@@ -21,12 +21,6 @@
     <string name="fcm_fallback_notification_channel_label">പലവക</string>
     <string name="google_assistant_verification_channel_name">അസിസ്‌റ്റന്റ് വെരിഫയർ</string>
     <string name="google_assistant_verification_notification_title">Google അസിസ്‌റ്റന്റ് സന്ദേശം അയയ്ക്കുന്നു</string>
-    <string name="hms_apk_not_installed_hints">HMS Core ഇല്ലാതെ %1$s എന്നതിലെ ചില സവിശേഷതകൾ ശരിയായി പ്രവർത്തിച്ചേക്കില്ല, അത് നിങ്ങളുടെ ഉപകരണത്തിൽ ഇൻസ്റ്റാൾ ചെയ്‌തിട്ടില്ല.</string>
-    <string name="hms_bindfaildlg_message">%1$s HMS Core ഉപയോഗിക്കാനാവില്ല. ഒപ്‌റ്റിമൈസർ (ഫോൺ മാനേജർ) സമാരംഭിക്കുക അല്ലെങ്കിൽ ക്രമീകരണത്തിലേക്ക് പോവുക, %2$s എന്നതിനുള്ള എല്ലാ അനുമതികളും പ്രവർത്തനസജ്ജമാക്കി (സ്വയമേവ സമാരംഭിക്കുക, സെക്കൻഡറി ലോഞ്ച് എന്നിവ ഉൾപ്പെടെ) വീണ്ടും ശ്രമിക്കുക.</string>
-    <string name="hms_confirm">ശരി</string>
-    <string name="hms_is_spoof">നിങ്ങളുടെ ഉപകരണത്തിൽ HMS Core-ന്റെ ഒരു അനൗദ്യോഗിക പതിപ്പ് (%1$s) ഇൻസ്റ്റാൾ ചെയ്‌തിട്ടുണ്ടെന്ന് തോന്നുന്നു. ക്രമീകരണത്തിൽ HMS Core അൺഇൻസ്റ്റാൾ ചെയ്‌ത ശേഷം ഔദ്യോഗിക പതിപ്പ് ഇൻസ്റ്റാൾ ചെയ്യാൻ ഈ ആപ്പിലേക്ക് മടങ്ങിവരുക.</string>
-    <string name="hms_push_channel">ഡിഫോൾട്ട്</string>
-    <string name="hms_spoof_hints">ശ്രദ്ധിക്കുക</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Google വഴി വാങ്ങുക</string>
 </resources>

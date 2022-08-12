@@ -15,13 +15,14 @@ import androidx.core.graphics.ColorUtils;
 import java.util.Random;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 
 public class SharedMediaFastScrollTooltip extends FrameLayout {
     public SharedMediaFastScrollTooltip(Context context) {
         super(context);
         TextView textView = new TextView(context);
-        textView.setText(LocaleController.getString("SharedMediaFastScrollHint", NUM));
+        textView.setText(LocaleController.getString("SharedMediaFastScrollHint", R.string.SharedMediaFastScrollHint));
         textView.setTextSize(1, 14.0f);
         textView.setMaxLines(3);
         textView.setTextColor(Theme.getColor("chat_gifSaveHintText"));

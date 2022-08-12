@@ -1,19 +1,19 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
 
-public final /* synthetic */ class LocationActivity$$ExternalSyntheticLambda26 implements RequestDelegate {
+public final /* synthetic */ class LocationActivity$$ExternalSyntheticLambda26 implements Runnable {
     public final /* synthetic */ LocationActivity f$0;
-    public final /* synthetic */ long f$1;
+    public final /* synthetic */ TLObject f$1;
+    public final /* synthetic */ long f$2;
 
-    public /* synthetic */ LocationActivity$$ExternalSyntheticLambda26(LocationActivity locationActivity, long j) {
+    public /* synthetic */ LocationActivity$$ExternalSyntheticLambda26(LocationActivity locationActivity, TLObject tLObject, long j) {
         this.f$0 = locationActivity;
-        this.f$1 = j;
+        this.f$1 = tLObject;
+        this.f$2 = j;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$getRecentLocations$36(this.f$1, tLObject, tLRPC$TL_error);
+    public final void run() {
+        this.f$0.lambda$getRecentLocations$39(this.f$1, this.f$2);
     }
 }

@@ -183,9 +183,6 @@ public final class R {
         public static final int common_google_signin_btn_text_light_pressed = NUM;
         public static final int common_google_signin_btn_tint = NUM;
         public static final int divider = NUM;
-        public static final int emui_color_gray_1 = NUM;
-        public static final int emui_color_gray_10 = NUM;
-        public static final int emui_color_gray_7 = NUM;
         public static final int notification_action_color_filter = NUM;
         public static final int notification_icon_bg_color = NUM;
         public static final int wallet_bright_foreground_disabled_holo_light = NUM;
@@ -1248,6 +1245,140 @@ public final class R {
         public static final int zoom_round_b = NUM;
         public static final int zoom_slide = NUM;
         public static final int zoom_slide_a = NUM;
+        /* added by JADX */
+        public static final int $avd_flip__0 = NUM;
+        /* added by JADX */
+        public static final int $avd_flip__1 = NUM;
+        /* added by JADX */
+        public static final int $avd_flip__2 = NUM;
+        /* added by JADX */
+        public static final int $avd_flip__3 = NUM;
+        /* added by JADX */
+        public static final int $avd_flip__4 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__0 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__1 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__10 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__11 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__12 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__13 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__14 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__15 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__16 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__17 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__18 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__19 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__2 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__20 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__21 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__22 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__23 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__24 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__25 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__26 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__27 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__28 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__29 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__3 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__4 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__5 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__6 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__7 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__8 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__9 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__0 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__1 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__10 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__11 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__12 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__13 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__14 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__15 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__16 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__17 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__18 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__19 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__2 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__20 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__21 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__22 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__23 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__24 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__25 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__26 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__27 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__3 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__4 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__5 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__6 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__7 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__8 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__9 = NUM;
+        /* added by JADX */
+        public static final int $tg_splash_320__0 = NUM;
+        /* added by JADX */
+        public static final int $tg_splash_320__1 = NUM;
+        /* added by JADX */
+        public static final int $tg_splash_320__2 = NUM;
+        /* added by JADX */
+        public static final int $tg_splash_320__3 = NUM;
 
         private drawable() {
         }
@@ -1348,7 +1479,6 @@ public final class R {
         public static final int donate_with_google = NUM;
         public static final int email = NUM;
         public static final int empty_view = NUM;
-        public static final int enable_service_text = NUM;
         public static final int end = NUM;
         public static final int feed_widget_item_image = NUM;
         public static final int feed_widget_item_text = NUM;
@@ -1515,7 +1645,6 @@ public final class R {
     }
 
     public static final class layout {
-        public static final int activity_endisable_service = NUM;
         public static final int call_notification = NUM;
         public static final int call_notification_rtl = NUM;
         public static final int contacts_widget_item = NUM;
@@ -1529,7 +1658,6 @@ public final class R {
         public static final int custom_dialog = NUM;
         public static final int feed_widget_item = NUM;
         public static final int feed_widget_layout = NUM;
-        public static final int hwpush_trans_activity = NUM;
         public static final int notification_action = NUM;
         public static final int notification_action_tombstone = NUM;
         public static final int notification_template_custom_big = NUM;
@@ -4177,6 +4305,7 @@ public final class R {
         public static final int IncreaseLimit = NUM;
         public static final int Info = NUM;
         public static final int InstallGoogleMaps = NUM;
+        public static final int InstallHuaweiMaps = NUM;
         public static final int InstallOfficialApp = NUM;
         public static final int InstantView = NUM;
         public static final int InstantViewNightMode = NUM;
@@ -7303,9 +7432,7 @@ public final class R {
         public static final int common_open_on_phone = NUM;
         public static final int common_signin_button_text = NUM;
         public static final int common_signin_button_text_long = NUM;
-        public static final int default_web_client_id = NUM;
         public static final int fcm_fallback_notification_channel_label = NUM;
-        public static final int firebase_database_url = NUM;
         public static final int formatDateAtTime = NUM;
         public static final int formatDateSchedule = NUM;
         public static final int formatDateScheduleYear = NUM;
@@ -7325,22 +7452,6 @@ public final class R {
         public static final int formatterWeekLong = NUM;
         public static final int formatterYear = NUM;
         public static final int formatterYearMax = NUM;
-        public static final int gcm_defaultSenderId = NUM;
-        public static final int google_api_key = NUM;
-        public static final int google_app_id = NUM;
-        public static final int google_assistant_verification_channel_name = NUM;
-        public static final int google_assistant_verification_notification_title = NUM;
-        public static final int google_crash_reporting_api_key = NUM;
-        public static final int google_storage_bucket = NUM;
-        public static final int hms_apk_not_installed_hints = NUM;
-        public static final int hms_bindfaildlg_message = NUM;
-        public static final int hms_bindfaildlg_title = NUM;
-        public static final int hms_confirm = NUM;
-        public static final int hms_is_spoof = NUM;
-        public static final int hms_push_channel = NUM;
-        public static final int hms_push_google = NUM;
-        public static final int hms_push_vmall = NUM;
-        public static final int hms_spoof_hints = NUM;
         public static final int items_few = NUM;
         public static final int items_many = NUM;
         public static final int items_one = NUM;
@@ -7353,11 +7464,28 @@ public final class R {
         public static final int messages_other = NUM;
         public static final int messages_two = NUM;
         public static final int messages_zero = NUM;
-        public static final int project_id = NUM;
-        public static final int push_cat_body = NUM;
-        public static final int push_cat_head = NUM;
         public static final int status_bar_notification_info_overflow = NUM;
         public static final int wallet_buy_button_place_holder = NUM;
+        /* added by JADX */
+        public static final int default_web_client_id = NUM;
+        /* added by JADX */
+        public static final int firebase_database_url = NUM;
+        /* added by JADX */
+        public static final int gcm_defaultSenderId = NUM;
+        /* added by JADX */
+        public static final int google_api_key = NUM;
+        /* added by JADX */
+        public static final int google_app_id = NUM;
+        /* added by JADX */
+        public static final int google_assistant_verification_channel_name = NUM;
+        /* added by JADX */
+        public static final int google_assistant_verification_notification_title = NUM;
+        /* added by JADX */
+        public static final int google_crash_reporting_api_key = NUM;
+        /* added by JADX */
+        public static final int google_storage_bucket = NUM;
+        /* added by JADX */
+        public static final int project_id = NUM;
 
         private string() {
         }
@@ -7369,7 +7497,6 @@ public final class R {
         public static final int Base_TMessages_AppWidget_Background = NUM;
         public static final int Base_TMessages_AppWidget_Badge = NUM;
         public static final int Base_Theme_TMessages_AppWidget = NUM;
-        public static final int Base_Translucent = NUM;
         public static final int DialogNoAnimation = NUM;
         public static final int MyTextViewStyle = NUM;
         public static final int PopupAnimation = NUM;

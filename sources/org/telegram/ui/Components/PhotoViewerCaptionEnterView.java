@@ -38,6 +38,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC$ChatFull;
@@ -165,13 +166,13 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         this.emojiButton.setAlpha(0.58f);
         frameLayout.addView(this.emojiButton, LayoutHelper.createFrame(48, 48, 83));
         this.emojiButton.setOnClickListener(new PhotoViewerCaptionEnterView$$ExternalSyntheticLambda5(this));
-        this.emojiButton.setContentDescription(LocaleController.getString("Emoji", NUM));
+        this.emojiButton.setContentDescription(LocaleController.getString("Emoji", R.string.Emoji));
         ImageView imageView2 = this.emojiButton;
         ReplaceableIconDrawable replaceableIconDrawable = new ReplaceableIconDrawable(context2);
         this.emojiIconDrawable = replaceableIconDrawable;
         imageView2.setImageDrawable(replaceableIconDrawable);
         this.emojiIconDrawable.setColorFilter(new PorterDuffColorFilter(-1, PorterDuff.Mode.MULTIPLY));
-        this.emojiIconDrawable.setIcon(NUM, false);
+        this.emojiIconDrawable.setIcon(R.drawable.input_smile, false);
         TextPaint textPaint = new TextPaint(1);
         this.lengthTextPaint = textPaint;
         textPaint.setTextSize((float) AndroidUtilities.dp(13.0f));
@@ -228,7 +229,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         this.messageEditText.setSelectAllOnFocus(false);
         this.messageEditText.setDelegate(new PhotoViewerCaptionEnterView$$ExternalSyntheticLambda9(this));
         this.messageEditText.setWindowView(this.windowView);
-        this.messageEditText.setHint(LocaleController.getString("AddCaption", NUM));
+        this.messageEditText.setHint(LocaleController.getString("AddCaption", R.string.AddCaption));
         this.messageEditText.setImeOptions(NUM);
         this.messageEditText.setLinkTextColor(-8994063);
         EditTextCaption editTextCaption = this.messageEditText;
@@ -479,7 +480,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
             }
         });
         this.doneDrawable = Theme.createCircleDrawable(AndroidUtilities.dp(16.0f), -10043398);
-        this.checkDrawable = context.getResources().getDrawable(NUM).mutate();
+        this.checkDrawable = context.getResources().getDrawable(R.drawable.input_done).mutate();
         CombinedDrawable combinedDrawable = new CombinedDrawable(this.doneDrawable, this.checkDrawable, 0, AndroidUtilities.dp(1.0f));
         combinedDrawable.setCustomSize(AndroidUtilities.dp(32.0f), AndroidUtilities.dp(32.0f));
         ImageView imageView3 = new ImageView(context2);
@@ -488,7 +489,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         imageView3.setImageDrawable(combinedDrawable);
         linearLayout.addView(imageView3, LayoutHelper.createLinear(48, 48, 80));
         imageView3.setOnClickListener(new PhotoViewerCaptionEnterView$$ExternalSyntheticLambda3(this));
-        imageView3.setContentDescription(LocaleController.getString("Done", NUM));
+        imageView3.setContentDescription(LocaleController.getString("Done", R.string.Done));
         NumberTextView numberTextView = new NumberTextView(context2);
         this.captionLimitView = numberTextView;
         numberTextView.setVisibility(8);
@@ -990,14 +991,14 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
             if (sizeNotifierFrameLayoutPhoto != null) {
                 this.emojiPadding = i2;
                 sizeNotifierFrameLayoutPhoto.requestLayout();
-                this.emojiIconDrawable.setIcon(NUM, true);
+                this.emojiIconDrawable.setIcon(R.drawable.input_keyboard, true);
                 onWindowSizeChanged();
                 return;
             }
             return;
         }
         if (this.emojiButton != null) {
-            this.emojiIconDrawable.setIcon(NUM, true);
+            this.emojiIconDrawable.setIcon(R.drawable.input_smile, true);
         }
         if (this.sizeNotifierLayout != null) {
             if (z && SharedConfig.smoothKeyboard && i == 0 && this.emojiView != null) {

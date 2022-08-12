@@ -22,6 +22,7 @@ import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.WebFile;
@@ -1965,28 +1966,28 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
         StringBuilder sb = new StringBuilder();
         switch (this.documentAttachType) {
             case 1:
-                sb.append(LocaleController.getString("AttachDocument", NUM));
+                sb.append(LocaleController.getString("AttachDocument", R.string.AttachDocument));
                 break;
             case 2:
-                sb.append(LocaleController.getString("AttachGif", NUM));
+                sb.append(LocaleController.getString("AttachGif", R.string.AttachGif));
                 break;
             case 3:
-                sb.append(LocaleController.getString("AttachAudio", NUM));
+                sb.append(LocaleController.getString("AttachAudio", R.string.AttachAudio));
                 break;
             case 4:
-                sb.append(LocaleController.getString("AttachVideo", NUM));
+                sb.append(LocaleController.getString("AttachVideo", R.string.AttachVideo));
                 break;
             case 5:
-                sb.append(LocaleController.getString("AttachMusic", NUM));
+                sb.append(LocaleController.getString("AttachMusic", R.string.AttachMusic));
                 break;
             case 6:
-                sb.append(LocaleController.getString("AttachSticker", NUM));
+                sb.append(LocaleController.getString("AttachSticker", R.string.AttachSticker));
                 break;
             case 7:
-                sb.append(LocaleController.getString("AttachPhoto", NUM));
+                sb.append(LocaleController.getString("AttachPhoto", R.string.AttachPhoto));
                 break;
             case 8:
-                sb.append(LocaleController.getString("AttachLocation", NUM));
+                sb.append(LocaleController.getString("AttachLocation", R.string.AttachLocation));
                 break;
         }
         StaticLayout staticLayout = this.titleLayout;
@@ -2008,7 +2009,7 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
             }
         } else {
             sb.append(", ");
-            sb.append(LocaleController.formatString("AccDescrMusicInfo", NUM, this.descriptionLayout.getText(), this.titleLayout.getText()));
+            sb.append(LocaleController.formatString("AccDescrMusicInfo", R.string.AccDescrMusicInfo, this.descriptionLayout.getText(), this.titleLayout.getText()));
         }
         accessibilityNodeInfo.setText(sb);
         CheckBox2 checkBox2 = this.checkBox;

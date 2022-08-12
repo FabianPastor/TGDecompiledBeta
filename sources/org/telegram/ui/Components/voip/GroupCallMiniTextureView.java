@@ -40,6 +40,7 @@ import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
@@ -192,12 +193,12 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
         final GroupCallActivity groupCallActivity2 = groupCallActivity;
         this.call = call3;
         this.currentAccount = groupCallActivity.getCurrentAccount();
-        CrossOutDrawable crossOutDrawable = new CrossOutDrawable(groupCallRenderersContainer.getContext(), NUM, (String) null);
+        CrossOutDrawable crossOutDrawable = new CrossOutDrawable(groupCallRenderersContainer.getContext(), R.drawable.calls_video, (String) null);
         this.pausedVideoDrawable = crossOutDrawable;
         crossOutDrawable.setCrossOut(true, false);
         this.pausedVideoDrawable.setOffsets((float) (-AndroidUtilities.dp(4.0f)), (float) AndroidUtilities.dp(6.0f), (float) AndroidUtilities.dp(6.0f));
         this.pausedVideoDrawable.setStrokeWidth(AndroidUtilities.dpf2(3.4f));
-        this.castingScreenDrawable = groupCallRenderersContainer.getContext().getResources().getDrawable(NUM).mutate();
+        this.castingScreenDrawable = groupCallRenderersContainer.getContext().getResources().getDrawable(R.drawable.screencast_big).mutate();
         final TextPaint textPaint = r2;
         TextPaint textPaint2 = new TextPaint(1);
         textPaint2.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -208,17 +209,18 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
         textPaint4.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         textPaint4.setTextSize((float) AndroidUtilities.dp(15.0f));
         textPaint4.setColor(-1);
-        String string = LocaleController.getString("VoipVideoOnPause", NUM);
+        String string = LocaleController.getString("VoipVideoOnPause", R.string.VoipVideoOnPause);
         final String str = string;
         final StaticLayout staticLayout = r19;
         TextPaint textPaint5 = textPaint2;
-        StaticLayout staticLayout2 = new StaticLayout(LocaleController.getString("VoipVideoScreenSharingTwoLines", NUM), textPaint5, AndroidUtilities.dp(400.0f), Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
+        StaticLayout staticLayout2 = new StaticLayout(LocaleController.getString("VoipVideoScreenSharingTwoLines", R.string.VoipVideoScreenSharingTwoLines), textPaint5, AndroidUtilities.dp(400.0f), Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
         TLRPC$Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Long.valueOf(call3.chatId));
+        String formatPluralString = LocaleController.formatPluralString("Participants", MessagesController.getInstance(this.currentAccount).groupCallVideoMaxParticipants, new Object[0]);
         String str2 = string;
         final StaticLayout staticLayout3 = r19;
         TLRPC$Chat tLRPC$Chat = chat;
-        StaticLayout staticLayout4 = new StaticLayout(LocaleController.formatString("VoipVideoNotAvailable", NUM, LocaleController.formatPluralString("Participants", MessagesController.getInstance(this.currentAccount).groupCallVideoMaxParticipants, new Object[0])), textPaint5, AndroidUtilities.dp(400.0f), Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
-        String string2 = LocaleController.getString("VoipVideoScreenSharing", NUM);
+        StaticLayout staticLayout4 = new StaticLayout(LocaleController.formatString("VoipVideoNotAvailable", R.string.VoipVideoNotAvailable, formatPluralString), textPaint5, AndroidUtilities.dp(400.0f), Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
+        String string2 = LocaleController.getString("VoipVideoScreenSharing", R.string.VoipVideoScreenSharing);
         String str3 = str2;
         final String str4 = string2;
         final float measureText = textPaint2.measureText(str3);
@@ -592,7 +594,7 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
         this.screencastIcon = imageView;
         addView(imageView, LayoutHelper.createFrame(24, 24.0f, 0, 4.0f, 6.0f, 4.0f, 0.0f));
         imageView.setPadding(AndroidUtilities.dp(4.0f), AndroidUtilities.dp(4.0f), AndroidUtilities.dp(4.0f), AndroidUtilities.dp(4.0f));
-        imageView.setImageDrawable(ContextCompat.getDrawable(groupCallRenderersContainer.getContext(), NUM));
+        imageView.setImageDrawable(ContextCompat.getDrawable(groupCallRenderersContainer.getContext(), R.drawable.voicechat_screencast));
         imageView.setColorFilter(new PorterDuffColorFilter(-1, PorterDuff.Mode.MULTIPLY));
         Drawable createSimpleSelectorRoundRectDrawable = Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(19.0f), 0, ColorUtils.setAlphaComponent(-1, 100));
         AnonymousClass3 r7 = new TextView(groupCallRenderersContainer.getContext()) {
@@ -604,7 +606,7 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
             }
         };
         this.stopSharingTextView = r7;
-        r7.setText(LocaleController.getString("VoipVideoScreenStopSharing", NUM));
+        r7.setText(LocaleController.getString("VoipVideoScreenStopSharing", R.string.VoipVideoScreenStopSharing));
         this.stopSharingTextView.setTextSize(1, 15.0f);
         this.stopSharingTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.stopSharingTextView.setPadding(AndroidUtilities.dp(21.0f), 0, AndroidUtilities.dp(21.0f), 0);
@@ -622,9 +624,9 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
         this.noRtmpStreamTextView.setGravity(17);
         this.noRtmpStreamTextView.setAlpha(0.0f);
         if (ChatObject.canManageCalls(tLRPC$Chat2)) {
-            this.noRtmpStreamTextView.setText(AndroidUtilities.replaceTags(LocaleController.getString(NUM)));
+            this.noRtmpStreamTextView.setText(AndroidUtilities.replaceTags(LocaleController.getString(R.string.NoRtmpStreamFromAppOwner)));
         } else {
-            this.noRtmpStreamTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("NoRtmpStreamFromAppViewer", NUM, tLRPC$Chat2.title)));
+            this.noRtmpStreamTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("NoRtmpStreamFromAppViewer", R.string.NoRtmpStreamFromAppViewer, tLRPC$Chat2.title)));
         }
         addView(this.noRtmpStreamTextView, LayoutHelper.createFrame(-2, -2, 51));
     }

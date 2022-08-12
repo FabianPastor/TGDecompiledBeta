@@ -8,11 +8,12 @@ import android.graphics.Paint;
 import android.view.MotionEvent;
 import android.view.View;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 
 public class BetterRatingView extends View {
-    private Bitmap filledStar = BitmapFactory.decodeResource(getResources(), NUM).extractAlpha();
-    private Bitmap hollowStar = BitmapFactory.decodeResource(getResources(), NUM).extractAlpha();
+    private Bitmap filledStar = BitmapFactory.decodeResource(getResources(), R.drawable.ic_rating_star_filled).extractAlpha();
+    private Bitmap hollowStar = BitmapFactory.decodeResource(getResources(), R.drawable.ic_rating_star).extractAlpha();
     private OnRatingChangeListener listener;
     private int numStars = 5;
     private Paint paint = new Paint();

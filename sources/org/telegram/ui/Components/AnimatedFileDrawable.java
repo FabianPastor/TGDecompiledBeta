@@ -1052,90 +1052,235 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
         drawInternal(canvas, true, 0);
     }
 
-    public void drawInternal(Canvas canvas, boolean z, long j) {
-        Canvas canvas2 = canvas;
-        if (canLoadFrames() && !this.destroyWhenDone) {
-            long currentTimeMillis = j == 0 ? System.currentTimeMillis() : j;
-            RectF rectF = z ? this.dstRectBackground : this.dstRect;
-            Paint paint = z ? this.backgroundPaint : getPaint();
-            int i = 0;
-            if (!z) {
-                updateCurrentFrame(currentTimeMillis, false);
-            }
-            Bitmap bitmap = this.renderingBitmap;
-            if (bitmap != null) {
-                if (this.applyTransformation) {
-                    int width = bitmap.getWidth();
-                    int height = this.renderingBitmap.getHeight();
-                    int[] iArr = this.metaData;
-                    if (iArr[2] == 90 || iArr[2] == 270) {
-                        int i2 = height;
-                        height = width;
-                        width = i2;
-                    }
-                    rectF.set(getBounds());
-                    this.scaleX = rectF.width() / ((float) width);
-                    this.scaleY = rectF.height() / ((float) height);
-                    this.applyTransformation = false;
-                }
-                if (hasRoundRadius()) {
-                    if (this.renderingShader == null) {
-                        Bitmap bitmap2 = this.backgroundBitmap;
-                        Shader.TileMode tileMode = Shader.TileMode.CLAMP;
-                        this.renderingShader = new BitmapShader(bitmap2, tileMode, tileMode);
-                    }
-                    paint.setShader(this.renderingShader);
-                    this.shaderMatrix.reset();
-                    this.shaderMatrix.setTranslate(rectF.left, rectF.top);
-                    int[] iArr2 = this.metaData;
-                    if (iArr2[2] == 90) {
-                        this.shaderMatrix.preRotate(90.0f);
-                        this.shaderMatrix.preTranslate(0.0f, -rectF.width());
-                    } else if (iArr2[2] == 180) {
-                        this.shaderMatrix.preRotate(180.0f);
-                        this.shaderMatrix.preTranslate(-rectF.width(), -rectF.height());
-                    } else if (iArr2[2] == 270) {
-                        this.shaderMatrix.preRotate(270.0f);
-                        this.shaderMatrix.preTranslate(-rectF.height(), 0.0f);
-                    }
-                    this.shaderMatrix.preScale(this.scaleX, this.scaleY);
-                    this.renderingShader.setLocalMatrix(this.shaderMatrix);
-                    if (this.invalidatePath) {
-                        this.invalidatePath = false;
-                        while (true) {
-                            int[] iArr3 = this.roundRadius;
-                            if (i >= iArr3.length) {
-                                break;
-                            }
-                            float[] fArr = radii;
-                            int i3 = i * 2;
-                            fArr[i3] = (float) iArr3[i];
-                            fArr[i3 + 1] = (float) iArr3[i];
-                            i++;
-                        }
-                        this.roundPath.reset();
-                        this.roundPath.addRoundRect(this.actualDrawRect, radii, Path.Direction.CW);
-                        this.roundPath.close();
-                    }
-                    canvas2.drawPath(this.roundPath, paint);
-                    return;
-                }
-                canvas2.translate(rectF.left, rectF.top);
-                int[] iArr4 = this.metaData;
-                if (iArr4[2] == 90) {
-                    canvas2.rotate(90.0f);
-                    canvas2.translate(0.0f, -rectF.width());
-                } else if (iArr4[2] == 180) {
-                    canvas2.rotate(180.0f);
-                    canvas2.translate(-rectF.width(), -rectF.height());
-                } else if (iArr4[2] == 270) {
-                    canvas2.rotate(270.0f);
-                    canvas2.translate(-rectF.height(), 0.0f);
-                }
-                canvas2.scale(this.scaleX, this.scaleY);
-                canvas2.drawBitmap(this.renderingBitmap, 0.0f, 0.0f, paint);
-            }
-        }
+    /* JADX WARNING: Removed duplicated region for block: B:38:0x00af  */
+    /* JADX WARNING: Removed duplicated region for block: B:58:0x015c  */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public void drawInternal(android.graphics.Canvas r18, boolean r19, long r20) {
+        /*
+            r17 = this;
+            r0 = r17
+            r1 = r18
+            boolean r2 = r17.canLoadFrames()
+            if (r2 == 0) goto L_0x01a3
+            boolean r2 = r0.destroyWhenDone
+            if (r2 == 0) goto L_0x0010
+            goto L_0x01a3
+        L_0x0010:
+            r2 = 0
+            int r4 = (r20 > r2 ? 1 : (r20 == r2 ? 0 : -1))
+            if (r4 != 0) goto L_0x001b
+            long r2 = java.lang.System.currentTimeMillis()
+            goto L_0x001d
+        L_0x001b:
+            r2 = r20
+        L_0x001d:
+            if (r19 == 0) goto L_0x0022
+            android.graphics.RectF r4 = r0.dstRectBackground
+            goto L_0x0024
+        L_0x0022:
+            android.graphics.RectF r4 = r0.dstRect
+        L_0x0024:
+            if (r19 == 0) goto L_0x0029
+            android.graphics.Paint r5 = r0.backgroundPaint
+            goto L_0x002d
+        L_0x0029:
+            android.graphics.Paint r5 = r17.getPaint()
+        L_0x002d:
+            r6 = 0
+            if (r19 != 0) goto L_0x0033
+            r0.updateCurrentFrame(r2, r6)
+        L_0x0033:
+            android.graphics.Bitmap r2 = r0.renderingBitmap
+            if (r2 == 0) goto L_0x01a3
+            float r3 = r0.scaleX
+            float r7 = r0.scaleY
+            r8 = 270(0x10e, float:3.78E-43)
+            r9 = 90
+            r10 = 2
+            if (r19 == 0) goto L_0x006a
+            int r2 = r2.getWidth()
+            android.graphics.Bitmap r3 = r0.renderingBitmap
+            int r3 = r3.getHeight()
+            int[] r7 = r0.metaData
+            r11 = r7[r10]
+            if (r11 == r9) goto L_0x0056
+            r7 = r7[r10]
+            if (r7 != r8) goto L_0x005b
+        L_0x0056:
+            r16 = r3
+            r3 = r2
+            r2 = r16
+        L_0x005b:
+            float r7 = r4.width()
+            float r2 = (float) r2
+            float r2 = r7 / r2
+            float r7 = r4.height()
+            float r3 = (float) r3
+            float r7 = r7 / r3
+        L_0x0068:
+            r3 = r2
+            goto L_0x00a2
+        L_0x006a:
+            boolean r11 = r0.applyTransformation
+            if (r11 == 0) goto L_0x00a2
+            int r2 = r2.getWidth()
+            android.graphics.Bitmap r3 = r0.renderingBitmap
+            int r3 = r3.getHeight()
+            int[] r7 = r0.metaData
+            r11 = r7[r10]
+            if (r11 == r9) goto L_0x0082
+            r7 = r7[r10]
+            if (r7 != r8) goto L_0x0087
+        L_0x0082:
+            r16 = r3
+            r3 = r2
+            r2 = r16
+        L_0x0087:
+            android.graphics.Rect r7 = r17.getBounds()
+            r4.set(r7)
+            float r7 = r4.width()
+            float r2 = (float) r2
+            float r2 = r7 / r2
+            r0.scaleX = r2
+            float r7 = r4.height()
+            float r3 = (float) r3
+            float r7 = r7 / r3
+            r0.scaleY = r7
+            r0.applyTransformation = r6
+            goto L_0x0068
+        L_0x00a2:
+            boolean r2 = r17.hasRoundRadius()
+            r12 = 1127481344(0x43340000, float:180.0)
+            r13 = 1119092736(0x42b40000, float:90.0)
+            r14 = 180(0xb4, float:2.52E-43)
+            r15 = 0
+            if (r2 == 0) goto L_0x015c
+            android.graphics.BitmapShader r2 = r0.renderingShader
+            if (r2 != 0) goto L_0x00be
+            android.graphics.BitmapShader r2 = new android.graphics.BitmapShader
+            android.graphics.Bitmap r6 = r0.backgroundBitmap
+            android.graphics.Shader$TileMode r11 = android.graphics.Shader.TileMode.CLAMP
+            r2.<init>(r6, r11, r11)
+            r0.renderingShader = r2
+        L_0x00be:
+            android.graphics.BitmapShader r2 = r0.renderingShader
+            r5.setShader(r2)
+            android.graphics.Matrix r2 = r0.shaderMatrix
+            r2.reset()
+            android.graphics.Matrix r2 = r0.shaderMatrix
+            float r6 = r4.left
+            float r11 = r4.top
+            r2.setTranslate(r6, r11)
+            int[] r2 = r0.metaData
+            r6 = r2[r10]
+            if (r6 != r9) goto L_0x00e7
+            android.graphics.Matrix r2 = r0.shaderMatrix
+            r2.preRotate(r13)
+            android.graphics.Matrix r2 = r0.shaderMatrix
+            float r4 = r4.width()
+            float r4 = -r4
+            r2.preTranslate(r15, r4)
+            goto L_0x0115
+        L_0x00e7:
+            r6 = r2[r10]
+            if (r6 != r14) goto L_0x0100
+            android.graphics.Matrix r2 = r0.shaderMatrix
+            r2.preRotate(r12)
+            android.graphics.Matrix r2 = r0.shaderMatrix
+            float r6 = r4.width()
+            float r6 = -r6
+            float r4 = r4.height()
+            float r4 = -r4
+            r2.preTranslate(r6, r4)
+            goto L_0x0115
+        L_0x0100:
+            r2 = r2[r10]
+            if (r2 != r8) goto L_0x0115
+            android.graphics.Matrix r2 = r0.shaderMatrix
+            r6 = 1132920832(0x43870000, float:270.0)
+            r2.preRotate(r6)
+            android.graphics.Matrix r2 = r0.shaderMatrix
+            float r4 = r4.height()
+            float r4 = -r4
+            r2.preTranslate(r4, r15)
+        L_0x0115:
+            android.graphics.Matrix r2 = r0.shaderMatrix
+            r2.preScale(r3, r7)
+            android.graphics.BitmapShader r2 = r0.renderingShader
+            android.graphics.Matrix r3 = r0.shaderMatrix
+            r2.setLocalMatrix(r3)
+            boolean r2 = r0.invalidatePath
+            if (r2 == 0) goto L_0x0156
+            r2 = 0
+            r0.invalidatePath = r2
+            r6 = 0
+        L_0x0129:
+            int[] r2 = r0.roundRadius
+            int r3 = r2.length
+            if (r6 >= r3) goto L_0x0141
+            float[] r3 = radii
+            int r4 = r6 * 2
+            r7 = r2[r6]
+            float r7 = (float) r7
+            r3[r4] = r7
+            int r4 = r4 + 1
+            r2 = r2[r6]
+            float r2 = (float) r2
+            r3[r4] = r2
+            int r6 = r6 + 1
+            goto L_0x0129
+        L_0x0141:
+            android.graphics.Path r2 = r0.roundPath
+            r2.reset()
+            android.graphics.Path r2 = r0.roundPath
+            android.graphics.RectF r3 = r0.actualDrawRect
+            float[] r4 = radii
+            android.graphics.Path$Direction r6 = android.graphics.Path.Direction.CW
+            r2.addRoundRect(r3, r4, r6)
+            android.graphics.Path r2 = r0.roundPath
+            r2.close()
+        L_0x0156:
+            android.graphics.Path r2 = r0.roundPath
+            r1.drawPath(r2, r5)
+            goto L_0x01a3
+        L_0x015c:
+            float r2 = r4.left
+            float r6 = r4.top
+            r1.translate(r2, r6)
+            int[] r2 = r0.metaData
+            r6 = r2[r10]
+            if (r6 != r9) goto L_0x0175
+            r1.rotate(r13)
+            float r2 = r4.width()
+            float r2 = -r2
+            r1.translate(r15, r2)
+            goto L_0x019b
+        L_0x0175:
+            r6 = r2[r10]
+            if (r6 != r14) goto L_0x018a
+            r1.rotate(r12)
+            float r2 = r4.width()
+            float r2 = -r2
+            float r4 = r4.height()
+            float r4 = -r4
+            r1.translate(r2, r4)
+            goto L_0x019b
+        L_0x018a:
+            r2 = r2[r10]
+            if (r2 != r8) goto L_0x019b
+            r2 = 1132920832(0x43870000, float:270.0)
+            r1.rotate(r2)
+            float r2 = r4.height()
+            float r2 = -r2
+            r1.translate(r2, r15)
+        L_0x019b:
+            r1.scale(r3, r7)
+            android.graphics.Bitmap r2 = r0.renderingBitmap
+            r1.drawBitmap(r2, r15, r15, r5)
+        L_0x01a3:
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AnimatedFileDrawable.drawInternal(android.graphics.Canvas, boolean, long):void");
     }
 
     public long getLastFrameTimestamp() {
@@ -1322,7 +1467,8 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
         long j = this.cacheGenerateNativePtr;
         Bitmap bitmap2 = this.generatingCacheBitmap;
         getVideoFrame(j, bitmap2, this.metaData, bitmap2.getRowBytes(), false, this.startTime, this.endTime);
-        if (this.cacheGenerateTimestamp != 0 && this.metaData[3] == 0) {
+        long j2 = this.cacheGenerateTimestamp;
+        if ((j2 != 0 && this.metaData[3] == 0) || j2 > ((long) this.metaData[3])) {
             return 0;
         }
         bitmap.eraseColor(0);

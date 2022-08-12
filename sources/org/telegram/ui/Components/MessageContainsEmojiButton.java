@@ -22,6 +22,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$InputStickerSet;
 import org.telegram.tgnet.TLRPC$StickerSet;
@@ -101,7 +102,7 @@ public class MessageContainsEmojiButton extends FrameLayout implements Notificat
                 i2++;
             }
         } else if (arrayList.size() == 1) {
-            String string = LocaleController.getString("MessageContainsEmojiPack", NUM);
+            String string = LocaleController.getString("MessageContainsEmojiPack", R.string.MessageContainsEmojiPack);
             String[] split = string.split("%s");
             if (split.length <= 1) {
                 this.mainText = string;

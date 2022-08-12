@@ -17,6 +17,7 @@ import android.widget.TextView;
 import java.util.List;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.R;
 import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$ChatFull;
 import org.telegram.tgnet.TLRPC$User;
@@ -60,7 +61,7 @@ public class ChatActivityMemberRequestsDelegate {
         if (this.root == null) {
             FrameLayout frameLayout = new FrameLayout(this.fragment.getParentActivity());
             this.root = frameLayout;
-            frameLayout.setBackgroundResource(NUM);
+            frameLayout.setBackgroundResource(R.drawable.blockpanel);
             this.root.getBackground().mutate().setColorFilter(new PorterDuffColorFilter(this.fragment.getThemedColor("chat_topPanelBackground"), PorterDuff.Mode.MULTIPLY));
             this.root.setVisibility(8);
             this.pendingRequestsEnterOffset = (float) (-getViewHeight());
@@ -96,8 +97,8 @@ public class ChatActivityMemberRequestsDelegate {
                 imageView.setBackground(Theme.createSelectorDrawable(this.fragment.getThemedColor("inappPlayerClose") & NUM, 1, AndroidUtilities.dp(14.0f)));
             }
             this.closeView.setColorFilter(new PorterDuffColorFilter(this.fragment.getThemedColor("chat_topPanelClose"), PorterDuff.Mode.MULTIPLY));
-            this.closeView.setContentDescription(LocaleController.getString("Close", NUM));
-            this.closeView.setImageResource(NUM);
+            this.closeView.setContentDescription(LocaleController.getString("Close", R.string.Close));
+            this.closeView.setImageResource(R.drawable.miniplayer_close);
             this.closeView.setScaleType(ImageView.ScaleType.CENTER);
             this.closeView.setOnClickListener(new ChatActivityMemberRequestsDelegate$$ExternalSyntheticLambda1(this));
             this.root.addView(this.closeView, LayoutHelper.createFrame(36, -1.0f, 53, 0.0f, 0.0f, 2.0f, 0.0f));

@@ -4422,12 +4422,6 @@
     <string name="formatterYearMax">dd-MM-yyyy</string>
     <string name="google_assistant_verification_channel_name">Assistent-verificatie</string>
     <string name="google_assistant_verification_notification_title">Google Assistent verzendt bericht</string>
-    <string name="hms_apk_not_installed_hints">Sommige functies in %1$s werken mogelijk niet goed zonder HMS Core, dat niet op uw apparaat is geïnstalleerd.</string>
-    <string name="hms_bindfaildlg_message">%1$s kan HMS Core niet gebruiken. Start Optimalisatie (Telefoonbeheer) of ga naar Instellingen, schakel alle toestemmingen voor %2$s in (waaronder auto-start en secundaire start) en probeer het opnieuw.</string>
-    <string name="hms_confirm">OK</string>
-    <string name="hms_is_spoof">Het lijkt erop dat er een niet-officiële versie van HMS Core (%1$s) op uw apparaat is geïnstalleerd. Verwijder HMS Core via Instellingen en keer terug naar deze app om de officiële versie te installeren.</string>
-    <string name="hms_push_channel">Standaard</string>
-    <string name="hms_spoof_hints">Opmerking</string>
     <string name="items_few">%1$d items</string>
     <string name="items_many">%1$d items</string>
     <string name="items_one">%1$d item</string>

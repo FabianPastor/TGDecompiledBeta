@@ -14,6 +14,7 @@ import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC$Chat;
@@ -184,7 +185,7 @@ public class DialogMeUrlCell extends BaseCell {
         }
         String str4 = MessagesController.getInstance(this.currentAccount).linkPrefix + "/" + this.recentMeUrl.url;
         if (TextUtils.isEmpty(str)) {
-            str = LocaleController.getString("HiddenName", NUM);
+            str = LocaleController.getString("HiddenName", R.string.HiddenName);
         }
         if (!LocaleController.isRTL) {
             i2 = getMeasuredWidth() - this.nameLeft;

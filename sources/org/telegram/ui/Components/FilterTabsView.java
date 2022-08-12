@@ -35,6 +35,7 @@ import org.telegram.messenger.Emoji;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
@@ -365,10 +366,10 @@ public class FilterTabsView extends FrameLayout {
         /* JADX WARNING: Removed duplicated region for block: B:208:0x064a  */
         /* JADX WARNING: Removed duplicated region for block: B:210:0x067c  */
         /* JADX WARNING: Removed duplicated region for block: B:231:0x0794  */
-        /* JADX WARNING: Removed duplicated region for block: B:243:0x07e5  */
-        /* JADX WARNING: Removed duplicated region for block: B:246:0x0801  */
-        /* JADX WARNING: Removed duplicated region for block: B:249:0x085f  */
-        /* JADX WARNING: Removed duplicated region for block: B:250:0x0892  */
+        /* JADX WARNING: Removed duplicated region for block: B:243:0x07e4  */
+        /* JADX WARNING: Removed duplicated region for block: B:246:0x0800  */
+        /* JADX WARNING: Removed duplicated region for block: B:249:0x085e  */
+        /* JADX WARNING: Removed duplicated region for block: B:250:0x0891  */
         /* JADX WARNING: Removed duplicated region for block: B:252:? A[RETURN, SYNTHETIC] */
         @android.annotation.SuppressLint({"DrawAllocation"})
         /* Code decompiled incorrectly, please refer to instructions dump. */
@@ -1329,34 +1330,34 @@ public class FilterTabsView extends FrameLayout {
                 float r1 = r0.progressToLocked
                 r2 = 0
                 int r1 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
-                if (r1 == 0) goto L_0x089b
+                if (r1 == 0) goto L_0x089a
             L_0x0794:
                 org.telegram.ui.Components.FilterTabsView r1 = org.telegram.ui.Components.FilterTabsView.this
                 android.graphics.drawable.Drawable r1 = r1.lockDrawable
-                if (r1 != 0) goto L_0x07ac
+                if (r1 != 0) goto L_0x07ab
                 org.telegram.ui.Components.FilterTabsView r1 = org.telegram.ui.Components.FilterTabsView.this
                 android.content.Context r2 = r34.getContext()
-                r3 = 2131166029(0x7var_d, float:1.7946292E38)
+                int r3 = org.telegram.messenger.R.drawable.other_lockedfolders
                 android.graphics.drawable.Drawable r2 = androidx.core.content.ContextCompat.getDrawable(r2, r3)
                 android.graphics.drawable.Drawable unused = r1.lockDrawable = r2
-            L_0x07ac:
+            L_0x07ab:
                 org.telegram.ui.Components.FilterTabsView$Tab r1 = r0.currentTab
                 boolean r1 = r1.isLocked
                 r2 = 1037726734(0x3dda740e, float:0.10666667)
-                if (r1 == 0) goto L_0x07c1
+                if (r1 == 0) goto L_0x07c0
                 float r3 = r0.progressToLocked
                 r4 = 1065353216(0x3var_, float:1.0)
                 int r5 = (r3 > r4 ? 1 : (r3 == r4 ? 0 : -1))
-                if (r5 == 0) goto L_0x07c1
+                if (r5 == 0) goto L_0x07c0
                 float r3 = r3 + r2
                 r0.progressToLocked = r3
-                goto L_0x07c8
-            L_0x07c1:
-                if (r1 != 0) goto L_0x07c8
+                goto L_0x07c7
+            L_0x07c0:
+                if (r1 != 0) goto L_0x07c7
                 float r1 = r0.progressToLocked
                 float r1 = r1 - r2
                 r0.progressToLocked = r1
-            L_0x07c8:
+            L_0x07c7:
                 float r1 = r0.progressToLocked
                 r2 = 0
                 r3 = 1065353216(0x3var_, float:1.0)
@@ -1367,17 +1368,17 @@ public class FilterTabsView extends FrameLayout {
                 int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
                 org.telegram.ui.Components.FilterTabsView r2 = org.telegram.ui.Components.FilterTabsView.this
                 java.lang.String r2 = r2.aUnactiveTextColorKey
-                if (r2 == 0) goto L_0x07f9
+                if (r2 == 0) goto L_0x07f8
                 org.telegram.ui.Components.FilterTabsView r2 = org.telegram.ui.Components.FilterTabsView.this
                 java.lang.String r2 = r2.aUnactiveTextColorKey
                 int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
                 org.telegram.ui.Components.FilterTabsView r3 = org.telegram.ui.Components.FilterTabsView.this
                 float r3 = r3.animationValue
                 int r1 = androidx.core.graphics.ColorUtils.blendARGB(r1, r2, r3)
-            L_0x07f9:
+            L_0x07f8:
                 org.telegram.ui.Components.FilterTabsView r2 = org.telegram.ui.Components.FilterTabsView.this
                 int r2 = r2.lockDrawableColor
-                if (r2 == r1) goto L_0x0816
+                if (r2 == r1) goto L_0x0815
                 org.telegram.ui.Components.FilterTabsView r2 = org.telegram.ui.Components.FilterTabsView.this
                 int unused = r2.lockDrawableColor = r1
                 org.telegram.ui.Components.FilterTabsView r2 = org.telegram.ui.Components.FilterTabsView.this
@@ -1386,7 +1387,7 @@ public class FilterTabsView extends FrameLayout {
                 android.graphics.PorterDuff$Mode r4 = android.graphics.PorterDuff.Mode.MULTIPLY
                 r3.<init>(r1, r4)
                 r2.setColorFilter(r3)
-            L_0x0816:
+            L_0x0815:
                 int r1 = r34.getMeasuredWidth()
                 org.telegram.ui.Components.FilterTabsView r2 = org.telegram.ui.Components.FilterTabsView.this
                 android.graphics.drawable.Drawable r2 = r2.lockDrawable
@@ -1416,7 +1417,7 @@ public class FilterTabsView extends FrameLayout {
                 float r1 = r0.progressToLocked
                 r2 = 1065353216(0x3var_, float:1.0)
                 int r1 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
-                if (r1 == 0) goto L_0x0892
+                if (r1 == 0) goto L_0x0891
                 r35.save()
                 float r1 = r0.progressToLocked
                 org.telegram.ui.Components.FilterTabsView r2 = org.telegram.ui.Components.FilterTabsView.this
@@ -1434,12 +1435,12 @@ public class FilterTabsView extends FrameLayout {
                 android.graphics.drawable.Drawable r1 = r1.lockDrawable
                 r1.draw(r7)
                 r35.restore()
-                goto L_0x089b
-            L_0x0892:
+                goto L_0x089a
+            L_0x0891:
                 org.telegram.ui.Components.FilterTabsView r1 = org.telegram.ui.Components.FilterTabsView.this
                 android.graphics.drawable.Drawable r1 = r1.lockDrawable
                 r1.draw(r7)
-            L_0x089b:
+            L_0x089a:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.FilterTabsView.TabView.onDraw(android.graphics.Canvas):void");
@@ -1570,7 +1571,7 @@ public class FilterTabsView extends FrameLayout {
             accessibilityNodeInfo.setSelected((this.currentTab == null || FilterTabsView.this.selectedTabId == -1 || this.currentTab.id != FilterTabsView.this.selectedTabId) ? false : true);
             accessibilityNodeInfo.addAction(16);
             if (Build.VERSION.SDK_INT >= 21) {
-                accessibilityNodeInfo.addAction(new AccessibilityNodeInfo.AccessibilityAction(32, LocaleController.getString("AccDescrOpenMenu2", NUM)));
+                accessibilityNodeInfo.addAction(new AccessibilityNodeInfo.AccessibilityAction(32, LocaleController.getString("AccDescrOpenMenu2", R.string.AccDescrOpenMenu2)));
             } else {
                 accessibilityNodeInfo.addAction(32);
             }
@@ -2308,14 +2309,20 @@ public class FilterTabsView extends FrameLayout {
         if (!this.tabs.isEmpty()) {
             int size = (View.MeasureSpec.getSize(i) - AndroidUtilities.dp(7.0f)) - AndroidUtilities.dp(7.0f);
             Tab findDefaultTab = findDefaultTab();
-            findDefaultTab.setTitle(LocaleController.getString("FilterAllChats", NUM));
+            int i3 = R.string.FilterAllChats;
+            String str = "FilterAllChats";
+            findDefaultTab.setTitle(LocaleController.getString(str, i3));
             int width = findDefaultTab.getWidth(false);
-            findDefaultTab.setTitle(this.allTabsWidth > size ? LocaleController.getString("FilterAllChatsShort", NUM) : LocaleController.getString("FilterAllChats", NUM));
+            if (this.allTabsWidth > size) {
+                i3 = R.string.FilterAllChatsShort;
+                str = "FilterAllChatsShort";
+            }
+            findDefaultTab.setTitle(LocaleController.getString(str, i3));
             int width2 = (this.allTabsWidth - width) + findDefaultTab.getWidth(false);
-            int i3 = this.additionalTabWidth;
+            int i4 = this.additionalTabWidth;
             int size2 = width2 < size ? (size - width2) / this.tabs.size() : 0;
             this.additionalTabWidth = size2;
-            if (i3 != size2) {
+            if (i4 != size2) {
                 this.ignoreLayout = true;
                 RecyclerView.ItemAnimator itemAnimator2 = this.listView.getItemAnimator();
                 this.listView.setItemAnimator((RecyclerView.ItemAnimator) null);
@@ -2440,7 +2447,7 @@ public class FilterTabsView extends FrameLayout {
                     this.invalidated = true;
                     requestLayout();
                     this.allTabsWidth = 0;
-                    findDefaultTab().setTitle(LocaleController.getString("FilterAllChats", NUM));
+                    findDefaultTab().setTitle(LocaleController.getString("FilterAllChats", R.string.FilterAllChats));
                 } else {
                     z = true;
                 }
@@ -2450,7 +2457,7 @@ public class FilterTabsView extends FrameLayout {
         this.invalidated = true;
         requestLayout();
         this.allTabsWidth = 0;
-        findDefaultTab().setTitle(LocaleController.getString("FilterAllChats", NUM));
+        findDefaultTab().setTitle(LocaleController.getString("FilterAllChats", R.string.FilterAllChats));
         for (int i2 = 0; i2 < size; i2++) {
             this.allTabsWidth += this.tabs.get(i2).getWidth(true) + AndroidUtilities.dp(32.0f);
         }
@@ -2473,7 +2480,7 @@ public class FilterTabsView extends FrameLayout {
                     this.listView.setItemAnimator(this.itemAnimator);
                     this.adapter.notifyDataSetChanged();
                     this.allTabsWidth = 0;
-                    findDefaultTab().setTitle(LocaleController.getString("FilterAllChats", NUM));
+                    findDefaultTab().setTitle(LocaleController.getString("FilterAllChats", R.string.FilterAllChats));
                     int size = this.tabs.size();
                     for (int i3 = 0; i3 < size; i3++) {
                         this.allTabsWidth += this.tabs.get(i3).getWidth(true) + AndroidUtilities.dp(32.0f);

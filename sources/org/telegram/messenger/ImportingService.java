@@ -73,13 +73,17 @@ public class ImportingService extends Service implements NotificationCenter.Noti
                 builder2.setSmallIcon(17301640);
                 this.builder.setWhen(System.currentTimeMillis());
                 this.builder.setChannelId(NotificationsController.OTHER_NOTIFICATIONS_CHANNEL);
-                this.builder.setContentTitle(LocaleController.getString("AppName", NUM));
+                this.builder.setContentTitle(LocaleController.getString("AppName", R.string.AppName));
                 if (hasImportingHistory()) {
-                    this.builder.setTicker(LocaleController.getString("ImporImportingService", NUM));
-                    this.builder.setContentText(LocaleController.getString("ImporImportingService", NUM));
+                    NotificationCompat.Builder builder3 = this.builder;
+                    int i3 = R.string.ImporImportingService;
+                    builder3.setTicker(LocaleController.getString("ImporImportingService", i3));
+                    this.builder.setContentText(LocaleController.getString("ImporImportingService", i3));
                 } else {
-                    this.builder.setTicker(LocaleController.getString("ImporImportingStickersService", NUM));
-                    this.builder.setContentText(LocaleController.getString("ImporImportingStickersService", NUM));
+                    NotificationCompat.Builder builder4 = this.builder;
+                    int i4 = R.string.ImporImportingStickersService;
+                    builder4.setTicker(LocaleController.getString("ImporImportingStickersService", i4));
+                    this.builder.setContentText(LocaleController.getString("ImporImportingStickersService", i4));
                 }
             }
             this.builder.setProgress(100, 0, true);

@@ -28,6 +28,7 @@ import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.TLRPC$FileLocation;
@@ -162,7 +163,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
                 return;
             }
             if (TextUtils.isEmpty(tLRPC$User.phone)) {
-                this.statusTextView.setText(LocaleController.getString("NumberUnknown", NUM));
+                this.statusTextView.setText(LocaleController.getString("NumberUnknown", R.string.NumberUnknown));
             } else if (this.formattedPhoneNumberUser == this.currentUser || (charSequence2 = this.formattedPhoneNumber) == null) {
                 this.statusTextView.setText("");
                 Utilities.globalQueue.postRunnable(new ChatAttachAlertContactsLayout$UserCell$$ExternalSyntheticLambda0(this));
@@ -377,11 +378,11 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
             public void onTextChange(String str) {
                 if (str.length() != 0) {
                     if (ChatAttachAlertContactsLayout.this.emptyView != null) {
-                        ChatAttachAlertContactsLayout.this.emptyView.setText(LocaleController.getString("NoResult", NUM));
+                        ChatAttachAlertContactsLayout.this.emptyView.setText(LocaleController.getString("NoResult", R.string.NoResult));
                     }
                 } else if (ChatAttachAlertContactsLayout.this.listView.getAdapter() != ChatAttachAlertContactsLayout.this.listAdapter) {
                     int access$300 = ChatAttachAlertContactsLayout.this.getCurrentTop();
-                    ChatAttachAlertContactsLayout.this.emptyView.setText(LocaleController.getString("NoContacts", NUM));
+                    ChatAttachAlertContactsLayout.this.emptyView.setText(LocaleController.getString("NoContacts", R.string.NoContacts));
                     ChatAttachAlertContactsLayout.this.emptyView.showTextView();
                     ChatAttachAlertContactsLayout.this.listView.setAdapter(ChatAttachAlertContactsLayout.this.listAdapter);
                     ChatAttachAlertContactsLayout.this.listAdapter.notifyDataSetChanged();
@@ -412,12 +413,12 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
             }
         };
         this.searchField = r12;
-        r12.setHint(LocaleController.getString("SearchFriends", NUM));
+        r12.setHint(LocaleController.getString("SearchFriends", R.string.SearchFriends));
         this.frameLayout.addView(this.searchField, LayoutHelper.createFrame(-1, -1, 51));
         EmptyTextProgressView emptyTextProgressView = new EmptyTextProgressView(context, (View) null, resourcesProvider);
         this.emptyView = emptyTextProgressView;
         emptyTextProgressView.showTextView();
-        this.emptyView.setText(LocaleController.getString("NoContacts", NUM));
+        this.emptyView.setText(LocaleController.getString("NoContacts", R.string.NoContacts));
         addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 52.0f, 0.0f, 0.0f));
         AnonymousClass2 r122 = new RecyclerListView(context, resourcesProvider) {
             /* access modifiers changed from: protected */

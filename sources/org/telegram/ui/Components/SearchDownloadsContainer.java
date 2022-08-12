@@ -26,6 +26,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.TLRPC$Document;
@@ -234,7 +235,7 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
             updateListInternal(z, this.currentLoadingFilesTmp, this.recentLoadingFilesTmp);
             if (this.rowCount == 0) {
                 this.emptyView.showProgress(false, false);
-                this.emptyView.title.setText(LocaleController.getString("SearchEmptyViewDownloads", NUM));
+                this.emptyView.title.setText(LocaleController.getString("SearchEmptyViewDownloads", R.string.SearchEmptyViewDownloads));
                 this.emptyView.subtitle.setVisibility(8);
             }
             this.emptyView.setStickerType(9);
@@ -293,9 +294,9 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
             updateListInternal(true, arrayList, arrayList2);
             if (this.rowCount == 0) {
                 this.emptyView.showProgress(false, true);
-                this.emptyView.title.setText(LocaleController.getString("SearchEmptyViewTitle2", NUM));
+                this.emptyView.title.setText(LocaleController.getString("SearchEmptyViewTitle2", R.string.SearchEmptyViewTitle2));
                 this.emptyView.subtitle.setVisibility(0);
-                this.emptyView.subtitle.setText(LocaleController.getString("SearchEmptyViewFilteredSubtitle2", NUM));
+                this.emptyView.subtitle.setText(LocaleController.getString("SearchEmptyViewFilteredSubtitle2", R.string.SearchEmptyViewFilteredSubtitle2));
             }
         }
     }
@@ -462,11 +463,11 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
                 GraySectionCell graySectionCell = (GraySectionCell) viewHolder.itemView;
                 SearchDownloadsContainer searchDownloadsContainer = SearchDownloadsContainer.this;
                 if (i == searchDownloadsContainer.downloadingFilesHeader) {
-                    String string = LocaleController.getString("Downloading", NUM);
+                    String string = LocaleController.getString("Downloading", R.string.Downloading);
                     if (graySectionCell.getText().equals(string)) {
-                        graySectionCell.setRightText(SearchDownloadsContainer.this.hasCurrentDownload ? LocaleController.getString("PauseAll", NUM) : LocaleController.getString("ResumeAll", NUM), SearchDownloadsContainer.this.hasCurrentDownload);
+                        graySectionCell.setRightText(SearchDownloadsContainer.this.hasCurrentDownload ? LocaleController.getString("PauseAll", R.string.PauseAll) : LocaleController.getString("ResumeAll", R.string.ResumeAll), SearchDownloadsContainer.this.hasCurrentDownload);
                     } else {
-                        graySectionCell.setText(string, SearchDownloadsContainer.this.hasCurrentDownload ? LocaleController.getString("PauseAll", NUM) : LocaleController.getString("ResumeAll", NUM), new View.OnClickListener() {
+                        graySectionCell.setText(string, SearchDownloadsContainer.this.hasCurrentDownload ? LocaleController.getString("PauseAll", R.string.PauseAll) : LocaleController.getString("ResumeAll", R.string.ResumeAll), new View.OnClickListener() {
                             public void onClick(View view) {
                                 for (int i = 0; i < SearchDownloadsContainer.this.currentLoadingFiles.size(); i++) {
                                     MessageObject messageObject = SearchDownloadsContainer.this.currentLoadingFiles.get(i);
@@ -481,7 +482,7 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
                         });
                     }
                 } else if (i == searchDownloadsContainer.recentFilesHeader) {
-                    graySectionCell.setText(LocaleController.getString("RecentlyDownloaded", NUM), LocaleController.getString("Settings", NUM), new View.OnClickListener() {
+                    graySectionCell.setText(LocaleController.getString("RecentlyDownloaded", R.string.RecentlyDownloaded), LocaleController.getString("Settings", R.string.Settings), new View.OnClickListener() {
                         public void onClick(View view) {
                             SearchDownloadsContainer.this.showSettingsDialog();
                         }
@@ -569,20 +570,20 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
             textView.setGravity(1);
             textView.setTextColor(Theme.getColor("dialogTextBlack"));
             textView.setTextSize(1, 24.0f);
-            textView.setText(LocaleController.getString("DownloadedFiles", NUM));
+            textView.setText(LocaleController.getString("DownloadedFiles", R.string.DownloadedFiles));
             linearLayout.addView(textView, LayoutHelper.createFrame(-1, -2.0f, 0, 21.0f, 30.0f, 21.0f, 0.0f));
             TextView textView2 = new TextView(parentActivity2);
             textView2.setGravity(1);
             textView2.setTextSize(1, 15.0f);
             textView2.setTextColor(Theme.getColor("dialogTextHint"));
-            textView2.setText(LocaleController.formatString("DownloadedFilesMessage", NUM, new Object[0]));
+            textView2.setText(LocaleController.formatString("DownloadedFilesMessage", R.string.DownloadedFilesMessage, new Object[0]));
             linearLayout.addView(textView2, LayoutHelper.createFrame(-1, -2.0f, 0, 21.0f, 15.0f, 21.0f, 16.0f));
             TextView textView3 = new TextView(parentActivity2);
             textView3.setPadding(AndroidUtilities.dp(34.0f), 0, AndroidUtilities.dp(34.0f), 0);
             textView3.setGravity(17);
             textView3.setTextSize(1, 14.0f);
             textView3.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-            textView3.setText(LocaleController.getString("ManageDeviceStorage", NUM));
+            textView3.setText(LocaleController.getString("ManageDeviceStorage", R.string.ManageDeviceStorage));
             textView3.setTextColor(Theme.getColor("featuredStickers_buttonText"));
             textView3.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(6.0f), Theme.getColor("featuredStickers_addButton"), ColorUtils.setAlphaComponent(Theme.getColor("windowBackgroundWhite"), 120)));
             linearLayout.addView(textView3, LayoutHelper.createFrame(-1, 48.0f, 0, 16.0f, 15.0f, 16.0f, 16.0f));
@@ -591,7 +592,7 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
             textView4.setGravity(17);
             textView4.setTextSize(1, 14.0f);
             textView4.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-            textView4.setText(LocaleController.getString("ClearDownloadsList", NUM));
+            textView4.setText(LocaleController.getString("ClearDownloadsList", R.string.ClearDownloadsList));
             textView4.setTextColor(Theme.getColor("featuredStickers_addButton"));
             textView4.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(6.0f), 0, ColorUtils.setAlphaComponent(Theme.getColor("featuredStickers_addButton"), 120)));
             linearLayout.addView(textView4, LayoutHelper.createFrame(-1, 48.0f, 0, 16.0f, 0.0f, 16.0f, 16.0f));

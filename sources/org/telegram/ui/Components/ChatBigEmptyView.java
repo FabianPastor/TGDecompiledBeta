@@ -11,6 +11,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 
 public class ChatBigEmptyView extends LinearLayout {
@@ -49,19 +50,19 @@ public class ChatBigEmptyView extends LinearLayout {
         } else {
             RLottieImageView rLottieImageView = new RLottieImageView(context2);
             rLottieImageView.setAutoRepeat(true);
-            rLottieImageView.setAnimation(NUM, 120, 120);
+            rLottieImageView.setAnimation(R.raw.utyan_saved_messages, 120, 120);
             rLottieImageView.playAnimation();
             addView(rLottieImageView, LayoutHelper.createLinear(-2, -2, 49, 0, 2, 0, 0));
         }
         TextView textView3 = new TextView(context2);
         if (i2 == 0) {
-            textView3.setText(LocaleController.getString("EncryptedDescriptionTitle", NUM));
+            textView3.setText(LocaleController.getString("EncryptedDescriptionTitle", R.string.EncryptedDescriptionTitle));
             textView3.setTextSize(1, 15.0f);
         } else if (i2 == 1) {
-            textView3.setText(LocaleController.getString("GroupEmptyTitle2", NUM));
+            textView3.setText(LocaleController.getString("GroupEmptyTitle2", R.string.GroupEmptyTitle2));
             textView3.setTextSize(1, 15.0f);
         } else {
-            textView3.setText(LocaleController.getString("ChatYourSelfTitle", NUM));
+            textView3.setText(LocaleController.getString("ChatYourSelfTitle", R.string.ChatYourSelfTitle));
             textView3.setTextSize(1, 16.0f);
             textView3.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             textView3.setGravity(1);
@@ -77,11 +78,11 @@ public class ChatBigEmptyView extends LinearLayout {
             ImageView imageView = new ImageView(context2);
             imageView.setColorFilter(new PorterDuffColorFilter(getThemedColor("chat_serviceText"), PorterDuff.Mode.MULTIPLY));
             if (i2 == 0) {
-                imageView.setImageResource(NUM);
+                imageView.setImageResource(R.drawable.ic_lock_white);
             } else if (i2 == 2) {
-                imageView.setImageResource(NUM);
+                imageView.setImageResource(R.drawable.list_circle);
             } else {
-                imageView.setImageResource(NUM);
+                imageView.setImageResource(R.drawable.groups_overview_check);
             }
             this.imageViews.add(imageView);
             TextView textView4 = new TextView(context2);
@@ -95,33 +96,33 @@ public class ChatBigEmptyView extends LinearLayout {
                     if (i3 != 2) {
                         if (i3 == 3) {
                             if (i2 == 0) {
-                                textView4.setText(LocaleController.getString("EncryptedDescription4", NUM));
+                                textView4.setText(LocaleController.getString("EncryptedDescription4", R.string.EncryptedDescription4));
                             } else if (i2 == 2) {
-                                textView4.setText(LocaleController.getString("ChatYourSelfDescription4", NUM));
+                                textView4.setText(LocaleController.getString("ChatYourSelfDescription4", R.string.ChatYourSelfDescription4));
                             } else {
-                                textView4.setText(LocaleController.getString("GroupDescription4", NUM));
+                                textView4.setText(LocaleController.getString("GroupDescription4", R.string.GroupDescription4));
                             }
                         }
                     } else if (i2 == 0) {
-                        textView4.setText(LocaleController.getString("EncryptedDescription3", NUM));
+                        textView4.setText(LocaleController.getString("EncryptedDescription3", R.string.EncryptedDescription3));
                     } else if (i2 == 2) {
-                        textView4.setText(LocaleController.getString("ChatYourSelfDescription3", NUM));
+                        textView4.setText(LocaleController.getString("ChatYourSelfDescription3", R.string.ChatYourSelfDescription3));
                     } else {
-                        textView4.setText(LocaleController.getString("GroupDescription3", NUM));
+                        textView4.setText(LocaleController.getString("GroupDescription3", R.string.GroupDescription3));
                     }
                 } else if (i2 == 0) {
-                    textView4.setText(LocaleController.getString("EncryptedDescription2", NUM));
+                    textView4.setText(LocaleController.getString("EncryptedDescription2", R.string.EncryptedDescription2));
                 } else if (i2 == 2) {
-                    textView4.setText(LocaleController.getString("ChatYourSelfDescription2", NUM));
+                    textView4.setText(LocaleController.getString("ChatYourSelfDescription2", R.string.ChatYourSelfDescription2));
                 } else {
-                    textView4.setText(LocaleController.getString("GroupDescription2", NUM));
+                    textView4.setText(LocaleController.getString("GroupDescription2", R.string.GroupDescription2));
                 }
             } else if (i2 == 0) {
-                textView4.setText(LocaleController.getString("EncryptedDescription1", NUM));
+                textView4.setText(LocaleController.getString("EncryptedDescription1", R.string.EncryptedDescription1));
             } else if (i2 == 2) {
-                textView4.setText(LocaleController.getString("ChatYourSelfDescription1", NUM));
+                textView4.setText(LocaleController.getString("ChatYourSelfDescription1", R.string.ChatYourSelfDescription1));
             } else {
-                textView4.setText(LocaleController.getString("GroupDescription1", NUM));
+                textView4.setText(LocaleController.getString("GroupDescription1", R.string.GroupDescription1));
             }
             if (LocaleController.isRTL) {
                 linearLayout.addView(textView4, LayoutHelper.createLinear(-2, -2));

@@ -30,6 +30,7 @@ import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
@@ -239,11 +240,11 @@ public class GiftPremiumBottomSheet extends BottomSheetWithRecyclerListView {
 
     private void updateButtonText(boolean z) {
         if (BuildVars.useInvoiceBilling() || (BillingController.getInstance().isReady() && this.giftTiers.get(this.selectedTierIndex).googlePlayProductDetails != null)) {
-            this.premiumButtonView.setButton(LocaleController.formatString(NUM, this.giftTiers.get(this.selectedTierIndex).getFormattedPrice()), new GiftPremiumBottomSheet$$ExternalSyntheticLambda0(this), z);
+            this.premiumButtonView.setButton(LocaleController.formatString(R.string.GiftSubscriptionFor, this.giftTiers.get(this.selectedTierIndex).getFormattedPrice()), new GiftPremiumBottomSheet$$ExternalSyntheticLambda0(this), z);
             this.premiumButtonView.setFlickerDisabled(false);
             return;
         }
-        this.premiumButtonView.setButton(LocaleController.getString(NUM), GiftPremiumBottomSheet$$ExternalSyntheticLambda1.INSTANCE, true);
+        this.premiumButtonView.setButton(LocaleController.getString(R.string.Loading), GiftPremiumBottomSheet$$ExternalSyntheticLambda1.INSTANCE, true);
         this.premiumButtonView.setFlickerDisabled(true);
     }
 
@@ -374,7 +375,7 @@ public class GiftPremiumBottomSheet extends BottomSheetWithRecyclerListView {
 
     /* access modifiers changed from: protected */
     public CharSequence getTitle() {
-        return LocaleController.getString(NUM);
+        return LocaleController.getString(R.string.GiftTelegramPremiumTitle);
     }
 
     /* access modifiers changed from: protected */
@@ -393,7 +394,7 @@ public class GiftPremiumBottomSheet extends BottomSheetWithRecyclerListView {
                 /*
                     r7 = this;
                     r8 = 1
-                    if (r9 == r8) goto L_0x009b
+                    if (r9 == r8) goto L_0x009a
                     r0 = 2
                     if (r9 == r0) goto L_0x0023
                     r8 = 3
@@ -402,13 +403,13 @@ public class GiftPremiumBottomSheet extends BottomSheetWithRecyclerListView {
                     org.telegram.ui.Components.Premium.GiftPremiumBottomSheet r9 = org.telegram.ui.Components.Premium.GiftPremiumBottomSheet.this
                     android.content.Context r9 = r9.getContext()
                     r8.<init>(r9)
-                    goto L_0x00c1
+                    goto L_0x00c0
                 L_0x0016:
                     org.telegram.ui.Components.Premium.GiftPremiumBottomSheet$1$2 r8 = new org.telegram.ui.Components.Premium.GiftPremiumBottomSheet$1$2
                     org.telegram.ui.Components.Premium.GiftPremiumBottomSheet r9 = org.telegram.ui.Components.Premium.GiftPremiumBottomSheet.this
                     android.content.Context r9 = r9.getContext()
                     r8.<init>(r7, r9)
-                    goto L_0x00c1
+                    goto L_0x00c0
                 L_0x0023:
                     org.telegram.ui.Cells.TextInfoPrivacyCell r9 = new org.telegram.ui.Cells.TextInfoPrivacyCell
                     org.telegram.ui.Components.Premium.GiftPremiumBottomSheet r0 = org.telegram.ui.Components.Premium.GiftPremiumBottomSheet.this
@@ -418,15 +419,15 @@ public class GiftPremiumBottomSheet extends BottomSheetWithRecyclerListView {
                     r9.setTopPadding(r0)
                     android.widget.TextView r0 = r9.getTextView()
                     r0.setGravity(r8)
-                    r0 = 2131626117(0x7f0e0885, float:1.8879461E38)
+                    int r0 = org.telegram.messenger.R.string.GiftPremiumListFeaturesAndTerms
                     java.lang.String r0 = org.telegram.messenger.LocaleController.getString((int) r0)
                     r1 = 42
                     int r2 = r0.indexOf(r1)
                     int r1 = r0.lastIndexOf(r1)
                     r3 = -1
                     r4 = 0
-                    if (r2 == r3) goto L_0x008a
-                    if (r1 == r3) goto L_0x008a
+                    if (r2 == r3) goto L_0x0089
+                    if (r1 == r3) goto L_0x0089
                     java.lang.StringBuilder r3 = new java.lang.StringBuilder
                     r3.<init>()
                     java.lang.String r5 = r0.substring(r4, r2)
@@ -448,16 +449,16 @@ public class GiftPremiumBottomSheet extends BottomSheetWithRecyclerListView {
                     r8 = 33
                     r3.setSpan(r0, r2, r1, r8)
                     r9.setText(r3)
-                    goto L_0x008d
-                L_0x008a:
+                    goto L_0x008c
+                L_0x0089:
                     r9.setText(r0)
-                L_0x008d:
+                L_0x008c:
                     r8 = 1101529088(0x41a80000, float:21.0)
                     int r0 = org.telegram.messenger.AndroidUtilities.dp(r8)
                     int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)
                     r9.setPadding(r0, r4, r8, r4)
-                    goto L_0x00c0
-                L_0x009b:
+                    goto L_0x00bf
+                L_0x009a:
                     java.util.concurrent.atomic.AtomicReference r8 = new java.util.concurrent.atomic.AtomicReference
                     r9 = 0
                     java.lang.Float r9 = java.lang.Float.valueOf(r9)
@@ -472,9 +473,9 @@ public class GiftPremiumBottomSheet extends BottomSheetWithRecyclerListView {
                     org.telegram.ui.Components.Premium.GiftPremiumBottomSheet$1$$ExternalSyntheticLambda1 r0 = new org.telegram.ui.Components.Premium.GiftPremiumBottomSheet$1$$ExternalSyntheticLambda1
                     r0.<init>(r8, r9)
                     r9.setProgressDelegate(r0)
-                L_0x00c0:
+                L_0x00bf:
                     r8 = r9
-                L_0x00c1:
+                L_0x00c0:
                     org.telegram.ui.Components.RecyclerListView$Holder r9 = new org.telegram.ui.Components.RecyclerListView$Holder
                     r9.<init>(r8)
                     return r9

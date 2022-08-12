@@ -27,6 +27,7 @@ import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$ChatFull;
@@ -121,9 +122,9 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
     }
 
     public View createView(Context context) {
-        this.actionBar.setBackButtonImage(NUM);
+        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("GroupStickers", NUM));
+        this.actionBar.setTitle(LocaleController.getString("GroupStickers", R.string.GroupStickers));
         this.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             public void onItemClick(int i) {
                 if (i == -1) {
@@ -131,7 +132,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                 }
             }
         });
-        ActionBarMenuItem addItem = this.actionBar.createMenu().addItem(0, NUM);
+        ActionBarMenuItem addItem = this.actionBar.createMenu().addItem(0, R.drawable.ic_ab_search);
         this.searchItem = addItem;
         addItem.setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
             public void onSearchExpand() {
@@ -157,7 +158,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                 }
             }
         });
-        this.searchItem.setSearchFieldHint(LocaleController.getString(NUM));
+        this.searchItem.setSearchFieldHint(LocaleController.getString(R.string.Search));
         this.listAdapter = new ListAdapter(context);
         this.searchAdapter = new SearchAdapter(context);
         FrameLayout frameLayout = new FrameLayout(context);
@@ -247,7 +248,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
             }
 
             public String getCustomButtonText() {
-                return LocaleController.getString(isChecked ? NUM : NUM);
+                return LocaleController.getString(isChecked ? R.string.RemoveGroupStickerSet : R.string.SetAsGroupStickerSet);
             }
 
             /* JADX WARNING: Removed duplicated region for block: B:21:0x0094  */
@@ -480,7 +481,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
             NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.chatInfoDidLoad, this.info, 0, Boolean.TRUE, Boolean.FALSE);
             finishFragment();
         } else if (getParentActivity() != null) {
-            Toast.makeText(getParentActivity(), LocaleController.getString("ErrorOccurred", NUM) + "\n" + tLRPC$TL_error.text, 0).show();
+            Toast.makeText(getParentActivity(), LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred) + "\n" + tLRPC$TL_error.text, 0).show();
         }
     }
 
@@ -668,20 +669,20 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
             this.localSearchEntries = list2;
             notifyDataSetChanged();
             GroupStickersActivity.this.emptyView.title.setVisibility(8);
-            GroupStickersActivity.this.emptyView.subtitle.setText(LocaleController.formatString(NUM, str));
+            GroupStickersActivity.this.emptyView.subtitle.setText(LocaleController.formatString(R.string.ChooseStickerNoResultsFound, str));
             GroupStickersActivity.this.emptyView.showProgress(false, true);
         }
 
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v2, resolved type: org.telegram.ui.Cells.StickerSetCell} */
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v3, resolved type: org.telegram.ui.Cells.HeaderCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v3, resolved type: org.telegram.ui.Cells.HeaderCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v4, resolved type: org.telegram.ui.Cells.HeaderCell} */
         /* JADX WARNING: type inference failed for: r9v1, types: [android.view.View] */
         /* JADX WARNING: Multi-variable type inference failed */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(android.view.ViewGroup r9, int r10) {
             /*
                 r8 = this;
-                if (r10 == 0) goto L_0x0030
+                if (r10 == 0) goto L_0x002e
                 org.telegram.ui.Cells.HeaderCell r9 = new org.telegram.ui.Cells.HeaderCell
                 android.content.Context r1 = r8.mContext
                 r3 = 21
@@ -694,15 +695,15 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                 r0 = r9
                 r0.<init>(r1, r2, r3, r4, r5, r6, r7)
                 android.content.Context r10 = r8.mContext
-                r0 = 2131165436(0x7var_fc, float:1.794509E38)
+                int r0 = org.telegram.messenger.R.drawable.greydivider_bottom
                 java.lang.String r1 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r10 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r10, (int) r0, (java.lang.String) r1)
                 r9.setBackground(r10)
-                r10 = 2131625134(0x7f0e04ae, float:1.8877467E38)
+                int r10 = org.telegram.messenger.R.string.ChooseStickerMyStickerSets
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString((int) r10)
                 r9.setText(r10)
-                goto L_0x0041
-            L_0x0030:
+                goto L_0x003f
+            L_0x002e:
                 org.telegram.ui.Cells.StickerSetCell r9 = new org.telegram.ui.Cells.StickerSetCell
                 android.content.Context r10 = r8.mContext
                 r0 = 3
@@ -710,7 +711,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                 java.lang.String r10 = "windowBackgroundWhite"
                 int r10 = org.telegram.ui.ActionBar.Theme.getColor(r10)
                 r9.setBackgroundColor(r10)
-            L_0x0041:
+            L_0x003f:
                 androidx.recyclerview.widget.RecyclerView$LayoutParams r10 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
                 r0 = -1
                 r1 = -2
@@ -794,10 +795,10 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                 stickerSetCell.setChecked(z, false);
             } else if (itemViewType != 1) {
                 if (itemViewType == 4) {
-                    ((HeaderCell) viewHolder.itemView).setText(LocaleController.getString(NUM));
+                    ((HeaderCell) viewHolder.itemView).setText(LocaleController.getString(R.string.ChooseStickerSetHeader));
                 }
             } else if (i == GroupStickersActivity.this.infoRow) {
-                String string = LocaleController.getString("ChooseStickerSetMy", NUM);
+                String string = LocaleController.getString("ChooseStickerSetMy", R.string.ChooseStickerSetMy);
                 int indexOf = string.indexOf("@stickers");
                 if (indexOf != -1) {
                     try {
@@ -832,7 +833,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                 view.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
             } else {
                 view = new TextInfoPrivacyCell(this.mContext);
-                view.setBackground(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
+                view.setBackground(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, "windowBackgroundGrayShadow"));
             }
             view.setLayoutParams(new RecyclerView.LayoutParams(-1, -2));
             return new RecyclerListView.Holder(view);

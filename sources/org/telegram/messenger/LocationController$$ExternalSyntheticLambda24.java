@@ -10,6 +10,6 @@ public final /* synthetic */ class LocationController$$ExternalSyntheticLambda24
     }
 
     public final void run() {
-        this.f$0.lambda$startLocationLookupForPeopleNearby$26(this.f$1);
+        this.f$0.lambda$startFusedLocationRequest$5(this.f$1);
     }
 }

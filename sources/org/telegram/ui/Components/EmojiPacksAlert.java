@@ -22,6 +22,7 @@ import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.ConnectionsManager;
@@ -283,14 +284,14 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
             org.telegram.ui.Components.Premium.PremiumButtonView r3 = new org.telegram.ui.Components.Premium.PremiumButtonView
             r3.<init>(r2, r5)
             r0.premiumButtonView = r3
-            r2 = 2131628818(0x7f0e1312, float:1.888494E38)
+            int r2 = org.telegram.messenger.R.string.UnlockPremiumEmoji
             java.lang.String r4 = "UnlockPremiumEmoji"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             org.telegram.ui.Components.EmojiPacksAlert$$ExternalSyntheticLambda1 r4 = new org.telegram.ui.Components.EmojiPacksAlert$$ExternalSyntheticLambda1
             r4.<init>(r0)
             r3.setButton(r2, r4)
             org.telegram.ui.Components.Premium.PremiumButtonView r2 = r0.premiumButtonView
-            r3 = 2131558588(0x7f0d00bc, float:1.8742496E38)
+            int r3 = org.telegram.messenger.R.raw.unlock_icon
             r2.setIcon(r3)
             org.telegram.ui.Components.Premium.PremiumButtonView r2 = r0.premiumButtonView
             android.widget.FrameLayout r2 = r2.buttonLayout
@@ -487,7 +488,7 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
                 callback.run(Boolean.TRUE);
             }
         } else if (baseFragment.getFragmentView() != null) {
-            Toast.makeText(baseFragment.getFragmentView().getContext(), LocaleController.getString("ErrorOccurred", NUM), 0).show();
+            Toast.makeText(baseFragment.getFragmentView().getContext(), LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred), 0).show();
             if (callback != null) {
                 callback.run(Boolean.FALSE);
             }
@@ -581,9 +582,9 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
                     this.addButtonView.setVisibility(0);
                     this.removeButtonView.setVisibility(8);
                     if (arrayList4.size() == 1) {
-                        this.addButtonView.setText(LocaleController.formatString("AddStickersCount", NUM, LocaleController.formatPluralString("EmojiCountButton", ((TLRPC$TL_messages_stickerSet) arrayList4.get(0)).documents.size(), new Object[0])));
+                        this.addButtonView.setText(LocaleController.formatString("AddStickersCount", R.string.AddStickersCount, LocaleController.formatPluralString("EmojiCountButton", ((TLRPC$TL_messages_stickerSet) arrayList4.get(0)).documents.size(), new Object[0])));
                     } else {
-                        this.addButtonView.setText(LocaleController.formatString("AddStickersCount", NUM, LocaleController.formatPluralString("EmojiPackCount", arrayList4.size(), new Object[0])));
+                        this.addButtonView.setText(LocaleController.formatString("AddStickersCount", R.string.AddStickersCount, LocaleController.formatPluralString("EmojiPackCount", arrayList4.size(), new Object[0])));
                     }
                     this.addButtonView.setOnClickListener(new EmojiPacksAlert$$ExternalSyntheticLambda2(this, arrayList4));
                     updateShowButton(true, !this.first);
@@ -591,9 +592,9 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
                     this.addButtonView.setVisibility(8);
                     this.removeButtonView.setVisibility(0);
                     if (arrayList2.size() == 1) {
-                        this.removeButtonView.setText(LocaleController.formatString("RemoveStickersCount", NUM, LocaleController.formatPluralString("EmojiCountButton", ((TLRPC$TL_messages_stickerSet) arrayList2.get(0)).documents.size(), new Object[0])));
+                        this.removeButtonView.setText(LocaleController.formatString("RemoveStickersCount", R.string.RemoveStickersCount, LocaleController.formatPluralString("EmojiCountButton", ((TLRPC$TL_messages_stickerSet) arrayList2.get(0)).documents.size(), new Object[0])));
                     } else {
-                        this.removeButtonView.setText(LocaleController.formatString("RemoveStickersCount", NUM, LocaleController.formatPluralString("EmojiPackCount", arrayList2.size(), new Object[0])));
+                        this.removeButtonView.setText(LocaleController.formatString("RemoveStickersCount", R.string.RemoveStickersCount, LocaleController.formatPluralString("EmojiPackCount", arrayList2.size(), new Object[0])));
                     }
                     this.removeButtonView.setOnClickListener(new EmojiPacksAlert$$ExternalSyntheticLambda3(this, arrayList2));
                     updateShowButton(true, !this.first);
@@ -821,7 +822,7 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
                 TextView textView = (TextView) viewHolder.itemView;
                 textView.setTextSize(1, 13.0f);
                 textView.setTextColor(EmojiPacksAlert.this.getThemedColor("chat_emojiPanelTrendingDescription"));
-                textView.setText(AndroidUtilities.replaceTags(LocaleController.getString("PremiumPreviewEmojiPack", NUM)));
+                textView.setText(AndroidUtilities.replaceTags(LocaleController.getString("PremiumPreviewEmojiPack", R.string.PremiumPreviewEmojiPack)));
                 textView.setPadding(AndroidUtilities.dp(14.0f), 0, AndroidUtilities.dp(30.0f), AndroidUtilities.dp(14.0f));
             }
         }
@@ -975,7 +976,7 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
                 r5 = 1101004800(0x41a00000, float:20.0)
                 java.lang.String r6 = "fonts/rmedium.ttf"
                 r7 = 1090519040(0x41000000, float:8.0)
-                if (r2 != 0) goto L_0x021a
+                if (r2 != 0) goto L_0x0216
                 int r10 = r26.currentAccount
                 org.telegram.messenger.UserConfig r10 = org.telegram.messenger.UserConfig.getInstance(r10)
                 boolean r10 = r10.isPremium()
@@ -985,19 +986,19 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
                 r14 = 1105199104(0x41e00000, float:28.0)
                 r15 = -2147483648(0xfffffffvar_, float:-0.0)
                 r4 = 99999(0x1869f, float:1.40128E-40)
-                if (r10 != 0) goto L_0x00e4
+                if (r10 != 0) goto L_0x00e2
                 org.telegram.ui.Components.Premium.PremiumButtonView r10 = new org.telegram.ui.Components.Premium.PremiumButtonView
                 int r9 = org.telegram.messenger.AndroidUtilities.dp(r11)
                 r10.<init>(r3, r9, r8)
                 r0.unlockButtonView = r10
-                r9 = 2131628816(0x7f0e1310, float:1.8884935E38)
+                int r9 = org.telegram.messenger.R.string.Unlock
                 java.lang.String r11 = "Unlock"
                 java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
                 org.telegram.ui.Components.EmojiPacksAlert$EmojiPackHeader$$ExternalSyntheticLambda2 r11 = new org.telegram.ui.Components.EmojiPacksAlert$EmojiPackHeader$$ExternalSyntheticLambda2
                 r11.<init>(r0)
                 r10.setButton(r9, r11)
                 org.telegram.ui.Components.Premium.PremiumButtonView r9 = r0.unlockButtonView
-                r10 = 2131558588(0x7f0d00bc, float:1.8742496E38)
+                int r10 = org.telegram.messenger.R.raw.unlock_icon
                 r9.setIcon(r10)
                 org.telegram.ui.Components.Premium.PremiumButtonView r9 = r0.unlockButtonView
                 org.telegram.ui.Components.RLottieImageView r9 = r9.getIconView()
@@ -1045,7 +1046,7 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
                 float r7 = (float) r7
                 float r9 = org.telegram.messenger.AndroidUtilities.density
                 float r7 = r7 / r9
-            L_0x00e4:
+            L_0x00e2:
                 android.widget.TextView r9 = new android.widget.TextView
                 r9.<init>(r3)
                 r0.addButtonView = r9
@@ -1065,7 +1066,7 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
                 android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.AdaptiveRipple.filledRect((int) r11, (float[]) r12)
                 r9.setBackground(r5)
                 android.widget.TextView r5 = r0.addButtonView
-                r9 = 2131624242(0x7f0e0132, float:1.8875658E38)
+                int r9 = org.telegram.messenger.R.string.Add
                 java.lang.String r11 = "Add"
                 java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
                 r5.setText(r9)
@@ -1121,7 +1122,7 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
                 android.graphics.drawable.Drawable r10 = org.telegram.ui.ActionBar.Theme.createRadSelectorDrawable(r10, r11, r11)
                 r7.setBackground(r10)
                 android.widget.TextView r7 = r0.removeButtonView
-                r10 = 2131628528(0x7f0e11f0, float:1.8884351E38)
+                int r10 = org.telegram.messenger.R.string.StickersRemove
                 java.lang.String r11 = "StickersRemove"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
                 r7.setText(r10)
@@ -1162,7 +1163,7 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
                 float r7 = org.telegram.messenger.AndroidUtilities.density
                 float r4 = r4 / r7
                 float r7 = java.lang.Math.max(r5, r4)
-            L_0x021a:
+            L_0x0216:
                 android.widget.TextView r4 = new android.widget.TextView
                 r4.<init>(r3)
                 r0.titleView = r4
@@ -1180,7 +1181,7 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
                 java.lang.String r6 = "dialogTextBlack"
                 int r6 = r1.getThemedColor(r6)
                 r4.setTextColor(r6)
-                if (r2 == 0) goto L_0x0265
+                if (r2 == 0) goto L_0x0261
                 android.widget.TextView r4 = r0.titleView
                 r6 = 1101004800(0x41a00000, float:20.0)
                 r4.setTextSize(r5, r6)
@@ -1194,8 +1195,8 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
                 r14 = r7
                 android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrameRelatively(r9, r10, r11, r12, r13, r14, r15)
                 r0.addView(r4, r5)
-                goto L_0x0283
-            L_0x0265:
+                goto L_0x027f
+            L_0x0261:
                 android.widget.TextView r4 = r0.titleView
                 r5 = 1099431936(0x41880000, float:17.0)
                 r6 = 1
@@ -1210,8 +1211,8 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
                 r14 = r7
                 android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrameRelatively(r9, r10, r11, r12, r13, r14, r15)
                 r0.addView(r4, r5)
-            L_0x0283:
-                if (r2 != 0) goto L_0x02c5
+            L_0x027f:
+                if (r2 != 0) goto L_0x02c1
                 android.widget.TextView r4 = new android.widget.TextView
                 r4.<init>(r3)
                 r0.subtitleView = r4
@@ -1239,8 +1240,8 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
                 r14 = r7
                 android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrameRelatively(r9, r10, r11, r12, r13, r14, r15)
                 r0.addView(r4, r5)
-            L_0x02c5:
-                if (r2 == 0) goto L_0x0361
+            L_0x02c1:
+                if (r2 == 0) goto L_0x0357
                 org.telegram.ui.ActionBar.ActionBarMenuItem r9 = new org.telegram.ui.ActionBar.ActionBarMenuItem
                 r4 = 0
                 r5 = 0
@@ -1256,7 +1257,7 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
                 r3 = 2
                 r2.setSubMenuOpenSide(r3)
                 org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r0.optionsButton
-                r4 = 2131165453(0x7var_d, float:1.7945124E38)
+                int r4 = org.telegram.messenger.R.drawable.ic_ab_other
                 r2.setIcon((int) r4)
                 org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r0.optionsButton
                 java.lang.String r4 = "player_actionBarSelector"
@@ -1280,15 +1281,15 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
                 android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r5, r6, r7, r8, r9, r10)
                 r0.addView(r2, r4)
                 org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r0.optionsButton
-                r4 = 2131165942(0x7var_f6, float:1.7946115E38)
-                r5 = 2131628533(0x7f0e11f5, float:1.8884361E38)
+                int r4 = org.telegram.messenger.R.drawable.msg_share
+                int r5 = org.telegram.messenger.R.string.StickersShare
                 java.lang.String r6 = "StickersShare"
                 java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
                 r6 = 1
                 r2.addSubItem(r6, r4, r5)
                 org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r0.optionsButton
-                r4 = 2131165783(0x7var_, float:1.7945793E38)
-                r5 = 2131625280(0x7f0e0540, float:1.8877763E38)
+                int r4 = org.telegram.messenger.R.drawable.msg_link
+                int r5 = org.telegram.messenger.R.string.CopyLink
                 java.lang.String r6 = "CopyLink"
                 java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
                 r2.addSubItem(r3, r4, r5)
@@ -1301,11 +1302,11 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
                 r3.<init>(r1)
                 r2.setDelegate(r3)
                 org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.optionsButton
-                r2 = 2131624003(0x7f0e0043, float:1.8875173E38)
+                int r2 = org.telegram.messenger.R.string.AccDescrMoreOptions
                 java.lang.String r3 = "AccDescrMoreOptions"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setContentDescription(r2)
-            L_0x0361:
+            L_0x0357:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.EmojiPacksAlert.EmojiPackHeader.<init>(org.telegram.ui.Components.EmojiPacksAlert, android.content.Context, boolean):void");
@@ -1489,7 +1490,7 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
         /* access modifiers changed from: private */
         public /* synthetic */ void lambda$init$0() {
             EmojiPacksAlert.this.dismiss();
-            BulletinFactory.of(EmojiPacksAlert.this.fragment).createErrorBulletin(LocaleController.getString("AddEmojiNotFound", NUM)).show();
+            BulletinFactory.of(EmojiPacksAlert.this.fragment).createErrorBulletin(LocaleController.getString("AddEmojiNotFound", R.string.AddEmojiNotFound)).show();
         }
 
         /* access modifiers changed from: private */

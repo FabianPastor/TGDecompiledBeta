@@ -42,6 +42,7 @@ import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MemberRequestsController;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.ConnectionsManager;
@@ -193,19 +194,19 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
             this.emptyView = stickerEmptyView;
             TextView textView = stickerEmptyView.title;
             if (this.isChannel) {
-                i = NUM;
+                i = R.string.NoSubscribeRequests;
                 str = "NoSubscribeRequests";
             } else {
-                i = NUM;
+                i = R.string.NoMemberRequests;
                 str = "NoMemberRequests";
             }
             textView.setText(LocaleController.getString(str, i));
             TextView textView2 = this.emptyView.subtitle;
             if (this.isChannel) {
-                i2 = NUM;
+                i2 = R.string.NoSubscribeRequestsDescription;
                 str2 = "NoSubscribeRequestsDescription";
             } else {
-                i2 = NUM;
+                i2 = R.string.NoMemberRequestsDescription;
                 str2 = "NoMemberRequestsDescription";
             }
             textView2.setText(LocaleController.getString(str2, i2));
@@ -222,8 +223,8 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
             if (this.isShowLastItemDivider) {
                 stickerEmptyView.setBackgroundColor(Theme.getColor("windowBackgroundWhite", this.fragment.getResourceProvider()));
             }
-            this.searchEmptyView.title.setText(LocaleController.getString("NoResult", NUM));
-            this.searchEmptyView.subtitle.setText(LocaleController.getString("SearchEmptyViewFilteredSubtitle2", NUM));
+            this.searchEmptyView.title.setText(LocaleController.getString("NoResult", R.string.NoResult));
+            this.searchEmptyView.subtitle.setText(LocaleController.getString("SearchEmptyViewFilteredSubtitle2", R.string.SearchEmptyViewFilteredSubtitle2));
             this.searchEmptyView.setAnimateLayoutChange(true);
             this.searchEmptyView.setVisibility(8);
         }
@@ -548,9 +549,9 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
                 multiLineLayout.imageView.setForUserOrChat(tLRPC$User, new AvatarDrawable(tLRPC$User));
                 String firstName = UserObject.getFirstName(tLRPC$User);
                 if (this.isChannel) {
-                    str = LocaleController.formatString("HasBeenAddedToChannel", NUM, firstName);
+                    str = LocaleController.formatString("HasBeenAddedToChannel", R.string.HasBeenAddedToChannel, firstName);
                 } else {
-                    str = LocaleController.formatString("HasBeenAddedToGroup", NUM, firstName);
+                    str = LocaleController.formatString("HasBeenAddedToGroup", R.string.HasBeenAddedToGroup, firstName);
                 }
                 SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(str);
                 int indexOf = str.indexOf(firstName);
@@ -612,7 +613,7 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
             MemberRequestCell memberRequestCell;
             if (i == 1) {
                 View view = new View(viewGroup.getContext());
-                view.setBackground(Theme.getThemedDrawable(viewGroup.getContext(), NUM, "windowBackgroundGrayShadow"));
+                view.setBackground(Theme.getThemedDrawable(viewGroup.getContext(), R.drawable.greydivider_bottom, "windowBackgroundGrayShadow"));
                 memberRequestCell = view;
             } else if (i == 2) {
                 memberRequestCell = new View(this, viewGroup.getContext()) {
@@ -742,10 +743,10 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
         public final ProfileGalleryView viewPager;
 
         public PreviewDialog(Context context, RecyclerListView recyclerListView, Theme.ResourcesProvider resourcesProvider, boolean z) {
-            super(context, NUM);
+            super(context, R.style.TransparentDialog2);
             int i;
             String str;
-            Drawable mutate = getContext().getResources().getDrawable(NUM).mutate();
+            Drawable mutate = getContext().getResources().getDrawable(R.drawable.popup_fixed_alert2).mutate();
             this.pagerShadowDrawable = mutate;
             TextView textView = new TextView(getContext());
             this.nameText = textView;
@@ -897,25 +898,25 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
             actionBarMenuSubItem.setColors(Theme.getColor("actionBarDefaultSubmenuItem", resourcesProvider), Theme.getColor("actionBarDefaultSubmenuItemIcon", resourcesProvider));
             actionBarMenuSubItem.setSelectorColor(Theme.getColor("dialogButtonSelector", resourcesProvider));
             if (z) {
-                i = NUM;
+                i = R.string.AddToChannel;
                 str = "AddToChannel";
             } else {
-                i = NUM;
+                i = R.string.AddToGroup;
                 str = "AddToGroup";
             }
-            actionBarMenuSubItem.setTextAndIcon(LocaleController.getString(str, i), NUM);
+            actionBarMenuSubItem.setTextAndIcon(LocaleController.getString(str, i), R.drawable.msg_requests);
             actionBarMenuSubItem.setOnClickListener(new MemberRequestsDelegate$PreviewDialog$$ExternalSyntheticLambda2(this));
             actionBarPopupWindowLayout.addView(actionBarMenuSubItem);
             ActionBarMenuSubItem actionBarMenuSubItem2 = new ActionBarMenuSubItem(context, false, false);
             actionBarMenuSubItem2.setColors(Theme.getColor("actionBarDefaultSubmenuItem", resourcesProvider), Theme.getColor("actionBarDefaultSubmenuItemIcon", resourcesProvider));
             actionBarMenuSubItem2.setSelectorColor(Theme.getColor("dialogButtonSelector", resourcesProvider));
-            actionBarMenuSubItem2.setTextAndIcon(LocaleController.getString("SendMessage", NUM), NUM);
+            actionBarMenuSubItem2.setTextAndIcon(LocaleController.getString("SendMessage", R.string.SendMessage), R.drawable.msg_msgbubble3);
             actionBarMenuSubItem2.setOnClickListener(new MemberRequestsDelegate$PreviewDialog$$ExternalSyntheticLambda3(this));
             actionBarPopupWindowLayout.addView(actionBarMenuSubItem2);
             ActionBarMenuSubItem actionBarMenuSubItem3 = new ActionBarMenuSubItem(context, false, true);
             actionBarMenuSubItem3.setColors(Theme.getColor("dialogTextRed2", resourcesProvider), Theme.getColor("dialogRedIcon", resourcesProvider));
             actionBarMenuSubItem3.setSelectorColor(Theme.getColor("dialogButtonSelector", resourcesProvider));
-            actionBarMenuSubItem3.setTextAndIcon(LocaleController.getString("DismissRequest", NUM), NUM);
+            actionBarMenuSubItem3.setTextAndIcon(LocaleController.getString("DismissRequest", R.string.DismissRequest), R.drawable.msg_remove);
             actionBarMenuSubItem3.setOnClickListener(new MemberRequestsDelegate$PreviewDialog$$ExternalSyntheticLambda1(this));
             actionBarPopupWindowLayout.addView(actionBarMenuSubItem3);
         }
@@ -953,7 +954,7 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
         /* access modifiers changed from: protected */
         public void onCreate(Bundle bundle) {
             super.onCreate(bundle);
-            getWindow().setWindowAnimations(NUM);
+            getWindow().setWindowAnimations(R.style.DialogNoAnimation);
             setContentView(this.contentView, new ViewGroup.LayoutParams(-1, -1));
             WindowManager.LayoutParams attributes = getWindow().getAttributes();
             attributes.width = -1;

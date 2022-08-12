@@ -10,6 +10,6 @@ public final /* synthetic */ class LocationActivity$$ExternalSyntheticLambda19 i
     }
 
     public final void run() {
-        this.f$0.lambda$fixLayoutInternal$33(this.f$1);
+        this.f$0.lambda$fixLayoutInternal$37(this.f$1);
     }
 }

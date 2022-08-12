@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.LocationController;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC$Message;
 import org.telegram.ui.ActionBar.SimpleTextView;
@@ -58,7 +59,7 @@ public class SendLocationCell extends FrameLayout {
             AndroidUtilities.runOnUIThread(this.invalidateRunnable, 1000);
             setWillNotDraw(false);
         } else {
-            Drawable drawable = getResources().getDrawable(NUM);
+            Drawable drawable = getResources().getDrawable(R.drawable.pin);
             drawable.setColorFilter(new PorterDuffColorFilter(getThemedColor("location_sendLocationIcon"), PorterDuff.Mode.MULTIPLY));
             CombinedDrawable combinedDrawable2 = new CombinedDrawable(createSimpleSelectorCircleDrawable, drawable);
             combinedDrawable2.setCustomSize(AndroidUtilities.dp(42.0f), AndroidUtilities.dp(42.0f));
@@ -145,13 +146,13 @@ public class SendLocationCell extends FrameLayout {
     public void checkText() {
         LocationController.SharingLocationInfo sharingLocationInfo = LocationController.getInstance(this.currentAccount).getSharingLocationInfo(this.dialogId);
         if (sharingLocationInfo != null) {
-            String string = LocaleController.getString("StopLiveLocation", NUM);
+            String string = LocaleController.getString("StopLiveLocation", R.string.StopLiveLocation);
             TLRPC$Message tLRPC$Message = sharingLocationInfo.messageObject.messageOwner;
             int i = tLRPC$Message.edit_date;
             setText(string, LocaleController.formatLocationUpdateDate(i != 0 ? (long) i : (long) tLRPC$Message.date));
             return;
         }
-        setText(LocaleController.getString("SendLiveLocation", NUM), LocaleController.getString("SendLiveLocationInfo", NUM));
+        setText(LocaleController.getString("SendLiveLocation", R.string.SendLiveLocation), LocaleController.getString("SendLiveLocationInfo", R.string.SendLiveLocationInfo));
     }
 
     /* access modifiers changed from: protected */

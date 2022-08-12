@@ -51,6 +51,7 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.ConnectionsManager;
@@ -430,18 +431,18 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
         this.isMotion = z2;
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:54:0x02a5, code lost:
-        if ("d".equals(((org.telegram.ui.WallpapersListActivity.ColorWallpaper) r0).slug) == false) goto L_0x02ad;
+    /* JADX WARNING: Code restructure failed: missing block: B:54:0x029f, code lost:
+        if ("d".equals(((org.telegram.ui.WallpapersListActivity.ColorWallpaper) r0).slug) == false) goto L_0x02a7;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:56:0x02ab, code lost:
-        if ((r6.currentWallpaper instanceof org.telegram.tgnet.TLRPC$TL_wallPaper) != false) goto L_0x02ad;
+    /* JADX WARNING: Code restructure failed: missing block: B:56:0x02a5, code lost:
+        if ((r6.currentWallpaper instanceof org.telegram.tgnet.TLRPC$TL_wallPaper) != false) goto L_0x02a7;
      */
-    /* JADX WARNING: Removed duplicated region for block: B:115:0x0605  */
-    /* JADX WARNING: Removed duplicated region for block: B:145:0x06f8  */
-    /* JADX WARNING: Removed duplicated region for block: B:148:0x06fe  */
-    /* JADX WARNING: Removed duplicated region for block: B:194:0x07eb  */
-    /* JADX WARNING: Removed duplicated region for block: B:238:0x092f  */
-    /* JADX WARNING: Removed duplicated region for block: B:280:0x0c7e  */
+    /* JADX WARNING: Removed duplicated region for block: B:115:0x05f4  */
+    /* JADX WARNING: Removed duplicated region for block: B:145:0x06e1  */
+    /* JADX WARNING: Removed duplicated region for block: B:148:0x06e7  */
+    /* JADX WARNING: Removed duplicated region for block: B:194:0x07d4  */
+    /* JADX WARNING: Removed duplicated region for block: B:238:0x0915  */
+    /* JADX WARNING: Removed duplicated region for block: B:280:0x0CLASSNAME  */
     @android.annotation.SuppressLint({"Recycle"})
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public android.view.View createView(android.content.Context r38) {
@@ -462,13 +463,13 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             r6.page1 = r0
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
             org.telegram.ui.ActionBar.ActionBarMenu r0 = r0.createMenu()
-            r1 = 2131165456(0x7var_, float:1.794513E38)
+            int r1 = org.telegram.messenger.R.drawable.ic_ab_search
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.addItem((int) r9, (int) r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.setIsSearchField(r8)
             org.telegram.ui.ThemePreviewActivity$1 r1 = new org.telegram.ui.ThemePreviewActivity$1
             r1.<init>(r6)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.setActionBarMenuItemSearchListener(r1)
-            r1 = 2131628168(0x7f0e1088, float:1.8883621E38)
+            int r1 = org.telegram.messenger.R.string.Search
             java.lang.String r2 = "Search"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setSearchFieldHint(r1)
@@ -479,7 +480,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
             r0.setAddToContainer(r9)
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
-            r1 = 2131628704(0x7f0e12a0, float:1.8884708E38)
+            int r1 = org.telegram.messenger.R.string.ThemePreview
             java.lang.String r2 = "ThemePreview"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
@@ -511,21 +512,21 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             org.telegram.ui.Components.RecyclerListView r0 = r6.listView
             boolean r1 = org.telegram.messenger.LocaleController.isRTL
             r12 = 2
-            if (r1 == 0) goto L_0x00a3
+            if (r1 == 0) goto L_0x00a0
             r1 = 1
-            goto L_0x00a4
-        L_0x00a3:
+            goto L_0x00a1
+        L_0x00a0:
             r1 = 2
-        L_0x00a4:
+        L_0x00a1:
             r0.setVerticalScrollbarPosition(r1)
             org.telegram.ui.Components.RecyclerListView r0 = r6.listView
             int r1 = r6.screenType
-            if (r1 == 0) goto L_0x00b0
+            if (r1 == 0) goto L_0x00ad
             r1 = 1094713344(0x41400000, float:12.0)
-            goto L_0x00b1
-        L_0x00b0:
+            goto L_0x00ae
+        L_0x00ad:
             r1 = 0
-        L_0x00b1:
+        L_0x00ae:
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
             r0.setPadding(r9, r9, r9, r1)
             org.telegram.ui.Components.RecyclerListView r0 = r6.listView
@@ -550,9 +551,9 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             android.graphics.drawable.Drawable r0 = org.telegram.ui.ActionBar.Theme.createSimpleSelectorCircleDrawable(r0, r1, r2)
             int r1 = android.os.Build.VERSION.SDK_INT
             r2 = 21
-            if (r1 >= r2) goto L_0x0120
+            if (r1 >= r2) goto L_0x011c
             android.content.res.Resources r3 = r38.getResources()
-            r4 = 2131165414(0x7var_e6, float:1.7945044E38)
+            int r4 = org.telegram.messenger.R.drawable.floating_shadow
             android.graphics.drawable.Drawable r3 = r3.getDrawable(r4)
             android.graphics.drawable.Drawable r3 = r3.mutate()
             android.graphics.PorterDuffColorFilter r4 = new android.graphics.PorterDuffColorFilter
@@ -566,7 +567,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r15)
             r4.setIconSize(r0, r3)
             r0 = r4
-        L_0x0120:
+        L_0x011c:
             android.widget.ImageView r3 = r6.floatingButton
             r3.setBackgroundDrawable(r0)
             android.widget.ImageView r0 = r6.floatingButton
@@ -577,10 +578,10 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             r3.<init>(r4, r5)
             r0.setColorFilter(r3)
             android.widget.ImageView r0 = r6.floatingButton
-            r3 = 2131165413(0x7var_e5, float:1.7945042E38)
+            int r3 = org.telegram.messenger.R.drawable.floating_pencil
             r0.setImageResource(r3)
             r13 = 1082130432(0x40800000, float:4.0)
-            if (r1 < r2) goto L_0x01a4
+            if (r1 < r2) goto L_0x019f
             android.animation.StateListAnimator r0 = new android.animation.StateListAnimator
             r0.<init>()
             int[] r3 = new int[r8]
@@ -620,47 +621,47 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             org.telegram.ui.ThemePreviewActivity$3 r3 = new org.telegram.ui.ThemePreviewActivity$3
             r3.<init>(r6)
             r0.setOutlineProvider(r3)
-        L_0x01a4:
+        L_0x019f:
             android.widget.FrameLayout r0 = r6.page1
             android.widget.ImageView r3 = r6.floatingButton
-            if (r1 < r2) goto L_0x01af
+            if (r1 < r2) goto L_0x01aa
             r4 = 56
             r19 = 56
-            goto L_0x01b3
-        L_0x01af:
+            goto L_0x01ae
+        L_0x01aa:
             r4 = 60
             r19 = 60
-        L_0x01b3:
-            if (r1 < r2) goto L_0x01b8
+        L_0x01ae:
+            if (r1 < r2) goto L_0x01b3
             r20 = 1113587712(0x42600000, float:56.0)
-            goto L_0x01bc
-        L_0x01b8:
+            goto L_0x01b7
+        L_0x01b3:
             r1 = 1114636288(0x42700000, float:60.0)
             r20 = 1114636288(0x42700000, float:60.0)
-        L_0x01bc:
+        L_0x01b7:
             boolean r1 = org.telegram.messenger.LocaleController.isRTL
             r14 = 3
-            if (r1 == 0) goto L_0x01c3
+            if (r1 == 0) goto L_0x01be
             r2 = 3
-            goto L_0x01c4
-        L_0x01c3:
+            goto L_0x01bf
+        L_0x01be:
             r2 = 5
-        L_0x01c4:
+        L_0x01bf:
             r21 = r2 | 80
             r15 = 1096810496(0x41600000, float:14.0)
-            if (r1 == 0) goto L_0x01cd
+            if (r1 == 0) goto L_0x01c8
             r22 = 1096810496(0x41600000, float:14.0)
-            goto L_0x01cf
-        L_0x01cd:
+            goto L_0x01ca
+        L_0x01c8:
             r22 = 0
-        L_0x01cf:
+        L_0x01ca:
             r23 = 0
-            if (r1 == 0) goto L_0x01d6
+            if (r1 == 0) goto L_0x01d1
             r24 = 0
-            goto L_0x01d8
-        L_0x01d6:
+            goto L_0x01d3
+        L_0x01d1:
             r24 = 1096810496(0x41600000, float:14.0)
-        L_0x01d8:
+        L_0x01d3:
             r25 = 1096810496(0x41600000, float:14.0)
             android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r19, r20, r21, r22, r23, r24, r25)
             r0.addView(r3, r1)
@@ -678,10 +679,10 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             org.telegram.ui.ActionBar.ActionBar r0 = r37.createActionBar(r38)
             r6.actionBar2 = r0
             boolean r0 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r0 == 0) goto L_0x020c
+            if (r0 == 0) goto L_0x0207
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar2
             r0.setOccupyStatusBar(r9)
-        L_0x020c:
+        L_0x0207:
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar2
             org.telegram.ui.ActionBar.BackDrawable r1 = new org.telegram.ui.ActionBar.BackDrawable
             r1.<init>(r9)
@@ -704,19 +705,19 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r19, r20, r21, r22, r23, r24, r25)
             r1.addView(r0, r2)
             int r0 = r6.screenType
-            if (r0 != r12) goto L_0x0250
+            if (r0 != r12) goto L_0x024b
             org.telegram.ui.Components.BackupImageView r0 = r6.backgroundImage
             org.telegram.messenger.ImageReceiver r0 = r0.getImageReceiver()
             org.telegram.ui.ThemePreviewActivity$$ExternalSyntheticLambda19 r1 = new org.telegram.ui.ThemePreviewActivity$$ExternalSyntheticLambda19
             r1.<init>(r6)
             r0.setDelegate(r1)
-        L_0x0250:
+        L_0x024b:
             org.telegram.ui.ThemePreviewActivity$MessagesAdapter r0 = r6.messagesAdapter
             boolean r0 = r0.showSecretMessages
             r5 = 4
             r18 = 1092616192(0x41200000, float:10.0)
             java.lang.String r19 = "fonts/rmedium.ttf"
-            if (r0 == 0) goto L_0x0275
+            if (r0 == 0) goto L_0x0270
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar2
             java.lang.String r1 = "Telegram Beta Chat"
             r0.setTitle(r1)
@@ -726,45 +727,45 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             java.lang.String r3 = "Members"
             java.lang.String r1 = org.telegram.messenger.LocaleController.formatPluralString(r3, r1, r2)
             r0.setSubtitle(r1)
-            goto L_0x042f
-        L_0x0275:
+            goto L_0x0420
+        L_0x0270:
             int r0 = r6.screenType
-            if (r0 != r12) goto L_0x02bc
+            if (r0 != r12) goto L_0x02b5
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar2
-            r1 = 2131624668(0x7f0e02dc, float:1.8876522E38)
+            int r1 = org.telegram.messenger.R.string.BackgroundPreview
             java.lang.String r2 = "BackgroundPreview"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
             boolean r0 = org.telegram.messenger.BuildVars.DEBUG_PRIVATE_VERSION
-            if (r0 == 0) goto L_0x0295
+            if (r0 == 0) goto L_0x028f
             org.telegram.ui.ActionBar.Theme$ThemeInfo r0 = org.telegram.ui.ActionBar.Theme.getActiveTheme()
             org.telegram.ui.ActionBar.Theme$ThemeAccent r0 = r0.getAccent(r9)
-            if (r0 != 0) goto L_0x02ad
-        L_0x0295:
+            if (r0 != 0) goto L_0x02a7
+        L_0x028f:
             java.lang.Object r0 = r6.currentWallpaper
             boolean r1 = r0 instanceof org.telegram.ui.WallpapersListActivity.ColorWallpaper
-            if (r1 == 0) goto L_0x02a7
+            if (r1 == 0) goto L_0x02a1
             org.telegram.ui.WallpapersListActivity$ColorWallpaper r0 = (org.telegram.ui.WallpapersListActivity.ColorWallpaper) r0
             java.lang.String r0 = r0.slug
             java.lang.String r1 = "d"
             boolean r0 = r1.equals(r0)
-            if (r0 == 0) goto L_0x02ad
-        L_0x02a7:
+            if (r0 == 0) goto L_0x02a7
+        L_0x02a1:
             java.lang.Object r0 = r6.currentWallpaper
             boolean r0 = r0 instanceof org.telegram.tgnet.TLRPC$TL_wallPaper
-            if (r0 == 0) goto L_0x042f
-        L_0x02ad:
+            if (r0 == 0) goto L_0x0420
+        L_0x02a7:
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar2
             org.telegram.ui.ActionBar.ActionBarMenu r0 = r0.createMenu()
             r1 = 5
-            r2 = 2131165943(0x7var_f7, float:1.7946117E38)
+            int r2 = org.telegram.messenger.R.drawable.msg_share_filled
             r0.addItem((int) r1, (int) r2)
-            goto L_0x042f
-        L_0x02bc:
-            if (r0 != r8) goto L_0x03e6
+            goto L_0x0420
+        L_0x02b5:
+            if (r0 != r8) goto L_0x03d7
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar2
             org.telegram.ui.ActionBar.ActionBarMenu r3 = r0.createMenu()
-            r0 = 2131628136(0x7f0e1068, float:1.8883556E38)
+            int r0 = org.telegram.messenger.R.string.Save
             java.lang.String r1 = "Save"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.String r0 = r0.toUpperCase()
@@ -783,46 +784,46 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             r6.dropDownContainer = r10
             r10.setSubMenuOpenSide(r8)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.dropDownContainer
-            r1 = 2131625199(0x7f0e04ef, float:1.88776E38)
+            int r1 = org.telegram.messenger.R.string.ColorPickerBackground
             java.lang.String r2 = "ColorPickerBackground"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.addSubItem(r12, r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.dropDownContainer
-            r1 = 2131625200(0x7f0e04f0, float:1.8877601E38)
+            int r1 = org.telegram.messenger.R.string.ColorPickerMainColor
             java.lang.String r2 = "ColorPickerMainColor"
-            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
-            r0.addSubItem(r8, r1)
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r1)
+            r0.addSubItem(r8, r2)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.dropDownContainer
-            r1 = 2131625201(0x7f0e04f1, float:1.8877603E38)
-            java.lang.String r2 = "ColorPickerMyMessages"
-            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
-            r0.addSubItem(r14, r1)
+            int r2 = org.telegram.messenger.R.string.ColorPickerMyMessages
+            java.lang.String r3 = "ColorPickerMyMessages"
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
+            r0.addSubItem(r14, r2)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.dropDownContainer
             r0.setAllowCloseAnimation(r9)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.dropDownContainer
             r0.setForceSmoothKeyboard(r8)
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar2
-            org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r6.dropDownContainer
+            org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r6.dropDownContainer
             r26 = -2
             r27 = -1082130432(0xffffffffbvar_, float:-1.0)
             r28 = 51
-            boolean r2 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r2 == 0) goto L_0x0338
-            r2 = 1115684864(0x42800000, float:64.0)
+            boolean r3 = org.telegram.messenger.AndroidUtilities.isTablet()
+            if (r3 == 0) goto L_0x032d
+            r3 = 1115684864(0x42800000, float:64.0)
             r29 = 1115684864(0x42800000, float:64.0)
-            goto L_0x033a
-        L_0x0338:
+            goto L_0x032f
+        L_0x032d:
             r29 = 1113587712(0x42600000, float:56.0)
-        L_0x033a:
+        L_0x032f:
             r30 = 0
             r31 = 1109393408(0x42200000, float:40.0)
             r32 = 0
-            android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r26, r27, r28, r29, r30, r31, r32)
-            r0.addView(r1, r2)
+            android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r26, r27, r28, r29, r30, r31, r32)
+            r0.addView(r2, r3)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.dropDownContainer
-            org.telegram.ui.ThemePreviewActivity$$ExternalSyntheticLambda8 r1 = new org.telegram.ui.ThemePreviewActivity$$ExternalSyntheticLambda8
-            r1.<init>(r6)
-            r0.setOnClickListener(r1)
+            org.telegram.ui.ThemePreviewActivity$$ExternalSyntheticLambda8 r2 = new org.telegram.ui.ThemePreviewActivity$$ExternalSyntheticLambda8
+            r2.<init>(r6)
+            r0.setOnClickListener(r2)
             android.widget.TextView r0 = new android.widget.TextView
             r0.<init>(r7)
             r6.dropDown = r0
@@ -836,22 +837,21 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             android.widget.TextView r0 = r6.dropDown
             r0.setMaxLines(r8)
             android.widget.TextView r0 = r6.dropDown
-            android.text.TextUtils$TruncateAt r1 = android.text.TextUtils.TruncateAt.END
-            r0.setEllipsize(r1)
+            android.text.TextUtils$TruncateAt r2 = android.text.TextUtils.TruncateAt.END
+            r0.setEllipsize(r2)
             android.widget.TextView r0 = r6.dropDown
-            java.lang.String r1 = "actionBarDefaultTitle"
-            int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
-            r0.setTextColor(r1)
+            java.lang.String r2 = "actionBarDefaultTitle"
+            int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
+            r0.setTextColor(r2)
             android.widget.TextView r0 = r6.dropDown
-            android.graphics.Typeface r1 = org.telegram.messenger.AndroidUtilities.getTypeface(r19)
-            r0.setTypeface(r1)
+            android.graphics.Typeface r2 = org.telegram.messenger.AndroidUtilities.getTypeface(r19)
+            r0.setTypeface(r2)
             android.widget.TextView r0 = r6.dropDown
-            r1 = 2131625200(0x7f0e04f0, float:1.8877601E38)
             java.lang.String r2 = "ColorPickerMainColor"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setText(r1)
             android.content.res.Resources r0 = r38.getResources()
-            r1 = 2131165463(0x7var_, float:1.7945144E38)
+            int r1 = org.telegram.messenger.R.drawable.ic_arrow_drop_down
             android.graphics.drawable.Drawable r0 = r0.getDrawable(r1)
             android.graphics.drawable.Drawable r0 = r0.mutate()
             android.graphics.PorterDuffColorFilter r1 = new android.graphics.PorterDuffColorFilter
@@ -878,35 +878,35 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             r32 = 1065353216(0x3var_, float:1.0)
             android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r26, r27, r28, r29, r30, r31, r32)
             r0.addView(r1, r2)
-            goto L_0x042f
-        L_0x03e6:
+            goto L_0x0420
+        L_0x03d7:
             org.telegram.ui.ActionBar.Theme$ThemeInfo r0 = r6.applyingTheme
             org.telegram.tgnet.TLRPC$TL_theme r1 = r0.info
-            if (r1 == 0) goto L_0x03ef
+            if (r1 == 0) goto L_0x03e0
             java.lang.String r0 = r1.title
-            goto L_0x03f3
-        L_0x03ef:
+            goto L_0x03e4
+        L_0x03e0:
             java.lang.String r0 = r0.getName()
-        L_0x03f3:
+        L_0x03e4:
             java.lang.String r1 = ".attheme"
             int r1 = r0.lastIndexOf(r1)
-            if (r1 < 0) goto L_0x03ff
+            if (r1 < 0) goto L_0x03f0
             java.lang.String r0 = r0.substring(r9, r1)
-        L_0x03ff:
+        L_0x03f0:
             org.telegram.ui.ActionBar.ActionBar r1 = r6.actionBar2
             r1.setTitle(r0)
             org.telegram.ui.ActionBar.Theme$ThemeInfo r0 = r6.applyingTheme
             org.telegram.tgnet.TLRPC$TL_theme r0 = r0.info
-            if (r0 == 0) goto L_0x041c
+            if (r0 == 0) goto L_0x040d
             int r0 = r0.installs_count
-            if (r0 <= 0) goto L_0x041c
+            if (r0 <= 0) goto L_0x040d
             org.telegram.ui.ActionBar.ActionBar r1 = r6.actionBar2
             java.lang.Object[] r2 = new java.lang.Object[r9]
             java.lang.String r3 = "ThemeInstallCount"
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatPluralString(r3, r0, r2)
             r1.setSubtitle(r0)
-            goto L_0x042f
-        L_0x041c:
+            goto L_0x0420
+        L_0x040d:
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar2
             long r1 = java.lang.System.currentTimeMillis()
             r3 = 1000(0x3e8, double:4.94E-321)
@@ -915,7 +915,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             long r1 = r1 - r3
             java.lang.String r1 = org.telegram.messenger.LocaleController.formatDateOnline(r1, r11)
             r0.setSubtitle(r1)
-        L_0x042f:
+        L_0x0420:
             org.telegram.ui.ThemePreviewActivity$8 r0 = new org.telegram.ui.ThemePreviewActivity$8
             r0.<init>(r7)
             r6.listView2 = r0
@@ -929,27 +929,27 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             org.telegram.ui.Components.RecyclerListView r0 = r6.listView2
             r0.setOverScrollMode(r12)
             int r0 = r6.screenType
-            if (r0 != r12) goto L_0x0461
+            if (r0 != r12) goto L_0x0452
             org.telegram.ui.Components.RecyclerListView r0 = r6.listView2
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r13)
             r2 = 1112539136(0x42500000, float:52.0)
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
             r0.setPadding(r9, r1, r9, r2)
-            goto L_0x0480
-        L_0x0461:
-            if (r0 != r8) goto L_0x0473
+            goto L_0x0471
+        L_0x0452:
+            if (r0 != r8) goto L_0x0464
             org.telegram.ui.Components.RecyclerListView r0 = r6.listView2
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r13)
             r2 = 1098907648(0x41800000, float:16.0)
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
             r0.setPadding(r9, r1, r9, r2)
-            goto L_0x0480
-        L_0x0473:
+            goto L_0x0471
+        L_0x0464:
             org.telegram.ui.Components.RecyclerListView r0 = r6.listView2
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r13)
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r13)
             r0.setPadding(r9, r1, r9, r2)
-        L_0x0480:
+        L_0x0471:
             org.telegram.ui.Components.RecyclerListView r0 = r6.listView2
             r0.setClipToPadding(r9)
             org.telegram.ui.Components.RecyclerListView r0 = r6.listView2
@@ -958,15 +958,15 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             r0.setLayoutManager(r1)
             org.telegram.ui.Components.RecyclerListView r0 = r6.listView2
             boolean r1 = org.telegram.messenger.LocaleController.isRTL
-            if (r1 == 0) goto L_0x0497
+            if (r1 == 0) goto L_0x0488
             r1 = 1
-            goto L_0x0498
-        L_0x0497:
+            goto L_0x0489
+        L_0x0488:
             r1 = 2
-        L_0x0498:
+        L_0x0489:
             r0.setVerticalScrollbarPosition(r1)
             int r0 = r6.screenType
-            if (r0 != r8) goto L_0x04c5
+            if (r0 != r8) goto L_0x04b6
             android.widget.FrameLayout r0 = r6.page2
             org.telegram.ui.Components.RecyclerListView r1 = r6.listView2
             r26 = -1
@@ -983,15 +983,15 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             r1.<init>(r6)
             r0.setOnItemClickListener((org.telegram.ui.Components.RecyclerListView.OnItemClickListenerExtended) r1)
             r3 = -1
-            goto L_0x04d3
-        L_0x04c5:
+            goto L_0x04c4
+        L_0x04b6:
             android.widget.FrameLayout r0 = r6.page2
             org.telegram.ui.Components.RecyclerListView r1 = r6.listView2
             r2 = 51
             r3 = -1
             android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r3, (int) r3, (int) r2)
             r0.addView(r1, r4)
-        L_0x04d3:
+        L_0x04c4:
             org.telegram.ui.Components.RecyclerListView r0 = r6.listView2
             org.telegram.ui.ThemePreviewActivity$10 r1 = new org.telegram.ui.ThemePreviewActivity$10
             r1.<init>()
@@ -1011,14 +1011,14 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             java.lang.String r3 = "chat_fieldOverlayText"
             r4 = 17
             r5 = -2
-            if (r0 == r8) goto L_0x050a
-            if (r0 != r12) goto L_0x0505
-            goto L_0x050a
-        L_0x0505:
+            if (r0 == r8) goto L_0x04fb
+            if (r0 != r12) goto L_0x04f6
+            goto L_0x04fb
+        L_0x04f6:
             r28 = r3
             r4 = 0
-            goto L_0x0CLASSNAME
-        L_0x050a:
+            goto L_0x0c7a
+        L_0x04fb:
             org.telegram.ui.Components.RadialProgress2 r0 = new org.telegram.ui.Components.RadialProgress2
             org.telegram.ui.Components.BackupImageView r13 = r6.backgroundImage
             r0.<init>(r13)
@@ -1029,7 +1029,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             java.lang.String r1 = "chat_serviceText"
             r0.setColors((java.lang.String) r13, (java.lang.String) r10, (java.lang.String) r11, (java.lang.String) r1)
             int r0 = r6.screenType
-            if (r0 != r12) goto L_0x0589
+            if (r0 != r12) goto L_0x0579
             org.telegram.ui.ThemePreviewActivity$11 r0 = new org.telegram.ui.ThemePreviewActivity$11
             r0.<init>(r6, r7)
             r6.bottomOverlayChat = r0
@@ -1062,7 +1062,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             int r1 = org.telegram.ui.ActionBar.Theme.getColor(r3)
             r0.setTextColor(r1)
             android.widget.TextView r0 = r6.bottomOverlayChatText
-            r1 = 2131628317(0x7f0e111d, float:1.8883923E38)
+            int r1 = org.telegram.messenger.R.string.SetBackground
             java.lang.String r11 = "SetBackground"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r11, r1)
             r0.setText(r1)
@@ -1070,11 +1070,11 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             android.widget.TextView r1 = r6.bottomOverlayChatText
             android.widget.FrameLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r5, (int) r5, (int) r4)
             r0.addView(r1, r11)
-        L_0x0589:
+        L_0x0579:
             android.graphics.Rect r0 = new android.graphics.Rect
             r0.<init>()
             android.content.res.Resources r1 = r38.getResources()
-            r11 = 2131166143(0x7var_bf, float:1.7946523E38)
+            int r11 = org.telegram.messenger.R.drawable.sheet_shadow_round
             android.graphics.drawable.Drawable r1 = r1.getDrawable(r11)
             android.graphics.drawable.Drawable r1 = r1.mutate()
             r6.sheetDrawable = r1
@@ -1094,80 +1094,80 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             android.graphics.Typeface r10 = org.telegram.messenger.AndroidUtilities.getTypeface(r19)
             r1.setTypeface(r10)
             int r10 = r6.screenType
-            if (r10 == r8) goto L_0x05e6
+            if (r10 == r8) goto L_0x05d5
             java.lang.Object r10 = r6.currentWallpaper
             boolean r11 = r10 instanceof org.telegram.ui.WallpapersListActivity.ColorWallpaper
-            if (r11 == 0) goto L_0x05d3
-            goto L_0x05e6
-        L_0x05d3:
+            if (r11 == 0) goto L_0x05c2
+            goto L_0x05d5
+        L_0x05c2:
             boolean r11 = r10 instanceof org.telegram.ui.WallpapersListActivity.FileWallpaper
-            if (r11 == 0) goto L_0x05e4
+            if (r11 == 0) goto L_0x05d3
             org.telegram.ui.WallpapersListActivity$FileWallpaper r10 = (org.telegram.ui.WallpapersListActivity.FileWallpaper) r10
             java.lang.String r10 = r10.slug
             java.lang.String r11 = "t"
             boolean r10 = r11.equals(r10)
-            if (r10 == 0) goto L_0x05e4
-            goto L_0x05f8
-        L_0x05e4:
+            if (r10 == 0) goto L_0x05d3
+            goto L_0x05e7
+        L_0x05d3:
             r10 = 2
-            goto L_0x05fb
-        L_0x05e6:
+            goto L_0x05ea
+        L_0x05d5:
             java.lang.Object r10 = r6.currentWallpaper
             boolean r11 = r10 instanceof org.telegram.ui.WallpapersListActivity.ColorWallpaper
-            if (r11 == 0) goto L_0x05fa
+            if (r11 == 0) goto L_0x05e9
             org.telegram.ui.WallpapersListActivity$ColorWallpaper r10 = (org.telegram.ui.WallpapersListActivity.ColorWallpaper) r10
             java.lang.String r10 = r10.slug
             java.lang.String r11 = "d"
             boolean r10 = r11.equals(r10)
-            if (r10 == 0) goto L_0x05fa
-        L_0x05f8:
+            if (r10 == 0) goto L_0x05e9
+        L_0x05e7:
             r10 = 0
-            goto L_0x05fb
-        L_0x05fa:
+            goto L_0x05ea
+        L_0x05e9:
             r10 = 3
-        L_0x05fb:
+        L_0x05ea:
             java.lang.String[] r11 = new java.lang.String[r10]
             int[] r13 = new int[r10]
             org.telegram.ui.Components.WallpaperCheckBoxView[] r15 = new org.telegram.ui.Components.WallpaperCheckBoxView[r10]
             r6.backgroundCheckBoxView = r15
-            if (r10 == 0) goto L_0x06f8
+            if (r10 == 0) goto L_0x06e1
             android.widget.FrameLayout r15 = new android.widget.FrameLayout
             r15.<init>(r7)
             r6.backgroundButtonsContainer = r15
             int r15 = r6.screenType
-            if (r15 == r8) goto L_0x062e
+            if (r15 == r8) goto L_0x061b
             java.lang.Object r15 = r6.currentWallpaper
             boolean r15 = r15 instanceof org.telegram.ui.WallpapersListActivity.ColorWallpaper
-            if (r15 == 0) goto L_0x0617
-            goto L_0x062e
-        L_0x0617:
-            r15 = 2131624656(0x7f0e02d0, float:1.8876498E38)
+            if (r15 == 0) goto L_0x0606
+            goto L_0x061b
+        L_0x0606:
+            int r15 = org.telegram.messenger.R.string.BackgroundBlurred
             java.lang.String r14 = "BackgroundBlurred"
             java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r14, r15)
             r11[r9] = r14
-            r14 = 2131624666(0x7f0e02da, float:1.8876518E38)
+            int r14 = org.telegram.messenger.R.string.BackgroundMotion
             java.lang.String r15 = "BackgroundMotion"
             java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r15, r14)
             r11[r8] = r14
-            goto L_0x064f
-        L_0x062e:
-            r14 = 2131624663(0x7f0e02d7, float:1.8876512E38)
+            goto L_0x0639
+        L_0x061b:
+            int r14 = org.telegram.messenger.R.string.BackgroundColors
             java.lang.String r15 = "BackgroundColors"
             java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r15, r14)
             r11[r9] = r14
-            r14 = 2131624667(0x7f0e02db, float:1.887652E38)
+            int r14 = org.telegram.messenger.R.string.BackgroundPattern
             java.lang.String r15 = "BackgroundPattern"
             java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r15, r14)
             r11[r8] = r14
-            r14 = 2131624666(0x7f0e02da, float:1.8876518E38)
+            int r14 = org.telegram.messenger.R.string.BackgroundMotion
             java.lang.String r15 = "BackgroundMotion"
             java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r15, r14)
             r11[r12] = r14
-        L_0x064f:
+        L_0x0639:
             r14 = 0
             r15 = 0
-        L_0x0651:
-            if (r14 >= r10) goto L_0x066f
+        L_0x063b:
+            if (r14 >= r10) goto L_0x0659
             r12 = r11[r14]
             float r12 = r1.measureText(r12)
             r28 = r3
@@ -1180,8 +1180,8 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             int r14 = r14 + 1
             r3 = r28
             r12 = 2
-            goto L_0x0651
-        L_0x066f:
+            goto L_0x063b
+        L_0x0659:
             r28 = r3
             org.telegram.ui.ThemePreviewActivity$12 r2 = new org.telegram.ui.ThemePreviewActivity$12
             r2.<init>(r7)
@@ -1189,48 +1189,48 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             r2.setWillNotDraw(r9)
             android.widget.FrameLayout r2 = r6.backgroundPlayAnimationView
             int r3 = r6.backgroundGradientColor1
-            if (r3 == 0) goto L_0x0683
+            if (r3 == 0) goto L_0x066d
             r3 = 0
-            goto L_0x0684
-        L_0x0683:
+            goto L_0x066e
+        L_0x066d:
             r3 = 4
-        L_0x0684:
+        L_0x066e:
             r2.setVisibility(r3)
             android.widget.FrameLayout r2 = r6.backgroundPlayAnimationView
             int r3 = r6.backgroundGradientColor1
-            if (r3 == 0) goto L_0x0690
+            if (r3 == 0) goto L_0x067a
             r3 = 1065353216(0x3var_, float:1.0)
-            goto L_0x0693
-        L_0x0690:
+            goto L_0x067d
+        L_0x067a:
             r3 = 1036831949(0x3dcccccd, float:0.1)
-        L_0x0693:
+        L_0x067d:
             r2.setScaleX(r3)
             android.widget.FrameLayout r2 = r6.backgroundPlayAnimationView
             int r3 = r6.backgroundGradientColor1
-            if (r3 == 0) goto L_0x069f
+            if (r3 == 0) goto L_0x0689
             r3 = 1065353216(0x3var_, float:1.0)
-            goto L_0x06a2
-        L_0x069f:
+            goto L_0x068c
+        L_0x0689:
             r3 = 1036831949(0x3dcccccd, float:0.1)
-        L_0x06a2:
+        L_0x068c:
             r2.setScaleY(r3)
             android.widget.FrameLayout r2 = r6.backgroundPlayAnimationView
             int r3 = r6.backgroundGradientColor1
-            if (r3 == 0) goto L_0x06ae
+            if (r3 == 0) goto L_0x0698
             r3 = 1065353216(0x3var_, float:1.0)
-            goto L_0x06af
-        L_0x06ae:
+            goto L_0x0699
+        L_0x0698:
             r3 = 0
-        L_0x06af:
+        L_0x0699:
             r2.setAlpha(r3)
             android.widget.FrameLayout r2 = r6.backgroundPlayAnimationView
             int r3 = r6.backgroundGradientColor1
-            if (r3 == 0) goto L_0x06bd
+            if (r3 == 0) goto L_0x06a7
             java.lang.Integer r3 = java.lang.Integer.valueOf(r8)
-            goto L_0x06be
-        L_0x06bd:
+            goto L_0x06a8
+        L_0x06a7:
             r3 = 0
-        L_0x06be:
+        L_0x06a8:
             r2.setTag(r3)
             android.widget.FrameLayout r2 = r6.backgroundButtonsContainer
             android.widget.FrameLayout r3 = r6.backgroundPlayAnimationView
@@ -1247,35 +1247,35 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             android.widget.ImageView$ScaleType r3 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r3)
             android.widget.ImageView r2 = r6.backgroundPlayAnimationImageView
-            r3 = 2131165272(0x7var_, float:1.7944756E38)
+            int r3 = org.telegram.messenger.R.drawable.bg_rotate_large
             r2.setImageResource(r3)
             android.widget.FrameLayout r2 = r6.backgroundPlayAnimationView
             android.widget.ImageView r3 = r6.backgroundPlayAnimationImageView
             android.widget.FrameLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r5, (int) r5, (int) r4)
             r2.addView(r3, r12)
-            goto L_0x06fb
-        L_0x06f8:
+            goto L_0x06e4
+        L_0x06e1:
             r28 = r3
             r15 = 0
-        L_0x06fb:
+        L_0x06e4:
             r2 = 0
-        L_0x06fc:
-            if (r2 >= r10) goto L_0x07e5
+        L_0x06e5:
+            if (r2 >= r10) goto L_0x07ce
             org.telegram.ui.Components.WallpaperCheckBoxView[] r3 = r6.backgroundCheckBoxView
             org.telegram.ui.Components.WallpaperCheckBoxView r12 = new org.telegram.ui.Components.WallpaperCheckBoxView
             int r14 = r6.screenType
-            if (r14 == r8) goto L_0x070c
+            if (r14 == r8) goto L_0x06f5
             java.lang.Object r14 = r6.currentWallpaper
             boolean r14 = r14 instanceof org.telegram.ui.WallpapersListActivity.ColorWallpaper
-            if (r14 == 0) goto L_0x070e
-        L_0x070c:
-            if (r2 == 0) goto L_0x0710
-        L_0x070e:
+            if (r14 == 0) goto L_0x06f7
+        L_0x06f5:
+            if (r2 == 0) goto L_0x06f9
+        L_0x06f7:
             r14 = 1
-            goto L_0x0711
-        L_0x0710:
+            goto L_0x06fa
+        L_0x06f9:
             r14 = 0
-        L_0x0711:
+        L_0x06fa:
             org.telegram.ui.Components.BackupImageView r4 = r6.backgroundImage
             r12.<init>(r7, r14, r4)
             r3[r2] = r12
@@ -1289,50 +1289,50 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             r12 = r13[r2]
             r3.setText(r4, r12, r15)
             int r3 = r6.screenType
-            if (r3 == r8) goto L_0x0746
+            if (r3 == r8) goto L_0x072f
             java.lang.Object r3 = r6.currentWallpaper
             boolean r3 = r3 instanceof org.telegram.ui.WallpapersListActivity.ColorWallpaper
-            if (r3 == 0) goto L_0x0737
-            goto L_0x0746
-        L_0x0737:
+            if (r3 == 0) goto L_0x0720
+            goto L_0x072f
+        L_0x0720:
             org.telegram.ui.Components.WallpaperCheckBoxView[] r3 = r6.backgroundCheckBoxView
             r3 = r3[r2]
-            if (r2 != 0) goto L_0x0740
+            if (r2 != 0) goto L_0x0729
             boolean r4 = r6.isBlurred
-            goto L_0x0742
-        L_0x0740:
+            goto L_0x072b
+        L_0x0729:
             boolean r4 = r6.isMotion
-        L_0x0742:
+        L_0x072b:
             r3.setChecked(r4, r9)
-            goto L_0x0770
-        L_0x0746:
-            if (r2 != r8) goto L_0x0764
+            goto L_0x0759
+        L_0x072f:
+            if (r2 != r8) goto L_0x074d
             org.telegram.ui.Components.WallpaperCheckBoxView[] r3 = r6.backgroundCheckBoxView
             r3 = r3[r2]
             org.telegram.tgnet.TLRPC$TL_wallPaper r4 = r6.selectedPattern
-            if (r4 != 0) goto L_0x075f
+            if (r4 != 0) goto L_0x0748
             org.telegram.ui.ActionBar.Theme$ThemeAccent r4 = r6.accent
-            if (r4 == 0) goto L_0x075d
+            if (r4 == 0) goto L_0x0746
             java.lang.String r4 = r4.patternSlug
             boolean r4 = android.text.TextUtils.isEmpty(r4)
-            if (r4 != 0) goto L_0x075d
-            goto L_0x075f
-        L_0x075d:
+            if (r4 != 0) goto L_0x0746
+            goto L_0x0748
+        L_0x0746:
             r4 = 0
-            goto L_0x0760
-        L_0x075f:
+            goto L_0x0749
+        L_0x0748:
             r4 = 1
-        L_0x0760:
+        L_0x0749:
             r3.setChecked(r4, r9)
-            goto L_0x0770
-        L_0x0764:
+            goto L_0x0759
+        L_0x074d:
             r3 = 2
-            if (r2 != r3) goto L_0x0770
+            if (r2 != r3) goto L_0x0759
             org.telegram.ui.Components.WallpaperCheckBoxView[] r3 = r6.backgroundCheckBoxView
             r3 = r3[r2]
             boolean r4 = r6.isMotion
             r3.setChecked(r4, r9)
-        L_0x0770:
+        L_0x0759:
             r3 = 1113587712(0x42600000, float:56.0)
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r3)
             int r4 = r4 + r15
@@ -1341,36 +1341,36 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             r12 = 17
             r3.gravity = r12
             r12 = 3
-            if (r10 != r12) goto L_0x079d
-            if (r2 == 0) goto L_0x0793
+            if (r10 != r12) goto L_0x0786
+            if (r2 == 0) goto L_0x077c
             r14 = 2
-            if (r2 != r14) goto L_0x0789
-            goto L_0x0793
-        L_0x0789:
+            if (r2 != r14) goto L_0x0772
+            goto L_0x077c
+        L_0x0772:
             int r4 = r4 / 2
             int r14 = org.telegram.messenger.AndroidUtilities.dp(r18)
             int r4 = r4 + r14
             r3.rightMargin = r4
-            goto L_0x07b2
-        L_0x0793:
+            goto L_0x079b
+        L_0x077c:
             int r4 = r4 / 2
             int r14 = org.telegram.messenger.AndroidUtilities.dp(r18)
             int r4 = r4 + r14
             r3.leftMargin = r4
-            goto L_0x07b2
-        L_0x079d:
-            if (r2 != r8) goto L_0x07a9
+            goto L_0x079b
+        L_0x0786:
+            if (r2 != r8) goto L_0x0792
             int r4 = r4 / 2
             int r14 = org.telegram.messenger.AndroidUtilities.dp(r18)
             int r4 = r4 + r14
             r3.leftMargin = r4
-            goto L_0x07b2
-        L_0x07a9:
+            goto L_0x079b
+        L_0x0792:
             int r4 = r4 / 2
             int r14 = org.telegram.messenger.AndroidUtilities.dp(r18)
             int r4 = r4 + r14
             r3.rightMargin = r4
-        L_0x07b2:
+        L_0x079b:
             android.widget.FrameLayout r4 = r6.backgroundButtonsContainer
             org.telegram.ui.Components.WallpaperCheckBoxView[] r14 = r6.backgroundCheckBoxView
             r14 = r14[r2]
@@ -1382,7 +1382,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             r14.<init>(r6, r2, r4)
             r3.setOnClickListener(r14)
             r3 = 2
-            if (r2 != r3) goto L_0x07dd
+            if (r2 != r3) goto L_0x07c6
             org.telegram.ui.Components.WallpaperCheckBoxView[] r3 = r6.backgroundCheckBoxView
             r3 = r3[r2]
             r4 = 0
@@ -1391,19 +1391,19 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             r3 = r3[r2]
             r14 = 4
             r3.setVisibility(r14)
-            goto L_0x07df
-        L_0x07dd:
+            goto L_0x07c8
+        L_0x07c6:
             r4 = 0
             r14 = 4
-        L_0x07df:
+        L_0x07c8:
             int r2 = r2 + 1
             r4 = 17
-            goto L_0x06fc
-        L_0x07e5:
+            goto L_0x06e5
+        L_0x07ce:
             r4 = 0
             r14 = 4
             int r2 = r6.screenType
-            if (r2 != r8) goto L_0x091f
+            if (r2 != r8) goto L_0x0905
             r2 = 2
             java.lang.String[] r3 = new java.lang.String[r2]
             int[] r10 = new int[r2]
@@ -1412,19 +1412,19 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             android.widget.FrameLayout r2 = new android.widget.FrameLayout
             r2.<init>(r7)
             r6.messagesButtonsContainer = r2
-            r2 = 2131624654(0x7f0e02ce, float:1.8876494E38)
+            int r2 = org.telegram.messenger.R.string.BackgroundAnimate
             java.lang.String r11 = "BackgroundAnimate"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r11, r2)
             r3[r9] = r2
-            r2 = 2131624663(0x7f0e02d7, float:1.8876512E38)
+            int r2 = org.telegram.messenger.R.string.BackgroundColors
             java.lang.String r11 = "BackgroundColors"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r11, r2)
             r3[r8] = r2
             r2 = 0
             r11 = 0
-        L_0x0813:
+        L_0x07fa:
             r12 = 2
-            if (r2 >= r12) goto L_0x082d
+            if (r2 >= r12) goto L_0x0814
             r12 = r3[r2]
             float r12 = r1.measureText(r12)
             double r12 = (double) r12
@@ -1434,10 +1434,10 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             r12 = r10[r2]
             int r11 = java.lang.Math.max(r11, r12)
             int r2 = r2 + 1
-            goto L_0x0813
-        L_0x082d:
+            goto L_0x07fa
+        L_0x0814:
             org.telegram.ui.ActionBar.Theme$ThemeAccent r1 = r6.accent
-            if (r1 == 0) goto L_0x091f
+            if (r1 == 0) goto L_0x0905
             org.telegram.ui.ThemePreviewActivity$14 r1 = new org.telegram.ui.ThemePreviewActivity$14
             r1.<init>(r7)
             r6.messagesPlayAnimationView = r1
@@ -1445,42 +1445,42 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             android.widget.FrameLayout r1 = r6.messagesPlayAnimationView
             org.telegram.ui.ActionBar.Theme$ThemeAccent r2 = r6.accent
             int r2 = r2.myMessagesGradientAccentColor1
-            if (r2 == 0) goto L_0x0845
+            if (r2 == 0) goto L_0x082c
             r2 = 0
-            goto L_0x0846
-        L_0x0845:
+            goto L_0x082d
+        L_0x082c:
             r2 = 4
-        L_0x0846:
+        L_0x082d:
             r1.setVisibility(r2)
             android.widget.FrameLayout r1 = r6.messagesPlayAnimationView
             org.telegram.ui.ActionBar.Theme$ThemeAccent r2 = r6.accent
             int r2 = r2.myMessagesGradientAccentColor1
-            if (r2 == 0) goto L_0x0854
+            if (r2 == 0) goto L_0x083b
             r2 = 1065353216(0x3var_, float:1.0)
-            goto L_0x0857
-        L_0x0854:
+            goto L_0x083e
+        L_0x083b:
             r2 = 1036831949(0x3dcccccd, float:0.1)
-        L_0x0857:
+        L_0x083e:
             r1.setScaleX(r2)
             android.widget.FrameLayout r1 = r6.messagesPlayAnimationView
             org.telegram.ui.ActionBar.Theme$ThemeAccent r2 = r6.accent
             int r2 = r2.myMessagesGradientAccentColor1
-            if (r2 == 0) goto L_0x0865
+            if (r2 == 0) goto L_0x084c
             r2 = 1065353216(0x3var_, float:1.0)
-            goto L_0x0868
-        L_0x0865:
+            goto L_0x084f
+        L_0x084c:
             r2 = 1036831949(0x3dcccccd, float:0.1)
-        L_0x0868:
+        L_0x084f:
             r1.setScaleY(r2)
             android.widget.FrameLayout r1 = r6.messagesPlayAnimationView
             org.telegram.ui.ActionBar.Theme$ThemeAccent r2 = r6.accent
             int r2 = r2.myMessagesGradientAccentColor1
-            if (r2 == 0) goto L_0x0876
+            if (r2 == 0) goto L_0x085d
             r15 = 1065353216(0x3var_, float:1.0)
-            goto L_0x0877
-        L_0x0876:
+            goto L_0x085e
+        L_0x085d:
             r15 = 0
-        L_0x0877:
+        L_0x085e:
             r1.setAlpha(r15)
             android.widget.FrameLayout r1 = r6.messagesButtonsContainer
             android.widget.FrameLayout r2 = r6.messagesPlayAnimationView
@@ -1498,7 +1498,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             android.widget.ImageView$ScaleType r2 = android.widget.ImageView.ScaleType.CENTER
             r1.setScaleType(r2)
             android.widget.ImageView r1 = r6.messagesPlayAnimationImageView
-            r2 = 2131165272(0x7var_, float:1.7944756E38)
+            int r2 = org.telegram.messenger.R.drawable.bg_rotate_large
             r1.setImageResource(r2)
             android.widget.FrameLayout r1 = r6.messagesPlayAnimationView
             android.widget.ImageView r2 = r6.messagesPlayAnimationImageView
@@ -1506,17 +1506,17 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             android.widget.FrameLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r5, (int) r5, (int) r12)
             r1.addView(r2, r13)
             r1 = 0
-        L_0x08b5:
+        L_0x089b:
             r2 = 2
-            if (r1 >= r2) goto L_0x091f
+            if (r1 >= r2) goto L_0x0905
             org.telegram.ui.Components.WallpaperCheckBoxView[] r2 = r6.messagesCheckBoxView
             org.telegram.ui.Components.WallpaperCheckBoxView r12 = new org.telegram.ui.Components.WallpaperCheckBoxView
-            if (r1 != 0) goto L_0x08c0
+            if (r1 != 0) goto L_0x08a6
             r13 = 1
-            goto L_0x08c1
-        L_0x08c0:
+            goto L_0x08a7
+        L_0x08a6:
             r13 = 0
-        L_0x08c1:
+        L_0x08a7:
             org.telegram.ui.Components.BackupImageView r15 = r6.backgroundImage
             r12.<init>(r7, r13, r15)
             r2[r1] = r12
@@ -1525,13 +1525,13 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             r12 = r3[r1]
             r13 = r10[r1]
             r2.setText(r12, r13, r11)
-            if (r1 != 0) goto L_0x08e0
+            if (r1 != 0) goto L_0x08c6
             org.telegram.ui.Components.WallpaperCheckBoxView[] r2 = r6.messagesCheckBoxView
             r2 = r2[r1]
             org.telegram.ui.ActionBar.Theme$ThemeAccent r12 = r6.accent
             boolean r12 = r12.myMessagesAnimated
             r2.setChecked(r12, r9)
-        L_0x08e0:
+        L_0x08c6:
             r2 = 1113587712(0x42600000, float:56.0)
             int r12 = org.telegram.messenger.AndroidUtilities.dp(r2)
             int r12 = r12 + r11
@@ -1539,18 +1539,18 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             r13.<init>(r12, r5)
             r15 = 17
             r13.gravity = r15
-            if (r1 != r8) goto L_0x08fc
+            if (r1 != r8) goto L_0x08e2
             int r12 = r12 / 2
             int r15 = org.telegram.messenger.AndroidUtilities.dp(r18)
             int r12 = r12 + r15
             r13.leftMargin = r12
-            goto L_0x0905
-        L_0x08fc:
+            goto L_0x08eb
+        L_0x08e2:
             int r12 = r12 / 2
             int r15 = org.telegram.messenger.AndroidUtilities.dp(r18)
             int r12 = r12 + r15
             r13.rightMargin = r12
-        L_0x0905:
+        L_0x08eb:
             android.widget.FrameLayout r12 = r6.messagesButtonsContainer
             org.telegram.ui.Components.WallpaperCheckBoxView[] r15 = r6.messagesCheckBoxView
             r15 = r15[r1]
@@ -1562,59 +1562,59 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             r15.<init>(r6, r1, r13)
             r12.setOnClickListener(r15)
             int r1 = r1 + 1
-            goto L_0x08b5
-        L_0x091f:
+            goto L_0x089b
+        L_0x0905:
             int r1 = r6.screenType
-            if (r1 == r8) goto L_0x0929
+            if (r1 == r8) goto L_0x090f
             java.lang.Object r1 = r6.currentWallpaper
             boolean r1 = r1 instanceof org.telegram.ui.WallpapersListActivity.ColorWallpaper
-            if (r1 == 0) goto L_0x0c6f
-        L_0x0929:
+            if (r1 == 0) goto L_0x0CLASSNAME
+        L_0x090f:
             r6.isBlurred = r9
             r1 = 0
-        L_0x092c:
+        L_0x0912:
             r2 = 2
-            if (r1 >= r2) goto L_0x0c6f
+            if (r1 >= r2) goto L_0x0CLASSNAME
             android.widget.FrameLayout[] r3 = r6.patternLayout
             org.telegram.ui.ThemePreviewActivity$16 r10 = new org.telegram.ui.ThemePreviewActivity$16
             r10.<init>(r7, r1, r0)
             r3[r1] = r10
-            if (r1 == r8) goto L_0x093e
+            if (r1 == r8) goto L_0x0924
             int r3 = r6.screenType
-            if (r3 != r2) goto L_0x0945
-        L_0x093e:
+            if (r3 != r2) goto L_0x092b
+        L_0x0924:
             android.widget.FrameLayout[] r2 = r6.patternLayout
             r2 = r2[r1]
             r2.setVisibility(r14)
-        L_0x0945:
+        L_0x092b:
             android.widget.FrameLayout[] r2 = r6.patternLayout
             r2 = r2[r1]
             r2.setWillNotDraw(r9)
             int r2 = r6.screenType
             r3 = 2
-            if (r2 != r3) goto L_0x0960
-            if (r1 != 0) goto L_0x0956
+            if (r2 != r3) goto L_0x0946
+            if (r1 != 0) goto L_0x093c
             r2 = 321(0x141, float:4.5E-43)
-            goto L_0x0958
-        L_0x0956:
+            goto L_0x093e
+        L_0x093c:
             r2 = 316(0x13c, float:4.43E-43)
-        L_0x0958:
+        L_0x093e:
             r3 = 83
             r10 = -1
             android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r10, (int) r2, (int) r3)
-            goto L_0x096e
-        L_0x0960:
+            goto L_0x0954
+        L_0x0946:
             r3 = 83
             r10 = -1
-            if (r1 != 0) goto L_0x0968
+            if (r1 != 0) goto L_0x094e
             r2 = 273(0x111, float:3.83E-43)
-            goto L_0x096a
-        L_0x0968:
+            goto L_0x0950
+        L_0x094e:
             r2 = 316(0x13c, float:4.43E-43)
-        L_0x096a:
+        L_0x0950:
             android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r10, (int) r2, (int) r3)
-        L_0x096e:
-            if (r1 != 0) goto L_0x098e
+        L_0x0954:
+            if (r1 != 0) goto L_0x0974
             int r3 = r2.height
             r10 = 1094713344(0x41400000, float:12.0)
             int r10 = org.telegram.messenger.AndroidUtilities.dp(r10)
@@ -1629,17 +1629,17 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             int r11 = r0.top
             int r10 = r10 + r11
             r3.setPadding(r9, r10, r9, r9)
-        L_0x098e:
+        L_0x0974:
             android.widget.FrameLayout r3 = r6.page2
             android.widget.FrameLayout[] r10 = r6.patternLayout
             r10 = r10[r1]
             r3.addView(r10, r2)
             r2 = 1101529088(0x41a80000, float:21.0)
-            if (r1 == r8) goto L_0x09a0
+            if (r1 == r8) goto L_0x0986
             int r3 = r6.screenType
             r10 = 2
-            if (r3 != r10) goto L_0x0ade
-        L_0x09a0:
+            if (r3 != r10) goto L_0x0ac2
+        L_0x0986:
             android.widget.FrameLayout[] r3 = r6.patternsButtonsContainer
             org.telegram.ui.ThemePreviewActivity$17 r10 = new org.telegram.ui.ThemePreviewActivity$17
             r10.<init>(r6, r7)
@@ -1682,7 +1682,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             r3.setTextColor(r11)
             android.widget.TextView[] r3 = r6.patternsCancelButton
             r3 = r3[r1]
-            r11 = 2131624838(0x7f0e0386, float:1.8876867E38)
+            int r11 = org.telegram.messenger.R.string.Cancel
             java.lang.String r12 = "Cancel"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
             java.lang.String r11 = r11.toUpperCase()
@@ -1733,7 +1733,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             r3.setTextColor(r11)
             android.widget.TextView[] r3 = r6.patternsSaveButton
             r3 = r3[r1]
-            r11 = 2131624402(0x7f0e01d2, float:1.8875983E38)
+            int r11 = org.telegram.messenger.R.string.ApplyTheme
             java.lang.String r12 = "ApplyTheme"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
             java.lang.String r11 = r11.toUpperCase()
@@ -1766,13 +1766,13 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             org.telegram.ui.ThemePreviewActivity$$ExternalSyntheticLambda9 r11 = new org.telegram.ui.ThemePreviewActivity$$ExternalSyntheticLambda9
             r11.<init>(r6, r1)
             r3.setOnClickListener(r11)
-        L_0x0ade:
-            if (r1 != r8) goto L_0x0bde
+        L_0x0ac2:
+            if (r1 != r8) goto L_0x0bc0
             android.widget.TextView r3 = new android.widget.TextView
             r3.<init>(r7)
             r3.setLines(r8)
             r3.setSingleLine(r8)
-            r11 = 2131624658(0x7f0e02d2, float:1.8876502E38)
+            int r11 = org.telegram.messenger.R.string.BackgroundChoosePattern
             java.lang.String r12 = "BackgroundChoosePattern"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
             r3.setText(r11)
@@ -1835,7 +1835,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             org.telegram.ui.Cells.HeaderCell r2 = new org.telegram.ui.Cells.HeaderCell
             r2.<init>(r7)
             r6.intensityCell = r2
-            r3 = 2131624665(0x7f0e02d9, float:1.8876516E38)
+            int r3 = org.telegram.messenger.R.string.BackgroundIntensity
             java.lang.String r11 = "BackgroundIntensity"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r11, r3)
             r2.setText(r3)
@@ -1866,8 +1866,8 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             r34 = 1084227584(0x40a00000, float:5.0)
             android.widget.FrameLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createFrame(r29, r30, r31, r32, r33, r34, r35)
             r2.addView(r3, r11)
-            goto L_0x0c6b
-        L_0x0bde:
+            goto L_0x0c4d
+        L_0x0bc0:
             org.telegram.ui.Components.ColorPicker r2 = new org.telegram.ui.Components.ColorPicker
             boolean r3 = r6.editingTheme
             org.telegram.ui.ThemePreviewActivity$22 r11 = new org.telegram.ui.ThemePreviewActivity$22
@@ -1883,27 +1883,27 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             r3.addView(r2, r12)
             org.telegram.ui.ActionBar.Theme$ThemeInfo r2 = r6.applyingTheme
             boolean r2 = r2.isDark()
-            if (r2 == 0) goto L_0x0c0d
+            if (r2 == 0) goto L_0x0bef
             org.telegram.ui.Components.ColorPicker r2 = r6.colorPicker
             r3 = 1045220557(0x3e4ccccd, float:0.2)
             r2.setMinBrightness(r3)
-            goto L_0x0c1d
-        L_0x0c0d:
+            goto L_0x0bff
+        L_0x0bef:
             org.telegram.ui.Components.ColorPicker r2 = r6.colorPicker
             r3 = 1028443341(0x3d4ccccd, float:0.05)
             r2.setMinBrightness(r3)
             org.telegram.ui.Components.ColorPicker r2 = r6.colorPicker
             r3 = 1061997773(0x3f4ccccd, float:0.8)
             r2.setMaxBrightness(r3)
-        L_0x0c1d:
+        L_0x0bff:
             org.telegram.ui.ActionBar.Theme$ThemeAccent r2 = r6.accent
             int r2 = r2.accentColor2
             if (r2 == 0) goto L_0x0CLASSNAME
             r33 = 2
-            goto L_0x0CLASSNAME
+            goto L_0x0c0a
         L_0x0CLASSNAME:
             r33 = 1
-        L_0x0CLASSNAME:
+        L_0x0c0a:
             org.telegram.ui.Components.ColorPicker r2 = r6.colorPicker
             r30 = 1
             boolean r31 = r6.hasChanges(r8)
@@ -1919,10 +1919,10 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             r2.setColor(r3, r9)
             org.telegram.ui.ActionBar.Theme$ThemeAccent r2 = r6.accent
             int r2 = r2.accentColor2
-            if (r2 == 0) goto L_0x0c6b
+            if (r2 == 0) goto L_0x0c4d
             org.telegram.ui.Components.ColorPicker r3 = r6.colorPicker
             r3.setColor(r2, r8)
-            goto L_0x0c6b
+            goto L_0x0c4d
         L_0x0CLASSNAME:
             android.widget.FrameLayout[] r3 = r6.patternLayout
             r3 = r3[r1]
@@ -1935,10 +1935,10 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             r35 = 1111490560(0x42400000, float:48.0)
             android.widget.FrameLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createFrame(r29, r30, r31, r32, r33, r34, r35)
             r3.addView(r2, r11)
-        L_0x0c6b:
+        L_0x0c4d:
             int r1 = r1 + 1
-            goto L_0x092c
-        L_0x0c6f:
+            goto L_0x0912
+        L_0x0CLASSNAME:
             r6.updateButtonState(r9, r9)
             org.telegram.ui.Components.BackupImageView r0 = r6.backgroundImage
             org.telegram.messenger.ImageReceiver r0 = r0.getImageReceiver()
@@ -1949,14 +1949,14 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             r0.setBackgroundColor(r1)
         L_0x0CLASSNAME:
             int r0 = r6.screenType
-            if (r0 == r8) goto L_0x0CLASSNAME
+            if (r0 == r8) goto L_0x0c7a
             java.lang.Object r0 = r6.currentWallpaper
             boolean r0 = r0 instanceof org.telegram.ui.WallpapersListActivity.ColorWallpaper
-            if (r0 != 0) goto L_0x0CLASSNAME
+            if (r0 != 0) goto L_0x0c7a
             org.telegram.ui.Components.BackupImageView r0 = r6.backgroundImage
             org.telegram.messenger.ImageReceiver r0 = r0.getImageReceiver()
             r0.setCrossfadeWithOldImage(r8)
-        L_0x0CLASSNAME:
+        L_0x0c7a:
             org.telegram.ui.Components.RecyclerListView r0 = r6.listView2
             org.telegram.ui.ThemePreviewActivity$MessagesAdapter r1 = r6.messagesAdapter
             r0.setAdapter(r1)
@@ -1994,13 +1994,13 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             r15 = 0
             r16 = 0
             int r2 = r6.screenType
-            if (r2 != 0) goto L_0x0cf5
+            if (r2 != 0) goto L_0x0cd7
             r2 = 1111490560(0x42400000, float:48.0)
             r17 = 1111490560(0x42400000, float:48.0)
-            goto L_0x0cf7
-        L_0x0cf5:
+            goto L_0x0cd9
+        L_0x0cd7:
             r17 = 0
-        L_0x0cf7:
+        L_0x0cd9:
             android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r12, r13, r14, r15, r16, r17)
             r0.addView(r1, r2)
             org.telegram.ui.Components.UndoView r0 = new org.telegram.ui.Components.UndoView
@@ -2022,7 +2022,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r12, r13, r14, r15, r16, r17)
             r0.addView(r1, r2)
             int r0 = r6.screenType
-            if (r0 != 0) goto L_0x0e59
+            if (r0 != 0) goto L_0x0e39
             android.view.View r0 = new android.view.View
             r0.<init>(r7)
             java.lang.String r1 = "dialogShadowLine"
@@ -2081,7 +2081,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
             r0.setPadding(r2, r9, r3, r9)
             android.widget.TextView r0 = r6.cancelButton
-            r2 = 2131624838(0x7f0e0386, float:1.8876867E38)
+            int r2 = org.telegram.messenger.R.string.Cancel
             java.lang.String r3 = "Cancel"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             java.lang.String r2 = r2.toUpperCase()
@@ -2121,7 +2121,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
             r0.setPadding(r1, r9, r2, r9)
             android.widget.TextView r0 = r6.doneButton
-            r1 = 2131624402(0x7f0e01d2, float:1.8875983E38)
+            int r1 = org.telegram.messenger.R.string.ApplyTheme
             java.lang.String r2 = "ApplyTheme"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             java.lang.String r1 = r1.toUpperCase()
@@ -2139,27 +2139,27 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             org.telegram.ui.ThemePreviewActivity$$ExternalSyntheticLambda6 r1 = new org.telegram.ui.ThemePreviewActivity$$ExternalSyntheticLambda6
             r1.<init>(r6)
             r0.setOnClickListener(r1)
-        L_0x0e59:
+        L_0x0e39:
             int r0 = r6.screenType
-            if (r0 != r8) goto L_0x0e74
+            if (r0 != r8) goto L_0x0e54
             boolean r0 = org.telegram.ui.ActionBar.Theme.hasCustomWallpaper()
-            if (r0 != 0) goto L_0x0e74
+            if (r0 != 0) goto L_0x0e54
             org.telegram.ui.ActionBar.Theme$ThemeAccent r0 = r6.accent
             long r0 = r0.backgroundOverrideColor
             r2 = 4294967296(0xNUM, double:2.121995791E-314)
             int r4 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
-            if (r4 == 0) goto L_0x0e74
+            if (r4 == 0) goto L_0x0e54
             r0 = 2
             r6.selectColorType(r0)
-        L_0x0e74:
+        L_0x0e54:
             java.util.List r0 = r37.getThemeDescriptionsInternal()
             r6.themeDescriptions = r0
             r6.setCurrentImage(r8)
             r6.updatePlayAnimationView(r9)
             boolean r0 = r6.showColor
-            if (r0 == 0) goto L_0x0e87
+            if (r0 == 0) goto L_0x0e67
             r6.showPatternsView(r9, r8, r9)
-        L_0x0e87:
+        L_0x0e67:
             android.view.View r0 = r6.fragmentView
             return r0
         */
@@ -2930,7 +2930,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                 int i4 = this.colorType;
                 this.colorType = i3;
                 if (i3 == 1) {
-                    this.dropDown.setText(LocaleController.getString("ColorPickerMainColor", NUM));
+                    this.dropDown.setText(LocaleController.getString("ColorPickerMainColor", R.string.ColorPickerMainColor));
                     this.colorPicker.setType(1, hasChanges(1), 2, this.accent.accentColor2 != 0 ? 2 : 1, false, 0, false);
                     this.colorPicker.setColor(this.accent.accentColor, 0);
                     int i5 = this.accent.accentColor2;
@@ -2941,7 +2941,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                         this.messagesAdapter.notifyItemRemoved(0);
                     }
                 } else if (i3 == 2) {
-                    this.dropDown.setText(LocaleController.getString("ColorPickerBackground", NUM));
+                    this.dropDown.setText(LocaleController.getString("ColorPickerBackground", R.string.ColorPickerBackground));
                     int color = Theme.getColor("chat_wallpaper");
                     int color2 = Theme.hasThemeKey("chat_wallpaper_gradient_to") ? Theme.getColor("chat_wallpaper_gradient_to") : 0;
                     int color3 = Theme.hasThemeKey("key_chat_wallpaper_gradient_to2") ? Theme.getColor("key_chat_wallpaper_gradient_to2") : 0;
@@ -2991,7 +2991,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                     }
                     this.listView2.smoothScrollBy(0, AndroidUtilities.dp(60.0f));
                 } else if (i3 == 3) {
-                    this.dropDown.setText(LocaleController.getString("ColorPickerMyMessages", NUM));
+                    this.dropDown.setText(LocaleController.getString("ColorPickerMyMessages", R.string.ColorPickerMyMessages));
                     Theme.ThemeAccent themeAccent2 = this.accent;
                     if (themeAccent2.myMessagesGradientAccentColor1 != 0) {
                         i2 = themeAccent2.myMessagesGradientAccentColor3 != 0 ? 4 : themeAccent2.myMessagesGradientAccentColor2 != 0 ? 3 : 2;
@@ -3044,15 +3044,15 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                 }
             } else {
                 AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
-                builder.setTitle(LocaleController.getString("ChangeChatBackground", NUM));
+                builder.setTitle(LocaleController.getString("ChangeChatBackground", R.string.ChangeChatBackground));
                 if (!Theme.hasCustomWallpaper() || Theme.isCustomWallpaperColor()) {
-                    builder.setMessage(LocaleController.getString("ChangeColorToColor", NUM));
-                    builder.setPositiveButton(LocaleController.getString("Reset", NUM), new ThemePreviewActivity$$ExternalSyntheticLambda4(this));
-                    builder.setNegativeButton(LocaleController.getString("Continue", NUM), new ThemePreviewActivity$$ExternalSyntheticLambda3(this));
+                    builder.setMessage(LocaleController.getString("ChangeColorToColor", R.string.ChangeColorToColor));
+                    builder.setPositiveButton(LocaleController.getString("Reset", R.string.Reset), new ThemePreviewActivity$$ExternalSyntheticLambda4(this));
+                    builder.setNegativeButton(LocaleController.getString("Continue", R.string.Continue), new ThemePreviewActivity$$ExternalSyntheticLambda3(this));
                 } else {
-                    builder.setMessage(LocaleController.getString("ChangeWallpaperToColor", NUM));
-                    builder.setPositiveButton(LocaleController.getString("Change", NUM), new ThemePreviewActivity$$ExternalSyntheticLambda0(this));
-                    builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
+                    builder.setMessage(LocaleController.getString("ChangeWallpaperToColor", R.string.ChangeWallpaperToColor));
+                    builder.setPositiveButton(LocaleController.getString("Change", R.string.Change), new ThemePreviewActivity$$ExternalSyntheticLambda0(this));
+                    builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), (DialogInterface.OnClickListener) null);
                 }
                 showDialog(builder.create());
             }
@@ -3305,7 +3305,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
         if (r7.accent.patternMotion == r7.isMotion) goto L_0x0086;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:40:0x0090, code lost:
-        if (r7.accent.patternIntensity == r7.currentIntensity) goto L_0x00de;
+        if (r7.accent.patternIntensity == r7.currentIntensity) goto L_0x00da;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public boolean checkDiscard() {
@@ -3313,7 +3313,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             r7 = this;
             int r0 = r7.screenType
             r1 = 1
-            if (r0 != r1) goto L_0x00de
+            if (r0 != r1) goto L_0x00da
             org.telegram.ui.ActionBar.Theme$ThemeAccent r0 = r7.accent
             int r2 = r0.accentColor
             int r3 = r7.backupAccentColor
@@ -3380,31 +3380,31 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             boolean r3 = r7.isMotion
             if (r2 != r3) goto L_0x0092
         L_0x0086:
-            if (r0 == 0) goto L_0x00de
+            if (r0 == 0) goto L_0x00da
             org.telegram.ui.ActionBar.Theme$ThemeAccent r0 = r7.accent
             float r0 = r0.patternIntensity
             float r2 = r7.currentIntensity
             int r0 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
-            if (r0 == 0) goto L_0x00de
+            if (r0 == 0) goto L_0x00da
         L_0x0092:
             org.telegram.ui.ActionBar.AlertDialog$Builder r0 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             android.app.Activity r1 = r7.getParentActivity()
             r0.<init>((android.content.Context) r1)
-            r1 = 2131628138(0x7f0e106a, float:1.888356E38)
+            int r1 = org.telegram.messenger.R.string.SaveChangesAlertTitle
             java.lang.String r2 = "SaveChangesAlertTitle"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
-            r1 = 2131628137(0x7f0e1069, float:1.8883558E38)
+            int r1 = org.telegram.messenger.R.string.SaveChangesAlertText
             java.lang.String r2 = "SaveChangesAlertText"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setMessage(r1)
-            r1 = 2131628136(0x7f0e1068, float:1.8883556E38)
+            int r1 = org.telegram.messenger.R.string.Save
             java.lang.String r2 = "Save"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             org.telegram.ui.ThemePreviewActivity$$ExternalSyntheticLambda1 r2 = new org.telegram.ui.ThemePreviewActivity$$ExternalSyntheticLambda1
             r2.<init>(r7)
             r0.setPositiveButton(r1, r2)
-            r1 = 2131627285(0x7f0e0d15, float:1.888183E38)
+            int r1 = org.telegram.messenger.R.string.PassportDiscard
             java.lang.String r2 = "PassportDiscard"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             org.telegram.ui.ThemePreviewActivity$$ExternalSyntheticLambda2 r2 = new org.telegram.ui.ThemePreviewActivity$$ExternalSyntheticLambda2
@@ -3414,7 +3414,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             r7.showDialog(r0)
             r0 = 0
             return r0
-        L_0x00de:
+        L_0x00da:
             return r1
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ThemePreviewActivity.checkDiscard():boolean");
@@ -4071,7 +4071,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                     this.radialProgress.setIcon(10, z, z2);
                 }
                 if (this.screenType == 2) {
-                    this.actionBar2.setSubtitle(LocaleController.getString("LoadingFullImage", NUM));
+                    this.actionBar2.setSubtitle(LocaleController.getString("LoadingFullImage", R.string.LoadingFullImage));
                 }
                 this.backgroundImage.invalidate();
             }
@@ -4146,7 +4146,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                     hintView.setShowingDuration(5000);
                     this.animationHint.setAlpha(0.0f);
                     this.animationHint.setVisibility(4);
-                    this.animationHint.setText(LocaleController.getString("BackgroundAnimateInfo", NUM));
+                    this.animationHint.setText(LocaleController.getString("BackgroundAnimateInfo", R.string.BackgroundAnimateInfo));
                     this.animationHint.setExtraTranslationY((float) AndroidUtilities.dp(6.0f));
                     this.frameLayout.addView(this.animationHint, LayoutHelper.createFrame(-2, -2.0f, 51, 10.0f, 0.0f, 10.0f, 0.0f));
                 }
@@ -5026,13 +5026,13 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             r1.setBackground(r3)
         L_0x0014:
             r1 = 0
-            goto L_0x0388
+            goto L_0x0387
         L_0x0017:
             r3 = 3
             r4 = 2
             r5 = 0
             r6 = 1
-            if (r1 != r4) goto L_0x0175
+            if (r1 != r4) goto L_0x0174
             java.lang.Object r1 = r0.currentWallpaper
             boolean r7 = r1 instanceof org.telegram.tgnet.TLRPC$TL_wallPaper
             r8 = 100
@@ -5060,7 +5060,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             goto L_0x0014
         L_0x0052:
             boolean r7 = r1 instanceof org.telegram.ui.WallpapersListActivity.ColorWallpaper
-            if (r7 == 0) goto L_0x00d0
+            if (r7 == 0) goto L_0x00cf
             org.telegram.ui.WallpapersListActivity$ColorWallpaper r1 = (org.telegram.ui.WallpapersListActivity.ColorWallpaper) r1
             int r5 = r1.gradientRotation
             r0.backgroundRotation = r5
@@ -5115,73 +5115,73 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             int r1 = org.telegram.ui.Components.MotionBackgroundDrawable.getPatternColor(r5, r6, r7, r1)
         L_0x00c2:
             org.telegram.ui.Components.BackupImageView r5 = r0.backgroundImage
-            r6 = 2131558436(0x7f0d0024, float:1.8742188E38)
+            int r6 = org.telegram.messenger.R.raw.default_pattern
             android.graphics.Bitmap r1 = org.telegram.messenger.SvgHelper.getBitmap((int) r6, (int) r3, (int) r4, (int) r1)
             r5.setImageBitmap(r1)
             goto L_0x0014
-        L_0x00d0:
+        L_0x00cf:
             boolean r3 = r1 instanceof org.telegram.ui.WallpapersListActivity.FileWallpaper
-            if (r3 == 0) goto L_0x0123
+            if (r3 == 0) goto L_0x0122
             android.graphics.Bitmap r3 = r0.currentWallpaperBitmap
-            if (r3 == 0) goto L_0x00df
+            if (r3 == 0) goto L_0x00de
             org.telegram.ui.Components.BackupImageView r1 = r0.backgroundImage
             r1.setImageBitmap(r3)
             goto L_0x0014
-        L_0x00df:
+        L_0x00de:
             org.telegram.ui.WallpapersListActivity$FileWallpaper r1 = (org.telegram.ui.WallpapersListActivity.FileWallpaper) r1
             java.io.File r3 = r1.originalPath
-            if (r3 == 0) goto L_0x00f2
+            if (r3 == 0) goto L_0x00f1
             org.telegram.ui.Components.BackupImageView r1 = r0.backgroundImage
             java.lang.String r3 = r3.getAbsolutePath()
             java.lang.String r4 = r0.imageFilter
             r1.setImage(r3, r4, r5)
             goto L_0x0014
-        L_0x00f2:
+        L_0x00f1:
             java.io.File r3 = r1.path
-            if (r3 == 0) goto L_0x0103
+            if (r3 == 0) goto L_0x0102
             org.telegram.ui.Components.BackupImageView r1 = r0.backgroundImage
             java.lang.String r3 = r3.getAbsolutePath()
             java.lang.String r4 = r0.imageFilter
             r1.setImage(r3, r4, r5)
             goto L_0x0014
-        L_0x0103:
+        L_0x0102:
             java.lang.String r3 = r1.slug
             java.lang.String r4 = "t"
             boolean r3 = r4.equals(r3)
-            if (r3 == 0) goto L_0x0118
+            if (r3 == 0) goto L_0x0117
             org.telegram.ui.Components.BackupImageView r1 = r0.backgroundImage
             android.graphics.drawable.Drawable r3 = org.telegram.ui.ActionBar.Theme.getThemedWallpaper(r2, r1)
             r1.setImageDrawable(r3)
             goto L_0x0014
-        L_0x0118:
+        L_0x0117:
             int r1 = r1.resId
             if (r1 == 0) goto L_0x0014
             org.telegram.ui.Components.BackupImageView r3 = r0.backgroundImage
             r3.setImageResource(r1)
             goto L_0x0014
-        L_0x0123:
+        L_0x0122:
             boolean r3 = r1 instanceof org.telegram.messenger.MediaController.SearchImage
             if (r3 == 0) goto L_0x0014
             org.telegram.messenger.MediaController$SearchImage r1 = (org.telegram.messenger.MediaController.SearchImage) r1
             org.telegram.tgnet.TLRPC$Photo r3 = r1.photo
-            if (r3 == 0) goto L_0x0166
+            if (r3 == 0) goto L_0x0165
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r3 = r3.sizes
             org.telegram.tgnet.TLRPC$PhotoSize r3 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r3, r8)
             org.telegram.tgnet.TLRPC$Photo r4 = r1.photo
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r4 = r4.sizes
             int r7 = r0.maxWallpaperSize
             org.telegram.tgnet.TLRPC$PhotoSize r4 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r4, r7, r6)
-            if (r4 != r3) goto L_0x0140
-            goto L_0x0141
-        L_0x0140:
+            if (r4 != r3) goto L_0x013f
+            goto L_0x0140
+        L_0x013f:
             r5 = r4
-        L_0x0141:
-            if (r5 == 0) goto L_0x0146
+        L_0x0140:
+            if (r5 == 0) goto L_0x0145
             int r4 = r5.size
-            goto L_0x0147
-        L_0x0146:
+            goto L_0x0146
+        L_0x0145:
             r4 = 0
-        L_0x0147:
+        L_0x0146:
             org.telegram.ui.Components.BackupImageView r9 = r0.backgroundImage
             org.telegram.tgnet.TLRPC$Photo r6 = r1.photo
             org.telegram.messenger.ImageLocation r10 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$PhotoSize) r5, (org.telegram.tgnet.TLRPC$Photo) r6)
@@ -5196,7 +5196,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             r18 = r1
             r9.setImage(r10, r11, r12, r13, r14, r15, r17, r18)
             goto L_0x0014
-        L_0x0166:
+        L_0x0165:
             org.telegram.ui.Components.BackupImageView r3 = r0.backgroundImage
             java.lang.String r4 = r1.imageUrl
             java.lang.String r5 = r0.imageFilter
@@ -5204,88 +5204,88 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             java.lang.String r6 = "100_100_b"
             r3.setImage((java.lang.String) r4, (java.lang.String) r5, (java.lang.String) r1, (java.lang.String) r6)
             goto L_0x0014
-        L_0x0175:
+        L_0x0174:
             org.telegram.ui.Components.BackgroundGradientDrawable$Disposable r1 = r0.backgroundGradientDisposable
-            if (r1 == 0) goto L_0x017e
+            if (r1 == 0) goto L_0x017d
             r1.dispose()
             r0.backgroundGradientDisposable = r5
-        L_0x017e:
+        L_0x017d:
             java.lang.String r1 = "chat_wallpaper"
             int r1 = org.telegram.ui.ActionBar.Theme.getDefaultAccentColor(r1)
             org.telegram.ui.ActionBar.Theme$ThemeAccent r7 = r0.accent
             long r7 = r7.backgroundOverrideColor
             int r8 = (int) r7
-            if (r8 == 0) goto L_0x018c
+            if (r8 == 0) goto L_0x018b
             r1 = r8
-        L_0x018c:
+        L_0x018b:
             java.lang.String r7 = "chat_wallpaper_gradient_to"
             int r7 = org.telegram.ui.ActionBar.Theme.getDefaultAccentColor(r7)
             org.telegram.ui.ActionBar.Theme$ThemeAccent r8 = r0.accent
             long r8 = r8.backgroundGradientOverrideColor1
             int r10 = (int) r8
             r11 = 0
-            if (r10 != 0) goto L_0x01a1
+            if (r10 != 0) goto L_0x01a0
             int r13 = (r8 > r11 ? 1 : (r8 == r11 ? 0 : -1))
-            if (r13 == 0) goto L_0x01a1
+            if (r13 == 0) goto L_0x01a0
             r7 = 0
-            goto L_0x01a4
-        L_0x01a1:
-            if (r10 == 0) goto L_0x01a4
+            goto L_0x01a3
+        L_0x01a0:
+            if (r10 == 0) goto L_0x01a3
             r7 = r10
-        L_0x01a4:
+        L_0x01a3:
             java.lang.String r8 = "key_chat_wallpaper_gradient_to2"
             int r8 = org.telegram.ui.ActionBar.Theme.getDefaultAccentColor(r8)
             org.telegram.ui.ActionBar.Theme$ThemeAccent r9 = r0.accent
             long r9 = r9.backgroundGradientOverrideColor2
             int r13 = (int) r9
-            if (r13 != 0) goto L_0x01b7
+            if (r13 != 0) goto L_0x01b6
             int r14 = (r9 > r11 ? 1 : (r9 == r11 ? 0 : -1))
-            if (r14 == 0) goto L_0x01b7
+            if (r14 == 0) goto L_0x01b6
             r8 = 0
-            goto L_0x01ba
-        L_0x01b7:
-            if (r13 == 0) goto L_0x01ba
+            goto L_0x01b9
+        L_0x01b6:
+            if (r13 == 0) goto L_0x01b9
             r8 = r13
-        L_0x01ba:
+        L_0x01b9:
             java.lang.String r9 = "key_chat_wallpaper_gradient_to3"
             int r9 = org.telegram.ui.ActionBar.Theme.getDefaultAccentColor(r9)
             org.telegram.ui.ActionBar.Theme$ThemeAccent r10 = r0.accent
             long r13 = r10.backgroundGradientOverrideColor3
             int r15 = (int) r13
-            if (r15 != 0) goto L_0x01cd
+            if (r15 != 0) goto L_0x01cc
             int r16 = (r13 > r11 ? 1 : (r13 == r11 ? 0 : -1))
-            if (r16 == 0) goto L_0x01cd
+            if (r16 == 0) goto L_0x01cc
             r9 = 0
-            goto L_0x01d0
-        L_0x01cd:
-            if (r15 == 0) goto L_0x01d0
+            goto L_0x01cf
+        L_0x01cc:
+            if (r15 == 0) goto L_0x01cf
             r9 = r15
-        L_0x01d0:
+        L_0x01cf:
             java.lang.String r10 = r10.patternSlug
             boolean r10 = android.text.TextUtils.isEmpty(r10)
-            if (r10 != 0) goto L_0x0256
+            if (r10 != 0) goto L_0x0255
             boolean r10 = org.telegram.ui.ActionBar.Theme.hasCustomWallpaper()
-            if (r10 != 0) goto L_0x0256
-            if (r8 == 0) goto L_0x0202
+            if (r10 != 0) goto L_0x0255
+            if (r8 == 0) goto L_0x0201
             org.telegram.ui.Components.BackupImageView r10 = r0.backgroundImage
             android.graphics.drawable.Drawable r10 = r10.getBackground()
             boolean r11 = r10 instanceof org.telegram.ui.Components.MotionBackgroundDrawable
-            if (r11 == 0) goto L_0x01ed
+            if (r11 == 0) goto L_0x01ec
             org.telegram.ui.Components.MotionBackgroundDrawable r10 = (org.telegram.ui.Components.MotionBackgroundDrawable) r10
-            goto L_0x01fe
-        L_0x01ed:
+            goto L_0x01fd
+        L_0x01ec:
             org.telegram.ui.Components.MotionBackgroundDrawable r10 = new org.telegram.ui.Components.MotionBackgroundDrawable
             r10.<init>()
             org.telegram.ui.Components.BackupImageView r11 = r0.backgroundImage
             r10.setParentView(r11)
             boolean r11 = r0.rotatePreview
-            if (r11 == 0) goto L_0x01fe
+            if (r11 == 0) goto L_0x01fd
             r10.rotatePreview(r2)
-        L_0x01fe:
+        L_0x01fd:
             r10.setColors(r1, r7, r8, r9)
-            goto L_0x022f
-        L_0x0202:
-            if (r7 == 0) goto L_0x022a
+            goto L_0x022e
+        L_0x0201:
+            if (r7 == 0) goto L_0x0229
             org.telegram.ui.ActionBar.Theme$ThemeAccent r10 = r0.accent
             int r10 = r10.backgroundRotation
             android.graphics.drawable.GradientDrawable$Orientation r10 = org.telegram.ui.Components.BackgroundGradientDrawable.getGradientOrientation(r10)
@@ -5301,15 +5301,15 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             org.telegram.ui.Components.BackgroundGradientDrawable$Disposable r10 = r11.startDithering(r12, r10, r13)
             r0.backgroundGradientDisposable = r10
             r10 = r11
-            goto L_0x022f
-        L_0x022a:
+            goto L_0x022e
+        L_0x0229:
             android.graphics.drawable.ColorDrawable r10 = new android.graphics.drawable.ColorDrawable
             r10.<init>(r1)
-        L_0x022f:
+        L_0x022e:
             org.telegram.ui.Components.BackupImageView r11 = r0.backgroundImage
             r11.setBackground(r10)
             org.telegram.tgnet.TLRPC$TL_wallPaper r10 = r0.selectedPattern
-            if (r10 == 0) goto L_0x026d
+            if (r10 == 0) goto L_0x026c
             org.telegram.ui.Components.BackupImageView r11 = r0.backgroundImage
             org.telegram.tgnet.TLRPC$Document r10 = r10.document
             org.telegram.messenger.ImageLocation r12 = org.telegram.messenger.ImageLocation.getForDocument(r10)
@@ -5324,40 +5324,40 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             r17 = r2
             r20 = r10
             r11.setImage(r12, r13, r14, r15, r16, r17, r19, r20)
-            goto L_0x026d
-        L_0x0256:
+            goto L_0x026c
+        L_0x0255:
             android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.getCachedWallpaperNonBlocking()
-            if (r2 == 0) goto L_0x026d
+            if (r2 == 0) goto L_0x026c
             boolean r3 = r2 instanceof org.telegram.ui.Components.MotionBackgroundDrawable
-            if (r3 == 0) goto L_0x0268
+            if (r3 == 0) goto L_0x0267
             r3 = r2
             org.telegram.ui.Components.MotionBackgroundDrawable r3 = (org.telegram.ui.Components.MotionBackgroundDrawable) r3
             org.telegram.ui.Components.BackupImageView r10 = r0.backgroundImage
             r3.setParentView(r10)
-        L_0x0268:
+        L_0x0267:
             org.telegram.ui.Components.BackupImageView r3 = r0.backgroundImage
             r3.setBackground(r2)
-        L_0x026d:
-            if (r7 != 0) goto L_0x0278
+        L_0x026c:
+            if (r7 != 0) goto L_0x0277
             int r2 = org.telegram.messenger.AndroidUtilities.getPatternColor(r1)
             r0.checkColor = r2
             r0.patternColor = r2
-            goto L_0x0291
-        L_0x0278:
-            if (r8 == 0) goto L_0x0285
+            goto L_0x0290
+        L_0x0277:
+            if (r8 == 0) goto L_0x0284
             int r2 = org.telegram.ui.Components.MotionBackgroundDrawable.getPatternColor(r1, r7, r8, r9)
             r0.patternColor = r2
             r2 = 754974720(0x2d000000, float:7.2759576E-12)
             r0.checkColor = r2
-            goto L_0x0291
-        L_0x0285:
+            goto L_0x0290
+        L_0x0284:
             int r2 = org.telegram.messenger.AndroidUtilities.getAverageColor(r1, r7)
             int r2 = org.telegram.messenger.AndroidUtilities.getPatternColor(r2)
             r0.checkColor = r2
             r0.patternColor = r2
-        L_0x0291:
+        L_0x0290:
             org.telegram.ui.Components.BackupImageView r2 = r0.backgroundImage
-            if (r2 == 0) goto L_0x030b
+            if (r2 == 0) goto L_0x030a
             org.telegram.messenger.ImageReceiver r2 = r2.getImageReceiver()
             android.graphics.PorterDuffColorFilter r3 = new android.graphics.PorterDuffColorFilter
             int r10 = r0.patternColor
@@ -5373,19 +5373,19 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             r2.invalidate()
             org.telegram.ui.ActionBar.Theme$ThemeInfo r2 = org.telegram.ui.ActionBar.Theme.getActiveTheme()
             boolean r2 = r2.isDark()
-            if (r2 == 0) goto L_0x02f1
+            if (r2 == 0) goto L_0x02f0
             org.telegram.ui.Components.BackupImageView r2 = r0.backgroundImage
             android.graphics.drawable.Drawable r2 = r2.getBackground()
             boolean r2 = r2 instanceof org.telegram.ui.Components.MotionBackgroundDrawable
-            if (r2 == 0) goto L_0x02f1
+            if (r2 == 0) goto L_0x02f0
             org.telegram.ui.Components.SeekBarView r2 = r0.intensitySeekBar
-            if (r2 == 0) goto L_0x02d4
+            if (r2 == 0) goto L_0x02d3
             r2.setTwoSided(r6)
-        L_0x02d4:
+        L_0x02d3:
             float r2 = r0.currentIntensity
             r3 = 0
             int r2 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1))
-            if (r2 >= 0) goto L_0x0302
+            if (r2 >= 0) goto L_0x0301
             org.telegram.ui.Components.BackupImageView r2 = r0.backgroundImage
             org.telegram.messenger.ImageReceiver r2 = r2.getImageReceiver()
             org.telegram.ui.Components.BackupImageView r3 = r0.backgroundImage
@@ -5393,28 +5393,28 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             org.telegram.ui.Components.MotionBackgroundDrawable r3 = (org.telegram.ui.Components.MotionBackgroundDrawable) r3
             android.graphics.Bitmap r3 = r3.getBitmap()
             r2.setGradientBitmap(r3)
-            goto L_0x0302
-        L_0x02f1:
+            goto L_0x0301
+        L_0x02f0:
             org.telegram.ui.Components.BackupImageView r2 = r0.backgroundImage
             org.telegram.messenger.ImageReceiver r2 = r2.getImageReceiver()
             r2.setGradientBitmap(r5)
             org.telegram.ui.Components.SeekBarView r2 = r0.intensitySeekBar
-            if (r2 == 0) goto L_0x0302
+            if (r2 == 0) goto L_0x0301
             r3 = 0
             r2.setTwoSided(r3)
-        L_0x0302:
+        L_0x0301:
             org.telegram.ui.Components.SeekBarView r2 = r0.intensitySeekBar
-            if (r2 == 0) goto L_0x030b
+            if (r2 == 0) goto L_0x030a
             float r3 = r0.currentIntensity
             r2.setProgress(r3)
-        L_0x030b:
+        L_0x030a:
             org.telegram.ui.Components.WallpaperCheckBoxView[] r2 = r0.backgroundCheckBoxView
-            if (r2 == 0) goto L_0x0334
+            if (r2 == 0) goto L_0x0333
             r3 = 0
-        L_0x0310:
+        L_0x030f:
             org.telegram.ui.Components.WallpaperCheckBoxView[] r2 = r0.backgroundCheckBoxView
             int r5 = r2.length
-            if (r3 >= r5) goto L_0x0334
+            if (r3 >= r5) goto L_0x0333
             r2 = r2[r3]
             r5 = 0
             r2.setColor(r5, r1)
@@ -5429,49 +5429,49 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             r5 = 3
             r2.setColor(r5, r9)
             int r3 = r3 + 1
-            goto L_0x0310
-        L_0x0334:
+            goto L_0x030f
+        L_0x0333:
             android.widget.ImageView r1 = r0.backgroundPlayAnimationImageView
             java.lang.String r2 = "chat_serviceText"
-            if (r1 == 0) goto L_0x0348
+            if (r1 == 0) goto L_0x0347
             android.graphics.PorterDuffColorFilter r3 = new android.graphics.PorterDuffColorFilter
             int r4 = org.telegram.ui.ActionBar.Theme.getColor(r2)
             android.graphics.PorterDuff$Mode r5 = android.graphics.PorterDuff.Mode.MULTIPLY
             r3.<init>(r4, r5)
             r1.setColorFilter(r3)
-        L_0x0348:
+        L_0x0347:
             android.widget.ImageView r1 = r0.messagesPlayAnimationImageView
-            if (r1 == 0) goto L_0x035a
+            if (r1 == 0) goto L_0x0359
             android.graphics.PorterDuffColorFilter r3 = new android.graphics.PorterDuffColorFilter
             int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
             android.graphics.PorterDuff$Mode r4 = android.graphics.PorterDuff.Mode.MULTIPLY
             r3.<init>(r2, r4)
             r1.setColorFilter(r3)
-        L_0x035a:
+        L_0x0359:
             android.widget.FrameLayout r1 = r0.backgroundButtonsContainer
-            if (r1 == 0) goto L_0x0371
+            if (r1 == 0) goto L_0x0370
             int r1 = r1.getChildCount()
             r3 = 0
-        L_0x0363:
-            if (r3 >= r1) goto L_0x0371
+        L_0x0362:
+            if (r3 >= r1) goto L_0x0370
             android.widget.FrameLayout r2 = r0.backgroundButtonsContainer
             android.view.View r2 = r2.getChildAt(r3)
             r2.invalidate()
             int r3 = r3 + 1
-            goto L_0x0363
-        L_0x0371:
+            goto L_0x0362
+        L_0x0370:
             android.widget.FrameLayout r1 = r0.messagesButtonsContainer
             if (r1 == 0) goto L_0x0014
             int r1 = r1.getChildCount()
             r3 = 0
-        L_0x037a:
+        L_0x0379:
             if (r3 >= r1) goto L_0x0014
             android.widget.FrameLayout r2 = r0.messagesButtonsContainer
             android.view.View r2 = r2.getChildAt(r3)
             r2.invalidate()
             int r3 = r3 + 1
-            goto L_0x037a
-        L_0x0388:
+            goto L_0x0379
+        L_0x0387:
             r0.rotatePreview = r1
             return
         */
@@ -5486,8 +5486,8 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             this.mContext = context;
             int currentTimeMillis = (int) (System.currentTimeMillis() / 1000);
             DialogCell.CustomDialog customDialog = new DialogCell.CustomDialog();
-            customDialog.name = LocaleController.getString("ThemePreviewDialog1", NUM);
-            customDialog.message = LocaleController.getString("ThemePreviewDialogMessage1", NUM);
+            customDialog.name = LocaleController.getString("ThemePreviewDialog1", R.string.ThemePreviewDialog1);
+            customDialog.message = LocaleController.getString("ThemePreviewDialogMessage1", R.string.ThemePreviewDialogMessage1);
             customDialog.id = 0;
             customDialog.unread_count = 0;
             customDialog.pinned = true;
@@ -5499,8 +5499,8 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             customDialog.sent = true;
             this.dialogs.add(customDialog);
             DialogCell.CustomDialog customDialog2 = new DialogCell.CustomDialog();
-            customDialog2.name = LocaleController.getString("ThemePreviewDialog2", NUM);
-            customDialog2.message = LocaleController.getString("ThemePreviewDialogMessage2", NUM);
+            customDialog2.name = LocaleController.getString("ThemePreviewDialog2", R.string.ThemePreviewDialog2);
+            customDialog2.message = LocaleController.getString("ThemePreviewDialogMessage2", R.string.ThemePreviewDialogMessage2);
             customDialog2.id = 1;
             customDialog2.unread_count = 2;
             customDialog2.pinned = false;
@@ -5512,8 +5512,8 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             customDialog2.sent = false;
             this.dialogs.add(customDialog2);
             DialogCell.CustomDialog customDialog3 = new DialogCell.CustomDialog();
-            customDialog3.name = LocaleController.getString("ThemePreviewDialog3", NUM);
-            customDialog3.message = LocaleController.getString("ThemePreviewDialogMessage3", NUM);
+            customDialog3.name = LocaleController.getString("ThemePreviewDialog3", R.string.ThemePreviewDialog3);
+            customDialog3.message = LocaleController.getString("ThemePreviewDialogMessage3", R.string.ThemePreviewDialogMessage3);
             customDialog3.id = 2;
             customDialog3.unread_count = 3;
             customDialog3.pinned = false;
@@ -5525,8 +5525,8 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             customDialog3.sent = false;
             this.dialogs.add(customDialog3);
             DialogCell.CustomDialog customDialog4 = new DialogCell.CustomDialog();
-            customDialog4.name = LocaleController.getString("ThemePreviewDialog4", NUM);
-            customDialog4.message = LocaleController.getString("ThemePreviewDialogMessage4", NUM);
+            customDialog4.name = LocaleController.getString("ThemePreviewDialog4", R.string.ThemePreviewDialog4);
+            customDialog4.message = LocaleController.getString("ThemePreviewDialogMessage4", R.string.ThemePreviewDialogMessage4);
             customDialog4.id = 3;
             customDialog4.unread_count = 0;
             customDialog4.pinned = false;
@@ -5538,8 +5538,8 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             customDialog4.sent = false;
             this.dialogs.add(customDialog4);
             DialogCell.CustomDialog customDialog5 = new DialogCell.CustomDialog();
-            customDialog5.name = LocaleController.getString("ThemePreviewDialog5", NUM);
-            customDialog5.message = LocaleController.getString("ThemePreviewDialogMessage5", NUM);
+            customDialog5.name = LocaleController.getString("ThemePreviewDialog5", R.string.ThemePreviewDialog5);
+            customDialog5.message = LocaleController.getString("ThemePreviewDialogMessage5", R.string.ThemePreviewDialogMessage5);
             customDialog5.id = 4;
             customDialog5.unread_count = 0;
             customDialog5.pinned = false;
@@ -5551,8 +5551,8 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             customDialog5.sent = true;
             this.dialogs.add(customDialog5);
             DialogCell.CustomDialog customDialog6 = new DialogCell.CustomDialog();
-            customDialog6.name = LocaleController.getString("ThemePreviewDialog6", NUM);
-            customDialog6.message = LocaleController.getString("ThemePreviewDialogMessage6", NUM);
+            customDialog6.name = LocaleController.getString("ThemePreviewDialog6", R.string.ThemePreviewDialog6);
+            customDialog6.message = LocaleController.getString("ThemePreviewDialogMessage6", R.string.ThemePreviewDialogMessage6);
             customDialog6.id = 5;
             customDialog6.unread_count = 0;
             customDialog6.pinned = false;
@@ -5564,8 +5564,8 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             customDialog6.sent = false;
             this.dialogs.add(customDialog6);
             DialogCell.CustomDialog customDialog7 = new DialogCell.CustomDialog();
-            customDialog7.name = LocaleController.getString("ThemePreviewDialog7", NUM);
-            customDialog7.message = LocaleController.getString("ThemePreviewDialogMessage7", NUM);
+            customDialog7.name = LocaleController.getString("ThemePreviewDialog7", R.string.ThemePreviewDialog7);
+            customDialog7.message = LocaleController.getString("ThemePreviewDialogMessage7", R.string.ThemePreviewDialogMessage7);
             customDialog7.id = 6;
             customDialog7.unread_count = 0;
             customDialog7.pinned = false;
@@ -5577,8 +5577,8 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             customDialog7.sent = false;
             this.dialogs.add(customDialog7);
             DialogCell.CustomDialog customDialog8 = new DialogCell.CustomDialog();
-            customDialog8.name = LocaleController.getString("ThemePreviewDialog8", NUM);
-            customDialog8.message = LocaleController.getString("ThemePreviewDialogMessage8", NUM);
+            customDialog8.name = LocaleController.getString("ThemePreviewDialog8", R.string.ThemePreviewDialog8);
+            customDialog8.message = LocaleController.getString("ThemePreviewDialogMessage8", R.string.ThemePreviewDialogMessage8);
             customDialog8.id = 0;
             customDialog8.unread_count = 0;
             customDialog8.pinned = false;
@@ -5647,9 +5647,9 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             if (themePreviewActivity.screenType == 2) {
                 TLRPC$TL_message tLRPC$TL_message = new TLRPC$TL_message();
                 if (themePreviewActivity.currentWallpaper instanceof WallpapersListActivity.ColorWallpaper) {
-                    tLRPC$TL_message.message = LocaleController.getString("BackgroundColorSinglePreviewLine2", NUM);
+                    tLRPC$TL_message.message = LocaleController.getString("BackgroundColorSinglePreviewLine2", R.string.BackgroundColorSinglePreviewLine2);
                 } else {
-                    tLRPC$TL_message.message = LocaleController.getString("BackgroundPreviewLine2", NUM);
+                    tLRPC$TL_message.message = LocaleController.getString("BackgroundPreviewLine2", R.string.BackgroundPreviewLine2);
                 }
                 int i = currentTimeMillis + 60;
                 tLRPC$TL_message.date = i;
@@ -5670,9 +5670,9 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                 this.messages.add(messageObject);
                 TLRPC$TL_message tLRPC$TL_message2 = new TLRPC$TL_message();
                 if (themePreviewActivity.currentWallpaper instanceof WallpapersListActivity.ColorWallpaper) {
-                    tLRPC$TL_message2.message = LocaleController.getString("BackgroundColorSinglePreviewLine1", NUM);
+                    tLRPC$TL_message2.message = LocaleController.getString("BackgroundColorSinglePreviewLine1", R.string.BackgroundColorSinglePreviewLine1);
                 } else {
-                    tLRPC$TL_message2.message = LocaleController.getString("BackgroundPreviewLine1", NUM);
+                    tLRPC$TL_message2.message = LocaleController.getString("BackgroundPreviewLine1", R.string.BackgroundPreviewLine1);
                 }
                 tLRPC$TL_message2.date = i;
                 tLRPC$TL_message2.dialog_id = 1;
@@ -5700,7 +5700,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                 tLRPC$Document.size = 2621440;
                 tLRPC$Document.dc_id = Integer.MIN_VALUE;
                 TLRPC$TL_documentAttributeFilename tLRPC$TL_documentAttributeFilename = new TLRPC$TL_documentAttributeFilename();
-                tLRPC$TL_documentAttributeFilename.file_name = LocaleController.getString("NewThemePreviewReply2", NUM) + ".mp3";
+                tLRPC$TL_documentAttributeFilename.file_name = LocaleController.getString("NewThemePreviewReply2", R.string.NewThemePreviewReply2) + ".mp3";
                 tLRPC$TL_message3.media.document.attributes.add(tLRPC$TL_documentAttributeFilename);
                 int i2 = currentTimeMillis + 60;
                 tLRPC$TL_message3.date = i2;
@@ -5736,7 +5736,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                     this.messages.add(messageObject4);
                 }
                 TLRPC$TL_message tLRPC$TL_message5 = new TLRPC$TL_message();
-                String string = LocaleController.getString("NewThemePreviewLine3", NUM);
+                String string = LocaleController.getString("NewThemePreviewLine3", R.string.NewThemePreviewLine3);
                 StringBuilder sb = new StringBuilder(string);
                 int indexOf = string.indexOf(42);
                 int lastIndexOf = string.lastIndexOf(42);
@@ -5767,7 +5767,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                 messageObject5.eventId = 1;
                 this.messages.add(messageObject5);
                 TLRPC$TL_message tLRPC$TL_message6 = new TLRPC$TL_message();
-                tLRPC$TL_message6.message = LocaleController.getString("NewThemePreviewLine1", NUM);
+                tLRPC$TL_message6.message = LocaleController.getString("NewThemePreviewLine1", R.string.NewThemePreviewLine1);
                 tLRPC$TL_message6.date = i2;
                 tLRPC$TL_message6.dialog_id = 1;
                 tLRPC$TL_message6.flags = 265;
@@ -5782,7 +5782,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                 tLRPC$TL_message6.peer_id = tLRPC$TL_peerUser10;
                 tLRPC$TL_peerUser10.user_id = UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId();
                 MessageObject messageObject6 = new MessageObject(UserConfig.selectedAccount, tLRPC$TL_message6, true, false);
-                messageObject6.customReplyName = LocaleController.getString("NewThemePreviewName", NUM);
+                messageObject6.customReplyName = LocaleController.getString("NewThemePreviewName", R.string.NewThemePreviewName);
                 messageObject5.customReplyName = "Test User";
                 messageObject6.eventId = 1;
                 messageObject6.resetLayout();
@@ -5878,7 +5878,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                 this.messages.add(new MessageObject(themePreviewActivity.currentAccount, tLRPC$TL_message10, true, false));
             } else {
                 TLRPC$TL_message tLRPC$TL_message11 = new TLRPC$TL_message();
-                tLRPC$TL_message11.message = LocaleController.getString("ThemePreviewLine1", NUM);
+                tLRPC$TL_message11.message = LocaleController.getString("ThemePreviewLine1", R.string.ThemePreviewLine1);
                 int i4 = currentTimeMillis + 60;
                 tLRPC$TL_message11.date = i4;
                 tLRPC$TL_message11.dialog_id = 1;
@@ -5894,7 +5894,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                 tLRPC$TL_peerUser16.user_id = 0;
                 MessageObject messageObject8 = new MessageObject(themePreviewActivity.currentAccount, tLRPC$TL_message11, true, false);
                 TLRPC$TL_message tLRPC$TL_message12 = new TLRPC$TL_message();
-                tLRPC$TL_message12.message = LocaleController.getString("ThemePreviewLine2", NUM);
+                tLRPC$TL_message12.message = LocaleController.getString("ThemePreviewLine2", R.string.ThemePreviewLine2);
                 tLRPC$TL_message12.date = currentTimeMillis + 960;
                 tLRPC$TL_message12.dialog_id = 1;
                 tLRPC$TL_message12.flags = 259;
@@ -5923,8 +5923,8 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                 tLRPC$Document3.file_reference = new byte[0];
                 TLRPC$TL_documentAttributeAudio tLRPC$TL_documentAttributeAudio2 = new TLRPC$TL_documentAttributeAudio();
                 tLRPC$TL_documentAttributeAudio2.duration = 243;
-                tLRPC$TL_documentAttributeAudio2.performer = LocaleController.getString("ThemePreviewSongPerformer", NUM);
-                tLRPC$TL_documentAttributeAudio2.title = LocaleController.getString("ThemePreviewSongTitle", NUM);
+                tLRPC$TL_documentAttributeAudio2.performer = LocaleController.getString("ThemePreviewSongPerformer", R.string.ThemePreviewSongPerformer);
+                tLRPC$TL_documentAttributeAudio2.title = LocaleController.getString("ThemePreviewSongTitle", R.string.ThemePreviewSongTitle);
                 tLRPC$TL_message13.media.document.attributes.add(tLRPC$TL_documentAttributeAudio2);
                 tLRPC$TL_message13.out = false;
                 TLRPC$TL_peerUser tLRPC$TL_peerUser19 = new TLRPC$TL_peerUser();
@@ -5932,7 +5932,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                 tLRPC$TL_peerUser19.user_id = UserConfig.getInstance(themePreviewActivity.currentAccount).getClientUserId();
                 this.messages.add(new MessageObject(themePreviewActivity.currentAccount, tLRPC$TL_message13, true, false));
                 TLRPC$TL_message tLRPC$TL_message14 = new TLRPC$TL_message();
-                tLRPC$TL_message14.message = LocaleController.getString("ThemePreviewLine3", NUM);
+                tLRPC$TL_message14.message = LocaleController.getString("ThemePreviewLine3", R.string.ThemePreviewLine3);
                 tLRPC$TL_message14.date = i4;
                 tLRPC$TL_message14.dialog_id = 1;
                 tLRPC$TL_message14.flags = 265;
@@ -5947,7 +5947,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                 tLRPC$TL_message14.peer_id = tLRPC$TL_peerUser20;
                 tLRPC$TL_peerUser20.user_id = UserConfig.getInstance(themePreviewActivity.currentAccount).getClientUserId();
                 MessageObject messageObject9 = new MessageObject(themePreviewActivity.currentAccount, tLRPC$TL_message14, true, false);
-                messageObject9.customReplyName = LocaleController.getString("ThemePreviewLine3Reply", NUM);
+                messageObject9.customReplyName = LocaleController.getString("ThemePreviewLine3Reply", R.string.ThemePreviewLine3Reply);
                 messageObject9.replyMessageObject = messageObject8;
                 this.messages.add(messageObject9);
                 TLRPC$TL_message tLRPC$TL_message15 = new TLRPC$TL_message();
@@ -6004,7 +6004,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                 tLRPC$TL_photoSize.type = "s";
                 tLRPC$TL_photoSize.location = new TLRPC$TL_fileLocationUnavailable();
                 tLRPC$TL_message16.media.photo.sizes.add(tLRPC$TL_photoSize);
-                tLRPC$TL_message16.message = LocaleController.getString("ThemePreviewLine4", NUM);
+                tLRPC$TL_message16.message = LocaleController.getString("ThemePreviewLine4", R.string.ThemePreviewLine4);
                 tLRPC$TL_message16.out = false;
                 TLRPC$TL_peerUser tLRPC$TL_peerUser23 = new TLRPC$TL_peerUser();
                 tLRPC$TL_message16.peer_id = tLRPC$TL_peerUser23;

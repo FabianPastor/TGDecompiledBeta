@@ -20,6 +20,7 @@ import androidx.core.graphics.ColorUtils;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.SvgHelper;
 import org.telegram.messenger.Utilities;
@@ -181,113 +182,130 @@ public class StarParticlesView extends View {
 
         private void generateBitmaps() {
             int dp;
-            int i = 0;
-            while (i < 3) {
+            int i;
+            int i2;
+            int i3;
+            int i4;
+            for (int i5 = 0; i5 < 3; i5++) {
                 float f = this.k1;
-                if (i == 0) {
+                if (i5 == 0) {
                     dp = AndroidUtilities.dp((float) this.size1);
-                } else if (i == 1) {
+                } else if (i5 == 1) {
                     f = this.k2;
                     dp = AndroidUtilities.dp((float) this.size2);
                 } else {
                     f = this.k3;
                     dp = AndroidUtilities.dp((float) this.size3);
                 }
-                int i2 = dp;
-                int i3 = this.type;
-                if (i3 == 9) {
-                    this.stars[i] = SvgHelper.getBitmap(i == 0 ? NUM : i == 1 ? NUM : NUM, i2, i2, ColorUtils.setAlphaComponent(Theme.getColor(this.colorKey), 30));
+                int i6 = dp;
+                int i7 = this.type;
+                if (i7 == 9) {
+                    if (i5 == 0) {
+                        i4 = R.raw.premium_object_folder;
+                    } else if (i5 == 1) {
+                        i4 = R.raw.premium_object_bubble;
+                    } else {
+                        i4 = R.raw.premium_object_settings;
+                    }
+                    this.stars[i5] = SvgHelper.getBitmap(i4, i6, i6, ColorUtils.setAlphaComponent(Theme.getColor(this.colorKey), 30));
+                    this.svg = true;
+                } else if (i7 == 11) {
+                    if (i5 == 0) {
+                        i3 = R.raw.premium_object_smile1;
+                    } else if (i5 == 1) {
+                        i3 = R.raw.premium_object_smile2;
+                    } else {
+                        i3 = R.raw.premium_object_like;
+                    }
+                    this.stars[i5] = SvgHelper.getBitmap(i3, i6, i6, ColorUtils.setAlphaComponent(Theme.getColor(this.colorKey), 30));
+                    this.svg = true;
+                } else if (i7 == 3) {
+                    if (i5 == 0) {
+                        i2 = R.raw.premium_object_adsbubble;
+                    } else if (i5 == 1) {
+                        i2 = R.raw.premium_object_like;
+                    } else {
+                        i2 = R.raw.premium_object_noads;
+                    }
+                    this.stars[i5] = SvgHelper.getBitmap(i2, i6, i6, ColorUtils.setAlphaComponent(Theme.getColor(this.colorKey), 30));
+                    this.svg = true;
+                } else if (i7 == 7) {
+                    if (i5 == 0) {
+                        i = R.raw.premium_object_video2;
+                    } else if (i5 == 1) {
+                        i = R.raw.premium_object_video;
+                    } else {
+                        i = R.raw.premium_object_user;
+                    }
+                    this.stars[i5] = SvgHelper.getBitmap(i, i6, i6, ColorUtils.setAlphaComponent(Theme.getColor(this.colorKey), 30));
+                    this.svg = true;
+                } else if (i7 == 1001) {
+                    this.stars[i5] = SvgHelper.getBitmap(R.raw.premium_object_fire, i6, i6, ColorUtils.setAlphaComponent(Theme.getColor(this.colorKey), 30));
+                    this.svg = true;
+                } else if (i7 == 1002) {
+                    this.stars[i5] = SvgHelper.getBitmap(R.raw.premium_object_star2, i6, i6, ColorUtils.setAlphaComponent(Theme.getColor(this.colorKey), 30));
                     this.svg = true;
                 } else {
-                    int i4 = NUM;
-                    if (i3 == 11) {
-                        if (i == 0) {
-                            i4 = NUM;
-                        } else if (i == 1) {
-                            i4 = NUM;
-                        }
-                        this.stars[i] = SvgHelper.getBitmap(i4, i2, i2, ColorUtils.setAlphaComponent(Theme.getColor(this.colorKey), 30));
-                        this.svg = true;
-                    } else if (i3 == 3) {
-                        if (i == 0) {
-                            i4 = NUM;
-                        } else if (i != 1) {
-                            i4 = NUM;
-                        }
-                        this.stars[i] = SvgHelper.getBitmap(i4, i2, i2, ColorUtils.setAlphaComponent(Theme.getColor(this.colorKey), 30));
-                        this.svg = true;
-                    } else if (i3 == 7) {
-                        this.stars[i] = SvgHelper.getBitmap(i == 0 ? NUM : i == 1 ? NUM : NUM, i2, i2, ColorUtils.setAlphaComponent(Theme.getColor(this.colorKey), 30));
-                        this.svg = true;
-                    } else if (i3 == 1001) {
-                        this.stars[i] = SvgHelper.getBitmap(NUM, i2, i2, ColorUtils.setAlphaComponent(Theme.getColor(this.colorKey), 30));
-                        this.svg = true;
-                    } else if (i3 == 1002) {
-                        this.stars[i] = SvgHelper.getBitmap(NUM, i2, i2, ColorUtils.setAlphaComponent(Theme.getColor(this.colorKey), 30));
-                        this.svg = true;
+                    Bitmap createBitmap = Bitmap.createBitmap(i6, i6, Bitmap.Config.ARGB_8888);
+                    this.stars[i5] = createBitmap;
+                    Canvas canvas = new Canvas(createBitmap);
+                    if (this.type == 6 && (i5 == 1 || i5 == 2)) {
+                        android.graphics.drawable.Drawable drawable = ContextCompat.getDrawable(ApplicationLoader.applicationContext, R.drawable.msg_premium_liststar);
+                        drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(this.colorKey), PorterDuff.Mode.MULTIPLY));
+                        drawable.setBounds(0, 0, i6, i6);
+                        drawable.draw(canvas);
                     } else {
-                        Bitmap createBitmap = Bitmap.createBitmap(i2, i2, Bitmap.Config.ARGB_8888);
-                        this.stars[i] = createBitmap;
-                        Canvas canvas = new Canvas(createBitmap);
-                        if (this.type == 6 && (i == 1 || i == 2)) {
-                            android.graphics.drawable.Drawable drawable = ContextCompat.getDrawable(ApplicationLoader.applicationContext, NUM);
-                            drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(this.colorKey), PorterDuff.Mode.MULTIPLY));
-                            drawable.setBounds(0, 0, i2, i2);
-                            drawable.draw(canvas);
-                        } else {
-                            Path path = new Path();
-                            float f2 = (float) (i2 >> 1);
-                            int i5 = (int) (f * f2);
-                            path.moveTo(0.0f, f2);
-                            float f3 = (float) i5;
-                            path.lineTo(f3, f3);
-                            path.lineTo(f2, 0.0f);
-                            float f4 = (float) (i2 - i5);
-                            path.lineTo(f4, f3);
-                            float f5 = (float) i2;
-                            path.lineTo(f5, f2);
-                            path.lineTo(f4, f4);
-                            path.lineTo(f2, f5);
-                            path.lineTo(f3, f4);
-                            path.lineTo(0.0f, f2);
-                            path.close();
-                            Paint paint2 = new Paint();
-                            if (this.useGradient) {
-                                if (i2 >= AndroidUtilities.dp(10.0f)) {
-                                    PremiumGradient.getInstance().updateMainGradientMatrix(0, 0, i2, i2, (float) (i2 * -2), 0.0f);
-                                } else {
-                                    PremiumGradient.getInstance().updateMainGradientMatrix(0, 0, i2, i2, (float) (i2 * -4), 0.0f);
-                                }
-                                Paint mainGradientPaint = PremiumGradient.getInstance().getMainGradientPaint();
-                                if (this.roundEffect) {
-                                    mainGradientPaint.setPathEffect(new CornerPathEffect(AndroidUtilities.dpf2(((float) this.size1) / 5.0f)));
-                                }
-                                if (this.useBlur) {
-                                    mainGradientPaint.setAlpha(60);
-                                } else {
-                                    mainGradientPaint.setAlpha(120);
-                                }
-                                canvas.drawPath(path, mainGradientPaint);
-                                mainGradientPaint.setPathEffect((PathEffect) null);
-                                mainGradientPaint.setAlpha(255);
+                        Path path = new Path();
+                        float f2 = (float) (i6 >> 1);
+                        int i8 = (int) (f * f2);
+                        path.moveTo(0.0f, f2);
+                        float f3 = (float) i8;
+                        path.lineTo(f3, f3);
+                        path.lineTo(f2, 0.0f);
+                        float f4 = (float) (i6 - i8);
+                        path.lineTo(f4, f3);
+                        float f5 = (float) i6;
+                        path.lineTo(f5, f2);
+                        path.lineTo(f4, f4);
+                        path.lineTo(f2, f5);
+                        path.lineTo(f3, f4);
+                        path.lineTo(0.0f, f2);
+                        path.close();
+                        Paint paint2 = new Paint();
+                        if (this.useGradient) {
+                            if (i6 >= AndroidUtilities.dp(10.0f)) {
+                                PremiumGradient.getInstance().updateMainGradientMatrix(0, 0, i6, i6, (float) (i6 * -2), 0.0f);
                             } else {
-                                if (this.type == 100) {
-                                    paint2.setColor(ColorUtils.setAlphaComponent(Theme.getColor(this.colorKey), 200));
-                                } else {
-                                    paint2.setColor(Theme.getColor(this.colorKey));
-                                }
-                                if (this.roundEffect) {
-                                    paint2.setPathEffect(new CornerPathEffect(AndroidUtilities.dpf2(((float) this.size1) / 5.0f)));
-                                }
-                                canvas.drawPath(path, paint2);
+                                PremiumGradient.getInstance().updateMainGradientMatrix(0, 0, i6, i6, (float) (i6 * -4), 0.0f);
+                            }
+                            Paint mainGradientPaint = PremiumGradient.getInstance().getMainGradientPaint();
+                            if (this.roundEffect) {
+                                mainGradientPaint.setPathEffect(new CornerPathEffect(AndroidUtilities.dpf2(((float) this.size1) / 5.0f)));
                             }
                             if (this.useBlur) {
-                                Utilities.stackBlurBitmap(createBitmap, 2);
+                                mainGradientPaint.setAlpha(60);
+                            } else {
+                                mainGradientPaint.setAlpha(120);
                             }
+                            canvas.drawPath(path, mainGradientPaint);
+                            mainGradientPaint.setPathEffect((PathEffect) null);
+                            mainGradientPaint.setAlpha(255);
+                        } else {
+                            if (this.type == 100) {
+                                paint2.setColor(ColorUtils.setAlphaComponent(Theme.getColor(this.colorKey), 200));
+                            } else {
+                                paint2.setColor(Theme.getColor(this.colorKey));
+                            }
+                            if (this.roundEffect) {
+                                paint2.setPathEffect(new CornerPathEffect(AndroidUtilities.dpf2(((float) this.size1) / 5.0f)));
+                            }
+                            canvas.drawPath(path, paint2);
+                        }
+                        if (this.useBlur) {
+                            Utilities.stackBlurBitmap(createBitmap, 2);
                         }
                     }
                 }
-                i++;
             }
         }
 

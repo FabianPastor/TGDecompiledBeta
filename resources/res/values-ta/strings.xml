@@ -21,12 +21,6 @@
     <string name="fcm_fallback_notification_channel_label">மற்றவை</string>
     <string name="google_assistant_verification_channel_name">அசிஸ்டண்ட் உறுதிப்படுத்தி</string>
     <string name="google_assistant_verification_notification_title">Google அசிஸ்டண்ட் செய்தியை அனுப்புகிறது</string>
-    <string name="hms_apk_not_installed_hints">உங்கள் சாதனத்தில் HMS Core நிறுவப்படாததால் அது இல்லாமல் %1$s-இன் சில அம்சங்கள் சரியாக வேலை செய்யாமல் போகலாம்.</string>
-    <string name="hms_bindfaildlg_message">%1$s-ஆல் HMS Core-ஐப் பயன்படுத்த இயலவில்லை. உகந்ததாக்கியைத் (ஃபோன் நிர்வாகி) தொடங்கி அல்லது அமைப்புகளுக்குச் சென்று, %2$s-க்கான (தன்னியக்கத் தொடக்கம் மற்றும் இரண்டாம் நிலைத் தொடக்கம் உள்ளிட்ட) அனைத்து அனுமதிகளையும் செயல்படுத்திவிட்டு, மீண்டும் முயலவும்.</string>
-    <string name="hms_confirm">சரி</string>
-    <string name="hms_is_spoof">உங்கள் சாதனத்தில் அதிகாரப்பூர்வமற்ற HMS Core (%1$s) பதிப்பு நிறுவப்பட்டுள்ளதைப் போலத் தெரிகிறது. அமைப்புகளில் HMS Core-ஐ நிறுவல்நீக்கி, அதிகாரப்பூர்வப் பதிப்பை நிறுவ, இந்த செயலிக்குத் திரும்பவும்.</string>
-    <string name="hms_push_channel">இயல்புநிலை</string>
-    <string name="hms_spoof_hints">குறிப்பு</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Google மூலம் வாங்கு</string>
 </resources>

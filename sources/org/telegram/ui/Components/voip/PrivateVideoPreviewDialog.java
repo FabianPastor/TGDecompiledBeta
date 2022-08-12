@@ -27,6 +27,7 @@ import java.io.FileOutputStream;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.R;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.voip.VideoCapturerDevice;
 import org.telegram.messenger.voip.VoIPService;
@@ -293,7 +294,7 @@ public abstract class PrivateVideoPreviewDialog extends FrameLayout implements V
         this.positiveButton.setTextColor(Theme.getColor("voipgroup_nameText"));
         this.positiveButton.setGravity(17);
         this.positiveButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.positiveButton.setText(LocaleController.getString("VoipShareVideo", NUM));
+        this.positiveButton.setText(LocaleController.getString("VoipShareVideo", R.string.VoipShareVideo));
         if (Build.VERSION.SDK_INT >= 23) {
             this.positiveButton.setForeground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(6.0f), 0, ColorUtils.setAlphaComponent(Theme.getColor("voipgroup_nameText"), 76)));
         }
@@ -318,11 +319,11 @@ public abstract class PrivateVideoPreviewDialog extends FrameLayout implements V
             this.titles[i].setSingleLine(true);
             this.titlesLayout.addView(this.titles[i], LayoutHelper.createLinear(-2, -1));
             if (i == 0 && this.needScreencast) {
-                this.titles[i].setText(LocaleController.getString("VoipPhoneScreen", NUM));
+                this.titles[i].setText(LocaleController.getString("VoipPhoneScreen", R.string.VoipPhoneScreen));
             } else if (i == 0 || (i == 1 && this.needScreencast)) {
-                this.titles[i].setText(LocaleController.getString("VoipFrontCamera", NUM));
+                this.titles[i].setText(LocaleController.getString("VoipFrontCamera", R.string.VoipFrontCamera));
             } else {
-                this.titles[i].setText(LocaleController.getString("VoipBackCamera", NUM));
+                this.titles[i].setText(LocaleController.getString("VoipBackCamera", R.string.VoipBackCamera));
             }
             this.titles[i].setOnClickListener(new PrivateVideoPreviewDialog$$ExternalSyntheticLambda1(this, i));
             i++;
@@ -349,7 +350,8 @@ public abstract class PrivateVideoPreviewDialog extends FrameLayout implements V
             this.micIconView = rLottieImageView;
             rLottieImageView.setPadding(AndroidUtilities.dp(9.0f), AndroidUtilities.dp(9.0f), AndroidUtilities.dp(9.0f), AndroidUtilities.dp(9.0f));
             this.micIconView.setBackground(Theme.createCircleDrawable(AndroidUtilities.dp(48.0f), ColorUtils.setAlphaComponent(-16777216, 76)));
-            RLottieDrawable rLottieDrawable = new RLottieDrawable(NUM, "NUM", AndroidUtilities.dp(24.0f), AndroidUtilities.dp(24.0f), true, (int[]) null);
+            int i2 = R.raw.voice_mini;
+            RLottieDrawable rLottieDrawable = new RLottieDrawable(i2, "" + i2, AndroidUtilities.dp(24.0f), AndroidUtilities.dp(24.0f), true, (int[]) null);
             this.micIconView.setAnimation(rLottieDrawable);
             this.micIconView.setScaleType(ImageView.ScaleType.FIT_CENTER);
             this.micEnabled = true;
@@ -619,8 +621,8 @@ public abstract class PrivateVideoPreviewDialog extends FrameLayout implements V
                 org.telegram.ui.Components.voip.PrivateVideoPreviewDialog r0 = org.telegram.ui.Components.voip.PrivateVideoPreviewDialog.this
                 boolean r0 = r0.needScreencast
                 r1 = 1
-                if (r0 == 0) goto L_0x00a1
-                if (r12 != 0) goto L_0x00a1
+                if (r0 == 0) goto L_0x009f
+                if (r12 != 0) goto L_0x009f
                 android.widget.FrameLayout r12 = new android.widget.FrameLayout
                 org.telegram.ui.Components.voip.PrivateVideoPreviewDialog r0 = org.telegram.ui.Components.voip.PrivateVideoPreviewDialog.this
                 android.content.Context r0 = r0.getContext()
@@ -640,7 +642,7 @@ public abstract class PrivateVideoPreviewDialog extends FrameLayout implements V
                 r0.<init>(r2)
                 android.widget.ImageView$ScaleType r2 = android.widget.ImageView.ScaleType.CENTER
                 r0.setScaleType(r2)
-                r2 = 2131166121(0x7var_a9, float:1.7946478E38)
+                int r2 = org.telegram.messenger.R.drawable.screencast_big
                 r0.setImageResource(r2)
                 r3 = 82
                 r4 = 1118044160(0x42a40000, float:82.0)
@@ -655,7 +657,7 @@ public abstract class PrivateVideoPreviewDialog extends FrameLayout implements V
                 org.telegram.ui.Components.voip.PrivateVideoPreviewDialog r2 = org.telegram.ui.Components.voip.PrivateVideoPreviewDialog.this
                 android.content.Context r2 = r2.getContext()
                 r0.<init>(r2)
-                r2 = 2131629298(0x7f0e14f2, float:1.8885913E38)
+                int r2 = org.telegram.messenger.R.string.VoipVideoPrivateScreenSharing
                 java.lang.String r3 = "VoipVideoPrivateScreenSharing"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r0.setText(r2)
@@ -681,8 +683,8 @@ public abstract class PrivateVideoPreviewDialog extends FrameLayout implements V
                 r7 = 1101529088(0x41a80000, float:21.0)
                 android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r2, r3, r4, r5, r6, r7, r8)
                 r12.addView(r0, r1)
-                goto L_0x00fd
-            L_0x00a1:
+                goto L_0x00fa
+            L_0x009f:
                 android.widget.ImageView r0 = new android.widget.ImageView
                 org.telegram.ui.Components.voip.PrivateVideoPreviewDialog r2 = org.telegram.ui.Components.voip.PrivateVideoPreviewDialog.this
                 android.content.Context r2 = r2.getContext()
@@ -690,48 +692,48 @@ public abstract class PrivateVideoPreviewDialog extends FrameLayout implements V
                 java.lang.Integer r2 = java.lang.Integer.valueOf(r12)
                 r0.setTag(r2)
                 r2 = 0
-                java.io.File r3 = new java.io.File     // Catch:{ all -> 0x00ea }
-                java.io.File r4 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed()     // Catch:{ all -> 0x00ea }
-                java.lang.StringBuilder r5 = new java.lang.StringBuilder     // Catch:{ all -> 0x00ea }
-                r5.<init>()     // Catch:{ all -> 0x00ea }
+                java.io.File r3 = new java.io.File     // Catch:{ all -> 0x00e8 }
+                java.io.File r4 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed()     // Catch:{ all -> 0x00e8 }
+                java.lang.StringBuilder r5 = new java.lang.StringBuilder     // Catch:{ all -> 0x00e8 }
+                r5.<init>()     // Catch:{ all -> 0x00e8 }
                 java.lang.String r6 = "cthumb"
-                r5.append(r6)     // Catch:{ all -> 0x00ea }
-                if (r12 == 0) goto L_0x00d2
-                if (r12 != r1) goto L_0x00d1
-                org.telegram.ui.Components.voip.PrivateVideoPreviewDialog r12 = org.telegram.ui.Components.voip.PrivateVideoPreviewDialog.this     // Catch:{ all -> 0x00ea }
-                boolean r12 = r12.needScreencast     // Catch:{ all -> 0x00ea }
-                if (r12 == 0) goto L_0x00d1
-                goto L_0x00d2
-            L_0x00d1:
+                r5.append(r6)     // Catch:{ all -> 0x00e8 }
+                if (r12 == 0) goto L_0x00d0
+                if (r12 != r1) goto L_0x00cf
+                org.telegram.ui.Components.voip.PrivateVideoPreviewDialog r12 = org.telegram.ui.Components.voip.PrivateVideoPreviewDialog.this     // Catch:{ all -> 0x00e8 }
+                boolean r12 = r12.needScreencast     // Catch:{ all -> 0x00e8 }
+                if (r12 == 0) goto L_0x00cf
+                goto L_0x00d0
+            L_0x00cf:
                 r1 = 2
-            L_0x00d2:
-                r5.append(r1)     // Catch:{ all -> 0x00ea }
+            L_0x00d0:
+                r5.append(r1)     // Catch:{ all -> 0x00e8 }
                 java.lang.String r12 = ".jpg"
-                r5.append(r12)     // Catch:{ all -> 0x00ea }
-                java.lang.String r12 = r5.toString()     // Catch:{ all -> 0x00ea }
-                r3.<init>(r4, r12)     // Catch:{ all -> 0x00ea }
-                java.lang.String r12 = r3.getAbsolutePath()     // Catch:{ all -> 0x00ea }
-                android.graphics.Bitmap r2 = android.graphics.BitmapFactory.decodeFile(r12)     // Catch:{ all -> 0x00ea }
-                goto L_0x00eb
-            L_0x00ea:
-            L_0x00eb:
-                if (r2 == 0) goto L_0x00f1
+                r5.append(r12)     // Catch:{ all -> 0x00e8 }
+                java.lang.String r12 = r5.toString()     // Catch:{ all -> 0x00e8 }
+                r3.<init>(r4, r12)     // Catch:{ all -> 0x00e8 }
+                java.lang.String r12 = r3.getAbsolutePath()     // Catch:{ all -> 0x00e8 }
+                android.graphics.Bitmap r2 = android.graphics.BitmapFactory.decodeFile(r12)     // Catch:{ all -> 0x00e8 }
+                goto L_0x00e9
+            L_0x00e8:
+            L_0x00e9:
+                if (r2 == 0) goto L_0x00ef
                 r0.setImageBitmap(r2)
-                goto L_0x00f7
-            L_0x00f1:
-                r12 = 2131165524(0x7var_, float:1.7945268E38)
+                goto L_0x00f4
+            L_0x00ef:
+                int r12 = org.telegram.messenger.R.drawable.icplaceholder
                 r0.setImageResource(r12)
-            L_0x00f7:
+            L_0x00f4:
                 android.widget.ImageView$ScaleType r12 = android.widget.ImageView.ScaleType.FIT_XY
                 r0.setScaleType(r12)
                 r12 = r0
-            L_0x00fd:
+            L_0x00fa:
                 android.view.ViewParent r0 = r12.getParent()
-                if (r0 == 0) goto L_0x010c
+                if (r0 == 0) goto L_0x0109
                 android.view.ViewParent r0 = r12.getParent()
                 android.view.ViewGroup r0 = (android.view.ViewGroup) r0
                 r0.removeView(r12)
-            L_0x010c:
+            L_0x0109:
                 r0 = 0
                 r11.addView(r12, r0)
                 return r12

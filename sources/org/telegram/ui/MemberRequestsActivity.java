@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -38,17 +39,17 @@ public class MemberRequestsActivity extends BaseFragment {
                 }
             }
         });
-        this.actionBar.setBackButtonImage(NUM);
+        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         ActionBar actionBar = this.actionBar;
         if (this.delegate.isChannel) {
-            i = NUM;
+            i = R.string.SubscribeRequests;
             str = "SubscribeRequests";
         } else {
-            i = NUM;
+            i = R.string.MemberRequests;
             str = "MemberRequests";
         }
         actionBar.setTitle(LocaleController.getString(str, i));
-        ActionBarMenuItem actionBarMenuItemSearchListener = this.actionBar.createMenu().addItem(0, NUM).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
+        ActionBarMenuItem actionBarMenuItemSearchListener = this.actionBar.createMenu().addItem(0, R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
             public void onSearchExpand() {
                 super.onSearchExpand();
                 MemberRequestsActivity.this.delegate.setSearchExpanded(true);
@@ -65,7 +66,7 @@ public class MemberRequestsActivity extends BaseFragment {
                 MemberRequestsActivity.this.delegate.setQuery(editText.getText().toString());
             }
         });
-        actionBarMenuItemSearchListener.setSearchFieldHint(LocaleController.getString("Search", NUM));
+        actionBarMenuItemSearchListener.setSearchFieldHint(LocaleController.getString("Search", R.string.Search));
         actionBarMenuItemSearchListener.setVisibility(8);
         FrameLayout rootLayout = this.delegate.getRootLayout();
         this.delegate.loadMembers();

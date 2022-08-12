@@ -23,6 +23,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
@@ -79,8 +80,8 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
     public void onCreate(Bundle bundle) {
         ApplicationLoader.postInitApplication();
         requestWindowFeature(1);
-        setTheme(NUM);
-        getWindow().setBackgroundDrawableResource(NUM);
+        setTheme(R.style.Theme_TMessages);
+        getWindow().setBackgroundDrawableResource(R.drawable.transparent);
         if (SharedConfig.passcodeHash.length() > 0 && !SharedConfig.allowScreenCapture) {
             try {
                 getWindow().setFlags(8192, 8192);
@@ -129,7 +130,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
             actionBarLayout2.setRemoveActionBarExtraHeight(true);
             this.layersActionBarLayout.setBackgroundView(frameLayout);
             this.layersActionBarLayout.setUseAlphaAnimations(true);
-            this.layersActionBarLayout.setBackgroundResource(NUM);
+            this.layersActionBarLayout.setBackgroundResource(R.drawable.boxshadow);
             relativeLayout.addView(this.layersActionBarLayout, LayoutHelper.createRelative(530, AndroidUtilities.isSmallTablet() ? 528 : 700));
             this.layersActionBarLayout.init(layerFragmentsStack);
             this.layersActionBarLayout.setDelegate(this);
@@ -281,9 +282,9 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
                         this.layersActionBarLayout.showLastFragment();
                     }
                     AlertDialog.Builder builder = new AlertDialog.Builder((Context) this);
-                    builder.setTitle(LocaleController.getString("AppName", NUM));
-                    builder.setMessage(LocaleController.getString("PleaseLoginPassport", NUM));
-                    builder.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
+                    builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                    builder.setMessage(LocaleController.getString("PleaseLoginPassport", R.string.PleaseLoginPassport));
+                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (DialogInterface.OnClickListener) null);
                     builder.show();
                     return true;
                 }
@@ -395,7 +396,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
         try {
             alertDialog.dismiss();
             if ("APP_VERSION_OUTDATED".equals(tLRPC$TL_error.text)) {
-                AlertDialog showUpdateAppAlert = AlertsCreator.showUpdateAppAlert(this, LocaleController.getString("UpdateAppAlert", NUM), true);
+                AlertDialog showUpdateAppAlert = AlertsCreator.showUpdateAppAlert(this, LocaleController.getString("UpdateAppAlert", R.string.UpdateAppAlert), true);
                 if (showUpdateAppAlert != null) {
                     showUpdateAppAlert.setOnDismissListener(new ExternalActionActivity$$ExternalSyntheticLambda2(this, tLRPC$TL_error));
                     return;

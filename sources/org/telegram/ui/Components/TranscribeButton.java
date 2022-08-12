@@ -30,6 +30,7 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$InputPeer;
@@ -77,13 +78,13 @@ public class TranscribeButton {
         Rect rect = new Rect(this.bounds);
         this.pressBounds = rect;
         rect.inset(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f));
-        RLottieDrawable rLottieDrawable = new RLottieDrawable(NUM, "transcribe_out", AndroidUtilities.dp(26.0f), AndroidUtilities.dp(26.0f));
+        RLottieDrawable rLottieDrawable = new RLottieDrawable(R.raw.transcribe_out, "transcribe_out", AndroidUtilities.dp(26.0f), AndroidUtilities.dp(26.0f));
         this.outIconDrawable = rLottieDrawable;
         rLottieDrawable.setCurrentFrame(0);
         this.outIconDrawable.setCallback(chatMessageCell);
         this.outIconDrawable.setOnFinishCallback(new TranscribeButton$$ExternalSyntheticLambda5(this), 19);
         this.outIconDrawable.setAllowDecodeSingleFrame(true);
-        RLottieDrawable rLottieDrawable2 = new RLottieDrawable(NUM, "transcribe_in", AndroidUtilities.dp(26.0f), AndroidUtilities.dp(26.0f));
+        RLottieDrawable rLottieDrawable2 = new RLottieDrawable(R.raw.transcribe_in, "transcribe_in", AndroidUtilities.dp(26.0f), AndroidUtilities.dp(26.0f));
         this.inIconDrawable = rLottieDrawable2;
         rLottieDrawable2.setCurrentFrame(0);
         this.inIconDrawable.setCallback(chatMessageCell);
@@ -393,7 +394,7 @@ public class TranscribeButton {
         public LoadingPointsDrawable(TextPaint textPaint) {
             this.paint = textPaint;
             float textSize = textPaint.getTextSize() * 0.89f;
-            AnonymousClass1 r0 = new RLottieDrawable(this, NUM, "dots_loading", (int) textSize, (int) (textSize * 1.25f)) {
+            AnonymousClass1 r0 = new RLottieDrawable(this, R.raw.dots_loading, "dots_loading", (int) textSize, (int) (textSize * 1.25f)) {
                 /* access modifiers changed from: protected */
                 public boolean hasParentView() {
                     return true;

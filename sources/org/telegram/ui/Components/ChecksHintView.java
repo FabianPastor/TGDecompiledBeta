@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.ChatMessageCell;
 
@@ -54,18 +55,18 @@ public class ChecksHintView extends FrameLayout {
             this.textView[i].setPivotX(0.0f);
             frameLayout.addView(this.textView[i], LayoutHelper.createFrame(-2, -2.0f, 51, 32.0f, i == 0 ? 2.0f : 26.0f, 10.0f, 0.0f));
             if (i == 0) {
-                this.imageView[i].setAnimation(NUM, 24, 24);
-                this.textView[i].setText(LocaleController.getString("HintSent", NUM));
+                this.imageView[i].setAnimation(R.raw.ticks_single, 24, 24);
+                this.textView[i].setText(LocaleController.getString("HintSent", R.string.HintSent));
             } else {
-                this.imageView[i].setAnimation(NUM, 24, 24);
-                this.textView[i].setText(LocaleController.getString("HintRead", NUM));
+                this.imageView[i].setAnimation(R.raw.ticks_double, 24, 24);
+                this.textView[i].setText(LocaleController.getString("HintRead", R.string.HintRead));
             }
             this.imageView[i].playAnimation();
             i++;
         }
         ImageView imageView2 = new ImageView(context);
         this.arrowImageView = imageView2;
-        imageView2.setImageResource(NUM);
+        imageView2.setImageResource(R.drawable.tooltip_arrow);
         this.arrowImageView.setColorFilter(new PorterDuffColorFilter(getThemedColor("chat_gifSaveHintBackground"), PorterDuff.Mode.MULTIPLY));
         addView(this.arrowImageView, LayoutHelper.createFrame(14, 6.0f, 83, 0.0f, 0.0f, 0.0f, 0.0f));
     }

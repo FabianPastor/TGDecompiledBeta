@@ -93,38 +93,38 @@ class ContactsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
         TLRPC$UserProfilePhoto tLRPC$UserProfilePhoto;
         int i3 = i;
         if (this.deleted) {
-            RemoteViews remoteViews = new RemoteViews(this.mContext.getPackageName(), NUM);
-            remoteViews.setTextViewText(NUM, LocaleController.getString("WidgetLoggedOff", NUM));
+            RemoteViews remoteViews = new RemoteViews(this.mContext.getPackageName(), R.layout.widget_deleted);
+            remoteViews.setTextViewText(R.id.widget_deleted_text, LocaleController.getString("WidgetLoggedOff", R.string.WidgetLoggedOff));
             return remoteViews;
         } else if (i3 >= getCount() - 1) {
-            RemoteViews remoteViews2 = new RemoteViews(this.mContext.getPackageName(), NUM);
-            remoteViews2.setTextViewText(NUM, LocaleController.getString("TapToEditWidgetShort", NUM));
+            RemoteViews remoteViews2 = new RemoteViews(this.mContext.getPackageName(), R.layout.widget_edititem);
+            remoteViews2.setTextViewText(R.id.widget_edititem_text, LocaleController.getString("TapToEditWidgetShort", R.string.TapToEditWidgetShort));
             Bundle bundle = new Bundle();
             bundle.putInt("appWidgetId", this.appWidgetId);
             bundle.putInt("appWidgetType", 1);
             bundle.putInt("currentAccount", this.accountInstance.getCurrentAccount());
             Intent intent = new Intent();
             intent.putExtras(bundle);
-            remoteViews2.setOnClickFillInIntent(NUM, intent);
+            remoteViews2.setOnClickFillInIntent(R.id.widget_edititem, intent);
             return remoteViews2;
         } else {
-            RemoteViews remoteViews3 = new RemoteViews(this.mContext.getPackageName(), NUM);
+            RemoteViews remoteViews3 = new RemoteViews(this.mContext.getPackageName(), R.layout.contacts_widget_item);
             int i4 = 0;
             while (i4 < 2) {
                 int i5 = (i3 * 2) + i4;
                 if (i5 >= this.dids.size()) {
-                    remoteViews3.setViewVisibility(i4 == 0 ? NUM : NUM, 4);
+                    remoteViews3.setViewVisibility(i4 == 0 ? R.id.contacts_widget_item1 : R.id.contacts_widget_item2, 4);
                 } else {
-                    remoteViews3.setViewVisibility(i4 == 0 ? NUM : NUM, 0);
+                    remoteViews3.setViewVisibility(i4 == 0 ? R.id.contacts_widget_item1 : R.id.contacts_widget_item2, 0);
                     Long l = this.dids.get(i5);
                     if (DialogObject.isUserDialog(l.longValue())) {
                         tLRPC$User = this.accountInstance.getMessagesController().getUser(l);
                         if (UserObject.isUserSelf(tLRPC$User)) {
-                            str = LocaleController.getString("SavedMessages", NUM);
+                            str = LocaleController.getString("SavedMessages", R.string.SavedMessages);
                         } else if (UserObject.isReplyUser(tLRPC$User)) {
-                            str = LocaleController.getString("RepliesTitle", NUM);
+                            str = LocaleController.getString("RepliesTitle", R.string.RepliesTitle);
                         } else if (UserObject.isDeleted(tLRPC$User)) {
-                            str = LocaleController.getString("HiddenName", NUM);
+                            str = LocaleController.getString("HiddenName", R.string.HiddenName);
                         } else {
                             str = UserObject.getFirstName(tLRPC$User);
                         }
@@ -150,7 +150,7 @@ class ContactsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
                         tLRPC$User = null;
                         tLRPC$FileLocation = null;
                     }
-                    remoteViews3.setTextViewText(i4 == 0 ? NUM : NUM, str);
+                    remoteViews3.setTextViewText(i4 == 0 ? R.id.contacts_widget_item_text1 : R.id.contacts_widget_item_text2, str);
                     if (tLRPC$FileLocation != null) {
                         try {
                             bitmap = BitmapFactory.decodeFile(FileLoader.getInstance(UserConfig.selectedAccount).getPathToAttach(tLRPC$FileLocation, true).toString());
@@ -193,25 +193,18 @@ class ContactsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
                         canvas.restore();
                     }
                     canvas.setBitmap((Bitmap) null);
-                    remoteViews3.setImageViewBitmap(i4 == 0 ? NUM : NUM, createBitmap);
+                    remoteViews3.setImageViewBitmap(i4 == 0 ? R.id.contacts_widget_item_avatar1 : R.id.contacts_widget_item_avatar2, createBitmap);
                     TLRPC$Dialog tLRPC$Dialog = this.dialogs.get(l.longValue());
-                    int i6 = NUM;
                     if (tLRPC$Dialog == null || (i2 = tLRPC$Dialog.unread_count) <= 0) {
-                        if (i4 != 0) {
-                            i6 = NUM;
-                        }
-                        remoteViews3.setViewVisibility(i6, 8);
+                        remoteViews3.setViewVisibility(i4 == 0 ? R.id.contacts_widget_item_badge_bg1 : R.id.contacts_widget_item_badge_bg2, 8);
                     } else {
                         if (i2 > 99) {
                             str2 = String.format("%d+", new Object[]{99});
                         } else {
                             str2 = String.format("%d", new Object[]{Integer.valueOf(i2)});
                         }
-                        remoteViews3.setTextViewText(i4 == 0 ? NUM : NUM, str2);
-                        if (i4 != 0) {
-                            i6 = NUM;
-                        }
-                        remoteViews3.setViewVisibility(i6, 0);
+                        remoteViews3.setTextViewText(i4 == 0 ? R.id.contacts_widget_item_badge1 : R.id.contacts_widget_item_badge2, str2);
+                        remoteViews3.setViewVisibility(i4 == 0 ? R.id.contacts_widget_item_badge_bg1 : R.id.contacts_widget_item_badge_bg2, 0);
                     }
                     Bundle bundle2 = new Bundle();
                     if (DialogObject.isUserDialog(l.longValue())) {
@@ -222,7 +215,7 @@ class ContactsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
                     bundle2.putInt("currentAccount", this.accountInstance.getCurrentAccount());
                     Intent intent2 = new Intent();
                     intent2.putExtras(bundle2);
-                    remoteViews3.setOnClickFillInIntent(i4 == 0 ? NUM : NUM, intent2);
+                    remoteViews3.setOnClickFillInIntent(i4 == 0 ? R.id.contacts_widget_item1 : R.id.contacts_widget_item2, intent2);
                 }
                 i4++;
             }

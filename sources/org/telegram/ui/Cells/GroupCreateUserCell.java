@@ -414,7 +414,7 @@ public class GroupCreateUserCell extends FrameLayout {
             org.telegram.ui.Components.BackupImageView r14 = r13.avatarImageView
             org.telegram.ui.Components.AvatarDrawable r0 = r13.avatarDrawable
             r14.setImage(r5, r1, r0)
-            goto L_0x0450
+            goto L_0x0448
         L_0x012c:
             java.lang.CharSequence r0 = r13.currentStatus
             r7 = 1100480512(0x41980000, float:19.0)
@@ -475,14 +475,14 @@ public class GroupCreateUserCell extends FrameLayout {
         L_0x01ad:
             java.lang.Object r0 = r13.currentObject
             boolean r8 = r0 instanceof org.telegram.tgnet.TLRPC$User
-            if (r8 == 0) goto L_0x032d
+            if (r8 == 0) goto L_0x032a
             org.telegram.tgnet.TLRPC$User r0 = (org.telegram.tgnet.TLRPC$User) r0
             boolean r8 = r13.showSelfAsSaved
-            if (r8 == 0) goto L_0x01ed
+            if (r8 == 0) goto L_0x01ec
             boolean r8 = org.telegram.messenger.UserObject.isUserSelf(r0)
-            if (r8 == 0) goto L_0x01ed
+            if (r8 == 0) goto L_0x01ec
             org.telegram.ui.ActionBar.SimpleTextView r14 = r13.nameTextView
-            r2 = 2131628153(0x7f0e1079, float:1.888359E38)
+            int r2 = org.telegram.messenger.R.string.SavedMessages
             java.lang.String r3 = "SavedMessages"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r14.setText(r2, r6)
@@ -499,359 +499,359 @@ public class GroupCreateUserCell extends FrameLayout {
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r7)
             r14.topMargin = r0
             return
-        L_0x01ed:
+        L_0x01ec:
             org.telegram.tgnet.TLRPC$UserProfilePhoto r1 = r0.photo
-            if (r1 == 0) goto L_0x01f4
+            if (r1 == 0) goto L_0x01f3
             org.telegram.tgnet.TLRPC$FileLocation r1 = r1.photo_small
-            goto L_0x01f5
-        L_0x01f4:
+            goto L_0x01f4
+        L_0x01f3:
             r1 = r5
-        L_0x01f5:
-            if (r14 == 0) goto L_0x0254
+        L_0x01f4:
+            if (r14 == 0) goto L_0x0253
             int r7 = org.telegram.messenger.MessagesController.UPDATE_MASK_AVATAR
             r7 = r7 & r14
-            if (r7 == 0) goto L_0x021a
+            if (r7 == 0) goto L_0x0219
             org.telegram.tgnet.TLRPC$FileLocation r7 = r13.lastAvatar
-            if (r7 == 0) goto L_0x0202
-            if (r1 == 0) goto L_0x0218
-        L_0x0202:
-            if (r7 != 0) goto L_0x0206
-            if (r1 != 0) goto L_0x0218
-        L_0x0206:
-            if (r7 == 0) goto L_0x021a
-            if (r1 == 0) goto L_0x021a
+            if (r7 == 0) goto L_0x0201
+            if (r1 == 0) goto L_0x0217
+        L_0x0201:
+            if (r7 != 0) goto L_0x0205
+            if (r1 != 0) goto L_0x0217
+        L_0x0205:
+            if (r7 == 0) goto L_0x0219
+            if (r1 == 0) goto L_0x0219
             long r8 = r7.volume_id
             long r10 = r1.volume_id
             int r12 = (r8 > r10 ? 1 : (r8 == r10 ? 0 : -1))
-            if (r12 != 0) goto L_0x0218
+            if (r12 != 0) goto L_0x0217
             int r7 = r7.local_id
             int r1 = r1.local_id
-            if (r7 == r1) goto L_0x021a
-        L_0x0218:
+            if (r7 == r1) goto L_0x0219
+        L_0x0217:
             r1 = 1
-            goto L_0x021b
-        L_0x021a:
+            goto L_0x021a
+        L_0x0219:
             r1 = 0
-        L_0x021b:
+        L_0x021a:
             java.lang.CharSequence r7 = r13.currentStatus
-            if (r7 != 0) goto L_0x0233
-            if (r1 != 0) goto L_0x0233
+            if (r7 != 0) goto L_0x0232
+            if (r1 != 0) goto L_0x0232
             int r7 = org.telegram.messenger.MessagesController.UPDATE_MASK_STATUS
             r7 = r7 & r14
-            if (r7 == 0) goto L_0x0233
+            if (r7 == 0) goto L_0x0232
             org.telegram.tgnet.TLRPC$UserStatus r7 = r0.status
-            if (r7 == 0) goto L_0x022d
+            if (r7 == 0) goto L_0x022c
             int r7 = r7.expires
-            goto L_0x022e
-        L_0x022d:
+            goto L_0x022d
+        L_0x022c:
             r7 = 0
-        L_0x022e:
+        L_0x022d:
             int r8 = r13.lastStatus
-            if (r7 == r8) goto L_0x0233
+            if (r7 == r8) goto L_0x0232
             r1 = 1
-        L_0x0233:
-            if (r1 != 0) goto L_0x0250
+        L_0x0232:
+            if (r1 != 0) goto L_0x024f
             java.lang.CharSequence r7 = r13.currentName
-            if (r7 != 0) goto L_0x0250
+            if (r7 != 0) goto L_0x024f
             java.lang.String r7 = r13.lastName
-            if (r7 == 0) goto L_0x0250
+            if (r7 == 0) goto L_0x024f
             int r7 = org.telegram.messenger.MessagesController.UPDATE_MASK_NAME
             r14 = r14 & r7
-            if (r14 == 0) goto L_0x0250
+            if (r14 == 0) goto L_0x024f
             java.lang.String r14 = org.telegram.messenger.UserObject.getUserName(r0)
             java.lang.String r7 = r13.lastName
             boolean r7 = r14.equals(r7)
-            if (r7 != 0) goto L_0x0251
+            if (r7 != 0) goto L_0x0250
             r1 = 1
-            goto L_0x0251
+            goto L_0x0250
+        L_0x024f:
+            r14 = r5
         L_0x0250:
-            r14 = r5
-        L_0x0251:
-            if (r1 != 0) goto L_0x0255
+            if (r1 != 0) goto L_0x0254
             return
-        L_0x0254:
+        L_0x0253:
             r14 = r5
-        L_0x0255:
+        L_0x0254:
             org.telegram.ui.Components.AvatarDrawable r1 = r13.avatarDrawable
             r1.setInfo((org.telegram.tgnet.TLRPC$User) r0)
             org.telegram.tgnet.TLRPC$UserStatus r1 = r0.status
-            if (r1 == 0) goto L_0x0260
+            if (r1 == 0) goto L_0x025f
             int r3 = r1.expires
-        L_0x0260:
+        L_0x025f:
             r13.lastStatus = r3
             java.lang.CharSequence r1 = r13.currentName
-            if (r1 == 0) goto L_0x026e
+            if (r1 == 0) goto L_0x026d
             r13.lastName = r5
             org.telegram.ui.ActionBar.SimpleTextView r14 = r13.nameTextView
             r14.setText(r1, r6)
-            goto L_0x027b
-        L_0x026e:
-            if (r14 != 0) goto L_0x0274
+            goto L_0x027a
+        L_0x026d:
+            if (r14 != 0) goto L_0x0273
             java.lang.String r14 = org.telegram.messenger.UserObject.getUserName(r0)
-        L_0x0274:
+        L_0x0273:
             r13.lastName = r14
             org.telegram.ui.ActionBar.SimpleTextView r1 = r13.nameTextView
             r1.setText(r14)
-        L_0x027b:
+        L_0x027a:
             java.lang.CharSequence r14 = r13.currentStatus
-            if (r14 != 0) goto L_0x0324
+            if (r14 != 0) goto L_0x0321
             boolean r14 = r0.bot
-            if (r14 == 0) goto L_0x02a8
+            if (r14 == 0) goto L_0x02a6
             org.telegram.ui.ActionBar.SimpleTextView r14 = r13.statusTextView
             r14.setTag(r4)
             org.telegram.ui.ActionBar.SimpleTextView r14 = r13.statusTextView
             boolean r1 = r13.forceDarkTheme
-            if (r1 == 0) goto L_0x0290
+            if (r1 == 0) goto L_0x028f
             r1 = r2
-            goto L_0x0291
-        L_0x0290:
+            goto L_0x0290
+        L_0x028f:
             r1 = r4
-        L_0x0291:
+        L_0x0290:
             int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
             r14.setTextColor(r1)
             org.telegram.ui.ActionBar.SimpleTextView r14 = r13.statusTextView
-            r1 = 2131624721(0x7f0e0311, float:1.887663E38)
+            int r1 = org.telegram.messenger.R.string.Bot
             java.lang.String r3 = "Bot"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r14.setText(r1)
-            goto L_0x0324
-        L_0x02a8:
+            goto L_0x0321
+        L_0x02a6:
             long r7 = r0.id
             int r14 = r13.currentAccount
             org.telegram.messenger.UserConfig r14 = org.telegram.messenger.UserConfig.getInstance(r14)
             long r9 = r14.getClientUserId()
             int r14 = (r7 > r9 ? 1 : (r7 == r9 ? 0 : -1))
-            if (r14 == 0) goto L_0x0300
+            if (r14 == 0) goto L_0x02fe
             org.telegram.tgnet.TLRPC$UserStatus r14 = r0.status
-            if (r14 == 0) goto L_0x02ca
+            if (r14 == 0) goto L_0x02c8
             int r14 = r14.expires
             int r1 = r13.currentAccount
             org.telegram.tgnet.ConnectionsManager r1 = org.telegram.tgnet.ConnectionsManager.getInstance(r1)
             int r1 = r1.getCurrentTime()
-            if (r14 > r1) goto L_0x0300
-        L_0x02ca:
+            if (r14 > r1) goto L_0x02fe
+        L_0x02c8:
             int r14 = r13.currentAccount
             org.telegram.messenger.MessagesController r14 = org.telegram.messenger.MessagesController.getInstance(r14)
             j$.util.concurrent.ConcurrentHashMap<java.lang.Long, java.lang.Integer> r14 = r14.onlinePrivacy
             long r7 = r0.id
             java.lang.Long r1 = java.lang.Long.valueOf(r7)
             boolean r14 = r14.containsKey(r1)
-            if (r14 == 0) goto L_0x02df
-            goto L_0x0300
-        L_0x02df:
+            if (r14 == 0) goto L_0x02dd
+            goto L_0x02fe
+        L_0x02dd:
             org.telegram.ui.ActionBar.SimpleTextView r14 = r13.statusTextView
             r14.setTag(r4)
             org.telegram.ui.ActionBar.SimpleTextView r14 = r13.statusTextView
             boolean r1 = r13.forceDarkTheme
-            if (r1 == 0) goto L_0x02ec
+            if (r1 == 0) goto L_0x02ea
             r1 = r2
-            goto L_0x02ed
-        L_0x02ec:
+            goto L_0x02eb
+        L_0x02ea:
             r1 = r4
-        L_0x02ed:
+        L_0x02eb:
             int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
             r14.setTextColor(r1)
             org.telegram.ui.ActionBar.SimpleTextView r14 = r13.statusTextView
             int r1 = r13.currentAccount
             java.lang.String r1 = org.telegram.messenger.LocaleController.formatUserStatus(r1, r0)
             r14.setText(r1)
-            goto L_0x0324
-        L_0x0300:
+            goto L_0x0321
+        L_0x02fe:
             org.telegram.ui.ActionBar.SimpleTextView r14 = r13.statusTextView
             java.lang.String r1 = "windowBackgroundWhiteBlueText"
             r14.setTag(r1)
             org.telegram.ui.ActionBar.SimpleTextView r14 = r13.statusTextView
             boolean r3 = r13.forceDarkTheme
-            if (r3 == 0) goto L_0x030f
+            if (r3 == 0) goto L_0x030d
             java.lang.String r1 = "voipgroup_listeningText"
-        L_0x030f:
+        L_0x030d:
             int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
             r14.setTextColor(r1)
             org.telegram.ui.ActionBar.SimpleTextView r14 = r13.statusTextView
-            r1 = 2131627145(0x7f0e0CLASSNAME, float:1.8881546E38)
+            int r1 = org.telegram.messenger.R.string.Online
             java.lang.String r3 = "Online"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r14.setText(r1)
-        L_0x0324:
+        L_0x0321:
             org.telegram.ui.Components.BackupImageView r14 = r13.avatarImageView
             org.telegram.ui.Components.AvatarDrawable r1 = r13.avatarDrawable
             r14.setForUserOrChat(r0, r1)
-            goto L_0x0450
-        L_0x032d:
+            goto L_0x0448
+        L_0x032a:
             org.telegram.tgnet.TLRPC$Chat r0 = (org.telegram.tgnet.TLRPC$Chat) r0
             org.telegram.tgnet.TLRPC$ChatPhoto r1 = r0.photo
-            if (r1 == 0) goto L_0x0336
+            if (r1 == 0) goto L_0x0333
             org.telegram.tgnet.TLRPC$FileLocation r1 = r1.photo_small
-            goto L_0x0337
-        L_0x0336:
+            goto L_0x0334
+        L_0x0333:
             r1 = r5
-        L_0x0337:
-            if (r14 == 0) goto L_0x037a
+        L_0x0334:
+            if (r14 == 0) goto L_0x0377
             int r7 = org.telegram.messenger.MessagesController.UPDATE_MASK_AVATAR
             r7 = r7 & r14
-            if (r7 == 0) goto L_0x035c
+            if (r7 == 0) goto L_0x0359
             org.telegram.tgnet.TLRPC$FileLocation r7 = r13.lastAvatar
-            if (r7 == 0) goto L_0x0344
-            if (r1 == 0) goto L_0x035a
-        L_0x0344:
-            if (r7 != 0) goto L_0x0348
-            if (r1 != 0) goto L_0x035a
-        L_0x0348:
-            if (r7 == 0) goto L_0x035c
-            if (r1 == 0) goto L_0x035c
+            if (r7 == 0) goto L_0x0341
+            if (r1 == 0) goto L_0x0357
+        L_0x0341:
+            if (r7 != 0) goto L_0x0345
+            if (r1 != 0) goto L_0x0357
+        L_0x0345:
+            if (r7 == 0) goto L_0x0359
+            if (r1 == 0) goto L_0x0359
             long r8 = r7.volume_id
             long r10 = r1.volume_id
             int r12 = (r8 > r10 ? 1 : (r8 == r10 ? 0 : -1))
-            if (r12 != 0) goto L_0x035a
+            if (r12 != 0) goto L_0x0357
             int r7 = r7.local_id
             int r1 = r1.local_id
-            if (r7 == r1) goto L_0x035c
-        L_0x035a:
+            if (r7 == r1) goto L_0x0359
+        L_0x0357:
             r1 = 1
-            goto L_0x035d
-        L_0x035c:
+            goto L_0x035a
+        L_0x0359:
             r1 = 0
-        L_0x035d:
-            if (r1 != 0) goto L_0x0376
+        L_0x035a:
+            if (r1 != 0) goto L_0x0373
             java.lang.CharSequence r7 = r13.currentName
-            if (r7 != 0) goto L_0x0376
+            if (r7 != 0) goto L_0x0373
             java.lang.String r7 = r13.lastName
-            if (r7 == 0) goto L_0x0376
+            if (r7 == 0) goto L_0x0373
             int r8 = org.telegram.messenger.MessagesController.UPDATE_MASK_NAME
             r14 = r14 & r8
-            if (r14 == 0) goto L_0x0376
+            if (r14 == 0) goto L_0x0373
             java.lang.String r14 = r0.title
             boolean r7 = r14.equals(r7)
-            if (r7 != 0) goto L_0x0377
+            if (r7 != 0) goto L_0x0374
             r1 = 1
-            goto L_0x0377
-        L_0x0376:
+            goto L_0x0374
+        L_0x0373:
             r14 = r5
-        L_0x0377:
-            if (r1 != 0) goto L_0x037b
+        L_0x0374:
+            if (r1 != 0) goto L_0x0378
             return
-        L_0x037a:
+        L_0x0377:
             r14 = r5
-        L_0x037b:
+        L_0x0378:
             org.telegram.ui.Components.AvatarDrawable r1 = r13.avatarDrawable
             r1.setInfo((org.telegram.tgnet.TLRPC$Chat) r0)
             java.lang.CharSequence r1 = r13.currentName
-            if (r1 == 0) goto L_0x038c
+            if (r1 == 0) goto L_0x0389
             r13.lastName = r5
             org.telegram.ui.ActionBar.SimpleTextView r14 = r13.nameTextView
             r14.setText(r1, r6)
-            goto L_0x0397
-        L_0x038c:
-            if (r14 != 0) goto L_0x0390
+            goto L_0x0394
+        L_0x0389:
+            if (r14 != 0) goto L_0x038d
             java.lang.String r14 = r0.title
-        L_0x0390:
+        L_0x038d:
             r13.lastName = r14
             org.telegram.ui.ActionBar.SimpleTextView r1 = r13.nameTextView
             r1.setText(r14)
-        L_0x0397:
+        L_0x0394:
             java.lang.CharSequence r14 = r13.currentStatus
-            if (r14 != 0) goto L_0x0449
+            if (r14 != 0) goto L_0x0441
             org.telegram.ui.ActionBar.SimpleTextView r14 = r13.statusTextView
             r14.setTag(r4)
             org.telegram.ui.ActionBar.SimpleTextView r14 = r13.statusTextView
             boolean r1 = r13.forceDarkTheme
-            if (r1 == 0) goto L_0x03a8
+            if (r1 == 0) goto L_0x03a5
             r1 = r2
-            goto L_0x03a9
-        L_0x03a8:
+            goto L_0x03a6
+        L_0x03a5:
             r1 = r4
-        L_0x03a9:
+        L_0x03a6:
             int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
             r14.setTextColor(r1)
             int r14 = r0.participants_count
-            if (r14 == 0) goto L_0x03df
+            if (r14 == 0) goto L_0x03dc
             boolean r14 = org.telegram.messenger.ChatObject.isChannel(r0)
-            if (r14 == 0) goto L_0x03cf
+            if (r14 == 0) goto L_0x03cc
             boolean r14 = r0.megagroup
-            if (r14 != 0) goto L_0x03cf
+            if (r14 != 0) goto L_0x03cc
             org.telegram.ui.ActionBar.SimpleTextView r14 = r13.statusTextView
             int r1 = r0.participants_count
             java.lang.Object[] r3 = new java.lang.Object[r3]
             java.lang.String r5 = "Subscribers"
             java.lang.String r1 = org.telegram.messenger.LocaleController.formatPluralString(r5, r1, r3)
             r14.setText(r1)
-            goto L_0x0449
-        L_0x03cf:
+            goto L_0x0441
+        L_0x03cc:
             org.telegram.ui.ActionBar.SimpleTextView r14 = r13.statusTextView
             int r1 = r0.participants_count
             java.lang.Object[] r3 = new java.lang.Object[r3]
             java.lang.String r5 = "Members"
             java.lang.String r1 = org.telegram.messenger.LocaleController.formatPluralString(r5, r1, r3)
             r14.setText(r1)
-            goto L_0x0449
-        L_0x03df:
+            goto L_0x0441
+        L_0x03dc:
             boolean r14 = r0.has_geo
-            if (r14 == 0) goto L_0x03f2
+            if (r14 == 0) goto L_0x03ee
             org.telegram.ui.ActionBar.SimpleTextView r14 = r13.statusTextView
-            r1 = 2131626645(0x7f0e0a95, float:1.8880532E38)
+            int r1 = org.telegram.messenger.R.string.MegaLocation
             java.lang.String r3 = "MegaLocation"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r14.setText(r1)
-            goto L_0x0449
-        L_0x03f2:
+            goto L_0x0441
+        L_0x03ee:
             java.lang.String r14 = r0.username
             boolean r14 = android.text.TextUtils.isEmpty(r14)
-            if (r14 == 0) goto L_0x0422
+            if (r14 == 0) goto L_0x041c
             boolean r14 = org.telegram.messenger.ChatObject.isChannel(r0)
-            if (r14 == 0) goto L_0x0413
+            if (r14 == 0) goto L_0x040e
             boolean r14 = r0.megagroup
-            if (r14 != 0) goto L_0x0413
+            if (r14 != 0) goto L_0x040e
             org.telegram.ui.ActionBar.SimpleTextView r14 = r13.statusTextView
-            r1 = 2131624965(0x7f0e0405, float:1.8877125E38)
+            int r1 = org.telegram.messenger.R.string.ChannelPrivate
             java.lang.String r3 = "ChannelPrivate"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r14.setText(r1)
-            goto L_0x0449
-        L_0x0413:
+            goto L_0x0441
+        L_0x040e:
             org.telegram.ui.ActionBar.SimpleTextView r14 = r13.statusTextView
-            r1 = 2131626646(0x7f0e0a96, float:1.8880534E38)
+            int r1 = org.telegram.messenger.R.string.MegaPrivate
             java.lang.String r3 = "MegaPrivate"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r14.setText(r1)
-            goto L_0x0449
-        L_0x0422:
+            goto L_0x0441
+        L_0x041c:
             boolean r14 = org.telegram.messenger.ChatObject.isChannel(r0)
-            if (r14 == 0) goto L_0x043b
+            if (r14 == 0) goto L_0x0434
             boolean r14 = r0.megagroup
-            if (r14 != 0) goto L_0x043b
+            if (r14 != 0) goto L_0x0434
             org.telegram.ui.ActionBar.SimpleTextView r14 = r13.statusTextView
-            r1 = 2131624968(0x7f0e0408, float:1.887713E38)
+            int r1 = org.telegram.messenger.R.string.ChannelPublic
             java.lang.String r3 = "ChannelPublic"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r14.setText(r1)
-            goto L_0x0449
-        L_0x043b:
+            goto L_0x0441
+        L_0x0434:
             org.telegram.ui.ActionBar.SimpleTextView r14 = r13.statusTextView
-            r1 = 2131626649(0x7f0e0a99, float:1.888054E38)
+            int r1 = org.telegram.messenger.R.string.MegaPublic
             java.lang.String r3 = "MegaPublic"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r14.setText(r1)
-        L_0x0449:
+        L_0x0441:
             org.telegram.ui.Components.BackupImageView r14 = r13.avatarImageView
             org.telegram.ui.Components.AvatarDrawable r1 = r13.avatarDrawable
             r14.setForUserOrChat(r0, r1)
-        L_0x0450:
+        L_0x0448:
             java.lang.CharSequence r14 = r13.currentStatus
-            if (r14 == 0) goto L_0x046d
+            if (r14 == 0) goto L_0x0465
             org.telegram.ui.ActionBar.SimpleTextView r0 = r13.statusTextView
             r0.setText(r14, r6)
             org.telegram.ui.ActionBar.SimpleTextView r14 = r13.statusTextView
             r14.setTag(r4)
             org.telegram.ui.ActionBar.SimpleTextView r14 = r13.statusTextView
             boolean r0 = r13.forceDarkTheme
-            if (r0 == 0) goto L_0x0465
-            goto L_0x0466
-        L_0x0465:
+            if (r0 == 0) goto L_0x045d
+            goto L_0x045e
+        L_0x045d:
             r2 = r4
-        L_0x0466:
+        L_0x045e:
             int r0 = org.telegram.ui.ActionBar.Theme.getColor(r2)
             r14.setTextColor(r0)
-        L_0x046d:
+        L_0x0465:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.GroupCreateUserCell.update(int):void");

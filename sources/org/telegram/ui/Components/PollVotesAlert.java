@@ -41,6 +41,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
@@ -270,9 +271,9 @@ public class PollVotesAlert extends BottomSheet {
                     this.righTextView.setText(LocaleController.formatPluralString("Vote", i2, new Object[0]));
                 }
             } else if (i3 == 1) {
-                this.righTextView.setText(LocaleController.getString("PollExpand", NUM));
+                this.righTextView.setText(LocaleController.getString("PollExpand", R.string.PollExpand));
             } else {
-                this.righTextView.setText(LocaleController.getString("PollCollapse", NUM));
+                this.righTextView.setText(LocaleController.getString("PollCollapse", R.string.PollCollapse));
             }
         }
     }
@@ -629,7 +630,7 @@ public class PollVotesAlert extends BottomSheet {
             }
         });
         updatePlaceholder();
-        Drawable mutate = parentActivity.getResources().getDrawable(NUM).mutate();
+        Drawable mutate = parentActivity.getResources().getDrawable(R.drawable.sheet_shadow_round).mutate();
         this.shadowDrawable = mutate;
         mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogBackground"), PorterDuff.Mode.MULTIPLY));
         AnonymousClass3 r0 = new FrameLayout(parentActivity) {
@@ -829,14 +830,14 @@ public class PollVotesAlert extends BottomSheet {
         };
         this.actionBar = r03;
         r03.setBackgroundColor(Theme.getColor("dialogBackground"));
-        this.actionBar.setBackButtonImage(NUM);
+        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setItemsColor(Theme.getColor("dialogTextBlack"), false);
         this.actionBar.setItemsBackgroundColor(Theme.getColor("dialogButtonSelector"), false);
         this.actionBar.setTitleColor(Theme.getColor("dialogTextBlack"));
         this.actionBar.setSubtitleColor(Theme.getColor("player_actionBarSubtitle"));
         this.actionBar.setOccupyStatusBar(false);
         this.actionBar.setAlpha(0.0f);
-        this.actionBar.setTitle(LocaleController.getString("PollResults", NUM));
+        this.actionBar.setTitle(LocaleController.getString("PollResults", R.string.PollResults));
         if (this.poll.quiz) {
             this.actionBar.setSubtitle(LocaleController.formatPluralString("Answer", tLRPC$TL_messageMediaPoll.results.total_voters, new Object[0]));
         } else {
@@ -1200,7 +1201,7 @@ public class PollVotesAlert extends BottomSheet {
             return new SectionCell(this.mContext) {
                 /* access modifiers changed from: protected */
                 public void onCollapseClick() {
-                    VotesList votesList = (VotesList) getTag(NUM);
+                    VotesList votesList = (VotesList) getTag(R.id.object_tag);
                     if (votesList.votes.size() > 15) {
                         boolean z = !votesList.collapsed;
                         votesList.collapsed = z;
@@ -1232,7 +1233,7 @@ public class PollVotesAlert extends BottomSheet {
                     if (Arrays.equals(tLRPC$TL_pollAnswer.option, votesList.option)) {
                         Button button = (Button) PollVotesAlert.this.votesPercents.get(votesList);
                         sectionCell.setText(tLRPC$TL_pollAnswer.text, button.percent, button.votesCount, votesList.getCollapsed());
-                        sectionCell.setTag(NUM, votesList);
+                        sectionCell.setTag(R.id.object_tag, votesList);
                         break;
                     }
                     i2++;
@@ -1275,13 +1276,13 @@ public class PollVotesAlert extends BottomSheet {
                     if (Arrays.equals(tLRPC$TL_pollAnswer.option, votesList.option)) {
                         Button button = (Button) PollVotesAlert.this.votesPercents.get(votesList);
                         sectionCell.setText(tLRPC$TL_pollAnswer.text, button.percent, button.votesCount, votesList.getCollapsed());
-                        sectionCell.setTag(NUM, votesList);
+                        sectionCell.setTag(R.id.object_tag, votesList);
                         return;
                     }
                 }
             } else if (itemViewType == 3) {
                 VotesList votesList2 = (VotesList) PollVotesAlert.this.voters.get(i - 1);
-                ((TextCell) viewHolder.itemView).setTextAndIcon(LocaleController.formatPluralString("ShowVotes", votesList2.count - votesList2.getCount(), new Object[0]), NUM, false);
+                ((TextCell) viewHolder.itemView).setTextAndIcon(LocaleController.formatPluralString("ShowVotes", votesList2.count - votesList2.getCount(), new Object[0]), R.drawable.arrow_more, false);
             }
         }
 

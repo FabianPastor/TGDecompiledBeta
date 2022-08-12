@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.LineProgressView;
@@ -238,7 +239,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
     }
 
     public AlertDialog(Context context, int i, Theme.ResourcesProvider resourcesProvider2) {
-        super(context, NUM);
+        super(context, R.style.TransparentDialog);
         this.customViewHeight = -2;
         this.shadow = new BitmapDrawable[2];
         this.shadowVisibility = new boolean[2];
@@ -259,7 +260,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         this.resourcesProvider = resourcesProvider2;
         this.backgroundPaddings = new Rect();
         if (i != 3) {
-            Drawable mutate = context.getResources().getDrawable(NUM).mutate();
+            Drawable mutate = context.getResources().getDrawable(R.drawable.popup_fixed_alert).mutate();
             this.shadowDrawable = mutate;
             mutate.setColorFilter(new PorterDuffColorFilter(getThemedColor("dialogBackground"), PorterDuff.Mode.MULTIPLY));
             this.shadowDrawable.getPadding(this.backgroundPaddings);
@@ -823,7 +824,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                 }
             }
             this.topImageView.setScaleType(ImageView.ScaleType.CENTER);
-            this.topImageView.setBackgroundDrawable(getContext().getResources().getDrawable(NUM));
+            this.topImageView.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.popup_fixed_top));
             this.topImageView.getBackground().setColorFilter(new PorterDuffColorFilter(this.topBackgroundColor, PorterDuff.Mode.MULTIPLY));
             this.topImageView.setPadding(0, 0, 0, 0);
             r1.addView(this.topImageView, LayoutHelper.createLinear(-1, this.topHeight, 51, -8, -8, 0, 0));
@@ -860,8 +861,8 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             r1.addView(this.subtitleTextView, LayoutHelper.createLinear(-2, -2, (LocaleController.isRTL ? 5 : 3) | 48, 24, 0, 24, this.items != null ? 14 : 10));
         }
         if (this.progressViewStyle == 0) {
-            this.shadow[0] = (BitmapDrawable) getContext().getResources().getDrawable(NUM).mutate();
-            this.shadow[1] = (BitmapDrawable) getContext().getResources().getDrawable(NUM).mutate();
+            this.shadow[0] = (BitmapDrawable) getContext().getResources().getDrawable(R.drawable.header_shadow).mutate();
+            this.shadow[1] = (BitmapDrawable) getContext().getResources().getDrawable(R.drawable.header_shadow_reverse).mutate();
             this.shadow[0].setAlpha(0);
             this.shadow[1].setAlpha(0);
             this.shadow[0].setCallback(this);
@@ -1307,10 +1308,10 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
     public void showCancelAlert() {
         if (this.canCacnel && this.cancelDialog == null) {
             Builder builder = new Builder(getContext());
-            builder.setTitle(LocaleController.getString("AppName", NUM));
-            builder.setMessage(LocaleController.getString("StopLoading", NUM));
-            builder.setPositiveButton(LocaleController.getString("WaitMore", NUM), (DialogInterface.OnClickListener) null);
-            builder.setNegativeButton(LocaleController.getString("Stop", NUM), new AlertDialog$$ExternalSyntheticLambda0(this));
+            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+            builder.setMessage(LocaleController.getString("StopLoading", R.string.StopLoading));
+            builder.setPositiveButton(LocaleController.getString("WaitMore", R.string.WaitMore), (DialogInterface.OnClickListener) null);
+            builder.setNegativeButton(LocaleController.getString("Stop", R.string.Stop), new AlertDialog$$ExternalSyntheticLambda0(this));
             builder.setOnDismissListener(new AlertDialog$$ExternalSyntheticLambda1(this));
             try {
                 this.cancelDialog = builder.show();

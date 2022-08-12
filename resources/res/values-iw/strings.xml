@@ -21,12 +21,6 @@
     <string name="fcm_fallback_notification_channel_label">שונות</string>
     <string name="google_assistant_verification_channel_name">‏מאמת ה-Assistant</string>
     <string name="google_assistant_verification_notification_title">‏Google Assistant שולח הודעה</string>
-    <string name="hms_apk_not_installed_hints">ייתכן שחלק מהתכונות ב-%1$s לא יעבדו כהלכה ללא HMS Core, אשר אינו מותקן בהתקן.</string>
-    <string name="hms_bindfaildlg_message">%1$s לא יכול להשתמש ב-HMS Core. הפעל את Optimizer (מנהל הטלפון) או עבור אל \'הגדרות\', הפעל את כל ההרשאות עבור %2$s (כולל הפעלה אוטומטית והפעלה משנית), ונסה שוב.</string>
-    <string name="hms_confirm">אישור</string>
-    <string name="hms_is_spoof">נראה שבהתקן שלך מותקנת גרסה לא רשמית של HMS Core ‏(%1$s). הסר את HMS Core מ\'הגדרות\' וחזור ליישום זה כדי להתקין את הגרסה הרשמית.</string>
-    <string name="hms_push_channel">ברירת מחדל</string>
-    <string name="hms_spoof_hints">הערה</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">קנה בעזרת Google</string>
 </resources>

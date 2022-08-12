@@ -28,6 +28,7 @@ import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.R;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$PhotoSize;
 import org.telegram.tgnet.TLRPC$VideoSize;
@@ -89,7 +90,7 @@ public class PhotoAttachPhotoCell extends FrameLayout {
         this.videoInfoContainer.setPadding(AndroidUtilities.dp(5.0f), 0, AndroidUtilities.dp(5.0f), 0);
         this.container.addView(this.videoInfoContainer, LayoutHelper.createFrame(-2, 17.0f, 83, 4.0f, 0.0f, 0.0f, 4.0f));
         ImageView imageView2 = new ImageView(context);
-        imageView2.setImageResource(NUM);
+        imageView2.setImageResource(R.drawable.play_mini_video);
         this.videoInfoContainer.addView(imageView2, LayoutHelper.createFrame(-2, -2, 19));
         TextView textView = new TextView(context);
         this.videoTextView = textView;
@@ -225,7 +226,7 @@ public class PhotoAttachPhotoCell extends FrameLayout {
         this.pressed = false;
         this.searchEntry = searchImage2;
         this.isLast = z2;
-        Drawable drawable = this.zoomOnSelect ? Theme.chat_attachEmptyDrawable : getResources().getDrawable(NUM);
+        Drawable drawable = this.zoomOnSelect ? Theme.chat_attachEmptyDrawable : getResources().getDrawable(R.drawable.nophotos);
         TLRPC$PhotoSize tLRPC$PhotoSize = searchImage2.thumbPhotoSize;
         if (tLRPC$PhotoSize != null) {
             this.imageView.setImage(ImageLocation.getForPhoto(tLRPC$PhotoSize, searchImage2.photo), (String) null, drawable, (Object) searchImage);
@@ -494,20 +495,20 @@ public class PhotoAttachPhotoCell extends FrameLayout {
         accessibilityNodeInfo.setEnabled(true);
         MediaController.PhotoEntry photoEntry2 = this.photoEntry;
         if (photoEntry2 == null || !photoEntry2.isVideo) {
-            accessibilityNodeInfo.setText(LocaleController.getString("AttachPhoto", NUM));
+            accessibilityNodeInfo.setText(LocaleController.getString("AttachPhoto", R.string.AttachPhoto));
         } else {
-            accessibilityNodeInfo.setText(LocaleController.getString("AttachVideo", NUM) + ", " + LocaleController.formatDuration(this.photoEntry.duration));
+            accessibilityNodeInfo.setText(LocaleController.getString("AttachVideo", R.string.AttachVideo) + ", " + LocaleController.formatDuration(this.photoEntry.duration));
         }
         if (this.checkBox.isChecked()) {
             accessibilityNodeInfo.setSelected(true);
         }
         if (Build.VERSION.SDK_INT >= 21) {
-            accessibilityNodeInfo.addAction(new AccessibilityNodeInfo.AccessibilityAction(NUM, LocaleController.getString("Open", NUM)));
+            accessibilityNodeInfo.addAction(new AccessibilityNodeInfo.AccessibilityAction(R.id.acc_action_open_photo, LocaleController.getString("Open", R.string.Open)));
         }
     }
 
     public boolean performAccessibilityAction(int i, Bundle bundle) {
-        if (i == NUM) {
+        if (i == R.id.acc_action_open_photo) {
             View view = (View) getParent();
             view.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), 0, (float) getLeft(), (float) ((getTop() + getHeight()) - 1), 0));
             view.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), 1, (float) getLeft(), (float) ((getTop() + getHeight()) - 1), 0));

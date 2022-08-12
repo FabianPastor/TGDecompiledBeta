@@ -15,6 +15,7 @@ import java.util.Calendar;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.Utilities;
 
@@ -180,7 +181,7 @@ public class FireworksOverlay extends View {
             while (true) {
                 Drawable[] drawableArr = heartDrawable;
                 if (i < drawableArr.length) {
-                    drawableArr[i] = ApplicationLoader.applicationContext.getResources().getDrawable(NUM).mutate();
+                    drawableArr[i] = ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.heart_confetti).mutate();
                     heartDrawable[i].setColorFilter(new PorterDuffColorFilter(heartColors[i], PorterDuff.Mode.MULTIPLY));
                     i++;
                 } else {

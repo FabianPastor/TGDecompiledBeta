@@ -21,11 +21,5 @@
     <string name="fcm_fallback_notification_channel_label">ଅନ୍ୟାନ୍ୟ</string>
     <string name="google_assistant_verification_channel_name">Assistant verifier</string>
     <string name="google_assistant_verification_notification_title">Google Assistant sending message</string>
-    <string name="hms_apk_not_installed_hints">%1$sରେ ଥିବା କିଛି ବିଶେଷତା HMS Coreରେ ଉପଯୁକ୍ତ ଭାବେ କାମ କରିନପାରେ, ଯାହା ଆପଣଙ୍କ ଡିଭାଇସ୍‌ରେ ସଂସ୍ଥାପନ କରାଯାଇ ନାହିଁ।</string>
-    <string name="hms_bindfaildlg_message">%1$s HMS Core ବ୍ୟବହାର କରିବାକୁ ଅସମର୍ଥ। ଦୟାକରି ଅପ୍ଟିମାଇଜର୍‌ (ଫୋନ୍ ପରିଚାଳକ) ଉନ୍ମୋଚନ କରନ୍ତୁ କିମ୍ୱା ସେଟିଂସକୁ ଯାଆନ୍ତୁ, (ଅନ୍ତର୍ଭୁକ୍ତ ସ୍ଵତଃ-ଲଞ୍ଚ ଏବଂ ଗୌଣ ଲଞ୍ଚ) %2$s ପାଇଁ ସମସ୍ତ ଅନୁମତିଗୁଡ଼ିକ ସକ୍ଷମ କରନ୍ତୁ, ଏବଂ ପୁନଃଚେଷ୍ଟା କରନ୍ତୁ।</string>
-    <string name="hms_confirm">ଓକେ</string>
-    <string name="hms_is_spoof">ଜଣା ପଡୁଛି ଯେ ଆପଣଙ୍କ ଡିଭାଇସ୍‌ରେ ଏକ ଅଣଅଫିସିଆଲ୍‌ HMS Core (%1$s)ର ସଂସ୍କରଣ ସଂସ୍ଥାପନ କରାଯାଇଛି। ଦୟାକରି ସେଟିଂସ୍‌ରୁ HMS Core ଅଣସଂସ୍ଥାପନ କରନ୍ତୁ ଏବଂ ଅଫିସିଆଲ୍‌ ସଂସ୍କରଣ ସଂସ୍ଥାପନ କରିବାକୁ ଏହି ଆପ୍‌କୁ ଫେରନ୍ତୁ।</string>
-    <string name="hms_push_channel">ଡିଫଲ୍ଟ</string>
-    <string name="hms_spoof_hints">ନୋଟ୍</string>
     <string name="status_bar_notification_info_overflow">999+</string>
 </resources>

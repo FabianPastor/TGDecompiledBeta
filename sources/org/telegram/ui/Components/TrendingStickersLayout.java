@@ -24,6 +24,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
@@ -214,7 +215,7 @@ public class TrendingStickersLayout extends FrameLayout implements NotificationC
             }
         };
         this.searchView = r2;
-        r2.setHint(LocaleController.getString("SearchTrendingStickersHint", NUM));
+        r2.setHint(LocaleController.getString("SearchTrendingStickersHint", R.string.SearchTrendingStickersHint));
         frameLayout.addView(r2, LayoutHelper.createFrame(-1, -1, 48));
         AnonymousClass3 r22 = new RecyclerListView(context2) {
             public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
@@ -809,7 +810,7 @@ public class TrendingStickersLayout extends FrameLayout implements NotificationC
             } else if (itemViewType != 1) {
                 if (itemViewType != 2) {
                     if (itemViewType == 4) {
-                        ((GraySectionCell) viewHolder.itemView).setText(LocaleController.getString("OtherStickers", NUM));
+                        ((GraySectionCell) viewHolder.itemView).setText(LocaleController.getString("OtherStickers", R.string.OtherStickers));
                         return;
                     } else if (itemViewType != 5) {
                         return;

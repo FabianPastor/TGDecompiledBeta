@@ -42,6 +42,7 @@ import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Chat;
@@ -361,7 +362,7 @@ public class ActionBarMenuItem extends FrameLayout {
         if (this.popupLayout == null) {
             this.rect = new Rect();
             this.location = new int[2];
-            ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(getContext(), NUM, this.resourcesProvider, 1);
+            ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(getContext(), R.drawable.popup_fixed_alert2, this.resourcesProvider, 1);
             this.popupLayout = actionBarPopupWindowLayout;
             actionBarPopupWindowLayout.setOnTouchListener(new ActionBarMenuItem$$ExternalSyntheticLambda8(this));
             this.popupLayout.setDispatchKeyEventListener(new ActionBarMenuItem$$ExternalSyntheticLambda14(this));
@@ -482,7 +483,7 @@ public class ActionBarMenuItem extends FrameLayout {
             if (!this.processedPopupClick) {
                 this.processedPopupClick = true;
                 if (!this.allowCloseAnimation) {
-                    this.popupWindow.setAnimationStyle(NUM);
+                    this.popupWindow.setAnimationStyle(R.style.PopupAnimation);
                 }
                 this.popupWindow.dismiss(this.allowCloseAnimation);
             } else {
@@ -517,7 +518,7 @@ public class ActionBarMenuItem extends FrameLayout {
         View view = new View(getContext());
         view.setMinimumWidth(AndroidUtilities.dp(196.0f));
         view.setTag(Integer.valueOf(i));
-        view.setTag(NUM, 1);
+        view.setTag(R.id.object_tag, 1);
         this.popupLayout.addView(view);
         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) view.getLayoutParams();
         if (LocaleController.isRTL) {
@@ -578,7 +579,7 @@ public class ActionBarMenuItem extends FrameLayout {
         ActionBarMenuSubItem actionBarMenuSubItem = new ActionBarMenuSubItem(getContext(), false, false, false, this.resourcesProvider);
         actionBarMenuSubItem.setTextAndIcon(str, i, drawable);
         actionBarMenuSubItem.setMinimumWidth(AndroidUtilities.dp(196.0f));
-        actionBarMenuSubItem.setRightIcon(NUM);
+        actionBarMenuSubItem.setRightIcon(R.drawable.msg_arrowright);
         this.popupLayout.addView(actionBarMenuSubItem);
         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) actionBarMenuSubItem.getLayoutParams();
         if (LocaleController.isRTL) {
@@ -691,7 +692,7 @@ public class ActionBarMenuItem extends FrameLayout {
         /*
             r10 = this;
             org.telegram.ui.ActionBar.ActionBarPopupWindow$ActionBarPopupWindowLayout r0 = r10.popupLayout
-            if (r0 == 0) goto L_0x016c
+            if (r0 == 0) goto L_0x016a
             org.telegram.ui.ActionBar.ActionBarMenu r0 = r10.parentMenu
             if (r0 == 0) goto L_0x0018
             boolean r1 = r0.isActionMode
@@ -700,7 +701,7 @@ public class ActionBarMenuItem extends FrameLayout {
             if (r0 == 0) goto L_0x0018
             boolean r0 = r0.isActionModeShowed()
             if (r0 != 0) goto L_0x0018
-            goto L_0x016c
+            goto L_0x016a
         L_0x0018:
             java.lang.Runnable r0 = r10.showMenuRunnable
             if (r0 == 0) goto L_0x0022
@@ -733,7 +734,7 @@ public class ActionBarMenuItem extends FrameLayout {
             org.telegram.ui.ActionBar.ActionBarPopupWindow$ActionBarPopupWindowLayout r12 = r10.popupLayout
             r0 = -2
             r1 = 1
-            if (r11 == 0) goto L_0x00c9
+            if (r11 == 0) goto L_0x00c8
             org.telegram.ui.ActionBar.ActionBarMenuItem$1 r12 = new org.telegram.ui.ActionBar.ActionBarMenuItem$1
             android.content.Context r2 = r10.getContext()
             r12.<init>(r2, r11)
@@ -750,7 +751,7 @@ public class ActionBarMenuItem extends FrameLayout {
             android.view.ViewPropertyAnimator r3 = r3.setDuration(r4)
             r3.start()
             android.content.Context r3 = r10.getContext()
-            r4 = 2131166091(0x7var_b, float:1.7946418E38)
+            int r4 = org.telegram.messenger.R.drawable.popup_fixed_alert2
             android.graphics.drawable.Drawable r3 = androidx.core.content.ContextCompat.getDrawable(r3, r4)
             android.graphics.drawable.Drawable r3 = r3.mutate()
             android.graphics.PorterDuffColorFilter r4 = new android.graphics.PorterDuffColorFilter
@@ -777,36 +778,36 @@ public class ActionBarMenuItem extends FrameLayout {
             r12.addView(r11, r3)
             org.telegram.ui.ActionBar.ActionBarPopupWindow$ActionBarPopupWindowLayout r11 = r10.popupLayout
             r11.setTopView(r2)
-        L_0x00c9:
+        L_0x00c8:
             org.telegram.ui.ActionBar.ActionBarPopupWindow r11 = new org.telegram.ui.ActionBar.ActionBarPopupWindow
             r11.<init>(r12, r0, r0)
             r10.popupWindow = r11
             boolean r0 = r10.animationEnabled
             r2 = 0
-            if (r0 == 0) goto L_0x00df
+            if (r0 == 0) goto L_0x00de
             int r0 = android.os.Build.VERSION.SDK_INT
             r3 = 19
-            if (r0 < r3) goto L_0x00df
+            if (r0 < r3) goto L_0x00de
             r11.setAnimationStyle(r2)
-            goto L_0x00e5
-        L_0x00df:
-            r0 = 2131689480(0x7f0var_, float:1.9007977E38)
+            goto L_0x00e3
+        L_0x00de:
+            int r0 = org.telegram.messenger.R.style.PopupAnimation
             r11.setAnimationStyle(r0)
-        L_0x00e5:
+        L_0x00e3:
             boolean r11 = r10.animationEnabled
-            if (r11 != 0) goto L_0x00ee
+            if (r11 != 0) goto L_0x00ec
             org.telegram.ui.ActionBar.ActionBarPopupWindow r0 = r10.popupWindow
             r0.setAnimationEnabled(r11)
-        L_0x00ee:
+        L_0x00ec:
             org.telegram.ui.ActionBar.ActionBarPopupWindow r11 = r10.popupWindow
             r11.setOutsideTouchable(r1)
             org.telegram.ui.ActionBar.ActionBarPopupWindow r11 = r10.popupWindow
             r11.setClippingEnabled(r1)
             boolean r11 = r10.layoutInScreen
-            if (r11 == 0) goto L_0x0101
+            if (r11 == 0) goto L_0x00ff
             org.telegram.ui.ActionBar.ActionBarPopupWindow r11 = r10.popupWindow
             r11.setLayoutInScreen(r1)
-        L_0x0101:
+        L_0x00ff:
             org.telegram.ui.ActionBar.ActionBarPopupWindow r11 = r10.popupWindow
             r0 = 2
             r11.setInputMethodMode(r0)
@@ -835,24 +836,24 @@ public class ActionBarMenuItem extends FrameLayout {
             org.telegram.ui.ActionBar.ActionBarPopupWindow r11 = r10.popupWindow
             r11.setFocusable(r1)
             int r11 = r12.getMeasuredWidth()
-            if (r11 != 0) goto L_0x014e
+            if (r11 != 0) goto L_0x014c
             r10.updateOrShowPopup(r1, r1)
-            goto L_0x0151
-        L_0x014e:
+            goto L_0x014f
+        L_0x014c:
             r10.updateOrShowPopup(r1, r2)
-        L_0x0151:
+        L_0x014f:
             org.telegram.ui.ActionBar.ActionBarPopupWindow$ActionBarPopupWindowLayout r11 = r10.popupLayout
             r11.updateRadialSelectors()
             org.telegram.ui.ActionBar.ActionBarPopupWindow$ActionBarPopupWindowLayout r11 = r10.popupLayout
             org.telegram.ui.Components.PopupSwipeBackLayout r11 = r11.getSwipeBack()
-            if (r11 == 0) goto L_0x0167
+            if (r11 == 0) goto L_0x0165
             org.telegram.ui.ActionBar.ActionBarPopupWindow$ActionBarPopupWindowLayout r11 = r10.popupLayout
             org.telegram.ui.Components.PopupSwipeBackLayout r11 = r11.getSwipeBack()
             r11.closeForeground(r2)
-        L_0x0167:
+        L_0x0165:
             org.telegram.ui.ActionBar.ActionBarPopupWindow r11 = r10.popupWindow
             r11.startAnimation()
-        L_0x016c:
+        L_0x016a:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.ActionBarMenuItem.toggleSubMenu(android.view.View, android.view.View):void");
@@ -1504,7 +1505,7 @@ public class ActionBarMenuItem extends FrameLayout {
             this.clearButton.setScaleX(0.0f);
             this.clearButton.setScaleY(0.0f);
             this.clearButton.setOnClickListener(new ActionBarMenuItem$$ExternalSyntheticLambda2(this));
-            this.clearButton.setContentDescription(LocaleController.getString("ClearButton", NUM));
+            this.clearButton.setContentDescription(LocaleController.getString("ClearButton", R.string.ClearButton));
             if (z2) {
                 this.wrappedSearchFrameLayout.addView(this.clearButton, LayoutHelper.createFrame(48, -1, 21));
             } else {
@@ -1929,7 +1930,7 @@ public class ActionBarMenuItem extends FrameLayout {
             addView(backupImageView, LayoutHelper.createFrame(32, 32.0f));
             ImageView imageView = new ImageView(context);
             this.closeIconView = imageView;
-            imageView.setImageResource(NUM);
+            imageView.setImageResource(R.drawable.ic_close_white);
             addView(this.closeIconView, LayoutHelper.createFrame(24, 24.0f, 16, 8.0f, 0.0f, 0.0f, 0.0f));
             TextView textView = new TextView(context);
             this.titleView = textView;
@@ -1979,7 +1980,7 @@ public class ActionBarMenuItem extends FrameLayout {
                 if (tLObject instanceof TLRPC$User) {
                     TLRPC$User tLRPC$User = (TLRPC$User) tLObject;
                     if (UserConfig.getInstance(UserConfig.selectedAccount).getCurrentUser().id == tLRPC$User.id) {
-                        CombinedDrawable createCircleDrawableWithIcon2 = Theme.createCircleDrawableWithIcon(AndroidUtilities.dp(32.0f), NUM);
+                        CombinedDrawable createCircleDrawableWithIcon2 = Theme.createCircleDrawableWithIcon(AndroidUtilities.dp(32.0f), R.drawable.chats_saved);
                         createCircleDrawableWithIcon2.setIconSize(AndroidUtilities.dp(16.0f), AndroidUtilities.dp(16.0f));
                         Theme.setCombinedDrawableColor(createCircleDrawableWithIcon2, getThemedColor("avatar_backgroundSaved"), false);
                         Theme.setCombinedDrawableColor(createCircleDrawableWithIcon2, getThemedColor("avatar_actionBarIconBlue"), true);
@@ -1993,7 +1994,7 @@ public class ActionBarMenuItem extends FrameLayout {
                     this.avatarImageView.getImageReceiver().setForUserOrChat((TLRPC$Chat) tLObject, this.thumbDrawable);
                 }
             } else if (i == 7) {
-                CombinedDrawable createCircleDrawableWithIcon3 = Theme.createCircleDrawableWithIcon(AndroidUtilities.dp(32.0f), NUM);
+                CombinedDrawable createCircleDrawableWithIcon3 = Theme.createCircleDrawableWithIcon(AndroidUtilities.dp(32.0f), R.drawable.chats_archive);
                 createCircleDrawableWithIcon3.setIconSize(AndroidUtilities.dp(16.0f), AndroidUtilities.dp(16.0f));
                 Theme.setCombinedDrawableColor(createCircleDrawableWithIcon3, getThemedColor("avatar_backgroundArchived"), false);
                 Theme.setCombinedDrawableColor(createCircleDrawableWithIcon3, getThemedColor("avatar_actionBarIconBlue"), true);
@@ -2060,7 +2061,7 @@ public class ActionBarMenuItem extends FrameLayout {
     public ActionBarPopupWindow.GapView addColoredGap() {
         createPopupLayout();
         ActionBarPopupWindow.GapView gapView = new ActionBarPopupWindow.GapView(getContext(), this.resourcesProvider, "actionBarDefaultSubmenuSeparator");
-        gapView.setTag(NUM, 1);
+        gapView.setTag(R.id.fit_width_tag, 1);
         this.popupLayout.addView(gapView, LayoutHelper.createLinear(-1, 8));
         return gapView;
     }

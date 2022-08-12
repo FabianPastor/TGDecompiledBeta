@@ -29,6 +29,7 @@ import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.support.LongSparseIntArray;
 import org.telegram.tgnet.TLObject;
@@ -242,7 +243,7 @@ public class GroupCallRenderersContainer extends FrameLayout {
         r13.setOnClickListener(new GroupCallRenderersContainer$$ExternalSyntheticLambda4(this));
         createSimpleSelectorRoundRectDrawable.setCallback(this.pinContainer);
         addView(this.pinContainer);
-        CrossOutDrawable crossOutDrawable = new CrossOutDrawable(context2, NUM, (String) null);
+        CrossOutDrawable crossOutDrawable = new CrossOutDrawable(context2, R.drawable.msg_pin_filled, (String) null);
         this.pinDrawable = crossOutDrawable;
         crossOutDrawable.setOffsets((float) (-AndroidUtilities.dp(1.0f)), (float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(1.0f));
         r72.setImageDrawable(this.pinDrawable);
@@ -253,21 +254,21 @@ public class GroupCallRenderersContainer extends FrameLayout {
         textView.setTextColor(-1);
         this.pinTextView.setTextSize(1, 15.0f);
         this.pinTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.pinTextView.setText(LocaleController.getString("CallVideoPin", NUM));
+        this.pinTextView.setText(LocaleController.getString("CallVideoPin", R.string.CallVideoPin));
         TextView textView2 = new TextView(context2);
         this.unpinTextView = textView2;
         textView2.setTextColor(-1);
         this.unpinTextView.setTextSize(1, 15.0f);
         this.unpinTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.unpinTextView.setText(LocaleController.getString("CallVideoUnpin", NUM));
+        this.unpinTextView.setText(LocaleController.getString("CallVideoUnpin", R.string.CallVideoUnpin));
         addView(this.pinTextView, LayoutHelper.createFrame(-2, -2, 51));
         addView(this.unpinTextView, LayoutHelper.createFrame(-2, -2, 51));
         ImageView imageView = new ImageView(context2);
         this.pipView = imageView;
         imageView.setVisibility(4);
         this.pipView.setAlpha(0.0f);
-        this.pipView.setImageResource(NUM);
-        this.pipView.setContentDescription(LocaleController.getString(NUM));
+        this.pipView.setImageResource(R.drawable.ic_goinline);
+        this.pipView.setContentDescription(LocaleController.getString(R.string.AccDescrPipMode));
         int dp = AndroidUtilities.dp(4.0f);
         this.pipView.setPadding(dp, dp, dp, dp);
         this.pipView.setBackground(Theme.createSelectorDrawable(ColorUtils.setAlphaComponent(-1, 55)));
@@ -369,7 +370,7 @@ public class GroupCallRenderersContainer extends FrameLayout {
             layoutParams.rightMargin = z ? AndroidUtilities.dp(328.0f) : 0;
             layoutParams.bottomMargin = z ? -AndroidUtilities.dp(8.0f) : 0;
             if (this.isTablet) {
-                this.backButton.setImageDrawable(ContextCompat.getDrawable(getContext(), NUM));
+                this.backButton.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.msg_calls_minimize));
                 return;
             }
             BackDrawable backDrawable = new BackDrawable(false);

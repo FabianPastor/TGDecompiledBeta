@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC$RecentMeUrl;
 import org.telegram.ui.ActionBar.ActionBar;
@@ -65,8 +66,8 @@ public class DialogsEmptyCell extends LinearLayout {
         TextViewSwitcher textViewSwitcher = new TextViewSwitcher(context);
         this.subtitleView = textViewSwitcher;
         textViewSwitcher.setFactory(new DialogsEmptyCell$$ExternalSyntheticLambda4(context));
-        this.subtitleView.setInAnimation(context, NUM);
-        this.subtitleView.setOutAnimation(context, NUM);
+        this.subtitleView.setInAnimation(context, R.anim.alpha_in);
+        this.subtitleView.setOutAnimation(context, R.anim.alpha_out);
         addView(this.subtitleView, LayoutHelper.createFrame(-1, -2.0f, 51, 52.0f, 7.0f, 52.0f, 0.0f));
     }
 
@@ -102,26 +103,26 @@ public class DialogsEmptyCell extends LinearLayout {
         if (this.currentType != i) {
             this.currentType = i;
             if (i == 0 || i == 1) {
-                i2 = NUM;
-                str = LocaleController.getString("NoChatsHelp", NUM);
-                this.titleView.setText(LocaleController.getString("NoChats", NUM));
+                i2 = R.raw.utyan_newborn;
+                str = LocaleController.getString("NoChatsHelp", R.string.NoChatsHelp);
+                this.titleView.setText(LocaleController.getString("NoChats", R.string.NoChats));
             } else if (i != 2) {
                 this.imageView.setAutoRepeat(true);
-                i2 = NUM;
-                str = LocaleController.getString("FilterAddingChatsInfo", NUM);
-                this.titleView.setText(LocaleController.getString("FilterAddingChats", NUM));
+                i2 = R.raw.filter_new;
+                str = LocaleController.getString("FilterAddingChatsInfo", R.string.FilterAddingChatsInfo);
+                this.titleView.setText(LocaleController.getString("FilterAddingChats", R.string.FilterAddingChats));
             } else {
                 this.imageView.setAutoRepeat(false);
-                i2 = NUM;
-                str = LocaleController.getString("FilterNoChatsToDisplayInfo", NUM);
-                this.titleView.setText(LocaleController.getString("FilterNoChatsToDisplay", NUM));
+                i2 = R.raw.filter_no_chats;
+                str = LocaleController.getString("FilterNoChatsToDisplayInfo", R.string.FilterNoChatsToDisplayInfo);
+                this.titleView.setText(LocaleController.getString("FilterNoChatsToDisplay", R.string.FilterNoChatsToDisplay));
             }
             if (i2 != 0) {
                 this.imageView.setVisibility(0);
                 if (this.currentType == 1) {
                     if (isUtyanAnimationTriggered()) {
                         this.utyanCollapseProgress = 1.0f;
-                        String string = LocaleController.getString("NoChatsContactsHelp", NUM);
+                        String string = LocaleController.getString("NoChatsContactsHelp", R.string.NoChatsContactsHelp);
                         if (AndroidUtilities.isTablet() && !AndroidUtilities.isSmallTablet()) {
                             string = string.replace(10, ' ');
                         }
@@ -190,7 +191,7 @@ public class DialogsEmptyCell extends LinearLayout {
         }
         this.utyanAnimationTriggered = true;
         if (z) {
-            String string = LocaleController.getString("NoChatsContactsHelp", NUM);
+            String string = LocaleController.getString("NoChatsContactsHelp", R.string.NoChatsContactsHelp);
             if (AndroidUtilities.isTablet() && !AndroidUtilities.isSmallTablet()) {
                 string = string.replace(10, ' ');
             }

@@ -12,6 +12,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AnimationProperties;
 import org.telegram.ui.Components.LayoutHelper;
@@ -179,10 +180,10 @@ public class TextRadioCell extends FrameLayout {
         accessibilityNodeInfo.setCheckable(true);
         accessibilityNodeInfo.setChecked(this.radioButton.isChecked());
         if (this.radioButton.isChecked()) {
-            i = NUM;
+            i = R.string.NotificationsOn;
             str = "NotificationsOn";
         } else {
-            i = NUM;
+            i = R.string.NotificationsOff;
             str = "NotificationsOff";
         }
         accessibilityNodeInfo.setContentDescription(LocaleController.getString(str, i));

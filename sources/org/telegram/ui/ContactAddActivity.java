@@ -20,6 +20,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.ActionBar;
@@ -101,12 +102,12 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         Context context2 = context;
         this.actionBar.setItemsBackgroundColor(Theme.getColor("avatar_actionBarSelectorBlue", this.resourcesProvider), false);
         this.actionBar.setItemsColor(Theme.getColor("actionBarDefaultIcon", this.resourcesProvider), false);
-        this.actionBar.setBackButtonImage(NUM);
+        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         if (this.addContact) {
-            this.actionBar.setTitle(LocaleController.getString("NewContact", NUM));
+            this.actionBar.setTitle(LocaleController.getString("NewContact", R.string.NewContact));
         } else {
-            this.actionBar.setTitle(LocaleController.getString("EditName", NUM));
+            this.actionBar.setTitle(LocaleController.getString("EditName", R.string.EditName));
         }
         this.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             public void onItemClick(int i) {
@@ -128,7 +129,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
                 }
             }
         });
-        this.doneButton = this.actionBar.createMenu().addItem(1, (CharSequence) LocaleController.getString("Done", NUM).toUpperCase());
+        this.doneButton = this.actionBar.createMenu().addItem(1, (CharSequence) LocaleController.getString("Done", R.string.Done).toUpperCase());
         this.fragmentView = new ScrollView(context2);
         LinearLayout linearLayout = new LinearLayout(context2);
         linearLayout.setOrientation(1);
@@ -183,7 +184,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         this.firstNameField.setGravity(LocaleController.isRTL ? 5 : 3);
         this.firstNameField.setInputType(49152);
         this.firstNameField.setImeOptions(5);
-        this.firstNameField.setHint(LocaleController.getString("FirstName", NUM));
+        this.firstNameField.setHint(LocaleController.getString("FirstName", R.string.FirstName));
         this.firstNameField.setCursorColor(Theme.getColor("windowBackgroundWhiteBlackText", this.resourcesProvider));
         this.firstNameField.setCursorSize(AndroidUtilities.dp(20.0f));
         this.firstNameField.setCursorWidth(1.5f);
@@ -217,7 +218,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         this.lastNameField.setGravity(LocaleController.isRTL ? 5 : 3);
         this.lastNameField.setInputType(49152);
         this.lastNameField.setImeOptions(6);
-        this.lastNameField.setHint(LocaleController.getString("LastName", NUM));
+        this.lastNameField.setHint(LocaleController.getString("LastName", R.string.LastName));
         this.lastNameField.setCursorColor(Theme.getColor("windowBackgroundWhiteBlackText", this.resourcesProvider));
         this.lastNameField.setCursorSize(AndroidUtilities.dp(20.0f));
         this.lastNameField.setCursorWidth(1.5f);
@@ -246,7 +247,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
                 CheckBoxCell checkBoxCell2 = new CheckBoxCell(getParentActivity(), 0);
                 this.checkBoxCell = checkBoxCell2;
                 checkBoxCell2.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-                this.checkBoxCell.setText(LocaleController.formatString("SharePhoneNumberWith", NUM, UserObject.getFirstName(user)), "", true, false);
+                this.checkBoxCell.setText(LocaleController.formatString("SharePhoneNumberWith", R.string.SharePhoneNumberWith, UserObject.getFirstName(user)), "", true, false);
                 this.checkBoxCell.setPadding(AndroidUtilities.dp(7.0f), 0, AndroidUtilities.dp(7.0f), 0);
                 this.checkBoxCell.setOnClickListener(new ContactAddActivity$$ExternalSyntheticLambda0(this));
                 linearLayout.addView(this.checkBoxCell, LayoutHelper.createLinear(-1, -2, 0.0f, 10.0f, 0.0f, 0.0f));
@@ -289,14 +290,14 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         TLRPC$User user;
         if (this.nameTextView != null && (user = getMessagesController().getUser(Long.valueOf(this.user_id))) != null) {
             if (TextUtils.isEmpty(user.phone)) {
-                this.nameTextView.setText(LocaleController.getString("MobileHidden", NUM));
-                this.infoTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("MobileHiddenExceptionInfo", NUM, UserObject.getFirstName(user))));
+                this.nameTextView.setText(LocaleController.getString("MobileHidden", R.string.MobileHidden));
+                this.infoTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("MobileHiddenExceptionInfo", R.string.MobileHiddenExceptionInfo, UserObject.getFirstName(user))));
             } else {
                 TextView textView = this.nameTextView;
                 PhoneFormat instance = PhoneFormat.getInstance();
                 textView.setText(instance.format("+" + user.phone));
                 if (this.needAddException) {
-                    this.infoTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("MobileVisibleInfo", NUM, UserObject.getFirstName(user))));
+                    this.infoTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("MobileVisibleInfo", R.string.MobileVisibleInfo, UserObject.getFirstName(user))));
                 }
             }
             this.onlineTextView.setText(LocaleController.formatUserStatus(this.currentAccount, user));

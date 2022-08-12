@@ -15,6 +15,7 @@ import android.view.animation.DecelerateInterpolator;
 import androidx.annotation.Keep;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.R;
 
 public class ShutterButton extends View {
     /* access modifiers changed from: private */
@@ -33,7 +34,7 @@ public class ShutterButton extends View {
     public boolean processRelease;
     private Paint redPaint;
     private float redProgress;
-    private Drawable shadowDrawable = getResources().getDrawable(NUM);
+    private Drawable shadowDrawable = getResources().getDrawable(R.drawable.camera_btn);
     private State state;
     private long totalTime;
     private Paint whitePaint;
@@ -199,8 +200,8 @@ public class ShutterButton extends View {
         accessibilityNodeInfo.setClickable(true);
         accessibilityNodeInfo.setLongClickable(true);
         if (Build.VERSION.SDK_INT >= 21) {
-            accessibilityNodeInfo.addAction(new AccessibilityNodeInfo.AccessibilityAction(AccessibilityNodeInfo.AccessibilityAction.ACTION_CLICK.getId(), LocaleController.getString("AccActionTakePicture", NUM)));
-            accessibilityNodeInfo.addAction(new AccessibilityNodeInfo.AccessibilityAction(AccessibilityNodeInfo.AccessibilityAction.ACTION_LONG_CLICK.getId(), LocaleController.getString("AccActionRecordVideo", NUM)));
+            accessibilityNodeInfo.addAction(new AccessibilityNodeInfo.AccessibilityAction(AccessibilityNodeInfo.AccessibilityAction.ACTION_CLICK.getId(), LocaleController.getString("AccActionTakePicture", R.string.AccActionTakePicture)));
+            accessibilityNodeInfo.addAction(new AccessibilityNodeInfo.AccessibilityAction(AccessibilityNodeInfo.AccessibilityAction.ACTION_LONG_CLICK.getId(), LocaleController.getString("AccActionRecordVideo", R.string.AccActionRecordVideo)));
         }
     }
 }

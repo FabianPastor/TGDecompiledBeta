@@ -12,6 +12,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.SeekBarView;
@@ -92,7 +93,7 @@ public class MaxFileSizeCell extends FrameLayout {
                         } else {
                             i = (int) (((float) NUM) + (((float) (NUM - ((long) NUM))) * ((f - 0.25f) / 0.25f)));
                             long j = (long) i;
-                            MaxFileSizeCell.this.sizeTextView.setText(LocaleController.formatString("AutodownloadSizeLimitUpTo", NUM, AndroidUtilities.formatFileSize(j)));
+                            MaxFileSizeCell.this.sizeTextView.setText(LocaleController.formatString("AutodownloadSizeLimitUpTo", R.string.AutodownloadSizeLimitUpTo, AndroidUtilities.formatFileSize(j)));
                             long unused = MaxFileSizeCell.this.currentSize = j;
                             MaxFileSizeCell.this.didChangedSizeValue(i);
                         }
@@ -100,7 +101,7 @@ public class MaxFileSizeCell extends FrameLayout {
                 }
                 i = (int) (f2 + ((f / 0.25f) * f3));
                 long j2 = (long) i;
-                MaxFileSizeCell.this.sizeTextView.setText(LocaleController.formatString("AutodownloadSizeLimitUpTo", NUM, AndroidUtilities.formatFileSize(j2)));
+                MaxFileSizeCell.this.sizeTextView.setText(LocaleController.formatString("AutodownloadSizeLimitUpTo", R.string.AutodownloadSizeLimitUpTo, AndroidUtilities.formatFileSize(j2)));
                 long unused2 = MaxFileSizeCell.this.currentSize = j2;
                 MaxFileSizeCell.this.didChangedSizeValue(i);
             }
@@ -158,7 +159,7 @@ public class MaxFileSizeCell extends FrameLayout {
         float f;
         float f2;
         this.currentSize = j;
-        this.sizeTextView.setText(LocaleController.formatString("AutodownloadSizeLimitUpTo", NUM, AndroidUtilities.formatFileSize(j)));
+        this.sizeTextView.setText(LocaleController.formatString("AutodownloadSizeLimitUpTo", R.string.AutodownloadSizeLimitUpTo, AndroidUtilities.formatFileSize(j)));
         long j2 = j - 512000;
         if (j2 < 536576) {
             f = Math.max(0.0f, ((float) j2) / 536576.0f) * 0.25f;

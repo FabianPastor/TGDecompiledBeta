@@ -25,6 +25,7 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.tgnet.TLRPC$TL_theme;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.EmojiThemes;
@@ -95,7 +96,8 @@ public class DefaultThemesPreviewCell extends LinearLayout {
         recyclerListView.setEmptyView(flickerLoadingView);
         recyclerListView.setAnimateEmptyView(true, 0);
         if (this.currentType == 0) {
-            RLottieDrawable rLottieDrawable = new RLottieDrawable(NUM, "NUM", AndroidUtilities.dp(28.0f), AndroidUtilities.dp(28.0f), true, (int[]) null);
+            int i3 = R.raw.sun_outline;
+            RLottieDrawable rLottieDrawable = new RLottieDrawable(i3, "" + i3, AndroidUtilities.dp(28.0f), AndroidUtilities.dp(28.0f), true, (int[]) null);
             this.darkThemeDrawable = rLottieDrawable;
             rLottieDrawable.setPlayInDirectionOfCustomEndFrame(true);
             this.darkThemeDrawable.beginApplyLayerColors();
@@ -108,7 +110,7 @@ public class DefaultThemesPreviewCell extends LinearLayout {
             addView(textCell2, LayoutHelper.createFrame(-1, -2.0f));
             TextCell textCell3 = new TextCell(context2);
             this.browseThemesCell = textCell3;
-            textCell3.setTextAndIcon(LocaleController.getString("SettingsBrowseThemes", NUM), NUM, false);
+            textCell3.setTextAndIcon(LocaleController.getString("SettingsBrowseThemes", R.string.SettingsBrowseThemes), R.drawable.msg_colors, false);
             addView(this.browseThemesCell, LayoutHelper.createFrame(-1, -2.0f));
             this.dayNightCell.setOnClickListener(new View.OnClickListener() {
                 /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v2, resolved type: java.lang.Object[]} */
@@ -327,9 +329,9 @@ public class DefaultThemesPreviewCell extends LinearLayout {
                         DefaultThemesPreviewCell.this.navBarAnimator.start();
                     }
                     if (Theme.isCurrentThemeDay()) {
-                        DefaultThemesPreviewCell.this.dayNightCell.setTextAndIcon(LocaleController.getString("SettingsSwitchToNightMode", NUM), (Drawable) DefaultThemesPreviewCell.this.darkThemeDrawable, true);
+                        DefaultThemesPreviewCell.this.dayNightCell.setTextAndIcon(LocaleController.getString("SettingsSwitchToNightMode", R.string.SettingsSwitchToNightMode), (Drawable) DefaultThemesPreviewCell.this.darkThemeDrawable, true);
                     } else {
-                        DefaultThemesPreviewCell.this.dayNightCell.setTextAndIcon(LocaleController.getString("SettingsSwitchToDayMode", NUM), (Drawable) DefaultThemesPreviewCell.this.darkThemeDrawable, true);
+                        DefaultThemesPreviewCell.this.dayNightCell.setTextAndIcon(LocaleController.getString("SettingsSwitchToDayMode", R.string.SettingsSwitchToDayMode), (Drawable) DefaultThemesPreviewCell.this.darkThemeDrawable, true);
                     }
                 }
             });
@@ -338,9 +340,9 @@ public class DefaultThemesPreviewCell extends LinearLayout {
             if (!Theme.isCurrentThemeDay()) {
                 RLottieDrawable rLottieDrawable2 = this.darkThemeDrawable;
                 rLottieDrawable2.setCurrentFrame(rLottieDrawable2.getFramesCount() - 1);
-                this.dayNightCell.setTextAndIcon(LocaleController.getString("SettingsSwitchToDayMode", NUM), (Drawable) this.darkThemeDrawable, true);
+                this.dayNightCell.setTextAndIcon(LocaleController.getString("SettingsSwitchToDayMode", R.string.SettingsSwitchToDayMode), (Drawable) this.darkThemeDrawable, true);
             } else {
-                this.dayNightCell.setTextAndIcon(LocaleController.getString("SettingsSwitchToNightMode", NUM), (Drawable) this.darkThemeDrawable, true);
+                this.dayNightCell.setTextAndIcon(LocaleController.getString("SettingsSwitchToNightMode", R.string.SettingsSwitchToNightMode), (Drawable) this.darkThemeDrawable, true);
             }
         }
         if (!MediaDataController.getInstance(baseFragment.getCurrentAccount()).defaultEmojiThemes.isEmpty()) {
@@ -357,9 +359,9 @@ public class DefaultThemesPreviewCell extends LinearLayout {
         updateDayNightMode();
         updateSelectedPosition();
         updateColors();
-        int i3 = this.selectedPosition;
-        if (i3 >= 0 && (linearLayoutManager = this.layoutManager) != null) {
-            linearLayoutManager.scrollToPositionWithOffset(i3, AndroidUtilities.dp(16.0f));
+        int i4 = this.selectedPosition;
+        if (i4 >= 0 && (linearLayoutManager = this.layoutManager) != null) {
+            linearLayoutManager.scrollToPositionWithOffset(i4, AndroidUtilities.dp(16.0f));
         }
     }
 

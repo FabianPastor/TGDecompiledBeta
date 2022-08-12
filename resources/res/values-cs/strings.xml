@@ -40,12 +40,6 @@
     <string name="fcm_fallback_notification_channel_label">Různé</string>
     <string name="google_assistant_verification_channel_name">Ověření Asistenta</string>
     <string name="google_assistant_verification_notification_title">Asistent Google odesílá zprávu</string>
-    <string name="hms_apk_not_installed_hints">Některé funkce v aplikaci %1$s nemusí fungovat správně bez funkce HMS Core, která na vašem zařízení není nainstalovaná.</string>
-    <string name="hms_bindfaildlg_message">%1$s nemůže využívat funkci HMS Core. Zapněte aplikaci Správce (Správce telefonu), nebo přejděte do nabídky Nastavení a povolte oprávnění pro %2$s (včetně automatického a sekundárního spuštění). Poté opakujte akci.</string>
-    <string name="hms_confirm">OK</string>
-    <string name="hms_is_spoof">Zdá se, že máte na svém zařízení nainstalovanou neoficiální verzi HMS Core (%1$s). Odinstalujte HMS Core z Nastavení a vraťte se k této aplikaci pro nainstalování oficiální verze.</string>
-    <string name="hms_push_channel">Výchozí nastavení</string>
-    <string name="hms_spoof_hints">Poznámka</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Koupit pomocí Googlu</string>
 </resources>

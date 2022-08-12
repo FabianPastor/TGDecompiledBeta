@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
@@ -57,8 +58,9 @@ public class PermanentLinkBottomSheet extends BottomSheet {
         linkActionView2.setPermanent(true);
         RLottieImageView rLottieImageView = new RLottieImageView(context2);
         this.imageView = rLottieImageView;
+        int i2 = R.raw.shared_link_enter;
         RLottieDrawable rLottieDrawable = r1;
-        RLottieDrawable rLottieDrawable2 = new RLottieDrawable(NUM, "NUM", AndroidUtilities.dp(90.0f), AndroidUtilities.dp(90.0f), false, (int[]) null);
+        RLottieDrawable rLottieDrawable2 = new RLottieDrawable(i2, "" + i2, AndroidUtilities.dp(90.0f), AndroidUtilities.dp(90.0f), false, (int[]) null);
         this.linkIcon = rLottieDrawable;
         rLottieDrawable.setCustomEndFrame(42);
         rLottieImageView.setAnimation(this.linkIcon);
@@ -67,17 +69,17 @@ public class PermanentLinkBottomSheet extends BottomSheet {
         linkActionView2.setDelegate(new PermanentLinkBottomSheet$$ExternalSyntheticLambda5(this));
         TextView textView = new TextView(context2);
         this.titleView = textView;
-        textView.setText(LocaleController.getString("InviteLink", NUM));
+        textView.setText(LocaleController.getString("InviteLink", R.string.InviteLink));
         textView.setTextSize(24.0f);
         textView.setGravity(1);
         textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         TextView textView2 = new TextView(context2);
         this.subtitle = textView2;
         if (z2) {
-            i = NUM;
+            i = R.string.LinkInfoChannel;
             str = "LinkInfoChannel";
         } else {
-            i = NUM;
+            i = R.string.LinkInfo;
             str = "LinkInfo";
         }
         textView2.setText(LocaleController.getString(str, i));
@@ -86,7 +88,7 @@ public class PermanentLinkBottomSheet extends BottomSheet {
         textView2.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText"));
         TextView textView3 = new TextView(context2);
         this.manage = textView3;
-        textView3.setText(LocaleController.getString("ManageInviteLinks", NUM));
+        textView3.setText(LocaleController.getString("ManageInviteLinks", R.string.ManageInviteLinks));
         textView3.setTextSize(14.0f);
         textView3.setTextColor(Theme.getColor("windowBackgroundWhiteBlueText"));
         textView3.setBackground(Theme.createRadSelectorDrawable(ColorUtils.setAlphaComponent(Theme.getColor("windowBackgroundWhiteBlueText"), 76), AndroidUtilities.dp(4.0f), AndroidUtilities.dp(4.0f)));
@@ -154,9 +156,9 @@ public class PermanentLinkBottomSheet extends BottomSheet {
             this.linkActionView.setLink(this.invite.link);
             if (z && this.fragment != null) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setMessage(LocaleController.getString("RevokeAlertNewLink", NUM));
-                builder.setTitle(LocaleController.getString("RevokeLink", NUM));
-                builder.setNegativeButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
+                builder.setMessage(LocaleController.getString("RevokeAlertNewLink", R.string.RevokeAlertNewLink));
+                builder.setTitle(LocaleController.getString("RevokeLink", R.string.RevokeLink));
+                builder.setNegativeButton(LocaleController.getString("OK", R.string.OK), (DialogInterface.OnClickListener) null);
                 this.fragment.showDialog(builder.create());
             }
         }

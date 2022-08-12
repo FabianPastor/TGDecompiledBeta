@@ -1,12 +1,15 @@
 package org.telegram.messenger;
 
 public final /* synthetic */ class LocationController$$ExternalSyntheticLambda25 implements Runnable {
-    public static final /* synthetic */ LocationController$$ExternalSyntheticLambda25 INSTANCE = new LocationController$$ExternalSyntheticLambda25();
+    public final /* synthetic */ LocationController f$0;
+    public final /* synthetic */ boolean f$1;
 
-    private /* synthetic */ LocationController$$ExternalSyntheticLambda25() {
+    public /* synthetic */ LocationController$$ExternalSyntheticLambda25(LocationController locationController, boolean z) {
+        this.f$0 = locationController;
+        this.f$1 = z;
     }
 
     public final void run() {
-        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.newLocationAvailable, new Object[0]);
+        this.f$0.lambda$startLocationLookupForPeopleNearby$26(this.f$1);
     }
 }

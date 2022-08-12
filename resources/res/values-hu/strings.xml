@@ -21,12 +21,6 @@
     <string name="fcm_fallback_notification_channel_label">Egyéb</string>
     <string name="google_assistant_verification_channel_name">Segéd-hitelesítő</string>
     <string name="google_assistant_verification_notification_title">A Google Segéd üzenetet küld</string>
-    <string name="hms_apk_not_installed_hints">Lehet, hogy a(z) %1$s egyes funkciói a HMS Core nélkül nem fognak megfelelően működni, ami nincs telepítve a készülékére.</string>
-    <string name="hms_bindfaildlg_message">%1$s nem tudja használni a HMS Core-t. Indítsa el az Optimalizálót (Telefonkezelő), vagy lépjen a Beállításokba és engedélyezze a(z) %2$s összes jogosultságát (beleértve az automatikus indítást és másodlagos indítást), majd próbálja újra.</string>
-    <string name="hms_confirm">OK</string>
-    <string name="hms_is_spoof">Úgy tűnik, hogy az Ön készülékére a HMS Core (%1$s) nem hivatalos verziója van telepítve. Távolítsa el a HMS Core-t a Beállításokban, majd nyissa meg ismét az alkalmazást a hivatalos verzió telepítéséhez.</string>
-    <string name="hms_push_channel">Alapértelmezett</string>
-    <string name="hms_spoof_hints">Megjegyzés</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Vásárlás a Google-lal</string>
 </resources>

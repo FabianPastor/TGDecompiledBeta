@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Adapters.FiltersView;
@@ -174,7 +175,7 @@ public class ActionBar extends FrameLayout {
             this.backButtonImageView.setPadding(AndroidUtilities.dp(1.0f), 0, 0, 0);
             addView(this.backButtonImageView, LayoutHelper.createFrame(54, 54, 51));
             this.backButtonImageView.setOnClickListener(new ActionBar$$ExternalSyntheticLambda0(this));
-            this.backButtonImageView.setContentDescription(LocaleController.getString("AccDescrGoBack", NUM));
+            this.backButtonImageView.setContentDescription(LocaleController.getString("AccDescrGoBack", R.string.AccDescrGoBack));
         }
     }
 

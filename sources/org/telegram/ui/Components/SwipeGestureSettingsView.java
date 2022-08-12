@@ -15,6 +15,7 @@ import androidx.core.graphics.ColorUtils;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.ui.ActionBar.Theme;
 
@@ -49,12 +50,12 @@ public class SwipeGestureSettingsView extends FrameLayout {
         this.iconViews = new RLottieImageView[2];
         float f = 1.0f;
         this.colorProgress = 1.0f;
-        strArr[0] = LocaleController.getString("SwipeSettingsPin", NUM);
-        this.strings[1] = LocaleController.getString("SwipeSettingsRead", NUM);
-        this.strings[2] = LocaleController.getString("SwipeSettingsArchive", NUM);
-        this.strings[3] = LocaleController.getString("SwipeSettingsMute", NUM);
-        this.strings[4] = LocaleController.getString("SwipeSettingsDelete", NUM);
-        this.strings[5] = LocaleController.getString("SwipeSettingsFolders", NUM);
+        strArr[0] = LocaleController.getString("SwipeSettingsPin", R.string.SwipeSettingsPin);
+        this.strings[1] = LocaleController.getString("SwipeSettingsRead", R.string.SwipeSettingsRead);
+        this.strings[2] = LocaleController.getString("SwipeSettingsArchive", R.string.SwipeSettingsArchive);
+        this.strings[3] = LocaleController.getString("SwipeSettingsMute", R.string.SwipeSettingsMute);
+        this.strings[4] = LocaleController.getString("SwipeSettingsDelete", R.string.SwipeSettingsDelete);
+        this.strings[5] = LocaleController.getString("SwipeSettingsFolders", R.string.SwipeSettingsFolders);
         String[] strArr2 = this.backgroundKeys;
         strArr2[0] = "chats_archiveBackground";
         strArr2[1] = "chats_archiveBackground";
@@ -431,10 +432,24 @@ public class SwipeGestureSettingsView extends FrameLayout {
     }
 
     public RLottieDrawable getIcon(int i) {
+        int i2;
         RLottieDrawable[] rLottieDrawableArr = this.icons;
         if (rLottieDrawableArr[i] == null) {
-            int i2 = i != 1 ? i != 2 ? i != 3 ? i != 4 ? i != 5 ? NUM : NUM : NUM : NUM : NUM : NUM;
-            rLottieDrawableArr[i] = new RLottieDrawable(i2, "" + i2, AndroidUtilities.dp(28.0f), AndroidUtilities.dp(28.0f), true, (int[]) null);
+            if (i == 1) {
+                i2 = R.raw.swipe_read;
+            } else if (i == 2) {
+                i2 = R.raw.chats_archive;
+            } else if (i == 3) {
+                i2 = R.raw.swipe_mute;
+            } else if (i == 4) {
+                i2 = R.raw.swipe_delete;
+            } else if (i != 5) {
+                i2 = R.raw.swipe_pin;
+            } else {
+                i2 = R.raw.swipe_disabled;
+            }
+            int i3 = i2;
+            rLottieDrawableArr[i] = new RLottieDrawable(i3, "" + i3, AndroidUtilities.dp(28.0f), AndroidUtilities.dp(28.0f), true, (int[]) null);
             updateIconColor(i);
         }
         return this.icons[i];

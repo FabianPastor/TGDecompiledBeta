@@ -330,12 +330,12 @@ public class ContactsController extends BaseController {
             str = "https://telegram.org/dl";
         }
         if (i <= 1) {
-            return LocaleController.formatString("InviteText2", NUM, str);
+            return LocaleController.formatString("InviteText2", R.string.InviteText2, str);
         }
         try {
             return String.format(LocaleController.getPluralString("InviteTextNum", i), new Object[]{Integer.valueOf(i), str});
         } catch (Exception unused) {
-            return LocaleController.formatString("InviteText2", NUM, str);
+            return LocaleController.formatString("InviteText2", R.string.InviteText2, str);
         }
     }
 
@@ -700,10 +700,10 @@ public class ContactsController extends BaseController {
     }
 
     /* JADX INFO: finally extract failed */
-    /* JADX WARNING: Removed duplicated region for block: B:195:0x032d A[Catch:{ all -> 0x0345 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:197:0x0332 A[SYNTHETIC, Splitter:B:197:0x0332] */
-    /* JADX WARNING: Removed duplicated region for block: B:203:0x033f  */
-    /* JADX WARNING: Removed duplicated region for block: B:224:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:199:0x032d A[Catch:{ all -> 0x0345 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:201:0x0332 A[SYNTHETIC, Splitter:B:201:0x0332] */
+    /* JADX WARNING: Removed duplicated region for block: B:207:0x033f  */
+    /* JADX WARNING: Removed duplicated region for block: B:228:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private java.util.HashMap<java.lang.String, org.telegram.messenger.ContactsController.Contact> readContactsFromPhoneBook() {
         /*
@@ -750,57 +750,57 @@ public class ContactsController extends BaseController {
             r14 = 0
             java.lang.String r15 = ""
             r9 = 1
-            if (r4 == 0) goto L_0x01fa
-            int r5 = r4.getCount()     // Catch:{ all -> 0x01f4 }
-            if (r5 <= 0) goto L_0x01e3
-            java.util.HashMap r6 = new java.util.HashMap     // Catch:{ all -> 0x01f4 }
-            r6.<init>(r5)     // Catch:{ all -> 0x01f4 }
+            if (r4 == 0) goto L_0x01f7
+            int r5 = r4.getCount()     // Catch:{ all -> 0x01f1 }
+            if (r5 <= 0) goto L_0x01e0
+            java.util.HashMap r6 = new java.util.HashMap     // Catch:{ all -> 0x01f1 }
+            r6.<init>(r5)     // Catch:{ all -> 0x01f1 }
             r5 = 1
         L_0x0061:
-            boolean r7 = r4.moveToNext()     // Catch:{ all -> 0x01eb }
-            if (r7 == 0) goto L_0x01df
-            java.lang.String r7 = r4.getString(r9)     // Catch:{ all -> 0x01eb }
+            boolean r7 = r4.moveToNext()     // Catch:{ all -> 0x01e8 }
+            if (r7 == 0) goto L_0x01dc
+            java.lang.String r7 = r4.getString(r9)     // Catch:{ all -> 0x01e8 }
             r8 = 5
-            java.lang.String r8 = r4.getString(r8)     // Catch:{ all -> 0x01eb }
+            java.lang.String r8 = r4.getString(r8)     // Catch:{ all -> 0x01e8 }
             if (r8 != 0) goto L_0x0073
             r8 = r15
         L_0x0073:
             java.lang.String r2 = ".sim"
-            int r2 = r8.indexOf(r2)     // Catch:{ all -> 0x01eb }
+            int r2 = r8.indexOf(r2)     // Catch:{ all -> 0x01e8 }
             if (r2 == 0) goto L_0x007d
             r2 = 1
             goto L_0x007e
         L_0x007d:
             r2 = 0
         L_0x007e:
-            boolean r16 = android.text.TextUtils.isEmpty(r7)     // Catch:{ all -> 0x01eb }
+            boolean r16 = android.text.TextUtils.isEmpty(r7)     // Catch:{ all -> 0x01e8 }
             if (r16 == 0) goto L_0x0085
             goto L_0x00df
         L_0x0085:
-            java.lang.String r7 = org.telegram.PhoneFormat.PhoneFormat.stripExceptNumbers(r7, r9)     // Catch:{ all -> 0x01eb }
-            boolean r16 = android.text.TextUtils.isEmpty(r7)     // Catch:{ all -> 0x01eb }
+            java.lang.String r7 = org.telegram.PhoneFormat.PhoneFormat.stripExceptNumbers(r7, r9)     // Catch:{ all -> 0x01e8 }
+            boolean r16 = android.text.TextUtils.isEmpty(r7)     // Catch:{ all -> 0x01e8 }
             if (r16 == 0) goto L_0x0090
             goto L_0x00df
         L_0x0090:
             java.lang.String r12 = "+"
-            boolean r12 = r7.startsWith(r12)     // Catch:{ all -> 0x01eb }
+            boolean r12 = r7.startsWith(r12)     // Catch:{ all -> 0x01e8 }
             if (r12 == 0) goto L_0x00a1
             java.lang.String r12 = r7.substring(r9)     // Catch:{ all -> 0x009d }
             goto L_0x00a2
         L_0x009d:
             r0 = move-exception
             r10 = r1
-            goto L_0x01ee
+            goto L_0x01eb
         L_0x00a1:
             r12 = r7
         L_0x00a2:
-            java.lang.String r9 = r4.getString(r14)     // Catch:{ all -> 0x01eb }
-            r0.setLength(r14)     // Catch:{ all -> 0x01eb }
-            android.database.DatabaseUtils.appendEscapedSQLString(r0, r9)     // Catch:{ all -> 0x01eb }
-            java.lang.String r13 = r0.toString()     // Catch:{ all -> 0x01eb }
-            java.lang.Object r17 = r10.get(r12)     // Catch:{ all -> 0x01eb }
+            java.lang.String r9 = r4.getString(r14)     // Catch:{ all -> 0x01e8 }
+            r0.setLength(r14)     // Catch:{ all -> 0x01e8 }
+            android.database.DatabaseUtils.appendEscapedSQLString(r0, r9)     // Catch:{ all -> 0x01e8 }
+            java.lang.String r13 = r0.toString()     // Catch:{ all -> 0x01e8 }
+            java.lang.Object r17 = r10.get(r12)     // Catch:{ all -> 0x01e8 }
             r14 = r17
-            org.telegram.messenger.ContactsController$Contact r14 = (org.telegram.messenger.ContactsController.Contact) r14     // Catch:{ all -> 0x01eb }
+            org.telegram.messenger.ContactsController$Contact r14 = (org.telegram.messenger.ContactsController.Contact) r14     // Catch:{ all -> 0x01e8 }
             if (r14 == 0) goto L_0x00e3
             boolean r7 = r14.isGoodProvider     // Catch:{ all -> 0x009d }
             if (r7 != 0) goto L_0x00df
@@ -822,27 +822,27 @@ public class ContactsController extends BaseController {
             r14 = 0
             goto L_0x0061
         L_0x00e3:
-            boolean r14 = r11.contains(r13)     // Catch:{ all -> 0x01eb }
+            boolean r14 = r11.contains(r13)     // Catch:{ all -> 0x01e8 }
             if (r14 != 0) goto L_0x00ec
             r11.add(r13)     // Catch:{ all -> 0x009d }
         L_0x00ec:
             r13 = 2
-            int r14 = r4.getInt(r13)     // Catch:{ all -> 0x01eb }
-            java.lang.Object r13 = r6.get(r9)     // Catch:{ all -> 0x01eb }
-            org.telegram.messenger.ContactsController$Contact r13 = (org.telegram.messenger.ContactsController.Contact) r13     // Catch:{ all -> 0x01eb }
+            int r14 = r4.getInt(r13)     // Catch:{ all -> 0x01e8 }
+            java.lang.Object r13 = r6.get(r9)     // Catch:{ all -> 0x01e8 }
+            org.telegram.messenger.ContactsController$Contact r13 = (org.telegram.messenger.ContactsController.Contact) r13     // Catch:{ all -> 0x01e8 }
             if (r13 != 0) goto L_0x0150
-            org.telegram.messenger.ContactsController$Contact r13 = new org.telegram.messenger.ContactsController$Contact     // Catch:{ all -> 0x01eb }
-            r13.<init>()     // Catch:{ all -> 0x01eb }
+            org.telegram.messenger.ContactsController$Contact r13 = new org.telegram.messenger.ContactsController$Contact     // Catch:{ all -> 0x01e8 }
+            r13.<init>()     // Catch:{ all -> 0x01e8 }
             r17 = r0
             r0 = 4
-            java.lang.String r0 = r4.getString(r0)     // Catch:{ all -> 0x01eb }
+            java.lang.String r0 = r4.getString(r0)     // Catch:{ all -> 0x01e8 }
             if (r0 != 0) goto L_0x0109
             r0 = r15
             goto L_0x010d
         L_0x0109:
-            java.lang.String r0 = r0.trim()     // Catch:{ all -> 0x01eb }
+            java.lang.String r0 = r0.trim()     // Catch:{ all -> 0x01e8 }
         L_0x010d:
-            boolean r18 = r1.isNotValidNameString(r0)     // Catch:{ all -> 0x01eb }
+            boolean r18 = r1.isNotValidNameString(r0)     // Catch:{ all -> 0x01e8 }
             if (r18 == 0) goto L_0x011a
             r13.first_name = r0     // Catch:{ all -> 0x009d }
             r13.last_name = r15     // Catch:{ all -> 0x009d }
@@ -851,134 +851,135 @@ public class ContactsController extends BaseController {
         L_0x011a:
             r18 = r3
             r3 = 32
-            int r3 = r0.lastIndexOf(r3)     // Catch:{ all -> 0x01eb }
+            int r3 = r0.lastIndexOf(r3)     // Catch:{ all -> 0x01e8 }
             r1 = -1
             if (r3 == r1) goto L_0x013d
             r1 = 0
-            java.lang.String r19 = r0.substring(r1, r3)     // Catch:{ all -> 0x01eb }
-            java.lang.String r1 = r19.trim()     // Catch:{ all -> 0x01eb }
-            r13.first_name = r1     // Catch:{ all -> 0x01eb }
+            java.lang.String r19 = r0.substring(r1, r3)     // Catch:{ all -> 0x01e8 }
+            java.lang.String r1 = r19.trim()     // Catch:{ all -> 0x01e8 }
+            r13.first_name = r1     // Catch:{ all -> 0x01e8 }
             int r3 = r3 + 1
-            java.lang.String r0 = r0.substring(r3)     // Catch:{ all -> 0x01eb }
-            java.lang.String r0 = r0.trim()     // Catch:{ all -> 0x01eb }
-            r13.last_name = r0     // Catch:{ all -> 0x01eb }
+            java.lang.String r0 = r0.substring(r3)     // Catch:{ all -> 0x01e8 }
+            java.lang.String r0 = r0.trim()     // Catch:{ all -> 0x01e8 }
+            r13.last_name = r0     // Catch:{ all -> 0x01e8 }
             goto L_0x0141
         L_0x013d:
-            r13.first_name = r0     // Catch:{ all -> 0x01eb }
-            r13.last_name = r15     // Catch:{ all -> 0x01eb }
+            r13.first_name = r0     // Catch:{ all -> 0x01e8 }
+            r13.last_name = r15     // Catch:{ all -> 0x01e8 }
         L_0x0141:
-            r13.provider = r8     // Catch:{ all -> 0x01eb }
-            r13.isGoodProvider = r2     // Catch:{ all -> 0x01eb }
-            r13.key = r9     // Catch:{ all -> 0x01eb }
+            r13.provider = r8     // Catch:{ all -> 0x01e8 }
+            r13.isGoodProvider = r2     // Catch:{ all -> 0x01e8 }
+            r13.key = r9     // Catch:{ all -> 0x01e8 }
             int r0 = r5 + 1
-            r13.contact_id = r5     // Catch:{ all -> 0x01eb }
-            r6.put(r9, r13)     // Catch:{ all -> 0x01eb }
+            r13.contact_id = r5     // Catch:{ all -> 0x01e8 }
+            r6.put(r9, r13)     // Catch:{ all -> 0x01e8 }
             r5 = r0
             goto L_0x0154
         L_0x0150:
             r17 = r0
             r18 = r3
         L_0x0154:
-            java.util.ArrayList<java.lang.String> r0 = r13.shortPhones     // Catch:{ all -> 0x01eb }
-            r0.add(r12)     // Catch:{ all -> 0x01eb }
-            java.util.ArrayList<java.lang.String> r0 = r13.phones     // Catch:{ all -> 0x01eb }
-            r0.add(r7)     // Catch:{ all -> 0x01eb }
-            java.util.ArrayList<java.lang.Integer> r0 = r13.phoneDeleted     // Catch:{ all -> 0x01eb }
+            java.util.ArrayList<java.lang.String> r0 = r13.shortPhones     // Catch:{ all -> 0x01e8 }
+            r0.add(r12)     // Catch:{ all -> 0x01e8 }
+            java.util.ArrayList<java.lang.String> r0 = r13.phones     // Catch:{ all -> 0x01e8 }
+            r0.add(r7)     // Catch:{ all -> 0x01e8 }
+            java.util.ArrayList<java.lang.Integer> r0 = r13.phoneDeleted     // Catch:{ all -> 0x01e8 }
             r1 = 0
-            java.lang.Integer r2 = java.lang.Integer.valueOf(r1)     // Catch:{ all -> 0x01eb }
-            r0.add(r2)     // Catch:{ all -> 0x01eb }
-            r0 = 2131627557(0x7f0e0e25, float:1.8882382E38)
-            java.lang.String r1 = "PhoneMobile"
-            if (r14 != 0) goto L_0x0182
-            r2 = 3
-            java.lang.String r3 = r4.getString(r2)     // Catch:{ all -> 0x01eb }
-            java.util.ArrayList<java.lang.String> r2 = r13.phoneTypes     // Catch:{ all -> 0x01eb }
-            if (r3 == 0) goto L_0x0179
-            goto L_0x017d
-        L_0x0179:
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r1, r0)     // Catch:{ all -> 0x01eb }
-        L_0x017d:
-            r2.add(r3)     // Catch:{ all -> 0x01eb }
-            r2 = 1
-            goto L_0x01d4
-        L_0x0182:
-            r2 = 1
-            if (r14 != r2) goto L_0x0194
-            java.util.ArrayList<java.lang.String> r0 = r13.phoneTypes     // Catch:{ all -> 0x01eb }
-            java.lang.String r1 = "PhoneHome"
-            r3 = 2131627555(0x7f0e0e23, float:1.8882378E38)
-            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r3)     // Catch:{ all -> 0x01eb }
-            r0.add(r1)     // Catch:{ all -> 0x01eb }
-            goto L_0x01d4
-        L_0x0194:
-            r3 = 2
-            if (r14 != r3) goto L_0x01a1
-            java.util.ArrayList<java.lang.String> r3 = r13.phoneTypes     // Catch:{ all -> 0x01eb }
-            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)     // Catch:{ all -> 0x01eb }
-            r3.add(r0)     // Catch:{ all -> 0x01eb }
-            goto L_0x01d4
+            java.lang.Integer r2 = java.lang.Integer.valueOf(r1)     // Catch:{ all -> 0x01e8 }
+            r0.add(r2)     // Catch:{ all -> 0x01e8 }
+            java.lang.String r0 = "PhoneMobile"
+            if (r14 != 0) goto L_0x0181
+            r1 = 3
+            java.lang.String r2 = r4.getString(r1)     // Catch:{ all -> 0x01e8 }
+            java.util.ArrayList<java.lang.String> r1 = r13.phoneTypes     // Catch:{ all -> 0x01e8 }
+            if (r2 == 0) goto L_0x0176
+            goto L_0x017c
+        L_0x0176:
+            int r2 = org.telegram.messenger.R.string.PhoneMobile     // Catch:{ all -> 0x01e8 }
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r0, r2)     // Catch:{ all -> 0x01e8 }
+        L_0x017c:
+            r1.add(r2)     // Catch:{ all -> 0x01e8 }
+            r1 = 1
+            goto L_0x01d1
+        L_0x0181:
+            r1 = 1
+            if (r14 != r1) goto L_0x0192
+            java.util.ArrayList<java.lang.String> r0 = r13.phoneTypes     // Catch:{ all -> 0x01e8 }
+            java.lang.String r2 = "PhoneHome"
+            int r3 = org.telegram.messenger.R.string.PhoneHome     // Catch:{ all -> 0x01e8 }
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)     // Catch:{ all -> 0x01e8 }
+            r0.add(r2)     // Catch:{ all -> 0x01e8 }
+            goto L_0x01d1
+        L_0x0192:
+            r2 = 2
+            if (r14 != r2) goto L_0x01a1
+            java.util.ArrayList<java.lang.String> r2 = r13.phoneTypes     // Catch:{ all -> 0x01e8 }
+            int r3 = org.telegram.messenger.R.string.PhoneMobile     // Catch:{ all -> 0x01e8 }
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r3)     // Catch:{ all -> 0x01e8 }
+            r2.add(r0)     // Catch:{ all -> 0x01e8 }
+            goto L_0x01d1
         L_0x01a1:
             r0 = 3
-            if (r14 != r0) goto L_0x01b3
-            java.util.ArrayList<java.lang.String> r0 = r13.phoneTypes     // Catch:{ all -> 0x01eb }
-            java.lang.String r1 = "PhoneWork"
-            r3 = 2131627567(0x7f0e0e2f, float:1.8882402E38)
-            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r3)     // Catch:{ all -> 0x01eb }
-            r0.add(r1)     // Catch:{ all -> 0x01eb }
-            goto L_0x01d4
-        L_0x01b3:
+            if (r14 != r0) goto L_0x01b2
+            java.util.ArrayList<java.lang.String> r0 = r13.phoneTypes     // Catch:{ all -> 0x01e8 }
+            java.lang.String r2 = "PhoneWork"
+            int r3 = org.telegram.messenger.R.string.PhoneWork     // Catch:{ all -> 0x01e8 }
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)     // Catch:{ all -> 0x01e8 }
+            r0.add(r2)     // Catch:{ all -> 0x01e8 }
+            goto L_0x01d1
+        L_0x01b2:
             r0 = 12
-            if (r14 != r0) goto L_0x01c6
-            java.util.ArrayList<java.lang.String> r0 = r13.phoneTypes     // Catch:{ all -> 0x01eb }
-            java.lang.String r1 = "PhoneMain"
-            r3 = 2131627556(0x7f0e0e24, float:1.888238E38)
-            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r3)     // Catch:{ all -> 0x01eb }
-            r0.add(r1)     // Catch:{ all -> 0x01eb }
-            goto L_0x01d4
-        L_0x01c6:
-            java.util.ArrayList<java.lang.String> r0 = r13.phoneTypes     // Catch:{ all -> 0x01eb }
-            java.lang.String r1 = "PhoneOther"
-            r3 = 2131627566(0x7f0e0e2e, float:1.88824E38)
-            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r3)     // Catch:{ all -> 0x01eb }
-            r0.add(r1)     // Catch:{ all -> 0x01eb }
-        L_0x01d4:
-            r10.put(r12, r13)     // Catch:{ all -> 0x01eb }
+            if (r14 != r0) goto L_0x01c4
+            java.util.ArrayList<java.lang.String> r0 = r13.phoneTypes     // Catch:{ all -> 0x01e8 }
+            java.lang.String r2 = "PhoneMain"
+            int r3 = org.telegram.messenger.R.string.PhoneMain     // Catch:{ all -> 0x01e8 }
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)     // Catch:{ all -> 0x01e8 }
+            r0.add(r2)     // Catch:{ all -> 0x01e8 }
+            goto L_0x01d1
+        L_0x01c4:
+            java.util.ArrayList<java.lang.String> r0 = r13.phoneTypes     // Catch:{ all -> 0x01e8 }
+            java.lang.String r2 = "PhoneOther"
+            int r3 = org.telegram.messenger.R.string.PhoneOther     // Catch:{ all -> 0x01e8 }
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)     // Catch:{ all -> 0x01e8 }
+            r0.add(r2)     // Catch:{ all -> 0x01e8 }
+        L_0x01d1:
+            r10.put(r12, r13)     // Catch:{ all -> 0x01e8 }
             r1 = r20
             r0 = r17
             r3 = r18
             goto L_0x00df
-        L_0x01df:
+        L_0x01dc:
             r18 = r3
-            r2 = 1
-            goto L_0x01e7
-        L_0x01e3:
+            r1 = 1
+            goto L_0x01e4
+        L_0x01e0:
             r18 = r3
-            r2 = 1
+            r1 = 1
             r6 = 0
-        L_0x01e7:
-            r4.close()     // Catch:{ Exception -> 0x01f1 }
-            goto L_0x01f1
-        L_0x01eb:
+        L_0x01e4:
+            r4.close()     // Catch:{ Exception -> 0x01ee }
+            goto L_0x01ee
+        L_0x01e8:
             r0 = move-exception
             r10 = r20
-        L_0x01ee:
+        L_0x01eb:
             r2 = r6
             goto L_0x0328
-        L_0x01f1:
+        L_0x01ee:
             r3 = r6
-            r1 = 0
-            goto L_0x01ff
-        L_0x01f4:
+            r2 = 0
+            goto L_0x01fc
+        L_0x01f1:
             r0 = move-exception
             r2 = 0
             r10 = r20
             goto L_0x0328
-        L_0x01fa:
+        L_0x01f7:
             r18 = r3
-            r2 = 1
-            r1 = r4
+            r1 = 1
+            r2 = r4
             r3 = 0
-        L_0x01ff:
+        L_0x01fc:
             java.lang.String r0 = ","
             java.lang.String r0 = android.text.TextUtils.join(r0, r11)     // Catch:{ all -> 0x031e }
             android.net.Uri r5 = android.provider.ContactsContract.Data.CONTENT_URI     // Catch:{ all -> 0x031e }
@@ -1006,113 +1007,117 @@ public class ContactsController extends BaseController {
             r0 = 1
             android.database.Cursor r1 = r4.query(r5, r6, r7, r8, r9)     // Catch:{ all -> 0x031c }
             if (r1 == 0) goto L_0x030f
-        L_0x0240:
-            boolean r2 = r1.moveToNext()     // Catch:{ all -> 0x031c }
-            if (r2 == 0) goto L_0x030a
+        L_0x023d:
+            boolean r2 = r1.moveToNext()     // Catch:{ all -> 0x030c }
+            if (r2 == 0) goto L_0x0307
             r2 = 0
-            java.lang.String r4 = r1.getString(r2)     // Catch:{ all -> 0x031c }
-            java.lang.String r5 = r1.getString(r0)     // Catch:{ all -> 0x031c }
+            java.lang.String r4 = r1.getString(r2)     // Catch:{ all -> 0x030c }
+            java.lang.String r5 = r1.getString(r0)     // Catch:{ all -> 0x030c }
             r6 = 2
-            java.lang.String r7 = r1.getString(r6)     // Catch:{ all -> 0x031c }
+            java.lang.String r7 = r1.getString(r6)     // Catch:{ all -> 0x030c }
             r8 = 3
-            java.lang.String r9 = r1.getString(r8)     // Catch:{ all -> 0x031c }
-            if (r3 == 0) goto L_0x0262
-            java.lang.Object r4 = r3.get(r4)     // Catch:{ all -> 0x031c }
-            org.telegram.messenger.ContactsController$Contact r4 = (org.telegram.messenger.ContactsController.Contact) r4     // Catch:{ all -> 0x031c }
-            goto L_0x0263
-        L_0x0262:
+            java.lang.String r9 = r1.getString(r8)     // Catch:{ all -> 0x030c }
+            if (r3 == 0) goto L_0x025f
+            java.lang.Object r4 = r3.get(r4)     // Catch:{ all -> 0x030c }
+            org.telegram.messenger.ContactsController$Contact r4 = (org.telegram.messenger.ContactsController.Contact) r4     // Catch:{ all -> 0x030c }
+            goto L_0x0260
+        L_0x025f:
             r4 = 0
-        L_0x0263:
-            if (r4 == 0) goto L_0x0240
-            boolean r11 = r4.namesFilled     // Catch:{ all -> 0x031c }
-            if (r11 != 0) goto L_0x0240
-            boolean r11 = r4.isGoodProvider     // Catch:{ all -> 0x031c }
+        L_0x0260:
+            if (r4 == 0) goto L_0x023d
+            boolean r11 = r4.namesFilled     // Catch:{ all -> 0x030c }
+            if (r11 != 0) goto L_0x023d
+            boolean r11 = r4.isGoodProvider     // Catch:{ all -> 0x030c }
             java.lang.String r12 = " "
-            if (r11 == 0) goto L_0x02a5
-            if (r5 == 0) goto L_0x0274
-            r4.first_name = r5     // Catch:{ all -> 0x031c }
-            goto L_0x0276
-        L_0x0274:
-            r4.first_name = r15     // Catch:{ all -> 0x031c }
-        L_0x0276:
-            if (r7 == 0) goto L_0x027b
-            r4.last_name = r7     // Catch:{ all -> 0x031c }
-            goto L_0x027d
-        L_0x027b:
-            r4.last_name = r15     // Catch:{ all -> 0x031c }
-        L_0x027d:
-            boolean r5 = android.text.TextUtils.isEmpty(r9)     // Catch:{ all -> 0x031c }
-            if (r5 != 0) goto L_0x0306
-            java.lang.String r5 = r4.first_name     // Catch:{ all -> 0x031c }
-            boolean r5 = android.text.TextUtils.isEmpty(r5)     // Catch:{ all -> 0x031c }
-            if (r5 != 0) goto L_0x02a2
-            java.lang.StringBuilder r5 = new java.lang.StringBuilder     // Catch:{ all -> 0x031c }
-            r5.<init>()     // Catch:{ all -> 0x031c }
-            java.lang.String r7 = r4.first_name     // Catch:{ all -> 0x031c }
-            r5.append(r7)     // Catch:{ all -> 0x031c }
-            r5.append(r12)     // Catch:{ all -> 0x031c }
-            r5.append(r9)     // Catch:{ all -> 0x031c }
-            java.lang.String r5 = r5.toString()     // Catch:{ all -> 0x031c }
-            r4.first_name = r5     // Catch:{ all -> 0x031c }
-            goto L_0x0306
+            if (r11 == 0) goto L_0x02a2
+            if (r5 == 0) goto L_0x0271
+            r4.first_name = r5     // Catch:{ all -> 0x030c }
+            goto L_0x0273
+        L_0x0271:
+            r4.first_name = r15     // Catch:{ all -> 0x030c }
+        L_0x0273:
+            if (r7 == 0) goto L_0x0278
+            r4.last_name = r7     // Catch:{ all -> 0x030c }
+            goto L_0x027a
+        L_0x0278:
+            r4.last_name = r15     // Catch:{ all -> 0x030c }
+        L_0x027a:
+            boolean r5 = android.text.TextUtils.isEmpty(r9)     // Catch:{ all -> 0x030c }
+            if (r5 != 0) goto L_0x0303
+            java.lang.String r5 = r4.first_name     // Catch:{ all -> 0x030c }
+            boolean r5 = android.text.TextUtils.isEmpty(r5)     // Catch:{ all -> 0x030c }
+            if (r5 != 0) goto L_0x029f
+            java.lang.StringBuilder r5 = new java.lang.StringBuilder     // Catch:{ all -> 0x030c }
+            r5.<init>()     // Catch:{ all -> 0x030c }
+            java.lang.String r7 = r4.first_name     // Catch:{ all -> 0x030c }
+            r5.append(r7)     // Catch:{ all -> 0x030c }
+            r5.append(r12)     // Catch:{ all -> 0x030c }
+            r5.append(r9)     // Catch:{ all -> 0x030c }
+            java.lang.String r5 = r5.toString()     // Catch:{ all -> 0x030c }
+            r4.first_name = r5     // Catch:{ all -> 0x030c }
+            goto L_0x0303
+        L_0x029f:
+            r4.first_name = r9     // Catch:{ all -> 0x030c }
+            goto L_0x0303
         L_0x02a2:
-            r4.first_name = r9     // Catch:{ all -> 0x031c }
-            goto L_0x0306
-        L_0x02a5:
-            boolean r11 = r10.isNotValidNameString(r5)     // Catch:{ all -> 0x031c }
-            if (r11 != 0) goto L_0x02bb
-            java.lang.String r11 = r4.first_name     // Catch:{ all -> 0x031c }
-            boolean r11 = r11.contains(r5)     // Catch:{ all -> 0x031c }
-            if (r11 != 0) goto L_0x02d1
-            java.lang.String r11 = r4.first_name     // Catch:{ all -> 0x031c }
-            boolean r11 = r5.contains(r11)     // Catch:{ all -> 0x031c }
-            if (r11 != 0) goto L_0x02d1
-        L_0x02bb:
-            boolean r11 = r10.isNotValidNameString(r7)     // Catch:{ all -> 0x031c }
-            if (r11 != 0) goto L_0x0306
-            java.lang.String r11 = r4.last_name     // Catch:{ all -> 0x031c }
-            boolean r11 = r11.contains(r7)     // Catch:{ all -> 0x031c }
-            if (r11 != 0) goto L_0x02d1
-            java.lang.String r11 = r4.last_name     // Catch:{ all -> 0x031c }
-            boolean r11 = r5.contains(r11)     // Catch:{ all -> 0x031c }
-            if (r11 == 0) goto L_0x0306
-        L_0x02d1:
-            if (r5 == 0) goto L_0x02d6
-            r4.first_name = r5     // Catch:{ all -> 0x031c }
-            goto L_0x02d8
-        L_0x02d6:
-            r4.first_name = r15     // Catch:{ all -> 0x031c }
-        L_0x02d8:
-            boolean r5 = android.text.TextUtils.isEmpty(r9)     // Catch:{ all -> 0x031c }
-            if (r5 != 0) goto L_0x02ff
-            java.lang.String r5 = r4.first_name     // Catch:{ all -> 0x031c }
-            boolean r5 = android.text.TextUtils.isEmpty(r5)     // Catch:{ all -> 0x031c }
-            if (r5 != 0) goto L_0x02fd
-            java.lang.StringBuilder r5 = new java.lang.StringBuilder     // Catch:{ all -> 0x031c }
-            r5.<init>()     // Catch:{ all -> 0x031c }
-            java.lang.String r11 = r4.first_name     // Catch:{ all -> 0x031c }
-            r5.append(r11)     // Catch:{ all -> 0x031c }
-            r5.append(r12)     // Catch:{ all -> 0x031c }
-            r5.append(r9)     // Catch:{ all -> 0x031c }
-            java.lang.String r5 = r5.toString()     // Catch:{ all -> 0x031c }
-            r4.first_name = r5     // Catch:{ all -> 0x031c }
-            goto L_0x02ff
-        L_0x02fd:
-            r4.first_name = r9     // Catch:{ all -> 0x031c }
-        L_0x02ff:
-            if (r7 == 0) goto L_0x0304
-            r4.last_name = r7     // Catch:{ all -> 0x031c }
-            goto L_0x0306
-        L_0x0304:
-            r4.last_name = r15     // Catch:{ all -> 0x031c }
-        L_0x0306:
-            r4.namesFilled = r0     // Catch:{ all -> 0x031c }
-            goto L_0x0240
+            boolean r11 = r10.isNotValidNameString(r5)     // Catch:{ all -> 0x030c }
+            if (r11 != 0) goto L_0x02b8
+            java.lang.String r11 = r4.first_name     // Catch:{ all -> 0x030c }
+            boolean r11 = r11.contains(r5)     // Catch:{ all -> 0x030c }
+            if (r11 != 0) goto L_0x02ce
+            java.lang.String r11 = r4.first_name     // Catch:{ all -> 0x030c }
+            boolean r11 = r5.contains(r11)     // Catch:{ all -> 0x030c }
+            if (r11 != 0) goto L_0x02ce
+        L_0x02b8:
+            boolean r11 = r10.isNotValidNameString(r7)     // Catch:{ all -> 0x030c }
+            if (r11 != 0) goto L_0x0303
+            java.lang.String r11 = r4.last_name     // Catch:{ all -> 0x030c }
+            boolean r11 = r11.contains(r7)     // Catch:{ all -> 0x030c }
+            if (r11 != 0) goto L_0x02ce
+            java.lang.String r11 = r4.last_name     // Catch:{ all -> 0x030c }
+            boolean r11 = r5.contains(r11)     // Catch:{ all -> 0x030c }
+            if (r11 == 0) goto L_0x0303
+        L_0x02ce:
+            if (r5 == 0) goto L_0x02d3
+            r4.first_name = r5     // Catch:{ all -> 0x030c }
+            goto L_0x02d5
+        L_0x02d3:
+            r4.first_name = r15     // Catch:{ all -> 0x030c }
+        L_0x02d5:
+            boolean r5 = android.text.TextUtils.isEmpty(r9)     // Catch:{ all -> 0x030c }
+            if (r5 != 0) goto L_0x02fc
+            java.lang.String r5 = r4.first_name     // Catch:{ all -> 0x030c }
+            boolean r5 = android.text.TextUtils.isEmpty(r5)     // Catch:{ all -> 0x030c }
+            if (r5 != 0) goto L_0x02fa
+            java.lang.StringBuilder r5 = new java.lang.StringBuilder     // Catch:{ all -> 0x030c }
+            r5.<init>()     // Catch:{ all -> 0x030c }
+            java.lang.String r11 = r4.first_name     // Catch:{ all -> 0x030c }
+            r5.append(r11)     // Catch:{ all -> 0x030c }
+            r5.append(r12)     // Catch:{ all -> 0x030c }
+            r5.append(r9)     // Catch:{ all -> 0x030c }
+            java.lang.String r5 = r5.toString()     // Catch:{ all -> 0x030c }
+            r4.first_name = r5     // Catch:{ all -> 0x030c }
+            goto L_0x02fc
+        L_0x02fa:
+            r4.first_name = r9     // Catch:{ all -> 0x030c }
+        L_0x02fc:
+            if (r7 == 0) goto L_0x0301
+            r4.last_name = r7     // Catch:{ all -> 0x030c }
+            goto L_0x0303
+        L_0x0301:
+            r4.last_name = r15     // Catch:{ all -> 0x030c }
+        L_0x0303:
+            r4.namesFilled = r0     // Catch:{ all -> 0x030c }
+            goto L_0x023d
+        L_0x0307:
+            r1.close()     // Catch:{ Exception -> 0x030a }
         L_0x030a:
-            r1.close()     // Catch:{ Exception -> 0x030d }
-        L_0x030d:
             r2 = 0
             goto L_0x0310
+        L_0x030c:
+            r0 = move-exception
+            r4 = r1
+            goto L_0x0322
         L_0x030f:
             r2 = r1
         L_0x0310:
@@ -1131,7 +1136,8 @@ public class ContactsController extends BaseController {
             r0 = move-exception
             r10 = r20
         L_0x0321:
-            r4 = r1
+            r4 = r2
+        L_0x0322:
             r2 = r3
             goto L_0x0328
         L_0x0324:
@@ -3115,7 +3121,7 @@ public class ContactsController extends BaseController {
         newInsert3.withValue("mimetype", "vnd.android.cursor.item/vnd.org.telegram.messenger.android.profile");
         newInsert3.withValue("data1", Long.valueOf(tLRPC$User.id));
         newInsert3.withValue("data2", "Telegram Profile");
-        newInsert3.withValue("data3", LocaleController.formatString("ContactShortcutMessage", NUM, str));
+        newInsert3.withValue("data3", LocaleController.formatString("ContactShortcutMessage", R.string.ContactShortcutMessage, str));
         newInsert3.withValue("data4", Long.valueOf(tLRPC$User.id));
         arrayList.add(newInsert3.build());
         ContentProviderOperation.Builder newInsert4 = ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI);
@@ -3123,7 +3129,7 @@ public class ContactsController extends BaseController {
         newInsert4.withValue("mimetype", "vnd.android.cursor.item/vnd.org.telegram.messenger.android.call");
         newInsert4.withValue("data1", Long.valueOf(tLRPC$User.id));
         newInsert4.withValue("data2", "Telegram Voice Call");
-        newInsert4.withValue("data3", LocaleController.formatString("ContactShortcutVoiceCall", NUM, str));
+        newInsert4.withValue("data3", LocaleController.formatString("ContactShortcutVoiceCall", R.string.ContactShortcutVoiceCall, str));
         newInsert4.withValue("data4", Long.valueOf(tLRPC$User.id));
         arrayList.add(newInsert4.build());
         ContentProviderOperation.Builder newInsert5 = ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI);
@@ -3131,7 +3137,7 @@ public class ContactsController extends BaseController {
         newInsert5.withValue("mimetype", "vnd.android.cursor.item/vnd.org.telegram.messenger.android.call.video");
         newInsert5.withValue("data1", Long.valueOf(tLRPC$User.id));
         newInsert5.withValue("data2", "Telegram Video Call");
-        newInsert5.withValue("data3", LocaleController.formatString("ContactShortcutVideoCall", NUM, str));
+        newInsert5.withValue("data3", LocaleController.formatString("ContactShortcutVideoCall", R.string.ContactShortcutVideoCall, str));
         newInsert5.withValue("data4", Long.valueOf(tLRPC$User.id));
         arrayList.add(newInsert5.build());
         try {
@@ -3313,7 +3319,7 @@ public class ContactsController extends BaseController {
         getNotificationCenter().postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(MessagesController.UPDATE_MASK_NAME));
         getNotificationCenter().postNotificationName(NotificationCenter.contactsDidLoad, new Object[0]);
         if (z) {
-            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, 1, LocaleController.formatString("DeletedFromYourContacts", NUM, str));
+            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, 1, LocaleController.formatString("DeletedFromYourContacts", R.string.DeletedFromYourContacts, str));
         }
     }
 

@@ -26,6 +26,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Chat;
@@ -213,7 +214,7 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
             }
         };
         this.emptyView = r13;
-        r13.title.setText(LocaleController.getString("NoResult", NUM));
+        r13.title.setText(LocaleController.getString("NoResult", R.string.NoResult));
         this.emptyView.subtitle.setVisibility(8);
         this.emptyView.setVisibility(8);
         this.emptyView.addView(flickerLoadingView, 0);
@@ -366,9 +367,9 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
                     this.selectedMessagesCountTextView.setTextColor(Theme.getColor("actionBarActionModeDefaultIcon"));
                     createActionMode.addView(this.selectedMessagesCountTextView, LayoutHelper.createLinear(0, -1, 1.0f, 72, 0, 0, 0));
                     this.selectedMessagesCountTextView.setOnTouchListener(SearchViewPager$$ExternalSyntheticLambda2.INSTANCE);
-                    this.gotoItem = createActionMode.addItemWithWidth(200, NUM, AndroidUtilities.dp(54.0f), (CharSequence) LocaleController.getString("AccDescrGoToMessage", NUM));
-                    this.forwardItem = createActionMode.addItemWithWidth(201, NUM, AndroidUtilities.dp(54.0f), (CharSequence) LocaleController.getString("Forward", NUM));
-                    this.deleteItem = createActionMode.addItemWithWidth(202, NUM, AndroidUtilities.dp(54.0f), (CharSequence) LocaleController.getString("Delete", NUM));
+                    this.gotoItem = createActionMode.addItemWithWidth(200, R.drawable.msg_message, AndroidUtilities.dp(54.0f), (CharSequence) LocaleController.getString("AccDescrGoToMessage", R.string.AccDescrGoToMessage));
+                    this.forwardItem = createActionMode.addItemWithWidth(201, R.drawable.msg_forward, AndroidUtilities.dp(54.0f), (CharSequence) LocaleController.getString("Forward", R.string.Forward));
+                    this.deleteItem = createActionMode.addItemWithWidth(202, R.drawable.msg_delete, AndroidUtilities.dp(54.0f), (CharSequence) LocaleController.getString("Delete", R.string.Delete));
                 }
                 if (this.parent.getActionBar().getBackButton().getDrawable() instanceof MenuDrawable) {
                     this.parent.getActionBar().setBackButtonDrawable(new BackDrawable(false));
@@ -416,10 +417,10 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
                 AlertDialog.Builder builder = new AlertDialog.Builder((Context) this.parent.getParentActivity());
                 builder.setTitle(LocaleController.formatPluralString("RemoveDocumentsTitle", this.selectedFiles.size(), new Object[0]));
                 SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder();
-                spannableStringBuilder.append(AndroidUtilities.replaceTags(LocaleController.formatPluralString("RemoveDocumentsMessage", this.selectedFiles.size(), new Object[0]))).append("\n\n").append(LocaleController.getString("RemoveDocumentsAlertMessage", NUM));
+                spannableStringBuilder.append(AndroidUtilities.replaceTags(LocaleController.formatPluralString("RemoveDocumentsMessage", this.selectedFiles.size(), new Object[0]))).append("\n\n").append(LocaleController.getString("RemoveDocumentsAlertMessage", R.string.RemoveDocumentsAlertMessage));
                 builder.setMessage(spannableStringBuilder);
-                builder.setNegativeButton(LocaleController.getString("Cancel", NUM), SearchViewPager$$ExternalSyntheticLambda1.INSTANCE);
-                builder.setPositiveButton(LocaleController.getString("Delete", NUM), new SearchViewPager$$ExternalSyntheticLambda0(this, arrayList));
+                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), SearchViewPager$$ExternalSyntheticLambda1.INSTANCE);
+                builder.setPositiveButton(LocaleController.getString("Delete", R.string.Delete), new SearchViewPager$$ExternalSyntheticLambda0(this, arrayList));
                 TextView textView = (TextView) builder.show().getButton(-1);
                 if (textView != null) {
                     textView.setTextColor(Theme.getColor("dialogTextRed2"));
@@ -914,10 +915,10 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
 
         public String getItemTitle(int i) {
             if (this.items.get(i).type == 0) {
-                return LocaleController.getString("SearchAllChatsShort", NUM);
+                return LocaleController.getString("SearchAllChatsShort", R.string.SearchAllChatsShort);
             }
             if (this.items.get(i).type == 1) {
-                return LocaleController.getString("DownloadsTabs", NUM);
+                return LocaleController.getString("DownloadsTabs", R.string.DownloadsTabs);
             }
             return FiltersView.filters[this.items.get(i).filterIndex].title;
         }

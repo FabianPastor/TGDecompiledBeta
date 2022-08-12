@@ -29,6 +29,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC$ChatFull;
@@ -204,17 +205,17 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
         imageView2.setImageDrawable(replaceableIconDrawable);
         this.emojiIconDrawable.setColorFilter(new PorterDuffColorFilter(getThemedColor("chat_messagePanelIcons"), PorterDuff.Mode.MULTIPLY));
         if (i == 0) {
-            this.emojiIconDrawable.setIcon(NUM, false);
+            this.emojiIconDrawable.setIcon(R.drawable.smiles_tab_smiles, false);
             addView(this.emojiButton, LayoutHelper.createFrame(48, 48.0f, (LocaleController.isRTL ? 3 : i2) | 16, 0.0f, 0.0f, 0.0f, 7.0f));
         } else {
-            this.emojiIconDrawable.setIcon(NUM, false);
+            this.emojiIconDrawable.setIcon(R.drawable.input_smile, false);
             addView(this.emojiButton, LayoutHelper.createFrame(48, 48.0f, 83, 0.0f, 0.0f, 0.0f, 0.0f));
         }
         if (Build.VERSION.SDK_INT >= 21) {
             this.emojiButton.setBackground(Theme.createSelectorDrawable(getThemedColor("listSelectorSDK21")));
         }
         this.emojiButton.setOnClickListener(new EditTextEmoji$$ExternalSyntheticLambda2(this));
-        this.emojiButton.setContentDescription(LocaleController.getString("Emoji", NUM));
+        this.emojiButton.setContentDescription(LocaleController.getString("Emoji", R.string.Emoji));
     }
 
     /* access modifiers changed from: private */
@@ -466,7 +467,7 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
             if (sizeNotifierFrameLayout != null) {
                 this.emojiPadding = i2;
                 sizeNotifierFrameLayout.requestLayout();
-                this.emojiIconDrawable.setIcon(NUM, true);
+                this.emojiIconDrawable.setIcon(R.drawable.input_keyboard, true);
                 onWindowSizeChanged();
             }
             if (!this.keyboardVisible && !z && SharedConfig.smoothKeyboard) {
@@ -487,9 +488,9 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
         }
         if (this.emojiButton != null) {
             if (this.currentStyle == 0) {
-                this.emojiIconDrawable.setIcon(NUM, true);
+                this.emojiIconDrawable.setIcon(R.drawable.smiles_tab_smiles, true);
             } else {
-                this.emojiIconDrawable.setIcon(NUM, true);
+                this.emojiIconDrawable.setIcon(R.drawable.input_smile, true);
             }
         }
         EmojiView emojiView4 = this.emojiView;
@@ -714,10 +715,10 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
 
                 public void onClearEmojiRecent() {
                     AlertDialog.Builder builder = new AlertDialog.Builder(EditTextEmoji.this.getContext(), EditTextEmoji.this.resourcesProvider);
-                    builder.setTitle(LocaleController.getString("ClearRecentEmojiTitle", NUM));
-                    builder.setMessage(LocaleController.getString("ClearRecentEmojiText", NUM));
-                    builder.setPositiveButton(LocaleController.getString("ClearButton", NUM).toUpperCase(), new EditTextEmoji$5$$ExternalSyntheticLambda0(this));
-                    builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
+                    builder.setTitle(LocaleController.getString("ClearRecentEmojiTitle", R.string.ClearRecentEmojiTitle));
+                    builder.setMessage(LocaleController.getString("ClearRecentEmojiText", R.string.ClearRecentEmojiText));
+                    builder.setPositiveButton(LocaleController.getString("ClearButton", R.string.ClearButton).toUpperCase(), new EditTextEmoji$5$$ExternalSyntheticLambda0(this));
+                    builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), (DialogInterface.OnClickListener) null);
                     if (EditTextEmoji.this.parentFragment != null) {
                         EditTextEmoji.this.parentFragment.showDialog(builder.create());
                     } else {

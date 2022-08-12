@@ -31,6 +31,7 @@ import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
@@ -128,7 +129,7 @@ public class ActionBarPopupWindow extends PopupWindow {
         }
 
         public ActionBarPopupWindowLayout(Context context, Theme.ResourcesProvider resourcesProvider2) {
-            this(context, NUM, resourcesProvider2);
+            this(context, R.drawable.popup_fixed_alert2, resourcesProvider2);
         }
 
         public ActionBarPopupWindowLayout(Context context, int i, Theme.ResourcesProvider resourcesProvider2) {
@@ -194,9 +195,9 @@ public class ActionBarPopupWindow extends PopupWindow {
                         for (int i5 = 0; i5 < childCount; i5++) {
                             View childAt = getChildAt(i5);
                             if (childAt.getVisibility() != 8) {
-                                Object tag = childAt.getTag(NUM);
-                                Object tag2 = childAt.getTag(NUM);
-                                Object tag3 = childAt.getTag(NUM);
+                                Object tag = childAt.getTag(R.id.width_tag);
+                                Object tag2 = childAt.getTag(R.id.object_tag);
+                                Object tag3 = childAt.getTag(R.id.fit_width_tag);
                                 if (tag != null) {
                                     childAt.getLayoutParams().width = -2;
                                 }
@@ -765,7 +766,7 @@ public class ActionBarPopupWindow extends PopupWindow {
             for (int i2 = 0; i2 < childCount; i2++) {
                 View childAt2 = this.linearLayout.getChildAt(i2);
                 if (childAt2.getVisibility() == 0) {
-                    Object tag = childAt2.getTag(NUM);
+                    Object tag = childAt2.getTag(R.id.object_tag);
                     if (childAt2 instanceof ActionBarMenuSubItem) {
                         ((ActionBarMenuSubItem) childAt2).updateSelectorBackground(childAt2 == view || z, childAt2 == view2);
                     }

@@ -13,6 +13,7 @@ import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC$TL_messages_stickerSet;
 import org.telegram.ui.ActionBar.Theme;
@@ -43,7 +44,7 @@ public class ContactsEmptyView extends LinearLayout implements NotificationCente
         textView.setTextSize(1, 20.0f);
         this.titleTextView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.titleTextView.setGravity(1);
-        this.titleTextView.setText(LocaleController.getString("NoContactsYet", NUM));
+        this.titleTextView.setText(LocaleController.getString("NoContactsYet", R.string.NoContactsYet));
         this.titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.titleTextView.setMaxWidth(AndroidUtilities.dp(260.0f));
         addView(this.titleTextView, LayoutHelper.createLinear(-2, -2, 49, 0, 18, 0, 14));
@@ -59,7 +60,7 @@ public class ContactsEmptyView extends LinearLayout implements NotificationCente
                 linearLayout.addView(linearLayout2, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 0, 8, 0, 0));
                 ImageView imageView = new ImageView(context2);
                 imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayText"), PorterDuff.Mode.MULTIPLY));
-                imageView.setImageResource(NUM);
+                imageView.setImageResource(R.drawable.list_circle);
                 this.imageViews.add(imageView);
                 TextView textView2 = new TextView(context2);
                 textView2.setTextSize(1, 15.0f);
@@ -68,11 +69,11 @@ public class ContactsEmptyView extends LinearLayout implements NotificationCente
                 this.textViews.add(textView2);
                 textView2.setGravity((LocaleController.isRTL ? 5 : i2) | 16);
                 if (i == 0) {
-                    textView2.setText(LocaleController.getString("NoContactsYetLine1", NUM));
+                    textView2.setText(LocaleController.getString("NoContactsYetLine1", R.string.NoContactsYetLine1));
                 } else if (i == 1) {
-                    textView2.setText(LocaleController.getString("NoContactsYetLine2", NUM));
+                    textView2.setText(LocaleController.getString("NoContactsYetLine2", R.string.NoContactsYetLine2));
                 } else if (i == 2) {
-                    textView2.setText(LocaleController.getString("NoContactsYetLine3", NUM));
+                    textView2.setText(LocaleController.getString("NoContactsYetLine3", R.string.NoContactsYetLine3));
                 }
                 if (LocaleController.isRTL) {
                     linearLayout2.addView(textView2, LayoutHelper.createLinear(-2, -2));

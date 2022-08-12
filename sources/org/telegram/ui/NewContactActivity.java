@@ -85,7 +85,7 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
     public void onNothingSelected(AdapterView<?> adapterView) {
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:58:0x056d  */
+    /* JADX WARNING: Removed duplicated region for block: B:58:0x0567  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public android.view.View createView(android.content.Context r31) {
         /*
@@ -93,15 +93,15 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             r1 = r30
             r0 = r31
             org.telegram.ui.ActionBar.ActionBar r2 = r1.actionBar
-            r3 = 2131165449(0x7var_, float:1.7945115E38)
+            int r3 = org.telegram.messenger.R.drawable.ic_ab_back
             r2.setBackButtonImage(r3)
             org.telegram.ui.ActionBar.ActionBar r2 = r1.actionBar
             r3 = 1
             r2.setAllowOverlayTitle(r3)
             org.telegram.ui.ActionBar.ActionBar r2 = r1.actionBar
-            java.lang.String r4 = "AddContactTitle"
-            r5 = 2131624269(0x7f0e014d, float:1.8875713E38)
-            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r5)
+            int r4 = org.telegram.messenger.R.string.AddContactTitle
+            java.lang.String r5 = "AddContactTitle"
+            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r2.setTitle(r4)
             org.telegram.ui.ActionBar.ActionBar r2 = r1.actionBar
             org.telegram.ui.NewContactActivity$1 r4 = new org.telegram.ui.NewContactActivity$1
@@ -115,14 +115,14 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             r2.setInfo(r4, r6, r6)
             org.telegram.ui.ActionBar.ActionBar r2 = r1.actionBar
             org.telegram.ui.ActionBar.ActionBarMenu r2 = r2.createMenu()
-            r4 = 1113587712(0x42600000, float:56.0)
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            r5 = 2131165450(0x7var_a, float:1.7945117E38)
-            org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r2.addItemWithWidth(r3, r5, r4)
+            int r4 = org.telegram.messenger.R.drawable.ic_ab_done
+            r5 = 1113587712(0x42600000, float:56.0)
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
+            org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r2.addItemWithWidth(r3, r4, r5)
             r1.editDoneItem = r2
-            java.lang.String r4 = "Done"
-            r5 = 2131625547(0x7f0e064b, float:1.8878305E38)
-            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r5)
+            int r4 = org.telegram.messenger.R.string.Done
+            java.lang.String r5 = "Done"
+            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r2.setContentDescription(r4)
             org.telegram.ui.Components.ContextProgressView r2 = new org.telegram.ui.Components.ContextProgressView
             r2.<init>(r0, r3)
@@ -223,9 +223,9 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             r14 = 5
             r4.setImeOptions(r14)
             org.telegram.ui.Components.EditTextBoldCursor r4 = r1.firstNameField
-            java.lang.String r8 = "FirstName"
-            r14 = 2131625960(0x7f0e07e8, float:1.8879143E38)
-            java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r14)
+            int r8 = org.telegram.messenger.R.string.FirstName
+            java.lang.String r14 = "FirstName"
+            java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r14, r8)
             r4.setHint(r8)
             org.telegram.ui.Components.EditTextBoldCursor r4 = r1.firstNameField
             int r8 = org.telegram.ui.ActionBar.Theme.getColor(r11)
@@ -238,15 +238,15 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             r14 = 1069547520(0x3fCLASSNAME, float:1.5)
             r4.setCursorWidth(r14)
             java.lang.String r4 = r1.initialFirstName
-            if (r4 == 0) goto L_0x0176
+            if (r4 == 0) goto L_0x0171
             org.telegram.ui.Components.EditTextBoldCursor r14 = r1.firstNameField
             r14.setText(r4)
             r1.initialFirstName = r12
             r4 = 1
-            goto L_0x0177
-        L_0x0176:
+            goto L_0x0172
+        L_0x0171:
             r4 = 0
-        L_0x0177:
+        L_0x0172:
             org.telegram.ui.Components.EditTextBoldCursor r14 = r1.firstNameField
             r16 = -1
             r17 = 1107820544(0x42080000, float:34.0)
@@ -296,7 +296,7 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             r8 = 5
             r7.setImeOptions(r8)
             org.telegram.ui.Components.EditTextBoldCursor r7 = r1.lastNameField
-            r8 = 2131626428(0x7f0e09bc, float:1.8880092E38)
+            int r8 = org.telegram.messenger.R.string.LastName
             java.lang.String r9 = "LastName"
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r9, r8)
             r7.setHint(r8)
@@ -311,13 +311,13 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             r8 = 1069547520(0x3fCLASSNAME, float:1.5)
             r7.setCursorWidth(r8)
             java.lang.String r7 = r1.initialLastName
-            if (r7 == 0) goto L_0x0229
+            if (r7 == 0) goto L_0x0223
             org.telegram.ui.Components.EditTextBoldCursor r4 = r1.lastNameField
             r4.setText(r7)
             r4 = 0
             r1.initialLastName = r4
             r4 = 1
-        L_0x0229:
+        L_0x0223:
             org.telegram.ui.Components.EditTextBoldCursor r7 = r1.lastNameField
             r23 = -1
             r24 = 1107820544(0x42080000, float:34.0)
@@ -336,9 +336,9 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             org.telegram.ui.NewContactActivity$3 r7 = new org.telegram.ui.NewContactActivity$3
             r7.<init>()
             r2.addTextChangedListener(r7)
-            if (r4 == 0) goto L_0x0259
+            if (r4 == 0) goto L_0x0253
             r30.invalidateAvatar()
-        L_0x0259:
+        L_0x0253:
             android.widget.TextView r2 = new android.widget.TextView
             r2.<init>(r0)
             r1.countryButton = r2
@@ -543,149 +543,149 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             r2.setOnKeyListener(r4)
             java.util.HashMap r2 = new java.util.HashMap
             r2.<init>()
-            java.io.BufferedReader r4 = new java.io.BufferedReader     // Catch:{ Exception -> 0x04b9 }
-            java.io.InputStreamReader r5 = new java.io.InputStreamReader     // Catch:{ Exception -> 0x04b9 }
-            android.content.res.Resources r0 = r31.getResources()     // Catch:{ Exception -> 0x04b9 }
-            android.content.res.AssetManager r0 = r0.getAssets()     // Catch:{ Exception -> 0x04b9 }
+            java.io.BufferedReader r4 = new java.io.BufferedReader     // Catch:{ Exception -> 0x04b3 }
+            java.io.InputStreamReader r5 = new java.io.InputStreamReader     // Catch:{ Exception -> 0x04b3 }
+            android.content.res.Resources r0 = r31.getResources()     // Catch:{ Exception -> 0x04b3 }
+            android.content.res.AssetManager r0 = r0.getAssets()     // Catch:{ Exception -> 0x04b3 }
             java.lang.String r8 = "countries.txt"
-            java.io.InputStream r0 = r0.open(r8)     // Catch:{ Exception -> 0x04b9 }
-            r5.<init>(r0)     // Catch:{ Exception -> 0x04b9 }
-            r4.<init>(r5)     // Catch:{ Exception -> 0x04b9 }
-        L_0x047a:
-            java.lang.String r0 = r4.readLine()     // Catch:{ Exception -> 0x04b9 }
-            if (r0 == 0) goto L_0x04b5
+            java.io.InputStream r0 = r0.open(r8)     // Catch:{ Exception -> 0x04b3 }
+            r5.<init>(r0)     // Catch:{ Exception -> 0x04b3 }
+            r4.<init>(r5)     // Catch:{ Exception -> 0x04b3 }
+        L_0x0474:
+            java.lang.String r0 = r4.readLine()     // Catch:{ Exception -> 0x04b3 }
+            if (r0 == 0) goto L_0x04af
             java.lang.String r5 = ";"
-            java.lang.String[] r0 = r0.split(r5)     // Catch:{ Exception -> 0x04b9 }
-            java.util.ArrayList<java.lang.String> r5 = r1.countriesArray     // Catch:{ Exception -> 0x04b9 }
-            r8 = r0[r7]     // Catch:{ Exception -> 0x04b9 }
+            java.lang.String[] r0 = r0.split(r5)     // Catch:{ Exception -> 0x04b3 }
+            java.util.ArrayList<java.lang.String> r5 = r1.countriesArray     // Catch:{ Exception -> 0x04b3 }
+            r8 = r0[r7]     // Catch:{ Exception -> 0x04b3 }
             r9 = 0
-            r5.add(r9, r8)     // Catch:{ Exception -> 0x04b9 }
-            java.util.HashMap<java.lang.String, java.lang.String> r5 = r1.countriesMap     // Catch:{ Exception -> 0x04b9 }
-            r8 = r0[r7]     // Catch:{ Exception -> 0x04b9 }
-            r10 = r0[r9]     // Catch:{ Exception -> 0x04b9 }
-            r5.put(r8, r10)     // Catch:{ Exception -> 0x04b9 }
-            java.util.HashMap<java.lang.String, java.lang.String> r5 = r1.codesMap     // Catch:{ Exception -> 0x04b9 }
-            r8 = r0[r9]     // Catch:{ Exception -> 0x04b9 }
-            r9 = r0[r7]     // Catch:{ Exception -> 0x04b9 }
-            r5.put(r8, r9)     // Catch:{ Exception -> 0x04b9 }
-            int r5 = r0.length     // Catch:{ Exception -> 0x04b9 }
-            if (r5 <= r6) goto L_0x04ad
-            java.util.HashMap<java.lang.String, java.lang.String> r5 = r1.phoneFormatMap     // Catch:{ Exception -> 0x04b9 }
+            r5.add(r9, r8)     // Catch:{ Exception -> 0x04b3 }
+            java.util.HashMap<java.lang.String, java.lang.String> r5 = r1.countriesMap     // Catch:{ Exception -> 0x04b3 }
+            r8 = r0[r7]     // Catch:{ Exception -> 0x04b3 }
+            r10 = r0[r9]     // Catch:{ Exception -> 0x04b3 }
+            r5.put(r8, r10)     // Catch:{ Exception -> 0x04b3 }
+            java.util.HashMap<java.lang.String, java.lang.String> r5 = r1.codesMap     // Catch:{ Exception -> 0x04b3 }
+            r8 = r0[r9]     // Catch:{ Exception -> 0x04b3 }
+            r9 = r0[r7]     // Catch:{ Exception -> 0x04b3 }
+            r5.put(r8, r9)     // Catch:{ Exception -> 0x04b3 }
+            int r5 = r0.length     // Catch:{ Exception -> 0x04b3 }
+            if (r5 <= r6) goto L_0x04a7
+            java.util.HashMap<java.lang.String, java.lang.String> r5 = r1.phoneFormatMap     // Catch:{ Exception -> 0x04b3 }
             r8 = 0
-            r9 = r0[r8]     // Catch:{ Exception -> 0x04b9 }
-            r8 = r0[r6]     // Catch:{ Exception -> 0x04b9 }
-            r5.put(r9, r8)     // Catch:{ Exception -> 0x04b9 }
-        L_0x04ad:
-            r5 = r0[r3]     // Catch:{ Exception -> 0x04b9 }
-            r0 = r0[r7]     // Catch:{ Exception -> 0x04b9 }
-            r2.put(r5, r0)     // Catch:{ Exception -> 0x04b9 }
-            goto L_0x047a
-        L_0x04b5:
-            r4.close()     // Catch:{ Exception -> 0x04b9 }
-            goto L_0x04bd
-        L_0x04b9:
+            r9 = r0[r8]     // Catch:{ Exception -> 0x04b3 }
+            r8 = r0[r6]     // Catch:{ Exception -> 0x04b3 }
+            r5.put(r9, r8)     // Catch:{ Exception -> 0x04b3 }
+        L_0x04a7:
+            r5 = r0[r3]     // Catch:{ Exception -> 0x04b3 }
+            r0 = r0[r7]     // Catch:{ Exception -> 0x04b3 }
+            r2.put(r5, r0)     // Catch:{ Exception -> 0x04b3 }
+            goto L_0x0474
+        L_0x04af:
+            r4.close()     // Catch:{ Exception -> 0x04b3 }
+            goto L_0x04b7
+        L_0x04b3:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x04bd:
+        L_0x04b7:
             java.util.ArrayList<java.lang.String> r0 = r1.countriesArray
             org.telegram.ui.CountrySelectActivity$CountryAdapter$$ExternalSyntheticLambda0 r4 = org.telegram.ui.CountrySelectActivity$CountryAdapter$$ExternalSyntheticLambda0.INSTANCE
             java.util.Collections.sort(r0, r4)
             java.lang.String r0 = r1.initialPhoneNumber
             boolean r0 = android.text.TextUtils.isEmpty(r0)
-            if (r0 != 0) goto L_0x052a
+            if (r0 != 0) goto L_0x0524
             org.telegram.messenger.UserConfig r0 = r30.getUserConfig()
             org.telegram.tgnet.TLRPC$User r0 = r0.getCurrentUser()
             java.lang.String r2 = r1.initialPhoneNumber
             java.lang.String r4 = "+"
             boolean r2 = r2.startsWith(r4)
-            if (r2 == 0) goto L_0x04eb
+            if (r2 == 0) goto L_0x04e5
             org.telegram.ui.Components.EditTextBoldCursor r0 = r1.codeField
             java.lang.String r2 = r1.initialPhoneNumber
             java.lang.String r2 = r2.substring(r3)
             r0.setText(r2)
-        L_0x04e9:
+        L_0x04e3:
             r2 = 0
-            goto L_0x0527
-        L_0x04eb:
+            goto L_0x0521
+        L_0x04e5:
             boolean r2 = r1.initialPhoneNumberWithCountryCode
-            if (r2 != 0) goto L_0x051f
-            if (r0 == 0) goto L_0x051f
+            if (r2 != 0) goto L_0x0519
+            if (r0 == 0) goto L_0x0519
             java.lang.String r2 = r0.phone
             boolean r2 = android.text.TextUtils.isEmpty(r2)
-            if (r2 == 0) goto L_0x04fa
-            goto L_0x051f
-        L_0x04fa:
+            if (r2 == 0) goto L_0x04f4
+            goto L_0x0519
+        L_0x04f4:
             java.lang.String r0 = r0.phone
             r4 = 4
-        L_0x04fd:
-            if (r4 < r3) goto L_0x0517
+        L_0x04f7:
+            if (r4 < r3) goto L_0x0511
             r2 = 0
             java.lang.String r5 = r0.substring(r2, r4)
             java.util.HashMap<java.lang.String, java.lang.String> r6 = r1.codesMap
             java.lang.Object r6 = r6.get(r5)
             java.lang.String r6 = (java.lang.String) r6
-            if (r6 == 0) goto L_0x0514
+            if (r6 == 0) goto L_0x050e
             org.telegram.ui.Components.EditTextBoldCursor r0 = r1.codeField
             r0.setText(r5)
-            goto L_0x0517
-        L_0x0514:
+            goto L_0x0511
+        L_0x050e:
             int r4 = r4 + -1
-            goto L_0x04fd
-        L_0x0517:
+            goto L_0x04f7
+        L_0x0511:
             org.telegram.ui.Components.HintEditText r0 = r1.phoneField
             java.lang.String r2 = r1.initialPhoneNumber
             r0.setText(r2)
-            goto L_0x04e9
-        L_0x051f:
+            goto L_0x04e3
+        L_0x0519:
             org.telegram.ui.Components.EditTextBoldCursor r0 = r1.codeField
             java.lang.String r2 = r1.initialPhoneNumber
             r0.setText(r2)
-            goto L_0x04e9
-        L_0x0527:
+            goto L_0x04e3
+        L_0x0521:
             r1.initialPhoneNumber = r2
-            goto L_0x0581
-        L_0x052a:
-            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0540 }
+            goto L_0x057a
+        L_0x0524:
+            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x053a }
             java.lang.String r3 = "phone"
-            java.lang.Object r0 = r0.getSystemService(r3)     // Catch:{ Exception -> 0x0540 }
-            android.telephony.TelephonyManager r0 = (android.telephony.TelephonyManager) r0     // Catch:{ Exception -> 0x0540 }
-            if (r0 == 0) goto L_0x0544
-            java.lang.String r0 = r0.getSimCountryIso()     // Catch:{ Exception -> 0x0540 }
-            java.lang.String r0 = r0.toUpperCase()     // Catch:{ Exception -> 0x0540 }
+            java.lang.Object r0 = r0.getSystemService(r3)     // Catch:{ Exception -> 0x053a }
+            android.telephony.TelephonyManager r0 = (android.telephony.TelephonyManager) r0     // Catch:{ Exception -> 0x053a }
+            if (r0 == 0) goto L_0x053e
+            java.lang.String r0 = r0.getSimCountryIso()     // Catch:{ Exception -> 0x053a }
+            java.lang.String r0 = r0.toUpperCase()     // Catch:{ Exception -> 0x053a }
             r4 = r0
-            goto L_0x0545
-        L_0x0540:
+            goto L_0x053f
+        L_0x053a:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x0544:
+        L_0x053e:
             r4 = 0
-        L_0x0545:
-            if (r4 == 0) goto L_0x0565
+        L_0x053f:
+            if (r4 == 0) goto L_0x055f
             java.lang.Object r0 = r2.get(r4)
             java.lang.String r0 = (java.lang.String) r0
-            if (r0 == 0) goto L_0x0565
+            if (r0 == 0) goto L_0x055f
             java.util.ArrayList<java.lang.String> r2 = r1.countriesArray
             int r2 = r2.indexOf(r0)
             r3 = -1
-            if (r2 == r3) goto L_0x0565
+            if (r2 == r3) goto L_0x055f
             org.telegram.ui.Components.EditTextBoldCursor r2 = r1.codeField
             java.util.HashMap<java.lang.String, java.lang.String> r3 = r1.countriesMap
             java.lang.Object r0 = r3.get(r0)
             java.lang.CharSequence r0 = (java.lang.CharSequence) r0
             r2.setText(r0)
-        L_0x0565:
+        L_0x055f:
             org.telegram.ui.Components.EditTextBoldCursor r0 = r1.codeField
             int r0 = r0.length()
-            if (r0 != 0) goto L_0x0581
+            if (r0 != 0) goto L_0x057a
             android.widget.TextView r0 = r1.countryButton
-            r2 = 2131625123(0x7f0e04a3, float:1.8877445E38)
+            int r2 = org.telegram.messenger.R.string.ChooseCountry
             java.lang.String r3 = "ChooseCountry"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.setText(r2)
             org.telegram.ui.Components.HintEditText r0 = r1.phoneField
             r2 = 0
             r0.setHintText(r2)
-        L_0x0581:
+        L_0x057a:
             android.view.View r0 = r1.fragmentView
             return r0
         */

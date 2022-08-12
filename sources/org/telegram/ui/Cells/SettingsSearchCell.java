@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
@@ -111,7 +112,7 @@ public class SettingsSearchCell extends FrameLayout {
             for (int i2 = 0; i2 < strArr.length; i2++) {
                 if (i2 != 0) {
                     spannableStringBuilder.append(" > ");
-                    Drawable mutate = getContext().getResources().getDrawable(NUM).mutate();
+                    Drawable mutate = getContext().getResources().getDrawable(R.drawable.settings_arrow).mutate();
                     mutate.setBounds(0, 0, mutate.getIntrinsicWidth(), mutate.getIntrinsicHeight());
                     mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayText2"), PorterDuff.Mode.MULTIPLY));
                     spannableStringBuilder.setSpan(new VerticalImageSpan(mutate), spannableStringBuilder.length() - 2, spannableStringBuilder.length() - 1, 33);
@@ -150,7 +151,7 @@ public class SettingsSearchCell extends FrameLayout {
             for (int i = 0; i < strArr.length; i++) {
                 if (i != 0) {
                     spannableStringBuilder.append(" > ");
-                    Drawable mutate = getContext().getResources().getDrawable(NUM).mutate();
+                    Drawable mutate = getContext().getResources().getDrawable(R.drawable.settings_arrow).mutate();
                     mutate.setBounds(0, 0, mutate.getIntrinsicWidth(), mutate.getIntrinsicHeight());
                     mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteBlackText"), PorterDuff.Mode.MULTIPLY));
                     spannableStringBuilder.setSpan(new VerticalImageSpan(mutate), spannableStringBuilder.length() - 2, spannableStringBuilder.length() - 1, 33);
@@ -167,7 +168,7 @@ public class SettingsSearchCell extends FrameLayout {
                 for (int i2 = 0; i2 < strArr.length; i2++) {
                     if (i2 != 0) {
                         spannableStringBuilder2.append(" > ");
-                        Drawable mutate2 = getContext().getResources().getDrawable(NUM).mutate();
+                        Drawable mutate2 = getContext().getResources().getDrawable(R.drawable.settings_arrow).mutate();
                         mutate2.setBounds(0, 0, mutate2.getIntrinsicWidth(), mutate2.getIntrinsicHeight());
                         mutate2.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayText2"), PorterDuff.Mode.MULTIPLY));
                         spannableStringBuilder2.setSpan(new VerticalImageSpan(mutate2), spannableStringBuilder2.length() - 2, spannableStringBuilder2.length() - 1, 33);

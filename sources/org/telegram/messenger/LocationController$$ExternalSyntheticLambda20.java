@@ -12,6 +12,6 @@ public final /* synthetic */ class LocationController$$ExternalSyntheticLambda20
     }
 
     public final void run() {
-        this.f$0.lambda$removeSharingLocation$21(this.f$1);
+        this.f$0.lambda$broadcastLastKnownLocation$6(this.f$1);
     }
 }

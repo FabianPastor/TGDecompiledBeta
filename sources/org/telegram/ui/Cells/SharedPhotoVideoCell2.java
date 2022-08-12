@@ -16,6 +16,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DownloadController;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.CheckBoxBase;
 import org.telegram.ui.Components.FlickerLoadingView;
@@ -379,13 +380,13 @@ public class SharedPhotoVideoCell2 extends View {
             r10 = r15
             r1.setImage(r2, r3, r4, r5, r6, r8, r9, r10)
         L_0x022e:
-            if (r12 == 0) goto L_0x0240
+            if (r12 == 0) goto L_0x023f
             org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
             android.content.Context r2 = r16.getContext()
-            r3 = 2131166048(0x7var_, float:1.794633E38)
+            int r3 = org.telegram.messenger.R.drawable.photo_placeholder_in
             android.graphics.drawable.Drawable r2 = androidx.core.content.ContextCompat.getDrawable(r2, r3)
             r1.setImageBitmap((android.graphics.drawable.Drawable) r2)
-        L_0x0240:
+        L_0x023f:
             r16.invalidate()
             return
         */
@@ -944,7 +945,7 @@ public class SharedPhotoVideoCell2 extends View {
             this.textPaint.setTextSize((float) AndroidUtilities.dp(12.0f));
             this.textPaint.setColor(-1);
             this.textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-            Drawable drawable = ContextCompat.getDrawable(context, NUM);
+            Drawable drawable = ContextCompat.getDrawable(context, R.drawable.play_mini_video);
             this.playDrawable = drawable;
             drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), this.playDrawable.getIntrinsicHeight());
             this.backgroundPaint.setColor(Theme.getColor("sharedMedia_photoPlaceholder", resourcesProvider));

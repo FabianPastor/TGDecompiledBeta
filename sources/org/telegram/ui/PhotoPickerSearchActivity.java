@@ -25,6 +25,7 @@ import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
@@ -104,7 +105,7 @@ public class PhotoPickerSearchActivity extends BaseFragment {
         boolean z = false;
         this.actionBar.setItemsColor(Theme.getColor("dialogTextBlack"), false);
         this.actionBar.setItemsBackgroundColor(Theme.getColor("dialogButtonSelector"), false);
-        this.actionBar.setBackButtonImage(NUM);
+        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         if (AndroidUtilities.isTablet()) {
             this.actionBar.setOccupyStatusBar(false);
         }
@@ -120,7 +121,7 @@ public class PhotoPickerSearchActivity extends BaseFragment {
             }
         });
         this.hasOwnBackground = true;
-        ActionBarMenuItem actionBarMenuItemSearchListener = this.actionBar.createMenu().addItem(0, NUM).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
+        ActionBarMenuItem actionBarMenuItemSearchListener = this.actionBar.createMenu().addItem(0, R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
             public void onSearchExpand() {
                 PhotoPickerSearchActivity.this.imagesSearch.getActionBar().openSearchField("", false);
                 PhotoPickerSearchActivity.this.gifsSearch.getActionBar().openSearchField("", false);
@@ -143,7 +144,7 @@ public class PhotoPickerSearchActivity extends BaseFragment {
             }
         });
         this.searchItem = actionBarMenuItemSearchListener;
-        actionBarMenuItemSearchListener.setSearchFieldHint(LocaleController.getString("SearchImagesTitle", NUM));
+        actionBarMenuItemSearchListener.setSearchFieldHint(LocaleController.getString("SearchImagesTitle", R.string.SearchImagesTitle));
         EditTextBoldCursor searchField = this.searchItem.getSearchField();
         searchField.setTextColor(Theme.getColor("dialogTextBlack"));
         searchField.setCursorColor(Theme.getColor("dialogTextBlack"));
@@ -167,9 +168,9 @@ public class PhotoPickerSearchActivity extends BaseFragment {
                     PhotoPickerSearchActivity.this.switchToCurrentSelectedMode(true);
                     boolean unused3 = PhotoPickerSearchActivity.this.animatingForward = z;
                     if (i == 0) {
-                        PhotoPickerSearchActivity.this.searchItem.setSearchFieldHint(LocaleController.getString("SearchImagesTitle", NUM));
+                        PhotoPickerSearchActivity.this.searchItem.setSearchFieldHint(LocaleController.getString("SearchImagesTitle", R.string.SearchImagesTitle));
                     } else {
-                        PhotoPickerSearchActivity.this.searchItem.setSearchFieldHint(LocaleController.getString("SearchGifsTitle", NUM));
+                        PhotoPickerSearchActivity.this.searchItem.setSearchFieldHint(LocaleController.getString("SearchGifsTitle", R.string.SearchGifsTitle));
                     }
                 }
             }
@@ -890,8 +891,8 @@ public class PhotoPickerSearchActivity extends BaseFragment {
     private void updateTabs() {
         ScrollSlidingTextTabStrip scrollSlidingTextTabStrip2 = this.scrollSlidingTextTabStrip;
         if (scrollSlidingTextTabStrip2 != null) {
-            scrollSlidingTextTabStrip2.addTextTab(0, LocaleController.getString("ImagesTab2", NUM));
-            this.scrollSlidingTextTabStrip.addTextTab(1, LocaleController.getString("GifsTab2", NUM));
+            scrollSlidingTextTabStrip2.addTextTab(0, LocaleController.getString("ImagesTab2", R.string.ImagesTab2));
+            this.scrollSlidingTextTabStrip.addTextTab(1, LocaleController.getString("GifsTab2", R.string.GifsTab2));
             this.scrollSlidingTextTabStrip.setVisibility(0);
             this.actionBar.setExtraHeight(AndroidUtilities.dp(44.0f));
             int currentTabId = this.scrollSlidingTextTabStrip.getCurrentTabId();

@@ -4,6 +4,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.os.SystemClock;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.R;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.voip.VoIPService;
 import org.telegram.tgnet.TLRPC$TL_groupCallParticipant;
@@ -16,12 +17,12 @@ public class GroupCallStatusIcon {
     RLottieImageView iconView;
     boolean isSpeaking;
     boolean lastRaisedHand;
-    RLottieDrawable micDrawable = new RLottieDrawable(NUM, "NUM", AndroidUtilities.dp(24.0f), AndroidUtilities.dp(24.0f), true, (int[]) null);
+    RLottieDrawable micDrawable;
     private boolean mutedByMe;
     TLRPC$TL_groupCallParticipant participant;
     private Runnable raiseHandCallback = new GroupCallStatusIcon$$ExternalSyntheticLambda0(this);
     private Runnable shakeHandCallback = new GroupCallStatusIcon$$ExternalSyntheticLambda3(this);
-    RLottieDrawable shakeHandDrawable = new RLottieDrawable(NUM, "NUM", AndroidUtilities.dp(15.0f), AndroidUtilities.dp(15.0f), true, (int[]) null);
+    RLottieDrawable shakeHandDrawable;
     private Runnable updateRunnable = new GroupCallStatusIcon$$ExternalSyntheticLambda1(this);
     boolean updateRunnableScheduled;
 
@@ -65,6 +66,13 @@ public class GroupCallStatusIcon {
             rLottieImageView.setAnimation(this.shakeHandDrawable);
             this.iconView.playAnimation();
         }
+    }
+
+    public GroupCallStatusIcon() {
+        int i = R.raw.voice_mini;
+        this.micDrawable = new RLottieDrawable(i, "" + i, AndroidUtilities.dp(24.0f), AndroidUtilities.dp(24.0f), true, (int[]) null);
+        int i2 = R.raw.hand_2;
+        this.shakeHandDrawable = new RLottieDrawable(i2, "" + i2, AndroidUtilities.dp(15.0f), AndroidUtilities.dp(15.0f), true, (int[]) null);
     }
 
     /* access modifiers changed from: private */

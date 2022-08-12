@@ -34,6 +34,7 @@ import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
@@ -136,6 +137,7 @@ public class ContentPreviewViewer {
             int i6;
             if (ContentPreviewViewer.this.parentActivity != null) {
                 boolean unused = ContentPreviewViewer.this.closeOnDismiss = true;
+                boolean z2 = false;
                 if (ContentPreviewViewer.this.currentContentType == 0) {
                     if (!MessageObject.isPremiumSticker(ContentPreviewViewer.this.currentDocument) || AccountInstance.getInstance(ContentPreviewViewer.this.currentAccount).getUserConfig().isPremium()) {
                         final boolean isStickerInFavorites = MediaDataController.getInstance(ContentPreviewViewer.this.currentAccount).isStickerInFavorites(ContentPreviewViewer.this.currentDocument);
@@ -146,46 +148,46 @@ public class ContentPreviewViewer {
                         ContentPreviewViewer.this.containerView.invalidate();
                         if (ContentPreviewViewer.this.delegate != null) {
                             if (ContentPreviewViewer.this.delegate.needSend() && !ContentPreviewViewer.this.delegate.isInScheduleMode()) {
-                                arrayList.add(LocaleController.getString("SendStickerPreview", NUM));
-                                arrayList3.add(NUM);
+                                arrayList.add(LocaleController.getString("SendStickerPreview", R.string.SendStickerPreview));
+                                arrayList3.add(Integer.valueOf(R.drawable.msg_send));
                                 arrayList2.add(0);
                             }
                             if (ContentPreviewViewer.this.delegate.needSend() && !ContentPreviewViewer.this.delegate.isInScheduleMode()) {
-                                arrayList.add(LocaleController.getString("SendWithoutSound", NUM));
-                                arrayList3.add(NUM);
+                                arrayList.add(LocaleController.getString("SendWithoutSound", R.string.SendWithoutSound));
+                                arrayList3.add(Integer.valueOf(R.drawable.input_notify_off));
                                 arrayList2.add(6);
                             }
                             if (ContentPreviewViewer.this.delegate.canSchedule()) {
-                                arrayList.add(LocaleController.getString("Schedule", NUM));
-                                arrayList3.add(NUM);
+                                arrayList.add(LocaleController.getString("Schedule", R.string.Schedule));
+                                arrayList3.add(Integer.valueOf(R.drawable.msg_autodelete));
                                 arrayList2.add(3);
                             }
                             if (ContentPreviewViewer.this.currentStickerSet != null && ContentPreviewViewer.this.delegate.needOpen()) {
-                                arrayList.add(LocaleController.formatString("ViewPackPreview", NUM, new Object[0]));
-                                arrayList3.add(NUM);
+                                arrayList.add(LocaleController.formatString("ViewPackPreview", R.string.ViewPackPreview, new Object[0]));
+                                arrayList3.add(Integer.valueOf(R.drawable.msg_media));
                                 arrayList2.add(1);
                             }
                             if (ContentPreviewViewer.this.delegate.needRemove()) {
-                                arrayList.add(LocaleController.getString("ImportStickersRemoveMenu", NUM));
-                                arrayList3.add(NUM);
+                                arrayList.add(LocaleController.getString("ImportStickersRemoveMenu", R.string.ImportStickersRemoveMenu));
+                                arrayList3.add(Integer.valueOf(R.drawable.msg_delete));
                                 arrayList2.add(5);
                             }
                         }
                         if (!MessageObject.isMaskDocument(ContentPreviewViewer.this.currentDocument) && (isStickerInFavorites || (MediaDataController.getInstance(ContentPreviewViewer.this.currentAccount).canAddStickerToFavorites() && MessageObject.isStickerHasSet(ContentPreviewViewer.this.currentDocument)))) {
                             if (isStickerInFavorites) {
-                                i6 = NUM;
+                                i6 = R.string.DeleteFromFavorites;
                                 str = "DeleteFromFavorites";
                             } else {
-                                i6 = NUM;
+                                i6 = R.string.AddToFavorites;
                                 str = "AddToFavorites";
                             }
                             arrayList.add(LocaleController.getString(str, i6));
-                            arrayList3.add(Integer.valueOf(isStickerInFavorites ? NUM : NUM));
+                            arrayList3.add(Integer.valueOf(isStickerInFavorites ? R.drawable.msg_unfave : R.drawable.msg_fave));
                             arrayList2.add(2);
                         }
                         if (ContentPreviewViewer.this.isRecentSticker) {
-                            arrayList.add(LocaleController.getString("DeleteFromRecent", NUM));
-                            arrayList3.add(NUM);
+                            arrayList.add(LocaleController.getString("DeleteFromRecent", R.string.DeleteFromRecent));
+                            arrayList3.add(Integer.valueOf(R.drawable.msg_delete));
                             arrayList2.add(4);
                         }
                         if (!arrayList.isEmpty()) {
@@ -193,7 +195,7 @@ public class ContentPreviewViewer {
                             for (int i7 = 0; i7 < arrayList3.size(); i7++) {
                                 iArr[i7] = ((Integer) arrayList3.get(i7)).intValue();
                             }
-                            AnonymousClass1 r3 = new View.OnClickListener() {
+                            AnonymousClass1 r5 = new View.OnClickListener() {
                                 public void onClick(View view) {
                                     if (ContentPreviewViewer.this.parentActivity != null) {
                                         int intValue = ((Integer) view.getTag()).intValue();
@@ -225,11 +227,11 @@ public class ContentPreviewViewer {
                                     }
                                 }
                             };
-                            ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(ContentPreviewViewer.this.containerView.getContext(), NUM, ContentPreviewViewer.this.resourcesProvider);
+                            ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(ContentPreviewViewer.this.containerView.getContext(), R.drawable.popup_fixed_alert2, ContentPreviewViewer.this.resourcesProvider);
                             for (int i8 = 0; i8 < arrayList.size(); i8++) {
                                 ActionBarMenuSubItem addItem = ActionBarMenuItem.addItem(actionBarPopupWindowLayout, ((Integer) arrayList3.get(i8)).intValue(), (CharSequence) arrayList.get(i8), false, ContentPreviewViewer.this.resourcesProvider);
                                 addItem.setTag(Integer.valueOf(i8));
-                                addItem.setOnClickListener(r3);
+                                addItem.setOnClickListener(r5);
                             }
                             ContentPreviewViewer.this.popupWindow = new ActionBarPopupWindow(actionBarPopupWindowLayout, -2, -2) {
                                 public void dismiss() {
@@ -247,7 +249,7 @@ public class ContentPreviewViewer {
                             ContentPreviewViewer.this.popupWindow.setScaleOut(true);
                             ContentPreviewViewer.this.popupWindow.setOutsideTouchable(true);
                             ContentPreviewViewer.this.popupWindow.setClippingEnabled(true);
-                            ContentPreviewViewer.this.popupWindow.setAnimationStyle(NUM);
+                            ContentPreviewViewer.this.popupWindow.setAnimationStyle(R.style.PopupContextAnimation);
                             ContentPreviewViewer.this.popupWindow.setFocusable(true);
                             actionBarPopupWindowLayout.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000.0f), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000.0f), Integer.MIN_VALUE));
                             ContentPreviewViewer.this.popupWindow.setInputMethodMode(2);
@@ -291,24 +293,24 @@ public class ContentPreviewViewer {
                     ArrayList arrayList5 = new ArrayList();
                     ArrayList arrayList6 = new ArrayList();
                     if (ContentPreviewViewer.this.delegate.needSend() && !ContentPreviewViewer.this.delegate.isInScheduleMode()) {
-                        arrayList4.add(LocaleController.getString("SendGifPreview", NUM));
-                        arrayList6.add(NUM);
+                        arrayList4.add(LocaleController.getString("SendGifPreview", R.string.SendGifPreview));
+                        arrayList6.add(Integer.valueOf(R.drawable.msg_send));
                         arrayList5.add(0);
                     }
                     if (ContentPreviewViewer.this.delegate.canSchedule()) {
-                        arrayList4.add(LocaleController.getString("Schedule", NUM));
-                        arrayList6.add(NUM);
+                        arrayList4.add(LocaleController.getString("Schedule", R.string.Schedule));
+                        arrayList6.add(Integer.valueOf(R.drawable.msg_autodelete));
                         arrayList5.add(3);
                     }
                     if (ContentPreviewViewer.this.currentDocument != null) {
                         z = MediaDataController.getInstance(ContentPreviewViewer.this.currentAccount).hasRecentGif(ContentPreviewViewer.this.currentDocument);
                         if (z) {
-                            arrayList4.add(LocaleController.formatString("Delete", NUM, new Object[0]));
-                            arrayList6.add(NUM);
+                            arrayList4.add(LocaleController.formatString("Delete", R.string.Delete, new Object[0]));
+                            arrayList6.add(Integer.valueOf(R.drawable.msg_delete));
                             arrayList5.add(1);
                         } else {
-                            arrayList4.add(LocaleController.formatString("SaveToGIFs", NUM, new Object[0]));
-                            arrayList6.add(NUM);
+                            arrayList4.add(LocaleController.formatString("SaveToGIFs", R.string.SaveToGIFs, new Object[0]));
+                            arrayList6.add(Integer.valueOf(R.drawable.msg_gif_add));
                             arrayList5.add(2);
                         }
                     } else {
@@ -318,15 +320,18 @@ public class ContentPreviewViewer {
                     for (int i10 = 0; i10 < arrayList6.size(); i10++) {
                         iArr2[i10] = ((Integer) arrayList6.get(i10)).intValue();
                     }
-                    ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout2 = new ActionBarPopupWindow.ActionBarPopupWindowLayout(ContentPreviewViewer.this.containerView.getContext(), NUM, ContentPreviewViewer.this.resourcesProvider);
+                    ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout2 = new ActionBarPopupWindow.ActionBarPopupWindowLayout(ContentPreviewViewer.this.containerView.getContext(), R.drawable.popup_fixed_alert2, ContentPreviewViewer.this.resourcesProvider);
                     ContentPreviewViewer$1$$ExternalSyntheticLambda1 contentPreviewViewer$1$$ExternalSyntheticLambda1 = new ContentPreviewViewer$1$$ExternalSyntheticLambda1(this, arrayList5);
-                    for (int i11 = 0; i11 < arrayList4.size(); i11++) {
-                        ActionBarMenuSubItem addItem2 = ActionBarMenuItem.addItem(actionBarPopupWindowLayout2, ((Integer) arrayList6.get(i11)).intValue(), (CharSequence) arrayList4.get(i11), false, ContentPreviewViewer.this.resourcesProvider);
+                    int i11 = 0;
+                    while (i11 < arrayList4.size()) {
+                        ActionBarMenuSubItem addItem2 = ActionBarMenuItem.addItem(actionBarPopupWindowLayout2, ((Integer) arrayList6.get(i11)).intValue(), (CharSequence) arrayList4.get(i11), z2, ContentPreviewViewer.this.resourcesProvider);
                         addItem2.setTag(Integer.valueOf(i11));
                         addItem2.setOnClickListener(contentPreviewViewer$1$$ExternalSyntheticLambda1);
                         if (z && i11 == arrayList4.size() - 1) {
                             addItem2.setColors(ContentPreviewViewer.this.getThemedColor("dialogTextRed2"), ContentPreviewViewer.this.getThemedColor("dialogRedIcon"));
                         }
+                        i11++;
+                        z2 = false;
                     }
                     ContentPreviewViewer.this.popupWindow = new ActionBarPopupWindow(actionBarPopupWindowLayout2, -2, -2) {
                         public void dismiss() {
@@ -344,7 +349,7 @@ public class ContentPreviewViewer {
                     ContentPreviewViewer.this.popupWindow.setScaleOut(true);
                     ContentPreviewViewer.this.popupWindow.setOutsideTouchable(true);
                     ContentPreviewViewer.this.popupWindow.setClippingEnabled(true);
-                    ContentPreviewViewer.this.popupWindow.setAnimationStyle(NUM);
+                    ContentPreviewViewer.this.popupWindow.setAnimationStyle(R.style.PopupContextAnimation);
                     ContentPreviewViewer.this.popupWindow.setFocusable(true);
                     actionBarPopupWindowLayout2.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000.0f), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000.0f), Integer.MIN_VALUE));
                     ContentPreviewViewer.this.popupWindow.setInputMethodMode(2);
@@ -1141,7 +1146,7 @@ public class ContentPreviewViewer {
         this.effectImage.setLayerNum(Integer.MAX_VALUE);
         if (this.parentActivity != activity) {
             this.parentActivity = activity;
-            this.slideUpDrawable = activity.getResources().getDrawable(NUM);
+            this.slideUpDrawable = activity.getResources().getDrawable(R.drawable.preview_arrow);
             FrameLayout frameLayout = new FrameLayout(activity);
             this.windowView = frameLayout;
             frameLayout.setFocusable(true);

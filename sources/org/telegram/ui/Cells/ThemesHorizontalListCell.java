@@ -39,6 +39,7 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$TL_error;
@@ -165,8 +166,8 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
         public InnerThemeView(Context context) {
             super(context);
             setWillNotDraw(false);
-            this.inDrawable = context.getResources().getDrawable(NUM).mutate();
-            this.outDrawable = context.getResources().getDrawable(NUM).mutate();
+            this.inDrawable = context.getResources().getDrawable(R.drawable.minibubble_in).mutate();
+            this.outDrawable = context.getResources().getDrawable(R.drawable.minibubble_out).mutate();
             this.textPaint.setTextSize((float) AndroidUtilities.dp(13.0f));
             RadioButton radioButton = new RadioButton(context);
             this.button = radioButton;
@@ -698,7 +699,7 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
                 updateColors(false);
                 this.optionsDrawable = null;
             } else {
-                this.optionsDrawable = getResources().getDrawable(NUM).mutate();
+                this.optionsDrawable = getResources().getDrawable(R.drawable.preview_dots).mutate();
                 int previewBackgroundColor = this.themeInfo.getPreviewBackgroundColor();
                 this.backColor = previewBackgroundColor;
                 this.oldBackColor = previewBackgroundColor;
@@ -769,7 +770,7 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
                     if (tLRPC$TL_theme.document != null) {
                         (themeInfo3 = this.themeInfo).themeLoaded = false;
                         this.placeholderAlpha = 1.0f;
-                        Drawable mutate = getResources().getDrawable(NUM).mutate();
+                        Drawable mutate = getResources().getDrawable(R.drawable.msg_theme).mutate();
                         this.loadingDrawable = mutate;
                         int color = Theme.getColor("windowBackgroundWhiteGrayText7");
                         this.loadingColor = color;
@@ -784,7 +785,7 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
                             }
                         }
                     } else {
-                        Drawable mutate2 = getResources().getDrawable(NUM).mutate();
+                        Drawable mutate2 = getResources().getDrawable(R.drawable.preview_custom).mutate();
                         this.loadingDrawable = mutate2;
                         int color2 = Theme.getColor("windowBackgroundWhiteGrayText7");
                         this.loadingColor = color2;
@@ -1026,7 +1027,7 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
             accessibilityNodeInfo.setEnabled(true);
             if (Build.VERSION.SDK_INT >= 21) {
                 accessibilityNodeInfo.addAction(AccessibilityNodeInfo.AccessibilityAction.ACTION_CLICK);
-                accessibilityNodeInfo.addAction(new AccessibilityNodeInfo.AccessibilityAction(32, LocaleController.getString("AccDescrMoreOptions", NUM)));
+                accessibilityNodeInfo.addAction(new AccessibilityNodeInfo.AccessibilityAction(32, LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions)));
             }
         }
     }

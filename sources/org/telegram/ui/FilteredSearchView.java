@@ -33,6 +33,7 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.tgnet.TLObject;
@@ -432,28 +433,28 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
     public static java.lang.CharSequence createFromInfoString(org.telegram.messenger.MessageObject r8) {
         /*
             android.text.SpannableStringBuilder r0 = arrowSpan
-            if (r0 != 0) goto L_0x0024
+            if (r0 != 0) goto L_0x0023
             android.text.SpannableStringBuilder r0 = new android.text.SpannableStringBuilder
             java.lang.String r1 = "-"
             r0.<init>(r1)
             arrowSpan = r0
             org.telegram.ui.Components.ColoredImageSpan r1 = new org.telegram.ui.Components.ColoredImageSpan
             android.content.Context r2 = org.telegram.messenger.ApplicationLoader.applicationContext
-            r3 = 2131166125(0x7var_ad, float:1.7946487E38)
+            int r3 = org.telegram.messenger.R.drawable.search_arrow
             android.graphics.drawable.Drawable r2 = androidx.core.content.ContextCompat.getDrawable(r2, r3)
             android.graphics.drawable.Drawable r2 = r2.mutate()
             r1.<init>((android.graphics.drawable.Drawable) r2)
             r2 = 1
             r3 = 0
             r0.setSpan(r1, r3, r2, r3)
-        L_0x0024:
+        L_0x0023:
             org.telegram.tgnet.TLRPC$Message r0 = r8.messageOwner
             org.telegram.tgnet.TLRPC$Peer r0 = r0.from_id
             long r0 = r0.user_id
             r2 = 0
             r4 = 0
             int r5 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
-            if (r5 == 0) goto L_0x0046
+            if (r5 == 0) goto L_0x0045
             int r0 = org.telegram.messenger.UserConfig.selectedAccount
             org.telegram.messenger.MessagesController r0 = org.telegram.messenger.MessagesController.getInstance(r0)
             org.telegram.tgnet.TLRPC$Message r1 = r8.messageOwner
@@ -461,15 +462,15 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
             long r5 = r1.user_id
             java.lang.Long r1 = java.lang.Long.valueOf(r5)
             org.telegram.tgnet.TLRPC$User r0 = r0.getUser(r1)
-            goto L_0x0047
-        L_0x0046:
+            goto L_0x0046
+        L_0x0045:
             r0 = r4
-        L_0x0047:
+        L_0x0046:
             org.telegram.tgnet.TLRPC$Message r1 = r8.messageOwner
             org.telegram.tgnet.TLRPC$Peer r1 = r1.from_id
             long r5 = r1.chat_id
             int r1 = (r5 > r2 ? 1 : (r5 == r2 ? 0 : -1))
-            if (r1 == 0) goto L_0x0066
+            if (r1 == 0) goto L_0x0065
             int r1 = org.telegram.messenger.UserConfig.selectedAccount
             org.telegram.messenger.MessagesController r1 = org.telegram.messenger.MessagesController.getInstance(r1)
             org.telegram.tgnet.TLRPC$Message r5 = r8.messageOwner
@@ -477,16 +478,16 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
             long r5 = r5.chat_id
             java.lang.Long r5 = java.lang.Long.valueOf(r5)
             org.telegram.tgnet.TLRPC$Chat r1 = r1.getChat(r5)
-            goto L_0x0067
-        L_0x0066:
+            goto L_0x0066
+        L_0x0065:
             r1 = r4
-        L_0x0067:
-            if (r1 != 0) goto L_0x0089
+        L_0x0066:
+            if (r1 != 0) goto L_0x0088
             org.telegram.tgnet.TLRPC$Message r1 = r8.messageOwner
             org.telegram.tgnet.TLRPC$Peer r1 = r1.from_id
             long r5 = r1.channel_id
             int r1 = (r5 > r2 ? 1 : (r5 == r2 ? 0 : -1))
-            if (r1 == 0) goto L_0x0088
+            if (r1 == 0) goto L_0x0087
             int r1 = org.telegram.messenger.UserConfig.selectedAccount
             org.telegram.messenger.MessagesController r1 = org.telegram.messenger.MessagesController.getInstance(r1)
             org.telegram.tgnet.TLRPC$Message r5 = r8.messageOwner
@@ -494,15 +495,15 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
             long r5 = r5.channel_id
             java.lang.Long r5 = java.lang.Long.valueOf(r5)
             org.telegram.tgnet.TLRPC$Chat r1 = r1.getChat(r5)
-            goto L_0x0089
-        L_0x0088:
+            goto L_0x0088
+        L_0x0087:
             r1 = r4
-        L_0x0089:
+        L_0x0088:
             org.telegram.tgnet.TLRPC$Message r5 = r8.messageOwner
             org.telegram.tgnet.TLRPC$Peer r5 = r5.peer_id
             long r5 = r5.channel_id
             int r7 = (r5 > r2 ? 1 : (r5 == r2 ? 0 : -1))
-            if (r7 == 0) goto L_0x00a8
+            if (r7 == 0) goto L_0x00a7
             int r5 = org.telegram.messenger.UserConfig.selectedAccount
             org.telegram.messenger.MessagesController r5 = org.telegram.messenger.MessagesController.getInstance(r5)
             org.telegram.tgnet.TLRPC$Message r6 = r8.messageOwner
@@ -510,16 +511,16 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
             long r6 = r6.channel_id
             java.lang.Long r6 = java.lang.Long.valueOf(r6)
             org.telegram.tgnet.TLRPC$Chat r5 = r5.getChat(r6)
-            goto L_0x00a9
-        L_0x00a8:
+            goto L_0x00a8
+        L_0x00a7:
             r5 = r4
-        L_0x00a9:
-            if (r5 != 0) goto L_0x00cc
+        L_0x00a8:
+            if (r5 != 0) goto L_0x00cb
             org.telegram.tgnet.TLRPC$Message r5 = r8.messageOwner
             org.telegram.tgnet.TLRPC$Peer r5 = r5.peer_id
             long r5 = r5.chat_id
             int r7 = (r5 > r2 ? 1 : (r5 == r2 ? 0 : -1))
-            if (r7 == 0) goto L_0x00cb
+            if (r7 == 0) goto L_0x00ca
             int r2 = org.telegram.messenger.UserConfig.selectedAccount
             org.telegram.messenger.MessagesController r2 = org.telegram.messenger.MessagesController.getInstance(r2)
             org.telegram.tgnet.TLRPC$Message r8 = r8.messageOwner
@@ -528,12 +529,12 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
             java.lang.Long r8 = java.lang.Long.valueOf(r5)
             org.telegram.tgnet.TLRPC$Chat r8 = r2.getChat(r8)
             r5 = r8
-            goto L_0x00cc
-        L_0x00cb:
+            goto L_0x00cb
+        L_0x00ca:
             r5 = r4
-        L_0x00cc:
-            if (r0 == 0) goto L_0x00f7
-            if (r5 == 0) goto L_0x00f7
+        L_0x00cb:
+            if (r0 == 0) goto L_0x00f6
+            if (r5 == 0) goto L_0x00f6
             android.text.SpannableStringBuilder r4 = new android.text.SpannableStringBuilder
             r4.<init>()
             java.lang.String r8 = r0.first_name
@@ -547,20 +548,20 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
             android.text.SpannableStringBuilder r8 = r8.append(r0)
             java.lang.String r0 = r5.title
             r8.append(r0)
-            goto L_0x0106
-        L_0x00f7:
-            if (r0 == 0) goto L_0x0102
+            goto L_0x0105
+        L_0x00f6:
+            if (r0 == 0) goto L_0x0101
             java.lang.String r8 = r0.first_name
             java.lang.String r0 = r0.last_name
             java.lang.String r4 = org.telegram.messenger.ContactsController.formatName(r8, r0)
-            goto L_0x0106
-        L_0x0102:
-            if (r1 == 0) goto L_0x0106
+            goto L_0x0105
+        L_0x0101:
+            if (r1 == 0) goto L_0x0105
             java.lang.String r4 = r1.title
-        L_0x0106:
-            if (r4 != 0) goto L_0x010a
+        L_0x0105:
+            if (r4 != 0) goto L_0x0109
             java.lang.String r4 = ""
-        L_0x010a:
+        L_0x0109:
             return r4
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.FilteredSearchView.createFromInfoString(org.telegram.messenger.MessageObject):java.lang.CharSequence");
@@ -870,9 +871,9 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
         if (i == this.requestIndex) {
             this.isLoading = false;
             if (tLRPC$TL_error != null) {
-                this.emptyView.title.setText(LocaleController.getString("SearchEmptyViewTitle2", NUM));
+                this.emptyView.title.setText(LocaleController.getString("SearchEmptyViewTitle2", R.string.SearchEmptyViewTitle2));
                 this.emptyView.subtitle.setVisibility(0);
-                this.emptyView.subtitle.setText(LocaleController.getString("SearchEmptyViewFilteredSubtitle2", NUM));
+                this.emptyView.subtitle.setText(LocaleController.getString("SearchEmptyViewFilteredSubtitle2", R.string.SearchEmptyViewFilteredSubtitle2));
                 this.emptyView.showProgress(false, true);
                 return;
             }
@@ -912,28 +913,28 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
             this.endReached = this.messages.size() >= this.totalCount;
             if (this.messages.isEmpty()) {
                 if (mediaFilterData2 == null) {
-                    this.emptyView.title.setText(LocaleController.getString("SearchEmptyViewTitle2", NUM));
+                    this.emptyView.title.setText(LocaleController.getString("SearchEmptyViewTitle2", R.string.SearchEmptyViewTitle2));
                     this.emptyView.subtitle.setVisibility(8);
                 } else if (TextUtils.isEmpty(this.currentDataQuery) && j == 0 && j2 == 0) {
-                    this.emptyView.title.setText(LocaleController.getString("SearchEmptyViewTitle", NUM));
+                    this.emptyView.title.setText(LocaleController.getString("SearchEmptyViewTitle", R.string.SearchEmptyViewTitle));
                     int i4 = mediaFilterData2.filterType;
                     if (i4 == 1) {
-                        str2 = LocaleController.getString("SearchEmptyViewFilteredSubtitleFiles", NUM);
+                        str2 = LocaleController.getString("SearchEmptyViewFilteredSubtitleFiles", R.string.SearchEmptyViewFilteredSubtitleFiles);
                     } else if (i4 == 0) {
-                        str2 = LocaleController.getString("SearchEmptyViewFilteredSubtitleMedia", NUM);
+                        str2 = LocaleController.getString("SearchEmptyViewFilteredSubtitleMedia", R.string.SearchEmptyViewFilteredSubtitleMedia);
                     } else if (i4 == 2) {
-                        str2 = LocaleController.getString("SearchEmptyViewFilteredSubtitleLinks", NUM);
+                        str2 = LocaleController.getString("SearchEmptyViewFilteredSubtitleLinks", R.string.SearchEmptyViewFilteredSubtitleLinks);
                     } else if (i4 == 3) {
-                        str2 = LocaleController.getString("SearchEmptyViewFilteredSubtitleMusic", NUM);
+                        str2 = LocaleController.getString("SearchEmptyViewFilteredSubtitleMusic", R.string.SearchEmptyViewFilteredSubtitleMusic);
                     } else {
-                        str2 = LocaleController.getString("SearchEmptyViewFilteredSubtitleVoice", NUM);
+                        str2 = LocaleController.getString("SearchEmptyViewFilteredSubtitleVoice", R.string.SearchEmptyViewFilteredSubtitleVoice);
                     }
                     this.emptyView.subtitle.setVisibility(0);
                     this.emptyView.subtitle.setText(str2);
                 } else {
-                    this.emptyView.title.setText(LocaleController.getString("SearchEmptyViewTitle2", NUM));
+                    this.emptyView.title.setText(LocaleController.getString("SearchEmptyViewTitle2", R.string.SearchEmptyViewTitle2));
                     this.emptyView.subtitle.setVisibility(0);
-                    this.emptyView.subtitle.setText(LocaleController.getString("SearchEmptyViewFilteredSubtitle2", NUM));
+                    this.emptyView.subtitle.setText(LocaleController.getString("SearchEmptyViewFilteredSubtitle2", R.string.SearchEmptyViewFilteredSubtitle2));
                 }
             }
             if (mediaFilterData2 != null) {
@@ -966,7 +967,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                 if (arrayList4 != null) {
                     this.localTipChats.addAll(arrayList4);
                 }
-                if (str.length() >= 3 && (LocaleController.getString("SavedMessages", NUM).toLowerCase().startsWith(str3) || "saved messages".startsWith(str3))) {
+                if (str.length() >= 3 && (LocaleController.getString("SavedMessages", R.string.SavedMessages).toLowerCase().startsWith(str3) || "saved messages".startsWith(str3))) {
                     int i6 = 0;
                     while (true) {
                         if (i6 < this.localTipChats.size()) {
@@ -987,7 +988,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                 this.localTipDates.clear();
                 this.localTipDates.addAll(arrayList3);
                 this.localTipArchive = false;
-                if (str.length() >= 3 && (LocaleController.getString("ArchiveSearchFilter", NUM).toLowerCase().startsWith(str3) || "archive".startsWith(str3))) {
+                if (str.length() >= 3 && (LocaleController.getString("ArchiveSearchFilter", R.string.ArchiveSearchFilter).toLowerCase().startsWith(str3) || "archive".startsWith(str3))) {
                     this.localTipArchive = true;
                 }
                 Delegate delegate2 = this.delegate;
@@ -1353,7 +1354,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                 if (z) {
                     BottomSheet.Builder builder = new BottomSheet.Builder(FilteredSearchView.this.parentActivity);
                     builder.setTitle(str);
-                    builder.setItems(new CharSequence[]{LocaleController.getString("Open", NUM), LocaleController.getString("Copy", NUM)}, new FilteredSearchView$SharedLinksAdapter$1$$ExternalSyntheticLambda0(this, str));
+                    builder.setItems(new CharSequence[]{LocaleController.getString("Open", R.string.Open), LocaleController.getString("Copy", R.string.Copy)}, new FilteredSearchView$SharedLinksAdapter$1$$ExternalSyntheticLambda0(this, str));
                     FilteredSearchView.this.parentFragment.showDialog(builder.create());
                     return;
                 }
@@ -1828,31 +1829,31 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
             /*
                 r3 = this;
                 r0 = 1
-                if (r5 == 0) goto L_0x002c
+                if (r5 == 0) goto L_0x002b
                 r1 = 3
-                if (r5 == r1) goto L_0x001c
+                if (r5 == r1) goto L_0x001b
                 org.telegram.ui.Cells.GraySectionCell r5 = new org.telegram.ui.Cells.GraySectionCell
                 android.content.Context r4 = r4.getContext()
                 r5.<init>(r4)
-                r4 = 2131628195(0x7f0e10a3, float:1.8883676E38)
+                int r4 = org.telegram.messenger.R.string.SearchMessages
                 java.lang.String r0 = "SearchMessages"
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r0, r4)
                 r5.setText(r4)
-                goto L_0x0037
-            L_0x001c:
+                goto L_0x0036
+            L_0x001b:
                 org.telegram.ui.Components.FlickerLoadingView r5 = new org.telegram.ui.Components.FlickerLoadingView
                 android.content.Context r4 = r4.getContext()
                 r5.<init>(r4)
                 r5.setIsSingleCell(r0)
                 r5.setViewType(r0)
-                goto L_0x0037
-            L_0x002c:
+                goto L_0x0036
+            L_0x002b:
                 org.telegram.ui.Cells.DialogCell r5 = new org.telegram.ui.Cells.DialogCell
                 r1 = 0
                 android.content.Context r4 = r4.getContext()
                 r2 = 0
                 r5.<init>(r1, r4, r0, r2)
-            L_0x0037:
+            L_0x0036:
                 androidx.recyclerview.widget.RecyclerView$LayoutParams r4 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
                 r0 = -1
                 r1 = -2

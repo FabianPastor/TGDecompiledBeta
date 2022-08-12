@@ -46,6 +46,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SecretChatHelper;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
@@ -198,26 +199,26 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:38:0x0141  */
-    /* JADX WARNING: Removed duplicated region for block: B:42:0x0149  */
-    /* JADX WARNING: Removed duplicated region for block: B:49:0x020e  */
-    /* JADX WARNING: Removed duplicated region for block: B:50:0x0211  */
-    /* JADX WARNING: Removed duplicated region for block: B:53:0x0217  */
-    /* JADX WARNING: Removed duplicated region for block: B:54:0x021a  */
-    /* JADX WARNING: Removed duplicated region for block: B:57:0x0224  */
-    /* JADX WARNING: Removed duplicated region for block: B:60:0x022c  */
-    /* JADX WARNING: Removed duplicated region for block: B:61:0x022f  */
-    /* JADX WARNING: Removed duplicated region for block: B:64:0x0235  */
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x0238  */
-    /* JADX WARNING: Removed duplicated region for block: B:68:0x0273  */
-    /* JADX WARNING: Removed duplicated region for block: B:71:0x02c4  */
-    /* JADX WARNING: Removed duplicated region for block: B:72:0x02c8  */
-    /* JADX WARNING: Removed duplicated region for block: B:75:0x02e0  */
-    /* JADX WARNING: Removed duplicated region for block: B:78:0x0343  */
-    /* JADX WARNING: Removed duplicated region for block: B:79:0x0346  */
-    /* JADX WARNING: Removed duplicated region for block: B:81:0x034a  */
-    /* JADX WARNING: Removed duplicated region for block: B:82:0x034d  */
-    /* JADX WARNING: Removed duplicated region for block: B:86:0x0367  */
+    /* JADX WARNING: Removed duplicated region for block: B:38:0x0137  */
+    /* JADX WARNING: Removed duplicated region for block: B:42:0x013f  */
+    /* JADX WARNING: Removed duplicated region for block: B:49:0x0202  */
+    /* JADX WARNING: Removed duplicated region for block: B:50:0x0205  */
+    /* JADX WARNING: Removed duplicated region for block: B:53:0x020b  */
+    /* JADX WARNING: Removed duplicated region for block: B:54:0x020e  */
+    /* JADX WARNING: Removed duplicated region for block: B:57:0x0218  */
+    /* JADX WARNING: Removed duplicated region for block: B:60:0x0220  */
+    /* JADX WARNING: Removed duplicated region for block: B:61:0x0223  */
+    /* JADX WARNING: Removed duplicated region for block: B:64:0x0229  */
+    /* JADX WARNING: Removed duplicated region for block: B:65:0x022c  */
+    /* JADX WARNING: Removed duplicated region for block: B:68:0x0267  */
+    /* JADX WARNING: Removed duplicated region for block: B:71:0x02b7  */
+    /* JADX WARNING: Removed duplicated region for block: B:72:0x02ba  */
+    /* JADX WARNING: Removed duplicated region for block: B:75:0x02d0  */
+    /* JADX WARNING: Removed duplicated region for block: B:78:0x0333  */
+    /* JADX WARNING: Removed duplicated region for block: B:79:0x0336  */
+    /* JADX WARNING: Removed duplicated region for block: B:81:0x033a  */
+    /* JADX WARNING: Removed duplicated region for block: B:82:0x033d  */
+    /* JADX WARNING: Removed duplicated region for block: B:86:0x0357  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public android.view.View createView(android.content.Context r24) {
         /*
@@ -228,80 +229,80 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             r11.searching = r13
             r11.searchWas = r13
             org.telegram.ui.ActionBar.ActionBar r0 = r11.actionBar
-            r1 = 2131165449(0x7var_, float:1.7945115E38)
+            int r1 = org.telegram.messenger.R.drawable.ic_ab_back
             r0.setBackButtonImage(r1)
             org.telegram.ui.ActionBar.ActionBar r0 = r11.actionBar
             r14 = 1
             r0.setAllowOverlayTitle(r14)
             boolean r0 = r11.destroyAfterSelect
-            if (r0 == 0) goto L_0x0050
+            if (r0 == 0) goto L_0x004c
             boolean r0 = r11.returnAsResult
-            if (r0 == 0) goto L_0x002e
+            if (r0 == 0) goto L_0x002c
             org.telegram.ui.ActionBar.ActionBar r0 = r11.actionBar
-            r1 = 2131628239(0x7f0e10cf, float:1.8883765E38)
+            int r1 = org.telegram.messenger.R.string.SelectContact
             java.lang.String r2 = "SelectContact"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
-            goto L_0x005e
-        L_0x002e:
+            goto L_0x0059
+        L_0x002c:
             boolean r0 = r11.createSecretChat
-            if (r0 == 0) goto L_0x0041
+            if (r0 == 0) goto L_0x003e
             org.telegram.ui.ActionBar.ActionBar r0 = r11.actionBar
-            r1 = 2131626858(0x7f0e0b6a, float:1.8880964E38)
+            int r1 = org.telegram.messenger.R.string.NewSecretChat
             java.lang.String r2 = "NewSecretChat"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
-            goto L_0x005e
-        L_0x0041:
+            goto L_0x0059
+        L_0x003e:
             org.telegram.ui.ActionBar.ActionBar r0 = r11.actionBar
-            r1 = 2131626848(0x7f0e0b60, float:1.8880944E38)
+            int r1 = org.telegram.messenger.R.string.NewMessageTitle
             java.lang.String r2 = "NewMessageTitle"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
-            goto L_0x005e
-        L_0x0050:
+            goto L_0x0059
+        L_0x004c:
             org.telegram.ui.ActionBar.ActionBar r0 = r11.actionBar
-            r1 = 2131625264(0x7f0e0530, float:1.8877731E38)
+            int r1 = org.telegram.messenger.R.string.Contacts
             java.lang.String r2 = "Contacts"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
-        L_0x005e:
+        L_0x0059:
             org.telegram.ui.ActionBar.ActionBar r0 = r11.actionBar
             org.telegram.ui.ContactsActivity$1 r1 = new org.telegram.ui.ContactsActivity$1
             r1.<init>()
             r0.setActionBarMenuOnItemClick(r1)
             org.telegram.ui.ActionBar.ActionBar r0 = r11.actionBar
             org.telegram.ui.ActionBar.ActionBarMenu r0 = r0.createMenu()
-            r1 = 2131165456(0x7var_, float:1.794513E38)
+            int r1 = org.telegram.messenger.R.drawable.ic_ab_search
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.addItem((int) r13, (int) r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r1.setIsSearchField(r14)
             org.telegram.ui.ContactsActivity$2 r2 = new org.telegram.ui.ContactsActivity$2
             r2.<init>()
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r1.setActionBarMenuItemSearchListener(r2)
-            java.lang.String r2 = "Search"
-            r3 = 2131628168(0x7f0e1088, float:1.8883621E38)
-            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r2, r3)
+            int r2 = org.telegram.messenger.R.string.Search
+            java.lang.String r3 = "Search"
+            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setSearchFieldHint(r4)
-            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setContentDescription(r2)
             boolean r1 = r11.createSecretChat
-            if (r1 != 0) goto L_0x00ba
+            if (r1 != 0) goto L_0x00b0
             boolean r1 = r11.returnAsResult
-            if (r1 != 0) goto L_0x00ba
+            if (r1 != 0) goto L_0x00b0
             boolean r1 = r11.sortByName
-            if (r1 == 0) goto L_0x00a5
-            r1 = 2131165696(0x7var_, float:1.7945616E38)
-            goto L_0x00a8
-        L_0x00a5:
-            r1 = 2131165694(0x7var_fe, float:1.7945612E38)
-        L_0x00a8:
+            if (r1 == 0) goto L_0x009d
+            int r1 = org.telegram.messenger.R.drawable.msg_contacts_time
+            goto L_0x009f
+        L_0x009d:
+            int r1 = org.telegram.messenger.R.drawable.msg_contacts_name
+        L_0x009f:
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.addItem((int) r14, (int) r1)
             r11.sortItem = r0
-            r1 = 2131623979(0x7f0e002b, float:1.8875125E38)
+            int r1 = org.telegram.messenger.R.string.AccDescrContactSorting
             java.lang.String r2 = "AccDescrContactSorting"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setContentDescription(r1)
-        L_0x00ba:
+        L_0x00b0:
             org.telegram.ui.ContactsActivity$3 r15 = new org.telegram.ui.ContactsActivity$3
             androidx.collection.LongSparseArray<org.telegram.tgnet.TLRPC$User> r3 = r11.ignoreUsers
             boolean r4 = r11.allowUsernameSearch
@@ -321,45 +322,45 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             r8 = 3
             r9 = 2
             int r4 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
-            if (r4 == 0) goto L_0x00f0
+            if (r4 == 0) goto L_0x00e6
             org.telegram.messenger.MessagesController r0 = r23.getMessagesController()
             long r1 = r11.chatId
             java.lang.Long r1 = java.lang.Long.valueOf(r1)
             org.telegram.tgnet.TLRPC$Chat r0 = r0.getChat(r1)
             boolean r0 = org.telegram.messenger.ChatObject.canUserDoAdminAction(r0, r8)
-        L_0x00ee:
+        L_0x00e4:
             r10 = r0
-            goto L_0x0117
-        L_0x00f0:
+            goto L_0x010d
+        L_0x00e6:
             long r0 = r11.channelId
             int r4 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
-            if (r4 == 0) goto L_0x0116
+            if (r4 == 0) goto L_0x010c
             org.telegram.messenger.MessagesController r0 = r23.getMessagesController()
             long r1 = r11.channelId
             java.lang.Long r1 = java.lang.Long.valueOf(r1)
             org.telegram.tgnet.TLRPC$Chat r0 = r0.getChat(r1)
             boolean r1 = org.telegram.messenger.ChatObject.canUserDoAdminAction(r0, r8)
-            if (r1 == 0) goto L_0x0114
+            if (r1 == 0) goto L_0x010a
             java.lang.String r0 = r0.username
             boolean r0 = android.text.TextUtils.isEmpty(r0)
-            if (r0 == 0) goto L_0x0114
+            if (r0 == 0) goto L_0x010a
             r0 = 2
-            goto L_0x00ee
-        L_0x0114:
+            goto L_0x00e4
+        L_0x010a:
             r0 = 0
-            goto L_0x00ee
-        L_0x0116:
+            goto L_0x00e4
+        L_0x010c:
             r10 = 0
-        L_0x0117:
-            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0126 }
-            android.content.pm.PackageManager r0 = r0.getPackageManager()     // Catch:{ all -> 0x0126 }
+        L_0x010d:
+            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x011c }
+            android.content.pm.PackageManager r0 = r0.getPackageManager()     // Catch:{ all -> 0x011c }
             java.lang.String r1 = "android.hardware.location.gps"
-            boolean r0 = r0.hasSystemFeature(r1)     // Catch:{ all -> 0x0126 }
-            r11.hasGps = r0     // Catch:{ all -> 0x0126 }
-            goto L_0x0128
-        L_0x0126:
+            boolean r0 = r0.hasSystemFeature(r1)     // Catch:{ all -> 0x011c }
+            r11.hasGps = r0     // Catch:{ all -> 0x011c }
+            goto L_0x011e
+        L_0x011c:
             r11.hasGps = r13
-        L_0x0128:
+        L_0x011e:
             org.telegram.ui.ContactsActivity$4 r15 = new org.telegram.ui.ContactsActivity$4
             boolean r3 = r11.onlyUsers
             boolean r4 = r11.needPhonebook
@@ -372,17 +373,17 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             r0.<init>(r2, r3, r4, r5, r6, r7)
             r11.listViewAdapter = r15
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r11.sortItem
-            if (r0 == 0) goto L_0x0149
+            if (r0 == 0) goto L_0x013f
             boolean r0 = r11.sortByName
-            if (r0 == 0) goto L_0x0147
+            if (r0 == 0) goto L_0x013d
             r0 = 1
-            goto L_0x014a
-        L_0x0147:
+            goto L_0x0140
+        L_0x013d:
             r0 = 2
-            goto L_0x014a
-        L_0x0149:
+            goto L_0x0140
+        L_0x013f:
             r0 = 0
-        L_0x014a:
+        L_0x0140:
             r15.setSortType(r0, r13)
             org.telegram.ui.Adapters.ContactsAdapter r0 = r11.listViewAdapter
             boolean r1 = r11.disableSections
@@ -406,13 +407,13 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             r1.showProgress(r14, r13)
             org.telegram.ui.Components.StickerEmptyView r1 = r11.emptyView
             android.widget.TextView r1 = r1.title
-            r2 = 2131626923(0x7f0e0bab, float:1.8881096E38)
+            int r2 = org.telegram.messenger.R.string.NoResult
             java.lang.String r3 = "NoResult"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setText(r2)
             org.telegram.ui.Components.StickerEmptyView r1 = r11.emptyView
             android.widget.TextView r1 = r1.subtitle
-            r2 = 2131628174(0x7f0e108e, float:1.8883633E38)
+            int r2 = org.telegram.messenger.R.string.SearchEmptyViewFilteredSubtitle2
             java.lang.String r3 = "SearchEmptyViewFilteredSubtitle2"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setText(r2)
@@ -454,51 +455,51 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             r2.<init>()
             r1.setOnScrollListener(r2)
             boolean r1 = r11.createSecretChat
-            if (r1 != 0) goto L_0x0363
+            if (r1 != 0) goto L_0x0353
             boolean r1 = r11.returnAsResult
-            if (r1 != 0) goto L_0x0363
+            if (r1 != 0) goto L_0x0353
             android.widget.FrameLayout r1 = new android.widget.FrameLayout
             r1.<init>(r12)
             r11.floatingButtonContainer = r1
             int r2 = android.os.Build.VERSION.SDK_INT
             r5 = 21
-            if (r2 < r5) goto L_0x0211
+            if (r2 < r5) goto L_0x0205
             r6 = 56
-            goto L_0x0213
-        L_0x0211:
+            goto L_0x0207
+        L_0x0205:
             r6 = 60
-        L_0x0213:
+        L_0x0207:
             int r15 = r6 + 20
-            if (r2 < r5) goto L_0x021a
+            if (r2 < r5) goto L_0x020e
             r6 = 56
-            goto L_0x021c
-        L_0x021a:
+            goto L_0x0210
+        L_0x020e:
             r6 = 60
-        L_0x021c:
+        L_0x0210:
             int r6 = r6 + 20
             float r6 = (float) r6
             boolean r7 = org.telegram.messenger.LocaleController.isRTL
-            if (r7 == 0) goto L_0x0224
-            goto L_0x0225
-        L_0x0224:
+            if (r7 == 0) goto L_0x0218
+            goto L_0x0219
+        L_0x0218:
             r8 = 5
-        L_0x0225:
+        L_0x0219:
             r17 = r8 | 80
             r8 = 0
             r10 = 1082130432(0x40800000, float:4.0)
-            if (r7 == 0) goto L_0x022f
+            if (r7 == 0) goto L_0x0223
             r18 = 1082130432(0x40800000, float:4.0)
-            goto L_0x0231
-        L_0x022f:
+            goto L_0x0225
+        L_0x0223:
             r18 = 0
-        L_0x0231:
+        L_0x0225:
             r19 = 0
-            if (r7 == 0) goto L_0x0238
+            if (r7 == 0) goto L_0x022c
             r20 = 0
-            goto L_0x023a
-        L_0x0238:
+            goto L_0x022e
+        L_0x022c:
             r20 = 1082130432(0x40800000, float:4.0)
-        L_0x023a:
+        L_0x022e:
             r21 = 0
             r16 = r6
             android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r15, r16, r17, r18, r19, r20, r21)
@@ -519,9 +520,9 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             java.lang.String r7 = "chats_actionPressedBackground"
             int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)
             android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.createSimpleSelectorCircleDrawable(r1, r6, r7)
-            if (r2 >= r5) goto L_0x029f
+            if (r2 >= r5) goto L_0x0292
             android.content.res.Resources r6 = r24.getResources()
-            r7 = 2131165414(0x7var_e6, float:1.7945044E38)
+            int r7 = org.telegram.messenger.R.drawable.floating_shadow
             android.graphics.drawable.Drawable r6 = r6.getDrawable(r7)
             android.graphics.drawable.Drawable r6 = r6.mutate()
             android.graphics.PorterDuffColorFilter r7 = new android.graphics.PorterDuffColorFilter
@@ -535,7 +536,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
             r7.setIconSize(r1, r0)
             r1 = r7
-        L_0x029f:
+        L_0x0292:
             org.telegram.ui.Components.RLottieImageView r0 = r11.floatingButton
             r0.setBackgroundDrawable(r1)
             org.telegram.ui.Components.RLottieImageView r0 = r11.floatingButton
@@ -549,20 +550,20 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             java.lang.String r1 = "view_animations"
             boolean r0 = r0.getBoolean(r1, r14)
             org.telegram.ui.Components.RLottieImageView r1 = r11.floatingButton
-            if (r0 == 0) goto L_0x02c8
-            r0 = 2131558626(0x7f0d00e2, float:1.8742573E38)
-            goto L_0x02cb
-        L_0x02c8:
-            r0 = 2131558627(0x7f0d00e3, float:1.8742575E38)
-        L_0x02cb:
+            if (r0 == 0) goto L_0x02ba
+            int r0 = org.telegram.messenger.R.raw.write_contacts_fab_icon
+            goto L_0x02bc
+        L_0x02ba:
+            int r0 = org.telegram.messenger.R.raw.write_contacts_fab_icon_reverse
+        L_0x02bc:
             r6 = 52
             r1.setAnimation((int) r0, (int) r6, (int) r6)
             android.widget.FrameLayout r0 = r11.floatingButtonContainer
-            r1 = 2131625296(0x7f0e0550, float:1.8877796E38)
+            int r1 = org.telegram.messenger.R.string.CreateNewContact
             java.lang.String r6 = "CreateNewContact"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r6, r1)
             r0.setContentDescription(r1)
-            if (r2 < r5) goto L_0x033d
+            if (r2 < r5) goto L_0x032d
             android.animation.StateListAnimator r0 = new android.animation.StateListAnimator
             r0.<init>()
             int[] r1 = new int[r14]
@@ -600,21 +601,21 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             org.telegram.ui.ContactsActivity$8 r1 = new org.telegram.ui.ContactsActivity$8
             r1.<init>(r11)
             r0.setOutlineProvider(r1)
-        L_0x033d:
+        L_0x032d:
             android.widget.FrameLayout r0 = r11.floatingButtonContainer
             org.telegram.ui.Components.RLottieImageView r1 = r11.floatingButton
-            if (r2 < r5) goto L_0x0346
+            if (r2 < r5) goto L_0x0336
             r16 = 56
-            goto L_0x0348
-        L_0x0346:
+            goto L_0x0338
+        L_0x0336:
             r16 = 60
-        L_0x0348:
-            if (r2 < r5) goto L_0x034d
+        L_0x0338:
+            if (r2 < r5) goto L_0x033d
             r3 = 56
-            goto L_0x034f
-        L_0x034d:
+            goto L_0x033f
+        L_0x033d:
             r3 = 60
-        L_0x034f:
+        L_0x033f:
             float r2 = (float) r3
             r18 = 51
             r19 = 1092616192(0x41200000, float:10.0)
@@ -624,14 +625,14 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             r17 = r2
             android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r16, r17, r18, r19, r20, r21, r22)
             r0.addView(r1, r2)
-        L_0x0363:
+        L_0x0353:
             java.lang.String r0 = r11.initialSearchString
-            if (r0 == 0) goto L_0x036f
+            if (r0 == 0) goto L_0x035f
             org.telegram.ui.ActionBar.ActionBar r1 = r11.actionBar
             r1.openSearchField(r0, r13)
             r0 = 0
             r11.initialSearchString = r0
-        L_0x036f:
+        L_0x035f:
             android.view.View r0 = r11.fragmentView
             return r0
         */
@@ -706,10 +707,10 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                         String str2 = !contact.phones.isEmpty() ? contact.phones.get(0) : null;
                         if (str2 != null && getParentActivity() != null) {
                             AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
-                            builder.setMessage(LocaleController.getString("InviteUser", NUM));
-                            builder.setTitle(LocaleController.getString("AppName", NUM));
-                            builder.setPositiveButton(LocaleController.getString("OK", NUM), new ContactsActivity$$ExternalSyntheticLambda1(this, str2));
-                            builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
+                            builder.setMessage(LocaleController.getString("InviteUser", R.string.InviteUser));
+                            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new ContactsActivity$$ExternalSyntheticLambda1(this, str2));
+                            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), (DialogInterface.OnClickListener) null);
                             showDialog(builder.create());
                         }
                     }
@@ -806,7 +807,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             if (tLRPC$User.bot) {
                 if (tLRPC$User.bot_nochats) {
                     try {
-                        BulletinFactory.of(this).createErrorBulletin(LocaleController.getString("BotCantJoinGroups", NUM)).show();
+                        BulletinFactory.of(this).createErrorBulletin(LocaleController.getString("BotCantJoinGroups", R.string.BotCantJoinGroups)).show();
                         return;
                     } catch (Exception e) {
                         FileLog.e((Throwable) e);
@@ -816,25 +817,25 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                     TLRPC$Chat chat = getMessagesController().getChat(Long.valueOf(this.channelId));
                     AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
                     if (ChatObject.canAddAdmins(chat)) {
-                        builder.setTitle(LocaleController.getString("AppName", NUM));
-                        builder.setMessage(LocaleController.getString("AddBotAsAdmin", NUM));
-                        builder.setPositiveButton(LocaleController.getString("MakeAdmin", NUM), new ContactsActivity$$ExternalSyntheticLambda3(this, tLRPC$User, str));
-                        builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
+                        builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                        builder.setMessage(LocaleController.getString("AddBotAsAdmin", R.string.AddBotAsAdmin));
+                        builder.setPositiveButton(LocaleController.getString("MakeAdmin", R.string.MakeAdmin), new ContactsActivity$$ExternalSyntheticLambda3(this, tLRPC$User, str));
+                        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), (DialogInterface.OnClickListener) null);
                     } else {
-                        builder.setMessage(LocaleController.getString("CantAddBotAsAdmin", NUM));
-                        builder.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
+                        builder.setMessage(LocaleController.getString("CantAddBotAsAdmin", R.string.CantAddBotAsAdmin));
+                        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (DialogInterface.OnClickListener) null);
                     }
                     showDialog(builder.create());
                     return;
                 }
             }
             AlertDialog.Builder builder2 = new AlertDialog.Builder((Context) getParentActivity());
-            builder2.setTitle(LocaleController.getString("AppName", NUM));
+            builder2.setTitle(LocaleController.getString("AppName", R.string.AppName));
             String formatStringSimple = LocaleController.formatStringSimple(this.selectAlertString, UserObject.getUserName(tLRPC$User));
             if (tLRPC$User.bot || !this.needForwardCount) {
                 editTextBoldCursor = null;
             } else {
-                formatStringSimple = String.format("%s\n\n%s", new Object[]{formatStringSimple, LocaleController.getString("AddToTheGroupForwardCount", NUM)});
+                formatStringSimple = String.format("%s\n\n%s", new Object[]{formatStringSimple, LocaleController.getString("AddToTheGroupForwardCount", R.string.AddToTheGroupForwardCount)});
                 editTextBoldCursor = new EditTextBoldCursor(getParentActivity());
                 editTextBoldCursor.setTextSize(1, 18.0f);
                 editTextBoldCursor.setText("50");
@@ -880,8 +881,8 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                 builder2.setView(editTextBoldCursor);
             }
             builder2.setMessage(formatStringSimple);
-            builder2.setPositiveButton(LocaleController.getString("OK", NUM), new ContactsActivity$$ExternalSyntheticLambda2(this, tLRPC$User, editTextBoldCursor));
-            builder2.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
+            builder2.setPositiveButton(LocaleController.getString("OK", R.string.OK), new ContactsActivity$$ExternalSyntheticLambda2(this, tLRPC$User, editTextBoldCursor));
+            builder2.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), (DialogInterface.OnClickListener) null);
             showDialog(builder2.create());
             if (editTextBoldCursor != null) {
                 ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) editTextBoldCursor.getLayoutParams();
@@ -1193,7 +1194,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                     ((ViewGroup) ContactsActivity.this.fragmentView).addView(ContactsActivity.this.floatingButtonContainer);
                     view2.setVisibility(0);
                     if (!z2) {
-                        floatingButton2.setAnimation(NUM, 52, 52);
+                        floatingButton2.setAnimation(R.raw.write_contacts_fab_icon_reverse, 52, 52);
                         floatingButton2.getAnimatedDrawable().setCurrentFrame(ContactsActivity.this.floatingButton.getAnimatedDrawable().getCurrentFrame());
                         floatingButton2.playAnimation();
                     }
@@ -1219,10 +1220,10 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         this.animationIndex = getNotificationCenter().setAnimationInProgress(this.animationIndex, new int[]{NotificationCenter.diceStickersDidLoad}, false);
         animatorSet.start();
         if (z) {
-            this.floatingButton.setAnimation(NUM, 52, 52);
+            this.floatingButton.setAnimation(R.raw.write_contacts_fab_icon, 52, 52);
             this.floatingButton.playAnimation();
         } else {
-            this.floatingButton.setAnimation(NUM, 52, 52);
+            this.floatingButton.setAnimation(R.raw.write_contacts_fab_icon_reverse, 52, 52);
             this.floatingButton.playAnimation();
         }
         AnimatorSet animatorSet2 = this.bounceIconAnimator;

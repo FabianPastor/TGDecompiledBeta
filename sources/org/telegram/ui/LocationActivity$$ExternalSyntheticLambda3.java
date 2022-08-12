@@ -15,6 +15,6 @@ public final /* synthetic */ class LocationActivity$$ExternalSyntheticLambda3 im
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$openProximityAlert$22(this.f$1, this.f$2, dialogInterface, i);
+        this.f$0.lambda$openProximityAlert$26(this.f$1, this.f$2, dialogInterface, i);
     }
 }

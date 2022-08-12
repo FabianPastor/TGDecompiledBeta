@@ -21,12 +21,6 @@
     <string name="fcm_fallback_notification_channel_label">ఇతరాలు</string>
     <string name="google_assistant_verification_channel_name">Assistant వెరిఫైయర్‌</string>
     <string name="google_assistant_verification_notification_title">Google అసిస్టెంట్ మెసేజ్‌ పంపుతోంది</string>
-    <string name="hms_apk_not_installed_hints">%1$sలోని కొన్ని ఫీచర్‌లు HMS Core లేకుండా సరిగ్గా పని చేయకపోవచ్చు, ఇది మీ పరికరంలో ఇన్‌స్టాల్ చేయబడలేదు.</string>
-    <string name="hms_bindfaildlg_message">%1$s HMS Coreను ఉపయోగించడం సాధ్యం కాదు. దయచేసి ఆప్టిమైజర్ (ఫోన్ నిర్వాహికి)ని లాంచ్ చేసి లేదా సెట్టింగ్‌లకు వెళ్లి, %2$s కోసం అన్ని అనుమతులను (స్వీయ లాంచ్ మరియు ద్వితీయ లాంచ్‌లతో సహా) ప్రారంభించి, మళ్లీ ప్రయత్నించండి.</string>
-    <string name="hms_confirm">సరే</string>
-    <string name="hms_is_spoof">మీ పరికరంలో HMS Core (%1$s) యొక్క అనధికారిక సంస్కరణను ఇన్‌స్టాల్ చేసినట్లు కనిపిస్తుంది. దయచేసి సెట్టింగ్‌ల నుండి HMS Core నుండి అన్ఇన్‌స్టాల్ చేసి, అధికారిక సంస్కరణను ఇన్‌స్టాల్ చేయడానికి ఈ అప్లికేషన్‌కు తిరిగి వెళ్లండి.</string>
-    <string name="hms_push_channel">డిఫాల్ట్</string>
-    <string name="hms_spoof_hints">గమనిక</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Googleతో కొనుగోలు చేయి</string>
 </resources>

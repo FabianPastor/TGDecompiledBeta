@@ -12,6 +12,6 @@ public final /* synthetic */ class LocationController$$ExternalSyntheticLambda17
     }
 
     public final void run() {
-        this.f$0.lambda$loadSharingLocations$16(this.f$1);
+        this.f$0.lambda$loadSharingLocations$15(this.f$1);
     }
 }

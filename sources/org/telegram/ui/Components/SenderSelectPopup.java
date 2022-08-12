@@ -26,6 +26,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$ChatFull;
@@ -71,7 +72,7 @@ public class SenderSelectPopup extends ActionBarPopupWindow {
         setWidth(-2);
         setHeight(-2);
         setBackgroundDrawable((Drawable) null);
-        Drawable mutate = ContextCompat.getDrawable(context, NUM).mutate();
+        Drawable mutate = ContextCompat.getDrawable(context, R.drawable.popup_fixed_alert).mutate();
         mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor("actionBarDefaultSubmenuBackground"), PorterDuff.Mode.MULTIPLY));
         this.scrimPopupContainerLayout.setBackground(mutate);
         Rect rect = new Rect();
@@ -99,7 +100,7 @@ public class SenderSelectPopup extends ActionBarPopupWindow {
         this.headerText = textView;
         textView.setTextColor(Theme.getColor("dialogTextBlue"));
         this.headerText.setTextSize(1, 16.0f);
-        this.headerText.setText(LocaleController.getString("SendMessageAsTitle", NUM));
+        this.headerText.setText(LocaleController.getString("SendMessageAsTitle", R.string.SendMessageAsTitle));
         this.headerText.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"), 1);
         int dp2 = AndroidUtilities.dp(18.0f);
         this.headerText.setPadding(dp2, AndroidUtilities.dp(12.0f), dp2, AndroidUtilities.dp(12.0f));
@@ -149,7 +150,7 @@ public class SenderSelectPopup extends ActionBarPopupWindow {
                 TLRPC$User user = messagesController.getUser(Long.valueOf(j2));
                 if (user != null) {
                     senderView.title.setText(UserObject.getUserName(user));
-                    senderView.subtitle.setText(LocaleController.getString("VoipGroupPersonalAccount", NUM));
+                    senderView.subtitle.setText(LocaleController.getString("VoipGroupPersonalAccount", R.string.VoipGroupPersonalAccount));
                     senderView.avatar.setAvatar(user);
                 }
                 SimpleAvatarView simpleAvatarView2 = senderView.avatar;
@@ -177,7 +178,7 @@ public class SenderSelectPopup extends ActionBarPopupWindow {
         this.recyclerView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new SenderSelectPopup$$ExternalSyntheticLambda8(this, onSelectCallback, arrayList));
         frameLayout.addView(this.recyclerView);
         this.headerShadow = new View(context);
-        Drawable drawable = ContextCompat.getDrawable(context, NUM);
+        Drawable drawable = ContextCompat.getDrawable(context, R.drawable.header_shadow);
         drawable.setAlpha(153);
         this.headerShadow.setBackground(drawable);
         this.headerShadow.setAlpha(0.0f);

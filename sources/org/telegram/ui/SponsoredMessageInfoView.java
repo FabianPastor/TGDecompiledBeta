@@ -12,6 +12,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.R;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
@@ -25,22 +26,22 @@ public class SponsoredMessageInfoView extends FrameLayout {
         LinearLayout linearLayout = new LinearLayout(activity2);
         linearLayout.setOrientation(1);
         TextView textView = new TextView(activity2);
-        textView.setText(LocaleController.getString("SponsoredMessageInfo", NUM));
+        textView.setText(LocaleController.getString("SponsoredMessageInfo", R.string.SponsoredMessageInfo));
         textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText", resourcesProvider2));
         textView.setTextSize(1, 20.0f);
         TextView textView2 = new TextView(activity2);
-        textView2.setText(LocaleController.getString("SponsoredMessageInfoDescription1", NUM));
+        textView2.setText(LocaleController.getString("SponsoredMessageInfoDescription1", R.string.SponsoredMessageInfoDescription1));
         textView2.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText", resourcesProvider2));
         textView2.setTextSize(1, 14.0f);
         textView2.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
         TextView textView3 = new TextView(activity2);
-        textView3.setText(LocaleController.getString("SponsoredMessageInfoDescription2", NUM));
+        textView3.setText(LocaleController.getString("SponsoredMessageInfoDescription2", R.string.SponsoredMessageInfoDescription2));
         textView3.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText", resourcesProvider2));
         textView3.setTextSize(1, 14.0f);
         textView3.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
         TextView textView4 = new TextView(activity2);
-        textView4.setText(LocaleController.getString("SponsoredMessageInfoDescription3", NUM));
+        textView4.setText(LocaleController.getString("SponsoredMessageInfoDescription3", R.string.SponsoredMessageInfoDescription3));
         textView4.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText", resourcesProvider2));
         textView4.setTextSize(1, 14.0f);
         textView4.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
@@ -59,17 +60,17 @@ public class SponsoredMessageInfoView extends FrameLayout {
         };
         r15.setOnClickListener(new View.OnClickListener(this) {
             public void onClick(View view) {
-                Browser.openUrl((Context) activity2, LocaleController.getString("SponsoredMessageAlertLearnMoreUrl", NUM));
+                Browser.openUrl((Context) activity2, LocaleController.getString("SponsoredMessageAlertLearnMoreUrl", R.string.SponsoredMessageAlertLearnMoreUrl));
             }
         });
         r15.setPadding(AndroidUtilities.dp(12.0f), 0, AndroidUtilities.dp(12.0f), 0);
-        r15.setText(LocaleController.getString("SponsoredMessageAlertLearnMoreUrl", NUM));
+        r15.setText(LocaleController.getString("SponsoredMessageAlertLearnMoreUrl", R.string.SponsoredMessageAlertLearnMoreUrl));
         r15.setTextColor(Theme.getColor("featuredStickers_addButton", resourcesProvider2));
         r15.setBackground(Theme.AdaptiveRipple.filledRect(Theme.getColor("dialogBackground", resourcesProvider2), 4.0f));
         r15.setTextSize(1, 14.0f);
         r15.setGravity(16);
         TextView textView5 = new TextView(activity2);
-        textView5.setText(LocaleController.getString("SponsoredMessageInfoDescription4", NUM));
+        textView5.setText(LocaleController.getString("SponsoredMessageInfoDescription4", R.string.SponsoredMessageInfoDescription4));
         textView5.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
         textView5.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText", resourcesProvider2));
         textView5.setTextSize(1, 14.0f);

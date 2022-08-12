@@ -28,6 +28,7 @@ import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.VideoEditedInfo;
 import org.telegram.ui.ActionBar.AlertDialog;
@@ -1254,8 +1255,8 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
             this.hasAspectRatioDialog = true;
             String[] strArr = new String[8];
             Integer[][] numArr = {new Integer[]{3, 2}, new Integer[]{5, 3}, new Integer[]{4, 3}, new Integer[]{5, 4}, new Integer[]{7, 5}, new Integer[]{16, 9}};
-            strArr[0] = LocaleController.getString("CropOriginal", NUM);
-            strArr[1] = LocaleController.getString("CropSquare", NUM);
+            strArr[0] = LocaleController.getString("CropOriginal", R.string.CropOriginal);
+            strArr[1] = LocaleController.getString("CropSquare", R.string.CropSquare);
             int i = 2;
             for (int i2 = 0; i2 < 6; i2++) {
                 Integer[] numArr2 = numArr[i2];

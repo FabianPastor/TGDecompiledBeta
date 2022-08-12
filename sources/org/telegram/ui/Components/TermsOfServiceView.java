@@ -15,6 +15,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.R;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$TL_account_deleteAccount;
@@ -55,14 +56,14 @@ public class TermsOfServiceView extends FrameLayout {
         LinearLayout linearLayout = new LinearLayout(context2);
         linearLayout.setOrientation(1);
         ImageView imageView = new ImageView(context2);
-        imageView.setImageResource(NUM);
+        imageView.setImageResource(R.drawable.logo_middle);
         linearLayout.addView(imageView, LayoutHelper.createLinear(-2, -2, 3, 0, 28, 0, 0));
         TextView textView2 = new TextView(context2);
         this.titleTextView = textView2;
         textView2.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.titleTextView.setTextSize(1, 17.0f);
         this.titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.titleTextView.setText(LocaleController.getString("PrivacyPolicyAndTerms", NUM));
+        this.titleTextView.setText(LocaleController.getString("PrivacyPolicyAndTerms", R.string.PrivacyPolicyAndTerms));
         linearLayout.addView(this.titleTextView, LayoutHelper.createLinear(-2, -2, 3, 0, 20, 0, 0));
         TextView textView3 = new TextView(context2);
         this.textView = textView3;
@@ -81,7 +82,7 @@ public class TermsOfServiceView extends FrameLayout {
         this.scrollView.addView(linearLayout, new FrameLayout.LayoutParams(-1, -2));
         addView(this.scrollView, LayoutHelper.createLinear(-1, -2));
         TextView textView4 = new TextView(context2);
-        textView4.setText(LocaleController.getString("Decline", NUM).toUpperCase());
+        textView4.setText(LocaleController.getString("Decline", R.string.Decline).toUpperCase());
         textView4.setGravity(17);
         textView4.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         textView4.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText"));
@@ -91,7 +92,7 @@ public class TermsOfServiceView extends FrameLayout {
         addView(textView4, LayoutHelper.createFrame(-2, -2.0f, 83, 16.0f, 0.0f, 16.0f, 16.0f));
         textView4.setOnClickListener(new TermsOfServiceView$$ExternalSyntheticLambda4(this));
         TextView textView5 = new TextView(context2);
-        textView5.setText(LocaleController.getString("Accept", NUM));
+        textView5.setText(LocaleController.getString("Accept", R.string.Accept));
         textView5.setGravity(17);
         textView5.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         textView5.setTextColor(-1);
@@ -111,20 +112,20 @@ public class TermsOfServiceView extends FrameLayout {
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$new$4(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-        builder.setTitle(LocaleController.getString("TermsOfService", NUM));
-        builder.setPositiveButton(LocaleController.getString("DeclineDeactivate", NUM), new TermsOfServiceView$$ExternalSyntheticLambda2(this));
-        builder.setNegativeButton(LocaleController.getString("Back", NUM), (DialogInterface.OnClickListener) null);
-        builder.setMessage(LocaleController.getString("TosUpdateDecline", NUM));
+        builder.setTitle(LocaleController.getString("TermsOfService", R.string.TermsOfService));
+        builder.setPositiveButton(LocaleController.getString("DeclineDeactivate", R.string.DeclineDeactivate), new TermsOfServiceView$$ExternalSyntheticLambda2(this));
+        builder.setNegativeButton(LocaleController.getString("Back", R.string.Back), (DialogInterface.OnClickListener) null);
+        builder.setMessage(LocaleController.getString("TosUpdateDecline", R.string.TosUpdateDecline));
         builder.show();
     }
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$new$3(DialogInterface dialogInterface, int i) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setMessage(LocaleController.getString("TosDeclineDeleteAccount", NUM));
-        builder.setTitle(LocaleController.getString("AppName", NUM));
-        builder.setPositiveButton(LocaleController.getString("Deactivate", NUM), new TermsOfServiceView$$ExternalSyntheticLambda0(this));
-        builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
+        builder.setMessage(LocaleController.getString("TosDeclineDeleteAccount", R.string.TosDeclineDeleteAccount));
+        builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+        builder.setPositiveButton(LocaleController.getString("Deactivate", R.string.Deactivate), new TermsOfServiceView$$ExternalSyntheticLambda0(this));
+        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), (DialogInterface.OnClickListener) null);
         builder.show();
     }
 
@@ -153,14 +154,14 @@ public class TermsOfServiceView extends FrameLayout {
         if (tLObject instanceof TLRPC$TL_boolTrue) {
             MessagesController.getInstance(this.currentAccount).performLogout(0);
         } else if (tLRPC$TL_error == null || tLRPC$TL_error.code != -1000) {
-            String string = LocaleController.getString("ErrorOccurred", NUM);
+            String string = LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred);
             if (tLRPC$TL_error != null) {
                 string = string + "\n" + tLRPC$TL_error.text;
             }
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            builder.setTitle(LocaleController.getString("AppName", NUM));
+            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
             builder.setMessage(string);
-            builder.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
+            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (DialogInterface.OnClickListener) null);
             builder.show();
         }
     }
@@ -169,10 +170,10 @@ public class TermsOfServiceView extends FrameLayout {
     public /* synthetic */ void lambda$new$6(View view) {
         if (this.currentTos.min_age_confirm != 0) {
             AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-            builder.setTitle(LocaleController.getString("TosAgeTitle", NUM));
-            builder.setPositiveButton(LocaleController.getString("Agree", NUM), new TermsOfServiceView$$ExternalSyntheticLambda1(this));
-            builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
-            builder.setMessage(LocaleController.formatString("TosAgeText", NUM, LocaleController.formatPluralString("Years", this.currentTos.min_age_confirm, new Object[0])));
+            builder.setTitle(LocaleController.getString("TosAgeTitle", R.string.TosAgeTitle));
+            builder.setPositiveButton(LocaleController.getString("Agree", R.string.Agree), new TermsOfServiceView$$ExternalSyntheticLambda1(this));
+            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), (DialogInterface.OnClickListener) null);
+            builder.setMessage(LocaleController.formatString("TosAgeText", R.string.TosAgeText, LocaleController.formatPluralString("Years", this.currentTos.min_age_confirm, new Object[0])));
             builder.show();
             return;
         }

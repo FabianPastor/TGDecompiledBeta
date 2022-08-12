@@ -30,6 +30,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.AdjustPanLayoutHelper;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
@@ -95,7 +96,7 @@ public class UsersAlertBase extends BottomSheet {
         updateColorKeys();
         setDimBehindAlpha(75);
         this.currentAccount = i;
-        this.shadowDrawable = context.getResources().getDrawable(NUM).mutate();
+        this.shadowDrawable = context.getResources().getDrawable(R.drawable.sheet_shadow_round).mutate();
         ContainerView createContainerView = createContainerView(context);
         this.containerView = createContainerView;
         createContainerView.setWillNotDraw(false);
@@ -116,8 +117,8 @@ public class UsersAlertBase extends BottomSheet {
         StickerEmptyView stickerEmptyView = new StickerEmptyView(context, this.flickerLoadingView, 1);
         this.emptyView = stickerEmptyView;
         stickerEmptyView.addView(this.flickerLoadingView, 0, LayoutHelper.createFrame(-1, -1.0f, 0, 0.0f, 2.0f, 0.0f, 0.0f));
-        this.emptyView.title.setText(LocaleController.getString("NoResult", NUM));
-        this.emptyView.subtitle.setText(LocaleController.getString("SearchEmptyViewFilteredSubtitle2", NUM));
+        this.emptyView.title.setText(LocaleController.getString("NoResult", R.string.NoResult));
+        this.emptyView.subtitle.setText(LocaleController.getString("SearchEmptyViewFilteredSubtitle2", R.string.SearchEmptyViewFilteredSubtitle2));
         this.emptyView.setVisibility(8);
         this.emptyView.setAnimateLayoutChange(true);
         this.emptyView.showProgress(true, false);
@@ -216,7 +217,7 @@ public class UsersAlertBase extends BottomSheet {
             ImageView imageView = new ImageView(context);
             this.searchIconImageView = imageView;
             imageView.setScaleType(ImageView.ScaleType.CENTER);
-            imageView.setImageResource(NUM);
+            imageView.setImageResource(R.drawable.smiles_inputsearch);
             imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(UsersAlertBase.this.keySearchPlaceholder), PorterDuff.Mode.MULTIPLY));
             addView(imageView, LayoutHelper.createFrame(36, 36.0f, 51, 16.0f, 11.0f, 0.0f, 0.0f));
             ImageView imageView2 = new ImageView(context);
@@ -258,7 +259,7 @@ public class UsersAlertBase extends BottomSheet {
             this.searchEditText.setLines(1);
             this.searchEditText.setSingleLine(true);
             this.searchEditText.setImeOptions(NUM);
-            this.searchEditText.setHint(LocaleController.getString("VoipGroupSearchMembers", NUM));
+            this.searchEditText.setHint(LocaleController.getString("VoipGroupSearchMembers", R.string.VoipGroupSearchMembers));
             this.searchEditText.setCursorColor(Theme.getColor(UsersAlertBase.this.keySearchText));
             this.searchEditText.setCursorSize(AndroidUtilities.dp(20.0f));
             this.searchEditText.setCursorWidth(1.5f);

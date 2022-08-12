@@ -1,17 +1,19 @@
 package org.telegram.messenger;
 
-import com.google.android.gms.common.api.Status;
+import org.telegram.tgnet.TLObject;
 
 public final /* synthetic */ class LocationController$$ExternalSyntheticLambda14 implements Runnable {
     public final /* synthetic */ LocationController f$0;
-    public final /* synthetic */ Status f$1;
+    public final /* synthetic */ long f$1;
+    public final /* synthetic */ TLObject f$2;
 
-    public /* synthetic */ LocationController$$ExternalSyntheticLambda14(LocationController locationController, Status status) {
+    public /* synthetic */ LocationController$$ExternalSyntheticLambda14(LocationController locationController, long j, TLObject tLObject) {
         this.f$0 = locationController;
-        this.f$1 = status;
+        this.f$1 = j;
+        this.f$2 = tLObject;
     }
 
     public final void run() {
-        this.f$0.lambda$onConnected$1(this.f$1);
+        this.f$0.lambda$loadLiveLocations$27(this.f$1, this.f$2);
     }
 }

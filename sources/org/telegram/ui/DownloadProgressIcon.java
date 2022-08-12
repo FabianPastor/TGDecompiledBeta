@@ -16,6 +16,7 @@ import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.RLottieDrawable;
 
@@ -37,10 +38,10 @@ public class DownloadProgressIcon extends View implements NotificationCenter.Not
     public DownloadProgressIcon(int i, Context context) {
         super(context);
         this.currentAccount = i;
-        RLottieDrawable rLottieDrawable = new RLottieDrawable(NUM, "download_progress", AndroidUtilities.dp(28.0f), AndroidUtilities.dp(28.0f), true, (int[]) null);
+        RLottieDrawable rLottieDrawable = new RLottieDrawable(R.raw.download_progress, "download_progress", AndroidUtilities.dp(28.0f), AndroidUtilities.dp(28.0f), true, (int[]) null);
         this.downloadDrawable = rLottieDrawable;
         rLottieDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor("actionBarDefaultIcon"), PorterDuff.Mode.MULTIPLY));
-        RLottieDrawable rLottieDrawable2 = new RLottieDrawable(NUM, "download_finish", AndroidUtilities.dp(28.0f), AndroidUtilities.dp(28.0f), true, (int[]) null);
+        RLottieDrawable rLottieDrawable2 = new RLottieDrawable(R.raw.download_finish, "download_finish", AndroidUtilities.dp(28.0f), AndroidUtilities.dp(28.0f), true, (int[]) null);
         this.downloadCompleteDrawable = rLottieDrawable2;
         rLottieDrawable2.setColorFilter(new PorterDuffColorFilter(Theme.getColor("actionBarDefaultIcon"), PorterDuff.Mode.MULTIPLY));
         this.downloadImageReceiver.setImageBitmap((Drawable) this.downloadDrawable);

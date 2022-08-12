@@ -11,6 +11,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.Theme;
@@ -100,9 +101,10 @@ public class SettingsSuggestionCell extends LinearLayout {
         if (i == 0) {
             TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(UserConfig.getInstance(this.currentAccount).clientUserId));
             TextView textView2 = this.textView;
+            int i2 = R.string.CheckPhoneNumber;
             PhoneFormat instance = PhoneFormat.getInstance();
-            textView2.setText(LocaleController.formatString("CheckPhoneNumber", NUM, instance.format("+" + user.phone)));
-            String string = LocaleController.getString("CheckPhoneNumberInfo", NUM);
+            textView2.setText(LocaleController.formatString("CheckPhoneNumber", i2, instance.format("+" + user.phone)));
+            String string = LocaleController.getString("CheckPhoneNumberInfo", R.string.CheckPhoneNumberInfo);
             SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(string);
             int indexOf = string.indexOf("**");
             int lastIndexOf = string.lastIndexOf("**");
@@ -110,19 +112,19 @@ public class SettingsSuggestionCell extends LinearLayout {
                 spannableStringBuilder.replace(lastIndexOf, lastIndexOf + 2, "");
                 spannableStringBuilder.replace(indexOf, indexOf + 2, "");
                 try {
-                    spannableStringBuilder.setSpan(new URLSpanNoUnderline(LocaleController.getString("CheckPhoneNumberLearnMoreUrl", NUM)), indexOf, lastIndexOf - 2, 33);
+                    spannableStringBuilder.setSpan(new URLSpanNoUnderline(LocaleController.getString("CheckPhoneNumberLearnMoreUrl", R.string.CheckPhoneNumberLearnMoreUrl)), indexOf, lastIndexOf - 2, 33);
                 } catch (Exception e) {
                     FileLog.e((Throwable) e);
                 }
             }
             this.detailTextView.setText(spannableStringBuilder);
-            this.yesButton.setText(LocaleController.getString("CheckPhoneNumberYes", NUM));
-            this.noButton.setText(LocaleController.getString("CheckPhoneNumberNo", NUM));
+            this.yesButton.setText(LocaleController.getString("CheckPhoneNumberYes", R.string.CheckPhoneNumberYes));
+            this.noButton.setText(LocaleController.getString("CheckPhoneNumberNo", R.string.CheckPhoneNumberNo));
         } else if (i == 1) {
-            this.textView.setText(LocaleController.getString("YourPasswordHeader", NUM));
-            this.detailTextView.setText(LocaleController.getString("YourPasswordRemember", NUM));
-            this.yesButton.setText(LocaleController.getString("YourPasswordRememberYes", NUM));
-            this.noButton.setText(LocaleController.getString("YourPasswordRememberNo", NUM));
+            this.textView.setText(LocaleController.getString("YourPasswordHeader", R.string.YourPasswordHeader));
+            this.detailTextView.setText(LocaleController.getString("YourPasswordRemember", R.string.YourPasswordRemember));
+            this.yesButton.setText(LocaleController.getString("YourPasswordRememberYes", R.string.YourPasswordRememberYes));
+            this.noButton.setText(LocaleController.getString("YourPasswordRememberNo", R.string.YourPasswordRememberNo));
         }
     }
 

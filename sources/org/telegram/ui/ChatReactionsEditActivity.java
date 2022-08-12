@@ -15,6 +15,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$ChatFull;
 import org.telegram.tgnet.TLRPC$TL_availableReaction;
@@ -100,8 +101,8 @@ public class ChatReactionsEditActivity extends BaseFragment implements Notificat
     }
 
     public View createView(final Context context) {
-        this.actionBar.setTitle(LocaleController.getString("Reactions", NUM));
-        this.actionBar.setBackButtonImage(NUM);
+        this.actionBar.setTitle(LocaleController.getString("Reactions", R.string.Reactions));
+        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             public void onItemClick(int i) {
@@ -116,7 +117,7 @@ public class ChatReactionsEditActivity extends BaseFragment implements Notificat
         TextCheckCell textCheckCell = new TextCheckCell(context);
         this.enableReactionsCell = textCheckCell;
         textCheckCell.setHeight(56);
-        this.enableReactionsCell.setTextAndCheck(LocaleController.getString("EnableReactions", NUM), true ^ this.chatReactions.isEmpty(), false);
+        this.enableReactionsCell.setTextAndCheck(LocaleController.getString("EnableReactions", R.string.EnableReactions), true ^ this.chatReactions.isEmpty(), false);
         TextCheckCell textCheckCell2 = this.enableReactionsCell;
         textCheckCell2.setBackgroundColor(Theme.getColor(textCheckCell2.isChecked() ? "windowBackgroundChecked" : "windowBackgroundUnchecked"));
         this.enableReactionsCell.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -151,14 +152,14 @@ public class ChatReactionsEditActivity extends BaseFragment implements Notificat
                     TextInfoPrivacyCell textInfoPrivacyCell = (TextInfoPrivacyCell) viewHolder.itemView;
                     textInfoPrivacyCell.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText4"));
                     if (ChatObject.isChannelAndNotMegaGroup(ChatReactionsEditActivity.this.currentChat)) {
-                        str = LocaleController.getString("EnableReactionsChannelInfo", NUM);
+                        str = LocaleController.getString("EnableReactionsChannelInfo", R.string.EnableReactionsChannelInfo);
                     } else {
-                        str = LocaleController.getString("EnableReactionsGroupInfo", NUM);
+                        str = LocaleController.getString("EnableReactionsGroupInfo", R.string.EnableReactionsGroupInfo);
                     }
                     textInfoPrivacyCell.setText(str);
                 } else if (itemViewType == 1) {
                     HeaderCell headerCell = (HeaderCell) viewHolder.itemView;
-                    headerCell.setText(LocaleController.getString("AvailableReactions", NUM));
+                    headerCell.setText(LocaleController.getString("AvailableReactions", R.string.AvailableReactions));
                     headerCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
                 } else if (itemViewType == 2) {
                     TLRPC$TL_availableReaction tLRPC$TL_availableReaction = (TLRPC$TL_availableReaction) ChatReactionsEditActivity.this.availableReactions.get(i - 2);

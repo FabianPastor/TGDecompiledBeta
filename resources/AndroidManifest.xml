@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:aapt="http://schemas.android.com/aapt" android:versionCode="27519" android:versionName="8.9.0" android:installLocation="auto" android:compileSdkVersion="31" android:compileSdkVersionCodename="12" package="org.telegram.messenger.beta" platformBuildVersionCode="31" platformBuildVersionName="12">
-    <uses-sdk android:minSdkVersion="17" android:targetSdkVersion="30"/>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:aapt="http://schemas.android.com/aapt" android:versionCode="27539" android:versionName="8.9.0" android:installLocation="auto" android:compileSdkVersion="31" android:compileSdkVersionCodename="12" package="org.telegram.messenger.beta" platformBuildVersionCode="31" platformBuildVersionName="12">
+    <uses-sdk android:minSdkVersion="16" android:targetSdkVersion="30"/>
     <uses-feature android:name="android.hardware.location.gps" android:required="false"/>
     <uses-feature android:name="android.hardware.location.network" android:required="false"/>
     <uses-feature android:name="android.hardware.location" android:required="false"/>
@@ -71,20 +71,9 @@
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
     <queries>
         <package android:name="com.google.android.apps.maps"/>
-        <intent>
-            <action android:name="com.huawei.hms.core.aidlservice"/>
-        </intent>
-        <intent>
-            <action android:name="com.huawei.hms.core"/>
-        </intent>
     </queries>
     <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION"/>
-    <permission android:name="org.telegram.messenger.beta.permission.PROCESS_PUSH_MSG" android:protectionLevel="signature"/>
-    <permission android:name="org.telegram.messenger.beta.permission.PUSH_PROVIDER" android:protectionLevel="signature"/>
-    <permission android:name="org.telegram.messenger.beta.permission.PUSH_WRITE_PROVIDER" android:protectionLevel="signature"/>
-    <uses-permission android:name="org.telegram.messenger.beta.permission.PROCESS_PUSH_MSG"/>
-    <uses-permission android:name="org.telegram.messenger.beta.permission.PUSH_PROVIDER"/>
-    <application android:theme="@style/Theme.TMessages.Start" android:label="@string/AppNameBeta" android:icon="@mipmap/ic_launcher" android:name="org.telegram.messenger.ApplicationLoader" android:manageSpaceActivity="org.telegram.ui.ExternalActionActivity" android:allowBackup="false" android:hardwareAccelerated="@bool/useHardwareAcceleration" android:largeHeap="true" android:supportsRtl="false" android:roundIcon="@mipmap/ic_launcher_round" android:appComponentFactory="androidx.core.app.CoreComponentFactory" android:allowAudioPlaybackCapture="true" android:requestLegacyExternalStorage="true" android:preserveLegacyExternalStorage="true">
+    <application android:theme="@style/Theme.TMessages.Start" android:label="@string/AppNameBeta" android:icon="@mipmap/ic_launcher" android:name="org.telegram.messenger.ApplicationLoaderImpl" android:manageSpaceActivity="org.telegram.ui.ExternalActionActivity" android:allowBackup="false" android:hardwareAccelerated="@bool/useHardwareAcceleration" android:largeHeap="true" android:supportsRtl="false" android:roundIcon="@mipmap/ic_launcher_round" android:appComponentFactory="androidx.core.app.CoreComponentFactory" android:allowAudioPlaybackCapture="true" android:requestLegacyExternalStorage="true" android:preserveLegacyExternalStorage="true">
         <meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyA-t0jLPjUt2FxrA8VPK2EiYHcYcboIR6k"/>
         <service android:name="org.telegram.messenger.GcmPushListenerService">
             <intent-filter>
@@ -100,6 +89,14 @@
             </intent-filter>
         </receiver>
         <service android:name="com.google.android.gms.measurement.AppMeasurementService" android:enabled="false" android:exported="false"/>
+        <service android:name="org.telegram.messenger.GoogleVoiceClientService"/>
+        <activity android:name="org.telegram.messenger.GoogleVoiceClientActivity" android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.voicesearch.SEND_MESSAGE_TO_CONTACTS"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="text/plain"/>
+            </intent-filter>
+        </activity>
         <activity android:theme="@style/Theme.TMessages.Start" android:name="org.telegram.ui.LaunchActivity" android:launchMode="singleTask" android:configChanges="keyboard|keyboardHidden|orientation|uiMode|screenSize" android:windowSoftInputMode="adjustResize" android:hardwareAccelerated="@bool/useHardwareAcceleration">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -164,36 +161,7 @@
             <meta-data android:name="android.service.chooser.chooser_target_service" android:value="androidx.sharetarget.ChooserTargetServiceCompat"/>
             <meta-data android:name="android.app.shortcuts" android:resource="@xml/shortcuts"/>
         </activity>
-        <activity-alias android:name="org.telegram.ui.CallsActivity" android:permission="android.permission.CALL_PHONE" android:targetActivity="org.telegram.ui.LaunchActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <data android:mimeType="vnd.android.cursor.item/vnd.org.telegram.messenger.android.call"/>
-                <data android:mimeType="vnd.android.cursor.item/vnd.org.telegram.messenger.android.call.video"/>
-            </intent-filter>
-        </activity-alias>
-        <activity-alias android:icon="@mipmap/icon_2_launcher" android:name="org.telegram.messenger.NoxIcon" android:enabled="false" android:exported="true" android:targetActivity="org.telegram.ui.LaunchActivity" android:roundIcon="@mipmap/icon_2_launcher_round">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-                <category android:name="android.intent.category.MULTIWINDOW_LAUNCHER"/>
-            </intent-filter>
-        </activity-alias>
-        <activity-alias android:icon="@mipmap/icon_5_launcher" android:name="org.telegram.messenger.TurboIcon" android:enabled="false" android:exported="true" android:targetActivity="org.telegram.ui.LaunchActivity" android:roundIcon="@mipmap/icon_5_launcher_round">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-                <category android:name="android.intent.category.MULTIWINDOW_LAUNCHER"/>
-            </intent-filter>
-        </activity-alias>
-        <activity-alias android:icon="@mipmap/icon_3_launcher" android:name="org.telegram.messenger.PremiumIcon" android:enabled="false" android:exported="true" android:targetActivity="org.telegram.ui.LaunchActivity" android:roundIcon="@mipmap/icon_3_launcher_round">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-                <category android:name="android.intent.category.MULTIWINDOW_LAUNCHER"/>
-            </intent-filter>
-        </activity-alias>
-        <activity-alias android:icon="@mipmap/icon_4_launcher" android:name="org.telegram.messenger.AquaIcon" android:enabled="false" android:exported="true" android:targetActivity="org.telegram.ui.LaunchActivity" android:roundIcon="@mipmap/icon_4_launcher_round">
+        <activity-alias android:name="org.telegram.messenger.DefaultIcon" android:enabled="true" android:exported="true" android:targetActivity="org.telegram.ui.LaunchActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -207,11 +175,40 @@
                 <category android:name="android.intent.category.MULTIWINDOW_LAUNCHER"/>
             </intent-filter>
         </activity-alias>
-        <activity-alias android:name="org.telegram.messenger.DefaultIcon" android:enabled="true" android:exported="true" android:targetActivity="org.telegram.ui.LaunchActivity">
+        <activity-alias android:icon="@mipmap/icon_4_launcher" android:name="org.telegram.messenger.AquaIcon" android:enabled="false" android:exported="true" android:targetActivity="org.telegram.ui.LaunchActivity" android:roundIcon="@mipmap/icon_4_launcher_round">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
                 <category android:name="android.intent.category.MULTIWINDOW_LAUNCHER"/>
+            </intent-filter>
+        </activity-alias>
+        <activity-alias android:icon="@mipmap/icon_3_launcher" android:name="org.telegram.messenger.PremiumIcon" android:enabled="false" android:exported="true" android:targetActivity="org.telegram.ui.LaunchActivity" android:roundIcon="@mipmap/icon_3_launcher_round">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.MULTIWINDOW_LAUNCHER"/>
+            </intent-filter>
+        </activity-alias>
+        <activity-alias android:icon="@mipmap/icon_5_launcher" android:name="org.telegram.messenger.TurboIcon" android:enabled="false" android:exported="true" android:targetActivity="org.telegram.ui.LaunchActivity" android:roundIcon="@mipmap/icon_5_launcher_round">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.MULTIWINDOW_LAUNCHER"/>
+            </intent-filter>
+        </activity-alias>
+        <activity-alias android:icon="@mipmap/icon_2_launcher" android:name="org.telegram.messenger.NoxIcon" android:enabled="false" android:exported="true" android:targetActivity="org.telegram.ui.LaunchActivity" android:roundIcon="@mipmap/icon_2_launcher_round">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.MULTIWINDOW_LAUNCHER"/>
+            </intent-filter>
+        </activity-alias>
+        <activity-alias android:name="org.telegram.ui.CallsActivity" android:permission="android.permission.CALL_PHONE" android:targetActivity="org.telegram.ui.LaunchActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="vnd.android.cursor.item/vnd.org.telegram.messenger.android.call"/>
+                <data android:mimeType="vnd.android.cursor.item/vnd.org.telegram.messenger.android.call.video"/>
             </intent-filter>
         </activity-alias>
         <activity android:name="org.telegram.ui.BubbleActivity" android:configChanges="keyboard|keyboardHidden|orientation|uiMode|screenSize" android:windowSoftInputMode="adjustResize" android:hardwareAccelerated="@bool/useHardwareAcceleration" android:allowEmbedded="true" android:documentLaunchMode="always" android:resizeableActivity="true"/>
@@ -241,13 +238,6 @@
         </activity>
         <activity android:name="org.telegram.messenger.OpenChatReceiver" android:exported="true" android:configChanges="keyboard|keyboardHidden|orientation|uiMode|screenSize"/>
         <activity android:theme="@style/Theme.TMessages.PopupNotification" android:name="org.telegram.ui.PopupNotificationActivity" android:taskAffinity="" android:excludeFromRecents="true" android:launchMode="singleTask" android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" android:windowSoftInputMode="adjustUnspecified|stateHidden|adjustResize" android:resizeableActivity="false"/>
-        <activity android:name="org.telegram.messenger.GoogleVoiceClientActivity" android:exported="true">
-            <intent-filter>
-                <action android:name="com.google.android.voicesearch.SEND_MESSAGE_TO_CONTACTS"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <data android:mimeType="text/plain"/>
-            </intent-filter>
-        </activity>
         <activity android:theme="@style/Theme.TMessages.Transparent" android:name="org.telegram.ui.VoIPPermissionActivity" android:taskAffinity="org.telegram.messenger.beta.voip" android:excludeFromRecents="true" android:configChanges="keyboard|keyboardHidden|orientation|uiMode|screenSize"/>
         <activity android:theme="@style/Theme.TMessages.TransparentWithAlerts" android:name="org.telegram.ui.VoIPFeedbackActivity" android:taskAffinity="org.telegram.messenger.beta.voip_feedback" android:excludeFromRecents="true" android:configChanges="keyboard|keyboardHidden|orientation|uiMode|screenSize"/>
         <receiver android:name="org.telegram.messenger.AutoMessageHeardReceiver" android:exported="false">
@@ -275,11 +265,6 @@
                 <action android:name="android.intent.action.PHONE_STATE"/>
             </intent-filter>
         </receiver>
-        <service android:name="org.telegram.messenger.HuaweiPushListenerService" android:exported="false">
-            <intent-filter>
-                <action android:name="com.huawei.push.action.MESSAGING_EVENT"/>
-            </intent-filter>
-        </service>
         <service android:name="org.telegram.messenger.AuthenticatorService" android:exported="true">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator"/>
@@ -301,7 +286,6 @@
         <service android:name="org.telegram.messenger.ImportingService" android:enabled="true"/>
         <service android:name="org.telegram.messenger.LocationSharingService" android:enabled="true" android:foregroundServiceType="8"/>
         <service android:name="org.telegram.messenger.voip.VoIPService" android:enabled="true" android:foregroundServiceType="e2"/>
-        <service android:name="org.telegram.messenger.GoogleVoiceClientService"/>
         <service android:name="org.telegram.messenger.MusicPlayerService" android:enabled="true" android:exported="true" android:foregroundServiceType="2"/>
         <service android:name="org.telegram.messenger.MusicBrowserService" android:exported="true">
             <intent-filter>
@@ -429,44 +413,10 @@
         </receiver>
         <meta-data android:name="com.google.android.play.billingclient.version" android:value="5.0.0"/>
         <activity android:theme="@style/Theme.Translucent.NoTitleBar" android:name="com.android.billingclient.api.ProxyBillingActivity" android:exported="false" android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize"/>
-        <receiver android:name="com.huawei.hms.support.api.push.PushMsgReceiver" android:permission="org.telegram.messenger.beta.permission.PROCESS_PUSH_MSG" android:exported="true" android:directBootAware="true">
-            <intent-filter>
-                <action android:name="com.huawei.intent.action.PUSH_DELAY_NOTIFY"/>
-                <action android:name="com.huawei.intent.action.PUSH"/>
-            </intent-filter>
-        </receiver>
-        <receiver android:name="com.huawei.hms.support.api.push.PushReceiver" android:permission="org.telegram.messenger.beta.permission.PROCESS_PUSH_MSG" android:exported="true" android:directBootAware="true">
-            <intent-filter>
-                <action android:name="com.huawei.android.push.intent.REGISTRATION"/>
-                <action android:name="com.huawei.android.push.intent.RECEIVE"/>
-            </intent-filter>
-        </receiver>
-        <service android:name="com.huawei.hms.support.api.push.service.HmsMsgService" android:enabled="true" android:exported="true" android:process=":pushservice" android:directBootAware="true">
-            <intent-filter>
-                <action android:name="com.huawei.push.msg.NOTIFY_MSG"/>
-                <action android:name="com.huawei.push.msg.PASSBY_MSG"/>
-            </intent-filter>
-        </service>
-        <provider android:name="com.huawei.hms.support.api.push.PushProvider" android:readPermission="org.telegram.messenger.beta.permission.PUSH_PROVIDER" android:writePermission="org.telegram.messenger.beta.permission.PUSH_WRITE_PROVIDER" android:exported="true" android:authorities="org.telegram.messenger.beta.huawei.push.provider"/>
-        <meta-data android:name="com.huawei.hms.client.service.name:push" android:value="push:6.5.0.300"/>
-        <meta-data android:name="com.huawei.hms.min_api_level:push:push" android:value="1"/>
-        <activity android:name="com.huawei.hms.support.api.push.TransActivity" android:exported="false"/>
         <service android:name="com.google.android.datatransport.runtime.backends.TransportBackendDiscovery" android:exported="false">
             <meta-data android:name="backend:com.google.android.datatransport.cct.CctBackendFactory" android:value="cct"/>
         </service>
         <service android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedulerService" android:permission="android.permission.BIND_JOB_SERVICE" android:exported="false"/>
         <receiver android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.AlarmManagerSchedulerBroadcastReceiver" android:exported="false"/>
-        <provider android:name="com.huawei.hms.aaid.InitProvider" android:exported="false" android:authorities="org.telegram.messenger.beta.aaidinitprovider" android:initOrder="500"/>
-        <meta-data android:name="com.huawei.hms.client.service.name:opendevice" android:value="opendevice:6.3.0.305"/>
-        <meta-data android:name="com.huawei.hms.min_api_level:opendevice:push" android:value="1"/>
-        <meta-data android:name="com.huawei.hms.client.service.name:base" android:value="base:6.5.0.300"/>
-        <meta-data android:name="com.huawei.hms.min_api_level:base:hmscore" android:value="1"/>
-        <meta-data android:name="availableLoaded" android:value="yes"/>
-        <activity android:theme="@style/Base_Translucent" android:name="com.huawei.hms.activity.BridgeActivity" android:exported="false" android:excludeFromRecents="true" android:screenOrientation="behind" android:configChanges="locale|orientation|screenLayout|uiMode|screenSize|smallestScreenSize|layoutDirection|fontScale" android:hardwareAccelerated="true">
-            <meta-data android:name="hwc-theme" android:value="androidhwext:style/Theme.Emui.Translucent"/>
-        </activity>
-        <activity android:name="com.huawei.hms.activity.EnableServiceActivity" android:exported="false" android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize"/>
-        <provider android:name="com.huawei.agconnect.core.provider.AGConnectInitializeProvider" android:exported="false" android:authorities="org.telegram.messenger.beta.AGCInitializeProvider"/>
-        <service android:name="com.huawei.agconnect.core.ServiceDiscovery" android:exported="false"/>
     </application>
 </manifest>

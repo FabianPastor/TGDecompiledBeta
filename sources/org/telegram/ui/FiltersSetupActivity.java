@@ -29,6 +29,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$DialogFilter;
@@ -182,7 +183,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
             addView(this.valueTextView, LayoutHelper.createFrame(-2, -2.0f, LocaleController.isRTL ? 5 : 3, 22.0f, 35.0f, 22.0f, 0.0f));
             ProgressButton progressButton = new ProgressButton(context);
             this.addButton = progressButton;
-            progressButton.setText(LocaleController.getString("Add", NUM));
+            progressButton.setText(LocaleController.getString("Add", R.string.Add));
             this.addButton.setTextColor(Theme.getColor("featuredStickers_buttonText"));
             this.addButton.setProgressColor(Theme.getColor("featuredStickers_buttonProgress"));
             this.addButton.setBackgroundRoundRect(Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed"));
@@ -238,7 +239,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
             super(context);
             RLottieImageView rLottieImageView = new RLottieImageView(context);
             this.imageView = rLottieImageView;
-            rLottieImageView.setAnimation(NUM, 90, 90);
+            rLottieImageView.setAnimation(R.raw.filters, 90, 90);
             this.imageView.setScaleType(ImageView.ScaleType.CENTER);
             this.imageView.playAnimation();
             this.imageView.setImportantForAccessibility(2);
@@ -249,7 +250,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
             textView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText4"));
             this.messageTextView.setTextSize(1, 14.0f);
             this.messageTextView.setGravity(17);
-            this.messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("CreateNewFilterInfo", NUM, new Object[0])));
+            this.messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("CreateNewFilterInfo", R.string.CreateNewFilterInfo, new Object[0])));
             addView(this.messageTextView, LayoutHelper.createFrame(-1, -2.0f, 49, 40.0f, 121.0f, 40.0f, 24.0f));
         }
 
@@ -286,9 +287,9 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
             this.moveImageView = imageView;
             imageView.setFocusable(false);
             this.moveImageView.setScaleType(ImageView.ScaleType.CENTER);
-            this.moveImageView.setImageResource(NUM);
+            this.moveImageView.setImageResource(R.drawable.list_reorder);
             this.moveImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("stickers_menu"), PorterDuff.Mode.MULTIPLY));
-            this.moveImageView.setContentDescription(LocaleController.getString("FilterReorder", NUM));
+            this.moveImageView.setContentDescription(LocaleController.getString("FilterReorder", R.string.FilterReorder));
             this.moveImageView.setClickable(true);
             int i = 5;
             addView(this.moveImageView, LayoutHelper.createFrame(48, 48.0f, (LocaleController.isRTL ? 5 : 3) | 16, 6.0f, 0.0f, 6.0f, 0.0f));
@@ -298,7 +299,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
             this.textView.setTextSize(16);
             this.textView.setMaxLines(1);
             this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
-            Drawable drawable = ContextCompat.getDrawable(getContext(), NUM);
+            Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.other_lockedfolders2);
             drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor("stickers_menu"), PorterDuff.Mode.MULTIPLY));
             this.textView.setRightDrawable(drawable);
             SimpleTextView simpleTextView2 = this.textView;
@@ -324,8 +325,8 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
             this.optionsImageView.setScaleType(ImageView.ScaleType.CENTER);
             this.optionsImageView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("stickers_menuSelector")));
             this.optionsImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("stickers_menu"), PorterDuff.Mode.MULTIPLY));
-            this.optionsImageView.setImageResource(NUM);
-            this.optionsImageView.setContentDescription(LocaleController.getString("AccDescrMoreOptions", NUM));
+            this.optionsImageView.setImageResource(R.drawable.msg_actions);
+            this.optionsImageView.setContentDescription(LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
             addView(this.optionsImageView, LayoutHelper.createFrame(40, 40.0f, (LocaleController.isRTL ? 3 : i) | 16, 6.0f, 0.0f, 6.0f, 0.0f));
         }
 
@@ -334,17 +335,17 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
             super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(50.0f), NUM));
         }
 
-        /* JADX WARNING: Removed duplicated region for block: B:52:0x00da  */
-        /* JADX WARNING: Removed duplicated region for block: B:56:0x00fb  */
-        /* JADX WARNING: Removed duplicated region for block: B:59:0x010f  */
-        /* JADX WARNING: Removed duplicated region for block: B:61:0x0115  */
-        /* JADX WARNING: Removed duplicated region for block: B:68:0x0145  */
-        /* JADX WARNING: Removed duplicated region for block: B:69:0x014d  */
+        /* JADX WARNING: Removed duplicated region for block: B:52:0x00d4  */
+        /* JADX WARNING: Removed duplicated region for block: B:56:0x00f5  */
+        /* JADX WARNING: Removed duplicated region for block: B:59:0x0108  */
+        /* JADX WARNING: Removed duplicated region for block: B:61:0x0110  */
+        /* JADX WARNING: Removed duplicated region for block: B:68:0x0140  */
+        /* JADX WARNING: Removed duplicated region for block: B:69:0x0148  */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public void setFilter(org.telegram.messenger.MessagesController.DialogFilter r10, boolean r11) {
+        public void setFilter(org.telegram.messenger.MessagesController.DialogFilter r9, boolean r10) {
             /*
-                r9 = this;
-                org.telegram.messenger.MessagesController$DialogFilter r0 = r9.currentFilter
+                r8 = this;
+                org.telegram.messenger.MessagesController$DialogFilter r0 = r8.currentFilter
                 r1 = -1
                 if (r0 != 0) goto L_0x0007
                 r0 = -1
@@ -352,11 +353,11 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
             L_0x0007:
                 int r0 = r0.id
             L_0x0009:
-                r9.currentFilter = r10
-                if (r10 != 0) goto L_0x000e
+                r8.currentFilter = r9
+                if (r9 != 0) goto L_0x000e
                 goto L_0x0010
             L_0x000e:
-                int r1 = r10.id
+                int r1 = r9.id
             L_0x0010:
                 r2 = 0
                 if (r0 == r1) goto L_0x0015
@@ -367,150 +368,151 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
             L_0x0016:
                 java.lang.StringBuilder r1 = new java.lang.StringBuilder
                 r1.<init>()
-                boolean r3 = r10.isDefault()
-                r4 = 2131625883(0x7f0e079b, float:1.8878987E38)
-                java.lang.String r5 = "FilterAllChats"
-                java.lang.String r6 = ", "
-                if (r3 != 0) goto L_0x00bd
-                int r3 = r10.flags
-                int r7 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_ALL_CHATS
-                r8 = r3 & r7
-                if (r8 != r7) goto L_0x0032
-                goto L_0x00bd
-            L_0x0032:
-                int r7 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_CONTACTS
-                r3 = r3 & r7
-                if (r3 == 0) goto L_0x004c
+                boolean r3 = r9.isDefault()
+                java.lang.String r4 = "FilterAllChats"
+                java.lang.String r5 = ", "
+                if (r3 != 0) goto L_0x00b5
+                int r3 = r9.flags
+                int r6 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_ALL_CHATS
+                r7 = r3 & r6
+                if (r7 != r6) goto L_0x002f
+                goto L_0x00b5
+            L_0x002f:
+                int r6 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_CONTACTS
+                r3 = r3 & r6
+                if (r3 == 0) goto L_0x0048
                 int r3 = r1.length()
-                if (r3 == 0) goto L_0x0040
-                r1.append(r6)
-            L_0x0040:
-                r3 = 2131625899(0x7f0e07ab, float:1.8879019E38)
-                java.lang.String r7 = "FilterContacts"
-                java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r7, r3)
-                r1.append(r3)
-            L_0x004c:
-                int r3 = r10.flags
-                int r7 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS
-                r3 = r3 & r7
-                if (r3 == 0) goto L_0x0068
-                int r3 = r1.length()
-                if (r3 == 0) goto L_0x005c
-                r1.append(r6)
-            L_0x005c:
-                r3 = 2131625929(0x7f0e07c9, float:1.887908E38)
-                java.lang.String r7 = "FilterNonContacts"
-                java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r7, r3)
-                r1.append(r3)
-            L_0x0068:
-                int r3 = r10.flags
-                int r7 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_GROUPS
-                r3 = r3 & r7
-                if (r3 == 0) goto L_0x0084
-                int r3 = r1.length()
-                if (r3 == 0) goto L_0x0078
-                r1.append(r6)
-            L_0x0078:
-                r3 = 2131625916(0x7f0e07bc, float:1.8879053E38)
-                java.lang.String r7 = "FilterGroups"
-                java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r7, r3)
-                r1.append(r3)
-            L_0x0084:
-                int r3 = r10.flags
-                int r7 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_CHANNELS
-                r3 = r3 & r7
-                if (r3 == 0) goto L_0x00a0
-                int r3 = r1.length()
-                if (r3 == 0) goto L_0x0094
-                r1.append(r6)
-            L_0x0094:
-                r3 = 2131625890(0x7f0e07a2, float:1.8879E38)
-                java.lang.String r7 = "FilterChannels"
-                java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r7, r3)
-                r1.append(r3)
-            L_0x00a0:
-                int r3 = r10.flags
-                int r7 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_BOTS
-                r3 = r3 & r7
-                if (r3 == 0) goto L_0x00c4
-                int r3 = r1.length()
-                if (r3 == 0) goto L_0x00b0
-                r1.append(r6)
-            L_0x00b0:
-                r3 = 2131625889(0x7f0e07a1, float:1.8878999E38)
-                java.lang.String r7 = "FilterBots"
-                java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r7, r3)
-                r1.append(r3)
-                goto L_0x00c4
-            L_0x00bd:
-                java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r4)
-                r1.append(r3)
-            L_0x00c4:
-                java.util.ArrayList<java.lang.Long> r3 = r10.alwaysShow
-                boolean r3 = r3.isEmpty()
-                if (r3 == 0) goto L_0x00d4
-                java.util.ArrayList<java.lang.Long> r3 = r10.neverShow
-                boolean r3 = r3.isEmpty()
-                if (r3 != 0) goto L_0x00f5
-            L_0x00d4:
-                int r3 = r1.length()
-                if (r3 == 0) goto L_0x00dd
-                r1.append(r6)
-            L_0x00dd:
-                java.util.ArrayList<java.lang.Long> r3 = r10.alwaysShow
-                int r3 = r3.size()
-                java.util.ArrayList<java.lang.Long> r6 = r10.neverShow
-                int r6 = r6.size()
-                int r3 = r3 + r6
-                java.lang.Object[] r6 = new java.lang.Object[r2]
-                java.lang.String r7 = "Exception"
-                java.lang.String r3 = org.telegram.messenger.LocaleController.formatPluralString(r7, r3, r6)
-                r1.append(r3)
-            L_0x00f5:
-                int r3 = r1.length()
-                if (r3 != 0) goto L_0x0107
-                r3 = 2131625925(0x7f0e07c5, float:1.8879072E38)
-                java.lang.String r6 = "FilterNoChats"
+                if (r3 == 0) goto L_0x003d
+                r1.append(r5)
+            L_0x003d:
+                int r3 = org.telegram.messenger.R.string.FilterContacts
+                java.lang.String r6 = "FilterContacts"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r6, r3)
                 r1.append(r3)
-            L_0x0107:
-                java.lang.String r3 = r10.name
-                boolean r6 = r10.isDefault()
-                if (r6 == 0) goto L_0x0113
-                java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r4)
-            L_0x0113:
-                if (r0 != 0) goto L_0x0121
-                org.telegram.messenger.MessagesController$DialogFilter r0 = r9.currentFilter
+            L_0x0048:
+                int r3 = r9.flags
+                int r6 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS
+                r3 = r3 & r6
+                if (r3 == 0) goto L_0x0063
+                int r3 = r1.length()
+                if (r3 == 0) goto L_0x0058
+                r1.append(r5)
+            L_0x0058:
+                int r3 = org.telegram.messenger.R.string.FilterNonContacts
+                java.lang.String r6 = "FilterNonContacts"
+                java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r6, r3)
+                r1.append(r3)
+            L_0x0063:
+                int r3 = r9.flags
+                int r6 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_GROUPS
+                r3 = r3 & r6
+                if (r3 == 0) goto L_0x007e
+                int r3 = r1.length()
+                if (r3 == 0) goto L_0x0073
+                r1.append(r5)
+            L_0x0073:
+                int r3 = org.telegram.messenger.R.string.FilterGroups
+                java.lang.String r6 = "FilterGroups"
+                java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r6, r3)
+                r1.append(r3)
+            L_0x007e:
+                int r3 = r9.flags
+                int r6 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_CHANNELS
+                r3 = r3 & r6
+                if (r3 == 0) goto L_0x0099
+                int r3 = r1.length()
+                if (r3 == 0) goto L_0x008e
+                r1.append(r5)
+            L_0x008e:
+                int r3 = org.telegram.messenger.R.string.FilterChannels
+                java.lang.String r6 = "FilterChannels"
+                java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r6, r3)
+                r1.append(r3)
+            L_0x0099:
+                int r3 = r9.flags
+                int r6 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_BOTS
+                r3 = r3 & r6
+                if (r3 == 0) goto L_0x00be
+                int r3 = r1.length()
+                if (r3 == 0) goto L_0x00a9
+                r1.append(r5)
+            L_0x00a9:
+                int r3 = org.telegram.messenger.R.string.FilterBots
+                java.lang.String r6 = "FilterBots"
+                java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r6, r3)
+                r1.append(r3)
+                goto L_0x00be
+            L_0x00b5:
+                int r3 = org.telegram.messenger.R.string.FilterAllChats
+                java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
+                r1.append(r3)
+            L_0x00be:
+                java.util.ArrayList<java.lang.Long> r3 = r9.alwaysShow
+                boolean r3 = r3.isEmpty()
+                if (r3 == 0) goto L_0x00ce
+                java.util.ArrayList<java.lang.Long> r3 = r9.neverShow
+                boolean r3 = r3.isEmpty()
+                if (r3 != 0) goto L_0x00ef
+            L_0x00ce:
+                int r3 = r1.length()
+                if (r3 == 0) goto L_0x00d7
+                r1.append(r5)
+            L_0x00d7:
+                java.util.ArrayList<java.lang.Long> r3 = r9.alwaysShow
+                int r3 = r3.size()
+                java.util.ArrayList<java.lang.Long> r5 = r9.neverShow
+                int r5 = r5.size()
+                int r3 = r3 + r5
+                java.lang.Object[] r5 = new java.lang.Object[r2]
+                java.lang.String r6 = "Exception"
+                java.lang.String r3 = org.telegram.messenger.LocaleController.formatPluralString(r6, r3, r5)
+                r1.append(r3)
+            L_0x00ef:
+                int r3 = r1.length()
+                if (r3 != 0) goto L_0x0100
+                int r3 = org.telegram.messenger.R.string.FilterNoChats
+                java.lang.String r5 = "FilterNoChats"
+                java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
+                r1.append(r3)
+            L_0x0100:
+                java.lang.String r3 = r9.name
+                boolean r5 = r9.isDefault()
+                if (r5 == 0) goto L_0x010e
+                int r3 = org.telegram.messenger.R.string.FilterAllChats
+                java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
+            L_0x010e:
+                if (r0 != 0) goto L_0x011c
+                org.telegram.messenger.MessagesController$DialogFilter r0 = r8.currentFilter
                 boolean r0 = r0.locked
-                if (r0 == 0) goto L_0x011e
+                if (r0 == 0) goto L_0x0119
                 r0 = 1065353216(0x3var_, float:1.0)
-                goto L_0x011f
-            L_0x011e:
+                goto L_0x011a
+            L_0x0119:
                 r0 = 0
-            L_0x011f:
-                r9.progressToLock = r0
-            L_0x0121:
-                org.telegram.ui.ActionBar.SimpleTextView r0 = r9.textView
+            L_0x011a:
+                r8.progressToLock = r0
+            L_0x011c:
+                org.telegram.ui.ActionBar.SimpleTextView r0 = r8.textView
                 android.graphics.Paint r4 = r0.getPaint()
                 android.graphics.Paint$FontMetricsInt r4 = r4.getFontMetricsInt()
                 r5 = 1101004800(0x41a00000, float:20.0)
                 int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
                 java.lang.CharSequence r3 = org.telegram.messenger.Emoji.replaceEmoji(r3, r4, r5, r2)
                 r0.setText(r3)
-                android.widget.TextView r0 = r9.valueTextView
+                android.widget.TextView r0 = r8.valueTextView
                 r0.setText(r1)
-                r9.needDivider = r11
-                boolean r10 = r10.isDefault()
-                if (r10 == 0) goto L_0x014d
-                android.widget.ImageView r10 = r9.optionsImageView
-                r11 = 8
-                r10.setVisibility(r11)
-                goto L_0x0152
+                r8.needDivider = r10
+                boolean r9 = r9.isDefault()
+                if (r9 == 0) goto L_0x0148
+                android.widget.ImageView r9 = r8.optionsImageView
+                r10 = 8
+                r9.setVisibility(r10)
+                goto L_0x014d
+            L_0x0148:
+                android.widget.ImageView r9 = r8.optionsImageView
+                r9.setVisibility(r2)
             L_0x014d:
-                android.widget.ImageView r10 = r9.optionsImageView
-                r10.setVisibility(r2)
-            L_0x0152:
-                r9.invalidate()
+                r8.invalidate()
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.FiltersSetupActivity.FilterCell.setFilter(org.telegram.messenger.MessagesController$DialogFilter, boolean):void");
@@ -649,9 +651,9 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
     }
 
     public View createView(Context context) {
-        this.actionBar.setBackButtonImage(NUM);
+        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("Filters", NUM));
+        this.actionBar.setTitle(LocaleController.getString("Filters", R.string.Filters));
         this.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             public void onItemClick(int i) {
                 if (i == -1) {
@@ -773,7 +775,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
             TextPaint textPaint = new TextPaint(1);
             textPaint.setTextSize((float) AndroidUtilities.dp(20.0f));
             builder.setTitle(Emoji.replaceEmoji(currentFilter.name, textPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false));
-            builder.setItems(new CharSequence[]{LocaleController.getString("FilterEditItem", NUM), LocaleController.getString("FilterDeleteItem", NUM)}, new int[]{NUM, NUM}, new FiltersSetupActivity$ListAdapter$$ExternalSyntheticLambda1(this, currentFilter));
+            builder.setItems(new CharSequence[]{LocaleController.getString("FilterEditItem", R.string.FilterEditItem), LocaleController.getString("FilterDeleteItem", R.string.FilterDeleteItem)}, new int[]{R.drawable.msg_edit, R.drawable.msg_delete}, new FiltersSetupActivity$ListAdapter$$ExternalSyntheticLambda1(this, currentFilter));
             AlertDialog create = builder.create();
             FiltersSetupActivity.this.showDialog(create);
             create.setItemColor(1, Theme.getColor("dialogTextRed2"), Theme.getColor("dialogRedIcon"));
@@ -791,10 +793,10 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
                 FiltersSetupActivity.this.presentFragment(new FilterCreateActivity(dialogFilter));
             } else if (i == 1) {
                 AlertDialog.Builder builder = new AlertDialog.Builder((Context) FiltersSetupActivity.this.getParentActivity());
-                builder.setTitle(LocaleController.getString("FilterDelete", NUM));
-                builder.setMessage(LocaleController.getString("FilterDeleteAlert", NUM));
-                builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
-                builder.setPositiveButton(LocaleController.getString("Delete", NUM), new FiltersSetupActivity$ListAdapter$$ExternalSyntheticLambda0(this, dialogFilter));
+                builder.setTitle(LocaleController.getString("FilterDelete", R.string.FilterDelete));
+                builder.setMessage(LocaleController.getString("FilterDeleteAlert", R.string.FilterDeleteAlert));
+                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), (DialogInterface.OnClickListener) null);
+                builder.setPositiveButton(LocaleController.getString("Delete", R.string.Delete), new FiltersSetupActivity$ListAdapter$$ExternalSyntheticLambda0(this, dialogFilter));
                 AlertDialog create = builder.create();
                 FiltersSetupActivity.this.showDialog(create);
                 TextView textView = (TextView) create.getButton(-1);
@@ -875,7 +877,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
                 suggestedFilterCell = headerCell;
             } else if (i == 1) {
                 HintInnerCell hintInnerCell = new HintInnerCell(this.mContext);
-                hintInnerCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
+                hintInnerCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_top, "windowBackgroundGrayShadow"));
                 suggestedFilterCell = hintInnerCell;
             } else if (i == 2) {
                 FilterCell filterCell = new FilterCell(this.mContext);
@@ -1019,11 +1021,11 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
                         TextCell textCell = (TextCell) viewHolder.itemView;
                         MessagesController.getNotificationsSettings(FiltersSetupActivity.this.currentAccount);
                         if (i == FiltersSetupActivity.this.createFilterRow) {
-                            Drawable drawable = this.mContext.getResources().getDrawable(NUM);
-                            Drawable drawable2 = this.mContext.getResources().getDrawable(NUM);
+                            Drawable drawable = this.mContext.getResources().getDrawable(R.drawable.poll_add_circle);
+                            Drawable drawable2 = this.mContext.getResources().getDrawable(R.drawable.poll_add_plus);
                             drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor("switchTrackChecked"), PorterDuff.Mode.MULTIPLY));
                             drawable2.setColorFilter(new PorterDuffColorFilter(Theme.getColor("checkboxCheck"), PorterDuff.Mode.MULTIPLY));
-                            textCell.setTextAndIcon(LocaleController.getString("CreateNewFilter", NUM), new CombinedDrawable(drawable, drawable2), false);
+                            textCell.setTextAndIcon(LocaleController.getString("CreateNewFilter", R.string.CreateNewFilter), new CombinedDrawable(drawable, drawable2), false);
                         }
                     } else if (itemViewType == 5) {
                         SuggestedFilterCell suggestedFilterCell = (SuggestedFilterCell) viewHolder.itemView;
@@ -1034,16 +1036,16 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
                         suggestedFilterCell.setFilter(tLRPC$TL_dialogFilterSuggested, z);
                     }
                 } else if (i == FiltersSetupActivity.this.createSectionRow) {
-                    viewHolder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
+                    viewHolder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, "windowBackgroundGrayShadow"));
                 } else {
-                    viewHolder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
+                    viewHolder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider, "windowBackgroundGrayShadow"));
                 }
             } else {
                 HeaderCell headerCell = (HeaderCell) viewHolder.itemView;
                 if (i == FiltersSetupActivity.this.filtersHeaderRow) {
-                    headerCell.setText(LocaleController.getString("Filters", NUM));
+                    headerCell.setText(LocaleController.getString("Filters", R.string.Filters));
                 } else if (i == FiltersSetupActivity.this.recommendedHeaderRow) {
-                    headerCell.setText(LocaleController.getString("FilterRecommended", NUM));
+                    headerCell.setText(LocaleController.getString("FilterRecommended", R.string.FilterRecommended));
                 }
             }
         }

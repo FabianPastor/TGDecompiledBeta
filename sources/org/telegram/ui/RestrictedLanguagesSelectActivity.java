@@ -22,6 +22,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.AlertDialog;
@@ -124,9 +125,9 @@ public class RestrictedLanguagesSelectActivity extends BaseFragment implements N
 
     public View createView(Context context) {
         this.searching = false;
-        this.actionBar.setBackButtonImage(NUM);
+        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("DoNotTranslate", NUM));
+        this.actionBar.setTitle(LocaleController.getString("DoNotTranslate", R.string.DoNotTranslate));
         this.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             public void onItemClick(int i) {
                 if (i == -1) {
@@ -134,7 +135,7 @@ public class RestrictedLanguagesSelectActivity extends BaseFragment implements N
                 }
             }
         });
-        this.actionBar.createMenu().addItem(0, NUM).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
+        this.actionBar.createMenu().addItem(0, R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
             public void onSearchExpand() {
                 boolean unused = RestrictedLanguagesSelectActivity.this.searching = true;
             }
@@ -167,7 +168,7 @@ public class RestrictedLanguagesSelectActivity extends BaseFragment implements N
                     RestrictedLanguagesSelectActivity.this.listView.setAdapter(RestrictedLanguagesSelectActivity.this.listAdapter);
                 }
             }
-        }).setSearchFieldHint(LocaleController.getString("Search", NUM));
+        }).setSearchFieldHint(LocaleController.getString("Search", R.string.Search));
         this.listAdapter = new ListAdapter(context, false);
         this.searchListViewAdapter = new ListAdapter(context, true);
         FrameLayout frameLayout = new FrameLayout(context);
@@ -176,7 +177,7 @@ public class RestrictedLanguagesSelectActivity extends BaseFragment implements N
         FrameLayout frameLayout2 = (FrameLayout) this.fragmentView;
         EmptyTextProgressView emptyTextProgressView = new EmptyTextProgressView(context);
         this.emptyView = emptyTextProgressView;
-        emptyTextProgressView.setText(LocaleController.getString("NoResult", NUM));
+        emptyTextProgressView.setText(LocaleController.getString("NoResult", R.string.NoResult));
         this.emptyView.showTextView();
         this.emptyView.setShowAtCenter(true);
         frameLayout2.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
@@ -255,10 +256,10 @@ public class RestrictedLanguagesSelectActivity extends BaseFragment implements N
             }
             if (!(localeInfo == null || localeInfo.pathToFile == null || (localeInfo.isRemote() && localeInfo.serverIndex != Integer.MAX_VALUE))) {
                 AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
-                builder.setTitle(LocaleController.getString("DeleteLocalizationTitle", NUM));
-                builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("DeleteLocalizationText", NUM, localeInfo.name)));
-                builder.setPositiveButton(LocaleController.getString("Delete", NUM), new RestrictedLanguagesSelectActivity$$ExternalSyntheticLambda0(this, localeInfo));
-                builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
+                builder.setTitle(LocaleController.getString("DeleteLocalizationTitle", R.string.DeleteLocalizationTitle));
+                builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("DeleteLocalizationText", R.string.DeleteLocalizationText, localeInfo.name)));
+                builder.setPositiveButton(LocaleController.getString("Delete", R.string.Delete), new RestrictedLanguagesSelectActivity$$ExternalSyntheticLambda0(this, localeInfo));
+                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), (DialogInterface.OnClickListener) null);
                 AlertDialog create = builder.create();
                 showDialog(create);
                 TextView textView = (TextView) create.getButton(-1);
@@ -416,33 +417,33 @@ public class RestrictedLanguagesSelectActivity extends BaseFragment implements N
             /*
                 r1 = this;
                 java.lang.String r2 = "windowBackgroundWhite"
-                if (r3 == 0) goto L_0x002a
+                if (r3 == 0) goto L_0x0029
                 r0 = 2
                 if (r3 == r0) goto L_0x000f
                 org.telegram.ui.Cells.ShadowSectionCell r2 = new org.telegram.ui.Cells.ShadowSectionCell
                 android.content.Context r3 = r1.mContext
                 r2.<init>(r3)
-                goto L_0x0039
+                goto L_0x0038
             L_0x000f:
                 org.telegram.ui.Cells.HeaderCell r3 = new org.telegram.ui.Cells.HeaderCell
                 android.content.Context r0 = r1.mContext
                 r3.<init>(r0)
                 int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
                 r3.setBackgroundColor(r2)
-                r2 = 2131625129(0x7f0e04a9, float:1.8877457E38)
+                int r2 = org.telegram.messenger.R.string.ChooseLanguages
                 java.lang.String r0 = "ChooseLanguages"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r0, r2)
                 r3.setText(r2)
-                goto L_0x0038
-            L_0x002a:
+                goto L_0x0037
+            L_0x0029:
                 org.telegram.ui.Cells.TextCheckbox2Cell r3 = new org.telegram.ui.Cells.TextCheckbox2Cell
                 android.content.Context r0 = r1.mContext
                 r3.<init>(r0)
                 int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
                 r3.setBackgroundColor(r2)
-            L_0x0038:
+            L_0x0037:
                 r2 = r3
-            L_0x0039:
+            L_0x0038:
                 org.telegram.ui.Components.RecyclerListView$Holder r3 = new org.telegram.ui.Components.RecyclerListView$Holder
                 r3.<init>(r2)
                 return r3
@@ -450,14 +451,14 @@ public class RestrictedLanguagesSelectActivity extends BaseFragment implements N
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.RestrictedLanguagesSelectActivity.ListAdapter.onCreateViewHolder(android.view.ViewGroup, int):androidx.recyclerview.widget.RecyclerView$ViewHolder");
         }
 
-        /* JADX WARNING: Code restructure failed: missing block: B:10:0x0043, code lost:
-            if (r10 == (org.telegram.ui.RestrictedLanguagesSelectActivity.access$100(r8.this$0).size() - 1)) goto L_0x0045;
+        /* JADX WARNING: Code restructure failed: missing block: B:10:0x0042, code lost:
+            if (r10 == (org.telegram.ui.RestrictedLanguagesSelectActivity.access$100(r8.this$0).size() - 1)) goto L_0x0044;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:12:0x0047, code lost:
+        /* JADX WARNING: Code restructure failed: missing block: B:12:0x0046, code lost:
             r10 = false;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:14:0x0060, code lost:
-            if (r10 == (org.telegram.ui.RestrictedLanguagesSelectActivity.access$200(r8.this$0).size() - 1)) goto L_0x0045;
+        /* JADX WARNING: Code restructure failed: missing block: B:14:0x005f, code lost:
+            if (r10 == (org.telegram.ui.RestrictedLanguagesSelectActivity.access$200(r8.this$0).size() - 1)) goto L_0x0044;
          */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public void onBindViewHolder(androidx.recyclerview.widget.RecyclerView.ViewHolder r9, int r10) {
@@ -465,27 +466,27 @@ public class RestrictedLanguagesSelectActivity extends BaseFragment implements N
                 r8 = this;
                 int r0 = r9.getItemViewType()
                 r1 = 1
-                if (r0 == 0) goto L_0x001f
+                if (r0 == 0) goto L_0x001e
                 if (r0 == r1) goto L_0x000b
-                goto L_0x00ba
+                goto L_0x00b8
             L_0x000b:
                 android.view.View r9 = r9.itemView
                 org.telegram.ui.Cells.ShadowSectionCell r9 = (org.telegram.ui.Cells.ShadowSectionCell) r9
                 android.content.Context r10 = r8.mContext
-                r0 = 2131165436(0x7var_fc, float:1.794509E38)
+                int r0 = org.telegram.messenger.R.drawable.greydivider_bottom
                 java.lang.String r1 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r10 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r10, (int) r0, (java.lang.String) r1)
                 r9.setBackgroundDrawable(r10)
-                goto L_0x00ba
-            L_0x001f:
+                goto L_0x00b8
+            L_0x001e:
                 boolean r0 = r8.search
-                if (r0 != 0) goto L_0x0025
+                if (r0 != 0) goto L_0x0024
                 int r10 = r10 + -1
-            L_0x0025:
+            L_0x0024:
                 android.view.View r9 = r9.itemView
                 org.telegram.ui.Cells.TextCheckbox2Cell r9 = (org.telegram.ui.Cells.TextCheckbox2Cell) r9
                 r2 = 0
-                if (r0 == 0) goto L_0x0049
+                if (r0 == 0) goto L_0x0048
                 org.telegram.ui.RestrictedLanguagesSelectActivity r0 = org.telegram.ui.RestrictedLanguagesSelectActivity.this
                 java.util.ArrayList r0 = r0.searchResult
                 java.lang.Object r0 = r0.get(r10)
@@ -494,14 +495,14 @@ public class RestrictedLanguagesSelectActivity extends BaseFragment implements N
                 java.util.ArrayList r3 = r3.searchResult
                 int r3 = r3.size()
                 int r3 = r3 - r1
-                if (r10 != r3) goto L_0x0047
-            L_0x0045:
+                if (r10 != r3) goto L_0x0046
+            L_0x0044:
                 r10 = 1
-                goto L_0x0063
-            L_0x0047:
+                goto L_0x0062
+            L_0x0046:
                 r10 = 0
-                goto L_0x0063
-            L_0x0049:
+                goto L_0x0062
+            L_0x0048:
                 org.telegram.ui.RestrictedLanguagesSelectActivity r0 = org.telegram.ui.RestrictedLanguagesSelectActivity.this
                 java.util.ArrayList r0 = r0.sortedLanguages
                 java.lang.Object r0 = r0.get(r10)
@@ -510,20 +511,20 @@ public class RestrictedLanguagesSelectActivity extends BaseFragment implements N
                 java.util.ArrayList r3 = r3.sortedLanguages
                 int r3 = r3.size()
                 int r3 = r3 - r1
-                if (r10 != r3) goto L_0x0047
-                goto L_0x0045
-            L_0x0063:
+                if (r10 != r3) goto L_0x0046
+                goto L_0x0044
+            L_0x0062:
                 java.lang.String r3 = r0.pluralLangCode
                 org.telegram.ui.RestrictedLanguagesSelectActivity r4 = org.telegram.ui.RestrictedLanguagesSelectActivity.this
                 java.util.HashSet r4 = r4.selectedLanguages
                 boolean r4 = r4.contains(r3)
                 boolean r5 = r0.isLocal()
-                if (r5 == 0) goto L_0x0094
+                if (r5 == 0) goto L_0x0092
                 r5 = 2
                 java.lang.Object[] r5 = new java.lang.Object[r5]
                 java.lang.String r6 = r0.name
                 r5[r2] = r6
-                r6 = 2131626409(0x7f0e09a9, float:1.8880053E38)
+                int r6 = org.telegram.messenger.R.string.LanguageCustom
                 java.lang.String r7 = "LanguageCustom"
                 java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
                 r5[r1] = r6
@@ -532,32 +533,32 @@ public class RestrictedLanguagesSelectActivity extends BaseFragment implements N
                 java.lang.String r0 = r0.nameEnglish
                 r10 = r10 ^ r1
                 r9.setTextAndValue(r5, r0, r2, r10)
-                goto L_0x009c
-            L_0x0094:
+                goto L_0x009a
+            L_0x0092:
                 java.lang.String r5 = r0.name
                 java.lang.String r0 = r0.nameEnglish
                 r10 = r10 ^ r1
                 r9.setTextAndValue(r5, r0, r2, r10)
-            L_0x009c:
-                if (r3 == 0) goto L_0x00b0
+            L_0x009a:
+                if (r3 == 0) goto L_0x00ae
                 org.telegram.messenger.LocaleController r10 = org.telegram.messenger.LocaleController.getInstance()
                 org.telegram.messenger.LocaleController$LocaleInfo r10 = r10.getCurrentLocaleInfo()
                 java.lang.String r10 = r10.pluralLangCode
                 boolean r10 = r3.equals(r10)
-                if (r10 == 0) goto L_0x00b0
+                if (r10 == 0) goto L_0x00ae
                 r10 = 1
-                goto L_0x00b1
-            L_0x00b0:
+                goto L_0x00af
+            L_0x00ae:
                 r10 = 0
-            L_0x00b1:
-                if (r4 != 0) goto L_0x00b7
-                if (r10 == 0) goto L_0x00b6
-                goto L_0x00b7
-            L_0x00b6:
+            L_0x00af:
+                if (r4 != 0) goto L_0x00b5
+                if (r10 == 0) goto L_0x00b4
+                goto L_0x00b5
+            L_0x00b4:
                 r1 = 0
-            L_0x00b7:
+            L_0x00b5:
                 r9.setChecked(r1)
-            L_0x00ba:
+            L_0x00b8:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.RestrictedLanguagesSelectActivity.ListAdapter.onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder, int):void");

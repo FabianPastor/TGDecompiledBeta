@@ -24,6 +24,7 @@ import android.widget.FrameLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.R;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 
 public class VoIPFloatingLayout extends FrameLayout {
@@ -132,7 +133,7 @@ public class VoIPFloatingLayout extends FrameLayout {
             setClipToOutline(true);
         }
         this.mutedPaint.setColor(ColorUtils.setAlphaComponent(-16777216, 102));
-        this.mutedDrawable = ContextCompat.getDrawable(context, NUM);
+        this.mutedDrawable = ContextCompat.getDrawable(context, R.drawable.calls_mute_mini);
     }
 
     /* access modifiers changed from: protected */

@@ -12,6 +12,7 @@ import androidx.core.graphics.ColorUtils;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
@@ -56,7 +57,7 @@ public abstract class BottomSheetWithRecyclerListView extends BottomSheet {
         this.baseFragment = baseFragment2;
         this.hasFixedSize = z2;
         final Activity parentActivity = baseFragment2.getParentActivity();
-        final Drawable mutate = ContextCompat.getDrawable(parentActivity, NUM).mutate();
+        final Drawable mutate = ContextCompat.getDrawable(parentActivity, R.drawable.header_shadow).mutate();
         final AnonymousClass1 r0 = new FrameLayout(parentActivity) {
             /* access modifiers changed from: protected */
             public void onMeasure(int i, int i2) {
@@ -185,7 +186,7 @@ public abstract class BottomSheetWithRecyclerListView extends BottomSheet {
             this.actionBar.setItemsBackgroundColor(getThemedColor("actionBarActionModeDefaultSelector"), false);
             this.actionBar.setItemsColor(getThemedColor("actionBarActionModeDefaultIcon"), false);
             this.actionBar.setCastShadows(true);
-            this.actionBar.setBackButtonImage(NUM);
+            this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
             this.actionBar.setTitle(getTitle());
             this.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
                 public void onItemClick(int i) {

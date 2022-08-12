@@ -41,6 +41,7 @@ import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.SvgHelper;
 import org.telegram.messenger.UserConfig;
@@ -143,7 +144,7 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
         this.currentAccount = i;
         this.fragment = baseFragment;
         this.animationEnabled = (!MessagesController.getGlobalMainSettings().getBoolean("view_animations", true) || SharedConfig.getDevicePerformanceClass() == 0) ? false : z;
-        this.shadow = ContextCompat.getDrawable(context, NUM).mutate();
+        this.shadow = ContextCompat.getDrawable(context, R.drawable.reactions_bubble_shadow).mutate();
         Rect rect2 = this.shadowPad;
         int dp2 = AndroidUtilities.dp(7.0f);
         rect2.bottom = dp2;

@@ -15,6 +15,7 @@ import org.telegram.messenger.DocumentObject;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.MediaDataController;
+import org.telegram.messenger.R;
 import org.telegram.tgnet.TLRPC$TL_attachMenuBot;
 import org.telegram.tgnet.TLRPC$TL_attachMenuBotIcon;
 
@@ -30,7 +31,7 @@ public class AttachBotIntroTopView extends View {
         this.imageReceiver = imageReceiver2;
         imageReceiver2.setAlpha(0.0f);
         this.imageReceiver.setDelegate(new AttachBotIntroTopView$$ExternalSyntheticLambda1(this));
-        this.attachDrawable = ContextCompat.getDrawable(context, NUM).mutate().getConstantState().newDrawable();
+        this.attachDrawable = ContextCompat.getDrawable(context, R.drawable.input_attach).mutate().getConstantState().newDrawable();
         this.paint.setStyle(Paint.Style.STROKE);
         this.paint.setStrokeWidth((float) AndroidUtilities.dp(3.0f));
         this.paint.setStrokeCap(Paint.Cap.ROUND);

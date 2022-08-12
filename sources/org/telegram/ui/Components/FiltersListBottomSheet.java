@@ -27,6 +27,7 @@ import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.tgnet.TLRPC$EncryptedChat;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
@@ -335,7 +336,7 @@ public class FiltersListBottomSheet extends BottomSheet implements NotificationC
         this.titleTextView.setEllipsize(TextUtils.TruncateAt.END);
         this.titleTextView.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
         this.titleTextView.setGravity(16);
-        this.titleTextView.setText(LocaleController.getString("FilterChoose", NUM));
+        this.titleTextView.setText(LocaleController.getString("FilterChoose", R.string.FilterChoose));
         this.titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.containerView.addView(this.titleTextView, LayoutHelper.createFrame(-1, 50.0f, 51, 0.0f, 0.0f, 40.0f, 0.0f));
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiLoaded);
@@ -520,35 +521,37 @@ public class FiltersListBottomSheet extends BottomSheet implements NotificationC
                 bottomSheetCell.setTextColor(Theme.getColor("dialogTextBlack"));
                 int i3 = dialogFilter.flags;
                 if ((MessagesController.DIALOG_FILTER_FLAG_ALL_CHATS & i3) == (MessagesController.DIALOG_FILTER_FLAG_CONTACTS | MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS)) {
-                    i2 = NUM;
+                    i2 = R.drawable.msg_openprofile;
                 } else {
                     if ((MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_READ & i3) != 0) {
                         int i4 = MessagesController.DIALOG_FILTER_FLAG_ALL_CHATS;
                         if ((i3 & i4) == i4) {
-                            i2 = NUM;
+                            i2 = R.drawable.msg_markunread;
                         }
                     }
                     if ((MessagesController.DIALOG_FILTER_FLAG_ALL_CHATS & i3) == MessagesController.DIALOG_FILTER_FLAG_CHANNELS) {
-                        i2 = NUM;
+                        i2 = R.drawable.msg_channel;
                     } else if ((MessagesController.DIALOG_FILTER_FLAG_ALL_CHATS & i3) == MessagesController.DIALOG_FILTER_FLAG_GROUPS) {
-                        i2 = NUM;
+                        i2 = R.drawable.msg_groups;
                     } else if ((MessagesController.DIALOG_FILTER_FLAG_ALL_CHATS & i3) == MessagesController.DIALOG_FILTER_FLAG_CONTACTS) {
-                        i2 = NUM;
+                        i2 = R.drawable.msg_contacts;
+                    } else if ((i3 & MessagesController.DIALOG_FILTER_FLAG_ALL_CHATS) == MessagesController.DIALOG_FILTER_FLAG_BOTS) {
+                        i2 = R.drawable.msg_bots;
                     } else {
-                        i2 = (i3 & MessagesController.DIALOG_FILTER_FLAG_ALL_CHATS) == MessagesController.DIALOG_FILTER_FLAG_BOTS ? NUM : NUM;
+                        i2 = R.drawable.msg_folders;
                     }
                 }
                 bottomSheetCell.setTextAndIcon((CharSequence) dialogFilter.name, i2);
                 return;
             }
             bottomSheetCell.getImageView().setColorFilter((ColorFilter) null);
-            Drawable drawable = this.context.getResources().getDrawable(NUM);
-            Drawable drawable2 = this.context.getResources().getDrawable(NUM);
+            Drawable drawable = this.context.getResources().getDrawable(R.drawable.poll_add_circle);
+            Drawable drawable2 = this.context.getResources().getDrawable(R.drawable.poll_add_plus);
             drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor("switchTrackChecked"), PorterDuff.Mode.MULTIPLY));
             drawable2.setColorFilter(new PorterDuffColorFilter(Theme.getColor("checkboxCheck"), PorterDuff.Mode.MULTIPLY));
             CombinedDrawable combinedDrawable = new CombinedDrawable(drawable, drawable2);
             bottomSheetCell.setTextColor(Theme.getColor("windowBackgroundWhiteBlueText4"));
-            bottomSheetCell.setTextAndIcon((CharSequence) LocaleController.getString("CreateNewFilter", NUM), (Drawable) combinedDrawable);
+            bottomSheetCell.setTextAndIcon((CharSequence) LocaleController.getString("CreateNewFilter", R.string.CreateNewFilter), (Drawable) combinedDrawable);
         }
     }
 }

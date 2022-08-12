@@ -8,6 +8,6 @@ public final /* synthetic */ class ChatAttachAlertLocationLayout$$ExternalSynthe
     }
 
     public final void run() {
-        this.f$0.openShareLiveLocation();
+        this.f$0.lambda$onShow$25();
     }
 }

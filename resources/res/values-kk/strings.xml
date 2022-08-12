@@ -21,12 +21,6 @@
     <string name="fcm_fallback_notification_channel_label">Өзге</string>
     <string name="google_assistant_verification_channel_name">Assistant растау құралы</string>
     <string name="google_assistant_verification_notification_title">Google Assistant хабар жіберуде</string>
-    <string name="hms_apk_not_installed_hints">%1$s ішіндегі кейбір мүмкіндіктер құрылғыңызға орнатылмаған HMS Core мүмкіндігінсіз дұрыс жұмыс істемеуі мүмкін.</string>
-    <string name="hms_bindfaildlg_message">%1$s HMS Core пайдалана алмайды. «Оңтайландырғыш (Телефон реттеушісі)» қолданбасын іске қосыңыз немесе «Параметрлер» тармағына өтіңіз, %2$s рұқсаттарының барлығын (соның ішінде автоматты түрде іске қосуды және қосымша іске қосуды) қосыңыз және әрекетті қайталаңыз.</string>
-    <string name="hms_confirm">OK</string>
-    <string name="hms_is_spoof">Құрылғыңызға HMS Core (%1$s) қолданбасының бейресми нұсқасы орнатылған сияқты. «Параметрлер» ішінен HMS Core қолданбасын жойып, ресми нұсқаны орнату үшін осы қолданбаға оралыңыз.</string>
-    <string name="hms_push_channel">Әдепкі</string>
-    <string name="hms_spoof_hints">Ескертпе</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Google арқылы сатып алу</string>
 </resources>

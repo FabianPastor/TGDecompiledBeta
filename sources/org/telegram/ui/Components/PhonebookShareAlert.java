@@ -31,6 +31,7 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.R;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.tgnet.TLRPC$TL_restrictionReason;
 import org.telegram.tgnet.TLRPC$User;
@@ -524,19 +525,19 @@ public class PhonebookShareAlert extends BottomSheet {
     /* JADX WARNING: Removed duplicated region for block: B:41:0x0105  */
     /* JADX WARNING: Removed duplicated region for block: B:44:0x0126  */
     /* JADX WARNING: Removed duplicated region for block: B:47:0x01a7  */
-    /* JADX WARNING: Removed duplicated region for block: B:59:0x0231  */
-    /* JADX WARNING: Removed duplicated region for block: B:60:0x023b  */
-    /* JADX WARNING: Removed duplicated region for block: B:63:0x02e6  */
-    /* JADX WARNING: Removed duplicated region for block: B:64:0x02f0  */
+    /* JADX WARNING: Removed duplicated region for block: B:59:0x022a  */
+    /* JADX WARNING: Removed duplicated region for block: B:60:0x0236  */
+    /* JADX WARNING: Removed duplicated region for block: B:63:0x02e1  */
+    /* JADX WARNING: Removed duplicated region for block: B:64:0x02ed  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public PhonebookShareAlert(org.telegram.ui.ActionBar.BaseFragment r20, org.telegram.messenger.ContactsController.Contact r21, org.telegram.tgnet.TLRPC$User r22, android.net.Uri r23, java.io.File r24, java.lang.String r25, java.lang.String r26, org.telegram.ui.ActionBar.Theme.ResourcesProvider r27) {
+    public PhonebookShareAlert(org.telegram.ui.ActionBar.BaseFragment r18, org.telegram.messenger.ContactsController.Contact r19, org.telegram.tgnet.TLRPC$User r20, android.net.Uri r21, java.io.File r22, java.lang.String r23, java.lang.String r24, org.telegram.ui.ActionBar.Theme.ResourcesProvider r25) {
         /*
-            r19 = this;
-            r0 = r19
-            r1 = r21
-            r2 = r23
-            r3 = r27
-            android.app.Activity r4 = r20.getParentActivity()
+            r17 = this;
+            r0 = r17
+            r1 = r19
+            r2 = r21
+            r3 = r25
+            android.app.Activity r4 = r18.getParentActivity()
             r5 = 0
             r0.<init>(r4, r5, r3)
             android.graphics.Paint r4 = new android.graphics.Paint
@@ -549,7 +550,7 @@ public class PhonebookShareAlert extends BottomSheet {
             java.util.ArrayList r4 = new java.util.ArrayList
             r4.<init>()
             r0.phones = r4
-            java.lang.String r4 = org.telegram.messenger.ContactsController.formatName(r25, r26)
+            java.lang.String r4 = org.telegram.messenger.ContactsController.formatName(r23, r24)
             java.util.ArrayList r7 = new java.util.ArrayList
             r7.<init>()
             r8 = 0
@@ -558,11 +559,11 @@ public class PhonebookShareAlert extends BottomSheet {
             java.util.ArrayList r2 = org.telegram.messenger.AndroidUtilities.loadVCardFromStream(r2, r9, r5, r7, r4)
             goto L_0x0085
         L_0x0039:
-            if (r24 == 0) goto L_0x004b
-            android.net.Uri r2 = android.net.Uri.fromFile(r24)
+            if (r22 == 0) goto L_0x004b
+            android.net.Uri r2 = android.net.Uri.fromFile(r22)
             int r9 = r0.currentAccount
             java.util.ArrayList r2 = org.telegram.messenger.AndroidUtilities.loadVCardFromStream(r2, r9, r5, r7, r4)
-            r24.delete()
+            r22.delete()
             r0.isImport = r6
             goto L_0x0085
         L_0x004b:
@@ -592,12 +593,12 @@ public class PhonebookShareAlert extends BottomSheet {
             r4.add(r2)
             r2 = r8
         L_0x0085:
-            if (r22 != 0) goto L_0x008c
+            if (r20 != 0) goto L_0x008c
             if (r1 == 0) goto L_0x008c
             org.telegram.tgnet.TLRPC$User r1 = r1.user
             goto L_0x008e
         L_0x008c:
-            r1 = r22
+            r1 = r20
         L_0x008e:
             if (r2 == 0) goto L_0x00f7
             r4 = 0
@@ -647,18 +648,18 @@ public class PhonebookShareAlert extends BottomSheet {
             java.lang.Object r2 = r2.get(r5)
             org.telegram.tgnet.TLRPC$User r2 = (org.telegram.tgnet.TLRPC$User) r2
             java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_restrictionReason> r4 = r2.restriction_reason
-            boolean r7 = android.text.TextUtils.isEmpty(r25)
+            boolean r7 = android.text.TextUtils.isEmpty(r23)
             if (r7 == 0) goto L_0x00f2
             java.lang.String r7 = r2.first_name
             java.lang.String r2 = r2.last_name
             goto L_0x00fc
         L_0x00f2:
-            r7 = r25
-            r2 = r26
+            r7 = r23
+            r2 = r24
             goto L_0x00fc
         L_0x00f7:
-            r7 = r25
-            r2 = r26
+            r7 = r23
+            r2 = r24
             r4 = r8
         L_0x00fc:
             org.telegram.tgnet.TLRPC$TL_userContact_old2 r9 = new org.telegram.tgnet.TLRPC$TL_userContact_old2
@@ -686,10 +687,10 @@ public class PhonebookShareAlert extends BottomSheet {
             r9.first_name = r7
             r9.last_name = r2
         L_0x012a:
-            r1 = r20
+            r1 = r18
             r0.parentFragment = r1
-            android.app.Activity r1 = r20.getParentActivity()
-            r19.updateRows()
+            android.app.Activity r1 = r18.getParentActivity()
+            r17.updateRows()
             org.telegram.ui.Components.PhonebookShareAlert$1 r2 = new org.telegram.ui.Components.PhonebookShareAlert$1
             r2.<init>(r1, r1)
             r2.setWillNotDraw(r5)
@@ -713,14 +714,14 @@ public class PhonebookShareAlert extends BottomSheet {
             r11 = 0
             r12 = 0
             r13 = 1117388800(0x429a0000, float:77.0)
-            r20 = r7
-            r21 = r8
-            r22 = r9
-            r23 = r10
-            r24 = r11
-            r25 = r12
-            r26 = r13
-            android.widget.FrameLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createFrame(r20, r21, r22, r23, r24, r25, r26)
+            r18 = r7
+            r19 = r8
+            r20 = r9
+            r21 = r10
+            r22 = r11
+            r23 = r12
+            r24 = r13
+            android.widget.FrameLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createFrame(r18, r19, r20, r21, r22, r23, r24)
             r2.addView(r4, r7)
             android.widget.LinearLayout r4 = new android.widget.LinearLayout
             r4.<init>(r1)
@@ -776,7 +777,7 @@ public class PhonebookShareAlert extends BottomSheet {
             int r7 = r0.getThemedColor(r7)
             r4.setBackgroundColor(r7)
             org.telegram.ui.ActionBar.ActionBar r4 = r0.actionBar
-            r7 = 2131165449(0x7var_, float:1.7945115E38)
+            int r7 = org.telegram.messenger.R.drawable.ic_ab_back
             r4.setBackButtonImage(r7)
             org.telegram.ui.ActionBar.ActionBar r4 = r0.actionBar
             java.lang.String r7 = "dialogTextBlack"
@@ -795,66 +796,66 @@ public class PhonebookShareAlert extends BottomSheet {
             r7 = 0
             r4.setAlpha(r7)
             boolean r4 = r0.isImport
-            r8 = 2131624268(0x7f0e014c, float:1.887571E38)
-            java.lang.String r10 = "AddContactPhonebookTitle"
-            r11 = 2131628349(0x7f0e113d, float:1.8883988E38)
-            java.lang.String r12 = "ShareContactTitle"
-            if (r4 == 0) goto L_0x023b
+            java.lang.String r8 = "AddContactPhonebookTitle"
+            java.lang.String r10 = "ShareContactTitle"
+            if (r4 == 0) goto L_0x0236
             org.telegram.ui.ActionBar.ActionBar r4 = r0.actionBar
-            java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r10, r8)
-            r4.setTitle(r13)
-            goto L_0x0244
-        L_0x023b:
+            int r11 = org.telegram.messenger.R.string.AddContactPhonebookTitle
+            java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r8, r11)
+            r4.setTitle(r11)
+            goto L_0x0241
+        L_0x0236:
             org.telegram.ui.ActionBar.ActionBar r4 = r0.actionBar
-            java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r12, r11)
-            r4.setTitle(r13)
-        L_0x0244:
+            int r11 = org.telegram.messenger.R.string.ShareContactTitle
+            java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r10, r11)
+            r4.setTitle(r11)
+        L_0x0241:
             android.view.ViewGroup r4 = r0.containerView
-            org.telegram.ui.ActionBar.ActionBar r13 = r0.actionBar
-            r14 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-            android.widget.FrameLayout$LayoutParams r14 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r14)
-            r4.addView(r13, r14)
+            org.telegram.ui.ActionBar.ActionBar r11 = r0.actionBar
+            r12 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+            android.widget.FrameLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r12)
+            r4.addView(r11, r12)
             org.telegram.ui.ActionBar.ActionBar r4 = r0.actionBar
-            org.telegram.ui.Components.PhonebookShareAlert$4 r13 = new org.telegram.ui.Components.PhonebookShareAlert$4
-            r13.<init>()
-            r4.setActionBarMenuOnItemClick(r13)
+            org.telegram.ui.Components.PhonebookShareAlert$4 r11 = new org.telegram.ui.Components.PhonebookShareAlert$4
+            r11.<init>()
+            r4.setActionBarMenuOnItemClick(r11)
             android.view.View r4 = new android.view.View
             r4.<init>(r1)
             r0.actionBarShadow = r4
             r4.setAlpha(r7)
             android.view.View r4 = r0.actionBarShadow
-            java.lang.String r13 = "dialogShadowLine"
-            int r14 = r0.getThemedColor(r13)
-            r4.setBackgroundColor(r14)
+            java.lang.String r11 = "dialogShadowLine"
+            int r12 = r0.getThemedColor(r11)
+            r4.setBackgroundColor(r12)
             android.view.ViewGroup r4 = r0.containerView
-            android.view.View r14 = r0.actionBarShadow
-            r15 = 1065353216(0x3var_, float:1.0)
-            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r15)
-            r4.addView(r14, r9)
+            android.view.View r12 = r0.actionBarShadow
+            r13 = 1065353216(0x3var_, float:1.0)
+            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r13)
+            r4.addView(r12, r9)
             android.view.View r4 = new android.view.View
             r4.<init>(r1)
             r0.shadow = r4
-            int r9 = r0.getThemedColor(r13)
+            int r9 = r0.getThemedColor(r11)
             r4.setBackgroundColor(r9)
             android.view.View r4 = r0.shadow
             r4.setAlpha(r7)
             android.view.ViewGroup r4 = r0.containerView
             android.view.View r7 = r0.shadow
             r9 = -1
-            r13 = 1065353216(0x3var_, float:1.0)
-            r14 = 83
+            r11 = 1065353216(0x3var_, float:1.0)
+            r12 = 83
+            r13 = 0
+            r14 = 0
             r15 = 0
-            r16 = 0
-            r17 = 0
-            r18 = 1117388800(0x429a0000, float:77.0)
-            r20 = r9
+            r16 = 1117388800(0x429a0000, float:77.0)
+            r18 = r9
+            r19 = r11
+            r20 = r12
             r21 = r13
             r22 = r14
             r23 = r15
             r24 = r16
-            r25 = r17
-            r26 = r18
-            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r20, r21, r22, r23, r24, r25, r26)
+            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r18, r19, r20, r21, r22, r23, r24)
             r4.addView(r7, r9)
             android.widget.TextView r4 = new android.widget.TextView
             r4.<init>(r1)
@@ -874,16 +875,18 @@ public class PhonebookShareAlert extends BottomSheet {
             r4 = 1096810496(0x41600000, float:14.0)
             r1.setTextSize(r6, r4)
             boolean r1 = r0.isImport
-            if (r1 == 0) goto L_0x02f0
+            if (r1 == 0) goto L_0x02ed
             android.widget.TextView r1 = r0.buttonTextView
-            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r10, r8)
+            int r4 = org.telegram.messenger.R.string.AddContactPhonebookTitle
+            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r8, r4)
             r1.setText(r4)
-            goto L_0x02f9
-        L_0x02f0:
+            goto L_0x02f8
+        L_0x02ed:
             android.widget.TextView r1 = r0.buttonTextView
-            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r12, r11)
+            int r4 = org.telegram.messenger.R.string.ShareContactTitle
+            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r10, r4)
             r1.setText(r4)
-        L_0x02f9:
+        L_0x02f8:
             android.widget.TextView r1 = r0.buttonTextView
             java.lang.String r4 = "fonts/rmedium.ttf"
             android.graphics.Typeface r4 = org.telegram.messenger.AndroidUtilities.getTypeface(r4)
@@ -905,14 +908,14 @@ public class PhonebookShareAlert extends BottomSheet {
             r8 = 1098907648(0x41800000, float:16.0)
             r9 = 1098907648(0x41800000, float:16.0)
             r10 = 1098907648(0x41800000, float:16.0)
-            r20 = r4
-            r21 = r5
-            r22 = r6
-            r23 = r7
-            r24 = r8
-            r25 = r9
-            r26 = r10
-            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r20, r21, r22, r23, r24, r25, r26)
+            r18 = r4
+            r19 = r5
+            r20 = r6
+            r21 = r7
+            r22 = r8
+            r23 = r9
+            r24 = r10
+            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r18, r19, r20, r21, r22, r23, r24)
             r2.addView(r1, r4)
             android.widget.TextView r1 = r0.buttonTextView
             org.telegram.ui.Components.PhonebookShareAlert$$ExternalSyntheticLambda2 r2 = new org.telegram.ui.Components.PhonebookShareAlert$$ExternalSyntheticLambda2
@@ -960,7 +963,7 @@ public class PhonebookShareAlert extends BottomSheet {
                     Browser.openUrl((Context) this.parentFragment.getParentActivity(), value);
                 } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder((Context) this.parentFragment.getParentActivity());
-                    builder.setItems(new CharSequence[]{LocaleController.getString("Copy", NUM)}, new PhonebookShareAlert$$ExternalSyntheticLambda0(this, vcardItem));
+                    builder.setItems(new CharSequence[]{LocaleController.getString("Copy", R.string.Copy)}, new PhonebookShareAlert$$ExternalSyntheticLambda0(this, vcardItem));
                     builder.show();
                 }
             } else {
@@ -996,7 +999,7 @@ public class PhonebookShareAlert extends BottomSheet {
             try {
                 ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", vcardItem.getValue(false)));
                 if (Build.VERSION.SDK_INT < 31) {
-                    Toast.makeText(this.parentFragment.getParentActivity(), LocaleController.getString("TextCopied", NUM), 0).show();
+                    Toast.makeText(this.parentFragment.getParentActivity(), LocaleController.getString("TextCopied", R.string.TextCopied), 0).show();
                 }
             } catch (Exception e) {
                 FileLog.e((Throwable) e);
@@ -1025,14 +1028,14 @@ public class PhonebookShareAlert extends BottomSheet {
                 Bulletin.SimpleLayout simpleLayout = new Bulletin.SimpleLayout(context, resourcesProvider);
                 int i4 = vcardItem.type;
                 if (i4 == 0) {
-                    simpleLayout.textView.setText(LocaleController.getString("PhoneCopied", NUM));
-                    simpleLayout.imageView.setImageResource(NUM);
+                    simpleLayout.textView.setText(LocaleController.getString("PhoneCopied", R.string.PhoneCopied));
+                    simpleLayout.imageView.setImageResource(R.drawable.msg_calls);
                 } else if (i4 == 1) {
-                    simpleLayout.textView.setText(LocaleController.getString("EmailCopied", NUM));
-                    simpleLayout.imageView.setImageResource(NUM);
+                    simpleLayout.textView.setText(LocaleController.getString("EmailCopied", R.string.EmailCopied));
+                    simpleLayout.imageView.setImageResource(R.drawable.msg_mention);
                 } else {
-                    simpleLayout.textView.setText(LocaleController.getString("TextCopied", NUM));
-                    simpleLayout.imageView.setImageResource(NUM);
+                    simpleLayout.textView.setText(LocaleController.getString("TextCopied", R.string.TextCopied));
+                    simpleLayout.imageView.setImageResource(R.drawable.msg_info);
                 }
                 if (Build.VERSION.SDK_INT < 31) {
                     Bulletin.make((FrameLayout) this.containerView, (Bulletin.Layout) simpleLayout, 1500).show();
@@ -1047,9 +1050,9 @@ public class PhonebookShareAlert extends BottomSheet {
         StringBuilder sb;
         if (this.isImport) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            builder.setTitle(LocaleController.getString("AddContactTitle", NUM));
-            builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
-            builder.setItems(new CharSequence[]{LocaleController.getString("CreateNewContact", NUM), LocaleController.getString("AddToExistingContact", NUM)}, new DialogInterface.OnClickListener() {
+            builder.setTitle(LocaleController.getString("AddContactTitle", R.string.AddContactTitle));
+            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), (DialogInterface.OnClickListener) null);
+            builder.setItems(new CharSequence[]{LocaleController.getString("CreateNewContact", R.string.CreateNewContact), LocaleController.getString("AddToExistingContact", R.string.AddToExistingContact)}, new DialogInterface.OnClickListener() {
                 private void fillRowWithType(String str, ContentValues contentValues) {
                     if (str.startsWith("X-")) {
                         contentValues.put("data2", 0);
@@ -1525,29 +1528,37 @@ public class PhonebookShareAlert extends BottomSheet {
 
         public void onBindViewHolder(View view, int i, int i2) {
             AndroidUtilities.VcardItem vcardItem;
+            int i3;
             boolean z = true;
             if (i2 == 1) {
                 TextCheckBoxCell textCheckBoxCell = (TextCheckBoxCell) view;
-                int i3 = NUM;
                 if (i < PhonebookShareAlert.this.phoneStartRow || i >= PhonebookShareAlert.this.phoneEndRow) {
                     vcardItem = (AndroidUtilities.VcardItem) PhonebookShareAlert.this.other.get(i - PhonebookShareAlert.this.vcardStartRow);
                     int i4 = vcardItem.type;
                     if (i4 == 1) {
-                        i3 = NUM;
+                        i3 = R.drawable.msg_mention;
                     } else if (i4 == 2) {
-                        i3 = NUM;
+                        i3 = R.drawable.msg_location;
                     } else if (i4 == 3) {
-                        i3 = NUM;
-                    } else if (i4 != 4) {
-                        if (i4 == 5) {
-                            i3 = NUM;
-                        } else if (i4 == 6) {
-                            i3 = "ORG".equalsIgnoreCase(vcardItem.getRawType(true)) ? NUM : NUM;
+                        i3 = R.drawable.msg_link;
+                    } else if (i4 == 4) {
+                        i3 = R.drawable.msg_info;
+                    } else if (i4 == 5) {
+                        i3 = R.drawable.msg_calendar2;
+                    } else if (i4 == 6) {
+                        if ("ORG".equalsIgnoreCase(vcardItem.getRawType(true))) {
+                            i3 = R.drawable.msg_work;
+                        } else {
+                            i3 = R.drawable.msg_jobtitle;
                         }
+                    } else if (i4 == 20) {
+                        i3 = R.drawable.msg_info;
+                    } else {
+                        i3 = R.drawable.msg_info;
                     }
                 } else {
                     vcardItem = (AndroidUtilities.VcardItem) PhonebookShareAlert.this.phones.get(i - PhonebookShareAlert.this.phoneStartRow);
-                    i3 = NUM;
+                    i3 = R.drawable.msg_calls;
                 }
                 if (i == getItemCount() - 1) {
                     z = false;

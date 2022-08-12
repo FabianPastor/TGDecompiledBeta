@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.util.Property;
 import android.view.View;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.R;
 import org.telegram.ui.Components.AnimationProperties;
 
 public class ZoomControlView extends View {
@@ -58,12 +59,12 @@ public class ZoomControlView extends View {
 
     public ZoomControlView(Context context) {
         super(context);
-        this.minusDrawable = context.getResources().getDrawable(NUM);
-        this.plusDrawable = context.getResources().getDrawable(NUM);
-        this.progressDrawable = context.getResources().getDrawable(NUM);
-        this.filledProgressDrawable = context.getResources().getDrawable(NUM);
-        this.knobDrawable = context.getResources().getDrawable(NUM);
-        this.pressedKnobDrawable = context.getResources().getDrawable(NUM);
+        this.minusDrawable = context.getResources().getDrawable(R.drawable.zoom_minus);
+        this.plusDrawable = context.getResources().getDrawable(R.drawable.zoom_plus);
+        this.progressDrawable = context.getResources().getDrawable(R.drawable.zoom_slide);
+        this.filledProgressDrawable = context.getResources().getDrawable(R.drawable.zoom_slide_a);
+        this.knobDrawable = context.getResources().getDrawable(R.drawable.zoom_round);
+        this.pressedKnobDrawable = context.getResources().getDrawable(R.drawable.zoom_round_b);
     }
 
     public float getZoom() {

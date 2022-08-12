@@ -4441,12 +4441,6 @@
     <string name="formatterYearMax">dd.MM.yyyy</string>
     <string name="google_assistant_verification_channel_name">Assistant verifier</string>
     <string name="google_assistant_verification_notification_title">L\'Assistente Google sta inviando il messaggio</string>
-    <string name="hms_apk_not_installed_hints">Alcune funzioni in %1$s potrebbero non funzionare correttamente senza HMS Core, che non è installato sul tuo dispositivo.</string>
-    <string name="hms_bindfaildlg_message">%1$s non può utilizzare HMS Core. Avvia Optimizer o accedi a Impostazioni, attiva tutte le autorizzazioni per %2$s (incluso l\'avvio automatico e l\'avvio secondario) e riprova.</string>
-    <string name="hms_confirm">OK</string>
-    <string name="hms_is_spoof">Sembra che tu abbia una versione non ufficiale di HMS Core (%1$s) installata sul tuo dispositivo. Disinstalla HMS Core dalle Impostazioni e torna a questa app per installare la versione ufficiale.</string>
-    <string name="hms_push_channel">Predefinito</string>
-    <string name="hms_spoof_hints">Nota</string>
     <string name="items_few">%1$d oggetti</string>
     <string name="items_many">%1$d oggetti</string>
     <string name="items_one">%1$d oggetto</string>

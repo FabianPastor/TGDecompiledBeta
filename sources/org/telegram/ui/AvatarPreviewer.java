@@ -26,6 +26,7 @@ import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$ChatFull;
@@ -117,11 +118,11 @@ public class AvatarPreviewer {
     }
 
     public enum MenuItem {
-        OPEN_PROFILE("OpenProfile", NUM, NUM),
-        OPEN_CHANNEL("OpenChannel2", NUM, NUM),
-        OPEN_GROUP("OpenGroup2", NUM, NUM),
-        SEND_MESSAGE("SendMessage", NUM, NUM),
-        MENTION("Mention", NUM, NUM);
+        OPEN_PROFILE("OpenProfile", R.string.OpenProfile, R.drawable.msg_openprofile),
+        OPEN_CHANNEL("OpenChannel2", R.string.OpenChannel2, R.drawable.msg_channel),
+        OPEN_GROUP("OpenGroup2", r17, r12),
+        SEND_MESSAGE("SendMessage", R.string.SendMessage, r12),
+        MENTION("Mention", R.string.Mention, R.drawable.msg_mention);
         
         /* access modifiers changed from: private */
         public final int iconResId;
@@ -366,7 +367,7 @@ public class AvatarPreviewer {
             radialProgress2.setOverrideAlpha(0.0f);
             radialProgress2.setIcon(10, false, false);
             radialProgress2.setColors(NUM, NUM, -1, -1);
-            this.arrowDrawable = ContextCompat.getDrawable(context, NUM);
+            this.arrowDrawable = ContextCompat.getDrawable(context, R.drawable.preview_arrow);
         }
 
         /* access modifiers changed from: protected */

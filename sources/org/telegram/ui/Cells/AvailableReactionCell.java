@@ -115,9 +115,9 @@ public class AvailableReactionCell extends FrameLayout {
             r0 = 0
         L_0x004c:
             r12.locked = r0
-            if (r0 == 0) goto L_0x0071
+            if (r0 == 0) goto L_0x0070
             android.content.Context r13 = r12.getContext()
-            r15 = 2131166030(0x7var_e, float:1.7946294E38)
+            int r15 = org.telegram.messenger.R.drawable.other_lockedfolders2
             android.graphics.drawable.Drawable r13 = androidx.core.content.ContextCompat.getDrawable(r13, r15)
             android.graphics.PorterDuffColorFilter r15 = new android.graphics.PorterDuffColorFilter
             java.lang.String r0 = "stickers_menu"
@@ -127,12 +127,12 @@ public class AvailableReactionCell extends FrameLayout {
             r13.setColorFilter(r15)
             org.telegram.ui.ActionBar.SimpleTextView r15 = r12.textView
             r15.setRightDrawable((android.graphics.drawable.Drawable) r13)
-            goto L_0x0077
-        L_0x0071:
+            goto L_0x0076
+        L_0x0070:
             org.telegram.ui.ActionBar.SimpleTextView r13 = r12.textView
             r15 = 0
             r13.setRightDrawable((android.graphics.drawable.Drawable) r15)
-        L_0x0077:
+        L_0x0076:
             r12.setChecked(r14, r2)
             return
         */

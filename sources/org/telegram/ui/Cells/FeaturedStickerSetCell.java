@@ -23,6 +23,7 @@ import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SvgHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLObject;
@@ -87,7 +88,7 @@ public class FeaturedStickerSetCell extends FrameLayout {
         addView(backupImageView2, LayoutHelper.createFrame(48, 48.0f, (!z3 ? 3 : i) | 48, z3 ? 0.0f : 12.0f, 8.0f, z3 ? 12.0f : 0.0f, 0.0f));
         ProgressButton progressButton = new ProgressButton(context);
         this.addButton = progressButton;
-        progressButton.setText(LocaleController.getString("Add", NUM));
+        progressButton.setText(LocaleController.getString("Add", R.string.Add));
         this.addButton.setTextColor(Theme.getColor("featuredStickers_buttonText"));
         this.addButton.setProgressColor(Theme.getColor("featuredStickers_buttonProgress"));
         this.addButton.setBackgroundRoundRect(Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed"));
@@ -95,7 +96,7 @@ public class FeaturedStickerSetCell extends FrameLayout {
         ImageView imageView2 = new ImageView(context);
         this.checkImage = imageView2;
         imageView2.setColorFilter(new PorterDuffColorFilter(Theme.getColor("featuredStickers_addedIcon"), PorterDuff.Mode.MULTIPLY));
-        this.checkImage.setImageResource(NUM);
+        this.checkImage.setImageResource(R.drawable.sticker_added);
         addView(this.checkImage, LayoutHelper.createFrame(19, 14.0f));
     }
 

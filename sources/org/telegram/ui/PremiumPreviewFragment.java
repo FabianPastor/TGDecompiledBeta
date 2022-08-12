@@ -49,6 +49,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.ConnectionsManager;
@@ -413,7 +414,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
         this.premiumFeatures.clear();
         fillPremiumFeaturesList(this.premiumFeatures, this.currentAccount);
         final Rect rect = new Rect();
-        Drawable mutate = context.getResources().getDrawable(NUM).mutate();
+        Drawable mutate = context.getResources().getDrawable(R.drawable.sheet_shadow_round).mutate();
         this.shadowDrawable = mutate;
         mutate.setColorFilter(new PorterDuffColorFilter(getThemedColor("dialogBackground"), PorterDuff.Mode.MULTIPLY));
         this.shadowDrawable.getPadding(rect);
@@ -650,7 +651,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
         this.fragmentView = this.contentView;
         this.actionBar.setBackground((Drawable) null);
         this.actionBar.setCastShadows(false);
-        this.actionBar.setBackButtonImage(NUM);
+        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             public void onItemClick(int i) {
                 if (i == -1) {
@@ -702,18 +703,18 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
     public static void fillPremiumFeaturesList(ArrayList<PremiumFeatureData> arrayList, int i) {
         MessagesController instance = MessagesController.getInstance(i);
         int i2 = 0;
-        arrayList.add(new PremiumFeatureData(0, NUM, LocaleController.getString("PremiumPreviewLimits", NUM), LocaleController.formatString("PremiumPreviewLimitsDescription", NUM, Integer.valueOf(instance.channelsLimitPremium), Integer.valueOf(instance.dialogFiltersLimitPremium), Integer.valueOf(instance.dialogFiltersPinnedLimitPremium), Integer.valueOf(instance.publicLinksLimitPremium), 4)));
-        arrayList.add(new PremiumFeatureData(1, NUM, LocaleController.getString("PremiumPreviewUploads", NUM), LocaleController.getString("PremiumPreviewUploadsDescription", NUM)));
-        arrayList.add(new PremiumFeatureData(2, NUM, LocaleController.getString("PremiumPreviewDownloadSpeed", NUM), LocaleController.getString("PremiumPreviewDownloadSpeedDescription", NUM)));
-        arrayList.add(new PremiumFeatureData(8, NUM, LocaleController.getString("PremiumPreviewVoiceToText", NUM), LocaleController.getString("PremiumPreviewVoiceToTextDescription", NUM)));
-        arrayList.add(new PremiumFeatureData(3, NUM, LocaleController.getString("PremiumPreviewNoAds", NUM), LocaleController.getString("PremiumPreviewNoAdsDescription", NUM)));
-        arrayList.add(new PremiumFeatureData(4, NUM, LocaleController.getString("PremiumPreviewReactions", NUM), LocaleController.getString("PremiumPreviewReactionsDescription", NUM)));
-        arrayList.add(new PremiumFeatureData(5, NUM, LocaleController.getString("PremiumPreviewStickers", NUM), LocaleController.getString("PremiumPreviewStickersDescription", NUM)));
-        arrayList.add(new PremiumFeatureData(11, NUM, LocaleController.getString("PremiumPreviewEmoji", NUM), LocaleController.getString("PremiumPreviewEmojiDescription", NUM)));
-        arrayList.add(new PremiumFeatureData(9, NUM, LocaleController.getString("PremiumPreviewAdvancedChatManagement", NUM), LocaleController.getString("PremiumPreviewAdvancedChatManagementDescription", NUM)));
-        arrayList.add(new PremiumFeatureData(6, NUM, LocaleController.getString("PremiumPreviewProfileBadge", NUM), LocaleController.getString("PremiumPreviewProfileBadgeDescription", NUM)));
-        arrayList.add(new PremiumFeatureData(7, NUM, LocaleController.getString("PremiumPreviewAnimatedProfiles", NUM), LocaleController.getString("PremiumPreviewAnimatedProfilesDescription", NUM)));
-        arrayList.add(new PremiumFeatureData(10, NUM, LocaleController.getString("PremiumPreviewAppIcon", NUM), LocaleController.getString("PremiumPreviewAppIconDescription", NUM)));
+        arrayList.add(new PremiumFeatureData(0, R.drawable.msg_premium_limits, LocaleController.getString("PremiumPreviewLimits", R.string.PremiumPreviewLimits), LocaleController.formatString("PremiumPreviewLimitsDescription", R.string.PremiumPreviewLimitsDescription, Integer.valueOf(instance.channelsLimitPremium), Integer.valueOf(instance.dialogFiltersLimitPremium), Integer.valueOf(instance.dialogFiltersPinnedLimitPremium), Integer.valueOf(instance.publicLinksLimitPremium), 4)));
+        arrayList.add(new PremiumFeatureData(1, R.drawable.msg_premium_uploads, LocaleController.getString("PremiumPreviewUploads", R.string.PremiumPreviewUploads), LocaleController.getString("PremiumPreviewUploadsDescription", R.string.PremiumPreviewUploadsDescription)));
+        arrayList.add(new PremiumFeatureData(2, R.drawable.msg_premium_speed, LocaleController.getString("PremiumPreviewDownloadSpeed", R.string.PremiumPreviewDownloadSpeed), LocaleController.getString("PremiumPreviewDownloadSpeedDescription", R.string.PremiumPreviewDownloadSpeedDescription)));
+        arrayList.add(new PremiumFeatureData(8, R.drawable.msg_premium_voice, LocaleController.getString("PremiumPreviewVoiceToText", R.string.PremiumPreviewVoiceToText), LocaleController.getString("PremiumPreviewVoiceToTextDescription", R.string.PremiumPreviewVoiceToTextDescription)));
+        arrayList.add(new PremiumFeatureData(3, R.drawable.msg_premium_ads, LocaleController.getString("PremiumPreviewNoAds", R.string.PremiumPreviewNoAds), LocaleController.getString("PremiumPreviewNoAdsDescription", R.string.PremiumPreviewNoAdsDescription)));
+        arrayList.add(new PremiumFeatureData(4, R.drawable.msg_premium_reactions, LocaleController.getString("PremiumPreviewReactions", R.string.PremiumPreviewReactions), LocaleController.getString("PremiumPreviewReactionsDescription", R.string.PremiumPreviewReactionsDescription)));
+        arrayList.add(new PremiumFeatureData(5, R.drawable.msg_premium_stickers, LocaleController.getString("PremiumPreviewStickers", R.string.PremiumPreviewStickers), LocaleController.getString("PremiumPreviewStickersDescription", R.string.PremiumPreviewStickersDescription)));
+        arrayList.add(new PremiumFeatureData(11, R.drawable.msg_premium_emoji, LocaleController.getString("PremiumPreviewEmoji", R.string.PremiumPreviewEmoji), LocaleController.getString("PremiumPreviewEmojiDescription", R.string.PremiumPreviewEmojiDescription)));
+        arrayList.add(new PremiumFeatureData(9, R.drawable.msg_premium_tools, LocaleController.getString("PremiumPreviewAdvancedChatManagement", R.string.PremiumPreviewAdvancedChatManagement), LocaleController.getString("PremiumPreviewAdvancedChatManagementDescription", R.string.PremiumPreviewAdvancedChatManagementDescription)));
+        arrayList.add(new PremiumFeatureData(6, R.drawable.msg_premium_badge, LocaleController.getString("PremiumPreviewProfileBadge", R.string.PremiumPreviewProfileBadge), LocaleController.getString("PremiumPreviewProfileBadgeDescription", R.string.PremiumPreviewProfileBadgeDescription)));
+        arrayList.add(new PremiumFeatureData(7, R.drawable.msg_premium_avatar, LocaleController.getString("PremiumPreviewAnimatedProfiles", R.string.PremiumPreviewAnimatedProfiles), LocaleController.getString("PremiumPreviewAnimatedProfilesDescription", R.string.PremiumPreviewAnimatedProfilesDescription)));
+        arrayList.add(new PremiumFeatureData(10, R.drawable.msg_premium_icons, LocaleController.getString("PremiumPreviewAppIcon", R.string.PremiumPreviewAppIcon), LocaleController.getString("PremiumPreviewAppIconDescription", R.string.PremiumPreviewAppIconDescription)));
         if (instance.premiumFeaturesTypesToPosition.size() > 0) {
             while (i2 < arrayList.size()) {
                 instance.premiumFeaturesTypesToPosition.append(11, 6);
@@ -852,14 +853,14 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
 
     public static String getPremiumButtonText(int i) {
         if (BuildVars.IS_BILLING_UNAVAILABLE) {
-            return LocaleController.getString(NUM);
+            return LocaleController.getString(R.string.SubscribeToPremiumNotAvailable);
         }
         if (BuildVars.useInvoiceBilling()) {
             TLRPC$TL_help_premiumPromo premiumPromo = MediaDataController.getInstance(i).getPremiumPromo();
             if (premiumPromo == null) {
-                return LocaleController.getString(NUM);
+                return LocaleController.getString(R.string.SubscribeToPremiumNoPrice);
             }
-            return LocaleController.formatString(NUM, BillingController.getInstance().formatCurrency(premiumPromo.monthly_amount, premiumPromo.currency));
+            return LocaleController.formatString(R.string.SubscribeToPremium, BillingController.getInstance().formatCurrency(premiumPromo.monthly_amount, premiumPromo.currency));
         }
         String str = null;
         ProductDetails productDetails = BillingController.PREMIUM_PRODUCT_DETAILS;
@@ -880,9 +881,9 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
             }
         }
         if (str == null) {
-            return LocaleController.getString(NUM);
+            return LocaleController.getString(R.string.Loading);
         }
-        return LocaleController.formatString(NUM, str);
+        return LocaleController.formatString(R.string.SubscribeToPremium, str);
     }
 
     /* access modifiers changed from: private */
@@ -981,7 +982,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
                 };
             } else if (i == 2) {
                 view = new ShadowSectionCell(context, 12, Theme.getColor("windowBackgroundGray"));
-                CombinedDrawable combinedDrawable = new CombinedDrawable(new ColorDrawable(Theme.getColor("windowBackgroundGray")), Theme.getThemedDrawable(context, NUM, Theme.getColor("windowBackgroundGrayShadow")), 0, 0);
+                CombinedDrawable combinedDrawable = new CombinedDrawable(new ColorDrawable(Theme.getColor("windowBackgroundGray")), Theme.getThemedDrawable(context, R.drawable.greydivider_bottom, Theme.getColor("windowBackgroundGrayShadow")), 0, 0);
                 combinedDrawable.setFullsize(true);
                 view.setBackgroundDrawable(combinedDrawable);
             } else if (i == 4) {
@@ -1033,7 +1034,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
                 premiumFeatureCell.setData(premiumFeatureData, z2);
             } else if (i3 == premiumPreviewFragment.statusRow || i3 == premiumPreviewFragment.privacyRow) {
                 TextInfoPrivacyCell textInfoPrivacyCell = (TextInfoPrivacyCell) viewHolder2.itemView;
-                CombinedDrawable combinedDrawable = new CombinedDrawable(new ColorDrawable(Theme.getColor("windowBackgroundGray")), Theme.getThemedDrawable(textInfoPrivacyCell.getContext(), NUM, Theme.getColor("windowBackgroundGrayShadow")), 0, 0);
+                CombinedDrawable combinedDrawable = new CombinedDrawable(new ColorDrawable(Theme.getColor("windowBackgroundGray")), Theme.getThemedDrawable(textInfoPrivacyCell.getContext(), R.drawable.greydivider, Theme.getColor("windowBackgroundGrayShadow")), 0, 0);
                 combinedDrawable.setFullsize(true);
                 textInfoPrivacyCell.setBackground(combinedDrawable);
                 PremiumPreviewFragment premiumPreviewFragment2 = PremiumPreviewFragment.this;
@@ -1219,8 +1220,8 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
         }
 
         public void updateText() {
-            this.titleView.setText(LocaleController.getString(PremiumPreviewFragment.this.forcePremium ? NUM : NUM));
-            this.subtitleView.setText(AndroidUtilities.replaceTags(LocaleController.getString((PremiumPreviewFragment.this.getUserConfig().isPremium() || PremiumPreviewFragment.this.forcePremium) ? NUM : NUM)));
+            this.titleView.setText(LocaleController.getString(PremiumPreviewFragment.this.forcePremium ? R.string.TelegramPremiumSubscribedTitle : R.string.TelegramPremium));
+            this.subtitleView.setText(AndroidUtilities.replaceTags(LocaleController.getString((PremiumPreviewFragment.this.getUserConfig().isPremium() || PremiumPreviewFragment.this.forcePremium) ? R.string.TelegramPremiumSubscribedSubtitle : R.string.TelegramPremiumSubtitle)));
         }
     }
 

@@ -66,6 +66,7 @@ import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
@@ -471,7 +472,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                 }
 
                 public void onSetBackButtonVisible(boolean z) {
-                    AndroidUtilities.updateImageViewImageAnimated(ChatAttachAlert.this.actionBar.getBackButton(), z ? NUM : NUM);
+                    AndroidUtilities.updateImageViewImageAnimated(ChatAttachAlert.this.actionBar.getBackButton(), z ? R.drawable.ic_ab_back : R.drawable.ic_close_white);
                 }
             });
             MessageObject replyingMessageObject = ((ChatActivity) this.baseFragment).getChatActivityEnterView().getReplyingMessageObject();
@@ -1255,7 +1256,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             int r1 = r8.getThemedColor(r1)
             r0.setBackgroundColor(r1)
             org.telegram.ui.ActionBar.ActionBar r0 = r8.actionBar
-            r1 = 2131165449(0x7var_, float:1.7945115E38)
+            int r1 = org.telegram.messenger.R.drawable.ic_ab_back
             r0.setBackButtonImage(r1)
             org.telegram.ui.ActionBar.ActionBar r0 = r8.actionBar
             java.lang.String r5 = "dialogTextBlack"
@@ -1294,10 +1295,10 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r8.selectedMenuItem = r15
             r15.setLongClickEnabled(r12)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r8.selectedMenuItem
-            r1 = 2131165453(0x7var_d, float:1.7945124E38)
+            int r1 = org.telegram.messenger.R.drawable.ic_ab_other
             r0.setIcon((int) r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r8.selectedMenuItem
-            r1 = 2131624003(0x7f0e0043, float:1.8875173E38)
+            int r1 = org.telegram.messenger.R.string.AccDescrMoreOptions
             java.lang.String r2 = "AccDescrMoreOptions"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setContentDescription(r1)
@@ -1346,7 +1347,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r8.doneItem = r13
             r13.setLongClickEnabled(r12)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r8.doneItem
-            r1 = 2131625290(0x7f0e054a, float:1.8877784E38)
+            int r1 = org.telegram.messenger.R.string.Create
             java.lang.String r2 = "Create"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             java.lang.String r1 = r1.toUpperCase()
@@ -1381,10 +1382,10 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r8.searchItem = r13
             r13.setLongClickEnabled(r12)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r8.searchItem
-            r1 = 2131165456(0x7var_, float:1.794513E38)
+            int r1 = org.telegram.messenger.R.drawable.ic_ab_search
             r0.setIcon((int) r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r8.searchItem
-            r1 = 2131628168(0x7f0e1088, float:1.8883621E38)
+            int r1 = org.telegram.messenger.R.string.Search
             java.lang.String r2 = "Search"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setContentDescription(r1)
@@ -1453,7 +1454,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r8.selectedArrowImageView = r0
             android.content.Context r0 = r29.getContext()
             android.content.res.Resources r0 = r0.getResources()
-            r3 = 2131165262(0x7var_e, float:1.7944736E38)
+            int r3 = org.telegram.messenger.R.drawable.attach_arrow_right
             android.graphics.drawable.Drawable r0 = r0.getDrawable(r3)
             android.graphics.drawable.Drawable r0 = r0.mutate()
             android.graphics.PorterDuffColorFilter r3 = new android.graphics.PorterDuffColorFilter
@@ -1495,7 +1496,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r0.<init>(r9)
             android.content.Context r5 = r29.getContext()
             android.content.res.Resources r5 = r5.getResources()
-            r7 = 2131165261(0x7var_d, float:1.7944734E38)
+            int r7 = org.telegram.messenger.R.drawable.attach_arrow_left
             android.graphics.drawable.Drawable r5 = r5.getDrawable(r7)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             android.graphics.PorterDuffColorFilter r7 = new android.graphics.PorterDuffColorFilter
@@ -1524,7 +1525,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r3 = 19
             r0.setGravity(r3)
             android.widget.TextView r0 = r8.mediaPreviewTextView
-            r3 = 2131624512(0x7f0e0240, float:1.8876206E38)
+            int r3 = org.telegram.messenger.R.string.AttachMediaPreview
             java.lang.String r5 = "AttachMediaPreview"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r0.setText(r3)
@@ -1603,7 +1604,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             android.view.View r0 = new android.view.View
             r0.<init>(r9)
             r8.shadow = r0
-            r1 = 2131165265(0x7var_, float:1.7944742E38)
+            int r1 = org.telegram.messenger.R.drawable.attach_shadow
             r0.setBackgroundResource(r1)
             android.view.View r0 = r8.shadow
             android.graphics.drawable.Drawable r0 = r0.getBackground()
@@ -1781,7 +1782,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r7 = r34
             r0.<init>(r2, r3, r4, r5, r6, r7)
             r8.commentTextView = r15
-            r0 = 2131624263(0x7f0e0147, float:1.88757E38)
+            int r0 = org.telegram.messenger.R.string.AddCaption
             java.lang.String r1 = "AddCaption"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r15.setHint(r0)
@@ -1842,18 +1843,18 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             int r3 = r8.getThemedColor(r3)
             int r4 = android.os.Build.VERSION.SDK_INT
             r5 = 21
-            if (r4 < r5) goto L_0x06b6
+            if (r4 < r5) goto L_0x06ab
             java.lang.String r6 = "dialogFloatingButtonPressed"
-            goto L_0x06b8
-        L_0x06b6:
+            goto L_0x06ad
+        L_0x06ab:
             java.lang.String r6 = "dialogFloatingButton"
-        L_0x06b8:
+        L_0x06ad:
             int r6 = r8.getThemedColor(r6)
             android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.createSimpleSelectorCircleDrawable(r2, r3, r6)
             r8.writeButtonDrawable = r2
-            if (r4 >= r5) goto L_0x06f3
+            if (r4 >= r5) goto L_0x06e7
             android.content.res.Resources r2 = r30.getResources()
-            r3 = 2131165415(0x7var_e7, float:1.7945046E38)
+            int r3 = org.telegram.messenger.R.drawable.floating_shadow_profile
             android.graphics.drawable.Drawable r2 = r2.getDrawable(r3)
             android.graphics.drawable.Drawable r2 = r2.mutate()
             android.graphics.PorterDuffColorFilter r3 = new android.graphics.PorterDuffColorFilter
@@ -1868,12 +1869,12 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             int r6 = org.telegram.messenger.AndroidUtilities.dp(r0)
             r3.setIconSize(r2, r6)
             r8.writeButtonDrawable = r3
-        L_0x06f3:
+        L_0x06e7:
             android.widget.ImageView r2 = r8.writeButton
             android.graphics.drawable.Drawable r3 = r8.writeButtonDrawable
             r2.setBackgroundDrawable(r3)
             android.widget.ImageView r2 = r8.writeButton
-            r3 = 2131165264(0x7var_, float:1.794474E38)
+            int r3 = org.telegram.messenger.R.drawable.attach_send
             r2.setImageResource(r3)
             android.widget.ImageView r2 = r8.writeButton
             android.graphics.PorterDuffColorFilter r3 = new android.graphics.PorterDuffColorFilter
@@ -1888,37 +1889,37 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             android.widget.ImageView r2 = r8.writeButton
             android.widget.ImageView$ScaleType r3 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r3)
-            if (r4 < r5) goto L_0x072d
+            if (r4 < r5) goto L_0x0720
             android.widget.ImageView r2 = r8.writeButton
             org.telegram.ui.Components.ChatAttachAlert$14 r3 = new org.telegram.ui.Components.ChatAttachAlert$14
             r3.<init>(r8)
             r2.setOutlineProvider(r3)
-        L_0x072d:
+        L_0x0720:
             android.widget.FrameLayout r2 = r8.writeButtonContainer
             android.widget.ImageView r3 = r8.writeButton
-            if (r4 < r5) goto L_0x0738
+            if (r4 < r5) goto L_0x072b
             r6 = 56
             r21 = 56
-            goto L_0x073c
-        L_0x0738:
+            goto L_0x072f
+        L_0x072b:
             r6 = 60
             r21 = 60
-        L_0x073c:
-            if (r4 < r5) goto L_0x0741
+        L_0x072f:
+            if (r4 < r5) goto L_0x0734
             r22 = 1113587712(0x42600000, float:56.0)
-            goto L_0x0745
-        L_0x0741:
+            goto L_0x0738
+        L_0x0734:
             r0 = 1114636288(0x42700000, float:60.0)
             r22 = 1114636288(0x42700000, float:60.0)
-        L_0x0745:
+        L_0x0738:
             r23 = 51
-            if (r4 < r5) goto L_0x074e
+            if (r4 < r5) goto L_0x0741
             r0 = 1073741824(0x40000000, float:2.0)
             r24 = 1073741824(0x40000000, float:2.0)
-            goto L_0x0750
-        L_0x074e:
+            goto L_0x0743
+        L_0x0741:
             r24 = 0
-        L_0x0750:
+        L_0x0743:
             r25 = 0
             r26 = 0
             r27 = 0
@@ -1960,10 +1961,10 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r21 = 1091567616(0x41100000, float:9.0)
             android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r15, r16, r17, r18, r19, r20, r21)
             r0.addView(r1, r2)
-            if (r10 == 0) goto L_0x07bb
+            if (r10 == 0) goto L_0x07ae
             r29.checkColors()
             r8.navBarColorKey = r14
-        L_0x07bb:
+        L_0x07ae:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatAttachAlert.<init>(android.content.Context, org.telegram.ui.ActionBar.BaseFragment, boolean, boolean, org.telegram.ui.ActionBar.Theme$ResourcesProvider):void");
@@ -2083,7 +2084,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                         return;
                     }
                 } else if (intValue == 6) {
-                    if (AndroidUtilities.isGoogleMapsInstalled(this.baseFragment)) {
+                    if (AndroidUtilities.isMapsInstalled(this.baseFragment)) {
                         if (this.locationLayout == null) {
                             AttachAlertLayout[] attachAlertLayoutArr = this.layouts;
                             ChatAttachAlertLocationLayout chatAttachAlertLocationLayout = new ChatAttachAlertLocationLayout(this, getContext(), resourcesProvider);
@@ -2251,12 +2252,12 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                 this.itemCells[i] = new ActionBarMenuSubItem(getContext(), i == 0, i == 1, resourcesProvider);
                 if (i == 0) {
                     if (UserObject.isUserSelf(currentUser)) {
-                        this.itemCells[i].setTextAndIcon(LocaleController.getString("SetReminder", NUM), NUM);
+                        this.itemCells[i].setTextAndIcon(LocaleController.getString("SetReminder", R.string.SetReminder), R.drawable.msg_calendar2);
                     } else {
-                        this.itemCells[i].setTextAndIcon(LocaleController.getString("ScheduleMessage", NUM), NUM);
+                        this.itemCells[i].setTextAndIcon(LocaleController.getString("ScheduleMessage", R.string.ScheduleMessage), R.drawable.msg_calendar2);
                     }
                 } else if (i == 1) {
-                    this.itemCells[i].setTextAndIcon(LocaleController.getString("SendWithoutSound", NUM), NUM);
+                    this.itemCells[i].setTextAndIcon(LocaleController.getString("SendWithoutSound", R.string.SendWithoutSound), R.drawable.input_notify_off);
                 }
                 this.itemCells[i].setMinimumWidth(AndroidUtilities.dp(196.0f));
                 this.sendPopupLayout.addView(this.itemCells[i], LayoutHelper.createLinear(-1, 48));
@@ -2267,7 +2268,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             ActionBarPopupWindow actionBarPopupWindow = new ActionBarPopupWindow(this.sendPopupLayout, -2, -2);
             this.sendPopupWindow = actionBarPopupWindow;
             actionBarPopupWindow.setAnimationEnabled(false);
-            this.sendPopupWindow.setAnimationStyle(NUM);
+            this.sendPopupWindow.setAnimationStyle(R.style.PopupContextAnimation2);
             this.sendPopupWindow.setOutsideTouchable(true);
             this.sendPopupWindow.setClippingEnabled(true);
             this.sendPopupWindow.setInputMethodMode(2);
@@ -2336,7 +2337,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
 
     public void onLongClickBotButton(TLRPC$TL_attachMenuBot tLRPC$TL_attachMenuBot, TLRPC$User tLRPC$User) {
         String userName = tLRPC$TL_attachMenuBot != null ? tLRPC$TL_attachMenuBot.short_name : UserObject.getUserName(tLRPC$User);
-        new AlertDialog.Builder(getContext()).setTitle(LocaleController.getString(NUM)).setMessage(AndroidUtilities.replaceTags(tLRPC$TL_attachMenuBot != null ? LocaleController.formatString("BotRemoveFromMenu", NUM, userName) : LocaleController.formatString("BotRemoveInlineFromMenu", NUM, userName))).setPositiveButton(LocaleController.getString("OK", NUM), new ChatAttachAlert$$ExternalSyntheticLambda4(this, tLRPC$TL_attachMenuBot, tLRPC$User)).setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null).show();
+        new AlertDialog.Builder(getContext()).setTitle(LocaleController.getString(R.string.BotRemoveFromMenuTitle)).setMessage(AndroidUtilities.replaceTags(tLRPC$TL_attachMenuBot != null ? LocaleController.formatString("BotRemoveFromMenu", R.string.BotRemoveFromMenu, userName) : LocaleController.formatString("BotRemoveInlineFromMenu", R.string.BotRemoveInlineFromMenu, userName))).setPositiveButton(LocaleController.getString("OK", R.string.OK), new ChatAttachAlert$$ExternalSyntheticLambda4(this, tLRPC$TL_attachMenuBot, tLRPC$User)).setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), (DialogInterface.OnClickListener) null).show();
     }
 
     /* access modifiers changed from: private */
@@ -4137,7 +4138,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             MediaController.loadGalleryPhotosAlbums(0);
         }
         this.currentAttachLayout.onOpenAnimationEnd();
-        AndroidUtilities.makeAccessibilityAnnouncement(LocaleController.getString("AccDescrAttachButton", NUM));
+        AndroidUtilities.makeAccessibilityAnnouncement(LocaleController.getString("AccDescrAttachButton", R.string.AccDescrAttachButton));
         this.openTransitionFinished = true;
     }
 
@@ -4156,9 +4157,9 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                 this.shadow.setVisibility(8);
             }
             if (this.avatarPicker == 2) {
-                this.selectedTextView.setText(LocaleController.getString("ChoosePhotoOrVideo", NUM));
+                this.selectedTextView.setText(LocaleController.getString("ChoosePhotoOrVideo", R.string.ChoosePhotoOrVideo));
             } else {
-                this.selectedTextView.setText(LocaleController.getString("ChoosePhoto", NUM));
+                this.selectedTextView.setText(LocaleController.getString("ChoosePhoto", R.string.ChoosePhoto));
             }
         } else {
             this.typeButtonsAvailable = true;
@@ -4169,7 +4170,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         this.isSoundPicker = true;
         this.buttonsRecyclerView.setVisibility(8);
         this.shadow.setVisibility(8);
-        this.selectedTextView.setText(LocaleController.getString("ChoosePhotoOrVideo", NUM));
+        this.selectedTextView.setText(LocaleController.getString("ChoosePhotoOrVideo", R.string.ChoosePhotoOrVideo));
     }
 
     public void setMaxSelectedPhotos(int i, boolean z) {
@@ -4225,22 +4226,22 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             if (itemViewType == 0) {
                 AttachButton attachButton = (AttachButton) viewHolder.itemView;
                 if (i == this.galleryButton) {
-                    attachButton.setTextAndIcon(1, LocaleController.getString("ChatGallery", NUM), Theme.chat_attachButtonDrawables[0], "chat_attachGalleryBackground", "chat_attachGalleryText");
+                    attachButton.setTextAndIcon(1, LocaleController.getString("ChatGallery", R.string.ChatGallery), Theme.chat_attachButtonDrawables[0], "chat_attachGalleryBackground", "chat_attachGalleryText");
                     attachButton.setTag(1);
                 } else if (i == this.documentButton) {
-                    attachButton.setTextAndIcon(4, LocaleController.getString("ChatDocument", NUM), Theme.chat_attachButtonDrawables[2], "chat_attachFileBackground", "chat_attachFileText");
+                    attachButton.setTextAndIcon(4, LocaleController.getString("ChatDocument", R.string.ChatDocument), Theme.chat_attachButtonDrawables[2], "chat_attachFileBackground", "chat_attachFileText");
                     attachButton.setTag(4);
                 } else if (i == this.locationButton) {
-                    attachButton.setTextAndIcon(6, LocaleController.getString("ChatLocation", NUM), Theme.chat_attachButtonDrawables[4], "chat_attachLocationBackground", "chat_attachLocationText");
+                    attachButton.setTextAndIcon(6, LocaleController.getString("ChatLocation", R.string.ChatLocation), Theme.chat_attachButtonDrawables[4], "chat_attachLocationBackground", "chat_attachLocationText");
                     attachButton.setTag(6);
                 } else if (i == this.musicButton) {
-                    attachButton.setTextAndIcon(3, LocaleController.getString("AttachMusic", NUM), Theme.chat_attachButtonDrawables[1], "chat_attachAudioBackground", "chat_attachAudioText");
+                    attachButton.setTextAndIcon(3, LocaleController.getString("AttachMusic", R.string.AttachMusic), Theme.chat_attachButtonDrawables[1], "chat_attachAudioBackground", "chat_attachAudioText");
                     attachButton.setTag(3);
                 } else if (i == this.pollButton) {
-                    attachButton.setTextAndIcon(9, LocaleController.getString("Poll", NUM), Theme.chat_attachButtonDrawables[5], "chat_attachPollBackground", "chat_attachPollText");
+                    attachButton.setTextAndIcon(9, LocaleController.getString("Poll", R.string.Poll), Theme.chat_attachButtonDrawables[5], "chat_attachPollBackground", "chat_attachPollText");
                     attachButton.setTag(9);
                 } else if (i == this.contactButton) {
-                    attachButton.setTextAndIcon(5, LocaleController.getString("AttachContact", NUM), Theme.chat_attachButtonDrawables[3], "chat_attachContactBackground", "chat_attachContactText");
+                    attachButton.setTextAndIcon(5, LocaleController.getString("AttachContact", R.string.AttachContact), Theme.chat_attachButtonDrawables[3], "chat_attachContactBackground", "chat_attachContactText");
                     attachButton.setTag(5);
                 }
             } else if (itemViewType == 1) {
@@ -4476,7 +4477,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                 this.allowPassConfirmationAlert = false;
             } else if (!this.confirmationAlertShown) {
                 this.confirmationAlertShown = true;
-                AlertDialog create = new AlertDialog.Builder(this.baseFragment.getParentActivity(), this.parentThemeDelegate).setTitle(LocaleController.getString("DiscardSelectionAlertTitle", NUM)).setMessage(LocaleController.getString("DiscardSelectionAlertMessage", NUM)).setPositiveButton(LocaleController.getString("PassportDiscard", NUM), new ChatAttachAlert$$ExternalSyntheticLambda3(this)).setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null).setOnCancelListener(new ChatAttachAlert$$ExternalSyntheticLambda2(this)).setOnPreDismissListener(new ChatAttachAlert$$ExternalSyntheticLambda5(this)).create();
+                AlertDialog create = new AlertDialog.Builder(this.baseFragment.getParentActivity(), this.parentThemeDelegate).setTitle(LocaleController.getString("DiscardSelectionAlertTitle", R.string.DiscardSelectionAlertTitle)).setMessage(LocaleController.getString("DiscardSelectionAlertMessage", R.string.DiscardSelectionAlertMessage)).setPositiveButton(LocaleController.getString("PassportDiscard", R.string.PassportDiscard), new ChatAttachAlert$$ExternalSyntheticLambda3(this)).setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), (DialogInterface.OnClickListener) null).setOnCancelListener(new ChatAttachAlert$$ExternalSyntheticLambda2(this)).setOnPreDismissListener(new ChatAttachAlert$$ExternalSyntheticLambda5(this)).create();
                 create.show();
                 TextView textView = (TextView) create.getButton(-1);
                 if (textView != null) {

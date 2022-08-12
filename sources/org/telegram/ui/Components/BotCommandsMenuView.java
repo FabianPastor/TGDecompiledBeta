@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.R;
 import org.telegram.tgnet.TLRPC$BotInfo;
 import org.telegram.tgnet.TLRPC$TL_botCommand;
 import org.telegram.ui.ActionBar.MenuDrawable;
@@ -55,7 +56,8 @@ public class BotCommandsMenuView extends View {
             }
         };
         this.backDrawable = r1;
-        this.webViewAnimation = new RLottieDrawable(NUM, String.valueOf(NUM) + hashCode(), AndroidUtilities.dp(20.0f), AndroidUtilities.dp(20.0f)) {
+        int i = R.raw.bot_webview_sheet_to_cross;
+        this.webViewAnimation = new RLottieDrawable(i, String.valueOf(i) + hashCode(), AndroidUtilities.dp(20.0f), AndroidUtilities.dp(20.0f)) {
             public void invalidateSelf() {
                 super.invalidateSelf();
                 BotCommandsMenuView.this.invalidate();
@@ -67,7 +69,7 @@ public class BotCommandsMenuView extends View {
                 BotCommandsMenuView.this.invalidate();
             }
         };
-        this.menuText = LocaleController.getString(NUM);
+        this.menuText = LocaleController.getString(R.string.BotsMenuTitle);
         this.drawBackgroundDrawable = true;
         updateColors();
         r1.setMiniIcon(true);
@@ -79,7 +81,7 @@ public class BotCommandsMenuView extends View {
         Drawable createSimpleSelectorRoundRectDrawable = Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(16.0f), 0, Theme.getColor("featuredStickers_addButtonPressed"));
         this.backgroundDrawable = createSimpleSelectorRoundRectDrawable;
         createSimpleSelectorRoundRectDrawable.setCallback(this);
-        setContentDescription(LocaleController.getString("AccDescrBotMenu", NUM));
+        setContentDescription(LocaleController.getString("AccDescrBotMenu", R.string.AccDescrBotMenu));
     }
 
     public void setDrawBackgroundDrawable(boolean z) {
@@ -297,7 +299,7 @@ public class BotCommandsMenuView extends View {
 
     public boolean setMenuText(String str) {
         if (str == null) {
-            str = LocaleController.getString(NUM);
+            str = LocaleController.getString(R.string.BotsMenuTitle);
         }
         String str2 = this.menuText;
         boolean z = str2 == null || !str2.equals(str);

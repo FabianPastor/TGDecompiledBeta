@@ -21,12 +21,6 @@
     <string name="fcm_fallback_notification_channel_label">Altres</string>
     <string name="google_assistant_verification_channel_name">Verificador de l\'Assistent</string>
     <string name="google_assistant_verification_notification_title">L\'Assistent de Google està enviant el missatge</string>
-    <string name="hms_apk_not_installed_hints">És possible que algunes funcions de %1$s no funcionin correctament sense l\'HMS Core, que no està instal·lat al sistema.</string>
-    <string name="hms_bindfaildlg_message">%1$s no pot utilitzar HMS Core. Inicieu l\'Optimitzador (Administrador del telèfon) o aneu a Paràmetres, habiliteu tots els permisos per a %2$s (incloent-hi l\'inici automàtic i l\'inici secundari) i torneu a provar-ho.</string>
-    <string name="hms_confirm">D\'acord</string>
-    <string name="hms_is_spoof">Sembla que teniu una versió no oficial d\'HMS Core (%1$s) instal·lada al dispositiu. Desinstal·leu HMS Core des de Paràmetres i torneu a aquesta aplicació per instal·lar-ne la versió oficial.</string>
-    <string name="hms_push_channel">Predeterminat</string>
-    <string name="hms_spoof_hints">Nota</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Compra amb Google</string>
 </resources>

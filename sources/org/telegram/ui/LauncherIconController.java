@@ -4,6 +4,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.R;
 
 public class LauncherIconController {
     public static void tryFixLauncherIconIfNeeded() {
@@ -44,12 +45,12 @@ public class LauncherIconController {
     }
 
     public enum LauncherIcon {
-        DEFAULT("DefaultIcon", NUM, NUM, NUM),
-        VINTAGE("VintageIcon", NUM, NUM, NUM),
-        AQUA("AquaIcon", NUM, NUM, NUM),
-        PREMIUM("PremiumIcon", NUM, NUM, NUM, true),
-        TURBO("TurboIcon", NUM, NUM, NUM, true),
-        NOX("NoxIcon", NUM, NUM, NUM, true);
+        DEFAULT("DefaultIcon", r4, r15, R.string.AppIconDefault),
+        VINTAGE("VintageIcon", R.drawable.icon_6_background_sa, R.mipmap.icon_6_foreground_sa, R.string.AppIconVintage),
+        AQUA("AquaIcon", R.drawable.icon_4_background_sa, r13, R.string.AppIconAqua),
+        PREMIUM("PremiumIcon", R.drawable.icon_3_background_sa, R.mipmap.icon_3_foreground_sa, R.string.AppIconPremium, true),
+        TURBO("TurboIcon", R.drawable.icon_5_background_sa, R.mipmap.icon_5_foreground_sa, R.string.AppIconTurbo, true),
+        NOX("NoxIcon", R.drawable.icon_2_background_sa, r13, R.string.AppIconNox, true);
         
         public final int background;
         private ComponentName componentName;

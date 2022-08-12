@@ -29,6 +29,7 @@ import androidx.annotation.Keep;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.R;
 import org.telegram.messenger.Utilities;
 
 public class DrawerLayoutContainer extends FrameLayout {
@@ -78,7 +79,7 @@ public class DrawerLayoutContainer extends FrameLayout {
             setOnApplyWindowInsetsListener(new DrawerLayoutContainer$$ExternalSyntheticLambda0(this));
             setSystemUiVisibility(1280);
         }
-        this.shadowLeft = getResources().getDrawable(NUM);
+        this.shadowLeft = getResources().getDrawable(R.drawable.menu_shadow);
     }
 
     /* access modifiers changed from: private */

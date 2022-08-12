@@ -33,6 +33,7 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationsController;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
@@ -488,7 +489,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         ActionBar actionBar2 = new ActionBar(this);
         this.actionBar = actionBar2;
         actionBar2.setOccupyStatusBar(false);
-        this.actionBar.setBackButtonImage(NUM);
+        this.actionBar.setBackButtonImage(R.drawable.ic_close_white);
         this.actionBar.setBackgroundColor(Theme.getColor("actionBarDefault"));
         this.actionBar.setItemsBackgroundColor(Theme.getColor("actionBarDefaultSelector"), false);
         this.popupContainer.addView(this.actionBar);
@@ -591,10 +592,10 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         super.onRequestPermissionsResult(i, strArr, iArr);
         if (i == 3 && iArr[0] != 0) {
             AlertDialog.Builder builder = new AlertDialog.Builder((Context) this);
-            builder.setTitle(LocaleController.getString("AppName", NUM));
-            builder.setMessage(LocaleController.getString("PermissionNoAudioWithHint", NUM));
-            builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", NUM), new PopupNotificationActivity$$ExternalSyntheticLambda0(this));
-            builder.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
+            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+            builder.setMessage(LocaleController.getString("PermissionNoAudioWithHint", R.string.PermissionNoAudioWithHint));
+            builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), new PopupNotificationActivity$$ExternalSyntheticLambda0(this));
+            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (DialogInterface.OnClickListener) null);
             builder.show();
         }
     }
@@ -1783,7 +1784,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                 if (tLRPC$User2 != null) {
                     this.nameTextView.setText(UserObject.getUserName(tLRPC$User2));
                     if (DialogObject.isEncryptedDialog(dialogId)) {
-                        this.nameTextView.setCompoundDrawablesWithIntrinsicBounds(NUM, 0, 0, 0);
+                        this.nameTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock_white, 0, 0, 0);
                         this.nameTextView.setCompoundDrawablePadding(AndroidUtilities.dp(4.0f));
                     } else {
                         this.nameTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
@@ -1833,7 +1834,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                 setTypingAnimation(true);
                 return;
             }
-            this.onlineTextView.setText(LocaleController.getString("ServiceNotifications", NUM));
+            this.onlineTextView.setText(LocaleController.getString("ServiceNotifications", R.string.ServiceNotifications));
         }
     }
 

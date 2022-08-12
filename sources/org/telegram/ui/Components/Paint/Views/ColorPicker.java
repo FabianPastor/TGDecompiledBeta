@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import androidx.annotation.Keep;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.R;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.Paint.Swatch;
 
@@ -58,22 +59,22 @@ public class ColorPicker extends FrameLayout {
     public ColorPicker(Context context) {
         super(context);
         setWillNotDraw(false);
-        this.shadowDrawable = getResources().getDrawable(NUM);
+        this.shadowDrawable = getResources().getDrawable(R.drawable.knob_shadow);
         this.backgroundPaint.setColor(-1);
         this.swatchStrokePaint.setStyle(Paint.Style.STROKE);
         this.swatchStrokePaint.setStrokeWidth((float) AndroidUtilities.dp(1.0f));
         ImageView imageView = new ImageView(context);
         this.settingsButton = imageView;
-        imageView.setContentDescription(LocaleController.getString("AccDescrBrushType", NUM));
+        imageView.setContentDescription(LocaleController.getString("AccDescrBrushType", R.string.AccDescrBrushType));
         this.settingsButton.setScaleType(ImageView.ScaleType.CENTER);
-        this.settingsButton.setImageResource(NUM);
+        this.settingsButton.setImageResource(R.drawable.photo_paint_brush);
         addView(this.settingsButton, LayoutHelper.createFrame(46, 52.0f));
         this.settingsButton.setOnClickListener(new ColorPicker$$ExternalSyntheticLambda0(this));
         ImageView imageView2 = new ImageView(context);
         this.undoButton = imageView2;
-        imageView2.setContentDescription(LocaleController.getString("Undo", NUM));
+        imageView2.setContentDescription(LocaleController.getString("Undo", R.string.Undo));
         this.undoButton.setScaleType(ImageView.ScaleType.CENTER);
-        this.undoButton.setImageResource(NUM);
+        this.undoButton.setImageResource(R.drawable.photo_undo);
         addView(this.undoButton, LayoutHelper.createFrame(46, 52.0f));
         this.undoButton.setOnClickListener(new ColorPicker$$ExternalSyntheticLambda1(this));
         SharedPreferences sharedPreferences = context.getSharedPreferences("paint", 0);

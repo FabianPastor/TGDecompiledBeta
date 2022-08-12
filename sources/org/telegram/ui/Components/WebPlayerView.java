@@ -47,6 +47,7 @@ import org.telegram.messenger.Bitmaps;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageReceiver;
+import org.telegram.messenger.R;
 import org.telegram.ui.Components.VideoPlayer;
 
 public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerDelegate, AudioManager.OnAudioFocusChangeListener {
@@ -2275,7 +2276,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
             ImageView imageView5 = new ImageView(context);
             this.shareButton = imageView5;
             imageView5.setScaleType(ImageView.ScaleType.CENTER);
-            this.shareButton.setImageResource(NUM);
+            this.shareButton.setImageResource(R.drawable.ic_share_video);
             this.controlsView.addView(this.shareButton, LayoutHelper.createFrame(56, 48, 53));
             this.shareButton.setOnClickListener(new WebPlayerView$$ExternalSyntheticLambda1(this));
         }
@@ -2544,13 +2545,13 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
         this.controlsView.checkNeedHide();
         AndroidUtilities.cancelRunOnUIThread(this.progressRunnable);
         if (this.videoPlayer.isPlaying()) {
-            this.playButton.setImageResource(this.isInline ? NUM : NUM);
+            this.playButton.setImageResource(this.isInline ? R.drawable.ic_pauseinline : R.drawable.ic_pause);
             AndroidUtilities.runOnUIThread(this.progressRunnable, 500);
             checkAudioFocus();
         } else if (this.isCompleted) {
-            this.playButton.setImageResource(this.isInline ? NUM : NUM);
+            this.playButton.setImageResource(this.isInline ? R.drawable.ic_againinline : R.drawable.ic_again);
         } else {
-            this.playButton.setImageResource(this.isInline ? NUM : NUM);
+            this.playButton.setImageResource(this.isInline ? R.drawable.ic_playinline : R.drawable.ic_play);
         }
     }
 
@@ -2593,11 +2594,11 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
         }
         this.fullscreenButton.setVisibility(0);
         if (!this.inFullscreen) {
-            this.fullscreenButton.setImageResource(NUM);
+            this.fullscreenButton.setImageResource(R.drawable.ic_gofullscreen);
             this.fullscreenButton.setLayoutParams(LayoutHelper.createFrame(56, 56.0f, 85, 0.0f, 0.0f, 0.0f, 5.0f));
             return;
         }
-        this.fullscreenButton.setImageResource(NUM);
+        this.fullscreenButton.setImageResource(R.drawable.ic_outfullscreen);
         this.fullscreenButton.setLayoutParams(LayoutHelper.createFrame(56, 56.0f, 85, 0.0f, 0.0f, 0.0f, 1.0f));
     }
 
@@ -2621,7 +2622,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
     public void updateInlineButton() {
         ImageView imageView = this.inlineButton;
         if (imageView != null) {
-            imageView.setImageResource(this.isInline ? NUM : NUM);
+            imageView.setImageResource(this.isInline ? R.drawable.ic_goinline : R.drawable.ic_outinline);
             this.inlineButton.setVisibility(this.videoPlayer.isPlayerPrepared() ? 0 : 8);
             if (this.isInline) {
                 this.inlineButton.setLayoutParams(LayoutHelper.createFrame(40, 40, 53));

@@ -32,7 +32,7 @@ public class JoinToSendSettingsView extends LinearLayout {
         return true;
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:2:0x0066, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:2:0x0064, code lost:
         r2 = r7.admin_rights;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
@@ -55,9 +55,9 @@ public class JoinToSendSettingsView extends LinearLayout {
             r2 = 23
             r1.<init>((android.content.Context) r6, (int) r2)
             r5.joinHeaderCell = r1
-            java.lang.String r2 = "ChannelSettingsJoinTitle"
-            r3 = 2131624980(0x7f0e0414, float:1.8877155E38)
-            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)
+            int r2 = org.telegram.messenger.R.string.ChannelSettingsJoinTitle
+            java.lang.String r3 = "ChannelSettingsJoinTitle"
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setText(r2)
             org.telegram.ui.Cells.HeaderCell r1 = r5.joinHeaderCell
             java.lang.String r2 = "windowBackgroundWhite"
@@ -71,26 +71,26 @@ public class JoinToSendSettingsView extends LinearLayout {
             android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r0)
             r1.setBackground(r2)
             org.telegram.ui.Cells.TextCheckCell r1 = r5.joinToSendCell
-            java.lang.String r2 = "ChannelSettingsJoinToSend"
-            r3 = 2131624981(0x7f0e0415, float:1.8877157E38)
-            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)
+            int r2 = org.telegram.messenger.R.string.ChannelSettingsJoinToSend
+            java.lang.String r3 = "ChannelSettingsJoinToSend"
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             boolean r3 = r5.isJoinToSend
             r1.setTextAndCheck(r2, r3, r3)
             org.telegram.ui.Cells.TextCheckCell r1 = r5.joinToSendCell
             boolean r2 = r7.creator
             r3 = 0
-            if (r2 != 0) goto L_0x0071
+            if (r2 != 0) goto L_0x006f
             org.telegram.tgnet.TLRPC$TL_chatAdminRights r2 = r7.admin_rights
-            if (r2 == 0) goto L_0x006f
+            if (r2 == 0) goto L_0x006d
             boolean r2 = r2.ban_users
-            if (r2 == 0) goto L_0x006f
-            goto L_0x0071
-        L_0x006f:
+            if (r2 == 0) goto L_0x006d
+            goto L_0x006f
+        L_0x006d:
             r2 = 0
-            goto L_0x0072
-        L_0x0071:
+            goto L_0x0070
+        L_0x006f:
             r2 = 1
-        L_0x0072:
+        L_0x0070:
             r1.setEnabled(r2)
             org.telegram.ui.Cells.TextCheckCell r1 = r5.joinToSendCell
             org.telegram.ui.Components.JoinToSendSettingsView$$ExternalSyntheticLambda1 r2 = new org.telegram.ui.Components.JoinToSendSettingsView$$ExternalSyntheticLambda1
@@ -104,7 +104,7 @@ public class JoinToSendSettingsView extends LinearLayout {
             android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r0)
             r1.setBackground(r2)
             org.telegram.ui.Cells.TextCheckCell r1 = r5.joinRequestCell
-            r2 = 2131624978(0x7f0e0412, float:1.887715E38)
+            int r2 = org.telegram.messenger.R.string.ChannelSettingsJoinRequest
             java.lang.String r4 = "ChannelSettingsJoinRequest"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             boolean r4 = r5.isJoinRequest
@@ -114,15 +114,15 @@ public class JoinToSendSettingsView extends LinearLayout {
             r1.setPivotY(r2)
             org.telegram.ui.Cells.TextCheckCell r1 = r5.joinRequestCell
             boolean r4 = r7.creator
-            if (r4 != 0) goto L_0x00b8
+            if (r4 != 0) goto L_0x00b5
             org.telegram.tgnet.TLRPC$TL_chatAdminRights r7 = r7.admin_rights
-            if (r7 == 0) goto L_0x00b7
+            if (r7 == 0) goto L_0x00b4
             boolean r7 = r7.ban_users
-            if (r7 == 0) goto L_0x00b7
-            goto L_0x00b8
-        L_0x00b7:
+            if (r7 == 0) goto L_0x00b4
+            goto L_0x00b5
+        L_0x00b4:
             r0 = 0
-        L_0x00b8:
+        L_0x00b5:
             r1.setEnabled(r0)
             org.telegram.ui.Cells.TextCheckCell r7 = r5.joinRequestCell
             org.telegram.ui.Components.JoinToSendSettingsView$$ExternalSyntheticLambda2 r0 = new org.telegram.ui.Components.JoinToSendSettingsView$$ExternalSyntheticLambda2
@@ -133,7 +133,7 @@ public class JoinToSendSettingsView extends LinearLayout {
             org.telegram.ui.Cells.TextInfoPrivacyCell r7 = new org.telegram.ui.Cells.TextInfoPrivacyCell
             r7.<init>(r6)
             r5.joinToSendInfoCell = r7
-            r0 = 2131624982(0x7f0e0416, float:1.887716E38)
+            int r0 = org.telegram.messenger.R.string.ChannelSettingsJoinToSendInfo
             java.lang.String r1 = "ChannelSettingsJoinToSendInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r7.setText(r0)
@@ -142,23 +142,23 @@ public class JoinToSendSettingsView extends LinearLayout {
             org.telegram.ui.Cells.TextInfoPrivacyCell r7 = new org.telegram.ui.Cells.TextInfoPrivacyCell
             r7.<init>(r6)
             r5.joinRequestInfoCell = r7
-            r6 = 2131624979(0x7f0e0413, float:1.8877153E38)
+            int r6 = org.telegram.messenger.R.string.ChannelSettingsJoinRequestInfo
             java.lang.String r0 = "ChannelSettingsJoinRequestInfo"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r0, r6)
             r7.setText(r6)
             org.telegram.ui.Cells.TextInfoPrivacyCell r6 = r5.joinRequestInfoCell
             r5.addView(r6)
             boolean r6 = r5.isJoinToSend
-            if (r6 == 0) goto L_0x0100
+            if (r6 == 0) goto L_0x00fb
             r2 = 1065353216(0x3var_, float:1.0)
-        L_0x0100:
+        L_0x00fb:
             r5.toggleValue = r2
             org.telegram.ui.Cells.TextCheckCell r7 = r5.joinRequestCell
-            if (r6 == 0) goto L_0x0107
-            goto L_0x0109
-        L_0x0107:
+            if (r6 == 0) goto L_0x0102
+            goto L_0x0104
+        L_0x0102:
             r3 = 8
-        L_0x0109:
+        L_0x0104:
             r7.setVisibility(r3)
             float r6 = r5.toggleValue
             r5.updateToggleValue(r6)

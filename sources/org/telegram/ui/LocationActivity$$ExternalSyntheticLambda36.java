@@ -1,18 +1,19 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLRPC$User;
-import org.telegram.ui.Components.ProximitySheet;
+import org.telegram.ui.ActionBar.ThemeDescription;
 
-public final /* synthetic */ class LocationActivity$$ExternalSyntheticLambda36 implements ProximitySheet.onRadiusPickerChange {
+public final /* synthetic */ class LocationActivity$$ExternalSyntheticLambda36 implements ThemeDescription.ThemeDescriptionDelegate {
     public final /* synthetic */ LocationActivity f$0;
-    public final /* synthetic */ TLRPC$User f$1;
 
-    public /* synthetic */ LocationActivity$$ExternalSyntheticLambda36(LocationActivity locationActivity, TLRPC$User tLRPC$User) {
+    public /* synthetic */ LocationActivity$$ExternalSyntheticLambda36(LocationActivity locationActivity) {
         this.f$0 = locationActivity;
-        this.f$1 = tLRPC$User;
     }
 
-    public final boolean run(boolean z, int i) {
-        return this.f$0.lambda$openProximityAlert$23(this.f$1, z, i);
+    public final void didSetColor() {
+        this.f$0.lambda$getThemeDescriptions$44();
+    }
+
+    public /* synthetic */ void onAnimationProgress(float f) {
+        ThemeDescription.ThemeDescriptionDelegate.CC.$default$onAnimationProgress(this, f);
     }
 }

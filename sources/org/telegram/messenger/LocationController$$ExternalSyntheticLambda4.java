@@ -8,6 +8,6 @@ public final /* synthetic */ class LocationController$$ExternalSyntheticLambda4 
     }
 
     public final void run() {
-        this.f$0.lambda$new$0();
+        this.f$0.lambda$loadSharingLocations$18();
     }
 }

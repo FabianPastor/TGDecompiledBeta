@@ -29,6 +29,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -256,7 +257,7 @@ public class AppIconsSelectorCell extends RecyclerListView implements Notificati
                 this.titleView.setText(LocaleController.getString(launcherIcon.title));
             } else {
                 SpannableString spannableString = new SpannableString("d " + LocaleController.getString(launcherIcon.title));
-                ColoredImageSpan coloredImageSpan = new ColoredImageSpan(NUM);
+                ColoredImageSpan coloredImageSpan = new ColoredImageSpan(R.drawable.msg_mini_premiumlock);
                 coloredImageSpan.setTopOffset(1);
                 coloredImageSpan.setSize(AndroidUtilities.dp(13.0f));
                 spannableString.setSpan(coloredImageSpan, 0, 1, 33);

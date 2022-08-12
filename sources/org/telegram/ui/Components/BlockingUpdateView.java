@@ -29,6 +29,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.browser.Browser;
@@ -71,7 +72,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         FrameLayout frameLayout = new FrameLayout(context2);
         addView(frameLayout, new FrameLayout.LayoutParams(-1, AndroidUtilities.dp(176.0f) + (i >= 21 ? AndroidUtilities.statusBarHeight : 0)));
         RLottieImageView rLottieImageView = new RLottieImageView(context2);
-        rLottieImageView.setAnimation(NUM, 108, 108);
+        rLottieImageView.setAnimation(R.raw.qr_code_logo, 108, 108);
         rLottieImageView.playAnimation();
         rLottieImageView.getAnimatedDrawable().setAutoRepeat(1);
         rLottieImageView.setScaleType(ImageView.ScaleType.CENTER);
@@ -91,7 +92,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         textView2.setTextSize(1, 20.0f);
         textView2.setGravity(49);
         textView2.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        textView2.setText(LocaleController.getString("UpdateTelegram", NUM));
+        textView2.setText(LocaleController.getString("UpdateTelegram", R.string.UpdateTelegram));
         frameLayout2.addView(textView2, LayoutHelper.createFrame(-2, -2, 49));
         TextView textView3 = new TextView(context2);
         this.textView = textView3;
@@ -247,7 +248,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
                 Intent intent = new Intent("android.intent.action.VIEW");
                 intent.setFlags(1);
                 if (Build.VERSION.SDK_INT >= 24) {
-                    intent.setDataAndType(FileProvider.getUriForFile(activity, "org.telegram.messenger.beta.provider", pathToAttach), "application/vnd.android.package-archive");
+                    intent.setDataAndType(FileProvider.getUriForFile(activity, ApplicationLoader.getApplicationId() + ".provider", pathToAttach), "application/vnd.android.package-archive");
                 } else {
                     intent.setDataAndType(Uri.fromFile(pathToAttach), "application/vnd.android.package-archive");
                 }
@@ -315,9 +316,9 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         this.textView.setText(spannableStringBuilder);
         if (tLRPC$TL_help_appUpdate.document instanceof TLRPC$TL_document) {
             TextView textView2 = this.acceptTextView;
-            textView2.setText(LocaleController.getString("Update", NUM) + String.format(Locale.US, " (%1$s)", new Object[]{AndroidUtilities.formatFileSize(tLRPC$TL_help_appUpdate.document.size)}));
+            textView2.setText(LocaleController.getString("Update", R.string.Update) + String.format(Locale.US, " (%1$s)", new Object[]{AndroidUtilities.formatFileSize(tLRPC$TL_help_appUpdate.document.size)}));
         } else {
-            this.acceptTextView.setText(LocaleController.getString("Update", NUM));
+            this.acceptTextView.setText(LocaleController.getString("Update", R.string.Update));
         }
         NotificationCenter.getInstance(this.accountNum).addObserver(this, NotificationCenter.fileLoaded);
         NotificationCenter.getInstance(this.accountNum).addObserver(this, NotificationCenter.fileLoadFailed);

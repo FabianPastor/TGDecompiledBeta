@@ -41,6 +41,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.R;
 import org.telegram.messenger.XiaomiUtilities;
 import org.telegram.ui.ActionBar.FloatingActionMode;
 import org.telegram.ui.ActionBar.FloatingToolbar;
@@ -245,8 +246,8 @@ public class EditTextBoldCursor extends EditTextEffects {
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Missing exception handler attribute for start block: B:21:0x008c */
     /* JADX WARNING: Missing exception handler attribute for start block: B:36:0x00d8 */
-    /* JADX WARNING: Removed duplicated region for block: B:39:0x00dc A[Catch:{ all -> 0x00f7 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:42:0x00ed A[Catch:{ all -> 0x00f7 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:39:0x00dc A[Catch:{ all -> 0x00f6 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:42:0x00ed A[Catch:{ all -> 0x00f6 }] */
     @android.annotation.SuppressLint({"PrivateApi"})
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private void init() {
@@ -337,7 +338,7 @@ public class EditTextBoldCursor extends EditTextEffects {
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r4)
         L_0x00b3:
             android.graphics.drawable.ShapeDrawable r4 = r8.cursorDrawable
-            if (r4 != 0) goto L_0x00f7
+            if (r4 != 0) goto L_0x00f6
             android.graphics.drawable.GradientDrawable r4 = new android.graphics.drawable.GradientDrawable     // Catch:{ all -> 0x00d8 }
             android.graphics.drawable.GradientDrawable$Orientation r5 = android.graphics.drawable.GradientDrawable.Orientation.TOP_BOTTOM     // Catch:{ all -> 0x00d8 }
             int[] r2 = new int[r2]     // Catch:{ all -> 0x00d8 }
@@ -354,20 +355,20 @@ public class EditTextBoldCursor extends EditTextEffects {
             java.lang.Object r0 = r0.get(r8)     // Catch:{ all -> 0x00d8 }
             r8.editor = r0     // Catch:{ all -> 0x00d8 }
         L_0x00d8:
-            java.lang.reflect.Field r0 = mCursorDrawableResField     // Catch:{ all -> 0x00f7 }
+            java.lang.reflect.Field r0 = mCursorDrawableResField     // Catch:{ all -> 0x00f6 }
             if (r0 != 0) goto L_0x00e9
             java.lang.Class<android.widget.TextView> r0 = android.widget.TextView.class
             java.lang.String r2 = "mCursorDrawableRes"
-            java.lang.reflect.Field r0 = r0.getDeclaredField(r2)     // Catch:{ all -> 0x00f7 }
-            mCursorDrawableResField = r0     // Catch:{ all -> 0x00f7 }
-            r0.setAccessible(r1)     // Catch:{ all -> 0x00f7 }
+            java.lang.reflect.Field r0 = r0.getDeclaredField(r2)     // Catch:{ all -> 0x00f6 }
+            mCursorDrawableResField = r0     // Catch:{ all -> 0x00f6 }
+            r0.setAccessible(r1)     // Catch:{ all -> 0x00f6 }
         L_0x00e9:
-            java.lang.reflect.Field r0 = mCursorDrawableResField     // Catch:{ all -> 0x00f7 }
-            if (r0 == 0) goto L_0x00f7
-            r1 = 2131165398(0x7var_d6, float:1.7945012E38)
-            java.lang.Integer r1 = java.lang.Integer.valueOf(r1)     // Catch:{ all -> 0x00f7 }
-            r0.set(r8, r1)     // Catch:{ all -> 0x00f7 }
-        L_0x00f7:
+            java.lang.reflect.Field r0 = mCursorDrawableResField     // Catch:{ all -> 0x00f6 }
+            if (r0 == 0) goto L_0x00f6
+            int r1 = org.telegram.messenger.R.drawable.field_carret_empty     // Catch:{ all -> 0x00f6 }
+            java.lang.Integer r1 = java.lang.Integer.valueOf(r1)     // Catch:{ all -> 0x00f6 }
+            r0.set(r8, r1)     // Catch:{ all -> 0x00f6 }
+        L_0x00f6:
             r0 = 1103101952(0x41CLASSNAME, float:24.0)
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
             r8.cursorSize = r0
@@ -447,7 +448,7 @@ public class EditTextBoldCursor extends EditTextEffects {
 
     public void setLineColors(int i, int i2, int i3) {
         this.lineVisible = true;
-        getContext().getResources().getDrawable(NUM).getPadding(this.padding);
+        getContext().getResources().getDrawable(R.drawable.search_dark).getPadding(this.padding);
         Rect rect2 = this.padding;
         setPadding(rect2.left, rect2.top, rect2.right, rect2.bottom);
         this.lineColor = i;

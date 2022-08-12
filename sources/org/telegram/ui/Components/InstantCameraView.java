@@ -75,6 +75,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
@@ -302,13 +303,13 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         ImageView imageView = new ImageView(context2);
         this.switchCameraButton = imageView;
         imageView.setScaleType(ImageView.ScaleType.CENTER);
-        this.switchCameraButton.setContentDescription(LocaleController.getString("AccDescrSwitchCamera", NUM));
+        this.switchCameraButton.setContentDescription(LocaleController.getString("AccDescrSwitchCamera", R.string.AccDescrSwitchCamera));
         addView(this.switchCameraButton, LayoutHelper.createFrame(62, 62.0f, 83, 8.0f, 0.0f, 0.0f, 0.0f));
         this.switchCameraButton.setOnClickListener(new InstantCameraView$$ExternalSyntheticLambda2(this));
         ImageView imageView2 = new ImageView(context2);
         this.muteImageView = imageView2;
         imageView2.setScaleType(ImageView.ScaleType.CENTER);
-        this.muteImageView.setImageResource(NUM);
+        this.muteImageView.setImageResource(R.drawable.video_mute);
         this.muteImageView.setAlpha(0.0f);
         addView(this.muteImageView, LayoutHelper.createFrame(48, 48, 17));
         final Paint paint3 = new Paint(1);
@@ -553,11 +554,11 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     public void showCamera() {
         if (this.textureView == null) {
             if (Build.VERSION.SDK_INT >= 21) {
-                AnimatedVectorDrawable animatedVectorDrawable = (AnimatedVectorDrawable) ContextCompat.getDrawable(getContext(), NUM);
+                AnimatedVectorDrawable animatedVectorDrawable = (AnimatedVectorDrawable) ContextCompat.getDrawable(getContext(), R.drawable.avd_flip);
                 this.switchCameraDrawable = animatedVectorDrawable;
                 this.switchCameraButton.setImageDrawable(animatedVectorDrawable);
             } else {
-                this.switchCameraButton.setImageResource(NUM);
+                this.switchCameraButton.setImageResource(R.drawable.vd_flip);
             }
             this.textureOverlayView.setAlpha(1.0f);
             this.textureOverlayView.invalidate();
@@ -571,7 +572,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             if (bitmap != null) {
                 this.textureOverlayView.setImageBitmap(bitmap);
             } else {
-                this.textureOverlayView.setImageResource(NUM);
+                this.textureOverlayView.setImageResource(R.drawable.icplaceholder);
             }
             this.cameraReady = false;
             this.isFrontface = true;

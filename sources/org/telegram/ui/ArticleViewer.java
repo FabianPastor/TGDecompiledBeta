@@ -96,6 +96,7 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
@@ -1481,7 +1482,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             }
             BottomSheet.Builder builder = new BottomSheet.Builder(this.parentActivity);
             builder.setTitle(str);
-            builder.setItems(new CharSequence[]{LocaleController.getString("Open", NUM), LocaleController.getString("Copy", NUM)}, new ArticleViewer$$ExternalSyntheticLambda1(this, str));
+            builder.setItems(new CharSequence[]{LocaleController.getString("Open", R.string.Open), LocaleController.getString("Copy", R.string.Copy)}, new ArticleViewer$$ExternalSyntheticLambda1(this, str));
             builder.setOnPreDismissListener(new ArticleViewer$$ExternalSyntheticLambda2(this));
             showDialog(builder.create());
         }
@@ -1541,7 +1542,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(this.parentActivity);
                 this.popupLayout = actionBarPopupWindowLayout;
                 actionBarPopupWindowLayout.setPadding(AndroidUtilities.dp(1.0f), AndroidUtilities.dp(1.0f), AndroidUtilities.dp(1.0f), AndroidUtilities.dp(1.0f));
-                this.popupLayout.setBackgroundDrawable(this.parentActivity.getResources().getDrawable(NUM));
+                this.popupLayout.setBackgroundDrawable(this.parentActivity.getResources().getDrawable(R.drawable.menu_copy));
                 this.popupLayout.setAnimationEnabled(false);
                 this.popupLayout.setOnTouchListener(new ArticleViewer$$ExternalSyntheticLambda13(this));
                 this.popupLayout.setDispatchKeyEventListener(new ArticleViewer$$ExternalSyntheticLambda39(this));
@@ -1553,13 +1554,13 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 this.deleteView.setPadding(AndroidUtilities.dp(20.0f), 0, AndroidUtilities.dp(20.0f), 0);
                 this.deleteView.setTextSize(1, 15.0f);
                 this.deleteView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-                this.deleteView.setText(LocaleController.getString("Copy", NUM).toUpperCase());
+                this.deleteView.setText(LocaleController.getString("Copy", R.string.Copy).toUpperCase());
                 this.deleteView.setOnClickListener(new ArticleViewer$$ExternalSyntheticLambda11(this));
                 this.popupLayout.addView(this.deleteView, LayoutHelper.createFrame(-2, 48.0f));
                 ActionBarPopupWindow actionBarPopupWindow2 = new ActionBarPopupWindow(this.popupLayout, -2, -2);
                 this.popupWindow = actionBarPopupWindow2;
                 actionBarPopupWindow2.setAnimationEnabled(false);
-                this.popupWindow.setAnimationStyle(NUM);
+                this.popupWindow.setAnimationStyle(R.style.PopupContextAnimation);
                 this.popupWindow.setOutsideTouchable(true);
                 this.popupWindow.setClippingEnabled(true);
                 this.popupWindow.setInputMethodMode(2);
@@ -1609,7 +1610,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         if (drawingText != null) {
             AndroidUtilities.addToClipboard(drawingText.getText());
             if (Build.VERSION.SDK_INT < 31) {
-                Toast.makeText(this.parentActivity, LocaleController.getString("TextCopied", NUM), 0).show();
+                Toast.makeText(this.parentActivity, LocaleController.getString("TextCopied", R.string.TextCopied), 0).show();
             }
         }
         ActionBarPopupWindow actionBarPopupWindow = this.popupWindow;
@@ -2208,7 +2209,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 };
                 r3.setTextSize(1, 16.0f);
                 r3.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-                r3.setText(LocaleController.getString("InstantViewReference", NUM));
+                r3.setText(LocaleController.getString("InstantViewReference", R.string.InstantViewReference));
                 r3.setGravity((this.adapter[0].isRtl ? 5 : 3) | 16);
                 r3.setTextColor(getTextColor());
                 r3.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
@@ -4493,9 +4494,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         this.selectedFont = ApplicationLoader.applicationContext.getSharedPreferences("articles", 0).getInt("font_type", 0);
         createPaint(false);
         this.backgroundPaint = new Paint();
-        this.layerShadowDrawable = activity.getResources().getDrawable(NUM);
-        this.slideDotDrawable = activity.getResources().getDrawable(NUM);
-        this.slideDotBigDrawable = activity.getResources().getDrawable(NUM);
+        this.layerShadowDrawable = activity.getResources().getDrawable(R.drawable.layer_shadow);
+        this.slideDotDrawable = activity.getResources().getDrawable(R.drawable.slide_dot_small);
+        this.slideDotBigDrawable = activity.getResources().getDrawable(R.drawable.slide_dot_big);
         this.scrimPaint = new Paint();
         WindowView windowView2 = new WindowView(activity2);
         this.windowView = windowView2;
@@ -4784,7 +4785,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         this.headerView.addView(frameLayout2, LayoutHelper.createFrame(48, 56, 53));
         View view = new View(activity2);
         this.searchShadow = view;
-        view.setBackgroundResource(NUM);
+        view.setBackgroundResource(R.drawable.header_shadow);
         this.searchShadow.setAlpha(0.0f);
         this.containerView.addView(this.searchShadow, LayoutHelper.createFrame(-1, 3.0f, 51, 0.0f, 56.0f, 0.0f, 0.0f));
         FrameLayout frameLayout3 = new FrameLayout(this.parentActivity);
@@ -4812,7 +4813,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         this.searchField.setTextSize(1, 18.0f);
         this.searchField.setHintTextColor(Theme.getColor("windowBackgroundWhiteHintText"));
         this.searchField.setSingleLine(true);
-        this.searchField.setHint(LocaleController.getString("Search", NUM));
+        EditTextBoldCursor editTextBoldCursor = this.searchField;
+        int i4 = R.string.Search;
+        editTextBoldCursor.setHint(LocaleController.getString("Search", i4));
         this.searchField.setBackgroundResource(0);
         this.searchField.setPadding(0, 0, 0, 0);
         this.searchField.setInputType(this.searchField.getInputType() | 524288);
@@ -4922,7 +4925,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         this.clearButton.setScaleX(0.0f);
         this.clearButton.setScaleY(0.0f);
         this.clearButton.setOnClickListener(new ArticleViewer$$ExternalSyntheticLambda9(this));
-        this.clearButton.setContentDescription(LocaleController.getString("ClearButton", NUM));
+        this.clearButton.setContentDescription(LocaleController.getString("ClearButton", R.string.ClearButton));
         this.searchContainer.addView(this.clearButton, LayoutHelper.createFrame(48, -1, 21));
         ImageView imageView = new ImageView(activity2);
         this.backButton = imageView;
@@ -4937,8 +4940,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         this.backButton.setBackgroundDrawable(Theme.createSelectorDrawable(NUM));
         this.headerView.addView(this.backButton, LayoutHelper.createFrame(54, 56.0f));
         this.backButton.setOnClickListener(new ArticleViewer$$ExternalSyntheticLambda5(this));
-        this.backButton.setContentDescription(LocaleController.getString("AccDescrGoBack", NUM));
-        AnonymousClass16 r12 = r0;
+        this.backButton.setContentDescription(LocaleController.getString("AccDescrGoBack", R.string.AccDescrGoBack));
         AnonymousClass16 r05 = new ActionBarMenuItem(this.parentActivity, (ActionBarMenu) null, NUM, -5000269) {
             public void toggleSubMenu() {
                 super.toggleSubMenu();
@@ -4946,17 +4948,17 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 ArticleViewer.this.checkScrollAnimated();
             }
         };
-        this.menuButton = r12;
-        r12.setLayoutInScreen(true);
+        this.menuButton = r05;
+        r05.setLayoutInScreen(true);
         this.menuButton.setDuplicateParentStateEnabled(false);
         this.menuButton.setClickable(true);
-        this.menuButton.setIcon(NUM);
-        this.menuButton.addSubItem(1, NUM, LocaleController.getString("Search", NUM));
-        this.menuButton.addSubItem(2, NUM, LocaleController.getString("ShareFile", NUM));
-        this.menuButton.addSubItem(3, NUM, LocaleController.getString("OpenInExternalApp", NUM));
-        this.menuButton.addSubItem(4, NUM, LocaleController.getString("Settings", NUM));
+        this.menuButton.setIcon(R.drawable.ic_ab_other);
+        this.menuButton.addSubItem(1, R.drawable.msg_search, LocaleController.getString("Search", i4));
+        this.menuButton.addSubItem(2, R.drawable.msg_share, LocaleController.getString("ShareFile", R.string.ShareFile));
+        this.menuButton.addSubItem(3, R.drawable.msg_openin, LocaleController.getString("OpenInExternalApp", R.string.OpenInExternalApp));
+        this.menuButton.addSubItem(4, R.drawable.msg_settings_old, LocaleController.getString("Settings", R.string.Settings));
         this.menuButton.setBackgroundDrawable(Theme.createSelectorDrawable(NUM));
-        this.menuButton.setContentDescription(LocaleController.getString("AccDescrMoreOptions", NUM));
+        this.menuButton.setContentDescription(LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
         this.menuContainer.addView(this.menuButton, LayoutHelper.createFrame(48, 56.0f));
         ContextProgressView contextProgressView = new ContextProgressView(activity2, 2);
         this.progressView = contextProgressView;
@@ -4984,21 +4986,21 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         ImageView imageView2 = new ImageView(this.parentActivity);
         this.searchUpButton = imageView2;
         imageView2.setScaleType(ImageView.ScaleType.CENTER);
-        this.searchUpButton.setImageResource(NUM);
+        this.searchUpButton.setImageResource(R.drawable.msg_go_up);
         this.searchUpButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteBlackText"), PorterDuff.Mode.MULTIPLY));
         this.searchUpButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("actionBarActionModeDefaultSelector"), 1));
         this.searchPanel.addView(this.searchUpButton, LayoutHelper.createFrame(48, 48.0f, 53, 0.0f, 0.0f, 48.0f, 0.0f));
         this.searchUpButton.setOnClickListener(new ArticleViewer$$ExternalSyntheticLambda10(this));
-        this.searchUpButton.setContentDescription(LocaleController.getString("AccDescrSearchNext", NUM));
+        this.searchUpButton.setContentDescription(LocaleController.getString("AccDescrSearchNext", R.string.AccDescrSearchNext));
         ImageView imageView3 = new ImageView(this.parentActivity);
         this.searchDownButton = imageView3;
         imageView3.setScaleType(ImageView.ScaleType.CENTER);
-        this.searchDownButton.setImageResource(NUM);
+        this.searchDownButton.setImageResource(R.drawable.msg_go_down);
         this.searchDownButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteBlackText"), PorterDuff.Mode.MULTIPLY));
         this.searchDownButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("actionBarActionModeDefaultSelector"), 1));
         this.searchPanel.addView(this.searchDownButton, LayoutHelper.createFrame(48, 48.0f, 53, 0.0f, 0.0f, 0.0f, 0.0f));
         this.searchDownButton.setOnClickListener(new ArticleViewer$$ExternalSyntheticLambda12(this));
-        this.searchDownButton.setContentDescription(LocaleController.getString("AccDescrSearchPrev", NUM));
+        this.searchDownButton.setContentDescription(LocaleController.getString("AccDescrSearchPrev", R.string.AccDescrSearchPrev));
         SimpleTextView simpleTextView2 = new SimpleTextView(this.parentActivity);
         this.searchCountText = simpleTextView2;
         simpleTextView2.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
@@ -5015,17 +5017,17 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         layoutParams.type = 98;
         layoutParams.softInputMode = 48;
         layoutParams.flags = 131072;
-        int i4 = 1792;
+        int i5 = 1792;
         int color = Theme.getColor("windowBackgroundGray", (boolean[]) null, true);
         boolean z = AndroidUtilities.computePerceivedBrightness(color) >= 0.721f;
         if (z && i3 >= 26) {
-            i4 = 1808;
+            i5 = 1808;
             this.navigationBarPaint.setColor(color);
         } else if (!z) {
             this.navigationBarPaint.setColor(color);
         }
         WindowManager.LayoutParams layoutParams2 = this.windowLayoutParams;
-        layoutParams2.systemUiVisibility = i4;
+        layoutParams2.systemUiVisibility = i5;
         if (i3 >= 21) {
             layoutParams2.flags |= -NUM;
             if (i3 >= 28) {
@@ -5049,7 +5051,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
             public void onTextCopied() {
                 if (Build.VERSION.SDK_INT < 31) {
-                    BulletinFactory.of(ArticleViewer.this.containerView, (Theme.ResourcesProvider) null).createCopyBulletin(LocaleController.getString("TextCopied", NUM)).show();
+                    BulletinFactory.of(ArticleViewer.this.containerView, (Theme.ResourcesProvider) null).createCopyBulletin(LocaleController.getString("TextCopied", R.string.TextCopied)).show();
                 }
             }
         });
@@ -5261,17 +5263,17 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 linearLayout.setPadding(0, 0, 0, AndroidUtilities.dp(4.0f));
                 linearLayout.setOrientation(1);
                 HeaderCell headerCell = new HeaderCell(this.parentActivity);
-                headerCell.setText(LocaleController.getString("FontSize", NUM));
+                headerCell.setText(LocaleController.getString("FontSize", R.string.FontSize));
                 linearLayout.addView(headerCell, LayoutHelper.createLinear(-2, -2, 51, 3, 1, 3, 0));
                 linearLayout.addView(new TextSizeCell(this.parentActivity), LayoutHelper.createLinear(-1, -2, 51, 3, 0, 3, 0));
                 HeaderCell headerCell2 = new HeaderCell(this.parentActivity);
-                headerCell2.setText(LocaleController.getString("FontType", NUM));
+                headerCell2.setText(LocaleController.getString("FontType", R.string.FontType));
                 linearLayout.addView(headerCell2, LayoutHelper.createLinear(-2, -2, 51, 3, 4, 3, 2));
                 int i2 = 0;
                 while (i2 < 2) {
                     this.fontCells[i2] = new FontCell(this.parentActivity);
                     if (i2 == 0) {
-                        this.fontCells[i2].setTextAndTypeface(LocaleController.getString("Default", NUM), Typeface.DEFAULT);
+                        this.fontCells[i2].setTextAndTypeface(LocaleController.getString("Default", R.string.Default), Typeface.DEFAULT);
                     } else if (i2 == 1) {
                         this.fontCells[i2].setTextAndTypeface("Serif", Typeface.SERIF);
                     }
@@ -5458,9 +5460,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             if (size < 0) {
                 this.searchCountText.setText("");
             } else if (size == 0) {
-                this.searchCountText.setText(LocaleController.getString("NoResult", NUM));
+                this.searchCountText.setText(LocaleController.getString("NoResult", R.string.NoResult));
             } else if (size == 1) {
-                this.searchCountText.setText(LocaleController.getString("OneResult", NUM));
+                this.searchCountText.setText(LocaleController.getString("OneResult", R.string.OneResult));
             } else {
                 this.searchCountText.setText(String.format(LocaleController.getPluralString("CountOfResults", size), new Object[]{Integer.valueOf(this.currentSearchIndex + 1), Integer.valueOf(size)}));
             }
@@ -9050,7 +9052,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
             super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
             accessibilityNodeInfo.setEnabled(true);
-            StringBuilder sb = new StringBuilder(LocaleController.getString("AttachVideo", NUM));
+            StringBuilder sb = new StringBuilder(LocaleController.getString("AttachVideo", R.string.AttachVideo));
             if (this.captionLayout != null) {
                 sb.append(", ");
                 sb.append(this.captionLayout.getText());
@@ -12987,7 +12989,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
         public BlockRelatedArticlesShadowCell(Context context) {
             super(context);
-            CombinedDrawable combinedDrawable = new CombinedDrawable(new ColorDrawable(Theme.getColor("windowBackgroundGray")), Theme.getThemedDrawable(context, NUM, -16777216));
+            CombinedDrawable combinedDrawable = new CombinedDrawable(new ColorDrawable(Theme.getColor("windowBackgroundGray")), Theme.getThemedDrawable(context, R.drawable.greydivider_bottom, -16777216));
             this.shadowDrawable = combinedDrawable;
             combinedDrawable.setFullsize(true);
             setBackgroundDrawable(this.shadowDrawable);
@@ -13158,9 +13160,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 i5 = 4;
             }
             if (tLRPC$TL_pageRelatedArticle.published_date != 0 && !TextUtils.isEmpty(tLRPC$TL_pageRelatedArticle.author)) {
-                str = LocaleController.formatString("ArticleDateByAuthor", NUM, LocaleController.getInstance().chatFullDate.format(((long) tLRPC$TL_pageRelatedArticle.published_date) * 1000), tLRPC$TL_pageRelatedArticle.author);
+                str = LocaleController.formatString("ArticleDateByAuthor", R.string.ArticleDateByAuthor, LocaleController.getInstance().chatFullDate.format(((long) tLRPC$TL_pageRelatedArticle.published_date) * 1000), tLRPC$TL_pageRelatedArticle.author);
             } else if (!TextUtils.isEmpty(tLRPC$TL_pageRelatedArticle.author)) {
-                str = LocaleController.formatString("ArticleByAuthor", NUM, tLRPC$TL_pageRelatedArticle.author);
+                str = LocaleController.formatString("ArticleByAuthor", R.string.ArticleByAuthor, tLRPC$TL_pageRelatedArticle.author);
             } else if (tLRPC$TL_pageRelatedArticle.published_date != 0) {
                 str = LocaleController.getInstance().chatFullDate.format(((long) tLRPC$TL_pageRelatedArticle.published_date) * 1000);
             } else if (!TextUtils.isEmpty(tLRPC$TL_pageRelatedArticle.description)) {
@@ -13286,7 +13288,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
             accessibilityNodeInfo.setEnabled(true);
             if (this.textLayout != null) {
-                accessibilityNodeInfo.setText(this.textLayout.getText() + ", " + LocaleController.getString("AccDescrIVHeading", NUM));
+                accessibilityNodeInfo.setText(this.textLayout.getText() + ", " + LocaleController.getString("AccDescrIVHeading", R.string.AccDescrIVHeading));
             }
         }
 
@@ -13375,7 +13377,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
             accessibilityNodeInfo.setEnabled(true);
             if (this.textLayout != null) {
-                accessibilityNodeInfo.setText(this.textLayout.getText() + ", " + LocaleController.getString("AccDescrIVHeading", NUM));
+                accessibilityNodeInfo.setText(this.textLayout.getText() + ", " + LocaleController.getString("AccDescrIVHeading", R.string.AccDescrIVHeading));
             }
         }
 
@@ -13665,7 +13667,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             this.isFirst = z;
             this.channelCell.setVisibility(4);
             if (!TextUtils.isEmpty(this.currentBlock.url)) {
-                this.linkDrawable = getResources().getDrawable(NUM);
+                this.linkDrawable = getResources().getDrawable(R.drawable.msg_instant_link);
             }
             TLRPC$TL_pageBlockPhoto tLRPC$TL_pageBlockPhoto2 = this.currentBlock;
             if (tLRPC$TL_pageBlockPhoto2 != null) {
@@ -14458,7 +14460,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
             super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
             accessibilityNodeInfo.setEnabled(true);
-            StringBuilder sb = new StringBuilder(LocaleController.getString("AttachPhoto", NUM));
+            StringBuilder sb = new StringBuilder(LocaleController.getString("AttachPhoto", R.string.AttachPhoto));
             if (this.captionLayout != null) {
                 sb.append(", ");
                 sb.append(this.captionLayout.getText());
@@ -14872,7 +14874,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
             super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
             accessibilityNodeInfo.setEnabled(true);
-            StringBuilder sb = new StringBuilder(LocaleController.getString("Map", NUM));
+            StringBuilder sb = new StringBuilder(LocaleController.getString("Map", R.string.Map));
             if (this.captionLayout != null) {
                 sb.append(", ");
                 sb.append(this.captionLayout.getText());
@@ -14918,13 +14920,13 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             this.textView = textView2;
             textView2.setTextSize(1, 14.0f);
             this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-            this.textView.setText(LocaleController.getString("ChannelJoin", NUM));
+            this.textView.setText(LocaleController.getString("ChannelJoin", R.string.ChannelJoin));
             this.textView.setGravity(19);
             addView(this.textView, LayoutHelper.createFrame(-2, 39, 53));
             this.textView.setOnClickListener(new ArticleViewer$BlockChannelCell$$ExternalSyntheticLambda0(this));
             ImageView imageView2 = new ImageView(context);
             this.imageView = imageView2;
-            imageView2.setImageResource(NUM);
+            imageView2.setImageResource(R.drawable.list_check);
             this.imageView.setScaleType(ImageView.ScaleType.CENTER);
             addView(this.imageView, LayoutHelper.createFrame(39, 39, 53));
             ContextProgressView contextProgressView = new ContextProgressView(context, 0);
@@ -15158,7 +15160,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 int r14 = android.view.View.MeasureSpec.getSize(r14)
                 org.telegram.tgnet.TLRPC$TL_pageBlockAuthorDate r5 = r13.currentBlock
                 r15 = 1
-                if (r5 == 0) goto L_0x0116
+                if (r5 == 0) goto L_0x0114
                 org.telegram.ui.ArticleViewer r0 = org.telegram.ui.ArticleViewer.this
                 org.telegram.ui.ArticleViewer$WebpageAdapter r1 = r13.parentAdapter
                 org.telegram.tgnet.TLRPC$RichText r4 = r5.author
@@ -15186,10 +15188,10 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 org.telegram.tgnet.TLRPC$TL_pageBlockAuthorDate r4 = r13.currentBlock
                 int r4 = r4.published_date
                 r5 = 1000(0x3e8, double:4.94E-321)
-                if (r4 == 0) goto L_0x0060
+                if (r4 == 0) goto L_0x005f
                 boolean r4 = android.text.TextUtils.isEmpty(r0)
-                if (r4 != 0) goto L_0x0060
-                r4 = 2131624489(0x7f0e0229, float:1.887616E38)
+                if (r4 != 0) goto L_0x005f
+                int r4 = org.telegram.messenger.R.string.ArticleDateByAuthor
                 r7 = 2
                 java.lang.Object[] r7 = new java.lang.Object[r7]
                 org.telegram.messenger.LocaleController r8 = org.telegram.messenger.LocaleController.getInstance()
@@ -15203,17 +15205,17 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r7[r15] = r0
                 java.lang.String r15 = "ArticleDateByAuthor"
                 java.lang.String r15 = org.telegram.messenger.LocaleController.formatString(r15, r4, r7)
-                goto L_0x0085
-            L_0x0060:
+                goto L_0x0083
+            L_0x005f:
                 boolean r4 = android.text.TextUtils.isEmpty(r0)
-                if (r4 != 0) goto L_0x0074
-                r4 = 2131624488(0x7f0e0228, float:1.8876157E38)
+                if (r4 != 0) goto L_0x0072
+                int r4 = org.telegram.messenger.R.string.ArticleByAuthor
                 java.lang.Object[] r15 = new java.lang.Object[r15]
                 r15[r3] = r0
                 java.lang.String r5 = "ArticleByAuthor"
                 java.lang.String r15 = org.telegram.messenger.LocaleController.formatString(r5, r4, r15)
-                goto L_0x0085
-            L_0x0074:
+                goto L_0x0083
+            L_0x0072:
                 org.telegram.messenger.LocaleController r15 = org.telegram.messenger.LocaleController.getInstance()
                 org.telegram.messenger.time.FastDateFormat r15 = r15.chatFullDate
                 org.telegram.tgnet.TLRPC$TL_pageBlockAuthorDate r4 = r13.currentBlock
@@ -15221,34 +15223,34 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 long r7 = (long) r4
                 long r7 = r7 * r5
                 java.lang.String r15 = r15.format((long) r7)
-            L_0x0085:
-                if (r2 == 0) goto L_0x00b9
-                int r4 = r2.length     // Catch:{ Exception -> 0x00b5 }
-                if (r4 <= 0) goto L_0x00b9
-                int r0 = android.text.TextUtils.indexOf(r15, r0)     // Catch:{ Exception -> 0x00b5 }
+            L_0x0083:
+                if (r2 == 0) goto L_0x00b7
+                int r4 = r2.length     // Catch:{ Exception -> 0x00b3 }
+                if (r4 <= 0) goto L_0x00b7
+                int r0 = android.text.TextUtils.indexOf(r15, r0)     // Catch:{ Exception -> 0x00b3 }
                 r4 = -1
-                if (r0 == r4) goto L_0x00b9
-                android.text.Spannable$Factory r4 = android.text.Spannable.Factory.getInstance()     // Catch:{ Exception -> 0x00b5 }
-                android.text.Spannable r15 = r4.newSpannable(r15)     // Catch:{ Exception -> 0x00b5 }
+                if (r0 == r4) goto L_0x00b7
+                android.text.Spannable$Factory r4 = android.text.Spannable.Factory.getInstance()     // Catch:{ Exception -> 0x00b3 }
+                android.text.Spannable r15 = r4.newSpannable(r15)     // Catch:{ Exception -> 0x00b3 }
                 r4 = 0
-            L_0x009a:
-                int r5 = r2.length     // Catch:{ Exception -> 0x00b5 }
-                if (r4 >= r5) goto L_0x00b9
-                r5 = r2[r4]     // Catch:{ Exception -> 0x00b5 }
-                r6 = r2[r4]     // Catch:{ Exception -> 0x00b5 }
-                int r6 = r1.getSpanStart(r6)     // Catch:{ Exception -> 0x00b5 }
+            L_0x0098:
+                int r5 = r2.length     // Catch:{ Exception -> 0x00b3 }
+                if (r4 >= r5) goto L_0x00b7
+                r5 = r2[r4]     // Catch:{ Exception -> 0x00b3 }
+                r6 = r2[r4]     // Catch:{ Exception -> 0x00b3 }
+                int r6 = r1.getSpanStart(r6)     // Catch:{ Exception -> 0x00b3 }
                 int r6 = r6 + r0
-                r7 = r2[r4]     // Catch:{ Exception -> 0x00b5 }
-                int r7 = r1.getSpanEnd(r7)     // Catch:{ Exception -> 0x00b5 }
+                r7 = r2[r4]     // Catch:{ Exception -> 0x00b3 }
+                int r7 = r1.getSpanEnd(r7)     // Catch:{ Exception -> 0x00b3 }
                 int r7 = r7 + r0
                 r8 = 33
-                r15.setSpan(r5, r6, r7, r8)     // Catch:{ Exception -> 0x00b5 }
+                r15.setSpan(r5, r6, r7, r8)     // Catch:{ Exception -> 0x00b3 }
                 int r4 = r4 + 1
-                goto L_0x009a
-            L_0x00b5:
+                goto L_0x0098
+            L_0x00b3:
                 r0 = move-exception
                 org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            L_0x00b9:
+            L_0x00b7:
                 r6 = r15
                 org.telegram.ui.ArticleViewer r4 = org.telegram.ui.ArticleViewer.this
                 r7 = 0
@@ -15261,7 +15263,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r5 = r13
                 org.telegram.ui.ArticleViewer$DrawingText r15 = r4.createLayoutForText(r5, r6, r7, r8, r9, r10, r11)
                 r13.textLayout = r15
-                if (r15 == 0) goto L_0x0115
+                if (r15 == 0) goto L_0x0113
                 r15 = 1098907648(0x41800000, float:16.0)
                 int r0 = org.telegram.messenger.AndroidUtilities.dp(r15)
                 org.telegram.ui.ArticleViewer$DrawingText r1 = r13.textLayout
@@ -15270,7 +15272,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 int r0 = r0 + r3
                 org.telegram.ui.ArticleViewer$WebpageAdapter r1 = r13.parentAdapter
                 boolean r1 = r1.isRtl
-                if (r1 == 0) goto L_0x0101
+                if (r1 == 0) goto L_0x00ff
                 float r1 = (float) r14
                 org.telegram.ui.ArticleViewer$DrawingText r2 = r13.textLayout
                 float r2 = r2.getLineWidth(r3)
@@ -15282,22 +15284,22 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 double r1 = java.lang.Math.floor(r1)
                 int r15 = (int) r1
                 r13.textX = r15
-                goto L_0x0109
-            L_0x0101:
+                goto L_0x0107
+            L_0x00ff:
                 r15 = 1099956224(0x41900000, float:18.0)
                 int r15 = org.telegram.messenger.AndroidUtilities.dp(r15)
                 r13.textX = r15
-            L_0x0109:
+            L_0x0107:
                 org.telegram.ui.ArticleViewer$DrawingText r15 = r13.textLayout
                 int r1 = r13.textX
                 r15.x = r1
                 int r1 = r13.textY
                 r15.y = r1
                 r15 = r0
-                goto L_0x0116
-            L_0x0115:
+                goto L_0x0114
+            L_0x0113:
                 r15 = 0
-            L_0x0116:
+            L_0x0114:
                 r13.setMeasuredDimension(r14, r15)
                 return
             */
@@ -15396,7 +15398,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
             accessibilityNodeInfo.setEnabled(true);
             if (this.textLayout != null) {
-                accessibilityNodeInfo.setText(this.textLayout.getText() + ", " + LocaleController.getString("AccDescrIVTitle", NUM));
+                accessibilityNodeInfo.setText(this.textLayout.getText() + ", " + LocaleController.getString("AccDescrIVTitle", R.string.AccDescrIVTitle));
             }
         }
 
@@ -15747,7 +15749,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
             accessibilityNodeInfo.setEnabled(true);
             if (this.textLayout != null) {
-                accessibilityNodeInfo.setText(this.textLayout.getText() + ", " + LocaleController.getString("AccDescrIVHeading", NUM));
+                accessibilityNodeInfo.setText(this.textLayout.getText() + ", " + LocaleController.getString("AccDescrIVHeading", R.string.AccDescrIVHeading));
             }
         }
 
@@ -15770,7 +15772,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             setTag(90);
             TextView textView2 = new TextView(context);
             this.textView = textView2;
-            textView2.setText(LocaleController.getString("PreviewFeedback2", NUM));
+            textView2.setText(LocaleController.getString("PreviewFeedback2", R.string.PreviewFeedback2));
             this.textView.setTextSize(1, 12.0f);
             this.textView.setGravity(17);
             this.textView.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);

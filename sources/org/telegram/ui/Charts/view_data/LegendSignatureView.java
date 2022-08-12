@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Charts.data.ChartData;
 import org.telegram.ui.Components.CombinedDrawable;
@@ -73,7 +74,7 @@ public class LegendSignatureView extends FrameLayout {
         this.hourTime.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         ImageView imageView = new ImageView(context);
         this.chevron = imageView;
-        imageView.setImageResource(NUM);
+        imageView.setImageResource(R.drawable.ic_chevron_right_black_18dp);
         RadialProgressView radialProgressView = new RadialProgressView(context);
         this.progressView = radialProgressView;
         radialProgressView.setSize(AndroidUtilities.dp(12.0f));
@@ -92,7 +93,7 @@ public class LegendSignatureView extends FrameLayout {
         this.hourTime.setTextColor(Theme.getColor("dialogTextBlack"));
         this.chevron.setColorFilter(Theme.getColor("statisticChartChevronColor"));
         this.progressView.setProgressColor(Theme.getColor("statisticChartChevronColor"));
-        this.shadowDrawable = getContext().getResources().getDrawable(NUM).mutate();
+        this.shadowDrawable = getContext().getResources().getDrawable(R.drawable.stats_tooltip).mutate();
         this.backgroundDrawable = Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), Theme.getColor("dialogBackground"), Theme.getColor("listSelectorSDK21"), -16777216);
         CombinedDrawable combinedDrawable = new CombinedDrawable(this.shadowDrawable, this.backgroundDrawable, AndroidUtilities.dp(3.0f), AndroidUtilities.dp(3.0f));
         combinedDrawable.setFullsize(true);

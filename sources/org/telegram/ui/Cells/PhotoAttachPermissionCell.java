@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
@@ -46,16 +47,16 @@ public class PhotoAttachPermissionCell extends FrameLayout {
 
     public void setType(int i) {
         if (i == 0) {
-            this.imageView.setImageResource(NUM);
-            this.imageView2.setImageResource(NUM);
-            this.textView.setText(LocaleController.getString("CameraPermissionText", NUM));
+            this.imageView.setImageResource(R.drawable.permissions_camera1);
+            this.imageView2.setImageResource(R.drawable.permissions_camera2);
+            this.textView.setText(LocaleController.getString("CameraPermissionText", R.string.CameraPermissionText));
             this.imageView.setLayoutParams(LayoutHelper.createFrame(44, 44.0f, 17, 5.0f, 0.0f, 0.0f, 27.0f));
             this.imageView2.setLayoutParams(LayoutHelper.createFrame(44, 44.0f, 17, 5.0f, 0.0f, 0.0f, 27.0f));
             return;
         }
-        this.imageView.setImageResource(NUM);
-        this.imageView2.setImageResource(NUM);
-        this.textView.setText(LocaleController.getString("GalleryPermissionText", NUM));
+        this.imageView.setImageResource(R.drawable.permissions_gallery1);
+        this.imageView2.setImageResource(R.drawable.permissions_gallery2);
+        this.textView.setText(LocaleController.getString("GalleryPermissionText", R.string.GalleryPermissionText));
         this.imageView.setLayoutParams(LayoutHelper.createFrame(44, 44.0f, 17, 0.0f, 0.0f, 2.0f, 27.0f));
         this.imageView2.setLayoutParams(LayoutHelper.createFrame(44, 44.0f, 17, 0.0f, 0.0f, 2.0f, 27.0f));
     }

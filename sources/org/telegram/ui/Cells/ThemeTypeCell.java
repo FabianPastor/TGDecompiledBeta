@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
@@ -38,7 +39,7 @@ public class ThemeTypeCell extends FrameLayout {
         ImageView imageView = new ImageView(context);
         this.checkImage = imageView;
         imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("featuredStickers_addedIcon"), PorterDuff.Mode.MULTIPLY));
-        this.checkImage.setImageResource(NUM);
+        this.checkImage.setImageResource(R.drawable.sticker_added);
         addView(this.checkImage, LayoutHelper.createFrame(19, 14.0f, (LocaleController.isRTL ? 3 : i) | 16, 23.0f, 0.0f, 23.0f, 0.0f));
     }
 

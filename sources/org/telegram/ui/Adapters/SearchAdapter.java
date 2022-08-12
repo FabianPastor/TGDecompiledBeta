@@ -17,6 +17,7 @@ import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
@@ -189,9 +190,9 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
                     strArr2[c2] = str4;
                 }
                 if (UserObject.isReplyUser(user)) {
-                    strArr2[2] = LocaleController.getString("RepliesTitle", NUM).toLowerCase();
+                    strArr2[2] = LocaleController.getString("RepliesTitle", R.string.RepliesTitle).toLowerCase();
                 } else if (user.self) {
-                    strArr2[2] = LocaleController.getString("SavedMessages", NUM).toLowerCase();
+                    strArr2[2] = LocaleController.getString("SavedMessages", R.string.SavedMessages).toLowerCase();
                 }
                 int i8 = 0;
                 char c3 = 0;
@@ -423,7 +424,7 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
                     return;
                 }
                 ProfileSearchCell profileSearchCell = (ProfileSearchCell) viewHolder.itemView;
-                profileSearchCell.setData(tLObject, (TLRPC$EncryptedChat) null, z ? LocaleController.getString("SavedMessages", NUM) : str2, spannableStringBuilder, false, z);
+                profileSearchCell.setData(tLObject, (TLRPC$EncryptedChat) null, z ? LocaleController.getString("SavedMessages", R.string.SavedMessages) : str2, spannableStringBuilder, false, z);
                 if (!(i == getItemCount() - 1 || i == this.searchResult.size() - 1)) {
                     z2 = true;
                 }
@@ -432,14 +433,14 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
         } else if (itemViewType == 1) {
             GraySectionCell graySectionCell = (GraySectionCell) viewHolder.itemView;
             if (getItem(i) == null) {
-                graySectionCell.setText(LocaleController.getString("GlobalSearch", NUM));
+                graySectionCell.setText(LocaleController.getString("GlobalSearch", R.string.GlobalSearch));
             } else {
-                graySectionCell.setText(LocaleController.getString("PhoneNumberSearch", NUM));
+                graySectionCell.setText(LocaleController.getString("PhoneNumberSearch", R.string.PhoneNumberSearch));
             }
         } else if (itemViewType == 2) {
             TextCell textCell = (TextCell) viewHolder.itemView;
             textCell.setColors((String) null, "windowBackgroundWhiteBlueText2");
-            textCell.setText(LocaleController.formatString("AddContactByPhone", NUM, PhoneFormat.getInstance().format("+" + ((String) getItem(i)))), false);
+            textCell.setText(LocaleController.formatString("AddContactByPhone", R.string.AddContactByPhone, PhoneFormat.getInstance().format("+" + ((String) getItem(i)))), false);
         }
     }
 

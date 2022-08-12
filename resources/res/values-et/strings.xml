@@ -21,12 +21,6 @@
     <string name="fcm_fallback_notification_channel_label">Muu</string>
     <string name="google_assistant_verification_channel_name">Assistendi kinnitaja</string>
     <string name="google_assistant_verification_notification_title">Google\'i assistent saadab sõnumi</string>
-    <string name="hms_apk_not_installed_hints">Mõned rakenduse %1$s funktsioonid ei pruugi korralikult toimida ilma HMS Core’ita, mis on teie seadmesse installimata.</string>
-    <string name="hms_bindfaildlg_message">%1$s ei saa HMS Core\'i kasutada. Käivitage Optimeerija (Telefonihaldur) või minge menüüsse Sätted, lubage teenuse %2$s kõik õigused (sh automaatkäivitus ja teisene käivitus) ja proovige uuesti.</string>
-    <string name="hms_confirm">OK</string>
-    <string name="hms_is_spoof">Paistab, et teie seadmesse on installitud HMS Core’i mitteametlik versioon (%1$s). Desinstallige sätetes HMS Core ja naaske ametliku versiooni installimiseks sellesse rakendusse.</string>
-    <string name="hms_push_channel">Vaikesäte</string>
-    <string name="hms_spoof_hints">Märkus</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Osta Google\'iga</string>
 </resources>

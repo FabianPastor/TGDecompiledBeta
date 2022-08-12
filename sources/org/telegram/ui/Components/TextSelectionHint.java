@@ -20,6 +20,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 
 public class TextSelectionHint extends View {
@@ -70,7 +71,7 @@ public class TextSelectionHint extends View {
                 animator.removeAllListeners();
                 this.a.cancel();
             }
-            String string = LocaleController.getString("TextSelectionHit", NUM);
+            String string = LocaleController.getString("TextSelectionHit", R.string.TextSelectionHit);
             Matcher matcher = Pattern.compile("\\*\\*.*\\*\\*").matcher(string);
             String str = null;
             if (matcher.matches()) {

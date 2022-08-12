@@ -17,6 +17,7 @@ import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$Message;
@@ -140,14 +141,14 @@ public class OtherDocumentPlaceholderDrawable extends RecyclableDrawable impleme
         canvas.drawText(this.fileName, (float) ((width - ((int) Math.ceil((double) namePaint.measureText(this.fileName)))) / 2), (float) (AndroidUtilities.dp(96.0f) + dp), namePaint);
         canvas.drawText(this.fileSize, (float) ((width - ((int) Math.ceil((double) sizePaint.measureText(this.fileSize)))) / 2), (float) (AndroidUtilities.dp(125.0f) + dp), sizePaint);
         if (this.loaded) {
-            str = LocaleController.getString("OpenFile", NUM);
+            str = LocaleController.getString("OpenFile", R.string.OpenFile);
             textPaint = openPaint;
             i = 0;
         } else {
             if (this.loading) {
-                str = LocaleController.getString("Cancel", NUM).toUpperCase();
+                str = LocaleController.getString("Cancel", R.string.Cancel).toUpperCase();
             } else {
-                str = LocaleController.getString("TapToDownload", NUM);
+                str = LocaleController.getString("TapToDownload", R.string.TapToDownload);
             }
             i = AndroidUtilities.dp(28.0f);
             textPaint = buttonPaint;

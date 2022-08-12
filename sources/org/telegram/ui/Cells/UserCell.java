@@ -17,6 +17,7 @@ import org.telegram.messenger.Emoji;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC$Chat;
@@ -92,7 +93,7 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
             this.addButton.setTextSize(1, 14.0f);
             this.addButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             this.addButton.setBackgroundDrawable(Theme.AdaptiveRipple.filledRect("featuredStickers_addButton", 4.0f));
-            this.addButton.setText(LocaleController.getString("Add", NUM));
+            this.addButton.setText(LocaleController.getString("Add", R.string.Add));
             this.addButton.setPadding(AndroidUtilities.dp(17.0f), 0, AndroidUtilities.dp(17.0f), 0);
             TextView textView2 = this.addButton;
             boolean z3 = LocaleController.isRTL;
@@ -153,7 +154,7 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
             boolean z8 = LocaleController.isRTL;
             addView(checkBoxSquare, LayoutHelper.createFrame(18, 18.0f, (z8 ? 3 : 5) | 16, z8 ? 19.0f : 0.0f, 0.0f, z8 ? 0.0f : 19.0f, 0.0f));
         } else if (i6 == 1) {
-            CheckBox checkBox2 = new CheckBox(context2, NUM);
+            CheckBox checkBox2 = new CheckBox(context2, R.drawable.round_check2);
             this.checkBox = checkBox2;
             checkBox2.setVisibility(4);
             this.checkBox.setColor(Theme.getColor("checkbox", resourcesProvider3), Theme.getColor("checkboxCheck", resourcesProvider3));
@@ -293,21 +294,21 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
             if (!(i == 0 || i == 1)) {
                 z3 = false;
             }
-            str = (!z3 || !z2) ? z3 ? LocaleController.getString("NotificationsUnmuted", NUM) : LocaleController.getString("NotificationsMuted", NUM) : LocaleController.getString("NotificationsCustom", NUM);
+            str = (!z3 || !z2) ? z3 ? LocaleController.getString("NotificationsUnmuted", R.string.NotificationsUnmuted) : LocaleController.getString("NotificationsMuted", R.string.NotificationsMuted) : LocaleController.getString("NotificationsCustom", R.string.NotificationsCustom);
         } else {
             int currentTime = i2 - ConnectionsManager.getInstance(this.currentAccount).getCurrentTime();
             if (currentTime <= 0) {
-                str = z2 ? LocaleController.getString("NotificationsCustom", NUM) : LocaleController.getString("NotificationsUnmuted", NUM);
+                str = z2 ? LocaleController.getString("NotificationsCustom", R.string.NotificationsCustom) : LocaleController.getString("NotificationsUnmuted", R.string.NotificationsUnmuted);
             } else if (currentTime < 3600) {
-                str = LocaleController.formatString("WillUnmuteIn", NUM, LocaleController.formatPluralString("Minutes", currentTime / 60, new Object[0]));
+                str = LocaleController.formatString("WillUnmuteIn", R.string.WillUnmuteIn, LocaleController.formatPluralString("Minutes", currentTime / 60, new Object[0]));
             } else if (currentTime < 86400) {
-                str = LocaleController.formatString("WillUnmuteIn", NUM, LocaleController.formatPluralString("Hours", (int) Math.ceil((double) ((((float) currentTime) / 60.0f) / 60.0f)), new Object[0]));
+                str = LocaleController.formatString("WillUnmuteIn", R.string.WillUnmuteIn, LocaleController.formatPluralString("Hours", (int) Math.ceil((double) ((((float) currentTime) / 60.0f) / 60.0f)), new Object[0]));
             } else {
-                str = currentTime < 31536000 ? LocaleController.formatString("WillUnmuteIn", NUM, LocaleController.formatPluralString("Days", (int) Math.ceil((double) (((((float) currentTime) / 60.0f) / 60.0f) / 24.0f)), new Object[0])) : null;
+                str = currentTime < 31536000 ? LocaleController.formatString("WillUnmuteIn", R.string.WillUnmuteIn, LocaleController.formatPluralString("Days", (int) Math.ceil((double) (((((float) currentTime) / 60.0f) / 60.0f) / 24.0f)), new Object[0])) : null;
             }
         }
         if (str == null) {
-            str = LocaleController.getString("NotificationsOff", NUM);
+            str = LocaleController.getString("NotificationsOff", R.string.NotificationsOff);
         }
         String str2 = str;
         if (DialogObject.isEncryptedDialog(notificationException.did)) {
@@ -387,18 +388,18 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
         if (r7.equals("groups") == false) goto L_0x00c0;
      */
     /* JADX WARNING: Multi-variable type inference failed */
-    /* JADX WARNING: Removed duplicated region for block: B:116:0x01de  */
-    /* JADX WARNING: Removed duplicated region for block: B:117:0x01e6  */
-    /* JADX WARNING: Removed duplicated region for block: B:135:0x0228  */
-    /* JADX WARNING: Removed duplicated region for block: B:136:0x0241  */
-    /* JADX WARNING: Removed duplicated region for block: B:139:0x0250  */
-    /* JADX WARNING: Removed duplicated region for block: B:140:0x0260  */
+    /* JADX WARNING: Removed duplicated region for block: B:116:0x01dd  */
+    /* JADX WARNING: Removed duplicated region for block: B:117:0x01e5  */
+    /* JADX WARNING: Removed duplicated region for block: B:135:0x0227  */
+    /* JADX WARNING: Removed duplicated region for block: B:136:0x0240  */
+    /* JADX WARNING: Removed duplicated region for block: B:139:0x024f  */
+    /* JADX WARNING: Removed duplicated region for block: B:140:0x025f  */
     /* JADX WARNING: Removed duplicated region for block: B:16:0x0030  */
-    /* JADX WARNING: Removed duplicated region for block: B:171:0x0317  */
-    /* JADX WARNING: Removed duplicated region for block: B:172:0x031a  */
-    /* JADX WARNING: Removed duplicated region for block: B:176:0x0329  */
-    /* JADX WARNING: Removed duplicated region for block: B:177:0x0331  */
-    /* JADX WARNING: Removed duplicated region for block: B:182:0x0353  */
+    /* JADX WARNING: Removed duplicated region for block: B:171:0x0313  */
+    /* JADX WARNING: Removed duplicated region for block: B:172:0x0316  */
+    /* JADX WARNING: Removed duplicated region for block: B:176:0x0325  */
+    /* JADX WARNING: Removed duplicated region for block: B:177:0x032d  */
+    /* JADX WARNING: Removed duplicated region for block: B:182:0x034f  */
     /* JADX WARNING: Removed duplicated region for block: B:184:? A[RETURN, SYNTHETIC] */
     /* JADX WARNING: Removed duplicated region for block: B:57:0x0091  */
     /* JADX WARNING: Removed duplicated region for block: B:60:0x00a0  */
@@ -660,7 +661,7 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
             org.telegram.ui.Components.AvatarDrawable r6 = r0.avatarDrawable
             r5.setImage(r3, r10, r6)
             r0.currentStatus = r9
-            goto L_0x01da
+            goto L_0x01d9
         L_0x015b:
             org.telegram.ui.ActionBar.SimpleTextView r6 = r0.nameTextView
             android.view.ViewGroup$LayoutParams r6 = r6.getLayoutParams()
@@ -668,13 +669,13 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
             r7 = 1092616192(0x41200000, float:10.0)
             int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
             r6.topMargin = r7
-            if (r1 == 0) goto L_0x01b7
+            if (r1 == 0) goto L_0x01b6
             boolean r6 = r0.selfAsSavedMessages
-            if (r6 == 0) goto L_0x01a5
+            if (r6 == 0) goto L_0x01a4
             boolean r6 = org.telegram.messenger.UserObject.isUserSelf(r1)
-            if (r6 == 0) goto L_0x01a5
+            if (r6 == 0) goto L_0x01a4
             org.telegram.ui.ActionBar.SimpleTextView r2 = r0.nameTextView
-            r4 = 2131628153(0x7f0e1079, float:1.888359E38)
+            int r4 = org.telegram.messenger.R.string.SavedMessages
             java.lang.String r6 = "SavedMessages"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r6, r4)
             r2.setText(r4, r5)
@@ -691,80 +692,80 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r11)
             r1.topMargin = r2
             return
-        L_0x01a5:
+        L_0x01a4:
             org.telegram.ui.Components.AvatarDrawable r5 = r0.avatarDrawable
             r5.setInfo((org.telegram.tgnet.TLRPC$User) r1)
             org.telegram.tgnet.TLRPC$UserStatus r5 = r1.status
-            if (r5 == 0) goto L_0x01b3
+            if (r5 == 0) goto L_0x01b2
             int r5 = r5.expires
             r0.lastStatus = r5
-            goto L_0x01da
-        L_0x01b3:
+            goto L_0x01d9
+        L_0x01b2:
             r5 = 0
             r0.lastStatus = r5
-            goto L_0x01da
-        L_0x01b7:
-            if (r2 == 0) goto L_0x01bf
+            goto L_0x01d9
+        L_0x01b6:
+            if (r2 == 0) goto L_0x01be
             org.telegram.ui.Components.AvatarDrawable r5 = r0.avatarDrawable
             r5.setInfo((org.telegram.tgnet.TLRPC$Chat) r2)
-            goto L_0x01da
-        L_0x01bf:
+            goto L_0x01d9
+        L_0x01be:
             java.lang.CharSequence r5 = r0.currentName
-            if (r5 == 0) goto L_0x01d0
+            if (r5 == 0) goto L_0x01cf
             org.telegram.ui.Components.AvatarDrawable r6 = r0.avatarDrawable
             int r7 = r0.currentId
             long r10 = (long) r7
             java.lang.String r5 = r5.toString()
             r6.setInfo(r10, r5, r3)
-            goto L_0x01da
-        L_0x01d0:
+            goto L_0x01d9
+        L_0x01cf:
             org.telegram.ui.Components.AvatarDrawable r5 = r0.avatarDrawable
             int r6 = r0.currentId
             long r6 = (long) r6
             java.lang.String r10 = "#"
             r5.setInfo(r6, r10, r3)
-        L_0x01da:
+        L_0x01d9:
             java.lang.CharSequence r5 = r0.currentName
-            if (r5 == 0) goto L_0x01e6
+            if (r5 == 0) goto L_0x01e5
             r0.lastName = r3
             org.telegram.ui.ActionBar.SimpleTextView r6 = r0.nameTextView
             r6.setText(r5)
-            goto L_0x021a
-        L_0x01e6:
-            if (r1 == 0) goto L_0x01f1
-            if (r8 != 0) goto L_0x01ee
+            goto L_0x0219
+        L_0x01e5:
+            if (r1 == 0) goto L_0x01f0
+            if (r8 != 0) goto L_0x01ed
             java.lang.String r8 = org.telegram.messenger.UserObject.getUserName(r1)
-        L_0x01ee:
+        L_0x01ed:
             r0.lastName = r8
-            goto L_0x01fc
-        L_0x01f1:
-            if (r2 == 0) goto L_0x01fa
-            if (r8 != 0) goto L_0x01f7
+            goto L_0x01fb
+        L_0x01f0:
+            if (r2 == 0) goto L_0x01f9
+            if (r8 != 0) goto L_0x01f6
             java.lang.String r8 = r2.title
-        L_0x01f7:
+        L_0x01f6:
             r0.lastName = r8
-            goto L_0x01fc
-        L_0x01fa:
+            goto L_0x01fb
+        L_0x01f9:
             r0.lastName = r9
-        L_0x01fc:
+        L_0x01fb:
             java.lang.String r5 = r0.lastName
-            if (r5 == 0) goto L_0x0215
-            org.telegram.ui.ActionBar.SimpleTextView r6 = r0.nameTextView     // Catch:{ Exception -> 0x0215 }
-            android.graphics.Paint r6 = r6.getPaint()     // Catch:{ Exception -> 0x0215 }
-            android.graphics.Paint$FontMetricsInt r6 = r6.getFontMetricsInt()     // Catch:{ Exception -> 0x0215 }
+            if (r5 == 0) goto L_0x0214
+            org.telegram.ui.ActionBar.SimpleTextView r6 = r0.nameTextView     // Catch:{ Exception -> 0x0214 }
+            android.graphics.Paint r6 = r6.getPaint()     // Catch:{ Exception -> 0x0214 }
+            android.graphics.Paint$FontMetricsInt r6 = r6.getFontMetricsInt()     // Catch:{ Exception -> 0x0214 }
             r7 = 1099956224(0x41900000, float:18.0)
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)     // Catch:{ Exception -> 0x0215 }
+            int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)     // Catch:{ Exception -> 0x0214 }
             r8 = 0
-            java.lang.CharSequence r5 = org.telegram.messenger.Emoji.replaceEmoji(r5, r6, r7, r8)     // Catch:{ Exception -> 0x0215 }
-        L_0x0215:
+            java.lang.CharSequence r5 = org.telegram.messenger.Emoji.replaceEmoji(r5, r6, r7, r8)     // Catch:{ Exception -> 0x0214 }
+        L_0x0214:
             org.telegram.ui.ActionBar.SimpleTextView r6 = r0.nameTextView
             r6.setText(r5)
-        L_0x021a:
-            if (r1 == 0) goto L_0x0241
+        L_0x0219:
+            if (r1 == 0) goto L_0x0240
             int r5 = r0.currentAccount
             org.telegram.messenger.MessagesController r5 = org.telegram.messenger.MessagesController.getInstance(r5)
             boolean r5 = r5.isPremiumUser(r1)
-            if (r5 == 0) goto L_0x0241
+            if (r5 == 0) goto L_0x0240
             org.telegram.ui.ActionBar.SimpleTextView r3 = r0.nameTextView
             org.telegram.ui.Components.Premium.PremiumGradient r5 = org.telegram.ui.Components.Premium.PremiumGradient.getInstance()
             android.graphics.drawable.Drawable r5 = r5.premiumStarDrawableMini
@@ -775,75 +776,75 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
             int r5 = -r5
             r3.setRightDrawableTopPadding(r5)
             r5 = 0
-            goto L_0x024c
-        L_0x0241:
+            goto L_0x024b
+        L_0x0240:
             org.telegram.ui.ActionBar.SimpleTextView r5 = r0.nameTextView
             r5.setRightDrawable((android.graphics.drawable.Drawable) r3)
             org.telegram.ui.ActionBar.SimpleTextView r3 = r0.nameTextView
             r5 = 0
             r3.setRightDrawableTopPadding(r5)
-        L_0x024c:
+        L_0x024b:
             java.lang.CharSequence r3 = r0.currentStatus
-            if (r3 == 0) goto L_0x0260
+            if (r3 == 0) goto L_0x025f
             org.telegram.ui.ActionBar.SimpleTextView r3 = r0.statusTextView
             int r6 = r0.statusColor
             r3.setTextColor(r6)
             org.telegram.ui.ActionBar.SimpleTextView r3 = r0.statusTextView
             java.lang.CharSequence r6 = r0.currentStatus
             r3.setText(r6)
-            goto L_0x02f9
-        L_0x0260:
-            if (r1 == 0) goto L_0x02f9
+            goto L_0x02f5
+        L_0x025f:
+            if (r1 == 0) goto L_0x02f5
             boolean r3 = r1.bot
-            if (r3 == 0) goto L_0x029a
+            if (r3 == 0) goto L_0x0297
             org.telegram.ui.ActionBar.SimpleTextView r3 = r0.statusTextView
             int r6 = r0.statusColor
             r3.setTextColor(r6)
             boolean r3 = r1.bot_chat_history
-            if (r3 != 0) goto L_0x028b
+            if (r3 != 0) goto L_0x0289
             android.widget.TextView r3 = r0.adminTextView
-            if (r3 == 0) goto L_0x027c
+            if (r3 == 0) goto L_0x027b
             int r3 = r3.getVisibility()
-            if (r3 != 0) goto L_0x027c
-            goto L_0x028b
-        L_0x027c:
+            if (r3 != 0) goto L_0x027b
+            goto L_0x0289
+        L_0x027b:
             org.telegram.ui.ActionBar.SimpleTextView r3 = r0.statusTextView
-            r6 = 2131624753(0x7f0e0331, float:1.8876695E38)
+            int r6 = org.telegram.messenger.R.string.BotStatusCantRead
             java.lang.String r7 = "BotStatusCantRead"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             r3.setText(r6)
-            goto L_0x02f9
-        L_0x028b:
+            goto L_0x02f5
+        L_0x0289:
             org.telegram.ui.ActionBar.SimpleTextView r3 = r0.statusTextView
-            r6 = 2131624754(0x7f0e0332, float:1.8876697E38)
+            int r6 = org.telegram.messenger.R.string.BotStatusRead
             java.lang.String r7 = "BotStatusRead"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             r3.setText(r6)
-            goto L_0x02f9
-        L_0x029a:
+            goto L_0x02f5
+        L_0x0297:
             long r6 = r1.id
             int r3 = r0.currentAccount
             org.telegram.messenger.UserConfig r3 = org.telegram.messenger.UserConfig.getInstance(r3)
             long r8 = r3.getClientUserId()
             int r3 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1))
-            if (r3 == 0) goto L_0x02e4
+            if (r3 == 0) goto L_0x02e1
             org.telegram.tgnet.TLRPC$UserStatus r3 = r1.status
-            if (r3 == 0) goto L_0x02bc
+            if (r3 == 0) goto L_0x02b9
             int r3 = r3.expires
             int r6 = r0.currentAccount
             org.telegram.tgnet.ConnectionsManager r6 = org.telegram.tgnet.ConnectionsManager.getInstance(r6)
             int r6 = r6.getCurrentTime()
-            if (r3 > r6) goto L_0x02e4
-        L_0x02bc:
+            if (r3 > r6) goto L_0x02e1
+        L_0x02b9:
             int r3 = r0.currentAccount
             org.telegram.messenger.MessagesController r3 = org.telegram.messenger.MessagesController.getInstance(r3)
             j$.util.concurrent.ConcurrentHashMap<java.lang.Long, java.lang.Integer> r3 = r3.onlinePrivacy
             long r6 = r1.id
             java.lang.Long r6 = java.lang.Long.valueOf(r6)
             boolean r3 = r3.containsKey(r6)
-            if (r3 == 0) goto L_0x02d1
-            goto L_0x02e4
-        L_0x02d1:
+            if (r3 == 0) goto L_0x02ce
+            goto L_0x02e1
+        L_0x02ce:
             org.telegram.ui.ActionBar.SimpleTextView r3 = r0.statusTextView
             int r6 = r0.statusColor
             r3.setTextColor(r6)
@@ -851,71 +852,71 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
             int r6 = r0.currentAccount
             java.lang.String r6 = org.telegram.messenger.LocaleController.formatUserStatus(r6, r1)
             r3.setText(r6)
-            goto L_0x02f9
-        L_0x02e4:
+            goto L_0x02f5
+        L_0x02e1:
             org.telegram.ui.ActionBar.SimpleTextView r3 = r0.statusTextView
             int r6 = r0.statusOnlineColor
             r3.setTextColor(r6)
             org.telegram.ui.ActionBar.SimpleTextView r3 = r0.statusTextView
-            r6 = 2131627145(0x7f0e0CLASSNAME, float:1.8881546E38)
+            int r6 = org.telegram.messenger.R.string.Online
             java.lang.String r7 = "Online"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             r3.setText(r6)
-        L_0x02f9:
+        L_0x02f5:
             android.widget.ImageView r3 = r0.imageView
             int r3 = r3.getVisibility()
-            if (r3 != 0) goto L_0x0305
+            if (r3 != 0) goto L_0x0301
             int r3 = r0.currentDrawable
-            if (r3 == 0) goto L_0x0311
-        L_0x0305:
+            if (r3 == 0) goto L_0x030d
+        L_0x0301:
             android.widget.ImageView r3 = r0.imageView
             int r3 = r3.getVisibility()
-            if (r3 != r12) goto L_0x0325
+            if (r3 != r12) goto L_0x0321
             int r3 = r0.currentDrawable
-            if (r3 == 0) goto L_0x0325
-        L_0x0311:
+            if (r3 == 0) goto L_0x0321
+        L_0x030d:
             android.widget.ImageView r3 = r0.imageView
             int r6 = r0.currentDrawable
-            if (r6 != 0) goto L_0x031a
+            if (r6 != 0) goto L_0x0316
             r6 = 8
-            goto L_0x031b
-        L_0x031a:
+            goto L_0x0317
+        L_0x0316:
             r6 = 0
-        L_0x031b:
+        L_0x0317:
             r3.setVisibility(r6)
             android.widget.ImageView r3 = r0.imageView
             int r5 = r0.currentDrawable
             r3.setImageResource(r5)
-        L_0x0325:
+        L_0x0321:
             r0.lastAvatar = r4
-            if (r1 == 0) goto L_0x0331
+            if (r1 == 0) goto L_0x032d
             org.telegram.ui.Components.BackupImageView r2 = r0.avatarImageView
             org.telegram.ui.Components.AvatarDrawable r3 = r0.avatarDrawable
             r2.setForUserOrChat(r1, r3)
-            goto L_0x0342
-        L_0x0331:
-            if (r2 == 0) goto L_0x033b
+            goto L_0x033e
+        L_0x032d:
+            if (r2 == 0) goto L_0x0337
             org.telegram.ui.Components.BackupImageView r1 = r0.avatarImageView
             org.telegram.ui.Components.AvatarDrawable r3 = r0.avatarDrawable
             r1.setForUserOrChat(r2, r3)
-            goto L_0x0342
-        L_0x033b:
+            goto L_0x033e
+        L_0x0337:
             org.telegram.ui.Components.BackupImageView r1 = r0.avatarImageView
             org.telegram.ui.Components.AvatarDrawable r2 = r0.avatarDrawable
             r1.setImageDrawable(r2)
-        L_0x0342:
+        L_0x033e:
             org.telegram.ui.ActionBar.SimpleTextView r1 = r0.nameTextView
             org.telegram.ui.ActionBar.Theme$ResourcesProvider r2 = r0.resourcesProvider
             java.lang.String r3 = "windowBackgroundWhiteBlackText"
             int r2 = org.telegram.ui.ActionBar.Theme.getColor((java.lang.String) r3, (org.telegram.ui.ActionBar.Theme.ResourcesProvider) r2)
             r1.setTextColor(r2)
             android.widget.TextView r1 = r0.adminTextView
-            if (r1 == 0) goto L_0x035e
+            if (r1 == 0) goto L_0x035a
             org.telegram.ui.ActionBar.Theme$ResourcesProvider r2 = r0.resourcesProvider
             java.lang.String r3 = "profile_creatorIcon"
             int r2 = org.telegram.ui.ActionBar.Theme.getColor((java.lang.String) r3, (org.telegram.ui.ActionBar.Theme.ResourcesProvider) r2)
             r1.setTextColor(r2)
-        L_0x035e:
+        L_0x035a:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.UserCell.update(int):void");

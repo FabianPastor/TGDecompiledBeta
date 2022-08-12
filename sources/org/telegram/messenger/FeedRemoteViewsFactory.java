@@ -75,28 +75,32 @@ class FeedRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory, N
 
     public RemoteViews getViewAt(int i) {
         MessageObject messageObject = this.messages.get(i);
-        RemoteViews remoteViews = new RemoteViews(this.mContext.getPackageName(), NUM);
+        RemoteViews remoteViews = new RemoteViews(this.mContext.getPackageName(), R.layout.feed_widget_item);
         if (messageObject.type == 0) {
-            remoteViews.setTextViewText(NUM, messageObject.messageText);
-            remoteViews.setViewVisibility(NUM, 0);
+            int i2 = R.id.feed_widget_item_text;
+            remoteViews.setTextViewText(i2, messageObject.messageText);
+            remoteViews.setViewVisibility(i2, 0);
         } else if (TextUtils.isEmpty(messageObject.caption)) {
-            remoteViews.setViewVisibility(NUM, 8);
+            remoteViews.setViewVisibility(R.id.feed_widget_item_text, 8);
         } else {
-            remoteViews.setTextViewText(NUM, messageObject.caption);
-            remoteViews.setViewVisibility(NUM, 0);
+            int i3 = R.id.feed_widget_item_text;
+            remoteViews.setTextViewText(i3, messageObject.caption);
+            remoteViews.setViewVisibility(i3, 0);
         }
         ArrayList<TLRPC$PhotoSize> arrayList = messageObject.photoThumbs;
         if (arrayList == null || arrayList.isEmpty()) {
-            remoteViews.setViewVisibility(NUM, 8);
+            remoteViews.setViewVisibility(R.id.feed_widget_item_image, 8);
         } else {
             File pathToAttach = FileLoader.getInstance(UserConfig.selectedAccount).getPathToAttach(FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, AndroidUtilities.getPhotoSize()));
             if (pathToAttach.exists()) {
-                remoteViews.setViewVisibility(NUM, 0);
-                Uri uriForFile = FileProvider.getUriForFile(this.mContext, "org.telegram.messenger.beta.provider", pathToAttach);
+                int i4 = R.id.feed_widget_item_image;
+                remoteViews.setViewVisibility(i4, 0);
+                Context context = this.mContext;
+                Uri uriForFile = FileProvider.getUriForFile(context, ApplicationLoader.getApplicationId() + ".provider", pathToAttach);
                 grantUriAccessToWidget(this.mContext, uriForFile);
-                remoteViews.setImageViewUri(NUM, uriForFile);
+                remoteViews.setImageViewUri(i4, uriForFile);
             } else {
-                remoteViews.setViewVisibility(NUM, 8);
+                remoteViews.setViewVisibility(R.id.feed_widget_item_image, 8);
             }
         }
         Bundle bundle = new Bundle();
@@ -105,7 +109,7 @@ class FeedRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory, N
         bundle.putInt("currentAccount", this.accountInstance.getCurrentAccount());
         Intent intent = new Intent();
         intent.putExtras(bundle);
-        remoteViews.setOnClickFillInIntent(NUM, intent);
+        remoteViews.setOnClickFillInIntent(R.id.shortcut_widget_item, intent);
         return remoteViews;
     }
 

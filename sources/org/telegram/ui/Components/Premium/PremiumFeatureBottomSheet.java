@@ -27,6 +27,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SvgHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC$TL_availableReaction;
@@ -66,7 +67,7 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
         fixNavigationBar();
         this.startType = i2;
         this.onlySelectedType = z2;
-        this.svgIcon = SvgHelper.getDrawable(RLottieDrawable.readRes((File) null, NUM));
+        this.svgIcon = SvgHelper.getDrawable(RLottieDrawable.readRes((File) null, R.raw.star_loader));
         final Context context = baseFragment.getContext();
         AnonymousClass1 r6 = new FrameLayout(context) {
             /* access modifiers changed from: protected */
@@ -128,7 +129,7 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
         };
         FrameLayout frameLayout = new FrameLayout(context);
         ImageView imageView = new ImageView(context);
-        imageView.setImageResource(NUM);
+        imageView.setImageResource(R.drawable.msg_close);
         imageView.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(12.0f), ColorUtils.setAlphaComponent(-1, 40), ColorUtils.setAlphaComponent(-1, 100)));
         frameLayout.addView(imageView, LayoutHelper.createFrame(24, 24, 17));
         frameLayout.setOnClickListener(new PremiumFeatureBottomSheet$$ExternalSyntheticLambda1(this));
@@ -258,7 +259,7 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
         this.buttonContainer.setBackgroundColor(getThemedColor("dialogBackground"));
         linearLayout.addView(this.buttonContainer, LayoutHelper.createLinear(-1, 68, 80));
         if (UserConfig.getInstance(this.currentAccount).isPremium()) {
-            this.premiumButtonView.setOverlayText(LocaleController.getString("OK", NUM), false, false);
+            this.premiumButtonView.setOverlayText(LocaleController.getString("OK", R.string.OK), false, false);
         }
         ScrollView scrollView = new ScrollView(context);
         scrollView.addView(linearLayout);
@@ -302,13 +303,13 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
         if (this.onlySelectedType) {
             int i = this.startType;
             if (i == 4) {
-                this.premiumButtonView.buttonTextView.setText(LocaleController.getString(NUM));
-                this.premiumButtonView.setIcon(NUM);
+                this.premiumButtonView.buttonTextView.setText(LocaleController.getString(R.string.UnlockPremiumReactions));
+                this.premiumButtonView.setIcon(R.raw.unlock_icon);
             } else if (i == 3) {
-                this.premiumButtonView.buttonTextView.setText(LocaleController.getString(NUM));
+                this.premiumButtonView.buttonTextView.setText(LocaleController.getString(R.string.AboutTelegramPremium));
             } else if (i == 10) {
-                this.premiumButtonView.buttonTextView.setText(LocaleController.getString(NUM));
-                this.premiumButtonView.setIcon(NUM);
+                this.premiumButtonView.buttonTextView.setText(LocaleController.getString(R.string.UnlockPremiumIcons));
+                this.premiumButtonView.setIcon(R.raw.unlock_icon);
             }
         } else {
             this.premiumButtonView.buttonTextView.setText(PremiumPreviewFragment.getPremiumButtonText(this.currentAccount));
@@ -342,7 +343,7 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
         } else if (i != NotificationCenter.currentUserPremiumStatusChanged) {
         } else {
             if (UserConfig.getInstance(this.currentAccount).isPremium()) {
-                this.premiumButtonView.setOverlayText(LocaleController.getString("OK", NUM), false, true);
+                this.premiumButtonView.setOverlayText(LocaleController.getString("OK", R.string.OK), false, true);
             } else {
                 this.premiumButtonView.clearOverlayText();
             }
@@ -419,14 +420,14 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
                 this.title.setText(premiumFeatureData.title);
                 this.description.setText(premiumFeatureData.description);
             } else if (PremiumFeatureBottomSheet.this.startType == 4) {
-                this.title.setText(LocaleController.getString("AdditionalReactions", NUM));
-                this.description.setText(LocaleController.getString("AdditionalReactionsDescription", NUM));
+                this.title.setText(LocaleController.getString("AdditionalReactions", R.string.AdditionalReactions));
+                this.description.setText(LocaleController.getString("AdditionalReactionsDescription", R.string.AdditionalReactionsDescription));
             } else if (PremiumFeatureBottomSheet.this.startType == 3) {
-                this.title.setText(LocaleController.getString("PremiumPreviewNoAds", NUM));
-                this.description.setText(LocaleController.getString("PremiumPreviewNoAdsDescription2", NUM));
+                this.title.setText(LocaleController.getString("PremiumPreviewNoAds", R.string.PremiumPreviewNoAds));
+                this.description.setText(LocaleController.getString("PremiumPreviewNoAdsDescription2", R.string.PremiumPreviewNoAdsDescription2));
             } else if (PremiumFeatureBottomSheet.this.startType == 10) {
-                this.title.setText(LocaleController.getString("PremiumPreviewAppIcon", NUM));
-                this.description.setText(LocaleController.getString("PremiumPreviewAppIconDescription2", NUM));
+                this.title.setText(LocaleController.getString("PremiumPreviewAppIcon", R.string.PremiumPreviewAppIcon));
+                this.description.setText(LocaleController.getString("PremiumPreviewAppIconDescription2", R.string.PremiumPreviewAppIconDescription2));
             }
         }
     }

@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RadialProgressView;
@@ -27,7 +28,7 @@ public class LocationLoadingCell extends FrameLayout {
         addView(radialProgressView, LayoutHelper.createFrame(-2, -2, 17));
         ImageView imageView2 = new ImageView(context);
         this.imageView = imageView2;
-        imageView2.setImageResource(NUM);
+        imageView2.setImageResource(R.drawable.location_empty);
         this.imageView.setColorFilter(new PorterDuffColorFilter(getThemedColor("dialogEmptyImage"), PorterDuff.Mode.MULTIPLY));
         addView(this.imageView, LayoutHelper.createFrame(-2, -2.0f, 17, 0.0f, 0.0f, 0.0f, 24.0f));
         TextView textView2 = new TextView(context);
@@ -36,7 +37,7 @@ public class LocationLoadingCell extends FrameLayout {
         this.textView.setGravity(17);
         this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.textView.setTextSize(1, 17.0f);
-        this.textView.setText(LocaleController.getString("NoPlacesFound", NUM));
+        this.textView.setText(LocaleController.getString("NoPlacesFound", R.string.NoPlacesFound));
         addView(this.textView, LayoutHelper.createFrame(-2, -2.0f, 17, 0.0f, 34.0f, 0.0f, 0.0f));
     }
 

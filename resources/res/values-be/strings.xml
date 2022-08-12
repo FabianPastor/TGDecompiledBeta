@@ -21,12 +21,6 @@
     <string name="fcm_fallback_notification_channel_label">Рознае</string>
     <string name="google_assistant_verification_channel_name">Інструмент праверкі Памочніка</string>
     <string name="google_assistant_verification_notification_title">Памочнік Google адпраўляе паведамленне</string>
-    <string name="hms_apk_not_installed_hints">Некаторыя функцыі ў праграме «%1$s» могуць працаваць няправільна без HMS Core, які не ўстаноўлены на вашай прыладзе.</string>
-    <string name="hms_bindfaildlg_message">%1$s не можа выкарыстоўваць HMS Core. Запусціце Аптымізатар (Дыспетчар) ці перайдзіце ў Налады, уключыце ўсе дазволы для %2$s (уключаючы аўтаматычны і другасны запускі) і паўтарыце спробу.</string>
-    <string name="hms_confirm">ОК</string>
-    <string name="hms_is_spoof">Здаецца, на вашай прыладзе ўстаноўлена неафіцыйная версія HMS Core (%1$s). Выдаліце HMS Core у Наладах і вярніцеся ў гэту праграму, каб устанавіць афіцыйную версію.</string>
-    <string name="hms_push_channel">Стандартнае</string>
-    <string name="hms_spoof_hints">Заўвага</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Купіць з дапамогай Google</string>
 </resources>

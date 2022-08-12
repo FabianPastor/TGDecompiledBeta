@@ -615,18 +615,18 @@ public class StickersSearchAdapter extends RecyclerListView.SelectionAdapter {
             r6 = this;
             r7 = 0
             r0 = 3
-            if (r8 == 0) goto L_0x00d9
+            if (r8 == 0) goto L_0x00d7
             r1 = 1
-            if (r8 == r1) goto L_0x00d1
+            if (r8 == r1) goto L_0x00cf
             r2 = 2
-            if (r8 == r2) goto L_0x00c7
-            if (r8 == r0) goto L_0x00b0
+            if (r8 == r2) goto L_0x00c5
+            if (r8 == r0) goto L_0x00ae
             r7 = 4
-            if (r8 == r7) goto L_0x00a8
+            if (r8 == r7) goto L_0x00a6
             r7 = 5
             if (r8 == r7) goto L_0x0015
             r7 = 0
-            goto L_0x00e8
+            goto L_0x00e6
         L_0x0015:
             android.widget.LinearLayout r7 = new android.widget.LinearLayout
             android.content.Context r8 = r6.context
@@ -641,7 +641,7 @@ public class StickersSearchAdapter extends RecyclerListView.SelectionAdapter {
             android.widget.ImageView$ScaleType r0 = android.widget.ImageView.ScaleType.CENTER
             r8.setScaleType(r0)
             android.widget.ImageView r8 = r6.emptyImageView
-            r0 = 2131166171(0x7var_db, float:1.794658E38)
+            int r0 = org.telegram.messenger.R.drawable.stickers_empty
             r8.setImageResource(r0)
             android.widget.ImageView r8 = r6.emptyImageView
             android.graphics.PorterDuffColorFilter r0 = new android.graphics.PorterDuffColorFilter
@@ -665,7 +665,7 @@ public class StickersSearchAdapter extends RecyclerListView.SelectionAdapter {
             android.content.Context r3 = r6.context
             r8.<init>(r3)
             r6.emptyTextView = r8
-            r3 = 2131626939(0x7f0e0bbb, float:1.8881128E38)
+            int r3 = org.telegram.messenger.R.string.NoStickersFound
             java.lang.String r5 = "NoStickersFound"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r8.setText(r3)
@@ -684,13 +684,13 @@ public class StickersSearchAdapter extends RecyclerListView.SelectionAdapter {
             r8 = -1082130432(0xffffffffbvar_, float:-1.0)
             android.widget.FrameLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r8)
             r7.setLayoutParams(r8)
-            goto L_0x00e8
-        L_0x00a8:
+            goto L_0x00e6
+        L_0x00a6:
             android.view.View r7 = new android.view.View
             android.content.Context r8 = r6.context
             r7.<init>(r8)
-            goto L_0x00e8
-        L_0x00b0:
+            goto L_0x00e6
+        L_0x00ae:
             org.telegram.ui.Cells.FeaturedStickerSetInfoCell r7 = new org.telegram.ui.Cells.FeaturedStickerSetInfoCell
             android.content.Context r1 = r6.context
             r2 = 17
@@ -702,27 +702,27 @@ public class StickersSearchAdapter extends RecyclerListView.SelectionAdapter {
             org.telegram.ui.Adapters.StickersSearchAdapter$$ExternalSyntheticLambda0 r8 = new org.telegram.ui.Adapters.StickersSearchAdapter$$ExternalSyntheticLambda0
             r8.<init>(r6)
             r7.setAddOnClickListener(r8)
-            goto L_0x00e8
-        L_0x00c7:
+            goto L_0x00e6
+        L_0x00c5:
             org.telegram.ui.Cells.StickerSetNameCell r8 = new org.telegram.ui.Cells.StickerSetNameCell
             android.content.Context r0 = r6.context
             org.telegram.ui.ActionBar.Theme$ResourcesProvider r2 = r6.resourcesProvider
             r8.<init>(r0, r7, r1, r2)
-            goto L_0x00e7
-        L_0x00d1:
+            goto L_0x00e5
+        L_0x00cf:
             org.telegram.ui.Cells.EmptyCell r7 = new org.telegram.ui.Cells.EmptyCell
             android.content.Context r8 = r6.context
             r7.<init>(r8)
-            goto L_0x00e8
-        L_0x00d9:
+            goto L_0x00e6
+        L_0x00d7:
             org.telegram.ui.Adapters.StickersSearchAdapter$2 r8 = new org.telegram.ui.Adapters.StickersSearchAdapter$2
             android.content.Context r1 = r6.context
             r8.<init>(r6, r1, r7)
             org.telegram.messenger.ImageReceiver r7 = r8.getImageView()
             r7.setLayerNum(r0)
-        L_0x00e7:
+        L_0x00e5:
             r7 = r8
-        L_0x00e8:
+        L_0x00e6:
             org.telegram.ui.Components.RecyclerListView$Holder r8 = new org.telegram.ui.Components.RecyclerListView$Holder
             r8.<init>(r7)
             return r8

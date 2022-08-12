@@ -8,6 +8,6 @@ public final /* synthetic */ class LocationActivity$$ExternalSyntheticLambda17 i
     }
 
     public final void run() {
-        this.f$0.lambda$openProximityAlert$24();
+        this.f$0.lambda$getRecentLocations$38();
     }
 }

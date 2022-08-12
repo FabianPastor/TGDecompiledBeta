@@ -23,6 +23,7 @@ import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
@@ -434,7 +435,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
     /* JADX WARNING: type inference failed for: r1v5, types: [org.telegram.ui.Components.FlickerLoadingView] */
     /* JADX WARNING: type inference failed for: r1v10 */
     /* JADX WARNING: type inference failed for: r1v15 */
-    /* JADX WARNING: type inference failed for: r3v29, types: [org.telegram.ui.Cells.DialogCell] */
+    /* JADX WARNING: type inference failed for: r3v21, types: [org.telegram.ui.Cells.DialogCell] */
     /* JADX WARNING: type inference failed for: r1v22 */
     /* JADX WARNING: type inference failed for: r1v23 */
     /* JADX WARNING: type inference failed for: r1v24 */
@@ -443,7 +444,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
     /* JADX WARNING: type inference failed for: r1v27 */
     /* JADX WARNING: type inference failed for: r1v28 */
     /* JADX WARNING: type inference failed for: r1v29 */
-    /* JADX WARNING: type inference failed for: r6v9, types: [org.telegram.ui.Cells.HeaderCell] */
+    /* JADX WARNING: type inference failed for: r5v13, types: [org.telegram.ui.Cells.HeaderCell] */
     /* JADX WARNING: type inference failed for: r1v30 */
     /* JADX WARNING: Failed to insert additional move for type inference */
     /* JADX WARNING: Multi-variable type inference failed */
@@ -454,169 +455,171 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             r13 = 5
             r0 = -1
             java.lang.String r1 = "windowBackgroundGrayShadow"
-            r2 = 2131165435(0x7var_fb, float:1.7945087E38)
-            java.lang.String r3 = "windowBackgroundGray"
-            r4 = 1
-            r5 = 0
+            java.lang.String r2 = "windowBackgroundGray"
+            r3 = 1
+            r4 = 0
             switch(r14) {
-                case 0: goto L_0x0182;
-                case 1: goto L_0x014e;
-                case 2: goto L_0x00e2;
-                case 3: goto L_0x00b8;
-                case 4: goto L_0x00af;
-                case 5: goto L_0x00a6;
-                case 6: goto L_0x009b;
-                case 7: goto L_0x0089;
-                case 8: goto L_0x0065;
-                case 9: goto L_0x005a;
-                case 10: goto L_0x0051;
-                case 11: goto L_0x002f;
-                case 12: goto L_0x000e;
-                case 13: goto L_0x014e;
-                case 14: goto L_0x0017;
-                default: goto L_0x000e;
+                case 0: goto L_0x0183;
+                case 1: goto L_0x014f;
+                case 2: goto L_0x00e5;
+                case 3: goto L_0x00b9;
+                case 4: goto L_0x00b0;
+                case 5: goto L_0x00a7;
+                case 6: goto L_0x009c;
+                case 7: goto L_0x008a;
+                case 8: goto L_0x0064;
+                case 9: goto L_0x0059;
+                case 10: goto L_0x0050;
+                case 11: goto L_0x002c;
+                case 12: goto L_0x000b;
+                case 13: goto L_0x014f;
+                case 14: goto L_0x0014;
+                default: goto L_0x000b;
             }
-        L_0x000e:
+        L_0x000b:
             org.telegram.ui.Cells.TextCell r1 = new org.telegram.ui.Cells.TextCell
             android.content.Context r2 = r12.mContext
             r1.<init>(r2)
-            goto L_0x01a8
-        L_0x0017:
+            goto L_0x01a9
+        L_0x0014:
             org.telegram.ui.Cells.HeaderCell r1 = new org.telegram.ui.Cells.HeaderCell
-            android.content.Context r7 = r12.mContext
-            r9 = 16
+            android.content.Context r6 = r12.mContext
+            r8 = 16
+            r9 = 0
             r10 = 0
-            r11 = 0
-            java.lang.String r8 = "key_graySectionText"
-            r6 = r1
-            r6.<init>(r7, r8, r9, r10, r11)
+            java.lang.String r7 = "key_graySectionText"
+            r5 = r1
+            r5.<init>(r6, r7, r8, r9, r10)
             r2 = 32
             r1.setHeight(r2)
-            r1.setClickable(r5)
-            goto L_0x01a8
-        L_0x002f:
-            org.telegram.ui.Adapters.DialogsAdapter$3 r5 = new org.telegram.ui.Adapters.DialogsAdapter$3
-            android.content.Context r6 = r12.mContext
-            r5.<init>(r6)
-            android.content.Context r6 = r12.mContext
-            android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r6, (int) r2, (java.lang.String) r1)
-            org.telegram.ui.Components.CombinedDrawable r2 = new org.telegram.ui.Components.CombinedDrawable
+            r1.setClickable(r4)
+            goto L_0x01a9
+        L_0x002c:
+            org.telegram.ui.Adapters.DialogsAdapter$3 r4 = new org.telegram.ui.Adapters.DialogsAdapter$3
+            android.content.Context r5 = r12.mContext
+            r4.<init>(r5)
+            android.content.Context r5 = r12.mContext
+            int r6 = org.telegram.messenger.R.drawable.greydivider
+            android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r5, (int) r6, (java.lang.String) r1)
+            org.telegram.ui.Components.CombinedDrawable r5 = new org.telegram.ui.Components.CombinedDrawable
             android.graphics.drawable.ColorDrawable r6 = new android.graphics.drawable.ColorDrawable
-            int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
-            r6.<init>(r3)
-            r2.<init>(r6, r1)
-            r2.setFullsize(r4)
-            r5.setBackgroundDrawable(r2)
-            goto L_0x0086
-        L_0x0051:
+            int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
+            r6.<init>(r2)
+            r5.<init>(r6, r1)
+            r5.setFullsize(r3)
+            r4.setBackgroundDrawable(r5)
+            goto L_0x0087
+        L_0x0050:
             org.telegram.ui.Adapters.DialogsAdapter$LastEmptyView r1 = new org.telegram.ui.Adapters.DialogsAdapter$LastEmptyView
             android.content.Context r2 = r12.mContext
             r1.<init>(r2)
-            goto L_0x01a8
-        L_0x005a:
+            goto L_0x01a9
+        L_0x0059:
             org.telegram.ui.Cells.ArchiveHintCell r1 = new org.telegram.ui.Cells.ArchiveHintCell
             android.content.Context r2 = r12.mContext
             r1.<init>(r2)
             r12.archiveHintCell = r1
-            goto L_0x01a8
-        L_0x0065:
-            org.telegram.ui.Cells.ShadowSectionCell r5 = new org.telegram.ui.Cells.ShadowSectionCell
-            android.content.Context r6 = r12.mContext
-            r5.<init>(r6)
-            android.content.Context r6 = r12.mContext
-            android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r6, (int) r2, (java.lang.String) r1)
-            org.telegram.ui.Components.CombinedDrawable r2 = new org.telegram.ui.Components.CombinedDrawable
+            goto L_0x01a9
+        L_0x0064:
+            org.telegram.ui.Cells.ShadowSectionCell r4 = new org.telegram.ui.Cells.ShadowSectionCell
+            android.content.Context r5 = r12.mContext
+            r4.<init>(r5)
+            android.content.Context r5 = r12.mContext
+            int r6 = org.telegram.messenger.R.drawable.greydivider
+            android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r5, (int) r6, (java.lang.String) r1)
+            org.telegram.ui.Components.CombinedDrawable r5 = new org.telegram.ui.Components.CombinedDrawable
             android.graphics.drawable.ColorDrawable r6 = new android.graphics.drawable.ColorDrawable
-            int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
-            r6.<init>(r3)
-            r2.<init>(r6, r1)
-            r2.setFullsize(r4)
-            r5.setBackgroundDrawable(r2)
-        L_0x0086:
-            r1 = r5
-            goto L_0x01a8
-        L_0x0089:
+            int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
+            r6.<init>(r2)
+            r5.<init>(r6, r1)
+            r5.setFullsize(r3)
+            r4.setBackgroundDrawable(r5)
+        L_0x0087:
+            r1 = r4
+            goto L_0x01a9
+        L_0x008a:
             org.telegram.ui.Cells.HeaderCell r1 = new org.telegram.ui.Cells.HeaderCell
             android.content.Context r2 = r12.mContext
             r1.<init>(r2)
             r2 = 1094713344(0x41400000, float:12.0)
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            r1.setPadding(r5, r5, r5, r2)
-            goto L_0x01a8
-        L_0x009b:
+            r1.setPadding(r4, r4, r4, r2)
+            goto L_0x01a9
+        L_0x009c:
             org.telegram.ui.Cells.UserCell r1 = new org.telegram.ui.Cells.UserCell
             android.content.Context r2 = r12.mContext
             r3 = 8
-            r1.<init>(r2, r3, r5, r5)
-            goto L_0x01a8
-        L_0x00a6:
+            r1.<init>(r2, r3, r4, r4)
+            goto L_0x01a9
+        L_0x00a7:
             org.telegram.ui.Cells.DialogsEmptyCell r1 = new org.telegram.ui.Cells.DialogsEmptyCell
             android.content.Context r2 = r12.mContext
             r1.<init>(r2)
-            goto L_0x01a8
-        L_0x00af:
+            goto L_0x01a9
+        L_0x00b0:
             org.telegram.ui.Cells.DialogMeUrlCell r1 = new org.telegram.ui.Cells.DialogMeUrlCell
             android.content.Context r2 = r12.mContext
             r1.<init>(r2)
-            goto L_0x01a8
-        L_0x00b8:
-            org.telegram.ui.Adapters.DialogsAdapter$2 r4 = new org.telegram.ui.Adapters.DialogsAdapter$2
-            android.content.Context r5 = r12.mContext
-            r4.<init>(r12, r5)
-            int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
-            r4.setBackgroundColor(r3)
-            android.view.View r3 = new android.view.View
-            android.content.Context r5 = r12.mContext
-            r3.<init>(r5)
-            android.content.Context r5 = r12.mContext
-            android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r5, (int) r2, (java.lang.String) r1)
-            r3.setBackgroundDrawable(r1)
+            goto L_0x01a9
+        L_0x00b9:
+            org.telegram.ui.Adapters.DialogsAdapter$2 r3 = new org.telegram.ui.Adapters.DialogsAdapter$2
+            android.content.Context r4 = r12.mContext
+            r3.<init>(r12, r4)
+            int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
+            r3.setBackgroundColor(r2)
+            android.view.View r2 = new android.view.View
+            android.content.Context r4 = r12.mContext
+            r2.<init>(r4)
+            android.content.Context r4 = r12.mContext
+            int r5 = org.telegram.messenger.R.drawable.greydivider
+            android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r4, (int) r5, (java.lang.String) r1)
+            r2.setBackgroundDrawable(r1)
             r1 = -1082130432(0xffffffffbvar_, float:-1.0)
             android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r0, r1)
-            r4.addView(r3, r1)
-            r1 = r4
-            goto L_0x01a8
-        L_0x00e2:
+            r3.addView(r2, r1)
+            r1 = r3
+            goto L_0x01a9
+        L_0x00e5:
             org.telegram.ui.Cells.HeaderCell r1 = new org.telegram.ui.Cells.HeaderCell
             android.content.Context r2 = r12.mContext
             r1.<init>(r2)
-            r2 = 2131627940(0x7f0e0fa4, float:1.8883159E38)
-            java.lang.String r3 = "RecentlyViewed"
-            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
+            int r2 = org.telegram.messenger.R.string.RecentlyViewed
+            java.lang.String r4 = "RecentlyViewed"
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             r1.setText(r2)
             android.widget.TextView r2 = new android.widget.TextView
-            android.content.Context r3 = r12.mContext
-            r2.<init>(r3)
-            r3 = 1097859072(0x41700000, float:15.0)
-            r2.setTextSize(r4, r3)
+            android.content.Context r4 = r12.mContext
+            r2.<init>(r4)
+            r4 = 1097859072(0x41700000, float:15.0)
+            r2.setTextSize(r3, r4)
             java.lang.String r3 = "fonts/rmedium.ttf"
             android.graphics.Typeface r3 = org.telegram.messenger.AndroidUtilities.getTypeface(r3)
             r2.setTypeface(r3)
             java.lang.String r3 = "windowBackgroundWhiteBlueHeader"
             int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
             r2.setTextColor(r3)
-            r3 = 2131627941(0x7f0e0fa5, float:1.888316E38)
+            int r3 = org.telegram.messenger.R.string.RecentlyViewedHide
             java.lang.String r4 = "RecentlyViewedHide"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r2.setText(r3)
             boolean r3 = org.telegram.messenger.LocaleController.isRTL
             r4 = 3
-            if (r3 == 0) goto L_0x0126
+            if (r3 == 0) goto L_0x0127
             r3 = 3
-            goto L_0x0127
-        L_0x0126:
-            r3 = 5
+            goto L_0x0128
         L_0x0127:
+            r3 = 5
+        L_0x0128:
             r3 = r3 | 16
             r2.setGravity(r3)
             r5 = -1
             r6 = -1082130432(0xffffffffbvar_, float:-1.0)
             boolean r3 = org.telegram.messenger.LocaleController.isRTL
-            if (r3 == 0) goto L_0x0134
-            goto L_0x0135
-        L_0x0134:
-            r4 = 5
+            if (r3 == 0) goto L_0x0135
+            goto L_0x0136
         L_0x0135:
+            r4 = 5
+        L_0x0136:
             r7 = r4 | 48
             r8 = 1099431936(0x41880000, float:17.0)
             r9 = 1097859072(0x41700000, float:15.0)
@@ -627,25 +630,25 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             org.telegram.ui.Adapters.DialogsAdapter$$ExternalSyntheticLambda0 r3 = new org.telegram.ui.Adapters.DialogsAdapter$$ExternalSyntheticLambda0
             r3.<init>(r12)
             r2.setOnClickListener(r3)
-            goto L_0x01a8
-        L_0x014e:
+            goto L_0x01a9
+        L_0x014f:
             org.telegram.ui.Components.FlickerLoadingView r1 = new org.telegram.ui.Components.FlickerLoadingView
             android.content.Context r2 = r12.mContext
             r1.<init>(r2)
-            r1.setIsSingleCell(r4)
+            r1.setIsSingleCell(r3)
             r2 = 18
-            r3 = 13
-            if (r14 != r3) goto L_0x0161
+            r4 = 13
+            if (r14 != r4) goto L_0x0162
             r5 = 18
-            goto L_0x0162
-        L_0x0161:
-            r5 = 7
+            goto L_0x0163
         L_0x0162:
+            r5 = 7
+        L_0x0163:
             r1.setViewType(r5)
-            if (r5 != r2) goto L_0x016a
-            r1.setIgnoreHeightCheck(r4)
-        L_0x016a:
-            if (r14 != r3) goto L_0x01a8
+            if (r5 != r2) goto L_0x016b
+            r1.setIgnoreHeightCheck(r3)
+        L_0x016b:
+            if (r14 != r4) goto L_0x01a9
             android.graphics.Point r2 = org.telegram.messenger.AndroidUtilities.displaySize
             int r2 = r2.y
             float r2 = (float) r2
@@ -657,16 +660,16 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             float r2 = r2 / r3
             int r2 = (int) r2
             r1.setItemsCount(r2)
-            goto L_0x01a8
-        L_0x0182:
+            goto L_0x01a9
+        L_0x0183:
             int r1 = r12.dialogsType
             r2 = 2
-            if (r1 != r2) goto L_0x018f
+            if (r1 != r2) goto L_0x0190
             org.telegram.ui.Cells.ProfileSearchCell r1 = new org.telegram.ui.Cells.ProfileSearchCell
             android.content.Context r2 = r12.mContext
             r1.<init>(r2)
-            goto L_0x01a8
-        L_0x018f:
+            goto L_0x01a9
+        L_0x0190:
             org.telegram.ui.Cells.DialogCell r1 = new org.telegram.ui.Cells.DialogCell
             org.telegram.ui.DialogsActivity r4 = r12.parentFragment
             android.content.Context r5 = r12.mContext
@@ -680,14 +683,14 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             r1.setArchivedPullAnimation(r2)
             org.telegram.ui.Adapters.DialogsAdapter$DialogsPreloader r2 = r12.preloader
             r1.setPreloader(r2)
-        L_0x01a8:
+        L_0x01a9:
             androidx.recyclerview.widget.RecyclerView$LayoutParams r2 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
-            if (r14 != r13) goto L_0x01ae
+            if (r14 != r13) goto L_0x01af
             r13 = -1
-            goto L_0x01af
-        L_0x01ae:
-            r13 = -2
+            goto L_0x01b0
         L_0x01af:
+            r13 = -2
+        L_0x01b0:
             r2.<init>((int) r0, (int) r13)
             r1.setLayoutParams(r2)
             org.telegram.ui.Components.RecyclerListView$Holder r13 = new org.telegram.ui.Components.RecyclerListView$Holder
@@ -731,18 +734,18 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
                         if (i4 != 0) {
                             str = LocaleController.formatPluralStringComma("Members", i4);
                         } else if (tLRPC$Chat.has_geo) {
-                            str = LocaleController.getString("MegaLocation", NUM);
+                            str = LocaleController.getString("MegaLocation", R.string.MegaLocation);
                         } else {
-                            str = TextUtils.isEmpty(tLRPC$Chat.username) ? LocaleController.getString("MegaPrivate", NUM).toLowerCase() : LocaleController.getString("MegaPublic", NUM).toLowerCase();
+                            str = TextUtils.isEmpty(tLRPC$Chat.username) ? LocaleController.getString("MegaPrivate", R.string.MegaPrivate).toLowerCase() : LocaleController.getString("MegaPublic", R.string.MegaPublic).toLowerCase();
                         }
                     } else {
                         int i5 = tLRPC$Chat.participants_count;
                         if (i5 != 0) {
                             str = LocaleController.formatPluralStringComma("Subscribers", i5);
                         } else if (TextUtils.isEmpty(tLRPC$Chat.username)) {
-                            str = LocaleController.getString("ChannelPrivate", NUM).toLowerCase();
+                            str = LocaleController.getString("ChannelPrivate", R.string.ChannelPrivate).toLowerCase();
                         } else {
-                            str = LocaleController.getString("ChannelPublic", NUM).toLowerCase();
+                            str = LocaleController.getString("ChannelPublic", R.string.ChannelPublic).toLowerCase();
                         }
                     }
                 } else {
@@ -778,11 +781,11 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             headerCell.setBackgroundColor(Theme.getColor("graySection"));
             int i6 = ((DialogsActivity.DialogsHeader) getItem(i2)).headerType;
             if (i6 == 0) {
-                headerCell.setText(LocaleController.getString("MyChannels", NUM));
+                headerCell.setText(LocaleController.getString("MyChannels", R.string.MyChannels));
             } else if (i6 == 1) {
-                headerCell.setText(LocaleController.getString("MyGroups", NUM));
+                headerCell.setText(LocaleController.getString("MyGroups", R.string.MyGroups));
             } else if (i6 == 2) {
-                headerCell.setText(LocaleController.getString("FilterGroups", NUM));
+                headerCell.setText(LocaleController.getString("FilterGroups", R.string.FilterGroups));
             }
         } else if (itemViewType == 4) {
             ((DialogMeUrlCell) viewHolder2.itemView).setRecentMeUrl((TLRPC$RecentMeUrl) getItem(i2));
@@ -820,17 +823,17 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             HeaderCell headerCell2 = (HeaderCell) viewHolder2.itemView;
             int i10 = this.dialogsType;
             if (i10 != 11 && i10 != 12 && i10 != 13) {
-                headerCell2.setText(LocaleController.getString((this.dialogsCount != 0 || !this.forceUpdatingContacts) ? NUM : NUM));
+                headerCell2.setText(LocaleController.getString((this.dialogsCount != 0 || !this.forceUpdatingContacts) ? R.string.YourContacts : R.string.ConnectingYourContacts));
             } else if (i2 == 0) {
-                headerCell2.setText(LocaleController.getString("ImportHeader", NUM));
+                headerCell2.setText(LocaleController.getString("ImportHeader", R.string.ImportHeader));
             } else {
-                headerCell2.setText(LocaleController.getString("ImportHeaderContacts", NUM));
+                headerCell2.setText(LocaleController.getString("ImportHeaderContacts", R.string.ImportHeaderContacts));
             }
         } else if (itemViewType == 11) {
             TextInfoPrivacyCell textInfoPrivacyCell = (TextInfoPrivacyCell) viewHolder2.itemView;
-            textInfoPrivacyCell.setText(LocaleController.getString("TapOnThePencil", NUM));
+            textInfoPrivacyCell.setText(LocaleController.getString("TapOnThePencil", R.string.TapOnThePencil));
             if (this.arrowDrawable == null) {
-                Drawable drawable = this.mContext.getResources().getDrawable(NUM);
+                Drawable drawable = this.mContext.getResources().getDrawable(R.drawable.arrow_newchat);
                 this.arrowDrawable = drawable;
                 drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayText4"), PorterDuff.Mode.MULTIPLY));
             }
@@ -841,11 +844,12 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
         } else if (itemViewType == 12) {
             TextCell textCell = (TextCell) viewHolder2.itemView;
             textCell.setColors("windowBackgroundWhiteBlueText4", "windowBackgroundWhiteBlueText4");
-            String string = LocaleController.getString("CreateGroupForImport", NUM);
+            String string = LocaleController.getString("CreateGroupForImport", R.string.CreateGroupForImport);
+            int i11 = R.drawable.msg_groups_create;
             if (this.dialogsCount != 0) {
                 z = true;
             }
-            textCell.setTextAndIcon(string, NUM, z);
+            textCell.setTextAndIcon(string, i11, z);
             textCell.setIsInDialogs();
             textCell.setOffsetFromImage(75);
         }

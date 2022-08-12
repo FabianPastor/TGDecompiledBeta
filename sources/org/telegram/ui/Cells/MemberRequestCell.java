@@ -8,6 +8,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC$TL_chatInviteImporter;
 import org.telegram.tgnet.TLRPC$User;
@@ -67,10 +68,10 @@ public class MemberRequestCell extends FrameLayout {
         textView.setMaxLines(1);
         textView.setPadding(dp, 0, dp, 0);
         if (z) {
-            i = NUM;
+            i = R.string.AddToChannel;
             str = "AddToChannel";
         } else {
-            i = NUM;
+            i = R.string.AddToGroup;
             str = "AddToGroup";
         }
         textView.setText(LocaleController.getString(str, i));
@@ -86,7 +87,7 @@ public class MemberRequestCell extends FrameLayout {
         textView2.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         textView2.setMaxLines(1);
         textView2.setPadding(dp, 0, dp, 0);
-        textView2.setText(LocaleController.getString("Dismiss", NUM));
+        textView2.setText(LocaleController.getString("Dismiss", R.string.Dismiss));
         textView2.setTextColor(Theme.getColor("windowBackgroundWhiteBlueText"));
         textView2.setTextSize(14.0f);
         textView2.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -125,12 +126,12 @@ public class MemberRequestCell extends FrameLayout {
         String formatDateAudio = LocaleController.formatDateAudio((long) tLRPC$TL_chatInviteImporter.date, false);
         long j = tLRPC$TL_chatInviteImporter.approved_by;
         if (j == 0) {
-            this.statusTextView.setText(LocaleController.formatString("RequestedToJoinAt", NUM, formatDateAudio));
+            this.statusTextView.setText(LocaleController.formatString("RequestedToJoinAt", R.string.RequestedToJoinAt, formatDateAudio));
             return;
         }
         TLRPC$User tLRPC$User2 = longSparseArray.get(j);
         if (tLRPC$User2 != null) {
-            this.statusTextView.setText(LocaleController.formatString("AddedBy", NUM, UserObject.getFirstName(tLRPC$User2), formatDateAudio));
+            this.statusTextView.setText(LocaleController.formatString("AddedBy", R.string.AddedBy, UserObject.getFirstName(tLRPC$User2), formatDateAudio));
             return;
         }
         this.statusTextView.setText("");

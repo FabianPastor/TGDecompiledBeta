@@ -20,6 +20,7 @@ import org.telegram.messenger.Bitmaps;
 import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLocation;
+import org.telegram.messenger.R;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.utils.BitmapsCache;
 import org.telegram.tgnet.TLRPC$Document;
@@ -58,7 +59,7 @@ public class VideoSeekPreviewImage extends View {
     public VideoSeekPreviewImage(Context context, VideoSeekPreviewImageDelegate videoSeekPreviewImageDelegate) {
         super(context);
         setVisibility(4);
-        this.frameDrawable = context.getResources().getDrawable(NUM);
+        this.frameDrawable = context.getResources().getDrawable(R.drawable.videopreview);
         this.textPaint.setTextSize((float) AndroidUtilities.dp(13.0f));
         this.textPaint.setColor(-1);
         this.delegate = videoSeekPreviewImageDelegate;

@@ -10,7 +10,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.Network;
@@ -20,15 +19,10 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.os.SystemClock;
-import android.text.TextUtils;
 import androidx.multidex.MultiDex;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.messaging.FirebaseMessaging;
-import com.huawei.hms.aaid.HmsInstanceId;
-import com.huawei.hms.common.ApiException;
-import com.huawei.hms.push.HmsMessaging;
 import java.io.File;
+import org.telegram.messenger.PushListenerController;
 import org.telegram.messenger.voip.VideoCapturerDevice;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC$User;
@@ -40,28 +34,86 @@ public class ApplicationLoader extends Application {
     public static volatile Context applicationContext = null;
     public static volatile Handler applicationHandler = null;
     private static volatile boolean applicationInited = false;
+    private static ApplicationLoader applicationLoaderInstance = null;
     public static boolean canDrawOverlays = false;
     /* access modifiers changed from: private */
     public static ConnectivityManager connectivityManager = null;
     public static volatile NetworkInfo currentNetworkInfo = null;
     public static volatile boolean externalInterfacePaused = true;
-    public static boolean hasHuaweiServices = false;
-    public static boolean hasPlayServices = false;
     public static volatile boolean isScreenOn = false;
     /* access modifiers changed from: private */
     public static int lastKnownNetworkType = -1;
     private static long lastNetworkCheckTypeTime = 0;
+    private static ILocationServiceProvider locationServiceProvider = null;
     public static volatile boolean mainInterfacePaused = true;
     public static volatile boolean mainInterfacePausedStageQueue = true;
     public static volatile long mainInterfacePausedStageQueueTime = 0;
     public static volatile boolean mainInterfaceStopped = true;
+    private static IMapsProvider mapsProvider;
     private static volatile ConnectivityManager.NetworkCallback networkCallback;
+    private static PushListenerController.IPushListenerServiceProvider pushProvider;
     public static long startTime;
+
+    /* access modifiers changed from: protected */
+    public boolean isHuaweiBuild() {
+        return false;
+    }
+
+    /* access modifiers changed from: protected */
+    public String onGetApplicationId() {
+        return null;
+    }
 
     /* access modifiers changed from: protected */
     public void attachBaseContext(Context context) {
         super.attachBaseContext(context);
         MultiDex.install(this);
+    }
+
+    public static ILocationServiceProvider getLocationServiceProvider() {
+        if (locationServiceProvider == null) {
+            ILocationServiceProvider onCreateLocationServiceProvider = applicationLoaderInstance.onCreateLocationServiceProvider();
+            locationServiceProvider = onCreateLocationServiceProvider;
+            onCreateLocationServiceProvider.init(applicationContext);
+        }
+        return locationServiceProvider;
+    }
+
+    /* access modifiers changed from: protected */
+    public ILocationServiceProvider onCreateLocationServiceProvider() {
+        return new GoogleLocationProvider();
+    }
+
+    public static IMapsProvider getMapsProvider() {
+        if (mapsProvider == null) {
+            mapsProvider = applicationLoaderInstance.onCreateMapsProvider();
+        }
+        return mapsProvider;
+    }
+
+    /* access modifiers changed from: protected */
+    public IMapsProvider onCreateMapsProvider() {
+        return new GoogleMapsProvider();
+    }
+
+    public static PushListenerController.IPushListenerServiceProvider getPushProvider() {
+        if (pushProvider == null) {
+            pushProvider = applicationLoaderInstance.onCreatePushProvider();
+        }
+        return pushProvider;
+    }
+
+    /* access modifiers changed from: protected */
+    public PushListenerController.IPushListenerServiceProvider onCreatePushProvider() {
+        return PushListenerController.GooglePushListenerServiceProvider.INSTANCE;
+    }
+
+    public static String getApplicationId() {
+        return applicationLoaderInstance.onGetApplicationId();
+    }
+
+    public static boolean isHuaweiStoreBuild() {
+        return applicationLoaderInstance.isHuaweiBuild();
     }
 
     public static File getFilesDirFixed() {
@@ -153,6 +205,7 @@ public class ApplicationLoader extends Application {
     }
 
     public void onCreate() {
+        applicationLoaderInstance = this;
         try {
             applicationContext = getApplicationContext();
         } catch (Throwable unused) {
@@ -185,7 +238,7 @@ public class ApplicationLoader extends Application {
             FileLog.d("load libs time = " + (SystemClock.elapsedRealtime() - startTime));
         }
         applicationHandler = new Handler(applicationContext.getMainLooper());
-        AndroidUtilities.runOnUIThread(ApplicationLoader$$ExternalSyntheticLambda4.INSTANCE);
+        AndroidUtilities.runOnUIThread(ApplicationLoader$$ExternalSyntheticLambda1.INSTANCE);
         LauncherIconController.tryFixLauncherIconIfNeeded();
     }
 
@@ -220,101 +273,20 @@ public class ApplicationLoader extends Application {
     }
 
     private void initPushServices() {
-        AndroidUtilities.runOnUIThread(new ApplicationLoader$$ExternalSyntheticLambda2(this), 1000);
+        AndroidUtilities.runOnUIThread(ApplicationLoader$$ExternalSyntheticLambda0.INSTANCE, 1000);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$initPushServices$3() {
-        boolean checkPlayServices = checkPlayServices();
-        hasPlayServices = checkPlayServices;
-        if (checkPlayServices) {
-            HmsMessaging.getInstance(this).setAutoInitEnabled(false);
-            FirebaseMessaging.getInstance().setAutoInitEnabled(true);
-            String str = SharedConfig.pushString;
-            if (!TextUtils.isEmpty(str)) {
-                if (BuildVars.DEBUG_PRIVATE_VERSION && BuildVars.LOGS_ENABLED) {
-                    FileLog.d("FCM regId = " + str);
-                }
-            } else if (BuildVars.LOGS_ENABLED) {
-                FileLog.d("FCM Registration not found.");
-            }
-            Utilities.globalQueue.postRunnable(ApplicationLoader$$ExternalSyntheticLambda3.INSTANCE);
-            return;
-        }
-        boolean checkHuaweiServices = checkHuaweiServices();
-        hasHuaweiServices = checkHuaweiServices;
-        if (checkHuaweiServices) {
-            FirebaseMessaging.getInstance().setAutoInitEnabled(false);
-            HmsMessaging.getInstance(this).setAutoInitEnabled(true);
-            Utilities.globalQueue.postRunnable(new ApplicationLoader$$ExternalSyntheticLambda1(this));
+    public static /* synthetic */ void lambda$initPushServices$0() {
+        if (getPushProvider().hasServices()) {
+            getPushProvider().onRequestPushToken();
             return;
         }
         if (BuildVars.LOGS_ENABLED) {
-            FileLog.d("No valid Google Play Services or HMS Core APK found.");
+            FileLog.d("No valid " + getPushProvider().getLogTitle() + " APK found.");
         }
         SharedConfig.pushStringStatus = "__NO_GOOGLE_PLAY_SERVICES__";
-        PushListenerController.sendRegistrationToServer(2, (String) null);
-    }
-
-    /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$initPushServices$1() {
-        try {
-            SharedConfig.pushStringGetTimeStart = SystemClock.elapsedRealtime();
-            FirebaseMessaging.getInstance().getToken().addOnCompleteListener(ApplicationLoader$$ExternalSyntheticLambda0.INSTANCE);
-        } catch (Throwable th) {
-            FileLog.e(th);
-        }
-    }
-
-    /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$initPushServices$0(Task task) {
-        SharedConfig.pushStringGetTimeEnd = SystemClock.elapsedRealtime();
-        if (!task.isSuccessful()) {
-            if (BuildVars.LOGS_ENABLED) {
-                FileLog.d("Failed to get regid");
-            }
-            SharedConfig.pushStringStatus = "__FIREBASE_FAILED__";
-            PushListenerController.sendRegistrationToServer(2, (String) null);
-            return;
-        }
-        String str = (String) task.getResult();
-        if (!TextUtils.isEmpty(str)) {
-            PushListenerController.sendRegistrationToServer(2, str);
-        }
-    }
-
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$initPushServices$2() {
-        try {
-            String token = HmsInstanceId.getInstance(this).getToken(BuildVars.HUAWEI_APP_ID, "HCM");
-            SharedConfig.pushStringGetTimeEnd = SystemClock.elapsedRealtime();
-            if (!TextUtils.isEmpty(token)) {
-                PushListenerController.sendRegistrationToServer(13, token);
-            }
-        } catch (ApiException e) {
-            FileLog.e((Throwable) e);
-            SharedConfig.pushStringGetTimeEnd = SystemClock.elapsedRealtime();
-            if (BuildVars.LOGS_ENABLED) {
-                FileLog.d("Failed to get regid");
-            }
-            SharedConfig.pushStringStatus = "__HUAWEI_FAILED__";
-            PushListenerController.sendRegistrationToServer(13, (String) null);
-        }
-    }
-
-    private boolean checkHuaweiServices() {
-        if (!BuildVars.isHuaweiStoreApp()) {
-            return false;
-        }
-        try {
-            getPackageManager().getPackageInfo("com.huawei.hwid", 0);
-            return true;
-        } catch (PackageManager.NameNotFoundException unused) {
-            return false;
-        } catch (Exception e) {
-            FileLog.e((Throwable) e);
-            return false;
-        }
+        PushListenerController.sendRegistrationToServer(getPushProvider().getPushType(), (String) null);
     }
 
     private boolean checkPlayServices() {

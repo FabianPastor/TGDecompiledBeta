@@ -12,6 +12,7 @@ import androidx.core.graphics.ColorUtils;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
@@ -46,20 +47,20 @@ public class SuggestClearDatabaseBottomSheet extends BottomSheet {
         textView.setTextColor(Theme.getColor("dialogTextBlack"));
         textView.setTextSize(1, 20.0f);
         textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        textView.setText(LocaleController.getString("SuggestClearDatabaseTitle", NUM));
+        textView.setText(LocaleController.getString("SuggestClearDatabaseTitle", R.string.SuggestClearDatabaseTitle));
         linearLayout.addView(textView, LayoutHelper.createFrame(-1, -2.0f, 0, 21.0f, 30.0f, 21.0f, 0.0f));
         TextView textView2 = new TextView(parentActivity);
         textView2.setGravity(8388611);
         textView2.setTextSize(1, 15.0f);
         textView2.setTextColor(Theme.getColor("dialogTextBlack"));
-        textView2.setText(AndroidUtilities.replaceTags(LocaleController.formatString("SuggestClearDatabaseMessage", NUM, AndroidUtilities.formatFileSize(baseFragment.getMessagesStorage().getDatabaseSize()))));
+        textView2.setText(AndroidUtilities.replaceTags(LocaleController.formatString("SuggestClearDatabaseMessage", R.string.SuggestClearDatabaseMessage, AndroidUtilities.formatFileSize(baseFragment.getMessagesStorage().getDatabaseSize()))));
         linearLayout.addView(textView2, LayoutHelper.createFrame(-1, -2.0f, 0, 21.0f, 15.0f, 21.0f, 16.0f));
         TextView textView3 = new TextView(parentActivity);
         textView3.setPadding(AndroidUtilities.dp(34.0f), 0, AndroidUtilities.dp(34.0f), 0);
         textView3.setGravity(17);
         textView3.setTextSize(1, 14.0f);
         textView3.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        textView3.setText(LocaleController.getString("ClearLocalDatabase", NUM));
+        textView3.setText(LocaleController.getString("ClearLocalDatabase", R.string.ClearLocalDatabase));
         textView3.setTextColor(Theme.getColor("featuredStickers_buttonText"));
         textView3.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(6.0f), Theme.getColor("featuredStickers_addButton"), ColorUtils.setAlphaComponent(Theme.getColor("windowBackgroundWhite"), 120)));
         linearLayout.addView(textView3, LayoutHelper.createFrame(-1, 48.0f, 0, 16.0f, 15.0f, 16.0f, 16.0f));
@@ -72,10 +73,10 @@ public class SuggestClearDatabaseBottomSheet extends BottomSheet {
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$new$1(BaseFragment baseFragment, View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder((Context) baseFragment.getParentActivity());
-        builder.setTitle(LocaleController.getString("LocalDatabaseClearTextTitle", NUM));
-        builder.setMessage(LocaleController.getString("LocalDatabaseClearText", NUM));
-        builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
-        builder.setPositiveButton(LocaleController.getString("CacheClear", NUM), new SuggestClearDatabaseBottomSheet$$ExternalSyntheticLambda0(this, baseFragment));
+        builder.setTitle(LocaleController.getString("LocalDatabaseClearTextTitle", R.string.LocalDatabaseClearTextTitle));
+        builder.setMessage(LocaleController.getString("LocalDatabaseClearText", R.string.LocalDatabaseClearText));
+        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), (DialogInterface.OnClickListener) null);
+        builder.setPositiveButton(LocaleController.getString("CacheClear", R.string.CacheClear), new SuggestClearDatabaseBottomSheet$$ExternalSyntheticLambda0(this, baseFragment));
         AlertDialog create = builder.create();
         baseFragment.showDialog(create);
         TextView textView = (TextView) create.getButton(-1);

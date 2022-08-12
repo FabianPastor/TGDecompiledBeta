@@ -14,6 +14,7 @@ import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
 
@@ -34,9 +35,9 @@ public class QRCodeBottomSheet extends BottomSheet {
             r2 = 0
             r0.<init>(r1, r2)
             r16.fixNavigationBar()
-            java.lang.String r3 = "InviteByQRCode"
-            r4 = 2131626319(0x7f0e094f, float:1.887987E38)
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r4)
+            int r3 = org.telegram.messenger.R.string.InviteByQRCode
+            java.lang.String r4 = "InviteByQRCode"
+            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r4 = 1
             r0.setTitle(r3, r4)
             org.telegram.ui.Components.QRCodeBottomSheet$1 r3 = new org.telegram.ui.Components.QRCodeBottomSheet$1
@@ -45,12 +46,12 @@ public class QRCodeBottomSheet extends BottomSheet {
             r3.setScaleType(r5)
             int r5 = android.os.Build.VERSION.SDK_INT
             r6 = 21
-            if (r5 < r6) goto L_0x0033
+            if (r5 < r6) goto L_0x0032
             org.telegram.ui.Components.QRCodeBottomSheet$2 r5 = new org.telegram.ui.Components.QRCodeBottomSheet$2
             r5.<init>(r0)
             r3.setOutlineProvider(r5)
             r3.setClipToOutline(r4)
-        L_0x0033:
+        L_0x0032:
             android.widget.LinearLayout r5 = new android.widget.LinearLayout
             r5.<init>(r1)
             r5.setOrientation(r4)
@@ -70,7 +71,7 @@ public class QRCodeBottomSheet extends BottomSheet {
             org.telegram.ui.Components.RLottieImageView r6 = r0.iconImage
             r6.setAutoRepeat(r4)
             org.telegram.ui.Components.RLottieImageView r6 = r0.iconImage
-            r8 = 2131558532(0x7f0d0084, float:1.8742382E38)
+            int r8 = org.telegram.messenger.R.raw.qr_code_logo
             r9 = 60
             r6.setAnimation((int) r8, (int) r9, (int) r9)
             org.telegram.ui.Components.RLottieImageView r6 = r0.iconImage
@@ -122,7 +123,7 @@ public class QRCodeBottomSheet extends BottomSheet {
             java.lang.String r2 = "fonts/rmedium.ttf"
             android.graphics.Typeface r2 = org.telegram.messenger.AndroidUtilities.getTypeface(r2)
             r3.setTypeface(r2)
-            r2 = 2131628359(0x7f0e1147, float:1.8884008E38)
+            int r2 = org.telegram.messenger.R.string.ShareQrCode
             java.lang.String r4 = "ShareQrCode"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             r3.setText(r2)
@@ -156,7 +157,7 @@ public class QRCodeBottomSheet extends BottomSheet {
             intent.setType("image/*");
             intent.putExtra("android.intent.extra.STREAM", bitmapShareUri);
             try {
-                AndroidUtilities.findActivity(context).startActivityForResult(Intent.createChooser(intent, LocaleController.getString("InviteByQRCode", NUM)), 500);
+                AndroidUtilities.findActivity(context).startActivityForResult(Intent.createChooser(intent, LocaleController.getString("InviteByQRCode", R.string.InviteByQRCode)), 500);
             } catch (ActivityNotFoundException e) {
                 e.printStackTrace();
             }

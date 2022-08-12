@@ -19,6 +19,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.R;
 import org.telegram.tgnet.TLRPC$ChannelParticipant;
 import org.telegram.tgnet.TLRPC$TL_channelAdminLogEventsFilter;
 import org.telegram.tgnet.TLRPC$User;
@@ -138,7 +139,7 @@ public class AdminLogFilterAlert extends BottomSheet {
         this.leavingRow = i7;
         this.callsRow = i8;
         this.allAdminsRow = i8 + 1 + 1;
-        Drawable mutate = context.getResources().getDrawable(NUM).mutate();
+        Drawable mutate = context.getResources().getDrawable(R.drawable.sheet_shadow_round).mutate();
         this.shadowDrawable = mutate;
         mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogBackground"), PorterDuff.Mode.MULTIPLY));
         AnonymousClass1 r13 = new FrameLayout(context) {
@@ -233,12 +234,12 @@ public class AdminLogFilterAlert extends BottomSheet {
         this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new AdminLogFilterAlert$$ExternalSyntheticLambda1(this));
         this.containerView.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, 48.0f));
         View view = new View(context);
-        view.setBackgroundResource(NUM);
+        view.setBackgroundResource(R.drawable.header_shadow_reverse);
         this.containerView.addView(view, LayoutHelper.createFrame(-1, 3.0f, 83, 0.0f, 0.0f, 0.0f, 48.0f));
         BottomSheet.BottomSheetCell bottomSheetCell = new BottomSheet.BottomSheetCell(context, 1);
         this.saveButton = bottomSheetCell;
         bottomSheetCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-        this.saveButton.setTextAndIcon((CharSequence) LocaleController.getString("Save", NUM).toUpperCase(), 0);
+        this.saveButton.setTextAndIcon((CharSequence) LocaleController.getString("Save", R.string.Save).toUpperCase(), 0);
         this.saveButton.setTextColor(Theme.getColor("dialogTextBlue2"));
         this.saveButton.setOnClickListener(new AdminLogFilterAlert$$ExternalSyntheticLambda0(this));
         this.containerView.addView(this.saveButton, LayoutHelper.createFrame(-1, 48, 83));
@@ -570,82 +571,82 @@ public class AdminLogFilterAlert extends BottomSheet {
             if (itemViewType == 0) {
                 CheckBoxCell checkBoxCell = (CheckBoxCell) viewHolder.itemView;
                 if (i == 0) {
-                    String string = LocaleController.getString("EventLogFilterAll", NUM);
+                    String string = LocaleController.getString("EventLogFilterAll", R.string.EventLogFilterAll);
                     if (AdminLogFilterAlert.this.currentFilter == null) {
                         z = true;
                     }
                     checkBoxCell.setText(string, "", z, true);
                 } else if (i == AdminLogFilterAlert.this.restrictionsRow) {
-                    String string2 = LocaleController.getString("EventLogFilterNewRestrictions", NUM);
+                    String string2 = LocaleController.getString("EventLogFilterNewRestrictions", R.string.EventLogFilterNewRestrictions);
                     if (AdminLogFilterAlert.this.currentFilter == null || (AdminLogFilterAlert.this.currentFilter.kick && AdminLogFilterAlert.this.currentFilter.ban && AdminLogFilterAlert.this.currentFilter.unkick && AdminLogFilterAlert.this.currentFilter.unban)) {
                         z = true;
                     }
                     checkBoxCell.setText(string2, "", z, true);
                 } else if (i == AdminLogFilterAlert.this.adminsRow) {
-                    String string3 = LocaleController.getString("EventLogFilterNewAdmins", NUM);
+                    String string3 = LocaleController.getString("EventLogFilterNewAdmins", R.string.EventLogFilterNewAdmins);
                     if (AdminLogFilterAlert.this.currentFilter == null || (AdminLogFilterAlert.this.currentFilter.promote && AdminLogFilterAlert.this.currentFilter.demote)) {
                         z = true;
                     }
                     checkBoxCell.setText(string3, "", z, true);
                 } else if (i == AdminLogFilterAlert.this.membersRow) {
-                    String string4 = LocaleController.getString("EventLogFilterNewMembers", NUM);
+                    String string4 = LocaleController.getString("EventLogFilterNewMembers", R.string.EventLogFilterNewMembers);
                     if (AdminLogFilterAlert.this.currentFilter == null || (AdminLogFilterAlert.this.currentFilter.invite && AdminLogFilterAlert.this.currentFilter.join)) {
                         z = true;
                     }
                     checkBoxCell.setText(string4, "", z, true);
                 } else if (i == AdminLogFilterAlert.this.infoRow) {
                     if (AdminLogFilterAlert.this.isMegagroup) {
-                        String string5 = LocaleController.getString("EventLogFilterGroupInfo", NUM);
+                        String string5 = LocaleController.getString("EventLogFilterGroupInfo", R.string.EventLogFilterGroupInfo);
                         if (AdminLogFilterAlert.this.currentFilter == null || AdminLogFilterAlert.this.currentFilter.info) {
                             z = true;
                         }
                         checkBoxCell.setText(string5, "", z, true);
                         return;
                     }
-                    String string6 = LocaleController.getString("EventLogFilterChannelInfo", NUM);
+                    String string6 = LocaleController.getString("EventLogFilterChannelInfo", R.string.EventLogFilterChannelInfo);
                     if (AdminLogFilterAlert.this.currentFilter == null || AdminLogFilterAlert.this.currentFilter.info) {
                         z = true;
                     }
                     checkBoxCell.setText(string6, "", z, true);
                 } else if (i == AdminLogFilterAlert.this.deleteRow) {
-                    String string7 = LocaleController.getString("EventLogFilterDeletedMessages", NUM);
+                    String string7 = LocaleController.getString("EventLogFilterDeletedMessages", R.string.EventLogFilterDeletedMessages);
                     if (AdminLogFilterAlert.this.currentFilter == null || AdminLogFilterAlert.this.currentFilter.delete) {
                         z = true;
                     }
                     checkBoxCell.setText(string7, "", z, true);
                 } else if (i == AdminLogFilterAlert.this.editRow) {
-                    String string8 = LocaleController.getString("EventLogFilterEditedMessages", NUM);
+                    String string8 = LocaleController.getString("EventLogFilterEditedMessages", R.string.EventLogFilterEditedMessages);
                     if (AdminLogFilterAlert.this.currentFilter == null || AdminLogFilterAlert.this.currentFilter.edit) {
                         z = true;
                     }
                     checkBoxCell.setText(string8, "", z, true);
                 } else if (i == AdminLogFilterAlert.this.pinnedRow) {
-                    String string9 = LocaleController.getString("EventLogFilterPinnedMessages", NUM);
+                    String string9 = LocaleController.getString("EventLogFilterPinnedMessages", R.string.EventLogFilterPinnedMessages);
                     if (AdminLogFilterAlert.this.currentFilter == null || AdminLogFilterAlert.this.currentFilter.pinned) {
                         z = true;
                     }
                     checkBoxCell.setText(string9, "", z, true);
                 } else if (i == AdminLogFilterAlert.this.leavingRow) {
-                    String string10 = LocaleController.getString("EventLogFilterLeavingMembers", NUM);
+                    String string10 = LocaleController.getString("EventLogFilterLeavingMembers", R.string.EventLogFilterLeavingMembers);
                     boolean z3 = AdminLogFilterAlert.this.currentFilter == null || AdminLogFilterAlert.this.currentFilter.leave;
                     if (AdminLogFilterAlert.this.callsRow != -1) {
                         z = true;
                     }
                     checkBoxCell.setText(string10, "", z3, z);
                 } else if (i == AdminLogFilterAlert.this.callsRow) {
-                    String string11 = LocaleController.getString("EventLogFilterCalls", NUM);
+                    String string11 = LocaleController.getString("EventLogFilterCalls", R.string.EventLogFilterCalls);
                     if (AdminLogFilterAlert.this.currentFilter != null && !AdminLogFilterAlert.this.currentFilter.group_call) {
                         z2 = false;
                     }
                     checkBoxCell.setText(string11, "", z2, false);
                 } else if (i == AdminLogFilterAlert.this.invitesRow) {
-                    String string12 = LocaleController.getString("EventLogFilterInvites", NUM);
+                    String string12 = LocaleController.getString("EventLogFilterInvites", R.string.EventLogFilterInvites);
                     if (AdminLogFilterAlert.this.currentFilter == null || AdminLogFilterAlert.this.currentFilter.invites) {
                         z = true;
                     }
                     checkBoxCell.setText(string12, "", z, true);
                 } else if (i == AdminLogFilterAlert.this.allAdminsRow) {
-                    String string13 = LocaleController.getString("EventLogAllAdmins", NUM);
+                    String string13 = LocaleController.getString("EventLogAllAdmins", R.string.EventLogAllAdmins);
                     if (AdminLogFilterAlert.this.selectedAdmins == null) {
                         z = true;
                     }

@@ -33,6 +33,7 @@ import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SvgHelper;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Document;
@@ -141,15 +142,15 @@ public class StickerSetCell extends FrameLayout {
             }
             if (i2 == 1) {
                 this.optionsButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("stickers_menu"), PorterDuff.Mode.MULTIPLY));
-                this.optionsButton.setImageResource(NUM);
-                this.optionsButton.setContentDescription(LocaleController.getString("AccDescrMoreOptions", NUM));
+                this.optionsButton.setImageResource(R.drawable.msg_actions);
+                this.optionsButton.setContentDescription(LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
                 addView(this.optionsButton, LayoutHelper.createFrame(40, 40, (LocaleController.isRTL ? 3 : 5) | 16));
                 ImageView imageView3 = new ImageView(context2);
                 this.reorderButton = imageView3;
                 imageView3.setAlpha(0.0f);
                 this.reorderButton.setVisibility(8);
                 this.reorderButton.setScaleType(ImageView.ScaleType.CENTER);
-                this.reorderButton.setImageResource(NUM);
+                this.reorderButton.setImageResource(R.drawable.list_reorder);
                 this.reorderButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("stickers_menu"), PorterDuff.Mode.MULTIPLY));
                 addView(this.reorderButton, LayoutHelper.createFrameRelatively(58.0f, 58.0f, 8388613));
                 CheckBox2 checkBox2 = new CheckBox2(context2, 21);
@@ -160,7 +161,7 @@ public class StickerSetCell extends FrameLayout {
                 addView(this.checkBox, LayoutHelper.createFrameRelatively(24.0f, 24.0f, 8388611, 34.0f, 30.0f, 0.0f, 0.0f));
             } else if (i2 == 3) {
                 this.optionsButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("featuredStickers_addedIcon"), PorterDuff.Mode.MULTIPLY));
-                this.optionsButton.setImageResource(NUM);
+                this.optionsButton.setImageResource(R.drawable.floating_check);
                 ImageView imageView4 = this.optionsButton;
                 boolean z3 = LocaleController.isRTL;
                 addView(imageView4, LayoutHelper.createFrame(40, 40.0f, (z3 ? 3 : 5) | 48, (float) (z3 ? 10 : 0), 9.0f, (float) (z3 ? 0 : 10), 0.0f));
@@ -171,7 +172,7 @@ public class StickerSetCell extends FrameLayout {
         this.addButtonView = textView4;
         textView4.setTextSize(1, 14.0f);
         this.addButtonView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.addButtonView.setText(LocaleController.getString("Add", NUM));
+        this.addButtonView.setText(LocaleController.getString("Add", R.string.Add));
         this.addButtonView.setTextColor(Theme.getColor("featuredStickers_buttonText", resourcesProvider2));
         this.addButtonView.setBackground(Theme.AdaptiveRipple.createRect(Theme.getColor("featuredStickers_addButton", resourcesProvider2), Theme.getColor("featuredStickers_addButtonPressed", resourcesProvider2), 4.0f));
         this.addButtonView.setPadding(AndroidUtilities.dp(14.0f), 0, AndroidUtilities.dp(14.0f), 0);
@@ -182,7 +183,7 @@ public class StickerSetCell extends FrameLayout {
         this.removeButtonView = textView5;
         textView5.setTextSize(1, 14.0f);
         this.removeButtonView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.removeButtonView.setText(LocaleController.getString("StickersRemove", NUM));
+        this.removeButtonView.setText(LocaleController.getString("StickersRemove", R.string.StickersRemove));
         this.removeButtonView.setTextColor(Theme.getColor("featuredStickers_removeButtonText", resourcesProvider2));
         this.removeButtonView.setBackground(Theme.AdaptiveRipple.createRect(0, Theme.getColor("featuredStickers_addButton", resourcesProvider2) & NUM, 4.0f));
         this.removeButtonView.setPadding(AndroidUtilities.dp(12.0f), 0, AndroidUtilities.dp(12.0f), 0);
@@ -191,8 +192,8 @@ public class StickerSetCell extends FrameLayout {
         this.sideButtons.addView(this.removeButtonView, LayoutHelper.createFrameRelatively(-2.0f, 32.0f, (LocaleController.isRTL ? 3 : 5) | 16, 0.0f, -2.0f, 0.0f, 0.0f));
         PremiumButtonView premiumButtonView2 = new PremiumButtonView(context2, AndroidUtilities.dp(4.0f), false);
         this.premiumButtonView = premiumButtonView2;
-        premiumButtonView2.setIcon(NUM);
-        this.premiumButtonView.setButton(LocaleController.getString("Unlock", NUM), new StickerSetCell$$ExternalSyntheticLambda5(this));
+        premiumButtonView2.setIcon(R.raw.unlock_icon);
+        this.premiumButtonView.setButton(LocaleController.getString("Unlock", R.string.Unlock), new StickerSetCell$$ExternalSyntheticLambda5(this));
         try {
             ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) this.premiumButtonView.getIconView().getLayoutParams();
             marginLayoutParams.leftMargin = AndroidUtilities.dp(1.0f);
@@ -584,9 +585,9 @@ public class StickerSetCell extends FrameLayout {
             this.stateAnimator = null;
         }
         if (i2 == 1) {
-            this.premiumButtonView.setButton(LocaleController.getString("Unlock", NUM), new StickerSetCell$$ExternalSyntheticLambda3(this));
+            this.premiumButtonView.setButton(LocaleController.getString("Unlock", R.string.Unlock), new StickerSetCell$$ExternalSyntheticLambda3(this));
         } else if (i2 == 2) {
-            this.premiumButtonView.setButton(LocaleController.getString("Restore", NUM), new StickerSetCell$$ExternalSyntheticLambda0(this));
+            this.premiumButtonView.setButton(LocaleController.getString("Restore", R.string.Restore), new StickerSetCell$$ExternalSyntheticLambda0(this));
         }
         int i3 = 0;
         this.premiumButtonView.setEnabled(i2 == 1 || i2 == 2);

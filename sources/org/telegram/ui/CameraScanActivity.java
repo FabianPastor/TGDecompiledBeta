@@ -49,6 +49,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MrzRecognizer;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.Utilities;
@@ -281,7 +282,7 @@ public class CameraScanActivity extends BaseFragment {
 
     public View createView(Context context) {
         Context context2 = context;
-        this.actionBar.setBackButtonImage(NUM);
+        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         if (this.shownAsBottomSheet) {
             this.actionBar.setItemsColor(-1, false);
             this.actionBar.setItemsBackgroundColor(-1, false);
@@ -493,12 +494,12 @@ public class CameraScanActivity extends BaseFragment {
             r2.addView(this.actionBar);
         }
         if (this.currentType == 2) {
-            this.actionBar.setTitle(LocaleController.getString("AuthAnotherClientScan", NUM));
+            this.actionBar.setTitle(LocaleController.getString("AuthAnotherClientScan", R.string.AuthAnotherClientScan));
         }
         final Paint paint2 = new Paint(1);
         paint2.setPathEffect(LinkPath.getRoundedEffect());
         paint2.setColor(ColorUtils.setAlphaComponent(-1, 40));
-        AnonymousClass4 r11 = new TextView(this, context2) {
+        AnonymousClass4 r10 = new TextView(this, context2) {
             LinkSpanDrawable.LinkCollector links = new LinkSpanDrawable.LinkCollector(this);
             private LinkSpanDrawable<URLSpanNoUnderline> pressedLink;
             LinkPath textPath;
@@ -588,8 +589,8 @@ public class CameraScanActivity extends BaseFragment {
                 super.onDraw(canvas);
             }
         };
-        this.titleTextView = r11;
-        r11.setGravity(1);
+        this.titleTextView = r10;
+        r10.setGravity(1);
         this.titleTextView.setTextSize(1, 24.0f);
         r2.addView(this.titleTextView);
         TextView textView = new TextView(context2);
@@ -605,17 +606,17 @@ public class CameraScanActivity extends BaseFragment {
         this.recognizedMrzView.setAlpha(0.0f);
         int i2 = this.currentType;
         if (i2 == 0) {
-            this.titleTextView.setText(LocaleController.getString("PassportScanPassport", NUM));
-            this.descriptionText.setText(LocaleController.getString("PassportScanPassportInfo", NUM));
+            this.titleTextView.setText(LocaleController.getString("PassportScanPassport", R.string.PassportScanPassport));
+            this.descriptionText.setText(LocaleController.getString("PassportScanPassportInfo", R.string.PassportScanPassportInfo));
             this.titleTextView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
             this.recognizedMrzView.setTypeface(Typeface.MONOSPACE);
         } else {
             if (!this.needGalleryButton) {
                 if (i2 == 1) {
-                    this.titleTextView.setText(LocaleController.getString("AuthAnotherClientScan", NUM));
+                    this.titleTextView.setText(LocaleController.getString("AuthAnotherClientScan", R.string.AuthAnotherClientScan));
                 } else {
-                    SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(LocaleController.getString("AuthAnotherClientInfo5", NUM));
-                    String[] strArr = {LocaleController.getString("AuthAnotherClientDownloadClientUrl", NUM), LocaleController.getString("AuthAnotherWebClientUrl", NUM)};
+                    SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(LocaleController.getString("AuthAnotherClientInfo5", R.string.AuthAnotherClientInfo5));
+                    String[] strArr = {LocaleController.getString("AuthAnotherClientDownloadClientUrl", R.string.AuthAnotherClientDownloadClientUrl), LocaleController.getString("AuthAnotherWebClientUrl", R.string.AuthAnotherWebClientUrl)};
                     int i3 = 0;
                     for (int i4 = 2; i3 < i4; i4 = 2) {
                         String spannableStringBuilder2 = spannableStringBuilder.toString();
@@ -645,14 +646,14 @@ public class CameraScanActivity extends BaseFragment {
             this.recognizedMrzView.setTextSize(1, 16.0f);
             this.recognizedMrzView.setPadding(AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f));
             if (!this.needGalleryButton) {
-                this.recognizedMrzView.setText(LocaleController.getString("AuthAnotherClientNotFound", NUM));
+                this.recognizedMrzView.setText(LocaleController.getString("AuthAnotherClientNotFound", R.string.AuthAnotherClientNotFound));
             }
             r2.addView(this.recognizedMrzView);
             if (this.needGalleryButton) {
                 ImageView imageView = new ImageView(context2);
                 this.galleryButton = imageView;
                 imageView.setScaleType(ImageView.ScaleType.CENTER);
-                this.galleryButton.setImageResource(NUM);
+                this.galleryButton.setImageResource(R.drawable.qr_gallery);
                 this.galleryButton.setBackgroundDrawable(Theme.createSelectorDrawableFromDrawables(Theme.createCircleDrawable(AndroidUtilities.dp(60.0f), NUM), Theme.createCircleDrawable(AndroidUtilities.dp(60.0f), NUM)));
                 r2.addView(this.galleryButton);
                 this.galleryButton.setOnClickListener(new CameraScanActivity$$ExternalSyntheticLambda2(this));
@@ -660,7 +661,7 @@ public class CameraScanActivity extends BaseFragment {
             ImageView imageView2 = new ImageView(context2);
             this.flashButton = imageView2;
             imageView2.setScaleType(ImageView.ScaleType.CENTER);
-            this.flashButton.setImageResource(NUM);
+            this.flashButton.setImageResource(R.drawable.qr_flashlight);
             this.flashButton.setBackgroundDrawable(Theme.createCircleDrawable(AndroidUtilities.dp(60.0f), NUM));
             r2.addView(this.flashButton);
             this.flashButton.setOnClickListener(new CameraScanActivity$$ExternalSyntheticLambda3(this));

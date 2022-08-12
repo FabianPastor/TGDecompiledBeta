@@ -23,6 +23,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.R;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Chat;
@@ -124,9 +125,9 @@ public class TooManyCommunitiesActivity extends BaseFragment {
 
     public View createView(Context context) {
         this.type = this.arguments.getInt("type", 0);
-        this.actionBar.setBackButtonImage(NUM);
+        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("LimitReached", NUM));
+        this.actionBar.setTitle(LocaleController.getString("LimitReached", R.string.LimitReached));
         this.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             public void onItemClick(int i) {
                 if (i == -1) {
@@ -134,7 +135,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 }
             }
         });
-        ActionBarMenuItem actionBarMenuItemSearchListener = this.actionBar.createMenu().addItem(0, NUM).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
+        ActionBarMenuItem actionBarMenuItemSearchListener = this.actionBar.createMenu().addItem(0, R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
             boolean expanded = false;
 
             public void onSearchCollapse() {
@@ -177,8 +178,9 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 }
             }
         });
-        actionBarMenuItemSearchListener.setContentDescription(LocaleController.getString("Search", NUM));
-        actionBarMenuItemSearchListener.setSearchFieldHint(LocaleController.getString("Search", NUM));
+        int i = R.string.Search;
+        actionBarMenuItemSearchListener.setContentDescription(LocaleController.getString("Search", i));
+        actionBarMenuItemSearchListener.setSearchFieldHint(LocaleController.getString("Search", i));
         FrameLayout frameLayout = new FrameLayout(context);
         this.fragmentView = frameLayout;
         RecyclerListView recyclerListView = new RecyclerListView(context);
@@ -210,7 +212,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
         EmptyTextProgressView emptyTextProgressView = new EmptyTextProgressView(context);
         this.emptyView = emptyTextProgressView;
         emptyTextProgressView.setShowAtCenter(true);
-        this.emptyView.setText(LocaleController.getString("NoResult", NUM));
+        this.emptyView.setText(LocaleController.getString("NoResult", R.string.NoResult));
         this.emptyView.showTextView();
         RadialProgressView radialProgressView = new RadialProgressView(context);
         this.progressBar = radialProgressView;
@@ -310,7 +312,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
             this.searchListView.setPadding(0, 0, 0, this.buttonHeight);
         }
         if (!this.selectedIds.isEmpty()) {
-            this.buttonTextView.setText(LocaleController.formatString("LeaveChats", NUM, LocaleController.formatPluralString("Chats", this.selectedIds.size(), new Object[0])));
+            this.buttonTextView.setText(LocaleController.formatString("LeaveChats", R.string.LeaveChats, LocaleController.formatPluralString("Chats", this.selectedIds.size(), new Object[0])));
         }
     }
 
@@ -338,11 +340,13 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                     str = LocaleController.formatPluralString("Years", currentTime / 365, new Object[0]);
                 }
                 if (ChatObject.isMegagroup(tLRPC$Chat)) {
-                    arrayList.add(LocaleController.formatString("InactiveChatSignature", NUM, LocaleController.formatPluralString("Members", tLRPC$Chat.participants_count, new Object[0]), str));
+                    String formatPluralString = LocaleController.formatPluralString("Members", tLRPC$Chat.participants_count, new Object[0]);
+                    arrayList.add(LocaleController.formatString("InactiveChatSignature", R.string.InactiveChatSignature, formatPluralString, str));
                 } else if (ChatObject.isChannel(tLRPC$Chat)) {
-                    arrayList.add(LocaleController.formatString("InactiveChannelSignature", NUM, str));
+                    arrayList.add(LocaleController.formatString("InactiveChannelSignature", R.string.InactiveChannelSignature, str));
                 } else {
-                    arrayList.add(LocaleController.formatString("InactiveChatSignature", NUM, LocaleController.formatPluralString("Members", tLRPC$Chat.participants_count, new Object[0]), str));
+                    String formatPluralString2 = LocaleController.formatPluralString("Members", tLRPC$Chat.participants_count, new Object[0]);
+                    arrayList.add(LocaleController.formatString("InactiveChatSignature", R.string.InactiveChatSignature, formatPluralString2, str));
                 }
             }
             AndroidUtilities.runOnUIThread(new TooManyCommunitiesActivity$$ExternalSyntheticLambda2(this, arrayList, tLRPC$TL_messages_inactiveChats));
@@ -453,9 +457,9 @@ public class TooManyCommunitiesActivity extends BaseFragment {
             /*
                 r7 = this;
                 r0 = 1
-                if (r9 == r0) goto L_0x007a
+                if (r9 == r0) goto L_0x0078
                 r1 = 2
-                if (r9 == r1) goto L_0x004d
+                if (r9 == r1) goto L_0x004c
                 r1 = 3
                 if (r9 == r1) goto L_0x0029
                 r1 = 5
@@ -464,14 +468,14 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 android.content.Context r8 = r8.getContext()
                 r1 = 0
                 r9.<init>(r8, r0, r1, r1)
-                goto L_0x00dc
+                goto L_0x00d7
             L_0x0018:
                 org.telegram.ui.Cells.EmptyCell r9 = new org.telegram.ui.Cells.EmptyCell
                 android.content.Context r8 = r8.getContext()
                 r0 = 1094713344(0x41400000, float:12.0)
                 int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
                 r9.<init>(r8, r0)
-                goto L_0x00dc
+                goto L_0x00d7
             L_0x0029:
                 org.telegram.ui.Cells.HeaderCell r9 = new org.telegram.ui.Cells.HeaderCell
                 android.content.Context r2 = r8.getContext()
@@ -483,17 +487,17 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 r1.<init>(r2, r3, r4, r5, r6)
                 r8 = 54
                 r9.setHeight(r8)
-                r8 = 2131626288(0x7f0e0930, float:1.8879808E38)
+                int r8 = org.telegram.messenger.R.string.InactiveChats
                 java.lang.String r0 = "InactiveChats"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
                 r9.setText(r8)
-                goto L_0x00dc
-            L_0x004d:
+                goto L_0x00d7
+            L_0x004c:
                 org.telegram.ui.Cells.ShadowSectionCell r9 = new org.telegram.ui.Cells.ShadowSectionCell
                 android.content.Context r1 = r8.getContext()
                 r9.<init>(r1)
                 android.content.Context r8 = r8.getContext()
-                r1 = 2131165435(0x7var_fb, float:1.7945087E38)
+                int r1 = org.telegram.messenger.R.drawable.greydivider
                 java.lang.String r2 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r8 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r8, (int) r1, (java.lang.String) r2)
                 org.telegram.ui.Components.CombinedDrawable r1 = new org.telegram.ui.Components.CombinedDrawable
@@ -504,8 +508,8 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 r1.<init>(r2, r8)
                 r1.setFullsize(r0)
                 r9.setBackground(r1)
-                goto L_0x00dc
-            L_0x007a:
+                goto L_0x00d7
+            L_0x0078:
                 org.telegram.ui.TooManyCommunitiesActivity r9 = org.telegram.ui.TooManyCommunitiesActivity.this
                 org.telegram.ui.Cells.TooManyCommunitiesHintCell r1 = new org.telegram.ui.Cells.TooManyCommunitiesHintCell
                 android.content.Context r8 = r8.getContext()
@@ -515,22 +519,22 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 org.telegram.ui.Cells.TooManyCommunitiesHintCell r9 = r8.hintCell
                 org.telegram.ui.TooManyCommunitiesActivity r8 = org.telegram.ui.TooManyCommunitiesActivity.this
                 int r8 = r8.type
-                if (r8 != 0) goto L_0x009e
-                r8 = 2131628758(0x7f0e12d6, float:1.8884818E38)
+                if (r8 != 0) goto L_0x009b
+                int r8 = org.telegram.messenger.R.string.TooManyCommunitiesHintJoin
                 java.lang.String r0 = "TooManyCommunitiesHintJoin"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
-                goto L_0x00b3
-            L_0x009e:
-                if (r8 != r0) goto L_0x00aa
-                r8 = 2131628757(0x7f0e12d5, float:1.8884816E38)
+                goto L_0x00ae
+            L_0x009b:
+                if (r8 != r0) goto L_0x00a6
+                int r8 = org.telegram.messenger.R.string.TooManyCommunitiesHintEdit
                 java.lang.String r0 = "TooManyCommunitiesHintEdit"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
-                goto L_0x00b3
-            L_0x00aa:
-                r8 = 2131628756(0x7f0e12d4, float:1.8884814E38)
+                goto L_0x00ae
+            L_0x00a6:
+                int r8 = org.telegram.messenger.R.string.TooManyCommunitiesHintCreate
                 java.lang.String r0 = "TooManyCommunitiesHintCreate"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
-            L_0x00b3:
+            L_0x00ae:
                 org.telegram.ui.TooManyCommunitiesActivity r0 = org.telegram.ui.TooManyCommunitiesActivity.this
                 org.telegram.ui.Cells.TooManyCommunitiesHintCell r0 = r0.hintCell
                 r0.setMessageText(r8)
@@ -547,7 +551,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 org.telegram.ui.TooManyCommunitiesActivity r0 = org.telegram.ui.TooManyCommunitiesActivity.this
                 org.telegram.ui.Cells.TooManyCommunitiesHintCell r0 = r0.hintCell
                 r0.setLayoutParams(r8)
-            L_0x00dc:
+            L_0x00d7:
                 org.telegram.ui.Components.RecyclerListView$Holder r8 = new org.telegram.ui.Components.RecyclerListView$Holder
                 r8.<init>(r9)
                 return r8

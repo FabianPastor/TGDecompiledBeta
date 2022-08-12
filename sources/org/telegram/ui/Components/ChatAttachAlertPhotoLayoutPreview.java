@@ -35,6 +35,7 @@ import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.VideoEditedInfo;
 import org.telegram.tgnet.TLRPC$FileLocation;
@@ -134,7 +135,7 @@ public class ChatAttachAlertPhotoLayoutPreview extends ChatAttachAlert.AttachAle
         this.header.setMaxLines(1);
         this.header.setEllipsize(TextUtils.TruncateAt.END);
         this.header.setTextColor(getThemedColor("dialogTextBlack"));
-        this.header.setText(LocaleController.getString("AttachMediaPreview", NUM));
+        this.header.setText(LocaleController.getString("AttachMediaPreview", R.string.AttachMediaPreview));
         this.header.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.header.setCompoundDrawablePadding(AndroidUtilities.dp(4.0f));
         this.header.setPadding(0, 0, AndroidUtilities.dp(10.0f), 0);
@@ -197,7 +198,7 @@ public class ChatAttachAlertPhotoLayoutPreview extends ChatAttachAlert.AttachAle
         this.undoView = undoView2;
         undoView2.setEnterOffsetMargin(AndroidUtilities.dp(32.0f));
         addView(this.undoView, LayoutHelper.createFrame(-1, -2.0f, 83, 8.0f, 0.0f, 8.0f, 52.0f));
-        this.videoPlayImage = context.getResources().getDrawable(NUM);
+        this.videoPlayImage = context.getResources().getDrawable(R.drawable.play_mini_video);
     }
 
     /* access modifiers changed from: package-private */
@@ -1780,7 +1781,7 @@ public class ChatAttachAlertPhotoLayoutPreview extends ChatAttachAlert.AttachAle
             setWillNotDraw(false);
             ChatActionCell chatActionCell = new ChatActionCell(context, true, ChatAttachAlertPhotoLayoutPreview.this.themeDelegate);
             this.hintView = chatActionCell;
-            chatActionCell.setCustomText(LocaleController.getString("AttachMediaDragHint", NUM));
+            chatActionCell.setCustomText(LocaleController.getString("AttachMediaDragHint", R.string.AttachMediaDragHint));
             addView(this.hintView);
         }
 

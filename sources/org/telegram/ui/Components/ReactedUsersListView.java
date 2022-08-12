@@ -31,6 +31,7 @@ import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
@@ -350,11 +351,11 @@ public class ReactedUsersListView extends FrameLayout {
                     } else {
                         this.reactView.setImageDrawable((Drawable) null);
                     }
-                    setContentDescription(LocaleController.formatString("AccDescrReactedWith", NUM, UserObject.getUserName(user), tLRPC$TL_messagePeerReaction.reaction));
+                    setContentDescription(LocaleController.formatString("AccDescrReactedWith", R.string.AccDescrReactedWith, UserObject.getUserName(user), tLRPC$TL_messagePeerReaction.reaction));
                     return;
                 }
                 this.reactView.setImageDrawable((Drawable) null);
-                setContentDescription(LocaleController.formatString("AccDescrPersonHasSeen", NUM, UserObject.getUserName(user)));
+                setContentDescription(LocaleController.formatString("AccDescrPersonHasSeen", R.string.AccDescrPersonHasSeen, UserObject.getUserName(user)));
             }
         }
 

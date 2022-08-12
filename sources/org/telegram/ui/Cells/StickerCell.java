@@ -16,6 +16,7 @@ import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SvgHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC$Document;
@@ -196,9 +197,9 @@ public class StickerCell extends FrameLayout {
                 }
             }
             if (str != null) {
-                accessibilityNodeInfo.setText(str + " " + LocaleController.getString("AttachSticker", NUM));
+                accessibilityNodeInfo.setText(str + " " + LocaleController.getString("AttachSticker", R.string.AttachSticker));
             } else {
-                accessibilityNodeInfo.setText(LocaleController.getString("AttachSticker", NUM));
+                accessibilityNodeInfo.setText(LocaleController.getString("AttachSticker", R.string.AttachSticker));
             }
             accessibilityNodeInfo.setEnabled(true);
         }

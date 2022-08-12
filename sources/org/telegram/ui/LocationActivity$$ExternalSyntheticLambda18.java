@@ -8,6 +8,6 @@ public final /* synthetic */ class LocationActivity$$ExternalSyntheticLambda18 i
     }
 
     public final void run() {
-        this.f$0.lambda$getRecentLocations$34();
+        this.f$0.lambda$openShareLiveLocation$29();
     }
 }

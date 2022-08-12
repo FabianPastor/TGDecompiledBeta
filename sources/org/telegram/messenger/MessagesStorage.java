@@ -2199,13 +2199,16 @@ public class MessagesStorage extends BaseController {
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v10, resolved type: boolean} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v12, resolved type: boolean} */
     /* access modifiers changed from: private */
-    /* JADX WARNING: Code restructure failed: missing block: B:134:0x0340, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:138:0x0341, code lost:
+        r2.commitTransaction();
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:140:0x0346, code lost:
         r3.dispose();
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:136:0x0345, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:142:0x034b, code lost:
         r7.dispose();
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:138:0x034a, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:144:0x0350, code lost:
         r19.dispose();
      */
     /* JADX WARNING: Code restructure failed: missing block: B:55:0x0155, code lost:
@@ -2235,12 +2238,14 @@ public class MessagesStorage extends BaseController {
      */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Multi-variable type inference failed */
-    /* JADX WARNING: Removed duplicated region for block: B:123:0x0322  */
-    /* JADX WARNING: Removed duplicated region for block: B:125:0x0327  */
-    /* JADX WARNING: Removed duplicated region for block: B:127:0x032c  */
-    /* JADX WARNING: Removed duplicated region for block: B:134:0x0340  */
-    /* JADX WARNING: Removed duplicated region for block: B:136:0x0345  */
-    /* JADX WARNING: Removed duplicated region for block: B:138:0x034a  */
+    /* JADX WARNING: Removed duplicated region for block: B:125:0x0321  */
+    /* JADX WARNING: Removed duplicated region for block: B:127:0x0326  */
+    /* JADX WARNING: Removed duplicated region for block: B:129:0x032b  */
+    /* JADX WARNING: Removed duplicated region for block: B:131:0x0330  */
+    /* JADX WARNING: Removed duplicated region for block: B:138:0x0341  */
+    /* JADX WARNING: Removed duplicated region for block: B:140:0x0346  */
+    /* JADX WARNING: Removed duplicated region for block: B:142:0x034b  */
+    /* JADX WARNING: Removed duplicated region for block: B:144:0x0350  */
     /* JADX WARNING: Removed duplicated region for block: B:71:0x025e A[Catch:{ Exception -> 0x027b, all -> 0x0278 }] */
     /* JADX WARNING: Removed duplicated region for block: B:76:0x0278 A[ExcHandler: all (th java.lang.Throwable), PHI: r19 
       PHI: (r19v18 org.telegram.SQLite.SQLiteCursor) = (r19v20 org.telegram.SQLite.SQLiteCursor), (r19v25 org.telegram.SQLite.SQLiteCursor), (r19v25 org.telegram.SQLite.SQLiteCursor), (r19v29 org.telegram.SQLite.SQLiteCursor), (r19v29 org.telegram.SQLite.SQLiteCursor) binds: [B:67:0x0185, B:59:0x0163, B:60:?, B:51:0x014b, B:52:?] A[DONT_GENERATE, DONT_INLINE], Splitter:B:59:0x0163] */
@@ -2252,35 +2257,35 @@ public class MessagesStorage extends BaseController {
             r20 = this;
             r1 = r20
             java.lang.String r2 = " AND mid != "
-            java.util.ArrayList r4 = new java.util.ArrayList     // Catch:{ Exception -> 0x0312, all -> 0x030b }
-            r4.<init>()     // Catch:{ Exception -> 0x0312, all -> 0x030b }
-            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x0312, all -> 0x030b }
+            java.util.ArrayList r4 = new java.util.ArrayList     // Catch:{ Exception -> 0x0314, all -> 0x030d }
+            r4.<init>()     // Catch:{ Exception -> 0x0314, all -> 0x030d }
+            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x0314, all -> 0x030d }
             java.lang.String r5 = "DELETE FROM reaction_mentions"
-            org.telegram.SQLite.SQLitePreparedStatement r0 = r0.executeFast(r5)     // Catch:{ Exception -> 0x0312, all -> 0x030b }
-            org.telegram.SQLite.SQLitePreparedStatement r0 = r0.stepThis()     // Catch:{ Exception -> 0x0312, all -> 0x030b }
-            r0.dispose()     // Catch:{ Exception -> 0x0312, all -> 0x030b }
-            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x0312, all -> 0x030b }
+            org.telegram.SQLite.SQLitePreparedStatement r0 = r0.executeFast(r5)     // Catch:{ Exception -> 0x0314, all -> 0x030d }
+            org.telegram.SQLite.SQLitePreparedStatement r0 = r0.stepThis()     // Catch:{ Exception -> 0x0314, all -> 0x030d }
+            r0.dispose()     // Catch:{ Exception -> 0x0314, all -> 0x030d }
+            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x0314, all -> 0x030d }
             java.lang.String r5 = "DELETE FROM downloading_documents"
-            org.telegram.SQLite.SQLitePreparedStatement r0 = r0.executeFast(r5)     // Catch:{ Exception -> 0x0312, all -> 0x030b }
-            org.telegram.SQLite.SQLitePreparedStatement r0 = r0.stepThis()     // Catch:{ Exception -> 0x0312, all -> 0x030b }
-            r0.dispose()     // Catch:{ Exception -> 0x0312, all -> 0x030b }
-            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x0312, all -> 0x030b }
+            org.telegram.SQLite.SQLitePreparedStatement r0 = r0.executeFast(r5)     // Catch:{ Exception -> 0x0314, all -> 0x030d }
+            org.telegram.SQLite.SQLitePreparedStatement r0 = r0.stepThis()     // Catch:{ Exception -> 0x0314, all -> 0x030d }
+            r0.dispose()     // Catch:{ Exception -> 0x0314, all -> 0x030d }
+            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x0314, all -> 0x030d }
             java.lang.String r5 = "DELETE FROM attach_menu_bots"
-            org.telegram.SQLite.SQLitePreparedStatement r0 = r0.executeFast(r5)     // Catch:{ Exception -> 0x0312, all -> 0x030b }
-            org.telegram.SQLite.SQLitePreparedStatement r0 = r0.stepThis()     // Catch:{ Exception -> 0x0312, all -> 0x030b }
-            r0.dispose()     // Catch:{ Exception -> 0x0312, all -> 0x030b }
-            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x0312, all -> 0x030b }
+            org.telegram.SQLite.SQLitePreparedStatement r0 = r0.executeFast(r5)     // Catch:{ Exception -> 0x0314, all -> 0x030d }
+            org.telegram.SQLite.SQLitePreparedStatement r0 = r0.stepThis()     // Catch:{ Exception -> 0x0314, all -> 0x030d }
+            r0.dispose()     // Catch:{ Exception -> 0x0314, all -> 0x030d }
+            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x0314, all -> 0x030d }
             java.lang.String r5 = "DELETE FROM animated_emoji"
-            org.telegram.SQLite.SQLitePreparedStatement r0 = r0.executeFast(r5)     // Catch:{ Exception -> 0x0312, all -> 0x030b }
-            org.telegram.SQLite.SQLitePreparedStatement r0 = r0.stepThis()     // Catch:{ Exception -> 0x0312, all -> 0x030b }
-            r0.dispose()     // Catch:{ Exception -> 0x0312, all -> 0x030b }
-            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x0312, all -> 0x030b }
+            org.telegram.SQLite.SQLitePreparedStatement r0 = r0.executeFast(r5)     // Catch:{ Exception -> 0x0314, all -> 0x030d }
+            org.telegram.SQLite.SQLitePreparedStatement r0 = r0.stepThis()     // Catch:{ Exception -> 0x0314, all -> 0x030d }
+            r0.dispose()     // Catch:{ Exception -> 0x0314, all -> 0x030d }
+            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x0314, all -> 0x030d }
             java.lang.String r5 = "SELECT did FROM dialogs WHERE 1"
             r6 = 0
-            java.lang.Object[] r7 = new java.lang.Object[r6]     // Catch:{ Exception -> 0x0312, all -> 0x030b }
-            org.telegram.SQLite.SQLiteCursor r5 = r0.queryFinalized(r5, r7)     // Catch:{ Exception -> 0x0312, all -> 0x030b }
+            java.lang.Object[] r7 = new java.lang.Object[r6]     // Catch:{ Exception -> 0x0314, all -> 0x030d }
+            org.telegram.SQLite.SQLiteCursor r5 = r0.queryFinalized(r5, r7)     // Catch:{ Exception -> 0x0314, all -> 0x030d }
         L_0x0050:
-            boolean r0 = r5.next()     // Catch:{ Exception -> 0x0304, all -> 0x02fd }
+            boolean r0 = r5.next()     // Catch:{ Exception -> 0x0306, all -> 0x02ff }
             if (r0 == 0) goto L_0x0076
             long r7 = r5.longValue(r6)     // Catch:{ Exception -> 0x006f, all -> 0x0068 }
             boolean r0 = org.telegram.messenger.DialogObject.isEncryptedDialog(r7)     // Catch:{ Exception -> 0x006f, all -> 0x0068 }
@@ -2293,48 +2298,48 @@ public class MessagesStorage extends BaseController {
             r19 = r5
             r3 = 0
             r7 = 0
-            goto L_0x0339
+            goto L_0x033d
         L_0x006f:
             r0 = move-exception
             r19 = r5
             r3 = 0
             r7 = 0
-            goto L_0x0318
+            goto L_0x031a
         L_0x0076:
-            r5.dispose()     // Catch:{ Exception -> 0x0304, all -> 0x02fd }
-            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x0312, all -> 0x030b }
+            r5.dispose()     // Catch:{ Exception -> 0x0306, all -> 0x02ff }
+            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x0314, all -> 0x030d }
             java.lang.String r5 = "REPLACE INTO messages_holes VALUES(?, ?, ?)"
-            org.telegram.SQLite.SQLitePreparedStatement r5 = r0.executeFast(r5)     // Catch:{ Exception -> 0x0312, all -> 0x030b }
-            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x02f6, all -> 0x02ef }
+            org.telegram.SQLite.SQLitePreparedStatement r5 = r0.executeFast(r5)     // Catch:{ Exception -> 0x0314, all -> 0x030d }
+            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x02f8, all -> 0x02f1 }
             java.lang.String r7 = "REPLACE INTO media_holes_v2 VALUES(?, ?, ?, ?)"
-            org.telegram.SQLite.SQLitePreparedStatement r7 = r0.executeFast(r7)     // Catch:{ Exception -> 0x02f6, all -> 0x02ef }
-            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x02ea, all -> 0x02e5 }
-            r0.beginTransaction()     // Catch:{ Exception -> 0x02ea, all -> 0x02e5 }
+            org.telegram.SQLite.SQLitePreparedStatement r7 = r0.executeFast(r7)     // Catch:{ Exception -> 0x02f8, all -> 0x02f1 }
+            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x02ec, all -> 0x02e7 }
+            r0.beginTransaction()     // Catch:{ Exception -> 0x02ec, all -> 0x02e7 }
             r8 = 0
             r9 = 0
         L_0x0090:
-            int r0 = r4.size()     // Catch:{ Exception -> 0x02e0, all -> 0x02da }
+            int r0 = r4.size()     // Catch:{ Exception -> 0x02e2, all -> 0x02dc }
             if (r8 >= r0) goto L_0x0288
-            java.lang.Object r0 = r4.get(r8)     // Catch:{ Exception -> 0x02e0, all -> 0x02da }
+            java.lang.Object r0 = r4.get(r8)     // Catch:{ Exception -> 0x02e2, all -> 0x02dc }
             r10 = r0
-            java.lang.Long r10 = (java.lang.Long) r10     // Catch:{ Exception -> 0x02e0, all -> 0x02da }
-            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x02e0, all -> 0x02da }
-            java.lang.StringBuilder r11 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x02e0, all -> 0x02da }
-            r11.<init>()     // Catch:{ Exception -> 0x02e0, all -> 0x02da }
+            java.lang.Long r10 = (java.lang.Long) r10     // Catch:{ Exception -> 0x02e2, all -> 0x02dc }
+            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x02e2, all -> 0x02dc }
+            java.lang.StringBuilder r11 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x02e2, all -> 0x02dc }
+            r11.<init>()     // Catch:{ Exception -> 0x02e2, all -> 0x02dc }
             java.lang.String r12 = "SELECT COUNT(mid) FROM messages_v2 WHERE uid = "
-            r11.append(r12)     // Catch:{ Exception -> 0x02e0, all -> 0x02da }
-            r11.append(r10)     // Catch:{ Exception -> 0x02e0, all -> 0x02da }
-            java.lang.String r11 = r11.toString()     // Catch:{ Exception -> 0x02e0, all -> 0x02da }
-            java.lang.Object[] r12 = new java.lang.Object[r6]     // Catch:{ Exception -> 0x02e0, all -> 0x02da }
-            org.telegram.SQLite.SQLiteCursor r9 = r0.queryFinalized(r11, r12)     // Catch:{ Exception -> 0x02e0, all -> 0x02da }
-            boolean r0 = r9.next()     // Catch:{ Exception -> 0x02e0, all -> 0x02da }
+            r11.append(r12)     // Catch:{ Exception -> 0x02e2, all -> 0x02dc }
+            r11.append(r10)     // Catch:{ Exception -> 0x02e2, all -> 0x02dc }
+            java.lang.String r11 = r11.toString()     // Catch:{ Exception -> 0x02e2, all -> 0x02dc }
+            java.lang.Object[] r12 = new java.lang.Object[r6]     // Catch:{ Exception -> 0x02e2, all -> 0x02dc }
+            org.telegram.SQLite.SQLiteCursor r9 = r0.queryFinalized(r11, r12)     // Catch:{ Exception -> 0x02e2, all -> 0x02dc }
+            boolean r0 = r9.next()     // Catch:{ Exception -> 0x02e2, all -> 0x02dc }
             if (r0 == 0) goto L_0x00c1
-            int r0 = r9.intValue(r6)     // Catch:{ Exception -> 0x02e0, all -> 0x02da }
+            int r0 = r9.intValue(r6)     // Catch:{ Exception -> 0x02e2, all -> 0x02dc }
             goto L_0x00c2
         L_0x00c1:
             r0 = 0
         L_0x00c2:
-            r9.dispose()     // Catch:{ Exception -> 0x02e0, all -> 0x02da }
+            r9.dispose()     // Catch:{ Exception -> 0x02e2, all -> 0x02dc }
             r11 = 2
             if (r0 > r11) goto L_0x00cf
             r17 = r4
@@ -2342,15 +2347,15 @@ public class MessagesStorage extends BaseController {
             r4 = 0
             goto L_0x0271
         L_0x00cf:
-            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x02e0, all -> 0x02da }
-            java.lang.StringBuilder r11 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x02e0, all -> 0x02da }
-            r11.<init>()     // Catch:{ Exception -> 0x02e0, all -> 0x02da }
+            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x02e2, all -> 0x02dc }
+            java.lang.StringBuilder r11 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x02e2, all -> 0x02dc }
+            r11.<init>()     // Catch:{ Exception -> 0x02e2, all -> 0x02dc }
             java.lang.String r12 = "SELECT last_mid_i, last_mid FROM dialogs WHERE did = "
-            r11.append(r12)     // Catch:{ Exception -> 0x02e0, all -> 0x02da }
-            r11.append(r10)     // Catch:{ Exception -> 0x02e0, all -> 0x02da }
-            java.lang.String r11 = r11.toString()     // Catch:{ Exception -> 0x02e0, all -> 0x02da }
-            java.lang.Object[] r12 = new java.lang.Object[r6]     // Catch:{ Exception -> 0x02e0, all -> 0x02da }
-            org.telegram.SQLite.SQLiteCursor r9 = r0.queryFinalized(r11, r12)     // Catch:{ Exception -> 0x02e0, all -> 0x02da }
+            r11.append(r12)     // Catch:{ Exception -> 0x02e2, all -> 0x02dc }
+            r11.append(r10)     // Catch:{ Exception -> 0x02e2, all -> 0x02dc }
+            java.lang.String r11 = r11.toString()     // Catch:{ Exception -> 0x02e2, all -> 0x02dc }
+            java.lang.Object[] r12 = new java.lang.Object[r6]     // Catch:{ Exception -> 0x02e2, all -> 0x02dc }
+            org.telegram.SQLite.SQLiteCursor r9 = r0.queryFinalized(r11, r12)     // Catch:{ Exception -> 0x02e2, all -> 0x02dc }
             boolean r0 = r9.next()     // Catch:{ Exception -> 0x0283, all -> 0x027e }
             if (r0 == 0) goto L_0x0266
             long r11 = r9.longValue(r6)     // Catch:{ Exception -> 0x0283, all -> 0x027e }
@@ -2526,162 +2531,168 @@ public class MessagesStorage extends BaseController {
             goto L_0x0090
         L_0x0278:
             r0 = move-exception
-            goto L_0x02f4
+            goto L_0x02f6
         L_0x027b:
             r0 = move-exception
-            goto L_0x02fb
+            goto L_0x02fd
         L_0x027e:
             r0 = move-exception
             r19 = r9
-            goto L_0x02f4
+            goto L_0x02f6
         L_0x0283:
             r0 = move-exception
             r19 = r9
-            goto L_0x02fb
+            goto L_0x02fd
         L_0x0288:
             r4 = 0
-            r5.dispose()     // Catch:{ Exception -> 0x02e0, all -> 0x02da }
-            r7.dispose()     // Catch:{ Exception -> 0x02e0, all -> 0x02da }
-            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
-            r0.commitTransaction()     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
-            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
+            r5.dispose()     // Catch:{ Exception -> 0x02e2, all -> 0x02dc }
+            r7.dispose()     // Catch:{ Exception -> 0x02e2, all -> 0x02dc }
+            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x02d8, all -> 0x02d4 }
+            r0.commitTransaction()     // Catch:{ Exception -> 0x02d8, all -> 0x02d4 }
+            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x02d8, all -> 0x02d4 }
             java.lang.String r2 = "PRAGMA journal_size_limit = 0"
-            org.telegram.SQLite.SQLitePreparedStatement r0 = r0.executeFast(r2)     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
-            org.telegram.SQLite.SQLitePreparedStatement r0 = r0.stepThis()     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
-            r0.dispose()     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
-            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
+            org.telegram.SQLite.SQLitePreparedStatement r0 = r0.executeFast(r2)     // Catch:{ Exception -> 0x02d8, all -> 0x02d4 }
+            org.telegram.SQLite.SQLitePreparedStatement r0 = r0.stepThis()     // Catch:{ Exception -> 0x02d8, all -> 0x02d4 }
+            r0.dispose()     // Catch:{ Exception -> 0x02d8, all -> 0x02d4 }
+            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x02d8, all -> 0x02d4 }
             java.lang.String r2 = "VACUUM"
-            org.telegram.SQLite.SQLitePreparedStatement r0 = r0.executeFast(r2)     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
-            org.telegram.SQLite.SQLitePreparedStatement r0 = r0.stepThis()     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
-            r0.dispose()     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
-            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
+            org.telegram.SQLite.SQLitePreparedStatement r0 = r0.executeFast(r2)     // Catch:{ Exception -> 0x02d8, all -> 0x02d4 }
+            org.telegram.SQLite.SQLitePreparedStatement r0 = r0.stepThis()     // Catch:{ Exception -> 0x02d8, all -> 0x02d4 }
+            r0.dispose()     // Catch:{ Exception -> 0x02d8, all -> 0x02d4 }
+            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x02d8, all -> 0x02d4 }
             java.lang.String r2 = "PRAGMA journal_size_limit = -1"
-            org.telegram.SQLite.SQLitePreparedStatement r0 = r0.executeFast(r2)     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
-            org.telegram.SQLite.SQLitePreparedStatement r0 = r0.stepThis()     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
-            r0.dispose()     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
+            org.telegram.SQLite.SQLitePreparedStatement r0 = r0.executeFast(r2)     // Catch:{ Exception -> 0x02d8, all -> 0x02d4 }
+            org.telegram.SQLite.SQLitePreparedStatement r0 = r0.stepThis()     // Catch:{ Exception -> 0x02d8, all -> 0x02d4 }
+            r0.dispose()     // Catch:{ Exception -> 0x02d8, all -> 0x02d4 }
             org.telegram.SQLite.SQLiteDatabase r0 = r1.database
+            if (r0 == 0) goto L_0x02c8
             r0.commitTransaction()
-            if (r9 == 0) goto L_0x02cb
+        L_0x02c8:
+            if (r9 == 0) goto L_0x02cd
             r9.dispose()
-        L_0x02cb:
+        L_0x02cd:
             org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda11 r0 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda11
             r0.<init>(r1)
-            goto L_0x0334
-        L_0x02d2:
+            goto L_0x0338
+        L_0x02d4:
             r0 = move-exception
             r3 = r4
             r7 = r3
-            goto L_0x02dc
-        L_0x02d6:
+            goto L_0x02de
+        L_0x02d8:
             r0 = move-exception
             r3 = r4
             r7 = r3
-            goto L_0x02e2
-        L_0x02da:
-            r0 = move-exception
-            r3 = r5
+            goto L_0x02e4
         L_0x02dc:
-            r19 = r9
-            goto L_0x0339
-        L_0x02e0:
             r0 = move-exception
             r3 = r5
+        L_0x02de:
+            r19 = r9
+            goto L_0x033d
         L_0x02e2:
+            r0 = move-exception
+            r3 = r5
+        L_0x02e4:
             r19 = r9
-            goto L_0x0318
-        L_0x02e5:
+            goto L_0x031a
+        L_0x02e7:
             r0 = move-exception
             r4 = 0
             r19 = r4
-            goto L_0x02f4
-        L_0x02ea:
+            goto L_0x02f6
+        L_0x02ec:
             r0 = move-exception
             r4 = 0
             r19 = r4
-            goto L_0x02fb
-        L_0x02ef:
+            goto L_0x02fd
+        L_0x02f1:
             r0 = move-exception
             r4 = 0
             r7 = r4
             r19 = r7
-        L_0x02f4:
-            r3 = r5
-            goto L_0x0339
         L_0x02f6:
+            r3 = r5
+            goto L_0x033d
+        L_0x02f8:
             r0 = move-exception
             r4 = 0
             r7 = r4
             r19 = r7
-        L_0x02fb:
-            r3 = r5
-            goto L_0x0318
         L_0x02fd:
+            r3 = r5
+            goto L_0x031a
+        L_0x02ff:
             r0 = move-exception
             r4 = 0
             r3 = r4
             r7 = r3
             r19 = r5
-            goto L_0x0339
-        L_0x0304:
+            goto L_0x033d
+        L_0x0306:
             r0 = move-exception
             r4 = 0
             r3 = r4
             r7 = r3
             r19 = r5
-            goto L_0x0318
-        L_0x030b:
+            goto L_0x031a
+        L_0x030d:
             r0 = move-exception
             r4 = 0
             r3 = r4
             r7 = r3
             r19 = r7
-            goto L_0x0339
-        L_0x0312:
+            goto L_0x033d
+        L_0x0314:
             r0 = move-exception
             r4 = 0
             r3 = r4
             r7 = r3
             r19 = r7
-        L_0x0318:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x0338 }
+        L_0x031a:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x033c }
             org.telegram.SQLite.SQLiteDatabase r0 = r1.database
+            if (r0 == 0) goto L_0x0324
             r0.commitTransaction()
-            if (r3 == 0) goto L_0x0325
+        L_0x0324:
+            if (r3 == 0) goto L_0x0329
             r3.dispose()
-        L_0x0325:
-            if (r7 == 0) goto L_0x032a
+        L_0x0329:
+            if (r7 == 0) goto L_0x032e
             r7.dispose()
-        L_0x032a:
-            if (r19 == 0) goto L_0x032f
+        L_0x032e:
+            if (r19 == 0) goto L_0x0333
             r19.dispose()
-        L_0x032f:
+        L_0x0333:
             org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda11 r0 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda11
             r0.<init>(r1)
-        L_0x0334:
+        L_0x0338:
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
             return
-        L_0x0338:
+        L_0x033c:
             r0 = move-exception
-        L_0x0339:
+        L_0x033d:
             org.telegram.SQLite.SQLiteDatabase r2 = r1.database
+            if (r2 == 0) goto L_0x0344
             r2.commitTransaction()
-            if (r3 == 0) goto L_0x0343
+        L_0x0344:
+            if (r3 == 0) goto L_0x0349
             r3.dispose()
-        L_0x0343:
-            if (r7 == 0) goto L_0x0348
+        L_0x0349:
+            if (r7 == 0) goto L_0x034e
             r7.dispose()
-        L_0x0348:
-            if (r19 == 0) goto L_0x034d
+        L_0x034e:
+            if (r19 == 0) goto L_0x0353
             r19.dispose()
-        L_0x034d:
+        L_0x0353:
             org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda11 r2 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda11
             r2.<init>(r1)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r2)
-            goto L_0x0357
-        L_0x0356:
+            goto L_0x035d
+        L_0x035c:
             throw r0
-        L_0x0357:
-            goto L_0x0356
+        L_0x035d:
+            goto L_0x035c
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$clearLocalDatabase$37():void");
     }
@@ -4573,187 +4584,194 @@ public class MessagesStorage extends BaseController {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.calcUnreadCounters(boolean):void");
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:50:0x0152  */
-    /* JADX WARNING: Removed duplicated region for block: B:53:0x015d  */
-    /* JADX WARNING: Removed duplicated region for block: B:62:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:52:0x0151  */
+    /* JADX WARNING: Removed duplicated region for block: B:54:0x0156  */
+    /* JADX WARNING: Removed duplicated region for block: B:57:0x015e  */
+    /* JADX WARNING: Removed duplicated region for block: B:59:0x0163  */
+    /* JADX WARNING: Removed duplicated region for block: B:69:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private void saveDialogFilterInternal(org.telegram.messenger.MessagesController.DialogFilter r11, boolean r12, boolean r13) {
         /*
             r10 = this;
             r0 = 0
-            java.util.ArrayList<org.telegram.messenger.MessagesController$DialogFilter> r1 = r10.dialogFilters     // Catch:{ Exception -> 0x0147 }
-            boolean r1 = r1.contains(r11)     // Catch:{ Exception -> 0x0147 }
+            java.util.ArrayList<org.telegram.messenger.MessagesController$DialogFilter> r1 = r10.dialogFilters     // Catch:{ Exception -> 0x0149 }
+            boolean r1 = r1.contains(r11)     // Catch:{ Exception -> 0x0149 }
             r2 = 0
             if (r1 != 0) goto L_0x001e
             if (r12 == 0) goto L_0x0012
-            java.util.ArrayList<org.telegram.messenger.MessagesController$DialogFilter> r12 = r10.dialogFilters     // Catch:{ Exception -> 0x0147 }
-            r12.add(r2, r11)     // Catch:{ Exception -> 0x0147 }
+            java.util.ArrayList<org.telegram.messenger.MessagesController$DialogFilter> r12 = r10.dialogFilters     // Catch:{ Exception -> 0x0149 }
+            r12.add(r2, r11)     // Catch:{ Exception -> 0x0149 }
             goto L_0x0017
         L_0x0012:
-            java.util.ArrayList<org.telegram.messenger.MessagesController$DialogFilter> r12 = r10.dialogFilters     // Catch:{ Exception -> 0x0147 }
-            r12.add(r11)     // Catch:{ Exception -> 0x0147 }
+            java.util.ArrayList<org.telegram.messenger.MessagesController$DialogFilter> r12 = r10.dialogFilters     // Catch:{ Exception -> 0x0149 }
+            r12.add(r11)     // Catch:{ Exception -> 0x0149 }
         L_0x0017:
-            android.util.SparseArray<org.telegram.messenger.MessagesController$DialogFilter> r12 = r10.dialogFiltersMap     // Catch:{ Exception -> 0x0147 }
-            int r1 = r11.id     // Catch:{ Exception -> 0x0147 }
-            r12.put(r1, r11)     // Catch:{ Exception -> 0x0147 }
+            android.util.SparseArray<org.telegram.messenger.MessagesController$DialogFilter> r12 = r10.dialogFiltersMap     // Catch:{ Exception -> 0x0149 }
+            int r1 = r11.id     // Catch:{ Exception -> 0x0149 }
+            r12.put(r1, r11)     // Catch:{ Exception -> 0x0149 }
         L_0x001e:
-            org.telegram.SQLite.SQLiteDatabase r12 = r10.database     // Catch:{ Exception -> 0x0147 }
+            org.telegram.SQLite.SQLiteDatabase r12 = r10.database     // Catch:{ Exception -> 0x0149 }
             java.lang.String r1 = "REPLACE INTO dialog_filter VALUES(?, ?, ?, ?, ?)"
-            org.telegram.SQLite.SQLitePreparedStatement r12 = r12.executeFast(r1)     // Catch:{ Exception -> 0x0147 }
-            int r1 = r11.id     // Catch:{ Exception -> 0x0142, all -> 0x013f }
+            org.telegram.SQLite.SQLitePreparedStatement r12 = r12.executeFast(r1)     // Catch:{ Exception -> 0x0149 }
+            int r1 = r11.id     // Catch:{ Exception -> 0x0144, all -> 0x0141 }
             r3 = 1
-            r12.bindInteger(r3, r1)     // Catch:{ Exception -> 0x0142, all -> 0x013f }
-            int r1 = r11.order     // Catch:{ Exception -> 0x0142, all -> 0x013f }
+            r12.bindInteger(r3, r1)     // Catch:{ Exception -> 0x0144, all -> 0x0141 }
+            int r1 = r11.order     // Catch:{ Exception -> 0x0144, all -> 0x0141 }
             r4 = 2
-            r12.bindInteger(r4, r1)     // Catch:{ Exception -> 0x0142, all -> 0x013f }
-            int r1 = r11.unreadCount     // Catch:{ Exception -> 0x0142, all -> 0x013f }
+            r12.bindInteger(r4, r1)     // Catch:{ Exception -> 0x0144, all -> 0x0141 }
+            int r1 = r11.unreadCount     // Catch:{ Exception -> 0x0144, all -> 0x0141 }
             r5 = 3
-            r12.bindInteger(r5, r1)     // Catch:{ Exception -> 0x0142, all -> 0x013f }
+            r12.bindInteger(r5, r1)     // Catch:{ Exception -> 0x0144, all -> 0x0141 }
             r1 = 4
-            int r6 = r11.flags     // Catch:{ Exception -> 0x0142, all -> 0x013f }
-            r12.bindInteger(r1, r6)     // Catch:{ Exception -> 0x0142, all -> 0x013f }
+            int r6 = r11.flags     // Catch:{ Exception -> 0x0144, all -> 0x0141 }
+            r12.bindInteger(r1, r6)     // Catch:{ Exception -> 0x0144, all -> 0x0141 }
             r1 = 5
-            int r6 = r11.id     // Catch:{ Exception -> 0x0142, all -> 0x013f }
+            int r6 = r11.id     // Catch:{ Exception -> 0x0144, all -> 0x0141 }
             if (r6 != 0) goto L_0x0046
             java.lang.String r6 = "ALL_CHATS"
             goto L_0x0048
         L_0x0046:
-            java.lang.String r6 = r11.name     // Catch:{ Exception -> 0x0142, all -> 0x013f }
+            java.lang.String r6 = r11.name     // Catch:{ Exception -> 0x0144, all -> 0x0141 }
         L_0x0048:
-            r12.bindString(r1, r6)     // Catch:{ Exception -> 0x0142, all -> 0x013f }
-            r12.step()     // Catch:{ Exception -> 0x0142, all -> 0x013f }
-            r12.dispose()     // Catch:{ Exception -> 0x0142, all -> 0x013f }
+            r12.bindString(r1, r6)     // Catch:{ Exception -> 0x0144, all -> 0x0141 }
+            r12.step()     // Catch:{ Exception -> 0x0144, all -> 0x0141 }
+            r12.dispose()     // Catch:{ Exception -> 0x0144, all -> 0x0141 }
             if (r13 == 0) goto L_0x0139
-            org.telegram.SQLite.SQLiteDatabase r12 = r10.database     // Catch:{ Exception -> 0x0147 }
-            java.lang.StringBuilder r13 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0147 }
-            r13.<init>()     // Catch:{ Exception -> 0x0147 }
+            org.telegram.SQLite.SQLiteDatabase r12 = r10.database     // Catch:{ Exception -> 0x0149 }
+            java.lang.StringBuilder r13 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0149 }
+            r13.<init>()     // Catch:{ Exception -> 0x0149 }
             java.lang.String r1 = "DELETE FROM dialog_filter_ep WHERE id = "
-            r13.append(r1)     // Catch:{ Exception -> 0x0147 }
-            int r1 = r11.id     // Catch:{ Exception -> 0x0147 }
-            r13.append(r1)     // Catch:{ Exception -> 0x0147 }
-            java.lang.String r13 = r13.toString()     // Catch:{ Exception -> 0x0147 }
-            org.telegram.SQLite.SQLitePreparedStatement r12 = r12.executeFast(r13)     // Catch:{ Exception -> 0x0147 }
-            org.telegram.SQLite.SQLitePreparedStatement r12 = r12.stepThis()     // Catch:{ Exception -> 0x0147 }
-            r12.dispose()     // Catch:{ Exception -> 0x0147 }
-            org.telegram.SQLite.SQLiteDatabase r12 = r10.database     // Catch:{ Exception -> 0x0147 }
-            java.lang.StringBuilder r13 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0147 }
-            r13.<init>()     // Catch:{ Exception -> 0x0147 }
+            r13.append(r1)     // Catch:{ Exception -> 0x0149 }
+            int r1 = r11.id     // Catch:{ Exception -> 0x0149 }
+            r13.append(r1)     // Catch:{ Exception -> 0x0149 }
+            java.lang.String r13 = r13.toString()     // Catch:{ Exception -> 0x0149 }
+            org.telegram.SQLite.SQLitePreparedStatement r12 = r12.executeFast(r13)     // Catch:{ Exception -> 0x0149 }
+            org.telegram.SQLite.SQLitePreparedStatement r12 = r12.stepThis()     // Catch:{ Exception -> 0x0149 }
+            r12.dispose()     // Catch:{ Exception -> 0x0149 }
+            org.telegram.SQLite.SQLiteDatabase r12 = r10.database     // Catch:{ Exception -> 0x0149 }
+            java.lang.StringBuilder r13 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0149 }
+            r13.<init>()     // Catch:{ Exception -> 0x0149 }
             java.lang.String r1 = "DELETE FROM dialog_filter_pin_v2 WHERE id = "
-            r13.append(r1)     // Catch:{ Exception -> 0x0147 }
-            int r1 = r11.id     // Catch:{ Exception -> 0x0147 }
-            r13.append(r1)     // Catch:{ Exception -> 0x0147 }
-            java.lang.String r13 = r13.toString()     // Catch:{ Exception -> 0x0147 }
-            org.telegram.SQLite.SQLitePreparedStatement r12 = r12.executeFast(r13)     // Catch:{ Exception -> 0x0147 }
-            org.telegram.SQLite.SQLitePreparedStatement r12 = r12.stepThis()     // Catch:{ Exception -> 0x0147 }
-            r12.dispose()     // Catch:{ Exception -> 0x0147 }
-            org.telegram.SQLite.SQLiteDatabase r12 = r10.database     // Catch:{ Exception -> 0x0147 }
-            r12.beginTransaction()     // Catch:{ Exception -> 0x0147 }
-            org.telegram.SQLite.SQLiteDatabase r12 = r10.database     // Catch:{ Exception -> 0x0147 }
+            r13.append(r1)     // Catch:{ Exception -> 0x0149 }
+            int r1 = r11.id     // Catch:{ Exception -> 0x0149 }
+            r13.append(r1)     // Catch:{ Exception -> 0x0149 }
+            java.lang.String r13 = r13.toString()     // Catch:{ Exception -> 0x0149 }
+            org.telegram.SQLite.SQLitePreparedStatement r12 = r12.executeFast(r13)     // Catch:{ Exception -> 0x0149 }
+            org.telegram.SQLite.SQLitePreparedStatement r12 = r12.stepThis()     // Catch:{ Exception -> 0x0149 }
+            r12.dispose()     // Catch:{ Exception -> 0x0149 }
+            org.telegram.SQLite.SQLiteDatabase r12 = r10.database     // Catch:{ Exception -> 0x0149 }
+            r12.beginTransaction()     // Catch:{ Exception -> 0x0149 }
+            org.telegram.SQLite.SQLiteDatabase r12 = r10.database     // Catch:{ Exception -> 0x0149 }
             java.lang.String r13 = "REPLACE INTO dialog_filter_pin_v2 VALUES(?, ?, ?)"
-            org.telegram.SQLite.SQLitePreparedStatement r12 = r12.executeFast(r13)     // Catch:{ Exception -> 0x0147 }
-            java.util.ArrayList<java.lang.Long> r13 = r11.alwaysShow     // Catch:{ Exception -> 0x0142, all -> 0x013f }
-            int r13 = r13.size()     // Catch:{ Exception -> 0x0142, all -> 0x013f }
+            org.telegram.SQLite.SQLitePreparedStatement r12 = r12.executeFast(r13)     // Catch:{ Exception -> 0x0149 }
+            java.util.ArrayList<java.lang.Long> r13 = r11.alwaysShow     // Catch:{ Exception -> 0x0144, all -> 0x0141 }
+            int r13 = r13.size()     // Catch:{ Exception -> 0x0144, all -> 0x0141 }
             r1 = 0
         L_0x00a7:
             if (r1 >= r13) goto L_0x00d1
-            java.util.ArrayList<java.lang.Long> r6 = r11.alwaysShow     // Catch:{ Exception -> 0x0142, all -> 0x013f }
-            java.lang.Object r6 = r6.get(r1)     // Catch:{ Exception -> 0x0142, all -> 0x013f }
-            java.lang.Long r6 = (java.lang.Long) r6     // Catch:{ Exception -> 0x0142, all -> 0x013f }
-            long r6 = r6.longValue()     // Catch:{ Exception -> 0x0142, all -> 0x013f }
-            r12.requery()     // Catch:{ Exception -> 0x0142, all -> 0x013f }
-            int r8 = r11.id     // Catch:{ Exception -> 0x0142, all -> 0x013f }
-            r12.bindInteger(r3, r8)     // Catch:{ Exception -> 0x0142, all -> 0x013f }
-            r12.bindLong(r4, r6)     // Catch:{ Exception -> 0x0142, all -> 0x013f }
-            org.telegram.messenger.support.LongSparseIntArray r8 = r11.pinnedDialogs     // Catch:{ Exception -> 0x0142, all -> 0x013f }
+            java.util.ArrayList<java.lang.Long> r6 = r11.alwaysShow     // Catch:{ Exception -> 0x0144, all -> 0x0141 }
+            java.lang.Object r6 = r6.get(r1)     // Catch:{ Exception -> 0x0144, all -> 0x0141 }
+            java.lang.Long r6 = (java.lang.Long) r6     // Catch:{ Exception -> 0x0144, all -> 0x0141 }
+            long r6 = r6.longValue()     // Catch:{ Exception -> 0x0144, all -> 0x0141 }
+            r12.requery()     // Catch:{ Exception -> 0x0144, all -> 0x0141 }
+            int r8 = r11.id     // Catch:{ Exception -> 0x0144, all -> 0x0141 }
+            r12.bindInteger(r3, r8)     // Catch:{ Exception -> 0x0144, all -> 0x0141 }
+            r12.bindLong(r4, r6)     // Catch:{ Exception -> 0x0144, all -> 0x0141 }
+            org.telegram.messenger.support.LongSparseIntArray r8 = r11.pinnedDialogs     // Catch:{ Exception -> 0x0144, all -> 0x0141 }
             r9 = -2147483648(0xfffffffvar_, float:-0.0)
-            int r6 = r8.get(r6, r9)     // Catch:{ Exception -> 0x0142, all -> 0x013f }
-            r12.bindInteger(r5, r6)     // Catch:{ Exception -> 0x0142, all -> 0x013f }
-            r12.step()     // Catch:{ Exception -> 0x0142, all -> 0x013f }
+            int r6 = r8.get(r6, r9)     // Catch:{ Exception -> 0x0144, all -> 0x0141 }
+            r12.bindInteger(r5, r6)     // Catch:{ Exception -> 0x0144, all -> 0x0141 }
+            r12.step()     // Catch:{ Exception -> 0x0144, all -> 0x0141 }
             int r1 = r1 + 1
             goto L_0x00a7
         L_0x00d1:
-            org.telegram.messenger.support.LongSparseIntArray r13 = r11.pinnedDialogs     // Catch:{ Exception -> 0x0142, all -> 0x013f }
-            int r13 = r13.size()     // Catch:{ Exception -> 0x0142, all -> 0x013f }
+            org.telegram.messenger.support.LongSparseIntArray r13 = r11.pinnedDialogs     // Catch:{ Exception -> 0x0144, all -> 0x0141 }
+            int r13 = r13.size()     // Catch:{ Exception -> 0x0144, all -> 0x0141 }
             r1 = 0
         L_0x00d8:
             if (r1 >= r13) goto L_0x0101
-            org.telegram.messenger.support.LongSparseIntArray r6 = r11.pinnedDialogs     // Catch:{ Exception -> 0x0142, all -> 0x013f }
-            long r6 = r6.keyAt(r1)     // Catch:{ Exception -> 0x0142, all -> 0x013f }
-            boolean r8 = org.telegram.messenger.DialogObject.isEncryptedDialog(r6)     // Catch:{ Exception -> 0x0142, all -> 0x013f }
+            org.telegram.messenger.support.LongSparseIntArray r6 = r11.pinnedDialogs     // Catch:{ Exception -> 0x0144, all -> 0x0141 }
+            long r6 = r6.keyAt(r1)     // Catch:{ Exception -> 0x0144, all -> 0x0141 }
+            boolean r8 = org.telegram.messenger.DialogObject.isEncryptedDialog(r6)     // Catch:{ Exception -> 0x0144, all -> 0x0141 }
             if (r8 != 0) goto L_0x00e7
             goto L_0x00fe
         L_0x00e7:
-            r12.requery()     // Catch:{ Exception -> 0x0142, all -> 0x013f }
-            int r8 = r11.id     // Catch:{ Exception -> 0x0142, all -> 0x013f }
-            r12.bindInteger(r3, r8)     // Catch:{ Exception -> 0x0142, all -> 0x013f }
-            r12.bindLong(r4, r6)     // Catch:{ Exception -> 0x0142, all -> 0x013f }
-            org.telegram.messenger.support.LongSparseIntArray r6 = r11.pinnedDialogs     // Catch:{ Exception -> 0x0142, all -> 0x013f }
-            int r6 = r6.valueAt(r1)     // Catch:{ Exception -> 0x0142, all -> 0x013f }
-            r12.bindInteger(r5, r6)     // Catch:{ Exception -> 0x0142, all -> 0x013f }
-            r12.step()     // Catch:{ Exception -> 0x0142, all -> 0x013f }
+            r12.requery()     // Catch:{ Exception -> 0x0144, all -> 0x0141 }
+            int r8 = r11.id     // Catch:{ Exception -> 0x0144, all -> 0x0141 }
+            r12.bindInteger(r3, r8)     // Catch:{ Exception -> 0x0144, all -> 0x0141 }
+            r12.bindLong(r4, r6)     // Catch:{ Exception -> 0x0144, all -> 0x0141 }
+            org.telegram.messenger.support.LongSparseIntArray r6 = r11.pinnedDialogs     // Catch:{ Exception -> 0x0144, all -> 0x0141 }
+            int r6 = r6.valueAt(r1)     // Catch:{ Exception -> 0x0144, all -> 0x0141 }
+            r12.bindInteger(r5, r6)     // Catch:{ Exception -> 0x0144, all -> 0x0141 }
+            r12.step()     // Catch:{ Exception -> 0x0144, all -> 0x0141 }
         L_0x00fe:
             int r1 = r1 + 1
             goto L_0x00d8
         L_0x0101:
-            r12.dispose()     // Catch:{ Exception -> 0x0142, all -> 0x013f }
-            org.telegram.SQLite.SQLiteDatabase r12 = r10.database     // Catch:{ Exception -> 0x0147 }
+            r12.dispose()     // Catch:{ Exception -> 0x0144, all -> 0x0141 }
+            org.telegram.SQLite.SQLiteDatabase r12 = r10.database     // Catch:{ Exception -> 0x0149 }
             java.lang.String r13 = "REPLACE INTO dialog_filter_ep VALUES(?, ?)"
-            org.telegram.SQLite.SQLitePreparedStatement r12 = r12.executeFast(r13)     // Catch:{ Exception -> 0x0147 }
-            java.util.ArrayList<java.lang.Long> r13 = r11.neverShow     // Catch:{ Exception -> 0x0142, all -> 0x013f }
-            int r13 = r13.size()     // Catch:{ Exception -> 0x0142, all -> 0x013f }
+            org.telegram.SQLite.SQLitePreparedStatement r12 = r12.executeFast(r13)     // Catch:{ Exception -> 0x0149 }
+            java.util.ArrayList<java.lang.Long> r13 = r11.neverShow     // Catch:{ Exception -> 0x0144, all -> 0x0141 }
+            int r13 = r13.size()     // Catch:{ Exception -> 0x0144, all -> 0x0141 }
         L_0x0112:
             if (r2 >= r13) goto L_0x0131
-            r12.requery()     // Catch:{ Exception -> 0x0142, all -> 0x013f }
-            int r1 = r11.id     // Catch:{ Exception -> 0x0142, all -> 0x013f }
-            r12.bindInteger(r3, r1)     // Catch:{ Exception -> 0x0142, all -> 0x013f }
-            java.util.ArrayList<java.lang.Long> r1 = r11.neverShow     // Catch:{ Exception -> 0x0142, all -> 0x013f }
-            java.lang.Object r1 = r1.get(r2)     // Catch:{ Exception -> 0x0142, all -> 0x013f }
-            java.lang.Long r1 = (java.lang.Long) r1     // Catch:{ Exception -> 0x0142, all -> 0x013f }
-            long r5 = r1.longValue()     // Catch:{ Exception -> 0x0142, all -> 0x013f }
-            r12.bindLong(r4, r5)     // Catch:{ Exception -> 0x0142, all -> 0x013f }
-            r12.step()     // Catch:{ Exception -> 0x0142, all -> 0x013f }
+            r12.requery()     // Catch:{ Exception -> 0x0144, all -> 0x0141 }
+            int r1 = r11.id     // Catch:{ Exception -> 0x0144, all -> 0x0141 }
+            r12.bindInteger(r3, r1)     // Catch:{ Exception -> 0x0144, all -> 0x0141 }
+            java.util.ArrayList<java.lang.Long> r1 = r11.neverShow     // Catch:{ Exception -> 0x0144, all -> 0x0141 }
+            java.lang.Object r1 = r1.get(r2)     // Catch:{ Exception -> 0x0144, all -> 0x0141 }
+            java.lang.Long r1 = (java.lang.Long) r1     // Catch:{ Exception -> 0x0144, all -> 0x0141 }
+            long r5 = r1.longValue()     // Catch:{ Exception -> 0x0144, all -> 0x0141 }
+            r12.bindLong(r4, r5)     // Catch:{ Exception -> 0x0144, all -> 0x0141 }
+            r12.step()     // Catch:{ Exception -> 0x0144, all -> 0x0141 }
             int r2 = r2 + 1
             goto L_0x0112
         L_0x0131:
-            r12.dispose()     // Catch:{ Exception -> 0x0142, all -> 0x013f }
-            org.telegram.SQLite.SQLiteDatabase r11 = r10.database     // Catch:{ Exception -> 0x0147 }
-            r11.commitTransaction()     // Catch:{ Exception -> 0x0147 }
+            r12.dispose()     // Catch:{ Exception -> 0x0144, all -> 0x0141 }
+            org.telegram.SQLite.SQLiteDatabase r11 = r10.database     // Catch:{ Exception -> 0x0149 }
+            r11.commitTransaction()     // Catch:{ Exception -> 0x0149 }
         L_0x0139:
             org.telegram.SQLite.SQLiteDatabase r11 = r10.database
+            if (r11 == 0) goto L_0x0159
             r11.commitTransaction()
-            goto L_0x0155
-        L_0x013f:
+            goto L_0x0159
+        L_0x0141:
             r11 = move-exception
             r0 = r12
-            goto L_0x0156
-        L_0x0142:
+            goto L_0x015a
+        L_0x0144:
             r11 = move-exception
             r0 = r12
-            goto L_0x0148
-        L_0x0145:
-            r11 = move-exception
-            goto L_0x0156
+            goto L_0x014a
         L_0x0147:
             r11 = move-exception
-        L_0x0148:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r11)     // Catch:{ all -> 0x0145 }
+            goto L_0x015a
+        L_0x0149:
+            r11 = move-exception
+        L_0x014a:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r11)     // Catch:{ all -> 0x0147 }
             org.telegram.SQLite.SQLiteDatabase r11 = r10.database
+            if (r11 == 0) goto L_0x0154
             r11.commitTransaction()
-            if (r0 == 0) goto L_0x0155
+        L_0x0154:
+            if (r0 == 0) goto L_0x0159
             r0.dispose()
-        L_0x0155:
+        L_0x0159:
             return
-        L_0x0156:
+        L_0x015a:
             org.telegram.SQLite.SQLiteDatabase r12 = r10.database
+            if (r12 == 0) goto L_0x0161
             r12.commitTransaction()
-            if (r0 == 0) goto L_0x0160
-            r0.dispose()
-        L_0x0160:
-            goto L_0x0162
         L_0x0161:
+            if (r0 == 0) goto L_0x0166
+            r0.dispose()
+        L_0x0166:
+            goto L_0x0168
+        L_0x0167:
             throw r11
-        L_0x0162:
-            goto L_0x0161
+        L_0x0168:
+            goto L_0x0167
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.saveDialogFilterInternal(org.telegram.messenger.MessagesController$DialogFilter, boolean, boolean):void");
     }
@@ -6550,9 +6568,11 @@ public class MessagesStorage extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:37:0x0094  */
-    /* JADX WARNING: Removed duplicated region for block: B:40:0x009f  */
-    /* JADX WARNING: Removed duplicated region for block: B:48:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:39:0x0093  */
+    /* JADX WARNING: Removed duplicated region for block: B:41:0x0098  */
+    /* JADX WARNING: Removed duplicated region for block: B:44:0x00a0  */
+    /* JADX WARNING: Removed duplicated region for block: B:46:0x00a5  */
+    /* JADX WARNING: Removed duplicated region for block: B:55:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public /* synthetic */ void lambda$putWallpapers$52(int r11, java.util.ArrayList r12) {
         /*
@@ -6560,43 +6580,43 @@ public class MessagesStorage extends BaseController {
             r0 = 0
             r1 = 1
             if (r11 != r1) goto L_0x0013
-            org.telegram.SQLite.SQLiteDatabase r2 = r10.database     // Catch:{ Exception -> 0x0089 }
+            org.telegram.SQLite.SQLiteDatabase r2 = r10.database     // Catch:{ Exception -> 0x008b }
             java.lang.String r3 = "DELETE FROM wallpapers2 WHERE num >= -1"
-            org.telegram.SQLite.SQLitePreparedStatement r2 = r2.executeFast(r3)     // Catch:{ Exception -> 0x0089 }
-            org.telegram.SQLite.SQLitePreparedStatement r2 = r2.stepThis()     // Catch:{ Exception -> 0x0089 }
-            r2.dispose()     // Catch:{ Exception -> 0x0089 }
+            org.telegram.SQLite.SQLitePreparedStatement r2 = r2.executeFast(r3)     // Catch:{ Exception -> 0x008b }
+            org.telegram.SQLite.SQLitePreparedStatement r2 = r2.stepThis()     // Catch:{ Exception -> 0x008b }
+            r2.dispose()     // Catch:{ Exception -> 0x008b }
         L_0x0013:
-            org.telegram.SQLite.SQLiteDatabase r2 = r10.database     // Catch:{ Exception -> 0x0089 }
-            r2.beginTransaction()     // Catch:{ Exception -> 0x0089 }
+            org.telegram.SQLite.SQLiteDatabase r2 = r10.database     // Catch:{ Exception -> 0x008b }
+            r2.beginTransaction()     // Catch:{ Exception -> 0x008b }
             if (r11 == 0) goto L_0x0023
-            org.telegram.SQLite.SQLiteDatabase r2 = r10.database     // Catch:{ Exception -> 0x0089 }
+            org.telegram.SQLite.SQLiteDatabase r2 = r10.database     // Catch:{ Exception -> 0x008b }
             java.lang.String r3 = "REPLACE INTO wallpapers2 VALUES(?, ?, ?)"
-            org.telegram.SQLite.SQLitePreparedStatement r2 = r2.executeFast(r3)     // Catch:{ Exception -> 0x0089 }
+            org.telegram.SQLite.SQLitePreparedStatement r2 = r2.executeFast(r3)     // Catch:{ Exception -> 0x008b }
             goto L_0x002b
         L_0x0023:
-            org.telegram.SQLite.SQLiteDatabase r2 = r10.database     // Catch:{ Exception -> 0x0089 }
+            org.telegram.SQLite.SQLiteDatabase r2 = r10.database     // Catch:{ Exception -> 0x008b }
             java.lang.String r3 = "UPDATE wallpapers2 SET data = ? WHERE uid = ?"
-            org.telegram.SQLite.SQLitePreparedStatement r2 = r2.executeFast(r3)     // Catch:{ Exception -> 0x0089 }
+            org.telegram.SQLite.SQLitePreparedStatement r2 = r2.executeFast(r3)     // Catch:{ Exception -> 0x008b }
         L_0x002b:
             r3 = 0
-            int r4 = r12.size()     // Catch:{ Exception -> 0x0084, all -> 0x0081 }
+            int r4 = r12.size()     // Catch:{ Exception -> 0x0086, all -> 0x0083 }
         L_0x0030:
             if (r3 >= r4) goto L_0x0073
-            java.lang.Object r5 = r12.get(r3)     // Catch:{ Exception -> 0x0084, all -> 0x0081 }
-            org.telegram.tgnet.TLRPC$WallPaper r5 = (org.telegram.tgnet.TLRPC$WallPaper) r5     // Catch:{ Exception -> 0x0084, all -> 0x0081 }
-            r2.requery()     // Catch:{ Exception -> 0x0084, all -> 0x0081 }
-            org.telegram.tgnet.NativeByteBuffer r6 = new org.telegram.tgnet.NativeByteBuffer     // Catch:{ Exception -> 0x0084, all -> 0x0081 }
-            int r7 = r5.getObjectSize()     // Catch:{ Exception -> 0x0084, all -> 0x0081 }
-            r6.<init>((int) r7)     // Catch:{ Exception -> 0x0084, all -> 0x0081 }
-            r5.serializeToStream(r6)     // Catch:{ Exception -> 0x0084, all -> 0x0081 }
+            java.lang.Object r5 = r12.get(r3)     // Catch:{ Exception -> 0x0086, all -> 0x0083 }
+            org.telegram.tgnet.TLRPC$WallPaper r5 = (org.telegram.tgnet.TLRPC$WallPaper) r5     // Catch:{ Exception -> 0x0086, all -> 0x0083 }
+            r2.requery()     // Catch:{ Exception -> 0x0086, all -> 0x0083 }
+            org.telegram.tgnet.NativeByteBuffer r6 = new org.telegram.tgnet.NativeByteBuffer     // Catch:{ Exception -> 0x0086, all -> 0x0083 }
+            int r7 = r5.getObjectSize()     // Catch:{ Exception -> 0x0086, all -> 0x0083 }
+            r6.<init>((int) r7)     // Catch:{ Exception -> 0x0086, all -> 0x0083 }
+            r5.serializeToStream(r6)     // Catch:{ Exception -> 0x0086, all -> 0x0083 }
             r7 = 2
             if (r11 == 0) goto L_0x0062
-            long r8 = r5.id     // Catch:{ Exception -> 0x0084, all -> 0x0081 }
-            r2.bindLong(r1, r8)     // Catch:{ Exception -> 0x0084, all -> 0x0081 }
-            r2.bindByteBuffer((int) r7, (org.telegram.tgnet.NativeByteBuffer) r6)     // Catch:{ Exception -> 0x0084, all -> 0x0081 }
+            long r8 = r5.id     // Catch:{ Exception -> 0x0086, all -> 0x0083 }
+            r2.bindLong(r1, r8)     // Catch:{ Exception -> 0x0086, all -> 0x0083 }
+            r2.bindByteBuffer((int) r7, (org.telegram.tgnet.NativeByteBuffer) r6)     // Catch:{ Exception -> 0x0086, all -> 0x0083 }
             r5 = 3
             if (r11 >= 0) goto L_0x0059
-            r2.bindInteger(r5, r11)     // Catch:{ Exception -> 0x0084, all -> 0x0081 }
+            r2.bindInteger(r5, r11)     // Catch:{ Exception -> 0x0086, all -> 0x0083 }
             goto L_0x006a
         L_0x0059:
             if (r11 != r7) goto L_0x005d
@@ -6605,56 +6625,61 @@ public class MessagesStorage extends BaseController {
         L_0x005d:
             r7 = r3
         L_0x005e:
-            r2.bindInteger(r5, r7)     // Catch:{ Exception -> 0x0084, all -> 0x0081 }
+            r2.bindInteger(r5, r7)     // Catch:{ Exception -> 0x0086, all -> 0x0083 }
             goto L_0x006a
         L_0x0062:
-            r2.bindByteBuffer((int) r1, (org.telegram.tgnet.NativeByteBuffer) r6)     // Catch:{ Exception -> 0x0084, all -> 0x0081 }
-            long r8 = r5.id     // Catch:{ Exception -> 0x0084, all -> 0x0081 }
-            r2.bindLong(r7, r8)     // Catch:{ Exception -> 0x0084, all -> 0x0081 }
+            r2.bindByteBuffer((int) r1, (org.telegram.tgnet.NativeByteBuffer) r6)     // Catch:{ Exception -> 0x0086, all -> 0x0083 }
+            long r8 = r5.id     // Catch:{ Exception -> 0x0086, all -> 0x0083 }
+            r2.bindLong(r7, r8)     // Catch:{ Exception -> 0x0086, all -> 0x0083 }
         L_0x006a:
-            r2.step()     // Catch:{ Exception -> 0x0084, all -> 0x0081 }
-            r6.reuse()     // Catch:{ Exception -> 0x0084, all -> 0x0081 }
+            r2.step()     // Catch:{ Exception -> 0x0086, all -> 0x0083 }
+            r6.reuse()     // Catch:{ Exception -> 0x0086, all -> 0x0083 }
             int r3 = r3 + 1
             goto L_0x0030
         L_0x0073:
-            r2.dispose()     // Catch:{ Exception -> 0x0084, all -> 0x0081 }
-            org.telegram.SQLite.SQLiteDatabase r11 = r10.database     // Catch:{ Exception -> 0x0089 }
-            r11.commitTransaction()     // Catch:{ Exception -> 0x0089 }
+            r2.dispose()     // Catch:{ Exception -> 0x0086, all -> 0x0083 }
+            org.telegram.SQLite.SQLiteDatabase r11 = r10.database     // Catch:{ Exception -> 0x008b }
+            r11.commitTransaction()     // Catch:{ Exception -> 0x008b }
             org.telegram.SQLite.SQLiteDatabase r11 = r10.database
+            if (r11 == 0) goto L_0x009b
             r11.commitTransaction()
-            goto L_0x0097
-        L_0x0081:
+            goto L_0x009b
+        L_0x0083:
             r11 = move-exception
             r0 = r2
-            goto L_0x0098
-        L_0x0084:
+            goto L_0x009c
+        L_0x0086:
             r11 = move-exception
             r0 = r2
-            goto L_0x008a
-        L_0x0087:
-            r11 = move-exception
-            goto L_0x0098
+            goto L_0x008c
         L_0x0089:
             r11 = move-exception
-        L_0x008a:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r11)     // Catch:{ all -> 0x0087 }
+            goto L_0x009c
+        L_0x008b:
+            r11 = move-exception
+        L_0x008c:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r11)     // Catch:{ all -> 0x0089 }
             org.telegram.SQLite.SQLiteDatabase r11 = r10.database
+            if (r11 == 0) goto L_0x0096
             r11.commitTransaction()
-            if (r0 == 0) goto L_0x0097
+        L_0x0096:
+            if (r0 == 0) goto L_0x009b
             r0.dispose()
-        L_0x0097:
+        L_0x009b:
             return
-        L_0x0098:
+        L_0x009c:
             org.telegram.SQLite.SQLiteDatabase r12 = r10.database
+            if (r12 == 0) goto L_0x00a3
             r12.commitTransaction()
-            if (r0 == 0) goto L_0x00a2
-            r0.dispose()
-        L_0x00a2:
-            goto L_0x00a4
         L_0x00a3:
+            if (r0 == 0) goto L_0x00a8
+            r0.dispose()
+        L_0x00a8:
+            goto L_0x00aa
+        L_0x00a9:
             throw r11
-        L_0x00a4:
-            goto L_0x00a3
+        L_0x00aa:
+            goto L_0x00a9
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$putWallpapers$52(int, java.util.ArrayList):void");
     }
@@ -8030,10 +8055,14 @@ public class MessagesStorage extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:121:? A[RETURN, SYNTHETIC] */
-    /* JADX WARNING: Removed duplicated region for block: B:80:0x02d0 A[Catch:{ Exception -> 0x0325, all -> 0x0322 }, LOOP:7: B:78:0x02cd->B:80:0x02d0, LOOP_END] */
-    /* JADX WARNING: Removed duplicated region for block: B:95:0x0331  */
-    /* JADX WARNING: Removed duplicated region for block: B:99:0x033d  */
+    /* JADX WARNING: Removed duplicated region for block: B:103:0x033e  */
+    /* JADX WARNING: Removed duplicated region for block: B:105:0x0343  */
+    /* JADX WARNING: Removed duplicated region for block: B:126:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:128:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:80:0x02d0 A[Catch:{ Exception -> 0x0327, all -> 0x0324 }, LOOP:7: B:78:0x02cd->B:80:0x02d0, LOOP_END] */
+    /* JADX WARNING: Removed duplicated region for block: B:84:0x031a  */
+    /* JADX WARNING: Removed duplicated region for block: B:97:0x0330  */
+    /* JADX WARNING: Removed duplicated region for block: B:99:0x0335  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public /* synthetic */ void lambda$resetDialogs$69(org.telegram.tgnet.TLRPC$messages_Dialogs r33, int r34, int r35, int r36, int r37, int r38, org.telegram.tgnet.TLRPC$Message r39, int r40, androidx.collection.LongSparseArray r41, androidx.collection.LongSparseArray r42) {
         /*
@@ -8041,206 +8070,206 @@ public class MessagesStorage extends BaseController {
             r1 = r32
             r0 = r33
             r11 = r39
-            java.util.ArrayList r2 = new java.util.ArrayList     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            r2.<init>()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r3 = r0.dialogs     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            int r3 = r3.size()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
+            java.util.ArrayList r2 = new java.util.ArrayList     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            r2.<init>()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r3 = r0.dialogs     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            int r3 = r3.size()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
             int r3 = r3 - r34
-            org.telegram.messenger.support.LongSparseIntArray r4 = new org.telegram.messenger.support.LongSparseIntArray     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            r4.<init>()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            java.util.ArrayList r5 = new java.util.ArrayList     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            r5.<init>()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            java.util.ArrayList r6 = new java.util.ArrayList     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            r6.<init>()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
+            org.telegram.messenger.support.LongSparseIntArray r4 = new org.telegram.messenger.support.LongSparseIntArray     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            r4.<init>()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            java.util.ArrayList r5 = new java.util.ArrayList     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            r5.<init>()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            java.util.ArrayList r6 = new java.util.ArrayList     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            r6.<init>()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
             r7 = r34
         L_0x0024:
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r8 = r0.dialogs     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            int r8 = r8.size()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r8 = r0.dialogs     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            int r8 = r8.size()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
             if (r7 >= r8) goto L_0x0040
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r8 = r0.dialogs     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            java.lang.Object r8 = r8.get(r7)     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            org.telegram.tgnet.TLRPC$Dialog r8 = (org.telegram.tgnet.TLRPC$Dialog) r8     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            long r8 = r8.id     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            java.lang.Long r8 = java.lang.Long.valueOf(r8)     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            r6.add(r8)     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r8 = r0.dialogs     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            java.lang.Object r8 = r8.get(r7)     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            org.telegram.tgnet.TLRPC$Dialog r8 = (org.telegram.tgnet.TLRPC$Dialog) r8     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            long r8 = r8.id     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            java.lang.Long r8 = java.lang.Long.valueOf(r8)     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            r6.add(r8)     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
             int r7 = r7 + 1
             goto L_0x0024
         L_0x0040:
-            org.telegram.SQLite.SQLiteDatabase r7 = r1.database     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
+            org.telegram.SQLite.SQLiteDatabase r7 = r1.database     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
             java.lang.String r8 = "SELECT did, pinned FROM dialogs WHERE 1"
             r9 = 0
-            java.lang.Object[] r10 = new java.lang.Object[r9]     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            org.telegram.SQLite.SQLiteCursor r7 = r7.queryFinalized(r8, r10)     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
+            java.lang.Object[] r10 = new java.lang.Object[r9]     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            org.telegram.SQLite.SQLiteCursor r7 = r7.queryFinalized(r8, r10)     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
             r8 = 0
         L_0x004c:
-            boolean r10 = r7.next()     // Catch:{ Exception -> 0x031f, all -> 0x031c }
+            boolean r10 = r7.next()     // Catch:{ Exception -> 0x0321, all -> 0x031e }
             if (r10 == 0) goto L_0x0079
-            long r13 = r7.longValue(r9)     // Catch:{ Exception -> 0x031f, all -> 0x031c }
+            long r13 = r7.longValue(r9)     // Catch:{ Exception -> 0x0321, all -> 0x031e }
             r10 = 1
-            int r10 = r7.intValue(r10)     // Catch:{ Exception -> 0x031f, all -> 0x031c }
-            boolean r15 = org.telegram.messenger.DialogObject.isEncryptedDialog(r13)     // Catch:{ Exception -> 0x031f, all -> 0x031c }
+            int r10 = r7.intValue(r10)     // Catch:{ Exception -> 0x0321, all -> 0x031e }
+            boolean r15 = org.telegram.messenger.DialogObject.isEncryptedDialog(r13)     // Catch:{ Exception -> 0x0321, all -> 0x031e }
             if (r15 != 0) goto L_0x004c
-            java.lang.Long r15 = java.lang.Long.valueOf(r13)     // Catch:{ Exception -> 0x031f, all -> 0x031c }
-            r2.add(r15)     // Catch:{ Exception -> 0x031f, all -> 0x031c }
+            java.lang.Long r15 = java.lang.Long.valueOf(r13)     // Catch:{ Exception -> 0x0321, all -> 0x031e }
+            r2.add(r15)     // Catch:{ Exception -> 0x0321, all -> 0x031e }
             if (r10 <= 0) goto L_0x004c
-            int r8 = java.lang.Math.max(r10, r8)     // Catch:{ Exception -> 0x031f, all -> 0x031c }
-            r4.put(r13, r10)     // Catch:{ Exception -> 0x031f, all -> 0x031c }
-            java.lang.Long r10 = java.lang.Long.valueOf(r13)     // Catch:{ Exception -> 0x031f, all -> 0x031c }
-            r5.add(r10)     // Catch:{ Exception -> 0x031f, all -> 0x031c }
+            int r8 = java.lang.Math.max(r10, r8)     // Catch:{ Exception -> 0x0321, all -> 0x031e }
+            r4.put(r13, r10)     // Catch:{ Exception -> 0x0321, all -> 0x031e }
+            java.lang.Long r10 = java.lang.Long.valueOf(r13)     // Catch:{ Exception -> 0x0321, all -> 0x031e }
+            r5.add(r10)     // Catch:{ Exception -> 0x0321, all -> 0x031e }
             goto L_0x004c
         L_0x0079:
-            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda196 r10 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda196     // Catch:{ Exception -> 0x031f, all -> 0x031c }
-            r10.<init>(r4)     // Catch:{ Exception -> 0x031f, all -> 0x031c }
-            java.util.Collections.sort(r5, r10)     // Catch:{ Exception -> 0x031f, all -> 0x031c }
+            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda196 r10 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda196     // Catch:{ Exception -> 0x0321, all -> 0x031e }
+            r10.<init>(r4)     // Catch:{ Exception -> 0x0321, all -> 0x031e }
+            java.util.Collections.sort(r5, r10)     // Catch:{ Exception -> 0x0321, all -> 0x031e }
         L_0x0081:
-            int r10 = r5.size()     // Catch:{ Exception -> 0x031f, all -> 0x031c }
+            int r10 = r5.size()     // Catch:{ Exception -> 0x0321, all -> 0x031e }
             r13 = 0
             if (r10 >= r3) goto L_0x0091
-            java.lang.Long r10 = java.lang.Long.valueOf(r13)     // Catch:{ Exception -> 0x031f, all -> 0x031c }
-            r5.add(r9, r10)     // Catch:{ Exception -> 0x031f, all -> 0x031c }
+            java.lang.Long r10 = java.lang.Long.valueOf(r13)     // Catch:{ Exception -> 0x0321, all -> 0x031e }
+            r5.add(r9, r10)     // Catch:{ Exception -> 0x0321, all -> 0x031e }
             goto L_0x0081
         L_0x0091:
-            r7.dispose()     // Catch:{ Exception -> 0x031f, all -> 0x031c }
-            java.lang.StringBuilder r7 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            r7.<init>()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
+            r7.dispose()     // Catch:{ Exception -> 0x0321, all -> 0x031e }
+            java.lang.StringBuilder r7 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            r7.<init>()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
             java.lang.String r10 = "("
-            r7.append(r10)     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
+            r7.append(r10)     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
             java.lang.String r10 = ","
-            java.lang.String r2 = android.text.TextUtils.join(r10, r2)     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            r7.append(r2)     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
+            java.lang.String r2 = android.text.TextUtils.join(r10, r2)     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            r7.append(r2)     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
             java.lang.String r2 = ")"
-            r7.append(r2)     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            java.lang.String r2 = r7.toString()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            org.telegram.SQLite.SQLiteDatabase r7 = r1.database     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            r7.beginTransaction()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            org.telegram.SQLite.SQLiteDatabase r7 = r1.database     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            java.lang.StringBuilder r10 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            r10.<init>()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
+            r7.append(r2)     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            java.lang.String r2 = r7.toString()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            org.telegram.SQLite.SQLiteDatabase r7 = r1.database     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            r7.beginTransaction()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            org.telegram.SQLite.SQLiteDatabase r7 = r1.database     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            java.lang.StringBuilder r10 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            r10.<init>()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
             java.lang.String r15 = "DELETE FROM chat_pinned_count WHERE uid IN "
-            r10.append(r15)     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            r10.append(r2)     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            java.lang.String r10 = r10.toString()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            org.telegram.SQLite.SQLitePreparedStatement r7 = r7.executeFast(r10)     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            org.telegram.SQLite.SQLitePreparedStatement r7 = r7.stepThis()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            r7.dispose()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            org.telegram.SQLite.SQLiteDatabase r7 = r1.database     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            java.lang.StringBuilder r10 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            r10.<init>()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
+            r10.append(r15)     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            r10.append(r2)     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            java.lang.String r10 = r10.toString()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            org.telegram.SQLite.SQLitePreparedStatement r7 = r7.executeFast(r10)     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            org.telegram.SQLite.SQLitePreparedStatement r7 = r7.stepThis()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            r7.dispose()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            org.telegram.SQLite.SQLiteDatabase r7 = r1.database     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            java.lang.StringBuilder r10 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            r10.<init>()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
             java.lang.String r15 = "DELETE FROM chat_pinned_v2 WHERE uid IN "
-            r10.append(r15)     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            r10.append(r2)     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            java.lang.String r10 = r10.toString()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            org.telegram.SQLite.SQLitePreparedStatement r7 = r7.executeFast(r10)     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            org.telegram.SQLite.SQLitePreparedStatement r7 = r7.stepThis()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            r7.dispose()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            org.telegram.SQLite.SQLiteDatabase r7 = r1.database     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            java.lang.StringBuilder r10 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            r10.<init>()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
+            r10.append(r15)     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            r10.append(r2)     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            java.lang.String r10 = r10.toString()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            org.telegram.SQLite.SQLitePreparedStatement r7 = r7.executeFast(r10)     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            org.telegram.SQLite.SQLitePreparedStatement r7 = r7.stepThis()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            r7.dispose()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            org.telegram.SQLite.SQLiteDatabase r7 = r1.database     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            java.lang.StringBuilder r10 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            r10.<init>()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
             java.lang.String r15 = "DELETE FROM dialogs WHERE did IN "
-            r10.append(r15)     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            r10.append(r2)     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            java.lang.String r10 = r10.toString()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            org.telegram.SQLite.SQLitePreparedStatement r7 = r7.executeFast(r10)     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            org.telegram.SQLite.SQLitePreparedStatement r7 = r7.stepThis()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            r7.dispose()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            org.telegram.SQLite.SQLiteDatabase r7 = r1.database     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            java.lang.StringBuilder r10 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            r10.<init>()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
+            r10.append(r15)     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            r10.append(r2)     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            java.lang.String r10 = r10.toString()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            org.telegram.SQLite.SQLitePreparedStatement r7 = r7.executeFast(r10)     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            org.telegram.SQLite.SQLitePreparedStatement r7 = r7.stepThis()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            r7.dispose()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            org.telegram.SQLite.SQLiteDatabase r7 = r1.database     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            java.lang.StringBuilder r10 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            r10.<init>()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
             java.lang.String r15 = "DELETE FROM messages_v2 WHERE uid IN "
-            r10.append(r15)     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            r10.append(r2)     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            java.lang.String r10 = r10.toString()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            org.telegram.SQLite.SQLitePreparedStatement r7 = r7.executeFast(r10)     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            org.telegram.SQLite.SQLitePreparedStatement r7 = r7.stepThis()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            r7.dispose()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            org.telegram.SQLite.SQLiteDatabase r7 = r1.database     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
+            r10.append(r15)     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            r10.append(r2)     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            java.lang.String r10 = r10.toString()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            org.telegram.SQLite.SQLitePreparedStatement r7 = r7.executeFast(r10)     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            org.telegram.SQLite.SQLitePreparedStatement r7 = r7.stepThis()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            r7.dispose()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            org.telegram.SQLite.SQLiteDatabase r7 = r1.database     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
             java.lang.String r10 = "DELETE FROM polls_v2 WHERE 1"
-            org.telegram.SQLite.SQLitePreparedStatement r7 = r7.executeFast(r10)     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            org.telegram.SQLite.SQLitePreparedStatement r7 = r7.stepThis()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            r7.dispose()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            org.telegram.SQLite.SQLiteDatabase r7 = r1.database     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            java.lang.StringBuilder r10 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            r10.<init>()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
+            org.telegram.SQLite.SQLitePreparedStatement r7 = r7.executeFast(r10)     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            org.telegram.SQLite.SQLitePreparedStatement r7 = r7.stepThis()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            r7.dispose()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            org.telegram.SQLite.SQLiteDatabase r7 = r1.database     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            java.lang.StringBuilder r10 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            r10.<init>()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
             java.lang.String r15 = "DELETE FROM bot_keyboard WHERE uid IN "
-            r10.append(r15)     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            r10.append(r2)     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            java.lang.String r10 = r10.toString()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            org.telegram.SQLite.SQLitePreparedStatement r7 = r7.executeFast(r10)     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            org.telegram.SQLite.SQLitePreparedStatement r7 = r7.stepThis()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            r7.dispose()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            org.telegram.SQLite.SQLiteDatabase r7 = r1.database     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            java.lang.StringBuilder r10 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            r10.<init>()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
+            r10.append(r15)     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            r10.append(r2)     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            java.lang.String r10 = r10.toString()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            org.telegram.SQLite.SQLitePreparedStatement r7 = r7.executeFast(r10)     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            org.telegram.SQLite.SQLitePreparedStatement r7 = r7.stepThis()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            r7.dispose()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            org.telegram.SQLite.SQLiteDatabase r7 = r1.database     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            java.lang.StringBuilder r10 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            r10.<init>()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
             java.lang.String r15 = "DELETE FROM media_v4 WHERE uid IN "
-            r10.append(r15)     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            r10.append(r2)     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            java.lang.String r10 = r10.toString()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            org.telegram.SQLite.SQLitePreparedStatement r7 = r7.executeFast(r10)     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            org.telegram.SQLite.SQLitePreparedStatement r7 = r7.stepThis()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            r7.dispose()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            org.telegram.SQLite.SQLiteDatabase r7 = r1.database     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            java.lang.StringBuilder r10 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            r10.<init>()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
+            r10.append(r15)     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            r10.append(r2)     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            java.lang.String r10 = r10.toString()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            org.telegram.SQLite.SQLitePreparedStatement r7 = r7.executeFast(r10)     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            org.telegram.SQLite.SQLitePreparedStatement r7 = r7.stepThis()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            r7.dispose()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            org.telegram.SQLite.SQLiteDatabase r7 = r1.database     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            java.lang.StringBuilder r10 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            r10.<init>()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
             java.lang.String r15 = "DELETE FROM messages_holes WHERE uid IN "
-            r10.append(r15)     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            r10.append(r2)     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            java.lang.String r10 = r10.toString()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            org.telegram.SQLite.SQLitePreparedStatement r7 = r7.executeFast(r10)     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            org.telegram.SQLite.SQLitePreparedStatement r7 = r7.stepThis()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            r7.dispose()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            org.telegram.SQLite.SQLiteDatabase r7 = r1.database     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            java.lang.StringBuilder r10 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            r10.<init>()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
+            r10.append(r15)     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            r10.append(r2)     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            java.lang.String r10 = r10.toString()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            org.telegram.SQLite.SQLitePreparedStatement r7 = r7.executeFast(r10)     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            org.telegram.SQLite.SQLitePreparedStatement r7 = r7.stepThis()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            r7.dispose()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            org.telegram.SQLite.SQLiteDatabase r7 = r1.database     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            java.lang.StringBuilder r10 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            r10.<init>()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
             java.lang.String r15 = "DELETE FROM media_holes_v2 WHERE uid IN "
-            r10.append(r15)     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            r10.append(r2)     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            java.lang.String r2 = r10.toString()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            org.telegram.SQLite.SQLitePreparedStatement r2 = r7.executeFast(r2)     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            org.telegram.SQLite.SQLitePreparedStatement r2 = r2.stepThis()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            r2.dispose()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            org.telegram.SQLite.SQLiteDatabase r2 = r1.database     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            r2.commitTransaction()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
+            r10.append(r15)     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            r10.append(r2)     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            java.lang.String r2 = r10.toString()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            org.telegram.SQLite.SQLitePreparedStatement r2 = r7.executeFast(r2)     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            org.telegram.SQLite.SQLitePreparedStatement r2 = r2.stepThis()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            r2.dispose()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            org.telegram.SQLite.SQLiteDatabase r2 = r1.database     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            r2.commitTransaction()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
             r2 = 0
         L_0x01ba:
             if (r2 >= r3) goto L_0x0216
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r7 = r0.dialogs     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r7 = r0.dialogs     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
             int r10 = r34 + r2
-            java.lang.Object r7 = r7.get(r10)     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            org.telegram.tgnet.TLRPC$Dialog r7 = (org.telegram.tgnet.TLRPC$Dialog) r7     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            boolean r10 = r7 instanceof org.telegram.tgnet.TLRPC$TL_dialog     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
+            java.lang.Object r7 = r7.get(r10)     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            org.telegram.tgnet.TLRPC$Dialog r7 = (org.telegram.tgnet.TLRPC$Dialog) r7     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            boolean r10 = r7 instanceof org.telegram.tgnet.TLRPC$TL_dialog     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
             if (r10 == 0) goto L_0x01cf
-            boolean r10 = r7.pinned     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
+            boolean r10 = r7.pinned     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
             if (r10 != 0) goto L_0x01cf
             goto L_0x0210
         L_0x01cf:
-            long r12 = r7.id     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            java.lang.Long r10 = java.lang.Long.valueOf(r12)     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            int r10 = r5.indexOf(r10)     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            long r12 = r7.id     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            java.lang.Long r12 = java.lang.Long.valueOf(r12)     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            int r12 = r6.indexOf(r12)     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
+            long r12 = r7.id     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            java.lang.Long r10 = java.lang.Long.valueOf(r12)     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            int r10 = r5.indexOf(r10)     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            long r12 = r7.id     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            java.lang.Long r12 = java.lang.Long.valueOf(r12)     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            int r12 = r6.indexOf(r12)     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
             r13 = -1
             if (r10 == r13) goto L_0x0207
             if (r12 == r13) goto L_0x0207
             if (r10 != r12) goto L_0x01f5
-            long r9 = r7.id     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            int r9 = r4.get(r9, r13)     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
+            long r9 = r7.id     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            int r9 = r4.get(r9, r13)     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
             if (r9 == r13) goto L_0x0207
-            r7.pinnedNum = r9     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
+            r7.pinnedNum = r9     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
             goto L_0x0207
         L_0x01f5:
-            java.lang.Object r9 = r5.get(r12)     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            java.lang.Long r9 = (java.lang.Long) r9     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            long r9 = r9.longValue()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            int r9 = r4.get(r9, r13)     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
+            java.lang.Object r9 = r5.get(r12)     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            java.lang.Long r9 = (java.lang.Long) r9     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            long r9 = r9.longValue()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            int r9 = r4.get(r9, r13)     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
             if (r9 == r13) goto L_0x0207
-            r7.pinnedNum = r9     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
+            r7.pinnedNum = r9     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
         L_0x0207:
-            int r9 = r7.pinnedNum     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
+            int r9 = r7.pinnedNum     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
             if (r9 != 0) goto L_0x0210
             int r9 = r3 - r2
             int r9 = r9 + r8
-            r7.pinnedNum = r9     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
+            r7.pinnedNum = r9     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
         L_0x0210:
             int r2 = r2 + 1
             r9 = 0
@@ -8248,36 +8277,36 @@ public class MessagesStorage extends BaseController {
             goto L_0x01ba
         L_0x0216:
             r2 = 0
-            r1.putDialogsInternal(r0, r2)     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
+            r1.putDialogsInternal(r0, r2)     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
             r5 = r35
             r6 = r36
             r7 = r37
             r8 = r38
-            r1.lambda$saveDiffParams$32(r5, r6, r7, r8)     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            org.telegram.messenger.UserConfig r3 = r32.getUserConfig()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            int r3 = r3.getTotalDialogsCount(r2)     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r2 = r0.dialogs     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            int r2 = r2.size()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
+            r1.lambda$saveDiffParams$32(r5, r6, r7, r8)     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            org.telegram.messenger.UserConfig r3 = r32.getUserConfig()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            int r3 = r3.getTotalDialogsCount(r2)     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r2 = r0.dialogs     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            int r2 = r2.size()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
             int r3 = r3 + r2
-            int r2 = r11.id     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            int r4 = r11.date     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            org.telegram.tgnet.TLRPC$Peer r9 = r11.peer_id     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            long r12 = r9.channel_id     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
+            int r2 = r11.id     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            int r4 = r11.date     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            org.telegram.tgnet.TLRPC$Peer r9 = r11.peer_id     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            long r12 = r9.channel_id     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
             r16 = 0
             int r10 = (r12 > r16 ? 1 : (r12 == r16 ? 0 : -1))
             if (r10 == 0) goto L_0x0269
             r9 = 0
         L_0x0243:
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Chat> r10 = r0.chats     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            int r10 = r10.size()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Chat> r10 = r0.chats     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            int r10 = r10.size()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
             if (r9 >= r10) goto L_0x025f
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Chat> r10 = r0.chats     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            java.lang.Object r10 = r10.get(r9)     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            org.telegram.tgnet.TLRPC$Chat r10 = (org.telegram.tgnet.TLRPC$Chat) r10     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            long r14 = r10.id     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Chat> r10 = r0.chats     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            java.lang.Object r10 = r10.get(r9)     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            org.telegram.tgnet.TLRPC$Chat r10 = (org.telegram.tgnet.TLRPC$Chat) r10     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            long r14 = r10.id     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
             int r18 = (r14 > r12 ? 1 : (r14 == r12 ? 0 : -1))
             if (r18 != 0) goto L_0x025c
-            long r9 = r10.access_hash     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
+            long r9 = r10.access_hash     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
             goto L_0x0261
         L_0x025c:
             int r9 = r9 + 1
@@ -8292,22 +8321,22 @@ public class MessagesStorage extends BaseController {
             r16 = 0
             goto L_0x02cc
         L_0x0269:
-            long r12 = r9.chat_id     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
+            long r12 = r9.chat_id     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
             r14 = 0
             int r10 = (r12 > r14 ? 1 : (r12 == r14 ? 0 : -1))
             if (r10 == 0) goto L_0x0299
             r9 = 0
         L_0x0272:
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Chat> r10 = r0.chats     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            int r10 = r10.size()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Chat> r10 = r0.chats     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            int r10 = r10.size()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
             if (r9 >= r10) goto L_0x028e
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Chat> r10 = r0.chats     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            java.lang.Object r10 = r10.get(r9)     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            org.telegram.tgnet.TLRPC$Chat r10 = (org.telegram.tgnet.TLRPC$Chat) r10     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            long r14 = r10.id     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Chat> r10 = r0.chats     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            java.lang.Object r10 = r10.get(r9)     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            org.telegram.tgnet.TLRPC$Chat r10 = (org.telegram.tgnet.TLRPC$Chat) r10     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            long r14 = r10.id     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
             int r18 = (r14 > r12 ? 1 : (r14 == r12 ? 0 : -1))
             if (r18 != 0) goto L_0x028b
-            long r9 = r10.access_hash     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
+            long r9 = r10.access_hash     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
             goto L_0x0290
         L_0x028b:
             int r9 = r9 + 1
@@ -8321,22 +8350,22 @@ public class MessagesStorage extends BaseController {
             r13 = 0
             goto L_0x02cc
         L_0x0299:
-            long r9 = r9.user_id     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
+            long r9 = r9.user_id     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
             r12 = 0
             int r14 = (r9 > r12 ? 1 : (r9 == r12 ? 0 : -1))
             if (r14 == 0) goto L_0x02c4
             r14 = 0
         L_0x02a2:
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r15 = r0.users     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            int r15 = r15.size()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r15 = r0.users     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            int r15 = r15.size()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
             if (r14 >= r15) goto L_0x02c6
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r15 = r0.users     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            java.lang.Object r15 = r15.get(r14)     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            org.telegram.tgnet.TLRPC$User r15 = (org.telegram.tgnet.TLRPC$User) r15     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            long r12 = r15.id     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r15 = r0.users     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            java.lang.Object r15 = r15.get(r14)     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            org.telegram.tgnet.TLRPC$User r15 = (org.telegram.tgnet.TLRPC$User) r15     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            long r12 = r15.id     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
             int r18 = (r12 > r9 ? 1 : (r12 == r9 ? 0 : -1))
             if (r18 != 0) goto L_0x02bf
-            long r12 = r15.access_hash     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
+            long r12 = r15.access_hash     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
             r30 = r12
             r13 = 0
             goto L_0x0266
@@ -8355,7 +8384,7 @@ public class MessagesStorage extends BaseController {
         L_0x02cd:
             r15 = 2
             if (r12 >= r15) goto L_0x02ef
-            org.telegram.messenger.UserConfig r18 = r32.getUserConfig()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
+            org.telegram.messenger.UserConfig r18 = r32.getUserConfig()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
             r19 = r12
             r20 = r2
             r21 = r4
@@ -8363,18 +8392,18 @@ public class MessagesStorage extends BaseController {
             r24 = r16
             r26 = r13
             r28 = r30
-            r18.setDialogsLoadOffset(r19, r20, r21, r22, r24, r26, r28)     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            org.telegram.messenger.UserConfig r15 = r32.getUserConfig()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            r15.setTotalDialogsCount(r12, r3)     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
+            r18.setDialogsLoadOffset(r19, r20, r21, r22, r24, r26, r28)     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            org.telegram.messenger.UserConfig r15 = r32.getUserConfig()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            r15.setTotalDialogsCount(r12, r3)     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
             int r12 = r12 + 1
             goto L_0x02cd
         L_0x02ef:
-            org.telegram.messenger.UserConfig r2 = r32.getUserConfig()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
+            org.telegram.messenger.UserConfig r2 = r32.getUserConfig()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
             r3 = 0
-            r2.draftsLoaded = r3     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            org.telegram.messenger.UserConfig r2 = r32.getUserConfig()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            r2.saveConfig(r3)     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
-            org.telegram.messenger.MessagesController r2 = r32.getMessagesController()     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
+            r2.draftsLoaded = r3     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            org.telegram.messenger.UserConfig r2 = r32.getUserConfig()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            r2.saveConfig(r3)     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
+            org.telegram.messenger.MessagesController r2 = r32.getMessagesController()     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
             r3 = r33
             r4 = r40
             r5 = r35
@@ -8384,46 +8413,51 @@ public class MessagesStorage extends BaseController {
             r9 = r41
             r10 = r42
             r11 = r39
-            r2.completeDialogsReset(r3, r4, r5, r6, r7, r8, r9, r10, r11)     // Catch:{ Exception -> 0x0325, all -> 0x0322 }
+            r2.completeDialogsReset(r3, r4, r5, r6, r7, r8, r9, r10, r11)     // Catch:{ Exception -> 0x0327, all -> 0x0324 }
             org.telegram.SQLite.SQLiteDatabase r0 = r1.database
+            if (r0 == 0) goto L_0x0338
             r0.commitTransaction()
-            goto L_0x0334
-        L_0x031c:
+            goto L_0x0338
+        L_0x031e:
             r0 = move-exception
             r12 = r7
-            goto L_0x0336
-        L_0x031f:
+            goto L_0x033a
+        L_0x0321:
             r0 = move-exception
             r12 = r7
-            goto L_0x0327
-        L_0x0322:
+            goto L_0x0329
+        L_0x0324:
             r0 = move-exception
             r12 = 0
-            goto L_0x0336
-        L_0x0325:
-            r0 = move-exception
-            r12 = 0
+            goto L_0x033a
         L_0x0327:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x0335 }
-            org.telegram.SQLite.SQLiteDatabase r0 = r1.database
-            r0.commitTransaction()
-            if (r12 == 0) goto L_0x0334
-            r12.dispose()
-        L_0x0334:
-            return
-        L_0x0335:
             r0 = move-exception
-        L_0x0336:
-            org.telegram.SQLite.SQLiteDatabase r2 = r1.database
-            r2.commitTransaction()
-            if (r12 == 0) goto L_0x0340
+            r12 = 0
+        L_0x0329:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x0339 }
+            org.telegram.SQLite.SQLiteDatabase r0 = r1.database
+            if (r0 == 0) goto L_0x0333
+            r0.commitTransaction()
+        L_0x0333:
+            if (r12 == 0) goto L_0x0338
             r12.dispose()
-        L_0x0340:
-            goto L_0x0342
+        L_0x0338:
+            return
+        L_0x0339:
+            r0 = move-exception
+        L_0x033a:
+            org.telegram.SQLite.SQLiteDatabase r2 = r1.database
+            if (r2 == 0) goto L_0x0341
+            r2.commitTransaction()
         L_0x0341:
+            if (r12 == 0) goto L_0x0346
+            r12.dispose()
+        L_0x0346:
+            goto L_0x0348
+        L_0x0347:
             throw r0
-        L_0x0342:
-            goto L_0x0341
+        L_0x0348:
+            goto L_0x0347
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$resetDialogs$69(org.telegram.tgnet.TLRPC$messages_Dialogs, int, int, int, int, int, org.telegram.tgnet.TLRPC$Message, int, androidx.collection.LongSparseArray, androidx.collection.LongSparseArray):void");
     }
@@ -9053,94 +9087,101 @@ public class MessagesStorage extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:26:0x009b  */
-    /* JADX WARNING: Removed duplicated region for block: B:29:0x00a6  */
-    /* JADX WARNING: Removed duplicated region for block: B:33:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:28:0x009a  */
+    /* JADX WARNING: Removed duplicated region for block: B:30:0x009f  */
+    /* JADX WARNING: Removed duplicated region for block: B:33:0x00a7  */
+    /* JADX WARNING: Removed duplicated region for block: B:35:0x00ac  */
+    /* JADX WARNING: Removed duplicated region for block: B:40:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public /* synthetic */ void lambda$updateMessageReactions$75(int r10, long r11, org.telegram.tgnet.TLRPC$TL_messageReactions r13) {
         /*
             r9 = this;
             r0 = 0
-            org.telegram.SQLite.SQLiteDatabase r1 = r9.database     // Catch:{ Exception -> 0x0090 }
-            r1.beginTransaction()     // Catch:{ Exception -> 0x0090 }
-            org.telegram.SQLite.SQLiteDatabase r1 = r9.database     // Catch:{ Exception -> 0x0090 }
-            java.util.Locale r2 = java.util.Locale.US     // Catch:{ Exception -> 0x0090 }
+            org.telegram.SQLite.SQLiteDatabase r1 = r9.database     // Catch:{ Exception -> 0x0092 }
+            r1.beginTransaction()     // Catch:{ Exception -> 0x0092 }
+            org.telegram.SQLite.SQLiteDatabase r1 = r9.database     // Catch:{ Exception -> 0x0092 }
+            java.util.Locale r2 = java.util.Locale.US     // Catch:{ Exception -> 0x0092 }
             java.lang.String r3 = "SELECT data FROM messages_v2 WHERE mid = %d AND uid = %d"
             r4 = 2
-            java.lang.Object[] r5 = new java.lang.Object[r4]     // Catch:{ Exception -> 0x0090 }
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r10)     // Catch:{ Exception -> 0x0090 }
+            java.lang.Object[] r5 = new java.lang.Object[r4]     // Catch:{ Exception -> 0x0092 }
+            java.lang.Integer r6 = java.lang.Integer.valueOf(r10)     // Catch:{ Exception -> 0x0092 }
             r7 = 0
-            r5[r7] = r6     // Catch:{ Exception -> 0x0090 }
-            java.lang.Long r6 = java.lang.Long.valueOf(r11)     // Catch:{ Exception -> 0x0090 }
+            r5[r7] = r6     // Catch:{ Exception -> 0x0092 }
+            java.lang.Long r6 = java.lang.Long.valueOf(r11)     // Catch:{ Exception -> 0x0092 }
             r8 = 1
-            r5[r8] = r6     // Catch:{ Exception -> 0x0090 }
-            java.lang.String r2 = java.lang.String.format(r2, r3, r5)     // Catch:{ Exception -> 0x0090 }
-            java.lang.Object[] r3 = new java.lang.Object[r7]     // Catch:{ Exception -> 0x0090 }
-            org.telegram.SQLite.SQLiteCursor r1 = r1.queryFinalized(r2, r3)     // Catch:{ Exception -> 0x0090 }
-            boolean r2 = r1.next()     // Catch:{ Exception -> 0x008b, all -> 0x0088 }
+            r5[r8] = r6     // Catch:{ Exception -> 0x0092 }
+            java.lang.String r2 = java.lang.String.format(r2, r3, r5)     // Catch:{ Exception -> 0x0092 }
+            java.lang.Object[] r3 = new java.lang.Object[r7]     // Catch:{ Exception -> 0x0092 }
+            org.telegram.SQLite.SQLiteCursor r1 = r1.queryFinalized(r2, r3)     // Catch:{ Exception -> 0x0092 }
+            boolean r2 = r1.next()     // Catch:{ Exception -> 0x008d, all -> 0x008a }
             if (r2 == 0) goto L_0x007a
-            org.telegram.tgnet.NativeByteBuffer r2 = r1.byteBufferValue(r7)     // Catch:{ Exception -> 0x008b, all -> 0x0088 }
+            org.telegram.tgnet.NativeByteBuffer r2 = r1.byteBufferValue(r7)     // Catch:{ Exception -> 0x008d, all -> 0x008a }
             if (r2 == 0) goto L_0x007a
-            int r3 = r2.readInt32(r7)     // Catch:{ Exception -> 0x008b, all -> 0x0088 }
-            org.telegram.tgnet.TLRPC$Message r3 = org.telegram.tgnet.TLRPC$Message.TLdeserialize(r2, r3, r7)     // Catch:{ Exception -> 0x008b, all -> 0x0088 }
+            int r3 = r2.readInt32(r7)     // Catch:{ Exception -> 0x008d, all -> 0x008a }
+            org.telegram.tgnet.TLRPC$Message r3 = org.telegram.tgnet.TLRPC$Message.TLdeserialize(r2, r3, r7)     // Catch:{ Exception -> 0x008d, all -> 0x008a }
             if (r3 == 0) goto L_0x0077
-            org.telegram.messenger.UserConfig r5 = r9.getUserConfig()     // Catch:{ Exception -> 0x008b, all -> 0x0088 }
-            long r5 = r5.clientUserId     // Catch:{ Exception -> 0x008b, all -> 0x0088 }
-            r3.readAttachPath(r2, r5)     // Catch:{ Exception -> 0x008b, all -> 0x0088 }
-            r2.reuse()     // Catch:{ Exception -> 0x008b, all -> 0x0088 }
-            org.telegram.messenger.MessageObject.updateReactions(r3, r13)     // Catch:{ Exception -> 0x008b, all -> 0x0088 }
-            org.telegram.SQLite.SQLiteDatabase r13 = r9.database     // Catch:{ Exception -> 0x008b, all -> 0x0088 }
+            org.telegram.messenger.UserConfig r5 = r9.getUserConfig()     // Catch:{ Exception -> 0x008d, all -> 0x008a }
+            long r5 = r5.clientUserId     // Catch:{ Exception -> 0x008d, all -> 0x008a }
+            r3.readAttachPath(r2, r5)     // Catch:{ Exception -> 0x008d, all -> 0x008a }
+            r2.reuse()     // Catch:{ Exception -> 0x008d, all -> 0x008a }
+            org.telegram.messenger.MessageObject.updateReactions(r3, r13)     // Catch:{ Exception -> 0x008d, all -> 0x008a }
+            org.telegram.SQLite.SQLiteDatabase r13 = r9.database     // Catch:{ Exception -> 0x008d, all -> 0x008a }
             java.lang.String r2 = "UPDATE messages_v2 SET data = ? WHERE mid = ? AND uid = ?"
-            org.telegram.SQLite.SQLitePreparedStatement r13 = r13.executeFast(r2)     // Catch:{ Exception -> 0x008b, all -> 0x0088 }
-            org.telegram.tgnet.NativeByteBuffer r2 = new org.telegram.tgnet.NativeByteBuffer     // Catch:{ Exception -> 0x008b, all -> 0x0088 }
-            int r5 = r3.getObjectSize()     // Catch:{ Exception -> 0x008b, all -> 0x0088 }
-            r2.<init>((int) r5)     // Catch:{ Exception -> 0x008b, all -> 0x0088 }
-            r3.serializeToStream(r2)     // Catch:{ Exception -> 0x008b, all -> 0x0088 }
-            r13.requery()     // Catch:{ Exception -> 0x008b, all -> 0x0088 }
-            r13.bindByteBuffer((int) r8, (org.telegram.tgnet.NativeByteBuffer) r2)     // Catch:{ Exception -> 0x008b, all -> 0x0088 }
-            r13.bindInteger(r4, r10)     // Catch:{ Exception -> 0x008b, all -> 0x0088 }
+            org.telegram.SQLite.SQLitePreparedStatement r13 = r13.executeFast(r2)     // Catch:{ Exception -> 0x008d, all -> 0x008a }
+            org.telegram.tgnet.NativeByteBuffer r2 = new org.telegram.tgnet.NativeByteBuffer     // Catch:{ Exception -> 0x008d, all -> 0x008a }
+            int r5 = r3.getObjectSize()     // Catch:{ Exception -> 0x008d, all -> 0x008a }
+            r2.<init>((int) r5)     // Catch:{ Exception -> 0x008d, all -> 0x008a }
+            r3.serializeToStream(r2)     // Catch:{ Exception -> 0x008d, all -> 0x008a }
+            r13.requery()     // Catch:{ Exception -> 0x008d, all -> 0x008a }
+            r13.bindByteBuffer((int) r8, (org.telegram.tgnet.NativeByteBuffer) r2)     // Catch:{ Exception -> 0x008d, all -> 0x008a }
+            r13.bindInteger(r4, r10)     // Catch:{ Exception -> 0x008d, all -> 0x008a }
             r10 = 3
-            r13.bindLong(r10, r11)     // Catch:{ Exception -> 0x008b, all -> 0x0088 }
-            r13.step()     // Catch:{ Exception -> 0x008b, all -> 0x0088 }
-            r2.reuse()     // Catch:{ Exception -> 0x008b, all -> 0x0088 }
-            r13.dispose()     // Catch:{ Exception -> 0x008b, all -> 0x0088 }
+            r13.bindLong(r10, r11)     // Catch:{ Exception -> 0x008d, all -> 0x008a }
+            r13.step()     // Catch:{ Exception -> 0x008d, all -> 0x008a }
+            r2.reuse()     // Catch:{ Exception -> 0x008d, all -> 0x008a }
+            r13.dispose()     // Catch:{ Exception -> 0x008d, all -> 0x008a }
             goto L_0x007a
         L_0x0077:
-            r2.reuse()     // Catch:{ Exception -> 0x008b, all -> 0x0088 }
+            r2.reuse()     // Catch:{ Exception -> 0x008d, all -> 0x008a }
         L_0x007a:
-            r1.dispose()     // Catch:{ Exception -> 0x008b, all -> 0x0088 }
-            org.telegram.SQLite.SQLiteDatabase r10 = r9.database     // Catch:{ Exception -> 0x0090 }
-            r10.commitTransaction()     // Catch:{ Exception -> 0x0090 }
+            r1.dispose()     // Catch:{ Exception -> 0x008d, all -> 0x008a }
+            org.telegram.SQLite.SQLiteDatabase r10 = r9.database     // Catch:{ Exception -> 0x0092 }
+            r10.commitTransaction()     // Catch:{ Exception -> 0x0092 }
             org.telegram.SQLite.SQLiteDatabase r10 = r9.database
+            if (r10 == 0) goto L_0x00a2
             r10.commitTransaction()
-            goto L_0x009e
-        L_0x0088:
+            goto L_0x00a2
+        L_0x008a:
             r10 = move-exception
             r0 = r1
-            goto L_0x009f
-        L_0x008b:
+            goto L_0x00a3
+        L_0x008d:
             r10 = move-exception
             r0 = r1
-            goto L_0x0091
-        L_0x008e:
-            r10 = move-exception
-            goto L_0x009f
+            goto L_0x0093
         L_0x0090:
             r10 = move-exception
-        L_0x0091:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r10)     // Catch:{ all -> 0x008e }
+            goto L_0x00a3
+        L_0x0092:
+            r10 = move-exception
+        L_0x0093:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r10)     // Catch:{ all -> 0x0090 }
             org.telegram.SQLite.SQLiteDatabase r10 = r9.database
+            if (r10 == 0) goto L_0x009d
             r10.commitTransaction()
-            if (r0 == 0) goto L_0x009e
+        L_0x009d:
+            if (r0 == 0) goto L_0x00a2
             r0.dispose()
-        L_0x009e:
+        L_0x00a2:
             return
-        L_0x009f:
+        L_0x00a3:
             org.telegram.SQLite.SQLiteDatabase r11 = r9.database
+            if (r11 == 0) goto L_0x00aa
             r11.commitTransaction()
-            if (r0 == 0) goto L_0x00a9
+        L_0x00aa:
+            if (r0 == 0) goto L_0x00af
             r0.dispose()
-        L_0x00a9:
+        L_0x00af:
             throw r10
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$updateMessageReactions$75(int, long, org.telegram.tgnet.TLRPC$TL_messageReactions):void");
@@ -9151,170 +9192,13 @@ public class MessagesStorage extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:24:0x0064  */
-    /* JADX WARNING: Removed duplicated region for block: B:27:0x006f  */
-    /* JADX WARNING: Removed duplicated region for block: B:31:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:26:0x0063  */
+    /* JADX WARNING: Removed duplicated region for block: B:28:0x0068  */
+    /* JADX WARNING: Removed duplicated region for block: B:31:0x0070  */
+    /* JADX WARNING: Removed duplicated region for block: B:33:0x0075  */
+    /* JADX WARNING: Removed duplicated region for block: B:38:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public /* synthetic */ void lambda$updateMessageVoiceTranscriptionOpen$76(int r5, long r6, org.telegram.tgnet.TLRPC$Message r8) {
-        /*
-            r4 = this;
-            r0 = 0
-            org.telegram.SQLite.SQLiteDatabase r1 = r4.database     // Catch:{ Exception -> 0x0059 }
-            r1.beginTransaction()     // Catch:{ Exception -> 0x0059 }
-            org.telegram.tgnet.TLRPC$Message r1 = r4.getMessageWithCustomParamsOnly(r5, r6)     // Catch:{ Exception -> 0x0059 }
-            boolean r2 = r8.voiceTranscriptionOpen     // Catch:{ Exception -> 0x0059 }
-            r1.voiceTranscriptionOpen = r2     // Catch:{ Exception -> 0x0059 }
-            boolean r2 = r8.voiceTranscriptionRated     // Catch:{ Exception -> 0x0059 }
-            r1.voiceTranscriptionRated = r2     // Catch:{ Exception -> 0x0059 }
-            boolean r2 = r8.voiceTranscriptionFinal     // Catch:{ Exception -> 0x0059 }
-            r1.voiceTranscriptionFinal = r2     // Catch:{ Exception -> 0x0059 }
-            long r2 = r8.voiceTranscriptionId     // Catch:{ Exception -> 0x0059 }
-            r1.voiceTranscriptionId = r2     // Catch:{ Exception -> 0x0059 }
-            org.telegram.SQLite.SQLiteDatabase r8 = r4.database     // Catch:{ Exception -> 0x0059 }
-            java.lang.String r2 = "UPDATE messages_v2 SET custom_params = ? WHERE mid = ? AND uid = ?"
-            org.telegram.SQLite.SQLitePreparedStatement r8 = r8.executeFast(r2)     // Catch:{ Exception -> 0x0059 }
-            r8.requery()     // Catch:{ Exception -> 0x0054, all -> 0x0051 }
-            org.telegram.tgnet.NativeByteBuffer r1 = org.telegram.messenger.MessageCustomParamsHelper.writeLocalParams(r1)     // Catch:{ Exception -> 0x0054, all -> 0x0051 }
-            r2 = 1
-            if (r1 == 0) goto L_0x0030
-            r8.bindByteBuffer((int) r2, (org.telegram.tgnet.NativeByteBuffer) r1)     // Catch:{ Exception -> 0x0054, all -> 0x0051 }
-            goto L_0x0033
-        L_0x0030:
-            r8.bindNull(r2)     // Catch:{ Exception -> 0x0054, all -> 0x0051 }
-        L_0x0033:
-            r2 = 2
-            r8.bindInteger(r2, r5)     // Catch:{ Exception -> 0x0054, all -> 0x0051 }
-            r5 = 3
-            r8.bindLong(r5, r6)     // Catch:{ Exception -> 0x0054, all -> 0x0051 }
-            r8.step()     // Catch:{ Exception -> 0x0054, all -> 0x0051 }
-            r8.dispose()     // Catch:{ Exception -> 0x0054, all -> 0x0051 }
-            if (r1 == 0) goto L_0x0046
-            r1.reuse()     // Catch:{ Exception -> 0x0059 }
-        L_0x0046:
-            org.telegram.SQLite.SQLiteDatabase r5 = r4.database     // Catch:{ Exception -> 0x0059 }
-            r5.commitTransaction()     // Catch:{ Exception -> 0x0059 }
-            org.telegram.SQLite.SQLiteDatabase r5 = r4.database
-            r5.commitTransaction()
-            goto L_0x0067
-        L_0x0051:
-            r5 = move-exception
-            r0 = r8
-            goto L_0x0068
-        L_0x0054:
-            r5 = move-exception
-            r0 = r8
-            goto L_0x005a
-        L_0x0057:
-            r5 = move-exception
-            goto L_0x0068
-        L_0x0059:
-            r5 = move-exception
-        L_0x005a:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r5)     // Catch:{ all -> 0x0057 }
-            org.telegram.SQLite.SQLiteDatabase r5 = r4.database
-            r5.commitTransaction()
-            if (r0 == 0) goto L_0x0067
-            r0.dispose()
-        L_0x0067:
-            return
-        L_0x0068:
-            org.telegram.SQLite.SQLiteDatabase r6 = r4.database
-            r6.commitTransaction()
-            if (r0 == 0) goto L_0x0072
-            r0.dispose()
-        L_0x0072:
-            throw r5
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$updateMessageVoiceTranscriptionOpen$76(int, long, org.telegram.tgnet.TLRPC$Message):void");
-    }
-
-    public void updateMessageVoiceTranscription(long j, int i, String str, long j2, boolean z) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda51(this, i, j, z, j2, str));
-    }
-
-    /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:24:0x005a  */
-    /* JADX WARNING: Removed duplicated region for block: B:27:0x0065  */
-    /* JADX WARNING: Removed duplicated region for block: B:31:? A[RETURN, SYNTHETIC] */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$updateMessageVoiceTranscription$77(int r3, long r4, boolean r6, long r7, java.lang.String r9) {
-        /*
-            r2 = this;
-            r0 = 0
-            org.telegram.SQLite.SQLiteDatabase r1 = r2.database     // Catch:{ Exception -> 0x004f }
-            r1.beginTransaction()     // Catch:{ Exception -> 0x004f }
-            org.telegram.tgnet.TLRPC$Message r1 = r2.getMessageWithCustomParamsOnly(r3, r4)     // Catch:{ Exception -> 0x004f }
-            r1.voiceTranscriptionFinal = r6     // Catch:{ Exception -> 0x004f }
-            r1.voiceTranscriptionId = r7     // Catch:{ Exception -> 0x004f }
-            r1.voiceTranscription = r9     // Catch:{ Exception -> 0x004f }
-            org.telegram.SQLite.SQLiteDatabase r6 = r2.database     // Catch:{ Exception -> 0x004f }
-            java.lang.String r7 = "UPDATE messages_v2 SET custom_params = ? WHERE mid = ? AND uid = ?"
-            org.telegram.SQLite.SQLitePreparedStatement r6 = r6.executeFast(r7)     // Catch:{ Exception -> 0x004f }
-            r6.requery()     // Catch:{ Exception -> 0x004a, all -> 0x0047 }
-            org.telegram.tgnet.NativeByteBuffer r7 = org.telegram.messenger.MessageCustomParamsHelper.writeLocalParams(r1)     // Catch:{ Exception -> 0x004a, all -> 0x0047 }
-            r8 = 1
-            if (r7 == 0) goto L_0x0026
-            r6.bindByteBuffer((int) r8, (org.telegram.tgnet.NativeByteBuffer) r7)     // Catch:{ Exception -> 0x004a, all -> 0x0047 }
-            goto L_0x0029
-        L_0x0026:
-            r6.bindNull(r8)     // Catch:{ Exception -> 0x004a, all -> 0x0047 }
-        L_0x0029:
-            r8 = 2
-            r6.bindInteger(r8, r3)     // Catch:{ Exception -> 0x004a, all -> 0x0047 }
-            r3 = 3
-            r6.bindLong(r3, r4)     // Catch:{ Exception -> 0x004a, all -> 0x0047 }
-            r6.step()     // Catch:{ Exception -> 0x004a, all -> 0x0047 }
-            r6.dispose()     // Catch:{ Exception -> 0x004a, all -> 0x0047 }
-            org.telegram.SQLite.SQLiteDatabase r3 = r2.database     // Catch:{ Exception -> 0x004f }
-            r3.commitTransaction()     // Catch:{ Exception -> 0x004f }
-            if (r7 == 0) goto L_0x0041
-            r7.reuse()     // Catch:{ Exception -> 0x004f }
-        L_0x0041:
-            org.telegram.SQLite.SQLiteDatabase r3 = r2.database
-            r3.commitTransaction()
-            goto L_0x005d
-        L_0x0047:
-            r3 = move-exception
-            r0 = r6
-            goto L_0x005e
-        L_0x004a:
-            r3 = move-exception
-            r0 = r6
-            goto L_0x0050
-        L_0x004d:
-            r3 = move-exception
-            goto L_0x005e
-        L_0x004f:
-            r3 = move-exception
-        L_0x0050:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r3)     // Catch:{ all -> 0x004d }
-            org.telegram.SQLite.SQLiteDatabase r3 = r2.database
-            r3.commitTransaction()
-            if (r0 == 0) goto L_0x005d
-            r0.dispose()
-        L_0x005d:
-            return
-        L_0x005e:
-            org.telegram.SQLite.SQLiteDatabase r4 = r2.database
-            r4.commitTransaction()
-            if (r0 == 0) goto L_0x0068
-            r0.dispose()
-        L_0x0068:
-            throw r3
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$updateMessageVoiceTranscription$77(int, long, boolean, long, java.lang.String):void");
-    }
-
-    public void updateMessageVoiceTranscription(long j, int i, String str, TLRPC$Message tLRPC$Message) {
-        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda49(this, i, j, tLRPC$Message, str));
-    }
-
-    /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:24:0x0066  */
-    /* JADX WARNING: Removed duplicated region for block: B:27:0x0071  */
-    /* JADX WARNING: Removed duplicated region for block: B:31:? A[RETURN, SYNTHETIC] */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$updateMessageVoiceTranscription$78(int r5, long r6, org.telegram.tgnet.TLRPC$Message r8, java.lang.String r9) {
         /*
             r4 = this;
             r0 = 0
@@ -9329,60 +9213,238 @@ public class MessagesStorage extends BaseController {
             r1.voiceTranscriptionFinal = r2     // Catch:{ Exception -> 0x005b }
             long r2 = r8.voiceTranscriptionId     // Catch:{ Exception -> 0x005b }
             r1.voiceTranscriptionId = r2     // Catch:{ Exception -> 0x005b }
-            r1.voiceTranscription = r9     // Catch:{ Exception -> 0x005b }
             org.telegram.SQLite.SQLiteDatabase r8 = r4.database     // Catch:{ Exception -> 0x005b }
-            java.lang.String r9 = "UPDATE messages_v2 SET custom_params = ? WHERE mid = ? AND uid = ?"
-            org.telegram.SQLite.SQLitePreparedStatement r8 = r8.executeFast(r9)     // Catch:{ Exception -> 0x005b }
+            java.lang.String r2 = "UPDATE messages_v2 SET custom_params = ? WHERE mid = ? AND uid = ?"
+            org.telegram.SQLite.SQLitePreparedStatement r8 = r8.executeFast(r2)     // Catch:{ Exception -> 0x005b }
             r8.requery()     // Catch:{ Exception -> 0x0056, all -> 0x0053 }
-            org.telegram.tgnet.NativeByteBuffer r9 = org.telegram.messenger.MessageCustomParamsHelper.writeLocalParams(r1)     // Catch:{ Exception -> 0x0056, all -> 0x0053 }
-            r1 = 1
-            if (r9 == 0) goto L_0x0032
-            r8.bindByteBuffer((int) r1, (org.telegram.tgnet.NativeByteBuffer) r9)     // Catch:{ Exception -> 0x0056, all -> 0x0053 }
-            goto L_0x0035
-        L_0x0032:
-            r8.bindNull(r1)     // Catch:{ Exception -> 0x0056, all -> 0x0053 }
-        L_0x0035:
-            r1 = 2
-            r8.bindInteger(r1, r5)     // Catch:{ Exception -> 0x0056, all -> 0x0053 }
+            org.telegram.tgnet.NativeByteBuffer r1 = org.telegram.messenger.MessageCustomParamsHelper.writeLocalParams(r1)     // Catch:{ Exception -> 0x0056, all -> 0x0053 }
+            r2 = 1
+            if (r1 == 0) goto L_0x0030
+            r8.bindByteBuffer((int) r2, (org.telegram.tgnet.NativeByteBuffer) r1)     // Catch:{ Exception -> 0x0056, all -> 0x0053 }
+            goto L_0x0033
+        L_0x0030:
+            r8.bindNull(r2)     // Catch:{ Exception -> 0x0056, all -> 0x0053 }
+        L_0x0033:
+            r2 = 2
+            r8.bindInteger(r2, r5)     // Catch:{ Exception -> 0x0056, all -> 0x0053 }
             r5 = 3
             r8.bindLong(r5, r6)     // Catch:{ Exception -> 0x0056, all -> 0x0053 }
             r8.step()     // Catch:{ Exception -> 0x0056, all -> 0x0053 }
             r8.dispose()     // Catch:{ Exception -> 0x0056, all -> 0x0053 }
+            if (r1 == 0) goto L_0x0046
+            r1.reuse()     // Catch:{ Exception -> 0x005b }
+        L_0x0046:
             org.telegram.SQLite.SQLiteDatabase r5 = r4.database     // Catch:{ Exception -> 0x005b }
             r5.commitTransaction()     // Catch:{ Exception -> 0x005b }
-            if (r9 == 0) goto L_0x004d
-            r9.reuse()     // Catch:{ Exception -> 0x005b }
-        L_0x004d:
             org.telegram.SQLite.SQLiteDatabase r5 = r4.database
+            if (r5 == 0) goto L_0x006b
             r5.commitTransaction()
-            goto L_0x0069
+            goto L_0x006b
         L_0x0053:
             r5 = move-exception
             r0 = r8
-            goto L_0x006a
+            goto L_0x006c
         L_0x0056:
             r5 = move-exception
             r0 = r8
             goto L_0x005c
         L_0x0059:
             r5 = move-exception
-            goto L_0x006a
+            goto L_0x006c
         L_0x005b:
             r5 = move-exception
         L_0x005c:
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r5)     // Catch:{ all -> 0x0059 }
             org.telegram.SQLite.SQLiteDatabase r5 = r4.database
+            if (r5 == 0) goto L_0x0066
             r5.commitTransaction()
-            if (r0 == 0) goto L_0x0069
+        L_0x0066:
+            if (r0 == 0) goto L_0x006b
             r0.dispose()
-        L_0x0069:
+        L_0x006b:
             return
-        L_0x006a:
+        L_0x006c:
             org.telegram.SQLite.SQLiteDatabase r6 = r4.database
+            if (r6 == 0) goto L_0x0073
             r6.commitTransaction()
-            if (r0 == 0) goto L_0x0074
+        L_0x0073:
+            if (r0 == 0) goto L_0x0078
             r0.dispose()
-        L_0x0074:
+        L_0x0078:
+            throw r5
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$updateMessageVoiceTranscriptionOpen$76(int, long, org.telegram.tgnet.TLRPC$Message):void");
+    }
+
+    public void updateMessageVoiceTranscription(long j, int i, String str, long j2, boolean z) {
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda51(this, i, j, z, j2, str));
+    }
+
+    /* access modifiers changed from: private */
+    /* JADX WARNING: Removed duplicated region for block: B:26:0x0059  */
+    /* JADX WARNING: Removed duplicated region for block: B:28:0x005e  */
+    /* JADX WARNING: Removed duplicated region for block: B:31:0x0066  */
+    /* JADX WARNING: Removed duplicated region for block: B:33:0x006b  */
+    /* JADX WARNING: Removed duplicated region for block: B:38:? A[RETURN, SYNTHETIC] */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public /* synthetic */ void lambda$updateMessageVoiceTranscription$77(int r3, long r4, boolean r6, long r7, java.lang.String r9) {
+        /*
+            r2 = this;
+            r0 = 0
+            org.telegram.SQLite.SQLiteDatabase r1 = r2.database     // Catch:{ Exception -> 0x0051 }
+            r1.beginTransaction()     // Catch:{ Exception -> 0x0051 }
+            org.telegram.tgnet.TLRPC$Message r1 = r2.getMessageWithCustomParamsOnly(r3, r4)     // Catch:{ Exception -> 0x0051 }
+            r1.voiceTranscriptionFinal = r6     // Catch:{ Exception -> 0x0051 }
+            r1.voiceTranscriptionId = r7     // Catch:{ Exception -> 0x0051 }
+            r1.voiceTranscription = r9     // Catch:{ Exception -> 0x0051 }
+            org.telegram.SQLite.SQLiteDatabase r6 = r2.database     // Catch:{ Exception -> 0x0051 }
+            java.lang.String r7 = "UPDATE messages_v2 SET custom_params = ? WHERE mid = ? AND uid = ?"
+            org.telegram.SQLite.SQLitePreparedStatement r6 = r6.executeFast(r7)     // Catch:{ Exception -> 0x0051 }
+            r6.requery()     // Catch:{ Exception -> 0x004c, all -> 0x0049 }
+            org.telegram.tgnet.NativeByteBuffer r7 = org.telegram.messenger.MessageCustomParamsHelper.writeLocalParams(r1)     // Catch:{ Exception -> 0x004c, all -> 0x0049 }
+            r8 = 1
+            if (r7 == 0) goto L_0x0026
+            r6.bindByteBuffer((int) r8, (org.telegram.tgnet.NativeByteBuffer) r7)     // Catch:{ Exception -> 0x004c, all -> 0x0049 }
+            goto L_0x0029
+        L_0x0026:
+            r6.bindNull(r8)     // Catch:{ Exception -> 0x004c, all -> 0x0049 }
+        L_0x0029:
+            r8 = 2
+            r6.bindInteger(r8, r3)     // Catch:{ Exception -> 0x004c, all -> 0x0049 }
+            r3 = 3
+            r6.bindLong(r3, r4)     // Catch:{ Exception -> 0x004c, all -> 0x0049 }
+            r6.step()     // Catch:{ Exception -> 0x004c, all -> 0x0049 }
+            r6.dispose()     // Catch:{ Exception -> 0x004c, all -> 0x0049 }
+            org.telegram.SQLite.SQLiteDatabase r3 = r2.database     // Catch:{ Exception -> 0x0051 }
+            r3.commitTransaction()     // Catch:{ Exception -> 0x0051 }
+            if (r7 == 0) goto L_0x0041
+            r7.reuse()     // Catch:{ Exception -> 0x0051 }
+        L_0x0041:
+            org.telegram.SQLite.SQLiteDatabase r3 = r2.database
+            if (r3 == 0) goto L_0x0061
+            r3.commitTransaction()
+            goto L_0x0061
+        L_0x0049:
+            r3 = move-exception
+            r0 = r6
+            goto L_0x0062
+        L_0x004c:
+            r3 = move-exception
+            r0 = r6
+            goto L_0x0052
+        L_0x004f:
+            r3 = move-exception
+            goto L_0x0062
+        L_0x0051:
+            r3 = move-exception
+        L_0x0052:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r3)     // Catch:{ all -> 0x004f }
+            org.telegram.SQLite.SQLiteDatabase r3 = r2.database
+            if (r3 == 0) goto L_0x005c
+            r3.commitTransaction()
+        L_0x005c:
+            if (r0 == 0) goto L_0x0061
+            r0.dispose()
+        L_0x0061:
+            return
+        L_0x0062:
+            org.telegram.SQLite.SQLiteDatabase r4 = r2.database
+            if (r4 == 0) goto L_0x0069
+            r4.commitTransaction()
+        L_0x0069:
+            if (r0 == 0) goto L_0x006e
+            r0.dispose()
+        L_0x006e:
+            throw r3
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$updateMessageVoiceTranscription$77(int, long, boolean, long, java.lang.String):void");
+    }
+
+    public void updateMessageVoiceTranscription(long j, int i, String str, TLRPC$Message tLRPC$Message) {
+        this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda49(this, i, j, tLRPC$Message, str));
+    }
+
+    /* access modifiers changed from: private */
+    /* JADX WARNING: Removed duplicated region for block: B:26:0x0065  */
+    /* JADX WARNING: Removed duplicated region for block: B:28:0x006a  */
+    /* JADX WARNING: Removed duplicated region for block: B:31:0x0072  */
+    /* JADX WARNING: Removed duplicated region for block: B:33:0x0077  */
+    /* JADX WARNING: Removed duplicated region for block: B:38:? A[RETURN, SYNTHETIC] */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public /* synthetic */ void lambda$updateMessageVoiceTranscription$78(int r5, long r6, org.telegram.tgnet.TLRPC$Message r8, java.lang.String r9) {
+        /*
+            r4 = this;
+            r0 = 0
+            org.telegram.SQLite.SQLiteDatabase r1 = r4.database     // Catch:{ Exception -> 0x005d }
+            r1.beginTransaction()     // Catch:{ Exception -> 0x005d }
+            org.telegram.tgnet.TLRPC$Message r1 = r4.getMessageWithCustomParamsOnly(r5, r6)     // Catch:{ Exception -> 0x005d }
+            boolean r2 = r8.voiceTranscriptionOpen     // Catch:{ Exception -> 0x005d }
+            r1.voiceTranscriptionOpen = r2     // Catch:{ Exception -> 0x005d }
+            boolean r2 = r8.voiceTranscriptionRated     // Catch:{ Exception -> 0x005d }
+            r1.voiceTranscriptionRated = r2     // Catch:{ Exception -> 0x005d }
+            boolean r2 = r8.voiceTranscriptionFinal     // Catch:{ Exception -> 0x005d }
+            r1.voiceTranscriptionFinal = r2     // Catch:{ Exception -> 0x005d }
+            long r2 = r8.voiceTranscriptionId     // Catch:{ Exception -> 0x005d }
+            r1.voiceTranscriptionId = r2     // Catch:{ Exception -> 0x005d }
+            r1.voiceTranscription = r9     // Catch:{ Exception -> 0x005d }
+            org.telegram.SQLite.SQLiteDatabase r8 = r4.database     // Catch:{ Exception -> 0x005d }
+            java.lang.String r9 = "UPDATE messages_v2 SET custom_params = ? WHERE mid = ? AND uid = ?"
+            org.telegram.SQLite.SQLitePreparedStatement r8 = r8.executeFast(r9)     // Catch:{ Exception -> 0x005d }
+            r8.requery()     // Catch:{ Exception -> 0x0058, all -> 0x0055 }
+            org.telegram.tgnet.NativeByteBuffer r9 = org.telegram.messenger.MessageCustomParamsHelper.writeLocalParams(r1)     // Catch:{ Exception -> 0x0058, all -> 0x0055 }
+            r1 = 1
+            if (r9 == 0) goto L_0x0032
+            r8.bindByteBuffer((int) r1, (org.telegram.tgnet.NativeByteBuffer) r9)     // Catch:{ Exception -> 0x0058, all -> 0x0055 }
+            goto L_0x0035
+        L_0x0032:
+            r8.bindNull(r1)     // Catch:{ Exception -> 0x0058, all -> 0x0055 }
+        L_0x0035:
+            r1 = 2
+            r8.bindInteger(r1, r5)     // Catch:{ Exception -> 0x0058, all -> 0x0055 }
+            r5 = 3
+            r8.bindLong(r5, r6)     // Catch:{ Exception -> 0x0058, all -> 0x0055 }
+            r8.step()     // Catch:{ Exception -> 0x0058, all -> 0x0055 }
+            r8.dispose()     // Catch:{ Exception -> 0x0058, all -> 0x0055 }
+            org.telegram.SQLite.SQLiteDatabase r5 = r4.database     // Catch:{ Exception -> 0x005d }
+            r5.commitTransaction()     // Catch:{ Exception -> 0x005d }
+            if (r9 == 0) goto L_0x004d
+            r9.reuse()     // Catch:{ Exception -> 0x005d }
+        L_0x004d:
+            org.telegram.SQLite.SQLiteDatabase r5 = r4.database
+            if (r5 == 0) goto L_0x006d
+            r5.commitTransaction()
+            goto L_0x006d
+        L_0x0055:
+            r5 = move-exception
+            r0 = r8
+            goto L_0x006e
+        L_0x0058:
+            r5 = move-exception
+            r0 = r8
+            goto L_0x005e
+        L_0x005b:
+            r5 = move-exception
+            goto L_0x006e
+        L_0x005d:
+            r5 = move-exception
+        L_0x005e:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r5)     // Catch:{ all -> 0x005b }
+            org.telegram.SQLite.SQLiteDatabase r5 = r4.database
+            if (r5 == 0) goto L_0x0068
+            r5.commitTransaction()
+        L_0x0068:
+            if (r0 == 0) goto L_0x006d
+            r0.dispose()
+        L_0x006d:
+            return
+        L_0x006e:
+            org.telegram.SQLite.SQLiteDatabase r6 = r4.database
+            if (r6 == 0) goto L_0x0075
+            r6.commitTransaction()
+        L_0x0075:
+            if (r0 == 0) goto L_0x007a
+            r0.dispose()
+        L_0x007a:
             throw r5
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$updateMessageVoiceTranscription$78(int, long, org.telegram.tgnet.TLRPC$Message, java.lang.String):void");
@@ -9393,73 +9455,80 @@ public class MessagesStorage extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:24:0x005b  */
-    /* JADX WARNING: Removed duplicated region for block: B:27:0x0066  */
-    /* JADX WARNING: Removed duplicated region for block: B:31:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:26:0x005a  */
+    /* JADX WARNING: Removed duplicated region for block: B:28:0x005f  */
+    /* JADX WARNING: Removed duplicated region for block: B:31:0x0067  */
+    /* JADX WARNING: Removed duplicated region for block: B:33:0x006c  */
+    /* JADX WARNING: Removed duplicated region for block: B:38:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public /* synthetic */ void lambda$updateMessageCustomParams$79(org.telegram.tgnet.TLRPC$Message r5, long r6) {
         /*
             r4 = this;
             r0 = 0
-            org.telegram.SQLite.SQLiteDatabase r1 = r4.database     // Catch:{ Exception -> 0x0050 }
-            r1.beginTransaction()     // Catch:{ Exception -> 0x0050 }
-            int r1 = r5.id     // Catch:{ Exception -> 0x0050 }
-            org.telegram.tgnet.TLRPC$Message r1 = r4.getMessageWithCustomParamsOnly(r1, r6)     // Catch:{ Exception -> 0x0050 }
-            org.telegram.messenger.MessageCustomParamsHelper.copyParams(r5, r1)     // Catch:{ Exception -> 0x0050 }
-            org.telegram.SQLite.SQLiteDatabase r2 = r4.database     // Catch:{ Exception -> 0x0050 }
+            org.telegram.SQLite.SQLiteDatabase r1 = r4.database     // Catch:{ Exception -> 0x0052 }
+            r1.beginTransaction()     // Catch:{ Exception -> 0x0052 }
+            int r1 = r5.id     // Catch:{ Exception -> 0x0052 }
+            org.telegram.tgnet.TLRPC$Message r1 = r4.getMessageWithCustomParamsOnly(r1, r6)     // Catch:{ Exception -> 0x0052 }
+            org.telegram.messenger.MessageCustomParamsHelper.copyParams(r5, r1)     // Catch:{ Exception -> 0x0052 }
+            org.telegram.SQLite.SQLiteDatabase r2 = r4.database     // Catch:{ Exception -> 0x0052 }
             java.lang.String r3 = "UPDATE messages_v2 SET custom_params = ? WHERE mid = ? AND uid = ?"
-            org.telegram.SQLite.SQLitePreparedStatement r2 = r2.executeFast(r3)     // Catch:{ Exception -> 0x0050 }
-            r2.requery()     // Catch:{ Exception -> 0x004b, all -> 0x0048 }
-            org.telegram.tgnet.NativeByteBuffer r1 = org.telegram.messenger.MessageCustomParamsHelper.writeLocalParams(r1)     // Catch:{ Exception -> 0x004b, all -> 0x0048 }
+            org.telegram.SQLite.SQLitePreparedStatement r2 = r2.executeFast(r3)     // Catch:{ Exception -> 0x0052 }
+            r2.requery()     // Catch:{ Exception -> 0x004d, all -> 0x004a }
+            org.telegram.tgnet.NativeByteBuffer r1 = org.telegram.messenger.MessageCustomParamsHelper.writeLocalParams(r1)     // Catch:{ Exception -> 0x004d, all -> 0x004a }
             r3 = 1
             if (r1 == 0) goto L_0x0025
-            r2.bindByteBuffer((int) r3, (org.telegram.tgnet.NativeByteBuffer) r1)     // Catch:{ Exception -> 0x004b, all -> 0x0048 }
+            r2.bindByteBuffer((int) r3, (org.telegram.tgnet.NativeByteBuffer) r1)     // Catch:{ Exception -> 0x004d, all -> 0x004a }
             goto L_0x0028
         L_0x0025:
-            r2.bindNull(r3)     // Catch:{ Exception -> 0x004b, all -> 0x0048 }
+            r2.bindNull(r3)     // Catch:{ Exception -> 0x004d, all -> 0x004a }
         L_0x0028:
             r3 = 2
-            int r5 = r5.id     // Catch:{ Exception -> 0x004b, all -> 0x0048 }
-            r2.bindInteger(r3, r5)     // Catch:{ Exception -> 0x004b, all -> 0x0048 }
+            int r5 = r5.id     // Catch:{ Exception -> 0x004d, all -> 0x004a }
+            r2.bindInteger(r3, r5)     // Catch:{ Exception -> 0x004d, all -> 0x004a }
             r5 = 3
-            r2.bindLong(r5, r6)     // Catch:{ Exception -> 0x004b, all -> 0x0048 }
-            r2.step()     // Catch:{ Exception -> 0x004b, all -> 0x0048 }
-            r2.dispose()     // Catch:{ Exception -> 0x004b, all -> 0x0048 }
-            org.telegram.SQLite.SQLiteDatabase r5 = r4.database     // Catch:{ Exception -> 0x0050 }
-            r5.commitTransaction()     // Catch:{ Exception -> 0x0050 }
+            r2.bindLong(r5, r6)     // Catch:{ Exception -> 0x004d, all -> 0x004a }
+            r2.step()     // Catch:{ Exception -> 0x004d, all -> 0x004a }
+            r2.dispose()     // Catch:{ Exception -> 0x004d, all -> 0x004a }
+            org.telegram.SQLite.SQLiteDatabase r5 = r4.database     // Catch:{ Exception -> 0x0052 }
+            r5.commitTransaction()     // Catch:{ Exception -> 0x0052 }
             if (r1 == 0) goto L_0x0042
-            r1.reuse()     // Catch:{ Exception -> 0x0050 }
+            r1.reuse()     // Catch:{ Exception -> 0x0052 }
         L_0x0042:
             org.telegram.SQLite.SQLiteDatabase r5 = r4.database
+            if (r5 == 0) goto L_0x0062
             r5.commitTransaction()
-            goto L_0x005e
-        L_0x0048:
+            goto L_0x0062
+        L_0x004a:
             r5 = move-exception
             r0 = r2
-            goto L_0x005f
-        L_0x004b:
+            goto L_0x0063
+        L_0x004d:
             r5 = move-exception
             r0 = r2
-            goto L_0x0051
-        L_0x004e:
-            r5 = move-exception
-            goto L_0x005f
+            goto L_0x0053
         L_0x0050:
             r5 = move-exception
-        L_0x0051:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r5)     // Catch:{ all -> 0x004e }
+            goto L_0x0063
+        L_0x0052:
+            r5 = move-exception
+        L_0x0053:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r5)     // Catch:{ all -> 0x0050 }
             org.telegram.SQLite.SQLiteDatabase r5 = r4.database
+            if (r5 == 0) goto L_0x005d
             r5.commitTransaction()
-            if (r0 == 0) goto L_0x005e
+        L_0x005d:
+            if (r0 == 0) goto L_0x0062
             r0.dispose()
-        L_0x005e:
+        L_0x0062:
             return
-        L_0x005f:
+        L_0x0063:
             org.telegram.SQLite.SQLiteDatabase r6 = r4.database
+            if (r6 == 0) goto L_0x006a
             r6.commitTransaction()
-            if (r0 == 0) goto L_0x0069
+        L_0x006a:
+            if (r0 == 0) goto L_0x006f
             r0.dispose()
-        L_0x0069:
+        L_0x006f:
             throw r5
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$updateMessageCustomParams$79(org.telegram.tgnet.TLRPC$Message, long):void");
@@ -9977,11 +10046,13 @@ public class MessagesStorage extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:62:0x015c  */
-    /* JADX WARNING: Removed duplicated region for block: B:64:0x0161  */
-    /* JADX WARNING: Removed duplicated region for block: B:68:0x016d  */
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x0172  */
-    /* JADX WARNING: Removed duplicated region for block: B:80:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:64:0x015b  */
+    /* JADX WARNING: Removed duplicated region for block: B:66:0x0160  */
+    /* JADX WARNING: Removed duplicated region for block: B:68:0x0165  */
+    /* JADX WARNING: Removed duplicated region for block: B:72:0x016e  */
+    /* JADX WARNING: Removed duplicated region for block: B:74:0x0173  */
+    /* JADX WARNING: Removed duplicated region for block: B:76:0x0178  */
+    /* JADX WARNING: Removed duplicated region for block: B:87:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public /* synthetic */ void lambda$createTaskForSecretChat$87(int r18, java.util.ArrayList r19, int r20, int r21, int r22) {
         /*
@@ -9990,89 +10061,89 @@ public class MessagesStorage extends BaseController {
             r0 = r19
             r2 = r18
             long r2 = (long) r2
-            long r2 = org.telegram.messenger.DialogObject.makeEncryptedDialogId(r2)     // Catch:{ Exception -> 0x014f, all -> 0x014b }
-            android.util.SparseArray r6 = new android.util.SparseArray     // Catch:{ Exception -> 0x014f, all -> 0x014b }
-            r6.<init>()     // Catch:{ Exception -> 0x014f, all -> 0x014b }
-            java.util.ArrayList r7 = new java.util.ArrayList     // Catch:{ Exception -> 0x014f, all -> 0x014b }
-            r7.<init>()     // Catch:{ Exception -> 0x014f, all -> 0x014b }
-            java.lang.StringBuilder r8 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x014f, all -> 0x014b }
-            r8.<init>()     // Catch:{ Exception -> 0x014f, all -> 0x014b }
+            long r2 = org.telegram.messenger.DialogObject.makeEncryptedDialogId(r2)     // Catch:{ Exception -> 0x0151, all -> 0x014d }
+            android.util.SparseArray r6 = new android.util.SparseArray     // Catch:{ Exception -> 0x0151, all -> 0x014d }
+            r6.<init>()     // Catch:{ Exception -> 0x0151, all -> 0x014d }
+            java.util.ArrayList r7 = new java.util.ArrayList     // Catch:{ Exception -> 0x0151, all -> 0x014d }
+            r7.<init>()     // Catch:{ Exception -> 0x0151, all -> 0x014d }
+            java.lang.StringBuilder r8 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0151, all -> 0x014d }
+            r8.<init>()     // Catch:{ Exception -> 0x0151, all -> 0x014d }
             r9 = 3
             java.lang.String r10 = ","
             r11 = 2
             r12 = 1
             r13 = 0
             if (r0 != 0) goto L_0x0047
-            org.telegram.SQLite.SQLiteDatabase r14 = r1.database     // Catch:{ Exception -> 0x014f, all -> 0x014b }
-            java.util.Locale r15 = java.util.Locale.US     // Catch:{ Exception -> 0x014f, all -> 0x014b }
+            org.telegram.SQLite.SQLiteDatabase r14 = r1.database     // Catch:{ Exception -> 0x0151, all -> 0x014d }
+            java.util.Locale r15 = java.util.Locale.US     // Catch:{ Exception -> 0x0151, all -> 0x014d }
             java.lang.String r4 = "SELECT mid, ttl FROM messages_v2 WHERE uid = %d AND out = %d AND read_state > 0 AND ttl > 0 AND date <= %d AND send_state = 0 AND media != 1"
-            java.lang.Object[] r5 = new java.lang.Object[r9]     // Catch:{ Exception -> 0x014f, all -> 0x014b }
-            java.lang.Long r16 = java.lang.Long.valueOf(r2)     // Catch:{ Exception -> 0x014f, all -> 0x014b }
-            r5[r13] = r16     // Catch:{ Exception -> 0x014f, all -> 0x014b }
-            java.lang.Integer r16 = java.lang.Integer.valueOf(r20)     // Catch:{ Exception -> 0x014f, all -> 0x014b }
-            r5[r12] = r16     // Catch:{ Exception -> 0x014f, all -> 0x014b }
-            java.lang.Integer r16 = java.lang.Integer.valueOf(r21)     // Catch:{ Exception -> 0x014f, all -> 0x014b }
-            r5[r11] = r16     // Catch:{ Exception -> 0x014f, all -> 0x014b }
-            java.lang.String r4 = java.lang.String.format(r15, r4, r5)     // Catch:{ Exception -> 0x014f, all -> 0x014b }
-            java.lang.Object[] r5 = new java.lang.Object[r13]     // Catch:{ Exception -> 0x014f, all -> 0x014b }
-            org.telegram.SQLite.SQLiteCursor r4 = r14.queryFinalized(r4, r5)     // Catch:{ Exception -> 0x014f, all -> 0x014b }
+            java.lang.Object[] r5 = new java.lang.Object[r9]     // Catch:{ Exception -> 0x0151, all -> 0x014d }
+            java.lang.Long r16 = java.lang.Long.valueOf(r2)     // Catch:{ Exception -> 0x0151, all -> 0x014d }
+            r5[r13] = r16     // Catch:{ Exception -> 0x0151, all -> 0x014d }
+            java.lang.Integer r16 = java.lang.Integer.valueOf(r20)     // Catch:{ Exception -> 0x0151, all -> 0x014d }
+            r5[r12] = r16     // Catch:{ Exception -> 0x0151, all -> 0x014d }
+            java.lang.Integer r16 = java.lang.Integer.valueOf(r21)     // Catch:{ Exception -> 0x0151, all -> 0x014d }
+            r5[r11] = r16     // Catch:{ Exception -> 0x0151, all -> 0x014d }
+            java.lang.String r4 = java.lang.String.format(r15, r4, r5)     // Catch:{ Exception -> 0x0151, all -> 0x014d }
+            java.lang.Object[] r5 = new java.lang.Object[r13]     // Catch:{ Exception -> 0x0151, all -> 0x014d }
+            org.telegram.SQLite.SQLiteCursor r4 = r14.queryFinalized(r4, r5)     // Catch:{ Exception -> 0x0151, all -> 0x014d }
             goto L_0x005f
         L_0x0047:
-            java.lang.String r4 = android.text.TextUtils.join(r10, r0)     // Catch:{ Exception -> 0x014f, all -> 0x014b }
-            org.telegram.SQLite.SQLiteDatabase r5 = r1.database     // Catch:{ Exception -> 0x014f, all -> 0x014b }
-            java.util.Locale r14 = java.util.Locale.US     // Catch:{ Exception -> 0x014f, all -> 0x014b }
+            java.lang.String r4 = android.text.TextUtils.join(r10, r0)     // Catch:{ Exception -> 0x0151, all -> 0x014d }
+            org.telegram.SQLite.SQLiteDatabase r5 = r1.database     // Catch:{ Exception -> 0x0151, all -> 0x014d }
+            java.util.Locale r14 = java.util.Locale.US     // Catch:{ Exception -> 0x0151, all -> 0x014d }
             java.lang.String r15 = "SELECT m.mid, m.ttl FROM messages_v2 as m INNER JOIN randoms_v2 as r ON m.mid = r.mid AND m.uid = r.uid WHERE r.random_id IN (%s)"
-            java.lang.Object[] r9 = new java.lang.Object[r12]     // Catch:{ Exception -> 0x014f, all -> 0x014b }
-            r9[r13] = r4     // Catch:{ Exception -> 0x014f, all -> 0x014b }
-            java.lang.String r4 = java.lang.String.format(r14, r15, r9)     // Catch:{ Exception -> 0x014f, all -> 0x014b }
-            java.lang.Object[] r9 = new java.lang.Object[r13]     // Catch:{ Exception -> 0x014f, all -> 0x014b }
-            org.telegram.SQLite.SQLiteCursor r4 = r5.queryFinalized(r4, r9)     // Catch:{ Exception -> 0x014f, all -> 0x014b }
+            java.lang.Object[] r9 = new java.lang.Object[r12]     // Catch:{ Exception -> 0x0151, all -> 0x014d }
+            r9[r13] = r4     // Catch:{ Exception -> 0x0151, all -> 0x014d }
+            java.lang.String r4 = java.lang.String.format(r14, r15, r9)     // Catch:{ Exception -> 0x0151, all -> 0x014d }
+            java.lang.Object[] r9 = new java.lang.Object[r13]     // Catch:{ Exception -> 0x0151, all -> 0x014d }
+            org.telegram.SQLite.SQLiteCursor r4 = r5.queryFinalized(r4, r9)     // Catch:{ Exception -> 0x0151, all -> 0x014d }
         L_0x005f:
             r5 = 2147483647(0x7fffffff, float:NaN)
         L_0x0062:
-            boolean r9 = r4.next()     // Catch:{ Exception -> 0x0148, all -> 0x0145 }
+            boolean r9 = r4.next()     // Catch:{ Exception -> 0x014a, all -> 0x0147 }
             if (r9 == 0) goto L_0x00a9
-            int r9 = r4.intValue(r12)     // Catch:{ Exception -> 0x0148, all -> 0x0145 }
-            int r14 = r4.intValue(r13)     // Catch:{ Exception -> 0x0148, all -> 0x0145 }
+            int r9 = r4.intValue(r12)     // Catch:{ Exception -> 0x014a, all -> 0x0147 }
+            int r14 = r4.intValue(r13)     // Catch:{ Exception -> 0x014a, all -> 0x0147 }
             if (r0 == 0) goto L_0x0079
-            java.lang.Integer r15 = java.lang.Integer.valueOf(r14)     // Catch:{ Exception -> 0x0148, all -> 0x0145 }
-            r7.add(r15)     // Catch:{ Exception -> 0x0148, all -> 0x0145 }
+            java.lang.Integer r15 = java.lang.Integer.valueOf(r14)     // Catch:{ Exception -> 0x014a, all -> 0x0147 }
+            r7.add(r15)     // Catch:{ Exception -> 0x014a, all -> 0x0147 }
         L_0x0079:
             if (r9 > 0) goto L_0x007c
             goto L_0x0062
         L_0x007c:
-            int r15 = java.lang.Math.max(r21, r22)     // Catch:{ Exception -> 0x0148, all -> 0x0145 }
+            int r15 = java.lang.Math.max(r21, r22)     // Catch:{ Exception -> 0x014a, all -> 0x0147 }
             int r15 = r15 + r9
-            int r5 = java.lang.Math.min(r5, r15)     // Catch:{ Exception -> 0x0148, all -> 0x0145 }
-            java.lang.Object r9 = r6.get(r15)     // Catch:{ Exception -> 0x0148, all -> 0x0145 }
-            java.util.ArrayList r9 = (java.util.ArrayList) r9     // Catch:{ Exception -> 0x0148, all -> 0x0145 }
+            int r5 = java.lang.Math.min(r5, r15)     // Catch:{ Exception -> 0x014a, all -> 0x0147 }
+            java.lang.Object r9 = r6.get(r15)     // Catch:{ Exception -> 0x014a, all -> 0x0147 }
+            java.util.ArrayList r9 = (java.util.ArrayList) r9     // Catch:{ Exception -> 0x014a, all -> 0x0147 }
             if (r9 != 0) goto L_0x0095
-            java.util.ArrayList r9 = new java.util.ArrayList     // Catch:{ Exception -> 0x0148, all -> 0x0145 }
-            r9.<init>()     // Catch:{ Exception -> 0x0148, all -> 0x0145 }
-            r6.put(r15, r9)     // Catch:{ Exception -> 0x0148, all -> 0x0145 }
+            java.util.ArrayList r9 = new java.util.ArrayList     // Catch:{ Exception -> 0x014a, all -> 0x0147 }
+            r9.<init>()     // Catch:{ Exception -> 0x014a, all -> 0x0147 }
+            r6.put(r15, r9)     // Catch:{ Exception -> 0x014a, all -> 0x0147 }
         L_0x0095:
-            int r15 = r8.length()     // Catch:{ Exception -> 0x0148, all -> 0x0145 }
+            int r15 = r8.length()     // Catch:{ Exception -> 0x014a, all -> 0x0147 }
             if (r15 == 0) goto L_0x009e
-            r8.append(r10)     // Catch:{ Exception -> 0x0148, all -> 0x0145 }
+            r8.append(r10)     // Catch:{ Exception -> 0x014a, all -> 0x0147 }
         L_0x009e:
-            r8.append(r14)     // Catch:{ Exception -> 0x0148, all -> 0x0145 }
-            java.lang.Integer r14 = java.lang.Integer.valueOf(r14)     // Catch:{ Exception -> 0x0148, all -> 0x0145 }
-            r9.add(r14)     // Catch:{ Exception -> 0x0148, all -> 0x0145 }
+            r8.append(r14)     // Catch:{ Exception -> 0x014a, all -> 0x0147 }
+            java.lang.Integer r14 = java.lang.Integer.valueOf(r14)     // Catch:{ Exception -> 0x014a, all -> 0x0147 }
+            r9.add(r14)     // Catch:{ Exception -> 0x014a, all -> 0x0147 }
             goto L_0x0062
         L_0x00a9:
-            r4.dispose()     // Catch:{ Exception -> 0x0148, all -> 0x0145 }
+            r4.dispose()     // Catch:{ Exception -> 0x014a, all -> 0x0147 }
             if (r0 == 0) goto L_0x00b6
-            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda94 r0 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda94     // Catch:{ Exception -> 0x014f, all -> 0x014b }
-            r0.<init>(r1, r2, r7)     // Catch:{ Exception -> 0x014f, all -> 0x014b }
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)     // Catch:{ Exception -> 0x014f, all -> 0x014b }
+            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda94 r0 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda94     // Catch:{ Exception -> 0x0151, all -> 0x014d }
+            r0.<init>(r1, r2, r7)     // Catch:{ Exception -> 0x0151, all -> 0x014d }
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)     // Catch:{ Exception -> 0x0151, all -> 0x014d }
         L_0x00b6:
-            int r0 = r6.size()     // Catch:{ Exception -> 0x014f, all -> 0x014b }
+            int r0 = r6.size()     // Catch:{ Exception -> 0x0151, all -> 0x014d }
             if (r0 == 0) goto L_0x013f
-            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x014f, all -> 0x014b }
-            r0.beginTransaction()     // Catch:{ Exception -> 0x014f, all -> 0x014b }
-            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x014f, all -> 0x014b }
+            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x0151, all -> 0x014d }
+            r0.beginTransaction()     // Catch:{ Exception -> 0x0151, all -> 0x014d }
+            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x0151, all -> 0x014d }
             java.lang.String r4 = "REPLACE INTO enc_tasks_v4 VALUES(?, ?, ?, ?)"
-            org.telegram.SQLite.SQLitePreparedStatement r4 = r0.executeFast(r4)     // Catch:{ Exception -> 0x014f, all -> 0x014b }
+            org.telegram.SQLite.SQLitePreparedStatement r4 = r0.executeFast(r4)     // Catch:{ Exception -> 0x0151, all -> 0x014d }
             r0 = 0
         L_0x00ca:
             int r7 = r6.size()     // Catch:{ Exception -> 0x013c, all -> 0x0139 }
@@ -10103,81 +10174,86 @@ public class MessagesStorage extends BaseController {
             goto L_0x00ca
         L_0x0106:
             r4.dispose()     // Catch:{ Exception -> 0x013c, all -> 0x0139 }
-            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x014f, all -> 0x014b }
-            r0.commitTransaction()     // Catch:{ Exception -> 0x014f, all -> 0x014b }
-            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x014f, all -> 0x014b }
-            java.util.Locale r4 = java.util.Locale.US     // Catch:{ Exception -> 0x014f, all -> 0x014b }
+            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x0151, all -> 0x014d }
+            r0.commitTransaction()     // Catch:{ Exception -> 0x0151, all -> 0x014d }
+            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x0151, all -> 0x014d }
+            java.util.Locale r4 = java.util.Locale.US     // Catch:{ Exception -> 0x0151, all -> 0x014d }
             java.lang.String r7 = "UPDATE messages_v2 SET ttl = 0 WHERE mid IN(%s) AND uid = %d"
-            java.lang.Object[] r9 = new java.lang.Object[r11]     // Catch:{ Exception -> 0x014f, all -> 0x014b }
-            java.lang.String r8 = r8.toString()     // Catch:{ Exception -> 0x014f, all -> 0x014b }
-            r9[r13] = r8     // Catch:{ Exception -> 0x014f, all -> 0x014b }
-            java.lang.Long r8 = java.lang.Long.valueOf(r2)     // Catch:{ Exception -> 0x014f, all -> 0x014b }
-            r9[r12] = r8     // Catch:{ Exception -> 0x014f, all -> 0x014b }
-            java.lang.String r4 = java.lang.String.format(r4, r7, r9)     // Catch:{ Exception -> 0x014f, all -> 0x014b }
-            org.telegram.SQLite.SQLitePreparedStatement r0 = r0.executeFast(r4)     // Catch:{ Exception -> 0x014f, all -> 0x014b }
-            org.telegram.SQLite.SQLitePreparedStatement r0 = r0.stepThis()     // Catch:{ Exception -> 0x014f, all -> 0x014b }
-            r0.dispose()     // Catch:{ Exception -> 0x014f, all -> 0x014b }
-            org.telegram.messenger.MessagesController r0 = r17.getMessagesController()     // Catch:{ Exception -> 0x014f, all -> 0x014b }
-            r0.didAddedNewTask(r5, r2, r6)     // Catch:{ Exception -> 0x014f, all -> 0x014b }
+            java.lang.Object[] r9 = new java.lang.Object[r11]     // Catch:{ Exception -> 0x0151, all -> 0x014d }
+            java.lang.String r8 = r8.toString()     // Catch:{ Exception -> 0x0151, all -> 0x014d }
+            r9[r13] = r8     // Catch:{ Exception -> 0x0151, all -> 0x014d }
+            java.lang.Long r8 = java.lang.Long.valueOf(r2)     // Catch:{ Exception -> 0x0151, all -> 0x014d }
+            r9[r12] = r8     // Catch:{ Exception -> 0x0151, all -> 0x014d }
+            java.lang.String r4 = java.lang.String.format(r4, r7, r9)     // Catch:{ Exception -> 0x0151, all -> 0x014d }
+            org.telegram.SQLite.SQLitePreparedStatement r0 = r0.executeFast(r4)     // Catch:{ Exception -> 0x0151, all -> 0x014d }
+            org.telegram.SQLite.SQLitePreparedStatement r0 = r0.stepThis()     // Catch:{ Exception -> 0x0151, all -> 0x014d }
+            r0.dispose()     // Catch:{ Exception -> 0x0151, all -> 0x014d }
+            org.telegram.messenger.MessagesController r0 = r17.getMessagesController()     // Catch:{ Exception -> 0x0151, all -> 0x014d }
+            r0.didAddedNewTask(r5, r2, r6)     // Catch:{ Exception -> 0x0151, all -> 0x014d }
             goto L_0x013f
         L_0x0139:
             r0 = move-exception
             r2 = 0
-            goto L_0x0166
+            goto L_0x016a
         L_0x013c:
             r0 = move-exception
             r2 = 0
-            goto L_0x0152
+            goto L_0x0154
         L_0x013f:
             org.telegram.SQLite.SQLiteDatabase r0 = r1.database
+            if (r0 == 0) goto L_0x0168
             r0.commitTransaction()
-            goto L_0x0164
-        L_0x0145:
+            goto L_0x0168
+        L_0x0147:
             r0 = move-exception
             r2 = r4
-            goto L_0x014d
-        L_0x0148:
+            goto L_0x014f
+        L_0x014a:
             r0 = move-exception
             r2 = r4
-            goto L_0x0151
-        L_0x014b:
-            r0 = move-exception
-            r2 = 0
+            goto L_0x0153
         L_0x014d:
-            r4 = 0
-            goto L_0x0166
-        L_0x014f:
             r0 = move-exception
             r2 = 0
-        L_0x0151:
+        L_0x014f:
             r4 = 0
-        L_0x0152:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x0165 }
-            org.telegram.SQLite.SQLiteDatabase r0 = r1.database
-            r0.commitTransaction()
-            if (r4 == 0) goto L_0x015f
-            r4.dispose()
-        L_0x015f:
-            if (r2 == 0) goto L_0x0164
-            r2.dispose()
-        L_0x0164:
-            return
-        L_0x0165:
+            goto L_0x016a
+        L_0x0151:
             r0 = move-exception
-        L_0x0166:
-            org.telegram.SQLite.SQLiteDatabase r3 = r1.database
-            r3.commitTransaction()
-            if (r4 == 0) goto L_0x0170
+            r2 = 0
+        L_0x0153:
+            r4 = 0
+        L_0x0154:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x0169 }
+            org.telegram.SQLite.SQLiteDatabase r0 = r1.database
+            if (r0 == 0) goto L_0x015e
+            r0.commitTransaction()
+        L_0x015e:
+            if (r4 == 0) goto L_0x0163
             r4.dispose()
-        L_0x0170:
-            if (r2 == 0) goto L_0x0175
+        L_0x0163:
+            if (r2 == 0) goto L_0x0168
             r2.dispose()
-        L_0x0175:
-            goto L_0x0177
+        L_0x0168:
+            return
+        L_0x0169:
+            r0 = move-exception
+        L_0x016a:
+            org.telegram.SQLite.SQLiteDatabase r3 = r1.database
+            if (r3 == 0) goto L_0x0171
+            r3.commitTransaction()
+        L_0x0171:
+            if (r4 == 0) goto L_0x0176
+            r4.dispose()
         L_0x0176:
+            if (r2 == 0) goto L_0x017b
+            r2.dispose()
+        L_0x017b:
+            goto L_0x017d
+        L_0x017c:
             throw r0
-        L_0x0177:
-            goto L_0x0176
+        L_0x017d:
+            goto L_0x017c
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$createTaskForSecretChat$87(int, java.util.ArrayList, int, int, int):void");
     }
@@ -11950,8 +12026,8 @@ public class MessagesStorage extends BaseController {
         this.archiveUnreadCount = this.pendingArchiveUnreadCount;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:109:0x02dc A[Catch:{ Exception -> 0x02e4 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:135:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:110:0x02f8 A[Catch:{ Exception -> 0x0300 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:137:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private void updateDialogsWithReadMessagesInternal(java.util.ArrayList<java.lang.Integer> r22, org.telegram.messenger.support.LongSparseIntArray r23, org.telegram.messenger.support.LongSparseIntArray r24, androidx.collection.LongSparseArray<java.util.ArrayList<java.lang.Integer>> r25, org.telegram.messenger.support.LongSparseIntArray r26) {
         /*
@@ -11959,345 +12035,359 @@ public class MessagesStorage extends BaseController {
             r1 = r21
             r0 = r23
             r2 = r24
-            r3 = r26
-            org.telegram.messenger.support.LongSparseIntArray r4 = new org.telegram.messenger.support.LongSparseIntArray     // Catch:{ Exception -> 0x02e4 }
-            r4.<init>()     // Catch:{ Exception -> 0x02e4 }
-            org.telegram.messenger.support.LongSparseIntArray r5 = new org.telegram.messenger.support.LongSparseIntArray     // Catch:{ Exception -> 0x02e4 }
-            r5.<init>()     // Catch:{ Exception -> 0x02e4 }
-            java.util.ArrayList r6 = new java.util.ArrayList     // Catch:{ Exception -> 0x02e4 }
-            r6.<init>()     // Catch:{ Exception -> 0x02e4 }
-            boolean r7 = isEmpty((java.util.List<?>) r22)     // Catch:{ Exception -> 0x02e4 }
-            java.lang.String r8 = ","
-            r9 = 2
-            r10 = 1
-            r11 = 0
-            if (r7 != 0) goto L_0x0069
-            r0 = r22
-            java.lang.String r0 = android.text.TextUtils.join(r8, r0)     // Catch:{ Exception -> 0x02e4 }
-            org.telegram.SQLite.SQLiteDatabase r2 = r1.database     // Catch:{ Exception -> 0x02e4 }
-            java.util.Locale r3 = java.util.Locale.US     // Catch:{ Exception -> 0x02e4 }
-            java.lang.String r7 = "SELECT uid, read_state, out FROM messages_v2 WHERE mid IN(%s) AND is_channel = 0"
-            java.lang.Object[] r8 = new java.lang.Object[r10]     // Catch:{ Exception -> 0x02e4 }
-            r8[r11] = r0     // Catch:{ Exception -> 0x02e4 }
-            java.lang.String r0 = java.lang.String.format(r3, r7, r8)     // Catch:{ Exception -> 0x02e4 }
-            java.lang.Object[] r3 = new java.lang.Object[r11]     // Catch:{ Exception -> 0x02e4 }
-            org.telegram.SQLite.SQLiteCursor r0 = r2.queryFinalized(r0, r3)     // Catch:{ Exception -> 0x02e4 }
-        L_0x003c:
-            boolean r2 = r0.next()     // Catch:{ Exception -> 0x02e4 }
-            if (r2 == 0) goto L_0x0064
-            int r2 = r0.intValue(r9)     // Catch:{ Exception -> 0x02e4 }
-            if (r2 == 0) goto L_0x0049
-            goto L_0x003c
-        L_0x0049:
-            int r2 = r0.intValue(r10)     // Catch:{ Exception -> 0x02e4 }
-            if (r2 == 0) goto L_0x0050
-            goto L_0x003c
-        L_0x0050:
-            long r2 = r0.longValue(r11)     // Catch:{ Exception -> 0x02e4 }
-            int r7 = r4.get(r2)     // Catch:{ Exception -> 0x02e4 }
-            if (r7 != 0) goto L_0x005e
-            r4.put(r2, r10)     // Catch:{ Exception -> 0x02e4 }
-            goto L_0x003c
-        L_0x005e:
-            int r7 = r7 + 1
-            r4.put(r2, r7)     // Catch:{ Exception -> 0x02e4 }
-            goto L_0x003c
-        L_0x0064:
-            r0.dispose()     // Catch:{ Exception -> 0x02e4 }
-            goto L_0x020a
-        L_0x0069:
-            boolean r7 = isEmpty((org.telegram.messenger.support.LongSparseIntArray) r26)     // Catch:{ Exception -> 0x02e4 }
-            if (r7 != 0) goto L_0x0084
-            r7 = 0
-        L_0x0070:
-            int r12 = r26.size()     // Catch:{ Exception -> 0x02e4 }
-            if (r7 >= r12) goto L_0x0084
-            long r12 = r3.keyAt(r7)     // Catch:{ Exception -> 0x02e4 }
-            int r14 = r3.get(r12)     // Catch:{ Exception -> 0x02e4 }
-            r4.put(r12, r14)     // Catch:{ Exception -> 0x02e4 }
-            int r7 = r7 + 1
-            goto L_0x0070
-        L_0x0084:
-            boolean r3 = isEmpty((org.telegram.messenger.support.LongSparseIntArray) r23)     // Catch:{ Exception -> 0x02e4 }
-            r12 = -1
-            if (r3 != 0) goto L_0x00f5
-            r3 = 0
-        L_0x008c:
-            int r13 = r23.size()     // Catch:{ Exception -> 0x02e4 }
-            if (r3 >= r13) goto L_0x00f5
-            long r13 = r0.keyAt(r3)     // Catch:{ Exception -> 0x02e4 }
-            int r15 = r0.get(r13)     // Catch:{ Exception -> 0x02e4 }
-            int r16 = r4.get(r13, r12)     // Catch:{ Exception -> 0x02e4 }
-            if (r16 >= 0) goto L_0x00d1
-            org.telegram.SQLite.SQLiteDatabase r12 = r1.database     // Catch:{ Exception -> 0x02e4 }
-            java.util.Locale r7 = java.util.Locale.US     // Catch:{ Exception -> 0x02e4 }
-            java.lang.String r10 = "SELECT COUNT(mid) FROM messages_v2 WHERE uid = %d AND mid > %d AND read_state IN(0,2) AND out = 0"
-            java.lang.Object[] r11 = new java.lang.Object[r9]     // Catch:{ Exception -> 0x02e4 }
-            java.lang.Long r18 = java.lang.Long.valueOf(r13)     // Catch:{ Exception -> 0x02e4 }
-            r9 = 0
-            r11[r9] = r18     // Catch:{ Exception -> 0x02e4 }
-            java.lang.Integer r17 = java.lang.Integer.valueOf(r15)     // Catch:{ Exception -> 0x02e4 }
-            r16 = 1
-            r11[r16] = r17     // Catch:{ Exception -> 0x02e4 }
-            java.lang.String r7 = java.lang.String.format(r7, r10, r11)     // Catch:{ Exception -> 0x02e4 }
-            java.lang.Object[] r10 = new java.lang.Object[r9]     // Catch:{ Exception -> 0x02e4 }
-            org.telegram.SQLite.SQLiteCursor r7 = r12.queryFinalized(r7, r10)     // Catch:{ Exception -> 0x02e4 }
-            boolean r10 = r7.next()     // Catch:{ Exception -> 0x02e4 }
-            if (r10 == 0) goto L_0x00ce
-            int r10 = r7.intValue(r9)     // Catch:{ Exception -> 0x02e4 }
-            r4.put(r13, r10)     // Catch:{ Exception -> 0x02e4 }
-        L_0x00ce:
-            r7.dispose()     // Catch:{ Exception -> 0x02e4 }
-        L_0x00d1:
-            org.telegram.SQLite.SQLiteDatabase r7 = r1.database     // Catch:{ Exception -> 0x02e4 }
-            java.lang.String r9 = "UPDATE dialogs SET inbox_max = max((SELECT inbox_max FROM dialogs WHERE did = ?), ?) WHERE did = ?"
-            org.telegram.SQLite.SQLitePreparedStatement r7 = r7.executeFast(r9)     // Catch:{ Exception -> 0x02e4 }
-            r7.requery()     // Catch:{ Exception -> 0x02e4 }
+            org.telegram.messenger.support.LongSparseIntArray r3 = new org.telegram.messenger.support.LongSparseIntArray     // Catch:{ Exception -> 0x0300 }
+            r3.<init>()     // Catch:{ Exception -> 0x0300 }
+            org.telegram.messenger.support.LongSparseIntArray r4 = new org.telegram.messenger.support.LongSparseIntArray     // Catch:{ Exception -> 0x0300 }
+            r4.<init>()     // Catch:{ Exception -> 0x0300 }
+            java.util.ArrayList r5 = new java.util.ArrayList     // Catch:{ Exception -> 0x0300 }
+            r5.<init>()     // Catch:{ Exception -> 0x0300 }
+            boolean r6 = isEmpty((java.util.List<?>) r22)     // Catch:{ Exception -> 0x0300 }
+            java.lang.String r7 = ","
+            r8 = 2
             r9 = 1
-            r7.bindLong(r9, r13)     // Catch:{ Exception -> 0x02e4 }
-            r9 = 2
-            r7.bindInteger(r9, r15)     // Catch:{ Exception -> 0x02e4 }
-            r9 = 3
-            r7.bindLong(r9, r13)     // Catch:{ Exception -> 0x02e4 }
-            r7.step()     // Catch:{ Exception -> 0x02e4 }
-            r7.dispose()     // Catch:{ Exception -> 0x02e4 }
-            int r3 = r3 + 1
-            r9 = 2
-            r10 = 1
-            r11 = 0
-            r12 = -1
-            goto L_0x008c
-        L_0x00f5:
-            boolean r0 = isEmpty((androidx.collection.LongSparseArray<?>) r25)     // Catch:{ Exception -> 0x02e4 }
-            if (r0 != 0) goto L_0x01d5
-            int r0 = r25.size()     // Catch:{ Exception -> 0x02e4 }
+            r10 = 0
+            if (r6 != 0) goto L_0x0067
+            r0 = r22
+            java.lang.String r0 = android.text.TextUtils.join(r7, r0)     // Catch:{ Exception -> 0x0300 }
+            org.telegram.SQLite.SQLiteDatabase r2 = r1.database     // Catch:{ Exception -> 0x0300 }
+            java.util.Locale r6 = java.util.Locale.US     // Catch:{ Exception -> 0x0300 }
+            java.lang.String r7 = "SELECT uid, read_state, out FROM messages_v2 WHERE mid IN(%s) AND is_channel = 0"
+            java.lang.Object[] r11 = new java.lang.Object[r9]     // Catch:{ Exception -> 0x0300 }
+            r11[r10] = r0     // Catch:{ Exception -> 0x0300 }
+            java.lang.String r0 = java.lang.String.format(r6, r7, r11)     // Catch:{ Exception -> 0x0300 }
+            java.lang.Object[] r6 = new java.lang.Object[r10]     // Catch:{ Exception -> 0x0300 }
+            org.telegram.SQLite.SQLiteCursor r0 = r2.queryFinalized(r0, r6)     // Catch:{ Exception -> 0x0300 }
+        L_0x003a:
+            boolean r2 = r0.next()     // Catch:{ Exception -> 0x0300 }
+            if (r2 == 0) goto L_0x0062
+            int r2 = r0.intValue(r8)     // Catch:{ Exception -> 0x0300 }
+            if (r2 == 0) goto L_0x0047
+            goto L_0x003a
+        L_0x0047:
+            int r2 = r0.intValue(r9)     // Catch:{ Exception -> 0x0300 }
+            if (r2 == 0) goto L_0x004e
+            goto L_0x003a
+        L_0x004e:
+            long r6 = r0.longValue(r10)     // Catch:{ Exception -> 0x0300 }
+            int r2 = r3.get(r6)     // Catch:{ Exception -> 0x0300 }
+            if (r2 != 0) goto L_0x005c
+            r3.put(r6, r9)     // Catch:{ Exception -> 0x0300 }
+            goto L_0x003a
+        L_0x005c:
+            int r2 = r2 + 1
+            r3.put(r6, r2)     // Catch:{ Exception -> 0x0300 }
+            goto L_0x003a
+        L_0x0062:
+            r0.dispose()     // Catch:{ Exception -> 0x0300 }
+            goto L_0x0226
+        L_0x0067:
+            boolean r6 = isEmpty((org.telegram.messenger.support.LongSparseIntArray) r23)     // Catch:{ Exception -> 0x0300 }
+            if (r6 != 0) goto L_0x0111
+            r6 = 0
+        L_0x006e:
+            int r12 = r23.size()     // Catch:{ Exception -> 0x0300 }
+            if (r6 >= r12) goto L_0x0111
+            long r12 = r0.keyAt(r6)     // Catch:{ Exception -> 0x0300 }
+            int r14 = r0.get(r12)     // Catch:{ Exception -> 0x0300 }
+            org.telegram.SQLite.SQLiteDatabase r15 = r1.database     // Catch:{ Exception -> 0x0300 }
+            java.util.Locale r11 = java.util.Locale.US     // Catch:{ Exception -> 0x0300 }
+            java.lang.String r9 = "SELECT start, end FROM messages_holes WHERE uid = %d AND end > %d"
+            java.lang.Object[] r10 = new java.lang.Object[r8]     // Catch:{ Exception -> 0x0300 }
+            java.lang.Long r18 = java.lang.Long.valueOf(r12)     // Catch:{ Exception -> 0x0300 }
+            r8 = 0
+            r10[r8] = r18     // Catch:{ Exception -> 0x0300 }
+            java.lang.Integer r17 = java.lang.Integer.valueOf(r14)     // Catch:{ Exception -> 0x0300 }
+            r16 = 1
+            r10[r16] = r17     // Catch:{ Exception -> 0x0300 }
+            java.lang.String r9 = java.lang.String.format(r11, r9, r10)     // Catch:{ Exception -> 0x0300 }
+            java.lang.Object[] r10 = new java.lang.Object[r8]     // Catch:{ Exception -> 0x0300 }
+            org.telegram.SQLite.SQLiteCursor r8 = r15.queryFinalized(r9, r10)     // Catch:{ Exception -> 0x0300 }
+            r9 = 1
+        L_0x009e:
+            boolean r10 = r8.next()     // Catch:{ Exception -> 0x0300 }
+            if (r10 == 0) goto L_0x00a6
             r9 = 0
-        L_0x0100:
-            if (r9 >= r0) goto L_0x01d5
-            r3 = r25
-            java.lang.Object r7 = r3.valueAt(r9)     // Catch:{ Exception -> 0x02e4 }
-            java.util.ArrayList r7 = (java.util.ArrayList) r7     // Catch:{ Exception -> 0x02e4 }
-            java.util.ArrayList r10 = new java.util.ArrayList     // Catch:{ Exception -> 0x02e4 }
-            r10.<init>(r7)     // Catch:{ Exception -> 0x02e4 }
-            java.lang.String r7 = android.text.TextUtils.join(r8, r7)     // Catch:{ Exception -> 0x02e4 }
-            org.telegram.SQLite.SQLiteDatabase r11 = r1.database     // Catch:{ Exception -> 0x02e4 }
-            java.util.Locale r12 = java.util.Locale.US     // Catch:{ Exception -> 0x02e4 }
+            goto L_0x009e
+        L_0x00a6:
+            r8.dispose()     // Catch:{ Exception -> 0x0300 }
+            if (r9 == 0) goto L_0x00e0
+            org.telegram.SQLite.SQLiteDatabase r8 = r1.database     // Catch:{ Exception -> 0x0300 }
+            java.util.Locale r9 = java.util.Locale.US     // Catch:{ Exception -> 0x0300 }
+            java.lang.String r10 = "SELECT COUNT(mid) FROM messages_v2 WHERE uid = %d AND mid > %d AND read_state IN(0,2) AND out = 0"
+            r11 = 2
+            java.lang.Object[] r15 = new java.lang.Object[r11]     // Catch:{ Exception -> 0x0300 }
+            java.lang.Long r11 = java.lang.Long.valueOf(r12)     // Catch:{ Exception -> 0x0300 }
+            r0 = 0
+            r15[r0] = r11     // Catch:{ Exception -> 0x0300 }
+            java.lang.Integer r11 = java.lang.Integer.valueOf(r14)     // Catch:{ Exception -> 0x0300 }
+            r16 = 1
+            r15[r16] = r11     // Catch:{ Exception -> 0x0300 }
+            java.lang.String r9 = java.lang.String.format(r9, r10, r15)     // Catch:{ Exception -> 0x0300 }
+            java.lang.Object[] r10 = new java.lang.Object[r0]     // Catch:{ Exception -> 0x0300 }
+            org.telegram.SQLite.SQLiteCursor r8 = r8.queryFinalized(r9, r10)     // Catch:{ Exception -> 0x0300 }
+            boolean r9 = r8.next()     // Catch:{ Exception -> 0x0300 }
+            if (r9 == 0) goto L_0x00da
+            int r9 = r8.intValue(r0)     // Catch:{ Exception -> 0x0300 }
+            r3.put(r12, r9)     // Catch:{ Exception -> 0x0300 }
+        L_0x00da:
+            r8.dispose()     // Catch:{ Exception -> 0x0300 }
+            r0 = r26
+            goto L_0x00eb
+        L_0x00e0:
+            r0 = r26
+            int r8 = r0.get(r12)     // Catch:{ Exception -> 0x0300 }
+            if (r8 <= 0) goto L_0x00eb
+            r3.put(r12, r8)     // Catch:{ Exception -> 0x0300 }
+        L_0x00eb:
+            org.telegram.SQLite.SQLiteDatabase r8 = r1.database     // Catch:{ Exception -> 0x0300 }
+            java.lang.String r9 = "UPDATE dialogs SET inbox_max = max((SELECT inbox_max FROM dialogs WHERE did = ?), ?) WHERE did = ?"
+            org.telegram.SQLite.SQLitePreparedStatement r8 = r8.executeFast(r9)     // Catch:{ Exception -> 0x0300 }
+            r8.requery()     // Catch:{ Exception -> 0x0300 }
+            r9 = 1
+            r8.bindLong(r9, r12)     // Catch:{ Exception -> 0x0300 }
+            r9 = 2
+            r8.bindInteger(r9, r14)     // Catch:{ Exception -> 0x0300 }
+            r9 = 3
+            r8.bindLong(r9, r12)     // Catch:{ Exception -> 0x0300 }
+            r8.step()     // Catch:{ Exception -> 0x0300 }
+            r8.dispose()     // Catch:{ Exception -> 0x0300 }
+            int r6 = r6 + 1
+            r0 = r23
+            r8 = 2
+            r9 = 1
+            r10 = 0
+            goto L_0x006e
+        L_0x0111:
+            boolean r0 = isEmpty((androidx.collection.LongSparseArray<?>) r25)     // Catch:{ Exception -> 0x0300 }
+            if (r0 != 0) goto L_0x01f1
+            int r0 = r25.size()     // Catch:{ Exception -> 0x0300 }
+            r8 = 0
+        L_0x011c:
+            if (r8 >= r0) goto L_0x01f1
+            r6 = r25
+            java.lang.Object r9 = r6.valueAt(r8)     // Catch:{ Exception -> 0x0300 }
+            java.util.ArrayList r9 = (java.util.ArrayList) r9     // Catch:{ Exception -> 0x0300 }
+            java.util.ArrayList r10 = new java.util.ArrayList     // Catch:{ Exception -> 0x0300 }
+            r10.<init>(r9)     // Catch:{ Exception -> 0x0300 }
+            java.lang.String r9 = android.text.TextUtils.join(r7, r9)     // Catch:{ Exception -> 0x0300 }
+            org.telegram.SQLite.SQLiteDatabase r11 = r1.database     // Catch:{ Exception -> 0x0300 }
+            java.util.Locale r12 = java.util.Locale.US     // Catch:{ Exception -> 0x0300 }
             java.lang.String r13 = "SELECT uid, read_state, out, mention, mid, is_channel FROM messages_v2 WHERE mid IN(%s)"
             r14 = 1
-            java.lang.Object[] r15 = new java.lang.Object[r14]     // Catch:{ Exception -> 0x02e4 }
+            java.lang.Object[] r15 = new java.lang.Object[r14]     // Catch:{ Exception -> 0x0300 }
             r14 = 0
-            r15[r14] = r7     // Catch:{ Exception -> 0x02e4 }
-            java.lang.String r7 = java.lang.String.format(r12, r13, r15)     // Catch:{ Exception -> 0x02e4 }
-            java.lang.Object[] r12 = new java.lang.Object[r14]     // Catch:{ Exception -> 0x02e4 }
-            org.telegram.SQLite.SQLiteCursor r7 = r11.queryFinalized(r7, r12)     // Catch:{ Exception -> 0x02e4 }
+            r15[r14] = r9     // Catch:{ Exception -> 0x0300 }
+            java.lang.String r9 = java.lang.String.format(r12, r13, r15)     // Catch:{ Exception -> 0x0300 }
+            java.lang.Object[] r12 = new java.lang.Object[r14]     // Catch:{ Exception -> 0x0300 }
+            org.telegram.SQLite.SQLiteCursor r9 = r11.queryFinalized(r9, r12)     // Catch:{ Exception -> 0x0300 }
             r19 = 0
-        L_0x012b:
-            boolean r13 = r7.next()     // Catch:{ Exception -> 0x02e4 }
-            if (r13 == 0) goto L_0x01ad
-            long r11 = r7.longValue(r14)     // Catch:{ Exception -> 0x02e4 }
+        L_0x0147:
+            boolean r13 = r9.next()     // Catch:{ Exception -> 0x0300 }
+            if (r13 == 0) goto L_0x01c9
+            long r11 = r9.longValue(r14)     // Catch:{ Exception -> 0x0300 }
             r13 = 4
-            int r13 = r7.intValue(r13)     // Catch:{ Exception -> 0x02e4 }
-            java.lang.Integer r13 = java.lang.Integer.valueOf(r13)     // Catch:{ Exception -> 0x02e4 }
-            r10.remove(r13)     // Catch:{ Exception -> 0x02e4 }
+            int r13 = r9.intValue(r13)     // Catch:{ Exception -> 0x0300 }
+            java.lang.Integer r13 = java.lang.Integer.valueOf(r13)     // Catch:{ Exception -> 0x0300 }
+            r10.remove(r13)     // Catch:{ Exception -> 0x0300 }
             r13 = 1
-            int r14 = r7.intValue(r13)     // Catch:{ Exception -> 0x02e4 }
+            int r14 = r9.intValue(r13)     // Catch:{ Exception -> 0x0300 }
             r15 = 2
-            if (r14 >= r15) goto L_0x01a1
-            int r14 = r7.intValue(r15)     // Catch:{ Exception -> 0x02e4 }
-            if (r14 != 0) goto L_0x01a1
+            if (r14 >= r15) goto L_0x01bd
+            int r14 = r9.intValue(r15)     // Catch:{ Exception -> 0x0300 }
+            if (r14 != 0) goto L_0x01bd
             r14 = 3
-            int r15 = r7.intValue(r14)     // Catch:{ Exception -> 0x02e4 }
-            if (r15 != r13) goto L_0x01a1
+            int r15 = r9.intValue(r14)     // Catch:{ Exception -> 0x0300 }
+            if (r15 != r13) goto L_0x01bd
             r13 = -1
-            int r14 = r5.get(r11, r13)     // Catch:{ Exception -> 0x02e4 }
-            if (r14 >= 0) goto L_0x0194
-            org.telegram.SQLite.SQLiteDatabase r14 = r1.database     // Catch:{ Exception -> 0x02e4 }
-            java.lang.StringBuilder r15 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x02e4 }
-            r15.<init>()     // Catch:{ Exception -> 0x02e4 }
-            java.lang.String r13 = "SELECT unread_count_i FROM dialogs WHERE did = "
-            r15.append(r13)     // Catch:{ Exception -> 0x02e4 }
-            r15.append(r11)     // Catch:{ Exception -> 0x02e4 }
-            java.lang.String r13 = r15.toString()     // Catch:{ Exception -> 0x02e4 }
+            int r13 = r4.get(r11, r13)     // Catch:{ Exception -> 0x0300 }
+            if (r13 >= 0) goto L_0x01b0
+            org.telegram.SQLite.SQLiteDatabase r13 = r1.database     // Catch:{ Exception -> 0x0300 }
+            java.lang.StringBuilder r14 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0300 }
+            r14.<init>()     // Catch:{ Exception -> 0x0300 }
+            java.lang.String r15 = "SELECT unread_count_i FROM dialogs WHERE did = "
+            r14.append(r15)     // Catch:{ Exception -> 0x0300 }
+            r14.append(r11)     // Catch:{ Exception -> 0x0300 }
+            java.lang.String r14 = r14.toString()     // Catch:{ Exception -> 0x0300 }
             r23 = r0
             r15 = 0
-            java.lang.Object[] r0 = new java.lang.Object[r15]     // Catch:{ Exception -> 0x02e4 }
-            org.telegram.SQLite.SQLiteCursor r0 = r14.queryFinalized(r13, r0)     // Catch:{ Exception -> 0x02e4 }
-            boolean r13 = r0.next()     // Catch:{ Exception -> 0x02e4 }
-            if (r13 == 0) goto L_0x0184
-            int r17 = r0.intValue(r15)     // Catch:{ Exception -> 0x02e4 }
-            goto L_0x0186
-        L_0x0184:
+            java.lang.Object[] r0 = new java.lang.Object[r15]     // Catch:{ Exception -> 0x0300 }
+            org.telegram.SQLite.SQLiteCursor r0 = r13.queryFinalized(r14, r0)     // Catch:{ Exception -> 0x0300 }
+            boolean r13 = r0.next()     // Catch:{ Exception -> 0x0300 }
+            if (r13 == 0) goto L_0x01a0
+            int r17 = r0.intValue(r15)     // Catch:{ Exception -> 0x0300 }
+            goto L_0x01a2
+        L_0x01a0:
             r17 = 0
-        L_0x0186:
-            r0.dispose()     // Catch:{ Exception -> 0x02e4 }
+        L_0x01a2:
+            r0.dispose()     // Catch:{ Exception -> 0x0300 }
             r0 = 1
             int r13 = r17 + -1
-            int r0 = java.lang.Math.max(r15, r13)     // Catch:{ Exception -> 0x02e4 }
-            r5.put(r11, r0)     // Catch:{ Exception -> 0x02e4 }
-            goto L_0x01a3
-        L_0x0194:
+            int r0 = java.lang.Math.max(r15, r13)     // Catch:{ Exception -> 0x0300 }
+            r4.put(r11, r0)     // Catch:{ Exception -> 0x0300 }
+            goto L_0x01bf
+        L_0x01b0:
             r23 = r0
-            int r14 = r14 + -1
+            int r13 = r13 + -1
             r0 = 0
-            int r13 = java.lang.Math.max(r0, r14)     // Catch:{ Exception -> 0x02e4 }
-            r5.put(r11, r13)     // Catch:{ Exception -> 0x02e4 }
-            goto L_0x01a3
-        L_0x01a1:
+            int r13 = java.lang.Math.max(r0, r13)     // Catch:{ Exception -> 0x0300 }
+            r4.put(r11, r13)     // Catch:{ Exception -> 0x0300 }
+            goto L_0x01bf
+        L_0x01bd:
             r23 = r0
-        L_0x01a3:
+        L_0x01bf:
             r0 = 5
-            long r19 = r7.longValue(r0)     // Catch:{ Exception -> 0x02e4 }
+            long r19 = r9.longValue(r0)     // Catch:{ Exception -> 0x0300 }
             r0 = r23
             r14 = 0
-            goto L_0x012b
-        L_0x01ad:
+            goto L_0x0147
+        L_0x01c9:
             r23 = r0
-            r7.dispose()     // Catch:{ Exception -> 0x02e4 }
-            boolean r0 = r10.isEmpty()     // Catch:{ Exception -> 0x02e4 }
-            if (r0 != 0) goto L_0x01cf
-            r10 = 0
-            int r0 = (r19 > r10 ? 1 : (r19 == r10 ? 0 : -1))
-            if (r0 == 0) goto L_0x01cf
-            java.lang.Long r0 = java.lang.Long.valueOf(r19)     // Catch:{ Exception -> 0x02e4 }
-            boolean r0 = r6.contains(r0)     // Catch:{ Exception -> 0x02e4 }
-            if (r0 != 0) goto L_0x01cf
-            java.lang.Long r0 = java.lang.Long.valueOf(r19)     // Catch:{ Exception -> 0x02e4 }
-            r6.add(r0)     // Catch:{ Exception -> 0x02e4 }
-        L_0x01cf:
-            int r9 = r9 + 1
+            r9.dispose()     // Catch:{ Exception -> 0x0300 }
+            boolean r0 = r10.isEmpty()     // Catch:{ Exception -> 0x0300 }
+            if (r0 != 0) goto L_0x01eb
+            r9 = 0
+            int r0 = (r19 > r9 ? 1 : (r19 == r9 ? 0 : -1))
+            if (r0 == 0) goto L_0x01eb
+            java.lang.Long r0 = java.lang.Long.valueOf(r19)     // Catch:{ Exception -> 0x0300 }
+            boolean r0 = r5.contains(r0)     // Catch:{ Exception -> 0x0300 }
+            if (r0 != 0) goto L_0x01eb
+            java.lang.Long r0 = java.lang.Long.valueOf(r19)     // Catch:{ Exception -> 0x0300 }
+            r5.add(r0)     // Catch:{ Exception -> 0x0300 }
+        L_0x01eb:
+            int r8 = r8 + 1
             r0 = r23
-            goto L_0x0100
-        L_0x01d5:
-            boolean r0 = isEmpty((org.telegram.messenger.support.LongSparseIntArray) r24)     // Catch:{ Exception -> 0x02e4 }
-            if (r0 != 0) goto L_0x020a
-            r9 = 0
-        L_0x01dc:
-            int r0 = r24.size()     // Catch:{ Exception -> 0x02e4 }
-            if (r9 >= r0) goto L_0x020a
-            long r7 = r2.keyAt(r9)     // Catch:{ Exception -> 0x02e4 }
-            int r0 = r2.get(r7)     // Catch:{ Exception -> 0x02e4 }
-            org.telegram.SQLite.SQLiteDatabase r3 = r1.database     // Catch:{ Exception -> 0x02e4 }
+            goto L_0x011c
+        L_0x01f1:
+            boolean r0 = isEmpty((org.telegram.messenger.support.LongSparseIntArray) r24)     // Catch:{ Exception -> 0x0300 }
+            if (r0 != 0) goto L_0x0226
+            r8 = 0
+        L_0x01f8:
+            int r0 = r24.size()     // Catch:{ Exception -> 0x0300 }
+            if (r8 >= r0) goto L_0x0226
+            long r6 = r2.keyAt(r8)     // Catch:{ Exception -> 0x0300 }
+            int r0 = r2.get(r6)     // Catch:{ Exception -> 0x0300 }
+            org.telegram.SQLite.SQLiteDatabase r9 = r1.database     // Catch:{ Exception -> 0x0300 }
             java.lang.String r10 = "UPDATE dialogs SET outbox_max = max((SELECT outbox_max FROM dialogs WHERE did = ?), ?) WHERE did = ?"
-            org.telegram.SQLite.SQLitePreparedStatement r3 = r3.executeFast(r10)     // Catch:{ Exception -> 0x02e4 }
-            r3.requery()     // Catch:{ Exception -> 0x02e4 }
+            org.telegram.SQLite.SQLitePreparedStatement r9 = r9.executeFast(r10)     // Catch:{ Exception -> 0x0300 }
+            r9.requery()     // Catch:{ Exception -> 0x0300 }
             r10 = 1
-            r3.bindLong(r10, r7)     // Catch:{ Exception -> 0x02e4 }
+            r9.bindLong(r10, r6)     // Catch:{ Exception -> 0x0300 }
             r10 = 2
-            r3.bindInteger(r10, r0)     // Catch:{ Exception -> 0x02e4 }
+            r9.bindInteger(r10, r0)     // Catch:{ Exception -> 0x0300 }
             r0 = 3
-            r3.bindLong(r0, r7)     // Catch:{ Exception -> 0x02e4 }
-            r3.step()     // Catch:{ Exception -> 0x02e4 }
-            r3.dispose()     // Catch:{ Exception -> 0x02e4 }
-            int r9 = r9 + 1
-            goto L_0x01dc
-        L_0x020a:
-            int r0 = r4.size()     // Catch:{ Exception -> 0x02e4 }
-            if (r0 > 0) goto L_0x021a
-            int r0 = r5.size()     // Catch:{ Exception -> 0x02e4 }
-            if (r0 <= 0) goto L_0x0217
-            goto L_0x021a
-        L_0x0217:
-            r0 = 1
-            goto L_0x02cc
-        L_0x021a:
-            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x02e4 }
-            r0.beginTransaction()     // Catch:{ Exception -> 0x02e4 }
-            int r0 = r4.size()     // Catch:{ Exception -> 0x02e4 }
-            if (r0 <= 0) goto L_0x0293
-            java.util.ArrayList r0 = new java.util.ArrayList     // Catch:{ Exception -> 0x02e4 }
-            r0.<init>()     // Catch:{ Exception -> 0x02e4 }
-            org.telegram.SQLite.SQLiteDatabase r2 = r1.database     // Catch:{ Exception -> 0x02e4 }
-            java.lang.String r3 = "UPDATE dialogs SET unread_count = ? WHERE did = ?"
-            org.telegram.SQLite.SQLitePreparedStatement r2 = r2.executeFast(r3)     // Catch:{ Exception -> 0x02e4 }
-            r9 = 0
+            r9.bindLong(r0, r6)     // Catch:{ Exception -> 0x0300 }
+            r9.step()     // Catch:{ Exception -> 0x0300 }
+            r9.dispose()     // Catch:{ Exception -> 0x0300 }
+            int r8 = r8 + 1
+            goto L_0x01f8
+        L_0x0226:
+            int r0 = r3.size()     // Catch:{ Exception -> 0x0300 }
+            if (r0 > 0) goto L_0x0236
+            int r0 = r4.size()     // Catch:{ Exception -> 0x0300 }
+            if (r0 <= 0) goto L_0x0233
+            goto L_0x0236
         L_0x0233:
-            int r3 = r4.size()     // Catch:{ Exception -> 0x02e4 }
-            if (r9 >= r3) goto L_0x028b
-            long r7 = r4.keyAt(r9)     // Catch:{ Exception -> 0x02e4 }
-            int r3 = r4.valueAt(r9)     // Catch:{ Exception -> 0x02e4 }
-            org.telegram.SQLite.SQLiteDatabase r10 = r1.database     // Catch:{ Exception -> 0x02e4 }
-            java.lang.StringBuilder r11 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x02e4 }
-            r11.<init>()     // Catch:{ Exception -> 0x02e4 }
-            java.lang.String r12 = "SELECT unread_count FROM dialogs WHERE did = "
-            r11.append(r12)     // Catch:{ Exception -> 0x02e4 }
-            r11.append(r7)     // Catch:{ Exception -> 0x02e4 }
-            java.lang.String r11 = r11.toString()     // Catch:{ Exception -> 0x02e4 }
-            r12 = 0
-            java.lang.Object[] r13 = new java.lang.Object[r12]     // Catch:{ Exception -> 0x02e4 }
-            org.telegram.SQLite.SQLiteCursor r10 = r10.queryFinalized(r11, r13)     // Catch:{ Exception -> 0x02e4 }
-            boolean r11 = r10.next()     // Catch:{ Exception -> 0x02e4 }
-            if (r11 == 0) goto L_0x0266
-            int r11 = r10.intValue(r12)     // Catch:{ Exception -> 0x02e4 }
-            goto L_0x0267
-        L_0x0266:
-            r11 = 0
-        L_0x0267:
-            r10.dispose()     // Catch:{ Exception -> 0x02e4 }
-            if (r11 != r3) goto L_0x0273
-            r4.removeAt(r9)     // Catch:{ Exception -> 0x02e4 }
-            int r9 = r9 + -1
-        L_0x0271:
-            r3 = 1
-            goto L_0x0289
-        L_0x0273:
-            r2.requery()     // Catch:{ Exception -> 0x02e4 }
-            r10 = 1
-            r2.bindInteger(r10, r3)     // Catch:{ Exception -> 0x02e4 }
-            r3 = 2
-            r2.bindLong(r3, r7)     // Catch:{ Exception -> 0x02e4 }
-            r2.step()     // Catch:{ Exception -> 0x02e4 }
-            java.lang.Long r3 = java.lang.Long.valueOf(r7)     // Catch:{ Exception -> 0x02e4 }
-            r0.add(r3)     // Catch:{ Exception -> 0x02e4 }
-            goto L_0x0271
-        L_0x0289:
-            int r9 = r9 + r3
-            goto L_0x0233
-        L_0x028b:
-            r12 = 0
-            r2.dispose()     // Catch:{ Exception -> 0x02e4 }
-            r1.updateWidgets((java.util.ArrayList<java.lang.Long>) r0)     // Catch:{ Exception -> 0x02e4 }
-            goto L_0x0294
-        L_0x0293:
-            r12 = 0
-        L_0x0294:
-            int r0 = r5.size()     // Catch:{ Exception -> 0x02e4 }
-            if (r0 <= 0) goto L_0x02c5
-            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x02e4 }
-            java.lang.String r2 = "UPDATE dialogs SET unread_count_i = ? WHERE did = ?"
-            org.telegram.SQLite.SQLitePreparedStatement r0 = r0.executeFast(r2)     // Catch:{ Exception -> 0x02e4 }
-            r11 = 0
-        L_0x02a3:
-            int r2 = r5.size()     // Catch:{ Exception -> 0x02e4 }
-            if (r11 >= r2) goto L_0x02c2
-            r0.requery()     // Catch:{ Exception -> 0x02e4 }
-            int r2 = r5.valueAt(r11)     // Catch:{ Exception -> 0x02e4 }
-            r3 = 1
-            r0.bindInteger(r3, r2)     // Catch:{ Exception -> 0x02e4 }
-            long r2 = r5.keyAt(r11)     // Catch:{ Exception -> 0x02e4 }
-            r7 = 2
-            r0.bindLong(r7, r2)     // Catch:{ Exception -> 0x02e4 }
-            r0.step()     // Catch:{ Exception -> 0x02e4 }
-            int r11 = r11 + 1
-            goto L_0x02a3
-        L_0x02c2:
-            r0.dispose()     // Catch:{ Exception -> 0x02e4 }
-        L_0x02c5:
-            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x02e4 }
-            r0.commitTransaction()     // Catch:{ Exception -> 0x02e4 }
-            goto L_0x0217
-        L_0x02cc:
-            r1.updateFiltersReadCounter(r4, r5, r0)     // Catch:{ Exception -> 0x02e4 }
-            org.telegram.messenger.MessagesController r0 = r21.getMessagesController()     // Catch:{ Exception -> 0x02e4 }
-            r0.processDialogsUpdateRead(r4, r5)     // Catch:{ Exception -> 0x02e4 }
-            boolean r0 = r6.isEmpty()     // Catch:{ Exception -> 0x02e4 }
-            if (r0 != 0) goto L_0x02e8
-            org.telegram.messenger.MessagesController r0 = r21.getMessagesController()     // Catch:{ Exception -> 0x02e4 }
-            r0.reloadMentionsCountForChannels(r6)     // Catch:{ Exception -> 0x02e4 }
+            r0 = 1
             goto L_0x02e8
-        L_0x02e4:
+        L_0x0236:
+            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x0300 }
+            r0.beginTransaction()     // Catch:{ Exception -> 0x0300 }
+            int r0 = r3.size()     // Catch:{ Exception -> 0x0300 }
+            if (r0 <= 0) goto L_0x02af
+            java.util.ArrayList r0 = new java.util.ArrayList     // Catch:{ Exception -> 0x0300 }
+            r0.<init>()     // Catch:{ Exception -> 0x0300 }
+            org.telegram.SQLite.SQLiteDatabase r2 = r1.database     // Catch:{ Exception -> 0x0300 }
+            java.lang.String r6 = "UPDATE dialogs SET unread_count = ? WHERE did = ?"
+            org.telegram.SQLite.SQLitePreparedStatement r2 = r2.executeFast(r6)     // Catch:{ Exception -> 0x0300 }
+            r8 = 0
+        L_0x024f:
+            int r6 = r3.size()     // Catch:{ Exception -> 0x0300 }
+            if (r8 >= r6) goto L_0x02a7
+            long r6 = r3.keyAt(r8)     // Catch:{ Exception -> 0x0300 }
+            int r9 = r3.valueAt(r8)     // Catch:{ Exception -> 0x0300 }
+            org.telegram.SQLite.SQLiteDatabase r10 = r1.database     // Catch:{ Exception -> 0x0300 }
+            java.lang.StringBuilder r11 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0300 }
+            r11.<init>()     // Catch:{ Exception -> 0x0300 }
+            java.lang.String r12 = "SELECT unread_count FROM dialogs WHERE did = "
+            r11.append(r12)     // Catch:{ Exception -> 0x0300 }
+            r11.append(r6)     // Catch:{ Exception -> 0x0300 }
+            java.lang.String r11 = r11.toString()     // Catch:{ Exception -> 0x0300 }
+            r12 = 0
+            java.lang.Object[] r13 = new java.lang.Object[r12]     // Catch:{ Exception -> 0x0300 }
+            org.telegram.SQLite.SQLiteCursor r10 = r10.queryFinalized(r11, r13)     // Catch:{ Exception -> 0x0300 }
+            boolean r11 = r10.next()     // Catch:{ Exception -> 0x0300 }
+            if (r11 == 0) goto L_0x0282
+            int r11 = r10.intValue(r12)     // Catch:{ Exception -> 0x0300 }
+            goto L_0x0283
+        L_0x0282:
+            r11 = 0
+        L_0x0283:
+            r10.dispose()     // Catch:{ Exception -> 0x0300 }
+            if (r11 != r9) goto L_0x028f
+            r3.removeAt(r8)     // Catch:{ Exception -> 0x0300 }
+            int r8 = r8 + -1
+        L_0x028d:
+            r6 = 1
+            goto L_0x02a5
+        L_0x028f:
+            r2.requery()     // Catch:{ Exception -> 0x0300 }
+            r10 = 1
+            r2.bindInteger(r10, r9)     // Catch:{ Exception -> 0x0300 }
+            r9 = 2
+            r2.bindLong(r9, r6)     // Catch:{ Exception -> 0x0300 }
+            r2.step()     // Catch:{ Exception -> 0x0300 }
+            java.lang.Long r6 = java.lang.Long.valueOf(r6)     // Catch:{ Exception -> 0x0300 }
+            r0.add(r6)     // Catch:{ Exception -> 0x0300 }
+            goto L_0x028d
+        L_0x02a5:
+            int r8 = r8 + r6
+            goto L_0x024f
+        L_0x02a7:
+            r12 = 0
+            r2.dispose()     // Catch:{ Exception -> 0x0300 }
+            r1.updateWidgets((java.util.ArrayList<java.lang.Long>) r0)     // Catch:{ Exception -> 0x0300 }
+            goto L_0x02b0
+        L_0x02af:
+            r12 = 0
+        L_0x02b0:
+            int r0 = r4.size()     // Catch:{ Exception -> 0x0300 }
+            if (r0 <= 0) goto L_0x02e1
+            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x0300 }
+            java.lang.String r2 = "UPDATE dialogs SET unread_count_i = ? WHERE did = ?"
+            org.telegram.SQLite.SQLitePreparedStatement r0 = r0.executeFast(r2)     // Catch:{ Exception -> 0x0300 }
+            r10 = 0
+        L_0x02bf:
+            int r2 = r4.size()     // Catch:{ Exception -> 0x0300 }
+            if (r10 >= r2) goto L_0x02de
+            r0.requery()     // Catch:{ Exception -> 0x0300 }
+            int r2 = r4.valueAt(r10)     // Catch:{ Exception -> 0x0300 }
+            r6 = 1
+            r0.bindInteger(r6, r2)     // Catch:{ Exception -> 0x0300 }
+            long r6 = r4.keyAt(r10)     // Catch:{ Exception -> 0x0300 }
+            r2 = 2
+            r0.bindLong(r2, r6)     // Catch:{ Exception -> 0x0300 }
+            r0.step()     // Catch:{ Exception -> 0x0300 }
+            int r10 = r10 + 1
+            goto L_0x02bf
+        L_0x02de:
+            r0.dispose()     // Catch:{ Exception -> 0x0300 }
+        L_0x02e1:
+            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x0300 }
+            r0.commitTransaction()     // Catch:{ Exception -> 0x0300 }
+            goto L_0x0233
+        L_0x02e8:
+            r1.updateFiltersReadCounter(r3, r4, r0)     // Catch:{ Exception -> 0x0300 }
+            org.telegram.messenger.MessagesController r0 = r21.getMessagesController()     // Catch:{ Exception -> 0x0300 }
+            r0.processDialogsUpdateRead(r3, r4)     // Catch:{ Exception -> 0x0300 }
+            boolean r0 = r5.isEmpty()     // Catch:{ Exception -> 0x0300 }
+            if (r0 != 0) goto L_0x0304
+            org.telegram.messenger.MessagesController r0 = r21.getMessagesController()     // Catch:{ Exception -> 0x0300 }
+            r0.reloadMentionsCountForChannels(r5)     // Catch:{ Exception -> 0x0300 }
+            goto L_0x0304
+        L_0x0300:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x02e8:
+        L_0x0304:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.updateDialogsWithReadMessagesInternal(java.util.ArrayList, org.telegram.messenger.support.LongSparseIntArray, org.telegram.messenger.support.LongSparseIntArray, androidx.collection.LongSparseArray, org.telegram.messenger.support.LongSparseIntArray):void");
@@ -12533,90 +12623,97 @@ public class MessagesStorage extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:22:0x0082  */
-    /* JADX WARNING: Removed duplicated region for block: B:25:0x008d  */
-    /* JADX WARNING: Removed duplicated region for block: B:30:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:24:0x0081  */
+    /* JADX WARNING: Removed duplicated region for block: B:26:0x0086  */
+    /* JADX WARNING: Removed duplicated region for block: B:29:0x008e  */
+    /* JADX WARNING: Removed duplicated region for block: B:31:0x0093  */
+    /* JADX WARNING: Removed duplicated region for block: B:37:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public /* synthetic */ void lambda$putChannelAdmins$93(long r7, androidx.collection.LongSparseArray r9) {
         /*
             r6 = this;
             r0 = 0
-            org.telegram.SQLite.SQLiteDatabase r1 = r6.database     // Catch:{ Exception -> 0x0077 }
-            java.lang.StringBuilder r2 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0077 }
-            r2.<init>()     // Catch:{ Exception -> 0x0077 }
+            org.telegram.SQLite.SQLiteDatabase r1 = r6.database     // Catch:{ Exception -> 0x0079 }
+            java.lang.StringBuilder r2 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0079 }
+            r2.<init>()     // Catch:{ Exception -> 0x0079 }
             java.lang.String r3 = "DELETE FROM channel_admins_v3 WHERE did = "
-            r2.append(r3)     // Catch:{ Exception -> 0x0077 }
-            r2.append(r7)     // Catch:{ Exception -> 0x0077 }
-            java.lang.String r2 = r2.toString()     // Catch:{ Exception -> 0x0077 }
-            org.telegram.SQLite.SQLitePreparedStatement r1 = r1.executeFast(r2)     // Catch:{ Exception -> 0x0077 }
-            org.telegram.SQLite.SQLitePreparedStatement r1 = r1.stepThis()     // Catch:{ Exception -> 0x0077 }
-            r1.dispose()     // Catch:{ Exception -> 0x0077 }
-            org.telegram.SQLite.SQLiteDatabase r1 = r6.database     // Catch:{ Exception -> 0x0077 }
-            r1.beginTransaction()     // Catch:{ Exception -> 0x0077 }
-            org.telegram.SQLite.SQLiteDatabase r1 = r6.database     // Catch:{ Exception -> 0x0077 }
+            r2.append(r3)     // Catch:{ Exception -> 0x0079 }
+            r2.append(r7)     // Catch:{ Exception -> 0x0079 }
+            java.lang.String r2 = r2.toString()     // Catch:{ Exception -> 0x0079 }
+            org.telegram.SQLite.SQLitePreparedStatement r1 = r1.executeFast(r2)     // Catch:{ Exception -> 0x0079 }
+            org.telegram.SQLite.SQLitePreparedStatement r1 = r1.stepThis()     // Catch:{ Exception -> 0x0079 }
+            r1.dispose()     // Catch:{ Exception -> 0x0079 }
+            org.telegram.SQLite.SQLiteDatabase r1 = r6.database     // Catch:{ Exception -> 0x0079 }
+            r1.beginTransaction()     // Catch:{ Exception -> 0x0079 }
+            org.telegram.SQLite.SQLiteDatabase r1 = r6.database     // Catch:{ Exception -> 0x0079 }
             java.lang.String r2 = "REPLACE INTO channel_admins_v3 VALUES(?, ?, ?)"
-            org.telegram.SQLite.SQLitePreparedStatement r1 = r1.executeFast(r2)     // Catch:{ Exception -> 0x0077 }
+            org.telegram.SQLite.SQLitePreparedStatement r1 = r1.executeFast(r2)     // Catch:{ Exception -> 0x0079 }
             r2 = 0
         L_0x002d:
-            int r3 = r9.size()     // Catch:{ Exception -> 0x0072, all -> 0x006f }
+            int r3 = r9.size()     // Catch:{ Exception -> 0x0074, all -> 0x0071 }
             if (r2 >= r3) goto L_0x0061
-            r1.requery()     // Catch:{ Exception -> 0x0072, all -> 0x006f }
+            r1.requery()     // Catch:{ Exception -> 0x0074, all -> 0x0071 }
             r3 = 1
-            r1.bindLong(r3, r7)     // Catch:{ Exception -> 0x0072, all -> 0x006f }
+            r1.bindLong(r3, r7)     // Catch:{ Exception -> 0x0074, all -> 0x0071 }
             r3 = 2
-            long r4 = r9.keyAt(r2)     // Catch:{ Exception -> 0x0072, all -> 0x006f }
-            r1.bindLong(r3, r4)     // Catch:{ Exception -> 0x0072, all -> 0x006f }
-            java.lang.Object r3 = r9.valueAt(r2)     // Catch:{ Exception -> 0x0072, all -> 0x006f }
-            org.telegram.tgnet.TLRPC$ChannelParticipant r3 = (org.telegram.tgnet.TLRPC$ChannelParticipant) r3     // Catch:{ Exception -> 0x0072, all -> 0x006f }
-            org.telegram.tgnet.NativeByteBuffer r4 = new org.telegram.tgnet.NativeByteBuffer     // Catch:{ Exception -> 0x0072, all -> 0x006f }
-            int r5 = r3.getObjectSize()     // Catch:{ Exception -> 0x0072, all -> 0x006f }
-            r4.<init>((int) r5)     // Catch:{ Exception -> 0x0072, all -> 0x006f }
-            r3.serializeToStream(r4)     // Catch:{ Exception -> 0x0072, all -> 0x006f }
+            long r4 = r9.keyAt(r2)     // Catch:{ Exception -> 0x0074, all -> 0x0071 }
+            r1.bindLong(r3, r4)     // Catch:{ Exception -> 0x0074, all -> 0x0071 }
+            java.lang.Object r3 = r9.valueAt(r2)     // Catch:{ Exception -> 0x0074, all -> 0x0071 }
+            org.telegram.tgnet.TLRPC$ChannelParticipant r3 = (org.telegram.tgnet.TLRPC$ChannelParticipant) r3     // Catch:{ Exception -> 0x0074, all -> 0x0071 }
+            org.telegram.tgnet.NativeByteBuffer r4 = new org.telegram.tgnet.NativeByteBuffer     // Catch:{ Exception -> 0x0074, all -> 0x0071 }
+            int r5 = r3.getObjectSize()     // Catch:{ Exception -> 0x0074, all -> 0x0071 }
+            r4.<init>((int) r5)     // Catch:{ Exception -> 0x0074, all -> 0x0071 }
+            r3.serializeToStream(r4)     // Catch:{ Exception -> 0x0074, all -> 0x0071 }
             r3 = 3
-            r1.bindByteBuffer((int) r3, (org.telegram.tgnet.NativeByteBuffer) r4)     // Catch:{ Exception -> 0x0072, all -> 0x006f }
-            r1.step()     // Catch:{ Exception -> 0x0072, all -> 0x006f }
-            r4.reuse()     // Catch:{ Exception -> 0x0072, all -> 0x006f }
+            r1.bindByteBuffer((int) r3, (org.telegram.tgnet.NativeByteBuffer) r4)     // Catch:{ Exception -> 0x0074, all -> 0x0071 }
+            r1.step()     // Catch:{ Exception -> 0x0074, all -> 0x0071 }
+            r4.reuse()     // Catch:{ Exception -> 0x0074, all -> 0x0071 }
             int r2 = r2 + 1
             goto L_0x002d
         L_0x0061:
-            r1.dispose()     // Catch:{ Exception -> 0x0072, all -> 0x006f }
-            org.telegram.SQLite.SQLiteDatabase r7 = r6.database     // Catch:{ Exception -> 0x0077 }
-            r7.commitTransaction()     // Catch:{ Exception -> 0x0077 }
+            r1.dispose()     // Catch:{ Exception -> 0x0074, all -> 0x0071 }
+            org.telegram.SQLite.SQLiteDatabase r7 = r6.database     // Catch:{ Exception -> 0x0079 }
+            r7.commitTransaction()     // Catch:{ Exception -> 0x0079 }
             org.telegram.SQLite.SQLiteDatabase r7 = r6.database
+            if (r7 == 0) goto L_0x0089
             r7.commitTransaction()
-            goto L_0x0085
-        L_0x006f:
+            goto L_0x0089
+        L_0x0071:
             r7 = move-exception
             r0 = r1
-            goto L_0x0086
-        L_0x0072:
+            goto L_0x008a
+        L_0x0074:
             r7 = move-exception
             r0 = r1
-            goto L_0x0078
-        L_0x0075:
-            r7 = move-exception
-            goto L_0x0086
+            goto L_0x007a
         L_0x0077:
             r7 = move-exception
-        L_0x0078:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r7)     // Catch:{ all -> 0x0075 }
+            goto L_0x008a
+        L_0x0079:
+            r7 = move-exception
+        L_0x007a:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r7)     // Catch:{ all -> 0x0077 }
             org.telegram.SQLite.SQLiteDatabase r7 = r6.database
+            if (r7 == 0) goto L_0x0084
             r7.commitTransaction()
-            if (r0 == 0) goto L_0x0085
+        L_0x0084:
+            if (r0 == 0) goto L_0x0089
             r0.dispose()
-        L_0x0085:
+        L_0x0089:
             return
-        L_0x0086:
+        L_0x008a:
             org.telegram.SQLite.SQLiteDatabase r8 = r6.database
+            if (r8 == 0) goto L_0x0091
             r8.commitTransaction()
-            if (r0 == 0) goto L_0x0090
-            r0.dispose()
-        L_0x0090:
-            goto L_0x0092
         L_0x0091:
+            if (r0 == 0) goto L_0x0096
+            r0.dispose()
+        L_0x0096:
+            goto L_0x0098
+        L_0x0097:
             throw r7
-        L_0x0092:
-            goto L_0x0091
+        L_0x0098:
+            goto L_0x0097
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$putChannelAdmins$93(long, androidx.collection.LongSparseArray):void");
     }
@@ -12626,106 +12723,113 @@ public class MessagesStorage extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:22:0x009c  */
-    /* JADX WARNING: Removed duplicated region for block: B:25:0x00a7  */
-    /* JADX WARNING: Removed duplicated region for block: B:30:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:24:0x009b  */
+    /* JADX WARNING: Removed duplicated region for block: B:26:0x00a0  */
+    /* JADX WARNING: Removed duplicated region for block: B:29:0x00a8  */
+    /* JADX WARNING: Removed duplicated region for block: B:31:0x00ad  */
+    /* JADX WARNING: Removed duplicated region for block: B:37:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public /* synthetic */ void lambda$updateChannelUsers$94(long r11, java.util.ArrayList r13) {
         /*
             r10 = this;
             long r0 = -r11
             r2 = 0
-            org.telegram.SQLite.SQLiteDatabase r3 = r10.database     // Catch:{ Exception -> 0x0091 }
-            java.lang.StringBuilder r4 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0091 }
-            r4.<init>()     // Catch:{ Exception -> 0x0091 }
+            org.telegram.SQLite.SQLiteDatabase r3 = r10.database     // Catch:{ Exception -> 0x0093 }
+            java.lang.StringBuilder r4 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0093 }
+            r4.<init>()     // Catch:{ Exception -> 0x0093 }
             java.lang.String r5 = "DELETE FROM channel_users_v2 WHERE did = "
-            r4.append(r5)     // Catch:{ Exception -> 0x0091 }
-            r4.append(r0)     // Catch:{ Exception -> 0x0091 }
-            java.lang.String r4 = r4.toString()     // Catch:{ Exception -> 0x0091 }
-            org.telegram.SQLite.SQLitePreparedStatement r3 = r3.executeFast(r4)     // Catch:{ Exception -> 0x0091 }
-            org.telegram.SQLite.SQLitePreparedStatement r3 = r3.stepThis()     // Catch:{ Exception -> 0x0091 }
-            r3.dispose()     // Catch:{ Exception -> 0x0091 }
-            org.telegram.SQLite.SQLiteDatabase r3 = r10.database     // Catch:{ Exception -> 0x0091 }
-            r3.beginTransaction()     // Catch:{ Exception -> 0x0091 }
-            org.telegram.SQLite.SQLiteDatabase r3 = r10.database     // Catch:{ Exception -> 0x0091 }
+            r4.append(r5)     // Catch:{ Exception -> 0x0093 }
+            r4.append(r0)     // Catch:{ Exception -> 0x0093 }
+            java.lang.String r4 = r4.toString()     // Catch:{ Exception -> 0x0093 }
+            org.telegram.SQLite.SQLitePreparedStatement r3 = r3.executeFast(r4)     // Catch:{ Exception -> 0x0093 }
+            org.telegram.SQLite.SQLitePreparedStatement r3 = r3.stepThis()     // Catch:{ Exception -> 0x0093 }
+            r3.dispose()     // Catch:{ Exception -> 0x0093 }
+            org.telegram.SQLite.SQLiteDatabase r3 = r10.database     // Catch:{ Exception -> 0x0093 }
+            r3.beginTransaction()     // Catch:{ Exception -> 0x0093 }
+            org.telegram.SQLite.SQLiteDatabase r3 = r10.database     // Catch:{ Exception -> 0x0093 }
             java.lang.String r4 = "REPLACE INTO channel_users_v2 VALUES(?, ?, ?, ?)"
-            org.telegram.SQLite.SQLitePreparedStatement r3 = r3.executeFast(r4)     // Catch:{ Exception -> 0x0091 }
-            long r4 = java.lang.System.currentTimeMillis()     // Catch:{ Exception -> 0x008c, all -> 0x0089 }
+            org.telegram.SQLite.SQLitePreparedStatement r3 = r3.executeFast(r4)     // Catch:{ Exception -> 0x0093 }
+            long r4 = java.lang.System.currentTimeMillis()     // Catch:{ Exception -> 0x008e, all -> 0x008b }
             r6 = 1000(0x3e8, double:4.94E-321)
             long r4 = r4 / r6
-            int r5 = (int) r4     // Catch:{ Exception -> 0x008c, all -> 0x0089 }
+            int r5 = (int) r4     // Catch:{ Exception -> 0x008e, all -> 0x008b }
             r4 = 0
         L_0x0036:
-            int r6 = r13.size()     // Catch:{ Exception -> 0x008c, all -> 0x0089 }
+            int r6 = r13.size()     // Catch:{ Exception -> 0x008e, all -> 0x008b }
             if (r4 >= r6) goto L_0x0072
-            java.lang.Object r6 = r13.get(r4)     // Catch:{ Exception -> 0x008c, all -> 0x0089 }
-            org.telegram.tgnet.TLRPC$ChannelParticipant r6 = (org.telegram.tgnet.TLRPC$ChannelParticipant) r6     // Catch:{ Exception -> 0x008c, all -> 0x0089 }
-            r3.requery()     // Catch:{ Exception -> 0x008c, all -> 0x0089 }
+            java.lang.Object r6 = r13.get(r4)     // Catch:{ Exception -> 0x008e, all -> 0x008b }
+            org.telegram.tgnet.TLRPC$ChannelParticipant r6 = (org.telegram.tgnet.TLRPC$ChannelParticipant) r6     // Catch:{ Exception -> 0x008e, all -> 0x008b }
+            r3.requery()     // Catch:{ Exception -> 0x008e, all -> 0x008b }
             r7 = 1
-            r3.bindLong(r7, r0)     // Catch:{ Exception -> 0x008c, all -> 0x0089 }
+            r3.bindLong(r7, r0)     // Catch:{ Exception -> 0x008e, all -> 0x008b }
             r7 = 2
-            org.telegram.tgnet.TLRPC$Peer r8 = r6.peer     // Catch:{ Exception -> 0x008c, all -> 0x0089 }
-            long r8 = org.telegram.messenger.MessageObject.getPeerId(r8)     // Catch:{ Exception -> 0x008c, all -> 0x0089 }
-            r3.bindLong(r7, r8)     // Catch:{ Exception -> 0x008c, all -> 0x0089 }
+            org.telegram.tgnet.TLRPC$Peer r8 = r6.peer     // Catch:{ Exception -> 0x008e, all -> 0x008b }
+            long r8 = org.telegram.messenger.MessageObject.getPeerId(r8)     // Catch:{ Exception -> 0x008e, all -> 0x008b }
+            r3.bindLong(r7, r8)     // Catch:{ Exception -> 0x008e, all -> 0x008b }
             r7 = 3
-            r3.bindInteger(r7, r5)     // Catch:{ Exception -> 0x008c, all -> 0x0089 }
-            org.telegram.tgnet.NativeByteBuffer r7 = new org.telegram.tgnet.NativeByteBuffer     // Catch:{ Exception -> 0x008c, all -> 0x0089 }
-            int r8 = r6.getObjectSize()     // Catch:{ Exception -> 0x008c, all -> 0x0089 }
-            r7.<init>((int) r8)     // Catch:{ Exception -> 0x008c, all -> 0x0089 }
-            r6.serializeToStream(r7)     // Catch:{ Exception -> 0x008c, all -> 0x0089 }
+            r3.bindInteger(r7, r5)     // Catch:{ Exception -> 0x008e, all -> 0x008b }
+            org.telegram.tgnet.NativeByteBuffer r7 = new org.telegram.tgnet.NativeByteBuffer     // Catch:{ Exception -> 0x008e, all -> 0x008b }
+            int r8 = r6.getObjectSize()     // Catch:{ Exception -> 0x008e, all -> 0x008b }
+            r7.<init>((int) r8)     // Catch:{ Exception -> 0x008e, all -> 0x008b }
+            r6.serializeToStream(r7)     // Catch:{ Exception -> 0x008e, all -> 0x008b }
             r6 = 4
-            r3.bindByteBuffer((int) r6, (org.telegram.tgnet.NativeByteBuffer) r7)     // Catch:{ Exception -> 0x008c, all -> 0x0089 }
-            r3.step()     // Catch:{ Exception -> 0x008c, all -> 0x0089 }
-            r7.reuse()     // Catch:{ Exception -> 0x008c, all -> 0x0089 }
+            r3.bindByteBuffer((int) r6, (org.telegram.tgnet.NativeByteBuffer) r7)     // Catch:{ Exception -> 0x008e, all -> 0x008b }
+            r3.step()     // Catch:{ Exception -> 0x008e, all -> 0x008b }
+            r7.reuse()     // Catch:{ Exception -> 0x008e, all -> 0x008b }
             int r5 = r5 + -1
             int r4 = r4 + 1
             goto L_0x0036
         L_0x0072:
-            r3.dispose()     // Catch:{ Exception -> 0x008c, all -> 0x0089 }
-            org.telegram.SQLite.SQLiteDatabase r13 = r10.database     // Catch:{ Exception -> 0x0091 }
-            r13.commitTransaction()     // Catch:{ Exception -> 0x0091 }
+            r3.dispose()     // Catch:{ Exception -> 0x008e, all -> 0x008b }
+            org.telegram.SQLite.SQLiteDatabase r13 = r10.database     // Catch:{ Exception -> 0x0093 }
+            r13.commitTransaction()     // Catch:{ Exception -> 0x0093 }
             r6 = 1
             r7 = 0
             r8 = 0
             r9 = 1
             r3 = r10
             r4 = r11
-            r3.loadChatInfo(r4, r6, r7, r8, r9)     // Catch:{ Exception -> 0x0091 }
+            r3.loadChatInfo(r4, r6, r7, r8, r9)     // Catch:{ Exception -> 0x0093 }
             org.telegram.SQLite.SQLiteDatabase r11 = r10.database
+            if (r11 == 0) goto L_0x00a3
             r11.commitTransaction()
-            goto L_0x009f
-        L_0x0089:
+            goto L_0x00a3
+        L_0x008b:
             r11 = move-exception
             r2 = r3
-            goto L_0x00a0
-        L_0x008c:
+            goto L_0x00a4
+        L_0x008e:
             r11 = move-exception
             r2 = r3
-            goto L_0x0092
-        L_0x008f:
-            r11 = move-exception
-            goto L_0x00a0
+            goto L_0x0094
         L_0x0091:
             r11 = move-exception
-        L_0x0092:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r11)     // Catch:{ all -> 0x008f }
+            goto L_0x00a4
+        L_0x0093:
+            r11 = move-exception
+        L_0x0094:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r11)     // Catch:{ all -> 0x0091 }
             org.telegram.SQLite.SQLiteDatabase r11 = r10.database
+            if (r11 == 0) goto L_0x009e
             r11.commitTransaction()
-            if (r2 == 0) goto L_0x009f
+        L_0x009e:
+            if (r2 == 0) goto L_0x00a3
             r2.dispose()
-        L_0x009f:
+        L_0x00a3:
             return
-        L_0x00a0:
+        L_0x00a4:
             org.telegram.SQLite.SQLiteDatabase r12 = r10.database
+            if (r12 == 0) goto L_0x00ab
             r12.commitTransaction()
-            if (r2 == 0) goto L_0x00aa
-            r2.dispose()
-        L_0x00aa:
-            goto L_0x00ac
         L_0x00ab:
+            if (r2 == 0) goto L_0x00b0
+            r2.dispose()
+        L_0x00b0:
+            goto L_0x00b2
+        L_0x00b1:
             throw r11
-        L_0x00ac:
-            goto L_0x00ab
+        L_0x00b2:
+            goto L_0x00b1
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$updateChannelUsers$94(long, java.util.ArrayList):void");
     }
@@ -13624,11 +13728,13 @@ public class MessagesStorage extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:141:0x0331  */
-    /* JADX WARNING: Removed duplicated region for block: B:143:0x0336  */
-    /* JADX WARNING: Removed duplicated region for block: B:147:0x0342  */
-    /* JADX WARNING: Removed duplicated region for block: B:149:0x0347  */
-    /* JADX WARNING: Removed duplicated region for block: B:156:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:143:0x0330  */
+    /* JADX WARNING: Removed duplicated region for block: B:145:0x0335  */
+    /* JADX WARNING: Removed duplicated region for block: B:147:0x033a  */
+    /* JADX WARNING: Removed duplicated region for block: B:151:0x0343  */
+    /* JADX WARNING: Removed duplicated region for block: B:153:0x0348  */
+    /* JADX WARNING: Removed duplicated region for block: B:155:0x034d  */
+    /* JADX WARNING: Removed duplicated region for block: B:163:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public /* synthetic */ void lambda$updatePinnedMessages$105(boolean r19, java.util.HashMap r20, int r21, long r22, java.util.ArrayList r24, int r25, boolean r26) {
         /*
@@ -13784,19 +13890,19 @@ public class MessagesStorage extends BaseController {
         L_0x0131:
             org.telegram.SQLite.SQLiteDatabase r1 = r10.database     // Catch:{ Exception -> 0x0182, all -> 0x017c }
             org.telegram.SQLite.SQLitePreparedStatement r1 = r1.executeFast(r2)     // Catch:{ Exception -> 0x0182, all -> 0x017c }
-            r1.requery()     // Catch:{ Exception -> 0x031a, all -> 0x0315 }
-            r1.bindLong(r13, r3)     // Catch:{ Exception -> 0x031a, all -> 0x0315 }
+            r1.requery()     // Catch:{ Exception -> 0x031c, all -> 0x0317 }
+            r1.bindLong(r13, r3)     // Catch:{ Exception -> 0x031c, all -> 0x0317 }
             r2 = 2
-            r1.bindInteger(r2, r8)     // Catch:{ Exception -> 0x031a, all -> 0x0315 }
+            r1.bindInteger(r2, r8)     // Catch:{ Exception -> 0x031c, all -> 0x0317 }
             r2 = 3
             if (r9 == 0) goto L_0x0145
             goto L_0x0146
         L_0x0145:
             r13 = 0
         L_0x0146:
-            r1.bindInteger(r2, r13)     // Catch:{ Exception -> 0x031a, all -> 0x0315 }
-            r1.step()     // Catch:{ Exception -> 0x031a, all -> 0x0315 }
-            r1.dispose()     // Catch:{ Exception -> 0x031a, all -> 0x0315 }
+            r1.bindInteger(r2, r13)     // Catch:{ Exception -> 0x031c, all -> 0x0317 }
+            r1.step()     // Catch:{ Exception -> 0x031c, all -> 0x0317 }
+            r1.dispose()     // Catch:{ Exception -> 0x031c, all -> 0x0317 }
             org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda98 r11 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda98     // Catch:{ Exception -> 0x0182, all -> 0x017c }
             r1 = r11
             r2 = r18
@@ -13820,13 +13926,13 @@ public class MessagesStorage extends BaseController {
             r16 = r7
         L_0x016d:
             r12 = 0
-            goto L_0x033b
+            goto L_0x033f
         L_0x0170:
             r0 = move-exception
             r16 = r7
         L_0x0173:
             r12 = 0
-            goto L_0x0327
+            goto L_0x0329
         L_0x0176:
             r0 = move-exception
             r12 = r7
@@ -13840,13 +13946,13 @@ public class MessagesStorage extends BaseController {
             r12 = 0
         L_0x017e:
             r16 = 0
-            goto L_0x033b
+            goto L_0x033f
         L_0x0182:
             r0 = move-exception
             r12 = 0
         L_0x0184:
             r16 = 0
-            goto L_0x0327
+            goto L_0x0329
         L_0x0188:
             if (r5 != 0) goto L_0x01ef
             org.telegram.SQLite.SQLiteDatabase r1 = r10.database     // Catch:{ Exception -> 0x0182, all -> 0x017c }
@@ -13982,13 +14088,13 @@ public class MessagesStorage extends BaseController {
             java.lang.String r1 = java.lang.String.format(r9, r1, r11)     // Catch:{ Exception -> 0x0182, all -> 0x017c }
             java.lang.Object[] r8 = new java.lang.Object[r13]     // Catch:{ Exception -> 0x0182, all -> 0x017c }
             org.telegram.SQLite.SQLiteCursor r1 = r6.queryFinalized(r1, r8)     // Catch:{ Exception -> 0x0182, all -> 0x017c }
-            boolean r6 = r1.next()     // Catch:{ Exception -> 0x0323, all -> 0x031f }
+            boolean r6 = r1.next()     // Catch:{ Exception -> 0x0325, all -> 0x0321 }
             if (r6 == 0) goto L_0x02d3
-            int r6 = r1.intValue(r13)     // Catch:{ Exception -> 0x0323, all -> 0x031f }
+            int r6 = r1.intValue(r13)     // Catch:{ Exception -> 0x0325, all -> 0x0321 }
             int r6 = r6 - r14
-            int r14 = java.lang.Math.max(r13, r6)     // Catch:{ Exception -> 0x0323, all -> 0x031f }
+            int r14 = java.lang.Math.max(r13, r6)     // Catch:{ Exception -> 0x0325, all -> 0x0321 }
             r6 = 1
-            int r8 = r1.intValue(r6)     // Catch:{ Exception -> 0x0323, all -> 0x031f }
+            int r8 = r1.intValue(r6)     // Catch:{ Exception -> 0x0325, all -> 0x0321 }
             if (r8 == 0) goto L_0x02d1
             r6 = 1
             goto L_0x02d5
@@ -13999,25 +14105,25 @@ public class MessagesStorage extends BaseController {
             r6 = 0
             r14 = 0
         L_0x02d5:
-            r1.dispose()     // Catch:{ Exception -> 0x0323, all -> 0x031f }
+            r1.dispose()     // Catch:{ Exception -> 0x0325, all -> 0x0321 }
             int r1 = java.lang.Math.max(r7, r14)     // Catch:{ Exception -> 0x0182, all -> 0x017c }
             r8 = r1
             r9 = r6
         L_0x02de:
             org.telegram.SQLite.SQLiteDatabase r1 = r10.database     // Catch:{ Exception -> 0x0182, all -> 0x017c }
             org.telegram.SQLite.SQLitePreparedStatement r1 = r1.executeFast(r2)     // Catch:{ Exception -> 0x0182, all -> 0x017c }
-            r1.requery()     // Catch:{ Exception -> 0x031a, all -> 0x0315 }
+            r1.requery()     // Catch:{ Exception -> 0x031c, all -> 0x0317 }
             r2 = 1
-            r1.bindLong(r2, r3)     // Catch:{ Exception -> 0x031a, all -> 0x0315 }
+            r1.bindLong(r2, r3)     // Catch:{ Exception -> 0x031c, all -> 0x0317 }
             r6 = 2
-            r1.bindInteger(r6, r8)     // Catch:{ Exception -> 0x031a, all -> 0x0315 }
+            r1.bindInteger(r6, r8)     // Catch:{ Exception -> 0x031c, all -> 0x0317 }
             r2 = 3
             if (r9 == 0) goto L_0x02f3
             r13 = 1
         L_0x02f3:
-            r1.bindInteger(r2, r13)     // Catch:{ Exception -> 0x031a, all -> 0x0315 }
-            r1.step()     // Catch:{ Exception -> 0x031a, all -> 0x0315 }
-            r1.dispose()     // Catch:{ Exception -> 0x031a, all -> 0x0315 }
+            r1.bindInteger(r2, r13)     // Catch:{ Exception -> 0x031c, all -> 0x0317 }
+            r1.step()     // Catch:{ Exception -> 0x031c, all -> 0x0317 }
+            r1.dispose()     // Catch:{ Exception -> 0x031c, all -> 0x0317 }
             org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda97 r11 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda97     // Catch:{ Exception -> 0x0182, all -> 0x017c }
             r1 = r11
             r2 = r18
@@ -14029,51 +14135,56 @@ public class MessagesStorage extends BaseController {
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r11)     // Catch:{ Exception -> 0x0182, all -> 0x017c }
         L_0x030f:
             org.telegram.SQLite.SQLiteDatabase r0 = r10.database
+            if (r0 == 0) goto L_0x033d
             r0.commitTransaction()
-            goto L_0x0339
-        L_0x0315:
+            goto L_0x033d
+        L_0x0317:
             r0 = move-exception
             r16 = r1
             goto L_0x016d
-        L_0x031a:
+        L_0x031c:
             r0 = move-exception
             r16 = r1
             goto L_0x0173
-        L_0x031f:
+        L_0x0321:
             r0 = move-exception
             r12 = r1
             goto L_0x017e
-        L_0x0323:
+        L_0x0325:
             r0 = move-exception
             r12 = r1
             goto L_0x0184
-        L_0x0327:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x033a }
+        L_0x0329:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x033e }
             org.telegram.SQLite.SQLiteDatabase r0 = r10.database
+            if (r0 == 0) goto L_0x0333
             r0.commitTransaction()
-            if (r12 == 0) goto L_0x0334
+        L_0x0333:
+            if (r12 == 0) goto L_0x0338
             r12.dispose()
-        L_0x0334:
-            if (r16 == 0) goto L_0x0339
+        L_0x0338:
+            if (r16 == 0) goto L_0x033d
             r16.dispose()
-        L_0x0339:
+        L_0x033d:
             return
-        L_0x033a:
+        L_0x033e:
             r0 = move-exception
-        L_0x033b:
+        L_0x033f:
             org.telegram.SQLite.SQLiteDatabase r1 = r10.database
+            if (r1 == 0) goto L_0x0346
             r1.commitTransaction()
-            if (r12 == 0) goto L_0x0345
+        L_0x0346:
+            if (r12 == 0) goto L_0x034b
             r12.dispose()
-        L_0x0345:
-            if (r16 == 0) goto L_0x034a
-            r16.dispose()
-        L_0x034a:
-            goto L_0x034c
         L_0x034b:
+            if (r16 == 0) goto L_0x0350
+            r16.dispose()
+        L_0x0350:
+            goto L_0x0352
+        L_0x0351:
             throw r0
-        L_0x034c:
-            goto L_0x034b
+        L_0x0352:
+            goto L_0x0351
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$updatePinnedMessages$105(boolean, java.util.HashMap, int, long, java.util.ArrayList, int, boolean):void");
     }
@@ -15129,24 +15240,12 @@ public class MessagesStorage extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Code restructure failed: missing block: B:116:0x01a1, code lost:
-        if (r4 == null) goto L_0x01a6;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:117:0x01a3, code lost:
-        r4.dispose();
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:118:0x01a6, code lost:
-        r1.database.commitTransaction();
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:119:0x01ab, code lost:
-        return;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:91:0x016f, code lost:
-        if (r4 != null) goto L_0x01a3;
-     */
-    /* JADX WARNING: Removed duplicated region for block: B:115:0x019e  */
-    /* JADX WARNING: Removed duplicated region for block: B:122:0x01af  */
-    /* JADX WARNING: Removed duplicated region for block: B:124:0x01b4  */
+    /* JADX WARNING: Removed duplicated region for block: B:118:0x01a5  */
+    /* JADX WARNING: Removed duplicated region for block: B:120:0x01aa  */
+    /* JADX WARNING: Removed duplicated region for block: B:126:0x01b8  */
+    /* JADX WARNING: Removed duplicated region for block: B:128:0x01bd  */
+    /* JADX WARNING: Removed duplicated region for block: B:131:0x01c4  */
+    /* JADX WARNING: Removed duplicated region for block: B:135:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public /* synthetic */ void lambda$processPendingRead$111(long r19, int r21, int r22, int r23, int r24) {
         /*
@@ -15155,17 +15254,17 @@ public class MessagesStorage extends BaseController {
             r2 = r19
             r0 = r24
             r4 = 0
-            org.telegram.SQLite.SQLiteDatabase r7 = r1.database     // Catch:{ Exception -> 0x0195, all -> 0x0190 }
-            java.lang.StringBuilder r8 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0195, all -> 0x0190 }
-            r8.<init>()     // Catch:{ Exception -> 0x0195, all -> 0x0190 }
+            org.telegram.SQLite.SQLiteDatabase r7 = r1.database     // Catch:{ Exception -> 0x019c, all -> 0x0197 }
+            java.lang.StringBuilder r8 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x019c, all -> 0x0197 }
+            r8.<init>()     // Catch:{ Exception -> 0x019c, all -> 0x0197 }
             java.lang.String r9 = "SELECT unread_count, inbox_max, last_mid FROM dialogs WHERE did = "
-            r8.append(r9)     // Catch:{ Exception -> 0x0195, all -> 0x0190 }
-            r8.append(r2)     // Catch:{ Exception -> 0x0195, all -> 0x0190 }
-            java.lang.String r8 = r8.toString()     // Catch:{ Exception -> 0x0195, all -> 0x0190 }
+            r8.append(r9)     // Catch:{ Exception -> 0x019c, all -> 0x0197 }
+            r8.append(r2)     // Catch:{ Exception -> 0x019c, all -> 0x0197 }
+            java.lang.String r8 = r8.toString()     // Catch:{ Exception -> 0x019c, all -> 0x0197 }
             r9 = 0
-            java.lang.Object[] r10 = new java.lang.Object[r9]     // Catch:{ Exception -> 0x0195, all -> 0x0190 }
-            org.telegram.SQLite.SQLiteCursor r7 = r7.queryFinalized(r8, r10)     // Catch:{ Exception -> 0x0195, all -> 0x0190 }
-            boolean r8 = r7.next()     // Catch:{ Exception -> 0x018b, all -> 0x0186 }
+            java.lang.Object[] r10 = new java.lang.Object[r9]     // Catch:{ Exception -> 0x019c, all -> 0x0197 }
+            org.telegram.SQLite.SQLiteCursor r7 = r7.queryFinalized(r8, r10)     // Catch:{ Exception -> 0x019c, all -> 0x0197 }
+            boolean r8 = r7.next()     // Catch:{ Exception -> 0x0192, all -> 0x018d }
             r10 = 2
             r11 = 1
             if (r8 == 0) goto L_0x0048
@@ -15183,22 +15282,22 @@ public class MessagesStorage extends BaseController {
             r4 = r7
         L_0x0040:
             r6 = 0
-            goto L_0x01ad
+            goto L_0x01b6
         L_0x0043:
             r0 = move-exception
             r4 = r7
         L_0x0045:
             r6 = 0
-            goto L_0x0199
+            goto L_0x01a0
         L_0x0048:
             r8 = 0
             r12 = 0
             r13 = 0
         L_0x004b:
-            r7.dispose()     // Catch:{ Exception -> 0x018b, all -> 0x0186 }
-            org.telegram.SQLite.SQLiteDatabase r7 = r1.database     // Catch:{ Exception -> 0x0195, all -> 0x0190 }
-            r7.beginTransaction()     // Catch:{ Exception -> 0x0195, all -> 0x0190 }
-            boolean r7 = org.telegram.messenger.DialogObject.isEncryptedDialog(r19)     // Catch:{ Exception -> 0x0195, all -> 0x0190 }
+            r7.dispose()     // Catch:{ Exception -> 0x0192, all -> 0x018d }
+            org.telegram.SQLite.SQLiteDatabase r7 = r1.database     // Catch:{ Exception -> 0x019c, all -> 0x0197 }
+            r7.beginTransaction()     // Catch:{ Exception -> 0x019c, all -> 0x0197 }
+            boolean r7 = org.telegram.messenger.DialogObject.isEncryptedDialog(r19)     // Catch:{ Exception -> 0x019c, all -> 0x0197 }
             java.lang.String r14 = "SELECT changes()"
             if (r7 != 0) goto L_0x00f8
             r7 = r21
@@ -15237,29 +15336,29 @@ public class MessagesStorage extends BaseController {
             org.telegram.SQLite.SQLiteDatabase r5 = r1.database     // Catch:{ Exception -> 0x00d7, all -> 0x00d2 }
             java.lang.String r6 = "DELETE FROM unread_push_messages WHERE uid = ? AND mid <= ?"
             org.telegram.SQLite.SQLitePreparedStatement r5 = r5.executeFast(r6)     // Catch:{ Exception -> 0x00d7, all -> 0x00d2 }
-            r5.requery()     // Catch:{ Exception -> 0x0174, all -> 0x0172 }
-            r5.bindLong(r11, r2)     // Catch:{ Exception -> 0x0174, all -> 0x0172 }
-            r5.bindInteger(r10, r0)     // Catch:{ Exception -> 0x0174, all -> 0x0172 }
-            r5.step()     // Catch:{ Exception -> 0x0174, all -> 0x0172 }
-            r5.dispose()     // Catch:{ Exception -> 0x0174, all -> 0x0172 }
-            org.telegram.SQLite.SQLiteDatabase r6 = r1.database     // Catch:{ Exception -> 0x0174, all -> 0x0172 }
+            r5.requery()     // Catch:{ Exception -> 0x017b, all -> 0x0179 }
+            r5.bindLong(r11, r2)     // Catch:{ Exception -> 0x017b, all -> 0x0179 }
+            r5.bindInteger(r10, r0)     // Catch:{ Exception -> 0x017b, all -> 0x0179 }
+            r5.step()     // Catch:{ Exception -> 0x017b, all -> 0x0179 }
+            r5.dispose()     // Catch:{ Exception -> 0x017b, all -> 0x0179 }
+            org.telegram.SQLite.SQLiteDatabase r6 = r1.database     // Catch:{ Exception -> 0x017b, all -> 0x0179 }
             java.lang.String r7 = "DELETE FROM unread_push_messages WHERE uid = ? AND date <= ?"
-            org.telegram.SQLite.SQLitePreparedStatement r5 = r6.executeFast(r7)     // Catch:{ Exception -> 0x0174, all -> 0x0172 }
-            r5.requery()     // Catch:{ Exception -> 0x0174, all -> 0x0172 }
-            r5.bindLong(r11, r2)     // Catch:{ Exception -> 0x0174, all -> 0x0172 }
+            org.telegram.SQLite.SQLitePreparedStatement r5 = r6.executeFast(r7)     // Catch:{ Exception -> 0x017b, all -> 0x0179 }
+            r5.requery()     // Catch:{ Exception -> 0x017b, all -> 0x0179 }
+            r5.bindLong(r11, r2)     // Catch:{ Exception -> 0x017b, all -> 0x0179 }
             r6 = r23
-            r5.bindInteger(r10, r6)     // Catch:{ Exception -> 0x0174, all -> 0x0172 }
-            r5.step()     // Catch:{ Exception -> 0x0174, all -> 0x0172 }
-            r5.dispose()     // Catch:{ Exception -> 0x0174, all -> 0x0172 }
+            r5.bindInteger(r10, r6)     // Catch:{ Exception -> 0x017b, all -> 0x0179 }
+            r5.step()     // Catch:{ Exception -> 0x017b, all -> 0x0179 }
+            r5.dispose()     // Catch:{ Exception -> 0x017b, all -> 0x0179 }
             goto L_0x013a
         L_0x00d2:
             r0 = move-exception
             r6 = r21
-            goto L_0x01ad
+            goto L_0x01b6
         L_0x00d7:
             r0 = move-exception
             r6 = r21
-            goto L_0x0199
+            goto L_0x01a0
         L_0x00dc:
             r0 = move-exception
             goto L_0x00e3
@@ -15272,14 +15371,14 @@ public class MessagesStorage extends BaseController {
         L_0x00e3:
             r6 = r21
             r4 = 0
-            goto L_0x01ad
+            goto L_0x01b6
         L_0x00e8:
             r0 = move-exception
             r21 = r7
         L_0x00eb:
             r6 = r21
             r4 = 0
-            goto L_0x0199
+            goto L_0x01a0
         L_0x00f0:
             r0 = move-exception
             r4 = 0
@@ -15289,24 +15388,24 @@ public class MessagesStorage extends BaseController {
             r4 = 0
             goto L_0x0045
         L_0x00f8:
-            org.telegram.SQLite.SQLiteDatabase r6 = r1.database     // Catch:{ Exception -> 0x0195, all -> 0x0190 }
+            org.telegram.SQLite.SQLiteDatabase r6 = r1.database     // Catch:{ Exception -> 0x019c, all -> 0x0197 }
             java.lang.String r7 = "UPDATE messages_v2 SET read_state = read_state | 1 WHERE uid = ? AND mid >= ? AND read_state IN(0,2) AND out = 0"
-            org.telegram.SQLite.SQLitePreparedStatement r6 = r6.executeFast(r7)     // Catch:{ Exception -> 0x0195, all -> 0x0190 }
-            r6.requery()     // Catch:{ Exception -> 0x0182, all -> 0x017e }
-            r6.bindLong(r11, r2)     // Catch:{ Exception -> 0x0182, all -> 0x017e }
-            r6.bindInteger(r10, r0)     // Catch:{ Exception -> 0x0182, all -> 0x017e }
-            r6.step()     // Catch:{ Exception -> 0x0182, all -> 0x017e }
-            r6.dispose()     // Catch:{ Exception -> 0x0182, all -> 0x017e }
+            org.telegram.SQLite.SQLitePreparedStatement r6 = r6.executeFast(r7)     // Catch:{ Exception -> 0x019c, all -> 0x0197 }
+            r6.requery()     // Catch:{ Exception -> 0x0189, all -> 0x0185 }
+            r6.bindLong(r11, r2)     // Catch:{ Exception -> 0x0189, all -> 0x0185 }
+            r6.bindInteger(r10, r0)     // Catch:{ Exception -> 0x0189, all -> 0x0185 }
+            r6.step()     // Catch:{ Exception -> 0x0189, all -> 0x0185 }
+            r6.dispose()     // Catch:{ Exception -> 0x0189, all -> 0x0185 }
             long r6 = (long) r0
             int r15 = (r6 > r4 ? 1 : (r6 == r4 ? 0 : -1))
             if (r15 > 0) goto L_0x0116
             r4 = 0
             goto L_0x013a
         L_0x0116:
-            org.telegram.SQLite.SQLiteDatabase r4 = r1.database     // Catch:{ Exception -> 0x0195, all -> 0x0190 }
-            java.lang.Object[] r5 = new java.lang.Object[r9]     // Catch:{ Exception -> 0x0195, all -> 0x0190 }
-            org.telegram.SQLite.SQLiteCursor r4 = r4.queryFinalized(r14, r5)     // Catch:{ Exception -> 0x0195, all -> 0x0190 }
-            boolean r5 = r4.next()     // Catch:{ Exception -> 0x017a, all -> 0x0176 }
+            org.telegram.SQLite.SQLiteDatabase r4 = r1.database     // Catch:{ Exception -> 0x019c, all -> 0x0197 }
+            java.lang.Object[] r5 = new java.lang.Object[r9]     // Catch:{ Exception -> 0x019c, all -> 0x0197 }
+            org.telegram.SQLite.SQLiteCursor r4 = r4.queryFinalized(r14, r5)     // Catch:{ Exception -> 0x019c, all -> 0x0197 }
+            boolean r5 = r4.next()     // Catch:{ Exception -> 0x0181, all -> 0x017d }
             if (r5 == 0) goto L_0x0131
             int r5 = r4.intValue(r9)     // Catch:{ Exception -> 0x012e, all -> 0x012b }
             int r5 = r5 + r22
@@ -15320,115 +15419,123 @@ public class MessagesStorage extends BaseController {
         L_0x0131:
             r5 = 0
         L_0x0132:
-            r4.dispose()     // Catch:{ Exception -> 0x017a, all -> 0x0176 }
+            r4.dispose()     // Catch:{ Exception -> 0x0181, all -> 0x017d }
             int r8 = r8 - r5
-            int r9 = java.lang.Math.max(r9, r8)     // Catch:{ Exception -> 0x017a, all -> 0x0176 }
+            int r9 = java.lang.Math.max(r9, r8)     // Catch:{ Exception -> 0x0181, all -> 0x017d }
         L_0x013a:
-            org.telegram.SQLite.SQLiteDatabase r5 = r1.database     // Catch:{ Exception -> 0x017a, all -> 0x0176 }
+            org.telegram.SQLite.SQLiteDatabase r5 = r1.database     // Catch:{ Exception -> 0x0181, all -> 0x017d }
             java.lang.String r6 = "UPDATE dialogs SET unread_count = ?, inbox_max = ? WHERE did = ?"
-            org.telegram.SQLite.SQLitePreparedStatement r5 = r5.executeFast(r6)     // Catch:{ Exception -> 0x017a, all -> 0x0176 }
-            r5.requery()     // Catch:{ Exception -> 0x0174, all -> 0x0172 }
-            r5.bindInteger(r11, r9)     // Catch:{ Exception -> 0x0174, all -> 0x0172 }
-            r5.bindInteger(r10, r0)     // Catch:{ Exception -> 0x0174, all -> 0x0172 }
+            org.telegram.SQLite.SQLitePreparedStatement r5 = r5.executeFast(r6)     // Catch:{ Exception -> 0x0181, all -> 0x017d }
+            r5.requery()     // Catch:{ Exception -> 0x017b, all -> 0x0179 }
+            r5.bindInteger(r11, r9)     // Catch:{ Exception -> 0x017b, all -> 0x0179 }
+            r5.bindInteger(r10, r0)     // Catch:{ Exception -> 0x017b, all -> 0x0179 }
             r0 = 3
-            r5.bindLong(r0, r2)     // Catch:{ Exception -> 0x0174, all -> 0x0172 }
-            r5.step()     // Catch:{ Exception -> 0x0174, all -> 0x0172 }
-            r5.dispose()     // Catch:{ Exception -> 0x0174, all -> 0x0172 }
-            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x017a, all -> 0x0176 }
-            r0.commitTransaction()     // Catch:{ Exception -> 0x017a, all -> 0x0176 }
+            r5.bindLong(r0, r2)     // Catch:{ Exception -> 0x017b, all -> 0x0179 }
+            r5.step()     // Catch:{ Exception -> 0x017b, all -> 0x0179 }
+            r5.dispose()     // Catch:{ Exception -> 0x017b, all -> 0x0179 }
+            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x0181, all -> 0x017d }
+            r0.commitTransaction()     // Catch:{ Exception -> 0x0181, all -> 0x017d }
             if (r12 == 0) goto L_0x016b
             if (r9 != 0) goto L_0x016b
-            org.telegram.messenger.support.LongSparseIntArray r0 = new org.telegram.messenger.support.LongSparseIntArray     // Catch:{ Exception -> 0x017a, all -> 0x0176 }
-            r0.<init>()     // Catch:{ Exception -> 0x017a, all -> 0x0176 }
-            r0.put(r2, r9)     // Catch:{ Exception -> 0x017a, all -> 0x0176 }
+            org.telegram.messenger.support.LongSparseIntArray r0 = new org.telegram.messenger.support.LongSparseIntArray     // Catch:{ Exception -> 0x0181, all -> 0x017d }
+            r0.<init>()     // Catch:{ Exception -> 0x0181, all -> 0x017d }
+            r0.put(r2, r9)     // Catch:{ Exception -> 0x0181, all -> 0x017d }
             r5 = 0
-            r1.updateFiltersReadCounter(r0, r5, r11)     // Catch:{ Exception -> 0x0174, all -> 0x0172 }
+            r1.updateFiltersReadCounter(r0, r5, r11)     // Catch:{ Exception -> 0x017b, all -> 0x0179 }
             goto L_0x016c
         L_0x016b:
             r5 = 0
         L_0x016c:
-            r18.updateWidgets((long) r19)     // Catch:{ Exception -> 0x0174, all -> 0x0172 }
-            if (r4 == 0) goto L_0x01a6
-            goto L_0x01a3
-        L_0x0172:
-            r0 = move-exception
-            goto L_0x0178
+            r18.updateWidgets((long) r19)     // Catch:{ Exception -> 0x017b, all -> 0x0179 }
+            if (r4 == 0) goto L_0x0174
+            r4.dispose()
         L_0x0174:
-            r0 = move-exception
-            goto L_0x017c
-        L_0x0176:
-            r0 = move-exception
-            r5 = 0
-        L_0x0178:
-            r6 = r5
-            goto L_0x01ad
-        L_0x017a:
-            r0 = move-exception
-            r5 = 0
-        L_0x017c:
-            r6 = r5
-            goto L_0x0199
-        L_0x017e:
-            r0 = move-exception
-            r5 = 0
-            r4 = r5
-            goto L_0x01ad
-        L_0x0182:
-            r0 = move-exception
-            r5 = 0
-            r4 = r5
-            goto L_0x0199
-        L_0x0186:
-            r0 = move-exception
-            r5 = 0
-            r6 = r5
-            r4 = r7
-            goto L_0x01ad
-        L_0x018b:
-            r0 = move-exception
-            r5 = 0
-            r6 = r5
-            r4 = r7
-            goto L_0x0199
-        L_0x0190:
-            r0 = move-exception
-            r5 = 0
-            r4 = r5
-            r6 = r4
-            goto L_0x01ad
-        L_0x0195:
-            r0 = move-exception
-            r5 = 0
-            r4 = r5
-            r6 = r4
-        L_0x0199:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x01ac }
-            if (r6 == 0) goto L_0x01a1
-            r6.dispose()
-        L_0x01a1:
-            if (r4 == 0) goto L_0x01a6
-        L_0x01a3:
-            r4.dispose()
-        L_0x01a6:
             org.telegram.SQLite.SQLiteDatabase r0 = r1.database
-            r0.commitTransaction()
-            return
-        L_0x01ac:
+            if (r0 == 0) goto L_0x01b4
+            goto L_0x01b1
+        L_0x0179:
             r0 = move-exception
-        L_0x01ad:
-            if (r6 == 0) goto L_0x01b2
+            goto L_0x017f
+        L_0x017b:
+            r0 = move-exception
+            goto L_0x0183
+        L_0x017d:
+            r0 = move-exception
+            r5 = 0
+        L_0x017f:
+            r6 = r5
+            goto L_0x01b6
+        L_0x0181:
+            r0 = move-exception
+            r5 = 0
+        L_0x0183:
+            r6 = r5
+            goto L_0x01a0
+        L_0x0185:
+            r0 = move-exception
+            r5 = 0
+            r4 = r5
+            goto L_0x01b6
+        L_0x0189:
+            r0 = move-exception
+            r5 = 0
+            r4 = r5
+            goto L_0x01a0
+        L_0x018d:
+            r0 = move-exception
+            r5 = 0
+            r6 = r5
+            r4 = r7
+            goto L_0x01b6
+        L_0x0192:
+            r0 = move-exception
+            r5 = 0
+            r6 = r5
+            r4 = r7
+            goto L_0x01a0
+        L_0x0197:
+            r0 = move-exception
+            r5 = 0
+            r4 = r5
+            r6 = r4
+            goto L_0x01b6
+        L_0x019c:
+            r0 = move-exception
+            r5 = 0
+            r4 = r5
+            r6 = r4
+        L_0x01a0:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x01b5 }
+            if (r6 == 0) goto L_0x01a8
             r6.dispose()
-        L_0x01b2:
-            if (r4 == 0) goto L_0x01b7
+        L_0x01a8:
+            if (r4 == 0) goto L_0x01ad
             r4.dispose()
-        L_0x01b7:
+        L_0x01ad:
+            org.telegram.SQLite.SQLiteDatabase r0 = r1.database
+            if (r0 == 0) goto L_0x01b4
+        L_0x01b1:
+            r0.commitTransaction()
+        L_0x01b4:
+            return
+        L_0x01b5:
+            r0 = move-exception
+        L_0x01b6:
+            if (r6 == 0) goto L_0x01bb
+            r6.dispose()
+        L_0x01bb:
+            if (r4 == 0) goto L_0x01c0
+            r4.dispose()
+        L_0x01c0:
             org.telegram.SQLite.SQLiteDatabase r2 = r1.database
+            if (r2 == 0) goto L_0x01c7
             r2.commitTransaction()
-            goto L_0x01be
-        L_0x01bd:
+        L_0x01c7:
+            goto L_0x01c9
+        L_0x01c8:
             throw r0
-        L_0x01be:
-            goto L_0x01bd
+        L_0x01c9:
+            goto L_0x01c8
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$processPendingRead$111(long, int, int, int, int):void");
     }
@@ -15440,85 +15547,95 @@ public class MessagesStorage extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:30:0x006a  */
+    /* JADX WARNING: Removed duplicated region for block: B:28:0x0063  */
+    /* JADX WARNING: Removed duplicated region for block: B:33:0x0070  */
+    /* JADX WARNING: Removed duplicated region for block: B:36:0x0077  */
+    /* JADX WARNING: Removed duplicated region for block: B:43:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public /* synthetic */ void lambda$putContacts$112(boolean r8, java.util.ArrayList r9) {
         /*
             r7 = this;
             r0 = 0
             if (r8 == 0) goto L_0x0012
-            org.telegram.SQLite.SQLiteDatabase r8 = r7.database     // Catch:{ Exception -> 0x0059 }
+            org.telegram.SQLite.SQLiteDatabase r8 = r7.database     // Catch:{ Exception -> 0x005d }
             java.lang.String r1 = "DELETE FROM contacts WHERE 1"
-            org.telegram.SQLite.SQLitePreparedStatement r8 = r8.executeFast(r1)     // Catch:{ Exception -> 0x0059 }
-            org.telegram.SQLite.SQLitePreparedStatement r8 = r8.stepThis()     // Catch:{ Exception -> 0x0059 }
-            r8.dispose()     // Catch:{ Exception -> 0x0059 }
+            org.telegram.SQLite.SQLitePreparedStatement r8 = r8.executeFast(r1)     // Catch:{ Exception -> 0x005d }
+            org.telegram.SQLite.SQLitePreparedStatement r8 = r8.stepThis()     // Catch:{ Exception -> 0x005d }
+            r8.dispose()     // Catch:{ Exception -> 0x005d }
         L_0x0012:
-            org.telegram.SQLite.SQLiteDatabase r8 = r7.database     // Catch:{ Exception -> 0x0059 }
-            r8.beginTransaction()     // Catch:{ Exception -> 0x0059 }
-            org.telegram.SQLite.SQLiteDatabase r8 = r7.database     // Catch:{ Exception -> 0x0059 }
+            org.telegram.SQLite.SQLiteDatabase r8 = r7.database     // Catch:{ Exception -> 0x005d }
+            r8.beginTransaction()     // Catch:{ Exception -> 0x005d }
+            org.telegram.SQLite.SQLiteDatabase r8 = r7.database     // Catch:{ Exception -> 0x005d }
             java.lang.String r1 = "REPLACE INTO contacts VALUES(?, ?)"
-            org.telegram.SQLite.SQLitePreparedStatement r8 = r8.executeFast(r1)     // Catch:{ Exception -> 0x0059 }
+            org.telegram.SQLite.SQLitePreparedStatement r8 = r8.executeFast(r1)     // Catch:{ Exception -> 0x005d }
             r1 = 0
             r2 = 0
         L_0x0021:
-            int r3 = r9.size()     // Catch:{ Exception -> 0x0053, all -> 0x004f }
+            int r3 = r9.size()     // Catch:{ Exception -> 0x0057, all -> 0x0053 }
             if (r2 >= r3) goto L_0x0046
-            java.lang.Object r3 = r9.get(r2)     // Catch:{ Exception -> 0x0053, all -> 0x004f }
-            org.telegram.tgnet.TLRPC$TL_contact r3 = (org.telegram.tgnet.TLRPC$TL_contact) r3     // Catch:{ Exception -> 0x0053, all -> 0x004f }
-            r8.requery()     // Catch:{ Exception -> 0x0053, all -> 0x004f }
-            long r4 = r3.user_id     // Catch:{ Exception -> 0x0053, all -> 0x004f }
+            java.lang.Object r3 = r9.get(r2)     // Catch:{ Exception -> 0x0057, all -> 0x0053 }
+            org.telegram.tgnet.TLRPC$TL_contact r3 = (org.telegram.tgnet.TLRPC$TL_contact) r3     // Catch:{ Exception -> 0x0057, all -> 0x0053 }
+            r8.requery()     // Catch:{ Exception -> 0x0057, all -> 0x0053 }
+            long r4 = r3.user_id     // Catch:{ Exception -> 0x0057, all -> 0x0053 }
             r6 = 1
-            r8.bindLong(r6, r4)     // Catch:{ Exception -> 0x0053, all -> 0x004f }
+            r8.bindLong(r6, r4)     // Catch:{ Exception -> 0x0057, all -> 0x0053 }
             r4 = 2
-            boolean r3 = r3.mutual     // Catch:{ Exception -> 0x0053, all -> 0x004f }
+            boolean r3 = r3.mutual     // Catch:{ Exception -> 0x0057, all -> 0x0053 }
             if (r3 == 0) goto L_0x003c
             goto L_0x003d
         L_0x003c:
             r6 = 0
         L_0x003d:
-            r8.bindInteger(r4, r6)     // Catch:{ Exception -> 0x0053, all -> 0x004f }
-            r8.step()     // Catch:{ Exception -> 0x0053, all -> 0x004f }
+            r8.bindInteger(r4, r6)     // Catch:{ Exception -> 0x0057, all -> 0x0053 }
+            r8.step()     // Catch:{ Exception -> 0x0057, all -> 0x0053 }
             int r2 = r2 + 1
             goto L_0x0021
         L_0x0046:
-            r8.dispose()     // Catch:{ Exception -> 0x0053, all -> 0x004f }
-            org.telegram.SQLite.SQLiteDatabase r8 = r7.database     // Catch:{ Exception -> 0x0059 }
-            r8.commitTransaction()     // Catch:{ Exception -> 0x0059 }
-            goto L_0x0062
-        L_0x004f:
-            r9 = move-exception
-            r0 = r8
-            r8 = r9
-            goto L_0x0068
+            r8.dispose()     // Catch:{ Exception -> 0x0057, all -> 0x0053 }
+            org.telegram.SQLite.SQLiteDatabase r8 = r7.database     // Catch:{ Exception -> 0x005d }
+            r8.commitTransaction()     // Catch:{ Exception -> 0x005d }
+            org.telegram.SQLite.SQLiteDatabase r8 = r7.database
+            if (r8 == 0) goto L_0x006d
+            goto L_0x006a
         L_0x0053:
             r9 = move-exception
             r0 = r8
             r8 = r9
-            goto L_0x005a
+            goto L_0x006e
         L_0x0057:
+            r9 = move-exception
+            r0 = r8
+            r8 = r9
+            goto L_0x005e
+        L_0x005b:
             r8 = move-exception
-            goto L_0x0068
-        L_0x0059:
+            goto L_0x006e
+        L_0x005d:
             r8 = move-exception
-        L_0x005a:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r8)     // Catch:{ all -> 0x0057 }
-            if (r0 == 0) goto L_0x0062
+        L_0x005e:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r8)     // Catch:{ all -> 0x005b }
+            if (r0 == 0) goto L_0x0066
             r0.dispose()
-        L_0x0062:
+        L_0x0066:
             org.telegram.SQLite.SQLiteDatabase r8 = r7.database
+            if (r8 == 0) goto L_0x006d
+        L_0x006a:
             r8.commitTransaction()
-            return
-        L_0x0068:
-            if (r0 == 0) goto L_0x006d
-            r0.dispose()
         L_0x006d:
-            org.telegram.SQLite.SQLiteDatabase r9 = r7.database
-            r9.commitTransaction()
-            goto L_0x0074
+            return
+        L_0x006e:
+            if (r0 == 0) goto L_0x0073
+            r0.dispose()
         L_0x0073:
+            org.telegram.SQLite.SQLiteDatabase r9 = r7.database
+            if (r9 == 0) goto L_0x007a
+            r9.commitTransaction()
+        L_0x007a:
+            goto L_0x007c
+        L_0x007b:
             throw r8
-        L_0x0074:
-            goto L_0x0073
+        L_0x007c:
+            goto L_0x007b
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$putContacts$112(boolean, java.util.ArrayList):void");
     }
@@ -15570,177 +15687,187 @@ public class MessagesStorage extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:44:0x0127  */
-    /* JADX WARNING: Removed duplicated region for block: B:46:0x012c  */
-    /* JADX WARNING: Removed duplicated region for block: B:51:0x0138  */
-    /* JADX WARNING: Removed duplicated region for block: B:53:0x013d  */
+    /* JADX WARNING: Removed duplicated region for block: B:46:0x012b  */
+    /* JADX WARNING: Removed duplicated region for block: B:48:0x0130  */
+    /* JADX WARNING: Removed duplicated region for block: B:54:0x013e  */
+    /* JADX WARNING: Removed duplicated region for block: B:56:0x0143  */
+    /* JADX WARNING: Removed duplicated region for block: B:59:0x014a  */
+    /* JADX WARNING: Removed duplicated region for block: B:68:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public /* synthetic */ void lambda$putCachedPhoneBook$115(java.util.HashMap r12, boolean r13) {
         /*
             r11 = this;
             r0 = 0
-            boolean r1 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x0120, all -> 0x011d }
+            boolean r1 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x0124, all -> 0x0121 }
             if (r1 == 0) goto L_0x0022
-            java.lang.StringBuilder r1 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0120, all -> 0x011d }
-            r1.<init>()     // Catch:{ Exception -> 0x0120, all -> 0x011d }
-            int r2 = r11.currentAccount     // Catch:{ Exception -> 0x0120, all -> 0x011d }
-            r1.append(r2)     // Catch:{ Exception -> 0x0120, all -> 0x011d }
+            java.lang.StringBuilder r1 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0124, all -> 0x0121 }
+            r1.<init>()     // Catch:{ Exception -> 0x0124, all -> 0x0121 }
+            int r2 = r11.currentAccount     // Catch:{ Exception -> 0x0124, all -> 0x0121 }
+            r1.append(r2)     // Catch:{ Exception -> 0x0124, all -> 0x0121 }
             java.lang.String r2 = " save contacts to db "
-            r1.append(r2)     // Catch:{ Exception -> 0x0120, all -> 0x011d }
-            int r2 = r12.size()     // Catch:{ Exception -> 0x0120, all -> 0x011d }
-            r1.append(r2)     // Catch:{ Exception -> 0x0120, all -> 0x011d }
-            java.lang.String r1 = r1.toString()     // Catch:{ Exception -> 0x0120, all -> 0x011d }
-            org.telegram.messenger.FileLog.d(r1)     // Catch:{ Exception -> 0x0120, all -> 0x011d }
+            r1.append(r2)     // Catch:{ Exception -> 0x0124, all -> 0x0121 }
+            int r2 = r12.size()     // Catch:{ Exception -> 0x0124, all -> 0x0121 }
+            r1.append(r2)     // Catch:{ Exception -> 0x0124, all -> 0x0121 }
+            java.lang.String r1 = r1.toString()     // Catch:{ Exception -> 0x0124, all -> 0x0121 }
+            org.telegram.messenger.FileLog.d(r1)     // Catch:{ Exception -> 0x0124, all -> 0x0121 }
         L_0x0022:
-            org.telegram.SQLite.SQLiteDatabase r1 = r11.database     // Catch:{ Exception -> 0x0120, all -> 0x011d }
+            org.telegram.SQLite.SQLiteDatabase r1 = r11.database     // Catch:{ Exception -> 0x0124, all -> 0x0121 }
             java.lang.String r2 = "DELETE FROM user_contacts_v7 WHERE 1"
-            org.telegram.SQLite.SQLitePreparedStatement r1 = r1.executeFast(r2)     // Catch:{ Exception -> 0x0120, all -> 0x011d }
-            org.telegram.SQLite.SQLitePreparedStatement r1 = r1.stepThis()     // Catch:{ Exception -> 0x0120, all -> 0x011d }
-            r1.dispose()     // Catch:{ Exception -> 0x0120, all -> 0x011d }
-            org.telegram.SQLite.SQLiteDatabase r1 = r11.database     // Catch:{ Exception -> 0x0120, all -> 0x011d }
+            org.telegram.SQLite.SQLitePreparedStatement r1 = r1.executeFast(r2)     // Catch:{ Exception -> 0x0124, all -> 0x0121 }
+            org.telegram.SQLite.SQLitePreparedStatement r1 = r1.stepThis()     // Catch:{ Exception -> 0x0124, all -> 0x0121 }
+            r1.dispose()     // Catch:{ Exception -> 0x0124, all -> 0x0121 }
+            org.telegram.SQLite.SQLiteDatabase r1 = r11.database     // Catch:{ Exception -> 0x0124, all -> 0x0121 }
             java.lang.String r2 = "DELETE FROM user_phones_v7 WHERE 1"
-            org.telegram.SQLite.SQLitePreparedStatement r1 = r1.executeFast(r2)     // Catch:{ Exception -> 0x0120, all -> 0x011d }
-            org.telegram.SQLite.SQLitePreparedStatement r1 = r1.stepThis()     // Catch:{ Exception -> 0x0120, all -> 0x011d }
-            r1.dispose()     // Catch:{ Exception -> 0x0120, all -> 0x011d }
-            org.telegram.SQLite.SQLiteDatabase r1 = r11.database     // Catch:{ Exception -> 0x0120, all -> 0x011d }
-            r1.beginTransaction()     // Catch:{ Exception -> 0x0120, all -> 0x011d }
-            org.telegram.SQLite.SQLiteDatabase r1 = r11.database     // Catch:{ Exception -> 0x0120, all -> 0x011d }
+            org.telegram.SQLite.SQLitePreparedStatement r1 = r1.executeFast(r2)     // Catch:{ Exception -> 0x0124, all -> 0x0121 }
+            org.telegram.SQLite.SQLitePreparedStatement r1 = r1.stepThis()     // Catch:{ Exception -> 0x0124, all -> 0x0121 }
+            r1.dispose()     // Catch:{ Exception -> 0x0124, all -> 0x0121 }
+            org.telegram.SQLite.SQLiteDatabase r1 = r11.database     // Catch:{ Exception -> 0x0124, all -> 0x0121 }
+            r1.beginTransaction()     // Catch:{ Exception -> 0x0124, all -> 0x0121 }
+            org.telegram.SQLite.SQLiteDatabase r1 = r11.database     // Catch:{ Exception -> 0x0124, all -> 0x0121 }
             java.lang.String r2 = "REPLACE INTO user_contacts_v7 VALUES(?, ?, ?, ?, ?)"
-            org.telegram.SQLite.SQLitePreparedStatement r1 = r1.executeFast(r2)     // Catch:{ Exception -> 0x0120, all -> 0x011d }
-            org.telegram.SQLite.SQLiteDatabase r2 = r11.database     // Catch:{ Exception -> 0x0119, all -> 0x0115 }
+            org.telegram.SQLite.SQLitePreparedStatement r1 = r1.executeFast(r2)     // Catch:{ Exception -> 0x0124, all -> 0x0121 }
+            org.telegram.SQLite.SQLiteDatabase r2 = r11.database     // Catch:{ Exception -> 0x011d, all -> 0x0119 }
             java.lang.String r3 = "REPLACE INTO user_phones_v7 VALUES(?, ?, ?, ?)"
-            org.telegram.SQLite.SQLitePreparedStatement r2 = r2.executeFast(r3)     // Catch:{ Exception -> 0x0119, all -> 0x0115 }
-            java.util.Set r12 = r12.entrySet()     // Catch:{ Exception -> 0x0113, all -> 0x0111 }
-            java.util.Iterator r12 = r12.iterator()     // Catch:{ Exception -> 0x0113, all -> 0x0111 }
+            org.telegram.SQLite.SQLitePreparedStatement r2 = r2.executeFast(r3)     // Catch:{ Exception -> 0x011d, all -> 0x0119 }
+            java.util.Set r12 = r12.entrySet()     // Catch:{ Exception -> 0x0117, all -> 0x0115 }
+            java.util.Iterator r12 = r12.iterator()     // Catch:{ Exception -> 0x0117, all -> 0x0115 }
         L_0x005d:
-            boolean r3 = r12.hasNext()     // Catch:{ Exception -> 0x0113, all -> 0x0111 }
+            boolean r3 = r12.hasNext()     // Catch:{ Exception -> 0x0117, all -> 0x0115 }
             r4 = 0
             if (r3 == 0) goto L_0x00e0
-            java.lang.Object r3 = r12.next()     // Catch:{ Exception -> 0x0113, all -> 0x0111 }
-            java.util.Map$Entry r3 = (java.util.Map.Entry) r3     // Catch:{ Exception -> 0x0113, all -> 0x0111 }
-            java.lang.Object r3 = r3.getValue()     // Catch:{ Exception -> 0x0113, all -> 0x0111 }
-            org.telegram.messenger.ContactsController$Contact r3 = (org.telegram.messenger.ContactsController.Contact) r3     // Catch:{ Exception -> 0x0113, all -> 0x0111 }
-            java.util.ArrayList<java.lang.String> r5 = r3.phones     // Catch:{ Exception -> 0x0113, all -> 0x0111 }
-            boolean r5 = r5.isEmpty()     // Catch:{ Exception -> 0x0113, all -> 0x0111 }
+            java.lang.Object r3 = r12.next()     // Catch:{ Exception -> 0x0117, all -> 0x0115 }
+            java.util.Map$Entry r3 = (java.util.Map.Entry) r3     // Catch:{ Exception -> 0x0117, all -> 0x0115 }
+            java.lang.Object r3 = r3.getValue()     // Catch:{ Exception -> 0x0117, all -> 0x0115 }
+            org.telegram.messenger.ContactsController$Contact r3 = (org.telegram.messenger.ContactsController.Contact) r3     // Catch:{ Exception -> 0x0117, all -> 0x0115 }
+            java.util.ArrayList<java.lang.String> r5 = r3.phones     // Catch:{ Exception -> 0x0117, all -> 0x0115 }
+            boolean r5 = r5.isEmpty()     // Catch:{ Exception -> 0x0117, all -> 0x0115 }
             if (r5 != 0) goto L_0x005d
-            java.util.ArrayList<java.lang.String> r5 = r3.shortPhones     // Catch:{ Exception -> 0x0113, all -> 0x0111 }
-            boolean r5 = r5.isEmpty()     // Catch:{ Exception -> 0x0113, all -> 0x0111 }
+            java.util.ArrayList<java.lang.String> r5 = r3.shortPhones     // Catch:{ Exception -> 0x0117, all -> 0x0115 }
+            boolean r5 = r5.isEmpty()     // Catch:{ Exception -> 0x0117, all -> 0x0115 }
             if (r5 == 0) goto L_0x0081
             goto L_0x005d
         L_0x0081:
-            r1.requery()     // Catch:{ Exception -> 0x0113, all -> 0x0111 }
-            java.lang.String r5 = r3.key     // Catch:{ Exception -> 0x0113, all -> 0x0111 }
+            r1.requery()     // Catch:{ Exception -> 0x0117, all -> 0x0115 }
+            java.lang.String r5 = r3.key     // Catch:{ Exception -> 0x0117, all -> 0x0115 }
             r6 = 1
-            r1.bindString(r6, r5)     // Catch:{ Exception -> 0x0113, all -> 0x0111 }
-            int r5 = r3.contact_id     // Catch:{ Exception -> 0x0113, all -> 0x0111 }
+            r1.bindString(r6, r5)     // Catch:{ Exception -> 0x0117, all -> 0x0115 }
+            int r5 = r3.contact_id     // Catch:{ Exception -> 0x0117, all -> 0x0115 }
             r7 = 2
-            r1.bindInteger(r7, r5)     // Catch:{ Exception -> 0x0113, all -> 0x0111 }
-            java.lang.String r5 = r3.first_name     // Catch:{ Exception -> 0x0113, all -> 0x0111 }
+            r1.bindInteger(r7, r5)     // Catch:{ Exception -> 0x0117, all -> 0x0115 }
+            java.lang.String r5 = r3.first_name     // Catch:{ Exception -> 0x0117, all -> 0x0115 }
             r8 = 3
-            r1.bindString(r8, r5)     // Catch:{ Exception -> 0x0113, all -> 0x0111 }
-            java.lang.String r5 = r3.last_name     // Catch:{ Exception -> 0x0113, all -> 0x0111 }
+            r1.bindString(r8, r5)     // Catch:{ Exception -> 0x0117, all -> 0x0115 }
+            java.lang.String r5 = r3.last_name     // Catch:{ Exception -> 0x0117, all -> 0x0115 }
             r9 = 4
-            r1.bindString(r9, r5)     // Catch:{ Exception -> 0x0113, all -> 0x0111 }
+            r1.bindString(r9, r5)     // Catch:{ Exception -> 0x0117, all -> 0x0115 }
             r5 = 5
-            int r10 = r3.imported     // Catch:{ Exception -> 0x0113, all -> 0x0111 }
-            r1.bindInteger(r5, r10)     // Catch:{ Exception -> 0x0113, all -> 0x0111 }
-            r1.step()     // Catch:{ Exception -> 0x0113, all -> 0x0111 }
+            int r10 = r3.imported     // Catch:{ Exception -> 0x0117, all -> 0x0115 }
+            r1.bindInteger(r5, r10)     // Catch:{ Exception -> 0x0117, all -> 0x0115 }
+            r1.step()     // Catch:{ Exception -> 0x0117, all -> 0x0115 }
         L_0x00a5:
-            java.util.ArrayList<java.lang.String> r5 = r3.phones     // Catch:{ Exception -> 0x0113, all -> 0x0111 }
-            int r5 = r5.size()     // Catch:{ Exception -> 0x0113, all -> 0x0111 }
+            java.util.ArrayList<java.lang.String> r5 = r3.phones     // Catch:{ Exception -> 0x0117, all -> 0x0115 }
+            int r5 = r5.size()     // Catch:{ Exception -> 0x0117, all -> 0x0115 }
             if (r4 >= r5) goto L_0x005d
-            r2.requery()     // Catch:{ Exception -> 0x0113, all -> 0x0111 }
-            java.lang.String r5 = r3.key     // Catch:{ Exception -> 0x0113, all -> 0x0111 }
-            r2.bindString(r6, r5)     // Catch:{ Exception -> 0x0113, all -> 0x0111 }
-            java.util.ArrayList<java.lang.String> r5 = r3.phones     // Catch:{ Exception -> 0x0113, all -> 0x0111 }
-            java.lang.Object r5 = r5.get(r4)     // Catch:{ Exception -> 0x0113, all -> 0x0111 }
-            java.lang.String r5 = (java.lang.String) r5     // Catch:{ Exception -> 0x0113, all -> 0x0111 }
-            r2.bindString(r7, r5)     // Catch:{ Exception -> 0x0113, all -> 0x0111 }
-            java.util.ArrayList<java.lang.String> r5 = r3.shortPhones     // Catch:{ Exception -> 0x0113, all -> 0x0111 }
-            java.lang.Object r5 = r5.get(r4)     // Catch:{ Exception -> 0x0113, all -> 0x0111 }
-            java.lang.String r5 = (java.lang.String) r5     // Catch:{ Exception -> 0x0113, all -> 0x0111 }
-            r2.bindString(r8, r5)     // Catch:{ Exception -> 0x0113, all -> 0x0111 }
-            java.util.ArrayList<java.lang.Integer> r5 = r3.phoneDeleted     // Catch:{ Exception -> 0x0113, all -> 0x0111 }
-            java.lang.Object r5 = r5.get(r4)     // Catch:{ Exception -> 0x0113, all -> 0x0111 }
-            java.lang.Integer r5 = (java.lang.Integer) r5     // Catch:{ Exception -> 0x0113, all -> 0x0111 }
-            int r5 = r5.intValue()     // Catch:{ Exception -> 0x0113, all -> 0x0111 }
-            r2.bindInteger(r9, r5)     // Catch:{ Exception -> 0x0113, all -> 0x0111 }
-            r2.step()     // Catch:{ Exception -> 0x0113, all -> 0x0111 }
+            r2.requery()     // Catch:{ Exception -> 0x0117, all -> 0x0115 }
+            java.lang.String r5 = r3.key     // Catch:{ Exception -> 0x0117, all -> 0x0115 }
+            r2.bindString(r6, r5)     // Catch:{ Exception -> 0x0117, all -> 0x0115 }
+            java.util.ArrayList<java.lang.String> r5 = r3.phones     // Catch:{ Exception -> 0x0117, all -> 0x0115 }
+            java.lang.Object r5 = r5.get(r4)     // Catch:{ Exception -> 0x0117, all -> 0x0115 }
+            java.lang.String r5 = (java.lang.String) r5     // Catch:{ Exception -> 0x0117, all -> 0x0115 }
+            r2.bindString(r7, r5)     // Catch:{ Exception -> 0x0117, all -> 0x0115 }
+            java.util.ArrayList<java.lang.String> r5 = r3.shortPhones     // Catch:{ Exception -> 0x0117, all -> 0x0115 }
+            java.lang.Object r5 = r5.get(r4)     // Catch:{ Exception -> 0x0117, all -> 0x0115 }
+            java.lang.String r5 = (java.lang.String) r5     // Catch:{ Exception -> 0x0117, all -> 0x0115 }
+            r2.bindString(r8, r5)     // Catch:{ Exception -> 0x0117, all -> 0x0115 }
+            java.util.ArrayList<java.lang.Integer> r5 = r3.phoneDeleted     // Catch:{ Exception -> 0x0117, all -> 0x0115 }
+            java.lang.Object r5 = r5.get(r4)     // Catch:{ Exception -> 0x0117, all -> 0x0115 }
+            java.lang.Integer r5 = (java.lang.Integer) r5     // Catch:{ Exception -> 0x0117, all -> 0x0115 }
+            int r5 = r5.intValue()     // Catch:{ Exception -> 0x0117, all -> 0x0115 }
+            r2.bindInteger(r9, r5)     // Catch:{ Exception -> 0x0117, all -> 0x0115 }
+            r2.step()     // Catch:{ Exception -> 0x0117, all -> 0x0115 }
             int r4 = r4 + 1
             goto L_0x00a5
         L_0x00e0:
-            r1.dispose()     // Catch:{ Exception -> 0x0113, all -> 0x0111 }
-            r2.dispose()     // Catch:{ Exception -> 0x010f }
-            org.telegram.SQLite.SQLiteDatabase r12 = r11.database     // Catch:{ Exception -> 0x0120, all -> 0x011d }
-            r12.commitTransaction()     // Catch:{ Exception -> 0x0120, all -> 0x011d }
-            if (r13 == 0) goto L_0x012f
-            org.telegram.SQLite.SQLiteDatabase r12 = r11.database     // Catch:{ Exception -> 0x0120, all -> 0x011d }
+            r1.dispose()     // Catch:{ Exception -> 0x0117, all -> 0x0115 }
+            r2.dispose()     // Catch:{ Exception -> 0x0113 }
+            org.telegram.SQLite.SQLiteDatabase r12 = r11.database     // Catch:{ Exception -> 0x0124, all -> 0x0121 }
+            r12.commitTransaction()     // Catch:{ Exception -> 0x0124, all -> 0x0121 }
+            if (r13 == 0) goto L_0x010e
+            org.telegram.SQLite.SQLiteDatabase r12 = r11.database     // Catch:{ Exception -> 0x0124, all -> 0x0121 }
             java.lang.String r13 = "DROP TABLE IF EXISTS user_contacts_v6;"
-            org.telegram.SQLite.SQLitePreparedStatement r12 = r12.executeFast(r13)     // Catch:{ Exception -> 0x0120, all -> 0x011d }
-            org.telegram.SQLite.SQLitePreparedStatement r12 = r12.stepThis()     // Catch:{ Exception -> 0x0120, all -> 0x011d }
-            r12.dispose()     // Catch:{ Exception -> 0x0120, all -> 0x011d }
-            org.telegram.SQLite.SQLiteDatabase r12 = r11.database     // Catch:{ Exception -> 0x0120, all -> 0x011d }
+            org.telegram.SQLite.SQLitePreparedStatement r12 = r12.executeFast(r13)     // Catch:{ Exception -> 0x0124, all -> 0x0121 }
+            org.telegram.SQLite.SQLitePreparedStatement r12 = r12.stepThis()     // Catch:{ Exception -> 0x0124, all -> 0x0121 }
+            r12.dispose()     // Catch:{ Exception -> 0x0124, all -> 0x0121 }
+            org.telegram.SQLite.SQLiteDatabase r12 = r11.database     // Catch:{ Exception -> 0x0124, all -> 0x0121 }
             java.lang.String r13 = "DROP TABLE IF EXISTS user_phones_v6;"
-            org.telegram.SQLite.SQLitePreparedStatement r12 = r12.executeFast(r13)     // Catch:{ Exception -> 0x0120, all -> 0x011d }
-            org.telegram.SQLite.SQLitePreparedStatement r12 = r12.stepThis()     // Catch:{ Exception -> 0x0120, all -> 0x011d }
-            r12.dispose()     // Catch:{ Exception -> 0x0120, all -> 0x011d }
-            r11.getCachedPhoneBook(r4)     // Catch:{ Exception -> 0x0120, all -> 0x011d }
-            goto L_0x012f
-        L_0x010f:
-            r12 = move-exception
-            goto L_0x0122
-        L_0x0111:
-            r12 = move-exception
-            goto L_0x0117
+            org.telegram.SQLite.SQLitePreparedStatement r12 = r12.executeFast(r13)     // Catch:{ Exception -> 0x0124, all -> 0x0121 }
+            org.telegram.SQLite.SQLitePreparedStatement r12 = r12.stepThis()     // Catch:{ Exception -> 0x0124, all -> 0x0121 }
+            r12.dispose()     // Catch:{ Exception -> 0x0124, all -> 0x0121 }
+            r11.getCachedPhoneBook(r4)     // Catch:{ Exception -> 0x0124, all -> 0x0121 }
+        L_0x010e:
+            org.telegram.SQLite.SQLiteDatabase r12 = r11.database
+            if (r12 == 0) goto L_0x013a
+            goto L_0x0137
         L_0x0113:
             r12 = move-exception
-            goto L_0x011b
+            goto L_0x0126
         L_0x0115:
             r12 = move-exception
-            r2 = r0
+            goto L_0x011b
         L_0x0117:
-            r0 = r1
-            goto L_0x0136
+            r12 = move-exception
+            goto L_0x011f
         L_0x0119:
             r12 = move-exception
             r2 = r0
         L_0x011b:
             r0 = r1
-            goto L_0x0122
+            goto L_0x013c
         L_0x011d:
             r12 = move-exception
             r2 = r0
-            goto L_0x0136
-        L_0x0120:
+        L_0x011f:
+            r0 = r1
+            goto L_0x0126
+        L_0x0121:
             r12 = move-exception
             r2 = r0
-        L_0x0122:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r12)     // Catch:{ all -> 0x0135 }
-            if (r0 == 0) goto L_0x012a
-            r0.dispose()
-        L_0x012a:
-            if (r2 == 0) goto L_0x012f
-            r2.dispose()
-        L_0x012f:
-            org.telegram.SQLite.SQLiteDatabase r12 = r11.database
-            r12.commitTransaction()
-            return
-        L_0x0135:
+            goto L_0x013c
+        L_0x0124:
             r12 = move-exception
-        L_0x0136:
-            if (r0 == 0) goto L_0x013b
+            r2 = r0
+        L_0x0126:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r12)     // Catch:{ all -> 0x013b }
+            if (r0 == 0) goto L_0x012e
             r0.dispose()
-        L_0x013b:
-            if (r2 == 0) goto L_0x0140
+        L_0x012e:
+            if (r2 == 0) goto L_0x0133
             r2.dispose()
-        L_0x0140:
-            org.telegram.SQLite.SQLiteDatabase r13 = r11.database
-            r13.commitTransaction()
-            goto L_0x0147
+        L_0x0133:
+            org.telegram.SQLite.SQLiteDatabase r12 = r11.database
+            if (r12 == 0) goto L_0x013a
+        L_0x0137:
+            r12.commitTransaction()
+        L_0x013a:
+            return
+        L_0x013b:
+            r12 = move-exception
+        L_0x013c:
+            if (r0 == 0) goto L_0x0141
+            r0.dispose()
+        L_0x0141:
+            if (r2 == 0) goto L_0x0146
+            r2.dispose()
         L_0x0146:
+            org.telegram.SQLite.SQLiteDatabase r13 = r11.database
+            if (r13 == 0) goto L_0x014d
+            r13.commitTransaction()
+        L_0x014d:
+            goto L_0x014f
+        L_0x014e:
             throw r12
-        L_0x0147:
-            goto L_0x0146
+        L_0x014f:
+            goto L_0x014e
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$putCachedPhoneBook$115(java.util.HashMap, boolean):void");
     }
@@ -20908,7 +21035,7 @@ public class MessagesStorage extends BaseController {
                     if (appWidgetManager == null) {
                         appWidgetManager = AppWidgetManager.getInstance(ApplicationLoader.applicationContext);
                     }
-                    appWidgetManager.notifyAppWidgetViewDataChanged(queryFinalized.intValue(0), NUM);
+                    appWidgetManager.notifyAppWidgetViewDataChanged(queryFinalized.intValue(0), R.id.list_view);
                 }
                 queryFinalized.dispose();
             } catch (Exception e) {
@@ -22387,19 +22514,31 @@ public class MessagesStorage extends BaseController {
     /* access modifiers changed from: private */
     /* renamed from: putUsersAndChatsInternal */
     public void lambda$putUsersAndChats$144(ArrayList<TLRPC$User> arrayList, ArrayList<TLRPC$Chat> arrayList2, boolean z) {
+        SQLiteDatabase sQLiteDatabase;
         if (z) {
             try {
                 this.database.beginTransaction();
             } catch (Exception e) {
                 FileLog.e((Throwable) e);
+                sQLiteDatabase = this.database;
+                if (sQLiteDatabase == null) {
+                    return;
+                }
             } catch (Throwable th) {
-                this.database.commitTransaction();
+                SQLiteDatabase sQLiteDatabase2 = this.database;
+                if (sQLiteDatabase2 != null) {
+                    sQLiteDatabase2.commitTransaction();
+                }
                 throw th;
             }
         }
         putUsersInternal(arrayList);
         putChatsInternal(arrayList2);
-        this.database.commitTransaction();
+        sQLiteDatabase = this.database;
+        if (sQLiteDatabase == null) {
+            return;
+        }
+        sQLiteDatabase.commitTransaction();
     }
 
     public void putUsersAndChats(ArrayList<TLRPC$User> arrayList, ArrayList<TLRPC$Chat> arrayList2, boolean z, boolean z2) {
@@ -22507,92 +22646,94 @@ public class MessagesStorage extends BaseController {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$removeFromDownloadQueue$145(boolean, int, long):void");
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:28:0x006b  */
-    /* JADX WARNING: Removed duplicated region for block: B:32:0x0078  */
-    /* JADX WARNING: Removed duplicated region for block: B:34:0x007d  */
-    /* JADX WARNING: Removed duplicated region for block: B:39:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:30:0x006f  */
+    /* JADX WARNING: Removed duplicated region for block: B:36:0x007e  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private void deleteFromDownloadQueue(java.util.ArrayList<android.util.Pair<java.lang.Long, java.lang.Integer>> r9, boolean r10) {
         /*
             r8 = this;
-            if (r9 == 0) goto L_0x0083
+            if (r9 == 0) goto L_0x008b
             boolean r0 = r9.isEmpty()
             if (r0 == 0) goto L_0x000a
-            goto L_0x0083
+            goto L_0x008b
         L_0x000a:
             r0 = 0
             if (r10 == 0) goto L_0x0012
-            org.telegram.SQLite.SQLiteDatabase r1 = r8.database     // Catch:{ Exception -> 0x0065 }
-            r1.beginTransaction()     // Catch:{ Exception -> 0x0065 }
+            org.telegram.SQLite.SQLiteDatabase r1 = r8.database     // Catch:{ Exception -> 0x0069 }
+            r1.beginTransaction()     // Catch:{ Exception -> 0x0069 }
         L_0x0012:
-            org.telegram.SQLite.SQLiteDatabase r1 = r8.database     // Catch:{ Exception -> 0x0065 }
+            org.telegram.SQLite.SQLiteDatabase r1 = r8.database     // Catch:{ Exception -> 0x0069 }
             java.lang.String r2 = "DELETE FROM download_queue WHERE uid = ? AND type = ?"
-            org.telegram.SQLite.SQLitePreparedStatement r1 = r1.executeFast(r2)     // Catch:{ Exception -> 0x0065 }
+            org.telegram.SQLite.SQLitePreparedStatement r1 = r1.executeFast(r2)     // Catch:{ Exception -> 0x0069 }
             r2 = 0
-            int r3 = r9.size()     // Catch:{ Exception -> 0x0060, all -> 0x005d }
+            int r3 = r9.size()     // Catch:{ Exception -> 0x0064, all -> 0x0061 }
         L_0x001f:
             if (r2 >= r3) goto L_0x0048
-            java.lang.Object r4 = r9.get(r2)     // Catch:{ Exception -> 0x0060, all -> 0x005d }
-            android.util.Pair r4 = (android.util.Pair) r4     // Catch:{ Exception -> 0x0060, all -> 0x005d }
-            r1.requery()     // Catch:{ Exception -> 0x0060, all -> 0x005d }
-            java.lang.Object r5 = r4.first     // Catch:{ Exception -> 0x0060, all -> 0x005d }
-            java.lang.Long r5 = (java.lang.Long) r5     // Catch:{ Exception -> 0x0060, all -> 0x005d }
-            long r5 = r5.longValue()     // Catch:{ Exception -> 0x0060, all -> 0x005d }
+            java.lang.Object r4 = r9.get(r2)     // Catch:{ Exception -> 0x0064, all -> 0x0061 }
+            android.util.Pair r4 = (android.util.Pair) r4     // Catch:{ Exception -> 0x0064, all -> 0x0061 }
+            r1.requery()     // Catch:{ Exception -> 0x0064, all -> 0x0061 }
+            java.lang.Object r5 = r4.first     // Catch:{ Exception -> 0x0064, all -> 0x0061 }
+            java.lang.Long r5 = (java.lang.Long) r5     // Catch:{ Exception -> 0x0064, all -> 0x0061 }
+            long r5 = r5.longValue()     // Catch:{ Exception -> 0x0064, all -> 0x0061 }
             r7 = 1
-            r1.bindLong(r7, r5)     // Catch:{ Exception -> 0x0060, all -> 0x005d }
+            r1.bindLong(r7, r5)     // Catch:{ Exception -> 0x0064, all -> 0x0061 }
             r5 = 2
-            java.lang.Object r4 = r4.second     // Catch:{ Exception -> 0x0060, all -> 0x005d }
-            java.lang.Integer r4 = (java.lang.Integer) r4     // Catch:{ Exception -> 0x0060, all -> 0x005d }
-            int r4 = r4.intValue()     // Catch:{ Exception -> 0x0060, all -> 0x005d }
-            r1.bindInteger(r5, r4)     // Catch:{ Exception -> 0x0060, all -> 0x005d }
-            r1.step()     // Catch:{ Exception -> 0x0060, all -> 0x005d }
+            java.lang.Object r4 = r4.second     // Catch:{ Exception -> 0x0064, all -> 0x0061 }
+            java.lang.Integer r4 = (java.lang.Integer) r4     // Catch:{ Exception -> 0x0064, all -> 0x0061 }
+            int r4 = r4.intValue()     // Catch:{ Exception -> 0x0064, all -> 0x0061 }
+            r1.bindInteger(r5, r4)     // Catch:{ Exception -> 0x0064, all -> 0x0061 }
+            r1.step()     // Catch:{ Exception -> 0x0064, all -> 0x0061 }
             int r2 = r2 + 1
             goto L_0x001f
         L_0x0048:
-            r1.dispose()     // Catch:{ Exception -> 0x0060, all -> 0x005d }
+            r1.dispose()     // Catch:{ Exception -> 0x0064, all -> 0x0061 }
             if (r10 == 0) goto L_0x0052
-            org.telegram.SQLite.SQLiteDatabase r1 = r8.database     // Catch:{ Exception -> 0x0065 }
-            r1.commitTransaction()     // Catch:{ Exception -> 0x0065 }
+            org.telegram.SQLite.SQLiteDatabase r1 = r8.database     // Catch:{ Exception -> 0x0069 }
+            r1.commitTransaction()     // Catch:{ Exception -> 0x0069 }
         L_0x0052:
-            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda138 r1 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda138     // Catch:{ Exception -> 0x0065 }
-            r1.<init>(r8, r9)     // Catch:{ Exception -> 0x0065 }
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r1)     // Catch:{ Exception -> 0x0065 }
-            if (r10 == 0) goto L_0x0075
-            goto L_0x0070
-        L_0x005d:
-            r9 = move-exception
-            r0 = r1
-            goto L_0x0076
-        L_0x0060:
-            r9 = move-exception
-            r0 = r1
-            goto L_0x0066
-        L_0x0063:
-            r9 = move-exception
-            goto L_0x0076
-        L_0x0065:
-            r9 = move-exception
-        L_0x0066:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r9)     // Catch:{ all -> 0x0063 }
-            if (r0 == 0) goto L_0x006e
-            r0.dispose()
-        L_0x006e:
-            if (r10 == 0) goto L_0x0075
-        L_0x0070:
+            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda138 r1 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda138     // Catch:{ Exception -> 0x0069 }
+            r1.<init>(r8, r9)     // Catch:{ Exception -> 0x0069 }
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r1)     // Catch:{ Exception -> 0x0069 }
+            if (r10 == 0) goto L_0x007b
             org.telegram.SQLite.SQLiteDatabase r9 = r8.database
-            r9.commitTransaction()
-        L_0x0075:
-            return
-        L_0x0076:
-            if (r0 == 0) goto L_0x007b
+            if (r9 == 0) goto L_0x007b
+            goto L_0x0078
+        L_0x0061:
+            r9 = move-exception
+            r0 = r1
+            goto L_0x007c
+        L_0x0064:
+            r9 = move-exception
+            r0 = r1
+            goto L_0x006a
+        L_0x0067:
+            r9 = move-exception
+            goto L_0x007c
+        L_0x0069:
+            r9 = move-exception
+        L_0x006a:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r9)     // Catch:{ all -> 0x0067 }
+            if (r0 == 0) goto L_0x0072
             r0.dispose()
+        L_0x0072:
+            if (r10 == 0) goto L_0x007b
+            org.telegram.SQLite.SQLiteDatabase r9 = r8.database
+            if (r9 == 0) goto L_0x007b
+        L_0x0078:
+            r9.commitTransaction()
         L_0x007b:
-            if (r10 == 0) goto L_0x0082
+            return
+        L_0x007c:
+            if (r0 == 0) goto L_0x0081
+            r0.dispose()
+        L_0x0081:
+            if (r10 == 0) goto L_0x008a
             org.telegram.SQLite.SQLiteDatabase r10 = r8.database
+            if (r10 == 0) goto L_0x008a
             r10.commitTransaction()
-        L_0x0082:
+        L_0x008a:
             throw r9
-        L_0x0083:
+        L_0x008b:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.deleteFromDownloadQueue(java.util.ArrayList, boolean):void");
@@ -22778,37 +22919,39 @@ public class MessagesStorage extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:82:0x019f  */
-    /* JADX WARNING: Removed duplicated region for block: B:84:0x01a4  */
-    /* JADX WARNING: Removed duplicated region for block: B:86:0x01a9  */
-    /* JADX WARNING: Removed duplicated region for block: B:91:0x01b5  */
-    /* JADX WARNING: Removed duplicated region for block: B:93:0x01ba  */
-    /* JADX WARNING: Removed duplicated region for block: B:95:0x01bf  */
+    /* JADX WARNING: Removed duplicated region for block: B:102:0x01ce  */
+    /* JADX WARNING: Removed duplicated region for block: B:119:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:85:0x01a5  */
+    /* JADX WARNING: Removed duplicated region for block: B:87:0x01aa  */
+    /* JADX WARNING: Removed duplicated region for block: B:89:0x01af  */
+    /* JADX WARNING: Removed duplicated region for block: B:95:0x01bd  */
+    /* JADX WARNING: Removed duplicated region for block: B:97:0x01c2  */
+    /* JADX WARNING: Removed duplicated region for block: B:99:0x01c7  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public /* synthetic */ void lambda$putWebPages$151(androidx.collection.LongSparseArray r18) {
         /*
             r17 = this;
             r1 = r17
             r0 = r18
-            java.util.ArrayList r3 = new java.util.ArrayList     // Catch:{ Exception -> 0x0195, all -> 0x018f }
-            r3.<init>()     // Catch:{ Exception -> 0x0195, all -> 0x018f }
-            int r4 = r18.size()     // Catch:{ Exception -> 0x0195, all -> 0x018f }
+            java.util.ArrayList r3 = new java.util.ArrayList     // Catch:{ Exception -> 0x019b, all -> 0x0195 }
+            r3.<init>()     // Catch:{ Exception -> 0x019b, all -> 0x0195 }
+            int r4 = r18.size()     // Catch:{ Exception -> 0x019b, all -> 0x0195 }
             r5 = 0
             r6 = 0
         L_0x000f:
             r7 = 2
             r8 = 1
             if (r6 >= r4) goto L_0x00ef
-            org.telegram.SQLite.SQLiteDatabase r9 = r1.database     // Catch:{ Exception -> 0x0195, all -> 0x018f }
-            java.lang.StringBuilder r10 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0195, all -> 0x018f }
-            r10.<init>()     // Catch:{ Exception -> 0x0195, all -> 0x018f }
+            org.telegram.SQLite.SQLiteDatabase r9 = r1.database     // Catch:{ Exception -> 0x019b, all -> 0x0195 }
+            java.lang.StringBuilder r10 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x019b, all -> 0x0195 }
+            r10.<init>()     // Catch:{ Exception -> 0x019b, all -> 0x0195 }
             java.lang.String r11 = "SELECT mid, uid FROM webpage_pending_v2 WHERE id = "
-            r10.append(r11)     // Catch:{ Exception -> 0x0195, all -> 0x018f }
-            long r11 = r0.keyAt(r6)     // Catch:{ Exception -> 0x0195, all -> 0x018f }
-            r10.append(r11)     // Catch:{ Exception -> 0x0195, all -> 0x018f }
-            java.lang.String r10 = r10.toString()     // Catch:{ Exception -> 0x0195, all -> 0x018f }
-            java.lang.Object[] r11 = new java.lang.Object[r5]     // Catch:{ Exception -> 0x0195, all -> 0x018f }
-            org.telegram.SQLite.SQLiteCursor r9 = r9.queryFinalized(r10, r11)     // Catch:{ Exception -> 0x0195, all -> 0x018f }
+            r10.append(r11)     // Catch:{ Exception -> 0x019b, all -> 0x0195 }
+            long r11 = r0.keyAt(r6)     // Catch:{ Exception -> 0x019b, all -> 0x0195 }
+            r10.append(r11)     // Catch:{ Exception -> 0x019b, all -> 0x0195 }
+            java.lang.String r10 = r10.toString()     // Catch:{ Exception -> 0x019b, all -> 0x0195 }
+            java.lang.Object[] r11 = new java.lang.Object[r5]     // Catch:{ Exception -> 0x019b, all -> 0x0195 }
+            org.telegram.SQLite.SQLiteCursor r9 = r9.queryFinalized(r10, r11)     // Catch:{ Exception -> 0x019b, all -> 0x0195 }
             androidx.collection.LongSparseArray r10 = new androidx.collection.LongSparseArray     // Catch:{ Exception -> 0x00eb, all -> 0x00e7 }
             r10.<init>()     // Catch:{ Exception -> 0x00eb, all -> 0x00e7 }
         L_0x0035:
@@ -22828,33 +22971,33 @@ public class MessagesStorage extends BaseController {
             goto L_0x0035
         L_0x005b:
             r9.dispose()     // Catch:{ Exception -> 0x00eb, all -> 0x00e7 }
-            boolean r9 = r10.isEmpty()     // Catch:{ Exception -> 0x0195, all -> 0x018f }
+            boolean r9 = r10.isEmpty()     // Catch:{ Exception -> 0x019b, all -> 0x0195 }
             if (r9 == 0) goto L_0x0067
         L_0x0064:
             r14 = 0
             goto L_0x00e2
         L_0x0067:
-            int r9 = r10.size()     // Catch:{ Exception -> 0x0195, all -> 0x018f }
+            int r9 = r10.size()     // Catch:{ Exception -> 0x019b, all -> 0x0195 }
             r11 = 0
         L_0x006c:
             if (r11 >= r9) goto L_0x0064
-            long r12 = r10.keyAt(r11)     // Catch:{ Exception -> 0x0195, all -> 0x018f }
-            java.lang.Object r14 = r10.valueAt(r11)     // Catch:{ Exception -> 0x0195, all -> 0x018f }
-            java.util.ArrayList r14 = (java.util.ArrayList) r14     // Catch:{ Exception -> 0x0195, all -> 0x018f }
-            org.telegram.SQLite.SQLiteDatabase r15 = r1.database     // Catch:{ Exception -> 0x0195, all -> 0x018f }
-            java.util.Locale r2 = java.util.Locale.US     // Catch:{ Exception -> 0x0195, all -> 0x018f }
+            long r12 = r10.keyAt(r11)     // Catch:{ Exception -> 0x019b, all -> 0x0195 }
+            java.lang.Object r14 = r10.valueAt(r11)     // Catch:{ Exception -> 0x019b, all -> 0x0195 }
+            java.util.ArrayList r14 = (java.util.ArrayList) r14     // Catch:{ Exception -> 0x019b, all -> 0x0195 }
+            org.telegram.SQLite.SQLiteDatabase r15 = r1.database     // Catch:{ Exception -> 0x019b, all -> 0x0195 }
+            java.util.Locale r2 = java.util.Locale.US     // Catch:{ Exception -> 0x019b, all -> 0x0195 }
             java.lang.String r8 = "SELECT mid, data FROM messages_v2 WHERE mid IN (%s) AND uid = %d"
-            java.lang.Object[] r5 = new java.lang.Object[r7]     // Catch:{ Exception -> 0x0195, all -> 0x018f }
+            java.lang.Object[] r5 = new java.lang.Object[r7]     // Catch:{ Exception -> 0x019b, all -> 0x0195 }
             java.lang.String r7 = ","
-            java.lang.String r7 = android.text.TextUtils.join(r7, r14)     // Catch:{ Exception -> 0x0195, all -> 0x018f }
+            java.lang.String r7 = android.text.TextUtils.join(r7, r14)     // Catch:{ Exception -> 0x019b, all -> 0x0195 }
             r14 = 0
-            r5[r14] = r7     // Catch:{ Exception -> 0x0195, all -> 0x018f }
-            java.lang.Long r7 = java.lang.Long.valueOf(r12)     // Catch:{ Exception -> 0x0195, all -> 0x018f }
+            r5[r14] = r7     // Catch:{ Exception -> 0x019b, all -> 0x0195 }
+            java.lang.Long r7 = java.lang.Long.valueOf(r12)     // Catch:{ Exception -> 0x019b, all -> 0x0195 }
             r12 = 1
-            r5[r12] = r7     // Catch:{ Exception -> 0x0195, all -> 0x018f }
-            java.lang.String r2 = java.lang.String.format(r2, r8, r5)     // Catch:{ Exception -> 0x0195, all -> 0x018f }
-            java.lang.Object[] r5 = new java.lang.Object[r14]     // Catch:{ Exception -> 0x0195, all -> 0x018f }
-            org.telegram.SQLite.SQLiteCursor r2 = r15.queryFinalized(r2, r5)     // Catch:{ Exception -> 0x0195, all -> 0x018f }
+            r5[r12] = r7     // Catch:{ Exception -> 0x019b, all -> 0x0195 }
+            java.lang.String r2 = java.lang.String.format(r2, r8, r5)     // Catch:{ Exception -> 0x019b, all -> 0x0195 }
+            java.lang.Object[] r5 = new java.lang.Object[r14]     // Catch:{ Exception -> 0x019b, all -> 0x0195 }
+            org.telegram.SQLite.SQLiteCursor r2 = r15.queryFinalized(r2, r5)     // Catch:{ Exception -> 0x019b, all -> 0x0195 }
         L_0x009a:
             boolean r5 = r2.next()     // Catch:{ Exception -> 0x00df, all -> 0x00dc }
             if (r5 == 0) goto L_0x00d3
@@ -22886,10 +23029,10 @@ public class MessagesStorage extends BaseController {
             goto L_0x006c
         L_0x00dc:
             r0 = move-exception
-            goto L_0x0191
+            goto L_0x0197
         L_0x00df:
             r0 = move-exception
-            goto L_0x0197
+            goto L_0x019d
         L_0x00e2:
             int r6 = r6 + 1
             r5 = 0
@@ -22897,106 +23040,102 @@ public class MessagesStorage extends BaseController {
         L_0x00e7:
             r0 = move-exception
             r2 = r9
-            goto L_0x0191
+            goto L_0x0197
         L_0x00eb:
             r0 = move-exception
             r2 = r9
-            goto L_0x0197
+            goto L_0x019d
         L_0x00ef:
             r14 = 0
-            boolean r0 = r3.isEmpty()     // Catch:{ Exception -> 0x0195, all -> 0x018f }
-            if (r0 == 0) goto L_0x00fc
+            boolean r0 = r3.isEmpty()     // Catch:{ Exception -> 0x019b, all -> 0x0195 }
+            if (r0 == 0) goto L_0x00fe
             org.telegram.SQLite.SQLiteDatabase r0 = r1.database
+            if (r0 == 0) goto L_0x00fd
             r0.commitTransaction()
+        L_0x00fd:
             return
-        L_0x00fc:
-            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x0195, all -> 0x018f }
-            r0.beginTransaction()     // Catch:{ Exception -> 0x0195, all -> 0x018f }
-            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x0195, all -> 0x018f }
+        L_0x00fe:
+            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x019b, all -> 0x0195 }
+            r0.beginTransaction()     // Catch:{ Exception -> 0x019b, all -> 0x0195 }
+            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x019b, all -> 0x0195 }
             java.lang.String r2 = "UPDATE messages_v2 SET data = ? WHERE mid = ? AND uid = ?"
-            org.telegram.SQLite.SQLitePreparedStatement r2 = r0.executeFast(r2)     // Catch:{ Exception -> 0x0195, all -> 0x018f }
-            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x0189, all -> 0x0183 }
+            org.telegram.SQLite.SQLitePreparedStatement r2 = r0.executeFast(r2)     // Catch:{ Exception -> 0x019b, all -> 0x0195 }
+            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x018f, all -> 0x0189 }
             java.lang.String r4 = "UPDATE media_v4 SET data = ? WHERE mid = ? AND uid = ?"
-            org.telegram.SQLite.SQLitePreparedStatement r4 = r0.executeFast(r4)     // Catch:{ Exception -> 0x0189, all -> 0x0183 }
+            org.telegram.SQLite.SQLitePreparedStatement r4 = r0.executeFast(r4)     // Catch:{ Exception -> 0x018f, all -> 0x0189 }
             r5 = 0
-        L_0x0112:
-            int r0 = r3.size()     // Catch:{ Exception -> 0x017e, all -> 0x0179 }
-            if (r5 >= r0) goto L_0x015f
-            java.lang.Object r0 = r3.get(r5)     // Catch:{ Exception -> 0x017e, all -> 0x0179 }
-            org.telegram.tgnet.TLRPC$Message r0 = (org.telegram.tgnet.TLRPC$Message) r0     // Catch:{ Exception -> 0x017e, all -> 0x0179 }
-            org.telegram.tgnet.NativeByteBuffer r6 = new org.telegram.tgnet.NativeByteBuffer     // Catch:{ Exception -> 0x017e, all -> 0x0179 }
-            int r7 = r0.getObjectSize()     // Catch:{ Exception -> 0x017e, all -> 0x0179 }
-            r6.<init>((int) r7)     // Catch:{ Exception -> 0x017e, all -> 0x0179 }
-            r0.serializeToStream(r6)     // Catch:{ Exception -> 0x017e, all -> 0x0179 }
-            r2.requery()     // Catch:{ Exception -> 0x017e, all -> 0x0179 }
+        L_0x0114:
+            int r0 = r3.size()     // Catch:{ Exception -> 0x0184, all -> 0x017f }
+            if (r5 >= r0) goto L_0x0161
+            java.lang.Object r0 = r3.get(r5)     // Catch:{ Exception -> 0x0184, all -> 0x017f }
+            org.telegram.tgnet.TLRPC$Message r0 = (org.telegram.tgnet.TLRPC$Message) r0     // Catch:{ Exception -> 0x0184, all -> 0x017f }
+            org.telegram.tgnet.NativeByteBuffer r6 = new org.telegram.tgnet.NativeByteBuffer     // Catch:{ Exception -> 0x0184, all -> 0x017f }
+            int r7 = r0.getObjectSize()     // Catch:{ Exception -> 0x0184, all -> 0x017f }
+            r6.<init>((int) r7)     // Catch:{ Exception -> 0x0184, all -> 0x017f }
+            r0.serializeToStream(r6)     // Catch:{ Exception -> 0x0184, all -> 0x017f }
+            r2.requery()     // Catch:{ Exception -> 0x0184, all -> 0x017f }
             r7 = 1
-            r2.bindByteBuffer((int) r7, (org.telegram.tgnet.NativeByteBuffer) r6)     // Catch:{ Exception -> 0x017e, all -> 0x0179 }
-            int r7 = r0.id     // Catch:{ Exception -> 0x017e, all -> 0x0179 }
+            r2.bindByteBuffer((int) r7, (org.telegram.tgnet.NativeByteBuffer) r6)     // Catch:{ Exception -> 0x0184, all -> 0x017f }
+            int r7 = r0.id     // Catch:{ Exception -> 0x0184, all -> 0x017f }
             r8 = 2
-            r2.bindInteger(r8, r7)     // Catch:{ Exception -> 0x017e, all -> 0x0179 }
-            long r7 = org.telegram.messenger.MessageObject.getDialogId(r0)     // Catch:{ Exception -> 0x017e, all -> 0x0179 }
+            r2.bindInteger(r8, r7)     // Catch:{ Exception -> 0x0184, all -> 0x017f }
+            long r7 = org.telegram.messenger.MessageObject.getDialogId(r0)     // Catch:{ Exception -> 0x0184, all -> 0x017f }
             r9 = 3
-            r2.bindLong(r9, r7)     // Catch:{ Exception -> 0x017e, all -> 0x0179 }
-            r2.step()     // Catch:{ Exception -> 0x017e, all -> 0x0179 }
-            r4.requery()     // Catch:{ Exception -> 0x017e, all -> 0x0179 }
+            r2.bindLong(r9, r7)     // Catch:{ Exception -> 0x0184, all -> 0x017f }
+            r2.step()     // Catch:{ Exception -> 0x0184, all -> 0x017f }
+            r4.requery()     // Catch:{ Exception -> 0x0184, all -> 0x017f }
             r7 = 1
-            r4.bindByteBuffer((int) r7, (org.telegram.tgnet.NativeByteBuffer) r6)     // Catch:{ Exception -> 0x017e, all -> 0x0179 }
-            int r8 = r0.id     // Catch:{ Exception -> 0x017e, all -> 0x0179 }
+            r4.bindByteBuffer((int) r7, (org.telegram.tgnet.NativeByteBuffer) r6)     // Catch:{ Exception -> 0x0184, all -> 0x017f }
+            int r8 = r0.id     // Catch:{ Exception -> 0x0184, all -> 0x017f }
             r10 = 2
-            r4.bindInteger(r10, r8)     // Catch:{ Exception -> 0x017e, all -> 0x0179 }
-            long r11 = org.telegram.messenger.MessageObject.getDialogId(r0)     // Catch:{ Exception -> 0x017e, all -> 0x0179 }
-            r4.bindLong(r9, r11)     // Catch:{ Exception -> 0x017e, all -> 0x0179 }
-            r4.step()     // Catch:{ Exception -> 0x017e, all -> 0x0179 }
-            r6.reuse()     // Catch:{ Exception -> 0x017e, all -> 0x0179 }
+            r4.bindInteger(r10, r8)     // Catch:{ Exception -> 0x0184, all -> 0x017f }
+            long r11 = org.telegram.messenger.MessageObject.getDialogId(r0)     // Catch:{ Exception -> 0x0184, all -> 0x017f }
+            r4.bindLong(r9, r11)     // Catch:{ Exception -> 0x0184, all -> 0x017f }
+            r4.step()     // Catch:{ Exception -> 0x0184, all -> 0x017f }
+            r6.reuse()     // Catch:{ Exception -> 0x0184, all -> 0x017f }
             int r5 = r5 + 1
-            goto L_0x0112
-        L_0x015f:
-            r2.dispose()     // Catch:{ Exception -> 0x017e, all -> 0x0179 }
-            r4.dispose()     // Catch:{ Exception -> 0x0176, all -> 0x0173 }
-            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x0195, all -> 0x018f }
-            r0.commitTransaction()     // Catch:{ Exception -> 0x0195, all -> 0x018f }
-            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda131 r0 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda131     // Catch:{ Exception -> 0x0195, all -> 0x018f }
-            r0.<init>(r1, r3)     // Catch:{ Exception -> 0x0195, all -> 0x018f }
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)     // Catch:{ Exception -> 0x0195, all -> 0x018f }
-            goto L_0x01ac
-        L_0x0173:
-            r0 = move-exception
-            r2 = 0
-            goto L_0x0192
-        L_0x0176:
+            goto L_0x0114
+        L_0x0161:
+            r2.dispose()     // Catch:{ Exception -> 0x0184, all -> 0x017f }
+            r4.dispose()     // Catch:{ Exception -> 0x017c, all -> 0x0179 }
+            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x019b, all -> 0x0195 }
+            r0.commitTransaction()     // Catch:{ Exception -> 0x019b, all -> 0x0195 }
+            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda131 r0 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda131     // Catch:{ Exception -> 0x019b, all -> 0x0195 }
+            r0.<init>(r1, r3)     // Catch:{ Exception -> 0x019b, all -> 0x0195 }
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)     // Catch:{ Exception -> 0x019b, all -> 0x0195 }
+            org.telegram.SQLite.SQLiteDatabase r0 = r1.database
+            if (r0 == 0) goto L_0x01b9
+            goto L_0x01b6
+        L_0x0179:
             r0 = move-exception
             r2 = 0
             goto L_0x0198
-        L_0x0179:
+        L_0x017c:
+            r0 = move-exception
+            r2 = 0
+            goto L_0x019e
+        L_0x017f:
             r0 = move-exception
             r16 = r2
             r2 = 0
-            goto L_0x01b3
-        L_0x017e:
+            goto L_0x01bb
+        L_0x0184:
             r0 = move-exception
             r16 = r2
             r2 = 0
-            goto L_0x019a
-        L_0x0183:
-            r0 = move-exception
-            r16 = r2
-            r2 = 0
-            r4 = 0
-            goto L_0x01b3
+            goto L_0x01a0
         L_0x0189:
             r0 = move-exception
             r16 = r2
             r2 = 0
             r4 = 0
-            goto L_0x019a
+            goto L_0x01bb
         L_0x018f:
             r0 = move-exception
+            r16 = r2
             r2 = 0
-        L_0x0191:
             r4 = 0
-        L_0x0192:
-            r16 = 0
-            goto L_0x01b3
+            goto L_0x01a0
         L_0x0195:
             r0 = move-exception
             r2 = 0
@@ -23004,39 +23143,52 @@ public class MessagesStorage extends BaseController {
             r4 = 0
         L_0x0198:
             r16 = 0
-        L_0x019a:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x01b2 }
-            if (r2 == 0) goto L_0x01a2
-            r2.dispose()
-        L_0x01a2:
-            if (r16 == 0) goto L_0x01a7
-            r16.dispose()
-        L_0x01a7:
-            if (r4 == 0) goto L_0x01ac
-            r4.dispose()
-        L_0x01ac:
-            org.telegram.SQLite.SQLiteDatabase r0 = r1.database
-            r0.commitTransaction()
-            return
-        L_0x01b2:
+            goto L_0x01bb
+        L_0x019b:
             r0 = move-exception
-        L_0x01b3:
-            if (r2 == 0) goto L_0x01b8
+            r2 = 0
+        L_0x019d:
+            r4 = 0
+        L_0x019e:
+            r16 = 0
+        L_0x01a0:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x01ba }
+            if (r2 == 0) goto L_0x01a8
             r2.dispose()
-        L_0x01b8:
-            if (r16 == 0) goto L_0x01bd
+        L_0x01a8:
+            if (r16 == 0) goto L_0x01ad
             r16.dispose()
-        L_0x01bd:
-            if (r4 == 0) goto L_0x01c2
+        L_0x01ad:
+            if (r4 == 0) goto L_0x01b2
             r4.dispose()
-        L_0x01c2:
+        L_0x01b2:
+            org.telegram.SQLite.SQLiteDatabase r0 = r1.database
+            if (r0 == 0) goto L_0x01b9
+        L_0x01b6:
+            r0.commitTransaction()
+        L_0x01b9:
+            return
+        L_0x01ba:
+            r0 = move-exception
+        L_0x01bb:
+            if (r2 == 0) goto L_0x01c0
+            r2.dispose()
+        L_0x01c0:
+            if (r16 == 0) goto L_0x01c5
+            r16.dispose()
+        L_0x01c5:
+            if (r4 == 0) goto L_0x01ca
+            r4.dispose()
+        L_0x01ca:
             org.telegram.SQLite.SQLiteDatabase r2 = r1.database
+            if (r2 == 0) goto L_0x01d1
             r2.commitTransaction()
-            goto L_0x01c9
-        L_0x01c8:
+        L_0x01d1:
+            goto L_0x01d3
+        L_0x01d2:
             throw r0
-        L_0x01c9:
-            goto L_0x01c8
+        L_0x01d3:
+            goto L_0x01d2
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$putWebPages$151(androidx.collection.LongSparseArray):void");
     }
@@ -23273,11 +23425,9 @@ public class MessagesStorage extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:139:0x023e  */
-    /* JADX WARNING: Removed duplicated region for block: B:141:0x0245  */
-    /* JADX WARNING: Removed duplicated region for block: B:144:0x024c  */
-    /* JADX WARNING: Removed duplicated region for block: B:146:0x0253  */
-    /* JADX WARNING: Removed duplicated region for block: B:162:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:143:0x0247  */
+    /* JADX WARNING: Removed duplicated region for block: B:150:0x0257  */
+    /* JADX WARNING: Removed duplicated region for block: B:166:? A[RETURN, SYNTHETIC] */
     /* JADX WARNING: Removed duplicated region for block: B:64:0x0136 A[Catch:{ Exception -> 0x0219, all -> 0x0215 }] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public /* synthetic */ void lambda$putChannelViews$154(androidx.collection.LongSparseArray r23, androidx.collection.LongSparseArray r24, androidx.collection.LongSparseArray r25, boolean r26) {
@@ -23330,7 +23480,7 @@ public class MessagesStorage extends BaseController {
         L_0x005f:
             r0 = move-exception
             r4 = r7
-            goto L_0x024a
+            goto L_0x024c
         L_0x0063:
             r0 = move-exception
             r4 = r7
@@ -23423,7 +23573,7 @@ public class MessagesStorage extends BaseController {
         L_0x0122:
             r0 = move-exception
             r4 = r2
-            goto L_0x024a
+            goto L_0x024c
         L_0x0126:
             r0 = move-exception
             r4 = r2
@@ -23587,7 +23737,7 @@ public class MessagesStorage extends BaseController {
         L_0x021e:
             org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x0226, all -> 0x0224 }
             r0.commitTransaction()     // Catch:{ Exception -> 0x0226, all -> 0x0224 }
-            goto L_0x0248
+            goto L_0x024a
         L_0x0224:
             r0 = move-exception
             goto L_0x022a
@@ -23601,7 +23751,7 @@ public class MessagesStorage extends BaseController {
             r4 = 0
         L_0x022b:
             r5 = 1
-            goto L_0x024a
+            goto L_0x024c
         L_0x022d:
             r0 = move-exception
             r10 = 1
@@ -23615,37 +23765,39 @@ public class MessagesStorage extends BaseController {
             r5 = 0
         L_0x0234:
             r4 = 0
-            goto L_0x024a
+            goto L_0x024c
         L_0x0236:
             r0 = move-exception
             r5 = 0
         L_0x0238:
             r4 = 0
         L_0x0239:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x0249 }
-            if (r5 == 0) goto L_0x0243
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x024b }
+            if (r5 == 0) goto L_0x0245
             org.telegram.SQLite.SQLiteDatabase r0 = r1.database
+            if (r0 == 0) goto L_0x0245
             r0.commitTransaction()
-        L_0x0243:
-            if (r4 == 0) goto L_0x0248
+        L_0x0245:
+            if (r4 == 0) goto L_0x024a
             r4.dispose()
-        L_0x0248:
-            return
-        L_0x0249:
-            r0 = move-exception
         L_0x024a:
-            if (r5 == 0) goto L_0x0251
+            return
+        L_0x024b:
+            r0 = move-exception
+        L_0x024c:
+            if (r5 == 0) goto L_0x0255
             org.telegram.SQLite.SQLiteDatabase r2 = r1.database
+            if (r2 == 0) goto L_0x0255
             r2.commitTransaction()
-        L_0x0251:
-            if (r4 == 0) goto L_0x0256
+        L_0x0255:
+            if (r4 == 0) goto L_0x025a
             r4.dispose()
-        L_0x0256:
-            goto L_0x0258
-        L_0x0257:
+        L_0x025a:
+            goto L_0x025c
+        L_0x025b:
             throw r0
-        L_0x0258:
-            goto L_0x0257
+        L_0x025c:
+            goto L_0x025b
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$putChannelViews$154(androidx.collection.LongSparseArray, androidx.collection.LongSparseArray, androidx.collection.LongSparseArray, boolean):void");
     }
@@ -23902,11 +24054,9 @@ public class MessagesStorage extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:31:0x005f  */
-    /* JADX WARNING: Removed duplicated region for block: B:33:0x0066  */
-    /* JADX WARNING: Removed duplicated region for block: B:35:0x006c  */
-    /* JADX WARNING: Removed duplicated region for block: B:37:0x0073  */
-    /* JADX WARNING: Removed duplicated region for block: B:44:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:35:0x0068  */
+    /* JADX WARNING: Removed duplicated region for block: B:41:0x0077  */
+    /* JADX WARNING: Removed duplicated region for block: B:48:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public /* synthetic */ void lambda$updateMessageVerifyFlags$157(java.util.ArrayList r11) {
         /*
@@ -23951,7 +24101,7 @@ public class MessagesStorage extends BaseController {
             r3.dispose()     // Catch:{ Exception -> 0x004e, all -> 0x004b }
             org.telegram.SQLite.SQLiteDatabase r11 = r10.database     // Catch:{ Exception -> 0x0054, all -> 0x0051 }
             r11.commitTransaction()     // Catch:{ Exception -> 0x0054, all -> 0x0051 }
-            goto L_0x0069
+            goto L_0x006b
         L_0x004b:
             r11 = move-exception
             r0 = r3
@@ -23964,7 +24114,7 @@ public class MessagesStorage extends BaseController {
             r11 = move-exception
         L_0x0052:
             r1 = 1
-            goto L_0x006a
+            goto L_0x006c
         L_0x0054:
             r11 = move-exception
         L_0x0055:
@@ -23972,32 +24122,34 @@ public class MessagesStorage extends BaseController {
             goto L_0x005a
         L_0x0057:
             r11 = move-exception
-            goto L_0x006a
+            goto L_0x006c
         L_0x0059:
             r11 = move-exception
         L_0x005a:
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r11)     // Catch:{ all -> 0x0057 }
-            if (r1 == 0) goto L_0x0064
+            if (r1 == 0) goto L_0x0066
             org.telegram.SQLite.SQLiteDatabase r11 = r10.database
+            if (r11 == 0) goto L_0x0066
             r11.commitTransaction()
-        L_0x0064:
-            if (r0 == 0) goto L_0x0069
+        L_0x0066:
+            if (r0 == 0) goto L_0x006b
             r0.dispose()
-        L_0x0069:
+        L_0x006b:
             return
-        L_0x006a:
-            if (r1 == 0) goto L_0x0071
+        L_0x006c:
+            if (r1 == 0) goto L_0x0075
             org.telegram.SQLite.SQLiteDatabase r1 = r10.database
+            if (r1 == 0) goto L_0x0075
             r1.commitTransaction()
-        L_0x0071:
-            if (r0 == 0) goto L_0x0076
+        L_0x0075:
+            if (r0 == 0) goto L_0x007a
             r0.dispose()
-        L_0x0076:
-            goto L_0x0078
-        L_0x0077:
+        L_0x007a:
+            goto L_0x007c
+        L_0x007b:
             throw r11
-        L_0x0078:
-            goto L_0x0077
+        L_0x007c:
+            goto L_0x007b
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$updateMessageVerifyFlags$157(java.util.ArrayList):void");
     }
@@ -24219,27 +24371,25 @@ public class MessagesStorage extends BaseController {
     /* JADX WARNING: Removed duplicated region for block: B:461:0x08ec A[Catch:{ Exception -> 0x08e2, all -> 0x08da }] */
     /* JADX WARNING: Removed duplicated region for block: B:465:0x08f4 A[Catch:{ Exception -> 0x0a76, all -> 0x0a72 }] */
     /* JADX WARNING: Removed duplicated region for block: B:522:0x09df A[Catch:{ Exception -> 0x0a76, all -> 0x0a72 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:897:0x115b  */
-    /* JADX WARNING: Removed duplicated region for block: B:899:0x1162  */
-    /* JADX WARNING: Removed duplicated region for block: B:901:0x1167  */
-    /* JADX WARNING: Removed duplicated region for block: B:903:0x116c  */
-    /* JADX WARNING: Removed duplicated region for block: B:905:0x1171  */
-    /* JADX WARNING: Removed duplicated region for block: B:907:0x1176  */
-    /* JADX WARNING: Removed duplicated region for block: B:909:0x117b  */
-    /* JADX WARNING: Removed duplicated region for block: B:911:0x1180  */
-    /* JADX WARNING: Removed duplicated region for block: B:913:0x1185  */
-    /* JADX WARNING: Removed duplicated region for block: B:915:0x118a  */
-    /* JADX WARNING: Removed duplicated region for block: B:919:0x1192  */
-    /* JADX WARNING: Removed duplicated region for block: B:921:0x1199  */
-    /* JADX WARNING: Removed duplicated region for block: B:923:0x119e  */
-    /* JADX WARNING: Removed duplicated region for block: B:925:0x11a3  */
-    /* JADX WARNING: Removed duplicated region for block: B:927:0x11a8  */
-    /* JADX WARNING: Removed duplicated region for block: B:929:0x11ad  */
-    /* JADX WARNING: Removed duplicated region for block: B:931:0x11b2  */
-    /* JADX WARNING: Removed duplicated region for block: B:933:0x11b7  */
-    /* JADX WARNING: Removed duplicated region for block: B:935:0x11bc  */
-    /* JADX WARNING: Removed duplicated region for block: B:937:0x11c1  */
-    /* JADX WARNING: Removed duplicated region for block: B:976:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:903:0x1166  */
+    /* JADX WARNING: Removed duplicated region for block: B:905:0x116b  */
+    /* JADX WARNING: Removed duplicated region for block: B:907:0x1170  */
+    /* JADX WARNING: Removed duplicated region for block: B:909:0x1175  */
+    /* JADX WARNING: Removed duplicated region for block: B:911:0x117a  */
+    /* JADX WARNING: Removed duplicated region for block: B:913:0x117f  */
+    /* JADX WARNING: Removed duplicated region for block: B:915:0x1184  */
+    /* JADX WARNING: Removed duplicated region for block: B:917:0x1189  */
+    /* JADX WARNING: Removed duplicated region for block: B:919:0x118e  */
+    /* JADX WARNING: Removed duplicated region for block: B:927:0x119f  */
+    /* JADX WARNING: Removed duplicated region for block: B:929:0x11a4  */
+    /* JADX WARNING: Removed duplicated region for block: B:931:0x11a9  */
+    /* JADX WARNING: Removed duplicated region for block: B:933:0x11ae  */
+    /* JADX WARNING: Removed duplicated region for block: B:935:0x11b3  */
+    /* JADX WARNING: Removed duplicated region for block: B:937:0x11b8  */
+    /* JADX WARNING: Removed duplicated region for block: B:939:0x11bd  */
+    /* JADX WARNING: Removed duplicated region for block: B:941:0x11c2  */
+    /* JADX WARNING: Removed duplicated region for block: B:943:0x11c7  */
+    /* JADX WARNING: Removed duplicated region for block: B:982:? A[RETURN, SYNTHETIC] */
     /* renamed from: putMessagesInternal */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void lambda$putMessages$159(java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> r44, boolean r45, boolean r46, int r47, boolean r48, boolean r49) {
@@ -24385,7 +24535,7 @@ public class MessagesStorage extends BaseController {
             r16 = 0
             r24 = 0
             r25 = 0
-            goto L_0x118f
+            goto L_0x1193
         L_0x00fe:
             r0 = move-exception
             r13 = r1
@@ -24400,7 +24550,7 @@ public class MessagesStorage extends BaseController {
             r24 = 0
             r25 = 0
             r3 = r0
-            goto L_0x1156
+            goto L_0x1158
         L_0x0111:
             r0 = move-exception
             r3 = r0
@@ -24496,7 +24646,7 @@ public class MessagesStorage extends BaseController {
             r25 = 0
         L_0x018f:
             r26 = 0
-            goto L_0x1190
+            goto L_0x1194
         L_0x0193:
             r0 = move-exception
             r3 = r0
@@ -24516,45 +24666,45 @@ public class MessagesStorage extends BaseController {
             r25 = 0
         L_0x01a3:
             r26 = 0
-            goto L_0x1156
+            goto L_0x1158
         L_0x01a7:
             if (r45 == 0) goto L_0x01ae
             org.telegram.SQLite.SQLiteDatabase r6 = r1.database     // Catch:{ Exception -> 0x0193, all -> 0x017f }
             r6.beginTransaction()     // Catch:{ Exception -> 0x0193, all -> 0x017f }
         L_0x01ae:
-            androidx.collection.LongSparseArray r6 = new androidx.collection.LongSparseArray     // Catch:{ Exception -> 0x1150, all -> 0x114a }
-            r6.<init>()     // Catch:{ Exception -> 0x1150, all -> 0x114a }
-            org.telegram.messenger.support.LongSparseIntArray r7 = new org.telegram.messenger.support.LongSparseIntArray     // Catch:{ Exception -> 0x1150, all -> 0x114a }
-            r7.<init>()     // Catch:{ Exception -> 0x1150, all -> 0x114a }
-            org.telegram.messenger.support.LongSparseIntArray r8 = new org.telegram.messenger.support.LongSparseIntArray     // Catch:{ Exception -> 0x1150, all -> 0x114a }
-            r8.<init>()     // Catch:{ Exception -> 0x1150, all -> 0x114a }
-            org.telegram.messenger.support.LongSparseIntArray r9 = new org.telegram.messenger.support.LongSparseIntArray     // Catch:{ Exception -> 0x1150, all -> 0x114a }
-            r9.<init>()     // Catch:{ Exception -> 0x1150, all -> 0x114a }
-            org.telegram.messenger.support.LongSparseIntArray r10 = new org.telegram.messenger.support.LongSparseIntArray     // Catch:{ Exception -> 0x1150, all -> 0x114a }
-            r10.<init>()     // Catch:{ Exception -> 0x1150, all -> 0x114a }
-            androidx.collection.LongSparseArray r11 = new androidx.collection.LongSparseArray     // Catch:{ Exception -> 0x1150, all -> 0x114a }
-            r11.<init>()     // Catch:{ Exception -> 0x1150, all -> 0x114a }
-            androidx.collection.LongSparseArray r12 = new androidx.collection.LongSparseArray     // Catch:{ Exception -> 0x1150, all -> 0x114a }
-            r12.<init>()     // Catch:{ Exception -> 0x1150, all -> 0x114a }
-            org.telegram.messenger.support.LongSparseIntArray r13 = new org.telegram.messenger.support.LongSparseIntArray     // Catch:{ Exception -> 0x1150, all -> 0x114a }
-            r13.<init>()     // Catch:{ Exception -> 0x1150, all -> 0x114a }
-            androidx.collection.LongSparseArray r14 = new androidx.collection.LongSparseArray     // Catch:{ Exception -> 0x1150, all -> 0x114a }
-            r14.<init>()     // Catch:{ Exception -> 0x1150, all -> 0x114a }
-            androidx.collection.LongSparseArray r15 = new androidx.collection.LongSparseArray     // Catch:{ Exception -> 0x1150, all -> 0x114a }
-            r15.<init>()     // Catch:{ Exception -> 0x1150, all -> 0x114a }
-            org.telegram.SQLite.SQLiteDatabase r5 = r1.database     // Catch:{ Exception -> 0x1150, all -> 0x114a }
+            androidx.collection.LongSparseArray r6 = new androidx.collection.LongSparseArray     // Catch:{ Exception -> 0x1152, all -> 0x114c }
+            r6.<init>()     // Catch:{ Exception -> 0x1152, all -> 0x114c }
+            org.telegram.messenger.support.LongSparseIntArray r7 = new org.telegram.messenger.support.LongSparseIntArray     // Catch:{ Exception -> 0x1152, all -> 0x114c }
+            r7.<init>()     // Catch:{ Exception -> 0x1152, all -> 0x114c }
+            org.telegram.messenger.support.LongSparseIntArray r8 = new org.telegram.messenger.support.LongSparseIntArray     // Catch:{ Exception -> 0x1152, all -> 0x114c }
+            r8.<init>()     // Catch:{ Exception -> 0x1152, all -> 0x114c }
+            org.telegram.messenger.support.LongSparseIntArray r9 = new org.telegram.messenger.support.LongSparseIntArray     // Catch:{ Exception -> 0x1152, all -> 0x114c }
+            r9.<init>()     // Catch:{ Exception -> 0x1152, all -> 0x114c }
+            org.telegram.messenger.support.LongSparseIntArray r10 = new org.telegram.messenger.support.LongSparseIntArray     // Catch:{ Exception -> 0x1152, all -> 0x114c }
+            r10.<init>()     // Catch:{ Exception -> 0x1152, all -> 0x114c }
+            androidx.collection.LongSparseArray r11 = new androidx.collection.LongSparseArray     // Catch:{ Exception -> 0x1152, all -> 0x114c }
+            r11.<init>()     // Catch:{ Exception -> 0x1152, all -> 0x114c }
+            androidx.collection.LongSparseArray r12 = new androidx.collection.LongSparseArray     // Catch:{ Exception -> 0x1152, all -> 0x114c }
+            r12.<init>()     // Catch:{ Exception -> 0x1152, all -> 0x114c }
+            org.telegram.messenger.support.LongSparseIntArray r13 = new org.telegram.messenger.support.LongSparseIntArray     // Catch:{ Exception -> 0x1152, all -> 0x114c }
+            r13.<init>()     // Catch:{ Exception -> 0x1152, all -> 0x114c }
+            androidx.collection.LongSparseArray r14 = new androidx.collection.LongSparseArray     // Catch:{ Exception -> 0x1152, all -> 0x114c }
+            r14.<init>()     // Catch:{ Exception -> 0x1152, all -> 0x114c }
+            androidx.collection.LongSparseArray r15 = new androidx.collection.LongSparseArray     // Catch:{ Exception -> 0x1152, all -> 0x114c }
+            r15.<init>()     // Catch:{ Exception -> 0x1152, all -> 0x114c }
+            org.telegram.SQLite.SQLiteDatabase r5 = r1.database     // Catch:{ Exception -> 0x1152, all -> 0x114c }
             java.lang.String r4 = "REPLACE INTO messages_v2 VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, ?, ?, ?, ?, ?, ?, 0, ?)"
-            org.telegram.SQLite.SQLitePreparedStatement r4 = r5.executeFast(r4)     // Catch:{ Exception -> 0x1150, all -> 0x114a }
-            org.telegram.SQLite.SQLiteDatabase r5 = r1.database     // Catch:{ Exception -> 0x113d, all -> 0x1130 }
-            org.telegram.SQLite.SQLitePreparedStatement r3 = r5.executeFast(r3)     // Catch:{ Exception -> 0x113d, all -> 0x1130 }
-            org.telegram.SQLite.SQLiteDatabase r5 = r1.database     // Catch:{ Exception -> 0x1118, all -> 0x10ff }
+            org.telegram.SQLite.SQLitePreparedStatement r4 = r5.executeFast(r4)     // Catch:{ Exception -> 0x1152, all -> 0x114c }
+            org.telegram.SQLite.SQLiteDatabase r5 = r1.database     // Catch:{ Exception -> 0x113f, all -> 0x1132 }
+            org.telegram.SQLite.SQLitePreparedStatement r3 = r5.executeFast(r3)     // Catch:{ Exception -> 0x113f, all -> 0x1132 }
+            org.telegram.SQLite.SQLiteDatabase r5 = r1.database     // Catch:{ Exception -> 0x111a, all -> 0x1101 }
             r48 = r9
             java.lang.String r9 = "REPLACE INTO download_queue VALUES(?, ?, ?, ?, ?)"
-            org.telegram.SQLite.SQLitePreparedStatement r9 = r5.executeFast(r9)     // Catch:{ Exception -> 0x1118, all -> 0x10ff }
-            org.telegram.SQLite.SQLiteDatabase r5 = r1.database     // Catch:{ Exception -> 0x10e8, all -> 0x10d1 }
+            org.telegram.SQLite.SQLitePreparedStatement r9 = r5.executeFast(r9)     // Catch:{ Exception -> 0x111a, all -> 0x1101 }
+            org.telegram.SQLite.SQLiteDatabase r5 = r1.database     // Catch:{ Exception -> 0x10ea, all -> 0x10d3 }
             r22 = r8
             java.lang.String r8 = "REPLACE INTO webpage_pending_v2 VALUES(?, ?, ?)"
-            org.telegram.SQLite.SQLitePreparedStatement r8 = r5.executeFast(r8)     // Catch:{ Exception -> 0x10e8, all -> 0x10d1 }
+            org.telegram.SQLite.SQLitePreparedStatement r8 = r5.executeFast(r8)     // Catch:{ Exception -> 0x10ea, all -> 0x10d3 }
             r26 = r3
             r27 = r6
             r25 = r8
@@ -24564,7 +24714,7 @@ public class MessagesStorage extends BaseController {
             r8 = 0
             r9 = 0
         L_0x020e:
-            int r6 = r44.size()     // Catch:{ Exception -> 0x10b9, all -> 0x10a1 }
+            int r6 = r44.size()     // Catch:{ Exception -> 0x10bb, all -> 0x10a3 }
             if (r5 >= r6) goto L_0x03dd
             java.lang.Object r6 = r2.get(r5)     // Catch:{ Exception -> 0x03d6, all -> 0x03cf }
             org.telegram.tgnet.TLRPC$Message r6 = (org.telegram.tgnet.TLRPC$Message) r6     // Catch:{ Exception -> 0x03d6, all -> 0x03cf }
@@ -24791,14 +24941,14 @@ public class MessagesStorage extends BaseController {
         L_0x03d2:
             r3 = r0
             r13 = r1
-            goto L_0x10ad
+            goto L_0x10af
         L_0x03d6:
             r0 = move-exception
             r28 = r4
         L_0x03d9:
             r3 = r0
             r13 = r1
-            goto L_0x10c5
+            goto L_0x10c7
         L_0x03dd:
             r2 = r3
             r28 = r4
@@ -24808,7 +24958,7 @@ public class MessagesStorage extends BaseController {
             r4 = r11
             r3 = 0
         L_0x03e8:
-            int r5 = r4.size()     // Catch:{ Exception -> 0x109e, all -> 0x109b }
+            int r5 = r4.size()     // Catch:{ Exception -> 0x10a0, all -> 0x109d }
             if (r3 >= r5) goto L_0x0402
             org.telegram.messenger.MediaDataController r5 = r43.getMediaDataController()     // Catch:{ Exception -> 0x03cd, all -> 0x03cb }
             long r6 = r4.keyAt(r3)     // Catch:{ Exception -> 0x03cd, all -> 0x03cb }
@@ -24971,7 +25121,7 @@ public class MessagesStorage extends BaseController {
             r13 = r43
             r3 = r0
             r11 = r28
-            goto L_0x1190
+            goto L_0x1194
         L_0x052d:
             r0 = move-exception
             r1 = 0
@@ -24983,11 +25133,11 @@ public class MessagesStorage extends BaseController {
             r13 = r43
             r3 = r0
             r11 = r28
-            goto L_0x1156
+            goto L_0x1158
         L_0x053d:
             r6 = 0
         L_0x053e:
-            boolean r1 = r12.isEmpty()     // Catch:{ Exception -> 0x1090, all -> 0x1085 }
+            boolean r1 = r12.isEmpty()     // Catch:{ Exception -> 0x1092, all -> 0x1087 }
             if (r1 != 0) goto L_0x05e5
             int r1 = r12.size()     // Catch:{ Exception -> 0x052d, all -> 0x051d }
             r2 = 0
@@ -25065,12 +25215,12 @@ public class MessagesStorage extends BaseController {
             r0 = move-exception
             r3 = r0
             r13 = r9
-            goto L_0x10ad
+            goto L_0x10af
         L_0x05e0:
             r0 = move-exception
             r3 = r0
             r13 = r9
-            goto L_0x10c5
+            goto L_0x10c7
         L_0x05e5:
             r9 = r43
             r1 = r30
@@ -25082,7 +25232,7 @@ public class MessagesStorage extends BaseController {
             r10 = 0
             r11 = 0
         L_0x05f3:
-            int r5 = r44.size()     // Catch:{ Exception -> 0x1071, all -> 0x105d }
+            int r5 = r44.size()     // Catch:{ Exception -> 0x1073, all -> 0x105f }
             if (r4 >= r5) goto L_0x0ae9
             r5 = r44
             java.lang.Object r34 = r5.get(r4)     // Catch:{ Exception -> 0x0ad4, all -> 0x0abf }
@@ -25118,13 +25268,13 @@ public class MessagesStorage extends BaseController {
             r3 = r0
             r16 = r8
             r13 = r9
-            goto L_0x106b
+            goto L_0x106d
         L_0x063d:
             r0 = move-exception
             r3 = r0
             r16 = r8
             r13 = r9
-            goto L_0x107f
+            goto L_0x1081
         L_0x0644:
             boolean r5 = r15.out     // Catch:{ Exception -> 0x0ad4, all -> 0x0abf }
             if (r5 == 0) goto L_0x067f
@@ -25401,7 +25551,7 @@ public class MessagesStorage extends BaseController {
             r17 = 0
             r11 = r4
             r13 = r9
-            goto L_0x1190
+            goto L_0x1194
         L_0x0818:
             r0 = move-exception
             r3 = r0
@@ -25413,7 +25563,7 @@ public class MessagesStorage extends BaseController {
             r17 = 0
             r11 = r4
             r13 = r9
-            goto L_0x1156
+            goto L_0x1158
         L_0x0827:
             r21 = r6
             r13 = r49
@@ -25842,7 +25992,7 @@ public class MessagesStorage extends BaseController {
         L_0x0acf:
             r17 = 0
             r11 = r4
-            goto L_0x1190
+            goto L_0x1194
         L_0x0ad4:
             r0 = move-exception
             r49 = r8
@@ -25861,7 +26011,7 @@ public class MessagesStorage extends BaseController {
         L_0x0ae4:
             r17 = 0
             r11 = r4
-            goto L_0x1156
+            goto L_0x1158
         L_0x0ae9:
             r39 = r1
             r38 = r6
@@ -25872,7 +26022,7 @@ public class MessagesStorage extends BaseController {
             r1 = r26
             r4 = r28
             r6 = 10
-            r4.dispose()     // Catch:{ Exception -> 0x104e, all -> 0x103f }
+            r4.dispose()     // Catch:{ Exception -> 0x1050, all -> 0x1041 }
             if (r49 == 0) goto L_0x0b1b
             r49.dispose()     // Catch:{ Exception -> 0x0b10, all -> 0x0b05 }
             r7 = 0
@@ -25944,20 +26094,20 @@ public class MessagesStorage extends BaseController {
             r0 = move-exception
             goto L_0x0b3f
         L_0x0b58:
-            r1.dispose()     // Catch:{ Exception -> 0x1021, all -> 0x1003 }
-            r8.dispose()     // Catch:{ Exception -> 0x0fe7, all -> 0x0fcb }
-            r5.dispose()     // Catch:{ Exception -> 0x0faf, all -> 0x0var_ }
-            org.telegram.SQLite.SQLiteDatabase r1 = r9.database     // Catch:{ Exception -> 0x0f7d, all -> 0x0var_ }
+            r1.dispose()     // Catch:{ Exception -> 0x1023, all -> 0x1005 }
+            r8.dispose()     // Catch:{ Exception -> 0x0fe9, all -> 0x0fcd }
+            r5.dispose()     // Catch:{ Exception -> 0x0fb1, all -> 0x0var_ }
+            org.telegram.SQLite.SQLiteDatabase r1 = r9.database     // Catch:{ Exception -> 0x0f7f, all -> 0x0var_ }
             java.lang.String r2 = "REPLACE INTO dialogs VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-            org.telegram.SQLite.SQLitePreparedStatement r1 = r1.executeFast(r2)     // Catch:{ Exception -> 0x0f7d, all -> 0x0var_ }
-            org.telegram.SQLite.SQLiteDatabase r2 = r9.database     // Catch:{ Exception -> 0x0f4b, all -> 0x0f2f }
+            org.telegram.SQLite.SQLitePreparedStatement r1 = r1.executeFast(r2)     // Catch:{ Exception -> 0x0f7f, all -> 0x0var_ }
+            org.telegram.SQLite.SQLiteDatabase r2 = r9.database     // Catch:{ Exception -> 0x0f4d, all -> 0x0var_ }
             java.lang.String r5 = "UPDATE dialogs SET date = ?, unread_count = ?, last_mid = ?, unread_count_i = ? WHERE did = ?"
-            org.telegram.SQLite.SQLitePreparedStatement r2 = r2.executeFast(r5)     // Catch:{ Exception -> 0x0f4b, all -> 0x0f2f }
-            java.util.ArrayList r8 = new java.util.ArrayList     // Catch:{ Exception -> 0x0f1d, all -> 0x0f0b }
-            r8.<init>()     // Catch:{ Exception -> 0x0f1d, all -> 0x0f0b }
+            org.telegram.SQLite.SQLitePreparedStatement r2 = r2.executeFast(r5)     // Catch:{ Exception -> 0x0f4d, all -> 0x0var_ }
+            java.util.ArrayList r8 = new java.util.ArrayList     // Catch:{ Exception -> 0x0f1f, all -> 0x0f0d }
+            r8.<init>()     // Catch:{ Exception -> 0x0f1f, all -> 0x0f0d }
             r13 = 0
         L_0x0b77:
-            int r5 = r27.size()     // Catch:{ Exception -> 0x0f1d, all -> 0x0f0b }
+            int r5 = r27.size()     // Catch:{ Exception -> 0x0f1f, all -> 0x0f0d }
             if (r13 >= r5) goto L_0x0dab
             r44 = r7
             r14 = r27
@@ -26022,7 +26172,7 @@ public class MessagesStorage extends BaseController {
             r3 = r0
             r12 = r1
             r13 = r9
-            goto L_0x0f1a
+            goto L_0x0f1c
         L_0x0CLASSNAME:
             r0 = move-exception
             r16 = r44
@@ -26030,7 +26180,7 @@ public class MessagesStorage extends BaseController {
             r3 = r0
             r12 = r1
             r13 = r9
-            goto L_0x0f2c
+            goto L_0x0f2e
         L_0x0c0e:
             r18 = 0
             int r5 = (r12 > r18 ? 1 : (r12 == r18 ? 0 : -1))
@@ -26083,7 +26233,7 @@ public class MessagesStorage extends BaseController {
             r3 = r0
             r12 = r1
             r11 = r28
-            goto L_0x101d
+            goto L_0x101f
         L_0x0CLASSNAME:
             r0 = move-exception
             r17 = 0
@@ -26096,7 +26246,7 @@ public class MessagesStorage extends BaseController {
             r3 = r0
             r12 = r1
             r11 = r28
-            goto L_0x103b
+            goto L_0x103d
         L_0x0c7b:
             if (r15 == 0) goto L_0x0CLASSNAME
             int r5 = r15.local_id     // Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0CLASSNAME }
@@ -26239,14 +26389,14 @@ public class MessagesStorage extends BaseController {
             goto L_0x0b77
         L_0x0d6f:
             r0 = move-exception
-            goto L_0x0eff
+            goto L_0x0var_
         L_0x0d72:
             r0 = move-exception
             goto L_0x0var_
         L_0x0d75:
             r0 = move-exception
             r13 = r43
-            goto L_0x0eff
+            goto L_0x0var_
         L_0x0d7a:
             r0 = move-exception
             r13 = r43
@@ -26254,7 +26404,7 @@ public class MessagesStorage extends BaseController {
         L_0x0d7f:
             r0 = move-exception
             r13 = r9
-            goto L_0x0eff
+            goto L_0x0var_
         L_0x0d83:
             r0 = move-exception
             r13 = r9
@@ -26263,7 +26413,7 @@ public class MessagesStorage extends BaseController {
             r0 = move-exception
             r13 = r9
             r49 = r11
-            goto L_0x0eff
+            goto L_0x0var_
         L_0x0d8d:
             r0 = move-exception
             r13 = r9
@@ -26290,7 +26440,7 @@ public class MessagesStorage extends BaseController {
             r13 = r9
             r47 = r10
             r49 = r11
-            goto L_0x0var_
+            goto L_0x0f2a
         L_0x0dab:
             r41 = r3
             r28 = r4
@@ -26300,8 +26450,8 @@ public class MessagesStorage extends BaseController {
             r49 = r11
             r27 = r22
             r22 = r40
-            r2.dispose()     // Catch:{ Exception -> 0x0var_, all -> 0x0efd }
-            r1.dispose()     // Catch:{ Exception -> 0x0ef5, all -> 0x0eee }
+            r2.dispose()     // Catch:{ Exception -> 0x0var_, all -> 0x0eff }
+            r1.dispose()     // Catch:{ Exception -> 0x0ef7, all -> 0x0ef0 }
             if (r38 == 0) goto L_0x0e9f
             org.telegram.SQLite.SQLiteDatabase r1 = r13.database     // Catch:{ Exception -> 0x0e98, all -> 0x0e91 }
             java.lang.String r2 = "REPLACE INTO media_counts_v2 VALUES(?, ?, ?, ?)"
@@ -26401,7 +26551,7 @@ public class MessagesStorage extends BaseController {
             r17 = 0
             r24 = 0
             r25 = 0
-            goto L_0x101d
+            goto L_0x101f
         L_0x0e7d:
             r0 = move-exception
             r16 = r44
@@ -26414,7 +26564,7 @@ public class MessagesStorage extends BaseController {
             r17 = 0
             r24 = 0
             r25 = 0
-            goto L_0x103b
+            goto L_0x103d
         L_0x0e91:
             r0 = move-exception
             r16 = r44
@@ -26424,7 +26574,7 @@ public class MessagesStorage extends BaseController {
             r0 = move-exception
             r16 = r44
             r10 = r47
-            goto L_0x0f8a
+            goto L_0x0f8c
         L_0x0e9f:
             if (r45 == 0) goto L_0x0ea6
             org.telegram.SQLite.SQLiteDatabase r1 = r13.database     // Catch:{ Exception -> 0x0e98, all -> 0x0e91 }
@@ -26451,49 +26601,50 @@ public class MessagesStorage extends BaseController {
             r11 = r28
             r14 = 0
         L_0x0ed1:
-            if (r14 == 0) goto L_0x0ed8
+            if (r14 == 0) goto L_0x0eda
             org.telegram.SQLite.SQLiteDatabase r3 = r13.database
+            if (r3 == 0) goto L_0x0eda
             r3.commitTransaction()
-        L_0x0ed8:
-            if (r11 == 0) goto L_0x0edd
+        L_0x0eda:
+            if (r11 == 0) goto L_0x0edf
             r11.dispose()
-        L_0x0edd:
-            if (r16 == 0) goto L_0x0ee2
+        L_0x0edf:
+            if (r16 == 0) goto L_0x0ee4
             r16.dispose()
-        L_0x0ee2:
-            if (r1 == 0) goto L_0x0ee7
+        L_0x0ee4:
+            if (r1 == 0) goto L_0x0ee9
             r1.dispose()
-        L_0x0ee7:
-            if (r2 == 0) goto L_0x118d
+        L_0x0ee9:
+            if (r2 == 0) goto L_0x1191
             r2.dispose()
-            goto L_0x118d
-        L_0x0eee:
+            goto L_0x1191
+        L_0x0ef0:
             r0 = move-exception
             r3 = 0
             r16 = r44
             r10 = r47
-            goto L_0x0f3c
-        L_0x0ef5:
+            goto L_0x0f3e
+        L_0x0ef7:
             r0 = move-exception
             r3 = 0
             r16 = r44
             r10 = r47
-            goto L_0x0var_
-        L_0x0efd:
-            r0 = move-exception
-            r3 = 0
+            goto L_0x0f5a
         L_0x0eff:
+            r0 = move-exception
+            r3 = 0
+        L_0x0var_:
             r16 = r44
             r10 = r47
-            goto L_0x0var_
+            goto L_0x0f1a
         L_0x0var_:
             r0 = move-exception
             r3 = 0
         L_0x0var_:
             r16 = r44
             r10 = r47
-            goto L_0x0f2a
-        L_0x0f0b:
+            goto L_0x0f2c
+        L_0x0f0d:
             r0 = move-exception
             r28 = r4
             r44 = r7
@@ -26503,13 +26654,13 @@ public class MessagesStorage extends BaseController {
             r3 = 0
         L_0x0var_:
             r16 = r44
-        L_0x0var_:
-            r3 = r0
-            r12 = r1
         L_0x0f1a:
+            r3 = r0
+            r12 = r1
+        L_0x0f1c:
             r11 = r28
             goto L_0x0var_
-        L_0x0f1d:
+        L_0x0f1f:
             r0 = move-exception
             r28 = r4
             r44 = r7
@@ -26517,15 +26668,15 @@ public class MessagesStorage extends BaseController {
             r47 = r10
             r49 = r11
             r3 = 0
-        L_0x0var_:
-            r16 = r44
         L_0x0f2a:
-            r3 = r0
-            r12 = r1
+            r16 = r44
         L_0x0f2c:
+            r3 = r0
+            r12 = r1
+        L_0x0f2e:
             r11 = r28
-            goto L_0x0f5d
-        L_0x0f2f:
+            goto L_0x0f5f
+        L_0x0var_:
             r0 = move-exception
             r28 = r4
             r44 = r7
@@ -26534,7 +26685,7 @@ public class MessagesStorage extends BaseController {
             r49 = r11
             r3 = 0
             r16 = r44
-        L_0x0f3c:
+        L_0x0f3e:
             r3 = r0
             r12 = r1
             r11 = r28
@@ -26544,8 +26695,8 @@ public class MessagesStorage extends BaseController {
             r24 = 0
             r25 = 0
             r26 = 0
-            goto L_0x101d
-        L_0x0f4b:
+            goto L_0x101f
+        L_0x0f4d:
             r0 = move-exception
             r28 = r4
             r44 = r7
@@ -26554,17 +26705,17 @@ public class MessagesStorage extends BaseController {
             r49 = r11
             r3 = 0
             r16 = r44
-        L_0x0var_:
+        L_0x0f5a:
             r3 = r0
             r12 = r1
             r11 = r28
             r2 = 0
-        L_0x0f5d:
+        L_0x0f5f:
             r17 = 0
             r24 = 0
             r25 = 0
             r26 = 0
-            goto L_0x103b
+            goto L_0x103d
         L_0x0var_:
             r0 = move-exception
             r28 = r4
@@ -26581,7 +26732,7 @@ public class MessagesStorage extends BaseController {
             r2 = 0
             r12 = 0
             goto L_0x0189
-        L_0x0f7d:
+        L_0x0f7f:
             r0 = move-exception
             r28 = r4
             r44 = r7
@@ -26590,7 +26741,7 @@ public class MessagesStorage extends BaseController {
             r49 = r11
             r3 = 0
             r16 = r44
-        L_0x0f8a:
+        L_0x0f8c:
             r1 = r49
             r3 = r0
             r11 = r28
@@ -26615,7 +26766,7 @@ public class MessagesStorage extends BaseController {
             r17 = 0
             r24 = 0
             goto L_0x018f
-        L_0x0faf:
+        L_0x0fb1:
             r0 = move-exception
             r28 = r4
             r44 = r7
@@ -26633,7 +26784,7 @@ public class MessagesStorage extends BaseController {
             r17 = 0
             r24 = 0
             goto L_0x01a3
-        L_0x0fcb:
+        L_0x0fcd:
             r0 = move-exception
             r28 = r4
             r44 = r7
@@ -26651,7 +26802,7 @@ public class MessagesStorage extends BaseController {
             r12 = 0
             r17 = 0
             goto L_0x018f
-        L_0x0fe7:
+        L_0x0fe9:
             r0 = move-exception
             r28 = r4
             r44 = r7
@@ -26669,7 +26820,7 @@ public class MessagesStorage extends BaseController {
             r12 = 0
             r17 = 0
             goto L_0x01a3
-        L_0x1003:
+        L_0x1005:
             r0 = move-exception
             r28 = r4
             r44 = r7
@@ -26686,10 +26837,10 @@ public class MessagesStorage extends BaseController {
             r2 = 0
             r12 = 0
             r17 = 0
-        L_0x101d:
+        L_0x101f:
             r1 = r49
-            goto L_0x1190
-        L_0x1021:
+            goto L_0x1194
+        L_0x1023:
             r0 = move-exception
             r28 = r4
             r44 = r7
@@ -26706,10 +26857,10 @@ public class MessagesStorage extends BaseController {
             r2 = 0
             r12 = 0
             r17 = 0
-        L_0x103b:
+        L_0x103d:
             r1 = r49
-            goto L_0x1156
-        L_0x103f:
+            goto L_0x1158
+        L_0x1041:
             r0 = move-exception
             r28 = r4
             r13 = r9
@@ -26719,8 +26870,8 @@ public class MessagesStorage extends BaseController {
             r26 = r1
             r25 = r5
             r24 = r8
-            goto L_0x106b
-        L_0x104e:
+            goto L_0x106d
+        L_0x1050:
             r0 = move-exception
             r28 = r4
             r13 = r9
@@ -26730,8 +26881,8 @@ public class MessagesStorage extends BaseController {
             r26 = r1
             r25 = r5
             r24 = r8
-            goto L_0x107f
-        L_0x105d:
+            goto L_0x1081
+        L_0x105f:
             r0 = move-exception
             r49 = r8
             r13 = r9
@@ -26741,13 +26892,13 @@ public class MessagesStorage extends BaseController {
             r3 = 0
             r16 = r49
             r3 = r0
-        L_0x106b:
+        L_0x106d:
             r1 = r11
             r11 = r28
             r2 = 0
             r12 = 0
-            goto L_0x10b5
-        L_0x1071:
+            goto L_0x10b7
+        L_0x1073:
             r0 = move-exception
             r49 = r8
             r13 = r9
@@ -26757,79 +26908,79 @@ public class MessagesStorage extends BaseController {
             r3 = 0
             r16 = r49
             r3 = r0
-        L_0x107f:
+        L_0x1081:
             r1 = r11
             r11 = r28
             r2 = 0
             r12 = 0
-            goto L_0x10cd
-        L_0x1085:
+            goto L_0x10cf
+        L_0x1087:
             r0 = move-exception
             r3 = 0
             r13 = r43
             r8 = r24
             r5 = r25
             r1 = r26
-            goto L_0x10ac
-        L_0x1090:
+            goto L_0x10ae
+        L_0x1092:
             r0 = move-exception
             r3 = 0
             r13 = r43
             r8 = r24
             r5 = r25
             r1 = r26
-            goto L_0x10c4
-        L_0x109b:
+            goto L_0x10c6
+        L_0x109d:
             r0 = move-exception
             r13 = r1
-            goto L_0x10a5
-        L_0x109e:
+            goto L_0x10a7
+        L_0x10a0:
             r0 = move-exception
             r13 = r1
-            goto L_0x10bd
-        L_0x10a1:
+            goto L_0x10bf
+        L_0x10a3:
             r0 = move-exception
             r13 = r1
             r28 = r4
-        L_0x10a5:
+        L_0x10a7:
             r8 = r24
             r5 = r25
             r1 = r26
             r3 = 0
-        L_0x10ac:
+        L_0x10ae:
             r3 = r0
-        L_0x10ad:
+        L_0x10af:
             r11 = r28
             r1 = 0
             r2 = 0
             r10 = 0
             r12 = 0
             r16 = 0
-        L_0x10b5:
+        L_0x10b7:
             r17 = 0
-            goto L_0x1190
-        L_0x10b9:
+            goto L_0x1194
+        L_0x10bb:
             r0 = move-exception
             r13 = r1
             r28 = r4
-        L_0x10bd:
+        L_0x10bf:
             r8 = r24
             r5 = r25
             r1 = r26
             r3 = 0
-        L_0x10c4:
+        L_0x10c6:
             r3 = r0
-        L_0x10c5:
+        L_0x10c7:
             r11 = r28
             r1 = 0
             r2 = 0
             r10 = 0
             r12 = 0
             r16 = 0
-        L_0x10cd:
+        L_0x10cf:
             r17 = 0
-            goto L_0x1156
-        L_0x10d1:
+            goto L_0x1158
+        L_0x10d3:
             r0 = move-exception
             r13 = r1
             r1 = r3
@@ -26846,8 +26997,8 @@ public class MessagesStorage extends BaseController {
             r12 = 0
             r16 = 0
             r17 = 0
-            goto L_0x1114
-        L_0x10e8:
+            goto L_0x1116
+        L_0x10ea:
             r0 = move-exception
             r13 = r1
             r1 = r3
@@ -26864,8 +27015,8 @@ public class MessagesStorage extends BaseController {
             r12 = 0
             r16 = 0
             r17 = 0
-            goto L_0x112d
-        L_0x10ff:
+            goto L_0x112f
+        L_0x1101:
             r0 = move-exception
             r13 = r1
             r1 = r3
@@ -26881,10 +27032,10 @@ public class MessagesStorage extends BaseController {
             r16 = 0
             r17 = 0
             r24 = 0
-        L_0x1114:
+        L_0x1116:
             r25 = 0
-            goto L_0x1190
-        L_0x1118:
+            goto L_0x1194
+        L_0x111a:
             r0 = move-exception
             r13 = r1
             r1 = r3
@@ -26900,10 +27051,10 @@ public class MessagesStorage extends BaseController {
             r16 = 0
             r17 = 0
             r24 = 0
-        L_0x112d:
+        L_0x112f:
             r25 = 0
-            goto L_0x1156
-        L_0x1130:
+            goto L_0x1158
+        L_0x1132:
             r0 = move-exception
             r13 = r1
             r28 = r4
@@ -26914,7 +27065,7 @@ public class MessagesStorage extends BaseController {
             r2 = 0
             r10 = 0
             goto L_0x0186
-        L_0x113d:
+        L_0x113f:
             r0 = move-exception
             r13 = r1
             r28 = r4
@@ -26925,93 +27076,95 @@ public class MessagesStorage extends BaseController {
             r2 = 0
             r10 = 0
             goto L_0x019a
-        L_0x114a:
+        L_0x114c:
             r0 = move-exception
             r13 = r1
             r3 = 0
             r3 = r0
             goto L_0x0182
-        L_0x1150:
+        L_0x1152:
             r0 = move-exception
             r13 = r1
             r3 = 0
             r3 = r0
             goto L_0x0196
-        L_0x1156:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r3)     // Catch:{ all -> 0x118e }
-            if (r17 == 0) goto L_0x1160
+        L_0x1158:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r3)     // Catch:{ all -> 0x1192 }
+            if (r17 == 0) goto L_0x1164
             org.telegram.SQLite.SQLiteDatabase r3 = r13.database
+            if (r3 == 0) goto L_0x1164
             r3.commitTransaction()
-        L_0x1160:
-            if (r11 == 0) goto L_0x1165
+        L_0x1164:
+            if (r11 == 0) goto L_0x1169
             r11.dispose()
-        L_0x1165:
-            if (r26 == 0) goto L_0x116a
+        L_0x1169:
+            if (r26 == 0) goto L_0x116e
             r26.dispose()
-        L_0x116a:
-            if (r24 == 0) goto L_0x116f
+        L_0x116e:
+            if (r24 == 0) goto L_0x1173
             r24.dispose()
-        L_0x116f:
-            if (r25 == 0) goto L_0x1174
+        L_0x1173:
+            if (r25 == 0) goto L_0x1178
             r25.dispose()
-        L_0x1174:
-            if (r16 == 0) goto L_0x1179
+        L_0x1178:
+            if (r16 == 0) goto L_0x117d
             r16.dispose()
-        L_0x1179:
-            if (r1 == 0) goto L_0x117e
+        L_0x117d:
+            if (r1 == 0) goto L_0x1182
             r1.dispose()
-        L_0x117e:
-            if (r10 == 0) goto L_0x1183
+        L_0x1182:
+            if (r10 == 0) goto L_0x1187
             r10.dispose()
-        L_0x1183:
-            if (r12 == 0) goto L_0x1188
+        L_0x1187:
+            if (r12 == 0) goto L_0x118c
             r12.dispose()
-        L_0x1188:
-            if (r2 == 0) goto L_0x118d
+        L_0x118c:
+            if (r2 == 0) goto L_0x1191
             r2.dispose()
-        L_0x118d:
+        L_0x1191:
             return
-        L_0x118e:
+        L_0x1192:
             r0 = move-exception
-        L_0x118f:
+        L_0x1193:
             r3 = r0
-        L_0x1190:
-            if (r17 == 0) goto L_0x1197
+        L_0x1194:
+            if (r17 == 0) goto L_0x119d
             org.telegram.SQLite.SQLiteDatabase r4 = r13.database
+            if (r4 == 0) goto L_0x119d
             r4.commitTransaction()
-        L_0x1197:
-            if (r11 == 0) goto L_0x119c
+        L_0x119d:
+            if (r11 == 0) goto L_0x11a2
             r11.dispose()
-        L_0x119c:
-            if (r26 == 0) goto L_0x11a1
+        L_0x11a2:
+            if (r26 == 0) goto L_0x11a7
             r26.dispose()
-        L_0x11a1:
-            if (r24 == 0) goto L_0x11a6
+        L_0x11a7:
+            if (r24 == 0) goto L_0x11ac
             r24.dispose()
-        L_0x11a6:
-            if (r25 == 0) goto L_0x11ab
+        L_0x11ac:
+            if (r25 == 0) goto L_0x11b1
             r25.dispose()
-        L_0x11ab:
-            if (r16 == 0) goto L_0x11b0
+        L_0x11b1:
+            if (r16 == 0) goto L_0x11b6
             r16.dispose()
-        L_0x11b0:
-            if (r1 == 0) goto L_0x11b5
+        L_0x11b6:
+            if (r1 == 0) goto L_0x11bb
             r1.dispose()
-        L_0x11b5:
-            if (r10 == 0) goto L_0x11ba
+        L_0x11bb:
+            if (r10 == 0) goto L_0x11c0
             r10.dispose()
-        L_0x11ba:
-            if (r12 == 0) goto L_0x11bf
+        L_0x11c0:
+            if (r12 == 0) goto L_0x11c5
             r12.dispose()
-        L_0x11bf:
-            if (r2 == 0) goto L_0x11c4
-            r2.dispose()
-        L_0x11c4:
-            goto L_0x11c6
         L_0x11c5:
+            if (r2 == 0) goto L_0x11ca
+            r2.dispose()
+        L_0x11ca:
+            goto L_0x11cc
+        L_0x11cb:
             throw r3
-        L_0x11c6:
-            goto L_0x11c5
+        L_0x11cc:
+            goto L_0x11cb
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$putMessages$159(java.util.ArrayList, boolean, boolean, int, boolean, boolean):void");
     }
@@ -27732,9 +27885,11 @@ public class MessagesStorage extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:61:0x00f7  */
-    /* JADX WARNING: Removed duplicated region for block: B:64:0x0102  */
-    /* JADX WARNING: Removed duplicated region for block: B:80:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:63:0x00f6  */
+    /* JADX WARNING: Removed duplicated region for block: B:65:0x00fb  */
+    /* JADX WARNING: Removed duplicated region for block: B:68:0x0103  */
+    /* JADX WARNING: Removed duplicated region for block: B:70:0x0108  */
+    /* JADX WARNING: Removed duplicated region for block: B:87:? A[RETURN, SYNTHETIC] */
     /* renamed from: updateUsersInternal */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void lambda$updateUsers$164(java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r9, boolean r10, boolean r11) {
@@ -27744,12 +27899,12 @@ public class MessagesStorage extends BaseController {
             r1 = 0
             if (r10 == 0) goto L_0x0051
             if (r11 == 0) goto L_0x000b
-            org.telegram.SQLite.SQLiteDatabase r10 = r8.database     // Catch:{ Exception -> 0x00ec }
-            r10.beginTransaction()     // Catch:{ Exception -> 0x00ec }
+            org.telegram.SQLite.SQLiteDatabase r10 = r8.database     // Catch:{ Exception -> 0x00ee }
+            r10.beginTransaction()     // Catch:{ Exception -> 0x00ee }
         L_0x000b:
-            org.telegram.SQLite.SQLiteDatabase r10 = r8.database     // Catch:{ Exception -> 0x00ec }
+            org.telegram.SQLite.SQLiteDatabase r10 = r8.database     // Catch:{ Exception -> 0x00ee }
             java.lang.String r2 = "UPDATE users SET status = ? WHERE uid = ?"
-            org.telegram.SQLite.SQLitePreparedStatement r10 = r10.executeFast(r2)     // Catch:{ Exception -> 0x00ec }
+            org.telegram.SQLite.SQLitePreparedStatement r10 = r10.executeFast(r2)     // Catch:{ Exception -> 0x00ee }
             int r2 = r9.size()     // Catch:{ Exception -> 0x004d, all -> 0x0049 }
             r3 = 0
         L_0x0018:
@@ -27775,118 +27930,123 @@ public class MessagesStorage extends BaseController {
         L_0x003d:
             r10.dispose()     // Catch:{ Exception -> 0x004d, all -> 0x0049 }
             if (r11 == 0) goto L_0x00e4
-            org.telegram.SQLite.SQLiteDatabase r9 = r8.database     // Catch:{ Exception -> 0x00ec }
-            r9.commitTransaction()     // Catch:{ Exception -> 0x00ec }
+            org.telegram.SQLite.SQLiteDatabase r9 = r8.database     // Catch:{ Exception -> 0x00ee }
+            r9.commitTransaction()     // Catch:{ Exception -> 0x00ee }
             goto L_0x00e4
         L_0x0049:
             r9 = move-exception
             r0 = r10
-            goto L_0x00fb
+            goto L_0x00ff
         L_0x004d:
             r9 = move-exception
             r0 = r10
-            goto L_0x00ed
+            goto L_0x00ef
         L_0x0051:
-            java.lang.StringBuilder r10 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x00ec }
-            r10.<init>()     // Catch:{ Exception -> 0x00ec }
-            androidx.collection.LongSparseArray r2 = new androidx.collection.LongSparseArray     // Catch:{ Exception -> 0x00ec }
-            r2.<init>()     // Catch:{ Exception -> 0x00ec }
-            int r3 = r9.size()     // Catch:{ Exception -> 0x00ec }
+            java.lang.StringBuilder r10 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x00ee }
+            r10.<init>()     // Catch:{ Exception -> 0x00ee }
+            androidx.collection.LongSparseArray r2 = new androidx.collection.LongSparseArray     // Catch:{ Exception -> 0x00ee }
+            r2.<init>()     // Catch:{ Exception -> 0x00ee }
+            int r3 = r9.size()     // Catch:{ Exception -> 0x00ee }
             r4 = 0
         L_0x0060:
             if (r4 >= r3) goto L_0x0080
-            java.lang.Object r5 = r9.get(r4)     // Catch:{ Exception -> 0x00ec }
-            org.telegram.tgnet.TLRPC$User r5 = (org.telegram.tgnet.TLRPC$User) r5     // Catch:{ Exception -> 0x00ec }
-            int r6 = r10.length()     // Catch:{ Exception -> 0x00ec }
+            java.lang.Object r5 = r9.get(r4)     // Catch:{ Exception -> 0x00ee }
+            org.telegram.tgnet.TLRPC$User r5 = (org.telegram.tgnet.TLRPC$User) r5     // Catch:{ Exception -> 0x00ee }
+            int r6 = r10.length()     // Catch:{ Exception -> 0x00ee }
             if (r6 == 0) goto L_0x0073
             java.lang.String r6 = ","
-            r10.append(r6)     // Catch:{ Exception -> 0x00ec }
+            r10.append(r6)     // Catch:{ Exception -> 0x00ee }
         L_0x0073:
-            long r6 = r5.id     // Catch:{ Exception -> 0x00ec }
-            r10.append(r6)     // Catch:{ Exception -> 0x00ec }
-            long r6 = r5.id     // Catch:{ Exception -> 0x00ec }
-            r2.put(r6, r5)     // Catch:{ Exception -> 0x00ec }
+            long r6 = r5.id     // Catch:{ Exception -> 0x00ee }
+            r10.append(r6)     // Catch:{ Exception -> 0x00ee }
+            long r6 = r5.id     // Catch:{ Exception -> 0x00ee }
+            r2.put(r6, r5)     // Catch:{ Exception -> 0x00ee }
             int r4 = r4 + 1
             goto L_0x0060
         L_0x0080:
-            java.util.ArrayList r9 = new java.util.ArrayList     // Catch:{ Exception -> 0x00ec }
-            r9.<init>()     // Catch:{ Exception -> 0x00ec }
-            java.lang.String r10 = r10.toString()     // Catch:{ Exception -> 0x00ec }
-            r8.getUsersInternal(r10, r9)     // Catch:{ Exception -> 0x00ec }
-            int r10 = r9.size()     // Catch:{ Exception -> 0x00ec }
+            java.util.ArrayList r9 = new java.util.ArrayList     // Catch:{ Exception -> 0x00ee }
+            r9.<init>()     // Catch:{ Exception -> 0x00ee }
+            java.lang.String r10 = r10.toString()     // Catch:{ Exception -> 0x00ee }
+            r8.getUsersInternal(r10, r9)     // Catch:{ Exception -> 0x00ee }
+            int r10 = r9.size()     // Catch:{ Exception -> 0x00ee }
         L_0x0090:
             if (r1 >= r10) goto L_0x00cd
-            java.lang.Object r3 = r9.get(r1)     // Catch:{ Exception -> 0x00ec }
-            org.telegram.tgnet.TLRPC$User r3 = (org.telegram.tgnet.TLRPC$User) r3     // Catch:{ Exception -> 0x00ec }
-            long r4 = r3.id     // Catch:{ Exception -> 0x00ec }
-            java.lang.Object r4 = r2.get(r4)     // Catch:{ Exception -> 0x00ec }
-            org.telegram.tgnet.TLRPC$User r4 = (org.telegram.tgnet.TLRPC$User) r4     // Catch:{ Exception -> 0x00ec }
+            java.lang.Object r3 = r9.get(r1)     // Catch:{ Exception -> 0x00ee }
+            org.telegram.tgnet.TLRPC$User r3 = (org.telegram.tgnet.TLRPC$User) r3     // Catch:{ Exception -> 0x00ee }
+            long r4 = r3.id     // Catch:{ Exception -> 0x00ee }
+            java.lang.Object r4 = r2.get(r4)     // Catch:{ Exception -> 0x00ee }
+            org.telegram.tgnet.TLRPC$User r4 = (org.telegram.tgnet.TLRPC$User) r4     // Catch:{ Exception -> 0x00ee }
             if (r4 == 0) goto L_0x00ca
-            java.lang.String r5 = r4.first_name     // Catch:{ Exception -> 0x00ec }
+            java.lang.String r5 = r4.first_name     // Catch:{ Exception -> 0x00ee }
             if (r5 == 0) goto L_0x00bd
-            java.lang.String r5 = r4.last_name     // Catch:{ Exception -> 0x00ec }
+            java.lang.String r5 = r4.last_name     // Catch:{ Exception -> 0x00ee }
             if (r5 == 0) goto L_0x00bd
-            boolean r5 = org.telegram.messenger.UserObject.isContact(r3)     // Catch:{ Exception -> 0x00ec }
+            boolean r5 = org.telegram.messenger.UserObject.isContact(r3)     // Catch:{ Exception -> 0x00ee }
             if (r5 != 0) goto L_0x00b8
-            java.lang.String r5 = r4.first_name     // Catch:{ Exception -> 0x00ec }
-            r3.first_name = r5     // Catch:{ Exception -> 0x00ec }
-            java.lang.String r5 = r4.last_name     // Catch:{ Exception -> 0x00ec }
-            r3.last_name = r5     // Catch:{ Exception -> 0x00ec }
+            java.lang.String r5 = r4.first_name     // Catch:{ Exception -> 0x00ee }
+            r3.first_name = r5     // Catch:{ Exception -> 0x00ee }
+            java.lang.String r5 = r4.last_name     // Catch:{ Exception -> 0x00ee }
+            r3.last_name = r5     // Catch:{ Exception -> 0x00ee }
         L_0x00b8:
-            java.lang.String r4 = r4.username     // Catch:{ Exception -> 0x00ec }
-            r3.username = r4     // Catch:{ Exception -> 0x00ec }
+            java.lang.String r4 = r4.username     // Catch:{ Exception -> 0x00ee }
+            r3.username = r4     // Catch:{ Exception -> 0x00ee }
             goto L_0x00ca
         L_0x00bd:
-            org.telegram.tgnet.TLRPC$UserProfilePhoto r5 = r4.photo     // Catch:{ Exception -> 0x00ec }
+            org.telegram.tgnet.TLRPC$UserProfilePhoto r5 = r4.photo     // Catch:{ Exception -> 0x00ee }
             if (r5 == 0) goto L_0x00c4
-            r3.photo = r5     // Catch:{ Exception -> 0x00ec }
+            r3.photo = r5     // Catch:{ Exception -> 0x00ee }
             goto L_0x00ca
         L_0x00c4:
-            java.lang.String r4 = r4.phone     // Catch:{ Exception -> 0x00ec }
+            java.lang.String r4 = r4.phone     // Catch:{ Exception -> 0x00ee }
             if (r4 == 0) goto L_0x00ca
-            r3.phone = r4     // Catch:{ Exception -> 0x00ec }
+            r3.phone = r4     // Catch:{ Exception -> 0x00ee }
         L_0x00ca:
             int r1 = r1 + 1
             goto L_0x0090
         L_0x00cd:
-            boolean r10 = r9.isEmpty()     // Catch:{ Exception -> 0x00ec }
+            boolean r10 = r9.isEmpty()     // Catch:{ Exception -> 0x00ee }
             if (r10 != 0) goto L_0x00e4
             if (r11 == 0) goto L_0x00da
-            org.telegram.SQLite.SQLiteDatabase r10 = r8.database     // Catch:{ Exception -> 0x00ec }
-            r10.beginTransaction()     // Catch:{ Exception -> 0x00ec }
+            org.telegram.SQLite.SQLiteDatabase r10 = r8.database     // Catch:{ Exception -> 0x00ee }
+            r10.beginTransaction()     // Catch:{ Exception -> 0x00ee }
         L_0x00da:
-            r8.putUsersInternal(r9)     // Catch:{ Exception -> 0x00ec }
+            r8.putUsersInternal(r9)     // Catch:{ Exception -> 0x00ee }
             if (r11 == 0) goto L_0x00e4
-            org.telegram.SQLite.SQLiteDatabase r9 = r8.database     // Catch:{ Exception -> 0x00ec }
-            r9.commitTransaction()     // Catch:{ Exception -> 0x00ec }
+            org.telegram.SQLite.SQLiteDatabase r9 = r8.database     // Catch:{ Exception -> 0x00ee }
+            r9.commitTransaction()     // Catch:{ Exception -> 0x00ee }
         L_0x00e4:
             org.telegram.SQLite.SQLiteDatabase r9 = r8.database
+            if (r9 == 0) goto L_0x00fe
             r9.commitTransaction()
-            goto L_0x00fa
-        L_0x00ea:
-            r9 = move-exception
-            goto L_0x00fb
+            goto L_0x00fe
         L_0x00ec:
             r9 = move-exception
-        L_0x00ed:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r9)     // Catch:{ all -> 0x00ea }
+            goto L_0x00ff
+        L_0x00ee:
+            r9 = move-exception
+        L_0x00ef:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r9)     // Catch:{ all -> 0x00ec }
             org.telegram.SQLite.SQLiteDatabase r9 = r8.database
+            if (r9 == 0) goto L_0x00f9
             r9.commitTransaction()
-            if (r0 == 0) goto L_0x00fa
+        L_0x00f9:
+            if (r0 == 0) goto L_0x00fe
             r0.dispose()
-        L_0x00fa:
+        L_0x00fe:
             return
-        L_0x00fb:
+        L_0x00ff:
             org.telegram.SQLite.SQLiteDatabase r10 = r8.database
+            if (r10 == 0) goto L_0x0106
             r10.commitTransaction()
-            if (r0 == 0) goto L_0x0105
-            r0.dispose()
-        L_0x0105:
-            goto L_0x0107
         L_0x0106:
+            if (r0 == 0) goto L_0x010b
+            r0.dispose()
+        L_0x010b:
+            goto L_0x010d
+        L_0x010c:
             throw r9
-        L_0x0107:
-            goto L_0x0106
+        L_0x010d:
+            goto L_0x010c
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$updateUsers$164(java.util.ArrayList, boolean, boolean):void");
     }
@@ -28470,10 +28630,13 @@ public class MessagesStorage extends BaseController {
     /* JADX WARNING: Code restructure failed: missing block: B:18:?, code lost:
         org.telegram.messenger.FileLog.e((java.lang.Throwable) r0);
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:323:0x07c2, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:327:0x07c3, code lost:
+        r2.commitTransaction();
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:329:0x07c8, code lost:
         r11.dispose();
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:325:0x07c7, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:331:0x07cd, code lost:
         r16.dispose();
      */
     /* JADX WARNING: Code restructure failed: missing block: B:80:0x01fa, code lost:
@@ -28498,20 +28661,23 @@ public class MessagesStorage extends BaseController {
      */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Multi-variable type inference failed */
-    /* JADX WARNING: Removed duplicated region for block: B:122:0x02f9 A[Catch:{ Exception -> 0x079e, all -> 0x0798 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:122:0x02f9 A[Catch:{ Exception -> 0x07a0, all -> 0x079a }] */
     /* JADX WARNING: Removed duplicated region for block: B:13:0x0051 A[ExcHandler: all (r0v52 'th' java.lang.Throwable A[CUSTOM_DECLARE]), Splitter:B:7:0x0035] */
     /* JADX WARNING: Removed duplicated region for block: B:148:0x0396  */
-    /* JADX WARNING: Removed duplicated region for block: B:284:0x0724 A[Catch:{ Exception -> 0x078c, all -> 0x0785 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:290:0x0768 A[Catch:{ Exception -> 0x078c, all -> 0x0785 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:295:0x077c  */
-    /* JADX WARNING: Removed duplicated region for block: B:297:0x0781  */
-    /* JADX WARNING: Removed duplicated region for block: B:315:0x07ac  */
-    /* JADX WARNING: Removed duplicated region for block: B:317:0x07b1  */
-    /* JADX WARNING: Removed duplicated region for block: B:323:0x07c2  */
-    /* JADX WARNING: Removed duplicated region for block: B:325:0x07c7  */
-    /* JADX WARNING: Removed duplicated region for block: B:347:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:284:0x0724 A[Catch:{ Exception -> 0x078e, all -> 0x0787 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:290:0x0768 A[Catch:{ Exception -> 0x078e, all -> 0x0787 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:295:0x0779  */
+    /* JADX WARNING: Removed duplicated region for block: B:297:0x077e  */
+    /* JADX WARNING: Removed duplicated region for block: B:299:0x0783  */
+    /* JADX WARNING: Removed duplicated region for block: B:317:0x07ab  */
+    /* JADX WARNING: Removed duplicated region for block: B:319:0x07b0  */
+    /* JADX WARNING: Removed duplicated region for block: B:321:0x07b5  */
+    /* JADX WARNING: Removed duplicated region for block: B:327:0x07c3  */
+    /* JADX WARNING: Removed duplicated region for block: B:329:0x07c8  */
+    /* JADX WARNING: Removed duplicated region for block: B:331:0x07cd  */
+    /* JADX WARNING: Removed duplicated region for block: B:353:? A[RETURN, SYNTHETIC] */
     /* JADX WARNING: Removed duplicated region for block: B:88:0x022f A[ExcHandler: all (r0v43 'th' java.lang.Throwable A[CUSTOM_DECLARE]), Splitter:B:69:0x01b2] */
-    /* JADX WARNING: Removed duplicated region for block: B:99:0x0250 A[Catch:{ Exception -> 0x079e, all -> 0x0798 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:99:0x0250 A[Catch:{ Exception -> 0x07a0, all -> 0x079a }] */
     /* JADX WARNING: Unknown variable types count: 1 */
     /* renamed from: markMessagesAsDeletedInternal */
     /* Code decompiled incorrectly, please refer to instructions dump. */
@@ -28521,26 +28687,26 @@ public class MessagesStorage extends BaseController {
             r7 = r32
             r8 = r33
             r10 = r35
-            java.util.ArrayList r12 = new java.util.ArrayList     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            r12.<init>()     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
+            java.util.ArrayList r12 = new java.util.ArrayList     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            r12.<init>()     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
             java.lang.String r13 = ","
             r14 = 2
             r15 = 1
             r6 = 0
             if (r37 == 0) goto L_0x0099
-            java.lang.String r1 = android.text.TextUtils.join(r13, r10)     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            java.util.ArrayList r2 = new java.util.ArrayList     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            r2.<init>()     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            org.telegram.SQLite.SQLiteDatabase r3 = r7.database     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            java.util.Locale r4 = java.util.Locale.US     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
+            java.lang.String r1 = android.text.TextUtils.join(r13, r10)     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            java.util.ArrayList r2 = new java.util.ArrayList     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            r2.<init>()     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            org.telegram.SQLite.SQLiteDatabase r3 = r7.database     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            java.util.Locale r4 = java.util.Locale.US     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
             java.lang.String r5 = "SELECT uid FROM scheduled_messages_v2 WHERE mid IN(%s) AND uid = %d"
-            java.lang.Object[] r10 = new java.lang.Object[r14]     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            r10[r6] = r1     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            java.lang.Long r13 = java.lang.Long.valueOf(r33)     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            r10[r15] = r13     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            java.lang.String r4 = java.lang.String.format(r4, r5, r10)     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            java.lang.Object[] r5 = new java.lang.Object[r6]     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            org.telegram.SQLite.SQLiteCursor r3 = r3.queryFinalized(r4, r5)     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
+            java.lang.Object[] r10 = new java.lang.Object[r14]     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            r10[r6] = r1     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            java.lang.Long r13 = java.lang.Long.valueOf(r33)     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            r10[r15] = r13     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            java.lang.String r4 = java.lang.String.format(r4, r5, r10)     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            java.lang.Object[] r5 = new java.lang.Object[r6]     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            org.telegram.SQLite.SQLiteCursor r3 = r3.queryFinalized(r4, r5)     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
         L_0x0035:
             boolean r4 = r3.next()     // Catch:{ Exception -> 0x0056, all -> 0x0051 }
             if (r4 == 0) goto L_0x005b
@@ -28555,30 +28721,30 @@ public class MessagesStorage extends BaseController {
             r0 = move-exception
             r1 = r0
             r11 = r3
-            goto L_0x079b
+            goto L_0x079d
         L_0x0056:
             r0 = move-exception
             r4 = r0
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r4)     // Catch:{ Exception -> 0x0094, all -> 0x0051 }
         L_0x005b:
             r3.dispose()     // Catch:{ Exception -> 0x0094, all -> 0x0051 }
-            org.telegram.SQLite.SQLiteDatabase r3 = r7.database     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            java.util.Locale r4 = java.util.Locale.US     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
+            org.telegram.SQLite.SQLiteDatabase r3 = r7.database     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            java.util.Locale r4 = java.util.Locale.US     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
             java.lang.String r5 = "DELETE FROM scheduled_messages_v2 WHERE mid IN(%s) AND uid = %d"
-            java.lang.Object[] r10 = new java.lang.Object[r14]     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            r10[r6] = r1     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            java.lang.Long r1 = java.lang.Long.valueOf(r33)     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            r10[r15] = r1     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            java.lang.String r1 = java.lang.String.format(r4, r5, r10)     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            org.telegram.SQLite.SQLitePreparedStatement r1 = r3.executeFast(r1)     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            org.telegram.SQLite.SQLitePreparedStatement r1 = r1.stepThis()     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            r1.dispose()     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            int r1 = r2.size()     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
+            java.lang.Object[] r10 = new java.lang.Object[r14]     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            r10[r6] = r1     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            java.lang.Long r1 = java.lang.Long.valueOf(r33)     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            r10[r15] = r1     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            java.lang.String r1 = java.lang.String.format(r4, r5, r10)     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            org.telegram.SQLite.SQLitePreparedStatement r1 = r3.executeFast(r1)     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            org.telegram.SQLite.SQLitePreparedStatement r1 = r1.stepThis()     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            r1.dispose()     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            int r1 = r2.size()     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
         L_0x0081:
             if (r6 >= r1) goto L_0x008f
-            java.lang.Object r3 = r2.get(r6)     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            java.lang.Long r3 = (java.lang.Long) r3     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            r7.broadcastScheduledMessagesChange(r3)     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
+            java.lang.Object r3 = r2.get(r6)     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            java.lang.Long r3 = (java.lang.Long) r3     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            r7.broadcastScheduledMessagesChange(r3)     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
             int r6 = r6 + 1
             goto L_0x0081
         L_0x008f:
@@ -28591,56 +28757,56 @@ public class MessagesStorage extends BaseController {
             r2 = r0
         L_0x0096:
             r1 = 0
-            goto L_0x07a2
+            goto L_0x07a4
         L_0x0099:
-            java.util.ArrayList r5 = new java.util.ArrayList     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            r5.<init>(r10)     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            androidx.collection.LongSparseArray r4 = new androidx.collection.LongSparseArray     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            r4.<init>()     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            androidx.collection.LongSparseArray r3 = new androidx.collection.LongSparseArray     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            r3.<init>()     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            java.lang.String r2 = android.text.TextUtils.join(r13, r10)     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            java.util.ArrayList r1 = new java.util.ArrayList     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            r1.<init>()     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            java.util.ArrayList r11 = new java.util.ArrayList     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            r11.<init>()     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            java.util.ArrayList r15 = new java.util.ArrayList     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            r15.<init>()     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            org.telegram.messenger.UserConfig r18 = r32.getUserConfig()     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            long r18 = r18.getClientUserId()     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
+            java.util.ArrayList r5 = new java.util.ArrayList     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            r5.<init>(r10)     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            androidx.collection.LongSparseArray r4 = new androidx.collection.LongSparseArray     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            r4.<init>()     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            androidx.collection.LongSparseArray r3 = new androidx.collection.LongSparseArray     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            r3.<init>()     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            java.lang.String r2 = android.text.TextUtils.join(r13, r10)     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            java.util.ArrayList r1 = new java.util.ArrayList     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            r1.<init>()     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            java.util.ArrayList r11 = new java.util.ArrayList     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            r11.<init>()     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            java.util.ArrayList r15 = new java.util.ArrayList     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            r15.<init>()     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            org.telegram.messenger.UserConfig r18 = r32.getUserConfig()     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            long r18 = r18.getClientUserId()     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
             r37 = r15
             r14 = 0
             int r20 = (r8 > r14 ? 1 : (r8 == r14 ? 0 : -1))
             if (r20 == 0) goto L_0x00ee
-            org.telegram.SQLite.SQLiteDatabase r14 = r7.database     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            java.util.Locale r15 = java.util.Locale.US     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
+            org.telegram.SQLite.SQLiteDatabase r14 = r7.database     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            java.util.Locale r15 = java.util.Locale.US     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
             java.lang.String r6 = "SELECT uid, data, read_state, out, mention, mid FROM messages_v2 WHERE mid IN(%s) AND uid = %d"
             r22 = r1
             r1 = 2
-            java.lang.Object[] r10 = new java.lang.Object[r1]     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
+            java.lang.Object[] r10 = new java.lang.Object[r1]     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
             r1 = 0
-            r10[r1] = r2     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            java.lang.Long r21 = java.lang.Long.valueOf(r33)     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
+            r10[r1] = r2     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            java.lang.Long r21 = java.lang.Long.valueOf(r33)     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
             r17 = 1
-            r10[r17] = r21     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            java.lang.String r6 = java.lang.String.format(r15, r6, r10)     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            java.lang.Object[] r10 = new java.lang.Object[r1]     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            org.telegram.SQLite.SQLiteCursor r1 = r14.queryFinalized(r6, r10)     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
+            r10[r17] = r21     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            java.lang.String r6 = java.lang.String.format(r15, r6, r10)     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            java.lang.Object[] r10 = new java.lang.Object[r1]     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            org.telegram.SQLite.SQLiteCursor r1 = r14.queryFinalized(r6, r10)     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
             r10 = r1
             r14 = 0
             goto L_0x0107
         L_0x00ee:
             r22 = r1
-            org.telegram.SQLite.SQLiteDatabase r1 = r7.database     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            java.util.Locale r6 = java.util.Locale.US     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
+            org.telegram.SQLite.SQLiteDatabase r1 = r7.database     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            java.util.Locale r6 = java.util.Locale.US     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
             java.lang.String r10 = "SELECT uid, data, read_state, out, mention, mid FROM messages_v2 WHERE mid IN(%s) AND is_channel = 0"
             r14 = 1
-            java.lang.Object[] r15 = new java.lang.Object[r14]     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
+            java.lang.Object[] r15 = new java.lang.Object[r14]     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
             r14 = 0
-            r15[r14] = r2     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            java.lang.String r6 = java.lang.String.format(r6, r10, r15)     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            java.lang.Object[] r10 = new java.lang.Object[r14]     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            org.telegram.SQLite.SQLiteCursor r1 = r1.queryFinalized(r6, r10)     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
+            r15[r14] = r2     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            java.lang.String r6 = java.lang.String.format(r6, r10, r15)     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            java.lang.Object[] r10 = new java.lang.Object[r14]     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            org.telegram.SQLite.SQLiteCursor r1 = r1.queryFinalized(r6, r10)     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
             r10 = r1
         L_0x0107:
             boolean r1 = r10.next()     // Catch:{ Exception -> 0x0234, all -> 0x022f }
@@ -28810,7 +28976,7 @@ public class MessagesStorage extends BaseController {
             r0 = move-exception
             r1 = r0
             r11 = r10
-            goto L_0x079b
+            goto L_0x079d
         L_0x0234:
             r0 = move-exception
             r23 = r4
@@ -28822,11 +28988,11 @@ public class MessagesStorage extends BaseController {
         L_0x0240:
             r1 = r0
         L_0x0241:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r1)     // Catch:{ Exception -> 0x0793, all -> 0x022f }
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r1)     // Catch:{ Exception -> 0x0795, all -> 0x022f }
         L_0x0244:
-            r10.dispose()     // Catch:{ Exception -> 0x0793, all -> 0x022f }
-            org.telegram.SQLite.SQLiteDatabase r1 = r7.database     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            r1.beginTransaction()     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
+            r10.dispose()     // Catch:{ Exception -> 0x0795, all -> 0x022f }
+            org.telegram.SQLite.SQLiteDatabase r1 = r7.database     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            r1.beginTransaction()     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
             r1 = 2
             r6 = 0
         L_0x024e:
@@ -28835,31 +29001,31 @@ public class MessagesStorage extends BaseController {
             r1 = 0
             int r3 = (r8 > r1 ? 1 : (r8 == r1 ? 0 : -1))
             if (r3 == 0) goto L_0x0267
-            org.telegram.messenger.MessagesStorage r1 = r32.getMessagesStorage()     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            org.telegram.SQLite.SQLiteDatabase r1 = r1.getDatabase()     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
+            org.telegram.messenger.MessagesStorage r1 = r32.getMessagesStorage()     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            org.telegram.SQLite.SQLiteDatabase r1 = r1.getDatabase()     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
             java.lang.String r2 = "UPDATE messages_v2 SET replydata = ? WHERE reply_to_message_id IN(?) AND uid = ?"
-            org.telegram.SQLite.SQLitePreparedStatement r1 = r1.executeFast(r2)     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
+            org.telegram.SQLite.SQLitePreparedStatement r1 = r1.executeFast(r2)     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
             goto L_0x0299
         L_0x0267:
-            org.telegram.messenger.MessagesStorage r1 = r32.getMessagesStorage()     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            org.telegram.SQLite.SQLiteDatabase r1 = r1.getDatabase()     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
+            org.telegram.messenger.MessagesStorage r1 = r32.getMessagesStorage()     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            org.telegram.SQLite.SQLiteDatabase r1 = r1.getDatabase()     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
             java.lang.String r2 = "UPDATE messages_v2 SET replydata = ? WHERE reply_to_message_id IN(?) AND is_channel = 0"
-            org.telegram.SQLite.SQLitePreparedStatement r1 = r1.executeFast(r2)     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
+            org.telegram.SQLite.SQLitePreparedStatement r1 = r1.executeFast(r2)     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
             goto L_0x0299
         L_0x0276:
             r1 = 0
             int r3 = (r8 > r1 ? 1 : (r8 == r1 ? 0 : -1))
             if (r3 == 0) goto L_0x028b
-            org.telegram.messenger.MessagesStorage r1 = r32.getMessagesStorage()     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            org.telegram.SQLite.SQLiteDatabase r1 = r1.getDatabase()     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
+            org.telegram.messenger.MessagesStorage r1 = r32.getMessagesStorage()     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            org.telegram.SQLite.SQLiteDatabase r1 = r1.getDatabase()     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
             java.lang.String r2 = "UPDATE scheduled_messages_v2 SET replydata = ? WHERE reply_to_message_id IN(?) AND uid = ?"
-            org.telegram.SQLite.SQLitePreparedStatement r1 = r1.executeFast(r2)     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
+            org.telegram.SQLite.SQLitePreparedStatement r1 = r1.executeFast(r2)     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
             goto L_0x0299
         L_0x028b:
-            org.telegram.messenger.MessagesStorage r1 = r32.getMessagesStorage()     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            org.telegram.SQLite.SQLiteDatabase r1 = r1.getDatabase()     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
+            org.telegram.messenger.MessagesStorage r1 = r32.getMessagesStorage()     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            org.telegram.SQLite.SQLiteDatabase r1 = r1.getDatabase()     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
             java.lang.String r2 = "UPDATE scheduled_messages_v2 SET replydata = ? WHERE reply_to_message_id IN(?)"
-            org.telegram.SQLite.SQLitePreparedStatement r1 = r1.executeFast(r2)     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
+            org.telegram.SQLite.SQLitePreparedStatement r1 = r1.executeFast(r2)     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
         L_0x0299:
             org.telegram.tgnet.TLRPC$TL_messageEmpty r2 = new org.telegram.tgnet.TLRPC$TL_messageEmpty     // Catch:{ Exception -> 0x02d8, all -> 0x02d2 }
             r2.<init>()     // Catch:{ Exception -> 0x02d8, all -> 0x02d2 }
@@ -28880,9 +29046,9 @@ public class MessagesStorage extends BaseController {
         L_0x02bf:
             r1.step()     // Catch:{ Exception -> 0x02d8, all -> 0x02d2 }
             r1.dispose()     // Catch:{ Exception -> 0x02d8, all -> 0x02d2 }
-            org.telegram.SQLite.SQLiteDatabase r1 = r7.database     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            r1.commitTransaction()     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            r3.reuse()     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
+            org.telegram.SQLite.SQLiteDatabase r1 = r7.database     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            r1.commitTransaction()     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            r3.reuse()     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
             int r6 = r6 + 1
             r1 = 2
             goto L_0x024e
@@ -28890,40 +29056,40 @@ public class MessagesStorage extends BaseController {
             r0 = move-exception
             r16 = r1
             r11 = 0
-            goto L_0x07ba
+            goto L_0x07be
         L_0x02d8:
             r0 = move-exception
         L_0x02d9:
             r2 = r0
-            goto L_0x07a1
+            goto L_0x07a3
         L_0x02dc:
             r1 = r37
             r2 = 1
-            r7.deleteFromDownloadQueue(r1, r2)     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda132 r1 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda132     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            r1.<init>(r7, r11)     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r1)     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            org.telegram.messenger.FileLoader r1 = r32.getFileLoader()     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
+            r7.deleteFromDownloadQueue(r1, r2)     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda132 r1 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda132     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            r1.<init>(r7, r11)     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r1)     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            org.telegram.messenger.FileLoader r1 = r32.getFileLoader()     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
             r2 = 0
-            r1.deleteFiles(r15, r2)     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
+            r1.deleteFiles(r15, r2)     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
             r6 = 0
         L_0x02f3:
-            int r1 = r23.size()     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
+            int r1 = r23.size()     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
             if (r6 >= r1) goto L_0x038b
             r1 = r23
-            long r2 = r1.keyAt(r6)     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            java.lang.Object r4 = r1.valueAt(r6)     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            java.lang.Integer[] r4 = (java.lang.Integer[]) r4     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            org.telegram.SQLite.SQLiteDatabase r5 = r7.database     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            java.lang.StringBuilder r10 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            r10.<init>()     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
+            long r2 = r1.keyAt(r6)     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            java.lang.Object r4 = r1.valueAt(r6)     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            java.lang.Integer[] r4 = (java.lang.Integer[]) r4     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            org.telegram.SQLite.SQLiteDatabase r5 = r7.database     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            java.lang.StringBuilder r10 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            r10.<init>()     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
             java.lang.String r11 = "SELECT unread_count, unread_count_i FROM dialogs WHERE did = "
-            r10.append(r11)     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            r10.append(r2)     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            java.lang.String r10 = r10.toString()     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
+            r10.append(r11)     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            r10.append(r2)     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            java.lang.String r10 = r10.toString()     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
             r11 = 0
-            java.lang.Object[] r14 = new java.lang.Object[r11]     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            org.telegram.SQLite.SQLiteCursor r5 = r5.queryFinalized(r10, r14)     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
+            java.lang.Object[] r14 = new java.lang.Object[r11]     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            org.telegram.SQLite.SQLiteCursor r5 = r5.queryFinalized(r10, r14)     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
             boolean r10 = r5.next()     // Catch:{ Exception -> 0x0386, all -> 0x0381 }
             if (r10 == 0) goto L_0x032f
             int r10 = r5.intValue(r11)     // Catch:{ Exception -> 0x0386, all -> 0x0381 }
@@ -28935,11 +29101,11 @@ public class MessagesStorage extends BaseController {
             r14 = 0
         L_0x0331:
             r5.dispose()     // Catch:{ Exception -> 0x0386, all -> 0x0381 }
-            java.lang.Long r5 = java.lang.Long.valueOf(r2)     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            r12.add(r5)     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
-            org.telegram.SQLite.SQLiteDatabase r5 = r7.database     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
+            java.lang.Long r5 = java.lang.Long.valueOf(r2)     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            r12.add(r5)     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
+            org.telegram.SQLite.SQLiteDatabase r5 = r7.database     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
             java.lang.String r11 = "UPDATE dialogs SET unread_count = ?, unread_count_i = ? WHERE did = ?"
-            org.telegram.SQLite.SQLitePreparedStatement r5 = r5.executeFast(r11)     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
+            org.telegram.SQLite.SQLitePreparedStatement r5 = r5.executeFast(r11)     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
             r5.requery()     // Catch:{ Exception -> 0x037c, all -> 0x0375 }
             r11 = 0
             r15 = r4[r11]     // Catch:{ Exception -> 0x037c, all -> 0x0375 }
@@ -28967,17 +29133,17 @@ public class MessagesStorage extends BaseController {
             r16 = r5
         L_0x0379:
             r11 = 0
-            goto L_0x07bb
+            goto L_0x07bf
         L_0x037c:
             r0 = move-exception
             r2 = r0
             r1 = r5
-            goto L_0x07a1
+            goto L_0x07a3
         L_0x0381:
             r0 = move-exception
             r1 = r0
             r11 = r5
-            goto L_0x079b
+            goto L_0x079d
         L_0x0386:
             r0 = move-exception
             r2 = r0
@@ -28985,7 +29151,7 @@ public class MessagesStorage extends BaseController {
             goto L_0x0096
         L_0x038b:
             r1 = r23
-            int r2 = r22.size()     // Catch:{ Exception -> 0x079e, all -> 0x0798 }
+            int r2 = r22.size()     // Catch:{ Exception -> 0x07a0, all -> 0x079a }
             r3 = 0
             r4 = 0
             r6 = 0
@@ -29010,17 +29176,17 @@ public class MessagesStorage extends BaseController {
             r22 = r5
             r25 = r15
             r5 = 2
-            java.lang.Object[] r15 = new java.lang.Object[r5]     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
+            java.lang.Object[] r15 = new java.lang.Object[r5]     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
             long r8 = -r10
-            java.lang.Long r5 = java.lang.Long.valueOf(r8)     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
+            java.lang.Long r5 = java.lang.Long.valueOf(r8)     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
             r8 = 0
-            r15[r8] = r5     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
+            r15[r8] = r5     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
             r5 = 1
-            r15[r5] = r14     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
-            java.lang.String r3 = java.lang.String.format(r3, r4, r15)     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
-            org.telegram.SQLite.SQLitePreparedStatement r2 = r2.executeFast(r3)     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
-            org.telegram.SQLite.SQLitePreparedStatement r2 = r2.stepThis()     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
-            r2.dispose()     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
+            r15[r5] = r14     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
+            java.lang.String r3 = java.lang.String.format(r3, r4, r15)     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
+            org.telegram.SQLite.SQLitePreparedStatement r2 = r2.executeFast(r3)     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
+            org.telegram.SQLite.SQLitePreparedStatement r2 = r2.stepThis()     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
+            r2.dispose()     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
             goto L_0x041f
         L_0x03e2:
             r0 = move-exception
@@ -29034,20 +29200,20 @@ public class MessagesStorage extends BaseController {
             r18 = r4
             r22 = r5
             r25 = r15
-            org.telegram.SQLite.SQLiteDatabase r2 = r7.database     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
-            java.util.Locale r3 = java.util.Locale.US     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
+            org.telegram.SQLite.SQLiteDatabase r2 = r7.database     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
+            java.util.Locale r3 = java.util.Locale.US     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
             java.lang.String r4 = "UPDATE user_settings SET pinned = 0 WHERE uid = %d AND pinned IN (%s)"
             r5 = 2
-            java.lang.Object[] r8 = new java.lang.Object[r5]     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
-            java.lang.Long r5 = java.lang.Long.valueOf(r10)     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
+            java.lang.Object[] r8 = new java.lang.Object[r5]     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
+            java.lang.Long r5 = java.lang.Long.valueOf(r10)     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
             r9 = 0
-            r8[r9] = r5     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
+            r8[r9] = r5     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
             r5 = 1
-            r8[r5] = r14     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
-            java.lang.String r3 = java.lang.String.format(r3, r4, r8)     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
-            org.telegram.SQLite.SQLitePreparedStatement r2 = r2.executeFast(r3)     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
-            org.telegram.SQLite.SQLitePreparedStatement r2 = r2.stepThis()     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
-            r2.dispose()     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
+            r8[r5] = r14     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
+            java.lang.String r3 = java.lang.String.format(r3, r4, r8)     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
+            org.telegram.SQLite.SQLitePreparedStatement r2 = r2.executeFast(r3)     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
+            org.telegram.SQLite.SQLitePreparedStatement r2 = r2.stepThis()     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
+            r2.dispose()     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
             goto L_0x041f
         L_0x0415:
             r36 = r2
@@ -29056,25 +29222,25 @@ public class MessagesStorage extends BaseController {
             r22 = r5
             r25 = r15
         L_0x041f:
-            org.telegram.SQLite.SQLiteDatabase r2 = r7.database     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
-            java.util.Locale r3 = java.util.Locale.US     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
+            org.telegram.SQLite.SQLiteDatabase r2 = r7.database     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
+            java.util.Locale r3 = java.util.Locale.US     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
             java.lang.String r4 = "DELETE FROM chat_pinned_v2 WHERE uid = %d AND mid IN(%s)"
             r5 = 2
-            java.lang.Object[] r8 = new java.lang.Object[r5]     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
-            java.lang.Long r5 = java.lang.Long.valueOf(r10)     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
+            java.lang.Object[] r8 = new java.lang.Object[r5]     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
+            java.lang.Long r5 = java.lang.Long.valueOf(r10)     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
             r9 = 0
-            r8[r9] = r5     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
+            r8[r9] = r5     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
             r5 = 1
-            r8[r5] = r14     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
-            java.lang.String r4 = java.lang.String.format(r3, r4, r8)     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
-            org.telegram.SQLite.SQLitePreparedStatement r2 = r2.executeFast(r4)     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
-            org.telegram.SQLite.SQLitePreparedStatement r2 = r2.stepThis()     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
-            r2.dispose()     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
-            org.telegram.SQLite.SQLiteDatabase r2 = r7.database     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
+            r8[r5] = r14     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
+            java.lang.String r4 = java.lang.String.format(r3, r4, r8)     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
+            org.telegram.SQLite.SQLitePreparedStatement r2 = r2.executeFast(r4)     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
+            org.telegram.SQLite.SQLitePreparedStatement r2 = r2.stepThis()     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
+            r2.dispose()     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
+            org.telegram.SQLite.SQLiteDatabase r2 = r7.database     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
             java.lang.String r4 = "SELECT changes()"
             r5 = 0
-            java.lang.Object[] r8 = new java.lang.Object[r5]     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
-            org.telegram.SQLite.SQLiteCursor r2 = r2.queryFinalized(r4, r8)     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
+            java.lang.Object[] r8 = new java.lang.Object[r5]     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
+            org.telegram.SQLite.SQLiteCursor r2 = r2.queryFinalized(r4, r8)     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
             boolean r4 = r2.next()     // Catch:{ Exception -> 0x06e6, all -> 0x06df }
             if (r4 == 0) goto L_0x0457
             int r4 = r2.intValue(r5)     // Catch:{ Exception -> 0x06e6, all -> 0x06df }
@@ -29122,7 +29288,7 @@ public class MessagesStorage extends BaseController {
             r11 = r2
         L_0x04a8:
             r16 = r8
-            goto L_0x07bb
+            goto L_0x07bf
         L_0x04ac:
             r0 = move-exception
             r3 = r2
@@ -29316,26 +29482,26 @@ public class MessagesStorage extends BaseController {
             r0 = move-exception
             r11 = r1
             r16 = r3
-            goto L_0x07ba
+            goto L_0x07be
         L_0x063d:
             r0 = move-exception
             r2 = r0
             r31 = r3
             r3 = r1
             r1 = r31
-            goto L_0x07a2
+            goto L_0x07a4
         L_0x0646:
             r0 = move-exception
             r1 = r0
             r16 = r3
             r11 = r19
-            goto L_0x07bb
+            goto L_0x07bf
         L_0x064e:
             r0 = move-exception
             r2 = r0
             r1 = r3
             r3 = r19
-            goto L_0x07a2
+            goto L_0x07a4
         L_0x0655:
             r27 = r1
             r18 = r4
@@ -29366,7 +29532,7 @@ public class MessagesStorage extends BaseController {
             r0 = move-exception
             r2 = r0
             r1 = r3
-            goto L_0x07a1
+            goto L_0x07a3
         L_0x0683:
             r0 = move-exception
             r1 = r0
@@ -29376,7 +29542,7 @@ public class MessagesStorage extends BaseController {
             r0 = move-exception
             r2 = r0
             r1 = r8
-            goto L_0x07a2
+            goto L_0x07a4
         L_0x068d:
             r27 = r1
             r28 = r6
@@ -29412,13 +29578,13 @@ public class MessagesStorage extends BaseController {
             r1 = r0
             r16 = r3
             r11 = r5
-            goto L_0x07bb
+            goto L_0x07bf
         L_0x06ce:
             r0 = move-exception
             r2 = r0
             r1 = r3
             r3 = r5
-            goto L_0x07a2
+            goto L_0x07a4
         L_0x06d4:
             r0 = move-exception
             r1 = r0
@@ -29428,159 +29594,165 @@ public class MessagesStorage extends BaseController {
             r0 = move-exception
             r2 = r0
             r1 = r8
-            goto L_0x07a1
+            goto L_0x07a3
         L_0x06df:
             r0 = move-exception
             r16 = r37
             r1 = r0
             r11 = r2
-            goto L_0x07bb
+            goto L_0x07bf
         L_0x06e6:
             r0 = move-exception
             r1 = r37
             r3 = r2
         L_0x06ea:
             r2 = r0
-            goto L_0x07a2
+            goto L_0x07a4
         L_0x06ed:
             r0 = move-exception
             r37 = r3
         L_0x06f0:
             r18 = r4
-            goto L_0x0786
+            goto L_0x0788
         L_0x06f4:
             r0 = move-exception
             r37 = r3
         L_0x06f7:
             r18 = r4
-            goto L_0x078d
+            goto L_0x078f
         L_0x06fb:
             r27 = r1
             r37 = r3
             r18 = r4
             r26 = r12
-            org.telegram.SQLite.SQLiteDatabase r1 = r7.database     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
-            java.util.Locale r2 = java.util.Locale.US     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
+            org.telegram.SQLite.SQLiteDatabase r1 = r7.database     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
+            java.util.Locale r2 = java.util.Locale.US     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
             java.lang.String r3 = "DELETE FROM messages_seq WHERE mid IN(%s)"
             r4 = 1
-            java.lang.Object[] r5 = new java.lang.Object[r4]     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
+            java.lang.Object[] r5 = new java.lang.Object[r4]     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
             r4 = 0
-            r5[r4] = r13     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
-            java.lang.String r3 = java.lang.String.format(r2, r3, r5)     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
-            org.telegram.SQLite.SQLitePreparedStatement r1 = r1.executeFast(r3)     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
-            org.telegram.SQLite.SQLitePreparedStatement r1 = r1.stepThis()     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
-            r1.dispose()     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
-            boolean r1 = r24.isEmpty()     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
+            r5[r4] = r13     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
+            java.lang.String r3 = java.lang.String.format(r2, r3, r5)     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
+            org.telegram.SQLite.SQLitePreparedStatement r1 = r1.executeFast(r3)     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
+            org.telegram.SQLite.SQLitePreparedStatement r1 = r1.stepThis()     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
+            r1.dispose()     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
+            boolean r1 = r24.isEmpty()     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
             if (r1 != 0) goto L_0x0757
             r3 = 0
             int r1 = (r33 > r3 ? 1 : (r33 == r3 ? 0 : -1))
             if (r1 != 0) goto L_0x073a
-            org.telegram.SQLite.SQLiteDatabase r1 = r7.database     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
+            org.telegram.SQLite.SQLiteDatabase r1 = r7.database     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
             java.lang.String r2 = "UPDATE media_counts_v2 SET old = 1 WHERE 1"
-            org.telegram.SQLite.SQLitePreparedStatement r1 = r1.executeFast(r2)     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
-            org.telegram.SQLite.SQLitePreparedStatement r1 = r1.stepThis()     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
-            r1.dispose()     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
+            org.telegram.SQLite.SQLitePreparedStatement r1 = r1.executeFast(r2)     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
+            org.telegram.SQLite.SQLitePreparedStatement r1 = r1.stepThis()     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
+            r1.dispose()     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
             goto L_0x0757
         L_0x073a:
-            org.telegram.SQLite.SQLiteDatabase r1 = r7.database     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
+            org.telegram.SQLite.SQLiteDatabase r1 = r7.database     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
             java.lang.String r3 = "UPDATE media_counts_v2 SET old = 1 WHERE uid = %d"
             r4 = 1
-            java.lang.Object[] r4 = new java.lang.Object[r4]     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
-            java.lang.Long r5 = java.lang.Long.valueOf(r33)     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
+            java.lang.Object[] r4 = new java.lang.Object[r4]     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
+            java.lang.Long r5 = java.lang.Long.valueOf(r33)     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
             r6 = 0
-            r4[r6] = r5     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
-            java.lang.String r2 = java.lang.String.format(r2, r3, r4)     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
-            org.telegram.SQLite.SQLitePreparedStatement r1 = r1.executeFast(r2)     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
-            org.telegram.SQLite.SQLitePreparedStatement r1 = r1.stepThis()     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
-            r1.dispose()     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
+            r4[r6] = r5     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
+            java.lang.String r2 = java.lang.String.format(r2, r3, r4)     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
+            org.telegram.SQLite.SQLitePreparedStatement r1 = r1.executeFast(r2)     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
+            org.telegram.SQLite.SQLitePreparedStatement r1 = r1.stepThis()     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
+            r1.dispose()     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
         L_0x0757:
-            org.telegram.messenger.MediaDataController r1 = r32.getMediaDataController()     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
+            org.telegram.messenger.MediaDataController r1 = r32.getMediaDataController()     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
             r2 = r35
             r3 = 0
-            r1.clearBotKeyboard(r3, r2)     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
-            int r1 = r27.size()     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
+            r1.clearBotKeyboard(r3, r2)     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
+            int r1 = r27.size()     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
             if (r1 == 0) goto L_0x076c
             r1 = 0
-            r7.resetAllUnreadCounters(r1)     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
+            r7.resetAllUnreadCounters(r1)     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
         L_0x076c:
             r1 = r26
-            r7.updateWidgets((java.util.ArrayList<java.lang.Long>) r1)     // Catch:{ Exception -> 0x078c, all -> 0x0785 }
+            r7.updateWidgets((java.util.ArrayList<java.lang.Long>) r1)     // Catch:{ Exception -> 0x078e, all -> 0x0787 }
             r2 = r37
             r11 = r18
         L_0x0775:
             org.telegram.SQLite.SQLiteDatabase r3 = r7.database
+            if (r3 == 0) goto L_0x077c
             r3.commitTransaction()
-            if (r11 == 0) goto L_0x077f
+        L_0x077c:
+            if (r11 == 0) goto L_0x0781
             r11.dispose()
-        L_0x077f:
-            if (r2 == 0) goto L_0x0784
+        L_0x0781:
+            if (r2 == 0) goto L_0x0786
             r2.dispose()
-        L_0x0784:
-            return r1
-        L_0x0785:
-            r0 = move-exception
         L_0x0786:
+            return r1
+        L_0x0787:
+            r0 = move-exception
+        L_0x0788:
             r16 = r37
             r1 = r0
             r11 = r18
-            goto L_0x07bb
-        L_0x078c:
+            goto L_0x07bf
+        L_0x078e:
             r0 = move-exception
-        L_0x078d:
+        L_0x078f:
             r1 = r37
             r2 = r0
             r3 = r18
-            goto L_0x07a2
-        L_0x0793:
+            goto L_0x07a4
+        L_0x0795:
             r0 = move-exception
             r2 = r0
             r3 = r10
             goto L_0x0096
-        L_0x0798:
+        L_0x079a:
             r0 = move-exception
             r1 = r0
             r11 = 0
-        L_0x079b:
+        L_0x079d:
             r16 = 0
-            goto L_0x07bb
-        L_0x079e:
+            goto L_0x07bf
+        L_0x07a0:
             r0 = move-exception
             r2 = r0
             r1 = 0
-        L_0x07a1:
+        L_0x07a3:
             r3 = 0
-        L_0x07a2:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r2)     // Catch:{ all -> 0x07b6 }
+        L_0x07a4:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r2)     // Catch:{ all -> 0x07ba }
             org.telegram.SQLite.SQLiteDatabase r2 = r7.database
+            if (r2 == 0) goto L_0x07ae
             r2.commitTransaction()
-            if (r3 == 0) goto L_0x07af
+        L_0x07ae:
+            if (r3 == 0) goto L_0x07b3
             r3.dispose()
-        L_0x07af:
-            if (r1 == 0) goto L_0x07b4
+        L_0x07b3:
+            if (r1 == 0) goto L_0x07b8
             r1.dispose()
-        L_0x07b4:
+        L_0x07b8:
             r1 = 0
             return r1
-        L_0x07b6:
+        L_0x07ba:
             r0 = move-exception
             r16 = r1
             r11 = r3
-        L_0x07ba:
+        L_0x07be:
             r1 = r0
-        L_0x07bb:
+        L_0x07bf:
             org.telegram.SQLite.SQLiteDatabase r2 = r7.database
+            if (r2 == 0) goto L_0x07c6
             r2.commitTransaction()
-            if (r11 == 0) goto L_0x07c5
+        L_0x07c6:
+            if (r11 == 0) goto L_0x07cb
             r11.dispose()
-        L_0x07c5:
-            if (r16 == 0) goto L_0x07ca
-            r16.dispose()
-        L_0x07ca:
-            goto L_0x07cc
         L_0x07cb:
+            if (r16 == 0) goto L_0x07d0
+            r16.dispose()
+        L_0x07d0:
+            goto L_0x07d2
+        L_0x07d1:
             throw r1
-        L_0x07cc:
-            goto L_0x07cb
+        L_0x07d2:
+            goto L_0x07d1
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$markMessagesAsDeleted$172(long, java.util.ArrayList, boolean, boolean):java.util.ArrayList");
     }
@@ -29614,11 +29786,13 @@ public class MessagesStorage extends BaseController {
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v41, resolved type: org.telegram.SQLite.SQLitePreparedStatement} */
     /* access modifiers changed from: private */
     /* JADX WARNING: Multi-variable type inference failed */
-    /* JADX WARNING: Removed duplicated region for block: B:156:0x02e9  */
-    /* JADX WARNING: Removed duplicated region for block: B:158:0x02ee  */
-    /* JADX WARNING: Removed duplicated region for block: B:162:0x02fa  */
-    /* JADX WARNING: Removed duplicated region for block: B:164:0x02ff  */
-    /* JADX WARNING: Removed duplicated region for block: B:179:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:158:0x02e8  */
+    /* JADX WARNING: Removed duplicated region for block: B:160:0x02ed  */
+    /* JADX WARNING: Removed duplicated region for block: B:162:0x02f2  */
+    /* JADX WARNING: Removed duplicated region for block: B:166:0x02fb  */
+    /* JADX WARNING: Removed duplicated region for block: B:168:0x0300  */
+    /* JADX WARNING: Removed duplicated region for block: B:170:0x0305  */
+    /* JADX WARNING: Removed duplicated region for block: B:186:? A[RETURN, SYNTHETIC] */
     /* renamed from: updateDialogsWithDeletedMessagesInternal */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void lambda$updateDialogsWithDeletedMessages$171(long r21, long r23, java.util.ArrayList<java.lang.Integer> r25, java.util.ArrayList<java.lang.Long> r26) {
@@ -29627,9 +29801,9 @@ public class MessagesStorage extends BaseController {
             r1 = r20
             r2 = r23
             r0 = r26
-            java.util.ArrayList r5 = new java.util.ArrayList     // Catch:{ Exception -> 0x02dc, all -> 0x02d8 }
-            r5.<init>()     // Catch:{ Exception -> 0x02dc, all -> 0x02d8 }
-            boolean r6 = r25.isEmpty()     // Catch:{ Exception -> 0x02dc, all -> 0x02d8 }
+            java.util.ArrayList r5 = new java.util.ArrayList     // Catch:{ Exception -> 0x02de, all -> 0x02da }
+            r5.<init>()     // Catch:{ Exception -> 0x02de, all -> 0x02da }
+            boolean r6 = r25.isEmpty()     // Catch:{ Exception -> 0x02de, all -> 0x02da }
             r7 = 3
             r8 = 2
             r9 = 0
@@ -29651,13 +29825,13 @@ public class MessagesStorage extends BaseController {
             r2 = 0
         L_0x0030:
             r4 = 0
-            goto L_0x02f3
+            goto L_0x02f7
         L_0x0033:
             r0 = move-exception
             r2 = 0
         L_0x0035:
             r4 = 0
-            goto L_0x02df
+            goto L_0x02e1
         L_0x0038:
             int r6 = (r21 > r9 ? 1 : (r21 == r9 ? 0 : -1))
             if (r6 != 0) goto L_0x0074
@@ -29685,12 +29859,12 @@ public class MessagesStorage extends BaseController {
             r0 = move-exception
         L_0x006d:
             r2 = 0
-            goto L_0x02f3
+            goto L_0x02f7
         L_0x0070:
             r0 = move-exception
         L_0x0071:
             r2 = 0
-            goto L_0x02df
+            goto L_0x02e1
         L_0x0074:
             java.lang.Long r4 = java.lang.Long.valueOf(r21)     // Catch:{ Exception -> 0x0033, all -> 0x002e }
             r5.add(r4)     // Catch:{ Exception -> 0x0033, all -> 0x002e }
@@ -29730,8 +29904,8 @@ public class MessagesStorage extends BaseController {
             goto L_0x0035
         L_0x00bc:
             long r9 = -r2
-            java.lang.Long r4 = java.lang.Long.valueOf(r9)     // Catch:{ Exception -> 0x02dc, all -> 0x02d8 }
-            r5.add(r4)     // Catch:{ Exception -> 0x02dc, all -> 0x02d8 }
+            java.lang.Long r4 = java.lang.Long.valueOf(r9)     // Catch:{ Exception -> 0x02de, all -> 0x02da }
+            r5.add(r4)     // Catch:{ Exception -> 0x02de, all -> 0x02da }
         L_0x00c4:
             if (r0 == 0) goto L_0x00df
             r4 = 0
@@ -29747,30 +29921,30 @@ public class MessagesStorage extends BaseController {
             int r4 = r4 + 1
             goto L_0x00c7
         L_0x00df:
-            java.lang.String r0 = android.text.TextUtils.join(r11, r5)     // Catch:{ Exception -> 0x02dc, all -> 0x02d8 }
-            org.telegram.tgnet.TLRPC$TL_messages_dialogs r4 = new org.telegram.tgnet.TLRPC$TL_messages_dialogs     // Catch:{ Exception -> 0x02dc, all -> 0x02d8 }
-            r4.<init>()     // Catch:{ Exception -> 0x02dc, all -> 0x02d8 }
-            java.util.ArrayList r5 = new java.util.ArrayList     // Catch:{ Exception -> 0x02dc, all -> 0x02d8 }
-            r5.<init>()     // Catch:{ Exception -> 0x02dc, all -> 0x02d8 }
-            java.util.ArrayList r6 = new java.util.ArrayList     // Catch:{ Exception -> 0x02dc, all -> 0x02d8 }
-            r6.<init>()     // Catch:{ Exception -> 0x02dc, all -> 0x02d8 }
-            java.util.ArrayList r9 = new java.util.ArrayList     // Catch:{ Exception -> 0x02dc, all -> 0x02d8 }
-            r9.<init>()     // Catch:{ Exception -> 0x02dc, all -> 0x02d8 }
-            java.util.ArrayList r10 = new java.util.ArrayList     // Catch:{ Exception -> 0x02dc, all -> 0x02d8 }
-            r10.<init>()     // Catch:{ Exception -> 0x02dc, all -> 0x02d8 }
-            org.telegram.SQLite.SQLiteDatabase r14 = r1.database     // Catch:{ Exception -> 0x02dc, all -> 0x02d8 }
-            java.util.Locale r15 = java.util.Locale.US     // Catch:{ Exception -> 0x02dc, all -> 0x02d8 }
+            java.lang.String r0 = android.text.TextUtils.join(r11, r5)     // Catch:{ Exception -> 0x02de, all -> 0x02da }
+            org.telegram.tgnet.TLRPC$TL_messages_dialogs r4 = new org.telegram.tgnet.TLRPC$TL_messages_dialogs     // Catch:{ Exception -> 0x02de, all -> 0x02da }
+            r4.<init>()     // Catch:{ Exception -> 0x02de, all -> 0x02da }
+            java.util.ArrayList r5 = new java.util.ArrayList     // Catch:{ Exception -> 0x02de, all -> 0x02da }
+            r5.<init>()     // Catch:{ Exception -> 0x02de, all -> 0x02da }
+            java.util.ArrayList r6 = new java.util.ArrayList     // Catch:{ Exception -> 0x02de, all -> 0x02da }
+            r6.<init>()     // Catch:{ Exception -> 0x02de, all -> 0x02da }
+            java.util.ArrayList r9 = new java.util.ArrayList     // Catch:{ Exception -> 0x02de, all -> 0x02da }
+            r9.<init>()     // Catch:{ Exception -> 0x02de, all -> 0x02da }
+            java.util.ArrayList r10 = new java.util.ArrayList     // Catch:{ Exception -> 0x02de, all -> 0x02da }
+            r10.<init>()     // Catch:{ Exception -> 0x02de, all -> 0x02da }
+            org.telegram.SQLite.SQLiteDatabase r14 = r1.database     // Catch:{ Exception -> 0x02de, all -> 0x02da }
+            java.util.Locale r15 = java.util.Locale.US     // Catch:{ Exception -> 0x02de, all -> 0x02da }
             java.lang.String r7 = "SELECT d.did, d.last_mid, d.unread_count, d.date, m.data, m.read_state, m.mid, m.send_state, m.date, d.pts, d.inbox_max, d.outbox_max, d.pinned, d.unread_count_i, d.flags, d.folder_id, d.data, d.unread_reactions FROM dialogs as d LEFT JOIN messages_v2 as m ON d.last_mid = m.mid AND d.did = m.uid WHERE d.did IN(%s)"
-            java.lang.Object[] r8 = new java.lang.Object[r12]     // Catch:{ Exception -> 0x02dc, all -> 0x02d8 }
-            r8[r13] = r0     // Catch:{ Exception -> 0x02dc, all -> 0x02d8 }
-            java.lang.String r0 = java.lang.String.format(r15, r7, r8)     // Catch:{ Exception -> 0x02dc, all -> 0x02d8 }
-            java.lang.Object[] r7 = new java.lang.Object[r13]     // Catch:{ Exception -> 0x02dc, all -> 0x02d8 }
-            org.telegram.SQLite.SQLiteCursor r7 = r14.queryFinalized(r0, r7)     // Catch:{ Exception -> 0x02dc, all -> 0x02d8 }
+            java.lang.Object[] r8 = new java.lang.Object[r12]     // Catch:{ Exception -> 0x02de, all -> 0x02da }
+            r8[r13] = r0     // Catch:{ Exception -> 0x02de, all -> 0x02da }
+            java.lang.String r0 = java.lang.String.format(r15, r7, r8)     // Catch:{ Exception -> 0x02de, all -> 0x02da }
+            java.lang.Object[] r7 = new java.lang.Object[r13]     // Catch:{ Exception -> 0x02de, all -> 0x02da }
+            org.telegram.SQLite.SQLiteCursor r7 = r14.queryFinalized(r0, r7)     // Catch:{ Exception -> 0x02de, all -> 0x02da }
         L_0x0110:
-            boolean r0 = r7.next()     // Catch:{ Exception -> 0x02d4, all -> 0x02d0 }
+            boolean r0 = r7.next()     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
             if (r0 == 0) goto L_0x027d
-            long r14 = r7.longValue(r13)     // Catch:{ Exception -> 0x02d4, all -> 0x02d0 }
-            boolean r0 = org.telegram.messenger.DialogObject.isFolderDialogId(r14)     // Catch:{ Exception -> 0x02d4, all -> 0x02d0 }
+            long r14 = r7.longValue(r13)     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
+            boolean r0 = org.telegram.messenger.DialogObject.isFolderDialogId(r14)     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
             if (r0 == 0) goto L_0x0159
             org.telegram.tgnet.TLRPC$TL_dialogFolder r0 = new org.telegram.tgnet.TLRPC$TL_dialogFolder     // Catch:{ Exception -> 0x0155, all -> 0x0151 }
             r0.<init>()     // Catch:{ Exception -> 0x0155, all -> 0x0151 }
@@ -29801,31 +29975,31 @@ public class MessagesStorage extends BaseController {
             r4 = r7
             goto L_0x0071
         L_0x0159:
-            org.telegram.tgnet.TLRPC$TL_dialog r0 = new org.telegram.tgnet.TLRPC$TL_dialog     // Catch:{ Exception -> 0x02d4, all -> 0x02d0 }
-            r0.<init>()     // Catch:{ Exception -> 0x02d4, all -> 0x02d0 }
+            org.telegram.tgnet.TLRPC$TL_dialog r0 = new org.telegram.tgnet.TLRPC$TL_dialog     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
+            r0.<init>()     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
         L_0x015e:
-            r0.id = r14     // Catch:{ Exception -> 0x02d4, all -> 0x02d0 }
+            r0.id = r14     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
             r8 = 1
-            int r12 = r7.intValue(r8)     // Catch:{ Exception -> 0x02d4, all -> 0x02d0 }
-            r0.top_message = r12     // Catch:{ Exception -> 0x02d4, all -> 0x02d0 }
+            int r12 = r7.intValue(r8)     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
+            r0.top_message = r12     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
             r8 = 10
-            int r8 = r7.intValue(r8)     // Catch:{ Exception -> 0x02d4, all -> 0x02d0 }
-            r0.read_inbox_max_id = r8     // Catch:{ Exception -> 0x02d4, all -> 0x02d0 }
+            int r8 = r7.intValue(r8)     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
+            r0.read_inbox_max_id = r8     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
             r8 = 11
-            int r8 = r7.intValue(r8)     // Catch:{ Exception -> 0x02d4, all -> 0x02d0 }
-            r0.read_outbox_max_id = r8     // Catch:{ Exception -> 0x02d4, all -> 0x02d0 }
+            int r8 = r7.intValue(r8)     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
+            r0.read_outbox_max_id = r8     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
             r8 = 2
-            int r12 = r7.intValue(r8)     // Catch:{ Exception -> 0x02d4, all -> 0x02d0 }
-            r0.unread_count = r12     // Catch:{ Exception -> 0x02d4, all -> 0x02d0 }
+            int r12 = r7.intValue(r8)     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
+            r0.unread_count = r12     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
             r12 = 13
-            int r12 = r7.intValue(r12)     // Catch:{ Exception -> 0x02d4, all -> 0x02d0 }
-            r0.unread_mentions_count = r12     // Catch:{ Exception -> 0x02d4, all -> 0x02d0 }
+            int r12 = r7.intValue(r12)     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
+            r0.unread_mentions_count = r12     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
             r12 = 3
-            int r13 = r7.intValue(r12)     // Catch:{ Exception -> 0x02d4, all -> 0x02d0 }
-            r0.last_message_date = r13     // Catch:{ Exception -> 0x02d4, all -> 0x02d0 }
+            int r13 = r7.intValue(r12)     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
+            r0.last_message_date = r13     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
             r13 = 9
-            int r13 = r7.intValue(r13)     // Catch:{ Exception -> 0x02d4, all -> 0x02d0 }
-            r0.pts = r13     // Catch:{ Exception -> 0x02d4, all -> 0x02d0 }
+            int r13 = r7.intValue(r13)     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
+            r0.pts = r13     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
             r16 = 0
             int r13 = (r2 > r16 ? 1 : (r2 == r16 ? 0 : -1))
             if (r13 != 0) goto L_0x019d
@@ -29834,19 +30008,19 @@ public class MessagesStorage extends BaseController {
         L_0x019d:
             r13 = 1
         L_0x019e:
-            r0.flags = r13     // Catch:{ Exception -> 0x02d4, all -> 0x02d0 }
+            r0.flags = r13     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
             r13 = 12
-            int r13 = r7.intValue(r13)     // Catch:{ Exception -> 0x02d4, all -> 0x02d0 }
-            r0.pinnedNum = r13     // Catch:{ Exception -> 0x02d4, all -> 0x02d0 }
+            int r13 = r7.intValue(r13)     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
+            r0.pinnedNum = r13     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
             if (r13 == 0) goto L_0x01ac
             r13 = 1
             goto L_0x01ad
         L_0x01ac:
             r13 = 0
         L_0x01ad:
-            r0.pinned = r13     // Catch:{ Exception -> 0x02d4, all -> 0x02d0 }
+            r0.pinned = r13     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
             r13 = 14
-            int r13 = r7.intValue(r13)     // Catch:{ Exception -> 0x02d4, all -> 0x02d0 }
+            int r13 = r7.intValue(r13)     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
             r18 = 1
             r13 = r13 & 1
             if (r13 == 0) goto L_0x01bd
@@ -29855,85 +30029,85 @@ public class MessagesStorage extends BaseController {
         L_0x01bd:
             r13 = 0
         L_0x01be:
-            r0.unread_mark = r13     // Catch:{ Exception -> 0x02d4, all -> 0x02d0 }
+            r0.unread_mark = r13     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
             r13 = 15
-            int r13 = r7.intValue(r13)     // Catch:{ Exception -> 0x02d4, all -> 0x02d0 }
-            r0.folder_id = r13     // Catch:{ Exception -> 0x02d4, all -> 0x02d0 }
+            int r13 = r7.intValue(r13)     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
+            r0.folder_id = r13     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
             r13 = 17
-            int r13 = r7.intValue(r13)     // Catch:{ Exception -> 0x02d4, all -> 0x02d0 }
-            r0.unread_reactions_count = r13     // Catch:{ Exception -> 0x02d4, all -> 0x02d0 }
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r13 = r4.dialogs     // Catch:{ Exception -> 0x02d4, all -> 0x02d0 }
-            r13.add(r0)     // Catch:{ Exception -> 0x02d4, all -> 0x02d0 }
+            int r13 = r7.intValue(r13)     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
+            r0.unread_reactions_count = r13     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r13 = r4.dialogs     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
+            r13.add(r0)     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
             r13 = 4
-            org.telegram.tgnet.NativeByteBuffer r13 = r7.byteBufferValue(r13)     // Catch:{ Exception -> 0x02d4, all -> 0x02d0 }
+            org.telegram.tgnet.NativeByteBuffer r13 = r7.byteBufferValue(r13)     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
             if (r13 == 0) goto L_0x021f
             r8 = 0
-            int r12 = r13.readInt32(r8)     // Catch:{ Exception -> 0x02d4, all -> 0x02d0 }
-            org.telegram.tgnet.TLRPC$Message r12 = org.telegram.tgnet.TLRPC$Message.TLdeserialize(r13, r12, r8)     // Catch:{ Exception -> 0x02d4, all -> 0x02d0 }
-            org.telegram.messenger.UserConfig r8 = r20.getUserConfig()     // Catch:{ Exception -> 0x02d4, all -> 0x02d0 }
-            long r2 = r8.clientUserId     // Catch:{ Exception -> 0x02d4, all -> 0x02d0 }
-            r12.readAttachPath(r13, r2)     // Catch:{ Exception -> 0x02d4, all -> 0x02d0 }
-            r13.reuse()     // Catch:{ Exception -> 0x02d4, all -> 0x02d0 }
+            int r12 = r13.readInt32(r8)     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
+            org.telegram.tgnet.TLRPC$Message r12 = org.telegram.tgnet.TLRPC$Message.TLdeserialize(r13, r12, r8)     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
+            org.telegram.messenger.UserConfig r8 = r20.getUserConfig()     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
+            long r2 = r8.clientUserId     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
+            r12.readAttachPath(r13, r2)     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
+            r13.reuse()     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
             r2 = 5
-            int r2 = r7.intValue(r2)     // Catch:{ Exception -> 0x02d4, all -> 0x02d0 }
-            org.telegram.messenger.MessageObject.setUnreadFlags(r12, r2)     // Catch:{ Exception -> 0x02d4, all -> 0x02d0 }
+            int r2 = r7.intValue(r2)     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
+            org.telegram.messenger.MessageObject.setUnreadFlags(r12, r2)     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
             r2 = 6
-            int r2 = r7.intValue(r2)     // Catch:{ Exception -> 0x02d4, all -> 0x02d0 }
-            r12.id = r2     // Catch:{ Exception -> 0x02d4, all -> 0x02d0 }
+            int r2 = r7.intValue(r2)     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
+            r12.id = r2     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
             r2 = 7
-            int r2 = r7.intValue(r2)     // Catch:{ Exception -> 0x02d4, all -> 0x02d0 }
-            r12.send_state = r2     // Catch:{ Exception -> 0x02d4, all -> 0x02d0 }
+            int r2 = r7.intValue(r2)     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
+            r12.send_state = r2     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
             r2 = 8
-            int r2 = r7.intValue(r2)     // Catch:{ Exception -> 0x02d4, all -> 0x02d0 }
+            int r2 = r7.intValue(r2)     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
             if (r2 == 0) goto L_0x0211
             r0.last_message_date = r2     // Catch:{ Exception -> 0x0155, all -> 0x0151 }
         L_0x0211:
-            long r2 = r0.id     // Catch:{ Exception -> 0x02d4, all -> 0x02d0 }
-            r12.dialog_id = r2     // Catch:{ Exception -> 0x02d4, all -> 0x02d0 }
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> r2 = r4.messages     // Catch:{ Exception -> 0x02d4, all -> 0x02d0 }
-            r2.add(r12)     // Catch:{ Exception -> 0x02d4, all -> 0x02d0 }
+            long r2 = r0.id     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
+            r12.dialog_id = r2     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> r2 = r4.messages     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
+            r2.add(r12)     // Catch:{ Exception -> 0x02d6, all -> 0x02d2 }
             r2 = 0
-            addUsersAndChatsFromMessage(r12, r6, r9, r2)     // Catch:{ Exception -> 0x02ce, all -> 0x02cc }
+            addUsersAndChatsFromMessage(r12, r6, r9, r2)     // Catch:{ Exception -> 0x02d0, all -> 0x02ce }
             goto L_0x0220
         L_0x021f:
             r2 = 0
         L_0x0220:
-            boolean r3 = org.telegram.messenger.DialogObject.isEncryptedDialog(r14)     // Catch:{ Exception -> 0x02ce, all -> 0x02cc }
+            boolean r3 = org.telegram.messenger.DialogObject.isEncryptedDialog(r14)     // Catch:{ Exception -> 0x02d0, all -> 0x02ce }
             if (r3 != 0) goto L_0x0230
-            int r3 = r0.read_inbox_max_id     // Catch:{ Exception -> 0x02ce, all -> 0x02cc }
-            int r8 = r0.top_message     // Catch:{ Exception -> 0x02ce, all -> 0x02cc }
+            int r3 = r0.read_inbox_max_id     // Catch:{ Exception -> 0x02d0, all -> 0x02ce }
+            int r8 = r0.top_message     // Catch:{ Exception -> 0x02d0, all -> 0x02ce }
             if (r3 <= r8) goto L_0x0230
             r3 = 0
-            r0.read_inbox_max_id = r3     // Catch:{ Exception -> 0x02ce, all -> 0x02cc }
+            r0.read_inbox_max_id = r3     // Catch:{ Exception -> 0x02d0, all -> 0x02ce }
             goto L_0x0231
         L_0x0230:
             r3 = 0
         L_0x0231:
-            boolean r0 = org.telegram.messenger.DialogObject.isEncryptedDialog(r14)     // Catch:{ Exception -> 0x02ce, all -> 0x02cc }
+            boolean r0 = org.telegram.messenger.DialogObject.isEncryptedDialog(r14)     // Catch:{ Exception -> 0x02d0, all -> 0x02ce }
             if (r0 == 0) goto L_0x024d
-            int r0 = org.telegram.messenger.DialogObject.getEncryptedChatId(r14)     // Catch:{ Exception -> 0x02ce, all -> 0x02cc }
-            java.lang.Integer r8 = java.lang.Integer.valueOf(r0)     // Catch:{ Exception -> 0x02ce, all -> 0x02cc }
-            boolean r8 = r10.contains(r8)     // Catch:{ Exception -> 0x02ce, all -> 0x02cc }
+            int r0 = org.telegram.messenger.DialogObject.getEncryptedChatId(r14)     // Catch:{ Exception -> 0x02d0, all -> 0x02ce }
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r0)     // Catch:{ Exception -> 0x02d0, all -> 0x02ce }
+            boolean r8 = r10.contains(r8)     // Catch:{ Exception -> 0x02d0, all -> 0x02ce }
             if (r8 != 0) goto L_0x0277
-            java.lang.Integer r0 = java.lang.Integer.valueOf(r0)     // Catch:{ Exception -> 0x02ce, all -> 0x02cc }
-            r10.add(r0)     // Catch:{ Exception -> 0x02ce, all -> 0x02cc }
+            java.lang.Integer r0 = java.lang.Integer.valueOf(r0)     // Catch:{ Exception -> 0x02d0, all -> 0x02ce }
+            r10.add(r0)     // Catch:{ Exception -> 0x02d0, all -> 0x02ce }
             goto L_0x0277
         L_0x024d:
-            boolean r0 = org.telegram.messenger.DialogObject.isUserDialog(r14)     // Catch:{ Exception -> 0x02ce, all -> 0x02cc }
+            boolean r0 = org.telegram.messenger.DialogObject.isUserDialog(r14)     // Catch:{ Exception -> 0x02d0, all -> 0x02ce }
             if (r0 == 0) goto L_0x0265
-            java.lang.Long r0 = java.lang.Long.valueOf(r14)     // Catch:{ Exception -> 0x02ce, all -> 0x02cc }
-            boolean r0 = r6.contains(r0)     // Catch:{ Exception -> 0x02ce, all -> 0x02cc }
+            java.lang.Long r0 = java.lang.Long.valueOf(r14)     // Catch:{ Exception -> 0x02d0, all -> 0x02ce }
+            boolean r0 = r6.contains(r0)     // Catch:{ Exception -> 0x02d0, all -> 0x02ce }
             if (r0 != 0) goto L_0x0277
-            java.lang.Long r0 = java.lang.Long.valueOf(r14)     // Catch:{ Exception -> 0x02ce, all -> 0x02cc }
-            r6.add(r0)     // Catch:{ Exception -> 0x02ce, all -> 0x02cc }
+            java.lang.Long r0 = java.lang.Long.valueOf(r14)     // Catch:{ Exception -> 0x02d0, all -> 0x02ce }
+            r6.add(r0)     // Catch:{ Exception -> 0x02d0, all -> 0x02ce }
             goto L_0x0277
         L_0x0265:
             long r12 = -r14
-            java.lang.Long r0 = java.lang.Long.valueOf(r12)     // Catch:{ Exception -> 0x02ce, all -> 0x02cc }
-            boolean r0 = r9.contains(r0)     // Catch:{ Exception -> 0x02ce, all -> 0x02cc }
+            java.lang.Long r0 = java.lang.Long.valueOf(r12)     // Catch:{ Exception -> 0x02d0, all -> 0x02ce }
+            boolean r0 = r9.contains(r0)     // Catch:{ Exception -> 0x02d0, all -> 0x02ce }
             if (r0 != 0) goto L_0x0277
-            java.lang.Long r0 = java.lang.Long.valueOf(r12)     // Catch:{ Exception -> 0x02ce, all -> 0x02cc }
-            r9.add(r0)     // Catch:{ Exception -> 0x02ce, all -> 0x02cc }
+            java.lang.Long r0 = java.lang.Long.valueOf(r12)     // Catch:{ Exception -> 0x02d0, all -> 0x02ce }
+            r9.add(r0)     // Catch:{ Exception -> 0x02d0, all -> 0x02ce }
         L_0x0277:
             r2 = r23
             r12 = 1
@@ -29941,99 +30115,104 @@ public class MessagesStorage extends BaseController {
             goto L_0x0110
         L_0x027d:
             r2 = 0
-            r7.dispose()     // Catch:{ Exception -> 0x02ce, all -> 0x02cc }
-            boolean r0 = r10.isEmpty()     // Catch:{ Exception -> 0x02ca, all -> 0x02c8 }
+            r7.dispose()     // Catch:{ Exception -> 0x02d0, all -> 0x02ce }
+            boolean r0 = r10.isEmpty()     // Catch:{ Exception -> 0x02cc, all -> 0x02ca }
             if (r0 != 0) goto L_0x028e
-            java.lang.String r0 = android.text.TextUtils.join(r11, r10)     // Catch:{ Exception -> 0x02ca, all -> 0x02c8 }
-            r1.getEncryptedChatsInternal(r0, r5, r6)     // Catch:{ Exception -> 0x02ca, all -> 0x02c8 }
+            java.lang.String r0 = android.text.TextUtils.join(r11, r10)     // Catch:{ Exception -> 0x02cc, all -> 0x02ca }
+            r1.getEncryptedChatsInternal(r0, r5, r6)     // Catch:{ Exception -> 0x02cc, all -> 0x02ca }
         L_0x028e:
-            boolean r0 = r9.isEmpty()     // Catch:{ Exception -> 0x02ca, all -> 0x02c8 }
+            boolean r0 = r9.isEmpty()     // Catch:{ Exception -> 0x02cc, all -> 0x02ca }
             if (r0 != 0) goto L_0x029d
-            java.lang.String r0 = android.text.TextUtils.join(r11, r9)     // Catch:{ Exception -> 0x02ca, all -> 0x02c8 }
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Chat> r3 = r4.chats     // Catch:{ Exception -> 0x02ca, all -> 0x02c8 }
-            r1.getChatsInternal(r0, r3)     // Catch:{ Exception -> 0x02ca, all -> 0x02c8 }
+            java.lang.String r0 = android.text.TextUtils.join(r11, r9)     // Catch:{ Exception -> 0x02cc, all -> 0x02ca }
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Chat> r3 = r4.chats     // Catch:{ Exception -> 0x02cc, all -> 0x02ca }
+            r1.getChatsInternal(r0, r3)     // Catch:{ Exception -> 0x02cc, all -> 0x02ca }
         L_0x029d:
-            boolean r0 = r6.isEmpty()     // Catch:{ Exception -> 0x02ca, all -> 0x02c8 }
+            boolean r0 = r6.isEmpty()     // Catch:{ Exception -> 0x02cc, all -> 0x02ca }
             if (r0 != 0) goto L_0x02ac
-            java.lang.String r0 = android.text.TextUtils.join(r11, r6)     // Catch:{ Exception -> 0x02ca, all -> 0x02c8 }
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r3 = r4.users     // Catch:{ Exception -> 0x02ca, all -> 0x02c8 }
-            r1.getUsersInternal(r0, r3)     // Catch:{ Exception -> 0x02ca, all -> 0x02c8 }
+            java.lang.String r0 = android.text.TextUtils.join(r11, r6)     // Catch:{ Exception -> 0x02cc, all -> 0x02ca }
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r3 = r4.users     // Catch:{ Exception -> 0x02cc, all -> 0x02ca }
+            r1.getUsersInternal(r0, r3)     // Catch:{ Exception -> 0x02cc, all -> 0x02ca }
         L_0x02ac:
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r0 = r4.dialogs     // Catch:{ Exception -> 0x02ca, all -> 0x02c8 }
-            boolean r0 = r0.isEmpty()     // Catch:{ Exception -> 0x02ca, all -> 0x02c8 }
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r0 = r4.dialogs     // Catch:{ Exception -> 0x02cc, all -> 0x02ca }
+            boolean r0 = r0.isEmpty()     // Catch:{ Exception -> 0x02cc, all -> 0x02ca }
             if (r0 == 0) goto L_0x02ba
-            boolean r0 = r5.isEmpty()     // Catch:{ Exception -> 0x02ca, all -> 0x02c8 }
+            boolean r0 = r5.isEmpty()     // Catch:{ Exception -> 0x02cc, all -> 0x02ca }
             if (r0 != 0) goto L_0x02c2
         L_0x02ba:
-            org.telegram.messenger.MessagesController r0 = r20.getMessagesController()     // Catch:{ Exception -> 0x02ca, all -> 0x02c8 }
+            org.telegram.messenger.MessagesController r0 = r20.getMessagesController()     // Catch:{ Exception -> 0x02cc, all -> 0x02ca }
             r3 = 1
-            r0.processDialogsUpdate(r4, r5, r3)     // Catch:{ Exception -> 0x02ca, all -> 0x02c8 }
+            r0.processDialogsUpdate(r4, r5, r3)     // Catch:{ Exception -> 0x02cc, all -> 0x02ca }
         L_0x02c2:
             org.telegram.SQLite.SQLiteDatabase r0 = r1.database
+            if (r0 == 0) goto L_0x02f5
             r0.commitTransaction()
-            goto L_0x02f1
-        L_0x02c8:
-            r0 = move-exception
-            goto L_0x02da
+            goto L_0x02f5
         L_0x02ca:
             r0 = move-exception
-            goto L_0x02de
+            goto L_0x02dc
         L_0x02cc:
             r0 = move-exception
-            goto L_0x02d2
+            goto L_0x02e0
         L_0x02ce:
             r0 = move-exception
-            goto L_0x02d6
+            goto L_0x02d4
         L_0x02d0:
             r0 = move-exception
-            r2 = 0
+            goto L_0x02d8
         L_0x02d2:
-            r4 = r7
-            goto L_0x02f3
+            r0 = move-exception
+            r2 = 0
         L_0x02d4:
-            r0 = move-exception
-            r2 = 0
-        L_0x02d6:
             r4 = r7
-            goto L_0x02df
+            goto L_0x02f7
+        L_0x02d6:
+            r0 = move-exception
+            r2 = 0
         L_0x02d8:
-            r0 = move-exception
-            r2 = 0
+            r4 = r7
+            goto L_0x02e1
         L_0x02da:
-            r4 = r2
-            goto L_0x02f3
-        L_0x02dc:
             r0 = move-exception
             r2 = 0
-        L_0x02de:
+        L_0x02dc:
             r4 = r2
-        L_0x02df:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x02f2 }
-            org.telegram.SQLite.SQLiteDatabase r0 = r1.database
-            r0.commitTransaction()
-            if (r4 == 0) goto L_0x02ec
-            r4.dispose()
-        L_0x02ec:
-            if (r2 == 0) goto L_0x02f1
-            r2.dispose()
-        L_0x02f1:
-            return
-        L_0x02f2:
+            goto L_0x02f7
+        L_0x02de:
             r0 = move-exception
-        L_0x02f3:
-            org.telegram.SQLite.SQLiteDatabase r3 = r1.database
-            r3.commitTransaction()
-            if (r4 == 0) goto L_0x02fd
+            r2 = 0
+        L_0x02e0:
+            r4 = r2
+        L_0x02e1:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x02f6 }
+            org.telegram.SQLite.SQLiteDatabase r0 = r1.database
+            if (r0 == 0) goto L_0x02eb
+            r0.commitTransaction()
+        L_0x02eb:
+            if (r4 == 0) goto L_0x02f0
             r4.dispose()
-        L_0x02fd:
-            if (r2 == 0) goto L_0x0302
+        L_0x02f0:
+            if (r2 == 0) goto L_0x02f5
             r2.dispose()
-        L_0x0302:
-            goto L_0x0304
+        L_0x02f5:
+            return
+        L_0x02f6:
+            r0 = move-exception
+        L_0x02f7:
+            org.telegram.SQLite.SQLiteDatabase r3 = r1.database
+            if (r3 == 0) goto L_0x02fe
+            r3.commitTransaction()
+        L_0x02fe:
+            if (r4 == 0) goto L_0x0303
+            r4.dispose()
         L_0x0303:
+            if (r2 == 0) goto L_0x0308
+            r2.dispose()
+        L_0x0308:
+            goto L_0x030a
+        L_0x0309:
             throw r0
-        L_0x0304:
-            goto L_0x0303
+        L_0x030a:
+            goto L_0x0309
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$updateDialogsWithDeletedMessages$171(long, long, java.util.ArrayList, java.util.ArrayList):void");
     }
@@ -31347,31 +31526,35 @@ public class MessagesStorage extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:113:0x0202 A[SYNTHETIC, Splitter:B:113:0x0202] */
-    /* JADX WARNING: Removed duplicated region for block: B:120:0x0210  */
-    /* JADX WARNING: Removed duplicated region for block: B:122:0x0215  */
-    /* JADX WARNING: Removed duplicated region for block: B:126:0x0221  */
-    /* JADX WARNING: Removed duplicated region for block: B:128:0x0226  */
-    /* JADX WARNING: Removed duplicated region for block: B:134:? A[RETURN, SYNTHETIC] */
-    /* JADX WARNING: Removed duplicated region for block: B:26:0x0056 A[SYNTHETIC, Splitter:B:26:0x0056] */
-    /* JADX WARNING: Removed duplicated region for block: B:35:0x0077 A[Catch:{ Exception -> 0x01ec, all -> 0x01e9 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:38:0x00b1 A[Catch:{ Exception -> 0x01ec, all -> 0x01e9 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:45:0x00cb A[Catch:{ Exception -> 0x01ec, all -> 0x01e9 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:46:0x00d1 A[Catch:{ Exception -> 0x01ec, all -> 0x01e9 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:49:0x00dc A[Catch:{ Exception -> 0x01ec, all -> 0x01e9 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:50:0x00de A[Catch:{ Exception -> 0x01ec, all -> 0x01e9 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:55:0x00ee A[Catch:{ Exception -> 0x01ec, all -> 0x01e9 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:56:0x00f0 A[Catch:{ Exception -> 0x01ec, all -> 0x01e9 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:59:0x0101 A[Catch:{ Exception -> 0x01ec, all -> 0x01e9 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:60:0x0115 A[Catch:{ Exception -> 0x01ec, all -> 0x01e9 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:63:0x011f A[Catch:{ Exception -> 0x01ec, all -> 0x01e9 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:68:0x012a A[Catch:{ Exception -> 0x01ec, all -> 0x01e9 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:71:0x013a A[Catch:{ Exception -> 0x01ec, all -> 0x01e9 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:72:0x013e A[Catch:{ Exception -> 0x01ec, all -> 0x01e9 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:75:0x014a A[Catch:{ Exception -> 0x01ec, all -> 0x01e9 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:77:0x016b A[Catch:{ Exception -> 0x01ec, all -> 0x01e9 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:79:0x0170 A[Catch:{ Exception -> 0x01ec, all -> 0x01e9 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:86:0x0183 A[Catch:{ Exception -> 0x01fb, all -> 0x01f7 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:116:0x0206 A[SYNTHETIC, Splitter:B:116:0x0206] */
+    /* JADX WARNING: Removed duplicated region for block: B:123:0x0211  */
+    /* JADX WARNING: Removed duplicated region for block: B:125:0x0216  */
+    /* JADX WARNING: Removed duplicated region for block: B:127:0x021b  */
+    /* JADX WARNING: Removed duplicated region for block: B:131:0x0224  */
+    /* JADX WARNING: Removed duplicated region for block: B:133:0x0229  */
+    /* JADX WARNING: Removed duplicated region for block: B:135:0x022e  */
+    /* JADX WARNING: Removed duplicated region for block: B:142:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:144:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:27:0x0058 A[SYNTHETIC, Splitter:B:27:0x0058] */
+    /* JADX WARNING: Removed duplicated region for block: B:36:0x0079 A[Catch:{ Exception -> 0x01f0, all -> 0x01ed }] */
+    /* JADX WARNING: Removed duplicated region for block: B:39:0x00b3 A[Catch:{ Exception -> 0x01f0, all -> 0x01ed }] */
+    /* JADX WARNING: Removed duplicated region for block: B:46:0x00cd A[Catch:{ Exception -> 0x01f0, all -> 0x01ed }] */
+    /* JADX WARNING: Removed duplicated region for block: B:47:0x00d3 A[Catch:{ Exception -> 0x01f0, all -> 0x01ed }] */
+    /* JADX WARNING: Removed duplicated region for block: B:50:0x00de A[Catch:{ Exception -> 0x01f0, all -> 0x01ed }] */
+    /* JADX WARNING: Removed duplicated region for block: B:51:0x00e0 A[Catch:{ Exception -> 0x01f0, all -> 0x01ed }] */
+    /* JADX WARNING: Removed duplicated region for block: B:56:0x00f0 A[Catch:{ Exception -> 0x01f0, all -> 0x01ed }] */
+    /* JADX WARNING: Removed duplicated region for block: B:57:0x00f2 A[Catch:{ Exception -> 0x01f0, all -> 0x01ed }] */
+    /* JADX WARNING: Removed duplicated region for block: B:60:0x0103 A[Catch:{ Exception -> 0x01f0, all -> 0x01ed }] */
+    /* JADX WARNING: Removed duplicated region for block: B:61:0x0117 A[Catch:{ Exception -> 0x01f0, all -> 0x01ed }] */
+    /* JADX WARNING: Removed duplicated region for block: B:64:0x0121 A[Catch:{ Exception -> 0x01f0, all -> 0x01ed }] */
+    /* JADX WARNING: Removed duplicated region for block: B:69:0x012c A[Catch:{ Exception -> 0x01f0, all -> 0x01ed }] */
+    /* JADX WARNING: Removed duplicated region for block: B:72:0x013c A[Catch:{ Exception -> 0x01f0, all -> 0x01ed }] */
+    /* JADX WARNING: Removed duplicated region for block: B:73:0x0140 A[Catch:{ Exception -> 0x01f0, all -> 0x01ed }] */
+    /* JADX WARNING: Removed duplicated region for block: B:76:0x014c A[Catch:{ Exception -> 0x01f0, all -> 0x01ed }] */
+    /* JADX WARNING: Removed duplicated region for block: B:78:0x016d A[Catch:{ Exception -> 0x01f0, all -> 0x01ed }] */
+    /* JADX WARNING: Removed duplicated region for block: B:80:0x0172 A[Catch:{ Exception -> 0x01f0, all -> 0x01ed }] */
+    /* JADX WARNING: Removed duplicated region for block: B:87:0x0185 A[Catch:{ Exception -> 0x01ff, all -> 0x01fb }] */
+    /* JADX WARNING: Removed duplicated region for block: B:97:0x01e5  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public /* synthetic */ void lambda$replaceMessageIfExists$176(org.telegram.tgnet.TLRPC$Message r17, boolean r18, java.util.ArrayList r19, java.util.ArrayList r20) {
         /*
@@ -31381,320 +31564,327 @@ public class MessagesStorage extends BaseController {
             r2 = 2
             r3 = 1
             r5 = 0
-            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x004e, all -> 0x004a }
-            java.util.Locale r6 = java.util.Locale.US     // Catch:{ Exception -> 0x004e, all -> 0x004a }
+            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x0050, all -> 0x004c }
+            java.util.Locale r6 = java.util.Locale.US     // Catch:{ Exception -> 0x0050, all -> 0x004c }
             java.lang.String r7 = "SELECT uid, read_state, custom_params FROM messages_v2 WHERE mid = %d AND uid = %d LIMIT 1"
-            java.lang.Object[] r8 = new java.lang.Object[r2]     // Catch:{ Exception -> 0x004e, all -> 0x004a }
-            int r10 = r4.id     // Catch:{ Exception -> 0x004e, all -> 0x004a }
-            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)     // Catch:{ Exception -> 0x004e, all -> 0x004a }
-            r8[r5] = r10     // Catch:{ Exception -> 0x004e, all -> 0x004a }
-            long r10 = org.telegram.messenger.MessageObject.getDialogId(r17)     // Catch:{ Exception -> 0x004e, all -> 0x004a }
-            java.lang.Long r10 = java.lang.Long.valueOf(r10)     // Catch:{ Exception -> 0x004e, all -> 0x004a }
-            r8[r3] = r10     // Catch:{ Exception -> 0x004e, all -> 0x004a }
-            java.lang.String r6 = java.lang.String.format(r6, r7, r8)     // Catch:{ Exception -> 0x004e, all -> 0x004a }
-            java.lang.Object[] r7 = new java.lang.Object[r5]     // Catch:{ Exception -> 0x004e, all -> 0x004a }
-            org.telegram.SQLite.SQLiteCursor r6 = r0.queryFinalized(r6, r7)     // Catch:{ Exception -> 0x004e, all -> 0x004a }
-            boolean r0 = r6.next()     // Catch:{ Exception -> 0x0048 }
-            if (r0 != 0) goto L_0x003a
-            r6.dispose()     // Catch:{ Exception -> 0x01fb, all -> 0x01f7 }
+            java.lang.Object[] r8 = new java.lang.Object[r2]     // Catch:{ Exception -> 0x0050, all -> 0x004c }
+            int r10 = r4.id     // Catch:{ Exception -> 0x0050, all -> 0x004c }
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)     // Catch:{ Exception -> 0x0050, all -> 0x004c }
+            r8[r5] = r10     // Catch:{ Exception -> 0x0050, all -> 0x004c }
+            long r10 = org.telegram.messenger.MessageObject.getDialogId(r17)     // Catch:{ Exception -> 0x0050, all -> 0x004c }
+            java.lang.Long r10 = java.lang.Long.valueOf(r10)     // Catch:{ Exception -> 0x0050, all -> 0x004c }
+            r8[r3] = r10     // Catch:{ Exception -> 0x0050, all -> 0x004c }
+            java.lang.String r6 = java.lang.String.format(r6, r7, r8)     // Catch:{ Exception -> 0x0050, all -> 0x004c }
+            java.lang.Object[] r7 = new java.lang.Object[r5]     // Catch:{ Exception -> 0x0050, all -> 0x004c }
+            org.telegram.SQLite.SQLiteCursor r6 = r0.queryFinalized(r6, r7)     // Catch:{ Exception -> 0x0050, all -> 0x004c }
+            boolean r0 = r6.next()     // Catch:{ Exception -> 0x004a }
+            if (r0 != 0) goto L_0x003c
+            r6.dispose()     // Catch:{ Exception -> 0x01ff, all -> 0x01fb }
             org.telegram.SQLite.SQLiteDatabase r0 = r1.database
+            if (r0 == 0) goto L_0x003b
             r0.commitTransaction()
+        L_0x003b:
             return
-        L_0x003a:
-            int r7 = r6.intValue(r3)     // Catch:{ Exception -> 0x0048 }
-            org.telegram.tgnet.NativeByteBuffer r0 = r6.byteBufferValue(r2)     // Catch:{ Exception -> 0x0046 }
-            r6.dispose()     // Catch:{ Exception -> 0x01fb, all -> 0x01f7 }
-            goto L_0x005a
-        L_0x0046:
-            r0 = move-exception
-            goto L_0x0051
+        L_0x003c:
+            int r7 = r6.intValue(r3)     // Catch:{ Exception -> 0x004a }
+            org.telegram.tgnet.NativeByteBuffer r0 = r6.byteBufferValue(r2)     // Catch:{ Exception -> 0x0048 }
+            r6.dispose()     // Catch:{ Exception -> 0x01ff, all -> 0x01fb }
+            goto L_0x005c
         L_0x0048:
             r0 = move-exception
-            goto L_0x0050
+            goto L_0x0053
         L_0x004a:
             r0 = move-exception
-            r6 = 0
-            goto L_0x0200
-        L_0x004e:
+            goto L_0x0052
+        L_0x004c:
             r0 = move-exception
             r6 = 0
+            goto L_0x0204
         L_0x0050:
+            r0 = move-exception
+            r6 = 0
+        L_0x0052:
             r7 = 0
-        L_0x0051:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x01ff }
-            if (r6 == 0) goto L_0x0059
-            r6.dispose()     // Catch:{ Exception -> 0x01fb, all -> 0x01f7 }
-        L_0x0059:
+        L_0x0053:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x0203 }
+            if (r6 == 0) goto L_0x005b
+            r6.dispose()     // Catch:{ Exception -> 0x01ff, all -> 0x01fb }
+        L_0x005b:
             r0 = 0
-        L_0x005a:
-            org.telegram.SQLite.SQLiteDatabase r6 = r1.database     // Catch:{ Exception -> 0x01fb, all -> 0x01f7 }
-            r6.beginTransaction()     // Catch:{ Exception -> 0x01fb, all -> 0x01f7 }
-            org.telegram.SQLite.SQLiteDatabase r6 = r1.database     // Catch:{ Exception -> 0x01fb, all -> 0x01f7 }
+        L_0x005c:
+            org.telegram.SQLite.SQLiteDatabase r6 = r1.database     // Catch:{ Exception -> 0x01ff, all -> 0x01fb }
+            r6.beginTransaction()     // Catch:{ Exception -> 0x01ff, all -> 0x01fb }
+            org.telegram.SQLite.SQLiteDatabase r6 = r1.database     // Catch:{ Exception -> 0x01ff, all -> 0x01fb }
             java.lang.String r8 = "REPLACE INTO messages_v2 VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, ?, ?, ?, ?, ?, ?, 0, ?)"
-            org.telegram.SQLite.SQLitePreparedStatement r6 = r6.executeFast(r8)     // Catch:{ Exception -> 0x01fb, all -> 0x01f7 }
-            org.telegram.SQLite.SQLiteDatabase r8 = r1.database     // Catch:{ Exception -> 0x01f3, all -> 0x01ef }
+            org.telegram.SQLite.SQLitePreparedStatement r6 = r6.executeFast(r8)     // Catch:{ Exception -> 0x01ff, all -> 0x01fb }
+            org.telegram.SQLite.SQLiteDatabase r8 = r1.database     // Catch:{ Exception -> 0x01f7, all -> 0x01f3 }
             java.lang.String r10 = "REPLACE INTO media_v4 VALUES(?, ?, ?, ?, ?)"
-            org.telegram.SQLite.SQLitePreparedStatement r8 = r8.executeFast(r10)     // Catch:{ Exception -> 0x01f3, all -> 0x01ef }
-            long r10 = r4.dialog_id     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
+            org.telegram.SQLite.SQLitePreparedStatement r8 = r8.executeFast(r10)     // Catch:{ Exception -> 0x01f7, all -> 0x01f3 }
+            long r10 = r4.dialog_id     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
             r12 = 0
             int r14 = (r10 > r12 ? 1 : (r10 == r12 ? 0 : -1))
-            if (r14 != 0) goto L_0x007a
-            org.telegram.messenger.MessageObject.getDialogId(r17)     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-        L_0x007a:
-            r16.fixUnsupportedMedia(r17)     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-            r6.requery()     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-            org.telegram.tgnet.NativeByteBuffer r10 = new org.telegram.tgnet.NativeByteBuffer     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-            int r11 = r17.getObjectSize()     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-            r10.<init>((int) r11)     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-            r4.serializeToStream(r10)     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-            int r11 = r4.id     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-            r6.bindInteger(r3, r11)     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-            long r11 = r4.dialog_id     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-            r6.bindLong(r2, r11)     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
+            if (r14 != 0) goto L_0x007c
+            org.telegram.messenger.MessageObject.getDialogId(r17)     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+        L_0x007c:
+            r16.fixUnsupportedMedia(r17)     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+            r6.requery()     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+            org.telegram.tgnet.NativeByteBuffer r10 = new org.telegram.tgnet.NativeByteBuffer     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+            int r11 = r17.getObjectSize()     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+            r10.<init>((int) r11)     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+            r4.serializeToStream(r10)     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+            int r11 = r4.id     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+            r6.bindInteger(r3, r11)     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+            long r11 = r4.dialog_id     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+            r6.bindLong(r2, r11)     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
             r11 = 3
-            r6.bindInteger(r11, r7)     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-            int r7 = r4.send_state     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
+            r6.bindInteger(r11, r7)     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+            int r7 = r4.send_state     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
             r12 = 4
-            r6.bindInteger(r12, r7)     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-            int r7 = r4.date     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
+            r6.bindInteger(r12, r7)     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+            int r7 = r4.date     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
             r13 = 5
-            r6.bindInteger(r13, r7)     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
+            r6.bindInteger(r13, r7)     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
             r7 = 6
-            r6.bindByteBuffer((int) r7, (org.telegram.tgnet.NativeByteBuffer) r10)     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
+            r6.bindByteBuffer((int) r7, (org.telegram.tgnet.NativeByteBuffer) r10)     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
             r7 = 7
-            boolean r14 = org.telegram.messenger.MessageObject.isOut(r17)     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-            if (r14 != 0) goto L_0x00b8
-            boolean r14 = r4.from_scheduled     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-            if (r14 == 0) goto L_0x00b6
-            goto L_0x00b8
-        L_0x00b6:
-            r14 = 0
-            goto L_0x00b9
+            boolean r14 = org.telegram.messenger.MessageObject.isOut(r17)     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+            if (r14 != 0) goto L_0x00ba
+            boolean r14 = r4.from_scheduled     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+            if (r14 == 0) goto L_0x00b8
+            goto L_0x00ba
         L_0x00b8:
+            r14 = 0
+            goto L_0x00bb
+        L_0x00ba:
             r14 = 1
-        L_0x00b9:
-            r6.bindInteger(r7, r14)     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
+        L_0x00bb:
+            r6.bindInteger(r7, r14)     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
             r7 = 8
-            int r14 = r4.ttl     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-            r6.bindInteger(r7, r14)     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-            int r7 = r4.flags     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
+            int r14 = r4.ttl     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+            r6.bindInteger(r7, r14)     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+            int r7 = r4.flags     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
             r7 = r7 & 1024(0x400, float:1.435E-42)
             r14 = 9
-            if (r7 == 0) goto L_0x00d1
-            int r7 = r4.views     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-            r6.bindInteger(r14, r7)     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-            goto L_0x00d8
-        L_0x00d1:
-            int r7 = r16.getMessageMediaType(r17)     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-            r6.bindInteger(r14, r7)     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-        L_0x00d8:
-            int r7 = r4.stickerVerified     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-            if (r7 != 0) goto L_0x00de
+            if (r7 == 0) goto L_0x00d3
+            int r7 = r4.views     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+            r6.bindInteger(r14, r7)     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+            goto L_0x00da
+        L_0x00d3:
+            int r7 = r16.getMessageMediaType(r17)     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+            r6.bindInteger(r14, r7)     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+        L_0x00da:
+            int r7 = r4.stickerVerified     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+            if (r7 != 0) goto L_0x00e0
             r7 = 1
-            goto L_0x00e3
-        L_0x00de:
-            if (r7 != r2) goto L_0x00e2
+            goto L_0x00e5
+        L_0x00e0:
+            if (r7 != r2) goto L_0x00e4
             r7 = 2
-            goto L_0x00e3
-        L_0x00e2:
+            goto L_0x00e5
+        L_0x00e4:
             r7 = 0
-        L_0x00e3:
+        L_0x00e5:
             r14 = 10
-            r6.bindInteger(r14, r7)     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
+            r6.bindInteger(r14, r7)     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
             r7 = 11
-            boolean r14 = r4.mentioned     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-            if (r14 == 0) goto L_0x00f0
+            boolean r14 = r4.mentioned     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+            if (r14 == 0) goto L_0x00f2
             r14 = 1
-            goto L_0x00f1
-        L_0x00f0:
+            goto L_0x00f3
+        L_0x00f2:
             r14 = 0
-        L_0x00f1:
-            r6.bindInteger(r7, r14)     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
+        L_0x00f3:
+            r6.bindInteger(r7, r14)     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
             r7 = 12
-            int r14 = r4.forwards     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-            r6.bindInteger(r7, r14)     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-            org.telegram.tgnet.TLRPC$MessageReplies r7 = r4.replies     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
+            int r14 = r4.forwards     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+            r6.bindInteger(r7, r14)     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+            org.telegram.tgnet.TLRPC$MessageReplies r7 = r4.replies     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
             r14 = 13
-            if (r7 == 0) goto L_0x0115
-            org.telegram.tgnet.NativeByteBuffer r7 = new org.telegram.tgnet.NativeByteBuffer     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-            org.telegram.tgnet.TLRPC$MessageReplies r15 = r4.replies     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-            int r15 = r15.getObjectSize()     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-            r7.<init>((int) r15)     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-            org.telegram.tgnet.TLRPC$MessageReplies r15 = r4.replies     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-            r15.serializeToStream(r7)     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-            r6.bindByteBuffer((int) r14, (org.telegram.tgnet.NativeByteBuffer) r7)     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-            goto L_0x0119
-        L_0x0115:
-            r6.bindNull(r14)     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
+            if (r7 == 0) goto L_0x0117
+            org.telegram.tgnet.NativeByteBuffer r7 = new org.telegram.tgnet.NativeByteBuffer     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+            org.telegram.tgnet.TLRPC$MessageReplies r15 = r4.replies     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+            int r15 = r15.getObjectSize()     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+            r7.<init>((int) r15)     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+            org.telegram.tgnet.TLRPC$MessageReplies r15 = r4.replies     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+            r15.serializeToStream(r7)     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+            r6.bindByteBuffer((int) r14, (org.telegram.tgnet.NativeByteBuffer) r7)     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+            goto L_0x011b
+        L_0x0117:
+            r6.bindNull(r14)     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
             r7 = 0
-        L_0x0119:
-            org.telegram.tgnet.TLRPC$TL_messageReplyHeader r14 = r4.reply_to     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
+        L_0x011b:
+            org.telegram.tgnet.TLRPC$TL_messageReplyHeader r14 = r4.reply_to     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
             r15 = 14
-            if (r14 == 0) goto L_0x012a
-            int r9 = r14.reply_to_top_id     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-            if (r9 == 0) goto L_0x0124
-            goto L_0x0126
-        L_0x0124:
-            int r9 = r14.reply_to_msg_id     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
+            if (r14 == 0) goto L_0x012c
+            int r9 = r14.reply_to_top_id     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+            if (r9 == 0) goto L_0x0126
+            goto L_0x0128
         L_0x0126:
-            r6.bindInteger(r15, r9)     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-            goto L_0x012d
-        L_0x012a:
-            r6.bindInteger(r15, r5)     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-        L_0x012d:
+            int r9 = r14.reply_to_msg_id     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+        L_0x0128:
+            r6.bindInteger(r15, r9)     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+            goto L_0x012f
+        L_0x012c:
+            r6.bindInteger(r15, r5)     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+        L_0x012f:
             r9 = 15
-            long r14 = org.telegram.messenger.MessageObject.getChannelId(r17)     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-            r6.bindLong(r9, r14)     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
+            long r14 = org.telegram.messenger.MessageObject.getChannelId(r17)     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+            r6.bindLong(r9, r14)     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
             r9 = 16
-            if (r0 == 0) goto L_0x013e
-            r6.bindByteBuffer((int) r9, (org.telegram.tgnet.NativeByteBuffer) r0)     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-            goto L_0x0141
-        L_0x013e:
-            r6.bindNull(r9)     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-        L_0x0141:
-            r6.step()     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-            boolean r9 = org.telegram.messenger.MediaDataController.canAddMessageToMedia(r17)     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-            if (r9 == 0) goto L_0x0169
-            r8.requery()     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-            int r9 = r4.id     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-            r8.bindInteger(r3, r9)     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-            long r14 = r4.dialog_id     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-            r8.bindLong(r2, r14)     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-            int r2 = r4.date     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-            r8.bindInteger(r11, r2)     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-            int r2 = org.telegram.messenger.MediaDataController.getMediaType(r17)     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-            r8.bindInteger(r12, r2)     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-            r8.bindByteBuffer((int) r13, (org.telegram.tgnet.NativeByteBuffer) r10)     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-            r8.step()     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-        L_0x0169:
-            if (r7 == 0) goto L_0x016e
-            r7.reuse()     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-        L_0x016e:
-            if (r0 == 0) goto L_0x0173
-            r0.reuse()     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-        L_0x0173:
-            r10.reuse()     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-            r6.dispose()     // Catch:{ Exception -> 0x01ec, all -> 0x01e9 }
-            r8.dispose()     // Catch:{ Exception -> 0x01e7, all -> 0x01e5 }
-            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x01fb, all -> 0x01f7 }
-            r0.commitTransaction()     // Catch:{ Exception -> 0x01fb, all -> 0x01f7 }
-            if (r18 == 0) goto L_0x01df
-            java.util.HashMap r0 = new java.util.HashMap     // Catch:{ Exception -> 0x01fb, all -> 0x01f7 }
-            r0.<init>()     // Catch:{ Exception -> 0x01fb, all -> 0x01f7 }
-            java.util.HashMap r6 = new java.util.HashMap     // Catch:{ Exception -> 0x01fb, all -> 0x01f7 }
-            r6.<init>()     // Catch:{ Exception -> 0x01fb, all -> 0x01f7 }
+            if (r0 == 0) goto L_0x0140
+            r6.bindByteBuffer((int) r9, (org.telegram.tgnet.NativeByteBuffer) r0)     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+            goto L_0x0143
+        L_0x0140:
+            r6.bindNull(r9)     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+        L_0x0143:
+            r6.step()     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+            boolean r9 = org.telegram.messenger.MediaDataController.canAddMessageToMedia(r17)     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+            if (r9 == 0) goto L_0x016b
+            r8.requery()     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+            int r9 = r4.id     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+            r8.bindInteger(r3, r9)     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+            long r14 = r4.dialog_id     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+            r8.bindLong(r2, r14)     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+            int r2 = r4.date     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+            r8.bindInteger(r11, r2)     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+            int r2 = org.telegram.messenger.MediaDataController.getMediaType(r17)     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+            r8.bindInteger(r12, r2)     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+            r8.bindByteBuffer((int) r13, (org.telegram.tgnet.NativeByteBuffer) r10)     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+            r8.step()     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+        L_0x016b:
+            if (r7 == 0) goto L_0x0170
+            r7.reuse()     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+        L_0x0170:
+            if (r0 == 0) goto L_0x0175
+            r0.reuse()     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+        L_0x0175:
+            r10.reuse()     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+            r6.dispose()     // Catch:{ Exception -> 0x01f0, all -> 0x01ed }
+            r8.dispose()     // Catch:{ Exception -> 0x01eb, all -> 0x01e9 }
+            org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x01ff, all -> 0x01fb }
+            r0.commitTransaction()     // Catch:{ Exception -> 0x01ff, all -> 0x01fb }
+            if (r18 == 0) goto L_0x01e1
+            java.util.HashMap r0 = new java.util.HashMap     // Catch:{ Exception -> 0x01ff, all -> 0x01fb }
+            r0.<init>()     // Catch:{ Exception -> 0x01ff, all -> 0x01fb }
+            java.util.HashMap r6 = new java.util.HashMap     // Catch:{ Exception -> 0x01ff, all -> 0x01fb }
+            r6.<init>()     // Catch:{ Exception -> 0x01ff, all -> 0x01fb }
             r2 = 0
-        L_0x018e:
-            int r3 = r19.size()     // Catch:{ Exception -> 0x01fb, all -> 0x01f7 }
-            if (r2 >= r3) goto L_0x01a8
+        L_0x0190:
+            int r3 = r19.size()     // Catch:{ Exception -> 0x01ff, all -> 0x01fb }
+            if (r2 >= r3) goto L_0x01aa
             r3 = r19
-            java.lang.Object r7 = r3.get(r2)     // Catch:{ Exception -> 0x01fb, all -> 0x01f7 }
-            org.telegram.tgnet.TLRPC$User r7 = (org.telegram.tgnet.TLRPC$User) r7     // Catch:{ Exception -> 0x01fb, all -> 0x01f7 }
-            long r8 = r7.id     // Catch:{ Exception -> 0x01fb, all -> 0x01f7 }
-            java.lang.Long r8 = java.lang.Long.valueOf(r8)     // Catch:{ Exception -> 0x01fb, all -> 0x01f7 }
-            r0.put(r8, r7)     // Catch:{ Exception -> 0x01fb, all -> 0x01f7 }
+            java.lang.Object r7 = r3.get(r2)     // Catch:{ Exception -> 0x01ff, all -> 0x01fb }
+            org.telegram.tgnet.TLRPC$User r7 = (org.telegram.tgnet.TLRPC$User) r7     // Catch:{ Exception -> 0x01ff, all -> 0x01fb }
+            long r8 = r7.id     // Catch:{ Exception -> 0x01ff, all -> 0x01fb }
+            java.lang.Long r8 = java.lang.Long.valueOf(r8)     // Catch:{ Exception -> 0x01ff, all -> 0x01fb }
+            r0.put(r8, r7)     // Catch:{ Exception -> 0x01ff, all -> 0x01fb }
             int r2 = r2 + 1
-            goto L_0x018e
-        L_0x01a8:
-            int r2 = r20.size()     // Catch:{ Exception -> 0x01fb, all -> 0x01f7 }
-            if (r5 >= r2) goto L_0x01c2
+            goto L_0x0190
+        L_0x01aa:
+            int r2 = r20.size()     // Catch:{ Exception -> 0x01ff, all -> 0x01fb }
+            if (r5 >= r2) goto L_0x01c4
             r2 = r20
-            java.lang.Object r3 = r2.get(r5)     // Catch:{ Exception -> 0x01fb, all -> 0x01f7 }
-            org.telegram.tgnet.TLRPC$Chat r3 = (org.telegram.tgnet.TLRPC$Chat) r3     // Catch:{ Exception -> 0x01fb, all -> 0x01f7 }
-            long r7 = r3.id     // Catch:{ Exception -> 0x01fb, all -> 0x01f7 }
-            java.lang.Long r7 = java.lang.Long.valueOf(r7)     // Catch:{ Exception -> 0x01fb, all -> 0x01f7 }
-            r6.put(r7, r3)     // Catch:{ Exception -> 0x01fb, all -> 0x01f7 }
+            java.lang.Object r3 = r2.get(r5)     // Catch:{ Exception -> 0x01ff, all -> 0x01fb }
+            org.telegram.tgnet.TLRPC$Chat r3 = (org.telegram.tgnet.TLRPC$Chat) r3     // Catch:{ Exception -> 0x01ff, all -> 0x01fb }
+            long r7 = r3.id     // Catch:{ Exception -> 0x01ff, all -> 0x01fb }
+            java.lang.Long r7 = java.lang.Long.valueOf(r7)     // Catch:{ Exception -> 0x01ff, all -> 0x01fb }
+            r6.put(r7, r3)     // Catch:{ Exception -> 0x01ff, all -> 0x01fb }
             int r5 = r5 + 1
-            goto L_0x01a8
-        L_0x01c2:
-            org.telegram.messenger.MessageObject r9 = new org.telegram.messenger.MessageObject     // Catch:{ Exception -> 0x01fb, all -> 0x01f7 }
-            int r3 = r1.currentAccount     // Catch:{ Exception -> 0x01fb, all -> 0x01f7 }
+            goto L_0x01aa
+        L_0x01c4:
+            org.telegram.messenger.MessageObject r9 = new org.telegram.messenger.MessageObject     // Catch:{ Exception -> 0x01ff, all -> 0x01fb }
+            int r3 = r1.currentAccount     // Catch:{ Exception -> 0x01ff, all -> 0x01fb }
             r7 = 1
             r8 = 1
             r2 = r9
             r4 = r17
             r5 = r0
-            r2.<init>((int) r3, (org.telegram.tgnet.TLRPC$Message) r4, (java.util.AbstractMap<java.lang.Long, org.telegram.tgnet.TLRPC$User>) r5, (java.util.AbstractMap<java.lang.Long, org.telegram.tgnet.TLRPC$Chat>) r6, (boolean) r7, (boolean) r8)     // Catch:{ Exception -> 0x01fb, all -> 0x01f7 }
-            java.util.ArrayList r0 = new java.util.ArrayList     // Catch:{ Exception -> 0x01fb, all -> 0x01f7 }
-            r0.<init>()     // Catch:{ Exception -> 0x01fb, all -> 0x01f7 }
-            r0.add(r9)     // Catch:{ Exception -> 0x01fb, all -> 0x01f7 }
-            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda151 r2 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda151     // Catch:{ Exception -> 0x01fb, all -> 0x01f7 }
-            r2.<init>(r1, r9, r0)     // Catch:{ Exception -> 0x01fb, all -> 0x01f7 }
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r2)     // Catch:{ Exception -> 0x01fb, all -> 0x01f7 }
-        L_0x01df:
+            r2.<init>((int) r3, (org.telegram.tgnet.TLRPC$Message) r4, (java.util.AbstractMap<java.lang.Long, org.telegram.tgnet.TLRPC$User>) r5, (java.util.AbstractMap<java.lang.Long, org.telegram.tgnet.TLRPC$Chat>) r6, (boolean) r7, (boolean) r8)     // Catch:{ Exception -> 0x01ff, all -> 0x01fb }
+            java.util.ArrayList r0 = new java.util.ArrayList     // Catch:{ Exception -> 0x01ff, all -> 0x01fb }
+            r0.<init>()     // Catch:{ Exception -> 0x01ff, all -> 0x01fb }
+            r0.add(r9)     // Catch:{ Exception -> 0x01ff, all -> 0x01fb }
+            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda151 r2 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda151     // Catch:{ Exception -> 0x01ff, all -> 0x01fb }
+            r2.<init>(r1, r9, r0)     // Catch:{ Exception -> 0x01ff, all -> 0x01fb }
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r2)     // Catch:{ Exception -> 0x01ff, all -> 0x01fb }
+        L_0x01e1:
             org.telegram.SQLite.SQLiteDatabase r0 = r1.database
+            if (r0 == 0) goto L_0x021e
             r0.commitTransaction()
-            goto L_0x0218
-        L_0x01e5:
-            r0 = move-exception
-            goto L_0x01f9
-        L_0x01e7:
-            r0 = move-exception
-            goto L_0x01fd
+            goto L_0x021e
         L_0x01e9:
             r0 = move-exception
-            r9 = r6
-            goto L_0x021a
-        L_0x01ec:
+            goto L_0x01fd
+        L_0x01eb:
+            r0 = move-exception
+            goto L_0x0201
+        L_0x01ed:
             r0 = move-exception
             r9 = r6
-            goto L_0x0206
-        L_0x01ef:
+            goto L_0x0220
+        L_0x01f0:
             r0 = move-exception
             r9 = r6
-            r8 = 0
-            goto L_0x021a
+            goto L_0x020a
         L_0x01f3:
             r0 = move-exception
             r9 = r6
             r8 = 0
-            goto L_0x0206
+            goto L_0x0220
         L_0x01f7:
             r0 = move-exception
+            r9 = r6
             r8 = 0
-        L_0x01f9:
-            r9 = 0
-            goto L_0x021a
+            goto L_0x020a
         L_0x01fb:
             r0 = move-exception
             r8 = 0
         L_0x01fd:
             r9 = 0
-            goto L_0x0206
+            goto L_0x0220
         L_0x01ff:
             r0 = move-exception
-        L_0x0200:
-            if (r6 == 0) goto L_0x0205
-            r6.dispose()     // Catch:{ Exception -> 0x01fb, all -> 0x01f7 }
-        L_0x0205:
-            throw r0     // Catch:{ Exception -> 0x01fb, all -> 0x01f7 }
-        L_0x0206:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x0219 }
-            org.telegram.SQLite.SQLiteDatabase r0 = r1.database
-            r0.commitTransaction()
-            if (r9 == 0) goto L_0x0213
-            r9.dispose()
-        L_0x0213:
-            if (r8 == 0) goto L_0x0218
-            r8.dispose()
-        L_0x0218:
-            return
-        L_0x0219:
+            r8 = 0
+        L_0x0201:
+            r9 = 0
+            goto L_0x020a
+        L_0x0203:
             r0 = move-exception
-        L_0x021a:
-            org.telegram.SQLite.SQLiteDatabase r2 = r1.database
-            r2.commitTransaction()
-            if (r9 == 0) goto L_0x0224
+        L_0x0204:
+            if (r6 == 0) goto L_0x0209
+            r6.dispose()     // Catch:{ Exception -> 0x01ff, all -> 0x01fb }
+        L_0x0209:
+            throw r0     // Catch:{ Exception -> 0x01ff, all -> 0x01fb }
+        L_0x020a:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x021f }
+            org.telegram.SQLite.SQLiteDatabase r0 = r1.database
+            if (r0 == 0) goto L_0x0214
+            r0.commitTransaction()
+        L_0x0214:
+            if (r9 == 0) goto L_0x0219
             r9.dispose()
-        L_0x0224:
-            if (r8 == 0) goto L_0x0229
+        L_0x0219:
+            if (r8 == 0) goto L_0x021e
             r8.dispose()
-        L_0x0229:
-            goto L_0x022b
-        L_0x022a:
+        L_0x021e:
+            return
+        L_0x021f:
+            r0 = move-exception
+        L_0x0220:
+            org.telegram.SQLite.SQLiteDatabase r2 = r1.database
+            if (r2 == 0) goto L_0x0227
+            r2.commitTransaction()
+        L_0x0227:
+            if (r9 == 0) goto L_0x022c
+            r9.dispose()
+        L_0x022c:
+            if (r8 == 0) goto L_0x0231
+            r8.dispose()
+        L_0x0231:
+            goto L_0x0233
+        L_0x0232:
             throw r0
-        L_0x022b:
-            goto L_0x022a
+        L_0x0233:
+            goto L_0x0232
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$replaceMessageIfExists$176(org.telegram.tgnet.TLRPC$Message, boolean, java.util.ArrayList, java.util.ArrayList):void");
     }
@@ -31998,79 +32188,81 @@ public class MessagesStorage extends BaseController {
     /* JADX WARNING: type inference failed for: r10v18 */
     /* JADX WARNING: type inference failed for: r10v23 */
     /* access modifiers changed from: private */
-    /* JADX WARNING: Code restructure failed: missing block: B:110:0x029e, code lost:
-        if (r4.id == r2.id) goto L_0x02a0;
-     */
     /* JADX WARNING: Code restructure failed: missing block: B:111:0x02a0, code lost:
-        r4 = true;
+        if (r4.id == r2.id) goto L_0x02a2;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:112:0x02a2, code lost:
+        r4 = true;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:113:0x02a4, code lost:
         r4 = false;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:113:0x02a3, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:114:0x02a5, code lost:
         r2 = r4;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:126:0x02bd, code lost:
-        if (r1.id == r2.id) goto L_0x02a0;
+    /* JADX WARNING: Code restructure failed: missing block: B:127:0x02bf, code lost:
+        if (r1.id == r2.id) goto L_0x02a2;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:291:0x0626, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:292:0x0628, code lost:
         r0 = e;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:292:0x0627, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:293:0x0629, code lost:
         r31 = r12;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:361:0x0755, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:362:0x0757, code lost:
         r0 = th;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:362:0x0757, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:363:0x0759, code lost:
         r0 = move-exception;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:363:0x0758, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:364:0x075a, code lost:
         r1 = r0;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:50:0x0165, code lost:
-        if (r11 == 4) goto L_0x0169;
+    /* JADX WARNING: Code restructure failed: missing block: B:51:0x0167, code lost:
+        if (r11 == 4) goto L_0x016b;
      */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Multi-variable type inference failed */
-    /* JADX WARNING: Removed duplicated region for block: B:235:0x051a A[SYNTHETIC, Splitter:B:235:0x051a] */
-    /* JADX WARNING: Removed duplicated region for block: B:237:0x0520 A[SYNTHETIC, Splitter:B:237:0x0520] */
-    /* JADX WARNING: Removed duplicated region for block: B:241:0x052b A[Catch:{ Exception -> 0x075d, all -> 0x075b }] */
-    /* JADX WARNING: Removed duplicated region for block: B:242:0x052f A[Catch:{ Exception -> 0x075d, all -> 0x075b }] */
-    /* JADX WARNING: Removed duplicated region for block: B:248:0x0540 A[Catch:{ Exception -> 0x075d, all -> 0x075b }] */
-    /* JADX WARNING: Removed duplicated region for block: B:249:0x0542 A[Catch:{ Exception -> 0x075d, all -> 0x075b }] */
-    /* JADX WARNING: Removed duplicated region for block: B:252:0x0553 A[SYNTHETIC, Splitter:B:252:0x0553] */
-    /* JADX WARNING: Removed duplicated region for block: B:254:0x0569  */
-    /* JADX WARNING: Removed duplicated region for block: B:259:0x0573 A[SYNTHETIC, Splitter:B:259:0x0573] */
-    /* JADX WARNING: Removed duplicated region for block: B:265:0x0580  */
-    /* JADX WARNING: Removed duplicated region for block: B:271:0x0597 A[SYNTHETIC, Splitter:B:271:0x0597] */
-    /* JADX WARNING: Removed duplicated region for block: B:273:0x059b A[SYNTHETIC, Splitter:B:273:0x059b] */
-    /* JADX WARNING: Removed duplicated region for block: B:277:0x05a7 A[Catch:{ Exception -> 0x075d, all -> 0x075b }] */
-    /* JADX WARNING: Removed duplicated region for block: B:281:0x05cc A[Catch:{ Exception -> 0x0757, all -> 0x0755 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:298:0x0632 A[Catch:{ Exception -> 0x0757, all -> 0x0755 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:300:0x0637 A[Catch:{ Exception -> 0x0757, all -> 0x0755 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:305:0x0645 A[Catch:{ Exception -> 0x0757, all -> 0x0755 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:311:0x067f A[Catch:{ Exception -> 0x0750, all -> 0x074b }] */
-    /* JADX WARNING: Removed duplicated region for block: B:314:0x068c A[Catch:{ Exception -> 0x0750, all -> 0x074b }] */
-    /* JADX WARNING: Removed duplicated region for block: B:331:0x06d2 A[SYNTHETIC, Splitter:B:331:0x06d2] */
-    /* JADX WARNING: Removed duplicated region for block: B:346:0x071d A[SYNTHETIC, Splitter:B:346:0x071d] */
-    /* JADX WARNING: Removed duplicated region for block: B:361:0x0755 A[ExcHandler: all (th java.lang.Throwable), PHI: r15 
-      PHI: (r15v23 org.telegram.SQLite.SQLitePreparedStatement) = (r15v26 org.telegram.SQLite.SQLitePreparedStatement), (r15v26 org.telegram.SQLite.SQLitePreparedStatement), (r15v26 org.telegram.SQLite.SQLitePreparedStatement), (r15v26 org.telegram.SQLite.SQLitePreparedStatement), (r15v26 org.telegram.SQLite.SQLitePreparedStatement), (r15v27 org.telegram.SQLite.SQLitePreparedStatement) binds: [B:285:0x05d9, B:294:0x062a, B:286:?, B:288:0x05e2, B:289:?, B:279:0x05af] A[DONT_GENERATE, DONT_INLINE], Splitter:B:279:0x05af] */
-    /* JADX WARNING: Removed duplicated region for block: B:456:0x08cc  */
-    /* JADX WARNING: Removed duplicated region for block: B:458:0x08d1  */
-    /* JADX WARNING: Removed duplicated region for block: B:460:0x08d6  */
-    /* JADX WARNING: Removed duplicated region for block: B:462:0x08db  */
-    /* JADX WARNING: Removed duplicated region for block: B:464:0x08e0  */
-    /* JADX WARNING: Removed duplicated region for block: B:466:0x08e5  */
-    /* JADX WARNING: Removed duplicated region for block: B:468:0x08ea  */
-    /* JADX WARNING: Removed duplicated region for block: B:473:0x08f9  */
-    /* JADX WARNING: Removed duplicated region for block: B:475:0x08fe  */
-    /* JADX WARNING: Removed duplicated region for block: B:477:0x0903  */
-    /* JADX WARNING: Removed duplicated region for block: B:479:0x0908  */
-    /* JADX WARNING: Removed duplicated region for block: B:481:0x090d  */
-    /* JADX WARNING: Removed duplicated region for block: B:483:0x0912  */
-    /* JADX WARNING: Removed duplicated region for block: B:485:0x0917  */
-    /* JADX WARNING: Removed duplicated region for block: B:497:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:236:0x051c A[SYNTHETIC, Splitter:B:236:0x051c] */
+    /* JADX WARNING: Removed duplicated region for block: B:238:0x0522 A[SYNTHETIC, Splitter:B:238:0x0522] */
+    /* JADX WARNING: Removed duplicated region for block: B:242:0x052d A[Catch:{ Exception -> 0x075f, all -> 0x075d }] */
+    /* JADX WARNING: Removed duplicated region for block: B:243:0x0531 A[Catch:{ Exception -> 0x075f, all -> 0x075d }] */
+    /* JADX WARNING: Removed duplicated region for block: B:249:0x0542 A[Catch:{ Exception -> 0x075f, all -> 0x075d }] */
+    /* JADX WARNING: Removed duplicated region for block: B:250:0x0544 A[Catch:{ Exception -> 0x075f, all -> 0x075d }] */
+    /* JADX WARNING: Removed duplicated region for block: B:253:0x0555 A[SYNTHETIC, Splitter:B:253:0x0555] */
+    /* JADX WARNING: Removed duplicated region for block: B:255:0x056b  */
+    /* JADX WARNING: Removed duplicated region for block: B:260:0x0575 A[SYNTHETIC, Splitter:B:260:0x0575] */
+    /* JADX WARNING: Removed duplicated region for block: B:266:0x0582  */
+    /* JADX WARNING: Removed duplicated region for block: B:272:0x0599 A[SYNTHETIC, Splitter:B:272:0x0599] */
+    /* JADX WARNING: Removed duplicated region for block: B:274:0x059d A[SYNTHETIC, Splitter:B:274:0x059d] */
+    /* JADX WARNING: Removed duplicated region for block: B:278:0x05a9 A[Catch:{ Exception -> 0x075f, all -> 0x075d }] */
+    /* JADX WARNING: Removed duplicated region for block: B:282:0x05ce A[Catch:{ Exception -> 0x0759, all -> 0x0757 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:299:0x0634 A[Catch:{ Exception -> 0x0759, all -> 0x0757 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:301:0x0639 A[Catch:{ Exception -> 0x0759, all -> 0x0757 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:306:0x0647 A[Catch:{ Exception -> 0x0759, all -> 0x0757 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:312:0x0681 A[Catch:{ Exception -> 0x0752, all -> 0x074d }] */
+    /* JADX WARNING: Removed duplicated region for block: B:315:0x068e A[Catch:{ Exception -> 0x0752, all -> 0x074d }] */
+    /* JADX WARNING: Removed duplicated region for block: B:332:0x06d4 A[SYNTHETIC, Splitter:B:332:0x06d4] */
+    /* JADX WARNING: Removed duplicated region for block: B:347:0x071f A[SYNTHETIC, Splitter:B:347:0x071f] */
+    /* JADX WARNING: Removed duplicated region for block: B:362:0x0757 A[ExcHandler: all (th java.lang.Throwable), PHI: r15 
+      PHI: (r15v23 org.telegram.SQLite.SQLitePreparedStatement) = (r15v26 org.telegram.SQLite.SQLitePreparedStatement), (r15v26 org.telegram.SQLite.SQLitePreparedStatement), (r15v26 org.telegram.SQLite.SQLitePreparedStatement), (r15v26 org.telegram.SQLite.SQLitePreparedStatement), (r15v26 org.telegram.SQLite.SQLitePreparedStatement), (r15v27 org.telegram.SQLite.SQLitePreparedStatement) binds: [B:286:0x05db, B:295:0x062c, B:287:?, B:289:0x05e4, B:290:?, B:280:0x05b1] A[DONT_GENERATE, DONT_INLINE], Splitter:B:280:0x05b1] */
+    /* JADX WARNING: Removed duplicated region for block: B:459:0x08cd  */
+    /* JADX WARNING: Removed duplicated region for block: B:461:0x08d2  */
+    /* JADX WARNING: Removed duplicated region for block: B:463:0x08d7  */
+    /* JADX WARNING: Removed duplicated region for block: B:465:0x08dc  */
+    /* JADX WARNING: Removed duplicated region for block: B:467:0x08e1  */
+    /* JADX WARNING: Removed duplicated region for block: B:469:0x08e6  */
+    /* JADX WARNING: Removed duplicated region for block: B:471:0x08eb  */
+    /* JADX WARNING: Removed duplicated region for block: B:473:0x08f0  */
+    /* JADX WARNING: Removed duplicated region for block: B:478:0x08fc  */
+    /* JADX WARNING: Removed duplicated region for block: B:480:0x0901  */
+    /* JADX WARNING: Removed duplicated region for block: B:482:0x0906  */
+    /* JADX WARNING: Removed duplicated region for block: B:484:0x090b  */
+    /* JADX WARNING: Removed duplicated region for block: B:486:0x0910  */
+    /* JADX WARNING: Removed duplicated region for block: B:488:0x0915  */
+    /* JADX WARNING: Removed duplicated region for block: B:490:0x091a  */
+    /* JADX WARNING: Removed duplicated region for block: B:492:0x091f  */
+    /* JADX WARNING: Removed duplicated region for block: B:506:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public /* synthetic */ void lambda$putMessages$178(boolean r40, long r41, org.telegram.tgnet.TLRPC$messages_Messages r43, int r44, int r45, boolean r46) {
         /*
@@ -32146,7 +32338,7 @@ public class MessagesStorage extends BaseController {
             r3 = 0
             r20 = 0
             r21 = 0
-            goto L_0x0863
+            goto L_0x0865
         L_0x00a2:
             r0 = move-exception
             r3 = r1
@@ -32158,7 +32350,7 @@ public class MessagesStorage extends BaseController {
             r24 = 0
         L_0x00ae:
             r1 = r0
-            goto L_0x08f2
+            goto L_0x08f8
         L_0x00b1:
             r0 = move-exception
             r3 = r1
@@ -32170,7 +32362,7 @@ public class MessagesStorage extends BaseController {
             r32 = 0
         L_0x00be:
             r1 = r0
-            goto L_0x08c2
+            goto L_0x08c6
         L_0x00c1:
             r0 = move-exception
             r1 = r0
@@ -32181,7 +32373,7 @@ public class MessagesStorage extends BaseController {
             r20 = 0
             r21 = 0
             r24 = 0
-            goto L_0x08f2
+            goto L_0x08f8
         L_0x00d0:
             r0 = move-exception
             r1 = r0
@@ -32193,25 +32385,27 @@ public class MessagesStorage extends BaseController {
             r24 = 0
         L_0x00dc:
             r32 = 0
-            goto L_0x08c2
+            goto L_0x08c6
         L_0x00e0:
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> r1 = r10.messages     // Catch:{ Exception -> 0x08b4, all -> 0x08a6 }
-            boolean r1 = r1.isEmpty()     // Catch:{ Exception -> 0x08b4, all -> 0x08a6 }
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> r1 = r10.messages     // Catch:{ Exception -> 0x08b8, all -> 0x08aa }
+            boolean r1 = r1.isEmpty()     // Catch:{ Exception -> 0x08b8, all -> 0x08aa }
             r13 = -1
-            if (r1 == 0) goto L_0x00f9
+            if (r1 == 0) goto L_0x00fb
             if (r11 != 0) goto L_0x00f3
             java.lang.String r1 = "messages_holes"
             r9.doneHolesInTable(r1, r7, r12)     // Catch:{ Exception -> 0x00d0, all -> 0x00c1 }
             r9.doneHolesInMedia(r7, r12, r13)     // Catch:{ Exception -> 0x00d0, all -> 0x00c1 }
         L_0x00f3:
             org.telegram.SQLite.SQLiteDatabase r1 = r9.database
+            if (r1 == 0) goto L_0x00fa
             r1.commitTransaction()
+        L_0x00fa:
             return
-        L_0x00f9:
-            org.telegram.SQLite.SQLiteDatabase r1 = r9.database     // Catch:{ Exception -> 0x08b4, all -> 0x08a6 }
-            r1.beginTransaction()     // Catch:{ Exception -> 0x08b4, all -> 0x08a6 }
+        L_0x00fb:
+            org.telegram.SQLite.SQLiteDatabase r1 = r9.database     // Catch:{ Exception -> 0x08b8, all -> 0x08aa }
+            r1.beginTransaction()     // Catch:{ Exception -> 0x08b8, all -> 0x08aa }
             r3 = 2147483647(0x7fffffff, float:NaN)
-            if (r11 != 0) goto L_0x0136
+            if (r11 != 0) goto L_0x0138
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> r1 = r10.messages     // Catch:{ Exception -> 0x00d0, all -> 0x00c1 }
             int r17 = r1.size()     // Catch:{ Exception -> 0x00d0, all -> 0x00c1 }
             int r2 = r17 + -1
@@ -32236,12 +32430,12 @@ public class MessagesStorage extends BaseController {
             r4 = r18
             r5 = r45
             r1.closeHolesInMedia(r2, r4, r5, r6)     // Catch:{ Exception -> 0x00d0, all -> 0x00c1 }
-            goto L_0x01a3
-        L_0x0136:
+            goto L_0x01a5
+        L_0x0138:
             r13 = 0
             r14 = 1
             r15 = 3
-            if (r11 != r14) goto L_0x015f
+            if (r11 != r14) goto L_0x0161
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> r1 = r10.messages     // Catch:{ Exception -> 0x00d0, all -> 0x00c1 }
             java.lang.Object r1 = r1.get(r13)     // Catch:{ Exception -> 0x00d0, all -> 0x00c1 }
             org.telegram.tgnet.TLRPC$Message r1 = (org.telegram.tgnet.TLRPC$Message) r1     // Catch:{ Exception -> 0x00d0, all -> 0x00c1 }
@@ -32258,62 +32452,62 @@ public class MessagesStorage extends BaseController {
             r4 = r45
             r5 = r18
             r1.closeHolesInMedia(r2, r4, r5, r6)     // Catch:{ Exception -> 0x00d0, all -> 0x00c1 }
-            goto L_0x01a3
-        L_0x015f:
-            if (r11 == r15) goto L_0x0168
+            goto L_0x01a5
+        L_0x0161:
+            if (r11 == r15) goto L_0x016a
             r1 = 2
-            if (r11 == r1) goto L_0x0168
+            if (r11 == r1) goto L_0x016a
             r1 = 4
-            if (r11 != r1) goto L_0x01a3
-            goto L_0x0169
-        L_0x0168:
+            if (r11 != r1) goto L_0x01a5
+            goto L_0x016b
+        L_0x016a:
             r1 = 4
-        L_0x0169:
-            if (r12 != 0) goto L_0x0171
-            if (r11 == r1) goto L_0x0171
+        L_0x016b:
+            if (r12 != 0) goto L_0x0173
+            if (r11 == r1) goto L_0x0173
             r12 = 2147483647(0x7fffffff, float:NaN)
-            goto L_0x017c
-        L_0x0171:
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> r1 = r10.messages     // Catch:{ Exception -> 0x08b4, all -> 0x08a6 }
-            java.lang.Object r1 = r1.get(r13)     // Catch:{ Exception -> 0x08b4, all -> 0x08a6 }
-            org.telegram.tgnet.TLRPC$Message r1 = (org.telegram.tgnet.TLRPC$Message) r1     // Catch:{ Exception -> 0x08b4, all -> 0x08a6 }
-            int r1 = r1.id     // Catch:{ Exception -> 0x08b4, all -> 0x08a6 }
+            goto L_0x017e
+        L_0x0173:
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> r1 = r10.messages     // Catch:{ Exception -> 0x08b8, all -> 0x08aa }
+            java.lang.Object r1 = r1.get(r13)     // Catch:{ Exception -> 0x08b8, all -> 0x08aa }
+            org.telegram.tgnet.TLRPC$Message r1 = (org.telegram.tgnet.TLRPC$Message) r1     // Catch:{ Exception -> 0x08b8, all -> 0x08aa }
+            int r1 = r1.id     // Catch:{ Exception -> 0x08b8, all -> 0x08aa }
             r12 = r1
-        L_0x017c:
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> r1 = r10.messages     // Catch:{ Exception -> 0x08b4, all -> 0x08a6 }
-            int r2 = r1.size()     // Catch:{ Exception -> 0x08b4, all -> 0x08a6 }
+        L_0x017e:
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> r1 = r10.messages     // Catch:{ Exception -> 0x08b8, all -> 0x08aa }
+            int r2 = r1.size()     // Catch:{ Exception -> 0x08b8, all -> 0x08aa }
             int r2 = r2 - r14
-            java.lang.Object r1 = r1.get(r2)     // Catch:{ Exception -> 0x08b4, all -> 0x08a6 }
-            org.telegram.tgnet.TLRPC$Message r1 = (org.telegram.tgnet.TLRPC$Message) r1     // Catch:{ Exception -> 0x08b4, all -> 0x08a6 }
-            int r6 = r1.id     // Catch:{ Exception -> 0x08b4, all -> 0x08a6 }
+            java.lang.Object r1 = r1.get(r2)     // Catch:{ Exception -> 0x08b8, all -> 0x08aa }
+            org.telegram.tgnet.TLRPC$Message r1 = (org.telegram.tgnet.TLRPC$Message) r1     // Catch:{ Exception -> 0x08b8, all -> 0x08aa }
+            int r6 = r1.id     // Catch:{ Exception -> 0x08b8, all -> 0x08aa }
             java.lang.String r2 = "messages_holes"
             r1 = r39
             r3 = r41
             r5 = r6
             r18 = r6
             r6 = r12
-            r1.closeHolesInTable(r2, r3, r5, r6)     // Catch:{ Exception -> 0x08b4, all -> 0x08a6 }
+            r1.closeHolesInTable(r2, r3, r5, r6)     // Catch:{ Exception -> 0x08b8, all -> 0x08aa }
             r6 = -1
             r1 = r39
             r2 = r41
             r4 = r18
             r5 = r12
-            r1.closeHolesInMedia(r2, r4, r5, r6)     // Catch:{ Exception -> 0x08b4, all -> 0x08a6 }
-        L_0x01a3:
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> r1 = r10.messages     // Catch:{ Exception -> 0x08b4, all -> 0x08a6 }
-            int r12 = r1.size()     // Catch:{ Exception -> 0x08b4, all -> 0x08a6 }
-            java.util.ArrayList r6 = new java.util.ArrayList     // Catch:{ Exception -> 0x08b4, all -> 0x08a6 }
-            r6.<init>()     // Catch:{ Exception -> 0x08b4, all -> 0x08a6 }
-            java.util.ArrayList r5 = new java.util.ArrayList     // Catch:{ Exception -> 0x08b4, all -> 0x08a6 }
-            r5.<init>()     // Catch:{ Exception -> 0x08b4, all -> 0x08a6 }
-            java.util.ArrayList r4 = new java.util.ArrayList     // Catch:{ Exception -> 0x08b4, all -> 0x08a6 }
-            r4.<init>()     // Catch:{ Exception -> 0x08b4, all -> 0x08a6 }
-            org.telegram.SQLite.SQLiteDatabase r1 = r9.database     // Catch:{ Exception -> 0x08b4, all -> 0x08a6 }
+            r1.closeHolesInMedia(r2, r4, r5, r6)     // Catch:{ Exception -> 0x08b8, all -> 0x08aa }
+        L_0x01a5:
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> r1 = r10.messages     // Catch:{ Exception -> 0x08b8, all -> 0x08aa }
+            int r12 = r1.size()     // Catch:{ Exception -> 0x08b8, all -> 0x08aa }
+            java.util.ArrayList r6 = new java.util.ArrayList     // Catch:{ Exception -> 0x08b8, all -> 0x08aa }
+            r6.<init>()     // Catch:{ Exception -> 0x08b8, all -> 0x08aa }
+            java.util.ArrayList r5 = new java.util.ArrayList     // Catch:{ Exception -> 0x08b8, all -> 0x08aa }
+            r5.<init>()     // Catch:{ Exception -> 0x08b8, all -> 0x08aa }
+            java.util.ArrayList r4 = new java.util.ArrayList     // Catch:{ Exception -> 0x08b8, all -> 0x08aa }
+            r4.<init>()     // Catch:{ Exception -> 0x08b8, all -> 0x08aa }
+            org.telegram.SQLite.SQLiteDatabase r1 = r9.database     // Catch:{ Exception -> 0x08b8, all -> 0x08aa }
             java.lang.String r2 = "REPLACE INTO messages_v2  VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, ?, ?, ?, ?, ?, ?, 0, ?)"
-            org.telegram.SQLite.SQLitePreparedStatement r3 = r1.executeFast(r2)     // Catch:{ Exception -> 0x08b4, all -> 0x08a6 }
-            org.telegram.SQLite.SQLiteDatabase r1 = r9.database     // Catch:{ Exception -> 0x089f, all -> 0x0899 }
+            org.telegram.SQLite.SQLitePreparedStatement r3 = r1.executeFast(r2)     // Catch:{ Exception -> 0x08b8, all -> 0x08aa }
+            org.telegram.SQLite.SQLiteDatabase r1 = r9.database     // Catch:{ Exception -> 0x08a3, all -> 0x089d }
             java.lang.String r2 = "REPLACE INTO media_v4 VALUES(?, ?, ?, ?, ?)"
-            org.telegram.SQLite.SQLitePreparedStatement r2 = r1.executeFast(r2)     // Catch:{ Exception -> 0x089f, all -> 0x0899 }
+            org.telegram.SQLite.SQLitePreparedStatement r2 = r1.executeFast(r2)     // Catch:{ Exception -> 0x08a3, all -> 0x089d }
             r14 = 0
             r26 = r14
             r1 = 0
@@ -32323,133 +32517,133 @@ public class MessagesStorage extends BaseController {
             r23 = 0
             r24 = 0
             r25 = 2147483647(0x7fffffff, float:NaN)
-        L_0x01db:
-            if (r1 >= r12) goto L_0x0783
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> r13 = r10.messages     // Catch:{ Exception -> 0x0778, all -> 0x076f }
-            java.lang.Object r13 = r13.get(r1)     // Catch:{ Exception -> 0x0778, all -> 0x076f }
-            org.telegram.tgnet.TLRPC$Message r13 = (org.telegram.tgnet.TLRPC$Message) r13     // Catch:{ Exception -> 0x0778, all -> 0x076f }
+        L_0x01dd:
+            if (r1 >= r12) goto L_0x0785
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> r13 = r10.messages     // Catch:{ Exception -> 0x077a, all -> 0x0771 }
+            java.lang.Object r13 = r13.get(r1)     // Catch:{ Exception -> 0x077a, all -> 0x0771 }
+            org.telegram.tgnet.TLRPC$Message r13 = (org.telegram.tgnet.TLRPC$Message) r13     // Catch:{ Exception -> 0x077a, all -> 0x0771 }
             int r29 = (r26 > r14 ? 1 : (r26 == r14 ? 0 : -1))
-            if (r29 != 0) goto L_0x01fb
-            org.telegram.tgnet.TLRPC$Peer r14 = r13.peer_id     // Catch:{ Exception -> 0x01f5, all -> 0x01f0 }
-            long r14 = r14.channel_id     // Catch:{ Exception -> 0x01f5, all -> 0x01f0 }
+            if (r29 != 0) goto L_0x01fd
+            org.telegram.tgnet.TLRPC$Peer r14 = r13.peer_id     // Catch:{ Exception -> 0x01f7, all -> 0x01f2 }
+            long r14 = r14.channel_id     // Catch:{ Exception -> 0x01f7, all -> 0x01f2 }
             r26 = r14
-            goto L_0x01fb
-        L_0x01f0:
+            goto L_0x01fd
+        L_0x01f2:
             r0 = move-exception
             r1 = r0
             r15 = r2
-            goto L_0x0773
-        L_0x01f5:
+            goto L_0x0775
+        L_0x01f7:
             r0 = move-exception
             r1 = r0
             r32 = r2
-            goto L_0x077e
-        L_0x01fb:
+            goto L_0x0780
+        L_0x01fd:
             r14 = -2
-            if (r11 != r14) goto L_0x03a4
-            org.telegram.SQLite.SQLiteDatabase r14 = r9.database     // Catch:{ Exception -> 0x039c, all -> 0x0392 }
-            java.util.Locale r15 = java.util.Locale.US     // Catch:{ Exception -> 0x039c, all -> 0x0392 }
+            if (r11 != r14) goto L_0x03a6
+            org.telegram.SQLite.SQLiteDatabase r14 = r9.database     // Catch:{ Exception -> 0x039e, all -> 0x0394 }
+            java.util.Locale r15 = java.util.Locale.US     // Catch:{ Exception -> 0x039e, all -> 0x0394 }
             r45 = r1
             java.lang.String r1 = "SELECT mid, data, ttl, mention, read_state, send_state, custom_params FROM messages_v2 WHERE mid = %d AND uid = %d"
             r30 = r2
             r31 = r3
             r2 = 2
-            java.lang.Object[] r3 = new java.lang.Object[r2]     // Catch:{ Exception -> 0x038d, all -> 0x0388 }
-            int r2 = r13.id     // Catch:{ Exception -> 0x038d, all -> 0x0388 }
-            java.lang.Integer r2 = java.lang.Integer.valueOf(r2)     // Catch:{ Exception -> 0x038d, all -> 0x0388 }
+            java.lang.Object[] r3 = new java.lang.Object[r2]     // Catch:{ Exception -> 0x038f, all -> 0x038a }
+            int r2 = r13.id     // Catch:{ Exception -> 0x038f, all -> 0x038a }
+            java.lang.Integer r2 = java.lang.Integer.valueOf(r2)     // Catch:{ Exception -> 0x038f, all -> 0x038a }
             r32 = r4
             r4 = 0
-            r3[r4] = r2     // Catch:{ Exception -> 0x038d, all -> 0x0388 }
-            long r33 = org.telegram.messenger.MessageObject.getDialogId(r13)     // Catch:{ Exception -> 0x038d, all -> 0x0388 }
-            java.lang.Long r2 = java.lang.Long.valueOf(r33)     // Catch:{ Exception -> 0x038d, all -> 0x0388 }
+            r3[r4] = r2     // Catch:{ Exception -> 0x038f, all -> 0x038a }
+            long r33 = org.telegram.messenger.MessageObject.getDialogId(r13)     // Catch:{ Exception -> 0x038f, all -> 0x038a }
+            java.lang.Long r2 = java.lang.Long.valueOf(r33)     // Catch:{ Exception -> 0x038f, all -> 0x038a }
             r18 = 1
-            r3[r18] = r2     // Catch:{ Exception -> 0x038d, all -> 0x0388 }
-            java.lang.String r1 = java.lang.String.format(r15, r1, r3)     // Catch:{ Exception -> 0x038d, all -> 0x0388 }
-            java.lang.Object[] r2 = new java.lang.Object[r4]     // Catch:{ Exception -> 0x038d, all -> 0x0388 }
-            org.telegram.SQLite.SQLiteCursor r14 = r14.queryFinalized(r1, r2)     // Catch:{ Exception -> 0x038d, all -> 0x0388 }
-            boolean r15 = r14.next()     // Catch:{ Exception -> 0x0381, all -> 0x037a }
-            if (r15 == 0) goto L_0x035d
+            r3[r18] = r2     // Catch:{ Exception -> 0x038f, all -> 0x038a }
+            java.lang.String r1 = java.lang.String.format(r15, r1, r3)     // Catch:{ Exception -> 0x038f, all -> 0x038a }
+            java.lang.Object[] r2 = new java.lang.Object[r4]     // Catch:{ Exception -> 0x038f, all -> 0x038a }
+            org.telegram.SQLite.SQLiteCursor r14 = r14.queryFinalized(r1, r2)     // Catch:{ Exception -> 0x038f, all -> 0x038a }
+            boolean r15 = r14.next()     // Catch:{ Exception -> 0x0383, all -> 0x037c }
+            if (r15 == 0) goto L_0x035f
             r1 = 1
-            org.telegram.tgnet.NativeByteBuffer r2 = r14.byteBufferValue(r1)     // Catch:{ Exception -> 0x0381, all -> 0x037a }
-            if (r2 == 0) goto L_0x02fb
+            org.telegram.tgnet.NativeByteBuffer r2 = r14.byteBufferValue(r1)     // Catch:{ Exception -> 0x0383, all -> 0x037c }
+            if (r2 == 0) goto L_0x02fd
             r1 = 0
-            int r3 = r2.readInt32(r1)     // Catch:{ Exception -> 0x0381, all -> 0x037a }
-            org.telegram.tgnet.TLRPC$Message r3 = org.telegram.tgnet.TLRPC$Message.TLdeserialize(r2, r3, r1)     // Catch:{ Exception -> 0x0381, all -> 0x037a }
-            org.telegram.messenger.UserConfig r1 = r39.getUserConfig()     // Catch:{ Exception -> 0x0381, all -> 0x037a }
+            int r3 = r2.readInt32(r1)     // Catch:{ Exception -> 0x0383, all -> 0x037c }
+            org.telegram.tgnet.TLRPC$Message r3 = org.telegram.tgnet.TLRPC$Message.TLdeserialize(r2, r3, r1)     // Catch:{ Exception -> 0x0383, all -> 0x037c }
+            org.telegram.messenger.UserConfig r1 = r39.getUserConfig()     // Catch:{ Exception -> 0x0383, all -> 0x037c }
             r33 = r5
-            long r4 = r1.clientUserId     // Catch:{ Exception -> 0x0381, all -> 0x037a }
-            r3.readAttachPath(r2, r4)     // Catch:{ Exception -> 0x0381, all -> 0x037a }
-            r2.reuse()     // Catch:{ Exception -> 0x0381, all -> 0x037a }
+            long r4 = r1.clientUserId     // Catch:{ Exception -> 0x0383, all -> 0x037c }
+            r3.readAttachPath(r2, r4)     // Catch:{ Exception -> 0x0383, all -> 0x037c }
+            r2.reuse()     // Catch:{ Exception -> 0x0383, all -> 0x037c }
             r1 = 5
-            int r2 = r14.intValue(r1)     // Catch:{ Exception -> 0x0381, all -> 0x037a }
+            int r2 = r14.intValue(r1)     // Catch:{ Exception -> 0x0383, all -> 0x037c }
             r1 = 3
-            if (r2 == r1) goto L_0x0284
-            java.lang.String r1 = org.telegram.messenger.MessageObject.getFileName(r3)     // Catch:{ Exception -> 0x027d, all -> 0x0274 }
-            java.lang.String r2 = org.telegram.messenger.MessageObject.getFileName(r13)     // Catch:{ Exception -> 0x027d, all -> 0x0274 }
-            boolean r1 = r1.equals(r2)     // Catch:{ Exception -> 0x027d, all -> 0x0274 }
-            if (r1 == 0) goto L_0x026c
-            java.lang.String r1 = r3.attachPath     // Catch:{ Exception -> 0x027d, all -> 0x0274 }
-            r13.attachPath = r1     // Catch:{ Exception -> 0x027d, all -> 0x0274 }
-        L_0x026c:
+            if (r2 == r1) goto L_0x0286
+            java.lang.String r1 = org.telegram.messenger.MessageObject.getFileName(r3)     // Catch:{ Exception -> 0x027f, all -> 0x0276 }
+            java.lang.String r2 = org.telegram.messenger.MessageObject.getFileName(r13)     // Catch:{ Exception -> 0x027f, all -> 0x0276 }
+            boolean r1 = r1.equals(r2)     // Catch:{ Exception -> 0x027f, all -> 0x0276 }
+            if (r1 == 0) goto L_0x026e
+            java.lang.String r1 = r3.attachPath     // Catch:{ Exception -> 0x027f, all -> 0x0276 }
+            r13.attachPath = r1     // Catch:{ Exception -> 0x027f, all -> 0x0276 }
+        L_0x026e:
             r1 = 2
-            int r2 = r14.intValue(r1)     // Catch:{ Exception -> 0x027d, all -> 0x0274 }
-            r13.ttl = r2     // Catch:{ Exception -> 0x027d, all -> 0x0274 }
-            goto L_0x0284
-        L_0x0274:
+            int r2 = r14.intValue(r1)     // Catch:{ Exception -> 0x027f, all -> 0x0276 }
+            r13.ttl = r2     // Catch:{ Exception -> 0x027f, all -> 0x0276 }
+            goto L_0x0286
+        L_0x0276:
             r0 = move-exception
             r1 = r0
             r10 = r14
             r15 = r30
             r3 = r31
-            goto L_0x0774
-        L_0x027d:
+            goto L_0x0776
+        L_0x027f:
             r0 = move-exception
             r1 = r0
             r10 = r14
             r32 = r30
-            goto L_0x04af
-        L_0x0284:
-            org.telegram.tgnet.TLRPC$MessageMedia r1 = r3.media     // Catch:{ Exception -> 0x0381, all -> 0x037a }
-            boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaPhoto     // Catch:{ Exception -> 0x0381, all -> 0x037a }
-            if (r2 == 0) goto L_0x02a5
-            org.telegram.tgnet.TLRPC$MessageMedia r2 = r13.media     // Catch:{ Exception -> 0x027d, all -> 0x0274 }
-            boolean r4 = r2 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaPhoto     // Catch:{ Exception -> 0x027d, all -> 0x0274 }
-            if (r4 == 0) goto L_0x02a5
-            org.telegram.tgnet.TLRPC$Photo r4 = r1.photo     // Catch:{ Exception -> 0x027d, all -> 0x0274 }
-            if (r4 == 0) goto L_0x02a5
-            org.telegram.tgnet.TLRPC$Photo r2 = r2.photo     // Catch:{ Exception -> 0x027d, all -> 0x0274 }
-            if (r2 == 0) goto L_0x02a5
-            long r4 = r4.id     // Catch:{ Exception -> 0x027d, all -> 0x0274 }
-            long r1 = r2.id     // Catch:{ Exception -> 0x027d, all -> 0x0274 }
+            goto L_0x04b1
+        L_0x0286:
+            org.telegram.tgnet.TLRPC$MessageMedia r1 = r3.media     // Catch:{ Exception -> 0x0383, all -> 0x037c }
+            boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaPhoto     // Catch:{ Exception -> 0x0383, all -> 0x037c }
+            if (r2 == 0) goto L_0x02a7
+            org.telegram.tgnet.TLRPC$MessageMedia r2 = r13.media     // Catch:{ Exception -> 0x027f, all -> 0x0276 }
+            boolean r4 = r2 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaPhoto     // Catch:{ Exception -> 0x027f, all -> 0x0276 }
+            if (r4 == 0) goto L_0x02a7
+            org.telegram.tgnet.TLRPC$Photo r4 = r1.photo     // Catch:{ Exception -> 0x027f, all -> 0x0276 }
+            if (r4 == 0) goto L_0x02a7
+            org.telegram.tgnet.TLRPC$Photo r2 = r2.photo     // Catch:{ Exception -> 0x027f, all -> 0x0276 }
+            if (r2 == 0) goto L_0x02a7
+            long r4 = r4.id     // Catch:{ Exception -> 0x027f, all -> 0x0276 }
+            long r1 = r2.id     // Catch:{ Exception -> 0x027f, all -> 0x0276 }
             int r34 = (r4 > r1 ? 1 : (r4 == r1 ? 0 : -1))
-            if (r34 != 0) goto L_0x02a2
-        L_0x02a0:
-            r4 = 1
-            goto L_0x02a3
+            if (r34 != 0) goto L_0x02a4
         L_0x02a2:
+            r4 = 1
+            goto L_0x02a5
+        L_0x02a4:
             r4 = 0
-        L_0x02a3:
-            r2 = r4
-            goto L_0x02c1
         L_0x02a5:
-            boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaDocument     // Catch:{ Exception -> 0x0381, all -> 0x037a }
-            if (r2 == 0) goto L_0x02c0
-            org.telegram.tgnet.TLRPC$MessageMedia r2 = r13.media     // Catch:{ Exception -> 0x027d, all -> 0x0274 }
-            boolean r4 = r2 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaDocument     // Catch:{ Exception -> 0x027d, all -> 0x0274 }
-            if (r4 == 0) goto L_0x02c0
-            org.telegram.tgnet.TLRPC$Document r1 = r1.document     // Catch:{ Exception -> 0x027d, all -> 0x0274 }
-            if (r1 == 0) goto L_0x02c0
-            org.telegram.tgnet.TLRPC$Document r2 = r2.document     // Catch:{ Exception -> 0x027d, all -> 0x0274 }
-            if (r2 == 0) goto L_0x02c0
-            long r4 = r1.id     // Catch:{ Exception -> 0x027d, all -> 0x0274 }
-            long r1 = r2.id     // Catch:{ Exception -> 0x027d, all -> 0x0274 }
+            r2 = r4
+            goto L_0x02c3
+        L_0x02a7:
+            boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaDocument     // Catch:{ Exception -> 0x0383, all -> 0x037c }
+            if (r2 == 0) goto L_0x02c2
+            org.telegram.tgnet.TLRPC$MessageMedia r2 = r13.media     // Catch:{ Exception -> 0x027f, all -> 0x0276 }
+            boolean r4 = r2 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaDocument     // Catch:{ Exception -> 0x027f, all -> 0x0276 }
+            if (r4 == 0) goto L_0x02c2
+            org.telegram.tgnet.TLRPC$Document r1 = r1.document     // Catch:{ Exception -> 0x027f, all -> 0x0276 }
+            if (r1 == 0) goto L_0x02c2
+            org.telegram.tgnet.TLRPC$Document r2 = r2.document     // Catch:{ Exception -> 0x027f, all -> 0x0276 }
+            if (r2 == 0) goto L_0x02c2
+            long r4 = r1.id     // Catch:{ Exception -> 0x027f, all -> 0x0276 }
+            long r1 = r2.id     // Catch:{ Exception -> 0x027f, all -> 0x0276 }
             int r34 = (r4 > r1 ? 1 : (r4 == r1 ? 0 : -1))
-            if (r34 != 0) goto L_0x02a2
-            goto L_0x02a0
-        L_0x02c0:
+            if (r34 != 0) goto L_0x02a4
+            goto L_0x02a2
+        L_0x02c2:
             r2 = 0
-        L_0x02c1:
-            if (r2 != 0) goto L_0x02e2
+        L_0x02c3:
+            if (r2 != 0) goto L_0x02e4
             r34 = 0
             r35 = r45
             r1 = r39
@@ -32465,134 +32659,134 @@ public class MessagesStorage extends BaseController {
             r33 = r12
             r12 = r6
             r6 = r34
-            r1.addFilesToDelete(r2, r3, r4, r5, r6)     // Catch:{ Exception -> 0x0378, all -> 0x0376 }
-            goto L_0x02ed
-        L_0x02e2:
+            r1.addFilesToDelete(r2, r3, r4, r5, r6)     // Catch:{ Exception -> 0x037a, all -> 0x0378 }
+            goto L_0x02ef
+        L_0x02e4:
             r35 = r45
             r45 = r32
             r32 = r30
             r30 = r33
             r33 = r12
             r12 = r6
-        L_0x02ed:
+        L_0x02ef:
             r1 = 6
-            org.telegram.tgnet.NativeByteBuffer r2 = r14.byteBufferValue(r1)     // Catch:{ Exception -> 0x0378, all -> 0x0376 }
-            org.telegram.messenger.MessageCustomParamsHelper.readLocalParams(r13, r2)     // Catch:{ Exception -> 0x0378, all -> 0x0376 }
-            if (r2 == 0) goto L_0x0306
-            r2.reuse()     // Catch:{ Exception -> 0x0378, all -> 0x0376 }
-            goto L_0x0306
-        L_0x02fb:
+            org.telegram.tgnet.NativeByteBuffer r2 = r14.byteBufferValue(r1)     // Catch:{ Exception -> 0x037a, all -> 0x0378 }
+            org.telegram.messenger.MessageCustomParamsHelper.readLocalParams(r13, r2)     // Catch:{ Exception -> 0x037a, all -> 0x0378 }
+            if (r2 == 0) goto L_0x0308
+            r2.reuse()     // Catch:{ Exception -> 0x037a, all -> 0x0378 }
+            goto L_0x0308
+        L_0x02fd:
             r35 = r45
             r33 = r12
             r45 = r32
             r12 = r6
             r32 = r30
             r30 = r5
-        L_0x0306:
+        L_0x0308:
             r1 = 3
-            int r2 = r14.intValue(r1)     // Catch:{ Exception -> 0x0378, all -> 0x0376 }
+            int r2 = r14.intValue(r1)     // Catch:{ Exception -> 0x037a, all -> 0x0378 }
             r1 = 4
-            if (r2 == 0) goto L_0x0310
+            if (r2 == 0) goto L_0x0312
             r4 = 1
-            goto L_0x0311
-        L_0x0310:
+            goto L_0x0313
+        L_0x0312:
             r4 = 0
-        L_0x0311:
-            int r2 = r14.intValue(r1)     // Catch:{ Exception -> 0x0378, all -> 0x0376 }
-            boolean r1 = r13.mentioned     // Catch:{ Exception -> 0x0378, all -> 0x0376 }
-            if (r4 == r1) goto L_0x0368
+        L_0x0313:
+            int r2 = r14.intValue(r1)     // Catch:{ Exception -> 0x037a, all -> 0x0378 }
+            boolean r1 = r13.mentioned     // Catch:{ Exception -> 0x037a, all -> 0x0378 }
+            if (r4 == r1) goto L_0x036a
             r1 = r25
             r3 = 2147483647(0x7fffffff, float:NaN)
-            if (r1 != r3) goto L_0x034c
-            org.telegram.SQLite.SQLiteDatabase r5 = r9.database     // Catch:{ Exception -> 0x0378, all -> 0x0376 }
-            java.lang.StringBuilder r6 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0378, all -> 0x0376 }
-            r6.<init>()     // Catch:{ Exception -> 0x0378, all -> 0x0376 }
+            if (r1 != r3) goto L_0x034e
+            org.telegram.SQLite.SQLiteDatabase r5 = r9.database     // Catch:{ Exception -> 0x037a, all -> 0x0378 }
+            java.lang.StringBuilder r6 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x037a, all -> 0x0378 }
+            r6.<init>()     // Catch:{ Exception -> 0x037a, all -> 0x0378 }
             java.lang.String r3 = "SELECT unread_count_i FROM dialogs WHERE did = "
-            r6.append(r3)     // Catch:{ Exception -> 0x0378, all -> 0x0376 }
-            r6.append(r7)     // Catch:{ Exception -> 0x0378, all -> 0x0376 }
-            java.lang.String r3 = r6.toString()     // Catch:{ Exception -> 0x0378, all -> 0x0376 }
+            r6.append(r3)     // Catch:{ Exception -> 0x037a, all -> 0x0378 }
+            r6.append(r7)     // Catch:{ Exception -> 0x037a, all -> 0x0378 }
+            java.lang.String r3 = r6.toString()     // Catch:{ Exception -> 0x037a, all -> 0x0378 }
             r25 = r1
             r6 = 0
-            java.lang.Object[] r1 = new java.lang.Object[r6]     // Catch:{ Exception -> 0x0378, all -> 0x0376 }
-            org.telegram.SQLite.SQLiteCursor r1 = r5.queryFinalized(r3, r1)     // Catch:{ Exception -> 0x0378, all -> 0x0376 }
-            boolean r3 = r1.next()     // Catch:{ Exception -> 0x0378, all -> 0x0376 }
-            if (r3 == 0) goto L_0x0348
-            int r3 = r1.intValue(r6)     // Catch:{ Exception -> 0x0378, all -> 0x0376 }
+            java.lang.Object[] r1 = new java.lang.Object[r6]     // Catch:{ Exception -> 0x037a, all -> 0x0378 }
+            org.telegram.SQLite.SQLiteCursor r1 = r5.queryFinalized(r3, r1)     // Catch:{ Exception -> 0x037a, all -> 0x0378 }
+            boolean r3 = r1.next()     // Catch:{ Exception -> 0x037a, all -> 0x0378 }
+            if (r3 == 0) goto L_0x034a
+            int r3 = r1.intValue(r6)     // Catch:{ Exception -> 0x037a, all -> 0x0378 }
             r25 = r3
-        L_0x0348:
-            r1.dispose()     // Catch:{ Exception -> 0x0378, all -> 0x0376 }
-            goto L_0x034e
-        L_0x034c:
-            r25 = r1
+        L_0x034a:
+            r1.dispose()     // Catch:{ Exception -> 0x037a, all -> 0x0378 }
+            goto L_0x0350
         L_0x034e:
-            if (r4 == 0) goto L_0x0356
+            r25 = r1
+        L_0x0350:
+            if (r4 == 0) goto L_0x0358
             r1 = 1
-            if (r2 > r1) goto L_0x0368
+            if (r2 > r1) goto L_0x036a
             int r25 = r25 + -1
-            goto L_0x0368
-        L_0x0356:
-            boolean r1 = r13.media_unread     // Catch:{ Exception -> 0x0378, all -> 0x0376 }
-            if (r1 == 0) goto L_0x0368
+            goto L_0x036a
+        L_0x0358:
+            boolean r1 = r13.media_unread     // Catch:{ Exception -> 0x037a, all -> 0x0378 }
+            if (r1 == 0) goto L_0x036a
             int r25 = r25 + 1
-            goto L_0x0368
-        L_0x035d:
+            goto L_0x036a
+        L_0x035f:
             r35 = r45
             r33 = r12
             r45 = r32
             r12 = r6
             r32 = r30
             r30 = r5
-        L_0x0368:
-            r14.dispose()     // Catch:{ Exception -> 0x0378, all -> 0x0376 }
-            if (r15 != 0) goto L_0x03b1
+        L_0x036a:
+            r14.dispose()     // Catch:{ Exception -> 0x037a, all -> 0x0378 }
+            if (r15 != 0) goto L_0x03b3
             r6 = r31
             r15 = r32
             r2 = 3
             r31 = r12
-            goto L_0x0738
-        L_0x0376:
-            r0 = move-exception
-            goto L_0x037d
+            goto L_0x073a
         L_0x0378:
             r0 = move-exception
-            goto L_0x0384
+            goto L_0x037f
         L_0x037a:
             r0 = move-exception
+            goto L_0x0386
+        L_0x037c:
+            r0 = move-exception
             r32 = r30
-        L_0x037d:
+        L_0x037f:
             r1 = r0
             r10 = r14
-            goto L_0x04a6
-        L_0x0381:
+            goto L_0x04a8
+        L_0x0383:
             r0 = move-exception
             r32 = r30
-        L_0x0384:
+        L_0x0386:
             r1 = r0
             r10 = r14
-            goto L_0x04af
-        L_0x0388:
+            goto L_0x04b1
+        L_0x038a:
             r0 = move-exception
             r32 = r30
-            goto L_0x04b4
-        L_0x038d:
+            goto L_0x04b6
+        L_0x038f:
             r0 = move-exception
             r32 = r30
-            goto L_0x04ba
-        L_0x0392:
+            goto L_0x04bc
+        L_0x0394:
             r0 = move-exception
             r32 = r2
             r31 = r3
             r1 = r0
-        L_0x0398:
+        L_0x039a:
             r15 = r32
-            goto L_0x0773
-        L_0x039c:
+            goto L_0x0775
+        L_0x039e:
             r0 = move-exception
             r32 = r2
             r31 = r3
             r1 = r0
-            goto L_0x077e
-        L_0x03a4:
+            goto L_0x0780
+        L_0x03a6:
             r35 = r1
             r32 = r2
             r31 = r3
@@ -32600,478 +32794,478 @@ public class MessagesStorage extends BaseController {
             r30 = r5
             r33 = r12
             r12 = r6
-        L_0x03b1:
+        L_0x03b3:
             r5 = 8
             r15 = 9
             r1 = 7
-            if (r35 != 0) goto L_0x04bf
-            if (r46 == 0) goto L_0x04bf
-            org.telegram.SQLite.SQLiteDatabase r6 = r9.database     // Catch:{ Exception -> 0x04b9, all -> 0x04b3 }
-            java.lang.StringBuilder r14 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x04b9, all -> 0x04b3 }
-            r14.<init>()     // Catch:{ Exception -> 0x04b9, all -> 0x04b3 }
+            if (r35 != 0) goto L_0x04c1
+            if (r46 == 0) goto L_0x04c1
+            org.telegram.SQLite.SQLiteDatabase r6 = r9.database     // Catch:{ Exception -> 0x04bb, all -> 0x04b5 }
+            java.lang.StringBuilder r14 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x04bb, all -> 0x04b5 }
+            r14.<init>()     // Catch:{ Exception -> 0x04bb, all -> 0x04b5 }
             java.lang.String r2 = "SELECT pinned, unread_count_i, flags FROM dialogs WHERE did = "
-            r14.append(r2)     // Catch:{ Exception -> 0x04b9, all -> 0x04b3 }
-            r14.append(r7)     // Catch:{ Exception -> 0x04b9, all -> 0x04b3 }
-            java.lang.String r2 = r14.toString()     // Catch:{ Exception -> 0x04b9, all -> 0x04b3 }
+            r14.append(r2)     // Catch:{ Exception -> 0x04bb, all -> 0x04b5 }
+            r14.append(r7)     // Catch:{ Exception -> 0x04bb, all -> 0x04b5 }
+            java.lang.String r2 = r14.toString()     // Catch:{ Exception -> 0x04bb, all -> 0x04b5 }
             r14 = 0
-            java.lang.Object[] r3 = new java.lang.Object[r14]     // Catch:{ Exception -> 0x04b9, all -> 0x04b3 }
-            org.telegram.SQLite.SQLiteCursor r3 = r6.queryFinalized(r2, r3)     // Catch:{ Exception -> 0x04b9, all -> 0x04b3 }
-            boolean r2 = r3.next()     // Catch:{ Exception -> 0x04ac, all -> 0x04a3 }
-            if (r2 == 0) goto L_0x03ee
-            int r6 = r3.intValue(r14)     // Catch:{ Exception -> 0x04ac, all -> 0x04a3 }
+            java.lang.Object[] r3 = new java.lang.Object[r14]     // Catch:{ Exception -> 0x04bb, all -> 0x04b5 }
+            org.telegram.SQLite.SQLiteCursor r3 = r6.queryFinalized(r2, r3)     // Catch:{ Exception -> 0x04bb, all -> 0x04b5 }
+            boolean r2 = r3.next()     // Catch:{ Exception -> 0x04ae, all -> 0x04a5 }
+            if (r2 == 0) goto L_0x03f0
+            int r6 = r3.intValue(r14)     // Catch:{ Exception -> 0x04ae, all -> 0x04a5 }
             r14 = 1
-            int r36 = r3.intValue(r14)     // Catch:{ Exception -> 0x04ac, all -> 0x04a3 }
+            int r36 = r3.intValue(r14)     // Catch:{ Exception -> 0x04ae, all -> 0x04a5 }
             r14 = 2
-            int r37 = r3.intValue(r14)     // Catch:{ Exception -> 0x04ac, all -> 0x04a3 }
+            int r37 = r3.intValue(r14)     // Catch:{ Exception -> 0x04ae, all -> 0x04a5 }
             r14 = r6
             r6 = r36
             r38 = r37
-            goto L_0x03f2
-        L_0x03ee:
+            goto L_0x03f4
+        L_0x03f0:
             r6 = 0
             r14 = 0
             r38 = 0
-        L_0x03f2:
-            r3.dispose()     // Catch:{ Exception -> 0x04ac, all -> 0x04a3 }
-            if (r2 == 0) goto L_0x0428
-            org.telegram.SQLite.SQLiteDatabase r2 = r9.database     // Catch:{ Exception -> 0x04b9, all -> 0x04b3 }
+        L_0x03f4:
+            r3.dispose()     // Catch:{ Exception -> 0x04ae, all -> 0x04a5 }
+            if (r2 == 0) goto L_0x042a
+            org.telegram.SQLite.SQLiteDatabase r2 = r9.database     // Catch:{ Exception -> 0x04bb, all -> 0x04b5 }
             java.lang.String r3 = "UPDATE dialogs SET date = ?, last_mid = ?, inbox_max = ?, last_mid_i = ?, pts = ?, date_i = ? WHERE did = ?"
-            org.telegram.SQLite.SQLitePreparedStatement r3 = r2.executeFast(r3)     // Catch:{ Exception -> 0x04b9, all -> 0x04b3 }
-            int r2 = r13.date     // Catch:{ Exception -> 0x049a, all -> 0x048f }
+            org.telegram.SQLite.SQLitePreparedStatement r3 = r2.executeFast(r3)     // Catch:{ Exception -> 0x04bb, all -> 0x04b5 }
+            int r2 = r13.date     // Catch:{ Exception -> 0x049c, all -> 0x0491 }
             r6 = 1
-            r3.bindInteger(r6, r2)     // Catch:{ Exception -> 0x049a, all -> 0x048f }
-            int r2 = r13.id     // Catch:{ Exception -> 0x049a, all -> 0x048f }
+            r3.bindInteger(r6, r2)     // Catch:{ Exception -> 0x049c, all -> 0x0491 }
+            int r2 = r13.id     // Catch:{ Exception -> 0x049c, all -> 0x0491 }
             r6 = 2
-            r3.bindInteger(r6, r2)     // Catch:{ Exception -> 0x049a, all -> 0x048f }
-            int r2 = r13.id     // Catch:{ Exception -> 0x049a, all -> 0x048f }
+            r3.bindInteger(r6, r2)     // Catch:{ Exception -> 0x049c, all -> 0x0491 }
+            int r2 = r13.id     // Catch:{ Exception -> 0x049c, all -> 0x0491 }
             r6 = 3
-            r3.bindInteger(r6, r2)     // Catch:{ Exception -> 0x049a, all -> 0x048f }
-            int r2 = r13.id     // Catch:{ Exception -> 0x049a, all -> 0x048f }
+            r3.bindInteger(r6, r2)     // Catch:{ Exception -> 0x049c, all -> 0x0491 }
+            int r2 = r13.id     // Catch:{ Exception -> 0x049c, all -> 0x0491 }
             r6 = 4
-            r3.bindInteger(r6, r2)     // Catch:{ Exception -> 0x049a, all -> 0x048f }
-            int r2 = r10.pts     // Catch:{ Exception -> 0x049a, all -> 0x048f }
+            r3.bindInteger(r6, r2)     // Catch:{ Exception -> 0x049c, all -> 0x0491 }
+            int r2 = r10.pts     // Catch:{ Exception -> 0x049c, all -> 0x0491 }
             r6 = 5
-            r3.bindInteger(r6, r2)     // Catch:{ Exception -> 0x049a, all -> 0x048f }
-            int r2 = r13.date     // Catch:{ Exception -> 0x049a, all -> 0x048f }
+            r3.bindInteger(r6, r2)     // Catch:{ Exception -> 0x049c, all -> 0x0491 }
+            int r2 = r13.date     // Catch:{ Exception -> 0x049c, all -> 0x0491 }
             r6 = 6
-            r3.bindInteger(r6, r2)     // Catch:{ Exception -> 0x049a, all -> 0x048f }
-            r3.bindLong(r1, r7)     // Catch:{ Exception -> 0x049a, all -> 0x048f }
+            r3.bindInteger(r6, r2)     // Catch:{ Exception -> 0x049c, all -> 0x0491 }
+            r3.bindLong(r1, r7)     // Catch:{ Exception -> 0x049c, all -> 0x0491 }
             r4 = -1
-            goto L_0x0488
-        L_0x0428:
-            org.telegram.SQLite.SQLiteDatabase r2 = r9.database     // Catch:{ Exception -> 0x04b9, all -> 0x04b3 }
+            goto L_0x048a
+        L_0x042a:
+            org.telegram.SQLite.SQLiteDatabase r2 = r9.database     // Catch:{ Exception -> 0x04bb, all -> 0x04b5 }
             java.lang.String r3 = "REPLACE INTO dialogs VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-            org.telegram.SQLite.SQLitePreparedStatement r3 = r2.executeFast(r3)     // Catch:{ Exception -> 0x04b9, all -> 0x04b3 }
+            org.telegram.SQLite.SQLitePreparedStatement r3 = r2.executeFast(r3)     // Catch:{ Exception -> 0x04bb, all -> 0x04b5 }
             r2 = 1
-            r3.bindLong(r2, r7)     // Catch:{ Exception -> 0x049a, all -> 0x048f }
-            int r2 = r13.date     // Catch:{ Exception -> 0x049a, all -> 0x048f }
+            r3.bindLong(r2, r7)     // Catch:{ Exception -> 0x049c, all -> 0x0491 }
+            int r2 = r13.date     // Catch:{ Exception -> 0x049c, all -> 0x0491 }
             r4 = 2
-            r3.bindInteger(r4, r2)     // Catch:{ Exception -> 0x049a, all -> 0x048f }
+            r3.bindInteger(r4, r2)     // Catch:{ Exception -> 0x049c, all -> 0x0491 }
             r2 = 3
             r4 = 0
-            r3.bindInteger(r2, r4)     // Catch:{ Exception -> 0x049a, all -> 0x048f }
-            int r2 = r13.id     // Catch:{ Exception -> 0x049a, all -> 0x048f }
+            r3.bindInteger(r2, r4)     // Catch:{ Exception -> 0x049c, all -> 0x0491 }
+            int r2 = r13.id     // Catch:{ Exception -> 0x049c, all -> 0x0491 }
             r4 = 4
-            r3.bindInteger(r4, r2)     // Catch:{ Exception -> 0x049a, all -> 0x048f }
-            int r2 = r13.id     // Catch:{ Exception -> 0x049a, all -> 0x048f }
+            r3.bindInteger(r4, r2)     // Catch:{ Exception -> 0x049c, all -> 0x0491 }
+            int r2 = r13.id     // Catch:{ Exception -> 0x049c, all -> 0x0491 }
             r4 = 5
-            r3.bindInteger(r4, r2)     // Catch:{ Exception -> 0x049a, all -> 0x048f }
+            r3.bindInteger(r4, r2)     // Catch:{ Exception -> 0x049c, all -> 0x0491 }
             r2 = 6
             r4 = 0
-            r3.bindInteger(r2, r4)     // Catch:{ Exception -> 0x049a, all -> 0x048f }
-            int r2 = r13.id     // Catch:{ Exception -> 0x049a, all -> 0x048f }
-            r3.bindInteger(r1, r2)     // Catch:{ Exception -> 0x049a, all -> 0x048f }
-            r3.bindInteger(r5, r6)     // Catch:{ Exception -> 0x049a, all -> 0x048f }
-            int r2 = r10.pts     // Catch:{ Exception -> 0x049a, all -> 0x048f }
-            r3.bindInteger(r15, r2)     // Catch:{ Exception -> 0x049a, all -> 0x048f }
-            int r2 = r13.date     // Catch:{ Exception -> 0x049a, all -> 0x048f }
+            r3.bindInteger(r2, r4)     // Catch:{ Exception -> 0x049c, all -> 0x0491 }
+            int r2 = r13.id     // Catch:{ Exception -> 0x049c, all -> 0x0491 }
+            r3.bindInteger(r1, r2)     // Catch:{ Exception -> 0x049c, all -> 0x0491 }
+            r3.bindInteger(r5, r6)     // Catch:{ Exception -> 0x049c, all -> 0x0491 }
+            int r2 = r10.pts     // Catch:{ Exception -> 0x049c, all -> 0x0491 }
+            r3.bindInteger(r15, r2)     // Catch:{ Exception -> 0x049c, all -> 0x0491 }
+            int r2 = r13.date     // Catch:{ Exception -> 0x049c, all -> 0x0491 }
             r4 = 10
-            r3.bindInteger(r4, r2)     // Catch:{ Exception -> 0x049a, all -> 0x048f }
+            r3.bindInteger(r4, r2)     // Catch:{ Exception -> 0x049c, all -> 0x0491 }
             r2 = 11
-            r3.bindInteger(r2, r14)     // Catch:{ Exception -> 0x049a, all -> 0x048f }
+            r3.bindInteger(r2, r14)     // Catch:{ Exception -> 0x049c, all -> 0x0491 }
             r2 = r38
             r4 = 12
-            r3.bindInteger(r4, r2)     // Catch:{ Exception -> 0x049a, all -> 0x048f }
+            r3.bindInteger(r4, r2)     // Catch:{ Exception -> 0x049c, all -> 0x0491 }
             r2 = 13
             r4 = -1
-            r3.bindInteger(r2, r4)     // Catch:{ Exception -> 0x049a, all -> 0x048f }
+            r3.bindInteger(r2, r4)     // Catch:{ Exception -> 0x049c, all -> 0x0491 }
             r2 = 14
-            r3.bindNull(r2)     // Catch:{ Exception -> 0x049a, all -> 0x048f }
+            r3.bindNull(r2)     // Catch:{ Exception -> 0x049c, all -> 0x0491 }
             r2 = 15
             r6 = 0
-            r3.bindInteger(r2, r6)     // Catch:{ Exception -> 0x049a, all -> 0x048f }
-            androidx.collection.LongSparseArray<java.lang.Boolean> r2 = r9.unknownDialogsIds     // Catch:{ Exception -> 0x049a, all -> 0x048f }
-            java.lang.Boolean r6 = java.lang.Boolean.TRUE     // Catch:{ Exception -> 0x049a, all -> 0x048f }
-            r2.put(r7, r6)     // Catch:{ Exception -> 0x049a, all -> 0x048f }
-        L_0x0488:
-            r3.step()     // Catch:{ Exception -> 0x049a, all -> 0x048f }
-            r3.dispose()     // Catch:{ Exception -> 0x049a, all -> 0x048f }
-            goto L_0x04c0
-        L_0x048f:
+            r3.bindInteger(r2, r6)     // Catch:{ Exception -> 0x049c, all -> 0x0491 }
+            androidx.collection.LongSparseArray<java.lang.Boolean> r2 = r9.unknownDialogsIds     // Catch:{ Exception -> 0x049c, all -> 0x0491 }
+            java.lang.Boolean r6 = java.lang.Boolean.TRUE     // Catch:{ Exception -> 0x049c, all -> 0x0491 }
+            r2.put(r7, r6)     // Catch:{ Exception -> 0x049c, all -> 0x0491 }
+        L_0x048a:
+            r3.step()     // Catch:{ Exception -> 0x049c, all -> 0x0491 }
+            r3.dispose()     // Catch:{ Exception -> 0x049c, all -> 0x0491 }
+            goto L_0x04c2
+        L_0x0491:
             r0 = move-exception
             r1 = r0
             r19 = r3
             r3 = r31
             r15 = r32
             r10 = 0
-            goto L_0x08f2
-        L_0x049a:
+            goto L_0x08f8
+        L_0x049c:
             r0 = move-exception
             r1 = r0
             r19 = r3
             r3 = r31
             r10 = 0
-            goto L_0x08c2
-        L_0x04a3:
+            goto L_0x08c6
+        L_0x04a5:
             r0 = move-exception
             r1 = r0
             r10 = r3
-        L_0x04a6:
+        L_0x04a8:
             r3 = r31
             r15 = r32
-            goto L_0x0774
-        L_0x04ac:
+            goto L_0x0776
+        L_0x04ae:
             r0 = move-exception
             r1 = r0
             r10 = r3
-        L_0x04af:
+        L_0x04b1:
             r3 = r31
-            goto L_0x077f
-        L_0x04b3:
+            goto L_0x0781
+        L_0x04b5:
             r0 = move-exception
-        L_0x04b4:
+        L_0x04b6:
             r1 = r0
             r3 = r31
-            goto L_0x0398
-        L_0x04b9:
+            goto L_0x039a
+        L_0x04bb:
             r0 = move-exception
-        L_0x04ba:
+        L_0x04bc:
             r1 = r0
             r3 = r31
-            goto L_0x077e
-        L_0x04bf:
+            goto L_0x0780
+        L_0x04c1:
             r4 = -1
-        L_0x04c0:
-            r9.fixUnsupportedMedia(r13)     // Catch:{ Exception -> 0x0767, all -> 0x075f }
-            r31.requery()     // Catch:{ Exception -> 0x0767, all -> 0x075f }
-            org.telegram.tgnet.NativeByteBuffer r2 = new org.telegram.tgnet.NativeByteBuffer     // Catch:{ Exception -> 0x0767, all -> 0x075f }
-            int r3 = r13.getObjectSize()     // Catch:{ Exception -> 0x0767, all -> 0x075f }
-            r2.<init>((int) r3)     // Catch:{ Exception -> 0x0767, all -> 0x075f }
-            r13.serializeToStream(r2)     // Catch:{ Exception -> 0x0767, all -> 0x075f }
-            int r3 = r13.id     // Catch:{ Exception -> 0x0767, all -> 0x075f }
+        L_0x04c2:
+            r9.fixUnsupportedMedia(r13)     // Catch:{ Exception -> 0x0769, all -> 0x0761 }
+            r31.requery()     // Catch:{ Exception -> 0x0769, all -> 0x0761 }
+            org.telegram.tgnet.NativeByteBuffer r2 = new org.telegram.tgnet.NativeByteBuffer     // Catch:{ Exception -> 0x0769, all -> 0x0761 }
+            int r3 = r13.getObjectSize()     // Catch:{ Exception -> 0x0769, all -> 0x0761 }
+            r2.<init>((int) r3)     // Catch:{ Exception -> 0x0769, all -> 0x0761 }
+            r13.serializeToStream(r2)     // Catch:{ Exception -> 0x0769, all -> 0x0761 }
+            int r3 = r13.id     // Catch:{ Exception -> 0x0769, all -> 0x0761 }
             r6 = r31
             r14 = 1
-            r6.bindInteger(r14, r3)     // Catch:{ Exception -> 0x075d, all -> 0x075b }
+            r6.bindInteger(r14, r3)     // Catch:{ Exception -> 0x075f, all -> 0x075d }
             r3 = 2
-            r6.bindLong(r3, r7)     // Catch:{ Exception -> 0x075d, all -> 0x075b }
-            int r3 = org.telegram.messenger.MessageObject.getUnreadFlags(r13)     // Catch:{ Exception -> 0x075d, all -> 0x075b }
+            r6.bindLong(r3, r7)     // Catch:{ Exception -> 0x075f, all -> 0x075d }
+            int r3 = org.telegram.messenger.MessageObject.getUnreadFlags(r13)     // Catch:{ Exception -> 0x075f, all -> 0x075d }
             r14 = 3
-            r6.bindInteger(r14, r3)     // Catch:{ Exception -> 0x075d, all -> 0x075b }
-            int r3 = r13.send_state     // Catch:{ Exception -> 0x075d, all -> 0x075b }
+            r6.bindInteger(r14, r3)     // Catch:{ Exception -> 0x075f, all -> 0x075d }
+            int r3 = r13.send_state     // Catch:{ Exception -> 0x075f, all -> 0x075d }
             r14 = 4
-            r6.bindInteger(r14, r3)     // Catch:{ Exception -> 0x075d, all -> 0x075b }
-            int r3 = r13.date     // Catch:{ Exception -> 0x075d, all -> 0x075b }
+            r6.bindInteger(r14, r3)     // Catch:{ Exception -> 0x075f, all -> 0x075d }
+            int r3 = r13.date     // Catch:{ Exception -> 0x075f, all -> 0x075d }
             r14 = 5
-            r6.bindInteger(r14, r3)     // Catch:{ Exception -> 0x075d, all -> 0x075b }
+            r6.bindInteger(r14, r3)     // Catch:{ Exception -> 0x075f, all -> 0x075d }
             r3 = 6
-            r6.bindByteBuffer((int) r3, (org.telegram.tgnet.NativeByteBuffer) r2)     // Catch:{ Exception -> 0x075d, all -> 0x075b }
-            boolean r14 = org.telegram.messenger.MessageObject.isOut(r13)     // Catch:{ Exception -> 0x075d, all -> 0x075b }
-            if (r14 != 0) goto L_0x050b
-            boolean r14 = r13.from_scheduled     // Catch:{ Exception -> 0x0508, all -> 0x0503 }
-            if (r14 == 0) goto L_0x0501
-            goto L_0x050b
-        L_0x0501:
-            r14 = 0
-            goto L_0x050c
+            r6.bindByteBuffer((int) r3, (org.telegram.tgnet.NativeByteBuffer) r2)     // Catch:{ Exception -> 0x075f, all -> 0x075d }
+            boolean r14 = org.telegram.messenger.MessageObject.isOut(r13)     // Catch:{ Exception -> 0x075f, all -> 0x075d }
+            if (r14 != 0) goto L_0x050d
+            boolean r14 = r13.from_scheduled     // Catch:{ Exception -> 0x050a, all -> 0x0505 }
+            if (r14 == 0) goto L_0x0503
+            goto L_0x050d
         L_0x0503:
+            r14 = 0
+            goto L_0x050e
+        L_0x0505:
             r0 = move-exception
             r1 = r0
             r3 = r6
-            goto L_0x0398
-        L_0x0508:
+            goto L_0x039a
+        L_0x050a:
             r0 = move-exception
-            goto L_0x076c
-        L_0x050b:
+            goto L_0x076e
+        L_0x050d:
             r14 = 1
-        L_0x050c:
-            r6.bindInteger(r1, r14)     // Catch:{ Exception -> 0x075d, all -> 0x075b }
-            int r1 = r13.ttl     // Catch:{ Exception -> 0x075d, all -> 0x075b }
-            r6.bindInteger(r5, r1)     // Catch:{ Exception -> 0x075d, all -> 0x075b }
-            int r1 = r13.flags     // Catch:{ Exception -> 0x075d, all -> 0x075b }
+        L_0x050e:
+            r6.bindInteger(r1, r14)     // Catch:{ Exception -> 0x075f, all -> 0x075d }
+            int r1 = r13.ttl     // Catch:{ Exception -> 0x075f, all -> 0x075d }
+            r6.bindInteger(r5, r1)     // Catch:{ Exception -> 0x075f, all -> 0x075d }
+            int r1 = r13.flags     // Catch:{ Exception -> 0x075f, all -> 0x075d }
             r1 = r1 & 1024(0x400, float:1.435E-42)
-            if (r1 == 0) goto L_0x0520
-            int r1 = r13.views     // Catch:{ Exception -> 0x0508, all -> 0x0503 }
-            r6.bindInteger(r15, r1)     // Catch:{ Exception -> 0x0508, all -> 0x0503 }
-            goto L_0x0527
-        L_0x0520:
-            int r1 = r9.getMessageMediaType(r13)     // Catch:{ Exception -> 0x075d, all -> 0x075b }
-            r6.bindInteger(r15, r1)     // Catch:{ Exception -> 0x075d, all -> 0x075b }
-        L_0x0527:
-            int r1 = r13.stickerVerified     // Catch:{ Exception -> 0x075d, all -> 0x075b }
-            if (r1 != 0) goto L_0x052f
+            if (r1 == 0) goto L_0x0522
+            int r1 = r13.views     // Catch:{ Exception -> 0x050a, all -> 0x0505 }
+            r6.bindInteger(r15, r1)     // Catch:{ Exception -> 0x050a, all -> 0x0505 }
+            goto L_0x0529
+        L_0x0522:
+            int r1 = r9.getMessageMediaType(r13)     // Catch:{ Exception -> 0x075f, all -> 0x075d }
+            r6.bindInteger(r15, r1)     // Catch:{ Exception -> 0x075f, all -> 0x075d }
+        L_0x0529:
+            int r1 = r13.stickerVerified     // Catch:{ Exception -> 0x075f, all -> 0x075d }
+            if (r1 != 0) goto L_0x0531
             r1 = 10
             r5 = 1
-            goto L_0x0539
-        L_0x052f:
+            goto L_0x053b
+        L_0x0531:
             r5 = 2
-            if (r1 != r5) goto L_0x0536
+            if (r1 != r5) goto L_0x0538
             r1 = 10
             r5 = 2
-            goto L_0x0539
-        L_0x0536:
+            goto L_0x053b
+        L_0x0538:
             r1 = 10
             r5 = 0
-        L_0x0539:
-            r6.bindInteger(r1, r5)     // Catch:{ Exception -> 0x075d, all -> 0x075b }
-            boolean r1 = r13.mentioned     // Catch:{ Exception -> 0x075d, all -> 0x075b }
-            if (r1 == 0) goto L_0x0542
+        L_0x053b:
+            r6.bindInteger(r1, r5)     // Catch:{ Exception -> 0x075f, all -> 0x075d }
+            boolean r1 = r13.mentioned     // Catch:{ Exception -> 0x075f, all -> 0x075d }
+            if (r1 == 0) goto L_0x0544
             r1 = 1
-            goto L_0x0543
-        L_0x0542:
+            goto L_0x0545
+        L_0x0544:
             r1 = 0
-        L_0x0543:
+        L_0x0545:
             r5 = 11
-            r6.bindInteger(r5, r1)     // Catch:{ Exception -> 0x075d, all -> 0x075b }
-            int r1 = r13.forwards     // Catch:{ Exception -> 0x075d, all -> 0x075b }
+            r6.bindInteger(r5, r1)     // Catch:{ Exception -> 0x075f, all -> 0x075d }
+            int r1 = r13.forwards     // Catch:{ Exception -> 0x075f, all -> 0x075d }
             r5 = 12
-            r6.bindInteger(r5, r1)     // Catch:{ Exception -> 0x075d, all -> 0x075b }
-            org.telegram.tgnet.TLRPC$MessageReplies r1 = r13.replies     // Catch:{ Exception -> 0x075d, all -> 0x075b }
-            if (r1 == 0) goto L_0x0569
-            org.telegram.tgnet.NativeByteBuffer r1 = new org.telegram.tgnet.NativeByteBuffer     // Catch:{ Exception -> 0x0508, all -> 0x0503 }
-            org.telegram.tgnet.TLRPC$MessageReplies r5 = r13.replies     // Catch:{ Exception -> 0x0508, all -> 0x0503 }
-            int r5 = r5.getObjectSize()     // Catch:{ Exception -> 0x0508, all -> 0x0503 }
-            r1.<init>((int) r5)     // Catch:{ Exception -> 0x0508, all -> 0x0503 }
-            org.telegram.tgnet.TLRPC$MessageReplies r5 = r13.replies     // Catch:{ Exception -> 0x0508, all -> 0x0503 }
-            r5.serializeToStream(r1)     // Catch:{ Exception -> 0x0508, all -> 0x0503 }
+            r6.bindInteger(r5, r1)     // Catch:{ Exception -> 0x075f, all -> 0x075d }
+            org.telegram.tgnet.TLRPC$MessageReplies r1 = r13.replies     // Catch:{ Exception -> 0x075f, all -> 0x075d }
+            if (r1 == 0) goto L_0x056b
+            org.telegram.tgnet.NativeByteBuffer r1 = new org.telegram.tgnet.NativeByteBuffer     // Catch:{ Exception -> 0x050a, all -> 0x0505 }
+            org.telegram.tgnet.TLRPC$MessageReplies r5 = r13.replies     // Catch:{ Exception -> 0x050a, all -> 0x0505 }
+            int r5 = r5.getObjectSize()     // Catch:{ Exception -> 0x050a, all -> 0x0505 }
+            r1.<init>((int) r5)     // Catch:{ Exception -> 0x050a, all -> 0x0505 }
+            org.telegram.tgnet.TLRPC$MessageReplies r5 = r13.replies     // Catch:{ Exception -> 0x050a, all -> 0x0505 }
+            r5.serializeToStream(r1)     // Catch:{ Exception -> 0x050a, all -> 0x0505 }
             r5 = 13
-            r6.bindByteBuffer((int) r5, (org.telegram.tgnet.NativeByteBuffer) r1)     // Catch:{ Exception -> 0x0508, all -> 0x0503 }
-            goto L_0x056f
-        L_0x0569:
+            r6.bindByteBuffer((int) r5, (org.telegram.tgnet.NativeByteBuffer) r1)     // Catch:{ Exception -> 0x050a, all -> 0x0505 }
+            goto L_0x0571
+        L_0x056b:
             r1 = 13
-            r6.bindNull(r1)     // Catch:{ Exception -> 0x075d, all -> 0x075b }
+            r6.bindNull(r1)     // Catch:{ Exception -> 0x075f, all -> 0x075d }
             r1 = 0
-        L_0x056f:
-            org.telegram.tgnet.TLRPC$TL_messageReplyHeader r5 = r13.reply_to     // Catch:{ Exception -> 0x075d, all -> 0x075b }
-            if (r5 == 0) goto L_0x0580
-            int r14 = r5.reply_to_top_id     // Catch:{ Exception -> 0x0508, all -> 0x0503 }
-            if (r14 == 0) goto L_0x0578
-            goto L_0x057a
-        L_0x0578:
-            int r14 = r5.reply_to_msg_id     // Catch:{ Exception -> 0x0508, all -> 0x0503 }
+        L_0x0571:
+            org.telegram.tgnet.TLRPC$TL_messageReplyHeader r5 = r13.reply_to     // Catch:{ Exception -> 0x075f, all -> 0x075d }
+            if (r5 == 0) goto L_0x0582
+            int r14 = r5.reply_to_top_id     // Catch:{ Exception -> 0x050a, all -> 0x0505 }
+            if (r14 == 0) goto L_0x057a
+            goto L_0x057c
         L_0x057a:
+            int r14 = r5.reply_to_msg_id     // Catch:{ Exception -> 0x050a, all -> 0x0505 }
+        L_0x057c:
             r5 = 14
-            r6.bindInteger(r5, r14)     // Catch:{ Exception -> 0x0508, all -> 0x0503 }
-            goto L_0x0586
-        L_0x0580:
+            r6.bindInteger(r5, r14)     // Catch:{ Exception -> 0x050a, all -> 0x0505 }
+            goto L_0x0588
+        L_0x0582:
             r5 = 14
             r14 = 0
-            r6.bindInteger(r5, r14)     // Catch:{ Exception -> 0x075d, all -> 0x075b }
-        L_0x0586:
-            long r14 = org.telegram.messenger.MessageObject.getChannelId(r13)     // Catch:{ Exception -> 0x075d, all -> 0x075b }
+            r6.bindInteger(r5, r14)     // Catch:{ Exception -> 0x075f, all -> 0x075d }
+        L_0x0588:
+            long r14 = org.telegram.messenger.MessageObject.getChannelId(r13)     // Catch:{ Exception -> 0x075f, all -> 0x075d }
             r5 = 15
-            r6.bindLong(r5, r14)     // Catch:{ Exception -> 0x075d, all -> 0x075b }
-            org.telegram.tgnet.NativeByteBuffer r5 = org.telegram.messenger.MessageCustomParamsHelper.writeLocalParams(r13)     // Catch:{ Exception -> 0x075d, all -> 0x075b }
+            r6.bindLong(r5, r14)     // Catch:{ Exception -> 0x075f, all -> 0x075d }
+            org.telegram.tgnet.NativeByteBuffer r5 = org.telegram.messenger.MessageCustomParamsHelper.writeLocalParams(r13)     // Catch:{ Exception -> 0x075f, all -> 0x075d }
             r14 = 16
-            if (r5 != 0) goto L_0x059b
-            r6.bindNull(r14)     // Catch:{ Exception -> 0x0508, all -> 0x0503 }
-            goto L_0x059e
-        L_0x059b:
-            r6.bindByteBuffer((int) r14, (org.telegram.tgnet.NativeByteBuffer) r5)     // Catch:{ Exception -> 0x075d, all -> 0x075b }
-        L_0x059e:
-            r6.step()     // Catch:{ Exception -> 0x075d, all -> 0x075b }
-            boolean r14 = org.telegram.messenger.MediaDataController.canAddMessageToMedia(r13)     // Catch:{ Exception -> 0x075d, all -> 0x075b }
-            if (r14 == 0) goto L_0x05cc
-            r32.requery()     // Catch:{ Exception -> 0x075d, all -> 0x075b }
-            int r14 = r13.id     // Catch:{ Exception -> 0x075d, all -> 0x075b }
+            if (r5 != 0) goto L_0x059d
+            r6.bindNull(r14)     // Catch:{ Exception -> 0x050a, all -> 0x0505 }
+            goto L_0x05a0
+        L_0x059d:
+            r6.bindByteBuffer((int) r14, (org.telegram.tgnet.NativeByteBuffer) r5)     // Catch:{ Exception -> 0x075f, all -> 0x075d }
+        L_0x05a0:
+            r6.step()     // Catch:{ Exception -> 0x075f, all -> 0x075d }
+            boolean r14 = org.telegram.messenger.MediaDataController.canAddMessageToMedia(r13)     // Catch:{ Exception -> 0x075f, all -> 0x075d }
+            if (r14 == 0) goto L_0x05ce
+            r32.requery()     // Catch:{ Exception -> 0x075f, all -> 0x075d }
+            int r14 = r13.id     // Catch:{ Exception -> 0x075f, all -> 0x075d }
             r15 = r32
             r3 = 1
-            r15.bindInteger(r3, r14)     // Catch:{ Exception -> 0x0757, all -> 0x0755 }
+            r15.bindInteger(r3, r14)     // Catch:{ Exception -> 0x0759, all -> 0x0757 }
             r3 = 2
-            r15.bindLong(r3, r7)     // Catch:{ Exception -> 0x0757, all -> 0x0755 }
-            int r3 = r13.date     // Catch:{ Exception -> 0x0757, all -> 0x0755 }
+            r15.bindLong(r3, r7)     // Catch:{ Exception -> 0x0759, all -> 0x0757 }
+            int r3 = r13.date     // Catch:{ Exception -> 0x0759, all -> 0x0757 }
             r14 = 3
-            r15.bindInteger(r14, r3)     // Catch:{ Exception -> 0x0757, all -> 0x0755 }
-            int r3 = org.telegram.messenger.MediaDataController.getMediaType(r13)     // Catch:{ Exception -> 0x0757, all -> 0x0755 }
+            r15.bindInteger(r14, r3)     // Catch:{ Exception -> 0x0759, all -> 0x0757 }
+            int r3 = org.telegram.messenger.MediaDataController.getMediaType(r13)     // Catch:{ Exception -> 0x0759, all -> 0x0757 }
             r14 = 4
-            r15.bindInteger(r14, r3)     // Catch:{ Exception -> 0x0757, all -> 0x0755 }
+            r15.bindInteger(r14, r3)     // Catch:{ Exception -> 0x0759, all -> 0x0757 }
             r3 = 5
-            r15.bindByteBuffer((int) r3, (org.telegram.tgnet.NativeByteBuffer) r2)     // Catch:{ Exception -> 0x0757, all -> 0x0755 }
-            r15.step()     // Catch:{ Exception -> 0x0757, all -> 0x0755 }
-            goto L_0x062e
-        L_0x05cc:
+            r15.bindByteBuffer((int) r3, (org.telegram.tgnet.NativeByteBuffer) r2)     // Catch:{ Exception -> 0x0759, all -> 0x0757 }
+            r15.step()     // Catch:{ Exception -> 0x0759, all -> 0x0757 }
+            goto L_0x0630
+        L_0x05ce:
             r15 = r32
             r3 = 5
-            boolean r14 = r13 instanceof org.telegram.tgnet.TLRPC$TL_messageService     // Catch:{ Exception -> 0x0757, all -> 0x0755 }
-            if (r14 == 0) goto L_0x062e
-            org.telegram.tgnet.TLRPC$MessageAction r14 = r13.action     // Catch:{ Exception -> 0x0757, all -> 0x0755 }
-            boolean r14 = r14 instanceof org.telegram.tgnet.TLRPC$TL_messageActionHistoryClear     // Catch:{ Exception -> 0x0757, all -> 0x0755 }
-            if (r14 == 0) goto L_0x062e
-            org.telegram.SQLite.SQLiteDatabase r14 = r9.database     // Catch:{ Exception -> 0x0626, all -> 0x0755 }
-            java.util.Locale r3 = java.util.Locale.US     // Catch:{ Exception -> 0x0626, all -> 0x0755 }
+            boolean r14 = r13 instanceof org.telegram.tgnet.TLRPC$TL_messageService     // Catch:{ Exception -> 0x0759, all -> 0x0757 }
+            if (r14 == 0) goto L_0x0630
+            org.telegram.tgnet.TLRPC$MessageAction r14 = r13.action     // Catch:{ Exception -> 0x0759, all -> 0x0757 }
+            boolean r14 = r14 instanceof org.telegram.tgnet.TLRPC$TL_messageActionHistoryClear     // Catch:{ Exception -> 0x0759, all -> 0x0757 }
+            if (r14 == 0) goto L_0x0630
+            org.telegram.SQLite.SQLiteDatabase r14 = r9.database     // Catch:{ Exception -> 0x0628, all -> 0x0757 }
+            java.util.Locale r3 = java.util.Locale.US     // Catch:{ Exception -> 0x0628, all -> 0x0757 }
             java.lang.String r4 = "DELETE FROM media_v4 WHERE mid = %d AND uid = %d"
             r31 = r12
             r10 = 2
-            java.lang.Object[] r12 = new java.lang.Object[r10]     // Catch:{ Exception -> 0x0624, all -> 0x0755 }
-            int r10 = r13.id     // Catch:{ Exception -> 0x0624, all -> 0x0755 }
-            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)     // Catch:{ Exception -> 0x0624, all -> 0x0755 }
+            java.lang.Object[] r12 = new java.lang.Object[r10]     // Catch:{ Exception -> 0x0626, all -> 0x0757 }
+            int r10 = r13.id     // Catch:{ Exception -> 0x0626, all -> 0x0757 }
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)     // Catch:{ Exception -> 0x0626, all -> 0x0757 }
             r28 = 0
-            r12[r28] = r10     // Catch:{ Exception -> 0x0624, all -> 0x0755 }
-            java.lang.Long r10 = java.lang.Long.valueOf(r41)     // Catch:{ Exception -> 0x0624, all -> 0x0755 }
+            r12[r28] = r10     // Catch:{ Exception -> 0x0626, all -> 0x0757 }
+            java.lang.Long r10 = java.lang.Long.valueOf(r41)     // Catch:{ Exception -> 0x0626, all -> 0x0757 }
             r18 = 1
-            r12[r18] = r10     // Catch:{ Exception -> 0x0624, all -> 0x0755 }
-            java.lang.String r3 = java.lang.String.format(r3, r4, r12)     // Catch:{ Exception -> 0x0624, all -> 0x0755 }
-            org.telegram.SQLite.SQLitePreparedStatement r3 = r14.executeFast(r3)     // Catch:{ Exception -> 0x0624, all -> 0x0755 }
-            org.telegram.SQLite.SQLitePreparedStatement r3 = r3.stepThis()     // Catch:{ Exception -> 0x0624, all -> 0x0755 }
-            r3.dispose()     // Catch:{ Exception -> 0x0624, all -> 0x0755 }
-            org.telegram.SQLite.SQLiteDatabase r3 = r9.database     // Catch:{ Exception -> 0x0624, all -> 0x0755 }
-            java.lang.StringBuilder r4 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0624, all -> 0x0755 }
-            r4.<init>()     // Catch:{ Exception -> 0x0624, all -> 0x0755 }
+            r12[r18] = r10     // Catch:{ Exception -> 0x0626, all -> 0x0757 }
+            java.lang.String r3 = java.lang.String.format(r3, r4, r12)     // Catch:{ Exception -> 0x0626, all -> 0x0757 }
+            org.telegram.SQLite.SQLitePreparedStatement r3 = r14.executeFast(r3)     // Catch:{ Exception -> 0x0626, all -> 0x0757 }
+            org.telegram.SQLite.SQLitePreparedStatement r3 = r3.stepThis()     // Catch:{ Exception -> 0x0626, all -> 0x0757 }
+            r3.dispose()     // Catch:{ Exception -> 0x0626, all -> 0x0757 }
+            org.telegram.SQLite.SQLiteDatabase r3 = r9.database     // Catch:{ Exception -> 0x0626, all -> 0x0757 }
+            java.lang.StringBuilder r4 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0626, all -> 0x0757 }
+            r4.<init>()     // Catch:{ Exception -> 0x0626, all -> 0x0757 }
             java.lang.String r10 = "DELETE FROM media_counts_v2 WHERE uid = "
-            r4.append(r10)     // Catch:{ Exception -> 0x0624, all -> 0x0755 }
-            r4.append(r7)     // Catch:{ Exception -> 0x0624, all -> 0x0755 }
-            java.lang.String r4 = r4.toString()     // Catch:{ Exception -> 0x0624, all -> 0x0755 }
-            org.telegram.SQLite.SQLitePreparedStatement r3 = r3.executeFast(r4)     // Catch:{ Exception -> 0x0624, all -> 0x0755 }
-            org.telegram.SQLite.SQLitePreparedStatement r3 = r3.stepThis()     // Catch:{ Exception -> 0x0624, all -> 0x0755 }
-            r3.dispose()     // Catch:{ Exception -> 0x0624, all -> 0x0755 }
-            goto L_0x0630
-        L_0x0624:
-            r0 = move-exception
-            goto L_0x0629
+            r4.append(r10)     // Catch:{ Exception -> 0x0626, all -> 0x0757 }
+            r4.append(r7)     // Catch:{ Exception -> 0x0626, all -> 0x0757 }
+            java.lang.String r4 = r4.toString()     // Catch:{ Exception -> 0x0626, all -> 0x0757 }
+            org.telegram.SQLite.SQLitePreparedStatement r3 = r3.executeFast(r4)     // Catch:{ Exception -> 0x0626, all -> 0x0757 }
+            org.telegram.SQLite.SQLitePreparedStatement r3 = r3.stepThis()     // Catch:{ Exception -> 0x0626, all -> 0x0757 }
+            r3.dispose()     // Catch:{ Exception -> 0x0626, all -> 0x0757 }
+            goto L_0x0632
         L_0x0626:
             r0 = move-exception
+            goto L_0x062b
+        L_0x0628:
+            r0 = move-exception
             r31 = r12
-        L_0x0629:
+        L_0x062b:
             r3 = r0
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r3)     // Catch:{ Exception -> 0x0757, all -> 0x0755 }
-            goto L_0x0630
-        L_0x062e:
-            r31 = r12
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r3)     // Catch:{ Exception -> 0x0759, all -> 0x0757 }
+            goto L_0x0632
         L_0x0630:
-            if (r1 == 0) goto L_0x0635
-            r1.reuse()     // Catch:{ Exception -> 0x0757, all -> 0x0755 }
-        L_0x0635:
-            if (r5 == 0) goto L_0x063a
-            r5.reuse()     // Catch:{ Exception -> 0x0757, all -> 0x0755 }
-        L_0x063a:
-            r2.reuse()     // Catch:{ Exception -> 0x0757, all -> 0x0755 }
-            int r1 = r13.ttl_period     // Catch:{ Exception -> 0x0757, all -> 0x0755 }
-            if (r1 == 0) goto L_0x067f
-            int r1 = r13.id     // Catch:{ Exception -> 0x0757, all -> 0x0755 }
-            if (r1 <= 0) goto L_0x067f
-            if (r21 != 0) goto L_0x0651
-            org.telegram.SQLite.SQLiteDatabase r1 = r9.database     // Catch:{ Exception -> 0x0757, all -> 0x0755 }
+            r31 = r12
+        L_0x0632:
+            if (r1 == 0) goto L_0x0637
+            r1.reuse()     // Catch:{ Exception -> 0x0759, all -> 0x0757 }
+        L_0x0637:
+            if (r5 == 0) goto L_0x063c
+            r5.reuse()     // Catch:{ Exception -> 0x0759, all -> 0x0757 }
+        L_0x063c:
+            r2.reuse()     // Catch:{ Exception -> 0x0759, all -> 0x0757 }
+            int r1 = r13.ttl_period     // Catch:{ Exception -> 0x0759, all -> 0x0757 }
+            if (r1 == 0) goto L_0x0681
+            int r1 = r13.id     // Catch:{ Exception -> 0x0759, all -> 0x0757 }
+            if (r1 <= 0) goto L_0x0681
+            if (r21 != 0) goto L_0x0653
+            org.telegram.SQLite.SQLiteDatabase r1 = r9.database     // Catch:{ Exception -> 0x0759, all -> 0x0757 }
             java.lang.String r2 = "REPLACE INTO enc_tasks_v4 VALUES(?, ?, ?, ?)"
-            org.telegram.SQLite.SQLitePreparedStatement r1 = r1.executeFast(r2)     // Catch:{ Exception -> 0x0757, all -> 0x0755 }
+            org.telegram.SQLite.SQLitePreparedStatement r1 = r1.executeFast(r2)     // Catch:{ Exception -> 0x0759, all -> 0x0757 }
             r3 = r1
-            goto L_0x0653
-        L_0x0651:
-            r3 = r21
+            goto L_0x0655
         L_0x0653:
-            r3.requery()     // Catch:{ Exception -> 0x0750, all -> 0x074b }
-            int r1 = r13.id     // Catch:{ Exception -> 0x0750, all -> 0x074b }
+            r3 = r21
+        L_0x0655:
+            r3.requery()     // Catch:{ Exception -> 0x0752, all -> 0x074d }
+            int r1 = r13.id     // Catch:{ Exception -> 0x0752, all -> 0x074d }
             r2 = 1
-            r3.bindInteger(r2, r1)     // Catch:{ Exception -> 0x0750, all -> 0x074b }
-            long r1 = r13.dialog_id     // Catch:{ Exception -> 0x0750, all -> 0x074b }
+            r3.bindInteger(r2, r1)     // Catch:{ Exception -> 0x0752, all -> 0x074d }
+            long r1 = r13.dialog_id     // Catch:{ Exception -> 0x0752, all -> 0x074d }
             r4 = 2
-            r3.bindLong(r4, r1)     // Catch:{ Exception -> 0x0750, all -> 0x074b }
-            int r1 = r13.date     // Catch:{ Exception -> 0x0750, all -> 0x074b }
-            int r2 = r13.ttl_period     // Catch:{ Exception -> 0x0750, all -> 0x074b }
+            r3.bindLong(r4, r1)     // Catch:{ Exception -> 0x0752, all -> 0x074d }
+            int r1 = r13.date     // Catch:{ Exception -> 0x0752, all -> 0x074d }
+            int r2 = r13.ttl_period     // Catch:{ Exception -> 0x0752, all -> 0x074d }
             int r1 = r1 + r2
             r2 = 3
-            r3.bindInteger(r2, r1)     // Catch:{ Exception -> 0x0750, all -> 0x074b }
+            r3.bindInteger(r2, r1)     // Catch:{ Exception -> 0x0752, all -> 0x074d }
             r1 = 4
             r2 = 0
-            r3.bindInteger(r1, r2)     // Catch:{ Exception -> 0x0750, all -> 0x074b }
-            r3.step()     // Catch:{ Exception -> 0x0750, all -> 0x074b }
-            int r2 = r13.date     // Catch:{ Exception -> 0x0750, all -> 0x074b }
-            int r4 = r13.ttl_period     // Catch:{ Exception -> 0x0750, all -> 0x074b }
+            r3.bindInteger(r1, r2)     // Catch:{ Exception -> 0x0752, all -> 0x074d }
+            r3.step()     // Catch:{ Exception -> 0x0752, all -> 0x074d }
+            int r2 = r13.date     // Catch:{ Exception -> 0x0752, all -> 0x074d }
+            int r4 = r13.ttl_period     // Catch:{ Exception -> 0x0752, all -> 0x074d }
             int r2 = r2 + r4
             r4 = r22
-            int r22 = java.lang.Math.min(r4, r2)     // Catch:{ Exception -> 0x0750, all -> 0x074b }
-            goto L_0x0686
-        L_0x067f:
+            int r22 = java.lang.Math.min(r4, r2)     // Catch:{ Exception -> 0x0752, all -> 0x074d }
+            goto L_0x0688
+        L_0x0681:
             r4 = r22
             r1 = 4
             r22 = r4
             r3 = r21
-        L_0x0686:
-            org.telegram.tgnet.TLRPC$MessageMedia r2 = r13.media     // Catch:{ Exception -> 0x0750, all -> 0x074b }
-            boolean r4 = r2 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaPoll     // Catch:{ Exception -> 0x0750, all -> 0x074b }
-            if (r4 == 0) goto L_0x06d2
-            if (r24 != 0) goto L_0x0697
-            org.telegram.SQLite.SQLiteDatabase r2 = r9.database     // Catch:{ Exception -> 0x0750, all -> 0x074b }
+        L_0x0688:
+            org.telegram.tgnet.TLRPC$MessageMedia r2 = r13.media     // Catch:{ Exception -> 0x0752, all -> 0x074d }
+            boolean r4 = r2 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaPoll     // Catch:{ Exception -> 0x0752, all -> 0x074d }
+            if (r4 == 0) goto L_0x06d4
+            if (r24 != 0) goto L_0x0699
+            org.telegram.SQLite.SQLiteDatabase r2 = r9.database     // Catch:{ Exception -> 0x0752, all -> 0x074d }
             java.lang.String r4 = "REPLACE INTO polls_v2 VALUES(?, ?, ?)"
-            org.telegram.SQLite.SQLitePreparedStatement r2 = r2.executeFast(r4)     // Catch:{ Exception -> 0x0750, all -> 0x074b }
-            goto L_0x0699
-        L_0x0697:
-            r2 = r24
+            org.telegram.SQLite.SQLitePreparedStatement r2 = r2.executeFast(r4)     // Catch:{ Exception -> 0x0752, all -> 0x074d }
+            goto L_0x069b
         L_0x0699:
-            org.telegram.tgnet.TLRPC$MessageMedia r4 = r13.media     // Catch:{ Exception -> 0x06c9, all -> 0x06c0 }
-            org.telegram.tgnet.TLRPC$TL_messageMediaPoll r4 = (org.telegram.tgnet.TLRPC$TL_messageMediaPoll) r4     // Catch:{ Exception -> 0x06c9, all -> 0x06c0 }
-            r2.requery()     // Catch:{ Exception -> 0x06c9, all -> 0x06c0 }
-            int r5 = r13.id     // Catch:{ Exception -> 0x06c9, all -> 0x06c0 }
+            r2 = r24
+        L_0x069b:
+            org.telegram.tgnet.TLRPC$MessageMedia r4 = r13.media     // Catch:{ Exception -> 0x06cb, all -> 0x06c2 }
+            org.telegram.tgnet.TLRPC$TL_messageMediaPoll r4 = (org.telegram.tgnet.TLRPC$TL_messageMediaPoll) r4     // Catch:{ Exception -> 0x06cb, all -> 0x06c2 }
+            r2.requery()     // Catch:{ Exception -> 0x06cb, all -> 0x06c2 }
+            int r5 = r13.id     // Catch:{ Exception -> 0x06cb, all -> 0x06c2 }
             r10 = 1
-            r2.bindInteger(r10, r5)     // Catch:{ Exception -> 0x06c9, all -> 0x06c0 }
+            r2.bindInteger(r10, r5)     // Catch:{ Exception -> 0x06cb, all -> 0x06c2 }
             r5 = r2
-            long r1 = r13.dialog_id     // Catch:{ Exception -> 0x06be, all -> 0x06bc }
+            long r1 = r13.dialog_id     // Catch:{ Exception -> 0x06c0, all -> 0x06be }
             r10 = 2
-            r5.bindLong(r10, r1)     // Catch:{ Exception -> 0x06be, all -> 0x06bc }
-            org.telegram.tgnet.TLRPC$Poll r1 = r4.poll     // Catch:{ Exception -> 0x06be, all -> 0x06bc }
-            long r1 = r1.id     // Catch:{ Exception -> 0x06be, all -> 0x06bc }
+            r5.bindLong(r10, r1)     // Catch:{ Exception -> 0x06c0, all -> 0x06be }
+            org.telegram.tgnet.TLRPC$Poll r1 = r4.poll     // Catch:{ Exception -> 0x06c0, all -> 0x06be }
+            long r1 = r1.id     // Catch:{ Exception -> 0x06c0, all -> 0x06be }
             r4 = 3
-            r5.bindLong(r4, r1)     // Catch:{ Exception -> 0x06be, all -> 0x06bc }
-            r5.step()     // Catch:{ Exception -> 0x06be, all -> 0x06bc }
+            r5.bindLong(r4, r1)     // Catch:{ Exception -> 0x06c0, all -> 0x06be }
+            r5.step()     // Catch:{ Exception -> 0x06c0, all -> 0x06be }
             r24 = r5
-            goto L_0x071a
-        L_0x06bc:
-            r0 = move-exception
-            goto L_0x06c2
+            goto L_0x071c
         L_0x06be:
             r0 = move-exception
-            goto L_0x06cb
+            goto L_0x06c4
         L_0x06c0:
             r0 = move-exception
-            r5 = r2
+            goto L_0x06cd
         L_0x06c2:
-            r1 = r0
-            r21 = r3
-            r24 = r5
-            goto L_0x0765
-        L_0x06c9:
             r0 = move-exception
             r5 = r2
-        L_0x06cb:
+        L_0x06c4:
             r1 = r0
             r21 = r3
             r24 = r5
-            goto L_0x0759
-        L_0x06d2:
-            boolean r1 = r2 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaWebPage     // Catch:{ Exception -> 0x0750, all -> 0x074b }
-            if (r1 == 0) goto L_0x071a
-            if (r20 != 0) goto L_0x06e1
-            org.telegram.SQLite.SQLiteDatabase r1 = r9.database     // Catch:{ Exception -> 0x0750, all -> 0x074b }
+            goto L_0x0767
+        L_0x06cb:
+            r0 = move-exception
+            r5 = r2
+        L_0x06cd:
+            r1 = r0
+            r21 = r3
+            r24 = r5
+            goto L_0x075b
+        L_0x06d4:
+            boolean r1 = r2 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaWebPage     // Catch:{ Exception -> 0x0752, all -> 0x074d }
+            if (r1 == 0) goto L_0x071c
+            if (r20 != 0) goto L_0x06e3
+            org.telegram.SQLite.SQLiteDatabase r1 = r9.database     // Catch:{ Exception -> 0x0752, all -> 0x074d }
             java.lang.String r2 = "REPLACE INTO webpage_pending_v2 VALUES(?, ?, ?)"
-            org.telegram.SQLite.SQLitePreparedStatement r1 = r1.executeFast(r2)     // Catch:{ Exception -> 0x0750, all -> 0x074b }
-            goto L_0x06e3
-        L_0x06e1:
-            r1 = r20
+            org.telegram.SQLite.SQLitePreparedStatement r1 = r1.executeFast(r2)     // Catch:{ Exception -> 0x0752, all -> 0x074d }
+            goto L_0x06e5
         L_0x06e3:
-            r1.requery()     // Catch:{ Exception -> 0x070d, all -> 0x0702 }
-            org.telegram.tgnet.TLRPC$MessageMedia r2 = r13.media     // Catch:{ Exception -> 0x070d, all -> 0x0702 }
-            org.telegram.tgnet.TLRPC$WebPage r2 = r2.webpage     // Catch:{ Exception -> 0x070d, all -> 0x0702 }
-            long r4 = r2.id     // Catch:{ Exception -> 0x070d, all -> 0x0702 }
+            r1 = r20
+        L_0x06e5:
+            r1.requery()     // Catch:{ Exception -> 0x070f, all -> 0x0704 }
+            org.telegram.tgnet.TLRPC$MessageMedia r2 = r13.media     // Catch:{ Exception -> 0x070f, all -> 0x0704 }
+            org.telegram.tgnet.TLRPC$WebPage r2 = r2.webpage     // Catch:{ Exception -> 0x070f, all -> 0x0704 }
+            long r4 = r2.id     // Catch:{ Exception -> 0x070f, all -> 0x0704 }
             r2 = 1
-            r1.bindLong(r2, r4)     // Catch:{ Exception -> 0x070d, all -> 0x0702 }
-            int r2 = r13.id     // Catch:{ Exception -> 0x070d, all -> 0x0702 }
+            r1.bindLong(r2, r4)     // Catch:{ Exception -> 0x070f, all -> 0x0704 }
+            int r2 = r13.id     // Catch:{ Exception -> 0x070f, all -> 0x0704 }
             r4 = 2
-            r1.bindInteger(r4, r2)     // Catch:{ Exception -> 0x070d, all -> 0x0702 }
-            long r4 = r13.dialog_id     // Catch:{ Exception -> 0x070d, all -> 0x0702 }
+            r1.bindInteger(r4, r2)     // Catch:{ Exception -> 0x070f, all -> 0x0704 }
+            long r4 = r13.dialog_id     // Catch:{ Exception -> 0x070f, all -> 0x0704 }
             r2 = 3
-            r1.bindLong(r2, r4)     // Catch:{ Exception -> 0x070d, all -> 0x0702 }
-            r1.step()     // Catch:{ Exception -> 0x070d, all -> 0x0702 }
+            r1.bindLong(r2, r4)     // Catch:{ Exception -> 0x070f, all -> 0x0704 }
+            r1.step()     // Catch:{ Exception -> 0x070f, all -> 0x0704 }
             r20 = r1
-            goto L_0x071b
-        L_0x0702:
+            goto L_0x071d
+        L_0x0704:
             r0 = move-exception
             r20 = r1
             r21 = r3
@@ -33079,7 +33273,7 @@ public class MessagesStorage extends BaseController {
             r10 = 0
             r19 = 0
             goto L_0x00ae
-        L_0x070d:
+        L_0x070f:
             r0 = move-exception
             r20 = r1
             r21 = r3
@@ -33088,27 +33282,27 @@ public class MessagesStorage extends BaseController {
             r10 = 0
             r19 = 0
             goto L_0x00be
-        L_0x071a:
+        L_0x071c:
             r2 = 3
-        L_0x071b:
-            if (r11 != 0) goto L_0x0732
-            boolean r1 = r9.isValidKeyboardToSave(r13)     // Catch:{ Exception -> 0x0750, all -> 0x074b }
-            if (r1 == 0) goto L_0x0732
+        L_0x071d:
+            if (r11 != 0) goto L_0x0734
+            boolean r1 = r9.isValidKeyboardToSave(r13)     // Catch:{ Exception -> 0x0752, all -> 0x074d }
+            if (r1 == 0) goto L_0x0734
             r1 = r23
-            if (r1 == 0) goto L_0x072d
-            int r4 = r1.id     // Catch:{ Exception -> 0x0750, all -> 0x074b }
-            int r5 = r13.id     // Catch:{ Exception -> 0x0750, all -> 0x074b }
-            if (r4 >= r5) goto L_0x0734
-        L_0x072d:
+            if (r1 == 0) goto L_0x072f
+            int r4 = r1.id     // Catch:{ Exception -> 0x0752, all -> 0x074d }
+            int r5 = r13.id     // Catch:{ Exception -> 0x0752, all -> 0x074d }
+            if (r4 >= r5) goto L_0x0736
+        L_0x072f:
             r21 = r3
             r23 = r13
-            goto L_0x0738
-        L_0x0732:
-            r1 = r23
+            goto L_0x073a
         L_0x0734:
+            r1 = r23
+        L_0x0736:
             r23 = r1
             r21 = r3
-        L_0x0738:
+        L_0x073a:
             int r1 = r35 + 1
             r10 = r43
             r4 = r45
@@ -33119,74 +33313,74 @@ public class MessagesStorage extends BaseController {
             r12 = r33
             r13 = 0
             r14 = 0
-            goto L_0x01db
-        L_0x074b:
+            goto L_0x01dd
+        L_0x074d:
             r0 = move-exception
             r1 = r0
             r21 = r3
-            goto L_0x0765
-        L_0x0750:
+            goto L_0x0767
+        L_0x0752:
             r0 = move-exception
             r1 = r0
             r21 = r3
-            goto L_0x0759
-        L_0x0755:
-            r0 = move-exception
-            goto L_0x0764
+            goto L_0x075b
         L_0x0757:
             r0 = move-exception
-            r1 = r0
+            goto L_0x0766
         L_0x0759:
-            r3 = r6
-            goto L_0x077c
+            r0 = move-exception
+            r1 = r0
         L_0x075b:
-            r0 = move-exception
-            goto L_0x0762
-        L_0x075d:
-            r0 = move-exception
-            goto L_0x076a
-        L_0x075f:
-            r0 = move-exception
-            r6 = r31
-        L_0x0762:
-            r15 = r32
-        L_0x0764:
-            r1 = r0
-        L_0x0765:
-            r3 = r6
-            goto L_0x0773
-        L_0x0767:
-            r0 = move-exception
-            r6 = r31
-        L_0x076a:
-            r15 = r32
-        L_0x076c:
-            r1 = r0
             r3 = r6
             goto L_0x077e
-        L_0x076f:
+        L_0x075d:
+            r0 = move-exception
+            goto L_0x0764
+        L_0x075f:
+            r0 = move-exception
+            goto L_0x076c
+        L_0x0761:
+            r0 = move-exception
+            r6 = r31
+        L_0x0764:
+            r15 = r32
+        L_0x0766:
+            r1 = r0
+        L_0x0767:
+            r3 = r6
+            goto L_0x0775
+        L_0x0769:
+            r0 = move-exception
+            r6 = r31
+        L_0x076c:
+            r15 = r32
+        L_0x076e:
+            r1 = r0
+            r3 = r6
+            goto L_0x0780
+        L_0x0771:
             r0 = move-exception
             r15 = r2
             r6 = r3
             r1 = r0
-        L_0x0773:
+        L_0x0775:
             r10 = 0
-        L_0x0774:
+        L_0x0776:
             r19 = 0
-            goto L_0x08f2
-        L_0x0778:
+            goto L_0x08f8
+        L_0x077a:
             r0 = move-exception
             r15 = r2
             r6 = r3
             r1 = r0
-        L_0x077c:
-            r32 = r15
         L_0x077e:
+            r32 = r15
+        L_0x0780:
             r10 = 0
-        L_0x077f:
+        L_0x0781:
             r19 = 0
-            goto L_0x08c2
-        L_0x0783:
+            goto L_0x08c6
+        L_0x0785:
             r15 = r2
             r45 = r4
             r30 = r5
@@ -33194,116 +33388,116 @@ public class MessagesStorage extends BaseController {
             r4 = r22
             r1 = r23
             r6 = r3
-            r6.dispose()     // Catch:{ Exception -> 0x0890, all -> 0x0888 }
-            r15.dispose()     // Catch:{ Exception -> 0x0881, all -> 0x0879 }
-            if (r20 == 0) goto L_0x07ab
-            r20.dispose()     // Catch:{ Exception -> 0x07a3, all -> 0x079d }
+            r6.dispose()     // Catch:{ Exception -> 0x0894, all -> 0x088c }
+            r15.dispose()     // Catch:{ Exception -> 0x0885, all -> 0x087d }
+            if (r20 == 0) goto L_0x07ad
+            r20.dispose()     // Catch:{ Exception -> 0x07a5, all -> 0x079f }
             r20 = 0
-            goto L_0x07ab
-        L_0x079d:
+            goto L_0x07ad
+        L_0x079f:
             r0 = move-exception
             r1 = r0
             r3 = 0
             r10 = 0
             r15 = 0
-            goto L_0x0774
-        L_0x07a3:
+            goto L_0x0776
+        L_0x07a5:
             r0 = move-exception
             r1 = r0
             r3 = 0
             r10 = 0
             r19 = 0
             goto L_0x00dc
-        L_0x07ab:
-            if (r21 == 0) goto L_0x07d0
-            r21.dispose()     // Catch:{ Exception -> 0x07c6, all -> 0x07bd }
-            org.telegram.messenger.MessagesController r2 = r39.getMessagesController()     // Catch:{ Exception -> 0x07c6, all -> 0x07bd }
+        L_0x07ad:
+            if (r21 == 0) goto L_0x07d2
+            r21.dispose()     // Catch:{ Exception -> 0x07c8, all -> 0x07bf }
+            org.telegram.messenger.MessagesController r2 = r39.getMessagesController()     // Catch:{ Exception -> 0x07c8, all -> 0x07bf }
             r5 = 0
             r10 = 0
-            r2.didAddedNewTask(r4, r5, r10)     // Catch:{ Exception -> 0x07db, all -> 0x07d9 }
+            r2.didAddedNewTask(r4, r5, r10)     // Catch:{ Exception -> 0x07dd, all -> 0x07db }
             r21 = r10
-            goto L_0x07d1
-        L_0x07bd:
+            goto L_0x07d3
+        L_0x07bf:
             r0 = move-exception
             r10 = 0
-        L_0x07bf:
+        L_0x07c1:
             r1 = r0
             r3 = r10
             r15 = r3
             r19 = r15
-            goto L_0x08f2
-        L_0x07c6:
+            goto L_0x08f8
+        L_0x07c8:
             r0 = move-exception
             r10 = 0
-        L_0x07c8:
+        L_0x07ca:
             r1 = r0
             r3 = r10
             r19 = r3
             r32 = r19
-            goto L_0x08c2
-        L_0x07d0:
+            goto L_0x08c6
+        L_0x07d2:
             r10 = 0
-        L_0x07d1:
-            if (r24 == 0) goto L_0x07dd
-            r24.dispose()     // Catch:{ Exception -> 0x07db, all -> 0x07d9 }
+        L_0x07d3:
+            if (r24 == 0) goto L_0x07df
+            r24.dispose()     // Catch:{ Exception -> 0x07dd, all -> 0x07db }
             r24 = r10
-            goto L_0x07dd
-        L_0x07d9:
-            r0 = move-exception
-            goto L_0x07bf
+            goto L_0x07df
         L_0x07db:
             r0 = move-exception
-            goto L_0x07c8
+            goto L_0x07c1
         L_0x07dd:
-            if (r1 == 0) goto L_0x07e6
-            org.telegram.messenger.MediaDataController r2 = r39.getMediaDataController()     // Catch:{ Exception -> 0x07db, all -> 0x07d9 }
-            r2.putBotKeyboard(r7, r1)     // Catch:{ Exception -> 0x07db, all -> 0x07d9 }
-        L_0x07e6:
+            r0 = move-exception
+            goto L_0x07ca
+        L_0x07df:
+            if (r1 == 0) goto L_0x07e8
+            org.telegram.messenger.MediaDataController r2 = r39.getMediaDataController()     // Catch:{ Exception -> 0x07dd, all -> 0x07db }
+            r2.putBotKeyboard(r7, r1)     // Catch:{ Exception -> 0x07dd, all -> 0x07db }
+        L_0x07e8:
             r1 = r45
             r2 = 0
-            r9.deleteFromDownloadQueue(r1, r2)     // Catch:{ Exception -> 0x07db, all -> 0x07d9 }
-            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda135 r1 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda135     // Catch:{ Exception -> 0x07db, all -> 0x07d9 }
+            r9.deleteFromDownloadQueue(r1, r2)     // Catch:{ Exception -> 0x07dd, all -> 0x07db }
+            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda135 r1 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda135     // Catch:{ Exception -> 0x07dd, all -> 0x07db }
             r3 = r30
-            r1.<init>(r9, r3)     // Catch:{ Exception -> 0x07db, all -> 0x07d9 }
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r1)     // Catch:{ Exception -> 0x07db, all -> 0x07d9 }
-            org.telegram.messenger.FileLoader r1 = r39.getFileLoader()     // Catch:{ Exception -> 0x07db, all -> 0x07d9 }
+            r1.<init>(r9, r3)     // Catch:{ Exception -> 0x07dd, all -> 0x07db }
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r1)     // Catch:{ Exception -> 0x07dd, all -> 0x07db }
+            org.telegram.messenger.FileLoader r1 = r39.getFileLoader()     // Catch:{ Exception -> 0x07dd, all -> 0x07db }
             r3 = r31
-            r1.deleteFiles(r3, r2)     // Catch:{ Exception -> 0x07db, all -> 0x07d9 }
+            r1.deleteFiles(r3, r2)     // Catch:{ Exception -> 0x07dd, all -> 0x07db }
             r1 = r43
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r2 = r1.users     // Catch:{ Exception -> 0x07db, all -> 0x07d9 }
-            r9.putUsersInternal(r2)     // Catch:{ Exception -> 0x07db, all -> 0x07d9 }
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Chat> r1 = r1.chats     // Catch:{ Exception -> 0x07db, all -> 0x07d9 }
-            r9.putChatsInternal(r1)     // Catch:{ Exception -> 0x07db, all -> 0x07d9 }
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r2 = r1.users     // Catch:{ Exception -> 0x07dd, all -> 0x07db }
+            r9.putUsersInternal(r2)     // Catch:{ Exception -> 0x07dd, all -> 0x07db }
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Chat> r1 = r1.chats     // Catch:{ Exception -> 0x07dd, all -> 0x07db }
+            r9.putChatsInternal(r1)     // Catch:{ Exception -> 0x07dd, all -> 0x07db }
             r1 = r25
             r2 = 2147483647(0x7fffffff, float:NaN)
-            if (r1 == r2) goto L_0x0848
-            org.telegram.SQLite.SQLiteDatabase r2 = r9.database     // Catch:{ Exception -> 0x07db, all -> 0x07d9 }
-            java.util.Locale r3 = java.util.Locale.US     // Catch:{ Exception -> 0x07db, all -> 0x07d9 }
+            if (r1 == r2) goto L_0x084a
+            org.telegram.SQLite.SQLiteDatabase r2 = r9.database     // Catch:{ Exception -> 0x07dd, all -> 0x07db }
+            java.util.Locale r3 = java.util.Locale.US     // Catch:{ Exception -> 0x07dd, all -> 0x07db }
             java.lang.String r4 = "UPDATE dialogs SET unread_count_i = %d WHERE did = %d"
             r5 = 2
-            java.lang.Object[] r5 = new java.lang.Object[r5]     // Catch:{ Exception -> 0x07db, all -> 0x07d9 }
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r1)     // Catch:{ Exception -> 0x07db, all -> 0x07d9 }
+            java.lang.Object[] r5 = new java.lang.Object[r5]     // Catch:{ Exception -> 0x07dd, all -> 0x07db }
+            java.lang.Integer r6 = java.lang.Integer.valueOf(r1)     // Catch:{ Exception -> 0x07dd, all -> 0x07db }
             r11 = 0
-            r5[r11] = r6     // Catch:{ Exception -> 0x07db, all -> 0x07d9 }
-            java.lang.Long r6 = java.lang.Long.valueOf(r41)     // Catch:{ Exception -> 0x07db, all -> 0x07d9 }
+            r5[r11] = r6     // Catch:{ Exception -> 0x07dd, all -> 0x07db }
+            java.lang.Long r6 = java.lang.Long.valueOf(r41)     // Catch:{ Exception -> 0x07dd, all -> 0x07db }
             r11 = 1
-            r5[r11] = r6     // Catch:{ Exception -> 0x07db, all -> 0x07d9 }
-            java.lang.String r3 = java.lang.String.format(r3, r4, r5)     // Catch:{ Exception -> 0x07db, all -> 0x07d9 }
-            org.telegram.SQLite.SQLitePreparedStatement r2 = r2.executeFast(r3)     // Catch:{ Exception -> 0x07db, all -> 0x07d9 }
-            org.telegram.SQLite.SQLitePreparedStatement r2 = r2.stepThis()     // Catch:{ Exception -> 0x07db, all -> 0x07d9 }
-            r2.dispose()     // Catch:{ Exception -> 0x07db, all -> 0x07d9 }
-            org.telegram.messenger.support.LongSparseIntArray r2 = new org.telegram.messenger.support.LongSparseIntArray     // Catch:{ Exception -> 0x07db, all -> 0x07d9 }
+            r5[r11] = r6     // Catch:{ Exception -> 0x07dd, all -> 0x07db }
+            java.lang.String r3 = java.lang.String.format(r3, r4, r5)     // Catch:{ Exception -> 0x07dd, all -> 0x07db }
+            org.telegram.SQLite.SQLitePreparedStatement r2 = r2.executeFast(r3)     // Catch:{ Exception -> 0x07dd, all -> 0x07db }
+            org.telegram.SQLite.SQLitePreparedStatement r2 = r2.stepThis()     // Catch:{ Exception -> 0x07dd, all -> 0x07db }
+            r2.dispose()     // Catch:{ Exception -> 0x07dd, all -> 0x07db }
+            org.telegram.messenger.support.LongSparseIntArray r2 = new org.telegram.messenger.support.LongSparseIntArray     // Catch:{ Exception -> 0x07dd, all -> 0x07db }
             r3 = 1
-            r2.<init>(r3)     // Catch:{ Exception -> 0x07db, all -> 0x07d9 }
-            r2.put(r7, r1)     // Catch:{ Exception -> 0x07db, all -> 0x07d9 }
-            org.telegram.messenger.MessagesController r1 = r39.getMessagesController()     // Catch:{ Exception -> 0x07db, all -> 0x07d9 }
-            r1.processDialogsUpdateRead(r10, r2)     // Catch:{ Exception -> 0x07db, all -> 0x07d9 }
-        L_0x0848:
-            org.telegram.SQLite.SQLiteDatabase r1 = r9.database     // Catch:{ Exception -> 0x07db, all -> 0x07d9 }
-            r1.commitTransaction()     // Catch:{ Exception -> 0x07db, all -> 0x07d9 }
-            if (r46 == 0) goto L_0x0861
-            java.util.ArrayList r6 = new java.util.ArrayList     // Catch:{ Exception -> 0x07db, all -> 0x07d9 }
-            r6.<init>()     // Catch:{ Exception -> 0x07db, all -> 0x07d9 }
+            r2.<init>(r3)     // Catch:{ Exception -> 0x07dd, all -> 0x07db }
+            r2.put(r7, r1)     // Catch:{ Exception -> 0x07dd, all -> 0x07db }
+            org.telegram.messenger.MessagesController r1 = r39.getMessagesController()     // Catch:{ Exception -> 0x07dd, all -> 0x07db }
+            r1.processDialogsUpdateRead(r10, r2)     // Catch:{ Exception -> 0x07dd, all -> 0x07db }
+        L_0x084a:
+            org.telegram.SQLite.SQLiteDatabase r1 = r9.database     // Catch:{ Exception -> 0x07dd, all -> 0x07db }
+            r1.commitTransaction()     // Catch:{ Exception -> 0x07dd, all -> 0x07db }
+            if (r46 == 0) goto L_0x0863
+            java.util.ArrayList r6 = new java.util.ArrayList     // Catch:{ Exception -> 0x07dd, all -> 0x07db }
+            r6.<init>()     // Catch:{ Exception -> 0x07dd, all -> 0x07db }
             r11 = 0
             r12 = 0
             r1 = r39
@@ -33311,147 +33505,153 @@ public class MessagesStorage extends BaseController {
             r4 = r26
             r7 = r11
             r8 = r12
-            r1.updateDialogsWithDeletedMessages(r2, r4, r6, r7, r8)     // Catch:{ Exception -> 0x07db, all -> 0x07d9 }
-        L_0x0861:
-            r3 = r24
+            r1.updateDialogsWithDeletedMessages(r2, r4, r6, r7, r8)     // Catch:{ Exception -> 0x07dd, all -> 0x07db }
         L_0x0863:
+            r3 = r24
+        L_0x0865:
             org.telegram.SQLite.SQLiteDatabase r1 = r9.database
+            if (r1 == 0) goto L_0x086c
             r1.commitTransaction()
-            if (r3 == 0) goto L_0x086d
+        L_0x086c:
+            if (r3 == 0) goto L_0x0871
             r3.dispose()
-        L_0x086d:
-            if (r20 == 0) goto L_0x0872
+        L_0x0871:
+            if (r20 == 0) goto L_0x0876
             r20.dispose()
-        L_0x0872:
-            if (r21 == 0) goto L_0x08ed
+        L_0x0876:
+            if (r21 == 0) goto L_0x08f3
             r21.dispose()
-            goto L_0x08ed
-        L_0x0879:
+            goto L_0x08f3
+        L_0x087d:
             r0 = move-exception
             r10 = 0
             r1 = r0
             r3 = r10
             r19 = r3
-            goto L_0x08f2
-        L_0x0881:
+            goto L_0x08f8
+        L_0x0885:
             r0 = move-exception
             r10 = 0
             r1 = r0
             r3 = r10
             r19 = r3
-            goto L_0x0896
-        L_0x0888:
+            goto L_0x089a
+        L_0x088c:
             r0 = move-exception
             r10 = 0
             r1 = r0
             r3 = r6
             r19 = r10
-            goto L_0x08f2
-        L_0x0890:
+            goto L_0x08f8
+        L_0x0894:
             r0 = move-exception
             r10 = 0
             r1 = r0
             r3 = r6
             r19 = r10
-        L_0x0896:
+        L_0x089a:
             r32 = r15
-            goto L_0x08c2
-        L_0x0899:
+            goto L_0x08c6
+        L_0x089d:
             r0 = move-exception
             r6 = r3
             r10 = 0
             r1 = r0
             r15 = r10
-            goto L_0x08ab
-        L_0x089f:
+            goto L_0x08af
+        L_0x08a3:
             r0 = move-exception
             r6 = r3
             r10 = 0
             r1 = r0
             r19 = r10
-            goto L_0x08ba
-        L_0x08a6:
+            goto L_0x08be
+        L_0x08aa:
             r0 = move-exception
             r10 = 0
             r1 = r0
             r3 = r10
             r15 = r3
-        L_0x08ab:
+        L_0x08af:
             r19 = r15
             r20 = r19
             r21 = r20
             r24 = r21
-            goto L_0x08f2
-        L_0x08b4:
+            goto L_0x08f8
+        L_0x08b8:
             r0 = move-exception
             r10 = 0
             r1 = r0
             r3 = r10
             r19 = r3
-        L_0x08ba:
+        L_0x08be:
             r20 = r19
             r21 = r20
             r24 = r21
             r32 = r24
-        L_0x08c2:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r1)     // Catch:{ all -> 0x08ee }
+        L_0x08c6:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r1)     // Catch:{ all -> 0x08f4 }
             org.telegram.SQLite.SQLiteDatabase r1 = r9.database
+            if (r1 == 0) goto L_0x08d0
             r1.commitTransaction()
-            if (r3 == 0) goto L_0x08cf
+        L_0x08d0:
+            if (r3 == 0) goto L_0x08d5
             r3.dispose()
-        L_0x08cf:
-            if (r32 == 0) goto L_0x08d4
+        L_0x08d5:
+            if (r32 == 0) goto L_0x08da
             r32.dispose()
-        L_0x08d4:
-            if (r24 == 0) goto L_0x08d9
+        L_0x08da:
+            if (r24 == 0) goto L_0x08df
             r24.dispose()
-        L_0x08d9:
-            if (r20 == 0) goto L_0x08de
+        L_0x08df:
+            if (r20 == 0) goto L_0x08e4
             r20.dispose()
-        L_0x08de:
-            if (r21 == 0) goto L_0x08e3
+        L_0x08e4:
+            if (r21 == 0) goto L_0x08e9
             r21.dispose()
-        L_0x08e3:
-            if (r19 == 0) goto L_0x08e8
+        L_0x08e9:
+            if (r19 == 0) goto L_0x08ee
             r19.dispose()
-        L_0x08e8:
-            if (r10 == 0) goto L_0x08ed
-            r10.dispose()
-        L_0x08ed:
-            return
         L_0x08ee:
+            if (r10 == 0) goto L_0x08f3
+            r10.dispose()
+        L_0x08f3:
+            return
+        L_0x08f4:
             r0 = move-exception
             r1 = r0
             r15 = r32
-        L_0x08f2:
+        L_0x08f8:
             org.telegram.SQLite.SQLiteDatabase r2 = r9.database
+            if (r2 == 0) goto L_0x08ff
             r2.commitTransaction()
-            if (r3 == 0) goto L_0x08fc
+        L_0x08ff:
+            if (r3 == 0) goto L_0x0904
             r3.dispose()
-        L_0x08fc:
-            if (r15 == 0) goto L_0x0901
+        L_0x0904:
+            if (r15 == 0) goto L_0x0909
             r15.dispose()
-        L_0x0901:
-            if (r24 == 0) goto L_0x0906
+        L_0x0909:
+            if (r24 == 0) goto L_0x090e
             r24.dispose()
-        L_0x0906:
-            if (r20 == 0) goto L_0x090b
+        L_0x090e:
+            if (r20 == 0) goto L_0x0913
             r20.dispose()
-        L_0x090b:
-            if (r21 == 0) goto L_0x0910
+        L_0x0913:
+            if (r21 == 0) goto L_0x0918
             r21.dispose()
-        L_0x0910:
-            if (r19 == 0) goto L_0x0915
+        L_0x0918:
+            if (r19 == 0) goto L_0x091d
             r19.dispose()
-        L_0x0915:
-            if (r10 == 0) goto L_0x091a
+        L_0x091d:
+            if (r10 == 0) goto L_0x0922
             r10.dispose()
-        L_0x091a:
-            goto L_0x091c
-        L_0x091b:
+        L_0x0922:
+            goto L_0x0924
+        L_0x0923:
             throw r1
-        L_0x091c:
-            goto L_0x091b
+        L_0x0924:
+            goto L_0x0923
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$putMessages$178(boolean, long, org.telegram.tgnet.TLRPC$messages_Messages, int, int, boolean):void");
     }
@@ -34798,26 +34998,28 @@ public class MessagesStorage extends BaseController {
     /* JADX WARNING: Removed duplicated region for block: B:238:0x0442 A[SYNTHETIC, Splitter:B:238:0x0442] */
     /* JADX WARNING: Removed duplicated region for block: B:243:0x0449 A[Catch:{ Exception -> 0x047d, all -> 0x0479 }] */
     /* JADX WARNING: Removed duplicated region for block: B:253:0x046a  */
-    /* JADX WARNING: Removed duplicated region for block: B:386:0x0646  */
-    /* JADX WARNING: Removed duplicated region for block: B:388:0x064b  */
-    /* JADX WARNING: Removed duplicated region for block: B:390:0x0650  */
-    /* JADX WARNING: Removed duplicated region for block: B:392:0x0655  */
-    /* JADX WARNING: Removed duplicated region for block: B:394:0x065a  */
-    /* JADX WARNING: Removed duplicated region for block: B:396:0x065f  */
-    /* JADX WARNING: Removed duplicated region for block: B:398:0x0664  */
-    /* JADX WARNING: Removed duplicated region for block: B:400:0x0669  */
-    /* JADX WARNING: Removed duplicated region for block: B:402:0x066e  */
-    /* JADX WARNING: Removed duplicated region for block: B:409:0x0680  */
-    /* JADX WARNING: Removed duplicated region for block: B:411:0x0685  */
-    /* JADX WARNING: Removed duplicated region for block: B:413:0x068a  */
-    /* JADX WARNING: Removed duplicated region for block: B:415:0x068f  */
-    /* JADX WARNING: Removed duplicated region for block: B:417:0x0694  */
-    /* JADX WARNING: Removed duplicated region for block: B:419:0x0699  */
-    /* JADX WARNING: Removed duplicated region for block: B:421:0x069e  */
-    /* JADX WARNING: Removed duplicated region for block: B:423:0x06a3  */
-    /* JADX WARNING: Removed duplicated region for block: B:425:0x06a8  */
-    /* JADX WARNING: Removed duplicated region for block: B:427:0x06ad  */
-    /* JADX WARNING: Removed duplicated region for block: B:435:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:388:0x0645  */
+    /* JADX WARNING: Removed duplicated region for block: B:390:0x064a  */
+    /* JADX WARNING: Removed duplicated region for block: B:392:0x064f  */
+    /* JADX WARNING: Removed duplicated region for block: B:394:0x0654  */
+    /* JADX WARNING: Removed duplicated region for block: B:396:0x0659  */
+    /* JADX WARNING: Removed duplicated region for block: B:398:0x065e  */
+    /* JADX WARNING: Removed duplicated region for block: B:400:0x0663  */
+    /* JADX WARNING: Removed duplicated region for block: B:402:0x0668  */
+    /* JADX WARNING: Removed duplicated region for block: B:404:0x066d  */
+    /* JADX WARNING: Removed duplicated region for block: B:406:0x0672  */
+    /* JADX WARNING: Removed duplicated region for block: B:413:0x0681  */
+    /* JADX WARNING: Removed duplicated region for block: B:415:0x0686  */
+    /* JADX WARNING: Removed duplicated region for block: B:417:0x068b  */
+    /* JADX WARNING: Removed duplicated region for block: B:419:0x0690  */
+    /* JADX WARNING: Removed duplicated region for block: B:421:0x0695  */
+    /* JADX WARNING: Removed duplicated region for block: B:423:0x069a  */
+    /* JADX WARNING: Removed duplicated region for block: B:425:0x069f  */
+    /* JADX WARNING: Removed duplicated region for block: B:427:0x06a4  */
+    /* JADX WARNING: Removed duplicated region for block: B:429:0x06a9  */
+    /* JADX WARNING: Removed duplicated region for block: B:431:0x06ae  */
+    /* JADX WARNING: Removed duplicated region for block: B:433:0x06b3  */
+    /* JADX WARNING: Removed duplicated region for block: B:441:? A[RETURN, SYNTHETIC] */
     /* JADX WARNING: Removed duplicated region for block: B:89:0x017c A[SYNTHETIC, Splitter:B:89:0x017c] */
     /* JADX WARNING: Unknown variable types count: 2 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
@@ -34827,16 +35029,16 @@ public class MessagesStorage extends BaseController {
             r7 = r24
             r8 = r25
             r9 = r26
-            org.telegram.SQLite.SQLiteDatabase r1 = r7.database     // Catch:{ Exception -> 0x062d, all -> 0x061d }
-            r1.beginTransaction()     // Catch:{ Exception -> 0x062d, all -> 0x061d }
-            androidx.collection.LongSparseArray r11 = new androidx.collection.LongSparseArray     // Catch:{ Exception -> 0x062d, all -> 0x061d }
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> r1 = r8.messages     // Catch:{ Exception -> 0x062d, all -> 0x061d }
-            int r1 = r1.size()     // Catch:{ Exception -> 0x062d, all -> 0x061d }
-            r11.<init>(r1)     // Catch:{ Exception -> 0x062d, all -> 0x061d }
+            org.telegram.SQLite.SQLiteDatabase r1 = r7.database     // Catch:{ Exception -> 0x062f, all -> 0x061f }
+            r1.beginTransaction()     // Catch:{ Exception -> 0x062f, all -> 0x061f }
+            androidx.collection.LongSparseArray r11 = new androidx.collection.LongSparseArray     // Catch:{ Exception -> 0x062f, all -> 0x061f }
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> r1 = r8.messages     // Catch:{ Exception -> 0x062f, all -> 0x061f }
+            int r1 = r1.size()     // Catch:{ Exception -> 0x062f, all -> 0x061f }
+            r11.<init>(r1)     // Catch:{ Exception -> 0x062f, all -> 0x061f }
             r1 = 0
         L_0x0017:
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> r2 = r8.messages     // Catch:{ Exception -> 0x062d, all -> 0x061d }
-            int r2 = r2.size()     // Catch:{ Exception -> 0x062d, all -> 0x061d }
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> r2 = r8.messages     // Catch:{ Exception -> 0x062f, all -> 0x061f }
+            int r2 = r2.size()     // Catch:{ Exception -> 0x062f, all -> 0x061f }
             if (r1 >= r2) goto L_0x0051
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> r2 = r8.messages     // Catch:{ Exception -> 0x0041, all -> 0x0031 }
             java.lang.Object r2 = r2.get(r1)     // Catch:{ Exception -> 0x0041, all -> 0x0031 }
@@ -34857,7 +35059,7 @@ public class MessagesStorage extends BaseController {
             r16 = 0
             r17 = 0
             r20 = 0
-            goto L_0x0679
+            goto L_0x067d
         L_0x0041:
             r0 = move-exception
             r1 = r0
@@ -34870,14 +35072,14 @@ public class MessagesStorage extends BaseController {
             r16 = 0
             r17 = 0
             r20 = 0
-            goto L_0x063c
+            goto L_0x063e
         L_0x0051:
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r1 = r8.dialogs     // Catch:{ Exception -> 0x062d, all -> 0x061d }
-            boolean r1 = r1.isEmpty()     // Catch:{ Exception -> 0x062d, all -> 0x061d }
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r1 = r8.dialogs     // Catch:{ Exception -> 0x062f, all -> 0x061f }
+            boolean r1 = r1.isEmpty()     // Catch:{ Exception -> 0x062f, all -> 0x061f }
             if (r1 != 0) goto L_0x05e2
-            org.telegram.SQLite.SQLiteDatabase r1 = r7.database     // Catch:{ Exception -> 0x062d, all -> 0x061d }
+            org.telegram.SQLite.SQLiteDatabase r1 = r7.database     // Catch:{ Exception -> 0x062f, all -> 0x061f }
             java.lang.String r2 = "REPLACE INTO messages_v2 VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, ?, ?, ?, ?, ?, ?, 0, NULL)"
-            org.telegram.SQLite.SQLitePreparedStatement r13 = r1.executeFast(r2)     // Catch:{ Exception -> 0x062d, all -> 0x061d }
+            org.telegram.SQLite.SQLitePreparedStatement r13 = r1.executeFast(r2)     // Catch:{ Exception -> 0x062f, all -> 0x061f }
             org.telegram.SQLite.SQLiteDatabase r1 = r7.database     // Catch:{ Exception -> 0x05d1, all -> 0x05c0 }
             java.lang.String r2 = "REPLACE INTO dialogs VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
             org.telegram.SQLite.SQLitePreparedStatement r14 = r1.executeFast(r2)     // Catch:{ Exception -> 0x05d1, all -> 0x05c0 }
@@ -35046,7 +35248,7 @@ public class MessagesStorage extends BaseController {
             r1 = r0
         L_0x0198:
             r8 = r21
-            goto L_0x0679
+            goto L_0x067d
         L_0x019c:
             r0 = move-exception
             r10 = 0
@@ -35054,7 +35256,7 @@ public class MessagesStorage extends BaseController {
             r1 = r0
         L_0x01a1:
             r8 = r21
-            goto L_0x063c
+            goto L_0x063e
         L_0x01a5:
             r7 = r24
             r7.fixUnsupportedMedia(r12)     // Catch:{ Exception -> 0x03b4, all -> 0x03b1 }
@@ -35299,7 +35501,7 @@ public class MessagesStorage extends BaseController {
             r2 = r9
             r8 = r21
             r10 = 0
-            goto L_0x0678
+            goto L_0x067c
         L_0x0349:
             r0 = move-exception
             r16 = r1
@@ -35307,7 +35509,7 @@ public class MessagesStorage extends BaseController {
             r8 = r21
             r10 = 0
             r1 = r0
-            goto L_0x063c
+            goto L_0x063e
         L_0x0353:
             r3 = 2
         L_0x0354:
@@ -35534,7 +35736,7 @@ public class MessagesStorage extends BaseController {
             r20 = r5
         L_0x049a:
             r10 = 0
-            goto L_0x0679
+            goto L_0x067d
         L_0x049d:
             r0 = move-exception
             r13 = r3
@@ -35546,7 +35748,7 @@ public class MessagesStorage extends BaseController {
             r20 = r5
         L_0x04a4:
             r10 = 0
-            goto L_0x063c
+            goto L_0x063e
         L_0x04a7:
             r13 = r3
             r8 = r5
@@ -35562,21 +35764,21 @@ public class MessagesStorage extends BaseController {
             org.telegram.messenger.MessagesController r3 = r24.getMessagesController()     // Catch:{ Exception -> 0x04d0, all -> 0x04cc }
             r4 = 0
             r6 = 0
-            r3.didAddedNewTask(r1, r4, r6)     // Catch:{ Exception -> 0x0613, all -> 0x0609 }
+            r3.didAddedNewTask(r1, r4, r6)     // Catch:{ Exception -> 0x0615, all -> 0x060b }
             goto L_0x04d5
         L_0x04cc:
             r0 = move-exception
             r6 = 0
-            goto L_0x060a
+            goto L_0x060c
         L_0x04d0:
             r0 = move-exception
             r6 = 0
-            goto L_0x0614
+            goto L_0x0616
         L_0x04d4:
             r6 = 0
         L_0x04d5:
             if (r16 == 0) goto L_0x04da
-            r16.dispose()     // Catch:{ Exception -> 0x0613, all -> 0x0609 }
+            r16.dispose()     // Catch:{ Exception -> 0x0615, all -> 0x060b }
         L_0x04da:
             r1 = r25
             goto L_0x05e8
@@ -35601,7 +35803,7 @@ public class MessagesStorage extends BaseController {
             r10 = r6
         L_0x04ee:
             r14 = r10
-            goto L_0x060f
+            goto L_0x0611
         L_0x04f1:
             r0 = move-exception
             r6 = 0
@@ -35609,7 +35811,7 @@ public class MessagesStorage extends BaseController {
             r10 = r6
         L_0x04f5:
             r14 = r10
-            goto L_0x0619
+            goto L_0x061b
         L_0x04f8:
             r0 = move-exception
             r6 = 0
@@ -35619,7 +35821,7 @@ public class MessagesStorage extends BaseController {
             r14 = r10
             r15 = r14
             r17 = r15
-            goto L_0x0679
+            goto L_0x067d
         L_0x0504:
             r0 = move-exception
             r6 = 0
@@ -35629,7 +35831,7 @@ public class MessagesStorage extends BaseController {
             r14 = r10
             r15 = r14
             r17 = r15
-            goto L_0x063c
+            goto L_0x063e
         L_0x0510:
             r0 = move-exception
             r6 = 0
@@ -35638,7 +35840,7 @@ public class MessagesStorage extends BaseController {
             r10 = r6
             r14 = r10
             r17 = r14
-            goto L_0x0679
+            goto L_0x067d
         L_0x051b:
             r0 = move-exception
             r6 = 0
@@ -35647,7 +35849,7 @@ public class MessagesStorage extends BaseController {
             r10 = r6
             r14 = r10
             r17 = r14
-            goto L_0x063c
+            goto L_0x063e
         L_0x0526:
             r0 = move-exception
             r6 = 0
@@ -35655,7 +35857,7 @@ public class MessagesStorage extends BaseController {
             r20 = r5
             r10 = r6
             r17 = r10
-            goto L_0x0679
+            goto L_0x067d
         L_0x0530:
             r0 = move-exception
             r6 = 0
@@ -35663,7 +35865,7 @@ public class MessagesStorage extends BaseController {
             r20 = r5
             r10 = r6
             r17 = r10
-            goto L_0x063c
+            goto L_0x063e
         L_0x053a:
             r0 = move-exception
             r6 = 0
@@ -35683,7 +35885,7 @@ public class MessagesStorage extends BaseController {
             r1 = r0
             r20 = r5
             r10 = r6
-            goto L_0x0679
+            goto L_0x067d
         L_0x054d:
             r0 = move-exception
             r8 = r5
@@ -35695,7 +35897,7 @@ public class MessagesStorage extends BaseController {
             r1 = r0
             r20 = r5
             r10 = r6
-            goto L_0x063c
+            goto L_0x063e
         L_0x055a:
             r0 = move-exception
             r8 = r5
@@ -35731,7 +35933,7 @@ public class MessagesStorage extends BaseController {
         L_0x057d:
             r13 = r10
             r16 = r13
-            goto L_0x0679
+            goto L_0x067d
         L_0x0582:
             r0 = move-exception
             r5 = r6
@@ -35745,7 +35947,7 @@ public class MessagesStorage extends BaseController {
         L_0x058d:
             r13 = r10
             r16 = r13
-            goto L_0x063c
+            goto L_0x063e
         L_0x0592:
             r0 = move-exception
             r17 = r13
@@ -35805,7 +36007,7 @@ public class MessagesStorage extends BaseController {
             r16 = r15
         L_0x05cd:
             r20 = r16
-            goto L_0x0679
+            goto L_0x067d
         L_0x05d1:
             r0 = move-exception
             r17 = r13
@@ -35821,53 +36023,55 @@ public class MessagesStorage extends BaseController {
             r16 = r15
         L_0x05de:
             r20 = r16
-            goto L_0x063c
+            goto L_0x063e
         L_0x05e2:
             r6 = 0
             r1 = r25
             r2 = r6
             r16 = r2
         L_0x05e8:
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r3 = r1.users     // Catch:{ Exception -> 0x0613, all -> 0x0609 }
-            r7.putUsersInternal(r3)     // Catch:{ Exception -> 0x0613, all -> 0x0609 }
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Chat> r1 = r1.chats     // Catch:{ Exception -> 0x0613, all -> 0x0609 }
-            r7.putChatsInternal(r1)     // Catch:{ Exception -> 0x0613, all -> 0x0609 }
-            org.telegram.SQLite.SQLiteDatabase r1 = r7.database     // Catch:{ Exception -> 0x0613, all -> 0x0609 }
-            r1.commitTransaction()     // Catch:{ Exception -> 0x0613, all -> 0x0609 }
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r3 = r1.users     // Catch:{ Exception -> 0x0615, all -> 0x060b }
+            r7.putUsersInternal(r3)     // Catch:{ Exception -> 0x0615, all -> 0x060b }
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Chat> r1 = r1.chats     // Catch:{ Exception -> 0x0615, all -> 0x060b }
+            r7.putChatsInternal(r1)     // Catch:{ Exception -> 0x0615, all -> 0x060b }
+            org.telegram.SQLite.SQLiteDatabase r1 = r7.database     // Catch:{ Exception -> 0x0615, all -> 0x060b }
+            r1.commitTransaction()     // Catch:{ Exception -> 0x0615, all -> 0x060b }
             r1 = 0
-            r7.resetAllUnreadCounters(r1)     // Catch:{ Exception -> 0x0613, all -> 0x0609 }
+            r7.resetAllUnreadCounters(r1)     // Catch:{ Exception -> 0x0615, all -> 0x060b }
             org.telegram.SQLite.SQLiteDatabase r1 = r7.database
+            if (r1 == 0) goto L_0x0602
             r1.commitTransaction()
-            if (r16 == 0) goto L_0x0605
+        L_0x0602:
+            if (r16 == 0) goto L_0x0607
             r16.dispose()
-        L_0x0605:
-            if (r2 == 0) goto L_0x0676
-            goto L_0x0673
-        L_0x0609:
+        L_0x0607:
+            if (r2 == 0) goto L_0x067a
+            goto L_0x0677
+        L_0x060b:
             r0 = move-exception
-        L_0x060a:
+        L_0x060c:
             r1 = r0
             r8 = r6
             r10 = r8
             r13 = r10
             r14 = r13
-        L_0x060f:
+        L_0x0611:
             r15 = r14
             r17 = r15
-            goto L_0x062a
-        L_0x0613:
+            goto L_0x062c
+        L_0x0615:
             r0 = move-exception
-        L_0x0614:
+        L_0x0616:
             r1 = r0
             r8 = r6
             r10 = r8
             r13 = r10
             r14 = r13
-        L_0x0619:
+        L_0x061b:
             r15 = r14
             r17 = r15
-            goto L_0x063a
-        L_0x061d:
+            goto L_0x063c
+        L_0x061f:
             r0 = move-exception
             r6 = 0
             r1 = r0
@@ -35879,10 +36083,10 @@ public class MessagesStorage extends BaseController {
             r15 = r14
             r16 = r15
             r17 = r16
-        L_0x062a:
+        L_0x062c:
             r20 = r17
-            goto L_0x0679
-        L_0x062d:
+            goto L_0x067d
+        L_0x062f:
             r0 = move-exception
             r6 = 0
             r1 = r0
@@ -35894,86 +36098,90 @@ public class MessagesStorage extends BaseController {
             r15 = r14
             r16 = r15
             r17 = r16
-        L_0x063a:
-            r20 = r17
         L_0x063c:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r1)     // Catch:{ all -> 0x0677 }
+            r20 = r17
+        L_0x063e:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r1)     // Catch:{ all -> 0x067b }
             org.telegram.SQLite.SQLiteDatabase r1 = r7.database
+            if (r1 == 0) goto L_0x0648
             r1.commitTransaction()
-            if (r10 == 0) goto L_0x0649
+        L_0x0648:
+            if (r10 == 0) goto L_0x064d
             r10.dispose()
-        L_0x0649:
-            if (r17 == 0) goto L_0x064e
+        L_0x064d:
+            if (r17 == 0) goto L_0x0652
             r17.dispose()
-        L_0x064e:
-            if (r14 == 0) goto L_0x0653
+        L_0x0652:
+            if (r14 == 0) goto L_0x0657
             r14.dispose()
-        L_0x0653:
-            if (r15 == 0) goto L_0x0658
+        L_0x0657:
+            if (r15 == 0) goto L_0x065c
             r15.dispose()
-        L_0x0658:
-            if (r20 == 0) goto L_0x065d
+        L_0x065c:
+            if (r20 == 0) goto L_0x0661
             r20.dispose()
-        L_0x065d:
-            if (r8 == 0) goto L_0x0662
+        L_0x0661:
+            if (r8 == 0) goto L_0x0666
             r8.dispose()
-        L_0x0662:
-            if (r8 == 0) goto L_0x0667
+        L_0x0666:
+            if (r8 == 0) goto L_0x066b
             r8.dispose()
-        L_0x0667:
-            if (r13 == 0) goto L_0x066c
+        L_0x066b:
+            if (r13 == 0) goto L_0x0670
             r13.dispose()
-        L_0x066c:
-            if (r16 == 0) goto L_0x0671
+        L_0x0670:
+            if (r16 == 0) goto L_0x0675
             r16.dispose()
-        L_0x0671:
-            if (r2 == 0) goto L_0x0676
-        L_0x0673:
-            r2.dispose()
-        L_0x0676:
-            return
+        L_0x0675:
+            if (r2 == 0) goto L_0x067a
         L_0x0677:
-            r0 = move-exception
-        L_0x0678:
-            r1 = r0
-        L_0x0679:
-            org.telegram.SQLite.SQLiteDatabase r3 = r7.database
-            r3.commitTransaction()
-            if (r10 == 0) goto L_0x0683
-            r10.dispose()
-        L_0x0683:
-            if (r17 == 0) goto L_0x0688
-            r17.dispose()
-        L_0x0688:
-            if (r14 == 0) goto L_0x068d
-            r14.dispose()
-        L_0x068d:
-            if (r15 == 0) goto L_0x0692
-            r15.dispose()
-        L_0x0692:
-            if (r20 == 0) goto L_0x0697
-            r20.dispose()
-        L_0x0697:
-            if (r8 == 0) goto L_0x069c
-            r8.dispose()
-        L_0x069c:
-            if (r8 == 0) goto L_0x06a1
-            r8.dispose()
-        L_0x06a1:
-            if (r13 == 0) goto L_0x06a6
-            r13.dispose()
-        L_0x06a6:
-            if (r16 == 0) goto L_0x06ab
-            r16.dispose()
-        L_0x06ab:
-            if (r2 == 0) goto L_0x06b0
             r2.dispose()
-        L_0x06b0:
-            goto L_0x06b2
+        L_0x067a:
+            return
+        L_0x067b:
+            r0 = move-exception
+        L_0x067c:
+            r1 = r0
+        L_0x067d:
+            org.telegram.SQLite.SQLiteDatabase r3 = r7.database
+            if (r3 == 0) goto L_0x0684
+            r3.commitTransaction()
+        L_0x0684:
+            if (r10 == 0) goto L_0x0689
+            r10.dispose()
+        L_0x0689:
+            if (r17 == 0) goto L_0x068e
+            r17.dispose()
+        L_0x068e:
+            if (r14 == 0) goto L_0x0693
+            r14.dispose()
+        L_0x0693:
+            if (r15 == 0) goto L_0x0698
+            r15.dispose()
+        L_0x0698:
+            if (r20 == 0) goto L_0x069d
+            r20.dispose()
+        L_0x069d:
+            if (r8 == 0) goto L_0x06a2
+            r8.dispose()
+        L_0x06a2:
+            if (r8 == 0) goto L_0x06a7
+            r8.dispose()
+        L_0x06a7:
+            if (r13 == 0) goto L_0x06ac
+            r13.dispose()
+        L_0x06ac:
+            if (r16 == 0) goto L_0x06b1
+            r16.dispose()
         L_0x06b1:
+            if (r2 == 0) goto L_0x06b6
+            r2.dispose()
+        L_0x06b6:
+            goto L_0x06b8
+        L_0x06b7:
             throw r1
-        L_0x06b2:
-            goto L_0x06b1
+        L_0x06b8:
+            goto L_0x06b7
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.putDialogsInternal(org.telegram.tgnet.TLRPC$messages_Dialogs, int):void");
     }
@@ -36019,19 +36227,21 @@ public class MessagesStorage extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:28:0x00a4  */
-    /* JADX WARNING: Removed duplicated region for block: B:31:0x00af  */
-    /* JADX WARNING: Removed duplicated region for block: B:37:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:30:0x00a3  */
+    /* JADX WARNING: Removed duplicated region for block: B:32:0x00a8  */
+    /* JADX WARNING: Removed duplicated region for block: B:35:0x00b0  */
+    /* JADX WARNING: Removed duplicated region for block: B:37:0x00b5  */
+    /* JADX WARNING: Removed duplicated region for block: B:44:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public /* synthetic */ void lambda$setDialogsFolderId$183(java.util.ArrayList r9, java.util.ArrayList r10, int r11, long r12) {
         /*
             r8 = this;
             r0 = 0
-            org.telegram.SQLite.SQLiteDatabase r1 = r8.database     // Catch:{ Exception -> 0x0099 }
-            r1.beginTransaction()     // Catch:{ Exception -> 0x0099 }
-            org.telegram.SQLite.SQLiteDatabase r1 = r8.database     // Catch:{ Exception -> 0x0099 }
+            org.telegram.SQLite.SQLiteDatabase r1 = r8.database     // Catch:{ Exception -> 0x009b }
+            r1.beginTransaction()     // Catch:{ Exception -> 0x009b }
+            org.telegram.SQLite.SQLiteDatabase r1 = r8.database     // Catch:{ Exception -> 0x009b }
             java.lang.String r2 = "UPDATE dialogs SET folder_id = ?, pinned = ? WHERE did = ?"
-            org.telegram.SQLite.SQLitePreparedStatement r1 = r1.executeFast(r2)     // Catch:{ Exception -> 0x0099 }
+            org.telegram.SQLite.SQLitePreparedStatement r1 = r1.executeFast(r2)     // Catch:{ Exception -> 0x009b }
             r2 = 3
             r3 = 2
             r4 = 1
@@ -36058,11 +36268,11 @@ public class MessagesStorage extends BaseController {
         L_0x0040:
             r9 = move-exception
             r0 = r1
-            goto L_0x00a8
+            goto L_0x00ac
         L_0x0043:
             r9 = move-exception
             r0 = r1
-            goto L_0x009a
+            goto L_0x009c
         L_0x0046:
             if (r10 == 0) goto L_0x0074
             int r9 = r10.size()     // Catch:{ Exception -> 0x0043, all -> 0x0040 }
@@ -36091,37 +36301,42 @@ public class MessagesStorage extends BaseController {
             r1.step()     // Catch:{ Exception -> 0x0043, all -> 0x0040 }
         L_0x0083:
             r1.dispose()     // Catch:{ Exception -> 0x0043, all -> 0x0040 }
-            org.telegram.SQLite.SQLiteDatabase r9 = r8.database     // Catch:{ Exception -> 0x0099 }
-            r9.commitTransaction()     // Catch:{ Exception -> 0x0099 }
-            r8.lambda$checkIfFolderEmpty$185(r4)     // Catch:{ Exception -> 0x0099 }
-            r8.resetAllUnreadCounters(r5)     // Catch:{ Exception -> 0x0099 }
+            org.telegram.SQLite.SQLiteDatabase r9 = r8.database     // Catch:{ Exception -> 0x009b }
+            r9.commitTransaction()     // Catch:{ Exception -> 0x009b }
+            r8.lambda$checkIfFolderEmpty$185(r4)     // Catch:{ Exception -> 0x009b }
+            r8.resetAllUnreadCounters(r5)     // Catch:{ Exception -> 0x009b }
             org.telegram.SQLite.SQLiteDatabase r9 = r8.database
+            if (r9 == 0) goto L_0x00ab
             r9.commitTransaction()
-            goto L_0x00a7
-        L_0x0097:
-            r9 = move-exception
-            goto L_0x00a8
+            goto L_0x00ab
         L_0x0099:
             r9 = move-exception
-        L_0x009a:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r9)     // Catch:{ all -> 0x0097 }
+            goto L_0x00ac
+        L_0x009b:
+            r9 = move-exception
+        L_0x009c:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r9)     // Catch:{ all -> 0x0099 }
             org.telegram.SQLite.SQLiteDatabase r9 = r8.database
+            if (r9 == 0) goto L_0x00a6
             r9.commitTransaction()
-            if (r0 == 0) goto L_0x00a7
+        L_0x00a6:
+            if (r0 == 0) goto L_0x00ab
             r0.dispose()
-        L_0x00a7:
+        L_0x00ab:
             return
-        L_0x00a8:
+        L_0x00ac:
             org.telegram.SQLite.SQLiteDatabase r10 = r8.database
+            if (r10 == 0) goto L_0x00b3
             r10.commitTransaction()
-            if (r0 == 0) goto L_0x00b2
-            r0.dispose()
-        L_0x00b2:
-            goto L_0x00b4
         L_0x00b3:
+            if (r0 == 0) goto L_0x00b8
+            r0.dispose()
+        L_0x00b8:
+            goto L_0x00ba
+        L_0x00b9:
             throw r9
-        L_0x00b4:
-            goto L_0x00b3
+        L_0x00ba:
+            goto L_0x00b9
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$setDialogsFolderId$183(java.util.ArrayList, java.util.ArrayList, int, long):void");
     }
@@ -36791,34 +37006,31 @@ public class MessagesStorage extends BaseController {
         }
     }
 
-    /* JADX WARNING: type inference failed for: r9v18 */
-    /* JADX WARNING: type inference failed for: r9v24 */
-    /* JADX WARNING: type inference failed for: r9v28 */
-    /* JADX WARNING: type inference failed for: r9v30 */
-    /* JADX WARNING: Code restructure failed: missing block: B:144:0x02ec, code lost:
-        r7 = r12;
+    /* JADX WARNING: type inference failed for: r8v27 */
+    /* JADX WARNING: type inference failed for: r8v33 */
+    /* JADX WARNING: type inference failed for: r8v37 */
+    /* JADX WARNING: type inference failed for: r8v39 */
+    /* JADX WARNING: Code restructure failed: missing block: B:244:0x059e, code lost:
+        r12 = r30;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:244:0x05a1, code lost:
-        r13 = r30;
+    /* JADX WARNING: Code restructure failed: missing block: B:70:0x0148, code lost:
+        if (r10.startsWith(r9) == false) goto L_0x014a;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:70:0x014a, code lost:
-        if (r10.startsWith(r9) == false) goto L_0x014c;
+    /* JADX WARNING: Code restructure failed: missing block: B:86:0x0184, code lost:
+        if (r21.startsWith(r9) == false) goto L_0x01c2;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:86:0x0186, code lost:
-        if (r22.startsWith(r9) == false) goto L_0x01c5;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:9:0x0051, code lost:
-        if (r15.length() == 0) goto L_0x005e;
+    /* JADX WARNING: Code restructure failed: missing block: B:9:0x004f, code lost:
+        if (r14.length() == 0) goto L_0x005c;
      */
     /* JADX WARNING: Multi-variable type inference failed */
-    /* JADX WARNING: Removed duplicated region for block: B:142:0x02d7 A[Catch:{ Exception -> 0x0309, all -> 0x0305 }, LOOP:2: B:112:0x0221->B:142:0x02d7, LOOP_END] */
-    /* JADX WARNING: Removed duplicated region for block: B:243:0x059b A[Catch:{ Exception -> 0x0309, all -> 0x0305 }, LOOP:6: B:205:0x0426->B:243:0x059b, LOOP_END] */
-    /* JADX WARNING: Removed duplicated region for block: B:312:0x06e5 A[Catch:{ Exception -> 0x0309, all -> 0x0305 }, LOOP:10: B:284:0x063f->B:312:0x06e5, LOOP_END] */
-    /* JADX WARNING: Removed duplicated region for block: B:327:0x070f  */
-    /* JADX WARNING: Removed duplicated region for block: B:331:0x0717  */
-    /* JADX WARNING: Removed duplicated region for block: B:349:0x0272 A[SYNTHETIC] */
-    /* JADX WARNING: Removed duplicated region for block: B:368:0x0470 A[SYNTHETIC] */
-    /* JADX WARNING: Removed duplicated region for block: B:377:0x0689 A[SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:142:0x02d4 A[Catch:{ Exception -> 0x0306, all -> 0x0302 }, LOOP:2: B:112:0x021e->B:142:0x02d4, LOOP_END] */
+    /* JADX WARNING: Removed duplicated region for block: B:243:0x0598 A[Catch:{ Exception -> 0x0306, all -> 0x0302 }, LOOP:6: B:205:0x0423->B:243:0x0598, LOOP_END] */
+    /* JADX WARNING: Removed duplicated region for block: B:312:0x06e2 A[Catch:{ Exception -> 0x0306, all -> 0x0302 }, LOOP:10: B:284:0x063c->B:312:0x06e2, LOOP_END] */
+    /* JADX WARNING: Removed duplicated region for block: B:327:0x070c  */
+    /* JADX WARNING: Removed duplicated region for block: B:331:0x0714  */
+    /* JADX WARNING: Removed duplicated region for block: B:348:0x026f A[SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:368:0x046d A[SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:377:0x0686 A[SYNTHETIC] */
     /* JADX WARNING: Removed duplicated region for block: B:381:? A[RETURN, SYNTHETIC] */
     /* JADX WARNING: Unknown variable types count: 1 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
@@ -36833,886 +37045,886 @@ public class MessagesStorage extends BaseController {
             int r6 = r1.currentAccount
             org.telegram.messenger.UserConfig r6 = org.telegram.messenger.UserConfig.getInstance(r6)
             long r6 = r6.getClientUserId()
-            java.lang.String r9 = r27.trim()     // Catch:{ Exception -> 0x0706, all -> 0x0701 }
-            java.lang.String r9 = r9.toLowerCase()     // Catch:{ Exception -> 0x0706, all -> 0x0701 }
-            boolean r10 = android.text.TextUtils.isEmpty(r9)     // Catch:{ Exception -> 0x0706, all -> 0x0701 }
+            java.lang.String r9 = r27.trim()     // Catch:{ Exception -> 0x0703, all -> 0x06fe }
+            java.lang.String r9 = r9.toLowerCase()     // Catch:{ Exception -> 0x0703, all -> 0x06fe }
+            boolean r10 = android.text.TextUtils.isEmpty(r9)     // Catch:{ Exception -> 0x0703, all -> 0x06fe }
             if (r10 == 0) goto L_0x0023
             return
         L_0x0023:
             java.lang.String r10 = "SavedMessages"
-            r11 = 2131628153(0x7f0e1079, float:1.888359E38)
-            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r10, r11)     // Catch:{ Exception -> 0x0706, all -> 0x0701 }
-            java.lang.String r10 = r10.toLowerCase()     // Catch:{ Exception -> 0x0706, all -> 0x0701 }
+            int r11 = org.telegram.messenger.R.string.SavedMessages     // Catch:{ Exception -> 0x0703, all -> 0x06fe }
+            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r10, r11)     // Catch:{ Exception -> 0x0703, all -> 0x06fe }
+            java.lang.String r10 = r10.toLowerCase()     // Catch:{ Exception -> 0x0703, all -> 0x06fe }
             java.lang.String r11 = "saved messages"
-            r12 = 2131627995(0x7f0e0fdb, float:1.888327E38)
-            java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r5, r12)     // Catch:{ Exception -> 0x0706, all -> 0x0701 }
-            java.lang.String r13 = r13.toLowerCase()     // Catch:{ Exception -> 0x0706, all -> 0x0701 }
-            java.lang.String r14 = "replies"
-            org.telegram.messenger.LocaleController r15 = org.telegram.messenger.LocaleController.getInstance()     // Catch:{ Exception -> 0x0706, all -> 0x0701 }
-            java.lang.String r15 = r15.getTranslitString(r9)     // Catch:{ Exception -> 0x0706, all -> 0x0701 }
-            boolean r16 = r9.equals(r15)     // Catch:{ Exception -> 0x0706, all -> 0x0701 }
-            if (r16 != 0) goto L_0x005e
-            int r16 = r15.length()     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            if (r16 != 0) goto L_0x005f
-            goto L_0x005e
-        L_0x0054:
+            int r12 = org.telegram.messenger.R.string.RepliesTitle     // Catch:{ Exception -> 0x0703, all -> 0x06fe }
+            java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r5, r12)     // Catch:{ Exception -> 0x0703, all -> 0x06fe }
+            java.lang.String r12 = r12.toLowerCase()     // Catch:{ Exception -> 0x0703, all -> 0x06fe }
+            java.lang.String r13 = "replies"
+            org.telegram.messenger.LocaleController r14 = org.telegram.messenger.LocaleController.getInstance()     // Catch:{ Exception -> 0x0703, all -> 0x06fe }
+            java.lang.String r14 = r14.getTranslitString(r9)     // Catch:{ Exception -> 0x0703, all -> 0x06fe }
+            boolean r15 = r9.equals(r14)     // Catch:{ Exception -> 0x0703, all -> 0x06fe }
+            if (r15 != 0) goto L_0x005c
+            int r15 = r14.length()     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            if (r15 != 0) goto L_0x005d
+            goto L_0x005c
+        L_0x0052:
             r0 = move-exception
             r1 = r0
             r8 = 0
-            goto L_0x0715
-        L_0x0059:
+            goto L_0x0712
+        L_0x0057:
             r0 = move-exception
             r1 = r0
             r8 = 0
-            goto L_0x070a
-        L_0x005e:
-            r15 = 0
-        L_0x005f:
-            r8 = 1
-            if (r15 == 0) goto L_0x0065
+            goto L_0x0707
+        L_0x005c:
+            r14 = 0
+        L_0x005d:
+            r15 = 1
+            if (r14 == 0) goto L_0x0063
             r17 = 1
-            goto L_0x0067
-        L_0x0065:
+            goto L_0x0065
+        L_0x0063:
             r17 = 0
-        L_0x0067:
-            int r12 = r8 + r17
-            java.lang.String[] r8 = new java.lang.String[r12]     // Catch:{ Exception -> 0x0706, all -> 0x0701 }
+        L_0x0065:
+            int r8 = r15 + r17
+            java.lang.String[] r15 = new java.lang.String[r8]     // Catch:{ Exception -> 0x0703, all -> 0x06fe }
             r18 = 0
-            r8[r18] = r9     // Catch:{ Exception -> 0x0706, all -> 0x0701 }
-            if (r15 == 0) goto L_0x0075
+            r15[r18] = r9     // Catch:{ Exception -> 0x0703, all -> 0x06fe }
+            if (r14 == 0) goto L_0x0073
             r17 = 1
-            r8[r17] = r15     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-        L_0x0075:
-            java.util.ArrayList r15 = new java.util.ArrayList     // Catch:{ Exception -> 0x0706, all -> 0x0701 }
-            r15.<init>()     // Catch:{ Exception -> 0x0706, all -> 0x0701 }
-            java.util.ArrayList r4 = new java.util.ArrayList     // Catch:{ Exception -> 0x0706, all -> 0x0701 }
-            r4.<init>()     // Catch:{ Exception -> 0x0706, all -> 0x0701 }
-            java.util.ArrayList r3 = new java.util.ArrayList     // Catch:{ Exception -> 0x0706, all -> 0x0701 }
-            r3.<init>()     // Catch:{ Exception -> 0x0706, all -> 0x0701 }
+            r15[r17] = r14     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+        L_0x0073:
+            java.util.ArrayList r14 = new java.util.ArrayList     // Catch:{ Exception -> 0x0703, all -> 0x06fe }
+            r14.<init>()     // Catch:{ Exception -> 0x0703, all -> 0x06fe }
+            java.util.ArrayList r4 = new java.util.ArrayList     // Catch:{ Exception -> 0x0703, all -> 0x06fe }
+            r4.<init>()     // Catch:{ Exception -> 0x0703, all -> 0x06fe }
+            java.util.ArrayList r3 = new java.util.ArrayList     // Catch:{ Exception -> 0x0703, all -> 0x06fe }
+            r3.<init>()     // Catch:{ Exception -> 0x0703, all -> 0x06fe }
+            r18 = r15
+            androidx.collection.LongSparseArray r15 = new androidx.collection.LongSparseArray     // Catch:{ Exception -> 0x0703, all -> 0x06fe }
+            r15.<init>()     // Catch:{ Exception -> 0x0703, all -> 0x06fe }
+            if (r31 < 0) goto L_0x00a9
             r19 = r8
-            androidx.collection.LongSparseArray r8 = new androidx.collection.LongSparseArray     // Catch:{ Exception -> 0x0706, all -> 0x0701 }
-            r8.<init>()     // Catch:{ Exception -> 0x0706, all -> 0x0701 }
-            if (r31 < 0) goto L_0x00ab
-            r20 = r12
-            org.telegram.SQLite.SQLiteDatabase r12 = r25.getDatabase()     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            r21 = r5
+            org.telegram.SQLite.SQLiteDatabase r8 = r25.getDatabase()     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            r20 = r5
             java.lang.String r5 = "SELECT did, date FROM dialogs WHERE folder_id = ? ORDER BY date DESC LIMIT 600"
-            r23 = r13
-            r22 = r14
-            r14 = 1
-            java.lang.Object[] r13 = new java.lang.Object[r14]     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            java.lang.Integer r14 = java.lang.Integer.valueOf(r31)     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            r18 = 0
-            r13[r18] = r14     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            org.telegram.SQLite.SQLiteCursor r5 = r12.queryFinalized(r5, r13)     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            goto L_0x00c0
-        L_0x00ab:
-            r21 = r5
-            r20 = r12
-            r23 = r13
-            r22 = r14
-            org.telegram.SQLite.SQLiteDatabase r5 = r25.getDatabase()     // Catch:{ Exception -> 0x0706, all -> 0x0701 }
-            java.lang.String r12 = "SELECT did, date FROM dialogs ORDER BY date DESC LIMIT 600"
-            r13 = 0
-            java.lang.Object[] r14 = new java.lang.Object[r13]     // Catch:{ Exception -> 0x0706, all -> 0x0701 }
-            org.telegram.SQLite.SQLiteCursor r5 = r5.queryFinalized(r12, r14)     // Catch:{ Exception -> 0x0706, all -> 0x0701 }
-        L_0x00c0:
-            boolean r12 = r5.next()     // Catch:{ Exception -> 0x06fd, all -> 0x06f9 }
-            if (r12 == 0) goto L_0x013b
+            r22 = r12
+            r21 = r13
+            r13 = 1
+            java.lang.Object[] r12 = new java.lang.Object[r13]     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            java.lang.Integer r13 = java.lang.Integer.valueOf(r31)     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            r23 = 0
+            r12[r23] = r13     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            org.telegram.SQLite.SQLiteCursor r5 = r8.queryFinalized(r5, r12)     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            goto L_0x00be
+        L_0x00a9:
+            r20 = r5
+            r19 = r8
+            r22 = r12
+            r21 = r13
+            org.telegram.SQLite.SQLiteDatabase r5 = r25.getDatabase()     // Catch:{ Exception -> 0x0703, all -> 0x06fe }
+            java.lang.String r8 = "SELECT did, date FROM dialogs ORDER BY date DESC LIMIT 600"
             r12 = 0
-            long r13 = r5.longValue(r12)     // Catch:{ Exception -> 0x06fd, all -> 0x06f9 }
-            org.telegram.ui.Adapters.DialogsSearchAdapter$DialogSearchResult r12 = new org.telegram.ui.Adapters.DialogsSearchAdapter$DialogSearchResult     // Catch:{ Exception -> 0x06fd, all -> 0x06f9 }
-            r12.<init>()     // Catch:{ Exception -> 0x06fd, all -> 0x06f9 }
+            java.lang.Object[] r13 = new java.lang.Object[r12]     // Catch:{ Exception -> 0x0703, all -> 0x06fe }
+            org.telegram.SQLite.SQLiteCursor r5 = r5.queryFinalized(r8, r13)     // Catch:{ Exception -> 0x0703, all -> 0x06fe }
+        L_0x00be:
+            boolean r8 = r5.next()     // Catch:{ Exception -> 0x06fa, all -> 0x06f6 }
+            if (r8 == 0) goto L_0x0139
+            r8 = 0
+            long r12 = r5.longValue(r8)     // Catch:{ Exception -> 0x06fa, all -> 0x06f6 }
+            org.telegram.ui.Adapters.DialogsSearchAdapter$DialogSearchResult r8 = new org.telegram.ui.Adapters.DialogsSearchAdapter$DialogSearchResult     // Catch:{ Exception -> 0x06fa, all -> 0x06f6 }
+            r8.<init>()     // Catch:{ Exception -> 0x06fa, all -> 0x06f6 }
             r24 = r11
             r1 = 1
-            int r11 = r5.intValue(r1)     // Catch:{ Exception -> 0x06fd, all -> 0x06f9 }
-            r12.date = r11     // Catch:{ Exception -> 0x06fd, all -> 0x06f9 }
-            r8.put(r13, r12)     // Catch:{ Exception -> 0x06fd, all -> 0x06f9 }
-            boolean r1 = org.telegram.messenger.DialogObject.isEncryptedDialog(r13)     // Catch:{ Exception -> 0x06fd, all -> 0x06f9 }
-            if (r1 != 0) goto L_0x011c
-            boolean r1 = org.telegram.messenger.DialogObject.isUserDialog(r13)     // Catch:{ Exception -> 0x06fd, all -> 0x06f9 }
-            if (r1 == 0) goto L_0x0105
+            int r11 = r5.intValue(r1)     // Catch:{ Exception -> 0x06fa, all -> 0x06f6 }
+            r8.date = r11     // Catch:{ Exception -> 0x06fa, all -> 0x06f6 }
+            r15.put(r12, r8)     // Catch:{ Exception -> 0x06fa, all -> 0x06f6 }
+            boolean r1 = org.telegram.messenger.DialogObject.isEncryptedDialog(r12)     // Catch:{ Exception -> 0x06fa, all -> 0x06f6 }
+            if (r1 != 0) goto L_0x011a
+            boolean r1 = org.telegram.messenger.DialogObject.isUserDialog(r12)     // Catch:{ Exception -> 0x06fa, all -> 0x06f6 }
+            if (r1 == 0) goto L_0x0103
             r1 = 4
-            if (r2 != r1) goto L_0x00f0
-            int r1 = (r13 > r6 ? 1 : (r13 == r6 ? 0 : -1))
-            if (r1 != 0) goto L_0x00f0
-            goto L_0x0136
-        L_0x00f0:
+            if (r2 != r1) goto L_0x00ee
+            int r1 = (r12 > r6 ? 1 : (r12 == r6 ? 0 : -1))
+            if (r1 != 0) goto L_0x00ee
+            goto L_0x0134
+        L_0x00ee:
             r1 = 2
-            if (r2 == r1) goto L_0x0136
-            java.lang.Long r1 = java.lang.Long.valueOf(r13)     // Catch:{ Exception -> 0x06fd, all -> 0x06f9 }
-            boolean r1 = r15.contains(r1)     // Catch:{ Exception -> 0x06fd, all -> 0x06f9 }
-            if (r1 != 0) goto L_0x0136
-            java.lang.Long r1 = java.lang.Long.valueOf(r13)     // Catch:{ Exception -> 0x06fd, all -> 0x06f9 }
-            r15.add(r1)     // Catch:{ Exception -> 0x06fd, all -> 0x06f9 }
-            goto L_0x0136
-        L_0x0105:
+            if (r2 == r1) goto L_0x0134
+            java.lang.Long r1 = java.lang.Long.valueOf(r12)     // Catch:{ Exception -> 0x06fa, all -> 0x06f6 }
+            boolean r1 = r14.contains(r1)     // Catch:{ Exception -> 0x06fa, all -> 0x06f6 }
+            if (r1 != 0) goto L_0x0134
+            java.lang.Long r1 = java.lang.Long.valueOf(r12)     // Catch:{ Exception -> 0x06fa, all -> 0x06f6 }
+            r14.add(r1)     // Catch:{ Exception -> 0x06fa, all -> 0x06f6 }
+            goto L_0x0134
+        L_0x0103:
             r1 = 4
-            if (r2 != r1) goto L_0x0109
-            goto L_0x0136
-        L_0x0109:
-            long r11 = -r13
-            java.lang.Long r1 = java.lang.Long.valueOf(r11)     // Catch:{ Exception -> 0x06fd, all -> 0x06f9 }
-            boolean r1 = r4.contains(r1)     // Catch:{ Exception -> 0x06fd, all -> 0x06f9 }
-            if (r1 != 0) goto L_0x0136
-            java.lang.Long r1 = java.lang.Long.valueOf(r11)     // Catch:{ Exception -> 0x06fd, all -> 0x06f9 }
-            r4.add(r1)     // Catch:{ Exception -> 0x06fd, all -> 0x06f9 }
-            goto L_0x0136
-        L_0x011c:
-            if (r2 == 0) goto L_0x0121
+            if (r2 != r1) goto L_0x0107
+            goto L_0x0134
+        L_0x0107:
+            long r11 = -r12
+            java.lang.Long r1 = java.lang.Long.valueOf(r11)     // Catch:{ Exception -> 0x06fa, all -> 0x06f6 }
+            boolean r1 = r4.contains(r1)     // Catch:{ Exception -> 0x06fa, all -> 0x06f6 }
+            if (r1 != 0) goto L_0x0134
+            java.lang.Long r1 = java.lang.Long.valueOf(r11)     // Catch:{ Exception -> 0x06fa, all -> 0x06f6 }
+            r4.add(r1)     // Catch:{ Exception -> 0x06fa, all -> 0x06f6 }
+            goto L_0x0134
+        L_0x011a:
+            if (r2 == 0) goto L_0x011f
             r1 = 3
-            if (r2 != r1) goto L_0x0136
-        L_0x0121:
-            int r1 = org.telegram.messenger.DialogObject.getEncryptedChatId(r13)     // Catch:{ Exception -> 0x06fd, all -> 0x06f9 }
-            java.lang.Integer r11 = java.lang.Integer.valueOf(r1)     // Catch:{ Exception -> 0x06fd, all -> 0x06f9 }
-            boolean r11 = r3.contains(r11)     // Catch:{ Exception -> 0x06fd, all -> 0x06f9 }
-            if (r11 != 0) goto L_0x0136
-            java.lang.Integer r1 = java.lang.Integer.valueOf(r1)     // Catch:{ Exception -> 0x06fd, all -> 0x06f9 }
-            r3.add(r1)     // Catch:{ Exception -> 0x06fd, all -> 0x06f9 }
-        L_0x0136:
+            if (r2 != r1) goto L_0x0134
+        L_0x011f:
+            int r1 = org.telegram.messenger.DialogObject.getEncryptedChatId(r12)     // Catch:{ Exception -> 0x06fa, all -> 0x06f6 }
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r1)     // Catch:{ Exception -> 0x06fa, all -> 0x06f6 }
+            boolean r8 = r3.contains(r8)     // Catch:{ Exception -> 0x06fa, all -> 0x06f6 }
+            if (r8 != 0) goto L_0x0134
+            java.lang.Integer r1 = java.lang.Integer.valueOf(r1)     // Catch:{ Exception -> 0x06fa, all -> 0x06f6 }
+            r3.add(r1)     // Catch:{ Exception -> 0x06fa, all -> 0x06f6 }
+        L_0x0134:
             r1 = r25
             r11 = r24
-            goto L_0x00c0
-        L_0x013b:
+            goto L_0x00be
+        L_0x0139:
             r24 = r11
-            r5.dispose()     // Catch:{ Exception -> 0x06fd, all -> 0x06f9 }
+            r5.dispose()     // Catch:{ Exception -> 0x06fa, all -> 0x06f6 }
             r1 = 2147483647(0x7fffffff, float:NaN)
             r5 = 4
-            if (r2 == r5) goto L_0x014c
-            boolean r5 = r10.startsWith(r9)     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            if (r5 != 0) goto L_0x0154
-        L_0x014c:
+            if (r2 == r5) goto L_0x014a
+            boolean r5 = r10.startsWith(r9)     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            if (r5 != 0) goto L_0x0152
+        L_0x014a:
             r5 = r24
-            boolean r5 = r5.startsWith(r9)     // Catch:{ Exception -> 0x0706, all -> 0x0701 }
-            if (r5 == 0) goto L_0x0172
-        L_0x0154:
+            boolean r5 = r5.startsWith(r9)     // Catch:{ Exception -> 0x0703, all -> 0x06fe }
+            if (r5 == 0) goto L_0x0170
+        L_0x0152:
             r6 = r25
-            int r5 = r6.currentAccount     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            org.telegram.messenger.UserConfig r5 = org.telegram.messenger.UserConfig.getInstance(r5)     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            org.telegram.tgnet.TLRPC$User r5 = r5.getCurrentUser()     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            org.telegram.ui.Adapters.DialogsSearchAdapter$DialogSearchResult r7 = new org.telegram.ui.Adapters.DialogsSearchAdapter$DialogSearchResult     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            r7.<init>()     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            r7.date = r1     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            r7.name = r10     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            r7.object = r5     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            long r10 = r5.id     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            r8.put(r10, r7)     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
+            int r5 = r6.currentAccount     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            org.telegram.messenger.UserConfig r5 = org.telegram.messenger.UserConfig.getInstance(r5)     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            org.telegram.tgnet.TLRPC$User r5 = r5.getCurrentUser()     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            org.telegram.ui.Adapters.DialogsSearchAdapter$DialogSearchResult r7 = new org.telegram.ui.Adapters.DialogsSearchAdapter$DialogSearchResult     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            r7.<init>()     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            r7.date = r1     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            r7.name = r10     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            r7.object = r5     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            long r10 = r5.id     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            r15.put(r10, r7)     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
             r5 = 1
-            goto L_0x0175
-        L_0x0172:
+            goto L_0x0173
+        L_0x0170:
             r6 = r25
             r5 = 0
-        L_0x0175:
+        L_0x0173:
             r7 = 4
-            if (r2 == r7) goto L_0x0180
-            r7 = r23
-            boolean r7 = r7.startsWith(r9)     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            if (r7 != 0) goto L_0x0188
-        L_0x0180:
+            if (r2 == r7) goto L_0x017e
             r7 = r22
-            boolean r7 = r7.startsWith(r9)     // Catch:{ Exception -> 0x0706, all -> 0x0701 }
-            if (r7 == 0) goto L_0x01c5
-        L_0x0188:
-            org.telegram.messenger.MessagesController r7 = r25.getMessagesController()     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            r9 = 708513(0xacfa1, double:3.50052E-318)
-            java.lang.Long r9 = java.lang.Long.valueOf(r9)     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            org.telegram.tgnet.TLRPC$User r7 = r7.getUser(r9)     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            if (r7 != 0) goto L_0x01a8
-            org.telegram.messenger.MessagesController r7 = r25.getMessagesController()     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            r9 = 1271266957(0x4bc5fe8d, double:6.2808933E-315)
-            java.lang.Long r9 = java.lang.Long.valueOf(r9)     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            org.telegram.tgnet.TLRPC$User r7 = r7.getUser(r9)     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-        L_0x01a8:
-            if (r7 == 0) goto L_0x01c5
-            org.telegram.ui.Adapters.DialogsSearchAdapter$DialogSearchResult r9 = new org.telegram.ui.Adapters.DialogsSearchAdapter$DialogSearchResult     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            r9.<init>()     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            r9.date = r1     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            r1 = r21
-            r10 = 2131627995(0x7f0e0fdb, float:1.888327E38)
-            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r10)     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            r9.name = r1     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            r9.object = r7     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            long r10 = r7.id     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            r8.put(r10, r9)     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
+            boolean r7 = r7.startsWith(r9)     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            if (r7 != 0) goto L_0x0186
+        L_0x017e:
+            r7 = r21
+            boolean r7 = r7.startsWith(r9)     // Catch:{ Exception -> 0x0703, all -> 0x06fe }
+            if (r7 == 0) goto L_0x01c2
+        L_0x0186:
+            org.telegram.messenger.MessagesController r7 = r25.getMessagesController()     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            r8 = 708513(0xacfa1, double:3.50052E-318)
+            java.lang.Long r8 = java.lang.Long.valueOf(r8)     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            org.telegram.tgnet.TLRPC$User r7 = r7.getUser(r8)     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            if (r7 != 0) goto L_0x01a6
+            org.telegram.messenger.MessagesController r7 = r25.getMessagesController()     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            r8 = 1271266957(0x4bc5fe8d, double:6.2808933E-315)
+            java.lang.Long r8 = java.lang.Long.valueOf(r8)     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            org.telegram.tgnet.TLRPC$User r7 = r7.getUser(r8)     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+        L_0x01a6:
+            if (r7 == 0) goto L_0x01c2
+            org.telegram.ui.Adapters.DialogsSearchAdapter$DialogSearchResult r8 = new org.telegram.ui.Adapters.DialogsSearchAdapter$DialogSearchResult     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            r8.<init>()     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            r8.date = r1     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            int r1 = org.telegram.messenger.R.string.RepliesTitle     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            r9 = r20
+            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r9, r1)     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            r8.name = r1     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            r8.object = r7     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            long r9 = r7.id     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            r15.put(r9, r8)     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
             int r5 = r5 + 1
-        L_0x01c5:
-            boolean r1 = r15.isEmpty()     // Catch:{ Exception -> 0x0706, all -> 0x0701 }
-            java.lang.String r9 = ";;;"
-            java.lang.String r10 = ","
-            java.lang.String r11 = "@"
-            java.lang.String r12 = " "
-            if (r1 != 0) goto L_0x030e
-            org.telegram.SQLite.SQLiteDatabase r1 = r25.getDatabase()     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            java.util.Locale r13 = java.util.Locale.US     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            java.lang.String r14 = "SELECT data, status, name FROM users WHERE uid IN(%s)"
+        L_0x01c2:
+            boolean r1 = r14.isEmpty()     // Catch:{ Exception -> 0x0703, all -> 0x06fe }
+            java.lang.String r8 = ";;;"
+            java.lang.String r9 = ","
+            java.lang.String r10 = "@"
+            java.lang.String r11 = " "
+            if (r1 != 0) goto L_0x030b
+            org.telegram.SQLite.SQLiteDatabase r1 = r25.getDatabase()     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            java.util.Locale r12 = java.util.Locale.US     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            java.lang.String r13 = "SELECT data, status, name FROM users WHERE uid IN(%s)"
             r21 = r5
             r7 = 1
-            java.lang.Object[] r5 = new java.lang.Object[r7]     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            java.lang.String r7 = android.text.TextUtils.join(r10, r15)     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            r15 = 0
-            r5[r15] = r7     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            java.lang.String r5 = java.lang.String.format(r13, r14, r5)     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            java.lang.Object[] r7 = new java.lang.Object[r15]     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            org.telegram.SQLite.SQLiteCursor r1 = r1.queryFinalized(r5, r7)     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            r5 = r21
-        L_0x01f3:
-            boolean r7 = r1.next()     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            if (r7 == 0) goto L_0x02fa
-            r7 = 2
-            java.lang.String r13 = r1.stringValue(r7)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            org.telegram.messenger.LocaleController r7 = org.telegram.messenger.LocaleController.getInstance()     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            java.lang.String r7 = r7.getTranslitString(r13)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            boolean r14 = r13.equals(r7)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            if (r14 == 0) goto L_0x020d
-            r7 = 0
-        L_0x020d:
-            int r14 = r13.lastIndexOf(r9)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r15 = -1
-            if (r14 == r15) goto L_0x021b
-            int r14 = r14 + 3
-            java.lang.String r14 = r13.substring(r14)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            goto L_0x021c
-        L_0x021b:
+            java.lang.Object[] r5 = new java.lang.Object[r7]     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            java.lang.String r7 = android.text.TextUtils.join(r9, r14)     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
             r14 = 0
-        L_0x021c:
-            r6 = r20
-            r15 = 0
-            r20 = 0
-        L_0x0221:
-            if (r15 >= r6) goto L_0x02e8
-            r2 = r19[r15]     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            boolean r21 = r13.startsWith(r2)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            if (r21 != 0) goto L_0x026d
-            r22 = r9
-            java.lang.StringBuilder r9 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r9.<init>()     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r9.append(r12)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r9.append(r2)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            java.lang.String r9 = r9.toString()     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            boolean r9 = r13.contains(r9)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            if (r9 != 0) goto L_0x026f
-            if (r7 == 0) goto L_0x0260
-            boolean r9 = r7.startsWith(r2)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            if (r9 != 0) goto L_0x026f
-            java.lang.StringBuilder r9 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r9.<init>()     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r9.append(r12)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r9.append(r2)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            java.lang.String r9 = r9.toString()     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            boolean r9 = r7.contains(r9)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            if (r9 == 0) goto L_0x0260
-            goto L_0x026f
-        L_0x0260:
-            if (r14 == 0) goto L_0x026a
-            boolean r9 = r14.startsWith(r2)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            if (r9 == 0) goto L_0x026a
-            r9 = 2
-            goto L_0x0270
-        L_0x026a:
-            r9 = r20
-            goto L_0x0270
-        L_0x026d:
-            r22 = r9
-        L_0x026f:
-            r9 = 1
-        L_0x0270:
-            if (r9 == 0) goto L_0x02d7
+            r5[r14] = r7     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            java.lang.String r5 = java.lang.String.format(r12, r13, r5)     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            java.lang.Object[] r7 = new java.lang.Object[r14]     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            org.telegram.SQLite.SQLiteCursor r1 = r1.queryFinalized(r5, r7)     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            r5 = r21
+        L_0x01f0:
+            boolean r7 = r1.next()     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            if (r7 == 0) goto L_0x02f7
+            r7 = 2
+            java.lang.String r12 = r1.stringValue(r7)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            org.telegram.messenger.LocaleController r7 = org.telegram.messenger.LocaleController.getInstance()     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            java.lang.String r7 = r7.getTranslitString(r12)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            boolean r13 = r12.equals(r7)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            if (r13 == 0) goto L_0x020a
             r7 = 0
-            org.telegram.tgnet.NativeByteBuffer r13 = r1.byteBufferValue(r7)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            if (r13 == 0) goto L_0x02d4
-            int r14 = r13.readInt32(r7)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            org.telegram.tgnet.TLRPC$User r14 = org.telegram.tgnet.TLRPC$User.TLdeserialize(r13, r14, r7)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r13.reuse()     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r7 = r12
-            long r12 = r14.id     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            java.lang.Object r12 = r8.get(r12)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            org.telegram.ui.Adapters.DialogsSearchAdapter$DialogSearchResult r12 = (org.telegram.ui.Adapters.DialogsSearchAdapter.DialogSearchResult) r12     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            org.telegram.tgnet.TLRPC$UserStatus r13 = r14.status     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r23 = r3
-            if (r13 == 0) goto L_0x029a
-            r15 = 1
-            int r3 = r1.intValue(r15)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r13.expires = r3     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-        L_0x029a:
+        L_0x020a:
+            int r13 = r12.lastIndexOf(r8)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r14 = -1
+            if (r13 == r14) goto L_0x0218
+            int r13 = r13 + 3
+            java.lang.String r13 = r12.substring(r13)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            goto L_0x0219
+        L_0x0218:
+            r13 = 0
+        L_0x0219:
+            r6 = r19
+            r14 = 0
+            r19 = 0
+        L_0x021e:
+            if (r14 >= r6) goto L_0x02e5
+            r2 = r18[r14]     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            boolean r21 = r12.startsWith(r2)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            if (r21 != 0) goto L_0x026a
+            r22 = r8
+            java.lang.StringBuilder r8 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r8.<init>()     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r8.append(r11)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r8.append(r2)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            java.lang.String r8 = r8.toString()     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            boolean r8 = r12.contains(r8)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            if (r8 != 0) goto L_0x026c
+            if (r7 == 0) goto L_0x025d
+            boolean r8 = r7.startsWith(r2)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            if (r8 != 0) goto L_0x026c
+            java.lang.StringBuilder r8 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r8.<init>()     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r8.append(r11)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r8.append(r2)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            java.lang.String r8 = r8.toString()     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            boolean r8 = r7.contains(r8)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            if (r8 == 0) goto L_0x025d
+            goto L_0x026c
+        L_0x025d:
+            if (r13 == 0) goto L_0x0267
+            boolean r8 = r13.startsWith(r2)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            if (r8 == 0) goto L_0x0267
+            r8 = 2
+            goto L_0x026d
+        L_0x0267:
+            r8 = r19
+            goto L_0x026d
+        L_0x026a:
+            r22 = r8
+        L_0x026c:
+            r8 = 1
+        L_0x026d:
+            if (r8 == 0) goto L_0x02d4
+            r7 = 0
+            org.telegram.tgnet.NativeByteBuffer r12 = r1.byteBufferValue(r7)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            if (r12 == 0) goto L_0x02d1
+            int r13 = r12.readInt32(r7)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            org.telegram.tgnet.TLRPC$User r13 = org.telegram.tgnet.TLRPC$User.TLdeserialize(r12, r13, r7)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r12.reuse()     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r7 = r11
+            long r11 = r13.id     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            java.lang.Object r11 = r15.get(r11)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            org.telegram.ui.Adapters.DialogsSearchAdapter$DialogSearchResult r11 = (org.telegram.ui.Adapters.DialogsSearchAdapter.DialogSearchResult) r11     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            org.telegram.tgnet.TLRPC$UserStatus r12 = r13.status     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r24 = r3
+            if (r12 == 0) goto L_0x0297
+            r14 = 1
+            int r3 = r1.intValue(r14)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r12.expires = r3     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+        L_0x0297:
             r3 = 1
-            if (r9 != r3) goto L_0x02a8
-            java.lang.String r3 = r14.first_name     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            java.lang.String r9 = r14.last_name     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            java.lang.CharSequence r2 = org.telegram.messenger.AndroidUtilities.generateSearchName(r3, r9, r2)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r12.name = r2     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            goto L_0x02cf
-        L_0x02a8:
-            java.lang.StringBuilder r3 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r3.<init>()     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r3.append(r11)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            java.lang.String r9 = r14.username     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r3.append(r9)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            java.lang.String r3 = r3.toString()     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            java.lang.StringBuilder r9 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r9.<init>()     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r9.append(r11)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r9.append(r2)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            java.lang.String r2 = r9.toString()     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r9 = 0
-            java.lang.CharSequence r2 = org.telegram.messenger.AndroidUtilities.generateSearchName(r3, r9, r2)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r12.name = r2     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-        L_0x02cf:
-            r12.object = r14     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
+            if (r8 != r3) goto L_0x02a5
+            java.lang.String r3 = r13.first_name     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            java.lang.String r8 = r13.last_name     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            java.lang.CharSequence r2 = org.telegram.messenger.AndroidUtilities.generateSearchName(r3, r8, r2)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r11.name = r2     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            goto L_0x02cc
+        L_0x02a5:
+            java.lang.StringBuilder r3 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r3.<init>()     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r3.append(r10)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            java.lang.String r8 = r13.username     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r3.append(r8)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            java.lang.String r3 = r3.toString()     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            java.lang.StringBuilder r8 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r8.<init>()     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r8.append(r10)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r8.append(r2)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            java.lang.String r2 = r8.toString()     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r8 = 0
+            java.lang.CharSequence r2 = org.telegram.messenger.AndroidUtilities.generateSearchName(r3, r8, r2)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r11.name = r2     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+        L_0x02cc:
+            r11.object = r13     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
             int r5 = r5 + 1
-            goto L_0x02ed
+            goto L_0x02ea
+        L_0x02d1:
+            r24 = r3
+            goto L_0x02e9
         L_0x02d4:
-            r23 = r3
-            goto L_0x02ec
-        L_0x02d7:
-            r23 = r3
-            r20 = r7
-            r7 = r12
-            int r15 = r15 + 1
+            r24 = r3
+            r19 = r7
+            r7 = r11
+            int r14 = r14 + 1
             r2 = r26
-            r7 = r20
-            r20 = r9
-            r9 = r22
-            goto L_0x0221
-        L_0x02e8:
-            r23 = r3
-            r22 = r9
-        L_0x02ec:
-            r7 = r12
-        L_0x02ed:
+            r7 = r19
+            r19 = r8
+            r8 = r22
+            goto L_0x021e
+        L_0x02e5:
+            r24 = r3
+            r22 = r8
+        L_0x02e9:
+            r7 = r11
+        L_0x02ea:
             r2 = r26
-            r20 = r6
-            r12 = r7
-            r9 = r22
-            r3 = r23
+            r19 = r6
+            r11 = r7
+            r8 = r22
+            r3 = r24
             r6 = r25
-            goto L_0x01f3
-        L_0x02fa:
-            r23 = r3
-            r22 = r9
-            r7 = r12
-            r6 = r20
-            r1.dispose()     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            goto L_0x0317
-        L_0x0305:
+            goto L_0x01f0
+        L_0x02f7:
+            r24 = r3
+            r22 = r8
+            r7 = r11
+            r6 = r19
+            r1.dispose()     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            goto L_0x0314
+        L_0x0302:
             r0 = move-exception
             r8 = r1
-            goto L_0x0714
-        L_0x0309:
+            goto L_0x0711
+        L_0x0306:
             r0 = move-exception
             r8 = r1
             r1 = r0
-            goto L_0x070a
-        L_0x030e:
-            r23 = r3
+            goto L_0x0707
+        L_0x030b:
+            r24 = r3
             r21 = r5
-            r22 = r9
-            r7 = r12
-            r6 = r20
-        L_0x0317:
-            boolean r1 = r4.isEmpty()     // Catch:{ Exception -> 0x0706, all -> 0x0701 }
-            if (r1 != 0) goto L_0x03d3
-            org.telegram.SQLite.SQLiteDatabase r1 = r25.getDatabase()     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            java.util.Locale r2 = java.util.Locale.US     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
+            r22 = r8
+            r7 = r11
+            r6 = r19
+        L_0x0314:
+            boolean r1 = r4.isEmpty()     // Catch:{ Exception -> 0x0703, all -> 0x06fe }
+            if (r1 != 0) goto L_0x03d0
+            org.telegram.SQLite.SQLiteDatabase r1 = r25.getDatabase()     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            java.util.Locale r2 = java.util.Locale.US     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
             java.lang.String r3 = "SELECT data, name FROM chats WHERE uid IN(%s)"
-            r9 = 1
-            java.lang.Object[] r12 = new java.lang.Object[r9]     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            java.lang.String r4 = android.text.TextUtils.join(r10, r4)     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            r9 = 0
-            r12[r9] = r4     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            java.lang.String r2 = java.lang.String.format(r2, r3, r12)     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            java.lang.Object[] r3 = new java.lang.Object[r9]     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            org.telegram.SQLite.SQLiteCursor r1 = r1.queryFinalized(r2, r3)     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-        L_0x0339:
-            boolean r2 = r1.next()     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            if (r2 == 0) goto L_0x03d0
+            r8 = 1
+            java.lang.Object[] r11 = new java.lang.Object[r8]     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            java.lang.String r4 = android.text.TextUtils.join(r9, r4)     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            r8 = 0
+            r11[r8] = r4     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            java.lang.String r2 = java.lang.String.format(r2, r3, r11)     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            java.lang.Object[] r3 = new java.lang.Object[r8]     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            org.telegram.SQLite.SQLiteCursor r1 = r1.queryFinalized(r2, r3)     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+        L_0x0336:
+            boolean r2 = r1.next()     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            if (r2 == 0) goto L_0x03cd
             r2 = 1
-            java.lang.String r3 = r1.stringValue(r2)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            org.telegram.messenger.LocaleController r2 = org.telegram.messenger.LocaleController.getInstance()     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            java.lang.String r2 = r2.getTranslitString(r3)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            boolean r4 = r3.equals(r2)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            if (r4 == 0) goto L_0x0353
+            java.lang.String r3 = r1.stringValue(r2)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            org.telegram.messenger.LocaleController r2 = org.telegram.messenger.LocaleController.getInstance()     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            java.lang.String r2 = r2.getTranslitString(r3)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            boolean r4 = r3.equals(r2)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            if (r4 == 0) goto L_0x0350
             r2 = 0
-        L_0x0353:
+        L_0x0350:
             r4 = 0
-        L_0x0354:
-            if (r4 >= r6) goto L_0x0339
-            r9 = r19[r4]     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            boolean r12 = r3.startsWith(r9)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            if (r12 != 0) goto L_0x0394
-            java.lang.StringBuilder r12 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r12.<init>()     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r12.append(r7)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r12.append(r9)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            java.lang.String r12 = r12.toString()     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            boolean r12 = r3.contains(r12)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            if (r12 != 0) goto L_0x0394
-            if (r2 == 0) goto L_0x0391
-            boolean r12 = r2.startsWith(r9)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            if (r12 != 0) goto L_0x0394
-            java.lang.StringBuilder r12 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r12.<init>()     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r12.append(r7)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r12.append(r9)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            java.lang.String r12 = r12.toString()     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            boolean r12 = r2.contains(r12)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            if (r12 == 0) goto L_0x0391
-            goto L_0x0394
-        L_0x0391:
+        L_0x0351:
+            if (r4 >= r6) goto L_0x0336
+            r8 = r18[r4]     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            boolean r11 = r3.startsWith(r8)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            if (r11 != 0) goto L_0x0391
+            java.lang.StringBuilder r11 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r11.<init>()     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r11.append(r7)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r11.append(r8)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            java.lang.String r11 = r11.toString()     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            boolean r11 = r3.contains(r11)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            if (r11 != 0) goto L_0x0391
+            if (r2 == 0) goto L_0x038e
+            boolean r11 = r2.startsWith(r8)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            if (r11 != 0) goto L_0x0391
+            java.lang.StringBuilder r11 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r11.<init>()     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r11.append(r7)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r11.append(r8)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            java.lang.String r11 = r11.toString()     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            boolean r11 = r2.contains(r11)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            if (r11 == 0) goto L_0x038e
+            goto L_0x0391
+        L_0x038e:
             int r4 = r4 + 1
-            goto L_0x0354
-        L_0x0394:
+            goto L_0x0351
+        L_0x0391:
             r2 = 0
-            org.telegram.tgnet.NativeByteBuffer r3 = r1.byteBufferValue(r2)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            if (r3 == 0) goto L_0x0339
-            int r4 = r3.readInt32(r2)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            org.telegram.tgnet.TLRPC$Chat r4 = org.telegram.tgnet.TLRPC$Chat.TLdeserialize(r3, r4, r2)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r3.reuse()     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            if (r4 == 0) goto L_0x0339
-            boolean r2 = r4.deactivated     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            if (r2 != 0) goto L_0x0339
-            boolean r2 = org.telegram.messenger.ChatObject.isChannel(r4)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            if (r2 == 0) goto L_0x03b8
-            boolean r2 = org.telegram.messenger.ChatObject.isNotInChat(r4)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            if (r2 != 0) goto L_0x0339
-        L_0x03b8:
-            long r2 = r4.id     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
+            org.telegram.tgnet.NativeByteBuffer r3 = r1.byteBufferValue(r2)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            if (r3 == 0) goto L_0x0336
+            int r4 = r3.readInt32(r2)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            org.telegram.tgnet.TLRPC$Chat r4 = org.telegram.tgnet.TLRPC$Chat.TLdeserialize(r3, r4, r2)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r3.reuse()     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            if (r4 == 0) goto L_0x0336
+            boolean r2 = r4.deactivated     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            if (r2 != 0) goto L_0x0336
+            boolean r2 = org.telegram.messenger.ChatObject.isChannel(r4)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            if (r2 == 0) goto L_0x03b5
+            boolean r2 = org.telegram.messenger.ChatObject.isNotInChat(r4)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            if (r2 != 0) goto L_0x0336
+        L_0x03b5:
+            long r2 = r4.id     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
             long r2 = -r2
-            java.lang.Object r2 = r8.get(r2)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            org.telegram.ui.Adapters.DialogsSearchAdapter$DialogSearchResult r2 = (org.telegram.ui.Adapters.DialogsSearchAdapter.DialogSearchResult) r2     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            java.lang.String r3 = r4.title     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r12 = 0
-            java.lang.CharSequence r3 = org.telegram.messenger.AndroidUtilities.generateSearchName(r3, r12, r9)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r2.name = r3     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r2.object = r4     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
+            java.lang.Object r2 = r15.get(r2)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            org.telegram.ui.Adapters.DialogsSearchAdapter$DialogSearchResult r2 = (org.telegram.ui.Adapters.DialogsSearchAdapter.DialogSearchResult) r2     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            java.lang.String r3 = r4.title     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r11 = 0
+            java.lang.CharSequence r3 = org.telegram.messenger.AndroidUtilities.generateSearchName(r3, r11, r8)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r2.name = r3     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r2.object = r4     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
             int r5 = r5 + 1
-            goto L_0x0339
+            goto L_0x0336
+        L_0x03cd:
+            r1.dispose()     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
         L_0x03d0:
-            r1.dispose()     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-        L_0x03d3:
-            boolean r1 = r23.isEmpty()     // Catch:{ Exception -> 0x0706, all -> 0x0701 }
-            if (r1 != 0) goto L_0x05ad
-            org.telegram.SQLite.SQLiteDatabase r1 = r25.getDatabase()     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            java.util.Locale r2 = java.util.Locale.US     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
+            boolean r1 = r24.isEmpty()     // Catch:{ Exception -> 0x0703, all -> 0x06fe }
+            if (r1 != 0) goto L_0x05aa
+            org.telegram.SQLite.SQLiteDatabase r1 = r25.getDatabase()     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            java.util.Locale r2 = java.util.Locale.US     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
             java.lang.String r3 = "SELECT q.data, u.name, q.user, q.g, q.authkey, q.ttl, u.data, u.status, q.layer, q.seq_in, q.seq_out, q.use_count, q.exchange_id, q.key_date, q.fprint, q.fauthkey, q.khash, q.in_seq_no, q.admin_id, q.mtproto_seq FROM enc_chats as q INNER JOIN users as u ON q.user = u.uid WHERE q.uid IN(%s)"
             r4 = 1
-            java.lang.Object[] r9 = new java.lang.Object[r4]     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            r4 = r23
-            java.lang.String r4 = android.text.TextUtils.join(r10, r4)     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            r10 = 0
-            r9[r10] = r4     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            java.lang.String r2 = java.lang.String.format(r2, r3, r9)     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            java.lang.Object[] r3 = new java.lang.Object[r10]     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            org.telegram.SQLite.SQLiteCursor r1 = r1.queryFinalized(r2, r3)     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-        L_0x03f7:
-            boolean r2 = r1.next()     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            if (r2 == 0) goto L_0x05a7
+            java.lang.Object[] r8 = new java.lang.Object[r4]     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            r4 = r24
+            java.lang.String r4 = android.text.TextUtils.join(r9, r4)     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            r9 = 0
+            r8[r9] = r4     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            java.lang.String r2 = java.lang.String.format(r2, r3, r8)     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            java.lang.Object[] r3 = new java.lang.Object[r9]     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            org.telegram.SQLite.SQLiteCursor r1 = r1.queryFinalized(r2, r3)     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+        L_0x03f4:
+            boolean r2 = r1.next()     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            if (r2 == 0) goto L_0x05a4
             r2 = 1
-            java.lang.String r3 = r1.stringValue(r2)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            org.telegram.messenger.LocaleController r2 = org.telegram.messenger.LocaleController.getInstance()     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            java.lang.String r2 = r2.getTranslitString(r3)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            boolean r4 = r3.equals(r2)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            if (r4 == 0) goto L_0x0412
-            r9 = 0
-            goto L_0x0413
-        L_0x0412:
-            r9 = r2
-        L_0x0413:
+            java.lang.String r3 = r1.stringValue(r2)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            org.telegram.messenger.LocaleController r2 = org.telegram.messenger.LocaleController.getInstance()     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            java.lang.String r2 = r2.getTranslitString(r3)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            boolean r4 = r3.equals(r2)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            if (r4 == 0) goto L_0x040f
+            r8 = 0
+            goto L_0x0410
+        L_0x040f:
+            r8 = r2
+        L_0x0410:
             r2 = r22
-            int r4 = r3.lastIndexOf(r2)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r10 = -1
-            if (r4 == r10) goto L_0x0423
+            int r4 = r3.lastIndexOf(r2)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r9 = -1
+            if (r4 == r9) goto L_0x0420
             int r4 = r4 + 2
-            java.lang.String r4 = r3.substring(r4)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            goto L_0x0424
-        L_0x0423:
+            java.lang.String r4 = r3.substring(r4)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            goto L_0x0421
+        L_0x0420:
             r4 = 0
-        L_0x0424:
-            r10 = 0
-            r12 = 0
-        L_0x0426:
-            if (r10 >= r6) goto L_0x05a1
-            r13 = r19[r10]     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            boolean r14 = r3.startsWith(r13)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            if (r14 != 0) goto L_0x046d
-            java.lang.StringBuilder r14 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r14.<init>()     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r14.append(r7)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r14.append(r13)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            java.lang.String r14 = r14.toString()     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            boolean r14 = r3.contains(r14)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            if (r14 != 0) goto L_0x046d
-            if (r9 == 0) goto L_0x0463
-            boolean r14 = r9.startsWith(r13)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            if (r14 != 0) goto L_0x046d
-            java.lang.StringBuilder r14 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r14.<init>()     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r14.append(r7)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r14.append(r13)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            java.lang.String r14 = r14.toString()     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            boolean r14 = r9.contains(r14)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            if (r14 == 0) goto L_0x0463
-            goto L_0x046d
-        L_0x0463:
-            if (r4 == 0) goto L_0x046e
-            boolean r14 = r4.startsWith(r13)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            if (r14 == 0) goto L_0x046e
-            r12 = 2
-            goto L_0x046e
-        L_0x046d:
-            r12 = 1
-        L_0x046e:
-            if (r12 == 0) goto L_0x059b
-            r14 = 0
-            org.telegram.tgnet.NativeByteBuffer r3 = r1.byteBufferValue(r14)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            if (r3 == 0) goto L_0x0484
-            int r4 = r3.readInt32(r14)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            org.telegram.tgnet.TLRPC$EncryptedChat r4 = org.telegram.tgnet.TLRPC$EncryptedChat.TLdeserialize(r3, r4, r14)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r3.reuse()     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r9 = r4
-            goto L_0x0485
-        L_0x0484:
+        L_0x0421:
             r9 = 0
-        L_0x0485:
-            r3 = 6
-            org.telegram.tgnet.NativeByteBuffer r3 = r1.byteBufferValue(r3)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            if (r3 == 0) goto L_0x0499
-            r4 = 0
-            int r10 = r3.readInt32(r4)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            org.telegram.tgnet.TLRPC$User r10 = org.telegram.tgnet.TLRPC$User.TLdeserialize(r3, r10, r4)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r3.reuse()     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            goto L_0x049a
-        L_0x0499:
-            r10 = 0
-        L_0x049a:
-            if (r9 == 0) goto L_0x05a1
-            if (r10 == 0) goto L_0x05a1
-            int r3 = r9.id     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            long r3 = (long) r3     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            long r3 = org.telegram.messenger.DialogObject.makeEncryptedDialogId(r3)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            java.lang.Object r3 = r8.get(r3)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            org.telegram.ui.Adapters.DialogsSearchAdapter$DialogSearchResult r3 = (org.telegram.ui.Adapters.DialogsSearchAdapter.DialogSearchResult) r3     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r4 = 2
-            long r14 = r1.longValue(r4)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r9.user_id = r14     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r4 = 3
-            byte[] r14 = r1.byteArrayValue(r4)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r9.a_or_b = r14     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r14 = 4
-            byte[] r4 = r1.byteArrayValue(r14)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r9.auth_key = r4     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r4 = 5
-            int r4 = r1.intValue(r4)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r9.ttl = r4     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r4 = 8
-            int r4 = r1.intValue(r4)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r9.layer = r4     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r4 = 9
-            int r4 = r1.intValue(r4)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r9.seq_in = r4     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r4 = 10
-            int r4 = r1.intValue(r4)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r9.seq_out = r4     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r4 = 11
-            int r4 = r1.intValue(r4)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            int r15 = r4 >> 16
-            short r15 = (short) r15     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r9.key_use_count_in = r15     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            short r4 = (short) r4     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r9.key_use_count_out = r4     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r4 = 12
-            long r14 = r1.longValue(r4)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r9.exchange_id = r14     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r4 = 13
-            int r4 = r1.intValue(r4)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r9.key_create_date = r4     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r4 = 14
-            long r14 = r1.longValue(r4)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r9.future_key_fingerprint = r14     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r4 = 15
-            byte[] r4 = r1.byteArrayValue(r4)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r9.future_auth_key = r4     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r4 = 16
-            byte[] r4 = r1.byteArrayValue(r4)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r9.key_hash = r4     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r4 = 17
-            int r4 = r1.intValue(r4)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r9.in_seq_no = r4     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r4 = 18
-            long r14 = r1.longValue(r4)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r20 = 0
-            int r4 = (r14 > r20 ? 1 : (r14 == r20 ? 0 : -1))
-            if (r4 == 0) goto L_0x052b
-            r9.admin_id = r14     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-        L_0x052b:
-            r4 = 19
-            int r4 = r1.intValue(r4)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r9.mtproto_seq = r4     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            org.telegram.tgnet.TLRPC$UserStatus r4 = r10.status     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            if (r4 == 0) goto L_0x053e
-            r14 = 7
-            int r14 = r1.intValue(r14)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r4.expires = r14     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-        L_0x053e:
-            r4 = 1
-            if (r12 != r4) goto L_0x056a
-            android.text.SpannableStringBuilder r4 = new android.text.SpannableStringBuilder     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            java.lang.String r12 = r10.first_name     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            java.lang.String r13 = r10.last_name     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            java.lang.String r12 = org.telegram.messenger.ContactsController.formatName(r12, r13)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r4.<init>(r12)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r3.name = r4     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            android.text.SpannableStringBuilder r4 = (android.text.SpannableStringBuilder) r4     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            android.text.style.ForegroundColorSpan r12 = new android.text.style.ForegroundColorSpan     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            java.lang.String r13 = "chats_secretName"
-            int r13 = org.telegram.ui.ActionBar.Theme.getColor(r13)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r12.<init>(r13)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            java.lang.CharSequence r13 = r3.name     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            int r13 = r13.length()     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r14 = 33
-            r15 = 0
-            r4.setSpan(r12, r15, r13, r14)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            goto L_0x0591
-        L_0x056a:
-            java.lang.StringBuilder r4 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r4.<init>()     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r4.append(r11)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            java.lang.String r12 = r10.username     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r4.append(r12)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            java.lang.String r4 = r4.toString()     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            java.lang.StringBuilder r12 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r12.<init>()     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r12.append(r11)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r12.append(r13)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            java.lang.String r12 = r12.toString()     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
+            r11 = 0
+        L_0x0423:
+            if (r9 >= r6) goto L_0x059e
+            r12 = r18[r9]     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            boolean r13 = r3.startsWith(r12)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            if (r13 != 0) goto L_0x046a
+            java.lang.StringBuilder r13 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r13.<init>()     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r13.append(r7)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r13.append(r12)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            java.lang.String r13 = r13.toString()     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            boolean r13 = r3.contains(r13)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            if (r13 != 0) goto L_0x046a
+            if (r8 == 0) goto L_0x0460
+            boolean r13 = r8.startsWith(r12)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            if (r13 != 0) goto L_0x046a
+            java.lang.StringBuilder r13 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r13.<init>()     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r13.append(r7)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r13.append(r12)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            java.lang.String r13 = r13.toString()     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            boolean r13 = r8.contains(r13)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            if (r13 == 0) goto L_0x0460
+            goto L_0x046a
+        L_0x0460:
+            if (r4 == 0) goto L_0x046b
+            boolean r13 = r4.startsWith(r12)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            if (r13 == 0) goto L_0x046b
+            r11 = 2
+            goto L_0x046b
+        L_0x046a:
+            r11 = 1
+        L_0x046b:
+            if (r11 == 0) goto L_0x0598
             r13 = 0
-            java.lang.CharSequence r4 = org.telegram.messenger.AndroidUtilities.generateSearchName(r4, r13, r12)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r3.name = r4     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-        L_0x0591:
-            r3.object = r9     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r13 = r30
-            r13.add(r10)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
+            org.telegram.tgnet.NativeByteBuffer r3 = r1.byteBufferValue(r13)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            if (r3 == 0) goto L_0x0481
+            int r4 = r3.readInt32(r13)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            org.telegram.tgnet.TLRPC$EncryptedChat r4 = org.telegram.tgnet.TLRPC$EncryptedChat.TLdeserialize(r3, r4, r13)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r3.reuse()     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r8 = r4
+            goto L_0x0482
+        L_0x0481:
+            r8 = 0
+        L_0x0482:
+            r3 = 6
+            org.telegram.tgnet.NativeByteBuffer r3 = r1.byteBufferValue(r3)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            if (r3 == 0) goto L_0x0496
+            r4 = 0
+            int r9 = r3.readInt32(r4)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            org.telegram.tgnet.TLRPC$User r9 = org.telegram.tgnet.TLRPC$User.TLdeserialize(r3, r9, r4)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r3.reuse()     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            goto L_0x0497
+        L_0x0496:
+            r9 = 0
+        L_0x0497:
+            if (r8 == 0) goto L_0x059e
+            if (r9 == 0) goto L_0x059e
+            int r3 = r8.id     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            long r3 = (long) r3     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            long r3 = org.telegram.messenger.DialogObject.makeEncryptedDialogId(r3)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            java.lang.Object r3 = r15.get(r3)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            org.telegram.ui.Adapters.DialogsSearchAdapter$DialogSearchResult r3 = (org.telegram.ui.Adapters.DialogsSearchAdapter.DialogSearchResult) r3     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r4 = 2
+            long r13 = r1.longValue(r4)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r8.user_id = r13     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r4 = 3
+            byte[] r13 = r1.byteArrayValue(r4)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r8.a_or_b = r13     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r13 = 4
+            byte[] r4 = r1.byteArrayValue(r13)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r8.auth_key = r4     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r4 = 5
+            int r4 = r1.intValue(r4)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r8.ttl = r4     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r4 = 8
+            int r4 = r1.intValue(r4)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r8.layer = r4     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r4 = 9
+            int r4 = r1.intValue(r4)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r8.seq_in = r4     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r4 = 10
+            int r4 = r1.intValue(r4)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r8.seq_out = r4     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r4 = 11
+            int r4 = r1.intValue(r4)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            int r14 = r4 >> 16
+            short r14 = (short) r14     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r8.key_use_count_in = r14     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            short r4 = (short) r4     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r8.key_use_count_out = r4     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r4 = 12
+            long r13 = r1.longValue(r4)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r8.exchange_id = r13     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r4 = 13
+            int r4 = r1.intValue(r4)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r8.key_create_date = r4     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r4 = 14
+            long r13 = r1.longValue(r4)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r8.future_key_fingerprint = r13     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r4 = 15
+            byte[] r4 = r1.byteArrayValue(r4)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r8.future_auth_key = r4     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r4 = 16
+            byte[] r4 = r1.byteArrayValue(r4)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r8.key_hash = r4     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r4 = 17
+            int r4 = r1.intValue(r4)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r8.in_seq_no = r4     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r4 = 18
+            long r13 = r1.longValue(r4)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r21 = 0
+            int r4 = (r13 > r21 ? 1 : (r13 == r21 ? 0 : -1))
+            if (r4 == 0) goto L_0x0528
+            r8.admin_id = r13     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+        L_0x0528:
+            r4 = 19
+            int r4 = r1.intValue(r4)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r8.mtproto_seq = r4     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            org.telegram.tgnet.TLRPC$UserStatus r4 = r9.status     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            if (r4 == 0) goto L_0x053b
+            r13 = 7
+            int r13 = r1.intValue(r13)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r4.expires = r13     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+        L_0x053b:
+            r4 = 1
+            if (r11 != r4) goto L_0x0567
+            android.text.SpannableStringBuilder r4 = new android.text.SpannableStringBuilder     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            java.lang.String r11 = r9.first_name     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            java.lang.String r12 = r9.last_name     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            java.lang.String r11 = org.telegram.messenger.ContactsController.formatName(r11, r12)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r4.<init>(r11)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r3.name = r4     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            android.text.SpannableStringBuilder r4 = (android.text.SpannableStringBuilder) r4     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            android.text.style.ForegroundColorSpan r11 = new android.text.style.ForegroundColorSpan     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            java.lang.String r12 = "chats_secretName"
+            int r12 = org.telegram.ui.ActionBar.Theme.getColor(r12)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r11.<init>(r12)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            java.lang.CharSequence r12 = r3.name     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            int r12 = r12.length()     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r13 = 33
+            r14 = 0
+            r4.setSpan(r11, r14, r12, r13)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            goto L_0x058e
+        L_0x0567:
+            java.lang.StringBuilder r4 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r4.<init>()     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r4.append(r10)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            java.lang.String r11 = r9.username     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r4.append(r11)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            java.lang.String r4 = r4.toString()     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            java.lang.StringBuilder r11 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r11.<init>()     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r11.append(r10)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r11.append(r12)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            java.lang.String r11 = r11.toString()     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r12 = 0
+            java.lang.CharSequence r4 = org.telegram.messenger.AndroidUtilities.generateSearchName(r4, r12, r11)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r3.name = r4     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+        L_0x058e:
+            r3.object = r8     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r12 = r30
+            r12.add(r9)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
             int r5 = r5 + 1
-            goto L_0x05a3
-        L_0x059b:
-            r13 = r30
-            int r10 = r10 + 1
-            goto L_0x0426
-        L_0x05a1:
-            r13 = r30
-        L_0x05a3:
+            goto L_0x05a0
+        L_0x0598:
+            r12 = r30
+            int r9 = r9 + 1
+            goto L_0x0423
+        L_0x059e:
+            r12 = r30
+        L_0x05a0:
             r22 = r2
-            goto L_0x03f7
-        L_0x05a7:
+            goto L_0x03f4
+        L_0x05a4:
             r2 = r22
-            r1.dispose()     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            goto L_0x05af
-        L_0x05ad:
+            r1.dispose()     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            goto L_0x05ac
+        L_0x05aa:
             r2 = r22
-        L_0x05af:
-            java.util.ArrayList r1 = new java.util.ArrayList     // Catch:{ Exception -> 0x0706, all -> 0x0701 }
-            r1.<init>(r5)     // Catch:{ Exception -> 0x0706, all -> 0x0701 }
+        L_0x05ac:
+            java.util.ArrayList r1 = new java.util.ArrayList     // Catch:{ Exception -> 0x0703, all -> 0x06fe }
+            r1.<init>(r5)     // Catch:{ Exception -> 0x0703, all -> 0x06fe }
             r3 = 0
-        L_0x05b5:
-            int r4 = r8.size()     // Catch:{ Exception -> 0x0706, all -> 0x0701 }
-            if (r3 >= r4) goto L_0x05cf
-            java.lang.Object r4 = r8.valueAt(r3)     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            org.telegram.ui.Adapters.DialogsSearchAdapter$DialogSearchResult r4 = (org.telegram.ui.Adapters.DialogsSearchAdapter.DialogSearchResult) r4     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            org.telegram.tgnet.TLObject r5 = r4.object     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            if (r5 == 0) goto L_0x05cc
-            java.lang.CharSequence r5 = r4.name     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            if (r5 == 0) goto L_0x05cc
-            r1.add(r4)     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
+        L_0x05b2:
+            int r4 = r15.size()     // Catch:{ Exception -> 0x0703, all -> 0x06fe }
+            if (r3 >= r4) goto L_0x05cc
+            java.lang.Object r4 = r15.valueAt(r3)     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            org.telegram.ui.Adapters.DialogsSearchAdapter$DialogSearchResult r4 = (org.telegram.ui.Adapters.DialogsSearchAdapter.DialogSearchResult) r4     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            org.telegram.tgnet.TLObject r5 = r4.object     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            if (r5 == 0) goto L_0x05c9
+            java.lang.CharSequence r5 = r4.name     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            if (r5 == 0) goto L_0x05c9
+            r1.add(r4)     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+        L_0x05c9:
+            int r3 = r3 + 1
+            goto L_0x05b2
         L_0x05cc:
-            int r3 = r3 + 1
-            goto L_0x05b5
-        L_0x05cf:
-            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda201 r3 = org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda201.INSTANCE     // Catch:{ Exception -> 0x0706, all -> 0x0701 }
-            java.util.Collections.sort(r1, r3)     // Catch:{ Exception -> 0x0706, all -> 0x0701 }
+            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda201 r3 = org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda201.INSTANCE     // Catch:{ Exception -> 0x0703, all -> 0x06fe }
+            java.util.Collections.sort(r1, r3)     // Catch:{ Exception -> 0x0703, all -> 0x06fe }
             r3 = 0
-        L_0x05d5:
-            int r4 = r1.size()     // Catch:{ Exception -> 0x0706, all -> 0x0701 }
-            if (r3 >= r4) goto L_0x05f2
-            java.lang.Object r4 = r1.get(r3)     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            org.telegram.ui.Adapters.DialogsSearchAdapter$DialogSearchResult r4 = (org.telegram.ui.Adapters.DialogsSearchAdapter.DialogSearchResult) r4     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            org.telegram.tgnet.TLObject r5 = r4.object     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            r9 = r28
-            r9.add(r5)     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
-            java.lang.CharSequence r4 = r4.name     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
+        L_0x05d2:
+            int r4 = r1.size()     // Catch:{ Exception -> 0x0703, all -> 0x06fe }
+            if (r3 >= r4) goto L_0x05ef
+            java.lang.Object r4 = r1.get(r3)     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            org.telegram.ui.Adapters.DialogsSearchAdapter$DialogSearchResult r4 = (org.telegram.ui.Adapters.DialogsSearchAdapter.DialogSearchResult) r4     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            org.telegram.tgnet.TLObject r5 = r4.object     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            r8 = r28
+            r8.add(r5)     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
+            java.lang.CharSequence r4 = r4.name     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
             r5 = r29
-            r5.add(r4)     // Catch:{ Exception -> 0x0059, all -> 0x0054 }
+            r5.add(r4)     // Catch:{ Exception -> 0x0057, all -> 0x0052 }
             int r3 = r3 + 1
-            goto L_0x05d5
-        L_0x05f2:
+            goto L_0x05d2
+        L_0x05ef:
             r1 = r26
-            r9 = r28
+            r8 = r28
             r5 = r29
             r3 = 2
-            if (r1 == r3) goto L_0x0712
-            org.telegram.SQLite.SQLiteDatabase r1 = r25.getDatabase()     // Catch:{ Exception -> 0x0706, all -> 0x0701 }
+            if (r1 == r3) goto L_0x070f
+            org.telegram.SQLite.SQLiteDatabase r1 = r25.getDatabase()     // Catch:{ Exception -> 0x0703, all -> 0x06fe }
             java.lang.String r3 = "SELECT u.data, u.status, u.name, u.uid FROM users as u INNER JOIN contacts as c ON u.uid = c.uid"
             r4 = 0
-            java.lang.Object[] r10 = new java.lang.Object[r4]     // Catch:{ Exception -> 0x0706, all -> 0x0701 }
-            org.telegram.SQLite.SQLiteCursor r1 = r1.queryFinalized(r3, r10)     // Catch:{ Exception -> 0x0706, all -> 0x0701 }
-        L_0x0608:
-            boolean r3 = r1.next()     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            if (r3 == 0) goto L_0x06f5
+            java.lang.Object[] r9 = new java.lang.Object[r4]     // Catch:{ Exception -> 0x0703, all -> 0x06fe }
+            org.telegram.SQLite.SQLiteCursor r1 = r1.queryFinalized(r3, r9)     // Catch:{ Exception -> 0x0703, all -> 0x06fe }
+        L_0x0605:
+            boolean r3 = r1.next()     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            if (r3 == 0) goto L_0x06f2
             r3 = 3
-            long r12 = r1.longValue(r3)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            int r4 = r8.indexOfKey(r12)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            if (r4 < 0) goto L_0x061a
-            goto L_0x0608
-        L_0x061a:
+            long r11 = r1.longValue(r3)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            int r4 = r15.indexOfKey(r11)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            if (r4 < 0) goto L_0x0617
+            goto L_0x0605
+        L_0x0617:
             r4 = 2
-            java.lang.String r10 = r1.stringValue(r4)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            org.telegram.messenger.LocaleController r12 = org.telegram.messenger.LocaleController.getInstance()     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            java.lang.String r12 = r12.getTranslitString(r10)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            boolean r13 = r10.equals(r12)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            if (r13 == 0) goto L_0x062e
+            java.lang.String r9 = r1.stringValue(r4)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            org.telegram.messenger.LocaleController r11 = org.telegram.messenger.LocaleController.getInstance()     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            java.lang.String r11 = r11.getTranslitString(r9)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            boolean r12 = r9.equals(r11)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            if (r12 == 0) goto L_0x062b
+            r11 = 0
+        L_0x062b:
+            int r12 = r9.lastIndexOf(r2)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r13 = -1
+            if (r12 == r13) goto L_0x0639
+            int r12 = r12 + 3
+            java.lang.String r12 = r9.substring(r12)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            goto L_0x063a
+        L_0x0639:
             r12 = 0
-        L_0x062e:
-            int r13 = r10.lastIndexOf(r2)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r14 = -1
-            if (r13 == r14) goto L_0x063c
-            int r13 = r13 + 3
-            java.lang.String r13 = r10.substring(r13)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            goto L_0x063d
-        L_0x063c:
-            r13 = 0
-        L_0x063d:
+        L_0x063a:
             r3 = 0
-            r15 = 0
-        L_0x063f:
-            if (r3 >= r6) goto L_0x06ef
-            r4 = r19[r3]     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            boolean r20 = r10.startsWith(r4)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            if (r20 != 0) goto L_0x0686
-            java.lang.StringBuilder r14 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r14.<init>()     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r14.append(r7)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r14.append(r4)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            java.lang.String r14 = r14.toString()     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            boolean r14 = r10.contains(r14)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            if (r14 != 0) goto L_0x0686
-            if (r12 == 0) goto L_0x067c
-            boolean r14 = r12.startsWith(r4)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            if (r14 != 0) goto L_0x0686
-            java.lang.StringBuilder r14 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r14.<init>()     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r14.append(r7)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r14.append(r4)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            java.lang.String r14 = r14.toString()     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            boolean r14 = r12.contains(r14)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            if (r14 == 0) goto L_0x067c
-            goto L_0x0686
-        L_0x067c:
-            if (r13 == 0) goto L_0x0687
-            boolean r14 = r13.startsWith(r4)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            if (r14 == 0) goto L_0x0687
-            r15 = 2
-            goto L_0x0687
-        L_0x0686:
-            r15 = 1
-        L_0x0687:
-            if (r15 == 0) goto L_0x06e5
             r14 = 0
-            org.telegram.tgnet.NativeByteBuffer r3 = r1.byteBufferValue(r14)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            if (r3 == 0) goto L_0x06e3
-            int r10 = r3.readInt32(r14)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            org.telegram.tgnet.TLRPC$User r10 = org.telegram.tgnet.TLRPC$User.TLdeserialize(r3, r10, r14)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r3.reuse()     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            org.telegram.tgnet.TLRPC$UserStatus r3 = r10.status     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            if (r3 == 0) goto L_0x06a6
-            r12 = 1
-            int r13 = r1.intValue(r12)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r3.expires = r13     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-        L_0x06a6:
+        L_0x063c:
+            if (r3 >= r6) goto L_0x06ec
+            r4 = r18[r3]     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            boolean r19 = r9.startsWith(r4)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            if (r19 != 0) goto L_0x0683
+            java.lang.StringBuilder r13 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r13.<init>()     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r13.append(r7)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r13.append(r4)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            java.lang.String r13 = r13.toString()     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            boolean r13 = r9.contains(r13)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            if (r13 != 0) goto L_0x0683
+            if (r11 == 0) goto L_0x0679
+            boolean r13 = r11.startsWith(r4)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            if (r13 != 0) goto L_0x0683
+            java.lang.StringBuilder r13 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r13.<init>()     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r13.append(r7)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r13.append(r4)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            java.lang.String r13 = r13.toString()     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            boolean r13 = r11.contains(r13)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            if (r13 == 0) goto L_0x0679
+            goto L_0x0683
+        L_0x0679:
+            if (r12 == 0) goto L_0x0684
+            boolean r13 = r12.startsWith(r4)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            if (r13 == 0) goto L_0x0684
+            r14 = 2
+            goto L_0x0684
+        L_0x0683:
+            r14 = 1
+        L_0x0684:
+            if (r14 == 0) goto L_0x06e2
+            r13 = 0
+            org.telegram.tgnet.NativeByteBuffer r3 = r1.byteBufferValue(r13)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            if (r3 == 0) goto L_0x06e0
+            int r9 = r3.readInt32(r13)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            org.telegram.tgnet.TLRPC$User r9 = org.telegram.tgnet.TLRPC$User.TLdeserialize(r3, r9, r13)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r3.reuse()     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            org.telegram.tgnet.TLRPC$UserStatus r3 = r9.status     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            if (r3 == 0) goto L_0x06a3
+            r11 = 1
+            int r12 = r1.intValue(r11)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r3.expires = r12     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+        L_0x06a3:
             r3 = 1
-            if (r15 != r3) goto L_0x06b6
-            java.lang.String r12 = r10.first_name     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            java.lang.String r13 = r10.last_name     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            java.lang.CharSequence r4 = org.telegram.messenger.AndroidUtilities.generateSearchName(r12, r13, r4)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r5.add(r4)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r13 = 0
-            goto L_0x06de
-        L_0x06b6:
-            java.lang.StringBuilder r12 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r12.<init>()     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r12.append(r11)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            java.lang.String r13 = r10.username     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r12.append(r13)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            java.lang.String r12 = r12.toString()     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            java.lang.StringBuilder r13 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r13.<init>()     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r13.append(r11)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r13.append(r4)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            java.lang.String r4 = r13.toString()     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r13 = 0
-            java.lang.CharSequence r4 = org.telegram.messenger.AndroidUtilities.generateSearchName(r12, r13, r4)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r5.add(r4)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-        L_0x06de:
-            r9.add(r10)     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
-            r4 = r13
-            goto L_0x06f1
-        L_0x06e3:
+            if (r14 != r3) goto L_0x06b3
+            java.lang.String r11 = r9.first_name     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            java.lang.String r12 = r9.last_name     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            java.lang.CharSequence r4 = org.telegram.messenger.AndroidUtilities.generateSearchName(r11, r12, r4)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r5.add(r4)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r12 = 0
+            goto L_0x06db
+        L_0x06b3:
+            java.lang.StringBuilder r11 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r11.<init>()     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r11.append(r10)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            java.lang.String r12 = r9.username     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r11.append(r12)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            java.lang.String r11 = r11.toString()     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            java.lang.StringBuilder r12 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r12.<init>()     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r12.append(r10)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r12.append(r4)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            java.lang.String r4 = r12.toString()     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r12 = 0
+            java.lang.CharSequence r4 = org.telegram.messenger.AndroidUtilities.generateSearchName(r11, r12, r4)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r5.add(r4)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+        L_0x06db:
+            r8.add(r9)     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            r4 = r12
+            goto L_0x06ee
+        L_0x06e0:
             r4 = 0
-            goto L_0x06f1
-        L_0x06e5:
+            goto L_0x06ee
+        L_0x06e2:
             r4 = 0
-            r14 = 0
+            r13 = 0
             r16 = 1
             int r3 = r3 + 1
             r4 = 2
-            r14 = -1
-            goto L_0x063f
-        L_0x06ef:
+            r13 = -1
+            goto L_0x063c
+        L_0x06ec:
             r4 = 0
-            r14 = 0
-        L_0x06f1:
+            r13 = 0
+        L_0x06ee:
             r16 = 1
-            goto L_0x0608
-        L_0x06f5:
-            r1.dispose()     // Catch:{ Exception -> 0x0309, all -> 0x0305 }
+            goto L_0x0605
+        L_0x06f2:
+            r1.dispose()     // Catch:{ Exception -> 0x0306, all -> 0x0302 }
+            goto L_0x070f
+        L_0x06f6:
+            r0 = move-exception
+            r1 = r0
+            r8 = r5
             goto L_0x0712
-        L_0x06f9:
+        L_0x06fa:
             r0 = move-exception
             r1 = r0
             r8 = r5
-            goto L_0x0715
-        L_0x06fd:
-            r0 = move-exception
-            r1 = r0
-            r8 = r5
-            goto L_0x070a
-        L_0x0701:
+            goto L_0x0707
+        L_0x06fe:
             r0 = move-exception
             r4 = 0
             r1 = r0
             r8 = r4
-            goto L_0x0715
-        L_0x0706:
+            goto L_0x0712
+        L_0x0703:
             r0 = move-exception
             r4 = 0
             r1 = r0
             r8 = r4
-        L_0x070a:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r1)     // Catch:{ all -> 0x0713 }
-            if (r8 == 0) goto L_0x0712
+        L_0x0707:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r1)     // Catch:{ all -> 0x0710 }
+            if (r8 == 0) goto L_0x070f
             r8.dispose()
-        L_0x0712:
+        L_0x070f:
             return
-        L_0x0713:
+        L_0x0710:
             r0 = move-exception
-        L_0x0714:
+        L_0x0711:
             r1 = r0
-        L_0x0715:
-            if (r8 == 0) goto L_0x071a
+        L_0x0712:
+            if (r8 == 0) goto L_0x0717
             r8.dispose()
-        L_0x071a:
-            goto L_0x071c
-        L_0x071b:
+        L_0x0717:
+            goto L_0x0719
+        L_0x0718:
             throw r1
-        L_0x071c:
-            goto L_0x071b
+        L_0x0719:
+            goto L_0x0718
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.localSearch(int, java.lang.String, java.util.ArrayList, java.util.ArrayList, java.util.ArrayList, int):void");
     }

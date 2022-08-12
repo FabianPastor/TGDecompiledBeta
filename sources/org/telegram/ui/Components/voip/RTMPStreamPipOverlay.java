@@ -43,6 +43,7 @@ import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.voip.VideoCapturerDevice;
 import org.telegram.messenger.voip.VoIPService;
 import org.telegram.tgnet.TLRPC$Chat;
@@ -594,7 +595,7 @@ public class RTMPStreamPipOverlay implements NotificationCenter.NotificationCent
             this.controlsView.addView(view, LayoutHelper.createFrame(-1, -1.0f));
             int dp = AndroidUtilities.dp(8.0f);
             ImageView imageView = new ImageView(context);
-            imageView.setImageResource(NUM);
+            imageView.setImageResource(R.drawable.pip_video_close);
             imageView.setColorFilter(Theme.getColor("voipgroup_actionBarItems"));
             imageView.setBackground(Theme.createSelectorDrawable(Theme.getColor("listSelectorSDK21")));
             imageView.setPadding(dp, dp, dp, dp);
@@ -604,7 +605,7 @@ public class RTMPStreamPipOverlay implements NotificationCenter.NotificationCent
             float f3 = f;
             this.controlsView.addView(imageView, LayoutHelper.createFrame(38, f2, 5, 0.0f, f3, f, 0.0f));
             ImageView imageView2 = new ImageView(context);
-            imageView2.setImageResource(NUM);
+            imageView2.setImageResource(R.drawable.pip_video_expand);
             imageView2.setColorFilter(Theme.getColor("voipgroup_actionBarItems"));
             imageView2.setBackground(Theme.createSelectorDrawable(Theme.getColor("listSelectorSDK21")));
             imageView2.setPadding(dp, dp, dp, dp);

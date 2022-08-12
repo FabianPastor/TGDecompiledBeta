@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.GestureDetectorFixDoubleTap;
 import org.telegram.ui.Components.VideoForwardDrawable;
@@ -423,12 +424,12 @@ public class PipVideoOverlay {
         if (photoViewer2 != null && (videoPlayer = photoViewer2.getVideoPlayer()) != null && this.playPauseButton != null) {
             AndroidUtilities.cancelRunOnUIThread(this.progressRunnable);
             if (videoPlayer.isPlaying()) {
-                this.playPauseButton.setImageResource(NUM);
+                this.playPauseButton.setImageResource(R.drawable.pip_pause_large);
                 AndroidUtilities.runOnUIThread(this.progressRunnable, 500);
             } else if (this.isVideoCompleted) {
-                this.playPauseButton.setImageResource(NUM);
+                this.playPauseButton.setImageResource(R.drawable.pip_replay_large);
             } else {
-                this.playPauseButton.setImageResource(NUM);
+                this.playPauseButton.setImageResource(R.drawable.pip_play_large);
             }
         }
     }
@@ -1070,7 +1071,7 @@ public class PipVideoOverlay {
         this.controlsView.addView(view2, LayoutHelper.createFrame(-1, -1.0f));
         int dp = AndroidUtilities.dp(8.0f);
         ImageView imageView = new ImageView(context2);
-        imageView.setImageResource(NUM);
+        imageView.setImageResource(R.drawable.pip_video_close);
         imageView.setColorFilter(Theme.getColor("voipgroup_actionBarItems"), PorterDuff.Mode.MULTIPLY);
         imageView.setBackground(Theme.createSelectorDrawable(Theme.getColor("listSelectorSDK21")));
         imageView.setPadding(dp, dp, dp, dp);
@@ -1080,7 +1081,7 @@ public class PipVideoOverlay {
         float f3 = f;
         this.controlsView.addView(imageView, LayoutHelper.createFrame(38, f2, 5, 0.0f, f3, f, 0.0f));
         ImageView imageView2 = new ImageView(context2);
-        imageView2.setImageResource(NUM);
+        imageView2.setImageResource(R.drawable.pip_video_expand);
         imageView2.setColorFilter(Theme.getColor("voipgroup_actionBarItems"), PorterDuff.Mode.MULTIPLY);
         imageView2.setBackground(Theme.createSelectorDrawable(Theme.getColor("listSelectorSDK21")));
         imageView2.setPadding(dp, dp, dp, dp);

@@ -173,8 +173,8 @@ public class AndroidUtilities {
     public static float density = 1.0f;
     public static DisplayMetrics displayMetrics = new DisplayMetrics();
     public static Point displaySize = new Point();
-    private static int[] documentIcons = {NUM, NUM, NUM, NUM};
-    private static int[] documentMediaIcons = {NUM, NUM, NUM, NUM};
+    private static int[] documentIcons = {R.drawable.media_doc_blue, R.drawable.media_doc_green, R.drawable.media_doc_red, R.drawable.media_doc_yellow};
+    private static int[] documentMediaIcons = {R.drawable.media_doc_blue_b, R.drawable.media_doc_green_b, R.drawable.media_doc_red_b, R.drawable.media_doc_yellow_b};
     public static boolean firstConfigurationWas;
     private static WeakReference<BaseFragment> flagSecureFragment;
     private static final HashMap<Window, ArrayList<Long>> flagSecureReasons = new HashMap<>();
@@ -924,27 +924,28 @@ public class AndroidUtilities {
         }
     }
 
-    public static boolean isGoogleMapsInstalled(BaseFragment baseFragment) {
+    public static boolean isMapsInstalled(BaseFragment baseFragment) {
+        String mapsAppPackageName = ApplicationLoader.getMapsProvider().getMapsAppPackageName();
         try {
-            ApplicationLoader.applicationContext.getPackageManager().getApplicationInfo("com.google.android.apps.maps", 0);
+            ApplicationLoader.applicationContext.getPackageManager().getApplicationInfo(mapsAppPackageName, 0);
             return true;
         } catch (PackageManager.NameNotFoundException unused) {
             if (baseFragment.getParentActivity() == null) {
                 return false;
             }
             AlertDialog.Builder builder = new AlertDialog.Builder((Context) baseFragment.getParentActivity());
-            builder.setMessage(LocaleController.getString("InstallGoogleMaps", NUM));
-            builder.setPositiveButton(LocaleController.getString("OK", NUM), new AndroidUtilities$$ExternalSyntheticLambda2(baseFragment));
-            builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
+            builder.setMessage(LocaleController.getString(ApplicationLoader.getMapsProvider().getInstallMapsString()));
+            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new AndroidUtilities$$ExternalSyntheticLambda2(mapsAppPackageName, baseFragment));
+            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), (DialogInterface.OnClickListener) null);
             baseFragment.showDialog(builder.create());
             return false;
         }
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$isGoogleMapsInstalled$4(BaseFragment baseFragment, DialogInterface dialogInterface, int i) {
+    public static /* synthetic */ void lambda$isMapsInstalled$4(String str, BaseFragment baseFragment, DialogInterface dialogInterface, int i) {
         try {
-            baseFragment.getParentActivity().startActivityForResult(new Intent("android.intent.action.VIEW", Uri.parse("market://details?id=com.google.android.apps.maps")), 500);
+            baseFragment.getParentActivity().startActivityForResult(new Intent("android.intent.action.VIEW", Uri.parse("market://details?id=" + str)), 500);
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }
@@ -1225,8 +1226,8 @@ public class AndroidUtilities {
         }
 
         /* JADX WARNING: Can't fix incorrect switch cases order */
-        /* JADX WARNING: Code restructure failed: missing block: B:32:0x0093, code lost:
-            if (r0.equals("OTHER") == false) goto L_0x008b;
+        /* JADX WARNING: Code restructure failed: missing block: B:32:0x0090, code lost:
+            if (r0.equals("OTHER") == false) goto L_0x0088;
          */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public java.lang.String getType() {
@@ -1234,36 +1235,36 @@ public class AndroidUtilities {
                 r9 = this;
                 int r0 = r9.type
                 r1 = 5
-                if (r0 != r1) goto L_0x000f
-                r0 = 2131625252(0x7f0e0524, float:1.8877707E38)
+                if (r0 != r1) goto L_0x000e
+                int r0 = org.telegram.messenger.R.string.ContactBirthday
                 java.lang.String r1 = "ContactBirthday"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 return r0
-            L_0x000f:
+            L_0x000e:
                 r2 = 6
                 r3 = 1
-                if (r0 != r2) goto L_0x0033
+                if (r0 != r2) goto L_0x0030
                 java.lang.String r0 = r9.getRawType(r3)
                 java.lang.String r1 = "ORG"
                 boolean r0 = r1.equalsIgnoreCase(r0)
-                if (r0 == 0) goto L_0x0029
-                r0 = 2131625253(0x7f0e0525, float:1.8877709E38)
+                if (r0 == 0) goto L_0x0027
+                int r0 = org.telegram.messenger.R.string.ContactJob
                 java.lang.String r1 = "ContactJob"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 return r0
-            L_0x0029:
-                r0 = 2131625254(0x7f0e0526, float:1.887771E38)
+            L_0x0027:
+                int r0 = org.telegram.messenger.R.string.ContactJobTitle
                 java.lang.String r1 = "ContactJobTitle"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 return r0
-            L_0x0033:
+            L_0x0030:
                 java.lang.String r0 = r9.fullData
                 r2 = 58
                 int r0 = r0.indexOf(r2)
-                if (r0 >= 0) goto L_0x0040
+                if (r0 >= 0) goto L_0x003d
                 java.lang.String r0 = ""
                 return r0
-            L_0x0040:
+            L_0x003d:
                 java.lang.String r2 = r9.fullData
                 r4 = 0
                 java.lang.String r0 = r2.substring(r4, r0)
@@ -1271,129 +1272,129 @@ public class AndroidUtilities {
                 r5 = 20
                 java.lang.String r6 = ";"
                 r7 = 2
-                if (r2 != r5) goto L_0x005c
+                if (r2 != r5) goto L_0x0059
                 java.lang.String r0 = r0.substring(r7)
                 java.lang.String[] r0 = r0.split(r6)
                 r0 = r0[r4]
-                goto L_0x0101
-            L_0x005c:
+                goto L_0x00f9
+            L_0x0059:
                 java.lang.String[] r2 = r0.split(r6)
                 r5 = 0
-            L_0x0061:
+            L_0x005e:
                 int r6 = r2.length
-                if (r5 >= r6) goto L_0x0074
+                if (r5 >= r6) goto L_0x0071
                 r6 = r2[r5]
                 r8 = 61
                 int r6 = r6.indexOf(r8)
-                if (r6 < 0) goto L_0x006f
-                goto L_0x0071
-            L_0x006f:
+                if (r6 < 0) goto L_0x006c
+                goto L_0x006e
+            L_0x006c:
                 r0 = r2[r5]
-            L_0x0071:
+            L_0x006e:
                 int r5 = r5 + 1
-                goto L_0x0061
-            L_0x0074:
+                goto L_0x005e
+            L_0x0071:
                 java.lang.String r2 = "X-"
                 boolean r2 = r0.startsWith(r2)
-                if (r2 == 0) goto L_0x0080
+                if (r2 == 0) goto L_0x007d
                 java.lang.String r0 = r0.substring(r7)
-            L_0x0080:
+            L_0x007d:
                 r0.hashCode()
                 r2 = -1
                 int r5 = r0.hashCode()
                 switch(r5) {
-                    case -2015525726: goto L_0x00c2;
-                    case 2064738: goto L_0x00b7;
-                    case 2223327: goto L_0x00ac;
-                    case 2464291: goto L_0x00a1;
-                    case 2670353: goto L_0x0096;
-                    case 75532016: goto L_0x008d;
-                    default: goto L_0x008b;
+                    case -2015525726: goto L_0x00bf;
+                    case 2064738: goto L_0x00b4;
+                    case 2223327: goto L_0x00a9;
+                    case 2464291: goto L_0x009e;
+                    case 2670353: goto L_0x0093;
+                    case 75532016: goto L_0x008a;
+                    default: goto L_0x0088;
                 }
-            L_0x008b:
+            L_0x0088:
                 r1 = -1
-                goto L_0x00cc
-            L_0x008d:
+                goto L_0x00c9
+            L_0x008a:
                 java.lang.String r5 = "OTHER"
                 boolean r5 = r0.equals(r5)
-                if (r5 != 0) goto L_0x00cc
-                goto L_0x008b
-            L_0x0096:
+                if (r5 != 0) goto L_0x00c9
+                goto L_0x0088
+            L_0x0093:
                 java.lang.String r1 = "WORK"
                 boolean r1 = r0.equals(r1)
-                if (r1 != 0) goto L_0x009f
-                goto L_0x008b
-            L_0x009f:
+                if (r1 != 0) goto L_0x009c
+                goto L_0x0088
+            L_0x009c:
                 r1 = 4
-                goto L_0x00cc
-            L_0x00a1:
+                goto L_0x00c9
+            L_0x009e:
                 java.lang.String r1 = "PREF"
                 boolean r1 = r0.equals(r1)
-                if (r1 != 0) goto L_0x00aa
-                goto L_0x008b
-            L_0x00aa:
+                if (r1 != 0) goto L_0x00a7
+                goto L_0x0088
+            L_0x00a7:
                 r1 = 3
-                goto L_0x00cc
-            L_0x00ac:
+                goto L_0x00c9
+            L_0x00a9:
                 java.lang.String r1 = "HOME"
                 boolean r1 = r0.equals(r1)
-                if (r1 != 0) goto L_0x00b5
-                goto L_0x008b
-            L_0x00b5:
+                if (r1 != 0) goto L_0x00b2
+                goto L_0x0088
+            L_0x00b2:
                 r1 = 2
-                goto L_0x00cc
-            L_0x00b7:
+                goto L_0x00c9
+            L_0x00b4:
                 java.lang.String r1 = "CELL"
                 boolean r1 = r0.equals(r1)
-                if (r1 != 0) goto L_0x00c0
-                goto L_0x008b
-            L_0x00c0:
+                if (r1 != 0) goto L_0x00bd
+                goto L_0x0088
+            L_0x00bd:
                 r1 = 1
-                goto L_0x00cc
-            L_0x00c2:
+                goto L_0x00c9
+            L_0x00bf:
                 java.lang.String r1 = "MOBILE"
                 boolean r1 = r0.equals(r1)
-                if (r1 != 0) goto L_0x00cb
-                goto L_0x008b
-            L_0x00cb:
+                if (r1 != 0) goto L_0x00c8
+                goto L_0x0088
+            L_0x00c8:
                 r1 = 0
-            L_0x00cc:
+            L_0x00c9:
                 switch(r1) {
-                    case 0: goto L_0x00f8;
-                    case 1: goto L_0x00f8;
-                    case 2: goto L_0x00ee;
-                    case 3: goto L_0x00e4;
-                    case 4: goto L_0x00da;
-                    case 5: goto L_0x00d0;
-                    default: goto L_0x00cf;
+                    case 0: goto L_0x00f1;
+                    case 1: goto L_0x00f1;
+                    case 2: goto L_0x00e8;
+                    case 3: goto L_0x00df;
+                    case 4: goto L_0x00d6;
+                    case 5: goto L_0x00cd;
+                    default: goto L_0x00cc;
                 }
-            L_0x00cf:
-                goto L_0x0101
-            L_0x00d0:
-                r0 = 2131627566(0x7f0e0e2e, float:1.88824E38)
+            L_0x00cc:
+                goto L_0x00f9
+            L_0x00cd:
+                int r0 = org.telegram.messenger.R.string.PhoneOther
                 java.lang.String r1 = "PhoneOther"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-                goto L_0x0101
-            L_0x00da:
-                r0 = 2131627567(0x7f0e0e2f, float:1.8882402E38)
+                goto L_0x00f9
+            L_0x00d6:
+                int r0 = org.telegram.messenger.R.string.PhoneWork
                 java.lang.String r1 = "PhoneWork"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-                goto L_0x0101
-            L_0x00e4:
-                r0 = 2131627556(0x7f0e0e24, float:1.888238E38)
+                goto L_0x00f9
+            L_0x00df:
+                int r0 = org.telegram.messenger.R.string.PhoneMain
                 java.lang.String r1 = "PhoneMain"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-                goto L_0x0101
-            L_0x00ee:
-                r0 = 2131627555(0x7f0e0e23, float:1.8882378E38)
+                goto L_0x00f9
+            L_0x00e8:
+                int r0 = org.telegram.messenger.R.string.PhoneHome
                 java.lang.String r1 = "PhoneHome"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-                goto L_0x0101
-            L_0x00f8:
-                r0 = 2131627557(0x7f0e0e25, float:1.8882382E38)
+                goto L_0x00f9
+            L_0x00f1:
+                int r0 = org.telegram.messenger.R.string.PhoneMobile
                 java.lang.String r1 = "PhoneMobile"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-            L_0x0101:
+            L_0x00f9:
                 java.lang.StringBuilder r1 = new java.lang.StringBuilder
                 r1.<init>()
                 java.lang.String r2 = r0.substring(r4, r3)
@@ -2421,7 +2422,7 @@ public class AndroidUtilities {
 
     public static boolean isTablet() {
         if (isTablet == null) {
-            isTablet = Boolean.valueOf(ApplicationLoader.applicationContext != null && ApplicationLoader.applicationContext.getResources().getBoolean(NUM));
+            isTablet = Boolean.valueOf(ApplicationLoader.applicationContext != null && ApplicationLoader.applicationContext.getResources().getBoolean(R.bool.isTablet));
         }
         return isTablet.booleanValue();
     }
@@ -3536,184 +3537,194 @@ public class AndroidUtilities {
         return bArr2;
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:80:?, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:79:?, code lost:
         return;
      */
     /* JADX WARNING: Exception block dominator not found, dom blocks: [] */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:59:0x0106 */
-    /* JADX WARNING: Removed duplicated region for block: B:62:0x010a A[Catch:{ Exception -> 0x0121 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:63:0x0112 A[Catch:{ Exception -> 0x0121 }] */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:58:0x0110 */
+    /* JADX WARNING: Removed duplicated region for block: B:61:0x0114 A[Catch:{ Exception -> 0x013e }] */
+    /* JADX WARNING: Removed duplicated region for block: B:62:0x012f A[Catch:{ Exception -> 0x013e }] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public static void openDocument(org.telegram.messenger.MessageObject r16, android.app.Activity r17, org.telegram.ui.ActionBar.BaseFragment r18) {
+    public static void openDocument(org.telegram.messenger.MessageObject r12, android.app.Activity r13, org.telegram.ui.ActionBar.BaseFragment r14) {
         /*
-            r0 = r16
-            r1 = r17
-            r2 = r18
-            if (r0 != 0) goto L_0x0009
+            if (r12 != 0) goto L_0x0003
             return
-        L_0x0009:
-            org.telegram.tgnet.TLRPC$Document r3 = r16.getDocument()
-            if (r3 != 0) goto L_0x0010
+        L_0x0003:
+            org.telegram.tgnet.TLRPC$Document r0 = r12.getDocument()
+            if (r0 != 0) goto L_0x000a
             return
-        L_0x0010:
-            org.telegram.tgnet.TLRPC$Message r4 = r0.messageOwner
-            org.telegram.tgnet.TLRPC$MessageMedia r4 = r4.media
-            if (r4 == 0) goto L_0x001b
-            java.lang.String r4 = org.telegram.messenger.FileLoader.getAttachFileName(r3)
-            goto L_0x001d
-        L_0x001b:
-            java.lang.String r4 = ""
-        L_0x001d:
-            org.telegram.tgnet.TLRPC$Message r5 = r0.messageOwner
-            java.lang.String r5 = r5.attachPath
-            r6 = 0
-            if (r5 == 0) goto L_0x0034
-            int r5 = r5.length()
-            if (r5 == 0) goto L_0x0034
-            java.io.File r5 = new java.io.File
-            org.telegram.tgnet.TLRPC$Message r7 = r0.messageOwner
-            java.lang.String r7 = r7.attachPath
-            r5.<init>(r7)
-            goto L_0x0035
-        L_0x0034:
-            r5 = r6
-        L_0x0035:
-            if (r5 == 0) goto L_0x003d
-            boolean r7 = r5.exists()
-            if (r7 != 0) goto L_0x0049
-        L_0x003d:
-            int r5 = org.telegram.messenger.UserConfig.selectedAccount
-            org.telegram.messenger.FileLoader r5 = org.telegram.messenger.FileLoader.getInstance(r5)
-            org.telegram.tgnet.TLRPC$Message r7 = r0.messageOwner
-            java.io.File r5 = r5.getPathToMessage(r7)
-        L_0x0049:
-            if (r5 == 0) goto L_0x015d
-            boolean r7 = r5.exists()
-            if (r7 == 0) goto L_0x015d
-            r7 = 2131627140(0x7f0e0CLASSNAME, float:1.8881536E38)
-            java.lang.String r8 = "OK"
-            r9 = 2131624390(0x7f0e01c6, float:1.8875958E38)
-            java.lang.String r10 = "AppName"
-            r11 = 1
-            if (r2 == 0) goto L_0x00aa
-            java.lang.String r12 = r5.getName()
-            java.lang.String r12 = r12.toLowerCase()
-            java.lang.String r13 = "attheme"
-            boolean r12 = r12.endsWith(r13)
-            if (r12 == 0) goto L_0x00aa
-            java.lang.String r0 = r16.getDocumentName()
-            org.telegram.ui.ActionBar.Theme$ThemeInfo r0 = org.telegram.ui.ActionBar.Theme.applyThemeFile(r5, r0, r6, r11)
-            if (r0 == 0) goto L_0x0082
-            org.telegram.ui.ThemePreviewActivity r1 = new org.telegram.ui.ThemePreviewActivity
-            r1.<init>(r0)
-            r2.presentFragment(r1)
-            goto L_0x015d
-        L_0x0082:
+        L_0x000a:
+            org.telegram.tgnet.TLRPC$Message r1 = r12.messageOwner
+            org.telegram.tgnet.TLRPC$MessageMedia r1 = r1.media
+            if (r1 == 0) goto L_0x0015
+            java.lang.String r1 = org.telegram.messenger.FileLoader.getAttachFileName(r0)
+            goto L_0x0017
+        L_0x0015:
+            java.lang.String r1 = ""
+        L_0x0017:
+            org.telegram.tgnet.TLRPC$Message r2 = r12.messageOwner
+            java.lang.String r2 = r2.attachPath
+            r3 = 0
+            if (r2 == 0) goto L_0x002e
+            int r2 = r2.length()
+            if (r2 == 0) goto L_0x002e
+            java.io.File r2 = new java.io.File
+            org.telegram.tgnet.TLRPC$Message r4 = r12.messageOwner
+            java.lang.String r4 = r4.attachPath
+            r2.<init>(r4)
+            goto L_0x002f
+        L_0x002e:
+            r2 = r3
+        L_0x002f:
+            if (r2 == 0) goto L_0x0037
+            boolean r4 = r2.exists()
+            if (r4 != 0) goto L_0x0043
+        L_0x0037:
+            int r2 = org.telegram.messenger.UserConfig.selectedAccount
+            org.telegram.messenger.FileLoader r2 = org.telegram.messenger.FileLoader.getInstance(r2)
+            org.telegram.tgnet.TLRPC$Message r4 = r12.messageOwner
+            java.io.File r2 = r2.getPathToMessage(r4)
+        L_0x0043:
+            if (r2 == 0) goto L_0x017c
+            boolean r4 = r2.exists()
+            if (r4 == 0) goto L_0x017c
+            java.lang.String r4 = "OK"
+            java.lang.String r5 = "AppName"
+            r6 = 1
+            if (r14 == 0) goto L_0x00a1
+            java.lang.String r7 = r2.getName()
+            java.lang.String r7 = r7.toLowerCase()
+            java.lang.String r8 = "attheme"
+            boolean r7 = r7.endsWith(r8)
+            if (r7 == 0) goto L_0x00a1
+            java.lang.String r12 = r12.getDocumentName()
+            org.telegram.ui.ActionBar.Theme$ThemeInfo r12 = org.telegram.ui.ActionBar.Theme.applyThemeFile(r2, r12, r3, r6)
+            if (r12 == 0) goto L_0x0076
+            org.telegram.ui.ThemePreviewActivity r13 = new org.telegram.ui.ThemePreviewActivity
+            r13.<init>(r12)
+            r14.presentFragment(r13)
+            goto L_0x017c
+        L_0x0076:
+            org.telegram.ui.ActionBar.AlertDialog$Builder r12 = new org.telegram.ui.ActionBar.AlertDialog$Builder
+            r12.<init>((android.content.Context) r13)
+            int r13 = org.telegram.messenger.R.string.AppName
+            java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r5, r13)
+            r12.setTitle(r13)
+            int r13 = org.telegram.messenger.R.string.IncorrectTheme
+            java.lang.String r0 = "IncorrectTheme"
+            java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
+            r12.setMessage(r13)
+            int r13 = org.telegram.messenger.R.string.OK
+            java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r4, r13)
+            r12.setPositiveButton(r13, r3)
+            org.telegram.ui.ActionBar.AlertDialog r12 = r12.create()
+            r14.showDialog(r12)
+            goto L_0x017c
+        L_0x00a1:
+            android.content.Intent r7 = new android.content.Intent     // Catch:{ Exception -> 0x013e }
+            java.lang.String r8 = "android.intent.action.VIEW"
+            r7.<init>(r8)     // Catch:{ Exception -> 0x013e }
+            r7.setFlags(r6)     // Catch:{ Exception -> 0x013e }
+            android.webkit.MimeTypeMap r8 = android.webkit.MimeTypeMap.getSingleton()     // Catch:{ Exception -> 0x013e }
+            r9 = 46
+            int r9 = r1.lastIndexOf(r9)     // Catch:{ Exception -> 0x013e }
+            r10 = -1
+            if (r9 == r10) goto L_0x00d1
+            int r9 = r9 + r6
+            java.lang.String r1 = r1.substring(r9)     // Catch:{ Exception -> 0x013e }
+            java.lang.String r1 = r1.toLowerCase()     // Catch:{ Exception -> 0x013e }
+            java.lang.String r1 = r8.getMimeTypeFromExtension(r1)     // Catch:{ Exception -> 0x013e }
+            if (r1 != 0) goto L_0x00d2
+            java.lang.String r1 = r0.mime_type     // Catch:{ Exception -> 0x013e }
+            if (r1 == 0) goto L_0x00d1
+            int r0 = r1.length()     // Catch:{ Exception -> 0x013e }
+            if (r0 != 0) goto L_0x00d2
+        L_0x00d1:
+            r1 = r3
+        L_0x00d2:
+            int r0 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x013e }
+            java.lang.String r8 = ".provider"
+            r9 = 24
+            java.lang.String r10 = "text/plain"
+            if (r0 < r9) goto L_0x00fc
+            java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x013e }
+            r0.<init>()     // Catch:{ Exception -> 0x013e }
+            java.lang.String r11 = org.telegram.messenger.ApplicationLoader.getApplicationId()     // Catch:{ Exception -> 0x013e }
+            r0.append(r11)     // Catch:{ Exception -> 0x013e }
+            r0.append(r8)     // Catch:{ Exception -> 0x013e }
+            java.lang.String r0 = r0.toString()     // Catch:{ Exception -> 0x013e }
+            android.net.Uri r0 = androidx.core.content.FileProvider.getUriForFile(r13, r0, r2)     // Catch:{ Exception -> 0x013e }
+            if (r1 == 0) goto L_0x00f7
+            r11 = r1
+            goto L_0x00f8
+        L_0x00f7:
+            r11 = r10
+        L_0x00f8:
+            r7.setDataAndType(r0, r11)     // Catch:{ Exception -> 0x013e }
+            goto L_0x0108
+        L_0x00fc:
+            android.net.Uri r0 = android.net.Uri.fromFile(r2)     // Catch:{ Exception -> 0x013e }
+            if (r1 == 0) goto L_0x0104
+            r11 = r1
+            goto L_0x0105
+        L_0x0104:
+            r11 = r10
+        L_0x0105:
+            r7.setDataAndType(r0, r11)     // Catch:{ Exception -> 0x013e }
+        L_0x0108:
+            r0 = 500(0x1f4, float:7.0E-43)
+            if (r1 == 0) goto L_0x013a
+            r13.startActivityForResult(r7, r0)     // Catch:{ Exception -> 0x0110 }
+            goto L_0x017c
+        L_0x0110:
+            int r1 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x013e }
+            if (r1 < r9) goto L_0x012f
+            java.lang.StringBuilder r1 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x013e }
+            r1.<init>()     // Catch:{ Exception -> 0x013e }
+            java.lang.String r9 = org.telegram.messenger.ApplicationLoader.getApplicationId()     // Catch:{ Exception -> 0x013e }
+            r1.append(r9)     // Catch:{ Exception -> 0x013e }
+            r1.append(r8)     // Catch:{ Exception -> 0x013e }
+            java.lang.String r1 = r1.toString()     // Catch:{ Exception -> 0x013e }
+            android.net.Uri r1 = androidx.core.content.FileProvider.getUriForFile(r13, r1, r2)     // Catch:{ Exception -> 0x013e }
+            r7.setDataAndType(r1, r10)     // Catch:{ Exception -> 0x013e }
+            goto L_0x0136
+        L_0x012f:
+            android.net.Uri r1 = android.net.Uri.fromFile(r2)     // Catch:{ Exception -> 0x013e }
+            r7.setDataAndType(r1, r10)     // Catch:{ Exception -> 0x013e }
+        L_0x0136:
+            r13.startActivityForResult(r7, r0)     // Catch:{ Exception -> 0x013e }
+            goto L_0x017c
+        L_0x013a:
+            r13.startActivityForResult(r7, r0)     // Catch:{ Exception -> 0x013e }
+            goto L_0x017c
+        L_0x013e:
+            if (r13 != 0) goto L_0x0142
+            return
+        L_0x0142:
             org.telegram.ui.ActionBar.AlertDialog$Builder r0 = new org.telegram.ui.ActionBar.AlertDialog$Builder
-            r0.<init>((android.content.Context) r1)
-            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r10, r9)
-            r0.setTitle(r1)
-            r1 = 2131626291(0x7f0e0933, float:1.8879814E38)
-            java.lang.String r3 = "IncorrectTheme"
-            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
-            r0.setMessage(r1)
-            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r8, r7)
-            r0.setPositiveButton(r1, r6)
-            org.telegram.ui.ActionBar.AlertDialog r0 = r0.create()
-            r2.showDialog(r0)
-            goto L_0x015d
-        L_0x00aa:
-            android.content.Intent r12 = new android.content.Intent     // Catch:{ Exception -> 0x0121 }
-            java.lang.String r13 = "android.intent.action.VIEW"
-            r12.<init>(r13)     // Catch:{ Exception -> 0x0121 }
-            r12.setFlags(r11)     // Catch:{ Exception -> 0x0121 }
-            android.webkit.MimeTypeMap r13 = android.webkit.MimeTypeMap.getSingleton()     // Catch:{ Exception -> 0x0121 }
-            r14 = 46
-            int r14 = r4.lastIndexOf(r14)     // Catch:{ Exception -> 0x0121 }
-            r15 = -1
-            if (r14 == r15) goto L_0x00da
-            int r14 = r14 + r11
-            java.lang.String r4 = r4.substring(r14)     // Catch:{ Exception -> 0x0121 }
-            java.lang.String r4 = r4.toLowerCase()     // Catch:{ Exception -> 0x0121 }
-            java.lang.String r4 = r13.getMimeTypeFromExtension(r4)     // Catch:{ Exception -> 0x0121 }
-            if (r4 != 0) goto L_0x00db
-            java.lang.String r4 = r3.mime_type     // Catch:{ Exception -> 0x0121 }
-            if (r4 == 0) goto L_0x00da
-            int r3 = r4.length()     // Catch:{ Exception -> 0x0121 }
-            if (r3 != 0) goto L_0x00db
-        L_0x00da:
-            r4 = r6
-        L_0x00db:
-            int r3 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x0121 }
-            java.lang.String r13 = "org.telegram.messenger.beta.provider"
-            r14 = 24
-            java.lang.String r15 = "text/plain"
-            if (r3 < r14) goto L_0x00f2
-            android.net.Uri r3 = androidx.core.content.FileProvider.getUriForFile(r1, r13, r5)     // Catch:{ Exception -> 0x0121 }
-            if (r4 == 0) goto L_0x00ed
-            r11 = r4
-            goto L_0x00ee
-        L_0x00ed:
-            r11 = r15
-        L_0x00ee:
-            r12.setDataAndType(r3, r11)     // Catch:{ Exception -> 0x0121 }
-            goto L_0x00fe
-        L_0x00f2:
-            android.net.Uri r3 = android.net.Uri.fromFile(r5)     // Catch:{ Exception -> 0x0121 }
-            if (r4 == 0) goto L_0x00fa
-            r11 = r4
-            goto L_0x00fb
-        L_0x00fa:
-            r11 = r15
-        L_0x00fb:
-            r12.setDataAndType(r3, r11)     // Catch:{ Exception -> 0x0121 }
-        L_0x00fe:
-            r3 = 500(0x1f4, float:7.0E-43)
-            if (r4 == 0) goto L_0x011d
-            r1.startActivityForResult(r12, r3)     // Catch:{ Exception -> 0x0106 }
-            goto L_0x015d
-        L_0x0106:
-            int r4 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x0121 }
-            if (r4 < r14) goto L_0x0112
-            android.net.Uri r4 = androidx.core.content.FileProvider.getUriForFile(r1, r13, r5)     // Catch:{ Exception -> 0x0121 }
-            r12.setDataAndType(r4, r15)     // Catch:{ Exception -> 0x0121 }
-            goto L_0x0119
-        L_0x0112:
-            android.net.Uri r4 = android.net.Uri.fromFile(r5)     // Catch:{ Exception -> 0x0121 }
-            r12.setDataAndType(r4, r15)     // Catch:{ Exception -> 0x0121 }
-        L_0x0119:
-            r1.startActivityForResult(r12, r3)     // Catch:{ Exception -> 0x0121 }
-            goto L_0x015d
-        L_0x011d:
-            r1.startActivityForResult(r12, r3)     // Catch:{ Exception -> 0x0121 }
-            goto L_0x015d
-        L_0x0121:
-            if (r1 != 0) goto L_0x0125
-            return
-        L_0x0125:
-            org.telegram.ui.ActionBar.AlertDialog$Builder r3 = new org.telegram.ui.ActionBar.AlertDialog$Builder
-            r3.<init>((android.content.Context) r1)
-            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r10, r9)
-            r3.setTitle(r1)
-            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r8, r7)
-            r3.setPositiveButton(r1, r6)
-            r1 = 2131626893(0x7f0e0b8d, float:1.8881035E38)
-            r4 = 1
-            java.lang.Object[] r4 = new java.lang.Object[r4]
-            r5 = 0
-            org.telegram.tgnet.TLRPC$Document r0 = r16.getDocument()
-            java.lang.String r0 = r0.mime_type
-            r4[r5] = r0
-            java.lang.String r0 = "NoHandleAppInstalled"
-            java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r0, r1, r4)
-            r3.setMessage(r0)
-            if (r2 == 0) goto L_0x015a
-            org.telegram.ui.ActionBar.AlertDialog r0 = r3.create()
-            r2.showDialog(r0)
-            goto L_0x015d
-        L_0x015a:
-            r3.show()
-        L_0x015d:
+            r0.<init>((android.content.Context) r13)
+            int r13 = org.telegram.messenger.R.string.AppName
+            java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r5, r13)
+            r0.setTitle(r13)
+            int r13 = org.telegram.messenger.R.string.OK
+            java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r4, r13)
+            r0.setPositiveButton(r13, r3)
+            int r13 = org.telegram.messenger.R.string.NoHandleAppInstalled
+            java.lang.Object[] r1 = new java.lang.Object[r6]
+            r2 = 0
+            org.telegram.tgnet.TLRPC$Document r12 = r12.getDocument()
+            java.lang.String r12 = r12.mime_type
+            r1[r2] = r12
+            java.lang.String r12 = "NoHandleAppInstalled"
+            java.lang.String r12 = org.telegram.messenger.LocaleController.formatString(r12, r13, r1)
+            r0.setMessage(r12)
+            if (r14 == 0) goto L_0x0179
+            org.telegram.ui.ActionBar.AlertDialog r12 = r0.create()
+            r14.showDialog(r12)
+            goto L_0x017c
+        L_0x0179:
+            r0.show()
+        L_0x017c:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.AndroidUtilities.openDocument(org.telegram.messenger.MessageObject, android.app.Activity, org.telegram.ui.ActionBar.BaseFragment):void");
@@ -3723,15 +3734,15 @@ public class AndroidUtilities {
         if (r8.length() != 0) goto L_0x003c;
      */
     /* JADX WARNING: Removed duplicated region for block: B:23:0x0068  */
-    /* JADX WARNING: Removed duplicated region for block: B:28:0x0075  */
-    /* JADX WARNING: Removed duplicated region for block: B:35:0x0085 A[SYNTHETIC, Splitter:B:35:0x0085] */
-    /* JADX WARNING: Removed duplicated region for block: B:43:0x00a0  */
+    /* JADX WARNING: Removed duplicated region for block: B:28:0x0088  */
+    /* JADX WARNING: Removed duplicated region for block: B:35:0x0098 A[SYNTHETIC, Splitter:B:35:0x0098] */
+    /* JADX WARNING: Removed duplicated region for block: B:43:0x00c6  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static boolean openForView(java.io.File r6, java.lang.String r7, java.lang.String r8, android.app.Activity r9, org.telegram.ui.ActionBar.Theme.ResourcesProvider r10) {
         /*
-            if (r6 == 0) goto L_0x00a4
+            if (r6 == 0) goto L_0x00ca
             boolean r0 = r6.exists()
-            if (r0 == 0) goto L_0x00a4
+            if (r0 == 0) goto L_0x00ca
             android.content.Intent r0 = new android.content.Intent
             java.lang.String r1 = "android.intent.action.VIEW"
             r0.<init>(r1)
@@ -3773,50 +3784,62 @@ public class AndroidUtilities {
             r6.show()
             return r1
         L_0x0060:
-            java.lang.String r10 = "org.telegram.messenger.beta.provider"
+            java.lang.String r10 = ".provider"
             r2 = 24
             java.lang.String r3 = "text/plain"
-            if (r7 < r2) goto L_0x0075
-            android.net.Uri r7 = androidx.core.content.FileProvider.getUriForFile(r9, r10, r6)
-            if (r8 == 0) goto L_0x0070
+            if (r7 < r2) goto L_0x0088
+            java.lang.StringBuilder r7 = new java.lang.StringBuilder
+            r7.<init>()
+            java.lang.String r4 = org.telegram.messenger.ApplicationLoader.getApplicationId()
+            r7.append(r4)
+            r7.append(r10)
+            java.lang.String r7 = r7.toString()
+            android.net.Uri r7 = androidx.core.content.FileProvider.getUriForFile(r9, r7, r6)
+            if (r8 == 0) goto L_0x0083
             r4 = r8
-            goto L_0x0071
-        L_0x0070:
+            goto L_0x0084
+        L_0x0083:
             r4 = r3
-        L_0x0071:
+        L_0x0084:
             r0.setDataAndType(r7, r4)
-            goto L_0x0081
-        L_0x0075:
+            goto L_0x0094
+        L_0x0088:
             android.net.Uri r7 = android.net.Uri.fromFile(r6)
-            if (r8 == 0) goto L_0x007d
+            if (r8 == 0) goto L_0x0090
             r4 = r8
-            goto L_0x007e
-        L_0x007d:
+            goto L_0x0091
+        L_0x0090:
             r4 = r3
-        L_0x007e:
+        L_0x0091:
             r0.setDataAndType(r7, r4)
-        L_0x0081:
+        L_0x0094:
             r7 = 500(0x1f4, float:7.0E-43)
-            if (r8 == 0) goto L_0x00a0
-            r9.startActivityForResult(r0, r7)     // Catch:{ Exception -> 0x0089 }
-            goto L_0x00a3
-        L_0x0089:
+            if (r8 == 0) goto L_0x00c6
+            r9.startActivityForResult(r0, r7)     // Catch:{ Exception -> 0x009c }
+            goto L_0x00c9
+        L_0x009c:
             int r8 = android.os.Build.VERSION.SDK_INT
-            if (r8 < r2) goto L_0x0095
-            android.net.Uri r6 = androidx.core.content.FileProvider.getUriForFile(r9, r10, r6)
+            if (r8 < r2) goto L_0x00bb
+            java.lang.StringBuilder r8 = new java.lang.StringBuilder
+            r8.<init>()
+            java.lang.String r2 = org.telegram.messenger.ApplicationLoader.getApplicationId()
+            r8.append(r2)
+            r8.append(r10)
+            java.lang.String r8 = r8.toString()
+            android.net.Uri r6 = androidx.core.content.FileProvider.getUriForFile(r9, r8, r6)
             r0.setDataAndType(r6, r3)
-            goto L_0x009c
-        L_0x0095:
+            goto L_0x00c2
+        L_0x00bb:
             android.net.Uri r6 = android.net.Uri.fromFile(r6)
             r0.setDataAndType(r6, r3)
-        L_0x009c:
+        L_0x00c2:
             r9.startActivityForResult(r0, r7)
-            goto L_0x00a3
-        L_0x00a0:
+            goto L_0x00c9
+        L_0x00c6:
             r9.startActivityForResult(r0, r7)
-        L_0x00a3:
+        L_0x00c9:
             return r1
-        L_0x00a4:
+        L_0x00ca:
             r6 = 0
             return r6
         */
@@ -3941,18 +3964,18 @@ public class AndroidUtilities {
     public static boolean openForView(org.telegram.tgnet.TLObject r8, android.app.Activity r9) {
         /*
             r0 = 0
-            if (r8 == 0) goto L_0x009d
+            if (r8 == 0) goto L_0x00c3
             if (r9 != 0) goto L_0x0007
-            goto L_0x009d
+            goto L_0x00c3
         L_0x0007:
             java.lang.String r1 = org.telegram.messenger.FileLoader.getAttachFileName(r8)
             int r2 = org.telegram.messenger.UserConfig.selectedAccount
             org.telegram.messenger.FileLoader r2 = org.telegram.messenger.FileLoader.getInstance(r2)
             r3 = 1
             java.io.File r2 = r2.getPathToAttach(r8, r3)
-            if (r2 == 0) goto L_0x009d
+            if (r2 == 0) goto L_0x00c3
             boolean r4 = r2.exists()
-            if (r4 == 0) goto L_0x009d
+            if (r4 == 0) goto L_0x00c3
             android.content.Intent r0 = new android.content.Intent
             java.lang.String r4 = "android.intent.action.VIEW"
             r0.<init>(r4)
@@ -3981,50 +4004,62 @@ public class AndroidUtilities {
             r7 = r1
         L_0x0057:
             int r8 = android.os.Build.VERSION.SDK_INT
-            java.lang.String r1 = "org.telegram.messenger.beta.provider"
+            java.lang.String r1 = ".provider"
             r4 = 24
             java.lang.String r5 = "text/plain"
-            if (r8 < r4) goto L_0x006e
-            android.net.Uri r8 = androidx.core.content.FileProvider.getUriForFile(r9, r1, r2)
-            if (r7 == 0) goto L_0x0069
+            if (r8 < r4) goto L_0x0081
+            java.lang.StringBuilder r8 = new java.lang.StringBuilder
+            r8.<init>()
+            java.lang.String r6 = org.telegram.messenger.ApplicationLoader.getApplicationId()
+            r8.append(r6)
+            r8.append(r1)
+            java.lang.String r8 = r8.toString()
+            android.net.Uri r8 = androidx.core.content.FileProvider.getUriForFile(r9, r8, r2)
+            if (r7 == 0) goto L_0x007c
             r6 = r7
-            goto L_0x006a
-        L_0x0069:
+            goto L_0x007d
+        L_0x007c:
             r6 = r5
-        L_0x006a:
+        L_0x007d:
             r0.setDataAndType(r8, r6)
-            goto L_0x007a
-        L_0x006e:
+            goto L_0x008d
+        L_0x0081:
             android.net.Uri r8 = android.net.Uri.fromFile(r2)
-            if (r7 == 0) goto L_0x0076
+            if (r7 == 0) goto L_0x0089
             r6 = r7
-            goto L_0x0077
-        L_0x0076:
+            goto L_0x008a
+        L_0x0089:
             r6 = r5
-        L_0x0077:
+        L_0x008a:
             r0.setDataAndType(r8, r6)
-        L_0x007a:
+        L_0x008d:
             r8 = 500(0x1f4, float:7.0E-43)
-            if (r7 == 0) goto L_0x0099
-            r9.startActivityForResult(r0, r8)     // Catch:{ Exception -> 0x0082 }
-            goto L_0x009c
-        L_0x0082:
+            if (r7 == 0) goto L_0x00bf
+            r9.startActivityForResult(r0, r8)     // Catch:{ Exception -> 0x0095 }
+            goto L_0x00c2
+        L_0x0095:
             int r6 = android.os.Build.VERSION.SDK_INT
-            if (r6 < r4) goto L_0x008e
+            if (r6 < r4) goto L_0x00b4
+            java.lang.StringBuilder r4 = new java.lang.StringBuilder
+            r4.<init>()
+            java.lang.String r6 = org.telegram.messenger.ApplicationLoader.getApplicationId()
+            r4.append(r6)
+            r4.append(r1)
+            java.lang.String r1 = r4.toString()
             android.net.Uri r1 = androidx.core.content.FileProvider.getUriForFile(r9, r1, r2)
             r0.setDataAndType(r1, r5)
-            goto L_0x0095
-        L_0x008e:
+            goto L_0x00bb
+        L_0x00b4:
             android.net.Uri r1 = android.net.Uri.fromFile(r2)
             r0.setDataAndType(r1, r5)
-        L_0x0095:
+        L_0x00bb:
             r9.startActivityForResult(r0, r8)
-            goto L_0x009c
-        L_0x0099:
+            goto L_0x00c2
+        L_0x00bf:
             r9.startActivityForResult(r0, r8)
-        L_0x009c:
+        L_0x00c2:
             return r3
-        L_0x009d:
+        L_0x00c3:
             return r0
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.AndroidUtilities.openForView(org.telegram.tgnet.TLObject, android.app.Activity):boolean");
@@ -4294,7 +4329,7 @@ public class AndroidUtilities {
         linearLayout.setOrientation(1);
         if (!TextUtils.isEmpty(str5)) {
             TextView textView = new TextView(activity2);
-            textView.setText(LocaleController.getString("UseProxyTelegramInfo2", NUM));
+            textView.setText(LocaleController.getString("UseProxyTelegramInfo2", R.string.UseProxyTelegramInfo2));
             textView.setTextColor(Theme.getColor("dialogTextGray4"));
             textView.setTextSize(1, 14.0f);
             textView.setGravity(49);
@@ -4312,21 +4347,21 @@ public class AndroidUtilities {
             String str8 = null;
             if (i == 0) {
                 String str9 = str2;
-                str6 = LocaleController.getString("UseProxyAddress", NUM);
+                str6 = LocaleController.getString("UseProxyAddress", R.string.UseProxyAddress);
                 str8 = str;
             } else if (i == 1) {
                 str8 = "" + str2;
-                str6 = LocaleController.getString("UseProxyPort", NUM);
+                str6 = LocaleController.getString("UseProxyPort", R.string.UseProxyPort);
             } else {
                 String str10 = str2;
                 if (i == 2) {
-                    str6 = LocaleController.getString("UseProxySecret", NUM);
+                    str6 = LocaleController.getString("UseProxySecret", R.string.UseProxySecret);
                     str8 = str5;
                 } else if (i == 3) {
-                    str6 = LocaleController.getString("UseProxyUsername", NUM);
+                    str6 = LocaleController.getString("UseProxyUsername", R.string.UseProxyUsername);
                     str8 = str3;
                 } else if (i == 4) {
-                    str6 = LocaleController.getString("UseProxyPassword", NUM);
+                    str6 = LocaleController.getString("UseProxyPassword", R.string.UseProxyPassword);
                     str8 = str4;
                 } else {
                     str6 = null;
@@ -4349,12 +4384,12 @@ public class AndroidUtilities {
         linearLayout.addView(pickerBottomLayout, LayoutHelper.createFrame(-1, 48, 83));
         pickerBottomLayout.cancelButton.setPadding(dp(18.0f), 0, dp(18.0f), 0);
         pickerBottomLayout.cancelButton.setTextColor(Theme.getColor("dialogTextBlue2"));
-        pickerBottomLayout.cancelButton.setText(LocaleController.getString("Cancel", NUM).toUpperCase());
+        pickerBottomLayout.cancelButton.setText(LocaleController.getString("Cancel", R.string.Cancel).toUpperCase());
         pickerBottomLayout.cancelButton.setOnClickListener(new AndroidUtilities$$ExternalSyntheticLambda4(dismissRunnable));
         pickerBottomLayout.doneButtonTextView.setTextColor(Theme.getColor("dialogTextBlue2"));
         pickerBottomLayout.doneButton.setPadding(dp(18.0f), 0, dp(18.0f), 0);
         pickerBottomLayout.doneButtonBadgeTextView.setVisibility(8);
-        pickerBottomLayout.doneButtonTextView.setText(LocaleController.getString("ConnectingConnectProxy", NUM).toUpperCase());
+        pickerBottomLayout.doneButtonTextView.setText(LocaleController.getString("ConnectingConnectProxy", R.string.ConnectingConnectProxy).toUpperCase());
         pickerBottomLayout.doneButton.setOnClickListener(new AndroidUtilities$$ExternalSyntheticLambda5(str, str2, str5, str4, str3, dismissRunnable));
         builder.show();
     }
@@ -5190,7 +5225,7 @@ public class AndroidUtilities {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.AndroidUtilities.getScaledBitmap(float, float, java.lang.String, java.lang.String, int):android.graphics.Bitmap");
     }
 
-    /* JADX WARNING: Missing exception handler attribute for start block: B:19:0x0036 */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:19:0x0049 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static android.net.Uri getBitmapShareUri(android.graphics.Bitmap r3, java.lang.String r4, android.graphics.Bitmap.CompressFormat r5) {
         /*
@@ -5207,22 +5242,28 @@ public class AndroidUtilities {
         L_0x0014:
             java.io.File r1 = new java.io.File
             r1.<init>(r0, r4)
-            java.io.FileOutputStream r4 = new java.io.FileOutputStream     // Catch:{ Exception -> 0x0037 }
-            r4.<init>(r1)     // Catch:{ Exception -> 0x0037 }
+            java.io.FileOutputStream r4 = new java.io.FileOutputStream     // Catch:{ Exception -> 0x004a }
+            r4.<init>(r1)     // Catch:{ Exception -> 0x004a }
             r0 = 100
-            r3.compress(r5, r0, r4)     // Catch:{ all -> 0x0032 }
-            r4.close()     // Catch:{ all -> 0x0032 }
-            android.content.Context r3 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0032 }
-            java.lang.String r5 = "org.telegram.messenger.beta.provider"
-            android.net.Uri r3 = androidx.core.content.FileProvider.getUriForFile(r3, r5, r1)     // Catch:{ all -> 0x0032 }
-            r4.close()     // Catch:{ Exception -> 0x0037 }
+            r3.compress(r5, r0, r4)     // Catch:{ all -> 0x0045 }
+            r4.close()     // Catch:{ all -> 0x0045 }
+            android.content.Context r3 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0045 }
+            java.lang.StringBuilder r5 = new java.lang.StringBuilder     // Catch:{ all -> 0x0045 }
+            r5.<init>()     // Catch:{ all -> 0x0045 }
+            java.lang.String r0 = org.telegram.messenger.ApplicationLoader.getApplicationId()     // Catch:{ all -> 0x0045 }
+            r5.append(r0)     // Catch:{ all -> 0x0045 }
+            java.lang.String r0 = ".provider"
+            r5.append(r0)     // Catch:{ all -> 0x0045 }
+            java.lang.String r5 = r5.toString()     // Catch:{ all -> 0x0045 }
+            android.net.Uri r3 = androidx.core.content.FileProvider.getUriForFile(r3, r5, r1)     // Catch:{ all -> 0x0045 }
+            r4.close()     // Catch:{ Exception -> 0x004a }
             return r3
-        L_0x0032:
+        L_0x0045:
             r3 = move-exception
-            r4.close()     // Catch:{ all -> 0x0036 }
-        L_0x0036:
-            throw r3     // Catch:{ Exception -> 0x0037 }
-        L_0x0037:
+            r4.close()     // Catch:{ all -> 0x0049 }
+        L_0x0049:
+            throw r3     // Catch:{ Exception -> 0x004a }
+        L_0x004a:
             r3 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r3)
             return r2

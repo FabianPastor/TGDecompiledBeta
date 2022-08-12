@@ -14,6 +14,7 @@ import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC$Document;
@@ -485,7 +486,7 @@ public class StickerEmojiCell extends FrameLayout implements NotificationCenter.
 
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
         super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
-        String string = LocaleController.getString("AttachSticker", NUM);
+        String string = LocaleController.getString("AttachSticker", R.string.AttachSticker);
         if (this.sticker != null) {
             int i = 0;
             while (true) {

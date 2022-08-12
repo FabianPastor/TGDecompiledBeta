@@ -62,6 +62,7 @@ import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
@@ -596,7 +597,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             if (z) {
                 BottomSheet.Builder builder = new BottomSheet.Builder(SharedMediaLayout.this.profileActivity.getParentActivity());
                 builder.setTitle(str);
-                builder.setItems(new CharSequence[]{LocaleController.getString("Open", NUM), LocaleController.getString("Copy", NUM)}, new SharedMediaLayout$30$$ExternalSyntheticLambda0(this, str));
+                builder.setItems(new CharSequence[]{LocaleController.getString("Open", R.string.Open), LocaleController.getString("Copy", R.string.Copy)}, new SharedMediaLayout$30$$ExternalSyntheticLambda0(this, str));
                 SharedMediaLayout.this.profileActivity.showDialog(builder.create());
                 return;
             }
@@ -2034,7 +2035,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
         this.maximumVelocity = ViewConfiguration.get(context).getScaledMaximumFlingVelocity();
         this.searching = false;
         this.searchWas = false;
-        Drawable drawable = context.getResources().getDrawable(NUM);
+        Drawable drawable = context.getResources().getDrawable(R.drawable.photos_header_shadow);
         this.pinnedHeaderShadowDrawable = drawable;
         drawable.setColorFilter(new PorterDuffColorFilter(getThemedColor("windowBackgroundGrayShadow"), PorterDuff.Mode.MULTIPLY));
         ScrollSlidingTextTabStripInner scrollSlidingTextTabStripInner = this.scrollSlidingTextTabStrip;
@@ -2055,7 +2056,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                 }
             }
         });
-        ActionBarMenuItem actionBarMenuItemSearchListener = createMenu.addItem(0, NUM).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
+        ActionBarMenuItem actionBarMenuItemSearchListener = createMenu.addItem(0, R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
             public void onSearchExpand() {
                 boolean unused = SharedMediaLayout.this.searching = true;
                 SharedMediaLayout.this.onSearchStateChanged(true);
@@ -2107,15 +2108,17 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
         });
         this.searchItem = actionBarMenuItemSearchListener;
         actionBarMenuItemSearchListener.setTranslationY((float) AndroidUtilities.dp(10.0f));
-        this.searchItem.setSearchFieldHint(LocaleController.getString("Search", NUM));
-        this.searchItem.setContentDescription(LocaleController.getString("Search", NUM));
+        ActionBarMenuItem actionBarMenuItem = this.searchItem;
+        int i7 = R.string.Search;
+        actionBarMenuItem.setSearchFieldHint(LocaleController.getString("Search", i7));
+        this.searchItem.setContentDescription(LocaleController.getString("Search", i7));
         this.searchItem.setVisibility(4);
         ImageView imageView = new ImageView(context2);
         this.photoVideoOptionsItem = imageView;
-        imageView.setContentDescription(LocaleController.getString("AccDescrMoreOptions", NUM));
+        imageView.setContentDescription(LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
         this.photoVideoOptionsItem.setTranslationY((float) AndroidUtilities.dp(10.0f));
         this.photoVideoOptionsItem.setVisibility(4);
-        Drawable mutate = ContextCompat.getDrawable(context2, NUM).mutate();
+        Drawable mutate = ContextCompat.getDrawable(context2, R.drawable.ic_ab_other).mutate();
         mutate.setColorFilter(new PorterDuffColorFilter(getThemedColor("windowBackgroundWhiteGrayText2"), PorterDuff.Mode.MULTIPLY));
         this.photoVideoOptionsItem.setImageDrawable(mutate);
         this.photoVideoOptionsItem.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
@@ -2140,10 +2143,10 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                 boolean z = true;
                 final ActionBarMenuSubItem actionBarMenuSubItem = new ActionBarMenuSubItem(context2, true, false);
                 final ActionBarMenuSubItem actionBarMenuSubItem2 = new ActionBarMenuSubItem(context2, false, false);
-                actionBarMenuSubItem.setTextAndIcon(LocaleController.getString("MediaZoomIn", NUM), NUM);
+                actionBarMenuSubItem.setTextAndIcon(LocaleController.getString("MediaZoomIn", R.string.MediaZoomIn), R.drawable.msg_zoomin);
                 actionBarMenuSubItem.setOnClickListener(new SharedMediaLayout$5$$ExternalSyntheticLambda0(this, actionBarMenuSubItem, actionBarMenuSubItem2));
                 r0.addView(actionBarMenuSubItem);
-                actionBarMenuSubItem2.setTextAndIcon(LocaleController.getString("MediaZoomOut", NUM), NUM);
+                actionBarMenuSubItem2.setTextAndIcon(LocaleController.getString("MediaZoomOut", R.string.MediaZoomOut), R.drawable.msg_zoomout);
                 actionBarMenuSubItem2.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View view) {
                         if (!SharedMediaLayout.this.photoVideoChangeColumnsAnimation) {
@@ -2175,7 +2178,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                 boolean z2 = (SharedMediaLayout.this.sharedMediaData[0].hasPhotos && SharedMediaLayout.this.sharedMediaData[0].hasVideos) || !SharedMediaLayout.this.sharedMediaData[0].endReached[0] || !SharedMediaLayout.this.sharedMediaData[0].endReached[1] || !SharedMediaLayout.this.sharedMediaData[0].startReached;
                 if (!DialogObject.isEncryptedDialog(SharedMediaLayout.this.dialog_id)) {
                     ActionBarMenuSubItem actionBarMenuSubItem3 = new ActionBarMenuSubItem(context2, false, false);
-                    actionBarMenuSubItem3.setTextAndIcon(LocaleController.getString("Calendar", NUM), NUM);
+                    actionBarMenuSubItem3.setTextAndIcon(LocaleController.getString("Calendar", R.string.Calendar), R.drawable.msg_calendar2);
                     r0.addView(actionBarMenuSubItem3);
                     actionBarMenuSubItem3.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View view) {
@@ -2190,7 +2193,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                         r0.addView(dividerCell);
                         final ActionBarMenuSubItem actionBarMenuSubItem4 = new ActionBarMenuSubItem(context2, true, false, false);
                         final ActionBarMenuSubItem actionBarMenuSubItem5 = new ActionBarMenuSubItem(context2, true, false, true);
-                        actionBarMenuSubItem4.setTextAndIcon(LocaleController.getString("MediaShowPhotos", NUM), 0);
+                        actionBarMenuSubItem4.setTextAndIcon(LocaleController.getString("MediaShowPhotos", R.string.MediaShowPhotos), 0);
                         actionBarMenuSubItem4.setChecked(SharedMediaLayout.this.sharedMediaData[0].filterType == 0 || SharedMediaLayout.this.sharedMediaData[0].filterType == 1);
                         actionBarMenuSubItem4.setOnClickListener(new View.OnClickListener() {
                             public void onClick(View view) {
@@ -2209,7 +2212,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                             }
                         });
                         r0.addView(actionBarMenuSubItem4);
-                        actionBarMenuSubItem5.setTextAndIcon(LocaleController.getString("MediaShowVideos", NUM), 0);
+                        actionBarMenuSubItem5.setTextAndIcon(LocaleController.getString("MediaShowVideos", R.string.MediaShowVideos), 0);
                         if (!(SharedMediaLayout.this.sharedMediaData[0].filterType == 0 || SharedMediaLayout.this.sharedMediaData[0].filterType == 2)) {
                             z = false;
                         }
@@ -2278,7 +2281,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
         imageView3.setImageDrawable(backDrawable2);
         this.backDrawable.setColor(getThemedColor("windowBackgroundWhiteGrayText2"));
         this.closeButton.setBackground(Theme.createSelectorDrawable(getThemedColor("actionBarActionModeDefaultSelector"), 1));
-        this.closeButton.setContentDescription(LocaleController.getString("Close", NUM));
+        this.closeButton.setContentDescription(LocaleController.getString("Close", R.string.Close));
         this.actionModeLayout.addView(this.closeButton, new LinearLayout.LayoutParams(AndroidUtilities.dp(54.0f), -1));
         this.actionModeViews.add(this.closeButton);
         this.closeButton.setOnClickListener(new SharedMediaLayout$$ExternalSyntheticLambda2(this));
@@ -2292,18 +2295,18 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
         if (!DialogObject.isEncryptedDialog(this.dialog_id)) {
             str = "actionBarActionModeDefaultSelector";
             str2 = "windowBackgroundWhiteGrayText2";
-            ActionBarMenuItem actionBarMenuItem = new ActionBarMenuItem(context, (ActionBarMenu) null, getThemedColor("actionBarActionModeDefaultSelector"), getThemedColor("windowBackgroundWhiteGrayText2"), false);
-            this.gotoItem = actionBarMenuItem;
-            actionBarMenuItem.setIcon(NUM);
-            this.gotoItem.setContentDescription(LocaleController.getString("AccDescrGoToMessage", NUM));
+            ActionBarMenuItem actionBarMenuItem2 = new ActionBarMenuItem(context, (ActionBarMenu) null, getThemedColor("actionBarActionModeDefaultSelector"), getThemedColor("windowBackgroundWhiteGrayText2"), false);
+            this.gotoItem = actionBarMenuItem2;
+            actionBarMenuItem2.setIcon(R.drawable.msg_message);
+            this.gotoItem.setContentDescription(LocaleController.getString("AccDescrGoToMessage", R.string.AccDescrGoToMessage));
             this.gotoItem.setDuplicateParentStateEnabled(false);
             this.actionModeLayout.addView(this.gotoItem, new LinearLayout.LayoutParams(AndroidUtilities.dp(54.0f), -1));
             this.actionModeViews.add(this.gotoItem);
             this.gotoItem.setOnClickListener(new SharedMediaLayout$$ExternalSyntheticLambda0(this));
-            ActionBarMenuItem actionBarMenuItem2 = new ActionBarMenuItem(context, (ActionBarMenu) null, getThemedColor(str), getThemedColor(str2), false);
-            this.forwardItem = actionBarMenuItem2;
-            actionBarMenuItem2.setIcon(NUM);
-            this.forwardItem.setContentDescription(LocaleController.getString("Forward", NUM));
+            ActionBarMenuItem actionBarMenuItem3 = new ActionBarMenuItem(context, (ActionBarMenu) null, getThemedColor(str), getThemedColor(str2), false);
+            this.forwardItem = actionBarMenuItem3;
+            actionBarMenuItem3.setIcon(R.drawable.msg_forward);
+            this.forwardItem.setContentDescription(LocaleController.getString("Forward", R.string.Forward));
             this.forwardItem.setDuplicateParentStateEnabled(false);
             this.actionModeLayout.addView(this.forwardItem, new LinearLayout.LayoutParams(AndroidUtilities.dp(54.0f), -1));
             this.actionModeViews.add(this.forwardItem);
@@ -2313,10 +2316,10 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             str = "actionBarActionModeDefaultSelector";
             str2 = "windowBackgroundWhiteGrayText2";
         }
-        ActionBarMenuItem actionBarMenuItem3 = new ActionBarMenuItem(context, (ActionBarMenu) null, getThemedColor(str), getThemedColor(str2), false);
-        this.deleteItem = actionBarMenuItem3;
-        actionBarMenuItem3.setIcon(NUM);
-        this.deleteItem.setContentDescription(LocaleController.getString("Delete", NUM));
+        ActionBarMenuItem actionBarMenuItem4 = new ActionBarMenuItem(context, (ActionBarMenu) null, getThemedColor(str), getThemedColor(str2), false);
+        this.deleteItem = actionBarMenuItem4;
+        actionBarMenuItem4.setIcon(R.drawable.msg_delete);
+        this.deleteItem.setContentDescription(LocaleController.getString("Delete", R.string.Delete));
         this.deleteItem.setDuplicateParentStateEnabled(false);
         this.actionModeLayout.addView(this.deleteItem, new LinearLayout.LayoutParams(AndroidUtilities.dp(54.0f), -1));
         this.actionModeViews.add(this.deleteItem);
@@ -2346,20 +2349,20 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
         TLRPC$ChatFull unused2 = this.chatUsersAdapter.chatInfo = !z ? null : tLRPC$ChatFull3;
         this.linksAdapter = new SharedLinksAdapter(context2);
         setWillNotDraw(false);
-        int i7 = 0;
-        int i8 = -1;
-        int i9 = 0;
+        int i8 = 0;
+        int i9 = -1;
+        int i10 = 0;
         while (true) {
             MediaPage[] mediaPageArr = this.mediaPages;
-            if (i7 >= mediaPageArr.length) {
+            if (i8 >= mediaPageArr.length) {
                 break;
             }
-            if (!(i7 != 0 || mediaPageArr[i7] == null || mediaPageArr[i7].layoutManager == null)) {
-                i8 = this.mediaPages[i7].layoutManager.findFirstVisibleItemPosition();
-                if (i8 == this.mediaPages[i7].layoutManager.getItemCount() - 1 || (holder = (RecyclerListView.Holder) this.mediaPages[i7].listView.findViewHolderForAdapterPosition(i8)) == null) {
-                    i8 = -1;
+            if (!(i8 != 0 || mediaPageArr[i8] == null || mediaPageArr[i8].layoutManager == null)) {
+                i9 = this.mediaPages[i8].layoutManager.findFirstVisibleItemPosition();
+                if (i9 == this.mediaPages[i8].layoutManager.getItemCount() - 1 || (holder = (RecyclerListView.Holder) this.mediaPages[i8].listView.findViewHolderForAdapterPosition(i9)) == null) {
+                    i9 = -1;
                 } else {
-                    i9 = holder.itemView.getTop();
+                    i10 = holder.itemView.getTop();
                 }
             }
             final AnonymousClass7 r4 = new MediaPage(context2) {
@@ -2397,8 +2400,8 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             };
             addView(r4, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 48.0f, 0.0f, 0.0f));
             MediaPage[] mediaPageArr2 = this.mediaPages;
-            mediaPageArr2[i7] = r4;
-            final ExtendedGridLayoutManager access$202 = mediaPageArr2[i7].layoutManager = new ExtendedGridLayoutManager(context2, 100) {
+            mediaPageArr2[i8] = r4;
+            final ExtendedGridLayoutManager access$202 = mediaPageArr2[i8].layoutManager = new ExtendedGridLayoutManager(context2, 100) {
                 private Size size = new Size();
 
                 public boolean supportsPredictiveItemAnimations() {
@@ -2486,7 +2489,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                     }
                 }
             });
-            BlurredRecyclerView unused3 = this.mediaPages[i7].listView = new BlurredRecyclerView(context2) {
+            BlurredRecyclerView unused3 = this.mediaPages[i8].listView = new BlurredRecyclerView(context2) {
                 ArrayList<SharedPhotoVideoCell2> drawingViews = new ArrayList<>();
                 ArrayList<SharedPhotoVideoCell2> drawingViews2 = new ArrayList<>();
                 ArrayList<SharedPhotoVideoCell2> drawingViews3 = new ArrayList<>();
@@ -3491,18 +3494,18 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                     return true;
                 }
             };
-            this.mediaPages[i7].listView.setFastScrollEnabled(1);
-            this.mediaPages[i7].listView.setScrollingTouchSlop(1);
-            this.mediaPages[i7].listView.setPinnedSectionOffsetY(-AndroidUtilities.dp(2.0f));
-            this.mediaPages[i7].listView.setPadding(0, AndroidUtilities.dp(2.0f), 0, 0);
-            this.mediaPages[i7].listView.setItemAnimator((RecyclerView.ItemAnimator) null);
-            this.mediaPages[i7].listView.setClipToPadding(false);
-            this.mediaPages[i7].listView.setSectionsType(2);
-            this.mediaPages[i7].listView.setLayoutManager(access$202);
+            this.mediaPages[i8].listView.setFastScrollEnabled(1);
+            this.mediaPages[i8].listView.setScrollingTouchSlop(1);
+            this.mediaPages[i8].listView.setPinnedSectionOffsetY(-AndroidUtilities.dp(2.0f));
+            this.mediaPages[i8].listView.setPadding(0, AndroidUtilities.dp(2.0f), 0, 0);
+            this.mediaPages[i8].listView.setItemAnimator((RecyclerView.ItemAnimator) null);
+            this.mediaPages[i8].listView.setClipToPadding(false);
+            this.mediaPages[i8].listView.setSectionsType(2);
+            this.mediaPages[i8].listView.setLayoutManager(access$202);
             MediaPage[] mediaPageArr3 = this.mediaPages;
-            mediaPageArr3[i7].addView(mediaPageArr3[i7].listView, LayoutHelper.createFrame(-1, -1.0f));
-            BlurredRecyclerView unused4 = this.mediaPages[i7].animationSupportingListView = new BlurredRecyclerView(context2);
-            this.mediaPages[i7].animationSupportingListView.setLayoutManager(this.mediaPages[i7].animationSupportingLayoutManager = new GridLayoutManager(context2, 3) {
+            mediaPageArr3[i8].addView(mediaPageArr3[i8].listView, LayoutHelper.createFrame(-1, -1.0f));
+            BlurredRecyclerView unused4 = this.mediaPages[i8].animationSupportingListView = new BlurredRecyclerView(context2);
+            this.mediaPages[i8].animationSupportingListView.setLayoutManager(this.mediaPages[i8].animationSupportingLayoutManager = new GridLayoutManager(context2, 3) {
                 public boolean supportsPredictiveItemAnimations() {
                     return false;
                 }
@@ -3515,9 +3518,9 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                 }
             });
             MediaPage[] mediaPageArr4 = this.mediaPages;
-            mediaPageArr4[i7].addView(mediaPageArr4[i7].animationSupportingListView, LayoutHelper.createFrame(-1, -1.0f));
-            this.mediaPages[i7].animationSupportingListView.setVisibility(8);
-            this.mediaPages[i7].listView.addItemDecoration(new RecyclerView.ItemDecoration() {
+            mediaPageArr4[i8].addView(mediaPageArr4[i8].animationSupportingListView, LayoutHelper.createFrame(-1, -1.0f));
+            this.mediaPages[i8].animationSupportingListView.setVisibility(8);
+            this.mediaPages[i8].listView.addItemDecoration(new RecyclerView.ItemDecoration() {
                 public void getItemOffsets(Rect rect, View view, RecyclerView recyclerView, RecyclerView.State state) {
                     int i = 0;
                     if (r4.listView.getAdapter() == SharedMediaLayout.this.gifAdapter) {
@@ -3541,8 +3544,8 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                     rect.right = 0;
                 }
             });
-            this.mediaPages[i7].listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new SharedMediaLayout$$ExternalSyntheticLambda15(this, r4));
-            this.mediaPages[i7].listView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            this.mediaPages[i8].listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new SharedMediaLayout$$ExternalSyntheticLambda15(this, r4));
+            this.mediaPages[i8].listView.setOnScrollListener(new RecyclerView.OnScrollListener() {
                 public void onScrollStateChanged(RecyclerView recyclerView, int i) {
                     boolean unused = SharedMediaLayout.this.scrolling = i != 0;
                 }
@@ -3563,20 +3566,20 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                     SharedMediaLayout.this.invalidateBlur();
                 }
             });
-            this.mediaPages[i7].listView.setOnItemLongClickListener((RecyclerListView.OnItemLongClickListener) new SharedMediaLayout$$ExternalSyntheticLambda16(this, r4));
-            if (i7 == 0 && i8 != -1) {
-                access$202.scrollToPositionWithOffset(i8, i9);
+            this.mediaPages[i8].listView.setOnItemLongClickListener((RecyclerListView.OnItemLongClickListener) new SharedMediaLayout$$ExternalSyntheticLambda16(this, r4));
+            if (i8 == 0 && i9 != -1) {
+                access$202.scrollToPositionWithOffset(i9, i10);
             }
-            final BlurredRecyclerView access$000 = this.mediaPages[i7].listView;
-            ClippingImageView unused5 = this.mediaPages[i7].animatingImageView = new ClippingImageView(this, context2) {
+            final BlurredRecyclerView access$000 = this.mediaPages[i8].listView;
+            ClippingImageView unused5 = this.mediaPages[i8].animatingImageView = new ClippingImageView(this, context2) {
                 public void invalidate() {
                     super.invalidate();
                     access$000.invalidate();
                 }
             };
-            this.mediaPages[i7].animatingImageView.setVisibility(8);
-            this.mediaPages[i7].listView.addOverlayView(this.mediaPages[i7].animatingImageView, LayoutHelper.createFrame(-1, -1.0f));
-            FlickerLoadingView unused6 = this.mediaPages[i7].progressView = new FlickerLoadingView(context2) {
+            this.mediaPages[i8].animatingImageView.setVisibility(8);
+            this.mediaPages[i8].listView.addOverlayView(this.mediaPages[i8].animatingImageView, LayoutHelper.createFrame(-1, -1.0f));
+            FlickerLoadingView unused6 = this.mediaPages[i8].progressView = new FlickerLoadingView(context2) {
                 public int getColumnsCount() {
                     return SharedMediaLayout.this.mediaColumnsCount;
                 }
@@ -3611,26 +3614,26 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                     super.onDraw(canvas);
                 }
             };
-            this.mediaPages[i7].progressView.showDate(false);
-            if (i7 != 0) {
-                this.mediaPages[i7].setVisibility(8);
+            this.mediaPages[i8].progressView.showDate(false);
+            if (i8 != 0) {
+                this.mediaPages[i8].setVisibility(8);
             }
             MediaPage[] mediaPageArr5 = this.mediaPages;
-            StickerEmptyView unused7 = mediaPageArr5[i7].emptyView = new StickerEmptyView(context2, mediaPageArr5[i7].progressView, 1);
-            this.mediaPages[i7].emptyView.setVisibility(8);
-            this.mediaPages[i7].emptyView.setAnimateLayoutChange(true);
+            StickerEmptyView unused7 = mediaPageArr5[i8].emptyView = new StickerEmptyView(context2, mediaPageArr5[i8].progressView, 1);
+            this.mediaPages[i8].emptyView.setVisibility(8);
+            this.mediaPages[i8].emptyView.setAnimateLayoutChange(true);
             MediaPage[] mediaPageArr6 = this.mediaPages;
-            mediaPageArr6[i7].addView(mediaPageArr6[i7].emptyView, LayoutHelper.createFrame(-1, -1.0f));
-            this.mediaPages[i7].emptyView.setOnTouchListener(SharedMediaLayout$$ExternalSyntheticLambda4.INSTANCE);
-            this.mediaPages[i7].emptyView.showProgress(true, false);
-            this.mediaPages[i7].emptyView.title.setText(LocaleController.getString("NoResult", NUM));
-            this.mediaPages[i7].emptyView.subtitle.setText(LocaleController.getString("SearchEmptyViewFilteredSubtitle2", NUM));
-            this.mediaPages[i7].emptyView.addView(this.mediaPages[i7].progressView, LayoutHelper.createFrame(-1, -1.0f));
-            this.mediaPages[i7].listView.setEmptyView(this.mediaPages[i7].emptyView);
-            this.mediaPages[i7].listView.setAnimateEmptyView(true, 0);
+            mediaPageArr6[i8].addView(mediaPageArr6[i8].emptyView, LayoutHelper.createFrame(-1, -1.0f));
+            this.mediaPages[i8].emptyView.setOnTouchListener(SharedMediaLayout$$ExternalSyntheticLambda4.INSTANCE);
+            this.mediaPages[i8].emptyView.showProgress(true, false);
+            this.mediaPages[i8].emptyView.title.setText(LocaleController.getString("NoResult", R.string.NoResult));
+            this.mediaPages[i8].emptyView.subtitle.setText(LocaleController.getString("SearchEmptyViewFilteredSubtitle2", R.string.SearchEmptyViewFilteredSubtitle2));
+            this.mediaPages[i8].emptyView.addView(this.mediaPages[i8].progressView, LayoutHelper.createFrame(-1, -1.0f));
+            this.mediaPages[i8].listView.setEmptyView(this.mediaPages[i8].emptyView);
+            this.mediaPages[i8].listView.setAnimateEmptyView(true, 0);
             MediaPage[] mediaPageArr7 = this.mediaPages;
-            RecyclerAnimationScrollHelper unused8 = mediaPageArr7[i7].scrollHelper = new RecyclerAnimationScrollHelper(mediaPageArr7[i7].listView, this.mediaPages[i7].layoutManager);
-            i7++;
+            RecyclerAnimationScrollHelper unused8 = mediaPageArr7[i8].scrollHelper = new RecyclerAnimationScrollHelper(mediaPageArr7[i8].listView, this.mediaPages[i8].layoutManager);
+            i8++;
         }
         ChatActionCell chatActionCell = new ChatActionCell(context2);
         this.floatingDateView = chatActionCell;
@@ -4745,9 +4748,9 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                     HintView hintView = this.fwdRestrictedHint;
                     if (hintView != null) {
                         if (!ChatObject.isChannel(chat) || chat.megagroup) {
-                            str = LocaleController.getString("ForwardsRestrictedInfoGroup", NUM);
+                            str = LocaleController.getString("ForwardsRestrictedInfoGroup", R.string.ForwardsRestrictedInfoGroup);
                         } else {
-                            str = LocaleController.getString("ForwardsRestrictedInfoChannel", NUM);
+                            str = LocaleController.getString("ForwardsRestrictedInfoChannel", R.string.ForwardsRestrictedInfoChannel);
                         }
                         hintView.setText(str);
                         this.fwdRestrictedHint.showForView(view2, true);
@@ -4759,7 +4762,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             if (hasNoforwardsMessage()) {
                 HintView hintView2 = this.fwdRestrictedHint;
                 if (hintView2 != null) {
-                    hintView2.setText(LocaleController.getString("ForwardsRestrictedInfoBot", NUM));
+                    hintView2.setText(LocaleController.getString("ForwardsRestrictedInfoBot", R.string.ForwardsRestrictedInfoBot));
                     this.fwdRestrictedHint.showForView(view2, true);
                     return;
                 }
@@ -6781,7 +6784,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             if (r3 != r10) goto L_0x00cb
             int r0 = r0 + 1
         L_0x00cb:
-            if (r0 <= 0) goto L_0x023c
+            if (r0 <= 0) goto L_0x0235
             if (r13 == 0) goto L_0x0100
             int r13 = android.os.Build.VERSION.SDK_INT
             r3 = 19
@@ -6810,144 +6813,145 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
         L_0x0109:
             org.telegram.ui.Components.SharedMediaLayout$ChatUsersAdapter r0 = r12.chatUsersAdapter
             org.telegram.tgnet.TLRPC$ChatFull r0 = r0.chatInfo
-            if (r0 == 0) goto L_0x0127
+            if (r0 == 0) goto L_0x0126
             org.telegram.ui.Components.SharedMediaLayout$ScrollSlidingTextTabStripInner r0 = r12.scrollSlidingTextTabStrip
             boolean r0 = r0.hasTab(r4)
-            if (r0 != 0) goto L_0x0127
+            if (r0 != 0) goto L_0x0126
             org.telegram.ui.Components.SharedMediaLayout$ScrollSlidingTextTabStripInner r0 = r12.scrollSlidingTextTabStrip
-            r3 = 2131626157(0x7f0e08ad, float:1.8879542E38)
+            int r3 = org.telegram.messenger.R.string.GroupMembers
             java.lang.String r10 = "GroupMembers"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r10, r3)
             r0.addTextTab(r4, r3, r13)
-        L_0x0127:
+        L_0x0126:
             int[] r0 = r12.hasMedia
             r0 = r0[r1]
-            if (r0 <= 0) goto L_0x0174
+            if (r0 <= 0) goto L_0x0171
             org.telegram.ui.Components.SharedMediaLayout$ScrollSlidingTextTabStripInner r0 = r12.scrollSlidingTextTabStrip
             boolean r0 = r0.hasTab(r1)
-            if (r0 != 0) goto L_0x0174
+            if (r0 != 0) goto L_0x0171
             int[] r0 = r12.hasMedia
             r3 = r0[r2]
-            if (r3 != 0) goto L_0x0166
+            if (r3 != 0) goto L_0x0164
             r3 = r0[r7]
-            if (r3 != 0) goto L_0x0166
+            if (r3 != 0) goto L_0x0164
             r3 = r0[r5]
-            if (r3 != 0) goto L_0x0166
+            if (r3 != 0) goto L_0x0164
             r3 = r0[r6]
-            if (r3 != 0) goto L_0x0166
+            if (r3 != 0) goto L_0x0164
             r3 = r0[r8]
-            if (r3 != 0) goto L_0x0166
+            if (r3 != 0) goto L_0x0164
             r0 = r0[r9]
-            if (r0 != 0) goto L_0x0166
+            if (r0 != 0) goto L_0x0164
             org.telegram.ui.Components.SharedMediaLayout$ChatUsersAdapter r0 = r12.chatUsersAdapter
             org.telegram.tgnet.TLRPC$ChatFull r0 = r0.chatInfo
-            if (r0 != 0) goto L_0x0166
+            if (r0 != 0) goto L_0x0164
             org.telegram.ui.Components.SharedMediaLayout$ScrollSlidingTextTabStripInner r0 = r12.scrollSlidingTextTabStrip
-            r3 = 2131628381(0x7f0e115d, float:1.8884053E38)
+            int r3 = org.telegram.messenger.R.string.SharedMediaTabFull2
             java.lang.String r4 = "SharedMediaTabFull2"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r0.addTextTab(r1, r3, r13)
-            goto L_0x0174
-        L_0x0166:
+            goto L_0x0171
+        L_0x0164:
             org.telegram.ui.Components.SharedMediaLayout$ScrollSlidingTextTabStripInner r0 = r12.scrollSlidingTextTabStrip
-            r3 = 2131628380(0x7f0e115c, float:1.8884051E38)
+            int r3 = org.telegram.messenger.R.string.SharedMediaTab2
             java.lang.String r4 = "SharedMediaTab2"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r0.addTextTab(r1, r3, r13)
-        L_0x0174:
+        L_0x0171:
             int[] r0 = r12.hasMedia
             r0 = r0[r2]
-            if (r0 <= 0) goto L_0x0190
+            if (r0 <= 0) goto L_0x018c
             org.telegram.ui.Components.SharedMediaLayout$ScrollSlidingTextTabStripInner r0 = r12.scrollSlidingTextTabStrip
             boolean r0 = r0.hasTab(r2)
-            if (r0 != 0) goto L_0x0190
+            if (r0 != 0) goto L_0x018c
             org.telegram.ui.Components.SharedMediaLayout$ScrollSlidingTextTabStripInner r0 = r12.scrollSlidingTextTabStrip
-            r3 = 2131628373(0x7f0e1155, float:1.8884037E38)
+            int r3 = org.telegram.messenger.R.string.SharedFilesTab2
             java.lang.String r4 = "SharedFilesTab2"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r0.addTextTab(r2, r3, r13)
-        L_0x0190:
+        L_0x018c:
             long r2 = r12.dialog_id
             boolean r0 = org.telegram.messenger.DialogObject.isEncryptedDialog(r2)
-            r2 = 2131628382(0x7f0e115e, float:1.8884055E38)
-            java.lang.String r3 = "SharedMusicTab2"
-            if (r0 != 0) goto L_0x01d1
+            java.lang.String r2 = "SharedMusicTab2"
+            if (r0 != 0) goto L_0x01cb
             int[] r0 = r12.hasMedia
             r0 = r0[r5]
-            if (r0 <= 0) goto L_0x01b9
+            if (r0 <= 0) goto L_0x01b1
             org.telegram.ui.Components.SharedMediaLayout$ScrollSlidingTextTabStripInner r0 = r12.scrollSlidingTextTabStrip
             boolean r0 = r0.hasTab(r5)
-            if (r0 != 0) goto L_0x01b9
+            if (r0 != 0) goto L_0x01b1
             org.telegram.ui.Components.SharedMediaLayout$ScrollSlidingTextTabStripInner r0 = r12.scrollSlidingTextTabStrip
-            r4 = 2131628377(0x7f0e1159, float:1.8884045E38)
-            java.lang.String r10 = "SharedLinksTab2"
-            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r10, r4)
-            r0.addTextTab(r5, r4, r13)
-        L_0x01b9:
+            int r3 = org.telegram.messenger.R.string.SharedLinksTab2
+            java.lang.String r4 = "SharedLinksTab2"
+            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
+            r0.addTextTab(r5, r3, r13)
+        L_0x01b1:
             int[] r0 = r12.hasMedia
             r0 = r0[r6]
-            if (r0 <= 0) goto L_0x01e8
+            if (r0 <= 0) goto L_0x01e4
             org.telegram.ui.Components.SharedMediaLayout$ScrollSlidingTextTabStripInner r0 = r12.scrollSlidingTextTabStrip
             boolean r0 = r0.hasTab(r6)
-            if (r0 != 0) goto L_0x01e8
+            if (r0 != 0) goto L_0x01e4
             org.telegram.ui.Components.SharedMediaLayout$ScrollSlidingTextTabStripInner r0 = r12.scrollSlidingTextTabStrip
-            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
+            int r3 = org.telegram.messenger.R.string.SharedMusicTab2
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)
             r0.addTextTab(r6, r2, r13)
-            goto L_0x01e8
-        L_0x01d1:
+            goto L_0x01e4
+        L_0x01cb:
             int[] r0 = r12.hasMedia
             r0 = r0[r6]
-            if (r0 <= 0) goto L_0x01e8
+            if (r0 <= 0) goto L_0x01e4
             org.telegram.ui.Components.SharedMediaLayout$ScrollSlidingTextTabStripInner r0 = r12.scrollSlidingTextTabStrip
             boolean r0 = r0.hasTab(r6)
-            if (r0 != 0) goto L_0x01e8
+            if (r0 != 0) goto L_0x01e4
             org.telegram.ui.Components.SharedMediaLayout$ScrollSlidingTextTabStripInner r0 = r12.scrollSlidingTextTabStrip
-            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
+            int r3 = org.telegram.messenger.R.string.SharedMusicTab2
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)
             r0.addTextTab(r6, r2, r13)
-        L_0x01e8:
+        L_0x01e4:
             int[] r0 = r12.hasMedia
             r0 = r0[r7]
-            if (r0 <= 0) goto L_0x0204
+            if (r0 <= 0) goto L_0x01ff
             org.telegram.ui.Components.SharedMediaLayout$ScrollSlidingTextTabStripInner r0 = r12.scrollSlidingTextTabStrip
             boolean r0 = r0.hasTab(r7)
-            if (r0 != 0) goto L_0x0204
+            if (r0 != 0) goto L_0x01ff
             org.telegram.ui.Components.SharedMediaLayout$ScrollSlidingTextTabStripInner r0 = r12.scrollSlidingTextTabStrip
-            r2 = 2131628386(0x7f0e1162, float:1.8884063E38)
+            int r2 = org.telegram.messenger.R.string.SharedVoiceTab2
             java.lang.String r3 = "SharedVoiceTab2"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.addTextTab(r7, r2, r13)
-        L_0x0204:
+        L_0x01ff:
             int[] r0 = r12.hasMedia
             r0 = r0[r8]
-            if (r0 <= 0) goto L_0x0220
+            if (r0 <= 0) goto L_0x021a
             org.telegram.ui.Components.SharedMediaLayout$ScrollSlidingTextTabStripInner r0 = r12.scrollSlidingTextTabStrip
             boolean r0 = r0.hasTab(r8)
-            if (r0 != 0) goto L_0x0220
+            if (r0 != 0) goto L_0x021a
             org.telegram.ui.Components.SharedMediaLayout$ScrollSlidingTextTabStripInner r0 = r12.scrollSlidingTextTabStrip
-            r2 = 2131628374(0x7f0e1156, float:1.8884039E38)
+            int r2 = org.telegram.messenger.R.string.SharedGIFsTab2
             java.lang.String r3 = "SharedGIFsTab2"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.addTextTab(r8, r2, r13)
-        L_0x0220:
+        L_0x021a:
             int[] r0 = r12.hasMedia
             r0 = r0[r9]
-            if (r0 <= 0) goto L_0x023c
+            if (r0 <= 0) goto L_0x0235
             org.telegram.ui.Components.SharedMediaLayout$ScrollSlidingTextTabStripInner r0 = r12.scrollSlidingTextTabStrip
             boolean r0 = r0.hasTab(r9)
-            if (r0 != 0) goto L_0x023c
+            if (r0 != 0) goto L_0x0235
             org.telegram.ui.Components.SharedMediaLayout$ScrollSlidingTextTabStripInner r0 = r12.scrollSlidingTextTabStrip
-            r2 = 2131628375(0x7f0e1157, float:1.888404E38)
+            int r2 = org.telegram.messenger.R.string.SharedGroupsTab2
             java.lang.String r3 = "SharedGroupsTab2"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.addTextTab(r9, r2, r13)
-        L_0x023c:
+        L_0x0235:
             org.telegram.ui.Components.SharedMediaLayout$ScrollSlidingTextTabStripInner r13 = r12.scrollSlidingTextTabStrip
             int r13 = r13.getCurrentTabId()
-            if (r13 < 0) goto L_0x024b
+            if (r13 < 0) goto L_0x0244
             org.telegram.ui.Components.SharedMediaLayout$MediaPage[] r0 = r12.mediaPages
             r0 = r0[r1]
             int unused = r0.selectedType = r13
-        L_0x024b:
+        L_0x0244:
             org.telegram.ui.Components.SharedMediaLayout$ScrollSlidingTextTabStripInner r13 = r12.scrollSlidingTextTabStrip
             r13.finishAddingTabs()
             return
@@ -8271,43 +8275,43 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
         EmptyStubView emptyStubView = new EmptyStubView(context, resourcesProvider2);
         if (i == 0) {
             if (DialogObject.isEncryptedDialog(j)) {
-                emptyStubView.emptyTextView.setText(LocaleController.getString("NoMediaSecret", NUM));
+                emptyStubView.emptyTextView.setText(LocaleController.getString("NoMediaSecret", R.string.NoMediaSecret));
             } else {
-                emptyStubView.emptyTextView.setText(LocaleController.getString("NoMedia", NUM));
+                emptyStubView.emptyTextView.setText(LocaleController.getString("NoMedia", R.string.NoMedia));
             }
         } else if (i == 1) {
             if (DialogObject.isEncryptedDialog(j)) {
-                emptyStubView.emptyTextView.setText(LocaleController.getString("NoSharedFilesSecret", NUM));
+                emptyStubView.emptyTextView.setText(LocaleController.getString("NoSharedFilesSecret", R.string.NoSharedFilesSecret));
             } else {
-                emptyStubView.emptyTextView.setText(LocaleController.getString("NoSharedFiles", NUM));
+                emptyStubView.emptyTextView.setText(LocaleController.getString("NoSharedFiles", R.string.NoSharedFiles));
             }
         } else if (i == 2) {
             if (DialogObject.isEncryptedDialog(j)) {
-                emptyStubView.emptyTextView.setText(LocaleController.getString("NoSharedVoiceSecret", NUM));
+                emptyStubView.emptyTextView.setText(LocaleController.getString("NoSharedVoiceSecret", R.string.NoSharedVoiceSecret));
             } else {
-                emptyStubView.emptyTextView.setText(LocaleController.getString("NoSharedVoice", NUM));
+                emptyStubView.emptyTextView.setText(LocaleController.getString("NoSharedVoice", R.string.NoSharedVoice));
             }
         } else if (i == 3) {
             if (DialogObject.isEncryptedDialog(j)) {
-                emptyStubView.emptyTextView.setText(LocaleController.getString("NoSharedLinksSecret", NUM));
+                emptyStubView.emptyTextView.setText(LocaleController.getString("NoSharedLinksSecret", R.string.NoSharedLinksSecret));
             } else {
-                emptyStubView.emptyTextView.setText(LocaleController.getString("NoSharedLinks", NUM));
+                emptyStubView.emptyTextView.setText(LocaleController.getString("NoSharedLinks", R.string.NoSharedLinks));
             }
         } else if (i == 4) {
             if (DialogObject.isEncryptedDialog(j)) {
-                emptyStubView.emptyTextView.setText(LocaleController.getString("NoSharedAudioSecret", NUM));
+                emptyStubView.emptyTextView.setText(LocaleController.getString("NoSharedAudioSecret", R.string.NoSharedAudioSecret));
             } else {
-                emptyStubView.emptyTextView.setText(LocaleController.getString("NoSharedAudio", NUM));
+                emptyStubView.emptyTextView.setText(LocaleController.getString("NoSharedAudio", R.string.NoSharedAudio));
             }
         } else if (i == 5) {
             if (DialogObject.isEncryptedDialog(j)) {
-                emptyStubView.emptyTextView.setText(LocaleController.getString("NoSharedGifSecret", NUM));
+                emptyStubView.emptyTextView.setText(LocaleController.getString("NoSharedGifSecret", R.string.NoSharedGifSecret));
             } else {
-                emptyStubView.emptyTextView.setText(LocaleController.getString("NoGIFs", NUM));
+                emptyStubView.emptyTextView.setText(LocaleController.getString("NoGIFs", R.string.NoGIFs));
             }
         } else if (i == 6) {
             emptyStubView.emptyImageView.setImageDrawable((Drawable) null);
-            emptyStubView.emptyTextView.setText(LocaleController.getString("NoGroupsInCommon", NUM));
+            emptyStubView.emptyTextView.setText(LocaleController.getString("NoGroupsInCommon", R.string.NoGroupsInCommon));
         } else if (i == 7) {
             emptyStubView.emptyImageView.setImageDrawable((Drawable) null);
             emptyStubView.emptyTextView.setText("");
@@ -8706,7 +8710,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                     for (int i2 = 0; i2 < SharedMediaLayout.this.mediaPages.length; i2++) {
                         if (SharedMediaLayout.this.mediaPages[i2].selectedType == this.currentType) {
                             if (this.searchesInProgress == 0 && itemCount2 == 0) {
-                                SharedMediaLayout.this.mediaPages[i2].emptyView.title.setText(LocaleController.formatString("NoResultFoundFor", NUM, str));
+                                SharedMediaLayout.this.mediaPages[i2].emptyView.title.setText(LocaleController.formatString("NoResultFoundFor", R.string.NoResultFoundFor, str));
                                 SharedMediaLayout.this.mediaPages[i2].emptyView.showProgress(false, true);
                             } else if (itemCount == 0) {
                                 SharedMediaLayout sharedMediaLayout = SharedMediaLayout.this;
@@ -8856,7 +8860,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                 for (int i = 0; i < SharedMediaLayout.this.mediaPages.length; i++) {
                     if (SharedMediaLayout.this.mediaPages[i].selectedType == this.currentType) {
                         if (this.searchesInProgress == 0 && itemCount2 == 0) {
-                            SharedMediaLayout.this.mediaPages[i].emptyView.title.setText(LocaleController.getString("NoResult", NUM));
+                            SharedMediaLayout.this.mediaPages[i].emptyView.title.setText(LocaleController.getString("NoResult", R.string.NoResult));
                             SharedMediaLayout.this.mediaPages[i].emptyView.showProgress(false, true);
                         } else if (itemCount == 0) {
                             SharedMediaLayout sharedMediaLayout = SharedMediaLayout.this;
@@ -9236,15 +9240,15 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                     if (!TextUtils.isEmpty(tLRPC$ChannelParticipant.rank)) {
                         string = tLRPC$ChannelParticipant.rank;
                     } else if (tLRPC$ChannelParticipant instanceof TLRPC$TL_channelParticipantCreator) {
-                        string = LocaleController.getString("ChannelCreator", NUM);
+                        string = LocaleController.getString("ChannelCreator", R.string.ChannelCreator);
                     } else if (tLRPC$ChannelParticipant instanceof TLRPC$TL_channelParticipantAdmin) {
-                        string = LocaleController.getString("ChannelAdmin", NUM);
+                        string = LocaleController.getString("ChannelAdmin", R.string.ChannelAdmin);
                     }
                     str = string;
                 } else if (tLRPC$ChatParticipant instanceof TLRPC$TL_chatParticipantCreator) {
-                    str = LocaleController.getString("ChannelCreator", NUM);
+                    str = LocaleController.getString("ChannelCreator", R.string.ChannelCreator);
                 } else if (tLRPC$ChatParticipant instanceof TLRPC$TL_chatParticipantAdmin) {
-                    str = LocaleController.getString("ChannelAdmin", NUM);
+                    str = LocaleController.getString("ChannelAdmin", R.string.ChannelAdmin);
                 }
                 userCell.setAdminRole(str);
                 TLRPC$User user = SharedMediaLayout.this.profileActivity.getMessagesController().getUser(Long.valueOf(tLRPC$ChatParticipant.user_id));

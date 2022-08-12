@@ -6,6 +6,7 @@ import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Outline;
 import android.graphics.PorterDuff;
@@ -36,6 +37,7 @@ import org.telegram.messenger.ForwardingMessagesParams;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$KeyboardButton;
 import org.telegram.tgnet.TLRPC$Peer;
@@ -640,7 +642,9 @@ public class ForwardingPreviewView extends FrameLayout {
         LinearLayout linearLayout2 = new LinearLayout(context2);
         this.buttonsLayout = linearLayout2;
         linearLayout2.setOrientation(1);
-        Drawable mutate = getContext().getResources().getDrawable(NUM).mutate();
+        Resources resources = getContext().getResources();
+        int i5 = R.drawable.popup_fixed_alert;
+        Drawable mutate = resources.getDrawable(i5).mutate();
         mutate.setColorFilter(new PorterDuffColorFilter(getThemedColor("dialogBackground"), PorterDuff.Mode.MULTIPLY));
         this.buttonsLayout.setBackground(mutate);
         this.menuContainer.addView(this.buttonsLayout, LayoutHelper.createFrame(-1, -2.0f));
@@ -650,10 +654,10 @@ public class ForwardingPreviewView extends FrameLayout {
         this.buttonsLayout.addView(actionBarMenuSubItem, LayoutHelper.createFrame(-1, 48.0f));
         ActionBarMenuSubItem actionBarMenuSubItem3 = this.showSendersNameView;
         if (this.forwardingMessagesParams.multiplyUsers) {
-            i2 = NUM;
+            i2 = R.string.ShowSenderNames;
             str = "ShowSenderNames";
         } else {
-            i2 = NUM;
+            i2 = R.string.ShowSendersName;
             str = "ShowSendersName";
         }
         actionBarMenuSubItem3.setTextAndIcon(LocaleController.getString(str, i2), 0);
@@ -663,10 +667,10 @@ public class ForwardingPreviewView extends FrameLayout {
         this.buttonsLayout.addView(actionBarMenuSubItem4, LayoutHelper.createFrame(-1, 48.0f));
         ActionBarMenuSubItem actionBarMenuSubItem5 = this.hideSendersNameView;
         if (this.forwardingMessagesParams.multiplyUsers) {
-            i3 = NUM;
+            i3 = R.string.HideSenderNames;
             str2 = "HideSenderNames";
         } else {
-            i3 = NUM;
+            i3 = R.string.HideSendersName;
             str2 = "HideSendersName";
         }
         actionBarMenuSubItem5.setTextAndIcon(LocaleController.getString(str2, i3), 0);
@@ -684,29 +688,29 @@ public class ForwardingPreviewView extends FrameLayout {
             ActionBarMenuSubItem actionBarMenuSubItem6 = new ActionBarMenuSubItem(context, true, false, false, resourcesDelegate3);
             this.showCaptionView = actionBarMenuSubItem6;
             this.buttonsLayout.addView(actionBarMenuSubItem6, LayoutHelper.createFrame(-1, 48.0f));
-            this.showCaptionView.setTextAndIcon(LocaleController.getString("ShowCaption", NUM), 0);
+            this.showCaptionView.setTextAndIcon(LocaleController.getString("ShowCaption", R.string.ShowCaption), 0);
             this.showCaptionView.setChecked(true);
             ActionBarMenuSubItem actionBarMenuSubItem7 = new ActionBarMenuSubItem(context, true, false, true, resourcesDelegate3);
             this.hideCaptionView = actionBarMenuSubItem7;
             this.buttonsLayout.addView(actionBarMenuSubItem7, LayoutHelper.createFrame(-1, 48.0f));
-            this.hideCaptionView.setTextAndIcon(LocaleController.getString("HideCaption", NUM), 0);
+            this.hideCaptionView.setTextAndIcon(LocaleController.getString("HideCaption", R.string.HideCaption), 0);
             this.hideCaptionView.setChecked(false);
         }
         LinearLayout linearLayout3 = new LinearLayout(context2);
         this.buttonsLayout2 = linearLayout3;
         linearLayout3.setOrientation(1);
-        Drawable mutate2 = getContext().getResources().getDrawable(NUM).mutate();
+        Drawable mutate2 = getContext().getResources().getDrawable(i5).mutate();
         mutate2.setColorFilter(new PorterDuffColorFilter(getThemedColor("dialogBackground"), PorterDuff.Mode.MULTIPLY));
         this.buttonsLayout2.setBackground(mutate2);
         this.menuContainer.addView(this.buttonsLayout2, LayoutHelper.createFrame(-1, -2.0f, 0, 0.0f, this.forwardingMessagesParams.hasSenders ? -8.0f : 0.0f, 0.0f, 0.0f));
         ActionBarMenuSubItem actionBarMenuSubItem8 = new ActionBarMenuSubItem(context2, true, false, (Theme.ResourcesProvider) resourcesDelegate2);
         this.changeRecipientView = actionBarMenuSubItem8;
         this.buttonsLayout2.addView(actionBarMenuSubItem8, LayoutHelper.createFrame(-1, 48.0f));
-        this.changeRecipientView.setTextAndIcon(LocaleController.getString("ChangeRecipient", NUM), NUM);
+        this.changeRecipientView.setTextAndIcon(LocaleController.getString("ChangeRecipient", R.string.ChangeRecipient), R.drawable.msg_forward_replace);
         ActionBarMenuSubItem actionBarMenuSubItem9 = new ActionBarMenuSubItem(context2, false, true, (Theme.ResourcesProvider) resourcesDelegate2);
         this.sendMessagesView = actionBarMenuSubItem9;
         this.buttonsLayout2.addView(actionBarMenuSubItem9, LayoutHelper.createFrame(-1, 48.0f));
-        this.sendMessagesView.setTextAndIcon(LocaleController.getString("ForwardSendMessages", NUM), NUM);
+        this.sendMessagesView.setTextAndIcon(LocaleController.getString("ForwardSendMessages", R.string.ForwardSendMessages), R.drawable.msg_send);
         if (this.forwardingMessagesParams.hasSenders) {
             this.actionItems.add(this.showSendersNameView);
             this.actionItems.add(this.hideSendersNameView);
@@ -843,39 +847,39 @@ public class ForwardingPreviewView extends FrameLayout {
             if (forwardingMessagesParams2.willSeeSenders) {
                 TLRPC$User tLRPC$User = this.currentUser;
                 if (tLRPC$User != null) {
-                    this.actionBar.setSubtitle(LocaleController.formatString("ForwardPreviewSendersNameVisible", NUM, ContactsController.formatName(tLRPC$User.first_name, tLRPC$User.last_name)));
+                    this.actionBar.setSubtitle(LocaleController.formatString("ForwardPreviewSendersNameVisible", R.string.ForwardPreviewSendersNameVisible, ContactsController.formatName(tLRPC$User.first_name, tLRPC$User.last_name)));
                 } else if (!ChatObject.isChannel(this.currentChat) || this.currentChat.megagroup) {
-                    this.actionBar.setSubtitle(LocaleController.getString("ForwardPreviewSendersNameVisibleGroup", NUM));
+                    this.actionBar.setSubtitle(LocaleController.getString("ForwardPreviewSendersNameVisibleGroup", R.string.ForwardPreviewSendersNameVisibleGroup));
                 } else {
-                    this.actionBar.setSubtitle(LocaleController.getString("ForwardPreviewSendersNameVisibleChannel", NUM));
+                    this.actionBar.setSubtitle(LocaleController.getString("ForwardPreviewSendersNameVisibleChannel", R.string.ForwardPreviewSendersNameVisibleChannel));
                 }
             } else {
                 TLRPC$User tLRPC$User2 = this.currentUser;
                 if (tLRPC$User2 != null) {
-                    this.actionBar.setSubtitle(LocaleController.formatString("ForwardPreviewSendersNameVisible", NUM, ContactsController.formatName(tLRPC$User2.first_name, tLRPC$User2.last_name)));
+                    this.actionBar.setSubtitle(LocaleController.formatString("ForwardPreviewSendersNameVisible", R.string.ForwardPreviewSendersNameVisible, ContactsController.formatName(tLRPC$User2.first_name, tLRPC$User2.last_name)));
                 } else if (!ChatObject.isChannel(this.currentChat) || this.currentChat.megagroup) {
-                    this.actionBar.setSubtitle(LocaleController.getString("ForwardPreviewSendersNameHiddenGroup", NUM));
+                    this.actionBar.setSubtitle(LocaleController.getString("ForwardPreviewSendersNameHiddenGroup", R.string.ForwardPreviewSendersNameHiddenGroup));
                 } else {
-                    this.actionBar.setSubtitle(LocaleController.getString("ForwardPreviewSendersNameHiddenChannel", NUM));
+                    this.actionBar.setSubtitle(LocaleController.getString("ForwardPreviewSendersNameHiddenChannel", R.string.ForwardPreviewSendersNameHiddenChannel));
                 }
             }
         } else if (!forwardingMessagesParams2.hideForwardSendersName) {
             TLRPC$User tLRPC$User3 = this.currentUser;
             if (tLRPC$User3 != null) {
-                this.actionBar.setSubtitle(LocaleController.formatString("ForwardPreviewSendersNameVisible", NUM, ContactsController.formatName(tLRPC$User3.first_name, tLRPC$User3.last_name)));
+                this.actionBar.setSubtitle(LocaleController.formatString("ForwardPreviewSendersNameVisible", R.string.ForwardPreviewSendersNameVisible, ContactsController.formatName(tLRPC$User3.first_name, tLRPC$User3.last_name)));
             } else if (!ChatObject.isChannel(this.currentChat) || this.currentChat.megagroup) {
-                this.actionBar.setSubtitle(LocaleController.getString("ForwardPreviewSendersNameVisibleGroup", NUM));
+                this.actionBar.setSubtitle(LocaleController.getString("ForwardPreviewSendersNameVisibleGroup", R.string.ForwardPreviewSendersNameVisibleGroup));
             } else {
-                this.actionBar.setSubtitle(LocaleController.getString("ForwardPreviewSendersNameVisibleChannel", NUM));
+                this.actionBar.setSubtitle(LocaleController.getString("ForwardPreviewSendersNameVisibleChannel", R.string.ForwardPreviewSendersNameVisibleChannel));
             }
         } else {
             TLRPC$User tLRPC$User4 = this.currentUser;
             if (tLRPC$User4 != null) {
-                this.actionBar.setSubtitle(LocaleController.formatString("ForwardPreviewSendersNameHidden", NUM, ContactsController.formatName(tLRPC$User4.first_name, tLRPC$User4.last_name)));
+                this.actionBar.setSubtitle(LocaleController.formatString("ForwardPreviewSendersNameHidden", R.string.ForwardPreviewSendersNameHidden, ContactsController.formatName(tLRPC$User4.first_name, tLRPC$User4.last_name)));
             } else if (!ChatObject.isChannel(this.currentChat) || this.currentChat.megagroup) {
-                this.actionBar.setSubtitle(LocaleController.getString("ForwardPreviewSendersNameHiddenGroup", NUM));
+                this.actionBar.setSubtitle(LocaleController.getString("ForwardPreviewSendersNameHiddenGroup", R.string.ForwardPreviewSendersNameHiddenGroup));
             } else {
-                this.actionBar.setSubtitle(LocaleController.getString("ForwardPreviewSendersNameHiddenChannel", NUM));
+                this.actionBar.setSubtitle(LocaleController.getString("ForwardPreviewSendersNameHiddenChannel", R.string.ForwardPreviewSendersNameHiddenChannel));
             }
         }
     }

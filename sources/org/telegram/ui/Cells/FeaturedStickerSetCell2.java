@@ -13,6 +13,7 @@ import android.widget.TextView;
 import java.util.List;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC$StickerSetCovered;
 import org.telegram.ui.ActionBar.Theme;
@@ -82,7 +83,7 @@ public class FeaturedStickerSetCell2 extends FrameLayout {
         addView(backupImageView, LayoutHelper.createFrame(48, 48.0f, (!z3 ? 3 : i) | 48, z3 ? 0.0f : 12.0f, 8.0f, z3 ? 12.0f : 0.0f, 0.0f));
         ProgressButton progressButton = new ProgressButton(context);
         this.addButton = progressButton;
-        progressButton.setText(LocaleController.getString("Add", NUM));
+        progressButton.setText(LocaleController.getString("Add", R.string.Add));
         progressButton.setTextColor(Theme.getColor("featuredStickers_buttonText"));
         addView(progressButton, LayoutHelper.createFrameRelatively(-2.0f, 28.0f, 8388661, 0.0f, 18.0f, 14.0f, 0.0f));
         TextView textView4 = new TextView(context);
@@ -91,12 +92,12 @@ public class FeaturedStickerSetCell2 extends FrameLayout {
         textView4.setTextColor(Theme.getColor("featuredStickers_removeButtonText"));
         textView4.setTextSize(1, 14.0f);
         textView4.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        textView4.setText(LocaleController.getString("StickersRemove", NUM));
+        textView4.setText(LocaleController.getString("StickersRemove", R.string.StickersRemove));
         addView(textView4, LayoutHelper.createFrameRelatively(-2.0f, 28.0f, 8388661, 0.0f, 16.0f, 14.0f, 0.0f));
         PremiumButtonView premiumButtonView = new PremiumButtonView(context, AndroidUtilities.dp(4.0f), false);
         this.unlockButton = premiumButtonView;
-        premiumButtonView.setIcon(NUM);
-        premiumButtonView.setButton(LocaleController.getString("Unlock", NUM), new FeaturedStickerSetCell2$$ExternalSyntheticLambda0(this));
+        premiumButtonView.setIcon(R.raw.unlock_icon);
+        premiumButtonView.setButton(LocaleController.getString("Unlock", R.string.Unlock), new FeaturedStickerSetCell2$$ExternalSyntheticLambda0(this));
         premiumButtonView.setVisibility(8);
         try {
             ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) premiumButtonView.getIconView().getLayoutParams();

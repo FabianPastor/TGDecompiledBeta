@@ -20,6 +20,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.CheckBox2;
@@ -161,7 +162,7 @@ public class PollEditTextCell extends FrameLayout {
             this.moveImageView = imageView;
             imageView.setFocusable(false);
             this.moveImageView.setScaleType(ImageView.ScaleType.CENTER);
-            this.moveImageView.setImageResource(NUM);
+            this.moveImageView.setImageResource(R.drawable.poll_reorder);
             this.moveImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayIcon"), PorterDuff.Mode.MULTIPLY));
             addView(this.moveImageView, LayoutHelper.createFrame(48, 48.0f, (LocaleController.isRTL ? 5 : 3) | 48, 6.0f, 2.0f, 6.0f, 0.0f));
             ImageView imageView2 = new ImageView(context2);
@@ -169,10 +170,10 @@ public class PollEditTextCell extends FrameLayout {
             imageView2.setFocusable(false);
             this.deleteImageView.setScaleType(ImageView.ScaleType.CENTER);
             this.deleteImageView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("stickers_menuSelector")));
-            this.deleteImageView.setImageResource(NUM);
+            this.deleteImageView.setImageResource(R.drawable.poll_remove);
             this.deleteImageView.setOnClickListener(onClickListener2);
             this.deleteImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayIcon"), PorterDuff.Mode.MULTIPLY));
-            this.deleteImageView.setContentDescription(LocaleController.getString("Delete", NUM));
+            this.deleteImageView.setContentDescription(LocaleController.getString("Delete", R.string.Delete));
             ImageView imageView3 = this.deleteImageView;
             boolean z3 = LocaleController.isRTL;
             addView(imageView3, LayoutHelper.createFrame(48, 50.0f, (z3 ? 3 : 5) | 48, z3 ? 3.0f : 0.0f, 0.0f, z3 ? 0.0f : 3.0f, 0.0f));
@@ -186,7 +187,7 @@ public class PollEditTextCell extends FrameLayout {
             CheckBox2 checkBox2 = new CheckBox2(context2, 21);
             this.checkBox = checkBox2;
             checkBox2.setColor((String) null, "windowBackgroundWhiteGrayIcon", "checkboxCheck");
-            this.checkBox.setContentDescription(LocaleController.getString("AccDescrQuizCorrectAnswer", NUM));
+            this.checkBox.setContentDescription(LocaleController.getString("AccDescrQuizCorrectAnswer", R.string.AccDescrQuizCorrectAnswer));
             this.checkBox.setDrawUnchecked(true);
             this.checkBox.setChecked(true, false);
             this.checkBox.setAlpha(0.0f);

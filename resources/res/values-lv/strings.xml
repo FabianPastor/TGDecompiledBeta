@@ -21,12 +21,6 @@
     <string name="fcm_fallback_notification_channel_label">Dažādi</string>
     <string name="google_assistant_verification_channel_name">Asistenta verifikators</string>
     <string name="google_assistant_verification_notification_title">Google asistents sūta ziņojumu</string>
-    <string name="hms_apk_not_installed_hints">Dažas lietotnes %1$s funkcijas var nedarboties pareizi bez pakalpojumu komplekta HMS Core, kas jūsu ierīcē nav instalēts.</string>
-    <string name="hms_bindfaildlg_message">%1$s nevar lietot HMS Core. Aktivizējiet lietotni Optimizer (Tālruņa pārvaldnieks) vai atveriet sadaļu Iestatījumi, iespējojiet visas atļaujas saistībā ar %2$s (tostarp automātisko palaišanu un sekundāro palaišanu) un mēģiniet vēlreiz.</string>
-    <string name="hms_confirm">Labi</string>
-    <string name="hms_is_spoof">Šķiet, ka jūsu ierīcē ir instalēta neoficiāla HMS Core versija (%1$s). Lūdzu, atinstalējiet HMS Core lietotnē Iestatījumi un pēc tam atgriezieties šajā lietotnē, lai instalētu oficiālo versiju.</string>
-    <string name="hms_push_channel">Noklusējums</string>
-    <string name="hms_spoof_hints">Piezīme</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Iegādāties, izmantojot Google</string>
 </resources>

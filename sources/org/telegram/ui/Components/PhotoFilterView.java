@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.PhotoEditRadioCell;
 import org.telegram.ui.Cells.PhotoEditToolCell;
@@ -251,8 +252,8 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    /* JADX WARNING: Removed duplicated region for block: B:39:0x04d5  */
-    /* JADX WARNING: Removed duplicated region for block: B:40:0x04d7  */
+    /* JADX WARNING: Removed duplicated region for block: B:39:0x04cc  */
+    /* JADX WARNING: Removed duplicated region for block: B:40:0x04ce  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public PhotoFilterView(android.content.Context r24, org.telegram.ui.Components.VideoEditTextureView r25, android.graphics.Bitmap r26, int r27, org.telegram.messenger.MediaController.SavedFilterState r28, org.telegram.ui.Components.PaintingOverlay r29, int r30, boolean r31, org.telegram.ui.ActionBar.Theme.ResourcesProvider r32) {
         /*
@@ -482,7 +483,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             int r9 = org.telegram.messenger.AndroidUtilities.dp(r15)
             r10.setPadding(r5, r6, r9, r6)
             android.widget.TextView r5 = r0.cancelTextView
-            r9 = 2131624838(0x7f0e0386, float:1.8876867E38)
+            int r9 = org.telegram.messenger.R.string.Cancel
             java.lang.String r10 = "Cancel"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             java.lang.String r9 = r9.toUpperCase()
@@ -513,7 +514,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             int r12 = org.telegram.messenger.AndroidUtilities.dp(r15)
             r5.setPadding(r11, r6, r12, r6)
             android.widget.TextView r5 = r0.doneTextView
-            r11 = 2131625547(0x7f0e064b, float:1.8878305E38)
+            int r11 = org.telegram.messenger.R.string.Done
             java.lang.String r12 = "Done"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
             java.lang.String r11 = r11.toUpperCase()
@@ -535,7 +536,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             android.widget.ImageView$ScaleType r9 = android.widget.ImageView.ScaleType.CENTER
             r4.setScaleType(r9)
             android.widget.ImageView r4 = r0.tuneItem
-            r9 = 2131165858(0x7var_a2, float:1.7945945E38)
+            int r9 = org.telegram.messenger.R.drawable.msg_photo_settings
             r4.setImageResource(r9)
             android.widget.ImageView r4 = r0.tuneItem
             android.graphics.PorterDuffColorFilter r9 = new android.graphics.PorterDuffColorFilter
@@ -563,7 +564,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             android.widget.ImageView$ScaleType r12 = android.widget.ImageView.ScaleType.CENTER
             r4.setScaleType(r12)
             android.widget.ImageView r4 = r0.blurItem
-            r12 = 2131165847(0x7var_, float:1.7945923E38)
+            int r12 = org.telegram.messenger.R.drawable.msg_photo_blur
             r4.setImageResource(r12)
             android.widget.ImageView r4 = r0.blurItem
             android.graphics.drawable.Drawable r12 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r9)
@@ -576,18 +577,18 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             org.telegram.ui.Components.PhotoFilterView$$ExternalSyntheticLambda3 r12 = new org.telegram.ui.Components.PhotoFilterView$$ExternalSyntheticLambda3
             r12.<init>(r0)
             r4.setOnClickListener(r12)
-            if (r2 == 0) goto L_0x02e3
+            if (r2 == 0) goto L_0x02df
             android.widget.ImageView r2 = r0.blurItem
             r4 = 8
             r2.setVisibility(r4)
-        L_0x02e3:
+        L_0x02df:
             android.widget.ImageView r2 = new android.widget.ImageView
             r2.<init>(r1)
             r0.curveItem = r2
             android.widget.ImageView$ScaleType r4 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r4)
             android.widget.ImageView r2 = r0.curveItem
-            r4 = 2131165854(0x7var_e, float:1.7945937E38)
+            int r4 = org.telegram.messenger.R.drawable.msg_photo_curve
             r2.setImageResource(r4)
             android.widget.ImageView r2 = r0.curveItem
             android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r9)
@@ -645,9 +646,9 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r10, (int) r10, (int) r8)
             r3.addView(r2, r4)
             r3 = 0
-        L_0x0381:
+        L_0x037c:
             r4 = 4
-            if (r3 >= r4) goto L_0x04fb
+            if (r3 >= r4) goto L_0x04f2
             android.widget.FrameLayout r4 = new android.widget.FrameLayout
             r4.<init>(r1)
             java.lang.Integer r5 = java.lang.Integer.valueOf(r3)
@@ -673,8 +674,8 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             r5.setTextSize(r8, r9)
             r9 = 16
             r5.setGravity(r9)
-            if (r3 != 0) goto L_0x03fe
-            r9 = 2131625317(0x7f0e0565, float:1.8877839E38)
+            if (r3 != 0) goto L_0x03f8
+            int r9 = org.telegram.messenger.R.string.CurvesAll
             java.lang.String r10 = "CurvesAll"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             java.lang.StringBuilder r10 = new java.lang.StringBuilder
@@ -691,12 +692,12 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             org.telegram.ui.Components.RadioButton[] r9 = r0.curveRadioButton
             r9 = r9[r3]
             r9.setColor(r7, r7)
-        L_0x03fb:
+        L_0x03f5:
             r9 = 2
-            goto L_0x04b0
-        L_0x03fe:
-            if (r3 != r8) goto L_0x0439
-            r9 = 2131625320(0x7f0e0568, float:1.8877845E38)
+            goto L_0x04a7
+        L_0x03f8:
+            if (r3 != r8) goto L_0x0432
+            int r9 = org.telegram.messenger.R.string.CurvesRed
             java.lang.String r10 = "CurvesRed"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             java.lang.StringBuilder r10 = new java.lang.StringBuilder
@@ -714,11 +715,11 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             org.telegram.ui.Components.RadioButton[] r10 = r0.curveRadioButton
             r10 = r10[r3]
             r10.setColor(r9, r9)
-            goto L_0x03fb
-        L_0x0439:
+            goto L_0x03f5
+        L_0x0432:
             r9 = 2
-            if (r3 != r9) goto L_0x0475
-            r10 = 2131625319(0x7f0e0567, float:1.8877843E38)
+            if (r3 != r9) goto L_0x046d
+            int r10 = org.telegram.messenger.R.string.CurvesGreen
             java.lang.String r11 = "CurvesGreen"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             java.lang.StringBuilder r11 = new java.lang.StringBuilder
@@ -736,11 +737,11 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             org.telegram.ui.Components.RadioButton[] r11 = r0.curveRadioButton
             r11 = r11[r3]
             r11.setColor(r10, r10)
-            goto L_0x04b0
-        L_0x0475:
+            goto L_0x04a7
+        L_0x046d:
             r10 = 3
-            if (r3 != r10) goto L_0x04b0
-            r10 = 2131625318(0x7f0e0566, float:1.887784E38)
+            if (r3 != r10) goto L_0x04a7
+            int r10 = org.telegram.messenger.R.string.CurvesBlue
             java.lang.String r11 = "CurvesBlue"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             java.lang.StringBuilder r11 = new java.lang.StringBuilder
@@ -758,7 +759,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             org.telegram.ui.Components.RadioButton[] r11 = r0.curveRadioButton
             r11 = r11[r3]
             r11.setColor(r10, r10)
-        L_0x04b0:
+        L_0x04a7:
             r10 = -2
             r11 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
             r12 = 49
@@ -777,12 +778,12 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             r4.addView(r5, r10)
             r5 = -2
             r10 = -2
-            if (r3 != 0) goto L_0x04d7
+            if (r3 != 0) goto L_0x04ce
             r11 = 0
-            goto L_0x04d9
-        L_0x04d7:
+            goto L_0x04d0
+        L_0x04ce:
             r11 = 1106247680(0x41var_, float:30.0)
-        L_0x04d9:
+        L_0x04d0:
             r12 = 0
             r13 = 0
             r14 = 0
@@ -798,8 +799,8 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             r5.<init>(r0)
             r4.setOnClickListener(r5)
             int r3 = r3 + 1
-            goto L_0x0381
-        L_0x04fb:
+            goto L_0x037c
+        L_0x04f2:
             android.widget.FrameLayout r2 = new android.widget.FrameLayout
             r2.<init>(r1)
             r0.blurLayout = r2
@@ -835,7 +836,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             android.widget.TextView r2 = r0.blurOffButton
             r2.setGravity(r8)
             android.widget.TextView r2 = r0.blurOffButton
-            r5 = 2131624718(0x7f0e030e, float:1.8876624E38)
+            int r5 = org.telegram.messenger.R.string.BlurOff
             java.lang.String r6 = "BlurOff"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r2.setText(r5)
@@ -859,7 +860,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             android.widget.TextView r2 = r0.blurRadialButton
             r2.setGravity(r8)
             android.widget.TextView r2 = r0.blurRadialButton
-            r5 = 2131624719(0x7f0e030f, float:1.8876626E38)
+            int r5 = org.telegram.messenger.R.string.BlurRadial
             java.lang.String r6 = "BlurRadial"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r2.setText(r5)
@@ -894,7 +895,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             android.widget.TextView r1 = r0.blurLinearButton
             r1.setGravity(r8)
             android.widget.TextView r1 = r0.blurLinearButton
-            r2 = 2131624717(0x7f0e030d, float:1.8876622E38)
+            int r2 = org.telegram.messenger.R.string.BlurLinear
             java.lang.String r3 = "BlurLinear"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setText(r2)
@@ -923,23 +924,23 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             r23.updateSelectedBlurType()
             int r1 = android.os.Build.VERSION.SDK_INT
             r2 = 21
-            if (r1 < r2) goto L_0x063c
+            if (r1 < r2) goto L_0x0630
             boolean r1 = r0.inBubbleMode
-            if (r1 != 0) goto L_0x063c
+            if (r1 != 0) goto L_0x0630
             boolean r1 = r0.ownsTextureView
-            if (r1 == 0) goto L_0x0630
+            if (r1 == 0) goto L_0x0624
             android.view.TextureView r1 = r0.textureView
             android.view.ViewGroup$LayoutParams r1 = r1.getLayoutParams()
             android.widget.FrameLayout$LayoutParams r1 = (android.widget.FrameLayout.LayoutParams) r1
             int r2 = org.telegram.messenger.AndroidUtilities.statusBarHeight
             r1.topMargin = r2
-        L_0x0630:
+        L_0x0624:
             org.telegram.ui.Components.PhotoFilterCurvesControl r1 = r0.curvesControl
             android.view.ViewGroup$LayoutParams r1 = r1.getLayoutParams()
             android.widget.FrameLayout$LayoutParams r1 = (android.widget.FrameLayout.LayoutParams) r1
             int r2 = org.telegram.messenger.AndroidUtilities.statusBarHeight
             r1.topMargin = r2
-        L_0x063c:
+        L_0x0630:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PhotoFilterView.<init>(android.content.Context, org.telegram.ui.Components.VideoEditTextureView, android.graphics.Bitmap, int, org.telegram.messenger.MediaController$SavedFilterState, org.telegram.ui.Components.PaintingOverlay, int, boolean, org.telegram.ui.ActionBar.Theme$ResourcesProvider):void");
@@ -1068,29 +1069,29 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
     private void updateSelectedBlurType() {
         int i = this.blurType;
         if (i == 0) {
-            Drawable mutate = this.blurOffButton.getContext().getResources().getDrawable(NUM).mutate();
+            Drawable mutate = this.blurOffButton.getContext().getResources().getDrawable(R.drawable.msg_blur_off).mutate();
             mutate.setColorFilter(new PorterDuffColorFilter(getThemedColor("dialogFloatingButton"), PorterDuff.Mode.MULTIPLY));
             this.blurOffButton.setCompoundDrawablesWithIntrinsicBounds((Drawable) null, mutate, (Drawable) null, (Drawable) null);
             this.blurOffButton.setTextColor(getThemedColor("dialogFloatingButton"));
-            this.blurRadialButton.setCompoundDrawablesWithIntrinsicBounds(0, NUM, 0, 0);
+            this.blurRadialButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.msg_blur_radial, 0, 0);
             this.blurRadialButton.setTextColor(-1);
-            this.blurLinearButton.setCompoundDrawablesWithIntrinsicBounds(0, NUM, 0, 0);
+            this.blurLinearButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.msg_blur_linear, 0, 0);
             this.blurLinearButton.setTextColor(-1);
         } else if (i == 1) {
-            this.blurOffButton.setCompoundDrawablesWithIntrinsicBounds(0, NUM, 0, 0);
+            this.blurOffButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.msg_blur_off, 0, 0);
             this.blurOffButton.setTextColor(-1);
-            Drawable mutate2 = this.blurOffButton.getContext().getResources().getDrawable(NUM).mutate();
+            Drawable mutate2 = this.blurOffButton.getContext().getResources().getDrawable(R.drawable.msg_blur_radial).mutate();
             mutate2.setColorFilter(new PorterDuffColorFilter(getThemedColor("dialogFloatingButton"), PorterDuff.Mode.MULTIPLY));
             this.blurRadialButton.setCompoundDrawablesWithIntrinsicBounds((Drawable) null, mutate2, (Drawable) null, (Drawable) null);
             this.blurRadialButton.setTextColor(getThemedColor("dialogFloatingButton"));
-            this.blurLinearButton.setCompoundDrawablesWithIntrinsicBounds(0, NUM, 0, 0);
+            this.blurLinearButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.msg_blur_linear, 0, 0);
             this.blurLinearButton.setTextColor(-1);
         } else if (i == 2) {
-            this.blurOffButton.setCompoundDrawablesWithIntrinsicBounds(0, NUM, 0, 0);
+            this.blurOffButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.msg_blur_off, 0, 0);
             this.blurOffButton.setTextColor(-1);
-            this.blurRadialButton.setCompoundDrawablesWithIntrinsicBounds(0, NUM, 0, 0);
+            this.blurRadialButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.msg_blur_radial, 0, 0);
             this.blurRadialButton.setTextColor(-1);
-            Drawable mutate3 = this.blurOffButton.getContext().getResources().getDrawable(NUM).mutate();
+            Drawable mutate3 = this.blurOffButton.getContext().getResources().getDrawable(R.drawable.msg_blur_linear).mutate();
             mutate3.setColorFilter(new PorterDuffColorFilter(getThemedColor("dialogFloatingButton"), PorterDuff.Mode.MULTIPLY));
             this.blurLinearButton.setCompoundDrawablesWithIntrinsicBounds((Drawable) null, mutate3, (Drawable) null, (Drawable) null);
             this.blurLinearButton.setTextColor(getThemedColor("dialogFloatingButton"));
@@ -1546,37 +1547,37 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
                 PhotoEditToolCell photoEditToolCell = (PhotoEditToolCell) viewHolder.itemView;
                 photoEditToolCell.setTag(Integer.valueOf(i));
                 if (i == PhotoFilterView.this.enhanceTool) {
-                    photoEditToolCell.setIconAndTextAndValue(LocaleController.getString("Enhance", NUM), PhotoFilterView.this.enhanceValue, 0, 100);
+                    photoEditToolCell.setIconAndTextAndValue(LocaleController.getString("Enhance", R.string.Enhance), PhotoFilterView.this.enhanceValue, 0, 100);
                 } else if (i == PhotoFilterView.this.highlightsTool) {
-                    photoEditToolCell.setIconAndTextAndValue(LocaleController.getString("Highlights", NUM), PhotoFilterView.this.highlightsValue, -100, 100);
+                    photoEditToolCell.setIconAndTextAndValue(LocaleController.getString("Highlights", R.string.Highlights), PhotoFilterView.this.highlightsValue, -100, 100);
                 } else if (i == PhotoFilterView.this.contrastTool) {
-                    photoEditToolCell.setIconAndTextAndValue(LocaleController.getString("Contrast", NUM), PhotoFilterView.this.contrastValue, -100, 100);
+                    photoEditToolCell.setIconAndTextAndValue(LocaleController.getString("Contrast", R.string.Contrast), PhotoFilterView.this.contrastValue, -100, 100);
                 } else if (i == PhotoFilterView.this.exposureTool) {
-                    photoEditToolCell.setIconAndTextAndValue(LocaleController.getString("Exposure", NUM), PhotoFilterView.this.exposureValue, -100, 100);
+                    photoEditToolCell.setIconAndTextAndValue(LocaleController.getString("Exposure", R.string.Exposure), PhotoFilterView.this.exposureValue, -100, 100);
                 } else if (i == PhotoFilterView.this.warmthTool) {
-                    photoEditToolCell.setIconAndTextAndValue(LocaleController.getString("Warmth", NUM), PhotoFilterView.this.warmthValue, -100, 100);
+                    photoEditToolCell.setIconAndTextAndValue(LocaleController.getString("Warmth", R.string.Warmth), PhotoFilterView.this.warmthValue, -100, 100);
                 } else if (i == PhotoFilterView.this.saturationTool) {
-                    photoEditToolCell.setIconAndTextAndValue(LocaleController.getString("Saturation", NUM), PhotoFilterView.this.saturationValue, -100, 100);
+                    photoEditToolCell.setIconAndTextAndValue(LocaleController.getString("Saturation", R.string.Saturation), PhotoFilterView.this.saturationValue, -100, 100);
                 } else if (i == PhotoFilterView.this.vignetteTool) {
-                    photoEditToolCell.setIconAndTextAndValue(LocaleController.getString("Vignette", NUM), PhotoFilterView.this.vignetteValue, 0, 100);
+                    photoEditToolCell.setIconAndTextAndValue(LocaleController.getString("Vignette", R.string.Vignette), PhotoFilterView.this.vignetteValue, 0, 100);
                 } else if (i == PhotoFilterView.this.shadowsTool) {
-                    photoEditToolCell.setIconAndTextAndValue(LocaleController.getString("Shadows", NUM), PhotoFilterView.this.shadowsValue, -100, 100);
+                    photoEditToolCell.setIconAndTextAndValue(LocaleController.getString("Shadows", R.string.Shadows), PhotoFilterView.this.shadowsValue, -100, 100);
                 } else if (i == PhotoFilterView.this.grainTool) {
-                    photoEditToolCell.setIconAndTextAndValue(LocaleController.getString("Grain", NUM), PhotoFilterView.this.grainValue, 0, 100);
+                    photoEditToolCell.setIconAndTextAndValue(LocaleController.getString("Grain", R.string.Grain), PhotoFilterView.this.grainValue, 0, 100);
                 } else if (i == PhotoFilterView.this.sharpenTool) {
-                    photoEditToolCell.setIconAndTextAndValue(LocaleController.getString("Sharpen", NUM), PhotoFilterView.this.sharpenValue, 0, 100);
+                    photoEditToolCell.setIconAndTextAndValue(LocaleController.getString("Sharpen", R.string.Sharpen), PhotoFilterView.this.sharpenValue, 0, 100);
                 } else if (i == PhotoFilterView.this.fadeTool) {
-                    photoEditToolCell.setIconAndTextAndValue(LocaleController.getString("Fade", NUM), PhotoFilterView.this.fadeValue, 0, 100);
+                    photoEditToolCell.setIconAndTextAndValue(LocaleController.getString("Fade", R.string.Fade), PhotoFilterView.this.fadeValue, 0, 100);
                 } else if (i == PhotoFilterView.this.softenSkinTool) {
-                    photoEditToolCell.setIconAndTextAndValue(LocaleController.getString("SoftenSkin", NUM), PhotoFilterView.this.softenSkinValue, 0, 100);
+                    photoEditToolCell.setIconAndTextAndValue(LocaleController.getString("SoftenSkin", R.string.SoftenSkin), PhotoFilterView.this.softenSkinValue, 0, 100);
                 }
             } else if (itemViewType == 1) {
                 PhotoEditRadioCell photoEditRadioCell = (PhotoEditRadioCell) viewHolder.itemView;
                 photoEditRadioCell.setTag(Integer.valueOf(i));
                 if (i == PhotoFilterView.this.tintShadowsTool) {
-                    photoEditRadioCell.setIconAndTextAndValue(LocaleController.getString("TintShadows", NUM), 0, PhotoFilterView.this.tintShadowsColor);
+                    photoEditRadioCell.setIconAndTextAndValue(LocaleController.getString("TintShadows", R.string.TintShadows), 0, PhotoFilterView.this.tintShadowsColor);
                 } else if (i == PhotoFilterView.this.tintHighlightsTool) {
-                    photoEditRadioCell.setIconAndTextAndValue(LocaleController.getString("TintHighlights", NUM), 0, PhotoFilterView.this.tintHighlightsColor);
+                    photoEditRadioCell.setIconAndTextAndValue(LocaleController.getString("TintHighlights", R.string.TintHighlights), 0, PhotoFilterView.this.tintHighlightsColor);
                 }
             }
         }

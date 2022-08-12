@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DownloadController;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.ui.ActionBar.ActionBar;
@@ -95,8 +96,8 @@ public class LogoutActivity extends BaseFragment {
     }
 
     public View createView(Context context) {
-        this.actionBar.setBackButtonImage(NUM);
-        this.actionBar.setTitle(LocaleController.getString("LogOutTitle", NUM));
+        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        this.actionBar.setTitle(LocaleController.getString("LogOutTitle", R.string.LogOutTitle));
         if (AndroidUtilities.isTablet()) {
             this.actionBar.setOccupyStatusBar(false);
         }
@@ -155,10 +156,11 @@ public class LogoutActivity extends BaseFragment {
 
     public static AlertDialog makeLogOutDialog(Context context, int i) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setMessage(LocaleController.getString("AreYouSureLogout", NUM));
-        builder.setTitle(LocaleController.getString("LogOut", NUM));
-        builder.setPositiveButton(LocaleController.getString("LogOut", NUM), new LogoutActivity$$ExternalSyntheticLambda0(i));
-        builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
+        builder.setMessage(LocaleController.getString("AreYouSureLogout", R.string.AreYouSureLogout));
+        int i2 = R.string.LogOut;
+        builder.setTitle(LocaleController.getString("LogOut", i2));
+        builder.setPositiveButton(LocaleController.getString("LogOut", i2), new LogoutActivity$$ExternalSyntheticLambda0(i));
+        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), (DialogInterface.OnClickListener) null);
         AlertDialog create = builder.create();
         TextView textView = (TextView) create.getButton(-1);
         if (textView != null) {
@@ -196,31 +198,31 @@ public class LogoutActivity extends BaseFragment {
             if (itemViewType == 0) {
                 HeaderCell headerCell = (HeaderCell) viewHolder.itemView;
                 if (i == LogoutActivity.this.alternativeHeaderRow) {
-                    headerCell.setText(LocaleController.getString("AlternativeOptions", NUM));
+                    headerCell.setText(LocaleController.getString("AlternativeOptions", R.string.AlternativeOptions));
                 }
             } else if (itemViewType == 1) {
                 TextDetailSettingsCell textDetailSettingsCell = (TextDetailSettingsCell) viewHolder.itemView;
                 if (i == LogoutActivity.this.addAccountRow) {
-                    textDetailSettingsCell.setTextAndValueAndIcon(LocaleController.getString("AddAnotherAccount", NUM), LocaleController.getString("AddAnotherAccountInfo", NUM), NUM, true);
+                    textDetailSettingsCell.setTextAndValueAndIcon(LocaleController.getString("AddAnotherAccount", R.string.AddAnotherAccount), LocaleController.getString("AddAnotherAccountInfo", R.string.AddAnotherAccountInfo), R.drawable.msg_contact_add, true);
                 } else if (i == LogoutActivity.this.passcodeRow) {
-                    textDetailSettingsCell.setTextAndValueAndIcon(LocaleController.getString("SetPasscode", NUM), LocaleController.getString("SetPasscodeInfo", NUM), NUM, true);
+                    textDetailSettingsCell.setTextAndValueAndIcon(LocaleController.getString("SetPasscode", R.string.SetPasscode), LocaleController.getString("SetPasscodeInfo", R.string.SetPasscodeInfo), R.drawable.msg_permissions, true);
                 } else if (i == LogoutActivity.this.cacheRow) {
-                    textDetailSettingsCell.setTextAndValueAndIcon(LocaleController.getString("ClearCache", NUM), LocaleController.getString("ClearCacheInfo", NUM), NUM, true);
+                    textDetailSettingsCell.setTextAndValueAndIcon(LocaleController.getString("ClearCache", R.string.ClearCache), LocaleController.getString("ClearCacheInfo", R.string.ClearCacheInfo), R.drawable.msg_clearcache, true);
                 } else if (i == LogoutActivity.this.phoneRow) {
-                    textDetailSettingsCell.setTextAndValueAndIcon(LocaleController.getString("ChangePhoneNumber", NUM), LocaleController.getString("ChangePhoneNumberInfo", NUM), NUM, true);
+                    textDetailSettingsCell.setTextAndValueAndIcon(LocaleController.getString("ChangePhoneNumber", R.string.ChangePhoneNumber), LocaleController.getString("ChangePhoneNumberInfo", R.string.ChangePhoneNumberInfo), R.drawable.msg_newphone, true);
                 } else if (i == LogoutActivity.this.supportRow) {
-                    textDetailSettingsCell.setTextAndValueAndIcon(LocaleController.getString("ContactSupport", NUM), LocaleController.getString("ContactSupportInfo", NUM), NUM, false);
+                    textDetailSettingsCell.setTextAndValueAndIcon(LocaleController.getString("ContactSupport", R.string.ContactSupport), LocaleController.getString("ContactSupportInfo", R.string.ContactSupportInfo), R.drawable.msg_help, false);
                 }
             } else if (itemViewType == 3) {
                 TextSettingsCell textSettingsCell = (TextSettingsCell) viewHolder.itemView;
                 if (i == LogoutActivity.this.logoutRow) {
                     textSettingsCell.setTextColor(Theme.getColor("windowBackgroundWhiteRedText5"));
-                    textSettingsCell.setText(LocaleController.getString("LogOutTitle", NUM), false);
+                    textSettingsCell.setText(LocaleController.getString("LogOutTitle", R.string.LogOutTitle), false);
                 }
             } else if (itemViewType == 4) {
                 TextInfoPrivacyCell textInfoPrivacyCell = (TextInfoPrivacyCell) viewHolder.itemView;
                 if (i == LogoutActivity.this.logoutSectionRow) {
-                    textInfoPrivacyCell.setText(LocaleController.getString("LogOutInfo", NUM));
+                    textInfoPrivacyCell.setText(LocaleController.getString("LogOutInfo", R.string.LogOutInfo));
                 }
             }
         }
@@ -240,51 +242,51 @@ public class LogoutActivity extends BaseFragment {
             /*
                 r2 = this;
                 java.lang.String r3 = "windowBackgroundWhite"
-                if (r4 == 0) goto L_0x004c
+                if (r4 == 0) goto L_0x004b
                 r0 = 1
-                if (r4 == r0) goto L_0x003a
+                if (r4 == r0) goto L_0x0039
                 r0 = 2
-                if (r4 == r0) goto L_0x0032
+                if (r4 == r0) goto L_0x0031
                 r0 = 3
-                if (r4 == r0) goto L_0x0023
+                if (r4 == r0) goto L_0x0022
                 org.telegram.ui.Cells.TextInfoPrivacyCell r3 = new org.telegram.ui.Cells.TextInfoPrivacyCell
                 android.content.Context r4 = r2.mContext
                 r3.<init>(r4)
                 android.content.Context r4 = r2.mContext
-                r0 = 2131165435(0x7var_fb, float:1.7945087E38)
+                int r0 = org.telegram.messenger.R.drawable.greydivider
                 java.lang.String r1 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r4, (int) r0, (java.lang.String) r1)
                 r3.setBackgroundDrawable(r4)
-                goto L_0x005b
-            L_0x0023:
+                goto L_0x005a
+            L_0x0022:
                 org.telegram.ui.Cells.TextSettingsCell r4 = new org.telegram.ui.Cells.TextSettingsCell
                 android.content.Context r0 = r2.mContext
                 r4.<init>(r0)
                 int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
                 r4.setBackgroundColor(r3)
-                goto L_0x005a
-            L_0x0032:
+                goto L_0x0059
+            L_0x0031:
                 org.telegram.ui.Cells.ShadowSectionCell r3 = new org.telegram.ui.Cells.ShadowSectionCell
                 android.content.Context r4 = r2.mContext
                 r3.<init>(r4)
-                goto L_0x005b
-            L_0x003a:
+                goto L_0x005a
+            L_0x0039:
                 org.telegram.ui.Cells.TextDetailSettingsCell r4 = new org.telegram.ui.Cells.TextDetailSettingsCell
                 android.content.Context r1 = r2.mContext
                 r4.<init>(r1)
                 r4.setMultilineDetail(r0)
                 int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
                 r4.setBackgroundColor(r3)
-                goto L_0x005a
-            L_0x004c:
+                goto L_0x0059
+            L_0x004b:
                 org.telegram.ui.Cells.HeaderCell r4 = new org.telegram.ui.Cells.HeaderCell
                 android.content.Context r0 = r2.mContext
                 r4.<init>(r0)
                 int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
                 r4.setBackgroundColor(r3)
-            L_0x005a:
+            L_0x0059:
                 r3 = r4
-            L_0x005b:
+            L_0x005a:
                 androidx.recyclerview.widget.RecyclerView$LayoutParams r4 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
                 r0 = -1
                 r1 = -2

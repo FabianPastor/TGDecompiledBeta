@@ -20,6 +20,7 @@ import org.telegram.messenger.DocumentObject;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SvgHelper;
 import org.telegram.tgnet.TLRPC$TL_availableReaction;
 import org.telegram.tgnet.TLRPC$TL_reactionCount;
@@ -48,7 +49,7 @@ public class ReactionTabHolderView extends FrameLayout {
         this.overlaySelectorView = view;
         addView(view, LayoutHelper.createFrame(-1, -1.0f));
         this.iconView = new ImageView(context);
-        Drawable mutate = ContextCompat.getDrawable(context, NUM).mutate();
+        Drawable mutate = ContextCompat.getDrawable(context, R.drawable.msg_reactions_filled).mutate();
         this.drawable = mutate;
         this.iconView.setImageDrawable(mutate);
         addView(this.iconView, LayoutHelper.createFrameRelatively(24.0f, 24.0f, 8388627, 8.0f, 0.0f, 8.0f, 0.0f));

@@ -28,6 +28,7 @@ import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.R;
 import org.telegram.messenger.WebFile;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$Message;
@@ -204,7 +205,7 @@ public class PinchToZoomHelper {
             this.isHardwareVideo = true;
             MediaController.getInstance().setTextureView(this.overlayView.videoTextureView, this.overlayView.aspectRatioFrameLayout, this.overlayView.videoPlayerContainer, true);
             FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) this.overlayView.videoPlayerContainer.getLayoutParams();
-            this.overlayView.videoPlayerContainer.setTag(NUM, imageReceiver);
+            this.overlayView.videoPlayerContainer.setTag(R.id.parent_tag, imageReceiver);
             if (!(((float) layoutParams.width) == imageReceiver.getImageWidth() && ((float) layoutParams.height) == imageReceiver.getImageHeight())) {
                 this.overlayView.aspectRatioFrameLayout.setResizeMode(3);
                 layoutParams.width = (int) imageReceiver.getImageWidth();
@@ -393,7 +394,7 @@ public class PinchToZoomHelper {
                 frameLayout.setOutlineProvider(new ViewOutlineProvider(this, PinchToZoomHelper.this) {
                     @TargetApi(21)
                     public void getOutline(View view, Outline outline) {
-                        ImageReceiver imageReceiver = (ImageReceiver) view.getTag(NUM);
+                        ImageReceiver imageReceiver = (ImageReceiver) view.getTag(R.id.parent_tag);
                         if (imageReceiver != null) {
                             int[] roundRadius = imageReceiver.getRoundRadius();
                             int i = 0;
@@ -416,7 +417,7 @@ public class PinchToZoomHelper {
                     public void onSizeChanged(int i, int i2, int i3, int i4) {
                         super.onSizeChanged(i, i2, i3, i4);
                         ZoomOverlayView.this.aspectPath.reset();
-                        ImageReceiver imageReceiver = (ImageReceiver) getTag(NUM);
+                        ImageReceiver imageReceiver = (ImageReceiver) getTag(R.id.parent_tag);
                         if (imageReceiver != null) {
                             int[] roundRadius = imageReceiver.getRoundRadius();
                             int i5 = 0;

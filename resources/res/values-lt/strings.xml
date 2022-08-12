@@ -21,12 +21,6 @@
     <string name="fcm_fallback_notification_channel_label">Įvairūs</string>
     <string name="google_assistant_verification_channel_name">Padėjėjo patvirtinimo priemonė</string>
     <string name="google_assistant_verification_notification_title">„Google“ padėjėjas siunčia pranešimą</string>
-    <string name="hms_apk_not_installed_hints">Kai kurios „%1$s“ funkcijos gali tinkamai neveikti be „HMS Core“. kuri neįdiegta jūsų įrenginyje.</string>
-    <string name="hms_bindfaildlg_message">„%1$s“ negali naudoti „HMS Core“. Paleiskite Optimizatorių (Telefono tvarkytuvę) arba eikite į Nuostatas, įjunkite visus „%2$s“ leidimus (įskaitant automatinio paleidimo ir antrinio paleidimo), tada bandykite dar kartą.</string>
-    <string name="hms_confirm">Gerai</string>
-    <string name="hms_is_spoof">Panašu, kad jūsų įrenginyje įdiegta neoficiali „HMS Core“ („%1$s“) versija. Nuostatose išdiekite „HMS Core“ ir grįžkite į šią programėlę, kad galėtumėte įdiegti oficialiąją versiją.</string>
-    <string name="hms_push_channel">Numatytasis</string>
-    <string name="hms_spoof_hints">Pastaba</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Pirkti naudojant „Google“</string>
 </resources>

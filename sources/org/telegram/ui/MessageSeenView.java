@@ -24,6 +24,7 @@ import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.R;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Chat;
@@ -88,7 +89,7 @@ public class MessageSeenView extends FrameLayout {
         ImageView imageView = new ImageView(context);
         this.iconView = imageView;
         addView(imageView, LayoutHelper.createFrame(24, 24.0f, 19, 11.0f, 0.0f, 0.0f, 0.0f));
-        Drawable mutate = ContextCompat.getDrawable(context, this.isVoice ? NUM : NUM).mutate();
+        Drawable mutate = ContextCompat.getDrawable(context, this.isVoice ? R.drawable.msg_played : R.drawable.msg_seen).mutate();
         mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor("actionBarDefaultSubmenuItemIcon"), PorterDuff.Mode.MULTIPLY));
         this.iconView.setImageDrawable(mutate);
         this.avatarsImageView.setAlpha(0.0f);
@@ -242,7 +243,7 @@ public class MessageSeenView extends FrameLayout {
         if (this.peerIds.size() == 1 && this.users.get(0) != null) {
             this.titleView.setText(ContactsController.formatName(this.users.get(0).first_name, this.users.get(0).last_name));
         } else if (this.peerIds.size() == 0) {
-            this.titleView.setText(LocaleController.getString("NobodyViewed", NUM));
+            this.titleView.setText(LocaleController.getString("NobodyViewed", R.string.NobodyViewed));
         } else {
             this.titleView.setText(LocaleController.formatPluralString(this.isVoice ? "MessagePlayed" : "MessageSeen", this.peerIds.size(), new Object[0]));
         }
@@ -333,7 +334,7 @@ public class MessageSeenView extends FrameLayout {
 
         public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
             super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
-            accessibilityNodeInfo.setText(LocaleController.formatString("AccDescrPersonHasSeen", NUM, this.nameView.getText()));
+            accessibilityNodeInfo.setText(LocaleController.formatString("AccDescrPersonHasSeen", R.string.AccDescrPersonHasSeen, this.nameView.getText()));
         }
     }
 }

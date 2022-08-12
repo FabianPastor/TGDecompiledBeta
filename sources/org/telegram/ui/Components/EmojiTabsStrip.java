@@ -28,6 +28,7 @@ import java.util.Map;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.R;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$StickerSet;
 import org.telegram.ui.ActionBar.Theme;
@@ -35,9 +36,9 @@ import org.telegram.ui.Components.Premium.PremiumLockIconView;
 
 public class EmojiTabsStrip extends ScrollableHorizontalScrollView {
     /* access modifiers changed from: private */
-    public static int[] emojiTabsAnimatedDrawableIds = {NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM};
+    public static int[] emojiTabsAnimatedDrawableIds = {R.raw.msg_emoji_smiles, R.raw.msg_emoji_cat, R.raw.msg_emoji_food, R.raw.msg_emoji_activities, R.raw.msg_emoji_travel, R.raw.msg_emoji_objects, R.raw.msg_emoji_other, R.raw.msg_emoji_flags};
     /* access modifiers changed from: private */
-    public static int[] emojiTabsDrawableIds = {NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM};
+    public static int[] emojiTabsDrawableIds = {R.drawable.msg_emoji_smiles, R.drawable.msg_emoji_cat, R.drawable.msg_emoji_food, R.drawable.msg_emoji_activities, R.drawable.msg_emoji_travel, R.drawable.msg_emoji_objects, R.drawable.msg_emoji_other, R.drawable.msg_emoji_flags};
     private ValueAnimator appearAnimation;
     private int appearCount;
     /* access modifiers changed from: private */
@@ -49,7 +50,7 @@ public class EmojiTabsStrip extends ScrollableHorizontalScrollView {
     private boolean includeAnimated;
     private Runnable onSettingsOpenRunnable;
     private EmojiView parent;
-    private int recentDrawableId = NUM;
+    private int recentDrawableId = R.drawable.msg_emoji_recent;
     private boolean recentFirstChange = true;
     /* access modifiers changed from: private */
     public boolean recentIsShown = true;
@@ -65,7 +66,7 @@ public class EmojiTabsStrip extends ScrollableHorizontalScrollView {
     /* access modifiers changed from: private */
     public float selectT = 0.0f;
     private int selected = 0;
-    private int settingsDrawableId = NUM;
+    private int settingsDrawableId = R.drawable.smiles_tab_settings;
     /* access modifiers changed from: private */
     public EmojiTabButton settingsTab;
     /* access modifiers changed from: private */
@@ -921,10 +922,10 @@ public class EmojiTabsStrip extends ScrollableHorizontalScrollView {
                 }
                 updateLock(true);
                 if (bool.booleanValue()) {
-                    this.lockView.setImageResource(NUM);
+                    this.lockView.setImageResource(R.drawable.msg_mini_lockedemoji);
                     return;
                 }
-                Drawable mutate = getResources().getDrawable(NUM).mutate();
+                Drawable mutate = getResources().getDrawable(R.drawable.msg_mini_addemoji).mutate();
                 mutate.setColorFilter(new PorterDuffColorFilter(-1, PorterDuff.Mode.MULTIPLY));
                 this.lockView.setImageDrawable(mutate);
             }

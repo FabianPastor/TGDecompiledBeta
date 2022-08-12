@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.R;
 
 public class ScamDrawable extends Drawable {
     int alpha;
@@ -38,9 +39,9 @@ public class ScamDrawable extends Drawable {
         this.paint.setStyle(Paint.Style.STROKE);
         this.paint.setStrokeWidth((float) AndroidUtilities.dp(1.0f));
         if (i2 == 0) {
-            this.text = LocaleController.getString("ScamMessage", NUM);
+            this.text = LocaleController.getString("ScamMessage", R.string.ScamMessage);
         } else {
-            this.text = LocaleController.getString("FakeMessage", NUM);
+            this.text = LocaleController.getString("FakeMessage", R.string.FakeMessage);
         }
         this.textWidth = (int) Math.ceil((double) this.textPaint.measureText(this.text));
     }
@@ -48,9 +49,9 @@ public class ScamDrawable extends Drawable {
     public void checkText() {
         String str;
         if (this.currentType == 0) {
-            str = LocaleController.getString("ScamMessage", NUM);
+            str = LocaleController.getString("ScamMessage", R.string.ScamMessage);
         } else {
-            str = LocaleController.getString("FakeMessage", NUM);
+            str = LocaleController.getString("FakeMessage", R.string.FakeMessage);
         }
         if (!str.equals(this.text)) {
             this.text = str;

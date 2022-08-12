@@ -12,6 +12,7 @@ import android.widget.FrameLayout;
 import androidx.core.graphics.ColorUtils;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.ActionBarLayout;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -37,7 +38,7 @@ public class OverlayActionBarLayoutDialog extends Dialog implements ActionBarLay
     }
 
     public OverlayActionBarLayoutDialog(Context context, Theme.ResourcesProvider resourcesProvider2) {
-        super(context, NUM);
+        super(context, R.style.TransparentDialog);
         this.resourcesProvider = resourcesProvider2;
         AnonymousClass1 r9 = new ActionBarLayout(this, context) {
             /* access modifiers changed from: protected */
@@ -81,7 +82,7 @@ public class OverlayActionBarLayoutDialog extends Dialog implements ActionBarLay
         } else if (i >= 21) {
             window.addFlags(-NUM);
         }
-        window.setWindowAnimations(NUM);
+        window.setWindowAnimations(R.style.DialogNoAnimation);
         WindowManager.LayoutParams attributes = window.getAttributes();
         attributes.width = -1;
         attributes.gravity = 51;

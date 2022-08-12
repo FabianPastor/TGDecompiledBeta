@@ -33,6 +33,7 @@ import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
+import org.telegram.messenger.R;
 import org.telegram.messenger.utils.CopyUtilities;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.Theme;
@@ -159,7 +160,7 @@ public class EditTextCaption extends EditTextBoldCursor {
     public void makeSelectedUrl() {
         int i;
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), this.resourcesProvider);
-        builder.setTitle(LocaleController.getString("CreateLink", NUM));
+        builder.setTitle(LocaleController.getString("CreateLink", R.string.CreateLink));
         AnonymousClass2 r1 = new EditTextBoldCursor(this, getContext()) {
             /* access modifiers changed from: protected */
             public void onMeasure(int i, int i2) {
@@ -169,7 +170,7 @@ public class EditTextCaption extends EditTextBoldCursor {
         r1.setTextSize(1, 18.0f);
         r1.setText("http://");
         r1.setTextColor(getThemedColor("dialogTextBlack"));
-        r1.setHintText(LocaleController.getString("URL", NUM));
+        r1.setHintText(LocaleController.getString("URL", R.string.URL));
         r1.setHeaderHintColor(getThemedColor("windowBackgroundWhiteBlueHeader"));
         r1.setSingleLine(true);
         r1.setFocusable(true);
@@ -188,8 +189,8 @@ public class EditTextCaption extends EditTextBoldCursor {
             this.selectionEnd = -1;
             this.selectionStart = -1;
         }
-        builder.setPositiveButton(LocaleController.getString("OK", NUM), new EditTextCaption$$ExternalSyntheticLambda0(this, i2, i, r1));
-        builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
+        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new EditTextCaption$$ExternalSyntheticLambda0(this, i2, i, r1));
+        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), (DialogInterface.OnClickListener) null);
         builder.show().setOnShowListener(new EditTextCaption$$ExternalSyntheticLambda1(r1));
         ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) r1.getLayoutParams();
         if (marginLayoutParams != null) {
@@ -336,28 +337,28 @@ public class EditTextCaption extends EditTextBoldCursor {
 
     /* access modifiers changed from: private */
     public boolean performMenuAction(int i) {
-        if (i == NUM) {
+        if (i == R.id.menu_regular) {
             makeSelectedRegular();
             return true;
-        } else if (i == NUM) {
+        } else if (i == R.id.menu_bold) {
             makeSelectedBold();
             return true;
-        } else if (i == NUM) {
+        } else if (i == R.id.menu_italic) {
             makeSelectedItalic();
             return true;
-        } else if (i == NUM) {
+        } else if (i == R.id.menu_mono) {
             makeSelectedMono();
             return true;
-        } else if (i == NUM) {
+        } else if (i == R.id.menu_link) {
             makeSelectedUrl();
             return true;
-        } else if (i == NUM) {
+        } else if (i == R.id.menu_strike) {
             makeSelectedStrike();
             return true;
-        } else if (i == NUM) {
+        } else if (i == R.id.menu_underline) {
             makeSelectedUnderline();
             return true;
-        } else if (i != NUM) {
+        } else if (i != R.id.menu_spoiler) {
             return false;
         } else {
             makeSelectedSpoiler();
@@ -477,14 +478,14 @@ public class EditTextCaption extends EditTextBoldCursor {
             i++;
         }
         if (hasSelection()) {
-            wrap.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(NUM, LocaleController.getString("Spoiler", NUM)));
-            wrap.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(NUM, LocaleController.getString("Bold", NUM)));
-            wrap.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(NUM, LocaleController.getString("Italic", NUM)));
-            wrap.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(NUM, LocaleController.getString("Mono", NUM)));
-            wrap.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(NUM, LocaleController.getString("Strike", NUM)));
-            wrap.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(NUM, LocaleController.getString("Underline", NUM)));
-            wrap.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(NUM, LocaleController.getString("CreateLink", NUM)));
-            wrap.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(NUM, LocaleController.getString("Regular", NUM)));
+            wrap.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(R.id.menu_spoiler, LocaleController.getString("Spoiler", R.string.Spoiler)));
+            wrap.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(R.id.menu_bold, LocaleController.getString("Bold", R.string.Bold)));
+            wrap.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(R.id.menu_italic, LocaleController.getString("Italic", R.string.Italic)));
+            wrap.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(R.id.menu_mono, LocaleController.getString("Mono", R.string.Mono)));
+            wrap.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(R.id.menu_strike, LocaleController.getString("Strike", R.string.Strike)));
+            wrap.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(R.id.menu_underline, LocaleController.getString("Underline", R.string.Underline)));
+            wrap.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(R.id.menu_link, LocaleController.getString("CreateLink", R.string.CreateLink)));
+            wrap.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(R.id.menu_regular, LocaleController.getString("Regular", R.string.Regular)));
         }
     }
 

@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.ChatMessageCell;
 
@@ -86,17 +87,17 @@ public class HintView extends FrameLayout {
             addView(this.textView, LayoutHelper.createFrame(-2, -2.0f, 51, 0.0f, z2 ? 6.0f : 0.0f, 0.0f, z2 ? 0.0f : 6.0f));
         }
         if (i2 == 0) {
-            this.textView.setText(LocaleController.getString("AutoplayVideoInfo", NUM));
+            this.textView.setText(LocaleController.getString("AutoplayVideoInfo", R.string.AutoplayVideoInfo));
             ImageView imageView2 = new ImageView(context2);
             this.imageView = imageView2;
-            imageView2.setImageResource(NUM);
+            imageView2.setImageResource(R.drawable.tooltip_sound);
             this.imageView.setScaleType(ImageView.ScaleType.CENTER);
             this.imageView.setColorFilter(new PorterDuffColorFilter(getThemedColor("chat_gifSaveHintText"), PorterDuff.Mode.MULTIPLY));
             addView(this.imageView, LayoutHelper.createFrame(38, 34.0f, 51, 7.0f, 7.0f, 0.0f, 0.0f));
         }
         ImageView imageView3 = new ImageView(context2);
         this.arrowImageView = imageView3;
-        imageView3.setImageResource(z2 ? NUM : NUM);
+        imageView3.setImageResource(z2 ? R.drawable.tooltip_arrow_up : R.drawable.tooltip_arrow);
         this.arrowImageView.setColorFilter(new PorterDuffColorFilter(getThemedColor("chat_gifSaveHintBackground"), PorterDuff.Mode.MULTIPLY));
         addView(this.arrowImageView, LayoutHelper.createFrame(14, 6.0f, (z2 ? 48 : 80) | 3, 0.0f, 0.0f, 0.0f, 0.0f));
     }
@@ -132,8 +133,8 @@ public class HintView extends FrameLayout {
         return showForMessageCell(chatMessageCell, (Object) null, 0, 0, z);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:59:0x017e A[RETURN] */
-    /* JADX WARNING: Removed duplicated region for block: B:60:0x017f  */
+    /* JADX WARNING: Removed duplicated region for block: B:59:0x017a A[RETURN] */
+    /* JADX WARNING: Removed duplicated region for block: B:60:0x017b  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public boolean showForMessageCell(org.telegram.ui.Cells.ChatMessageCell r17, java.lang.Object r18, int r19, int r20, boolean r21) {
         /*
@@ -200,91 +201,91 @@ public class HintView extends FrameLayout {
             goto L_0x007b
         L_0x0075:
             int r2 = r17.getNoSoundIconCenterX()
-            goto L_0x0183
+            goto L_0x017f
         L_0x007b:
             return r5
         L_0x007c:
             r12 = -2147483648(0xfffffffvar_, float:-0.0)
             r13 = 1000(0x3e8, float:1.401E-42)
-            if (r10 != r4) goto L_0x0105
+            if (r10 != r4) goto L_0x0102
             r10 = r18
             java.lang.Integer r10 = (java.lang.Integer) r10
             int r9 = r9 + r2
             r0.shownY = r2
             int r2 = r10.intValue()
             r14 = -1
-            if (r2 != r14) goto L_0x009f
+            if (r2 != r14) goto L_0x009e
             android.widget.TextView r2 = r0.textView
-            r10 = 2131627651(0x7f0e0e83, float:1.8882572E38)
+            int r10 = org.telegram.messenger.R.string.PollSelectOption
             java.lang.String r14 = "PollSelectOption"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r14, r10)
             r2.setText(r10)
-            goto L_0x00f6
-        L_0x009f:
+            goto L_0x00f3
+        L_0x009e:
             org.telegram.messenger.MessageObject r2 = r17.getMessageObject()
             boolean r2 = r2.isQuiz()
-            if (r2 == 0) goto L_0x00d0
+            if (r2 == 0) goto L_0x00ce
             int r2 = r10.intValue()
-            if (r2 != 0) goto L_0x00be
+            if (r2 != 0) goto L_0x00bc
             android.widget.TextView r2 = r0.textView
-            r10 = 2131626944(0x7f0e0bc0, float:1.8881138E38)
+            int r10 = org.telegram.messenger.R.string.NoVotesQuiz
             java.lang.String r14 = "NoVotesQuiz"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r14, r10)
             r2.setText(r10)
-            goto L_0x00f6
-        L_0x00be:
+            goto L_0x00f3
+        L_0x00bc:
             android.widget.TextView r2 = r0.textView
             int r10 = r10.intValue()
             java.lang.Object[] r14 = new java.lang.Object[r5]
             java.lang.String r15 = "Answer"
             java.lang.String r10 = org.telegram.messenger.LocaleController.formatPluralString(r15, r10, r14)
             r2.setText(r10)
-            goto L_0x00f6
-        L_0x00d0:
+            goto L_0x00f3
+        L_0x00ce:
             int r2 = r10.intValue()
-            if (r2 != 0) goto L_0x00e5
+            if (r2 != 0) goto L_0x00e2
             android.widget.TextView r2 = r0.textView
-            r10 = 2131626943(0x7f0e0bbf, float:1.8881136E38)
+            int r10 = org.telegram.messenger.R.string.NoVotes
             java.lang.String r14 = "NoVotes"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r14, r10)
             r2.setText(r10)
-            goto L_0x00f6
-        L_0x00e5:
+            goto L_0x00f3
+        L_0x00e2:
             android.widget.TextView r2 = r0.textView
             int r10 = r10.intValue()
             java.lang.Object[] r14 = new java.lang.Object[r5]
             java.lang.String r15 = "Vote"
             java.lang.String r10 = org.telegram.messenger.LocaleController.formatPluralString(r15, r10, r14)
             r2.setText(r10)
-        L_0x00f6:
+        L_0x00f3:
             int r2 = android.view.View.MeasureSpec.makeMeasureSpec(r13, r12)
             int r10 = android.view.View.MeasureSpec.makeMeasureSpec(r13, r12)
             r0.measure(r2, r10)
             r2 = r19
-            goto L_0x0183
-        L_0x0105:
+            goto L_0x017f
+        L_0x0102:
             org.telegram.messenger.MessageObject r2 = r17.getMessageObject()
             java.lang.String r10 = r0.overrideText
-            if (r10 != 0) goto L_0x011c
+            if (r10 != 0) goto L_0x0118
             android.widget.TextView r10 = r0.textView
-            r14 = 2131626190(0x7f0e08ce, float:1.887961E38)
+            int r14 = org.telegram.messenger.R.string.HidAccount
             java.lang.String r15 = "HidAccount"
             java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r15, r14)
             r10.setText(r14)
-            goto L_0x0121
-        L_0x011c:
+            goto L_0x011d
+        L_0x0118:
             android.widget.TextView r14 = r0.textView
             r14.setText(r10)
-        L_0x0121:
+        L_0x011d:
             int r10 = android.view.View.MeasureSpec.makeMeasureSpec(r13, r12)
             int r12 = android.view.View.MeasureSpec.makeMeasureSpec(r13, r12)
             r0.measure(r10, r12)
             org.telegram.tgnet.TLRPC$User r10 = r17.getCurrentUser()
-            if (r10 == 0) goto L_0x0155
+            if (r10 == 0) goto L_0x0151
             long r12 = r10.id
             r14 = 0
             int r10 = (r12 > r14 ? 1 : (r12 == r14 ? 0 : -1))
-            if (r10 != 0) goto L_0x0155
+            if (r10 != 0) goto L_0x0151
             int r2 = r17.getMeasuredHeight()
             int r10 = r17.getBottom()
             int r12 = r7.getMeasuredHeight()
@@ -294,34 +295,34 @@ public class HintView extends FrameLayout {
             r10 = 1112014848(0x42480000, float:50.0)
             int r10 = org.telegram.messenger.AndroidUtilities.dp(r10)
             int r2 = r2 - r10
-        L_0x0153:
+        L_0x014f:
             int r9 = r9 + r2
-            goto L_0x016f
-        L_0x0155:
+            goto L_0x016b
+        L_0x0151:
             r10 = 1102053376(0x41b00000, float:22.0)
             int r10 = org.telegram.messenger.AndroidUtilities.dp(r10)
             int r9 = r9 + r10
             boolean r2 = r2.isOutOwner()
-            if (r2 != 0) goto L_0x016f
+            if (r2 != 0) goto L_0x016b
             boolean r2 = r17.isDrawNameLayout()
-            if (r2 == 0) goto L_0x016f
+            if (r2 == 0) goto L_0x016b
             r2 = 1101004800(0x41a00000, float:20.0)
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            goto L_0x0153
-        L_0x016f:
+            goto L_0x014f
+        L_0x016b:
             boolean r2 = r0.isTopArrow
-            if (r2 != 0) goto L_0x017f
+            if (r2 != 0) goto L_0x017b
             int r2 = r16.getMeasuredHeight()
             int r10 = org.telegram.messenger.AndroidUtilities.dp(r11)
             int r2 = r2 + r10
-            if (r9 > r2) goto L_0x017f
+            if (r9 > r2) goto L_0x017b
             return r5
-        L_0x017f:
+        L_0x017b:
             int r2 = r17.getForwardNameCenterX()
-        L_0x0183:
+        L_0x017f:
             int r10 = r7.getMeasuredWidth()
             boolean r12 = r0.isTopArrow
-            if (r12 == 0) goto L_0x019b
+            if (r12 == 0) goto L_0x0197
             float r9 = r0.extraTranslationY
             r12 = 1110441984(0x42300000, float:44.0)
             int r12 = org.telegram.messenger.AndroidUtilities.dp(r12)
@@ -329,8 +330,8 @@ public class HintView extends FrameLayout {
             r0.translationY = r12
             float r9 = r9 + r12
             r0.setTranslationY(r9)
-            goto L_0x01a9
-        L_0x019b:
+            goto L_0x01a5
+        L_0x0197:
             float r12 = r0.extraTranslationY
             int r13 = r16.getMeasuredHeight()
             int r9 = r9 - r13
@@ -338,13 +339,13 @@ public class HintView extends FrameLayout {
             r0.translationY = r9
             float r12 = r12 + r9
             r0.setTranslationY(r12)
-        L_0x01a9:
+        L_0x01a5:
             int r9 = r17.getLeft()
             int r9 = r9 + r2
             r12 = 1100480512(0x41980000, float:19.0)
             int r12 = org.telegram.messenger.AndroidUtilities.dp(r12)
             int r13 = r0.currentType
-            if (r13 != r4) goto L_0x01d1
+            if (r13 != r4) goto L_0x01cd
             int r4 = r16.getMeasuredWidth()
             int r4 = r4 / r3
             int r4 = r2 - r4
@@ -355,11 +356,11 @@ public class HintView extends FrameLayout {
             float r10 = (float) r4
             r0.setTranslationX(r10)
             int r12 = r12 + r4
-            goto L_0x01ee
-        L_0x01d1:
+            goto L_0x01ea
+        L_0x01cd:
             int r4 = r7.getMeasuredWidth()
             int r4 = r4 / r3
-            if (r9 <= r4) goto L_0x01ea
+            if (r9 <= r4) goto L_0x01e6
             int r4 = r16.getMeasuredWidth()
             int r10 = r10 - r4
             r4 = 1108869120(0x42180000, float:38.0)
@@ -368,11 +369,11 @@ public class HintView extends FrameLayout {
             float r4 = (float) r10
             r0.setTranslationX(r4)
             int r12 = r12 + r10
-            goto L_0x01ee
-        L_0x01ea:
+            goto L_0x01ea
+        L_0x01e6:
             r4 = 0
             r0.setTranslationX(r4)
-        L_0x01ee:
+        L_0x01ea:
             int r4 = r17.getLeft()
             int r4 = r4 + r2
             int r4 = r4 - r12
@@ -385,11 +386,11 @@ public class HintView extends FrameLayout {
             r4.setTranslationX(r2)
             int r4 = r7.getMeasuredWidth()
             int r4 = r4 / r3
-            if (r9 <= r4) goto L_0x0228
+            if (r9 <= r4) goto L_0x0224
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r11)
             float r4 = (float) r4
             int r4 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1))
-            if (r4 >= 0) goto L_0x026d
+            if (r4 >= 0) goto L_0x0269
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r11)
             float r4 = (float) r4
             float r4 = r2 - r4
@@ -399,15 +400,15 @@ public class HintView extends FrameLayout {
             android.widget.ImageView r7 = r0.arrowImageView
             float r2 = r2 - r4
             r7.setTranslationX(r2)
-            goto L_0x026d
-        L_0x0228:
+            goto L_0x0269
+        L_0x0224:
             int r4 = r16.getMeasuredWidth()
             r7 = 1103101952(0x41CLASSNAME, float:24.0)
             int r9 = org.telegram.messenger.AndroidUtilities.dp(r7)
             int r4 = r4 - r9
             float r4 = (float) r4
             int r4 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1))
-            if (r4 <= 0) goto L_0x024f
+            if (r4 <= 0) goto L_0x024b
             int r4 = r16.getMeasuredWidth()
             float r4 = (float) r4
             float r4 = r2 - r4
@@ -418,12 +419,12 @@ public class HintView extends FrameLayout {
             android.widget.ImageView r7 = r0.arrowImageView
             float r2 = r2 - r4
             r7.setTranslationX(r2)
-            goto L_0x026d
-        L_0x024f:
+            goto L_0x0269
+        L_0x024b:
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r11)
             float r4 = (float) r4
             int r4 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1))
-            if (r4 >= 0) goto L_0x026d
+            if (r4 >= 0) goto L_0x0269
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r11)
             float r4 = (float) r4
             float r4 = r2 - r4
@@ -433,17 +434,17 @@ public class HintView extends FrameLayout {
             android.widget.ImageView r7 = r0.arrowImageView
             float r2 = r2 - r4
             r7.setTranslationX(r2)
-        L_0x026d:
+        L_0x0269:
             r0.messageCell = r1
             android.animation.AnimatorSet r1 = r0.animatorSet
-            if (r1 == 0) goto L_0x0278
+            if (r1 == 0) goto L_0x0274
             r1.cancel()
             r0.animatorSet = r6
-        L_0x0278:
+        L_0x0274:
             java.lang.Integer r1 = java.lang.Integer.valueOf(r8)
             r0.setTag(r1)
             r0.setVisibility(r5)
-            if (r21 == 0) goto L_0x02b4
+            if (r21 == 0) goto L_0x02b0
             android.animation.AnimatorSet r1 = new android.animation.AnimatorSet
             r1.<init>()
             r0.animatorSet = r1
@@ -463,11 +464,11 @@ public class HintView extends FrameLayout {
             r1.setDuration(r2)
             android.animation.AnimatorSet r1 = r0.animatorSet
             r1.start()
-            goto L_0x02b9
-        L_0x02b4:
+            goto L_0x02b5
+        L_0x02b0:
             r1 = 1065353216(0x3var_, float:1.0)
             r0.setAlpha(r1)
-        L_0x02b9:
+        L_0x02b5:
             return r8
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.HintView.showForMessageCell(org.telegram.ui.Cells.ChatMessageCell, java.lang.Object, int, int, boolean):boolean");

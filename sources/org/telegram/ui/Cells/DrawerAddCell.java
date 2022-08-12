@@ -9,6 +9,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
@@ -39,8 +40,8 @@ public class DrawerAddCell extends FrameLayout {
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
         this.textView.setTextColor(Theme.getColor("chats_menuItemText"));
-        this.textView.setText(LocaleController.getString("AddAccount", NUM));
-        Drawable drawable = getResources().getDrawable(NUM);
+        this.textView.setText(LocaleController.getString("AddAccount", R.string.AddAccount));
+        Drawable drawable = getResources().getDrawable(R.drawable.msg_add);
         if (drawable != null) {
             drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chats_menuItemIcon"), PorterDuff.Mode.MULTIPLY));
         }

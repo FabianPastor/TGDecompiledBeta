@@ -16,6 +16,7 @@ import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
@@ -60,7 +61,7 @@ public class ImportingAlert extends BottomSheet implements NotificationCenter.No
             rLottieImageView.setBackground(Theme.createCircleDrawable(AndroidUtilities.dp(20.0f), getThemedColor("featuredStickers_buttonText")));
             this.imageView.setScaleType(ImageView.ScaleType.CENTER);
             this.imageView.setColorFilter(new PorterDuffColorFilter(getThemedColor("featuredStickers_addButton"), PorterDuff.Mode.MULTIPLY));
-            this.imageView.setAnimation(NUM, 26, 26);
+            this.imageView.setAnimation(R.raw.import_check, 26, 26);
             this.imageView.setScaleX(0.8f);
             this.imageView.setScaleY(0.8f);
             this.linearLayout.addView(this.imageView, LayoutHelper.createLinear(20, 20, 16));
@@ -161,11 +162,16 @@ public class ImportingAlert extends BottomSheet implements NotificationCenter.No
             android.widget.FrameLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createFrame(r13, r14, r15, r16, r17, r18, r19)
             r7.addView(r8, r12)
             org.telegram.ui.Components.RLottieDrawable r12 = new org.telegram.ui.Components.RLottieDrawable
+            int r14 = org.telegram.messenger.R.raw.import_finish
+            java.lang.StringBuilder r13 = new java.lang.StringBuilder
+            r13.<init>()
+            java.lang.String r15 = ""
+            r13.append(r15)
+            r13.append(r14)
+            java.lang.String r15 = r13.toString()
             r13 = 1123024896(0x42var_, float:120.0)
             int r16 = org.telegram.messenger.AndroidUtilities.dp(r13)
             int r17 = org.telegram.messenger.AndroidUtilities.dp(r13)
-            r14 = 2131558475(0x7f0d004b, float:1.8742267E38)
-            java.lang.String r15 = "NUM"
             r18 = 0
             r19 = 0
             r13 = r12
@@ -177,7 +183,7 @@ public class ImportingAlert extends BottomSheet implements NotificationCenter.No
             r0.imageView = r12
             r12.setAutoRepeat(r10)
             org.telegram.ui.Components.RLottieImageView r12 = r0.imageView
-            r13 = 2131558476(0x7f0d004c, float:1.8742269E38)
+            int r13 = org.telegram.messenger.R.raw.import_loop
             r14 = 120(0x78, float:1.68E-43)
             r12.setAnimation((int) r13, (int) r14, (int) r14)
             org.telegram.ui.Components.RLottieImageView r12 = r0.imageView
@@ -243,9 +249,9 @@ public class ImportingAlert extends BottomSheet implements NotificationCenter.No
             r3 = 0
             r6.setBackground(r3)
             org.telegram.ui.Components.ImportingAlert$BottomSheetCell r3 = r0.cell
-            java.lang.String r6 = "ImportDone"
-            r12 = 2131626238(0x7f0e08fe, float:1.8879707E38)
-            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r6, r12)
+            int r6 = org.telegram.messenger.R.string.ImportDone
+            java.lang.String r12 = "ImportDone"
+            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r12, r6)
             r3.setText(r6)
             org.telegram.ui.Components.ImportingAlert$BottomSheetCell r3 = r0.cell
             r6 = 4
@@ -274,8 +280,8 @@ public class ImportingAlert extends BottomSheet implements NotificationCenter.No
             android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r12, r13, r14, r15, r16, r17, r18)
             r7.addView(r3, r6)
             r3 = 0
-        L_0x0186:
-            if (r3 >= r5) goto L_0x0242
+        L_0x0192:
+            if (r3 >= r5) goto L_0x024d
             android.widget.TextView[] r6 = r0.importCountTextView
             android.widget.TextView r12 = new android.widget.TextView
             r12.<init>(r1)
@@ -328,15 +334,15 @@ public class ImportingAlert extends BottomSheet implements NotificationCenter.No
             r18 = 1110441984(0x42300000, float:44.0)
             android.widget.FrameLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createFrame(r12, r13, r14, r15, r16, r17, r18)
             r7.addView(r6, r12)
-            if (r3 != 0) goto L_0x0215
+            if (r3 != 0) goto L_0x0220
             android.widget.TextView[] r6 = r0.infoTextView
             r6 = r6[r3]
-            r12 = 2131626253(0x7f0e090d, float:1.8879737E38)
+            int r12 = org.telegram.messenger.R.string.ImportImportingInfo
             java.lang.String r13 = "ImportImportingInfo"
             java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r13, r12)
             r6.setText(r12)
-            goto L_0x023e
-        L_0x0215:
+            goto L_0x0249
+        L_0x0220:
             android.widget.TextView[] r6 = r0.infoTextView
             r6 = r6[r3]
             r12 = 0
@@ -355,39 +361,39 @@ public class ImportingAlert extends BottomSheet implements NotificationCenter.No
             int r12 = org.telegram.messenger.AndroidUtilities.dp(r13)
             float r12 = (float) r12
             r6.setTranslationY(r12)
-        L_0x023e:
+        L_0x0249:
             int r3 = r3 + 1
-            goto L_0x0186
-        L_0x0242:
+            goto L_0x0192
+        L_0x024d:
             org.telegram.ui.ChatActivity r1 = r0.parentFragment
-            r3 = 2131626237(0x7f0e08fd, float:1.8879705E38)
-            java.lang.String r6 = "ImportCount"
-            r7 = 1120403456(0x42CLASSNAME, float:100.0)
-            java.lang.String r9 = "%d%%"
-            if (r1 == 0) goto L_0x02d5
-            r1 = 2131626254(0x7f0e090e, float:1.887974E38)
+            java.lang.String r3 = "ImportCount"
+            r6 = 1120403456(0x42CLASSNAME, float:100.0)
+            java.lang.String r7 = "%d%%"
+            if (r1 == 0) goto L_0x02dc
+            int r1 = org.telegram.messenger.R.string.ImportImportingTitle
             java.lang.String r2 = "ImportImportingTitle"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r8.setText(r1)
             org.telegram.ui.ChatActivity r1 = r0.parentFragment
             org.telegram.messenger.SendMessagesHelper r1 = r1.getSendMessagesHelper()
             org.telegram.ui.ChatActivity r2 = r0.parentFragment
-            long r11 = r2.getDialogId()
-            org.telegram.messenger.SendMessagesHelper$ImportingHistory r1 = r1.getImportingHistory(r11)
+            long r8 = r2.getDialogId()
+            org.telegram.messenger.SendMessagesHelper$ImportingHistory r1 = r1.getImportingHistory(r8)
             android.widget.TextView r2 = r0.percentTextView
             java.lang.Object[] r8 = new java.lang.Object[r10]
-            int r11 = r1.uploadProgress
-            java.lang.Integer r11 = java.lang.Integer.valueOf(r11)
-            r8[r4] = r11
-            java.lang.String r8 = java.lang.String.format(r9, r8)
-            r2.setText(r8)
+            int r9 = r1.uploadProgress
+            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            r8[r4] = r9
+            java.lang.String r7 = java.lang.String.format(r7, r8)
+            r2.setText(r7)
             org.telegram.ui.Components.LineProgressView r2 = r0.lineProgressView
-            int r8 = r1.uploadProgress
-            float r8 = (float) r8
-            float r8 = r8 / r7
-            r2.setProgress(r8, r4)
+            int r7 = r1.uploadProgress
+            float r7 = (float) r7
+            float r7 = r7 / r6
+            r2.setProgress(r7, r4)
             android.widget.TextView[] r2 = r0.importCountTextView
             r2 = r2[r4]
+            int r6 = org.telegram.messenger.R.string.ImportCount
             java.lang.Object[] r5 = new java.lang.Object[r5]
             long r7 = r1.getUploadedCount()
             java.lang.String r7 = org.telegram.messenger.AndroidUtilities.formatFileSize(r7)
@@ -395,17 +401,17 @@ public class ImportingAlert extends BottomSheet implements NotificationCenter.No
             long r7 = r1.getTotalCount()
             java.lang.String r1 = org.telegram.messenger.AndroidUtilities.formatFileSize(r7)
             r5[r10] = r1
-            java.lang.String r1 = org.telegram.messenger.LocaleController.formatString(r6, r3, r5)
+            java.lang.String r1 = org.telegram.messenger.LocaleController.formatString(r3, r6, r5)
             r2.setText(r1)
             android.widget.TextView[] r1 = r0.infoTextView
             r1 = r1[r10]
-            r2 = 2131626239(0x7f0e08ff, float:1.8879709E38)
+            int r2 = org.telegram.messenger.R.string.ImportDoneInfo
             java.lang.String r3 = "ImportDoneInfo"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setText(r2)
             android.widget.TextView[] r1 = r0.importCountTextView
             r1 = r1[r10]
-            r2 = 2131626240(0x7f0e0900, float:1.887971E38)
+            int r2 = org.telegram.messenger.R.string.ImportDoneTitle
             java.lang.String r3 = "ImportDoneTitle"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setText(r2)
@@ -413,29 +419,30 @@ public class ImportingAlert extends BottomSheet implements NotificationCenter.No
             org.telegram.messenger.NotificationCenter r1 = r1.getNotificationCenter()
             int r2 = org.telegram.messenger.NotificationCenter.historyImportProgressChanged
             r1.addObserver(r0, r2)
-            goto L_0x0353
-        L_0x02d5:
-            r1 = 2131626264(0x7f0e0918, float:1.887976E38)
-            java.lang.String r11 = "ImportStickersImportingTitle"
-            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r11, r1)
+            goto L_0x0359
+        L_0x02dc:
+            int r1 = org.telegram.messenger.R.string.ImportStickersImportingTitle
+            java.lang.String r9 = "ImportStickersImportingTitle"
+            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r9, r1)
             r8.setText(r1)
             int r1 = r0.currentAccount
             org.telegram.messenger.SendMessagesHelper r1 = org.telegram.messenger.SendMessagesHelper.getInstance(r1)
             org.telegram.messenger.SendMessagesHelper$ImportingStickers r1 = r1.getImportingStickers(r2)
             android.widget.TextView r2 = r0.percentTextView
             java.lang.Object[] r8 = new java.lang.Object[r10]
-            int r11 = r1.uploadProgress
-            java.lang.Integer r11 = java.lang.Integer.valueOf(r11)
-            r8[r4] = r11
-            java.lang.String r8 = java.lang.String.format(r9, r8)
-            r2.setText(r8)
+            int r9 = r1.uploadProgress
+            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            r8[r4] = r9
+            java.lang.String r7 = java.lang.String.format(r7, r8)
+            r2.setText(r7)
             org.telegram.ui.Components.LineProgressView r2 = r0.lineProgressView
-            int r8 = r1.uploadProgress
-            float r8 = (float) r8
-            float r8 = r8 / r7
-            r2.setProgress(r8, r4)
+            int r7 = r1.uploadProgress
+            float r7 = (float) r7
+            float r7 = r7 / r6
+            r2.setProgress(r7, r4)
             android.widget.TextView[] r2 = r0.importCountTextView
             r2 = r2[r4]
+            int r6 = org.telegram.messenger.R.string.ImportCount
             java.lang.Object[] r5 = new java.lang.Object[r5]
             long r7 = r1.getUploadedCount()
             java.lang.String r7 = org.telegram.messenger.AndroidUtilities.formatFileSize(r7)
@@ -443,17 +450,17 @@ public class ImportingAlert extends BottomSheet implements NotificationCenter.No
             long r7 = r1.getTotalCount()
             java.lang.String r1 = org.telegram.messenger.AndroidUtilities.formatFileSize(r7)
             r5[r10] = r1
-            java.lang.String r1 = org.telegram.messenger.LocaleController.formatString(r6, r3, r5)
+            java.lang.String r1 = org.telegram.messenger.LocaleController.formatString(r3, r6, r5)
             r2.setText(r1)
             android.widget.TextView[] r1 = r0.infoTextView
             r1 = r1[r10]
-            r2 = 2131626259(0x7f0e0913, float:1.887975E38)
+            int r2 = org.telegram.messenger.R.string.ImportStickersDoneInfo
             java.lang.String r3 = "ImportStickersDoneInfo"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setText(r2)
             android.widget.TextView[] r1 = r0.importCountTextView
             r1 = r1[r10]
-            r2 = 2131626260(0x7f0e0914, float:1.8879751E38)
+            int r2 = org.telegram.messenger.R.string.ImportStickersDoneTitle
             java.lang.String r3 = "ImportStickersDoneTitle"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setText(r2)
@@ -461,7 +468,7 @@ public class ImportingAlert extends BottomSheet implements NotificationCenter.No
             org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getInstance(r1)
             int r2 = org.telegram.messenger.NotificationCenter.stickersImportProgressChanged
             r1.addObserver(r0, r2)
-        L_0x0353:
+        L_0x0359:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ImportingAlert.<init>(android.content.Context, java.lang.String, org.telegram.ui.ChatActivity, org.telegram.ui.ActionBar.Theme$ResourcesProvider):void");
@@ -506,7 +513,7 @@ public class ImportingAlert extends BottomSheet implements NotificationCenter.No
                 }
             }
             this.percentTextView.setText(String.format("%d%%", new Object[]{Integer.valueOf(importingHistory.uploadProgress)}));
-            this.importCountTextView[0].setText(LocaleController.formatString("ImportCount", NUM, AndroidUtilities.formatFileSize(importingHistory.getUploadedCount()), AndroidUtilities.formatFileSize(importingHistory.getTotalCount())));
+            this.importCountTextView[0].setText(LocaleController.formatString("ImportCount", R.string.ImportCount, AndroidUtilities.formatFileSize(importingHistory.getUploadedCount()), AndroidUtilities.formatFileSize(importingHistory.getTotalCount())));
             this.lineProgressView.setProgress(((float) importingHistory.uploadProgress) / 100.0f, true);
         } else if (i != NotificationCenter.stickersImportProgressChanged) {
         } else {
@@ -528,7 +535,7 @@ public class ImportingAlert extends BottomSheet implements NotificationCenter.No
                 }
             }
             this.percentTextView.setText(String.format("%d%%", new Object[]{Integer.valueOf(importingStickers.uploadProgress)}));
-            this.importCountTextView[0].setText(LocaleController.formatString("ImportCount", NUM, AndroidUtilities.formatFileSize(importingStickers.getUploadedCount()), AndroidUtilities.formatFileSize(importingStickers.getTotalCount())));
+            this.importCountTextView[0].setText(LocaleController.formatString("ImportCount", R.string.ImportCount, AndroidUtilities.formatFileSize(importingStickers.getUploadedCount()), AndroidUtilities.formatFileSize(importingStickers.getTotalCount())));
             this.lineProgressView.setProgress(((float) importingStickers.uploadProgress) / 100.0f, true);
         }
     }

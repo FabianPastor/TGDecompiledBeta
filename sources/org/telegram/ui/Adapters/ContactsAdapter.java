@@ -16,6 +16,7 @@ import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC$TL_contact;
@@ -386,7 +387,7 @@ public class ContactsAdapter extends RecyclerListView.SectionsAdapter {
             view.setPadding(dp, dp2, AndroidUtilities.dp(f), AndroidUtilities.dp(8.0f));
         } else if (i != 4) {
             view = new ShadowSectionCell(this.mContext);
-            CombinedDrawable combinedDrawable = new CombinedDrawable(new ColorDrawable(Theme.getColor("windowBackgroundGray")), Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
+            CombinedDrawable combinedDrawable = new CombinedDrawable(new ColorDrawable(Theme.getColor("windowBackgroundGray")), Theme.getThemedDrawable(this.mContext, R.drawable.greydivider, "windowBackgroundGrayShadow"));
             combinedDrawable.setFullsize(true);
             view.setBackgroundDrawable(combinedDrawable);
         } else {
@@ -465,32 +466,32 @@ public class ContactsAdapter extends RecyclerListView.SectionsAdapter {
                 }
             } else if (this.needPhonebook) {
                 if (i2 == 0) {
-                    textCell.setTextAndIcon(LocaleController.getString("InviteFriends", NUM), NUM, false);
+                    textCell.setTextAndIcon(LocaleController.getString("InviteFriends", R.string.InviteFriends), R.drawable.msg_invite, false);
                 } else if (i2 == 1) {
-                    textCell.setTextAndIcon(LocaleController.getString("AddPeopleNearby", NUM), NUM, false);
+                    textCell.setTextAndIcon(LocaleController.getString("AddPeopleNearby", R.string.AddPeopleNearby), R.drawable.msg_location, false);
                 }
             } else if (this.isAdmin) {
                 if (this.isChannel) {
-                    textCell.setTextAndIcon(LocaleController.getString("ChannelInviteViaLink", NUM), NUM, false);
+                    textCell.setTextAndIcon(LocaleController.getString("ChannelInviteViaLink", R.string.ChannelInviteViaLink), R.drawable.msg_link2, false);
                 } else {
-                    textCell.setTextAndIcon(LocaleController.getString("InviteToGroupByLink", NUM), NUM, false);
+                    textCell.setTextAndIcon(LocaleController.getString("InviteToGroupByLink", R.string.InviteToGroupByLink), R.drawable.msg_link2, false);
                 }
             } else if (i2 == 0) {
-                textCell.setTextAndIcon(LocaleController.getString("NewGroup", NUM), NUM, false);
+                textCell.setTextAndIcon(LocaleController.getString("NewGroup", R.string.NewGroup), R.drawable.msg_groups, false);
             } else if (i2 == 1) {
-                textCell.setTextAndIcon(LocaleController.getString("NewSecretChat", NUM), NUM, false);
+                textCell.setTextAndIcon(LocaleController.getString("NewSecretChat", R.string.NewSecretChat), R.drawable.msg_secret, false);
             } else if (i2 == 2) {
-                textCell.setTextAndIcon(LocaleController.getString("NewChannel", NUM), NUM, false);
+                textCell.setTextAndIcon(LocaleController.getString("NewChannel", R.string.NewChannel), R.drawable.msg_channel, false);
             }
         } else if (itemViewType == 2) {
             GraySectionCell graySectionCell = (GraySectionCell) viewHolder.itemView;
             int i3 = this.sortType;
             if (i3 == 0) {
-                graySectionCell.setText(LocaleController.getString("Contacts", NUM));
+                graySectionCell.setText(LocaleController.getString("Contacts", R.string.Contacts));
             } else if (i3 == 1) {
-                graySectionCell.setText(LocaleController.getString("SortedByName", NUM));
+                graySectionCell.setText(LocaleController.getString("SortedByName", R.string.SortedByName));
             } else {
-                graySectionCell.setText(LocaleController.getString("SortedByLastSeen", NUM));
+                graySectionCell.setText(LocaleController.getString("SortedByLastSeen", R.string.SortedByLastSeen));
             }
         }
     }

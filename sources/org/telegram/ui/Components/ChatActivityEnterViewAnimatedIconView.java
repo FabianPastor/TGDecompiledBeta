@@ -4,6 +4,7 @@ import android.content.Context;
 import java.util.HashMap;
 import java.util.Map;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.R;
 import org.telegram.ui.Cells.ChatActionCell$$ExternalSyntheticLambda2;
 
 public class ChatActivityEnterViewAnimatedIconView extends RLottieImageView {
@@ -82,18 +83,18 @@ public class ChatActivityEnterViewAnimatedIconView extends RLottieImageView {
     }
 
     private enum TransitState {
-        VOICE_TO_VIDEO(r7, r8, NUM),
-        STICKER_TO_KEYBOARD(r16, r17, NUM),
-        SMILE_TO_KEYBOARD(r10, r17, NUM),
-        VIDEO_TO_VOICE(r8, r7, NUM),
-        KEYBOARD_TO_STICKER(r3, r16, NUM),
-        KEYBOARD_TO_GIF(r3, r12, NUM),
-        KEYBOARD_TO_SMILE(r3, r10, NUM),
-        GIF_TO_KEYBOARD(r3, r17, NUM),
-        GIF_TO_SMILE(r3, r10, NUM),
-        SMILE_TO_GIF(r3, r12, NUM),
-        SMILE_TO_STICKER(r3, r16, NUM),
-        STICKER_TO_SMILE(r16, r10, NUM);
+        VOICE_TO_VIDEO(r7, r8, R.raw.voice_to_video),
+        STICKER_TO_KEYBOARD(r16, r17, R.raw.sticker_to_keyboard),
+        SMILE_TO_KEYBOARD(r10, r17, R.raw.smile_to_keyboard),
+        VIDEO_TO_VOICE(r8, r7, R.raw.video_to_voice),
+        KEYBOARD_TO_STICKER(r3, r16, R.raw.keyboard_to_sticker),
+        KEYBOARD_TO_GIF(r3, r12, R.raw.keyboard_to_gif),
+        KEYBOARD_TO_SMILE(r3, r10, R.raw.keyboard_to_smile),
+        GIF_TO_KEYBOARD(r3, r17, R.raw.gif_to_keyboard),
+        GIF_TO_SMILE(r3, r10, R.raw.gif_to_smile),
+        SMILE_TO_GIF(r3, r12, R.raw.smile_to_gif),
+        SMILE_TO_STICKER(r3, r16, R.raw.smile_to_sticker),
+        STICKER_TO_SMILE(r16, r10, R.raw.sticker_to_smile);
         
         final State firstState;
         final int resource;

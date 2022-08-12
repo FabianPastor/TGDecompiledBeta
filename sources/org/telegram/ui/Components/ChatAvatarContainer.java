@@ -25,6 +25,7 @@ import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.ConnectionsManager;
@@ -113,9 +114,9 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                     accessibilityNodeInfo.setVisibleToUser(false);
                     return;
                 }
-                accessibilityNodeInfo.setText(LocaleController.getString("AccDescrProfilePicture", NUM));
+                accessibilityNodeInfo.setText(LocaleController.getString("AccDescrProfilePicture", R.string.AccDescrProfilePicture));
                 if (Build.VERSION.SDK_INT >= 21) {
-                    accessibilityNodeInfo.addAction(new AccessibilityNodeInfo.AccessibilityAction(16, LocaleController.getString("Open", NUM)));
+                    accessibilityNodeInfo.addAction(new AccessibilityNodeInfo.AccessibilityAction(16, LocaleController.getString("Open", R.string.Open)));
                 }
             }
         };
@@ -125,7 +126,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                 this.avatarImageView.setVisibility(8);
             }
         }
-        this.avatarImageView.setContentDescription(LocaleController.getString("AccDescrProfilePicture", NUM));
+        this.avatarImageView.setContentDescription(LocaleController.getString("AccDescrProfilePicture", R.string.AccDescrProfilePicture));
         this.avatarImageView.setRoundRadius(AndroidUtilities.dp(21.0f));
         addView(this.avatarImageView);
         if (z2) {
@@ -191,9 +192,9 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
             this.secretChatTimer = z;
             this.timeItem.setOnClickListener(new ChatAvatarContainer$$ExternalSyntheticLambda2(this, resourcesProvider2));
             if (this.secretChatTimer) {
-                this.timeItem.setContentDescription(LocaleController.getString("SetTimer", NUM));
+                this.timeItem.setContentDescription(LocaleController.getString("SetTimer", R.string.SetTimer));
             } else {
-                this.timeItem.setContentDescription(LocaleController.getString("AccAutoDeleteTimer", NUM));
+                this.timeItem.setContentDescription(LocaleController.getString("AccAutoDeleteTimer", R.string.AccAutoDeleteTimer));
             }
         }
         ChatActivity chatActivity2 = this.parentFragment;
@@ -290,7 +291,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
             actionBarPopupWindowArr[0].setDismissAnimationDuration(220);
             actionBarPopupWindowArr[0].setOutsideTouchable(true);
             actionBarPopupWindowArr[0].setClippingEnabled(true);
-            actionBarPopupWindowArr[0].setAnimationStyle(NUM);
+            actionBarPopupWindowArr[0].setAnimationStyle(R.style.PopupContextAnimation);
             actionBarPopupWindowArr[0].setFocusable(true);
             autoDeletePopupWrapper.windowLayout.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000.0f), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000.0f), Integer.MIN_VALUE));
             actionBarPopupWindowArr[0].setInputMethodMode(2);
@@ -613,7 +614,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
         if (!this.rightDrawableIsScamOrVerified) {
             this.titleTextView.setRightDrawable(drawable2);
             if (drawable2 != null) {
-                this.rightDrawableContentDescription = LocaleController.getString("NotificationsMuted", NUM);
+                this.rightDrawableContentDescription = LocaleController.getString("NotificationsMuted", R.string.NotificationsMuted);
             } else {
                 this.rightDrawableContentDescription = null;
             }
@@ -635,26 +636,26 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                 ScamDrawable scamDrawable = new ScamDrawable(11, z ^ true ? 1 : 0);
                 scamDrawable.setColor(getThemedColor("actionBarDefaultSubtitle"));
                 this.titleTextView.setRightDrawable((Drawable) scamDrawable);
-                this.rightDrawableContentDescription = LocaleController.getString("ScamMessage", NUM);
+                this.rightDrawableContentDescription = LocaleController.getString("ScamMessage", R.string.ScamMessage);
                 this.rightDrawableIsScamOrVerified = true;
             }
         } else if (z3) {
-            Drawable mutate = getResources().getDrawable(NUM).mutate();
+            Drawable mutate = getResources().getDrawable(R.drawable.verified_area).mutate();
             mutate.setColorFilter(new PorterDuffColorFilter(getThemedColor("profile_verifiedBackground"), PorterDuff.Mode.MULTIPLY));
-            Drawable mutate2 = getResources().getDrawable(NUM).mutate();
+            Drawable mutate2 = getResources().getDrawable(R.drawable.verified_check).mutate();
             mutate2.setColorFilter(new PorterDuffColorFilter(getThemedColor("profile_verifiedCheck"), PorterDuff.Mode.MULTIPLY));
             this.titleTextView.setRightDrawable((Drawable) new CombinedDrawable(mutate, mutate2));
             this.rightDrawableIsScamOrVerified = true;
-            this.rightDrawableContentDescription = LocaleController.getString("AccDescrVerified", NUM);
+            this.rightDrawableContentDescription = LocaleController.getString("AccDescrVerified", R.string.AccDescrVerified);
         } else if (z4) {
             if (this.premiumIconHiddable) {
                 this.titleTextView.setCanHideRightDrawable(true);
             }
-            Drawable mutate3 = ContextCompat.getDrawable(ApplicationLoader.applicationContext, NUM).mutate();
+            Drawable mutate3 = ContextCompat.getDrawable(ApplicationLoader.applicationContext, R.drawable.msg_premium_liststar).mutate();
             mutate3.setColorFilter(new PorterDuffColorFilter(getThemedColor("profile_verifiedBackground"), PorterDuff.Mode.MULTIPLY));
             this.titleTextView.setRightDrawable(mutate3);
             this.rightDrawableIsScamOrVerified = true;
-            this.rightDrawableContentDescription = LocaleController.getString("AccDescrPremium", NUM);
+            this.rightDrawableContentDescription = LocaleController.getString("AccDescrPremium", R.string.AccDescrPremium);
         } else if (this.titleTextView.getRightDrawable() instanceof ScamDrawable) {
             this.titleTextView.setRightDrawable((Drawable) null);
             this.rightDrawableIsScamOrVerified = false;
@@ -792,18 +793,18 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                             if (currentChatInfo == null || (i = currentChatInfo.participants_count) == 0) {
                                 if (currentChat.megagroup) {
                                     if (currentChatInfo == null) {
-                                        string = LocaleController.getString("Loading", NUM).toLowerCase();
+                                        string = LocaleController.getString("Loading", R.string.Loading).toLowerCase();
                                     } else if (currentChat.has_geo) {
-                                        string = LocaleController.getString("MegaLocation", NUM).toLowerCase();
+                                        string = LocaleController.getString("MegaLocation", R.string.MegaLocation).toLowerCase();
                                     } else if (!TextUtils.isEmpty(currentChat.username)) {
-                                        string = LocaleController.getString("MegaPublic", NUM).toLowerCase();
+                                        string = LocaleController.getString("MegaPublic", R.string.MegaPublic).toLowerCase();
                                     } else {
-                                        string = LocaleController.getString("MegaPrivate", NUM).toLowerCase();
+                                        string = LocaleController.getString("MegaPrivate", R.string.MegaPrivate).toLowerCase();
                                     }
                                 } else if ((currentChat.flags & 64) != 0) {
-                                    string = LocaleController.getString("ChannelPublic", NUM).toLowerCase();
+                                    string = LocaleController.getString("ChannelPublic", R.string.ChannelPublic).toLowerCase();
                                 } else {
-                                    string = LocaleController.getString("ChannelPrivate", NUM).toLowerCase();
+                                    string = LocaleController.getString("ChannelPrivate", R.string.ChannelPrivate).toLowerCase();
                                 }
                             } else if (!currentChat.megagroup) {
                                 int[] iArr = new int[1];
@@ -819,9 +820,9 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                                 string = LocaleController.formatPluralString("Members", i, new Object[0]);
                             }
                         } else if (ChatObject.isKickedFromChat(currentChat)) {
-                            string = LocaleController.getString("YouWereKicked", NUM);
+                            string = LocaleController.getString("YouWereKicked", R.string.YouWereKicked);
                         } else if (ChatObject.isLeftFromChat(currentChat)) {
-                            string = LocaleController.getString("YouLeft", NUM);
+                            string = LocaleController.getString("YouLeft", R.string.YouLeft);
                         } else {
                             int i2 = currentChat.participants_count;
                             if (!(currentChatInfo == null || (tLRPC$ChatParticipants = currentChatInfo.participants) == null)) {
@@ -840,15 +841,15 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                         }
                         if (!UserObject.isReplyUser(currentUser)) {
                             if (currentUser.id == UserConfig.getInstance(this.currentAccount).getClientUserId()) {
-                                string = LocaleController.getString("ChatYourSelf", NUM);
+                                string = LocaleController.getString("ChatYourSelf", R.string.ChatYourSelf);
                             } else {
                                 long j = currentUser.id;
                                 if (j == 333000 || j == 777000 || j == 42777) {
-                                    string = LocaleController.getString("ServiceNotifications", NUM);
+                                    string = LocaleController.getString("ServiceNotifications", R.string.ServiceNotifications);
                                 } else if (MessagesController.isSupportUser(currentUser)) {
-                                    string = LocaleController.getString("SupportStatus", NUM);
+                                    string = LocaleController.getString("SupportStatus", R.string.SupportStatus);
                                 } else if (currentUser.bot) {
-                                    string = LocaleController.getString("Bot", NUM);
+                                    string = LocaleController.getString("Bot", R.string.Bot);
                                 } else {
                                     boolean[] zArr2 = this.isOnline;
                                     zArr2[0] = false;
@@ -1062,13 +1063,13 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
         String str;
         int i = this.currentConnectionState;
         if (i == 2) {
-            str = LocaleController.getString("WaitingForNetwork", NUM);
+            str = LocaleController.getString("WaitingForNetwork", R.string.WaitingForNetwork);
         } else if (i == 1) {
-            str = LocaleController.getString("Connecting", NUM);
+            str = LocaleController.getString("Connecting", R.string.Connecting);
         } else if (i == 5) {
-            str = LocaleController.getString("Updating", NUM);
+            str = LocaleController.getString("Updating", R.string.Updating);
         } else {
-            str = i == 4 ? LocaleController.getString("ConnectingToProxy", NUM) : null;
+            str = i == 4 ? LocaleController.getString("ConnectingToProxy", R.string.ConnectingToProxy) : null;
         }
         if (str == null) {
             CharSequence charSequence = this.lastSubtitle;
@@ -1115,7 +1116,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
         sb.append(this.subtitleTextView.getText());
         accessibilityNodeInfo.setContentDescription(sb);
         if (accessibilityNodeInfo.isClickable() && Build.VERSION.SDK_INT >= 21) {
-            accessibilityNodeInfo.addAction(new AccessibilityNodeInfo.AccessibilityAction(16, LocaleController.getString("OpenProfile", NUM)));
+            accessibilityNodeInfo.addAction(new AccessibilityNodeInfo.AccessibilityAction(16, LocaleController.getString("OpenProfile", R.string.OpenProfile)));
         }
     }
 

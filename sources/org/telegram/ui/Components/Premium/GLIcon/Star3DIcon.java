@@ -18,6 +18,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.charset.StandardCharsets;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SvgHelper;
 import org.telegram.messenger.Utilities;
 import org.telegram.ui.ActionBar.Theme;
@@ -117,7 +118,7 @@ public class Star3DIcon {
         this.mVertices.position(0);
         GLES20.glVertexAttribPointer(0, 3, 5126, false, 0, this.mVertices);
         GLES20.glEnableVertexAttribArray(0);
-        Bitmap bitmap = SvgHelper.getBitmap(NUM, 80, 80, -1);
+        Bitmap bitmap = SvgHelper.getBitmap(R.raw.start_texture, 80, 80, -1);
         Utilities.stackBlurBitmap(bitmap, 3);
         int[] iArr = new int[1];
         GLES20.glGenTextures(1, iArr, 0);

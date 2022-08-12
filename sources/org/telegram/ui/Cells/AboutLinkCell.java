@@ -34,6 +34,7 @@ import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.R;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
@@ -81,7 +82,7 @@ public class AboutLinkCell extends FrameLayout {
                 }
                 BottomSheet.Builder builder = new BottomSheet.Builder(AboutLinkCell.this.parentFragment.getParentActivity());
                 builder.setTitle(str);
-                builder.setItems(new CharSequence[]{LocaleController.getString("Open", NUM), LocaleController.getString("Copy", NUM)}, new AboutLinkCell$3$$ExternalSyntheticLambda0(this, (ClickableSpan) AboutLinkCell.this.pressedLink.getSpan(), str));
+                builder.setItems(new CharSequence[]{LocaleController.getString("Open", R.string.Open), LocaleController.getString("Copy", R.string.Copy)}, new AboutLinkCell$3$$ExternalSyntheticLambda0(this, (ClickableSpan) AboutLinkCell.this.pressedLink.getSpan(), str));
                 builder.setOnPreDismissListener(new AboutLinkCell$3$$ExternalSyntheticLambda1(this));
                 builder.show();
                 LinkSpanDrawable unused2 = AboutLinkCell.this.pressedLink = null;
@@ -98,11 +99,11 @@ public class AboutLinkCell extends FrameLayout {
                     return;
                 }
                 if (str.startsWith("@")) {
-                    BulletinFactory.of(AboutLinkCell.this.parentFragment).createSimpleBulletin(NUM, LocaleController.getString("UsernameCopied", NUM)).show();
+                    BulletinFactory.of(AboutLinkCell.this.parentFragment).createSimpleBulletin(R.raw.copy, LocaleController.getString("UsernameCopied", R.string.UsernameCopied)).show();
                 } else if (str.startsWith("#") || str.startsWith("$")) {
-                    BulletinFactory.of(AboutLinkCell.this.parentFragment).createSimpleBulletin(NUM, LocaleController.getString("HashtagCopied", NUM)).show();
+                    BulletinFactory.of(AboutLinkCell.this.parentFragment).createSimpleBulletin(R.raw.copy, LocaleController.getString("HashtagCopied", R.string.HashtagCopied)).show();
                 } else {
-                    BulletinFactory.of(AboutLinkCell.this.parentFragment).createSimpleBulletin(NUM, LocaleController.getString("LinkCopied", NUM)).show();
+                    BulletinFactory.of(AboutLinkCell.this.parentFragment).createSimpleBulletin(R.raw.copy, LocaleController.getString("LinkCopied", R.string.LinkCopied)).show();
                 }
             }
         }
@@ -365,7 +366,7 @@ public class AboutLinkCell extends FrameLayout {
         this.valueTextView.setFocusable(false);
         this.container.addView(this.valueTextView, LayoutHelper.createFrame(-2, -2.0f, (!LocaleController.isRTL ? 3 : i) | 80, 23.0f, 0.0f, 23.0f, 10.0f));
         this.bottomShadow = new FrameLayout(context2);
-        Drawable mutate = context.getResources().getDrawable(NUM).mutate();
+        Drawable mutate = context.getResources().getDrawable(R.drawable.gradient_bottom).mutate();
         mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhite", resourcesProvider3), PorterDuff.Mode.SRC_ATOP));
         this.bottomShadow.setBackground(mutate);
         addView(this.bottomShadow, LayoutHelper.createFrame(-1, 12.0f, 87, 0.0f, 0.0f, 0.0f, 0.0f));
@@ -402,11 +403,11 @@ public class AboutLinkCell extends FrameLayout {
         this.showMoreTextView.setLines(1);
         this.showMoreTextView.setMaxLines(1);
         this.showMoreTextView.setSingleLine(true);
-        this.showMoreTextView.setText(LocaleController.getString("DescriptionMore", NUM));
+        this.showMoreTextView.setText(LocaleController.getString("DescriptionMore", R.string.DescriptionMore));
         this.showMoreTextView.setOnClickListener(new AboutLinkCell$$ExternalSyntheticLambda1(this));
         this.showMoreTextView.setPadding(AndroidUtilities.dp(2.0f), 0, AndroidUtilities.dp(2.0f), 0);
         this.showMoreTextBackgroundView = new FrameLayout(context2);
-        Drawable mutate2 = context.getResources().getDrawable(NUM).mutate();
+        Drawable mutate2 = context.getResources().getDrawable(R.drawable.gradient_left).mutate();
         this.showMoreBackgroundDrawable = mutate2;
         mutate2.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhite", resourcesProvider3), PorterDuff.Mode.MULTIPLY));
         this.showMoreTextBackgroundView.setBackground(this.showMoreBackgroundDrawable);

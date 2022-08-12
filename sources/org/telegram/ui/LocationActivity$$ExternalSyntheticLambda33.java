@@ -1,18 +1,19 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLRPC$TL_messageMediaGeo;
-import org.telegram.ui.Components.AlertsCreator;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-public final /* synthetic */ class LocationActivity$$ExternalSyntheticLambda33 implements AlertsCreator.ScheduleDatePickerDelegate {
+public final /* synthetic */ class LocationActivity$$ExternalSyntheticLambda33 implements RequestDelegate {
     public final /* synthetic */ LocationActivity f$0;
-    public final /* synthetic */ TLRPC$TL_messageMediaGeo f$1;
+    public final /* synthetic */ long f$1;
 
-    public /* synthetic */ LocationActivity$$ExternalSyntheticLambda33(LocationActivity locationActivity, TLRPC$TL_messageMediaGeo tLRPC$TL_messageMediaGeo) {
+    public /* synthetic */ LocationActivity$$ExternalSyntheticLambda33(LocationActivity locationActivity, long j) {
         this.f$0 = locationActivity;
-        this.f$1 = tLRPC$TL_messageMediaGeo;
+        this.f$1 = j;
     }
 
-    public final void didSelectDate(boolean z, int i) {
-        this.f$0.lambda$createView$12(this.f$1, z, i);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$getRecentLocations$40(this.f$1, tLObject, tLRPC$TL_error);
     }
 }

@@ -15,6 +15,7 @@ import android.widget.TextView;
 import androidx.core.graphics.ColorUtils;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.voip.CellFlickerDrawable;
@@ -111,7 +112,7 @@ public class StroageUsageView extends FrameLayout {
         TextView textView = new TextView(context);
         this.calculatingTextView = textView;
         textView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText"));
-        String string = LocaleController.getString("CalculatingSize", NUM);
+        String string = LocaleController.getString("CalculatingSize", R.string.CalculatingSize);
         int indexOf = string.indexOf("...");
         if (indexOf >= 0) {
             SpannableString spannableString = new SpannableString(string);
@@ -163,13 +164,11 @@ public class StroageUsageView extends FrameLayout {
     }
 
     public void setStorageUsage(boolean z, long j, long j2, long j3, long j4) {
-        boolean z2 = z;
-        long j5 = j4;
-        this.calculating = z2;
-        this.freeSizeTextView.setText(LocaleController.formatString("TotalDeviceFreeSize", NUM, AndroidUtilities.formatFileSize(j3)));
-        long j6 = j5 - j3;
-        this.totlaSizeTextView.setText(LocaleController.formatString("TotalDeviceSize", NUM, AndroidUtilities.formatFileSize(j6)));
-        if (z2) {
+        this.calculating = z;
+        this.freeSizeTextView.setText(LocaleController.formatString("TotalDeviceFreeSize", R.string.TotalDeviceFreeSize, AndroidUtilities.formatFileSize(j3)));
+        long j5 = j4 - j3;
+        this.totlaSizeTextView.setText(LocaleController.formatString("TotalDeviceSize", R.string.TotalDeviceSize, AndroidUtilities.formatFileSize(j5)));
+        if (z) {
             this.calculatingTextView.setVisibility(0);
             this.telegramCacheTextView.setVisibility(8);
             this.freeSizeTextView.setVisibility(8);
@@ -194,20 +193,20 @@ public class StroageUsageView extends FrameLayout {
                 this.textSettingsCell.setVisibility(0);
                 this.telegramCacheTextView.setVisibility(0);
                 this.telegramDatabaseTextView.setVisibility(8);
-                this.textSettingsCell.setText(LocaleController.getString("ClearTelegramCache", NUM), false);
-                this.telegramCacheTextView.setText(LocaleController.formatString("TelegramCacheSize", NUM, AndroidUtilities.formatFileSize(j2 + j)));
+                this.textSettingsCell.setText(LocaleController.getString("ClearTelegramCache", R.string.ClearTelegramCache), false);
+                this.telegramCacheTextView.setText(LocaleController.formatString("TelegramCacheSize", R.string.TelegramCacheSize, AndroidUtilities.formatFileSize(j2 + j)));
             } else {
                 this.telegramCacheTextView.setVisibility(8);
                 this.telegramDatabaseTextView.setVisibility(0);
-                this.telegramDatabaseTextView.setText(LocaleController.formatString("LocalDatabaseSize", NUM, AndroidUtilities.formatFileSize(j)));
+                this.telegramDatabaseTextView.setText(LocaleController.formatString("LocalDatabaseSize", R.string.LocalDatabaseSize, AndroidUtilities.formatFileSize(j)));
                 this.divider.setVisibility(8);
                 this.textSettingsCell.setVisibility(8);
             }
             this.freeSizeTextView.setVisibility(0);
             this.totlaSizeTextView.setVisibility(0);
-            float f = (float) j5;
+            float f = (float) j4;
             float f2 = ((float) (j2 + j)) / f;
-            float f3 = ((float) j6) / f;
+            float f3 = ((float) j5) / f;
             if (this.progress != f2) {
                 ValueAnimator valueAnimator3 = this.valueAnimator;
                 if (valueAnimator3 != null) {

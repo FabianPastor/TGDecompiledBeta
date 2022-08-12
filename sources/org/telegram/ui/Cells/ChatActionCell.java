@@ -33,6 +33,7 @@ import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.browser.Browser;
@@ -305,9 +306,9 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
             if (!z) {
                 str = LocaleController.formatDateChat((long) i);
             } else if (i == NUM) {
-                str = LocaleController.getString("MessageScheduledUntilOnline", NUM);
+                str = LocaleController.getString("MessageScheduledUntilOnline", R.string.MessageScheduledUntilOnline);
             } else {
-                str = LocaleController.formatString("MessageScheduledOn", NUM, LocaleController.formatDateChat((long) i));
+                str = LocaleController.formatString("MessageScheduledOn", R.string.MessageScheduledOn, LocaleController.formatDateChat((long) i));
             }
             this.customDate = i;
             CharSequence charSequence = this.customText;
@@ -1132,9 +1133,9 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
             if (tLRPC$Message == null || (tLRPC$MessageMedia = tLRPC$Message.media) == null || tLRPC$MessageMedia.ttl_seconds == 0) {
                 charSequence = AnimatedEmojiSpan.cloneSpans(messageObject.messageText);
             } else if (tLRPC$MessageMedia.photo instanceof TLRPC$TL_photoEmpty) {
-                charSequence = LocaleController.getString("AttachPhotoExpired", NUM);
+                charSequence = LocaleController.getString("AttachPhotoExpired", R.string.AttachPhotoExpired);
             } else if (tLRPC$MessageMedia.document instanceof TLRPC$TL_documentEmpty) {
-                charSequence = LocaleController.getString("AttachVideoExpired", NUM);
+                charSequence = LocaleController.getString("AttachVideoExpired", R.string.AttachVideoExpired);
             } else {
                 charSequence = AnimatedEmojiSpan.cloneSpans(messageObject.messageText);
             }
@@ -1148,7 +1149,7 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
                 int i2 = AndroidUtilities.roundMessageSize;
                 this.imageReceiver.setImageCoords(((float) (this.previousWidth - AndroidUtilities.roundMessageSize)) / 2.0f, (float) (this.textHeight + AndroidUtilities.dp(19.0f)), (float) i2, (float) i2);
             } else if (i == 18) {
-                createGiftPremiumLayouts(LocaleController.getString(NUM), LocaleController.formatString(NUM, LocaleController.formatPluralString("Months", messageObject.messageOwner.action.months, new Object[0])), LocaleController.getString(NUM), this.giftRectSize);
+                createGiftPremiumLayouts(LocaleController.getString(R.string.ActionGiftPremiumTitle), LocaleController.formatString(R.string.ActionGiftPremiumSubtitle, LocaleController.formatPluralString("Months", messageObject.messageOwner.action.months, new Object[0])), LocaleController.getString(R.string.ActionGiftPremiumView), this.giftRectSize);
             }
         }
     }

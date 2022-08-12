@@ -1,5 +1,6 @@
 package org.telegram.ui.Components;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,6 +18,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
@@ -26,6 +28,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
@@ -145,29 +148,29 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                 return;
             }
             BottomSheet.Builder builder = new BottomSheet.Builder(this.parentFragment.getParentActivity());
-            builder.setTitle(LocaleController.getString("ChoosePhoto", NUM), true);
+            builder.setTitle(LocaleController.getString("ChoosePhoto", R.string.ChoosePhoto), true);
             ArrayList arrayList = new ArrayList();
             ArrayList arrayList2 = new ArrayList();
             ArrayList arrayList3 = new ArrayList();
-            arrayList.add(LocaleController.getString("ChooseTakePhoto", NUM));
-            arrayList2.add(NUM);
+            arrayList.add(LocaleController.getString("ChooseTakePhoto", R.string.ChooseTakePhoto));
+            arrayList2.add(Integer.valueOf(R.drawable.msg_camera));
             arrayList3.add(0);
             if (this.canSelectVideo) {
-                arrayList.add(LocaleController.getString("ChooseRecordVideo", NUM));
-                arrayList2.add(NUM);
+                arrayList.add(LocaleController.getString("ChooseRecordVideo", R.string.ChooseRecordVideo));
+                arrayList2.add(Integer.valueOf(R.drawable.msg_video));
                 arrayList3.add(4);
             }
-            arrayList.add(LocaleController.getString("ChooseFromGallery", NUM));
-            arrayList2.add(NUM);
+            arrayList.add(LocaleController.getString("ChooseFromGallery", R.string.ChooseFromGallery));
+            arrayList2.add(Integer.valueOf(R.drawable.msg_photos));
             arrayList3.add(1);
             if (this.searchAvailable) {
-                arrayList.add(LocaleController.getString("ChooseFromSearch", NUM));
-                arrayList2.add(NUM);
+                arrayList.add(LocaleController.getString("ChooseFromSearch", R.string.ChooseFromSearch));
+                arrayList2.add(Integer.valueOf(R.drawable.msg_search));
                 arrayList3.add(2);
             }
             if (z) {
-                arrayList.add(LocaleController.getString("DeletePhoto", NUM));
-                arrayList2.add(NUM);
+                arrayList.add(LocaleController.getString("DeletePhoto", R.string.DeletePhoto));
+                arrayList2.add(Integer.valueOf(R.drawable.msg_delete));
                 arrayList3.add(3);
             }
             int[] iArr = new int[arrayList2.size()];
@@ -501,7 +504,8 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                     File generatePicturePath = AndroidUtilities.generatePicturePath();
                     if (generatePicturePath != null) {
                         if (i >= 24) {
-                            intent.putExtra("output", FileProvider.getUriForFile(this.parentFragment.getParentActivity(), "org.telegram.messenger.beta.provider", generatePicturePath));
+                            Activity parentActivity = this.parentFragment.getParentActivity();
+                            intent.putExtra("output", FileProvider.getUriForFile(parentActivity, ApplicationLoader.getApplicationId() + ".provider", generatePicturePath));
                             intent.addFlags(2);
                             intent.addFlags(1);
                         } else {
@@ -529,7 +533,8 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                     File generateVideoPath = AndroidUtilities.generateVideoPath();
                     if (generateVideoPath != null) {
                         if (i >= 24) {
-                            intent.putExtra("output", FileProvider.getUriForFile(this.parentFragment.getParentActivity(), "org.telegram.messenger.beta.provider", generateVideoPath));
+                            Activity parentActivity = this.parentFragment.getParentActivity();
+                            intent.putExtra("output", FileProvider.getUriForFile(parentActivity, ApplicationLoader.getApplicationId() + ".provider", generateVideoPath));
                             intent.addFlags(2);
                             intent.addFlags(1);
                         } else if (i >= 18) {
@@ -674,7 +679,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
             }
             this.currentPicturePath = null;
         } else if (i == 13) {
-            this.parentFragment.getParentActivity().overridePendingTransition(NUM, NUM);
+            this.parentFragment.getParentActivity().overridePendingTransition(R.anim.alpha_in, R.anim.alpha_out);
             PhotoViewer.getInstance().setParentActivity(this.parentFragment.getParentActivity());
             try {
                 int attributeInt = new ExifInterface(this.currentPicturePath).getAttributeInt("Orientation", 1);

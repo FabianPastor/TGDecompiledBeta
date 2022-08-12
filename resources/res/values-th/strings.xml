@@ -21,12 +21,6 @@
     <string name="fcm_fallback_notification_channel_label">เบ็ดเตล็ด</string>
     <string name="google_assistant_verification_channel_name">เครื่องมือยืนยัน Assistant</string>
     <string name="google_assistant_verification_notification_title">Google Assistant กำลังส่งข้อความ</string>
-    <string name="hms_apk_not_installed_hints">บางฟีเจอร์ใน %1$s อาจทำงานไม่ถูกต้องหากไม่มี HMS Core ซึ่งไม่ได้ติดตั้งบนอุปกรณ์ของคุณ</string>
-    <string name="hms_bindfaildlg_message">%1$s ไม่สามารถใช้ HMS Core ได้ โปรดเปิดใช้งานตัวเพิ่มประสิทธิภาพ (ตัวจัดการโทรศัพท์) หรือไปที่การตั้งค่า เปิดใช้งานการอนุญาตทั้งหมดสำหรับ %2$s (รวมทั้งเปิดใช้งานอัตโนมัติและเปิดใช้งานรอง) และลองอีกครั้ง</string>
-    <string name="hms_confirm">ตกลง</string>
-    <string name="hms_is_spoof">ดูเหมือนว่าคุณมี HMS Core เวอร์ชันที่ไม่เป็นทางการ (%1$s) ติดตั้งอยู่บนอุปกรณ์ของคุณ โปรดถอนการติดตั้ง HMS Core จากการตั้งค่าและกลับมาที่แอปนี้เพื่อติดตั้งเวอร์ชันที่เป็นทางการ</string>
-    <string name="hms_push_channel">ค่าเริ่มต้น</string>
-    <string name="hms_spoof_hints">หมายเหตุ</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">ซื้อด้วย Google</string>
 </resources>

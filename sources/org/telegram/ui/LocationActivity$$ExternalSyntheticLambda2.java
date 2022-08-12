@@ -10,6 +10,6 @@ public final /* synthetic */ class LocationActivity$$ExternalSyntheticLambda2 im
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$checkGpsEnabled$31(dialogInterface, i);
+        this.f$0.lambda$showPermissionAlert$36(dialogInterface, i);
     }
 }

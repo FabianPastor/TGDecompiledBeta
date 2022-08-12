@@ -40,12 +40,6 @@
     <string name="fcm_fallback_notification_channel_label">Çeşitli</string>
     <string name="google_assistant_verification_channel_name">Asistan doğrulayıcı</string>
     <string name="google_assistant_verification_notification_title">Google Assistant mesaj gönderiyor</string>
-    <string name="hms_apk_not_installed_hints">HMS Core cihazınızda yüklü değil. %1$s uygulamasındaki bazı özellikler HMS Core olmadan düzgün çalışmayabilir.</string>
-    <string name="hms_bindfaildlg_message">%1$s HMS Core\'u kullanamıyor. Optimizer\'ı (Telefon Yöneticisi) başlatın veya Ayarlar\'a gidin, %2$s için tüm izinleri (otomatik başlatma ve ikincil başlatma dahil) etkinleştirin ve tekrar deneyin.</string>
-    <string name="hms_confirm">Tamam</string>
-    <string name="hms_is_spoof">Cihazınızda HMS Core\'un (%1$s) resmi olmayan bir sürümü yüklü gibi görünüyor. Lütfen Ayarlar bölümünden HMS Core\'u kaldırın ve resmi sürümü yüklemek için bu uygulamaya dönün.</string>
-    <string name="hms_push_channel">Varsayılan</string>
-    <string name="hms_spoof_hints">Not</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Google ile satın al</string>
 </resources>

@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.R;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -34,19 +35,19 @@ public final class BulletinFactory {
     }
 
     public enum FileType {
-        PHOTO("PhotoSavedHint", NUM, r5),
-        PHOTOS("PhotosSavedHint", r7),
-        VIDEO("VideoSavedHint", NUM, r5),
-        VIDEOS("VideosSavedHint", r7),
-        MEDIA("MediaSavedHint", r7),
-        PHOTO_TO_DOWNLOADS("PhotoSavedToDownloadsHint", NUM, r16),
-        VIDEO_TO_DOWNLOADS("VideoSavedToDownloadsHint", NUM, r16),
-        GIF("GifSavedHint", NUM, Icon.SAVED_TO_GIFS),
-        GIF_TO_DOWNLOADS("GifSavedToDownloadsHint", NUM, r5),
-        AUDIO("AudioSavedHint", NUM, r11),
-        AUDIOS("AudiosSavedHint", r11),
-        UNKNOWN("FileSavedHint", NUM, r5),
-        UNKNOWNS("FilesSavedHint", r5);
+        PHOTO("PhotoSavedHint", r4, r13),
+        PHOTOS("PhotosSavedHint", r13),
+        VIDEO("VideoSavedHint", R.string.VideoSavedHint, r13),
+        VIDEOS("VideosSavedHint", r13),
+        MEDIA("MediaSavedHint", r13),
+        PHOTO_TO_DOWNLOADS("PhotoSavedToDownloadsHint", r18, r13),
+        VIDEO_TO_DOWNLOADS("VideoSavedToDownloadsHint", R.string.VideoSavedToDownloadsHint, r14),
+        GIF("GifSavedHint", R.string.GifSavedHint, Icon.SAVED_TO_GIFS),
+        GIF_TO_DOWNLOADS("GifSavedToDownloadsHint", R.string.GifSavedToDownloadsHint, r14),
+        AUDIO("AudioSavedHint", r28, r9),
+        AUDIOS("AudiosSavedHint", r9),
+        UNKNOWN("FileSavedHint", R.string.FileSavedHint, r16),
+        UNKNOWNS("FilesSavedHint", r16);
         
         /* access modifiers changed from: private */
         public final Icon icon;
@@ -77,10 +78,10 @@ public final class BulletinFactory {
         }
 
         private enum Icon {
-            SAVED_TO_DOWNLOADS(NUM, 2, "Box", "Arrow"),
-            SAVED_TO_GALLERY(NUM, 0, "Box", "Arrow", "Mask", "Arrow 2", "Splash"),
-            SAVED_TO_MUSIC(NUM, 2, "Box", "Arrow"),
-            SAVED_TO_GIFS(NUM, 0, "gif");
+            SAVED_TO_DOWNLOADS(R.raw.ic_download, 2, "Box", "Arrow"),
+            SAVED_TO_GALLERY(R.raw.ic_save_to_gallery, 0, "Box", "Arrow", "Mask", "Arrow 2", "Splash"),
+            SAVED_TO_MUSIC(R.raw.ic_save_to_music, 2, "Box", "Arrow"),
+            SAVED_TO_GIFS(R.raw.ic_save_to_gifs, 0, "gif");
             
             /* access modifiers changed from: private */
             public final String[] layers;
@@ -155,8 +156,8 @@ public final class BulletinFactory {
 
     public Bulletin createReportSent(Theme.ResourcesProvider resourcesProvider2) {
         Bulletin.LottieLayout lottieLayout = new Bulletin.LottieLayout(getContext(), resourcesProvider2);
-        lottieLayout.setAnimation(NUM, new String[0]);
-        lottieLayout.textView.setText(LocaleController.getString("ReportChatSent", NUM));
+        lottieLayout.setAnimation(R.raw.chats_infotip, new String[0]);
+        lottieLayout.textView.setText(LocaleController.getString("ReportChatSent", R.string.ReportChatSent));
         return create(lottieLayout, 1500);
     }
 
@@ -185,7 +186,7 @@ public final class BulletinFactory {
 
     public Bulletin createErrorBulletin(CharSequence charSequence, Theme.ResourcesProvider resourcesProvider2) {
         Bulletin.LottieLayout lottieLayout = new Bulletin.LottieLayout(getContext(), resourcesProvider2);
-        lottieLayout.setAnimation(NUM, new String[0]);
+        lottieLayout.setAnimation(R.raw.chats_infotip, new String[0]);
         lottieLayout.textView.setText(charSequence);
         lottieLayout.textView.setSingleLine(false);
         lottieLayout.textView.setMaxLines(2);
@@ -194,8 +195,8 @@ public final class BulletinFactory {
 
     public Bulletin createRestrictVoiceMessagesPremiumBulletin() {
         Bulletin.LottieLayout lottieLayout = new Bulletin.LottieLayout(getContext(), (Theme.ResourcesProvider) null);
-        lottieLayout.setAnimation(NUM, new String[0]);
-        String string = LocaleController.getString(NUM);
+        lottieLayout.setAnimation(R.raw.voip_muted, new String[0]);
+        String string = LocaleController.getString(R.string.PrivacyVoiceMessagesPremiumOnly);
         SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(string);
         int indexOf = string.indexOf(42);
         int lastIndexOf = string.lastIndexOf(42);
@@ -218,7 +219,7 @@ public final class BulletinFactory {
 
     public Bulletin createErrorBulletinSubtitle(CharSequence charSequence, CharSequence charSequence2, Theme.ResourcesProvider resourcesProvider2) {
         Bulletin.TwoLineLottieLayout twoLineLottieLayout = new Bulletin.TwoLineLottieLayout(getContext(), resourcesProvider2);
-        twoLineLottieLayout.setAnimation(NUM, new String[0]);
+        twoLineLottieLayout.setAnimation(R.raw.chats_infotip, new String[0]);
         twoLineLottieLayout.titleTextView.setText(charSequence);
         twoLineLottieLayout.subtitleTextView.setText(charSequence2);
         return create(twoLineLottieLayout, 1500);
@@ -237,7 +238,7 @@ public final class BulletinFactory {
             return new Bulletin.EmptyBulletin();
         }
         Bulletin.LottieLayout lottieLayout = new Bulletin.LottieLayout(getContext(), (Theme.ResourcesProvider) null);
-        lottieLayout.setAnimation(NUM, 36, 36, "NULL ROTATION", "Back", "Front");
+        lottieLayout.setAnimation(R.raw.copy, 36, 36, "NULL ROTATION", "Back", "Front");
         lottieLayout.textView.setText(str);
         return create(lottieLayout, 1500);
     }
@@ -248,14 +249,14 @@ public final class BulletinFactory {
         }
         if (z) {
             Bulletin.TwoLineLottieLayout twoLineLottieLayout = new Bulletin.TwoLineLottieLayout(getContext(), resourcesProvider2);
-            twoLineLottieLayout.setAnimation(NUM, 36, 36, "Wibe", "Circle");
-            twoLineLottieLayout.titleTextView.setText(LocaleController.getString("LinkCopied", NUM));
-            twoLineLottieLayout.subtitleTextView.setText(LocaleController.getString("LinkCopiedPrivateInfo", NUM));
+            twoLineLottieLayout.setAnimation(R.raw.voip_invite, 36, 36, "Wibe", "Circle");
+            twoLineLottieLayout.titleTextView.setText(LocaleController.getString("LinkCopied", R.string.LinkCopied));
+            twoLineLottieLayout.subtitleTextView.setText(LocaleController.getString("LinkCopiedPrivateInfo", R.string.LinkCopiedPrivateInfo));
             return create(twoLineLottieLayout, 2750);
         }
         Bulletin.LottieLayout lottieLayout = new Bulletin.LottieLayout(getContext(), resourcesProvider2);
-        lottieLayout.setAnimation(NUM, 36, 36, "Wibe", "Circle");
-        lottieLayout.textView.setText(LocaleController.getString("LinkCopied", NUM));
+        lottieLayout.setAnimation(R.raw.voip_invite, 36, 36, "Wibe", "Circle");
+        lottieLayout.textView.setText(LocaleController.getString("LinkCopied", R.string.LinkCopied));
         return create(lottieLayout, 1500);
     }
 
@@ -264,7 +265,7 @@ public final class BulletinFactory {
             return new Bulletin.EmptyBulletin();
         }
         Bulletin.LottieLayout lottieLayout = new Bulletin.LottieLayout(getContext(), resourcesProvider2);
-        lottieLayout.setAnimation(NUM, 36, 36, "Wibe", "Circle");
+        lottieLayout.setAnimation(R.raw.voip_invite, 36, 36, "Wibe", "Circle");
         lottieLayout.textView.setText(str);
         return create(lottieLayout, 1500);
     }
@@ -286,8 +287,8 @@ public final class BulletinFactory {
         return createMuteBulletin(baseFragment, i, 0, (Theme.ResourcesProvider) null);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:18:0x0080  */
-    /* JADX WARNING: Removed duplicated region for block: B:19:0x0089  */
+    /* JADX WARNING: Removed duplicated region for block: B:18:0x0083  */
+    /* JADX WARNING: Removed duplicated region for block: B:19:0x008b  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static org.telegram.ui.Components.Bulletin createMuteBulletin(org.telegram.ui.ActionBar.BaseFragment r10, int r11, int r12, org.telegram.ui.ActionBar.Theme.ResourcesProvider r13) {
         /*
@@ -298,96 +299,99 @@ public final class BulletinFactory {
             r1 = 5
             r2 = 4
             r3 = 3
-            r4 = 2131627111(0x7f0e0CLASSNAME, float:1.8881477E38)
-            java.lang.String r5 = "NotificationsMutedForHint"
-            r6 = 2
-            r7 = 0
-            r8 = 1
-            if (r11 == 0) goto L_0x006e
-            if (r11 == r8) goto L_0x005d
-            if (r11 == r6) goto L_0x004c
-            if (r11 == r3) goto L_0x0042
-            if (r11 == r2) goto L_0x0036
-            if (r11 != r1) goto L_0x0030
-            java.lang.Object[] r11 = new java.lang.Object[r8]
+            java.lang.String r4 = "NotificationsMutedForHint"
+            r5 = 2
+            r6 = 0
+            r7 = 1
+            if (r11 == 0) goto L_0x006f
+            if (r11 == r7) goto L_0x005c
+            if (r11 == r5) goto L_0x0049
+            if (r11 == r3) goto L_0x0040
+            if (r11 == r2) goto L_0x0035
+            if (r11 != r1) goto L_0x002f
+            int r11 = org.telegram.messenger.R.string.NotificationsMutedForHint
+            java.lang.Object[] r13 = new java.lang.Object[r7]
             java.lang.String r12 = org.telegram.messenger.LocaleController.formatTTLString(r12)
-            r11[r7] = r12
-            java.lang.String r11 = org.telegram.messenger.LocaleController.formatString(r5, r4, r11)
+            r13[r6] = r12
+            java.lang.String r11 = org.telegram.messenger.LocaleController.formatString(r4, r11, r13)
             r12 = 1
-            goto L_0x007d
-        L_0x0030:
+            goto L_0x0080
+        L_0x002f:
             java.lang.IllegalArgumentException r10 = new java.lang.IllegalArgumentException
             r10.<init>()
             throw r10
-        L_0x0036:
-            r11 = 2131627136(0x7f0e0CLASSNAME, float:1.8881528E38)
+        L_0x0035:
+            int r11 = org.telegram.messenger.R.string.NotificationsUnmutedHint
             java.lang.String r12 = "NotificationsUnmutedHint"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
             r12 = 0
             r13 = 0
-            goto L_0x007e
-        L_0x0042:
-            r11 = 2131627112(0x7f0e0CLASSNAME, float:1.888148E38)
+            goto L_0x0081
+        L_0x0040:
+            int r11 = org.telegram.messenger.R.string.NotificationsMutedHint
             java.lang.String r12 = "NotificationsMutedHint"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
-            goto L_0x007c
-        L_0x004c:
-            java.lang.Object[] r11 = new java.lang.Object[r8]
+            goto L_0x007f
+        L_0x0049:
+            int r11 = org.telegram.messenger.R.string.NotificationsMutedForHint
             java.lang.Object[] r12 = new java.lang.Object[r7]
-            java.lang.String r13 = "Days"
-            java.lang.String r12 = org.telegram.messenger.LocaleController.formatPluralString(r13, r6, r12)
-            r11[r7] = r12
-            java.lang.String r11 = org.telegram.messenger.LocaleController.formatString(r5, r4, r11)
-            goto L_0x007c
-        L_0x005d:
-            java.lang.Object[] r11 = new java.lang.Object[r8]
-            r12 = 8
-            java.lang.Object[] r9 = new java.lang.Object[r7]
-            java.lang.String r12 = org.telegram.messenger.LocaleController.formatPluralString(r13, r12, r9)
-            r11[r7] = r12
-            java.lang.String r11 = org.telegram.messenger.LocaleController.formatString(r5, r4, r11)
-            goto L_0x007c
-        L_0x006e:
-            java.lang.Object[] r11 = new java.lang.Object[r8]
+            java.lang.Object[] r13 = new java.lang.Object[r6]
+            java.lang.String r8 = "Days"
+            java.lang.String r13 = org.telegram.messenger.LocaleController.formatPluralString(r8, r5, r13)
+            r12[r6] = r13
+            java.lang.String r11 = org.telegram.messenger.LocaleController.formatString(r4, r11, r12)
+            goto L_0x007f
+        L_0x005c:
+            int r11 = org.telegram.messenger.R.string.NotificationsMutedForHint
             java.lang.Object[] r12 = new java.lang.Object[r7]
-            java.lang.String r12 = org.telegram.messenger.LocaleController.formatPluralString(r13, r8, r12)
-            r11[r7] = r12
-            java.lang.String r11 = org.telegram.messenger.LocaleController.formatString(r5, r4, r11)
-        L_0x007c:
+            r8 = 8
+            java.lang.Object[] r9 = new java.lang.Object[r6]
+            java.lang.String r13 = org.telegram.messenger.LocaleController.formatPluralString(r13, r8, r9)
+            r12[r6] = r13
+            java.lang.String r11 = org.telegram.messenger.LocaleController.formatString(r4, r11, r12)
+            goto L_0x007f
+        L_0x006f:
+            int r11 = org.telegram.messenger.R.string.NotificationsMutedForHint
+            java.lang.Object[] r12 = new java.lang.Object[r7]
+            java.lang.Object[] r8 = new java.lang.Object[r6]
+            java.lang.String r13 = org.telegram.messenger.LocaleController.formatPluralString(r13, r7, r8)
+            r12[r6] = r13
+            java.lang.String r11 = org.telegram.messenger.LocaleController.formatString(r4, r11, r12)
+        L_0x007f:
             r12 = 0
-        L_0x007d:
+        L_0x0080:
             r13 = 1
-        L_0x007e:
-            if (r12 == 0) goto L_0x0089
-            r12 = 2131558498(0x7f0d0062, float:1.8742314E38)
-            java.lang.String[] r13 = new java.lang.String[r7]
+        L_0x0081:
+            if (r12 == 0) goto L_0x008b
+            int r12 = org.telegram.messenger.R.raw.mute_for
+            java.lang.String[] r13 = new java.lang.String[r6]
             r0.setAnimation(r12, r13)
             goto L_0x00c0
-        L_0x0089:
-            if (r13 == 0) goto L_0x00a8
-            r12 = 2131558466(0x7f0d0042, float:1.8742249E38)
+        L_0x008b:
+            if (r13 == 0) goto L_0x00a9
+            int r12 = org.telegram.messenger.R.raw.ic_mute
             java.lang.String[] r13 = new java.lang.String[r1]
             java.lang.String r1 = "Body Main"
-            r13[r7] = r1
-            java.lang.String r1 = "Body Top"
-            r13[r8] = r1
-            java.lang.String r1 = "Line"
             r13[r6] = r1
+            java.lang.String r1 = "Body Top"
+            r13[r7] = r1
+            java.lang.String r1 = "Line"
+            r13[r5] = r1
             java.lang.String r1 = "Curve Big"
             r13[r3] = r1
             java.lang.String r1 = "Curve Small"
             r13[r2] = r1
             r0.setAnimation(r12, r13)
             goto L_0x00c0
-        L_0x00a8:
-            r12 = 2131558472(0x7f0d0048, float:1.874226E38)
+        L_0x00a9:
+            int r12 = org.telegram.messenger.R.raw.ic_unmute
             java.lang.String[] r13 = new java.lang.String[r2]
             java.lang.String r1 = "BODY"
-            r13[r7] = r1
-            java.lang.String r1 = "Wibe Big"
-            r13[r8] = r1
-            java.lang.String r1 = "Wibe Big 3"
             r13[r6] = r1
+            java.lang.String r1 = "Wibe Big"
+            r13[r7] = r1
+            java.lang.String r1 = "Wibe Big 3"
+            r13[r5] = r1
             java.lang.String r1 = "Wibe Small"
             r13[r3] = r1
             r0.setAnimation(r12, r13)
@@ -405,72 +409,73 @@ public final class BulletinFactory {
         return createMuteBulletin(baseFragment, z ? 3 : 4, 0, resourcesProvider2);
     }
 
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v1, resolved type: org.telegram.ui.Components.Bulletin$LottieLayout} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v3, resolved type: org.telegram.ui.Components.Bulletin$LottieLayout} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v4, resolved type: org.telegram.ui.Components.Bulletin$TwoLineLottieLayout} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v5, resolved type: org.telegram.ui.Components.Bulletin$LottieLayout} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v1, resolved type: org.telegram.ui.Components.Bulletin$LottieLayout} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v3, resolved type: org.telegram.ui.Components.Bulletin$LottieLayout} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v4, resolved type: org.telegram.ui.Components.Bulletin$TwoLineLottieLayout} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v5, resolved type: org.telegram.ui.Components.Bulletin$LottieLayout} */
     /* JADX WARNING: Multi-variable type inference failed */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public static org.telegram.ui.Components.Bulletin createUnpinAllMessagesBulletin(org.telegram.ui.ActionBar.BaseFragment r8, int r9, boolean r10, java.lang.Runnable r11, java.lang.Runnable r12, org.telegram.ui.ActionBar.Theme.ResourcesProvider r13) {
+    public static org.telegram.ui.Components.Bulletin createUnpinAllMessagesBulletin(org.telegram.ui.ActionBar.BaseFragment r7, int r8, boolean r9, java.lang.Runnable r10, java.lang.Runnable r11, org.telegram.ui.ActionBar.Theme.ResourcesProvider r12) {
         /*
-            android.app.Activity r0 = r8.getParentActivity()
+            android.app.Activity r0 = r7.getParentActivity()
             if (r0 != 0) goto L_0x000d
-            if (r12 == 0) goto L_0x000b
-            r12.run()
+            if (r11 == 0) goto L_0x000b
+            r11.run()
         L_0x000b:
-            r8 = 0
-            return r8
+            r7 = 0
+            return r7
         L_0x000d:
             java.lang.String r0 = "Line"
             java.lang.String r1 = "Pin"
             r2 = 2
-            r3 = 2131558473(0x7f0d0049, float:1.8742263E38)
-            r4 = 1
-            r5 = 0
-            r6 = 28
-            if (r10 == 0) goto L_0x004a
-            org.telegram.ui.Components.Bulletin$TwoLineLottieLayout r9 = new org.telegram.ui.Components.Bulletin$TwoLineLottieLayout
-            android.app.Activity r10 = r8.getParentActivity()
-            r9.<init>(r10, r13)
-            java.lang.String[] r10 = new java.lang.String[r2]
-            r10[r5] = r1
-            r10[r4] = r0
-            r9.setAnimation(r3, r6, r6, r10)
-            android.widget.TextView r10 = r9.titleTextView
-            r0 = 2131627620(0x7f0e0e64, float:1.888251E38)
+            r3 = 1
+            r4 = 0
+            r5 = 28
+            if (r9 == 0) goto L_0x0047
+            org.telegram.ui.Components.Bulletin$TwoLineLottieLayout r8 = new org.telegram.ui.Components.Bulletin$TwoLineLottieLayout
+            android.app.Activity r9 = r7.getParentActivity()
+            r8.<init>(r9, r12)
+            int r9 = org.telegram.messenger.R.raw.ic_unpin
+            java.lang.String[] r2 = new java.lang.String[r2]
+            r2[r4] = r1
+            r2[r3] = r0
+            r8.setAnimation(r9, r5, r5, r2)
+            android.widget.TextView r9 = r8.titleTextView
+            int r0 = org.telegram.messenger.R.string.PinnedMessagesHidden
             java.lang.String r1 = "PinnedMessagesHidden"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-            r10.setText(r0)
-            android.widget.TextView r10 = r9.subtitleTextView
-            r0 = 2131627621(0x7f0e0e65, float:1.8882512E38)
+            r9.setText(r0)
+            android.widget.TextView r9 = r8.subtitleTextView
+            int r0 = org.telegram.messenger.R.string.PinnedMessagesHiddenInfo
             java.lang.String r1 = "PinnedMessagesHiddenInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-            r10.setText(r0)
-            goto L_0x006a
-        L_0x004a:
-            org.telegram.ui.Components.Bulletin$LottieLayout r10 = new org.telegram.ui.Components.Bulletin$LottieLayout
-            android.app.Activity r7 = r8.getParentActivity()
-            r10.<init>(r7, r13)
+            r9.setText(r0)
+            goto L_0x0069
+        L_0x0047:
+            org.telegram.ui.Components.Bulletin$LottieLayout r9 = new org.telegram.ui.Components.Bulletin$LottieLayout
+            android.app.Activity r6 = r7.getParentActivity()
+            r9.<init>(r6, r12)
+            int r6 = org.telegram.messenger.R.raw.ic_unpin
             java.lang.String[] r2 = new java.lang.String[r2]
-            r2[r5] = r1
-            r2[r4] = r0
-            r10.setAnimation((int) r3, (int) r6, (int) r6, (java.lang.String[]) r2)
-            android.widget.TextView r0 = r10.textView
-            java.lang.Object[] r1 = new java.lang.Object[r5]
+            r2[r4] = r1
+            r2[r3] = r0
+            r9.setAnimation((int) r6, (int) r5, (int) r5, (java.lang.String[]) r2)
+            android.widget.TextView r0 = r9.textView
+            java.lang.Object[] r1 = new java.lang.Object[r4]
             java.lang.String r2 = "MessagesUnpinned"
-            java.lang.String r9 = org.telegram.messenger.LocaleController.formatPluralString(r2, r9, r1)
-            r0.setText(r9)
-            r9 = r10
-        L_0x006a:
-            org.telegram.ui.Components.Bulletin$UndoButton r10 = new org.telegram.ui.Components.Bulletin$UndoButton
-            android.app.Activity r0 = r8.getParentActivity()
-            r10.<init>(r0, r4, r13)
-            org.telegram.ui.Components.Bulletin$UndoButton r10 = r10.setUndoAction(r11)
-            org.telegram.ui.Components.Bulletin$UndoButton r10 = r10.setDelayedAction(r12)
-            r9.setButton(r10)
-            r10 = 5000(0x1388, float:7.006E-42)
-            org.telegram.ui.Components.Bulletin r8 = org.telegram.ui.Components.Bulletin.make((org.telegram.ui.ActionBar.BaseFragment) r8, (org.telegram.ui.Components.Bulletin.Layout) r9, (int) r10)
-            return r8
+            java.lang.String r8 = org.telegram.messenger.LocaleController.formatPluralString(r2, r8, r1)
+            r0.setText(r8)
+            r8 = r9
+        L_0x0069:
+            org.telegram.ui.Components.Bulletin$UndoButton r9 = new org.telegram.ui.Components.Bulletin$UndoButton
+            android.app.Activity r0 = r7.getParentActivity()
+            r9.<init>(r0, r3, r12)
+            org.telegram.ui.Components.Bulletin$UndoButton r9 = r9.setUndoAction(r10)
+            org.telegram.ui.Components.Bulletin$UndoButton r9 = r9.setDelayedAction(r11)
+            r8.setButton(r9)
+            r9 = 5000(0x1388, float:7.006E-42)
+            org.telegram.ui.Components.Bulletin r7 = org.telegram.ui.Components.Bulletin.make((org.telegram.ui.ActionBar.BaseFragment) r7, (org.telegram.ui.Components.Bulletin.Layout) r8, (int) r9)
+            return r7
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.BulletinFactory.createUnpinAllMessagesBulletin(org.telegram.ui.ActionBar.BaseFragment, int, boolean, java.lang.Runnable, java.lang.Runnable, org.telegram.ui.ActionBar.Theme$ResourcesProvider):org.telegram.ui.Components.Bulletin");
     }
@@ -485,234 +490,236 @@ public final class BulletinFactory {
 
     public static Bulletin createPromoteToAdminBulletin(BaseFragment baseFragment, String str) {
         Bulletin.LottieLayout lottieLayout = new Bulletin.LottieLayout(baseFragment.getParentActivity(), baseFragment.getResourceProvider());
-        lottieLayout.setAnimation(NUM, "Shield");
-        lottieLayout.textView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("UserSetAsAdminHint", NUM, str)));
+        lottieLayout.setAnimation(R.raw.ic_admin, "Shield");
+        lottieLayout.textView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("UserSetAsAdminHint", R.string.UserSetAsAdminHint, str)));
         return Bulletin.make(baseFragment, (Bulletin.Layout) lottieLayout, 1500);
     }
 
     public static Bulletin createAddedAsAdminBulletin(BaseFragment baseFragment, String str) {
         Bulletin.LottieLayout lottieLayout = new Bulletin.LottieLayout(baseFragment.getParentActivity(), baseFragment.getResourceProvider());
-        lottieLayout.setAnimation(NUM, "Shield");
-        lottieLayout.textView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("UserAddedAsAdminHint", NUM, str)));
+        lottieLayout.setAnimation(R.raw.ic_admin, "Shield");
+        lottieLayout.textView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("UserAddedAsAdminHint", R.string.UserAddedAsAdminHint, str)));
         return Bulletin.make(baseFragment, (Bulletin.Layout) lottieLayout, 1500);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:14:0x00ae  */
+    /* JADX WARNING: Removed duplicated region for block: B:14:0x00aa  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public static org.telegram.ui.Components.Bulletin createInviteSentBulletin(android.content.Context r4, android.widget.FrameLayout r5, int r6, long r7, int r9, int r10, int r11) {
+    public static org.telegram.ui.Components.Bulletin createInviteSentBulletin(android.content.Context r3, android.widget.FrameLayout r4, int r5, long r6, int r8, int r9, int r10) {
         /*
-            org.telegram.ui.Components.Bulletin$LottieLayout r9 = new org.telegram.ui.Components.Bulletin$LottieLayout
+            org.telegram.ui.Components.Bulletin$LottieLayout r8 = new org.telegram.ui.Components.Bulletin$LottieLayout
             r0 = 0
-            r9.<init>(r4, r0, r10, r11)
-            r4 = 300(0x12c, float:4.2E-43)
-            r10 = 2131558454(0x7f0d0036, float:1.8742224E38)
-            r11 = 1
-            r0 = 30
+            r8.<init>(r3, r0, r9, r10)
+            r3 = 300(0x12c, float:4.2E-43)
+            r9 = 1
+            r10 = 30
+            r0 = 0
+            if (r5 > r9) goto L_0x0081
+            int r5 = org.telegram.messenger.UserConfig.selectedAccount
+            org.telegram.messenger.UserConfig r5 = org.telegram.messenger.UserConfig.getInstance(r5)
+            long r1 = r5.clientUserId
+            int r5 = (r6 > r1 ? 1 : (r6 == r1 ? 0 : -1))
+            if (r5 != 0) goto L_0x002f
+            int r3 = org.telegram.messenger.R.string.InvLinkToSavedMessages
+            java.lang.String r5 = "InvLinkToSavedMessages"
+            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
+            android.text.SpannableStringBuilder r3 = org.telegram.messenger.AndroidUtilities.replaceTags(r3)
+            int r5 = org.telegram.messenger.R.raw.saved_messages
+            java.lang.String[] r6 = new java.lang.String[r0]
+            r8.setAnimation((int) r5, (int) r10, (int) r10, (java.lang.String[]) r6)
+            r5 = -1
+            goto L_0x00a3
+        L_0x002f:
+            boolean r5 = org.telegram.messenger.DialogObject.isChatDialog(r6)
+            if (r5 == 0) goto L_0x0057
+            int r5 = org.telegram.messenger.UserConfig.selectedAccount
+            org.telegram.messenger.MessagesController r5 = org.telegram.messenger.MessagesController.getInstance(r5)
+            long r6 = -r6
+            java.lang.Long r6 = java.lang.Long.valueOf(r6)
+            org.telegram.tgnet.TLRPC$Chat r5 = r5.getChat(r6)
+            int r6 = org.telegram.messenger.R.string.InvLinkToGroup
+            java.lang.Object[] r7 = new java.lang.Object[r9]
+            java.lang.String r5 = r5.title
+            r7[r0] = r5
+            java.lang.String r5 = "InvLinkToGroup"
+            java.lang.String r5 = org.telegram.messenger.LocaleController.formatString(r5, r6, r7)
+            android.text.SpannableStringBuilder r5 = org.telegram.messenger.AndroidUtilities.replaceTags(r5)
+            goto L_0x0079
+        L_0x0057:
+            int r5 = org.telegram.messenger.UserConfig.selectedAccount
+            org.telegram.messenger.MessagesController r5 = org.telegram.messenger.MessagesController.getInstance(r5)
+            java.lang.Long r6 = java.lang.Long.valueOf(r6)
+            org.telegram.tgnet.TLRPC$User r5 = r5.getUser(r6)
+            int r6 = org.telegram.messenger.R.string.InvLinkToUser
+            java.lang.Object[] r7 = new java.lang.Object[r9]
+            java.lang.String r5 = org.telegram.messenger.UserObject.getFirstName(r5)
+            r7[r0] = r5
+            java.lang.String r5 = "InvLinkToUser"
+            java.lang.String r5 = org.telegram.messenger.LocaleController.formatString(r5, r6, r7)
+            android.text.SpannableStringBuilder r5 = org.telegram.messenger.AndroidUtilities.replaceTags(r5)
+        L_0x0079:
+            int r6 = org.telegram.messenger.R.raw.forward
+            java.lang.String[] r7 = new java.lang.String[r0]
+            r8.setAnimation((int) r6, (int) r10, (int) r10, (java.lang.String[]) r7)
+            goto L_0x00a0
+        L_0x0081:
+            int r6 = org.telegram.messenger.R.string.InvLinkToChats
+            java.lang.Object[] r7 = new java.lang.Object[r9]
+            java.lang.Object[] r9 = new java.lang.Object[r0]
+            java.lang.String r1 = "Chats"
+            java.lang.String r5 = org.telegram.messenger.LocaleController.formatPluralString(r1, r5, r9)
+            r7[r0] = r5
+            java.lang.String r5 = "InvLinkToChats"
+            java.lang.String r5 = org.telegram.messenger.LocaleController.formatString(r5, r6, r7)
+            android.text.SpannableStringBuilder r5 = org.telegram.messenger.AndroidUtilities.replaceTags(r5)
+            int r6 = org.telegram.messenger.R.raw.forward
+            java.lang.String[] r7 = new java.lang.String[r0]
+            r8.setAnimation((int) r6, (int) r10, (int) r10, (java.lang.String[]) r7)
+        L_0x00a0:
+            r3 = r5
+            r5 = 300(0x12c, float:4.2E-43)
+        L_0x00a3:
+            android.widget.TextView r6 = r8.textView
+            r6.setText(r3)
+            if (r5 <= 0) goto L_0x00b3
+            org.telegram.ui.Components.BulletinFactory$$ExternalSyntheticLambda1 r3 = new org.telegram.ui.Components.BulletinFactory$$ExternalSyntheticLambda1
+            r3.<init>(r8)
+            long r5 = (long) r5
+            r8.postDelayed(r3, r5)
+        L_0x00b3:
+            r3 = 1500(0x5dc, float:2.102E-42)
+            org.telegram.ui.Components.Bulletin r3 = org.telegram.ui.Components.Bulletin.make((android.widget.FrameLayout) r4, (org.telegram.ui.Components.Bulletin.Layout) r8, (int) r3)
+            return r3
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.BulletinFactory.createInviteSentBulletin(android.content.Context, android.widget.FrameLayout, int, long, int, int, int):org.telegram.ui.Components.Bulletin");
+    }
+
+    /* JADX WARNING: Removed duplicated region for block: B:27:0x00ff  */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public static org.telegram.ui.Components.Bulletin createForwardedBulletin(android.content.Context r4, android.widget.FrameLayout r5, int r6, long r7, int r9, int r10, int r11) {
+        /*
+            org.telegram.ui.Components.Bulletin$LottieLayout r0 = new org.telegram.ui.Components.Bulletin$LottieLayout
             r1 = 0
-            if (r6 > r11) goto L_0x0086
+            r0.<init>(r4, r1, r10, r11)
+            r4 = 300(0x12c, float:4.2E-43)
+            r10 = 30
+            r11 = 0
+            r1 = 1
+            if (r6 > r1) goto L_0x00bd
             int r6 = org.telegram.messenger.UserConfig.selectedAccount
             org.telegram.messenger.UserConfig r6 = org.telegram.messenger.UserConfig.getInstance(r6)
             long r2 = r6.clientUserId
             int r6 = (r7 > r2 ? 1 : (r7 == r2 ? 0 : -1))
-            if (r6 != 0) goto L_0x0034
-            r4 = 2131626304(0x7f0e0940, float:1.887984E38)
-            java.lang.String r6 = "InvLinkToSavedMessages"
+            if (r6 != 0) goto L_0x003f
+            if (r9 > r1) goto L_0x0029
+            int r4 = org.telegram.messenger.R.string.FwdMessageToSavedMessages
+            java.lang.String r6 = "FwdMessageToSavedMessages"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r6, r4)
             android.text.SpannableStringBuilder r4 = org.telegram.messenger.AndroidUtilities.replaceTags(r4)
-            r6 = 2131558542(0x7f0d008e, float:1.8742403E38)
-            java.lang.String[] r7 = new java.lang.String[r1]
-            r9.setAnimation((int) r6, (int) r0, (int) r0, (java.lang.String[]) r7)
+            goto L_0x0035
+        L_0x0029:
+            int r4 = org.telegram.messenger.R.string.FwdMessagesToSavedMessages
+            java.lang.String r6 = "FwdMessagesToSavedMessages"
+            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r6, r4)
+            android.text.SpannableStringBuilder r4 = org.telegram.messenger.AndroidUtilities.replaceTags(r4)
+        L_0x0035:
+            int r6 = org.telegram.messenger.R.raw.saved_messages
+            java.lang.String[] r7 = new java.lang.String[r11]
+            r0.setAnimation((int) r6, (int) r10, (int) r10, (java.lang.String[]) r7)
             r6 = -1
-            goto L_0x00a7
-        L_0x0034:
+            goto L_0x00f8
+        L_0x003f:
             boolean r6 = org.telegram.messenger.DialogObject.isChatDialog(r7)
-            if (r6 == 0) goto L_0x005d
+            if (r6 == 0) goto L_0x007c
             int r6 = org.telegram.messenger.UserConfig.selectedAccount
             org.telegram.messenger.MessagesController r6 = org.telegram.messenger.MessagesController.getInstance(r6)
             long r7 = -r7
             java.lang.Long r7 = java.lang.Long.valueOf(r7)
             org.telegram.tgnet.TLRPC$Chat r6 = r6.getChat(r7)
-            r7 = 2131626303(0x7f0e093f, float:1.8879838E38)
-            java.lang.Object[] r8 = new java.lang.Object[r11]
+            if (r9 > r1) goto L_0x0069
+            int r7 = org.telegram.messenger.R.string.FwdMessageToGroup
+            java.lang.Object[] r8 = new java.lang.Object[r1]
             java.lang.String r6 = r6.title
-            r8[r1] = r6
-            java.lang.String r6 = "InvLinkToGroup"
+            r8[r11] = r6
+            java.lang.String r6 = "FwdMessageToGroup"
             java.lang.String r6 = org.telegram.messenger.LocaleController.formatString(r6, r7, r8)
             android.text.SpannableStringBuilder r6 = org.telegram.messenger.AndroidUtilities.replaceTags(r6)
-            goto L_0x0080
-        L_0x005d:
+            goto L_0x00b5
+        L_0x0069:
+            int r7 = org.telegram.messenger.R.string.FwdMessagesToGroup
+            java.lang.Object[] r8 = new java.lang.Object[r1]
+            java.lang.String r6 = r6.title
+            r8[r11] = r6
+            java.lang.String r6 = "FwdMessagesToGroup"
+            java.lang.String r6 = org.telegram.messenger.LocaleController.formatString(r6, r7, r8)
+            android.text.SpannableStringBuilder r6 = org.telegram.messenger.AndroidUtilities.replaceTags(r6)
+            goto L_0x00b5
+        L_0x007c:
             int r6 = org.telegram.messenger.UserConfig.selectedAccount
             org.telegram.messenger.MessagesController r6 = org.telegram.messenger.MessagesController.getInstance(r6)
             java.lang.Long r7 = java.lang.Long.valueOf(r7)
             org.telegram.tgnet.TLRPC$User r6 = r6.getUser(r7)
-            r7 = 2131626305(0x7f0e0941, float:1.8879842E38)
-            java.lang.Object[] r8 = new java.lang.Object[r11]
+            if (r9 > r1) goto L_0x00a1
+            int r7 = org.telegram.messenger.R.string.FwdMessageToUser
+            java.lang.Object[] r8 = new java.lang.Object[r1]
             java.lang.String r6 = org.telegram.messenger.UserObject.getFirstName(r6)
-            r8[r1] = r6
-            java.lang.String r6 = "InvLinkToUser"
+            r8[r11] = r6
+            java.lang.String r6 = "FwdMessageToUser"
             java.lang.String r6 = org.telegram.messenger.LocaleController.formatString(r6, r7, r8)
             android.text.SpannableStringBuilder r6 = org.telegram.messenger.AndroidUtilities.replaceTags(r6)
-        L_0x0080:
-            java.lang.String[] r7 = new java.lang.String[r1]
-            r9.setAnimation((int) r10, (int) r0, (int) r0, (java.lang.String[]) r7)
-            goto L_0x00a4
-        L_0x0086:
-            r7 = 2131626302(0x7f0e093e, float:1.8879836E38)
-            java.lang.Object[] r8 = new java.lang.Object[r11]
-            java.lang.Object[] r11 = new java.lang.Object[r1]
-            java.lang.String r2 = "Chats"
-            java.lang.String r6 = org.telegram.messenger.LocaleController.formatPluralString(r2, r6, r11)
-            r8[r1] = r6
-            java.lang.String r6 = "InvLinkToChats"
+            goto L_0x00b5
+        L_0x00a1:
+            int r7 = org.telegram.messenger.R.string.FwdMessagesToUser
+            java.lang.Object[] r8 = new java.lang.Object[r1]
+            java.lang.String r6 = org.telegram.messenger.UserObject.getFirstName(r6)
+            r8[r11] = r6
+            java.lang.String r6 = "FwdMessagesToUser"
             java.lang.String r6 = org.telegram.messenger.LocaleController.formatString(r6, r7, r8)
             android.text.SpannableStringBuilder r6 = org.telegram.messenger.AndroidUtilities.replaceTags(r6)
-            java.lang.String[] r7 = new java.lang.String[r1]
-            r9.setAnimation((int) r10, (int) r0, (int) r0, (java.lang.String[]) r7)
-        L_0x00a4:
+        L_0x00b5:
+            int r7 = org.telegram.messenger.R.raw.forward
+            java.lang.String[] r8 = new java.lang.String[r11]
+            r0.setAnimation((int) r7, (int) r10, (int) r10, (java.lang.String[]) r8)
+            goto L_0x00f5
+        L_0x00bd:
+            java.lang.String r7 = "Chats"
+            if (r9 > r1) goto L_0x00d8
+            int r8 = org.telegram.messenger.R.string.FwdMessageToChats
+            java.lang.Object[] r9 = new java.lang.Object[r1]
+            java.lang.Object[] r1 = new java.lang.Object[r11]
+            java.lang.String r6 = org.telegram.messenger.LocaleController.formatPluralString(r7, r6, r1)
+            r9[r11] = r6
+            java.lang.String r6 = "FwdMessageToChats"
+            java.lang.String r6 = org.telegram.messenger.LocaleController.formatString(r6, r8, r9)
+            android.text.SpannableStringBuilder r6 = org.telegram.messenger.AndroidUtilities.replaceTags(r6)
+            goto L_0x00ee
+        L_0x00d8:
+            int r8 = org.telegram.messenger.R.string.FwdMessagesToChats
+            java.lang.Object[] r9 = new java.lang.Object[r1]
+            java.lang.Object[] r1 = new java.lang.Object[r11]
+            java.lang.String r6 = org.telegram.messenger.LocaleController.formatPluralString(r7, r6, r1)
+            r9[r11] = r6
+            java.lang.String r6 = "FwdMessagesToChats"
+            java.lang.String r6 = org.telegram.messenger.LocaleController.formatString(r6, r8, r9)
+            android.text.SpannableStringBuilder r6 = org.telegram.messenger.AndroidUtilities.replaceTags(r6)
+        L_0x00ee:
+            int r7 = org.telegram.messenger.R.raw.forward
+            java.lang.String[] r8 = new java.lang.String[r11]
+            r0.setAnimation((int) r7, (int) r10, (int) r10, (java.lang.String[]) r8)
+        L_0x00f5:
             r4 = r6
             r6 = 300(0x12c, float:4.2E-43)
-        L_0x00a7:
-            android.widget.TextView r7 = r9.textView
-            r7.setText(r4)
-            if (r6 <= 0) goto L_0x00b7
-            org.telegram.ui.Components.BulletinFactory$$ExternalSyntheticLambda1 r4 = new org.telegram.ui.Components.BulletinFactory$$ExternalSyntheticLambda1
-            r4.<init>(r9)
-            long r6 = (long) r6
-            r9.postDelayed(r4, r6)
-        L_0x00b7:
-            r4 = 1500(0x5dc, float:2.102E-42)
-            org.telegram.ui.Components.Bulletin r4 = org.telegram.ui.Components.Bulletin.make((android.widget.FrameLayout) r5, (org.telegram.ui.Components.Bulletin.Layout) r9, (int) r4)
-            return r4
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.BulletinFactory.createInviteSentBulletin(android.content.Context, android.widget.FrameLayout, int, long, int, int, int):org.telegram.ui.Components.Bulletin");
-    }
-
-    /* JADX WARNING: Removed duplicated region for block: B:27:0x0107  */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public static org.telegram.ui.Components.Bulletin createForwardedBulletin(android.content.Context r5, android.widget.FrameLayout r6, int r7, long r8, int r10, int r11, int r12) {
-        /*
-            org.telegram.ui.Components.Bulletin$LottieLayout r0 = new org.telegram.ui.Components.Bulletin$LottieLayout
-            r1 = 0
-            r0.<init>(r5, r1, r11, r12)
-            r5 = 300(0x12c, float:4.2E-43)
-            r11 = 2131558454(0x7f0d0036, float:1.8742224E38)
-            r12 = 30
-            r1 = 0
-            r2 = 1
-            if (r7 > r2) goto L_0x00c5
-            int r7 = org.telegram.messenger.UserConfig.selectedAccount
-            org.telegram.messenger.UserConfig r7 = org.telegram.messenger.UserConfig.getInstance(r7)
-            long r3 = r7.clientUserId
-            int r7 = (r8 > r3 ? 1 : (r8 == r3 ? 0 : -1))
-            if (r7 != 0) goto L_0x0045
-            if (r10 > r2) goto L_0x002d
-            r5 = 2131626093(0x7f0e086d, float:1.8879412E38)
-            java.lang.String r7 = "FwdMessageToSavedMessages"
-            java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r7, r5)
-            android.text.SpannableStringBuilder r5 = org.telegram.messenger.AndroidUtilities.replaceTags(r5)
-            goto L_0x003a
-        L_0x002d:
-            r5 = 2131626097(0x7f0e0871, float:1.887942E38)
-            java.lang.String r7 = "FwdMessagesToSavedMessages"
-            java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r7, r5)
-            android.text.SpannableStringBuilder r5 = org.telegram.messenger.AndroidUtilities.replaceTags(r5)
-        L_0x003a:
-            r7 = 2131558542(0x7f0d008e, float:1.8742403E38)
-            java.lang.String[] r8 = new java.lang.String[r1]
-            r0.setAnimation((int) r7, (int) r12, (int) r12, (java.lang.String[]) r8)
-            r7 = -1
-            goto L_0x0100
-        L_0x0045:
-            boolean r7 = org.telegram.messenger.DialogObject.isChatDialog(r8)
-            if (r7 == 0) goto L_0x0084
-            int r7 = org.telegram.messenger.UserConfig.selectedAccount
-            org.telegram.messenger.MessagesController r7 = org.telegram.messenger.MessagesController.getInstance(r7)
-            long r8 = -r8
-            java.lang.Long r8 = java.lang.Long.valueOf(r8)
-            org.telegram.tgnet.TLRPC$Chat r7 = r7.getChat(r8)
-            if (r10 > r2) goto L_0x0070
-            r8 = 2131626092(0x7f0e086c, float:1.887941E38)
-            java.lang.Object[] r9 = new java.lang.Object[r2]
-            java.lang.String r7 = r7.title
-            r9[r1] = r7
-            java.lang.String r7 = "FwdMessageToGroup"
-            java.lang.String r7 = org.telegram.messenger.LocaleController.formatString(r7, r8, r9)
-            android.text.SpannableStringBuilder r7 = org.telegram.messenger.AndroidUtilities.replaceTags(r7)
-            goto L_0x00bf
-        L_0x0070:
-            r8 = 2131626096(0x7f0e0870, float:1.8879419E38)
-            java.lang.Object[] r9 = new java.lang.Object[r2]
-            java.lang.String r7 = r7.title
-            r9[r1] = r7
-            java.lang.String r7 = "FwdMessagesToGroup"
-            java.lang.String r7 = org.telegram.messenger.LocaleController.formatString(r7, r8, r9)
-            android.text.SpannableStringBuilder r7 = org.telegram.messenger.AndroidUtilities.replaceTags(r7)
-            goto L_0x00bf
-        L_0x0084:
-            int r7 = org.telegram.messenger.UserConfig.selectedAccount
-            org.telegram.messenger.MessagesController r7 = org.telegram.messenger.MessagesController.getInstance(r7)
-            java.lang.Long r8 = java.lang.Long.valueOf(r8)
-            org.telegram.tgnet.TLRPC$User r7 = r7.getUser(r8)
-            if (r10 > r2) goto L_0x00aa
-            r8 = 2131626094(0x7f0e086e, float:1.8879414E38)
-            java.lang.Object[] r9 = new java.lang.Object[r2]
-            java.lang.String r7 = org.telegram.messenger.UserObject.getFirstName(r7)
-            r9[r1] = r7
-            java.lang.String r7 = "FwdMessageToUser"
-            java.lang.String r7 = org.telegram.messenger.LocaleController.formatString(r7, r8, r9)
-            android.text.SpannableStringBuilder r7 = org.telegram.messenger.AndroidUtilities.replaceTags(r7)
-            goto L_0x00bf
-        L_0x00aa:
-            r8 = 2131626098(0x7f0e0872, float:1.8879423E38)
-            java.lang.Object[] r9 = new java.lang.Object[r2]
-            java.lang.String r7 = org.telegram.messenger.UserObject.getFirstName(r7)
-            r9[r1] = r7
-            java.lang.String r7 = "FwdMessagesToUser"
-            java.lang.String r7 = org.telegram.messenger.LocaleController.formatString(r7, r8, r9)
-            android.text.SpannableStringBuilder r7 = org.telegram.messenger.AndroidUtilities.replaceTags(r7)
-        L_0x00bf:
-            java.lang.String[] r8 = new java.lang.String[r1]
-            r0.setAnimation((int) r11, (int) r12, (int) r12, (java.lang.String[]) r8)
-            goto L_0x00fd
-        L_0x00c5:
-            java.lang.String r8 = "Chats"
-            if (r10 > r2) goto L_0x00e1
-            r9 = 2131626091(0x7f0e086b, float:1.8879408E38)
-            java.lang.Object[] r10 = new java.lang.Object[r2]
-            java.lang.Object[] r2 = new java.lang.Object[r1]
-            java.lang.String r7 = org.telegram.messenger.LocaleController.formatPluralString(r8, r7, r2)
-            r10[r1] = r7
-            java.lang.String r7 = "FwdMessageToChats"
-            java.lang.String r7 = org.telegram.messenger.LocaleController.formatString(r7, r9, r10)
-            android.text.SpannableStringBuilder r7 = org.telegram.messenger.AndroidUtilities.replaceTags(r7)
-            goto L_0x00f8
-        L_0x00e1:
-            r9 = 2131626095(0x7f0e086f, float:1.8879417E38)
-            java.lang.Object[] r10 = new java.lang.Object[r2]
-            java.lang.Object[] r2 = new java.lang.Object[r1]
-            java.lang.String r7 = org.telegram.messenger.LocaleController.formatPluralString(r8, r7, r2)
-            r10[r1] = r7
-            java.lang.String r7 = "FwdMessagesToChats"
-            java.lang.String r7 = org.telegram.messenger.LocaleController.formatString(r7, r9, r10)
-            android.text.SpannableStringBuilder r7 = org.telegram.messenger.AndroidUtilities.replaceTags(r7)
         L_0x00f8:
-            java.lang.String[] r8 = new java.lang.String[r1]
-            r0.setAnimation((int) r11, (int) r12, (int) r12, (java.lang.String[]) r8)
-        L_0x00fd:
-            r5 = r7
-            r7 = 300(0x12c, float:4.2E-43)
-        L_0x0100:
-            android.widget.TextView r8 = r0.textView
-            r8.setText(r5)
-            if (r7 <= 0) goto L_0x0110
-            org.telegram.ui.Components.BulletinFactory$$ExternalSyntheticLambda0 r5 = new org.telegram.ui.Components.BulletinFactory$$ExternalSyntheticLambda0
-            r5.<init>(r0)
-            long r7 = (long) r7
-            r0.postDelayed(r5, r7)
-        L_0x0110:
-            r5 = 1500(0x5dc, float:2.102E-42)
-            org.telegram.ui.Components.Bulletin r5 = org.telegram.ui.Components.Bulletin.make((android.widget.FrameLayout) r6, (org.telegram.ui.Components.Bulletin.Layout) r0, (int) r5)
-            return r5
+            android.widget.TextView r7 = r0.textView
+            r7.setText(r4)
+            if (r6 <= 0) goto L_0x0108
+            org.telegram.ui.Components.BulletinFactory$$ExternalSyntheticLambda0 r4 = new org.telegram.ui.Components.BulletinFactory$$ExternalSyntheticLambda0
+            r4.<init>(r0)
+            long r6 = (long) r6
+            r0.postDelayed(r4, r6)
+        L_0x0108:
+            r4 = 1500(0x5dc, float:2.102E-42)
+            org.telegram.ui.Components.Bulletin r4 = org.telegram.ui.Components.Bulletin.make((android.widget.FrameLayout) r5, (org.telegram.ui.Components.Bulletin.Layout) r0, (int) r4)
+            return r4
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.BulletinFactory.createForwardedBulletin(android.content.Context, android.widget.FrameLayout, int, long, int, int, int):org.telegram.ui.Components.Bulletin");
     }
@@ -720,13 +727,13 @@ public final class BulletinFactory {
     public static Bulletin createRemoveFromChatBulletin(BaseFragment baseFragment, TLRPC$User tLRPC$User, String str) {
         String str2;
         Bulletin.LottieLayout lottieLayout = new Bulletin.LottieLayout(baseFragment.getParentActivity(), baseFragment.getResourceProvider());
-        lottieLayout.setAnimation(NUM, "Hand");
+        lottieLayout.setAnimation(R.raw.ic_ban, "Hand");
         if (tLRPC$User.deleted) {
-            str2 = LocaleController.formatString("HiddenName", NUM, new Object[0]);
+            str2 = LocaleController.formatString("HiddenName", R.string.HiddenName, new Object[0]);
         } else {
             str2 = tLRPC$User.first_name;
         }
-        lottieLayout.textView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("UserRemovedFromChatHint", NUM, str2, str)));
+        lottieLayout.textView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("UserRemovedFromChatHint", R.string.UserRemovedFromChatHint, str2, str)));
         return Bulletin.make(baseFragment, (Bulletin.Layout) lottieLayout, 1500);
     }
 
@@ -734,11 +741,11 @@ public final class BulletinFactory {
         String str;
         Bulletin.LottieLayout lottieLayout = new Bulletin.LottieLayout(baseFragment.getParentActivity(), baseFragment.getResourceProvider());
         if (z) {
-            lottieLayout.setAnimation(NUM, "Hand");
-            str = LocaleController.getString("UserBlocked", NUM);
+            lottieLayout.setAnimation(R.raw.ic_ban, "Hand");
+            str = LocaleController.getString("UserBlocked", R.string.UserBlocked);
         } else {
-            lottieLayout.setAnimation(NUM, "Main", "Finger 1", "Finger 2", "Finger 3", "Finger 4");
-            str = LocaleController.getString("UserUnblocked", NUM);
+            lottieLayout.setAnimation(R.raw.ic_unban, "Main", "Finger 1", "Finger 2", "Finger 3", "Finger 4");
+            str = LocaleController.getString("UserUnblocked", R.string.UserUnblocked);
         }
         lottieLayout.textView.setText(AndroidUtilities.replaceTags(str));
         return Bulletin.make(baseFragment, (Bulletin.Layout) lottieLayout, 1500);
@@ -762,8 +769,8 @@ public final class BulletinFactory {
 
     private static Bulletin createPinMessageBulletin(BaseFragment baseFragment, boolean z, Runnable runnable, Runnable runnable2, Theme.ResourcesProvider resourcesProvider2) {
         Bulletin.LottieLayout lottieLayout = new Bulletin.LottieLayout(baseFragment.getParentActivity(), resourcesProvider2);
-        lottieLayout.setAnimation(z ? NUM : NUM, 28, 28, "Pin", "Line");
-        lottieLayout.textView.setText(LocaleController.getString(z ? "MessagePinnedHint" : "MessageUnpinnedHint", z ? NUM : NUM));
+        lottieLayout.setAnimation(z ? R.raw.ic_pin : R.raw.ic_unpin, 28, 28, "Pin", "Line");
+        lottieLayout.textView.setText(LocaleController.getString(z ? "MessagePinnedHint" : "MessageUnpinnedHint", z ? R.string.MessagePinnedHint : R.string.MessageUnpinnedHint));
         if (!z) {
             lottieLayout.setButton(new Bulletin.UndoButton(baseFragment.getParentActivity(), true, resourcesProvider2).setUndoAction(runnable).setDelayedAction(runnable2));
         }
@@ -775,17 +782,17 @@ public final class BulletinFactory {
         Bulletin.LottieLayout lottieLayout = new Bulletin.LottieLayout(baseFragment.getParentActivity(), resourcesProvider2);
         boolean z = true;
         if (i == 0) {
-            str = LocaleController.getString("SoundOnHint", NUM);
+            str = LocaleController.getString("SoundOnHint", R.string.SoundOnHint);
         } else if (i == 1) {
-            str = LocaleController.getString("SoundOffHint", NUM);
+            str = LocaleController.getString("SoundOffHint", R.string.SoundOffHint);
             z = false;
         } else {
             throw new IllegalArgumentException();
         }
         if (z) {
-            lottieLayout.setAnimation(NUM, new String[0]);
+            lottieLayout.setAnimation(R.raw.sound_on, new String[0]);
         } else {
-            lottieLayout.setAnimation(NUM, new String[0]);
+            lottieLayout.setAnimation(R.raw.sound_off, new String[0]);
         }
         lottieLayout.textView.setText(str);
         return Bulletin.make(baseFragment, (Bulletin.Layout) lottieLayout, 1500);

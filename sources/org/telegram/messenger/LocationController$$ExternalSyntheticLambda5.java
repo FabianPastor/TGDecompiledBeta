@@ -8,6 +8,6 @@ public final /* synthetic */ class LocationController$$ExternalSyntheticLambda5 
     }
 
     public final void run() {
-        this.f$0.lambda$setProximityLocation$14();
+        this.f$0.lambda$new$0();
     }
 }

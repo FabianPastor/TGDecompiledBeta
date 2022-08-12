@@ -15,6 +15,7 @@ import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SvgHelper;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$DocumentAttribute;
@@ -57,11 +58,11 @@ public class ChatGreetingsView extends LinearLayout {
         addView(this.stickerToSendView, LayoutHelper.createLinear(112, 112, 1, 0, 16, 0, 16));
         updateColors();
         if (i <= 0) {
-            this.titleView.setText(LocaleController.getString("NoMessages", NUM));
-            this.descriptionView.setText(LocaleController.getString("NoMessagesGreetingsDescription", NUM));
+            this.titleView.setText(LocaleController.getString("NoMessages", R.string.NoMessages));
+            this.descriptionView.setText(LocaleController.getString("NoMessagesGreetingsDescription", R.string.NoMessagesGreetingsDescription));
         } else {
-            this.titleView.setText(LocaleController.formatString("NearbyPeopleGreetingsMessage", NUM, tLRPC$User.first_name, LocaleController.formatDistance((float) i, 1)));
-            this.descriptionView.setText(LocaleController.getString("NearbyPeopleGreetingsDescription", NUM));
+            this.titleView.setText(LocaleController.formatString("NearbyPeopleGreetingsMessage", R.string.NearbyPeopleGreetingsMessage, tLRPC$User.first_name, LocaleController.formatDistance((float) i, 1)));
+            this.descriptionView.setText(LocaleController.getString("NearbyPeopleGreetingsDescription", R.string.NearbyPeopleGreetingsDescription));
         }
         this.stickerToSendView.setContentDescription(this.descriptionView.getText());
         this.preloadedGreetingsSticker = tLRPC$Document;

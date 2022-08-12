@@ -10,14 +10,15 @@ import android.location.Location;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
-import com.google.android.gms.maps.model.LatLng;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.DialogObject;
+import org.telegram.messenger.IMapsProvider;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.LocationController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.ConnectionsManager;
@@ -150,7 +151,7 @@ public class SharingLiveLocationCell extends FrameLayout {
         String str2 = !TextUtils.isEmpty(messageObject.messageOwner.media.address) ? messageObject.messageOwner.media.address : null;
         if (!TextUtils.isEmpty(messageObject.messageOwner.media.title)) {
             str = messageObject.messageOwner.media.title;
-            Drawable drawable = getResources().getDrawable(NUM);
+            Drawable drawable = getResources().getDrawable(R.drawable.pin);
             drawable.setColorFilter(new PorterDuffColorFilter(getThemedColor("location_sendLocationIcon"), PorterDuff.Mode.MULTIPLY));
             int themedColor = getThemedColor("location_placeLocationBackground");
             CombinedDrawable combinedDrawable = new CombinedDrawable(Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(42.0f), themedColor, themedColor), drawable);
@@ -192,7 +193,7 @@ public class SharingLiveLocationCell extends FrameLayout {
         } else if (str2 != null) {
             this.distanceTextView.setText(str2);
         } else if (!z) {
-            this.distanceTextView.setText(LocaleController.getString("Loading", NUM));
+            this.distanceTextView.setText(LocaleController.getString("Loading", R.string.Loading));
         } else {
             this.distanceTextView.setText("");
         }
@@ -215,7 +216,7 @@ public class SharingLiveLocationCell extends FrameLayout {
                 this.avatarImageView.setForUserOrChat(chat, this.avatarDrawable);
             }
         }
-        LatLng position = liveLocation2.marker.getPosition();
+        IMapsProvider.LatLng position = liveLocation2.marker.getPosition();
         this.location.setLatitude(position.latitude);
         this.location.setLongitude(position.longitude);
         TLRPC$Message tLRPC$Message = liveLocation2.object;

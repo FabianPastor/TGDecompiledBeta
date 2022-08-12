@@ -14,6 +14,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.SerializedData;
@@ -28,7 +29,7 @@ public class ShareActivity extends Activity {
         ApplicationLoader.postInitApplication();
         AndroidUtilities.checkDisplaySize(this, getResources().getConfiguration());
         requestWindowFeature(1);
-        setTheme(NUM);
+        setTheme(R.style.Theme_TMessages_Transparent);
         super.onCreate(bundle);
         setContentView(new View(this), new ViewGroup.LayoutParams(-1, -1));
         Intent intent = getIntent();

@@ -13,6 +13,7 @@ import java.util.Locale;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.LocationController;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC$TL_channelLocation;
 import org.telegram.tgnet.TLRPC$TL_geoPoint;
@@ -169,7 +170,7 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
                 } else {
                     Location location = this.customLocation;
                     if ((location == null && this.gpsLocation == null) || this.fetchingLocation) {
-                        str = LocaleController.getString("Loading", NUM);
+                        str = LocaleController.getString("Loading", R.string.Loading);
                     } else if (location != null) {
                         str = String.format(Locale.US, "(%f,%f)", new Object[]{Double.valueOf(location.getLatitude()), Double.valueOf(this.customLocation.getLongitude())});
                     } else {
@@ -177,23 +178,23 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
                         if (location2 != null) {
                             str = String.format(Locale.US, "(%f,%f)", new Object[]{Double.valueOf(location2.getLatitude()), Double.valueOf(this.gpsLocation.getLongitude())});
                         } else if (!this.myLocationDenied) {
-                            str = LocaleController.getString("Loading", NUM);
+                            str = LocaleController.getString("Loading", R.string.Loading);
                         }
                     }
                 }
                 if (this.locationType == 4) {
-                    this.sendLocationCell.setText(LocaleController.getString("ChatSetThisLocation", NUM), str);
+                    this.sendLocationCell.setText(LocaleController.getString("ChatSetThisLocation", R.string.ChatSetThisLocation), str);
                 } else {
-                    this.sendLocationCell.setText(LocaleController.getString("SendSelectedLocation", NUM), str);
+                    this.sendLocationCell.setText(LocaleController.getString("SendSelectedLocation", R.string.SendSelectedLocation), str);
                 }
                 this.sendLocationCell.setHasLocation(true);
             } else if (this.gpsLocation != null) {
-                sendLocationCell2.setText(LocaleController.getString("SendLocation", NUM), LocaleController.formatString("AccurateTo", NUM, LocaleController.formatPluralString("Meters", (int) this.gpsLocation.getAccuracy(), new Object[0])));
+                sendLocationCell2.setText(LocaleController.getString("SendLocation", R.string.SendLocation), LocaleController.formatString("AccurateTo", R.string.AccurateTo, LocaleController.formatPluralString("Meters", (int) this.gpsLocation.getAccuracy(), new Object[0])));
                 this.sendLocationCell.setHasLocation(true);
             } else {
-                String string = LocaleController.getString("SendLocation", NUM);
+                String string = LocaleController.getString("SendLocation", R.string.SendLocation);
                 if (!this.myLocationDenied) {
-                    str = LocaleController.getString("Loading", NUM);
+                    str = LocaleController.getString("Loading", R.string.Loading);
                 }
                 sendLocationCell2.setText(string, str);
                 this.sendLocationCell.setHasLocation(!this.myLocationDenied);
@@ -316,7 +317,7 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
                 break;
             case 9:
                 ShadowSectionCell shadowSectionCell2 = new ShadowSectionCell(this.mContext);
-                CombinedDrawable combinedDrawable = new CombinedDrawable(new ColorDrawable(getThemedColor("windowBackgroundGray")), Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
+                CombinedDrawable combinedDrawable = new CombinedDrawable(new ColorDrawable(getThemedColor("windowBackgroundGray")), Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, "windowBackgroundGrayShadow"));
                 combinedDrawable.setFullsize(true);
                 shadowSectionCell2.setBackgroundDrawable(combinedDrawable);
                 shadowSectionCell = shadowSectionCell2;
@@ -338,9 +339,9 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
                 if (itemViewType == 2) {
                     HeaderCell headerCell = (HeaderCell) viewHolder.itemView;
                     if (this.currentMessageObject != null) {
-                        headerCell.setText(LocaleController.getString("LiveLocations", NUM));
+                        headerCell.setText(LocaleController.getString("LiveLocations", R.string.LiveLocations));
                     } else {
-                        headerCell.setText(LocaleController.getString("NearbyVenue", NUM));
+                        headerCell.setText(LocaleController.getString("NearbyVenue", R.string.NearbyVenue));
                     }
                 } else if (itemViewType == 3) {
                     LocationCell locationCell = (LocationCell) viewHolder.itemView;

@@ -44,6 +44,7 @@ import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC$Document;
@@ -267,7 +268,7 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
             Paint paint3 = new Paint(1);
             this.circlePaint = paint3;
             paint3.setColor(NUM);
-            this.drawable = context.getResources().getDrawable(NUM);
+            this.drawable = context.getResources().getDrawable(R.drawable.flame_small);
         }
 
         /* access modifiers changed from: private */
@@ -645,7 +646,7 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
             this.actionBar.setBackgroundColor(NUM);
             this.actionBar.setOccupyStatusBar(i2 >= 21);
             this.actionBar.setItemsBackgroundColor(NUM, false);
-            this.actionBar.setBackButtonImage(NUM);
+            this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
             this.actionBar.setTitleRightMargin(AndroidUtilities.dp(70.0f));
             this.containerView.addView(this.actionBar, LayoutHelper.createFrame(-1, -2.0f));
             this.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
@@ -799,13 +800,13 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
             if (document == null) {
                 i = 21;
                 c = 4;
-                this.actionBar.setTitle(LocaleController.getString("DisappearingPhoto", NUM));
+                this.actionBar.setTitle(LocaleController.getString("DisappearingPhoto", R.string.DisappearingPhoto));
                 this.centerImage.setImage(ImageLocation.getForObject(FileLoader.getClosestPhotoSizeWithSize(messageObject2.photoThumbs, AndroidUtilities.getPhotoSize()), messageObject2.photoThumbsObject), (String) null, (Drawable) this.currentThumb != null ? new BitmapDrawable(this.currentThumb.bitmap) : null, -1, (String) null, (Object) messageObject, 2);
                 SecretDeleteTimer secretDeleteTimer2 = this.secretDeleteTimer;
                 TLRPC$Message tLRPC$Message = messageObject2.messageOwner;
                 secretDeleteTimer2.setDestroyTime(((long) tLRPC$Message.destroyTime) * 1000, (long) tLRPC$Message.ttl, false);
             } else if (MessageObject.isGifDocument(document)) {
-                this.actionBar.setTitle(LocaleController.getString("DisappearingGif", NUM));
+                this.actionBar.setTitle(LocaleController.getString("DisappearingGif", R.string.DisappearingGif));
                 i = 21;
                 c = 4;
                 this.centerImage.setImage(ImageLocation.getForDocument(document), (String) null, (Drawable) this.currentThumb != null ? new BitmapDrawable(this.currentThumb.bitmap) : null, -1, (String) null, (Object) messageObject, 1);
@@ -816,7 +817,7 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
                 i = 21;
                 c = 4;
                 this.playerRetryPlayCount = 1;
-                this.actionBar.setTitle(LocaleController.getString("DisappearingVideo", NUM));
+                this.actionBar.setTitle(LocaleController.getString("DisappearingVideo", R.string.DisappearingVideo));
                 File file = new File(messageObject2.messageOwner.attachPath);
                 if (file.exists()) {
                     preparePlayer(file);

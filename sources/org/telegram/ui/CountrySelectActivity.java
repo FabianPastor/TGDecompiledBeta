@@ -32,6 +32,7 @@ import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.Utilities;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
@@ -90,9 +91,9 @@ public class CountrySelectActivity extends BaseFragment {
     }
 
     public View createView(Context context) {
-        this.actionBar.setBackButtonImage(NUM);
+        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(false);
-        this.actionBar.setTitle(LocaleController.getString("ChooseCountry", NUM));
+        this.actionBar.setTitle(LocaleController.getString("ChooseCountry", R.string.ChooseCountry));
         this.actionBar.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
         this.actionBar.setItemsColor(Theme.getColor("windowBackgroundWhiteBlackText"), false);
         this.actionBar.setItemsBackgroundColor(Theme.getColor("actionBarWhiteSelector"), false);
@@ -105,7 +106,7 @@ public class CountrySelectActivity extends BaseFragment {
             }
         });
         int i = 1;
-        this.actionBar.createMenu().addItem(0, NUM).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
+        this.actionBar.createMenu().addItem(0, R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
             public void onSearchExpand() {
                 boolean unused = CountrySelectActivity.this.searching = true;
             }
@@ -132,7 +133,7 @@ public class CountrySelectActivity extends BaseFragment {
                     boolean unused2 = CountrySelectActivity.this.searchWas = true;
                 }
             }
-        }).setSearchFieldHint(LocaleController.getString("Search", NUM));
+        }).setSearchFieldHint(LocaleController.getString("Search", R.string.Search));
         this.actionBar.setSearchTextColor(Theme.getColor("windowBackgroundWhiteGrayText"), true);
         this.actionBar.setSearchTextColor(Theme.getColor("windowBackgroundWhiteBlackText"), false);
         this.actionBar.setSearchCursorColor(Theme.getColor("windowBackgroundWhiteBlackText"));
@@ -148,7 +149,7 @@ public class CountrySelectActivity extends BaseFragment {
         this.emptyView = emptyTextProgressView;
         emptyTextProgressView.showTextView();
         this.emptyView.setShowAtCenter(true);
-        this.emptyView.setText(LocaleController.getString("NoResult", NUM));
+        this.emptyView.setText(LocaleController.getString("NoResult", R.string.NoResult));
         frameLayout2.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
         RecyclerListView recyclerListView = new RecyclerListView(context);
         this.listView = recyclerListView;

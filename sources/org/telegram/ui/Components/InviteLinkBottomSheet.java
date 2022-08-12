@@ -20,6 +20,7 @@ import java.util.Locale;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
@@ -248,46 +249,47 @@ public class InviteLinkBottomSheet extends BottomSheet {
             java.lang.String r4 = "fonts/rmedium.ttf"
             android.graphics.Typeface r4 = org.telegram.messenger.AndroidUtilities.getTypeface(r4)
             r1.setTypeface(r4)
-            r1 = 2131626323(0x7f0e0953, float:1.8879879E38)
-            java.lang.String r4 = "InviteLink"
-            if (r5 != 0) goto L_0x0164
-            boolean r5 = r2.expired
-            if (r5 == 0) goto L_0x0145
+            java.lang.String r1 = "InviteLink"
+            if (r5 != 0) goto L_0x0161
+            boolean r4 = r2.expired
+            if (r4 == 0) goto L_0x0141
             android.widget.TextView r1 = r0.titleTextView
-            r4 = 2131625842(0x7f0e0772, float:1.8878903E38)
+            int r4 = org.telegram.messenger.R.string.ExpiredLink
             java.lang.String r5 = "ExpiredLink"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r1.setText(r4)
-            goto L_0x0161
-        L_0x0145:
-            boolean r5 = r2.revoked
-            if (r5 == 0) goto L_0x0158
+            goto L_0x015e
+        L_0x0141:
+            boolean r4 = r2.revoked
+            if (r4 == 0) goto L_0x0153
             android.widget.TextView r1 = r0.titleTextView
-            r4 = 2131628131(0x7f0e1063, float:1.8883546E38)
+            int r4 = org.telegram.messenger.R.string.RevokedLink
             java.lang.String r5 = "RevokedLink"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r1.setText(r4)
-            goto L_0x0161
-        L_0x0158:
-            android.widget.TextView r5 = r0.titleTextView
-            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
-            r5.setText(r1)
-        L_0x0161:
+            goto L_0x015e
+        L_0x0153:
+            android.widget.TextView r4 = r0.titleTextView
+            int r5 = org.telegram.messenger.R.string.InviteLink
+            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r5)
+            r4.setText(r1)
+        L_0x015e:
             r0.titleVisible = r7
-            goto L_0x0179
-        L_0x0164:
-            android.widget.TextView r5 = r0.titleTextView
-            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
-            r5.setText(r1)
+            goto L_0x0178
+        L_0x0161:
+            android.widget.TextView r4 = r0.titleTextView
+            int r5 = org.telegram.messenger.R.string.InviteLink
+            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r5)
+            r4.setText(r1)
             r0.titleVisible = r6
             android.widget.TextView r1 = r0.titleTextView
             r1.setVisibility(r11)
             android.widget.TextView r1 = r0.titleTextView
             r1.setAlpha(r10)
-        L_0x0179:
+        L_0x0178:
             java.lang.String r1 = r2.title
             boolean r1 = android.text.TextUtils.isEmpty(r1)
-            if (r1 != 0) goto L_0x01a5
+            if (r1 != 0) goto L_0x01a4
             android.text.SpannableStringBuilder r1 = new android.text.SpannableStringBuilder
             java.lang.String r4 = r2.title
             r1.<init>(r4)
@@ -301,7 +303,7 @@ public class InviteLinkBottomSheet extends BottomSheet {
             org.telegram.messenger.Emoji.replaceEmoji(r1, r4, r5, r6)
             android.widget.TextView r4 = r0.titleTextView
             r4.setText(r1)
-        L_0x01a5:
+        L_0x01a4:
             android.view.ViewGroup r1 = r0.containerView
             org.telegram.ui.Components.RecyclerListView r4 = r0.listView
             r11 = -1
@@ -310,12 +312,12 @@ public class InviteLinkBottomSheet extends BottomSheet {
             r14 = 0
             boolean r5 = r0.titleVisible
             r6 = 1110441984(0x42300000, float:44.0)
-            if (r5 != 0) goto L_0x01b7
+            if (r5 != 0) goto L_0x01b6
             r15 = 0
-            goto L_0x01b9
-        L_0x01b7:
+            goto L_0x01b8
+        L_0x01b6:
             r15 = 1110441984(0x42300000, float:44.0)
-        L_0x01b9:
+        L_0x01b8:
             r16 = 0
             r17 = 0
             android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r12, r13, r14, r15, r16, r17)
@@ -324,13 +326,13 @@ public class InviteLinkBottomSheet extends BottomSheet {
             android.widget.TextView r4 = r0.titleTextView
             r7 = -1
             boolean r5 = r0.titleVisible
-            if (r5 != 0) goto L_0x01d0
+            if (r5 != 0) goto L_0x01cf
             r8 = 1110441984(0x42300000, float:44.0)
-            goto L_0x01d4
-        L_0x01d0:
+            goto L_0x01d3
+        L_0x01cf:
             r6 = 1112014848(0x42480000, float:50.0)
             r8 = 1112014848(0x42480000, float:50.0)
-        L_0x01d4:
+        L_0x01d3:
             r9 = 51
             r10 = 0
             r11 = 0
@@ -340,14 +342,14 @@ public class InviteLinkBottomSheet extends BottomSheet {
             r1.addView(r4, r5)
             r18.updateRows()
             r18.loadUsers()
-            if (r3 == 0) goto L_0x01f5
+            if (r3 == 0) goto L_0x01f4
             long r1 = r2.admin_id
             java.lang.Long r1 = java.lang.Long.valueOf(r1)
             java.lang.Object r1 = r3.get(r1)
-            if (r1 != 0) goto L_0x01f8
-        L_0x01f5:
+            if (r1 != 0) goto L_0x01f7
+        L_0x01f4:
             r18.loadCreator()
-        L_0x01f8:
+        L_0x01f7:
             r18.updateColors()
             return
         */
@@ -431,7 +433,7 @@ public class InviteLinkBottomSheet extends BottomSheet {
         } else if (view instanceof LinkActionView) {
             ((LinkActionView) view).updateColors();
         } else if (view instanceof TextInfoPrivacyCell) {
-            CombinedDrawable combinedDrawable = new CombinedDrawable(new ColorDrawable(Theme.getColor("windowBackgroundGray")), Theme.getThemedDrawable(view.getContext(), NUM, "windowBackgroundGrayShadow"));
+            CombinedDrawable combinedDrawable = new CombinedDrawable(new ColorDrawable(Theme.getColor("windowBackgroundGray")), Theme.getThemedDrawable(view.getContext(), R.drawable.greydivider, "windowBackgroundGrayShadow"));
             combinedDrawable.setFullsize(true);
             view.setBackground(combinedDrawable);
             ((TextInfoPrivacyCell) view).setTextColor(Theme.getColor("windowBackgroundWhiteGrayText4"));
@@ -443,11 +445,11 @@ public class InviteLinkBottomSheet extends BottomSheet {
             return;
         }
         if (childViewHolder.getItemViewType() == 7) {
-            CombinedDrawable combinedDrawable2 = new CombinedDrawable(new ColorDrawable(Theme.getColor("windowBackgroundGray")), Theme.getThemedDrawable(view.getContext(), NUM, "windowBackgroundGrayShadow"), 0, 0);
+            CombinedDrawable combinedDrawable2 = new CombinedDrawable(new ColorDrawable(Theme.getColor("windowBackgroundGray")), Theme.getThemedDrawable(view.getContext(), R.drawable.greydivider_bottom, "windowBackgroundGrayShadow"), 0, 0);
             combinedDrawable2.setFullsize(true);
             view.setBackgroundDrawable(combinedDrawable2);
         } else if (childViewHolder.getItemViewType() == 2) {
-            CombinedDrawable combinedDrawable3 = new CombinedDrawable(new ColorDrawable(Theme.getColor("windowBackgroundGray")), Theme.getThemedDrawable(view.getContext(), NUM, "windowBackgroundGrayShadow"), 0, 0);
+            CombinedDrawable combinedDrawable3 = new CombinedDrawable(new ColorDrawable(Theme.getColor("windowBackgroundGray")), Theme.getThemedDrawable(view.getContext(), R.drawable.greydivider, "windowBackgroundGrayShadow"), 0, 0);
             combinedDrawable3.setFullsize(true);
             view.setBackgroundDrawable(combinedDrawable3);
         }
@@ -688,12 +690,12 @@ public class InviteLinkBottomSheet extends BottomSheet {
                 r3 = 1
                 r4 = 0
                 switch(r12) {
-                    case 1: goto L_0x00e2;
-                    case 2: goto L_0x00d8;
-                    case 3: goto L_0x00b2;
-                    case 4: goto L_0x008e;
-                    case 5: goto L_0x0074;
-                    case 6: goto L_0x006d;
+                    case 1: goto L_0x00e0;
+                    case 2: goto L_0x00d6;
+                    case 3: goto L_0x00b0;
+                    case 4: goto L_0x008d;
+                    case 5: goto L_0x0073;
+                    case 6: goto L_0x006c;
                     case 7: goto L_0x004c;
                     case 8: goto L_0x0043;
                     default: goto L_0x0011;
@@ -717,16 +719,16 @@ public class InviteLinkBottomSheet extends BottomSheet {
                 java.lang.String r0 = "fonts/rmedium.ttf"
                 android.graphics.Typeface r0 = org.telegram.messenger.AndroidUtilities.getTypeface(r0)
                 r12.setTypeface(r0)
-                goto L_0x00e7
+                goto L_0x00e5
             L_0x0043:
                 org.telegram.ui.Components.InviteLinkBottomSheet$EmptyHintRow r11 = new org.telegram.ui.Components.InviteLinkBottomSheet$EmptyHintRow
                 org.telegram.ui.Components.InviteLinkBottomSheet r12 = org.telegram.ui.Components.InviteLinkBottomSheet.this
                 r11.<init>(r12, r1)
-                goto L_0x00e7
+                goto L_0x00e5
             L_0x004c:
                 org.telegram.ui.Cells.ShadowSectionCell r12 = new org.telegram.ui.Cells.ShadowSectionCell
                 r12.<init>((android.content.Context) r1, (int) r2)
-                r2 = 2131165436(0x7var_fc, float:1.794509E38)
+                int r2 = org.telegram.messenger.R.drawable.greydivider_bottom
                 android.graphics.drawable.Drawable r11 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r1, (int) r2, (java.lang.String) r11)
                 android.graphics.drawable.ColorDrawable r1 = new android.graphics.drawable.ColorDrawable
                 int r0 = org.telegram.ui.ActionBar.Theme.getColor(r0)
@@ -735,12 +737,12 @@ public class InviteLinkBottomSheet extends BottomSheet {
                 r0.<init>(r1, r11, r4, r4)
                 r0.setFullsize(r3)
                 r12.setBackgroundDrawable(r0)
-                goto L_0x00b0
-            L_0x006d:
+                goto L_0x00ae
+            L_0x006c:
                 org.telegram.ui.Components.InviteLinkBottomSheet$Adapter$2 r11 = new org.telegram.ui.Components.InviteLinkBottomSheet$Adapter$2
                 r11.<init>(r10, r1)
-                goto L_0x00e7
-            L_0x0074:
+                goto L_0x00e5
+            L_0x0073:
                 org.telegram.ui.Components.FlickerLoadingView r11 = new org.telegram.ui.Components.FlickerLoadingView
                 r11.<init>(r1)
                 r11.setIsSingleCell(r3)
@@ -750,8 +752,8 @@ public class InviteLinkBottomSheet extends BottomSheet {
                 r12 = 1092616192(0x41200000, float:10.0)
                 int r12 = org.telegram.messenger.AndroidUtilities.dp(r12)
                 r11.setPaddingLeft(r12)
-                goto L_0x00e7
-            L_0x008e:
+                goto L_0x00e5
+            L_0x008d:
                 org.telegram.ui.Components.InviteLinkBottomSheet$TimerPrivacyCell r12 = new org.telegram.ui.Components.InviteLinkBottomSheet$TimerPrivacyCell
                 org.telegram.ui.Components.InviteLinkBottomSheet r2 = org.telegram.ui.Components.InviteLinkBottomSheet.this
                 r12.<init>(r1)
@@ -759,15 +761,15 @@ public class InviteLinkBottomSheet extends BottomSheet {
                 android.graphics.drawable.ColorDrawable r4 = new android.graphics.drawable.ColorDrawable
                 int r0 = org.telegram.ui.ActionBar.Theme.getColor(r0)
                 r4.<init>(r0)
-                r0 = 2131165435(0x7var_fb, float:1.7945087E38)
+                int r0 = org.telegram.messenger.R.drawable.greydivider
                 android.graphics.drawable.Drawable r11 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r1, (int) r0, (java.lang.String) r11)
                 r2.<init>(r4, r11)
                 r2.setFullsize(r3)
                 r12.setBackground(r2)
-            L_0x00b0:
+            L_0x00ae:
                 r11 = r12
-                goto L_0x00e7
-            L_0x00b2:
+                goto L_0x00e5
+            L_0x00b0:
                 org.telegram.ui.Components.LinkActionView r11 = new org.telegram.ui.Components.LinkActionView
                 org.telegram.ui.Components.InviteLinkBottomSheet r3 = org.telegram.ui.Components.InviteLinkBottomSheet.this
                 org.telegram.ui.ActionBar.BaseFragment r2 = r3.fragment
@@ -783,16 +785,16 @@ public class InviteLinkBottomSheet extends BottomSheet {
                 androidx.recyclerview.widget.RecyclerView$LayoutParams r12 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
                 r12.<init>((int) r9, (int) r8)
                 r11.setLayoutParams(r12)
-                goto L_0x00e7
-            L_0x00d8:
+                goto L_0x00e5
+            L_0x00d6:
                 org.telegram.ui.Cells.ShadowSectionCell r11 = new org.telegram.ui.Cells.ShadowSectionCell
                 int r12 = org.telegram.ui.ActionBar.Theme.getColor(r0)
                 r11.<init>((android.content.Context) r1, (int) r2, (int) r12)
-                goto L_0x00e7
-            L_0x00e2:
+                goto L_0x00e5
+            L_0x00e0:
                 org.telegram.ui.Cells.UserCell r11 = new org.telegram.ui.Cells.UserCell
                 r11.<init>(r1, r2, r4, r3)
-            L_0x00e7:
+            L_0x00e5:
                 androidx.recyclerview.widget.RecyclerView$LayoutParams r12 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
                 r12.<init>((int) r9, (int) r8)
                 r11.setLayoutParams(r12)
@@ -816,14 +818,14 @@ public class InviteLinkBottomSheet extends BottomSheet {
                 HeaderCell headerCell = (HeaderCell) viewHolder.itemView;
                 InviteLinkBottomSheet inviteLinkBottomSheet = InviteLinkBottomSheet.this;
                 if (i == inviteLinkBottomSheet.creatorHeaderRow) {
-                    headerCell.setText(LocaleController.getString("LinkCreatedeBy", NUM));
+                    headerCell.setText(LocaleController.getString("LinkCreatedeBy", R.string.LinkCreatedeBy));
                     headerCell.setText2((CharSequence) null);
                 } else if (i == inviteLinkBottomSheet.joinedHeaderRow) {
                     int i5 = inviteLinkBottomSheet.invite.usage;
                     if (i5 > 0) {
                         headerCell.setText(LocaleController.formatPluralString("PeopleJoined", i5, new Object[0]));
                     } else {
-                        headerCell.setText(LocaleController.getString("NoOneJoined", NUM));
+                        headerCell.setText(LocaleController.getString("NoOneJoined", R.string.NoOneJoined));
                     }
                     TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported = InviteLinkBottomSheet.this.invite;
                     if (tLRPC$TL_chatInviteExported.expired || tLRPC$TL_chatInviteExported.revoked || (i2 = tLRPC$TL_chatInviteExported.usage_limit) <= 0 || (i3 = tLRPC$TL_chatInviteExported.usage) <= 0) {
@@ -855,15 +857,15 @@ public class InviteLinkBottomSheet extends BottomSheet {
                                     if (!TextUtils.isEmpty(tLRPC$ChannelParticipant.rank)) {
                                         str2 = tLRPC$ChannelParticipant.rank;
                                     } else if (tLRPC$ChannelParticipant instanceof TLRPC$TL_channelParticipantCreator) {
-                                        str2 = LocaleController.getString("ChannelCreator", NUM);
+                                        str2 = LocaleController.getString("ChannelCreator", R.string.ChannelCreator);
                                     } else if (tLRPC$ChannelParticipant instanceof TLRPC$TL_channelParticipantAdmin) {
-                                        str2 = LocaleController.getString("ChannelAdmin", NUM);
+                                        str2 = LocaleController.getString("ChannelAdmin", R.string.ChannelAdmin);
                                     }
                                 } else {
                                     if (tLRPC$ChatParticipant instanceof TLRPC$TL_chatParticipantCreator) {
-                                        string = LocaleController.getString("ChannelCreator", NUM);
+                                        string = LocaleController.getString("ChannelCreator", R.string.ChannelCreator);
                                     } else if (tLRPC$ChatParticipant instanceof TLRPC$TL_chatParticipantAdmin) {
-                                        string = LocaleController.getString("ChannelAdmin", NUM);
+                                        string = LocaleController.getString("ChannelAdmin", R.string.ChannelAdmin);
                                     }
                                     str2 = string;
                                 }
@@ -903,15 +905,15 @@ public class InviteLinkBottomSheet extends BottomSheet {
                 timerPrivacyCell.setFixedSize(0);
                 TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported2 = InviteLinkBottomSheet.this.invite;
                 if (tLRPC$TL_chatInviteExported2.revoked) {
-                    timerPrivacyCell.setText(LocaleController.getString("LinkIsNoActive", NUM));
+                    timerPrivacyCell.setText(LocaleController.getString("LinkIsNoActive", R.string.LinkIsNoActive));
                 } else if (tLRPC$TL_chatInviteExported2.expired) {
                     int i8 = tLRPC$TL_chatInviteExported2.usage_limit;
                     if (i8 <= 0 || i8 != tLRPC$TL_chatInviteExported2.usage) {
-                        timerPrivacyCell.setText(LocaleController.getString("LinkIsExpired", NUM));
+                        timerPrivacyCell.setText(LocaleController.getString("LinkIsExpired", R.string.LinkIsExpired));
                         timerPrivacyCell.setTextColor(Theme.getColor("windowBackgroundWhiteRedText"));
                         return;
                     }
-                    timerPrivacyCell.setText(LocaleController.getString("LinkIsExpiredLimitReached", NUM));
+                    timerPrivacyCell.setText(LocaleController.getString("LinkIsExpiredLimitReached", R.string.LinkIsExpiredLimitReached));
                 } else if (tLRPC$TL_chatInviteExported2.expire_date > 0) {
                     long currentTimeMillis = System.currentTimeMillis() + (InviteLinkBottomSheet.this.timeDif * 1000);
                     int i9 = InviteLinkBottomSheet.this.invite.expire_date;
@@ -920,7 +922,7 @@ public class InviteLinkBottomSheet extends BottomSheet {
                         j = 0;
                     }
                     if (j > 86400000) {
-                        timerPrivacyCell.setText(LocaleController.formatString("LinkExpiresIn", NUM, LocaleController.formatDateAudio((long) i9, false)));
+                        timerPrivacyCell.setText(LocaleController.formatString("LinkExpiresIn", R.string.LinkExpiresIn, LocaleController.formatDateAudio((long) i9, false)));
                         return;
                     }
                     long j2 = j / 1000;
@@ -935,7 +937,7 @@ public class InviteLinkBottomSheet extends BottomSheet {
                     String sb2 = sb.toString();
                     timerPrivacyCell.timer = true;
                     timerPrivacyCell.runTimer();
-                    timerPrivacyCell.setText(LocaleController.formatString("LinkExpiresInTime", NUM, sb2));
+                    timerPrivacyCell.setText(LocaleController.formatString("LinkExpiresInTime", R.string.LinkExpiresInTime, sb2));
                 } else {
                     timerPrivacyCell.setFixedSize(12);
                     timerPrivacyCell.setText((CharSequence) null);

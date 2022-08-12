@@ -192,7 +192,7 @@ public abstract class TLRPC$Message extends TLObject {
     /* JADX WARNING: Removed duplicated region for block: B:28:0x0045  */
     /* JADX WARNING: Removed duplicated region for block: B:40:0x0063  */
     /* JADX WARNING: Removed duplicated region for block: B:60:0x00a9  */
-    /* JADX WARNING: Removed duplicated region for block: B:90:0x012d  */
+    /* JADX WARNING: Removed duplicated region for block: B:90:0x012c  */
     /* JADX WARNING: Removed duplicated region for block: B:96:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void readAttachPath(org.telegram.tgnet.AbstractSerializedData r12, long r13) {
@@ -261,7 +261,7 @@ public abstract class TLRPC$Message extends TLObject {
             if (r13 == r5) goto L_0x006d
         L_0x0069:
             boolean r13 = r11.legacy
-            if (r13 == 0) goto L_0x0123
+            if (r13 == 0) goto L_0x0122
         L_0x006d:
             r13 = 2
             if (r0 == 0) goto L_0x00a3
@@ -291,56 +291,56 @@ public abstract class TLRPC$Message extends TLObject {
             r11.message = r14
         L_0x00a3:
             int r14 = r12.remaining()
-            if (r14 <= 0) goto L_0x0123
+            if (r14 <= 0) goto L_0x0122
             java.lang.String r14 = r12.readString(r1)
             r11.attachPath = r14
-            if (r14 == 0) goto L_0x0123
+            if (r14 == 0) goto L_0x0122
             int r0 = r11.id
             if (r0 < 0) goto L_0x00bd
             int r0 = r11.send_state
             if (r0 == r5) goto L_0x00bd
             boolean r0 = r11.legacy
-            if (r0 == 0) goto L_0x011b
+            if (r0 == 0) goto L_0x011a
         L_0x00bd:
             java.lang.String r0 = "||"
             boolean r14 = r14.startsWith(r0)
-            if (r14 == 0) goto L_0x011b
+            if (r14 == 0) goto L_0x011a
             java.lang.String r14 = r11.attachPath
             java.lang.String r0 = "\\|\\|"
             java.lang.String[] r14 = r14.split(r0)
             int r0 = r14.length
-            if (r0 <= 0) goto L_0x0123
+            if (r0 <= 0) goto L_0x0122
             java.util.HashMap<java.lang.String, java.lang.String> r0 = r11.params
-            if (r0 != 0) goto L_0x00dc
+            if (r0 != 0) goto L_0x00db
             java.util.HashMap r0 = new java.util.HashMap
             r0.<init>()
             r11.params = r0
-        L_0x00dc:
+        L_0x00db:
             r0 = 1
-        L_0x00dd:
+        L_0x00dc:
             int r3 = r14.length
             int r3 = r3 - r2
-            if (r0 >= r3) goto L_0x00f8
+            if (r0 >= r3) goto L_0x00f7
             r3 = r14[r0]
             java.lang.String r4 = "\\|=\\|"
             java.lang.String[] r3 = r3.split(r4)
             int r4 = r3.length
-            if (r4 != r13) goto L_0x00f5
+            if (r4 != r13) goto L_0x00f4
             java.util.HashMap<java.lang.String, java.lang.String> r4 = r11.params
             r5 = r3[r1]
             r3 = r3[r2]
             r4.put(r5, r3)
-        L_0x00f5:
+        L_0x00f4:
             int r0 = r0 + 1
-            goto L_0x00dd
-        L_0x00f8:
+            goto L_0x00dc
+        L_0x00f7:
             int r13 = r14.length
             int r13 = r13 - r2
             r13 = r14[r13]
             java.lang.String r13 = r13.trim()
             r11.attachPath = r13
             boolean r13 = r11.legacy
-            if (r13 == 0) goto L_0x0123
+            if (r13 == 0) goto L_0x0122
             java.util.HashMap<java.lang.String, java.lang.String> r13 = r11.params
             java.lang.String r14 = "legacy_layer"
             java.lang.Object r13 = r13.get(r14)
@@ -348,20 +348,20 @@ public abstract class TLRPC$Message extends TLObject {
             java.lang.Integer r13 = org.telegram.messenger.Utilities.parseInt((java.lang.CharSequence) r13)
             int r13 = r13.intValue()
             r11.layer = r13
-            goto L_0x0123
-        L_0x011b:
+            goto L_0x0122
+        L_0x011a:
             java.lang.String r13 = r11.attachPath
             java.lang.String r13 = r13.trim()
             r11.attachPath = r13
-        L_0x0123:
+        L_0x0122:
             int r13 = r11.flags
             r13 = r13 & 4
-            if (r13 == 0) goto L_0x0133
+            if (r13 == 0) goto L_0x0132
             int r13 = r11.id
-            if (r13 >= 0) goto L_0x0133
+            if (r13 >= 0) goto L_0x0132
             int r12 = r12.readInt32(r1)
             r11.fwd_msg_id = r12
-        L_0x0133:
+        L_0x0132:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.tgnet.TLRPC$Message.readAttachPath(org.telegram.tgnet.AbstractSerializedData, long):void");

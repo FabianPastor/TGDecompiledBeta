@@ -4422,12 +4422,6 @@
     <string name="formatterYearMax">yyyy.MM.dd</string>
     <string name="google_assistant_verification_channel_name">‏أداة التحقق في خدمة \"مساعد Google\"</string>
     <string name="google_assistant_verification_notification_title">‏\"مساعد Google\" يرسل رسالة</string>
-    <string name="hms_apk_not_installed_hints">قد لا تعمل بعض الميزات في تطبيق %1$s على النحو المنشود بدون خدمات HMS Core، والتي لم يتم تثبيتها على جهازك.</string>
-    <string name="hms_bindfaildlg_message">\"%1$s\" غير قادر على استخدام خدمات HMS Core. يُرجى تشغيل مدير الهاتف أو الانتقال إلى الإعدادات، وتشغيل جميع أذونات %2$s (بما في ذلك التشغيل التلقائي، والتشغيل الثانوي)، وإعادة المحاولة.</string>
-    <string name="hms_confirm">حسنًا</string>
-    <string name="hms_is_spoof">يبدو أنك ثبّت إصدارًا غير رسمي من HMS Core (%1$s)‎ على جهازك. يُرجى إزالة تثبيت إصدار HMS Core من الإعدادات والعودة إلى هذا التطبيق لتثبيت الإصدار الرسمي.</string>
-    <string name="hms_push_channel">الافتراضي</string>
-    <string name="hms_spoof_hints">تنويه</string>
     <string name="items_few">%1$d عناصر</string>
     <string name="items_many">%1$d عنصرًا</string>
     <string name="items_one">عنصر واحد</string>

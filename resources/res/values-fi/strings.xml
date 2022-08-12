@@ -21,12 +21,6 @@
     <string name="fcm_fallback_notification_channel_label">Muut</string>
     <string name="google_assistant_verification_channel_name">Assistant-vahvistaja</string>
     <string name="google_assistant_verification_notification_title">Google Assistant lähettää viestiä</string>
-    <string name="hms_apk_not_installed_hints">Jotkin sovelluksen %1$s ominaisuudet eivät ehkä toimi oikein ilman HMS Corea, jota ei ole asennettu laitteeseesi.</string>
-    <string name="hms_bindfaildlg_message">%1$s ei voi käyttää HMS Core -palveluja. Käynnistä Optimoija (puhelimen hallinta) tai mene kohtaan Asetukset, ota käyttöön kaikki luvat palvelulle %2$s (mukaan lukien automaattinen käynnistys ja toissijainen käynnistys) ja yritä uudelleen.</string>
-    <string name="hms_confirm">OK</string>
-    <string name="hms_is_spoof">Laitteellesi asennettu HMS Core -versio (%1$s) vaikuttaa olevan epävirallinen. Poista HMS Coren asennus asetuksista ja palaa tähän sovellukseen virallisen version asennusta varten.</string>
-    <string name="hms_push_channel">Oletus</string>
-    <string name="hms_spoof_hints">Huomautus</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Maksa Googlen kautta</string>
 </resources>

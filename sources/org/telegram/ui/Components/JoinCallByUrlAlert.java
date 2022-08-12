@@ -11,6 +11,7 @@ import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.R;
 import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
@@ -88,20 +89,20 @@ public class JoinCallByUrlAlert extends BottomSheet {
             }
             int i = groupCall.call.participants_count;
             if (i == 0) {
-                textView2.setText(LocaleController.getString("NoOneJoinedYet", NUM));
+                textView2.setText(LocaleController.getString("NoOneJoinedYet", R.string.NoOneJoinedYet));
             } else {
                 textView2.setText(LocaleController.formatPluralString("Participants", i, new Object[0]));
             }
         } else {
             textView.setText(tLRPC$Chat.title);
-            textView2.setText(LocaleController.getString("NoOneJoinedYet", NUM));
+            textView2.setText(LocaleController.getString("NoOneJoinedYet", R.string.NoOneJoinedYet));
         }
         BottomSheetCell bottomSheetCell = new BottomSheetCell(context);
         bottomSheetCell.setBackground((Drawable) null);
         if (ChatObject.isChannelOrGiga(tLRPC$Chat)) {
-            bottomSheetCell.setText(LocaleController.getString("VoipChannelJoinVoiceChatUrl", NUM));
+            bottomSheetCell.setText(LocaleController.getString("VoipChannelJoinVoiceChatUrl", R.string.VoipChannelJoinVoiceChatUrl));
         } else {
-            bottomSheetCell.setText(LocaleController.getString("VoipGroupJoinVoiceChatUrl", NUM));
+            bottomSheetCell.setText(LocaleController.getString("VoipGroupJoinVoiceChatUrl", R.string.VoipGroupJoinVoiceChatUrl));
         }
         bottomSheetCell.background.setOnClickListener(new JoinCallByUrlAlert$$ExternalSyntheticLambda0(this));
         linearLayout.addView(bottomSheetCell, LayoutHelper.createLinear(-1, 50, 51, 0, 30, 0, 0));

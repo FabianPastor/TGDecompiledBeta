@@ -32,6 +32,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.R;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.tgnet.ConnectionsManager;
@@ -157,7 +158,7 @@ public class WebviewActivity extends BaseFragment {
 
     @SuppressLint({"SetJavaScriptEnabled", "AddJavascriptInterface"})
     public View createView(Context context) {
-        this.actionBar.setBackButtonImage(NUM);
+        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             public void onItemClick(int i) {
@@ -175,10 +176,10 @@ public class WebviewActivity extends BaseFragment {
             }
         });
         ActionBarMenu createMenu = this.actionBar.createMenu();
-        this.progressItem = createMenu.addItemWithWidth(1, NUM, AndroidUtilities.dp(54.0f));
+        this.progressItem = createMenu.addItemWithWidth(1, R.drawable.share, AndroidUtilities.dp(54.0f));
         int i = this.type;
         if (i == 0) {
-            createMenu.addItem(0, NUM).addSubItem(2, NUM, LocaleController.getString("OpenInExternalApp", NUM));
+            createMenu.addItem(0, R.drawable.ic_ab_other).addSubItem(2, R.drawable.msg_openin, LocaleController.getString("OpenInExternalApp", R.string.OpenInExternalApp));
             this.actionBar.setTitle(this.currentGame);
             ActionBar actionBar = this.actionBar;
             actionBar.setSubtitle("@" + this.currentBot);
@@ -195,7 +196,7 @@ public class WebviewActivity extends BaseFragment {
             this.actionBar.setItemsBackgroundColor(Theme.getColor("player_actionBarSelector"), false);
             this.actionBar.setTitleColor(Theme.getColor("player_actionBarTitle"));
             this.actionBar.setSubtitleColor(Theme.getColor("player_actionBarSubtitle"));
-            this.actionBar.setTitle(LocaleController.getString("Statistics", NUM));
+            this.actionBar.setTitle(LocaleController.getString("Statistics", R.string.Statistics));
             ContextProgressView contextProgressView2 = new ContextProgressView(context, 3);
             this.progressView = contextProgressView2;
             this.progressItem.addView(contextProgressView2, LayoutHelper.createFrame(-1, -1.0f));

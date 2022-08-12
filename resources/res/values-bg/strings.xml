@@ -21,12 +21,6 @@
     <string name="fcm_fallback_notification_channel_label">Разни</string>
     <string name="google_assistant_verification_channel_name">Инструмент за потвърждаване на Асистент</string>
     <string name="google_assistant_verification_notification_title">Google Асистент изпраща съобщение</string>
-    <string name="hms_apk_not_installed_hints">Някои функции в %1$s може да не работят правилно без приложението HMS Core, което не е инсталирано на вашето устройство.</string>
-    <string name="hms_bindfaildlg_message">%1$s не може да използва \"HMS Core\". Стартирайте Оптимизатор (Мениджър на телефона) или отидете в \"Настройки\", активирайте всички разрешения за %2$s (включително авто стартиране и вторично стартиране), след което опитайте отново.</string>
-    <string name="hms_confirm">ОК</string>
-    <string name="hms_is_spoof">Изглежда, че имате неофициална версия на HMS Core (%1$s), инсталирана на вашето устройство. Моля, деинсталирайте HMS Core от Настройки и се върнете към това приложение, за да инсталирате официалната версия.</string>
-    <string name="hms_push_channel">По подразбиране</string>
-    <string name="hms_spoof_hints">Бележка</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Купете с Google</string>
 </resources>

@@ -27,6 +27,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 
 public class AcceptDeclineView extends View {
@@ -93,22 +94,22 @@ public class AcceptDeclineView extends View {
         TextPaint textPaint = new TextPaint(1);
         textPaint.setTextSize((float) AndroidUtilities.dp(11.0f));
         textPaint.setColor(-1);
-        String string = LocaleController.getString("AcceptCall", NUM);
-        String string2 = LocaleController.getString("DeclineCall", NUM);
-        String string3 = LocaleController.getString("RetryCall", NUM);
+        String string = LocaleController.getString("AcceptCall", R.string.AcceptCall);
+        String string2 = LocaleController.getString("DeclineCall", R.string.DeclineCall);
+        String string3 = LocaleController.getString("RetryCall", R.string.RetryCall);
         TextPaint textPaint2 = textPaint;
         this.acceptLayout = new StaticLayout(string, textPaint2, (int) textPaint.measureText(string), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
         this.declineLayout = new StaticLayout(string2, textPaint2, (int) textPaint.measureText(string2), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
         this.retryLayout = new StaticLayout(string3, textPaint2, (int) textPaint.measureText(string3), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-        this.callDrawable = ContextCompat.getDrawable(context, NUM).mutate();
-        Drawable mutate = ContextCompat.getDrawable(context, NUM).mutate();
+        this.callDrawable = ContextCompat.getDrawable(context, R.drawable.calls_decline).mutate();
+        Drawable mutate = ContextCompat.getDrawable(context, R.drawable.ic_close_white).mutate();
         this.cancelDrawable = mutate;
         mutate.setColorFilter(new PorterDuffColorFilter(-16777216, PorterDuff.Mode.MULTIPLY));
         this.acceptCirclePaint.setColor(NUM);
         Drawable createSimpleSelectorCircleDrawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(52.0f), 0, ColorUtils.setAlphaComponent(-1, 76));
         this.rippleDrawable = createSimpleSelectorCircleDrawable;
         createSimpleSelectorCircleDrawable.setCallback(this);
-        this.arrowDrawable = ContextCompat.getDrawable(context, NUM);
+        this.arrowDrawable = ContextCompat.getDrawable(context, R.drawable.call_arrow_right);
     }
 
     /* access modifiers changed from: protected */

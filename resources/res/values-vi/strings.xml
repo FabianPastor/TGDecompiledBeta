@@ -21,12 +21,6 @@
     <string name="fcm_fallback_notification_channel_label">Khác</string>
     <string name="google_assistant_verification_channel_name">Trình xác minh của Trợ lý</string>
     <string name="google_assistant_verification_notification_title">Trợ lý Google đang gửi thông báo</string>
-    <string name="hms_apk_not_installed_hints">Một số tính năng trong %1$s có thể không hoạt động bình thường nếu không có HMS Core, dịch vụ này chưa được cài đặt trên thiết bị của bạn.</string>
-    <string name="hms_bindfaildlg_message">%1$s không thể sử dụng HMS Core. Vui lòng khởi chạy Trình tối ưu hóa (Quản lý ĐT) hoặc chuyển tới mục Cài đặt để bật tất cả quyền cho %2$s (bao gồm tự động khởi chạy và khởi chạy thứ cấp), sau đó thử lại.</string>
-    <string name="hms_confirm">OK</string>
-    <string name="hms_is_spoof">Có vẻ như bạn đã cài đặt phiên bản HMS Core (%1$s) không chính thức trên thiết bị của mình. Vui lòng gỡ cài đặt HMS Core khỏi Cài đặt và quay lại ứng dụng này để cài đặt phiên bản chính thức.</string>
-    <string name="hms_push_channel">Mặc định</string>
-    <string name="hms_spoof_hints">Lưu ý</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Mua hàng bằng Google</string>
 </resources>

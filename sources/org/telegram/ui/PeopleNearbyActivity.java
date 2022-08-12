@@ -35,6 +35,7 @@ import org.telegram.messenger.LocationController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Chat;
@@ -341,7 +342,7 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
     }
 
     public View createView(Context context) {
-        this.actionBar.setBackButtonImage(NUM);
+        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setBackgroundDrawable((Drawable) null);
         this.actionBar.setTitleColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.actionBar.setItemsColor(Theme.getColor("windowBackgroundWhiteBlackText"), false);
@@ -350,7 +351,7 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
         this.actionBar.setAddToContainer(false);
         int i = 1;
         this.actionBar.setOccupyStatusBar(Build.VERSION.SDK_INT >= 21 && !AndroidUtilities.isTablet());
-        this.actionBar.setTitle(LocaleController.getString("PeopleNearby", NUM));
+        this.actionBar.setTitle(LocaleController.getString("PeopleNearby", R.string.PeopleNearby));
         this.actionBar.getTitleTextView().setAlpha(0.0f);
         this.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             public void onItemClick(int i) {
@@ -462,10 +463,10 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
                         updateRows((DiffCallback) null);
                     } else {
                         AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
-                        builder.setTitle(LocaleController.getString("MakeMyselfVisibleTitle", NUM));
-                        builder.setMessage(LocaleController.getString("MakeMyselfVisibleInfo", NUM));
-                        builder.setPositiveButton(LocaleController.getString("OK", NUM), new PeopleNearbyActivity$$ExternalSyntheticLambda1(this, userConfig));
-                        builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
+                        builder.setTitle(LocaleController.getString("MakeMyselfVisibleTitle", R.string.MakeMyselfVisibleTitle));
+                        builder.setMessage(LocaleController.getString("MakeMyselfVisibleInfo", R.string.MakeMyselfVisibleInfo));
+                        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new PeopleNearbyActivity$$ExternalSyntheticLambda1(this, userConfig));
+                        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), (DialogInterface.OnClickListener) null);
                         showDialog(builder.create());
                     }
                     userConfig.saveConfig(false);
@@ -633,7 +634,7 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
 
     private void openGroupCreate() {
         if (!this.canCreateGroup) {
-            AlertsCreator.showSimpleAlert(this, LocaleController.getString("YourLocatedChannelsTooMuch", NUM));
+            AlertsCreator.showSimpleAlert(this, LocaleController.getString("YourLocatedChannelsTooMuch", R.string.YourLocatedChannelsTooMuch));
             return;
         }
         ActionIntroActivity actionIntroActivity = new ActionIntroActivity(2);
@@ -1148,14 +1149,14 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
             textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
             this.titleTextView.setTextSize(1, 24.0f);
             this.titleTextView.setGravity(17);
-            this.titleTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("PeopleNearby", NUM, new Object[0])));
+            this.titleTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("PeopleNearby", R.string.PeopleNearby, new Object[0])));
             addView(this.titleTextView, LayoutHelper.createFrame(-1, -2.0f, 51, 17.0f, (float) (currentActionBarHeight + 120), 17.0f, 27.0f));
             TextView textView2 = new TextView(context);
             this.messageTextView = textView2;
             textView2.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText"));
             this.messageTextView.setTextSize(1, 15.0f);
             this.messageTextView.setGravity(17);
-            this.messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("PeopleNearbyInfo2", NUM, new Object[0])));
+            this.messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("PeopleNearbyInfo2", R.string.PeopleNearbyInfo2, new Object[0])));
             addView(this.messageTextView, LayoutHelper.createFrame(-1, -2.0f, 51, 40.0f, (float) (currentActionBarHeight + 161), 40.0f, 27.0f));
         }
     }
@@ -1266,46 +1267,49 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
             } else if (itemViewType == 1) {
                 ShadowSectionCell shadowSectionCell = (ShadowSectionCell) viewHolder.itemView;
                 if (i == PeopleNearbyActivity.this.usersSectionRow) {
-                    shadowSectionCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
+                    shadowSectionCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider, "windowBackgroundGrayShadow"));
                 } else if (i == PeopleNearbyActivity.this.chatsSectionRow) {
-                    shadowSectionCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
+                    shadowSectionCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, "windowBackgroundGrayShadow"));
                 } else if (i == PeopleNearbyActivity.this.helpSectionRow) {
-                    shadowSectionCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
+                    shadowSectionCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider, "windowBackgroundGrayShadow"));
                 }
             } else if (itemViewType == 2) {
                 ManageChatTextCell manageChatTextCell = (ManageChatTextCell) viewHolder.itemView;
                 manageChatTextCell.setColors("windowBackgroundWhiteBlueIcon", "windowBackgroundWhiteBlueButton");
                 if (i == PeopleNearbyActivity.this.chatsCreateRow) {
-                    String string = LocaleController.getString("NearbyCreateGroup", NUM);
+                    String string = LocaleController.getString("NearbyCreateGroup", R.string.NearbyCreateGroup);
+                    int i3 = R.drawable.msg_groups_create;
                     if (PeopleNearbyActivity.this.chatsStartRow != -1) {
                         z = true;
                     }
-                    manageChatTextCell.setText(string, (String) null, NUM, z);
+                    manageChatTextCell.setText(string, (String) null, i3, z);
                 } else if (i == PeopleNearbyActivity.this.showMeRow) {
                     PeopleNearbyActivity peopleNearbyActivity = PeopleNearbyActivity.this;
                     if (peopleNearbyActivity.showingMe = peopleNearbyActivity.getUserConfig().sharingMyLocationUntil > PeopleNearbyActivity.this.getConnectionsManager().getCurrentTime()) {
-                        String string2 = LocaleController.getString("StopShowingMe", NUM);
+                        String string2 = LocaleController.getString("StopShowingMe", R.string.StopShowingMe);
+                        int i4 = R.drawable.msg_nearby_off;
                         if (PeopleNearbyActivity.this.usersStartRow != -1) {
                             z = true;
                         }
-                        manageChatTextCell.setText(string2, (String) null, NUM, z);
+                        manageChatTextCell.setText(string2, (String) null, i4, z);
                         manageChatTextCell.setColors("windowBackgroundWhiteRedText5", "windowBackgroundWhiteRedText5");
                         return;
                     }
-                    String string3 = LocaleController.getString("MakeMyselfVisible", NUM);
+                    String string3 = LocaleController.getString("MakeMyselfVisible", R.string.MakeMyselfVisible);
+                    int i5 = R.drawable.msg_nearby;
                     if (PeopleNearbyActivity.this.usersStartRow != -1) {
                         z = true;
                     }
-                    manageChatTextCell.setText(string3, (String) null, NUM, z);
+                    manageChatTextCell.setText(string3, (String) null, i5, z);
                 } else if (i == PeopleNearbyActivity.this.showMoreRow) {
-                    manageChatTextCell.setText(LocaleController.formatPluralString("ShowVotes", PeopleNearbyActivity.this.users.size() - 5, new Object[0]), (String) null, NUM, false);
+                    manageChatTextCell.setText(LocaleController.formatPluralString("ShowVotes", PeopleNearbyActivity.this.users.size() - 5, new Object[0]), (String) null, R.drawable.arrow_more, false);
                 }
             } else if (itemViewType == 3) {
                 HeaderCellProgress headerCellProgress = (HeaderCellProgress) viewHolder.itemView;
                 if (i == PeopleNearbyActivity.this.usersHeaderRow) {
-                    headerCellProgress.setText(LocaleController.getString("PeopleNearbyHeader", NUM));
+                    headerCellProgress.setText(LocaleController.getString("PeopleNearbyHeader", R.string.PeopleNearbyHeader));
                 } else if (i == PeopleNearbyActivity.this.chatsHeaderRow) {
-                    headerCellProgress.setText(LocaleController.getString("ChatsNearbyHeader", NUM));
+                    headerCellProgress.setText(LocaleController.getString("ChatsNearbyHeader", R.string.ChatsNearbyHeader));
                 }
             }
         }

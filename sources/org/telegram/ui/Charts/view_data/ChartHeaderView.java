@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Charts.BaseChartView;
 import org.telegram.ui.Components.LayoutHelper;
@@ -59,8 +60,8 @@ public class ChartHeaderView extends FrameLayout {
         addView(this.datesTmp, LayoutHelper.createFrame(-2, -2.0f, 8388629, 16.0f, 0.0f, 16.0f, 0.0f));
         this.datesTmp.setVisibility(8);
         this.back.setVisibility(8);
-        this.back.setText(LocaleController.getString("ZoomOut", NUM));
-        Drawable drawable = ContextCompat.getDrawable(getContext(), NUM);
+        this.back.setText(LocaleController.getString("ZoomOut", R.string.ZoomOut));
+        Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.msg_zoomout_stats);
         this.zoomIcon = drawable;
         this.back.setCompoundDrawablesWithIntrinsicBounds(drawable, (Drawable) null, (Drawable) null, (Drawable) null);
         this.back.setCompoundDrawablePadding(AndroidUtilities.dp(4.0f));

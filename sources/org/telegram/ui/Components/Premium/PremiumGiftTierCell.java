@@ -18,6 +18,7 @@ import org.telegram.messenger.BillingController;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.GenericProvider;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.CheckBox2;
 import org.telegram.ui.Components.CheckBoxBase;
@@ -185,15 +186,15 @@ public class PremiumGiftTierCell extends ViewGroup {
             if (giftTier.getDiscount() <= 0) {
                 this.discountView.setVisibility(8);
             } else {
-                this.discountView.setText(LocaleController.formatString(NUM, Integer.valueOf(giftTier.getDiscount())));
+                this.discountView.setText(LocaleController.formatString(R.string.GiftPremiumOptionDiscount, Integer.valueOf(giftTier.getDiscount())));
                 this.discountView.setVisibility(0);
             }
-            this.pricePerMonthView.setText(LocaleController.formatString(NUM, giftTier.getFormattedPricePerMonth()));
+            this.pricePerMonthView.setText(LocaleController.formatString(R.string.PricePerMonth, giftTier.getFormattedPricePerMonth()));
             this.priceTotalView.setText(giftTier.getFormattedPrice());
         } else {
-            this.discountView.setText(LocaleController.formatString(NUM, 10));
+            this.discountView.setText(LocaleController.formatString(R.string.GiftPremiumOptionDiscount, 10));
             this.discountView.setVisibility(0);
-            this.pricePerMonthView.setText(LocaleController.formatString(NUM, 100));
+            this.pricePerMonthView.setText(LocaleController.formatString(R.string.PricePerMonth, 100));
             this.priceTotalView.setText("USD00,00");
         }
         requestLayout();

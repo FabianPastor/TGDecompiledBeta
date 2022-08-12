@@ -24,6 +24,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.ui.ActionBar.Theme;
@@ -112,7 +113,7 @@ public class LimitPreviewView extends LinearLayout {
         FrameLayout frameLayout = new FrameLayout(context2);
         TextView textView = new TextView(context2);
         textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        textView.setText(LocaleController.getString("LimitFree", NUM));
+        textView.setText(LocaleController.getString("LimitFree", R.string.LimitFree));
         textView.setGravity(16);
         textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         textView.setPadding(AndroidUtilities.dp(12.0f), 0, 0, 0);
@@ -128,7 +129,7 @@ public class LimitPreviewView extends LinearLayout {
         FrameLayout frameLayout2 = new FrameLayout(context2);
         TextView textView3 = new TextView(context2);
         textView3.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        textView3.setText(LocaleController.getString("LimitPremium", NUM));
+        textView3.setText(LocaleController.getString("LimitPremium", R.string.LimitPremium));
         textView3.setGravity(16);
         textView3.setTextColor(-1);
         textView3.setPadding(AndroidUtilities.dp(12.0f), 0, 0, 0);

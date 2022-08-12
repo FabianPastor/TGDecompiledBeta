@@ -21,12 +21,6 @@
     <string name="fcm_fallback_notification_channel_label">Razno</string>
     <string name="google_assistant_verification_channel_name">Verifikator Asistenta</string>
     <string name="google_assistant_verification_notification_title">Google asistent šalje poruku</string>
-    <string name="hms_apk_not_installed_hints">Neke značajke u aplikaciji %1$s možda neće ispravno funkcionirati bez značajke HMS Core koja nije instalirana na vašem uređaju.</string>
-    <string name="hms_bindfaildlg_message">%1$s ne može upotrebljavati aplikaciju HMS Core. Pokrenite aplikaciju Optimizacija (Upravitelj telefona) ili idite na Postavke, omogućite sve dozvole za %2$s (uključujući Automatsko pokretanje i Sekundarno pokretanje) i pokušajte ponovno.</string>
-    <string name="hms_confirm">U redu</string>
-    <string name="hms_is_spoof">Čini se da je na vašem uređaju instalirana neslužbena verzija aplikacije HMS Core (%1$s). Deinstalirajte HMS Core putem aplikacije Postavke i vratite se u ovu aplikaciju da biste instalirali službenu verziju.</string>
-    <string name="hms_push_channel">Zadano</string>
-    <string name="hms_spoof_hints">Napomena</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Kupi putem Googlea</string>
 </resources>

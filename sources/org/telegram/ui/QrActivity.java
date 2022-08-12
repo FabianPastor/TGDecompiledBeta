@@ -54,6 +54,7 @@ import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SvgHelper;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.ResultCallback;
@@ -335,7 +336,7 @@ public class QrActivity extends BaseFragment {
         RLottieImageView rLottieImageView = new RLottieImageView(context2);
         this.logoImageView = rLottieImageView;
         rLottieImageView.setAutoRepeat(true);
-        this.logoImageView.setAnimation(NUM, 60, 60);
+        this.logoImageView.setAnimation(R.raw.qr_code_logo_2, 60, 60);
         this.logoImageView.playAnimation();
         r2.addView(this.logoImageView);
         BackupImageView backupImageView = new BackupImageView(context2);
@@ -347,7 +348,7 @@ public class QrActivity extends BaseFragment {
         ImageView imageView = new ImageView(context2);
         this.closeImageView = imageView;
         imageView.setBackground(Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(34.0f), NUM, NUM));
-        this.closeImageView.setImageResource(NUM);
+        this.closeImageView.setImageResource(R.drawable.ic_ab_back);
         this.closeImageView.setScaleType(ImageView.ScaleType.CENTER);
         this.closeImageView.setOnClickListener(new QrActivity$$ExternalSyntheticLambda2(this));
         r2.addView(this.closeImageView, LayoutHelper.createFrame(34, 34.0f));
@@ -359,7 +360,7 @@ public class QrActivity extends BaseFragment {
         paint.setColor(-1);
         canvas.drawRoundRect(rectF, (float) AndroidUtilities.dp(5.0f), (float) AndroidUtilities.dp(5.0f), paint);
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OUT));
-        Bitmap decodeResource = BitmapFactory.decodeResource(ApplicationLoader.applicationContext.getResources(), NUM);
+        Bitmap decodeResource = BitmapFactory.decodeResource(ApplicationLoader.applicationContext.getResources(), R.drawable.msg_qr_mini);
         canvas.drawBitmap(decodeResource, ((float) (this.emojiThemeIcon.getWidth() - decodeResource.getWidth())) * 0.5f, ((float) (this.emojiThemeIcon.getHeight() - decodeResource.getHeight())) * 0.5f, paint);
         canvas.setBitmap((Bitmap) null);
         AnonymousClass3 r1 = new ThemeListViewController(this, getParentActivity().getWindow()) {
@@ -375,7 +376,7 @@ public class QrActivity extends BaseFragment {
         this.themeLayout = r1.rootLayout;
         r1.onCreate();
         this.themesViewController.setItemSelectedListener(new QrActivity$$ExternalSyntheticLambda10(this));
-        this.themesViewController.titleView.setText(LocaleController.getString("QrCode", NUM));
+        this.themesViewController.titleView.setText(LocaleController.getString("QrCode", R.string.QrCode));
         this.themesViewController.progressView.setViewType(17);
         this.themesViewController.shareButton.setOnClickListener(new QrActivity$$ExternalSyntheticLambda3(this));
         r2.addView(this.themeLayout, LayoutHelper.createFrame(-1, -2, 80));
@@ -664,7 +665,7 @@ public class QrActivity extends BaseFragment {
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$onItemSelected$7() {
-        AndroidUtilities.runOnUIThread(new QrActivity$$ExternalSyntheticLambda7(this, SvgHelper.getBitmap(NUM, this.backgroundView.getWidth(), this.backgroundView.getHeight(), -16777216)));
+        AndroidUtilities.runOnUIThread(new QrActivity$$ExternalSyntheticLambda7(this, SvgHelper.getBitmap(R.raw.default_pattern, this.backgroundView.getWidth(), this.backgroundView.getHeight(), -16777216)));
     }
 
     /* access modifiers changed from: private */
@@ -723,7 +724,7 @@ public class QrActivity extends BaseFragment {
         Uri bitmapShareUri = AndroidUtilities.getBitmapShareUri(createBitmap, "qr_tmp.jpg", Bitmap.CompressFormat.JPEG);
         if (bitmapShareUri != null) {
             try {
-                getParentActivity().startActivityForResult(Intent.createChooser(new Intent("android.intent.action.SEND").setType("image/*").putExtra("android.intent.extra.STREAM", bitmapShareUri), LocaleController.getString("InviteByQRCode", NUM)), 500);
+                getParentActivity().startActivityForResult(Intent.createChooser(new Intent("android.intent.action.SEND").setType("image/*").putExtra("android.intent.extra.STREAM", bitmapShareUri), LocaleController.getString("InviteByQRCode", R.string.InviteByQRCode)), 500);
             } catch (ActivityNotFoundException e) {
                 e.printStackTrace();
             }
@@ -901,36 +902,36 @@ public class QrActivity extends BaseFragment {
             this.gradientDrawable.posAnimationProgress = f;
         }
 
-        /* JADX WARNING: Code restructure failed: missing block: B:32:0x010c, code lost:
-            if (r9 <= ((float) r5)) goto L_0x0110;
+        /* JADX WARNING: Code restructure failed: missing block: B:32:0x0109, code lost:
+            if (r9 <= ((float) r5)) goto L_0x010d;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:33:0x010e, code lost:
+        /* JADX WARNING: Code restructure failed: missing block: B:33:0x010b, code lost:
             r6 = 2;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:34:0x0110, code lost:
+        /* JADX WARNING: Code restructure failed: missing block: B:34:0x010d, code lost:
             r6 = 1;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:35:0x0111, code lost:
-            if (r6 <= 1) goto L_0x0126;
+        /* JADX WARNING: Code restructure failed: missing block: B:35:0x010e, code lost:
+            if (r6 <= 1) goto L_0x0123;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:36:0x0113, code lost:
+        /* JADX WARNING: Code restructure failed: missing block: B:36:0x0110, code lost:
             r10 = (((int) (((float) r7.getBounds().width()) + r9)) / 2) + org.telegram.messenger.AndroidUtilities.dp(2.0f);
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:37:0x0126, code lost:
+        /* JADX WARNING: Code restructure failed: missing block: B:37:0x0123, code lost:
             r10 = r5;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:38:0x0127, code lost:
-            if (r10 <= r5) goto L_0x013e;
+        /* JADX WARNING: Code restructure failed: missing block: B:38:0x0124, code lost:
+            if (r10 <= r5) goto L_0x013b;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:39:0x0129, code lost:
+        /* JADX WARNING: Code restructure failed: missing block: B:39:0x0126, code lost:
             r7 = (((int) (r9 + ((float) r7.getBounds().width()))) / 3) + org.telegram.messenger.AndroidUtilities.dp(4.0f);
             r20 = 3;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:40:0x013e, code lost:
+        /* JADX WARNING: Code restructure failed: missing block: B:40:0x013b, code lost:
             r20 = r6;
             r7 = r10;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:41:0x0141, code lost:
+        /* JADX WARNING: Code restructure failed: missing block: B:41:0x013e, code lost:
             r3 = 3;
             r23 = 0;
             r5 = org.telegram.ui.Components.StaticLayoutEx.createStaticLayout(r8, r15, r7, android.text.Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false, (android.text.TextUtils.TruncateAt) null, java.lang.Math.min(org.telegram.messenger.AndroidUtilities.dp(10.0f) + r7, r0.contentBitmap.getWidth()), r20);
@@ -944,13 +945,13 @@ public class QrActivity extends BaseFragment {
                 r2 = r35
                 java.lang.String r3 = r0.username
                 boolean r3 = android.text.TextUtils.isEmpty(r3)
-                if (r3 != 0) goto L_0x02a7
+                if (r3 != 0) goto L_0x02a4
                 java.lang.String r3 = r0.link
                 boolean r3 = android.text.TextUtils.isEmpty(r3)
-                if (r3 != 0) goto L_0x02a7
-                if (r1 == 0) goto L_0x02a7
+                if (r3 != 0) goto L_0x02a4
+                if (r1 == 0) goto L_0x02a4
                 if (r2 != 0) goto L_0x001c
-                goto L_0x02a7
+                goto L_0x02a4
             L_0x001c:
                 android.graphics.Bitmap r3 = r0.contentBitmap
                 if (r3 == 0) goto L_0x0023
@@ -984,35 +985,35 @@ public class QrActivity extends BaseFragment {
                 r19 = 0
                 r12 = 3
                 r11 = 1
-                if (r6 > r14) goto L_0x0175
-                if (r6 != 0) goto L_0x0077
+                if (r6 > r14) goto L_0x0172
+                if (r6 != 0) goto L_0x0076
                 android.content.Context r7 = r33.getContext()
-                r8 = 2131166106(0x7var_a, float:1.7946448E38)
+                int r8 = org.telegram.messenger.R.drawable.qr_at_large
                 android.graphics.drawable.Drawable r7 = androidx.core.content.ContextCompat.getDrawable(r7, r8)
                 int r8 = org.telegram.messenger.AndroidUtilities.dp(r18)
                 float r8 = (float) r8
                 r15.setTextSize(r8)
-                goto L_0x00a4
-            L_0x0077:
-                if (r6 != r11) goto L_0x008f
+                goto L_0x00a1
+            L_0x0076:
+                if (r6 != r11) goto L_0x008d
                 android.content.Context r7 = r33.getContext()
-                r8 = 2131166107(0x7var_b, float:1.794645E38)
+                int r8 = org.telegram.messenger.R.drawable.qr_at_medium
                 android.graphics.drawable.Drawable r7 = androidx.core.content.ContextCompat.getDrawable(r7, r8)
                 r8 = 1103626240(0x41CLASSNAME, float:25.0)
                 int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)
                 float r8 = (float) r8
                 r15.setTextSize(r8)
-                goto L_0x00a4
-            L_0x008f:
+                goto L_0x00a1
+            L_0x008d:
                 android.content.Context r7 = r33.getContext()
-                r8 = 2131166108(0x7var_c, float:1.7946452E38)
+                int r8 = org.telegram.messenger.R.drawable.qr_at_small
                 android.graphics.drawable.Drawable r7 = androidx.core.content.ContextCompat.getDrawable(r7, r8)
                 r8 = 1100480512(0x41980000, float:19.0)
                 int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)
                 float r8 = (float) r8
                 r15.setTextSize(r8)
-            L_0x00a4:
-                if (r7 == 0) goto L_0x00bb
+            L_0x00a1:
+                if (r7 == 0) goto L_0x00b8
                 int r8 = r7.getIntrinsicWidth()
                 int r9 = r7.getIntrinsicHeight()
                 r7.setBounds(r13, r13, r8, r9)
@@ -1020,52 +1021,52 @@ public class QrActivity extends BaseFragment {
                 android.graphics.PorterDuff$Mode r9 = android.graphics.PorterDuff.Mode.SRC_IN
                 r8.<init>(r3, r9)
                 r7.setColorFilter(r8)
-            L_0x00bb:
+            L_0x00b8:
                 android.text.SpannableStringBuilder r8 = new android.text.SpannableStringBuilder
                 java.lang.StringBuilder r9 = new java.lang.StringBuilder
                 r9.<init>()
                 java.lang.String r10 = " "
                 r9.append(r10)
                 boolean r10 = r0.isPhone
-                if (r10 == 0) goto L_0x00ce
+                if (r10 == 0) goto L_0x00cb
                 java.lang.String r10 = r0.username
-                goto L_0x00d4
-            L_0x00ce:
+                goto L_0x00d1
+            L_0x00cb:
                 java.lang.String r10 = r0.username
                 java.lang.String r10 = r10.toUpperCase()
-            L_0x00d4:
+            L_0x00d1:
                 r9.append(r10)
                 java.lang.String r9 = r9.toString()
                 r8.<init>(r9)
                 boolean r9 = r0.isPhone
-                if (r9 != 0) goto L_0x00ec
+                if (r9 != 0) goto L_0x00e9
                 org.telegram.ui.Cells.SettingsSearchCell$VerticalImageSpan r9 = new org.telegram.ui.Cells.SettingsSearchCell$VerticalImageSpan
                 r9.<init>(r7)
                 r10 = 33
                 r8.setSpan(r9, r13, r11, r10)
-            L_0x00ec:
+            L_0x00e9:
                 int r9 = r8.length()
                 float r9 = r15.measureText(r8, r11, r9)
                 android.graphics.Rect r10 = r7.getBounds()
                 int r10 = r10.width()
                 float r10 = (float) r10
                 float r9 = r9 + r10
-                if (r6 > r11) goto L_0x0109
+                if (r6 > r11) goto L_0x0106
                 float r10 = (float) r5
                 int r10 = (r9 > r10 ? 1 : (r9 == r10 ? 0 : -1))
-                if (r10 <= 0) goto L_0x0109
+                if (r10 <= 0) goto L_0x0106
                 int r6 = r6 + 1
                 goto L_0x0055
-            L_0x0109:
+            L_0x0106:
                 float r6 = (float) r5
                 int r6 = (r9 > r6 ? 1 : (r9 == r6 ? 0 : -1))
-                if (r6 <= 0) goto L_0x0110
+                if (r6 <= 0) goto L_0x010d
                 r6 = 2
-                goto L_0x0111
-            L_0x0110:
+                goto L_0x010e
+            L_0x010d:
                 r6 = 1
-            L_0x0111:
-                if (r6 <= r11) goto L_0x0126
+            L_0x010e:
+                if (r6 <= r11) goto L_0x0123
                 android.graphics.Rect r10 = r7.getBounds()
                 int r10 = r10.width()
                 float r10 = (float) r10
@@ -1074,11 +1075,11 @@ public class QrActivity extends BaseFragment {
                 int r10 = r10 / r14
                 int r20 = org.telegram.messenger.AndroidUtilities.dp(r17)
                 int r10 = r10 + r20
-                goto L_0x0127
-            L_0x0126:
+                goto L_0x0124
+            L_0x0123:
                 r10 = r5
-            L_0x0127:
-                if (r10 <= r5) goto L_0x013e
+            L_0x0124:
+                if (r10 <= r5) goto L_0x013b
                 android.graphics.Rect r5 = r7.getBounds()
                 int r5 = r5.width()
                 float r5 = (float) r5
@@ -1089,11 +1090,11 @@ public class QrActivity extends BaseFragment {
                 int r5 = r5 + r6
                 r7 = r5
                 r20 = 3
-                goto L_0x0141
-            L_0x013e:
+                goto L_0x013e
+            L_0x013b:
                 r20 = r6
                 r7 = r10
-            L_0x0141:
+            L_0x013e:
                 android.text.Layout$Alignment r9 = android.text.Layout.Alignment.ALIGN_CENTER
                 r10 = 1065353216(0x3var_, float:1.0)
                 r21 = 0
@@ -1119,13 +1120,13 @@ public class QrActivity extends BaseFragment {
                 r24 = 2
                 r14 = r20
                 android.text.StaticLayout r5 = org.telegram.ui.Components.StaticLayoutEx.createStaticLayout(r5, r6, r7, r8, r9, r10, r11, r12, r13, r14)
-                goto L_0x017c
-            L_0x0175:
+                goto L_0x0179
+            L_0x0172:
                 r3 = 3
                 r23 = 0
                 r24 = 2
                 r5 = r19
-            L_0x017c:
+            L_0x0179:
                 float r6 = r15.descent()
                 float r7 = r15.ascent()
                 float r6 = r6 - r7
@@ -1147,13 +1148,13 @@ public class QrActivity extends BaseFragment {
                 r9.<init>()
                 r12 = 3
                 r13 = 0
-            L_0x01b0:
+            L_0x01ad:
                 r10 = 5
-                if (r12 >= r10) goto L_0x01e2
-                com.google.zxing.EncodeHintType r10 = com.google.zxing.EncodeHintType.QR_VERSION     // Catch:{ Exception -> 0x01db }
-                java.lang.Integer r11 = java.lang.Integer.valueOf(r12)     // Catch:{ Exception -> 0x01db }
-                r8.put(r10, r11)     // Catch:{ Exception -> 0x01db }
-                java.lang.String r10 = r0.link     // Catch:{ Exception -> 0x01db }
+                if (r12 >= r10) goto L_0x01df
+                com.google.zxing.EncodeHintType r10 = com.google.zxing.EncodeHintType.QR_VERSION     // Catch:{ Exception -> 0x01d8 }
+                java.lang.Integer r11 = java.lang.Integer.valueOf(r12)     // Catch:{ Exception -> 0x01d8 }
+                r8.put(r10, r11)     // Catch:{ Exception -> 0x01d8 }
+                java.lang.String r10 = r0.link     // Catch:{ Exception -> 0x01d8 }
                 r29 = 0
                 r30 = 1061158912(0x3var_, float:0.75)
                 r31 = 16777215(0xffffff, float:2.3509886E-38)
@@ -1163,22 +1164,22 @@ public class QrActivity extends BaseFragment {
                 r26 = r7
                 r27 = r7
                 r28 = r8
-                android.graphics.Bitmap r19 = r24.encode(r25, r26, r27, r28, r29, r30, r31, r32)     // Catch:{ Exception -> 0x01db }
-                int r10 = r9.getImageSize()     // Catch:{ Exception -> 0x01db }
+                android.graphics.Bitmap r19 = r24.encode(r25, r26, r27, r28, r29, r30, r31, r32)     // Catch:{ Exception -> 0x01d8 }
+                int r10 = r9.getImageSize()     // Catch:{ Exception -> 0x01d8 }
                 r13 = r10
-                goto L_0x01dc
-            L_0x01db:
+                goto L_0x01d9
+            L_0x01d8:
+            L_0x01d9:
+                if (r19 == 0) goto L_0x01dc
+                goto L_0x01df
             L_0x01dc:
-                if (r19 == 0) goto L_0x01df
-                goto L_0x01e2
-            L_0x01df:
                 int r12 = r12 + 1
-                goto L_0x01b0
-            L_0x01e2:
+                goto L_0x01ad
+            L_0x01df:
                 r7 = r19
-                if (r7 != 0) goto L_0x01e7
+                if (r7 != 0) goto L_0x01e4
                 return
-            L_0x01e7:
+            L_0x01e4:
                 android.graphics.Canvas r8 = new android.graphics.Canvas
                 android.graphics.Bitmap r9 = r0.contentBitmap
                 r8.<init>(r9)
@@ -1191,23 +1192,23 @@ public class QrActivity extends BaseFragment {
                 r4 = 1041865114(0x3e19999a, float:0.15)
                 float r4 = r4 * r2
                 int r9 = r5.getLineCount()
-                if (r9 != r3) goto L_0x020a
+                if (r9 != r3) goto L_0x0207
                 r4 = 1040522936(0x3e051eb8, float:0.13)
                 float r4 = r4 * r2
-            L_0x020a:
+            L_0x0207:
                 android.view.ViewParent r9 = r33.getParent()
                 android.view.ViewGroup r9 = (android.view.ViewGroup) r9
                 int r9 = r9.getMeasuredWidth()
                 android.view.ViewParent r10 = r33.getParent()
                 android.view.ViewGroup r10 = (android.view.ViewGroup) r10
                 int r10 = r10.getMeasuredHeight()
-                if (r9 >= r10) goto L_0x0222
+                if (r9 >= r10) goto L_0x021f
                 r23 = 1
-            L_0x0222:
-                if (r23 != 0) goto L_0x0229
+            L_0x021f:
+                if (r23 != 0) goto L_0x0226
                 r4 = 1035489772(0x3db851ec, float:0.09)
                 float r4 = r4 * r2
-            L_0x0229:
+            L_0x0226:
                 android.graphics.Paint r2 = new android.graphics.Paint
                 r2.<init>(r3)
                 r8.drawBitmap(r7, r1, r4, r2)
@@ -1229,7 +1230,7 @@ public class QrActivity extends BaseFragment {
                 float r10 = r10 * r9
                 r8.drawCircle(r1, r3, r10, r2)
                 org.telegram.ui.QrActivity$QrView$QrCenterChangedListener r2 = r0.centerChangedListener
-                if (r2 == 0) goto L_0x0265
+                if (r2 == 0) goto L_0x0262
                 float r11 = r1 - r10
                 int r11 = (int) r11
                 float r12 = r3 - r10
@@ -1239,7 +1240,7 @@ public class QrActivity extends BaseFragment {
                 float r3 = r3 + r10
                 int r3 = (int) r3
                 r2.onCenterChanged(r11, r12, r1, r3)
-            L_0x0265:
+            L_0x0262:
                 int r1 = r8.getWidth()
                 int r2 = r5.getWidth()
                 int r1 = r1 - r2
@@ -1269,7 +1270,7 @@ public class QrActivity extends BaseFragment {
                 android.graphics.Bitmap r2 = r1.extractAlpha()
                 r0.contentBitmap = r2
                 r1.recycle()
-            L_0x02a7:
+            L_0x02a4:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.QrActivity.QrView.prepareContent(int, int):void");
@@ -1334,7 +1335,7 @@ public class QrActivity extends BaseFragment {
                     return super.calculateTimeForScrolling(i) * 6;
                 }
             };
-            Drawable mutate = parentActivity.getResources().getDrawable(NUM).mutate();
+            Drawable mutate = parentActivity.getResources().getDrawable(R.drawable.sheet_shadow_round).mutate();
             this.backgroundDrawable = mutate;
             mutate.setColorFilter(new PorterDuffColorFilter(baseFragment2.getThemedColor("dialogBackground"), PorterDuff.Mode.MULTIPLY));
             AnonymousClass2 r5 = new FrameLayout(parentActivity, qrActivity2, baseFragment2) {
@@ -1420,9 +1421,10 @@ public class QrActivity extends BaseFragment {
             r5.addView(textView, LayoutHelper.createFrame(-1, -2.0f, 8388659, 0.0f, 0.0f, 62.0f, 0.0f));
             int themedColor = baseFragment2.getThemedColor("featuredStickers_addButton");
             int dp = AndroidUtilities.dp(28.0f);
-            RLottieDrawable rLottieDrawable = new RLottieDrawable(NUM, "NUM", dp, dp, false, (int[]) null);
+            int i = R.raw.sun_outline;
+            RLottieDrawable rLottieDrawable = new RLottieDrawable(i, "" + i, dp, dp, false, (int[]) null);
             this.darkThemeDrawable = rLottieDrawable;
-            this.forceDark = !Theme.getActiveTheme().isDark();
+            this.forceDark = Theme.getActiveTheme().isDark() ^ true;
             setForceDark(Theme.getActiveTheme().isDark(), false);
             rLottieDrawable.setPlayInDirectionOfCustomEndFrame(true);
             rLottieDrawable.setColorFilter(new PorterDuffColorFilter(themedColor, PorterDuff.Mode.MULTIPLY));
@@ -1430,9 +1432,9 @@ public class QrActivity extends BaseFragment {
                 public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
                     super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
                     if (ThemeListViewController.this.this$0.isCurrentThemeDark) {
-                        accessibilityNodeInfo.setText(LocaleController.getString("AccDescrSwitchToDayTheme", NUM));
+                        accessibilityNodeInfo.setText(LocaleController.getString("AccDescrSwitchToDayTheme", R.string.AccDescrSwitchToDayTheme));
                     } else {
-                        accessibilityNodeInfo.setText(LocaleController.getString("AccDescrSwitchToNightTheme", NUM));
+                        accessibilityNodeInfo.setText(LocaleController.getString("AccDescrSwitchToNightTheme", R.string.AccDescrSwitchToNightTheme));
                     }
                 }
             };
@@ -1475,12 +1477,13 @@ public class QrActivity extends BaseFragment {
             View view = new View(parentActivity);
             this.topShadow = view;
             view.setAlpha(0.0f);
-            view.setBackground(ContextCompat.getDrawable(parentActivity, NUM));
+            int i2 = R.drawable.shadowdown;
+            view.setBackground(ContextCompat.getDrawable(parentActivity, i2));
             view.setRotation(180.0f);
             r5.addView(view);
             View view2 = new View(parentActivity);
             this.bottomShadow = view2;
-            view2.setBackground(ContextCompat.getDrawable(parentActivity, NUM));
+            view2.setBackground(ContextCompat.getDrawable(parentActivity, i2));
             r5.addView(view2);
             TextView textView2 = new TextView(parentActivity);
             this.shareButton = textView2;
@@ -1489,7 +1492,7 @@ public class QrActivity extends BaseFragment {
             textView2.setGravity(17);
             textView2.setLines(1);
             textView2.setSingleLine(true);
-            textView2.setText(LocaleController.getString("ShareQrCode", NUM));
+            textView2.setText(LocaleController.getString("ShareQrCode", R.string.ShareQrCode));
             textView2.setTextColor(baseFragment2.getThemedColor("featuredStickers_buttonText"));
             textView2.setTextSize(1, 15.0f);
             textView2.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));

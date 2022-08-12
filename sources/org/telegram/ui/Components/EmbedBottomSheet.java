@@ -519,7 +519,7 @@ public class EmbedBottomSheet extends BottomSheet {
             int r9 = org.telegram.messenger.AndroidUtilities.dp(r7)
             int r13 = org.telegram.messenger.AndroidUtilities.dp(r7)
             r15.setPadding(r9, r6, r13, r6)
-            r9 = 2131625189(0x7f0e04e5, float:1.8877579E38)
+            int r9 = org.telegram.messenger.R.string.Close
             java.lang.String r13 = "Close"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r13, r9)
             java.lang.String r9 = r9.toUpperCase()
@@ -545,10 +545,10 @@ public class EmbedBottomSheet extends BottomSheet {
             android.widget.ImageView$ScaleType r13 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r13)
             android.widget.ImageView r2 = r0.pipButton
-            r13 = 2131165478(0x7var_, float:1.7945174E38)
+            int r13 = org.telegram.messenger.R.drawable.ic_goinline
             r2.setImageResource(r13)
             android.widget.ImageView r2 = r0.pipButton
-            r13 = 2131624040(0x7f0e0068, float:1.8875248E38)
+            int r13 = org.telegram.messenger.R.string.AccDescrPipMode
             java.lang.String r15 = "AccDescrPipMode"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r15, r13)
             r2.setContentDescription(r13)
@@ -588,9 +588,9 @@ public class EmbedBottomSheet extends BottomSheet {
             r12.<init>(r1)
             android.widget.ImageView$ScaleType r13 = android.widget.ImageView.ScaleType.CENTER
             r12.setScaleType(r13)
-            r13 = 2131165697(0x7var_, float:1.7945618E38)
+            int r13 = org.telegram.messenger.R.drawable.msg_copy
             r12.setImageResource(r13)
-            r13 = 2131625280(0x7f0e0540, float:1.8877763E38)
+            int r13 = org.telegram.messenger.R.string.CopyLink
             java.lang.String r15 = "CopyLink"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r15, r13)
             r12.setContentDescription(r13)
@@ -632,7 +632,7 @@ public class EmbedBottomSheet extends BottomSheet {
             int r13 = org.telegram.messenger.AndroidUtilities.dp(r7)
             r8.setPadding(r12, r6, r13, r6)
             android.widget.TextView r8 = r0.copyTextButton
-            r12 = 2131625278(0x7f0e053e, float:1.887776E38)
+            int r12 = org.telegram.messenger.R.string.Copy
             java.lang.String r13 = "Copy"
             java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r13, r12)
             java.lang.String r12 = r12.toUpperCase()
@@ -663,7 +663,7 @@ public class EmbedBottomSheet extends BottomSheet {
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r7)
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r7)
             r2.setPadding(r1, r6, r4, r6)
-            r1 = 2131627164(0x7f0e0c9c, float:1.8881585E38)
+            int r1 = org.telegram.messenger.R.string.OpenInBrowser
             java.lang.String r4 = "OpenInBrowser"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             java.lang.String r1 = r1.toUpperCase()
@@ -679,29 +679,29 @@ public class EmbedBottomSheet extends BottomSheet {
             org.telegram.ui.Components.WebPlayerView r1 = r0.videoView
             java.lang.String r2 = r0.embedUrl
             boolean r1 = r1.canHandleUrl(r2)
-            if (r1 != 0) goto L_0x048d
+            if (r1 != 0) goto L_0x0486
             org.telegram.ui.Components.WebPlayerView r1 = r0.videoView
             boolean r1 = r1.canHandleUrl(r3)
-            if (r1 == 0) goto L_0x048b
-            goto L_0x048d
-        L_0x048b:
+            if (r1 == 0) goto L_0x0484
+            goto L_0x0486
+        L_0x0484:
             r13 = 0
+            goto L_0x0487
+        L_0x0486:
+            r13 = 1
+        L_0x0487:
+            org.telegram.ui.Components.WebPlayerView r1 = r0.videoView
+            if (r13 == 0) goto L_0x048d
+            r2 = 0
             goto L_0x048e
         L_0x048d:
-            r13 = 1
-        L_0x048e:
-            org.telegram.ui.Components.WebPlayerView r1 = r0.videoView
-            if (r13 == 0) goto L_0x0494
-            r2 = 0
-            goto L_0x0495
-        L_0x0494:
             r2 = 4
-        L_0x0495:
+        L_0x048e:
             r1.setVisibility(r2)
-            if (r13 == 0) goto L_0x049f
+            if (r13 == 0) goto L_0x0498
             org.telegram.ui.Components.WebPlayerView r1 = r0.videoView
             r1.willHandle()
-        L_0x049f:
+        L_0x0498:
             org.telegram.ui.Components.EmbedBottomSheet$8 r1 = new org.telegram.ui.Components.EmbedBottomSheet$8
             r1.<init>(r13)
             r0.setDelegate(r1)
@@ -711,19 +711,19 @@ public class EmbedBottomSheet extends BottomSheet {
             r0.orientationEventListener = r1
             java.lang.String r1 = r0.embedUrl
             java.lang.String r1 = org.telegram.ui.Components.WebPlayerView.getYouTubeVideoId(r1)
-            if (r1 != 0) goto L_0x04ba
-            if (r13 != 0) goto L_0x051d
-        L_0x04ba:
+            if (r1 != 0) goto L_0x04b3
+            if (r13 != 0) goto L_0x0516
+        L_0x04b3:
             org.telegram.ui.Components.RadialProgressView r2 = r0.progressBar
             r2.setVisibility(r6)
             android.webkit.WebView r2 = r0.webView
             r2.setVisibility(r6)
             android.widget.LinearLayout r2 = r0.imageButtonsContainer
             r2.setVisibility(r6)
-            if (r1 == 0) goto L_0x04d0
+            if (r1 == 0) goto L_0x04c9
             android.view.View r2 = r0.progressBarBlackBackground
             r2.setVisibility(r6)
-        L_0x04d0:
+        L_0x04c9:
             android.widget.TextView r2 = r0.copyTextButton
             r3 = 4
             r2.setVisibility(r3)
@@ -740,34 +740,34 @@ public class EmbedBottomSheet extends BottomSheet {
             r2.setVisibility(r3)
             org.telegram.ui.Components.WebPlayerView r2 = r0.videoView
             android.widget.ImageView r2 = r2.getTextureImageView()
-            if (r2 == 0) goto L_0x0504
+            if (r2 == 0) goto L_0x04fd
             org.telegram.ui.Components.WebPlayerView r2 = r0.videoView
             android.widget.ImageView r2 = r2.getTextureImageView()
             r2.setVisibility(r3)
-        L_0x0504:
-            if (r1 == 0) goto L_0x051d
+        L_0x04fd:
+            if (r1 == 0) goto L_0x0516
             int r1 = r0.currentAccount
             org.telegram.messenger.MessagesController r1 = org.telegram.messenger.MessagesController.getInstance(r1)
             java.lang.String r1 = r1.youtubePipType
             java.lang.String r2 = "disabled"
             boolean r1 = r2.equals(r1)
-            if (r1 == 0) goto L_0x051d
+            if (r1 == 0) goto L_0x0516
             android.widget.ImageView r1 = r0.pipButton
             r2 = 8
             r1.setVisibility(r2)
-        L_0x051d:
+        L_0x0516:
             android.view.OrientationEventListener r1 = r0.orientationEventListener
             boolean r1 = r1.canDetectOrientation()
-            if (r1 == 0) goto L_0x052b
+            if (r1 == 0) goto L_0x0524
             android.view.OrientationEventListener r1 = r0.orientationEventListener
             r1.enable()
-            goto L_0x0533
-        L_0x052b:
+            goto L_0x052c
+        L_0x0524:
             android.view.OrientationEventListener r1 = r0.orientationEventListener
             r1.disable()
             r1 = 0
             r0.orientationEventListener = r1
-        L_0x0533:
+        L_0x052c:
             instance = r0
             return
         */

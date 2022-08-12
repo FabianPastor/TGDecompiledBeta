@@ -1,6 +1,7 @@
 package org.telegram.ui.Components;
 
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.R;
 import org.telegram.ui.Components.NumberPicker;
 
 public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda109 implements NumberPicker.Formatter {
@@ -10,6 +11,6 @@ public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda109 imp
     }
 
     public final String format(int i) {
-        return LocaleController.getString("NotificationsFrequencyDivider", NUM);
+        return LocaleController.getString("NotificationsFrequencyDivider", R.string.NotificationsFrequencyDivider);
     }
 }

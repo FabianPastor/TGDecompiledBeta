@@ -23,6 +23,7 @@ import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SvgHelper;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Document;
@@ -63,7 +64,7 @@ public class ArchivedStickerSetCell extends FrameLayout implements Checkable {
             ProgressButton progressButton = new ProgressButton(context);
             this.addButton = progressButton;
             this.currentButton = progressButton;
-            progressButton.setText(LocaleController.getString("Add", NUM));
+            progressButton.setText(LocaleController.getString("Add", R.string.Add));
             progressButton.setTextColor(Theme.getColor("featuredStickers_buttonText"));
             progressButton.setProgressColor(Theme.getColor("featuredStickers_buttonProgress"));
             progressButton.setBackgroundRoundRect(Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed"));
@@ -76,7 +77,7 @@ public class ArchivedStickerSetCell extends FrameLayout implements Checkable {
             progressButton2.setMinimumWidth(dp);
             progressButton2.setTextSize(1, 14.0f);
             progressButton2.setTextColor(Theme.getColor("featuredStickers_removeButtonText"));
-            progressButton2.setText(LocaleController.getString("StickersRemove", NUM));
+            progressButton2.setText(LocaleController.getString("StickersRemove", R.string.StickersRemove));
             progressButton2.setBackground(Theme.getRoundRectSelectorDrawable(Theme.getColor("featuredStickers_removeButtonText")));
             progressButton2.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             ViewHelper.setPadding(progressButton2, 8.0f, 0.0f, 8.0f, 0.0f);

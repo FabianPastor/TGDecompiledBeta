@@ -10,6 +10,7 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.SeekBarView;
@@ -27,7 +28,7 @@ public class BrightnessControlCell extends FrameLayout {
         super(context);
         ImageView imageView = new ImageView(context);
         this.leftImageView = imageView;
-        imageView.setImageResource(NUM);
+        imageView.setImageResource(R.drawable.msg_brightness_low);
         addView(this.leftImageView, LayoutHelper.createFrame(24, 24.0f, 51, 17.0f, 12.0f, 0.0f, 0.0f));
         AnonymousClass1 r0 = new SeekBarView(this, context, true, (Theme.ResourcesProvider) null) {
             public boolean onTouchEvent(MotionEvent motionEvent) {
@@ -59,7 +60,7 @@ public class BrightnessControlCell extends FrameLayout {
         addView(this.seekBarView, LayoutHelper.createFrame(-1, 38.0f, 51, 54.0f, 5.0f, 54.0f, 0.0f));
         ImageView imageView2 = new ImageView(context);
         this.rightImageView = imageView2;
-        imageView2.setImageResource(NUM);
+        imageView2.setImageResource(R.drawable.msg_brightness_high);
         addView(this.rightImageView, LayoutHelper.createFrame(24, 24.0f, 53, 0.0f, 12.0f, 17.0f, 0.0f));
     }
 

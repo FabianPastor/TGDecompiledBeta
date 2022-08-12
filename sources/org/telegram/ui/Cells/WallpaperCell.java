@@ -24,6 +24,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.MediaController;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SvgHelper;
 import org.telegram.tgnet.TLRPC$Photo;
 import org.telegram.tgnet.TLRPC$PhotoSize;
@@ -101,14 +102,14 @@ public class WallpaperCell extends FrameLayout {
             addView(r1, LayoutHelper.createFrame(-1, -1, 51));
             ImageView imageView3 = new ImageView(context);
             this.imageView2 = imageView3;
-            imageView3.setImageResource(NUM);
+            imageView3.setImageResource(R.drawable.ic_gallery_background);
             this.imageView2.setScaleType(ImageView.ScaleType.CENTER);
             addView(this.imageView2, LayoutHelper.createFrame(-1, -1, 51));
             View view = new View(context);
             this.selector = view;
             view.setBackgroundDrawable(Theme.getSelectorDrawable(false));
             addView(this.selector, LayoutHelper.createFrame(-1, -1.0f));
-            CheckBox checkBox2 = new CheckBox(context, NUM);
+            CheckBox checkBox2 = new CheckBox(context, R.drawable.round_check2);
             this.checkBox = checkBox2;
             checkBox2.setVisibility(4);
             this.checkBox.setColor(Theme.getColor("checkbox"), Theme.getColor("checkboxCheck"));
@@ -208,7 +209,7 @@ public class WallpaperCell extends FrameLayout {
                     }
                     if ("d".equals(colorWallpaper.slug)) {
                         if (colorWallpaper.defaultCache == null) {
-                            colorWallpaper.defaultCache = SvgHelper.getBitmap(NUM, 100, 180, -16777216);
+                            colorWallpaper.defaultCache = SvgHelper.getBitmap(R.raw.default_pattern, 100, 180, -16777216);
                         }
                         this.imageView.setImageBitmap(colorWallpaper.defaultCache);
                         this.imageView.getImageReceiver().setAlpha(Math.abs(colorWallpaper.intensity));
@@ -358,7 +359,7 @@ public class WallpaperCell extends FrameLayout {
                 this.framePaint = paint;
                 paint.setColor(NUM);
                 this.circlePaint = new Paint(1);
-                this.checkDrawable = context.getResources().getDrawable(NUM).mutate();
+                this.checkDrawable = context.getResources().getDrawable(R.drawable.background_selected).mutate();
                 Paint paint2 = new Paint();
                 this.backgroundPaint = paint2;
                 paint2.setColor(Theme.getColor("sharedMedia_photoPlaceholder"));

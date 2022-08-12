@@ -29,6 +29,7 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.voip.VideoCapturerDevice;
 import org.telegram.messenger.voip.VoIPService;
 import org.telegram.ui.Components.CubicBezierInterpolator;
@@ -260,7 +261,7 @@ public class VoIPPiPView implements VoIPService.StateListener, NotificationCente
         this.yOffset = ((int) ((f * 1.05f) - f)) / 2;
         float f2 = ((float) i) * 0.4f;
         this.xOffset = ((int) ((1.05f * f2) - f2)) / 2;
-        final Drawable drawable = ContextCompat.getDrawable(context, NUM);
+        final Drawable drawable = ContextCompat.getDrawable(context, R.drawable.calls_pip_outershadow);
         AnonymousClass4 r10 = new FrameLayout(context) {
             /* access modifiers changed from: protected */
             public void onDraw(Canvas canvas) {
@@ -298,15 +299,15 @@ public class VoIPPiPView implements VoIPService.StateListener, NotificationCente
             this.floatingView.addView(this.topShadow, -1, AndroidUtilities.dp(60.0f));
             ImageView imageView = new ImageView(context);
             this.closeIcon = imageView;
-            imageView.setImageResource(NUM);
+            imageView.setImageResource(R.drawable.pip_close);
             this.closeIcon.setPadding(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f));
-            this.closeIcon.setContentDescription(LocaleController.getString("Close", NUM));
+            this.closeIcon.setContentDescription(LocaleController.getString("Close", R.string.Close));
             this.floatingView.addView(this.closeIcon, LayoutHelper.createFrame(40, 40.0f, 53, 4.0f, 4.0f, 4.0f, 0.0f));
             ImageView imageView2 = new ImageView(context);
             this.enlargeIcon = imageView2;
-            imageView2.setImageResource(NUM);
+            imageView2.setImageResource(R.drawable.pip_enlarge);
             this.enlargeIcon.setPadding(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f));
-            this.enlargeIcon.setContentDescription(LocaleController.getString("Open", NUM));
+            this.enlargeIcon.setContentDescription(LocaleController.getString("Open", R.string.Open));
             this.floatingView.addView(this.enlargeIcon, LayoutHelper.createFrame(40, 40.0f, 51, 4.0f, 4.0f, 4.0f, 0.0f));
             this.closeIcon.setOnClickListener(VoIPPiPView$$ExternalSyntheticLambda2.INSTANCE);
             this.enlargeIcon.setOnClickListener(new VoIPPiPView$$ExternalSyntheticLambda1(this, context));

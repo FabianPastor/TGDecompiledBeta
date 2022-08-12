@@ -37,6 +37,7 @@ import java.util.List;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.R;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -1241,7 +1242,7 @@ public class Bulletin {
                 this.undoTextView.setTextSize(1, 14.0f);
                 this.undoTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                 this.undoTextView.setTextColor(themedColor);
-                this.undoTextView.setText(LocaleController.getString("Undo", NUM));
+                this.undoTextView.setText(LocaleController.getString("Undo", R.string.Undo));
                 this.undoTextView.setGravity(16);
                 ViewHelper.setPaddingRelative(this.undoTextView, 16.0f, 0.0f, 16.0f, 0.0f);
                 addView(this.undoTextView, LayoutHelper.createFrameRelatively(-2.0f, 48.0f, 16, 8.0f, 0.0f, 0.0f, 0.0f));
@@ -1249,7 +1250,7 @@ public class Bulletin {
             }
             ImageView imageView = new ImageView(getContext());
             imageView.setOnClickListener(new Bulletin$UndoButton$$ExternalSyntheticLambda1(this));
-            imageView.setImageResource(NUM);
+            imageView.setImageResource(R.drawable.chats_undo);
             imageView.setColorFilter(new PorterDuffColorFilter(themedColor, PorterDuff.Mode.MULTIPLY));
             imageView.setBackground(Theme.createSelectorDrawable((themedColor & 16777215) | NUM));
             ViewHelper.setPaddingRelative(imageView, 0.0f, 12.0f, 0.0f, 12.0f);

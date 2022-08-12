@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.PremiumPreviewFragment;
@@ -41,7 +42,7 @@ public class PremiumFeatureCell extends FrameLayout {
         addView(this.imageView, LayoutHelper.createFrame(28, 28.0f, 0, 18.0f, 12.0f, 0.0f, 0.0f));
         ImageView imageView3 = new ImageView(context);
         imageView3.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-        imageView3.setImageResource(NUM);
+        imageView3.setImageResource(R.drawable.msg_arrowright);
         imageView3.setColorFilter(Theme.getColor("switchTrack"));
         addView(imageView3, LayoutHelper.createFrame(24, 24.0f, 21, 0.0f, 0.0f, 18.0f, 0.0f));
     }

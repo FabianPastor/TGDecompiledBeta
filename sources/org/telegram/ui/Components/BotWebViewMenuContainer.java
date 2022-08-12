@@ -30,6 +30,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$TL_dataJSON;
@@ -144,10 +145,10 @@ public class BotWebViewMenuContainer extends FrameLayout implements Notification
         super(context);
         this.parentEnterView = chatActivityEnterView;
         final ActionBar actionBar = chatActivityEnterView.getParentFragment().getActionBar();
-        ActionBarMenuItem addItem = actionBar.createMenu().addItem(1000, NUM);
+        ActionBarMenuItem addItem = actionBar.createMenu().addItem(1000, R.drawable.ic_ab_other);
         this.botMenuItem = addItem;
         addItem.setVisibility(8);
-        this.botMenuItem.addSubItem(NUM, NUM, LocaleController.getString(NUM));
+        this.botMenuItem.addSubItem(R.id.menu_reload_page, R.drawable.msg_retry, LocaleController.getString(R.string.BotWebViewReloadPage));
         this.actionBarOnItemClick = actionBar.getActionBarMenuOnItemClick();
         BotWebViewContainer botWebViewContainer = new BotWebViewContainer(context, chatActivityEnterView.getParentFragment().getResourceProvider(), getColor("windowBackgroundWhite"));
         this.webViewContainer = botWebViewContainer;
@@ -254,7 +255,7 @@ public class BotWebViewMenuContainer extends FrameLayout implements Notification
                 if (z) {
                     AndroidUtilities.updateImageViewImageAnimated(actionBar.getBackButton(), actionBar.getBackButtonDrawable());
                 } else {
-                    AndroidUtilities.updateImageViewImageAnimated(actionBar.getBackButton(), NUM);
+                    AndroidUtilities.updateImageViewImageAnimated(actionBar.getBackButton(), R.drawable.ic_close_white);
                 }
             }
         };
@@ -365,7 +366,7 @@ public class BotWebViewMenuContainer extends FrameLayout implements Notification
                 this.springAnimation.start();
                 if (!this.webViewContainer.isBackButtonVisible()) {
                     if (f2 == 100.0f) {
-                        AndroidUtilities.updateImageViewImageAnimated(actionBar.getBackButton(), NUM);
+                        AndroidUtilities.updateImageViewImageAnimated(actionBar.getBackButton(), R.drawable.ic_close_white);
                     } else {
                         AndroidUtilities.updateImageViewImageAnimated(actionBar.getBackButton(), actionBar.getBackButtonDrawable());
                     }
@@ -446,7 +447,7 @@ public class BotWebViewMenuContainer extends FrameLayout implements Notification
     public boolean onCheckDismissByUser() {
         if (this.needCloseConfirmation) {
             TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(this.botId));
-            AlertDialog create = new AlertDialog.Builder(getContext()).setTitle(user != null ? ContactsController.formatName(user.first_name, user.last_name) : null).setMessage(LocaleController.getString(NUM)).setPositiveButton(LocaleController.getString(NUM), new BotWebViewMenuContainer$$ExternalSyntheticLambda3(this)).setNegativeButton(LocaleController.getString(NUM), (DialogInterface.OnClickListener) null).create();
+            AlertDialog create = new AlertDialog.Builder(getContext()).setTitle(user != null ? ContactsController.formatName(user.first_name, user.last_name) : null).setMessage(LocaleController.getString(R.string.BotWebViewChangesMayNotBeSaved)).setPositiveButton(LocaleController.getString(R.string.BotWebViewCloseAnyway), new BotWebViewMenuContainer$$ExternalSyntheticLambda3(this)).setNegativeButton(LocaleController.getString(R.string.Cancel), (DialogInterface.OnClickListener) null).create();
             create.show();
             ((TextView) create.getButton(-1)).setTextColor(getColor("dialogTextRed"));
             return false;
@@ -531,7 +532,7 @@ public class BotWebViewMenuContainer extends FrameLayout implements Notification
                     if (!BotWebViewMenuContainer.this.webViewContainer.onBackPressed()) {
                         BotWebViewMenuContainer.this.onCheckDismissByUser();
                     }
-                } else if (i == NUM) {
+                } else if (i == R.id.menu_reload_page) {
                     if (BotWebViewMenuContainer.this.webViewContainer.getWebView() != null) {
                         BotWebViewMenuContainer.this.webViewContainer.getWebView().animate().cancel();
                         BotWebViewMenuContainer.this.webViewContainer.getWebView().animate().alpha(0.0f).start();
@@ -543,7 +544,7 @@ public class BotWebViewMenuContainer extends FrameLayout implements Notification
                     BotWebViewMenuContainer.this.webViewContainer.setBotUser(MessagesController.getInstance(BotWebViewMenuContainer.this.currentAccount).getUser(Long.valueOf(BotWebViewMenuContainer.this.botId)));
                     BotWebViewMenuContainer.this.webViewContainer.loadFlickerAndSettingsItem(BotWebViewMenuContainer.this.currentAccount, BotWebViewMenuContainer.this.botId, BotWebViewMenuContainer.this.settingsItem);
                     BotWebViewMenuContainer.this.webViewContainer.reload();
-                } else if (i == NUM) {
+                } else if (i == R.id.menu_settings) {
                     BotWebViewMenuContainer.this.webViewContainer.onSettingsButtonPressed();
                 }
             }

@@ -8,6 +8,6 @@ public final /* synthetic */ class LocationController$$ExternalSyntheticLambda8 
     }
 
     public final void run() {
-        this.f$0.lambda$removeAllLocationSharings$25();
+        this.f$0.lambda$onConnected$3();
     }
 }

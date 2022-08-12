@@ -23,6 +23,7 @@ import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$Dialog;
@@ -136,21 +137,21 @@ public class ChatPullingDownDrawable implements NotificationCenter.NotificationC
             this.circleRadius = ((float) AndroidUtilities.dp(56.0f)) / 2.0f;
             this.lastWidth = i3;
             TLRPC$Chat tLRPC$Chat = this.nextChat;
-            String string = tLRPC$Chat != null ? tLRPC$Chat.title : LocaleController.getString("SwipeToGoNextChannelEnd", NUM);
+            String string = tLRPC$Chat != null ? tLRPC$Chat.title : LocaleController.getString("SwipeToGoNextChannelEnd", R.string.SwipeToGoNextChannelEnd);
             int measureText = (int) this.textPaint.measureText(string);
             this.chatNameWidth = measureText;
             this.chatNameWidth = Math.min(measureText, this.lastWidth - AndroidUtilities.dp(60.0f));
             this.chatNameLayout = new StaticLayout(string, this.textPaint, this.chatNameWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
             boolean z = this.drawFolderBackground;
             if (z && (i2 = this.dialogFolderId) != this.folderId && i2 != 0) {
-                str2 = LocaleController.getString("SwipeToGoNextArchive", NUM);
-                str = LocaleController.getString("ReleaseToGoNextArchive", NUM);
+                str2 = LocaleController.getString("SwipeToGoNextArchive", R.string.SwipeToGoNextArchive);
+                str = LocaleController.getString("ReleaseToGoNextArchive", R.string.ReleaseToGoNextArchive);
             } else if (z) {
-                str2 = LocaleController.getString("SwipeToGoNextFolder", NUM);
-                str = LocaleController.getString("ReleaseToGoNextFolder", NUM);
+                str2 = LocaleController.getString("SwipeToGoNextFolder", R.string.SwipeToGoNextFolder);
+                str = LocaleController.getString("ReleaseToGoNextFolder", R.string.ReleaseToGoNextFolder);
             } else {
-                str2 = LocaleController.getString("SwipeToGoNextChannel", NUM);
-                str = LocaleController.getString("ReleaseToGoNextChannel", NUM);
+                str2 = LocaleController.getString("SwipeToGoNextChannel", R.string.SwipeToGoNextChannel);
+                str = LocaleController.getString("ReleaseToGoNextChannel", R.string.ReleaseToGoNextChannel);
             }
             String str3 = str2;
             String str4 = str;

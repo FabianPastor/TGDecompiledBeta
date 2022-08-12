@@ -46,6 +46,7 @@ import java.util.List;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.ui.ActionBar.Theme;
 
@@ -287,16 +288,16 @@ public final class FloatingToolbar {
             this.mFastOutSlowInInterpolator = AnimationUtils.loadInterpolator(context, 17563661);
             this.mLinearOutSlowInInterpolator = AnimationUtils.loadInterpolator(context, 17563662);
             this.mFastOutLinearInInterpolator = AnimationUtils.loadInterpolator(context, 17563663);
-            Drawable mutate = context.getDrawable(NUM).mutate();
+            Drawable mutate = context.getDrawable(R.drawable.ft_avd_tooverflow).mutate();
             this.mArrow = mutate;
             mutate.setAutoMirrored(true);
-            Drawable mutate2 = context.getDrawable(NUM).mutate();
+            Drawable mutate2 = context.getDrawable(R.drawable.ft_avd_toarrow).mutate();
             this.mOverflow = mutate2;
             mutate2.setAutoMirrored(true);
-            AnimatedVectorDrawable animatedVectorDrawable = (AnimatedVectorDrawable) context.getDrawable(NUM).mutate();
+            AnimatedVectorDrawable animatedVectorDrawable = (AnimatedVectorDrawable) context.getDrawable(R.drawable.ft_avd_toarrow_animation).mutate();
             this.mToArrow = animatedVectorDrawable;
             animatedVectorDrawable.setAutoMirrored(true);
-            AnimatedVectorDrawable animatedVectorDrawable2 = (AnimatedVectorDrawable) context.getDrawable(NUM).mutate();
+            AnimatedVectorDrawable animatedVectorDrawable2 = (AnimatedVectorDrawable) context.getDrawable(R.drawable.ft_avd_tooverflow_animation).mutate();
             this.mToOverflow = animatedVectorDrawable2;
             animatedVectorDrawable2.setAutoMirrored(true);
             ImageButton createOverflowButton = createOverflowButton();
@@ -612,7 +613,7 @@ public final class FloatingToolbar {
                 this.mOverflowPanel.setAlpha(1.0f);
                 this.mOverflowPanel.setVisibility(0);
                 this.mOverflowButton.setImageDrawable(this.mArrow);
-                this.mOverflowButton.setContentDescription(LocaleController.getString("AccDescrMoreOptions", NUM));
+                this.mOverflowButton.setContentDescription(LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
                 if (isInRTLMode()) {
                     this.mContentContainer.setX((float) this.mMarginHorizontal);
                     this.mMainPanel.setX(0.0f);
@@ -644,7 +645,7 @@ public final class FloatingToolbar {
             this.mOverflowPanel.setAlpha(0.0f);
             this.mOverflowPanel.setVisibility(4);
             this.mOverflowButton.setImageDrawable(this.mOverflow);
-            this.mOverflowButton.setContentDescription(LocaleController.getString("AccDescrMoreOptions", NUM));
+            this.mOverflowButton.setContentDescription(LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
             if (hasOverflow()) {
                 if (isInRTLMode()) {
                     this.mContentContainer.setX((float) this.mMarginHorizontal);

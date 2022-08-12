@@ -24,6 +24,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
@@ -662,9 +663,9 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
     }
 
     public View createView(Context context) {
-        this.actionBar.setBackButtonImage(NUM);
+        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("NotificationsAndSounds", NUM));
+        this.actionBar.setTitle(LocaleController.getString("NotificationsAndSounds", R.string.NotificationsAndSounds));
         this.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             public void onItemClick(int i) {
                 if (i == -1) {
@@ -695,493 +696,489 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
         return this.fragmentView;
     }
 
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v12, resolved type: java.lang.String} */
-    /* JADX WARNING: type inference failed for: r7v4 */
-    /* JADX WARNING: type inference failed for: r7v17, types: [android.os.Parcelable] */
-    /* JADX WARNING: type inference failed for: r7v20 */
-    /* JADX WARNING: type inference failed for: r7v21 */
-    /* JADX WARNING: type inference failed for: r7v22 */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r15v12, resolved type: java.lang.String} */
+    /* JADX WARNING: type inference failed for: r15v11 */
+    /* JADX WARNING: type inference failed for: r15v32, types: [android.os.Parcelable] */
+    /* JADX WARNING: type inference failed for: r15v35 */
+    /* JADX WARNING: type inference failed for: r15v36 */
+    /* JADX WARNING: type inference failed for: r15v37 */
     /* access modifiers changed from: private */
     /* JADX WARNING: Multi-variable type inference failed */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$createView$8(android.view.View r17, int r18, float r19, float r20) {
+    public /* synthetic */ void lambda$createView$8(android.view.View r12, int r13, float r14, float r15) {
         /*
-            r16 = this;
-            r1 = r16
-            r2 = r17
-            r0 = r18
-            android.app.Activity r3 = r16.getParentActivity()
-            if (r3 != 0) goto L_0x000d
+            r11 = this;
+            android.app.Activity r15 = r11.getParentActivity()
+            if (r15 != 0) goto L_0x0007
             return
-        L_0x000d:
-            int r3 = r1.privateRow
-            r4 = 2
-            r5 = 0
-            r6 = 1
-            if (r0 == r3) goto L_0x03d6
-            int r7 = r1.groupRow
-            if (r0 == r7) goto L_0x03d6
-            int r7 = r1.channelsRow
-            if (r0 != r7) goto L_0x001e
-            goto L_0x03d6
-        L_0x001e:
-            int r3 = r1.callsRingtoneRow
-            r7 = 0
-            if (r0 != r3) goto L_0x007e
-            int r3 = r1.currentAccount     // Catch:{ Exception -> 0x0078 }
-            android.content.SharedPreferences r3 = org.telegram.messenger.MessagesController.getNotificationsSettings(r3)     // Catch:{ Exception -> 0x0078 }
-            android.content.Intent r4 = new android.content.Intent     // Catch:{ Exception -> 0x0078 }
-            java.lang.String r8 = "android.intent.action.RINGTONE_PICKER"
-            r4.<init>(r8)     // Catch:{ Exception -> 0x0078 }
-            java.lang.String r8 = "android.intent.extra.ringtone.TYPE"
-            r4.putExtra(r8, r6)     // Catch:{ Exception -> 0x0078 }
-            java.lang.String r8 = "android.intent.extra.ringtone.SHOW_DEFAULT"
-            r4.putExtra(r8, r6)     // Catch:{ Exception -> 0x0078 }
-            java.lang.String r8 = "android.intent.extra.ringtone.SHOW_SILENT"
-            r4.putExtra(r8, r6)     // Catch:{ Exception -> 0x0078 }
-            java.lang.String r8 = "android.intent.extra.ringtone.DEFAULT_URI"
-            android.net.Uri r9 = android.media.RingtoneManager.getDefaultUri(r6)     // Catch:{ Exception -> 0x0078 }
-            r4.putExtra(r8, r9)     // Catch:{ Exception -> 0x0078 }
-            android.net.Uri r8 = android.provider.Settings.System.DEFAULT_RINGTONE_URI     // Catch:{ Exception -> 0x0078 }
-            if (r8 == 0) goto L_0x0051
-            java.lang.String r9 = r8.getPath()     // Catch:{ Exception -> 0x0078 }
-            goto L_0x0052
-        L_0x0051:
-            r9 = r7
-        L_0x0052:
-            java.lang.String r10 = "CallsRingtonePath"
-            java.lang.String r3 = r3.getString(r10, r9)     // Catch:{ Exception -> 0x0078 }
-            if (r3 == 0) goto L_0x006e
-            java.lang.String r10 = "NoSound"
-            boolean r10 = r3.equals(r10)     // Catch:{ Exception -> 0x0078 }
-            if (r10 != 0) goto L_0x006e
-            boolean r7 = r3.equals(r9)     // Catch:{ Exception -> 0x0078 }
-            if (r7 == 0) goto L_0x006a
-            r7 = r8
-            goto L_0x006e
-        L_0x006a:
-            android.net.Uri r7 = android.net.Uri.parse(r3)     // Catch:{ Exception -> 0x0078 }
-        L_0x006e:
-            java.lang.String r3 = "android.intent.extra.ringtone.EXISTING_URI"
-            r4.putExtra(r3, r7)     // Catch:{ Exception -> 0x0078 }
-            r1.startActivityForResult(r4, r0)     // Catch:{ Exception -> 0x0078 }
-            goto L_0x043a
+        L_0x0007:
+            int r15 = r11.privateRow
+            r0 = 2
+            r1 = 0
+            r2 = 1
+            if (r13 == r15) goto L_0x03cb
+            int r3 = r11.groupRow
+            if (r13 == r3) goto L_0x03cb
+            int r3 = r11.channelsRow
+            if (r13 != r3) goto L_0x0018
+            goto L_0x03cb
+        L_0x0018:
+            int r14 = r11.callsRingtoneRow
+            r15 = 0
+            if (r13 != r14) goto L_0x0078
+            int r14 = r11.currentAccount     // Catch:{ Exception -> 0x0072 }
+            android.content.SharedPreferences r14 = org.telegram.messenger.MessagesController.getNotificationsSettings(r14)     // Catch:{ Exception -> 0x0072 }
+            android.content.Intent r0 = new android.content.Intent     // Catch:{ Exception -> 0x0072 }
+            java.lang.String r3 = "android.intent.action.RINGTONE_PICKER"
+            r0.<init>(r3)     // Catch:{ Exception -> 0x0072 }
+            java.lang.String r3 = "android.intent.extra.ringtone.TYPE"
+            r0.putExtra(r3, r2)     // Catch:{ Exception -> 0x0072 }
+            java.lang.String r3 = "android.intent.extra.ringtone.SHOW_DEFAULT"
+            r0.putExtra(r3, r2)     // Catch:{ Exception -> 0x0072 }
+            java.lang.String r3 = "android.intent.extra.ringtone.SHOW_SILENT"
+            r0.putExtra(r3, r2)     // Catch:{ Exception -> 0x0072 }
+            java.lang.String r3 = "android.intent.extra.ringtone.DEFAULT_URI"
+            android.net.Uri r4 = android.media.RingtoneManager.getDefaultUri(r2)     // Catch:{ Exception -> 0x0072 }
+            r0.putExtra(r3, r4)     // Catch:{ Exception -> 0x0072 }
+            android.net.Uri r3 = android.provider.Settings.System.DEFAULT_RINGTONE_URI     // Catch:{ Exception -> 0x0072 }
+            if (r3 == 0) goto L_0x004b
+            java.lang.String r4 = r3.getPath()     // Catch:{ Exception -> 0x0072 }
+            goto L_0x004c
+        L_0x004b:
+            r4 = r15
+        L_0x004c:
+            java.lang.String r5 = "CallsRingtonePath"
+            java.lang.String r14 = r14.getString(r5, r4)     // Catch:{ Exception -> 0x0072 }
+            if (r14 == 0) goto L_0x0068
+            java.lang.String r5 = "NoSound"
+            boolean r5 = r14.equals(r5)     // Catch:{ Exception -> 0x0072 }
+            if (r5 != 0) goto L_0x0068
+            boolean r15 = r14.equals(r4)     // Catch:{ Exception -> 0x0072 }
+            if (r15 == 0) goto L_0x0064
+            r15 = r3
+            goto L_0x0068
+        L_0x0064:
+            android.net.Uri r15 = android.net.Uri.parse(r14)     // Catch:{ Exception -> 0x0072 }
+        L_0x0068:
+            java.lang.String r14 = "android.intent.extra.ringtone.EXISTING_URI"
+            r0.putExtra(r14, r15)     // Catch:{ Exception -> 0x0072 }
+            r11.startActivityForResult(r0, r13)     // Catch:{ Exception -> 0x0072 }
+            goto L_0x042f
+        L_0x0072:
+            r13 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r13)
+            goto L_0x042f
         L_0x0078:
-            r0 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            goto L_0x043a
-        L_0x007e:
-            int r3 = r1.resetNotificationsRow
-            r8 = 2131624838(0x7f0e0386, float:1.8876867E38)
-            java.lang.String r9 = "Cancel"
-            if (r0 != r3) goto L_0x00db
-            org.telegram.ui.ActionBar.AlertDialog$Builder r0 = new org.telegram.ui.ActionBar.AlertDialog$Builder
-            android.app.Activity r3 = r16.getParentActivity()
-            r0.<init>((android.content.Context) r3)
-            r3 = 2131628078(0x7f0e102e, float:1.8883439E38)
-            java.lang.String r4 = "ResetNotificationsAlertTitle"
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
-            r0.setTitle(r3)
-            r3 = 2131628077(0x7f0e102d, float:1.8883436E38)
-            java.lang.String r4 = "ResetNotificationsAlert"
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
-            r0.setMessage(r3)
-            r3 = 2131628055(0x7f0e1017, float:1.8883392E38)
-            java.lang.String r4 = "Reset"
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
-            org.telegram.ui.NotificationsSettingsActivity$$ExternalSyntheticLambda0 r4 = new org.telegram.ui.NotificationsSettingsActivity$$ExternalSyntheticLambda0
-            r4.<init>(r1)
-            r0.setPositiveButton(r3, r4)
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r9, r8)
-            r0.setNegativeButton(r3, r7)
-            org.telegram.ui.ActionBar.AlertDialog r0 = r0.create()
-            r1.showDialog(r0)
-            r3 = -1
-            android.view.View r0 = r0.getButton(r3)
-            android.widget.TextView r0 = (android.widget.TextView) r0
-            if (r0 == 0) goto L_0x043a
-            java.lang.String r3 = "dialogTextRed2"
-            int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
-            r0.setTextColor(r3)
-            goto L_0x043a
-        L_0x00db:
-            int r3 = r1.inappSoundRow
-            if (r0 != r3) goto L_0x00f9
-            int r0 = r1.currentAccount
-            android.content.SharedPreferences r0 = org.telegram.messenger.MessagesController.getNotificationsSettings(r0)
-            android.content.SharedPreferences$Editor r3 = r0.edit()
-            java.lang.String r4 = "EnableInAppSounds"
-            boolean r5 = r0.getBoolean(r4, r6)
-            r0 = r5 ^ 1
-            r3.putBoolean(r4, r0)
-            r3.commit()
-            goto L_0x043a
-        L_0x00f9:
-            int r3 = r1.inappVibrateRow
-            if (r0 != r3) goto L_0x0117
-            int r0 = r1.currentAccount
-            android.content.SharedPreferences r0 = org.telegram.messenger.MessagesController.getNotificationsSettings(r0)
-            android.content.SharedPreferences$Editor r3 = r0.edit()
-            java.lang.String r4 = "EnableInAppVibrate"
-            boolean r5 = r0.getBoolean(r4, r6)
-            r0 = r5 ^ 1
-            r3.putBoolean(r4, r0)
-            r3.commit()
-            goto L_0x043a
-        L_0x0117:
-            int r3 = r1.inappPreviewRow
-            if (r0 != r3) goto L_0x0135
-            int r0 = r1.currentAccount
-            android.content.SharedPreferences r0 = org.telegram.messenger.MessagesController.getNotificationsSettings(r0)
-            android.content.SharedPreferences$Editor r3 = r0.edit()
-            java.lang.String r4 = "EnableInAppPreview"
-            boolean r5 = r0.getBoolean(r4, r6)
-            r0 = r5 ^ 1
-            r3.putBoolean(r4, r0)
-            r3.commit()
-            goto L_0x043a
-        L_0x0135:
-            int r3 = r1.inchatSoundRow
-            if (r0 != r3) goto L_0x015c
-            int r0 = r1.currentAccount
-            android.content.SharedPreferences r0 = org.telegram.messenger.MessagesController.getNotificationsSettings(r0)
-            android.content.SharedPreferences$Editor r3 = r0.edit()
-            java.lang.String r4 = "EnableInChatSound"
-            boolean r5 = r0.getBoolean(r4, r6)
-            r0 = r5 ^ 1
-            r3.putBoolean(r4, r0)
-            r3.commit()
-            org.telegram.messenger.NotificationsController r0 = r16.getNotificationsController()
-            r3 = r5 ^ 1
-            r0.setInChatSoundEnabled(r3)
-            goto L_0x043a
-        L_0x015c:
-            int r3 = r1.inappPriorityRow
-            if (r0 != r3) goto L_0x017a
-            int r0 = r1.currentAccount
-            android.content.SharedPreferences r0 = org.telegram.messenger.MessagesController.getNotificationsSettings(r0)
-            android.content.SharedPreferences$Editor r3 = r0.edit()
-            java.lang.String r4 = "EnableInAppPriority"
-            boolean r5 = r0.getBoolean(r4, r5)
-            r0 = r5 ^ 1
-            r3.putBoolean(r4, r0)
-            r3.commit()
-            goto L_0x043a
-        L_0x017a:
-            int r3 = r1.contactJoinedRow
-            if (r0 != r3) goto L_0x01b4
-            int r0 = r1.currentAccount
-            android.content.SharedPreferences r0 = org.telegram.messenger.MessagesController.getNotificationsSettings(r0)
-            android.content.SharedPreferences$Editor r3 = r0.edit()
-            java.lang.String r4 = "EnableContactJoined"
-            boolean r5 = r0.getBoolean(r4, r6)
-            int r0 = r1.currentAccount
-            org.telegram.messenger.MessagesController r0 = org.telegram.messenger.MessagesController.getInstance(r0)
-            r7 = r5 ^ 1
-            r0.enableJoined = r7
-            r0 = r5 ^ 1
-            r3.putBoolean(r4, r0)
-            r3.commit()
-            org.telegram.tgnet.TLRPC$TL_account_setContactSignUpNotification r0 = new org.telegram.tgnet.TLRPC$TL_account_setContactSignUpNotification
-            r0.<init>()
-            r0.silent = r5
-            int r3 = r1.currentAccount
-            org.telegram.tgnet.ConnectionsManager r3 = org.telegram.tgnet.ConnectionsManager.getInstance(r3)
-            org.telegram.ui.NotificationsSettingsActivity$$ExternalSyntheticLambda8 r4 = org.telegram.ui.NotificationsSettingsActivity$$ExternalSyntheticLambda8.INSTANCE
-            r3.sendRequest(r0, r4)
-            goto L_0x043a
-        L_0x01b4:
-            int r3 = r1.pinnedMessageRow
-            if (r0 != r3) goto L_0x01d2
-            int r0 = r1.currentAccount
-            android.content.SharedPreferences r0 = org.telegram.messenger.MessagesController.getNotificationsSettings(r0)
-            android.content.SharedPreferences$Editor r3 = r0.edit()
-            java.lang.String r4 = "PinnedMessages"
-            boolean r5 = r0.getBoolean(r4, r6)
-            r0 = r5 ^ 1
-            r3.putBoolean(r4, r0)
-            r3.commit()
-            goto L_0x043a
-        L_0x01d2:
-            int r3 = r1.androidAutoAlertRow
-            if (r0 != r3) goto L_0x01f0
-            int r0 = r1.currentAccount
-            android.content.SharedPreferences r0 = org.telegram.messenger.MessagesController.getNotificationsSettings(r0)
-            android.content.SharedPreferences$Editor r3 = r0.edit()
-            java.lang.String r4 = "EnableAutoNotifications"
-            boolean r5 = r0.getBoolean(r4, r5)
-            r0 = r5 ^ 1
-            r3.putBoolean(r4, r0)
-            r3.commit()
-            goto L_0x043a
-        L_0x01f0:
-            int r3 = r1.badgeNumberShowRow
-            if (r0 != r3) goto L_0x0223
-            int r0 = r1.currentAccount
-            android.content.SharedPreferences r0 = org.telegram.messenger.MessagesController.getNotificationsSettings(r0)
-            android.content.SharedPreferences$Editor r0 = r0.edit()
-            org.telegram.messenger.NotificationsController r3 = r16.getNotificationsController()
-            boolean r5 = r3.showBadgeNumber
-            org.telegram.messenger.NotificationsController r3 = r16.getNotificationsController()
-            r4 = r5 ^ 1
-            r3.showBadgeNumber = r4
-            org.telegram.messenger.NotificationsController r3 = r16.getNotificationsController()
-            boolean r3 = r3.showBadgeNumber
-            java.lang.String r4 = "badgeNumber"
-            r0.putBoolean(r4, r3)
-            r0.commit()
-            org.telegram.messenger.NotificationsController r0 = r16.getNotificationsController()
-            r0.updateBadge()
-            goto L_0x043a
-        L_0x0223:
-            int r3 = r1.badgeNumberMutedRow
-            if (r0 != r3) goto L_0x025d
-            int r0 = r1.currentAccount
-            android.content.SharedPreferences r0 = org.telegram.messenger.MessagesController.getNotificationsSettings(r0)
-            android.content.SharedPreferences$Editor r0 = r0.edit()
-            org.telegram.messenger.NotificationsController r3 = r16.getNotificationsController()
-            boolean r5 = r3.showBadgeMuted
-            org.telegram.messenger.NotificationsController r3 = r16.getNotificationsController()
-            r4 = r5 ^ 1
-            r3.showBadgeMuted = r4
-            org.telegram.messenger.NotificationsController r3 = r16.getNotificationsController()
-            boolean r3 = r3.showBadgeMuted
-            java.lang.String r4 = "badgeNumberMuted"
-            r0.putBoolean(r4, r3)
-            r0.commit()
-            org.telegram.messenger.NotificationsController r0 = r16.getNotificationsController()
-            r0.updateBadge()
-            org.telegram.messenger.MessagesStorage r0 = r16.getMessagesStorage()
-            r0.updateMutedDialogsFiltersCounters()
-            goto L_0x043a
-        L_0x025d:
-            int r3 = r1.badgeNumberMessagesRow
-            if (r0 != r3) goto L_0x0290
-            int r0 = r1.currentAccount
-            android.content.SharedPreferences r0 = org.telegram.messenger.MessagesController.getNotificationsSettings(r0)
-            android.content.SharedPreferences$Editor r0 = r0.edit()
-            org.telegram.messenger.NotificationsController r3 = r16.getNotificationsController()
-            boolean r5 = r3.showBadgeMessages
-            org.telegram.messenger.NotificationsController r3 = r16.getNotificationsController()
-            r4 = r5 ^ 1
-            r3.showBadgeMessages = r4
-            org.telegram.messenger.NotificationsController r3 = r16.getNotificationsController()
-            boolean r3 = r3.showBadgeMessages
-            java.lang.String r4 = "badgeNumberMessages"
-            r0.putBoolean(r4, r3)
-            r0.commit()
-            org.telegram.messenger.NotificationsController r0 = r16.getNotificationsController()
-            r0.updateBadge()
-            goto L_0x043a
-        L_0x0290:
-            int r3 = r1.notificationsServiceConnectionRow
-            if (r0 != r3) goto L_0x02ca
-            int r0 = r1.currentAccount
-            android.content.SharedPreferences r0 = org.telegram.messenger.MessagesController.getNotificationsSettings(r0)
-            org.telegram.messenger.MessagesController r3 = r16.getMessagesController()
-            boolean r3 = r3.backgroundConnection
-            java.lang.String r4 = "pushConnection"
-            boolean r3 = r0.getBoolean(r4, r3)
-            android.content.SharedPreferences$Editor r0 = r0.edit()
-            r7 = r3 ^ 1
-            r0.putBoolean(r4, r7)
-            r0.commit()
-            if (r3 != 0) goto L_0x02be
-            int r0 = r1.currentAccount
-            org.telegram.tgnet.ConnectionsManager r0 = org.telegram.tgnet.ConnectionsManager.getInstance(r0)
-            r0.setPushConnectionEnabled(r6)
-            goto L_0x02c7
-        L_0x02be:
-            int r0 = r1.currentAccount
-            org.telegram.tgnet.ConnectionsManager r0 = org.telegram.tgnet.ConnectionsManager.getInstance(r0)
-            r0.setPushConnectionEnabled(r5)
-        L_0x02c7:
-            r5 = r3
-            goto L_0x043a
-        L_0x02ca:
-            int r3 = r1.accountsAllRow
-            r10 = 4
-            if (r0 != r3) goto L_0x0310
-            android.content.SharedPreferences r0 = org.telegram.messenger.MessagesController.getGlobalNotificationsSettings()
-            java.lang.String r3 = "AllAccounts"
-            boolean r4 = r0.getBoolean(r3, r6)
-            android.content.SharedPreferences$Editor r0 = r0.edit()
-            r7 = r4 ^ 1
-            r0.putBoolean(r3, r7)
-            r0.commit()
-            r0 = r4 ^ 1
-            org.telegram.messenger.SharedConfig.showNotificationsForAllAccounts = r0
-        L_0x02e9:
-            if (r5 >= r10) goto L_0x030d
-            boolean r0 = org.telegram.messenger.SharedConfig.showNotificationsForAllAccounts
-            if (r0 == 0) goto L_0x02f7
-            org.telegram.messenger.NotificationsController r0 = org.telegram.messenger.NotificationsController.getInstance(r5)
-            r0.showNotifications()
-            goto L_0x030a
-        L_0x02f7:
-            int r0 = r1.currentAccount
-            if (r5 != r0) goto L_0x0303
-            org.telegram.messenger.NotificationsController r0 = org.telegram.messenger.NotificationsController.getInstance(r5)
-            r0.showNotifications()
-            goto L_0x030a
+            int r14 = r11.resetNotificationsRow
+            java.lang.String r3 = "Cancel"
+            if (r13 != r14) goto L_0x00d1
+            org.telegram.ui.ActionBar.AlertDialog$Builder r13 = new org.telegram.ui.ActionBar.AlertDialog$Builder
+            android.app.Activity r14 = r11.getParentActivity()
+            r13.<init>((android.content.Context) r14)
+            int r14 = org.telegram.messenger.R.string.ResetNotificationsAlertTitle
+            java.lang.String r0 = "ResetNotificationsAlertTitle"
+            java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
+            r13.setTitle(r14)
+            int r14 = org.telegram.messenger.R.string.ResetNotificationsAlert
+            java.lang.String r0 = "ResetNotificationsAlert"
+            java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
+            r13.setMessage(r14)
+            int r14 = org.telegram.messenger.R.string.Reset
+            java.lang.String r0 = "Reset"
+            java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
+            org.telegram.ui.NotificationsSettingsActivity$$ExternalSyntheticLambda0 r0 = new org.telegram.ui.NotificationsSettingsActivity$$ExternalSyntheticLambda0
+            r0.<init>(r11)
+            r13.setPositiveButton(r14, r0)
+            int r14 = org.telegram.messenger.R.string.Cancel
+            java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r3, r14)
+            r13.setNegativeButton(r14, r15)
+            org.telegram.ui.ActionBar.AlertDialog r13 = r13.create()
+            r11.showDialog(r13)
+            r14 = -1
+            android.view.View r13 = r13.getButton(r14)
+            android.widget.TextView r13 = (android.widget.TextView) r13
+            if (r13 == 0) goto L_0x042f
+            java.lang.String r14 = "dialogTextRed2"
+            int r14 = org.telegram.ui.ActionBar.Theme.getColor(r14)
+            r13.setTextColor(r14)
+            goto L_0x042f
+        L_0x00d1:
+            int r14 = r11.inappSoundRow
+            if (r13 != r14) goto L_0x00ef
+            int r13 = r11.currentAccount
+            android.content.SharedPreferences r13 = org.telegram.messenger.MessagesController.getNotificationsSettings(r13)
+            android.content.SharedPreferences$Editor r14 = r13.edit()
+            java.lang.String r15 = "EnableInAppSounds"
+            boolean r1 = r13.getBoolean(r15, r2)
+            r13 = r1 ^ 1
+            r14.putBoolean(r15, r13)
+            r14.commit()
+            goto L_0x042f
+        L_0x00ef:
+            int r14 = r11.inappVibrateRow
+            if (r13 != r14) goto L_0x010d
+            int r13 = r11.currentAccount
+            android.content.SharedPreferences r13 = org.telegram.messenger.MessagesController.getNotificationsSettings(r13)
+            android.content.SharedPreferences$Editor r14 = r13.edit()
+            java.lang.String r15 = "EnableInAppVibrate"
+            boolean r1 = r13.getBoolean(r15, r2)
+            r13 = r1 ^ 1
+            r14.putBoolean(r15, r13)
+            r14.commit()
+            goto L_0x042f
+        L_0x010d:
+            int r14 = r11.inappPreviewRow
+            if (r13 != r14) goto L_0x012b
+            int r13 = r11.currentAccount
+            android.content.SharedPreferences r13 = org.telegram.messenger.MessagesController.getNotificationsSettings(r13)
+            android.content.SharedPreferences$Editor r14 = r13.edit()
+            java.lang.String r15 = "EnableInAppPreview"
+            boolean r1 = r13.getBoolean(r15, r2)
+            r13 = r1 ^ 1
+            r14.putBoolean(r15, r13)
+            r14.commit()
+            goto L_0x042f
+        L_0x012b:
+            int r14 = r11.inchatSoundRow
+            if (r13 != r14) goto L_0x0152
+            int r13 = r11.currentAccount
+            android.content.SharedPreferences r13 = org.telegram.messenger.MessagesController.getNotificationsSettings(r13)
+            android.content.SharedPreferences$Editor r14 = r13.edit()
+            java.lang.String r15 = "EnableInChatSound"
+            boolean r1 = r13.getBoolean(r15, r2)
+            r13 = r1 ^ 1
+            r14.putBoolean(r15, r13)
+            r14.commit()
+            org.telegram.messenger.NotificationsController r13 = r11.getNotificationsController()
+            r14 = r1 ^ 1
+            r13.setInChatSoundEnabled(r14)
+            goto L_0x042f
+        L_0x0152:
+            int r14 = r11.inappPriorityRow
+            if (r13 != r14) goto L_0x0170
+            int r13 = r11.currentAccount
+            android.content.SharedPreferences r13 = org.telegram.messenger.MessagesController.getNotificationsSettings(r13)
+            android.content.SharedPreferences$Editor r14 = r13.edit()
+            java.lang.String r15 = "EnableInAppPriority"
+            boolean r1 = r13.getBoolean(r15, r1)
+            r13 = r1 ^ 1
+            r14.putBoolean(r15, r13)
+            r14.commit()
+            goto L_0x042f
+        L_0x0170:
+            int r14 = r11.contactJoinedRow
+            if (r13 != r14) goto L_0x01aa
+            int r13 = r11.currentAccount
+            android.content.SharedPreferences r13 = org.telegram.messenger.MessagesController.getNotificationsSettings(r13)
+            android.content.SharedPreferences$Editor r14 = r13.edit()
+            java.lang.String r15 = "EnableContactJoined"
+            boolean r1 = r13.getBoolean(r15, r2)
+            int r13 = r11.currentAccount
+            org.telegram.messenger.MessagesController r13 = org.telegram.messenger.MessagesController.getInstance(r13)
+            r0 = r1 ^ 1
+            r13.enableJoined = r0
+            r13 = r1 ^ 1
+            r14.putBoolean(r15, r13)
+            r14.commit()
+            org.telegram.tgnet.TLRPC$TL_account_setContactSignUpNotification r13 = new org.telegram.tgnet.TLRPC$TL_account_setContactSignUpNotification
+            r13.<init>()
+            r13.silent = r1
+            int r14 = r11.currentAccount
+            org.telegram.tgnet.ConnectionsManager r14 = org.telegram.tgnet.ConnectionsManager.getInstance(r14)
+            org.telegram.ui.NotificationsSettingsActivity$$ExternalSyntheticLambda8 r15 = org.telegram.ui.NotificationsSettingsActivity$$ExternalSyntheticLambda8.INSTANCE
+            r14.sendRequest(r13, r15)
+            goto L_0x042f
+        L_0x01aa:
+            int r14 = r11.pinnedMessageRow
+            if (r13 != r14) goto L_0x01c8
+            int r13 = r11.currentAccount
+            android.content.SharedPreferences r13 = org.telegram.messenger.MessagesController.getNotificationsSettings(r13)
+            android.content.SharedPreferences$Editor r14 = r13.edit()
+            java.lang.String r15 = "PinnedMessages"
+            boolean r1 = r13.getBoolean(r15, r2)
+            r13 = r1 ^ 1
+            r14.putBoolean(r15, r13)
+            r14.commit()
+            goto L_0x042f
+        L_0x01c8:
+            int r14 = r11.androidAutoAlertRow
+            if (r13 != r14) goto L_0x01e6
+            int r13 = r11.currentAccount
+            android.content.SharedPreferences r13 = org.telegram.messenger.MessagesController.getNotificationsSettings(r13)
+            android.content.SharedPreferences$Editor r14 = r13.edit()
+            java.lang.String r15 = "EnableAutoNotifications"
+            boolean r1 = r13.getBoolean(r15, r1)
+            r13 = r1 ^ 1
+            r14.putBoolean(r15, r13)
+            r14.commit()
+            goto L_0x042f
+        L_0x01e6:
+            int r14 = r11.badgeNumberShowRow
+            if (r13 != r14) goto L_0x0219
+            int r13 = r11.currentAccount
+            android.content.SharedPreferences r13 = org.telegram.messenger.MessagesController.getNotificationsSettings(r13)
+            android.content.SharedPreferences$Editor r13 = r13.edit()
+            org.telegram.messenger.NotificationsController r14 = r11.getNotificationsController()
+            boolean r1 = r14.showBadgeNumber
+            org.telegram.messenger.NotificationsController r14 = r11.getNotificationsController()
+            r15 = r1 ^ 1
+            r14.showBadgeNumber = r15
+            org.telegram.messenger.NotificationsController r14 = r11.getNotificationsController()
+            boolean r14 = r14.showBadgeNumber
+            java.lang.String r15 = "badgeNumber"
+            r13.putBoolean(r15, r14)
+            r13.commit()
+            org.telegram.messenger.NotificationsController r13 = r11.getNotificationsController()
+            r13.updateBadge()
+            goto L_0x042f
+        L_0x0219:
+            int r14 = r11.badgeNumberMutedRow
+            if (r13 != r14) goto L_0x0253
+            int r13 = r11.currentAccount
+            android.content.SharedPreferences r13 = org.telegram.messenger.MessagesController.getNotificationsSettings(r13)
+            android.content.SharedPreferences$Editor r13 = r13.edit()
+            org.telegram.messenger.NotificationsController r14 = r11.getNotificationsController()
+            boolean r1 = r14.showBadgeMuted
+            org.telegram.messenger.NotificationsController r14 = r11.getNotificationsController()
+            r15 = r1 ^ 1
+            r14.showBadgeMuted = r15
+            org.telegram.messenger.NotificationsController r14 = r11.getNotificationsController()
+            boolean r14 = r14.showBadgeMuted
+            java.lang.String r15 = "badgeNumberMuted"
+            r13.putBoolean(r15, r14)
+            r13.commit()
+            org.telegram.messenger.NotificationsController r13 = r11.getNotificationsController()
+            r13.updateBadge()
+            org.telegram.messenger.MessagesStorage r13 = r11.getMessagesStorage()
+            r13.updateMutedDialogsFiltersCounters()
+            goto L_0x042f
+        L_0x0253:
+            int r14 = r11.badgeNumberMessagesRow
+            if (r13 != r14) goto L_0x0286
+            int r13 = r11.currentAccount
+            android.content.SharedPreferences r13 = org.telegram.messenger.MessagesController.getNotificationsSettings(r13)
+            android.content.SharedPreferences$Editor r13 = r13.edit()
+            org.telegram.messenger.NotificationsController r14 = r11.getNotificationsController()
+            boolean r1 = r14.showBadgeMessages
+            org.telegram.messenger.NotificationsController r14 = r11.getNotificationsController()
+            r15 = r1 ^ 1
+            r14.showBadgeMessages = r15
+            org.telegram.messenger.NotificationsController r14 = r11.getNotificationsController()
+            boolean r14 = r14.showBadgeMessages
+            java.lang.String r15 = "badgeNumberMessages"
+            r13.putBoolean(r15, r14)
+            r13.commit()
+            org.telegram.messenger.NotificationsController r13 = r11.getNotificationsController()
+            r13.updateBadge()
+            goto L_0x042f
+        L_0x0286:
+            int r14 = r11.notificationsServiceConnectionRow
+            if (r13 != r14) goto L_0x02c0
+            int r13 = r11.currentAccount
+            android.content.SharedPreferences r13 = org.telegram.messenger.MessagesController.getNotificationsSettings(r13)
+            org.telegram.messenger.MessagesController r14 = r11.getMessagesController()
+            boolean r14 = r14.backgroundConnection
+            java.lang.String r15 = "pushConnection"
+            boolean r14 = r13.getBoolean(r15, r14)
+            android.content.SharedPreferences$Editor r13 = r13.edit()
+            r0 = r14 ^ 1
+            r13.putBoolean(r15, r0)
+            r13.commit()
+            if (r14 != 0) goto L_0x02b4
+            int r13 = r11.currentAccount
+            org.telegram.tgnet.ConnectionsManager r13 = org.telegram.tgnet.ConnectionsManager.getInstance(r13)
+            r13.setPushConnectionEnabled(r2)
+            goto L_0x02bd
+        L_0x02b4:
+            int r13 = r11.currentAccount
+            org.telegram.tgnet.ConnectionsManager r13 = org.telegram.tgnet.ConnectionsManager.getInstance(r13)
+            r13.setPushConnectionEnabled(r1)
+        L_0x02bd:
+            r1 = r14
+            goto L_0x042f
+        L_0x02c0:
+            int r14 = r11.accountsAllRow
+            r4 = 4
+            if (r13 != r14) goto L_0x0306
+            android.content.SharedPreferences r13 = org.telegram.messenger.MessagesController.getGlobalNotificationsSettings()
+            java.lang.String r14 = "AllAccounts"
+            boolean r15 = r13.getBoolean(r14, r2)
+            android.content.SharedPreferences$Editor r13 = r13.edit()
+            r0 = r15 ^ 1
+            r13.putBoolean(r14, r0)
+            r13.commit()
+            r13 = r15 ^ 1
+            org.telegram.messenger.SharedConfig.showNotificationsForAllAccounts = r13
+        L_0x02df:
+            if (r1 >= r4) goto L_0x0303
+            boolean r13 = org.telegram.messenger.SharedConfig.showNotificationsForAllAccounts
+            if (r13 == 0) goto L_0x02ed
+            org.telegram.messenger.NotificationsController r13 = org.telegram.messenger.NotificationsController.getInstance(r1)
+            r13.showNotifications()
+            goto L_0x0300
+        L_0x02ed:
+            int r13 = r11.currentAccount
+            if (r1 != r13) goto L_0x02f9
+            org.telegram.messenger.NotificationsController r13 = org.telegram.messenger.NotificationsController.getInstance(r1)
+            r13.showNotifications()
+            goto L_0x0300
+        L_0x02f9:
+            org.telegram.messenger.NotificationsController r13 = org.telegram.messenger.NotificationsController.getInstance(r1)
+            r13.hideNotifications()
+        L_0x0300:
+            int r1 = r1 + 1
+            goto L_0x02df
         L_0x0303:
-            org.telegram.messenger.NotificationsController r0 = org.telegram.messenger.NotificationsController.getInstance(r5)
-            r0.hideNotifications()
-        L_0x030a:
-            int r5 = r5 + 1
-            goto L_0x02e9
-        L_0x030d:
-            r5 = r4
-            goto L_0x043a
-        L_0x0310:
-            int r3 = r1.notificationsServiceRow
-            if (r0 != r3) goto L_0x0337
-            int r0 = r1.currentAccount
-            android.content.SharedPreferences r0 = org.telegram.messenger.MessagesController.getNotificationsSettings(r0)
-            org.telegram.messenger.MessagesController r3 = r16.getMessagesController()
-            boolean r3 = r3.keepAliveService
-            java.lang.String r4 = "pushService"
-            boolean r5 = r0.getBoolean(r4, r3)
-            android.content.SharedPreferences$Editor r0 = r0.edit()
-            r3 = r5 ^ 1
-            r0.putBoolean(r4, r3)
-            r0.commit()
+            r1 = r15
+            goto L_0x042f
+        L_0x0306:
+            int r14 = r11.notificationsServiceRow
+            if (r13 != r14) goto L_0x032d
+            int r13 = r11.currentAccount
+            android.content.SharedPreferences r13 = org.telegram.messenger.MessagesController.getNotificationsSettings(r13)
+            org.telegram.messenger.MessagesController r14 = r11.getMessagesController()
+            boolean r14 = r14.keepAliveService
+            java.lang.String r15 = "pushService"
+            boolean r1 = r13.getBoolean(r15, r14)
+            android.content.SharedPreferences$Editor r13 = r13.edit()
+            r14 = r1 ^ 1
+            r13.putBoolean(r15, r14)
+            r13.commit()
             org.telegram.messenger.ApplicationLoader.startPushService()
-            goto L_0x043a
-        L_0x0337:
-            int r3 = r1.callsVibrateRow
-            if (r0 != r3) goto L_0x035c
-            android.app.Activity r3 = r16.getParentActivity()
-            if (r3 != 0) goto L_0x0342
+            goto L_0x042f
+        L_0x032d:
+            int r14 = r11.callsVibrateRow
+            if (r13 != r14) goto L_0x0352
+            android.app.Activity r14 = r11.getParentActivity()
+            if (r14 != 0) goto L_0x0338
             return
-        L_0x0342:
-            int r3 = r1.callsVibrateRow
-            if (r0 != r3) goto L_0x0348
-            java.lang.String r7 = "vibrate_calls"
-        L_0x0348:
-            android.app.Activity r3 = r16.getParentActivity()
-            r8 = 0
-            org.telegram.ui.NotificationsSettingsActivity$$ExternalSyntheticLambda5 r4 = new org.telegram.ui.NotificationsSettingsActivity$$ExternalSyntheticLambda5
-            r4.<init>(r1, r0)
-            android.app.Dialog r0 = org.telegram.ui.Components.AlertsCreator.createVibrationSelectDialog(r3, r8, r7, r4)
-            r1.showDialog(r0)
-            goto L_0x043a
-        L_0x035c:
-            int r3 = r1.repeatRow
-            if (r0 != r3) goto L_0x043a
-            org.telegram.ui.ActionBar.AlertDialog$Builder r3 = new org.telegram.ui.ActionBar.AlertDialog$Builder
-            android.app.Activity r11 = r16.getParentActivity()
-            r3.<init>((android.content.Context) r11)
-            r11 = 2131627990(0x7f0e0fd6, float:1.888326E38)
-            java.lang.String r12 = "RepeatNotifications"
-            java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
-            r3.setTitle(r11)
-            r11 = 7
-            java.lang.CharSequence[] r11 = new java.lang.CharSequence[r11]
-            r12 = 2131627988(0x7f0e0fd4, float:1.8883256E38)
-            java.lang.String r13 = "RepeatDisabled"
-            java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r13, r12)
-            r11[r5] = r12
-            java.lang.Object[] r12 = new java.lang.Object[r5]
-            java.lang.String r13 = "Minutes"
-            r14 = 5
-            java.lang.String r12 = org.telegram.messenger.LocaleController.formatPluralString(r13, r14, r12)
-            r11[r6] = r12
-            r12 = 10
-            java.lang.Object[] r15 = new java.lang.Object[r5]
-            java.lang.String r12 = org.telegram.messenger.LocaleController.formatPluralString(r13, r12, r15)
-            r11[r4] = r12
-            r12 = 3
-            r15 = 30
-            java.lang.Object[] r7 = new java.lang.Object[r5]
-            java.lang.String r7 = org.telegram.messenger.LocaleController.formatPluralString(r13, r15, r7)
-            r11[r12] = r7
-            java.lang.Object[] r7 = new java.lang.Object[r5]
-            java.lang.String r12 = "Hours"
-            java.lang.String r7 = org.telegram.messenger.LocaleController.formatPluralString(r12, r6, r7)
-            r11[r10] = r7
-            java.lang.Object[] r7 = new java.lang.Object[r5]
-            java.lang.String r4 = org.telegram.messenger.LocaleController.formatPluralString(r12, r4, r7)
-            r11[r14] = r4
-            r4 = 6
-            java.lang.Object[] r7 = new java.lang.Object[r5]
-            java.lang.String r7 = org.telegram.messenger.LocaleController.formatPluralString(r12, r10, r7)
-            r11[r4] = r7
-            org.telegram.ui.NotificationsSettingsActivity$$ExternalSyntheticLambda1 r4 = new org.telegram.ui.NotificationsSettingsActivity$$ExternalSyntheticLambda1
-            r4.<init>(r1, r0)
-            r3.setItems(r11, r4)
-            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r9, r8)
-            r4 = 0
-            r3.setNegativeButton(r0, r4)
-            org.telegram.ui.ActionBar.AlertDialog r0 = r3.create()
-            r1.showDialog(r0)
-            goto L_0x043a
-        L_0x03d6:
-            if (r0 != r3) goto L_0x03dc
-            java.util.ArrayList<org.telegram.ui.NotificationsSettingsActivity$NotificationException> r3 = r1.exceptionUsers
-            r4 = 1
-            goto L_0x03e6
-        L_0x03dc:
-            int r3 = r1.groupRow
-            if (r0 != r3) goto L_0x03e4
-            java.util.ArrayList<org.telegram.ui.NotificationsSettingsActivity$NotificationException> r3 = r1.exceptionChats
-            r4 = 0
-            goto L_0x03e6
-        L_0x03e4:
-            java.util.ArrayList<org.telegram.ui.NotificationsSettingsActivity$NotificationException> r3 = r1.exceptionChannels
-        L_0x03e6:
-            if (r3 != 0) goto L_0x03e9
+        L_0x0338:
+            int r14 = r11.callsVibrateRow
+            if (r13 != r14) goto L_0x033e
+            java.lang.String r15 = "vibrate_calls"
+        L_0x033e:
+            android.app.Activity r14 = r11.getParentActivity()
+            r3 = 0
+            org.telegram.ui.NotificationsSettingsActivity$$ExternalSyntheticLambda5 r0 = new org.telegram.ui.NotificationsSettingsActivity$$ExternalSyntheticLambda5
+            r0.<init>(r11, r13)
+            android.app.Dialog r13 = org.telegram.ui.Components.AlertsCreator.createVibrationSelectDialog(r14, r3, r15, r0)
+            r11.showDialog(r13)
+            goto L_0x042f
+        L_0x0352:
+            int r14 = r11.repeatRow
+            if (r13 != r14) goto L_0x042f
+            org.telegram.ui.ActionBar.AlertDialog$Builder r14 = new org.telegram.ui.ActionBar.AlertDialog$Builder
+            android.app.Activity r5 = r11.getParentActivity()
+            r14.<init>((android.content.Context) r5)
+            int r5 = org.telegram.messenger.R.string.RepeatNotifications
+            java.lang.String r6 = "RepeatNotifications"
+            java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
+            r14.setTitle(r5)
+            r5 = 7
+            java.lang.CharSequence[] r5 = new java.lang.CharSequence[r5]
+            int r6 = org.telegram.messenger.R.string.RepeatDisabled
+            java.lang.String r7 = "RepeatDisabled"
+            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
+            r5[r1] = r6
+            java.lang.Object[] r6 = new java.lang.Object[r1]
+            java.lang.String r7 = "Minutes"
+            r8 = 5
+            java.lang.String r6 = org.telegram.messenger.LocaleController.formatPluralString(r7, r8, r6)
+            r5[r2] = r6
+            r6 = 10
+            java.lang.Object[] r9 = new java.lang.Object[r1]
+            java.lang.String r6 = org.telegram.messenger.LocaleController.formatPluralString(r7, r6, r9)
+            r5[r0] = r6
+            r6 = 3
+            r9 = 30
+            java.lang.Object[] r10 = new java.lang.Object[r1]
+            java.lang.String r7 = org.telegram.messenger.LocaleController.formatPluralString(r7, r9, r10)
+            r5[r6] = r7
+            java.lang.Object[] r6 = new java.lang.Object[r1]
+            java.lang.String r7 = "Hours"
+            java.lang.String r6 = org.telegram.messenger.LocaleController.formatPluralString(r7, r2, r6)
+            r5[r4] = r6
+            java.lang.Object[] r6 = new java.lang.Object[r1]
+            java.lang.String r0 = org.telegram.messenger.LocaleController.formatPluralString(r7, r0, r6)
+            r5[r8] = r0
+            r0 = 6
+            java.lang.Object[] r6 = new java.lang.Object[r1]
+            java.lang.String r4 = org.telegram.messenger.LocaleController.formatPluralString(r7, r4, r6)
+            r5[r0] = r4
+            org.telegram.ui.NotificationsSettingsActivity$$ExternalSyntheticLambda1 r0 = new org.telegram.ui.NotificationsSettingsActivity$$ExternalSyntheticLambda1
+            r0.<init>(r11, r13)
+            r14.setItems(r5, r0)
+            int r13 = org.telegram.messenger.R.string.Cancel
+            java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r3, r13)
+            r14.setNegativeButton(r13, r15)
+            org.telegram.ui.ActionBar.AlertDialog r13 = r14.create()
+            r11.showDialog(r13)
+            goto L_0x042f
+        L_0x03cb:
+            if (r13 != r15) goto L_0x03d1
+            java.util.ArrayList<org.telegram.ui.NotificationsSettingsActivity$NotificationException> r15 = r11.exceptionUsers
+            r0 = 1
+            goto L_0x03db
+        L_0x03d1:
+            int r15 = r11.groupRow
+            if (r13 != r15) goto L_0x03d9
+            java.util.ArrayList<org.telegram.ui.NotificationsSettingsActivity$NotificationException> r15 = r11.exceptionChats
+            r0 = 0
+            goto L_0x03db
+        L_0x03d9:
+            java.util.ArrayList<org.telegram.ui.NotificationsSettingsActivity$NotificationException> r15 = r11.exceptionChannels
+        L_0x03db:
+            if (r15 != 0) goto L_0x03de
             return
-        L_0x03e9:
-            r7 = r2
-            org.telegram.ui.Cells.NotificationsCheckCell r7 = (org.telegram.ui.Cells.NotificationsCheckCell) r7
-            org.telegram.messenger.NotificationsController r8 = r16.getNotificationsController()
-            boolean r8 = r8.isGlobalNotificationsEnabled((int) r4)
-            boolean r9 = org.telegram.messenger.LocaleController.isRTL
-            r10 = 1117257728(0x42980000, float:76.0)
-            if (r9 == 0) goto L_0x0403
-            int r9 = org.telegram.messenger.AndroidUtilities.dp(r10)
-            float r9 = (float) r9
-            int r9 = (r19 > r9 ? 1 : (r19 == r9 ? 0 : -1))
-            if (r9 <= 0) goto L_0x0415
-        L_0x0403:
-            boolean r9 = org.telegram.messenger.LocaleController.isRTL
-            if (r9 != 0) goto L_0x0431
-            int r9 = r17.getMeasuredWidth()
-            int r10 = org.telegram.messenger.AndroidUtilities.dp(r10)
-            int r9 = r9 - r10
-            float r9 = (float) r9
-            int r9 = (r19 > r9 ? 1 : (r19 == r9 ? 0 : -1))
-            if (r9 < 0) goto L_0x0431
+        L_0x03de:
+            r3 = r12
+            org.telegram.ui.Cells.NotificationsCheckCell r3 = (org.telegram.ui.Cells.NotificationsCheckCell) r3
+            org.telegram.messenger.NotificationsController r4 = r11.getNotificationsController()
+            boolean r4 = r4.isGlobalNotificationsEnabled((int) r0)
+            boolean r5 = org.telegram.messenger.LocaleController.isRTL
+            r6 = 1117257728(0x42980000, float:76.0)
+            if (r5 == 0) goto L_0x03f8
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            float r5 = (float) r5
+            int r5 = (r14 > r5 ? 1 : (r14 == r5 ? 0 : -1))
+            if (r5 <= 0) goto L_0x040a
+        L_0x03f8:
+            boolean r5 = org.telegram.messenger.LocaleController.isRTL
+            if (r5 != 0) goto L_0x0426
+            int r5 = r12.getMeasuredWidth()
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            int r5 = r5 - r6
+            float r5 = (float) r5
+            int r14 = (r14 > r5 ? 1 : (r14 == r5 ? 0 : -1))
+            if (r14 < 0) goto L_0x0426
+        L_0x040a:
+            org.telegram.messenger.NotificationsController r14 = r11.getNotificationsController()
+            if (r4 != 0) goto L_0x0412
+            r15 = 0
+            goto L_0x0415
+        L_0x0412:
+            r15 = 2147483647(0x7fffffff, float:NaN)
         L_0x0415:
-            org.telegram.messenger.NotificationsController r3 = r16.getNotificationsController()
-            if (r8 != 0) goto L_0x041d
-            r9 = 0
-            goto L_0x0420
-        L_0x041d:
-            r9 = 2147483647(0x7fffffff, float:NaN)
-        L_0x0420:
-            r3.setGlobalNotificationsEnabled(r4, r9)
-            r1.showExceptionsAlert(r0)
-            r3 = r8 ^ 1
-            r7.setChecked(r3, r5)
-            org.telegram.ui.NotificationsSettingsActivity$ListAdapter r3 = r1.adapter
-            r3.notifyItemChanged(r0)
-            goto L_0x0439
-        L_0x0431:
-            org.telegram.ui.NotificationsCustomSettingsActivity r0 = new org.telegram.ui.NotificationsCustomSettingsActivity
-            r0.<init>(r4, r3)
-            r1.presentFragment(r0)
-        L_0x0439:
-            r5 = r8
+            r14.setGlobalNotificationsEnabled(r0, r15)
+            r11.showExceptionsAlert(r13)
+            r14 = r4 ^ 1
+            r3.setChecked(r14, r1)
+            org.telegram.ui.NotificationsSettingsActivity$ListAdapter r14 = r11.adapter
+            r14.notifyItemChanged(r13)
+            goto L_0x042e
+        L_0x0426:
+            org.telegram.ui.NotificationsCustomSettingsActivity r13 = new org.telegram.ui.NotificationsCustomSettingsActivity
+            r13.<init>(r0, r15)
+            r11.presentFragment(r13)
+        L_0x042e:
+            r1 = r4
+        L_0x042f:
+            boolean r13 = r12 instanceof org.telegram.ui.Cells.TextCheckCell
+            if (r13 == 0) goto L_0x043a
+            org.telegram.ui.Cells.TextCheckCell r12 = (org.telegram.ui.Cells.TextCheckCell) r12
+            r13 = r1 ^ 1
+            r12.setChecked(r13)
         L_0x043a:
-            boolean r0 = r2 instanceof org.telegram.ui.Cells.TextCheckCell
-            if (r0 == 0) goto L_0x0446
-            r0 = r2
-            org.telegram.ui.Cells.TextCheckCell r0 = (org.telegram.ui.Cells.TextCheckCell) r0
-            r2 = r5 ^ 1
-            r0.setChecked(r2)
-        L_0x0446:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.NotificationsSettingsActivity.lambda$createView$8(android.view.View, int, float, float):void");
@@ -1211,7 +1208,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
         this.exceptionUsers.clear();
         this.adapter.notifyDataSetChanged();
         if (getParentActivity() != null) {
-            Toast.makeText(getParentActivity(), LocaleController.getString("ResetNotificationsText", NUM), 0).show();
+            Toast.makeText(getParentActivity(), LocaleController.getString("ResetNotificationsText", R.string.ResetNotificationsText), 0).show();
         }
         getMessagesStorage().updateMutedDialogsFiltersCounters();
     }
@@ -1239,12 +1236,12 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
             if (!(uri == null || (ringtone = RingtoneManager.getRingtone(getParentActivity(), uri)) == null)) {
                 if (i == this.callsRingtoneRow) {
                     if (uri.equals(Settings.System.DEFAULT_RINGTONE_URI)) {
-                        str = LocaleController.getString("DefaultRingtone", NUM);
+                        str = LocaleController.getString("DefaultRingtone", R.string.DefaultRingtone);
                     } else {
                         str = ringtone.getTitle(getParentActivity());
                     }
                 } else if (uri.equals(Settings.System.DEFAULT_NOTIFICATION_URI)) {
-                    str = LocaleController.getString("SoundDefault", NUM);
+                    str = LocaleController.getString("SoundDefault", R.string.SoundDefault);
                 } else {
                     str = ringtone.getTitle(getParentActivity());
                 }
@@ -1317,35 +1314,35 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
             r3.<init>((android.content.Context) r4)
             int r4 = r7.size()
             r5 = 1
-            if (r4 != r5) goto L_0x0078
-            r4 = 2131627098(0x7f0e0c5a, float:1.888145E38)
+            if (r4 != r5) goto L_0x0077
+            int r4 = org.telegram.messenger.R.string.NotificationsExceptionsSingleAlert
             java.lang.Object[] r5 = new java.lang.Object[r5]
             r5[r2] = r0
             java.lang.String r0 = "NotificationsExceptionsSingleAlert"
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r0, r4, r5)
             android.text.SpannableStringBuilder r0 = org.telegram.messenger.AndroidUtilities.replaceTags(r0)
             r3.setMessage(r0)
-            goto L_0x008c
-        L_0x0078:
-            r4 = 2131627097(0x7f0e0CLASSNAME, float:1.8881449E38)
+            goto L_0x008a
+        L_0x0077:
+            int r4 = org.telegram.messenger.R.string.NotificationsExceptionsAlert
             java.lang.Object[] r5 = new java.lang.Object[r5]
             r5[r2] = r0
             java.lang.String r0 = "NotificationsExceptionsAlert"
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r0, r4, r5)
             android.text.SpannableStringBuilder r0 = org.telegram.messenger.AndroidUtilities.replaceTags(r0)
             r3.setMessage(r0)
-        L_0x008c:
-            r0 = 2131627096(0x7f0e0CLASSNAME, float:1.8881447E38)
+        L_0x008a:
+            int r0 = org.telegram.messenger.R.string.NotificationsExceptions
             java.lang.String r2 = "NotificationsExceptions"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
             r3.setTitle(r0)
-            r0 = 2131629005(0x7f0e13cd, float:1.8885319E38)
+            int r0 = org.telegram.messenger.R.string.ViewExceptions
             java.lang.String r2 = "ViewExceptions"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
             org.telegram.ui.NotificationsSettingsActivity$$ExternalSyntheticLambda2 r2 = new org.telegram.ui.NotificationsSettingsActivity$$ExternalSyntheticLambda2
             r2.<init>(r6, r7)
             r3.setNeutralButton(r0, r2)
-            r7 = 2131627140(0x7f0e0CLASSNAME, float:1.8881536E38)
+            int r7 = org.telegram.messenger.R.string.OK
             java.lang.String r0 = "OK"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
             r3.setNegativeButton(r7, r1)
@@ -1408,7 +1405,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                     view = new ShadowSectionCell(this.mContext);
                 } else if (i != 5) {
                     view = new TextInfoPrivacyCell(this.mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, "windowBackgroundGrayShadow"));
                 } else {
                     view2 = new TextSettingsCell(this.mContext);
                     view2.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
@@ -1423,36 +1420,36 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
         }
 
         public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
-            String string;
-            ArrayList access$4200;
             int i2;
+            ArrayList arrayList;
             String str;
+            String str2;
             switch (viewHolder.getItemViewType()) {
                 case 0:
                     HeaderCell headerCell = (HeaderCell) viewHolder.itemView;
                     if (i == NotificationsSettingsActivity.this.notificationsSectionRow) {
-                        headerCell.setText(LocaleController.getString("NotificationsForChats", NUM));
+                        headerCell.setText(LocaleController.getString("NotificationsForChats", R.string.NotificationsForChats));
                         return;
                     } else if (i == NotificationsSettingsActivity.this.inappSectionRow) {
-                        headerCell.setText(LocaleController.getString("InAppNotifications", NUM));
+                        headerCell.setText(LocaleController.getString("InAppNotifications", R.string.InAppNotifications));
                         return;
                     } else if (i == NotificationsSettingsActivity.this.eventsSectionRow) {
-                        headerCell.setText(LocaleController.getString("Events", NUM));
+                        headerCell.setText(LocaleController.getString("Events", R.string.Events));
                         return;
                     } else if (i == NotificationsSettingsActivity.this.otherSectionRow) {
-                        headerCell.setText(LocaleController.getString("NotificationsOther", NUM));
+                        headerCell.setText(LocaleController.getString("NotificationsOther", R.string.NotificationsOther));
                         return;
                     } else if (i == NotificationsSettingsActivity.this.resetSectionRow) {
-                        headerCell.setText(LocaleController.getString("Reset", NUM));
+                        headerCell.setText(LocaleController.getString("Reset", R.string.Reset));
                         return;
                     } else if (i == NotificationsSettingsActivity.this.callsSectionRow) {
-                        headerCell.setText(LocaleController.getString("VoipNotificationSettings", NUM));
+                        headerCell.setText(LocaleController.getString("VoipNotificationSettings", R.string.VoipNotificationSettings));
                         return;
                     } else if (i == NotificationsSettingsActivity.this.badgeNumberSection) {
-                        headerCell.setText(LocaleController.getString("BadgeNumber", NUM));
+                        headerCell.setText(LocaleController.getString("BadgeNumber", R.string.BadgeNumber));
                         return;
                     } else if (i == NotificationsSettingsActivity.this.accountsSectionRow) {
-                        headerCell.setText(LocaleController.getString("ShowNotificationsFor", NUM));
+                        headerCell.setText(LocaleController.getString("ShowNotificationsFor", R.string.ShowNotificationsFor));
                         return;
                     } else {
                         return;
@@ -1461,49 +1458,49 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                     TextCheckCell textCheckCell = (TextCheckCell) viewHolder.itemView;
                     SharedPreferences notificationsSettings = MessagesController.getNotificationsSettings(NotificationsSettingsActivity.this.currentAccount);
                     if (i == NotificationsSettingsActivity.this.inappSoundRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString("InAppSounds", NUM), notificationsSettings.getBoolean("EnableInAppSounds", true), true);
+                        textCheckCell.setTextAndCheck(LocaleController.getString("InAppSounds", R.string.InAppSounds), notificationsSettings.getBoolean("EnableInAppSounds", true), true);
                         return;
                     } else if (i == NotificationsSettingsActivity.this.inappVibrateRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString("InAppVibrate", NUM), notificationsSettings.getBoolean("EnableInAppVibrate", true), true);
+                        textCheckCell.setTextAndCheck(LocaleController.getString("InAppVibrate", R.string.InAppVibrate), notificationsSettings.getBoolean("EnableInAppVibrate", true), true);
                         return;
                     } else if (i == NotificationsSettingsActivity.this.inappPreviewRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString("InAppPreview", NUM), notificationsSettings.getBoolean("EnableInAppPreview", true), true);
+                        textCheckCell.setTextAndCheck(LocaleController.getString("InAppPreview", R.string.InAppPreview), notificationsSettings.getBoolean("EnableInAppPreview", true), true);
                         return;
                     } else if (i == NotificationsSettingsActivity.this.inappPriorityRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString("NotificationsImportance", NUM), notificationsSettings.getBoolean("EnableInAppPriority", false), false);
+                        textCheckCell.setTextAndCheck(LocaleController.getString("NotificationsImportance", R.string.NotificationsImportance), notificationsSettings.getBoolean("EnableInAppPriority", false), false);
                         return;
                     } else if (i == NotificationsSettingsActivity.this.contactJoinedRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString("ContactJoined", NUM), notificationsSettings.getBoolean("EnableContactJoined", true), true);
+                        textCheckCell.setTextAndCheck(LocaleController.getString("ContactJoined", R.string.ContactJoined), notificationsSettings.getBoolean("EnableContactJoined", true), true);
                         return;
                     } else if (i == NotificationsSettingsActivity.this.pinnedMessageRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString("PinnedMessages", NUM), notificationsSettings.getBoolean("PinnedMessages", true), false);
+                        textCheckCell.setTextAndCheck(LocaleController.getString("PinnedMessages", R.string.PinnedMessages), notificationsSettings.getBoolean("PinnedMessages", true), false);
                         return;
                     } else if (i == NotificationsSettingsActivity.this.androidAutoAlertRow) {
                         textCheckCell.setTextAndCheck("Android Auto", notificationsSettings.getBoolean("EnableAutoNotifications", false), true);
                         return;
                     } else if (i == NotificationsSettingsActivity.this.notificationsServiceRow) {
-                        textCheckCell.setTextAndValueAndCheck(LocaleController.getString("NotificationsService", NUM), LocaleController.getString("NotificationsServiceInfo", NUM), notificationsSettings.getBoolean("pushService", NotificationsSettingsActivity.this.getMessagesController().keepAliveService), true, true);
+                        textCheckCell.setTextAndValueAndCheck(LocaleController.getString("NotificationsService", R.string.NotificationsService), LocaleController.getString("NotificationsServiceInfo", R.string.NotificationsServiceInfo), notificationsSettings.getBoolean("pushService", NotificationsSettingsActivity.this.getMessagesController().keepAliveService), true, true);
                         return;
                     } else if (i == NotificationsSettingsActivity.this.notificationsServiceConnectionRow) {
-                        textCheckCell.setTextAndValueAndCheck(LocaleController.getString("NotificationsServiceConnection", NUM), LocaleController.getString("NotificationsServiceConnectionInfo", NUM), notificationsSettings.getBoolean("pushConnection", NotificationsSettingsActivity.this.getMessagesController().backgroundConnection), true, true);
+                        textCheckCell.setTextAndValueAndCheck(LocaleController.getString("NotificationsServiceConnection", R.string.NotificationsServiceConnection), LocaleController.getString("NotificationsServiceConnectionInfo", R.string.NotificationsServiceConnectionInfo), notificationsSettings.getBoolean("pushConnection", NotificationsSettingsActivity.this.getMessagesController().backgroundConnection), true, true);
                         return;
                     } else if (i == NotificationsSettingsActivity.this.badgeNumberShowRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString("BadgeNumberShow", NUM), NotificationsSettingsActivity.this.getNotificationsController().showBadgeNumber, true);
+                        textCheckCell.setTextAndCheck(LocaleController.getString("BadgeNumberShow", R.string.BadgeNumberShow), NotificationsSettingsActivity.this.getNotificationsController().showBadgeNumber, true);
                         return;
                     } else if (i == NotificationsSettingsActivity.this.badgeNumberMutedRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString("BadgeNumberMutedChats", NUM), NotificationsSettingsActivity.this.getNotificationsController().showBadgeMuted, true);
+                        textCheckCell.setTextAndCheck(LocaleController.getString("BadgeNumberMutedChats", R.string.BadgeNumberMutedChats), NotificationsSettingsActivity.this.getNotificationsController().showBadgeMuted, true);
                         return;
                     } else if (i == NotificationsSettingsActivity.this.badgeNumberMessagesRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString("BadgeNumberUnread", NUM), NotificationsSettingsActivity.this.getNotificationsController().showBadgeMessages, false);
+                        textCheckCell.setTextAndCheck(LocaleController.getString("BadgeNumberUnread", R.string.BadgeNumberUnread), NotificationsSettingsActivity.this.getNotificationsController().showBadgeMessages, false);
                         return;
                     } else if (i == NotificationsSettingsActivity.this.inchatSoundRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString("InChatSound", NUM), notificationsSettings.getBoolean("EnableInChatSound", true), true);
+                        textCheckCell.setTextAndCheck(LocaleController.getString("InChatSound", R.string.InChatSound), notificationsSettings.getBoolean("EnableInChatSound", true), true);
                         return;
                     } else if (i == NotificationsSettingsActivity.this.callsVibrateRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString("Vibrate", NUM), notificationsSettings.getBoolean("EnableCallVibrate", true), true);
+                        textCheckCell.setTextAndCheck(LocaleController.getString("Vibrate", R.string.Vibrate), notificationsSettings.getBoolean("EnableCallVibrate", true), true);
                         return;
                     } else if (i == NotificationsSettingsActivity.this.accountsAllRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString("AllAccounts", NUM), MessagesController.getGlobalNotificationsSettings().getBoolean("AllAccounts", true), false);
+                        textCheckCell.setTextAndCheck(LocaleController.getString("AllAccounts", R.string.AllAccounts), MessagesController.getGlobalNotificationsSettings().getBoolean("AllAccounts", true), false);
                         return;
                     } else {
                         return;
@@ -1512,7 +1509,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                     TextDetailSettingsCell textDetailSettingsCell = (TextDetailSettingsCell) viewHolder.itemView;
                     textDetailSettingsCell.setMultilineDetail(true);
                     if (i == NotificationsSettingsActivity.this.resetNotificationsRow) {
-                        textDetailSettingsCell.setTextAndValue(LocaleController.getString("ResetAllNotifications", NUM), LocaleController.getString("UndoAllCustom", NUM), false);
+                        textDetailSettingsCell.setTextAndValue(LocaleController.getString("ResetAllNotifications", R.string.ResetAllNotifications), LocaleController.getString("UndoAllCustom", R.string.UndoAllCustom), false);
                         return;
                     }
                     return;
@@ -1521,74 +1518,73 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                     SharedPreferences notificationsSettings2 = MessagesController.getNotificationsSettings(NotificationsSettingsActivity.this.currentAccount);
                     int currentTime = ConnectionsManager.getInstance(NotificationsSettingsActivity.this.currentAccount).getCurrentTime();
                     if (i == NotificationsSettingsActivity.this.privateRow) {
-                        string = LocaleController.getString("NotificationsPrivateChats", NUM);
-                        access$4200 = NotificationsSettingsActivity.this.exceptionUsers;
+                        str = LocaleController.getString("NotificationsPrivateChats", R.string.NotificationsPrivateChats);
+                        arrayList = NotificationsSettingsActivity.this.exceptionUsers;
                         i2 = notificationsSettings2.getInt("EnableAll2", 0);
                     } else if (i == NotificationsSettingsActivity.this.groupRow) {
-                        string = LocaleController.getString("NotificationsGroups", NUM);
-                        access$4200 = NotificationsSettingsActivity.this.exceptionChats;
+                        str = LocaleController.getString("NotificationsGroups", R.string.NotificationsGroups);
+                        arrayList = NotificationsSettingsActivity.this.exceptionChats;
                         i2 = notificationsSettings2.getInt("EnableGroup2", 0);
                     } else {
-                        string = LocaleController.getString("NotificationsChannels", NUM);
-                        access$4200 = NotificationsSettingsActivity.this.exceptionChannels;
+                        str = LocaleController.getString("NotificationsChannels", R.string.NotificationsChannels);
+                        arrayList = NotificationsSettingsActivity.this.exceptionChannels;
                         i2 = notificationsSettings2.getInt("EnableChannel2", 0);
                     }
-                    String str2 = string;
                     boolean z = i2 < currentTime;
                     int i3 = (!z && i2 - 31536000 < currentTime) ? 2 : 0;
                     StringBuilder sb = new StringBuilder();
-                    if (access$4200 == null || access$4200.isEmpty()) {
-                        sb.append(LocaleController.getString("TapToChange", NUM));
+                    if (arrayList == null || arrayList.isEmpty()) {
+                        sb.append(LocaleController.getString("TapToChange", R.string.TapToChange));
                     } else {
                         z = i2 < currentTime;
                         if (z) {
-                            sb.append(LocaleController.getString("NotificationsOn", NUM));
+                            sb.append(LocaleController.getString("NotificationsOn", R.string.NotificationsOn));
                         } else if (i2 - 31536000 >= currentTime) {
-                            sb.append(LocaleController.getString("NotificationsOff", NUM));
+                            sb.append(LocaleController.getString("NotificationsOff", R.string.NotificationsOff));
                         } else {
-                            sb.append(LocaleController.formatString("NotificationsOffUntil", NUM, LocaleController.stringForMessageListDate((long) i2)));
+                            sb.append(LocaleController.formatString("NotificationsOffUntil", R.string.NotificationsOffUntil, LocaleController.stringForMessageListDate((long) i2)));
                         }
                         if (sb.length() != 0) {
                             sb.append(", ");
                         }
-                        sb.append(LocaleController.formatPluralString("Exception", access$4200.size(), new Object[0]));
+                        sb.append(LocaleController.formatPluralString("Exception", arrayList.size(), new Object[0]));
                     }
-                    notificationsCheckCell.setTextAndValueAndCheck(str2, sb, z, i3, i != NotificationsSettingsActivity.this.channelsRow);
+                    notificationsCheckCell.setTextAndValueAndCheck(str, sb, z, i3, i != NotificationsSettingsActivity.this.channelsRow);
                     return;
                 case 4:
                     if (i == NotificationsSettingsActivity.this.resetNotificationsSectionRow) {
-                        viewHolder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
+                        viewHolder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, "windowBackgroundGrayShadow"));
                         return;
                     } else {
-                        viewHolder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
+                        viewHolder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider, "windowBackgroundGrayShadow"));
                         return;
                     }
                 case 5:
                     TextSettingsCell textSettingsCell = (TextSettingsCell) viewHolder.itemView;
                     SharedPreferences notificationsSettings3 = MessagesController.getNotificationsSettings(NotificationsSettingsActivity.this.currentAccount);
                     if (i == NotificationsSettingsActivity.this.callsRingtoneRow) {
-                        String string2 = notificationsSettings3.getString("CallsRingtone", LocaleController.getString("DefaultRingtone", NUM));
-                        if (string2.equals("NoSound")) {
-                            string2 = LocaleController.getString("NoSound", NUM);
+                        String string = notificationsSettings3.getString("CallsRingtone", LocaleController.getString("DefaultRingtone", R.string.DefaultRingtone));
+                        if (string.equals("NoSound")) {
+                            string = LocaleController.getString("NoSound", R.string.NoSound);
                         }
-                        textSettingsCell.setTextAndValue(LocaleController.getString("VoipSettingsRingtone", NUM), string2, false);
+                        textSettingsCell.setTextAndValue(LocaleController.getString("VoipSettingsRingtone", R.string.VoipSettingsRingtone), string, false);
                         return;
                     } else if (i == NotificationsSettingsActivity.this.callsVibrateRow) {
                         int i4 = notificationsSettings3.getInt("vibrate_calls", 0);
                         if (i4 == 0) {
-                            textSettingsCell.setTextAndValue(LocaleController.getString("Vibrate", NUM), LocaleController.getString("VibrationDefault", NUM), true);
+                            textSettingsCell.setTextAndValue(LocaleController.getString("Vibrate", R.string.Vibrate), LocaleController.getString("VibrationDefault", R.string.VibrationDefault), true);
                             return;
                         } else if (i4 == 1) {
-                            textSettingsCell.setTextAndValue(LocaleController.getString("Vibrate", NUM), LocaleController.getString("Short", NUM), true);
+                            textSettingsCell.setTextAndValue(LocaleController.getString("Vibrate", R.string.Vibrate), LocaleController.getString("Short", R.string.Short), true);
                             return;
                         } else if (i4 == 2) {
-                            textSettingsCell.setTextAndValue(LocaleController.getString("Vibrate", NUM), LocaleController.getString("VibrationDisabled", NUM), true);
+                            textSettingsCell.setTextAndValue(LocaleController.getString("Vibrate", R.string.Vibrate), LocaleController.getString("VibrationDisabled", R.string.VibrationDisabled), true);
                             return;
                         } else if (i4 == 3) {
-                            textSettingsCell.setTextAndValue(LocaleController.getString("Vibrate", NUM), LocaleController.getString("Long", NUM), true);
+                            textSettingsCell.setTextAndValue(LocaleController.getString("Vibrate", R.string.Vibrate), LocaleController.getString("Long", R.string.Long), true);
                             return;
                         } else if (i4 == 4) {
-                            textSettingsCell.setTextAndValue(LocaleController.getString("Vibrate", NUM), LocaleController.getString("OnlyIfSilent", NUM), true);
+                            textSettingsCell.setTextAndValue(LocaleController.getString("Vibrate", R.string.Vibrate), LocaleController.getString("OnlyIfSilent", R.string.OnlyIfSilent), true);
                             return;
                         } else {
                             return;
@@ -1596,13 +1592,13 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                     } else if (i == NotificationsSettingsActivity.this.repeatRow) {
                         int i5 = notificationsSettings3.getInt("repeat_messages", 60);
                         if (i5 == 0) {
-                            str = LocaleController.getString("RepeatNotificationsNever", NUM);
+                            str2 = LocaleController.getString("RepeatNotificationsNever", R.string.RepeatNotificationsNever);
                         } else if (i5 < 60) {
-                            str = LocaleController.formatPluralString("Minutes", i5, new Object[0]);
+                            str2 = LocaleController.formatPluralString("Minutes", i5, new Object[0]);
                         } else {
-                            str = LocaleController.formatPluralString("Hours", i5 / 60, new Object[0]);
+                            str2 = LocaleController.formatPluralString("Hours", i5 / 60, new Object[0]);
                         }
-                        textSettingsCell.setTextAndValue(LocaleController.getString("RepeatNotifications", NUM), str, false);
+                        textSettingsCell.setTextAndValue(LocaleController.getString("RepeatNotifications", R.string.RepeatNotifications), str2, false);
                         return;
                     } else {
                         return;
@@ -1610,7 +1606,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                 case 6:
                     TextInfoPrivacyCell textInfoPrivacyCell = (TextInfoPrivacyCell) viewHolder.itemView;
                     if (i == NotificationsSettingsActivity.this.accountsInfoRow) {
-                        textInfoPrivacyCell.setText(LocaleController.getString("ShowNotificationsForInfo", NUM));
+                        textInfoPrivacyCell.setText(LocaleController.getString("ShowNotificationsForInfo", R.string.ShowNotificationsForInfo));
                         return;
                     }
                     return;

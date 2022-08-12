@@ -41,6 +41,7 @@ import java.util.HashSet;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.GestureDetectorFixDoubleTap;
 
@@ -493,7 +494,7 @@ public class RecyclerListView extends RecyclerView {
                 this.letterPaint.setTextSize((float) AndroidUtilities.dp(13.0f));
                 this.letterPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                 this.paint2.setColor(Theme.getColor("windowBackgroundWhite"));
-                Drawable mutate = ContextCompat.getDrawable(context, NUM).mutate();
+                Drawable mutate = ContextCompat.getDrawable(context, R.drawable.calendar_date).mutate();
                 this.fastScrollBackgroundDrawable = mutate;
                 mutate.setColorFilter(new PorterDuffColorFilter(ColorUtils.blendARGB(Theme.getColor("windowBackgroundWhite"), -1, 0.1f), PorterDuff.Mode.MULTIPLY));
             }
@@ -509,7 +510,7 @@ public class RecyclerListView extends RecyclerView {
             updateColors();
             setFocusableInTouchMode(true);
             this.touchSlop = (float) ViewConfiguration.get(context).getScaledTouchSlop();
-            this.fastScrollShadowDrawable = ContextCompat.getDrawable(context, NUM);
+            this.fastScrollShadowDrawable = ContextCompat.getDrawable(context, R.drawable.fast_scroll_shadow);
         }
 
         /* access modifiers changed from: private */

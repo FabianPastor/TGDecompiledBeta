@@ -42,10 +42,10 @@ public class BackButtonMenu {
             org.telegram.ui.ActionBar.ActionBarLayout r3 = r25.getParentLayout()
             android.app.Activity r4 = r25.getParentActivity()
             android.view.View r5 = r25.getFragmentView()
-            if (r3 == 0) goto L_0x0217
-            if (r4 == 0) goto L_0x0217
+            if (r3 == 0) goto L_0x0212
+            if (r4 == 0) goto L_0x0212
             if (r5 != 0) goto L_0x001c
-            goto L_0x0217
+            goto L_0x0212
         L_0x001c:
             r6 = r27
             java.util.ArrayList r6 = getStackedHistoryDialogs(r0, r6)
@@ -59,7 +59,7 @@ public class BackButtonMenu {
             r7.<init>()
             android.app.Activity r8 = r25.getParentActivity()
             android.content.res.Resources r8 = r8.getResources()
-            r9 = 2131166090(0x7var_a, float:1.7946416E38)
+            int r9 = org.telegram.messenger.R.drawable.popup_fixed_alert
             android.graphics.drawable.Drawable r8 = r8.getDrawable(r9)
             android.graphics.drawable.Drawable r8 = r8.mutate()
             r8.getPadding(r7)
@@ -69,9 +69,9 @@ public class BackButtonMenu {
             java.util.concurrent.atomic.AtomicReference r8 = new java.util.concurrent.atomic.AtomicReference
             r8.<init>()
             r10 = 0
-        L_0x0058:
+        L_0x0057:
             int r11 = r6.size()
-            if (r10 >= r11) goto L_0x0197
+            if (r10 >= r11) goto L_0x0193
             java.lang.Object r11 = r6.get(r10)
             org.telegram.ui.Components.BackButtonMenu$PulledDialog r11 = (org.telegram.ui.Components.BackButtonMenu.PulledDialog) r11
             org.telegram.tgnet.TLRPC$Chat r13 = r11.chat
@@ -120,78 +120,78 @@ public class BackButtonMenu {
             r6 = 1
             r4.setSmallSize(r6)
             java.lang.String r6 = "50_50"
-            if (r13 == 0) goto L_0x00f4
+            if (r13 == 0) goto L_0x00f3
             r4.setInfo((org.telegram.tgnet.TLRPC$Chat) r13)
             org.telegram.tgnet.TLRPC$ChatPhoto r14 = r13.photo
-            if (r14 == 0) goto L_0x00e5
+            if (r14 == 0) goto L_0x00e4
             android.graphics.drawable.BitmapDrawable r14 = r14.strippedBitmap
-            if (r14 == 0) goto L_0x00e5
+            if (r14 == 0) goto L_0x00e4
             r4 = r14
-        L_0x00e5:
+        L_0x00e4:
             r14 = 1
             org.telegram.messenger.ImageLocation r14 = org.telegram.messenger.ImageLocation.getForChat(r13, r14)
             r9.setImage((org.telegram.messenger.ImageLocation) r14, (java.lang.String) r6, (android.graphics.drawable.Drawable) r4, (java.lang.Object) r13)
             java.lang.String r4 = r13.title
             r12.setText(r4)
-            goto L_0x0167
-        L_0x00f4:
-            if (r14 == 0) goto L_0x0167
+            goto L_0x0163
+        L_0x00f3:
+            if (r14 == 0) goto L_0x0163
             org.telegram.tgnet.TLRPC$UserProfilePhoto r13 = r14.photo
-            if (r13 == 0) goto L_0x00ff
+            if (r13 == 0) goto L_0x00fe
             android.graphics.drawable.BitmapDrawable r13 = r13.strippedBitmap
-            if (r13 == 0) goto L_0x00ff
-            goto L_0x0100
-        L_0x00ff:
+            if (r13 == 0) goto L_0x00fe
+            goto L_0x00ff
+        L_0x00fe:
             r13 = r4
-        L_0x0100:
+        L_0x00ff:
             r18 = r5
             java.lang.Class<T> r5 = r11.activity
             r19 = r7
             java.lang.Class<org.telegram.ui.ChatActivity> r7 = org.telegram.ui.ChatActivity.class
-            if (r5 != r7) goto L_0x0121
+            if (r5 != r7) goto L_0x011f
             boolean r5 = org.telegram.messenger.UserObject.isUserSelf(r14)
-            if (r5 == 0) goto L_0x0121
-            r5 = 2131628153(0x7f0e1079, float:1.888359E38)
+            if (r5 == 0) goto L_0x011f
+            int r5 = org.telegram.messenger.R.string.SavedMessages
             java.lang.String r6 = "SavedMessages"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r6 = 1
             r4.setAvatarType(r6)
             r9.setImageDrawable(r4)
-            goto L_0x0163
-        L_0x0121:
+            goto L_0x015f
+        L_0x011f:
             boolean r5 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r14)
-            if (r5 == 0) goto L_0x0139
-            r5 = 2131627995(0x7f0e0fdb, float:1.888327E38)
+            if (r5 == 0) goto L_0x0136
+            int r5 = org.telegram.messenger.R.string.RepliesTitle
             java.lang.String r6 = "RepliesTitle"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r6 = 12
             r4.setAvatarType(r6)
             r9.setImageDrawable(r4)
-            goto L_0x0163
-        L_0x0139:
+            goto L_0x015f
+        L_0x0136:
             boolean r5 = org.telegram.messenger.UserObject.isDeleted(r14)
-            if (r5 == 0) goto L_0x0154
-            r5 = 2131626191(0x7f0e08cf, float:1.8879611E38)
+            if (r5 == 0) goto L_0x0150
+            int r5 = org.telegram.messenger.R.string.HiddenName
             java.lang.String r7 = "HiddenName"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r7, r5)
             r4.setInfo((org.telegram.tgnet.TLRPC$User) r14)
             r7 = 1
             org.telegram.messenger.ImageLocation r7 = org.telegram.messenger.ImageLocation.getForUser(r14, r7)
             r9.setImage((org.telegram.messenger.ImageLocation) r7, (java.lang.String) r6, (android.graphics.drawable.Drawable) r4, (java.lang.Object) r14)
-            goto L_0x0163
-        L_0x0154:
+            goto L_0x015f
+        L_0x0150:
             r7 = 1
             java.lang.String r5 = org.telegram.messenger.UserObject.getUserName(r14)
             r4.setInfo((org.telegram.tgnet.TLRPC$User) r14)
             org.telegram.messenger.ImageLocation r4 = org.telegram.messenger.ImageLocation.getForUser(r14, r7)
             r9.setImage((org.telegram.messenger.ImageLocation) r4, (java.lang.String) r6, (android.graphics.drawable.Drawable) r13, (java.lang.Object) r14)
-        L_0x0163:
+        L_0x015f:
             r12.setText(r5)
-            goto L_0x016b
-        L_0x0167:
+            goto L_0x0167
+        L_0x0163:
             r18 = r5
             r19 = r7
-        L_0x016b:
+        L_0x0167:
             java.lang.String r4 = "listSelectorSDK21"
             int r4 = org.telegram.ui.ActionBar.Theme.getColor((java.lang.String) r4, (org.telegram.ui.ActionBar.Theme.ResourcesProvider) r1)
             r5 = 0
@@ -209,8 +209,8 @@ public class BackButtonMenu {
             r6 = r17
             r5 = r18
             r7 = r19
-            goto L_0x0058
-        L_0x0197:
+            goto L_0x0057
+        L_0x0193:
             r18 = r5
             r19 = r7
             org.telegram.ui.ActionBar.ActionBarPopupWindow r0 = new org.telegram.ui.ActionBar.ActionBarPopupWindow
@@ -223,7 +223,7 @@ public class BackButtonMenu {
             r0.setDismissAnimationDuration(r3)
             r0.setOutsideTouchable(r1)
             r0.setClippingEnabled(r1)
-            r3 = 2131689481(0x7f0var_, float:1.9007979E38)
+            int r3 = org.telegram.messenger.R.style.PopupContextAnimation
             r0.setAnimationStyle(r3)
             r0.setFocusable(r1)
             r1 = 1148846080(0x447a0000, float:1000.0)
@@ -247,17 +247,17 @@ public class BackButtonMenu {
             int r5 = r4.left
             int r3 = r3 - r5
             boolean r5 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r5 == 0) goto L_0x0203
+            if (r5 == 0) goto L_0x01fe
             int[] r1 = new int[r1]
             r5 = r18
             r5.getLocationInWindow(r1)
             r6 = 0
             r1 = r1[r6]
             int r3 = r3 + r1
-            goto L_0x0205
-        L_0x0203:
+            goto L_0x0200
+        L_0x01fe:
             r5 = r18
-        L_0x0205:
+        L_0x0200:
             int r1 = r26.getBottom()
             int r4 = r4.top
             int r1 = r1 - r4
@@ -266,7 +266,7 @@ public class BackButtonMenu {
             r2 = 51
             r0.showAtLocation(r5, r2, r3, r1)
             return r0
-        L_0x0217:
+        L_0x0212:
             return r2
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.BackButtonMenu.show(org.telegram.ui.ActionBar.BaseFragment, android.view.View, long, org.telegram.ui.ActionBar.Theme$ResourcesProvider):org.telegram.ui.ActionBar.ActionBarPopupWindow");

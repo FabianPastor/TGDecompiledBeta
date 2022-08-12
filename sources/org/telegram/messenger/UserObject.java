@@ -38,7 +38,7 @@ public class UserObject {
 
     public static String getUserName(TLRPC$User tLRPC$User) {
         if (tLRPC$User == null || isDeleted(tLRPC$User)) {
-            return LocaleController.getString("HiddenName", NUM);
+            return LocaleController.getString("HiddenName", R.string.HiddenName);
         }
         String formatName = ContactsController.formatName(tLRPC$User.first_name, tLRPC$User.last_name);
         if (formatName.length() != 0 || TextUtils.isEmpty(tLRPC$User.phone)) {
@@ -62,7 +62,7 @@ public class UserObject {
         } else if (!z && str.length() <= 2) {
             return ContactsController.formatName(tLRPC$User.first_name, tLRPC$User.last_name);
         }
-        return !TextUtils.isEmpty(str) ? str : LocaleController.getString("HiddenName", NUM);
+        return !TextUtils.isEmpty(str) ? str : LocaleController.getString("HiddenName", R.string.HiddenName);
     }
 
     /* JADX WARNING: Code restructure failed: missing block: B:1:0x0002, code lost:

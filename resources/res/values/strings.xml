@@ -2354,6 +2354,7 @@
     <string name="IncreaseLimit">Increase Limit</string>
     <string name="Info">Info</string>
     <string name="InstallGoogleMaps">Install Google Maps?</string>
+    <string name="InstallHuaweiMaps">Install Petal Maps?</string>
     <string name="InstallOfficialApp">Install official app</string>
     <string name="InstantView">INSTANT VIEW</string>
     <string name="InstantViewNightMode">The dark theme will turn automatically during night time</string>
@@ -5509,15 +5510,6 @@
     <string name="google_assistant_verification_notification_title">Google Assistant sending message</string>
     <string name="google_crash_reporting_api_key">AIzaSyA-t0jLPjUt2FxrA8VPK2EiYHcYcboIR6k</string>
     <string name="google_storage_bucket">tmessages2.appspot.com</string>
-    <string name="hms_apk_not_installed_hints">Some features in %1$s may not work properly without HMS Core, which is not installed on your device.</string>
-    <string name="hms_bindfaildlg_message">%1$s is unable to use HMS Core. Launch Optimizer (Phone Manager) or go to Settings, enable all permissions for %2$s (including auto-launch and secondary launch), and try again.</string>
-    <string name="hms_bindfaildlg_title">@string/hms_spoof_hints</string>
-    <string name="hms_confirm">OK</string>
-    <string name="hms_is_spoof">It appears that you have an unofficial version of HMS Core (%1$s) installed on your device. Please uninstall HMS Core from Settings and return to this app to install the official version.</string>
-    <string name="hms_push_channel">Default</string>
-    <string name="hms_push_google">https://play.google.com/store/apps/details?id=</string>
-    <string name="hms_push_vmall">https://appgallery.cloud.huawei.com</string>
-    <string name="hms_spoof_hints">Note</string>
     <string name="items_few">%1$d items</string>
     <string name="items_many">%1$d items</string>
     <string name="items_one">%1$d item</string>
@@ -5531,8 +5523,6 @@
     <string name="messages_two">%1$d messages</string>
     <string name="messages_zero">%1$d messages</string>
     <string name="project_id">tmessages2</string>
-    <string name="push_cat_body">99A9343CEC0A64112FD2496Evar_var_</string>
-    <string name="push_cat_head">767499AE5B2DFC9D873Avar_E13B00</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Buy with Google</string>
 </resources>

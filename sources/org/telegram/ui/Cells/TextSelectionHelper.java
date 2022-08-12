@@ -38,6 +38,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LanguageDetector;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.ui.ActionBar.ActionBarPopupWindow;
@@ -673,7 +674,7 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
                     ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(this.textSelectionOverlay.getContext());
                     this.popupLayout = actionBarPopupWindowLayout;
                     actionBarPopupWindowLayout.setPadding(AndroidUtilities.dp(1.0f), AndroidUtilities.dp(1.0f), AndroidUtilities.dp(1.0f), AndroidUtilities.dp(1.0f));
-                    this.popupLayout.setBackgroundDrawable(this.textSelectionOverlay.getContext().getResources().getDrawable(NUM));
+                    this.popupLayout.setBackgroundDrawable(this.textSelectionOverlay.getContext().getResources().getDrawable(R.drawable.menu_copy));
                     this.popupLayout.setAnimationEnabled(false);
                     this.popupLayout.setOnTouchListener(new TextSelectionHelper$$ExternalSyntheticLambda2(this));
                     this.popupLayout.setShownFromBottom(false);
@@ -691,7 +692,7 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
                     ActionBarPopupWindow actionBarPopupWindow = new ActionBarPopupWindow(this.popupLayout, -2, -2);
                     this.popupWindow = actionBarPopupWindow;
                     actionBarPopupWindow.setAnimationEnabled(false);
-                    this.popupWindow.setAnimationStyle(NUM);
+                    this.popupWindow.setAnimationStyle(R.style.PopupContextAnimation);
                     this.popupWindow.setOutsideTouchable(true);
                     ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout2 = this.popupLayout;
                     if (actionBarPopupWindowLayout2 != null) {
@@ -1902,7 +1903,7 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
             public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
                 menu.add(0, 16908321, 0, 17039361);
                 menu.add(0, 16908319, 1, 17039373);
-                menu.add(0, 3, 2, LocaleController.getString("TranslateMessage", NUM));
+                menu.add(0, 3, 2, LocaleController.getString("TranslateMessage", R.string.TranslateMessage));
                 return true;
             }
 

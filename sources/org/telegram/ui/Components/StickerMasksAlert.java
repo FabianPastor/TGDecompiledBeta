@@ -36,6 +36,7 @@ import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
@@ -237,7 +238,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                 r4.<init>(r2)
                 android.widget.ImageView$ScaleType r7 = android.widget.ImageView.ScaleType.CENTER
                 r4.setScaleType(r7)
-                r7 = 2131166153(0x7var_c9, float:1.7946543E38)
+                int r7 = org.telegram.messenger.R.drawable.smiles_inputsearch
                 r4.setImageResource(r7)
                 android.graphics.PorterDuffColorFilter r7 = new android.graphics.PorterDuffColorFilter
                 android.graphics.PorterDuff$Mode r8 = android.graphics.PorterDuff.Mode.MULTIPLY
@@ -306,30 +307,30 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                 org.telegram.ui.Components.EditTextBoldCursor r2 = r0.searchEditText
                 r4 = 268435459(0x10000003, float:2.5243558E-29)
                 r2.setImeOptions(r4)
-                if (r3 != 0) goto L_0x0140
+                if (r3 != 0) goto L_0x013e
                 org.telegram.ui.Components.EditTextBoldCursor r2 = r0.searchEditText
-                r3 = 2131628198(0x7f0e10a6, float:1.8883682E38)
+                int r3 = org.telegram.messenger.R.string.SearchStickersHint
                 java.lang.String r4 = "SearchStickersHint"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 r2.setHint(r3)
-                goto L_0x0162
-            L_0x0140:
-                if (r3 != r6) goto L_0x0151
+                goto L_0x015e
+            L_0x013e:
+                if (r3 != r6) goto L_0x014e
                 org.telegram.ui.Components.EditTextBoldCursor r2 = r0.searchEditText
-                r3 = 2131628172(0x7f0e108c, float:1.888363E38)
+                int r3 = org.telegram.messenger.R.string.SearchEmojiHint
                 java.lang.String r4 = "SearchEmojiHint"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 r2.setHint(r3)
-                goto L_0x0162
-            L_0x0151:
+                goto L_0x015e
+            L_0x014e:
                 r2 = 2
-                if (r3 != r2) goto L_0x0162
+                if (r3 != r2) goto L_0x015e
                 org.telegram.ui.Components.EditTextBoldCursor r2 = r0.searchEditText
-                r3 = 2131628188(0x7f0e109c, float:1.8883662E38)
+                int r3 = org.telegram.messenger.R.string.SearchGifsTitle
                 java.lang.String r4 = "SearchGifsTitle"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 r2.setHint(r3)
-            L_0x0162:
+            L_0x015e:
                 org.telegram.ui.Components.EditTextBoldCursor r2 = r0.searchEditText
                 r2.setCursorColor(r9)
                 org.telegram.ui.Components.EditTextBoldCursor r2 = r0.searchEditText
@@ -431,7 +432,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
         MediaDataController.getInstance(this.currentAccount).loadRecents(0, false, true, false);
         MediaDataController.getInstance(this.currentAccount).loadRecents(1, false, true, false);
         MediaDataController.getInstance(this.currentAccount).loadRecents(2, false, true, false);
-        Drawable mutate = context.getResources().getDrawable(NUM).mutate();
+        Drawable mutate = context.getResources().getDrawable(R.drawable.sheet_shadow_round).mutate();
         this.shadowDrawable = mutate;
         mutate.setColorFilter(new PorterDuffColorFilter(-14342875, PorterDuff.Mode.MULTIPLY));
         AnonymousClass2 r5 = new SizeNotifierFrameLayout(context) {
@@ -568,7 +569,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
         int i = this.backgroundPaddingLeft;
         viewGroup.setPadding(i, 0, i, 0);
         this.searchFieldHeight = AndroidUtilities.dp(64.0f);
-        this.stickerIcons = new Drawable[]{Theme.createEmojiIconSelectorDrawable(context, NUM, -11842741, -9520403), Theme.createEmojiIconSelectorDrawable(context, NUM, -11842741, -9520403)};
+        this.stickerIcons = new Drawable[]{Theme.createEmojiIconSelectorDrawable(context, R.drawable.stickers_recent, -11842741, -9520403), Theme.createEmojiIconSelectorDrawable(context, R.drawable.stickers_favorites, -11842741, -9520403)};
         MediaDataController.getInstance(this.currentAccount).checkStickers(0);
         MediaDataController.getInstance(this.currentAccount).checkStickers(1);
         MediaDataController.getInstance(this.currentAccount).checkFeaturedStickers();
@@ -663,7 +664,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
             }
         });
         View view = new View(context);
-        view.setBackgroundDrawable(Theme.getThemedDrawable(context, NUM, -1907225));
+        view.setBackgroundDrawable(Theme.getThemedDrawable(context, R.drawable.greydivider_bottom, -1907225));
         this.containerView.addView(view, LayoutHelper.createFrame(-1, 6.0f));
         if (!z) {
             this.bottomTabContainer = new FrameLayout(this, context) {
@@ -697,7 +698,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
             };
             this.stickersButton = r14;
             r14.setScaleType(ImageView.ScaleType.CENTER);
-            this.stickersButton.setImageDrawable(Theme.createEmojiIconSelectorDrawable(context, NUM, -1, -9520403));
+            this.stickersButton.setImageDrawable(Theme.createEmojiIconSelectorDrawable(context, R.drawable.smiles_tab_stickers, -1, -9520403));
             int i2 = Build.VERSION.SDK_INT;
             if (i2 >= 21) {
                 RippleDrawable rippleDrawable = (RippleDrawable) Theme.createSelectorDrawable(NUM);
@@ -718,7 +719,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
             };
             this.masksButton = r4;
             r4.setScaleType(ImageView.ScaleType.CENTER);
-            this.masksButton.setImageDrawable(Theme.createEmojiIconSelectorDrawable(context, NUM, -1, -9520403));
+            this.masksButton.setImageDrawable(Theme.createEmojiIconSelectorDrawable(context, R.drawable.ic_masks_msk1, -1, -9520403));
             if (i2 >= 21) {
                 RippleDrawable rippleDrawable2 = (RippleDrawable) Theme.createSelectorDrawable(NUM);
                 Theme.setRippleDrawableForceSoftware(rippleDrawable2);
@@ -902,13 +903,13 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                 int i = this.stickersTabOffset;
                 this.favTabBum = i;
                 this.stickersTabOffset = i + 1;
-                this.stickersTab.addIconTab(1, this.stickerIcons[1]).setContentDescription(LocaleController.getString("FavoriteStickers", NUM));
+                this.stickersTab.addIconTab(1, this.stickerIcons[1]).setContentDescription(LocaleController.getString("FavoriteStickers", R.string.FavoriteStickers));
             }
             if (!this.recentStickers[this.currentType].isEmpty()) {
                 int i2 = this.stickersTabOffset;
                 this.recentTabBum = i2;
                 this.stickersTabOffset = i2 + 1;
-                this.stickersTab.addIconTab(0, this.stickerIcons[0]).setContentDescription(LocaleController.getString("RecentStickers", NUM));
+                this.stickersTab.addIconTab(0, this.stickerIcons[0]).setContentDescription(LocaleController.getString("RecentStickers", R.string.RecentStickers));
             }
             this.stickerSets[this.currentType].clear();
             ArrayList<TLRPC$TL_messages_stickerSet> stickerSets2 = MediaDataController.getInstance(this.currentAccount).getStickerSets(this.currentType);
@@ -926,7 +927,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                     closestPhotoSizeWithSize = tLRPC$Document;
                 }
                 View addStickerTab = this.stickersTab.addStickerTab(closestPhotoSizeWithSize, tLRPC$Document, tLRPC$TL_messages_stickerSet2);
-                addStickerTab.setContentDescription(tLRPC$TL_messages_stickerSet2.set.title + ", " + LocaleController.getString("AccDescrStickerSet", NUM));
+                addStickerTab.setContentDescription(tLRPC$TL_messages_stickerSet2.set.title + ", " + LocaleController.getString("AccDescrStickerSet", R.string.AccDescrStickerSet));
             }
             this.stickersTab.commitUpdate();
             this.stickersTab.updateTabStyles();
@@ -1222,9 +1223,9 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                             stickerSetNameCell.setText(tLRPC$StickerSet.title, 0);
                         }
                     } else if (obj2 == StickerMasksAlert.this.recentStickers[StickerMasksAlert.this.currentType]) {
-                        stickerSetNameCell.setText(LocaleController.getString("RecentStickers", NUM), 0);
+                        stickerSetNameCell.setText(LocaleController.getString("RecentStickers", R.string.RecentStickers), 0);
                     } else if (obj2 == StickerMasksAlert.this.favouriteStickers) {
-                        stickerSetNameCell.setText(LocaleController.getString("FavoriteStickers", NUM), 0);
+                        stickerSetNameCell.setText(LocaleController.getString("FavoriteStickers", R.string.FavoriteStickers), 0);
                     }
                 }
             } else {
@@ -1971,11 +1972,11 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                     };
                     ImageView imageView = new ImageView(this.context);
                     imageView.setScaleType(ImageView.ScaleType.CENTER);
-                    imageView.setImageResource(NUM);
+                    imageView.setImageResource(R.drawable.stickers_empty);
                     imageView.setColorFilter(new PorterDuffColorFilter(-7038047, PorterDuff.Mode.MULTIPLY));
                     r132.addView(imageView, LayoutHelper.createFrame(-2, -2.0f, 17, 0.0f, 0.0f, 0.0f, 50.0f));
                     TextView textView = new TextView(this.context);
-                    textView.setText(LocaleController.getString("NoStickersFound", NUM));
+                    textView.setText(LocaleController.getString("NoStickersFound", R.string.NoStickersFound));
                     textView.setTextSize(1, 16.0f);
                     textView.setTextColor(-7038047);
                     r132.addView(textView, LayoutHelper.createFrame(-2, -2.0f, 17, 0.0f, 0.0f, 0.0f, 0.0f));

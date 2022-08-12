@@ -17,6 +17,7 @@ import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.DrawerLayoutContainer;
@@ -60,7 +61,7 @@ public class DrawerProfileCell extends FrameLayout implements NotificationCenter
         this.shadowView = imageView;
         imageView.setVisibility(4);
         this.shadowView.setScaleType(ImageView.ScaleType.FIT_XY);
-        this.shadowView.setImageResource(NUM);
+        this.shadowView.setImageResource(R.drawable.bottom_shadow);
         addView(this.shadowView, LayoutHelper.createFrame(-1, 70, 83));
         BackupImageView backupImageView = new BackupImageView(context);
         this.avatarImageView = backupImageView;
@@ -87,10 +88,11 @@ public class DrawerProfileCell extends FrameLayout implements NotificationCenter
         ImageView imageView2 = new ImageView(context);
         this.arrowView = imageView2;
         imageView2.setScaleType(ImageView.ScaleType.CENTER);
-        this.arrowView.setImageResource(NUM);
+        this.arrowView.setImageResource(R.drawable.msg_expand);
         addView(this.arrowView, LayoutHelper.createFrame(59, 59, 85));
         setArrowState(false);
-        this.sunDrawable = new RLottieDrawable(NUM, "NUM", AndroidUtilities.dp(28.0f), AndroidUtilities.dp(28.0f), true, (int[]) null);
+        int i = R.raw.sun;
+        this.sunDrawable = new RLottieDrawable(i, "" + i, AndroidUtilities.dp(28.0f), AndroidUtilities.dp(28.0f), true, (int[]) null);
         if (Theme.isCurrentThemeDay()) {
             this.sunDrawable.setCustomEndFrame(36);
         } else {
@@ -102,9 +104,9 @@ public class DrawerProfileCell extends FrameLayout implements NotificationCenter
             public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
                 super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
                 if (Theme.isCurrentThemeDark()) {
-                    accessibilityNodeInfo.setText(LocaleController.getString("AccDescrSwitchToDayTheme", NUM));
+                    accessibilityNodeInfo.setText(LocaleController.getString("AccDescrSwitchToDayTheme", R.string.AccDescrSwitchToDayTheme));
                 } else {
-                    accessibilityNodeInfo.setText(LocaleController.getString("AccDescrSwitchToNightTheme", NUM));
+                    accessibilityNodeInfo.setText(LocaleController.getString("AccDescrSwitchToNightTheme", R.string.AccDescrSwitchToNightTheme));
                 }
             }
         };
@@ -208,9 +210,9 @@ public class DrawerProfileCell extends FrameLayout implements NotificationCenter
             org.telegram.ui.Components.RLottieImageView r2 = r6.darkThemeView
             r2.playAnimation()
             int r2 = org.telegram.ui.ActionBar.Theme.selectedAutoNightType
-            if (r2 == 0) goto L_0x00a9
+            if (r2 == 0) goto L_0x00a8
             android.content.Context r2 = r6.getContext()
-            r3 = 2131624627(0x7f0e02b3, float:1.887644E38)
+            int r3 = org.telegram.messenger.R.string.AutoNightModeOff
             java.lang.String r4 = "AutoNightModeOff"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             android.widget.Toast r2 = android.widget.Toast.makeText(r2, r3, r1)
@@ -218,7 +220,7 @@ public class DrawerProfileCell extends FrameLayout implements NotificationCenter
             org.telegram.ui.ActionBar.Theme.selectedAutoNightType = r1
             org.telegram.ui.ActionBar.Theme.saveAutoNightThemeConfig()
             org.telegram.ui.ActionBar.Theme.cancelAutoNightThemeCallbacks()
-        L_0x00a9:
+        L_0x00a8:
             r6.switchTheme(r0, r7)
             return
         */
@@ -670,10 +672,10 @@ public class DrawerProfileCell extends FrameLayout implements NotificationCenter
         }
         ImageView imageView = this.arrowView;
         if (this.accountsShown) {
-            i = NUM;
+            i = R.string.AccDescrHideAccounts;
             str = "AccDescrHideAccounts";
         } else {
-            i = NUM;
+            i = R.string.AccDescrShowAccounts;
             str = "AccDescrShowAccounts";
         }
         imageView.setContentDescription(LocaleController.getString(str, i));

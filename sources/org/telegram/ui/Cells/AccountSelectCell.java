@@ -11,6 +11,7 @@ import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Chat;
@@ -49,7 +50,7 @@ public class AccountSelectCell extends FrameLayout {
         if (z) {
             addView(this.textView, LayoutHelper.createFrame(-2, -2.0f, 51, 61.0f, 7.0f, 8.0f, 0.0f));
             this.textView.setTextColor(Theme.getColor("voipgroup_nameText"));
-            this.textView.setText(LocaleController.getString("VoipGroupDisplayAs", NUM));
+            this.textView.setText(LocaleController.getString("VoipGroupDisplayAs", R.string.VoipGroupDisplayAs));
             TextView textView3 = new TextView(context);
             this.infoTextView = textView3;
             textView3.setTextColor(Theme.getColor("voipgroup_lastSeenText"));
@@ -67,7 +68,7 @@ public class AccountSelectCell extends FrameLayout {
         this.textView.setTextColor(Theme.getColor("actionBarDefaultSubmenuItem"));
         ImageView imageView2 = new ImageView(context);
         this.checkImageView = imageView2;
-        imageView2.setImageResource(NUM);
+        imageView2.setImageResource(R.drawable.account_check);
         this.checkImageView.setScaleType(ImageView.ScaleType.CENTER);
         this.checkImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chats_menuItemCheck"), PorterDuff.Mode.MULTIPLY));
         addView(this.checkImageView, LayoutHelper.createFrame(40, -1.0f, 53, 0.0f, 0.0f, 6.0f, 0.0f));

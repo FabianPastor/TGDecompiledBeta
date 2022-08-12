@@ -6,6 +6,7 @@ import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Delegates.MemberRequestsDelegate;
@@ -43,7 +44,7 @@ public class MemberRequestsBottomSheet extends UsersAlertBase {
         this.delegate = r4;
         r4.setShowLastItemDivider(false);
         setDimBehindAlpha(75);
-        this.searchView.searchEditText.setHint(LocaleController.getString("SearchMemberRequests", NUM));
+        this.searchView.searchEditText.setHint(LocaleController.getString("SearchMemberRequests", R.string.SearchMemberRequests));
         MemberRequestsDelegate.Adapter adapter = r4.getAdapter();
         this.listViewAdapter = adapter;
         this.searchListViewAdapter = adapter;

@@ -23,6 +23,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$KeyboardButton;
@@ -78,11 +79,11 @@ public class ThemePreviewMessagesCell extends LinearLayout {
         setWillNotDraw(false);
         setOrientation(1);
         setPadding(0, AndroidUtilities.dp(11.0f), 0, AndroidUtilities.dp(11.0f));
-        this.shadowDrawable = Theme.getThemedDrawable(context2, NUM, "windowBackgroundGrayShadow");
+        this.shadowDrawable = Theme.getThemedDrawable(context2, R.drawable.greydivider_bottom, "windowBackgroundGrayShadow");
         int currentTimeMillis = ((int) (System.currentTimeMillis() / 1000)) - 3600;
         if (i3 == 2) {
             TLRPC$TL_message tLRPC$TL_message = new TLRPC$TL_message();
-            tLRPC$TL_message.message = LocaleController.getString("DoubleTapPreviewMessage", NUM);
+            tLRPC$TL_message.message = LocaleController.getString("DoubleTapPreviewMessage", R.string.DoubleTapPreviewMessage);
             tLRPC$TL_message.date = currentTimeMillis + 60;
             tLRPC$TL_message.dialog_id = 1;
             tLRPC$TL_message.flags = 259;
@@ -98,17 +99,17 @@ public class ThemePreviewMessagesCell extends LinearLayout {
             MessageObject messageObject3 = new MessageObject(UserConfig.selectedAccount, tLRPC$TL_message, true, false);
             messageObject3.resetLayout();
             messageObject3.eventId = 1;
-            messageObject3.customName = LocaleController.getString("DoubleTapPreviewSenderName", NUM);
-            messageObject3.customAvatarDrawable = ContextCompat.getDrawable(context2, NUM);
+            messageObject3.customName = LocaleController.getString("DoubleTapPreviewSenderName", R.string.DoubleTapPreviewSenderName);
+            messageObject3.customAvatarDrawable = ContextCompat.getDrawable(context2, R.drawable.dino_pic);
             messageObject2 = messageObject3;
             i2 = i4;
             messageObject = null;
         } else {
             TLRPC$TL_message tLRPC$TL_message2 = new TLRPC$TL_message();
             if (i3 == 0) {
-                tLRPC$TL_message2.message = LocaleController.getString("FontSizePreviewReply", NUM);
+                tLRPC$TL_message2.message = LocaleController.getString("FontSizePreviewReply", R.string.FontSizePreviewReply);
             } else {
-                tLRPC$TL_message2.message = LocaleController.getString("NewThemePreviewReply", NUM);
+                tLRPC$TL_message2.message = LocaleController.getString("NewThemePreviewReply", R.string.NewThemePreviewReply);
             }
             int indexOf = tLRPC$TL_message2.message.indexOf("👋");
             if (indexOf >= 0) {
@@ -137,9 +138,9 @@ public class ThemePreviewMessagesCell extends LinearLayout {
             MessageObject messageObject4 = new MessageObject(UserConfig.selectedAccount, tLRPC$TL_message2, true, false);
             TLRPC$TL_message tLRPC$TL_message3 = new TLRPC$TL_message();
             if (i3 == 0) {
-                tLRPC$TL_message3.message = LocaleController.getString("FontSizePreviewLine2", NUM);
+                tLRPC$TL_message3.message = LocaleController.getString("FontSizePreviewLine2", R.string.FontSizePreviewLine2);
             } else {
-                String string = LocaleController.getString("NewThemePreviewLine3", NUM);
+                String string = LocaleController.getString("NewThemePreviewLine3", R.string.NewThemePreviewLine3);
                 StringBuilder sb = new StringBuilder(string);
                 int indexOf2 = string.indexOf(42);
                 int lastIndexOf = string.lastIndexOf(42);
@@ -179,9 +180,9 @@ public class ThemePreviewMessagesCell extends LinearLayout {
             messageObject5.eventId = 1;
             TLRPC$TL_message tLRPC$TL_message4 = new TLRPC$TL_message();
             if (i3 == 0) {
-                tLRPC$TL_message4.message = LocaleController.getString("FontSizePreviewLine1", NUM);
+                tLRPC$TL_message4.message = LocaleController.getString("FontSizePreviewLine1", R.string.FontSizePreviewLine1);
             } else {
-                tLRPC$TL_message4.message = LocaleController.getString("NewThemePreviewLine1", NUM);
+                tLRPC$TL_message4.message = LocaleController.getString("NewThemePreviewLine1", R.string.NewThemePreviewLine1);
             }
             tLRPC$TL_message4.date = i5;
             tLRPC$TL_message4.dialog_id = 1;
@@ -198,9 +199,9 @@ public class ThemePreviewMessagesCell extends LinearLayout {
             tLRPC$TL_peerUser7.user_id = UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId();
             MessageObject messageObject6 = new MessageObject(UserConfig.selectedAccount, tLRPC$TL_message4, true, false);
             if (i3 == 0) {
-                messageObject6.customReplyName = LocaleController.getString("FontSizePreviewName", NUM);
+                messageObject6.customReplyName = LocaleController.getString("FontSizePreviewName", R.string.FontSizePreviewName);
             } else {
-                messageObject6.customReplyName = LocaleController.getString("NewThemePreviewName", NUM);
+                messageObject6.customReplyName = LocaleController.getString("NewThemePreviewName", R.string.NewThemePreviewName);
             }
             messageObject6.eventId = 1;
             messageObject6.resetLayout();

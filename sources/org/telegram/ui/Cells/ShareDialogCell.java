@@ -14,6 +14,7 @@ import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC$Chat;
@@ -88,7 +89,7 @@ public class ShareDialogCell extends FrameLayout {
             this.user = user2;
             this.avatarDrawable.setInfo(user2);
             if (this.currentType != 2 && UserObject.isReplyUser(this.user)) {
-                this.nameTextView.setText(LocaleController.getString("RepliesTitle", NUM));
+                this.nameTextView.setText(LocaleController.getString("RepliesTitle", R.string.RepliesTitle));
                 this.avatarDrawable.setAvatarType(12);
                 this.imageView.setImage((ImageLocation) null, (String) null, (Drawable) this.avatarDrawable, (Object) this.user);
             } else if (this.currentType == 2 || !UserObject.isUserSelf(this.user)) {
@@ -104,7 +105,7 @@ public class ShareDialogCell extends FrameLayout {
                 }
                 this.imageView.setForUserOrChat(this.user, this.avatarDrawable);
             } else {
-                this.nameTextView.setText(LocaleController.getString("SavedMessages", NUM));
+                this.nameTextView.setText(LocaleController.getString("SavedMessages", R.string.SavedMessages));
                 this.avatarDrawable.setAvatarType(1);
                 this.imageView.setImage((ImageLocation) null, (String) null, (Drawable) this.avatarDrawable, (Object) this.user);
             }

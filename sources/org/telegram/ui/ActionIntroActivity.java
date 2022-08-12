@@ -31,6 +31,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.LocationController;
 import org.telegram.messenger.MrzRecognizer;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.ActionBar;
@@ -99,7 +100,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
         int i2 = 0;
         if (actionBar != null) {
             actionBar.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-            this.actionBar.setBackButtonImage(NUM);
+            this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
             this.actionBar.setItemsColor(Theme.getColor("windowBackgroundWhiteGrayText2"), false);
             this.actionBar.setItemsBackgroundColor(Theme.getColor("actionBarWhiteSelector"), false);
             this.actionBar.setCastShadows(false);
@@ -548,7 +549,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                 if (i7 == 0) {
                     this.desctiptionLines[i10].setLinkTextColor(Theme.getColor("windowBackgroundWhiteLinkText"));
                     this.desctiptionLines[i10].setHighlightColor(Theme.getColor("windowBackgroundWhiteLinkSelection"));
-                    String string = LocaleController.getString("AuthAnotherClientInfo1", NUM);
+                    String string = LocaleController.getString("AuthAnotherClientInfo1", R.string.AuthAnotherClientInfo1);
                     SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(string);
                     int indexOf = string.indexOf(42);
                     int lastIndexOf = string.lastIndexOf(42);
@@ -556,13 +557,13 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                         this.desctiptionLines[i10].setMovementMethod(new AndroidUtilities.LinkMovementMethodMy());
                         spannableStringBuilder.replace(lastIndexOf, lastIndexOf + 1, str2);
                         spannableStringBuilder.replace(indexOf, indexOf + 1, str2);
-                        spannableStringBuilder.setSpan(new URLSpanNoUnderline(LocaleController.getString("AuthAnotherClientDownloadClientUrl", NUM)), indexOf, lastIndexOf - 1, 33);
+                        spannableStringBuilder.setSpan(new URLSpanNoUnderline(LocaleController.getString("AuthAnotherClientDownloadClientUrl", R.string.AuthAnotherClientDownloadClientUrl)), indexOf, lastIndexOf - 1, 33);
                     }
                     this.desctiptionLines[i10].setText(spannableStringBuilder);
                 } else if (i7 == 1) {
-                    this.desctiptionLines[i10].setText(LocaleController.getString("AuthAnotherClientInfo2", NUM));
+                    this.desctiptionLines[i10].setText(LocaleController.getString("AuthAnotherClientInfo2", R.string.AuthAnotherClientInfo2));
                 } else {
-                    this.desctiptionLines[i10].setText(LocaleController.getString("AuthAnotherClientInfo3", NUM));
+                    this.desctiptionLines[i10].setText(LocaleController.getString("AuthAnotherClientInfo3", R.string.AuthAnotherClientInfo3));
                 }
                 if (LocaleController.isRTL) {
                     linearLayout2.setGravity(5);
@@ -630,10 +631,10 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
         switch (this.currentType) {
             case 0:
                 this.imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                this.imageView.setAnimation(NUM, 200, 200);
-                this.titleTextView.setText(LocaleController.getString("ChannelAlertTitle", NUM));
-                this.descriptionText.setText(LocaleController.getString("ChannelAlertText", NUM));
-                this.buttonTextView.setText(LocaleController.getString("ChannelAlertCreate2", NUM));
+                this.imageView.setAnimation(R.raw.channel_create, 200, 200);
+                this.titleTextView.setText(LocaleController.getString("ChannelAlertTitle", R.string.ChannelAlertTitle));
+                this.descriptionText.setText(LocaleController.getString("ChannelAlertText", R.string.ChannelAlertText));
+                this.buttonTextView.setText(LocaleController.getString("ChannelAlertCreate2", R.string.ChannelAlertCreate2));
                 this.imageView.playAnimation();
                 this.flickerButton = true;
                 break;
@@ -641,14 +642,14 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                 this.imageView.setBackgroundDrawable(Theme.createCircleDrawable(AndroidUtilities.dp(100.0f), Theme.getColor("chats_archiveBackground")));
                 this.imageView.setImageDrawable(new ShareLocationDrawable(context2, 3));
                 this.imageView.setScaleType(ImageView.ScaleType.CENTER);
-                this.titleTextView.setText(LocaleController.getString("PeopleNearby", NUM));
-                this.descriptionText.setText(LocaleController.getString("PeopleNearbyAccessInfo", NUM));
-                this.buttonTextView.setText(LocaleController.getString("PeopleNearbyAllowAccess", NUM));
+                this.titleTextView.setText(LocaleController.getString("PeopleNearby", R.string.PeopleNearby));
+                this.descriptionText.setText(LocaleController.getString("PeopleNearbyAccessInfo", R.string.PeopleNearbyAccessInfo));
+                this.buttonTextView.setText(LocaleController.getString("PeopleNearbyAllowAccess", R.string.PeopleNearbyAllowAccess));
                 break;
             case 2:
                 this.subtitleTextView.setVisibility(0);
                 this.descriptionText2.setVisibility(0);
-                this.imageView.setImageResource(Theme.getCurrentTheme().isDark() ? NUM : NUM);
+                this.imageView.setImageResource(Theme.getCurrentTheme().isDark() ? R.drawable.groupsintro2 : R.drawable.groupsintro);
                 this.imageView.setScaleType(ImageView.ScaleType.CENTER);
                 TextView textView6 = this.subtitleTextView;
                 String str4 = this.currentGroupCreateDisplayAddress;
@@ -656,15 +657,15 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                     str2 = str4;
                 }
                 textView6.setText(str2);
-                this.titleTextView.setText(LocaleController.getString("NearbyCreateGroup", NUM));
-                this.descriptionText.setText(LocaleController.getString("NearbyCreateGroupInfo", NUM));
-                this.descriptionText2.setText(LocaleController.getString("NearbyCreateGroupInfo2", NUM));
-                this.buttonTextView.setText(LocaleController.getString("NearbyStartGroup", NUM));
+                this.titleTextView.setText(LocaleController.getString("NearbyCreateGroup", R.string.NearbyCreateGroup));
+                this.descriptionText.setText(LocaleController.getString("NearbyCreateGroupInfo", R.string.NearbyCreateGroupInfo));
+                this.descriptionText2.setText(LocaleController.getString("NearbyCreateGroupInfo2", R.string.NearbyCreateGroupInfo2));
+                this.buttonTextView.setText(LocaleController.getString("NearbyStartGroup", R.string.NearbyStartGroup));
                 break;
             case 3:
                 this.subtitleTextView.setVisibility(0);
                 this.imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                this.imageView.setAnimation(NUM, 200, 200);
+                this.imageView.setAnimation(R.raw.utyan_change_number, 200, 200);
                 this.imageView.setOnClickListener(new ActionIntroActivity$$ExternalSyntheticLambda4(this));
                 UserConfig userConfig = getUserConfig();
                 TLRPC$User user = getMessagesController().getUser(Long.valueOf(userConfig.clientUserId));
@@ -673,13 +674,16 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                 }
                 if (user != null) {
                     TextView textView7 = this.subtitleTextView;
+                    int i12 = R.string.PhoneNumberKeepButton;
                     PhoneFormat instance = PhoneFormat.getInstance();
-                    textView7.setText(LocaleController.formatString("PhoneNumberKeepButton", NUM, instance.format("+" + user.phone)));
+                    textView7.setText(LocaleController.formatString("PhoneNumberKeepButton", i12, instance.format("+" + user.phone)));
                 }
                 this.subtitleTextView.setOnClickListener(new ActionIntroActivity$$ExternalSyntheticLambda2(this));
-                this.titleTextView.setText(LocaleController.getString("PhoneNumberChange2", NUM));
-                this.descriptionText.setText(AndroidUtilities.replaceTags(LocaleController.getString("PhoneNumberHelp", NUM)));
-                this.buttonTextView.setText(LocaleController.getString("PhoneNumberChange2", NUM));
+                TextView textView8 = this.titleTextView;
+                int i13 = R.string.PhoneNumberChange2;
+                textView8.setText(LocaleController.getString("PhoneNumberChange2", i13));
+                this.descriptionText.setText(AndroidUtilities.replaceTags(LocaleController.getString("PhoneNumberHelp", R.string.PhoneNumberHelp)));
+                this.buttonTextView.setText(LocaleController.getString("PhoneNumberChange2", i13));
                 this.imageView.playAnimation();
                 this.flickerButton = true;
                 break;
@@ -687,27 +691,27 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                 this.imageView.setBackgroundDrawable(Theme.createCircleDrawable(AndroidUtilities.dp(100.0f), Theme.getColor("chats_archiveBackground")));
                 this.imageView.setImageDrawable(new ShareLocationDrawable(context2, 3));
                 this.imageView.setScaleType(ImageView.ScaleType.CENTER);
-                this.titleTextView.setText(LocaleController.getString("PeopleNearby", NUM));
-                this.descriptionText.setText(LocaleController.getString("PeopleNearbyGpsInfo", NUM));
-                this.buttonTextView.setText(LocaleController.getString("PeopleNearbyGps", NUM));
+                this.titleTextView.setText(LocaleController.getString("PeopleNearby", R.string.PeopleNearby));
+                this.descriptionText.setText(LocaleController.getString("PeopleNearbyGpsInfo", R.string.PeopleNearbyGpsInfo));
+                this.buttonTextView.setText(LocaleController.getString("PeopleNearbyGps", R.string.PeopleNearbyGps));
                 break;
             case 5:
                 this.colors = new int[8];
                 updateColors();
-                this.imageView.setAnimation(NUM, 334, 334, this.colors);
+                this.imageView.setAnimation(R.raw.qr_login, 334, 334, this.colors);
                 this.imageView.setScaleType(ImageView.ScaleType.CENTER);
-                this.titleTextView.setText(LocaleController.getString("AuthAnotherClient", NUM));
-                this.buttonTextView.setText(LocaleController.getString("AuthAnotherClientScan", NUM));
+                this.titleTextView.setText(LocaleController.getString("AuthAnotherClient", R.string.AuthAnotherClient));
+                this.buttonTextView.setText(LocaleController.getString("AuthAnotherClientScan", R.string.AuthAnotherClientScan));
                 this.imageView.playAnimation();
                 break;
             case 6:
                 this.imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                this.imageView.setAnimation(NUM, 200, 200);
+                this.imageView.setAnimation(R.raw.utyan_passcode, 200, 200);
                 this.imageView.setFocusable(false);
                 this.imageView.setOnClickListener(new ActionIntroActivity$$ExternalSyntheticLambda5(this));
-                this.titleTextView.setText(LocaleController.getString("Passcode", NUM));
-                this.descriptionText.setText(LocaleController.getString("ChangePasscodeInfoShort", NUM));
-                this.buttonTextView.setText(LocaleController.getString("EnablePasscode", NUM));
+                this.titleTextView.setText(LocaleController.getString("Passcode", R.string.Passcode));
+                this.descriptionText.setText(LocaleController.getString("ChangePasscodeInfoShort", R.string.ChangePasscodeInfoShort));
+                this.buttonTextView.setText(LocaleController.getString("EnablePasscode", R.string.EnablePasscode));
                 this.imageView.playAnimation();
                 this.flickerButton = true;
                 break;
@@ -744,10 +748,10 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                     return;
                 case 3:
                     AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
-                    builder.setTitle(LocaleController.getString("PhoneNumberChangeTitle", NUM));
-                    builder.setMessage(LocaleController.getString("PhoneNumberAlert", NUM));
-                    builder.setPositiveButton(LocaleController.getString("Change", NUM), new ActionIntroActivity$$ExternalSyntheticLambda1(this));
-                    builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
+                    builder.setTitle(LocaleController.getString("PhoneNumberChangeTitle", R.string.PhoneNumberChangeTitle));
+                    builder.setMessage(LocaleController.getString("PhoneNumberAlert", R.string.PhoneNumberAlert));
+                    builder.setPositiveButton(LocaleController.getString("Change", R.string.Change), new ActionIntroActivity$$ExternalSyntheticLambda1(this));
+                    builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), (DialogInterface.OnClickListener) null);
                     showDialog(builder.create());
                     return;
                 case 4:
@@ -879,7 +883,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
             } else if (i != 34) {
             } else {
                 if (iArr.length <= 0 || iArr[0] != 0) {
-                    new AlertDialog.Builder((Context) getParentActivity()).setMessage(AndroidUtilities.replaceTags(LocaleController.getString("QRCodePermissionNoCameraWithHint", NUM))).setPositiveButton(LocaleController.getString("PermissionOpenSettings", NUM), new ActionIntroActivity$$ExternalSyntheticLambda0(this)).setNegativeButton(LocaleController.getString("ContactsPermissionAlertNotNow", NUM), (DialogInterface.OnClickListener) null).setTopAnimation(NUM, 72, false, Theme.getColor("dialogTopBackground")).show();
+                    new AlertDialog.Builder((Context) getParentActivity()).setMessage(AndroidUtilities.replaceTags(LocaleController.getString("QRCodePermissionNoCameraWithHint", R.string.QRCodePermissionNoCameraWithHint))).setPositiveButton(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), new ActionIntroActivity$$ExternalSyntheticLambda0(this)).setNegativeButton(LocaleController.getString("ContactsPermissionAlertNotNow", R.string.ContactsPermissionAlertNotNow), (DialogInterface.OnClickListener) null).setTopAnimation(R.raw.permission_request_camera, 72, false, Theme.getColor("dialogTopBackground")).show();
                 } else {
                     processOpenQrReader();
                 }

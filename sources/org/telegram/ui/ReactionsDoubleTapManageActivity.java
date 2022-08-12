@@ -12,6 +12,7 @@ import java.util.List;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.tgnet.TLRPC$TL_availableReaction;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -38,8 +39,8 @@ public class ReactionsDoubleTapManageActivity extends BaseFragment implements No
     }
 
     public View createView(final Context context) {
-        this.actionBar.setTitle(LocaleController.getString("Reactions", NUM));
-        this.actionBar.setBackButtonImage(NUM);
+        this.actionBar.setTitle(LocaleController.getString("Reactions", R.string.Reactions));
+        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             public void onItemClick(int i) {
@@ -67,23 +68,23 @@ public class ReactionsDoubleTapManageActivity extends BaseFragment implements No
                 /*
                     r2 = this;
                     r3 = 2
-                    if (r4 == 0) goto L_0x0022
+                    if (r4 == 0) goto L_0x0021
                     if (r4 == r3) goto L_0x000e
                     org.telegram.ui.Cells.AvailableReactionCell r3 = new org.telegram.ui.Cells.AvailableReactionCell
                     android.content.Context r4 = r4
                     r0 = 1
                     r3.<init>(r4, r0, r0)
-                    goto L_0x003e
+                    goto L_0x003d
                 L_0x000e:
                     org.telegram.ui.Cells.TextInfoPrivacyCell r3 = new org.telegram.ui.Cells.TextInfoPrivacyCell
                     android.content.Context r4 = r4
                     r3.<init>(r4)
-                    r4 = 2131625550(0x7f0e064e, float:1.8878311E38)
+                    int r4 = org.telegram.messenger.R.string.DoubleTapPreviewRational
                     java.lang.String r0 = "DoubleTapPreviewRational"
                     java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r0, r4)
                     r3.setText(r4)
-                    goto L_0x003e
-                L_0x0022:
+                    goto L_0x003d
+                L_0x0021:
                     org.telegram.ui.Cells.ThemePreviewMessagesCell r4 = new org.telegram.ui.Cells.ThemePreviewMessagesCell
                     android.content.Context r0 = r4
                     org.telegram.ui.ReactionsDoubleTapManageActivity r1 = org.telegram.ui.ReactionsDoubleTapManageActivity.this
@@ -91,14 +92,14 @@ public class ReactionsDoubleTapManageActivity extends BaseFragment implements No
                     r4.<init>(r0, r1, r3)
                     int r3 = android.os.Build.VERSION.SDK_INT
                     r0 = 19
-                    if (r3 < r0) goto L_0x0039
+                    if (r3 < r0) goto L_0x0038
                     r3 = 4
                     r4.setImportantForAccessibility(r3)
-                L_0x0039:
+                L_0x0038:
                     org.telegram.ui.ReactionsDoubleTapManageActivity r3 = org.telegram.ui.ReactionsDoubleTapManageActivity.this
                     r4.fragment = r3
                     r3 = r4
-                L_0x003e:
+                L_0x003d:
                     org.telegram.ui.Components.RecyclerListView$Holder r4 = new org.telegram.ui.Components.RecyclerListView$Holder
                     r4.<init>(r3)
                     return r4

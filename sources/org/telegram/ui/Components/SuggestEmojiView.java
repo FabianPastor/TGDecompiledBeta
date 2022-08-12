@@ -30,6 +30,7 @@ import org.telegram.messenger.Emoji;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.ui.ActionBar.Theme;
@@ -168,10 +169,10 @@ public class SuggestEmojiView extends FrameLayout implements NotificationCenter.
                 }
             }
         });
-        Drawable mutate = getResources().getDrawable(NUM).mutate();
+        Drawable mutate = getResources().getDrawable(R.drawable.gradient_right).mutate();
         this.leftGradient = mutate;
         mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_stickersHintPanel", resourcesProvider2), PorterDuff.Mode.MULTIPLY));
-        Drawable mutate2 = getResources().getDrawable(NUM).mutate();
+        Drawable mutate2 = getResources().getDrawable(R.drawable.gradient_left).mutate();
         this.rightGradient = mutate2;
         mutate2.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_stickersHintPanel", resourcesProvider2), PorterDuff.Mode.MULTIPLY));
         MediaDataController.getInstance(i).checkStickers(5);

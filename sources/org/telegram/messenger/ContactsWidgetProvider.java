@@ -57,41 +57,47 @@ public class ContactsWidgetProvider extends AppWidgetProvider {
     }
 
     public static void updateWidget(Context context, AppWidgetManager appWidgetManager, int i) {
-        Context context2 = context;
-        AppWidgetManager appWidgetManager2 = appWidgetManager;
-        int i2 = i;
+        int i2;
         ApplicationLoader.postInitApplication();
         int cellsForSize = getCellsForSize(appWidgetManager.getAppWidgetOptions(i).getInt("appWidgetMaxHeight"));
-        Intent intent = new Intent(context2, ContactsWidgetService.class);
-        intent.putExtra("appWidgetId", i2);
+        Intent intent = new Intent(context, ContactsWidgetService.class);
+        intent.putExtra("appWidgetId", i);
         intent.setData(Uri.parse(intent.toUri(1)));
-        SharedPreferences sharedPreferences = context2.getSharedPreferences("shortcut_widget", 0);
-        int i3 = NUM;
-        if (!sharedPreferences.getBoolean("deleted" + i2, false)) {
-            int i4 = sharedPreferences.getInt("account" + i2, -1);
-            if (i4 == -1) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("shortcut_widget", 0);
+        if (!sharedPreferences.getBoolean("deleted" + i, false)) {
+            int i3 = sharedPreferences.getInt("account" + i, -1);
+            if (i3 == -1) {
                 SharedPreferences.Editor edit = sharedPreferences.edit();
-                edit.putInt("account" + i2, UserConfig.selectedAccount);
-                edit.putInt("type" + i2, 0).commit();
+                edit.putInt("account" + i, UserConfig.selectedAccount);
+                edit.putInt("type" + i, 0).commit();
             }
             ArrayList arrayList = new ArrayList();
-            if (i4 >= 0) {
-                AccountInstance.getInstance(i4).getMessagesStorage().getWidgetDialogIds(i, 1, arrayList, (ArrayList<TLRPC$User>) null, (ArrayList<TLRPC$Chat>) null, false);
+            if (i3 >= 0) {
+                AccountInstance.getInstance(i3).getMessagesStorage().getWidgetDialogIds(i, 1, arrayList, (ArrayList<TLRPC$User>) null, (ArrayList<TLRPC$Chat>) null, false);
             }
             int ceil = (int) Math.ceil((double) (((float) arrayList.size()) / 2.0f));
-            if (cellsForSize != 1 && ceil > 1) {
-                i3 = (cellsForSize == 2 || ceil <= 2) ? NUM : (cellsForSize == 3 || ceil <= 3) ? NUM : NUM;
+            if (cellsForSize == 1 || ceil <= 1) {
+                i2 = R.layout.contacts_widget_layout_1;
+            } else if (cellsForSize == 2 || ceil <= 2) {
+                i2 = R.layout.contacts_widget_layout_2;
+            } else if (cellsForSize == 3 || ceil <= 3) {
+                i2 = R.layout.contacts_widget_layout_3;
+            } else {
+                i2 = R.layout.contacts_widget_layout_4;
             }
+        } else {
+            i2 = R.layout.contacts_widget_layout_1;
         }
-        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), i3);
-        remoteViews.setRemoteAdapter(i2, NUM, intent);
-        remoteViews.setEmptyView(NUM, NUM);
+        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), i2);
+        int i4 = R.id.list_view;
+        remoteViews.setRemoteAdapter(i, i4, intent);
+        remoteViews.setEmptyView(i4, R.id.empty_view);
         Intent intent2 = new Intent(ApplicationLoader.applicationContext, LaunchActivity.class);
         intent2.setAction("com.tmessages.openchat" + Math.random() + Integer.MAX_VALUE);
         intent2.addFlags(67108864);
         intent2.addCategory("android.intent.category.LAUNCHER");
-        remoteViews.setPendingIntentTemplate(NUM, PendingIntent.getActivity(ApplicationLoader.applicationContext, 0, intent2, NUM));
-        appWidgetManager2.updateAppWidget(i2, remoteViews);
-        appWidgetManager2.notifyAppWidgetViewDataChanged(i2, NUM);
+        remoteViews.setPendingIntentTemplate(i4, PendingIntent.getActivity(ApplicationLoader.applicationContext, 0, intent2, NUM));
+        appWidgetManager.updateAppWidget(i, remoteViews);
+        appWidgetManager.notifyAppWidgetViewDataChanged(i, i4);
     }
 }

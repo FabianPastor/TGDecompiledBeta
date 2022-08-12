@@ -150,7 +150,7 @@ public class BillingController implements PurchasesUpdatedListener, BillingClien
     }
 
     public void launchBillingFlow(Activity activity, AccountInstance accountInstance, TLRPC$InputStorePaymentPurpose tLRPC$InputStorePaymentPurpose, List<BillingFlowParams.ProductDetailsParams> list, boolean z) {
-        if (isReady()) {
+        if (isReady() && activity != null) {
             if (!(tLRPC$InputStorePaymentPurpose instanceof TLRPC$TL_inputStorePaymentGiftPremium) || z) {
                 if (this.billingClient.launchBillingFlow(activity, BillingFlowParams.newBuilder().setProductDetailsParamsList(list).build()).getResponseCode() == 0) {
                     for (BillingFlowParams.ProductDetailsParams zza : list) {

@@ -22,6 +22,7 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
@@ -647,11 +648,11 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
                 } else {
                     TLRPC$User tLRPC$User2 = this.foundContextBot;
                     AlertDialog.Builder builder = new AlertDialog.Builder((Context) this.parentFragment.getParentActivity());
-                    builder.setTitle(LocaleController.getString("ShareYouLocationTitle", NUM));
-                    builder.setMessage(LocaleController.getString("ShareYouLocationInline", NUM));
+                    builder.setTitle(LocaleController.getString("ShareYouLocationTitle", R.string.ShareYouLocationTitle));
+                    builder.setMessage(LocaleController.getString("ShareYouLocationInline", R.string.ShareYouLocationInline));
                     boolean[] zArr = new boolean[1];
-                    builder.setPositiveButton(LocaleController.getString("OK", NUM), new MentionsAdapter$$ExternalSyntheticLambda1(this, zArr, tLRPC$User2));
-                    builder.setNegativeButton(LocaleController.getString("Cancel", NUM), new MentionsAdapter$$ExternalSyntheticLambda0(this, zArr));
+                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new MentionsAdapter$$ExternalSyntheticLambda1(this, zArr, tLRPC$User2));
+                    builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), new MentionsAdapter$$ExternalSyntheticLambda0(this, zArr));
                     this.parentFragment.showDialog(builder.create(), new MentionsAdapter$$ExternalSyntheticLambda2(this, zArr));
                 }
             }
@@ -2324,11 +2325,11 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
                 return;
             }
             if (!ChatObject.hasAdminRights(currentChat) && (tLRPC$TL_chatBannedRights = currentChat.default_banned_rights) != null && tLRPC$TL_chatBannedRights.send_inline) {
-                textView.setText(LocaleController.getString("GlobalAttachInlineRestricted", NUM));
+                textView.setText(LocaleController.getString("GlobalAttachInlineRestricted", R.string.GlobalAttachInlineRestricted));
             } else if (AndroidUtilities.isBannedForever(currentChat.banned_rights)) {
-                textView.setText(LocaleController.getString("AttachInlineRestrictedForever", NUM));
+                textView.setText(LocaleController.getString("AttachInlineRestrictedForever", R.string.AttachInlineRestrictedForever));
             } else {
-                textView.setText(LocaleController.formatString("AttachInlineRestricted", NUM, LocaleController.formatDateForBan((long) currentChat.banned_rights.until_date)));
+                textView.setText(LocaleController.formatString("AttachInlineRestricted", R.string.AttachInlineRestricted, LocaleController.formatDateForBan((long) currentChat.banned_rights.until_date)));
             }
         } else if (this.searchResultBotContext != null) {
             boolean z = this.searchResultBotContextSwitch != null;

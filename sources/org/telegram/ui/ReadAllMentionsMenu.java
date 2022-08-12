@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.ActionBarMenuSubItem;
 import org.telegram.ui.ActionBar.ActionBarPopupWindow;
 import org.telegram.ui.ActionBar.Theme;
@@ -19,13 +20,13 @@ public class ReadAllMentionsMenu {
         ActionBarMenuSubItem actionBarMenuSubItem = new ActionBarMenuSubItem((Context) activity, true, true, resourcesProvider);
         actionBarMenuSubItem.setMinimumWidth(AndroidUtilities.dp(200.0f));
         if (i == 0) {
-            i2 = NUM;
+            i2 = R.string.ReadAllReactions;
             str = "ReadAllReactions";
         } else {
-            i2 = NUM;
+            i2 = R.string.ReadAllMentions;
             str = "ReadAllMentions";
         }
-        actionBarMenuSubItem.setTextAndIcon(LocaleController.getString(str, i2), NUM);
+        actionBarMenuSubItem.setTextAndIcon(LocaleController.getString(str, i2), R.drawable.msg_seen);
         actionBarMenuSubItem.setOnClickListener(new ReadAllMentionsMenu$$ExternalSyntheticLambda0(runnable));
         actionBarPopupWindowLayout.addView(actionBarMenuSubItem);
         ActionBarPopupWindow actionBarPopupWindow = new ActionBarPopupWindow(actionBarPopupWindowLayout, -2, -2);
@@ -33,7 +34,7 @@ public class ReadAllMentionsMenu {
         actionBarPopupWindow.setDismissAnimationDuration(220);
         actionBarPopupWindow.setOutsideTouchable(true);
         actionBarPopupWindow.setClippingEnabled(true);
-        actionBarPopupWindow.setAnimationStyle(NUM);
+        actionBarPopupWindow.setAnimationStyle(R.style.PopupContextAnimation);
         actionBarPopupWindow.setFocusable(true);
         actionBarPopupWindowLayout.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000.0f), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000.0f), Integer.MIN_VALUE));
         actionBarPopupWindow.setInputMethodMode(2);
