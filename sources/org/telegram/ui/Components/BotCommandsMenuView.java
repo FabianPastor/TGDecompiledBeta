@@ -359,13 +359,7 @@ public class BotCommandsMenuView extends View {
                     if (!(tLRPC$TL_botCommand == null || tLRPC$TL_botCommand.command == null)) {
                         ArrayList<String> arrayList = this.newResult;
                         arrayList.add("/" + tLRPC$TL_botCommand.command);
-                        String str = tLRPC$TL_botCommand.description;
-                        if (str == null || str.length() <= 1) {
-                            this.newResultHelp.add(tLRPC$TL_botCommand.description);
-                        } else {
-                            ArrayList<String> arrayList2 = this.newResultHelp;
-                            arrayList2.add(tLRPC$TL_botCommand.description.substring(0, 1).toUpperCase() + tLRPC$TL_botCommand.description.substring(1).toLowerCase());
-                        }
+                        this.newResultHelp.add(tLRPC$TL_botCommand.description);
                     }
                 }
             }

@@ -27,6 +27,7 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$Dialog;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$InputStickerSet;
 import org.telegram.tgnet.TLRPC$StickerSet;
@@ -48,6 +49,7 @@ import org.telegram.ui.Components.Premium.PremiumFeatureBottomSheet;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.PremiumPreviewFragment;
+import org.telegram.ui.ProfileActivity;
 
 public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.NotificationCenterDelegate {
     private TextView addButtonView;
@@ -888,12 +890,36 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
                 if (context == null) {
                     context = getContext();
                 }
-                ShareAlert shareAlert = new ShareAlert(context, (ArrayList<MessageObject>) null, str2, false, str2, false, this.resourcesProvider);
+                AnonymousClass8 r1 = new ShareAlert(context, (ArrayList) null, str2, false, str2, false, this.resourcesProvider) {
+                    /* access modifiers changed from: protected */
+                    public void onSend(androidx.collection.LongSparseArray<TLRPC$Dialog> longSparseArray, int i) {
+                        AndroidUtilities.runOnUIThread(new EmojiPacksAlert$8$$ExternalSyntheticLambda0(this, longSparseArray, i), 100);
+                    }
+
+                    /* access modifiers changed from: private */
+                    public /* synthetic */ void lambda$onSend$0(androidx.collection.LongSparseArray longSparseArray, int i) {
+                        UndoView undoView;
+                        if (EmojiPacksAlert.this.fragment instanceof ChatActivity) {
+                            undoView = ((ChatActivity) EmojiPacksAlert.this.fragment).getUndoView();
+                        } else {
+                            undoView = EmojiPacksAlert.this.fragment instanceof ProfileActivity ? ((ProfileActivity) EmojiPacksAlert.this.fragment).getUndoView() : null;
+                        }
+                        UndoView undoView2 = undoView;
+                        if (undoView2 == null) {
+                            return;
+                        }
+                        if (longSparseArray.size() == 1) {
+                            undoView2.showWithAction(((TLRPC$Dialog) longSparseArray.valueAt(0)).id, 53, (Object) Integer.valueOf(i));
+                        } else {
+                            undoView2.showWithAction(0, 53, (Object) Integer.valueOf(i), (Object) Integer.valueOf(longSparseArray.size()), (Runnable) null, (Runnable) null);
+                        }
+                    }
+                };
                 BaseFragment baseFragment2 = this.fragment;
                 if (baseFragment2 != null) {
-                    baseFragment2.showDialog(shareAlert);
+                    baseFragment2.showDialog(r1);
                 } else {
-                    shareAlert.show();
+                    r1.show();
                 }
             } else if (i == 2) {
                 try {

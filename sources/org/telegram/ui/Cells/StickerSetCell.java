@@ -97,26 +97,6 @@ public class StickerSetCell extends FrameLayout {
         int i2 = i;
         this.rect = new Rect();
         this.option = i2;
-        TextView textView2 = new TextView(context2);
-        this.textView = textView2;
-        textView2.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
-        this.textView.setTextSize(1, 16.0f);
-        this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.textView.setLines(1);
-        this.textView.setMaxLines(1);
-        this.textView.setSingleLine(true);
-        this.textView.setEllipsize(TextUtils.TruncateAt.END);
-        this.textView.setGravity(LayoutHelper.getAbsoluteGravityStart());
-        addView(this.textView, LayoutHelper.createFrameRelatively(-2.0f, -2.0f, 8388611, 71.0f, 9.0f, 46.0f, 0.0f));
-        TextView textView3 = new TextView(context2);
-        this.valueTextView = textView3;
-        textView3.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2"));
-        this.valueTextView.setTextSize(1, 13.0f);
-        this.valueTextView.setLines(1);
-        this.valueTextView.setMaxLines(1);
-        this.valueTextView.setSingleLine(true);
-        this.valueTextView.setGravity(LayoutHelper.getAbsoluteGravityStart());
-        addView(this.valueTextView, LayoutHelper.createFrameRelatively(-2.0f, -2.0f, 8388611, 71.0f, 32.0f, 46.0f, 0.0f));
         BackupImageView backupImageView = new BackupImageView(context2);
         this.imageView = backupImageView;
         backupImageView.setAspectFit(true);
@@ -168,9 +148,9 @@ public class StickerSetCell extends FrameLayout {
             }
         }
         this.sideButtons = new FrameLayout(getContext());
-        TextView textView4 = new TextView(context2);
-        this.addButtonView = textView4;
-        textView4.setTextSize(1, 14.0f);
+        TextView textView2 = new TextView(context2);
+        this.addButtonView = textView2;
+        textView2.setTextSize(1, 14.0f);
         this.addButtonView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.addButtonView.setText(LocaleController.getString("Add", R.string.Add));
         this.addButtonView.setTextColor(Theme.getColor("featuredStickers_buttonText", resourcesProvider2));
@@ -179,9 +159,9 @@ public class StickerSetCell extends FrameLayout {
         this.addButtonView.setGravity(17);
         this.addButtonView.setOnClickListener(new StickerSetCell$$ExternalSyntheticLambda4(this));
         this.sideButtons.addView(this.addButtonView, LayoutHelper.createFrameRelatively(-2.0f, 28.0f, (LocaleController.isRTL ? 3 : 5) | 16));
-        TextView textView5 = new TextView(context2);
-        this.removeButtonView = textView5;
-        textView5.setTextSize(1, 14.0f);
+        TextView textView3 = new TextView(context2);
+        this.removeButtonView = textView3;
+        textView3.setTextSize(1, 14.0f);
         this.removeButtonView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.removeButtonView.setText(LocaleController.getString("StickersRemove", R.string.StickersRemove));
         this.removeButtonView.setTextColor(Theme.getColor("featuredStickers_removeButtonText", resourcesProvider2));
@@ -209,6 +189,26 @@ public class StickerSetCell extends FrameLayout {
         this.sideButtons.setPadding(AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f), 0);
         addView(this.sideButtons, LayoutHelper.createFrame(-2, -1.0f, LocaleController.isRTL ? 3 : 5, 0.0f, 0.0f, 0.0f, 0.0f));
         this.sideButtons.setOnClickListener(new StickerSetCell$$ExternalSyntheticLambda2(this));
+        TextView textView4 = new TextView(context2);
+        this.textView = textView4;
+        textView4.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+        this.textView.setTextSize(1, 16.0f);
+        this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        this.textView.setLines(1);
+        this.textView.setMaxLines(1);
+        this.textView.setSingleLine(true);
+        this.textView.setEllipsize(TextUtils.TruncateAt.END);
+        this.textView.setGravity(LayoutHelper.getAbsoluteGravityStart());
+        addView(this.textView, LayoutHelper.createFrameRelatively(-2.0f, -2.0f, 8388611, 71.0f, 9.0f, 70.0f, 0.0f));
+        TextView textView5 = new TextView(context2);
+        this.valueTextView = textView5;
+        textView5.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2"));
+        this.valueTextView.setTextSize(1, 13.0f);
+        this.valueTextView.setLines(1);
+        this.valueTextView.setMaxLines(1);
+        this.valueTextView.setSingleLine(true);
+        this.valueTextView.setGravity(LayoutHelper.getAbsoluteGravityStart());
+        addView(this.valueTextView, LayoutHelper.createFrameRelatively(-2.0f, -2.0f, 8388611, 71.0f, 32.0f, 70.0f, 0.0f));
         updateButtonState(0, false);
     }
 
@@ -577,6 +577,18 @@ public class StickerSetCell extends FrameLayout {
         }
     }
 
+    public void updateRightMargin() {
+        this.sideButtons.measure(View.MeasureSpec.makeMeasureSpec(999999, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(58.0f), NUM));
+        int measuredWidth = this.sideButtons.getMeasuredWidth();
+        if (LocaleController.isRTL) {
+            ((ViewGroup.MarginLayoutParams) this.textView.getLayoutParams()).leftMargin = measuredWidth;
+            ((ViewGroup.MarginLayoutParams) this.valueTextView.getLayoutParams()).leftMargin = measuredWidth;
+            return;
+        }
+        ((ViewGroup.MarginLayoutParams) this.textView.getLayoutParams()).rightMargin = measuredWidth;
+        ((ViewGroup.MarginLayoutParams) this.valueTextView.getLayoutParams()).rightMargin = measuredWidth;
+    }
+
     public void updateButtonState(int i, boolean z) {
         final int i2 = i;
         AnimatorSet animatorSet = this.stateAnimator;
@@ -669,6 +681,7 @@ public class StickerSetCell extends FrameLayout {
                         i2 = 0;
                     }
                     access$400.setVisibility(i2);
+                    StickerSetCell.this.updateRightMargin();
                 }
             });
             this.stateAnimator.setDuration(250);
@@ -700,6 +713,7 @@ public class StickerSetCell extends FrameLayout {
             i3 = 8;
         }
         textView10.setVisibility(i3);
+        updateRightMargin();
     }
 
     /* access modifiers changed from: private */

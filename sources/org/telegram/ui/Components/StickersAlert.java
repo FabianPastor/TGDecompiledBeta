@@ -38,6 +38,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.collection.LongSparseArray;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.io.File;
@@ -64,6 +65,7 @@ import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$Dialog;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$DocumentAttribute;
 import org.telegram.tgnet.TLRPC$InputStickerSet;
@@ -105,6 +107,7 @@ import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.ContentPreviewViewer;
 import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.PremiumPreviewFragment;
+import org.telegram.ui.ProfileActivity;
 
 public class StickersAlert extends BottomSheet implements NotificationCenter.NotificationCenterDelegate {
     /* access modifiers changed from: private */
@@ -1672,6 +1675,30 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                             if (((ChatActivity) StickersAlert.this.parentFragment).getChatActivityEnterView().getVisibility() == 0) {
                                 StickersAlert.this.parentFragment.getFragmentView().requestLayout();
                             }
+                        }
+                    }
+
+                    /* access modifiers changed from: protected */
+                    public void onSend(LongSparseArray<TLRPC$Dialog> longSparseArray, int i) {
+                        AndroidUtilities.runOnUIThread(new StickersAlert$10$$ExternalSyntheticLambda0(this, longSparseArray, i), 100);
+                    }
+
+                    /* access modifiers changed from: private */
+                    public /* synthetic */ void lambda$onSend$0(LongSparseArray longSparseArray, int i) {
+                        UndoView undoView;
+                        if (StickersAlert.this.parentFragment instanceof ChatActivity) {
+                            undoView = ((ChatActivity) StickersAlert.this.parentFragment).getUndoView();
+                        } else {
+                            undoView = StickersAlert.this.parentFragment instanceof ProfileActivity ? ((ProfileActivity) StickersAlert.this.parentFragment).getUndoView() : null;
+                        }
+                        UndoView undoView2 = undoView;
+                        if (undoView2 == null) {
+                            return;
+                        }
+                        if (longSparseArray.size() == 1) {
+                            undoView2.showWithAction(((TLRPC$Dialog) longSparseArray.valueAt(0)).id, 53, (Object) Integer.valueOf(i));
+                        } else {
+                            undoView2.showWithAction(0, 53, (Object) Integer.valueOf(i), (Object) Integer.valueOf(longSparseArray.size()), (Runnable) null, (Runnable) null);
                         }
                     }
                 };
