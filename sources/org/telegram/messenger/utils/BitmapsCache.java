@@ -1,6 +1,7 @@
 package org.telegram.messenger.utils;
 
 import android.graphics.Bitmap;
+import android.os.Build;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -308,7 +309,11 @@ public class BitmapsCache {
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$createCache$0(Bitmap[] bitmapArr, int i, ByteArrayOutputStream[] byteArrayOutputStreamArr, int i2, RandomAccessFile randomAccessFile, ArrayList arrayList, CountDownLatch[] countDownLatchArr) {
-        bitmapArr[i].compress(Bitmap.CompressFormat.WEBP, this.compressQuality, byteArrayOutputStreamArr[i]);
+        Bitmap.CompressFormat compressFormat = Bitmap.CompressFormat.WEBP;
+        if (Build.VERSION.SDK_INT <= 26) {
+            compressFormat = Bitmap.CompressFormat.PNG;
+        }
+        bitmapArr[i].compress(compressFormat, this.compressQuality, byteArrayOutputStreamArr[i]);
         int i3 = byteArrayOutputStreamArr[i].count;
         try {
             synchronized (this.mutex) {
@@ -381,8 +386,8 @@ public class BitmapsCache {
             return r1
         L_0x0006:
             r0 = 0
-            java.lang.Object r2 = r9.mutex     // Catch:{ FileNotFoundException -> 0x00cd, IOException -> 0x00c8 }
-            monitor-enter(r2)     // Catch:{ FileNotFoundException -> 0x00cd, IOException -> 0x00c8 }
+            java.lang.Object r2 = r9.mutex     // Catch:{ FileNotFoundException -> 0x00cd, Exception -> 0x00c8 }
+            monitor-enter(r2)     // Catch:{ FileNotFoundException -> 0x00cd, Exception -> 0x00c8 }
             boolean r3 = r9.cacheCreated     // Catch:{ all -> 0x00c5 }
             r4 = 0
             if (r3 == 0) goto L_0x0013
@@ -465,12 +470,12 @@ public class BitmapsCache {
             r3.close()     // Catch:{ all -> 0x00c2 }
         L_0x00ad:
             monitor-exit(r2)     // Catch:{ all -> 0x00c2 }
-            android.graphics.BitmapFactory$Options r0 = new android.graphics.BitmapFactory$Options     // Catch:{ FileNotFoundException -> 0x00c0, IOException -> 0x00bd }
-            r0.<init>()     // Catch:{ FileNotFoundException -> 0x00c0, IOException -> 0x00bd }
-            r0.inBitmap = r11     // Catch:{ FileNotFoundException -> 0x00c0, IOException -> 0x00bd }
-            byte[] r11 = r9.bufferTmp     // Catch:{ FileNotFoundException -> 0x00c0, IOException -> 0x00bd }
-            int r10 = r10.frameSize     // Catch:{ FileNotFoundException -> 0x00c0, IOException -> 0x00bd }
-            android.graphics.BitmapFactory.decodeByteArray(r11, r4, r10, r0)     // Catch:{ FileNotFoundException -> 0x00c0, IOException -> 0x00bd }
+            android.graphics.BitmapFactory$Options r0 = new android.graphics.BitmapFactory$Options     // Catch:{ FileNotFoundException -> 0x00c0, Exception -> 0x00bd }
+            r0.<init>()     // Catch:{ FileNotFoundException -> 0x00c0, Exception -> 0x00bd }
+            r0.inBitmap = r11     // Catch:{ FileNotFoundException -> 0x00c0, Exception -> 0x00bd }
+            byte[] r11 = r9.bufferTmp     // Catch:{ FileNotFoundException -> 0x00c0, Exception -> 0x00bd }
+            int r10 = r10.frameSize     // Catch:{ FileNotFoundException -> 0x00c0, Exception -> 0x00bd }
+            android.graphics.BitmapFactory.decodeByteArray(r11, r4, r10, r0)     // Catch:{ FileNotFoundException -> 0x00c0, Exception -> 0x00bd }
             return r4
         L_0x00bd:
             r10 = move-exception
@@ -487,7 +492,7 @@ public class BitmapsCache {
             r10 = move-exception
         L_0x00c6:
             monitor-exit(r2)     // Catch:{ all -> 0x00c5 }
-            throw r10     // Catch:{ FileNotFoundException -> 0x00cd, IOException -> 0x00c8 }
+            throw r10     // Catch:{ FileNotFoundException -> 0x00cd, Exception -> 0x00c8 }
         L_0x00c8:
             r10 = move-exception
         L_0x00c9:

@@ -563,11 +563,14 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             }
             AndroidUtilities.updateViewVisibilityAnimated(pagerSlidingTabStrip, z4, 1.0f, z3);
         }
-        this.pager.setAdapter((PagerAdapter) null);
-        this.pager.setAdapter(this.emojiPagerAdapter);
-        PagerSlidingTabStrip pagerSlidingTabStrip2 = this.typeTabs;
-        if (pagerSlidingTabStrip2 != null) {
-            pagerSlidingTabStrip2.setViewPager(this.pager);
+        ViewPager viewPager = this.pager;
+        if (viewPager != null) {
+            viewPager.setAdapter((PagerAdapter) null);
+            this.pager.setAdapter(this.emojiPagerAdapter);
+            PagerSlidingTabStrip pagerSlidingTabStrip2 = this.typeTabs;
+            if (pagerSlidingTabStrip2 != null) {
+                pagerSlidingTabStrip2.setViewPager(this.pager);
+            }
         }
     }
 
@@ -6271,7 +6274,11 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         int i = 0;
         this.recentStickers = MediaDataController.getInstance(this.currentAccount).getRecentStickers(0);
         this.favouriteStickers = MediaDataController.getInstance(this.currentAccount).getRecentStickers(2);
-        this.premiumStickers = MediaDataController.getInstance(this.currentAccount).getRecentStickers(7);
+        if (UserConfig.getInstance(this.currentAccount).isPremium()) {
+            this.premiumStickers = MediaDataController.getInstance(this.currentAccount).getRecentStickers(7);
+        } else {
+            this.premiumStickers = new ArrayList<>();
+        }
         for (int i2 = 0; i2 < this.favouriteStickers.size(); i2++) {
             TLRPC$Document tLRPC$Document = this.favouriteStickers.get(i2);
             int i3 = 0;

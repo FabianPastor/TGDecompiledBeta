@@ -15642,35 +15642,36 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r7 = r22
             r2 = 0
         L_0x0508:
+            if (r2 == 0) goto L_0x054c
             long r3 = r2.user_id
             r18 = 0
             int r6 = (r3 > r18 ? 1 : (r3 == r18 ? 0 : -1))
-            if (r6 == 0) goto L_0x054a
+            if (r6 == 0) goto L_0x054c
             org.telegram.messenger.MessagesController r3 = r25.getMessagesController()
             long r4 = r2.user_id
             org.telegram.tgnet.TLRPC$UserFull r3 = r3.getUserFull(r4)
-            if (r3 == 0) goto L_0x054a
+            if (r3 == 0) goto L_0x054c
             org.telegram.messenger.MessagesController r3 = r25.getMessagesController()
             long r4 = r2.user_id
             org.telegram.tgnet.TLRPC$UserFull r2 = r3.getUserFull(r4)
             boolean r2 = r2.voice_messages_forbidden
-            if (r2 == 0) goto L_0x054a
-            if (r13 == 0) goto L_0x054a
+            if (r2 == 0) goto L_0x054c
+            if (r13 == 0) goto L_0x054c
             boolean r0 = org.telegram.messenger.MessageObject.isVoiceDocument(r13)
-            if (r0 == 0) goto L_0x053b
+            if (r0 == 0) goto L_0x053d
             org.telegram.messenger.SendMessagesHelper$$ExternalSyntheticLambda75 r0 = new org.telegram.messenger.SendMessagesHelper$$ExternalSyntheticLambda75
             r0.<init>(r1)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
-            goto L_0x0549
-        L_0x053b:
+            goto L_0x054b
+        L_0x053d:
             boolean r0 = org.telegram.messenger.MessageObject.isRoundVideoDocument(r13)
-            if (r0 == 0) goto L_0x0549
+            if (r0 == 0) goto L_0x054b
             org.telegram.messenger.SendMessagesHelper$$ExternalSyntheticLambda76 r0 = new org.telegram.messenger.SendMessagesHelper$$ExternalSyntheticLambda76
             r0.<init>(r1)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
-        L_0x0549:
+        L_0x054b:
             return
-        L_0x054a:
+        L_0x054c:
             org.telegram.messenger.SendMessagesHelper$$ExternalSyntheticLambda74 r18 = new org.telegram.messenger.SendMessagesHelper$$ExternalSyntheticLambda74
             r1 = r18
             r2 = r13
