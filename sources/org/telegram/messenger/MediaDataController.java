@@ -10437,7 +10437,7 @@ public class MediaDataController extends BaseController {
             sQLiteCursor.dispose();
         }
         Collections.sort(arrayList2, new MediaDataController$$ExternalSyntheticLambda138(arrayList));
-        if (z2) {
+        if (z2 && SharedConfig.suggestAnimatedEmoji) {
             fillWithAnimatedEmoji(arrayList2, (Integer) null, new MediaDataController$$ExternalSyntheticLambda0(countDownLatch2, keywordResultCallback2, arrayList2, str3));
         } else if (countDownLatch2 != null) {
             keywordResultCallback2.run(arrayList2, str3);

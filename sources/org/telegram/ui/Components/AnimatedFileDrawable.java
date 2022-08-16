@@ -75,6 +75,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
     /* access modifiers changed from: private */
     public long lastFrameDecodeTime;
     private long lastFrameTime;
+    int lastMetadata;
     /* access modifiers changed from: private */
     public int lastTimeStamp;
     /* access modifiers changed from: private */
@@ -135,6 +136,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
     public long streamFileSize;
     /* access modifiers changed from: private */
     public final Object sync;
+    int tryCount;
     /* access modifiers changed from: private */
     public Runnable uiRunnable;
     /* access modifiers changed from: private */
@@ -1468,9 +1470,22 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
         Bitmap bitmap2 = this.generatingCacheBitmap;
         getVideoFrame(j, bitmap2, this.metaData, bitmap2.getRowBytes(), false, this.startTime, this.endTime);
         long j2 = this.cacheGenerateTimestamp;
-        if ((j2 != 0 && this.metaData[3] == 0) || j2 > ((long) this.metaData[3])) {
-            return 0;
+        if (j2 != 0) {
+            int[] iArr2 = this.metaData;
+            if (iArr2[3] == 0 || j2 > ((long) iArr2[3])) {
+                return 0;
+            }
         }
+        int i = this.lastMetadata;
+        int[] iArr3 = this.metaData;
+        if (i == iArr3[3]) {
+            int i2 = this.tryCount + 1;
+            this.tryCount = i2;
+            if (i2 > 5) {
+                return 0;
+            }
+        }
+        this.lastMetadata = iArr3[3];
         bitmap.eraseColor(0);
         canvas.save();
         float width = ((float) this.renderingWidth) / ((float) this.generatingCacheBitmap.getWidth());

@@ -1,6 +1,5 @@
 package org.telegram.messenger;
 
-import android.location.Location;
 import androidx.core.util.Consumer;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -13,6 +12,6 @@ public final /* synthetic */ class GoogleLocationProvider$$ExternalSyntheticLamb
     }
 
     public final void onComplete(Task task) {
-        this.f$0.accept((Location) task.getResult());
+        GoogleLocationProvider.lambda$getLastLocation$0(this.f$0, task);
     }
 }

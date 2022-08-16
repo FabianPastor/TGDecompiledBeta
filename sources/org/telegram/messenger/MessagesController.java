@@ -6079,6 +6079,7 @@ public class MessagesController extends BaseController implements NotificationCe
                         TLRPC$TL_updateReadChannelInbox tLRPC$TL_updateReadChannelInbox = new TLRPC$TL_updateReadChannelInbox();
                         tLRPC$TL_updateReadChannelInbox.channel_id = tLRPC$Dialog.peer.channel_id;
                         tLRPC$TL_updateReadChannelInbox.max_id = tLRPC$Dialog.read_inbox_max_id;
+                        tLRPC$TL_updateReadChannelInbox.still_unread_count = tLRPC$Dialog.unread_count;
                         arrayList.add(tLRPC$TL_updateReadChannelInbox);
                     } else {
                         TLRPC$TL_updateReadHistoryInbox tLRPC$TL_updateReadHistoryInbox = new TLRPC$TL_updateReadHistoryInbox();
@@ -6273,7 +6274,9 @@ public class MessagesController extends BaseController implements NotificationCe
                     ArrayList arrayList = new ArrayList();
                     TLRPC$TL_updateReadChannelInbox tLRPC$TL_updateReadChannelInbox = new TLRPC$TL_updateReadChannelInbox();
                     tLRPC$TL_updateReadChannelInbox.channel_id = j4;
-                    tLRPC$TL_updateReadChannelInbox.max_id = tLRPC$TL_messages_chatFull.full_chat.read_inbox_max_id;
+                    TLRPC$ChatFull tLRPC$ChatFull = tLRPC$TL_messages_chatFull.full_chat;
+                    tLRPC$TL_updateReadChannelInbox.max_id = tLRPC$ChatFull.read_inbox_max_id;
+                    tLRPC$TL_updateReadChannelInbox.still_unread_count = tLRPC$ChatFull.unread_count;
                     arrayList.add(tLRPC$TL_updateReadChannelInbox);
                     processUpdateArray(arrayList, (ArrayList<TLRPC$User>) null, (ArrayList<TLRPC$Chat>) null, false, 0);
                 }

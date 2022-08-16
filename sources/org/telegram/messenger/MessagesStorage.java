@@ -12083,15 +12083,15 @@ public class MessagesStorage extends BaseController {
             goto L_0x0226
         L_0x0069:
             boolean r7 = isEmpty((org.telegram.messenger.support.LongSparseIntArray) r21)     // Catch:{ Exception -> 0x0300 }
-            r13 = -1
             if (r7 != 0) goto L_0x011d
             r7 = 0
-        L_0x0071:
+        L_0x0070:
             int r14 = r21.size()     // Catch:{ Exception -> 0x0300 }
             if (r7 >= r14) goto L_0x011d
             long r14 = r0.keyAt(r7)     // Catch:{ Exception -> 0x0300 }
             int r12 = r0.get(r14)     // Catch:{ Exception -> 0x0300 }
             if (r3 == 0) goto L_0x00b5
+            r13 = -2
             int r10 = r3.get(r14, r13)     // Catch:{ Exception -> 0x0300 }
             if (r10 == r13) goto L_0x00b5
             org.telegram.SQLite.SQLiteDatabase r10 = r1.database     // Catch:{ Exception -> 0x0300 }
@@ -12140,12 +12140,13 @@ public class MessagesStorage extends BaseController {
             r4.put(r14, r9)     // Catch:{ Exception -> 0x0300 }
         L_0x00e7:
             r0.dispose()     // Catch:{ Exception -> 0x0300 }
-            goto L_0x00f4
+            goto L_0x00f5
         L_0x00eb:
-            int r0 = r3.get(r14)     // Catch:{ Exception -> 0x0300 }
-            if (r0 <= 0) goto L_0x00f4
-            r4.put(r14, r0)     // Catch:{ Exception -> 0x0300 }
-        L_0x00f4:
+            r0 = -1
+            int r2 = r3.get(r14, r0)     // Catch:{ Exception -> 0x0300 }
+            if (r2 < 0) goto L_0x00f5
+            r4.put(r14, r2)     // Catch:{ Exception -> 0x0300 }
+        L_0x00f5:
             org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x0300 }
             java.lang.String r2 = "UPDATE dialogs SET inbox_max = max((SELECT inbox_max FROM dialogs WHERE did = ?), ?) WHERE did = ?"
             org.telegram.SQLite.SQLitePreparedStatement r0 = r0.executeFast(r2)     // Catch:{ Exception -> 0x0300 }
@@ -12164,8 +12165,7 @@ public class MessagesStorage extends BaseController {
             r9 = 2
             r10 = 1
             r11 = 0
-            r13 = -1
-            goto L_0x0071
+            goto L_0x0070
         L_0x011d:
             boolean r0 = isEmpty((androidx.collection.LongSparseArray<?>) r23)     // Catch:{ Exception -> 0x0300 }
             if (r0 != 0) goto L_0x01ef

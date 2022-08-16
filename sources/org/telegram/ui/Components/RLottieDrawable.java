@@ -1827,17 +1827,9 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable, Bitma
 
     /* access modifiers changed from: protected */
     public boolean scheduleNextGetFrame(boolean z) {
-        if (this.loadFrameTask != null || this.nextRenderingBitmap != null || !canLoadFrames() || this.loadingInBackground || this.destroyWhenDone) {
+        boolean z2;
+        if (this.loadFrameTask != null || this.nextRenderingBitmap != null || !canLoadFrames() || this.loadingInBackground || this.destroyWhenDone || ((!this.isRunning && (!(z2 = this.decodeSingleFrame) || (z2 && this.singleFrameDecoded))) || this.generatingCache)) {
             return false;
-        }
-        if (!this.isRunning) {
-            boolean z2 = this.decodeSingleFrame;
-            if (!z2) {
-                return false;
-            }
-            if (z2 && this.singleFrameDecoded) {
-                return false;
-            }
         }
         if (!this.newColorUpdates.isEmpty()) {
             this.pendingColorUpdates.putAll(this.newColorUpdates);

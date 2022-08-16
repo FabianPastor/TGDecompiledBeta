@@ -37,6 +37,13 @@ public class GoogleLocationProvider implements ILocationServiceProvider {
         this.locationProviderClient.getLastLocation().addOnCompleteListener(new GoogleLocationProvider$$ExternalSyntheticLambda1(consumer));
     }
 
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$getLastLocation$0(Consumer consumer, Task task) {
+        if (task.getException() == null) {
+            consumer.accept((Location) task.getResult());
+        }
+    }
+
     public void requestLocationUpdates(ILocationServiceProvider.ILocationRequest iLocationRequest, final ILocationServiceProvider.ILocationListener iLocationListener) {
         this.locationProviderClient.requestLocationUpdates(((GoogleLocationRequest) iLocationRequest).request, new LocationCallback() {
             public void onLocationResult(LocationResult locationResult) {
