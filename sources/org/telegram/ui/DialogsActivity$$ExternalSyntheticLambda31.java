@@ -1,15 +1,14 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.AccountInstance;
+import android.view.animation.Interpolator;
 
-public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda31 implements Runnable {
-    public final /* synthetic */ AccountInstance f$0;
+public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda31 implements Interpolator {
+    public static final /* synthetic */ DialogsActivity$$ExternalSyntheticLambda31 INSTANCE = new DialogsActivity$$ExternalSyntheticLambda31();
 
-    public /* synthetic */ DialogsActivity$$ExternalSyntheticLambda31(AccountInstance accountInstance) {
-        this.f$0 = accountInstance;
+    private /* synthetic */ DialogsActivity$$ExternalSyntheticLambda31() {
     }
 
-    public final void run() {
-        this.f$0.getDownloadController().loadDownloadingFiles();
+    public final float getInterpolation(float f) {
+        return DialogsActivity.lambda$static$0(f);
     }
 }

@@ -1,21 +1,17 @@
 package org.telegram.ui;
 
 import android.view.View;
-import org.telegram.ui.ActionBar.BottomSheet;
-import org.telegram.ui.Components.NumberPicker;
 
 public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda41 implements View.OnClickListener {
     public final /* synthetic */ PhotoViewer f$0;
-    public final /* synthetic */ NumberPicker f$1;
-    public final /* synthetic */ BottomSheet f$2;
+    public final /* synthetic */ int f$1;
 
-    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda41(PhotoViewer photoViewer, NumberPicker numberPicker, BottomSheet bottomSheet) {
+    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda41(PhotoViewer photoViewer, int i) {
         this.f$0 = photoViewer;
-        this.f$1 = numberPicker;
-        this.f$2 = bottomSheet;
+        this.f$1 = i;
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$setParentActivity$27(this.f$1, this.f$2, view);
+        this.f$0.lambda$setParentActivity$14(this.f$1, view);
     }
 }

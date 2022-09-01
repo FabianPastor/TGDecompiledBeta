@@ -79,6 +79,7 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.ColorUtils;
 import androidx.core.math.MathUtils;
 import androidx.dynamicanimation.animation.DynamicAnimation;
 import androidx.dynamicanimation.animation.SpringAnimation;
@@ -144,6 +145,7 @@ import org.telegram.ui.Components.PickerBottomLayout;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.ShareAlert;
 import org.telegram.ui.Components.TypefaceSpan;
+import org.telegram.ui.Components.URLSpanReplacement;
 import org.telegram.ui.WallpapersListActivity;
 
 public class AndroidUtilities {
@@ -430,7 +432,11 @@ public class AndroidUtilities {
         return null;
     }
 
-    public static CharSequence replaceSingleTag(String str, final Runnable runnable) {
+    public static CharSequence replaceSingleTag(String str, Runnable runnable) {
+        return replaceSingleTag(str, (String) null, runnable);
+    }
+
+    public static CharSequence replaceSingleTag(String str, final String str2, final Runnable runnable) {
         int i;
         int i2;
         int indexOf = str.indexOf("**");
@@ -448,6 +454,10 @@ public class AndroidUtilities {
                 public void updateDrawState(TextPaint textPaint) {
                     super.updateDrawState(textPaint);
                     textPaint.setUnderlineText(false);
+                    String str = str2;
+                    if (str != null) {
+                        textPaint.setColor(Theme.getColor(str));
+                    }
                 }
 
                 public void onClick(View view) {
@@ -544,12 +554,19 @@ public class AndroidUtilities {
     }
 
     public static boolean addLinks(Spannable spannable, int i, boolean z) {
+        return addLinks(spannable, i, z, true);
+    }
+
+    public static boolean addLinks(Spannable spannable, int i, boolean z, boolean z2) {
         if (spannable == null || containsUnsupportedCharacters(spannable.toString()) || i == 0) {
             return false;
         }
         URLSpan[] uRLSpanArr = (URLSpan[]) spannable.getSpans(0, spannable.length(), URLSpan.class);
         for (int length = uRLSpanArr.length - 1; length >= 0; length--) {
-            spannable.removeSpan(uRLSpanArr[length]);
+            URLSpan uRLSpan = uRLSpanArr[length];
+            if (!(uRLSpan instanceof URLSpanReplacement) || z2) {
+                spannable.removeSpan(uRLSpan);
+            }
         }
         ArrayList arrayList = new ArrayList();
         if (!z && (i & 4) != 0) {
@@ -567,8 +584,11 @@ public class AndroidUtilities {
             LinkSpec linkSpec = (LinkSpec) arrayList.get(i2);
             URLSpan[] uRLSpanArr2 = (URLSpan[]) spannable.getSpans(linkSpec.start, linkSpec.end, URLSpan.class);
             if (uRLSpanArr2 != null && uRLSpanArr2.length > 0) {
-                for (URLSpan removeSpan : uRLSpanArr2) {
-                    spannable.removeSpan(removeSpan);
+                for (URLSpan uRLSpan2 : uRLSpanArr2) {
+                    spannable.removeSpan(uRLSpan2);
+                    if (!(uRLSpan2 instanceof URLSpanReplacement) || z2) {
+                        spannable.removeSpan(uRLSpan2);
+                    }
                 }
             }
             spannable.setSpan(new URLSpan(linkSpec.url), linkSpec.start, linkSpec.end, 33);
@@ -2420,11 +2440,15 @@ public class AndroidUtilities {
         }
     }
 
-    public static boolean isTablet() {
+    public static boolean isTabletInternal() {
         if (isTablet == null) {
             isTablet = Boolean.valueOf(ApplicationLoader.applicationContext != null && ApplicationLoader.applicationContext.getResources().getBoolean(R.bool.isTablet));
         }
         return isTablet.booleanValue();
+    }
+
+    public static boolean isTablet() {
+        return isTabletInternal() && !SharedConfig.forceDisableTabletMode;
     }
 
     public static boolean isSmallScreen() {
@@ -4687,10 +4711,13 @@ public class AndroidUtilities {
         }
     }
 
-    public static float cascade(float f, int i, int i2, float f2) {
-        float f3 = (float) i2;
-        float f4 = (1.0f / f3) * f2;
-        return MathUtils.clamp((f - ((((float) i) / f3) * (1.0f - f4))) / f4, 0.0f, 1.0f);
+    public static float cascade(float f, float f2, float f3, float f4) {
+        float f5 = (1.0f / f3) * f4;
+        return MathUtils.clamp((f - ((f2 / f3) * (1.0f - f5))) / f5, 0.0f, 1.0f);
+    }
+
+    public static int multiplyAlphaComponent(int i, float f) {
+        return ColorUtils.setAlphaComponent(i, (int) (((float) Color.alpha(i)) * f));
     }
 
     public static float computeDampingRatio(float f, float f2, float f3) {

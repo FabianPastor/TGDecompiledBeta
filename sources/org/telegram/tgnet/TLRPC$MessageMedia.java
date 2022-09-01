@@ -8,6 +8,7 @@ public abstract class TLRPC$MessageMedia extends TLObject {
     public String currency;
     public String description;
     public TLRPC$Document document;
+    public TLRPC$MessageExtendedMedia extended_media;
     public String first_name;
     public int flags;
     public TLRPC$TL_game game;
@@ -39,7 +40,7 @@ public abstract class TLRPC$MessageMedia extends TLObject {
         TLRPC$TL_messageMediaDocument tLRPC$TL_messageMediaDocument;
         switch (i) {
             case -2074799289:
-                tLRPC$MessageMedia = new TLRPC$TL_messageMediaInvoice();
+                tLRPC$MessageMedia = new TLRPC$TL_messageMediaInvoice_layer145();
                 break;
             case -1666158377:
                 tLRPC$MessageMedia = new TLRPC$TL_messageMediaDocument();
@@ -70,6 +71,9 @@ public abstract class TLRPC$MessageMedia extends TLObject {
                 break;
             case -203411800:
                 tLRPC$MessageMedia = new TLRPC$TL_messageMediaDocument_layer68();
+                break;
+            case -156940077:
+                tLRPC$MessageMedia = new TLRPC$TL_messageMediaInvoice();
                 break;
             case -38694904:
                 tLRPC$MessageMedia = new TLRPC$TL_messageMediaGame();

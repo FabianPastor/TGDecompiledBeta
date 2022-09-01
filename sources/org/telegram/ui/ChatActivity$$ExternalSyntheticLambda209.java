@@ -1,19 +1,15 @@
 package org.telegram.ui;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
-import org.telegram.messenger.LanguageDetector;
+import org.telegram.ui.ActionBar.AlertDialog;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda209 implements LanguageDetector.ExceptionCallback {
-    public final /* synthetic */ AtomicBoolean f$0;
-    public final /* synthetic */ AtomicReference f$1;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda209 implements Runnable {
+    public final /* synthetic */ AlertDialog[] f$0;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda209(AtomicBoolean atomicBoolean, AtomicReference atomicReference) {
-        this.f$0 = atomicBoolean;
-        this.f$1 = atomicReference;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda209(AlertDialog[] alertDialogArr) {
+        this.f$0 = alertDialogArr;
     }
 
-    public final void run(Exception exc) {
-        ChatActivity.lambda$createMenu$172(this.f$0, this.f$1, exc);
+    public final void run() {
+        ChatActivity.lambda$processSelectedOption$205(this.f$0);
     }
 }

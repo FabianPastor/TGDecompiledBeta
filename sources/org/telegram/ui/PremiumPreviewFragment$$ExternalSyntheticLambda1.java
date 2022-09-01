@@ -1,16 +1,15 @@
 package org.telegram.ui;
 
-import androidx.core.util.Consumer;
-import com.android.billingclient.api.BillingResult;
+import android.view.View;
 
-public final /* synthetic */ class PremiumPreviewFragment$$ExternalSyntheticLambda1 implements Consumer {
-    public final /* synthetic */ Runnable f$0;
+public final /* synthetic */ class PremiumPreviewFragment$$ExternalSyntheticLambda1 implements View.OnClickListener {
+    public final /* synthetic */ PremiumPreviewFragment f$0;
 
-    public /* synthetic */ PremiumPreviewFragment$$ExternalSyntheticLambda1(Runnable runnable) {
-        this.f$0 = runnable;
+    public /* synthetic */ PremiumPreviewFragment$$ExternalSyntheticLambda1(PremiumPreviewFragment premiumPreviewFragment) {
+        this.f$0 = premiumPreviewFragment;
     }
 
-    public final void accept(Object obj) {
-        PremiumPreviewFragment.lambda$buyPremium$7(this.f$0, (BillingResult) obj);
+    public final void onClick(View view) {
+        this.f$0.lambda$updateButtonText$13(view);
     }
 }

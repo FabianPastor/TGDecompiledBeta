@@ -1,14 +1,18 @@
 package org.telegram.ui;
 
-import android.view.animation.Interpolator;
+import android.view.View;
+import android.widget.FrameLayout;
 
-public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda29 implements Interpolator {
-    public static final /* synthetic */ DialogsActivity$$ExternalSyntheticLambda29 INSTANCE = new DialogsActivity$$ExternalSyntheticLambda29();
+public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda29 implements View.OnLongClickListener {
+    public final /* synthetic */ DialogsActivity f$0;
+    public final /* synthetic */ FrameLayout f$1;
 
-    private /* synthetic */ DialogsActivity$$ExternalSyntheticLambda29() {
+    public /* synthetic */ DialogsActivity$$ExternalSyntheticLambda29(DialogsActivity dialogsActivity, FrameLayout frameLayout) {
+        this.f$0 = dialogsActivity;
+        this.f$1 = frameLayout;
     }
 
-    public final float getInterpolation(float f) {
-        return DialogsActivity.lambda$static$0(f);
+    public final boolean onLongClick(View view) {
+        return this.f$0.lambda$createView$13(this.f$1, view);
     }
 }

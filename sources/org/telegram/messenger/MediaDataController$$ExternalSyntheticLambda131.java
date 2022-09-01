@@ -1,15 +1,23 @@
 package org.telegram.messenger;
 
-import org.telegram.messenger.Utilities;
+import java.util.ArrayList;
 
 public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda131 implements Runnable {
-    public final /* synthetic */ Utilities.Callback f$0;
+    public final /* synthetic */ MediaDataController f$0;
+    public final /* synthetic */ boolean[] f$1;
+    public final /* synthetic */ ArrayList f$2;
+    public final /* synthetic */ int f$3;
+    public final /* synthetic */ int[] f$4;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda131(Utilities.Callback callback) {
-        this.f$0 = callback;
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda131(MediaDataController mediaDataController, boolean[] zArr, ArrayList arrayList, int i, int[] iArr) {
+        this.f$0 = mediaDataController;
+        this.f$1 = zArr;
+        this.f$2 = arrayList;
+        this.f$3 = i;
+        this.f$4 = iArr;
     }
 
     public final void run() {
-        MediaDataController.lambda$loadStickers$73(this.f$0);
+        this.f$0.lambda$removeMultipleStickerSets$92(this.f$1, this.f$2, this.f$3, this.f$4);
     }
 }

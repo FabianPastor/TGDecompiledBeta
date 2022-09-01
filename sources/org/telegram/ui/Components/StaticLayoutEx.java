@@ -160,9 +160,9 @@ public class StaticLayoutEx {
             r7 = r28
             android.text.StaticLayout$Builder r0 = r0.setIncludePad(r7)     // Catch:{ Exception -> 0x013d }
             int r3 = r2.length()     // Catch:{ Exception -> 0x013d }
-            java.lang.Class<android.text.style.CharacterStyle> r4 = android.text.style.CharacterStyle.class
+            java.lang.Class<org.telegram.ui.Components.AnimatedEmojiSpan> r4 = org.telegram.ui.Components.AnimatedEmojiSpan.class
             java.lang.Object[] r2 = r2.getSpans(r1, r3, r4)     // Catch:{ Exception -> 0x013d }
-            android.text.style.CharacterStyle[] r2 = (android.text.style.CharacterStyle[]) r2     // Catch:{ Exception -> 0x013d }
+            org.telegram.ui.Components.AnimatedEmojiSpan[] r2 = (org.telegram.ui.Components.AnimatedEmojiSpan[]) r2     // Catch:{ Exception -> 0x013d }
             int r2 = r2.length     // Catch:{ Exception -> 0x013d }
             if (r2 <= 0) goto L_0x0107
             r2 = r19

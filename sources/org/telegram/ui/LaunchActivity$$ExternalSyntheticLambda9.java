@@ -10,6 +10,6 @@ public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda9 impl
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$didReceivedNotification$84(dialogInterface, i);
+        this.f$0.lambda$didReceivedNotification$85(dialogInterface, i);
     }
 }

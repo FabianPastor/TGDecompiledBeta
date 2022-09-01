@@ -10,6 +10,6 @@ public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda10 im
     }
 
     public final void onDismiss(DialogInterface dialogInterface) {
-        this.f$0.lambda$onWriteButtonClick$16(dialogInterface);
+        this.f$0.lambda$onWriteButtonClick$18(dialogInterface);
     }
 }

@@ -1,13 +1,18 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class PrivacySettingsActivity$$ExternalSyntheticLambda6 implements Runnable {
-    public final /* synthetic */ PrivacySettingsActivity f$0;
+import android.view.View;
+import org.telegram.ui.ActionBar.AlertDialog;
 
-    public /* synthetic */ PrivacySettingsActivity$$ExternalSyntheticLambda6(PrivacySettingsActivity privacySettingsActivity) {
+public final /* synthetic */ class PrivacySettingsActivity$$ExternalSyntheticLambda6 implements View.OnClickListener {
+    public final /* synthetic */ PrivacySettingsActivity f$0;
+    public final /* synthetic */ AlertDialog.Builder f$1;
+
+    public /* synthetic */ PrivacySettingsActivity$$ExternalSyntheticLambda6(PrivacySettingsActivity privacySettingsActivity, AlertDialog.Builder builder) {
         this.f$0 = privacySettingsActivity;
+        this.f$1 = builder;
     }
 
-    public final void run() {
-        this.f$0.lambda$createView$5();
+    public final void onClick(View view) {
+        this.f$0.lambda$createView$4(this.f$1, view);
     }
 }

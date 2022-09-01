@@ -1,7 +1,12 @@
 package org.telegram.tgnet;
 
 public abstract class TLRPC$auth_SentCodeType extends TLObject {
+    public boolean apple_signin_allowed;
+    public String email_pattern;
+    public int flags;
+    public boolean google_signin_allowed;
     public int length;
+    public int next_phone_login_date;
     public String pattern;
     public String prefix;
 
@@ -10,6 +15,9 @@ public abstract class TLRPC$auth_SentCodeType extends TLObject {
         switch (i) {
             case -2113903484:
                 tLRPC$auth_SentCodeType = new TLRPC$TL_auth_sentCodeTypeMissedCall();
+                break;
+            case -1521934870:
+                tLRPC$auth_SentCodeType = new TLRPC$TL_auth_sentCodeTypeSetUpEmailRequired();
                 break;
             case -1425815847:
                 tLRPC$auth_SentCodeType = new TLRPC$TL_auth_sentCodeTypeFlashCall();
@@ -22,6 +30,9 @@ public abstract class TLRPC$auth_SentCodeType extends TLObject {
                 break;
             case 1398007207:
                 tLRPC$auth_SentCodeType = new TLRPC$TL_auth_sentCodeTypeCall();
+                break;
+            case 1511364673:
+                tLRPC$auth_SentCodeType = new TLRPC$TL_auth_sentCodeTypeEmailCode();
                 break;
             default:
                 tLRPC$auth_SentCodeType = null;

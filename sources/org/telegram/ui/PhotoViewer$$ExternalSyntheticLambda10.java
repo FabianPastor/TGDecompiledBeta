@@ -2,14 +2,14 @@ package org.telegram.ui;
 
 import android.content.DialogInterface;
 
-public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda10 implements DialogInterface.OnDismissListener {
-    public final /* synthetic */ Runnable f$0;
+public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda10 implements DialogInterface.OnClickListener {
+    public final /* synthetic */ PhotoViewer f$0;
 
-    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda10(Runnable runnable) {
-        this.f$0 = runnable;
+    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda10(PhotoViewer photoViewer) {
+        this.f$0 = photoViewer;
     }
 
-    public final void onDismiss(DialogInterface dialogInterface) {
-        this.f$0.run();
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        this.f$0.lambda$switchToEditMode$60(dialogInterface, i);
     }
 }

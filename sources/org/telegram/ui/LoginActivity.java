@@ -53,6 +53,12 @@ import android.widget.ViewSwitcher;
 import androidx.core.graphics.ColorUtils;
 import androidx.core.util.ObjectsCompat$$ExternalSyntheticBackport0;
 import androidx.dynamicanimation.animation.DynamicAnimation;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -64,6 +70,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLog;
@@ -90,9 +97,13 @@ import org.telegram.tgnet.TLRPC$PhotoSize;
 import org.telegram.tgnet.TLRPC$TL_account_changePhone;
 import org.telegram.tgnet.TLRPC$TL_account_confirmPhone;
 import org.telegram.tgnet.TLRPC$TL_account_deleteAccount;
+import org.telegram.tgnet.TLRPC$TL_account_emailVerified;
+import org.telegram.tgnet.TLRPC$TL_account_emailVerifiedLogin;
 import org.telegram.tgnet.TLRPC$TL_account_getPassword;
-import org.telegram.tgnet.TLRPC$TL_account_password;
 import org.telegram.tgnet.TLRPC$TL_account_passwordInputSettings;
+import org.telegram.tgnet.TLRPC$TL_account_sendVerifyEmailCode;
+import org.telegram.tgnet.TLRPC$TL_account_sentEmailCode;
+import org.telegram.tgnet.TLRPC$TL_account_verifyEmail;
 import org.telegram.tgnet.TLRPC$TL_auth_authorization;
 import org.telegram.tgnet.TLRPC$TL_auth_cancelCode;
 import org.telegram.tgnet.TLRPC$TL_auth_checkPassword;
@@ -108,12 +119,17 @@ import org.telegram.tgnet.TLRPC$TL_auth_resendCode;
 import org.telegram.tgnet.TLRPC$TL_auth_sentCode;
 import org.telegram.tgnet.TLRPC$TL_auth_sentCodeTypeApp;
 import org.telegram.tgnet.TLRPC$TL_auth_sentCodeTypeCall;
+import org.telegram.tgnet.TLRPC$TL_auth_sentCodeTypeEmailCode;
 import org.telegram.tgnet.TLRPC$TL_auth_sentCodeTypeFlashCall;
 import org.telegram.tgnet.TLRPC$TL_auth_sentCodeTypeMissedCall;
+import org.telegram.tgnet.TLRPC$TL_auth_sentCodeTypeSetUpEmailRequired;
 import org.telegram.tgnet.TLRPC$TL_auth_sentCodeTypeSms;
 import org.telegram.tgnet.TLRPC$TL_auth_signIn;
 import org.telegram.tgnet.TLRPC$TL_auth_signUp;
 import org.telegram.tgnet.TLRPC$TL_boolTrue;
+import org.telegram.tgnet.TLRPC$TL_emailVerificationGoogle;
+import org.telegram.tgnet.TLRPC$TL_emailVerifyPurposeLoginChange;
+import org.telegram.tgnet.TLRPC$TL_emailVerifyPurposeLoginSetup;
 import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.tgnet.TLRPC$TL_help_countriesList;
 import org.telegram.tgnet.TLRPC$TL_help_country;
@@ -121,6 +137,7 @@ import org.telegram.tgnet.TLRPC$TL_help_termsOfService;
 import org.telegram.tgnet.TLRPC$TL_inputCheckPasswordSRP;
 import org.telegram.tgnet.TLRPC$TL_nearestDc;
 import org.telegram.tgnet.TLRPC$TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow;
+import org.telegram.tgnet.TLRPC$account_Password;
 import org.telegram.tgnet.TLRPC$auth_Authorization;
 import org.telegram.tgnet.TLRPC$auth_CodeType;
 import org.telegram.tgnet.TLRPC$auth_SentCodeType;
@@ -141,6 +158,7 @@ import org.telegram.ui.Components.Easings;
 import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.ImageUpdater;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.LoginOrView;
 import org.telegram.ui.Components.OutlineTextContainerView;
 import org.telegram.ui.Components.RLottieDrawable;
 import org.telegram.ui.Components.RLottieImageView;
@@ -179,12 +197,15 @@ public class LoginActivity extends BaseFragment {
     public TLRPC$TL_help_termsOfService currentTermsOfService;
     /* access modifiers changed from: private */
     public int currentViewNum;
-    private boolean customKeyboardWasVisible = false;
+    /* access modifiers changed from: private */
+    public boolean customKeyboardWasVisible = false;
     private boolean[] doneButtonVisible = {true, false};
     /* access modifiers changed from: private */
     public AnimatorSet doneItemAnimation;
     private boolean[] doneProgressVisible = new boolean[2];
     private Runnable[] editDoneCallback = new Runnable[2];
+    /* access modifiers changed from: private */
+    public Runnable emailChangeFinishCallback;
     private VerticalPositionAutoAnimator floatingAutoAnimator;
     /* access modifiers changed from: private */
     public FrameLayout floatingButtonContainer;
@@ -195,6 +216,8 @@ public class LoginActivity extends BaseFragment {
     private View introView;
     /* access modifiers changed from: private */
     public boolean isAnimatingIntro;
+    /* access modifiers changed from: private */
+    public ValueAnimator keyboardAnimator;
     /* access modifiers changed from: private */
     public Runnable keyboardHideCallback;
     /* access modifiers changed from: private */
@@ -234,7 +257,7 @@ public class LoginActivity extends BaseFragment {
     /* access modifiers changed from: private */
     public boolean testBackend = false;
     /* access modifiers changed from: private */
-    public SlideView[] views = new SlideView[12];
+    public SlideView[] views = new SlideView[15];
 
     private static class ProgressView extends View {
     }
@@ -249,6 +272,13 @@ public class LoginActivity extends BaseFragment {
     public LoginActivity(int i) {
         this.currentAccount = i;
         this.newAccount = true;
+    }
+
+    public LoginActivity changeEmail(Runnable runnable) {
+        this.activityMode = 3;
+        this.currentViewNum = 12;
+        this.emailChangeFinishCallback = runnable;
+        return this;
     }
 
     public LoginActivity cancelAccountDeletion(String str, Bundle bundle, TLRPC$TL_auth_sentCode tLRPC$TL_auth_sentCode) {
@@ -294,25 +324,28 @@ public class LoginActivity extends BaseFragment {
         }
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:109:0x03e6, code lost:
-        if (r1 != 4) goto L_0x03ed;
+    /* JADX WARNING: Code restructure failed: missing block: B:113:0x0411, code lost:
+        if (r2 != 4) goto L_0x0417;
      */
-    /* JADX WARNING: Removed duplicated region for block: B:106:0x03e0 A[ADDED_TO_REGION] */
-    /* JADX WARNING: Removed duplicated region for block: B:119:0x0415  */
-    /* JADX WARNING: Removed duplicated region for block: B:125:0x040a A[EDGE_INSN: B:125:0x040a->B:117:0x040a ?: BREAK  , SYNTHETIC] */
-    /* JADX WARNING: Removed duplicated region for block: B:48:0x01da  */
-    /* JADX WARNING: Removed duplicated region for block: B:49:0x01dc  */
-    /* JADX WARNING: Removed duplicated region for block: B:52:0x01e9  */
-    /* JADX WARNING: Removed duplicated region for block: B:55:0x025a  */
-    /* JADX WARNING: Removed duplicated region for block: B:56:0x025f  */
-    /* JADX WARNING: Removed duplicated region for block: B:58:0x0265  */
-    /* JADX WARNING: Removed duplicated region for block: B:59:0x026a  */
-    /* JADX WARNING: Removed duplicated region for block: B:62:0x0333  */
-    /* JADX WARNING: Removed duplicated region for block: B:63:0x0336  */
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x033a  */
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x033d  */
-    /* JADX WARNING: Removed duplicated region for block: B:69:0x037c  */
-    /* JADX WARNING: Removed duplicated region for block: B:73:0x0384  */
+    /* JADX WARNING: Removed duplicated region for block: B:110:0x040c A[ADDED_TO_REGION] */
+    /* JADX WARNING: Removed duplicated region for block: B:117:0x041a  */
+    /* JADX WARNING: Removed duplicated region for block: B:123:0x0443  */
+    /* JADX WARNING: Removed duplicated region for block: B:129:0x0438 A[EDGE_INSN: B:129:0x0438->B:121:0x0438 ?: BREAK  , SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:48:0x01fb  */
+    /* JADX WARNING: Removed duplicated region for block: B:49:0x01fd  */
+    /* JADX WARNING: Removed duplicated region for block: B:52:0x020a  */
+    /* JADX WARNING: Removed duplicated region for block: B:53:0x026f  */
+    /* JADX WARNING: Removed duplicated region for block: B:56:0x027e  */
+    /* JADX WARNING: Removed duplicated region for block: B:57:0x0283  */
+    /* JADX WARNING: Removed duplicated region for block: B:59:0x0289  */
+    /* JADX WARNING: Removed duplicated region for block: B:60:0x028e  */
+    /* JADX WARNING: Removed duplicated region for block: B:63:0x0355  */
+    /* JADX WARNING: Removed duplicated region for block: B:64:0x0358  */
+    /* JADX WARNING: Removed duplicated region for block: B:66:0x035c  */
+    /* JADX WARNING: Removed duplicated region for block: B:67:0x035f  */
+    /* JADX WARNING: Removed duplicated region for block: B:70:0x039e  */
+    /* JADX WARNING: Removed duplicated region for block: B:74:0x03a6  */
+    /* JADX WARNING: Removed duplicated region for block: B:85:0x03c1  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public android.view.View createView(android.content.Context r32) {
         /*
@@ -440,18 +473,33 @@ public class LoginActivity extends BaseFragment {
             r10 = 11
             r5.<init>(r0, r1, r10)
             r2[r10] = r5
+            org.telegram.ui.Components.SlideView[] r2 = r0.views
+            org.telegram.ui.LoginActivity$LoginActivitySetupEmail r5 = new org.telegram.ui.LoginActivity$LoginActivitySetupEmail
+            r5.<init>(r0, r1)
+            r10 = 12
+            r2[r10] = r5
+            org.telegram.ui.Components.SlideView[] r2 = r0.views
+            r5 = 13
+            org.telegram.ui.LoginActivity$LoginActivityEmailCodeView r10 = new org.telegram.ui.LoginActivity$LoginActivityEmailCodeView
+            r10.<init>(r0, r1, r4)
+            r2[r5] = r10
+            org.telegram.ui.Components.SlideView[] r2 = r0.views
+            r5 = 14
+            org.telegram.ui.LoginActivity$LoginActivityEmailCodeView r10 = new org.telegram.ui.LoginActivity$LoginActivityEmailCodeView
+            r10.<init>(r0, r1, r3)
+            r2[r5] = r10
             r2 = 0
-        L_0x0110:
+        L_0x0131:
             org.telegram.ui.Components.SlideView[] r5 = r0.views
             int r10 = r5.length
-            if (r2 >= r10) goto L_0x0157
+            if (r2 >= r10) goto L_0x0178
             r5 = r5[r2]
-            if (r2 != 0) goto L_0x011b
+            if (r2 != 0) goto L_0x013c
             r10 = 0
-            goto L_0x011d
-        L_0x011b:
+            goto L_0x013e
+        L_0x013c:
             r10 = 8
-        L_0x011d:
+        L_0x013e:
             r5.setVisibility(r10)
             android.widget.FrameLayout r5 = r0.slideViewsContainer
             org.telegram.ui.Components.SlideView[] r10 = r0.views
@@ -462,17 +510,17 @@ public class LoginActivity extends BaseFragment {
             boolean r19 = org.telegram.messenger.AndroidUtilities.isTablet()
             r20 = 1104150528(0x41d00000, float:26.0)
             r21 = 1099956224(0x41900000, float:18.0)
-            if (r19 == 0) goto L_0x0139
+            if (r19 == 0) goto L_0x015a
             r19 = 1104150528(0x41d00000, float:26.0)
-            goto L_0x013b
-        L_0x0139:
+            goto L_0x015c
+        L_0x015a:
             r19 = 1099956224(0x41900000, float:18.0)
-        L_0x013b:
+        L_0x015c:
             r22 = 1106247680(0x41var_, float:30.0)
             boolean r23 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r23 == 0) goto L_0x0145
+            if (r23 == 0) goto L_0x0166
             r21 = 1104150528(0x41d00000, float:26.0)
-        L_0x0145:
+        L_0x0166:
             r23 = 0
             r20 = r22
             r22 = r23
@@ -480,35 +528,35 @@ public class LoginActivity extends BaseFragment {
             r5.addView(r10, r15)
             int r2 = r2 + 1
             r15 = 9
-            goto L_0x0110
-        L_0x0157:
+            goto L_0x0131
+        L_0x0178:
             int r2 = r0.activityMode
-            if (r2 != 0) goto L_0x0162
+            if (r2 != 0) goto L_0x0183
             boolean r2 = r0.newAccount
             android.os.Bundle r2 = loadCurrentState(r2)
-            goto L_0x0163
-        L_0x0162:
+            goto L_0x0184
+        L_0x0183:
             r2 = 0
-        L_0x0163:
-            if (r2 == 0) goto L_0x01cc
+        L_0x0184:
+            if (r2 == 0) goto L_0x01ed
             java.lang.String r10 = "currentViewNum"
             int r10 = r2.getInt(r10, r3)
             r0.currentViewNum = r10
             java.lang.String r10 = "syncContacts"
             int r10 = r2.getInt(r10, r4)
-            if (r10 != r4) goto L_0x0177
+            if (r10 != r4) goto L_0x0198
             r10 = 1
-            goto L_0x0178
-        L_0x0177:
+            goto L_0x0199
+        L_0x0198:
             r10 = 0
-        L_0x0178:
+        L_0x0199:
             r0.syncContacts = r10
             int r10 = r0.currentViewNum
-            if (r10 < r4) goto L_0x01a3
-            if (r10 > r11) goto L_0x01a3
+            if (r10 < r4) goto L_0x01c4
+            if (r10 > r11) goto L_0x01c4
             java.lang.String r10 = "open"
             int r10 = r2.getInt(r10)
-            if (r10 == 0) goto L_0x01cc
+            if (r10 == 0) goto L_0x01ed
             long r14 = java.lang.System.currentTimeMillis()
             r16 = 1000(0x3e8, double:4.94E-321)
             long r14 = r14 / r16
@@ -517,51 +565,51 @@ public class LoginActivity extends BaseFragment {
             long r5 = java.lang.Math.abs(r14)
             r14 = 86400(0x15180, double:4.26873E-319)
             int r10 = (r5 > r14 ? 1 : (r5 == r14 ? 0 : -1))
-            if (r10 < 0) goto L_0x01cc
+            if (r10 < 0) goto L_0x01ed
             r0.currentViewNum = r3
             r31.clearCurrentState()
-            goto L_0x01ca
-        L_0x01a3:
-            if (r10 != r13) goto L_0x01b7
+            goto L_0x01eb
+        L_0x01c4:
+            if (r10 != r13) goto L_0x01d8
             org.telegram.ui.Components.SlideView[] r5 = r0.views
             r5 = r5[r13]
             org.telegram.ui.LoginActivity$LoginActivityPasswordView r5 = (org.telegram.ui.LoginActivity.LoginActivityPasswordView) r5
-            org.telegram.tgnet.TLRPC$TL_account_password r5 = r5.currentPassword
-            if (r5 != 0) goto L_0x01cc
+            org.telegram.tgnet.TLRPC$account_Password r5 = r5.currentPassword
+            if (r5 != 0) goto L_0x01ed
             r0.currentViewNum = r3
             r31.clearCurrentState()
-            goto L_0x01ca
-        L_0x01b7:
-            if (r10 != r14) goto L_0x01cc
+            goto L_0x01eb
+        L_0x01d8:
+            if (r10 != r14) goto L_0x01ed
             org.telegram.ui.Components.SlideView[] r5 = r0.views
             r5 = r5[r14]
             org.telegram.ui.LoginActivity$LoginActivityRecoverView r5 = (org.telegram.ui.LoginActivity.LoginActivityRecoverView) r5
             java.lang.String r5 = r5.passwordString
-            if (r5 != 0) goto L_0x01cc
+            if (r5 != 0) goto L_0x01ed
             r0.currentViewNum = r3
             r31.clearCurrentState()
-        L_0x01ca:
+        L_0x01eb:
             r5 = 0
-            goto L_0x01cd
-        L_0x01cc:
+            goto L_0x01ee
+        L_0x01ed:
             r5 = r2
-        L_0x01cd:
+        L_0x01ee:
             android.widget.FrameLayout r2 = new android.widget.FrameLayout
             r2.<init>(r1)
             r0.floatingButtonContainer = r2
             boolean[] r6 = r0.doneButtonVisible
             boolean r6 = r6[r3]
-            if (r6 == 0) goto L_0x01dc
+            if (r6 == 0) goto L_0x01fd
             r6 = 0
-            goto L_0x01de
-        L_0x01dc:
+            goto L_0x01ff
+        L_0x01fd:
             r6 = 8
-        L_0x01de:
+        L_0x01ff:
             r2.setVisibility(r6)
             int r2 = android.os.Build.VERSION.SDK_INT
             r6 = 1082130432(0x40800000, float:4.0)
             r10 = 21
-            if (r2 < r10) goto L_0x024a
+            if (r2 < r10) goto L_0x026f
             android.animation.StateListAnimator r14 = new android.animation.StateListAnimator
             r14.<init>()
             int[] r15 = new int[r4]
@@ -577,86 +625,90 @@ public class LoginActivity extends BaseFragment {
             float r7 = (float) r7
             r12[r4] = r7
             java.lang.String r7 = "translationZ"
-            android.animation.ObjectAnimator r12 = android.animation.ObjectAnimator.ofFloat(r13, r7, r12)
-            r10 = 200(0xc8, double:9.9E-322)
-            android.animation.ObjectAnimator r10 = r12.setDuration(r10)
-            r14.addState(r15, r10)
-            int[] r10 = new int[r3]
-            org.telegram.ui.Components.TransformableLoginButtonView r11 = r0.floatingButtonIcon
-            float[] r12 = new float[r9]
+            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r13, r7, r12)
+            r12 = 200(0xc8, double:9.9E-322)
+            android.animation.ObjectAnimator r7 = r7.setDuration(r12)
+            r14.addState(r15, r7)
+            int[] r7 = new int[r3]
+            org.telegram.ui.Components.TransformableLoginButtonView r12 = r0.floatingButtonIcon
+            float[] r13 = new float[r9]
             int r15 = org.telegram.messenger.AndroidUtilities.dp(r6)
             float r15 = (float) r15
-            r12[r3] = r15
+            r13[r3] = r15
             r15 = 1073741824(0x40000000, float:2.0)
             int r15 = org.telegram.messenger.AndroidUtilities.dp(r15)
             float r15 = (float) r15
-            r12[r4] = r15
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r11, r7, r12)
-            r11 = 200(0xc8, double:9.9E-322)
-            android.animation.ObjectAnimator r7 = r7.setDuration(r11)
-            r14.addState(r10, r7)
-            android.widget.FrameLayout r7 = r0.floatingButtonContainer
-            r7.setStateListAnimator(r14)
-            android.widget.FrameLayout r7 = r0.floatingButtonContainer
-            org.telegram.ui.LoginActivity$5 r10 = new org.telegram.ui.LoginActivity$5
-            r10.<init>(r0)
-            r7.setOutlineProvider(r10)
-        L_0x024a:
-            android.widget.FrameLayout r7 = r0.floatingButtonContainer
-            org.telegram.ui.Components.VerticalPositionAutoAnimator r7 = org.telegram.ui.Components.VerticalPositionAutoAnimator.attach(r7)
-            r0.floatingAutoAnimator = r7
-            org.telegram.ui.Components.SizeNotifierFrameLayout r7 = r0.sizeNotifierFrameLayout
-            android.widget.FrameLayout r10 = r0.floatingButtonContainer
-            r11 = 21
-            if (r2 < r11) goto L_0x025f
-            r12 = 56
+            r13[r4] = r15
+            java.lang.String r15 = "translationZ"
+            android.animation.ObjectAnimator r12 = android.animation.ObjectAnimator.ofFloat(r12, r15, r13)
+            r15 = r5
+            r4 = 200(0xc8, double:9.9E-322)
+            android.animation.ObjectAnimator r4 = r12.setDuration(r4)
+            r14.addState(r7, r4)
+            android.widget.FrameLayout r4 = r0.floatingButtonContainer
+            r4.setStateListAnimator(r14)
+            android.widget.FrameLayout r4 = r0.floatingButtonContainer
+            org.telegram.ui.LoginActivity$5 r5 = new org.telegram.ui.LoginActivity$5
+            r5.<init>(r0)
+            r4.setOutlineProvider(r5)
+            goto L_0x0270
+        L_0x026f:
+            r15 = r5
+        L_0x0270:
+            android.widget.FrameLayout r4 = r0.floatingButtonContainer
+            org.telegram.ui.Components.VerticalPositionAutoAnimator r4 = org.telegram.ui.Components.VerticalPositionAutoAnimator.attach(r4)
+            r0.floatingAutoAnimator = r4
+            org.telegram.ui.Components.SizeNotifierFrameLayout r4 = r0.sizeNotifierFrameLayout
+            android.widget.FrameLayout r5 = r0.floatingButtonContainer
+            if (r2 < r10) goto L_0x0283
+            r7 = 56
             r24 = 56
-            goto L_0x0263
-        L_0x025f:
-            r12 = 60
+            goto L_0x0287
+        L_0x0283:
+            r7 = 60
             r24 = 60
-        L_0x0263:
-            if (r2 < r11) goto L_0x026a
-            r11 = 1113587712(0x42600000, float:56.0)
+        L_0x0287:
+            if (r2 < r10) goto L_0x028e
+            r7 = 1113587712(0x42600000, float:56.0)
             r25 = 1113587712(0x42600000, float:56.0)
-            goto L_0x026e
-        L_0x026a:
-            r11 = 1114636288(0x42700000, float:60.0)
+            goto L_0x0292
+        L_0x028e:
+            r7 = 1114636288(0x42700000, float:60.0)
             r25 = 1114636288(0x42700000, float:60.0)
-        L_0x026e:
+        L_0x0292:
             r26 = 85
             r27 = 0
             r28 = 0
             r29 = 1103101952(0x41CLASSNAME, float:24.0)
             r30 = 1098907648(0x41800000, float:16.0)
-            android.widget.FrameLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createFrame(r24, r25, r26, r27, r28, r29, r30)
-            r7.addView(r10, r11)
-            android.widget.FrameLayout r7 = r0.floatingButtonContainer
-            org.telegram.ui.LoginActivity$$ExternalSyntheticLambda9 r10 = new org.telegram.ui.LoginActivity$$ExternalSyntheticLambda9
-            r10.<init>(r0)
-            r7.setOnClickListener(r10)
-            org.telegram.ui.Components.VerticalPositionAutoAnimator r7 = r0.floatingAutoAnimator
-            org.telegram.ui.LoginActivity$$ExternalSyntheticLambda11 r10 = new org.telegram.ui.LoginActivity$$ExternalSyntheticLambda11
-            r10.<init>(r0)
-            r7.addUpdateListener(r10)
-            android.widget.ImageView r7 = new android.widget.ImageView
-            r7.<init>(r1)
-            r0.backButtonView = r7
-            int r10 = org.telegram.messenger.R.drawable.ic_ab_back
-            r7.setImageResource(r10)
-            android.widget.ImageView r7 = r0.backButtonView
-            org.telegram.ui.LoginActivity$$ExternalSyntheticLambda10 r10 = new org.telegram.ui.LoginActivity$$ExternalSyntheticLambda10
-            r10.<init>(r0)
-            r7.setOnClickListener(r10)
-            android.widget.ImageView r7 = r0.backButtonView
-            int r10 = org.telegram.messenger.R.string.Back
-            java.lang.String r10 = org.telegram.messenger.LocaleController.getString((int) r10)
-            r7.setContentDescription(r10)
-            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
-            android.widget.ImageView r7 = r0.backButtonView
-            r7.setPadding(r6, r6, r6, r6)
-            org.telegram.ui.Components.SizeNotifierFrameLayout r6 = r0.sizeNotifierFrameLayout
-            android.widget.ImageView r7 = r0.backButtonView
+            android.widget.FrameLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createFrame(r24, r25, r26, r27, r28, r29, r30)
+            r4.addView(r5, r7)
+            android.widget.FrameLayout r4 = r0.floatingButtonContainer
+            org.telegram.ui.LoginActivity$$ExternalSyntheticLambda9 r5 = new org.telegram.ui.LoginActivity$$ExternalSyntheticLambda9
+            r5.<init>(r0)
+            r4.setOnClickListener(r5)
+            org.telegram.ui.Components.VerticalPositionAutoAnimator r4 = r0.floatingAutoAnimator
+            org.telegram.ui.LoginActivity$$ExternalSyntheticLambda11 r5 = new org.telegram.ui.LoginActivity$$ExternalSyntheticLambda11
+            r5.<init>(r0)
+            r4.addUpdateListener(r5)
+            android.widget.ImageView r4 = new android.widget.ImageView
+            r4.<init>(r1)
+            r0.backButtonView = r4
+            int r5 = org.telegram.messenger.R.drawable.ic_ab_back
+            r4.setImageResource(r5)
+            android.widget.ImageView r4 = r0.backButtonView
+            org.telegram.ui.LoginActivity$$ExternalSyntheticLambda10 r5 = new org.telegram.ui.LoginActivity$$ExternalSyntheticLambda10
+            r5.<init>(r0)
+            r4.setOnClickListener(r5)
+            android.widget.ImageView r4 = r0.backButtonView
+            int r5 = org.telegram.messenger.R.string.Back
+            java.lang.String r5 = org.telegram.messenger.LocaleController.getString((int) r5)
+            r4.setContentDescription(r5)
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            android.widget.ImageView r5 = r0.backButtonView
+            r5.setPadding(r4, r4, r4, r4)
+            org.telegram.ui.Components.SizeNotifierFrameLayout r4 = r0.sizeNotifierFrameLayout
+            android.widget.ImageView r5 = r0.backButtonView
             r24 = 32
             r25 = 1107296256(0x42000000, float:32.0)
             r26 = 51
@@ -664,59 +716,58 @@ public class LoginActivity extends BaseFragment {
             r28 = 1098907648(0x41800000, float:16.0)
             r29 = 0
             r30 = 0
-            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r24, r25, r26, r27, r28, r29, r30)
-            r6.addView(r7, r10)
-            org.telegram.ui.Components.RadialProgressView r6 = new org.telegram.ui.Components.RadialProgressView
-            r6.<init>(r1)
-            r0.radialProgressView = r6
-            r7 = 1101004800(0x41a00000, float:20.0)
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r6.setSize(r7)
+            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r24, r25, r26, r27, r28, r29, r30)
+            r4.addView(r5, r6)
+            org.telegram.ui.Components.RadialProgressView r4 = new org.telegram.ui.Components.RadialProgressView
+            r4.<init>(r1)
+            r0.radialProgressView = r4
+            r5 = 1101004800(0x41a00000, float:20.0)
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
+            r4.setSize(r5)
+            org.telegram.ui.Components.RadialProgressView r4 = r0.radialProgressView
+            r5 = 0
+            r4.setAlpha(r5)
+            org.telegram.ui.Components.RadialProgressView r4 = r0.radialProgressView
+            r5 = 1036831949(0x3dcccccd, float:0.1)
+            r4.setScaleX(r5)
+            org.telegram.ui.Components.RadialProgressView r4 = r0.radialProgressView
+            r4.setScaleY(r5)
+            org.telegram.ui.Components.SizeNotifierFrameLayout r4 = r0.sizeNotifierFrameLayout
             org.telegram.ui.Components.RadialProgressView r6 = r0.radialProgressView
-            r7 = 0
-            r6.setAlpha(r7)
-            org.telegram.ui.Components.RadialProgressView r6 = r0.radialProgressView
-            r7 = 1036831949(0x3dcccccd, float:0.1)
-            r6.setScaleX(r7)
-            org.telegram.ui.Components.RadialProgressView r6 = r0.radialProgressView
-            r6.setScaleY(r7)
-            org.telegram.ui.Components.SizeNotifierFrameLayout r6 = r0.sizeNotifierFrameLayout
-            org.telegram.ui.Components.RadialProgressView r10 = r0.radialProgressView
             r26 = 53
             r27 = 0
             r29 = 1098907648(0x41800000, float:16.0)
-            android.widget.FrameLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createFrame(r24, r25, r26, r27, r28, r29, r30)
-            r6.addView(r10, r11)
-            org.telegram.ui.Components.TransformableLoginButtonView r6 = new org.telegram.ui.Components.TransformableLoginButtonView
-            r6.<init>(r1)
-            r0.floatingButtonIcon = r6
-            r6.setTransformType(r3)
+            android.widget.FrameLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createFrame(r24, r25, r26, r27, r28, r29, r30)
+            r4.addView(r6, r7)
+            org.telegram.ui.Components.TransformableLoginButtonView r4 = new org.telegram.ui.Components.TransformableLoginButtonView
+            r4.<init>(r1)
+            r0.floatingButtonIcon = r4
+            r4.setTransformType(r3)
+            org.telegram.ui.Components.TransformableLoginButtonView r4 = r0.floatingButtonIcon
+            r4.setProgress(r8)
+            org.telegram.ui.Components.TransformableLoginButtonView r4 = r0.floatingButtonIcon
+            r4.setDrawBackground(r3)
+            android.widget.FrameLayout r4 = r0.floatingButtonContainer
+            int r6 = org.telegram.messenger.R.string.Done
+            java.lang.String r7 = "Done"
+            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
+            r4.setContentDescription(r6)
+            android.widget.FrameLayout r4 = r0.floatingButtonContainer
             org.telegram.ui.Components.TransformableLoginButtonView r6 = r0.floatingButtonIcon
-            r6.setProgress(r8)
-            org.telegram.ui.Components.TransformableLoginButtonView r6 = r0.floatingButtonIcon
-            r6.setDrawBackground(r3)
-            android.widget.FrameLayout r6 = r0.floatingButtonContainer
-            int r8 = org.telegram.messenger.R.string.Done
-            java.lang.String r10 = "Done"
-            java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
-            r6.setContentDescription(r8)
-            android.widget.FrameLayout r6 = r0.floatingButtonContainer
-            org.telegram.ui.Components.TransformableLoginButtonView r8 = r0.floatingButtonIcon
-            r10 = 21
-            if (r2 < r10) goto L_0x0336
-            r11 = 56
-            goto L_0x0338
-        L_0x0336:
-            r11 = 60
-        L_0x0338:
-            if (r2 < r10) goto L_0x033d
+            if (r2 < r10) goto L_0x0358
+            r7 = 56
+            goto L_0x035a
+        L_0x0358:
+            r7 = 60
+        L_0x035a:
+            if (r2 < r10) goto L_0x035f
             r2 = 1113587712(0x42600000, float:56.0)
-            goto L_0x033f
-        L_0x033d:
+            goto L_0x0361
+        L_0x035f:
             r2 = 1114636288(0x42700000, float:60.0)
-        L_0x033f:
-            android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r2)
-            r6.addView(r8, r2)
+        L_0x0361:
+            android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r7, r2)
+            r4.addView(r6, r2)
             org.telegram.ui.Components.RadialProgressView r2 = new org.telegram.ui.Components.RadialProgressView
             r2.<init>(r1)
             r0.floatingProgressView = r2
@@ -727,120 +778,130 @@ public class LoginActivity extends BaseFragment {
             r2 = 0
             r1.setAlpha(r2)
             org.telegram.ui.Components.RadialProgressView r1 = r0.floatingProgressView
-            r1.setScaleX(r7)
+            r1.setScaleX(r5)
             org.telegram.ui.Components.RadialProgressView r1 = r0.floatingProgressView
-            r1.setScaleY(r7)
+            r1.setScaleY(r5)
             org.telegram.ui.Components.RadialProgressView r1 = r0.floatingProgressView
-            r2 = 4
-            r1.setVisibility(r2)
+            r1.setVisibility(r11)
             android.widget.FrameLayout r1 = r0.floatingButtonContainer
             org.telegram.ui.Components.RadialProgressView r2 = r0.floatingProgressView
-            r6 = -1082130432(0xffffffffbvar_, float:-1.0)
-            r7 = -1
-            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r7, r6)
-            r1.addView(r2, r6)
-            if (r5 == 0) goto L_0x037e
-            r0.restoringState = r4
-        L_0x037e:
-            r1 = 0
-        L_0x037f:
-            org.telegram.ui.Components.SlideView[] r2 = r0.views
-            int r6 = r2.length
-            if (r1 >= r6) goto L_0x040a
-            r2 = r2[r1]
-            if (r5 == 0) goto L_0x0398
-            if (r1 < r4) goto L_0x0395
-            r6 = 4
-            if (r1 > r6) goto L_0x0395
-            int r6 = r0.currentViewNum
-            if (r1 != r6) goto L_0x0398
-            r2.restoreStateParams(r5)
-            goto L_0x0398
-        L_0x0395:
-            r2.restoreStateParams(r5)
-        L_0x0398:
-            int r6 = r0.currentViewNum
-            if (r6 != r1) goto L_0x03f0
-            android.widget.ImageView r6 = r0.backButtonView
-            boolean r7 = r2.needBackButton()
-            if (r7 != 0) goto L_0x03b0
-            boolean r7 = r0.newAccount
-            if (r7 != 0) goto L_0x03b0
-            int r7 = r0.activityMode
-            if (r7 != r9) goto L_0x03ad
-            goto L_0x03b0
-        L_0x03ad:
-            r7 = 8
-            goto L_0x03b1
-        L_0x03b0:
-            r7 = 0
-        L_0x03b1:
-            r6.setVisibility(r7)
-            r2.setVisibility(r3)
-            r2.onShow()
-            boolean r2 = r2.hasCustomKeyboard()
-            r0.setCustomKeyboardVisible(r2, r3)
-            r0.currentDoneType = r3
-            r6 = 5
-            r7 = 6
-            if (r1 == 0) goto L_0x03d6
-            if (r1 == r6) goto L_0x03d6
-            r8 = 9
-            if (r1 == r7) goto L_0x03d8
-            r10 = 10
-            if (r1 == r8) goto L_0x03da
-            if (r1 != r10) goto L_0x03d4
-            goto L_0x03da
-        L_0x03d4:
+            r4 = -1082130432(0xffffffffbvar_, float:-1.0)
+            r5 = -1
+            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r5, r4)
+            r1.addView(r2, r4)
+            r1 = 1
+            if (r15 == 0) goto L_0x03a0
+            r0.restoringState = r1
+        L_0x03a0:
             r2 = 0
-            goto L_0x03db
+        L_0x03a1:
+            org.telegram.ui.Components.SlideView[] r4 = r0.views
+            int r5 = r4.length
+            if (r2 >= r5) goto L_0x0438
+            r4 = r4[r2]
+            if (r15 == 0) goto L_0x03bc
+            if (r2 < r1) goto L_0x03b7
+            if (r2 > r11) goto L_0x03b7
+            int r1 = r0.currentViewNum
+            if (r2 != r1) goto L_0x03bc
+            r5 = r15
+            r4.restoreStateParams(r5)
+            goto L_0x03bd
+        L_0x03b7:
+            r5 = r15
+            r4.restoreStateParams(r5)
+            goto L_0x03bd
+        L_0x03bc:
+            r5 = r15
+        L_0x03bd:
+            int r1 = r0.currentViewNum
+            if (r1 != r2) goto L_0x041a
+            android.widget.ImageView r1 = r0.backButtonView
+            boolean r6 = r4.needBackButton()
+            if (r6 != 0) goto L_0x03d5
+            boolean r6 = r0.newAccount
+            if (r6 != 0) goto L_0x03d5
+            int r6 = r0.activityMode
+            if (r6 != r9) goto L_0x03d2
+            goto L_0x03d5
+        L_0x03d2:
+            r6 = 8
+            goto L_0x03d6
+        L_0x03d5:
+            r6 = 0
         L_0x03d6:
-            r8 = 9
-        L_0x03d8:
-            r10 = 10
-        L_0x03da:
-            r2 = 1
-        L_0x03db:
-            r0.showDoneButton(r2, r3)
-            if (r1 == r4) goto L_0x03e9
-            if (r1 == r9) goto L_0x03e9
-            r11 = 3
-            r12 = 4
-            if (r1 == r11) goto L_0x03eb
-            if (r1 != r12) goto L_0x03ed
-            goto L_0x03eb
-        L_0x03e9:
-            r11 = 3
-            r12 = 4
-        L_0x03eb:
-            r0.currentDoneType = r4
-        L_0x03ed:
-            r14 = 8
+            r1.setVisibility(r6)
+            r4.setVisibility(r3)
+            r4.onShow()
+            boolean r1 = r4.hasCustomKeyboard()
+            r0.setCustomKeyboardVisible(r1, r3)
+            r0.currentDoneType = r3
+            r1 = 5
+            r6 = 6
+            if (r2 == 0) goto L_0x03ff
+            if (r2 == r1) goto L_0x03ff
+            r7 = 9
+            if (r2 == r6) goto L_0x0401
+            r8 = 10
+            if (r2 == r7) goto L_0x0403
+            r10 = 12
+            if (r2 == r8) goto L_0x0405
+            if (r2 != r10) goto L_0x03fd
+            goto L_0x0405
+        L_0x03fd:
+            r4 = 0
             goto L_0x0406
-        L_0x03f0:
-            r6 = 5
-            r7 = 6
-            r8 = 9
-            r10 = 10
-            r11 = 3
-            r12 = 4
-            int r13 = r2.getVisibility()
-            r14 = 8
-            if (r13 == r14) goto L_0x0406
-            r2.setVisibility(r14)
-            r2.onHide()
+        L_0x03ff:
+            r7 = 9
+        L_0x0401:
+            r8 = 10
+        L_0x0403:
+            r10 = 12
+        L_0x0405:
+            r4 = 1
         L_0x0406:
-            int r1 = r1 + 1
-            goto L_0x037f
-        L_0x040a:
+            r0.showDoneButton(r4, r3)
+            r12 = 1
+            if (r2 == r12) goto L_0x0414
+            if (r2 == r9) goto L_0x0414
+            r13 = 3
+            if (r2 == r13) goto L_0x0415
+            if (r2 != r11) goto L_0x0417
+            goto L_0x0415
+        L_0x0414:
+            r13 = 3
+        L_0x0415:
+            r0.currentDoneType = r12
+        L_0x0417:
+            r15 = 8
+            goto L_0x0432
+        L_0x041a:
+            r1 = 5
+            r6 = 6
+            r7 = 9
+            r8 = 10
+            r10 = 12
+            r12 = 1
+            r13 = 3
+            int r14 = r4.getVisibility()
+            r15 = 8
+            if (r14 == r15) goto L_0x0432
+            r4.setVisibility(r15)
+            r4.onHide()
+        L_0x0432:
+            int r2 = r2 + 1
+            r15 = r5
+            r1 = 1
+            goto L_0x03a1
+        L_0x0438:
             r0.restoringState = r3
             r31.updateColors()
             boolean r1 = r31.isInCancelAccountDeletionMode()
-            if (r1 == 0) goto L_0x041c
+            if (r1 == 0) goto L_0x044a
             android.os.Bundle r1 = r0.cancelDeletionParams
             org.telegram.tgnet.TLRPC$TL_auth_sentCode r2 = r0.cancelDeletionCode
             r0.fillNextCodeParams(r1, r2, r3)
-        L_0x041c:
+        L_0x044a:
             android.view.View r1 = r0.fragmentView
             return r1
         */
@@ -901,14 +962,21 @@ public class LoginActivity extends BaseFragment {
                 AndroidUtilities.requestAltFocusable(getParentActivity(), this.classGuid);
                 if (z2) {
                     ValueAnimator duration = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f}).setDuration(300);
+                    this.keyboardAnimator = duration;
                     duration.setInterpolator(CubicBezierInterpolator.DEFAULT);
-                    duration.addUpdateListener(new LoginActivity$$ExternalSyntheticLambda1(this));
-                    duration.addListener(new AnimatorListenerAdapter() {
+                    this.keyboardAnimator.addUpdateListener(new LoginActivity$$ExternalSyntheticLambda1(this));
+                    this.keyboardAnimator.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationStart(Animator animator) {
                             LoginActivity.this.keyboardView.setVisibility(0);
                         }
+
+                        public void onAnimationEnd(Animator animator) {
+                            if (LoginActivity.this.keyboardAnimator == animator) {
+                                ValueAnimator unused = LoginActivity.this.keyboardAnimator = null;
+                            }
+                        }
                     });
-                    duration.start();
+                    this.keyboardAnimator.start();
                     return;
                 }
                 this.keyboardView.setVisibility(0);
@@ -917,14 +985,18 @@ public class LoginActivity extends BaseFragment {
             AndroidUtilities.removeAltFocusable(getParentActivity(), this.classGuid);
             if (z2) {
                 ValueAnimator duration2 = ValueAnimator.ofFloat(new float[]{1.0f, 0.0f}).setDuration(300);
+                this.keyboardAnimator = duration2;
                 duration2.setInterpolator(Easings.easeInOutQuad);
-                duration2.addUpdateListener(new LoginActivity$$ExternalSyntheticLambda2(this));
-                duration2.addListener(new AnimatorListenerAdapter() {
+                this.keyboardAnimator.addUpdateListener(new LoginActivity$$ExternalSyntheticLambda2(this));
+                this.keyboardAnimator.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animator) {
                         LoginActivity.this.keyboardView.setVisibility(8);
+                        if (LoginActivity.this.keyboardAnimator == animator) {
+                            ValueAnimator unused = LoginActivity.this.keyboardAnimator = null;
+                        }
                     }
                 });
-                duration2.start();
+                this.keyboardAnimator.start();
                 return;
             }
             this.keyboardView.setVisibility(8);
@@ -955,7 +1027,7 @@ public class LoginActivity extends BaseFragment {
 
     public void onResume() {
         SlideView slideView;
-        int access$1000;
+        int access$1300;
         super.onResume();
         if (this.newAccount) {
             ConnectionsManager.getInstance(this.currentAccount).setAppPaused(false, false);
@@ -966,7 +1038,7 @@ public class LoginActivity extends BaseFragment {
             int i = this.currentViewNum;
             if (i >= 1 && i <= 4) {
                 SlideView[] slideViewArr = this.views;
-                if ((slideViewArr[i] instanceof LoginActivitySmsView) && (access$1000 = ((LoginActivitySmsView) slideViewArr[i]).openTime) != 0 && Math.abs((System.currentTimeMillis() / 1000) - ((long) access$1000)) >= 86400) {
+                if ((slideViewArr[i] instanceof LoginActivitySmsView) && (access$1300 = ((LoginActivitySmsView) slideViewArr[i]).openTime) != 0 && Math.abs((System.currentTimeMillis() / 1000) - ((long) access$1300)) >= 86400) {
                     this.views[this.currentViewNum].onBackPressed(true);
                     setPage(0, false, (Bundle) null, true);
                 }
@@ -1106,7 +1178,7 @@ public class LoginActivity extends BaseFragment {
     public boolean onBackPressed() {
         int i = this.currentViewNum;
         int i2 = 0;
-        if (i == 0) {
+        if (i == 0 || (this.activityMode == 3 && i == 12)) {
             while (true) {
                 SlideView[] slideViewArr = this.views;
                 if (i2 < slideViewArr.length) {
@@ -1135,6 +1207,11 @@ public class LoginActivity extends BaseFragment {
                 } else if (i == 10) {
                     this.views[i].onBackPressed(true);
                     setPage(9, true, (Bundle) null, true);
+                } else if (i == 13) {
+                    this.views[i].onBackPressed(true);
+                    setPage(12, true, (Bundle) null, true);
+                } else if (this.views[i].onBackPressed(true)) {
+                    setPage(0, true, (Bundle) null, true);
                 }
             } else if (this.views[i].onBackPressed(false)) {
                 setPage(0, true, (Bundle) null, true);
@@ -1578,7 +1655,7 @@ public class LoginActivity extends BaseFragment {
     }
 
     public void setPage(int i, boolean z, Bundle bundle, boolean z2) {
-        final boolean z3 = i == 0 || i == 5 || i == 6 || i == 9 || i == 10;
+        final boolean z3 = i == 0 || i == 5 || i == 6 || i == 9 || i == 10 || i == 12;
         int i2 = 8;
         if (z3) {
             if (i == 0) {
@@ -1690,7 +1767,7 @@ public class LoginActivity extends BaseFragment {
                 bundle.putBoolean("afterSignup", z);
                 presentFragment(new DialogsActivity(bundle), true);
             } else {
-                TwoStepVerificationSetupActivity twoStepVerificationSetupActivity = new TwoStepVerificationSetupActivity(6, (TLRPC$TL_account_password) null);
+                TwoStepVerificationSetupActivity twoStepVerificationSetupActivity = new TwoStepVerificationSetupActivity(6, (TLRPC$account_Password) null);
                 twoStepVerificationSetupActivity.setBlockingAlert(i);
                 twoStepVerificationSetupActivity.setFromRegistration(true);
                 presentFragment(twoStepVerificationSetupActivity, true);
@@ -1739,6 +1816,13 @@ public class LoginActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
+    public void fillNextCodeParams(Bundle bundle, TLRPC$TL_account_sentEmailCode tLRPC$TL_account_sentEmailCode) {
+        bundle.putString("emailPattern", tLRPC$TL_account_sentEmailCode.email_pattern);
+        bundle.putInt("length", tLRPC$TL_account_sentEmailCode.length);
+        setPage(13, true, bundle, false);
+    }
+
+    /* access modifiers changed from: private */
     public void fillNextCodeParams(Bundle bundle, TLRPC$TL_auth_sentCode tLRPC$TL_auth_sentCode) {
         fillNextCodeParams(bundle, tLRPC$TL_auth_sentCode, true);
     }
@@ -1783,6 +1867,15 @@ public class LoginActivity extends BaseFragment {
             bundle.putInt("length", tLRPC$TL_auth_sentCode.type.length);
             bundle.putString("prefix", tLRPC$TL_auth_sentCode.type.prefix);
             setPage(11, z, bundle, false);
+        } else if (tLRPC$auth_SentCodeType instanceof TLRPC$TL_auth_sentCodeTypeSetUpEmailRequired) {
+            bundle.putBoolean("googleSignInAllowed", tLRPC$auth_SentCodeType.google_signin_allowed);
+            setPage(12, z, bundle, false);
+        } else if (tLRPC$auth_SentCodeType instanceof TLRPC$TL_auth_sentCodeTypeEmailCode) {
+            bundle.putBoolean("googleSignInAllowed", tLRPC$auth_SentCodeType.google_signin_allowed);
+            bundle.putString("emailPattern", tLRPC$TL_auth_sentCode.type.email_pattern);
+            bundle.putInt("length", tLRPC$TL_auth_sentCode.type.length);
+            bundle.putInt("nextPhoneLoginDate", tLRPC$TL_auth_sentCode.type.next_phone_login_date);
+            setPage(14, z, bundle, false);
         }
     }
 
@@ -3369,14 +3462,14 @@ public class LoginActivity extends BaseFragment {
             this.nextPressed = false;
             this.this$0.showDoneButton(false, true);
             if (tLRPC$TL_error == null) {
-                TLRPC$TL_account_password tLRPC$TL_account_password = (TLRPC$TL_account_password) tLObject;
-                if (!TwoStepVerificationActivity.canHandleCurrentPassword(tLRPC$TL_account_password, true)) {
+                TLRPC$account_Password tLRPC$account_Password = (TLRPC$account_Password) tLObject;
+                if (!TwoStepVerificationActivity.canHandleCurrentPassword(tLRPC$account_Password, true)) {
                     AlertsCreator.showUpdateAppAlert(this.this$0.getParentActivity(), LocaleController.getString("UpdateAppAlert", R.string.UpdateAppAlert), true);
                     return;
                 }
                 Bundle bundle = new Bundle();
-                SerializedData serializedData = new SerializedData(tLRPC$TL_account_password.getObjectSize());
-                tLRPC$TL_account_password.serializeToStream(serializedData);
+                SerializedData serializedData = new SerializedData(tLRPC$account_Password.getObjectSize());
+                tLRPC$account_Password.serializeToStream(serializedData);
                 bundle.putString("password", Utilities.bytesToHex(serializedData.toByteArray()));
                 bundle.putString("phoneFormated", str);
                 this.this$0.setPage(6, true, bundle, false);
@@ -3718,7 +3811,7 @@ public class LoginActivity extends BaseFragment {
             return true;
         }
 
-        static /* synthetic */ int access$8126(LoginActivitySmsView loginActivitySmsView, double d) {
+        static /* synthetic */ int access$8326(LoginActivitySmsView loginActivitySmsView, double d) {
             double d2 = (double) loginActivitySmsView.codeTime;
             Double.isNaN(d2);
             int i = (int) (d2 - d);
@@ -3726,7 +3819,7 @@ public class LoginActivity extends BaseFragment {
             return i;
         }
 
-        static /* synthetic */ int access$8726(LoginActivitySmsView loginActivitySmsView, double d) {
+        static /* synthetic */ int access$8926(LoginActivitySmsView loginActivitySmsView, double d) {
             double d2 = (double) loginActivitySmsView.time;
             Double.isNaN(d2);
             int i = (int) (d2 - d);
@@ -5103,10 +5196,10 @@ public class LoginActivity extends BaseFragment {
                     /* access modifiers changed from: private */
                     public /* synthetic */ void lambda$run$0() {
                         double currentTimeMillis = (double) System.currentTimeMillis();
-                        double access$8000 = LoginActivitySmsView.this.lastCodeTime;
+                        double access$8200 = LoginActivitySmsView.this.lastCodeTime;
                         Double.isNaN(currentTimeMillis);
                         double unused = LoginActivitySmsView.this.lastCodeTime = currentTimeMillis;
-                        LoginActivitySmsView.access$8126(LoginActivitySmsView.this, currentTimeMillis - access$8000);
+                        LoginActivitySmsView.access$8326(LoginActivitySmsView.this, currentTimeMillis - access$8200);
                         if (LoginActivitySmsView.this.codeTime <= 1000) {
                             LoginActivitySmsView.this.setProblemTextVisible(true);
                             LoginActivitySmsView.this.timeText.setVisibility(8);
@@ -5148,17 +5241,17 @@ public class LoginActivity extends BaseFragment {
                     /* access modifiers changed from: private */
                     public /* synthetic */ void lambda$run$0() {
                         double currentTimeMillis = (double) System.currentTimeMillis();
-                        double access$8600 = LoginActivitySmsView.this.lastCurrentTime;
+                        double access$8800 = LoginActivitySmsView.this.lastCurrentTime;
                         Double.isNaN(currentTimeMillis);
                         double unused = LoginActivitySmsView.this.lastCurrentTime = currentTimeMillis;
-                        LoginActivitySmsView.access$8726(LoginActivitySmsView.this, currentTimeMillis - access$8600);
+                        LoginActivitySmsView.access$8926(LoginActivitySmsView.this, currentTimeMillis - access$8800);
                         if (LoginActivitySmsView.this.time >= 1000) {
-                            int access$8700 = (LoginActivitySmsView.this.time / 1000) / 60;
-                            int access$87002 = (LoginActivitySmsView.this.time / 1000) - (access$8700 * 60);
+                            int access$8900 = (LoginActivitySmsView.this.time / 1000) / 60;
+                            int access$89002 = (LoginActivitySmsView.this.time / 1000) - (access$8900 * 60);
                             if (LoginActivitySmsView.this.nextType == 4 || LoginActivitySmsView.this.nextType == 3 || LoginActivitySmsView.this.nextType == 11) {
-                                LoginActivitySmsView.this.timeText.setText(LocaleController.formatString("CallAvailableIn", R.string.CallAvailableIn, Integer.valueOf(access$8700), Integer.valueOf(access$87002)));
+                                LoginActivitySmsView.this.timeText.setText(LocaleController.formatString("CallAvailableIn", R.string.CallAvailableIn, Integer.valueOf(access$8900), Integer.valueOf(access$89002)));
                             } else if (LoginActivitySmsView.this.nextType == 2) {
-                                LoginActivitySmsView.this.timeText.setText(LocaleController.formatString("SmsAvailableIn", R.string.SmsAvailableIn, Integer.valueOf(access$8700), Integer.valueOf(access$87002)));
+                                LoginActivitySmsView.this.timeText.setText(LocaleController.formatString("SmsAvailableIn", R.string.SmsAvailableIn, Integer.valueOf(access$8900), Integer.valueOf(access$89002)));
                             }
                             ProgressView unused2 = LoginActivitySmsView.this.progressView;
                             return;
@@ -5222,8 +5315,8 @@ public class LoginActivity extends BaseFragment {
                     NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didReceiveCall);
                 }
                 this.waitingForEvent = false;
-                int access$2400 = this.this$0.activityMode;
-                if (access$2400 == 1) {
+                int access$2700 = this.this$0.activityMode;
+                if (access$2700 == 1) {
                     this.requestPhone = this.this$0.cancelDeletionPhone;
                     TLRPC$TL_account_confirmPhone tLRPC$TL_account_confirmPhone = new TLRPC$TL_account_confirmPhone();
                     tLRPC$TL_account_confirmPhone.phone_code = str;
@@ -5238,11 +5331,12 @@ public class LoginActivity extends BaseFragment {
                         i++;
                     }
                     tryShowProgress(ConnectionsManager.getInstance(this.this$0.currentAccount).sendRequest(tLRPC$TL_account_confirmPhone, new LoginActivity$LoginActivitySmsView$$ExternalSyntheticLambda37(this, tLRPC$TL_account_confirmPhone), 2));
-                } else if (access$2400 != 2) {
+                } else if (access$2700 != 2) {
                     TLRPC$TL_auth_signIn tLRPC$TL_auth_signIn = new TLRPC$TL_auth_signIn();
                     tLRPC$TL_auth_signIn.phone_number = this.requestPhone;
                     tLRPC$TL_auth_signIn.phone_code = str;
                     tLRPC$TL_auth_signIn.phone_code_hash = this.phoneHash;
+                    tLRPC$TL_auth_signIn.flags |= 1;
                     destroyTimer();
                     CodeFieldContainer codeFieldContainer3 = this.codeFieldContainer;
                     codeFieldContainer3.isFocusSuppressed = true;
@@ -5770,14 +5864,14 @@ public class LoginActivity extends BaseFragment {
             this.nextPressed = false;
             this.this$0.showDoneButton(false, true);
             if (tLRPC$TL_error == null) {
-                TLRPC$TL_account_password tLRPC$TL_account_password = (TLRPC$TL_account_password) tLObject;
-                if (!TwoStepVerificationActivity.canHandleCurrentPassword(tLRPC$TL_account_password, true)) {
+                TLRPC$account_Password tLRPC$account_Password = (TLRPC$account_Password) tLObject;
+                if (!TwoStepVerificationActivity.canHandleCurrentPassword(tLRPC$account_Password, true)) {
                     AlertsCreator.showUpdateAppAlert(this.this$0.getParentActivity(), LocaleController.getString("UpdateAppAlert", R.string.UpdateAppAlert), true);
                     return;
                 }
                 Bundle bundle = new Bundle();
-                SerializedData serializedData = new SerializedData(tLRPC$TL_account_password.getObjectSize());
-                tLRPC$TL_account_password.serializeToStream(serializedData);
+                SerializedData serializedData = new SerializedData(tLRPC$account_Password.getObjectSize());
+                tLRPC$account_Password.serializeToStream(serializedData);
                 bundle.putString("password", Utilities.bytesToHex(serializedData.toByteArray()));
                 bundle.putString("phoneFormated", this.requestPhone);
                 bundle.putString("phoneHash", this.phoneHash);
@@ -6043,7 +6137,7 @@ public class LoginActivity extends BaseFragment {
         private TextView confirmTextView;
         private Bundle currentParams;
         /* access modifiers changed from: private */
-        public TLRPC$TL_account_password currentPassword;
+        public TLRPC$account_Password currentPassword;
         private RLottieImageView lockImageView;
         private boolean nextPressed;
         private OutlineTextContainerView outlineCodeField;
@@ -6410,13 +6504,13 @@ public class LoginActivity extends BaseFragment {
                 this.passwordString = string;
                 if (string != null) {
                     SerializedData serializedData = new SerializedData(Utilities.hexToBytes(string));
-                    this.currentPassword = TLRPC$TL_account_password.TLdeserialize(serializedData, serializedData.readInt32(false), false);
+                    this.currentPassword = TLRPC$account_Password.TLdeserialize(serializedData, serializedData.readInt32(false), false);
                 }
                 this.requestPhone = bundle.getString("phoneFormated");
                 this.phoneHash = bundle.getString("phoneHash");
                 this.phoneCode = bundle.getString("code");
-                TLRPC$TL_account_password tLRPC$TL_account_password = this.currentPassword;
-                if (tLRPC$TL_account_password == null || TextUtils.isEmpty(tLRPC$TL_account_password.hint)) {
+                TLRPC$account_Password tLRPC$account_Password = this.currentPassword;
+                if (tLRPC$account_Password == null || TextUtils.isEmpty(tLRPC$account_Password.hint)) {
                     this.codeField.setHint((CharSequence) null);
                 } else {
                     this.codeField.setHint(this.currentPassword.hint);
@@ -6454,8 +6548,8 @@ public class LoginActivity extends BaseFragment {
             TLRPC$TL_auth_checkPassword tLRPC$TL_auth_checkPassword = new TLRPC$TL_auth_checkPassword();
             LoginActivity$LoginActivityPasswordView$$ExternalSyntheticLambda13 loginActivity$LoginActivityPasswordView$$ExternalSyntheticLambda13 = new LoginActivity$LoginActivityPasswordView$$ExternalSyntheticLambda13(this);
             if (z) {
-                TLRPC$TL_account_password tLRPC$TL_account_password = this.currentPassword;
-                TLRPC$TL_inputCheckPasswordSRP startCheck = SRPHelper.startCheck(x, tLRPC$TL_account_password.srp_id, tLRPC$TL_account_password.srp_B, (TLRPC$TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow) tLRPC$PasswordKdfAlgo);
+                TLRPC$account_Password tLRPC$account_Password = this.currentPassword;
+                TLRPC$TL_inputCheckPasswordSRP startCheck = SRPHelper.startCheck(x, tLRPC$account_Password.srp_id, tLRPC$account_Password.srp_B, (TLRPC$TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow) tLRPC$PasswordKdfAlgo);
                 tLRPC$TL_auth_checkPassword.password = startCheck;
                 if (startCheck == null) {
                     TLRPC$TL_error tLRPC$TL_error = new TLRPC$TL_error();
@@ -6507,7 +6601,7 @@ public class LoginActivity extends BaseFragment {
         /* access modifiers changed from: private */
         public /* synthetic */ void lambda$onNextPressed$7(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
             if (tLRPC$TL_error == null) {
-                this.currentPassword = (TLRPC$TL_account_password) tLObject;
+                this.currentPassword = (TLRPC$account_Password) tLObject;
                 onNextPressed((String) null);
             }
         }
@@ -6914,6 +7008,1610 @@ public class LoginActivity extends BaseFragment {
         }
     }
 
+    public class LoginActivitySetupEmail extends SlideView {
+        private Bundle currentParams;
+        private EditTextBoldCursor emailField;
+        private OutlineTextContainerView emailOutlineView;
+        private String emailPhone;
+        /* access modifiers changed from: private */
+        public GoogleSignInAccount googleAccount;
+        private RLottieImageView inboxImageView;
+        private LoginOrView loginOrView;
+        private boolean nextPressed;
+        private String phone;
+        private String phoneHash;
+        private String requestPhone;
+        private TextView signInWithGoogleView;
+        private TextView subtitleView;
+        final /* synthetic */ LoginActivity this$0;
+        private TextView titleView;
+
+        public boolean needBackButton() {
+            return true;
+        }
+
+        /* JADX WARNING: Illegal instructions before constructor call */
+        /* JADX WARNING: Removed duplicated region for block: B:10:0x0076  */
+        /* JADX WARNING: Removed duplicated region for block: B:11:0x0079  */
+        /* JADX WARNING: Removed duplicated region for block: B:14:0x00f3  */
+        /* JADX WARNING: Removed duplicated region for block: B:15:0x00f6  */
+        /* Code decompiled incorrectly, please refer to instructions dump. */
+        public LoginActivitySetupEmail(org.telegram.ui.LoginActivity r26, android.content.Context r27) {
+            /*
+                r25 = this;
+                r0 = r25
+                r1 = r26
+                r2 = r27
+                r0.this$0 = r1
+                r0.<init>(r2)
+                r3 = 1
+                r0.setOrientation(r3)
+                android.widget.FrameLayout r4 = new android.widget.FrameLayout
+                r4.<init>(r2)
+                org.telegram.ui.Components.RLottieImageView r5 = new org.telegram.ui.Components.RLottieImageView
+                r5.<init>(r2)
+                r0.inboxImageView = r5
+                int r6 = org.telegram.messenger.R.raw.tsv_setup_mail
+                r7 = 120(0x78, float:1.68E-43)
+                r5.setAnimation((int) r6, (int) r7, (int) r7)
+                org.telegram.ui.Components.RLottieImageView r5 = r0.inboxImageView
+                r6 = 0
+                r5.setAutoRepeat(r6)
+                org.telegram.ui.Components.RLottieImageView r5 = r0.inboxImageView
+                android.widget.FrameLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r7, (int) r7, (int) r3)
+                r4.addView(r5, r7)
+                boolean r5 = org.telegram.messenger.AndroidUtilities.isSmallScreen()
+                if (r5 != 0) goto L_0x0048
+                android.graphics.Point r5 = org.telegram.messenger.AndroidUtilities.displaySize
+                int r7 = r5.x
+                int r5 = r5.y
+                if (r7 <= r5) goto L_0x0046
+                boolean r5 = org.telegram.messenger.AndroidUtilities.isTablet()
+                if (r5 != 0) goto L_0x0046
+                goto L_0x0048
+            L_0x0046:
+                r5 = 0
+                goto L_0x004a
+            L_0x0048:
+                r5 = 8
+            L_0x004a:
+                r4.setVisibility(r5)
+                r5 = -1
+                r7 = -2
+                android.widget.FrameLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r5, (int) r7, (int) r3)
+                r0.addView(r4, r8)
+                android.widget.TextView r4 = new android.widget.TextView
+                r4.<init>(r2)
+                r0.titleView = r4
+                r8 = 1099956224(0x41900000, float:18.0)
+                r4.setTextSize(r3, r8)
+                android.widget.TextView r4 = r0.titleView
+                java.lang.String r9 = "fonts/rmedium.ttf"
+                android.graphics.Typeface r9 = org.telegram.messenger.AndroidUtilities.getTypeface(r9)
+                r4.setTypeface(r9)
+                android.widget.TextView r4 = r0.titleView
+                int r9 = r26.activityMode
+                r10 = 3
+                if (r9 != r10) goto L_0x0079
+                int r9 = org.telegram.messenger.R.string.EnterNewEmail
+                goto L_0x007b
+            L_0x0079:
+                int r9 = org.telegram.messenger.R.string.AddEmailTitle
+            L_0x007b:
+                java.lang.String r9 = org.telegram.messenger.LocaleController.getString((int) r9)
+                r4.setText(r9)
+                android.widget.TextView r4 = r0.titleView
+                r9 = 17
+                r4.setGravity(r9)
+                android.widget.TextView r4 = r0.titleView
+                r11 = 1073741824(0x40000000, float:2.0)
+                int r12 = org.telegram.messenger.AndroidUtilities.dp(r11)
+                float r12 = (float) r12
+                r13 = 1065353216(0x3var_, float:1.0)
+                r4.setLineSpacing(r12, r13)
+                android.widget.TextView r4 = r0.titleView
+                r14 = -1
+                r15 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+                r16 = 1
+                r17 = 1107296256(0x42000000, float:32.0)
+                r18 = 1098907648(0x41800000, float:16.0)
+                r19 = 1107296256(0x42000000, float:32.0)
+                r20 = 0
+                android.widget.FrameLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createFrame(r14, r15, r16, r17, r18, r19, r20)
+                r0.addView(r4, r12)
+                android.widget.TextView r4 = new android.widget.TextView
+                r4.<init>(r2)
+                r0.subtitleView = r4
+                r12 = 1096810496(0x41600000, float:14.0)
+                r4.setTextSize(r3, r12)
+                android.widget.TextView r4 = r0.subtitleView
+                r4.setGravity(r9)
+                android.widget.TextView r4 = r0.subtitleView
+                int r9 = org.telegram.messenger.AndroidUtilities.dp(r11)
+                float r9 = (float) r9
+                r4.setLineSpacing(r9, r13)
+                android.widget.TextView r4 = r0.subtitleView
+                int r9 = org.telegram.messenger.R.string.AddEmailSubtitle
+                java.lang.String r9 = org.telegram.messenger.LocaleController.getString((int) r9)
+                r4.setText(r9)
+                android.widget.TextView r4 = r0.subtitleView
+                r14 = -2
+                r15 = -2
+                r17 = 32
+                r18 = 8
+                r19 = 32
+                r20 = 0
+                android.widget.LinearLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r14, (int) r15, (int) r16, (int) r17, (int) r18, (int) r19, (int) r20)
+                r0.addView(r4, r9)
+                org.telegram.ui.Components.OutlineTextContainerView r4 = new org.telegram.ui.Components.OutlineTextContainerView
+                r4.<init>(r2)
+                r0.emailOutlineView = r4
+                int r9 = r26.activityMode
+                if (r9 != r10) goto L_0x00f6
+                int r9 = org.telegram.messenger.R.string.YourNewEmail
+                goto L_0x00f8
+            L_0x00f6:
+                int r9 = org.telegram.messenger.R.string.YourEmail
+            L_0x00f8:
+                java.lang.String r9 = org.telegram.messenger.LocaleController.getString((int) r9)
+                r4.setText(r9)
+                org.telegram.ui.Components.EditTextBoldCursor r4 = new org.telegram.ui.Components.EditTextBoldCursor
+                r4.<init>(r2)
+                r0.emailField = r4
+                r9 = 1101004800(0x41a00000, float:20.0)
+                int r9 = org.telegram.messenger.AndroidUtilities.dp(r9)
+                r4.setCursorSize(r9)
+                org.telegram.ui.Components.EditTextBoldCursor r4 = r0.emailField
+                r9 = 1069547520(0x3fCLASSNAME, float:1.5)
+                r4.setCursorWidth(r9)
+                org.telegram.ui.Components.EditTextBoldCursor r4 = r0.emailField
+                r9 = 268435461(0x10000005, float:2.5243564E-29)
+                r4.setImeOptions(r9)
+                org.telegram.ui.Components.EditTextBoldCursor r4 = r0.emailField
+                r9 = 1099431936(0x41880000, float:17.0)
+                r4.setTextSize(r3, r9)
+                org.telegram.ui.Components.EditTextBoldCursor r4 = r0.emailField
+                r4.setMaxLines(r3)
+                org.telegram.ui.Components.EditTextBoldCursor r4 = r0.emailField
+                r9 = 33
+                r4.setInputType(r9)
+                org.telegram.ui.Components.EditTextBoldCursor r4 = r0.emailField
+                org.telegram.ui.LoginActivity$LoginActivitySetupEmail$$ExternalSyntheticLambda1 r14 = new org.telegram.ui.LoginActivity$LoginActivitySetupEmail$$ExternalSyntheticLambda1
+                r14.<init>(r0)
+                r4.setOnFocusChangeListener(r14)
+                org.telegram.ui.Components.EditTextBoldCursor r4 = r0.emailField
+                r14 = 0
+                r4.setBackground(r14)
+                org.telegram.ui.Components.EditTextBoldCursor r4 = r0.emailField
+                r14 = 1098907648(0x41800000, float:16.0)
+                int r15 = org.telegram.messenger.AndroidUtilities.dp(r14)
+                int r9 = org.telegram.messenger.AndroidUtilities.dp(r14)
+                int r6 = org.telegram.messenger.AndroidUtilities.dp(r14)
+                int r8 = org.telegram.messenger.AndroidUtilities.dp(r14)
+                r4.setPadding(r15, r9, r6, r8)
+                org.telegram.ui.Components.OutlineTextContainerView r4 = r0.emailOutlineView
+                org.telegram.ui.Components.EditTextBoldCursor r6 = r0.emailField
+                r4.attachEditText(r6)
+                org.telegram.ui.Components.OutlineTextContainerView r4 = r0.emailOutlineView
+                org.telegram.ui.Components.EditTextBoldCursor r6 = r0.emailField
+                r8 = 48
+                android.widget.FrameLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r5, (int) r7, (int) r8)
+                r4.addView(r6, r8)
+                org.telegram.ui.Components.EditTextBoldCursor r4 = r0.emailField
+                org.telegram.ui.LoginActivity$LoginActivitySetupEmail$$ExternalSyntheticLambda2 r6 = new org.telegram.ui.LoginActivity$LoginActivitySetupEmail$$ExternalSyntheticLambda2
+                r6.<init>(r0)
+                r4.setOnEditorActionListener(r6)
+                org.telegram.ui.Components.OutlineTextContainerView r4 = r0.emailOutlineView
+                r19 = -1
+                r20 = 58
+                r21 = 1098907648(0x41800000, float:16.0)
+                r22 = 1103101952(0x41CLASSNAME, float:24.0)
+                r23 = 1098907648(0x41800000, float:16.0)
+                r24 = 0
+                android.widget.LinearLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createLinear(r19, r20, r21, r22, r23, r24)
+                r0.addView(r4, r6)
+                android.widget.TextView r4 = new android.widget.TextView
+                r4.<init>(r2)
+                r0.signInWithGoogleView = r4
+                r4.setGravity(r10)
+                android.widget.TextView r4 = r0.signInWithGoogleView
+                r4.setTextSize(r3, r12)
+                android.widget.TextView r4 = r0.signInWithGoogleView
+                int r6 = org.telegram.messenger.AndroidUtilities.dp(r11)
+                float r6 = (float) r6
+                r4.setLineSpacing(r6, r13)
+                android.widget.TextView r4 = r0.signInWithGoogleView
+                int r6 = org.telegram.messenger.AndroidUtilities.dp(r14)
+                int r8 = org.telegram.messenger.AndroidUtilities.dp(r14)
+                int r9 = org.telegram.messenger.AndroidUtilities.dp(r14)
+                int r10 = org.telegram.messenger.AndroidUtilities.dp(r14)
+                r4.setPadding(r6, r8, r9, r10)
+                android.widget.TextView r4 = r0.signInWithGoogleView
+                r6 = 2
+                r4.setMaxLines(r6)
+                android.text.SpannableStringBuilder r4 = new android.text.SpannableStringBuilder
+                java.lang.String r8 = "d "
+                r4.<init>(r8)
+                int r8 = org.telegram.messenger.R.drawable.googleg_standard_color_18
+                android.graphics.drawable.Drawable r8 = androidx.core.content.ContextCompat.getDrawable(r2, r8)
+                r9 = 1091567616(0x41100000, float:9.0)
+                int r9 = org.telegram.messenger.AndroidUtilities.dp(r9)
+                r10 = 1099956224(0x41900000, float:18.0)
+                int r10 = org.telegram.messenger.AndroidUtilities.dp(r10)
+                r11 = 1104674816(0x41d80000, float:27.0)
+                int r11 = org.telegram.messenger.AndroidUtilities.dp(r11)
+                r12 = 0
+                r8.setBounds(r12, r9, r10, r11)
+                android.text.style.ImageSpan r9 = new android.text.style.ImageSpan
+                r9.<init>(r8, r12)
+                r8 = 33
+                r4.setSpan(r9, r12, r3, r8)
+                org.telegram.ui.LoginActivity$LoginActivitySetupEmail$1 r9 = new org.telegram.ui.LoginActivity$LoginActivitySetupEmail$1
+                r9.<init>(r0, r1)
+                r4.setSpan(r9, r3, r6, r8)
+                int r1 = org.telegram.messenger.R.string.SignInWithGoogle
+                java.lang.String r1 = org.telegram.messenger.LocaleController.getString((int) r1)
+                r4.append(r1)
+                android.widget.TextView r1 = r0.signInWithGoogleView
+                r1.setText(r4)
+                org.telegram.ui.Components.LoginOrView r1 = new org.telegram.ui.Components.LoginOrView
+                r1.<init>(r2)
+                r0.loginOrView = r1
+                android.widget.Space r1 = new android.widget.Space
+                r1.<init>(r2)
+                r3 = 0
+                android.widget.LinearLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r3, (int) r3, (float) r13)
+                r0.addView(r1, r3)
+                android.widget.FrameLayout r1 = new android.widget.FrameLayout
+                r1.<init>(r2)
+                android.widget.TextView r2 = r0.signInWithGoogleView
+                r8 = -2
+                r9 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+                r10 = 83
+                r11 = 0
+                r12 = 0
+                r13 = 0
+                r14 = 1103101952(0x41CLASSNAME, float:24.0)
+                android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r8, r9, r10, r11, r12, r13, r14)
+                r1.addView(r2, r3)
+                org.telegram.ui.Components.LoginOrView r2 = r0.loginOrView
+                r9 = 1098907648(0x41800000, float:16.0)
+                r14 = 1116471296(0x428CLASSNAME, float:70.0)
+                android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r8, r9, r10, r11, r12, r13, r14)
+                r1.addView(r2, r3)
+                org.telegram.ui.Components.LoginOrView r2 = r0.loginOrView
+                android.widget.TextView r3 = r0.signInWithGoogleView
+                r2.setMeasureAfter(r3)
+                android.widget.LinearLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createLinear(r5, r7)
+                r0.addView(r1, r2)
+                org.telegram.ui.Components.VerticalPositionAutoAnimator.attach(r1)
+                org.telegram.ui.LoginActivity$LoginActivitySetupEmail$$ExternalSyntheticLambda0 r2 = new org.telegram.ui.LoginActivity$LoginActivitySetupEmail$$ExternalSyntheticLambda0
+                r2.<init>(r0)
+                r1.setOnClickListener(r2)
+                return
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LoginActivity.LoginActivitySetupEmail.<init>(org.telegram.ui.LoginActivity, android.content.Context):void");
+        }
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$new$0(View view, boolean z) {
+            this.emailOutlineView.animateSelection(z ? 1.0f : 0.0f);
+        }
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ boolean lambda$new$1(TextView textView, int i, KeyEvent keyEvent) {
+            if (i != 5) {
+                return false;
+            }
+            onNextPressed((String) null);
+            return true;
+        }
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$new$3(View view) {
+            NotificationCenter.getGlobalInstance().addObserver(new NotificationCenter.NotificationCenterDelegate() {
+                public void didReceivedNotification(int i, int i2, Object... objArr) {
+                    int intValue = objArr[0].intValue();
+                    objArr[1].intValue();
+                    Intent intent = objArr[2];
+                    NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.onActivityResultReceived);
+                    if (intValue == 200) {
+                        try {
+                            GoogleSignInAccount unused = LoginActivitySetupEmail.this.googleAccount = GoogleSignIn.getSignedInAccountFromIntent(intent).getResult(ApiException.class);
+                            LoginActivitySetupEmail.this.onNextPressed((String) null);
+                        } catch (ApiException e) {
+                            FileLog.e((Throwable) e);
+                        }
+                    }
+                }
+            }, NotificationCenter.onActivityResultReceived);
+            GoogleSignInClient client = GoogleSignIn.getClient(getContext(), new GoogleSignInOptions.Builder().requestIdToken(BuildVars.GOOGLE_AUTH_CLIENT_ID).requestEmail().build());
+            client.signOut().addOnCompleteListener(new LoginActivity$LoginActivitySetupEmail$$ExternalSyntheticLambda3(this, client));
+        }
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$new$2(GoogleSignInClient googleSignInClient, Task task) {
+            this.this$0.getParentActivity().startActivityForResult(googleSignInClient.getSignInIntent(), 200);
+        }
+
+        public void updateColors() {
+            this.titleView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+            this.subtitleView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText6"));
+            this.emailField.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+            this.signInWithGoogleView.setTextColor(Theme.getColor("windowBackgroundWhiteBlueText4"));
+            this.loginOrView.updateColors();
+            this.emailOutlineView.invalidate();
+        }
+
+        public String getHeaderName() {
+            return LocaleController.getString("AddEmailTitle", R.string.AddEmailTitle);
+        }
+
+        public void setParams(Bundle bundle, boolean z) {
+            if (bundle != null) {
+                this.emailField.setText("");
+                this.currentParams = bundle;
+                this.phone = bundle.getString("phone");
+                this.emailPhone = this.currentParams.getString("ephone");
+                this.requestPhone = this.currentParams.getString("phoneFormated");
+                this.phoneHash = this.currentParams.getString("phoneHash");
+                int i = bundle.getBoolean("googleSignInAllowed") ? 0 : 8;
+                this.loginOrView.setVisibility(i);
+                this.signInWithGoogleView.setVisibility(i);
+                boolean unused = this.this$0.showKeyboard(this.emailField);
+                this.emailField.requestFocus();
+            }
+        }
+
+        private void onPasscodeError(boolean z) {
+            if (this.this$0.getParentActivity() != null) {
+                try {
+                    this.emailOutlineView.performHapticFeedback(3, 2);
+                } catch (Exception unused) {
+                }
+                if (z) {
+                    this.emailField.setText("");
+                }
+                this.emailField.requestFocus();
+                this.this$0.onFieldError(this.emailOutlineView, true);
+                postDelayed(new LoginActivity$LoginActivitySetupEmail$$ExternalSyntheticLambda4(this), 300);
+            }
+        }
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$onPasscodeError$4() {
+            this.emailField.requestFocus();
+        }
+
+        public void onNextPressed(String str) {
+            if (!this.nextPressed) {
+                GoogleSignInAccount googleSignInAccount = this.googleAccount;
+                String email = googleSignInAccount != null ? googleSignInAccount.getEmail() : this.emailField.getText().toString();
+                Bundle bundle = new Bundle();
+                bundle.putString("phone", this.phone);
+                bundle.putString("ephone", this.emailPhone);
+                bundle.putString("phoneFormated", this.requestPhone);
+                bundle.putString("phoneHash", this.phoneHash);
+                bundle.putString("email", email);
+                bundle.putBoolean("setup", true);
+                if (this.googleAccount != null) {
+                    TLRPC$TL_account_verifyEmail tLRPC$TL_account_verifyEmail = new TLRPC$TL_account_verifyEmail();
+                    if (this.this$0.activityMode == 3) {
+                        tLRPC$TL_account_verifyEmail.purpose = new TLRPC$TL_emailVerifyPurposeLoginChange();
+                    } else {
+                        TLRPC$TL_emailVerifyPurposeLoginSetup tLRPC$TL_emailVerifyPurposeLoginSetup = new TLRPC$TL_emailVerifyPurposeLoginSetup();
+                        tLRPC$TL_emailVerifyPurposeLoginSetup.phone_number = this.requestPhone;
+                        tLRPC$TL_emailVerifyPurposeLoginSetup.phone_code_hash = this.phoneHash;
+                        tLRPC$TL_account_verifyEmail.purpose = tLRPC$TL_emailVerifyPurposeLoginSetup;
+                    }
+                    TLRPC$TL_emailVerificationGoogle tLRPC$TL_emailVerificationGoogle = new TLRPC$TL_emailVerificationGoogle();
+                    tLRPC$TL_emailVerificationGoogle.token = this.googleAccount.getIdToken();
+                    tLRPC$TL_account_verifyEmail.verification = tLRPC$TL_emailVerificationGoogle;
+                    this.googleAccount = null;
+                    ConnectionsManager.getInstance(this.this$0.currentAccount).sendRequest(tLRPC$TL_account_verifyEmail, new LoginActivity$LoginActivitySetupEmail$$ExternalSyntheticLambda9(this, bundle, tLRPC$TL_account_verifyEmail), 10);
+                } else if (TextUtils.isEmpty(email)) {
+                    onPasscodeError(false);
+                } else {
+                    this.nextPressed = true;
+                    this.this$0.needShowProgress(0);
+                    TLRPC$TL_account_sendVerifyEmailCode tLRPC$TL_account_sendVerifyEmailCode = new TLRPC$TL_account_sendVerifyEmailCode();
+                    if (this.this$0.activityMode == 3) {
+                        tLRPC$TL_account_sendVerifyEmailCode.purpose = new TLRPC$TL_emailVerifyPurposeLoginChange();
+                    } else {
+                        TLRPC$TL_emailVerifyPurposeLoginSetup tLRPC$TL_emailVerifyPurposeLoginSetup2 = new TLRPC$TL_emailVerifyPurposeLoginSetup();
+                        tLRPC$TL_emailVerifyPurposeLoginSetup2.phone_number = this.requestPhone;
+                        tLRPC$TL_emailVerifyPurposeLoginSetup2.phone_code_hash = this.phoneHash;
+                        tLRPC$TL_account_sendVerifyEmailCode.purpose = tLRPC$TL_emailVerifyPurposeLoginSetup2;
+                    }
+                    tLRPC$TL_account_sendVerifyEmailCode.email = email;
+                    ConnectionsManager.getInstance(this.this$0.currentAccount).sendRequest(tLRPC$TL_account_sendVerifyEmailCode, new LoginActivity$LoginActivitySetupEmail$$ExternalSyntheticLambda8(this, bundle, tLRPC$TL_account_sendVerifyEmailCode), 10);
+                }
+            }
+        }
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$onNextPressed$6(Bundle bundle, TLRPC$TL_account_verifyEmail tLRPC$TL_account_verifyEmail, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+            AndroidUtilities.runOnUIThread(new LoginActivity$LoginActivitySetupEmail$$ExternalSyntheticLambda7(this, tLObject, bundle, tLRPC$TL_error, tLRPC$TL_account_verifyEmail));
+        }
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$onNextPressed$5(TLObject tLObject, Bundle bundle, TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_account_verifyEmail tLRPC$TL_account_verifyEmail) {
+            if ((tLObject instanceof TLRPC$TL_account_emailVerified) && this.this$0.activityMode == 3) {
+                this.this$0.finishFragment();
+                this.this$0.emailChangeFinishCallback.run();
+            } else if (tLObject instanceof TLRPC$TL_account_emailVerifiedLogin) {
+                TLRPC$TL_account_emailVerifiedLogin tLRPC$TL_account_emailVerifiedLogin = (TLRPC$TL_account_emailVerifiedLogin) tLObject;
+                bundle.putString("email", tLRPC$TL_account_emailVerifiedLogin.email);
+                this.this$0.fillNextCodeParams(bundle, tLRPC$TL_account_emailVerifiedLogin.sent_code);
+            } else if (tLRPC$TL_error == null) {
+            } else {
+                if (tLRPC$TL_error.text.contains("EMAIL_NOT_ALLOWED")) {
+                    this.this$0.needShowAlert(LocaleController.getString(R.string.RestorePasswordNoEmailTitle), LocaleController.getString(R.string.EmailNotAllowed));
+                } else if (tLRPC$TL_error.text.contains("EMAIL_TOKEN_INVALID")) {
+                    this.this$0.needShowAlert(LocaleController.getString(R.string.RestorePasswordNoEmailTitle), LocaleController.getString(R.string.EmailTokenInvalid));
+                } else if (tLRPC$TL_error.code != -1000) {
+                    AlertsCreator.processError(this.this$0.currentAccount, tLRPC$TL_error, this.this$0, tLRPC$TL_account_verifyEmail, new Object[0]);
+                }
+            }
+        }
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$onNextPressed$8(Bundle bundle, TLRPC$TL_account_sendVerifyEmailCode tLRPC$TL_account_sendVerifyEmailCode, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+            AndroidUtilities.runOnUIThread(new LoginActivity$LoginActivitySetupEmail$$ExternalSyntheticLambda6(this, tLObject, bundle, tLRPC$TL_error, tLRPC$TL_account_sendVerifyEmailCode));
+        }
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$onNextPressed$7(TLObject tLObject, Bundle bundle, TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_account_sendVerifyEmailCode tLRPC$TL_account_sendVerifyEmailCode) {
+            this.this$0.needHideProgress(false);
+            this.nextPressed = false;
+            if (tLObject instanceof TLRPC$TL_account_sentEmailCode) {
+                this.this$0.fillNextCodeParams(bundle, (TLRPC$TL_account_sentEmailCode) tLObject);
+                return;
+            }
+            String str = tLRPC$TL_error.text;
+            if (str == null) {
+                return;
+            }
+            if (str.contains("EMAIL_INVALID")) {
+                onPasscodeError(false);
+            } else if (tLRPC$TL_error.text.contains("EMAIL_NOT_ALLOWED")) {
+                this.this$0.needShowAlert(LocaleController.getString(R.string.RestorePasswordNoEmailTitle), LocaleController.getString(R.string.EmailNotAllowed));
+            } else if (tLRPC$TL_error.text.contains("PHONE_PASSWORD_FLOOD")) {
+                this.this$0.needShowAlert(LocaleController.getString(R.string.RestorePasswordNoEmailTitle), LocaleController.getString("FloodWait", R.string.FloodWait));
+            } else if (tLRPC$TL_error.text.contains("PHONE_NUMBER_FLOOD")) {
+                this.this$0.needShowAlert(LocaleController.getString(R.string.RestorePasswordNoEmailTitle), LocaleController.getString("PhoneNumberFlood", R.string.PhoneNumberFlood));
+            } else if (tLRPC$TL_error.text.contains("PHONE_CODE_EMPTY") || tLRPC$TL_error.text.contains("PHONE_CODE_INVALID")) {
+                this.this$0.needShowAlert(LocaleController.getString(R.string.RestorePasswordNoEmailTitle), LocaleController.getString("InvalidCode", R.string.InvalidCode));
+            } else if (tLRPC$TL_error.text.contains("PHONE_CODE_EXPIRED")) {
+                this.this$0.needShowAlert(LocaleController.getString(R.string.RestorePasswordNoEmailTitle), LocaleController.getString("CodeExpired", R.string.CodeExpired));
+            } else if (tLRPC$TL_error.text.startsWith("FLOOD_WAIT")) {
+                this.this$0.needShowAlert(LocaleController.getString(R.string.RestorePasswordNoEmailTitle), LocaleController.getString("FloodWait", R.string.FloodWait));
+            } else if (tLRPC$TL_error.code != -1000) {
+                AlertsCreator.processError(this.this$0.currentAccount, tLRPC$TL_error, this.this$0, tLRPC$TL_account_sendVerifyEmailCode, this.requestPhone);
+            }
+        }
+
+        public void onShow() {
+            super.onShow();
+            AndroidUtilities.runOnUIThread(new LoginActivity$LoginActivitySetupEmail$$ExternalSyntheticLambda5(this), (long) LoginActivity.SHOW_DELAY);
+        }
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$onShow$9() {
+            this.inboxImageView.getAnimatedDrawable().setCurrentFrame(0, false);
+            this.inboxImageView.playAnimation();
+            this.emailField.requestFocus();
+            AndroidUtilities.showKeyboard(this.emailField);
+        }
+
+        public void saveStateParams(Bundle bundle) {
+            String obj = this.emailField.getText().toString();
+            if (!(obj == null || obj.length() == 0)) {
+                bundle.putString("emailsetup_email", obj);
+            }
+            Bundle bundle2 = this.currentParams;
+            if (bundle2 != null) {
+                bundle.putBundle("emailsetup_params", bundle2);
+            }
+        }
+
+        public void restoreStateParams(Bundle bundle) {
+            Bundle bundle2 = bundle.getBundle("emailsetup_params");
+            this.currentParams = bundle2;
+            if (bundle2 != null) {
+                setParams(bundle2, true);
+            }
+            String string = bundle.getString("emailsetup_email");
+            if (string != null) {
+                this.emailField.setText(string);
+            }
+        }
+    }
+
+    public class LoginActivityEmailCodeView extends SlideView {
+        private CodeFieldContainer codeFieldContainer;
+        private TextView confirmTextView;
+        private Bundle currentParams;
+        private String email;
+        private String emailPhone;
+        /* access modifiers changed from: private */
+        public Runnable errorColorTimeout = new LoginActivity$LoginActivityEmailCodeView$$ExternalSyntheticLambda10(this);
+        private ViewSwitcher errorViewSwitcher;
+        /* access modifiers changed from: private */
+        public GoogleSignInAccount googleAccount;
+        private RLottieImageView inboxImageView;
+        private boolean isFromSetup;
+        private boolean isSetup;
+        private int length;
+        private LoginOrView loginOrView;
+        private boolean nextPressed;
+        private String phone;
+        private String phoneHash;
+        /* access modifiers changed from: private */
+        public boolean postedErrorColorTimeout;
+        private String requestPhone;
+        private Runnable resendCodeTimeout = new LoginActivity$LoginActivityEmailCodeView$$ExternalSyntheticLambda4(this);
+        private TextView resendCodeView;
+        private FrameLayout resendFrameLayout;
+        private TextView signInWithGoogleView;
+        final /* synthetic */ LoginActivity this$0;
+        private TextView titleView;
+        private TextView wrongCodeView;
+
+        public boolean hasCustomKeyboard() {
+            return true;
+        }
+
+        public boolean needBackButton() {
+            return true;
+        }
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$new$0() {
+            int i = 0;
+            this.postedErrorColorTimeout = false;
+            while (true) {
+                CodeNumberField[] codeNumberFieldArr = this.codeFieldContainer.codeField;
+                if (i >= codeNumberFieldArr.length) {
+                    break;
+                }
+                codeNumberFieldArr[i].animateErrorProgress(0.0f);
+                i++;
+            }
+            if (this.errorViewSwitcher.getCurrentView() != this.resendFrameLayout) {
+                this.errorViewSwitcher.showNext();
+            }
+        }
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$new$1() {
+            showResendCodeView(true);
+        }
+
+        /* JADX WARNING: Illegal instructions before constructor call */
+        /* JADX WARNING: Removed duplicated region for block: B:16:0x009b  */
+        /* JADX WARNING: Removed duplicated region for block: B:17:0x009e  */
+        /* JADX WARNING: Removed duplicated region for block: B:22:0x0113  */
+        /* JADX WARNING: Removed duplicated region for block: B:23:0x0116  */
+        /* JADX WARNING: Removed duplicated region for block: B:26:0x0284  */
+        /* JADX WARNING: Removed duplicated region for block: B:27:0x029c  */
+        /* Code decompiled incorrectly, please refer to instructions dump. */
+        public LoginActivityEmailCodeView(org.telegram.ui.LoginActivity r27, android.content.Context r28, boolean r29) {
+            /*
+                r26 = this;
+                r0 = r26
+                r1 = r27
+                r2 = r28
+                r3 = r29
+                r0.this$0 = r1
+                r0.<init>(r2)
+                org.telegram.ui.LoginActivity$LoginActivityEmailCodeView$$ExternalSyntheticLambda10 r4 = new org.telegram.ui.LoginActivity$LoginActivityEmailCodeView$$ExternalSyntheticLambda10
+                r4.<init>(r0)
+                r0.errorColorTimeout = r4
+                org.telegram.ui.LoginActivity$LoginActivityEmailCodeView$$ExternalSyntheticLambda4 r4 = new org.telegram.ui.LoginActivity$LoginActivityEmailCodeView$$ExternalSyntheticLambda4
+                r4.<init>(r0)
+                r0.resendCodeTimeout = r4
+                r0.isSetup = r3
+                r4 = 1
+                r0.setOrientation(r4)
+                android.widget.FrameLayout r5 = new android.widget.FrameLayout
+                r5.<init>(r2)
+                org.telegram.ui.Components.RLottieImageView r6 = new org.telegram.ui.Components.RLottieImageView
+                r6.<init>(r2)
+                r0.inboxImageView = r6
+                r6 = 3
+                r7 = 120(0x78, float:1.68E-43)
+                if (r3 == 0) goto L_0x0041
+                int r8 = r27.activityMode
+                if (r8 != r6) goto L_0x0039
+                goto L_0x0041
+            L_0x0039:
+                org.telegram.ui.Components.RLottieImageView r8 = r0.inboxImageView
+                int r9 = org.telegram.messenger.R.raw.email_setup_heart
+                r8.setAnimation((int) r9, (int) r7, (int) r7)
+                goto L_0x0048
+            L_0x0041:
+                org.telegram.ui.Components.RLottieImageView r8 = r0.inboxImageView
+                int r9 = org.telegram.messenger.R.raw.email_check_inbox
+                r8.setAnimation((int) r9, (int) r7, (int) r7)
+            L_0x0048:
+                org.telegram.ui.Components.RLottieImageView r8 = r0.inboxImageView
+                r9 = 0
+                r8.setAutoRepeat(r9)
+                org.telegram.ui.Components.RLottieImageView r8 = r0.inboxImageView
+                android.widget.FrameLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r7, (int) r7, (int) r4)
+                r5.addView(r8, r7)
+                boolean r7 = org.telegram.messenger.AndroidUtilities.isSmallScreen()
+                if (r7 != 0) goto L_0x006e
+                android.graphics.Point r7 = org.telegram.messenger.AndroidUtilities.displaySize
+                int r8 = r7.x
+                int r7 = r7.y
+                if (r8 <= r7) goto L_0x006c
+                boolean r7 = org.telegram.messenger.AndroidUtilities.isTablet()
+                if (r7 != 0) goto L_0x006c
+                goto L_0x006e
+            L_0x006c:
+                r7 = 0
+                goto L_0x0070
+            L_0x006e:
+                r7 = 8
+            L_0x0070:
+                r5.setVisibility(r7)
+                r7 = -1
+                r8 = -2
+                android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r7, (int) r8, (int) r4)
+                r0.addView(r5, r10)
+                android.widget.TextView r5 = new android.widget.TextView
+                r5.<init>(r2)
+                r0.titleView = r5
+                r10 = 1099956224(0x41900000, float:18.0)
+                r5.setTextSize(r4, r10)
+                android.widget.TextView r5 = r0.titleView
+                java.lang.String r11 = "fonts/rmedium.ttf"
+                android.graphics.Typeface r11 = org.telegram.messenger.AndroidUtilities.getTypeface(r11)
+                r5.setTypeface(r11)
+                android.widget.TextView r5 = r0.titleView
+                int r11 = r27.activityMode
+                if (r11 != r6) goto L_0x009e
+                int r6 = org.telegram.messenger.R.string.CheckYourNewEmail
+                goto L_0x00a5
+            L_0x009e:
+                if (r3 == 0) goto L_0x00a3
+                int r6 = org.telegram.messenger.R.string.VerificationCode
+                goto L_0x00a5
+            L_0x00a3:
+                int r6 = org.telegram.messenger.R.string.CheckYourEmail
+            L_0x00a5:
+                java.lang.String r6 = org.telegram.messenger.LocaleController.getString((int) r6)
+                r5.setText(r6)
+                android.widget.TextView r5 = r0.titleView
+                r6 = 17
+                r5.setGravity(r6)
+                android.widget.TextView r5 = r0.titleView
+                r11 = 1073741824(0x40000000, float:2.0)
+                int r12 = org.telegram.messenger.AndroidUtilities.dp(r11)
+                float r12 = (float) r12
+                r13 = 1065353216(0x3var_, float:1.0)
+                r5.setLineSpacing(r12, r13)
+                android.widget.TextView r5 = r0.titleView
+                r14 = -1
+                r15 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+                r16 = 1
+                r17 = 1107296256(0x42000000, float:32.0)
+                r18 = 1098907648(0x41800000, float:16.0)
+                r19 = 1107296256(0x42000000, float:32.0)
+                r20 = 0
+                android.widget.FrameLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createFrame(r14, r15, r16, r17, r18, r19, r20)
+                r0.addView(r5, r12)
+                org.telegram.ui.Components.spoilers.SpoilersTextView r5 = new org.telegram.ui.Components.spoilers.SpoilersTextView
+                r5.<init>(r2, r9)
+                r0.confirmTextView = r5
+                r12 = 1096810496(0x41600000, float:14.0)
+                r5.setTextSize(r4, r12)
+                android.widget.TextView r5 = r0.confirmTextView
+                r5.setGravity(r6)
+                android.widget.TextView r5 = r0.confirmTextView
+                int r14 = org.telegram.messenger.AndroidUtilities.dp(r11)
+                float r14 = (float) r14
+                r5.setLineSpacing(r14, r13)
+                android.widget.TextView r5 = r0.confirmTextView
+                r14 = -2
+                r15 = -2
+                r17 = 24
+                r18 = 8
+                r19 = 24
+                r20 = 0
+                android.widget.LinearLayout$LayoutParams r14 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r14, (int) r15, (int) r16, (int) r17, (int) r18, (int) r19, (int) r20)
+                r0.addView(r5, r14)
+                org.telegram.ui.LoginActivity$LoginActivityEmailCodeView$1 r5 = new org.telegram.ui.LoginActivity$LoginActivityEmailCodeView$1
+                r5.<init>(r2, r1)
+                r0.codeFieldContainer = r5
+                r14 = -2
+                r15 = 42
+                r17 = 0
+                if (r3 == 0) goto L_0x0116
+                r18 = 48
+                goto L_0x0118
+            L_0x0116:
+                r18 = 32
+            L_0x0118:
+                r19 = 0
+                r20 = 0
+                android.widget.LinearLayout$LayoutParams r14 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r14, (int) r15, (int) r16, (int) r17, (int) r18, (int) r19, (int) r20)
+                r0.addView(r5, r14)
+                android.widget.TextView r5 = new android.widget.TextView
+                r5.<init>(r2)
+                r0.signInWithGoogleView = r5
+                r5.setGravity(r6)
+                android.widget.TextView r5 = r0.signInWithGoogleView
+                r5.setTextSize(r4, r12)
+                android.widget.TextView r5 = r0.signInWithGoogleView
+                int r14 = org.telegram.messenger.AndroidUtilities.dp(r11)
+                float r14 = (float) r14
+                r5.setLineSpacing(r14, r13)
+                android.widget.TextView r5 = r0.signInWithGoogleView
+                r14 = 1098907648(0x41800000, float:16.0)
+                int r15 = org.telegram.messenger.AndroidUtilities.dp(r14)
+                int r7 = org.telegram.messenger.AndroidUtilities.dp(r14)
+                int r8 = org.telegram.messenger.AndroidUtilities.dp(r14)
+                int r13 = org.telegram.messenger.AndroidUtilities.dp(r14)
+                r5.setPadding(r15, r7, r8, r13)
+                android.widget.TextView r5 = r0.signInWithGoogleView
+                r7 = 2
+                r5.setMaxLines(r7)
+                android.text.SpannableStringBuilder r5 = new android.text.SpannableStringBuilder
+                java.lang.String r8 = "d "
+                r5.<init>(r8)
+                int r8 = org.telegram.messenger.R.drawable.googleg_standard_color_18
+                android.graphics.drawable.Drawable r8 = androidx.core.content.ContextCompat.getDrawable(r2, r8)
+                r13 = 1091567616(0x41100000, float:9.0)
+                int r13 = org.telegram.messenger.AndroidUtilities.dp(r13)
+                int r10 = org.telegram.messenger.AndroidUtilities.dp(r10)
+                r15 = 1104674816(0x41d80000, float:27.0)
+                int r15 = org.telegram.messenger.AndroidUtilities.dp(r15)
+                r8.setBounds(r9, r13, r10, r15)
+                android.text.style.ImageSpan r10 = new android.text.style.ImageSpan
+                r10.<init>(r8, r9)
+                r8 = 33
+                r5.setSpan(r10, r9, r4, r8)
+                org.telegram.ui.LoginActivity$LoginActivityEmailCodeView$2 r10 = new org.telegram.ui.LoginActivity$LoginActivityEmailCodeView$2
+                r10.<init>(r0, r1)
+                r5.setSpan(r10, r4, r7, r8)
+                int r8 = org.telegram.messenger.R.string.SignInWithGoogle
+                java.lang.String r8 = org.telegram.messenger.LocaleController.getString((int) r8)
+                r5.append(r8)
+                android.widget.TextView r8 = r0.signInWithGoogleView
+                r8.setText(r5)
+                android.widget.TextView r5 = r0.signInWithGoogleView
+                org.telegram.ui.LoginActivity$LoginActivityEmailCodeView$$ExternalSyntheticLambda0 r8 = new org.telegram.ui.LoginActivity$LoginActivityEmailCodeView$$ExternalSyntheticLambda0
+                r8.<init>(r0)
+                r5.setOnClickListener(r8)
+                android.widget.TextView r5 = new android.widget.TextView
+                r5.<init>(r2)
+                r0.resendCodeView = r5
+                r5.setGravity(r6)
+                android.widget.TextView r5 = r0.resendCodeView
+                r5.setTextSize(r4, r12)
+                android.widget.TextView r5 = r0.resendCodeView
+                int r8 = org.telegram.messenger.AndroidUtilities.dp(r11)
+                float r8 = (float) r8
+                r10 = 1065353216(0x3var_, float:1.0)
+                r5.setLineSpacing(r8, r10)
+                android.widget.TextView r5 = r0.resendCodeView
+                int r8 = org.telegram.messenger.AndroidUtilities.dp(r14)
+                int r10 = org.telegram.messenger.AndroidUtilities.dp(r14)
+                int r12 = org.telegram.messenger.AndroidUtilities.dp(r14)
+                int r13 = org.telegram.messenger.AndroidUtilities.dp(r14)
+                r5.setPadding(r8, r10, r12, r13)
+                android.widget.TextView r5 = r0.resendCodeView
+                r5.setMaxLines(r7)
+                android.widget.TextView r5 = r0.resendCodeView
+                int r7 = org.telegram.messenger.R.string.ResendCode
+                java.lang.String r7 = org.telegram.messenger.LocaleController.getString((int) r7)
+                r5.setText(r7)
+                android.widget.TextView r5 = r0.resendCodeView
+                org.telegram.ui.LoginActivity$LoginActivityEmailCodeView$$ExternalSyntheticLambda1 r7 = new org.telegram.ui.LoginActivity$LoginActivityEmailCodeView$$ExternalSyntheticLambda1
+                r7.<init>(r0)
+                r5.setOnClickListener(r7)
+                android.widget.TextView r5 = r0.resendCodeView
+                r7 = 1065353216(0x3var_, float:1.0)
+                org.telegram.messenger.AndroidUtilities.updateViewVisibilityAnimated(r5, r9, r7, r9)
+                org.telegram.ui.Components.LoginOrView r5 = new org.telegram.ui.Components.LoginOrView
+                r5.<init>(r2)
+                r0.loginOrView = r5
+                org.telegram.ui.Components.VerticalPositionAutoAnimator.attach(r5)
+                org.telegram.ui.LoginActivity$LoginActivityEmailCodeView$4 r5 = new org.telegram.ui.LoginActivity$LoginActivityEmailCodeView$4
+                r5.<init>(r0, r2, r1)
+                r0.errorViewSwitcher = r5
+                int r1 = org.telegram.messenger.R.anim.text_in
+                android.view.animation.Animation r1 = android.view.animation.AnimationUtils.loadAnimation(r2, r1)
+                android.view.animation.Interpolator r5 = org.telegram.ui.Components.Easings.easeInOutQuad
+                r1.setInterpolator(r5)
+                android.widget.ViewSwitcher r7 = r0.errorViewSwitcher
+                r7.setInAnimation(r1)
+                int r1 = org.telegram.messenger.R.anim.text_out
+                android.view.animation.Animation r1 = android.view.animation.AnimationUtils.loadAnimation(r2, r1)
+                r1.setInterpolator(r5)
+                android.widget.ViewSwitcher r5 = r0.errorViewSwitcher
+                r5.setOutAnimation(r1)
+                android.widget.FrameLayout r1 = new android.widget.FrameLayout
+                r1.<init>(r2)
+                r0.resendFrameLayout = r1
+                android.widget.TextView r5 = r0.resendCodeView
+                r7 = -2
+                android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r7, (int) r7, (int) r6)
+                r1.addView(r5, r6)
+                android.widget.ViewSwitcher r1 = r0.errorViewSwitcher
+                android.widget.FrameLayout r5 = r0.resendFrameLayout
+                r1.addView(r5)
+                android.widget.TextView r1 = new android.widget.TextView
+                r1.<init>(r2)
+                r0.wrongCodeView = r1
+                int r5 = org.telegram.messenger.R.string.WrongCode
+                java.lang.String r6 = "WrongCode"
+                java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
+                r1.setText(r5)
+                android.widget.TextView r1 = r0.wrongCodeView
+                int r5 = org.telegram.messenger.AndroidUtilities.dp(r11)
+                float r5 = (float) r5
+                r6 = 1065353216(0x3var_, float:1.0)
+                r1.setLineSpacing(r5, r6)
+                android.widget.TextView r1 = r0.wrongCodeView
+                r5 = 1097859072(0x41700000, float:15.0)
+                r1.setTextSize(r4, r5)
+                android.widget.TextView r1 = r0.wrongCodeView
+                r4 = 49
+                r1.setGravity(r4)
+                android.widget.TextView r1 = r0.wrongCodeView
+                r4 = 1082130432(0x40800000, float:4.0)
+                int r5 = org.telegram.messenger.AndroidUtilities.dp(r4)
+                int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
+                r1.setPadding(r9, r5, r9, r4)
+                android.widget.ViewSwitcher r1 = r0.errorViewSwitcher
+                android.widget.TextView r4 = r0.wrongCodeView
+                r1.addView(r4)
+                android.widget.FrameLayout r1 = new android.widget.FrameLayout
+                r1.<init>(r2)
+                if (r3 == 0) goto L_0x029c
+                android.widget.ViewSwitcher r2 = r0.errorViewSwitcher
+                r19 = -1
+                r20 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+                r21 = 80
+                r22 = 0
+                r23 = 0
+                r24 = 0
+                r25 = 1107296256(0x42000000, float:32.0)
+                android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r19, r20, r21, r22, r23, r24, r25)
+                r1.addView(r2, r3)
+                goto L_0x02d1
+            L_0x029c:
+                android.widget.ViewSwitcher r2 = r0.errorViewSwitcher
+                r19 = -1
+                r20 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+                r21 = 48
+                r22 = 0
+                r23 = 1090519040(0x41000000, float:8.0)
+                r24 = 0
+                r25 = 0
+                android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r19, r20, r21, r22, r23, r24, r25)
+                r1.addView(r2, r3)
+                org.telegram.ui.Components.LoginOrView r2 = r0.loginOrView
+                r20 = 1098907648(0x41800000, float:16.0)
+                r21 = 17
+                r23 = 0
+                r25 = 1098907648(0x41800000, float:16.0)
+                android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r19, r20, r21, r22, r23, r24, r25)
+                r1.addView(r2, r3)
+                android.widget.TextView r2 = r0.signInWithGoogleView
+                r20 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+                r21 = 80
+                android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r19, r20, r21, r22, r23, r24, r25)
+                r1.addView(r2, r3)
+            L_0x02d1:
+                r2 = -1
+                r3 = 1065353216(0x3var_, float:1.0)
+                android.widget.LinearLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r2, (int) r9, (float) r3)
+                r0.addView(r1, r2)
+                return
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LoginActivity.LoginActivityEmailCodeView.<init>(org.telegram.ui.LoginActivity, android.content.Context, boolean):void");
+        }
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$new$3(View view) {
+            NotificationCenter.getGlobalInstance().addObserver(new NotificationCenter.NotificationCenterDelegate() {
+                public void didReceivedNotification(int i, int i2, Object... objArr) {
+                    int intValue = objArr[0].intValue();
+                    objArr[1].intValue();
+                    Intent intent = objArr[2];
+                    NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.onActivityResultReceived);
+                    if (intValue == 200) {
+                        try {
+                            GoogleSignInAccount unused = LoginActivityEmailCodeView.this.googleAccount = GoogleSignIn.getSignedInAccountFromIntent(intent).getResult(ApiException.class);
+                            LoginActivityEmailCodeView.this.onNextPressed((String) null);
+                        } catch (ApiException e) {
+                            FileLog.e((Throwable) e);
+                        }
+                    }
+                }
+            }, NotificationCenter.onActivityResultReceived);
+            GoogleSignInClient client = GoogleSignIn.getClient(getContext(), new GoogleSignInOptions.Builder().requestIdToken(BuildVars.GOOGLE_AUTH_CLIENT_ID).requestEmail().build());
+            client.signOut().addOnCompleteListener(new LoginActivity$LoginActivityEmailCodeView$$ExternalSyntheticLambda3(this, client));
+        }
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$new$2(GoogleSignInClient googleSignInClient, Task task) {
+            this.this$0.getParentActivity().startActivityForResult(googleSignInClient.getSignInIntent(), 200);
+        }
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$new$6(View view) {
+            showResendCodeView(false);
+            TLRPC$TL_auth_resendCode tLRPC$TL_auth_resendCode = new TLRPC$TL_auth_resendCode();
+            tLRPC$TL_auth_resendCode.phone_number = this.requestPhone;
+            tLRPC$TL_auth_resendCode.phone_code_hash = this.phoneHash;
+            Bundle bundle = new Bundle();
+            bundle.putString("phone", this.phone);
+            bundle.putString("ephone", this.emailPhone);
+            bundle.putString("phoneFormated", this.requestPhone);
+            ConnectionsManager.getInstance(this.this$0.currentAccount).sendRequest(tLRPC$TL_auth_resendCode, new LoginActivity$LoginActivityEmailCodeView$$ExternalSyntheticLambda19(this, bundle, tLRPC$TL_auth_resendCode), 10);
+        }
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$new$5(Bundle bundle, TLRPC$TL_auth_resendCode tLRPC$TL_auth_resendCode, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+            AndroidUtilities.runOnUIThread(new LoginActivity$LoginActivityEmailCodeView$$ExternalSyntheticLambda16(this, tLObject, bundle, tLRPC$TL_error, tLRPC$TL_auth_resendCode));
+        }
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$new$4(TLObject tLObject, Bundle bundle, TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_auth_resendCode tLRPC$TL_auth_resendCode) {
+            if (tLObject instanceof TLRPC$TL_auth_sentCode) {
+                this.this$0.fillNextCodeParams(bundle, (TLRPC$TL_auth_sentCode) tLObject);
+            } else if (tLRPC$TL_error != null && tLRPC$TL_error.text != null) {
+                AlertsCreator.processError(this.this$0.currentAccount, tLRPC$TL_error, this.this$0, tLRPC$TL_auth_resendCode, new Object[0]);
+            }
+        }
+
+        public void updateColors() {
+            this.titleView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+            this.confirmTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText6"));
+            this.signInWithGoogleView.setTextColor(Theme.getColor("windowBackgroundWhiteBlueText4"));
+            this.loginOrView.updateColors();
+            this.resendCodeView.setTextColor(Theme.getColor("windowBackgroundWhiteBlueText4"));
+            this.wrongCodeView.setTextColor(Theme.getColor("dialogTextRed"));
+            this.codeFieldContainer.invalidate();
+        }
+
+        /* access modifiers changed from: protected */
+        public void onDetachedFromWindow() {
+            super.onDetachedFromWindow();
+            removeCallbacks(this.errorColorTimeout);
+            removeCallbacks(this.resendCodeTimeout);
+        }
+
+        private void showResendCodeView(boolean z) {
+            AndroidUtilities.updateViewVisibilityAnimated(this.resendCodeView, z);
+            if (this.loginOrView.getVisibility() != 8) {
+                this.loginOrView.setLayoutParams(LayoutHelper.createFrame(-1, 16.0f, 17, 0.0f, 0.0f, 0.0f, z ? 8.0f : 16.0f));
+                this.loginOrView.requestLayout();
+            }
+        }
+
+        public String getHeaderName() {
+            return LocaleController.getString(R.string.VerificationCode);
+        }
+
+        public void setParams(Bundle bundle, boolean z) {
+            if (bundle != null) {
+                this.currentParams = bundle;
+                this.requestPhone = bundle.getString("phoneFormated");
+                this.phoneHash = this.currentParams.getString("phoneHash");
+                this.phone = this.currentParams.getString("phone");
+                this.emailPhone = this.currentParams.getString("ephone");
+                this.isFromSetup = this.currentParams.getBoolean("setup");
+                this.length = this.currentParams.getInt("length");
+                this.email = this.currentParams.getString("email");
+                if (this.this$0.activityMode == 3) {
+                    this.confirmTextView.setText(LocaleController.formatString(R.string.CheckYourNewEmailSubtitle, this.email));
+                } else if (this.isSetup) {
+                    this.confirmTextView.setText(LocaleController.formatString(R.string.VerificationCodeSubtitle, this.email));
+                }
+                this.codeFieldContainer.setNumbersCount(this.length, 1);
+                for (CodeNumberField codeNumberField : this.codeFieldContainer.codeField) {
+                    codeNumberField.setShowSoftInputOnFocusCompat(!hasCustomKeyboard() || this.this$0.isCustomKeyboardForceDisabled());
+                    codeNumberField.addTextChangedListener(new TextWatcher() {
+                        public void afterTextChanged(Editable editable) {
+                        }
+
+                        public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+                        }
+
+                        public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+                            if (LoginActivityEmailCodeView.this.postedErrorColorTimeout) {
+                                LoginActivityEmailCodeView loginActivityEmailCodeView = LoginActivityEmailCodeView.this;
+                                loginActivityEmailCodeView.removeCallbacks(loginActivityEmailCodeView.errorColorTimeout);
+                                LoginActivityEmailCodeView.this.errorColorTimeout.run();
+                            }
+                        }
+                    });
+                    codeNumberField.setOnFocusChangeListener(new LoginActivity$LoginActivityEmailCodeView$$ExternalSyntheticLambda2(this));
+                }
+                this.codeFieldContainer.setText("");
+                if (!this.isFromSetup && this.this$0.activityMode != 3) {
+                    String string = this.currentParams.getString("emailPattern");
+                    SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(string);
+                    int indexOf = string.indexOf(42);
+                    int lastIndexOf = string.lastIndexOf(42);
+                    if (!(indexOf == lastIndexOf || indexOf == -1 || lastIndexOf == -1)) {
+                        TextStyleSpan.TextStyleRun textStyleRun = new TextStyleSpan.TextStyleRun();
+                        textStyleRun.flags |= 256;
+                        textStyleRun.start = indexOf;
+                        int i = lastIndexOf + 1;
+                        textStyleRun.end = i;
+                        spannableStringBuilder.setSpan(new TextStyleSpan(textStyleRun), indexOf, i, 0);
+                    }
+                    this.confirmTextView.setText(AndroidUtilities.formatSpannable(LocaleController.getString(R.string.CheckYourEmailSubtitle), spannableStringBuilder));
+                }
+                int i2 = bundle.getBoolean("googleSignInAllowed") ? 0 : 8;
+                this.loginOrView.setVisibility(i2);
+                this.signInWithGoogleView.setVisibility(i2);
+                boolean unused = this.this$0.showKeyboard(this.codeFieldContainer.codeField[0]);
+                this.codeFieldContainer.requestFocus();
+            }
+        }
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$setParams$7(View view, boolean z) {
+            if (z) {
+                this.this$0.keyboardView.setEditText((EditText) view);
+                this.this$0.keyboardView.setDispatchBackWhenEmpty(true);
+            }
+        }
+
+        private void onPasscodeError(boolean z) {
+            if (this.this$0.getParentActivity() != null) {
+                try {
+                    this.codeFieldContainer.performHapticFeedback(3, 2);
+                } catch (Exception unused) {
+                }
+                if (z) {
+                    for (CodeNumberField text : this.codeFieldContainer.codeField) {
+                        text.setText("");
+                    }
+                }
+                for (CodeNumberField animateErrorProgress : this.codeFieldContainer.codeField) {
+                    animateErrorProgress.animateErrorProgress(1.0f);
+                }
+                this.codeFieldContainer.codeField[0].requestFocus();
+                AndroidUtilities.shakeViewSpring((View) this.codeFieldContainer, (Runnable) new LoginActivity$LoginActivityEmailCodeView$$ExternalSyntheticLambda8(this));
+            }
+        }
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$onPasscodeError$9() {
+            postDelayed(new LoginActivity$LoginActivityEmailCodeView$$ExternalSyntheticLambda9(this), 150);
+            removeCallbacks(this.errorColorTimeout);
+            postDelayed(this.errorColorTimeout, 3000);
+            this.postedErrorColorTimeout = true;
+        }
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$onPasscodeError$8() {
+            CodeFieldContainer codeFieldContainer2 = this.codeFieldContainer;
+            int i = 0;
+            codeFieldContainer2.isFocusSuppressed = false;
+            codeFieldContainer2.codeField[0].requestFocus();
+            while (true) {
+                CodeNumberField[] codeNumberFieldArr = this.codeFieldContainer.codeField;
+                if (i < codeNumberFieldArr.length) {
+                    codeNumberFieldArr[i].animateErrorProgress(0.0f);
+                    i++;
+                } else {
+                    return;
+                }
+            }
+        }
+
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v5, resolved type: org.telegram.tgnet.TLRPC$TL_auth_signIn} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v8, resolved type: org.telegram.tgnet.TLRPC$TL_account_verifyEmail} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v9, resolved type: org.telegram.tgnet.TLRPC$TL_account_verifyEmail} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v11, resolved type: org.telegram.tgnet.TLRPC$TL_auth_signIn} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v12, resolved type: org.telegram.tgnet.TLRPC$TL_auth_signIn} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v13, resolved type: org.telegram.tgnet.TLRPC$TL_auth_signIn} */
+        /* JADX WARNING: Multi-variable type inference failed */
+        /* Code decompiled incorrectly, please refer to instructions dump. */
+        public void onNextPressed(java.lang.String r7) {
+            /*
+                r6 = this;
+                boolean r7 = r6.nextPressed
+                if (r7 == 0) goto L_0x0005
+                return
+            L_0x0005:
+                java.lang.Runnable r7 = r6.resendCodeTimeout
+                org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r7)
+                org.telegram.ui.CodeFieldContainer r7 = r6.codeFieldContainer
+                r0 = 1
+                r7.isFocusSuppressed = r0
+                org.telegram.ui.CodeNumberField[] r7 = r7.codeField
+                int r1 = r7.length
+                r2 = 0
+                r3 = 0
+            L_0x0014:
+                r4 = 0
+                if (r3 >= r1) goto L_0x001f
+                r5 = r7[r3]
+                r5.animateFocusedProgress(r4)
+                int r3 = r3 + 1
+                goto L_0x0014
+            L_0x001f:
+                org.telegram.ui.CodeFieldContainer r7 = r6.codeFieldContainer
+                java.lang.String r7 = r7.getCode()
+                int r1 = r7.length()
+                if (r1 != 0) goto L_0x0033
+                com.google.android.gms.auth.api.signin.GoogleSignInAccount r1 = r6.googleAccount
+                if (r1 != 0) goto L_0x0033
+                r6.onPasscodeError(r2)
+                return
+            L_0x0033:
+                r6.nextPressed = r0
+                org.telegram.ui.LoginActivity r1 = r6.this$0
+                r1.needShowProgress(r2)
+                org.telegram.ui.LoginActivity r1 = r6.this$0
+                int r1 = r1.activityMode
+                r3 = 3
+                if (r1 != r3) goto L_0x0059
+                org.telegram.tgnet.TLRPC$TL_account_verifyEmail r1 = new org.telegram.tgnet.TLRPC$TL_account_verifyEmail
+                r1.<init>()
+                org.telegram.tgnet.TLRPC$TL_emailVerifyPurposeLoginChange r3 = new org.telegram.tgnet.TLRPC$TL_emailVerifyPurposeLoginChange
+                r3.<init>()
+                r1.purpose = r3
+                org.telegram.tgnet.TLRPC$TL_emailVerificationCode r3 = new org.telegram.tgnet.TLRPC$TL_emailVerificationCode
+                r3.<init>()
+                r3.code = r7
+                r1.verification = r3
+                goto L_0x00ab
+            L_0x0059:
+                boolean r1 = r6.isFromSetup
+                if (r1 == 0) goto L_0x007b
+                org.telegram.tgnet.TLRPC$TL_account_verifyEmail r1 = new org.telegram.tgnet.TLRPC$TL_account_verifyEmail
+                r1.<init>()
+                org.telegram.tgnet.TLRPC$TL_emailVerifyPurposeLoginSetup r3 = new org.telegram.tgnet.TLRPC$TL_emailVerifyPurposeLoginSetup
+                r3.<init>()
+                java.lang.String r5 = r6.requestPhone
+                r3.phone_number = r5
+                java.lang.String r5 = r6.phoneHash
+                r3.phone_code_hash = r5
+                r1.purpose = r3
+                org.telegram.tgnet.TLRPC$TL_emailVerificationCode r3 = new org.telegram.tgnet.TLRPC$TL_emailVerificationCode
+                r3.<init>()
+                r3.code = r7
+                r1.verification = r3
+                goto L_0x00ab
+            L_0x007b:
+                org.telegram.tgnet.TLRPC$TL_auth_signIn r1 = new org.telegram.tgnet.TLRPC$TL_auth_signIn
+                r1.<init>()
+                java.lang.String r3 = r6.requestPhone
+                r1.phone_number = r3
+                java.lang.String r3 = r6.phoneHash
+                r1.phone_code_hash = r3
+                com.google.android.gms.auth.api.signin.GoogleSignInAccount r3 = r6.googleAccount
+                if (r3 == 0) goto L_0x009c
+                org.telegram.tgnet.TLRPC$TL_emailVerificationGoogle r3 = new org.telegram.tgnet.TLRPC$TL_emailVerificationGoogle
+                r3.<init>()
+                com.google.android.gms.auth.api.signin.GoogleSignInAccount r5 = r6.googleAccount
+                java.lang.String r5 = r5.getIdToken()
+                r3.token = r5
+                r1.email_verification = r3
+                goto L_0x00a5
+            L_0x009c:
+                org.telegram.tgnet.TLRPC$TL_emailVerificationCode r3 = new org.telegram.tgnet.TLRPC$TL_emailVerificationCode
+                r3.<init>()
+                r3.code = r7
+                r1.email_verification = r3
+            L_0x00a5:
+                int r3 = r1.flags
+                r3 = r3 | 2
+                r1.flags = r3
+            L_0x00ab:
+                org.telegram.ui.CodeFieldContainer r3 = r6.codeFieldContainer
+                r3.isFocusSuppressed = r0
+                org.telegram.ui.CodeNumberField[] r0 = r3.codeField
+                int r3 = r0.length
+            L_0x00b2:
+                if (r2 >= r3) goto L_0x00bc
+                r5 = r0[r2]
+                r5.animateFocusedProgress(r4)
+                int r2 = r2 + 1
+                goto L_0x00b2
+            L_0x00bc:
+                org.telegram.ui.LoginActivity r0 = r6.this$0
+                int r0 = r0.currentAccount
+                org.telegram.tgnet.ConnectionsManager r0 = org.telegram.tgnet.ConnectionsManager.getInstance(r0)
+                org.telegram.ui.LoginActivity$LoginActivityEmailCodeView$$ExternalSyntheticLambda20 r2 = new org.telegram.ui.LoginActivity$LoginActivityEmailCodeView$$ExternalSyntheticLambda20
+                r2.<init>(r6, r7)
+                r7 = 10
+                r0.sendRequest(r1, r2, r7)
+                return
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LoginActivity.LoginActivityEmailCodeView.onNextPressed(java.lang.String):void");
+        }
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$onNextPressed$16(String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+            AndroidUtilities.runOnUIThread(new LoginActivity$LoginActivityEmailCodeView$$ExternalSyntheticLambda17(this, tLRPC$TL_error, str, tLObject));
+        }
+
+        /* access modifiers changed from: private */
+        /* JADX WARNING: Removed duplicated region for block: B:39:0x017c  */
+        /* Code decompiled incorrectly, please refer to instructions dump. */
+        public /* synthetic */ void lambda$onNextPressed$15(org.telegram.tgnet.TLRPC$TL_error r6, java.lang.String r7, org.telegram.tgnet.TLObject r8) {
+            /*
+                r5 = this;
+                org.telegram.ui.LoginActivity r0 = r5.this$0
+                r1 = 0
+                r0.needHideProgress(r1)
+                r0 = 0
+                r2 = 1
+                if (r6 != 0) goto L_0x005a
+                r5.nextPressed = r1
+                org.telegram.ui.LoginActivity r6 = r5.this$0
+                r6.showDoneButton(r1, r2)
+                android.os.Bundle r6 = new android.os.Bundle
+                r6.<init>()
+                java.lang.String r1 = r5.phone
+                java.lang.String r2 = "phone"
+                r6.putString(r2, r1)
+                java.lang.String r1 = r5.emailPhone
+                java.lang.String r2 = "ephone"
+                r6.putString(r2, r1)
+                java.lang.String r1 = r5.requestPhone
+                java.lang.String r2 = "phoneFormated"
+                r6.putString(r2, r1)
+                java.lang.String r1 = r5.phoneHash
+                java.lang.String r2 = "phoneHash"
+                r6.putString(r2, r1)
+                java.lang.String r1 = "code"
+                r6.putString(r1, r7)
+                boolean r7 = r8 instanceof org.telegram.tgnet.TLRPC$TL_auth_authorizationSignUpRequired
+                if (r7 == 0) goto L_0x0050
+                org.telegram.tgnet.TLRPC$TL_auth_authorizationSignUpRequired r8 = (org.telegram.tgnet.TLRPC$TL_auth_authorizationSignUpRequired) r8
+                org.telegram.tgnet.TLRPC$TL_help_termsOfService r7 = r8.terms_of_service
+                if (r7 == 0) goto L_0x0046
+                org.telegram.ui.LoginActivity r8 = r5.this$0
+                org.telegram.tgnet.TLRPC$TL_help_termsOfService unused = r8.currentTermsOfService = r7
+            L_0x0046:
+                org.telegram.ui.LoginActivity$LoginActivityEmailCodeView$$ExternalSyntheticLambda13 r7 = new org.telegram.ui.LoginActivity$LoginActivityEmailCodeView$$ExternalSyntheticLambda13
+                r7.<init>(r5, r6)
+                r5.animateSuccess(r7)
+                goto L_0x0195
+            L_0x0050:
+                org.telegram.ui.LoginActivity$LoginActivityEmailCodeView$$ExternalSyntheticLambda15 r7 = new org.telegram.ui.LoginActivity$LoginActivityEmailCodeView$$ExternalSyntheticLambda15
+                r7.<init>(r5, r8, r6)
+                r5.animateSuccess(r7)
+                goto L_0x0195
+            L_0x005a:
+                java.lang.String r8 = r6.text
+                java.lang.String r3 = "SESSION_PASSWORD_NEEDED"
+                boolean r8 = r8.contains(r3)
+                if (r8 == 0) goto L_0x007f
+                org.telegram.tgnet.TLRPC$TL_account_getPassword r6 = new org.telegram.tgnet.TLRPC$TL_account_getPassword
+                r6.<init>()
+                org.telegram.ui.LoginActivity r8 = r5.this$0
+                int r8 = r8.currentAccount
+                org.telegram.tgnet.ConnectionsManager r8 = org.telegram.tgnet.ConnectionsManager.getInstance(r8)
+                org.telegram.ui.LoginActivity$LoginActivityEmailCodeView$$ExternalSyntheticLambda21 r1 = new org.telegram.ui.LoginActivity$LoginActivityEmailCodeView$$ExternalSyntheticLambda21
+                r1.<init>(r5, r7)
+                r7 = 10
+                r8.sendRequest(r6, r1, r7)
+                goto L_0x0195
+            L_0x007f:
+                r5.nextPressed = r1
+                org.telegram.ui.LoginActivity r7 = r5.this$0
+                r7.showDoneButton(r1, r2)
+                java.lang.String r7 = r6.text
+                java.lang.String r8 = "EMAIL_ADDRESS_INVALID"
+                boolean r7 = r7.contains(r8)
+                if (r7 == 0) goto L_0x00a3
+                org.telegram.ui.LoginActivity r6 = r5.this$0
+                int r7 = org.telegram.messenger.R.string.RestorePasswordNoEmailTitle
+                java.lang.String r7 = org.telegram.messenger.LocaleController.getString((int) r7)
+                int r8 = org.telegram.messenger.R.string.EmailAddressInvalid
+                java.lang.String r8 = org.telegram.messenger.LocaleController.getString((int) r8)
+                r6.needShowAlert(r7, r8)
+                goto L_0x0175
+            L_0x00a3:
+                java.lang.String r7 = r6.text
+                java.lang.String r8 = "PHONE_NUMBER_INVALID"
+                boolean r7 = r7.contains(r8)
+                if (r7 == 0) goto L_0x00c2
+                org.telegram.ui.LoginActivity r6 = r5.this$0
+                int r7 = org.telegram.messenger.R.string.RestorePasswordNoEmailTitle
+                java.lang.String r7 = org.telegram.messenger.LocaleController.getString((int) r7)
+                int r8 = org.telegram.messenger.R.string.InvalidPhoneNumber
+                java.lang.String r2 = "InvalidPhoneNumber"
+                java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r2, r8)
+                r6.needShowAlert(r7, r8)
+                goto L_0x0175
+            L_0x00c2:
+                java.lang.String r7 = r6.text
+                java.lang.String r8 = "CODE_EMPTY"
+                boolean r7 = r7.contains(r8)
+                if (r7 != 0) goto L_0x0177
+                java.lang.String r7 = r6.text
+                java.lang.String r8 = "CODE_INVALID"
+                boolean r7 = r7.contains(r8)
+                if (r7 != 0) goto L_0x0177
+                java.lang.String r7 = r6.text
+                java.lang.String r8 = "EMAIL_CODE_INVALID"
+                boolean r7 = r7.contains(r8)
+                if (r7 != 0) goto L_0x0177
+                java.lang.String r7 = r6.text
+                java.lang.String r8 = "PHONE_CODE_INVALID"
+                boolean r7 = r7.contains(r8)
+                if (r7 == 0) goto L_0x00ec
+                goto L_0x0177
+            L_0x00ec:
+                java.lang.String r7 = r6.text
+                java.lang.String r8 = "EMAIL_TOKEN_INVALID"
+                boolean r7 = r7.contains(r8)
+                if (r7 == 0) goto L_0x0108
+                org.telegram.ui.LoginActivity r6 = r5.this$0
+                int r7 = org.telegram.messenger.R.string.RestorePasswordNoEmailTitle
+                java.lang.String r7 = org.telegram.messenger.LocaleController.getString((int) r7)
+                int r8 = org.telegram.messenger.R.string.EmailTokenInvalid
+                java.lang.String r8 = org.telegram.messenger.LocaleController.getString((int) r8)
+                r6.needShowAlert(r7, r8)
+                goto L_0x0175
+            L_0x0108:
+                java.lang.String r7 = r6.text
+                java.lang.String r8 = "EMAIL_VERIFY_EXPIRED"
+                boolean r7 = r7.contains(r8)
+                if (r7 == 0) goto L_0x012e
+                r5.onBackPressed(r2)
+                org.telegram.ui.LoginActivity r6 = r5.this$0
+                r6.setPage(r1, r2, r0, r2)
+                org.telegram.ui.LoginActivity r6 = r5.this$0
+                int r7 = org.telegram.messenger.R.string.RestorePasswordNoEmailTitle
+                java.lang.String r7 = org.telegram.messenger.LocaleController.getString((int) r7)
+                int r8 = org.telegram.messenger.R.string.CodeExpired
+                java.lang.String r2 = "CodeExpired"
+                java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r2, r8)
+                r6.needShowAlert(r7, r8)
+                goto L_0x0175
+            L_0x012e:
+                java.lang.String r7 = r6.text
+                java.lang.String r8 = "FLOOD_WAIT"
+                boolean r7 = r7.startsWith(r8)
+                if (r7 == 0) goto L_0x014c
+                org.telegram.ui.LoginActivity r6 = r5.this$0
+                int r7 = org.telegram.messenger.R.string.RestorePasswordNoEmailTitle
+                java.lang.String r7 = org.telegram.messenger.LocaleController.getString((int) r7)
+                int r8 = org.telegram.messenger.R.string.FloodWait
+                java.lang.String r2 = "FloodWait"
+                java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r2, r8)
+                r6.needShowAlert(r7, r8)
+                goto L_0x0175
+            L_0x014c:
+                org.telegram.ui.LoginActivity r7 = r5.this$0
+                int r8 = org.telegram.messenger.R.string.RestorePasswordNoEmailTitle
+                java.lang.String r8 = org.telegram.messenger.LocaleController.getString((int) r8)
+                java.lang.StringBuilder r2 = new java.lang.StringBuilder
+                r2.<init>()
+                int r3 = org.telegram.messenger.R.string.ErrorOccurred
+                java.lang.String r4 = "ErrorOccurred"
+                java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
+                r2.append(r3)
+                java.lang.String r3 = "\n"
+                r2.append(r3)
+                java.lang.String r6 = r6.text
+                r2.append(r6)
+                java.lang.String r6 = r2.toString()
+                r7.needShowAlert(r8, r6)
+            L_0x0175:
+                r2 = 0
+                goto L_0x017a
+            L_0x0177:
+                r5.shakeWrongCode()
+            L_0x017a:
+                if (r2 != 0) goto L_0x0195
+                r6 = 0
+            L_0x017d:
+                org.telegram.ui.CodeFieldContainer r7 = r5.codeFieldContainer
+                org.telegram.ui.CodeNumberField[] r8 = r7.codeField
+                int r2 = r8.length
+                if (r6 >= r2) goto L_0x018e
+                r7 = r8[r6]
+                java.lang.String r8 = ""
+                r7.setText(r8)
+                int r6 = r6 + 1
+                goto L_0x017d
+            L_0x018e:
+                r7.isFocusSuppressed = r1
+                r6 = r8[r1]
+                r6.requestFocus()
+            L_0x0195:
+                r5.googleAccount = r0
+                return
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LoginActivity.LoginActivityEmailCodeView.lambda$onNextPressed$15(org.telegram.tgnet.TLRPC$TL_error, java.lang.String, org.telegram.tgnet.TLObject):void");
+        }
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$onNextPressed$10(Bundle bundle) {
+            this.this$0.setPage(5, true, bundle, false);
+        }
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$onNextPressed$11(TLObject tLObject, Bundle bundle) {
+            if ((tLObject instanceof TLRPC$TL_account_emailVerified) && this.this$0.activityMode == 3) {
+                this.this$0.finishFragment();
+                this.this$0.emailChangeFinishCallback.run();
+            } else if (tLObject instanceof TLRPC$TL_account_emailVerifiedLogin) {
+                this.this$0.fillNextCodeParams(bundle, ((TLRPC$TL_account_emailVerifiedLogin) tLObject).sent_code);
+            } else if (tLObject instanceof TLRPC$TL_auth_authorization) {
+                this.this$0.onAuthSuccess((TLRPC$TL_auth_authorization) tLObject);
+            }
+        }
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$onNextPressed$14(String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+            AndroidUtilities.runOnUIThread(new LoginActivity$LoginActivityEmailCodeView$$ExternalSyntheticLambda18(this, tLRPC$TL_error, tLObject, str));
+        }
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$onNextPressed$13(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, String str) {
+            this.nextPressed = false;
+            this.this$0.showDoneButton(false, true);
+            if (tLRPC$TL_error == null) {
+                TLRPC$account_Password tLRPC$account_Password = (TLRPC$account_Password) tLObject;
+                if (!TwoStepVerificationActivity.canHandleCurrentPassword(tLRPC$account_Password, true)) {
+                    AlertsCreator.showUpdateAppAlert(this.this$0.getParentActivity(), LocaleController.getString("UpdateAppAlert", R.string.UpdateAppAlert), true);
+                    return;
+                }
+                Bundle bundle = new Bundle();
+                SerializedData serializedData = new SerializedData(tLRPC$account_Password.getObjectSize());
+                tLRPC$account_Password.serializeToStream(serializedData);
+                bundle.putString("password", Utilities.bytesToHex(serializedData.toByteArray()));
+                bundle.putString("phoneFormated", this.requestPhone);
+                bundle.putString("phoneHash", this.phoneHash);
+                bundle.putString("code", str);
+                animateSuccess(new LoginActivity$LoginActivityEmailCodeView$$ExternalSyntheticLambda12(this, bundle));
+                return;
+            }
+            this.this$0.needShowAlert(LocaleController.getString(R.string.RestorePasswordNoEmailTitle), tLRPC$TL_error.text);
+        }
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$onNextPressed$12(Bundle bundle) {
+            this.this$0.setPage(6, true, bundle, false);
+        }
+
+        private void animateSuccess(Runnable runnable) {
+            if (this.googleAccount != null) {
+                runnable.run();
+                return;
+            }
+            int i = 0;
+            while (true) {
+                CodeFieldContainer codeFieldContainer2 = this.codeFieldContainer;
+                if (i < codeFieldContainer2.codeField.length) {
+                    codeFieldContainer2.postDelayed(new LoginActivity$LoginActivityEmailCodeView$$ExternalSyntheticLambda11(this, i), ((long) i) * 75);
+                    i++;
+                } else {
+                    codeFieldContainer2.postDelayed(new LoginActivity$LoginActivityEmailCodeView$$ExternalSyntheticLambda14(this, runnable), (((long) this.codeFieldContainer.codeField.length) * 75) + 400);
+                    return;
+                }
+            }
+        }
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$animateSuccess$17(int i) {
+            this.codeFieldContainer.codeField[i].animateSuccessProgress(1.0f);
+        }
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$animateSuccess$18(Runnable runnable) {
+            int i = 0;
+            while (true) {
+                CodeNumberField[] codeNumberFieldArr = this.codeFieldContainer.codeField;
+                if (i < codeNumberFieldArr.length) {
+                    codeNumberFieldArr[i].animateSuccessProgress(0.0f);
+                    i++;
+                } else {
+                    runnable.run();
+                    this.codeFieldContainer.isFocusSuppressed = false;
+                    return;
+                }
+            }
+        }
+
+        private void shakeWrongCode() {
+            try {
+                this.codeFieldContainer.performHapticFeedback(3, 2);
+            } catch (Exception unused) {
+            }
+            int i = 0;
+            while (true) {
+                CodeNumberField[] codeNumberFieldArr = this.codeFieldContainer.codeField;
+                if (i >= codeNumberFieldArr.length) {
+                    break;
+                }
+                codeNumberFieldArr[i].setText("");
+                this.codeFieldContainer.codeField[i].animateErrorProgress(1.0f);
+                i++;
+            }
+            if (this.errorViewSwitcher.getCurrentView() == this.resendFrameLayout) {
+                this.errorViewSwitcher.showNext();
+            }
+            this.codeFieldContainer.codeField[0].requestFocus();
+            AndroidUtilities.shakeViewSpring(this.codeFieldContainer, 10.0f, new LoginActivity$LoginActivityEmailCodeView$$ExternalSyntheticLambda7(this));
+            removeCallbacks(this.errorColorTimeout);
+            postDelayed(this.errorColorTimeout, 5000);
+            this.postedErrorColorTimeout = true;
+        }
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$shakeWrongCode$20() {
+            postDelayed(new LoginActivity$LoginActivityEmailCodeView$$ExternalSyntheticLambda6(this), 150);
+        }
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$shakeWrongCode$19() {
+            CodeFieldContainer codeFieldContainer2 = this.codeFieldContainer;
+            int i = 0;
+            codeFieldContainer2.isFocusSuppressed = false;
+            codeFieldContainer2.codeField[0].requestFocus();
+            while (true) {
+                CodeNumberField[] codeNumberFieldArr = this.codeFieldContainer.codeField;
+                if (i < codeNumberFieldArr.length) {
+                    codeNumberFieldArr[i].animateErrorProgress(0.0f);
+                    i++;
+                } else {
+                    return;
+                }
+            }
+        }
+
+        public void onShow() {
+            super.onShow();
+            AndroidUtilities.runOnUIThread(new LoginActivity$LoginActivityEmailCodeView$$ExternalSyntheticLambda5(this), (long) LoginActivity.SHOW_DELAY);
+        }
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$onShow$21() {
+            this.inboxImageView.getAnimatedDrawable().setCurrentFrame(0, false);
+            this.inboxImageView.playAnimation();
+            this.codeFieldContainer.setText("");
+            CodeFieldContainer codeFieldContainer2 = this.codeFieldContainer;
+            if (codeFieldContainer2 != null) {
+                codeFieldContainer2.codeField[0].requestFocus();
+            }
+            AndroidUtilities.runOnUIThread(this.resendCodeTimeout, 60000);
+        }
+
+        public void saveStateParams(Bundle bundle) {
+            String code = this.codeFieldContainer.getCode();
+            if (!(code == null || code.length() == 0)) {
+                bundle.putString("emailcode_code", code);
+            }
+            Bundle bundle2 = this.currentParams;
+            if (bundle2 != null) {
+                bundle.putBundle("emailcode_params", bundle2);
+            }
+        }
+
+        public void restoreStateParams(Bundle bundle) {
+            Bundle bundle2 = bundle.getBundle("emailcode_params");
+            this.currentParams = bundle2;
+            if (bundle2 != null) {
+                setParams(bundle2, true);
+            }
+            String string = bundle.getString("emailcode_code");
+            if (string != null) {
+                this.codeFieldContainer.setText(string);
+            }
+        }
+    }
+
     public class LoginActivityRecoverView extends SlideView {
         private CodeFieldContainer codeFieldContainer;
         private TextView confirmTextView;
@@ -7106,7 +8804,7 @@ public class LoginActivity extends BaseFragment {
                 android.widget.LinearLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r11, (int) r12, (int) r13, (int) r14, (int) r15, (int) r16, (int) r17)
                 r0.addView(r1, r4)
                 org.telegram.ui.Components.spoilers.SpoilersTextView r1 = new org.telegram.ui.Components.spoilers.SpoilersTextView
-                r1.<init>(r2)
+                r1.<init>(r2, r6)
                 r0.troubleButton = r1
                 r1.setGravity(r5)
                 android.widget.TextView r1 = r0.troubleButton
@@ -7369,7 +9067,7 @@ public class LoginActivity extends BaseFragment {
         private EditTextBoldCursor[] codeField;
         private TextView confirmTextView;
         private Bundle currentParams;
-        private TLRPC$TL_account_password currentPassword;
+        private TLRPC$account_Password currentPassword;
         private int currentStage;
         private String emailCode;
         /* access modifiers changed from: private */
@@ -7806,7 +9504,7 @@ public class LoginActivity extends BaseFragment {
                 this.passwordString = string;
                 if (string != null) {
                     SerializedData serializedData = new SerializedData(Utilities.hexToBytes(string));
-                    TLRPC$TL_account_password TLdeserialize = TLRPC$TL_account_password.TLdeserialize(serializedData, serializedData.readInt32(false), false);
+                    TLRPC$account_Password TLdeserialize = TLRPC$account_Password.TLdeserialize(serializedData, serializedData.readInt32(false), false);
                     this.currentPassword = TLdeserialize;
                     TwoStepVerificationActivity.initPasswordNewAlgo(TLdeserialize);
                 }
@@ -7934,9 +9632,9 @@ public class LoginActivity extends BaseFragment {
         /* access modifiers changed from: private */
         public /* synthetic */ void lambda$recoverPassword$4(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, String str, String str2) {
             if (tLRPC$TL_error == null) {
-                TLRPC$TL_account_password tLRPC$TL_account_password = (TLRPC$TL_account_password) tLObject;
-                this.currentPassword = tLRPC$TL_account_password;
-                TwoStepVerificationActivity.initPasswordNewAlgo(tLRPC$TL_account_password);
+                TLRPC$account_Password tLRPC$account_Password = (TLRPC$account_Password) tLObject;
+                this.currentPassword = tLRPC$account_Password;
+                TwoStepVerificationActivity.initPasswordNewAlgo(tLRPC$account_Password);
                 recoverPassword(str, str2);
             }
         }

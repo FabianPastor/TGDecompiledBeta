@@ -6,18 +6,14 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda120 i
     public final /* synthetic */ MessagesStorage f$0;
     public final /* synthetic */ LongSparseArray f$1;
     public final /* synthetic */ LongSparseArray f$2;
-    public final /* synthetic */ LongSparseArray f$3;
-    public final /* synthetic */ boolean f$4;
 
-    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda120(MessagesStorage messagesStorage, LongSparseArray longSparseArray, LongSparseArray longSparseArray2, LongSparseArray longSparseArray3, boolean z) {
+    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda120(MessagesStorage messagesStorage, LongSparseArray longSparseArray, LongSparseArray longSparseArray2) {
         this.f$0 = messagesStorage;
         this.f$1 = longSparseArray;
         this.f$2 = longSparseArray2;
-        this.f$3 = longSparseArray3;
-        this.f$4 = z;
     }
 
     public final void run() {
-        this.f$0.lambda$putChannelViews$154(this.f$1, this.f$2, this.f$3, this.f$4);
+        this.f$0.lambda$getNewTask$80(this.f$1, this.f$2);
     }
 }

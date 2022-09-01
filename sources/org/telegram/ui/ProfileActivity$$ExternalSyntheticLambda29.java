@@ -1,17 +1,15 @@
 package org.telegram.ui;
 
-import java.util.Comparator;
-
-public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda29 implements Comparator {
+public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda29 implements Runnable {
     public final /* synthetic */ ProfileActivity f$0;
-    public final /* synthetic */ int f$1;
+    public final /* synthetic */ Object[] f$1;
 
-    public /* synthetic */ ProfileActivity$$ExternalSyntheticLambda29(ProfileActivity profileActivity, int i) {
+    public /* synthetic */ ProfileActivity$$ExternalSyntheticLambda29(ProfileActivity profileActivity, Object[] objArr) {
         this.f$0 = profileActivity;
-        this.f$1 = i;
+        this.f$1 = objArr;
     }
 
-    public final int compare(Object obj, Object obj2) {
-        return this.f$0.lambda$updateOnlineCount$31(this.f$1, (Integer) obj, (Integer) obj2);
+    public final void run() {
+        this.f$0.lambda$didReceivedNotification$31(this.f$1);
     }
 }

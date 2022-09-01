@@ -10,6 +10,6 @@ public final /* synthetic */ class FileLoadOperation$$ExternalSyntheticLambda6 i
     }
 
     public final void run() {
-        this.f$0.lambda$setIsPreloadVideoOperation$6(this.f$1);
+        this.f$0.lambda$setIsPreloadVideoOperation$7(this.f$1);
     }
 }

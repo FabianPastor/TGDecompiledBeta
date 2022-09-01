@@ -32,6 +32,7 @@ import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$DocumentAttribute;
 import org.telegram.tgnet.TLRPC$PhotoSize;
@@ -76,6 +77,8 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
     private LineProgressView progressView;
     private final Theme.ResourcesProvider resourcesProvider;
     public TextView rightDateTextView;
+    boolean showReorderIcon;
+    float showReorderIconProgress;
     private RLottieDrawable statusDrawable;
     private RLottieImageView statusImageView;
     /* access modifiers changed from: private */
@@ -665,22 +668,24 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
     public void onLayout(boolean z, int i, int i2, int i3, int i4) {
         TextView textView;
         super.onLayout(z, i, i2, i3, i4);
-        if (!(this.viewType == 1 || this.nameTextView.getLineCount() > 1 || (textView = this.captionTextView) == null)) {
-            textView.getVisibility();
+        if (this.viewType == 1) {
+            return;
         }
-        int measuredHeight = this.nameTextView.getMeasuredHeight() - AndroidUtilities.dp(22.0f);
-        TextView textView2 = this.captionTextView;
-        if (textView2 != null && textView2.getVisibility() == 0) {
-            TextView textView3 = this.captionTextView;
-            textView3.layout(textView3.getLeft(), this.captionTextView.getTop() + measuredHeight, this.captionTextView.getRight(), this.captionTextView.getBottom() + measuredHeight);
-            measuredHeight += this.captionTextView.getMeasuredHeight() + AndroidUtilities.dp(3.0f);
+        if (this.nameTextView.getLineCount() > 1 || ((textView = this.captionTextView) != null && textView.getVisibility() == 0)) {
+            int measuredHeight = this.nameTextView.getMeasuredHeight() - AndroidUtilities.dp(22.0f);
+            TextView textView2 = this.captionTextView;
+            if (textView2 != null && textView2.getVisibility() == 0) {
+                TextView textView3 = this.captionTextView;
+                textView3.layout(textView3.getLeft(), this.captionTextView.getTop() + measuredHeight, this.captionTextView.getRight(), this.captionTextView.getBottom() + measuredHeight);
+                measuredHeight += this.captionTextView.getMeasuredHeight() + AndroidUtilities.dp(3.0f);
+            }
+            TextView textView4 = this.dateTextView;
+            textView4.layout(textView4.getLeft(), this.dateTextView.getTop() + measuredHeight, this.dateTextView.getRight(), this.dateTextView.getBottom() + measuredHeight);
+            RLottieImageView rLottieImageView = this.statusImageView;
+            rLottieImageView.layout(rLottieImageView.getLeft(), this.statusImageView.getTop() + measuredHeight, this.statusImageView.getRight(), measuredHeight + this.statusImageView.getBottom());
+            LineProgressView lineProgressView = this.progressView;
+            lineProgressView.layout(lineProgressView.getLeft(), (getMeasuredHeight() - this.progressView.getMeasuredHeight()) - (this.needDivider ? 1 : 0), this.progressView.getRight(), getMeasuredHeight() - (this.needDivider ? 1 : 0));
         }
-        TextView textView4 = this.dateTextView;
-        textView4.layout(textView4.getLeft(), this.dateTextView.getTop() + measuredHeight, this.dateTextView.getRight(), this.dateTextView.getBottom() + measuredHeight);
-        RLottieImageView rLottieImageView = this.statusImageView;
-        rLottieImageView.layout(rLottieImageView.getLeft(), this.statusImageView.getTop() + measuredHeight, this.statusImageView.getRight(), measuredHeight + this.statusImageView.getBottom());
-        LineProgressView lineProgressView = this.progressView;
-        lineProgressView.layout(lineProgressView.getLeft(), (getMeasuredHeight() - this.progressView.getMeasuredHeight()) - (this.needDivider ? 1 : 0), this.progressView.getRight(), getMeasuredHeight() - (this.needDivider ? 1 : 0));
     }
 
     public void onFailedDownload(String str, boolean z) {
@@ -732,18 +737,55 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
         if (this.enterAlpha == 1.0f || this.globalGradientView == null) {
             super.dispatchDraw(canvas);
             drawDivider(canvas);
-            return;
+        } else {
+            canvas.saveLayerAlpha(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), (int) ((1.0f - this.enterAlpha) * 255.0f), 31);
+            this.globalGradientView.setViewType(3);
+            this.globalGradientView.updateColors();
+            this.globalGradientView.updateGradient();
+            this.globalGradientView.draw(canvas);
+            canvas.restore();
+            canvas.saveLayerAlpha(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), (int) (this.enterAlpha * 255.0f), 31);
+            super.dispatchDraw(canvas);
+            drawDivider(canvas);
+            canvas.restore();
         }
-        canvas.saveLayerAlpha(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), (int) ((1.0f - this.enterAlpha) * 255.0f), 31);
-        this.globalGradientView.setViewType(3);
-        this.globalGradientView.updateColors();
-        this.globalGradientView.updateGradient();
-        this.globalGradientView.draw(canvas);
-        canvas.restore();
-        canvas.saveLayerAlpha(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), (int) (this.enterAlpha * 255.0f), 31);
-        super.dispatchDraw(canvas);
-        drawDivider(canvas);
-        canvas.restore();
+        boolean z = this.showReorderIcon;
+        if (z || this.showReorderIconProgress != 0.0f) {
+            if (z) {
+                float f = this.showReorderIconProgress;
+                if (f != 1.0f) {
+                    this.showReorderIconProgress = f + 0.10666667f;
+                    invalidate();
+                    this.showReorderIconProgress = Utilities.clamp(this.showReorderIconProgress, 1.0f, 0.0f);
+                    int measuredWidth = (getMeasuredWidth() - AndroidUtilities.dp(12.0f)) - Theme.dialogs_reorderDrawable.getIntrinsicWidth();
+                    int measuredHeight = (getMeasuredHeight() - Theme.dialogs_reorderDrawable.getIntrinsicHeight()) >> 1;
+                    canvas.save();
+                    float f2 = this.showReorderIconProgress;
+                    canvas.scale(f2, f2, ((float) measuredWidth) + (((float) Theme.dialogs_reorderDrawable.getIntrinsicWidth()) / 2.0f), ((float) measuredHeight) + (((float) Theme.dialogs_reorderDrawable.getIntrinsicHeight()) / 2.0f));
+                    Drawable drawable = Theme.dialogs_reorderDrawable;
+                    drawable.setBounds(measuredWidth, measuredHeight, drawable.getIntrinsicWidth() + measuredWidth, Theme.dialogs_reorderDrawable.getIntrinsicHeight() + measuredHeight);
+                    Theme.dialogs_reorderDrawable.draw(canvas);
+                    canvas.restore();
+                }
+            }
+            if (!z) {
+                float f3 = this.showReorderIconProgress;
+                if (f3 != 0.0f) {
+                    this.showReorderIconProgress = f3 - 0.10666667f;
+                    invalidate();
+                }
+            }
+            this.showReorderIconProgress = Utilities.clamp(this.showReorderIconProgress, 1.0f, 0.0f);
+            int measuredWidth2 = (getMeasuredWidth() - AndroidUtilities.dp(12.0f)) - Theme.dialogs_reorderDrawable.getIntrinsicWidth();
+            int measuredHeight2 = (getMeasuredHeight() - Theme.dialogs_reorderDrawable.getIntrinsicHeight()) >> 1;
+            canvas.save();
+            float var_ = this.showReorderIconProgress;
+            canvas.scale(var_, var_, ((float) measuredWidth2) + (((float) Theme.dialogs_reorderDrawable.getIntrinsicWidth()) / 2.0f), ((float) measuredHeight2) + (((float) Theme.dialogs_reorderDrawable.getIntrinsicHeight()) / 2.0f));
+            Drawable drawable2 = Theme.dialogs_reorderDrawable;
+            drawable2.setBounds(measuredWidth2, measuredHeight2, drawable2.getIntrinsicWidth() + measuredWidth2, Theme.dialogs_reorderDrawable.getIntrinsicHeight() + measuredHeight2);
+            Theme.dialogs_reorderDrawable.draw(canvas);
+            canvas.restore();
+        }
     }
 
     private void drawDivider(Canvas canvas) {
@@ -755,6 +797,16 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
     public void setEnterAnimationAlpha(float f) {
         if (this.enterAlpha != f) {
             this.enterAlpha = f;
+            invalidate();
+        }
+    }
+
+    public void showReorderIcon(boolean z, boolean z2) {
+        if (this.showReorderIcon != z) {
+            this.showReorderIcon = z;
+            if (!z2) {
+                this.showReorderIconProgress = z ? 1.0f : 0.0f;
+            }
             invalidate();
         }
     }

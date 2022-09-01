@@ -4,19 +4,13 @@ import java.util.ArrayList;
 import org.telegram.messenger.Utilities;
 
 public final /* synthetic */ class EmojiPacksAlert$$ExternalSyntheticLambda6 implements Utilities.Callback {
-    public final /* synthetic */ EmojiPacksAlert f$0;
-    public final /* synthetic */ int[] f$1;
-    public final /* synthetic */ int f$2;
-    public final /* synthetic */ ArrayList f$3;
+    public final /* synthetic */ Runnable f$0;
 
-    public /* synthetic */ EmojiPacksAlert$$ExternalSyntheticLambda6(EmojiPacksAlert emojiPacksAlert, int[] iArr, int i, ArrayList arrayList) {
-        this.f$0 = emojiPacksAlert;
-        this.f$1 = iArr;
-        this.f$2 = i;
-        this.f$3 = arrayList;
+    public /* synthetic */ EmojiPacksAlert$$ExternalSyntheticLambda6(Runnable runnable) {
+        this.f$0 = runnable;
     }
 
     public final void run(Object obj) {
-        this.f$0.lambda$updateButton$6(this.f$1, this.f$2, this.f$3, (Boolean) obj);
+        EmojiPacksAlert.lambda$installSet$4(this.f$0, (ArrayList) obj);
     }
 }

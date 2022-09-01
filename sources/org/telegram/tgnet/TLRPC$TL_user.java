@@ -23,7 +23,8 @@ public class TLRPC$TL_user extends TLRPC$User {
         this.apply_min_photo = (33554432 & readInt32) != 0;
         this.fake = (67108864 & readInt32) != 0;
         this.bot_attach_menu = (NUM & readInt32) != 0;
-        this.premium = (readInt32 & NUM) != 0;
+        this.premium = (NUM & readInt32) != 0;
+        this.attach_menu_enabled = (readInt32 & NUM) != 0;
         this.id = abstractSerializedData.readInt64(z);
         if ((this.flags & 1) != 0) {
             this.access_hash = abstractSerializedData.readInt64(z);
@@ -74,6 +75,9 @@ public class TLRPC$TL_user extends TLRPC$User {
         if ((this.flags & 4194304) != 0) {
             this.lang_code = abstractSerializedData.readString(z);
         }
+        if ((this.flags & NUM) != 0) {
+            this.emoji_status = TLRPC$EmojiStatus.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+        }
     }
 
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
@@ -112,7 +116,9 @@ public class TLRPC$TL_user extends TLRPC$User {
         this.flags = i16;
         int i17 = this.premium ? i16 | NUM : i16 & -NUM;
         this.flags = i17;
-        abstractSerializedData.writeInt32(i17);
+        int i18 = this.attach_menu_enabled ? i17 | NUM : i17 & -NUM;
+        this.flags = i18;
+        abstractSerializedData.writeInt32(i18);
         abstractSerializedData.writeInt64(this.id);
         if ((this.flags & 1) != 0) {
             abstractSerializedData.writeInt64(this.access_hash);
@@ -142,8 +148,8 @@ public class TLRPC$TL_user extends TLRPC$User {
             abstractSerializedData.writeInt32(NUM);
             int size = this.restriction_reason.size();
             abstractSerializedData.writeInt32(size);
-            for (int i18 = 0; i18 < size; i18++) {
-                this.restriction_reason.get(i18).serializeToStream(abstractSerializedData);
+            for (int i19 = 0; i19 < size; i19++) {
+                this.restriction_reason.get(i19).serializeToStream(abstractSerializedData);
             }
         }
         if ((this.flags & 524288) != 0) {
@@ -151,6 +157,9 @@ public class TLRPC$TL_user extends TLRPC$User {
         }
         if ((this.flags & 4194304) != 0) {
             abstractSerializedData.writeString(this.lang_code);
+        }
+        if ((this.flags & NUM) != 0) {
+            this.emoji_status.serializeToStream(abstractSerializedData);
         }
     }
 }

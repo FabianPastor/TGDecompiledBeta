@@ -8,6 +8,6 @@ public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda37 im
     }
 
     public final void run() {
-        this.f$0.lambda$showFiltersHint$48();
+        this.f$0.lambda$createView$6();
     }
 }

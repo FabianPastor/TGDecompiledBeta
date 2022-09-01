@@ -1,20 +1,12 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
-import org.telegram.messenger.Utilities;
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda151 implements GenericProvider {
+    public static final /* synthetic */ MediaDataController$$ExternalSyntheticLambda151 INSTANCE = new MediaDataController$$ExternalSyntheticLambda151();
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda151 implements Utilities.Callback {
-    public final /* synthetic */ boolean[] f$0;
-    public final /* synthetic */ ArrayList[] f$1;
-    public final /* synthetic */ Runnable f$2;
-
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda151(boolean[] zArr, ArrayList[] arrayListArr, Runnable runnable) {
-        this.f$0 = zArr;
-        this.f$1 = arrayListArr;
-        this.f$2 = runnable;
+    private /* synthetic */ MediaDataController$$ExternalSyntheticLambda151() {
     }
 
-    public final void run(Object obj) {
-        MediaDataController.lambda$fillWithAnimatedEmoji$193(this.f$0, this.f$1, this.f$2, (ArrayList) obj);
+    public final Object provide(Object obj) {
+        return MediaDataController.lambda$getEntities$160((Void) obj);
     }
 }

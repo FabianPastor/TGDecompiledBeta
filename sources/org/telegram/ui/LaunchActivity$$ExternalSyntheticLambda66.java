@@ -1,14 +1,18 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.GenericProvider;
+import android.content.Intent;
+import org.telegram.messenger.ContactsLoadingObserver;
 
-public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda66 implements GenericProvider {
-    public static final /* synthetic */ LaunchActivity$$ExternalSyntheticLambda66 INSTANCE = new LaunchActivity$$ExternalSyntheticLambda66();
+public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda66 implements ContactsLoadingObserver.Callback {
+    public final /* synthetic */ LaunchActivity f$0;
+    public final /* synthetic */ Intent f$1;
 
-    private /* synthetic */ LaunchActivity$$ExternalSyntheticLambda66() {
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda66(LaunchActivity launchActivity, Intent intent) {
+        this.f$0 = launchActivity;
+        this.f$1 = intent;
     }
 
-    public final Object provide(Object obj) {
-        return LaunchActivity.lambda$switchToAccount$7((Void) obj);
+    public final void onResult(boolean z) {
+        this.f$0.lambda$handleIntent$12(this.f$1, z);
     }
 }

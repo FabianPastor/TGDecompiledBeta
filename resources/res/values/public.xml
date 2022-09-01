@@ -450,6 +450,7 @@
     <public type="drawable" name="googlepay_button_no_shadow_background_image" id="NUM" />
     <public type="drawable" name="googlepay_button_overlay" id="NUM" />
     <public type="drawable" name="gradient_bottom" id="NUM" />
+    <public type="drawable" name="gradient_bottom_rounded" id="NUM" />
     <public type="drawable" name="gradient_left" id="NUM" />
     <public type="drawable" name="gradient_right" id="NUM" />
     <public type="drawable" name="gradient_top" id="NUM" />
@@ -542,6 +543,7 @@
     <public type="drawable" name="icon_background_clip_round" id="NUM" />
     <public type="drawable" name="icon_background_round" id="NUM" />
     <public type="drawable" name="icon_background_sa" id="NUM" />
+    <public type="drawable" name="icon_plane" id="NUM" />
     <public type="drawable" name="icplaceholder" id="NUM" />
     <public type="drawable" name="inline_video_pause" id="NUM" />
     <public type="drawable" name="inline_video_play" id="NUM" />
@@ -913,6 +915,7 @@
     <public type="drawable" name="msg_rate_up" id="NUM" />
     <public type="drawable" name="msg_reactions" id="NUM" />
     <public type="drawable" name="msg_reactions2" id="NUM" />
+    <public type="drawable" name="msg_reactions_expand" id="NUM" />
     <public type="drawable" name="msg_reactions_filled" id="NUM" />
     <public type="drawable" name="msg_recent" id="NUM" />
     <public type="drawable" name="msg_remove" id="NUM" />
@@ -971,6 +974,8 @@
     <public type="drawable" name="msg_speed_1_5" id="NUM" />
     <public type="drawable" name="msg_speed_2" id="NUM" />
     <public type="drawable" name="msg_stats" id="NUM" />
+    <public type="drawable" name="msg_status_edit" id="NUM" />
+    <public type="drawable" name="msg_status_set" id="NUM" />
     <public type="drawable" name="msg_sticker" id="NUM" />
     <public type="drawable" name="msg_switch" id="NUM" />
     <public type="drawable" name="msg_tabs_mic1" id="NUM" />
@@ -1158,6 +1163,8 @@
     <public type="drawable" name="settings_arrow" id="NUM" />
     <public type="drawable" name="settings_noresults" id="NUM" />
     <public type="drawable" name="shadowdown" id="NUM" />
+    <public type="drawable" name="shadowed_bubble1" id="NUM" />
+    <public type="drawable" name="shadowed_bubble2_half" id="NUM" />
     <public type="drawable" name="share" id="NUM" />
     <public type="drawable" name="share_arrow" id="NUM" />
     <public type="drawable" name="sheet_shadow" id="NUM" />
@@ -1609,6 +1616,7 @@
     <public type="raw" name="contacts_sync_off" id="NUM" />
     <public type="raw" name="contacts_sync_on" id="NUM" />
     <public type="raw" name="copy" id="NUM" />
+    <public type="raw" name="custom_emoji_reaction" id="NUM" />
     <public type="raw" name="dartloop" id="NUM" />
     <public type="raw" name="db_migration_placeholder" id="NUM" />
     <public type="raw" name="default_pattern" id="NUM" />
@@ -1620,6 +1628,10 @@
     <public type="raw" name="download_progress" id="NUM" />
     <public type="raw" name="durgerking_placeholder" id="NUM" />
     <public type="raw" name="edge_30" id="NUM" />
+    <public type="raw" name="email_check_inbox" id="NUM" />
+    <public type="raw" name="email_setup_heart" id="NUM" />
+    <public type="raw" name="emoji_status_change_to_set" id="NUM" />
+    <public type="raw" name="emoji_status_set_to_change" id="NUM" />
     <public type="raw" name="error" id="NUM" />
     <public type="raw" name="filter_new" id="NUM" />
     <public type="raw" name="filter_no_chats" id="NUM" />
@@ -1847,6 +1859,7 @@
     <public type="string" name="AccDescrClosePlayer" id="NUM" />
     <public type="string" name="AccDescrCollapsePanel" id="NUM" />
     <public type="string" name="AccDescrContactSorting" id="NUM" />
+    <public type="string" name="AccDescrCustomEmoji" id="NUM" />
     <public type="string" name="AccDescrDownloadProgress" id="NUM" />
     <public type="string" name="AccDescrEditing" id="NUM" />
     <public type="string" name="AccDescrEmojiButton" id="NUM" />
@@ -2135,6 +2148,8 @@
     <public type="string" name="AddContactFullChat" id="NUM" />
     <public type="string" name="AddContactPhonebookTitle" id="NUM" />
     <public type="string" name="AddContactTitle" id="NUM" />
+    <public type="string" name="AddEmailSubtitle" id="NUM" />
+    <public type="string" name="AddEmailTitle" id="NUM" />
     <public type="string" name="AddEmojiInstalled" id="NUM" />
     <public type="string" name="AddEmojiInstalledInfo" id="NUM" />
     <public type="string" name="AddEmojiMultipleInstalledInfo_few" id="NUM" />
@@ -2199,6 +2214,7 @@
     <public type="string" name="AllNPhotos_many" id="NUM" />
     <public type="string" name="AllNPhotos_other" id="NUM" />
     <public type="string" name="AllPhotos" id="NUM" />
+    <public type="string" name="AllReactions" id="NUM" />
     <public type="string" name="AllSessionsTerminated" id="NUM" />
     <public type="string" name="AllVideos" id="NUM" />
     <public type="string" name="AllWebSessionsTerminated" id="NUM" />
@@ -2547,6 +2563,7 @@
     <public type="string" name="BadgeNumberShow" id="NUM" />
     <public type="string" name="BadgeNumberUnread" id="NUM" />
     <public type="string" name="BanFromTheGroup" id="NUM" />
+    <public type="string" name="BanUser" id="NUM" />
     <public type="string" name="BannedPhoneNumber" id="NUM" />
     <public type="string" name="Bans_few" id="NUM" />
     <public type="string" name="Bans_many" id="NUM" />
@@ -2733,6 +2750,8 @@
     <public type="string" name="ChangeChatBackground" id="NUM" />
     <public type="string" name="ChangeColorToColor" id="NUM" />
     <public type="string" name="ChangeColors" id="NUM" />
+    <public type="string" name="ChangeEmail" id="NUM" />
+    <public type="string" name="ChangeEmojiStatus" id="NUM" />
     <public type="string" name="ChangeLanguageLater" id="NUM" />
     <public type="string" name="ChangePasscode" id="NUM" />
     <public type="string" name="ChangePasscodeInfo" id="NUM" />
@@ -2985,6 +3004,10 @@
     <public type="string" name="CheckPhoneNumberLearnMoreUrl" id="NUM" />
     <public type="string" name="CheckPhoneNumberNo" id="NUM" />
     <public type="string" name="CheckPhoneNumberYes" id="NUM" />
+    <public type="string" name="CheckYourEmail" id="NUM" />
+    <public type="string" name="CheckYourEmailSubtitle" id="NUM" />
+    <public type="string" name="CheckYourNewEmail" id="NUM" />
+    <public type="string" name="CheckYourNewEmailSubtitle" id="NUM" />
     <public type="string" name="Checking" id="NUM" />
     <public type="string" name="ChooseCountry" id="NUM" />
     <public type="string" name="ChooseCover" id="NUM" />
@@ -3032,9 +3055,13 @@
     <public type="string" name="ClearMediaCache" id="NUM" />
     <public type="string" name="ClearOtherSessionsHelp" id="NUM" />
     <public type="string" name="ClearOtherWebSessionsHelp" id="NUM" />
+    <public type="string" name="ClearRecentEmojiStatusesText" id="NUM" />
+    <public type="string" name="ClearRecentEmojiStatusesTitle" id="NUM" />
     <public type="string" name="ClearRecentEmojiText" id="NUM" />
     <public type="string" name="ClearRecentEmojiTitle" id="NUM" />
     <public type="string" name="ClearRecentHistory" id="NUM" />
+    <public type="string" name="ClearRecentReactionsAlertMessage" id="NUM" />
+    <public type="string" name="ClearRecentReactionsAlertTitle" id="NUM" />
     <public type="string" name="ClearRecentStickersAlertMessage" id="NUM" />
     <public type="string" name="ClearRecentStickersAlertTitle" id="NUM" />
     <public type="string" name="ClearSearch" id="NUM" />
@@ -3367,6 +3394,7 @@
     <public type="string" name="DisablePasscode" id="NUM" />
     <public type="string" name="DisablePasscodeConfirmMessage" id="NUM" />
     <public type="string" name="DisablePasscodeTurnOff" id="NUM" />
+    <public type="string" name="DisableReactionsInfo" id="NUM" />
     <public type="string" name="DisappearingGif" id="NUM" />
     <public type="string" name="DisappearingPhoto" id="NUM" />
     <public type="string" name="DisappearingVideo" id="NUM" />
@@ -3481,9 +3509,14 @@
     <public type="string" name="EditWidgetChatsInfo" id="NUM" />
     <public type="string" name="EditWidgetContactsInfo" id="NUM" />
     <public type="string" name="EditedMessage" id="NUM" />
+    <public type="string" name="EmailAddressInvalid" id="NUM" />
     <public type="string" name="EmailCopied" id="NUM" />
+    <public type="string" name="EmailLogin" id="NUM" />
+    <public type="string" name="EmailLoginChangeMessage" id="NUM" />
+    <public type="string" name="EmailNotAllowed" id="NUM" />
     <public type="string" name="EmailPasswordConfirmText2" id="NUM" />
     <public type="string" name="EmailPasswordConfirmText3" id="NUM" />
+    <public type="string" name="EmailTokenInvalid" id="NUM" />
     <public type="string" name="Emoji" id="NUM" />
     <public type="string" name="Emoji1" id="NUM" />
     <public type="string" name="Emoji2" id="NUM" />
@@ -3496,6 +3529,7 @@
     <public type="string" name="EmojiArchived" id="NUM" />
     <public type="string" name="EmojiArchivedInfo" id="NUM" />
     <public type="string" name="EmojiBotInfo" id="NUM" />
+    <public type="string" name="EmojiCopied" id="NUM" />
     <public type="string" name="EmojiCountButton_few" id="NUM" />
     <public type="string" name="EmojiCountButton_many" id="NUM" />
     <public type="string" name="EmojiCountButton_one" id="NUM" />
@@ -3530,6 +3564,7 @@
     <public type="string" name="EmpryUsersPlaceholder" id="NUM" />
     <public type="string" name="EmptyExceptions" id="NUM" />
     <public type="string" name="Enable" id="NUM" />
+    <public type="string" name="EnableAllReactionsInfo" id="NUM" />
     <public type="string" name="EnableAllStreamingInfo" id="NUM" />
     <public type="string" name="EnableAnimations" id="NUM" />
     <public type="string" name="EnableAutoDelete" id="NUM" />
@@ -3537,6 +3572,7 @@
     <public type="string" name="EnableReactions" id="NUM" />
     <public type="string" name="EnableReactionsChannelInfo" id="NUM" />
     <public type="string" name="EnableReactionsGroupInfo" id="NUM" />
+    <public type="string" name="EnableSomeReactionsInfo" id="NUM" />
     <public type="string" name="EnableStreaming" id="NUM" />
     <public type="string" name="EnabledNotifications" id="NUM" />
     <public type="string" name="EnabledPasswordText" id="NUM" />
@@ -3562,6 +3598,7 @@
     <public type="string" name="EnterCurrentPasscode" id="NUM" />
     <public type="string" name="EnterGroupNamePlaceholder" id="NUM" />
     <public type="string" name="EnterListName" id="NUM" />
+    <public type="string" name="EnterNewEmail" id="NUM" />
     <public type="string" name="EnterNewFirstPasscode" id="NUM" />
     <public type="string" name="EnterNewPasscode" id="NUM" />
     <public type="string" name="EnterPassword" id="NUM" />
@@ -3707,6 +3744,7 @@
     <public type="string" name="ExpiredLink" id="NUM" />
     <public type="string" name="ExportTheme" id="NUM" />
     <public type="string" name="Exposure" id="NUM" />
+    <public type="string" name="ExtendedMediaUnlockFor" id="NUM" />
     <public type="string" name="ExternalFolderInfo" id="NUM" />
     <public type="string" name="ExternalStorage" id="NUM" />
     <public type="string" name="Fade" id="NUM" />
@@ -4427,6 +4465,7 @@
     <public type="string" name="LoginAccessibilityCountryCode" id="NUM" />
     <public type="string" name="LoginAttempts" id="NUM" />
     <public type="string" name="LoginAttemptsInfo" id="NUM" />
+    <public type="string" name="LoginOrSingInWithGoogle" id="NUM" />
     <public type="string" name="LoginPassword" id="NUM" />
     <public type="string" name="LoginPasswordText" id="NUM" />
     <public type="string" name="LoginPasswordTextShort" id="NUM" />
@@ -4547,10 +4586,16 @@
     <public type="string" name="Mention" id="NUM" />
     <public type="string" name="Message" id="NUM" />
     <public type="string" name="MessageContainsEmojiPack" id="NUM" />
+    <public type="string" name="MessageContainsEmojiPackSingle" id="NUM" />
     <public type="string" name="MessageContainsEmojiPacks_few" id="NUM" />
     <public type="string" name="MessageContainsEmojiPacks_many" id="NUM" />
     <public type="string" name="MessageContainsEmojiPacks_other" id="NUM" />
     <public type="string" name="MessageContainsEmojiPacks_two" id="NUM" />
+    <public type="string" name="MessageContainsReactionsPack" id="NUM" />
+    <public type="string" name="MessageContainsReactionsPacks_few" id="NUM" />
+    <public type="string" name="MessageContainsReactionsPacks_many" id="NUM" />
+    <public type="string" name="MessageContainsReactionsPacks_other" id="NUM" />
+    <public type="string" name="MessageContainsReactionsPacks_two" id="NUM" />
     <public type="string" name="MessageCopied" id="NUM" />
     <public type="string" name="MessageLifetime" id="NUM" />
     <public type="string" name="MessageLifetimeChanged" id="NUM" />
@@ -4780,6 +4825,7 @@
     <public type="string" name="NoPlacesFoundInfo" id="NUM" />
     <public type="string" name="NoPlayerInstalled" id="NUM" />
     <public type="string" name="NoPopup" id="NUM" />
+    <public type="string" name="NoReactions" id="NUM" />
     <public type="string" name="NoRecent" id="NUM" />
     <public type="string" name="NoRecentCalls" id="NUM" />
     <public type="string" name="NoRecentCallsInfo" id="NUM" />
@@ -5015,6 +5061,7 @@
     <public type="string" name="OnlineCount_other" id="NUM" />
     <public type="string" name="OnlineCount_two" id="NUM" />
     <public type="string" name="OnlineCount_zero" id="NUM" />
+    <public type="string" name="OnlyAllowThisReactions" id="NUM" />
     <public type="string" name="OnlyIfSilent" id="NUM" />
     <public type="string" name="OnlyWhenScreenOff" id="NUM" />
     <public type="string" name="OnlyWhenScreenOn" id="NUM" />
@@ -5514,6 +5561,7 @@
     <public type="string" name="PollSubmitVotes" id="NUM" />
     <public type="string" name="PollTapToSelect" id="NUM" />
     <public type="string" name="PollViewResults" id="NUM" />
+    <public type="string" name="PopularReactions" id="NUM" />
     <public type="string" name="PopupDisabled" id="NUM" />
     <public type="string" name="PopupEnabled" id="NUM" />
     <public type="string" name="PopupNotification" id="NUM" />
@@ -5550,6 +5598,9 @@
     <public type="string" name="PremiumStickerTooltip" id="NUM" />
     <public type="string" name="PremiumStickers" id="NUM" />
     <public type="string" name="PremiumStickersShort" id="NUM" />
+    <public type="string" name="PremiumTierAnnual" id="NUM" />
+    <public type="string" name="PremiumTierMonthly" id="NUM" />
+    <public type="string" name="PremiumTierSemiannual" id="NUM" />
     <public type="string" name="PreviewFeedback2" id="NUM" />
     <public type="string" name="PreviewForwardAudio_few" id="NUM" />
     <public type="string" name="PreviewForwardAudio_many" id="NUM" />
@@ -5619,6 +5670,8 @@
     <public type="string" name="PreviewForwardVideo_zero" id="NUM" />
     <public type="string" name="PreviousPinnedMessage" id="NUM" />
     <public type="string" name="PricePerMonth" id="NUM" />
+    <public type="string" name="PricePerMonthMe" id="NUM" />
+    <public type="string" name="PricePerYear" id="NUM" />
     <public type="string" name="PrimaryLinkHelp" id="NUM" />
     <public type="string" name="PrimaryLinkHelpChannel" id="NUM" />
     <public type="string" name="PriorityInfo" id="NUM" />
@@ -5781,6 +5834,7 @@
     <public type="string" name="Reacted_two" id="NUM" />
     <public type="string" name="Reacted_zero" id="NUM" />
     <public type="string" name="Reactions" id="NUM" />
+    <public type="string" name="ReactionsAll" id="NUM" />
     <public type="string" name="ReactionsCount" id="NUM" />
     <public type="string" name="ReactionsCount_few" id="NUM" />
     <public type="string" name="ReactionsCount_many" id="NUM" />
@@ -5788,6 +5842,7 @@
     <public type="string" name="ReactionsCount_other" id="NUM" />
     <public type="string" name="ReactionsCount_two" id="NUM" />
     <public type="string" name="ReactionsCount_zero" id="NUM" />
+    <public type="string" name="ReactionsLongtapHint" id="NUM" />
     <public type="string" name="ReactionsOff" id="NUM" />
     <public type="string" name="ReadAllMentions" id="NUM" />
     <public type="string" name="ReadAllReactions" id="NUM" />
@@ -5798,6 +5853,7 @@
     <public type="string" name="RecentStickers" id="NUM" />
     <public type="string" name="RecentStickersShort" id="NUM" />
     <public type="string" name="RecentlyDownloaded" id="NUM" />
+    <public type="string" name="RecentlyUsed" id="NUM" />
     <public type="string" name="RecentlyViewed" id="NUM" />
     <public type="string" name="RecentlyViewedHide" id="NUM" />
     <public type="string" name="Recipient_few" id="NUM" />
@@ -5863,6 +5919,7 @@
     <public type="string" name="Reply" id="NUM" />
     <public type="string" name="ReplyToGroup" id="NUM" />
     <public type="string" name="ReplyToUser" id="NUM" />
+    <public type="string" name="ReportAlertReaction" id="NUM" />
     <public type="string" name="ReportChat" id="NUM" />
     <public type="string" name="ReportChatChild" id="NUM" />
     <public type="string" name="ReportChatDescription" id="NUM" />
@@ -5878,6 +5935,8 @@
     <public type="string" name="ReportInfo" id="NUM" />
     <public type="string" name="ReportMessages" id="NUM" />
     <public type="string" name="ReportMessagesCount" id="NUM" />
+    <public type="string" name="ReportReaction" id="NUM" />
+    <public type="string" name="ReportReactionAndBan" id="NUM" />
     <public type="string" name="ReportSelectMessages" id="NUM" />
     <public type="string" name="ReportSend" id="NUM" />
     <public type="string" name="ReportSentInfo" id="NUM" />
@@ -6176,6 +6235,7 @@
     <public type="string" name="SetAsMain" id="NUM" />
     <public type="string" name="SetBackground" id="NUM" />
     <public type="string" name="SetColor" id="NUM" />
+    <public type="string" name="SetEmojiStatus" id="NUM" />
     <public type="string" name="SetNewPassword" id="NUM" />
     <public type="string" name="SetPasscode" id="NUM" />
     <public type="string" name="SetPasscodeInfo" id="NUM" />
@@ -6289,6 +6349,7 @@
     <public type="string" name="ShowVotes_two" id="NUM" />
     <public type="string" name="ShowVotes_zero" id="NUM" />
     <public type="string" name="ShuffleList" id="NUM" />
+    <public type="string" name="SignInWithGoogle" id="NUM" />
     <public type="string" name="SignUp" id="NUM" />
     <public type="string" name="SinglePhotosHelp" id="NUM" />
     <public type="string" name="SlideToCancel" id="NUM" />
@@ -6313,6 +6374,7 @@
     <public type="string" name="SmsText" id="NUM" />
     <public type="string" name="SoftUserLimitAlert" id="NUM" />
     <public type="string" name="SoftenSkin" id="NUM" />
+    <public type="string" name="SomeReactions" id="NUM" />
     <public type="string" name="SortBy" id="NUM" />
     <public type="string" name="SortFirstName" id="NUM" />
     <public type="string" name="SortLastName" id="NUM" />
@@ -6474,6 +6536,7 @@
     <public type="string" name="SystemTones" id="NUM" />
     <public type="string" name="TapForForwardingOptions" id="NUM" />
     <public type="string" name="TapForVideo" id="NUM" />
+    <public type="string" name="TapHereEmoji" id="NUM" />
     <public type="string" name="TapHereGifs" id="NUM" />
     <public type="string" name="TapOnThePencil" id="NUM" />
     <public type="string" name="TapToAddBio" id="NUM" />
@@ -6518,6 +6581,8 @@
     <public type="string" name="TelegramPremiumUserGiftedPremiumDialogTitle" id="NUM" />
     <public type="string" name="TelegramPremiumUserGiftedPremiumOutboundDialogSubtitle" id="NUM" />
     <public type="string" name="TelegramPremiumUserGiftedPremiumOutboundDialogTitle" id="NUM" />
+    <public type="string" name="TelegramPremiumUserStatusDialogSubtitle" id="NUM" />
+    <public type="string" name="TelegramPremiumUserStatusDialogTitle" id="NUM" />
     <public type="string" name="TelegramTones" id="NUM" />
     <public type="string" name="TelegramVersion" id="NUM" />
     <public type="string" name="Terminate" id="NUM" />
@@ -6678,6 +6743,7 @@
     <public type="string" name="UnlockPremiumEmojiHint" id="NUM" />
     <public type="string" name="UnlockPremiumEmojiHint2" id="NUM" />
     <public type="string" name="UnlockPremiumEmojiPack" id="NUM" />
+    <public type="string" name="UnlockPremiumEmojiReaction" id="NUM" />
     <public type="string" name="UnlockPremiumIcons" id="NUM" />
     <public type="string" name="UnlockPremiumReactions" id="NUM" />
     <public type="string" name="UnlockPremiumReactionsDescription" id="NUM" />
@@ -6821,6 +6887,7 @@
     <public type="string" name="UsesLimitHelp" id="NUM" />
     <public type="string" name="UsesLimitHint" id="NUM" />
     <public type="string" name="VerificationCode" id="NUM" />
+    <public type="string" name="VerificationCodeSubtitle" id="NUM" />
     <public type="string" name="ViaBot" id="NUM" />
     <public type="string" name="Vibrate" id="NUM" />
     <public type="string" name="VibrationDefault" id="NUM" />
@@ -7228,8 +7295,10 @@
     <public type="string" name="YourEmailSuccessChangedText" id="NUM" />
     <public type="string" name="YourEmailSuccessText" id="NUM" />
     <public type="string" name="YourLocatedChannelsTooMuch" id="NUM" />
+    <public type="string" name="YourLoginEmailChangedSuccess" id="NUM" />
     <public type="string" name="YourName" id="NUM" />
     <public type="string" name="YourNameChanged" id="NUM" />
+    <public type="string" name="YourNewEmail" id="NUM" />
     <public type="string" name="YourNumber" id="NUM" />
     <public type="string" name="YourPassword" id="NUM" />
     <public type="string" name="YourPasswordChangedSuccessText" id="NUM" />

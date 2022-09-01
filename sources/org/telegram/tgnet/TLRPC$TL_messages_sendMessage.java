@@ -10,6 +10,7 @@ public class TLRPC$TL_messages_sendMessage extends TLObject {
     public int flags;
     public String message;
     public boolean no_webpage;
+    public boolean noforwards;
     public TLRPC$InputPeer peer;
     public long random_id;
     public TLRPC$ReplyMarkup reply_markup;
@@ -17,6 +18,7 @@ public class TLRPC$TL_messages_sendMessage extends TLObject {
     public int schedule_date;
     public TLRPC$InputPeer send_as;
     public boolean silent;
+    public boolean update_stickersets_order;
 
     public TLObject deserializeResponse(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         return TLRPC$Updates.TLdeserialize(abstractSerializedData, i, z);
@@ -32,7 +34,11 @@ public class TLRPC$TL_messages_sendMessage extends TLObject {
         this.flags = i3;
         int i4 = this.clear_draft ? i3 | 128 : i3 & -129;
         this.flags = i4;
-        abstractSerializedData.writeInt32(i4);
+        int i5 = this.noforwards ? i4 | 16384 : i4 & -16385;
+        this.flags = i5;
+        int i6 = this.update_stickersets_order ? i5 | 32768 : i5 & -32769;
+        this.flags = i6;
+        abstractSerializedData.writeInt32(i6);
         this.peer.serializeToStream(abstractSerializedData);
         if ((this.flags & 1) != 0) {
             abstractSerializedData.writeInt32(this.reply_to_msg_id);
@@ -46,8 +52,8 @@ public class TLRPC$TL_messages_sendMessage extends TLObject {
             abstractSerializedData.writeInt32(NUM);
             int size = this.entities.size();
             abstractSerializedData.writeInt32(size);
-            for (int i5 = 0; i5 < size; i5++) {
-                this.entities.get(i5).serializeToStream(abstractSerializedData);
+            for (int i7 = 0; i7 < size; i7++) {
+                this.entities.get(i7).serializeToStream(abstractSerializedData);
             }
         }
         if ((this.flags & 1024) != 0) {

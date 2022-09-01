@@ -1,23 +1,22 @@
 package org.telegram.ui;
 
-import android.widget.ImageView;
+import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.ui.Cells.ChatMessageCell;
 
 public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda204 implements Runnable {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ boolean[] f$1;
-    public final /* synthetic */ boolean[] f$2;
-    public final /* synthetic */ ImageView f$3;
-    public final /* synthetic */ ImageView f$4;
+    public final /* synthetic */ AlertDialog[] f$1;
+    public final /* synthetic */ int f$2;
+    public final /* synthetic */ ChatMessageCell f$3;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda204(ChatActivity chatActivity, boolean[] zArr, boolean[] zArr2, ImageView imageView, ImageView imageView2) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda204(ChatActivity chatActivity, AlertDialog[] alertDialogArr, int i, ChatMessageCell chatMessageCell) {
         this.f$0 = chatActivity;
-        this.f$1 = zArr;
-        this.f$2 = zArr2;
-        this.f$3 = imageView;
-        this.f$4 = imageView2;
+        this.f$1 = alertDialogArr;
+        this.f$2 = i;
+        this.f$3 = chatMessageCell;
     }
 
     public final void run() {
-        this.f$0.lambda$createMenu$165(this.f$1, this.f$2, this.f$3, this.f$4);
+        this.f$0.lambda$didPressMessageUrl$244(this.f$1, this.f$2, this.f$3);
     }
 }

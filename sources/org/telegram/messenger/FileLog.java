@@ -137,7 +137,7 @@ public class FileLog {
             ensureInitied();
             Log.e("tmessages", str);
             if (getInstance().streamWriter != null) {
-                getInstance().logQueue.postRunnable(new FileLog$$ExternalSyntheticLambda1(str));
+                getInstance().logQueue.postRunnable(new FileLog$$ExternalSyntheticLambda2(str));
             }
         }
     }
@@ -165,7 +165,7 @@ public class FileLog {
             ensureInitied();
             th.printStackTrace();
             if (getInstance().streamWriter != null) {
-                getInstance().logQueue.postRunnable(new FileLog$$ExternalSyntheticLambda4(th));
+                getInstance().logQueue.postRunnable(new FileLog$$ExternalSyntheticLambda5(th));
             } else {
                 th.printStackTrace();
             }
@@ -188,6 +188,47 @@ public class FileLog {
         }
     }
 
+    public static void fatal(Throwable th) {
+        fatal(th, true);
+    }
+
+    public static void fatal(Throwable th, boolean z) {
+        if (BuildVars.LOGS_ENABLED) {
+            if (BuildVars.DEBUG_VERSION && needSent(th) && z) {
+                AndroidUtilities.appCenterLog(th);
+            }
+            ensureInitied();
+            th.printStackTrace();
+            if (getInstance().streamWriter != null) {
+                getInstance().logQueue.postRunnable(new FileLog$$ExternalSyntheticLambda4(th));
+                return;
+            }
+            th.printStackTrace();
+            if (BuildVars.DEBUG_PRIVATE_VERSION) {
+                System.exit(2);
+            }
+        }
+    }
+
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$fatal$3(Throwable th) {
+        try {
+            OutputStreamWriter outputStreamWriter = getInstance().streamWriter;
+            outputStreamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: " + th + "\n");
+            StackTraceElement[] stackTrace = th.getStackTrace();
+            for (int i = 0; i < stackTrace.length; i++) {
+                OutputStreamWriter outputStreamWriter2 = getInstance().streamWriter;
+                outputStreamWriter2.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: " + stackTrace[i] + "\n");
+            }
+            getInstance().streamWriter.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (BuildVars.DEBUG_PRIVATE_VERSION) {
+            System.exit(2);
+        }
+    }
+
     private static boolean needSent(Throwable th) {
         return !(th instanceof InterruptedException) && !(th instanceof MediaCodecVideoConvertor.ConversionCanceledException);
     }
@@ -203,7 +244,7 @@ public class FileLog {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$d$3(String str) {
+    public static /* synthetic */ void lambda$d$4(String str) {
         try {
             OutputStreamWriter outputStreamWriter = getInstance().streamWriter;
             outputStreamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " D/tmessages: " + str + "\n");
@@ -218,13 +259,13 @@ public class FileLog {
             ensureInitied();
             Log.w("tmessages", str);
             if (getInstance().streamWriter != null) {
-                getInstance().logQueue.postRunnable(new FileLog$$ExternalSyntheticLambda2(str));
+                getInstance().logQueue.postRunnable(new FileLog$$ExternalSyntheticLambda1(str));
             }
         }
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$w$4(String str) {
+    public static /* synthetic */ void lambda$w$5(String str) {
         try {
             OutputStreamWriter outputStreamWriter = getInstance().streamWriter;
             outputStreamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " W/tmessages: " + str + "\n");

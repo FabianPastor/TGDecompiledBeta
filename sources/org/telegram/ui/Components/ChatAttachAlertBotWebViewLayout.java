@@ -462,6 +462,7 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
         tLRPC$TL_messages_requestWebView.peer = MessagesController.getInstance(i).getInputPeer(j);
         tLRPC$TL_messages_requestWebView.bot = MessagesController.getInstance(i).getInputUser(j2);
         tLRPC$TL_messages_requestWebView.silent = z;
+        tLRPC$TL_messages_requestWebView.platform = "android";
         if (!(j >= 0 || (chatFull = MessagesController.getInstance(i).getChatFull(-j)) == null || (tLRPC$Peer = chatFull.default_send_as) == null)) {
             tLRPC$TL_messages_requestWebView.send_as = MessagesController.getInstance(i).getInputPeer(tLRPC$Peer);
             tLRPC$TL_messages_requestWebView.flags |= 8192;

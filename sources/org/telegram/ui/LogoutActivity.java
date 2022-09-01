@@ -29,6 +29,7 @@ import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.Premium.LimitReachedBottomSheet;
 import org.telegram.ui.Components.RecyclerListView;
 
 public class LogoutActivity extends BaseFragment {
@@ -125,21 +126,24 @@ public class LogoutActivity extends BaseFragment {
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$createView$0(View view, int i, float f, float f2) {
+        Integer num = null;
         if (i == this.addAccountRow) {
-            int i2 = -1;
-            int i3 = 0;
-            while (true) {
-                if (i3 >= 4) {
-                    break;
-                } else if (!UserConfig.getInstance(i3).isClientActivated()) {
-                    i2 = i3;
-                    break;
-                } else {
-                    i3++;
+            int i2 = 0;
+            for (int i3 = 3; i3 >= 0; i3--) {
+                if (!UserConfig.getInstance(i3).isClientActivated()) {
+                    i2++;
+                    if (num == null) {
+                        num = Integer.valueOf(i3);
+                    }
                 }
             }
-            if (i2 >= 0) {
-                presentFragment(new LoginActivity(i2));
+            if (!UserConfig.hasPremiumOnAccounts()) {
+                i2--;
+            }
+            if (i2 > 0 && num != null) {
+                presentFragment(new LoginActivity(num.intValue()));
+            } else if (!UserConfig.hasPremiumOnAccounts()) {
+                showDialog(new LimitReachedBottomSheet(this, getContext(), 7, this.currentAccount));
             }
         } else if (i == this.passcodeRow) {
             presentFragment(PasscodeActivity.determineOpenFragment());

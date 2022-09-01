@@ -2119,7 +2119,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
         this.photoVideoOptionsItem.setTranslationY((float) AndroidUtilities.dp(10.0f));
         this.photoVideoOptionsItem.setVisibility(4);
         Drawable mutate = ContextCompat.getDrawable(context2, R.drawable.ic_ab_other).mutate();
-        mutate.setColorFilter(new PorterDuffColorFilter(getThemedColor("windowBackgroundWhiteGrayText2"), PorterDuff.Mode.MULTIPLY));
+        mutate.setColorFilter(new PorterDuffColorFilter(getThemedColor("actionBarActionModeDefaultIcon"), PorterDuff.Mode.MULTIPLY));
         this.photoVideoOptionsItem.setImageDrawable(mutate);
         this.photoVideoOptionsItem.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         this.actionBar.addView(this.photoVideoOptionsItem, LayoutHelper.createFrame(48, 56, 85));
@@ -2279,7 +2279,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
         BackDrawable backDrawable2 = new BackDrawable(true);
         this.backDrawable = backDrawable2;
         imageView3.setImageDrawable(backDrawable2);
-        this.backDrawable.setColor(getThemedColor("windowBackgroundWhiteGrayText2"));
+        this.backDrawable.setColor(getThemedColor("actionBarActionModeDefaultIcon"));
         this.closeButton.setBackground(Theme.createSelectorDrawable(getThemedColor("actionBarActionModeDefaultSelector"), 1));
         this.closeButton.setContentDescription(LocaleController.getString("Close", R.string.Close));
         this.actionModeLayout.addView(this.closeButton, new LinearLayout.LayoutParams(AndroidUtilities.dp(54.0f), -1));
@@ -2294,8 +2294,9 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
         this.actionModeViews.add(this.selectedMessagesCountTextView);
         if (!DialogObject.isEncryptedDialog(this.dialog_id)) {
             str = "actionBarActionModeDefaultSelector";
+            ActionBarMenuItem actionBarMenuItem2 = r1;
             str2 = "windowBackgroundWhiteGrayText2";
-            ActionBarMenuItem actionBarMenuItem2 = new ActionBarMenuItem(context, (ActionBarMenu) null, getThemedColor("actionBarActionModeDefaultSelector"), getThemedColor("windowBackgroundWhiteGrayText2"), false);
+            ActionBarMenuItem actionBarMenuItem3 = new ActionBarMenuItem(context, (ActionBarMenu) null, getThemedColor("actionBarActionModeDefaultSelector"), getThemedColor("windowBackgroundWhiteGrayText2"), false);
             this.gotoItem = actionBarMenuItem2;
             actionBarMenuItem2.setIcon(R.drawable.msg_message);
             this.gotoItem.setContentDescription(LocaleController.getString("AccDescrGoToMessage", R.string.AccDescrGoToMessage));
@@ -2303,9 +2304,9 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             this.actionModeLayout.addView(this.gotoItem, new LinearLayout.LayoutParams(AndroidUtilities.dp(54.0f), -1));
             this.actionModeViews.add(this.gotoItem);
             this.gotoItem.setOnClickListener(new SharedMediaLayout$$ExternalSyntheticLambda0(this));
-            ActionBarMenuItem actionBarMenuItem3 = new ActionBarMenuItem(context, (ActionBarMenu) null, getThemedColor(str), getThemedColor(str2), false);
-            this.forwardItem = actionBarMenuItem3;
-            actionBarMenuItem3.setIcon(R.drawable.msg_forward);
+            ActionBarMenuItem actionBarMenuItem4 = new ActionBarMenuItem(context, (ActionBarMenu) null, getThemedColor(str), getThemedColor(str2), false);
+            this.forwardItem = actionBarMenuItem4;
+            actionBarMenuItem4.setIcon(R.drawable.msg_forward);
             this.forwardItem.setContentDescription(LocaleController.getString("Forward", R.string.Forward));
             this.forwardItem.setDuplicateParentStateEnabled(false);
             this.actionModeLayout.addView(this.forwardItem, new LinearLayout.LayoutParams(AndroidUtilities.dp(54.0f), -1));
@@ -2316,9 +2317,9 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             str = "actionBarActionModeDefaultSelector";
             str2 = "windowBackgroundWhiteGrayText2";
         }
-        ActionBarMenuItem actionBarMenuItem4 = new ActionBarMenuItem(context, (ActionBarMenu) null, getThemedColor(str), getThemedColor(str2), false);
-        this.deleteItem = actionBarMenuItem4;
-        actionBarMenuItem4.setIcon(R.drawable.msg_delete);
+        ActionBarMenuItem actionBarMenuItem5 = new ActionBarMenuItem(context, (ActionBarMenu) null, getThemedColor(str), getThemedColor(str2), false);
+        this.deleteItem = actionBarMenuItem5;
+        actionBarMenuItem5.setIcon(R.drawable.msg_delete);
         this.deleteItem.setContentDescription(LocaleController.getString("Delete", R.string.Delete));
         this.deleteItem.setDuplicateParentStateEnabled(false);
         this.actionModeLayout.addView(this.deleteItem, new LinearLayout.LayoutParams(AndroidUtilities.dp(54.0f), -1));
@@ -4839,7 +4840,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             for (int i3 = 0; i3 < arrayList.size(); i3++) {
                 long longValue = ((Long) arrayList2.get(i3)).longValue();
                 if (charSequence != null) {
-                    this.profileActivity.getSendMessagesHelper().sendMessage(charSequence.toString(), longValue, (MessageObject) null, (MessageObject) null, (TLRPC$WebPage) null, true, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, true, 0, (MessageObject.SendAnimationData) null);
+                    this.profileActivity.getSendMessagesHelper().sendMessage(charSequence.toString(), longValue, (MessageObject) null, (MessageObject) null, (TLRPC$WebPage) null, true, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, true, 0, (MessageObject.SendAnimationData) null, false);
                 }
                 this.profileActivity.getSendMessagesHelper().sendMessage((ArrayList<MessageObject>) arrayList3, longValue, false, false, true, 0);
             }
@@ -7739,7 +7740,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             } else if (i5 == 0) {
                 int access$700 = i - this.sharedMediaData[i5].startOffset;
                 if (access$700 >= 0 && access$700 < this.sharedMediaData[i5].messages.size()) {
-                    PhotoViewer.getInstance().setParentActivity(this.profileActivity.getParentActivity());
+                    PhotoViewer.getInstance().setParentActivity(this.profileActivity);
                     PhotoViewer.getInstance().openPhoto(this.sharedMediaData[i5].messages, access$700, this.dialog_id, this.mergeDialogId, this.provider);
                 }
             } else if (i5 == 2 || i5 == 4) {
@@ -7747,7 +7748,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                     ((SharedAudioCell) view2).didPressedButton();
                 }
             } else if (i5 == 5) {
-                PhotoViewer.getInstance().setParentActivity(this.profileActivity.getParentActivity());
+                PhotoViewer.getInstance().setParentActivity(this.profileActivity);
                 int indexOf = this.sharedMediaData[i5].messages.indexOf(messageObject2);
                 if (indexOf < 0) {
                     ArrayList arrayList = new ArrayList();
@@ -7762,7 +7763,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                     TLRPC$Document document = messageObject.getDocument();
                     if (sharedDocumentCell2.isLoaded()) {
                         if (messageObject.canPreviewDocument()) {
-                            PhotoViewer.getInstance().setParentActivity(this.profileActivity.getParentActivity());
+                            PhotoViewer.getInstance().setParentActivity(this.profileActivity);
                             int indexOf2 = this.sharedMediaData[i5].messages.indexOf(messageObject2);
                             if (indexOf2 < 0) {
                                 ArrayList arrayList2 = new ArrayList();
@@ -7827,7 +7828,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
 
     /* access modifiers changed from: private */
     public void openWebView(TLRPC$WebPage tLRPC$WebPage, MessageObject messageObject) {
-        EmbedBottomSheet.show(this.profileActivity.getParentActivity(), messageObject, this.provider, tLRPC$WebPage.site_name, tLRPC$WebPage.description, tLRPC$WebPage.url, tLRPC$WebPage.embed_url, tLRPC$WebPage.embed_width, tLRPC$WebPage.embed_height, false);
+        EmbedBottomSheet.show(this.profileActivity, messageObject, this.provider, tLRPC$WebPage.site_name, tLRPC$WebPage.description, tLRPC$WebPage.url, tLRPC$WebPage.embed_url, tLRPC$WebPage.embed_width, tLRPC$WebPage.embed_height, false);
     }
 
     private void recycleAdapter(RecyclerView.Adapter adapter) {
@@ -9676,7 +9677,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             arrayList.add(new ThemeDescription(this.forwardItem.getIconView(), ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText2"));
             arrayList.add(new ThemeDescription(this.forwardItem, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarActionModeDefaultSelector"));
         }
-        arrayList.add(new ThemeDescription(this.closeButton, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, new Drawable[]{this.backDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText2"));
+        arrayList.add(new ThemeDescription(this.closeButton, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, new Drawable[]{this.backDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarActionModeDefaultIcon"));
         arrayList.add(new ThemeDescription(this.closeButton, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarActionModeDefaultSelector"));
         arrayList.add(new ThemeDescription(this.actionModeLayout, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
         arrayList.add(new ThemeDescription(this.scrollSlidingTextTabStrip, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));

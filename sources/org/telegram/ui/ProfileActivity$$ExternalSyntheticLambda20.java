@@ -1,17 +1,15 @@
 package org.telegram.ui;
 
-import java.util.concurrent.CountDownLatch;
+import android.animation.AnimatorSet;
 
 public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda20 implements Runnable {
-    public final /* synthetic */ ProfileActivity f$0;
-    public final /* synthetic */ CountDownLatch f$1;
+    public final /* synthetic */ AnimatorSet f$0;
 
-    public /* synthetic */ ProfileActivity$$ExternalSyntheticLambda20(ProfileActivity profileActivity, CountDownLatch countDownLatch) {
-        this.f$0 = profileActivity;
-        this.f$1 = countDownLatch;
+    public /* synthetic */ ProfileActivity$$ExternalSyntheticLambda20(AnimatorSet animatorSet) {
+        this.f$0 = animatorSet;
     }
 
     public final void run() {
-        this.f$0.lambda$onFragmentCreate$0(this.f$1);
+        this.f$0.start();
     }
 }

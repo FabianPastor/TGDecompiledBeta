@@ -13,6 +13,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda21
     }
 
     public final void run() {
-        MessagesController.lambda$convertToMegaGroup$214(this.f$0, this.f$1);
+        MessagesController.lambda$convertToMegaGroup$215(this.f$0, this.f$1);
     }
 }

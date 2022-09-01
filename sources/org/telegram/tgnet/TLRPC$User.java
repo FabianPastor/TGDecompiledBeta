@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public abstract class TLRPC$User extends TLObject {
     public long access_hash;
     public boolean apply_min_photo;
+    public boolean attach_menu_enabled;
     public boolean bot;
     public boolean bot_attach_menu;
     public boolean bot_chat_history;
@@ -15,6 +16,7 @@ public abstract class TLRPC$User extends TLObject {
     public boolean bot_nochats;
     public boolean contact;
     public boolean deleted;
+    public TLRPC$EmojiStatus emoji_status;
     public boolean explicit_content;
     public boolean fake;
     public String first_name;
@@ -83,10 +85,13 @@ public abstract class TLRPC$User extends TLObject {
                 tLRPC$User = new TLRPC$TL_user_layer104();
                 break;
             case 1073147056:
-                tLRPC$User = new TLRPC$TL_user();
+                tLRPC$User = new TLRPC$TL_user_layer144();
                 break;
             case 1377093789:
                 tLRPC$User = new TLRPC$TL_userForeign_old();
+                break;
+            case 1570352622:
+                tLRPC$User = new TLRPC$TL_user();
                 break;
             case 1879553105:
                 tLRPC$User = new TLRPC$TL_userSelf_old2();

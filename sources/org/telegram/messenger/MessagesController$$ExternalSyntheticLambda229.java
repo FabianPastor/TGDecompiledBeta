@@ -17,6 +17,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda22
     }
 
     public final void run(int i) {
-        this.f$0.lambda$updateInterfaceWithMessages$343(this.f$1, this.f$2, this.f$3, i);
+        this.f$0.lambda$updateInterfaceWithMessages$344(this.f$1, this.f$2, this.f$3, i);
     }
 }

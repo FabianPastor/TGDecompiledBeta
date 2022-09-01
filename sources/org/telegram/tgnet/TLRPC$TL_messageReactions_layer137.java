@@ -12,7 +12,7 @@ public class TLRPC$TL_messageReactions_layer137 extends TLRPC$TL_messageReaction
         if (readInt322 == NUM) {
             int readInt323 = abstractSerializedData.readInt32(z);
             while (i < readInt323) {
-                TLRPC$TL_reactionCount TLdeserialize = TLRPC$TL_reactionCount.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+                TLRPC$ReactionCount TLdeserialize = TLRPC$ReactionCount.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
                 if (TLdeserialize != null) {
                     this.results.add(TLdeserialize);
                     i++;

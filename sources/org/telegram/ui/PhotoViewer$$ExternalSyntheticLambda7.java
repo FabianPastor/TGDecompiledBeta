@@ -1,15 +1,19 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
+import android.animation.ValueAnimator;
 
-public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda7 implements DialogInterface.OnClickListener {
+public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda7 implements ValueAnimator.AnimatorUpdateListener {
     public final /* synthetic */ PhotoViewer f$0;
+    public final /* synthetic */ int f$1;
+    public final /* synthetic */ int f$2;
 
-    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda7(PhotoViewer photoViewer) {
+    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda7(PhotoViewer photoViewer, int i, int i2) {
         this.f$0 = photoViewer;
+        this.f$1 = i;
+        this.f$2 = i2;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$setParentActivity$40(dialogInterface, i);
+    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+        this.f$0.lambda$animateNavBarColorTo$42(this.f$1, this.f$2, valueAnimator);
     }
 }

@@ -6,8 +6,8 @@ public abstract class TLRPC$MessageReactions extends TLObject {
     public boolean can_see_list;
     public int flags;
     public boolean min;
-    public ArrayList<TLRPC$TL_messagePeerReaction> recent_reactions = new ArrayList<>();
-    public ArrayList<TLRPC$TL_reactionCount> results = new ArrayList<>();
+    public ArrayList<TLRPC$MessagePeerReaction> recent_reactions = new ArrayList<>();
+    public ArrayList<TLRPC$ReactionCount> results = new ArrayList<>();
 
     public static TLRPC$TL_messageReactions TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         TLRPC$TL_messageReactions tLRPC$TL_messageReactions;

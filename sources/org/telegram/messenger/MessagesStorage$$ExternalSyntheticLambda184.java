@@ -10,6 +10,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda184 i
     }
 
     public final void run() {
-        this.f$0.lambda$cleanup$6(this.f$1);
+        this.f$0.lambda$getCachedPhoneBook$117(this.f$1);
     }
 }

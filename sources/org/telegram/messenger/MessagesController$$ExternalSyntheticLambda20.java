@@ -8,6 +8,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda20
     }
 
     public final void run() {
-        this.f$0.lambda$toggleChannelInvitesHistory$234();
+        this.f$0.lambda$hidePromoDialog$109();
     }
 }

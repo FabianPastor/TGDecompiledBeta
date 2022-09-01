@@ -10,6 +10,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda21
     }
 
     public final void run() {
-        MessagesController.lambda$convertToGigaGroup$219(this.f$0);
+        MessagesController.lambda$convertToGigaGroup$220(this.f$0);
     }
 }

@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.CornerPathEffect;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.text.Layout;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -30,6 +31,7 @@ import org.telegram.tgnet.TLRPC$TL_messages_stickerSet;
 import org.telegram.ui.ActionBar.Theme;
 
 public class MessageContainsEmojiButton extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
+    public boolean checkWidth;
     private int currentAccount;
     private AnimatedEmojiDrawable emojiDrawable;
     /* access modifiers changed from: private */
@@ -72,16 +74,19 @@ public class MessageContainsEmojiButton extends FrameLayout implements Notificat
         }
     }
 
-    public MessageContainsEmojiButton(int i, Context context, Theme.ResourcesProvider resourcesProvider2, ArrayList<TLRPC$InputStickerSet> arrayList) {
+    public MessageContainsEmojiButton(int i, Context context, Theme.ResourcesProvider resourcesProvider2, ArrayList<TLRPC$InputStickerSet> arrayList, int i2) {
         super(context);
-        TLRPC$Document tLRPC$Document;
         String str;
+        String str2;
+        TLRPC$Document tLRPC$Document;
         TLRPC$TL_messages_stickerSet stickerSet;
         TLRPC$StickerSet tLRPC$StickerSet;
         ArrayList<TLRPC$Document> arrayList2;
-        int i2 = 0;
+        String str3;
+        int i3 = 0;
         this.loadingDrawableBoundsSet = false;
         this.lastWidth = -1;
+        this.checkWidth = true;
         this.loadT = 0.0f;
         this.currentAccount = i;
         setBackground(Theme.createRadSelectorDrawable(Theme.getColor("listSelectorSDK21", resourcesProvider2), 0, 6));
@@ -90,48 +95,57 @@ public class MessageContainsEmojiButton extends FrameLayout implements Notificat
         textPaint2.setTextSize((float) AndroidUtilities.dp(13.0f));
         this.textPaint.setColor(Theme.getColor("actionBarDefaultSubmenuItem", resourcesProvider2));
         if (arrayList.size() > 1) {
-            SpannableStringBuilder replaceTags = AndroidUtilities.replaceTags(LocaleController.formatPluralString("MessageContainsEmojiPacks", arrayList.size(), new Object[0]));
+            if (i2 == 0) {
+                str3 = LocaleController.formatPluralString("MessageContainsEmojiPacks", arrayList.size(), new Object[0]);
+            } else {
+                str3 = LocaleController.formatPluralString("MessageContainsReactionsPacks", arrayList.size(), new Object[0]);
+            }
+            SpannableStringBuilder replaceTags = AndroidUtilities.replaceTags(str3);
             this.mainText = replaceTags;
             Spannable spannable = replaceTags;
             TypefaceSpan[] typefaceSpanArr = (TypefaceSpan[]) spannable.getSpans(0, replaceTags.length(), TypefaceSpan.class);
-            while (typefaceSpanArr != null && i2 < typefaceSpanArr.length) {
-                int spanStart = spannable.getSpanStart(typefaceSpanArr[i2]);
-                int spanEnd = spannable.getSpanEnd(typefaceSpanArr[i2]);
-                spannable.removeSpan(typefaceSpanArr[i2]);
+            while (typefaceSpanArr != null && i3 < typefaceSpanArr.length) {
+                int spanStart = spannable.getSpanStart(typefaceSpanArr[i3]);
+                int spanEnd = spannable.getSpanEnd(typefaceSpanArr[i3]);
+                spannable.removeSpan(typefaceSpanArr[i3]);
                 spannable.setSpan(new BoldAndAccent(), spanStart, spanEnd, 33);
-                i2++;
+                i3++;
             }
         } else if (arrayList.size() == 1) {
-            String string = LocaleController.getString("MessageContainsEmojiPack", R.string.MessageContainsEmojiPack);
-            String[] split = string.split("%s");
+            if (i2 == 0) {
+                str = LocaleController.getString("MessageContainsEmojiPack", R.string.MessageContainsEmojiPack);
+            } else {
+                str = LocaleController.getString("MessageContainsReactionsPack", R.string.MessageContainsReactionsPack);
+            }
+            String[] split = str.split("%s");
             if (split.length <= 1) {
-                this.mainText = string;
+                this.mainText = str;
                 return;
             }
             TLRPC$InputStickerSet tLRPC$InputStickerSet = arrayList.get(0);
             this.inputStickerSet = tLRPC$InputStickerSet;
             if (tLRPC$InputStickerSet == null || (stickerSet = MediaDataController.getInstance(i).getStickerSet(this.inputStickerSet, false)) == null || (tLRPC$StickerSet = stickerSet.set) == null) {
-                str = null;
+                str2 = null;
                 tLRPC$Document = null;
             } else {
-                str = tLRPC$StickerSet.title;
-                int i3 = 0;
+                str2 = tLRPC$StickerSet.title;
+                int i4 = 0;
                 while (true) {
                     ArrayList<TLRPC$Document> arrayList3 = stickerSet.documents;
-                    if (arrayList3 == null || i3 >= arrayList3.size()) {
+                    if (arrayList3 == null || i4 >= arrayList3.size()) {
                         tLRPC$Document = null;
-                    } else if (stickerSet.documents.get(i3).id == stickerSet.set.thumb_document_id) {
-                        tLRPC$Document = stickerSet.documents.get(i3);
+                    } else if (stickerSet.documents.get(i4).id == stickerSet.set.thumb_document_id) {
+                        tLRPC$Document = stickerSet.documents.get(i4);
                         break;
                     } else {
-                        i3++;
+                        i4++;
                     }
                 }
                 if (tLRPC$Document == null && (arrayList2 = stickerSet.documents) != null && arrayList2.size() > 0) {
                     tLRPC$Document = stickerSet.documents.get(0);
                 }
             }
-            if (str == null || tLRPC$Document == null) {
+            if (str2 == null || tLRPC$Document == null) {
                 this.mainText = split[0];
                 this.endText = split[1];
                 LoadingDrawable loadingDrawable2 = new LoadingDrawable(resourcesProvider2);
@@ -150,7 +164,7 @@ public class MessageContainsEmojiButton extends FrameLayout implements Notificat
             AnimatedEmojiDrawable make = AnimatedEmojiDrawable.make(i, 0, tLRPC$Document);
             this.emojiDrawable = make;
             make.addView((View) this);
-            SpannableString spannableString2 = new SpannableString(str);
+            SpannableString spannableString2 = new SpannableString(str2);
             spannableString2.setSpan(new BoldAndAccent(), 0, spannableString2.length(), 33);
             this.mainText = new SpannableStringBuilder().append(split[0]).append(spannableString).append(' ').append(spannableString2).append(split[1]);
             this.loadT = 1.0f;
@@ -215,14 +229,18 @@ public class MessageContainsEmojiButton extends FrameLayout implements Notificat
 
     /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
+        int i3;
         setPadding(AndroidUtilities.dp(13.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(13.0f), AndroidUtilities.dp(8.0f));
         int size = View.MeasureSpec.getSize(i);
-        int i3 = this.lastWidth;
-        if (i3 > 0) {
+        if (this.checkWidth && (i3 = this.lastWidth) > 0) {
             size = Math.min(size, i3);
         }
         this.lastWidth = size;
-        super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(updateLayout((size - getPaddingLeft()) - getPaddingRight(), false) + getPaddingTop() + getPaddingBottom(), NUM));
+        int paddingLeft = (size - getPaddingLeft()) - getPaddingRight();
+        if (paddingLeft < 0) {
+            paddingLeft = 0;
+        }
+        super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(updateLayout(paddingLeft, false) + getPaddingTop() + getPaddingBottom(), NUM));
     }
 
     /* access modifiers changed from: protected */
@@ -361,7 +379,7 @@ public class MessageContainsEmojiButton extends FrameLayout implements Notificat
         super.onDetachedFromWindow();
         AnimatedEmojiDrawable animatedEmojiDrawable = this.emojiDrawable;
         if (animatedEmojiDrawable != null) {
-            animatedEmojiDrawable.removeView((View) this);
+            animatedEmojiDrawable.removeView((Drawable.Callback) this);
         }
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.groupStickersDidLoad);
     }
@@ -369,6 +387,10 @@ public class MessageContainsEmojiButton extends FrameLayout implements Notificat
     /* access modifiers changed from: protected */
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
+        AnimatedEmojiDrawable animatedEmojiDrawable = this.emojiDrawable;
+        if (animatedEmojiDrawable != null) {
+            animatedEmojiDrawable.addView((View) this);
+        }
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.groupStickersDidLoad);
     }
 }

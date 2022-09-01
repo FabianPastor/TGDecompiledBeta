@@ -1,17 +1,19 @@
 package org.telegram.messenger;
 
+import org.telegram.tgnet.TLRPC$TL_account_emojiStatuses;
+
 public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda31 implements Runnable {
     public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ long f$1;
-    public final /* synthetic */ double f$2;
+    public final /* synthetic */ int f$1;
+    public final /* synthetic */ TLRPC$TL_account_emojiStatuses f$2;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda31(MediaDataController mediaDataController, long j, double d) {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda31(MediaDataController mediaDataController, int i, TLRPC$TL_account_emojiStatuses tLRPC$TL_account_emojiStatuses) {
         this.f$0 = mediaDataController;
-        this.f$1 = j;
-        this.f$2 = d;
+        this.f$1 = i;
+        this.f$2 = tLRPC$TL_account_emojiStatuses;
     }
 
     public final void run() {
-        this.f$0.lambda$increasePeerRaiting$131(this.f$1, this.f$2);
+        this.f$0.lambda$updateEmojiStatuses$204(this.f$1, this.f$2);
     }
 }

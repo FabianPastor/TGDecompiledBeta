@@ -21,27 +21,41 @@ import org.telegram.ui.Components.voip.CellFlickerDrawable;
 public class PremiumLockIconView extends ImageView {
     public static int TYPE_REACTIONS = 0;
     public static int TYPE_STICKERS_PREMIUM_LOCKED = 1;
-    CellFlickerDrawable cellFlickerDrawable = new CellFlickerDrawable();
+    CellFlickerDrawable cellFlickerDrawable;
     int color1;
     int color2;
-    private float[] colorFloat = new float[3];
-    boolean colorRetrieved = false;
-    int currentColor = -1;
+    private float[] colorFloat;
+    boolean colorRetrieved;
+    int currentColor;
     ImageReceiver imageReceiver;
     private boolean locked;
     Paint oldShaderPaint;
-    Paint paint = new Paint(1);
-    Path path = new Path();
-    Shader shader = null;
-    float shaderCrossfadeProgress = 1.0f;
+    Paint paint;
+    Path path;
+    private Theme.ResourcesProvider resourcesProvider;
+    Shader shader;
+    float shaderCrossfadeProgress;
     StarParticlesView.Drawable starParticles;
     private final int type;
     boolean waitingImage;
     boolean wasDrawn;
 
     public PremiumLockIconView(Context context, int i) {
+        this(context, i, (Theme.ResourcesProvider) null);
+    }
+
+    public PremiumLockIconView(Context context, int i, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
+        this.colorFloat = new float[3];
+        this.colorRetrieved = false;
+        this.currentColor = -1;
+        this.shader = null;
+        this.path = new Path();
+        this.paint = new Paint(1);
+        this.shaderCrossfadeProgress = 1.0f;
+        this.cellFlickerDrawable = new CellFlickerDrawable();
         this.type = i;
+        this.resourcesProvider = resourcesProvider2;
         setImageResource(i == TYPE_REACTIONS ? R.drawable.msg_premium_lock2 : R.drawable.msg_mini_premiumlock);
         if (i == TYPE_REACTIONS) {
             StarParticlesView.Drawable drawable = new StarParticlesView.Drawable(5);
@@ -143,7 +157,14 @@ public class PremiumLockIconView extends ImageView {
 
     public void setImageReceiver(ImageReceiver imageReceiver2) {
         this.imageReceiver = imageReceiver2;
-        this.waitingImage = true;
+        if (imageReceiver2 != null) {
+            this.waitingImage = true;
+            invalidate();
+        }
+    }
+
+    public ImageReceiver getImageReceiver() {
+        return this.imageReceiver;
     }
 
     public static int getDominantColor(Bitmap bitmap) {
@@ -182,8 +203,8 @@ public class PremiumLockIconView extends ImageView {
                 fArr[2] = 0.7f;
             }
             int HSVToColor = Color.HSVToColor(fArr);
-            int blendARGB = ColorUtils.blendARGB(HSVToColor, Theme.getColor("windowBackgroundWhite"), 0.5f);
-            int blendARGB2 = ColorUtils.blendARGB(HSVToColor, Theme.getColor("windowBackgroundWhite"), 0.4f);
+            int blendARGB = ColorUtils.blendARGB(HSVToColor, Theme.getColor("windowBackgroundWhite", this.resourcesProvider), 0.5f);
+            int blendARGB2 = ColorUtils.blendARGB(HSVToColor, Theme.getColor("windowBackgroundWhite", this.resourcesProvider), 0.4f);
             if (this.shader == null || this.color1 != blendARGB2 || this.color2 != blendARGB) {
                 if (this.wasDrawn) {
                     Paint paint2 = this.paint;

@@ -136,7 +136,7 @@ public class DrawingInBackgroundThreadDrawable implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: protected */
-    public void drawInUiThread(Canvas canvas) {
+    public void drawInUiThread(Canvas canvas, float f) {
         throw null;
     }
 
@@ -153,7 +153,7 @@ public class DrawingInBackgroundThreadDrawable implements NotificationCenter.Not
         throw null;
     }
 
-    DrawingInBackgroundThreadDrawable() {
+    public DrawingInBackgroundThreadDrawable() {
         if (backgroundQueue == null) {
             backgroundQueue = new DispatchQueue("draw_background_queue");
         }
@@ -182,7 +182,7 @@ public class DrawingInBackgroundThreadDrawable implements NotificationCenter.Not
                 }
                 this.nextRenderingCanvas.save();
                 this.nextRenderingCanvas.translate(0.0f, (float) this.padding);
-                drawInUiThread(this.nextRenderingCanvas);
+                drawInUiThread(this.nextRenderingCanvas, 1.0f);
                 this.nextRenderingCanvas.restore();
             }
             if (!this.bitmapUpdating && !this.paused) {
@@ -199,10 +199,15 @@ public class DrawingInBackgroundThreadDrawable implements NotificationCenter.Not
                 this.paint.setAlpha((int) (f * 255.0f));
                 canvas.save();
                 canvas.translate(0.0f, (float) (-this.padding));
-                canvas.drawBitmap(bitmap4, 0.0f, 0.0f, this.paint);
+                drawBitmap(canvas, bitmap4, this.paint);
                 canvas.restore();
             }
         }
+    }
+
+    /* access modifiers changed from: protected */
+    public void drawBitmap(Canvas canvas, Bitmap bitmap2, Paint paint2) {
+        canvas.drawBitmap(bitmap2, 0.0f, 0.0f, paint2);
     }
 
     public void onAttachToWindow() {

@@ -10,6 +10,6 @@ public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda3 impl
     }
 
     public final void onCancel(DialogInterface dialogInterface) {
-        LaunchActivity.lambda$runLinkRequest$47(this.f$0, dialogInterface);
+        LaunchActivity.lambda$runLinkRequest$48(this.f$0, dialogInterface);
     }
 }

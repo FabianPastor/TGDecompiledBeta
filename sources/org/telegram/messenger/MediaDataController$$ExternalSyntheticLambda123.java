@@ -1,34 +1,27 @@
 package org.telegram.messenger;
 
-import android.content.Context;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$StickerSet;
-import org.telegram.ui.ActionBar.BaseFragment;
+import java.util.ArrayList;
 
 public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda123 implements Runnable {
     public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ boolean[] f$1;
-    public final /* synthetic */ Context f$2;
+    public final /* synthetic */ boolean f$1;
+    public final /* synthetic */ ArrayList f$2;
     public final /* synthetic */ int f$3;
-    public final /* synthetic */ BaseFragment f$4;
-    public final /* synthetic */ boolean f$5;
-    public final /* synthetic */ TLObject f$6;
-    public final /* synthetic */ TLRPC$StickerSet f$7;
-    public final /* synthetic */ int f$8;
+    public final /* synthetic */ long f$4;
+    public final /* synthetic */ int f$5;
+    public final /* synthetic */ Runnable f$6;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda123(MediaDataController mediaDataController, boolean[] zArr, Context context, int i, BaseFragment baseFragment, boolean z, TLObject tLObject, TLRPC$StickerSet tLRPC$StickerSet, int i2) {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda123(MediaDataController mediaDataController, boolean z, ArrayList arrayList, int i, long j, int i2, Runnable runnable) {
         this.f$0 = mediaDataController;
-        this.f$1 = zArr;
-        this.f$2 = context;
+        this.f$1 = z;
+        this.f$2 = arrayList;
         this.f$3 = i;
-        this.f$4 = baseFragment;
-        this.f$5 = z;
-        this.f$6 = tLObject;
-        this.f$7 = tLRPC$StickerSet;
-        this.f$8 = i2;
+        this.f$4 = j;
+        this.f$5 = i2;
+        this.f$6 = runnable;
     }
 
     public final void run() {
-        this.f$0.lambda$toggleStickerSet$88(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8);
+        this.f$0.lambda$processLoadedStickers$89(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6);
     }
 }

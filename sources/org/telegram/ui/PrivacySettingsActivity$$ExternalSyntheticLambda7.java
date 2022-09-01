@@ -8,6 +8,6 @@ public final /* synthetic */ class PrivacySettingsActivity$$ExternalSyntheticLam
     }
 
     public final void run() {
-        this.f$0.lambda$createView$10();
+        this.f$0.lambda$createView$5();
     }
 }

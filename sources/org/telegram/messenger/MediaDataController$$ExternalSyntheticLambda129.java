@@ -1,15 +1,22 @@
 package org.telegram.messenger;
 
-import org.telegram.messenger.Utilities;
+import java.util.ArrayList;
+import org.telegram.messenger.MediaDataController;
 
 public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda129 implements Runnable {
-    public final /* synthetic */ Utilities.Callback f$0;
+    public final /* synthetic */ MediaDataController f$0;
+    public final /* synthetic */ String[] f$1;
+    public final /* synthetic */ MediaDataController.KeywordResultCallback f$2;
+    public final /* synthetic */ ArrayList f$3;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda129(Utilities.Callback callback) {
-        this.f$0 = callback;
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda129(MediaDataController mediaDataController, String[] strArr, MediaDataController.KeywordResultCallback keywordResultCallback, ArrayList arrayList) {
+        this.f$0 = mediaDataController;
+        this.f$1 = strArr;
+        this.f$2 = keywordResultCallback;
+        this.f$3 = arrayList;
     }
 
     public final void run() {
-        MediaDataController.lambda$loadStickers$74(this.f$0);
+        this.f$0.lambda$getEmojiSuggestions$189(this.f$1, this.f$2, this.f$3);
     }
 }

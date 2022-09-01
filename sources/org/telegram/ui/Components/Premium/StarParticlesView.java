@@ -107,6 +107,7 @@ public class StarParticlesView extends View {
         /* access modifiers changed from: private */
         public final float dt = (1000.0f / AndroidUtilities.screenRefreshRate);
         public RectF excludeRect = new RectF();
+        public boolean forceMaxAlpha;
         public boolean isCircle;
         public float k1 = 0.85f;
         public float k2 = 0.85f;
@@ -150,6 +151,7 @@ public class StarParticlesView extends View {
             this.checkTime = true;
             this.isCircle = true;
             this.useBlur = false;
+            this.forceMaxAlpha = false;
             this.roundEffect = true;
             this.type = -1;
             this.colorKey = "premiumStartSmallStarsColor";
@@ -282,7 +284,9 @@ public class StarParticlesView extends View {
                             if (this.roundEffect) {
                                 mainGradientPaint.setPathEffect(new CornerPathEffect(AndroidUtilities.dpf2(((float) this.size1) / 5.0f)));
                             }
-                            if (this.useBlur) {
+                            if (this.forceMaxAlpha) {
+                                mainGradientPaint.setAlpha(255);
+                            } else if (this.useBlur) {
                                 mainGradientPaint.setAlpha(60);
                             } else {
                                 mainGradientPaint.setAlpha(120);

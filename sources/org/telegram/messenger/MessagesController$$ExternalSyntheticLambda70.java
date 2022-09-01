@@ -16,6 +16,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda70
     }
 
     public final void run() {
-        this.f$0.lambda$checkUnreadReactions$332(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$checkUnreadReactions$335(this.f$1, this.f$2, this.f$3);
     }
 }

@@ -193,11 +193,20 @@ public abstract class TLRPC$Update extends TLObject {
             case 654302845:
                 tLRPC$Update = new TLRPC$TL_updateDialogFilter();
                 break;
+            case 674706841:
+                tLRPC$Update = new TLRPC$TL_updateUserEmojiStatus();
+                break;
             case 791390623:
                 tLRPC$Update = new TLRPC$TL_updateChannelWebPage();
                 break;
             case 791617983:
                 tLRPC$Update = new TLRPC$TL_updateReadHistoryOutbox();
+                break;
+            case 821314523:
+                tLRPC$Update = new TLRPC$TL_updateRecentEmojiStatuses();
+                break;
+            case 834816008:
+                tLRPC$Update = new TLRPC$TL_updateStickerSets();
                 break;
             case 889491791:
                 tLRPC$Update = new TLRPC$TL_updateDialogFilters();
@@ -210,9 +219,6 @@ public abstract class TLRPC$Update extends TLObject {
                 break;
             case 1037718609:
                 tLRPC$Update = new TLRPC$TL_updateChatParticipantAdd();
-                break;
-            case 1135492588:
-                tLRPC$Update = new TLRPC$TL_updateStickerSets();
                 break;
             case 1153291573:
                 tLRPC$Update = new TLRPC$TL_updateChannelReadMessagesContents();
@@ -238,6 +244,9 @@ public abstract class TLRPC$Update extends TLObject {
             case 1461528386:
                 tLRPC$Update = new TLRPC$TL_updateReadFeaturedStickers();
                 break;
+            case 1517529484:
+                tLRPC$Update = new TLRPC$TL_updateMessageExtendedMedia();
+                break;
             case 1538885128:
                 tLRPC$Update = new TLRPC$TL_updatePinnedChannelMessages();
                 break;
@@ -261,6 +270,9 @@ public abstract class TLRPC$Update extends TLObject {
                 break;
             case 1852826908:
                 tLRPC$Update = new TLRPC$TL_updateDialogPinned();
+                break;
+            case 1870160884:
+                tLRPC$Update = new TLRPC$TL_updateRecentReactions();
                 break;
             case 1885586395:
                 tLRPC$Update = new TLRPC$TL_updatePendingJoinRequests();

@@ -10,6 +10,6 @@ public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda5 imp
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$createView$6(dialogInterface, i);
+        this.f$0.lambda$createView$8(dialogInterface, i);
     }
 }

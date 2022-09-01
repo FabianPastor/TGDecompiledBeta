@@ -10,6 +10,6 @@ public final /* synthetic */ class PrivacySettingsActivity$$ExternalSyntheticLam
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$createView$13(dialogInterface, i);
+        this.f$0.lambda$createView$15(dialogInterface, i);
     }
 }

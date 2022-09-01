@@ -11,6 +11,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda34
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        MessagesController.lambda$blockPeer$69(tLObject, tLRPC$TL_error);
+        MessagesController.lambda$deleteParticipantFromChat$247(tLObject, tLRPC$TL_error);
     }
 }

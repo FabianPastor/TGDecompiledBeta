@@ -233,7 +233,7 @@ public class AudioPlayerCell extends View implements DownloadController.FileDown
         if (i == 0) {
             this.miniButtonState = 1;
             this.radialProgress.setProgress(0.0f, false);
-            FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.getDocument(), this.currentMessageObject, 1, 0);
+            FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.getDocument(), this.currentMessageObject, 3, 0);
             this.radialProgress.setMiniIcon(getMiniIconForCurrentState(), false, true);
             invalidate();
         } else if (i == 1) {

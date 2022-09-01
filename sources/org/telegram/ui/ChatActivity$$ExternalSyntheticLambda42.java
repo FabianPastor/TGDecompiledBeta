@@ -13,6 +13,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda42 imple
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$onTransitionAnimationEnd$130(this.f$1, dialogInterface, i);
+        this.f$0.lambda$onTransitionAnimationEnd$133(this.f$1, dialogInterface, i);
     }
 }

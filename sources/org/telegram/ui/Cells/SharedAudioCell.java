@@ -2,6 +2,7 @@ package org.telegram.ui.Cells;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.text.SpannableStringBuilder;
 import android.text.StaticLayout;
 import android.text.TextPaint;
@@ -20,6 +21,7 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$PhotoSize;
 import org.telegram.tgnet.TLRPC$TL_photoSize;
@@ -58,6 +60,8 @@ public class SharedAudioCell extends FrameLayout implements DownloadController.F
     private boolean needDivider;
     private RadialProgress2 radialProgress;
     private final Theme.ResourcesProvider resourcesProvider;
+    boolean showReorderIcon;
+    float showReorderIconProgress;
     private StaticLayout titleLayout;
     private int titleY;
     private int viewType;
@@ -798,6 +802,7 @@ public class SharedAudioCell extends FrameLayout implements DownloadController.F
     public void dispatchDraw(Canvas canvas) {
         if (this.enterAlpha == 1.0f || this.globalGradientView == null) {
             drawInternal(canvas);
+            drawReorder(canvas);
             super.dispatchDraw(canvas);
             return;
         }
@@ -810,7 +815,48 @@ public class SharedAudioCell extends FrameLayout implements DownloadController.F
         canvas.saveLayerAlpha(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), (int) (this.enterAlpha * 255.0f), 31);
         drawInternal(canvas);
         super.dispatchDraw(canvas);
+        drawReorder(canvas);
         canvas.restore();
+    }
+
+    private void drawReorder(Canvas canvas) {
+        boolean z = this.showReorderIcon;
+        if (z || this.showReorderIconProgress != 0.0f) {
+            if (z) {
+                float f = this.showReorderIconProgress;
+                if (f != 1.0f) {
+                    this.showReorderIconProgress = f + 0.10666667f;
+                    invalidate();
+                    this.showReorderIconProgress = Utilities.clamp(this.showReorderIconProgress, 1.0f, 0.0f);
+                    int measuredWidth = (getMeasuredWidth() - AndroidUtilities.dp(12.0f)) - Theme.dialogs_reorderDrawable.getIntrinsicWidth();
+                    int measuredHeight = (getMeasuredHeight() - Theme.dialogs_reorderDrawable.getIntrinsicHeight()) >> 1;
+                    canvas.save();
+                    float f2 = this.showReorderIconProgress;
+                    canvas.scale(f2, f2, ((float) measuredWidth) + (((float) Theme.dialogs_reorderDrawable.getIntrinsicWidth()) / 2.0f), ((float) measuredHeight) + (((float) Theme.dialogs_reorderDrawable.getIntrinsicHeight()) / 2.0f));
+                    Drawable drawable = Theme.dialogs_reorderDrawable;
+                    drawable.setBounds(measuredWidth, measuredHeight, drawable.getIntrinsicWidth() + measuredWidth, Theme.dialogs_reorderDrawable.getIntrinsicHeight() + measuredHeight);
+                    Theme.dialogs_reorderDrawable.draw(canvas);
+                    canvas.restore();
+                }
+            }
+            if (!z) {
+                float f3 = this.showReorderIconProgress;
+                if (f3 != 0.0f) {
+                    this.showReorderIconProgress = f3 - 0.10666667f;
+                    invalidate();
+                }
+            }
+            this.showReorderIconProgress = Utilities.clamp(this.showReorderIconProgress, 1.0f, 0.0f);
+            int measuredWidth2 = (getMeasuredWidth() - AndroidUtilities.dp(12.0f)) - Theme.dialogs_reorderDrawable.getIntrinsicWidth();
+            int measuredHeight2 = (getMeasuredHeight() - Theme.dialogs_reorderDrawable.getIntrinsicHeight()) >> 1;
+            canvas.save();
+            float var_ = this.showReorderIconProgress;
+            canvas.scale(var_, var_, ((float) measuredWidth2) + (((float) Theme.dialogs_reorderDrawable.getIntrinsicWidth()) / 2.0f), ((float) measuredHeight2) + (((float) Theme.dialogs_reorderDrawable.getIntrinsicHeight()) / 2.0f));
+            Drawable drawable2 = Theme.dialogs_reorderDrawable;
+            drawable2.setBounds(measuredWidth2, measuredHeight2, drawable2.getIntrinsicWidth() + measuredWidth2, Theme.dialogs_reorderDrawable.getIntrinsicHeight() + measuredHeight2);
+            Theme.dialogs_reorderDrawable.draw(canvas);
+            canvas.restore();
+        }
     }
 
     private void drawInternal(Canvas canvas) {
@@ -863,6 +909,16 @@ public class SharedAudioCell extends FrameLayout implements DownloadController.F
     public void setEnterAnimationAlpha(float f) {
         if (this.enterAlpha != f) {
             this.enterAlpha = f;
+            invalidate();
+        }
+    }
+
+    public void showReorderIcon(boolean z, boolean z2) {
+        if (this.showReorderIcon != z) {
+            this.showReorderIcon = z;
+            if (!z2) {
+                this.showReorderIconProgress = z ? 1.0f : 0.0f;
+            }
             invalidate();
         }
     }

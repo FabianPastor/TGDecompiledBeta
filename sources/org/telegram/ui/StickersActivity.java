@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.ListUpdateCallback;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import org.telegram.messenger.AndroidUtilities;
@@ -103,6 +104,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
     public int featuredStickersShowMoreRow;
     /* access modifiers changed from: private */
     public int featuredStickersStartRow;
+    ArrayList<TLRPC$TL_messages_stickerSet> frozenEmojiPacks;
     /* access modifiers changed from: private */
     public boolean isListeningForFeaturedUpdate;
     /* access modifiers changed from: private */
@@ -216,8 +218,9 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         }
     }
 
-    public StickersActivity(int i) {
+    public StickersActivity(int i, ArrayList<TLRPC$TL_messages_stickerSet> arrayList) {
         this.currentType = i;
+        this.frozenEmojiPacks = arrayList;
     }
 
     public boolean onFragmentCreate() {
@@ -236,7 +239,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.archivedStickersCountDidLoad);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.featuredStickersDidLoad);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.currentUserPremiumStatusChanged);
-        updateRows();
+        updateRows(false);
         return true;
     }
 
@@ -253,6 +256,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
 
     @SuppressLint({"ClickableViewAccessibility"})
     public View createView(Context context) {
+        ArrayList<TLRPC$TL_messages_stickerSet> arrayList;
         this.actionBar.setBackButtonDrawable(new BackDrawable(false));
         this.actionBar.setAllowOverlayTitle(true);
         int i = this.currentType;
@@ -292,7 +296,10 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             createActionMode.addItemWithWidth(0, R.drawable.msg_archive, AndroidUtilities.dp(54.0f));
         }
         this.deleteMenuItem = createActionMode.addItemWithWidth(1, R.drawable.msg_delete, AndroidUtilities.dp(54.0f));
-        this.listAdapter = new ListAdapter(context, new ArrayList(MessagesController.getInstance(this.currentAccount).filterPremiumStickers(MediaDataController.getInstance(this.currentAccount).getStickerSets(this.currentType))), getFeaturedSets());
+        if (this.currentType != 5 || (arrayList = this.frozenEmojiPacks) == null) {
+            arrayList = new ArrayList<>(MessagesController.getInstance(this.currentAccount).filterPremiumStickers(MediaDataController.getInstance(this.currentAccount).getStickerSets(this.currentType)));
+        }
+        this.listAdapter = new ListAdapter(context, arrayList, getFeaturedSets());
         FrameLayout frameLayout = new FrameLayout(context);
         this.fragmentView = frameLayout;
         FrameLayout frameLayout2 = frameLayout;
@@ -367,9 +374,9 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                 if (i == this.archivedRow) {
                     presentFragment(new ArchivedStickersActivity(this.currentType));
                 } else if (i == this.masksRow) {
-                    presentFragment(new StickersActivity(1));
+                    presentFragment(new StickersActivity(1, (ArrayList<TLRPC$TL_messages_stickerSet>) null));
                 } else if (i == this.emojiPacksRow) {
-                    presentFragment(new StickersActivity(5));
+                    presentFragment(new StickersActivity(5, (ArrayList<TLRPC$TL_messages_stickerSet>) null));
                 } else if (i == this.suggestRow) {
                     if (getParentActivity() != null) {
                         AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
@@ -468,16 +475,16 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             int i3 = this.currentType;
             if (intValue == i3) {
                 this.listAdapter.loadingFeaturedStickerSets.clear();
-                updateRows();
+                updateRows(objArr[1].booleanValue());
             } else if (i3 == 0 && intValue == 1) {
                 this.listAdapter.notifyItemChanged(this.masksRow);
             }
         } else if (i == NotificationCenter.featuredStickersDidLoad || i == NotificationCenter.featuredEmojiDidLoad) {
-            updateRows();
+            updateRows(false);
         } else if (i != NotificationCenter.archivedStickersCountDidLoad) {
             int i4 = NotificationCenter.currentUserPremiumStatusChanged;
         } else if (objArr[0].intValue() == this.currentType) {
-            updateRows();
+            updateRows(false);
         }
     }
 
@@ -495,7 +502,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                 tLRPC$TL_messages_reorderStickerSets.order.add(Long.valueOf(((TLRPC$TL_messages_stickerSet) this.listAdapter.stickerSets.get(i2)).set.id));
             }
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_reorderStickerSets, new StickersActivity$$ExternalSyntheticLambda3(this));
-            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.stickersDidLoad, Integer.valueOf(this.currentType));
+            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.stickersDidLoad, Integer.valueOf(this.currentType), Boolean.TRUE);
         }
     }
 
@@ -509,43 +516,51 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         AndroidUtilities.runOnUIThread(new StickersActivity$$ExternalSyntheticLambda2(this));
     }
 
-    private void updateRows() {
-        boolean z;
+    private void updateRows(boolean z) {
+        final ArrayList<TLRPC$TL_messages_stickerSet> arrayList;
         boolean z2;
+        boolean z3;
         DiffUtil.DiffResult diffResult;
         int i;
         MediaDataController instance = MediaDataController.getInstance(this.currentAccount);
-        final ArrayList arrayList = new ArrayList(MessagesController.getInstance(this.currentAccount).filterPremiumStickers(instance.getStickerSets(this.currentType)));
+        if (this.currentType == 5) {
+            if (z || this.frozenEmojiPacks == null) {
+                this.frozenEmojiPacks = new ArrayList<>(MessagesController.getInstance(this.currentAccount).filterPremiumStickers(instance.getStickerSets(this.currentType)));
+            }
+            arrayList = this.frozenEmojiPacks;
+        } else {
+            arrayList = new ArrayList<>(MessagesController.getInstance(this.currentAccount).filterPremiumStickers(instance.getStickerSets(this.currentType)));
+        }
         List<TLRPC$StickerSetCovered> featuredSets = getFeaturedSets();
         if (featuredSets.size() > 3) {
             featuredSets = featuredSets.subList(0, 3);
-            z = true;
+            z2 = true;
         } else {
-            z = false;
+            z2 = false;
         }
         final ArrayList arrayList2 = new ArrayList(featuredSets);
         if (this.currentType == 5) {
-            z2 = UserConfig.getInstance(this.currentAccount).isPremium();
-            if (!z2) {
+            z3 = UserConfig.getInstance(this.currentAccount).isPremium();
+            if (!z3) {
                 int i2 = 0;
                 while (true) {
                     if (i2 >= arrayList.size()) {
                         break;
-                    } else if (!MessageObject.isPremiumEmojiPack((TLRPC$TL_messages_stickerSet) arrayList.get(i2))) {
-                        z2 = true;
+                    } else if (!MessageObject.isPremiumEmojiPack(arrayList.get(i2))) {
+                        z3 = true;
                         break;
                     } else {
                         i2++;
                     }
                 }
             }
-            if (!z2) {
+            if (!z3) {
                 int i3 = 0;
                 while (true) {
                     if (i3 >= featuredSets.size()) {
                         break;
                     } else if (!MessageObject.isPremiumEmojiPack(featuredSets.get(i3))) {
-                        z2 = true;
+                        z3 = true;
                         break;
                     } else {
                         i3++;
@@ -553,7 +568,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                 }
             }
         } else {
-            z2 = false;
+            z3 = false;
         }
         DiffUtil.DiffResult diffResult2 = null;
         if (this.listAdapter != null) {
@@ -636,7 +651,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             this.loopRow = -1;
             this.loopInfoRow = -1;
         }
-        if (i4 != 5 || !z2) {
+        if (i4 != 5 || !z3) {
             this.suggestAnimatedEmojiRow = -1;
             this.suggestAnimatedEmojiInfoRow = -1;
         } else {
@@ -672,7 +687,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                 listAdapter2.notifyItemRangeRemoved(i13, i12);
             }
         } else {
-            boolean z3 = this.archivedRow == -1;
+            boolean z4 = this.archivedRow == -1;
             int i15 = this.rowCount;
             int i16 = i15 + 1;
             this.rowCount = i16;
@@ -684,7 +699,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             }
             this.archivedInfoRow = i16;
             ListAdapter listAdapter3 = this.listAdapter;
-            if (listAdapter3 != null && z3) {
+            if (listAdapter3 != null && z4) {
                 if (i16 == -1) {
                     i12 = 1;
                 }
@@ -719,7 +734,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             int size = i21 + arrayList2.size();
             this.rowCount = size;
             this.featuredStickersEndRow = size;
-            if (z) {
+            if (z2) {
                 this.rowCount = size + 1;
                 this.featuredStickersShowMoreRow = size;
             }
@@ -775,7 +790,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             int size3 = i29 + arrayList2.size();
             this.rowCount = size3;
             this.featuredStickersEndRow = size3;
-            if (z) {
+            if (z2) {
                 this.rowCount = size3 + 1;
                 this.featuredStickersShowMoreRow = size3;
             }
@@ -1020,490 +1035,508 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             }
         }
 
-        /* JADX WARNING: Code restructure failed: missing block: B:132:0x03f0, code lost:
-            if (r5 == false) goto L_0x03f4;
+        /* JADX WARNING: Code restructure failed: missing block: B:137:0x041d, code lost:
+            if (r6 == false) goto L_0x0421;
          */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public void onBindViewHolder(androidx.recyclerview.widget.RecyclerView.ViewHolder r11, int r12) {
+        public void onBindViewHolder(androidx.recyclerview.widget.RecyclerView.ViewHolder r12, int r13) {
             /*
-                r10 = this;
-                int r0 = r11.getItemViewType()
-                r1 = 5
-                r2 = 0
-                r3 = 1
+                r11 = this;
+                int r0 = r12.getItemViewType()
+                r1 = 2
+                r2 = 5
+                r3 = 0
+                r4 = 1
                 switch(r0) {
-                    case 0: goto L_0x0348;
-                    case 1: goto L_0x02b1;
-                    case 2: goto L_0x0163;
-                    case 3: goto L_0x014a;
-                    case 4: goto L_0x0101;
-                    case 5: goto L_0x00a2;
-                    case 6: goto L_0x0062;
-                    case 7: goto L_0x000c;
-                    default: goto L_0x000a;
+                    case 0: goto L_0x0375;
+                    case 1: goto L_0x02de;
+                    case 2: goto L_0x0190;
+                    case 3: goto L_0x0177;
+                    case 4: goto L_0x012e;
+                    case 5: goto L_0x00a3;
+                    case 6: goto L_0x0063;
+                    case 7: goto L_0x000d;
+                    default: goto L_0x000b;
                 }
-            L_0x000a:
-                goto L_0x0408
-            L_0x000c:
-                android.view.View r11 = r11.itemView
-                org.telegram.ui.Cells.FeaturedStickerSetCell2 r11 = (org.telegram.ui.Cells.FeaturedStickerSetCell2) r11
+            L_0x000b:
+                goto L_0x0436
+            L_0x000d:
+                android.view.View r12 = r12.itemView
+                org.telegram.ui.Cells.FeaturedStickerSetCell2 r12 = (org.telegram.ui.Cells.FeaturedStickerSetCell2) r12
                 org.telegram.ui.StickersActivity r0 = org.telegram.ui.StickersActivity.this
                 int r0 = r0.featuredStickersStartRow
-                int r12 = r12 - r0
-                java.util.List<org.telegram.tgnet.TLRPC$StickerSetCovered> r0 = r10.featuredStickerSets
-                java.lang.Object r12 = r0.get(r12)
-                org.telegram.tgnet.TLRPC$StickerSetCovered r12 = (org.telegram.tgnet.TLRPC$StickerSetCovered) r12
+                int r13 = r13 - r0
+                java.util.List<org.telegram.tgnet.TLRPC$StickerSetCovered> r0 = r11.featuredStickerSets
+                java.lang.Object r13 = r0.get(r13)
+                org.telegram.tgnet.TLRPC$StickerSetCovered r13 = (org.telegram.tgnet.TLRPC$StickerSetCovered) r13
                 org.telegram.ui.StickersActivity r0 = org.telegram.ui.StickersActivity.this
                 boolean r0 = r0.isListeningForFeaturedUpdate
-                if (r0 != 0) goto L_0x003d
-                org.telegram.tgnet.TLRPC$StickerSetCovered r0 = r11.getStickerSet()
-                if (r0 == 0) goto L_0x003e
-                org.telegram.tgnet.TLRPC$StickerSetCovered r0 = r11.getStickerSet()
+                if (r0 != 0) goto L_0x003e
+                org.telegram.tgnet.TLRPC$StickerSetCovered r0 = r12.getStickerSet()
+                if (r0 == 0) goto L_0x003f
+                org.telegram.tgnet.TLRPC$StickerSetCovered r0 = r12.getStickerSet()
                 org.telegram.tgnet.TLRPC$StickerSet r0 = r0.set
                 long r0 = r0.id
-                org.telegram.tgnet.TLRPC$StickerSet r4 = r12.set
-                long r4 = r4.id
-                int r6 = (r0 > r4 ? 1 : (r0 == r4 ? 0 : -1))
-                if (r6 != 0) goto L_0x003e
-            L_0x003d:
-                r2 = 1
+                org.telegram.tgnet.TLRPC$StickerSet r2 = r13.set
+                long r5 = r2.id
+                int r2 = (r0 > r5 ? 1 : (r0 == r5 ? 0 : -1))
+                if (r2 != 0) goto L_0x003f
             L_0x003e:
-                r6 = 1
-                r7 = 0
+                r3 = 1
+            L_0x003f:
+                r7 = 1
                 r8 = 0
-                r4 = r11
+                r9 = 0
                 r5 = r12
-                r9 = r2
-                r4.setStickersSet(r5, r6, r7, r8, r9)
-                java.util.List<java.lang.Long> r0 = r10.loadingFeaturedStickerSets
-                org.telegram.tgnet.TLRPC$StickerSet r12 = r12.set
-                long r3 = r12.id
-                java.lang.Long r12 = java.lang.Long.valueOf(r3)
-                boolean r12 = r0.contains(r12)
-                r11.setDrawProgress(r12, r2)
-                org.telegram.ui.StickersActivity$ListAdapter$$ExternalSyntheticLambda3 r12 = new org.telegram.ui.StickersActivity$ListAdapter$$ExternalSyntheticLambda3
-                r12.<init>(r10)
-                r11.setAddOnClickListener(r12)
-                goto L_0x0408
-            L_0x0062:
-                android.view.View r11 = r11.itemView
-                org.telegram.ui.Cells.HeaderCell r11 = (org.telegram.ui.Cells.HeaderCell) r11
+                r6 = r13
+                r10 = r3
+                r5.setStickersSet(r6, r7, r8, r9, r10)
+                java.util.List<java.lang.Long> r0 = r11.loadingFeaturedStickerSets
+                org.telegram.tgnet.TLRPC$StickerSet r13 = r13.set
+                long r1 = r13.id
+                java.lang.Long r13 = java.lang.Long.valueOf(r1)
+                boolean r13 = r0.contains(r13)
+                r12.setDrawProgress(r13, r3)
+                org.telegram.ui.StickersActivity$ListAdapter$$ExternalSyntheticLambda3 r13 = new org.telegram.ui.StickersActivity$ListAdapter$$ExternalSyntheticLambda3
+                r13.<init>(r11)
+                r12.setAddOnClickListener(r13)
+                goto L_0x0436
+            L_0x0063:
+                android.view.View r12 = r12.itemView
+                org.telegram.ui.Cells.HeaderCell r12 = (org.telegram.ui.Cells.HeaderCell) r12
                 org.telegram.ui.StickersActivity r0 = org.telegram.ui.StickersActivity.this
                 int r0 = r0.featuredStickersHeaderRow
-                if (r12 != r0) goto L_0x0084
-                org.telegram.ui.StickersActivity r12 = org.telegram.ui.StickersActivity.this
-                int r12 = r12.currentType
-                if (r12 != r1) goto L_0x0079
-                int r12 = org.telegram.messenger.R.string.FeaturedEmojiPacks
-                goto L_0x007b
-            L_0x0079:
-                int r12 = org.telegram.messenger.R.string.FeaturedStickers
-            L_0x007b:
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString((int) r12)
-                r11.setText(r12)
-                goto L_0x0408
-            L_0x0084:
+                if (r13 != r0) goto L_0x0085
+                org.telegram.ui.StickersActivity r13 = org.telegram.ui.StickersActivity.this
+                int r13 = r13.currentType
+                if (r13 != r2) goto L_0x007a
+                int r13 = org.telegram.messenger.R.string.FeaturedEmojiPacks
+                goto L_0x007c
+            L_0x007a:
+                int r13 = org.telegram.messenger.R.string.FeaturedStickers
+            L_0x007c:
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString((int) r13)
+                r12.setText(r13)
+                goto L_0x0436
+            L_0x0085:
                 org.telegram.ui.StickersActivity r0 = org.telegram.ui.StickersActivity.this
                 int r0 = r0.stickersHeaderRow
-                if (r12 != r0) goto L_0x0408
-                org.telegram.ui.StickersActivity r12 = org.telegram.ui.StickersActivity.this
-                int r12 = r12.currentType
-                if (r12 != r1) goto L_0x0097
-                int r12 = org.telegram.messenger.R.string.ChooseStickerMyEmojiPacks
-                goto L_0x0099
-            L_0x0097:
-                int r12 = org.telegram.messenger.R.string.ChooseStickerMyStickerSets
-            L_0x0099:
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString((int) r12)
-                r11.setText(r12)
-                goto L_0x0408
-            L_0x00a2:
-                android.view.View r11 = r11.itemView
-                org.telegram.ui.Cells.TextSettingsCell r11 = (org.telegram.ui.Cells.TextSettingsCell) r11
-                int r12 = org.telegram.messenger.R.string.DoubleTapSetting
+                if (r13 != r0) goto L_0x0436
+                org.telegram.ui.StickersActivity r13 = org.telegram.ui.StickersActivity.this
+                int r13 = r13.currentType
+                if (r13 != r2) goto L_0x0098
+                int r13 = org.telegram.messenger.R.string.ChooseStickerMyEmojiPacks
+                goto L_0x009a
+            L_0x0098:
+                int r13 = org.telegram.messenger.R.string.ChooseStickerMyStickerSets
+            L_0x009a:
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString((int) r13)
+                r12.setText(r13)
+                goto L_0x0436
+            L_0x00a3:
+                android.view.View r12 = r12.itemView
+                org.telegram.ui.Cells.TextSettingsCell r12 = (org.telegram.ui.Cells.TextSettingsCell) r12
+                int r13 = org.telegram.messenger.R.string.DoubleTapSetting
                 java.lang.String r0 = "DoubleTapSetting"
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
-                r11.setText(r12, r2)
-                int r12 = org.telegram.messenger.R.drawable.msg_reactions2
-                r11.setIcon(r12)
-                org.telegram.ui.StickersActivity r12 = org.telegram.ui.StickersActivity.this
-                int r12 = r12.currentAccount
-                org.telegram.messenger.MediaDataController r12 = org.telegram.messenger.MediaDataController.getInstance(r12)
-                java.lang.String r12 = r12.getDoubleTapReaction()
-                if (r12 == 0) goto L_0x0408
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
+                r12.setText(r13, r3)
+                int r13 = org.telegram.messenger.R.drawable.msg_reactions2
+                r12.setIcon(r13)
+                org.telegram.ui.StickersActivity r13 = org.telegram.ui.StickersActivity.this
+                int r13 = r13.currentAccount
+                org.telegram.messenger.MediaDataController r13 = org.telegram.messenger.MediaDataController.getInstance(r13)
+                java.lang.String r13 = r13.getDoubleTapReaction()
+                if (r13 == 0) goto L_0x0436
+                java.lang.String r0 = "animated_"
+                boolean r0 = r13.startsWith(r0)
+                if (r0 == 0) goto L_0x00f3
+                r0 = 9
+                java.lang.String r13 = r13.substring(r0)     // Catch:{ Exception -> 0x0436 }
+                long r2 = java.lang.Long.parseLong(r13)     // Catch:{ Exception -> 0x0436 }
+                org.telegram.ui.StickersActivity r13 = org.telegram.ui.StickersActivity.this     // Catch:{ Exception -> 0x0436 }
+                int r13 = r13.currentAccount     // Catch:{ Exception -> 0x0436 }
+                org.telegram.ui.Components.AnimatedEmojiDrawable r13 = org.telegram.ui.Components.AnimatedEmojiDrawable.make((int) r13, (int) r1, (long) r2)     // Catch:{ Exception -> 0x0436 }
+                org.telegram.ui.Components.BackupImageView r0 = r12.getValueBackupImageView()     // Catch:{ Exception -> 0x0436 }
+                r13.addView((android.view.View) r0)     // Catch:{ Exception -> 0x0436 }
+                org.telegram.ui.Components.BackupImageView r12 = r12.getValueBackupImageView()     // Catch:{ Exception -> 0x0436 }
+                r12.setImageDrawable(r13)     // Catch:{ Exception -> 0x0436 }
+                goto L_0x0436
+            L_0x00f3:
                 org.telegram.ui.StickersActivity r0 = org.telegram.ui.StickersActivity.this
                 int r0 = r0.currentAccount
                 org.telegram.messenger.MediaDataController r0 = org.telegram.messenger.MediaDataController.getInstance(r0)
                 java.util.HashMap r0 = r0.getReactionsMap()
-                java.lang.Object r12 = r0.get(r12)
-                r5 = r12
+                java.lang.Object r13 = r0.get(r13)
+                r5 = r13
                 org.telegram.tgnet.TLRPC$TL_availableReaction r5 = (org.telegram.tgnet.TLRPC$TL_availableReaction) r5
-                if (r5 == 0) goto L_0x0408
-                org.telegram.tgnet.TLRPC$Document r12 = r5.static_icon
-                java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r12 = r12.thumbs
+                if (r5 == 0) goto L_0x0436
+                org.telegram.tgnet.TLRPC$Document r13 = r5.static_icon
+                java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r13 = r13.thumbs
                 r0 = 1065353216(0x3var_, float:1.0)
                 java.lang.String r1 = "windowBackgroundGray"
-                org.telegram.messenger.SvgHelper$SvgDrawable r3 = org.telegram.messenger.DocumentObject.getSvgThumb((java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize>) r12, (java.lang.String) r1, (float) r0)
-                org.telegram.ui.Components.BackupImageView r11 = r11.getValueBackupImageView()
-                org.telegram.messenger.ImageReceiver r0 = r11.getImageReceiver()
-                org.telegram.tgnet.TLRPC$Document r11 = r5.center_icon
-                org.telegram.messenger.ImageLocation r1 = org.telegram.messenger.ImageLocation.getForDocument(r11)
+                org.telegram.messenger.SvgHelper$SvgDrawable r3 = org.telegram.messenger.DocumentObject.getSvgThumb((java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize>) r13, (java.lang.String) r1, (float) r0)
+                org.telegram.ui.Components.BackupImageView r12 = r12.getValueBackupImageView()
+                org.telegram.messenger.ImageReceiver r0 = r12.getImageReceiver()
+                org.telegram.tgnet.TLRPC$Document r12 = r5.center_icon
+                org.telegram.messenger.ImageLocation r1 = org.telegram.messenger.ImageLocation.getForDocument(r12)
                 r6 = 1
                 java.lang.String r2 = "100_100_lastframe"
                 java.lang.String r4 = "webp"
                 r0.setImage(r1, r2, r3, r4, r5, r6)
-                goto L_0x0408
-            L_0x0101:
-                android.view.View r11 = r11.itemView
-                org.telegram.ui.Cells.TextCheckCell r11 = (org.telegram.ui.Cells.TextCheckCell) r11
+                goto L_0x0436
+            L_0x012e:
+                android.view.View r12 = r12.itemView
+                org.telegram.ui.Cells.TextCheckCell r12 = (org.telegram.ui.Cells.TextCheckCell) r12
                 org.telegram.ui.StickersActivity r0 = org.telegram.ui.StickersActivity.this
                 int r0 = r0.loopRow
-                if (r12 != r0) goto L_0x011c
-                int r12 = org.telegram.messenger.R.string.LoopAnimatedStickers
+                if (r13 != r0) goto L_0x0149
+                int r13 = org.telegram.messenger.R.string.LoopAnimatedStickers
                 java.lang.String r0 = "LoopAnimatedStickers"
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
                 boolean r0 = org.telegram.messenger.SharedConfig.loopStickers
-                r11.setTextAndCheck(r12, r0, r3)
-                goto L_0x0408
-            L_0x011c:
+                r12.setTextAndCheck(r13, r0, r4)
+                goto L_0x0436
+            L_0x0149:
                 org.telegram.ui.StickersActivity r0 = org.telegram.ui.StickersActivity.this
                 int r0 = r0.largeEmojiRow
-                if (r12 != r0) goto L_0x0133
-                int r12 = org.telegram.messenger.R.string.LargeEmoji
+                if (r13 != r0) goto L_0x0160
+                int r13 = org.telegram.messenger.R.string.LargeEmoji
                 java.lang.String r0 = "LargeEmoji"
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
                 boolean r0 = org.telegram.messenger.SharedConfig.allowBigEmoji
-                r11.setTextAndCheck(r12, r0, r3)
-                goto L_0x0408
-            L_0x0133:
+                r12.setTextAndCheck(r13, r0, r4)
+                goto L_0x0436
+            L_0x0160:
                 org.telegram.ui.StickersActivity r0 = org.telegram.ui.StickersActivity.this
                 int r0 = r0.suggestAnimatedEmojiRow
-                if (r12 != r0) goto L_0x0408
-                int r12 = org.telegram.messenger.R.string.SuggestAnimatedEmoji
+                if (r13 != r0) goto L_0x0436
+                int r13 = org.telegram.messenger.R.string.SuggestAnimatedEmoji
                 java.lang.String r0 = "SuggestAnimatedEmoji"
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
                 boolean r0 = org.telegram.messenger.SharedConfig.suggestAnimatedEmoji
-                r11.setTextAndCheck(r12, r0, r2)
-                goto L_0x0408
-            L_0x014a:
+                r12.setTextAndCheck(r13, r0, r3)
+                goto L_0x0436
+            L_0x0177:
                 org.telegram.ui.StickersActivity r0 = org.telegram.ui.StickersActivity.this
                 int r0 = r0.stickersShadowRow
-                if (r12 != r0) goto L_0x0408
-                android.view.View r11 = r11.itemView
-                android.content.Context r12 = r10.mContext
+                if (r13 != r0) goto L_0x0436
+                android.view.View r12 = r12.itemView
+                android.content.Context r13 = r11.mContext
                 int r0 = org.telegram.messenger.R.drawable.greydivider_bottom
                 java.lang.String r1 = "windowBackgroundGrayShadow"
-                android.graphics.drawable.Drawable r12 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r12, (int) r0, (java.lang.String) r1)
-                r11.setBackground(r12)
-                goto L_0x0408
-            L_0x0163:
-                android.view.View r11 = r11.itemView
-                org.telegram.ui.Cells.TextCell r11 = (org.telegram.ui.Cells.TextCell) r11
+                android.graphics.drawable.Drawable r13 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r13, (int) r0, (java.lang.String) r1)
+                r12.setBackground(r13)
+                goto L_0x0436
+            L_0x0190:
+                android.view.View r12 = r12.itemView
+                org.telegram.ui.Cells.TextCell r12 = (org.telegram.ui.Cells.TextCell) r12
                 org.telegram.ui.StickersActivity r0 = org.telegram.ui.StickersActivity.this
                 int r0 = r0.featuredStickersShowMoreRow
-                if (r12 != r0) goto L_0x0196
-                java.lang.String r12 = "windowBackgroundWhiteBlueText4"
-                r11.setColors(r12, r12)
-                org.telegram.ui.StickersActivity r12 = org.telegram.ui.StickersActivity.this
-                int r12 = r12.currentType
-                if (r12 != r1) goto L_0x0189
-                int r12 = org.telegram.messenger.R.string.ShowMoreEmojiPacks
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString((int) r12)
+                if (r13 != r0) goto L_0x01c3
+                java.lang.String r13 = "windowBackgroundWhiteBlueText4"
+                r12.setColors(r13, r13)
+                org.telegram.ui.StickersActivity r13 = org.telegram.ui.StickersActivity.this
+                int r13 = r13.currentType
+                if (r13 != r2) goto L_0x01b6
+                int r13 = org.telegram.messenger.R.string.ShowMoreEmojiPacks
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString((int) r13)
                 int r0 = org.telegram.messenger.R.drawable.msg_trending
-                r11.setTextAndIcon((java.lang.String) r12, (int) r0, (boolean) r2)
-                goto L_0x0408
-            L_0x0189:
-                int r12 = org.telegram.messenger.R.string.ShowMoreStickers
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString((int) r12)
+                r12.setTextAndIcon((java.lang.String) r13, (int) r0, (boolean) r3)
+                goto L_0x0436
+            L_0x01b6:
+                int r13 = org.telegram.messenger.R.string.ShowMoreStickers
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString((int) r13)
                 int r0 = org.telegram.messenger.R.drawable.msg_trending
-                r11.setTextAndIcon((java.lang.String) r12, (int) r0, (boolean) r2)
-                goto L_0x0408
-            L_0x0196:
-                org.telegram.ui.Components.RLottieImageView r0 = r11.imageView
-                r2 = 0
-                r0.setTranslationX(r2)
+                r12.setTextAndIcon((java.lang.String) r13, (int) r0, (boolean) r3)
+                goto L_0x0436
+            L_0x01c3:
+                org.telegram.ui.Components.RLottieImageView r0 = r12.imageView
+                r1 = 0
+                r0.setTranslationX(r1)
                 java.lang.String r0 = "windowBackgroundWhiteGrayIcon"
-                java.lang.String r2 = "windowBackgroundWhiteBlackText"
-                r11.setColors(r0, r2)
+                java.lang.String r1 = "windowBackgroundWhiteBlackText"
+                r12.setColors(r0, r1)
                 org.telegram.ui.StickersActivity r0 = org.telegram.ui.StickersActivity.this
                 int r0 = r0.archivedRow
-                java.lang.String r2 = ""
-                if (r12 != r0) goto L_0x01fe
-                org.telegram.ui.StickersActivity r12 = org.telegram.ui.StickersActivity.this
-                int r12 = r12.currentAccount
-                org.telegram.messenger.MediaDataController r12 = org.telegram.messenger.MediaDataController.getInstance(r12)
+                java.lang.String r1 = ""
+                if (r13 != r0) goto L_0x022b
+                org.telegram.ui.StickersActivity r13 = org.telegram.ui.StickersActivity.this
+                int r13 = r13.currentAccount
+                org.telegram.messenger.MediaDataController r13 = org.telegram.messenger.MediaDataController.getInstance(r13)
                 org.telegram.ui.StickersActivity r0 = org.telegram.ui.StickersActivity.this
                 int r0 = r0.currentType
-                int r12 = r12.getArchivedStickersCount(r0)
-                if (r12 <= 0) goto L_0x01c7
-                java.lang.String r2 = java.lang.Integer.toString(r12)
-            L_0x01c7:
-                org.telegram.ui.StickersActivity r12 = org.telegram.ui.StickersActivity.this
-                int r12 = r12.currentType
-                if (r12 != 0) goto L_0x01dc
-                int r12 = org.telegram.messenger.R.string.ArchivedStickers
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString((int) r12)
+                int r13 = r13.getArchivedStickersCount(r0)
+                if (r13 <= 0) goto L_0x01f4
+                java.lang.String r1 = java.lang.Integer.toString(r13)
+            L_0x01f4:
+                org.telegram.ui.StickersActivity r13 = org.telegram.ui.StickersActivity.this
+                int r13 = r13.currentType
+                if (r13 != 0) goto L_0x0209
+                int r13 = org.telegram.messenger.R.string.ArchivedStickers
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString((int) r13)
                 int r0 = org.telegram.messenger.R.drawable.msg_archived_stickers
-                r11.setTextAndValueAndIcon(r12, r2, r0, r3)
-                goto L_0x0408
-            L_0x01dc:
-                org.telegram.ui.StickersActivity r12 = org.telegram.ui.StickersActivity.this
-                int r12 = r12.currentType
-                if (r12 != r1) goto L_0x01f1
-                int r12 = org.telegram.messenger.R.string.ArchivedEmojiPacks
+                r12.setTextAndValueAndIcon(r13, r1, r0, r4)
+                goto L_0x0436
+            L_0x0209:
+                org.telegram.ui.StickersActivity r13 = org.telegram.ui.StickersActivity.this
+                int r13 = r13.currentType
+                if (r13 != r2) goto L_0x021e
+                int r13 = org.telegram.messenger.R.string.ArchivedEmojiPacks
                 java.lang.String r0 = "ArchivedEmojiPacks"
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
-                r11.setTextAndValue(r12, r2, r3)
-                goto L_0x0408
-            L_0x01f1:
-                int r12 = org.telegram.messenger.R.string.ArchivedMasks
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
+                r12.setTextAndValue(r13, r1, r4)
+                goto L_0x0436
+            L_0x021e:
+                int r13 = org.telegram.messenger.R.string.ArchivedMasks
                 java.lang.String r0 = "ArchivedMasks"
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
-                r11.setTextAndValue(r12, r2, r3)
-                goto L_0x0408
-            L_0x01fe:
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
+                r12.setTextAndValue(r13, r1, r4)
+                goto L_0x0436
+            L_0x022b:
                 org.telegram.ui.StickersActivity r0 = org.telegram.ui.StickersActivity.this
                 int r0 = r0.masksRow
-                if (r12 != r0) goto L_0x0240
-                org.telegram.ui.StickersActivity r12 = org.telegram.ui.StickersActivity.this
-                int r12 = r12.currentAccount
-                org.telegram.messenger.MediaDataController r12 = org.telegram.messenger.MediaDataController.getInstance(r12)
+                if (r13 != r0) goto L_0x026d
+                org.telegram.ui.StickersActivity r13 = org.telegram.ui.StickersActivity.this
+                int r13 = r13.currentAccount
+                org.telegram.messenger.MediaDataController r13 = org.telegram.messenger.MediaDataController.getInstance(r13)
                 org.telegram.ui.StickersActivity r0 = org.telegram.ui.StickersActivity.this
                 int r0 = r0.currentAccount
                 org.telegram.messenger.MessagesController r0 = org.telegram.messenger.MessagesController.getInstance(r0)
-                java.util.ArrayList r1 = r12.getStickerSets(r3)
-                java.util.ArrayList r0 = r0.filterPremiumStickers((java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_messages_stickerSet>) r1)
+                java.util.ArrayList r2 = r13.getStickerSets(r4)
+                java.util.ArrayList r0 = r0.filterPremiumStickers((java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_messages_stickerSet>) r2)
                 int r0 = r0.size()
-                int r12 = r12.getArchivedStickersCount(r3)
-                int r0 = r0 + r12
-                int r12 = org.telegram.messenger.R.string.Masks
-                java.lang.String r1 = "Masks"
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r1, r12)
-                if (r0 <= 0) goto L_0x0239
-                java.lang.String r2 = java.lang.Integer.toString(r0)
-            L_0x0239:
+                int r13 = r13.getArchivedStickersCount(r4)
+                int r0 = r0 + r13
+                int r13 = org.telegram.messenger.R.string.Masks
+                java.lang.String r2 = "Masks"
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r2, r13)
+                if (r0 <= 0) goto L_0x0266
+                java.lang.String r1 = java.lang.Integer.toString(r0)
+            L_0x0266:
                 int r0 = org.telegram.messenger.R.drawable.msg_mask
-                r11.setTextAndValueAndIcon(r12, r2, r0, r3)
-                goto L_0x0408
-            L_0x0240:
+                r12.setTextAndValueAndIcon(r13, r1, r0, r4)
+                goto L_0x0436
+            L_0x026d:
                 org.telegram.ui.StickersActivity r0 = org.telegram.ui.StickersActivity.this
                 int r0 = r0.emojiPacksRow
-                if (r12 != r0) goto L_0x027c
-                org.telegram.ui.StickersActivity r12 = org.telegram.ui.StickersActivity.this
-                int r12 = r12.currentAccount
-                org.telegram.messenger.MediaDataController r12 = org.telegram.messenger.MediaDataController.getInstance(r12)
-                java.util.ArrayList r12 = r12.getStickerSets(r1)
-                int r12 = r12.size()
-                org.telegram.ui.Components.RLottieImageView r0 = r11.imageView
-                r1 = 1073741824(0x40000000, float:2.0)
-                int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
-                int r1 = -r1
-                float r1 = (float) r1
-                r0.setTranslationX(r1)
+                if (r13 != r0) goto L_0x02a9
+                org.telegram.ui.StickersActivity r13 = org.telegram.ui.StickersActivity.this
+                int r13 = r13.currentAccount
+                org.telegram.messenger.MediaDataController r13 = org.telegram.messenger.MediaDataController.getInstance(r13)
+                java.util.ArrayList r13 = r13.getStickerSets(r2)
+                int r13 = r13.size()
+                org.telegram.ui.Components.RLottieImageView r0 = r12.imageView
+                r2 = 1073741824(0x40000000, float:2.0)
+                int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
+                int r2 = -r2
+                float r2 = (float) r2
+                r0.setTranslationX(r2)
                 int r0 = org.telegram.messenger.R.string.Emoji
-                java.lang.String r1 = "Emoji"
-                java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-                if (r12 <= 0) goto L_0x0275
-                java.lang.String r2 = java.lang.Integer.toString(r12)
-            L_0x0275:
-                int r12 = org.telegram.messenger.R.drawable.input_smile
-                r11.setTextAndValueAndIcon(r0, r2, r12, r3)
-                goto L_0x0408
-            L_0x027c:
+                java.lang.String r2 = "Emoji"
+                java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
+                if (r13 <= 0) goto L_0x02a2
+                java.lang.String r1 = java.lang.Integer.toString(r13)
+            L_0x02a2:
+                int r13 = org.telegram.messenger.R.drawable.input_smile
+                r12.setTextAndValueAndIcon(r0, r1, r13, r4)
+                goto L_0x0436
+            L_0x02a9:
                 org.telegram.ui.StickersActivity r0 = org.telegram.ui.StickersActivity.this
                 int r0 = r0.suggestRow
-                if (r12 != r0) goto L_0x0408
-                int r12 = org.telegram.messenger.SharedConfig.suggestStickers
-                if (r12 == 0) goto L_0x029c
-                if (r12 == r3) goto L_0x0293
-                int r12 = org.telegram.messenger.R.string.SuggestStickersNone
+                if (r13 != r0) goto L_0x0436
+                int r13 = org.telegram.messenger.SharedConfig.suggestStickers
+                if (r13 == 0) goto L_0x02c9
+                if (r13 == r4) goto L_0x02c0
+                int r13 = org.telegram.messenger.R.string.SuggestStickersNone
                 java.lang.String r0 = "SuggestStickersNone"
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
-                goto L_0x02a4
-            L_0x0293:
-                int r12 = org.telegram.messenger.R.string.SuggestStickersInstalled
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
+                goto L_0x02d1
+            L_0x02c0:
+                int r13 = org.telegram.messenger.R.string.SuggestStickersInstalled
                 java.lang.String r0 = "SuggestStickersInstalled"
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
-                goto L_0x02a4
-            L_0x029c:
-                int r12 = org.telegram.messenger.R.string.SuggestStickersAll
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
+                goto L_0x02d1
+            L_0x02c9:
+                int r13 = org.telegram.messenger.R.string.SuggestStickersAll
                 java.lang.String r0 = "SuggestStickersAll"
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
-            L_0x02a4:
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
+            L_0x02d1:
                 int r0 = org.telegram.messenger.R.string.SuggestStickers
                 java.lang.String r1 = "SuggestStickers"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-                r11.setTextAndValue(r0, r12, r3)
-                goto L_0x0408
-            L_0x02b1:
-                android.view.View r11 = r11.itemView
-                org.telegram.ui.Cells.TextInfoPrivacyCell r11 = (org.telegram.ui.Cells.TextInfoPrivacyCell) r11
+                r12.setTextAndValue(r0, r13, r4)
+                goto L_0x0436
+            L_0x02de:
+                android.view.View r12 = r12.itemView
+                org.telegram.ui.Cells.TextInfoPrivacyCell r12 = (org.telegram.ui.Cells.TextInfoPrivacyCell) r12
                 org.telegram.ui.StickersActivity r0 = org.telegram.ui.StickersActivity.this
                 int r0 = r0.stickersBotInfo
-                if (r12 != r0) goto L_0x02df
-                org.telegram.ui.StickersActivity r12 = org.telegram.ui.StickersActivity.this
-                int r12 = r12.currentType
-                if (r12 != r1) goto L_0x02ce
-                int r12 = org.telegram.messenger.R.string.EmojiBotInfo
+                if (r13 != r0) goto L_0x030c
+                org.telegram.ui.StickersActivity r13 = org.telegram.ui.StickersActivity.this
+                int r13 = r13.currentType
+                if (r13 != r2) goto L_0x02fb
+                int r13 = org.telegram.messenger.R.string.EmojiBotInfo
                 java.lang.String r0 = "EmojiBotInfo"
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
-                goto L_0x02d6
-            L_0x02ce:
-                int r12 = org.telegram.messenger.R.string.StickersBotInfo
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
+                goto L_0x0303
+            L_0x02fb:
+                int r13 = org.telegram.messenger.R.string.StickersBotInfo
                 java.lang.String r0 = "StickersBotInfo"
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
-            L_0x02d6:
-                java.lang.CharSequence r12 = r10.addStickersBotSpan(r12)
-                r11.setText(r12)
-                goto L_0x0408
-            L_0x02df:
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
+            L_0x0303:
+                java.lang.CharSequence r13 = r11.addStickersBotSpan(r13)
+                r12.setText(r13)
+                goto L_0x0436
+            L_0x030c:
                 org.telegram.ui.StickersActivity r0 = org.telegram.ui.StickersActivity.this
                 int r0 = r0.archivedInfoRow
-                if (r12 != r0) goto L_0x0309
-                org.telegram.ui.StickersActivity r12 = org.telegram.ui.StickersActivity.this
-                int r12 = r12.currentType
-                if (r12 != 0) goto L_0x02fc
-                int r12 = org.telegram.messenger.R.string.ArchivedStickersInfo
+                if (r13 != r0) goto L_0x0336
+                org.telegram.ui.StickersActivity r13 = org.telegram.ui.StickersActivity.this
+                int r13 = r13.currentType
+                if (r13 != 0) goto L_0x0329
+                int r13 = org.telegram.messenger.R.string.ArchivedStickersInfo
                 java.lang.String r0 = "ArchivedStickersInfo"
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
-                r11.setText(r12)
-                goto L_0x0408
-            L_0x02fc:
-                int r12 = org.telegram.messenger.R.string.ArchivedMasksInfo
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
+                r12.setText(r13)
+                goto L_0x0436
+            L_0x0329:
+                int r13 = org.telegram.messenger.R.string.ArchivedMasksInfo
                 java.lang.String r0 = "ArchivedMasksInfo"
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
-                r11.setText(r12)
-                goto L_0x0408
-            L_0x0309:
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
+                r12.setText(r13)
+                goto L_0x0436
+            L_0x0336:
                 org.telegram.ui.StickersActivity r0 = org.telegram.ui.StickersActivity.this
                 int r0 = r0.loopInfoRow
-                if (r12 != r0) goto L_0x031e
-                int r12 = org.telegram.messenger.R.string.LoopAnimatedStickersInfo
+                if (r13 != r0) goto L_0x034b
+                int r13 = org.telegram.messenger.R.string.LoopAnimatedStickersInfo
                 java.lang.String r0 = "LoopAnimatedStickersInfo"
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
-                r11.setText(r12)
-                goto L_0x0408
-            L_0x031e:
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
+                r12.setText(r13)
+                goto L_0x0436
+            L_0x034b:
                 org.telegram.ui.StickersActivity r0 = org.telegram.ui.StickersActivity.this
                 int r0 = r0.suggestAnimatedEmojiInfoRow
-                if (r12 != r0) goto L_0x0333
-                int r12 = org.telegram.messenger.R.string.SuggestAnimatedEmojiInfo
+                if (r13 != r0) goto L_0x0360
+                int r13 = org.telegram.messenger.R.string.SuggestAnimatedEmojiInfo
                 java.lang.String r0 = "SuggestAnimatedEmojiInfo"
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
-                r11.setText(r12)
-                goto L_0x0408
-            L_0x0333:
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
+                r12.setText(r13)
+                goto L_0x0436
+            L_0x0360:
                 org.telegram.ui.StickersActivity r0 = org.telegram.ui.StickersActivity.this
                 int r0 = r0.masksInfoRow
-                if (r12 != r0) goto L_0x0408
-                int r12 = org.telegram.messenger.R.string.MasksInfo
+                if (r13 != r0) goto L_0x0436
+                int r13 = org.telegram.messenger.R.string.MasksInfo
                 java.lang.String r0 = "MasksInfo"
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
-                r11.setText(r12)
-                goto L_0x0408
-            L_0x0348:
-                android.view.View r11 = r11.itemView
-                org.telegram.ui.Cells.StickerSetCell r11 = (org.telegram.ui.Cells.StickerSetCell) r11
+                java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
+                r12.setText(r13)
+                goto L_0x0436
+            L_0x0375:
+                android.view.View r12 = r12.itemView
+                org.telegram.ui.Cells.StickerSetCell r12 = (org.telegram.ui.Cells.StickerSetCell) r12
                 org.telegram.ui.StickersActivity r0 = org.telegram.ui.StickersActivity.this
                 int r0 = r0.stickersStartRow
-                int r0 = r12 - r0
-                java.util.List<org.telegram.tgnet.TLRPC$TL_messages_stickerSet> r1 = r10.stickerSets
-                java.lang.Object r1 = r1.get(r0)
-                org.telegram.tgnet.TLRPC$TL_messages_stickerSet r1 = (org.telegram.tgnet.TLRPC$TL_messages_stickerSet) r1
-                org.telegram.tgnet.TLRPC$TL_messages_stickerSet r4 = r11.getStickersSet()
-                if (r4 != 0) goto L_0x0364
-                if (r1 == 0) goto L_0x037c
-            L_0x0364:
-                org.telegram.tgnet.TLRPC$TL_messages_stickerSet r4 = r11.getStickersSet()
-                if (r4 == 0) goto L_0x037e
-                if (r1 == 0) goto L_0x037e
-                org.telegram.tgnet.TLRPC$TL_messages_stickerSet r4 = r11.getStickersSet()
-                org.telegram.tgnet.TLRPC$StickerSet r4 = r4.set
-                long r4 = r4.id
-                org.telegram.tgnet.TLRPC$StickerSet r6 = r1.set
-                long r6 = r6.id
-                int r8 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1))
-                if (r8 != 0) goto L_0x037e
-            L_0x037c:
-                r4 = 1
-                goto L_0x037f
-            L_0x037e:
-                r4 = 0
-            L_0x037f:
-                java.util.List<org.telegram.tgnet.TLRPC$TL_messages_stickerSet> r5 = r10.stickerSets
-                int r5 = r5.size()
-                int r5 = r5 - r3
-                if (r0 == r5) goto L_0x038a
+                int r0 = r13 - r0
+                java.util.List<org.telegram.tgnet.TLRPC$TL_messages_stickerSet> r2 = r11.stickerSets
+                java.lang.Object r2 = r2.get(r0)
+                org.telegram.tgnet.TLRPC$TL_messages_stickerSet r2 = (org.telegram.tgnet.TLRPC$TL_messages_stickerSet) r2
+                org.telegram.tgnet.TLRPC$TL_messages_stickerSet r5 = r12.getStickersSet()
+                if (r5 != 0) goto L_0x0391
+                if (r2 == 0) goto L_0x03a9
+            L_0x0391:
+                org.telegram.tgnet.TLRPC$TL_messages_stickerSet r5 = r12.getStickersSet()
+                if (r5 == 0) goto L_0x03ab
+                if (r2 == 0) goto L_0x03ab
+                org.telegram.tgnet.TLRPC$TL_messages_stickerSet r5 = r12.getStickersSet()
+                org.telegram.tgnet.TLRPC$StickerSet r5 = r5.set
+                long r5 = r5.id
+                org.telegram.tgnet.TLRPC$StickerSet r7 = r2.set
+                long r7 = r7.id
+                int r9 = (r5 > r7 ? 1 : (r5 == r7 ? 0 : -1))
+                if (r9 != 0) goto L_0x03ab
+            L_0x03a9:
+                r5 = 1
+                goto L_0x03ac
+            L_0x03ab:
+                r5 = 0
+            L_0x03ac:
+                java.util.List<org.telegram.tgnet.TLRPC$TL_messages_stickerSet> r6 = r11.stickerSets
+                int r6 = r6.size()
+                int r6 = r6 - r4
+                if (r0 == r6) goto L_0x03b7
                 r0 = 1
-                goto L_0x038b
-            L_0x038a:
+                goto L_0x03b8
+            L_0x03b7:
                 r0 = 0
-            L_0x038b:
-                r11.setStickersSet(r1, r0)
-                androidx.collection.LongSparseArray<java.lang.Boolean> r0 = r10.selectedItems
-                long r5 = r10.getItemId(r12)
-                java.lang.Boolean r12 = java.lang.Boolean.FALSE
-                java.lang.Object r12 = r0.get(r5, r12)
-                java.lang.Boolean r12 = (java.lang.Boolean) r12
-                boolean r12 = r12.booleanValue()
-                r11.setChecked(r12, r2)
-                boolean r12 = r10.hasSelected()
-                r11.setReorderable(r12, r2)
-                if (r1 == 0) goto L_0x0408
-                org.telegram.tgnet.TLRPC$StickerSet r12 = r1.set
-                if (r12 == 0) goto L_0x0408
-                boolean r12 = r12.emojis
-                if (r12 == 0) goto L_0x0408
-                org.telegram.ui.StickersActivity r12 = org.telegram.ui.StickersActivity.this
-                org.telegram.messenger.MediaDataController r12 = r12.getMediaDataController()
-                org.telegram.tgnet.TLRPC$StickerSet r0 = r1.set
-                long r5 = r0.id
-                boolean r12 = r12.isStickerPackInstalled((long) r5)
+            L_0x03b8:
+                r12.setStickersSet(r2, r0)
+                androidx.collection.LongSparseArray<java.lang.Boolean> r0 = r11.selectedItems
+                long r6 = r11.getItemId(r13)
+                java.lang.Boolean r13 = java.lang.Boolean.FALSE
+                java.lang.Object r13 = r0.get(r6, r13)
+                java.lang.Boolean r13 = (java.lang.Boolean) r13
+                boolean r13 = r13.booleanValue()
+                r12.setChecked(r13, r3)
+                boolean r13 = r11.hasSelected()
+                r12.setReorderable(r13, r3)
+                if (r2 == 0) goto L_0x0436
+                org.telegram.tgnet.TLRPC$StickerSet r13 = r2.set
+                if (r13 == 0) goto L_0x0436
+                boolean r13 = r13.emojis
+                if (r13 == 0) goto L_0x0436
+                org.telegram.ui.StickersActivity r13 = org.telegram.ui.StickersActivity.this
+                org.telegram.messenger.MediaDataController r13 = r13.getMediaDataController()
+                org.telegram.tgnet.TLRPC$StickerSet r0 = r2.set
+                long r6 = r0.id
+                boolean r13 = r13.isStickerPackInstalled((long) r6)
                 org.telegram.ui.StickersActivity r0 = org.telegram.ui.StickersActivity.this
                 int r0 = r0.currentAccount
                 org.telegram.messenger.UserConfig r0 = org.telegram.messenger.UserConfig.getInstance(r0)
                 boolean r0 = r0.isPremium()
-                r0 = r0 ^ r3
-                if (r0 == 0) goto L_0x03f3
-                r5 = 0
-            L_0x03d4:
-                java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r6 = r1.documents
-                int r6 = r6.size()
-                if (r5 >= r6) goto L_0x03ef
-                java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r6 = r1.documents
-                java.lang.Object r6 = r6.get(r5)
-                org.telegram.tgnet.TLRPC$Document r6 = (org.telegram.tgnet.TLRPC$Document) r6
-                boolean r6 = org.telegram.messenger.MessageObject.isFreeEmoji(r6)
-                if (r6 != 0) goto L_0x03ec
-                r5 = 1
-                goto L_0x03f0
-            L_0x03ec:
-                int r5 = r5 + 1
-                goto L_0x03d4
-            L_0x03ef:
-                r5 = 0
-            L_0x03f0:
-                if (r5 != 0) goto L_0x03f3
-                goto L_0x03f4
-            L_0x03f3:
-                r2 = r0
-            L_0x03f4:
-                if (r2 == 0) goto L_0x0400
-                if (r12 == 0) goto L_0x0405
-                org.telegram.tgnet.TLRPC$StickerSet r12 = r1.set
-                boolean r12 = r12.official
-                if (r12 != 0) goto L_0x0405
-                r3 = 2
-                goto L_0x0405
-            L_0x0400:
-                if (r12 == 0) goto L_0x0404
-                r3 = 4
-                goto L_0x0405
-            L_0x0404:
-                r3 = 3
-            L_0x0405:
-                r11.updateButtonState(r3, r4)
-            L_0x0408:
+                r0 = r0 ^ r4
+                if (r0 == 0) goto L_0x0420
+                r6 = 0
+            L_0x0401:
+                java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r7 = r2.documents
+                int r7 = r7.size()
+                if (r6 >= r7) goto L_0x041c
+                java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r7 = r2.documents
+                java.lang.Object r7 = r7.get(r6)
+                org.telegram.tgnet.TLRPC$Document r7 = (org.telegram.tgnet.TLRPC$Document) r7
+                boolean r7 = org.telegram.messenger.MessageObject.isFreeEmoji(r7)
+                if (r7 != 0) goto L_0x0419
+                r6 = 1
+                goto L_0x041d
+            L_0x0419:
+                int r6 = r6 + 1
+                goto L_0x0401
+            L_0x041c:
+                r6 = 0
+            L_0x041d:
+                if (r6 != 0) goto L_0x0420
+                goto L_0x0421
+            L_0x0420:
+                r3 = r0
+            L_0x0421:
+                if (r3 == 0) goto L_0x042e
+                if (r13 == 0) goto L_0x042c
+                org.telegram.tgnet.TLRPC$StickerSet r13 = r2.set
+                boolean r13 = r13.official
+                if (r13 != 0) goto L_0x042c
+                goto L_0x0433
+            L_0x042c:
+                r1 = 1
+                goto L_0x0433
+            L_0x042e:
+                if (r13 == 0) goto L_0x0432
+                r1 = 4
+                goto L_0x0433
+            L_0x0432:
+                r1 = 3
+            L_0x0433:
+                r12.updateButtonState(r1, r5)
+            L_0x0436:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.StickersActivity.ListAdapter.onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder, int):void");
@@ -1719,15 +1752,23 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                 boolean unused = StickersActivity.this.needReorder = true;
             }
             MediaDataController instance = MediaDataController.getInstance(StickersActivity.this.currentAccount);
-            int access$1400 = i - StickersActivity.this.stickersStartRow;
-            int access$14002 = i2 - StickersActivity.this.stickersStartRow;
-            swapListElements(this.stickerSets, access$1400, access$14002);
-            swapListElements(instance.getStickerSets(StickersActivity.this.currentType), access$1400, access$14002);
+            swapListElements(this.stickerSets, i - StickersActivity.this.stickersStartRow, i2 - StickersActivity.this.stickersStartRow);
+            Collections.sort(instance.getStickerSets(StickersActivity.this.currentType), new StickersActivity$ListAdapter$$ExternalSyntheticLambda5(this));
             notifyItemMoved(i, i2);
             if (i == StickersActivity.this.stickersEndRow - 1 || i2 == StickersActivity.this.stickersEndRow - 1) {
                 notifyItemRangeChanged(i, 3);
                 notifyItemRangeChanged(i2, 3);
             }
+        }
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ int lambda$swapElements$5(TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet, TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet2) {
+            int indexOf = this.stickerSets.indexOf(tLRPC$TL_messages_stickerSet);
+            int indexOf2 = this.stickerSets.indexOf(tLRPC$TL_messages_stickerSet2);
+            if (indexOf < 0 || indexOf2 < 0) {
+                return 0;
+            }
+            return indexOf - indexOf2;
         }
 
         private void swapListElements(List<TLRPC$TL_messages_stickerSet> list, int i, int i2) {

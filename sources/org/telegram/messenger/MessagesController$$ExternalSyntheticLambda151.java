@@ -16,6 +16,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda15
     }
 
     public final void run() {
-        this.f$0.lambda$startShortPoll$264(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$startShortPoll$265(this.f$1, this.f$2, this.f$3);
     }
 }

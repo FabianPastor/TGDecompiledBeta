@@ -8,6 +8,6 @@ public final /* synthetic */ class FileLog$$ExternalSyntheticLambda0 implements 
     }
 
     public final void run() {
-        FileLog.lambda$d$3(this.f$0);
+        FileLog.lambda$d$4(this.f$0);
     }
 }

@@ -15836,7 +15836,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             i = 0;
         }
         PhotoViewer instance = PhotoViewer.getInstance();
-        instance.setParentActivity(this.parentActivity);
+        instance.setParentActivity(this.parentFragment);
         return instance.openPhoto(i, (PhotoViewer.PageBlocksAdapter) new RealPageBlocksAdapter(webpageAdapter.currentPage, list), (PhotoViewer.PhotoViewerProvider) new PageBlocksPhotoViewerProvider(list));
     }
 

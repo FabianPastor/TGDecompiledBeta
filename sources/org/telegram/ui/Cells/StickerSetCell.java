@@ -274,8 +274,9 @@ public class StickerSetCell extends FrameLayout {
     @SuppressLint({"SetTextI18n"})
     public void setStickersSet(TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet, boolean z, boolean z2) {
         ImageLocation imageLocation;
+        TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet2 = tLRPC$TL_messages_stickerSet;
         this.needDivider = z;
-        this.stickersSet = tLRPC$TL_messages_stickerSet;
+        this.stickersSet = tLRPC$TL_messages_stickerSet2;
         this.imageView.setVisibility(0);
         RadialProgressView radialProgressView = this.progressView;
         if (radialProgressView != null) {
@@ -292,7 +293,7 @@ public class StickerSetCell extends FrameLayout {
             this.valueTextView.setAlpha(1.0f);
             this.imageView.setAlpha(1.0f);
         }
-        boolean z3 = tLRPC$TL_messages_stickerSet.set.emojis;
+        boolean z3 = tLRPC$TL_messages_stickerSet2.set.emojis;
         this.emojis = z3;
         int i = 8;
         this.sideButtons.setVisibility(z3 ? 0 : 8);
@@ -301,11 +302,12 @@ public class StickerSetCell extends FrameLayout {
             i = 0;
         }
         imageView2.setVisibility(i);
-        ArrayList<TLRPC$Document> arrayList = tLRPC$TL_messages_stickerSet.documents;
+        ArrayList<TLRPC$Document> arrayList = tLRPC$TL_messages_stickerSet2.documents;
+        TLRPC$Document tLRPC$Document = null;
         String str = "EmojiCount";
         if (arrayList == null || arrayList.isEmpty()) {
             TextView textView2 = this.valueTextView;
-            if (!tLRPC$TL_messages_stickerSet.set.emojis) {
+            if (!tLRPC$TL_messages_stickerSet2.set.emojis) {
                 str = "Stickers";
             }
             textView2.setText(LocaleController.formatPluralString(str, 0, new Object[0]));
@@ -316,35 +318,51 @@ public class StickerSetCell extends FrameLayout {
                 str = "Stickers";
             }
             textView3.setText(LocaleController.formatPluralString(str, arrayList.size(), new Object[0]));
-            TLRPC$Document tLRPC$Document = arrayList.get(0);
-            TLObject closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(tLRPC$TL_messages_stickerSet.set.thumbs, 90);
+            int i2 = 0;
+            while (true) {
+                if (i2 < arrayList.size()) {
+                    TLRPC$Document tLRPC$Document2 = arrayList.get(i2);
+                    if (tLRPC$Document2 != null && tLRPC$Document2.id == tLRPC$TL_messages_stickerSet2.set.thumb_document_id) {
+                        tLRPC$Document = tLRPC$Document2;
+                        break;
+                    }
+                    i2++;
+                } else {
+                    break;
+                }
+            }
+            if (tLRPC$Document == null) {
+                tLRPC$Document = arrayList.get(0);
+            }
+            TLObject closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(tLRPC$TL_messages_stickerSet2.set.thumbs, 90);
             if (closestPhotoSizeWithSize == null) {
                 closestPhotoSizeWithSize = tLRPC$Document;
             }
-            SvgHelper.SvgDrawable svgThumb = DocumentObject.getSvgThumb(tLRPC$TL_messages_stickerSet.set.thumbs, "windowBackgroundGray", 1.0f);
+            SvgHelper.SvgDrawable svgThumb = DocumentObject.getSvgThumb(tLRPC$TL_messages_stickerSet2.set.thumbs, "windowBackgroundGray", 1.0f);
             boolean z4 = closestPhotoSizeWithSize instanceof TLRPC$Document;
             if (z4) {
                 imageLocation = ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(tLRPC$Document.thumbs, 90), tLRPC$Document);
             } else {
-                imageLocation = ImageLocation.getForSticker((TLRPC$PhotoSize) closestPhotoSizeWithSize, tLRPC$Document, tLRPC$TL_messages_stickerSet.set.thumb_version);
+                imageLocation = ImageLocation.getForSticker((TLRPC$PhotoSize) closestPhotoSizeWithSize, tLRPC$Document, tLRPC$TL_messages_stickerSet2.set.thumb_version);
             }
+            ImageLocation imageLocation2 = imageLocation;
             if ((!z4 || !MessageObject.isAnimatedStickerDocument(tLRPC$Document, true)) && !MessageObject.isVideoSticker(tLRPC$Document)) {
-                if (imageLocation == null || imageLocation.imageType != 1) {
-                    this.imageView.setImage(imageLocation, "50_50", "webp", (Drawable) svgThumb, (Object) tLRPC$TL_messages_stickerSet);
+                if (imageLocation2 == null || imageLocation2.imageType != 1) {
+                    this.imageView.setImage(imageLocation2, "50_50", "webp", (Drawable) svgThumb, (Object) tLRPC$TL_messages_stickerSet);
                 } else {
-                    this.imageView.setImage(imageLocation, "50_50", "tgs", (Drawable) svgThumb, (Object) tLRPC$TL_messages_stickerSet);
+                    this.imageView.setImage(imageLocation2, "50_50", "tgs", (Drawable) svgThumb, (Object) tLRPC$TL_messages_stickerSet);
                 }
             } else if (svgThumb != null) {
                 this.imageView.setImage(ImageLocation.getForDocument(tLRPC$Document), "50_50", (Drawable) svgThumb, 0, (Object) tLRPC$TL_messages_stickerSet);
             } else {
-                this.imageView.setImage(ImageLocation.getForDocument(tLRPC$Document), "50_50", imageLocation, (String) null, 0, (Object) tLRPC$TL_messages_stickerSet);
+                this.imageView.setImage(ImageLocation.getForDocument(tLRPC$Document), "50_50", imageLocation2, (String) null, 0, (Object) tLRPC$TL_messages_stickerSet);
             }
         }
         if (z2) {
             TextView textView4 = this.valueTextView;
             StringBuilder sb = new StringBuilder();
-            sb.append(tLRPC$TL_messages_stickerSet.set.emojis ? "t.me/addemoji/" : "t.me/addstickers/");
-            sb.append(tLRPC$TL_messages_stickerSet.set.short_name);
+            sb.append(tLRPC$TL_messages_stickerSet2.set.emojis ? "t.me/addemoji/" : "t.me/addstickers/");
+            sb.append(tLRPC$TL_messages_stickerSet2.set.short_name);
             textView4.setText(sb.toString());
         }
     }

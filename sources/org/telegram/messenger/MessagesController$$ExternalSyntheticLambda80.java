@@ -12,6 +12,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda80
     }
 
     public final void run() {
-        this.f$0.lambda$updateChannelUserName$238(this.f$1, this.f$2);
+        this.f$0.lambda$updateChannelUserName$239(this.f$1, this.f$2);
     }
 }

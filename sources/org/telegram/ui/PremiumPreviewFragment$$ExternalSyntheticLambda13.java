@@ -11,6 +11,6 @@ public final /* synthetic */ class PremiumPreviewFragment$$ExternalSyntheticLamb
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        PremiumPreviewFragment.lambda$sentShowFeaturePreview$15(tLObject, tLRPC$TL_error);
+        PremiumPreviewFragment.lambda$sentPremiumButtonClick$15(tLObject, tLRPC$TL_error);
     }
 }

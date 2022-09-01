@@ -134,15 +134,7 @@ public class TLRPC$TL_channelFull extends TLRPC$ChatFull {
                 this.default_send_as = TLRPC$Peer.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
             }
             if ((this.flags & NUM) != 0) {
-                int readInt329 = abstractSerializedData.readInt32(z);
-                if (readInt329 == NUM) {
-                    int readInt3210 = abstractSerializedData.readInt32(z);
-                    for (int i4 = 0; i4 < readInt3210; i4++) {
-                        this.available_reactions.add(abstractSerializedData.readString(z));
-                    }
-                } else if (z) {
-                    throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt329)}));
-                }
+                this.available_reactions = TLRPC$ChatReactions.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
             }
         } else if (z) {
             throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt323)}));
@@ -271,12 +263,7 @@ public class TLRPC$TL_channelFull extends TLRPC$ChatFull {
             this.default_send_as.serializeToStream(abstractSerializedData);
         }
         if ((this.flags & NUM) != 0) {
-            abstractSerializedData.writeInt32(NUM);
-            int size4 = this.available_reactions.size();
-            abstractSerializedData.writeInt32(size4);
-            for (int i13 = 0; i13 < size4; i13++) {
-                abstractSerializedData.writeString(this.available_reactions.get(i13));
-            }
+            this.available_reactions.serializeToStream(abstractSerializedData);
         }
     }
 }

@@ -10,6 +10,6 @@ public final /* synthetic */ class ReactedUsersListView$$ExternalSyntheticLambda
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$load$2(valueAnimator);
+        this.f$0.lambda$load$3(valueAnimator);
     }
 }

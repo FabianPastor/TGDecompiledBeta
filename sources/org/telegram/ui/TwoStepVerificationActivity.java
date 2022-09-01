@@ -37,7 +37,6 @@ import org.telegram.tgnet.TLRPC$SecurePasswordKdfAlgo;
 import org.telegram.tgnet.TLRPC$TL_account_declinePasswordReset;
 import org.telegram.tgnet.TLRPC$TL_account_getPassword;
 import org.telegram.tgnet.TLRPC$TL_account_getPasswordSettings;
-import org.telegram.tgnet.TLRPC$TL_account_password;
 import org.telegram.tgnet.TLRPC$TL_account_passwordInputSettings;
 import org.telegram.tgnet.TLRPC$TL_account_passwordSettings;
 import org.telegram.tgnet.TLRPC$TL_account_resetPassword;
@@ -57,6 +56,7 @@ import org.telegram.tgnet.TLRPC$TL_securePasswordKdfAlgoPBKDF2HMACSHA512iter1000
 import org.telegram.tgnet.TLRPC$TL_securePasswordKdfAlgoSHA512;
 import org.telegram.tgnet.TLRPC$TL_securePasswordKdfAlgoUnknown;
 import org.telegram.tgnet.TLRPC$TL_secureSecretSettings;
+import org.telegram.tgnet.TLRPC$account_Password;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.SimpleTextView;
@@ -84,7 +84,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
     /* access modifiers changed from: private */
     public int changeRecoveryEmailRow;
     /* access modifiers changed from: private */
-    public TLRPC$TL_account_password currentPassword;
+    public TLRPC$account_Password currentPassword;
     private byte[] currentPasswordHash = new byte[0];
     private byte[] currentSecret;
     private long currentSecretId;
@@ -143,25 +143,25 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         this.passwordOutlineView.animateError(0.0f);
     }
 
-    public void setPassword(TLRPC$TL_account_password tLRPC$TL_account_password) {
-        this.currentPassword = tLRPC$TL_account_password;
+    public void setPassword(TLRPC$account_Password tLRPC$account_Password) {
+        this.currentPassword = tLRPC$account_Password;
         this.passwordEntered = false;
     }
 
-    public void setCurrentPasswordParams(TLRPC$TL_account_password tLRPC$TL_account_password, byte[] bArr, long j, byte[] bArr2) {
-        this.currentPassword = tLRPC$TL_account_password;
+    public void setCurrentPasswordParams(TLRPC$account_Password tLRPC$account_Password, byte[] bArr, long j, byte[] bArr2) {
+        this.currentPassword = tLRPC$account_Password;
         this.currentPasswordHash = bArr;
         this.currentSecret = bArr2;
         this.currentSecretId = j;
-        this.passwordEntered = (bArr != null && bArr.length > 0) || !tLRPC$TL_account_password.has_password;
+        this.passwordEntered = (bArr != null && bArr.length > 0) || !tLRPC$account_Password.has_password;
     }
 
     public boolean onFragmentCreate() {
         byte[] bArr;
         super.onFragmentCreate();
-        TLRPC$TL_account_password tLRPC$TL_account_password = this.currentPassword;
-        if (tLRPC$TL_account_password == null || tLRPC$TL_account_password.current_algo == null || (bArr = this.currentPasswordHash) == null || bArr.length <= 0) {
-            loadPasswordInfo(true, tLRPC$TL_account_password != null);
+        TLRPC$account_Password tLRPC$account_Password = this.currentPassword;
+        if (tLRPC$account_Password == null || tLRPC$account_Password.current_algo == null || (bArr = this.currentPasswordHash) == null || bArr.length <= 0) {
+            loadPasswordInfo(true, tLRPC$account_Password != null);
         }
         updateRows();
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.twoStepPasswordChanged);
@@ -1042,8 +1042,8 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
     }
 
     private void onPasswordForgot() {
-        TLRPC$TL_account_password tLRPC$TL_account_password = this.currentPassword;
-        if (tLRPC$TL_account_password.pending_reset_date == 0 && tLRPC$TL_account_password.has_recovery) {
+        TLRPC$account_Password tLRPC$account_Password = this.currentPassword;
+        if (tLRPC$account_Password.pending_reset_date == 0 && tLRPC$account_Password.has_recovery) {
             needShowProgress(true);
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TLRPC$TL_auth_requestPasswordRecovery(), new TwoStepVerificationActivity$$ExternalSyntheticLambda31(this), 10);
         } else if (getParentActivity() != null) {
@@ -1082,9 +1082,9 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         String str;
         needHideProgress();
         if (tLRPC$TL_error == null) {
-            TLRPC$TL_account_password tLRPC$TL_account_password = this.currentPassword;
-            tLRPC$TL_account_password.email_unconfirmed_pattern = ((TLRPC$TL_auth_passwordRecovery) tLObject).email_pattern;
-            AnonymousClass5 r8 = new TwoStepVerificationSetupActivity(this.currentAccount, 4, tLRPC$TL_account_password) {
+            TLRPC$account_Password tLRPC$account_Password = this.currentPassword;
+            tLRPC$account_Password.email_unconfirmed_pattern = ((TLRPC$TL_auth_passwordRecovery) tLObject).email_pattern;
+            AnonymousClass5 r8 = new TwoStepVerificationSetupActivity(this.currentAccount, 4, tLRPC$account_Password) {
                 /* access modifiers changed from: protected */
                 public void onReset() {
                     boolean unused = TwoStepVerificationActivity.this.resetPasswordOnShow = true;
@@ -1135,32 +1135,32 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         AndroidUtilities.requestAdjustResize(getParentActivity(), this.classGuid);
     }
 
-    public void setCurrentPasswordInfo(byte[] bArr, TLRPC$TL_account_password tLRPC$TL_account_password) {
+    public void setCurrentPasswordInfo(byte[] bArr, TLRPC$account_Password tLRPC$account_Password) {
         if (bArr != null) {
             this.currentPasswordHash = bArr;
         }
-        this.currentPassword = tLRPC$TL_account_password;
+        this.currentPassword = tLRPC$account_Password;
     }
 
     public void setDelegate(TwoStepVerificationActivityDelegate twoStepVerificationActivityDelegate) {
         this.delegate = twoStepVerificationActivityDelegate;
     }
 
-    public static boolean canHandleCurrentPassword(TLRPC$TL_account_password tLRPC$TL_account_password, boolean z) {
+    public static boolean canHandleCurrentPassword(TLRPC$account_Password tLRPC$account_Password, boolean z) {
         if (z) {
-            if (tLRPC$TL_account_password.current_algo instanceof TLRPC$TL_passwordKdfAlgoUnknown) {
+            if (tLRPC$account_Password.current_algo instanceof TLRPC$TL_passwordKdfAlgoUnknown) {
                 return false;
             }
             return true;
-        } else if ((tLRPC$TL_account_password.new_algo instanceof TLRPC$TL_passwordKdfAlgoUnknown) || (tLRPC$TL_account_password.current_algo instanceof TLRPC$TL_passwordKdfAlgoUnknown) || (tLRPC$TL_account_password.new_secure_algo instanceof TLRPC$TL_securePasswordKdfAlgoUnknown)) {
+        } else if ((tLRPC$account_Password.new_algo instanceof TLRPC$TL_passwordKdfAlgoUnknown) || (tLRPC$account_Password.current_algo instanceof TLRPC$TL_passwordKdfAlgoUnknown) || (tLRPC$account_Password.new_secure_algo instanceof TLRPC$TL_securePasswordKdfAlgoUnknown)) {
             return false;
         } else {
             return true;
         }
     }
 
-    public static void initPasswordNewAlgo(TLRPC$TL_account_password tLRPC$TL_account_password) {
-        TLRPC$PasswordKdfAlgo tLRPC$PasswordKdfAlgo = tLRPC$TL_account_password.new_algo;
+    public static void initPasswordNewAlgo(TLRPC$account_Password tLRPC$account_Password) {
+        TLRPC$PasswordKdfAlgo tLRPC$PasswordKdfAlgo = tLRPC$account_Password.new_algo;
         if (tLRPC$PasswordKdfAlgo instanceof TLRPC$TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow) {
             TLRPC$TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow tLRPC$TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow = (TLRPC$TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow) tLRPC$PasswordKdfAlgo;
             byte[] bArr = new byte[(tLRPC$TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow.salt1.length + 32)];
@@ -1169,7 +1169,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             System.arraycopy(bArr2, 0, bArr, 0, bArr2.length);
             tLRPC$TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow.salt1 = bArr;
         }
-        TLRPC$SecurePasswordKdfAlgo tLRPC$SecurePasswordKdfAlgo = tLRPC$TL_account_password.new_secure_algo;
+        TLRPC$SecurePasswordKdfAlgo tLRPC$SecurePasswordKdfAlgo = tLRPC$account_Password.new_secure_algo;
         if (tLRPC$SecurePasswordKdfAlgo instanceof TLRPC$TL_securePasswordKdfAlgoPBKDF2HMACSHA512iter100000) {
             TLRPC$TL_securePasswordKdfAlgoPBKDF2HMACSHA512iter100000 tLRPC$TL_securePasswordKdfAlgoPBKDF2HMACSHA512iter100000 = (TLRPC$TL_securePasswordKdfAlgoPBKDF2HMACSHA512iter100000) tLRPC$SecurePasswordKdfAlgo;
             byte[] bArr3 = new byte[(tLRPC$TL_securePasswordKdfAlgoPBKDF2HMACSHA512iter100000.salt.length + 32)];
@@ -1200,9 +1200,9 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
     public /* synthetic */ void lambda$loadPasswordInfo$18(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, boolean z, boolean z2) {
         if (tLRPC$TL_error == null) {
             this.loading = false;
-            TLRPC$TL_account_password tLRPC$TL_account_password = (TLRPC$TL_account_password) tLObject;
-            this.currentPassword = tLRPC$TL_account_password;
-            if (!canHandleCurrentPassword(tLRPC$TL_account_password, false)) {
+            TLRPC$account_Password tLRPC$account_Password = (TLRPC$account_Password) tLObject;
+            this.currentPassword = tLRPC$account_Password;
+            if (!canHandleCurrentPassword(tLRPC$account_Password, false)) {
                 AlertsCreator.showUpdateAppAlert(getParentActivity(), LocaleController.getString("UpdateAppAlert", R.string.UpdateAppAlert), true);
                 return;
             }
@@ -1232,7 +1232,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
     }
 
     private void updateRows() {
-        TLRPC$TL_account_password tLRPC$TL_account_password;
+        TLRPC$account_Password tLRPC$account_Password;
         StringBuilder sb = new StringBuilder();
         sb.append(this.setPasswordRow);
         sb.append(this.setPasswordDetailRow);
@@ -1250,15 +1250,15 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         this.setRecoveryEmailRow = -1;
         this.changeRecoveryEmailRow = -1;
         this.passwordEnabledDetailRow = -1;
-        if (!this.loading && (tLRPC$TL_account_password = this.currentPassword) != null && this.passwordEntered) {
-            if (tLRPC$TL_account_password.has_password) {
+        if (!this.loading && (tLRPC$account_Password = this.currentPassword) != null && this.passwordEntered) {
+            if (tLRPC$account_Password.has_password) {
                 int i = 0 + 1;
                 this.rowCount = i;
                 this.changePasswordRow = 0;
                 int i2 = i + 1;
                 this.rowCount = i2;
                 this.turnPasswordOffRow = i;
-                if (tLRPC$TL_account_password.has_recovery) {
+                if (tLRPC$account_Password.has_recovery) {
                     this.rowCount = i2 + 1;
                     this.changeRecoveryEmailRow = i2;
                 } else {
@@ -1436,9 +1436,9 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$clearPassword$21(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         if (tLRPC$TL_error == null) {
-            TLRPC$TL_account_password tLRPC$TL_account_password = (TLRPC$TL_account_password) tLObject;
-            this.currentPassword = tLRPC$TL_account_password;
-            initPasswordNewAlgo(tLRPC$TL_account_password);
+            TLRPC$account_Password tLRPC$account_Password = (TLRPC$account_Password) tLObject;
+            this.currentPassword = tLRPC$account_Password;
+            initPasswordNewAlgo(tLRPC$account_Password);
             NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.didSetOrRemoveTwoStepPassword, this.currentPassword);
             clearPassword();
         }
@@ -1487,21 +1487,21 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$clearPassword$23(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         if (tLRPC$TL_error == null) {
-            TLRPC$TL_account_password tLRPC$TL_account_password = (TLRPC$TL_account_password) tLObject;
-            this.currentPassword = tLRPC$TL_account_password;
-            initPasswordNewAlgo(tLRPC$TL_account_password);
+            TLRPC$account_Password tLRPC$account_Password = (TLRPC$account_Password) tLObject;
+            this.currentPassword = tLRPC$account_Password;
+            initPasswordNewAlgo(tLRPC$account_Password);
             NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.didSetOrRemoveTwoStepPassword, this.currentPassword);
             clearPassword();
         }
     }
 
     public TLRPC$TL_inputCheckPasswordSRP getNewSrpPassword() {
-        TLRPC$TL_account_password tLRPC$TL_account_password = this.currentPassword;
-        TLRPC$PasswordKdfAlgo tLRPC$PasswordKdfAlgo = tLRPC$TL_account_password.current_algo;
+        TLRPC$account_Password tLRPC$account_Password = this.currentPassword;
+        TLRPC$PasswordKdfAlgo tLRPC$PasswordKdfAlgo = tLRPC$account_Password.current_algo;
         if (!(tLRPC$PasswordKdfAlgo instanceof TLRPC$TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow)) {
             return null;
         }
-        return SRPHelper.startCheck(this.currentPasswordHash, tLRPC$TL_account_password.srp_id, tLRPC$TL_account_password.srp_B, (TLRPC$TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow) tLRPC$PasswordKdfAlgo);
+        return SRPHelper.startCheck(this.currentPasswordHash, tLRPC$account_Password.srp_id, tLRPC$account_Password.srp_B, (TLRPC$TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow) tLRPC$PasswordKdfAlgo);
     }
 
     private boolean checkSecretValues(byte[] bArr, TLRPC$TL_account_passwordSettings tLRPC$TL_account_passwordSettings) {
@@ -1569,10 +1569,10 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         TLRPC$PasswordKdfAlgo tLRPC$PasswordKdfAlgo = this.currentPassword.current_algo;
         byte[] x = tLRPC$PasswordKdfAlgo instanceof TLRPC$TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow ? SRPHelper.getX(bArr, (TLRPC$TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow) tLRPC$PasswordKdfAlgo) : null;
         TwoStepVerificationActivity$$ExternalSyntheticLambda36 twoStepVerificationActivity$$ExternalSyntheticLambda36 = new TwoStepVerificationActivity$$ExternalSyntheticLambda36(this, bArr, x);
-        TLRPC$TL_account_password tLRPC$TL_account_password = this.currentPassword;
-        TLRPC$PasswordKdfAlgo tLRPC$PasswordKdfAlgo2 = tLRPC$TL_account_password.current_algo;
+        TLRPC$account_Password tLRPC$account_Password = this.currentPassword;
+        TLRPC$PasswordKdfAlgo tLRPC$PasswordKdfAlgo2 = tLRPC$account_Password.current_algo;
         if (tLRPC$PasswordKdfAlgo2 instanceof TLRPC$TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow) {
-            TLRPC$TL_inputCheckPasswordSRP startCheck = SRPHelper.startCheck(x, tLRPC$TL_account_password.srp_id, tLRPC$TL_account_password.srp_B, (TLRPC$TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow) tLRPC$PasswordKdfAlgo2);
+            TLRPC$TL_inputCheckPasswordSRP startCheck = SRPHelper.startCheck(x, tLRPC$account_Password.srp_id, tLRPC$account_Password.srp_B, (TLRPC$TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow) tLRPC$PasswordKdfAlgo2);
             tLRPC$TL_account_getPasswordSettings.password = startCheck;
             if (startCheck == null) {
                 TLRPC$TL_error tLRPC$TL_error = new TLRPC$TL_error();
@@ -1663,9 +1663,9 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$processDone$31(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         if (tLRPC$TL_error == null) {
-            TLRPC$TL_account_password tLRPC$TL_account_password = (TLRPC$TL_account_password) tLObject;
-            this.currentPassword = tLRPC$TL_account_password;
-            initPasswordNewAlgo(tLRPC$TL_account_password);
+            TLRPC$account_Password tLRPC$account_Password = (TLRPC$account_Password) tLObject;
+            this.currentPassword = tLRPC$account_Password;
+            initPasswordNewAlgo(tLRPC$account_Password);
             NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.didSetOrRemoveTwoStepPassword, this.currentPassword);
             processDone();
         }

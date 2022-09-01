@@ -2431,7 +2431,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
 
     private void removeParticipant(long j) {
         if (ChatObject.isChannel(this.currentChat)) {
-            getMessagesController().deleteParticipantFromChat(this.chatId, getMessagesController().getUser(Long.valueOf(j)), (TLRPC$ChatFull) null);
+            getMessagesController().deleteParticipantFromChat(this.chatId, getMessagesController().getUser(Long.valueOf(j)));
             ChatUsersActivityDelegate chatUsersActivityDelegate = this.delegate;
             if (chatUsersActivityDelegate != null) {
                 chatUsersActivityDelegate.didKickParticipant(j);
@@ -2984,7 +2984,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         TLObject tLObject2 = tLObject;
         int i3 = i2;
         if (((Integer) arrayList2.get(i3)).intValue() == 2) {
-            getMessagesController().deleteParticipantFromChat(this.chatId, tLRPC$User2, (TLRPC$ChatFull) null);
+            getMessagesController().deleteParticipantFromChat(this.chatId, tLRPC$User2);
             removeParticipants(j);
             if (this.currentChat != null && tLRPC$User2 != null && BulletinFactory.canShowBulletin(this)) {
                 BulletinFactory.createRemoveFromChatBulletin(this, tLRPC$User2, this.currentChat.title).show();
@@ -3000,10 +3000,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
         builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
         builder.setMessage(LocaleController.formatString("AdminWillBeRemoved", R.string.AdminWillBeRemoved, UserObject.getUserName(tLRPC$User)));
-        String string = LocaleController.getString("OK", R.string.OK);
-        ChatUsersActivity$$ExternalSyntheticLambda2 chatUsersActivity$$ExternalSyntheticLambda2 = r0;
-        ChatUsersActivity$$ExternalSyntheticLambda2 chatUsersActivity$$ExternalSyntheticLambda22 = new ChatUsersActivity$$ExternalSyntheticLambda2(this, j, i, tLObject, tLRPC$TL_chatAdminRights, tLRPC$TL_chatBannedRights, str, z, arrayList, i2);
-        builder.setPositiveButton(string, chatUsersActivity$$ExternalSyntheticLambda2);
+        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new ChatUsersActivity$$ExternalSyntheticLambda2(this, j, i, tLObject, tLRPC$TL_chatAdminRights, tLRPC$TL_chatBannedRights, str, z, arrayList, i2));
         builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), (DialogInterface.OnClickListener) null);
         showDialog(builder.create());
     }
@@ -3086,7 +3083,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             } else {
                 tLRPC$Chat = getMessagesController().getChat(Long.valueOf(-j2));
             }
-            getMessagesController().deleteParticipantFromChat(this.chatId, tLRPC$User, tLRPC$Chat, (TLRPC$ChatFull) null, false, false);
+            getMessagesController().deleteParticipantFromChat(this.chatId, tLRPC$User, tLRPC$Chat, false, false);
         }
     }
 

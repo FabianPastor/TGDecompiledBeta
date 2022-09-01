@@ -13,6 +13,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda38 imple
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$processSelectedOption$210(this.f$1, dialogInterface, i);
+        this.f$0.lambda$processSelectedOption$214(this.f$1, dialogInterface, i);
     }
 }

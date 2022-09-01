@@ -4,21 +4,23 @@ public abstract class TLRPC$MessagePeerReaction extends TLObject {
     public boolean big;
     public int flags;
     public TLRPC$Peer peer_id;
-    public String reaction;
+    public TLRPC$Reaction reaction;
     public boolean unread;
 
-    public static TLRPC$TL_messagePeerReaction TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-        TLRPC$TL_messagePeerReaction tLRPC$TL_messagePeerReaction;
-        if (i != -NUM) {
-            tLRPC$TL_messagePeerReaction = i != NUM ? null : new TLRPC$TL_messagePeerReaction();
+    public static TLRPC$MessagePeerReaction TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
+        TLRPC$MessagePeerReaction tLRPC$MessagePeerReaction;
+        if (i == -NUM) {
+            tLRPC$MessagePeerReaction = new TLRPC$TL_messagePeerReaction_layer137();
+        } else if (i != -NUM) {
+            tLRPC$MessagePeerReaction = i != NUM ? null : new TLRPC$TL_messagePeerReaction_layer144();
         } else {
-            tLRPC$TL_messagePeerReaction = new TLRPC$TL_messagePeerReaction_layer137();
+            tLRPC$MessagePeerReaction = new TLRPC$TL_messagePeerReaction();
         }
-        if (tLRPC$TL_messagePeerReaction != null || !z) {
-            if (tLRPC$TL_messagePeerReaction != null) {
-                tLRPC$TL_messagePeerReaction.readParams(abstractSerializedData, z);
+        if (tLRPC$MessagePeerReaction != null || !z) {
+            if (tLRPC$MessagePeerReaction != null) {
+                tLRPC$MessagePeerReaction.readParams(abstractSerializedData, z);
             }
-            return tLRPC$TL_messagePeerReaction;
+            return tLRPC$MessagePeerReaction;
         }
         throw new RuntimeException(String.format("can't parse magic %x in MessagePeerReaction", new Object[]{Integer.valueOf(i)}));
     }

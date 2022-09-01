@@ -10,6 +10,6 @@ public final /* synthetic */ class DrawerProfileCell$$ExternalSyntheticLambda0 i
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$new$0(view);
+        this.f$0.lambda$new$1(view);
     }
 }

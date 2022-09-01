@@ -294,6 +294,7 @@ public class BotWebViewContainer extends FrameLayout implements NotificationCent
         settings.setGeolocationEnabled(true);
         settings.setDomStorageEnabled(true);
         settings.setDatabaseEnabled(true);
+        settings.setTextSize(WebSettings.TextSize.NORMAL);
         File file = new File(ApplicationLoader.getFilesDirFixed(), "webview_database");
         if ((file.exists() && file.isDirectory()) || file.mkdirs()) {
             settings.setDatabasePath(file.getAbsolutePath());

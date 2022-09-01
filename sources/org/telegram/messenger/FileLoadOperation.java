@@ -41,6 +41,7 @@ import org.telegram.tgnet.TLRPC$WebPage;
 import org.telegram.tgnet.WriteToSocketDelegate;
 
 public class FileLoadOperation {
+    public static volatile DispatchQueue filesQueue = new DispatchQueue("writeFileQueue");
     private static final Object lockObject = new Object();
     private static final int preloadMaxBytes = 2097152;
     private static final int stateCanceled = 4;
@@ -67,7 +68,6 @@ public class FileLoadOperation {
     private int currentAccount;
     private int currentDownloadChunkSize;
     private int currentMaxDownloadRequests;
-    private int currentQueueType;
     private int currentType;
     private int datacenterId;
     private ArrayList<RequestInfo> delayedRequestInfos;
@@ -118,6 +118,7 @@ public class FileLoadOperation {
     private int preloadTempBufferCount;
     private HashMap<Long, PreloadRange> preloadedBytesRanges;
     private int priority;
+    private FileLoaderPriorityQueue priorityQueue;
     private RequestInfo priorityRequestInfo;
     private int renameRetryCount;
     private ArrayList<RequestInfo> requestInfos;
@@ -132,13 +133,17 @@ public class FileLoadOperation {
     private volatile int state;
     private String storeFileName;
     private File storePath;
+    FileLoadOperationStream stream;
     private ArrayList<FileLoadOperationStream> streamListeners;
+    long streamOffset;
+    boolean streamPriority;
     private long streamPriorityStartOffset;
     private long streamStartOffset;
     private boolean supportsPreloading;
     private File tempPath;
     private long totalBytesCount;
     private int totalPreloadedBytes;
+    long totalTime;
     private boolean ungzip;
     private WebFile webFile;
     private TLRPC$InputWebFileLocation webLocation;
@@ -153,6 +158,12 @@ public class FileLoadOperation {
         boolean hasAnotherRefOnFile(String str);
 
         void saveFilePath(FilePathDatabase.PathData pathData, File file);
+    }
+
+    public void setStream(FileLoadOperationStream fileLoadOperationStream, boolean z, long j) {
+        this.stream = fileLoadOperationStream;
+        this.streamOffset = j;
+        this.streamPriority = z;
     }
 
     protected static class RequestInfo {
@@ -572,17 +583,17 @@ public class FileLoadOperation {
         return this.priority;
     }
 
-    public void setPaths(int i, String str, int i2, File file, File file2, String str2) {
+    public void setPaths(int i, String str, FileLoaderPriorityQueue fileLoaderPriorityQueue, File file, File file2, String str2) {
         this.storePath = file;
         this.tempPath = file2;
         this.currentAccount = i;
         this.fileName = str;
         this.storeFileName = str2;
-        this.currentQueueType = i2;
+        this.priorityQueue = fileLoaderPriorityQueue;
     }
 
-    public int getQueueType() {
-        return this.currentQueueType;
+    public FileLoaderPriorityQueue getQueue() {
+        return this.priorityQueue;
     }
 
     public boolean wasStarted() {
@@ -614,7 +625,7 @@ public class FileLoadOperation {
                 z = true;
             }
             z = false;
-            Collections.sort(arrayList2, FileLoadOperation$$ExternalSyntheticLambda11.INSTANCE);
+            Collections.sort(arrayList2, FileLoadOperation$$ExternalSyntheticLambda12.INSTANCE);
             while (i < arrayList.size() - 1) {
                 Range range2 = arrayList2.get(i);
                 int i3 = i + 1;
@@ -641,17 +652,15 @@ public class FileLoadOperation {
     }
 
     private void addPart(ArrayList<Range> arrayList, long j, long j2, boolean z) {
-        boolean z2;
         ArrayList<Range> arrayList2 = arrayList;
         long j3 = j;
         long j4 = j2;
         if (arrayList2 != null && j4 >= j3) {
             int size = arrayList.size();
+            boolean z2 = false;
             int i = 0;
             while (true) {
-                z2 = true;
                 if (i >= size) {
-                    z2 = false;
                     break;
                 }
                 Range range = arrayList2.get(i);
@@ -662,6 +671,8 @@ public class FileLoadOperation {
                     } else if (j4 > range.start) {
                         long unused = range.start = j4;
                         break;
+                    } else {
+                        i++;
                     }
                 } else if (j4 < range.end) {
                     arrayList2.add(0, new Range(range.start, j));
@@ -670,30 +681,46 @@ public class FileLoadOperation {
                 } else if (j3 < range.end) {
                     long unused3 = range.end = j3;
                     break;
+                } else {
+                    i++;
                 }
-                i++;
             }
+            z2 = true;
             if (!z) {
                 return;
             }
             if (z2) {
-                try {
-                    this.filePartsStream.seek(0);
-                    int size2 = arrayList.size();
-                    this.filePartsStream.writeInt(size2);
-                    for (int i2 = 0; i2 < size2; i2++) {
-                        Range range2 = arrayList2.get(i2);
-                        this.filePartsStream.writeLong(range2.start);
-                        this.filePartsStream.writeLong(range2.end);
-                    }
-                } catch (Exception e) {
-                    FileLog.e((Throwable) e);
-                }
+                filesQueue.postRunnable(new FileLoadOperation$$ExternalSyntheticLambda2(this, new ArrayList(arrayList2)));
                 notifyStreamListeners();
             } else if (BuildVars.LOGS_ENABLED) {
                 FileLog.e(this.cacheFileFinal + " downloaded duplicate file part " + j3 + " - " + j4);
             }
         }
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$addPart$1(ArrayList arrayList) {
+        long currentTimeMillis = System.currentTimeMillis();
+        try {
+            synchronized (this) {
+                RandomAccessFile randomAccessFile = this.filePartsStream;
+                if (randomAccessFile != null) {
+                    randomAccessFile.seek(0);
+                    int size = arrayList.size();
+                    this.filePartsStream.writeInt(size);
+                    for (int i = 0; i < size; i++) {
+                        Range range = (Range) arrayList.get(i);
+                        this.filePartsStream.writeLong(range.start);
+                        this.filePartsStream.writeLong(range.end);
+                    }
+                } else {
+                    return;
+                }
+            }
+        } catch (Exception e) {
+            FileLog.e((Throwable) e);
+        }
+        this.totalTime += System.currentTimeMillis() - currentTimeMillis;
     }
 
     private void notifyStreamListeners() {
@@ -715,7 +742,7 @@ public class FileLoadOperation {
     public File getCurrentFile() {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         File[] fileArr = new File[1];
-        Utilities.stageQueue.postRunnable(new FileLoadOperation$$ExternalSyntheticLambda9(this, fileArr, countDownLatch));
+        Utilities.stageQueue.postRunnable(new FileLoadOperation$$ExternalSyntheticLambda10(this, fileArr, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Exception e) {
@@ -725,7 +752,7 @@ public class FileLoadOperation {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$getCurrentFile$1(File[] fileArr, CountDownLatch countDownLatch) {
+    public /* synthetic */ void lambda$getCurrentFile$2(File[] fileArr, CountDownLatch countDownLatch) {
         if (this.state == 3) {
             fileArr[0] = this.cacheFileFinal;
         } else {
@@ -789,7 +816,7 @@ public class FileLoadOperation {
     public long[] getDownloadedLengthFromOffset(long j, long j2) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         long[] jArr = new long[2];
-        Utilities.stageQueue.postRunnable(new FileLoadOperation$$ExternalSyntheticLambda8(this, jArr, j, j2, countDownLatch));
+        Utilities.stageQueue.postRunnable(new FileLoadOperation$$ExternalSyntheticLambda9(this, jArr, j, j2, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Exception unused) {
@@ -798,7 +825,7 @@ public class FileLoadOperation {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$getDownloadedLengthFromOffset$2(long[] jArr, long j, long j2, CountDownLatch countDownLatch) {
+    public /* synthetic */ void lambda$getDownloadedLengthFromOffset$3(long[] jArr, long j, long j2, CountDownLatch countDownLatch) {
         jArr[0] = getDownloadedLengthFromOffsetInternal(this.notLoadedBytesRanges, j, j2);
         if (this.state == 3) {
             jArr[1] = 1;
@@ -812,11 +839,11 @@ public class FileLoadOperation {
 
     /* access modifiers changed from: protected */
     public void removeStreamListener(FileLoadOperationStream fileLoadOperationStream) {
-        Utilities.stageQueue.postRunnable(new FileLoadOperation$$ExternalSyntheticLambda3(this, fileLoadOperationStream));
+        Utilities.stageQueue.postRunnable(new FileLoadOperation$$ExternalSyntheticLambda4(this, fileLoadOperationStream));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$removeStreamListener$3(FileLoadOperationStream fileLoadOperationStream) {
+    public /* synthetic */ void lambda$removeStreamListener$4(FileLoadOperationStream fileLoadOperationStream) {
         ArrayList<FileLoadOperationStream> arrayList = this.streamListeners;
         if (arrayList != null) {
             arrayList.remove(fileLoadOperationStream);
@@ -836,7 +863,7 @@ public class FileLoadOperation {
     }
 
     public boolean start() {
-        return start((FileLoadOperationStream) null, 0, false);
+        return start(this.stream, this.streamOffset, this.streamPriority);
     }
 
     /* JADX WARNING: type inference failed for: r6v20 */
@@ -920,7 +947,7 @@ public class FileLoadOperation {
             r8.paused = r10
             if (r31 == 0) goto L_0x0061
             org.telegram.messenger.DispatchQueue r12 = org.telegram.messenger.Utilities.stageQueue
-            org.telegram.messenger.FileLoadOperation$$ExternalSyntheticLambda7 r13 = new org.telegram.messenger.FileLoadOperation$$ExternalSyntheticLambda7
+            org.telegram.messenger.FileLoadOperation$$ExternalSyntheticLambda8 r13 = new org.telegram.messenger.FileLoadOperation$$ExternalSyntheticLambda8
             r1 = r13
             r2 = r30
             r3 = r34
@@ -1909,7 +1936,7 @@ public class FileLoadOperation {
             r2 = 1
             r8.started = r2
             org.telegram.messenger.DispatchQueue r0 = org.telegram.messenger.Utilities.stageQueue
-            org.telegram.messenger.FileLoadOperation$$ExternalSyntheticLambda10 r1 = new org.telegram.messenger.FileLoadOperation$$ExternalSyntheticLambda10
+            org.telegram.messenger.FileLoadOperation$$ExternalSyntheticLambda11 r1 = new org.telegram.messenger.FileLoadOperation$$ExternalSyntheticLambda11
             r1.<init>(r8, r7)
             r0.postRunnable(r1)
             goto L_0x081d
@@ -1942,7 +1969,7 @@ public class FileLoadOperation {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$start$4(boolean z, long j, FileLoadOperationStream fileLoadOperationStream, boolean z2) {
+    public /* synthetic */ void lambda$start$5(boolean z, long j, FileLoadOperationStream fileLoadOperationStream, boolean z2) {
         if (this.streamListeners == null) {
             this.streamListeners = new ArrayList<>();
         }
@@ -1983,7 +2010,7 @@ public class FileLoadOperation {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$start$5(boolean[] zArr) {
+    public /* synthetic */ void lambda$start$6(boolean[] zArr) {
         long j = this.totalBytesCount;
         if (j == 0 || ((!this.isPreloadVideoOperation || !zArr[0]) && this.downloadedBytes != j)) {
             startDownloadRequest();
@@ -2034,7 +2061,7 @@ public class FileLoadOperation {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$setIsPreloadVideoOperation$6(boolean z) {
+    public /* synthetic */ void lambda$setIsPreloadVideoOperation$7(boolean z) {
         this.requestedBytesCount = 0;
         clearOperaion((RequestInfo) null, true);
         this.isPreloadVideoOperation = z;
@@ -2058,7 +2085,7 @@ public class FileLoadOperation {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$cancel$7(boolean z) {
+    public /* synthetic */ void lambda$cancel$8(boolean z) {
         if (!(this.state == 3 || this.state == 2)) {
             if (this.requestInfos != null) {
                 for (int i = 0; i < this.requestInfos.size(); i++) {
@@ -2168,23 +2195,24 @@ public class FileLoadOperation {
             FileLog.e((Throwable) e6);
         }
         try {
-            RandomAccessFile randomAccessFile4 = this.filePartsStream;
-            if (randomAccessFile4 != null) {
-                try {
-                    randomAccessFile4.getChannel().close();
-                } catch (Exception e7) {
-                    FileLog.e((Throwable) e7);
+            if (this.filePartsStream != null) {
+                synchronized (this) {
+                    try {
+                        this.filePartsStream.getChannel().close();
+                    } catch (Exception e7) {
+                        FileLog.e((Throwable) e7);
+                    }
+                    this.filePartsStream.close();
+                    this.filePartsStream = null;
                 }
-                this.filePartsStream.close();
-                this.filePartsStream = null;
             }
         } catch (Exception e8) {
             FileLog.e((Throwable) e8);
         }
         try {
-            RandomAccessFile randomAccessFile5 = this.fiv;
-            if (randomAccessFile5 != null) {
-                randomAccessFile5.close();
+            RandomAccessFile randomAccessFile4 = this.fiv;
+            if (randomAccessFile4 != null) {
+                randomAccessFile4.close();
                 this.fiv = null;
             }
         } catch (Exception e9) {
@@ -2292,7 +2320,7 @@ public class FileLoadOperation {
                             this.renameRetryCount = i2;
                             if (i2 < 3) {
                                 this.state = 1;
-                                Utilities.stageQueue.postRunnable(new FileLoadOperation$$ExternalSyntheticLambda4(this, z), 200);
+                                Utilities.stageQueue.postRunnable(new FileLoadOperation$$ExternalSyntheticLambda7(this, z), 200);
                                 return;
                             }
                             this.cacheFileFinal = this.cacheFileTemp;
@@ -2325,7 +2353,7 @@ public class FileLoadOperation {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onFinishLoadingFile$8(boolean z) {
+    public /* synthetic */ void lambda$onFinishLoadingFile$9(boolean z) {
         try {
             onFinishLoadingFile(z);
         } catch (Exception unused) {
@@ -2403,12 +2431,12 @@ public class FileLoadOperation {
             TLRPC$TL_upload_getCdnFileHashes tLRPC$TL_upload_getCdnFileHashes = new TLRPC$TL_upload_getCdnFileHashes();
             tLRPC$TL_upload_getCdnFileHashes.file_token = this.cdnToken;
             tLRPC$TL_upload_getCdnFileHashes.offset = j;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_upload_getCdnFileHashes, new FileLoadOperation$$ExternalSyntheticLambda12(this), (QuickAckDelegate) null, (WriteToSocketDelegate) null, 0, this.datacenterId, 1, true);
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_upload_getCdnFileHashes, new FileLoadOperation$$ExternalSyntheticLambda13(this), (QuickAckDelegate) null, (WriteToSocketDelegate) null, 0, this.datacenterId, 1, true);
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$requestFileOffsets$9(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$requestFileOffsets$10(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLRPC$TL_error != null) {
             onFail(false, 0);
             return;
@@ -3366,7 +3394,7 @@ public class FileLoadOperation {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onFail$10(int i) {
+    public /* synthetic */ void lambda$onFail$11(int i) {
         this.delegate.didFailedLoadingFile(this, i);
     }
 
@@ -3820,7 +3848,7 @@ public class FileLoadOperation {
             org.telegram.tgnet.TLRPC$TL_upload_file r2 = r0.response     // Catch:{ Exception -> 0x02b6 }
             r2.bytes = r3     // Catch:{ Exception -> 0x02b6 }
             org.telegram.messenger.DispatchQueue r2 = org.telegram.messenger.Utilities.stageQueue     // Catch:{ Exception -> 0x02b6 }
-            org.telegram.messenger.FileLoadOperation$$ExternalSyntheticLambda2 r3 = new org.telegram.messenger.FileLoadOperation$$ExternalSyntheticLambda2     // Catch:{ Exception -> 0x02b6 }
+            org.telegram.messenger.FileLoadOperation$$ExternalSyntheticLambda3 r3 = new org.telegram.messenger.FileLoadOperation$$ExternalSyntheticLambda3     // Catch:{ Exception -> 0x02b6 }
             r3.<init>(r7, r0)     // Catch:{ Exception -> 0x02b6 }
             r2.postRunnable(r3)     // Catch:{ Exception -> 0x02b6 }
             r1 = 1
@@ -3866,7 +3894,7 @@ public class FileLoadOperation {
         L_0x02f7:
             int r5 = r7.currentAccount
             org.telegram.tgnet.ConnectionsManager r20 = org.telegram.tgnet.ConnectionsManager.getInstance(r5)
-            org.telegram.messenger.FileLoadOperation$$ExternalSyntheticLambda14 r5 = new org.telegram.messenger.FileLoadOperation$$ExternalSyntheticLambda14
+            org.telegram.messenger.FileLoadOperation$$ExternalSyntheticLambda15 r5 = new org.telegram.messenger.FileLoadOperation$$ExternalSyntheticLambda15
             r5.<init>(r7, r0, r1)
             r23 = 0
             r24 = 0
@@ -3900,13 +3928,13 @@ public class FileLoadOperation {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$startDownloadRequest$11(RequestInfo requestInfo) {
+    public /* synthetic */ void lambda$startDownloadRequest$12(RequestInfo requestInfo) {
         processRequestResult(requestInfo, (TLRPC$TL_error) null);
         requestInfo.response.freeResources();
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$startDownloadRequest$13(RequestInfo requestInfo, TLObject tLObject, TLObject tLObject2, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$startDownloadRequest$14(RequestInfo requestInfo, TLObject tLObject, TLObject tLObject2, TLRPC$TL_error tLRPC$TL_error) {
         byte[] bArr;
         if (this.requestInfos.contains(requestInfo)) {
             if (requestInfo == this.priorityRequestInfo) {
@@ -3987,13 +4015,13 @@ public class FileLoadOperation {
                 TLRPC$TL_upload_reuploadCdnFile tLRPC$TL_upload_reuploadCdnFile = new TLRPC$TL_upload_reuploadCdnFile();
                 tLRPC$TL_upload_reuploadCdnFile.file_token = this.cdnToken;
                 tLRPC$TL_upload_reuploadCdnFile.request_token = ((TLRPC$TL_upload_cdnFileReuploadNeeded) tLObject2).request_token;
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_upload_reuploadCdnFile, new FileLoadOperation$$ExternalSyntheticLambda13(this, requestInfo), (QuickAckDelegate) null, (WriteToSocketDelegate) null, 0, this.datacenterId, 1, true);
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_upload_reuploadCdnFile, new FileLoadOperation$$ExternalSyntheticLambda14(this, requestInfo), (QuickAckDelegate) null, (WriteToSocketDelegate) null, 0, this.datacenterId, 1, true);
             }
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$startDownloadRequest$12(RequestInfo requestInfo, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$startDownloadRequest$13(RequestInfo requestInfo, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         this.reuploadingCdn = false;
         if (tLRPC$TL_error == null) {
             TLRPC$Vector tLRPC$Vector = (TLRPC$Vector) tLObject;

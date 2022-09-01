@@ -164,6 +164,13 @@ public class Bulletin {
         return visibleBulletin;
     }
 
+    public static void hideVisible() {
+        Bulletin bulletin = visibleBulletin;
+        if (bulletin != null) {
+            bulletin.hide();
+        }
+    }
+
     public void setDuration(int i) {
         this.duration = i;
     }

@@ -1,29 +1,17 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
-
 public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda117 implements Runnable {
     public final /* synthetic */ MediaDataController f$0;
     public final /* synthetic */ boolean f$1;
-    public final /* synthetic */ ArrayList f$2;
-    public final /* synthetic */ int f$3;
-    public final /* synthetic */ long f$4;
-    public final /* synthetic */ boolean f$5;
-    public final /* synthetic */ ArrayList f$6;
-    public final /* synthetic */ boolean f$7;
+    public final /* synthetic */ int f$2;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda117(MediaDataController mediaDataController, boolean z, ArrayList arrayList, int i, long j, boolean z2, ArrayList arrayList2, boolean z3) {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda117(MediaDataController mediaDataController, boolean z, int i) {
         this.f$0 = mediaDataController;
         this.f$1 = z;
-        this.f$2 = arrayList;
-        this.f$3 = i;
-        this.f$4 = j;
-        this.f$5 = z2;
-        this.f$6 = arrayList2;
-        this.f$7 = z3;
+        this.f$2 = i;
     }
 
     public final void run() {
-        this.f$0.lambda$processLoadedFeaturedStickers$48(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7);
+        this.f$0.lambda$processLoadedFeaturedStickers$48(this.f$1, this.f$2);
     }
 }

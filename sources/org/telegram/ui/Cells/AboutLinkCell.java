@@ -482,6 +482,7 @@ public class AboutLinkCell extends FrameLayout {
         this.textY = dp2;
         canvas2.translate(0.0f, (float) dp2);
         try {
+            Theme.profile_aboutTextPaint.linkColor = Theme.getColor("chat_messageLinkIn", this.resourcesProvider);
             StaticLayout staticLayout2 = this.firstThreeLinesLayout;
             if (staticLayout2 != null) {
                 if (this.shouldExpand) {

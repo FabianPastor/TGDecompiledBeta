@@ -37,6 +37,7 @@ import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Adapters.FiltersView;
+import org.telegram.ui.Components.AnimatedEmojiDrawable;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.EllipsizeSpanAnimator;
 import org.telegram.ui.Components.FireworksEffect;
@@ -90,6 +91,7 @@ public class ActionBar extends FrameLayout {
     protected int itemsBackgroundColor;
     protected int itemsColor;
     private CharSequence lastOverlayTitle;
+    private Drawable lastRightDrawable;
     private Runnable lastRunnable;
     private CharSequence lastTitle;
     private boolean manualStart;
@@ -105,6 +107,7 @@ public class ActionBar extends FrameLayout {
     private Rect rect;
     Rect rectTmp;
     private final Theme.ResourcesProvider resourcesProvider;
+    private View.OnClickListener rightDrawableOnClickListener;
     AnimatorSet searchVisibleAnimator;
     private SnowflakesEffect snowflakesEffect;
     /* access modifiers changed from: private */
@@ -389,7 +392,7 @@ public class ActionBar extends FrameLayout {
         SimpleTextView[] simpleTextViewArr = this.titleTextView;
         if (simpleTextViewArr[i] == null) {
             simpleTextViewArr[i] = new SimpleTextView(getContext());
-            this.titleTextView[i].setGravity(3);
+            this.titleTextView[i].setGravity(19);
             int i2 = this.titleColorToSet;
             if (i2 != 0) {
                 this.titleTextView[i].setTextColor(i2);
@@ -397,6 +400,9 @@ public class ActionBar extends FrameLayout {
                 this.titleTextView[i].setTextColor(getThemedColor("actionBarDefaultTitle"));
             }
             this.titleTextView[i].setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            this.titleTextView[i].setDrawablePadding(AndroidUtilities.dp(4.0f));
+            this.titleTextView[i].setPadding(0, AndroidUtilities.dp(8.0f), 0, AndroidUtilities.dp(8.0f));
+            this.titleTextView[i].setRightDrawableTopPadding(-AndroidUtilities.dp(1.0f));
             addView(this.titleTextView[i], 0, LayoutHelper.createFrame(-2, -2, 51));
         }
     }
@@ -406,16 +412,40 @@ public class ActionBar extends FrameLayout {
     }
 
     public void setTitle(CharSequence charSequence) {
+        setTitle(charSequence, (Drawable) null);
+    }
+
+    public void setTitle(CharSequence charSequence, Drawable drawable) {
         if (charSequence != null && this.titleTextView[0] == null) {
             createTitleTextView(0);
         }
         SimpleTextView[] simpleTextViewArr = this.titleTextView;
         if (simpleTextViewArr[0] != null) {
-            this.lastTitle = charSequence;
             simpleTextViewArr[0].setVisibility((charSequence == null || this.isSearchFieldVisible) ? 4 : 0);
-            this.titleTextView[0].setText(charSequence);
+            SimpleTextView simpleTextView = this.titleTextView[0];
+            this.lastTitle = charSequence;
+            simpleTextView.setText(charSequence);
+            SimpleTextView simpleTextView2 = this.titleTextView[0];
+            this.lastRightDrawable = drawable;
+            simpleTextView2.setRightDrawable(drawable);
+            this.titleTextView[0].setRightDrawableOnClick(this.rightDrawableOnClickListener);
+            if (drawable instanceof AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable) {
+                ((AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable) drawable).setParentView(this.titleTextView[0]);
+            }
         }
         this.fromBottom = false;
+    }
+
+    public void setRightDrawableOnClick(View.OnClickListener onClickListener) {
+        this.rightDrawableOnClickListener = onClickListener;
+        SimpleTextView[] simpleTextViewArr = this.titleTextView;
+        if (simpleTextViewArr[0] != null) {
+            simpleTextViewArr[0].setRightDrawableOnClick(onClickListener);
+        }
+        SimpleTextView[] simpleTextViewArr2 = this.titleTextView;
+        if (simpleTextViewArr2[1] != null) {
+            simpleTextViewArr2[1].setRightDrawableOnClick(this.rightDrawableOnClickListener);
+        }
     }
 
     public void setTitleColor(int i) {
@@ -477,6 +507,10 @@ public class ActionBar extends FrameLayout {
 
     public SimpleTextView getTitleTextView() {
         return this.titleTextView[0];
+    }
+
+    public SimpleTextView getTitleTextView2() {
+        return this.titleTextView[1];
     }
 
     public String getTitle() {
@@ -1241,7 +1275,7 @@ public class ActionBar extends FrameLayout {
                 }
                 SimpleTextView[] simpleTextViewArr5 = this.titleTextView;
                 if (!(simpleTextViewArr5[i5] == null || simpleTextViewArr5[i5].getVisibility() == 8)) {
-                    this.titleTextView[i5].measure(View.MeasureSpec.makeMeasureSpec(measuredWidth, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(24.0f), Integer.MIN_VALUE));
+                    this.titleTextView[i5].measure(View.MeasureSpec.makeMeasureSpec(measuredWidth, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(24.0f) + this.titleTextView[i5].getPaddingTop() + this.titleTextView[i5].getPaddingBottom(), Integer.MIN_VALUE));
                     if (this.centerScale) {
                         CharSequence text = this.titleTextView[i5].getText();
                         SimpleTextView[] simpleTextViewArr6 = this.titleTextView;
@@ -1279,8 +1313,8 @@ public class ActionBar extends FrameLayout {
     }
 
     /* access modifiers changed from: protected */
-    /* JADX WARNING: Removed duplicated region for block: B:107:0x0201  */
-    /* JADX WARNING: Removed duplicated region for block: B:111:0x020e  */
+    /* JADX WARNING: Removed duplicated region for block: B:107:0x021d  */
+    /* JADX WARNING: Removed duplicated region for block: B:111:0x022a  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void onLayout(boolean r15, int r16, int r17, int r18, int r19) {
         /*
@@ -1358,13 +1392,13 @@ public class ActionBar extends FrameLayout {
         L_0x0082:
             r6 = 1
             r7 = 2
-            if (r5 >= r7) goto L_0x0115
+            if (r5 >= r7) goto L_0x0131
             org.telegram.ui.ActionBar.SimpleTextView[] r8 = r0.titleTextView
             r9 = r8[r5]
-            if (r9 == 0) goto L_0x0111
+            if (r9 == 0) goto L_0x012d
             r8 = r8[r5]
             int r8 = r8.getVisibility()
-            if (r8 == r4) goto L_0x0111
+            if (r8 == r4) goto L_0x012d
             boolean r8 = r0.fromBottom
             if (r8 == 0) goto L_0x009a
             if (r5 == 0) goto L_0x009e
@@ -1421,22 +1455,34 @@ public class ActionBar extends FrameLayout {
             r8 = r7[r5]
             int r6 = r6 + r1
             r7 = r7[r5]
-            int r7 = r7.getMeasuredWidth()
-            int r7 = r7 + r3
+            int r7 = r7.getPaddingTop()
+            int r7 = r6 - r7
             org.telegram.ui.ActionBar.SimpleTextView[] r9 = r0.titleTextView
             r9 = r9[r5]
-            int r9 = r9.getTextHeight()
-            int r9 = r9 + r6
-            r8.layout(r3, r6, r7, r9)
-        L_0x0111:
+            int r9 = r9.getMeasuredWidth()
+            int r9 = r9 + r3
+            org.telegram.ui.ActionBar.SimpleTextView[] r10 = r0.titleTextView
+            r10 = r10[r5]
+            int r10 = r10.getTextHeight()
+            int r6 = r6 + r10
+            org.telegram.ui.ActionBar.SimpleTextView[] r10 = r0.titleTextView
+            r10 = r10[r5]
+            int r10 = r10.getPaddingTop()
+            int r6 = r6 - r10
+            org.telegram.ui.ActionBar.SimpleTextView[] r10 = r0.titleTextView
+            r10 = r10[r5]
+            int r10 = r10.getPaddingBottom()
+            int r6 = r6 + r10
+            r8.layout(r3, r7, r9, r6)
+        L_0x012d:
             int r5 = r5 + 1
             goto L_0x0082
-        L_0x0115:
+        L_0x0131:
             org.telegram.ui.ActionBar.SimpleTextView r5 = r0.subtitleTextView
             r8 = 1065353216(0x3var_, float:1.0)
-            if (r5 == 0) goto L_0x015b
+            if (r5 == 0) goto L_0x0177
             int r5 = r5.getVisibility()
-            if (r5 == r4) goto L_0x015b
+            if (r5 == r4) goto L_0x0177
             int r5 = getCurrentActionBarHeight()
             int r5 = r5 / r7
             int r9 = getCurrentActionBarHeight()
@@ -1447,11 +1493,11 @@ public class ActionBar extends FrameLayout {
             int r9 = r9 / r7
             int r5 = r5 + r9
             boolean r9 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r9 != 0) goto L_0x0144
+            if (r9 != 0) goto L_0x0160
             android.content.res.Resources r9 = r14.getResources()
             android.content.res.Configuration r9 = r9.getConfiguration()
             int r9 = r9.orientation
-        L_0x0144:
+        L_0x0160:
             int r9 = org.telegram.messenger.AndroidUtilities.dp(r8)
             int r5 = r5 - r9
             org.telegram.ui.ActionBar.SimpleTextView r9 = r0.subtitleTextView
@@ -1462,11 +1508,11 @@ public class ActionBar extends FrameLayout {
             int r11 = r11.getTextHeight()
             int r11 = r11 + r5
             r9.layout(r3, r5, r10, r11)
-        L_0x015b:
+        L_0x0177:
             org.telegram.ui.ActionBar.SimpleTextView r5 = r0.additionalSubtitleTextView
-            if (r5 == 0) goto L_0x019f
+            if (r5 == 0) goto L_0x01bb
             int r5 = r5.getVisibility()
-            if (r5 == r4) goto L_0x019f
+            if (r5 == r4) goto L_0x01bb
             int r5 = getCurrentActionBarHeight()
             int r5 = r5 / r7
             int r9 = getCurrentActionBarHeight()
@@ -1477,11 +1523,11 @@ public class ActionBar extends FrameLayout {
             int r9 = r9 / r7
             int r5 = r5 + r9
             boolean r9 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r9 != 0) goto L_0x0188
+            if (r9 != 0) goto L_0x01a4
             android.content.res.Resources r9 = r14.getResources()
             android.content.res.Configuration r9 = r9.getConfiguration()
             int r9 = r9.orientation
-        L_0x0188:
+        L_0x01a4:
             int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)
             int r5 = r5 - r8
             org.telegram.ui.ActionBar.SimpleTextView r8 = r0.additionalSubtitleTextView
@@ -1492,88 +1538,88 @@ public class ActionBar extends FrameLayout {
             int r9 = r9.getTextHeight()
             int r9 = r9 + r1
             r8.layout(r3, r1, r5, r9)
-        L_0x019f:
+        L_0x01bb:
             int r1 = r14.getChildCount()
             r3 = 0
-        L_0x01a4:
-            if (r3 >= r1) goto L_0x0221
+        L_0x01c0:
+            if (r3 >= r1) goto L_0x023d
             android.view.View r5 = r14.getChildAt(r3)
             int r8 = r5.getVisibility()
-            if (r8 == r4) goto L_0x021e
+            if (r8 == r4) goto L_0x023a
             org.telegram.ui.ActionBar.SimpleTextView[] r8 = r0.titleTextView
             r9 = r8[r2]
-            if (r5 == r9) goto L_0x021e
+            if (r5 == r9) goto L_0x023a
             r8 = r8[r6]
-            if (r5 == r8) goto L_0x021e
+            if (r5 == r8) goto L_0x023a
             org.telegram.ui.ActionBar.SimpleTextView r8 = r0.subtitleTextView
-            if (r5 == r8) goto L_0x021e
+            if (r5 == r8) goto L_0x023a
             org.telegram.ui.ActionBar.ActionBarMenu r8 = r0.menu
-            if (r5 == r8) goto L_0x021e
+            if (r5 == r8) goto L_0x023a
             android.widget.ImageView r8 = r0.backButtonImageView
-            if (r5 == r8) goto L_0x021e
+            if (r5 == r8) goto L_0x023a
             org.telegram.ui.ActionBar.SimpleTextView r8 = r0.additionalSubtitleTextView
-            if (r5 != r8) goto L_0x01cb
-            goto L_0x021e
-        L_0x01cb:
+            if (r5 != r8) goto L_0x01e7
+            goto L_0x023a
+        L_0x01e7:
             android.view.ViewGroup$LayoutParams r8 = r5.getLayoutParams()
             android.widget.FrameLayout$LayoutParams r8 = (android.widget.FrameLayout.LayoutParams) r8
             int r9 = r5.getMeasuredWidth()
             int r10 = r5.getMeasuredHeight()
             int r11 = r8.gravity
             r12 = -1
-            if (r11 != r12) goto L_0x01e0
+            if (r11 != r12) goto L_0x01fc
             r11 = 51
-        L_0x01e0:
+        L_0x01fc:
             r12 = r11 & 7
             r11 = r11 & 112(0x70, float:1.57E-43)
             r12 = r12 & 7
-            if (r12 == r6) goto L_0x01f3
+            if (r12 == r6) goto L_0x020f
             r13 = 5
-            if (r12 == r13) goto L_0x01ee
+            if (r12 == r13) goto L_0x020a
             int r12 = r8.leftMargin
-            goto L_0x01fd
-        L_0x01ee:
+            goto L_0x0219
+        L_0x020a:
             int r12 = r18 - r9
             int r13 = r8.rightMargin
-            goto L_0x01fc
-        L_0x01f3:
+            goto L_0x0218
+        L_0x020f:
             int r12 = r18 - r16
             int r12 = r12 - r9
             int r12 = r12 / r7
             int r13 = r8.leftMargin
             int r12 = r12 + r13
             int r13 = r8.rightMargin
-        L_0x01fc:
+        L_0x0218:
             int r12 = r12 - r13
-        L_0x01fd:
+        L_0x0219:
             r13 = 16
-            if (r11 == r13) goto L_0x020e
+            if (r11 == r13) goto L_0x022a
             r13 = 80
-            if (r11 == r13) goto L_0x0208
+            if (r11 == r13) goto L_0x0224
             int r8 = r8.topMargin
-            goto L_0x0219
-        L_0x0208:
+            goto L_0x0235
+        L_0x0224:
             int r11 = r19 - r17
             int r11 = r11 - r10
             int r8 = r8.bottomMargin
-            goto L_0x0217
-        L_0x020e:
+            goto L_0x0233
+        L_0x022a:
             int r11 = r19 - r17
             int r11 = r11 - r10
             int r11 = r11 / r7
             int r13 = r8.topMargin
             int r11 = r11 + r13
             int r8 = r8.bottomMargin
-        L_0x0217:
+        L_0x0233:
             int r8 = r11 - r8
-        L_0x0219:
+        L_0x0235:
             int r9 = r9 + r12
             int r10 = r10 + r8
             r5.layout(r12, r8, r9, r10)
-        L_0x021e:
+        L_0x023a:
             int r3 = r3 + 1
-            goto L_0x01a4
-        L_0x0221:
+            goto L_0x01c0
+        L_0x023d:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.ActionBar.onLayout(boolean, int, int, int, int):void");
@@ -1603,188 +1649,231 @@ public class ActionBar extends FrameLayout {
         this.lastRunnable = runnable;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:59:0x0155  */
+    /* JADX WARNING: Removed duplicated region for block: B:66:0x01ad  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void setTitleOverlayText(java.lang.String r5, int r6, java.lang.Runnable r7) {
+    public void setTitleOverlayText(java.lang.String r7, int r8, java.lang.Runnable r9) {
         /*
-            r4 = this;
-            boolean r0 = r4.allowOverlayTitle
-            if (r0 == 0) goto L_0x0159
-            org.telegram.ui.ActionBar.BaseFragment r0 = r4.parentFragment
+            r6 = this;
+            boolean r0 = r6.allowOverlayTitle
+            if (r0 == 0) goto L_0x01b1
+            org.telegram.ui.ActionBar.BaseFragment r0 = r6.parentFragment
             org.telegram.ui.ActionBar.ActionBarLayout r0 = r0.parentLayout
             if (r0 != 0) goto L_0x000c
-            goto L_0x0159
+            goto L_0x01b1
         L_0x000c:
-            java.lang.Object[] r0 = r4.overlayTitleToSet
+            java.lang.Object[] r0 = r6.overlayTitleToSet
             r1 = 0
-            r0[r1] = r5
-            java.lang.Integer r2 = java.lang.Integer.valueOf(r6)
+            r0[r1] = r7
+            java.lang.Integer r2 = java.lang.Integer.valueOf(r8)
             r3 = 1
             r0[r3] = r2
-            java.lang.Object[] r0 = r4.overlayTitleToSet
+            java.lang.Object[] r0 = r6.overlayTitleToSet
             r2 = 2
-            r0[r2] = r7
-            boolean r0 = r4.overlayTitleAnimationInProgress
+            r0[r2] = r9
+            boolean r0 = r6.overlayTitleAnimationInProgress
             if (r0 == 0) goto L_0x0022
             return
         L_0x0022:
-            java.lang.CharSequence r0 = r4.lastOverlayTitle
+            java.lang.CharSequence r0 = r6.lastOverlayTitle
             if (r0 != 0) goto L_0x0028
-            if (r5 == 0) goto L_0x0030
+            if (r7 == 0) goto L_0x0030
         L_0x0028:
             if (r0 == 0) goto L_0x0031
-            boolean r0 = r0.equals(r5)
+            boolean r0 = r0.equals(r7)
             if (r0 == 0) goto L_0x0031
         L_0x0030:
             return
         L_0x0031:
-            r4.lastOverlayTitle = r5
-            if (r5 == 0) goto L_0x003a
-            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r5, r6)
+            r6.lastOverlayTitle = r7
+            if (r7 == 0) goto L_0x003a
+            java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r7, r8)
             goto L_0x003c
         L_0x003a:
-            java.lang.CharSequence r6 = r4.lastTitle
+            java.lang.CharSequence r8 = r6.lastTitle
         L_0x003c:
-            if (r5 == 0) goto L_0x0051
-            java.lang.String r0 = "..."
-            int r0 = android.text.TextUtils.indexOf(r6, r0)
-            if (r0 < 0) goto L_0x0051
-            android.text.SpannableString r6 = android.text.SpannableString.valueOf(r6)
-            org.telegram.ui.Components.EllipsizeSpanAnimator r2 = r4.ellipsizeSpanAnimator
-            r2.wrap(r6, r0)
-            r0 = 1
-            goto L_0x0052
-        L_0x0051:
+            if (r7 == 0) goto L_0x0040
             r0 = 0
-        L_0x0052:
-            if (r5 == 0) goto L_0x0056
-            r5 = 1
-            goto L_0x0057
-        L_0x0056:
-            r5 = 0
+            goto L_0x0042
+        L_0x0040:
+            android.graphics.drawable.Drawable r0 = r6.lastRightDrawable
+        L_0x0042:
+            if (r7 == 0) goto L_0x0057
+            java.lang.String r2 = "..."
+            int r2 = android.text.TextUtils.indexOf(r8, r2)
+            if (r2 < 0) goto L_0x0057
+            android.text.SpannableString r8 = android.text.SpannableString.valueOf(r8)
+            org.telegram.ui.Components.EllipsizeSpanAnimator r4 = r6.ellipsizeSpanAnimator
+            r4.wrap(r8, r2)
+            r2 = 1
+            goto L_0x0058
         L_0x0057:
-            r4.titleOverlayShown = r5
-            if (r6 == 0) goto L_0x0061
-            org.telegram.ui.ActionBar.SimpleTextView[] r5 = r4.titleTextView
-            r5 = r5[r1]
-            if (r5 == 0) goto L_0x0125
-        L_0x0061:
-            int r5 = r4.getMeasuredWidth()
-            if (r5 == 0) goto L_0x0125
-            org.telegram.ui.ActionBar.SimpleTextView[] r5 = r4.titleTextView
-            r2 = r5[r1]
-            if (r2 == 0) goto L_0x0077
-            r5 = r5[r1]
-            int r5 = r5.getVisibility()
-            if (r5 == 0) goto L_0x0077
-            goto L_0x0125
-        L_0x0077:
-            org.telegram.ui.ActionBar.SimpleTextView[] r5 = r4.titleTextView
-            r2 = r5[r1]
-            if (r2 == 0) goto L_0x0152
-            r5 = r5[r1]
-            android.view.ViewPropertyAnimator r5 = r5.animate()
-            r5.cancel()
-            org.telegram.ui.ActionBar.SimpleTextView[] r5 = r4.titleTextView
-            r2 = r5[r3]
-            if (r2 == 0) goto L_0x0095
-            r5 = r5[r3]
-            android.view.ViewPropertyAnimator r5 = r5.animate()
-            r5.cancel()
-        L_0x0095:
-            org.telegram.ui.ActionBar.SimpleTextView[] r5 = r4.titleTextView
-            r5 = r5[r3]
-            if (r5 != 0) goto L_0x009e
-            r4.createTitleTextView(r3)
-        L_0x009e:
-            org.telegram.ui.ActionBar.SimpleTextView[] r5 = r4.titleTextView
-            r5 = r5[r3]
-            r5.setText(r6)
-            if (r0 == 0) goto L_0x00b0
-            org.telegram.ui.Components.EllipsizeSpanAnimator r5 = r4.ellipsizeSpanAnimator
-            org.telegram.ui.ActionBar.SimpleTextView[] r6 = r4.titleTextView
-            r6 = r6[r3]
-            r5.addView(r6)
-        L_0x00b0:
-            r4.overlayTitleAnimationInProgress = r3
-            org.telegram.ui.ActionBar.SimpleTextView[] r5 = r4.titleTextView
-            r6 = r5[r3]
-            r0 = r5[r1]
-            r5[r3] = r0
-            r5[r1] = r6
-            r5 = r5[r1]
-            r6 = 0
-            r5.setAlpha(r6)
-            org.telegram.ui.ActionBar.SimpleTextView[] r5 = r4.titleTextView
-            r5 = r5[r1]
+            r2 = 0
+        L_0x0058:
+            if (r7 == 0) goto L_0x005c
+            r7 = 1
+            goto L_0x005d
+        L_0x005c:
+            r7 = 0
+        L_0x005d:
+            r6.titleOverlayShown = r7
+            r7 = 1082130432(0x40800000, float:4.0)
+            if (r8 == 0) goto L_0x0069
+            org.telegram.ui.ActionBar.SimpleTextView[] r4 = r6.titleTextView
+            r4 = r4[r1]
+            if (r4 == 0) goto L_0x0155
+        L_0x0069:
+            int r4 = r6.getMeasuredWidth()
+            if (r4 == 0) goto L_0x0155
+            org.telegram.ui.ActionBar.SimpleTextView[] r4 = r6.titleTextView
+            r5 = r4[r1]
+            if (r5 == 0) goto L_0x007f
+            r4 = r4[r1]
+            int r4 = r4.getVisibility()
+            if (r4 == 0) goto L_0x007f
+            goto L_0x0155
+        L_0x007f:
+            org.telegram.ui.ActionBar.SimpleTextView[] r4 = r6.titleTextView
+            r5 = r4[r1]
+            if (r5 == 0) goto L_0x01aa
+            r4 = r4[r1]
+            android.view.ViewPropertyAnimator r4 = r4.animate()
+            r4.cancel()
+            org.telegram.ui.ActionBar.SimpleTextView[] r4 = r6.titleTextView
+            r5 = r4[r3]
+            if (r5 == 0) goto L_0x009d
+            r4 = r4[r3]
+            android.view.ViewPropertyAnimator r4 = r4.animate()
+            r4.cancel()
+        L_0x009d:
+            org.telegram.ui.ActionBar.SimpleTextView[] r4 = r6.titleTextView
+            r4 = r4[r3]
+            if (r4 != 0) goto L_0x00a6
+            r6.createTitleTextView(r3)
+        L_0x00a6:
+            org.telegram.ui.ActionBar.SimpleTextView[] r4 = r6.titleTextView
+            r4 = r4[r3]
+            r4.setText(r8)
+            org.telegram.ui.ActionBar.SimpleTextView[] r8 = r6.titleTextView
+            r8 = r8[r3]
+            int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            r8.setDrawablePadding(r7)
+            org.telegram.ui.ActionBar.SimpleTextView[] r7 = r6.titleTextView
+            r7 = r7[r3]
+            r7.setRightDrawable((android.graphics.drawable.Drawable) r0)
+            org.telegram.ui.ActionBar.SimpleTextView[] r7 = r6.titleTextView
+            r7 = r7[r3]
+            android.view.View$OnClickListener r8 = r6.rightDrawableOnClickListener
+            r7.setRightDrawableOnClick(r8)
+            boolean r7 = r0 instanceof org.telegram.ui.Components.AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable
+            if (r7 == 0) goto L_0x00d5
+            org.telegram.ui.Components.AnimatedEmojiDrawable$SwapAnimatedEmojiDrawable r0 = (org.telegram.ui.Components.AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable) r0
+            org.telegram.ui.ActionBar.SimpleTextView[] r7 = r6.titleTextView
+            r7 = r7[r3]
+            r0.setParentView(r7)
+        L_0x00d5:
+            if (r2 == 0) goto L_0x00e0
+            org.telegram.ui.Components.EllipsizeSpanAnimator r7 = r6.ellipsizeSpanAnimator
+            org.telegram.ui.ActionBar.SimpleTextView[] r8 = r6.titleTextView
+            r8 = r8[r3]
+            r7.addView(r8)
+        L_0x00e0:
+            r6.overlayTitleAnimationInProgress = r3
+            org.telegram.ui.ActionBar.SimpleTextView[] r7 = r6.titleTextView
+            r8 = r7[r3]
+            r0 = r7[r1]
+            r7[r3] = r0
+            r7[r1] = r8
+            r7 = r7[r1]
+            r8 = 0
+            r7.setAlpha(r8)
+            org.telegram.ui.ActionBar.SimpleTextView[] r7 = r6.titleTextView
+            r7 = r7[r1]
             r0 = 1101004800(0x41a00000, float:20.0)
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r0)
             int r2 = -r2
             float r2 = (float) r2
-            r5.setTranslationY(r2)
-            org.telegram.ui.ActionBar.SimpleTextView[] r5 = r4.titleTextView
-            r5 = r5[r1]
-            android.view.ViewPropertyAnimator r5 = r5.animate()
+            r7.setTranslationY(r2)
+            org.telegram.ui.ActionBar.SimpleTextView[] r7 = r6.titleTextView
+            r7 = r7[r1]
+            android.view.ViewPropertyAnimator r7 = r7.animate()
             r1 = 1065353216(0x3var_, float:1.0)
-            android.view.ViewPropertyAnimator r5 = r5.alpha(r1)
-            android.view.ViewPropertyAnimator r5 = r5.translationY(r6)
+            android.view.ViewPropertyAnimator r7 = r7.alpha(r1)
+            android.view.ViewPropertyAnimator r7 = r7.translationY(r8)
             r1 = 220(0xdc, double:1.087E-321)
-            android.view.ViewPropertyAnimator r5 = r5.setDuration(r1)
-            r5.start()
-            org.telegram.ui.ActionBar.SimpleTextView[] r5 = r4.titleTextView
-            r5 = r5[r3]
-            android.view.ViewPropertyAnimator r5 = r5.animate()
-            android.view.ViewPropertyAnimator r5 = r5.alpha(r6)
-            org.telegram.ui.ActionBar.SimpleTextView r6 = r4.subtitleTextView
-            if (r6 != 0) goto L_0x0105
-            int r6 = org.telegram.messenger.AndroidUtilities.dp(r0)
-            float r6 = (float) r6
-            r5.translationY(r6)
-            goto L_0x010f
-        L_0x0105:
-            r6 = 1060320051(0x3var_, float:0.7)
-            android.view.ViewPropertyAnimator r0 = r5.scaleY(r6)
-            r0.scaleX(r6)
-        L_0x010f:
-            r4.requestLayout()
-            r4.centerScale = r3
-            android.view.ViewPropertyAnimator r5 = r5.setDuration(r1)
-            org.telegram.ui.ActionBar.ActionBar$5 r6 = new org.telegram.ui.ActionBar.ActionBar$5
-            r6.<init>()
-            android.view.ViewPropertyAnimator r5 = r5.setListener(r6)
-            r5.start()
-            goto L_0x0152
-        L_0x0125:
-            r4.createTitleTextView(r1)
-            boolean r5 = r4.supportsHolidayImage
-            if (r5 == 0) goto L_0x0136
-            org.telegram.ui.ActionBar.SimpleTextView[] r5 = r4.titleTextView
-            r5 = r5[r1]
-            r5.invalidate()
-            r4.invalidate()
-        L_0x0136:
-            org.telegram.ui.ActionBar.SimpleTextView[] r5 = r4.titleTextView
-            r5 = r5[r1]
-            r5.setText(r6)
-            if (r0 == 0) goto L_0x0149
-            org.telegram.ui.Components.EllipsizeSpanAnimator r5 = r4.ellipsizeSpanAnimator
-            org.telegram.ui.ActionBar.SimpleTextView[] r6 = r4.titleTextView
-            r6 = r6[r1]
-            r5.addView(r6)
-            goto L_0x0152
-        L_0x0149:
-            org.telegram.ui.Components.EllipsizeSpanAnimator r5 = r4.ellipsizeSpanAnimator
-            org.telegram.ui.ActionBar.SimpleTextView[] r6 = r4.titleTextView
-            r6 = r6[r1]
-            r5.removeView(r6)
-        L_0x0152:
-            if (r7 == 0) goto L_0x0155
-            goto L_0x0157
+            android.view.ViewPropertyAnimator r7 = r7.setDuration(r1)
+            r7.start()
+            org.telegram.ui.ActionBar.SimpleTextView[] r7 = r6.titleTextView
+            r7 = r7[r3]
+            android.view.ViewPropertyAnimator r7 = r7.animate()
+            android.view.ViewPropertyAnimator r7 = r7.alpha(r8)
+            org.telegram.ui.ActionBar.SimpleTextView r8 = r6.subtitleTextView
+            if (r8 != 0) goto L_0x0135
+            int r8 = org.telegram.messenger.AndroidUtilities.dp(r0)
+            float r8 = (float) r8
+            r7.translationY(r8)
+            goto L_0x013f
+        L_0x0135:
+            r8 = 1060320051(0x3var_, float:0.7)
+            android.view.ViewPropertyAnimator r0 = r7.scaleY(r8)
+            r0.scaleX(r8)
+        L_0x013f:
+            r6.requestLayout()
+            r6.centerScale = r3
+            android.view.ViewPropertyAnimator r7 = r7.setDuration(r1)
+            org.telegram.ui.ActionBar.ActionBar$5 r8 = new org.telegram.ui.ActionBar.ActionBar$5
+            r8.<init>()
+            android.view.ViewPropertyAnimator r7 = r7.setListener(r8)
+            r7.start()
+            goto L_0x01aa
         L_0x0155:
-            java.lang.Runnable r7 = r4.lastRunnable
-        L_0x0157:
-            r4.titleActionRunnable = r7
-        L_0x0159:
+            r6.createTitleTextView(r1)
+            boolean r3 = r6.supportsHolidayImage
+            if (r3 == 0) goto L_0x0166
+            org.telegram.ui.ActionBar.SimpleTextView[] r3 = r6.titleTextView
+            r3 = r3[r1]
+            r3.invalidate()
+            r6.invalidate()
+        L_0x0166:
+            org.telegram.ui.ActionBar.SimpleTextView[] r3 = r6.titleTextView
+            r3 = r3[r1]
+            r3.setText(r8)
+            org.telegram.ui.ActionBar.SimpleTextView[] r8 = r6.titleTextView
+            r8 = r8[r1]
+            int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            r8.setDrawablePadding(r7)
+            org.telegram.ui.ActionBar.SimpleTextView[] r7 = r6.titleTextView
+            r7 = r7[r1]
+            r7.setRightDrawable((android.graphics.drawable.Drawable) r0)
+            org.telegram.ui.ActionBar.SimpleTextView[] r7 = r6.titleTextView
+            r7 = r7[r1]
+            android.view.View$OnClickListener r8 = r6.rightDrawableOnClickListener
+            r7.setRightDrawableOnClick(r8)
+            boolean r7 = r0 instanceof org.telegram.ui.Components.AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable
+            if (r7 == 0) goto L_0x0195
+            org.telegram.ui.Components.AnimatedEmojiDrawable$SwapAnimatedEmojiDrawable r0 = (org.telegram.ui.Components.AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable) r0
+            org.telegram.ui.ActionBar.SimpleTextView[] r7 = r6.titleTextView
+            r7 = r7[r1]
+            r0.setParentView(r7)
+        L_0x0195:
+            if (r2 == 0) goto L_0x01a1
+            org.telegram.ui.Components.EllipsizeSpanAnimator r7 = r6.ellipsizeSpanAnimator
+            org.telegram.ui.ActionBar.SimpleTextView[] r8 = r6.titleTextView
+            r8 = r8[r1]
+            r7.addView(r8)
+            goto L_0x01aa
+        L_0x01a1:
+            org.telegram.ui.Components.EllipsizeSpanAnimator r7 = r6.ellipsizeSpanAnimator
+            org.telegram.ui.ActionBar.SimpleTextView[] r8 = r6.titleTextView
+            r8 = r8[r1]
+            r7.removeView(r8)
+        L_0x01aa:
+            if (r9 == 0) goto L_0x01ad
+            goto L_0x01af
+        L_0x01ad:
+            java.lang.Runnable r9 = r6.lastRunnable
+        L_0x01af:
+            r6.titleActionRunnable = r9
+        L_0x01b1:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.ActionBar.setTitleOverlayText(java.lang.String, int, java.lang.Runnable):void");

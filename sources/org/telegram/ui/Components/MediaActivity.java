@@ -366,7 +366,7 @@ public class MediaActivity extends BaseFragment implements SharedMediaLayout.Sha
     /* renamed from: updateColors */
     public void lambda$getThemeDescriptions$0() {
         this.actionBar.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-        this.actionBar.setItemsColor(Theme.getColor("windowBackgroundWhiteGrayText2"), false);
+        this.actionBar.setItemsColor(Theme.getColor("actionBarActionModeDefaultIcon"), false);
         this.actionBar.setItemsBackgroundColor(Theme.getColor("actionBarActionModeDefaultSelector"), false);
         this.actionBar.setTitleColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.nameTextView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));

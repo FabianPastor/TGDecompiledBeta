@@ -1,19 +1,19 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC$TL_emojiKeywordsDifference;
+import org.telegram.tgnet.TLRPC$Message;
 
 public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda94 implements Runnable {
     public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ TLRPC$TL_emojiKeywordsDifference f$1;
-    public final /* synthetic */ String f$2;
+    public final /* synthetic */ TLRPC$Message f$1;
+    public final /* synthetic */ long f$2;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda94(MediaDataController mediaDataController, TLRPC$TL_emojiKeywordsDifference tLRPC$TL_emojiKeywordsDifference, String str) {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda94(MediaDataController mediaDataController, TLRPC$Message tLRPC$Message, long j) {
         this.f$0 = mediaDataController;
-        this.f$1 = tLRPC$TL_emojiKeywordsDifference;
-        this.f$2 = str;
+        this.f$1 = tLRPC$Message;
+        this.f$2 = j;
     }
 
     public final void run() {
-        this.f$0.lambda$putEmojiKeywords$185(this.f$1, this.f$2);
+        this.f$0.lambda$loadBotKeyboard$170(this.f$1, this.f$2);
     }
 }

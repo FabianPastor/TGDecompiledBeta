@@ -27,7 +27,7 @@ public abstract class BottomSheetWithRecyclerListView extends BottomSheet {
     public int contentHeight;
     public final boolean hasFixedSize;
     protected RecyclerListView recyclerListView;
-    public float topPadding = 0.4f;
+    public float topPadding;
     boolean wasDrawn;
 
     /* access modifiers changed from: protected */
@@ -52,13 +52,18 @@ public abstract class BottomSheetWithRecyclerListView extends BottomSheet {
     public void onViewCreated(FrameLayout frameLayout) {
     }
 
-    public BottomSheetWithRecyclerListView(BaseFragment baseFragment2, boolean z, final boolean z2) {
-        super(baseFragment2.getParentActivity(), z);
+    public BottomSheetWithRecyclerListView(BaseFragment baseFragment2, boolean z, boolean z2) {
+        this(baseFragment2, z, z2, (Theme.ResourcesProvider) null);
+    }
+
+    public BottomSheetWithRecyclerListView(BaseFragment baseFragment2, boolean z, final boolean z2, Theme.ResourcesProvider resourcesProvider) {
+        super(baseFragment2.getParentActivity(), z, resourcesProvider);
+        this.topPadding = 0.4f;
         this.baseFragment = baseFragment2;
         this.hasFixedSize = z2;
         final Activity parentActivity = baseFragment2.getParentActivity();
         final Drawable mutate = ContextCompat.getDrawable(parentActivity, R.drawable.header_shadow).mutate();
-        final AnonymousClass1 r0 = new FrameLayout(parentActivity) {
+        final AnonymousClass1 r11 = new FrameLayout(parentActivity) {
             /* access modifiers changed from: protected */
             public void onMeasure(int i, int i2) {
                 int unused = BottomSheetWithRecyclerListView.this.contentHeight = View.MeasureSpec.getSize(i2);
@@ -123,8 +128,8 @@ public abstract class BottomSheetWithRecyclerListView extends BottomSheet {
         if (z2) {
             this.recyclerListView.setHasFixedSize(true);
             this.recyclerListView.setAdapter(createAdapter);
-            setCustomView(r0);
-            r0.addView(this.recyclerListView, LayoutHelper.createFrame(-1, -2.0f));
+            setCustomView(r11);
+            r11.addView(this.recyclerListView, LayoutHelper.createFrame(-1, -2.0f));
         } else {
             this.recyclerListView.setAdapter(new RecyclerListView.SelectionAdapter() {
                 public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
@@ -166,12 +171,12 @@ public abstract class BottomSheetWithRecyclerListView extends BottomSheet {
                     return createAdapter.getItemCount() + 1;
                 }
             });
-            this.containerView = r0;
-            AnonymousClass3 r10 = new ActionBar(parentActivity) {
+            this.containerView = r11;
+            AnonymousClass3 r9 = new ActionBar(parentActivity) {
                 public void setAlpha(float f) {
                     if (getAlpha() != f) {
                         super.setAlpha(f);
-                        r0.invalidate();
+                        r11.invalidate();
                     }
                 }
 
@@ -180,8 +185,8 @@ public abstract class BottomSheetWithRecyclerListView extends BottomSheet {
                     BottomSheetWithRecyclerListView.this.updateStatusBar();
                 }
             };
-            this.actionBar = r10;
-            r10.setBackgroundColor(getThemedColor("dialogBackground"));
+            this.actionBar = r9;
+            r9.setBackgroundColor(getThemedColor("dialogBackground"));
             this.actionBar.setTitleColor(getThemedColor("windowBackgroundWhiteBlackText"));
             this.actionBar.setItemsBackgroundColor(getThemedColor("actionBarActionModeDefaultSelector"), false);
             this.actionBar.setItemsColor(getThemedColor("actionBarActionModeDefaultIcon"), false);
@@ -195,16 +200,16 @@ public abstract class BottomSheetWithRecyclerListView extends BottomSheet {
                     }
                 }
             });
-            r0.addView(this.recyclerListView);
-            r0.addView(this.actionBar, LayoutHelper.createFrame(-1, -2.0f, 0, 6.0f, 0.0f, 6.0f, 0.0f));
+            r11.addView(this.recyclerListView);
+            r11.addView(this.actionBar, LayoutHelper.createFrame(-1, -2.0f, 0, 6.0f, 0.0f, 6.0f, 0.0f));
             this.recyclerListView.addOnScrollListener(new RecyclerView.OnScrollListener(this) {
                 public void onScrolled(RecyclerView recyclerView, int i, int i2) {
                     super.onScrolled(recyclerView, i, i2);
-                    r0.invalidate();
+                    r11.invalidate();
                 }
             });
         }
-        onViewCreated(r0);
+        onViewCreated(r11);
         updateStatusBar();
     }
 

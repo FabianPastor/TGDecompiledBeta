@@ -19,6 +19,7 @@ import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$ChatFull;
 import org.telegram.tgnet.TLRPC$ChatPhoto;
+import org.telegram.tgnet.TLRPC$ChatReactions;
 import org.telegram.tgnet.TLRPC$GroupCall;
 import org.telegram.tgnet.TLRPC$InputPeer;
 import org.telegram.tgnet.TLRPC$Peer;
@@ -34,6 +35,8 @@ import org.telegram.tgnet.TLRPC$TL_chatAdminRights;
 import org.telegram.tgnet.TLRPC$TL_chatBannedRights;
 import org.telegram.tgnet.TLRPC$TL_chatEmpty;
 import org.telegram.tgnet.TLRPC$TL_chatForbidden;
+import org.telegram.tgnet.TLRPC$TL_chatReactionsAll;
+import org.telegram.tgnet.TLRPC$TL_chatReactionsSome;
 import org.telegram.tgnet.TLRPC$TL_chat_layer92;
 import org.telegram.tgnet.TLRPC$TL_chat_old;
 import org.telegram.tgnet.TLRPC$TL_chat_old2;
@@ -55,6 +58,7 @@ import org.telegram.tgnet.TLRPC$TL_phone_getGroupParticipants;
 import org.telegram.tgnet.TLRPC$TL_phone_groupCall;
 import org.telegram.tgnet.TLRPC$TL_phone_groupParticipants;
 import org.telegram.tgnet.TLRPC$TL_phone_toggleGroupCallRecord;
+import org.telegram.tgnet.TLRPC$TL_reactionEmoji;
 import org.telegram.tgnet.TLRPC$TL_updateGroupCall;
 import org.telegram.tgnet.TLRPC$TL_updateGroupCallParticipants;
 import org.telegram.tgnet.TLRPC$Updates;
@@ -106,6 +110,22 @@ public class ChatObject {
             }
         }
         return true;
+    }
+
+    public static boolean reactionIsAvailable(TLRPC$ChatFull tLRPC$ChatFull, String str) {
+        TLRPC$ChatReactions tLRPC$ChatReactions = tLRPC$ChatFull.available_reactions;
+        if (tLRPC$ChatReactions instanceof TLRPC$TL_chatReactionsAll) {
+            return true;
+        }
+        if (tLRPC$ChatReactions instanceof TLRPC$TL_chatReactionsSome) {
+            TLRPC$TL_chatReactionsSome tLRPC$TL_chatReactionsSome = (TLRPC$TL_chatReactionsSome) tLRPC$ChatReactions;
+            for (int i = 0; i < tLRPC$TL_chatReactionsSome.reactions.size(); i++) {
+                if ((tLRPC$TL_chatReactionsSome.reactions.get(i) instanceof TLRPC$TL_reactionEmoji) && TextUtils.equals(((TLRPC$TL_reactionEmoji) tLRPC$TL_chatReactionsSome.reactions.get(i)).emoticon, str)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public static class Call {

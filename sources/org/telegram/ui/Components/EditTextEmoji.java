@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLog;
@@ -579,8 +580,8 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
                     return EmojiView.EmojiViewDelegate.CC.$default$isUserSelf(this);
                 }
 
-                public /* synthetic */ void onEmojiSettingsClick() {
-                    EmojiView.EmojiViewDelegate.CC.$default$onEmojiSettingsClick(this);
+                public /* synthetic */ void onEmojiSettingsClick(ArrayList arrayList) {
+                    EmojiView.EmojiViewDelegate.CC.$default$onEmojiSettingsClick(this, arrayList);
                 }
 
                 public /* synthetic */ void onGifSelected(View view, Object obj, String str, Object obj2, boolean z, int i) {
@@ -686,7 +687,7 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
                     int unused3 = EditTextEmoji.this.innerTextChange = 0;
                 }
 
-                public void onCustomEmojiSelected(long j, TLRPC$Document tLRPC$Document, String str) {
+                public void onCustomEmojiSelected(long j, TLRPC$Document tLRPC$Document, String str, boolean z) {
                     AnimatedEmojiSpan animatedEmojiSpan;
                     int selectionEnd = EditTextEmoji.this.editText.getSelectionEnd();
                     if (selectionEnd < 0) {

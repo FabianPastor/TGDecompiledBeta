@@ -3,6 +3,7 @@ package org.telegram.ui.Components;
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
+import android.graphics.ColorFilter;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -21,7 +22,6 @@ import java.util.concurrent.TimeUnit;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.AnimatedFileDrawableStream;
 import org.telegram.messenger.DispatchQueue;
-import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.utils.BitmapsCache;
@@ -44,6 +44,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
     long cacheGenerateNativePtr;
     long cacheGenerateTimestamp;
     BitmapsCache.Metadata cacheMetadata;
+    private Runnable cancelCache;
     /* access modifiers changed from: private */
     public int currentAccount;
     private DispatchQueue decodeQueue;
@@ -271,460 +272,201 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
         this(file, z, j, tLRPC$Document, imageLocation, obj, j2, i, z2, 0, 0, cacheOptions);
     }
 
-    /* JADX WARNING: type inference failed for: r2v0, types: [boolean] */
-    /* JADX WARNING: type inference failed for: r2v1 */
-    /* JADX WARNING: type inference failed for: r2v4 */
-    public AnimatedFileDrawable(File file, boolean z, long j, TLRPC$Document tLRPC$Document, ImageLocation imageLocation, Object obj, long j2, int i, boolean z2, int i2, int i3, BitmapsCache.CacheOptions cacheOptions) {
-        long j3;
-        int[] iArr;
-        char c;
-        ? r2;
-        long j4 = j;
-        TLRPC$Document tLRPC$Document2 = tLRPC$Document;
-        long j5 = j2;
-        int i4 = i2;
-        int i5 = i3;
-        this.invalidateAfter = 50;
-        int[] iArr2 = new int[5];
-        this.metaData = iArr2;
-        this.pendingSeekTo = -1;
-        this.pendingSeekToUI = -1;
-        this.sync = new Object();
-        this.actualDrawRect = new RectF();
-        this.roundRadius = new int[4];
-        this.shaderMatrix = new Matrix();
-        this.roundPath = new Path();
-        this.scaleX = 1.0f;
-        this.scaleY = 1.0f;
-        this.dstRect = new RectF();
-        this.scaleFactor = 1.0f;
-        this.secondParentViews = new ArrayList<>();
-        this.parents = new ArrayList<>();
-        this.invalidatePath = true;
-        this.uiRunnableNoFrame = new Runnable() {
-            public void run() {
-                AnimatedFileDrawable.this.chekDestroyDecoder();
-                Runnable unused = AnimatedFileDrawable.this.loadFrameTask = null;
-                AnimatedFileDrawable.this.scheduleNextGetFrame();
-                AnimatedFileDrawable.this.invalidateInternal();
-            }
-        };
-        this.uiRunnableGenerateCache = new Runnable() {
-            public void run() {
-                if (!AnimatedFileDrawable.this.isRecycled && !AnimatedFileDrawable.this.destroyWhenDone) {
-                    AnimatedFileDrawable animatedFileDrawable = AnimatedFileDrawable.this;
-                    if (!animatedFileDrawable.generatingCache) {
-                        float unused = animatedFileDrawable.startTime = (float) System.currentTimeMillis();
-                        if (RLottieDrawable.lottieCacheGenerateQueue == null) {
-                            RLottieDrawable.createCacheGenQueue();
-                        }
-                        AnimatedFileDrawable animatedFileDrawable2 = AnimatedFileDrawable.this;
-                        animatedFileDrawable2.generatingCache = true;
-                        Runnable unused2 = animatedFileDrawable2.loadFrameTask = null;
-                        DispatchQueue dispatchQueue = RLottieDrawable.lottieCacheGenerateQueue;
-                        AnimatedFileDrawable animatedFileDrawable3 = AnimatedFileDrawable.this;
-                        AnimatedFileDrawable$2$$ExternalSyntheticLambda0 animatedFileDrawable$2$$ExternalSyntheticLambda0 = new AnimatedFileDrawable$2$$ExternalSyntheticLambda0(this);
-                        animatedFileDrawable3.cacheGenRunnable = animatedFileDrawable$2$$ExternalSyntheticLambda0;
-                        dispatchQueue.postRunnable(animatedFileDrawable$2$$ExternalSyntheticLambda0);
-                    }
-                }
-            }
-
-            /* access modifiers changed from: private */
-            public /* synthetic */ void lambda$run$1() {
-                AnimatedFileDrawable.this.bitmapsCache.createCache();
-                AndroidUtilities.runOnUIThread(new AnimatedFileDrawable$2$$ExternalSyntheticLambda1(this));
-            }
-
-            /* access modifiers changed from: private */
-            public /* synthetic */ void lambda$run$0() {
-                AnimatedFileDrawable animatedFileDrawable = AnimatedFileDrawable.this;
-                animatedFileDrawable.generatingCache = false;
-                animatedFileDrawable.scheduleNextGetFrame();
-            }
-        };
-        this.uiRunnable = new Runnable() {
-            public void run() {
-                AnimatedFileDrawable.this.chekDestroyDecoder();
-                if (AnimatedFileDrawable.this.stream != null && AnimatedFileDrawable.this.pendingRemoveLoading) {
-                    FileLoader.getInstance(AnimatedFileDrawable.this.currentAccount).removeLoadingVideo(AnimatedFileDrawable.this.stream.getDocument(), false, false);
-                }
-                if (AnimatedFileDrawable.this.pendingRemoveLoadingFramesReset <= 0) {
-                    boolean unused = AnimatedFileDrawable.this.pendingRemoveLoading = true;
-                } else {
-                    AnimatedFileDrawable.access$1010(AnimatedFileDrawable.this);
-                }
-                if (!AnimatedFileDrawable.this.forceDecodeAfterNextFrame) {
-                    boolean unused2 = AnimatedFileDrawable.this.singleFrameDecoded = true;
-                } else {
-                    boolean unused3 = AnimatedFileDrawable.this.forceDecodeAfterNextFrame = false;
-                }
-                Runnable unused4 = AnimatedFileDrawable.this.loadFrameTask = null;
-                AnimatedFileDrawable animatedFileDrawable = AnimatedFileDrawable.this;
-                Bitmap unused5 = animatedFileDrawable.nextRenderingBitmap = animatedFileDrawable.backgroundBitmap;
-                AnimatedFileDrawable animatedFileDrawable2 = AnimatedFileDrawable.this;
-                int unused6 = animatedFileDrawable2.nextRenderingBitmapTime = animatedFileDrawable2.backgroundBitmapTime;
-                AnimatedFileDrawable animatedFileDrawable3 = AnimatedFileDrawable.this;
-                BitmapShader unused7 = animatedFileDrawable3.nextRenderingShader = animatedFileDrawable3.backgroundShader;
-                if (AnimatedFileDrawable.this.isRestarted) {
-                    boolean unused8 = AnimatedFileDrawable.this.isRestarted = false;
-                    AnimatedFileDrawable animatedFileDrawable4 = AnimatedFileDrawable.this;
-                    animatedFileDrawable4.repeatCount++;
-                    animatedFileDrawable4.checkRepeat();
-                }
-                if (AnimatedFileDrawable.this.metaData[3] < AnimatedFileDrawable.this.lastTimeStamp) {
-                    AnimatedFileDrawable animatedFileDrawable5 = AnimatedFileDrawable.this;
-                    int unused9 = animatedFileDrawable5.lastTimeStamp = animatedFileDrawable5.startTime > 0.0f ? (int) (AnimatedFileDrawable.this.startTime * 1000.0f) : 0;
-                }
-                if (AnimatedFileDrawable.this.metaData[3] - AnimatedFileDrawable.this.lastTimeStamp != 0) {
-                    AnimatedFileDrawable animatedFileDrawable6 = AnimatedFileDrawable.this;
-                    int unused10 = animatedFileDrawable6.invalidateAfter = animatedFileDrawable6.metaData[3] - AnimatedFileDrawable.this.lastTimeStamp;
-                    if (AnimatedFileDrawable.this.limitFps && AnimatedFileDrawable.this.invalidateAfter < 32) {
-                        int unused11 = AnimatedFileDrawable.this.invalidateAfter = 32;
-                    }
-                }
-                if (AnimatedFileDrawable.this.pendingSeekToUI >= 0 && AnimatedFileDrawable.this.pendingSeekTo == -1) {
-                    long unused12 = AnimatedFileDrawable.this.pendingSeekToUI = -1;
-                    int unused13 = AnimatedFileDrawable.this.invalidateAfter = 0;
-                }
-                AnimatedFileDrawable animatedFileDrawable7 = AnimatedFileDrawable.this;
-                int unused14 = animatedFileDrawable7.lastTimeStamp = animatedFileDrawable7.metaData[3];
-                if (!AnimatedFileDrawable.this.secondParentViews.isEmpty()) {
-                    int size = AnimatedFileDrawable.this.secondParentViews.size();
-                    for (int i = 0; i < size; i++) {
-                        ((View) AnimatedFileDrawable.this.secondParentViews.get(i)).invalidate();
-                    }
-                }
-                AnimatedFileDrawable.this.invalidateInternal();
-                AnimatedFileDrawable.this.scheduleNextGetFrame();
-            }
-        };
-        this.loadFrameRunnable = new Runnable() {
-            /* JADX WARNING: No exception handlers in catch block: Catch:{  } */
-            /* Code decompiled incorrectly, please refer to instructions dump. */
-            public void run() {
-                /*
-                    r15 = this;
-                    org.telegram.ui.Components.AnimatedFileDrawable r0 = org.telegram.ui.Components.AnimatedFileDrawable.this
-                    boolean r0 = r0.isRecycled
-                    if (r0 != 0) goto L_0x0262
-                    org.telegram.ui.Components.AnimatedFileDrawable r0 = org.telegram.ui.Components.AnimatedFileDrawable.this
-                    boolean r0 = r0.decoderCreated
-                    r1 = 0
-                    r2 = 0
-                    r4 = 1
-                    if (r0 != 0) goto L_0x0078
-                    org.telegram.ui.Components.AnimatedFileDrawable r0 = org.telegram.ui.Components.AnimatedFileDrawable.this
-                    long r5 = r0.nativePtr
-                    int r0 = (r5 > r2 ? 1 : (r5 == r2 ? 0 : -1))
-                    if (r0 != 0) goto L_0x0078
-                    org.telegram.ui.Components.AnimatedFileDrawable r0 = org.telegram.ui.Components.AnimatedFileDrawable.this
-                    java.io.File r5 = r0.path
-                    java.lang.String r6 = r5.getAbsolutePath()
-                    org.telegram.ui.Components.AnimatedFileDrawable r5 = org.telegram.ui.Components.AnimatedFileDrawable.this
-                    int[] r7 = r5.metaData
-                    org.telegram.ui.Components.AnimatedFileDrawable r5 = org.telegram.ui.Components.AnimatedFileDrawable.this
-                    int r8 = r5.currentAccount
-                    org.telegram.ui.Components.AnimatedFileDrawable r5 = org.telegram.ui.Components.AnimatedFileDrawable.this
-                    long r9 = r5.streamFileSize
-                    org.telegram.ui.Components.AnimatedFileDrawable r5 = org.telegram.ui.Components.AnimatedFileDrawable.this
-                    org.telegram.messenger.AnimatedFileDrawableStream r11 = r5.stream
-                    r12 = 0
-                    long r5 = org.telegram.ui.Components.AnimatedFileDrawable.createDecoder(r6, r7, r8, r9, r11, r12)
-                    r0.nativePtr = r5
-                    org.telegram.ui.Components.AnimatedFileDrawable r0 = org.telegram.ui.Components.AnimatedFileDrawable.this
-                    long r5 = r0.nativePtr
-                    int r0 = (r5 > r2 ? 1 : (r5 == r2 ? 0 : -1))
-                    if (r0 == 0) goto L_0x006e
-                    org.telegram.ui.Components.AnimatedFileDrawable r0 = org.telegram.ui.Components.AnimatedFileDrawable.this
-                    int[] r0 = r0.metaData
-                    r0 = r0[r1]
-                    r5 = 3840(0xvar_, float:5.381E-42)
-                    if (r0 > r5) goto L_0x0063
-                    org.telegram.ui.Components.AnimatedFileDrawable r0 = org.telegram.ui.Components.AnimatedFileDrawable.this
-                    int[] r0 = r0.metaData
-                    r0 = r0[r4]
-                    if (r0 <= r5) goto L_0x006e
-                L_0x0063:
-                    org.telegram.ui.Components.AnimatedFileDrawable r0 = org.telegram.ui.Components.AnimatedFileDrawable.this
-                    long r5 = r0.nativePtr
-                    org.telegram.ui.Components.AnimatedFileDrawable.destroyDecoder(r5)
-                    org.telegram.ui.Components.AnimatedFileDrawable r0 = org.telegram.ui.Components.AnimatedFileDrawable.this
-                    r0.nativePtr = r2
-                L_0x006e:
-                    org.telegram.ui.Components.AnimatedFileDrawable r0 = org.telegram.ui.Components.AnimatedFileDrawable.this
-                    r0.updateScaleFactor()
-                    org.telegram.ui.Components.AnimatedFileDrawable r0 = org.telegram.ui.Components.AnimatedFileDrawable.this
-                    boolean unused = r0.decoderCreated = r4
-                L_0x0078:
-                    org.telegram.ui.Components.AnimatedFileDrawable r0 = org.telegram.ui.Components.AnimatedFileDrawable.this     // Catch:{ all -> 0x025e }
-                    org.telegram.messenger.utils.BitmapsCache r5 = r0.bitmapsCache     // Catch:{ all -> 0x025e }
-                    r6 = 3
-                    if (r5 == 0) goto L_0x00fe
-                    android.graphics.Bitmap r0 = r0.backgroundBitmap     // Catch:{ all -> 0x025e }
-                    if (r0 != 0) goto L_0x009a
-                    org.telegram.ui.Components.AnimatedFileDrawable r0 = org.telegram.ui.Components.AnimatedFileDrawable.this     // Catch:{ all -> 0x025e }
-                    int r1 = r0.renderingWidth     // Catch:{ all -> 0x025e }
-                    org.telegram.ui.Components.AnimatedFileDrawable r2 = org.telegram.ui.Components.AnimatedFileDrawable.this     // Catch:{ all -> 0x025e }
-                    int r2 = r2.renderingHeight     // Catch:{ all -> 0x025e }
-                    android.graphics.Bitmap$Config r3 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ all -> 0x025e }
-                    android.graphics.Bitmap r1 = android.graphics.Bitmap.createBitmap(r1, r2, r3)     // Catch:{ all -> 0x025e }
-                    android.graphics.Bitmap unused = r0.backgroundBitmap = r1     // Catch:{ all -> 0x025e }
-                L_0x009a:
-                    org.telegram.ui.Components.AnimatedFileDrawable r0 = org.telegram.ui.Components.AnimatedFileDrawable.this     // Catch:{ all -> 0x025e }
-                    org.telegram.messenger.utils.BitmapsCache$Metadata r1 = r0.cacheMetadata     // Catch:{ all -> 0x025e }
-                    if (r1 != 0) goto L_0x00a7
-                    org.telegram.messenger.utils.BitmapsCache$Metadata r1 = new org.telegram.messenger.utils.BitmapsCache$Metadata     // Catch:{ all -> 0x025e }
-                    r1.<init>()     // Catch:{ all -> 0x025e }
-                    r0.cacheMetadata = r1     // Catch:{ all -> 0x025e }
-                L_0x00a7:
-                    org.telegram.ui.Components.AnimatedFileDrawable r0 = org.telegram.ui.Components.AnimatedFileDrawable.this     // Catch:{ all -> 0x025e }
-                    long r1 = java.lang.System.currentTimeMillis()     // Catch:{ all -> 0x025e }
-                    long unused = r0.lastFrameDecodeTime = r1     // Catch:{ all -> 0x025e }
-                    org.telegram.ui.Components.AnimatedFileDrawable r0 = org.telegram.ui.Components.AnimatedFileDrawable.this     // Catch:{ all -> 0x025e }
-                    org.telegram.messenger.utils.BitmapsCache r1 = r0.bitmapsCache     // Catch:{ all -> 0x025e }
-                    android.graphics.Bitmap r0 = r0.backgroundBitmap     // Catch:{ all -> 0x025e }
-                    org.telegram.ui.Components.AnimatedFileDrawable r2 = org.telegram.ui.Components.AnimatedFileDrawable.this     // Catch:{ all -> 0x025e }
-                    org.telegram.messenger.utils.BitmapsCache$Metadata r2 = r2.cacheMetadata     // Catch:{ all -> 0x025e }
-                    int r0 = r1.getFrame((android.graphics.Bitmap) r0, (org.telegram.messenger.utils.BitmapsCache.Metadata) r2)     // Catch:{ all -> 0x025e }
-                    org.telegram.ui.Components.AnimatedFileDrawable r1 = org.telegram.ui.Components.AnimatedFileDrawable.this     // Catch:{ all -> 0x025e }
-                    int[] r1 = r1.metaData     // Catch:{ all -> 0x025e }
-                    org.telegram.ui.Components.AnimatedFileDrawable r2 = org.telegram.ui.Components.AnimatedFileDrawable.this     // Catch:{ all -> 0x025e }
-                    org.telegram.messenger.utils.BitmapsCache$Metadata r3 = r2.cacheMetadata     // Catch:{ all -> 0x025e }
-                    int r3 = r3.frame     // Catch:{ all -> 0x025e }
-                    int r3 = r3 * 33
-                    int r2 = r2.backgroundBitmapTime = r3     // Catch:{ all -> 0x025e }
-                    r1[r6] = r2     // Catch:{ all -> 0x025e }
-                    org.telegram.ui.Components.AnimatedFileDrawable r1 = org.telegram.ui.Components.AnimatedFileDrawable.this     // Catch:{ all -> 0x025e }
-                    org.telegram.messenger.utils.BitmapsCache r1 = r1.bitmapsCache     // Catch:{ all -> 0x025e }
-                    boolean r1 = r1.needGenCache()     // Catch:{ all -> 0x025e }
-                    if (r1 == 0) goto L_0x00e7
-                    org.telegram.ui.Components.AnimatedFileDrawable r1 = org.telegram.ui.Components.AnimatedFileDrawable.this     // Catch:{ all -> 0x025e }
-                    java.lang.Runnable r1 = r1.uiRunnableGenerateCache     // Catch:{ all -> 0x025e }
-                    org.telegram.messenger.AndroidUtilities.runOnUIThread(r1)     // Catch:{ all -> 0x025e }
-                L_0x00e7:
-                    r1 = -1
-                    if (r0 != r1) goto L_0x00f4
-                    org.telegram.ui.Components.AnimatedFileDrawable r0 = org.telegram.ui.Components.AnimatedFileDrawable.this     // Catch:{ all -> 0x025e }
-                    java.lang.Runnable r0 = r0.uiRunnableNoFrame     // Catch:{ all -> 0x025e }
-                    org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)     // Catch:{ all -> 0x025e }
-                    goto L_0x00fd
-                L_0x00f4:
-                    org.telegram.ui.Components.AnimatedFileDrawable r0 = org.telegram.ui.Components.AnimatedFileDrawable.this     // Catch:{ all -> 0x025e }
-                    java.lang.Runnable r0 = r0.uiRunnable     // Catch:{ all -> 0x025e }
-                    org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)     // Catch:{ all -> 0x025e }
-                L_0x00fd:
-                    return
-                L_0x00fe:
-                    long r7 = r0.nativePtr     // Catch:{ all -> 0x025e }
-                    int r0 = (r7 > r2 ? 1 : (r7 == r2 ? 0 : -1))
-                    if (r0 != 0) goto L_0x0123
-                    org.telegram.ui.Components.AnimatedFileDrawable r0 = org.telegram.ui.Components.AnimatedFileDrawable.this     // Catch:{ all -> 0x025e }
-                    int[] r0 = r0.metaData     // Catch:{ all -> 0x025e }
-                    r0 = r0[r1]     // Catch:{ all -> 0x025e }
-                    if (r0 == 0) goto L_0x0123
-                    org.telegram.ui.Components.AnimatedFileDrawable r0 = org.telegram.ui.Components.AnimatedFileDrawable.this     // Catch:{ all -> 0x025e }
-                    int[] r0 = r0.metaData     // Catch:{ all -> 0x025e }
-                    r0 = r0[r4]     // Catch:{ all -> 0x025e }
-                    if (r0 != 0) goto L_0x0119
-                    goto L_0x0123
-                L_0x0119:
-                    org.telegram.ui.Components.AnimatedFileDrawable r0 = org.telegram.ui.Components.AnimatedFileDrawable.this     // Catch:{ all -> 0x025e }
-                    java.lang.Runnable r0 = r0.uiRunnableNoFrame     // Catch:{ all -> 0x025e }
-                    org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)     // Catch:{ all -> 0x025e }
-                    return
-                L_0x0123:
-                    org.telegram.ui.Components.AnimatedFileDrawable r0 = org.telegram.ui.Components.AnimatedFileDrawable.this     // Catch:{ all -> 0x025e }
-                    android.graphics.Bitmap r0 = r0.backgroundBitmap     // Catch:{ all -> 0x025e }
-                    if (r0 != 0) goto L_0x019b
-                    org.telegram.ui.Components.AnimatedFileDrawable r0 = org.telegram.ui.Components.AnimatedFileDrawable.this     // Catch:{ all -> 0x025e }
-                    int[] r0 = r0.metaData     // Catch:{ all -> 0x025e }
-                    r0 = r0[r1]     // Catch:{ all -> 0x025e }
-                    if (r0 <= 0) goto L_0x019b
-                    org.telegram.ui.Components.AnimatedFileDrawable r0 = org.telegram.ui.Components.AnimatedFileDrawable.this     // Catch:{ all -> 0x025e }
-                    int[] r0 = r0.metaData     // Catch:{ all -> 0x025e }
-                    r0 = r0[r4]     // Catch:{ all -> 0x025e }
-                    if (r0 <= 0) goto L_0x019b
-                    org.telegram.ui.Components.AnimatedFileDrawable r0 = org.telegram.ui.Components.AnimatedFileDrawable.this     // Catch:{ all -> 0x016d }
-                    int[] r5 = r0.metaData     // Catch:{ all -> 0x016d }
-                    r5 = r5[r1]     // Catch:{ all -> 0x016d }
-                    float r5 = (float) r5     // Catch:{ all -> 0x016d }
-                    org.telegram.ui.Components.AnimatedFileDrawable r7 = org.telegram.ui.Components.AnimatedFileDrawable.this     // Catch:{ all -> 0x016d }
-                    float r7 = r7.scaleFactor     // Catch:{ all -> 0x016d }
-                    float r5 = r5 * r7
-                    int r5 = (int) r5     // Catch:{ all -> 0x016d }
-                    org.telegram.ui.Components.AnimatedFileDrawable r7 = org.telegram.ui.Components.AnimatedFileDrawable.this     // Catch:{ all -> 0x016d }
-                    int[] r7 = r7.metaData     // Catch:{ all -> 0x016d }
-                    r7 = r7[r4]     // Catch:{ all -> 0x016d }
-                    float r7 = (float) r7     // Catch:{ all -> 0x016d }
-                    org.telegram.ui.Components.AnimatedFileDrawable r8 = org.telegram.ui.Components.AnimatedFileDrawable.this     // Catch:{ all -> 0x016d }
-                    float r8 = r8.scaleFactor     // Catch:{ all -> 0x016d }
-                    float r7 = r7 * r8
-                    int r7 = (int) r7     // Catch:{ all -> 0x016d }
-                    android.graphics.Bitmap$Config r8 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ all -> 0x016d }
-                    android.graphics.Bitmap r5 = android.graphics.Bitmap.createBitmap(r5, r7, r8)     // Catch:{ all -> 0x016d }
-                    android.graphics.Bitmap unused = r0.backgroundBitmap = r5     // Catch:{ all -> 0x016d }
-                    goto L_0x0171
-                L_0x016d:
-                    r0 = move-exception
-                    org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x025e }
-                L_0x0171:
-                    org.telegram.ui.Components.AnimatedFileDrawable r0 = org.telegram.ui.Components.AnimatedFileDrawable.this     // Catch:{ all -> 0x025e }
-                    android.graphics.BitmapShader r0 = r0.backgroundShader     // Catch:{ all -> 0x025e }
-                    if (r0 != 0) goto L_0x019b
-                    org.telegram.ui.Components.AnimatedFileDrawable r0 = org.telegram.ui.Components.AnimatedFileDrawable.this     // Catch:{ all -> 0x025e }
-                    android.graphics.Bitmap r0 = r0.backgroundBitmap     // Catch:{ all -> 0x025e }
-                    if (r0 == 0) goto L_0x019b
-                    org.telegram.ui.Components.AnimatedFileDrawable r0 = org.telegram.ui.Components.AnimatedFileDrawable.this     // Catch:{ all -> 0x025e }
-                    boolean r0 = r0.hasRoundRadius()     // Catch:{ all -> 0x025e }
-                    if (r0 == 0) goto L_0x019b
-                    org.telegram.ui.Components.AnimatedFileDrawable r0 = org.telegram.ui.Components.AnimatedFileDrawable.this     // Catch:{ all -> 0x025e }
-                    android.graphics.BitmapShader r5 = new android.graphics.BitmapShader     // Catch:{ all -> 0x025e }
-                    org.telegram.ui.Components.AnimatedFileDrawable r7 = org.telegram.ui.Components.AnimatedFileDrawable.this     // Catch:{ all -> 0x025e }
-                    android.graphics.Bitmap r7 = r7.backgroundBitmap     // Catch:{ all -> 0x025e }
-                    android.graphics.Shader$TileMode r8 = android.graphics.Shader.TileMode.CLAMP     // Catch:{ all -> 0x025e }
-                    r5.<init>(r7, r8, r8)     // Catch:{ all -> 0x025e }
-                    android.graphics.BitmapShader unused = r0.backgroundShader = r5     // Catch:{ all -> 0x025e }
-                L_0x019b:
-                    org.telegram.ui.Components.AnimatedFileDrawable r0 = org.telegram.ui.Components.AnimatedFileDrawable.this     // Catch:{ all -> 0x025e }
-                    long r7 = r0.pendingSeekTo     // Catch:{ all -> 0x025e }
-                    int r0 = (r7 > r2 ? 1 : (r7 == r2 ? 0 : -1))
-                    if (r0 < 0) goto L_0x01e6
-                    org.telegram.ui.Components.AnimatedFileDrawable r0 = org.telegram.ui.Components.AnimatedFileDrawable.this     // Catch:{ all -> 0x025e }
-                    int[] r0 = r0.metaData     // Catch:{ all -> 0x025e }
-                    org.telegram.ui.Components.AnimatedFileDrawable r1 = org.telegram.ui.Components.AnimatedFileDrawable.this     // Catch:{ all -> 0x025e }
-                    long r1 = r1.pendingSeekTo     // Catch:{ all -> 0x025e }
-                    int r2 = (int) r1     // Catch:{ all -> 0x025e }
-                    r0[r6] = r2     // Catch:{ all -> 0x025e }
-                    org.telegram.ui.Components.AnimatedFileDrawable r0 = org.telegram.ui.Components.AnimatedFileDrawable.this     // Catch:{ all -> 0x025e }
-                    long r0 = r0.pendingSeekTo     // Catch:{ all -> 0x025e }
-                    org.telegram.ui.Components.AnimatedFileDrawable r2 = org.telegram.ui.Components.AnimatedFileDrawable.this     // Catch:{ all -> 0x025e }
-                    java.lang.Object r2 = r2.sync     // Catch:{ all -> 0x025e }
-                    monitor-enter(r2)     // Catch:{ all -> 0x025e }
-                    org.telegram.ui.Components.AnimatedFileDrawable r3 = org.telegram.ui.Components.AnimatedFileDrawable.this     // Catch:{ all -> 0x01e3 }
-                    r7 = -1
-                    long unused = r3.pendingSeekTo = r7     // Catch:{ all -> 0x01e3 }
-                    monitor-exit(r2)     // Catch:{ all -> 0x01e3 }
-                    org.telegram.ui.Components.AnimatedFileDrawable r2 = org.telegram.ui.Components.AnimatedFileDrawable.this     // Catch:{ all -> 0x025e }
-                    org.telegram.messenger.AnimatedFileDrawableStream r2 = r2.stream     // Catch:{ all -> 0x025e }
-                    if (r2 == 0) goto L_0x01da
-                    org.telegram.ui.Components.AnimatedFileDrawable r2 = org.telegram.ui.Components.AnimatedFileDrawable.this     // Catch:{ all -> 0x025e }
-                    org.telegram.messenger.AnimatedFileDrawableStream r2 = r2.stream     // Catch:{ all -> 0x025e }
-                    r2.reset()     // Catch:{ all -> 0x025e }
-                L_0x01da:
-                    org.telegram.ui.Components.AnimatedFileDrawable r2 = org.telegram.ui.Components.AnimatedFileDrawable.this     // Catch:{ all -> 0x025e }
-                    long r2 = r2.nativePtr     // Catch:{ all -> 0x025e }
-                    org.telegram.ui.Components.AnimatedFileDrawable.seekToMs(r2, r0, r4)     // Catch:{ all -> 0x025e }
-                    r1 = 1
-                    goto L_0x01e6
-                L_0x01e3:
-                    r0 = move-exception
-                    monitor-exit(r2)     // Catch:{ all -> 0x01e3 }
-                    throw r0     // Catch:{ all -> 0x025e }
-                L_0x01e6:
-                    org.telegram.ui.Components.AnimatedFileDrawable r0 = org.telegram.ui.Components.AnimatedFileDrawable.this     // Catch:{ all -> 0x025e }
-                    android.graphics.Bitmap r0 = r0.backgroundBitmap     // Catch:{ all -> 0x025e }
-                    if (r0 == 0) goto L_0x0262
-                    org.telegram.ui.Components.AnimatedFileDrawable r0 = org.telegram.ui.Components.AnimatedFileDrawable.this     // Catch:{ all -> 0x025e }
-                    long r2 = java.lang.System.currentTimeMillis()     // Catch:{ all -> 0x025e }
-                    long unused = r0.lastFrameDecodeTime = r2     // Catch:{ all -> 0x025e }
-                    org.telegram.ui.Components.AnimatedFileDrawable r0 = org.telegram.ui.Components.AnimatedFileDrawable.this     // Catch:{ all -> 0x025e }
-                    long r7 = r0.nativePtr     // Catch:{ all -> 0x025e }
-                    org.telegram.ui.Components.AnimatedFileDrawable r0 = org.telegram.ui.Components.AnimatedFileDrawable.this     // Catch:{ all -> 0x025e }
-                    android.graphics.Bitmap r9 = r0.backgroundBitmap     // Catch:{ all -> 0x025e }
-                    org.telegram.ui.Components.AnimatedFileDrawable r0 = org.telegram.ui.Components.AnimatedFileDrawable.this     // Catch:{ all -> 0x025e }
-                    int[] r10 = r0.metaData     // Catch:{ all -> 0x025e }
-                    org.telegram.ui.Components.AnimatedFileDrawable r0 = org.telegram.ui.Components.AnimatedFileDrawable.this     // Catch:{ all -> 0x025e }
-                    android.graphics.Bitmap r0 = r0.backgroundBitmap     // Catch:{ all -> 0x025e }
-                    int r11 = r0.getRowBytes()     // Catch:{ all -> 0x025e }
-                    r12 = 0
-                    org.telegram.ui.Components.AnimatedFileDrawable r0 = org.telegram.ui.Components.AnimatedFileDrawable.this     // Catch:{ all -> 0x025e }
-                    float r13 = r0.startTime     // Catch:{ all -> 0x025e }
-                    org.telegram.ui.Components.AnimatedFileDrawable r0 = org.telegram.ui.Components.AnimatedFileDrawable.this     // Catch:{ all -> 0x025e }
-                    float r14 = r0.endTime     // Catch:{ all -> 0x025e }
-                    int r0 = org.telegram.ui.Components.AnimatedFileDrawable.getVideoFrame(r7, r9, r10, r11, r12, r13, r14)     // Catch:{ all -> 0x025e }
-                    if (r0 != 0) goto L_0x022e
-                    org.telegram.ui.Components.AnimatedFileDrawable r0 = org.telegram.ui.Components.AnimatedFileDrawable.this     // Catch:{ all -> 0x025e }
-                    java.lang.Runnable r0 = r0.uiRunnableNoFrame     // Catch:{ all -> 0x025e }
-                    org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)     // Catch:{ all -> 0x025e }
-                    return
-                L_0x022e:
-                    org.telegram.ui.Components.AnimatedFileDrawable r0 = org.telegram.ui.Components.AnimatedFileDrawable.this     // Catch:{ all -> 0x025e }
-                    int r0 = r0.lastTimeStamp     // Catch:{ all -> 0x025e }
-                    if (r0 == 0) goto L_0x0245
-                    org.telegram.ui.Components.AnimatedFileDrawable r0 = org.telegram.ui.Components.AnimatedFileDrawable.this     // Catch:{ all -> 0x025e }
-                    int[] r0 = r0.metaData     // Catch:{ all -> 0x025e }
-                    r0 = r0[r6]     // Catch:{ all -> 0x025e }
-                    if (r0 != 0) goto L_0x0245
-                    org.telegram.ui.Components.AnimatedFileDrawable r0 = org.telegram.ui.Components.AnimatedFileDrawable.this     // Catch:{ all -> 0x025e }
-                    boolean unused = r0.isRestarted = r4     // Catch:{ all -> 0x025e }
-                L_0x0245:
-                    if (r1 == 0) goto L_0x0252
-                    org.telegram.ui.Components.AnimatedFileDrawable r0 = org.telegram.ui.Components.AnimatedFileDrawable.this     // Catch:{ all -> 0x025e }
-                    int[] r1 = r0.metaData     // Catch:{ all -> 0x025e }
-                    r1 = r1[r6]     // Catch:{ all -> 0x025e }
-                    int unused = r0.lastTimeStamp = r1     // Catch:{ all -> 0x025e }
-                L_0x0252:
-                    org.telegram.ui.Components.AnimatedFileDrawable r0 = org.telegram.ui.Components.AnimatedFileDrawable.this     // Catch:{ all -> 0x025e }
-                    int[] r1 = r0.metaData     // Catch:{ all -> 0x025e }
-                    r1 = r1[r6]     // Catch:{ all -> 0x025e }
-                    int unused = r0.backgroundBitmapTime = r1     // Catch:{ all -> 0x025e }
-                    goto L_0x0262
-                L_0x025e:
-                    r0 = move-exception
-                    org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-                L_0x0262:
-                    org.telegram.ui.Components.AnimatedFileDrawable r0 = org.telegram.ui.Components.AnimatedFileDrawable.this
-                    java.lang.Runnable r0 = r0.uiRunnable
-                    org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
-                    return
-                */
-                throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AnimatedFileDrawable.AnonymousClass4.run():void");
-            }
-        };
-        this.mStartTask = new AnimatedFileDrawable$$ExternalSyntheticLambda0(this);
-        this.path = file;
-        this.streamFileSize = j4;
-        this.currentAccount = i;
-        this.renderingHeight = i5;
-        this.renderingWidth = i4;
-        this.precache = cacheOptions != null && i4 > 0 && i5 > 0;
-        this.document = tLRPC$Document2;
-        getPaint().setFlags(3);
-        if (!(j4 == 0 || (tLRPC$Document2 == null && imageLocation == null))) {
-            this.stream = new AnimatedFileDrawableStream(tLRPC$Document, imageLocation, obj, i, z2);
-        }
-        if (!z || this.precache) {
-            j3 = 0;
-            iArr = iArr2;
-            r2 = 0;
-            c = 1;
-        } else {
-            j3 = 0;
-            r2 = 0;
-            c = 1;
-            iArr = iArr2;
-            this.nativePtr = createDecoder(file.getAbsolutePath(), iArr2, this.currentAccount, this.streamFileSize, this.stream, z2);
-            if (this.nativePtr != 0 && (iArr[0] > 3840 || iArr[1] > 3840)) {
-                destroyDecoder(this.nativePtr);
-                this.nativePtr = 0;
-            }
-            updateScaleFactor();
-            this.decoderCreated = true;
-        }
-        if (this.precache) {
-            this.nativePtr = createDecoder(file.getAbsolutePath(), iArr, this.currentAccount, this.streamFileSize, this.stream, z2);
-            if (this.nativePtr == j3 || (iArr[r2] <= 3840 && iArr[c] <= 3840)) {
-                this.bitmapsCache = new BitmapsCache(file, this, cacheOptions, this.renderingWidth, this.renderingHeight);
-            } else {
-                destroyDecoder(this.nativePtr);
-                this.nativePtr = j3;
-            }
-        }
-        long j6 = j2;
-        if (j6 != j3) {
-            seekTo(j6, r2);
-        }
+    /* JADX WARNING: Removed duplicated region for block: B:38:0x0154  */
+    /* JADX WARNING: Removed duplicated region for block: B:40:? A[RETURN, SYNTHETIC] */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public AnimatedFileDrawable(java.io.File r18, boolean r19, long r20, org.telegram.tgnet.TLRPC$Document r22, org.telegram.messenger.ImageLocation r23, java.lang.Object r24, long r25, int r27, boolean r28, int r29, int r30, org.telegram.messenger.utils.BitmapsCache.CacheOptions r31) {
+        /*
+            r17 = this;
+            r7 = r17
+            r0 = r20
+            r2 = r22
+            r8 = r25
+            r3 = r29
+            r4 = r30
+            r17.<init>()
+            r5 = 50
+            r7.invalidateAfter = r5
+            r5 = 5
+            int[] r6 = new int[r5]
+            r7.metaData = r6
+            r10 = -1
+            r7.pendingSeekTo = r10
+            r7.pendingSeekToUI = r10
+            java.lang.Object r5 = new java.lang.Object
+            r5.<init>()
+            r7.sync = r5
+            android.graphics.RectF r5 = new android.graphics.RectF
+            r5.<init>()
+            r7.actualDrawRect = r5
+            r5 = 4
+            int[] r5 = new int[r5]
+            r7.roundRadius = r5
+            android.graphics.Matrix r5 = new android.graphics.Matrix
+            r5.<init>()
+            r7.shaderMatrix = r5
+            android.graphics.Path r5 = new android.graphics.Path
+            r5.<init>()
+            r7.roundPath = r5
+            r5 = 1065353216(0x3var_, float:1.0)
+            r7.scaleX = r5
+            r7.scaleY = r5
+            android.graphics.RectF r10 = new android.graphics.RectF
+            r10.<init>()
+            r7.dstRect = r10
+            r7.scaleFactor = r5
+            java.util.ArrayList r5 = new java.util.ArrayList
+            r5.<init>()
+            r7.secondParentViews = r5
+            java.util.ArrayList r5 = new java.util.ArrayList
+            r5.<init>()
+            r7.parents = r5
+            r15 = 1
+            r7.invalidatePath = r15
+            org.telegram.ui.Components.AnimatedFileDrawable$1 r5 = new org.telegram.ui.Components.AnimatedFileDrawable$1
+            r5.<init>()
+            r7.uiRunnableNoFrame = r5
+            org.telegram.ui.Components.AnimatedFileDrawable$2 r5 = new org.telegram.ui.Components.AnimatedFileDrawable$2
+            r5.<init>()
+            r7.uiRunnableGenerateCache = r5
+            org.telegram.ui.Components.AnimatedFileDrawable$3 r5 = new org.telegram.ui.Components.AnimatedFileDrawable$3
+            r5.<init>()
+            r7.uiRunnable = r5
+            org.telegram.ui.Components.AnimatedFileDrawable$4 r5 = new org.telegram.ui.Components.AnimatedFileDrawable$4
+            r5.<init>()
+            r7.loadFrameRunnable = r5
+            org.telegram.ui.Components.AnimatedFileDrawable$$ExternalSyntheticLambda0 r5 = new org.telegram.ui.Components.AnimatedFileDrawable$$ExternalSyntheticLambda0
+            r5.<init>(r7)
+            r7.mStartTask = r5
+            r13 = r18
+            r7.path = r13
+            r7.streamFileSize = r0
+            r5 = r27
+            r7.currentAccount = r5
+            r7.renderingHeight = r4
+            r7.renderingWidth = r3
+            r14 = 0
+            if (r31 == 0) goto L_0x0099
+            if (r3 <= 0) goto L_0x0099
+            if (r4 <= 0) goto L_0x0099
+            r3 = 1
+            goto L_0x009a
+        L_0x0099:
+            r3 = 0
+        L_0x009a:
+            r7.precache = r3
+            r7.document = r2
+            android.graphics.Paint r3 = r17.getPaint()
+            r4 = 3
+            r3.setFlags(r4)
+            r11 = 0
+            int r3 = (r0 > r11 ? 1 : (r0 == r11 ? 0 : -1))
+            if (r3 == 0) goto L_0x00c2
+            if (r2 != 0) goto L_0x00b0
+            if (r23 == 0) goto L_0x00c2
+        L_0x00b0:
+            org.telegram.messenger.AnimatedFileDrawableStream r10 = new org.telegram.messenger.AnimatedFileDrawableStream
+            r0 = r10
+            r1 = r22
+            r2 = r23
+            r3 = r24
+            r4 = r27
+            r5 = r28
+            r0.<init>(r1, r2, r3, r4, r5)
+            r7.stream = r10
+        L_0x00c2:
+            r0 = 3840(0xvar_, float:5.381E-42)
+            if (r19 == 0) goto L_0x00fe
+            boolean r1 = r7.precache
+            if (r1 != 0) goto L_0x00fe
+            java.lang.String r10 = r18.getAbsolutePath()
+            int r1 = r7.currentAccount
+            long r2 = r7.streamFileSize
+            org.telegram.messenger.AnimatedFileDrawableStream r4 = r7.stream
+            r8 = r11
+            r11 = r6
+            r12 = r1
+            r5 = 0
+            r13 = r2
+            r1 = 1
+            r15 = r4
+            r16 = r28
+            long r2 = createDecoder(r10, r11, r12, r13, r15, r16)
+            r7.nativePtr = r2
+            long r2 = r7.nativePtr
+            int r4 = (r2 > r8 ? 1 : (r2 == r8 ? 0 : -1))
+            if (r4 == 0) goto L_0x00f8
+            r2 = r6[r5]
+            if (r2 > r0) goto L_0x00f1
+            r2 = r6[r1]
+            if (r2 <= r0) goto L_0x00f8
+        L_0x00f1:
+            long r2 = r7.nativePtr
+            destroyDecoder(r2)
+            r7.nativePtr = r8
+        L_0x00f8:
+            r17.updateScaleFactor()
+            r7.decoderCreated = r1
+            goto L_0x0101
+        L_0x00fe:
+            r8 = r11
+            r1 = 1
+            r5 = 0
+        L_0x0101:
+            boolean r2 = r7.precache
+            if (r2 == 0) goto L_0x014c
+            java.lang.String r10 = r18.getAbsolutePath()
+            int r12 = r7.currentAccount
+            long r13 = r7.streamFileSize
+            org.telegram.messenger.AnimatedFileDrawableStream r15 = r7.stream
+            r11 = r6
+            r16 = r28
+            long r2 = createDecoder(r10, r11, r12, r13, r15, r16)
+            r7.nativePtr = r2
+            long r2 = r7.nativePtr
+            int r4 = (r2 > r8 ? 1 : (r2 == r8 ? 0 : -1))
+            if (r4 == 0) goto L_0x0132
+            r2 = r6[r5]
+            if (r2 > r0) goto L_0x0126
+            r2 = r6[r1]
+            if (r2 <= r0) goto L_0x0132
+        L_0x0126:
+            long r0 = r7.nativePtr
+            destroyDecoder(r0)
+            r7.nativePtr = r8
+            r0 = r25
+            r2 = r8
+            r12 = 0
+            goto L_0x0150
+        L_0x0132:
+            org.telegram.messenger.utils.BitmapsCache r10 = new org.telegram.messenger.utils.BitmapsCache
+            int r4 = r7.renderingWidth
+            int r6 = r7.renderingHeight
+            boolean r0 = r7.limitFps
+            r11 = r0 ^ 1
+            r0 = r10
+            r1 = r18
+            r2 = r17
+            r3 = r31
+            r12 = 0
+            r5 = r6
+            r6 = r11
+            r0.<init>(r1, r2, r3, r4, r5, r6)
+            r7.bitmapsCache = r10
+            goto L_0x014d
+        L_0x014c:
+            r12 = 0
+        L_0x014d:
+            r0 = r25
+            r2 = r8
+        L_0x0150:
+            int r4 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
+            if (r4 == 0) goto L_0x0157
+            r7.seekTo(r0, r12)
+        L_0x0157:
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AnimatedFileDrawable.<init>(java.io.File, boolean, long, org.telegram.tgnet.TLRPC$Document, org.telegram.messenger.ImageLocation, java.lang.Object, long, int, boolean, int, int, org.telegram.messenger.utils.BitmapsCache$CacheOptions):void");
     }
 
     public void setIsWebmSticker(boolean z) {
@@ -784,12 +526,37 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
                 scheduleNextGetFrame();
             }
         }
+        checkCacheCancel();
     }
 
     public void removeParent(ImageReceiver imageReceiver) {
         this.parents.remove(imageReceiver);
         if (this.parents.size() == 0) {
             this.repeatCount = 0;
+        }
+        checkCacheCancel();
+    }
+
+    public void checkCacheCancel() {
+        Runnable runnable;
+        if (this.bitmapsCache != null) {
+            boolean isEmpty = this.parents.isEmpty();
+            if (isEmpty && this.cancelCache == null) {
+                AnimatedFileDrawable$$ExternalSyntheticLambda1 animatedFileDrawable$$ExternalSyntheticLambda1 = new AnimatedFileDrawable$$ExternalSyntheticLambda1(this);
+                this.cancelCache = animatedFileDrawable$$ExternalSyntheticLambda1;
+                AndroidUtilities.runOnUIThread(animatedFileDrawable$$ExternalSyntheticLambda1, 600);
+            } else if (!isEmpty && (runnable = this.cancelCache) != null) {
+                AndroidUtilities.cancelRunOnUIThread(runnable);
+                this.cancelCache = null;
+            }
+        }
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$checkCacheCancel$1() {
+        BitmapsCache bitmapsCache2 = this.bitmapsCache;
+        if (bitmapsCache2 != null) {
+            bitmapsCache2.cancelCreate();
         }
     }
 
@@ -1042,7 +809,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
         drawInternal(canvas, false, System.currentTimeMillis());
     }
 
-    public void drawInBackground(Canvas canvas, float f, float f2, float f3, float f4, int i) {
+    public void drawInBackground(Canvas canvas, float f, float f2, float f3, float f4, int i, ColorFilter colorFilter) {
         if (this.dstRectBackground == null) {
             this.dstRectBackground = new RectF();
             Paint paint = new Paint();
@@ -1050,6 +817,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
             paint.setFilterBitmap(true);
         }
         this.backgroundPaint.setAlpha(i);
+        this.backgroundPaint.setColorFilter(colorFilter);
         this.dstRectBackground.set(f, f2, f3 + f, f4 + f2);
         drawInternal(canvas, true, 0);
     }
@@ -1160,7 +928,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
             android.graphics.BitmapShader r2 = r0.renderingShader
             if (r2 != 0) goto L_0x00be
             android.graphics.BitmapShader r2 = new android.graphics.BitmapShader
-            android.graphics.Bitmap r6 = r0.backgroundBitmap
+            android.graphics.Bitmap r6 = r0.renderingBitmap
             android.graphics.Shader$TileMode r11 = android.graphics.Shader.TileMode.CLAMP
             r2.<init>(r6, r11, r11)
             r0.renderingShader = r2

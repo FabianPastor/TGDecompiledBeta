@@ -681,7 +681,7 @@ public class SuggestEmojiView extends FrameLayout implements NotificationCenter.
             public void setImageDrawable(Drawable drawable2) {
                 Drawable drawable3 = this.drawable;
                 if (drawable3 instanceof AnimatedEmojiDrawable) {
-                    ((AnimatedEmojiDrawable) drawable3).removeView((View) this);
+                    ((AnimatedEmojiDrawable) drawable3).removeView((Drawable.Callback) this);
                 }
                 this.drawable = drawable2;
                 if ((drawable2 instanceof AnimatedEmojiDrawable) && this.attached) {
@@ -723,7 +723,7 @@ public class SuggestEmojiView extends FrameLayout implements NotificationCenter.
             public void detach() {
                 Drawable drawable2 = this.drawable;
                 if (drawable2 instanceof AnimatedEmojiDrawable) {
-                    ((AnimatedEmojiDrawable) drawable2).removeView((View) this);
+                    ((AnimatedEmojiDrawable) drawable2).removeView((Drawable.Callback) this);
                 }
                 this.attached = false;
             }

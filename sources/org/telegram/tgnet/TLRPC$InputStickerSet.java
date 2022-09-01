@@ -26,6 +26,12 @@ public abstract class TLRPC$InputStickerSet extends TLObject {
             case 42402760:
                 tLRPC$InputStickerSet = new TLRPC$TL_inputStickerSetAnimatedEmoji();
                 break;
+            case 80008398:
+                tLRPC$InputStickerSet = new TLRPC$TL_inputStickerSetEmojiGenericAnimations();
+                break;
+            case 701560302:
+                tLRPC$InputStickerSet = new TLRPC$TL_inputStickerSetEmojiDefaultStatuses();
+                break;
             default:
                 tLRPC$InputStickerSet = null;
                 break;

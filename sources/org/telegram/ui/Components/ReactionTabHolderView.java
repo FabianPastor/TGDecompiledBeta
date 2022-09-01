@@ -21,10 +21,10 @@ import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.R;
-import org.telegram.messenger.SvgHelper;
+import org.telegram.tgnet.TLRPC$ReactionCount;
 import org.telegram.tgnet.TLRPC$TL_availableReaction;
-import org.telegram.tgnet.TLRPC$TL_reactionCount;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble;
 
 public class ReactionTabHolderView extends FrameLayout {
     private Paint bgPaint = new Paint(1);
@@ -37,7 +37,7 @@ public class ReactionTabHolderView extends FrameLayout {
     View overlaySelectorView;
     private float radius;
     private BackupImageView reactView;
-    private String reaction;
+    private ReactionsLayoutInBubble.VisibleReaction reaction;
     private RectF rect;
 
     public ReactionTabHolderView(Context context) {
@@ -91,22 +91,26 @@ public class ReactionTabHolderView extends FrameLayout {
         this.reactView.setVisibility(8);
     }
 
-    public void setCounter(int i, TLRPC$TL_reactionCount tLRPC$TL_reactionCount) {
-        int i2 = tLRPC$TL_reactionCount.count;
+    public void setCounter(int i, TLRPC$ReactionCount tLRPC$ReactionCount) {
+        int i2 = tLRPC$ReactionCount.count;
         this.count = i2;
         this.counterView.setText(String.format("%s", new Object[]{LocaleController.formatShortNumber(i2, (int[]) null)}));
-        String str = tLRPC$TL_reactionCount.reaction;
-        this.reaction = null;
-        for (TLRPC$TL_availableReaction next : MediaDataController.getInstance(i).getReactionsList()) {
-            if (next.reaction.equals(str)) {
-                SvgHelper.SvgDrawable svgThumb = DocumentObject.getSvgThumb(next.static_icon, "windowBackgroundGray", 1.0f);
-                this.reaction = next.reaction;
-                this.reactView.setImage(ImageLocation.getForDocument(next.center_icon), "40_40_lastframe", "webp", (Drawable) svgThumb, (Object) next);
-                this.reactView.setVisibility(0);
-                this.iconView.setVisibility(8);
-                return;
+        ReactionsLayoutInBubble.VisibleReaction fromTLReaction = ReactionsLayoutInBubble.VisibleReaction.fromTLReaction(tLRPC$ReactionCount.reaction);
+        this.reaction = fromTLReaction;
+        if (fromTLReaction.emojicon != null) {
+            for (TLRPC$TL_availableReaction next : MediaDataController.getInstance(i).getReactionsList()) {
+                if (next.reaction.equals(this.reaction.emojicon)) {
+                    this.reactView.setImage(ImageLocation.getForDocument(next.center_icon), "40_40_lastframe", "webp", (Drawable) DocumentObject.getSvgThumb(next.static_icon, "windowBackgroundGray", 1.0f), (Object) next);
+                    this.reactView.setVisibility(0);
+                    this.iconView.setVisibility(8);
+                    return;
+                }
             }
+            return;
         }
+        this.reactView.setAnimatedEmojiDrawable(new AnimatedEmojiDrawable(0, i, this.reaction.documentId));
+        this.reactView.setVisibility(0);
+        this.iconView.setVisibility(8);
     }
 
     /* access modifiers changed from: protected */
@@ -125,9 +129,9 @@ public class ReactionTabHolderView extends FrameLayout {
         if (((double) this.outlineProgress) > 0.5d) {
             accessibilityNodeInfo.setSelected(true);
         }
-        String str = this.reaction;
-        if (str != null) {
-            accessibilityNodeInfo.setText(LocaleController.formatPluralString("AccDescrNumberOfPeopleReactions", this.count, str));
+        ReactionsLayoutInBubble.VisibleReaction visibleReaction = this.reaction;
+        if (visibleReaction != null) {
+            accessibilityNodeInfo.setText(LocaleController.formatPluralString("AccDescrNumberOfPeopleReactions", this.count, visibleReaction));
             return;
         }
         accessibilityNodeInfo.setText(LocaleController.formatPluralString("AccDescrNumberOfReactions", this.count, new Object[0]));

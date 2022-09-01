@@ -11,6 +11,6 @@ public final /* synthetic */ class PrivacySettingsActivity$$ExternalSyntheticLam
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        PrivacySettingsActivity.lambda$onFragmentDestroy$0(tLObject, tLRPC$TL_error);
+        PrivacySettingsActivity.lambda$onFragmentDestroy$1(tLObject, tLRPC$TL_error);
     }
 }

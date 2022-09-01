@@ -29,6 +29,7 @@ import android.os.PowerManager;
 import android.os.Vibrator;
 import android.text.Editable;
 import android.text.Layout;
+import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -3701,18 +3702,12 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             android.widget.FrameLayout r0 = r7.audioVideoButtonContainer
             r0.setImportantForAccessibility(r2)
             android.widget.FrameLayout r0 = r7.audioVideoButtonContainer
-            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda29 r2 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda29
-            r2.<init>(r7, r10)
-            r0.setOnTouchListener(r2)
+            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda29 r5 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda29
+            r5.<init>(r7, r10)
+            r0.setOnTouchListener(r5)
             org.telegram.ui.Components.ChatActivityEnterViewAnimatedIconView r0 = new org.telegram.ui.Components.ChatActivityEnterViewAnimatedIconView
             r0.<init>(r8)
             r7.audioVideoSendButton = r0
-            int r2 = org.telegram.messenger.R.string.AccDescrVoiceMessage
-            java.lang.String r5 = "AccDescrVoiceMessage"
-            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r5, r2)
-            r0.setContentDescription(r2)
-            org.telegram.ui.Components.ChatActivityEnterViewAnimatedIconView r0 = r7.audioVideoSendButton
-            r2 = 1
             r0.setFocusable(r2)
             org.telegram.ui.Components.ChatActivityEnterViewAnimatedIconView r0 = r7.audioVideoSendButton
             r0.setImportantForAccessibility(r2)
@@ -3776,12 +3771,12 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             android.widget.ImageView r0 = r7.cancelBotButton
             r0.setAlpha(r6)
             r0 = 21
-            if (r13 < r0) goto L_0x0a42
+            if (r13 < r0) goto L_0x0a34
             android.widget.ImageView r0 = r7.cancelBotButton
             int r5 = r7.getThemedColor(r1)
             android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r5)
             r0.setBackgroundDrawable(r5)
-        L_0x0a42:
+        L_0x0a34:
             android.widget.FrameLayout r0 = r7.sendButtonContainer
             android.widget.ImageView r5 = r7.cancelBotButton
             r9 = 1111490560(0x42400000, float:48.0)
@@ -3792,7 +3787,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             r5.<init>(r7)
             r0.setOnClickListener(r5)
             boolean r0 = r37.isInScheduleMode()
-            if (r0 == 0) goto L_0x0a8c
+            if (r0 == 0) goto L_0x0a7e
             android.content.res.Resources r0 = r38.getResources()
             int r5 = org.telegram.messenger.R.drawable.input_schedule
             android.graphics.drawable.Drawable r0 = r0.getDrawable(r5)
@@ -3806,8 +3801,8 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             android.graphics.drawable.Drawable r0 = r0.getDrawable(r5)
             android.graphics.drawable.Drawable r0 = r0.mutate()
             r7.inactinveSendButtonDrawable = r0
-            goto L_0x0ab8
-        L_0x0a8c:
+            goto L_0x0aaa
+        L_0x0a7e:
             android.content.res.Resources r0 = r38.getResources()
             int r5 = org.telegram.messenger.R.drawable.ic_send
             android.graphics.drawable.Drawable r0 = r0.getDrawable(r5)
@@ -3821,7 +3816,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             android.graphics.drawable.Drawable r0 = r0.getDrawable(r5)
             android.graphics.drawable.Drawable r0 = r0.mutate()
             r7.inactinveSendButtonDrawable = r0
-        L_0x0ab8:
+        L_0x0aaa:
             org.telegram.ui.Components.ChatActivityEnterView$30 r0 = new org.telegram.ui.Components.ChatActivityEnterView$30
             r0.<init>(r8)
             r7.sendButton = r0
@@ -3843,7 +3838,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             android.view.View r5 = r7.sendButton
             r5.setAlpha(r6)
             r5 = 21
-            if (r13 < r5) goto L_0x0b0c
+            if (r13 < r5) goto L_0x0afe
             android.view.View r5 = r7.sendButton
             r9 = 24
             int r10 = android.graphics.Color.red(r0)
@@ -3853,7 +3848,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             r9 = 1
             android.graphics.drawable.Drawable r0 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r0, r9)
             r5.setBackgroundDrawable(r0)
-        L_0x0b0c:
+        L_0x0afe:
             android.widget.FrameLayout r0 = r7.sendButtonContainer
             android.view.View r5 = r7.sendButton
             r9 = 1111490560(0x42400000, float:48.0)
@@ -3928,12 +3923,12 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             android.widget.ImageView r0 = r7.expandStickersButton
             r0.setAlpha(r6)
             r0 = 21
-            if (r13 < r0) goto L_0x0bd7
+            if (r13 < r0) goto L_0x0bc9
             android.widget.ImageView r0 = r7.expandStickersButton
             int r1 = r7.getThemedColor(r1)
             android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r1)
             r0.setBackgroundDrawable(r1)
-        L_0x0bd7:
+        L_0x0bc9:
             android.widget.FrameLayout r0 = r7.sendButtonContainer
             android.widget.ImageView r1 = r7.expandStickersButton
             r3 = 1111490560(0x42400000, float:48.0)
@@ -6104,7 +6099,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                 if (playingMessageObject != null && playingMessageObject == this.audioToSendMessageObject) {
                     MediaController.getInstance().cleanupPlayer(true, true);
                 }
-                SendMessagesHelper.getInstance(this.currentAccount).sendMessage(this.audioToSend, (VideoEditedInfo) null, this.audioToSendPath, this.dialog_id, this.replyingMessageObject, getThreadMessage(), (String) null, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, z, i, 0, (Object) null, (MessageObject.SendAnimationData) null);
+                SendMessagesHelper.getInstance(this.currentAccount).sendMessage(this.audioToSend, (VideoEditedInfo) null, this.audioToSendPath, this.dialog_id, this.replyingMessageObject, getThreadMessage(), (String) null, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, z, i, 0, (Object) null, (MessageObject.SendAnimationData) null, false);
                 ChatActivityEnterViewDelegate chatActivityEnterViewDelegate2 = this.delegate;
                 if (chatActivityEnterViewDelegate2 != null) {
                     chatActivityEnterViewDelegate2.onMessageSend((CharSequence) null, z, i);
@@ -6193,7 +6188,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         if (baseFragment != null) {
             new PremiumFeatureBottomSheet(baseFragment, 11, false).show();
         } else if (baseFragment.getContext() instanceof LaunchActivity) {
-            ((LaunchActivity) baseFragment.getContext()).lambda$runLinkRequest$61(new PremiumPreviewFragment((String) null));
+            ((LaunchActivity) baseFragment.getContext()).lambda$runLinkRequest$62(new PremiumPreviewFragment((String) null));
         }
     }
 
@@ -6217,13 +6212,18 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                     AndroidUtilities.runOnUIThread(new ChatActivityEnterView$$ExternalSyntheticLambda38(this), 200);
                 }
             }
-            CharSequence[] charSequenceArr = {AndroidUtilities.getTrimmedString(this.messageEditText.getText())};
+            CharSequence text = this.messageEditText.getText();
+            MessageObject messageObject = this.editingMessageObject;
+            if (messageObject == null || messageObject.type != 19) {
+                text = AndroidUtilities.getTrimmedString(text);
+            }
+            CharSequence[] charSequenceArr = {text};
             ArrayList<TLRPC$MessageEntity> entities = MediaDataController.getInstance(this.currentAccount).getEntities(charSequenceArr, supportsSendingNewEntities());
             if (!TextUtils.equals(charSequenceArr[0], this.editingMessageObject.messageText) || ((entities != null && !entities.isEmpty()) || (((entities == null || entities.isEmpty()) && !this.editingMessageObject.messageOwner.entities.isEmpty()) || (this.editingMessageObject.messageOwner.media instanceof TLRPC$TL_messageMediaWebPage)))) {
-                MessageObject messageObject = this.editingMessageObject;
-                messageObject.editingMessage = charSequenceArr[0];
-                messageObject.editingMessageEntities = entities;
-                messageObject.editingMessageSearchWebPage = this.messageWebPageSearch;
+                MessageObject messageObject2 = this.editingMessageObject;
+                messageObject2.editingMessage = charSequenceArr[0];
+                messageObject2.editingMessageEntities = entities;
+                messageObject2.editingMessageSearchWebPage = this.messageWebPageSearch;
                 SendMessagesHelper.getInstance(this.currentAccount).editMessage(this.editingMessageObject, (TLRPC$TL_photo) null, (VideoEditedInfo) null, (TLRPC$TL_document) null, (String) null, (HashMap<String, String>) null, false, (Object) null);
             }
             setEditingMessageObject((MessageObject) null, false);
@@ -6241,12 +6241,18 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         int i3;
         int i4;
         int i5;
+        boolean z2;
         ChatActivity chatActivity;
-        CharSequence trimmedString = AndroidUtilities.getTrimmedString(charSequence);
+        int[] iArr = new int[1];
+        CharSequence charSequence2 = charSequence;
+        Emoji.parseEmojis(charSequence2, iArr);
+        boolean z3 = iArr[0] <= 100;
+        if (!z3) {
+            charSequence2 = AndroidUtilities.getTrimmedString(charSequence);
+        }
         boolean supportsSendingNewEntities = supportsSendingNewEntities();
         int i6 = this.accountInstance.getMessagesController().maxMessageLength;
-        char c = 0;
-        if (trimmedString.length() == 0) {
+        if (charSequence2.length() == 0) {
             return false;
         }
         if (!(this.delegate == null || (chatActivity = this.parentFragment) == null)) {
@@ -6257,7 +6263,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         int i7 = 0;
         while (true) {
             int i8 = i7 + i6;
-            if (trimmedString.length() > i8) {
+            if (charSequence2.length() > i8) {
                 int i9 = i8 - 1;
                 int i10 = 0;
                 i4 = -1;
@@ -6265,8 +6271,8 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                 i2 = -1;
                 while (true) {
                     if (i9 > i7 && i10 < 300) {
-                        char charAt = trimmedString.charAt(i9);
-                        char charAt2 = i9 > 0 ? trimmedString.charAt(i9 - 1) : ' ';
+                        char charAt = charSequence2.charAt(i9);
+                        char charAt2 = i9 > 0 ? charSequence2.charAt(i9 - 1) : ' ';
                         if (charAt == 10 && charAt2 == 10) {
                             i5 = i9;
                             break;
@@ -6290,9 +6296,21 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                 i3 = -1;
                 i2 = -1;
             }
-            int min = i5 > 0 ? i5 : i2 > 0 ? i2 : i4 > 0 ? i4 : i3 > 0 ? i3 : Math.min(i8, trimmedString.length());
-            CharSequence[] charSequenceArr = new CharSequence[1];
-            charSequenceArr[c] = AndroidUtilities.getTrimmedString(trimmedString.subSequence(i7, min));
+            int min = Math.min(i8, charSequence2.length());
+            if (i5 > 0) {
+                min = i5;
+            } else if (i2 > 0) {
+                min = i2;
+            } else if (i4 > 0) {
+                min = i4;
+            } else if (i3 > 0) {
+                min = i3;
+            }
+            CharSequence subSequence = charSequence2.subSequence(i7, min);
+            if (!z3) {
+                subSequence = AndroidUtilities.getTrimmedString(subSequence);
+            }
+            CharSequence[] charSequenceArr = {subSequence};
             ArrayList<TLRPC$MessageEntity> entities = MediaDataController.getInstance(this.currentAccount).getEntities(charSequenceArr, supportsSendingNewEntities);
             MessageObject.SendAnimationData sendAnimationData = null;
             if (!this.delegate.hasForwardingMessages()) {
@@ -6301,16 +6319,30 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                 sendAnimationData.height = dp;
                 sendAnimationData.width = dp;
                 this.messageEditText.getLocationInWindow(this.location);
-                sendAnimationData.x = (float) (this.location[c] + AndroidUtilities.dp(11.0f));
+                sendAnimationData.x = (float) (this.location[0] + AndroidUtilities.dp(11.0f));
                 sendAnimationData.y = (float) (this.location[1] + AndroidUtilities.dp(19.0f));
             }
-            int i11 = min;
-            SendMessagesHelper.getInstance(this.currentAccount).sendMessage(charSequenceArr[c].toString(), this.dialog_id, this.replyingMessageObject, getThreadMessage(), this.messageWebPage, this.messageWebPageSearch, entities, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, z, i, sendAnimationData);
-            i7 = i11 + 1;
-            if (i11 == trimmedString.length()) {
+            MessageObject.SendAnimationData sendAnimationData2 = sendAnimationData;
+            if (charSequence2 instanceof Spannable) {
+                AnimatedEmojiSpan[] animatedEmojiSpanArr = (AnimatedEmojiSpan[]) ((Spannable) charSequence2).getSpans(0, charSequence2.length(), AnimatedEmojiSpan.class);
+                int i11 = 0;
+                while (true) {
+                    if (i11 >= animatedEmojiSpanArr.length) {
+                        break;
+                    } else if (animatedEmojiSpanArr[i11].fromEmojiKeyboard) {
+                        z2 = true;
+                        break;
+                    } else {
+                        i11++;
+                    }
+                }
+            }
+            z2 = false;
+            SendMessagesHelper.getInstance(this.currentAccount).sendMessage(charSequenceArr[0].toString(), this.dialog_id, this.replyingMessageObject, getThreadMessage(), this.messageWebPage, this.messageWebPageSearch, entities, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, z, i, sendAnimationData2, z2);
+            i7 = min + 1;
+            if (min == charSequence2.length()) {
                 return true;
             }
-            c = 0;
         }
     }
 
@@ -8602,10 +8634,10 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                     tLRPC$User = this.accountInstance.getMessagesController().getUser(Long.valueOf(messageObject2.messageOwner.from_id.user_id));
                 }
                 if ((this.botCount != 1 || z2) && tLRPC$User != null && tLRPC$User.bot && !str3.contains("@")) {
-                    SendMessagesHelper.getInstance(this.currentAccount).sendMessage(String.format(Locale.US, "%s@%s", new Object[]{str3, tLRPC$User.username}), this.dialog_id, this.replyingMessageObject, getThreadMessage(), (TLRPC$WebPage) null, false, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, true, 0, (MessageObject.SendAnimationData) null);
+                    SendMessagesHelper.getInstance(this.currentAccount).sendMessage(String.format(Locale.US, "%s@%s", new Object[]{str3, tLRPC$User.username}), this.dialog_id, this.replyingMessageObject, getThreadMessage(), (TLRPC$WebPage) null, false, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, true, 0, (MessageObject.SendAnimationData) null, false);
                     return;
                 }
-                SendMessagesHelper.getInstance(this.currentAccount).sendMessage(str, this.dialog_id, this.replyingMessageObject, getThreadMessage(), (TLRPC$WebPage) null, false, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, true, 0, (MessageObject.SendAnimationData) null);
+                SendMessagesHelper.getInstance(this.currentAccount).sendMessage(str, this.dialog_id, this.replyingMessageObject, getThreadMessage(), (TLRPC$WebPage) null, false, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, true, 0, (MessageObject.SendAnimationData) null, false);
             } else {
                 ChatActivityEnterViewDelegate chatActivityEnterViewDelegate2 = this.delegate;
                 if (chatActivityEnterViewDelegate2 != null) {
@@ -9766,7 +9798,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             return false;
         }
         if (tLRPC$KeyboardButton2 instanceof TLRPC$TL_keyboardButton) {
-            SendMessagesHelper.getInstance(this.currentAccount).sendMessage(tLRPC$KeyboardButton2.text, this.dialog_id, messageObject, getThreadMessage(), (TLRPC$WebPage) null, false, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, true, 0, (MessageObject.SendAnimationData) null);
+            SendMessagesHelper.getInstance(this.currentAccount).sendMessage(tLRPC$KeyboardButton2.text, this.dialog_id, messageObject, getThreadMessage(), (TLRPC$WebPage) null, false, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, true, 0, (MessageObject.SendAnimationData) null, false);
         } else if (tLRPC$KeyboardButton2 instanceof TLRPC$TL_keyboardButtonUrl) {
             AlertsCreator.showOpenUrlAlert(this.parentFragment, tLRPC$KeyboardButton2.url, false, true, this.resourcesProvider);
         } else if (tLRPC$KeyboardButton2 instanceof TLRPC$TL_keyboardButtonRequestPhone) {
@@ -9978,12 +10010,12 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                     int unused3 = ChatActivityEnterView.this.innerTextChange = 0;
                 }
 
-                public void onCustomEmojiSelected(long j, TLRPC$Document tLRPC$Document, String str) {
-                    AndroidUtilities.runOnUIThread(new ChatActivityEnterView$57$$ExternalSyntheticLambda1(this, str, tLRPC$Document, j));
+                public void onCustomEmojiSelected(long j, TLRPC$Document tLRPC$Document, String str, boolean z) {
+                    AndroidUtilities.runOnUIThread(new ChatActivityEnterView$57$$ExternalSyntheticLambda1(this, str, tLRPC$Document, j, z));
                 }
 
                 /* access modifiers changed from: private */
-                public /* synthetic */ void lambda$onCustomEmojiSelected$0(String str, TLRPC$Document tLRPC$Document, long j) {
+                public /* synthetic */ void lambda$onCustomEmojiSelected$0(String str, TLRPC$Document tLRPC$Document, long j, boolean z) {
                     AnimatedEmojiSpan animatedEmojiSpan;
                     int selectionEnd = ChatActivityEnterView.this.messageEditText.getSelectionEnd();
                     if (selectionEnd < 0) {
@@ -9999,6 +10031,9 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                             animatedEmojiSpan = new AnimatedEmojiSpan(tLRPC$Document, ChatActivityEnterView.this.messageEditText.getPaint().getFontMetricsInt());
                         } else {
                             animatedEmojiSpan = new AnimatedEmojiSpan(j, ChatActivityEnterView.this.messageEditText.getPaint().getFontMetricsInt());
+                        }
+                        if (!z) {
+                            animatedEmojiSpan.fromEmojiKeyboard = true;
                         }
                         animatedEmojiSpan.cacheType = AnimatedEmojiDrawable.getCacheTypeForEnterView();
                         spannableString.setSpan(animatedEmojiSpan, 0, spannableString.length(), 33);
@@ -10049,13 +10084,13 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
 
                 public void onStickersSettingsClick() {
                     if (ChatActivityEnterView.this.parentFragment != null) {
-                        ChatActivityEnterView.this.parentFragment.presentFragment(new StickersActivity(0));
+                        ChatActivityEnterView.this.parentFragment.presentFragment(new StickersActivity(0, (ArrayList<TLRPC$TL_messages_stickerSet>) null));
                     }
                 }
 
-                public void onEmojiSettingsClick() {
+                public void onEmojiSettingsClick(ArrayList<TLRPC$TL_messages_stickerSet> arrayList) {
                     if (ChatActivityEnterView.this.parentFragment != null) {
-                        ChatActivityEnterView.this.parentFragment.presentFragment(new StickersActivity(5));
+                        ChatActivityEnterView.this.parentFragment.presentFragment(new StickersActivity(5, arrayList));
                     }
                 }
 
@@ -10075,7 +10110,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                         }
                         if (obj3 instanceof TLRPC$Document) {
                             TLRPC$Document tLRPC$Document = (TLRPC$Document) obj3;
-                            SendMessagesHelper.getInstance(ChatActivityEnterView.this.currentAccount).sendSticker(tLRPC$Document, str, ChatActivityEnterView.this.dialog_id, ChatActivityEnterView.this.replyingMessageObject, ChatActivityEnterView.this.getThreadMessage(), obj2, (MessageObject.SendAnimationData) null, z, i);
+                            SendMessagesHelper.getInstance(ChatActivityEnterView.this.currentAccount).sendSticker(tLRPC$Document, str, ChatActivityEnterView.this.dialog_id, ChatActivityEnterView.this.replyingMessageObject, ChatActivityEnterView.this.getThreadMessage(), obj2, (MessageObject.SendAnimationData) null, z, i, false);
                             MediaDataController.getInstance(ChatActivityEnterView.this.currentAccount).addRecentGif(tLRPC$Document, (int) (System.currentTimeMillis() / 1000), true);
                             if (DialogObject.isEncryptedDialog(ChatActivityEnterView.this.dialog_id)) {
                                 ChatActivityEnterView.this.accountInstance.getMessagesController().saveGif(obj4, tLRPC$Document);
@@ -10319,7 +10354,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                 this.emojiView.hideSearchKeyboard();
             }
             setStickersExpanded(false, true, false);
-            SendMessagesHelper.getInstance(this.currentAccount).sendSticker(tLRPC$Document, str, this.dialog_id, this.replyingMessageObject, getThreadMessage(), obj, sendAnimationData, z2, i);
+            SendMessagesHelper.getInstance(this.currentAccount).sendSticker(tLRPC$Document, str, this.dialog_id, this.replyingMessageObject, getThreadMessage(), obj, sendAnimationData, z2, i, obj instanceof TLRPC$TL_messages_stickerSet);
             ChatActivityEnterViewDelegate chatActivityEnterViewDelegate = this.delegate;
             if (chatActivityEnterViewDelegate != null) {
                 chatActivityEnterViewDelegate.onMessageSend((CharSequence) null, true, i2);

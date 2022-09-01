@@ -1,19 +1,15 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
-import org.telegram.messenger.Utilities;
-import org.telegram.tgnet.TLRPC$StickerSet;
+import java.util.Comparator;
+import org.telegram.tgnet.TLRPC$TL_topPeer;
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda150 implements Utilities.Callback {
-    public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ TLRPC$StickerSet f$1;
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda150 implements Comparator {
+    public static final /* synthetic */ MediaDataController$$ExternalSyntheticLambda150 INSTANCE = new MediaDataController$$ExternalSyntheticLambda150();
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda150(MediaDataController mediaDataController, TLRPC$StickerSet tLRPC$StickerSet) {
-        this.f$0 = mediaDataController;
-        this.f$1 = tLRPC$StickerSet;
+    private /* synthetic */ MediaDataController$$ExternalSyntheticLambda150() {
     }
 
-    public final void run(Object obj) {
-        this.f$0.lambda$toggleStickerSetInternal$91(this.f$1, (ArrayList) obj);
+    public final int compare(Object obj, Object obj2) {
+        return MediaDataController.lambda$increaseInlineRaiting$130((TLRPC$TL_topPeer) obj, (TLRPC$TL_topPeer) obj2);
     }
 }

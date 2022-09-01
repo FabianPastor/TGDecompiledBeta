@@ -31,6 +31,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.core.graphics.ColorUtils;
+import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLog;
@@ -96,11 +97,11 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     ValueAnimator messageEditTextAnimator;
     private int messageEditTextPredrawHeigth;
     private int messageEditTextPredrawScrollY;
-    float offset;
-    Paint paint;
+    float offset = 0.0f;
+    Paint paint = new Paint();
     /* access modifiers changed from: private */
     public boolean popupAnimating;
-    private final Theme.ResourcesProvider resourcesProvider;
+    private final Theme.ResourcesProvider resourcesProvider = new DarkTheme();
     /* access modifiers changed from: private */
     public ValueAnimator sendButtonColorAnimator;
     boolean sendButtonEnabled = true;
@@ -141,11 +142,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     public PhotoViewerCaptionEnterView(Context context, SizeNotifierFrameLayoutPhoto sizeNotifierFrameLayoutPhoto, View view, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
         Context context2 = context;
-        Paint paint2 = new Paint();
-        this.paint = paint2;
-        this.offset = 0.0f;
-        this.resourcesProvider = resourcesProvider2;
-        paint2.setColor(NUM);
+        this.paint.setColor(NUM);
         setWillNotDraw(false);
         setFocusable(true);
         setFocusableInTouchMode(true);
@@ -178,7 +175,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         textPaint.setTextSize((float) AndroidUtilities.dp(13.0f));
         this.lengthTextPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.lengthTextPaint.setColor(-2500135);
-        AnonymousClass1 r7 = new EditTextCaption(context2, (Theme.ResourcesProvider) null) {
+        AnonymousClass1 r8 = new EditTextCaption(context2, (Theme.ResourcesProvider) null) {
             /* access modifiers changed from: protected */
             public int getActionModeStyle() {
                 return 2;
@@ -224,8 +221,8 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
                 invalidateForce();
             }
         };
-        this.messageEditText = r7;
-        r7.setOnFocusChangeListener(new PhotoViewerCaptionEnterView$$ExternalSyntheticLambda6(this));
+        this.messageEditText = r8;
+        r8.setOnFocusChangeListener(new PhotoViewerCaptionEnterView$$ExternalSyntheticLambda6(this));
         this.messageEditText.setSelectAllOnFocus(false);
         this.messageEditText.setDelegate(new PhotoViewerCaptionEnterView$$ExternalSyntheticLambda9(this));
         this.messageEditText.setWindowView(this.windowView);
@@ -474,8 +471,8 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
             /* access modifiers changed from: private */
             public /* synthetic */ void lambda$afterTextChanged$0(ValueAnimator valueAnimator) {
                 float unused = PhotoViewerCaptionEnterView.this.sendButtonEnabledProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
-                int access$1100 = PhotoViewerCaptionEnterView.this.getThemedColor("dialogFloatingIcon");
-                Theme.setDrawableColor(PhotoViewerCaptionEnterView.this.checkDrawable, ColorUtils.setAlphaComponent(access$1100, (int) (((float) Color.alpha(access$1100)) * ((PhotoViewerCaptionEnterView.this.sendButtonEnabledProgress * 0.42f) + 0.58f))));
+                int access$1200 = PhotoViewerCaptionEnterView.this.getThemedColor("dialogFloatingIcon");
+                Theme.setDrawableColor(PhotoViewerCaptionEnterView.this.checkDrawable, ColorUtils.setAlphaComponent(access$1200, (int) (((float) Color.alpha(access$1200)) * ((PhotoViewerCaptionEnterView.this.sendButtonEnabledProgress * 0.42f) + 0.58f))));
                 PhotoViewerCaptionEnterView.this.doneButton.invalidate();
             }
         });
@@ -716,6 +713,293 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         return editTextCaption.getSelectionStart();
     }
 
+    private class DarkTheme implements Theme.ResourcesProvider {
+        public /* synthetic */ void applyServiceShaderMatrix(int i, int i2, float f, float f2) {
+            Theme.ResourcesProvider.CC.$default$applyServiceShaderMatrix(this, i, i2, f, f2);
+        }
+
+        public /* synthetic */ int getColorOrDefault(String str) {
+            return Theme.ResourcesProvider.CC.$default$getColorOrDefault(this, str);
+        }
+
+        public /* synthetic */ Integer getCurrentColor(String str) {
+            return Theme.ResourcesProvider.CC.$default$getCurrentColor(this, str);
+        }
+
+        public /* synthetic */ Drawable getDrawable(String str) {
+            return Theme.ResourcesProvider.CC.$default$getDrawable(this, str);
+        }
+
+        public /* synthetic */ Paint getPaint(String str) {
+            return Theme.ResourcesProvider.CC.$default$getPaint(this, str);
+        }
+
+        public /* synthetic */ boolean hasGradientService() {
+            return Theme.ResourcesProvider.CC.$default$hasGradientService(this);
+        }
+
+        public /* synthetic */ void setAnimatedColor(String str, int i) {
+            Theme.ResourcesProvider.CC.$default$setAnimatedColor(this, str, i);
+        }
+
+        private DarkTheme(PhotoViewerCaptionEnterView photoViewerCaptionEnterView) {
+        }
+
+        /* JADX WARNING: Can't fix incorrect switch cases order */
+        /* Code decompiled incorrectly, please refer to instructions dump. */
+        public java.lang.Integer getColor(java.lang.String r4) {
+            /*
+                r3 = this;
+                r4.hashCode()
+                int r0 = r4.hashCode()
+                r1 = -1
+                switch(r0) {
+                    case -2139469579: goto L_0x00d7;
+                    case -1850167367: goto L_0x00cb;
+                    case -1849805674: goto L_0x00bf;
+                    case -1815610844: goto L_0x00b3;
+                    case -1633591792: goto L_0x00a7;
+                    case -1345036363: goto L_0x009b;
+                    case -1285599213: goto L_0x008f;
+                    case -343666293: goto L_0x0083;
+                    case -249481380: goto L_0x0076;
+                    case 339397761: goto L_0x0069;
+                    case 421601145: goto L_0x005c;
+                    case 634019162: goto L_0x004f;
+                    case 1674318617: goto L_0x0042;
+                    case 1929729373: goto L_0x0035;
+                    case 1976399936: goto L_0x0028;
+                    case 2067556030: goto L_0x001b;
+                    case 2133456819: goto L_0x000e;
+                    default: goto L_0x000b;
+                }
+            L_0x000b:
+                r4 = -1
+                goto L_0x00e2
+            L_0x000e:
+                java.lang.String r0 = "chat_emojiPanelBackground"
+                boolean r4 = r4.equals(r0)
+                if (r4 != 0) goto L_0x0017
+                goto L_0x000b
+            L_0x0017:
+                r4 = 16
+                goto L_0x00e2
+            L_0x001b:
+                java.lang.String r0 = "chat_emojiPanelIcon"
+                boolean r4 = r4.equals(r0)
+                if (r4 != 0) goto L_0x0024
+                goto L_0x000b
+            L_0x0024:
+                r4 = 15
+                goto L_0x00e2
+            L_0x0028:
+                java.lang.String r0 = "chat_emojiSearchIcon"
+                boolean r4 = r4.equals(r0)
+                if (r4 != 0) goto L_0x0031
+                goto L_0x000b
+            L_0x0031:
+                r4 = 14
+                goto L_0x00e2
+            L_0x0035:
+                java.lang.String r0 = "progressCircle"
+                boolean r4 = r4.equals(r0)
+                if (r4 != 0) goto L_0x003e
+                goto L_0x000b
+            L_0x003e:
+                r4 = 13
+                goto L_0x00e2
+            L_0x0042:
+                java.lang.String r0 = "divider"
+                boolean r4 = r4.equals(r0)
+                if (r4 != 0) goto L_0x004b
+                goto L_0x000b
+            L_0x004b:
+                r4 = 12
+                goto L_0x00e2
+            L_0x004f:
+                java.lang.String r0 = "chat_emojiPanelBackspace"
+                boolean r4 = r4.equals(r0)
+                if (r4 != 0) goto L_0x0058
+                goto L_0x000b
+            L_0x0058:
+                r4 = 11
+                goto L_0x00e2
+            L_0x005c:
+                java.lang.String r0 = "chat_emojiPanelIconSelected"
+                boolean r4 = r4.equals(r0)
+                if (r4 != 0) goto L_0x0065
+                goto L_0x000b
+            L_0x0065:
+                r4 = 10
+                goto L_0x00e2
+            L_0x0069:
+                java.lang.String r0 = "windowBackgroundWhiteBlackText"
+                boolean r4 = r4.equals(r0)
+                if (r4 != 0) goto L_0x0072
+                goto L_0x000b
+            L_0x0072:
+                r4 = 9
+                goto L_0x00e2
+            L_0x0076:
+                java.lang.String r0 = "listSelectorSDK21"
+                boolean r4 = r4.equals(r0)
+                if (r4 != 0) goto L_0x007f
+                goto L_0x000b
+            L_0x007f:
+                r4 = 8
+                goto L_0x00e2
+            L_0x0083:
+                java.lang.String r0 = "windowBackgroundWhite"
+                boolean r4 = r4.equals(r0)
+                if (r4 != 0) goto L_0x008d
+                goto L_0x000b
+            L_0x008d:
+                r4 = 7
+                goto L_0x00e2
+            L_0x008f:
+                java.lang.String r0 = "chat_emojiBottomPanelIcon"
+                boolean r4 = r4.equals(r0)
+                if (r4 != 0) goto L_0x0099
+                goto L_0x000b
+            L_0x0099:
+                r4 = 6
+                goto L_0x00e2
+            L_0x009b:
+                java.lang.String r0 = "chat_emojiSearchBackground"
+                boolean r4 = r4.equals(r0)
+                if (r4 != 0) goto L_0x00a5
+                goto L_0x000b
+            L_0x00a5:
+                r4 = 5
+                goto L_0x00e2
+            L_0x00a7:
+                java.lang.String r0 = "chat_emojiPanelStickerPackSelector"
+                boolean r4 = r4.equals(r0)
+                if (r4 != 0) goto L_0x00b1
+                goto L_0x000b
+            L_0x00b1:
+                r4 = 4
+                goto L_0x00e2
+            L_0x00b3:
+                java.lang.String r0 = "chat_emojiPanelStickerPackSelectorLine"
+                boolean r4 = r4.equals(r0)
+                if (r4 != 0) goto L_0x00bd
+                goto L_0x000b
+            L_0x00bd:
+                r4 = 3
+                goto L_0x00e2
+            L_0x00bf:
+                java.lang.String r0 = "dialogBackground"
+                boolean r4 = r4.equals(r0)
+                if (r4 != 0) goto L_0x00c9
+                goto L_0x000b
+            L_0x00c9:
+                r4 = 2
+                goto L_0x00e2
+            L_0x00cb:
+                java.lang.String r0 = "chat_emojiPanelShadowLine"
+                boolean r4 = r4.equals(r0)
+                if (r4 != 0) goto L_0x00d5
+                goto L_0x000b
+            L_0x00d5:
+                r4 = 1
+                goto L_0x00e2
+            L_0x00d7:
+                java.lang.String r0 = "chat_emojiPanelEmptyText"
+                boolean r4 = r4.equals(r0)
+                if (r4 != 0) goto L_0x00e1
+                goto L_0x000b
+            L_0x00e1:
+                r4 = 0
+            L_0x00e2:
+                r0 = -10177041(0xfffffffffvar_b5ef, float:-3.0400864E38)
+                r2 = -9539985(0xffffffffff6e6e6f, float:-3.1692967E38)
+                switch(r4) {
+                    case 0: goto L_0x0150;
+                    case 1: goto L_0x0149;
+                    case 2: goto L_0x0141;
+                    case 3: goto L_0x013c;
+                    case 4: goto L_0x0134;
+                    case 5: goto L_0x0134;
+                    case 6: goto L_0x012f;
+                    case 7: goto L_0x0127;
+                    case 8: goto L_0x0120;
+                    case 9: goto L_0x011b;
+                    case 10: goto L_0x0116;
+                    case 11: goto L_0x0111;
+                    case 12: goto L_0x010a;
+                    case 13: goto L_0x0102;
+                    case 14: goto L_0x00fa;
+                    case 15: goto L_0x00f5;
+                    case 16: goto L_0x00ed;
+                    default: goto L_0x00eb;
+                }
+            L_0x00eb:
+                r4 = 0
+                return r4
+            L_0x00ed:
+                r4 = -14803425(0xffffffffff1e1e1f, float:-2.1017442E38)
+                java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
+                return r4
+            L_0x00f5:
+                java.lang.Integer r4 = java.lang.Integer.valueOf(r2)
+                return r4
+            L_0x00fa:
+                r4 = -9211020(0xfffffffffvar_, float:-3.2360187E38)
+                java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
+                return r4
+            L_0x0102:
+                r4 = -10177027(0xfffffffffvar_b5fd, float:-3.0400892E38)
+                java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
+                return r4
+            L_0x010a:
+                r4 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
+                java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
+                return r4
+            L_0x0111:
+                java.lang.Integer r4 = java.lang.Integer.valueOf(r2)
+                return r4
+            L_0x0116:
+                java.lang.Integer r4 = java.lang.Integer.valueOf(r0)
+                return r4
+            L_0x011b:
+                java.lang.Integer r4 = java.lang.Integer.valueOf(r1)
+                return r4
+            L_0x0120:
+                r4 = 771751936(0x2e000000, float:2.910383E-11)
+                java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
+                return r4
+            L_0x0127:
+                r4 = -15198183(0xfffffffffvar_, float:-2.0216778E38)
+                java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
+                return r4
+            L_0x012f:
+                java.lang.Integer r4 = java.lang.Integer.valueOf(r2)
+                return r4
+            L_0x0134:
+                r4 = 181267199(0xacdeaff, float:1.9829178E-32)
+                java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
+                return r4
+            L_0x013c:
+                java.lang.Integer r4 = java.lang.Integer.valueOf(r0)
+                return r4
+            L_0x0141:
+                r4 = -14803426(0xffffffffff1e1e1e, float:-2.101744E38)
+                java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
+                return r4
+            L_0x0149:
+                r4 = -1610612736(0xffffffffa0000000, float:-1.0842022E-19)
+                java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
+                return r4
+            L_0x0150:
+                r4 = -8553090(0xffffffffff7d7d7e, float:-3.3694628E38)
+                java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
+                return r4
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PhotoViewerCaptionEnterView.DarkTheme.getColor(java.lang.String):java.lang.Integer");
+        }
+    }
+
     private void createEmojiView() {
         EmojiView emojiView2 = this.emojiView;
         if (!(emojiView2 == null || emojiView2.currentAccount == UserConfig.selectedAccount)) {
@@ -723,7 +1007,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
             this.emojiView = null;
         }
         if (this.emojiView == null) {
-            EmojiView emojiView3 = new EmojiView((BaseFragment) null, true, false, false, getContext(), false, (TLRPC$ChatFull) null, (ViewGroup) null, (Theme.ResourcesProvider) null);
+            EmojiView emojiView3 = new EmojiView((BaseFragment) null, true, false, false, getContext(), false, (TLRPC$ChatFull) null, (ViewGroup) null, this.resourcesProvider);
             this.emojiView = emojiView3;
             emojiView3.setDelegate(new EmojiView.EmojiViewDelegate() {
                 public /* synthetic */ boolean canSchedule() {
@@ -766,8 +1050,8 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
                     EmojiView.EmojiViewDelegate.CC.$default$onClearEmojiRecent(this);
                 }
 
-                public /* synthetic */ void onEmojiSettingsClick() {
-                    EmojiView.EmojiViewDelegate.CC.$default$onEmojiSettingsClick(this);
+                public /* synthetic */ void onEmojiSettingsClick(ArrayList arrayList) {
+                    EmojiView.EmojiViewDelegate.CC.$default$onEmojiSettingsClick(this, arrayList);
                 }
 
                 public /* synthetic */ void onGifSelected(View view, Object obj, String str, Object obj2, boolean z, int i) {
@@ -859,7 +1143,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
                     }, 11, false).show();
                 }
 
-                public void onCustomEmojiSelected(long j, TLRPC$Document tLRPC$Document, String str) {
+                public void onCustomEmojiSelected(long j, TLRPC$Document tLRPC$Document, String str, boolean z) {
                     AnimatedEmojiSpan animatedEmojiSpan;
                     int selectionEnd = PhotoViewerCaptionEnterView.this.messageEditText.getSelectionEnd();
                     if (selectionEnd < 0) {
@@ -1159,5 +1443,9 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
         Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
         return color != null ? color.intValue() : Theme.getColor(str);
+    }
+
+    public Theme.ResourcesProvider getResourcesProvider() {
+        return this.resourcesProvider;
     }
 }

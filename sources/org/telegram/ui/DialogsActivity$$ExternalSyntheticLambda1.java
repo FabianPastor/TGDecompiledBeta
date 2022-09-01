@@ -10,6 +10,6 @@ public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda1 imp
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$showSearch$20(valueAnimator);
+        this.f$0.lambda$showOrUpdateActionMode$43(valueAnimator);
     }
 }

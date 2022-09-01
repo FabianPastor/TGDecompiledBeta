@@ -4,6 +4,7 @@ import android.content.Context;
 import java.util.HashMap;
 import java.util.Map;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.ui.Cells.ChatActionCell$$ExternalSyntheticLambda2;
 
@@ -43,18 +44,26 @@ public class ChatActivityEnterViewAnimatedIconView extends RLottieImageView {
                 rLottieDrawable.stop();
                 rLottieDrawable.setProgress(0.0f, false);
                 setAnimation(rLottieDrawable);
-                return;
+            } else {
+                TransitState state3 = getState(state2, this.currentState);
+                if (state3 != this.animatingState) {
+                    this.animatingState = state3;
+                    RLottieDrawable rLottieDrawable2 = this.stateMap.get(state3);
+                    rLottieDrawable2.stop();
+                    rLottieDrawable2.setProgress(0.0f, false);
+                    rLottieDrawable2.setAutoRepeat(0);
+                    rLottieDrawable2.setOnAnimationEndListener(new ChatActivityEnterViewAnimatedIconView$$ExternalSyntheticLambda0(this));
+                    setAnimation(rLottieDrawable2);
+                    AndroidUtilities.runOnUIThread(new ChatActionCell$$ExternalSyntheticLambda2(rLottieDrawable2));
+                } else {
+                    return;
+                }
             }
-            TransitState state3 = getState(state2, this.currentState);
-            if (state3 != this.animatingState) {
-                this.animatingState = state3;
-                RLottieDrawable rLottieDrawable2 = this.stateMap.get(state3);
-                rLottieDrawable2.stop();
-                rLottieDrawable2.setProgress(0.0f, false);
-                rLottieDrawable2.setAutoRepeat(0);
-                rLottieDrawable2.setOnAnimationEndListener(new ChatActivityEnterViewAnimatedIconView$$ExternalSyntheticLambda0(this));
-                setAnimation(rLottieDrawable2);
-                AndroidUtilities.runOnUIThread(new ChatActionCell$$ExternalSyntheticLambda2(rLottieDrawable2));
+            int i = AnonymousClass2.$SwitchMap$org$telegram$ui$Components$ChatActivityEnterViewAnimatedIconView$State[state.ordinal()];
+            if (i == 1) {
+                setContentDescription(LocaleController.getString("AccDescrVoiceMessage", R.string.AccDescrVoiceMessage));
+            } else if (i == 2) {
+                setContentDescription(LocaleController.getString("AccDescrVideoMessage", R.string.AccDescrVideoMessage));
             }
         }
     }
@@ -62,6 +71,39 @@ public class ChatActivityEnterViewAnimatedIconView extends RLottieImageView {
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$setState$0() {
         this.animatingState = null;
+    }
+
+    /* renamed from: org.telegram.ui.Components.ChatActivityEnterViewAnimatedIconView$2  reason: invalid class name */
+    static /* synthetic */ class AnonymousClass2 {
+        static final /* synthetic */ int[] $SwitchMap$org$telegram$ui$Components$ChatActivityEnterViewAnimatedIconView$State;
+
+        /* JADX WARNING: Can't wrap try/catch for region: R(6:0|1|2|3|4|6) */
+        /* JADX WARNING: Code restructure failed: missing block: B:7:?, code lost:
+            return;
+         */
+        /* JADX WARNING: Failed to process nested try/catch */
+        /* JADX WARNING: Missing exception handler attribute for start block: B:3:0x0012 */
+        static {
+            /*
+                org.telegram.ui.Components.ChatActivityEnterViewAnimatedIconView$State[] r0 = org.telegram.ui.Components.ChatActivityEnterViewAnimatedIconView.State.values()
+                int r0 = r0.length
+                int[] r0 = new int[r0]
+                $SwitchMap$org$telegram$ui$Components$ChatActivityEnterViewAnimatedIconView$State = r0
+                org.telegram.ui.Components.ChatActivityEnterViewAnimatedIconView$State r1 = org.telegram.ui.Components.ChatActivityEnterViewAnimatedIconView.State.VOICE     // Catch:{ NoSuchFieldError -> 0x0012 }
+                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x0012 }
+                r2 = 1
+                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x0012 }
+            L_0x0012:
+                int[] r0 = $SwitchMap$org$telegram$ui$Components$ChatActivityEnterViewAnimatedIconView$State     // Catch:{ NoSuchFieldError -> 0x001d }
+                org.telegram.ui.Components.ChatActivityEnterViewAnimatedIconView$State r1 = org.telegram.ui.Components.ChatActivityEnterViewAnimatedIconView.State.VIDEO     // Catch:{ NoSuchFieldError -> 0x001d }
+                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x001d }
+                r2 = 2
+                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x001d }
+            L_0x001d:
+                return
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatActivityEnterViewAnimatedIconView.AnonymousClass2.<clinit>():void");
+        }
     }
 
     private TransitState getAnyState(State state) {

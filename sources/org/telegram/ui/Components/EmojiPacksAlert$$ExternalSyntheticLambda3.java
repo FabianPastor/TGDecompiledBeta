@@ -13,6 +13,6 @@ public final /* synthetic */ class EmojiPacksAlert$$ExternalSyntheticLambda3 imp
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$updateButton$8(this.f$1, view);
+        this.f$0.lambda$updateButton$9(this.f$1, view);
     }
 }

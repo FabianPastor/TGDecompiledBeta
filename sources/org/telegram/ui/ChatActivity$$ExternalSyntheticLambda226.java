@@ -3,18 +3,19 @@ package org.telegram.ui;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$TL_error;
-import org.telegram.tgnet.TLRPC$TL_messages_getWebPagePreview;
 
 public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda226 implements RequestDelegate {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ TLRPC$TL_messages_getWebPagePreview f$1;
+    public final /* synthetic */ Runnable f$1;
+    public final /* synthetic */ long[] f$2;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda226(ChatActivity chatActivity, TLRPC$TL_messages_getWebPagePreview tLRPC$TL_messages_getWebPagePreview) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda226(ChatActivity chatActivity, Runnable runnable, long[] jArr) {
         this.f$0 = chatActivity;
-        this.f$1 = tLRPC$TL_messages_getWebPagePreview;
+        this.f$1 = runnable;
+        this.f$2 = jArr;
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$searchLinks$96(this.f$1, tLObject, tLRPC$TL_error);
+        this.f$0.lambda$createMenu$168(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
     }
 }

@@ -1,23 +1,17 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
-import android.text.style.URLSpan;
-import android.widget.TextView;
+import android.animation.ValueAnimator;
 
-public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda9 implements DialogInterface.OnClickListener {
+public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda9 implements ValueAnimator.AnimatorUpdateListener {
     public final /* synthetic */ PhotoViewer f$0;
-    public final /* synthetic */ URLSpan f$1;
-    public final /* synthetic */ TextView f$2;
-    public final /* synthetic */ int f$3;
+    public final /* synthetic */ boolean f$1;
 
-    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda9(PhotoViewer photoViewer, URLSpan uRLSpan, TextView textView, int i) {
+    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda9(PhotoViewer photoViewer, boolean z) {
         this.f$0 = photoViewer;
-        this.f$1 = uRLSpan;
-        this.f$2 = textView;
-        this.f$3 = i;
+        this.f$1 = z;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$onLinkLongPress$1(this.f$1, this.f$2, this.f$3, dialogInterface, i);
+    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+        this.f$0.lambda$setVideoPlayerControlVisible$52(this.f$1, valueAnimator);
     }
 }

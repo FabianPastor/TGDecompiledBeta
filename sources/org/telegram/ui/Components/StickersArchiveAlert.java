@@ -12,6 +12,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.tgnet.TLRPC$StickerSetCovered;
+import org.telegram.tgnet.TLRPC$TL_messages_stickerSet;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -66,7 +67,7 @@ public class StickersArchiveAlert extends AlertDialog.Builder {
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$new$1(DialogInterface dialogInterface, int i) {
-        this.parentFragment.presentFragment(new StickersActivity(this.currentType));
+        this.parentFragment.presentFragment(new StickersActivity(this.currentType, (ArrayList<TLRPC$TL_messages_stickerSet>) null));
         dialogInterface.dismiss();
     }
 

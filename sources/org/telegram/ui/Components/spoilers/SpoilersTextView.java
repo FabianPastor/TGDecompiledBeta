@@ -17,20 +17,28 @@ import java.util.Stack;
 import org.telegram.messenger.AndroidUtilities;
 
 public class SpoilersTextView extends TextView {
-    private SpoilersClickDetector clickDetector = new SpoilersClickDetector(this, this.spoilers, new SpoilersTextView$$ExternalSyntheticLambda2(this));
+    private SpoilersClickDetector clickDetector;
     private boolean isSpoilersRevealed;
-    private Path path = new Path();
-    private List<SpoilerEffect> spoilers = new ArrayList();
-    private Stack<SpoilerEffect> spoilersPool = new Stack<>();
+    private Path path;
+    private List<SpoilerEffect> spoilers;
+    private Stack<SpoilerEffect> spoilersPool;
     private Paint xRefPaint;
 
     public SpoilersTextView(Context context) {
+        this(context, true);
+    }
+
+    public SpoilersTextView(Context context, boolean z) {
         super(context);
+        this.spoilers = new ArrayList();
+        this.spoilersPool = new Stack<>();
+        this.path = new Path();
+        this.clickDetector = new SpoilersClickDetector(this, this.spoilers, new SpoilersTextView$$ExternalSyntheticLambda2(this, z));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$2(SpoilerEffect spoilerEffect, float f, float f2) {
-        if (!this.isSpoilersRevealed) {
+    public /* synthetic */ void lambda$new$2(boolean z, SpoilerEffect spoilerEffect, float f, float f2) {
+        if (!this.isSpoilersRevealed && z) {
             spoilerEffect.setOnRippleEndCallback(new SpoilersTextView$$ExternalSyntheticLambda0(this));
             float sqrt = (float) Math.sqrt(Math.pow((double) getWidth(), 2.0d) + Math.pow((double) getHeight(), 2.0d));
             for (SpoilerEffect startRipple : this.spoilers) {

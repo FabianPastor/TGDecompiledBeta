@@ -1859,7 +1859,6 @@ public class RecyclerListView extends RecyclerView {
         this.disableHighlightState = z;
     }
 
-    /* access modifiers changed from: protected */
     public View getPressedChildView() {
         return this.currentChildView;
     }

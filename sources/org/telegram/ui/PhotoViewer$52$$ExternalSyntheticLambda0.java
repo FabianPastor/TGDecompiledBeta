@@ -11,6 +11,6 @@ public final /* synthetic */ class PhotoViewer$52$$ExternalSyntheticLambda0 impl
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$onSurfaceTextureUpdated$3(valueAnimator);
+        this.f$0.lambda$onSurfaceTextureUpdated$4(valueAnimator);
     }
 }

@@ -1,16 +1,18 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLRPC$Document;
-import org.telegram.ui.Components.ChatGreetingsView;
+import org.telegram.tgnet.TLRPC$BotInlineResult;
+import org.telegram.ui.Components.AlertsCreator;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda241 implements ChatGreetingsView.Listener {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda241 implements AlertsCreator.ScheduleDatePickerDelegate {
     public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ TLRPC$BotInlineResult f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda241(ChatActivity chatActivity) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda241(ChatActivity chatActivity, TLRPC$BotInlineResult tLRPC$BotInlineResult) {
         this.f$0 = chatActivity;
+        this.f$1 = tLRPC$BotInlineResult;
     }
 
-    public final void onGreetings(TLRPC$Document tLRPC$Document) {
-        this.f$0.lambda$createView$26(tLRPC$Document);
+    public final void didSelectDate(boolean z, int i) {
+        this.f$0.lambda$createView$45(this.f$1, z, i);
     }
 }

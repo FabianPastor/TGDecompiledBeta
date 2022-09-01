@@ -1165,7 +1165,7 @@ public class AlertsCreator {
             } else if (ChatObject.isNotInChat(tLRPC$Chat)) {
                 accountInstance.getMessagesController().deleteDialog(j2, 0);
             } else {
-                accountInstance.getMessagesController().deleteParticipantFromChat(-j2, accountInstance.getMessagesController().getUser(Long.valueOf(accountInstance.getUserConfig().getClientUserId())), (TLRPC$ChatFull) null);
+                accountInstance.getMessagesController().deleteParticipantFromChat(-j2, accountInstance.getMessagesController().getUser(Long.valueOf(accountInstance.getUserConfig().getClientUserId())));
             }
             intCallback2.run(1);
             return;
@@ -5905,7 +5905,7 @@ public class AlertsCreator {
     }
 
     /*  JADX ERROR: JadxRuntimeException in pass: IfRegionVisitor
-        jadx.core.utils.exceptions.JadxRuntimeException: Don't wrap MOVE or CONST insns: 0x0660: MOVE  (r9v3 int) = (r22v0 int)
+        jadx.core.utils.exceptions.JadxRuntimeException: Don't wrap MOVE or CONST insns: 0x065e: MOVE  (r9v3 int) = (r21v0 int)
         	at jadx.core.dex.instructions.args.InsnArg.wrapArg(InsnArg.java:164)
         	at jadx.core.dex.visitors.shrink.CodeShrinkVisitor.assignInline(CodeShrinkVisitor.java:133)
         	at jadx.core.dex.visitors.shrink.CodeShrinkVisitor.checkInline(CodeShrinkVisitor.java:118)
@@ -5927,11 +5927,11 @@ public class AlertsCreator {
     /* JADX WARNING: Removed duplicated region for block: B:20:0x0057  */
     /* JADX WARNING: Removed duplicated region for block: B:22:0x0061  */
     /* JADX WARNING: Removed duplicated region for block: B:27:0x0078  */
-    /* JADX WARNING: Removed duplicated region for block: B:302:0x0631  */
-    /* JADX WARNING: Removed duplicated region for block: B:303:0x063e  */
-    /* JADX WARNING: Removed duplicated region for block: B:332:0x06fe  */
-    /* JADX WARNING: Removed duplicated region for block: B:333:0x0708  */
-    /* JADX WARNING: Removed duplicated region for block: B:336:0x0739  */
+    /* JADX WARNING: Removed duplicated region for block: B:302:0x062f  */
+    /* JADX WARNING: Removed duplicated region for block: B:303:0x063c  */
+    /* JADX WARNING: Removed duplicated region for block: B:332:0x06fc  */
+    /* JADX WARNING: Removed duplicated region for block: B:333:0x0706  */
+    /* JADX WARNING: Removed duplicated region for block: B:336:0x0737  */
     /* JADX WARNING: Removed duplicated region for block: B:33:0x008f  */
     /* JADX WARNING: Removed duplicated region for block: B:369:? A[RETURN, SYNTHETIC] */
     /* JADX WARNING: Removed duplicated region for block: B:52:0x00e7  */
@@ -5949,11 +5949,11 @@ public class AlertsCreator {
             r0 = r54
             r13 = r56
             r12 = r57
-            if (r15 == 0) goto L_0x0742
+            if (r15 == 0) goto L_0x0740
             if (r3 != 0) goto L_0x001c
             if (r14 != 0) goto L_0x001c
             if (r7 != 0) goto L_0x001c
-            goto L_0x0742
+            goto L_0x0740
         L_0x001c:
             android.app.Activity r1 = r43.getParentActivity()
             if (r1 != 0) goto L_0x0023
@@ -6031,14 +6031,14 @@ public class AlertsCreator {
             if (r8 >= r7) goto L_0x00d5
             r7 = 0
         L_0x0095:
-            r21 = r51[r8]
-            int r6 = r21.size()
+            r22 = r51[r8]
+            int r6 = r22.size()
             if (r7 >= r6) goto L_0x00c9
             r6 = r51[r8]
             java.lang.Object r6 = r6.valueAt(r7)
             org.telegram.messenger.MessageObject r6 = (org.telegram.messenger.MessageObject) r6
-            boolean r21 = r6.isDice()
-            if (r21 == 0) goto L_0x00c3
+            boolean r22 = r6.isDice()
+            if (r22 == 0) goto L_0x00c3
             org.telegram.tgnet.TLRPC$Message r6 = r6.messageOwner
             int r6 = r6.date
             int r6 = r4 - r6
@@ -6093,10 +6093,10 @@ public class AlertsCreator {
             if (r8 == 0) goto L_0x0107
             r13 = 2147483647(0x7fffffff, float:NaN)
             if (r12 != r13) goto L_0x0107
-            r21 = 1
+            r22 = 1
             goto L_0x0109
         L_0x0107:
-            r21 = 0
+            r22 = 0
         L_0x0109:
             java.lang.String r13 = "DeleteMessagesOption"
             r23 = 1098907648(0x41800000, float:16.0)
@@ -6382,8 +6382,8 @@ public class AlertsCreator {
             org.telegram.ui.Cells.CheckBoxCell r3 = new org.telegram.ui.Cells.CheckBoxCell
             r0 = 1
             r3.<init>(r1, r0, r15)
-            r48 = 0
-            android.graphics.drawable.Drawable r0 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r48)
+            r47 = 0
+            android.graphics.drawable.Drawable r0 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r47)
             r3.setBackgroundDrawable(r0)
             java.lang.Integer r0 = java.lang.Integer.valueOf(r12)
             r3.setTag(r0)
@@ -6523,7 +6523,7 @@ public class AlertsCreator {
             r0 = 0
             r3 = 0
         L_0x042a:
-            r20 = r0
+            r19 = r0
             r1 = r2
             r15 = r3
             r3 = r4
@@ -6689,7 +6689,7 @@ public class AlertsCreator {
             r1 = 0
             android.graphics.drawable.Drawable r6 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r1)
             r5.setBackgroundDrawable(r6)
-            if (r21 == 0) goto L_0x056c
+            if (r22 == 0) goto L_0x056c
             int r6 = org.telegram.messenger.R.string.DeleteMessagesOptionAlso
             java.lang.Object[] r7 = new java.lang.Object[r8]
             java.lang.String r9 = org.telegram.messenger.UserObject.getFirstName(r44)
@@ -6750,7 +6750,7 @@ public class AlertsCreator {
             r1.setCustomViewOffset(r2)
             r2 = r4
             r15 = 0
-            r20 = 1
+            r19 = 1
             goto L_0x05f0
         L_0x05d5:
             r1 = r20
@@ -6773,7 +6773,7 @@ public class AlertsCreator {
             r3 = 0
         L_0x05ed:
             r15 = 0
-            r20 = 0
+            r19 = 0
         L_0x05f0:
             r30 = 0
         L_0x05f2:
@@ -6794,30 +6794,29 @@ public class AlertsCreator {
             r0 = r11
             r17 = r28
             r11 = r16
-            r22 = r3
+            r21 = r3
             r3 = r12
             r12 = r53
-            r48 = r2
+            r47 = r2
             r2 = r13
             r13 = r51
             r14 = r15
             r15 = r30
             r16 = r17
             r17 = r45
-            r18 = r47
-            r19 = r55
-            r4.<init>(r5, r6, r7, r8, r9, r11, r12, r13, r14, r15, r16, r17, r18, r19)
+            r18 = r55
+            r4.<init>(r5, r6, r7, r8, r9, r11, r12, r13, r14, r15, r16, r17, r18)
             r1.setPositiveButton(r2, r3)
             java.lang.String r2 = "messages"
             r3 = 1
-            if (r0 != r3) goto L_0x063e
+            if (r0 != r3) goto L_0x063c
             int r4 = org.telegram.messenger.R.string.DeleteSingleMessagesTitle
             java.lang.String r5 = "DeleteSingleMessagesTitle"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r1.setTitle(r4)
             r3 = 0
-            goto L_0x0654
-        L_0x063e:
+            goto L_0x0652
+        L_0x063c:
             int r4 = org.telegram.messenger.R.string.DeleteMessagesTitle
             java.lang.Object[] r5 = new java.lang.Object[r3]
             r3 = 0
@@ -6827,15 +6826,15 @@ public class AlertsCreator {
             java.lang.String r6 = "DeleteMessagesTitle"
             java.lang.String r4 = org.telegram.messenger.LocaleController.formatString(r6, r4, r5)
             r1.setTitle(r4)
-        L_0x0654:
+        L_0x0652:
             java.lang.String r4 = "AreYouSureDeleteSingleMessage"
             java.lang.String r5 = "AreYouSureDeleteFewMessages"
             r6 = r45
-            if (r6 == 0) goto L_0x0695
-            if (r48 == 0) goto L_0x0695
-            if (r20 == 0) goto L_0x067c
-            r9 = r22
-            if (r9 == r0) goto L_0x067c
+            if (r6 == 0) goto L_0x0693
+            if (r47 == 0) goto L_0x0693
+            if (r19 == 0) goto L_0x067a
+            r9 = r21
+            if (r9 == r0) goto L_0x067a
             int r0 = org.telegram.messenger.R.string.DeleteMessagesTextGroupPart
             r6 = 1
             java.lang.Object[] r4 = new java.lang.Object[r6]
@@ -6845,25 +6844,25 @@ public class AlertsCreator {
             java.lang.String r2 = "DeleteMessagesTextGroupPart"
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r2, r0, r4)
             r1.setMessage(r0)
-            goto L_0x0711
-        L_0x067c:
+            goto L_0x070f
+        L_0x067a:
             r6 = 1
-            if (r0 != r6) goto L_0x068a
+            if (r0 != r6) goto L_0x0688
             int r0 = org.telegram.messenger.R.string.AreYouSureDeleteSingleMessage
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r4, r0)
             r1.setMessage(r0)
-            goto L_0x0711
-        L_0x068a:
+            goto L_0x070f
+        L_0x0688:
             int r0 = org.telegram.messenger.R.string.AreYouSureDeleteFewMessages
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r5, r0)
             r1.setMessage(r0)
-            goto L_0x0711
-        L_0x0695:
-            r9 = r22
-            if (r20 == 0) goto L_0x06d8
-            if (r21 != 0) goto L_0x06d8
-            if (r9 == r0) goto L_0x06d8
-            if (r6 == 0) goto L_0x06b6
+            goto L_0x070f
+        L_0x0693:
+            r9 = r21
+            if (r19 == 0) goto L_0x06d6
+            if (r22 != 0) goto L_0x06d6
+            if (r9 == r0) goto L_0x06d6
+            if (r6 == 0) goto L_0x06b4
             int r0 = org.telegram.messenger.R.string.DeleteMessagesTextGroup
             r4 = 1
             java.lang.Object[] r4 = new java.lang.Object[r4]
@@ -6873,8 +6872,8 @@ public class AlertsCreator {
             java.lang.String r2 = "DeleteMessagesTextGroup"
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r2, r0, r4)
             r1.setMessage(r0)
-            goto L_0x0711
-        L_0x06b6:
+            goto L_0x070f
+        L_0x06b4:
             int r0 = org.telegram.messenger.R.string.DeleteMessagesText
             r4 = 2
             java.lang.Object[] r4 = new java.lang.Object[r4]
@@ -6888,37 +6887,37 @@ public class AlertsCreator {
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r2, r0, r4)
             android.text.SpannableStringBuilder r0 = org.telegram.messenger.AndroidUtilities.replaceTags(r0)
             r1.setMessage(r0)
-            goto L_0x0711
-        L_0x06d8:
-            if (r6 == 0) goto L_0x06fb
+            goto L_0x070f
+        L_0x06d6:
+            if (r6 == 0) goto L_0x06f9
             boolean r2 = r6.megagroup
-            if (r2 == 0) goto L_0x06fb
-            if (r53 != 0) goto L_0x06fb
+            if (r2 == 0) goto L_0x06f9
+            if (r53 != 0) goto L_0x06f9
             r2 = 1
-            if (r0 != r2) goto L_0x06ef
+            if (r0 != r2) goto L_0x06ed
             int r0 = org.telegram.messenger.R.string.AreYouSureDeleteSingleMessageMega
             java.lang.String r2 = "AreYouSureDeleteSingleMessageMega"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
             r1.setMessage(r0)
-            goto L_0x0711
-        L_0x06ef:
+            goto L_0x070f
+        L_0x06ed:
             int r0 = org.telegram.messenger.R.string.AreYouSureDeleteFewMessagesMega
             java.lang.String r2 = "AreYouSureDeleteFewMessagesMega"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
             r1.setMessage(r0)
-            goto L_0x0711
-        L_0x06fb:
+            goto L_0x070f
+        L_0x06f9:
             r2 = 1
-            if (r0 != r2) goto L_0x0708
+            if (r0 != r2) goto L_0x0706
             int r0 = org.telegram.messenger.R.string.AreYouSureDeleteSingleMessage
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r4, r0)
             r1.setMessage(r0)
-            goto L_0x0711
-        L_0x0708:
+            goto L_0x070f
+        L_0x0706:
             int r0 = org.telegram.messenger.R.string.AreYouSureDeleteFewMessages
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r5, r0)
             r1.setMessage(r0)
-        L_0x0711:
+        L_0x070f:
             int r0 = org.telegram.messenger.R.string.Cancel
             java.lang.String r2 = "Cancel"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
@@ -6934,11 +6933,11 @@ public class AlertsCreator {
             r1 = -1
             android.view.View r0 = r0.getButton(r1)
             android.widget.TextView r0 = (android.widget.TextView) r0
-            if (r0 == 0) goto L_0x0742
+            if (r0 == 0) goto L_0x0740
             java.lang.String r1 = "dialogTextRed2"
             int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
             r0.setTextColor(r1)
-        L_0x0742:
+        L_0x0740:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AlertsCreator.createDeleteMessagesAlert(org.telegram.ui.ActionBar.BaseFragment, org.telegram.tgnet.TLRPC$User, org.telegram.tgnet.TLRPC$Chat, org.telegram.tgnet.TLRPC$EncryptedChat, org.telegram.tgnet.TLRPC$ChatFull, long, org.telegram.messenger.MessageObject, android.util.SparseArray[], org.telegram.messenger.MessageObject$GroupedMessages, boolean, int, java.lang.Runnable, java.lang.Runnable, org.telegram.ui.ActionBar.Theme$ResourcesProvider):void");
@@ -6997,7 +6996,7 @@ public class AlertsCreator {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createDeleteMessagesAlert$118(MessageObject messageObject, MessageObject.GroupedMessages groupedMessages, TLRPC$EncryptedChat tLRPC$EncryptedChat, int i, long j, boolean[] zArr, boolean z, SparseArray[] sparseArrayArr, TLRPC$User tLRPC$User, TLRPC$Chat tLRPC$Chat, boolean[] zArr2, TLRPC$Chat tLRPC$Chat2, TLRPC$ChatFull tLRPC$ChatFull, Runnable runnable, DialogInterface dialogInterface, int i2) {
+    public static /* synthetic */ void lambda$createDeleteMessagesAlert$118(MessageObject messageObject, MessageObject.GroupedMessages groupedMessages, TLRPC$EncryptedChat tLRPC$EncryptedChat, int i, long j, boolean[] zArr, boolean z, SparseArray[] sparseArrayArr, TLRPC$User tLRPC$User, TLRPC$Chat tLRPC$Chat, boolean[] zArr2, TLRPC$Chat tLRPC$Chat2, Runnable runnable, DialogInterface dialogInterface, int i2) {
         ArrayList<Integer> arrayList;
         int i3;
         ArrayList arrayList2;
@@ -7074,7 +7073,7 @@ public class AlertsCreator {
         }
         if (!(tLRPC$User2 == null && tLRPC$Chat3 == null)) {
             if (zArr2[i3]) {
-                MessagesController.getInstance(i).deleteParticipantFromChat(tLRPC$Chat4.id, tLRPC$User, tLRPC$Chat, tLRPC$ChatFull, false, false);
+                MessagesController.getInstance(i).deleteParticipantFromChat(tLRPC$Chat4.id, tLRPC$User, tLRPC$Chat, false, false);
             }
             if (zArr2[1]) {
                 TLRPC$TL_channels_reportSpam tLRPC$TL_channels_reportSpam = new TLRPC$TL_channels_reportSpam();

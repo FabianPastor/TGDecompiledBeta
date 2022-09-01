@@ -1,17 +1,19 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.messenger.ImageReceiver;
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda155 implements RequestDelegate {
-    public final /* synthetic */ MediaDataController f$0;
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda155 implements ImageReceiver.ImageReceiverDelegate {
+    public final /* synthetic */ ImageReceiver f$0;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda155(MediaDataController mediaDataController) {
-        this.f$0 = mediaDataController;
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda155(ImageReceiver imageReceiver) {
+        this.f$0 = imageReceiver;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$clearRecentStickers$17(tLObject, tLRPC$TL_error);
+    public final void didSetImage(ImageReceiver imageReceiver, boolean z, boolean z2, boolean z3) {
+        MediaDataController.lambda$preloadImage$14(this.f$0, imageReceiver, z, z2, z3);
+    }
+
+    public /* synthetic */ void onAnimationReady(ImageReceiver imageReceiver) {
+        ImageReceiver.ImageReceiverDelegate.CC.$default$onAnimationReady(this, imageReceiver);
     }
 }

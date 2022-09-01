@@ -53,23 +53,37 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
     /* access modifiers changed from: private */
     public final boolean onlySelectedType;
     private PremiumButtonView premiumButtonView;
-    ArrayList<PremiumPreviewFragment.PremiumFeatureData> premiumFeatures = new ArrayList<>();
+    ArrayList<PremiumPreviewFragment.PremiumFeatureData> premiumFeatures;
+    private PremiumPreviewFragment.SubscriptionTier selectedTier;
     /* access modifiers changed from: private */
     public final int startType;
     SvgHelper.SvgDrawable svgIcon;
     ViewPager viewPager;
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
     public PremiumFeatureBottomSheet(BaseFragment baseFragment, int i, boolean z) {
-        super(baseFragment.getContext(), false);
-        int i2 = i;
+        this(baseFragment, i, z, (PremiumPreviewFragment.SubscriptionTier) null);
+    }
+
+    public PremiumFeatureBottomSheet(BaseFragment baseFragment, int i, boolean z, PremiumPreviewFragment.SubscriptionTier subscriptionTier) {
+        this(baseFragment, baseFragment.getContext(), baseFragment.getCurrentAccount(), i, z, subscriptionTier);
+    }
+
+    public PremiumFeatureBottomSheet(BaseFragment baseFragment, Context context, int i, int i2, boolean z) {
+        this(baseFragment, context, i, i2, z, (PremiumPreviewFragment.SubscriptionTier) null);
+    }
+
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    public PremiumFeatureBottomSheet(BaseFragment baseFragment, Context context, int i, int i2, boolean z, PremiumPreviewFragment.SubscriptionTier subscriptionTier) {
+        super(context, false);
+        int i3 = i2;
         boolean z2 = z;
+        this.premiumFeatures = new ArrayList<>();
+        this.selectedTier = subscriptionTier;
         fixNavigationBar();
-        this.startType = i2;
+        this.startType = i3;
         this.onlySelectedType = z2;
         this.svgIcon = SvgHelper.getDrawable(RLottieDrawable.readRes((File) null, R.raw.star_loader));
-        final Context context = baseFragment.getContext();
-        AnonymousClass1 r6 = new FrameLayout(context) {
+        AnonymousClass1 r4 = new FrameLayout(getContext()) {
             /* access modifiers changed from: protected */
             public void onMeasure(int i, int i2) {
                 if (PremiumFeatureBottomSheet.this.isPortrait) {
@@ -80,27 +94,27 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
                 super.onMeasure(i, i2);
             }
         };
-        PremiumPreviewFragment.fillPremiumFeaturesList(this.premiumFeatures, baseFragment.getCurrentAccount());
-        int i3 = 0;
+        PremiumPreviewFragment.fillPremiumFeaturesList(this.premiumFeatures, i);
+        int i4 = 0;
         while (true) {
-            if (i3 >= this.premiumFeatures.size()) {
-                i3 = 0;
+            if (i4 >= this.premiumFeatures.size()) {
+                i4 = 0;
                 break;
             }
-            if (this.premiumFeatures.get(i3).type == 0) {
-                this.premiumFeatures.remove(i3);
-                i3--;
-            } else if (this.premiumFeatures.get(i3).type == i2) {
+            if (this.premiumFeatures.get(i4).type == 0) {
+                this.premiumFeatures.remove(i4);
+                i4--;
+            } else if (this.premiumFeatures.get(i4).type == i3) {
                 break;
             }
-            i3++;
+            i4++;
         }
         if (z2) {
             this.premiumFeatures.clear();
-            this.premiumFeatures.add(this.premiumFeatures.get(i3));
-            i3 = 0;
+            this.premiumFeatures.add(this.premiumFeatures.get(i4));
+            i4 = 0;
         }
-        PremiumPreviewFragment.PremiumFeatureData premiumFeatureData = this.premiumFeatures.get(i3);
+        PremiumPreviewFragment.PremiumFeatureData premiumFeatureData = this.premiumFeatures.get(i4);
         setApplyBottomPadding(false);
         this.useBackgroundTopPadding = false;
         final PremiumGradient.GradientTools gradientTools = new PremiumGradient.GradientTools("premiumGradientBottomSheet1", "premiumGradientBottomSheet2", "premiumGradientBottomSheet3", (String) null);
@@ -109,7 +123,7 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
         gradientTools.x2 = 1.5f;
         gradientTools.y2 = -0.2f;
         gradientTools.exactly = true;
-        this.content = new FrameLayout(context) {
+        this.content = new FrameLayout(getContext()) {
             /* access modifiers changed from: protected */
             public void onMeasure(int i, int i2) {
                 super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(PremiumFeatureBottomSheet.this.contentHeight + AndroidUtilities.dp(2.0f), NUM));
@@ -127,14 +141,14 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
                 super.dispatchDraw(canvas);
             }
         };
-        FrameLayout frameLayout = new FrameLayout(context);
-        ImageView imageView = new ImageView(context);
+        FrameLayout frameLayout = new FrameLayout(getContext());
+        ImageView imageView = new ImageView(getContext());
         imageView.setImageResource(R.drawable.msg_close);
         imageView.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(12.0f), ColorUtils.setAlphaComponent(-1, 40), ColorUtils.setAlphaComponent(-1, 100)));
         frameLayout.addView(imageView, LayoutHelper.createFrame(24, 24, 17));
         frameLayout.setOnClickListener(new PremiumFeatureBottomSheet$$ExternalSyntheticLambda1(this));
-        r6.addView(this.content, LayoutHelper.createLinear(-1, -2, 1, 0, 16, 0, 0));
-        AnonymousClass3 r8 = new ViewPager(context) {
+        r4.addView(this.content, LayoutHelper.createLinear(-1, -2, 1, 0, 16, 0, 0));
+        AnonymousClass3 r8 = new ViewPager(getContext()) {
             /* access modifiers changed from: protected */
             public void onMeasure(int i, int i2) {
                 int dp = AndroidUtilities.dp(100.0f);
@@ -172,7 +186,8 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
             }
 
             public Object instantiateItem(ViewGroup viewGroup, int i) {
-                ViewPage viewPage = new ViewPage(context, i);
+                PremiumFeatureBottomSheet premiumFeatureBottomSheet = PremiumFeatureBottomSheet.this;
+                ViewPage viewPage = new ViewPage(premiumFeatureBottomSheet.getContext(), i);
                 viewGroup.addView(viewPage);
                 viewPage.position = i;
                 viewPage.setFeatureDate(PremiumFeatureBottomSheet.this.premiumFeatures.get(i));
@@ -183,10 +198,10 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
                 viewGroup.removeView((View) obj);
             }
         });
-        this.viewPager.setCurrentItem(i3);
-        r6.addView(this.viewPager, LayoutHelper.createFrame(-1, 100.0f, 0, 0.0f, 18.0f, 0.0f, 0.0f));
-        r6.addView(frameLayout, LayoutHelper.createFrame(52, 52.0f, 53, 0.0f, 16.0f, 0.0f, 0.0f));
-        final BottomPagesView bottomPagesView = new BottomPagesView(context, this.viewPager, this.premiumFeatures.size());
+        this.viewPager.setCurrentItem(i4);
+        r4.addView(this.viewPager, LayoutHelper.createFrame(-1, 100.0f, 0, 0.0f, 18.0f, 0.0f, 0.0f));
+        r4.addView(frameLayout, LayoutHelper.createFrame(52, 52.0f, 53, 0.0f, 16.0f, 0.0f, 0.0f));
+        final BottomPagesView bottomPagesView = new BottomPagesView(getContext(), this.viewPager, this.premiumFeatures.size());
         this.viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             float progress;
             int selectedPosition;
@@ -242,29 +257,29 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
                 premiumFeatureBottomSheet.containerViewsForward = z;
             }
         });
-        LinearLayout linearLayout = new LinearLayout(context);
-        linearLayout.addView(r6);
+        LinearLayout linearLayout = new LinearLayout(getContext());
+        linearLayout.addView(r4);
         linearLayout.setOrientation(1);
         bottomPagesView.setColor("chats_unreadCounterMuted", "chats_actionBackground");
         if (!z2) {
             linearLayout.addView(bottomPagesView, LayoutHelper.createLinear(this.premiumFeatures.size() * 11, 5, 1, 0, 0, 0, 10));
         }
-        PremiumButtonView premiumButtonView2 = new PremiumButtonView(context, true);
+        PremiumButtonView premiumButtonView2 = new PremiumButtonView(getContext(), true);
         this.premiumButtonView = premiumButtonView2;
         premiumButtonView2.buttonLayout.setOnClickListener(new PremiumFeatureBottomSheet$$ExternalSyntheticLambda2(this, baseFragment, z2, premiumFeatureData));
         this.premiumButtonView.overlayTextView.setOnClickListener(new PremiumFeatureBottomSheet$$ExternalSyntheticLambda0(this));
-        FrameLayout frameLayout2 = new FrameLayout(context);
+        FrameLayout frameLayout2 = new FrameLayout(getContext());
         this.buttonContainer = frameLayout2;
         frameLayout2.addView(this.premiumButtonView, LayoutHelper.createFrame(-1, 48.0f, 16, 16.0f, 0.0f, 16.0f, 0.0f));
         this.buttonContainer.setBackgroundColor(getThemedColor("dialogBackground"));
         linearLayout.addView(this.buttonContainer, LayoutHelper.createLinear(-1, 68, 80));
-        if (UserConfig.getInstance(this.currentAccount).isPremium()) {
+        if (UserConfig.getInstance(i).isPremium()) {
             this.premiumButtonView.setOverlayText(LocaleController.getString("OK", R.string.OK), false, false);
         }
-        ScrollView scrollView = new ScrollView(context);
+        ScrollView scrollView = new ScrollView(getContext());
         scrollView.addView(linearLayout);
         setCustomView(scrollView);
-        MediaDataController.getInstance(this.currentAccount).preloadPremiumPreviewStickers();
+        MediaDataController.getInstance(i).preloadPremiumPreviewStickers();
         setButtonText();
     }
 
@@ -289,7 +304,7 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
         if (z) {
             baseFragment.presentFragment(new PremiumPreviewFragment(PremiumPreviewFragment.featureTypeToServerString(premiumFeatureData.type)));
         } else {
-            PremiumPreviewFragment.buyPremium(baseFragment, PremiumPreviewFragment.featureTypeToServerString(premiumFeatureData.type));
+            PremiumPreviewFragment.buyPremium(baseFragment, this.selectedTier, PremiumPreviewFragment.featureTypeToServerString(premiumFeatureData.type));
         }
         dismiss();
     }
@@ -312,7 +327,7 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
                 this.premiumButtonView.setIcon(R.raw.unlock_icon);
             }
         } else {
-            this.premiumButtonView.buttonTextView.setText(PremiumPreviewFragment.getPremiumButtonText(this.currentAccount));
+            this.premiumButtonView.buttonTextView.setText(PremiumPreviewFragment.getPremiumButtonText(this.currentAccount, this.selectedTier));
         }
     }
 

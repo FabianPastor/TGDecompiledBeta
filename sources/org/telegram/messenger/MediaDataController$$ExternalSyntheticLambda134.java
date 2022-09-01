@@ -1,15 +1,21 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC$Document;
+import java.util.ArrayList;
 
 public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda134 implements Runnable {
-    public final /* synthetic */ TLRPC$Document f$0;
+    public final /* synthetic */ MediaDataController f$0;
+    public final /* synthetic */ boolean[] f$1;
+    public final /* synthetic */ ArrayList[] f$2;
+    public final /* synthetic */ Runnable f$3;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda134(TLRPC$Document tLRPC$Document) {
-        this.f$0 = tLRPC$Document;
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda134(MediaDataController mediaDataController, boolean[] zArr, ArrayList[] arrayListArr, Runnable runnable) {
+        this.f$0 = mediaDataController;
+        this.f$1 = zArr;
+        this.f$2 = arrayListArr;
+        this.f$3 = runnable;
     }
 
     public final void run() {
-        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, 0, this.f$0, 7);
+        this.f$0.lambda$fillWithAnimatedEmoji$197(this.f$1, this.f$2, this.f$3);
     }
 }

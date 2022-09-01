@@ -14,6 +14,8 @@ import org.telegram.messenger.SecureDocument;
 import org.telegram.tgnet.TLObject;
 
 public class BackupImageView extends View {
+    public AnimatedEmojiDrawable animatedEmojiDrawable;
+    boolean attached;
     protected int height = -1;
     protected ImageReceiver imageReceiver = new ImageReceiver(this);
     protected int width = -1;
@@ -152,28 +154,55 @@ public class BackupImageView extends View {
     /* access modifiers changed from: protected */
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
+        this.attached = false;
         this.imageReceiver.onDetachedFromWindow();
+        AnimatedEmojiDrawable animatedEmojiDrawable2 = this.animatedEmojiDrawable;
+        if (animatedEmojiDrawable2 != null) {
+            animatedEmojiDrawable2.removeView((Drawable.Callback) this);
+        }
     }
 
     /* access modifiers changed from: protected */
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
+        this.attached = true;
         this.imageReceiver.onAttachedToWindow();
+        AnimatedEmojiDrawable animatedEmojiDrawable2 = this.animatedEmojiDrawable;
+        if (animatedEmojiDrawable2 != null) {
+            animatedEmojiDrawable2.addView((View) this);
+        }
     }
 
     /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
-        if (this.width == -1 || this.height == -1) {
-            this.imageReceiver.setImageCoords(0.0f, 0.0f, (float) getWidth(), (float) getHeight());
-        } else {
-            int height2 = getHeight();
-            int i = this.height;
-            this.imageReceiver.setImageCoords((float) ((getWidth() - this.width) / 2), (float) ((height2 - i) / 2), (float) this.width, (float) i);
+        AnimatedEmojiDrawable animatedEmojiDrawable2 = this.animatedEmojiDrawable;
+        ImageReceiver imageReceiver2 = animatedEmojiDrawable2 != null ? animatedEmojiDrawable2.getImageReceiver() : this.imageReceiver;
+        if (imageReceiver2 != null) {
+            if (this.width == -1 || this.height == -1) {
+                imageReceiver2.setImageCoords(0.0f, 0.0f, (float) getWidth(), (float) getHeight());
+            } else {
+                int height2 = getHeight();
+                int i = this.height;
+                imageReceiver2.setImageCoords((float) ((getWidth() - this.width) / 2), (float) ((height2 - i) / 2), (float) this.width, (float) i);
+            }
+            imageReceiver2.draw(canvas);
         }
-        this.imageReceiver.draw(canvas);
     }
 
     public void setColorFilter(ColorFilter colorFilter) {
         this.imageReceiver.setColorFilter(colorFilter);
+    }
+
+    public void setAnimatedEmojiDrawable(AnimatedEmojiDrawable animatedEmojiDrawable2) {
+        AnimatedEmojiDrawable animatedEmojiDrawable3 = this.animatedEmojiDrawable;
+        if (animatedEmojiDrawable3 != animatedEmojiDrawable2) {
+            if (this.attached && animatedEmojiDrawable3 != null) {
+                animatedEmojiDrawable3.removeView((Drawable.Callback) this);
+            }
+            this.animatedEmojiDrawable = animatedEmojiDrawable2;
+            if (this.attached && animatedEmojiDrawable2 != null) {
+                animatedEmojiDrawable2.addView((View) this);
+            }
+        }
     }
 }

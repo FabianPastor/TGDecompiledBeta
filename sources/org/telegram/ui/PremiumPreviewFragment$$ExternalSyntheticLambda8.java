@@ -1,17 +1,22 @@
 package org.telegram.ui;
 
-import java.util.Comparator;
-import org.telegram.messenger.MessagesController;
-import org.telegram.ui.PremiumPreviewFragment;
+import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC$TL_payments_assignPlayMarketTransaction;
+import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.Components.AlertsCreator;
 
-public final /* synthetic */ class PremiumPreviewFragment$$ExternalSyntheticLambda8 implements Comparator {
-    public final /* synthetic */ MessagesController f$0;
+public final /* synthetic */ class PremiumPreviewFragment$$ExternalSyntheticLambda8 implements Runnable {
+    public final /* synthetic */ BaseFragment f$0;
+    public final /* synthetic */ TLRPC$TL_error f$1;
+    public final /* synthetic */ TLRPC$TL_payments_assignPlayMarketTransaction f$2;
 
-    public /* synthetic */ PremiumPreviewFragment$$ExternalSyntheticLambda8(MessagesController messagesController) {
-        this.f$0 = messagesController;
+    public /* synthetic */ PremiumPreviewFragment$$ExternalSyntheticLambda8(BaseFragment baseFragment, TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_payments_assignPlayMarketTransaction tLRPC$TL_payments_assignPlayMarketTransaction) {
+        this.f$0 = baseFragment;
+        this.f$1 = tLRPC$TL_error;
+        this.f$2 = tLRPC$TL_payments_assignPlayMarketTransaction;
     }
 
-    public final int compare(Object obj, Object obj2) {
-        return PremiumPreviewFragment.lambda$fillPremiumFeaturesList$3(this.f$0, (PremiumPreviewFragment.PremiumFeatureData) obj, (PremiumPreviewFragment.PremiumFeatureData) obj2);
+    public final void run() {
+        AlertsCreator.processError(this.f$0.getCurrentAccount(), this.f$1, this.f$0, this.f$2, new Object[0]);
     }
 }

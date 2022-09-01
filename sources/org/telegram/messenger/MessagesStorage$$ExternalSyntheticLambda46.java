@@ -20,6 +20,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda46 im
     }
 
     public final void run() {
-        this.f$0.lambda$updateRepliesCount$156(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+        this.f$0.lambda$updateRepliesCount$157(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
     }
 }

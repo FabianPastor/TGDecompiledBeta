@@ -1,16 +1,15 @@
 package org.telegram.ui.Cells;
 
 import android.view.View;
-import org.telegram.ui.ActionBar.DrawerLayoutContainer;
 
-public final /* synthetic */ class DrawerProfileCell$$ExternalSyntheticLambda1 implements View.OnLongClickListener {
-    public final /* synthetic */ DrawerLayoutContainer f$0;
+public final /* synthetic */ class DrawerProfileCell$$ExternalSyntheticLambda1 implements View.OnClickListener {
+    public final /* synthetic */ DrawerProfileCell f$0;
 
-    public /* synthetic */ DrawerProfileCell$$ExternalSyntheticLambda1(DrawerLayoutContainer drawerLayoutContainer) {
-        this.f$0 = drawerLayoutContainer;
+    public /* synthetic */ DrawerProfileCell$$ExternalSyntheticLambda1(DrawerProfileCell drawerProfileCell) {
+        this.f$0 = drawerProfileCell;
     }
 
-    public final boolean onLongClick(View view) {
-        return DrawerProfileCell.lambda$new$1(this.f$0, view);
+    public final void onClick(View view) {
+        this.f$0.lambda$new$0(view);
     }
 }

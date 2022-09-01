@@ -1761,7 +1761,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                             String charSequence = charSequenceArr[c] == null ? str2 : charSequenceArr[c].toString();
                             i2 = i5;
                             arrayList = arrayList2;
-                            instance.sendMessage(charSequence, keyAt2, (MessageObject) null, (MessageObject) null, (TLRPC$WebPage) null, true, entities, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, z, 0, (MessageObject.SendAnimationData) null);
+                            instance.sendMessage(charSequence, keyAt2, (MessageObject) null, (MessageObject) null, (TLRPC$WebPage) null, true, entities, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, z, 0, (MessageObject.SendAnimationData) null, false);
                         }
                         int sendMessage = SendMessagesHelper.getInstance(this.currentAccount).sendMessage(this.sendingMessageObjects, keyAt2, !this.showSendersName, false, z, 0);
                         if (sendMessage != 0) {
@@ -1799,9 +1799,9 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                             } else {
                                 i = i6;
                                 str = str2;
-                                SendMessagesHelper.getInstance(this.currentAccount).sendMessage(charSequenceArr[0] == null ? str2 : charSequenceArr[0].toString(), keyAt3, (MessageObject) null, (MessageObject) null, (TLRPC$WebPage) null, true, entities, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, z, 0, (MessageObject.SendAnimationData) null);
+                                SendMessagesHelper.getInstance(this.currentAccount).sendMessage(charSequenceArr[0] == null ? str2 : charSequenceArr[0].toString(), keyAt3, (MessageObject) null, (MessageObject) null, (TLRPC$WebPage) null, true, entities, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, z, 0, (MessageObject.SendAnimationData) null, false);
                             }
-                            SendMessagesHelper.getInstance(this.currentAccount).sendMessage(this.sendingText[access$10500], keyAt3, (MessageObject) null, (MessageObject) null, (TLRPC$WebPage) null, true, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, z, 0, (MessageObject.SendAnimationData) null);
+                            SendMessagesHelper.getInstance(this.currentAccount).sendMessage(this.sendingText[access$10500], keyAt3, (MessageObject) null, (MessageObject) null, (TLRPC$WebPage) null, true, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, z, 0, (MessageObject.SendAnimationData) null, false);
                             i6 = i + 1;
                             str2 = str;
                         }

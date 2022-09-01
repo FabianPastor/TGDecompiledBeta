@@ -1440,7 +1440,7 @@ public class DownloadController extends BaseController implements NotificationCe
         L_0x006d:
             if (r3 != 0) goto L_0x0084
             java.util.ArrayList<org.telegram.messenger.MessageObject> r1 = r9.downloadingFiles
-            r1.add(r10)
+            r1.add(r0, r10)
             org.telegram.messenger.MessagesStorage r1 = r9.getMessagesStorage()
             org.telegram.messenger.DispatchQueue r1 = r1.getStorageQueue()
             org.telegram.messenger.DownloadController$$ExternalSyntheticLambda6 r2 = new org.telegram.messenger.DownloadController$$ExternalSyntheticLambda6
@@ -1679,6 +1679,24 @@ public class DownloadController extends BaseController implements NotificationCe
         this.downloadingFiles.addAll(arrayList);
         this.recentDownloadingFiles.clear();
         this.recentDownloadingFiles.addAll(arrayList2);
+    }
+
+    public void swapLoadingPriority(MessageObject messageObject, MessageObject messageObject2) {
+        int indexOf = this.downloadingFiles.indexOf(messageObject);
+        int indexOf2 = this.downloadingFiles.indexOf(messageObject2);
+        if (indexOf >= 0 && indexOf2 >= 0) {
+            this.downloadingFiles.set(indexOf, messageObject2);
+            this.downloadingFiles.set(indexOf2, messageObject);
+        }
+        updateFilesLoadingPriority();
+    }
+
+    public void updateFilesLoadingPriority() {
+        for (int size = this.downloadingFiles.size() - 1; size >= 0; size--) {
+            if (getFileLoader().isLoadingFile(this.downloadingFiles.get(size).getFileName())) {
+                getFileLoader().loadFile(this.downloadingFiles.get(size).getDocument(), this.downloadingFiles.get(size), 2, 0);
+            }
+        }
     }
 
     public void clearRecentDownloadedFiles() {

@@ -1,19 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.ui.ActionBar.ThemeDescription;
+import android.view.View;
 
-public final /* synthetic */ class ChatReactionsEditActivity$$ExternalSyntheticLambda1 implements ThemeDescription.ThemeDescriptionDelegate {
+public final /* synthetic */ class ChatReactionsEditActivity$$ExternalSyntheticLambda1 implements View.OnClickListener {
     public final /* synthetic */ ChatReactionsEditActivity f$0;
 
     public /* synthetic */ ChatReactionsEditActivity$$ExternalSyntheticLambda1(ChatReactionsEditActivity chatReactionsEditActivity) {
         this.f$0 = chatReactionsEditActivity;
     }
 
-    public final void didSetColor() {
-        this.f$0.updateColors();
-    }
-
-    public /* synthetic */ void onAnimationProgress(float f) {
-        ThemeDescription.ThemeDescriptionDelegate.CC.$default$onAnimationProgress(this, f);
+    public final void onClick(View view) {
+        this.f$0.lambda$createView$2(view);
     }
 }

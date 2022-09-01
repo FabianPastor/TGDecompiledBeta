@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda13 imple
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$hidePinnedMessageView$139(valueAnimator);
+        this.f$0.lambda$dimBehindView$76(valueAnimator);
     }
 }

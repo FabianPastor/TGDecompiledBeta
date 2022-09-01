@@ -12,6 +12,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda15
     }
 
     public final void run() {
-        this.f$0.lambda$checkLastDialogMessage$184(this.f$1);
+        this.f$0.lambda$checkLastDialogMessage$185(this.f$1);
     }
 }

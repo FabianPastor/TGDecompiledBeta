@@ -10,6 +10,6 @@ public final /* synthetic */ class PremiumPreviewBottomSheet$$ExternalSyntheticL
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$onCustomOpenAnimation$3(valueAnimator);
+        this.f$0.lambda$onCustomOpenAnimation$5(valueAnimator);
     }
 }

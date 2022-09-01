@@ -1,16 +1,15 @@
 package org.telegram.ui;
 
-import android.content.Context;
-import org.telegram.ui.ActionBar.Theme;
+import android.view.MotionEvent;
+import android.view.View;
 
-public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda30 implements Runnable {
-    public final /* synthetic */ Context f$0;
+public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda30 implements View.OnTouchListener {
+    public static final /* synthetic */ DialogsActivity$$ExternalSyntheticLambda30 INSTANCE = new DialogsActivity$$ExternalSyntheticLambda30();
 
-    public /* synthetic */ DialogsActivity$$ExternalSyntheticLambda30(Context context) {
-        this.f$0 = context;
+    private /* synthetic */ DialogsActivity$$ExternalSyntheticLambda30() {
     }
 
-    public final void run() {
-        Theme.createChatResources(this.f$0, false);
+    public final boolean onTouch(View view, MotionEvent motionEvent) {
+        return DialogsActivity.lambda$createActionMode$17(view, motionEvent);
     }
 }

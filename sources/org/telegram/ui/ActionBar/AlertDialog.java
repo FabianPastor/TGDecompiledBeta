@@ -63,6 +63,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
     public String dialogButtonColorKey;
     /* access modifiers changed from: private */
     public float dimAlpha;
+    private boolean dimCustom;
     /* access modifiers changed from: private */
     public boolean dimEnabled;
     private boolean dismissDialogByButtons;
@@ -256,6 +257,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         this.itemViews = new ArrayList<>();
         this.dimEnabled = true;
         this.dimAlpha = 0.6f;
+        this.dimCustom = false;
         this.topAnimationAutoRepeat = true;
         this.resourcesProvider = resourcesProvider2;
         this.backgroundPaddings = new Rect();
@@ -833,9 +835,9 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             FrameLayout frameLayout = new FrameLayout(getContext());
             this.titleContainer = frameLayout;
             r1.addView(frameLayout, LayoutHelper.createLinear(-2, -2, 24.0f, 0.0f, 24.0f, 0.0f));
-            TextView textView = new TextView(getContext());
-            this.titleTextView = textView;
-            textView.setText(this.title);
+            SpoilersTextView spoilersTextView = new SpoilersTextView(getContext(), false);
+            this.titleTextView = spoilersTextView;
+            spoilersTextView.setText(this.title);
             this.titleTextView.setTextColor(getThemedColor("dialogTextBlack"));
             this.titleTextView.setTextSize(1, 20.0f);
             this.titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -843,18 +845,18 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             this.titleContainer.addView(this.titleTextView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, 0.0f, 19.0f, 0.0f, (float) (this.subtitle != null ? 2 : this.items != null ? 14 : 10)));
         }
         if (!(this.secondTitle == null || this.title == null)) {
-            TextView textView2 = new TextView(getContext());
-            this.secondTitleTextView = textView2;
-            textView2.setText(this.secondTitle);
+            TextView textView = new TextView(getContext());
+            this.secondTitleTextView = textView;
+            textView.setText(this.secondTitle);
             this.secondTitleTextView.setTextColor(getThemedColor("dialogTextGray3"));
             this.secondTitleTextView.setTextSize(1, 18.0f);
             this.secondTitleTextView.setGravity((LocaleController.isRTL ? 3 : 5) | 48);
             this.titleContainer.addView(this.secondTitleTextView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 3 : 5) | 48, 0.0f, 21.0f, 0.0f, 0.0f));
         }
         if (this.subtitle != null) {
-            TextView textView3 = new TextView(getContext());
-            this.subtitleTextView = textView3;
-            textView3.setText(this.subtitle);
+            TextView textView2 = new TextView(getContext());
+            this.subtitleTextView = textView2;
+            textView2.setText(this.subtitle);
             this.subtitleTextView.setTextColor(getThemedColor("dialogIcon"));
             this.subtitleTextView.setTextSize(1, 14.0f);
             this.subtitleTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
@@ -891,9 +893,9 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             linearLayout.setOrientation(1);
             this.contentScrollView.addView(this.scrollContainer, new FrameLayout.LayoutParams(-1, -2));
         }
-        SpoilersTextView spoilersTextView = new SpoilersTextView(getContext());
-        this.messageTextView = spoilersTextView;
-        spoilersTextView.setTextColor(getThemedColor("dialogTextBlack"));
+        SpoilersTextView spoilersTextView2 = new SpoilersTextView(getContext(), false);
+        this.messageTextView = spoilersTextView2;
+        spoilersTextView2.setTextColor(getThemedColor("dialogTextBlack"));
         this.messageTextView.setTextSize(1, 16.0f);
         this.messageTextView.setMovementMethod(new AndroidUtilities.LinkMovementMethodMy());
         this.messageTextView.setLinkTextColor(getThemedColor("dialogTextLink"));
@@ -913,9 +915,9 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             this.messageTextView.setLines(1);
             this.messageTextView.setEllipsize(TextUtils.TruncateAt.END);
             FrameLayout frameLayout3 = this.progressViewContainer;
-            TextView textView4 = this.messageTextView;
+            TextView textView3 = this.messageTextView;
             boolean z2 = LocaleController.isRTL;
-            frameLayout3.addView(textView4, LayoutHelper.createFrame(-2, -2.0f, (z2 ? 5 : 3) | 16, (float) (z2 ? 0 : 62), 0.0f, (float) (z2 ? 62 : 0), 0.0f));
+            frameLayout3.addView(textView3, LayoutHelper.createFrame(-2, -2.0f, (z2 ? 5 : 3) | 16, (float) (z2 ? 0 : 62), 0.0f, (float) (z2 ? 62 : 0), 0.0f));
         } else if (i7 == 2) {
             r1.addView(this.messageTextView, LayoutHelper.createLinear(-2, -2, (LocaleController.isRTL ? 5 : 3) | 48, 24, this.title == null ? 19 : 0, 24, 20));
             LineProgressView lineProgressView2 = new LineProgressView(getContext());
@@ -924,9 +926,9 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             this.lineProgressView.setProgressColor(getThemedColor("dialogLineProgress"));
             this.lineProgressView.setBackColor(getThemedColor("dialogLineProgressBackground"));
             r1.addView(this.lineProgressView, LayoutHelper.createLinear(-1, 4, 19, 24, 0, 24, 0));
-            TextView textView5 = new TextView(getContext());
-            this.lineProgressViewPercent = textView5;
-            textView5.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            TextView textView4 = new TextView(getContext());
+            this.lineProgressViewPercent = textView4;
+            textView4.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             this.lineProgressViewPercent.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
             this.lineProgressViewPercent.setTextColor(getThemedColor("dialogTextGray2"));
             this.lineProgressViewPercent.setTextSize(1, 14.0f);
@@ -1190,12 +1192,12 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         if (this.progressViewStyle == 3) {
             layoutParams.width = -1;
         } else {
-            if (this.dimEnabled) {
-                layoutParams.dimAmount = this.dimAlpha;
-                layoutParams.flags |= 2;
-            } else {
+            if (!this.dimEnabled || this.dimCustom) {
                 layoutParams.dimAmount = 0.0f;
                 layoutParams.flags ^= 2;
+            } else {
+                layoutParams.dimAmount = this.dimAlpha;
+                layoutParams.flags |= 2;
             }
             int i10 = AndroidUtilities.displaySize.x;
             this.lastScreenWidth = i10;

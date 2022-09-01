@@ -15,9 +15,11 @@ import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationsController;
 import org.telegram.messenger.UserConfig;
+import org.telegram.tgnet.TLRPC$TL_emojiStatus;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Components.AnimatedEmojiDrawable;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.GroupCreateCheckBox;
@@ -30,6 +32,7 @@ public class DrawerUserCell extends FrameLayout implements NotificationCenter.No
     private GroupCreateCheckBox checkBox;
     private BackupImageView imageView;
     private RectF rect = new RectF();
+    private AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable status;
     private SimpleTextView textView;
 
     public DrawerUserCell(Context context) {
@@ -43,12 +46,16 @@ public class DrawerUserCell extends FrameLayout implements NotificationCenter.No
         addView(this.imageView, LayoutHelper.createFrame(36, 36.0f, 51, 14.0f, 6.0f, 0.0f, 0.0f));
         SimpleTextView simpleTextView = new SimpleTextView(context);
         this.textView = simpleTextView;
-        simpleTextView.setTextColor(Theme.getColor("chats_menuItemText"));
+        simpleTextView.setPadding(0, AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f));
+        this.textView.setTextColor(Theme.getColor("chats_menuItemText"));
         this.textView.setTextSize(15);
         this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.textView.setMaxLines(1);
         this.textView.setGravity(19);
         addView(this.textView, LayoutHelper.createFrame(-1, -2.0f, 19, 72.0f, 0.0f, 60.0f, 0.0f));
+        AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable swapAnimatedEmojiDrawable = new AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable(this.textView, AndroidUtilities.dp(20.0f));
+        this.status = swapAnimatedEmojiDrawable;
+        this.textView.setRightDrawable((Drawable) swapAnimatedEmojiDrawable);
         GroupCreateCheckBox groupCreateCheckBox = new GroupCreateCheckBox(context);
         this.checkBox = groupCreateCheckBox;
         groupCreateCheckBox.setChecked(true, false);
@@ -70,6 +77,7 @@ public class DrawerUserCell extends FrameLayout implements NotificationCenter.No
         this.textView.setTextColor(Theme.getColor("chats_menuItemText"));
         for (int i = 0; i < 4; i++) {
             NotificationCenter.getInstance(i).addObserver(this, NotificationCenter.currentUserPremiumStatusChanged);
+            NotificationCenter.getInstance(i).addObserver(this, NotificationCenter.updateInterfaces);
         }
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiLoaded);
     }
@@ -79,8 +87,15 @@ public class DrawerUserCell extends FrameLayout implements NotificationCenter.No
         super.onDetachedFromWindow();
         for (int i = 0; i < 4; i++) {
             NotificationCenter.getInstance(i).removeObserver(this, NotificationCenter.currentUserPremiumStatusChanged);
+            NotificationCenter.getInstance(i).removeObserver(this, NotificationCenter.updateInterfaces);
         }
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiLoaded);
+        if (this.textView.getRightDrawable() instanceof AnimatedEmojiDrawable.WrapSizeDrawable) {
+            Drawable drawable = ((AnimatedEmojiDrawable.WrapSizeDrawable) this.textView.getRightDrawable()).getDrawable();
+            if (drawable instanceof AnimatedEmojiDrawable) {
+                ((AnimatedEmojiDrawable) drawable).removeView((Drawable.Callback) this.textView);
+            }
+        }
     }
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
@@ -91,6 +106,8 @@ public class DrawerUserCell extends FrameLayout implements NotificationCenter.No
             }
         } else if (i == NotificationCenter.emojiLoaded) {
             this.textView.invalidate();
+        } else if (i == NotificationCenter.updateInterfaces && (objArr[0].intValue() & MessagesController.UPDATE_MASK_EMOJI_STATUS) > 0) {
+            setAccount(this.accountNumber);
         }
     }
 
@@ -106,12 +123,16 @@ public class DrawerUserCell extends FrameLayout implements NotificationCenter.No
             } catch (Exception unused) {
             }
             this.textView.setText(formatName);
-            if (MessagesController.getInstance(i).isPremiumUser(currentUser)) {
+            if (currentUser.emoji_status instanceof TLRPC$TL_emojiStatus) {
+                this.textView.setDrawablePadding(AndroidUtilities.dp(4.0f));
+                this.status.set(((TLRPC$TL_emojiStatus) currentUser.emoji_status).document_id, true);
+            } else if (MessagesController.getInstance(i).isPremiumUser(currentUser)) {
                 this.textView.setDrawablePadding(AndroidUtilities.dp(6.0f));
-                this.textView.setRightDrawable(PremiumGradient.getInstance().premiumStarDrawableMini);
+                this.status.set(PremiumGradient.getInstance().premiumStarDrawableMini, true);
             } else {
-                this.textView.setRightDrawable((Drawable) null);
+                this.status.set((Drawable) null, true);
             }
+            this.status.setColor(Integer.valueOf(Theme.getColor("chats_verifiedBackground")));
             this.imageView.getImageReceiver().setCurrentAccount(i);
             this.imageView.setForUserOrChat(currentUser, this.avatarDrawable);
             GroupCreateCheckBox groupCreateCheckBox = this.checkBox;

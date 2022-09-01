@@ -1350,7 +1350,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             org.telegram.ui.ActionBar.BaseFragment r2 = r2.baseFragment
             android.app.Activity r2 = r2.getParentActivity()
             org.telegram.ui.ActionBar.Theme$ResourcesProvider r3 = r11.resourcesProvider
-            r14.setParentActivity(r2, r3)
+            r14.setParentActivity((android.app.Activity) r2, (org.telegram.ui.ActionBar.Theme.ResourcesProvider) r3)
             org.telegram.ui.PhotoViewer r14 = org.telegram.ui.PhotoViewer.getInstance()
             org.telegram.ui.Components.ChatAttachAlert r2 = r11.parentAlert
             r14.setParentAlert(r2)
@@ -1982,7 +1982,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             org.telegram.ui.ActionBar.BaseFragment r2 = r2.baseFragment
             android.app.Activity r2 = r2.getParentActivity()
             org.telegram.ui.ActionBar.Theme$ResourcesProvider r3 = r1.resourcesProvider
-            r0.setParentActivity(r2, r3)
+            r0.setParentActivity((android.app.Activity) r2, (org.telegram.ui.ActionBar.Theme.ResourcesProvider) r3)
             org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.getInstance()
             org.telegram.ui.Components.ChatAttachAlert r2 = r1.parentAlert
             int r3 = r2.maxSelectedPhotos

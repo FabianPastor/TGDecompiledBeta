@@ -1,7 +1,7 @@
 package org.telegram.tgnet;
 
 public class TLRPC$TL_messagePeerReaction extends TLRPC$MessagePeerReaction {
-    public static int constructor = NUM;
+    public static int constructor = -NUM;
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
@@ -13,7 +13,7 @@ public class TLRPC$TL_messagePeerReaction extends TLRPC$MessagePeerReaction {
         }
         this.unread = z2;
         this.peer_id = TLRPC$Peer.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
-        this.reaction = abstractSerializedData.readString(z);
+        this.reaction = TLRPC$Reaction.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
     }
 
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
@@ -24,6 +24,6 @@ public class TLRPC$TL_messagePeerReaction extends TLRPC$MessagePeerReaction {
         this.flags = i2;
         abstractSerializedData.writeInt32(i2);
         this.peer_id.serializeToStream(abstractSerializedData);
-        abstractSerializedData.writeString(this.reaction);
+        this.reaction.serializeToStream(abstractSerializedData);
     }
 }

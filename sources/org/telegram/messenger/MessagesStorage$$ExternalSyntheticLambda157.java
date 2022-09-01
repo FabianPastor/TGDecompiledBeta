@@ -1,19 +1,19 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC$Chat;
+import org.telegram.tgnet.TLObject;
 
 public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda157 implements Runnable {
     public final /* synthetic */ MessagesStorage f$0;
-    public final /* synthetic */ TLRPC$Chat f$1;
-    public final /* synthetic */ long f$2;
+    public final /* synthetic */ TLObject f$1;
+    public final /* synthetic */ String f$2;
 
-    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda157(MessagesStorage messagesStorage, TLRPC$Chat tLRPC$Chat, long j) {
+    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda157(MessagesStorage messagesStorage, TLObject tLObject, String str) {
         this.f$0 = messagesStorage;
-        this.f$1 = tLRPC$Chat;
-        this.f$2 = j;
+        this.f$1 = tLObject;
+        this.f$2 = str;
     }
 
     public final void run() {
-        this.f$0.lambda$loadPendingTasks$11(this.f$1, this.f$2);
+        this.f$0.lambda$saveBotCache$95(this.f$1, this.f$2);
     }
 }

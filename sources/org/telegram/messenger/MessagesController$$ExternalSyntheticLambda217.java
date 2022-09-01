@@ -10,6 +10,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda21
     }
 
     public final void run() {
-        MessagesController.lambda$performLogout$253(this.f$0);
+        MessagesController.lambda$performLogout$254(this.f$0);
     }
 }

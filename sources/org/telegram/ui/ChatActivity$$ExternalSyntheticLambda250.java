@@ -1,19 +1,16 @@
 package org.telegram.ui;
 
-import android.text.style.URLSpan;
 import android.view.View;
-import org.telegram.ui.Components.TranslateAlert;
+import org.telegram.ui.Components.RecyclerListView;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda250 implements TranslateAlert.OnLinkPress {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda250 implements RecyclerListView.OnItemClickListener {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ View f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda250(ChatActivity chatActivity, View view) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda250(ChatActivity chatActivity) {
         this.f$0 = chatActivity;
-        this.f$1 = view;
     }
 
-    public final boolean run(URLSpan uRLSpan) {
-        return this.f$0.lambda$createMenu$170(this.f$1, uRLSpan);
+    public final void onItemClick(View view, int i) {
+        this.f$0.lambda$createView$54(view, i);
     }
 }

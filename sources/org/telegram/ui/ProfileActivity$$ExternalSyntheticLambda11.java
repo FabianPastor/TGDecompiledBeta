@@ -10,6 +10,6 @@ public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda11 im
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$createView$13(view);
+        this.f$0.lambda$updateProfileData$34(view);
     }
 }

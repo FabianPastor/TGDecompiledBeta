@@ -14,7 +14,7 @@ public class TLClassStore {
         sparseArray.put(TLRPC$TL_error.constructor, TLRPC$TL_error.class);
         this.classStore.put(TLRPC$TL_decryptedMessageService.constructor, TLRPC$TL_decryptedMessageService.class);
         this.classStore.put(TLRPC$TL_decryptedMessage.constructor, cls);
-        this.classStore.put(TLRPC$TL_config.constructor, TLRPC$TL_config.class);
+        this.classStore.put(TLRPC$TL_config_layer144.constructor, TLRPC$TL_config_layer144.class);
         this.classStore.put(TLRPC$TL_decryptedMessageLayer.constructor, TLRPC$TL_decryptedMessageLayer.class);
         this.classStore.put(TLRPC$TL_decryptedMessage_layer17.constructor, cls);
         this.classStore.put(TLRPC$TL_decryptedMessage_layer45.constructor, TLRPC$TL_decryptedMessage_layer45.class);

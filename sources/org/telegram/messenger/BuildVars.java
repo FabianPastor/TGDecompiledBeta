@@ -7,11 +7,12 @@ public class BuildVars {
     public static String APPCENTER_HASH = "var_-67c9-48d2-b5d0-4761f1c1a8f3";
     public static String APP_HASH = "014b35b6184100b085b0d0572f9b5103";
     public static int APP_ID = 4;
-    public static int BUILD_VERSION = 2757;
+    public static int BUILD_VERSION = 2783;
     public static String BUILD_VERSION_STRING = "8.9.3";
     public static boolean CHECK_UPDATES = true;
     public static boolean DEBUG_PRIVATE_VERSION = false;
     public static boolean DEBUG_VERSION = true;
+    public static String GOOGLE_AUTH_CLIENT_ID = "760348033671-81kmi3pi84p11ub8hp9a1funsv0rn2p9.apps.googleusercontent.com";
     public static String HUAWEI_APP_ID = "NUM";
     public static boolean IS_BILLING_UNAVAILABLE = false;
     public static boolean LOGS_ENABLED = true;

@@ -1,7 +1,7 @@
 package org.telegram.messenger;
 
 import android.content.DialogInterface;
-import org.telegram.tgnet.TLRPC$TL_account_password;
+import org.telegram.tgnet.TLRPC$account_Password;
 import org.telegram.ui.ChatActivity;
 import org.telegram.ui.TwoStepVerificationSetupActivity;
 
@@ -13,6 +13,6 @@ public final /* synthetic */ class SendMessagesHelper$$ExternalSyntheticLambda1 
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.presentFragment(new TwoStepVerificationSetupActivity(6, (TLRPC$TL_account_password) null));
+        this.f$0.presentFragment(new TwoStepVerificationSetupActivity(6, (TLRPC$account_Password) null));
     }
 }

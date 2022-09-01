@@ -1,23 +1,7 @@
 package org.telegram.tgnet;
 
-public class TLRPC$TL_reactionCount extends TLObject {
-    public static int constructor = NUM;
-    public boolean chosen;
-    public int count;
-    public int flags;
-    public String reaction;
-
-    public static TLRPC$TL_reactionCount TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-        if (constructor == i) {
-            TLRPC$TL_reactionCount tLRPC$TL_reactionCount = new TLRPC$TL_reactionCount();
-            tLRPC$TL_reactionCount.readParams(abstractSerializedData, z);
-            return tLRPC$TL_reactionCount;
-        } else if (!z) {
-            return null;
-        } else {
-            throw new RuntimeException(String.format("can't parse magic %x in TL_reactionCount", new Object[]{Integer.valueOf(i)}));
-        }
-    }
+public class TLRPC$TL_reactionCount extends TLRPC$ReactionCount {
+    public static int constructor = -NUM;
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
@@ -27,16 +11,20 @@ public class TLRPC$TL_reactionCount extends TLObject {
             z2 = false;
         }
         this.chosen = z2;
-        this.reaction = abstractSerializedData.readString(z);
+        if (z2) {
+            this.chosen_order = abstractSerializedData.readInt32(z);
+        }
+        this.reaction = TLRPC$Reaction.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         this.count = abstractSerializedData.readInt32(z);
     }
 
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
-        int i = this.chosen ? this.flags | 1 : this.flags & -2;
-        this.flags = i;
-        abstractSerializedData.writeInt32(i);
-        abstractSerializedData.writeString(this.reaction);
+        abstractSerializedData.writeInt32(this.flags);
+        if ((this.flags & 1) != 0) {
+            abstractSerializedData.writeInt32(this.chosen_order);
+        }
+        this.reaction.serializeToStream(abstractSerializedData);
         abstractSerializedData.writeInt32(this.count);
     }
 }

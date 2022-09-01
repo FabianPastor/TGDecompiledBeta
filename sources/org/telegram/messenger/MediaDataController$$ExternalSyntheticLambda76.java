@@ -1,17 +1,21 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLObject;
+import java.util.ArrayList;
 
 public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda76 implements Runnable {
     public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ TLObject f$1;
+    public final /* synthetic */ ArrayList f$1;
+    public final /* synthetic */ long f$2;
+    public final /* synthetic */ boolean f$3;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda76(MediaDataController mediaDataController, TLObject tLObject) {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda76(MediaDataController mediaDataController, ArrayList arrayList, long j, boolean z) {
         this.f$0 = mediaDataController;
-        this.f$1 = tLObject;
+        this.f$1 = arrayList;
+        this.f$2 = j;
+        this.f$3 = z;
     }
 
     public final void run() {
-        this.f$0.lambda$loadHints$123(this.f$1);
+        this.f$0.lambda$processLoadedFeaturedStickers$46(this.f$1, this.f$2, this.f$3);
     }
 }

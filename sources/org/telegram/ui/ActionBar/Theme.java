@@ -314,6 +314,7 @@ public class Theme {
     public static TextPaint chat_msgTextPaintOneEmoji = null;
     public static TextPaint chat_msgTextPaintThreeEmoji = null;
     public static TextPaint chat_msgTextPaintTwoEmoji = null;
+    public static Drawable chat_msgUnlockDrawable = null;
     public static Drawable chat_muteIconDrawable = null;
     public static TextPaint chat_namePaint = null;
     public static Paint chat_outUrlPaint = null;
@@ -341,6 +342,8 @@ public class Theme {
     public static Paint chat_textSearchSelectionPaint = null;
     public static Paint chat_timeBackgroundPaint = null;
     public static TextPaint chat_timePaint = null;
+    public static Paint chat_unlockExtendedMediaBackground = null;
+    public static TextPaint chat_unlockExtendedMediaTextPaint = null;
     public static Path[] chat_updatePath = new Path[3];
     public static Paint chat_urlPaint = null;
     public static Paint checkboxSquare_backgroundPaint = null;
@@ -13002,14 +13005,26 @@ public class Theme {
     public static void applyDayNightThemeMaybe(boolean z) {
         if (previousTheme == null) {
             if (z) {
-                if (currentTheme != currentNightTheme) {
+                ThemeInfo themeInfo = currentTheme;
+                ThemeInfo themeInfo2 = currentNightTheme;
+                if (themeInfo == themeInfo2) {
+                    return;
+                }
+                if (themeInfo == null || !(themeInfo2 == null || themeInfo.isDark() == currentNightTheme.isDark())) {
                     isInNigthMode = true;
                     lastThemeSwitchTime = SystemClock.elapsedRealtime();
                     switchingNightTheme = true;
                     NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needSetDayNightTheme, currentNightTheme, Boolean.TRUE, null, -1);
                     switchingNightTheme = false;
+                    return;
                 }
-            } else if (currentTheme != currentDayTheme) {
+                return;
+            }
+            ThemeInfo themeInfo3 = currentTheme;
+            if (themeInfo3 == currentDayTheme) {
+                return;
+            }
+            if (themeInfo3 == null || !(currentNightTheme == null || themeInfo3.isDark() == currentNightTheme.isDark())) {
                 isInNigthMode = false;
                 lastThemeSwitchTime = SystemClock.elapsedRealtime();
                 switchingNightTheme = true;
@@ -15667,18 +15682,22 @@ public class Theme {
             TextPaint textPaint12 = new TextPaint(1);
             chat_actionTextPaint = textPaint12;
             textPaint12.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            TextPaint textPaint13 = new TextPaint(1);
+            chat_unlockExtendedMediaTextPaint = textPaint13;
+            textPaint13.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             Paint paint10 = new Paint(1);
             chat_actionBackgroundGradientDarkenPaint = paint10;
             paint10.setColor(NUM);
             chat_timeBackgroundPaint = new Paint(1);
-            TextPaint textPaint13 = new TextPaint(1);
-            chat_contextResult_titleTextPaint = textPaint13;
-            textPaint13.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            TextPaint textPaint14 = new TextPaint(1);
+            chat_contextResult_titleTextPaint = textPaint14;
+            textPaint14.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             chat_contextResult_descriptionTextPaint = new TextPaint(1);
             chat_composeBackgroundPaint = new Paint();
             new Paint(1);
             chat_radialProgressPausedSeekbarPaint = new Paint(1);
             chat_messageBackgroundSelectedPaint = new Paint(1);
+            chat_unlockExtendedMediaBackground = new Paint(1);
             chat_actionBackgroundPaint = new Paint(1);
             chat_actionBackgroundSelectedPaint = new Paint(1);
             chat_actionBackgroundPaint2 = new Paint(1);
@@ -15694,7 +15713,7 @@ public class Theme {
     }
 
     /* JADX WARNING: Can't wrap try/catch for region: R(7:8|9|(4:11|(1:13)(1:14)|15|16)|17|18|19|20) */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:19:0x08ab */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:19:0x08b5 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static void createChatResources(android.content.Context r18, boolean r19) {
         /*
@@ -15703,9 +15722,9 @@ public class Theme {
             r1 = 1077936128(0x40400000, float:3.0)
             r2 = 1096810496(0x41600000, float:14.0)
             r3 = 2
-            if (r0 != 0) goto L_0x0a3a
+            if (r0 != 0) goto L_0x0a44
             org.telegram.ui.ActionBar.Theme$MessageDrawable r4 = chat_msgInDrawable
-            if (r4 != 0) goto L_0x0a3a
+            if (r4 != 0) goto L_0x0a44
             android.content.res.Resources r4 = r18.getResources()
             int r5 = org.telegram.messenger.R.drawable.video_muted
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
@@ -15806,94 +15825,97 @@ public class Theme {
             org.telegram.ui.Components.MsgClockDrawable r5 = new org.telegram.ui.Components.MsgClockDrawable
             r5.<init>()
             chat_msgClockDrawable = r5
-            int r5 = org.telegram.messenger.R.drawable.msg_views
-            android.graphics.drawable.Drawable r8 = r4.getDrawable(r5)
-            android.graphics.drawable.Drawable r8 = r8.mutate()
-            chat_msgInViewsDrawable = r8
-            android.graphics.drawable.Drawable r8 = r4.getDrawable(r5)
-            android.graphics.drawable.Drawable r8 = r8.mutate()
-            chat_msgInViewsSelectedDrawable = r8
-            android.graphics.drawable.Drawable r8 = r4.getDrawable(r5)
-            android.graphics.drawable.Drawable r8 = r8.mutate()
-            chat_msgOutViewsDrawable = r8
-            android.graphics.drawable.Drawable r8 = r4.getDrawable(r5)
-            android.graphics.drawable.Drawable r8 = r8.mutate()
-            chat_msgOutViewsSelectedDrawable = r8
-            int r8 = org.telegram.messenger.R.drawable.msg_reply_small
-            android.graphics.drawable.Drawable r9 = r4.getDrawable(r8)
-            android.graphics.drawable.Drawable r9 = r9.mutate()
-            chat_msgInRepliesDrawable = r9
-            android.graphics.drawable.Drawable r9 = r4.getDrawable(r8)
-            android.graphics.drawable.Drawable r9 = r9.mutate()
-            chat_msgInRepliesSelectedDrawable = r9
-            android.graphics.drawable.Drawable r9 = r4.getDrawable(r8)
-            android.graphics.drawable.Drawable r9 = r9.mutate()
-            chat_msgOutRepliesDrawable = r9
-            android.graphics.drawable.Drawable r9 = r4.getDrawable(r8)
-            android.graphics.drawable.Drawable r9 = r9.mutate()
-            chat_msgOutRepliesSelectedDrawable = r9
-            int r9 = org.telegram.messenger.R.drawable.msg_pin_mini
-            android.graphics.drawable.Drawable r10 = r4.getDrawable(r9)
-            android.graphics.drawable.Drawable r10 = r10.mutate()
-            chat_msgInPinnedDrawable = r10
-            android.graphics.drawable.Drawable r10 = r4.getDrawable(r9)
-            android.graphics.drawable.Drawable r10 = r10.mutate()
-            chat_msgInPinnedSelectedDrawable = r10
-            android.graphics.drawable.Drawable r10 = r4.getDrawable(r9)
-            android.graphics.drawable.Drawable r10 = r10.mutate()
-            chat_msgOutPinnedDrawable = r10
-            android.graphics.drawable.Drawable r10 = r4.getDrawable(r9)
-            android.graphics.drawable.Drawable r10 = r10.mutate()
-            chat_msgOutPinnedSelectedDrawable = r10
-            android.graphics.drawable.Drawable r10 = r4.getDrawable(r9)
-            android.graphics.drawable.Drawable r10 = r10.mutate()
-            chat_msgMediaPinnedDrawable = r10
-            android.graphics.drawable.Drawable r9 = r4.getDrawable(r9)
-            android.graphics.drawable.Drawable r9 = r9.mutate()
-            chat_msgStickerPinnedDrawable = r9
-            android.graphics.drawable.Drawable r9 = r4.getDrawable(r5)
-            android.graphics.drawable.Drawable r9 = r9.mutate()
-            chat_msgMediaViewsDrawable = r9
-            android.graphics.drawable.Drawable r9 = r4.getDrawable(r8)
-            android.graphics.drawable.Drawable r9 = r9.mutate()
-            chat_msgMediaRepliesDrawable = r9
-            android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
-            android.graphics.drawable.Drawable r5 = r5.mutate()
-            chat_msgStickerViewsDrawable = r5
-            android.graphics.drawable.Drawable r5 = r4.getDrawable(r8)
-            android.graphics.drawable.Drawable r5 = r5.mutate()
-            chat_msgStickerRepliesDrawable = r5
-            int r5 = org.telegram.messenger.R.drawable.msg_actions
-            android.graphics.drawable.Drawable r8 = r4.getDrawable(r5)
-            android.graphics.drawable.Drawable r8 = r8.mutate()
-            chat_msgInMenuDrawable = r8
-            android.graphics.drawable.Drawable r8 = r4.getDrawable(r5)
-            android.graphics.drawable.Drawable r8 = r8.mutate()
-            chat_msgInMenuSelectedDrawable = r8
-            android.graphics.drawable.Drawable r8 = r4.getDrawable(r5)
-            android.graphics.drawable.Drawable r8 = r8.mutate()
-            chat_msgOutMenuDrawable = r8
-            android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
-            android.graphics.drawable.Drawable r5 = r5.mutate()
-            chat_msgOutMenuSelectedDrawable = r5
-            int r5 = org.telegram.messenger.R.drawable.video_actions
-            android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
-            chat_msgMediaMenuDrawable = r5
-            int r5 = org.telegram.messenger.R.drawable.msg_instant
-            android.graphics.drawable.Drawable r8 = r4.getDrawable(r5)
-            android.graphics.drawable.Drawable r8 = r8.mutate()
-            chat_msgInInstantDrawable = r8
-            android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
-            android.graphics.drawable.Drawable r5 = r5.mutate()
-            chat_msgOutInstantDrawable = r5
-            int r5 = org.telegram.messenger.R.drawable.msg_warning
-            android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
-            chat_msgErrorDrawable = r5
-            int r5 = org.telegram.messenger.R.drawable.list_mute
-            android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
-            android.graphics.drawable.Drawable r5 = r5.mutate()
-            chat_muteIconDrawable = r5
             int r5 = org.telegram.messenger.R.drawable.ic_lock_header
+            android.graphics.drawable.Drawable r8 = r4.getDrawable(r5)
+            android.graphics.drawable.Drawable r8 = r8.mutate()
+            chat_msgUnlockDrawable = r8
+            int r8 = org.telegram.messenger.R.drawable.msg_views
+            android.graphics.drawable.Drawable r9 = r4.getDrawable(r8)
+            android.graphics.drawable.Drawable r9 = r9.mutate()
+            chat_msgInViewsDrawable = r9
+            android.graphics.drawable.Drawable r9 = r4.getDrawable(r8)
+            android.graphics.drawable.Drawable r9 = r9.mutate()
+            chat_msgInViewsSelectedDrawable = r9
+            android.graphics.drawable.Drawable r9 = r4.getDrawable(r8)
+            android.graphics.drawable.Drawable r9 = r9.mutate()
+            chat_msgOutViewsDrawable = r9
+            android.graphics.drawable.Drawable r9 = r4.getDrawable(r8)
+            android.graphics.drawable.Drawable r9 = r9.mutate()
+            chat_msgOutViewsSelectedDrawable = r9
+            int r9 = org.telegram.messenger.R.drawable.msg_reply_small
+            android.graphics.drawable.Drawable r10 = r4.getDrawable(r9)
+            android.graphics.drawable.Drawable r10 = r10.mutate()
+            chat_msgInRepliesDrawable = r10
+            android.graphics.drawable.Drawable r10 = r4.getDrawable(r9)
+            android.graphics.drawable.Drawable r10 = r10.mutate()
+            chat_msgInRepliesSelectedDrawable = r10
+            android.graphics.drawable.Drawable r10 = r4.getDrawable(r9)
+            android.graphics.drawable.Drawable r10 = r10.mutate()
+            chat_msgOutRepliesDrawable = r10
+            android.graphics.drawable.Drawable r10 = r4.getDrawable(r9)
+            android.graphics.drawable.Drawable r10 = r10.mutate()
+            chat_msgOutRepliesSelectedDrawable = r10
+            int r10 = org.telegram.messenger.R.drawable.msg_pin_mini
+            android.graphics.drawable.Drawable r11 = r4.getDrawable(r10)
+            android.graphics.drawable.Drawable r11 = r11.mutate()
+            chat_msgInPinnedDrawable = r11
+            android.graphics.drawable.Drawable r11 = r4.getDrawable(r10)
+            android.graphics.drawable.Drawable r11 = r11.mutate()
+            chat_msgInPinnedSelectedDrawable = r11
+            android.graphics.drawable.Drawable r11 = r4.getDrawable(r10)
+            android.graphics.drawable.Drawable r11 = r11.mutate()
+            chat_msgOutPinnedDrawable = r11
+            android.graphics.drawable.Drawable r11 = r4.getDrawable(r10)
+            android.graphics.drawable.Drawable r11 = r11.mutate()
+            chat_msgOutPinnedSelectedDrawable = r11
+            android.graphics.drawable.Drawable r11 = r4.getDrawable(r10)
+            android.graphics.drawable.Drawable r11 = r11.mutate()
+            chat_msgMediaPinnedDrawable = r11
+            android.graphics.drawable.Drawable r10 = r4.getDrawable(r10)
+            android.graphics.drawable.Drawable r10 = r10.mutate()
+            chat_msgStickerPinnedDrawable = r10
+            android.graphics.drawable.Drawable r10 = r4.getDrawable(r8)
+            android.graphics.drawable.Drawable r10 = r10.mutate()
+            chat_msgMediaViewsDrawable = r10
+            android.graphics.drawable.Drawable r10 = r4.getDrawable(r9)
+            android.graphics.drawable.Drawable r10 = r10.mutate()
+            chat_msgMediaRepliesDrawable = r10
+            android.graphics.drawable.Drawable r8 = r4.getDrawable(r8)
+            android.graphics.drawable.Drawable r8 = r8.mutate()
+            chat_msgStickerViewsDrawable = r8
+            android.graphics.drawable.Drawable r8 = r4.getDrawable(r9)
+            android.graphics.drawable.Drawable r8 = r8.mutate()
+            chat_msgStickerRepliesDrawable = r8
+            int r8 = org.telegram.messenger.R.drawable.msg_actions
+            android.graphics.drawable.Drawable r9 = r4.getDrawable(r8)
+            android.graphics.drawable.Drawable r9 = r9.mutate()
+            chat_msgInMenuDrawable = r9
+            android.graphics.drawable.Drawable r9 = r4.getDrawable(r8)
+            android.graphics.drawable.Drawable r9 = r9.mutate()
+            chat_msgInMenuSelectedDrawable = r9
+            android.graphics.drawable.Drawable r9 = r4.getDrawable(r8)
+            android.graphics.drawable.Drawable r9 = r9.mutate()
+            chat_msgOutMenuDrawable = r9
+            android.graphics.drawable.Drawable r8 = r4.getDrawable(r8)
+            android.graphics.drawable.Drawable r8 = r8.mutate()
+            chat_msgOutMenuSelectedDrawable = r8
+            int r8 = org.telegram.messenger.R.drawable.video_actions
+            android.graphics.drawable.Drawable r8 = r4.getDrawable(r8)
+            chat_msgMediaMenuDrawable = r8
+            int r8 = org.telegram.messenger.R.drawable.msg_instant
+            android.graphics.drawable.Drawable r9 = r4.getDrawable(r8)
+            android.graphics.drawable.Drawable r9 = r9.mutate()
+            chat_msgInInstantDrawable = r9
+            android.graphics.drawable.Drawable r8 = r4.getDrawable(r8)
+            android.graphics.drawable.Drawable r8 = r8.mutate()
+            chat_msgOutInstantDrawable = r8
+            int r8 = org.telegram.messenger.R.drawable.msg_warning
+            android.graphics.drawable.Drawable r8 = r4.getDrawable(r8)
+            chat_msgErrorDrawable = r8
+            int r8 = org.telegram.messenger.R.drawable.list_mute
+            android.graphics.drawable.Drawable r8 = r4.getDrawable(r8)
+            android.graphics.drawable.Drawable r8 = r8.mutate()
+            chat_muteIconDrawable = r8
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             chat_lockIconDrawable = r5
             android.graphics.drawable.Drawable[] r5 = chat_msgInCallDrawable
@@ -15942,8 +15964,8 @@ public class Theme {
             android.graphics.drawable.Drawable r5 = r5.mutate()
             chat_msgCallDownGreenDrawable = r5
             r5 = 0
-        L_0x02bb:
-            if (r5 >= r3) goto L_0x02f8
+        L_0x02c5:
+            if (r5 >= r3) goto L_0x0302
             android.graphics.drawable.Drawable[] r8 = chat_pollCheckDrawable
             int r9 = org.telegram.messenger.R.drawable.poll_right
             android.graphics.drawable.Drawable r9 = r4.getDrawable(r9)
@@ -15965,8 +15987,8 @@ public class Theme {
             android.graphics.drawable.Drawable r9 = r9.mutate()
             r8[r5] = r9
             int r5 = r5 + 1
-            goto L_0x02bb
-        L_0x02f8:
+            goto L_0x02c5
+        L_0x0302:
             int r5 = org.telegram.messenger.R.drawable.ic_call_made_green_18dp
             android.graphics.drawable.Drawable r8 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r8 = r8.mutate()
@@ -16495,61 +16517,61 @@ public class Theme {
             android.graphics.drawable.Drawable r1 = r1.mutate()
             chat_composeShadowRoundDrawable = r1
             r1 = 0
-            int r2 = org.telegram.messenger.AndroidUtilities.roundMessageSize     // Catch:{ all -> 0x08b2 }
+            int r2 = org.telegram.messenger.AndroidUtilities.roundMessageSize     // Catch:{ all -> 0x08bc }
             r4 = 1086324736(0x40CLASSNAME, float:6.0)
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)     // Catch:{ all -> 0x08b2 }
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)     // Catch:{ all -> 0x08bc }
             int r2 = r2 + r4
-            android.graphics.Bitmap$Config r4 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ all -> 0x08b2 }
-            android.graphics.Bitmap r4 = android.graphics.Bitmap.createBitmap(r2, r2, r4)     // Catch:{ all -> 0x08b2 }
-            android.graphics.Canvas r5 = new android.graphics.Canvas     // Catch:{ all -> 0x08b2 }
-            r5.<init>(r4)     // Catch:{ all -> 0x08b2 }
-            android.graphics.Paint r8 = new android.graphics.Paint     // Catch:{ all -> 0x08b2 }
-            r8.<init>(r7)     // Catch:{ all -> 0x08b2 }
-            r8.setColor(r6)     // Catch:{ all -> 0x08b2 }
-            android.graphics.Paint$Style r9 = android.graphics.Paint.Style.FILL     // Catch:{ all -> 0x08b2 }
-            r8.setStyle(r9)     // Catch:{ all -> 0x08b2 }
-            android.graphics.PorterDuffXfermode r9 = new android.graphics.PorterDuffXfermode     // Catch:{ all -> 0x08b2 }
-            android.graphics.PorterDuff$Mode r10 = android.graphics.PorterDuff.Mode.CLEAR     // Catch:{ all -> 0x08b2 }
-            r9.<init>(r10)     // Catch:{ all -> 0x08b2 }
-            r8.setXfermode(r9)     // Catch:{ all -> 0x08b2 }
-            android.graphics.Paint r9 = new android.graphics.Paint     // Catch:{ all -> 0x08b2 }
-            r9.<init>(r7)     // Catch:{ all -> 0x08b2 }
+            android.graphics.Bitmap$Config r4 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ all -> 0x08bc }
+            android.graphics.Bitmap r4 = android.graphics.Bitmap.createBitmap(r2, r2, r4)     // Catch:{ all -> 0x08bc }
+            android.graphics.Canvas r5 = new android.graphics.Canvas     // Catch:{ all -> 0x08bc }
+            r5.<init>(r4)     // Catch:{ all -> 0x08bc }
+            android.graphics.Paint r8 = new android.graphics.Paint     // Catch:{ all -> 0x08bc }
+            r8.<init>(r7)     // Catch:{ all -> 0x08bc }
+            r8.setColor(r6)     // Catch:{ all -> 0x08bc }
+            android.graphics.Paint$Style r9 = android.graphics.Paint.Style.FILL     // Catch:{ all -> 0x08bc }
+            r8.setStyle(r9)     // Catch:{ all -> 0x08bc }
+            android.graphics.PorterDuffXfermode r9 = new android.graphics.PorterDuffXfermode     // Catch:{ all -> 0x08bc }
+            android.graphics.PorterDuff$Mode r10 = android.graphics.PorterDuff.Mode.CLEAR     // Catch:{ all -> 0x08bc }
+            r9.<init>(r10)     // Catch:{ all -> 0x08bc }
+            r8.setXfermode(r9)     // Catch:{ all -> 0x08bc }
+            android.graphics.Paint r9 = new android.graphics.Paint     // Catch:{ all -> 0x08bc }
+            r9.<init>(r7)     // Catch:{ all -> 0x08bc }
             r10 = 1082130432(0x40800000, float:4.0)
-            int r10 = org.telegram.messenger.AndroidUtilities.dp(r10)     // Catch:{ all -> 0x08b2 }
-            float r10 = (float) r10     // Catch:{ all -> 0x08b2 }
+            int r10 = org.telegram.messenger.AndroidUtilities.dp(r10)     // Catch:{ all -> 0x08bc }
+            float r10 = (float) r10     // Catch:{ all -> 0x08bc }
             r11 = 0
             r12 = 0
             r13 = 1593835520(0x5var_, float:9.223372E18)
-            r9.setShadowLayer(r10, r11, r12, r13)     // Catch:{ all -> 0x08b2 }
+            r9.setShadowLayer(r10, r11, r12, r13)     // Catch:{ all -> 0x08bc }
             r10 = 0
-        L_0x088a:
-            if (r10 >= r3) goto L_0x08a8
+        L_0x0894:
+            if (r10 >= r3) goto L_0x08b2
             int r11 = r2 / 2
-            float r11 = (float) r11     // Catch:{ all -> 0x08b2 }
+            float r11 = (float) r11     // Catch:{ all -> 0x08bc }
             int r12 = r2 / 2
-            float r12 = (float) r12     // Catch:{ all -> 0x08b2 }
-            int r13 = org.telegram.messenger.AndroidUtilities.roundMessageSize     // Catch:{ all -> 0x08b2 }
+            float r12 = (float) r12     // Catch:{ all -> 0x08bc }
+            int r13 = org.telegram.messenger.AndroidUtilities.roundMessageSize     // Catch:{ all -> 0x08bc }
             int r13 = r13 / r3
             r14 = 1065353216(0x3var_, float:1.0)
-            int r14 = org.telegram.messenger.AndroidUtilities.dp(r14)     // Catch:{ all -> 0x08b2 }
+            int r14 = org.telegram.messenger.AndroidUtilities.dp(r14)     // Catch:{ all -> 0x08bc }
             int r13 = r13 - r14
-            float r13 = (float) r13     // Catch:{ all -> 0x08b2 }
-            if (r10 != 0) goto L_0x08a1
+            float r13 = (float) r13     // Catch:{ all -> 0x08bc }
+            if (r10 != 0) goto L_0x08ab
             r14 = r9
-            goto L_0x08a2
-        L_0x08a1:
-            r14 = r8
-        L_0x08a2:
-            r5.drawCircle(r11, r12, r13, r14)     // Catch:{ all -> 0x08b2 }
-            int r10 = r10 + 1
-            goto L_0x088a
-        L_0x08a8:
-            r5.setBitmap(r1)     // Catch:{ Exception -> 0x08ab }
+            goto L_0x08ac
         L_0x08ab:
-            android.graphics.drawable.BitmapDrawable r2 = new android.graphics.drawable.BitmapDrawable     // Catch:{ all -> 0x08b2 }
-            r2.<init>(r4)     // Catch:{ all -> 0x08b2 }
-            chat_roundVideoShadow = r2     // Catch:{ all -> 0x08b2 }
+            r14 = r8
+        L_0x08ac:
+            r5.drawCircle(r11, r12, r13, r14)     // Catch:{ all -> 0x08bc }
+            int r10 = r10 + 1
+            goto L_0x0894
         L_0x08b2:
+            r5.setBitmap(r1)     // Catch:{ Exception -> 0x08b5 }
+        L_0x08b5:
+            android.graphics.drawable.BitmapDrawable r2 = new android.graphics.drawable.BitmapDrawable     // Catch:{ all -> 0x08bc }
+            r2.<init>(r4)     // Catch:{ all -> 0x08bc }
+            chat_roundVideoShadow = r2     // Catch:{ all -> 0x08bc }
+        L_0x08bc:
             java.util.HashMap<java.lang.String, android.graphics.drawable.Drawable> r2 = defaultChatDrawables
             r2.clear()
             java.util.HashMap<java.lang.String, java.lang.String> r2 = defaultChatDrawableColorKeys
@@ -16722,10 +16744,10 @@ public class Theme {
             java.lang.String r4 = "chat_inPreviewInstantText"
             addChatDrawable(r2, r1, r4)
             applyChatTheme(r0, r6)
-        L_0x0a3a:
-            if (r0 != 0) goto L_0x0b8b
+        L_0x0a44:
+            if (r0 != 0) goto L_0x0ba8
             android.graphics.Paint r0 = chat_botProgressPaint
-            if (r0 == 0) goto L_0x0b8b
+            if (r0 == 0) goto L_0x0ba8
             r1 = 1073741824(0x40000000, float:2.0)
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
             float r1 = (float) r1
@@ -16843,6 +16865,14 @@ public class Theme {
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
             float r1 = (float) r1
             r0.setTextSize(r1)
+            android.text.TextPaint r0 = chat_unlockExtendedMediaTextPaint
+            r1 = 16
+            int r3 = org.telegram.messenger.SharedConfig.fontSize
+            int r1 = java.lang.Math.max(r1, r3)
+            float r1 = (float) r1
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            float r1 = (float) r1
+            r0.setTextSize(r1)
             android.text.TextPaint r0 = chat_contextResult_titleTextPaint
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r2)
             float r1 = (float) r1
@@ -16861,7 +16891,7 @@ public class Theme {
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
             float r1 = (float) r1
             r0.setStrokeWidth(r1)
-        L_0x0b8b:
+        L_0x0ba8:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.createChatResources(android.content.Context, boolean):void");
@@ -16920,6 +16950,7 @@ public class Theme {
             chat_statusRecordPaint.setColor(getColor("chat_status"));
             chat_actionTextPaint.setColor(getColor("chat_serviceText"));
             chat_actionTextPaint.linkColor = getColor("chat_serviceLink");
+            chat_unlockExtendedMediaTextPaint.setColor(getColor("chat_serviceText"));
             chat_contextResult_titleTextPaint.setColor(getColor("windowBackgroundWhiteBlackText"));
             chat_composeBackgroundPaint.setColor(getColor("chat_messagePanelBackground"));
             chat_timeBackgroundPaint.setColor(getColor("chat_mediaTimeBackground"));
@@ -16940,6 +16971,7 @@ public class Theme {
             setDrawableColorByKey(chat_msgStickerHalfCheckDrawable, "chat_serviceText");
             setDrawableColorByKey(chat_msgStickerViewsDrawable, "chat_serviceText");
             setDrawableColorByKey(chat_msgStickerRepliesDrawable, "chat_serviceText");
+            setDrawableColorByKey(chat_msgUnlockDrawable, "chat_serviceText");
             setDrawableColorByKey(chat_shareIconDrawable, "chat_serviceIcon");
             setDrawableColorByKey(chat_replyIconDrawable, "chat_serviceIcon");
             setDrawableColorByKey(chat_goIconDrawable, "chat_serviceIcon");
@@ -17146,6 +17178,7 @@ public class Theme {
                 setDrawableColor(chat_msgStickerRepliesDrawable, -1);
                 chat_actionTextPaint.setColor(-1);
                 chat_actionTextPaint.linkColor = -1;
+                chat_unlockExtendedMediaTextPaint.setColor(-1);
                 chat_botButtonPaint.setColor(-1);
                 setDrawableColor(chat_commentStickerDrawable, -1);
                 setDrawableColor(chat_shareIconDrawable, -1);
@@ -17165,6 +17198,7 @@ public class Theme {
                 setDrawableColorByKey(chat_msgStickerRepliesDrawable, "chat_serviceText");
                 chat_actionTextPaint.setColor(getColor("chat_serviceText"));
                 chat_actionTextPaint.linkColor = getColor("chat_serviceLink");
+                chat_unlockExtendedMediaTextPaint.setColor(getColor("chat_serviceText"));
                 setDrawableColorByKey(chat_commentStickerDrawable, "chat_serviceIcon");
                 setDrawableColorByKey(chat_shareIconDrawable, "chat_serviceIcon");
                 setDrawableColorByKey(chat_replyIconDrawable, "chat_serviceIcon");

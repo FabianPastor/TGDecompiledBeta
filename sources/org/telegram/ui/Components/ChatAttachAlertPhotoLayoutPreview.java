@@ -2317,8 +2317,8 @@ public class ChatAttachAlertPhotoLayoutPreview extends ChatAttachAlert.AttachAle
         }
 
         /* JADX WARNING: Removed duplicated region for block: B:160:0x0433  */
-        /* JADX WARNING: Removed duplicated region for block: B:163:0x04a2  */
-        /* JADX WARNING: Removed duplicated region for block: B:171:0x04d9  */
+        /* JADX WARNING: Removed duplicated region for block: B:163:0x049c  */
+        /* JADX WARNING: Removed duplicated region for block: B:171:0x04d3  */
         /* JADX WARNING: Removed duplicated region for block: B:19:0x005f  */
         /* JADX WARNING: Removed duplicated region for block: B:60:0x017e  */
         /* Code decompiled incorrectly, please refer to instructions dump. */
@@ -2587,7 +2587,7 @@ public class ChatAttachAlertPhotoLayoutPreview extends ChatAttachAlert.AttachAle
             L_0x021d:
                 r1 = 1
                 r16 = 1
-                goto L_0x04c8
+                goto L_0x04c2
             L_0x0222:
                 r4 = 1
                 if (r3 != r4) goto L_0x0343
@@ -2723,14 +2723,14 @@ public class ChatAttachAlertPhotoLayoutPreview extends ChatAttachAlert.AttachAle
             L_0x0342:
                 r4 = 1
             L_0x0343:
-                if (r3 != r4) goto L_0x04c5
+                if (r3 != r4) goto L_0x04bf
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r4 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell$MediaCell r4 = r4.draggingCell
-                if (r4 != 0) goto L_0x04c5
+                if (r4 != 0) goto L_0x04bf
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell$MediaCell r4 = r0.tapMediaCell
-                if (r4 == 0) goto L_0x04c5
+                if (r4 == 0) goto L_0x04bf
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell r5 = r0.tapGroupCell
-                if (r5 == 0) goto L_0x04c5
+                if (r5 == 0) goto L_0x04bf
                 android.graphics.RectF r4 = r4.drawingRect()
                 android.graphics.RectF r5 = org.telegram.messenger.AndroidUtilities.rectTmp
                 float r6 = r4.right
@@ -2805,7 +2805,7 @@ public class ChatAttachAlertPhotoLayoutPreview extends ChatAttachAlert.AttachAle
                 r1.cancel()
             L_0x0401:
                 r1 = 0
-                goto L_0x04b7
+                goto L_0x04b1
             L_0x0404:
                 r19.calcPhotoArrays()
                 java.util.ArrayList r1 = r19.getPhotos()
@@ -2849,12 +2849,10 @@ public class ChatAttachAlertPhotoLayoutPreview extends ChatAttachAlert.AttachAle
             L_0x0453:
                 org.telegram.ui.PhotoViewer r2 = org.telegram.ui.PhotoViewer.getInstance()
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r4 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
-                org.telegram.ui.Components.ChatAttachAlert r4 = r4.parentAlert
-                org.telegram.ui.ActionBar.BaseFragment r4 = r4.baseFragment
-                android.app.Activity r4 = r4.getParentActivity()
-                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r5 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
-                org.telegram.ui.ActionBar.Theme$ResourcesProvider r5 = r5.resourcesProvider
-                r2.setParentActivity(r4, r5)
+                org.telegram.ui.Components.ChatAttachAlert r5 = r4.parentAlert
+                org.telegram.ui.ActionBar.BaseFragment r5 = r5.baseFragment
+                org.telegram.ui.ActionBar.Theme$ResourcesProvider r4 = r4.resourcesProvider
+                r2.setParentActivity((org.telegram.ui.ActionBar.BaseFragment) r5, (org.telegram.ui.ActionBar.Theme.ResourcesProvider) r4)
                 org.telegram.ui.PhotoViewer r2 = org.telegram.ui.PhotoViewer.getInstance()
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r4 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
                 org.telegram.ui.Components.ChatAttachAlert r4 = r4.parentAlert
@@ -2884,7 +2882,7 @@ public class ChatAttachAlertPhotoLayoutPreview extends ChatAttachAlert.AttachAle
                 android.text.Editable r2 = r2.getText()
                 r1.setCaption(r2)
                 goto L_0x0401
-            L_0x04b7:
+            L_0x04b1:
                 r0.tapMediaCell = r1
                 r0.tapTime = r7
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r2 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
@@ -2892,26 +2890,26 @@ public class ChatAttachAlertPhotoLayoutPreview extends ChatAttachAlert.AttachAle
                 r1 = 0
                 r0.draggingT = r1
                 goto L_0x021d
-            L_0x04c5:
+            L_0x04bf:
                 r1 = 1
                 r16 = 0
-            L_0x04c8:
-                if (r3 == r1) goto L_0x04cd
+            L_0x04c2:
+                if (r3 == r1) goto L_0x04c7
                 r2 = 3
-                if (r3 != r2) goto L_0x04de
-            L_0x04cd:
+                if (r3 != r2) goto L_0x04d8
+            L_0x04c7:
                 r0.tapTime = r7
                 java.lang.Runnable r2 = r0.scroller
                 r0.removeCallbacks(r2)
                 r2 = 0
                 r0.scrollerStarted = r2
-                if (r16 != 0) goto L_0x04de
+                if (r16 != 0) goto L_0x04d8
                 r19.stopDragging()
                 r12 = 1
-                goto L_0x04e0
-            L_0x04de:
+                goto L_0x04da
+            L_0x04d8:
                 r12 = r16
-            L_0x04e0:
+            L_0x04da:
                 return r12
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.PreviewGroupsView.onTouchEvent(android.view.MotionEvent):boolean");

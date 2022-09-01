@@ -325,9 +325,9 @@ public class NotificationsSoundActivity extends BaseFragment implements ChatAtta
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:31:0x0098 A[Catch:{ Exception -> 0x00d1 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:35:0x00ac A[Catch:{ Exception -> 0x00d1 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:36:0x00c5 A[Catch:{ Exception -> 0x00d1 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:31:0x0098 A[Catch:{ Exception -> 0x00d2 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:35:0x00ac A[Catch:{ Exception -> 0x00d2 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:36:0x00c5 A[Catch:{ Exception -> 0x00d2 }] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public /* synthetic */ void lambda$createView$1(android.content.Context r8, android.view.View r9, int r10) {
         /*
@@ -350,14 +350,14 @@ public class NotificationsSoundActivity extends BaseFragment implements ChatAtta
             r10.show()
         L_0x001f:
             boolean r10 = r9 instanceof org.telegram.ui.NotificationsSoundActivity.ToneCell
-            if (r10 == 0) goto L_0x00ed
+            if (r10 == 0) goto L_0x00ee
             org.telegram.ui.NotificationsSoundActivity$ToneCell r9 = (org.telegram.ui.NotificationsSoundActivity.ToneCell) r9
             org.telegram.ui.ActionBar.ActionBar r10 = r7.actionBar
             boolean r10 = r10.isActionModeShowed()
-            if (r10 != 0) goto L_0x00e8
+            if (r10 != 0) goto L_0x00e9
             org.telegram.ui.NotificationsSoundActivity$Tone r10 = r9.tone
             if (r10 != 0) goto L_0x0033
-            goto L_0x00e8
+            goto L_0x00e9
         L_0x0033:
             android.media.Ringtone r10 = r7.lastPlayedRingtone
             if (r10 == 0) goto L_0x003a
@@ -365,74 +365,75 @@ public class NotificationsSoundActivity extends BaseFragment implements ChatAtta
         L_0x003a:
             r10 = 0
             r0 = 0
-            org.telegram.ui.NotificationsSoundActivity$Tone r1 = r9.tone     // Catch:{ Exception -> 0x00d1 }
-            boolean r2 = r1.isSystemDefault     // Catch:{ Exception -> 0x00d1 }
-            r3 = 2
-            r4 = 4
+            org.telegram.ui.NotificationsSoundActivity$Tone r1 = r9.tone     // Catch:{ Exception -> 0x00d2 }
+            boolean r2 = r1.isSystemDefault     // Catch:{ Exception -> 0x00d2 }
+            r3 = 4
             if (r2 == 0) goto L_0x005a
-            android.content.Context r8 = r8.getApplicationContext()     // Catch:{ Exception -> 0x00d1 }
-            android.net.Uri r1 = android.media.RingtoneManager.getDefaultUri(r3)     // Catch:{ Exception -> 0x00d1 }
-            android.media.Ringtone r8 = android.media.RingtoneManager.getRingtone(r8, r1)     // Catch:{ Exception -> 0x00d1 }
-            r8.setStreamType(r4)     // Catch:{ Exception -> 0x00d1 }
-            r7.lastPlayedRingtone = r8     // Catch:{ Exception -> 0x00d1 }
-            r8.play()     // Catch:{ Exception -> 0x00d1 }
-            goto L_0x00d5
+            android.content.Context r8 = r8.getApplicationContext()     // Catch:{ Exception -> 0x00d2 }
+            r1 = 2
+            android.net.Uri r1 = android.media.RingtoneManager.getDefaultUri(r1)     // Catch:{ Exception -> 0x00d2 }
+            android.media.Ringtone r8 = android.media.RingtoneManager.getRingtone(r8, r1)     // Catch:{ Exception -> 0x00d2 }
+            r8.setStreamType(r3)     // Catch:{ Exception -> 0x00d2 }
+            r7.lastPlayedRingtone = r8     // Catch:{ Exception -> 0x00d2 }
+            r8.play()     // Catch:{ Exception -> 0x00d2 }
+            goto L_0x00d6
         L_0x005a:
-            java.lang.String r2 = r1.uri     // Catch:{ Exception -> 0x00d1 }
+            java.lang.String r2 = r1.uri     // Catch:{ Exception -> 0x00d2 }
             if (r2 == 0) goto L_0x007b
-            boolean r5 = r1.fromServer     // Catch:{ Exception -> 0x00d1 }
-            if (r5 != 0) goto L_0x007b
-            android.content.Context r8 = r8.getApplicationContext()     // Catch:{ Exception -> 0x00d1 }
-            org.telegram.ui.NotificationsSoundActivity$Tone r1 = r9.tone     // Catch:{ Exception -> 0x00d1 }
-            java.lang.String r1 = r1.uri     // Catch:{ Exception -> 0x00d1 }
-            android.net.Uri r1 = android.net.Uri.parse(r1)     // Catch:{ Exception -> 0x00d1 }
-            android.media.Ringtone r8 = android.media.RingtoneManager.getRingtone(r8, r1)     // Catch:{ Exception -> 0x00d1 }
-            r8.setStreamType(r4)     // Catch:{ Exception -> 0x00d1 }
-            r7.lastPlayedRingtone = r8     // Catch:{ Exception -> 0x00d1 }
-            r8.play()     // Catch:{ Exception -> 0x00d1 }
-            goto L_0x00d5
+            boolean r4 = r1.fromServer     // Catch:{ Exception -> 0x00d2 }
+            if (r4 != 0) goto L_0x007b
+            android.content.Context r8 = r8.getApplicationContext()     // Catch:{ Exception -> 0x00d2 }
+            org.telegram.ui.NotificationsSoundActivity$Tone r1 = r9.tone     // Catch:{ Exception -> 0x00d2 }
+            java.lang.String r1 = r1.uri     // Catch:{ Exception -> 0x00d2 }
+            android.net.Uri r1 = android.net.Uri.parse(r1)     // Catch:{ Exception -> 0x00d2 }
+            android.media.Ringtone r8 = android.media.RingtoneManager.getRingtone(r8, r1)     // Catch:{ Exception -> 0x00d2 }
+            r8.setStreamType(r3)     // Catch:{ Exception -> 0x00d2 }
+            r7.lastPlayedRingtone = r8     // Catch:{ Exception -> 0x00d2 }
+            r8.play()     // Catch:{ Exception -> 0x00d2 }
+            goto L_0x00d6
         L_0x007b:
-            boolean r1 = r1.fromServer     // Catch:{ Exception -> 0x00d1 }
-            if (r1 == 0) goto L_0x00d5
-            boolean r1 = android.text.TextUtils.isEmpty(r2)     // Catch:{ Exception -> 0x00d1 }
+            boolean r1 = r1.fromServer     // Catch:{ Exception -> 0x00d2 }
+            if (r1 == 0) goto L_0x00d6
+            boolean r1 = android.text.TextUtils.isEmpty(r2)     // Catch:{ Exception -> 0x00d2 }
             if (r1 != 0) goto L_0x0095
-            java.io.File r1 = new java.io.File     // Catch:{ Exception -> 0x00d1 }
-            org.telegram.ui.NotificationsSoundActivity$Tone r2 = r9.tone     // Catch:{ Exception -> 0x00d1 }
-            java.lang.String r2 = r2.uri     // Catch:{ Exception -> 0x00d1 }
-            r1.<init>(r2)     // Catch:{ Exception -> 0x00d1 }
-            boolean r2 = r1.exists()     // Catch:{ Exception -> 0x00d1 }
+            java.io.File r1 = new java.io.File     // Catch:{ Exception -> 0x00d2 }
+            org.telegram.ui.NotificationsSoundActivity$Tone r2 = r9.tone     // Catch:{ Exception -> 0x00d2 }
+            java.lang.String r2 = r2.uri     // Catch:{ Exception -> 0x00d2 }
+            r1.<init>(r2)     // Catch:{ Exception -> 0x00d2 }
+            boolean r2 = r1.exists()     // Catch:{ Exception -> 0x00d2 }
             if (r2 == 0) goto L_0x0095
             goto L_0x0096
         L_0x0095:
             r1 = r0
         L_0x0096:
             if (r1 != 0) goto L_0x00a4
-            org.telegram.messenger.FileLoader r1 = r7.getFileLoader()     // Catch:{ Exception -> 0x00d1 }
-            org.telegram.ui.NotificationsSoundActivity$Tone r2 = r9.tone     // Catch:{ Exception -> 0x00d1 }
-            org.telegram.tgnet.TLRPC$Document r2 = r2.document     // Catch:{ Exception -> 0x00d1 }
-            java.io.File r1 = r1.getPathToAttach(r2)     // Catch:{ Exception -> 0x00d1 }
+            org.telegram.messenger.FileLoader r1 = r7.getFileLoader()     // Catch:{ Exception -> 0x00d2 }
+            org.telegram.ui.NotificationsSoundActivity$Tone r2 = r9.tone     // Catch:{ Exception -> 0x00d2 }
+            org.telegram.tgnet.TLRPC$Document r2 = r2.document     // Catch:{ Exception -> 0x00d2 }
+            java.io.File r1 = r1.getPathToAttach(r2)     // Catch:{ Exception -> 0x00d2 }
         L_0x00a4:
             if (r1 == 0) goto L_0x00c5
-            boolean r2 = r1.exists()     // Catch:{ Exception -> 0x00d1 }
+            boolean r2 = r1.exists()     // Catch:{ Exception -> 0x00d2 }
             if (r2 == 0) goto L_0x00c5
-            android.content.Context r8 = r8.getApplicationContext()     // Catch:{ Exception -> 0x00d1 }
-            java.lang.String r1 = r1.toString()     // Catch:{ Exception -> 0x00d1 }
-            android.net.Uri r1 = android.net.Uri.parse(r1)     // Catch:{ Exception -> 0x00d1 }
-            android.media.Ringtone r8 = android.media.RingtoneManager.getRingtone(r8, r1)     // Catch:{ Exception -> 0x00d1 }
-            r8.setStreamType(r4)     // Catch:{ Exception -> 0x00d1 }
-            r7.lastPlayedRingtone = r8     // Catch:{ Exception -> 0x00d1 }
-            r8.play()     // Catch:{ Exception -> 0x00d1 }
-            goto L_0x00d5
+            android.content.Context r8 = r8.getApplicationContext()     // Catch:{ Exception -> 0x00d2 }
+            java.lang.String r1 = r1.toString()     // Catch:{ Exception -> 0x00d2 }
+            android.net.Uri r1 = android.net.Uri.parse(r1)     // Catch:{ Exception -> 0x00d2 }
+            android.media.Ringtone r8 = android.media.RingtoneManager.getRingtone(r8, r1)     // Catch:{ Exception -> 0x00d2 }
+            r8.setStreamType(r3)     // Catch:{ Exception -> 0x00d2 }
+            r7.lastPlayedRingtone = r8     // Catch:{ Exception -> 0x00d2 }
+            r8.play()     // Catch:{ Exception -> 0x00d2 }
+            goto L_0x00d6
         L_0x00c5:
-            org.telegram.messenger.FileLoader r8 = r7.getFileLoader()     // Catch:{ Exception -> 0x00d1 }
-            org.telegram.ui.NotificationsSoundActivity$Tone r1 = r9.tone     // Catch:{ Exception -> 0x00d1 }
-            org.telegram.tgnet.TLRPC$Document r1 = r1.document     // Catch:{ Exception -> 0x00d1 }
-            r8.loadFile(r1, r1, r3, r10)     // Catch:{ Exception -> 0x00d1 }
-            goto L_0x00d5
-        L_0x00d1:
+            org.telegram.messenger.FileLoader r8 = r7.getFileLoader()     // Catch:{ Exception -> 0x00d2 }
+            org.telegram.ui.NotificationsSoundActivity$Tone r1 = r9.tone     // Catch:{ Exception -> 0x00d2 }
+            org.telegram.tgnet.TLRPC$Document r1 = r1.document     // Catch:{ Exception -> 0x00d2 }
+            r2 = 3
+            r8.loadFile(r1, r1, r2, r10)     // Catch:{ Exception -> 0x00d2 }
+            goto L_0x00d6
+        L_0x00d2:
             r8 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r8)
-        L_0x00d5:
+        L_0x00d6:
             r7.startSelectedTone = r0
             org.telegram.ui.NotificationsSoundActivity$Tone r8 = r9.tone
             r7.selectedTone = r8
@@ -441,11 +442,11 @@ public class NotificationsSoundActivity extends BaseFragment implements ChatAtta
             org.telegram.ui.NotificationsSoundActivity$Adapter r8 = r7.adapter
             int r9 = r8.getItemCount()
             r8.notifyItemRangeChanged(r10, r9)
-            goto L_0x00ed
-        L_0x00e8:
+            goto L_0x00ee
+        L_0x00e9:
             org.telegram.ui.NotificationsSoundActivity$Tone r8 = r9.tone
             r7.checkSelection(r8)
-        L_0x00ed:
+        L_0x00ee:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.NotificationsSoundActivity.lambda$createView$1(android.content.Context, android.view.View, int):void");

@@ -100,6 +100,8 @@ public class PipVideoOverlay {
     /* access modifiers changed from: private */
     public PhotoViewer photoViewer;
     /* access modifiers changed from: private */
+    public PhotoViewerWebView photoViewerWebView;
+    /* access modifiers changed from: private */
     public PipConfig pipConfig;
     /* access modifiers changed from: private */
     public int pipHeight;
@@ -157,12 +159,21 @@ public class PipVideoOverlay {
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$new$4() {
-        VideoPlayer videoPlayer;
         PhotoViewer photoViewer2 = this.photoViewer;
-        if (photoViewer2 != null && (videoPlayer = photoViewer2.getVideoPlayer()) != null) {
-            this.videoProgress = ((float) videoPlayer.getCurrentPosition()) / ((float) videoPlayer.getDuration());
-            if (this.photoViewer == null) {
-                this.bufferProgress = ((float) videoPlayer.getBufferedPosition()) / ((float) videoPlayer.getDuration());
+        if (photoViewer2 != null) {
+            PhotoViewerWebView photoViewerWebView2 = this.photoViewerWebView;
+            if (photoViewerWebView2 != null) {
+                this.videoProgress = ((float) photoViewerWebView2.getCurrentPosition()) / ((float) this.photoViewerWebView.getVideoDuration());
+                this.bufferProgress = this.photoViewerWebView.getBufferedPosition();
+            } else {
+                VideoPlayer videoPlayer = photoViewer2.getVideoPlayer();
+                if (videoPlayer != null) {
+                    float duration = (float) getDuration();
+                    this.videoProgress = ((float) videoPlayer.getCurrentPosition()) / duration;
+                    this.bufferProgress = ((float) videoPlayer.getBufferedPosition()) / duration;
+                } else {
+                    return;
+                }
             }
             this.videoProgressView.invalidate();
             AndroidUtilities.runOnUIThread(this.progressRunnable, 500);
@@ -227,19 +238,65 @@ public class PipVideoOverlay {
         }
     }
 
+    /* access modifiers changed from: private */
+    public long getCurrentPosition() {
+        PhotoViewerWebView photoViewerWebView2 = this.photoViewerWebView;
+        if (photoViewerWebView2 != null) {
+            return (long) photoViewerWebView2.getCurrentPosition();
+        }
+        VideoPlayer videoPlayer = this.photoViewer.getVideoPlayer();
+        if (videoPlayer == null) {
+            return 0;
+        }
+        return videoPlayer.getCurrentPosition();
+    }
+
+    /* access modifiers changed from: private */
+    public void seekTo(long j) {
+        PhotoViewerWebView photoViewerWebView2 = this.photoViewerWebView;
+        if (photoViewerWebView2 != null) {
+            photoViewerWebView2.seekTo(j);
+            return;
+        }
+        VideoPlayer videoPlayer = this.photoViewer.getVideoPlayer();
+        if (videoPlayer != null) {
+            videoPlayer.seekTo(j);
+        }
+    }
+
+    /* access modifiers changed from: private */
+    public long getDuration() {
+        PhotoViewerWebView photoViewerWebView2 = this.photoViewerWebView;
+        if (photoViewerWebView2 != null) {
+            return (long) photoViewerWebView2.getVideoDuration();
+        }
+        VideoPlayer videoPlayer = this.photoViewer.getVideoPlayer();
+        if (videoPlayer == null) {
+            return 0;
+        }
+        return videoPlayer.getDuration();
+    }
+
     /* access modifiers changed from: protected */
     public void onLongClick() {
         PhotoViewer photoViewer2 = this.photoViewer;
-        if (photoViewer2 != null && photoViewer2.getVideoPlayer() != null && !this.isDismissing && !this.isVideoCompleted && !this.isScrolling && !this.scaleGestureDetector.isInProgress() && this.canLongClick) {
+        if (photoViewer2 == null) {
+            return;
+        }
+        if (!(photoViewer2.getVideoPlayer() == null && this.photoViewerWebView == null) && !this.isDismissing && !this.isVideoCompleted && !this.isScrolling && !this.scaleGestureDetector.isInProgress() && this.canLongClick) {
             VideoPlayer videoPlayer = this.photoViewer.getVideoPlayer();
             boolean z = false;
             if (this.longClickStartPoint[0] >= ((float) getSuggestedWidth()) * this.scaleFactor * 0.5f) {
                 z = true;
             }
-            long currentPosition = videoPlayer.getCurrentPosition();
-            long duration = videoPlayer.getDuration();
+            long currentPosition = getCurrentPosition();
+            long duration = getDuration();
             if (currentPosition != -9223372036854775807L && duration >= 15000) {
-                this.photoViewer.getVideoPlayerRewinder().startRewind(videoPlayer, z, this.photoViewer.getCurrentVideoSpeed());
+                if (this.photoViewerWebView != null) {
+                    this.photoViewer.getVideoPlayerRewinder().startRewind(this.photoViewerWebView, z, this.photoViewer.getCurrentVideoSpeed());
+                } else {
+                    this.photoViewer.getVideoPlayerRewinder().startRewind(videoPlayer, z, this.photoViewer.getCurrentVideoSpeed());
+                }
                 if (!this.isShowingControls) {
                     this.isShowingControls = true;
                     toggleControls(true);
@@ -393,9 +450,14 @@ public class PipVideoOverlay {
             }
         } catch (IllegalArgumentException unused) {
         }
+        PhotoViewerWebView photoViewerWebView2 = this.photoViewerWebView;
+        if (photoViewerWebView2 != null) {
+            photoViewerWebView2.showControls();
+        }
         this.videoProgressView = null;
         this.innerView = null;
         this.photoViewer = null;
+        this.photoViewerWebView = null;
         this.parentSheet = null;
         this.consumingChild = null;
         this.isScrolling = false;
@@ -419,11 +481,22 @@ public class PipVideoOverlay {
     }
 
     private void updatePlayButtonInternal() {
-        VideoPlayer videoPlayer;
+        boolean z;
         PhotoViewer photoViewer2 = this.photoViewer;
-        if (photoViewer2 != null && (videoPlayer = photoViewer2.getVideoPlayer()) != null && this.playPauseButton != null) {
+        if (photoViewer2 != null && this.playPauseButton != null) {
+            PhotoViewerWebView photoViewerWebView2 = this.photoViewerWebView;
+            if (photoViewerWebView2 != null) {
+                z = photoViewerWebView2.isPlaying();
+            } else {
+                VideoPlayer videoPlayer = photoViewer2.getVideoPlayer();
+                if (videoPlayer != null) {
+                    z = videoPlayer.isPlaying();
+                } else {
+                    return;
+                }
+            }
             AndroidUtilities.cancelRunOnUIThread(this.progressRunnable);
-            if (videoPlayer.isPlaying()) {
+            if (z) {
                 this.playPauseButton.setImageResource(R.drawable.pip_pause_large);
                 AndroidUtilities.runOnUIThread(this.progressRunnable, 500);
             } else if (this.isVideoCompleted) {
@@ -513,12 +586,18 @@ public class PipVideoOverlay {
     }
 
     public static boolean show(boolean z, Activity activity, View view, int i, int i2, boolean z2) {
-        return instance.showInternal(z, activity, view, i, i2, z2);
+        return show(z, activity, (PhotoViewerWebView) null, view, i, i2, z2);
     }
 
-    private boolean showInternal(boolean z, Activity activity, View view, int i, int i2, boolean z2) {
+    public static boolean show(boolean z, Activity activity, PhotoViewerWebView photoViewerWebView2, View view, int i, int i2, boolean z2) {
+        return instance.showInternal(z, activity, view, photoViewerWebView2, i, i2, z2);
+    }
+
+    private boolean showInternal(boolean z, Activity activity, View view, PhotoViewerWebView photoViewerWebView2, int i, int i2, boolean z2) {
         Context context;
+        PhotoViewerWebView photoViewerWebView3;
         boolean z3 = z;
+        PhotoViewerWebView photoViewerWebView4 = photoViewerWebView2;
         if (this.isVisible) {
             return false;
         }
@@ -526,6 +605,12 @@ public class PipVideoOverlay {
         this.mVideoWidth = i;
         this.mVideoHeight = i2;
         this.aspectRatio = null;
+        if (photoViewerWebView4 == null || !photoViewerWebView2.isControllable()) {
+            this.photoViewerWebView = null;
+        } else {
+            this.photoViewerWebView = photoViewerWebView4;
+            photoViewerWebView2.hideControls();
+        }
         float access$300 = getPipConfig().getPipX();
         float access$400 = getPipConfig().getPipY();
         this.scaleFactor = getPipConfig().getScaleFactor();
@@ -675,136 +760,143 @@ public class PipVideoOverlay {
                 return true;
             }
 
-            /* JADX WARNING: Removed duplicated region for block: B:39:0x00ab  */
+            /* JADX WARNING: Removed duplicated region for block: B:41:0x00b6  */
             /* Code decompiled incorrectly, please refer to instructions dump. */
-            public boolean onDoubleTap(android.view.MotionEvent r15) {
+            public boolean onDoubleTap(android.view.MotionEvent r14) {
                 /*
-                    r14 = this;
+                    r13 = this;
                     org.telegram.ui.Components.PipVideoOverlay r0 = org.telegram.ui.Components.PipVideoOverlay.this
                     org.telegram.ui.PhotoViewer r0 = r0.photoViewer
                     r1 = 0
-                    if (r0 == 0) goto L_0x0102
+                    if (r0 == 0) goto L_0x010f
                     org.telegram.ui.Components.PipVideoOverlay r0 = org.telegram.ui.Components.PipVideoOverlay.this
                     org.telegram.ui.PhotoViewer r0 = r0.photoViewer
                     org.telegram.ui.Components.VideoPlayer r0 = r0.getVideoPlayer()
-                    if (r0 == 0) goto L_0x0102
+                    if (r0 != 0) goto L_0x001d
+                    org.telegram.ui.Components.PipVideoOverlay r0 = org.telegram.ui.Components.PipVideoOverlay.this
+                    org.telegram.ui.Components.PhotoViewerWebView r0 = r0.photoViewerWebView
+                    if (r0 == 0) goto L_0x010f
+                L_0x001d:
                     org.telegram.ui.Components.PipVideoOverlay r0 = org.telegram.ui.Components.PipVideoOverlay.this
                     boolean r0 = r0.isDismissing
-                    if (r0 != 0) goto L_0x0102
+                    if (r0 != 0) goto L_0x010f
                     org.telegram.ui.Components.PipVideoOverlay r0 = org.telegram.ui.Components.PipVideoOverlay.this
                     boolean r0 = r0.isVideoCompleted
-                    if (r0 != 0) goto L_0x0102
+                    if (r0 != 0) goto L_0x010f
                     org.telegram.ui.Components.PipVideoOverlay r0 = org.telegram.ui.Components.PipVideoOverlay.this
                     boolean r0 = r0.isScrolling
-                    if (r0 != 0) goto L_0x0102
+                    if (r0 != 0) goto L_0x010f
                     org.telegram.ui.Components.PipVideoOverlay r0 = org.telegram.ui.Components.PipVideoOverlay.this
                     android.view.ScaleGestureDetector r0 = r0.scaleGestureDetector
                     boolean r0 = r0.isInProgress()
-                    if (r0 != 0) goto L_0x0102
+                    if (r0 != 0) goto L_0x010f
                     org.telegram.ui.Components.PipVideoOverlay r0 = org.telegram.ui.Components.PipVideoOverlay.this
                     boolean r0 = r0.canLongClick
-                    if (r0 != 0) goto L_0x0043
-                    goto L_0x0102
-                L_0x0043:
+                    if (r0 != 0) goto L_0x004b
+                    goto L_0x010f
+                L_0x004b:
                     org.telegram.ui.Components.PipVideoOverlay r0 = org.telegram.ui.Components.PipVideoOverlay.this
                     org.telegram.ui.PhotoViewer r0 = r0.photoViewer
-                    org.telegram.ui.Components.VideoPlayer r0 = r0.getVideoPlayer()
-                    float r15 = r15.getX()
-                    org.telegram.ui.Components.PipVideoOverlay r2 = org.telegram.ui.Components.PipVideoOverlay.this
-                    int r2 = r2.getSuggestedWidth()
-                    float r2 = (float) r2
-                    org.telegram.ui.Components.PipVideoOverlay r3 = org.telegram.ui.Components.PipVideoOverlay.this
-                    float r3 = r3.scaleFactor
-                    float r2 = r2 * r3
-                    r3 = 1056964608(0x3var_, float:0.5)
-                    float r2 = r2 * r3
-                    r3 = 1
-                    int r15 = (r15 > r2 ? 1 : (r15 == r2 ? 0 : -1))
-                    if (r15 < 0) goto L_0x006b
-                    r15 = 1
-                    goto L_0x006c
-                L_0x006b:
-                    r15 = 0
-                L_0x006c:
-                    long r4 = r0.getCurrentPosition()
-                    long r6 = r0.getDuration()
-                    r8 = -9223372036854775807(0xNUM, double:-4.9E-324)
-                    int r2 = (r4 > r8 ? 1 : (r4 == r8 ? 0 : -1))
-                    if (r2 == 0) goto L_0x0102
-                    r8 = 15000(0x3a98, double:7.411E-320)
-                    int r2 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1))
-                    if (r2 >= 0) goto L_0x0085
-                    goto L_0x0102
-                L_0x0085:
-                    r8 = 10000(0x2710, double:4.9407E-320)
-                    if (r15 == 0) goto L_0x008c
-                    long r10 = r4 + r8
-                    goto L_0x008e
-                L_0x008c:
-                    long r10 = r4 - r8
-                L_0x008e:
-                    int r2 = (r4 > r10 ? 1 : (r4 == r10 ? 0 : -1))
-                    if (r2 == 0) goto L_0x0102
-                    r4 = 0
-                    int r2 = (r10 > r6 ? 1 : (r10 == r6 ? 0 : -1))
-                    if (r2 <= 0) goto L_0x009a
-                    r10 = r6
-                    goto L_0x00a8
-                L_0x009a:
-                    int r2 = (r10 > r4 ? 1 : (r10 == r4 ? 0 : -1))
-                    if (r2 >= 0) goto L_0x00a8
-                    r12 = -9000(0xffffffffffffdcd8, double:NaN)
-                    int r2 = (r10 > r12 ? 1 : (r10 == r12 ? 0 : -1))
-                    if (r2 >= 0) goto L_0x00a5
-                    goto L_0x00a6
-                L_0x00a5:
-                    r1 = 1
-                L_0x00a6:
-                    r10 = r4
-                    goto L_0x00a9
-                L_0x00a8:
-                    r1 = 1
-                L_0x00a9:
-                    if (r1 == 0) goto L_0x0101
-                    org.telegram.ui.Components.PipVideoOverlay r1 = org.telegram.ui.Components.PipVideoOverlay.this
-                    org.telegram.ui.Components.VideoForwardDrawable r1 = r1.videoForwardDrawable
-                    r1.setOneShootAnimation(r3)
-                    org.telegram.ui.Components.PipVideoOverlay r1 = org.telegram.ui.Components.PipVideoOverlay.this
-                    org.telegram.ui.Components.VideoForwardDrawable r1 = r1.videoForwardDrawable
-                    r2 = r15 ^ 1
-                    r1.setLeftSide(r2)
-                    org.telegram.ui.Components.PipVideoOverlay r1 = org.telegram.ui.Components.PipVideoOverlay.this
-                    org.telegram.ui.Components.VideoForwardDrawable r1 = r1.videoForwardDrawable
-                    r1.addTime(r8)
-                    r0.seekTo(r10)
+                    r0.getVideoPlayer()
+                    float r14 = r14.getX()
                     org.telegram.ui.Components.PipVideoOverlay r0 = org.telegram.ui.Components.PipVideoOverlay.this
-                    if (r15 == 0) goto L_0x00d0
-                    goto L_0x00d2
-                L_0x00d0:
-                    r8 = -10000(0xffffffffffffd8f0, double:NaN)
-                L_0x00d2:
-                    float r15 = (float) r10
-                    float r1 = (float) r6
-                    float r15 = r15 / r1
-                    r0.onUpdateRewindProgressUiInternal(r8, r15, r3)
-                    org.telegram.ui.Components.PipVideoOverlay r15 = org.telegram.ui.Components.PipVideoOverlay.this
-                    boolean r15 = r15.isShowingControls
-                    if (r15 != 0) goto L_0x0101
-                    org.telegram.ui.Components.PipVideoOverlay r15 = org.telegram.ui.Components.PipVideoOverlay.this
-                    boolean r0 = r15.isShowingControls = r3
-                    r15.toggleControls(r0)
-                    org.telegram.ui.Components.PipVideoOverlay r15 = org.telegram.ui.Components.PipVideoOverlay.this
-                    boolean r15 = r15.postedDismissControls
-                    if (r15 != 0) goto L_0x0101
-                    org.telegram.ui.Components.PipVideoOverlay r15 = org.telegram.ui.Components.PipVideoOverlay.this
-                    boolean unused = r15.postedDismissControls = r3
-                    org.telegram.ui.Components.PipVideoOverlay r15 = org.telegram.ui.Components.PipVideoOverlay.this
-                    java.lang.Runnable r15 = r15.dismissControlsCallback
+                    int r0 = r0.getSuggestedWidth()
+                    float r0 = (float) r0
+                    org.telegram.ui.Components.PipVideoOverlay r2 = org.telegram.ui.Components.PipVideoOverlay.this
+                    float r2 = r2.scaleFactor
+                    float r0 = r0 * r2
+                    r2 = 1056964608(0x3var_, float:0.5)
+                    float r0 = r0 * r2
+                    r2 = 1
+                    int r14 = (r14 > r0 ? 1 : (r14 == r0 ? 0 : -1))
+                    if (r14 < 0) goto L_0x0072
+                    r14 = 1
+                    goto L_0x0073
+                L_0x0072:
+                    r14 = 0
+                L_0x0073:
+                    org.telegram.ui.Components.PipVideoOverlay r0 = org.telegram.ui.Components.PipVideoOverlay.this
+                    long r3 = r0.getCurrentPosition()
+                    org.telegram.ui.Components.PipVideoOverlay r0 = org.telegram.ui.Components.PipVideoOverlay.this
+                    long r5 = r0.getDuration()
+                    r7 = -9223372036854775807(0xNUM, double:-4.9E-324)
+                    int r0 = (r3 > r7 ? 1 : (r3 == r7 ? 0 : -1))
+                    if (r0 == 0) goto L_0x010f
+                    r7 = 15000(0x3a98, double:7.411E-320)
+                    int r0 = (r5 > r7 ? 1 : (r5 == r7 ? 0 : -1))
+                    if (r0 >= 0) goto L_0x0090
+                    goto L_0x010f
+                L_0x0090:
+                    r7 = 10000(0x2710, double:4.9407E-320)
+                    if (r14 == 0) goto L_0x0097
+                    long r9 = r3 + r7
+                    goto L_0x0099
+                L_0x0097:
+                    long r9 = r3 - r7
+                L_0x0099:
+                    int r0 = (r3 > r9 ? 1 : (r3 == r9 ? 0 : -1))
+                    if (r0 == 0) goto L_0x010f
+                    r3 = 0
+                    int r0 = (r9 > r5 ? 1 : (r9 == r5 ? 0 : -1))
+                    if (r0 <= 0) goto L_0x00a5
+                    r9 = r5
+                    goto L_0x00b3
+                L_0x00a5:
+                    int r0 = (r9 > r3 ? 1 : (r9 == r3 ? 0 : -1))
+                    if (r0 >= 0) goto L_0x00b3
+                    r11 = -9000(0xffffffffffffdcd8, double:NaN)
+                    int r0 = (r9 > r11 ? 1 : (r9 == r11 ? 0 : -1))
+                    if (r0 >= 0) goto L_0x00b0
+                    goto L_0x00b1
+                L_0x00b0:
+                    r1 = 1
+                L_0x00b1:
+                    r9 = r3
+                    goto L_0x00b4
+                L_0x00b3:
+                    r1 = 1
+                L_0x00b4:
+                    if (r1 == 0) goto L_0x010e
+                    org.telegram.ui.Components.PipVideoOverlay r0 = org.telegram.ui.Components.PipVideoOverlay.this
+                    org.telegram.ui.Components.VideoForwardDrawable r0 = r0.videoForwardDrawable
+                    r0.setOneShootAnimation(r2)
+                    org.telegram.ui.Components.PipVideoOverlay r0 = org.telegram.ui.Components.PipVideoOverlay.this
+                    org.telegram.ui.Components.VideoForwardDrawable r0 = r0.videoForwardDrawable
+                    r1 = r14 ^ 1
+                    r0.setLeftSide(r1)
+                    org.telegram.ui.Components.PipVideoOverlay r0 = org.telegram.ui.Components.PipVideoOverlay.this
+                    org.telegram.ui.Components.VideoForwardDrawable r0 = r0.videoForwardDrawable
+                    r0.addTime(r7)
+                    org.telegram.ui.Components.PipVideoOverlay r0 = org.telegram.ui.Components.PipVideoOverlay.this
+                    r0.seekTo(r9)
+                    org.telegram.ui.Components.PipVideoOverlay r0 = org.telegram.ui.Components.PipVideoOverlay.this
+                    if (r14 == 0) goto L_0x00dd
+                    goto L_0x00df
+                L_0x00dd:
+                    r7 = -10000(0xffffffffffffd8f0, double:NaN)
+                L_0x00df:
+                    float r14 = (float) r9
+                    float r1 = (float) r5
+                    float r14 = r14 / r1
+                    r0.onUpdateRewindProgressUiInternal(r7, r14, r2)
+                    org.telegram.ui.Components.PipVideoOverlay r14 = org.telegram.ui.Components.PipVideoOverlay.this
+                    boolean r14 = r14.isShowingControls
+                    if (r14 != 0) goto L_0x010e
+                    org.telegram.ui.Components.PipVideoOverlay r14 = org.telegram.ui.Components.PipVideoOverlay.this
+                    boolean r0 = r14.isShowingControls = r2
+                    r14.toggleControls(r0)
+                    org.telegram.ui.Components.PipVideoOverlay r14 = org.telegram.ui.Components.PipVideoOverlay.this
+                    boolean r14 = r14.postedDismissControls
+                    if (r14 != 0) goto L_0x010e
+                    org.telegram.ui.Components.PipVideoOverlay r14 = org.telegram.ui.Components.PipVideoOverlay.this
+                    boolean unused = r14.postedDismissControls = r2
+                    org.telegram.ui.Components.PipVideoOverlay r14 = org.telegram.ui.Components.PipVideoOverlay.this
+                    java.lang.Runnable r14 = r14.dismissControlsCallback
                     r0 = 2500(0x9c4, double:1.235E-320)
-                    org.telegram.messenger.AndroidUtilities.runOnUIThread(r15, r0)
-                L_0x0101:
-                    return r3
-                L_0x0102:
+                    org.telegram.messenger.AndroidUtilities.runOnUIThread(r14, r0)
+                L_0x010e:
+                    return r2
+                L_0x010f:
                     return r1
                 */
                 throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PipVideoOverlay.AnonymousClass4.onDoubleTap(android.view.MotionEvent):boolean");
@@ -818,13 +910,15 @@ public class PipVideoOverlay {
             }
 
             public boolean hasDoubleTap() {
-                if (PipVideoOverlay.this.photoViewer == null || PipVideoOverlay.this.photoViewer.getVideoPlayer() == null || PipVideoOverlay.this.isDismissing || PipVideoOverlay.this.isVideoCompleted || PipVideoOverlay.this.isScrolling || PipVideoOverlay.this.scaleGestureDetector.isInProgress() || !PipVideoOverlay.this.canLongClick) {
+                if (PipVideoOverlay.this.photoViewer == null) {
                     return false;
                 }
-                VideoPlayer videoPlayer = PipVideoOverlay.this.photoViewer.getVideoPlayer();
-                long currentPosition = videoPlayer.getCurrentPosition();
-                long duration = videoPlayer.getDuration();
-                if (currentPosition == -9223372036854775807L || duration < 15000) {
+                if ((PipVideoOverlay.this.photoViewer.getVideoPlayer() == null && PipVideoOverlay.this.photoViewerWebView == null) || PipVideoOverlay.this.isDismissing || PipVideoOverlay.this.isVideoCompleted || PipVideoOverlay.this.isScrolling || PipVideoOverlay.this.scaleGestureDetector.isInProgress() || !PipVideoOverlay.this.canLongClick) {
+                    return false;
+                }
+                long access$3700 = PipVideoOverlay.this.getCurrentPosition();
+                long access$3800 = PipVideoOverlay.this.getDuration();
+                if (access$3700 == -9223372036854775807L || access$3800 < 15000) {
                     return false;
                 }
                 return true;
@@ -1092,9 +1186,10 @@ public class PipVideoOverlay {
         imageView3.setColorFilter(Theme.getColor("voipgroup_actionBarItems"), PorterDuff.Mode.MULTIPLY);
         this.playPauseButton.setBackground(Theme.createSelectorDrawable(Theme.getColor("listSelectorSDK21")));
         this.playPauseButton.setOnClickListener(new PipVideoOverlay$$ExternalSyntheticLambda1(this));
-        boolean z4 = this.innerView instanceof WebView;
+        View view3 = this.innerView;
+        boolean z4 = (view3 instanceof WebView) || (view3 instanceof PhotoViewerWebView);
         this.isWebView = z4;
-        this.playPauseButton.setVisibility(z4 ? 8 : 0);
+        this.playPauseButton.setVisibility((!z4 || ((photoViewerWebView3 = this.photoViewerWebView) != null && photoViewerWebView3.isControllable())) ? 0 : 8);
         this.controlsView.addView(this.playPauseButton, LayoutHelper.createFrame(38, 38, 17));
         VideoProgressView videoProgressView2 = new VideoProgressView(context2);
         this.videoProgressView = videoProgressView2;
@@ -1192,13 +1287,24 @@ public class PipVideoOverlay {
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$showInternal$11(View view) {
-        VideoPlayer videoPlayer;
         PhotoViewer photoViewer2 = this.photoViewer;
-        if (photoViewer2 != null && (videoPlayer = photoViewer2.getVideoPlayer()) != null) {
-            if (videoPlayer.isPlaying()) {
-                videoPlayer.pause();
+        if (photoViewer2 != null) {
+            PhotoViewerWebView photoViewerWebView2 = this.photoViewerWebView;
+            if (photoViewerWebView2 == null) {
+                VideoPlayer videoPlayer = photoViewer2.getVideoPlayer();
+                if (videoPlayer != null) {
+                    if (videoPlayer.isPlaying()) {
+                        videoPlayer.pause();
+                    } else {
+                        videoPlayer.play();
+                    }
+                } else {
+                    return;
+                }
+            } else if (photoViewerWebView2.isPlaying()) {
+                this.photoViewerWebView.pauseVideo();
             } else {
-                videoPlayer.play();
+                this.photoViewerWebView.playVideo();
             }
             updatePlayButton();
         }
@@ -1240,17 +1346,17 @@ public class PipVideoOverlay {
         /* access modifiers changed from: protected */
         public void onDraw(Canvas canvas) {
             super.onDraw(canvas);
-            if (!PipVideoOverlay.this.isWebView) {
+            if (!PipVideoOverlay.this.isWebView || (PipVideoOverlay.this.photoViewerWebView != null && PipVideoOverlay.this.photoViewerWebView.isControllable())) {
                 int width = getWidth();
                 int dp = AndroidUtilities.dp(10.0f);
                 float f = (float) ((width - dp) - dp);
-                int access$4700 = ((int) (PipVideoOverlay.this.videoProgress * f)) + dp;
+                int access$5100 = ((int) (PipVideoOverlay.this.videoProgress * f)) + dp;
                 float height = (float) (getHeight() - AndroidUtilities.dp(8.0f));
                 if (PipVideoOverlay.this.bufferProgress != 0.0f) {
                     float f2 = (float) dp;
                     canvas.drawLine(f2, height, f2 + (f * PipVideoOverlay.this.bufferProgress), height, this.bufferPaint);
                 }
-                canvas.drawLine((float) dp, height, (float) access$4700, height, this.progressPaint);
+                canvas.drawLine((float) dp, height, (float) access$5100, height, this.progressPaint);
             }
         }
     }

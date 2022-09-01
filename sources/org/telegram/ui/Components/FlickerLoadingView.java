@@ -46,6 +46,10 @@ public class FlickerLoadingView extends View {
     private boolean useHeaderOffset;
     private int viewType;
 
+    public int getAdditionalHeight() {
+        return 0;
+    }
+
     public int getColumnsCount() {
         return 2;
     }
@@ -99,11 +103,11 @@ public class FlickerLoadingView extends View {
         if (this.isSingleCell) {
             int i3 = this.itemsCount;
             if (i3 > 1 && this.ignoreHeightCheck) {
-                super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(getCellHeight(View.MeasureSpec.getSize(i)) * this.itemsCount, NUM));
+                super.onMeasure(i, View.MeasureSpec.makeMeasureSpec((getCellHeight(View.MeasureSpec.getSize(i)) * this.itemsCount) + getAdditionalHeight(), NUM));
             } else if (i3 <= 1 || View.MeasureSpec.getSize(i2) <= 0) {
-                super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(getCellHeight(View.MeasureSpec.getSize(i)), NUM));
+                super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(getCellHeight(View.MeasureSpec.getSize(i)) + getAdditionalHeight(), NUM));
             } else {
-                super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(Math.min(View.MeasureSpec.getSize(i2), getCellHeight(View.MeasureSpec.getSize(i)) * this.itemsCount), NUM));
+                super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(Math.min(View.MeasureSpec.getSize(i2), getCellHeight(View.MeasureSpec.getSize(i)) * this.itemsCount) + getAdditionalHeight(), NUM));
             }
         } else {
             super.onMeasure(i, i2);
@@ -504,7 +508,7 @@ public class FlickerLoadingView extends View {
                         }
                         i2 = i26;
                     }
-                } else if (getViewType() == 16) {
+                } else if (getViewType() == 16 || getViewType() == 23) {
                     int i27 = 0;
                     while (i <= getMeasuredHeight()) {
                         int dp26 = AndroidUtilities.dp(18.0f);
@@ -522,6 +526,12 @@ public class FlickerLoadingView extends View {
                             break;
                         }
                     }
+                    this.rectF.set((float) (this.paddingLeft + AndroidUtilities.dp(8.0f)), (float) (AndroidUtilities.dp(20.0f) + i), (float) (getWidth() - AndroidUtilities.dp(8.0f)), (float) (AndroidUtilities.dp(28.0f) + i));
+                    checkRtl(this.rectF);
+                    canvas2.drawRoundRect(this.rectF, (float) AndroidUtilities.dp(8.0f), (float) AndroidUtilities.dp(8.0f), paint3);
+                    this.rectF.set((float) (this.paddingLeft + AndroidUtilities.dp(8.0f)), (float) (AndroidUtilities.dp(36.0f) + i), (float) (getWidth() - AndroidUtilities.dp(53.0f)), (float) (i + AndroidUtilities.dp(44.0f)));
+                    checkRtl(this.rectF);
+                    canvas2.drawRoundRect(this.rectF, (float) AndroidUtilities.dp(8.0f), (float) AndroidUtilities.dp(8.0f), paint3);
                 } else {
                     int i28 = this.viewType;
                     if (i28 == 21) {
@@ -674,6 +684,7 @@ public class FlickerLoadingView extends View {
             case 15:
                 return AndroidUtilities.dp(107.0f);
             case 16:
+            case 23:
                 return AndroidUtilities.dp(48.0f);
             case 19:
                 return AndroidUtilities.dp(58.0f);

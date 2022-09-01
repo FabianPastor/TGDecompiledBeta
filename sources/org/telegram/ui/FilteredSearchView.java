@@ -1267,7 +1267,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
             } else {
                 int i3 = this.currentSearchFilter.filterType;
                 if (i3 == 0) {
-                    PhotoViewer.getInstance().setParentActivity(this.parentActivity);
+                    PhotoViewer.getInstance().setParentActivity(this.parentFragment);
                     PhotoViewer.getInstance().openPhoto(this.messages, i, 0, 0, this.provider);
                     this.photoViewerClassGuid = PhotoViewer.getInstance().getClassGuid();
                 } else if (i3 == 3 || i3 == 5) {
@@ -1280,17 +1280,17 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                         TLRPC$Document document = messageObject.getDocument();
                         if (sharedDocumentCell.isLoaded()) {
                             if (messageObject.canPreviewDocument()) {
-                                PhotoViewer.getInstance().setParentActivity(this.parentActivity);
+                                PhotoViewer.getInstance().setParentActivity(this.parentFragment);
                                 int indexOf = this.messages.indexOf(messageObject);
                                 if (indexOf < 0) {
                                     ArrayList arrayList = new ArrayList();
                                     arrayList.add(messageObject);
-                                    PhotoViewer.getInstance().setParentActivity(this.parentActivity);
+                                    PhotoViewer.getInstance().setParentActivity(this.parentFragment);
                                     PhotoViewer.getInstance().openPhoto((ArrayList<MessageObject>) arrayList, 0, 0, 0, this.provider);
                                     this.photoViewerClassGuid = PhotoViewer.getInstance().getClassGuid();
                                     return;
                                 }
-                                PhotoViewer.getInstance().setParentActivity(this.parentActivity);
+                                PhotoViewer.getInstance().setParentActivity(this.parentFragment);
                                 PhotoViewer.getInstance().openPhoto(this.messages, indexOf, 0, 0, this.provider);
                                 this.photoViewerClassGuid = PhotoViewer.getInstance().getClassGuid();
                                 return;
@@ -1735,7 +1735,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
 
     /* access modifiers changed from: private */
     public void openWebView(TLRPC$WebPage tLRPC$WebPage, MessageObject messageObject) {
-        EmbedBottomSheet.show(this.parentActivity, messageObject, this.provider, tLRPC$WebPage.site_name, tLRPC$WebPage.description, tLRPC$WebPage.url, tLRPC$WebPage.embed_url, tLRPC$WebPage.embed_width, tLRPC$WebPage.embed_height, false);
+        EmbedBottomSheet.show(this.parentFragment, messageObject, this.provider, tLRPC$WebPage.site_name, tLRPC$WebPage.description, tLRPC$WebPage.url, tLRPC$WebPage.embed_url, tLRPC$WebPage.embed_width, tLRPC$WebPage.embed_height, false);
     }
 
     /* access modifiers changed from: protected */

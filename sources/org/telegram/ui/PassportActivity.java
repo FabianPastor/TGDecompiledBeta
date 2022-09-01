@@ -152,6 +152,7 @@ import org.telegram.tgnet.TLRPC$TL_secureValueTypeRentalAgreement;
 import org.telegram.tgnet.TLRPC$TL_secureValueTypeTemporaryRegistration;
 import org.telegram.tgnet.TLRPC$TL_secureValueTypeUtilityBill;
 import org.telegram.tgnet.TLRPC$User;
+import org.telegram.tgnet.TLRPC$account_Password;
 import org.telegram.tgnet.TLRPC$auth_CodeType;
 import org.telegram.tgnet.TLRPC$auth_SentCodeType;
 import org.telegram.ui.ActionBar.ActionBar;
@@ -223,7 +224,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     /* access modifiers changed from: private */
     public String currentNonce;
     /* access modifiers changed from: private */
-    public TLRPC$TL_account_password currentPassword;
+    public TLRPC$account_Password currentPassword;
     /* access modifiers changed from: private */
     public String currentPayload;
     private TLRPC$TL_auth_sentCode currentPhoneVerification;
@@ -664,7 +665,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     /* JADX WARNING: Removed duplicated region for block: B:94:0x022f A[Catch:{ Exception -> 0x023d }] */
     /* JADX WARNING: Unknown variable types count: 1 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public PassportActivity(int r20, long r21, java.lang.String r23, java.lang.String r24, java.lang.String r25, java.lang.String r26, java.lang.String r27, org.telegram.tgnet.TLRPC$TL_account_authorizationForm r28, org.telegram.tgnet.TLRPC$TL_account_password r29) {
+    public PassportActivity(int r20, long r21, java.lang.String r23, java.lang.String r24, java.lang.String r25, java.lang.String r26, java.lang.String r27, org.telegram.tgnet.TLRPC$TL_account_authorizationForm r28, org.telegram.tgnet.TLRPC$account_Password r29) {
         /*
             r19 = this;
             r10 = r19
@@ -679,7 +680,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r1 = r20
             r2 = r28
             r3 = r29
-            r0.<init>((int) r1, (org.telegram.tgnet.TLRPC$TL_account_authorizationForm) r2, (org.telegram.tgnet.TLRPC$TL_account_password) r3, (org.telegram.tgnet.TLRPC$TL_secureRequiredType) r4, (org.telegram.tgnet.TLRPC$TL_secureValue) r5, (org.telegram.tgnet.TLRPC$TL_secureRequiredType) r6, (org.telegram.tgnet.TLRPC$TL_secureValue) r7, (java.util.HashMap<java.lang.String, java.lang.String>) r8, (java.util.HashMap<java.lang.String, java.lang.String>) r9)
+            r0.<init>((int) r1, (org.telegram.tgnet.TLRPC$TL_account_authorizationForm) r2, (org.telegram.tgnet.TLRPC$account_Password) r3, (org.telegram.tgnet.TLRPC$TL_secureRequiredType) r4, (org.telegram.tgnet.TLRPC$TL_secureValue) r5, (org.telegram.tgnet.TLRPC$TL_secureRequiredType) r6, (org.telegram.tgnet.TLRPC$TL_secureValue) r7, (java.util.HashMap<java.lang.String, java.lang.String>) r8, (java.util.HashMap<java.lang.String, java.lang.String>) r9)
             r0 = r21
             r10.currentBotId = r0
             r0 = r25
@@ -994,10 +995,10 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         L_0x023d:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PassportActivity.<init>(int, long, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, org.telegram.tgnet.TLRPC$TL_account_authorizationForm, org.telegram.tgnet.TLRPC$TL_account_password):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PassportActivity.<init>(int, long, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, org.telegram.tgnet.TLRPC$TL_account_authorizationForm, org.telegram.tgnet.TLRPC$account_Password):void");
     }
 
-    public PassportActivity(int i, TLRPC$TL_account_authorizationForm tLRPC$TL_account_authorizationForm, TLRPC$TL_account_password tLRPC$TL_account_password, TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType, TLRPC$TL_secureValue tLRPC$TL_secureValue, TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType2, TLRPC$TL_secureValue tLRPC$TL_secureValue2, HashMap<String, String> hashMap, HashMap<String, String> hashMap2) {
+    public PassportActivity(int i, TLRPC$TL_account_authorizationForm tLRPC$TL_account_authorizationForm, TLRPC$account_Password tLRPC$account_Password, TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType, TLRPC$TL_secureValue tLRPC$TL_secureValue, TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType2, TLRPC$TL_secureValue tLRPC$TL_secureValue2, HashMap<String, String> hashMap, HashMap<String, String> hashMap2) {
         this.currentCitizeship = "";
         this.currentResidence = "";
         this.currentExpireDate = new int[3];
@@ -1102,7 +1103,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         this.currentTypeValue = tLRPC$TL_secureValue;
         this.currentDocumentsType = tLRPC$TL_secureRequiredType2;
         this.currentDocumentsTypeValue = tLRPC$TL_secureValue2;
-        this.currentPassword = tLRPC$TL_account_password;
+        this.currentPassword = tLRPC$account_Password;
         this.currentValues = hashMap;
         this.currentDocumentValues = hashMap2;
         if (i == 3) {
@@ -1122,11 +1123,11 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 this.savedPasswordHash = UserConfig.getInstance(this.currentAccount).savedPasswordHash;
                 this.savedSaltedPassword = UserConfig.getInstance(this.currentAccount).savedSaltedPassword;
             }
-            TLRPC$TL_account_password tLRPC$TL_account_password2 = this.currentPassword;
-            if (tLRPC$TL_account_password2 == null) {
+            TLRPC$account_Password tLRPC$account_Password2 = this.currentPassword;
+            if (tLRPC$account_Password2 == null) {
                 loadPasswordInfo();
             } else {
-                TwoStepVerificationActivity.initPasswordNewAlgo(tLRPC$TL_account_password2);
+                TwoStepVerificationActivity.initPasswordNewAlgo(tLRPC$account_Password2);
                 if (this.usingSavedPassword == 1) {
                     onPasswordDone(true);
                 }
@@ -1716,7 +1717,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 L_0x0027:
                     org.telegram.ui.PassportActivity r1 = org.telegram.ui.PassportActivity.this
                     r1.finishFragment()
-                    goto L_0x0363
+                    goto L_0x0361
                 L_0x002e:
                     r5 = 0
                     r6 = 1
@@ -1789,10 +1790,10 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     org.telegram.ui.PassportActivity r1 = org.telegram.ui.PassportActivity.this
                     org.telegram.ui.ActionBar.AlertDialog r2 = r2.create()
                     r1.showDialog(r2)
-                    goto L_0x0363
+                    goto L_0x0361
                 L_0x00e7:
                     r3 = 2
-                    if (r1 != r3) goto L_0x0363
+                    if (r1 != r3) goto L_0x0361
                     org.telegram.ui.PassportActivity r1 = org.telegram.ui.PassportActivity.this
                     int r1 = r1.currentActivityType
                     if (r1 != r2) goto L_0x00f8
@@ -1810,7 +1811,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     int r2 = r2.currentViewNum
                     r1 = r1[r2]
                     r1.onNextPressed(r5)
-                    goto L_0x0363
+                    goto L_0x0361
                 L_0x0114:
                     org.telegram.ui.PassportActivity$3$$ExternalSyntheticLambda2 r1 = new org.telegram.ui.PassportActivity$3$$ExternalSyntheticLambda2
                     r1.<init>(r0)
@@ -1856,7 +1857,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     r18 = r1
                     r19 = r2
                     r7.saveValue(r8, r9, r10, r11, r12, r13, r14, r15, r16, r17, r18, r19)
-                    goto L_0x035e
+                    goto L_0x035c
                 L_0x0170:
                     org.telegram.ui.PassportActivity r7 = org.telegram.ui.PassportActivity.this
                     int r7 = r7.currentActivityType
@@ -1911,7 +1912,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     r18 = r1
                     r19 = r2
                     r7.saveValue(r8, r9, r10, r11, r12, r13, r14, r15, r16, r17, r18, r19)
-                    goto L_0x035e
+                    goto L_0x035c
                 L_0x01eb:
                     org.telegram.ui.PassportActivity r7 = org.telegram.ui.PassportActivity.this
                     int r7 = r7.currentActivityType
@@ -2020,7 +2021,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     r18 = r1
                     r19 = r2
                     r7.saveValue(r8, r9, r10, r11, r12, r13, r14, r15, r16, r17, r18, r19)
-                    goto L_0x035e
+                    goto L_0x035c
                 L_0x02f8:
                     return
                 L_0x02f9:
@@ -2028,27 +2029,27 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     int r3 = r3.currentActivityType
                     if (r3 != r6) goto L_0x0308
                     boolean r1 = r0.onIdentityDone(r1, r2)
-                    if (r1 != 0) goto L_0x035e
+                    if (r1 != 0) goto L_0x035c
                     return
                 L_0x0308:
                     org.telegram.ui.PassportActivity r3 = org.telegram.ui.PassportActivity.this
                     int r3 = r3.currentActivityType
                     r5 = 6
-                    if (r3 != r5) goto L_0x035e
+                    if (r3 != r5) goto L_0x035c
                     org.telegram.tgnet.TLRPC$TL_account_verifyEmail r3 = new org.telegram.tgnet.TLRPC$TL_account_verifyEmail
                     r3.<init>()
-                    org.telegram.ui.PassportActivity r5 = org.telegram.ui.PassportActivity.this
-                    java.util.HashMap r5 = r5.currentValues
-                    java.lang.String r7 = "email"
-                    java.lang.Object r5 = r5.get(r7)
-                    java.lang.String r5 = (java.lang.String) r5
-                    r3.email = r5
-                    org.telegram.ui.PassportActivity r5 = org.telegram.ui.PassportActivity.this
-                    org.telegram.ui.Components.EditTextBoldCursor[] r5 = r5.inputFields
-                    r4 = r5[r4]
+                    org.telegram.tgnet.TLRPC$TL_emailVerifyPurposePassport r5 = new org.telegram.tgnet.TLRPC$TL_emailVerifyPurposePassport
+                    r5.<init>()
+                    r3.purpose = r5
+                    org.telegram.tgnet.TLRPC$TL_emailVerificationCode r5 = new org.telegram.tgnet.TLRPC$TL_emailVerificationCode
+                    r5.<init>()
+                    org.telegram.ui.PassportActivity r7 = org.telegram.ui.PassportActivity.this
+                    org.telegram.ui.Components.EditTextBoldCursor[] r7 = r7.inputFields
+                    r4 = r7[r4]
                     android.text.Editable r4 = r4.getText()
                     java.lang.String r4 = r4.toString()
-                    r3.code = r4
+                    r5.code = r4
+                    r3.verification = r5
                     org.telegram.ui.PassportActivity r4 = org.telegram.ui.PassportActivity.this
                     int r4 = r4.currentAccount
                     org.telegram.tgnet.ConnectionsManager r4 = org.telegram.tgnet.ConnectionsManager.getInstance(r4)
@@ -2061,10 +2062,10 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     org.telegram.ui.PassportActivity r3 = org.telegram.ui.PassportActivity.this
                     int r3 = r3.classGuid
                     r2.bindRequestToGuid(r1, r3)
-                L_0x035e:
+                L_0x035c:
                     org.telegram.ui.PassportActivity r1 = org.telegram.ui.PassportActivity.this
                     r1.showEditDoneProgress(r6, r6)
-                L_0x0363:
+                L_0x0361:
                     return
                 */
                 throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PassportActivity.AnonymousClass3.onItemClick(int):void");
@@ -2386,9 +2387,9 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$loadPasswordInfo$3(TLObject tLObject) {
         if (tLObject != null) {
-            TLRPC$TL_account_password tLRPC$TL_account_password = (TLRPC$TL_account_password) tLObject;
-            this.currentPassword = tLRPC$TL_account_password;
-            if (!TwoStepVerificationActivity.canHandleCurrentPassword(tLRPC$TL_account_password, false)) {
+            TLRPC$account_Password tLRPC$account_Password = (TLRPC$account_Password) tLObject;
+            this.currentPassword = tLRPC$account_Password;
+            if (!TwoStepVerificationActivity.canHandleCurrentPassword(tLRPC$account_Password, false)) {
                 AlertsCreator.showUpdateAppAlert(getParentActivity(), LocaleController.getString("UpdateAppAlert", R.string.UpdateAppAlert), true);
                 return;
             }
@@ -2658,9 +2659,9 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$createPasswordInterface$8(TLRPC$TL_auth_passwordRecovery tLRPC$TL_auth_passwordRecovery, DialogInterface dialogInterface, int i) {
-        TLRPC$TL_account_password tLRPC$TL_account_password = this.currentPassword;
-        tLRPC$TL_account_password.email_unconfirmed_pattern = tLRPC$TL_auth_passwordRecovery.email_pattern;
-        presentFragment(new TwoStepVerificationSetupActivity(this.currentAccount, 4, tLRPC$TL_account_password));
+        TLRPC$account_Password tLRPC$account_Password = this.currentPassword;
+        tLRPC$account_Password.email_unconfirmed_pattern = tLRPC$TL_auth_passwordRecovery.email_pattern;
+        presentFragment(new TwoStepVerificationSetupActivity(this.currentAccount, 4, tLRPC$account_Password));
     }
 
     /* access modifiers changed from: private */
@@ -2701,12 +2702,12 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r8 = r0
             goto L_0x0024
         L_0x000c:
-            org.telegram.tgnet.TLRPC$TL_account_password r0 = r10.currentPassword
+            org.telegram.tgnet.TLRPC$account_Password r0 = r10.currentPassword
             org.telegram.tgnet.TLRPC$PasswordKdfAlgo r0 = r0.current_algo
             boolean r0 = r0 instanceof org.telegram.tgnet.TLRPC$TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow
             if (r0 == 0) goto L_0x0023
             byte[] r0 = org.telegram.messenger.AndroidUtilities.getStringBytes(r12)
-            org.telegram.tgnet.TLRPC$TL_account_password r1 = r10.currentPassword
+            org.telegram.tgnet.TLRPC$account_Password r1 = r10.currentPassword
             org.telegram.tgnet.TLRPC$PasswordKdfAlgo r1 = r1.current_algo
             org.telegram.tgnet.TLRPC$TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow r1 = (org.telegram.tgnet.TLRPC$TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow) r1
             byte[] r0 = org.telegram.messenger.SRPHelper.getX(r0, r1)
@@ -2722,7 +2723,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r4 = r6
             r5 = r12
             r0.<init>(r2, r3, r4, r5)
-            org.telegram.tgnet.TLRPC$TL_account_password r11 = r10.currentPassword
+            org.telegram.tgnet.TLRPC$account_Password r11 = r10.currentPassword
             org.telegram.tgnet.TLRPC$PasswordKdfAlgo r12 = r11.current_algo
             boolean r0 = r12 instanceof org.telegram.tgnet.TLRPC$TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow
             if (r0 == 0) goto L_0x006a
@@ -7042,7 +7043,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             this.currentPhotoViewerLayout = this.documentsLayout;
         }
         SecureDocument secureDocument = (SecureDocument) view.getTag();
-        PhotoViewer.getInstance().setParentActivity(getParentActivity());
+        PhotoViewer.getInstance().setParentActivity(this);
         if (i == 1) {
             ArrayList arrayList = new ArrayList();
             arrayList.add(this.selfieDocument);
@@ -8204,7 +8205,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
 
     private void openTypeActivity(TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType, TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType2, ArrayList<TLRPC$TL_secureRequiredType> arrayList, boolean z) {
         int i;
-        TLRPC$TL_account_password tLRPC$TL_account_password;
+        TLRPC$account_Password tLRPC$account_Password;
         HashMap hashMap;
         TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType3 = tLRPC$TL_secureRequiredType;
         TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType4 = tLRPC$TL_secureRequiredType2;
@@ -8227,18 +8228,18 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             TLRPC$TL_secureValue valueByType = getValueByType(tLRPC$TL_secureRequiredType3, false);
             TLRPC$TL_secureValue valueByType2 = getValueByType(tLRPC$TL_secureRequiredType4, false);
             TLRPC$TL_account_authorizationForm tLRPC$TL_account_authorizationForm = this.currentForm;
-            TLRPC$TL_account_password tLRPC$TL_account_password2 = this.currentPassword;
+            TLRPC$account_Password tLRPC$account_Password2 = this.currentPassword;
             HashMap hashMap4 = this.typesValues.get(tLRPC$TL_secureRequiredType3);
             if (tLRPC$TL_secureRequiredType4 != null) {
-                tLRPC$TL_account_password = tLRPC$TL_account_password2;
+                tLRPC$account_Password = tLRPC$account_Password2;
                 hashMap = this.typesValues.get(tLRPC$TL_secureRequiredType4);
             } else {
-                tLRPC$TL_account_password = tLRPC$TL_account_password2;
+                tLRPC$account_Password = tLRPC$account_Password2;
                 hashMap = null;
             }
             PassportActivity passportActivity = r1;
             int i2 = i;
-            PassportActivity passportActivity2 = new PassportActivity(i, tLRPC$TL_account_authorizationForm, tLRPC$TL_account_password, tLRPC$TL_secureRequiredType, valueByType, tLRPC$TL_secureRequiredType2, valueByType2, (HashMap<String, String>) hashMap4, (HashMap<String, String>) hashMap);
+            PassportActivity passportActivity2 = new PassportActivity(i, tLRPC$TL_account_authorizationForm, tLRPC$account_Password, tLRPC$TL_secureRequiredType, valueByType, tLRPC$TL_secureRequiredType2, valueByType2, (HashMap<String, String>) hashMap4, (HashMap<String, String>) hashMap);
             passportActivity.delegate = new PassportActivityDelegate() {
                 private TLRPC$InputSecureFile getInputSecureFile(SecureDocument secureDocument) {
                     if (secureDocument.inputFile != null) {
@@ -9295,8 +9296,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     public void updatePasswordInterface() {
         ImageView imageView = this.noPasswordImageView;
         if (imageView != null) {
-            TLRPC$TL_account_password tLRPC$TL_account_password = this.currentPassword;
-            if (tLRPC$TL_account_password == null || this.usingSavedPassword != 0) {
+            TLRPC$account_Password tLRPC$account_Password = this.currentPassword;
+            if (tLRPC$account_Password == null || this.usingSavedPassword != 0) {
                 imageView.setVisibility(8);
                 this.noPasswordTextView.setVisibility(8);
                 this.noPasswordSetTextView.setVisibility(8);
@@ -9307,7 +9308,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 this.passwordInfoRequestTextView.setVisibility(8);
                 this.passwordRequestTextView.setVisibility(8);
                 this.emptyView.setVisibility(0);
-            } else if (!tLRPC$TL_account_password.has_password) {
+            } else if (!tLRPC$account_Password.has_password) {
                 this.passwordRequestTextView.setVisibility(0);
                 this.noPasswordImageView.setVisibility(0);
                 this.noPasswordTextView.setVisibility(0);
@@ -9332,8 +9333,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 this.passwordInfoRequestTextView.setVisibility(0);
                 this.passwordRequestTextView.setLayoutParams(LayoutHelper.createLinear(-1, -2, 0.0f, 0.0f, 0.0f, 0.0f));
                 if (this.inputFields != null) {
-                    TLRPC$TL_account_password tLRPC$TL_account_password2 = this.currentPassword;
-                    if (tLRPC$TL_account_password2 == null || TextUtils.isEmpty(tLRPC$TL_account_password2.hint)) {
+                    TLRPC$account_Password tLRPC$account_Password2 = this.currentPassword;
+                    if (tLRPC$account_Password2 == null || TextUtils.isEmpty(tLRPC$account_Password2.hint)) {
                         this.inputFields[0].setHint(LocaleController.getString("LoginPassword", R.string.LoginPassword));
                     } else {
                         this.inputFields[0].setHint(this.currentPassword.hint);
@@ -9467,11 +9468,11 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                         tLRPC$TL_account_password.new_secure_algo = objArr[2];
                         tLRPC$TL_account_password.secure_random = objArr[3];
                         tLRPC$TL_account_password.has_recovery = !TextUtils.isEmpty(objArr[4]);
-                        TLRPC$TL_account_password tLRPC$TL_account_password2 = this.currentPassword;
-                        tLRPC$TL_account_password2.hint = objArr[5];
-                        tLRPC$TL_account_password2.srp_id = -1;
+                        TLRPC$account_Password tLRPC$account_Password = this.currentPassword;
+                        tLRPC$account_Password.hint = objArr[5];
+                        tLRPC$account_Password.srp_id = -1;
                         byte[] bArr = new byte[256];
-                        tLRPC$TL_account_password2.srp_B = bArr;
+                        tLRPC$account_Password.srp_B = bArr;
                         Utilities.random.nextBytes(bArr);
                         EditTextBoldCursor[] editTextBoldCursorArr2 = this.inputFields;
                         if (editTextBoldCursorArr2[0] != null && editTextBoldCursorArr2[0].length() > 0) {

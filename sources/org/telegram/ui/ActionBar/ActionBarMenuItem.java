@@ -692,7 +692,7 @@ public class ActionBarMenuItem extends FrameLayout {
         /*
             r10 = this;
             org.telegram.ui.ActionBar.ActionBarPopupWindow$ActionBarPopupWindowLayout r0 = r10.popupLayout
-            if (r0 == 0) goto L_0x016a
+            if (r0 == 0) goto L_0x0169
             org.telegram.ui.ActionBar.ActionBarMenu r0 = r10.parentMenu
             if (r0 == 0) goto L_0x0018
             boolean r1 = r0.isActionMode
@@ -701,7 +701,7 @@ public class ActionBarMenuItem extends FrameLayout {
             if (r0 == 0) goto L_0x0018
             boolean r0 = r0.isActionModeShowed()
             if (r0 != 0) goto L_0x0018
-            goto L_0x016a
+            goto L_0x0169
         L_0x0018:
             java.lang.Runnable r0 = r10.showMenuRunnable
             if (r0 == 0) goto L_0x0022
@@ -836,24 +836,25 @@ public class ActionBarMenuItem extends FrameLayout {
             org.telegram.ui.ActionBar.ActionBarPopupWindow r11 = r10.popupWindow
             r11.setFocusable(r1)
             int r11 = r12.getMeasuredWidth()
-            if (r11 != 0) goto L_0x014c
-            r10.updateOrShowPopup(r1, r1)
-            goto L_0x014f
-        L_0x014c:
-            r10.updateOrShowPopup(r1, r2)
-        L_0x014f:
+            if (r11 != 0) goto L_0x014a
+            r11 = 1
+            goto L_0x014b
+        L_0x014a:
+            r11 = 0
+        L_0x014b:
+            r10.updateOrShowPopup(r1, r11)
             org.telegram.ui.ActionBar.ActionBarPopupWindow$ActionBarPopupWindowLayout r11 = r10.popupLayout
             r11.updateRadialSelectors()
             org.telegram.ui.ActionBar.ActionBarPopupWindow$ActionBarPopupWindowLayout r11 = r10.popupLayout
             org.telegram.ui.Components.PopupSwipeBackLayout r11 = r11.getSwipeBack()
-            if (r11 == 0) goto L_0x0165
+            if (r11 == 0) goto L_0x0164
             org.telegram.ui.ActionBar.ActionBarPopupWindow$ActionBarPopupWindowLayout r11 = r10.popupLayout
             org.telegram.ui.Components.PopupSwipeBackLayout r11 = r11.getSwipeBack()
             r11.closeForeground(r2)
-        L_0x0165:
+        L_0x0164:
             org.telegram.ui.ActionBar.ActionBarPopupWindow r11 = r10.popupWindow
             r11.startAnimation()
-        L_0x016a:
+        L_0x0169:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.ActionBarMenuItem.toggleSubMenu(android.view.View, android.view.View):void");

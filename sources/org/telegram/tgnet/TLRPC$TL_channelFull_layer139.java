@@ -135,7 +135,7 @@ public class TLRPC$TL_channelFull_layer139 extends TLRPC$ChatFull {
                 if (readInt328 == NUM) {
                     int readInt329 = abstractSerializedData.readInt32(z);
                     for (int i4 = 0; i4 < readInt329; i4++) {
-                        this.available_reactions.add(abstractSerializedData.readString(z));
+                        this.available_reactions_legacy.add(abstractSerializedData.readString(z));
                     }
                 } else if (z) {
                     throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt328)}));
@@ -266,10 +266,10 @@ public class TLRPC$TL_channelFull_layer139 extends TLRPC$ChatFull {
         }
         if ((this.flags & NUM) != 0) {
             abstractSerializedData.writeInt32(NUM);
-            int size4 = this.available_reactions.size();
+            int size4 = this.available_reactions_legacy.size();
             abstractSerializedData.writeInt32(size4);
             for (int i12 = 0; i12 < size4; i12++) {
-                abstractSerializedData.writeString(this.available_reactions.get(i12));
+                abstractSerializedData.writeString(this.available_reactions_legacy.get(i12));
             }
         }
     }

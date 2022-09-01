@@ -1,23 +1,16 @@
 package org.telegram.ui;
 
+import androidx.core.util.Consumer;
 import com.android.billingclient.api.BillingResult;
-import java.util.List;
-import org.telegram.ui.ActionBar.BaseFragment;
 
-public final /* synthetic */ class PremiumPreviewFragment$$ExternalSyntheticLambda3 implements Runnable {
-    public final /* synthetic */ BillingResult f$0;
-    public final /* synthetic */ BaseFragment f$1;
-    public final /* synthetic */ List f$2;
-    public final /* synthetic */ List f$3;
+public final /* synthetic */ class PremiumPreviewFragment$$ExternalSyntheticLambda3 implements Consumer {
+    public final /* synthetic */ Runnable f$0;
 
-    public /* synthetic */ PremiumPreviewFragment$$ExternalSyntheticLambda3(BillingResult billingResult, BaseFragment baseFragment, List list, List list2) {
-        this.f$0 = billingResult;
-        this.f$1 = baseFragment;
-        this.f$2 = list;
-        this.f$3 = list2;
+    public /* synthetic */ PremiumPreviewFragment$$ExternalSyntheticLambda3(Runnable runnable) {
+        this.f$0 = runnable;
     }
 
-    public final void run() {
-        PremiumPreviewFragment.lambda$buyPremium$10(this.f$0, this.f$1, this.f$2, this.f$3);
+    public final void accept(Object obj) {
+        PremiumPreviewFragment.lambda$buyPremium$6(this.f$0, (BillingResult) obj);
     }
 }

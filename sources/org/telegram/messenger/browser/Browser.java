@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import java.lang.ref.WeakReference;
 import java.util.List;
+import java.util.regex.Matcher;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.SharedConfig;
@@ -20,6 +21,7 @@ import org.telegram.messenger.support.customtabsclient.shared.CustomTabsHelper;
 import org.telegram.messenger.support.customtabsclient.shared.ServiceConnection;
 import org.telegram.messenger.support.customtabsclient.shared.ServiceConnectionCallback;
 import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.ui.LaunchActivity;
 
 public class Browser {
     private static WeakReference<Activity> currentCustomTabsActivity;
@@ -636,12 +638,42 @@ public class Browser {
     }
 
     public static boolean isInternalUri(Uri uri, boolean z, boolean[] zArr) {
+        String str;
+        String str2;
         String host = uri.getHost();
-        String lowerCase = host != null ? host.toLowerCase() : "";
+        String str3 = "";
+        String lowerCase = host != null ? host.toLowerCase() : str3;
+        Matcher matcher = LaunchActivity.PREFIX_T_ME_PATTERN.matcher(lowerCase);
+        if (matcher.find()) {
+            StringBuilder sb = new StringBuilder();
+            sb.append("https://t.me/");
+            sb.append(matcher.group(1));
+            if (TextUtils.isEmpty(uri.getPath())) {
+                str = str3;
+            } else {
+                str = "/" + uri.getPath();
+            }
+            sb.append(str);
+            if (TextUtils.isEmpty(uri.getQuery())) {
+                str2 = str3;
+            } else {
+                str2 = "?" + uri.getQuery();
+            }
+            sb.append(str2);
+            uri = Uri.parse(sb.toString());
+            String host2 = uri.getHost();
+            if (host2 != null) {
+                str3 = host2.toLowerCase();
+            }
+            lowerCase = str3;
+        }
         if ("ton".equals(uri.getScheme())) {
             try {
                 List<ResolveInfo> queryIntentActivities = ApplicationLoader.applicationContext.getPackageManager().queryIntentActivities(new Intent("android.intent.action.VIEW", uri), 0);
-                return queryIntentActivities == null || queryIntentActivities.size() <= 1;
+                if (queryIntentActivities == null || queryIntentActivities.size() <= 1) {
+                    return true;
+                }
+                return false;
             } catch (Exception unused) {
             }
         } else if ("tg".equals(uri.getScheme())) {
@@ -662,9 +694,7 @@ public class Browser {
                     }
                     return false;
                 }
-            } else if (!"telegram.me".equals(lowerCase) && !"t.me".equals(lowerCase)) {
-                return z && (lowerCase.endsWith("telegram.org") || lowerCase.endsWith("telegra.ph") || lowerCase.endsWith("telesco.pe"));
-            } else {
+            } else if ("telegram.me".equals(lowerCase) || "t.me".equals(lowerCase)) {
                 String path2 = uri.getPath();
                 if (path2 != null && path2.length() > 1) {
                     if (z) {
@@ -678,7 +708,12 @@ public class Browser {
                         zArr[0] = true;
                     }
                 }
+            } else if (!z || (!lowerCase.endsWith("telegram.org") && !lowerCase.endsWith("telegra.ph") && !lowerCase.endsWith("telesco.pe"))) {
+                return false;
+            } else {
+                return true;
             }
+            return false;
         }
     }
 }

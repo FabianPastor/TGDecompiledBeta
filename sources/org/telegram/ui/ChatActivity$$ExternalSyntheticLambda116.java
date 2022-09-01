@@ -14,6 +14,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda116 impl
     }
 
     public final void run() {
-        ChatActivity.lambda$didReceivedNotification$117(this.f$0, this.f$1, this.f$2);
+        ChatActivity.lambda$didReceivedNotification$120(this.f$0, this.f$1, this.f$2);
     }
 }

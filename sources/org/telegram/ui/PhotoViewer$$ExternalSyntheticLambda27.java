@@ -10,6 +10,6 @@ public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda27 implem
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$setParentActivity$5(view);
+        this.f$0.lambda$createPaintView$63(view);
     }
 }

@@ -73,15 +73,7 @@ public class TLRPC$TL_chatFull extends TLRPC$ChatFull {
             }
         }
         if ((this.flags & 262144) != 0) {
-            int readInt326 = abstractSerializedData.readInt32(z);
-            if (readInt326 == NUM) {
-                int readInt327 = abstractSerializedData.readInt32(z);
-                for (int i3 = 0; i3 < readInt327; i3++) {
-                    this.available_reactions.add(abstractSerializedData.readString(z));
-                }
-            } else if (z) {
-                throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt326)}));
-            }
+            this.available_reactions = TLRPC$ChatReactions.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         }
     }
 
@@ -140,12 +132,7 @@ public class TLRPC$TL_chatFull extends TLRPC$ChatFull {
             }
         }
         if ((this.flags & 262144) != 0) {
-            abstractSerializedData.writeInt32(NUM);
-            int size3 = this.available_reactions.size();
-            abstractSerializedData.writeInt32(size3);
-            for (int i5 = 0; i5 < size3; i5++) {
-                abstractSerializedData.writeString(this.available_reactions.get(i5));
-            }
+            this.available_reactions.serializeToStream(abstractSerializedData);
         }
     }
 }

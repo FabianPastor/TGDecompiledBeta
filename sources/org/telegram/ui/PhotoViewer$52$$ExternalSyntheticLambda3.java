@@ -10,6 +10,6 @@ public final /* synthetic */ class PhotoViewer$52$$ExternalSyntheticLambda3 impl
     }
 
     public final void run() {
-        this.f$0.lambda$onRenderedFirstFrame$1();
+        this.f$0.lambda$onRenderedFirstFrame$2();
     }
 }

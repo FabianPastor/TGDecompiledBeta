@@ -1,23 +1,19 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
+import org.telegram.tgnet.TLRPC$Message;
 
 public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda50 implements Runnable {
     public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ Integer f$1;
-    public final /* synthetic */ ArrayList f$2;
-    public final /* synthetic */ ArrayList[] f$3;
-    public final /* synthetic */ Runnable f$4;
+    public final /* synthetic */ long f$1;
+    public final /* synthetic */ TLRPC$Message f$2;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda50(MediaDataController mediaDataController, Integer num, ArrayList arrayList, ArrayList[] arrayListArr, Runnable runnable) {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda50(MediaDataController mediaDataController, long j, TLRPC$Message tLRPC$Message) {
         this.f$0 = mediaDataController;
-        this.f$1 = num;
-        this.f$2 = arrayList;
-        this.f$3 = arrayListArr;
-        this.f$4 = runnable;
+        this.f$1 = j;
+        this.f$2 = tLRPC$Message;
     }
 
     public final void run() {
-        this.f$0.lambda$fillWithAnimatedEmoji$192(this.f$1, this.f$2, this.f$3, this.f$4);
+        this.f$0.lambda$putBotKeyboard$174(this.f$1, this.f$2);
     }
 }

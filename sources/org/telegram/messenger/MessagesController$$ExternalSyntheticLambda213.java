@@ -17,6 +17,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda21
     }
 
     public final void run() {
-        this.f$0.lambda$openByUserName$350(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$openByUserName$351(this.f$1, this.f$2, this.f$3);
     }
 }

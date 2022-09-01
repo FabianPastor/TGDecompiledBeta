@@ -15,6 +15,6 @@ public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda8 impl
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        LaunchActivity.lambda$handleIntent$23(this.f$0, this.f$1, this.f$2, dialogInterface, i);
+        LaunchActivity.lambda$handleIntent$24(this.f$0, this.f$1, this.f$2, dialogInterface, i);
     }
 }

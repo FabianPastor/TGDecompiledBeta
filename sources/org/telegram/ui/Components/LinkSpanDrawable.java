@@ -55,7 +55,7 @@ public class LinkSpanDrawable<S extends CharacterStyle> {
         this.mReleaseStart = -1;
         this.mSpan = s;
         this.mResourcesProvider = resourcesProvider;
-        setColor(getThemedColor("chat_linkSelectBackground"));
+        setColor(Theme.getColor("chat_linkSelectBackground", resourcesProvider));
         this.mTouchX = f;
         this.mTouchY = f2;
         long longPressTimeout = (long) ViewConfiguration.getLongPressTimeout();
@@ -190,12 +190,6 @@ public class LinkSpanDrawable<S extends CharacterStyle> {
             }
         }
         return interpolation < 1.0f || this.mReleaseStart >= 0 || (this.mSupportsLongPress && elapsedRealtime - this.mStart < this.mLongPressDuration + this.mDuration);
-    }
-
-    private int getThemedColor(String str) {
-        Theme.ResourcesProvider resourcesProvider = this.mResourcesProvider;
-        Integer color2 = resourcesProvider != null ? resourcesProvider.getColor(str) : null;
-        return color2 != null ? color2.intValue() : Theme.getColor(str);
     }
 
     public static class LinkCollector {
@@ -536,8 +530,13 @@ public class LinkSpanDrawable<S extends CharacterStyle> {
 
         /* access modifiers changed from: protected */
         public void onDraw(Canvas canvas) {
-            if (!this.isCustomLinkCollector && this.links.draw(canvas)) {
-                invalidate();
+            if (!this.isCustomLinkCollector) {
+                canvas.save();
+                canvas.translate((float) getPaddingLeft(), (float) getPaddingTop());
+                if (this.links.draw(canvas)) {
+                    invalidate();
+                }
+                canvas.restore();
             }
             super.onDraw(canvas);
         }

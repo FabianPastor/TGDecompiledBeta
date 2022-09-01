@@ -4,7 +4,7 @@ public class TLRPC$TL_account_getPassword extends TLObject {
     public static int constructor = NUM;
 
     public TLObject deserializeResponse(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-        return TLRPC$TL_account_password.TLdeserialize(abstractSerializedData, i, z);
+        return TLRPC$account_Password.TLdeserialize(abstractSerializedData, i, z);
     }
 
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {

@@ -56,7 +56,6 @@ import org.telegram.tgnet.TLRPC$PasswordKdfAlgo;
 import org.telegram.tgnet.TLRPC$SecurePasswordKdfAlgo;
 import org.telegram.tgnet.TLRPC$TL_account_getPassword;
 import org.telegram.tgnet.TLRPC$TL_account_getPasswordSettings;
-import org.telegram.tgnet.TLRPC$TL_account_password;
 import org.telegram.tgnet.TLRPC$TL_account_passwordInputSettings;
 import org.telegram.tgnet.TLRPC$TL_account_resendPasswordEmail;
 import org.telegram.tgnet.TLRPC$TL_account_updatePasswordSettings;
@@ -67,6 +66,7 @@ import org.telegram.tgnet.TLRPC$TL_inputCheckPasswordSRP;
 import org.telegram.tgnet.TLRPC$TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow;
 import org.telegram.tgnet.TLRPC$TL_securePasswordKdfAlgoPBKDF2HMACSHA512iter100000;
 import org.telegram.tgnet.TLRPC$TL_secureSecretSettings;
+import org.telegram.tgnet.TLRPC$account_Password;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -104,7 +104,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
     private boolean closeAfterSet;
     private CodeFieldContainer codeFieldContainer;
     /* access modifiers changed from: private */
-    public TLRPC$TL_account_password currentPassword;
+    public TLRPC$account_Password currentPassword;
     private byte[] currentPasswordHash = new byte[0];
     private byte[] currentSecret;
     private long currentSecretId;
@@ -205,21 +205,21 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
         }
     }
 
-    public TwoStepVerificationSetupActivity(int i, TLRPC$TL_account_password tLRPC$TL_account_password) {
+    public TwoStepVerificationSetupActivity(int i, TLRPC$account_Password tLRPC$account_Password) {
         this.currentType = i;
-        this.currentPassword = tLRPC$TL_account_password;
-        if (tLRPC$TL_account_password == null && (i == 6 || i == 8)) {
+        this.currentPassword = tLRPC$account_Password;
+        if (tLRPC$account_Password == null && (i == 6 || i == 8)) {
             loadPasswordInfo();
         } else {
-            this.waitingForEmail = !TextUtils.isEmpty(tLRPC$TL_account_password.email_unconfirmed_pattern);
+            this.waitingForEmail = !TextUtils.isEmpty(tLRPC$account_Password.email_unconfirmed_pattern);
         }
     }
 
-    public TwoStepVerificationSetupActivity(int i, int i2, TLRPC$TL_account_password tLRPC$TL_account_password) {
+    public TwoStepVerificationSetupActivity(int i, int i2, TLRPC$account_Password tLRPC$account_Password) {
         this.currentAccount = i;
         this.currentType = i2;
-        this.currentPassword = tLRPC$TL_account_password;
-        this.waitingForEmail = !TextUtils.isEmpty(tLRPC$TL_account_password.email_unconfirmed_pattern);
+        this.currentPassword = tLRPC$account_Password;
+        this.waitingForEmail = !TextUtils.isEmpty(tLRPC$account_Password.email_unconfirmed_pattern);
         if (this.currentPassword == null) {
             int i3 = this.currentType;
             if (i3 == 6 || i3 == 8) {
@@ -1445,7 +1445,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
             r9.finishFragment()
             goto L_0x01d5
         L_0x0017:
-            org.telegram.tgnet.TLRPC$TL_account_password r0 = r9.currentPassword
+            org.telegram.tgnet.TLRPC$account_Password r0 = r9.currentPassword
             if (r0 != 0) goto L_0x0021
             r9.needShowProgress()
             r9.doneAfterPasswordLoad = r2
@@ -1487,7 +1487,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
         L_0x006d:
             org.telegram.ui.TwoStepVerificationActivity r0 = new org.telegram.ui.TwoStepVerificationActivity
             r0.<init>()
-            org.telegram.tgnet.TLRPC$TL_account_password r4 = r9.currentPassword
+            org.telegram.tgnet.TLRPC$account_Password r4 = r9.currentPassword
             byte[] r5 = r9.currentPasswordHash
             long r6 = r9.currentSecretId
             byte[] r8 = r9.currentSecret
@@ -1498,7 +1498,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
             r9.presentFragment(r0, r2)
             goto L_0x01d5
         L_0x0088:
-            org.telegram.tgnet.TLRPC$TL_account_password r0 = r9.currentPassword
+            org.telegram.tgnet.TLRPC$account_Password r0 = r9.currentPassword
             if (r0 != 0) goto L_0x0092
             r9.needShowProgress()
             r9.doneAfterPasswordLoad = r2
@@ -1626,7 +1626,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
         L_0x0196:
             r2 = 2
         L_0x0197:
-            org.telegram.tgnet.TLRPC$TL_account_password r1 = r9.currentPassword
+            org.telegram.tgnet.TLRPC$account_Password r1 = r9.currentPassword
             r0.<init>(r3, r2, r1)
             boolean r1 = r9.fromRegistration
             r0.fromRegistration = r1
@@ -1664,10 +1664,10 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
         TLRPC$PasswordKdfAlgo tLRPC$PasswordKdfAlgo = this.currentPassword.current_algo;
         byte[] x = tLRPC$PasswordKdfAlgo instanceof TLRPC$TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow ? SRPHelper.getX(bArr, (TLRPC$TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow) tLRPC$PasswordKdfAlgo) : null;
         TwoStepVerificationSetupActivity$$ExternalSyntheticLambda50 twoStepVerificationSetupActivity$$ExternalSyntheticLambda50 = new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda50(this, x);
-        TLRPC$TL_account_password tLRPC$TL_account_password = this.currentPassword;
-        TLRPC$PasswordKdfAlgo tLRPC$PasswordKdfAlgo2 = tLRPC$TL_account_password.current_algo;
+        TLRPC$account_Password tLRPC$account_Password = this.currentPassword;
+        TLRPC$PasswordKdfAlgo tLRPC$PasswordKdfAlgo2 = tLRPC$account_Password.current_algo;
         if (tLRPC$PasswordKdfAlgo2 instanceof TLRPC$TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow) {
-            TLRPC$TL_inputCheckPasswordSRP startCheck = SRPHelper.startCheck(x, tLRPC$TL_account_password.srp_id, tLRPC$TL_account_password.srp_B, (TLRPC$TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow) tLRPC$PasswordKdfAlgo2);
+            TLRPC$TL_inputCheckPasswordSRP startCheck = SRPHelper.startCheck(x, tLRPC$account_Password.srp_id, tLRPC$account_Password.srp_B, (TLRPC$TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow) tLRPC$PasswordKdfAlgo2);
             tLRPC$TL_account_getPasswordSettings.password = startCheck;
             if (startCheck == null) {
                 TLRPC$TL_error tLRPC$TL_error = new TLRPC$TL_error();
@@ -1737,9 +1737,9 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$processNext$24(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         if (tLRPC$TL_error == null) {
-            TLRPC$TL_account_password tLRPC$TL_account_password = (TLRPC$TL_account_password) tLObject;
-            this.currentPassword = tLRPC$TL_account_password;
-            TwoStepVerificationActivity.initPasswordNewAlgo(tLRPC$TL_account_password);
+            TLRPC$account_Password tLRPC$account_Password = (TLRPC$account_Password) tLObject;
+            this.currentPassword = tLRPC$account_Password;
+            TwoStepVerificationActivity.initPasswordNewAlgo(tLRPC$account_Password);
             NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.didSetOrRemoveTwoStepPassword, this.currentPassword);
             processNext();
         }
@@ -1832,11 +1832,11 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
         for (int i = 0; i < size; i++) {
             this.fragmentsToClose.get(i).removeSelfFromStack();
         }
-        TLRPC$TL_account_password tLRPC$TL_account_password = this.currentPassword;
-        tLRPC$TL_account_password.has_password = true;
-        tLRPC$TL_account_password.has_recovery = true;
-        tLRPC$TL_account_password.email_unconfirmed_pattern = "";
-        TwoStepVerificationSetupActivity twoStepVerificationSetupActivity = new TwoStepVerificationSetupActivity(7, tLRPC$TL_account_password);
+        TLRPC$account_Password tLRPC$account_Password = this.currentPassword;
+        tLRPC$account_Password.has_password = true;
+        tLRPC$account_Password.has_recovery = true;
+        tLRPC$account_Password.email_unconfirmed_pattern = "";
+        TwoStepVerificationSetupActivity twoStepVerificationSetupActivity = new TwoStepVerificationSetupActivity(7, tLRPC$account_Password);
         twoStepVerificationSetupActivity.fromRegistration = this.fromRegistration;
         twoStepVerificationSetupActivity.setCurrentPasswordParams(this.currentPasswordHash, this.currentSecretId, this.currentSecret, this.emailOnly);
         twoStepVerificationSetupActivity.fragmentsToClose.addAll(this.fragmentsToClose);
@@ -1845,8 +1845,8 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
         presentFragment(twoStepVerificationSetupActivity, true);
         NotificationCenter instance = NotificationCenter.getInstance(this.currentAccount);
         int i2 = NotificationCenter.twoStepPasswordChanged;
-        TLRPC$TL_account_password tLRPC$TL_account_password2 = this.currentPassword;
-        instance.postNotificationName(i2, this.currentPasswordHash, tLRPC$TL_account_password2.new_algo, tLRPC$TL_account_password2.new_secure_algo, tLRPC$TL_account_password2.secure_random, this.email, this.hint, null, this.firstPassword);
+        TLRPC$account_Password tLRPC$account_Password2 = this.currentPassword;
+        instance.postNotificationName(i2, this.currentPasswordHash, tLRPC$account_Password2.new_algo, tLRPC$account_Password2.new_secure_algo, tLRPC$account_Password2.secure_random, this.email, this.hint, null, this.firstPassword);
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.didSetOrRemoveTwoStepPassword, this.currentPassword);
     }
 
@@ -1858,14 +1858,14 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
         }
         NotificationCenter instance = NotificationCenter.getInstance(this.currentAccount);
         int i3 = NotificationCenter.twoStepPasswordChanged;
-        TLRPC$TL_account_password tLRPC$TL_account_password = this.currentPassword;
-        instance.postNotificationName(i3, this.currentPasswordHash, tLRPC$TL_account_password.new_algo, tLRPC$TL_account_password.new_secure_algo, tLRPC$TL_account_password.secure_random, this.email, this.hint, null, this.firstPassword);
+        TLRPC$account_Password tLRPC$account_Password = this.currentPassword;
+        instance.postNotificationName(i3, this.currentPasswordHash, tLRPC$account_Password.new_algo, tLRPC$account_Password.new_secure_algo, tLRPC$account_Password.secure_random, this.email, this.hint, null, this.firstPassword);
         TwoStepVerificationActivity twoStepVerificationActivity = new TwoStepVerificationActivity();
-        TLRPC$TL_account_password tLRPC$TL_account_password2 = this.currentPassword;
-        tLRPC$TL_account_password2.has_password = true;
-        tLRPC$TL_account_password2.has_recovery = true;
-        tLRPC$TL_account_password2.email_unconfirmed_pattern = "";
-        twoStepVerificationActivity.setCurrentPasswordParams(tLRPC$TL_account_password2, this.currentPasswordHash, this.currentSecretId, this.currentSecret);
+        TLRPC$account_Password tLRPC$account_Password2 = this.currentPassword;
+        tLRPC$account_Password2.has_password = true;
+        tLRPC$account_Password2.has_recovery = true;
+        tLRPC$account_Password2.email_unconfirmed_pattern = "";
+        twoStepVerificationActivity.setCurrentPasswordParams(tLRPC$account_Password2, this.currentPasswordHash, this.currentSecretId, this.currentSecret);
         twoStepVerificationActivity.setBlockingAlert(this.otherwiseReloginDays);
         presentFragment(twoStepVerificationActivity, true);
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.didSetOrRemoveTwoStepPassword, this.currentPassword);
@@ -1903,9 +1903,9 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
     }
 
     private void onHintDone() {
-        TLRPC$TL_account_password tLRPC$TL_account_password = this.currentPassword;
-        if (!tLRPC$TL_account_password.has_recovery) {
-            TwoStepVerificationSetupActivity twoStepVerificationSetupActivity = new TwoStepVerificationSetupActivity(this.currentAccount, 3, tLRPC$TL_account_password);
+        TLRPC$account_Password tLRPC$account_Password = this.currentPassword;
+        if (!tLRPC$account_Password.has_recovery) {
+            TwoStepVerificationSetupActivity twoStepVerificationSetupActivity = new TwoStepVerificationSetupActivity(this.currentAccount, 3, tLRPC$account_Password);
             twoStepVerificationSetupActivity.fromRegistration = this.fromRegistration;
             twoStepVerificationSetupActivity.setCurrentPasswordParams(this.currentPasswordHash, this.currentSecretId, this.currentSecret, this.emailOnly);
             twoStepVerificationSetupActivity.firstPassword = this.firstPassword;
@@ -2083,22 +2083,22 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$loadPasswordInfo$41(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         if (tLRPC$TL_error == null) {
-            TLRPC$TL_account_password tLRPC$TL_account_password = (TLRPC$TL_account_password) tLObject;
-            this.currentPassword = tLRPC$TL_account_password;
-            if (!TwoStepVerificationActivity.canHandleCurrentPassword(tLRPC$TL_account_password, false)) {
+            TLRPC$account_Password tLRPC$account_Password = (TLRPC$account_Password) tLObject;
+            this.currentPassword = tLRPC$account_Password;
+            if (!TwoStepVerificationActivity.canHandleCurrentPassword(tLRPC$account_Password, false)) {
                 AlertsCreator.showUpdateAppAlert(getParentActivity(), LocaleController.getString("UpdateAppAlert", R.string.UpdateAppAlert), true);
                 return;
             }
             this.waitingForEmail = !TextUtils.isEmpty(this.currentPassword.email_unconfirmed_pattern);
             TwoStepVerificationActivity.initPasswordNewAlgo(this.currentPassword);
             if (!this.paused && this.closeAfterSet) {
-                TLRPC$TL_account_password tLRPC$TL_account_password2 = this.currentPassword;
-                if (tLRPC$TL_account_password2.has_password) {
-                    Object obj = tLRPC$TL_account_password2.current_algo;
-                    Object obj2 = tLRPC$TL_account_password2.new_secure_algo;
-                    Object obj3 = tLRPC$TL_account_password2.secure_random;
-                    String str = tLRPC$TL_account_password2.has_recovery ? "1" : null;
-                    String str2 = tLRPC$TL_account_password2.hint;
+                TLRPC$account_Password tLRPC$account_Password2 = this.currentPassword;
+                if (tLRPC$account_Password2.has_password) {
+                    Object obj = tLRPC$account_Password2.current_algo;
+                    Object obj2 = tLRPC$account_Password2.new_secure_algo;
+                    Object obj3 = tLRPC$account_Password2.secure_random;
+                    String str = tLRPC$account_Password2.has_recovery ? "1" : null;
+                    String str2 = tLRPC$account_Password2.hint;
                     if (str2 == null) {
                         str2 = "";
                     }
@@ -2176,7 +2176,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
             if (r9 == 0) goto L_0x0023
             boolean r0 = r8.waitingForEmail
             if (r0 == 0) goto L_0x0023
-            org.telegram.tgnet.TLRPC$TL_account_password r0 = r8.currentPassword
+            org.telegram.tgnet.TLRPC$account_Password r0 = r8.currentPassword
             boolean r0 = r0.has_password
             if (r0 == 0) goto L_0x0023
             r8.needShowProgress()
@@ -2220,7 +2220,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
         L_0x0058:
             java.lang.String r2 = r8.hint
             if (r2 != 0) goto L_0x0064
-            org.telegram.tgnet.TLRPC$TL_account_password r2 = r8.currentPassword
+            org.telegram.tgnet.TLRPC$account_Password r2 = r8.currentPassword
             if (r2 == 0) goto L_0x0064
             java.lang.String r2 = r2.hint
             r8.hint = r2
@@ -2235,7 +2235,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
             r7.flags = r1
             java.lang.String r1 = r8.hint
             r7.hint = r1
-            org.telegram.tgnet.TLRPC$TL_account_password r1 = r8.currentPassword
+            org.telegram.tgnet.TLRPC$account_Password r1 = r8.currentPassword
             org.telegram.tgnet.TLRPC$PasswordKdfAlgo r1 = r1.new_algo
             r7.new_algo = r1
         L_0x007c:
@@ -2303,10 +2303,10 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
         needHideProgress();
         if (tLRPC$TL_error == null) {
             TwoStepVerificationActivity twoStepVerificationActivity = new TwoStepVerificationActivity();
-            TLRPC$TL_account_password tLRPC$TL_account_password = this.currentPassword;
-            tLRPC$TL_account_password.has_recovery = false;
-            tLRPC$TL_account_password.email_unconfirmed_pattern = "";
-            twoStepVerificationActivity.setCurrentPasswordParams(tLRPC$TL_account_password, this.currentPasswordHash, this.currentSecretId, this.currentSecret);
+            TLRPC$account_Password tLRPC$account_Password = this.currentPassword;
+            tLRPC$account_Password.has_recovery = false;
+            tLRPC$account_Password.email_unconfirmed_pattern = "";
+            twoStepVerificationActivity.setCurrentPasswordParams(tLRPC$account_Password, this.currentPasswordHash, this.currentSecretId, this.currentSecret);
             twoStepVerificationActivity.setBlockingAlert(this.otherwiseReloginDays);
             presentFragment(twoStepVerificationActivity, true);
             NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.didRemoveTwoStepPassword, new Object[0]);
@@ -2460,7 +2460,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
             if (r1 != 0) goto L_0x0081
             return
         L_0x0081:
-            org.telegram.tgnet.TLRPC$TL_account_password r1 = r0.currentPassword
+            org.telegram.tgnet.TLRPC$account_Password r1 = r0.currentPassword
             boolean r1 = r1.has_password
             if (r1 == 0) goto L_0x00de
             org.telegram.ui.ActionBar.AlertDialog$Builder r1 = new org.telegram.ui.ActionBar.AlertDialog$Builder
@@ -2473,7 +2473,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
             r3.<init>(r11, r15)
             r1.setPositiveButton(r2, r3)
             if (r16 != 0) goto L_0x00b6
-            org.telegram.tgnet.TLRPC$TL_account_password r2 = r0.currentPassword
+            org.telegram.tgnet.TLRPC$account_Password r2 = r0.currentPassword
             if (r2 == 0) goto L_0x00b6
             boolean r2 = r2.has_password
             if (r2 == 0) goto L_0x00b6
@@ -2511,7 +2511,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
             int r2 = r2 + 1
             goto L_0x00e5
         L_0x00f5:
-            org.telegram.tgnet.TLRPC$TL_account_password r1 = r0.currentPassword
+            org.telegram.tgnet.TLRPC$account_Password r1 = r0.currentPassword
             r1.has_password = r7
             boolean r2 = r1.has_recovery
             if (r2 != 0) goto L_0x0106
@@ -2529,7 +2529,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
             r1.postNotificationName(r2, r3)
         L_0x0117:
             org.telegram.ui.TwoStepVerificationSetupActivity r1 = new org.telegram.ui.TwoStepVerificationSetupActivity
-            org.telegram.tgnet.TLRPC$TL_account_password r2 = r0.currentPassword
+            org.telegram.tgnet.TLRPC$account_Password r2 = r0.currentPassword
             r1.<init>(r6, r2)
             boolean r2 = r0.fromRegistration
             r1.fromRegistration = r2
@@ -2557,7 +2557,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
             org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getInstance(r1)
             int r2 = org.telegram.messenger.NotificationCenter.didSetOrRemoveTwoStepPassword
             java.lang.Object[] r3 = new java.lang.Object[r7]
-            org.telegram.tgnet.TLRPC$TL_account_password r4 = r0.currentPassword
+            org.telegram.tgnet.TLRPC$account_Password r4 = r0.currentPassword
             r3[r8] = r4
             r1.postNotificationName(r2, r3)
             goto L_0x0262
@@ -2647,7 +2647,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
             org.telegram.tgnet.TLRPC$PasswordKdfAlgo r5 = r5.new_algo
             r3[r7] = r5
             r5 = 2
-            org.telegram.tgnet.TLRPC$TL_account_password r8 = r0.currentPassword
+            org.telegram.tgnet.TLRPC$account_Password r8 = r0.currentPassword
             org.telegram.tgnet.TLRPC$SecurePasswordKdfAlgo r9 = r8.new_secure_algo
             r3[r5] = r9
             r5 = 3
@@ -2664,7 +2664,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
             java.lang.String r5 = r0.firstPassword
             r3[r6] = r5
             r1.postNotificationName(r2, r3)
-            org.telegram.tgnet.TLRPC$TL_account_password r1 = r0.currentPassword
+            org.telegram.tgnet.TLRPC$account_Password r1 = r0.currentPassword
             java.lang.String r2 = r0.email
             r1.email_unconfirmed_pattern = r2
             org.telegram.ui.TwoStepVerificationSetupActivity r2 = new org.telegram.ui.TwoStepVerificationSetupActivity
@@ -2705,9 +2705,9 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$setNewPassword$45(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, boolean z) {
         if (tLRPC$TL_error == null) {
-            TLRPC$TL_account_password tLRPC$TL_account_password = (TLRPC$TL_account_password) tLObject;
-            this.currentPassword = tLRPC$TL_account_password;
-            TwoStepVerificationActivity.initPasswordNewAlgo(tLRPC$TL_account_password);
+            TLRPC$account_Password tLRPC$account_Password = (TLRPC$account_Password) tLObject;
+            this.currentPassword = tLRPC$account_Password;
+            TwoStepVerificationActivity.initPasswordNewAlgo(tLRPC$account_Password);
             setNewPassword(z);
             NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.didSetOrRemoveTwoStepPassword, this.currentPassword);
         }
@@ -2720,16 +2720,16 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
             this.fragmentsToClose.get(i2).removeSelfFromStack();
         }
         TwoStepVerificationActivity twoStepVerificationActivity = new TwoStepVerificationActivity();
-        TLRPC$TL_account_password tLRPC$TL_account_password = this.currentPassword;
-        tLRPC$TL_account_password.has_password = true;
-        if (!tLRPC$TL_account_password.has_recovery) {
-            tLRPC$TL_account_password.has_recovery = !TextUtils.isEmpty(tLRPC$TL_account_password.email_unconfirmed_pattern);
+        TLRPC$account_Password tLRPC$account_Password = this.currentPassword;
+        tLRPC$account_Password.has_password = true;
+        if (!tLRPC$account_Password.has_recovery) {
+            tLRPC$account_Password.has_recovery = !TextUtils.isEmpty(tLRPC$account_Password.email_unconfirmed_pattern);
         }
-        TLRPC$TL_account_password tLRPC$TL_account_password2 = this.currentPassword;
+        TLRPC$account_Password tLRPC$account_Password2 = this.currentPassword;
         if (bArr == null) {
             bArr = this.currentPasswordHash;
         }
-        twoStepVerificationActivity.setCurrentPasswordParams(tLRPC$TL_account_password2, bArr, this.currentSecretId, this.currentSecret);
+        twoStepVerificationActivity.setCurrentPasswordParams(tLRPC$account_Password2, bArr, this.currentSecretId, this.currentSecret);
         twoStepVerificationActivity.setBlockingAlert(this.otherwiseReloginDays);
         presentFragment(twoStepVerificationActivity, true);
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.didSetOrRemoveTwoStepPassword, this.currentPassword);
@@ -2737,12 +2737,12 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
 
     /* access modifiers changed from: protected */
     public TLRPC$TL_inputCheckPasswordSRP getNewSrpPassword() {
-        TLRPC$TL_account_password tLRPC$TL_account_password = this.currentPassword;
-        TLRPC$PasswordKdfAlgo tLRPC$PasswordKdfAlgo = tLRPC$TL_account_password.current_algo;
+        TLRPC$account_Password tLRPC$account_Password = this.currentPassword;
+        TLRPC$PasswordKdfAlgo tLRPC$PasswordKdfAlgo = tLRPC$account_Password.current_algo;
         if (!(tLRPC$PasswordKdfAlgo instanceof TLRPC$TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow)) {
             return null;
         }
-        return SRPHelper.startCheck(this.currentPasswordHash, tLRPC$TL_account_password.srp_id, tLRPC$TL_account_password.srp_B, (TLRPC$TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow) tLRPC$PasswordKdfAlgo);
+        return SRPHelper.startCheck(this.currentPasswordHash, tLRPC$account_Password.srp_id, tLRPC$account_Password.srp_B, (TLRPC$TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow) tLRPC$PasswordKdfAlgo);
     }
 
     private void onFieldError(View view, TextView textView, boolean z) {

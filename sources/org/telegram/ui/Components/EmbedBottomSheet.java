@@ -32,6 +32,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.browser.Browser;
+import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.PhotoViewer;
@@ -136,64 +137,65 @@ public class EmbedBottomSheet extends BottomSheet {
         }
     }
 
-    public static void show(Activity activity, MessageObject messageObject, PhotoViewer.PhotoViewerProvider photoViewerProvider, String str, String str2, String str3, String str4, int i, int i2, boolean z) {
-        show(activity, messageObject, photoViewerProvider, str, str2, str3, str4, i, i2, -1, z);
+    public static void show(BaseFragment baseFragment, MessageObject messageObject, PhotoViewer.PhotoViewerProvider photoViewerProvider, String str, String str2, String str3, String str4, int i, int i2, boolean z) {
+        show(baseFragment, messageObject, photoViewerProvider, str, str2, str3, str4, i, i2, -1, z);
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:4:0x000a, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:4:0x000b, code lost:
         r0 = r1.messageOwner.media;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public static void show(android.app.Activity r10, org.telegram.messenger.MessageObject r11, org.telegram.ui.PhotoViewer.PhotoViewerProvider r12, java.lang.String r13, java.lang.String r14, java.lang.String r15, java.lang.String r16, int r17, int r18, int r19, boolean r20) {
+    public static void show(org.telegram.ui.ActionBar.BaseFragment r17, org.telegram.messenger.MessageObject r18, org.telegram.ui.PhotoViewer.PhotoViewerProvider r19, java.lang.String r20, java.lang.String r21, java.lang.String r22, java.lang.String r23, int r24, int r25, int r26, boolean r27) {
         /*
-            r1 = r11
+            r1 = r18
             org.telegram.ui.Components.EmbedBottomSheet r0 = instance
-            if (r0 == 0) goto L_0x0008
+            if (r0 == 0) goto L_0x0009
             r0.destroy()
-        L_0x0008:
-            if (r1 == 0) goto L_0x0019
+        L_0x0009:
+            if (r1 == 0) goto L_0x001a
             org.telegram.tgnet.TLRPC$Message r0 = r1.messageOwner
             org.telegram.tgnet.TLRPC$MessageMedia r0 = r0.media
-            if (r0 == 0) goto L_0x0019
+            if (r0 == 0) goto L_0x001a
             org.telegram.tgnet.TLRPC$WebPage r0 = r0.webpage
-            if (r0 == 0) goto L_0x0019
-            java.lang.String r0 = org.telegram.ui.Components.WebPlayerView.getYouTubeVideoId(r16)
-            goto L_0x001a
-        L_0x0019:
-            r0 = 0
+            if (r0 == 0) goto L_0x001a
+            java.lang.String r0 = org.telegram.ui.Components.WebPlayerView.getYouTubeVideoId(r23)
+            goto L_0x001b
         L_0x001a:
-            if (r0 == 0) goto L_0x0035
+            r0 = 0
+        L_0x001b:
+            if (r0 == 0) goto L_0x0039
             org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.getInstance()
-            r2 = r10
-            r0.setParentActivity(r10)
+            r2 = r17
+            r0.setParentActivity(r2)
             org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.getInstance()
             r3 = 0
             r4 = 0
             r6 = 0
-            r1 = r11
-            r2 = r19
-            r8 = r12
+            r1 = r18
+            r2 = r26
+            r8 = r19
             r0.openPhoto(r1, r2, r3, r4, r6, r8)
-            goto L_0x004f
-        L_0x0035:
-            r2 = r10
+            goto L_0x005b
+        L_0x0039:
+            r2 = r17
             org.telegram.ui.Components.EmbedBottomSheet r0 = new org.telegram.ui.Components.EmbedBottomSheet
-            r1 = r0
-            r3 = r13
-            r4 = r14
-            r5 = r15
-            r6 = r16
-            r7 = r17
-            r8 = r18
-            r9 = r19
-            r1.<init>(r2, r3, r4, r5, r6, r7, r8, r9)
-            r1 = r20
+            android.app.Activity r9 = r17.getParentActivity()
+            r8 = r0
+            r10 = r20
+            r11 = r21
+            r12 = r22
+            r13 = r23
+            r14 = r24
+            r15 = r25
+            r16 = r26
+            r8.<init>(r9, r10, r11, r12, r13, r14, r15, r16)
+            r1 = r27
             r0.setCalcMandatoryInsets(r1)
             r0.show()
-        L_0x004f:
+        L_0x005b:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.EmbedBottomSheet.show(android.app.Activity, org.telegram.messenger.MessageObject, org.telegram.ui.PhotoViewer$PhotoViewerProvider, java.lang.String, java.lang.String, java.lang.String, java.lang.String, int, int, int, boolean):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.EmbedBottomSheet.show(org.telegram.ui.ActionBar.BaseFragment, org.telegram.messenger.MessageObject, org.telegram.ui.PhotoViewer$PhotoViewerProvider, java.lang.String, java.lang.String, java.lang.String, java.lang.String, int, int, int, boolean):void");
     }
 
     /* JADX WARNING: Illegal instructions before constructor call */

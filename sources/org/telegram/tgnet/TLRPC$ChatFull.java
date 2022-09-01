@@ -6,7 +6,8 @@ public abstract class TLRPC$ChatFull extends TLObject {
     public String about;
     public int admins_count;
     public int available_min_id;
-    public ArrayList<String> available_reactions = new ArrayList<>();
+    public TLRPC$ChatReactions available_reactions;
+    public ArrayList<String> available_reactions_legacy = new ArrayList<>();
     public int banned_count;
     public boolean blocked;
     public ArrayList<TLRPC$BotInfo> bot_info = new ArrayList<>();
@@ -76,11 +77,14 @@ public abstract class TLRPC$ChatFull extends TLObject {
             case -1009430225:
                 tLRPC$ChatFull = new TLRPC$TL_channelFull_layer67();
                 break;
+            case -908914376:
+                tLRPC$ChatFull = new TLRPC$TL_chatFull();
+                break;
             case -877254512:
                 tLRPC$ChatFull = new TLRPC$TL_channelFull_layer89();
                 break;
             case -779165146:
-                tLRPC$ChatFull = new TLRPC$TL_chatFull();
+                tLRPC$ChatFull = new TLRPC$TL_chatFull_layer144();
                 break;
             case -516145888:
                 tLRPC$ChatFull = new TLRPC$TL_channelFull_layer139();
@@ -89,7 +93,7 @@ public abstract class TLRPC$ChatFull extends TLObject {
                 tLRPC$ChatFull = new TLRPC$TL_channelFull_layer133();
                 break;
             case -362240487:
-                tLRPC$ChatFull = new TLRPC$TL_channelFull();
+                tLRPC$ChatFull = new TLRPC$TL_channelFull_layer144();
                 break;
             case -304961647:
                 tLRPC$ChatFull = new TLRPC$TL_chatFull_layer92();
@@ -102,6 +106,9 @@ public abstract class TLRPC$ChatFull extends TLObject {
                 break;
             case -253335766:
                 tLRPC$ChatFull = new TLRPC$TL_channelFull_layer121();
+                break;
+            case -231385849:
+                tLRPC$ChatFull = new TLRPC$TL_channelFull();
                 break;
             case -213431562:
                 tLRPC$ChatFull = new TLRPC$TL_chatFull_layer123();
@@ -173,6 +180,19 @@ public abstract class TLRPC$ChatFull extends TLObject {
         if (tLRPC$ChatFull != null || !z) {
             if (tLRPC$ChatFull != null) {
                 tLRPC$ChatFull.readParams(abstractSerializedData, z);
+                if (tLRPC$ChatFull.available_reactions == null) {
+                    if (!tLRPC$ChatFull.available_reactions_legacy.isEmpty()) {
+                        TLRPC$TL_chatReactionsSome tLRPC$TL_chatReactionsSome = new TLRPC$TL_chatReactionsSome();
+                        for (int i2 = 0; i2 < tLRPC$ChatFull.available_reactions_legacy.size(); i2++) {
+                            TLRPC$TL_reactionEmoji tLRPC$TL_reactionEmoji = new TLRPC$TL_reactionEmoji();
+                            tLRPC$TL_reactionEmoji.emoticon = tLRPC$ChatFull.available_reactions_legacy.get(i2);
+                            tLRPC$TL_chatReactionsSome.reactions.add(tLRPC$TL_reactionEmoji);
+                        }
+                        tLRPC$ChatFull.available_reactions = tLRPC$TL_chatReactionsSome;
+                    } else {
+                        tLRPC$ChatFull.available_reactions = new TLRPC$TL_chatReactionsNone();
+                    }
+                }
             }
             return tLRPC$ChatFull;
         }

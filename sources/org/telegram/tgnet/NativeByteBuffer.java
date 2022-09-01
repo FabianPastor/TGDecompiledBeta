@@ -208,6 +208,13 @@ public class NativeByteBuffer extends AbstractSerializedData {
     }
 
     public void writeString(String str) {
+        if (str == null) {
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.e("write string null");
+                FileLog.e(new Throwable());
+            }
+            str = "";
+        }
         try {
             writeByteArray(str.getBytes("UTF-8"));
         } catch (Exception e) {

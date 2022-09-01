@@ -1,14 +1,21 @@
 package org.telegram.ui;
 
-import java.util.Comparator;
+import android.widget.ImageView;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda208 implements Comparator {
-    public static final /* synthetic */ ChatActivity$$ExternalSyntheticLambda208 INSTANCE = new ChatActivity$$ExternalSyntheticLambda208();
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda208 implements Runnable {
+    public final /* synthetic */ long[] f$0;
+    public final /* synthetic */ boolean[] f$1;
+    public final /* synthetic */ ImageView f$2;
+    public final /* synthetic */ ImageView f$3;
 
-    private /* synthetic */ ChatActivity$$ExternalSyntheticLambda208() {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda208(long[] jArr, boolean[] zArr, ImageView imageView, ImageView imageView2) {
+        this.f$0 = jArr;
+        this.f$1 = zArr;
+        this.f$2 = imageView;
+        this.f$3 = imageView2;
     }
 
-    public final int compare(Object obj, Object obj2) {
-        return ((Integer) obj2).compareTo((Integer) obj);
+    public final void run() {
+        ChatActivity.lambda$createMenu$166(this.f$0, this.f$1, this.f$2, this.f$3);
     }
 }

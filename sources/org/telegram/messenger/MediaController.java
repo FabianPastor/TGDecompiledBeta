@@ -3542,6 +3542,55 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         }
     }
 
+    /* JADX WARNING: Removed duplicated region for block: B:18:0x0031 A[Catch:{ SecurityException -> 0x0044, all -> 0x0025 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:19:0x0035 A[Catch:{ SecurityException -> 0x0044, all -> 0x0025 }] */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    private void setBluetoothScoOn(boolean r4) {
+        /*
+            r3 = this;
+            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext
+            java.lang.String r1 = "audio"
+            java.lang.Object r0 = r0.getSystemService(r1)
+            android.media.AudioManager r0 = (android.media.AudioManager) r0
+            boolean r1 = r0.isBluetoothScoAvailableOffCall()
+            if (r1 == 0) goto L_0x0014
+            boolean r1 = org.telegram.messenger.SharedConfig.recordViaSco
+            if (r1 != 0) goto L_0x0016
+        L_0x0014:
+            if (r4 != 0) goto L_0x0044
+        L_0x0016:
+            android.bluetooth.BluetoothAdapter r1 = android.bluetooth.BluetoothAdapter.getDefaultAdapter()
+            if (r1 == 0) goto L_0x0027
+            r2 = 1
+            int r1 = r1.getProfileConnectionState(r2)     // Catch:{ SecurityException -> 0x0044, all -> 0x0025 }
+            r2 = 2
+            if (r1 == r2) goto L_0x0029
+            goto L_0x0027
+        L_0x0025:
+            r4 = move-exception
+            goto L_0x0041
+        L_0x0027:
+            if (r4 != 0) goto L_0x0044
+        L_0x0029:
+            if (r4 == 0) goto L_0x0035
+            boolean r1 = r0.isBluetoothScoOn()     // Catch:{ SecurityException -> 0x0044, all -> 0x0025 }
+            if (r1 != 0) goto L_0x0035
+            r0.startBluetoothSco()     // Catch:{ SecurityException -> 0x0044, all -> 0x0025 }
+            goto L_0x0044
+        L_0x0035:
+            if (r4 != 0) goto L_0x0044
+            boolean r4 = r0.isBluetoothScoOn()     // Catch:{ SecurityException -> 0x0044, all -> 0x0025 }
+            if (r4 == 0) goto L_0x0044
+            r0.stopBluetoothSco()     // Catch:{ SecurityException -> 0x0044, all -> 0x0025 }
+            goto L_0x0044
+        L_0x0041:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r4)
+        L_0x0044:
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaController.setBluetoothScoOn(boolean):void");
+    }
+
     public boolean playMessage(MessageObject messageObject) {
         boolean z;
         File file;
@@ -4274,6 +4323,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             AndroidUtilities.runOnUIThread(new MediaController$$ExternalSyntheticLambda19(this, i, i2));
             return;
         }
+        setBluetoothScoOn(true);
         this.sendAfterDone = 0;
         TLRPC$TL_document tLRPC$TL_document = new TLRPC$TL_document();
         this.recordingAudio = tLRPC$TL_document;
@@ -4317,6 +4367,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             } catch (Exception e2) {
                 FileLog.e((Throwable) e2);
             }
+            setBluetoothScoOn(false);
             AndroidUtilities.runOnUIThread(new MediaController$$ExternalSyntheticLambda20(this, i, i2));
         }
     }
@@ -4437,7 +4488,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         if (j > 700) {
             if (i3 == 1) {
                 c = 1;
-                SendMessagesHelper.getInstance(this.recordingCurrentAccount).sendMessage(tLRPC$TL_document, (VideoEditedInfo) null, file.getAbsolutePath(), this.recordDialogId, this.recordReplyingMsg, this.recordReplyingTopMsg, (String) null, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, z, i2, 0, (Object) null, (MessageObject.SendAnimationData) null);
+                SendMessagesHelper.getInstance(this.recordingCurrentAccount).sendMessage(tLRPC$TL_document, (VideoEditedInfo) null, file.getAbsolutePath(), this.recordDialogId, this.recordReplyingMsg, this.recordReplyingTopMsg, (String) null, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, z, i2, 0, (Object) null, (MessageObject.SendAnimationData) null, false);
             } else {
                 c = 1;
             }
@@ -4485,6 +4536,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                 this.sendAfterDoneNotify = z;
                 this.sendAfterDoneScheduleDate = i2;
                 audioRecord.stop();
+                setBluetoothScoOn(false);
             } catch (Exception e) {
                 FileLog.e((Throwable) e);
                 File file = this.recordingAudioFile;
@@ -4700,7 +4752,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             TLRPC$Document document = messageObject.getDocument();
             if (document != null) {
                 this.loadingMessageObjects.put(FileLoader.getAttachFileName(document), messageObject);
-                this.currentAccount.getFileLoader().loadFile(document, messageObject, 1, 0);
+                this.currentAccount.getFileLoader().loadFile(document, messageObject, 0, 0);
             }
         }
 

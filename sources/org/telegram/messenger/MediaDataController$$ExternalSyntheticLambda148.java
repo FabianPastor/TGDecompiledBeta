@@ -1,18 +1,15 @@
 package org.telegram.messenger;
 
-import org.telegram.messenger.ImageReceiver;
+import java.util.Comparator;
+import org.telegram.tgnet.TLRPC$MessageEntity;
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda148 implements ImageReceiver.ImageReceiverDelegate {
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda148 implements Comparator {
     public static final /* synthetic */ MediaDataController$$ExternalSyntheticLambda148 INSTANCE = new MediaDataController$$ExternalSyntheticLambda148();
 
     private /* synthetic */ MediaDataController$$ExternalSyntheticLambda148() {
     }
 
-    public final void didSetImage(ImageReceiver imageReceiver, boolean z, boolean z2, boolean z3) {
-        imageReceiver.clearImage();
-    }
-
-    public /* synthetic */ void onAnimationReady(ImageReceiver imageReceiver) {
-        ImageReceiver.ImageReceiverDelegate.CC.$default$onAnimationReady(this, imageReceiver);
+    public final int compare(Object obj, Object obj2) {
+        return MediaDataController.lambda$getTextStyleRuns$156((TLRPC$MessageEntity) obj, (TLRPC$MessageEntity) obj2);
     }
 }

@@ -8,7 +8,7 @@ public class TLRPC$TL_messages_messageReactionsList extends TLObject {
     public int count;
     public int flags;
     public String next_offset;
-    public ArrayList<TLRPC$TL_messagePeerReaction> reactions = new ArrayList<>();
+    public ArrayList<TLRPC$MessagePeerReaction> reactions = new ArrayList<>();
     public ArrayList<TLRPC$User> users = new ArrayList<>();
 
     public static TLRPC$TL_messages_messageReactionsList TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
@@ -32,7 +32,7 @@ public class TLRPC$TL_messages_messageReactionsList extends TLObject {
             int readInt322 = abstractSerializedData.readInt32(z);
             int i2 = 0;
             while (i2 < readInt322) {
-                TLRPC$TL_messagePeerReaction TLdeserialize = TLRPC$MessagePeerReaction.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+                TLRPC$MessagePeerReaction TLdeserialize = TLRPC$MessagePeerReaction.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
                 if (TLdeserialize != null) {
                     this.reactions.add(TLdeserialize);
                     i2++;

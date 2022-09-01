@@ -1,6 +1,7 @@
 package org.telegram.ui.Adapters;
 
 import android.content.Context;
+import android.view.View;
 import android.view.ViewGroup;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
@@ -30,7 +31,9 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
     private ArrayList<Item> items = new ArrayList<>(11);
     private Context mContext;
     private DrawerLayoutContainer mDrawerLayoutContainer;
-    private DrawerProfileCell profileCell;
+    /* access modifiers changed from: private */
+    public View.OnClickListener onPremiumDrawableClick;
+    public DrawerProfileCell profileCell;
 
     public DrawerLayoutAdapter(Context context, SideMenultItemAnimator sideMenultItemAnimator, DrawerLayoutContainer drawerLayoutContainer) {
         this.mContext = context;
@@ -82,6 +85,10 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
         return this.accountsShown;
     }
 
+    public void setOnPremiumDrawableClick(View.OnClickListener onClickListener) {
+        this.onPremiumDrawableClick = onClickListener;
+    }
+
     public void notifyDataSetChanged() {
         resetItems();
         super.notifyDataSetChanged();
@@ -95,9 +102,16 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         EmptyCell emptyCell;
         if (i == 0) {
-            DrawerProfileCell drawerProfileCell = new DrawerProfileCell(this.mContext, this.mDrawerLayoutContainer);
-            this.profileCell = drawerProfileCell;
-            emptyCell = drawerProfileCell;
+            AnonymousClass1 r3 = new DrawerProfileCell(this.mContext, this.mDrawerLayoutContainer) {
+                /* access modifiers changed from: protected */
+                public void onPremiumClick() {
+                    if (DrawerLayoutAdapter.this.onPremiumDrawableClick != null) {
+                        DrawerLayoutAdapter.this.onPremiumDrawableClick.onClick(this);
+                    }
+                }
+            };
+            this.profileCell = r3;
+            emptyCell = r3;
         } else if (i == 2) {
             emptyCell = new DividerCell(this.mContext);
         } else if (i == 3) {
@@ -232,6 +246,15 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
                 i2 = R.drawable.msg_help;
                 i = R.drawable.msg_nearby;
             }
+            UserConfig instance = UserConfig.getInstance(UserConfig.selectedAccount);
+            if (instance != null && instance.isPremium()) {
+                if (instance.getEmojiStatus() != null) {
+                    this.items.add(new Item(15, LocaleController.getString("ChangeEmojiStatus", R.string.ChangeEmojiStatus), 0, R.raw.emoji_status_change_to_set));
+                } else {
+                    this.items.add(new Item(15, LocaleController.getString("SetEmojiStatus", R.string.SetEmojiStatus), 0, R.raw.emoji_status_set_to_change));
+                }
+                this.items.add((Object) null);
+            }
             this.items.add(new Item(2, LocaleController.getString("NewGroup", R.string.NewGroup), i8));
             this.items.add(new Item(6, LocaleController.getString("Contacts", R.string.Contacts), i7));
             this.items.add(new Item(10, LocaleController.getString("Calls", R.string.Calls), i6));
@@ -282,6 +305,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
     private static class Item {
         public int icon;
         public int id;
+        public int lottieIcon;
         public String text;
 
         public Item(int i, String str, int i2) {
@@ -290,8 +314,15 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
             this.text = str;
         }
 
+        public Item(int i, String str, int i2, int i3) {
+            this.icon = i2;
+            this.lottieIcon = i3;
+            this.id = i;
+            this.text = str;
+        }
+
         public void bind(DrawerActionCell drawerActionCell) {
-            drawerActionCell.setTextAndIcon(this.id, this.text, this.icon);
+            drawerActionCell.setTextAndIcon(this.id, this.text, this.icon, this.lottieIcon);
         }
     }
 }

@@ -78,6 +78,7 @@ import org.telegram.tgnet.TLRPC$InputStickerSet;
 import org.telegram.tgnet.TLRPC$KeyboardButton;
 import org.telegram.tgnet.TLRPC$MessageMedia;
 import org.telegram.tgnet.TLRPC$PhotoSize;
+import org.telegram.tgnet.TLRPC$ReactionCount;
 import org.telegram.tgnet.TLRPC$TL_channelAdminLogEvent;
 import org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionChangeHistoryTTL;
 import org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionChangeStickerSet;
@@ -103,7 +104,6 @@ import org.telegram.tgnet.TLRPC$TL_messages_exportedChatInvite;
 import org.telegram.tgnet.TLRPC$TL_messages_getExportedChatInvite;
 import org.telegram.tgnet.TLRPC$TL_messages_stickerSet;
 import org.telegram.tgnet.TLRPC$TL_premiumGiftOption;
-import org.telegram.tgnet.TLRPC$TL_reactionCount;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.tgnet.TLRPC$UserFull;
 import org.telegram.tgnet.TLRPC$VideoSize;
@@ -125,6 +125,7 @@ import org.telegram.ui.Cells.ChatUnreadCell;
 import org.telegram.ui.Cells.TextSelectionHelper;
 import org.telegram.ui.Components.AdminLogFilterAlert;
 import org.telegram.ui.Components.AlertsCreator;
+import org.telegram.ui.Components.AnimatedEmojiSpan;
 import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.ChatAvatarContainer;
 import org.telegram.ui.Components.ClearHistoryAlert;
@@ -2599,6 +2600,10 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                         return ChatMessageCell.ChatMessageCellDelegate.CC.$default$didLongPressChannelAvatar(this, chatMessageCell, tLRPC$Chat, i, f, f2);
                     }
 
+                    public /* synthetic */ boolean didPressAnimatedEmoji(AnimatedEmojiSpan animatedEmojiSpan) {
+                        return ChatMessageCell.ChatMessageCellDelegate.CC.$default$didPressAnimatedEmoji(this, animatedEmojiSpan);
+                    }
+
                     public /* synthetic */ void didPressBotButton(ChatMessageCell chatMessageCell, TLRPC$KeyboardButton tLRPC$KeyboardButton) {
                         ChatMessageCell.ChatMessageCellDelegate.CC.$default$didPressBotButton(this, chatMessageCell, tLRPC$KeyboardButton);
                     }
@@ -2618,8 +2623,12 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                         ChatMessageCell.ChatMessageCellDelegate.CC.$default$didPressHint(this, chatMessageCell, i);
                     }
 
-                    public /* synthetic */ void didPressReaction(ChatMessageCell chatMessageCell, TLRPC$TL_reactionCount tLRPC$TL_reactionCount, boolean z) {
-                        ChatMessageCell.ChatMessageCellDelegate.CC.$default$didPressReaction(this, chatMessageCell, tLRPC$TL_reactionCount, z);
+                    public /* synthetic */ void didPressPaidPreview(ChatMessageCell chatMessageCell, TLRPC$KeyboardButton tLRPC$KeyboardButton) {
+                        ChatMessageCell.ChatMessageCellDelegate.CC.$default$didPressPaidPreview(this, chatMessageCell, tLRPC$KeyboardButton);
+                    }
+
+                    public /* synthetic */ void didPressReaction(ChatMessageCell chatMessageCell, TLRPC$ReactionCount tLRPC$ReactionCount, boolean z) {
+                        ChatMessageCell.ChatMessageCellDelegate.CC.$default$didPressReaction(this, chatMessageCell, tLRPC$ReactionCount, z);
                     }
 
                     public void didPressReplyMessage(ChatMessageCell chatMessageCell, int i) {
@@ -2870,7 +2879,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                     }
 
                     public void needOpenWebView(MessageObject messageObject, String str, String str2, String str3, String str4, int i, int i2) {
-                        EmbedBottomSheet.show(ChannelAdminLogActivity.this.getParentActivity(), messageObject, ChannelAdminLogActivity.this.provider, str2, str3, str4, str, i, i2, false);
+                        ChannelAdminLogActivity channelAdminLogActivity = ChannelAdminLogActivity.this;
+                        EmbedBottomSheet.show(channelAdminLogActivity, messageObject, channelAdminLogActivity.provider, str2, str3, str4, str, i, i2, false);
                     }
 
                     /* JADX WARNING: Code restructure failed: missing block: B:49:0x011c, code lost:
@@ -2897,7 +2907,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                             r2 = r10
                             r2.<init>((android.content.Context) r3, (org.telegram.ui.ActionBar.BaseFragment) r4, (org.telegram.tgnet.TLRPC$InputStickerSet) r5, (org.telegram.tgnet.TLRPC$TL_messages_stickerSet) r6, (org.telegram.ui.Components.StickersAlert.StickersAlertDelegate) r7)
                             r9.showDialog(r10)
-                            goto L_0x01f6
+                            goto L_0x01f2
                         L_0x002b:
                             boolean r9 = r1.isVideo()
                             if (r9 != 0) goto L_0x01d3
@@ -2966,12 +2976,12 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                             android.app.Activity r10 = r10.getParentActivity()     // Catch:{ Exception -> 0x00c4 }
                             r11 = 500(0x1f4, float:7.0E-43)
                             r10.startActivityForResult(r9, r11)     // Catch:{ Exception -> 0x00c4 }
-                            goto L_0x01f6
+                            goto L_0x01f2
                         L_0x00c4:
                             org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter r9 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this
                             org.telegram.ui.ChannelAdminLogActivity r9 = org.telegram.ui.ChannelAdminLogActivity.this
                             r9.alertUserOpenError(r1)
-                            goto L_0x01f6
+                            goto L_0x01f2
                         L_0x00cd:
                             r11 = 4
                             if (r9 != r11) goto L_0x00ed
@@ -2988,11 +2998,11 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                             org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter r10 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this
                             org.telegram.ui.ChannelAdminLogActivity r10 = org.telegram.ui.ChannelAdminLogActivity.this
                             r10.presentFragment(r9)
-                            goto L_0x01f6
+                            goto L_0x01f2
                         L_0x00ed:
                             r11 = 9
                             if (r9 == r11) goto L_0x00f3
-                            if (r9 != 0) goto L_0x01f6
+                            if (r9 != 0) goto L_0x01f2
                         L_0x00f3:
                             java.lang.String r9 = r1.getDocumentName()
                             java.lang.String r9 = r9.toLowerCase()
@@ -3087,17 +3097,16 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                             org.telegram.ui.ChannelAdminLogActivity r9 = org.telegram.ui.ChannelAdminLogActivity.this     // Catch:{ Exception -> 0x01cb }
                             android.app.Activity r9 = r9.getParentActivity()     // Catch:{ Exception -> 0x01cb }
                             org.telegram.messenger.AndroidUtilities.openForView((org.telegram.messenger.MessageObject) r1, (android.app.Activity) r9, (org.telegram.ui.ActionBar.Theme.ResourcesProvider) r0)     // Catch:{ Exception -> 0x01cb }
-                            goto L_0x01f6
+                            goto L_0x01f2
                         L_0x01cb:
                             org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter r9 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this
                             org.telegram.ui.ChannelAdminLogActivity r9 = org.telegram.ui.ChannelAdminLogActivity.this
                             r9.alertUserOpenError(r1)
-                            goto L_0x01f6
+                            goto L_0x01f2
                         L_0x01d3:
                             org.telegram.ui.PhotoViewer r9 = org.telegram.ui.PhotoViewer.getInstance()
                             org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter r10 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this
                             org.telegram.ui.ChannelAdminLogActivity r10 = org.telegram.ui.ChannelAdminLogActivity.this
-                            android.app.Activity r10 = r10.getParentActivity()
                             r9.setParentActivity(r10)
                             org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.getInstance()
                             r2 = 0
@@ -3107,7 +3116,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                             org.telegram.ui.ChannelAdminLogActivity r9 = org.telegram.ui.ChannelAdminLogActivity.this
                             org.telegram.ui.PhotoViewer$PhotoViewerProvider r7 = r9.provider
                             r0.openPhoto((org.telegram.messenger.MessageObject) r1, (org.telegram.ui.ChatActivity) r2, (long) r3, (long) r5, (org.telegram.ui.PhotoViewer.PhotoViewerProvider) r7)
-                        L_0x01f6:
+                        L_0x01f2:
                             return
                         */
                         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.AnonymousClass1.didPressImage(org.telegram.ui.Cells.ChatMessageCell, float, float):void");
@@ -3158,7 +3167,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
 
                     public void didClickImage(ChatActionCell chatActionCell) {
                         MessageObject messageObject = chatActionCell.getMessageObject();
-                        PhotoViewer.getInstance().setParentActivity(ChannelAdminLogActivity.this.getParentActivity());
+                        PhotoViewer.getInstance().setParentActivity(ChannelAdminLogActivity.this);
                         TLRPC$PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 640);
                         if (closestPhotoSizeWithSize != null) {
                             PhotoViewer.getInstance().openPhoto(closestPhotoSizeWithSize.location, ImageLocation.getForPhoto(closestPhotoSizeWithSize, messageObject.messageOwner.action.photo), ChannelAdminLogActivity.this.provider);

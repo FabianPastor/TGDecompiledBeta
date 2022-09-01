@@ -1,15 +1,20 @@
 package org.telegram.ui;
 
-import android.view.MotionEvent;
 import android.view.View;
+import org.telegram.ui.Cells.DialogCell;
 
-public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda28 implements View.OnTouchListener {
-    public static final /* synthetic */ DialogsActivity$$ExternalSyntheticLambda28 INSTANCE = new DialogsActivity$$ExternalSyntheticLambda28();
+public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda28 implements View.OnClickListener {
+    public final /* synthetic */ DialogsActivity f$0;
+    public final /* synthetic */ DialogCell f$1;
+    public final /* synthetic */ long f$2;
 
-    private /* synthetic */ DialogsActivity$$ExternalSyntheticLambda28() {
+    public /* synthetic */ DialogsActivity$$ExternalSyntheticLambda28(DialogsActivity dialogsActivity, DialogCell dialogCell, long j) {
+        this.f$0 = dialogsActivity;
+        this.f$1 = dialogCell;
+        this.f$2 = j;
     }
 
-    public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return DialogsActivity.lambda$createActionMode$15(view, motionEvent);
+    public final void onClick(View view) {
+        this.f$0.lambda$showChatPreview$27(this.f$1, this.f$2, view);
     }
 }

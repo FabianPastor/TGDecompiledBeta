@@ -614,7 +614,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                 }
                 PhotoCropActivity photoCropActivity = new PhotoCropActivity(bundle);
                 photoCropActivity.setDelegate(this);
-                launchActivity.lambda$runLinkRequest$61(photoCropActivity);
+                launchActivity.lambda$runLinkRequest$62(photoCropActivity);
             }
         } catch (Exception e) {
             FileLog.e((Throwable) e);
@@ -628,7 +628,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
         photoEntry.isVideo = z;
         photoEntry.thumbPath = str2;
         arrayList.add(photoEntry);
-        PhotoViewer.getInstance().setParentActivity(this.parentFragment.getParentActivity());
+        PhotoViewer.getInstance().setParentActivity(this.parentFragment);
         PhotoViewer.getInstance().openPhotoForSelect(arrayList, 0, 1, false, new PhotoViewer.EmptyPhotoViewerProvider() {
             public boolean allowCaption() {
                 return false;
@@ -680,7 +680,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
             this.currentPicturePath = null;
         } else if (i == 13) {
             this.parentFragment.getParentActivity().overridePendingTransition(R.anim.alpha_in, R.anim.alpha_out);
-            PhotoViewer.getInstance().setParentActivity(this.parentFragment.getParentActivity());
+            PhotoViewer.getInstance().setParentActivity(this.parentFragment);
             try {
                 int attributeInt = new ExifInterface(this.currentPicturePath).getAttributeInt("Orientation", 1);
                 if (attributeInt == 3) {

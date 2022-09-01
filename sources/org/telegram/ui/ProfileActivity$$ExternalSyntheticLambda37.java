@@ -1,16 +1,19 @@
 package org.telegram.ui;
 
-import android.view.View;
-import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda37 implements RecyclerListView.OnItemClickListener {
+public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda37 implements RequestDelegate {
     public final /* synthetic */ ProfileActivity f$0;
+    public final /* synthetic */ String f$1;
 
-    public /* synthetic */ ProfileActivity$$ExternalSyntheticLambda37(ProfileActivity profileActivity) {
+    public /* synthetic */ ProfileActivity$$ExternalSyntheticLambda37(ProfileActivity profileActivity, String str) {
         this.f$0 = profileActivity;
+        this.f$1 = str;
     }
 
-    public final void onItemClick(View view, int i) {
-        this.f$0.lambda$createView$5(view, i);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$didUploadPhoto$38(this.f$1, tLObject, tLRPC$TL_error);
     }
 }

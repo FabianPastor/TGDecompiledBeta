@@ -159,7 +159,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
     }
 
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r15v3, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v41, resolved type: org.telegram.ui.ArticleViewer$BlockBlockquoteCell} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v41, resolved type: org.telegram.ui.Cells.WallpaperCell$WallpaperView} */
     /* JADX WARNING: type inference failed for: r15v0 */
     /* JADX WARNING: type inference failed for: r15v1, types: [int] */
     /* JADX WARNING: type inference failed for: r0v33, types: [boolean] */

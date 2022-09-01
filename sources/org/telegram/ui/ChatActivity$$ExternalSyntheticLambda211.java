@@ -1,19 +1,14 @@
 package org.telegram.ui;
 
-import android.content.Context;
-import org.telegram.messenger.MessagesController;
-import org.telegram.tgnet.TLRPC$TL_error;
+import java.util.Comparator;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda211 implements MessagesController.ErrorDelegate {
-    public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ Context f$1;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda211 implements Comparator {
+    public static final /* synthetic */ ChatActivity$$ExternalSyntheticLambda211 INSTANCE = new ChatActivity$$ExternalSyntheticLambda211();
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda211(ChatActivity chatActivity, Context context) {
-        this.f$0 = chatActivity;
-        this.f$1 = context;
+    private /* synthetic */ ChatActivity$$ExternalSyntheticLambda211() {
     }
 
-    public final boolean run(TLRPC$TL_error tLRPC$TL_error) {
-        return this.f$0.lambda$createView$69(this.f$1, tLRPC$TL_error);
+    public final int compare(Object obj, Object obj2) {
+        return ((Integer) obj2).compareTo((Integer) obj);
     }
 }

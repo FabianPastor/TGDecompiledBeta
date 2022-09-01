@@ -1,29 +1,22 @@
 package org.telegram.ui;
 
-import android.content.Context;
-import android.view.View;
-import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_channels_getParticipants;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda38 implements RecyclerListView.OnItemClickListenerExtended {
+public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda38 implements RequestDelegate {
     public final /* synthetic */ ProfileActivity f$0;
-    public final /* synthetic */ long f$1;
-    public final /* synthetic */ Context f$2;
+    public final /* synthetic */ TLRPC$TL_channels_getParticipants f$1;
+    public final /* synthetic */ int f$2;
 
-    public /* synthetic */ ProfileActivity$$ExternalSyntheticLambda38(ProfileActivity profileActivity, long j, Context context) {
+    public /* synthetic */ ProfileActivity$$ExternalSyntheticLambda38(ProfileActivity profileActivity, TLRPC$TL_channels_getParticipants tLRPC$TL_channels_getParticipants, int i) {
         this.f$0 = profileActivity;
-        this.f$1 = j;
-        this.f$2 = context;
+        this.f$1 = tLRPC$TL_channels_getParticipants;
+        this.f$2 = i;
     }
 
-    public /* synthetic */ boolean hasDoubleTap(View view, int i) {
-        return RecyclerListView.OnItemClickListenerExtended.CC.$default$hasDoubleTap(this, view, i);
-    }
-
-    public /* synthetic */ void onDoubleTap(View view, int i, float f, float f2) {
-        RecyclerListView.OnItemClickListenerExtended.CC.$default$onDoubleTap(this, view, i, f, f2);
-    }
-
-    public final void onItemClick(View view, int i, float f, float f2) {
-        this.f$0.lambda$createView$4(this.f$1, this.f$2, view, i, f, f2);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$getChannelParticipants$29(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
     }
 }

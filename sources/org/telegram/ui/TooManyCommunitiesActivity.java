@@ -27,7 +27,6 @@ import org.telegram.messenger.R;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Chat;
-import org.telegram.tgnet.TLRPC$ChatFull;
 import org.telegram.tgnet.TLRPC$TL_channels_getInactiveChannels;
 import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.tgnet.TLRPC$TL_messages_inactiveChats;
@@ -265,7 +264,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
             for (int i2 = 0; i2 < arrayList.size(); i2++) {
                 TLRPC$Chat tLRPC$Chat = (TLRPC$Chat) arrayList.get(i2);
                 getMessagesController().putChat(tLRPC$Chat, false);
-                getMessagesController().deleteParticipantFromChat(tLRPC$Chat.id, user, (TLRPC$ChatFull) null);
+                getMessagesController().deleteParticipantFromChat(tLRPC$Chat.id, user);
             }
             finishFragment();
         }

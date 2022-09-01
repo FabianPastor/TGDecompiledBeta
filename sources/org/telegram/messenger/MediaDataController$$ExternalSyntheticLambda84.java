@@ -1,19 +1,17 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC$BotInfo;
+import org.telegram.tgnet.TLObject;
 
 public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda84 implements Runnable {
     public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ TLRPC$BotInfo f$1;
-    public final /* synthetic */ long f$2;
+    public final /* synthetic */ TLObject f$1;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda84(MediaDataController mediaDataController, TLRPC$BotInfo tLRPC$BotInfo, long j) {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda84(MediaDataController mediaDataController, TLObject tLObject) {
         this.f$0 = mediaDataController;
-        this.f$1 = tLRPC$BotInfo;
-        this.f$2 = j;
+        this.f$1 = tLObject;
     }
 
     public final void run() {
-        this.f$0.lambda$putBotInfo$172(this.f$1, this.f$2);
+        this.f$0.lambda$clearRecentStickers$17(this.f$1);
     }
 }

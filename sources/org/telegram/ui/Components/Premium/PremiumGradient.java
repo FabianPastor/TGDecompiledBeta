@@ -52,18 +52,24 @@ public class PremiumGradient {
     }
 
     public InternalDrawable createGradientDrawable(Drawable drawable) {
+        return createGradientDrawable(drawable, this.mainGradient);
+    }
+
+    public InternalDrawable createGradientDrawable(Drawable drawable, GradientTools gradientTools) {
+        if (drawable == null) {
+            return null;
+        }
         int intrinsicWidth = drawable.getIntrinsicWidth();
         int minimumHeight = drawable.getMinimumHeight();
         Bitmap createBitmap = Bitmap.createBitmap(intrinsicWidth, minimumHeight, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(createBitmap);
         drawable.setBounds(0, 0, intrinsicWidth, minimumHeight);
         drawable.draw(canvas);
-        this.mainGradient.paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-        this.mainGradient.gradientMatrix(0, 0, intrinsicWidth, minimumHeight, (float) (-intrinsicWidth), 0.0f);
-        Canvas canvas2 = canvas;
-        canvas2.drawRect(0.0f, 0.0f, (float) intrinsicWidth, (float) minimumHeight, this.mainGradient.paint);
-        this.mainGradient.paint.setXfermode((Xfermode) null);
-        return new InternalDrawable(drawable, createBitmap, this.mainGradient.colors);
+        gradientTools.paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        gradientTools.gradientMatrix(0, 0, intrinsicWidth, minimumHeight, (float) (-intrinsicWidth), 0.0f);
+        canvas.drawRect(0.0f, 0.0f, (float) intrinsicWidth, (float) minimumHeight, gradientTools.paint);
+        gradientTools.paint.setXfermode((Xfermode) null);
+        return new InternalDrawable(drawable, createBitmap, gradientTools.colors);
     }
 
     public void checkIconColors() {
