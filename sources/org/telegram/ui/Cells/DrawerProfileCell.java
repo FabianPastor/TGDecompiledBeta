@@ -527,7 +527,7 @@ public class DrawerProfileCell extends FrameLayout implements NotificationCenter
         if (this.nameTextView.getRightDrawable() instanceof AnimatedEmojiDrawable.WrapSizeDrawable) {
             Drawable drawable = ((AnimatedEmojiDrawable.WrapSizeDrawable) this.nameTextView.getRightDrawable()).getDrawable();
             if (drawable instanceof AnimatedEmojiDrawable) {
-                ((AnimatedEmojiDrawable) drawable).removeView((Drawable.Callback) this.nameTextView);
+                ((AnimatedEmojiDrawable) drawable).removeView((View) this.nameTextView);
             }
         }
     }

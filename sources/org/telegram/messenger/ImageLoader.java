@@ -96,7 +96,7 @@ public class ImageLoader {
     /* access modifiers changed from: private */
     public String ignoreRemoval;
     /* access modifiers changed from: private */
-    public DispatchQueuePriority imageLoadQueue = new DispatchQueuePriority("imageLoadQueue");
+    public DispatchQueue imageLoadQueue = new DispatchQueue("imageLoadQueue");
     /* access modifiers changed from: private */
     public HashMap<String, CacheImage> imageLoadingByKeys = new HashMap<>();
     /* access modifiers changed from: private */
@@ -1088,7 +1088,7 @@ public class ImageLoader {
                 ImageLoader.this.httpFileLoadError(this.cacheImage.url);
             }
             Utilities.stageQueue.postRunnable(new ImageLoader$HttpImageTask$$ExternalSyntheticLambda6(this, bool));
-            ImageLoader.this.imageLoadQueue.postRunnable(new ImageLoader$HttpImageTask$$ExternalSyntheticLambda0(this), this.cacheImage.priority);
+            ImageLoader.this.imageLoadQueue.postRunnable(new ImageLoader$HttpImageTask$$ExternalSyntheticLambda0(this), (long) this.cacheImage.priority);
         }
 
         /* access modifiers changed from: private */
@@ -1121,7 +1121,7 @@ public class ImageLoader {
 
         /* access modifiers changed from: protected */
         public void onCancelled() {
-            ImageLoader.this.imageLoadQueue.postRunnable(new ImageLoader$HttpImageTask$$ExternalSyntheticLambda2(this), this.cacheImage.priority);
+            ImageLoader.this.imageLoadQueue.postRunnable(new ImageLoader$HttpImageTask$$ExternalSyntheticLambda2(this), (long) this.cacheImage.priority);
             Utilities.stageQueue.postRunnable(new ImageLoader$HttpImageTask$$ExternalSyntheticLambda3(this));
         }
 
@@ -3567,12 +3567,13 @@ public class ImageLoader {
                 r7 = r1
             L_0x010d:
                 org.telegram.messenger.ImageLoader r0 = org.telegram.messenger.ImageLoader.this
-                org.telegram.DispatchQueuePriority r0 = r0.imageLoadQueue
+                org.telegram.messenger.DispatchQueue r0 = r0.imageLoadQueue
                 org.telegram.messenger.ImageLoader$CacheOutTask$$ExternalSyntheticLambda1 r2 = new org.telegram.messenger.ImageLoader$CacheOutTask$$ExternalSyntheticLambda1
                 r2.<init>(r6, r1, r7)
                 org.telegram.messenger.ImageLoader$CacheImage r7 = r6.cacheImage
                 int r7 = r7.priority
-                r0.postRunnable(r2, r7)
+                long r3 = (long) r7
+                r0.postRunnable(r2, r3)
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ImageLoader.CacheOutTask.lambda$onPostExecute$3(android.graphics.drawable.Drawable):void");
@@ -3669,6 +3670,7 @@ public class ImageLoader {
         protected ArrayList<String> keys;
         protected Object parentObject;
         public int priority;
+        public Runnable runningTask;
         protected SecureDocument secureDocument;
         protected long size;
         protected File tempFilePath;
@@ -3758,6 +3760,7 @@ public class ImageLoader {
                         ImageLoader.this.cacheThumbOutQueue.cancelRunnable(this.cacheTask);
                     } else {
                         ImageLoader.this.cacheOutQueue.cancelRunnable(this.cacheTask);
+                        ImageLoader.this.cacheOutQueue.cancelRunnable(this.runningTask);
                     }
                     this.cacheTask.cancel();
                     this.cacheTask = null;
@@ -4749,20 +4752,14 @@ public class ImageLoader {
     public void cancelLoadingForImageReceiver(ImageReceiver imageReceiver, boolean z) {
         if (imageReceiver != null) {
             ArrayList<Runnable> loadingOperations = imageReceiver.getLoadingOperations();
-            int i = 0;
             if (!loadingOperations.isEmpty()) {
-                for (int i2 = 0; i2 < loadingOperations.size(); i2++) {
-                    this.imageLoadQueue.cancelRunnable(loadingOperations.get(i2));
+                for (int i = 0; i < loadingOperations.size(); i++) {
+                    this.imageLoadQueue.cancelRunnable(loadingOperations.get(i));
                 }
                 loadingOperations.clear();
             }
             imageReceiver.addLoadingImageRunnable((Runnable) null);
-            DispatchQueuePriority dispatchQueuePriority = this.imageLoadQueue;
-            ImageLoader$$ExternalSyntheticLambda12 imageLoader$$ExternalSyntheticLambda12 = new ImageLoader$$ExternalSyntheticLambda12(this, z, imageReceiver);
-            if (imageReceiver.getFileLoadingPriority() != 0) {
-                i = 1;
-            }
-            dispatchQueuePriority.postRunnable(imageLoader$$ExternalSyntheticLambda12, i);
+            this.imageLoadQueue.postRunnable(new ImageLoader$$ExternalSyntheticLambda12(this, z, imageReceiver), imageReceiver.getFileLoadingPriority() == 0 ? 0 : 1);
         }
     }
 
@@ -4884,40 +4881,28 @@ public class ImageLoader {
     }
 
     private void createLoadOperationForImageReceiver(ImageReceiver imageReceiver, String str, String str2, String str3, ImageLocation imageLocation, String str4, long j, int i, int i2, int i3, int i4) {
-        int i5;
-        ImageLoader$$ExternalSyntheticLambda2 imageLoader$$ExternalSyntheticLambda2;
         ImageReceiver imageReceiver2 = imageReceiver;
-        int i6 = i2;
+        int i5 = i2;
         if (imageReceiver2 == null || str2 == null || str == null || imageLocation == null) {
             return;
         }
-        int tag = imageReceiver2.getTag(i6);
+        int tag = imageReceiver2.getTag(i5);
         if (tag == 0) {
             tag = this.lastImageNum;
-            imageReceiver2.setTag(tag, i6);
-            int i7 = this.lastImageNum + 1;
-            this.lastImageNum = i7;
-            if (i7 == Integer.MAX_VALUE) {
+            imageReceiver2.setTag(tag, i5);
+            int i6 = this.lastImageNum + 1;
+            this.lastImageNum = i6;
+            if (i6 == Integer.MAX_VALUE) {
                 this.lastImageNum = 0;
             }
         }
-        int i8 = tag;
+        int i7 = tag;
         boolean isNeedsQualityThumb = imageReceiver.isNeedsQualityThumb();
-        Object parentObject = imageReceiver.getParentObject();
-        TLRPC$Document qualityThumbDocument = imageReceiver.getQualityThumbDocument();
-        boolean isShouldGenerateQualityThumb = imageReceiver.isShouldGenerateQualityThumb();
-        ImageLoader$$ExternalSyntheticLambda2 imageLoader$$ExternalSyntheticLambda22 = r0;
-        ImageLoader$$ExternalSyntheticLambda2 imageLoader$$ExternalSyntheticLambda23 = new ImageLoader$$ExternalSyntheticLambda2(this, i3, str2, str, i8, imageReceiver, i4, str4, i2, imageLocation, i6 == 0 && imageReceiver.isCurrentKeyQuality(), parentObject, imageReceiver.getCurrentAccount(), qualityThumbDocument, isNeedsQualityThumb, isShouldGenerateQualityThumb, str3, i, j);
-        DispatchQueuePriority dispatchQueuePriority = this.imageLoadQueue;
-        if (imageReceiver.getFileLoadingPriority() == 0) {
-            imageLoader$$ExternalSyntheticLambda2 = imageLoader$$ExternalSyntheticLambda22;
-            i5 = 0;
-        } else {
-            imageLoader$$ExternalSyntheticLambda2 = imageLoader$$ExternalSyntheticLambda22;
-            i5 = 1;
-        }
-        dispatchQueuePriority.postRunnable(imageLoader$$ExternalSyntheticLambda2, i5);
-        imageReceiver.addLoadingImageRunnable(imageLoader$$ExternalSyntheticLambda2);
+        ImageLoader$$ExternalSyntheticLambda2 imageLoader$$ExternalSyntheticLambda2 = r0;
+        ImageLoader$$ExternalSyntheticLambda2 imageLoader$$ExternalSyntheticLambda22 = new ImageLoader$$ExternalSyntheticLambda2(this, i3, str2, str, i7, imageReceiver, i4, str4, i2, imageLocation, i5 == 0 && imageReceiver.isCurrentKeyQuality(), imageReceiver.getParentObject(), imageReceiver.getCurrentAccount(), imageReceiver.getQualityThumbDocument(), isNeedsQualityThumb, imageReceiver.isShouldGenerateQualityThumb(), str3, i, j);
+        ImageLoader$$ExternalSyntheticLambda2 imageLoader$$ExternalSyntheticLambda23 = imageLoader$$ExternalSyntheticLambda2;
+        this.imageLoadQueue.postRunnable(imageLoader$$ExternalSyntheticLambda23, imageReceiver.getFileLoadingPriority() == 0 ? 0 : 1);
+        imageReceiver.addLoadingImageRunnable(imageLoader$$ExternalSyntheticLambda23);
     }
 
     /* access modifiers changed from: private */
@@ -5055,7 +5040,7 @@ public class ImageLoader {
             r18 = 0
             r3 = 0
         L_0x00b5:
-            if (r3 != 0) goto L_0x067f
+            if (r3 != 0) goto L_0x0682
             java.lang.String r3 = r13.path
             java.lang.String r8 = "athumb"
             java.lang.String r4 = "_"
@@ -5261,7 +5246,7 @@ public class ImageLoader {
             r6 = 2
             r10 = 0
         L_0x022b:
-            if (r1 == r6) goto L_0x067f
+            if (r1 == r6) goto L_0x0682
             boolean r7 = r33.isEncrypted()
             org.telegram.messenger.ImageLoader$CacheImage r13 = new org.telegram.messenger.ImageLoader$CacheImage
             r15 = 0
@@ -5763,7 +5748,7 @@ public class ImageLoader {
             r2.add(r1)
             r7 = 0
             r0.runArtworkTasks(r7)
-            goto L_0x067f
+            goto L_0x0682
         L_0x05e0:
             r7 = 0
             org.telegram.messenger.ImageLoader$HttpImageTask r1 = new org.telegram.messenger.ImageLoader$HttpImageTask
@@ -5773,7 +5758,7 @@ public class ImageLoader {
             java.util.LinkedList<org.telegram.messenger.ImageLoader$HttpImageTask> r2 = r0.httpTasks
             r2.add(r1)
             r0.runHttpTasks(r7)
-            goto L_0x067f
+            goto L_0x0682
         L_0x05f4:
             r2 = r42
             r7 = 0
@@ -5825,12 +5810,12 @@ public class ImageLoader {
             r1.loadFile(r2, r5, r11)
         L_0x0648:
             boolean r1 = r29.isForceLoding()
-            if (r1 == 0) goto L_0x067f
+            if (r1 == 0) goto L_0x0682
             java.util.HashMap<java.lang.String, java.lang.Integer> r1 = r0.forceLoadingImages
             java.lang.String r2 = r13.key
             java.lang.Integer r3 = java.lang.Integer.valueOf(r7)
             r1.put(r2, r3)
-            goto L_0x067f
+            goto L_0x0682
         L_0x065a:
             r13.finalFilePath = r10
             r13.imageLocation = r15
@@ -5844,13 +5829,14 @@ public class ImageLoader {
             org.telegram.messenger.DispatchQueue r1 = r0.cacheThumbOutQueue
             org.telegram.messenger.ImageLoader$CacheOutTask r2 = r13.cacheTask
             r1.postRunnable(r2)
-            goto L_0x067f
+            goto L_0x0682
         L_0x0676:
             org.telegram.DispatchQueuePriority r1 = r0.cacheOutQueue
             org.telegram.messenger.ImageLoader$CacheOutTask r2 = r13.cacheTask
             int r3 = r13.priority
-            r1.postRunnable(r2, r3)
-        L_0x067f:
+            java.lang.Runnable r1 = r1.postRunnable(r2, r3)
+            r13.runningTask = r1
+        L_0x0682:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ImageLoader.lambda$createLoadOperationForImageReceiver$6(int, java.lang.String, java.lang.String, int, org.telegram.messenger.ImageReceiver, int, java.lang.String, int, org.telegram.messenger.ImageLocation, boolean, java.lang.Object, int, org.telegram.tgnet.TLRPC$Document, boolean, boolean, java.lang.String, int, long):void");

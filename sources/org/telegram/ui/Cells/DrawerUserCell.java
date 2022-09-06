@@ -95,7 +95,7 @@ public class DrawerUserCell extends FrameLayout implements NotificationCenter.No
         if (this.textView.getRightDrawable() instanceof AnimatedEmojiDrawable.WrapSizeDrawable) {
             Drawable drawable = ((AnimatedEmojiDrawable.WrapSizeDrawable) this.textView.getRightDrawable()).getDrawable();
             if (drawable instanceof AnimatedEmojiDrawable) {
-                ((AnimatedEmojiDrawable) drawable).removeView((Drawable.Callback) this.textView);
+                ((AnimatedEmojiDrawable) drawable).removeView((View) this.textView);
             }
         }
     }

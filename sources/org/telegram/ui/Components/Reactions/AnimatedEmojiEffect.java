@@ -142,7 +142,7 @@ public class AnimatedEmojiEffect {
     }
 
     public void removeView(View view) {
-        this.animatedEmojiDrawable.removeView((Drawable.Callback) view);
+        this.animatedEmojiDrawable.removeView(view);
         ImageReceiver imageReceiver = this.effectImageReceiver;
         if (imageReceiver != null) {
             imageReceiver.onDetachedFromWindow();

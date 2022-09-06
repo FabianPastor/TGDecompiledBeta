@@ -6,7 +6,6 @@ import android.graphics.Canvas;
 import android.graphics.CornerPathEffect;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
 import android.text.Layout;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -379,7 +378,7 @@ public class MessageContainsEmojiButton extends FrameLayout implements Notificat
         super.onDetachedFromWindow();
         AnimatedEmojiDrawable animatedEmojiDrawable = this.emojiDrawable;
         if (animatedEmojiDrawable != null) {
-            animatedEmojiDrawable.removeView((Drawable.Callback) this);
+            animatedEmojiDrawable.removeView((View) this);
         }
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.groupStickersDidLoad);
     }

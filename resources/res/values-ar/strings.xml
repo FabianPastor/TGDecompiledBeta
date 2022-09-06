@@ -736,7 +736,6 @@
     <string name="Change">تغيير</string>
     <string name="ChangeChatBackground">تغيير خلفية المحادثة</string>
     <string name="ChangeColorToColor">هل تريد استخدام الخلفية المختارة حاليا أم إعادة تعيين الأساسية لهذا النمط؟ </string>
-    <string name="ChangeEmojiStatus">تغيير الحالة</string>
     <string name="ChangeLanguageLater">يمكنك تغيير لغة التطبيق لاحقًا من الإعدادات.</string>
     <string name="ChangePasscode">تغيير رمز القفل</string>
     <string name="ChangePasscodeInfo">عندما تقوم بتعيين رمز قفل إضافي، ستظهر أيقونة قفل أعلى صفحة المحادثات، اضغط عليها لإقفال تيليجرام أو فتحِه.\10\10ملحوظة: إذا نسيت رمز القفل ستحتاج لحذف التطبيق وإعادةِ تثبيته، ستَفقد كافة محادثاتك السرية.</string>
@@ -3500,7 +3499,6 @@
     <string name="SetAsMain">تعيين كأساسي</string>
     <string name="SetBackground">تعيين كخلفية</string>
     <string name="SetColor">تعيين لون</string>
-    <string name="SetEmojiStatus">تعيين حالة الرموز التعبيرية</string>
     <string name="SetPasscode">تعيين رمز مرور</string>
     <string name="SetPasscodeInfo">تأمين التطبيق برمز مرور لحمايته من المتطفلين.</string>
     <string name="SetProfilePhoto">تعيين صورة للملف الشخصي </string>

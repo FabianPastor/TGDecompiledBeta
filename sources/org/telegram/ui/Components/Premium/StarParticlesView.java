@@ -211,35 +211,35 @@ public class StarParticlesView extends View {
                     }
                     this.stars[i5] = SvgHelper.getBitmap(i4, i6, i6, ColorUtils.setAlphaComponent(Theme.getColor(this.colorKey), 30));
                     this.svg = true;
-                } else if (i7 == 11) {
+                } else if (i7 == 11 || i7 == 4) {
                     if (i5 == 0) {
-                        i3 = R.raw.premium_object_smile1;
+                        i = R.raw.premium_object_smile1;
                     } else if (i5 == 1) {
-                        i3 = R.raw.premium_object_smile2;
+                        i = R.raw.premium_object_smile2;
                     } else {
-                        i3 = R.raw.premium_object_like;
+                        i = R.raw.premium_object_like;
                     }
-                    this.stars[i5] = SvgHelper.getBitmap(i3, i6, i6, ColorUtils.setAlphaComponent(Theme.getColor(this.colorKey), 30));
+                    this.stars[i5] = SvgHelper.getBitmap(i, i6, i6, ColorUtils.setAlphaComponent(Theme.getColor(this.colorKey), 30));
                     this.svg = true;
                 } else if (i7 == 3) {
                     if (i5 == 0) {
-                        i2 = R.raw.premium_object_adsbubble;
+                        i3 = R.raw.premium_object_adsbubble;
                     } else if (i5 == 1) {
-                        i2 = R.raw.premium_object_like;
+                        i3 = R.raw.premium_object_like;
                     } else {
-                        i2 = R.raw.premium_object_noads;
+                        i3 = R.raw.premium_object_noads;
                     }
-                    this.stars[i5] = SvgHelper.getBitmap(i2, i6, i6, ColorUtils.setAlphaComponent(Theme.getColor(this.colorKey), 30));
+                    this.stars[i5] = SvgHelper.getBitmap(i3, i6, i6, ColorUtils.setAlphaComponent(Theme.getColor(this.colorKey), 30));
                     this.svg = true;
                 } else if (i7 == 7) {
                     if (i5 == 0) {
-                        i = R.raw.premium_object_video2;
+                        i2 = R.raw.premium_object_video2;
                     } else if (i5 == 1) {
-                        i = R.raw.premium_object_video;
+                        i2 = R.raw.premium_object_video;
                     } else {
-                        i = R.raw.premium_object_user;
+                        i2 = R.raw.premium_object_user;
                     }
-                    this.stars[i5] = SvgHelper.getBitmap(i, i6, i6, ColorUtils.setAlphaComponent(Theme.getColor(this.colorKey), 30));
+                    this.stars[i5] = SvgHelper.getBitmap(i2, i6, i6, ColorUtils.setAlphaComponent(Theme.getColor(this.colorKey), 30));
                     this.svg = true;
                 } else if (i7 == 1001) {
                     this.stars[i5] = SvgHelper.getBitmap(R.raw.premium_object_fire, i6, i6, ColorUtils.setAlphaComponent(Theme.getColor(this.colorKey), 30));
@@ -556,7 +556,7 @@ public class StarParticlesView extends View {
                     this.alpha = (int) ((((float) (Utilities.fastRandom.nextInt(50) + 50)) / 100.0f) * 255.0f);
                 }
                 int i4 = Drawable.this.type;
-                if ((i4 == 6 && ((i = this.starIndex) == 1 || i == 2)) || i4 == 9 || i4 == 3 || i4 == 7 || i4 == 11) {
+                if ((i4 == 6 && ((i = this.starIndex) == 1 || i == 2)) || i4 == 9 || i4 == 3 || i4 == 7 || i4 == 11 || i4 == 4) {
                     this.randomRotate = (float) ((int) ((((float) (Utilities.fastRandom.nextInt() % 100)) / 100.0f) * 45.0f));
                 }
                 Drawable drawable4 = Drawable.this;

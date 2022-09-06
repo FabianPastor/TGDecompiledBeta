@@ -93,6 +93,7 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
     ValueAnimator cancelPressedAnimation;
     /* access modifiers changed from: private */
     public float cancelPressedProgress;
+    ChatScrimPopupContainerLayout chatScrimPopupContainerLayout;
     /* access modifiers changed from: private */
     public boolean clicked;
     /* access modifiers changed from: private */
@@ -121,7 +122,6 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
     private MessageObject messageObject;
     public ReactionHolderView nextRecentReaction;
     private float otherViewsScale;
-    View popupLayout;
     FrameLayout premiumLockContainer;
     /* access modifiers changed from: private */
     public PremiumLockIconView premiumLockIconView;
@@ -162,7 +162,7 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
         void onReactionClicked(View view, ReactionsLayoutInBubble.VisibleReaction visibleReaction, boolean z, boolean z2);
     }
 
-    public ReactionsContainerLayout(BaseFragment baseFragment, final Context context, int i, View view, Theme.ResourcesProvider resourcesProvider2) {
+    public ReactionsContainerLayout(BaseFragment baseFragment, final Context context, int i, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
         boolean z = true;
         float dp = (float) AndroidUtilities.dp(8.0f);
@@ -184,7 +184,6 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
         this.resourcesProvider = resourcesProvider2;
         this.currentAccount = i;
         this.fragment = baseFragment;
-        this.popupLayout = view;
         ReactionHolderView reactionHolderView = new ReactionHolderView(context);
         this.nextRecentReaction = reactionHolderView;
         reactionHolderView.setVisibility(8);
@@ -201,7 +200,7 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
         rect2.top = dp2;
         rect2.left = dp2;
         this.shadow.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_messagePanelShadow"), PorterDuff.Mode.MULTIPLY));
-        AnonymousClass2 r5 = new RecyclerListView(context) {
+        AnonymousClass2 r6 = new RecyclerListView(context) {
             public boolean drawChild(Canvas canvas, View view, long j) {
                 if (ReactionsContainerLayout.this.pressedReaction == null || !(view instanceof ReactionHolderView) || !((ReactionHolderView) view).currentReaction.equals(ReactionsContainerLayout.this.pressedReaction)) {
                     return super.drawChild(canvas, view, j);
@@ -220,9 +219,9 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
                 return super.dispatchTouchEvent(motionEvent);
             }
         };
-        this.recyclerListView = r5;
-        r5.setClipChildren(false);
-        r5.setClipToPadding(false);
+        this.recyclerListView = r6;
+        r6.setClipChildren(false);
+        r6.setClipToPadding(false);
         this.linearLayoutManager = new LinearLayoutManager(context, 0, false) {
             public int scrollHorizontallyBy(int i, RecyclerView.Recycler recycler, RecyclerView.State state) {
                 int i2;
@@ -283,7 +282,7 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
                 return scrollHorizontallyBy;
             }
         };
-        r5.addItemDecoration(new RecyclerView.ItemDecoration() {
+        r6.addItemDecoration(new RecyclerView.ItemDecoration() {
             public void getItemOffsets(Rect rect, View view, RecyclerView recyclerView, RecyclerView.State state) {
                 super.getItemOffsets(rect, view, recyclerView, state);
                 if (!ReactionsContainerLayout.this.showCustomEmojiReaction()) {
@@ -306,9 +305,9 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
                 }
             }
         });
-        r5.setLayoutManager(this.linearLayoutManager);
-        r5.setOverScrollMode(2);
-        AnonymousClass5 r8 = new RecyclerView.Adapter() {
+        r6.setLayoutManager(this.linearLayoutManager);
+        r6.setOverScrollMode(2);
+        AnonymousClass5 r0 = new RecyclerView.Adapter() {
             int premiumUnlockButtonRow;
             int rowCount;
 
@@ -393,10 +392,10 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
                 super.notifyDataSetChanged();
             }
         };
-        this.listAdapter = r8;
-        r5.setAdapter(r8);
-        r5.addOnScrollListener(new LeftRightShadowsListener());
-        r5.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        this.listAdapter = r0;
+        r6.setAdapter(r0);
+        r6.addOnScrollListener(new LeftRightShadowsListener());
+        r6.addOnScrollListener(new RecyclerView.OnScrollListener() {
             public void onScrolled(RecyclerView recyclerView, int i, int i2) {
                 if (recyclerView.getChildCount() > 2) {
                     recyclerView.getLocationInWindow(ReactionsContainerLayout.this.location);
@@ -422,7 +421,7 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
                 ReactionsContainerLayout.this.invalidate();
             }
         });
-        r5.addItemDecoration(new RecyclerView.ItemDecoration() {
+        r6.addItemDecoration(new RecyclerView.ItemDecoration() {
             public void getItemOffsets(Rect rect, View view, RecyclerView recyclerView, RecyclerView.State state) {
                 int childAdapterPosition = recyclerView.getChildAdapterPosition(view);
                 if (childAdapterPosition == 0) {
@@ -433,13 +432,13 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
                 }
             }
         });
-        r5.setOnItemClickListener((RecyclerListView.OnItemClickListener) new ReactionsContainerLayout$$ExternalSyntheticLambda3(this));
-        r5.setOnItemLongClickListener((RecyclerListView.OnItemLongClickListener) new ReactionsContainerLayout$$ExternalSyntheticLambda4(this));
-        addView(r5, LayoutHelper.createFrame(-1, -1.0f));
+        r6.setOnItemClickListener((RecyclerListView.OnItemClickListener) new ReactionsContainerLayout$$ExternalSyntheticLambda3(this));
+        r6.setOnItemLongClickListener((RecyclerListView.OnItemLongClickListener) new ReactionsContainerLayout$$ExternalSyntheticLambda4(this));
+        addView(r6, LayoutHelper.createFrame(-1, -1.0f));
         setClipChildren(false);
         setClipToPadding(false);
         invalidateShaders();
-        int paddingTop = (r5.getLayoutParams().height - r5.getPaddingTop()) - r5.getPaddingBottom();
+        int paddingTop = (r6.getLayoutParams().height - r6.getPaddingTop()) - r6.getPaddingBottom();
         this.nextRecentReaction.getLayoutParams().width = paddingTop - AndroidUtilities.dp(12.0f);
         this.nextRecentReaction.getLayoutParams().height = paddingTop;
         this.bgPaint.setColor(Theme.getColor("actionBarDefaultSubmenuBackground", resourcesProvider2));
@@ -632,9 +631,9 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
         }
         float pullingLeftProgress = getPullingLeftProgress();
         float expandSize = expandSize();
-        View view = this.popupLayout;
-        if (view != null) {
-            view.setTranslationY(expandSize);
+        ChatScrimPopupContainerLayout chatScrimPopupContainerLayout2 = this.chatScrimPopupContainerLayout;
+        if (chatScrimPopupContainerLayout2 != null) {
+            chatScrimPopupContainerLayout2.setExpandSize(expandSize);
         }
         float var_ = f6;
         this.rect.set(((float) getPaddingLeft()) + (((float) (getWidth() - getPaddingRight())) * f4), (((float) getPaddingTop()) + (((float) this.recyclerListView.getMeasuredHeight()) * (1.0f - this.otherViewsScale))) - expandSize, ((float) (getWidth() - getPaddingRight())) * f3, ((float) (getHeight() - getPaddingBottom())) + expandSize);
@@ -1019,7 +1018,7 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
 
     public void setCustomEmojiEnterProgress(float f) {
         this.customEmojiReactionsEnterProgress = f;
-        this.popupLayout.setAlpha(1.0f - f);
+        this.chatScrimPopupContainerLayout.setPopupAlpha(1.0f - f);
         invalidate();
     }
 
@@ -1085,6 +1084,10 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
         setVisibleReactionsList(arrayList);
         this.lastVisibleViews.clear();
         this.reactionsWindow.setRecentReactions(arrayList);
+    }
+
+    public void setChatScrimView(ChatScrimPopupContainerLayout chatScrimPopupContainerLayout2) {
+        this.chatScrimPopupContainerLayout = chatScrimPopupContainerLayout2;
     }
 
     private final class LeftRightShadowsListener extends RecyclerView.OnScrollListener {

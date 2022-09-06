@@ -8,7 +8,6 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.RectF;
-import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -371,7 +370,7 @@ public class TextSettingsCell extends FrameLayout {
         super.onDetachedFromWindow();
         BackupImageView backupImageView = this.valueBackupImageView;
         if (backupImageView != null && backupImageView.getImageReceiver() != null && (this.valueBackupImageView.getImageReceiver().getDrawable() instanceof AnimatedEmojiDrawable)) {
-            ((AnimatedEmojiDrawable) this.valueBackupImageView.getImageReceiver().getDrawable()).removeView((Drawable.Callback) this);
+            ((AnimatedEmojiDrawable) this.valueBackupImageView.getImageReceiver().getDrawable()).removeView((View) this);
         }
     }
 }

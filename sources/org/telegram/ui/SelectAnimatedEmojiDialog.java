@@ -1007,7 +1007,7 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
         AnimatedEmojiDrawable animatedEmojiDrawable2;
         if (this.isAttached && (animatedEmojiDrawable2 = this.bigReactionAnimatedEmoji) != animatedEmojiDrawable) {
             if (animatedEmojiDrawable2 != null) {
-                animatedEmojiDrawable2.removeView((Drawable.Callback) this);
+                animatedEmojiDrawable2.removeView((View) this);
             }
             this.bigReactionAnimatedEmoji = animatedEmojiDrawable;
             if (animatedEmojiDrawable != null) {

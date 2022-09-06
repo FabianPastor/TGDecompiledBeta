@@ -1157,6 +1157,9 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
                         } else {
                             animatedEmojiSpan = new AnimatedEmojiSpan(j, PhotoViewerCaptionEnterView.this.messageEditText.getPaint().getFontMetricsInt());
                         }
+                        if (!z) {
+                            animatedEmojiSpan.fromEmojiKeyboard = true;
+                        }
                         spannableString.setSpan(animatedEmojiSpan, 0, spannableString.length(), 33);
                         PhotoViewerCaptionEnterView.this.messageEditText.setText(PhotoViewerCaptionEnterView.this.messageEditText.getText().insert(selectionEnd, spannableString));
                         int length = selectionEnd + spannableString.length();

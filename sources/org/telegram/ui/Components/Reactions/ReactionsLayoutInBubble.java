@@ -786,7 +786,7 @@ public class ReactionsLayoutInBubble {
             }
             AnimatedEmojiDrawable animatedEmojiDrawable2 = this.animatedEmojiDrawable;
             if (animatedEmojiDrawable2 != null) {
-                animatedEmojiDrawable2.removeView((Drawable.Callback) ReactionsLayoutInBubble.this.parentView);
+                animatedEmojiDrawable2.removeView((View) ReactionsLayoutInBubble.this.parentView);
             }
         }
     }

@@ -151,7 +151,7 @@ public class MentionCell extends LinearLayout {
         Drawable drawable = this.emojiDrawable;
         if (drawable != null) {
             if (drawable instanceof AnimatedEmojiDrawable) {
-                ((AnimatedEmojiDrawable) drawable).removeView((Drawable.Callback) this);
+                ((AnimatedEmojiDrawable) drawable).removeView((View) this);
             }
             this.emojiDrawable = null;
             invalidate();
@@ -168,7 +168,7 @@ public class MentionCell extends LinearLayout {
             try {
                 Drawable drawable = this.emojiDrawable;
                 if (drawable instanceof AnimatedEmojiDrawable) {
-                    ((AnimatedEmojiDrawable) drawable).removeView((Drawable.Callback) this);
+                    ((AnimatedEmojiDrawable) drawable).removeView((View) this);
                     this.emojiDrawable = null;
                 }
                 AnimatedEmojiDrawable make = AnimatedEmojiDrawable.make(UserConfig.selectedAccount, 0, Long.parseLong(keywordResult.emoji.substring(9)));
@@ -256,7 +256,7 @@ public class MentionCell extends LinearLayout {
         this.attached = false;
         Drawable drawable = this.emojiDrawable;
         if (drawable instanceof AnimatedEmojiDrawable) {
-            ((AnimatedEmojiDrawable) drawable).removeView((Drawable.Callback) this);
+            ((AnimatedEmojiDrawable) drawable).removeView((View) this);
         }
     }
 

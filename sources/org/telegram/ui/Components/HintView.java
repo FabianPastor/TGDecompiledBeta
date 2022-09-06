@@ -38,7 +38,7 @@ public class HintView extends FrameLayout {
     /* access modifiers changed from: private */
     public long showingDuration;
     private int shownY;
-    private TextView textView;
+    public TextView textView;
     private float translationY;
 
     public HintView(Context context, int i) {

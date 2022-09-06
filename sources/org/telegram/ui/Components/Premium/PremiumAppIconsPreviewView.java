@@ -82,27 +82,27 @@ public class PremiumAppIconsPreviewView extends FrameLayout implements PagerHead
 
     public void setOffset(float f) {
         if (!this.isEmpty) {
-            float measuredWidth = f / ((float) getMeasuredWidth());
-            float interpolation = CubicBezierInterpolator.EASE_IN.getInterpolation(measuredWidth);
+            float abs = Math.abs(f / ((float) getMeasuredWidth()));
+            float interpolation = CubicBezierInterpolator.EASE_IN.getInterpolation(abs);
             this.bottomRightIcon.setTranslationX((((float) (getRight() - this.bottomRightIcon.getRight())) + (((float) this.bottomRightIcon.getWidth()) * 1.5f) + ((float) AndroidUtilities.dp(32.0f))) * interpolation);
             this.bottomRightIcon.setTranslationY(((float) AndroidUtilities.dp(16.0f)) * interpolation);
             float f2 = 1.0f;
             float clamp = Utilities.clamp(AndroidUtilities.lerp(1.0f, 1.5f, interpolation), 1.0f, 0.0f);
             this.bottomRightIcon.setScaleX(clamp);
             this.bottomRightIcon.setScaleY(clamp);
-            this.topIcon.setTranslationY(((((float) (getTop() - this.topIcon.getTop())) - (((float) this.topIcon.getHeight()) * 1.8f)) - ((float) AndroidUtilities.dp(32.0f))) * measuredWidth);
-            this.topIcon.setTranslationX(((float) AndroidUtilities.dp(16.0f)) * measuredWidth);
-            float clamp2 = Utilities.clamp(AndroidUtilities.lerp(1.0f, 1.8f, measuredWidth), 1.0f, 0.0f);
+            this.topIcon.setTranslationY(((((float) (getTop() - this.topIcon.getTop())) - (((float) this.topIcon.getHeight()) * 1.8f)) - ((float) AndroidUtilities.dp(32.0f))) * abs);
+            this.topIcon.setTranslationX(((float) AndroidUtilities.dp(16.0f)) * abs);
+            float clamp2 = Utilities.clamp(AndroidUtilities.lerp(1.0f, 1.8f, abs), 1.0f, 0.0f);
             this.topIcon.setScaleX(clamp2);
             this.topIcon.setScaleY(clamp2);
-            float interpolation2 = CubicBezierInterpolator.EASE_OUT.getInterpolation(measuredWidth);
+            float interpolation2 = CubicBezierInterpolator.EASE_OUT.getInterpolation(abs);
             this.bottomLeftIcon.setTranslationX(((((float) (getLeft() - this.bottomLeftIcon.getLeft())) - (((float) this.bottomLeftIcon.getWidth()) * 2.5f)) + ((float) AndroidUtilities.dp(32.0f))) * interpolation2);
             this.bottomLeftIcon.setTranslationY(interpolation2 * (((float) (getBottom() - this.bottomLeftIcon.getBottom())) + (((float) this.bottomLeftIcon.getHeight()) * 2.5f) + ((float) AndroidUtilities.dp(32.0f))));
-            float clamp3 = Utilities.clamp(AndroidUtilities.lerp(1.0f, 2.5f, measuredWidth), 1.0f, 0.0f);
+            float clamp3 = Utilities.clamp(AndroidUtilities.lerp(1.0f, 2.5f, abs), 1.0f, 0.0f);
             this.bottomLeftIcon.setScaleX(clamp3);
             this.bottomLeftIcon.setScaleY(clamp3);
-            if (measuredWidth < 0.4f) {
-                f2 = measuredWidth / 0.4f;
+            if (abs < 0.4f) {
+                f2 = abs / 0.4f;
             }
             this.bottomRightIcon.particlesScale = f2;
             this.topIcon.particlesScale = f2;

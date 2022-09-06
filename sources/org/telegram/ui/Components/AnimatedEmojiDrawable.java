@@ -49,7 +49,6 @@ public class AnimatedEmojiDrawable extends Drawable {
     /* access modifiers changed from: private */
     public int cacheType;
     private ColorFilter colorFilterToSet;
-    int count;
     private TLRPC$Document document;
     private long documentId;
     private ArrayList<AnimatedEmojiSpan.InvalidateHolder> holders;
@@ -827,58 +826,51 @@ public class AnimatedEmojiDrawable extends Drawable {
         updateAttachState();
     }
 
-    public void removeView(Drawable.Callback callback) {
+    public void removeView(View view) {
         ArrayList<View> arrayList = this.views;
         if (arrayList != null) {
-            arrayList.remove(callback);
+            arrayList.remove(view);
         }
         updateAttachState();
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:7:0x0010, code lost:
-        r0 = r3.holders;
+    /* JADX WARNING: Code restructure failed: missing block: B:7:0x000f, code lost:
+        r0 = r2.holders;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private void updateAttachState() {
         /*
-            r3 = this;
-            org.telegram.messenger.ImageReceiver r0 = r3.imageReceiver
+            r2 = this;
+            org.telegram.messenger.ImageReceiver r0 = r2.imageReceiver
             if (r0 != 0) goto L_0x0005
             return
         L_0x0005:
-            java.util.ArrayList<android.view.View> r0 = r3.views
-            r1 = 1
-            if (r0 == 0) goto L_0x0010
+            java.util.ArrayList<android.view.View> r0 = r2.views
+            if (r0 == 0) goto L_0x000f
             int r0 = r0.size()
-            if (r0 > 0) goto L_0x001a
-        L_0x0010:
-            java.util.ArrayList<org.telegram.ui.Components.AnimatedEmojiSpan$InvalidateHolder> r0 = r3.holders
-            if (r0 == 0) goto L_0x001c
+            if (r0 > 0) goto L_0x0019
+        L_0x000f:
+            java.util.ArrayList<org.telegram.ui.Components.AnimatedEmojiSpan$InvalidateHolder> r0 = r2.holders
+            if (r0 == 0) goto L_0x001b
             int r0 = r0.size()
-            if (r0 <= 0) goto L_0x001c
-        L_0x001a:
+            if (r0 <= 0) goto L_0x001b
+        L_0x0019:
             r0 = 1
-            goto L_0x001d
-        L_0x001c:
+            goto L_0x001c
+        L_0x001b:
             r0 = 0
-        L_0x001d:
-            boolean r2 = r3.attached
-            if (r0 == r2) goto L_0x003a
-            r3.attached = r0
-            if (r0 == 0) goto L_0x0030
-            int r0 = r3.count
-            int r0 = r0 + r1
-            r3.count = r0
-            org.telegram.messenger.ImageReceiver r0 = r3.imageReceiver
+        L_0x001c:
+            boolean r1 = r2.attached
+            if (r0 == r1) goto L_0x002f
+            r2.attached = r0
+            if (r0 == 0) goto L_0x002a
+            org.telegram.messenger.ImageReceiver r0 = r2.imageReceiver
             r0.onAttachedToWindow()
-            goto L_0x003a
-        L_0x0030:
-            int r0 = r3.count
-            int r0 = r0 - r1
-            r3.count = r0
-            org.telegram.messenger.ImageReceiver r0 = r3.imageReceiver
+            goto L_0x002f
+        L_0x002a:
+            org.telegram.messenger.ImageReceiver r0 = r2.imageReceiver
             r0.onDetachedFromWindow()
-        L_0x003a:
+        L_0x002f:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AnimatedEmojiDrawable.updateAttachState():void");
@@ -1036,11 +1028,11 @@ public class AnimatedEmojiDrawable extends Drawable {
         public void removeParentView(View view) {
             Drawable[] drawableArr = this.drawables;
             if (drawableArr[0] instanceof AnimatedEmojiDrawable) {
-                ((AnimatedEmojiDrawable) drawableArr[0]).removeView((Drawable.Callback) view);
+                ((AnimatedEmojiDrawable) drawableArr[0]).removeView(view);
             }
             Drawable[] drawableArr2 = this.drawables;
             if (drawableArr2[1] instanceof AnimatedEmojiDrawable) {
-                ((AnimatedEmojiDrawable) drawableArr2[1]).removeView((Drawable.Callback) view);
+                ((AnimatedEmojiDrawable) drawableArr2[1]).removeView(view);
             }
         }
 
@@ -1148,7 +1140,7 @@ public class AnimatedEmojiDrawable extends Drawable {
                     Drawable[] drawableArr2 = this.drawables;
                     if (drawableArr2[1] != null) {
                         if (drawableArr2[1] instanceof AnimatedEmojiDrawable) {
-                            ((AnimatedEmojiDrawable) drawableArr2[1]).removeView((Drawable.Callback) this.parentView);
+                            ((AnimatedEmojiDrawable) drawableArr2[1]).removeView(this.parentView);
                         }
                         this.drawables[1] = null;
                     }
@@ -1184,7 +1176,7 @@ public class AnimatedEmojiDrawable extends Drawable {
                     Drawable[] drawableArr2 = this.drawables;
                     if (drawableArr2[1] != null) {
                         if (drawableArr2[1] instanceof AnimatedEmojiDrawable) {
-                            ((AnimatedEmojiDrawable) drawableArr2[1]).removeView((Drawable.Callback) this.parentView);
+                            ((AnimatedEmojiDrawable) drawableArr2[1]).removeView(this.parentView);
                         }
                         this.drawables[1] = null;
                     }
@@ -1223,7 +1215,7 @@ public class AnimatedEmojiDrawable extends Drawable {
                     Drawable[] drawableArr = this.drawables;
                     if (drawableArr[1] != null) {
                         if (drawableArr[1] instanceof AnimatedEmojiDrawable) {
-                            ((AnimatedEmojiDrawable) drawableArr[1]).removeView((Drawable.Callback) this.parentView);
+                            ((AnimatedEmojiDrawable) drawableArr[1]).removeView(this.parentView);
                         }
                         this.drawables[1] = null;
                     }
@@ -1248,11 +1240,11 @@ public class AnimatedEmojiDrawable extends Drawable {
         public void detach() {
             Drawable[] drawableArr = this.drawables;
             if (drawableArr[0] instanceof AnimatedEmojiDrawable) {
-                ((AnimatedEmojiDrawable) drawableArr[0]).removeView((Drawable.Callback) this.parentView);
+                ((AnimatedEmojiDrawable) drawableArr[0]).removeView(this.parentView);
             }
             Drawable[] drawableArr2 = this.drawables;
             if (drawableArr2[1] instanceof AnimatedEmojiDrawable) {
-                ((AnimatedEmojiDrawable) drawableArr2[1]).removeView((Drawable.Callback) this.parentView);
+                ((AnimatedEmojiDrawable) drawableArr2[1]).removeView(this.parentView);
             }
         }
 

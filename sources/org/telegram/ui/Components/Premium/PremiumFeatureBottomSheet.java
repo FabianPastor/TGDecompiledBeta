@@ -20,9 +20,6 @@ import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
@@ -30,7 +27,6 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SvgHelper;
 import org.telegram.messenger.UserConfig;
-import org.telegram.tgnet.TLRPC$TL_availableReaction;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
@@ -456,53 +452,18 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
     public View getViewForPosition(Context context, int i) {
         PremiumPreviewFragment.PremiumFeatureData premiumFeatureData = this.premiumFeatures.get(i);
         int i2 = premiumFeatureData.type;
-        if (i2 == 4) {
-            ArrayList arrayList = new ArrayList();
-            List<TLRPC$TL_availableReaction> enabledReactionsList = MediaDataController.getInstance(this.currentAccount).getEnabledReactionsList();
-            ArrayList arrayList2 = new ArrayList();
-            for (int i3 = 0; i3 < enabledReactionsList.size(); i3++) {
-                if (enabledReactionsList.get(i3).premium) {
-                    arrayList2.add(enabledReactionsList.get(i3));
-                }
-            }
-            for (int i4 = 0; i4 < arrayList2.size(); i4++) {
-                ReactionDrawingObject reactionDrawingObject = new ReactionDrawingObject(i4);
-                reactionDrawingObject.set((TLRPC$TL_availableReaction) arrayList2.get(i4));
-                arrayList.add(reactionDrawingObject);
-            }
-            HashMap hashMap = new HashMap();
-            hashMap.put("👌", 1);
-            hashMap.put("😍", 2);
-            hashMap.put("🤡", 3);
-            hashMap.put("🕊", 4);
-            hashMap.put("🥱", 5);
-            hashMap.put("🥴", 6);
-            hashMap.put("🐳", 7);
-            Collections.sort(arrayList, new PremiumFeatureBottomSheet$$ExternalSyntheticLambda3(hashMap));
-            return new CarouselView(context, arrayList);
-        } else if (i2 == 5) {
+        if (i2 == 5) {
             return new PremiumStickersPreviewRecycler(this, context, this.currentAccount) {
                 public void setOffset(float f) {
                     setAutoPlayEnabled(f == 0.0f);
                     super.setOffset(f);
                 }
             };
-        } else {
-            if (i2 == 10) {
-                return new PremiumAppIconsPreviewView(context);
-            }
-            return new VideoScreenPreview(context, this.svgIcon, this.currentAccount, premiumFeatureData.type);
         }
-    }
-
-    /* access modifiers changed from: private */
-    public static /* synthetic */ int lambda$getViewForPosition$3(HashMap hashMap, ReactionDrawingObject reactionDrawingObject, ReactionDrawingObject reactionDrawingObject2) {
-        int i = Integer.MAX_VALUE;
-        int intValue = hashMap.containsKey(reactionDrawingObject.reaction.reaction) ? ((Integer) hashMap.get(reactionDrawingObject.reaction.reaction)).intValue() : Integer.MAX_VALUE;
-        if (hashMap.containsKey(reactionDrawingObject2.reaction.reaction)) {
-            i = ((Integer) hashMap.get(reactionDrawingObject2.reaction.reaction)).intValue();
+        if (i2 == 10) {
+            return new PremiumAppIconsPreviewView(context);
         }
-        return i - intValue;
+        return new VideoScreenPreview(context, this.svgIcon, this.currentAccount, premiumFeatureData.type);
     }
 
     /* access modifiers changed from: protected */

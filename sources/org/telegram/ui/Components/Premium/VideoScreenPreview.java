@@ -101,7 +101,7 @@ public class VideoScreenPreview extends FrameLayout implements PagerHeaderView, 
             MatrixParticlesDrawable matrixParticlesDrawable2 = new MatrixParticlesDrawable();
             this.matrixParticlesDrawable = matrixParticlesDrawable2;
             matrixParticlesDrawable2.init();
-        } else if (i2 == 6 || i2 == 9 || i2 == 3 || i2 == 7 || i2 == 11) {
+        } else if (i2 == 6 || i2 == 9 || i2 == 3 || i2 == 7 || i2 == 11 || i2 == 4) {
             StarParticlesView.Drawable drawable = new StarParticlesView.Drawable(40);
             this.starDrawable = drawable;
             drawable.speedScale = 3.0f;
@@ -152,7 +152,7 @@ public class VideoScreenPreview extends FrameLayout implements PagerHeaderView, 
         if (i2 == 1 || i2 == 3 || i2 == 11) {
             this.fromTop = true;
         }
-        AnonymousClass1 r11 = new AspectRatioFrameLayout(context) {
+        AnonymousClass1 r12 = new AspectRatioFrameLayout(context) {
             Path clipPath = new Path();
 
             /* access modifiers changed from: protected */
@@ -177,8 +177,8 @@ public class VideoScreenPreview extends FrameLayout implements PagerHeaderView, 
                 canvas.restore();
             }
         };
-        this.aspectRatioFrameLayout = r11;
-        r11.setResizeMode(0);
+        this.aspectRatioFrameLayout = r12;
+        r12.setResizeMode(0);
         TextureView textureView2 = new TextureView(context);
         this.textureView = textureView2;
         this.aspectRatioFrameLayout.addView(textureView2);
@@ -293,7 +293,7 @@ public class VideoScreenPreview extends FrameLayout implements PagerHeaderView, 
             StarParticlesView.Drawable drawable = this.starDrawable;
             if (drawable != null) {
                 int i5 = this.type;
-                if (i5 == 6 || i5 == 9 || i5 == 3 || i5 == 7 || i5 == 11) {
+                if (i5 == 6 || i5 == 9 || i5 == 3 || i5 == 7 || i5 == 11 || i5 == 4) {
                     drawable.rect.set(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight());
                     this.starDrawable.rect.inset((float) AndroidUtilities.dp(30.0f), (float) AndroidUtilities.dp(30.0f));
                 } else {

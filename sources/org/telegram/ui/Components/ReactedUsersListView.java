@@ -72,7 +72,7 @@ public class ReactedUsersListView extends FrameLayout {
     private OnCustomEmojiSelectedListener onCustomEmojiSelectedListener;
     private OnHeightChangedListener onHeightChangedListener;
     private OnProfileSelectedListener onProfileSelectedListener;
-    private LongSparseArray<TLRPC$MessagePeerReaction> peerReactionMap = new LongSparseArray<>();
+    private LongSparseArray<ArrayList<TLRPC$MessagePeerReaction>> peerReactionMap = new LongSparseArray<>();
     private int predictiveCount;
     Theme.ResourcesProvider resourcesProvider;
     /* access modifiers changed from: private */
@@ -213,13 +213,15 @@ public class ReactedUsersListView extends FrameLayout {
     public ReactedUsersListView setSeenUsers(List<TLRPC$User> list) {
         ArrayList arrayList = new ArrayList(list.size());
         for (TLRPC$User next : list) {
-            if (this.peerReactionMap.get(next.id) == null) {
+            ArrayList arrayList2 = this.peerReactionMap.get(next.id);
+            if (arrayList2 == null) {
                 TLRPC$TL_messagePeerReaction tLRPC$TL_messagePeerReaction = new TLRPC$TL_messagePeerReaction();
                 tLRPC$TL_messagePeerReaction.reaction = null;
                 TLRPC$TL_peerUser tLRPC$TL_peerUser = new TLRPC$TL_peerUser();
                 tLRPC$TL_messagePeerReaction.peer_id = tLRPC$TL_peerUser;
                 tLRPC$TL_peerUser.user_id = next.id;
-                this.peerReactionMap.put(MessageObject.getPeerId(tLRPC$TL_peerUser), tLRPC$TL_messagePeerReaction);
+                arrayList2.add(tLRPC$TL_messagePeerReaction);
+                this.peerReactionMap.put(MessageObject.getPeerId(tLRPC$TL_messagePeerReaction.peer_id), arrayList2);
                 arrayList.add(tLRPC$TL_messagePeerReaction);
             }
         }
@@ -288,15 +290,24 @@ public class ReactedUsersListView extends FrameLayout {
             for (int i = 0; i < tLRPC$TL_messages_messageReactionsList.reactions.size(); i++) {
                 this.userReactions.add(tLRPC$TL_messages_messageReactionsList.reactions.get(i));
                 long peerId = MessageObject.getPeerId(tLRPC$TL_messages_messageReactionsList.reactions.get(i).peer_id);
-                TLRPC$MessagePeerReaction tLRPC$MessagePeerReaction = this.peerReactionMap.get(peerId);
-                if (tLRPC$MessagePeerReaction != null) {
-                    this.userReactions.remove(tLRPC$MessagePeerReaction);
+                ArrayList arrayList = this.peerReactionMap.get(peerId);
+                if (arrayList == null) {
+                    arrayList = new ArrayList();
+                }
+                int i2 = 0;
+                while (i2 < arrayList.size()) {
+                    if (((TLRPC$MessagePeerReaction) arrayList.get(i2)).reaction == null) {
+                        arrayList.remove(i2);
+                        i2--;
+                    }
+                    i2++;
                 }
                 ReactionsLayoutInBubble.VisibleReaction fromTLReaction = ReactionsLayoutInBubble.VisibleReaction.fromTLReaction(tLRPC$TL_messages_messageReactionsList.reactions.get(i).reaction);
                 if (fromTLReaction.documentId != 0) {
                     hashSet.add(fromTLReaction);
                 }
-                this.peerReactionMap.put(peerId, tLRPC$TL_messages_messageReactionsList.reactions.get(i));
+                arrayList.add(tLRPC$TL_messages_messageReactionsList.reactions.get(i));
+                this.peerReactionMap.put(peerId, arrayList);
             }
             if (this.filter == null) {
                 this.customReactionsEmoji.clear();
@@ -344,10 +355,12 @@ public class ReactedUsersListView extends FrameLayout {
     /* access modifiers changed from: private */
     public void updateCustomReactionsButton() {
         ArrayList arrayList = new ArrayList();
+        HashSet hashSet = new HashSet();
         for (int i = 0; i < this.customReactionsEmoji.size(); i++) {
             TLRPC$InputStickerSet inputStickerSet = MessageObject.getInputStickerSet(AnimatedEmojiDrawable.findDocument(this.currentAccount, this.customReactionsEmoji.get(i).documentId));
-            if (inputStickerSet != null) {
+            if (inputStickerSet != null && !hashSet.contains(Long.valueOf(inputStickerSet.id))) {
                 arrayList.add(inputStickerSet);
+                hashSet.add(Long.valueOf(inputStickerSet.id));
             }
         }
         this.customEmojiStickerSets.clear();

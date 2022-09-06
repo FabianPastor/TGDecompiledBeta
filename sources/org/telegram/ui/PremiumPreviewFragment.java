@@ -179,7 +179,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
             case 3:
                 return "no_ads";
             case 4:
-                return "unique_reactions";
+                return "infinite_reactions";
             case 5:
                 return "premium_stickers";
             case 6:
@@ -194,6 +194,8 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
                 return "app_icons";
             case 11:
                 return "animated_emoji";
+            case 12:
+                return "emoji_status";
             default:
                 return null;
         }
@@ -229,178 +231,191 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
 
     /* JADX WARNING: Can't fix incorrect switch cases order */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public static int serverStringToFeatureType(java.lang.String r14) {
+    public static int serverStringToFeatureType(java.lang.String r15) {
         /*
-            r14.hashCode()
-            int r0 = r14.hashCode()
-            r1 = 11
-            r2 = 10
-            r3 = 9
-            r4 = 8
-            r5 = 7
-            r6 = 6
-            r7 = 5
-            r8 = 4
-            r9 = 3
-            r10 = 2
-            r11 = 1
-            r12 = 0
-            r13 = -1
-            switch(r0) {
-                case -2145993328: goto L_0x00a0;
-                case -1755514268: goto L_0x0094;
-                case -1425144150: goto L_0x0089;
-                case -1040323278: goto L_0x007e;
-                case -1023650261: goto L_0x0073;
-                case -730864243: goto L_0x0068;
-                case -448825858: goto L_0x005d;
-                case -165039170: goto L_0x0052;
-                case -96210874: goto L_0x0045;
-                case 1182539900: goto L_0x0038;
-                case 1219849581: goto L_0x002b;
-                case 1832801148: goto L_0x001e;
-                default: goto L_0x001b;
-            }
-        L_0x001b:
+            r15.hashCode()
+            int r0 = r15.hashCode()
+            r1 = 12
+            r2 = 11
+            r3 = 10
+            r4 = 9
+            r5 = 8
+            r6 = 7
+            r7 = 6
+            r8 = 5
+            r9 = 4
+            r10 = 3
+            r11 = 2
+            r12 = 1
+            r13 = 0
             r14 = -1
-            goto L_0x00ab
-        L_0x001e:
-            java.lang.String r0 = "app_icons"
-            boolean r14 = r14.equals(r0)
-            if (r14 != 0) goto L_0x0027
-            goto L_0x001b
-        L_0x0027:
-            r14 = 11
-            goto L_0x00ab
-        L_0x002b:
-            java.lang.String r0 = "advanced_chat_management"
-            boolean r14 = r14.equals(r0)
-            if (r14 != 0) goto L_0x0034
-            goto L_0x001b
-        L_0x0034:
-            r14 = 10
-            goto L_0x00ab
-        L_0x0038:
-            java.lang.String r0 = "unique_reactions"
-            boolean r14 = r14.equals(r0)
-            if (r14 != 0) goto L_0x0041
-            goto L_0x001b
-        L_0x0041:
-            r14 = 9
-            goto L_0x00ab
-        L_0x0045:
-            java.lang.String r0 = "double_limits"
-            boolean r14 = r14.equals(r0)
-            if (r14 != 0) goto L_0x004e
-            goto L_0x001b
-        L_0x004e:
-            r14 = 8
-            goto L_0x00ab
-        L_0x0052:
-            java.lang.String r0 = "premium_stickers"
-            boolean r14 = r14.equals(r0)
-            if (r14 != 0) goto L_0x005b
-            goto L_0x001b
-        L_0x005b:
-            r14 = 7
-            goto L_0x00ab
-        L_0x005d:
-            java.lang.String r0 = "faster_download"
-            boolean r14 = r14.equals(r0)
-            if (r14 != 0) goto L_0x0066
-            goto L_0x001b
-        L_0x0066:
-            r14 = 6
-            goto L_0x00ab
-        L_0x0068:
-            java.lang.String r0 = "profile_badge"
-            boolean r14 = r14.equals(r0)
-            if (r14 != 0) goto L_0x0071
-            goto L_0x001b
-        L_0x0071:
-            r14 = 5
-            goto L_0x00ab
-        L_0x0073:
-            java.lang.String r0 = "more_upload"
-            boolean r14 = r14.equals(r0)
-            if (r14 != 0) goto L_0x007c
-            goto L_0x001b
-        L_0x007c:
-            r14 = 4
-            goto L_0x00ab
-        L_0x007e:
-            java.lang.String r0 = "no_ads"
-            boolean r14 = r14.equals(r0)
-            if (r14 != 0) goto L_0x0087
-            goto L_0x001b
-        L_0x0087:
-            r14 = 3
-            goto L_0x00ab
-        L_0x0089:
-            java.lang.String r0 = "animated_emoji"
-            boolean r14 = r14.equals(r0)
-            if (r14 != 0) goto L_0x0092
-            goto L_0x001b
-        L_0x0092:
-            r14 = 2
-            goto L_0x00ab
-        L_0x0094:
-            java.lang.String r0 = "voice_to_text"
-            boolean r14 = r14.equals(r0)
-            if (r14 != 0) goto L_0x009e
-            goto L_0x001b
-        L_0x009e:
-            r14 = 1
-            goto L_0x00ab
-        L_0x00a0:
-            java.lang.String r0 = "animated_userpics"
-            boolean r14 = r14.equals(r0)
-            if (r14 != 0) goto L_0x00aa
-            goto L_0x001b
-        L_0x00aa:
-            r14 = 0
-        L_0x00ab:
-            switch(r14) {
-                case 0: goto L_0x00ba;
-                case 1: goto L_0x00b9;
-                case 2: goto L_0x00b8;
-                case 3: goto L_0x00b7;
-                case 4: goto L_0x00b6;
-                case 5: goto L_0x00b5;
-                case 6: goto L_0x00b4;
-                case 7: goto L_0x00b3;
-                case 8: goto L_0x00b2;
-                case 9: goto L_0x00b1;
-                case 10: goto L_0x00b0;
-                case 11: goto L_0x00af;
-                default: goto L_0x00ae;
+            switch(r0) {
+                case -2145993328: goto L_0x00b0;
+                case -2080028929: goto L_0x00a4;
+                case -1755514268: goto L_0x0098;
+                case -1425144150: goto L_0x008d;
+                case -1040323278: goto L_0x0082;
+                case -1023650261: goto L_0x0077;
+                case -969043445: goto L_0x006c;
+                case -730864243: goto L_0x0061;
+                case -448825858: goto L_0x0054;
+                case -165039170: goto L_0x0047;
+                case -96210874: goto L_0x003a;
+                case 1219849581: goto L_0x002d;
+                case 1832801148: goto L_0x0020;
+                default: goto L_0x001d;
             }
+        L_0x001d:
+            r15 = -1
+            goto L_0x00bb
+        L_0x0020:
+            java.lang.String r0 = "app_icons"
+            boolean r15 = r15.equals(r0)
+            if (r15 != 0) goto L_0x0029
+            goto L_0x001d
+        L_0x0029:
+            r15 = 12
+            goto L_0x00bb
+        L_0x002d:
+            java.lang.String r0 = "advanced_chat_management"
+            boolean r15 = r15.equals(r0)
+            if (r15 != 0) goto L_0x0036
+            goto L_0x001d
+        L_0x0036:
+            r15 = 11
+            goto L_0x00bb
+        L_0x003a:
+            java.lang.String r0 = "double_limits"
+            boolean r15 = r15.equals(r0)
+            if (r15 != 0) goto L_0x0043
+            goto L_0x001d
+        L_0x0043:
+            r15 = 10
+            goto L_0x00bb
+        L_0x0047:
+            java.lang.String r0 = "premium_stickers"
+            boolean r15 = r15.equals(r0)
+            if (r15 != 0) goto L_0x0050
+            goto L_0x001d
+        L_0x0050:
+            r15 = 9
+            goto L_0x00bb
+        L_0x0054:
+            java.lang.String r0 = "faster_download"
+            boolean r15 = r15.equals(r0)
+            if (r15 != 0) goto L_0x005d
+            goto L_0x001d
+        L_0x005d:
+            r15 = 8
+            goto L_0x00bb
+        L_0x0061:
+            java.lang.String r0 = "profile_badge"
+            boolean r15 = r15.equals(r0)
+            if (r15 != 0) goto L_0x006a
+            goto L_0x001d
+        L_0x006a:
+            r15 = 7
+            goto L_0x00bb
+        L_0x006c:
+            java.lang.String r0 = "emoji_status"
+            boolean r15 = r15.equals(r0)
+            if (r15 != 0) goto L_0x0075
+            goto L_0x001d
+        L_0x0075:
+            r15 = 6
+            goto L_0x00bb
+        L_0x0077:
+            java.lang.String r0 = "more_upload"
+            boolean r15 = r15.equals(r0)
+            if (r15 != 0) goto L_0x0080
+            goto L_0x001d
+        L_0x0080:
+            r15 = 5
+            goto L_0x00bb
+        L_0x0082:
+            java.lang.String r0 = "no_ads"
+            boolean r15 = r15.equals(r0)
+            if (r15 != 0) goto L_0x008b
+            goto L_0x001d
+        L_0x008b:
+            r15 = 4
+            goto L_0x00bb
+        L_0x008d:
+            java.lang.String r0 = "animated_emoji"
+            boolean r15 = r15.equals(r0)
+            if (r15 != 0) goto L_0x0096
+            goto L_0x001d
+        L_0x0096:
+            r15 = 3
+            goto L_0x00bb
+        L_0x0098:
+            java.lang.String r0 = "voice_to_text"
+            boolean r15 = r15.equals(r0)
+            if (r15 != 0) goto L_0x00a2
+            goto L_0x001d
+        L_0x00a2:
+            r15 = 2
+            goto L_0x00bb
+        L_0x00a4:
+            java.lang.String r0 = "infinite_reactions"
+            boolean r15 = r15.equals(r0)
+            if (r15 != 0) goto L_0x00ae
+            goto L_0x001d
         L_0x00ae:
-            return r13
-        L_0x00af:
-            return r2
+            r15 = 1
+            goto L_0x00bb
         L_0x00b0:
-            return r3
-        L_0x00b1:
-            return r8
-        L_0x00b2:
-            return r12
-        L_0x00b3:
-            return r7
-        L_0x00b4:
-            return r10
-        L_0x00b5:
-            return r6
-        L_0x00b6:
-            return r11
-        L_0x00b7:
-            return r9
-        L_0x00b8:
-            return r1
-        L_0x00b9:
-            return r4
+            java.lang.String r0 = "animated_userpics"
+            boolean r15 = r15.equals(r0)
+            if (r15 != 0) goto L_0x00ba
+            goto L_0x001d
         L_0x00ba:
+            r15 = 0
+        L_0x00bb:
+            switch(r15) {
+                case 0: goto L_0x00cb;
+                case 1: goto L_0x00ca;
+                case 2: goto L_0x00c9;
+                case 3: goto L_0x00c8;
+                case 4: goto L_0x00c7;
+                case 5: goto L_0x00c6;
+                case 6: goto L_0x00c5;
+                case 7: goto L_0x00c4;
+                case 8: goto L_0x00c3;
+                case 9: goto L_0x00c2;
+                case 10: goto L_0x00c1;
+                case 11: goto L_0x00c0;
+                case 12: goto L_0x00bf;
+                default: goto L_0x00be;
+            }
+        L_0x00be:
+            return r14
+        L_0x00bf:
+            return r3
+        L_0x00c0:
+            return r4
+        L_0x00c1:
+            return r13
+        L_0x00c2:
+            return r8
+        L_0x00c3:
+            return r11
+        L_0x00c4:
+            return r7
+        L_0x00c5:
+            return r1
+        L_0x00c6:
+            return r12
+        L_0x00c7:
+            return r10
+        L_0x00c8:
+            return r2
+        L_0x00c9:
             return r5
+        L_0x00ca:
+            return r9
+        L_0x00cb:
+            return r6
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PremiumPreviewFragment.serverStringToFeatureType(java.lang.String):int");
     }
@@ -745,13 +760,15 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
         arrayList.add(new PremiumFeatureData(2, R.drawable.msg_premium_speed, LocaleController.getString("PremiumPreviewDownloadSpeed", R.string.PremiumPreviewDownloadSpeed), LocaleController.getString("PremiumPreviewDownloadSpeedDescription", R.string.PremiumPreviewDownloadSpeedDescription)));
         arrayList.add(new PremiumFeatureData(8, R.drawable.msg_premium_voice, LocaleController.getString("PremiumPreviewVoiceToText", R.string.PremiumPreviewVoiceToText), LocaleController.getString("PremiumPreviewVoiceToTextDescription", R.string.PremiumPreviewVoiceToTextDescription)));
         arrayList.add(new PremiumFeatureData(3, R.drawable.msg_premium_ads, LocaleController.getString("PremiumPreviewNoAds", R.string.PremiumPreviewNoAds), LocaleController.getString("PremiumPreviewNoAdsDescription", R.string.PremiumPreviewNoAdsDescription)));
-        arrayList.add(new PremiumFeatureData(4, R.drawable.msg_premium_reactions, LocaleController.getString("PremiumPreviewReactions", R.string.PremiumPreviewReactions), LocaleController.getString("PremiumPreviewReactionsDescription", R.string.PremiumPreviewReactionsDescription)));
+        arrayList.add(new PremiumFeatureData(4, R.drawable.msg_premium_reactions, LocaleController.getString("PremiumPreviewReactions2", R.string.PremiumPreviewReactions2), LocaleController.getString("PremiumPreviewReactions2Description", R.string.PremiumPreviewReactions2Description)));
         arrayList.add(new PremiumFeatureData(5, R.drawable.msg_premium_stickers, LocaleController.getString("PremiumPreviewStickers", R.string.PremiumPreviewStickers), LocaleController.getString("PremiumPreviewStickersDescription", R.string.PremiumPreviewStickersDescription)));
         arrayList.add(new PremiumFeatureData(11, R.drawable.msg_premium_emoji, LocaleController.getString("PremiumPreviewEmoji", R.string.PremiumPreviewEmoji), LocaleController.getString("PremiumPreviewEmojiDescription", R.string.PremiumPreviewEmojiDescription)));
         arrayList.add(new PremiumFeatureData(9, R.drawable.msg_premium_tools, LocaleController.getString("PremiumPreviewAdvancedChatManagement", R.string.PremiumPreviewAdvancedChatManagement), LocaleController.getString("PremiumPreviewAdvancedChatManagementDescription", R.string.PremiumPreviewAdvancedChatManagementDescription)));
         arrayList.add(new PremiumFeatureData(6, R.drawable.msg_premium_badge, LocaleController.getString("PremiumPreviewProfileBadge", R.string.PremiumPreviewProfileBadge), LocaleController.getString("PremiumPreviewProfileBadgeDescription", R.string.PremiumPreviewProfileBadgeDescription)));
         arrayList.add(new PremiumFeatureData(7, R.drawable.msg_premium_avatar, LocaleController.getString("PremiumPreviewAnimatedProfiles", R.string.PremiumPreviewAnimatedProfiles), LocaleController.getString("PremiumPreviewAnimatedProfilesDescription", R.string.PremiumPreviewAnimatedProfilesDescription)));
-        arrayList.add(new PremiumFeatureData(10, R.drawable.msg_premium_icons, LocaleController.getString("PremiumPreviewAppIcon", R.string.PremiumPreviewAppIcon), LocaleController.getString("PremiumPreviewAppIconDescription", R.string.PremiumPreviewAppIconDescription)));
+        int i3 = R.drawable.msg_premium_icons;
+        arrayList.add(new PremiumFeatureData(10, i3, LocaleController.getString("PremiumPreviewAppIcon", R.string.PremiumPreviewAppIcon), LocaleController.getString("PremiumPreviewAppIconDescription", R.string.PremiumPreviewAppIconDescription)));
+        arrayList.add(new PremiumFeatureData(12, i3, LocaleController.getString("PremiumPreviewEmojiStatus", R.string.PremiumPreviewEmojiStatus), LocaleController.getString("PremiumPreviewEmojiStatusDescription", R.string.PremiumPreviewEmojiStatusDescription)));
         if (instance.premiumFeaturesTypesToPosition.size() > 0) {
             while (i2 < arrayList.size()) {
                 if (instance.premiumFeaturesTypesToPosition.get(arrayList.get(i2).type, -1) == -1) {

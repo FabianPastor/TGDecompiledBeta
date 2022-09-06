@@ -158,7 +158,7 @@ public class BackupImageView extends View {
         this.imageReceiver.onDetachedFromWindow();
         AnimatedEmojiDrawable animatedEmojiDrawable2 = this.animatedEmojiDrawable;
         if (animatedEmojiDrawable2 != null) {
-            animatedEmojiDrawable2.removeView((Drawable.Callback) this);
+            animatedEmojiDrawable2.removeView((View) this);
         }
     }
 
@@ -197,7 +197,7 @@ public class BackupImageView extends View {
         AnimatedEmojiDrawable animatedEmojiDrawable3 = this.animatedEmojiDrawable;
         if (animatedEmojiDrawable3 != animatedEmojiDrawable2) {
             if (this.attached && animatedEmojiDrawable3 != null) {
-                animatedEmojiDrawable3.removeView((Drawable.Callback) this);
+                animatedEmojiDrawable3.removeView((View) this);
             }
             this.animatedEmojiDrawable = animatedEmojiDrawable2;
             if (this.attached && animatedEmojiDrawable2 != null) {

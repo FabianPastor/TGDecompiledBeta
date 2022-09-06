@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Point;
-import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -1145,7 +1144,7 @@ public class ReactionsEffectOverlay {
             this.attached = false;
             AnimatedEmojiDrawable animatedEmojiDrawable2 = this.animatedEmojiDrawable;
             if (animatedEmojiDrawable2 != null) {
-                animatedEmojiDrawable2.removeView((Drawable.Callback) this);
+                animatedEmojiDrawable2.removeView((View) this);
             }
             AnimatedEmojiEffect animatedEmojiEffect = this.emojiEffect;
             if (animatedEmojiEffect != null) {
@@ -1155,7 +1154,7 @@ public class ReactionsEffectOverlay {
 
         public void setAnimatedReactionDrawable(AnimatedEmojiDrawable animatedEmojiDrawable2) {
             if (animatedEmojiDrawable2 != null) {
-                animatedEmojiDrawable2.removeView((Drawable.Callback) this);
+                animatedEmojiDrawable2.removeView((View) this);
             }
             this.animatedEmojiDrawable = animatedEmojiDrawable2;
             if (this.attached && animatedEmojiDrawable2 != null) {

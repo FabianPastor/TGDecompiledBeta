@@ -29,7 +29,6 @@ import android.os.PowerManager;
 import android.os.Vibrator;
 import android.text.Editable;
 import android.text.Layout;
-import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -6241,13 +6240,12 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         int i3;
         int i4;
         int i5;
-        boolean z2;
         ChatActivity chatActivity;
         int[] iArr = new int[1];
         CharSequence charSequence2 = charSequence;
         Emoji.parseEmojis(charSequence2, iArr);
-        boolean z3 = iArr[0] <= 100;
-        if (!z3) {
+        boolean z2 = iArr[0] <= 100;
+        if (!z2) {
             charSequence2 = AndroidUtilities.getTrimmedString(charSequence);
         }
         boolean supportsSendingNewEntities = supportsSendingNewEntities();
@@ -6307,7 +6305,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                 min = i3;
             }
             CharSequence subSequence = charSequence2.subSequence(i7, min);
-            if (!z3) {
+            if (!z2) {
                 subSequence = AndroidUtilities.getTrimmedString(subSequence);
             }
             CharSequence[] charSequenceArr = {subSequence};
@@ -6322,23 +6320,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                 sendAnimationData.x = (float) (this.location[0] + AndroidUtilities.dp(11.0f));
                 sendAnimationData.y = (float) (this.location[1] + AndroidUtilities.dp(19.0f));
             }
-            MessageObject.SendAnimationData sendAnimationData2 = sendAnimationData;
-            if (charSequence2 instanceof Spannable) {
-                AnimatedEmojiSpan[] animatedEmojiSpanArr = (AnimatedEmojiSpan[]) ((Spannable) charSequence2).getSpans(0, charSequence2.length(), AnimatedEmojiSpan.class);
-                int i11 = 0;
-                while (true) {
-                    if (i11 >= animatedEmojiSpanArr.length) {
-                        break;
-                    } else if (animatedEmojiSpanArr[i11].fromEmojiKeyboard) {
-                        z2 = true;
-                        break;
-                    } else {
-                        i11++;
-                    }
-                }
-            }
-            z2 = false;
-            SendMessagesHelper.getInstance(this.currentAccount).sendMessage(charSequenceArr[0].toString(), this.dialog_id, this.replyingMessageObject, getThreadMessage(), this.messageWebPage, this.messageWebPageSearch, entities, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, z, i, sendAnimationData2, z2);
+            SendMessagesHelper.getInstance(this.currentAccount).sendMessage(charSequenceArr[0].toString(), this.dialog_id, this.replyingMessageObject, getThreadMessage(), this.messageWebPage, this.messageWebPageSearch, entities, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, z, i, sendAnimationData, SendMessagesHelper.checkUpdateStickersOrder(charSequence2));
             i7 = min + 1;
             if (min == charSequence2.length()) {
                 return true;

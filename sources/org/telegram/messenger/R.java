@@ -1087,7 +1087,6 @@ public final class R {
         public static final int popup_fixed = NUM;
         public static final int popup_fixed_alert = NUM;
         public static final int popup_fixed_alert2 = NUM;
-        public static final int popup_fixed_alert3 = NUM;
         public static final int popup_fixed_top = NUM;
         public static final int preview_arrow = NUM;
         public static final int preview_back = NUM;
@@ -5736,6 +5735,8 @@ public final class R {
         public static final int PremiumPreviewEmoji = NUM;
         public static final int PremiumPreviewEmojiDescription = NUM;
         public static final int PremiumPreviewEmojiPack = NUM;
+        public static final int PremiumPreviewEmojiStatus = NUM;
+        public static final int PremiumPreviewEmojiStatusDescription = NUM;
         public static final int PremiumPreviewLimits = NUM;
         public static final int PremiumPreviewLimitsDescription = NUM;
         public static final int PremiumPreviewNoAds = NUM;
@@ -5744,6 +5745,8 @@ public final class R {
         public static final int PremiumPreviewProfileBadge = NUM;
         public static final int PremiumPreviewProfileBadgeDescription = NUM;
         public static final int PremiumPreviewReactions = NUM;
+        public static final int PremiumPreviewReactions2 = NUM;
+        public static final int PremiumPreviewReactions2Description = NUM;
         public static final int PremiumPreviewReactionsDescription = NUM;
         public static final int PremiumPreviewStickers = NUM;
         public static final int PremiumPreviewStickersDescription = NUM;

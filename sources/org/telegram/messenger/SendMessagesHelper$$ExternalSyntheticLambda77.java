@@ -11,6 +11,7 @@ public final /* synthetic */ class SendMessagesHelper$$ExternalSyntheticLambda77
     public final /* synthetic */ SendMessagesHelper.SendingMediaInfo f$10;
     public final /* synthetic */ boolean f$11;
     public final /* synthetic */ int f$12;
+    public final /* synthetic */ boolean f$13;
     public final /* synthetic */ MessageObject f$2;
     public final /* synthetic */ AccountInstance f$3;
     public final /* synthetic */ TLRPC$TL_photo f$4;
@@ -20,7 +21,7 @@ public final /* synthetic */ class SendMessagesHelper$$ExternalSyntheticLambda77
     public final /* synthetic */ MessageObject f$8;
     public final /* synthetic */ MessageObject f$9;
 
-    public /* synthetic */ SendMessagesHelper$$ExternalSyntheticLambda77(Bitmap[] bitmapArr, String[] strArr, MessageObject messageObject, AccountInstance accountInstance, TLRPC$TL_photo tLRPC$TL_photo, HashMap hashMap, String str, long j, MessageObject messageObject2, MessageObject messageObject3, SendMessagesHelper.SendingMediaInfo sendingMediaInfo, boolean z, int i) {
+    public /* synthetic */ SendMessagesHelper$$ExternalSyntheticLambda77(Bitmap[] bitmapArr, String[] strArr, MessageObject messageObject, AccountInstance accountInstance, TLRPC$TL_photo tLRPC$TL_photo, HashMap hashMap, String str, long j, MessageObject messageObject2, MessageObject messageObject3, SendMessagesHelper.SendingMediaInfo sendingMediaInfo, boolean z, int i, boolean z2) {
         this.f$0 = bitmapArr;
         this.f$1 = strArr;
         this.f$2 = messageObject;
@@ -34,9 +35,10 @@ public final /* synthetic */ class SendMessagesHelper$$ExternalSyntheticLambda77
         this.f$10 = sendingMediaInfo;
         this.f$11 = z;
         this.f$12 = i;
+        this.f$13 = z2;
     }
 
     public final void run() {
-        SendMessagesHelper.lambda$prepareSendingMedia$90(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, this.f$10, this.f$11, this.f$12);
+        SendMessagesHelper.lambda$prepareSendingMedia$90(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, this.f$10, this.f$11, this.f$12, this.f$13);
     }
 }

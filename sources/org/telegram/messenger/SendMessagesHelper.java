@@ -19,6 +19,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.CancellationSignal;
 import android.os.SystemClock;
+import android.text.Spannable;
 import android.text.TextUtils;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
@@ -191,6 +192,7 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.Cells.ChatMessageCell;
 import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.AlertsCreator;
+import org.telegram.ui.Components.AnimatedEmojiSpan;
 import org.telegram.ui.Components.AnimatedFileDrawable;
 import org.telegram.ui.Components.Point;
 import org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble;
@@ -249,8 +251,21 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         public MediaController.SearchImage searchImage;
         public String thumbPath;
         public int ttl;
+        public boolean updateStickersOrder;
         public Uri uri;
         public VideoEditedInfo videoEditedInfo;
+    }
+
+    public static boolean checkUpdateStickersOrder(CharSequence charSequence) {
+        if (charSequence instanceof Spannable) {
+            AnimatedEmojiSpan[] animatedEmojiSpanArr = (AnimatedEmojiSpan[]) ((Spannable) charSequence).getSpans(0, charSequence.length(), AnimatedEmojiSpan.class);
+            for (AnimatedEmojiSpan animatedEmojiSpan : animatedEmojiSpanArr) {
+                if (animatedEmojiSpan.fromEmojiKeyboard) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public class ImportingHistory {
@@ -1863,7 +1878,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:25:0x0070  */
-    /* JADX WARNING: Removed duplicated region for block: B:26:0x008e  */
+    /* JADX WARNING: Removed duplicated region for block: B:26:0x0092  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void processForwardFromMyName(org.telegram.messenger.MessageObject r19, long r20) {
         /*
@@ -1875,15 +1890,15 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             org.telegram.tgnet.TLRPC$Message r0 = r15.messageOwner
             org.telegram.tgnet.TLRPC$MessageMedia r1 = r0.media
             r2 = 0
-            if (r1 == 0) goto L_0x0116
+            if (r1 == 0) goto L_0x011a
             boolean r3 = r1 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaEmpty
-            if (r3 != 0) goto L_0x0116
+            if (r3 != 0) goto L_0x011a
             boolean r3 = r1 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaWebPage
-            if (r3 != 0) goto L_0x0116
+            if (r3 != 0) goto L_0x011a
             boolean r3 = r1 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaGame
-            if (r3 != 0) goto L_0x0116
+            if (r3 != 0) goto L_0x011a
             boolean r3 = r1 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaInvoice
-            if (r3 != 0) goto L_0x0116
+            if (r3 != 0) goto L_0x011a
             boolean r0 = org.telegram.messenger.DialogObject.isEncryptedDialog(r20)
             if (r0 == 0) goto L_0x0065
             org.telegram.tgnet.TLRPC$Message r0 = r15.messageOwner
@@ -1923,7 +1938,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             org.telegram.tgnet.TLRPC$MessageMedia r4 = r0.media
             org.telegram.tgnet.TLRPC$Photo r1 = r4.photo
             boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_photo
-            if (r2 == 0) goto L_0x008e
+            if (r2 == 0) goto L_0x0092
             org.telegram.tgnet.TLRPC$TL_photo r1 = (org.telegram.tgnet.TLRPC$TL_photo) r1
             r2 = 0
             org.telegram.messenger.MessageObject r5 = r15.replyMessageObject
@@ -1934,6 +1949,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r12 = 1
             r13 = 0
             int r14 = r4.ttl_seconds
+            r16 = 0
             r0 = r18
             r3 = r20
             r10 = r11
@@ -1941,12 +1957,13 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r12 = r13
             r13 = r14
             r14 = r19
-            r0.sendMessage((org.telegram.tgnet.TLRPC$TL_photo) r1, (java.lang.String) r2, (long) r3, (org.telegram.messenger.MessageObject) r5, (org.telegram.messenger.MessageObject) r6, (java.lang.String) r7, (java.util.ArrayList<org.telegram.tgnet.TLRPC$MessageEntity>) r8, (org.telegram.tgnet.TLRPC$ReplyMarkup) r9, (java.util.HashMap<java.lang.String, java.lang.String>) r10, (boolean) r11, (int) r12, (int) r13, (java.lang.Object) r14)
-            goto L_0x019b
-        L_0x008e:
+            r15 = r16
+            r0.sendMessage(r1, r2, r3, r5, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15)
+            goto L_0x019f
+        L_0x0092:
             org.telegram.tgnet.TLRPC$Document r1 = r4.document
             boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_document
-            if (r2 == 0) goto L_0x00b4
+            if (r2 == 0) goto L_0x00b8
             org.telegram.tgnet.TLRPC$TL_document r1 = (org.telegram.tgnet.TLRPC$TL_document) r1
             r2 = 0
             java.lang.String r3 = r0.attachPath
@@ -1964,16 +1981,16 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r4 = r20
             r15 = r19
             r0.sendMessage(r1, r2, r3, r4, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15, r16, r17)
-            goto L_0x019b
-        L_0x00b4:
+            goto L_0x019f
+        L_0x00b8:
             boolean r0 = r4 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaVenue
-            if (r0 != 0) goto L_0x0105
+            if (r0 != 0) goto L_0x0109
             boolean r0 = r4 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaGeo
-            if (r0 == 0) goto L_0x00bd
-            goto L_0x0105
-        L_0x00bd:
+            if (r0 == 0) goto L_0x00c1
+            goto L_0x0109
+        L_0x00c1:
             java.lang.String r0 = r4.phone_number
-            if (r0 == 0) goto L_0x00ea
+            if (r0 == 0) goto L_0x00ee
             org.telegram.tgnet.TLRPC$TL_userContact_old2 r2 = new org.telegram.tgnet.TLRPC$TL_userContact_old2
             r2.<init>()
             org.telegram.tgnet.TLRPC$Message r0 = r15.messageOwner
@@ -1995,10 +2012,10 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r1 = r18
             r3 = r20
             r1.sendMessage((org.telegram.tgnet.TLRPC$User) r2, (long) r3, (org.telegram.messenger.MessageObject) r5, (org.telegram.messenger.MessageObject) r6, (org.telegram.tgnet.TLRPC$ReplyMarkup) r7, (java.util.HashMap<java.lang.String, java.lang.String>) r8, (boolean) r9, (int) r10)
-            goto L_0x019b
-        L_0x00ea:
+            goto L_0x019f
+        L_0x00ee:
             boolean r0 = org.telegram.messenger.DialogObject.isEncryptedDialog(r20)
-            if (r0 != 0) goto L_0x019b
+            if (r0 != 0) goto L_0x019f
             java.util.ArrayList r2 = new java.util.ArrayList
             r2.<init>()
             r2.add(r15)
@@ -2009,8 +2026,8 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r1 = r18
             r3 = r20
             r1.sendMessage((java.util.ArrayList<org.telegram.messenger.MessageObject>) r2, (long) r3, (boolean) r5, (boolean) r6, (boolean) r7, (int) r8)
-            goto L_0x019b
-        L_0x0105:
+            goto L_0x019f
+        L_0x0109:
             org.telegram.messenger.MessageObject r5 = r15.replyMessageObject
             r6 = 0
             r7 = 0
@@ -2021,54 +2038,54 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r2 = r4
             r3 = r20
             r1.sendMessage((org.telegram.tgnet.TLRPC$MessageMedia) r2, (long) r3, (org.telegram.messenger.MessageObject) r5, (org.telegram.messenger.MessageObject) r6, (org.telegram.tgnet.TLRPC$ReplyMarkup) r7, (java.util.HashMap<java.lang.String, java.lang.String>) r8, (boolean) r9, (int) r10)
-            goto L_0x019b
-        L_0x0116:
+            goto L_0x019f
+        L_0x011a:
             java.lang.String r3 = r0.message
-            if (r3 == 0) goto L_0x0182
+            if (r3 == 0) goto L_0x0186
             boolean r3 = r1 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaWebPage
-            if (r3 == 0) goto L_0x0122
+            if (r3 == 0) goto L_0x0126
             org.telegram.tgnet.TLRPC$WebPage r1 = r1.webpage
             r9 = r1
-            goto L_0x0123
-        L_0x0122:
+            goto L_0x0127
+        L_0x0126:
             r9 = r2
-        L_0x0123:
+        L_0x0127:
             java.util.ArrayList<org.telegram.tgnet.TLRPC$MessageEntity> r0 = r0.entities
-            if (r0 == 0) goto L_0x0169
+            if (r0 == 0) goto L_0x016d
             boolean r0 = r0.isEmpty()
-            if (r0 != 0) goto L_0x0169
+            if (r0 != 0) goto L_0x016d
             java.util.ArrayList r2 = new java.util.ArrayList
             r2.<init>()
             r0 = 0
-        L_0x0133:
+        L_0x0137:
             org.telegram.tgnet.TLRPC$Message r1 = r15.messageOwner
             java.util.ArrayList<org.telegram.tgnet.TLRPC$MessageEntity> r1 = r1.entities
             int r1 = r1.size()
-            if (r0 >= r1) goto L_0x0169
+            if (r0 >= r1) goto L_0x016d
             org.telegram.tgnet.TLRPC$Message r1 = r15.messageOwner
             java.util.ArrayList<org.telegram.tgnet.TLRPC$MessageEntity> r1 = r1.entities
             java.lang.Object r1 = r1.get(r0)
             org.telegram.tgnet.TLRPC$MessageEntity r1 = (org.telegram.tgnet.TLRPC$MessageEntity) r1
             boolean r3 = r1 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityBold
-            if (r3 != 0) goto L_0x0163
+            if (r3 != 0) goto L_0x0167
             boolean r3 = r1 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityItalic
-            if (r3 != 0) goto L_0x0163
+            if (r3 != 0) goto L_0x0167
             boolean r3 = r1 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityPre
-            if (r3 != 0) goto L_0x0163
+            if (r3 != 0) goto L_0x0167
             boolean r3 = r1 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityCode
-            if (r3 != 0) goto L_0x0163
+            if (r3 != 0) goto L_0x0167
             boolean r3 = r1 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityTextUrl
-            if (r3 != 0) goto L_0x0163
+            if (r3 != 0) goto L_0x0167
             boolean r3 = r1 instanceof org.telegram.tgnet.TLRPC$TL_messageEntitySpoiler
-            if (r3 != 0) goto L_0x0163
+            if (r3 != 0) goto L_0x0167
             boolean r3 = r1 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityCustomEmoji
-            if (r3 == 0) goto L_0x0166
-        L_0x0163:
+            if (r3 == 0) goto L_0x016a
+        L_0x0167:
             r2.add(r1)
-        L_0x0166:
+        L_0x016a:
             int r0 = r0 + 1
-            goto L_0x0133
-        L_0x0169:
+            goto L_0x0137
+        L_0x016d:
             r11 = r2
             org.telegram.tgnet.TLRPC$Message r0 = r15.messageOwner
             java.lang.String r4 = r0.message
@@ -2083,11 +2100,11 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r17 = 0
             r3 = r18
             r5 = r20
-            r3.sendMessage((java.lang.String) r4, (long) r5, (org.telegram.messenger.MessageObject) r7, (org.telegram.messenger.MessageObject) r8, (org.telegram.tgnet.TLRPC$WebPage) r9, (boolean) r10, (java.util.ArrayList<org.telegram.tgnet.TLRPC$MessageEntity>) r11, (org.telegram.tgnet.TLRPC$ReplyMarkup) r12, (java.util.HashMap<java.lang.String, java.lang.String>) r13, (boolean) r14, (int) r15, (org.telegram.messenger.MessageObject.SendAnimationData) r16, (boolean) r17)
-            goto L_0x019b
-        L_0x0182:
+            r3.sendMessage(r4, r5, r7, r8, r9, r10, r11, r12, r13, r14, r15, r16, r17)
+            goto L_0x019f
+        L_0x0186:
             boolean r0 = org.telegram.messenger.DialogObject.isEncryptedDialog(r20)
-            if (r0 == 0) goto L_0x019b
+            if (r0 == 0) goto L_0x019f
             java.util.ArrayList r2 = new java.util.ArrayList
             r2.<init>()
             r2.add(r15)
@@ -2098,7 +2115,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r1 = r18
             r3 = r20
             r1.sendMessage((java.util.ArrayList<org.telegram.messenger.MessageObject>) r2, (long) r3, (boolean) r5, (boolean) r6, (boolean) r7, (int) r8)
-        L_0x019b:
+        L_0x019f:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SendMessagesHelper.processForwardFromMyName(org.telegram.messenger.MessageObject, long):void");
@@ -3543,7 +3560,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r12 = r59
             r31 = r14
             r14 = r15
-            r0.sendMessage((java.lang.String) r1, (long) r2, (org.telegram.messenger.MessageObject) r4, (org.telegram.messenger.MessageObject) r5, (org.telegram.tgnet.TLRPC$WebPage) r6, (boolean) r7, (java.util.ArrayList<org.telegram.tgnet.TLRPC$MessageEntity>) r8, (org.telegram.tgnet.TLRPC$ReplyMarkup) r9, (java.util.HashMap<java.lang.String, java.lang.String>) r10, (boolean) r11, (int) r12, (org.telegram.messenger.MessageObject.SendAnimationData) r13, (boolean) r14)
+            r0.sendMessage(r1, r2, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13, r14)
             goto L_0x093d
         L_0x093b:
             r31 = r14
@@ -6064,9 +6081,9 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         sendMessage((String) null, (String) null, (TLRPC$MessageMedia) null, (TLRPC$TL_photo) null, (VideoEditedInfo) null, (TLRPC$User) null, (TLRPC$TL_document) null, tLRPC$TL_game, (TLRPC$TL_messageMediaPoll) null, (TLRPC$TL_messageMediaInvoice) null, j, (String) null, (MessageObject) null, (MessageObject) null, (TLRPC$WebPage) null, true, (MessageObject) null, (ArrayList<TLRPC$MessageEntity>) null, tLRPC$ReplyMarkup, hashMap, z, i, 0, (Object) null, (MessageObject.SendAnimationData) null, false);
     }
 
-    public void sendMessage(TLRPC$TL_photo tLRPC$TL_photo, String str, long j, MessageObject messageObject, MessageObject messageObject2, String str2, ArrayList<TLRPC$MessageEntity> arrayList, TLRPC$ReplyMarkup tLRPC$ReplyMarkup, HashMap<String, String> hashMap, boolean z, int i, int i2, Object obj) {
+    public void sendMessage(TLRPC$TL_photo tLRPC$TL_photo, String str, long j, MessageObject messageObject, MessageObject messageObject2, String str2, ArrayList<TLRPC$MessageEntity> arrayList, TLRPC$ReplyMarkup tLRPC$ReplyMarkup, HashMap<String, String> hashMap, boolean z, int i, int i2, Object obj, boolean z2) {
         String str3 = str2;
-        sendMessage((String) null, str3, (TLRPC$MessageMedia) null, tLRPC$TL_photo, (VideoEditedInfo) null, (TLRPC$User) null, (TLRPC$TL_document) null, (TLRPC$TL_game) null, (TLRPC$TL_messageMediaPoll) null, (TLRPC$TL_messageMediaInvoice) null, j, str, messageObject, messageObject2, (TLRPC$WebPage) null, true, (MessageObject) null, arrayList, tLRPC$ReplyMarkup, hashMap, z, i, i2, obj, (MessageObject.SendAnimationData) null, false);
+        sendMessage((String) null, str3, (TLRPC$MessageMedia) null, tLRPC$TL_photo, (VideoEditedInfo) null, (TLRPC$User) null, (TLRPC$TL_document) null, (TLRPC$TL_game) null, (TLRPC$TL_messageMediaPoll) null, (TLRPC$TL_messageMediaInvoice) null, j, str, messageObject, messageObject2, (TLRPC$WebPage) null, true, (MessageObject) null, arrayList, tLRPC$ReplyMarkup, hashMap, z, i, i2, obj, (MessageObject.SendAnimationData) null, z2);
     }
 
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v1, resolved type: java.util.HashMap<java.lang.String, java.lang.String>} */
@@ -14679,7 +14696,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         sendingMediaInfo.videoEditedInfo = videoEditedInfo;
         ArrayList arrayList4 = new ArrayList();
         arrayList4.add(sendingMediaInfo);
-        prepareSendingMedia(accountInstance, arrayList4, j, messageObject, messageObject2, inputContentInfoCompat, z2, false, messageObject3, z, i2);
+        prepareSendingMedia(accountInstance, arrayList4, j, messageObject, messageObject2, inputContentInfoCompat, z2, false, messageObject3, z, i2, false);
     }
 
     public static void prepareSendingBotContextResult(BaseFragment baseFragment, AccountInstance accountInstance, TLRPC$BotInlineResult tLRPC$BotInlineResult, HashMap<String, String> hashMap, long j, MessageObject messageObject, MessageObject messageObject2, boolean z, int i) {
@@ -14710,7 +14727,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                 TLRPC$TL_webPagePending tLRPC$TL_webPagePending2 = tLRPC$TL_webPagePending;
                 SendMessagesHelper sendMessagesHelper = accountInstance.getSendMessagesHelper();
                 TLRPC$BotInlineMessage tLRPC$BotInlineMessage2 = tLRPC$BotInlineResult2.send_message;
-                sendMessagesHelper.sendMessage(tLRPC$BotInlineMessage2.message, j, messageObject, messageObject2, (TLRPC$WebPage) tLRPC$TL_webPagePending2, !tLRPC$BotInlineMessage2.no_webpage, tLRPC$BotInlineMessage2.entities, tLRPC$BotInlineMessage2.reply_markup, hashMap, z, i, (MessageObject.SendAnimationData) null, false);
+                sendMessagesHelper.sendMessage(tLRPC$BotInlineMessage2.message, j, messageObject, messageObject2, tLRPC$TL_webPagePending2, !tLRPC$BotInlineMessage2.no_webpage, tLRPC$BotInlineMessage2.entities, tLRPC$BotInlineMessage2.reply_markup, hashMap, z, i, (MessageObject.SendAnimationData) null, false);
             } else if (tLRPC$BotInlineMessage instanceof TLRPC$TL_botInlineMessageMediaVenue) {
                 TLRPC$TL_messageMediaVenue tLRPC$TL_messageMediaVenue = new TLRPC$TL_messageMediaVenue();
                 TLRPC$BotInlineMessage tLRPC$BotInlineMessage3 = tLRPC$BotInlineResult2.send_message;
@@ -15826,7 +15843,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             TLRPC$WebDocument tLRPC$WebDocument = tLRPC$BotInlineResult2.content;
             String str2 = tLRPC$WebDocument != null ? tLRPC$WebDocument.url : null;
             TLRPC$BotInlineMessage tLRPC$BotInlineMessage2 = tLRPC$BotInlineResult2.send_message;
-            sendMessagesHelper2.sendMessage(tLRPC$TL_photo, str2, j, messageObject, messageObject2, tLRPC$BotInlineMessage2.message, tLRPC$BotInlineMessage2.entities, tLRPC$BotInlineMessage2.reply_markup, (HashMap<String, String>) hashMap, z, i, 0, (Object) tLRPC$BotInlineResult);
+            sendMessagesHelper2.sendMessage(tLRPC$TL_photo, str2, j, messageObject, messageObject2, tLRPC$BotInlineMessage2.message, tLRPC$BotInlineMessage2.entities, tLRPC$BotInlineMessage2.reply_markup, hashMap, z, i, 0, tLRPC$BotInlineResult, false);
         } else if (tLRPC$TL_game != null) {
             accountInstance.getSendMessagesHelper().sendMessage(tLRPC$TL_game, j, tLRPC$BotInlineResult2.send_message.reply_markup, (HashMap<String, String>) hashMap, z, i);
         }
@@ -15998,24 +16015,24 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SendMessagesHelper.shouldSendWebPAsSticker(java.lang.String, android.net.Uri):boolean");
     }
 
-    public static void prepareSendingMedia(AccountInstance accountInstance, ArrayList<SendingMediaInfo> arrayList, long j, MessageObject messageObject, MessageObject messageObject2, InputContentInfoCompat inputContentInfoCompat, boolean z, boolean z2, MessageObject messageObject3, boolean z3, int i) {
-        boolean z4;
+    public static void prepareSendingMedia(AccountInstance accountInstance, ArrayList<SendingMediaInfo> arrayList, long j, MessageObject messageObject, MessageObject messageObject2, InputContentInfoCompat inputContentInfoCompat, boolean z, boolean z2, MessageObject messageObject3, boolean z3, int i, boolean z4) {
+        boolean z5;
         if (!arrayList.isEmpty()) {
             int size = arrayList.size();
             int i2 = 0;
             while (true) {
                 ArrayList<SendingMediaInfo> arrayList2 = arrayList;
                 if (i2 >= size) {
-                    z4 = z2;
+                    z5 = z2;
                     break;
                 } else if (arrayList2.get(i2).ttl > 0) {
-                    z4 = false;
+                    z5 = false;
                     break;
                 } else {
                     i2++;
                 }
             }
-            mediaSendQueue.postRunnable(new SendMessagesHelper$$ExternalSyntheticLambda11(arrayList, j, z, z4, accountInstance, messageObject3, messageObject, messageObject2, z3, i, inputContentInfoCompat));
+            mediaSendQueue.postRunnable(new SendMessagesHelper$$ExternalSyntheticLambda11(arrayList, j, z, z5, accountInstance, messageObject3, messageObject, messageObject2, z3, i, inputContentInfoCompat, z4));
         }
     }
 
@@ -16044,7 +16061,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         if (r5 == (r11 - 1)) goto L_0x0ccb;
      */
     /* JADX WARNING: Failed to process nested try/catch */
-    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r6v19, types: [boolean, int] */
+    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r6v19, types: [int, boolean] */
     /* JADX WARNING: Missing exception handler attribute for start block: B:234:0x060f */
     /* JADX WARNING: Multi-variable type inference failed */
     /* JADX WARNING: Removed duplicated region for block: B:133:0x02db A[Catch:{ Exception -> 0x02cc }] */
@@ -16077,7 +16094,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
     /* JADX WARNING: Removed duplicated region for block: B:81:0x0161  */
     /* JADX WARNING: Removed duplicated region for block: B:82:0x0166  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public static /* synthetic */ void lambda$prepareSendingMedia$91(java.util.ArrayList r65, long r66, boolean r68, boolean r69, org.telegram.messenger.AccountInstance r70, org.telegram.messenger.MessageObject r71, org.telegram.messenger.MessageObject r72, org.telegram.messenger.MessageObject r73, boolean r74, int r75, androidx.core.view.inputmethod.InputContentInfoCompat r76) {
+    public static /* synthetic */ void lambda$prepareSendingMedia$91(java.util.ArrayList r65, long r66, boolean r68, boolean r69, org.telegram.messenger.AccountInstance r70, org.telegram.messenger.MessageObject r71, org.telegram.messenger.MessageObject r72, org.telegram.messenger.MessageObject r73, boolean r74, int r75, androidx.core.view.inputmethod.InputContentInfoCompat r76, boolean r77) {
         /*
             r1 = r65
             r15 = r70
@@ -17332,18 +17349,18 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r11 = r56
             r0 = r16
         L_0x090f:
-            org.telegram.messenger.SendMessagesHelper$$ExternalSyntheticLambda77 r17 = new org.telegram.messenger.SendMessagesHelper$$ExternalSyntheticLambda77
-            r2 = r17
+            org.telegram.messenger.SendMessagesHelper$$ExternalSyntheticLambda77 r18 = new org.telegram.messenger.SendMessagesHelper$$ExternalSyntheticLambda77
+            r2 = r18
             r12 = r5
             r5 = r71
-            r18 = r6
+            r13 = r6
             r6 = r70
-            r13 = r8
+            r59 = r8
             r8 = r12
-            r59 = r9
+            r60 = r9
             r12 = 0
-            r9 = r18
-            r61 = r11
+            r9 = r13
+            r13 = r11
             r10 = r66
             r12 = r72
             r62 = r13
@@ -17352,19 +17369,20 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r63 = r15
             r15 = r74
             r16 = r75
-            r2.<init>(r3, r4, r5, r6, r7, r8, r9, r10, r12, r13, r14, r15, r16)
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r17)
+            r17 = r77
+            r2.<init>(r3, r4, r5, r6, r7, r8, r9, r10, r12, r13, r14, r15, r16, r17)
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r18)
             r4 = r43
             r5 = r44
             r3 = r46
             r2 = r49
             goto L_0x0996
         L_0x0942:
-            r62 = r8
+            r59 = r8
             r63 = r15
             r30 = r51
-            r59 = r54
-            r61 = r56
+            r60 = r54
+            r62 = r56
             r1 = r57
             r15 = r70
             if (r44 != 0) goto L_0x0970
@@ -17402,9 +17420,9 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r0 = r16
         L_0x0996:
             r41 = r58
-            r37 = r59
-            r31 = r61
-            r34 = r62
+            r34 = r59
+            r37 = r60
+            r31 = r62
             r53 = r63
             goto L_0x0714
         L_0x09a2:
@@ -17414,9 +17432,9 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r58 = r48
             r23 = r50
             r30 = r51
-            r62 = r52
-            r59 = r54
-            r61 = r56
+            r59 = r52
+            r60 = r54
+            r62 = r56
             r15 = r70
             if (r68 == 0) goto L_0x09b9
             r0 = 0
@@ -17527,13 +17545,13 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         L_0x0aa3:
             r1 = r2
             r31 = r3
-            r3 = r62
+            r3 = r59
             goto L_0x0ab2
         L_0x0aa9:
             r18 = r1
             r1 = r2
             r4 = r25
-            r3 = r62
+            r3 = r59
             r31 = 0
         L_0x0ab2:
             if (r3 != 0) goto L_0x0b1e
@@ -17825,7 +17843,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             java.lang.StringBuilder r2 = new java.lang.StringBuilder
             r2.<init>()
             r2.append(r10)
-            r9 = r59
+            r9 = r60
             r2.append(r9)
             java.lang.String r2 = r2.toString()
             r6.put(r11, r2)
@@ -17833,11 +17851,11 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             if (r1 == r2) goto L_0x0cc7
             r11 = r63
             int r2 = r11 + -1
-            r5 = r61
+            r5 = r62
             if (r5 != r2) goto L_0x0cdb
             goto L_0x0ccb
         L_0x0cc7:
-            r5 = r61
+            r5 = r62
             r11 = r63
         L_0x0ccb:
             r2 = r39
@@ -17845,8 +17863,8 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r28 = r25
             goto L_0x0cdb
         L_0x0cd3:
-            r9 = r59
-            r5 = r61
+            r9 = r60
+            r5 = r62
             r11 = r63
             r1 = r16
         L_0x0cdb:
@@ -17927,9 +17945,9 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r18 = r14
             r1 = r15
             r41 = r58
-            r37 = r59
-            r31 = r61
-            r34 = r62
+            r34 = r59
+            r37 = r60
+            r31 = r62
             r53 = r63
             r32 = 0
             r35 = 0
@@ -18119,7 +18137,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         L_0x0ee4:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SendMessagesHelper.lambda$prepareSendingMedia$91(java.util.ArrayList, long, boolean, boolean, org.telegram.messenger.AccountInstance, org.telegram.messenger.MessageObject, org.telegram.messenger.MessageObject, org.telegram.messenger.MessageObject, boolean, int, androidx.core.view.inputmethod.InputContentInfoCompat):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SendMessagesHelper.lambda$prepareSendingMedia$91(java.util.ArrayList, long, boolean, boolean, org.telegram.messenger.AccountInstance, org.telegram.messenger.MessageObject, org.telegram.messenger.MessageObject, org.telegram.messenger.MessageObject, boolean, int, androidx.core.view.inputmethod.InputContentInfoCompat, boolean):void");
     }
 
     /* access modifiers changed from: private */
@@ -18157,7 +18175,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         if (z) {
             str2 = sendingMediaInfo2.searchImage.imageUrl;
         }
-        sendMessagesHelper2.sendMessage(tLRPC$TL_photo, str2, j, messageObject2, messageObject3, sendingMediaInfo2.caption, sendingMediaInfo2.entities, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) hashMap, z2, i, sendingMediaInfo2.ttl, (Object) str);
+        sendMessagesHelper2.sendMessage(tLRPC$TL_photo, str2, j, messageObject2, messageObject3, sendingMediaInfo2.caption, sendingMediaInfo2.entities, (TLRPC$ReplyMarkup) null, hashMap, z2, i, sendingMediaInfo2.ttl, str, false);
     }
 
     /* access modifiers changed from: private */
@@ -18176,7 +18194,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$prepareSendingMedia$90(Bitmap[] bitmapArr, String[] strArr, MessageObject messageObject, AccountInstance accountInstance, TLRPC$TL_photo tLRPC$TL_photo, HashMap hashMap, String str, long j, MessageObject messageObject2, MessageObject messageObject3, SendingMediaInfo sendingMediaInfo, boolean z, int i) {
+    public static /* synthetic */ void lambda$prepareSendingMedia$90(Bitmap[] bitmapArr, String[] strArr, MessageObject messageObject, AccountInstance accountInstance, TLRPC$TL_photo tLRPC$TL_photo, HashMap hashMap, String str, long j, MessageObject messageObject2, MessageObject messageObject3, SendingMediaInfo sendingMediaInfo, boolean z, int i, boolean z2) {
         SendingMediaInfo sendingMediaInfo2 = sendingMediaInfo;
         if (!(bitmapArr[0] == null || strArr[0] == null)) {
             ImageLoader.getInstance().putImageToCache(new BitmapDrawable(bitmapArr[0]), strArr[0], false);
@@ -18185,7 +18203,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             accountInstance.getSendMessagesHelper().editMessage(messageObject, tLRPC$TL_photo, (VideoEditedInfo) null, (TLRPC$TL_document) null, (String) null, hashMap, false, str);
             return;
         }
-        accountInstance.getSendMessagesHelper().sendMessage(tLRPC$TL_photo, (String) null, j, messageObject2, messageObject3, sendingMediaInfo2.caption, sendingMediaInfo2.entities, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) hashMap, z, i, sendingMediaInfo2.ttl, (Object) str);
+        accountInstance.getSendMessagesHelper().sendMessage(tLRPC$TL_photo, (String) null, j, messageObject2, messageObject3, sendingMediaInfo2.caption, sendingMediaInfo2.entities, (TLRPC$ReplyMarkup) null, hashMap, z, i, sendingMediaInfo2.ttl, str, z2);
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:39:0x0080 A[SYNTHETIC, Splitter:B:39:0x0080] */

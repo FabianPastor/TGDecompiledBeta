@@ -4,7 +4,6 @@ import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
 import android.text.Layout;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -469,7 +468,7 @@ public class AnimatedEmojiSpan extends ReplacementSpan {
                     }
                 }
                 if (!z) {
-                    animatedEmojiDrawable2.removeView((Drawable.Callback) view);
+                    animatedEmojiDrawable2.removeView(view);
                     longSparseArray.remove(keyAt);
                 } else {
                     i3++;
@@ -506,7 +505,7 @@ public class AnimatedEmojiSpan extends ReplacementSpan {
             for (int i = 0; i < longSparseArray.size(); i++) {
                 AnimatedEmojiDrawable valueAt = longSparseArray.valueAt(i);
                 if (valueAt != null) {
-                    valueAt.removeView((Drawable.Callback) view);
+                    valueAt.removeView(view);
                 }
             }
             longSparseArray.clear();
@@ -720,11 +719,15 @@ public class AnimatedEmojiSpan extends ReplacementSpan {
     }
 
     public static AnimatedEmojiSpan cloneSpan(AnimatedEmojiSpan animatedEmojiSpan) {
+        AnimatedEmojiSpan animatedEmojiSpan2;
         TLRPC$Document tLRPC$Document = animatedEmojiSpan.document;
         if (tLRPC$Document != null) {
-            return new AnimatedEmojiSpan(tLRPC$Document, animatedEmojiSpan.fontMetrics);
+            animatedEmojiSpan2 = new AnimatedEmojiSpan(tLRPC$Document, animatedEmojiSpan.fontMetrics);
+        } else {
+            animatedEmojiSpan2 = new AnimatedEmojiSpan(animatedEmojiSpan.documentId, animatedEmojiSpan.scale, animatedEmojiSpan.fontMetrics);
         }
-        return new AnimatedEmojiSpan(animatedEmojiSpan.documentId, animatedEmojiSpan.scale, animatedEmojiSpan.fontMetrics);
+        animatedEmojiSpan2.fromEmojiKeyboard = animatedEmojiSpan.fromEmojiKeyboard;
+        return animatedEmojiSpan2;
     }
 
     public static CharSequence cloneSpans(CharSequence charSequence) {

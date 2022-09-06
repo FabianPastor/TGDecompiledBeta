@@ -3,67 +3,44 @@ package org.telegram.ui.Components.Premium;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
-import android.content.Context;
 import android.graphics.Canvas;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.Interpolator;
 import android.view.animation.OvershootInterpolator;
 import android.widget.OverScroller;
-import j$.util.Comparator$CC;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Utilities;
 
 public class CarouselView extends View implements PagerHeaderView {
-    static final Interpolator sQuinticInterpolator = CarouselView$$ExternalSyntheticLambda1.INSTANCE;
-    boolean autoPlayEnabled = true;
+    boolean autoPlayEnabled;
     ValueAnimator autoScrollAnimation;
-    /* access modifiers changed from: private */
-    public Runnable autoScrollRunnable = new Runnable() {
-        public void run() {
-            CarouselView carouselView = CarouselView.this;
-            if (carouselView.autoPlayEnabled) {
-                carouselView.scrollToInternal(carouselView.offsetAngle + (360.0f / ((float) carouselView.drawingObjects.size())));
-            }
-        }
-    };
+    private Runnable autoScrollRunnable;
     int cX;
     int cY;
-    Comparator<DrawingObject> comparator = Comparator$CC.comparingInt(CarouselView$$ExternalSyntheticLambda2.INSTANCE);
-    /* access modifiers changed from: private */
-    public final ArrayList<? extends DrawingObject> drawingObjects;
+    Comparator<DrawingObject> comparator;
+    private final ArrayList<? extends DrawingObject> drawingObjects;
     /* access modifiers changed from: private */
     public final ArrayList<? extends DrawingObject> drawingObjectsSorted;
-    boolean firstScroll = true;
-    boolean firstScroll1 = true;
-    boolean firstScrollEnabled = true;
+    boolean firstScroll;
+    boolean firstScroll1;
+    boolean firstScrollEnabled;
     GestureDetector gestureDetector;
     float lastFlingX;
-    float lastFlingY;
     int lastSelected;
-    float offsetAngle = 0.0f;
-    OverScroller overScroller = new OverScroller(getContext(), sQuinticInterpolator);
+    float offsetAngle;
+    OverScroller overScroller;
     boolean scrolled;
 
     public static class DrawingObject {
         public double angle;
-        CarouselView carouselView;
         public float x;
         public float y;
         float yRelative;
 
-        public boolean checkTap(float f, float f2) {
-            return false;
-        }
-
         public void draw(Canvas canvas, float f, float f2, float f3) {
-        }
-
-        public void hideAnimation() {
         }
 
         public void onAttachToWindow(View view, int i) {
@@ -76,124 +53,7 @@ public class CarouselView extends View implements PagerHeaderView {
         }
     }
 
-    /* access modifiers changed from: private */
-    public static /* synthetic */ float lambda$static$0(float f) {
-        float f2 = f - 1.0f;
-        return (f2 * f2 * f2 * f2 * f2) + 1.0f;
-    }
-
-    /* access modifiers changed from: private */
-    public static /* synthetic */ int lambda$new$1(DrawingObject drawingObject) {
-        return (int) (drawingObject.yRelative * 100.0f);
-    }
-
-    public CarouselView(Context context, final ArrayList<? extends DrawingObject> arrayList) {
-        super(context);
-        this.gestureDetector = new GestureDetector(context, new GestureDetector.OnGestureListener() {
-            double lastAngle;
-
-            public void onLongPress(MotionEvent motionEvent) {
-            }
-
-            public void onShowPress(MotionEvent motionEvent) {
-            }
-
-            public boolean onDown(MotionEvent motionEvent) {
-                double measuredHeight = (double) CarouselView.this.getMeasuredHeight();
-                Double.isNaN(measuredHeight);
-                if (((double) motionEvent.getY()) > measuredHeight * 0.2d) {
-                    double measuredHeight2 = (double) CarouselView.this.getMeasuredHeight();
-                    Double.isNaN(measuredHeight2);
-                    if (((double) motionEvent.getY()) < measuredHeight2 * 0.9d) {
-                        CarouselView.this.getParent().requestDisallowInterceptTouchEvent(true);
-                    }
-                }
-                ValueAnimator valueAnimator = CarouselView.this.autoScrollAnimation;
-                if (valueAnimator != null) {
-                    valueAnimator.removeAllListeners();
-                    CarouselView.this.autoScrollAnimation.cancel();
-                    CarouselView.this.autoScrollAnimation = null;
-                }
-                AndroidUtilities.cancelRunOnUIThread(CarouselView.this.autoScrollRunnable);
-                CarouselView.this.overScroller.abortAnimation();
-                this.lastAngle = Math.atan2((double) (motionEvent.getX() - ((float) CarouselView.this.cX)), (double) (motionEvent.getY() - ((float) CarouselView.this.cY)));
-                float size = 360.0f / ((float) arrayList.size());
-                CarouselView carouselView = CarouselView.this;
-                carouselView.lastSelected = (int) (carouselView.offsetAngle / size);
-                for (int i = 0; i < arrayList.size(); i++) {
-                    ((DrawingObject) arrayList.get(i)).hideAnimation();
-                }
-                return true;
-            }
-
-            public boolean onSingleTapUp(MotionEvent motionEvent) {
-                float x = motionEvent.getX();
-                float y = motionEvent.getY();
-                for (int size = CarouselView.this.drawingObjectsSorted.size() - 1; size >= 0; size--) {
-                    if (((DrawingObject) CarouselView.this.drawingObjectsSorted.get(size)).checkTap(x, y)) {
-                        if (((DrawingObject) CarouselView.this.drawingObjectsSorted.get(size)).angle % 360.0d != 270.0d) {
-                            double d = ((270.0d - (((DrawingObject) CarouselView.this.drawingObjectsSorted.get(size)).angle % 360.0d)) + 180.0d) % 360.0d;
-                            if (d > 180.0d) {
-                                d = -(360.0d - d);
-                            }
-                            CarouselView carouselView = CarouselView.this;
-                            carouselView.scrollToInternal(carouselView.offsetAngle + ((float) d));
-                            CarouselView.this.performHapticFeedback(3);
-                        }
-                        return true;
-                    }
-                }
-                return false;
-            }
-
-            public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent2, float f, float f2) {
-                double atan2 = Math.atan2((double) (motionEvent2.getX() - ((float) CarouselView.this.cX)), (double) (motionEvent2.getY() - ((float) CarouselView.this.cY)));
-                double d = this.lastAngle - atan2;
-                this.lastAngle = atan2;
-                CarouselView carouselView = CarouselView.this;
-                double d2 = (double) carouselView.offsetAngle;
-                double degrees = Math.toDegrees(d);
-                Double.isNaN(d2);
-                carouselView.offsetAngle = (float) (d2 + degrees);
-                CarouselView.this.checkSelectedHaptic();
-                CarouselView.this.invalidate();
-                return true;
-            }
-
-            public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent2, float f, float f2) {
-                CarouselView carouselView = CarouselView.this;
-                carouselView.lastFlingY = 0.0f;
-                carouselView.lastFlingX = 0.0f;
-                double atan2 = Math.atan2((double) (motionEvent2.getX() - ((float) CarouselView.this.cX)), (double) (motionEvent2.getY() - ((float) CarouselView.this.cY)));
-                double cos = Math.cos(atan2);
-                double d = (double) f;
-                Double.isNaN(d);
-                double sin = Math.sin(atan2);
-                double d2 = (double) f2;
-                Double.isNaN(d2);
-                CarouselView.this.overScroller.fling(0, 0, (int) ((float) ((cos * d) - (sin * d2))), 0, Integer.MIN_VALUE, Integer.MAX_VALUE, Integer.MIN_VALUE, Integer.MAX_VALUE);
-                if (CarouselView.this.overScroller.isFinished()) {
-                    CarouselView.this.scheduleAutoscroll();
-                }
-                CarouselView.this.invalidate();
-                return true;
-            }
-        });
-        this.drawingObjects = arrayList;
-        this.drawingObjectsSorted = new ArrayList<>(arrayList);
-        for (int i = 0; i < arrayList.size() / 2; i++) {
-            float f = (float) i;
-            ((DrawingObject) arrayList.get(i)).y = ((float) arrayList.size()) / f;
-            ((DrawingObject) arrayList.get((arrayList.size() - 1) - i)).y = ((float) arrayList.size()) / f;
-        }
-        Collections.sort(arrayList, this.comparator);
-        for (int i2 = 0; i2 < arrayList.size(); i2++) {
-            ((DrawingObject) arrayList.get(i2)).carouselView = this;
-        }
-    }
-
-    /* access modifiers changed from: private */
-    public void checkSelectedHaptic() {
+    private void checkSelectedHaptic() {
         int size = (int) (this.offsetAngle / (360.0f / ((float) this.drawingObjects.size())));
         if (this.lastSelected != size) {
             this.lastSelected = size;
@@ -201,8 +61,7 @@ public class CarouselView extends View implements PagerHeaderView {
         }
     }
 
-    /* access modifiers changed from: private */
-    public void scrollToInternal(final float f) {
+    private void scrollToInternal(final float f) {
         if (Math.abs(f - this.offsetAngle) >= 1.0f || this.autoScrollAnimation != null) {
             AndroidUtilities.cancelRunOnUIThread(this.autoScrollRunnable);
             ValueAnimator valueAnimator = this.autoScrollAnimation;
@@ -517,19 +376,6 @@ public class CarouselView extends View implements PagerHeaderView {
         float clamp = 1.0f - Utilities.clamp(Math.abs(f) / ((float) getMeasuredWidth()), 1.0f, 0.0f);
         setScaleX(clamp);
         setScaleY(clamp);
-    }
-
-    public void autoplayToNext() {
-        AndroidUtilities.cancelRunOnUIThread(this.autoScrollRunnable);
-        if (this.autoPlayEnabled) {
-            ArrayList<? extends DrawingObject> arrayList = this.drawingObjectsSorted;
-            int indexOf = this.drawingObjects.indexOf((DrawingObject) arrayList.get(arrayList.size() - 1)) - 1;
-            if (indexOf < 0) {
-                indexOf = this.drawingObjects.size() - 1;
-            }
-            ((DrawingObject) this.drawingObjects.get(indexOf)).select();
-            AndroidUtilities.runOnUIThread(this.autoScrollRunnable, 16);
-        }
     }
 
     /* access modifiers changed from: package-private */

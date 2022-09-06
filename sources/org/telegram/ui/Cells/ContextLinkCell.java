@@ -159,7 +159,7 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
         setWillNotDraw(false);
     }
 
-    /* JADX WARNING: type inference failed for: r3v1, types: [boolean, int] */
+    /* JADX WARNING: type inference failed for: r3v1, types: [int, boolean] */
     /* JADX WARNING: type inference failed for: r11v34, types: [org.telegram.tgnet.TLRPC$WebDocument] */
     /* JADX WARNING: type inference failed for: r11v37, types: [org.telegram.tgnet.TLRPC$WebDocument] */
     /* JADX WARNING: type inference failed for: r3v24 */
