@@ -8,18 +8,14 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda26
     public final /* synthetic */ MessagesController f$0;
     public final /* synthetic */ int f$1;
     public final /* synthetic */ int f$2;
-    public final /* synthetic */ int f$3;
-    public final /* synthetic */ int f$4;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda263(MessagesController messagesController, int i, int i2, int i3, int i4) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda263(MessagesController messagesController, int i, int i2) {
         this.f$0 = messagesController;
         this.f$1 = i;
         this.f$2 = i2;
-        this.f$3 = i3;
-        this.f$4 = i4;
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$resetDialogs$168(this.f$1, this.f$2, this.f$3, this.f$4, tLObject, tLRPC$TL_error);
+        this.f$0.lambda$getDifference$284(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
     }
 }

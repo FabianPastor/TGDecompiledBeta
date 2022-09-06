@@ -10,6 +10,6 @@ public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda81 impl
     }
 
     public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return AlertsCreator.lambda$createSoundFrequencyPickerDialog$69(view, motionEvent);
+        return AlertsCreator.lambda$createAutoDeleteDatePickerDialog$69(view, motionEvent);
     }
 }

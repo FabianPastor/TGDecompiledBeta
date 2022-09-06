@@ -11,6 +11,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda36
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        MessagesController.lambda$installTheme$96(tLObject, tLRPC$TL_error);
+        MessagesController.lambda$markMessageContentAsRead$192(tLObject, tLRPC$TL_error);
     }
 }

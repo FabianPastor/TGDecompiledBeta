@@ -1,5 +1,6 @@
 package org.telegram.ui.Components;
 
+import org.telegram.messenger.LocaleController;
 import org.telegram.ui.Components.NumberPicker;
 
 public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda112 implements NumberPicker.Formatter {
@@ -9,6 +10,6 @@ public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda112 imp
     }
 
     public final String format(int i) {
-        return String.format("%02d", new Object[]{Integer.valueOf(i)});
+        return LocaleController.formatPluralString("Minutes", i + 1, new Object[0]);
     }
 }

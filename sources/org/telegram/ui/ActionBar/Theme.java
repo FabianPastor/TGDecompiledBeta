@@ -81,7 +81,7 @@ import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.MessagesController$$ExternalSyntheticLambda219;
+import org.telegram.messenger.MessagesController$$ExternalSyntheticLambda220;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
@@ -10823,7 +10823,7 @@ public class Theme {
             r5 = 0
         L_0x3987:
             applyTheme(r0, r1, r1, r5)
-            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda219 r0 = org.telegram.messenger.MessagesController$$ExternalSyntheticLambda219.INSTANCE
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda220 r0 = org.telegram.messenger.MessagesController$$ExternalSyntheticLambda220.INSTANCE
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
             org.telegram.ui.ActionBar.Theme$9 r0 = new org.telegram.ui.ActionBar.Theme$9
             r0.<init>()
@@ -12221,7 +12221,7 @@ public class Theme {
             switchNightThemeDelay = r0     // Catch:{ Exception -> 0x01e8 }
             long r0 = android.os.SystemClock.elapsedRealtime()     // Catch:{ Exception -> 0x01e8 }
             lastDelayUpdateTime = r0     // Catch:{ Exception -> 0x01e8 }
-            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda219 r0 = org.telegram.messenger.MessagesController$$ExternalSyntheticLambda219.INSTANCE     // Catch:{ Exception -> 0x01e8 }
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda220 r0 = org.telegram.messenger.MessagesController$$ExternalSyntheticLambda220.INSTANCE     // Catch:{ Exception -> 0x01e8 }
             r1 = 2100(0x834, double:1.0375E-320)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0, r1)     // Catch:{ Exception -> 0x01e8 }
         L_0x01e2:
@@ -12271,7 +12271,7 @@ public class Theme {
                             if (isCurrentThemeNight()) {
                                 switchNightThemeDelay = 2000;
                                 lastDelayUpdateTime = SystemClock.elapsedRealtime();
-                                AndroidUtilities.runOnUIThread(MessagesController$$ExternalSyntheticLambda219.INSTANCE, 2100);
+                                AndroidUtilities.runOnUIThread(MessagesController$$ExternalSyntheticLambda220.INSTANCE, 2100);
                             }
                         }
                         currentTheme = themeInfo;
@@ -12479,7 +12479,7 @@ public class Theme {
             switchNightThemeDelay = r7     // Catch:{ Exception -> 0x0180 }
             long r1 = android.os.SystemClock.elapsedRealtime()     // Catch:{ Exception -> 0x0180 }
             lastDelayUpdateTime = r1     // Catch:{ Exception -> 0x0180 }
-            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda219 r7 = org.telegram.messenger.MessagesController$$ExternalSyntheticLambda219.INSTANCE     // Catch:{ Exception -> 0x0180 }
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda220 r7 = org.telegram.messenger.MessagesController$$ExternalSyntheticLambda220.INSTANCE     // Catch:{ Exception -> 0x0180 }
             r1 = 2100(0x834, double:1.0375E-320)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r7, r1)     // Catch:{ Exception -> 0x0180 }
         L_0x017a:

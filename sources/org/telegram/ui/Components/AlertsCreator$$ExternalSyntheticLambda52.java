@@ -14,6 +14,6 @@ public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda52 impl
     }
 
     public final void onClick(View view) {
-        AlertsCreator.lambda$createSingleChoiceDialog$106(this.f$0, this.f$1, view);
+        AlertsCreator.lambda$createSingleChoiceDialog$112(this.f$0, this.f$1, view);
     }
 }

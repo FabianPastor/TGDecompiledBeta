@@ -59,7 +59,6 @@ public class EmojiTabsStrip extends ScrollableHorizontalScrollView {
     private boolean recentFirstChange = true;
     /* access modifiers changed from: private */
     public boolean recentIsShown = true;
-    /* access modifiers changed from: private */
     public EmojiTabButton recentTab;
     /* access modifiers changed from: private */
     public HashMap<View, Rect> removingViews = new HashMap<>();
@@ -211,9 +210,9 @@ public class EmojiTabsStrip extends ScrollableHorizontalScrollView {
                 if (EmojiTabsStrip.this.emojiTabs != null) {
                     f = MathUtils.clamp(1.0f - Math.abs(EmojiTabsStrip.this.selectT - 1.0f), 0.0f, 1.0f);
                 }
-                float access$600 = EmojiTabsStrip.this.selectAnimationT * 4.0f * (1.0f - EmojiTabsStrip.this.selectAnimationT);
-                float width = (this.rect.width() / 2.0f) * ((0.3f * access$600) + 1.0f);
-                float height = (this.rect.height() / 2.0f) * (1.0f - (access$600 * 0.05f));
+                float access$500 = EmojiTabsStrip.this.selectAnimationT * 4.0f * (1.0f - EmojiTabsStrip.this.selectAnimationT);
+                float width = (this.rect.width() / 2.0f) * ((0.3f * access$500) + 1.0f);
+                float height = (this.rect.height() / 2.0f) * (1.0f - (access$500 * 0.05f));
                 RectF rectF = this.rect;
                 rectF.set(rectF.centerX() - width, this.rect.centerY() - height, this.rect.centerX() + width, this.rect.centerY() + height);
                 float dp = (float) AndroidUtilities.dp(AndroidUtilities.lerp(8.0f, 16.0f, f));

@@ -16,6 +16,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda29
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$loadUnknownDialog$167(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
+        this.f$0.lambda$deleteMessages$102(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
     }
 }

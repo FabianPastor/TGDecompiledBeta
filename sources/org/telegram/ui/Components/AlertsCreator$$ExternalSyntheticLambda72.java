@@ -4,14 +4,12 @@ import android.view.View;
 
 public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda72 implements View.OnClickListener {
     public final /* synthetic */ boolean[] f$0;
-    public final /* synthetic */ int f$1;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda72(boolean[] zArr, int i) {
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda72(boolean[] zArr) {
         this.f$0 = zArr;
-        this.f$1 = i;
     }
 
     public final void onClick(View view) {
-        AlertsCreator.lambda$createBlockDialogAlert$38(this.f$0, this.f$1, view);
+        AlertsCreator.lambda$createClearDaysDialogAlert$26(this.f$0, view);
     }
 }

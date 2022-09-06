@@ -1,16 +1,14 @@
 package org.telegram.ui.Components;
 
-import android.widget.LinearLayout;
 import org.telegram.ui.Components.NumberPicker;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda121 implements NumberPicker.OnValueChangeListener {
-    public final /* synthetic */ LinearLayout f$0;
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda121 implements NumberPicker.Formatter {
+    public static final /* synthetic */ AlertsCreator$$ExternalSyntheticLambda121 INSTANCE = new AlertsCreator$$ExternalSyntheticLambda121();
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda121(LinearLayout linearLayout) {
-        this.f$0 = linearLayout;
+    private /* synthetic */ AlertsCreator$$ExternalSyntheticLambda121() {
     }
 
-    public final void onValueChange(NumberPicker numberPicker, int i, int i2) {
-        AlertsCreator.lambda$createAutoDeleteDatePickerDialog$64(this.f$0, numberPicker, i, i2);
+    public final String format(int i) {
+        return String.format("%02d", new Object[]{Integer.valueOf(i)});
     }
 }

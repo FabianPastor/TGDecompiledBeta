@@ -436,17 +436,19 @@ public class AnimatedEmojiDrawable extends Drawable {
     /* JADX WARNING: Removed duplicated region for block: B:67:0x01ac  */
     /* JADX WARNING: Removed duplicated region for block: B:70:0x01e8  */
     /* JADX WARNING: Removed duplicated region for block: B:80:0x0206  */
-    /* JADX WARNING: Removed duplicated region for block: B:81:0x0216  */
+    /* JADX WARNING: Removed duplicated region for block: B:81:0x0217  */
+    /* JADX WARNING: Removed duplicated region for block: B:86:0x0235  */
+    /* JADX WARNING: Removed duplicated region for block: B:87:0x0237  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private void initDocument() {
         /*
             r30 = this;
             r0 = r30
             org.telegram.tgnet.TLRPC$Document r1 = r0.document
-            if (r1 == 0) goto L_0x0231
+            if (r1 == 0) goto L_0x0248
             org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
             if (r1 == 0) goto L_0x000c
-            goto L_0x0231
+            goto L_0x0248
         L_0x000c:
             org.telegram.ui.Components.AnimatedEmojiDrawable$1 r1 = new org.telegram.ui.Components.AnimatedEmojiDrawable$1
             r1.<init>()
@@ -475,14 +477,14 @@ public class AnimatedEmojiDrawable extends Drawable {
             r3 = 1
             r1.setVideoThumbIsSame(r3)
             int r1 = org.telegram.messenger.SharedConfig.getDevicePerformanceClass()
-            r4 = 5
-            r5 = 3
+            r4 = 3
+            r5 = 5
             r6 = 2
             if (r1 != 0) goto L_0x0059
             int r1 = r0.cacheType
             if (r1 == r6) goto L_0x0057
-            if (r1 == r5) goto L_0x0057
-            if (r1 != r4) goto L_0x0059
+            if (r1 == r4) goto L_0x0057
+            if (r1 != r5) goto L_0x0059
         L_0x0057:
             r1 = 1
             goto L_0x005a
@@ -690,15 +692,16 @@ public class AnimatedEmojiDrawable extends Drawable {
             org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
             r1.setAspectFit(r3)
             int r1 = r0.cacheType
-            if (r1 == r10) goto L_0x0216
+            if (r1 == r10) goto L_0x0217
             org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
             r1.setAllowStartLottieAnimation(r3)
             org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
             r1.setAllowStartAnimation(r3)
             org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
             r1.setAutoRepeat(r3)
-            goto L_0x0226
-        L_0x0216:
+            r2 = 0
+            goto L_0x0227
+        L_0x0217:
             org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
             r2 = 0
             r1.setAllowStartAnimation(r2)
@@ -706,12 +709,27 @@ public class AnimatedEmojiDrawable extends Drawable {
             r1.setAllowStartLottieAnimation(r2)
             org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
             r1.setAutoRepeat(r2)
-        L_0x0226:
+        L_0x0227:
             org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
             r1.setAllowDecodeSingleFrame(r3)
+            int r1 = r0.cacheType
+            r3 = 5
+            if (r1 == r3) goto L_0x0237
+            r3 = 6
+            if (r1 != r3) goto L_0x0235
+            goto L_0x0237
+        L_0x0235:
+            r7 = 0
+            goto L_0x023d
+        L_0x0237:
+            r1 = 1086324736(0x40CLASSNAME, float:6.0)
+            int r7 = org.telegram.messenger.AndroidUtilities.dp(r1)
+        L_0x023d:
+            org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
+            r1.setRoundRadius((int) r7)
             r30.updateAttachState()
             r30.invalidate()
-        L_0x0231:
+        L_0x0248:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AnimatedEmojiDrawable.initDocument():void");

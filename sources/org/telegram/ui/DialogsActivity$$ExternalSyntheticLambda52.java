@@ -10,6 +10,6 @@ public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda52 im
     }
 
     public final void run(int i) {
-        this.f$0.lambda$onResume$18(i);
+        this.f$0.lambda$onResume$19(i);
     }
 }

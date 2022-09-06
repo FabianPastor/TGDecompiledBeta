@@ -2409,10 +2409,11 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         /* access modifiers changed from: private */
         /* JADX WARNING: Removed duplicated region for block: B:17:0x0050  */
         /* JADX WARNING: Removed duplicated region for block: B:23:0x006a  */
-        /* JADX WARNING: Removed duplicated region for block: B:28:0x00ca  */
-        /* JADX WARNING: Removed duplicated region for block: B:37:0x012e  */
-        /* JADX WARNING: Removed duplicated region for block: B:42:0x01d0  */
-        /* JADX WARNING: Removed duplicated region for block: B:47:0x0215  */
+        /* JADX WARNING: Removed duplicated region for block: B:32:0x00d6  */
+        /* JADX WARNING: Removed duplicated region for block: B:35:0x00e3  */
+        /* JADX WARNING: Removed duplicated region for block: B:39:0x0136  */
+        /* JADX WARNING: Removed duplicated region for block: B:44:0x01d8  */
+        /* JADX WARNING: Removed duplicated region for block: B:49:0x021d  */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public void handleVideoFrameAvailable(long r28, java.lang.Integer r30) {
             /*
@@ -2520,15 +2521,18 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 r6 = 5
                 r7 = 36197(0x8d65, float:5.0723E-41)
                 r10 = 1065353216(0x3var_, float:1.0)
-                if (r0 == 0) goto L_0x0126
+                if (r0 == 0) goto L_0x012e
+                org.telegram.ui.Components.InstantCameraView r0 = org.telegram.ui.Components.InstantCameraView.this
+                java.nio.FloatBuffer r0 = r0.oldTextureTextureBuffer
+                if (r0 == 0) goto L_0x012e
                 boolean r0 = r1.blendEnabled
-                if (r0 != 0) goto L_0x00d3
+                if (r0 != 0) goto L_0x00db
                 android.opengl.GLES20.glEnable(r2)
                 r1.blendEnabled = r4
-            L_0x00d3:
+            L_0x00db:
                 org.telegram.ui.Components.InstantCameraView r0 = org.telegram.ui.Components.InstantCameraView.this
                 org.telegram.messenger.camera.Size r0 = r0.oldTexturePreviewSize
-                if (r0 == 0) goto L_0x00f6
+                if (r0 == 0) goto L_0x00fe
                 int r0 = r1.previewSizeHandle
                 org.telegram.ui.Components.InstantCameraView r11 = org.telegram.ui.Components.InstantCameraView.this
                 org.telegram.messenger.camera.Size r11 = r11.oldTexturePreviewSize
@@ -2539,7 +2543,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 int r12 = r12.getHeight()
                 float r12 = (float) r12
                 android.opengl.GLES20.glUniform2f(r0, r11, r12)
-            L_0x00f6:
+            L_0x00fe:
                 int r13 = r1.textureHandle
                 r14 = 2
                 r15 = 5126(0x1406, float:7.183E-42)
@@ -2559,10 +2563,10 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 r0 = r0[r5]
                 android.opengl.GLES20.glBindTexture(r7, r0)
                 android.opengl.GLES20.glDrawArrays(r6, r5, r3)
-            L_0x0126:
+            L_0x012e:
                 org.telegram.ui.Components.InstantCameraView r0 = org.telegram.ui.Components.InstantCameraView.this
                 org.telegram.messenger.camera.Size r0 = r0.previewSize
-                if (r0 == 0) goto L_0x0149
+                if (r0 == 0) goto L_0x0151
                 int r0 = r1.previewSizeHandle
                 org.telegram.ui.Components.InstantCameraView r11 = org.telegram.ui.Components.InstantCameraView.this
                 org.telegram.messenger.camera.Size r11 = r11.previewSize
@@ -2573,7 +2577,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 int r12 = r12.getHeight()
                 float r12 = (float) r12
                 android.opengl.GLES20.glUniform2f(r0, r11, r12)
-            L_0x0149:
+            L_0x0151:
                 int r13 = r1.positionHandle
                 r14 = 3
                 r15 = 5126(0x1406, float:7.183E-42)
@@ -2624,11 +2628,11 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 org.telegram.ui.Components.InstantCameraView r0 = org.telegram.ui.Components.InstantCameraView.this
                 int[] r0 = r0.oldCameraTexture
                 r0 = r0[r5]
-                if (r0 == 0) goto L_0x0215
+                if (r0 == 0) goto L_0x021d
                 org.telegram.ui.Components.InstantCameraView r0 = org.telegram.ui.Components.InstantCameraView.this
                 float r0 = r0.cameraTextureAlpha
                 int r0 = (r0 > r10 ? 1 : (r0 == r10 ? 0 : -1))
-                if (r0 >= 0) goto L_0x0215
+                if (r0 >= 0) goto L_0x021d
                 org.telegram.ui.Components.InstantCameraView r0 = org.telegram.ui.Components.InstantCameraView.this
                 float r3 = (float) r8
                 r6 = 1295957024(0x4d3ebCLASSNAME, float:2.0E8)
@@ -2637,7 +2641,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 org.telegram.ui.Components.InstantCameraView r0 = org.telegram.ui.Components.InstantCameraView.this
                 float r0 = r0.cameraTextureAlpha
                 int r0 = (r0 > r10 ? 1 : (r0 == r10 ? 0 : -1))
-                if (r0 <= 0) goto L_0x022a
+                if (r0 <= 0) goto L_0x0232
                 android.opengl.GLES20.glDisable(r2)
                 r1.blendEnabled = r5
                 org.telegram.ui.Components.InstantCameraView r0 = org.telegram.ui.Components.InstantCameraView.this
@@ -2650,23 +2654,23 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 r0[r5] = r5
                 org.telegram.ui.Components.InstantCameraView r0 = org.telegram.ui.Components.InstantCameraView.this
                 boolean r0 = r0.cameraReady
-                if (r0 != 0) goto L_0x022a
+                if (r0 != 0) goto L_0x0232
                 org.telegram.ui.Components.InstantCameraView r0 = org.telegram.ui.Components.InstantCameraView.this
                 boolean unused = r0.cameraReady = r4
                 org.telegram.ui.Components.InstantCameraView$VideoRecorder$$ExternalSyntheticLambda3 r0 = new org.telegram.ui.Components.InstantCameraView$VideoRecorder$$ExternalSyntheticLambda3
                 r0.<init>(r1)
                 org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
-                goto L_0x022a
-            L_0x0215:
+                goto L_0x0232
+            L_0x021d:
                 org.telegram.ui.Components.InstantCameraView r0 = org.telegram.ui.Components.InstantCameraView.this
                 boolean r0 = r0.cameraReady
-                if (r0 != 0) goto L_0x022a
+                if (r0 != 0) goto L_0x0232
                 org.telegram.ui.Components.InstantCameraView r0 = org.telegram.ui.Components.InstantCameraView.this
                 boolean unused = r0.cameraReady = r4
                 org.telegram.ui.Components.InstantCameraView$VideoRecorder$$ExternalSyntheticLambda1 r0 = new org.telegram.ui.Components.InstantCameraView$VideoRecorder$$ExternalSyntheticLambda1
                 r0.<init>(r1)
                 org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
-            L_0x022a:
+            L_0x0232:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.InstantCameraView.VideoRecorder.handleVideoFrameAvailable(long, java.lang.Integer):void");

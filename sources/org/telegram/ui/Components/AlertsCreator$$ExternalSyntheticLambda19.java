@@ -11,6 +11,6 @@ public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda19 impl
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.run(1);
+        this.f$0.run(0);
     }
 }

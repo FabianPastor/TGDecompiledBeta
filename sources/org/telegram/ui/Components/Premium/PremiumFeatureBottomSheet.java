@@ -75,212 +75,217 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
     public PremiumFeatureBottomSheet(BaseFragment baseFragment, Context context, int i, int i2, boolean z, PremiumPreviewFragment.SubscriptionTier subscriptionTier) {
         super(context, false);
+        BaseFragment baseFragment2 = baseFragment;
         int i3 = i2;
         boolean z2 = z;
         this.premiumFeatures = new ArrayList<>();
-        this.selectedTier = subscriptionTier;
-        fixNavigationBar();
-        this.startType = i3;
-        this.onlySelectedType = z2;
-        this.svgIcon = SvgHelper.getDrawable(RLottieDrawable.readRes((File) null, R.raw.star_loader));
-        AnonymousClass1 r4 = new FrameLayout(getContext()) {
-            /* access modifiers changed from: protected */
-            public void onMeasure(int i, int i2) {
-                if (PremiumFeatureBottomSheet.this.isPortrait) {
-                    PremiumFeatureBottomSheet.this.contentHeight = View.MeasureSpec.getSize(i);
-                } else {
-                    PremiumFeatureBottomSheet.this.contentHeight = (int) (((float) View.MeasureSpec.getSize(i2)) * 0.65f);
+        if (baseFragment2 != null) {
+            this.selectedTier = subscriptionTier;
+            fixNavigationBar();
+            this.startType = i3;
+            this.onlySelectedType = z2;
+            this.svgIcon = SvgHelper.getDrawable(RLottieDrawable.readRes((File) null, R.raw.star_loader));
+            AnonymousClass1 r5 = new FrameLayout(getContext()) {
+                /* access modifiers changed from: protected */
+                public void onMeasure(int i, int i2) {
+                    if (PremiumFeatureBottomSheet.this.isPortrait) {
+                        PremiumFeatureBottomSheet.this.contentHeight = View.MeasureSpec.getSize(i);
+                    } else {
+                        PremiumFeatureBottomSheet.this.contentHeight = (int) (((float) View.MeasureSpec.getSize(i2)) * 0.65f);
+                    }
+                    super.onMeasure(i, i2);
                 }
-                super.onMeasure(i, i2);
+            };
+            PremiumPreviewFragment.fillPremiumFeaturesList(this.premiumFeatures, i);
+            int i4 = 0;
+            while (true) {
+                if (i4 >= this.premiumFeatures.size()) {
+                    i4 = 0;
+                    break;
+                }
+                if (this.premiumFeatures.get(i4).type == 0) {
+                    this.premiumFeatures.remove(i4);
+                    i4--;
+                } else if (this.premiumFeatures.get(i4).type == i3) {
+                    break;
+                }
+                i4++;
             }
-        };
-        PremiumPreviewFragment.fillPremiumFeaturesList(this.premiumFeatures, i);
-        int i4 = 0;
-        while (true) {
-            if (i4 >= this.premiumFeatures.size()) {
+            if (z2) {
+                this.premiumFeatures.clear();
+                this.premiumFeatures.add(this.premiumFeatures.get(i4));
                 i4 = 0;
-                break;
             }
-            if (this.premiumFeatures.get(i4).type == 0) {
-                this.premiumFeatures.remove(i4);
-                i4--;
-            } else if (this.premiumFeatures.get(i4).type == i3) {
-                break;
-            }
-            i4++;
-        }
-        if (z2) {
-            this.premiumFeatures.clear();
-            this.premiumFeatures.add(this.premiumFeatures.get(i4));
-            i4 = 0;
-        }
-        PremiumPreviewFragment.PremiumFeatureData premiumFeatureData = this.premiumFeatures.get(i4);
-        setApplyBottomPadding(false);
-        this.useBackgroundTopPadding = false;
-        final PremiumGradient.GradientTools gradientTools = new PremiumGradient.GradientTools("premiumGradientBottomSheet1", "premiumGradientBottomSheet2", "premiumGradientBottomSheet3", (String) null);
-        gradientTools.x1 = 0.0f;
-        gradientTools.y1 = 1.1f;
-        gradientTools.x2 = 1.5f;
-        gradientTools.y2 = -0.2f;
-        gradientTools.exactly = true;
-        this.content = new FrameLayout(getContext()) {
-            /* access modifiers changed from: protected */
-            public void onMeasure(int i, int i2) {
-                super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(PremiumFeatureBottomSheet.this.contentHeight + AndroidUtilities.dp(2.0f), NUM));
-            }
-
-            /* access modifiers changed from: protected */
-            public void dispatchDraw(Canvas canvas) {
-                gradientTools.gradientMatrix(0, 0, getMeasuredWidth(), getMeasuredHeight(), 0.0f, 0.0f);
-                RectF rectF = AndroidUtilities.rectTmp;
-                rectF.set(0.0f, (float) AndroidUtilities.dp(2.0f), (float) getMeasuredWidth(), (float) (getMeasuredHeight() + AndroidUtilities.dp(18.0f)));
-                canvas.save();
-                canvas.clipRect(0, 0, getMeasuredWidth(), getMeasuredHeight());
-                canvas.drawRoundRect(rectF, (float) (AndroidUtilities.dp(12.0f) - 1), (float) (AndroidUtilities.dp(12.0f) - 1), gradientTools.paint);
-                canvas.restore();
-                super.dispatchDraw(canvas);
-            }
-        };
-        FrameLayout frameLayout = new FrameLayout(getContext());
-        ImageView imageView = new ImageView(getContext());
-        imageView.setImageResource(R.drawable.msg_close);
-        imageView.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(12.0f), ColorUtils.setAlphaComponent(-1, 40), ColorUtils.setAlphaComponent(-1, 100)));
-        frameLayout.addView(imageView, LayoutHelper.createFrame(24, 24, 17));
-        frameLayout.setOnClickListener(new PremiumFeatureBottomSheet$$ExternalSyntheticLambda1(this));
-        r4.addView(this.content, LayoutHelper.createLinear(-1, -2, 1, 0, 16, 0, 0));
-        AnonymousClass3 r8 = new ViewPager(getContext()) {
-            /* access modifiers changed from: protected */
-            public void onMeasure(int i, int i2) {
-                int dp = AndroidUtilities.dp(100.0f);
-                if (getChildCount() > 0) {
-                    getChildAt(0).measure(i, View.MeasureSpec.makeMeasureSpec(0, 0));
-                    dp = getChildAt(0).getMeasuredHeight();
+            PremiumPreviewFragment.PremiumFeatureData premiumFeatureData = this.premiumFeatures.get(i4);
+            setApplyBottomPadding(false);
+            this.useBackgroundTopPadding = false;
+            final PremiumGradient.GradientTools gradientTools = new PremiumGradient.GradientTools("premiumGradientBottomSheet1", "premiumGradientBottomSheet2", "premiumGradientBottomSheet3", (String) null);
+            gradientTools.x1 = 0.0f;
+            gradientTools.y1 = 1.1f;
+            gradientTools.x2 = 1.5f;
+            gradientTools.y2 = -0.2f;
+            gradientTools.exactly = true;
+            this.content = new FrameLayout(getContext()) {
+                /* access modifiers changed from: protected */
+                public void onMeasure(int i, int i2) {
+                    super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(PremiumFeatureBottomSheet.this.contentHeight + AndroidUtilities.dp(2.0f), NUM));
                 }
-                super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(dp, NUM));
-            }
 
-            public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
-                try {
-                    return super.onInterceptTouchEvent(motionEvent);
-                } catch (Exception unused) {
-                    return false;
+                /* access modifiers changed from: protected */
+                public void dispatchDraw(Canvas canvas) {
+                    gradientTools.gradientMatrix(0, 0, getMeasuredWidth(), getMeasuredHeight(), 0.0f, 0.0f);
+                    RectF rectF = AndroidUtilities.rectTmp;
+                    rectF.set(0.0f, (float) AndroidUtilities.dp(2.0f), (float) getMeasuredWidth(), (float) (getMeasuredHeight() + AndroidUtilities.dp(18.0f)));
+                    canvas.save();
+                    canvas.clipRect(0, 0, getMeasuredWidth(), getMeasuredHeight());
+                    canvas.drawRoundRect(rectF, (float) (AndroidUtilities.dp(12.0f) - 1), (float) (AndroidUtilities.dp(12.0f) - 1), gradientTools.paint);
+                    canvas.restore();
+                    super.dispatchDraw(canvas);
                 }
-            }
-
-            public boolean onTouchEvent(MotionEvent motionEvent) {
-                if (PremiumFeatureBottomSheet.this.enterAnimationIsRunning) {
-                    return false;
+            };
+            FrameLayout frameLayout = new FrameLayout(getContext());
+            ImageView imageView = new ImageView(getContext());
+            imageView.setImageResource(R.drawable.msg_close);
+            imageView.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(12.0f), ColorUtils.setAlphaComponent(-1, 40), ColorUtils.setAlphaComponent(-1, 100)));
+            frameLayout.addView(imageView, LayoutHelper.createFrame(24, 24, 17));
+            frameLayout.setOnClickListener(new PremiumFeatureBottomSheet$$ExternalSyntheticLambda1(this));
+            r5.addView(this.content, LayoutHelper.createLinear(-1, -2, 1, 0, 16, 0, 0));
+            AnonymousClass3 r9 = new ViewPager(getContext()) {
+                /* access modifiers changed from: protected */
+                public void onMeasure(int i, int i2) {
+                    int dp = AndroidUtilities.dp(100.0f);
+                    if (getChildCount() > 0) {
+                        getChildAt(0).measure(i, View.MeasureSpec.makeMeasureSpec(0, 0));
+                        dp = getChildAt(0).getMeasuredHeight();
+                    }
+                    super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(dp, NUM));
                 }
-                return super.onTouchEvent(motionEvent);
-            }
-        };
-        this.viewPager = r8;
-        r8.setOffscreenPageLimit(0);
-        this.viewPager.setAdapter(new PagerAdapter() {
-            public boolean isViewFromObject(View view, Object obj) {
-                return view == obj;
-            }
 
-            public int getCount() {
-                return PremiumFeatureBottomSheet.this.premiumFeatures.size();
-            }
+                public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
+                    try {
+                        return super.onInterceptTouchEvent(motionEvent);
+                    } catch (Exception unused) {
+                        return false;
+                    }
+                }
 
-            public Object instantiateItem(ViewGroup viewGroup, int i) {
-                PremiumFeatureBottomSheet premiumFeatureBottomSheet = PremiumFeatureBottomSheet.this;
-                ViewPage viewPage = new ViewPage(premiumFeatureBottomSheet.getContext(), i);
-                viewGroup.addView(viewPage);
-                viewPage.position = i;
-                viewPage.setFeatureDate(PremiumFeatureBottomSheet.this.premiumFeatures.get(i));
-                return viewPage;
-            }
+                public boolean onTouchEvent(MotionEvent motionEvent) {
+                    if (PremiumFeatureBottomSheet.this.enterAnimationIsRunning) {
+                        return false;
+                    }
+                    return super.onTouchEvent(motionEvent);
+                }
+            };
+            this.viewPager = r9;
+            r9.setOffscreenPageLimit(0);
+            this.viewPager.setAdapter(new PagerAdapter() {
+                public boolean isViewFromObject(View view, Object obj) {
+                    return view == obj;
+                }
 
-            public void destroyItem(ViewGroup viewGroup, int i, Object obj) {
-                viewGroup.removeView((View) obj);
-            }
-        });
-        this.viewPager.setCurrentItem(i4);
-        r4.addView(this.viewPager, LayoutHelper.createFrame(-1, 100.0f, 0, 0.0f, 18.0f, 0.0f, 0.0f));
-        r4.addView(frameLayout, LayoutHelper.createFrame(52, 52.0f, 53, 0.0f, 16.0f, 0.0f, 0.0f));
-        final BottomPagesView bottomPagesView = new BottomPagesView(getContext(), this.viewPager, this.premiumFeatures.size());
-        this.viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            float progress;
-            int selectedPosition;
-            int toPosition;
+                public int getCount() {
+                    return PremiumFeatureBottomSheet.this.premiumFeatures.size();
+                }
 
-            public void onPageScrollStateChanged(int i) {
-            }
+                public Object instantiateItem(ViewGroup viewGroup, int i) {
+                    PremiumFeatureBottomSheet premiumFeatureBottomSheet = PremiumFeatureBottomSheet.this;
+                    ViewPage viewPage = new ViewPage(premiumFeatureBottomSheet.getContext(), i);
+                    viewGroup.addView(viewPage);
+                    viewPage.position = i;
+                    viewPage.setFeatureDate(PremiumFeatureBottomSheet.this.premiumFeatures.get(i));
+                    return viewPage;
+                }
 
-            public void onPageScrolled(int i, float f, int i2) {
-                bottomPagesView.setPageOffset(i, f);
-                this.selectedPosition = i;
-                this.toPosition = i2 > 0 ? i + 1 : i - 1;
-                this.progress = f;
-                checkPage();
-            }
+                public void destroyItem(ViewGroup viewGroup, int i, Object obj) {
+                    viewGroup.removeView((View) obj);
+                }
+            });
+            this.viewPager.setCurrentItem(i4);
+            r5.addView(this.viewPager, LayoutHelper.createFrame(-1, 100.0f, 0, 0.0f, 18.0f, 0.0f, 0.0f));
+            r5.addView(frameLayout, LayoutHelper.createFrame(52, 52.0f, 53, 0.0f, 16.0f, 0.0f, 0.0f));
+            final BottomPagesView bottomPagesView = new BottomPagesView(getContext(), this.viewPager, this.premiumFeatures.size());
+            this.viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                float progress;
+                int selectedPosition;
+                int toPosition;
 
-            public void onPageSelected(int i) {
-                checkPage();
-            }
+                public void onPageScrollStateChanged(int i) {
+                }
 
-            private void checkPage() {
-                float measuredWidth;
-                boolean z = false;
-                for (int i = 0; i < PremiumFeatureBottomSheet.this.viewPager.getChildCount(); i++) {
-                    ViewPage viewPage = (ViewPage) PremiumFeatureBottomSheet.this.viewPager.getChildAt(i);
-                    float f = 0.0f;
-                    if (!PremiumFeatureBottomSheet.this.enterAnimationIsRunning || !(viewPage.topView instanceof PremiumAppIconsPreviewView)) {
-                        int i2 = viewPage.position;
-                        if (i2 == this.selectedPosition) {
-                            PagerHeaderView pagerHeaderView = viewPage.topHeader;
-                            measuredWidth = ((float) (-viewPage.getMeasuredWidth())) * this.progress;
-                            pagerHeaderView.setOffset(measuredWidth);
-                        } else if (i2 == this.toPosition) {
-                            PagerHeaderView pagerHeaderView2 = viewPage.topHeader;
-                            measuredWidth = (((float) (-viewPage.getMeasuredWidth())) * this.progress) + ((float) viewPage.getMeasuredWidth());
-                            pagerHeaderView2.setOffset(measuredWidth);
-                        } else {
-                            viewPage.topHeader.setOffset((float) viewPage.getMeasuredWidth());
+                public void onPageScrolled(int i, float f, int i2) {
+                    bottomPagesView.setPageOffset(i, f);
+                    this.selectedPosition = i;
+                    this.toPosition = i2 > 0 ? i + 1 : i - 1;
+                    this.progress = f;
+                    checkPage();
+                }
+
+                public void onPageSelected(int i) {
+                    checkPage();
+                }
+
+                private void checkPage() {
+                    float measuredWidth;
+                    boolean z = false;
+                    for (int i = 0; i < PremiumFeatureBottomSheet.this.viewPager.getChildCount(); i++) {
+                        ViewPage viewPage = (ViewPage) PremiumFeatureBottomSheet.this.viewPager.getChildAt(i);
+                        float f = 0.0f;
+                        if (!PremiumFeatureBottomSheet.this.enterAnimationIsRunning || !(viewPage.topView instanceof PremiumAppIconsPreviewView)) {
+                            int i2 = viewPage.position;
+                            if (i2 == this.selectedPosition) {
+                                PagerHeaderView pagerHeaderView = viewPage.topHeader;
+                                measuredWidth = ((float) (-viewPage.getMeasuredWidth())) * this.progress;
+                                pagerHeaderView.setOffset(measuredWidth);
+                            } else if (i2 == this.toPosition) {
+                                PagerHeaderView pagerHeaderView2 = viewPage.topHeader;
+                                measuredWidth = (((float) (-viewPage.getMeasuredWidth())) * this.progress) + ((float) viewPage.getMeasuredWidth());
+                                pagerHeaderView2.setOffset(measuredWidth);
+                            } else {
+                                viewPage.topHeader.setOffset((float) viewPage.getMeasuredWidth());
+                            }
+                            f = measuredWidth;
                         }
-                        f = measuredWidth;
+                        if (viewPage.topView instanceof PremiumAppIconsPreviewView) {
+                            viewPage.setTranslationX(-f);
+                            viewPage.title.setTranslationX(f);
+                            viewPage.description.setTranslationX(f);
+                        }
                     }
-                    if (viewPage.topView instanceof PremiumAppIconsPreviewView) {
-                        viewPage.setTranslationX(-f);
-                        viewPage.title.setTranslationX(f);
-                        viewPage.description.setTranslationX(f);
+                    PremiumFeatureBottomSheet premiumFeatureBottomSheet = PremiumFeatureBottomSheet.this;
+                    premiumFeatureBottomSheet.containerViewsProgress = this.progress;
+                    if (this.toPosition > this.selectedPosition) {
+                        z = true;
                     }
+                    premiumFeatureBottomSheet.containerViewsForward = z;
                 }
-                PremiumFeatureBottomSheet premiumFeatureBottomSheet = PremiumFeatureBottomSheet.this;
-                premiumFeatureBottomSheet.containerViewsProgress = this.progress;
-                if (this.toPosition > this.selectedPosition) {
-                    z = true;
-                }
-                premiumFeatureBottomSheet.containerViewsForward = z;
+            });
+            LinearLayout linearLayout = new LinearLayout(getContext());
+            linearLayout.addView(r5);
+            linearLayout.setOrientation(1);
+            bottomPagesView.setColor("chats_unreadCounterMuted", "chats_actionBackground");
+            if (!z2) {
+                linearLayout.addView(bottomPagesView, LayoutHelper.createLinear(this.premiumFeatures.size() * 11, 5, 1, 0, 0, 0, 10));
             }
-        });
-        LinearLayout linearLayout = new LinearLayout(getContext());
-        linearLayout.addView(r4);
-        linearLayout.setOrientation(1);
-        bottomPagesView.setColor("chats_unreadCounterMuted", "chats_actionBackground");
-        if (!z2) {
-            linearLayout.addView(bottomPagesView, LayoutHelper.createLinear(this.premiumFeatures.size() * 11, 5, 1, 0, 0, 0, 10));
+            PremiumButtonView premiumButtonView2 = new PremiumButtonView(getContext(), true);
+            this.premiumButtonView = premiumButtonView2;
+            premiumButtonView2.buttonLayout.setOnClickListener(new PremiumFeatureBottomSheet$$ExternalSyntheticLambda2(this, baseFragment2, z2, premiumFeatureData));
+            this.premiumButtonView.overlayTextView.setOnClickListener(new PremiumFeatureBottomSheet$$ExternalSyntheticLambda0(this));
+            FrameLayout frameLayout2 = new FrameLayout(getContext());
+            this.buttonContainer = frameLayout2;
+            frameLayout2.addView(this.premiumButtonView, LayoutHelper.createFrame(-1, 48.0f, 16, 16.0f, 0.0f, 16.0f, 0.0f));
+            this.buttonContainer.setBackgroundColor(getThemedColor("dialogBackground"));
+            linearLayout.addView(this.buttonContainer, LayoutHelper.createLinear(-1, 68, 80));
+            if (UserConfig.getInstance(i).isPremium()) {
+                this.premiumButtonView.setOverlayText(LocaleController.getString("OK", R.string.OK), false, false);
+            }
+            ScrollView scrollView = new ScrollView(getContext());
+            scrollView.addView(linearLayout);
+            setCustomView(scrollView);
+            MediaDataController.getInstance(i).preloadPremiumPreviewStickers();
+            setButtonText();
+            return;
         }
-        PremiumButtonView premiumButtonView2 = new PremiumButtonView(getContext(), true);
-        this.premiumButtonView = premiumButtonView2;
-        premiumButtonView2.buttonLayout.setOnClickListener(new PremiumFeatureBottomSheet$$ExternalSyntheticLambda2(this, baseFragment, z2, premiumFeatureData));
-        this.premiumButtonView.overlayTextView.setOnClickListener(new PremiumFeatureBottomSheet$$ExternalSyntheticLambda0(this));
-        FrameLayout frameLayout2 = new FrameLayout(getContext());
-        this.buttonContainer = frameLayout2;
-        frameLayout2.addView(this.premiumButtonView, LayoutHelper.createFrame(-1, 48.0f, 16, 16.0f, 0.0f, 16.0f, 0.0f));
-        this.buttonContainer.setBackgroundColor(getThemedColor("dialogBackground"));
-        linearLayout.addView(this.buttonContainer, LayoutHelper.createLinear(-1, 68, 80));
-        if (UserConfig.getInstance(i).isPremium()) {
-            this.premiumButtonView.setOverlayText(LocaleController.getString("OK", R.string.OK), false, false);
-        }
-        ScrollView scrollView = new ScrollView(getContext());
-        scrollView.addView(linearLayout);
-        setCustomView(scrollView);
-        MediaDataController.getInstance(i).preloadPremiumPreviewStickers();
-        setButtonText();
+        throw new RuntimeException("fragmnet can't be null");
     }
 
     /* access modifiers changed from: private */
@@ -298,13 +303,13 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
                 chatAttachAlert.dismiss(true);
             }
         }
-        if (baseFragment.getVisibleDialog() != null) {
+        if (!(baseFragment == null || baseFragment.getVisibleDialog() == null)) {
             baseFragment.getVisibleDialog().dismiss();
         }
-        if (z) {
-            baseFragment.presentFragment(new PremiumPreviewFragment(PremiumPreviewFragment.featureTypeToServerString(premiumFeatureData.type)));
-        } else {
+        if (!z || baseFragment == null) {
             PremiumPreviewFragment.buyPremium(baseFragment, this.selectedTier, PremiumPreviewFragment.featureTypeToServerString(premiumFeatureData.type));
+        } else {
+            baseFragment.presentFragment(new PremiumPreviewFragment(PremiumPreviewFragment.featureTypeToServerString(premiumFeatureData.type)));
         }
         dismiss();
     }

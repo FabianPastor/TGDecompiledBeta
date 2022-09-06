@@ -258,21 +258,21 @@ public class ReactionsDoubleTapManageActivity extends BaseFragment implements No
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:22:0x00b5 A[LOOP:0: B:20:0x00af->B:22:0x00b5, LOOP_END] */
+    /* JADX WARNING: Removed duplicated region for block: B:22:0x00b8 A[LOOP:0: B:20:0x00b2->B:22:0x00b8, LOOP_END] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void showSelectStatusDialog(org.telegram.ui.ReactionsDoubleTapManageActivity.SetDefaultReactionCell r17) {
         /*
             r16 = this;
-            r9 = r16
-            r10 = r17
-            org.telegram.ui.SelectAnimatedEmojiDialog$SelectAnimatedEmojiDialogWindow r0 = r9.selectAnimatedEmojiDialog
+            r10 = r16
+            r11 = r17
+            org.telegram.ui.SelectAnimatedEmojiDialog$SelectAnimatedEmojiDialogWindow r0 = r10.selectAnimatedEmojiDialog
             if (r0 == 0) goto L_0x0009
             return
         L_0x0009:
             r0 = 1
-            org.telegram.ui.SelectAnimatedEmojiDialog$SelectAnimatedEmojiDialogWindow[] r11 = new org.telegram.ui.SelectAnimatedEmojiDialog.SelectAnimatedEmojiDialogWindow[r0]
+            org.telegram.ui.SelectAnimatedEmojiDialog$SelectAnimatedEmojiDialogWindow[] r12 = new org.telegram.ui.SelectAnimatedEmojiDialog.SelectAnimatedEmojiDialogWindow[r0]
             r0 = 0
-            if (r10 == 0) goto L_0x0065
+            if (r11 == 0) goto L_0x0065
             org.telegram.ui.Components.AnimatedEmojiDrawable$SwapAnimatedEmojiDrawable r0 = r17.imageDrawable
             org.telegram.ui.Components.AnimatedEmojiDrawable$SwapAnimatedEmojiDrawable r1 = r17.imageDrawable
             if (r1 == 0) goto L_0x0062
@@ -304,53 +304,55 @@ public class ReactionsDoubleTapManageActivity extends BaseFragment implements No
             int r4 = r4.x
             int r4 = r4 - r3
             int r1 = r1 - r4
-            r13 = r0
-            r15 = r2
-            r14 = r10
+            r14 = r0
+            r9 = r2
+            r15 = r11
             goto L_0x0069
         L_0x0062:
-            r13 = r0
-            r14 = r10
+            r14 = r0
+            r15 = r11
             goto L_0x0067
         L_0x0065:
-            r13 = r0
-            r14 = r13
+            r14 = r0
+            r15 = r14
         L_0x0067:
             r1 = 0
-            r15 = 0
+            r9 = 0
         L_0x0069:
             org.telegram.ui.ReactionsDoubleTapManageActivity$3 r8 = new org.telegram.ui.ReactionsDoubleTapManageActivity$3
-            android.content.Context r2 = r16.getContext()
-            r3 = 0
-            java.lang.Integer r4 = java.lang.Integer.valueOf(r1)
-            r5 = 0
+            android.content.Context r3 = r16.getContext()
+            r4 = 0
+            java.lang.Integer r5 = java.lang.Integer.valueOf(r1)
             r6 = 0
+            r7 = 0
             r0 = r8
             r1 = r16
-            r7 = r17
-            r12 = r8
-            r8 = r11
-            r0.<init>(r2, r3, r4, r5, r6, r7, r8)
+            r2 = r16
+            r13 = r8
+            r8 = r17
+            r11 = r9
+            r9 = r12
+            r0.<init>(r1, r2, r3, r4, r5, r6, r7, r8, r9)
             org.telegram.messenger.MediaDataController r0 = r16.getMediaDataController()
             java.lang.String r0 = r0.getDoubleTapReaction()
-            if (r0 == 0) goto L_0x00a3
+            if (r0 == 0) goto L_0x00a6
             java.lang.String r1 = "animated_"
             boolean r1 = r0.startsWith(r1)
-            if (r1 == 0) goto L_0x00a3
+            if (r1 == 0) goto L_0x00a6
             r1 = 9
-            java.lang.String r0 = r0.substring(r1)     // Catch:{ Exception -> 0x00a3 }
-            long r0 = java.lang.Long.parseLong(r0)     // Catch:{ Exception -> 0x00a3 }
-            java.lang.Long r0 = java.lang.Long.valueOf(r0)     // Catch:{ Exception -> 0x00a3 }
-            r12.setSelected(r0)     // Catch:{ Exception -> 0x00a3 }
-        L_0x00a3:
+            java.lang.String r0 = r0.substring(r1)     // Catch:{ Exception -> 0x00a6 }
+            long r0 = java.lang.Long.parseLong(r0)     // Catch:{ Exception -> 0x00a6 }
+            java.lang.Long r0 = java.lang.Long.valueOf(r0)     // Catch:{ Exception -> 0x00a6 }
+            r13.setSelected(r0)     // Catch:{ Exception -> 0x00a6 }
+        L_0x00a6:
             java.util.List r0 = r16.getAvailableReactions()
             java.util.ArrayList r1 = new java.util.ArrayList
             r2 = 20
             r1.<init>(r2)
             r2 = 0
-        L_0x00af:
+        L_0x00b2:
             int r3 = r0.size()
-            if (r2 >= r3) goto L_0x00ca
+            if (r2 >= r3) goto L_0x00cd
             org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble$VisibleReaction r3 = new org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble$VisibleReaction
             r3.<init>()
             java.lang.Object r4 = r0.get(r2)
@@ -359,22 +361,24 @@ public class ReactionsDoubleTapManageActivity extends BaseFragment implements No
             r3.emojicon = r4
             r1.add(r3)
             int r2 = r2 + 1
-            goto L_0x00af
-        L_0x00ca:
-            r12.setRecentReactions(r1)
+            goto L_0x00b2
+        L_0x00cd:
+            r13.setRecentReactions(r1)
             r0 = 3
-            r12.setSaveState(r0)
-            r12.setScrimDrawable(r13, r14)
+            r13.setSaveState(r0)
+            r13.setScrimDrawable(r14, r15)
             org.telegram.ui.ReactionsDoubleTapManageActivity$4 r0 = new org.telegram.ui.ReactionsDoubleTapManageActivity$4
             r1 = -2
-            r0.<init>(r12, r1, r1)
-            r9.selectAnimatedEmojiDialog = r0
+            r0.<init>(r13, r1, r1)
+            r10.selectAnimatedEmojiDialog = r0
             r1 = 0
-            r11[r1] = r0
-            r0 = r11[r1]
+            r12[r1] = r0
+            r0 = r12[r1]
             r2 = 53
-            r0.showAsDropDown(r10, r1, r15, r2)
-            r0 = r11[r1]
+            r3 = r17
+            r13 = r11
+            r0.showAsDropDown(r3, r1, r13, r2)
+            r0 = r12[r1]
             r0.dimBehind()
             return
         */

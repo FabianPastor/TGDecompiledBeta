@@ -1,16 +1,14 @@
 package org.telegram.ui;
 
-import android.content.Context;
-import org.telegram.ui.ActionBar.Theme;
+import android.view.animation.Interpolator;
 
-public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda32 implements Runnable {
-    public final /* synthetic */ Context f$0;
+public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda32 implements Interpolator {
+    public static final /* synthetic */ DialogsActivity$$ExternalSyntheticLambda32 INSTANCE = new DialogsActivity$$ExternalSyntheticLambda32();
 
-    public /* synthetic */ DialogsActivity$$ExternalSyntheticLambda32(Context context) {
-        this.f$0 = context;
+    private /* synthetic */ DialogsActivity$$ExternalSyntheticLambda32() {
     }
 
-    public final void run() {
-        Theme.createChatResources(this.f$0, false);
+    public final float getInterpolation(float f) {
+        return DialogsActivity.lambda$static$0(f);
     }
 }

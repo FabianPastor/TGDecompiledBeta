@@ -138,7 +138,7 @@ public class ChatReactionsEditActivity extends BaseFragment implements Notificat
             TextCheckCell textCheckCell2 = this.enableReactionsCell;
             textCheckCell2.setBackgroundColor(Theme.getColor(textCheckCell2.isChecked() ? "windowBackgroundChecked" : "windowBackgroundUnchecked"));
             this.enableReactionsCell.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-            this.enableReactionsCell.setOnClickListener(new ChatReactionsEditActivity$$ExternalSyntheticLambda2(this));
+            this.enableReactionsCell.setOnClickListener(new ChatReactionsEditActivity$$ExternalSyntheticLambda3(this));
             linearLayout.addView(this.enableReactionsCell, LayoutHelper.createLinear(-1, -2));
         }
         HeaderCell headerCell = new HeaderCell(context);
@@ -163,7 +163,7 @@ public class ChatReactionsEditActivity extends BaseFragment implements Notificat
         this.radioCells.add(this.allReactions);
         this.radioCells.add(this.someReactions);
         this.radioCells.add(this.disableReactions);
-        this.allReactions.setOnClickListener(new ChatReactionsEditActivity$$ExternalSyntheticLambda3(this));
+        this.allReactions.setOnClickListener(new ChatReactionsEditActivity$$ExternalSyntheticLambda2(this));
         this.someReactions.setOnClickListener(new ChatReactionsEditActivity$$ExternalSyntheticLambda1(this));
         this.disableReactions.setOnClickListener(new ChatReactionsEditActivity$$ExternalSyntheticLambda0(this));
         headerCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
@@ -268,7 +268,7 @@ public class ChatReactionsEditActivity extends BaseFragment implements Notificat
         };
         this.listAdapter = r2;
         recyclerListView2.setAdapter(r2);
-        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new ChatReactionsEditActivity$$ExternalSyntheticLambda5(this));
+        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new ChatReactionsEditActivity$$ExternalSyntheticLambda8(this));
         linearLayout.addView(this.listView, LayoutHelper.createLinear(-1, 0, 1.0f));
         this.contentView = linearLayout;
         this.fragmentView = linearLayout;
@@ -282,22 +282,37 @@ public class ChatReactionsEditActivity extends BaseFragment implements Notificat
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$1(View view) {
+    public /* synthetic */ void lambda$createView$1() {
         setCheckedEnableReactionCell(0, true);
     }
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$createView$2(View view) {
+        AndroidUtilities.runOnUIThread(new ChatReactionsEditActivity$$ExternalSyntheticLambda4(this));
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$createView$3() {
         setCheckedEnableReactionCell(1, true);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$3(View view) {
+    public /* synthetic */ void lambda$createView$4(View view) {
+        AndroidUtilities.runOnUIThread(new ChatReactionsEditActivity$$ExternalSyntheticLambda5(this));
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$createView$5() {
         setCheckedEnableReactionCell(2, true);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$4(View view, int i) {
+    public /* synthetic */ void lambda$createView$6(View view) {
+        AndroidUtilities.runOnUIThread(new ChatReactionsEditActivity$$ExternalSyntheticLambda6(this));
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$createView$7(View view, int i) {
         boolean z = this.isChannel;
         if (i > (z ? 1 : 2)) {
             AvailableReactionCell availableReactionCell = (AvailableReactionCell) view;
@@ -409,7 +424,7 @@ public class ChatReactionsEditActivity extends BaseFragment implements Notificat
     }
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {
-        return SimpleThemeDescription.createThemeDescriptions(new ChatReactionsEditActivity$$ExternalSyntheticLambda4(this), "windowBackgroundWhite", "windowBackgroundWhiteBlackText", "windowBackgroundWhiteGrayText2", "listSelectorSDK21", "windowBackgroundGray", "windowBackgroundWhiteGrayText4", "windowBackgroundWhiteRedText4", "windowBackgroundChecked", "windowBackgroundCheckText", "switchTrackBlue", "switchTrackBlueChecked", "switchTrackBlueThumb", "switchTrackBlueThumbChecked");
+        return SimpleThemeDescription.createThemeDescriptions(new ChatReactionsEditActivity$$ExternalSyntheticLambda7(this), "windowBackgroundWhite", "windowBackgroundWhiteBlackText", "windowBackgroundWhiteGrayText2", "listSelectorSDK21", "windowBackgroundGray", "windowBackgroundWhiteGrayText4", "windowBackgroundWhiteRedText4", "windowBackgroundChecked", "windowBackgroundCheckText", "switchTrackBlue", "switchTrackBlueChecked", "switchTrackBlueThumb", "switchTrackBlueThumbChecked");
     }
 
     /* access modifiers changed from: private */

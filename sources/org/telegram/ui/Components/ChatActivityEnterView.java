@@ -9436,7 +9436,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             TLRPC$Peer tLRPC$Peer = chatFull != null ? chatFull.default_send_as : null;
             int i = 0;
             if (tLRPC$Peer == null && this.delegate.getSendAsPeers() != null && !this.delegate.getSendAsPeers().peers.isEmpty()) {
-                tLRPC$Peer = this.delegate.getSendAsPeers().peers.get(0);
+                tLRPC$Peer = this.delegate.getSendAsPeers().peers.get(0).peer;
             }
             if (tLRPC$Peer != null) {
                 if (tLRPC$Peer.channel_id != 0) {

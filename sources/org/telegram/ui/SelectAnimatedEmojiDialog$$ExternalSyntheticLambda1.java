@@ -10,6 +10,6 @@ public final /* synthetic */ class SelectAnimatedEmojiDialog$$ExternalSyntheticL
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$onShow$9(valueAnimator);
+        this.f$0.lambda$onDismiss$11(valueAnimator);
     }
 }

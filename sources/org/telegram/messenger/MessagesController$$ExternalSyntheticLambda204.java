@@ -1,26 +1,25 @@
 package org.telegram.messenger;
 
-import android.os.Bundle;
-import org.telegram.tgnet.TLObject;
-import org.telegram.ui.ActionBar.AlertDialog;
-import org.telegram.ui.ActionBar.BaseFragment;
+import androidx.collection.LongSparseArray;
+import java.util.ArrayList;
+import org.telegram.tgnet.TLRPC$updates_Difference;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda204 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ AlertDialog f$1;
-    public final /* synthetic */ TLObject f$2;
-    public final /* synthetic */ BaseFragment f$3;
-    public final /* synthetic */ Bundle f$4;
+    public final /* synthetic */ TLRPC$updates_Difference f$1;
+    public final /* synthetic */ ArrayList f$2;
+    public final /* synthetic */ LongSparseArray f$3;
+    public final /* synthetic */ LongSparseArray f$4;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda204(MessagesController messagesController, AlertDialog alertDialog, TLObject tLObject, BaseFragment baseFragment, Bundle bundle) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda204(MessagesController messagesController, TLRPC$updates_Difference tLRPC$updates_Difference, ArrayList arrayList, LongSparseArray longSparseArray, LongSparseArray longSparseArray2) {
         this.f$0 = messagesController;
-        this.f$1 = alertDialog;
-        this.f$2 = tLObject;
-        this.f$3 = baseFragment;
-        this.f$4 = bundle;
+        this.f$1 = tLRPC$updates_Difference;
+        this.f$2 = arrayList;
+        this.f$3 = longSparseArray;
+        this.f$4 = longSparseArray2;
     }
 
     public final void run() {
-        this.f$0.lambda$checkCanOpenChat$345(this.f$1, this.f$2, this.f$3, this.f$4);
+        this.f$0.lambda$getDifference$283(this.f$1, this.f$2, this.f$3, this.f$4);
     }
 }

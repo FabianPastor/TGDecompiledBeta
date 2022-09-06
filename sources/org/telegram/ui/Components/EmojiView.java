@@ -3163,6 +3163,9 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         /* access modifiers changed from: protected */
         public void onAttachedToWindow() {
             super.onAttachedToWindow();
+            if (EmojiView.this.emojiAdapter != null) {
+                EmojiView.this.emojiAdapter.processEmoji(true);
+            }
             updateEmojiDrawables();
         }
 

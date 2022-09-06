@@ -2,7 +2,6 @@ package org.telegram.ui.Components.Premium;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
 import android.app.Dialog;
 import android.content.Context;
@@ -652,10 +651,9 @@ public class PremiumPreviewBottomSheet extends BottomSheetWithRecyclerListView i
                 measuredWidth += view4.getX();
                 view4 = (View) view4.getParent();
             }
-            AnimatorSet animatorSet = this.currentSheetAnimation;
-            float translationY = ((animatorSet == null || !animatorSet.isRunning() || this.currentSheetAnimationType != 1) ? this.containerView.getTranslationY() : 0.0f) + view3.getY() + ((View) view3.getParent()).getY() + ((View) view3.getParent().getParent()).getY() + (((float) view3.getMeasuredHeight()) / 2.0f);
+            float y = view3.getY() + 0.0f + ((View) view3.getParent()).getY() + ((View) view3.getParent().getParent()).getY() + (((float) view3.getMeasuredHeight()) / 2.0f);
             float lerp = AndroidUtilities.lerp(f, measuredWidth, CubicBezierInterpolator.EASE_OUT_QUINT.getInterpolation(this.enterTransitionProgress));
-            float lerp2 = AndroidUtilities.lerp(f2, translationY, this.enterTransitionProgress);
+            float lerp2 = AndroidUtilities.lerp(f2, y, this.enterTransitionProgress);
             float f5 = this.startEnterFromScale;
             float f6 = this.enterTransitionProgress;
             float f7 = (f5 * (1.0f - f6)) + (f3 * f6);

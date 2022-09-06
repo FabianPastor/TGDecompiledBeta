@@ -5,9 +5,11 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SharedConfig;
+import org.telegram.ui.ActionBar.Theme;
 
 public class DrawingInBackgroundThreadDrawable implements NotificationCenter.NotificationCenterDelegate {
     private static DispatchQueue backgroundQueue;
@@ -202,6 +204,8 @@ public class DrawingInBackgroundThreadDrawable implements NotificationCenter.Not
                 drawBitmap(canvas, bitmap4, this.paint);
                 canvas.restore();
             }
+        } else if (BuildVars.DEBUG_PRIVATE_VERSION) {
+            canvas.drawRect(0.0f, 0.0f, (float) i, (float) i2, Theme.DEBUG_RED);
         }
     }
 

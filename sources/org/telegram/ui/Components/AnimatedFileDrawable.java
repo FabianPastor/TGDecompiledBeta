@@ -823,7 +823,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:38:0x00af  */
-    /* JADX WARNING: Removed duplicated region for block: B:58:0x015c  */
+    /* JADX WARNING: Removed duplicated region for block: B:58:0x015a  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void drawInternal(android.graphics.Canvas r18, boolean r19, long r20) {
         /*
@@ -831,10 +831,10 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
             r0 = r17
             r1 = r18
             boolean r2 = r17.canLoadFrames()
-            if (r2 == 0) goto L_0x01a3
+            if (r2 == 0) goto L_0x01a1
             boolean r2 = r0.destroyWhenDone
             if (r2 == 0) goto L_0x0010
-            goto L_0x01a3
+            goto L_0x01a1
         L_0x0010:
             r2 = 0
             int r4 = (r20 > r2 ? 1 : (r20 == r2 ? 0 : -1))
@@ -861,7 +861,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
             r0.updateCurrentFrame(r2, r6)
         L_0x0033:
             android.graphics.Bitmap r2 = r0.renderingBitmap
-            if (r2 == 0) goto L_0x01a3
+            if (r2 == 0) goto L_0x01a1
             float r3 = r0.scaleX
             float r7 = r0.scaleY
             r8 = 270(0x10e, float:3.78E-43)
@@ -924,7 +924,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
             r13 = 1119092736(0x42b40000, float:90.0)
             r14 = 180(0xb4, float:2.52E-43)
             r15 = 0
-            if (r2 == 0) goto L_0x015c
+            if (r2 == 0) goto L_0x015a
             android.graphics.BitmapShader r2 = r0.renderingShader
             if (r2 != 0) goto L_0x00be
             android.graphics.BitmapShader r2 = new android.graphics.BitmapShader
@@ -947,9 +947,9 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
             android.graphics.Matrix r2 = r0.shaderMatrix
             r2.preRotate(r13)
             android.graphics.Matrix r2 = r0.shaderMatrix
-            float r4 = r4.width()
-            float r4 = -r4
-            r2.preTranslate(r15, r4)
+            float r6 = r4.width()
+            float r6 = -r6
+            r2.preTranslate(r15, r6)
             goto L_0x0115
         L_0x00e7:
             r6 = r2[r10]
@@ -959,9 +959,9 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
             android.graphics.Matrix r2 = r0.shaderMatrix
             float r6 = r4.width()
             float r6 = -r6
-            float r4 = r4.height()
-            float r4 = -r4
-            r2.preTranslate(r6, r4)
+            float r8 = r4.height()
+            float r8 = -r8
+            r2.preTranslate(r6, r8)
             goto L_0x0115
         L_0x0100:
             r2 = r2[r10]
@@ -970,9 +970,9 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
             r6 = 1132920832(0x43870000, float:270.0)
             r2.preRotate(r6)
             android.graphics.Matrix r2 = r0.shaderMatrix
-            float r4 = r4.height()
-            float r4 = -r4
-            r2.preTranslate(r4, r15)
+            float r6 = r4.height()
+            float r6 = -r6
+            r2.preTranslate(r6, r15)
         L_0x0115:
             android.graphics.Matrix r2 = r0.shaderMatrix
             r2.preScale(r3, r7)
@@ -980,7 +980,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
             android.graphics.Matrix r3 = r0.shaderMatrix
             r2.setLocalMatrix(r3)
             boolean r2 = r0.invalidatePath
-            if (r2 == 0) goto L_0x0156
+            if (r2 == 0) goto L_0x0154
             r2 = 0
             r0.invalidatePath = r2
             r6 = 0
@@ -989,65 +989,64 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
             int r3 = r2.length
             if (r6 >= r3) goto L_0x0141
             float[] r3 = radii
-            int r4 = r6 * 2
-            r7 = r2[r6]
-            float r7 = (float) r7
-            r3[r4] = r7
-            int r4 = r4 + 1
+            int r7 = r6 * 2
+            r8 = r2[r6]
+            float r8 = (float) r8
+            r3[r7] = r8
+            int r7 = r7 + 1
             r2 = r2[r6]
             float r2 = (float) r2
-            r3[r4] = r2
+            r3[r7] = r2
             int r6 = r6 + 1
             goto L_0x0129
         L_0x0141:
             android.graphics.Path r2 = r0.roundPath
             r2.reset()
             android.graphics.Path r2 = r0.roundPath
-            android.graphics.RectF r3 = r0.actualDrawRect
-            float[] r4 = radii
+            float[] r3 = radii
             android.graphics.Path$Direction r6 = android.graphics.Path.Direction.CW
-            r2.addRoundRect(r3, r4, r6)
+            r2.addRoundRect(r4, r3, r6)
             android.graphics.Path r2 = r0.roundPath
             r2.close()
-        L_0x0156:
+        L_0x0154:
             android.graphics.Path r2 = r0.roundPath
             r1.drawPath(r2, r5)
-            goto L_0x01a3
-        L_0x015c:
+            goto L_0x01a1
+        L_0x015a:
             float r2 = r4.left
             float r6 = r4.top
             r1.translate(r2, r6)
             int[] r2 = r0.metaData
             r6 = r2[r10]
-            if (r6 != r9) goto L_0x0175
+            if (r6 != r9) goto L_0x0173
             r1.rotate(r13)
             float r2 = r4.width()
             float r2 = -r2
             r1.translate(r15, r2)
-            goto L_0x019b
-        L_0x0175:
+            goto L_0x0199
+        L_0x0173:
             r6 = r2[r10]
-            if (r6 != r14) goto L_0x018a
+            if (r6 != r14) goto L_0x0188
             r1.rotate(r12)
             float r2 = r4.width()
             float r2 = -r2
             float r4 = r4.height()
             float r4 = -r4
             r1.translate(r2, r4)
-            goto L_0x019b
-        L_0x018a:
+            goto L_0x0199
+        L_0x0188:
             r2 = r2[r10]
-            if (r2 != r8) goto L_0x019b
+            if (r2 != r8) goto L_0x0199
             r2 = 1132920832(0x43870000, float:270.0)
             r1.rotate(r2)
             float r2 = r4.height()
             float r2 = -r2
             r1.translate(r2, r15)
-        L_0x019b:
+        L_0x0199:
             r1.scale(r3, r7)
             android.graphics.Bitmap r2 = r0.renderingBitmap
             r1.drawBitmap(r2, r15, r15, r5)
-        L_0x01a3:
+        L_0x01a1:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AnimatedFileDrawable.drawInternal(android.graphics.Canvas, boolean, long):void");

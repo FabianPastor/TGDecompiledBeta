@@ -105,6 +105,7 @@ import org.telegram.tgnet.TLRPC$ReplyMarkup;
 import org.telegram.tgnet.TLRPC$TL_documentAttributeAudio;
 import org.telegram.tgnet.TLRPC$TL_documentAttributeVideo;
 import org.telegram.tgnet.TLRPC$TL_emojiStatus;
+import org.telegram.tgnet.TLRPC$TL_emojiStatusUntil;
 import org.telegram.tgnet.TLRPC$TL_keyboardButtonBuy;
 import org.telegram.tgnet.TLRPC$TL_keyboardButtonCallback;
 import org.telegram.tgnet.TLRPC$TL_keyboardButtonGame;
@@ -31351,10 +31352,15 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             return null;
         }
         TLRPC$EmojiStatus tLRPC$EmojiStatus = tLRPC$User.emoji_status;
-        if (tLRPC$EmojiStatus instanceof TLRPC$TL_emojiStatus) {
-            return Long.valueOf(((TLRPC$TL_emojiStatus) tLRPC$EmojiStatus).document_id);
+        if ((tLRPC$EmojiStatus instanceof TLRPC$TL_emojiStatusUntil) && ((TLRPC$TL_emojiStatusUntil) tLRPC$EmojiStatus).until > ((int) (System.currentTimeMillis() / 1000))) {
+            return Long.valueOf(((TLRPC$TL_emojiStatusUntil) this.currentUser.emoji_status).document_id);
         }
-        if (tLRPC$User.premium) {
+        TLRPC$User tLRPC$User2 = this.currentUser;
+        TLRPC$EmojiStatus tLRPC$EmojiStatus2 = tLRPC$User2.emoji_status;
+        if (tLRPC$EmojiStatus2 instanceof TLRPC$TL_emojiStatus) {
+            return Long.valueOf(((TLRPC$TL_emojiStatus) tLRPC$EmojiStatus2).document_id);
+        }
+        if (tLRPC$User2.premium) {
             return ContextCompat.getDrawable(ApplicationLoader.applicationContext, R.drawable.msg_premium_liststar).mutate();
         }
         return null;

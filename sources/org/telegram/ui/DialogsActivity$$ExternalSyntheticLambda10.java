@@ -10,6 +10,6 @@ public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda10 im
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$showSuggestion$48(dialogInterface, i);
+        this.f$0.lambda$onArchiveLongPress$27(dialogInterface, i);
     }
 }

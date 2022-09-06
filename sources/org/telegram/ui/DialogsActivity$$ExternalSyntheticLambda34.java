@@ -1,13 +1,15 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda34 implements Runnable {
-    public final /* synthetic */ DialogsActivity f$0;
+import org.telegram.messenger.AccountInstance;
 
-    public /* synthetic */ DialogsActivity$$ExternalSyntheticLambda34(DialogsActivity dialogsActivity) {
-        this.f$0 = dialogsActivity;
+public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda34 implements Runnable {
+    public final /* synthetic */ AccountInstance f$0;
+
+    public /* synthetic */ DialogsActivity$$ExternalSyntheticLambda34(AccountInstance accountInstance) {
+        this.f$0 = accountInstance;
     }
 
     public final void run() {
-        this.f$0.lambda$onRequestPermissionsResultFragment$45();
+        this.f$0.getDownloadController().loadDownloadingFiles();
     }
 }

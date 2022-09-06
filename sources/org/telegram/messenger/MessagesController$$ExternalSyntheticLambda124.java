@@ -1,6 +1,5 @@
 package org.telegram.messenger;
 
-import androidx.collection.LongSparseArray;
 import java.util.ArrayList;
 import org.telegram.tgnet.TLRPC$updates_Difference;
 
@@ -8,16 +7,14 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda12
     public final /* synthetic */ MessagesController f$0;
     public final /* synthetic */ ArrayList f$1;
     public final /* synthetic */ TLRPC$updates_Difference f$2;
-    public final /* synthetic */ LongSparseArray f$3;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda124(MessagesController messagesController, ArrayList arrayList, TLRPC$updates_Difference tLRPC$updates_Difference, LongSparseArray longSparseArray) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda124(MessagesController messagesController, ArrayList arrayList, TLRPC$updates_Difference tLRPC$updates_Difference) {
         this.f$0 = messagesController;
         this.f$1 = arrayList;
         this.f$2 = tLRPC$updates_Difference;
-        this.f$3 = longSparseArray;
     }
 
     public final void run() {
-        this.f$0.lambda$getDifference$281(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$getDifference$278(this.f$1, this.f$2);
     }
 }

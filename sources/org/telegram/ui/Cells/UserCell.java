@@ -394,16 +394,16 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
     /* JADX WARNING: Removed duplicated region for block: B:116:0x01dd  */
     /* JADX WARNING: Removed duplicated region for block: B:117:0x01e5  */
     /* JADX WARNING: Removed duplicated region for block: B:135:0x0227  */
-    /* JADX WARNING: Removed duplicated region for block: B:140:0x0269  */
-    /* JADX WARNING: Removed duplicated region for block: B:143:0x0278  */
-    /* JADX WARNING: Removed duplicated region for block: B:144:0x0288  */
+    /* JADX WARNING: Removed duplicated region for block: B:145:0x02a0  */
+    /* JADX WARNING: Removed duplicated region for block: B:148:0x02af  */
+    /* JADX WARNING: Removed duplicated region for block: B:149:0x02bf  */
     /* JADX WARNING: Removed duplicated region for block: B:16:0x0030  */
-    /* JADX WARNING: Removed duplicated region for block: B:175:0x033c  */
-    /* JADX WARNING: Removed duplicated region for block: B:176:0x033f  */
-    /* JADX WARNING: Removed duplicated region for block: B:180:0x034e  */
-    /* JADX WARNING: Removed duplicated region for block: B:181:0x0356  */
-    /* JADX WARNING: Removed duplicated region for block: B:186:0x0378  */
-    /* JADX WARNING: Removed duplicated region for block: B:188:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:180:0x0373  */
+    /* JADX WARNING: Removed duplicated region for block: B:181:0x0376  */
+    /* JADX WARNING: Removed duplicated region for block: B:185:0x0385  */
+    /* JADX WARNING: Removed duplicated region for block: B:186:0x038d  */
+    /* JADX WARNING: Removed duplicated region for block: B:191:0x03af  */
+    /* JADX WARNING: Removed duplicated region for block: B:193:? A[RETURN, SYNTHETIC] */
     /* JADX WARNING: Removed duplicated region for block: B:57:0x0091  */
     /* JADX WARNING: Removed duplicated region for block: B:60:0x00a0  */
     /* JADX WARNING: Removed duplicated region for block: B:96:0x015b  */
@@ -764,110 +764,136 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
             org.telegram.ui.ActionBar.SimpleTextView r6 = r0.nameTextView
             r6.setText(r5)
         L_0x0219:
-            if (r1 == 0) goto L_0x0269
+            if (r1 == 0) goto L_0x02a0
             int r5 = r0.currentAccount
             org.telegram.messenger.MessagesController r5 = org.telegram.messenger.MessagesController.getInstance(r5)
             boolean r5 = r5.isPremiumUser(r1)
-            if (r5 == 0) goto L_0x0269
+            if (r5 == 0) goto L_0x02a0
             org.telegram.tgnet.TLRPC$EmojiStatus r3 = r1.emoji_status
-            boolean r5 = r3 instanceof org.telegram.tgnet.TLRPC$TL_emojiStatus
-            if (r5 == 0) goto L_0x0250
-            org.telegram.ui.Components.AnimatedEmojiDrawable$SwapAnimatedEmojiDrawable r5 = r0.emojiStatus
-            org.telegram.tgnet.TLRPC$TL_emojiStatus r3 = (org.telegram.tgnet.TLRPC$TL_emojiStatus) r3
-            long r6 = r3.document_id
-            r3 = 0
-            r5.set((long) r6, (boolean) r3)
+            boolean r5 = r3 instanceof org.telegram.tgnet.TLRPC$TL_emojiStatusUntil
+            java.lang.String r6 = "chats_verifiedBackground"
+            if (r5 == 0) goto L_0x0260
+            org.telegram.tgnet.TLRPC$TL_emojiStatusUntil r3 = (org.telegram.tgnet.TLRPC$TL_emojiStatusUntil) r3
+            int r3 = r3.until
+            long r7 = java.lang.System.currentTimeMillis()
+            r9 = 1000(0x3e8, double:4.94E-321)
+            long r7 = r7 / r9
+            int r5 = (int) r7
+            if (r3 <= r5) goto L_0x0260
+            org.telegram.ui.Components.AnimatedEmojiDrawable$SwapAnimatedEmojiDrawable r3 = r0.emojiStatus
+            org.telegram.tgnet.TLRPC$EmojiStatus r5 = r1.emoji_status
+            org.telegram.tgnet.TLRPC$TL_emojiStatusUntil r5 = (org.telegram.tgnet.TLRPC$TL_emojiStatusUntil) r5
+            long r7 = r5.document_id
+            r5 = 0
+            r3.set((long) r7, (boolean) r5)
             org.telegram.ui.Components.AnimatedEmojiDrawable$SwapAnimatedEmojiDrawable r3 = r0.emojiStatus
             org.telegram.ui.ActionBar.Theme$ResourcesProvider r5 = r0.resourcesProvider
-            java.lang.String r6 = "chats_verifiedBackground"
             int r5 = org.telegram.ui.ActionBar.Theme.getColor((java.lang.String) r6, (org.telegram.ui.ActionBar.Theme.ResourcesProvider) r5)
             java.lang.Integer r5 = java.lang.Integer.valueOf(r5)
             r3.setColor(r5)
             org.telegram.ui.ActionBar.SimpleTextView r3 = r0.nameTextView
             org.telegram.ui.Components.AnimatedEmojiDrawable$SwapAnimatedEmojiDrawable r5 = r0.emojiStatus
             r3.setRightDrawable((android.graphics.drawable.Drawable) r5)
-            goto L_0x025b
-        L_0x0250:
+            goto L_0x0292
+        L_0x0260:
+            org.telegram.tgnet.TLRPC$EmojiStatus r3 = r1.emoji_status
+            boolean r5 = r3 instanceof org.telegram.tgnet.TLRPC$TL_emojiStatus
+            if (r5 == 0) goto L_0x0287
+            org.telegram.ui.Components.AnimatedEmojiDrawable$SwapAnimatedEmojiDrawable r5 = r0.emojiStatus
+            org.telegram.tgnet.TLRPC$TL_emojiStatus r3 = (org.telegram.tgnet.TLRPC$TL_emojiStatus) r3
+            long r7 = r3.document_id
+            r3 = 0
+            r5.set((long) r7, (boolean) r3)
+            org.telegram.ui.Components.AnimatedEmojiDrawable$SwapAnimatedEmojiDrawable r3 = r0.emojiStatus
+            org.telegram.ui.ActionBar.Theme$ResourcesProvider r5 = r0.resourcesProvider
+            int r5 = org.telegram.ui.ActionBar.Theme.getColor((java.lang.String) r6, (org.telegram.ui.ActionBar.Theme.ResourcesProvider) r5)
+            java.lang.Integer r5 = java.lang.Integer.valueOf(r5)
+            r3.setColor(r5)
+            org.telegram.ui.ActionBar.SimpleTextView r3 = r0.nameTextView
+            org.telegram.ui.Components.AnimatedEmojiDrawable$SwapAnimatedEmojiDrawable r5 = r0.emojiStatus
+            r3.setRightDrawable((android.graphics.drawable.Drawable) r5)
+            goto L_0x0292
+        L_0x0287:
             org.telegram.ui.ActionBar.SimpleTextView r3 = r0.nameTextView
             org.telegram.ui.Components.Premium.PremiumGradient r5 = org.telegram.ui.Components.Premium.PremiumGradient.getInstance()
             android.graphics.drawable.Drawable r5 = r5.premiumStarDrawableMini
             r3.setRightDrawable((android.graphics.drawable.Drawable) r5)
-        L_0x025b:
+        L_0x0292:
             org.telegram.ui.ActionBar.SimpleTextView r3 = r0.nameTextView
             r5 = 1056964608(0x3var_, float:0.5)
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
             int r5 = -r5
             r3.setRightDrawableTopPadding(r5)
             r5 = 0
-            goto L_0x0274
-        L_0x0269:
+            goto L_0x02ab
+        L_0x02a0:
             org.telegram.ui.ActionBar.SimpleTextView r5 = r0.nameTextView
             r5.setRightDrawable((android.graphics.drawable.Drawable) r3)
             org.telegram.ui.ActionBar.SimpleTextView r3 = r0.nameTextView
             r5 = 0
             r3.setRightDrawableTopPadding(r5)
-        L_0x0274:
+        L_0x02ab:
             java.lang.CharSequence r3 = r0.currentStatus
-            if (r3 == 0) goto L_0x0288
+            if (r3 == 0) goto L_0x02bf
             org.telegram.ui.ActionBar.SimpleTextView r3 = r0.statusTextView
             int r6 = r0.statusColor
             r3.setTextColor(r6)
             org.telegram.ui.ActionBar.SimpleTextView r3 = r0.statusTextView
             java.lang.CharSequence r6 = r0.currentStatus
             r3.setText(r6)
-            goto L_0x031e
-        L_0x0288:
-            if (r1 == 0) goto L_0x031e
+            goto L_0x0355
+        L_0x02bf:
+            if (r1 == 0) goto L_0x0355
             boolean r3 = r1.bot
-            if (r3 == 0) goto L_0x02c0
+            if (r3 == 0) goto L_0x02f7
             org.telegram.ui.ActionBar.SimpleTextView r3 = r0.statusTextView
             int r6 = r0.statusColor
             r3.setTextColor(r6)
             boolean r3 = r1.bot_chat_history
-            if (r3 != 0) goto L_0x02b2
+            if (r3 != 0) goto L_0x02e9
             android.widget.TextView r3 = r0.adminTextView
-            if (r3 == 0) goto L_0x02a4
+            if (r3 == 0) goto L_0x02db
             int r3 = r3.getVisibility()
-            if (r3 != 0) goto L_0x02a4
-            goto L_0x02b2
-        L_0x02a4:
+            if (r3 != 0) goto L_0x02db
+            goto L_0x02e9
+        L_0x02db:
             org.telegram.ui.ActionBar.SimpleTextView r3 = r0.statusTextView
             int r6 = org.telegram.messenger.R.string.BotStatusCantRead
             java.lang.String r7 = "BotStatusCantRead"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             r3.setText(r6)
-            goto L_0x031e
-        L_0x02b2:
+            goto L_0x0355
+        L_0x02e9:
             org.telegram.ui.ActionBar.SimpleTextView r3 = r0.statusTextView
             int r6 = org.telegram.messenger.R.string.BotStatusRead
             java.lang.String r7 = "BotStatusRead"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             r3.setText(r6)
-            goto L_0x031e
-        L_0x02c0:
+            goto L_0x0355
+        L_0x02f7:
             long r6 = r1.id
             int r3 = r0.currentAccount
             org.telegram.messenger.UserConfig r3 = org.telegram.messenger.UserConfig.getInstance(r3)
             long r8 = r3.getClientUserId()
             int r3 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1))
-            if (r3 == 0) goto L_0x030a
+            if (r3 == 0) goto L_0x0341
             org.telegram.tgnet.TLRPC$UserStatus r3 = r1.status
-            if (r3 == 0) goto L_0x02e2
+            if (r3 == 0) goto L_0x0319
             int r3 = r3.expires
             int r6 = r0.currentAccount
             org.telegram.tgnet.ConnectionsManager r6 = org.telegram.tgnet.ConnectionsManager.getInstance(r6)
             int r6 = r6.getCurrentTime()
-            if (r3 > r6) goto L_0x030a
-        L_0x02e2:
+            if (r3 > r6) goto L_0x0341
+        L_0x0319:
             int r3 = r0.currentAccount
             org.telegram.messenger.MessagesController r3 = org.telegram.messenger.MessagesController.getInstance(r3)
             j$.util.concurrent.ConcurrentHashMap<java.lang.Long, java.lang.Integer> r3 = r3.onlinePrivacy
             long r6 = r1.id
             java.lang.Long r6 = java.lang.Long.valueOf(r6)
             boolean r3 = r3.containsKey(r6)
-            if (r3 == 0) goto L_0x02f7
-            goto L_0x030a
-        L_0x02f7:
+            if (r3 == 0) goto L_0x032e
+            goto L_0x0341
+        L_0x032e:
             org.telegram.ui.ActionBar.SimpleTextView r3 = r0.statusTextView
             int r6 = r0.statusColor
             r3.setTextColor(r6)
@@ -875,8 +901,8 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
             int r6 = r0.currentAccount
             java.lang.String r6 = org.telegram.messenger.LocaleController.formatUserStatus(r6, r1)
             r3.setText(r6)
-            goto L_0x031e
-        L_0x030a:
+            goto L_0x0355
+        L_0x0341:
             org.telegram.ui.ActionBar.SimpleTextView r3 = r0.statusTextView
             int r6 = r0.statusOnlineColor
             r3.setTextColor(r6)
@@ -885,61 +911,61 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
             java.lang.String r7 = "Online"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             r3.setText(r6)
-        L_0x031e:
+        L_0x0355:
             android.widget.ImageView r3 = r0.imageView
             int r3 = r3.getVisibility()
-            if (r3 != 0) goto L_0x032a
+            if (r3 != 0) goto L_0x0361
             int r3 = r0.currentDrawable
-            if (r3 == 0) goto L_0x0336
-        L_0x032a:
+            if (r3 == 0) goto L_0x036d
+        L_0x0361:
             android.widget.ImageView r3 = r0.imageView
             int r3 = r3.getVisibility()
-            if (r3 != r12) goto L_0x034a
+            if (r3 != r12) goto L_0x0381
             int r3 = r0.currentDrawable
-            if (r3 == 0) goto L_0x034a
-        L_0x0336:
+            if (r3 == 0) goto L_0x0381
+        L_0x036d:
             android.widget.ImageView r3 = r0.imageView
             int r6 = r0.currentDrawable
-            if (r6 != 0) goto L_0x033f
+            if (r6 != 0) goto L_0x0376
             r6 = 8
-            goto L_0x0340
-        L_0x033f:
+            goto L_0x0377
+        L_0x0376:
             r6 = 0
-        L_0x0340:
+        L_0x0377:
             r3.setVisibility(r6)
             android.widget.ImageView r3 = r0.imageView
             int r5 = r0.currentDrawable
             r3.setImageResource(r5)
-        L_0x034a:
+        L_0x0381:
             r0.lastAvatar = r4
-            if (r1 == 0) goto L_0x0356
+            if (r1 == 0) goto L_0x038d
             org.telegram.ui.Components.BackupImageView r2 = r0.avatarImageView
             org.telegram.ui.Components.AvatarDrawable r3 = r0.avatarDrawable
             r2.setForUserOrChat(r1, r3)
-            goto L_0x0367
-        L_0x0356:
-            if (r2 == 0) goto L_0x0360
+            goto L_0x039e
+        L_0x038d:
+            if (r2 == 0) goto L_0x0397
             org.telegram.ui.Components.BackupImageView r1 = r0.avatarImageView
             org.telegram.ui.Components.AvatarDrawable r3 = r0.avatarDrawable
             r1.setForUserOrChat(r2, r3)
-            goto L_0x0367
-        L_0x0360:
+            goto L_0x039e
+        L_0x0397:
             org.telegram.ui.Components.BackupImageView r1 = r0.avatarImageView
             org.telegram.ui.Components.AvatarDrawable r2 = r0.avatarDrawable
             r1.setImageDrawable(r2)
-        L_0x0367:
+        L_0x039e:
             org.telegram.ui.ActionBar.SimpleTextView r1 = r0.nameTextView
             org.telegram.ui.ActionBar.Theme$ResourcesProvider r2 = r0.resourcesProvider
             java.lang.String r3 = "windowBackgroundWhiteBlackText"
             int r2 = org.telegram.ui.ActionBar.Theme.getColor((java.lang.String) r3, (org.telegram.ui.ActionBar.Theme.ResourcesProvider) r2)
             r1.setTextColor(r2)
             android.widget.TextView r1 = r0.adminTextView
-            if (r1 == 0) goto L_0x0383
+            if (r1 == 0) goto L_0x03ba
             org.telegram.ui.ActionBar.Theme$ResourcesProvider r2 = r0.resourcesProvider
             java.lang.String r3 = "profile_creatorIcon"
             int r2 = org.telegram.ui.ActionBar.Theme.getColor((java.lang.String) r3, (org.telegram.ui.ActionBar.Theme.ResourcesProvider) r2)
             r1.setTextColor(r2)
-        L_0x0383:
+        L_0x03ba:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.UserCell.update(int):void");

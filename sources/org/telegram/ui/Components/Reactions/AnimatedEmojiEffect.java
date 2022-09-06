@@ -119,11 +119,13 @@ public class AnimatedEmojiEffect {
                 if (str != null && (tLRPC$TL_messages_stickerSet = MediaDataController.getInstance(this.currentAccount).getStickerSetByName(str)) == null) {
                     tLRPC$TL_messages_stickerSet = MediaDataController.getInstance(this.currentAccount).getStickerSetByEmojiOrName(str);
                 }
-                if (this.animationIndex < 0) {
-                    this.animationIndex = Math.abs(Utilities.fastRandom.nextInt() % tLRPC$TL_messages_stickerSet.documents.size());
+                if (tLRPC$TL_messages_stickerSet != null) {
+                    if (this.animationIndex < 0) {
+                        this.animationIndex = Math.abs(Utilities.fastRandom.nextInt() % tLRPC$TL_messages_stickerSet.documents.size());
+                    }
+                    this.effectImageReceiver.setImage(ImageLocation.getForDocument(tLRPC$TL_messages_stickerSet.documents.get(this.animationIndex)), "60_60", (Drawable) null, (String) null, tLRPC$TL_messages_stickerSet.documents.get(this.animationIndex), 0);
+                    z = true;
                 }
-                this.effectImageReceiver.setImage(ImageLocation.getForDocument(tLRPC$TL_messages_stickerSet.documents.get(this.animationIndex)), "60_60", (Drawable) null, (String) null, tLRPC$TL_messages_stickerSet.documents.get(this.animationIndex), 0);
-                z = true;
             }
             if (z) {
                 if (this.effectImageReceiver.getLottieAnimation() != null) {

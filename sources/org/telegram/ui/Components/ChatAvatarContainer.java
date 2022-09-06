@@ -36,6 +36,7 @@ import org.telegram.tgnet.TLRPC$EmojiStatus;
 import org.telegram.tgnet.TLRPC$TL_channelFull;
 import org.telegram.tgnet.TLRPC$TL_chatFull;
 import org.telegram.tgnet.TLRPC$TL_emojiStatus;
+import org.telegram.tgnet.TLRPC$TL_emojiStatusUntil;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.tgnet.TLRPC$UserFull;
 import org.telegram.tgnet.TLRPC$UserStatus;
@@ -67,7 +68,6 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
     private Integer overrideSubtitleColor;
     /* access modifiers changed from: private */
     public ChatActivity parentFragment;
-    public boolean premiumIconHiddable;
     private Theme.ResourcesProvider resourcesProvider;
     private String rightDrawableContentDescription;
     private boolean rightDrawableIsScamOrVerified;
@@ -105,7 +105,6 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
         this.statusMadeShorter = new boolean[1];
         this.onlineCount = -1;
         this.allowShorterStatus = false;
-        this.premiumIconHiddable = false;
         this.rightDrawableIsScamOrVerified = false;
         this.rightDrawableContentDescription = null;
         this.resourcesProvider = resourcesProvider2;
@@ -639,6 +638,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
         }
         this.titleTextView.setText(charSequence);
         this.titleTextView.setCanHideRightDrawable(false);
+        this.titleTextView.setRightDrawableOutside(true);
         if (z || z2) {
             if (!(this.titleTextView.getRightDrawable() instanceof ScamDrawable)) {
                 ScamDrawable scamDrawable = new ScamDrawable(11, z ^ true ? 1 : 0);
@@ -657,16 +657,22 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
             this.rightDrawableContentDescription = LocaleController.getString("AccDescrVerified", R.string.AccDescrVerified);
         } else if (z4) {
             boolean z5 = tLRPC$EmojiStatus instanceof TLRPC$TL_emojiStatus;
-            if (this.premiumIconHiddable) {
-                this.titleTextView.setCanHideRightDrawable(!z5);
+            if (!z5 && (tLRPC$EmojiStatus instanceof TLRPC$TL_emojiStatusUntil)) {
+                int i = ((TLRPC$TL_emojiStatusUntil) tLRPC$EmojiStatus).until;
+                long currentTimeMillis = System.currentTimeMillis() / 1000;
             }
-            this.titleTextView.setRightDrawableOutside(z5);
             if ((this.titleTextView.getRightDrawable() instanceof AnimatedEmojiDrawable.WrapSizeDrawable) && (((AnimatedEmojiDrawable.WrapSizeDrawable) this.titleTextView.getRightDrawable()).getDrawable() instanceof AnimatedEmojiDrawable)) {
                 ((AnimatedEmojiDrawable) ((AnimatedEmojiDrawable.WrapSizeDrawable) this.titleTextView.getRightDrawable()).getDrawable()).removeView((Drawable.Callback) this.titleTextView);
             }
             if (z5) {
                 this.emojiStatusDrawable.set(((TLRPC$TL_emojiStatus) tLRPC$EmojiStatus).document_id, true);
             } else {
+                if (tLRPC$EmojiStatus instanceof TLRPC$TL_emojiStatusUntil) {
+                    TLRPC$TL_emojiStatusUntil tLRPC$TL_emojiStatusUntil = (TLRPC$TL_emojiStatusUntil) tLRPC$EmojiStatus;
+                    if (tLRPC$TL_emojiStatusUntil.until > ((int) (System.currentTimeMillis() / 1000))) {
+                        this.emojiStatusDrawable.set(tLRPC$TL_emojiStatusUntil.document_id, true);
+                    }
+                }
                 Drawable mutate3 = ContextCompat.getDrawable(ApplicationLoader.applicationContext, R.drawable.msg_premium_liststar).mutate();
                 mutate3.setColorFilter(new PorterDuffColorFilter(getThemedColor("profile_verifiedBackground"), PorterDuff.Mode.MULTIPLY));
                 this.emojiStatusDrawable.set(mutate3, true);

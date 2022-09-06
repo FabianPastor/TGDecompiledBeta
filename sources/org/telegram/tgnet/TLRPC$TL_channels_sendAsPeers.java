@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class TLRPC$TL_channels_sendAsPeers extends TLObject {
     public static int constructor = -NUM;
     public ArrayList<TLRPC$Chat> chats = new ArrayList<>();
-    public ArrayList<TLRPC$Peer> peers = new ArrayList<>();
+    public ArrayList<TLRPC$TL_sendAsPeer> peers = new ArrayList<>();
     public ArrayList<TLRPC$User> users = new ArrayList<>();
 
     public static TLRPC$TL_channels_sendAsPeers TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
@@ -27,7 +27,7 @@ public class TLRPC$TL_channels_sendAsPeers extends TLObject {
             int readInt322 = abstractSerializedData.readInt32(z);
             int i2 = 0;
             while (i2 < readInt322) {
-                TLRPC$Peer TLdeserialize = TLRPC$Peer.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+                TLRPC$TL_sendAsPeer TLdeserialize = TLRPC$TL_sendAsPeer.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
                 if (TLdeserialize != null) {
                     this.peers.add(TLdeserialize);
                     i2++;

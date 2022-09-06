@@ -10,6 +10,6 @@ public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda43 impl
     }
 
     public final void onDismiss(DialogInterface dialogInterface) {
-        AlertsCreator.lambda$createDeleteMessagesAlert$119(this.f$0, dialogInterface);
+        AlertsCreator.lambda$showBlockReportSpamReplyAlert$9(this.f$0, dialogInterface);
     }
 }

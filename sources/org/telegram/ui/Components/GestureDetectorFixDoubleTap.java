@@ -15,6 +15,8 @@ public class GestureDetectorFixDoubleTap {
         boolean onTouchEvent(MotionEvent motionEvent);
 
         void setIsLongpressEnabled(boolean z);
+
+        void setLongpressDuration(long j);
     }
 
     public static class OnGestureListener extends GestureDetector.SimpleOnGestureListener {
@@ -40,6 +42,7 @@ public class GestureDetectorFixDoubleTap {
         private float mLastFocusX;
         private float mLastFocusY;
         final OnGestureListener mListener;
+        private long mLongpressDuration = ((long) ViewConfiguration.getLongPressTimeout());
         private int mMaximumFlingVelocity;
         private int mMinimumFlingVelocity;
         private MotionEvent mPreviousUpEvent;
@@ -117,6 +120,10 @@ public class GestureDetectorFixDoubleTap {
             this.mIsLongpressEnabled = z;
         }
 
+        public void setLongpressDuration(long j) {
+            this.mLongpressDuration = j;
+        }
+
         /* JADX WARNING: Removed duplicated region for block: B:102:0x020f  */
         /* JADX WARNING: Removed duplicated region for block: B:105:0x0226  */
         /* Code decompiled incorrectly, please refer to instructions dump. */
@@ -184,7 +191,7 @@ public class GestureDetectorFixDoubleTap {
                 r2 = 5
                 if (r0 == r2) goto L_0x00a8
                 if (r0 == r1) goto L_0x005b
-                goto L_0x0257
+                goto L_0x0254
             L_0x005b:
                 r12.mLastFocusX = r9
                 r12.mDownFocusX = r9
@@ -202,7 +209,7 @@ public class GestureDetectorFixDoubleTap {
                 float r1 = r4.getYVelocity(r1)
                 r4 = 0
             L_0x0080:
-                if (r4 >= r6) goto L_0x0257
+                if (r4 >= r6) goto L_0x0254
                 if (r4 != r0) goto L_0x0085
                 goto L_0x00a5
             L_0x0085:
@@ -218,7 +225,7 @@ public class GestureDetectorFixDoubleTap {
                 if (r5 >= 0) goto L_0x00a5
                 android.view.VelocityTracker r13 = r12.mVelocityTracker
                 r13.clear()
-                goto L_0x0257
+                goto L_0x0254
             L_0x00a5:
                 int r4 = r4 + 1
                 goto L_0x0080
@@ -228,14 +235,14 @@ public class GestureDetectorFixDoubleTap {
                 r12.mLastFocusY = r10
                 r12.mDownFocusY = r10
                 r12.cancelTaps()
-                goto L_0x0257
+                goto L_0x0254
             L_0x00b5:
                 r12.cancel()
-                goto L_0x0257
+                goto L_0x0254
             L_0x00ba:
                 boolean r0 = r12.mInLongPress
                 if (r0 == 0) goto L_0x00c0
-                goto L_0x0257
+                goto L_0x0254
             L_0x00c0:
                 float r0 = r12.mLastFocusX
                 float r0 = r0 - r9
@@ -246,7 +253,7 @@ public class GestureDetectorFixDoubleTap {
                 android.view.GestureDetector$OnDoubleTapListener r0 = r12.mDoubleTapListener
                 boolean r13 = r0.onDoubleTapEvent(r13)
                 r3 = r3 | r13
-                goto L_0x0257
+                goto L_0x0254
             L_0x00d3:
                 boolean r6 = r12.mAlwaysInTapRegion
                 if (r6 == 0) goto L_0x0111
@@ -288,14 +295,14 @@ public class GestureDetectorFixDoubleTap {
                 if (r2 >= 0) goto L_0x0123
                 float r2 = java.lang.Math.abs(r1)
                 int r2 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1))
-                if (r2 < 0) goto L_0x0257
+                if (r2 < 0) goto L_0x0254
             L_0x0123:
                 org.telegram.ui.Components.GestureDetectorFixDoubleTap$OnGestureListener r2 = r12.mListener
                 android.view.MotionEvent r3 = r12.mCurrentDownEvent
                 boolean r3 = r2.onScroll(r3, r13, r0, r1)
                 r12.mLastFocusX = r9
                 r12.mLastFocusY = r10
-                goto L_0x0257
+                goto L_0x0254
             L_0x0131:
                 r12.mStillDown = r3
                 android.view.MotionEvent r0 = android.view.MotionEvent.obtain(r13)
@@ -371,7 +378,7 @@ public class GestureDetectorFixDoubleTap {
                 r0.removeMessages(r4)
             L_0x01bc:
                 r3 = r13
-                goto L_0x0257
+                goto L_0x0254
             L_0x01bf:
                 android.view.GestureDetector$OnDoubleTapListener r0 = r12.mDoubleTapListener
                 if (r0 == 0) goto L_0x0202
@@ -423,7 +430,7 @@ public class GestureDetectorFixDoubleTap {
                 r12.mInLongPress = r3
                 r12.mDeferConfirmSingleTap = r3
                 boolean r1 = r12.mIsLongpressEnabled
-                if (r1 == 0) goto L_0x0240
+                if (r1 == 0) goto L_0x023d
                 android.os.Handler r1 = r12.mHandler
                 r1.removeMessages(r4)
                 android.os.Handler r1 = r12.mHandler
@@ -432,11 +439,10 @@ public class GestureDetectorFixDoubleTap {
                 int r3 = TAP_TIMEOUT
                 long r7 = (long) r3
                 long r5 = r5 + r7
-                int r3 = android.view.ViewConfiguration.getLongPressTimeout()
-                long r7 = (long) r3
+                long r7 = r12.mLongpressDuration
                 long r5 = r5 + r7
                 r1.sendEmptyMessageAtTime(r4, r5)
-            L_0x0240:
+            L_0x023d:
                 android.os.Handler r1 = r12.mHandler
                 android.view.MotionEvent r3 = r12.mCurrentDownEvent
                 long r3 = r3.getDownTime()
@@ -447,7 +453,7 @@ public class GestureDetectorFixDoubleTap {
                 org.telegram.ui.Components.GestureDetectorFixDoubleTap$OnGestureListener r1 = r12.mListener
                 boolean r13 = r1.onDown(r13)
                 r3 = r0 | r13
-            L_0x0257:
+            L_0x0254:
                 return r3
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.GestureDetectorFixDoubleTap.GestureDetectorCompatImplBase.onTouchEvent(android.view.MotionEvent):boolean");
@@ -517,5 +523,9 @@ public class GestureDetectorFixDoubleTap {
 
     public void setIsLongpressEnabled(boolean z) {
         this.mImpl.setIsLongpressEnabled(z);
+    }
+
+    public void setLongpressDuration(long j) {
+        this.mImpl.setLongpressDuration(j);
     }
 }

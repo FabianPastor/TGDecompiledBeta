@@ -32,6 +32,7 @@ public class PlayPauseDrawable extends Drawable {
     /* JADX WARNING: Removed duplicated region for block: B:27:0x0066  */
     /* JADX WARNING: Removed duplicated region for block: B:30:0x009f  */
     /* JADX WARNING: Removed duplicated region for block: B:31:0x00aa  */
+    /* JADX WARNING: Removed duplicated region for block: B:37:0x00ea  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void draw(android.graphics.Canvas r10) {
         /*
@@ -165,6 +166,7 @@ public class PlayPauseDrawable extends Drawable {
             r10.scale(r4, r6)
             r10.rotate(r3)
             org.telegram.ui.Components.PathAnimator r0 = org.telegram.ui.ActionBar.Theme.playPauseAnimator
+            if (r0 == 0) goto L_0x00fb
             android.graphics.Paint r3 = r9.paint
             r0.draw(r10, r3, r2)
             r0 = -1082130432(0xffffffffbvar_, float:-1.0)
@@ -172,6 +174,7 @@ public class PlayPauseDrawable extends Drawable {
             org.telegram.ui.Components.PathAnimator r0 = org.telegram.ui.ActionBar.Theme.playPauseAnimator
             android.graphics.Paint r1 = r9.paint
             r0.draw(r10, r1, r2)
+        L_0x00fb:
             r10.restore()
             return
         */

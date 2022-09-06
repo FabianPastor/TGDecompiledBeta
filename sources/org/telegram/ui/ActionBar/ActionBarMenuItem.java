@@ -2068,7 +2068,11 @@ public class ActionBarMenuItem extends FrameLayout {
     }
 
     public static ActionBarMenuSubItem addItem(ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout, int i, CharSequence charSequence, boolean z, Theme.ResourcesProvider resourcesProvider2) {
-        ActionBarMenuSubItem actionBarMenuSubItem = new ActionBarMenuSubItem(actionBarPopupWindowLayout.getContext(), z, false, false, resourcesProvider2);
+        return addItem(false, false, actionBarPopupWindowLayout, i, charSequence, z, resourcesProvider2);
+    }
+
+    public static ActionBarMenuSubItem addItem(boolean z, boolean z2, ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout, int i, CharSequence charSequence, boolean z3, Theme.ResourcesProvider resourcesProvider2) {
+        ActionBarMenuSubItem actionBarMenuSubItem = new ActionBarMenuSubItem(actionBarPopupWindowLayout.getContext(), z3, z, z2, resourcesProvider2);
         actionBarMenuSubItem.setTextAndIcon(charSequence, i);
         actionBarMenuSubItem.setMinimumWidth(AndroidUtilities.dp(196.0f));
         actionBarPopupWindowLayout.addView(actionBarMenuSubItem);

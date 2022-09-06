@@ -168,6 +168,7 @@ public class NotificationCenter {
     public static final int openedChatChanged;
     public static final int paymentFinished;
     public static final int peerSettingsDidLoad;
+    public static final int permissionsGranted;
     public static final int pinnedInfoDidLoad;
     public static final int playerDidStartPlaying;
     public static final int premiumPromoUpdated;
@@ -191,6 +192,7 @@ public class NotificationCenter {
     public static final int removeAllMessagesFromDialog;
     public static final int replaceMessagesObjects;
     public static final int replyMessagesDidLoad;
+    public static final int requestPermissions;
     public static final int scheduledMessagesUpdated;
     public static final int screenStateChanged;
     public static final int screenshotTook;
@@ -910,8 +912,14 @@ public class NotificationCenter {
         int i218 = i217 + 1;
         totalEvents = i218;
         premiumStickersPreviewLoaded = i217;
-        totalEvents = i218 + 1;
+        int i219 = i218 + 1;
+        totalEvents = i219;
         userEmojiStatusUpdated = i218;
+        int i220 = i219 + 1;
+        totalEvents = i220;
+        requestPermissions = i219;
+        totalEvents = i220 + 1;
+        permissionsGranted = i220;
     }
 
     private static class DelayedPost {

@@ -1,15 +1,18 @@
 package org.telegram.ui;
 
-import android.view.MotionEvent;
 import android.view.View;
+import android.widget.FrameLayout;
 
-public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda30 implements View.OnTouchListener {
-    public static final /* synthetic */ DialogsActivity$$ExternalSyntheticLambda30 INSTANCE = new DialogsActivity$$ExternalSyntheticLambda30();
+public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda30 implements View.OnLongClickListener {
+    public final /* synthetic */ DialogsActivity f$0;
+    public final /* synthetic */ FrameLayout f$1;
 
-    private /* synthetic */ DialogsActivity$$ExternalSyntheticLambda30() {
+    public /* synthetic */ DialogsActivity$$ExternalSyntheticLambda30(DialogsActivity dialogsActivity, FrameLayout frameLayout) {
+        this.f$0 = dialogsActivity;
+        this.f$1 = frameLayout;
     }
 
-    public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return DialogsActivity.lambda$createActionMode$17(view, motionEvent);
+    public final boolean onLongClick(View view) {
+        return this.f$0.lambda$createView$14(this.f$1, view);
     }
 }

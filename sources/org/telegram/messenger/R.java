@@ -3691,6 +3691,7 @@ public final class R {
         public static final int EmojiCount_two = NUM;
         public static final int EmojiCount_zero = NUM;
         public static final int EmojiInteractionTapHint = NUM;
+        public static final int EmojiLongtapHint = NUM;
         public static final int EmojiPackCount_few = NUM;
         public static final int EmojiPackCount_many = NUM;
         public static final int EmojiPackCount_one = NUM;
@@ -3705,6 +3706,7 @@ public final class R {
         public static final int EmojiRemovedMultipleInfo_other = NUM;
         public static final int EmojiRemovedMultipleInfo_two = NUM;
         public static final int EmojiRemovedMultipleInfo_zero = NUM;
+        public static final int EmojiStatusExpireHint = NUM;
         public static final int EmojiSuggestions = NUM;
         public static final int EmojiSuggestionsInfo = NUM;
         public static final int EmojiSuggestionsUrl = NUM;
@@ -6096,6 +6098,7 @@ public final class R {
         public static final int ReportSpamLocation = NUM;
         public static final int ReportSpamTitle = NUM;
         public static final int ReportSpamUser = NUM;
+        public static final int ReportSpamUserEmojiStatusHint = NUM;
         public static final int ReportTitleChild = NUM;
         public static final int ReportTitleFake = NUM;
         public static final int ReportTitlePornography = NUM;
@@ -6311,6 +6314,8 @@ public final class R {
         public static final int SelectFile = NUM;
         public static final int SelectFromGallery = NUM;
         public static final int SelectImage = NUM;
+        public static final int SelectSendAsPeerPremiumHint = NUM;
+        public static final int SelectSendAsPeerPremiumOpen = NUM;
         public static final int SelectTheme = NUM;
         public static final int SelectThisDay = NUM;
         public static final int SelectingContact = NUM;
@@ -6384,6 +6389,13 @@ public final class R {
         public static final int SetBackground = NUM;
         public static final int SetColor = NUM;
         public static final int SetEmojiStatus = NUM;
+        public static final int SetEmojiStatusUntil1Hour = NUM;
+        public static final int SetEmojiStatusUntil2Days = NUM;
+        public static final int SetEmojiStatusUntil2Hours = NUM;
+        public static final int SetEmojiStatusUntil8Hours = NUM;
+        public static final int SetEmojiStatusUntilButton = NUM;
+        public static final int SetEmojiStatusUntilOther = NUM;
+        public static final int SetEmojiStatusUntilTitle = NUM;
         public static final int SetNewPassword = NUM;
         public static final int SetPasscode = NUM;
         public static final int SetPasscodeInfo = NUM;

@@ -76,6 +76,7 @@ import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$Dialog;
 import org.telegram.tgnet.TLRPC$Document;
+import org.telegram.tgnet.TLRPC$EmojiStatus;
 import org.telegram.tgnet.TLRPC$EncryptedChat;
 import org.telegram.tgnet.TLRPC$InputDialogPeer;
 import org.telegram.tgnet.TLRPC$InputPeer;
@@ -84,6 +85,7 @@ import org.telegram.tgnet.TLRPC$TL_boolTrue;
 import org.telegram.tgnet.TLRPC$TL_dialogFolder;
 import org.telegram.tgnet.TLRPC$TL_emojiStatus;
 import org.telegram.tgnet.TLRPC$TL_emojiStatusEmpty;
+import org.telegram.tgnet.TLRPC$TL_emojiStatusUntil;
 import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.tgnet.TLRPC$TL_inputFolderPeer;
 import org.telegram.tgnet.TLRPC$TL_messages_checkHistoryImportPeer;
@@ -165,7 +167,7 @@ import org.telegram.ui.SelectAnimatedEmojiDialog;
 public class DialogsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
     public static boolean[] dialogsLoaded = new boolean[4];
     /* access modifiers changed from: private */
-    public static final Interpolator interpolator = DialogsActivity$$ExternalSyntheticLambda31.INSTANCE;
+    public static final Interpolator interpolator = DialogsActivity$$ExternalSyntheticLambda32.INSTANCE;
     public static float viewOffset = 0.0f;
     public final Property<DialogsActivity, Float> SCROLL_Y = new AnimationProperties.FloatProperty<DialogsActivity>("animationValue") {
         public void setValue(DialogsActivity dialogsActivity, float f) {
@@ -481,7 +483,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ boolean lambda$createActionMode$17(View view, MotionEvent motionEvent) {
+    public static /* synthetic */ boolean lambda$createActionMode$18(View view, MotionEvent motionEvent) {
         return true;
     }
 
@@ -2283,7 +2285,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             messagesController.loadUserInfo(accountInstance.getUserConfig().getCurrentUser(), false, 0);
             accountInstance.getContactsController().checkInviteText();
             accountInstance.getMediaDataController().chekAllMedia(false);
-            AndroidUtilities.runOnUIThread(new DialogsActivity$$ExternalSyntheticLambda33(accountInstance), 200);
+            AndroidUtilities.runOnUIThread(new DialogsActivity$$ExternalSyntheticLambda34(accountInstance), 200);
             Iterator<String> it = messagesController.diceEmojies.iterator();
             while (it.hasNext()) {
                 accountInstance.getMediaDataController().loadStickersByEmojiOrName(it.next(), true, true);
@@ -2292,97 +2294,120 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:19:0x009d  */
-    /* JADX WARNING: Removed duplicated region for block: B:24:0x00b0  */
-    /* JADX WARNING: Removed duplicated region for block: B:28:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:25:0x00cc  */
+    /* JADX WARNING: Removed duplicated region for block: B:30:0x00df  */
+    /* JADX WARNING: Removed duplicated region for block: B:34:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void updateStatus(org.telegram.tgnet.TLRPC$User r5, boolean r6) {
+    public void updateStatus(org.telegram.tgnet.TLRPC$User r7, boolean r8) {
         /*
-            r4 = this;
-            org.telegram.ui.Components.AnimatedEmojiDrawable$SwapAnimatedEmojiDrawable r0 = r4.statusDrawable
-            if (r0 == 0) goto L_0x00c3
-            org.telegram.ui.ActionBar.ActionBar r1 = r4.actionBar
-            if (r1 != 0) goto L_0x000a
-            goto L_0x00c3
+            r6 = this;
+            org.telegram.ui.Components.AnimatedEmojiDrawable$SwapAnimatedEmojiDrawable r0 = r6.statusDrawable
+            if (r0 == 0) goto L_0x00f2
+            org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
+            if (r0 != 0) goto L_0x000a
+            goto L_0x00f2
         L_0x000a:
-            java.lang.String r1 = "profile_verifiedBackground"
-            if (r5 == 0) goto L_0x0026
-            org.telegram.tgnet.TLRPC$EmojiStatus r2 = r5.emoji_status
-            boolean r3 = r2 instanceof org.telegram.tgnet.TLRPC$TL_emojiStatus
-            if (r3 == 0) goto L_0x0026
-            org.telegram.tgnet.TLRPC$TL_emojiStatus r2 = (org.telegram.tgnet.TLRPC$TL_emojiStatus) r2
-            long r2 = r2.document_id
-            r0.set((long) r2, (boolean) r6)
-            org.telegram.ui.ActionBar.ActionBar r5 = r4.actionBar
-            org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda24 r6 = new org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda24
-            r6.<init>(r4)
-            r5.setRightDrawableOnClick(r6)
-            goto L_0x008c
-        L_0x0026:
-            if (r5 == 0) goto L_0x0081
-            int r0 = r4.currentAccount
-            org.telegram.messenger.MessagesController r0 = org.telegram.messenger.MessagesController.getInstance(r0)
-            boolean r5 = r0.isPremiumUser(r5)
-            if (r5 == 0) goto L_0x0081
-            android.graphics.drawable.Drawable r5 = r4.premiumStar
-            if (r5 != 0) goto L_0x005f
-            android.content.Context r5 = r4.getContext()
-            android.content.res.Resources r5 = r5.getResources()
-            int r0 = org.telegram.messenger.R.drawable.msg_premium_liststar
-            android.graphics.drawable.Drawable r5 = r5.getDrawable(r0)
-            android.graphics.drawable.Drawable r5 = r5.mutate()
-            r4.premiumStar = r5
-            org.telegram.ui.Components.AnimatedEmojiDrawable$WrapSizeDrawable r5 = new org.telegram.ui.Components.AnimatedEmojiDrawable$WrapSizeDrawable
-            android.graphics.drawable.Drawable r0 = r4.premiumStar
+            java.lang.String r0 = "profile_verifiedBackground"
+            if (r7 == 0) goto L_0x0039
+            org.telegram.tgnet.TLRPC$EmojiStatus r1 = r7.emoji_status
+            boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_emojiStatusUntil
+            if (r2 == 0) goto L_0x0039
+            org.telegram.tgnet.TLRPC$TL_emojiStatusUntil r1 = (org.telegram.tgnet.TLRPC$TL_emojiStatusUntil) r1
+            int r1 = r1.until
+            long r2 = java.lang.System.currentTimeMillis()
+            r4 = 1000(0x3e8, double:4.94E-321)
+            long r2 = r2 / r4
+            int r3 = (int) r2
+            if (r1 <= r3) goto L_0x0039
+            org.telegram.ui.Components.AnimatedEmojiDrawable$SwapAnimatedEmojiDrawable r1 = r6.statusDrawable
+            org.telegram.tgnet.TLRPC$EmojiStatus r7 = r7.emoji_status
+            org.telegram.tgnet.TLRPC$TL_emojiStatusUntil r7 = (org.telegram.tgnet.TLRPC$TL_emojiStatusUntil) r7
+            long r2 = r7.document_id
+            r1.set((long) r2, (boolean) r8)
+            org.telegram.ui.ActionBar.ActionBar r7 = r6.actionBar
+            org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda25 r8 = new org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda25
+            r8.<init>(r6)
+            r7.setRightDrawableOnClick(r8)
+            goto L_0x00bb
+        L_0x0039:
+            if (r7 == 0) goto L_0x0055
+            org.telegram.tgnet.TLRPC$EmojiStatus r1 = r7.emoji_status
+            boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_emojiStatus
+            if (r2 == 0) goto L_0x0055
+            org.telegram.ui.Components.AnimatedEmojiDrawable$SwapAnimatedEmojiDrawable r7 = r6.statusDrawable
+            org.telegram.tgnet.TLRPC$TL_emojiStatus r1 = (org.telegram.tgnet.TLRPC$TL_emojiStatus) r1
+            long r1 = r1.document_id
+            r7.set((long) r1, (boolean) r8)
+            org.telegram.ui.ActionBar.ActionBar r7 = r6.actionBar
+            org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda19 r8 = new org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda19
+            r8.<init>(r6)
+            r7.setRightDrawableOnClick(r8)
+            goto L_0x00bb
+        L_0x0055:
+            if (r7 == 0) goto L_0x00b0
+            int r1 = r6.currentAccount
+            org.telegram.messenger.MessagesController r1 = org.telegram.messenger.MessagesController.getInstance(r1)
+            boolean r7 = r1.isPremiumUser(r7)
+            if (r7 == 0) goto L_0x00b0
+            android.graphics.drawable.Drawable r7 = r6.premiumStar
+            if (r7 != 0) goto L_0x008e
+            android.content.Context r7 = r6.getContext()
+            android.content.res.Resources r7 = r7.getResources()
+            int r1 = org.telegram.messenger.R.drawable.msg_premium_liststar
+            android.graphics.drawable.Drawable r7 = r7.getDrawable(r1)
+            android.graphics.drawable.Drawable r7 = r7.mutate()
+            r6.premiumStar = r7
+            org.telegram.ui.Components.AnimatedEmojiDrawable$WrapSizeDrawable r7 = new org.telegram.ui.Components.AnimatedEmojiDrawable$WrapSizeDrawable
+            android.graphics.drawable.Drawable r1 = r6.premiumStar
             r2 = 1099956224(0x41900000, float:18.0)
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r2)
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            r5.<init>(r0, r3, r2)
-            r4.premiumStar = r5
-        L_0x005f:
-            android.graphics.drawable.Drawable r5 = r4.premiumStar
-            android.graphics.PorterDuffColorFilter r0 = new android.graphics.PorterDuffColorFilter
-            int r2 = org.telegram.ui.ActionBar.Theme.getColor(r1)
+            r7.<init>(r1, r3, r2)
+            r6.premiumStar = r7
+        L_0x008e:
+            android.graphics.drawable.Drawable r7 = r6.premiumStar
+            android.graphics.PorterDuffColorFilter r1 = new android.graphics.PorterDuffColorFilter
+            int r2 = org.telegram.ui.ActionBar.Theme.getColor(r0)
             android.graphics.PorterDuff$Mode r3 = android.graphics.PorterDuff.Mode.MULTIPLY
-            r0.<init>(r2, r3)
-            r5.setColorFilter(r0)
-            org.telegram.ui.Components.AnimatedEmojiDrawable$SwapAnimatedEmojiDrawable r5 = r4.statusDrawable
-            android.graphics.drawable.Drawable r0 = r4.premiumStar
-            r5.set((android.graphics.drawable.Drawable) r0, (boolean) r6)
-            org.telegram.ui.ActionBar.ActionBar r5 = r4.actionBar
-            org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda19 r6 = new org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda19
-            r6.<init>(r4)
-            r5.setRightDrawableOnClick(r6)
-            goto L_0x008c
-        L_0x0081:
-            org.telegram.ui.Components.AnimatedEmojiDrawable$SwapAnimatedEmojiDrawable r5 = r4.statusDrawable
-            r0 = 0
-            r5.set((android.graphics.drawable.Drawable) r0, (boolean) r6)
-            org.telegram.ui.ActionBar.ActionBar r5 = r4.actionBar
-            r5.setRightDrawableOnClick(r0)
-        L_0x008c:
-            org.telegram.ui.Components.AnimatedEmojiDrawable$SwapAnimatedEmojiDrawable r5 = r4.statusDrawable
-            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r1)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            r5.setColor(r6)
-            org.telegram.ui.Cells.DrawerProfileCell$AnimatedStatusView r5 = r4.animatedStatusView
-            if (r5 == 0) goto L_0x00a4
-            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r1)
-            r5.setColor(r6)
-        L_0x00a4:
-            org.telegram.ui.SelectAnimatedEmojiDialog$SelectAnimatedEmojiDialogWindow r5 = r4.selectAnimatedEmojiDialog
-            if (r5 == 0) goto L_0x00c3
-            android.view.View r5 = r5.getContentView()
-            boolean r5 = r5 instanceof org.telegram.ui.SelectAnimatedEmojiDialog
-            if (r5 == 0) goto L_0x00c3
-            org.telegram.ui.SelectAnimatedEmojiDialog$SelectAnimatedEmojiDialogWindow r5 = r4.selectAnimatedEmojiDialog
-            android.view.View r5 = r5.getContentView()
-            org.telegram.ui.SelectAnimatedEmojiDialog r5 = (org.telegram.ui.SelectAnimatedEmojiDialog) r5
-            org.telegram.ui.Components.AnimatedEmojiDrawable$SwapAnimatedEmojiDrawable r6 = r4.statusDrawable
-            org.telegram.ui.ActionBar.ActionBar r0 = r4.actionBar
+            r1.<init>(r2, r3)
+            r7.setColorFilter(r1)
+            org.telegram.ui.Components.AnimatedEmojiDrawable$SwapAnimatedEmojiDrawable r7 = r6.statusDrawable
+            android.graphics.drawable.Drawable r1 = r6.premiumStar
+            r7.set((android.graphics.drawable.Drawable) r1, (boolean) r8)
+            org.telegram.ui.ActionBar.ActionBar r7 = r6.actionBar
+            org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda24 r8 = new org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda24
+            r8.<init>(r6)
+            r7.setRightDrawableOnClick(r8)
+            goto L_0x00bb
+        L_0x00b0:
+            org.telegram.ui.Components.AnimatedEmojiDrawable$SwapAnimatedEmojiDrawable r7 = r6.statusDrawable
+            r1 = 0
+            r7.set((android.graphics.drawable.Drawable) r1, (boolean) r8)
+            org.telegram.ui.ActionBar.ActionBar r7 = r6.actionBar
+            r7.setRightDrawableOnClick(r1)
+        L_0x00bb:
+            org.telegram.ui.Components.AnimatedEmojiDrawable$SwapAnimatedEmojiDrawable r7 = r6.statusDrawable
+            int r8 = org.telegram.ui.ActionBar.Theme.getColor(r0)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            r7.setColor(r8)
+            org.telegram.ui.Cells.DrawerProfileCell$AnimatedStatusView r7 = r6.animatedStatusView
+            if (r7 == 0) goto L_0x00d3
+            int r8 = org.telegram.ui.ActionBar.Theme.getColor(r0)
+            r7.setColor(r8)
+        L_0x00d3:
+            org.telegram.ui.SelectAnimatedEmojiDialog$SelectAnimatedEmojiDialogWindow r7 = r6.selectAnimatedEmojiDialog
+            if (r7 == 0) goto L_0x00f2
+            android.view.View r7 = r7.getContentView()
+            boolean r7 = r7 instanceof org.telegram.ui.SelectAnimatedEmojiDialog
+            if (r7 == 0) goto L_0x00f2
+            org.telegram.ui.SelectAnimatedEmojiDialog$SelectAnimatedEmojiDialogWindow r7 = r6.selectAnimatedEmojiDialog
+            android.view.View r7 = r7.getContentView()
+            org.telegram.ui.SelectAnimatedEmojiDialog r7 = (org.telegram.ui.SelectAnimatedEmojiDialog) r7
+            org.telegram.ui.Components.AnimatedEmojiDrawable$SwapAnimatedEmojiDrawable r8 = r6.statusDrawable
+            org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
             org.telegram.ui.ActionBar.SimpleTextView r0 = r0.getTitleTextView()
-            r5.setScrimDrawable(r6, r0)
-        L_0x00c3:
+            r7.setScrimDrawable(r8, r0)
+        L_0x00f2:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.DialogsActivity.updateStatus(org.telegram.tgnet.TLRPC$User, boolean):void");
@@ -2395,6 +2420,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$updateStatus$3(View view) {
+        showSelectStatusDialog();
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$updateStatus$4(View view) {
         showSelectStatusDialog();
     }
 
@@ -2518,7 +2548,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             android.view.ViewConfiguration r0 = android.view.ViewConfiguration.get(r36)
             int r0 = r0.getScaledMaximumFlingVelocity()
             r10.maximumVelocity = r0
-            org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda32 r0 = new org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda32
+            org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda33 r0 = new org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda33
             r0.<init>(r11)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
             org.telegram.ui.ActionBar.ActionBar r0 = r10.actionBar
@@ -2564,7 +2594,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
             r0.addView(r1, r2)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r10.doneItem
-            org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda22 r1 = new org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda22
+            org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda23 r1 = new org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda23
             r1.<init>(r10)
             r0.setOnClickListener(r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r10.doneItem
@@ -2753,7 +2783,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r0.setClipContent(r7)
         L_0x0229:
             org.telegram.ui.ActionBar.ActionBar r0 = r10.actionBar
-            org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda37 r1 = new org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda37
+            org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda39 r1 = new org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda39
             r1.<init>(r10)
             r0.setTitleActionRunnable(r1)
             int r0 = r10.initialDialogsType
@@ -2950,7 +2980,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r8, r1)
             r14.addView(r0, r1)
             org.telegram.ui.DialogsActivity$DialogsRecyclerView r0 = r14.listView
-            org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda59 r1 = new org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda59
+            org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda60 r1 = new org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda60
             r1.<init>(r10, r14)
             r0.setOnItemClickListener((org.telegram.ui.Components.RecyclerListView.OnItemClickListener) r1)
             org.telegram.ui.DialogsActivity$DialogsRecyclerView r0 = r14.listView
@@ -3131,7 +3161,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r0.setDelegate(r1)
             org.telegram.ui.Components.SearchViewPager r0 = r10.searchViewPager
             org.telegram.ui.Components.RecyclerListView r0 = r0.searchListView
-            org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda58 r1 = new org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda58
+            org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda59 r1 = new org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda59
             r1.<init>(r10)
             r0.setOnItemClickListener((org.telegram.ui.Components.RecyclerListView.OnItemClickListener) r1)
             org.telegram.ui.Components.SearchViewPager r0 = r10.searchViewPager
@@ -3140,7 +3170,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r1.<init>()
             r0.setOnItemLongClickListener((org.telegram.ui.Components.RecyclerListView.OnItemLongClickListenerExtended) r1)
             org.telegram.ui.Components.SearchViewPager r0 = r10.searchViewPager
-            org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda60 r1 = new org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda60
+            org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda61 r1 = new org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda61
             r1.<init>(r10)
             r0.setFilteredSearchViewDelegate(r1)
             org.telegram.ui.Components.SearchViewPager r0 = r10.searchViewPager
@@ -3150,7 +3180,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r2 = 0
             r0.<init>(r1, r2)
             r10.filtersView = r0
-            org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda57 r1 = new org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda57
+            org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda58 r1 = new org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda58
             r1.<init>(r10)
             r0.setOnItemClickListener((org.telegram.ui.Components.RecyclerListView.OnItemClickListener) r1)
             org.telegram.ui.Adapters.FiltersView r0 = r10.filtersView
@@ -3221,7 +3251,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r28, r29, r30, r31, r32, r33, r34)
             r12.addView(r0, r1)
             android.widget.FrameLayout r0 = r10.floatingButtonContainer
-            org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda23 r1 = new org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda23
+            org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda22 r1 = new org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda22
             r1.<init>(r10)
             r0.setOnClickListener(r1)
             org.telegram.ui.Components.RLottieImageView r0 = new org.telegram.ui.Components.RLottieImageView
@@ -3556,10 +3586,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r2.<init>(r10)
             r0.setOutlineProvider(r2)
         L_0x0945:
-            org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda21 r2 = new org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda21
+            org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda20 r2 = new org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda20
             r2.<init>(r10)
             r0.setOnClickListener(r2)
-            org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda29 r2 = new org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda29
+            org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda30 r2 = new org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda30
             r2.<init>(r10, r0)
             r0.setOnLongClickListener(r2)
             r2 = 2
@@ -3963,13 +3993,13 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$5(View view) {
+    public /* synthetic */ void lambda$createView$6(View view) {
         this.filterTabsView.setIsEditing(false);
         showDoneItem(false);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$6() {
+    public /* synthetic */ void lambda$createView$7() {
         if (this.initialDialogsType != 10) {
             hideFloatingButton(false);
         }
@@ -3977,7 +4007,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$7(ViewPage viewPage, View view, int i) {
+    public /* synthetic */ void lambda$createView$8(ViewPage viewPage, View view, int i) {
         int i2 = this.initialDialogsType;
         if (i2 == 10) {
             onItemLongClick(viewPage.listView, view, i, 0.0f, 0.0f, viewPage.dialogsType, viewPage.dialogsAdapter);
@@ -4015,7 +4045,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$8(View view, int i) {
+    public /* synthetic */ void lambda$createView$9(View view, int i) {
         if (this.initialDialogsType == 10) {
             SearchViewPager searchViewPager2 = this.searchViewPager;
             onItemLongClick(searchViewPager2.searchListView, view, i, 0.0f, 0.0f, -1, searchViewPager2.dialogsSearchAdapter);
@@ -4025,18 +4055,18 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$9(boolean z, ArrayList arrayList, ArrayList arrayList2, boolean z2) {
+    public /* synthetic */ void lambda$createView$10(boolean z, ArrayList arrayList, ArrayList arrayList2, boolean z2) {
         updateFiltersView(z, arrayList, arrayList2, z2, true);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$10(View view, int i) {
+    public /* synthetic */ void lambda$createView$11(View view, int i) {
         this.filtersView.cancelClickRunnables(true);
         addSearchFilter(this.filtersView.getFilterAt(i));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$11(View view) {
+    public /* synthetic */ void lambda$createView$12(View view) {
         ActionBarLayout actionBarLayout = this.parentLayout;
         if (actionBarLayout != null && actionBarLayout.isInPreviewMode()) {
             finishPreviewFragment();
@@ -4052,14 +4082,14 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$12(View view) {
+    public /* synthetic */ void lambda$createView$13(View view) {
         if (this.delegate != null && !this.selectedDialogs.isEmpty()) {
             this.delegate.didSelectDialogs(this, this.selectedDialogs, this.commentView.getFieldText(), false);
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ boolean lambda$createView$13(FrameLayout frameLayout, View view) {
+    public /* synthetic */ boolean lambda$createView$14(FrameLayout frameLayout, View view) {
         if (this.isNextButton) {
             return false;
         }
@@ -4068,14 +4098,14 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$14(View view) {
+    public /* synthetic */ void lambda$createView$15(View view) {
         if (SharedConfig.isAppUpdateAvailable()) {
             AndroidUtilities.openForView(SharedConfig.pendingAppUpdate.document, true, getParentActivity());
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$15(View view) {
+    public /* synthetic */ void lambda$createView$16(View view) {
         finishPreviewFragment();
     }
 
@@ -4084,7 +4114,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         int i2;
         if (this.selectAnimatedEmojiDialog == null) {
             SelectAnimatedEmojiDialog.SelectAnimatedEmojiDialogWindow[] selectAnimatedEmojiDialogWindowArr = new SelectAnimatedEmojiDialog.SelectAnimatedEmojiDialogWindow[1];
-            UserConfig.getInstance(UserConfig.selectedAccount).getCurrentUser();
+            TLRPC$User currentUser = UserConfig.getInstance(UserConfig.selectedAccount).getCurrentUser();
             SimpleTextView titleTextView = this.actionBar.getTitleTextView();
             if (titleTextView == null || titleTextView.getRightDrawable() == null) {
                 i2 = 0;
@@ -4103,24 +4133,34 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 }
                 i = dp;
             }
+            AnonymousClass28 r14 = r0;
+            int i3 = i;
             final SelectAnimatedEmojiDialog.SelectAnimatedEmojiDialogWindow[] selectAnimatedEmojiDialogWindowArr2 = selectAnimatedEmojiDialogWindowArr;
-            AnonymousClass28 r1 = new SelectAnimatedEmojiDialog(getContext(), true, Integer.valueOf(i2), 0, getResourceProvider()) {
+            AnonymousClass28 r0 = new SelectAnimatedEmojiDialog(this, getContext(), true, Integer.valueOf(i2), 0, getResourceProvider()) {
                 /* access modifiers changed from: protected */
-                public void onEmojiSelected(View view, Long l, TLRPC$Document tLRPC$Document) {
+                public void onEmojiSelected(View view, Long l, TLRPC$Document tLRPC$Document, Integer num) {
                     TLRPC$TL_account_updateEmojiStatus tLRPC$TL_account_updateEmojiStatus = new TLRPC$TL_account_updateEmojiStatus();
                     if (l == null) {
                         tLRPC$TL_account_updateEmojiStatus.emoji_status = new TLRPC$TL_emojiStatusEmpty();
+                    } else if (num != null) {
+                        TLRPC$TL_emojiStatusUntil tLRPC$TL_emojiStatusUntil = new TLRPC$TL_emojiStatusUntil();
+                        tLRPC$TL_account_updateEmojiStatus.emoji_status = tLRPC$TL_emojiStatusUntil;
+                        tLRPC$TL_emojiStatusUntil.document_id = l.longValue();
+                        ((TLRPC$TL_emojiStatusUntil) tLRPC$TL_account_updateEmojiStatus.emoji_status).until = num.intValue();
                     } else {
                         TLRPC$TL_emojiStatus tLRPC$TL_emojiStatus = new TLRPC$TL_emojiStatus();
                         tLRPC$TL_account_updateEmojiStatus.emoji_status = tLRPC$TL_emojiStatus;
                         tLRPC$TL_emojiStatus.document_id = l.longValue();
                     }
                     TLRPC$User user = MessagesController.getInstance(DialogsActivity.this.currentAccount).getUser(Long.valueOf(UserConfig.getInstance(DialogsActivity.this.currentAccount).getClientUserId()));
-                    user.emoji_status = tLRPC$TL_account_updateEmojiStatus.emoji_status;
-                    if (DialogsActivity.this.animatedStatusView != null && (user.emoji_status instanceof TLRPC$TL_emojiStatus)) {
-                        DialogsActivity.this.animatedStatusView.animateChange(ReactionsLayoutInBubble.VisibleReaction.fromCustomEmoji(Long.valueOf(((TLRPC$TL_emojiStatus) user.emoji_status).document_id)));
+                    if (user != null) {
+                        user.emoji_status = tLRPC$TL_account_updateEmojiStatus.emoji_status;
+                        if (DialogsActivity.this.animatedStatusView != null && (user.emoji_status instanceof TLRPC$TL_emojiStatus)) {
+                            DialogsActivity.this.animatedStatusView.animateChange(ReactionsLayoutInBubble.VisibleReaction.fromCustomEmoji(Long.valueOf(((TLRPC$TL_emojiStatus) user.emoji_status).document_id)));
+                        }
+                        NotificationCenter.getInstance(DialogsActivity.this.currentAccount).postNotificationName(NotificationCenter.userEmojiStatusUpdated, user);
+                        DialogsActivity.this.getMessagesController().updateEmojiStatusUntilUpdate(user.id, user.emoji_status);
                     }
-                    NotificationCenter.getInstance(DialogsActivity.this.currentAccount).postNotificationName(NotificationCenter.userEmojiStatusUpdated, user);
                     ConnectionsManager.getInstance(DialogsActivity.this.currentAccount).sendRequest(tLRPC$TL_account_updateEmojiStatus, DialogsActivity$28$$ExternalSyntheticLambda0.INSTANCE);
                     if (selectAnimatedEmojiDialogWindowArr2[0] != null) {
                         SelectAnimatedEmojiDialog.SelectAnimatedEmojiDialogWindow unused = DialogsActivity.this.selectAnimatedEmojiDialog = null;
@@ -4133,18 +4173,24 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     boolean z = tLObject instanceof TLRPC$TL_boolTrue;
                 }
             };
-            r1.setSelected(this.statusDrawable.getDrawable() instanceof AnimatedEmojiDrawable ? Long.valueOf(((AnimatedEmojiDrawable) this.statusDrawable.getDrawable()).getDocumentId()) : null);
-            r1.setSaveState(1);
-            r1.setScrimDrawable(this.statusDrawable, titleTextView);
-            AnonymousClass29 r0 = new SelectAnimatedEmojiDialog.SelectAnimatedEmojiDialogWindow(r1, -2, -2) {
+            if (currentUser != null) {
+                TLRPC$EmojiStatus tLRPC$EmojiStatus = currentUser.emoji_status;
+                if ((tLRPC$EmojiStatus instanceof TLRPC$TL_emojiStatusUntil) && ((TLRPC$TL_emojiStatusUntil) tLRPC$EmojiStatus).until > ((int) (System.currentTimeMillis() / 1000))) {
+                    r14.setExpireDateHint(((TLRPC$TL_emojiStatusUntil) currentUser.emoji_status).until);
+                }
+            }
+            r14.setSelected(this.statusDrawable.getDrawable() instanceof AnimatedEmojiDrawable ? Long.valueOf(((AnimatedEmojiDrawable) this.statusDrawable.getDrawable()).getDocumentId()) : null);
+            r14.setSaveState(1);
+            r14.setScrimDrawable(this.statusDrawable, titleTextView);
+            AnonymousClass29 r02 = new SelectAnimatedEmojiDialog.SelectAnimatedEmojiDialogWindow(r14, -2, -2) {
                 public void dismiss() {
                     super.dismiss();
                     SelectAnimatedEmojiDialog.SelectAnimatedEmojiDialogWindow unused = DialogsActivity.this.selectAnimatedEmojiDialog = null;
                 }
             };
-            this.selectAnimatedEmojiDialog = r0;
-            selectAnimatedEmojiDialogWindowArr[0] = r0;
-            selectAnimatedEmojiDialogWindowArr[0].showAsDropDown(this.actionBar, AndroidUtilities.dp(16.0f), i, 48);
+            this.selectAnimatedEmojiDialog = r02;
+            selectAnimatedEmojiDialogWindowArr[0] = r02;
+            selectAnimatedEmojiDialogWindowArr[0].showAsDropDown(this.actionBar, AndroidUtilities.dp(16.0f), i3, 48);
             selectAnimatedEmojiDialogWindowArr[0].dimBehind();
         }
     }
@@ -4399,7 +4445,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             this.selectedDialogsCountTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             this.selectedDialogsCountTextView.setTextColor(Theme.getColor("actionBarActionModeDefaultIcon"));
             createActionMode.addView(this.selectedDialogsCountTextView, LayoutHelper.createLinear(0, -1, 1.0f, 72, 0, 0, 0));
-            this.selectedDialogsCountTextView.setOnTouchListener(DialogsActivity$$ExternalSyntheticLambda30.INSTANCE);
+            this.selectedDialogsCountTextView.setOnTouchListener(DialogsActivity$$ExternalSyntheticLambda31.INSTANCE);
             int i = R.drawable.msg_pin;
             this.pinItem = createActionMode.addItemWithWidth(100, i, AndroidUtilities.dp(54.0f));
             this.muteItem = createActionMode.addItemWithWidth(104, R.drawable.msg_mute, AndroidUtilities.dp(54.0f));
@@ -4849,7 +4895,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             if (parentActivity != null) {
                 this.checkPermission = false;
                 boolean z = parentActivity.checkSelfPermission("android.permission.READ_CONTACTS") != 0;
-                AndroidUtilities.runOnUIThread(new DialogsActivity$$ExternalSyntheticLambda48(this, z, (i <= 28 || BuildVars.NO_SCOPED_STORAGE) && parentActivity.checkSelfPermission("android.permission.WRITE_EXTERNAL_STORAGE") != 0, parentActivity), (!this.afterSignup || !z) ? 0 : 4000);
+                AndroidUtilities.runOnUIThread(new DialogsActivity$$ExternalSyntheticLambda49(this, z, (i <= 28 || BuildVars.NO_SCOPED_STORAGE) && parentActivity.checkSelfPermission("android.permission.WRITE_EXTERNAL_STORAGE") != 0, parentActivity), (!this.afterSignup || !z) ? 0 : 4000);
             }
         } else if (!this.onlySelect && XiaomiUtilities.isMIUI() && Build.VERSION.SDK_INT >= 19 && !XiaomiUtilities.isCustomPermissionGranted(10020)) {
             if (getParentActivity() != null && !MessagesController.getGlobalNotificationsSettings().getBoolean("askedAboutMiuiLockscreen", false)) {
@@ -4914,7 +4960,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onResume$19(boolean z, boolean z2, Activity activity) {
+    public /* synthetic */ void lambda$onResume$20(boolean z, boolean z2, Activity activity) {
         this.afterSignup = false;
         if (z || z2) {
             this.askingForPermissions = true;
@@ -4933,7 +4979,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onResume$18(int i) {
+    public /* synthetic */ void lambda$onResume$19(int i) {
         this.askAboutContacts = i != 0;
         MessagesController.getGlobalNotificationsSettings().edit().putBoolean("askAboutContacts", this.askAboutContacts).apply();
         askForPermissons(false);
@@ -4946,7 +4992,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Missing exception handler attribute for start block: B:4:0x000e */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$onResume$20(android.content.DialogInterface r2, int r3) {
+    public /* synthetic */ void lambda$onResume$21(android.content.DialogInterface r2, int r3) {
         /*
             r1 = this;
             android.content.Intent r2 = org.telegram.messenger.XiaomiUtilities.getPermissionManagerIntent()
@@ -4977,7 +5023,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         L_0x003f:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.DialogsActivity.lambda$onResume$20(android.content.DialogInterface, int):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.DialogsActivity.lambda$onResume$21(android.content.DialogInterface, int):void");
     }
 
     public boolean presentFragment(BaseFragment baseFragment) {
@@ -5511,7 +5557,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         L_0x02c2:
             r2[r11] = r13
             android.animation.ValueAnimator r2 = android.animation.ValueAnimator.ofFloat(r2)
-            org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda2 r5 = new org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda2
+            org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda3 r5 = new org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda3
             r5.<init>(r6)
             r2.addUpdateListener(r5)
             r0.add(r2)
@@ -5753,7 +5799,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$showSearch$22(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$showSearch$23(ValueAnimator valueAnimator) {
         setSearchAnimationProgress(((Float) valueAnimator.getAnimatedValue()).floatValue());
     }
 
@@ -5837,7 +5883,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateFilterTabsVisibility$23(boolean z, float f, ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$updateFilterTabsVisibility$24(boolean z, float f, ValueAnimator valueAnimator) {
         float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         this.filterTabsProgress = floatValue;
         if (!z) {
@@ -6050,7 +6096,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             if (r10 != 0) goto L_0x0132
             if (r12 == 0) goto L_0x013c
         L_0x0132:
-            org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda49 r15 = new org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda49
+            org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda50 r15 = new org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda50
             r8 = r15
             r9 = r14
             r8.<init>(r9, r10, r11, r12, r13)
@@ -6062,7 +6108,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$checkListLoad$24(boolean z, boolean z2, boolean z3, boolean z4) {
+    public /* synthetic */ void lambda$checkListLoad$25(boolean z, boolean z2, boolean z3, boolean z4) {
         if (z) {
             getMessagesController().loadDialogs(this.folderId, -1, 100, z2);
         }
@@ -6558,7 +6604,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     builder.setMessage(LocaleController.formatString("ClearSearchSingleUserAlertText", R.string.ClearSearchSingleUserAlertText, ContactsController.formatName(user.first_name, user.last_name)));
                     j = DialogObject.makeEncryptedDialogId((long) tLRPC$EncryptedChat.id);
                 }
-                builder.setPositiveButton(LocaleController.getString("ClearSearchRemove", R.string.ClearSearchRemove).toUpperCase(), new DialogsActivity$$ExternalSyntheticLambda12(this, j));
+                builder.setPositiveButton(LocaleController.getString("ClearSearchRemove", R.string.ClearSearchRemove).toUpperCase(), new DialogsActivity$$ExternalSyntheticLambda11(this, j));
                 builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), (DialogInterface.OnClickListener) null);
                 AlertDialog create = builder.create();
                 showDialog(create);
@@ -6607,7 +6653,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onItemLongClick$25(long j, DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$onItemLongClick$26(long j, DialogInterface dialogInterface, int i) {
         this.searchViewPager.dialogsSearchAdapter.removeRecentSearch(j);
     }
 
@@ -6630,12 +6676,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             str = "HideAboveTheList";
         }
         charSequenceArr[1] = LocaleController.getString(str, i);
-        builder.setItems(charSequenceArr, iArr, new DialogsActivity$$ExternalSyntheticLambda7(this));
+        builder.setItems(charSequenceArr, iArr, new DialogsActivity$$ExternalSyntheticLambda10(this));
         showDialog(builder.create());
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onArchiveLongPress$26(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$onArchiveLongPress$27(DialogInterface dialogInterface, int i) {
         if (i == 0) {
             getMessagesStorage().readAllDialogs(1);
         } else if (i == 1 && this.viewPages != null) {
@@ -6718,7 +6764,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             actionBarMenuSubItem.setTextAndIcon(LocaleController.getString("MarkAsUnread", R.string.MarkAsUnread), R.drawable.msg_markunread);
         }
         actionBarMenuSubItem.setMinimumWidth(160);
-        actionBarMenuSubItem.setOnClickListener(new DialogsActivity$$ExternalSyntheticLambda28(this, dialogCell, dialogId));
+        actionBarMenuSubItem.setOnClickListener(new DialogsActivity$$ExternalSyntheticLambda29(this, dialogCell, dialogId));
         actionBarPopupWindowLayoutArr[0].addView(actionBarMenuSubItem);
         boolean[] zArr = {true};
         TLRPC$Dialog tLRPC$Dialog = getMessagesController().dialogs_dict.get(dialogId);
@@ -6815,7 +6861,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             }
             actionBarMenuSubItem2.setMinimumWidth(160);
             bundle = null;
-            actionBarMenuSubItem2.setOnClickListener(new DialogsActivity$$ExternalSyntheticLambda27(this, dialogFilter, tLRPC$Dialog, dialogId));
+            actionBarMenuSubItem2.setOnClickListener(new DialogsActivity$$ExternalSyntheticLambda28(this, dialogFilter, tLRPC$Dialog, dialogId));
             actionBarPopupWindowLayoutArr[0].addView(actionBarMenuSubItem2);
         } else {
             bundle = null;
@@ -6828,7 +6874,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 actionBarMenuSubItem3.setTextAndIcon(LocaleController.getString("Unmute", R.string.Unmute), R.drawable.msg_unmute);
             }
             actionBarMenuSubItem3.setMinimumWidth(160);
-            actionBarMenuSubItem3.setOnClickListener(new DialogsActivity$$ExternalSyntheticLambda25(this, dialogId));
+            actionBarMenuSubItem3.setOnClickListener(new DialogsActivity$$ExternalSyntheticLambda26(this, dialogId));
             z = false;
             actionBarPopupWindowLayoutArr[0].addView(actionBarMenuSubItem3);
         } else {
@@ -6839,7 +6885,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         actionBarMenuSubItem4.setTextColor(getThemedColor("dialogTextRed"));
         actionBarMenuSubItem4.setTextAndIcon(LocaleController.getString("Delete", R.string.Delete), R.drawable.msg_delete);
         actionBarMenuSubItem4.setMinimumWidth(160);
-        actionBarMenuSubItem4.setOnClickListener(new DialogsActivity$$ExternalSyntheticLambda26(this, arrayList2));
+        actionBarMenuSubItem4.setOnClickListener(new DialogsActivity$$ExternalSyntheticLambda27(this, arrayList2));
         actionBarPopupWindowLayoutArr[0].addView(actionBarMenuSubItem4);
         if (!getMessagesController().checkCanOpenChat(bundle2, this)) {
             return false;
@@ -6872,7 +6918,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$showChatPreview$27(DialogCell dialogCell, long j, View view) {
+    public /* synthetic */ void lambda$showChatPreview$28(DialogCell dialogCell, long j, View view) {
         if (dialogCell.getHasUnread()) {
             markAsRead(j);
         } else {
@@ -6882,13 +6928,13 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$showChatPreview$29(MessagesController.DialogFilter dialogFilter, TLRPC$Dialog tLRPC$Dialog, long j, View view) {
+    public /* synthetic */ void lambda$showChatPreview$30(MessagesController.DialogFilter dialogFilter, TLRPC$Dialog tLRPC$Dialog, long j, View view) {
         finishPreviewFragment();
-        AndroidUtilities.runOnUIThread(new DialogsActivity$$ExternalSyntheticLambda44(this, dialogFilter, tLRPC$Dialog, j), 100);
+        AndroidUtilities.runOnUIThread(new DialogsActivity$$ExternalSyntheticLambda45(this, dialogFilter, tLRPC$Dialog, j), 100);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$showChatPreview$28(MessagesController.DialogFilter dialogFilter, TLRPC$Dialog tLRPC$Dialog, long j) {
+    public /* synthetic */ void lambda$showChatPreview$29(MessagesController.DialogFilter dialogFilter, TLRPC$Dialog tLRPC$Dialog, long j) {
         int i;
         boolean z;
         MessagesController.DialogFilter dialogFilter2 = dialogFilter;
@@ -6943,7 +6989,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$showChatPreview$30(long j, View view) {
+    public /* synthetic */ void lambda$showChatPreview$31(long j, View view) {
         boolean isDialogMuted = getMessagesController().isDialogMuted(j);
         if (!isDialogMuted) {
             getNotificationsController().setDialogNotificationsSettings(j, 3);
@@ -6955,7 +7001,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$showChatPreview$31(ArrayList arrayList, View view) {
+    public /* synthetic */ void lambda$showChatPreview$32(ArrayList arrayList, View view) {
         performSelectedDialogsAction(arrayList, 102, false);
         finishPreviewFragment();
     }
@@ -6980,11 +7026,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         this.dialogRemoveFinished = 0;
         this.dialogInsertFinished = 0;
         this.dialogChangeFinished = 0;
-        AndroidUtilities.runOnUIThread(new DialogsActivity$$ExternalSyntheticLambda36(this));
+        AndroidUtilities.runOnUIThread(new DialogsActivity$$ExternalSyntheticLambda37(this));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onDialogAnimationFinished$32() {
+    public /* synthetic */ void lambda$onDialogAnimationFinished$33() {
         ArrayList<TLRPC$Dialog> arrayList;
         if (!(this.viewPages == null || this.folderId == 0 || ((arrayList = this.frozenDialogsList) != null && !arrayList.isEmpty()))) {
             int i = 0;
@@ -7117,7 +7163,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         int i = 0;
         ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{this.progressToActionMode, 0.0f});
         this.actionBarColorAnimator = ofFloat;
-        ofFloat.addUpdateListener(new DialogsActivity$$ExternalSyntheticLambda0(this));
+        ofFloat.addUpdateListener(new DialogsActivity$$ExternalSyntheticLambda1(this));
         this.actionBarColorAnimator.setInterpolator(CubicBezierInterpolator.DEFAULT);
         this.actionBarColorAnimator.setDuration(200);
         this.actionBarColorAnimator.start();
@@ -7155,7 +7201,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$hideActionMode$33(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$hideActionMode$34(ValueAnimator valueAnimator) {
         this.progressToActionMode = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         for (int i = 0; i < this.actionBar.getChildCount(); i++) {
             if (!(this.actionBar.getChildAt(i).getVisibility() != 0 || this.actionBar.getChildAt(i) == this.actionBar.getActionMode() || this.actionBar.getChildAt(i) == this.actionBar.getBackButton())) {
@@ -7526,7 +7572,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             if (r0 == 0) goto L_0x025d
             r15 = 1
         L_0x025d:
-            org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda56 r0 = new org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda56
+            org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda57 r0 = new org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda57
             r0.<init>(r13, r7)
             org.telegram.ui.Components.AlertsCreator.createBlockDialogAlert(r13, r10, r15, r8, r0)
             return
@@ -7663,7 +7709,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             if (r3 != r1) goto L_0x036b
             r1 = 0
             org.telegram.ui.ActionBar.BottomSheet r0 = org.telegram.ui.Components.AlertsCreator.createMuteAlert(r13, r5, r1)
-            org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda16 r1 = new org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda16
+            org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda15 r1 = new org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda15
             r1.<init>(r13)
             r13.showDialog(r0, r1)
             return
@@ -7738,7 +7784,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             if (r14 != r12) goto L_0x03fe
             r15 = 1
         L_0x03fe:
-            org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda50 r9 = new org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda50
+            org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda51 r9 = new org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda51
             r0 = r9
             r1 = r26
             r2 = r28
@@ -7794,7 +7840,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r6 = 4
             r5 = r21
             r6 = r16
-            r0.lambda$performSelectedDialogsAction$39(r1, r2, r4, r5, r6)
+            r0.lambda$performSelectedDialogsAction$40(r1, r2, r4, r5, r6)
             r16 = 102(0x66, float:1.43E-43)
             goto L_0x04ed
         L_0x046a:
@@ -8034,7 +8080,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             org.telegram.ui.Components.UndoView r0 = r26.getUndoView()
             r1 = 0
             r4 = 0
-            org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda43 r5 = new org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda43
+            org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda44 r5 = new org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda44
             r5.<init>(r13, r7)
             r0.showWithAction(r1, r3, r4, r5)
             goto L_0x0622
@@ -8069,21 +8115,21 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$performSelectedDialogsAction$34(ArrayList arrayList) {
+    public /* synthetic */ void lambda$performSelectedDialogsAction$35(ArrayList arrayList) {
         getMessagesController().addDialogToFolder(arrayList, this.folderId == 0 ? 0 : 1, -1, (ArrayList<TLRPC$TL_inputFolderPeer>) null, 0);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$performSelectedDialogsAction$36(ArrayList arrayList, int i, DialogInterface dialogInterface, int i2) {
+    public /* synthetic */ void lambda$performSelectedDialogsAction$37(ArrayList arrayList, int i, DialogInterface dialogInterface, int i2) {
         if (!arrayList.isEmpty()) {
             ArrayList arrayList2 = new ArrayList(arrayList);
-            getUndoView().showWithAction((ArrayList<Long>) arrayList2, i == 102 ? 27 : 26, (Object) null, (Object) null, (Runnable) new DialogsActivity$$ExternalSyntheticLambda41(this, i, arrayList2), (Runnable) null);
+            getUndoView().showWithAction((ArrayList<Long>) arrayList2, i == 102 ? 27 : 26, (Object) null, (Object) null, (Runnable) new DialogsActivity$$ExternalSyntheticLambda42(this, i, arrayList2), (Runnable) null);
             hideActionMode(i == 103);
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$performSelectedDialogsAction$35(int i, ArrayList arrayList) {
+    public /* synthetic */ void lambda$performSelectedDialogsAction$36(int i, ArrayList arrayList) {
         if (i == 102) {
             getMessagesController().setDialogsInTransaction(true);
             performSelectedDialogsAction(arrayList, i, false);
@@ -8101,7 +8147,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$performSelectedDialogsAction$37(ArrayList arrayList, boolean z, boolean z2) {
+    public /* synthetic */ void lambda$performSelectedDialogsAction$38(ArrayList arrayList, boolean z, boolean z2) {
         int size = arrayList.size();
         for (int i = 0; i < size; i++) {
             ArrayList arrayList2 = arrayList;
@@ -8118,13 +8164,13 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$performSelectedDialogsAction$38(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$performSelectedDialogsAction$39(DialogInterface dialogInterface, int i) {
         getMessagesController().hidePromoDialog();
         hideActionMode(false);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$performSelectedDialogsAction$40(int i, TLRPC$Chat tLRPC$Chat, long j, boolean z, boolean z2) {
+    public /* synthetic */ void lambda$performSelectedDialogsAction$41(int i, TLRPC$Chat tLRPC$Chat, long j, boolean z, boolean z2) {
         int i2;
         int i3;
         int i4;
@@ -8158,10 +8204,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             i2 = -1;
             UndoView undoView2 = getUndoView();
             int i7 = i5 == 103 ? 0 : 1;
-            DialogsActivity$$ExternalSyntheticLambda40 dialogsActivity$$ExternalSyntheticLambda40 = r0;
+            DialogsActivity$$ExternalSyntheticLambda41 dialogsActivity$$ExternalSyntheticLambda41 = r0;
             int i8 = i2;
-            DialogsActivity$$ExternalSyntheticLambda40 dialogsActivity$$ExternalSyntheticLambda402 = new DialogsActivity$$ExternalSyntheticLambda40(this, i, j, tLRPC$Chat, z, z2);
-            undoView2.showWithAction(j2, i7, (Runnable) dialogsActivity$$ExternalSyntheticLambda40);
+            DialogsActivity$$ExternalSyntheticLambda41 dialogsActivity$$ExternalSyntheticLambda412 = new DialogsActivity$$ExternalSyntheticLambda41(this, i, j, tLRPC$Chat, z, z2);
+            undoView2.showWithAction(j2, i7, (Runnable) dialogsActivity$$ExternalSyntheticLambda41);
             ArrayList arrayList2 = new ArrayList(getDialogsArray(this.currentAccount, this.viewPages[0].dialogsType, this.folderId, false));
             int i9 = 0;
             while (true) {
@@ -8195,7 +8241,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$performSelectedDialogsAction$41(DialogInterface dialogInterface) {
+    public /* synthetic */ void lambda$performSelectedDialogsAction$42(DialogInterface dialogInterface) {
         hideActionMode(true);
     }
 
@@ -8329,7 +8375,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
     /* access modifiers changed from: private */
     /* renamed from: performDeleteOrClearDialogAction */
-    public void lambda$performSelectedDialogsAction$39(int i, long j, TLRPC$Chat tLRPC$Chat, boolean z, boolean z2) {
+    public void lambda$performSelectedDialogsAction$40(int i, long j, TLRPC$Chat tLRPC$Chat, boolean z, boolean z2) {
         if (i == 103) {
             getMessagesController().deleteDialog(j, 1, z2);
             return;
@@ -8525,7 +8571,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         L_0x012f:
             if (r12 < 0) goto L_0x013e
             if (r13 != r12) goto L_0x013e
-            org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda38 r1 = new org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda38
+            org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda35 r1 = new org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda35
             r1.<init>(r15)
             r2 = 200(0xc8, double:9.9E-322)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r1, r2)
@@ -8542,7 +8588,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$pinDialog$42() {
+    public /* synthetic */ void lambda$pinDialog$43() {
         setDialogsListFrozen(false);
     }
 
@@ -8838,7 +8884,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             }
             ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{this.progressToActionMode, 1.0f});
             this.actionBarColorAnimator = ofFloat;
-            ofFloat.addUpdateListener(new DialogsActivity$$ExternalSyntheticLambda1(this));
+            ofFloat.addUpdateListener(new DialogsActivity$$ExternalSyntheticLambda2(this));
             this.actionBarColorAnimator.setInterpolator(CubicBezierInterpolator.DEFAULT);
             this.actionBarColorAnimator.setDuration(200);
             this.actionBarColorAnimator.start();
@@ -8866,7 +8912,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$showOrUpdateActionMode$43(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$showOrUpdateActionMode$44(ValueAnimator valueAnimator) {
         this.progressToActionMode = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         for (int i = 0; i < this.actionBar.getChildCount(); i++) {
             if (!(this.actionBar.getChildAt(i).getVisibility() != 0 || this.actionBar.getChildAt(i) == this.actionBar.getActionMode() || this.actionBar.getChildAt(i) == this.actionBar.getBackButton())) {
@@ -9144,7 +9190,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             ArrayList arrayList = new ArrayList();
             if (getUserConfig().syncContacts && this.askAboutContacts && parentActivity.checkSelfPermission("android.permission.READ_CONTACTS") != 0) {
                 if (z) {
-                    AlertDialog create = AlertsCreator.createContactsPermissionDialog(parentActivity, new DialogsActivity$$ExternalSyntheticLambda51(this)).create();
+                    AlertDialog create = AlertsCreator.createContactsPermissionDialog(parentActivity, new DialogsActivity$$ExternalSyntheticLambda53(this)).create();
                     this.permissionDialog = create;
                     showDialog(create);
                     return;
@@ -9170,7 +9216,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$askForPermissons$44(int i) {
+    public /* synthetic */ void lambda$askForPermissons$45(int i) {
         this.askAboutContacts = i != 0;
         MessagesController.getGlobalNotificationsSettings().edit().putBoolean("askAboutContacts", this.askAboutContacts).commit();
         askForPermissons(false);
@@ -9218,7 +9264,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     if (!str.equals("android.permission.WRITE_EXTERNAL_STORAGE")) {
                         if (str.equals("android.permission.READ_CONTACTS")) {
                             if (iArr[i2] == 0) {
-                                AndroidUtilities.runOnUIThread(new DialogsActivity$$ExternalSyntheticLambda34(this));
+                                AndroidUtilities.runOnUIThread(new DialogsActivity$$ExternalSyntheticLambda40(this));
                                 getContactsController().forceImportContacts();
                             } else {
                                 SharedPreferences.Editor edit = MessagesController.getGlobalNotificationsSettings().edit();
@@ -9254,7 +9300,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onRequestPermissionsResultFragment$45() {
+    public /* synthetic */ void lambda$onRequestPermissionsResultFragment$46() {
         getNotificationCenter().postNotificationName(NotificationCenter.forceImportContactsStart, new Object[0]);
     }
 
@@ -9315,7 +9361,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     if (!this.slowedReloadAfterDialogClick || !z) {
                         reloadViewPageDialogs(viewPage, objArr.length > 0);
                     } else {
-                        AndroidUtilities.runOnUIThread(new DialogsActivity$$ExternalSyntheticLambda47(this, viewPage, objArr), 160);
+                        AndroidUtilities.runOnUIThread(new DialogsActivity$$ExternalSyntheticLambda48(this, viewPage, objArr), 160);
                     }
                     i4++;
                 }
@@ -9361,6 +9407,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     i3++;
                 }
             }
+            updateStatus(UserConfig.getInstance(i2).getCurrentUser(), true);
         } else if (i == NotificationCenter.appDidLogout) {
             dialogsLoaded[this.currentAccount] = false;
         } else if (i == NotificationCenter.encryptedChatUpdated) {
@@ -9446,11 +9493,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         } else if (i == NotificationCenter.needDeleteDialog) {
             if (this.fragmentView != null && !this.isPaused) {
                 long longValue2 = objArr[0].longValue();
-                DialogsActivity$$ExternalSyntheticLambda45 dialogsActivity$$ExternalSyntheticLambda45 = new DialogsActivity$$ExternalSyntheticLambda45(this, objArr[2], longValue2, objArr[3].booleanValue(), objArr[1]);
+                DialogsActivity$$ExternalSyntheticLambda46 dialogsActivity$$ExternalSyntheticLambda46 = new DialogsActivity$$ExternalSyntheticLambda46(this, objArr[2], longValue2, objArr[3].booleanValue(), objArr[1]);
                 if (this.undoView[0] != null) {
-                    getUndoView().showWithAction(longValue2, 1, (Runnable) dialogsActivity$$ExternalSyntheticLambda45);
+                    getUndoView().showWithAction(longValue2, 1, (Runnable) dialogsActivity$$ExternalSyntheticLambda46);
                 } else {
-                    dialogsActivity$$ExternalSyntheticLambda45.run();
+                    dialogsActivity$$ExternalSyntheticLambda46.run();
                 }
             }
         } else if (i == NotificationCenter.folderBecomeEmpty) {
@@ -9535,7 +9582,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$didReceivedNotification$46(ViewPage viewPage, Object[] objArr) {
+    public /* synthetic */ void lambda$didReceivedNotification$47(ViewPage viewPage, Object[] objArr) {
         reloadViewPageDialogs(viewPage, objArr.length > 0);
         FilterTabsView filterTabsView2 = this.filterTabsView;
         if (filterTabsView2 != null && filterTabsView2.getVisibility() == 0) {
@@ -9544,7 +9591,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$didReceivedNotification$47(TLRPC$Chat tLRPC$Chat, long j, boolean z, TLRPC$User tLRPC$User) {
+    public /* synthetic */ void lambda$didReceivedNotification$48(TLRPC$Chat tLRPC$Chat, long j, boolean z, TLRPC$User tLRPC$User) {
         if (tLRPC$Chat == null) {
             getMessagesController().deleteDialog(j, 0, z);
             if (tLRPC$User != null && tLRPC$User.bot) {
@@ -9616,19 +9663,19 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         builder.setTitle(LocaleController.getString("HideNewChatsAlertTitle", R.string.HideNewChatsAlertTitle));
         builder.setMessage(AndroidUtilities.replaceTags(LocaleController.getString("HideNewChatsAlertText", R.string.HideNewChatsAlertText)));
         builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), (DialogInterface.OnClickListener) null);
-        builder.setPositiveButton(LocaleController.getString("GoToSettings", R.string.GoToSettings), new DialogsActivity$$ExternalSyntheticLambda10(this));
-        showDialog(builder.create(), new DialogsActivity$$ExternalSyntheticLambda15(this));
+        builder.setPositiveButton(LocaleController.getString("GoToSettings", R.string.GoToSettings), new DialogsActivity$$ExternalSyntheticLambda7(this));
+        showDialog(builder.create(), new DialogsActivity$$ExternalSyntheticLambda16(this));
         return true;
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$showSuggestion$48(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$showSuggestion$49(DialogInterface dialogInterface, int i) {
         presentFragment(new PrivacySettingsActivity());
         AndroidUtilities.scrollToFragmentRow(this.parentLayout, "newChatsRow");
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$showSuggestion$49(DialogInterface dialogInterface) {
+    public /* synthetic */ void lambda$showSuggestion$50(DialogInterface dialogInterface) {
         onSuggestionDismiss();
     }
 
@@ -9637,19 +9684,19 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             SharedPreferences globalMainSettings = MessagesController.getGlobalMainSettings();
             if (!globalMainSettings.getBoolean("filterhint", false)) {
                 globalMainSettings.edit().putBoolean("filterhint", true).commit();
-                AndroidUtilities.runOnUIThread(new DialogsActivity$$ExternalSyntheticLambda35(this), 1000);
+                AndroidUtilities.runOnUIThread(new DialogsActivity$$ExternalSyntheticLambda36(this), 1000);
             }
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$showFiltersHint$50() {
+    public /* synthetic */ void lambda$showFiltersHint$51() {
         presentFragment(new FiltersSetupActivity());
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$showFiltersHint$51() {
-        getUndoView().showWithAction(0, 15, (Runnable) null, new DialogsActivity$$ExternalSyntheticLambda39(this));
+    public /* synthetic */ void lambda$showFiltersHint$52() {
+        getUndoView().showWithAction(0, 15, (Runnable) null, new DialogsActivity$$ExternalSyntheticLambda38(this));
     }
 
     private void setDialogsListFrozen(boolean z, boolean z2) {
@@ -9915,7 +9962,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$hideFloatingButton$52(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$hideFloatingButton$53(ValueAnimator valueAnimator) {
         this.floatingButtonHideProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         this.floatingButtonTranslation = ((float) AndroidUtilities.dp(100.0f)) * this.floatingButtonHideProgress;
         updateFloatingButtonOffset();
@@ -9933,12 +9980,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         ValueAnimator duration = ValueAnimator.ofFloat(new float[]{this.contactsAlpha, f}).setDuration(250);
         this.contactsAlphaAnimator = duration;
         duration.setInterpolator(CubicBezierInterpolator.DEFAULT);
-        this.contactsAlphaAnimator.addUpdateListener(new DialogsActivity$$ExternalSyntheticLambda3(this));
+        this.contactsAlphaAnimator.addUpdateListener(new DialogsActivity$$ExternalSyntheticLambda5(this));
         this.contactsAlphaAnimator.start();
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$animateContactsAlpha$53(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$animateContactsAlpha$54(ValueAnimator valueAnimator) {
         setContactsAlpha(((Float) valueAnimator.getAnimatedValue()).floatValue());
     }
 
@@ -10178,7 +10225,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     AlertDialog alertDialog = new AlertDialog(getParentActivity(), 3);
                     TLRPC$TL_messages_checkHistoryImportPeer tLRPC$TL_messages_checkHistoryImportPeer = new TLRPC$TL_messages_checkHistoryImportPeer();
                     tLRPC$TL_messages_checkHistoryImportPeer.peer = getMessagesController().getInputPeer(j2);
-                    getConnectionsManager().sendRequest(tLRPC$TL_messages_checkHistoryImportPeer, new DialogsActivity$$ExternalSyntheticLambda53(this, alertDialog, tLRPC$User, tLRPC$Chat, j, z2, tLRPC$TL_messages_checkHistoryImportPeer));
+                    getConnectionsManager().sendRequest(tLRPC$TL_messages_checkHistoryImportPeer, new DialogsActivity$$ExternalSyntheticLambda54(this, alertDialog, tLRPC$User, tLRPC$Chat, j, z2, tLRPC$TL_messages_checkHistoryImportPeer));
                     try {
                         alertDialog.showDelayed(300);
                     } catch (Exception unused) {
@@ -10238,7 +10285,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 }
                 builder.setTitle(str);
                 builder.setMessage(AndroidUtilities.replaceTags(str3));
-                builder.setPositiveButton(str2, new DialogsActivity$$ExternalSyntheticLambda11(this, j2));
+                builder.setPositiveButton(str2, new DialogsActivity$$ExternalSyntheticLambda12(this, j2));
                 builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), (DialogInterface.OnClickListener) null);
                 showDialog(builder.create());
             }
@@ -10246,12 +10293,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$didSelectResult$56(AlertDialog alertDialog, TLRPC$User tLRPC$User, TLRPC$Chat tLRPC$Chat, long j, boolean z, TLRPC$TL_messages_checkHistoryImportPeer tLRPC$TL_messages_checkHistoryImportPeer, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new DialogsActivity$$ExternalSyntheticLambda46(this, alertDialog, tLObject, tLRPC$User, tLRPC$Chat, j, z, tLRPC$TL_error, tLRPC$TL_messages_checkHistoryImportPeer));
+    public /* synthetic */ void lambda$didSelectResult$57(AlertDialog alertDialog, TLRPC$User tLRPC$User, TLRPC$Chat tLRPC$Chat, long j, boolean z, TLRPC$TL_messages_checkHistoryImportPeer tLRPC$TL_messages_checkHistoryImportPeer, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new DialogsActivity$$ExternalSyntheticLambda47(this, alertDialog, tLObject, tLRPC$User, tLRPC$Chat, j, z, tLRPC$TL_error, tLRPC$TL_messages_checkHistoryImportPeer));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$didSelectResult$55(AlertDialog alertDialog, TLObject tLObject, TLRPC$User tLRPC$User, TLRPC$Chat tLRPC$Chat, long j, boolean z, TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_messages_checkHistoryImportPeer tLRPC$TL_messages_checkHistoryImportPeer) {
+    public /* synthetic */ void lambda$didSelectResult$56(AlertDialog alertDialog, TLObject tLObject, TLRPC$User tLRPC$User, TLRPC$Chat tLRPC$Chat, long j, boolean z, TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_messages_checkHistoryImportPeer tLRPC$TL_messages_checkHistoryImportPeer) {
         try {
             alertDialog.dismiss();
         } catch (Exception e) {
@@ -10259,7 +10306,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         }
         this.checkingImportDialog = false;
         if (tLObject != null) {
-            AlertsCreator.createImportDialogAlert(this, this.arguments.getString("importTitle"), ((TLRPC$TL_messages_checkedHistoryImportPeer) tLObject).confirm_text, tLRPC$User, tLRPC$Chat, new DialogsActivity$$ExternalSyntheticLambda42(this, j, z));
+            AlertsCreator.createImportDialogAlert(this, this.arguments.getString("importTitle"), ((TLRPC$TL_messages_checkedHistoryImportPeer) tLObject).confirm_text, tLRPC$User, tLRPC$Chat, new DialogsActivity$$ExternalSyntheticLambda43(this, j, z));
             return;
         }
         AlertsCreator.processError(this.currentAccount, tLRPC$TL_error, this, tLRPC$TL_messages_checkHistoryImportPeer, new Object[0]);
@@ -10267,7 +10314,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$didSelectResult$54(long j, boolean z) {
+    public /* synthetic */ void lambda$didSelectResult$55(long j, boolean z) {
         setDialogsListFrozen(true);
         ArrayList arrayList = new ArrayList();
         arrayList.add(Long.valueOf(j));
@@ -10275,7 +10322,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$didSelectResult$57(long j, DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$didSelectResult$58(long j, DialogInterface dialogInterface, int i) {
         didSelectResult(j, false, false);
     }
 
@@ -10308,14 +10355,14 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 return false;
             }
         });
-        actionBarPopupWindowLayout.setDispatchKeyEventListener(new DialogsActivity$$ExternalSyntheticLambda54(this));
+        actionBarPopupWindowLayout.setDispatchKeyEventListener(new DialogsActivity$$ExternalSyntheticLambda55(this));
         actionBarPopupWindowLayout.setShownFromBottom(false);
         actionBarPopupWindowLayout.setupRadialSelectors(getThemedColor("dialogButtonSelector"));
         ActionBarMenuSubItem actionBarMenuSubItem = new ActionBarMenuSubItem((Context) parentActivity, true, true, resourceProvider);
         actionBarMenuSubItem.setTextAndIcon(LocaleController.getString("SendWithoutSound", R.string.SendWithoutSound), R.drawable.input_notify_off);
         actionBarMenuSubItem.setMinimumWidth(AndroidUtilities.dp(196.0f));
         actionBarPopupWindowLayout.addView(actionBarMenuSubItem, LayoutHelper.createLinear(-1, 48));
-        actionBarMenuSubItem.setOnClickListener(new DialogsActivity$$ExternalSyntheticLambda20(this));
+        actionBarMenuSubItem.setOnClickListener(new DialogsActivity$$ExternalSyntheticLambda21(this));
         linearLayout.addView(actionBarPopupWindowLayout, LayoutHelper.createLinear(-1, -2));
         ActionBarPopupWindow actionBarPopupWindow = new ActionBarPopupWindow(linearLayout, -2, -2);
         this.sendPopupWindow = actionBarPopupWindow;
@@ -10338,7 +10385,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onSendLongClick$58(KeyEvent keyEvent) {
+    public /* synthetic */ void lambda$onSendLongClick$59(KeyEvent keyEvent) {
         ActionBarPopupWindow actionBarPopupWindow;
         if (keyEvent.getKeyCode() == 4 && keyEvent.getRepeatCount() == 0 && (actionBarPopupWindow = this.sendPopupWindow) != null && actionBarPopupWindow.isShowing()) {
             this.sendPopupWindow.dismiss();
@@ -10346,7 +10393,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onSendLongClick$59(View view) {
+    public /* synthetic */ void lambda$onSendLongClick$60(View view) {
         ActionBarPopupWindow actionBarPopupWindow = this.sendPopupWindow;
         if (actionBarPopupWindow != null && actionBarPopupWindow.isShowing()) {
             this.sendPopupWindow.dismiss();
@@ -10359,7 +10406,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         RecyclerListView recyclerListView;
-        DialogsActivity$$ExternalSyntheticLambda55 dialogsActivity$$ExternalSyntheticLambda55 = new DialogsActivity$$ExternalSyntheticLambda55(this);
+        DialogsActivity$$ExternalSyntheticLambda56 dialogsActivity$$ExternalSyntheticLambda56 = new DialogsActivity$$ExternalSyntheticLambda56(this);
         ArrayList<ThemeDescription> arrayList = new ArrayList<>();
         arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
         if (this.movingView != null) {
@@ -10376,7 +10423,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             if (this.searchViewPager != null) {
                 arrayList.add(new ThemeDescription(this.searchViewPager.searchListView, ThemeDescription.FLAG_LISTGLOWCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"));
             }
-            arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda55, "actionBarDefaultIcon"));
+            arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda56, "actionBarDefaultIcon"));
             arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, (Class[]) null, (Paint) null, new Drawable[]{Theme.dialogs_holidayDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultTitle"));
             arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSelector"));
             arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SEARCH, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSearch"));
@@ -10396,11 +10443,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_AM_TOPBACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarActionModeDefaultTop"));
         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_AM_SELECTORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarActionModeDefaultSelector"));
         arrayList.add(new ThemeDescription(this.selectedDialogsCountTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarActionModeDefaultIcon"));
-        DialogsActivity$$ExternalSyntheticLambda55 dialogsActivity$$ExternalSyntheticLambda552 = dialogsActivity$$ExternalSyntheticLambda55;
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda552, "actionBarDefaultSubmenuBackground"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda552, "actionBarDefaultSubmenuItem"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda552, "actionBarDefaultSubmenuItemIcon"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda552, "dialogButtonSelector"));
+        DialogsActivity$$ExternalSyntheticLambda56 dialogsActivity$$ExternalSyntheticLambda562 = dialogsActivity$$ExternalSyntheticLambda56;
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda562, "actionBarDefaultSubmenuBackground"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda562, "actionBarDefaultSubmenuItem"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda562, "actionBarDefaultSubmenuItemIcon"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda562, "dialogButtonSelector"));
         if (this.filterTabsView != null) {
             if (this.actionBar.isActionModeShowed()) {
                 arrayList.add(new ThemeDescription((View) this.filterTabsView, 0, new Class[]{FilterTabsView.class}, new String[]{"selectorDrawable"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "profile_tabSelectedLine"));
@@ -10488,24 +10535,24 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             }
             i++;
         }
-        DialogsActivity$$ExternalSyntheticLambda55 dialogsActivity$$ExternalSyntheticLambda553 = dialogsActivity$$ExternalSyntheticLambda55;
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda553, "avatar_backgroundRed"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda553, "avatar_backgroundOrange"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda553, "avatar_backgroundViolet"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda553, "avatar_backgroundGreen"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda553, "avatar_backgroundCyan"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda553, "avatar_backgroundBlue"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda553, "avatar_backgroundPink"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda553, "avatar_backgroundSaved"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda553, "avatar_backgroundArchived"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda553, "avatar_backgroundArchivedHidden"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda553, "chats_nameMessage"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda553, "chats_draft"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda553, "chats_attachMessage"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda553, "chats_nameArchived"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda553, "chats_nameMessageArchived"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda553, "chats_nameMessageArchived_threeLines"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda553, "chats_messageArchived"));
+        DialogsActivity$$ExternalSyntheticLambda56 dialogsActivity$$ExternalSyntheticLambda563 = dialogsActivity$$ExternalSyntheticLambda56;
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda563, "avatar_backgroundRed"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda563, "avatar_backgroundOrange"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda563, "avatar_backgroundViolet"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda563, "avatar_backgroundGreen"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda563, "avatar_backgroundCyan"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda563, "avatar_backgroundBlue"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda563, "avatar_backgroundPink"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda563, "avatar_backgroundSaved"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda563, "avatar_backgroundArchived"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda563, "avatar_backgroundArchivedHidden"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda563, "chats_nameMessage"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda563, "chats_draft"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda563, "chats_attachMessage"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda563, "chats_nameArchived"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda563, "chats_nameMessageArchived"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda563, "chats_nameMessageArchived_threeLines"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda563, "chats_messageArchived"));
         if (this.viewPages != null) {
             int i2 = 0;
             while (i2 < this.viewPages.length) {
@@ -10543,11 +10590,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 arrayList.add(new ThemeDescription((View) this.viewPages[i2].listView, 0, new Class[]{DialogCell.class}, new RLottieDrawable[]{Theme.dialogs_unarchiveDrawable}, "Box1", "chats_archiveIcon"));
                 arrayList.add(new ThemeDescription((View) this.viewPages[i2].listView, 0, new Class[]{UserCell.class}, new String[]{"nameTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
                 ThemeDescription themeDescription = r1;
-                DialogsActivity$$ExternalSyntheticLambda55 dialogsActivity$$ExternalSyntheticLambda554 = dialogsActivity$$ExternalSyntheticLambda55;
+                DialogsActivity$$ExternalSyntheticLambda56 dialogsActivity$$ExternalSyntheticLambda564 = dialogsActivity$$ExternalSyntheticLambda56;
                 int i3 = i2;
-                ThemeDescription themeDescription2 = new ThemeDescription((View) this.viewPages[i2].listView, 0, new Class[]{UserCell.class}, new String[]{"statusColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) dialogsActivity$$ExternalSyntheticLambda554, "windowBackgroundWhiteGrayText");
+                ThemeDescription themeDescription2 = new ThemeDescription((View) this.viewPages[i2].listView, 0, new Class[]{UserCell.class}, new String[]{"statusColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) dialogsActivity$$ExternalSyntheticLambda564, "windowBackgroundWhiteGrayText");
                 arrayList.add(themeDescription);
-                arrayList.add(new ThemeDescription((View) this.viewPages[i3].listView, 0, new Class[]{UserCell.class}, new String[]{"statusOnlineColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) dialogsActivity$$ExternalSyntheticLambda554, "windowBackgroundWhiteBlueText"));
+                arrayList.add(new ThemeDescription((View) this.viewPages[i3].listView, 0, new Class[]{UserCell.class}, new String[]{"statusOnlineColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) dialogsActivity$$ExternalSyntheticLambda564, "windowBackgroundWhiteBlueText"));
                 arrayList.add(new ThemeDescription((View) this.viewPages[i3].listView, 0, new Class[]{TextCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueText4"));
                 arrayList.add(new ThemeDescription((View) this.viewPages[i3].listView, 0, new Class[]{TextCell.class}, new String[]{"imageView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueText4"));
                 arrayList.add(new ThemeDescription(this.viewPages[i3].progressView, ThemeDescription.FLAG_PROGRESSBAR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "progressCircle"));
@@ -10560,9 +10607,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 i2 = i3 + 1;
             }
         }
-        DialogsActivity$$ExternalSyntheticLambda55 dialogsActivity$$ExternalSyntheticLambda555 = dialogsActivity$$ExternalSyntheticLambda55;
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda555, "chats_archivePullDownBackground"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda555, "chats_archivePullDownBackgroundActive"));
+        DialogsActivity$$ExternalSyntheticLambda56 dialogsActivity$$ExternalSyntheticLambda565 = dialogsActivity$$ExternalSyntheticLambda56;
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda565, "chats_archivePullDownBackground"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda565, "chats_archivePullDownBackgroundActive"));
         arrayList.add(new ThemeDescription(this.sideMenu, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_menuBackground"));
         arrayList.add(new ThemeDescription(this.sideMenu, 0, new Class[]{DrawerProfileCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_menuName"));
         arrayList.add(new ThemeDescription(this.sideMenu, 0, new Class[]{DrawerProfileCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_menuPhone"));
@@ -10572,8 +10619,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         arrayList.add(new ThemeDescription(this.sideMenu, 0, new Class[]{DrawerProfileCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_menuTopShadow"));
         arrayList.add(new ThemeDescription(this.sideMenu, 0, new Class[]{DrawerProfileCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_menuTopShadowCats"));
         arrayList.add(new ThemeDescription((View) this.sideMenu, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{DrawerProfileCell.class}, new String[]{"darkThemeView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_menuName"));
-        arrayList.add(new ThemeDescription(this.sideMenu, ThemeDescription.FLAG_CHECKTAG | ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{DrawerProfileCell.class}, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda555, "chats_menuTopBackgroundCats"));
-        arrayList.add(new ThemeDescription(this.sideMenu, ThemeDescription.FLAG_CHECKTAG | ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{DrawerProfileCell.class}, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda555, "chats_menuTopBackground"));
+        arrayList.add(new ThemeDescription(this.sideMenu, ThemeDescription.FLAG_CHECKTAG | ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{DrawerProfileCell.class}, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda565, "chats_menuTopBackgroundCats"));
+        arrayList.add(new ThemeDescription(this.sideMenu, ThemeDescription.FLAG_CHECKTAG | ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{DrawerProfileCell.class}, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda565, "chats_menuTopBackground"));
         arrayList.add(new ThemeDescription((View) this.sideMenu, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{DrawerActionCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_menuItemIcon"));
         arrayList.add(new ThemeDescription((View) this.sideMenu, 0, new Class[]{DrawerActionCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_menuItemText"));
         arrayList.add(new ThemeDescription((View) this.sideMenu, 0, new Class[]{DrawerUserCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_menuItemText"));
@@ -10696,13 +10743,13 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             arrayList.add(new ThemeDescription((View) this.commentView, ThemeDescription.FLAG_CURSORCOLOR, new Class[]{ChatActivityEnterView.class}, new String[]{"messageEditText"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_messagePanelCursor"));
             arrayList.add(new ThemeDescription((View) this.commentView, ThemeDescription.FLAG_HINTTEXTCOLOR, new Class[]{ChatActivityEnterView.class}, new String[]{"messageEditText"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_messagePanelHint"));
         }
-        DialogsActivity$$ExternalSyntheticLambda55 dialogsActivity$$ExternalSyntheticLambda556 = dialogsActivity$$ExternalSyntheticLambda55;
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda556, "actionBarTipBackground"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda556, "windowBackgroundWhiteBlackText"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda556, "player_time"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda556, "chat_messagePanelCursor"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda556, "avatar_actionBarIconBlue"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda556, "groupcreate_spanBackground"));
+        DialogsActivity$$ExternalSyntheticLambda56 dialogsActivity$$ExternalSyntheticLambda566 = dialogsActivity$$ExternalSyntheticLambda56;
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda566, "actionBarTipBackground"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda566, "windowBackgroundWhiteBlackText"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda566, "player_time"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda566, "chat_messagePanelCursor"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda566, "avatar_actionBarIconBlue"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, dialogsActivity$$ExternalSyntheticLambda566, "groupcreate_spanBackground"));
         arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "voipgroup_overlayGreen1"));
         arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "voipgroup_overlayGreen2"));
         arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "voipgroup_overlayBlue1"));
@@ -10734,7 +10781,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$getThemeDescriptions$60() {
+    public /* synthetic */ void lambda$getThemeDescriptions$61() {
         DialogsSearchAdapter dialogsSearchAdapter;
         RecyclerListView innerListView;
         ViewGroup viewGroup;
@@ -10897,7 +10944,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         }
         ValueAnimator ofFloat2 = ValueAnimator.ofFloat(new float[]{this.slideFragmentProgress, 1.0f});
         this.slideBackTransitionAnimator = ofFloat2;
-        ofFloat2.addUpdateListener(new DialogsActivity$$ExternalSyntheticLambda5(this));
+        ofFloat2.addUpdateListener(new DialogsActivity$$ExternalSyntheticLambda0(this));
         this.slideBackTransitionAnimator.setInterpolator(CubicBezierInterpolator.EASE_OUT);
         this.slideBackTransitionAnimator.setDuration((long) ((int) (((float) Math.max((int) ((200.0f / ((float) getLayoutContainer().getMeasuredWidth())) * f), 80)) * 1.2f)));
         this.slideBackTransitionAnimator.start();
@@ -10905,7 +10952,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$getCustomSlideTransition$61(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$getCustomSlideTransition$62(ValueAnimator valueAnimator) {
         setSlideTransitionProgress(((Float) valueAnimator.getAnimatedValue()).floatValue());
     }
 

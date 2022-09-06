@@ -12,6 +12,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda23
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$loadHintDialogs$159(tLObject, tLRPC$TL_error);
+        this.f$0.lambda$generateUpdateMessage$256(tLObject, tLRPC$TL_error);
     }
 }

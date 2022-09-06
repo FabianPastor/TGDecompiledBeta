@@ -1,19 +1,21 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC$ChatFull;
+import org.telegram.tgnet.TLRPC$Chat;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda152 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ TLRPC$ChatFull f$1;
-    public final /* synthetic */ String f$2;
+    public final /* synthetic */ TLRPC$Chat f$1;
+    public final /* synthetic */ boolean f$2;
+    public final /* synthetic */ int f$3;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda152(MessagesController messagesController, TLRPC$ChatFull tLRPC$ChatFull, String str) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda152(MessagesController messagesController, TLRPC$Chat tLRPC$Chat, boolean z, int i) {
         this.f$0 = messagesController;
-        this.f$1 = tLRPC$ChatFull;
-        this.f$2 = str;
+        this.f$1 = tLRPC$Chat;
+        this.f$2 = z;
+        this.f$3 = i;
     }
 
     public final void run() {
-        this.f$0.lambda$updateChatAbout$237(this.f$1, this.f$2);
+        this.f$0.lambda$startShortPoll$265(this.f$1, this.f$2, this.f$3);
     }
 }

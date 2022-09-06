@@ -111,6 +111,7 @@ import org.telegram.tgnet.TLRPC$TL_inputMessagesFilterRoundVoice;
 import org.telegram.tgnet.TLRPC$TL_inputMessagesFilterUrl;
 import org.telegram.tgnet.TLRPC$TL_inputMessagesFilterVideo;
 import org.telegram.tgnet.TLRPC$TL_inputStickerSetDice;
+import org.telegram.tgnet.TLRPC$TL_inputStickerSetEmojiDefaultStatuses;
 import org.telegram.tgnet.TLRPC$TL_inputStickerSetEmojiGenericAnimations;
 import org.telegram.tgnet.TLRPC$TL_inputStickerSetEmpty;
 import org.telegram.tgnet.TLRPC$TL_inputStickerSetID;
@@ -331,6 +332,7 @@ public class MediaDataController extends BaseController {
     private Runnable[] scheduledLoadStickers = new Runnable[7];
     private ArrayList<MessageObject> searchResultMessages = new ArrayList<>();
     private SparseArray<MessageObject>[] searchResultMessagesMap = {new SparseArray<>(), new SparseArray<>()};
+    private TLRPC$TL_messages_stickerSet stickerSetDefaultStatuses = null;
     private ArrayList<TLRPC$TL_messages_stickerSet>[] stickerSets = {new ArrayList<>(), new ArrayList<>(), new ArrayList<>(0), new ArrayList<>(), new ArrayList<>(), new ArrayList<>()};
     private LongSparseArray<TLRPC$TL_messages_stickerSet> stickerSetsById = new LongSparseArray<>();
     private ConcurrentHashMap<String, TLRPC$TL_messages_stickerSet> stickerSetsByName = new ConcurrentHashMap<>(100, 1.0f, 1);
@@ -1070,7 +1072,6 @@ public class MediaDataController extends BaseController {
         imageReceiver.setFileLoadingPriority(0);
         imageReceiver.setUniqKeyPrefix("preload");
         imageReceiver.setImage(imageLocation, str, (Drawable) null, (String) null, 0, 11);
-        ImageLoader.getInstance().loadImageForImageReceiver(imageReceiver);
     }
 
     /* access modifiers changed from: private */
@@ -1505,7 +1506,7 @@ public class MediaDataController extends BaseController {
             r0.packs = r4
             org.telegram.tgnet.TLRPC$StickerSet r4 = r13.set
             r0.set = r4
-            org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda110 r4 = new org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda110
+            org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda109 r4 = new org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda109
             r4.<init>(r12, r13)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r4)
             r8 = 1
@@ -1637,6 +1638,7 @@ public class MediaDataController extends BaseController {
     }
 
     public TLRPC$TL_messages_stickerSet getStickerSet(TLRPC$InputStickerSet tLRPC$InputStickerSet, boolean z, Runnable runnable) {
+        TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet;
         String str;
         if (tLRPC$InputStickerSet == null) {
             return null;
@@ -1647,30 +1649,36 @@ public class MediaDataController extends BaseController {
         if ((tLRPC$InputStickerSet instanceof TLRPC$TL_inputStickerSetShortName) && (str = tLRPC$InputStickerSet.short_name) != null && this.stickerSetsByName.containsKey(str.toLowerCase())) {
             return this.stickerSetsByName.get(tLRPC$InputStickerSet.short_name.toLowerCase());
         }
+        if ((tLRPC$InputStickerSet instanceof TLRPC$TL_inputStickerSetEmojiDefaultStatuses) && (tLRPC$TL_messages_stickerSet = this.stickerSetDefaultStatuses) != null) {
+            return tLRPC$TL_messages_stickerSet;
+        }
         if (z) {
             return null;
         }
         TLRPC$TL_messages_getStickerSet tLRPC$TL_messages_getStickerSet = new TLRPC$TL_messages_getStickerSet();
         tLRPC$TL_messages_getStickerSet.stickerset = tLRPC$InputStickerSet;
-        getConnectionsManager().sendRequest(tLRPC$TL_messages_getStickerSet, new MediaDataController$$ExternalSyntheticLambda192(this, runnable));
+        getConnectionsManager().sendRequest(tLRPC$TL_messages_getStickerSet, new MediaDataController$$ExternalSyntheticLambda197(this, tLRPC$InputStickerSet, runnable));
         return null;
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$getStickerSet$29(Runnable runnable, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$getStickerSet$29(TLRPC$InputStickerSet tLRPC$InputStickerSet, Runnable runnable, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject != null) {
-            AndroidUtilities.runOnUIThread(new MediaDataController$$ExternalSyntheticLambda107(this, (TLRPC$TL_messages_stickerSet) tLObject));
+            AndroidUtilities.runOnUIThread(new MediaDataController$$ExternalSyntheticLambda111(this, (TLRPC$TL_messages_stickerSet) tLObject, tLRPC$InputStickerSet));
         } else if (runnable != null) {
             runnable.run();
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$getStickerSet$28(TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet) {
+    public /* synthetic */ void lambda$getStickerSet$28(TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet, TLRPC$InputStickerSet tLRPC$InputStickerSet) {
         TLRPC$StickerSet tLRPC$StickerSet;
         if (tLRPC$TL_messages_stickerSet != null && (tLRPC$StickerSet = tLRPC$TL_messages_stickerSet.set) != null) {
             this.stickerSetsById.put(tLRPC$StickerSet.id, tLRPC$TL_messages_stickerSet);
             this.stickerSetsByName.put(tLRPC$TL_messages_stickerSet.set.short_name.toLowerCase(), tLRPC$TL_messages_stickerSet);
+            if (tLRPC$InputStickerSet instanceof TLRPC$TL_inputStickerSetEmojiDefaultStatuses) {
+                this.stickerSetDefaultStatuses = tLRPC$TL_messages_stickerSet;
+            }
             getNotificationCenter().postNotificationName(NotificationCenter.groupStickersDidLoad, Long.valueOf(tLRPC$TL_messages_stickerSet.set.id), tLRPC$TL_messages_stickerSet);
         }
     }
@@ -1705,7 +1713,7 @@ public class MediaDataController extends BaseController {
                 loadGroupStickerSet(tLRPC$StickerSet, false);
             }
             if (tLRPC$TL_messages_stickerSet != null && tLRPC$TL_messages_stickerSet.set != null) {
-                AndroidUtilities.runOnUIThread(new MediaDataController$$ExternalSyntheticLambda108(this, tLRPC$TL_messages_stickerSet));
+                AndroidUtilities.runOnUIThread(new MediaDataController$$ExternalSyntheticLambda107(this, tLRPC$TL_messages_stickerSet));
             }
         } catch (Throwable th) {
             FileLog.e(th);
@@ -1732,7 +1740,7 @@ public class MediaDataController extends BaseController {
     }
 
     private void putSetToCache(TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet) {
-        getMessagesStorage().getStorageQueue().postRunnable(new MediaDataController$$ExternalSyntheticLambda109(this, tLRPC$TL_messages_stickerSet));
+        getMessagesStorage().getStorageQueue().postRunnable(new MediaDataController$$ExternalSyntheticLambda108(this, tLRPC$TL_messages_stickerSet));
     }
 
     /* access modifiers changed from: private */
@@ -3122,7 +3130,7 @@ public class MediaDataController extends BaseController {
         arrayList.add(tLRPC$Message);
         TLRPC$TL_messages_getStickerSet tLRPC$TL_messages_getStickerSet = new TLRPC$TL_messages_getStickerSet();
         tLRPC$TL_messages_getStickerSet.stickerset = MessageObject.getInputStickerSet(tLRPC$Message);
-        getConnectionsManager().sendRequest(tLRPC$TL_messages_getStickerSet, new MediaDataController$$ExternalSyntheticLambda193(this, str));
+        getConnectionsManager().sendRequest(tLRPC$TL_messages_getStickerSet, new MediaDataController$$ExternalSyntheticLambda192(this, str));
     }
 
     /* access modifiers changed from: private */
@@ -3244,10 +3252,10 @@ public class MediaDataController extends BaseController {
             tLRPC$TL_messages_getStickerSet.stickerset = tLRPC$TL_inputStickerSetID;
             tLRPC$TL_inputStickerSetID.id = tLRPC$StickerSet.id;
             tLRPC$TL_inputStickerSetID.access_hash = tLRPC$StickerSet.access_hash;
-            MediaDataController$$ExternalSyntheticLambda196 mediaDataController$$ExternalSyntheticLambda196 = r0;
+            MediaDataController$$ExternalSyntheticLambda195 mediaDataController$$ExternalSyntheticLambda195 = r0;
             ConnectionsManager connectionsManager = getConnectionsManager();
-            MediaDataController$$ExternalSyntheticLambda196 mediaDataController$$ExternalSyntheticLambda1962 = new MediaDataController$$ExternalSyntheticLambda196(this, arrayList, i2, longSparseArray, tLRPC$StickerSet, tLRPC$TL_messages_allStickers, i);
-            connectionsManager.sendRequest(tLRPC$TL_messages_getStickerSet, mediaDataController$$ExternalSyntheticLambda196);
+            MediaDataController$$ExternalSyntheticLambda195 mediaDataController$$ExternalSyntheticLambda1952 = new MediaDataController$$ExternalSyntheticLambda195(this, arrayList, i2, longSparseArray, tLRPC$StickerSet, tLRPC$TL_messages_allStickers, i);
+            connectionsManager.sendRequest(tLRPC$TL_messages_getStickerSet, mediaDataController$$ExternalSyntheticLambda195);
             i2++;
             j = 1000;
         }
@@ -3375,7 +3383,7 @@ public class MediaDataController extends BaseController {
                 tLRPC$TL_inputStickerSetShortName.short_name = str;
                 tLRPC$TL_messages_getStickerSet.stickerset = tLRPC$TL_inputStickerSetShortName;
             }
-            getConnectionsManager().sendRequest(tLRPC$TL_messages_getStickerSet, new MediaDataController$$ExternalSyntheticLambda195(this, str, z));
+            getConnectionsManager().sendRequest(tLRPC$TL_messages_getStickerSet, new MediaDataController$$ExternalSyntheticLambda194(this, str, z));
         }
     }
 
@@ -3508,7 +3516,7 @@ public class MediaDataController extends BaseController {
 
     private void putDiceStickersToCache(String str, TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet, int i) {
         if (!TextUtils.isEmpty(str)) {
-            getMessagesStorage().getStorageQueue().postRunnable(new MediaDataController$$ExternalSyntheticLambda111(this, tLRPC$TL_messages_stickerSet, str, i));
+            getMessagesStorage().getStorageQueue().postRunnable(new MediaDataController$$ExternalSyntheticLambda110(this, tLRPC$TL_messages_stickerSet, str, i));
         }
     }
 
@@ -4805,9 +4813,9 @@ public class MediaDataController extends BaseController {
             int i12 = this.lastReqId + 1;
             this.lastReqId = i12;
             this.lastSearchQuery = str3;
-            MediaDataController$$ExternalSyntheticLambda194 mediaDataController$$ExternalSyntheticLambda194 = r0;
-            MediaDataController$$ExternalSyntheticLambda194 mediaDataController$$ExternalSyntheticLambda1942 = new MediaDataController$$ExternalSyntheticLambda194(this, str3, i12, z2, tLRPC$TL_messages_search2, j3, j, i, j2, i3, tLRPC$User, tLRPC$Chat);
-            this.reqId = getConnectionsManager().sendRequest(tLRPC$TL_messages_search2, mediaDataController$$ExternalSyntheticLambda194, 2);
+            MediaDataController$$ExternalSyntheticLambda193 mediaDataController$$ExternalSyntheticLambda193 = r0;
+            MediaDataController$$ExternalSyntheticLambda193 mediaDataController$$ExternalSyntheticLambda1932 = new MediaDataController$$ExternalSyntheticLambda193(this, str3, i12, z2, tLRPC$TL_messages_search2, j3, j, i, j2, i3, tLRPC$User, tLRPC$Chat);
+            this.reqId = getConnectionsManager().sendRequest(tLRPC$TL_messages_search2, mediaDataController$$ExternalSyntheticLambda193, 2);
         }
     }
 
@@ -10135,7 +10143,7 @@ public class MediaDataController extends BaseController {
         tLRPC$TL_inputDocument.id = tLRPC$Document.id;
         tLRPC$TL_inputDocument.file_reference = tLRPC$Document.file_reference;
         tLRPC$TL_inputDocument.access_hash = tLRPC$Document.access_hash;
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_saveRingtone, new MediaDataController$$ExternalSyntheticLambda197(this, tLRPC$Document));
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_saveRingtone, new MediaDataController$$ExternalSyntheticLambda196(this, tLRPC$Document));
         return true;
     }
 
@@ -10213,6 +10221,21 @@ public class MediaDataController extends BaseController {
         checkPremiumPromo();
         checkPremiumGiftStickers();
         checkGenericAnimations();
+    }
+
+    public void moveStickerSetToTop(long j, boolean z, boolean z2) {
+        int i = z ? 5 : z2 ? 1 : 0;
+        ArrayList<TLRPC$TL_messages_stickerSet> stickerSets2 = getStickerSets(i);
+        if (stickerSets2 != null) {
+            for (int i2 = 0; i2 < stickerSets2.size(); i2++) {
+                if (stickerSets2.get(i2).set.id == j) {
+                    stickerSets2.remove(i2);
+                    stickerSets2.add(0, stickerSets2.get(i2));
+                    getNotificationCenter().postNotificationName(NotificationCenter.stickersDidLoad, Integer.valueOf(i), Boolean.FALSE);
+                    return;
+                }
+            }
+        }
     }
 
     public static class KeywordResult {

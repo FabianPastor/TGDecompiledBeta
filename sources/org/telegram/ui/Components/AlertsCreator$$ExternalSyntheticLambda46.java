@@ -11,6 +11,6 @@ public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda46 impl
     }
 
     public final void onShow(DialogInterface dialogInterface) {
-        AndroidUtilities.runOnUIThread(new AlertsCreator$$ExternalSyntheticLambda87(this.f$0));
+        AndroidUtilities.runOnUIThread(new AlertsCreator$$ExternalSyntheticLambda89(this.f$0));
     }
 }

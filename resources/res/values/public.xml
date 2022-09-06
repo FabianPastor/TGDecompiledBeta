@@ -3543,6 +3543,7 @@
     <public type="string" name="EmojiCount_two" id="NUM" />
     <public type="string" name="EmojiCount_zero" id="NUM" />
     <public type="string" name="EmojiInteractionTapHint" id="NUM" />
+    <public type="string" name="EmojiLongtapHint" id="NUM" />
     <public type="string" name="EmojiPackCount_few" id="NUM" />
     <public type="string" name="EmojiPackCount_many" id="NUM" />
     <public type="string" name="EmojiPackCount_one" id="NUM" />
@@ -3557,6 +3558,7 @@
     <public type="string" name="EmojiRemovedMultipleInfo_other" id="NUM" />
     <public type="string" name="EmojiRemovedMultipleInfo_two" id="NUM" />
     <public type="string" name="EmojiRemovedMultipleInfo_zero" id="NUM" />
+    <public type="string" name="EmojiStatusExpireHint" id="NUM" />
     <public type="string" name="EmojiSuggestions" id="NUM" />
     <public type="string" name="EmojiSuggestionsInfo" id="NUM" />
     <public type="string" name="EmojiSuggestionsUrl" id="NUM" />
@@ -5948,6 +5950,7 @@
     <public type="string" name="ReportSpamLocation" id="NUM" />
     <public type="string" name="ReportSpamTitle" id="NUM" />
     <public type="string" name="ReportSpamUser" id="NUM" />
+    <public type="string" name="ReportSpamUserEmojiStatusHint" id="NUM" />
     <public type="string" name="ReportTitleChild" id="NUM" />
     <public type="string" name="ReportTitleFake" id="NUM" />
     <public type="string" name="ReportTitlePornography" id="NUM" />
@@ -6163,6 +6166,8 @@
     <public type="string" name="SelectFile" id="NUM" />
     <public type="string" name="SelectFromGallery" id="NUM" />
     <public type="string" name="SelectImage" id="NUM" />
+    <public type="string" name="SelectSendAsPeerPremiumHint" id="NUM" />
+    <public type="string" name="SelectSendAsPeerPremiumOpen" id="NUM" />
     <public type="string" name="SelectTheme" id="NUM" />
     <public type="string" name="SelectThisDay" id="NUM" />
     <public type="string" name="SelectingContact" id="NUM" />
@@ -6236,6 +6241,13 @@
     <public type="string" name="SetBackground" id="NUM" />
     <public type="string" name="SetColor" id="NUM" />
     <public type="string" name="SetEmojiStatus" id="NUM" />
+    <public type="string" name="SetEmojiStatusUntil1Hour" id="NUM" />
+    <public type="string" name="SetEmojiStatusUntil2Days" id="NUM" />
+    <public type="string" name="SetEmojiStatusUntil2Hours" id="NUM" />
+    <public type="string" name="SetEmojiStatusUntil8Hours" id="NUM" />
+    <public type="string" name="SetEmojiStatusUntilButton" id="NUM" />
+    <public type="string" name="SetEmojiStatusUntilOther" id="NUM" />
+    <public type="string" name="SetEmojiStatusUntilTitle" id="NUM" />
     <public type="string" name="SetNewPassword" id="NUM" />
     <public type="string" name="SetPasscode" id="NUM" />
     <public type="string" name="SetPasscodeInfo" id="NUM" />

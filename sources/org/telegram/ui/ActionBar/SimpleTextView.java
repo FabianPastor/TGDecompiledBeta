@@ -851,22 +851,24 @@ public class SimpleTextView extends View {
     }
 
     /* JADX WARNING: Code restructure failed: missing block: B:2:0x0008, code lost:
-        r1 = r2.rightDrawable;
+        r1 = r3.rightDrawable;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private int getMaxTextWidth() {
         /*
-            r2 = this;
-            int r0 = r2.getMeasuredWidth()
-            boolean r1 = r2.rightDrawableOutside
-            if (r1 == 0) goto L_0x0011
-            android.graphics.drawable.Drawable r1 = r2.rightDrawable
-            if (r1 == 0) goto L_0x0011
+            r3 = this;
+            int r0 = r3.getMeasuredWidth()
+            boolean r1 = r3.rightDrawableOutside
+            if (r1 == 0) goto L_0x0014
+            android.graphics.drawable.Drawable r1 = r3.rightDrawable
+            if (r1 == 0) goto L_0x0014
             int r1 = r1.getIntrinsicWidth()
-            goto L_0x0012
-        L_0x0011:
+            int r2 = r3.drawablePadding
+            int r1 = r1 + r2
+            goto L_0x0015
+        L_0x0014:
             r1 = 0
-        L_0x0012:
+        L_0x0015:
             int r0 = r0 - r1
             return r0
         */

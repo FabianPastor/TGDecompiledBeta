@@ -12,6 +12,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda79
     }
 
     public final void run() {
-        this.f$0.lambda$setUserAdminRole$78(this.f$1, this.f$2);
+        this.f$0.lambda$setUserAdminRole$83(this.f$1, this.f$2);
     }
 }

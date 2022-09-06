@@ -14,6 +14,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda28
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$markMessageAsRead2$196(this.f$1, tLObject, tLRPC$TL_error);
+        this.f$0.lambda$setChannelSlowMode$74(this.f$1, tLObject, tLRPC$TL_error);
     }
 }

@@ -1466,34 +1466,39 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
 
         @SuppressLint({"NotifyDataSetChanged"})
         public void updatePremiumTiers() {
+            long j;
             PremiumPreviewFragment.this.subscriptionTiers.clear();
-            Iterator<TLRPC$TL_premiumSubscriptionOption> it = PremiumPreviewFragment.this.getMediaDataController().getPremiumPromo().period_options.iterator();
-            long j = 0;
             long j2 = 0;
-            while (it.hasNext()) {
-                SubscriptionTier subscriptionTier = new SubscriptionTier(it.next());
-                PremiumPreviewFragment.this.subscriptionTiers.add(subscriptionTier);
-                if (BuildVars.useInvoiceBilling() && subscriptionTier.getPricePerYear() > j2) {
-                    j2 = subscriptionTier.getPricePerYear();
+            if (PremiumPreviewFragment.this.getMediaDataController().getPremiumPromo() != null) {
+                Iterator<TLRPC$TL_premiumSubscriptionOption> it = PremiumPreviewFragment.this.getMediaDataController().getPremiumPromo().period_options.iterator();
+                j = 0;
+                while (it.hasNext()) {
+                    SubscriptionTier subscriptionTier = new SubscriptionTier(it.next());
+                    PremiumPreviewFragment.this.subscriptionTiers.add(subscriptionTier);
+                    if (BuildVars.useInvoiceBilling() && subscriptionTier.getPricePerYear() > j) {
+                        j = subscriptionTier.getPricePerYear();
+                    }
                 }
+            } else {
+                j = 0;
             }
             if (BuildVars.useInvoiceBilling()) {
                 Iterator<SubscriptionTier> it2 = PremiumPreviewFragment.this.subscriptionTiers.iterator();
                 while (it2.hasNext()) {
-                    it2.next().setPricePerYearRegular(j2);
+                    it2.next().setPricePerYearRegular(j);
                 }
             } else if (BillingController.getInstance().isReady() && BillingController.PREMIUM_PRODUCT_DETAILS != null) {
                 Iterator<SubscriptionTier> it3 = PremiumPreviewFragment.this.subscriptionTiers.iterator();
                 while (it3.hasNext()) {
                     SubscriptionTier next = it3.next();
                     next.setGooglePlayProductDetails(BillingController.PREMIUM_PRODUCT_DETAILS);
-                    if (next.getPricePerYear() > j) {
-                        j = next.getPricePerYear();
+                    if (next.getPricePerYear() > j2) {
+                        j2 = next.getPricePerYear();
                     }
                 }
                 Iterator<SubscriptionTier> it4 = PremiumPreviewFragment.this.subscriptionTiers.iterator();
                 while (it4.hasNext()) {
-                    it4.next().setPricePerYearRegular(j);
+                    it4.next().setPricePerYearRegular(j2);
                 }
             }
             int i = 0;

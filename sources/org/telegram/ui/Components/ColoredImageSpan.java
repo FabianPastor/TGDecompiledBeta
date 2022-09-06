@@ -62,6 +62,11 @@ public class ColoredImageSpan extends ReplacementSpan {
         canvas.restore();
     }
 
+    public void setColorKey(String str) {
+        this.colorKey = str;
+        this.usePaintColor = false;
+    }
+
     public void setTopOffset(int i) {
         this.topOffset = i;
     }

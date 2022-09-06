@@ -1,29 +1,21 @@
 package org.telegram.ui.Components;
 
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import org.telegram.ui.Components.NumberPicker;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda125 implements NumberPicker.OnValueChangeListener {
-    public final /* synthetic */ LinearLayout f$0;
-    public final /* synthetic */ TextView f$1;
-    public final /* synthetic */ long f$2;
-    public final /* synthetic */ long f$3;
-    public final /* synthetic */ NumberPicker f$4;
-    public final /* synthetic */ NumberPicker f$5;
-    public final /* synthetic */ NumberPicker f$6;
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda125 implements NumberPicker.OnScrollListener {
+    public final /* synthetic */ boolean f$0;
+    public final /* synthetic */ NumberPicker f$1;
+    public final /* synthetic */ NumberPicker f$2;
+    public final /* synthetic */ NumberPicker f$3;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda125(LinearLayout linearLayout, TextView textView, long j, long j2, NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3) {
-        this.f$0 = linearLayout;
-        this.f$1 = textView;
-        this.f$2 = j;
-        this.f$3 = j2;
-        this.f$4 = numberPicker;
-        this.f$5 = numberPicker2;
-        this.f$6 = numberPicker3;
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda125(boolean z, NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3) {
+        this.f$0 = z;
+        this.f$1 = numberPicker;
+        this.f$2 = numberPicker2;
+        this.f$3 = numberPicker3;
     }
 
-    public final void onValueChange(NumberPicker numberPicker, int i, int i2) {
-        AlertsCreator.lambda$createScheduleDatePickerDialog$51(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, numberPicker, i, i2);
+    public final void onScrollStateChange(NumberPicker numberPicker, int i) {
+        AlertsCreator.lambda$createDatePickerDialog$45(this.f$0, this.f$1, this.f$2, this.f$3, numberPicker, i);
     }
 }

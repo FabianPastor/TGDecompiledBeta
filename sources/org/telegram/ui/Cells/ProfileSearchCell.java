@@ -30,6 +30,7 @@ import org.telegram.tgnet.TLRPC$EmojiStatus;
 import org.telegram.tgnet.TLRPC$EncryptedChat;
 import org.telegram.tgnet.TLRPC$FileLocation;
 import org.telegram.tgnet.TLRPC$TL_emojiStatus;
+import org.telegram.tgnet.TLRPC$TL_emojiStatusUntil;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.tgnet.TLRPC$UserStatus;
 import org.telegram.ui.ActionBar.Theme;
@@ -448,8 +449,16 @@ public class ProfileSearchCell extends BaseCell implements NotificationCenter.No
         }
         if (tLRPC$User != null && !tLRPC$User.self) {
             TLRPC$EmojiStatus tLRPC$EmojiStatus = tLRPC$User.emoji_status;
-            if (tLRPC$EmojiStatus instanceof TLRPC$TL_emojiStatus) {
-                this.statusDrawable.set(((TLRPC$TL_emojiStatus) tLRPC$EmojiStatus).document_id, z2);
+            if ((tLRPC$EmojiStatus instanceof TLRPC$TL_emojiStatusUntil) && ((TLRPC$TL_emojiStatusUntil) tLRPC$EmojiStatus).until > ((int) (System.currentTimeMillis() / 1000))) {
+                this.statusDrawable.set(((TLRPC$TL_emojiStatusUntil) tLRPC$User.emoji_status).document_id, z2);
+                this.statusDrawable.setColor(Integer.valueOf(Theme.getColor("chats_verifiedBackground", this.resourcesProvider)));
+                return;
+            }
+        }
+        if (tLRPC$User != null && !tLRPC$User.self) {
+            TLRPC$EmojiStatus tLRPC$EmojiStatus2 = tLRPC$User.emoji_status;
+            if (tLRPC$EmojiStatus2 instanceof TLRPC$TL_emojiStatus) {
+                this.statusDrawable.set(((TLRPC$TL_emojiStatus) tLRPC$EmojiStatus2).document_id, z2);
                 this.statusDrawable.setColor(Integer.valueOf(Theme.getColor("chats_verifiedBackground", this.resourcesProvider)));
                 return;
             }

@@ -18,6 +18,6 @@ public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda55 impl
     }
 
     public final void onClick(View view) {
-        AlertsCreator.lambda$createSoundFrequencyPickerDialog$71(this.f$0, this.f$1, this.f$2, this.f$3, view);
+        AlertsCreator.lambda$createSoundFrequencyPickerDialog$77(this.f$0, this.f$1, this.f$2, this.f$3, view);
     }
 }

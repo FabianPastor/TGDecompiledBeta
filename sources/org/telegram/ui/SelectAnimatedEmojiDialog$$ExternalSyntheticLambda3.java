@@ -25,6 +25,6 @@ public final /* synthetic */ class SelectAnimatedEmojiDialog$$ExternalSyntheticL
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$animateEmojiSelect$5(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, valueAnimator);
+        this.f$0.lambda$animateEmojiSelect$6(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, valueAnimator);
     }
 }

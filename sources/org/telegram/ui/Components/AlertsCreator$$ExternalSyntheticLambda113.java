@@ -9,6 +9,6 @@ public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda113 imp
     }
 
     public final String format(int i) {
-        return AlertsCreator.lambda$createDatePickerDialog$41(i);
+        return String.format("%02d", new Object[]{Integer.valueOf(i)});
     }
 }

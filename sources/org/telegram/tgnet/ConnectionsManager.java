@@ -756,7 +756,7 @@ public class ConnectionsManager extends BaseController {
         try {
             NativeByteBuffer wrap = NativeByteBuffer.wrap(j);
             wrap.reused = true;
-            TLRPC$Config TLdeserialize = TLRPC$Config.TLdeserialize(wrap, wrap.readInt32(true), true);
+            TLRPC$TL_config TLdeserialize = TLRPC$TL_config.TLdeserialize(wrap, wrap.readInt32(true), true);
             if (TLdeserialize != null) {
                 Utilities.stageQueue.postRunnable(new ConnectionsManager$$ExternalSyntheticLambda6(i, TLdeserialize));
             }

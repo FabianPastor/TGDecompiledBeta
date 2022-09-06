@@ -1,22 +1,15 @@
 package org.telegram.ui.Components;
 
-import android.content.DialogInterface;
-import android.view.KeyEvent;
-import android.widget.TextView;
-import org.telegram.ui.ActionBar.AlertDialog;
+import android.view.MotionEvent;
+import android.view.View;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda82 implements TextView.OnEditorActionListener {
-    public final /* synthetic */ long f$0;
-    public final /* synthetic */ AlertDialog f$1;
-    public final /* synthetic */ DialogInterface.OnClickListener f$2;
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda82 implements View.OnTouchListener {
+    public static final /* synthetic */ AlertsCreator$$ExternalSyntheticLambda82 INSTANCE = new AlertsCreator$$ExternalSyntheticLambda82();
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda82(long j, AlertDialog alertDialog, DialogInterface.OnClickListener onClickListener) {
-        this.f$0 = j;
-        this.f$1 = alertDialog;
-        this.f$2 = onClickListener;
+    private /* synthetic */ AlertsCreator$$ExternalSyntheticLambda82() {
     }
 
-    public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-        return AlertsCreator.lambda$createChangeBioAlert$32(this.f$0, this.f$1, this.f$2, textView, i, keyEvent);
+    public final boolean onTouch(View view, MotionEvent motionEvent) {
+        return AlertsCreator.lambda$createSoundFrequencyPickerDialog$75(view, motionEvent);
     }
 }

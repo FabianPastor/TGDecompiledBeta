@@ -10,6 +10,9 @@ public abstract class TLRPC$Update extends TLObject {
             case -2092401936:
                 tLRPC$Update = new TLRPC$TL_updateChatUserTyping();
                 break;
+            case -2030252155:
+                tLRPC$Update = new TLRPC$TL_updateMoveStickerSetToTop();
+                break;
             case -2027964103:
                 tLRPC$Update = new TLRPC$TL_updateGeoLiveViewed();
                 break;

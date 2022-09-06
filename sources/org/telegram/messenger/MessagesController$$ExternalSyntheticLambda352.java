@@ -11,6 +11,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda35
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        MessagesController.lambda$deleteUserPhoto$93(tLObject, tLRPC$TL_error);
+        MessagesController.lambda$unregistedPush$253(tLObject, tLRPC$TL_error);
     }
 }

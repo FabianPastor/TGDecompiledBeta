@@ -13,6 +13,7 @@ import org.telegram.tgnet.TLRPC$EmojiStatus;
 import org.telegram.tgnet.TLRPC$InputStorePaymentPurpose;
 import org.telegram.tgnet.TLRPC$TL_account_tmpPassword;
 import org.telegram.tgnet.TLRPC$TL_emojiStatus;
+import org.telegram.tgnet.TLRPC$TL_emojiStatusUntil;
 import org.telegram.tgnet.TLRPC$TL_help_termsOfService;
 import org.telegram.tgnet.TLRPC$User;
 
@@ -707,8 +708,12 @@ public class UserConfig extends BaseController {
             return null;
         }
         TLRPC$EmojiStatus tLRPC$EmojiStatus = tLRPC$User.emoji_status;
-        if (tLRPC$EmojiStatus instanceof TLRPC$TL_emojiStatus) {
-            return Long.valueOf(((TLRPC$TL_emojiStatus) tLRPC$EmojiStatus).document_id);
+        if ((tLRPC$EmojiStatus instanceof TLRPC$TL_emojiStatusUntil) && ((TLRPC$TL_emojiStatusUntil) tLRPC$EmojiStatus).until > ((int) (System.currentTimeMillis() / 1000))) {
+            return Long.valueOf(((TLRPC$TL_emojiStatusUntil) this.currentUser.emoji_status).document_id);
+        }
+        TLRPC$EmojiStatus tLRPC$EmojiStatus2 = this.currentUser.emoji_status;
+        if (tLRPC$EmojiStatus2 instanceof TLRPC$TL_emojiStatus) {
+            return Long.valueOf(((TLRPC$TL_emojiStatus) tLRPC$EmojiStatus2).document_id);
         }
         return null;
     }

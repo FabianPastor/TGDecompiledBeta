@@ -99,18 +99,25 @@ public class CustomEmojiReactionsWindow {
         r0.setOnClickListener(new CustomEmojiReactionsWindow$$ExternalSyntheticLambda2(this));
         this.containerView = new ContainerView(context);
         final ReactionsContainerLayout reactionsContainerLayout4 = reactionsContainerLayout2;
+        AnonymousClass2 r13 = r0;
         final BaseFragment baseFragment3 = baseFragment2;
-        AnonymousClass2 r02 = new SelectAnimatedEmojiDialog(context, false, (Integer) null, 1, resourcesProvider3) {
+        AnonymousClass2 r02 = new SelectAnimatedEmojiDialog(this, baseFragment2, context, false, (Integer) null, 1, resourcesProvider3) {
+            final /* synthetic */ CustomEmojiReactionsWindow this$0;
+
+            {
+                this.this$0 = r9;
+            }
+
             /* access modifiers changed from: protected */
             public void onReactionClick(SelectAnimatedEmojiDialog.ImageViewEmoji imageViewEmoji, ReactionsLayoutInBubble.VisibleReaction visibleReaction) {
                 reactionsContainerLayout4.onReactionClicked(imageViewEmoji, visibleReaction, false);
             }
 
             /* access modifiers changed from: protected */
-            public void onEmojiSelected(View view, Long l, TLRPC$Document tLRPC$Document) {
+            public void onEmojiSelected(View view, Long l, TLRPC$Document tLRPC$Document, Integer num) {
                 if (!UserConfig.getInstance(baseFragment3.getCurrentAccount()).isPremium()) {
-                    CustomEmojiReactionsWindow.this.windowView.performHapticFeedback(3);
-                    BulletinFactory.of(CustomEmojiReactionsWindow.this.windowView, (Theme.ResourcesProvider) null).createEmojiBulletin(tLRPC$Document, AndroidUtilities.replaceTags(LocaleController.getString("UnlockPremiumEmojiReaction", R.string.UnlockPremiumEmojiReaction)), LocaleController.getString("PremiumMore", R.string.PremiumMore), new CustomEmojiReactionsWindow$2$$ExternalSyntheticLambda0(this)).show();
+                    this.this$0.windowView.performHapticFeedback(3);
+                    BulletinFactory.of(this.this$0.windowView, (Theme.ResourcesProvider) null).createEmojiBulletin(tLRPC$Document, AndroidUtilities.replaceTags(LocaleController.getString("UnlockPremiumEmojiReaction", R.string.UnlockPremiumEmojiReaction)), LocaleController.getString("PremiumMore", R.string.PremiumMore), new CustomEmojiReactionsWindow$2$$ExternalSyntheticLambda0(this)).show();
                     return;
                 }
                 reactionsContainerLayout4.onReactionClicked(view, ReactionsLayoutInBubble.VisibleReaction.fromCustomEmoji(l), false);
@@ -118,11 +125,11 @@ public class CustomEmojiReactionsWindow {
 
             /* access modifiers changed from: private */
             public /* synthetic */ void lambda$onEmojiSelected$0() {
-                CustomEmojiReactionsWindow.this.showUnlockPremiumAlert();
+                this.this$0.showUnlockPremiumAlert();
             }
         };
-        this.selectAnimatedEmojiDialog = r02;
-        r02.setOnLongPressedListener(new SelectAnimatedEmojiDialog.onLongPressedListener(this) {
+        this.selectAnimatedEmojiDialog = r13;
+        r13.setOnLongPressedListener(new SelectAnimatedEmojiDialog.onLongPressedListener(this) {
             public void onLongPressed(SelectAnimatedEmojiDialog.ImageViewEmoji imageViewEmoji) {
                 if (imageViewEmoji.isDefaultReaction) {
                     reactionsContainerLayout3.onReactionClicked(imageViewEmoji, imageViewEmoji.reaction, true);

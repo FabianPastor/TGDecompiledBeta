@@ -10,6 +10,6 @@ public final /* synthetic */ class SelectAnimatedEmojiDialog$$ExternalSyntheticL
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$onRecentLongClick$2(dialogInterface, i);
+        this.f$0.lambda$onRecentLongClick$3(dialogInterface, i);
     }
 }

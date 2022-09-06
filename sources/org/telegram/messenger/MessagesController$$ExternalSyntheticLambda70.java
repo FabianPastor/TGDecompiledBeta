@@ -1,21 +1,21 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
-
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda70 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
     public final /* synthetic */ long f$1;
     public final /* synthetic */ int f$2;
-    public final /* synthetic */ ArrayList f$3;
+    public final /* synthetic */ int f$3;
+    public final /* synthetic */ boolean f$4;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda70(MessagesController messagesController, long j, int i, ArrayList arrayList) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda70(MessagesController messagesController, long j, int i, int i2, boolean z) {
         this.f$0 = messagesController;
         this.f$1 = j;
         this.f$2 = i;
-        this.f$3 = arrayList;
+        this.f$3 = i2;
+        this.f$4 = z;
     }
 
     public final void run() {
-        this.f$0.lambda$checkUnreadReactions$335(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$markDialogAsRead$203(this.f$1, this.f$2, this.f$3, this.f$4);
     }
 }

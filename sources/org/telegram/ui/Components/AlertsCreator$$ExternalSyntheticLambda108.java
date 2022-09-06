@@ -3,12 +3,13 @@ package org.telegram.ui.Components;
 import org.telegram.ui.Components.NumberPicker;
 
 public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda108 implements NumberPicker.Formatter {
-    public static final /* synthetic */ AlertsCreator$$ExternalSyntheticLambda108 INSTANCE = new AlertsCreator$$ExternalSyntheticLambda108();
+    public final /* synthetic */ int[] f$0;
 
-    private /* synthetic */ AlertsCreator$$ExternalSyntheticLambda108() {
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda108(int[] iArr) {
+        this.f$0 = iArr;
     }
 
     public final String format(int i) {
-        return String.format("%02d", new Object[]{Integer.valueOf(i)});
+        return AlertsCreator.lambda$createAutoDeleteDatePickerDialog$68(this.f$0, i);
     }
 }

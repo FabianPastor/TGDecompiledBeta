@@ -12,6 +12,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda13
     }
 
     public final void run() {
-        this.f$0.lambda$loadSignUpNotificationsSettings$165(this.f$1);
+        this.f$0.lambda$loadUnreadDialogs$286(this.f$1);
     }
 }

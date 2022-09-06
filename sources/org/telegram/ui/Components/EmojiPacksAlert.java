@@ -1969,7 +1969,9 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
         /* access modifiers changed from: private */
         public /* synthetic */ void lambda$init$0() {
             EmojiPacksAlert.this.dismiss();
-            BulletinFactory.of(EmojiPacksAlert.this.fragment).createErrorBulletin(LocaleController.getString("AddEmojiNotFound", R.string.AddEmojiNotFound)).show();
+            if (EmojiPacksAlert.this.fragment != null && EmojiPacksAlert.this.fragment.getParentActivity() != null) {
+                BulletinFactory.of(EmojiPacksAlert.this.fragment).createErrorBulletin(LocaleController.getString("AddEmojiNotFound", R.string.AddEmojiNotFound)).show();
+            }
         }
 
         /* access modifiers changed from: private */

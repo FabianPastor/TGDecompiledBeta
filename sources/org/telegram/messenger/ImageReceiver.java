@@ -2401,7 +2401,11 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                         }
                     }
                 }
-                invalidate();
+                if (backgroundThreadDrawHolder != null) {
+                    AndroidUtilities.runOnUIThread(new ImageReceiver$$ExternalSyntheticLambda0(this));
+                } else {
+                    invalidate();
+                }
             }
         }
     }

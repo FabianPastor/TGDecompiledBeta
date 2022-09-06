@@ -13,6 +13,6 @@ public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda49 impl
     }
 
     public final void onClick(View view) {
-        AlertsCreator.lambda$createColorSelectDialog$88(this.f$0, this.f$1, view);
+        AlertsCreator.lambda$createColorSelectDialog$94(this.f$0, this.f$1, view);
     }
 }
