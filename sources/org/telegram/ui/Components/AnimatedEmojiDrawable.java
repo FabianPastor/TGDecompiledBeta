@@ -52,7 +52,7 @@ public class AnimatedEmojiDrawable extends Drawable {
     int count;
     private TLRPC$Document document;
     private long documentId;
-    private ArrayList<AnimatedEmojiSpan.AnimatedEmojiHolder> holders;
+    private ArrayList<AnimatedEmojiSpan.InvalidateHolder> holders;
     private ImageReceiver imageReceiver;
     public int sizedp;
     private ArrayList<View> views;
@@ -747,9 +747,9 @@ public class AnimatedEmojiDrawable extends Drawable {
         }
         if (this.holders != null) {
             for (int i2 = 0; i2 < this.holders.size(); i2++) {
-                AnimatedEmojiSpan.AnimatedEmojiHolder animatedEmojiHolder = this.holders.get(i2);
-                if (animatedEmojiHolder != null) {
-                    animatedEmojiHolder.invalidate();
+                AnimatedEmojiSpan.InvalidateHolder invalidateHolder = this.holders.get(i2);
+                if (invalidateHolder != null) {
+                    invalidateHolder.invalidate();
                 }
             }
         }
@@ -809,20 +809,20 @@ public class AnimatedEmojiDrawable extends Drawable {
         updateAttachState();
     }
 
-    public void addView(AnimatedEmojiSpan.AnimatedEmojiHolder animatedEmojiHolder) {
+    public void addView(AnimatedEmojiSpan.InvalidateHolder invalidateHolder) {
         if (this.holders == null) {
             this.holders = new ArrayList<>(10);
         }
-        if (!this.holders.contains(animatedEmojiHolder)) {
-            this.holders.add(animatedEmojiHolder);
+        if (!this.holders.contains(invalidateHolder)) {
+            this.holders.add(invalidateHolder);
         }
         updateAttachState();
     }
 
-    public void removeView(AnimatedEmojiSpan.AnimatedEmojiHolder animatedEmojiHolder) {
-        ArrayList<AnimatedEmojiSpan.AnimatedEmojiHolder> arrayList = this.holders;
+    public void removeView(AnimatedEmojiSpan.InvalidateHolder invalidateHolder) {
+        ArrayList<AnimatedEmojiSpan.InvalidateHolder> arrayList = this.holders;
         if (arrayList != null) {
-            arrayList.remove(animatedEmojiHolder);
+            arrayList.remove(invalidateHolder);
         }
         updateAttachState();
     }
@@ -852,7 +852,7 @@ public class AnimatedEmojiDrawable extends Drawable {
             int r0 = r0.size()
             if (r0 > 0) goto L_0x001a
         L_0x0010:
-            java.util.ArrayList<org.telegram.ui.Components.AnimatedEmojiSpan$AnimatedEmojiHolder> r0 = r3.holders
+            java.util.ArrayList<org.telegram.ui.Components.AnimatedEmojiSpan$InvalidateHolder> r0 = r3.holders
             if (r0 == 0) goto L_0x001c
             int r0 = r0.size()
             if (r0 <= 0) goto L_0x001c

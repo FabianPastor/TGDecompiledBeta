@@ -2745,6 +2745,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     mediaCodec2.stop();
                     this.audioEncoder.release();
                     this.audioEncoder = null;
+                    setBluetoothScoOn(false);
                 } catch (Exception e3) {
                     FileLog.e((Throwable) e3);
                 }
@@ -2884,8 +2885,58 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             InstantCameraView.this.startAnimation(false);
         }
 
+        /* JADX WARNING: Removed duplicated region for block: B:18:0x0031 A[Catch:{ SecurityException -> 0x0044, all -> 0x0025 }] */
+        /* JADX WARNING: Removed duplicated region for block: B:19:0x0035 A[Catch:{ SecurityException -> 0x0044, all -> 0x0025 }] */
+        /* Code decompiled incorrectly, please refer to instructions dump. */
+        private void setBluetoothScoOn(boolean r4) {
+            /*
+                r3 = this;
+                android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext
+                java.lang.String r1 = "audio"
+                java.lang.Object r0 = r0.getSystemService(r1)
+                android.media.AudioManager r0 = (android.media.AudioManager) r0
+                boolean r1 = r0.isBluetoothScoAvailableOffCall()
+                if (r1 == 0) goto L_0x0014
+                boolean r1 = org.telegram.messenger.SharedConfig.recordViaSco
+                if (r1 != 0) goto L_0x0016
+            L_0x0014:
+                if (r4 != 0) goto L_0x0044
+            L_0x0016:
+                android.bluetooth.BluetoothAdapter r1 = android.bluetooth.BluetoothAdapter.getDefaultAdapter()
+                if (r1 == 0) goto L_0x0027
+                r2 = 1
+                int r1 = r1.getProfileConnectionState(r2)     // Catch:{ SecurityException -> 0x0044, all -> 0x0025 }
+                r2 = 2
+                if (r1 == r2) goto L_0x0029
+                goto L_0x0027
+            L_0x0025:
+                r4 = move-exception
+                goto L_0x0041
+            L_0x0027:
+                if (r4 != 0) goto L_0x0044
+            L_0x0029:
+                if (r4 == 0) goto L_0x0035
+                boolean r1 = r0.isBluetoothScoOn()     // Catch:{ SecurityException -> 0x0044, all -> 0x0025 }
+                if (r1 != 0) goto L_0x0035
+                r0.startBluetoothSco()     // Catch:{ SecurityException -> 0x0044, all -> 0x0025 }
+                goto L_0x0044
+            L_0x0035:
+                if (r4 != 0) goto L_0x0044
+                boolean r4 = r0.isBluetoothScoOn()     // Catch:{ SecurityException -> 0x0044, all -> 0x0025 }
+                if (r4 == 0) goto L_0x0044
+                r0.stopBluetoothSco()     // Catch:{ SecurityException -> 0x0044, all -> 0x0025 }
+                goto L_0x0044
+            L_0x0041:
+                org.telegram.messenger.FileLog.e((java.lang.Throwable) r4)
+            L_0x0044:
+                return
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.InstantCameraView.VideoRecorder.setBluetoothScoOn(boolean):void");
+        }
+
         /* access modifiers changed from: private */
         public void prepareEncoder() {
+            setBluetoothScoOn(true);
             try {
                 int minBufferSize = AudioRecord.getMinBufferSize(48000, 16, 2);
                 if (minBufferSize <= 0) {

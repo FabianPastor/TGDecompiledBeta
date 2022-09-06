@@ -439,7 +439,7 @@ public class ReactionsEffectOverlay {
             r0 = r0[r1]
             float r0 = (float) r0
             org.telegram.ui.Components.ReactionsContainerLayout$ReactionHolderView r1 = r13.holderView
-            org.telegram.ui.Components.BackupImageView r1 = r1.enterImageView
+            org.telegram.ui.Components.BackupImageView r1 = r1.loopImageView
             float r1 = r1.getX()
             float r0 = r0 + r1
             int[] r1 = r13.loc
@@ -447,11 +447,11 @@ public class ReactionsEffectOverlay {
             r1 = r1[r2]
             float r1 = (float) r1
             org.telegram.ui.Components.ReactionsContainerLayout$ReactionHolderView r2 = r13.holderView
-            org.telegram.ui.Components.BackupImageView r2 = r2.enterImageView
+            org.telegram.ui.Components.BackupImageView r2 = r2.loopImageView
             float r2 = r2.getY()
             float r1 = r1 + r2
             org.telegram.ui.Components.ReactionsContainerLayout$ReactionHolderView r2 = r13.holderView
-            org.telegram.ui.Components.BackupImageView r2 = r2.enterImageView
+            org.telegram.ui.Components.BackupImageView r2 = r2.loopImageView
             int r2 = r2.getWidth()
             float r2 = (float) r2
             org.telegram.ui.Components.ReactionsContainerLayout$ReactionHolderView r4 = r13.holderView

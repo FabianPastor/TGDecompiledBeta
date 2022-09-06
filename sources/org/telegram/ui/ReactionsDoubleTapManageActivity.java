@@ -233,10 +233,14 @@ public class ReactionsDoubleTapManageActivity extends BaseFragment implements No
             }
         }
 
+        public void updateImageBounds() {
+            this.imageDrawable.setBounds((getWidth() - this.imageDrawable.getIntrinsicWidth()) - AndroidUtilities.dp(21.0f), (getHeight() - this.imageDrawable.getIntrinsicHeight()) / 2, getWidth() - AndroidUtilities.dp(21.0f), (getHeight() + this.imageDrawable.getIntrinsicHeight()) / 2);
+        }
+
         /* access modifiers changed from: protected */
         public void dispatchDraw(Canvas canvas) {
             super.dispatchDraw(canvas);
-            this.imageDrawable.setBounds((getWidth() - this.imageDrawable.getIntrinsicWidth()) - AndroidUtilities.dp(21.0f), (getHeight() - this.imageDrawable.getIntrinsicHeight()) / 2, getWidth() - AndroidUtilities.dp(21.0f), (getHeight() + this.imageDrawable.getIntrinsicHeight()) / 2);
+            updateImageBounds();
             this.imageDrawable.draw(canvas);
         }
 
@@ -258,7 +262,7 @@ public class ReactionsDoubleTapManageActivity extends BaseFragment implements No
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:22:0x00b8 A[LOOP:0: B:20:0x00b2->B:22:0x00b8, LOOP_END] */
+    /* JADX WARNING: Removed duplicated region for block: B:22:0x00bb A[LOOP:0: B:20:0x00b5->B:22:0x00bb, LOOP_END] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void showSelectStatusDialog(org.telegram.ui.ReactionsDoubleTapManageActivity.SetDefaultReactionCell r17) {
         /*
@@ -272,12 +276,13 @@ public class ReactionsDoubleTapManageActivity extends BaseFragment implements No
             r0 = 1
             org.telegram.ui.SelectAnimatedEmojiDialog$SelectAnimatedEmojiDialogWindow[] r12 = new org.telegram.ui.SelectAnimatedEmojiDialog.SelectAnimatedEmojiDialogWindow[r0]
             r0 = 0
-            if (r11 == 0) goto L_0x0065
+            if (r11 == 0) goto L_0x0068
             org.telegram.ui.Components.AnimatedEmojiDrawable$SwapAnimatedEmojiDrawable r0 = r17.imageDrawable
             org.telegram.ui.Components.AnimatedEmojiDrawable$SwapAnimatedEmojiDrawable r1 = r17.imageDrawable
-            if (r1 == 0) goto L_0x0062
+            if (r1 == 0) goto L_0x0065
             org.telegram.ui.Components.AnimatedEmojiDrawable$SwapAnimatedEmojiDrawable r1 = r17.imageDrawable
             r1.play()
+            r17.updateImageBounds()
             android.graphics.Rect r1 = org.telegram.messenger.AndroidUtilities.rectTmp2
             org.telegram.ui.Components.AnimatedEmojiDrawable$SwapAnimatedEmojiDrawable r2 = r17.imageDrawable
             android.graphics.Rect r2 = r2.getBounds()
@@ -307,23 +312,23 @@ public class ReactionsDoubleTapManageActivity extends BaseFragment implements No
             r14 = r0
             r9 = r2
             r15 = r11
-            goto L_0x0069
-        L_0x0062:
-            r14 = r0
-            r15 = r11
-            goto L_0x0067
+            goto L_0x006c
         L_0x0065:
             r14 = r0
+            r15 = r11
+            goto L_0x006a
+        L_0x0068:
+            r14 = r0
             r15 = r14
-        L_0x0067:
+        L_0x006a:
             r1 = 0
             r9 = 0
-        L_0x0069:
+        L_0x006c:
             org.telegram.ui.ReactionsDoubleTapManageActivity$3 r8 = new org.telegram.ui.ReactionsDoubleTapManageActivity$3
             android.content.Context r3 = r16.getContext()
             r4 = 0
             java.lang.Integer r5 = java.lang.Integer.valueOf(r1)
-            r6 = 0
+            r6 = 2
             r7 = 0
             r0 = r8
             r1 = r16
@@ -335,24 +340,24 @@ public class ReactionsDoubleTapManageActivity extends BaseFragment implements No
             r0.<init>(r1, r2, r3, r4, r5, r6, r7, r8, r9)
             org.telegram.messenger.MediaDataController r0 = r16.getMediaDataController()
             java.lang.String r0 = r0.getDoubleTapReaction()
-            if (r0 == 0) goto L_0x00a6
+            if (r0 == 0) goto L_0x00a9
             java.lang.String r1 = "animated_"
             boolean r1 = r0.startsWith(r1)
-            if (r1 == 0) goto L_0x00a6
+            if (r1 == 0) goto L_0x00a9
             r1 = 9
-            java.lang.String r0 = r0.substring(r1)     // Catch:{ Exception -> 0x00a6 }
-            long r0 = java.lang.Long.parseLong(r0)     // Catch:{ Exception -> 0x00a6 }
-            java.lang.Long r0 = java.lang.Long.valueOf(r0)     // Catch:{ Exception -> 0x00a6 }
-            r13.setSelected(r0)     // Catch:{ Exception -> 0x00a6 }
-        L_0x00a6:
+            java.lang.String r0 = r0.substring(r1)     // Catch:{ Exception -> 0x00a9 }
+            long r0 = java.lang.Long.parseLong(r0)     // Catch:{ Exception -> 0x00a9 }
+            java.lang.Long r0 = java.lang.Long.valueOf(r0)     // Catch:{ Exception -> 0x00a9 }
+            r13.setSelected(r0)     // Catch:{ Exception -> 0x00a9 }
+        L_0x00a9:
             java.util.List r0 = r16.getAvailableReactions()
             java.util.ArrayList r1 = new java.util.ArrayList
             r2 = 20
             r1.<init>(r2)
             r2 = 0
-        L_0x00b2:
+        L_0x00b5:
             int r3 = r0.size()
-            if (r2 >= r3) goto L_0x00cd
+            if (r2 >= r3) goto L_0x00d0
             org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble$VisibleReaction r3 = new org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble$VisibleReaction
             r3.<init>()
             java.lang.Object r4 = r0.get(r2)
@@ -361,8 +366,8 @@ public class ReactionsDoubleTapManageActivity extends BaseFragment implements No
             r3.emojicon = r4
             r1.add(r3)
             int r2 = r2 + 1
-            goto L_0x00b2
-        L_0x00cd:
+            goto L_0x00b5
+        L_0x00d0:
             r13.setRecentReactions(r1)
             r0 = 3
             r13.setSaveState(r0)

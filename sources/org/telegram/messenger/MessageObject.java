@@ -13643,7 +13643,7 @@ public class MessageObject {
         }
         int maxUserReactionsCount = MessagesController.getInstance(this.currentAccount).getMaxUserReactionsCount();
         if (arrayList.isEmpty() || (!arrayList.contains(tLRPC$ReactionCount) && !z2)) {
-            if (!arrayList.isEmpty() && arrayList.size() >= maxUserReactionsCount) {
+            while (!arrayList.isEmpty() && arrayList.size() >= maxUserReactionsCount) {
                 int i4 = 0;
                 for (int i5 = 1; i5 < arrayList.size(); i5++) {
                     if (((TLRPC$ReactionCount) arrayList.get(i5)).chosen_order < ((TLRPC$ReactionCount) arrayList.get(i4)).chosen_order) {
@@ -13657,6 +13657,7 @@ public class MessageObject {
                 if (i6 <= 0) {
                     this.messageOwner.reactions.results.remove(tLRPC$ReactionCount3);
                 }
+                arrayList.remove(tLRPC$ReactionCount3);
                 if (this.messageOwner.reactions.can_see_list) {
                     int i7 = 0;
                     while (i7 < this.messageOwner.reactions.recent_reactions.size()) {

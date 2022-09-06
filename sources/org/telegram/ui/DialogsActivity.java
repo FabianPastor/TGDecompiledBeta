@@ -4129,7 +4129,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 i2 = rect2.centerX() - AndroidUtilities.dp(16.0f);
                 DrawerProfileCell.AnimatedStatusView animatedStatusView2 = this.animatedStatusView;
                 if (animatedStatusView2 != null) {
-                    animatedStatusView2.translate(rect2.centerX(), rect2.centerY());
+                    animatedStatusView2.translate((float) rect2.centerX(), (float) rect2.centerY());
                 }
                 i = dp;
             }
@@ -4155,11 +4155,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     TLRPC$User user = MessagesController.getInstance(DialogsActivity.this.currentAccount).getUser(Long.valueOf(UserConfig.getInstance(DialogsActivity.this.currentAccount).getClientUserId()));
                     if (user != null) {
                         user.emoji_status = tLRPC$TL_account_updateEmojiStatus.emoji_status;
-                        if (DialogsActivity.this.animatedStatusView != null && (user.emoji_status instanceof TLRPC$TL_emojiStatus)) {
-                            DialogsActivity.this.animatedStatusView.animateChange(ReactionsLayoutInBubble.VisibleReaction.fromCustomEmoji(Long.valueOf(((TLRPC$TL_emojiStatus) user.emoji_status).document_id)));
-                        }
                         NotificationCenter.getInstance(DialogsActivity.this.currentAccount).postNotificationName(NotificationCenter.userEmojiStatusUpdated, user);
                         DialogsActivity.this.getMessagesController().updateEmojiStatusUntilUpdate(user.id, user.emoji_status);
+                    }
+                    if (l != null) {
+                        DialogsActivity.this.animatedStatusView.animateChange(ReactionsLayoutInBubble.VisibleReaction.fromCustomEmoji(l));
                     }
                     ConnectionsManager.getInstance(DialogsActivity.this.currentAccount).sendRequest(tLRPC$TL_account_updateEmojiStatus, DialogsActivity$28$$ExternalSyntheticLambda0.INSTANCE);
                     if (selectAnimatedEmojiDialogWindowArr2[0] != null) {
@@ -7062,7 +7062,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         }
         DrawerProfileCell.AnimatedStatusView animatedStatusView2 = this.animatedStatusView;
         if (animatedStatusView2 != null) {
-            animatedStatusView2.translateY2((int) f);
+            animatedStatusView2.translateY2((float) ((int) f));
             this.animatedStatusView.setAlpha(1.0f - ((-f) / ((float) ActionBar.getCurrentActionBarHeight())));
         }
         updateContextViewPosition();

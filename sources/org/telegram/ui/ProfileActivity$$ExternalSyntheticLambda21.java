@@ -8,6 +8,6 @@ public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda21 im
     }
 
     public final void run() {
-        this.f$0.lambda$onWriteButtonClick$17();
+        this.f$0.updateEmojiStatusEffectPosition();
     }
 }

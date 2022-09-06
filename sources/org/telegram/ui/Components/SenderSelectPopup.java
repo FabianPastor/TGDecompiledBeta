@@ -86,11 +86,15 @@ public class SenderSelectPopup extends ActionBarPopupWindow {
         void onPeerSelected(RecyclerView recyclerView, SenderView senderView, TLRPC$Peer tLRPC$Peer);
     }
 
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
     @SuppressLint({"WrongConstant"})
-    public SenderSelectPopup(Context context, ChatActivity chatActivity, final MessagesController messagesController, final TLRPC$ChatFull tLRPC$ChatFull, TLRPC$TL_channels_sendAsPeers tLRPC$TL_channels_sendAsPeers, OnSelectCallback onSelectCallback) {
+    public SenderSelectPopup(Context context, ChatActivity chatActivity, MessagesController messagesController, TLRPC$ChatFull tLRPC$ChatFull, TLRPC$TL_channels_sendAsPeers tLRPC$TL_channels_sendAsPeers, OnSelectCallback onSelectCallback) {
         super(context);
-        this.chatFull = tLRPC$ChatFull;
-        this.sendAsPeers = tLRPC$TL_channels_sendAsPeers;
+        Context context2 = context;
+        TLRPC$TL_channels_sendAsPeers tLRPC$TL_channels_sendAsPeers2 = tLRPC$TL_channels_sendAsPeers;
+        final TLRPC$ChatFull tLRPC$ChatFull2 = tLRPC$ChatFull;
+        this.chatFull = tLRPC$ChatFull2;
+        this.sendAsPeers = tLRPC$TL_channels_sendAsPeers2;
         BackButtonFrameLayout backButtonFrameLayout = new BackButtonFrameLayout(context);
         this.scrimPopupContainerLayout = backButtonFrameLayout;
         backButtonFrameLayout.setLayoutParams(LayoutHelper.createFrame(-2, -2.0f));
@@ -109,7 +113,7 @@ public class SenderSelectPopup extends ActionBarPopupWindow {
         view.setBackgroundColor(NUM);
         final int dp = AndroidUtilities.dp(450.0f);
         final int width = (int) (((float) chatActivity.contentView.getWidth()) * 0.75f);
-        AnonymousClass1 r3 = new LinearLayout(this, context) {
+        AnonymousClass1 r2 = new LinearLayout(this, context) {
             /* access modifiers changed from: protected */
             public void onMeasure(int i, int i2) {
                 super.onMeasure(View.MeasureSpec.makeMeasureSpec(Math.min(View.MeasureSpec.getSize(i), width), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(Math.min(View.MeasureSpec.getSize(i2), dp), View.MeasureSpec.getMode(i2)));
@@ -120,8 +124,8 @@ public class SenderSelectPopup extends ActionBarPopupWindow {
                 return AndroidUtilities.dp(260.0f);
             }
         };
-        this.recyclerContainer = r3;
-        r3.setOrientation(1);
+        this.recyclerContainer = r2;
+        r2.setOrientation(1);
         TextView textView = new TextView(context);
         this.headerText = textView;
         textView.setTextColor(Theme.getColor("dialogTextBlue"));
@@ -132,11 +136,13 @@ public class SenderSelectPopup extends ActionBarPopupWindow {
         this.headerText.setPadding(dp2, AndroidUtilities.dp(12.0f), dp2, AndroidUtilities.dp(12.0f));
         this.recyclerContainer.addView(this.headerText);
         FrameLayout frameLayout = new FrameLayout(context);
-        final ArrayList<TLRPC$TL_sendAsPeer> arrayList = tLRPC$TL_channels_sendAsPeers.peers;
+        ArrayList<TLRPC$TL_sendAsPeer> arrayList = tLRPC$TL_channels_sendAsPeers2.peers;
         this.recyclerView = new RecyclerListView(context);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
         this.layoutManager = linearLayoutManager;
         this.recyclerView.setLayoutManager(linearLayoutManager);
+        final ArrayList<TLRPC$TL_sendAsPeer> arrayList2 = arrayList;
+        final MessagesController messagesController2 = messagesController;
         this.recyclerView.setAdapter(new RecyclerListView.SelectionAdapter(this) {
             public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
                 return true;
@@ -148,7 +154,7 @@ public class SenderSelectPopup extends ActionBarPopupWindow {
 
             public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
                 SenderView senderView = (SenderView) viewHolder.itemView;
-                TLRPC$TL_sendAsPeer tLRPC$TL_sendAsPeer = (TLRPC$TL_sendAsPeer) arrayList.get(i);
+                TLRPC$TL_sendAsPeer tLRPC$TL_sendAsPeer = (TLRPC$TL_sendAsPeer) arrayList2.get(i);
                 TLRPC$Peer tLRPC$Peer = tLRPC$TL_sendAsPeer.peer;
                 long j = tLRPC$Peer.channel_id;
                 long j2 = j != 0 ? -j : 0;
@@ -160,38 +166,40 @@ public class SenderSelectPopup extends ActionBarPopupWindow {
                 }
                 boolean z = true;
                 if (j2 < 0) {
-                    TLRPC$Chat chat = messagesController.getChat(Long.valueOf(-j2));
+                    TLRPC$Chat chat = messagesController2.getChat(Long.valueOf(-j2));
                     if (chat != null) {
                         if (tLRPC$TL_sendAsPeer.premium_required) {
-                            SpannableString spannableString = new SpannableString(chat.title + " d");
+                            SpannableString spannableString = new SpannableString(TextUtils.ellipsize(chat.title, senderView.title.getPaint(), (float) (width - AndroidUtilities.dp(100.0f)), TextUtils.TruncateAt.END) + " d");
                             ColoredImageSpan coloredImageSpan = new ColoredImageSpan(R.drawable.msg_mini_premiumlock);
                             coloredImageSpan.setTopOffset(1);
                             coloredImageSpan.setSize(AndroidUtilities.dp(14.0f));
-                            coloredImageSpan.setColorKey("windowBackgroundWhiteGrayIcon");
+                            coloredImageSpan.setColorKey("windowBackgroundWhiteGrayText5");
                             spannableString.setSpan(coloredImageSpan, spannableString.length() - 1, spannableString.length(), 33);
+                            senderView.title.setEllipsize((TextUtils.TruncateAt) null);
                             senderView.title.setText(spannableString);
                         } else {
+                            senderView.title.setEllipsize(TextUtils.TruncateAt.END);
                             senderView.title.setText(chat.title);
                         }
                         senderView.subtitle.setText(LocaleController.formatPluralString((!ChatObject.isChannel(chat) || chat.megagroup) ? "Members" : "Subscribers", chat.participants_count, new Object[0]));
                         senderView.avatar.setAvatar(chat);
                     }
                     SimpleAvatarView simpleAvatarView = senderView.avatar;
-                    TLRPC$Peer tLRPC$Peer2 = tLRPC$ChatFull.default_send_as;
+                    TLRPC$Peer tLRPC$Peer2 = tLRPC$ChatFull2.default_send_as;
                     if (tLRPC$Peer2 == null ? i != 0 : tLRPC$Peer2.channel_id != tLRPC$Peer.channel_id) {
                         z = false;
                     }
                     simpleAvatarView.setSelected(z, false);
                     return;
                 }
-                TLRPC$User user = messagesController.getUser(Long.valueOf(j2));
+                TLRPC$User user = messagesController2.getUser(Long.valueOf(j2));
                 if (user != null) {
                     senderView.title.setText(UserObject.getUserName(user));
                     senderView.subtitle.setText(LocaleController.getString("VoipGroupPersonalAccount", R.string.VoipGroupPersonalAccount));
                     senderView.avatar.setAvatar(user);
                 }
                 SimpleAvatarView simpleAvatarView2 = senderView.avatar;
-                TLRPC$Peer tLRPC$Peer3 = tLRPC$ChatFull.default_send_as;
+                TLRPC$Peer tLRPC$Peer3 = tLRPC$ChatFull2.default_send_as;
                 if (tLRPC$Peer3 == null ? i != 0 : tLRPC$Peer3.user_id != tLRPC$Peer.user_id) {
                     z = false;
                 }
@@ -199,7 +207,7 @@ public class SenderSelectPopup extends ActionBarPopupWindow {
             }
 
             public int getItemCount() {
-                return arrayList.size();
+                return arrayList2.size();
             }
         });
         this.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -212,7 +220,7 @@ public class SenderSelectPopup extends ActionBarPopupWindow {
                 }
             }
         });
-        this.recyclerView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new SenderSelectPopup$$ExternalSyntheticLambda10(this, arrayList, context, chatActivity, onSelectCallback));
+        this.recyclerView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new SenderSelectPopup$$ExternalSyntheticLambda10(this, arrayList2, context, chatActivity, onSelectCallback));
         this.recyclerView.setOverScrollMode(2);
         frameLayout.addView(this.recyclerView);
         this.headerShadow = new View(context);
@@ -524,7 +532,6 @@ public class SenderSelectPopup extends ActionBarPopupWindow {
             textView.setTextSize(1, 16.0f);
             textView.setTag(textView);
             textView.setMaxLines(1);
-            textView.setEllipsize(TextUtils.TruncateAt.END);
             linearLayout.addView(textView);
             TextView textView2 = new TextView(context);
             this.subtitle = textView2;

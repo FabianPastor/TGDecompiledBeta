@@ -12,6 +12,6 @@ public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda36 im
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$createView$11(tLObject, tLRPC$TL_error);
+        this.f$0.lambda$onFragmentCreate$1(tLObject, tLRPC$TL_error);
     }
 }

@@ -109,6 +109,7 @@ public class MentionCell extends LinearLayout {
     }
 
     public void setChat(TLRPC$Chat tLRPC$Chat) {
+        resetEmojiSuggestion();
         if (tLRPC$Chat == null) {
             this.nameTextView.setText("");
             this.usernameTextView.setText("");
@@ -148,9 +149,12 @@ public class MentionCell extends LinearLayout {
     public void resetEmojiSuggestion() {
         this.nameTextView.setPadding(0, 0, 0, 0);
         Drawable drawable = this.emojiDrawable;
-        if (drawable instanceof AnimatedEmojiDrawable) {
-            ((AnimatedEmojiDrawable) drawable).removeView((Drawable.Callback) this);
+        if (drawable != null) {
+            if (drawable instanceof AnimatedEmojiDrawable) {
+                ((AnimatedEmojiDrawable) drawable).removeView((Drawable.Callback) this);
+            }
             this.emojiDrawable = null;
+            invalidate();
         }
     }
 

@@ -1087,6 +1087,7 @@ public final class R {
         public static final int popup_fixed = NUM;
         public static final int popup_fixed_alert = NUM;
         public static final int popup_fixed_alert2 = NUM;
+        public static final int popup_fixed_alert3 = NUM;
         public static final int popup_fixed_top = NUM;
         public static final int preview_arrow = NUM;
         public static final int preview_back = NUM;
@@ -6741,6 +6742,7 @@ public final class R {
         public static final int TelegramPremiumUserGiftedPremiumDialogTitle = NUM;
         public static final int TelegramPremiumUserGiftedPremiumOutboundDialogSubtitle = NUM;
         public static final int TelegramPremiumUserGiftedPremiumOutboundDialogTitle = NUM;
+        public static final int TelegramPremiumUserStatusDefaultDialogTitle = NUM;
         public static final int TelegramPremiumUserStatusDialogSubtitle = NUM;
         public static final int TelegramPremiumUserStatusDialogTitle = NUM;
         public static final int TelegramTones = NUM;

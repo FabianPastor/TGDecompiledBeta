@@ -1,17 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.messenger.MessagesStorage;
 
-public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda35 implements RequestDelegate {
+public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda35 implements MessagesStorage.BooleanCallback {
     public final /* synthetic */ ProfileActivity f$0;
 
     public /* synthetic */ ProfileActivity$$ExternalSyntheticLambda35(ProfileActivity profileActivity) {
         this.f$0 = profileActivity;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$onFragmentCreate$1(tLObject, tLRPC$TL_error);
+    public final void run(boolean z) {
+        this.f$0.lambda$leaveChatPressed$27(z);
     }
 }

@@ -79,6 +79,7 @@ public class PremiumPreviewBottomSheet extends BottomSheetWithRecyclerListView i
     int helpUsRow;
     ViewGroup iconContainer;
     GLIconTextureView iconTextureView;
+    public boolean isEmojiStatus;
     boolean isOutboundGift;
     public View overrideTitleIcon;
     int paddingRow;
@@ -153,7 +154,7 @@ public class PremiumPreviewBottomSheet extends BottomSheetWithRecyclerListView i
         this.container.addView(fireworksOverlay2, LayoutHelper.createFrame(-1, -1.0f));
         FrameLayout frameLayout = new FrameLayout(getContext());
         this.bulletinContainer = frameLayout;
-        this.container.addView(frameLayout, LayoutHelper.createFrame(-1, 140, 87));
+        this.containerView.addView(frameLayout, LayoutHelper.createFrame(-1, 140, 87));
     }
 
     /* access modifiers changed from: private */
@@ -284,45 +285,53 @@ public class PremiumPreviewBottomSheet extends BottomSheetWithRecyclerListView i
                 }
                 this.titleView.setText(spannableStringBuilder2, (TextView.BufferType) null);
                 this.subtitleView.setText(AndroidUtilities.replaceTags(LocaleController.getString(R.string.TelegramPremiumUserStatusDialogSubtitle)));
-                return;
-            }
-            GiftPremiumBottomSheet.GiftTier giftTier2 = this.giftTier;
-            if (giftTier2 != null) {
-                String str = "";
-                if (this.isOutboundGift) {
-                    int i3 = R.string.TelegramPremiumUserGiftedPremiumOutboundDialogTitle;
-                    Object[] objArr = new Object[2];
-                    TLRPC$User tLRPC$User2 = this.user;
-                    objArr[0] = tLRPC$User2 != null ? tLRPC$User2.first_name : str;
-                    objArr[1] = Integer.valueOf(giftTier2.getMonths());
-                    linksTextView.setText(AndroidUtilities.replaceSingleTag(LocaleController.formatString(i3, objArr), "windowBackgroundWhiteBlueButton", (Runnable) null));
-                    TextView textView = this.subtitleView;
-                    int i4 = R.string.TelegramPremiumUserGiftedPremiumOutboundDialogSubtitle;
-                    Object[] objArr2 = new Object[1];
-                    TLRPC$User tLRPC$User3 = this.user;
-                    if (tLRPC$User3 != null) {
-                        str = tLRPC$User3.first_name;
+            } else if (this.isEmojiStatus) {
+                int i3 = R.string.TelegramPremiumUserStatusDefaultDialogTitle;
+                TLRPC$User tLRPC$User2 = this.user;
+                linksTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString(i3, ContactsController.formatName(tLRPC$User2.first_name, tLRPC$User2.last_name))));
+                TextView textView = this.subtitleView;
+                int i4 = R.string.TelegramPremiumUserStatusDialogSubtitle;
+                TLRPC$User tLRPC$User3 = this.user;
+                textView.setText(AndroidUtilities.replaceTags(LocaleController.formatString(i4, ContactsController.formatName(tLRPC$User3.first_name, tLRPC$User3.last_name))));
+            } else {
+                GiftPremiumBottomSheet.GiftTier giftTier2 = this.giftTier;
+                if (giftTier2 != null) {
+                    String str = "";
+                    if (this.isOutboundGift) {
+                        int i5 = R.string.TelegramPremiumUserGiftedPremiumOutboundDialogTitle;
+                        Object[] objArr = new Object[2];
+                        TLRPC$User tLRPC$User4 = this.user;
+                        objArr[0] = tLRPC$User4 != null ? tLRPC$User4.first_name : str;
+                        objArr[1] = Integer.valueOf(giftTier2.getMonths());
+                        linksTextView.setText(AndroidUtilities.replaceSingleTag(LocaleController.formatString(i5, objArr), "windowBackgroundWhiteBlueButton", (Runnable) null));
+                        TextView textView2 = this.subtitleView;
+                        int i6 = R.string.TelegramPremiumUserGiftedPremiumOutboundDialogSubtitle;
+                        Object[] objArr2 = new Object[1];
+                        TLRPC$User tLRPC$User5 = this.user;
+                        if (tLRPC$User5 != null) {
+                            str = tLRPC$User5.first_name;
+                        }
+                        objArr2[0] = str;
+                        textView2.setText(AndroidUtilities.replaceSingleTag(LocaleController.formatString(i6, objArr2), "windowBackgroundWhiteBlueButton", (Runnable) null));
+                        return;
                     }
-                    objArr2[0] = str;
-                    textView.setText(AndroidUtilities.replaceSingleTag(LocaleController.formatString(i4, objArr2), "windowBackgroundWhiteBlueButton", (Runnable) null));
+                    int i7 = R.string.TelegramPremiumUserGiftedPremiumDialogTitle;
+                    Object[] objArr3 = new Object[2];
+                    TLRPC$User tLRPC$User6 = this.user;
+                    if (tLRPC$User6 != null) {
+                        str = tLRPC$User6.first_name;
+                    }
+                    objArr3[0] = str;
+                    objArr3[1] = Integer.valueOf(giftTier2.getMonths());
+                    linksTextView.setText(AndroidUtilities.replaceSingleTag(LocaleController.formatString(i7, objArr3), "windowBackgroundWhiteBlueButton", (Runnable) null));
+                    this.subtitleView.setText(AndroidUtilities.replaceTags(LocaleController.getString(R.string.TelegramPremiumUserGiftedPremiumDialogSubtitle)));
                     return;
                 }
-                int i5 = R.string.TelegramPremiumUserGiftedPremiumDialogTitle;
-                Object[] objArr3 = new Object[2];
-                TLRPC$User tLRPC$User4 = this.user;
-                if (tLRPC$User4 != null) {
-                    str = tLRPC$User4.first_name;
-                }
-                objArr3[0] = str;
-                objArr3[1] = Integer.valueOf(giftTier2.getMonths());
-                linksTextView.setText(AndroidUtilities.replaceSingleTag(LocaleController.formatString(i5, objArr3), "windowBackgroundWhiteBlueButton", (Runnable) null));
-                this.subtitleView.setText(AndroidUtilities.replaceTags(LocaleController.getString(R.string.TelegramPremiumUserGiftedPremiumDialogSubtitle)));
-                return;
+                int i8 = R.string.TelegramPremiumUserDialogTitle;
+                TLRPC$User tLRPC$User7 = this.user;
+                linksTextView.setText(AndroidUtilities.replaceSingleTag(LocaleController.formatString(i8, ContactsController.formatName(tLRPC$User7.first_name, tLRPC$User7.last_name)), "windowBackgroundWhiteBlueButton", (Runnable) null));
+                this.subtitleView.setText(AndroidUtilities.replaceTags(LocaleController.getString(R.string.TelegramPremiumUserDialogSubtitle)));
             }
-            int i6 = R.string.TelegramPremiumUserDialogTitle;
-            TLRPC$User tLRPC$User5 = this.user;
-            linksTextView.setText(AndroidUtilities.replaceSingleTag(LocaleController.formatString(i6, ContactsController.formatName(tLRPC$User5.first_name, tLRPC$User5.last_name)), "windowBackgroundWhiteBlueButton", (Runnable) null));
-            this.subtitleView.setText(AndroidUtilities.replaceTags(LocaleController.getString(R.string.TelegramPremiumUserDialogSubtitle)));
         }
     }
 

@@ -34,6 +34,7 @@ public class SharedConfig {
     public static final int SAVE_TO_GALLERY_FLAG_PEER = 1;
     public static boolean allowBigEmoji = false;
     public static boolean allowScreenCapture = false;
+    private static Boolean animationsEnabled = null;
     public static boolean appLocked = false;
     public static boolean archiveHidden = false;
     public static int autoLockIn = 3600;
@@ -1526,7 +1527,14 @@ public class SharedConfig {
         }
     }
 
+    public static void setAnimationsEnabled(boolean z) {
+        animationsEnabled = Boolean.valueOf(z);
+    }
+
     public static boolean animationsEnabled() {
-        return MessagesController.getGlobalMainSettings().getBoolean("view_animations", true);
+        if (animationsEnabled == null) {
+            animationsEnabled = Boolean.valueOf(MessagesController.getGlobalMainSettings().getBoolean("view_animations", true));
+        }
+        return animationsEnabled.booleanValue();
     }
 }

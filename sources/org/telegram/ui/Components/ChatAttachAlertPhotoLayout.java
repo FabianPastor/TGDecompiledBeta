@@ -937,7 +937,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                 int i3 = i;
                 ArrayList<Object> allPhotosArray = getAllPhotosArray();
                 if (i3 >= 0 && i3 < allPhotosArray.size()) {
-                    PhotoViewer.getInstance().setParentActivity(this.parentAlert.baseFragment.getParentActivity(), resourcesProvider);
+                    PhotoViewer.getInstance().setParentActivity(this.parentAlert.baseFragment, resourcesProvider);
                     PhotoViewer.getInstance().setParentAlert(this.parentAlert);
                     PhotoViewer instance = PhotoViewer.getInstance();
                     ChatAttachAlert chatAttachAlert = this.parentAlert;

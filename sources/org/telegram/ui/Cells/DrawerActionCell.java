@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 import java.util.Set;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
@@ -133,5 +134,7 @@ public class DrawerActionCell extends FrameLayout {
         super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
         accessibilityNodeInfo.addAction(16);
         accessibilityNodeInfo.addAction(32);
+        accessibilityNodeInfo.setText(this.textView.getText());
+        accessibilityNodeInfo.setClassName(TextView.class.getName());
     }
 }

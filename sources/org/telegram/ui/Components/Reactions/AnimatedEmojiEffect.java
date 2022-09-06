@@ -13,13 +13,14 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
+import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$TL_availableReaction;
 import org.telegram.tgnet.TLRPC$TL_messages_stickerSet;
 import org.telegram.ui.Components.AnimatedEmojiDrawable;
 import org.telegram.ui.Components.RLottieDrawable;
 
 public class AnimatedEmojiEffect {
-    AnimatedEmojiDrawable animatedEmojiDrawable;
+    public AnimatedEmojiDrawable animatedEmojiDrawable;
     int animationIndex = -1;
     Rect bounds = new Rect();
     int currentAccount;
@@ -101,6 +102,7 @@ public class AnimatedEmojiEffect {
     public void setView(View view) {
         boolean z;
         TLRPC$TL_availableReaction tLRPC$TL_availableReaction;
+        TLRPC$Document tLRPC$Document;
         this.animatedEmojiDrawable.addView(view);
         this.parentView = view;
         ImageReceiver imageReceiver = this.effectImageReceiver;
@@ -108,10 +110,10 @@ public class AnimatedEmojiEffect {
             imageReceiver.onAttachedToWindow();
             TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet = null;
             String findAnimatedEmojiEmoticon = MessageObject.findAnimatedEmojiEmoticon(this.animatedEmojiDrawable.getDocument(), (String) null);
-            if (findAnimatedEmojiEmoticon == null || (tLRPC$TL_availableReaction = MediaDataController.getInstance(this.currentAccount).getReactionsMap().get(findAnimatedEmojiEmoticon)) == null) {
+            if (findAnimatedEmojiEmoticon == null || (tLRPC$TL_availableReaction = MediaDataController.getInstance(this.currentAccount).getReactionsMap().get(findAnimatedEmojiEmoticon)) == null || (tLRPC$Document = tLRPC$TL_availableReaction.around_animation) == null) {
                 z = false;
             } else {
-                this.effectImageReceiver.setImage(ImageLocation.getForDocument(tLRPC$TL_availableReaction.around_animation), ReactionsEffectOverlay.getFilterForAroundAnimation(), (Drawable) null, (String) null, tLRPC$TL_availableReaction.around_animation, 0);
+                this.effectImageReceiver.setImage(ImageLocation.getForDocument(tLRPC$Document), ReactionsEffectOverlay.getFilterForAroundAnimation(), (Drawable) null, (String) null, tLRPC$TL_availableReaction.around_animation, 0);
                 z = true;
             }
             if (!z) {

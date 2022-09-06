@@ -1,15 +1,17 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.LanguageDetector;
+import java.util.Comparator;
 
-public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda32 implements LanguageDetector.ExceptionCallback {
-    public final /* synthetic */ Runnable f$0;
+public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda32 implements Comparator {
+    public final /* synthetic */ ProfileActivity f$0;
+    public final /* synthetic */ int f$1;
 
-    public /* synthetic */ ProfileActivity$$ExternalSyntheticLambda32(Runnable runnable) {
-        this.f$0 = runnable;
+    public /* synthetic */ ProfileActivity$$ExternalSyntheticLambda32(ProfileActivity profileActivity, int i) {
+        this.f$0 = profileActivity;
+        this.f$1 = i;
     }
 
-    public final void run(Exception exc) {
-        ProfileActivity.lambda$processOnClickOrPress$26(this.f$0, exc);
+    public final int compare(Object obj, Object obj2) {
+        return this.f$0.lambda$updateOnlineCount$33(this.f$1, (Integer) obj, (Integer) obj2);
     }
 }

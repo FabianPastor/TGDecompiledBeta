@@ -110,7 +110,7 @@ public class DrawerProfileCell extends FrameLayout implements NotificationCenter
                     DrawerProfileCell drawerProfileCell = DrawerProfileCell.this;
                     Rect rect = AndroidUtilities.rectTmp2;
                     drawerProfileCell.getEmojiStatusLocation(rect);
-                    DrawerProfileCell.this.animatedStatus.translate(rect.centerX(), rect.centerY());
+                    DrawerProfileCell.this.animatedStatus.translate((float) rect.centerX(), (float) rect.centerY());
                 }
             }
         };
@@ -316,18 +316,17 @@ public class DrawerProfileCell extends FrameLayout implements NotificationCenter
             super.onMeasure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp((float) Math.max(this.renderedEffectsSize, Math.max(this.stateSize, this.effectsSize))), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp((float) Math.max(this.renderedEffectsSize, Math.max(this.stateSize, this.effectsSize))), NUM));
         }
 
-        public void translate(int i, int i2) {
-            setTranslationX(((float) i) - (((float) getMeasuredWidth()) / 2.0f));
-            float measuredHeight = ((float) i2) - (((float) getMeasuredHeight()) / 2.0f);
+        public void translate(float f, float f2) {
+            setTranslationX(f - (((float) getMeasuredWidth()) / 2.0f));
+            float measuredHeight = f2 - (((float) getMeasuredHeight()) / 2.0f);
             this.y1 = measuredHeight;
             setTranslationY(measuredHeight + this.y2);
         }
 
-        public void translateY2(int i) {
-            float f = this.y1;
-            float f2 = (float) i;
-            this.y2 = f2;
-            setTranslationY(f + f2);
+        public void translateY2(float f) {
+            float f2 = this.y1;
+            this.y2 = f;
+            setTranslationY(f2 + f);
         }
 
         public void dispatchDraw(Canvas canvas) {
@@ -427,6 +426,15 @@ public class DrawerProfileCell extends FrameLayout implements NotificationCenter
 
         public void setColor(int i) {
             this.color = Integer.valueOf(i);
+            PorterDuffColorFilter porterDuffColorFilter = new PorterDuffColorFilter(i, PorterDuff.Mode.MULTIPLY);
+            for (int i2 = 0; i2 < this.animations.size(); i2++) {
+                Object obj = this.animations.get(i2);
+                if (obj instanceof ImageReceiver) {
+                    ((ImageReceiver) obj).setColorFilter(porterDuffColorFilter);
+                } else if (obj instanceof AnimatedEmojiEffect) {
+                    ((AnimatedEmojiEffect) obj).animatedEmojiDrawable.setColorFilter(porterDuffColorFilter);
+                }
+            }
         }
     }
 
@@ -442,7 +450,7 @@ public class DrawerProfileCell extends FrameLayout implements NotificationCenter
         }
         rect.set(this.nameTextView.getRightDrawable().getBounds());
         rect.offset((int) this.nameTextView.getX(), (int) this.nameTextView.getY());
-        this.animatedStatus.translate(rect.centerX(), rect.centerY());
+        this.animatedStatus.translate((float) rect.centerX(), (float) rect.centerY());
     }
 
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v1, resolved type: java.lang.Object[]} */

@@ -4778,6 +4778,7 @@
     <string name="TelegramPremiumUserGiftedPremiumDialogTitle">**%1$s** has gifted you a %2$d-month subscription for Telegram Premium.</string>
     <string name="TelegramPremiumUserGiftedPremiumOutboundDialogSubtitle">**%1$s** now have access to additional features.</string>
     <string name="TelegramPremiumUserGiftedPremiumOutboundDialogTitle">You gifted **%1$s** a %2$d-month subscription for Telegram Premium.</string>
+    <string name="TelegramPremiumUserStatusDefaultDialogTitle">This is %1$s\'s current status.</string>
     <string name="TelegramPremiumUserStatusDialogSubtitle">Emoji status is a premium feature. Other features included in **Telegram Premium**:</string>
     <string name="TelegramPremiumUserStatusDialogTitle">%1$s set this emoji from **%2$s** as their current status.</string>
     <string name="TelegramTones">Telegram tones</string>

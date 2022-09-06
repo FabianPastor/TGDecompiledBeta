@@ -41,6 +41,10 @@ public class AnimatedEmojiSpan extends ReplacementSpan {
     boolean spanDrawn;
     public boolean standard;
 
+    public interface InvalidateHolder {
+        void invalidate();
+    }
+
     public AnimatedEmojiSpan(TLRPC$Document tLRPC$Document, Paint.FontMetricsInt fontMetricsInt) {
         this(tLRPC$Document.id, 1.2f, fontMetricsInt);
         this.document = tLRPC$Document;
@@ -181,7 +185,7 @@ public class AnimatedEmojiSpan extends ReplacementSpan {
         return false;
     }
 
-    public static class AnimatedEmojiHolder {
+    public static class AnimatedEmojiHolder implements InvalidateHolder {
         public float alpha;
         ImageReceiver.BackgroundThreadDrawHolder backgroundDrawHolder;
         public AnimatedEmojiDrawable drawable;
@@ -529,7 +533,7 @@ public class AnimatedEmojiSpan extends ReplacementSpan {
                 this.backgroundDrawingArray.add(spansChunk);
             }
             spansChunk.add(animatedEmojiHolder);
-            animatedEmojiHolder.drawable.addView(animatedEmojiHolder);
+            animatedEmojiHolder.drawable.addView((InvalidateHolder) animatedEmojiHolder);
         }
 
         public void remove(int i) {
@@ -542,7 +546,7 @@ public class AnimatedEmojiSpan extends ReplacementSpan {
                     this.groupedByLayout.remove(animatedEmojiHolder.layout);
                     this.backgroundDrawingArray.remove(spansChunk);
                 }
-                animatedEmojiHolder.drawable.removeView(animatedEmojiHolder);
+                animatedEmojiHolder.drawable.removeView((InvalidateHolder) animatedEmojiHolder);
                 return;
             }
             throw new RuntimeException("!!!");
