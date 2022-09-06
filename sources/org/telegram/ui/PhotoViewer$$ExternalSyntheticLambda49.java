@@ -1,16 +1,15 @@
 package org.telegram.ui;
 
+import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ViewSwitcher;
 
-public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda49 implements ViewSwitcher.ViewFactory {
-    public final /* synthetic */ PhotoViewer f$0;
+public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda49 implements View.OnTouchListener {
+    public static final /* synthetic */ PhotoViewer$$ExternalSyntheticLambda49 INSTANCE = new PhotoViewer$$ExternalSyntheticLambda49();
 
-    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda49(PhotoViewer photoViewer) {
-        this.f$0 = photoViewer;
+    private /* synthetic */ PhotoViewer$$ExternalSyntheticLambda49() {
     }
 
-    public final View makeView() {
-        return this.f$0.lambda$setParentActivity$6();
+    public final boolean onTouch(View view, MotionEvent motionEvent) {
+        return PhotoViewer.lambda$setParentActivity$24(view, motionEvent);
     }
 }

@@ -342,7 +342,6 @@ public class Theme {
     public static Paint chat_textSearchSelectionPaint = null;
     public static Paint chat_timeBackgroundPaint = null;
     public static TextPaint chat_timePaint = null;
-    public static Paint chat_unlockExtendedMediaBackground = null;
     public static TextPaint chat_unlockExtendedMediaTextPaint = null;
     public static Path[] chat_updatePath = new Path[3];
     public static Paint chat_urlPaint = null;
@@ -15697,7 +15696,6 @@ public class Theme {
             new Paint(1);
             chat_radialProgressPausedSeekbarPaint = new Paint(1);
             chat_messageBackgroundSelectedPaint = new Paint(1);
-            chat_unlockExtendedMediaBackground = new Paint(1);
             chat_actionBackgroundPaint = new Paint(1);
             chat_actionBackgroundSelectedPaint = new Paint(1);
             chat_actionBackgroundPaint2 = new Paint(1);

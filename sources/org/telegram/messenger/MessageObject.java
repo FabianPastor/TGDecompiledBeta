@@ -2109,317 +2109,135 @@ public class MessageObject {
         checkEmojiOnly(iArr == null ? null : Integer.valueOf(iArr[0]));
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:116:?, code lost:
-        return;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:117:?, code lost:
-        return;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:118:?, code lost:
-        return;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:56:0x009f, code lost:
-        r0 = 2;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:69:0x00be, code lost:
-        r0 = 1;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:75:0x00ce, code lost:
-        r1 = (int) (r12.getTextSize() + ((float) org.telegram.messenger.AndroidUtilities.dp(4.0f)));
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:76:0x00d9, code lost:
-        if (r3 == null) goto L_0x00ee;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:78:0x00dc, code lost:
-        if (r3.length <= 0) goto L_0x00ee;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:79:0x00de, code lost:
-        r6 = 0;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:81:0x00e0, code lost:
-        if (r6 >= r3.length) goto L_0x00ee;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:82:0x00e2, code lost:
-        r3[r6].replaceFontMetrics(r12.getFontMetricsInt(), r1);
-        r6 = r6 + 1;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:83:0x00ee, code lost:
-        if (r5 == null) goto L_?;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:85:0x00f1, code lost:
-        if (r5.length <= 0) goto L_?;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:87:0x00f4, code lost:
-        if (r2 >= r5.length) goto L_0x016d;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:88:0x00f6, code lost:
-        r5[r2].replaceFontMetrics(r12.getFontMetricsInt(), r1, r0);
-        r5[r2].full = true;
-        r2 = r2 + 1;
-     */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    private void checkEmojiOnly(java.lang.Integer r12) {
-        /*
-            r11 = this;
-            r0 = -1
-            r1 = 1082130432(0x40800000, float:4.0)
-            r2 = 0
-            if (r12 == 0) goto L_0x012f
-            int r3 = r12.intValue()
-            r4 = 1
-            if (r3 < r4) goto L_0x012f
-            java.lang.CharSequence r3 = r11.messageText
-            r5 = r3
-            android.text.Spannable r5 = (android.text.Spannable) r5
-            int r3 = r3.length()
-            java.lang.Class<org.telegram.messenger.Emoji$EmojiSpan> r6 = org.telegram.messenger.Emoji.EmojiSpan.class
-            java.lang.Object[] r3 = r5.getSpans(r2, r3, r6)
-            org.telegram.messenger.Emoji$EmojiSpan[] r3 = (org.telegram.messenger.Emoji.EmojiSpan[]) r3
-            java.lang.CharSequence r5 = r11.messageText
-            r6 = r5
-            android.text.Spannable r6 = (android.text.Spannable) r6
-            int r5 = r5.length()
-            java.lang.Class<org.telegram.ui.Components.AnimatedEmojiSpan> r7 = org.telegram.ui.Components.AnimatedEmojiSpan.class
-            java.lang.Object[] r5 = r6.getSpans(r2, r5, r7)
-            org.telegram.ui.Components.AnimatedEmojiSpan[] r5 = (org.telegram.ui.Components.AnimatedEmojiSpan[]) r5
-            int r12 = r12.intValue()
-            if (r3 != 0) goto L_0x0037
-            r6 = 0
-            goto L_0x0038
-        L_0x0037:
-            int r6 = r3.length
-        L_0x0038:
-            if (r5 != 0) goto L_0x003c
-            r7 = 0
-            goto L_0x003d
-        L_0x003c:
-            int r7 = r5.length
-        L_0x003d:
-            int r6 = r6 + r7
-            int r12 = java.lang.Math.max(r12, r6)
-            r11.emojiOnlyCount = r12
-            if (r5 != 0) goto L_0x0048
-            r12 = 0
-            goto L_0x0049
-        L_0x0048:
-            int r12 = r5.length
-        L_0x0049:
-            r11.totalAnimatedEmojiCount = r12
-            if (r5 == 0) goto L_0x005d
-            r12 = 0
-            r6 = 0
-        L_0x004f:
-            int r7 = r5.length
-            if (r12 >= r7) goto L_0x005e
-            r7 = r5[r12]
-            boolean r7 = r7.standard
-            if (r7 != 0) goto L_0x005a
-            int r6 = r6 + 1
-        L_0x005a:
-            int r12 = r12 + 1
-            goto L_0x004f
-        L_0x005d:
-            r6 = 0
-        L_0x005e:
-            int r12 = r11.emojiOnlyCount
-            if (r3 != 0) goto L_0x0064
-            r7 = 0
-            goto L_0x0065
-        L_0x0064:
-            int r7 = r3.length
-        L_0x0065:
-            int r7 = r12 - r7
-            if (r5 != 0) goto L_0x006b
-            r8 = 0
-            goto L_0x006c
-        L_0x006b:
-            int r8 = r5.length
-        L_0x006c:
-            int r7 = r7 - r8
-            if (r7 <= 0) goto L_0x0071
-            r7 = 1
-            goto L_0x0072
-        L_0x0071:
-            r7 = 0
-        L_0x0072:
-            r11.hasUnwrappedEmoji = r7
-            if (r12 == 0) goto L_0x0106
-            if (r7 == 0) goto L_0x007a
-            goto L_0x0106
-        L_0x007a:
-            if (r12 != r6) goto L_0x007e
-            r6 = 1
-            goto L_0x007f
-        L_0x007e:
-            r6 = 0
-        L_0x007f:
-            r7 = 4
-            r8 = 3
-            r9 = 5
-            r10 = 2
-            switch(r12) {
-                case 0: goto L_0x00c0;
-                case 1: goto L_0x00c0;
-                case 2: goto L_0x00b5;
-                case 3: goto L_0x00ab;
-                case 4: goto L_0x00a1;
-                case 5: goto L_0x0096;
-                case 6: goto L_0x008c;
-                default: goto L_0x0086;
+    private void checkEmojiOnly(Integer num) {
+        int i;
+        int i2;
+        TextPaint textPaint;
+        int i3 = -1;
+        if (num == null || num.intValue() < 1) {
+            CharSequence charSequence = this.messageText;
+            AnimatedEmojiSpan[] animatedEmojiSpanArr = (AnimatedEmojiSpan[]) ((Spannable) charSequence).getSpans(0, charSequence.length(), AnimatedEmojiSpan.class);
+            if (animatedEmojiSpanArr == null || animatedEmojiSpanArr.length <= 0) {
+                this.totalAnimatedEmojiCount = 0;
+                return;
             }
-        L_0x0086:
-            r6 = 9
-            if (r12 <= r6) goto L_0x00ca
-            r0 = 0
-            goto L_0x00ca
-        L_0x008c:
-            android.text.TextPaint[] r12 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaintEmoji
-            if (r6 == 0) goto L_0x0093
-            r12 = r12[r7]
-            goto L_0x009f
-        L_0x0093:
-            r12 = r12[r9]
-            goto L_0x009f
-        L_0x0096:
-            android.text.TextPaint[] r12 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaintEmoji
-            if (r6 == 0) goto L_0x009d
-            r12 = r12[r8]
-            goto L_0x009f
-        L_0x009d:
-            r12 = r12[r9]
-        L_0x009f:
-            r0 = 2
-            goto L_0x00ce
-        L_0x00a1:
-            android.text.TextPaint[] r12 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaintEmoji
-            if (r6 == 0) goto L_0x00a8
-            r12 = r12[r10]
-            goto L_0x00be
-        L_0x00a8:
-            r12 = r12[r7]
-            goto L_0x00be
-        L_0x00ab:
-            android.text.TextPaint[] r12 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaintEmoji
-            if (r6 == 0) goto L_0x00b2
-            r12 = r12[r4]
-            goto L_0x00be
-        L_0x00b2:
-            r12 = r12[r8]
-            goto L_0x00be
-        L_0x00b5:
-            android.text.TextPaint[] r12 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaintEmoji
-            if (r6 == 0) goto L_0x00bc
-            r12 = r12[r2]
-            goto L_0x00be
-        L_0x00bc:
-            r12 = r12[r10]
-        L_0x00be:
-            r0 = 1
-            goto L_0x00ce
-        L_0x00c0:
-            android.text.TextPaint[] r12 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaintEmoji
-            if (r6 == 0) goto L_0x00c7
-            r12 = r12[r2]
-            goto L_0x00ce
-        L_0x00c7:
-            r12 = r12[r10]
-            goto L_0x00ce
-        L_0x00ca:
-            android.text.TextPaint[] r12 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaintEmoji
-            r12 = r12[r9]
-        L_0x00ce:
-            float r6 = r12.getTextSize()
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            float r1 = (float) r1
-            float r6 = r6 + r1
-            int r1 = (int) r6
-            if (r3 == 0) goto L_0x00ee
-            int r6 = r3.length
-            if (r6 <= 0) goto L_0x00ee
-            r6 = 0
-        L_0x00df:
-            int r7 = r3.length
-            if (r6 >= r7) goto L_0x00ee
-            r7 = r3[r6]
-            android.graphics.Paint$FontMetricsInt r8 = r12.getFontMetricsInt()
-            r7.replaceFontMetrics(r8, r1)
-            int r6 = r6 + 1
-            goto L_0x00df
-        L_0x00ee:
-            if (r5 == 0) goto L_0x016d
-            int r3 = r5.length
-            if (r3 <= 0) goto L_0x016d
-        L_0x00f3:
-            int r3 = r5.length
-            if (r2 >= r3) goto L_0x016d
-            r3 = r5[r2]
-            android.graphics.Paint$FontMetricsInt r6 = r12.getFontMetricsInt()
-            r3.replaceFontMetrics(r6, r1, r0)
-            r3 = r5[r2]
-            r3.full = r4
-            int r2 = r2 + 1
-            goto L_0x00f3
-        L_0x0106:
-            if (r5 == 0) goto L_0x012e
-            int r12 = r5.length
-            if (r12 <= 0) goto L_0x012e
-            r12 = 0
-        L_0x010c:
-            int r3 = r5.length
-            if (r12 >= r3) goto L_0x012e
-            r3 = r5[r12]
-            android.text.TextPaint r4 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint
-            android.graphics.Paint$FontMetricsInt r4 = r4.getFontMetricsInt()
-            android.text.TextPaint r6 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint
-            float r6 = r6.getTextSize()
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            float r7 = (float) r7
-            float r6 = r6 + r7
-            int r6 = (int) r6
-            r3.replaceFontMetrics(r4, r6, r0)
-            r3 = r5[r12]
-            r3.full = r2
-            int r12 = r12 + 1
-            goto L_0x010c
-        L_0x012e:
-            return
-        L_0x012f:
-            java.lang.CharSequence r12 = r11.messageText
-            r3 = r12
-            android.text.Spannable r3 = (android.text.Spannable) r3
-            int r12 = r12.length()
-            java.lang.Class<org.telegram.ui.Components.AnimatedEmojiSpan> r4 = org.telegram.ui.Components.AnimatedEmojiSpan.class
-            java.lang.Object[] r12 = r3.getSpans(r2, r12, r4)
-            org.telegram.ui.Components.AnimatedEmojiSpan[] r12 = (org.telegram.ui.Components.AnimatedEmojiSpan[]) r12
-            if (r12 == 0) goto L_0x016b
-            int r3 = r12.length
-            if (r3 <= 0) goto L_0x016b
-            int r3 = r12.length
-            r11.totalAnimatedEmojiCount = r3
-            r3 = 0
-        L_0x0149:
-            int r4 = r12.length
-            if (r3 >= r4) goto L_0x016d
-            r4 = r12[r3]
-            android.text.TextPaint r5 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint
-            android.graphics.Paint$FontMetricsInt r5 = r5.getFontMetricsInt()
-            android.text.TextPaint r6 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint
-            float r6 = r6.getTextSize()
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            float r7 = (float) r7
-            float r6 = r6 + r7
-            int r6 = (int) r6
-            r4.replaceFontMetrics(r5, r6, r0)
-            r4 = r12[r3]
-            r4.full = r2
-            int r3 = r3 + 1
-            goto L_0x0149
-        L_0x016b:
-            r11.totalAnimatedEmojiCount = r2
-        L_0x016d:
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessageObject.checkEmojiOnly(java.lang.Integer):void");
+            this.totalAnimatedEmojiCount = animatedEmojiSpanArr.length;
+            for (int i4 = 0; i4 < animatedEmojiSpanArr.length; i4++) {
+                animatedEmojiSpanArr[i4].replaceFontMetrics(Theme.chat_msgTextPaint.getFontMetricsInt(), (int) (Theme.chat_msgTextPaint.getTextSize() + ((float) AndroidUtilities.dp(4.0f))), -1);
+                animatedEmojiSpanArr[i4].full = false;
+            }
+            return;
+        }
+        CharSequence charSequence2 = this.messageText;
+        Emoji.EmojiSpan[] emojiSpanArr = (Emoji.EmojiSpan[]) ((Spannable) charSequence2).getSpans(0, charSequence2.length(), Emoji.EmojiSpan.class);
+        CharSequence charSequence3 = this.messageText;
+        AnimatedEmojiSpan[] animatedEmojiSpanArr2 = (AnimatedEmojiSpan[]) ((Spannable) charSequence3).getSpans(0, charSequence3.length(), AnimatedEmojiSpan.class);
+        this.emojiOnlyCount = Math.max(num.intValue(), (emojiSpanArr == null ? 0 : emojiSpanArr.length) + (animatedEmojiSpanArr2 == null ? 0 : animatedEmojiSpanArr2.length));
+        if (animatedEmojiSpanArr2 == null) {
+            i = 0;
+        } else {
+            i = animatedEmojiSpanArr2.length;
+        }
+        this.totalAnimatedEmojiCount = i;
+        if (animatedEmojiSpanArr2 != null) {
+            i2 = 0;
+            for (AnimatedEmojiSpan animatedEmojiSpan : animatedEmojiSpanArr2) {
+                if (!animatedEmojiSpan.standard) {
+                    i2++;
+                }
+            }
+        } else {
+            i2 = 0;
+        }
+        int i5 = this.emojiOnlyCount;
+        boolean z = (i5 - (emojiSpanArr == null ? 0 : emojiSpanArr.length)) - (animatedEmojiSpanArr2 == null ? 0 : animatedEmojiSpanArr2.length) > 0;
+        this.hasUnwrappedEmoji = z;
+        if (i5 != 0 && !z) {
+            boolean z2 = i5 == i2;
+            int i6 = 2;
+            switch (i5) {
+                case 0:
+                case 1:
+                    TextPaint[] textPaintArr = Theme.chat_msgTextPaintEmoji;
+                    if (!z2) {
+                        textPaint = textPaintArr[2];
+                        break;
+                    } else {
+                        textPaint = textPaintArr[0];
+                        break;
+                    }
+                case 2:
+                    TextPaint[] textPaintArr2 = Theme.chat_msgTextPaintEmoji;
+                    if (!z2) {
+                        textPaint = textPaintArr2[2];
+                        break;
+                    } else {
+                        textPaint = textPaintArr2[0];
+                        break;
+                    }
+                case 3:
+                    TextPaint[] textPaintArr3 = Theme.chat_msgTextPaintEmoji;
+                    if (!z2) {
+                        textPaint = textPaintArr3[3];
+                        break;
+                    } else {
+                        textPaint = textPaintArr3[1];
+                        break;
+                    }
+                case 4:
+                    TextPaint[] textPaintArr4 = Theme.chat_msgTextPaintEmoji;
+                    if (!z2) {
+                        textPaint = textPaintArr4[4];
+                        break;
+                    } else {
+                        textPaint = textPaintArr4[2];
+                        break;
+                    }
+                case 5:
+                    TextPaint[] textPaintArr5 = Theme.chat_msgTextPaintEmoji;
+                    if (!z2) {
+                        textPaint = textPaintArr5[5];
+                        break;
+                    } else {
+                        textPaint = textPaintArr5[3];
+                        break;
+                    }
+                case 6:
+                    TextPaint[] textPaintArr6 = Theme.chat_msgTextPaintEmoji;
+                    if (!z2) {
+                        textPaint = textPaintArr6[5];
+                        break;
+                    } else {
+                        textPaint = textPaintArr6[4];
+                        break;
+                    }
+                default:
+                    if (i5 > 9) {
+                        i3 = 0;
+                    }
+                    textPaint = Theme.chat_msgTextPaintEmoji[5];
+                    i6 = i3;
+                    break;
+            }
+            i6 = 1;
+            int textSize = (int) (textPaint.getTextSize() + ((float) AndroidUtilities.dp(4.0f)));
+            if (emojiSpanArr != null && emojiSpanArr.length > 0) {
+                for (Emoji.EmojiSpan replaceFontMetrics : emojiSpanArr) {
+                    replaceFontMetrics.replaceFontMetrics(textPaint.getFontMetricsInt(), textSize);
+                }
+            }
+            if (animatedEmojiSpanArr2 != null && animatedEmojiSpanArr2.length > 0) {
+                for (int i7 = 0; i7 < animatedEmojiSpanArr2.length; i7++) {
+                    animatedEmojiSpanArr2[i7].replaceFontMetrics(textPaint.getFontMetricsInt(), textSize, i6);
+                    animatedEmojiSpanArr2[i7].full = true;
+                }
+            }
+        } else if (animatedEmojiSpanArr2 != null && animatedEmojiSpanArr2.length > 0) {
+            for (int i8 = 0; i8 < animatedEmojiSpanArr2.length; i8++) {
+                animatedEmojiSpanArr2[i8].replaceFontMetrics(Theme.chat_msgTextPaint.getFontMetricsInt(), (int) (Theme.chat_msgTextPaint.getTextSize() + ((float) AndroidUtilities.dp(4.0f))), -1);
+                animatedEmojiSpanArr2[i8].full = false;
+            }
+        }
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:182:0x04b5  */

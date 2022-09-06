@@ -298,11 +298,11 @@ public class PremiumPreviewBottomSheet extends BottomSheetWithRecyclerListView i
                 if (giftTier2 != null) {
                     String str = "";
                     if (this.isOutboundGift) {
-                        int i5 = R.string.TelegramPremiumUserGiftedPremiumOutboundDialogTitle;
+                        int i5 = R.string.TelegramPremiumUserGiftedPremiumOutboundDialogTitleWithPlural;
                         Object[] objArr = new Object[2];
                         TLRPC$User tLRPC$User4 = this.user;
                         objArr[0] = tLRPC$User4 != null ? tLRPC$User4.first_name : str;
-                        objArr[1] = Integer.valueOf(giftTier2.getMonths());
+                        objArr[1] = LocaleController.formatPluralString("GiftMonths", giftTier2.getMonths(), new Object[0]);
                         linksTextView.setText(AndroidUtilities.replaceSingleTag(LocaleController.formatString(i5, objArr), "windowBackgroundWhiteBlueButton", (Runnable) null));
                         TextView textView2 = this.subtitleView;
                         int i6 = R.string.TelegramPremiumUserGiftedPremiumOutboundDialogSubtitle;
@@ -315,14 +315,14 @@ public class PremiumPreviewBottomSheet extends BottomSheetWithRecyclerListView i
                         textView2.setText(AndroidUtilities.replaceSingleTag(LocaleController.formatString(i6, objArr2), "windowBackgroundWhiteBlueButton", (Runnable) null));
                         return;
                     }
-                    int i7 = R.string.TelegramPremiumUserGiftedPremiumDialogTitle;
+                    int i7 = R.string.TelegramPremiumUserGiftedPremiumDialogTitleWithPlural;
                     Object[] objArr3 = new Object[2];
                     TLRPC$User tLRPC$User6 = this.user;
                     if (tLRPC$User6 != null) {
                         str = tLRPC$User6.first_name;
                     }
                     objArr3[0] = str;
-                    objArr3[1] = Integer.valueOf(giftTier2.getMonths());
+                    objArr3[1] = LocaleController.formatPluralString("GiftMonths", giftTier2.getMonths(), new Object[0]);
                     linksTextView.setText(AndroidUtilities.replaceSingleTag(LocaleController.formatString(i7, objArr3), "windowBackgroundWhiteBlueButton", (Runnable) null));
                     this.subtitleView.setText(AndroidUtilities.replaceTags(LocaleController.getString(R.string.TelegramPremiumUserGiftedPremiumDialogSubtitle)));
                     return;

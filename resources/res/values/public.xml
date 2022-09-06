@@ -3747,7 +3747,6 @@
     <public type="string" name="ExpiredLink" id="NUM" />
     <public type="string" name="ExportTheme" id="NUM" />
     <public type="string" name="Exposure" id="NUM" />
-    <public type="string" name="ExtendedMediaUnlockFor" id="NUM" />
     <public type="string" name="ExternalFolderInfo" id="NUM" />
     <public type="string" name="ExternalStorage" id="NUM" />
     <public type="string" name="Fade" id="NUM" />
@@ -4019,6 +4018,12 @@
     <public type="string" name="GifSavedHint" id="NUM" />
     <public type="string" name="GifSavedToDownloadsHint" id="NUM" />
     <public type="string" name="GifsTab2" id="NUM" />
+    <public type="string" name="GiftMonths_few" id="NUM" />
+    <public type="string" name="GiftMonths_many" id="NUM" />
+    <public type="string" name="GiftMonths_one" id="NUM" />
+    <public type="string" name="GiftMonths_other" id="NUM" />
+    <public type="string" name="GiftMonths_two" id="NUM" />
+    <public type="string" name="GiftMonths_zero" id="NUM" />
     <public type="string" name="GiftPremium" id="NUM" />
     <public type="string" name="GiftPremiumListFeaturesAndTerms" id="NUM" />
     <public type="string" name="GiftPremiumOptionDiscount" id="NUM" />
@@ -6591,9 +6596,9 @@
     <public type="string" name="TelegramPremiumUserDialogSubtitle" id="NUM" />
     <public type="string" name="TelegramPremiumUserDialogTitle" id="NUM" />
     <public type="string" name="TelegramPremiumUserGiftedPremiumDialogSubtitle" id="NUM" />
-    <public type="string" name="TelegramPremiumUserGiftedPremiumDialogTitle" id="NUM" />
+    <public type="string" name="TelegramPremiumUserGiftedPremiumDialogTitleWithPlural" id="NUM" />
     <public type="string" name="TelegramPremiumUserGiftedPremiumOutboundDialogSubtitle" id="NUM" />
-    <public type="string" name="TelegramPremiumUserGiftedPremiumOutboundDialogTitle" id="NUM" />
+    <public type="string" name="TelegramPremiumUserGiftedPremiumOutboundDialogTitleWithPlural" id="NUM" />
     <public type="string" name="TelegramPremiumUserStatusDefaultDialogTitle" id="NUM" />
     <public type="string" name="TelegramPremiumUserStatusDialogSubtitle" id="NUM" />
     <public type="string" name="TelegramPremiumUserStatusDialogTitle" id="NUM" />

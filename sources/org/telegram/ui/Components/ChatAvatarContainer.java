@@ -68,7 +68,6 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
     private Integer overrideSubtitleColor;
     /* access modifiers changed from: private */
     public ChatActivity parentFragment;
-    public boolean premiumIconHiddable;
     private Theme.ResourcesProvider resourcesProvider;
     private String rightDrawableContentDescription;
     private boolean rightDrawableIsScamOrVerified;
@@ -106,7 +105,6 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
         this.statusMadeShorter = new boolean[1];
         this.onlineCount = -1;
         this.allowShorterStatus = false;
-        this.premiumIconHiddable = false;
         this.rightDrawableIsScamOrVerified = false;
         this.rightDrawableContentDescription = null;
         this.resourcesProvider = resourcesProvider2;
@@ -159,6 +157,9 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
         this.titleTextView.setGravity(3);
         this.titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.titleTextView.setLeftDrawableTopPadding(-AndroidUtilities.dp(1.3f));
+        this.titleTextView.setCanHideRightDrawable(false);
+        this.titleTextView.setRightDrawableOutside(true);
+        this.titleTextView.setEllipsizeByGradient(true);
         this.titleTextView.setPadding(0, AndroidUtilities.dp(6.0f), AndroidUtilities.dp(12.0f), AndroidUtilities.dp(12.0f));
         addView(this.titleTextView);
         AnonymousClass3 r112 = new SimpleTextView(context) {
@@ -621,15 +622,12 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
     public void setTitleIcons(Drawable drawable, Drawable drawable2) {
         this.titleTextView.setLeftDrawable(drawable);
         if (!this.rightDrawableIsScamOrVerified) {
-            this.titleTextView.setRightDrawableOutside(false);
-            this.titleTextView.setRightDrawable(drawable2);
             if (drawable2 != null) {
-                this.titleTextView.setDrawablePadding(AndroidUtilities.dp(8.0f));
                 this.rightDrawableContentDescription = LocaleController.getString("NotificationsMuted", R.string.NotificationsMuted);
-                return;
+            } else {
+                this.rightDrawableContentDescription = null;
             }
-            this.titleTextView.setDrawablePadding(AndroidUtilities.dp(4.0f));
-            this.rightDrawableContentDescription = null;
+            this.titleTextView.setRightDrawable(drawable2);
         }
     }
 
@@ -638,15 +636,10 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
     }
 
     public void setTitle(CharSequence charSequence, boolean z, boolean z2, boolean z3, boolean z4, TLRPC$EmojiStatus tLRPC$EmojiStatus) {
-        boolean z5 = false;
         if (charSequence != null) {
             charSequence = Emoji.replaceEmoji(charSequence, this.titleTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(24.0f), false);
         }
         this.titleTextView.setText(charSequence);
-        this.titleTextView.setCanHideRightDrawable(false);
-        this.titleTextView.setRightDrawableOutside(true);
-        this.titleTextView.setEllipsizeByGradient(true);
-        this.titleTextView.setDrawablePadding(AndroidUtilities.dp(4.0f));
         if (z || z2) {
             if (!(this.titleTextView.getRightDrawable() instanceof ScamDrawable)) {
                 ScamDrawable scamDrawable = new ScamDrawable(11, z ^ true ? 1 : 0);
@@ -661,24 +654,18 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
             Drawable mutate2 = getResources().getDrawable(R.drawable.verified_check).mutate();
             mutate2.setColorFilter(new PorterDuffColorFilter(getThemedColor("profile_verifiedCheck"), PorterDuff.Mode.MULTIPLY));
             this.titleTextView.setRightDrawable((Drawable) new CombinedDrawable(mutate, mutate2));
-            this.titleTextView.setDrawablePadding(AndroidUtilities.dp(8.0f));
             this.rightDrawableIsScamOrVerified = true;
             this.rightDrawableContentDescription = LocaleController.getString("AccDescrVerified", R.string.AccDescrVerified);
         } else if (z4) {
-            boolean z6 = tLRPC$EmojiStatus instanceof TLRPC$TL_emojiStatus;
-            if (z6 || ((tLRPC$EmojiStatus instanceof TLRPC$TL_emojiStatusUntil) && ((TLRPC$TL_emojiStatusUntil) tLRPC$EmojiStatus).until > ((int) (System.currentTimeMillis() / 1000)))) {
-                z5 = true;
-            }
-            if (this.premiumIconHiddable) {
-                this.titleTextView.setCanHideRightDrawable(!z5);
-            }
-            if (!z5) {
-                this.titleTextView.setDrawablePadding(AndroidUtilities.dp(8.0f));
+            boolean z5 = tLRPC$EmojiStatus instanceof TLRPC$TL_emojiStatus;
+            if (!z5 && (tLRPC$EmojiStatus instanceof TLRPC$TL_emojiStatusUntil)) {
+                int i = ((TLRPC$TL_emojiStatusUntil) tLRPC$EmojiStatus).until;
+                long currentTimeMillis = System.currentTimeMillis() / 1000;
             }
             if ((this.titleTextView.getRightDrawable() instanceof AnimatedEmojiDrawable.WrapSizeDrawable) && (((AnimatedEmojiDrawable.WrapSizeDrawable) this.titleTextView.getRightDrawable()).getDrawable() instanceof AnimatedEmojiDrawable)) {
                 ((AnimatedEmojiDrawable) ((AnimatedEmojiDrawable.WrapSizeDrawable) this.titleTextView.getRightDrawable()).getDrawable()).removeView((Drawable.Callback) this.titleTextView);
             }
-            if (z6) {
+            if (z5) {
                 this.emojiStatusDrawable.set(((TLRPC$TL_emojiStatus) tLRPC$EmojiStatus).document_id, true);
             } else {
                 if (tLRPC$EmojiStatus instanceof TLRPC$TL_emojiStatusUntil) {
@@ -699,11 +686,6 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
             this.titleTextView.setRightDrawable((Drawable) null);
             this.rightDrawableIsScamOrVerified = false;
             this.rightDrawableContentDescription = null;
-        } else if (this.titleTextView.getRightDrawable() != null) {
-            this.titleTextView.setDrawablePadding(AndroidUtilities.dp(8.0f));
-            this.titleTextView.setRightDrawableOutside(false);
-        } else {
-            this.titleTextView.setRightDrawableOutside(false);
         }
     }
 

@@ -1,17 +1,19 @@
 package org.telegram.ui;
 
-import org.telegram.ui.Components.ShareAlert;
+import org.telegram.messenger.ImageReceiver;
 
 public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda66 implements Runnable {
     public final /* synthetic */ PhotoViewer f$0;
-    public final /* synthetic */ ShareAlert f$1;
+    public final /* synthetic */ ImageReceiver.BitmapHolder f$1;
+    public final /* synthetic */ String f$2;
 
-    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda66(PhotoViewer photoViewer, ShareAlert shareAlert) {
+    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda66(PhotoViewer photoViewer, ImageReceiver.BitmapHolder bitmapHolder, String str) {
         this.f$0 = photoViewer;
-        this.f$1 = shareAlert;
+        this.f$1 = bitmapHolder;
+        this.f$2 = str;
     }
 
     public final void run() {
-        this.f$0.lambda$showShareAlert$43(this.f$1);
+        this.f$0.lambda$detectFaces$56(this.f$1, this.f$2);
     }
 }

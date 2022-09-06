@@ -1,16 +1,16 @@
 package org.telegram.ui;
 
 import android.view.View;
-import org.telegram.ui.ActionBar.BottomSheet;
+import android.view.WindowInsets;
 
-public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda16 implements View.OnClickListener {
-    public final /* synthetic */ BottomSheet f$0;
+public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda16 implements View.OnApplyWindowInsetsListener {
+    public final /* synthetic */ PhotoViewer f$0;
 
-    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda16(BottomSheet bottomSheet) {
-        this.f$0 = bottomSheet;
+    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda16(PhotoViewer photoViewer) {
+        this.f$0 = photoViewer;
     }
 
-    public final void onClick(View view) {
-        this.f$0.dismiss();
+    public final WindowInsets onApplyWindowInsets(View view, WindowInsets windowInsets) {
+        return this.f$0.lambda$setParentActivity$4(view, windowInsets);
     }
 }

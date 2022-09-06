@@ -549,7 +549,7 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
             int r0 = r39.intValue()
             r1 = 1104150528(0x41d00000, float:26.0)
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            r2 = 1134690304(0x43a20000, float:324.0)
+            r2 = 1133641728(0x43920000, float:292.0)
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
             int r0 = androidx.core.math.MathUtils.clamp((int) r0, (int) r1, (int) r2)
             java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
@@ -1124,6 +1124,7 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
 
     /* access modifiers changed from: protected */
     public void dispatchDraw(Canvas canvas) {
+        Canvas canvas2 = canvas;
         AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable swapAnimatedEmojiDrawable = this.scrimDrawable;
         if (!(swapAnimatedEmojiDrawable == null || this.emojiX == null)) {
             Rect bounds = swapAnimatedEmojiDrawable.getBounds();
@@ -1136,7 +1137,7 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
             View view2 = this.scrimDrawableParent;
             int height = view2 == null ? bounds.height() : view2.getHeight();
             canvas.save();
-            canvas.translate(0.0f, -getTranslationY());
+            canvas2.translate(0.0f, -getTranslationY());
             AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable swapAnimatedEmojiDrawable2 = this.scrimDrawable;
             double d = (double) i;
             double pow = Math.pow((double) this.contentView.getAlpha(), 0.25d);
@@ -1148,26 +1149,17 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
             if (this.drawableToBounds == null) {
                 this.drawableToBounds = new Rect();
             }
-            Rect rect = this.drawableToBounds;
-            int centerX = (int) (((((float) bounds.centerX()) - ((((float) bounds.width()) / 2.0f) * scaleY2)) - ((float) bounds.centerX())) + ((float) this.emojiX.intValue()));
-            int i2 = 0;
-            int height2 = (int) ((((((((float) (height - (height - bounds.bottom))) * scaleY2) - ((float) (scaleY2 > 1.5f ? bounds.height() : 0))) - (((float) bounds.height()) * scaleY2)) - ((float) bounds.top)) - (((float) bounds.height()) / 2.0f)) + ((float) AndroidUtilities.dp((float) this.topMarginDp)));
-            int centerX2 = (int) (((((float) bounds.centerX()) + ((((float) bounds.width()) / 2.0f) * scaleY2)) - ((float) bounds.centerX())) + ((float) this.emojiX.intValue()));
-            float f = ((float) (height - (height - bounds.bottom))) * scaleY2;
-            if (scaleY2 > 1.5f) {
-                i2 = bounds.height();
-            }
-            rect.set(centerX, height2, centerX2, (int) ((((f - ((float) i2)) - ((float) bounds.top)) - (((float) bounds.height()) / 2.0f)) + ((float) AndroidUtilities.dp((float) this.topMarginDp))));
+            this.drawableToBounds.set((int) (((((float) bounds.centerX()) - ((((float) bounds.width()) / 2.0f) * scaleY2)) - ((float) bounds.centerX())) + ((float) this.emojiX.intValue()) + ((float) ((scaleY2 <= 1.0f || scaleY2 >= 1.5f) ? 0 : 2))), (int) ((((((((float) (height - (height - bounds.bottom))) * scaleY2) - (scaleY2 > 1.5f ? (((float) bounds.height()) * 0.75f) - 1.0f : 0.0f)) - (((float) bounds.height()) * scaleY2)) - ((float) bounds.top)) - (((float) bounds.height()) / 2.0f)) + ((float) AndroidUtilities.dp((float) this.topMarginDp))), (int) (((((float) bounds.centerX()) + ((((float) bounds.width()) / 2.0f) * scaleY2)) - ((float) bounds.centerX())) + ((float) this.emojiX.intValue()) + ((float) ((scaleY2 <= 1.0f || scaleY2 >= 1.5f) ? 0 : 2))), (int) (((((((float) (height - (height - bounds.bottom))) * scaleY2) - (scaleY2 > 1.5f ? (((float) bounds.height()) * 0.75f) - 1.0f : 0.0f)) - ((float) bounds.top)) - (((float) bounds.height()) / 2.0f)) + ((float) AndroidUtilities.dp((float) this.topMarginDp))));
             AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable swapAnimatedEmojiDrawable3 = this.scrimDrawable;
+            Rect rect = this.drawableToBounds;
+            int i2 = rect.left;
+            int i3 = rect.top;
+            int width = (int) (((float) i2) + (((float) rect.width()) / scaleY2));
             Rect rect2 = this.drawableToBounds;
-            int i3 = rect2.left;
-            int i4 = rect2.top;
-            int width = (int) (((float) i3) + (((float) rect2.width()) / scaleY2));
+            swapAnimatedEmojiDrawable3.setBounds(i2, i3, width, (int) (((float) rect2.top) + (((float) rect2.height()) / scaleY2)));
             Rect rect3 = this.drawableToBounds;
-            swapAnimatedEmojiDrawable3.setBounds(i3, i4, width, (int) (((float) rect3.top) + (((float) rect3.height()) / scaleY2)));
-            Rect rect4 = this.drawableToBounds;
-            canvas.scale(scaleY2, scaleY2, (float) rect4.left, (float) rect4.top);
-            this.scrimDrawable.draw(canvas);
+            canvas2.scale(scaleY2, scaleY2, (float) rect3.left, (float) rect3.top);
+            this.scrimDrawable.draw(canvas2);
             this.scrimDrawable.setAlpha(i);
             this.scrimDrawable.setBounds(bounds);
             canvas.restore();
@@ -1175,11 +1167,11 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
         super.dispatchDraw(canvas);
         if (this.emojiSelectView != null && this.emojiSelectRect != null && this.drawableToBounds != null) {
             canvas.save();
-            canvas.translate(0.0f, -getTranslationY());
+            canvas2.translate(0.0f, -getTranslationY());
             this.emojiSelectView.drawable.setAlpha((int) (this.emojiSelectAlpha * 255.0f));
             this.emojiSelectView.drawable.setBounds(this.emojiSelectRect);
             this.emojiSelectView.drawable.setColorFilter(new PorterDuffColorFilter(ColorUtils.blendARGB(Theme.getColor("windowBackgroundWhiteBlueIcon", this.resourcesProvider), this.scrimColor, 1.0f - this.scrimAlpha), PorterDuff.Mode.MULTIPLY));
-            this.emojiSelectView.drawable.draw(canvas);
+            this.emojiSelectView.drawable.draw(canvas2);
             canvas.restore();
         }
     }

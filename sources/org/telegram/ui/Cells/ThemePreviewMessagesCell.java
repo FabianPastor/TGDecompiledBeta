@@ -332,6 +332,10 @@ public class ThemePreviewMessagesCell extends LinearLayout {
                         ChatMessageCell.ChatMessageCellDelegate.CC.$default$didPressCommentButton(this, chatMessageCell);
                     }
 
+                    public /* synthetic */ void didPressExtendedMediaPreview(ChatMessageCell chatMessageCell, TLRPC$KeyboardButton tLRPC$KeyboardButton) {
+                        ChatMessageCell.ChatMessageCellDelegate.CC.$default$didPressExtendedMediaPreview(this, chatMessageCell, tLRPC$KeyboardButton);
+                    }
+
                     public /* synthetic */ void didPressHiddenForward(ChatMessageCell chatMessageCell) {
                         ChatMessageCell.ChatMessageCellDelegate.CC.$default$didPressHiddenForward(this, chatMessageCell);
                     }
@@ -350,10 +354,6 @@ public class ThemePreviewMessagesCell extends LinearLayout {
 
                     public /* synthetic */ void didPressOther(ChatMessageCell chatMessageCell, float f, float f2) {
                         ChatMessageCell.ChatMessageCellDelegate.CC.$default$didPressOther(this, chatMessageCell, f, f2);
-                    }
-
-                    public /* synthetic */ void didPressPaidPreview(ChatMessageCell chatMessageCell, TLRPC$KeyboardButton tLRPC$KeyboardButton) {
-                        ChatMessageCell.ChatMessageCellDelegate.CC.$default$didPressPaidPreview(this, chatMessageCell, tLRPC$KeyboardButton);
                     }
 
                     public /* synthetic */ void didPressReaction(ChatMessageCell chatMessageCell, TLRPC$ReactionCount tLRPC$ReactionCount, boolean z) {

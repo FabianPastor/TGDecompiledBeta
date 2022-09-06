@@ -10,6 +10,6 @@ public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda4 impleme
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$switchToEditMode$58(valueAnimator);
+        this.f$0.lambda$toggleActionBar$66(valueAnimator);
     }
 }
