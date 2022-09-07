@@ -30725,26 +30725,25 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     /* JADX WARNING: Code restructure failed: missing block: B:33:0x017e, code lost:
         if (((org.telegram.tgnet.TLRPC$TL_emojiStatusUntil) r1).until < ((int) (java.lang.System.currentTimeMillis() / 1000))) goto L_0x0182;
      */
-    /* JADX WARNING: Removed duplicated region for block: B:121:0x048f  */
-    /* JADX WARNING: Removed duplicated region for block: B:137:0x04b9  */
-    /* JADX WARNING: Removed duplicated region for block: B:157:0x059a  */
-    /* JADX WARNING: Removed duplicated region for block: B:160:0x05bb  */
-    /* JADX WARNING: Removed duplicated region for block: B:172:0x062a  */
-    /* JADX WARNING: Removed duplicated region for block: B:39:0x018c  */
-    /* JADX WARNING: Removed duplicated region for block: B:48:0x01ab  */
-    /* JADX WARNING: Removed duplicated region for block: B:49:0x01bd  */
-    /* JADX WARNING: Removed duplicated region for block: B:53:0x01c6  */
-    /* JADX WARNING: Removed duplicated region for block: B:61:0x027c  */
+    /* JADX WARNING: Removed duplicated region for block: B:119:0x048c  */
+    /* JADX WARNING: Removed duplicated region for block: B:135:0x04b6  */
+    /* JADX WARNING: Removed duplicated region for block: B:155:0x0597  */
+    /* JADX WARNING: Removed duplicated region for block: B:158:0x05b8  */
+    /* JADX WARNING: Removed duplicated region for block: B:170:0x0627  */
+    /* JADX WARNING: Removed duplicated region for block: B:46:0x01a8  */
+    /* JADX WARNING: Removed duplicated region for block: B:47:0x01ba  */
+    /* JADX WARNING: Removed duplicated region for block: B:51:0x01c3  */
+    /* JADX WARNING: Removed duplicated region for block: B:59:0x0279  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private void updateTopPanel(boolean r29) {
         /*
             r28 = this;
             r6 = r28
             org.telegram.ui.Components.BlurredFrameLayout r0 = r6.topChatPanelView
-            if (r0 == 0) goto L_0x069c
+            if (r0 == 0) goto L_0x0699
             int r0 = r6.chatMode
             if (r0 == 0) goto L_0x000c
-            goto L_0x069c
+            goto L_0x0699
         L_0x000c:
             int r0 = r6.currentAccount
             android.content.SharedPreferences r0 = org.telegram.messenger.MessagesController.getNotificationsSettings(r0)
@@ -30910,44 +30909,41 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         L_0x0189:
             r9 = 0
         L_0x018a:
-            if (r0 == 0) goto L_0x018d
-            r3 = 1
-        L_0x018d:
             r10 = 8
-            if (r2 != 0) goto L_0x019e
-            if (r11 != 0) goto L_0x019e
-            if (r14 == 0) goto L_0x0196
-            goto L_0x019e
-        L_0x0196:
+            if (r2 != 0) goto L_0x019b
+            if (r11 != 0) goto L_0x019b
+            if (r14 == 0) goto L_0x0193
+            goto L_0x019b
+        L_0x0193:
             android.widget.TextView r1 = r6.reportSpamButton
             r1.setVisibility(r10)
             r11 = r3
             r2 = 0
-            goto L_0x01a5
-        L_0x019e:
+            goto L_0x01a2
+        L_0x019b:
             android.widget.TextView r1 = r6.reportSpamButton
             r2 = 0
             r1.setVisibility(r2)
             r11 = 1
-        L_0x01a5:
+        L_0x01a2:
             r6.addToContactsButtonArchive = r2
             org.telegram.tgnet.TLRPC$User r1 = r6.currentUser
-            if (r1 == 0) goto L_0x01bd
+            if (r1 == 0) goto L_0x01ba
             org.telegram.messenger.MessagesController r1 = r28.getMessagesController()
             org.telegram.tgnet.TLRPC$User r2 = r6.currentUser
             long r2 = r2.id
             java.lang.Long r2 = java.lang.Long.valueOf(r2)
             org.telegram.tgnet.TLRPC$User r1 = r1.getUser(r2)
             r3 = r1
-            goto L_0x01be
-        L_0x01bd:
+            goto L_0x01bb
+        L_0x01ba:
             r3 = 0
-        L_0x01be:
-            if (r3 == 0) goto L_0x027c
+        L_0x01bb:
+            if (r3 == 0) goto L_0x0279
             boolean r1 = android.text.TextUtils.isEmpty(r16)
-            if (r1 != 0) goto L_0x027c
+            if (r1 != 0) goto L_0x0279
             android.widget.TextView r0 = r6.chatWithAdminTextView
-            if (r0 != 0) goto L_0x023c
+            if (r0 != 0) goto L_0x0239
             android.widget.TextView r0 = new android.widget.TextView
             org.telegram.ui.Components.BlurredFrameLayout r1 = r6.topChatPanelView
             android.content.Context r1 = r1.getContext()
@@ -30997,11 +30993,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r4 = r15
             r0.<init>(r2, r3, r4, r5)
             r12.setOnClickListener(r13)
-            goto L_0x023d
-        L_0x023c:
+            goto L_0x023a
+        L_0x0239:
             r14 = r3
-        L_0x023d:
-            if (r15 == 0) goto L_0x0253
+        L_0x023a:
+            if (r15 == 0) goto L_0x0250
             int r0 = org.telegram.messenger.R.string.ChatWithGroupAdmin
             r1 = 2
             java.lang.Object[] r2 = new java.lang.Object[r1]
@@ -31012,8 +31008,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r2[r3] = r16
             java.lang.String r5 = "ChatWithGroupAdmin"
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r5, r0, r2)
-            goto L_0x0266
-        L_0x0253:
+            goto L_0x0263
+        L_0x0250:
             r1 = 2
             r3 = 1
             r4 = 0
@@ -31024,7 +31020,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r2[r3] = r16
             java.lang.String r1 = "ChatWithChannelAdmin"
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r1, r0, r2)
-        L_0x0266:
+        L_0x0263:
             android.widget.TextView r1 = r6.reportSpamButton
             r1.setVisibility(r10)
             android.widget.TextView r1 = r6.addToContactsButton
@@ -31033,19 +31029,19 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             android.text.SpannableStringBuilder r0 = org.telegram.messenger.AndroidUtilities.replaceTags(r0)
             r1.setText(r0)
             r0 = 1
-            goto L_0x048b
-        L_0x027c:
+            goto L_0x0488
+        L_0x0279:
             r1 = r3
             r2 = 436207615(0x19ffffff, float:2.6469778E-23)
             r3 = 21
             java.lang.String r5 = "chat_addContact"
-            if (r0 == 0) goto L_0x02cc
+            if (r0 == 0) goto L_0x02c9
             int r0 = org.telegram.messenger.R.string.GroupAddMembers
             java.lang.String r1 = "GroupAddMembers"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-            if (r0 == 0) goto L_0x0294
+            if (r0 == 0) goto L_0x0291
             java.lang.String r0 = r0.toUpperCase()
-        L_0x0294:
+        L_0x0291:
             android.widget.TextView r1 = r6.addToContactsButton
             r4 = 0
             r1.setVisibility(r4)
@@ -31059,31 +31055,31 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             int r1 = r6.getThemedColor(r5)
             r0.setTextColor(r1)
             int r0 = android.os.Build.VERSION.SDK_INT
-            if (r0 < r3) goto L_0x02c5
+            if (r0 < r3) goto L_0x02c2
             android.widget.TextView r0 = r6.addToContactsButton
             android.graphics.drawable.Drawable r0 = r0.getBackground()
             int r1 = r6.getThemedColor(r5)
             r1 = r1 & r2
             r2 = 1
             org.telegram.ui.ActionBar.Theme.setSelectorDrawableColor(r0, r1, r2)
-        L_0x02c5:
+        L_0x02c2:
             android.widget.TextView r0 = r6.reportSpamButton
             r0.setTag(r5)
-            goto L_0x048a
-        L_0x02cc:
+            goto L_0x0487
+        L_0x02c9:
             java.lang.String r0 = "Unarchive"
-            if (r1 == 0) goto L_0x03d8
+            if (r1 == 0) goto L_0x03d5
             boolean r2 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r1)
-            if (r2 == 0) goto L_0x02dd
+            if (r2 == 0) goto L_0x02da
             android.widget.TextView r0 = r6.addToContactsButton
             r0.setVisibility(r10)
-            goto L_0x03c9
-        L_0x02dd:
+            goto L_0x03c6
+        L_0x02da:
             boolean r2 = r1.contact
-            if (r2 != 0) goto L_0x035c
+            if (r2 != 0) goto L_0x0359
             boolean r3 = r1.self
-            if (r3 != 0) goto L_0x035c
-            if (r12 == 0) goto L_0x035c
+            if (r3 != 0) goto L_0x0359
+            if (r12 == 0) goto L_0x0359
             org.telegram.ui.ActionBar.ActionBarMenuSubItem r2 = r6.addContactItem
             r3 = 0
             r2.setVisibility(r3)
@@ -31094,7 +31090,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r2.setText(r4)
             android.widget.TextView r2 = r6.addToContactsButton
             r2.setVisibility(r3)
-            if (r13 == 0) goto L_0x031f
+            if (r13 == 0) goto L_0x031c
             r2 = 1
             r6.addToContactsButtonArchive = r2
             android.widget.TextView r1 = r6.addToContactsButton
@@ -31106,20 +31102,20 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r1 = 3
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
             r0.setTag(r1)
-        L_0x031d:
+        L_0x031a:
             r3 = 0
-            goto L_0x0350
-        L_0x031f:
+            goto L_0x034d
+        L_0x031c:
             android.widget.TextView r0 = r6.reportSpamButton
             int r0 = r0.getVisibility()
-            if (r0 != 0) goto L_0x0335
+            if (r0 != 0) goto L_0x0332
             android.widget.TextView r0 = r6.addToContactsButton
             int r1 = org.telegram.messenger.R.string.AddContactChat
             java.lang.String r2 = "AddContactChat"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setText(r1)
-            goto L_0x031d
-        L_0x0335:
+            goto L_0x031a
+        L_0x0332:
             android.widget.TextView r0 = r6.addToContactsButton
             int r2 = org.telegram.messenger.R.string.AddContactFullChat
             r3 = 1
@@ -31131,19 +31127,19 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             java.lang.String r1 = org.telegram.messenger.LocaleController.formatString(r1, r2, r4)
             java.lang.String r1 = r1.toUpperCase()
             r0.setText(r1)
-        L_0x0350:
+        L_0x034d:
             android.widget.TextView r0 = r6.addToContactsButton
             r1 = 0
             r0.setTag(r1)
             android.widget.TextView r0 = r6.addToContactsButton
             r0.setVisibility(r3)
-            goto L_0x03c9
-        L_0x035c:
+            goto L_0x03c6
+        L_0x0359:
             r3 = 0
             java.lang.String r0 = "ShareMyContactInfo"
-            if (r4 == 0) goto L_0x039c
+            if (r4 == 0) goto L_0x0399
             boolean r4 = r1.self
-            if (r4 != 0) goto L_0x039c
+            if (r4 != 0) goto L_0x0399
             org.telegram.ui.ActionBar.ActionBarMenuSubItem r1 = r6.addContactItem
             r1.setVisibility(r3)
             android.widget.TextView r1 = r6.addToContactsButton
@@ -31165,12 +31161,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             android.widget.TextView r0 = r6.addToContactsButton
             r3 = 0
             r0.setVisibility(r3)
-            goto L_0x03c9
-        L_0x039c:
-            if (r2 != 0) goto L_0x03bf
+            goto L_0x03c6
+        L_0x0399:
+            if (r2 != 0) goto L_0x03bc
             boolean r1 = r1.self
-            if (r1 != 0) goto L_0x03bf
-            if (r11 != 0) goto L_0x03bf
+            if (r1 != 0) goto L_0x03bc
+            if (r11 != 0) goto L_0x03bc
             org.telegram.ui.ActionBar.ActionBarMenuSubItem r1 = r6.addContactItem
             r1.setVisibility(r3)
             org.telegram.ui.ActionBar.ActionBarMenuSubItem r1 = r6.addContactItem
@@ -31181,22 +31177,22 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r1 = 2
             java.lang.Integer r2 = java.lang.Integer.valueOf(r1)
             r0.setTag(r2)
-            goto L_0x03c4
-        L_0x03bf:
+            goto L_0x03c1
+        L_0x03bc:
             org.telegram.ui.ActionBar.ActionBarMenuSubItem r0 = r6.addContactItem
             r0.setVisibility(r10)
-        L_0x03c4:
+        L_0x03c1:
             android.widget.TextView r0 = r6.addToContactsButton
             r0.setVisibility(r10)
-        L_0x03c9:
+        L_0x03c6:
             android.widget.TextView r0 = r6.reportSpamButton
             int r1 = org.telegram.messenger.R.string.ReportSpamUser
             java.lang.String r2 = "ReportSpamUser"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setText(r1)
-            goto L_0x048a
-        L_0x03d8:
-            if (r14 == 0) goto L_0x0414
+            goto L_0x0487
+        L_0x03d5:
+            if (r14 == 0) goto L_0x0411
             android.widget.TextView r0 = r6.reportSpamButton
             int r1 = org.telegram.messenger.R.string.ReportSpamLocation
             java.lang.String r4 = "ReportSpamLocation"
@@ -31211,19 +31207,19 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             int r1 = r6.getThemedColor(r5)
             r0.setTextColor(r1)
             int r0 = android.os.Build.VERSION.SDK_INT
-            if (r0 < r3) goto L_0x040e
+            if (r0 < r3) goto L_0x040b
             android.widget.TextView r0 = r6.reportSpamButton
             android.graphics.drawable.Drawable r0 = r0.getBackground()
             int r1 = r6.getThemedColor(r5)
             r1 = r1 & r2
             org.telegram.ui.ActionBar.Theme.setSelectorDrawableColor(r0, r1, r4)
-        L_0x040e:
+        L_0x040b:
             android.widget.TextView r0 = r6.reportSpamButton
             r0.setTag(r5)
-            goto L_0x0483
-        L_0x0414:
+            goto L_0x0480
+        L_0x0411:
             r4 = 1
-            if (r13 == 0) goto L_0x0446
+            if (r13 == 0) goto L_0x0443
             r6.addToContactsButtonArchive = r4
             android.widget.TextView r1 = r6.addToContactsButton
             int r4 = org.telegram.messenger.R.string.Unarchive
@@ -31242,8 +31238,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             java.lang.String r4 = "ReportSpam"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r0.setText(r1)
-            goto L_0x0458
-        L_0x0446:
+            goto L_0x0455
+        L_0x0443:
             android.widget.TextView r0 = r6.addToContactsButton
             r0.setVisibility(r10)
             android.widget.TextView r0 = r6.reportSpamButton
@@ -31251,7 +31247,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             java.lang.String r4 = "ReportSpamAndLeave"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r0.setText(r1)
-        L_0x0458:
+        L_0x0455:
             android.widget.TextView r0 = r6.reportSpamButton
             int r1 = org.telegram.messenger.R.id.object_tag
             r4 = 0
@@ -31261,49 +31257,49 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             int r4 = r6.getThemedColor(r1)
             r0.setTextColor(r4)
             int r0 = android.os.Build.VERSION.SDK_INT
-            if (r0 < r3) goto L_0x047e
+            if (r0 < r3) goto L_0x047b
             android.widget.TextView r0 = r6.reportSpamButton
             android.graphics.drawable.Drawable r0 = r0.getBackground()
             int r3 = r6.getThemedColor(r1)
             r2 = r2 & r3
             r3 = 1
             org.telegram.ui.ActionBar.Theme.setSelectorDrawableColor(r0, r2, r3)
-        L_0x047e:
+        L_0x047b:
             android.widget.TextView r0 = r6.reportSpamButton
             r0.setTag(r1)
-        L_0x0483:
+        L_0x0480:
             org.telegram.ui.ActionBar.ActionBarMenuSubItem r0 = r6.addContactItem
-            if (r0 == 0) goto L_0x048a
+            if (r0 == 0) goto L_0x0487
             r0.setVisibility(r10)
-        L_0x048a:
+        L_0x0487:
             r0 = 0
-        L_0x048b:
+        L_0x0488:
             android.widget.TextView r1 = r6.chatWithAdminTextView
-            if (r1 == 0) goto L_0x0498
-            if (r0 == 0) goto L_0x0493
+            if (r1 == 0) goto L_0x0495
+            if (r0 == 0) goto L_0x0490
             r0 = 0
-            goto L_0x0495
-        L_0x0493:
+            goto L_0x0492
+        L_0x0490:
             r0 = 8
-        L_0x0495:
+        L_0x0492:
             r1.setVisibility(r0)
-        L_0x0498:
+        L_0x0495:
             boolean r0 = r6.userBlocked
-            if (r0 != 0) goto L_0x04b6
+            if (r0 != 0) goto L_0x04b3
             android.widget.TextView r0 = r6.addToContactsButton
             int r0 = r0.getVisibility()
-            if (r0 != r10) goto L_0x04b7
+            if (r0 != r10) goto L_0x04b4
             android.widget.TextView r0 = r6.reportSpamButton
             int r0 = r0.getVisibility()
-            if (r0 != r10) goto L_0x04b7
+            if (r0 != r10) goto L_0x04b4
             android.widget.TextView r0 = r6.chatWithAdminTextView
-            if (r0 == 0) goto L_0x04b6
+            if (r0 == 0) goto L_0x04b3
             int r0 = r0.getVisibility()
-            if (r0 != r10) goto L_0x04b7
-        L_0x04b6:
+            if (r0 != r10) goto L_0x04b4
+        L_0x04b3:
             r11 = 0
-        L_0x04b7:
-            if (r9 == 0) goto L_0x059a
+        L_0x04b4:
+            if (r9 == 0) goto L_0x0597
             org.telegram.ui.Components.LinkSpanDrawable$LinksTextView r0 = r6.emojiStatusSpamHint
             r1 = 0
             r0.setVisibility(r1)
@@ -31322,31 +31318,31 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             org.telegram.tgnet.TLRPC$User r2 = r6.currentUser
             org.telegram.tgnet.TLRPC$EmojiStatus r2 = r2.emoji_status
             boolean r3 = r2 instanceof org.telegram.tgnet.TLRPC$TL_emojiStatus
-            if (r3 == 0) goto L_0x04ee
+            if (r3 == 0) goto L_0x04eb
             org.telegram.tgnet.TLRPC$TL_emojiStatus r2 = (org.telegram.tgnet.TLRPC$TL_emojiStatus) r2
             long r2 = r2.document_id
             java.lang.Long r2 = java.lang.Long.valueOf(r2)
-            goto L_0x050c
-        L_0x04ee:
+            goto L_0x0509
+        L_0x04eb:
             boolean r3 = r2 instanceof org.telegram.tgnet.TLRPC$TL_emojiStatusUntil
-            if (r3 == 0) goto L_0x050b
+            if (r3 == 0) goto L_0x0508
             org.telegram.tgnet.TLRPC$TL_emojiStatusUntil r2 = (org.telegram.tgnet.TLRPC$TL_emojiStatusUntil) r2
             int r2 = r2.until
             long r3 = java.lang.System.currentTimeMillis()
             long r3 = r3 / r7
             int r4 = (int) r3
-            if (r2 <= r4) goto L_0x050b
+            if (r2 <= r4) goto L_0x0508
             org.telegram.tgnet.TLRPC$User r2 = r6.currentUser
             org.telegram.tgnet.TLRPC$EmojiStatus r2 = r2.emoji_status
             org.telegram.tgnet.TLRPC$TL_emojiStatusUntil r2 = (org.telegram.tgnet.TLRPC$TL_emojiStatusUntil) r2
             long r2 = r2.document_id
             java.lang.Long r2 = java.lang.Long.valueOf(r2)
-            goto L_0x050c
-        L_0x050b:
+            goto L_0x0509
+        L_0x0508:
             r2 = 0
-        L_0x050c:
+        L_0x0509:
             r3 = 33
-            if (r2 == 0) goto L_0x052e
+            if (r2 == 0) goto L_0x052b
             org.telegram.ui.Components.AnimatedEmojiSpan r4 = new org.telegram.ui.Components.AnimatedEmojiSpan
             long r7 = r2.longValue()
             org.telegram.ui.Components.LinkSpanDrawable$LinksTextView r2 = r6.emojiStatusSpamHint
@@ -31357,10 +31353,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r4.full = r2
             int r5 = r1.length()
             r1.setSpan(r4, r2, r5, r3)
-            goto L_0x052f
-        L_0x052e:
+            goto L_0x052c
+        L_0x052b:
             r2 = 0
-        L_0x052f:
+        L_0x052c:
             android.text.SpannableString r4 = new android.text.SpannableString
             int r5 = org.telegram.messenger.R.string.TelegramPremium
             java.lang.String r7 = "TelegramPremium"
@@ -31373,17 +31369,17 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             java.lang.String r2 = r0.toString()
             java.lang.String r3 = "%1$s"
             int r2 = r2.indexOf(r3)
-            if (r2 < 0) goto L_0x0559
+            if (r2 < 0) goto L_0x0556
             int r3 = r2 + 4
             r0.replace(r2, r3, r1)
-        L_0x0559:
+        L_0x0556:
             java.lang.String r1 = r0.toString()
             java.lang.String r2 = "%2$s"
             int r1 = r1.indexOf(r2)
-            if (r1 < 0) goto L_0x056a
+            if (r1 < 0) goto L_0x0567
             int r2 = r1 + 4
             r0.replace(r1, r2, r4)
-        L_0x056a:
+        L_0x0567:
             org.telegram.ui.Components.LinkSpanDrawable$LinksTextView r1 = r6.emojiStatusSpamHint
             r1.setText(r0)
             org.telegram.ui.Components.LinkSpanDrawable$LinksTextView r0 = r6.emojiStatusSpamHint
@@ -31402,8 +31398,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             org.telegram.ui.Components.LinkSpanDrawable$LinksTextView r1 = r6.emojiStatusSpamHint
             int r1 = r1.getMeasuredHeight()
             int r0 = r0 + r1
-            goto L_0x05af
-        L_0x059a:
+            goto L_0x05ac
+        L_0x0597:
             org.telegram.ui.Components.LinkSpanDrawable$LinksTextView r0 = r6.emojiStatusSpamHint
             r0.setVisibility(r10)
             android.view.View r0 = r6.topViewSeparator1
@@ -31412,20 +31408,20 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r0.setVisibility(r10)
             r0 = 1112014848(0x42480000, float:50.0)
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
-        L_0x05af:
+        L_0x05ac:
             org.telegram.ui.Components.BlurredFrameLayout r1 = r6.topChatPanelView
             android.view.ViewGroup$LayoutParams r1 = r1.getLayoutParams()
             r1.height = r0
             r1 = 200(0xc8, double:9.9E-322)
-            if (r11 == 0) goto L_0x062a
+            if (r11 == 0) goto L_0x0627
             org.telegram.ui.Components.BlurredFrameLayout r0 = r6.topChatPanelView
             java.lang.Object r0 = r0.getTag()
-            if (r0 == 0) goto L_0x0699
+            if (r0 == 0) goto L_0x0696
             boolean r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r0 == 0) goto L_0x05cc
+            if (r0 == 0) goto L_0x05c9
             java.lang.String r0 = "show spam button"
             org.telegram.messenger.FileLog.d(r0)
-        L_0x05cc:
+        L_0x05c9:
             org.telegram.ui.Components.BlurredFrameLayout r0 = r6.topChatPanelView
             r3 = 0
             r0.setTag(r3)
@@ -31433,12 +31429,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r4 = 0
             r0.setVisibility(r4)
             android.animation.AnimatorSet r0 = r6.reportSpamViewAnimator
-            if (r0 == 0) goto L_0x05e1
+            if (r0 == 0) goto L_0x05de
             r0.cancel()
             r6.reportSpamViewAnimator = r3
-        L_0x05e1:
+        L_0x05de:
             r0 = 0
-            if (r29 == 0) goto L_0x0621
+            if (r29 == 0) goto L_0x061e
             android.animation.AnimatorSet r3 = new android.animation.AnimatorSet
             r3.<init>()
             r6.reportSpamViewAnimator = r3
@@ -31465,32 +31461,32 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r0.addListener(r1)
             android.animation.AnimatorSet r0 = r6.reportSpamViewAnimator
             r0.start()
-            goto L_0x0699
-        L_0x0621:
+            goto L_0x0696
+        L_0x061e:
             r6.topChatPanelViewOffset = r0
             r28.invalidateChatListViewTopPadding()
             r28.invalidateMessagesVisiblePart()
-            goto L_0x0699
-        L_0x062a:
+            goto L_0x0696
+        L_0x0627:
             org.telegram.ui.Components.BlurredFrameLayout r3 = r6.topChatPanelView
             java.lang.Object r3 = r3.getTag()
-            if (r3 != 0) goto L_0x0699
+            if (r3 != 0) goto L_0x0696
             boolean r3 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r3 == 0) goto L_0x063b
+            if (r3 == 0) goto L_0x0638
             java.lang.String r3 = "hide spam button"
             org.telegram.messenger.FileLog.d(r3)
-        L_0x063b:
+        L_0x0638:
             org.telegram.ui.Components.BlurredFrameLayout r3 = r6.topChatPanelView
             r4 = 1
             java.lang.Integer r5 = java.lang.Integer.valueOf(r4)
             r3.setTag(r5)
             android.animation.AnimatorSet r3 = r6.reportSpamViewAnimator
-            if (r3 == 0) goto L_0x064f
+            if (r3 == 0) goto L_0x064c
             r3.cancel()
             r3 = 0
             r6.reportSpamViewAnimator = r3
-        L_0x064f:
-            if (r29 == 0) goto L_0x068f
+        L_0x064c:
+            if (r29 == 0) goto L_0x068c
             android.animation.AnimatorSet r3 = new android.animation.AnimatorSet
             r3.<init>()
             r6.reportSpamViewAnimator = r3
@@ -31519,16 +31515,16 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r0.addListener(r1)
             android.animation.AnimatorSet r0 = r6.reportSpamViewAnimator
             r0.start()
-            goto L_0x0699
-        L_0x068f:
+            goto L_0x0696
+        L_0x068c:
             int r0 = -r0
             float r0 = (float) r0
             r6.topChatPanelViewOffset = r0
             r28.invalidateChatListViewTopPadding()
             r28.invalidateMessagesVisiblePart()
-        L_0x0699:
+        L_0x0696:
             r28.checkListViewPaddings()
-        L_0x069c:
+        L_0x0699:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatActivity.updateTopPanel(boolean):void");

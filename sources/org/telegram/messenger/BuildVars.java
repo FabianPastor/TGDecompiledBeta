@@ -2,13 +2,16 @@ package org.telegram.messenger;
 
 import android.content.SharedPreferences;
 import android.os.Build;
+import androidx.core.util.ObjectsCompat$$ExternalSyntheticBackport0;
+import com.android.billingclient.api.ProductDetails;
+import java.util.Iterator;
 
 public class BuildVars {
     public static String APPCENTER_HASH = "var_-67c9-48d2-b5d0-4761f1c1a8f3";
     public static String APP_HASH = "014b35b6184100b085b0d0572f9b5103";
     public static int APP_ID = 4;
-    public static int BUILD_VERSION = 2792;
-    public static String BUILD_VERSION_STRING = "8.9.3";
+    public static int BUILD_VERSION = 2794;
+    public static String BUILD_VERSION_STRING = "9.0.0";
     public static boolean CHECK_UPDATES = true;
     public static boolean DEBUG_PRIVATE_VERSION = false;
     public static boolean DEBUG_VERSION = true;
@@ -36,7 +39,30 @@ public class BuildVars {
     }
 
     public static boolean useInvoiceBilling() {
-        return DEBUG_VERSION || isStandaloneApp() || isBetaApp() || isHuaweiStoreApp();
+        return DEBUG_VERSION || isStandaloneApp() || isBetaApp() || isHuaweiStoreApp() || hasDirectCurrency();
+    }
+
+    private static boolean hasDirectCurrency() {
+        ProductDetails productDetails;
+        if (BillingController.getInstance().isReady() && (productDetails = BillingController.PREMIUM_PRODUCT_DETAILS) != null) {
+            for (ProductDetails.SubscriptionOfferDetails pricingPhases : productDetails.getSubscriptionOfferDetails()) {
+                Iterator<ProductDetails.PricingPhase> it = pricingPhases.getPricingPhases().getPricingPhaseList().iterator();
+                while (true) {
+                    if (it.hasNext()) {
+                        ProductDetails.PricingPhase next = it.next();
+                        Iterator<String> it2 = MessagesController.getInstance(UserConfig.selectedAccount).directPaymentsCurrency.iterator();
+                        while (true) {
+                            if (it2.hasNext()) {
+                                if (ObjectsCompat$$ExternalSyntheticBackport0.m(next.getPriceCurrencyCode(), it2.next())) {
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     public static boolean isStandaloneApp() {

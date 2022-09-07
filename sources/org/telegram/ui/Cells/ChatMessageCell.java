@@ -37260,7 +37260,10 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     invalidate();
                     canvas.restore();
                     canvas.saveLayerAlpha(0.0f, 0.0f, (float) getWidth(), (float) getHeight(), (int) (this.unlockAlpha * 255.0f), 31);
+                    int alpha5 = Theme.chat_timeBackgroundPaint.getAlpha();
+                    Theme.chat_timeBackgroundPaint.setAlpha((int) (((float) alpha5) * 0.7f));
                     canvas6.drawRoundRect(rectF2, (float) AndroidUtilities.dp(32.0f), (float) AndroidUtilities.dp(32.0f), Theme.chat_timeBackgroundPaint);
+                    Theme.chat_timeBackgroundPaint.setAlpha(alpha5);
                     canvas6.translate(this.unlockX + ((float) AndroidUtilities.dp(4.0f)), this.unlockY);
                     Drawable drawable = Theme.chat_msgUnlockDrawable;
                     drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), Theme.chat_msgUnlockDrawable.getIntrinsicHeight());

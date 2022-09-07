@@ -617,7 +617,7 @@ public class AnimatedEmojiSpan extends ReplacementSpan {
                         for (int i = 0; i < this.backgroundHolders.size(); i++) {
                             AnimatedEmojiHolder animatedEmojiHolder = this.backgroundHolders.get(i);
                             if (!(animatedEmojiHolder == null || (backgroundThreadDrawHolder = animatedEmojiHolder.backgroundDrawHolder) == null)) {
-                                animatedEmojiHolder.drawable.draw(canvas, backgroundThreadDrawHolder);
+                                animatedEmojiHolder.drawable.draw(canvas, backgroundThreadDrawHolder, true);
                             }
                         }
                     }

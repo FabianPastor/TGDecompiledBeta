@@ -1149,7 +1149,7 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
             if (this.drawableToBounds == null) {
                 this.drawableToBounds = new Rect();
             }
-            this.drawableToBounds.set((int) (((((float) bounds.centerX()) - ((((float) bounds.width()) / 2.0f) * scaleY2)) - ((float) bounds.centerX())) + ((float) this.emojiX.intValue()) + ((float) ((scaleY2 <= 1.0f || scaleY2 >= 1.5f) ? 0 : 2))), (int) ((((((((float) (height - (height - bounds.bottom))) * scaleY2) - (scaleY2 > 1.5f ? (((float) bounds.height()) * 0.75f) - 1.0f : 0.0f)) - (((float) bounds.height()) * scaleY2)) - ((float) bounds.top)) - (((float) bounds.height()) / 2.0f)) + ((float) AndroidUtilities.dp((float) this.topMarginDp))), (int) (((((float) bounds.centerX()) + ((((float) bounds.width()) / 2.0f) * scaleY2)) - ((float) bounds.centerX())) + ((float) this.emojiX.intValue()) + ((float) ((scaleY2 <= 1.0f || scaleY2 >= 1.5f) ? 0 : 2))), (int) (((((((float) (height - (height - bounds.bottom))) * scaleY2) - (scaleY2 > 1.5f ? (((float) bounds.height()) * 0.75f) - 1.0f : 0.0f)) - ((float) bounds.top)) - (((float) bounds.height()) / 2.0f)) + ((float) AndroidUtilities.dp((float) this.topMarginDp))));
+            this.drawableToBounds.set((int) (((((float) bounds.centerX()) - ((((float) bounds.width()) / 2.0f) * scaleY2)) - ((float) bounds.centerX())) + ((float) this.emojiX.intValue()) + ((float) ((scaleY2 <= 1.0f || scaleY2 >= 1.5f) ? 0 : 2))), (int) ((((((((float) (height - (height - bounds.bottom))) * scaleY2) - (scaleY2 > 1.5f ? (((float) bounds.height()) * 0.81f) + 1.0f : 0.0f)) - ((float) bounds.top)) - (((float) bounds.height()) / 2.0f)) + ((float) AndroidUtilities.dp((float) this.topMarginDp))) - (((float) bounds.height()) * scaleY2)), (int) (((((float) bounds.centerX()) + ((((float) bounds.width()) / 2.0f) * scaleY2)) - ((float) bounds.centerX())) + ((float) this.emojiX.intValue()) + ((float) ((scaleY2 <= 1.0f || scaleY2 >= 1.5f) ? 0 : 2))), (int) (((((((float) (height - (height - bounds.bottom))) * scaleY2) - (scaleY2 > 1.5f ? (((float) bounds.height()) * 0.81f) + 1.0f : 0.0f)) - ((float) bounds.top)) - (((float) bounds.height()) / 2.0f)) + ((float) AndroidUtilities.dp((float) this.topMarginDp))));
             AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable swapAnimatedEmojiDrawable3 = this.scrimDrawable;
             Rect rect = this.drawableToBounds;
             int i2 = rect.left;
@@ -1165,7 +1165,8 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
             canvas.restore();
         }
         super.dispatchDraw(canvas);
-        if (this.emojiSelectView != null && this.emojiSelectRect != null && this.drawableToBounds != null) {
+        ImageViewEmoji imageViewEmoji = this.emojiSelectView;
+        if (imageViewEmoji != null && this.emojiSelectRect != null && this.drawableToBounds != null && imageViewEmoji.drawable != null) {
             canvas.save();
             canvas2.translate(0.0f, -getTranslationY());
             this.emojiSelectView.drawable.setAlpha((int) (this.emojiSelectAlpha * 255.0f));
@@ -3346,7 +3347,12 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
                     if (!imageViewEmoji.notDraw) {
                         if (imageViewEmoji.empty) {
                             imageViewEmoji.drawable.setBounds(imageViewEmoji.drawableBounds);
-                            imageViewEmoji.drawable.draw(canvas);
+                            Drawable drawable = imageViewEmoji.drawable;
+                            if (drawable instanceof AnimatedEmojiDrawable) {
+                                ((AnimatedEmojiDrawable) drawable).draw(canvas, false);
+                            } else {
+                                drawable.draw(canvas);
+                            }
                         } else {
                             ImageReceiver imageReceiver = imageViewEmoji.imageReceiverToDraw;
                             if (imageReceiver != null) {
@@ -3460,7 +3466,11 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
                 if (drawable != null) {
                     drawable.setColorFilter(SelectAnimatedEmojiDialog.this.premiumStarColorFilter);
                     drawable.setAlpha((int) (f * 255.0f));
-                    drawable.draw(canvas);
+                    if (drawable instanceof AnimatedEmojiDrawable) {
+                        ((AnimatedEmojiDrawable) drawable).draw(canvas, false);
+                    } else {
+                        drawable.draw(canvas);
+                    }
                     PremiumLockIconView premiumLockIconView = imageViewEmoji.premiumLockIconView;
                 } else if (imageViewEmoji.isDefaultReaction && (imageReceiver = imageViewEmoji.imageReceiver) != null) {
                     imageReceiver.setAlpha(f);

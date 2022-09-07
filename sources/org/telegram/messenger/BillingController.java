@@ -218,13 +218,12 @@ public class BillingController implements PurchasesUpdatedListener, BillingClien
         List<Purchase> list2 = list;
         FileLog.d("Billing purchases updated: " + billingResult + ", " + list2);
         int i = 4;
-        int i2 = 1;
         if (billingResult.getResponseCode() != 0) {
             if (billingResult.getResponseCode() == 1) {
                 PremiumPreviewFragment.sentPremiumBuyCanceled();
             }
-            for (int i3 = 0; i3 < 4; i3++) {
-                AccountInstance instance2 = AccountInstance.getInstance(i3);
+            for (int i2 = 0; i2 < 4; i2++) {
+                AccountInstance instance2 = AccountInstance.getInstance(i2);
                 if (!instance2.getUserConfig().awaitBillingProductIds.isEmpty()) {
                     instance2.getUserConfig().awaitBillingProductIds.clear();
                     instance2.getUserConfig().billingPaymentPurpose = null;
@@ -234,34 +233,34 @@ public class BillingController implements PurchasesUpdatedListener, BillingClien
         } else if (list2 != null) {
             for (Purchase next : list) {
                 if (!this.requestingTokens.contains(next.getPurchaseToken())) {
-                    int i4 = 0;
-                    while (i4 < i) {
-                        AccountInstance instance3 = AccountInstance.getInstance(i4);
+                    int i3 = 0;
+                    while (i3 < i) {
+                        AccountInstance instance3 = AccountInstance.getInstance(i3);
                         if (instance3.getUserConfig().awaitBillingProductIds.containsAll(next.getProducts()) && next.getPurchaseState() != 2) {
-                            instance3.getUserConfig().awaitBillingProductIds.removeAll(next.getProducts());
-                            instance3.getUserConfig().saveConfig(false);
-                            if (next.getPurchaseState() == i2 && !next.isAcknowledged()) {
+                            if (next.getPurchaseState() != 1) {
+                                instance3.getUserConfig().awaitBillingProductIds.removeAll(next.getProducts());
+                                instance3.getUserConfig().saveConfig(false);
+                            } else if (!next.isAcknowledged()) {
                                 this.requestingTokens.add(next.getPurchaseToken());
                                 TLRPC$TL_payments_assignPlayMarketTransaction tLRPC$TL_payments_assignPlayMarketTransaction = new TLRPC$TL_payments_assignPlayMarketTransaction();
                                 TLRPC$TL_dataJSON tLRPC$TL_dataJSON = new TLRPC$TL_dataJSON();
                                 tLRPC$TL_payments_assignPlayMarketTransaction.receipt = tLRPC$TL_dataJSON;
                                 tLRPC$TL_dataJSON.data = next.getOriginalJson();
                                 tLRPC$TL_payments_assignPlayMarketTransaction.purpose = instance3.getUserConfig().billingPaymentPurpose;
-                                BillingController$$ExternalSyntheticLambda7 billingController$$ExternalSyntheticLambda7 = r0;
                                 ConnectionsManager connectionsManager = instance3.getConnectionsManager();
+                                BillingController$$ExternalSyntheticLambda7 billingController$$ExternalSyntheticLambda7 = r0;
                                 BillingController$$ExternalSyntheticLambda7 billingController$$ExternalSyntheticLambda72 = new BillingController$$ExternalSyntheticLambda7(this, instance3, next, billingResult, tLRPC$TL_payments_assignPlayMarketTransaction);
                                 connectionsManager.sendRequest(tLRPC$TL_payments_assignPlayMarketTransaction, billingController$$ExternalSyntheticLambda7, 66);
-                                instance3.getUserConfig().billingPaymentPurpose = null;
+                            } else {
+                                instance3.getUserConfig().awaitBillingProductIds.removeAll(next.getProducts());
                                 instance3.getUserConfig().saveConfig(false);
                             }
                         }
-                        i4++;
+                        i3++;
                         i = 4;
-                        i2 = 1;
                     }
                 }
                 i = 4;
-                i2 = 1;
             }
         }
     }
@@ -280,6 +279,10 @@ public class BillingController implements PurchasesUpdatedListener, BillingClien
             if (tLRPC$TL_payments_assignPlayMarketTransaction.purpose instanceof TLRPC$TL_inputStorePaymentGiftPremium) {
                 this.billingClient.consumeAsync(ConsumeParams.newBuilder().setPurchaseToken(purchase.getPurchaseToken()).build(), BillingController$$ExternalSyntheticLambda1.INSTANCE);
             }
+        }
+        if (tLObject != null || (ApplicationLoader.isNetworkOnline() && tLRPC$TL_error != null && tLRPC$TL_error.code != -1000)) {
+            accountInstance.getUserConfig().awaitBillingProductIds.removeAll(purchase.getProducts());
+            accountInstance.getUserConfig().saveConfig(false);
         }
     }
 

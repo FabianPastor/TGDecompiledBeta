@@ -539,7 +539,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v0, resolved type: org.telegram.ui.PaymentFormActivity} */
-    /* JADX WARNING: type inference failed for: r13v2, types: [boolean, int] */
+    /* JADX WARNING: type inference failed for: r13v2, types: [int, boolean] */
     /* JADX WARNING: type inference failed for: r13v3 */
     /* JADX WARNING: type inference failed for: r13v6 */
     /* JADX WARNING: Can't wrap try/catch for region: R(5:299|300|301|302|303) */

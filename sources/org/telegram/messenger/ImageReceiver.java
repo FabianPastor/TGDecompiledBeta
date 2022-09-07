@@ -3,6 +3,7 @@ package org.telegram.messenger;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
+import android.graphics.BlendMode;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.ComposeShader;
@@ -1241,1064 +1242,499 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
     }
 
     /* access modifiers changed from: protected */
-    /* JADX WARNING: Removed duplicated region for block: B:266:0x0656  */
-    /* JADX WARNING: Removed duplicated region for block: B:267:0x0660  */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void drawDrawable(android.graphics.Canvas r29, android.graphics.drawable.Drawable r30, int r31, android.graphics.BitmapShader r32, int r33, int r34, org.telegram.messenger.ImageReceiver.BackgroundThreadDrawHolder r35) {
-        /*
-            r28 = this;
-            r1 = r28
-            r3 = r29
-            r2 = r30
-            r0 = r31
-            r4 = r32
-            r5 = r33
-            r6 = r34
-            r7 = r35
-            if (r7 == 0) goto L_0x001f
-            float r8 = r7.imageX
-            float r9 = r7.imageY
-            float r10 = r7.imageH
-            float r11 = r7.imageW
-            android.graphics.RectF r12 = r7.drawRegion
-            android.graphics.ColorFilter r13 = r7.colorFilter
-            goto L_0x002b
-        L_0x001f:
-            float r8 = r1.imageX
-            float r9 = r1.imageY
-            float r10 = r1.imageH
-            float r11 = r1.imageW
-            android.graphics.RectF r12 = r1.drawRegion
-            android.graphics.ColorFilter r13 = r1.colorFilter
-        L_0x002b:
-            boolean r14 = r2 instanceof android.graphics.drawable.BitmapDrawable
-            r17 = 1073741824(0x40000000, float:2.0)
-            if (r14 == 0) goto L_0x066e
-            r14 = r2
-            android.graphics.drawable.BitmapDrawable r14 = (android.graphics.drawable.BitmapDrawable) r14
-            boolean r15 = r2 instanceof org.telegram.ui.Components.RLottieDrawable
-            if (r15 == 0) goto L_0x0042
-            r19 = r15
-            r15 = r2
-            org.telegram.ui.Components.RLottieDrawable r15 = (org.telegram.ui.Components.RLottieDrawable) r15
-            boolean r3 = r1.skipUpdateFrame
-            r15.skipFrameUpdate = r3
-            goto L_0x004f
-        L_0x0042:
-            r19 = r15
-            boolean r3 = r2 instanceof org.telegram.ui.Components.AnimatedFileDrawable
-            if (r3 == 0) goto L_0x004f
-            r3 = r2
-            org.telegram.ui.Components.AnimatedFileDrawable r3 = (org.telegram.ui.Components.AnimatedFileDrawable) r3
-            boolean r15 = r1.skipUpdateFrame
-            r3.skipFrameUpdate = r15
-        L_0x004f:
-            if (r4 == 0) goto L_0x0054
-            android.graphics.Paint r3 = r1.roundPaint
-            goto L_0x0058
-        L_0x0054:
-            android.graphics.Paint r3 = r14.getPaint()
-        L_0x0058:
-            int r15 = android.os.Build.VERSION.SDK_INT
-            r0 = 29
-            r20 = r12
-            if (r15 < r0) goto L_0x0072
-            java.lang.Object r0 = r1.blendMode
-            if (r0 == 0) goto L_0x006e
-            android.graphics.BitmapShader r12 = r1.gradientShader
-            if (r12 != 0) goto L_0x006e
-            android.graphics.BlendMode r0 = (android.graphics.BlendMode) r0
-            r3.setBlendMode(r0)
-            goto L_0x0072
-        L_0x006e:
-            r0 = 0
-            r3.setBlendMode(r0)
-        L_0x0072:
-            r0 = 1
-            if (r3 == 0) goto L_0x007d
-            android.graphics.ColorFilter r3 = r3.getColorFilter()
-            if (r3 == 0) goto L_0x007d
-            r3 = 1
-            goto L_0x007e
-        L_0x007d:
-            r3 = 0
-        L_0x007e:
-            if (r3 == 0) goto L_0x0094
-            if (r6 != 0) goto L_0x0094
-            if (r4 == 0) goto L_0x008b
-            android.graphics.Paint r3 = r1.roundPaint
-            r6 = 0
-            r3.setColorFilter(r6)
-            goto L_0x00b9
-        L_0x008b:
-            r6 = 0
-            android.graphics.drawable.Drawable r3 = r1.staticThumbDrawable
-            if (r3 == r2) goto L_0x00b9
-            r14.setColorFilter(r6)
-            goto L_0x00b9
-        L_0x0094:
-            if (r3 != 0) goto L_0x00b9
-            if (r6 == 0) goto L_0x00b9
-            if (r6 != r0) goto L_0x00aa
-            if (r4 == 0) goto L_0x00a4
-            android.graphics.Paint r3 = r1.roundPaint
-            android.graphics.PorterDuffColorFilter r6 = selectedColorFilter
-            r3.setColorFilter(r6)
-            goto L_0x00b9
-        L_0x00a4:
-            android.graphics.PorterDuffColorFilter r3 = selectedColorFilter
-            r14.setColorFilter(r3)
-            goto L_0x00b9
-        L_0x00aa:
-            if (r4 == 0) goto L_0x00b4
-            android.graphics.Paint r3 = r1.roundPaint
-            android.graphics.PorterDuffColorFilter r6 = selectedGroupColorFilter
-            r3.setColorFilter(r6)
-            goto L_0x00b9
-        L_0x00b4:
-            android.graphics.PorterDuffColorFilter r3 = selectedGroupColorFilter
-            r14.setColorFilter(r3)
-        L_0x00b9:
-            if (r13 == 0) goto L_0x00ca
-            android.graphics.BitmapShader r3 = r1.gradientShader
-            if (r3 != 0) goto L_0x00ca
-            if (r4 == 0) goto L_0x00c7
-            android.graphics.Paint r3 = r1.roundPaint
-            r3.setColorFilter(r13)
-            goto L_0x00ca
-        L_0x00c7:
-            r14.setColorFilter(r13)
-        L_0x00ca:
-            boolean r3 = r14 instanceof org.telegram.ui.Components.AnimatedFileDrawable
-            r6 = 270(0x10e, float:3.78E-43)
-            r13 = 90
-            if (r3 != 0) goto L_0x00fd
-            boolean r0 = r14 instanceof org.telegram.ui.Components.RLottieDrawable
-            if (r0 == 0) goto L_0x00d7
-            goto L_0x00fd
-        L_0x00d7:
-            android.graphics.Bitmap r0 = r14.getBitmap()
-            if (r0 == 0) goto L_0x00e4
-            boolean r23 = r0.isRecycled()
-            if (r23 == 0) goto L_0x00e4
-            return
-        L_0x00e4:
-            int r12 = r5 % 360
-            if (r12 == r13) goto L_0x00f4
-            if (r12 != r6) goto L_0x00eb
-            goto L_0x00f4
-        L_0x00eb:
-            int r12 = r0.getWidth()
-            int r0 = r0.getHeight()
-            goto L_0x0115
-        L_0x00f4:
-            int r12 = r0.getHeight()
-            int r0 = r0.getWidth()
-            goto L_0x0115
-        L_0x00fd:
-            int r0 = r5 % 360
-            if (r0 == r13) goto L_0x010d
-            if (r0 != r6) goto L_0x0104
-            goto L_0x010d
-        L_0x0104:
-            int r12 = r14.getIntrinsicWidth()
-            int r0 = r14.getIntrinsicHeight()
-            goto L_0x0115
-        L_0x010d:
-            int r12 = r14.getIntrinsicHeight()
-            int r0 = r14.getIntrinsicWidth()
-        L_0x0115:
-            float r6 = r1.sideClip
-            float r24 = r6 * r17
-            float r24 = r11 - r24
-            float r6 = r6 * r17
-            float r6 = r10 - r6
-            r18 = 0
-            int r25 = (r11 > r18 ? 1 : (r11 == r18 ? 0 : -1))
-            if (r25 != 0) goto L_0x0128
-            r13 = 1065353216(0x3var_, float:1.0)
-            goto L_0x012b
-        L_0x0128:
-            float r13 = (float) r12
-            float r13 = r13 / r24
-        L_0x012b:
-            int r26 = (r10 > r18 ? 1 : (r10 == r18 ? 0 : -1))
-            if (r26 != 0) goto L_0x0132
-            r2 = 1065353216(0x3var_, float:1.0)
-            goto L_0x0134
-        L_0x0132:
-            float r2 = (float) r0
-            float r2 = r2 / r6
-        L_0x0134:
-            if (r4 == 0) goto L_0x045d
-            if (r7 != 0) goto L_0x045d
-            boolean r3 = r1.isAspectFit
-            if (r3 == 0) goto L_0x01fe
-            float r2 = java.lang.Math.max(r13, r2)
-            float r3 = (float) r12
-            float r3 = r3 / r2
-            int r3 = (int) r3
-            float r0 = (float) r0
-            float r0 = r0 / r2
-            int r0 = (int) r0
-            float r3 = (float) r3
-            float r5 = r11 - r3
-            float r5 = r5 / r17
-            float r5 = r5 + r8
-            float r0 = (float) r0
-            float r6 = r10 - r0
-            float r6 = r6 / r17
-            float r6 = r6 + r9
-            float r11 = r11 + r3
-            float r11 = r11 / r17
-            float r8 = r8 + r11
-            float r10 = r10 + r0
-            float r10 = r10 / r17
-            float r9 = r9 + r10
-            r3 = r20
-            r3.set(r5, r6, r8, r9)
-            boolean r0 = r1.isVisible
-            if (r0 == 0) goto L_0x04d1
-            android.graphics.Matrix r0 = r1.shaderMatrix
-            r0.reset()
-            android.graphics.Matrix r0 = r1.shaderMatrix
-            float r5 = r3.left
-            int r5 = (int) r5
-            float r5 = (float) r5
-            float r6 = r3.top
-            int r6 = (int) r6
-            float r6 = (float) r6
-            r0.setTranslate(r5, r6)
-            r0 = 1065353216(0x3var_, float:1.0)
-            float r15 = r0 / r2
-            android.graphics.Matrix r0 = r1.shaderMatrix
-            r0.preScale(r15, r15)
-            android.graphics.Matrix r0 = r1.shaderMatrix
-            r4.setLocalMatrix(r0)
-            android.graphics.Paint r0 = r1.roundPaint
-            r0.setShader(r4)
-            android.graphics.Paint r0 = r1.roundPaint
-            r15 = r31
-            r0.setAlpha(r15)
-            android.graphics.RectF r0 = r1.roundRect
-            r0.set(r3)
-            boolean r0 = r1.isRoundRect
-            if (r0 == 0) goto L_0x01c5
-            int[] r0 = r1.roundRadius     // Catch:{ Exception -> 0x01bc }
-            r2 = 0
-            r3 = r0[r2]     // Catch:{ Exception -> 0x01bc }
-            if (r3 != 0) goto L_0x01aa
-            android.graphics.RectF r0 = r1.roundRect     // Catch:{ Exception -> 0x01bc }
-            android.graphics.Paint r2 = r1.roundPaint     // Catch:{ Exception -> 0x01bc }
-            r3 = r29
-            r3.drawRect(r0, r2)     // Catch:{ Exception -> 0x01bc }
-            goto L_0x04d1
-        L_0x01aa:
-            r3 = r29
-            android.graphics.RectF r2 = r1.roundRect     // Catch:{ Exception -> 0x01bc }
-            r4 = 0
-            r5 = r0[r4]     // Catch:{ Exception -> 0x01bc }
-            float r5 = (float) r5     // Catch:{ Exception -> 0x01bc }
-            r0 = r0[r4]     // Catch:{ Exception -> 0x01bc }
-            float r0 = (float) r0     // Catch:{ Exception -> 0x01bc }
-            android.graphics.Paint r4 = r1.roundPaint     // Catch:{ Exception -> 0x01bc }
-            r3.drawRoundRect(r2, r5, r0, r4)     // Catch:{ Exception -> 0x01bc }
-            goto L_0x04d1
-        L_0x01bc:
-            r0 = move-exception
-            r1.onBitmapException(r14)
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            goto L_0x04d1
-        L_0x01c5:
-            r3 = r29
-            r0 = 0
-        L_0x01c8:
-            int[] r2 = r1.roundRadius
-            int r4 = r2.length
-            if (r0 >= r4) goto L_0x01e0
-            float[] r4 = radii
-            int r5 = r0 * 2
-            r6 = r2[r0]
-            float r6 = (float) r6
-            r4[r5] = r6
-            r6 = 1
-            int r5 = r5 + r6
-            r2 = r2[r0]
-            float r2 = (float) r2
-            r4[r5] = r2
-            int r0 = r0 + 1
-            goto L_0x01c8
-        L_0x01e0:
-            android.graphics.Path r0 = r1.roundPath
-            r0.reset()
-            android.graphics.Path r0 = r1.roundPath
-            android.graphics.RectF r2 = r1.roundRect
-            float[] r4 = radii
-            android.graphics.Path$Direction r5 = android.graphics.Path.Direction.CW
-            r0.addRoundRect(r2, r4, r5)
-            android.graphics.Path r0 = r1.roundPath
-            r0.close()
-            android.graphics.Path r0 = r1.roundPath
-            android.graphics.Paint r2 = r1.roundPaint
-            r3.drawPath(r0, r2)
-            goto L_0x04d1
-        L_0x01fe:
-            r15 = r31
-            r3 = r20
-            android.graphics.Canvas r7 = r1.legacyCanvas
-            if (r7 == 0) goto L_0x0236
-            android.graphics.RectF r7 = r1.roundRect
-            android.graphics.Bitmap r15 = r1.legacyBitmap
-            int r15 = r15.getWidth()
-            float r15 = (float) r15
-            android.graphics.Bitmap r5 = r1.legacyBitmap
-            int r5 = r5.getHeight()
-            float r5 = (float) r5
-            r20 = r0
-            r0 = 0
-            r7.set(r0, r0, r15, r5)
-            android.graphics.Canvas r0 = r1.legacyCanvas
-            android.graphics.Bitmap r5 = r1.gradientBitmap
-            android.graphics.RectF r7 = r1.roundRect
-            r15 = 0
-            r0.drawBitmap(r5, r15, r7, r15)
-            android.graphics.Canvas r0 = r1.legacyCanvas
-            android.graphics.Bitmap r5 = r14.getBitmap()
-            android.graphics.RectF r7 = r1.roundRect
-            r21 = r14
-            android.graphics.Paint r14 = r1.legacyPaint
-            r0.drawBitmap(r5, r15, r7, r14)
-            goto L_0x023a
-        L_0x0236:
-            r20 = r0
-            r21 = r14
-        L_0x023a:
-            android.graphics.BitmapShader r0 = r1.imageShader
-            if (r4 != r0) goto L_0x0254
-            android.graphics.BitmapShader r0 = r1.gradientShader
-            if (r0 == 0) goto L_0x0254
-            android.graphics.ComposeShader r0 = r1.composeShader
-            if (r0 == 0) goto L_0x024c
-            android.graphics.Paint r5 = r1.roundPaint
-            r5.setShader(r0)
-            goto L_0x0259
-        L_0x024c:
-            android.graphics.Paint r0 = r1.roundPaint
-            android.graphics.BitmapShader r5 = r1.legacyShader
-            r0.setShader(r5)
-            goto L_0x0259
-        L_0x0254:
-            android.graphics.Paint r0 = r1.roundPaint
-            r0.setShader(r4)
-        L_0x0259:
-            float r0 = java.lang.Math.min(r13, r2)
-            r5 = 1065353216(0x3var_, float:1.0)
-            float r15 = r5 / r0
-            android.graphics.RectF r0 = r1.roundRect
-            float r5 = r1.sideClip
-            float r7 = r8 + r5
-            float r14 = r9 + r5
-            float r22 = r8 + r11
-            r26 = r11
-            float r11 = r22 - r5
-            float r22 = r9 + r10
-            float r5 = r22 - r5
-            r0.set(r7, r14, r11, r5)
-            float r0 = r13 - r2
-            float r0 = java.lang.Math.abs(r0)
-            r5 = 973279855(0x3a03126f, float:5.0E-4)
-            int r0 = (r0 > r5 ? 1 : (r0 == r5 ? 0 : -1))
-            if (r0 <= 0) goto L_0x02b2
-            float r0 = (float) r12
-            float r0 = r0 / r2
-            int r2 = (r0 > r24 ? 1 : (r0 == r24 ? 0 : -1))
-            if (r2 <= 0) goto L_0x029c
-            int r0 = (int) r0
-            float r0 = (float) r0
-            float r2 = r0 - r24
-            float r2 = r2 / r17
-            float r2 = r8 - r2
-            float r0 = r0 + r24
-            float r0 = r0 / r17
-            float r0 = r0 + r8
-            float r7 = r9 + r6
-            r3.set(r2, r9, r0, r7)
-            goto L_0x02b9
-        L_0x029c:
-            r0 = r20
-            float r0 = (float) r0
-            float r0 = r0 / r13
-            int r0 = (int) r0
-            float r0 = (float) r0
-            float r2 = r0 - r6
-            float r2 = r2 / r17
-            float r2 = r9 - r2
-            float r7 = r8 + r24
-            float r0 = r0 + r6
-            float r0 = r0 / r17
-            float r0 = r0 + r9
-            r3.set(r8, r2, r7, r0)
-            goto L_0x02b9
-        L_0x02b2:
-            float r0 = r8 + r24
-            float r2 = r9 + r6
-            r3.set(r8, r9, r0, r2)
-        L_0x02b9:
-            boolean r0 = r1.isVisible
-            if (r0 == 0) goto L_0x04d1
-            android.graphics.Matrix r0 = r1.shaderMatrix
-            r0.reset()
-            android.graphics.Matrix r0 = r1.shaderMatrix
-            float r2 = r3.left
-            float r7 = r1.sideClip
-            float r2 = r2 + r7
-            int r2 = (int) r2
-            float r2 = (float) r2
-            float r11 = r3.top
-            float r11 = r11 + r7
-            int r7 = (int) r11
-            float r7 = (float) r7
-            r0.setTranslate(r2, r7)
-            r7 = r33
-            r0 = 90
-            if (r7 != r0) goto L_0x02ec
-            android.graphics.Matrix r0 = r1.shaderMatrix
-            r2 = 1119092736(0x42b40000, float:90.0)
-            r0.preRotate(r2)
-            android.graphics.Matrix r0 = r1.shaderMatrix
-            float r2 = r3.width()
-            float r2 = -r2
-            r7 = 0
-            r0.preTranslate(r7, r2)
-            goto L_0x031d
-        L_0x02ec:
-            r0 = 180(0xb4, float:2.52E-43)
-            if (r7 != r0) goto L_0x0307
-            android.graphics.Matrix r0 = r1.shaderMatrix
-            r2 = 1127481344(0x43340000, float:180.0)
-            r0.preRotate(r2)
-            android.graphics.Matrix r0 = r1.shaderMatrix
-            float r2 = r3.width()
-            float r2 = -r2
-            float r7 = r3.height()
-            float r7 = -r7
-            r0.preTranslate(r2, r7)
-            goto L_0x031d
-        L_0x0307:
-            r0 = 270(0x10e, float:3.78E-43)
-            if (r7 != r0) goto L_0x031d
-            android.graphics.Matrix r0 = r1.shaderMatrix
-            r2 = 1132920832(0x43870000, float:270.0)
-            r0.preRotate(r2)
-            android.graphics.Matrix r0 = r1.shaderMatrix
-            float r2 = r3.height()
-            float r2 = -r2
-            r7 = 0
-            r0.preTranslate(r2, r7)
-        L_0x031d:
-            android.graphics.Matrix r0 = r1.shaderMatrix
-            r0.preScale(r15, r15)
-            boolean r0 = r1.isRoundVideo
-            if (r0 == 0) goto L_0x033c
-            int r0 = org.telegram.messenger.AndroidUtilities.roundMessageInset
-            int r0 = r0 * 2
-            float r0 = (float) r0
-            float r0 = r24 + r0
-            float r0 = r0 / r24
-            android.graphics.Matrix r2 = r1.shaderMatrix
-            float r7 = r3.centerX()
-            float r11 = r3.centerY()
-            r2.postScale(r0, r0, r7, r11)
-        L_0x033c:
-            android.graphics.BitmapShader r0 = r1.legacyShader
-            if (r0 == 0) goto L_0x0345
-            android.graphics.Matrix r2 = r1.shaderMatrix
-            r0.setLocalMatrix(r2)
-        L_0x0345:
-            android.graphics.Matrix r0 = r1.shaderMatrix
-            r4.setLocalMatrix(r0)
-            android.graphics.ComposeShader r0 = r1.composeShader
-            if (r0 == 0) goto L_0x03e6
-            android.graphics.Bitmap r0 = r1.gradientBitmap
-            int r0 = r0.getWidth()
-            android.graphics.Bitmap r2 = r1.gradientBitmap
-            int r2 = r2.getHeight()
-            r4 = 0
-            int r7 = (r26 > r4 ? 1 : (r26 == r4 ? 0 : -1))
-            if (r7 != 0) goto L_0x0362
-            r7 = 1065353216(0x3var_, float:1.0)
-            goto L_0x0365
-        L_0x0362:
-            float r7 = (float) r0
-            float r7 = r7 / r24
-        L_0x0365:
-            int r11 = (r10 > r4 ? 1 : (r10 == r4 ? 0 : -1))
-            if (r11 != 0) goto L_0x036c
-            r4 = 1065353216(0x3var_, float:1.0)
-            goto L_0x036e
-        L_0x036c:
-            float r4 = (float) r2
-            float r4 = r4 / r6
-        L_0x036e:
-            float r11 = r7 - r4
-            float r11 = java.lang.Math.abs(r11)
-            int r5 = (r11 > r5 ? 1 : (r11 == r5 ? 0 : -1))
-            if (r5 <= 0) goto L_0x03a5
-            float r5 = (float) r0
-            float r5 = r5 / r4
-            int r4 = (r5 > r24 ? 1 : (r5 == r24 ? 0 : -1))
-            if (r4 <= 0) goto L_0x0391
-            int r0 = (int) r5
-            float r4 = (float) r0
-            float r5 = r4 - r24
-            float r5 = r5 / r17
-            float r5 = r8 - r5
-            float r4 = r4 + r24
-            float r4 = r4 / r17
-            float r8 = r8 + r4
-            float r4 = r9 + r6
-            r3.set(r5, r9, r8, r4)
-            goto L_0x03ac
-        L_0x0391:
-            float r2 = (float) r2
-            float r2 = r2 / r7
-            int r2 = (int) r2
-            float r4 = (float) r2
-            float r5 = r4 - r6
-            float r5 = r5 / r17
-            float r5 = r9 - r5
-            float r7 = r8 + r24
-            float r4 = r4 + r6
-            float r4 = r4 / r17
-            float r9 = r9 + r4
-            r3.set(r8, r5, r7, r9)
-            goto L_0x03ac
-        L_0x03a5:
-            float r4 = r8 + r24
-            float r5 = r9 + r6
-            r3.set(r8, r9, r4, r5)
-        L_0x03ac:
-            r4 = 0
-            int r5 = (r26 > r4 ? 1 : (r26 == r4 ? 0 : -1))
-            if (r5 != 0) goto L_0x03b4
-            r0 = 1065353216(0x3var_, float:1.0)
-            goto L_0x03b7
-        L_0x03b4:
-            float r0 = (float) r0
-            float r0 = r0 / r24
-        L_0x03b7:
-            int r4 = (r10 > r4 ? 1 : (r10 == r4 ? 0 : -1))
-            if (r4 != 0) goto L_0x03be
-            r2 = 1065353216(0x3var_, float:1.0)
-            goto L_0x03c0
-        L_0x03be:
-            float r2 = (float) r2
-            float r2 = r2 / r6
-        L_0x03c0:
-            float r0 = java.lang.Math.min(r0, r2)
-            r2 = 1065353216(0x3var_, float:1.0)
-            float r15 = r2 / r0
-            android.graphics.Matrix r0 = r1.shaderMatrix
-            r0.reset()
-            android.graphics.Matrix r0 = r1.shaderMatrix
-            float r2 = r3.left
-            float r4 = r1.sideClip
-            float r2 = r2 + r4
-            float r3 = r3.top
-            float r3 = r3 + r4
-            r0.setTranslate(r2, r3)
-            android.graphics.Matrix r0 = r1.shaderMatrix
-            r0.preScale(r15, r15)
-            android.graphics.BitmapShader r0 = r1.gradientShader
-            android.graphics.Matrix r2 = r1.shaderMatrix
-            r0.setLocalMatrix(r2)
-        L_0x03e6:
-            android.graphics.Paint r0 = r1.roundPaint
-            r2 = r31
-            r0.setAlpha(r2)
-            boolean r0 = r1.isRoundRect
-            if (r0 == 0) goto L_0x0424
-            int[] r0 = r1.roundRadius     // Catch:{ Exception -> 0x0415 }
-            r2 = 0
-            r3 = r0[r2]     // Catch:{ Exception -> 0x0415 }
-            if (r3 != 0) goto L_0x0403
-            android.graphics.RectF r0 = r1.roundRect     // Catch:{ Exception -> 0x0415 }
-            android.graphics.Paint r2 = r1.roundPaint     // Catch:{ Exception -> 0x0415 }
-            r3 = r29
-            r3.drawRect(r0, r2)     // Catch:{ Exception -> 0x0415 }
-            goto L_0x04d1
-        L_0x0403:
-            r3 = r29
-            android.graphics.RectF r2 = r1.roundRect     // Catch:{ Exception -> 0x0415 }
-            r4 = 0
-            r5 = r0[r4]     // Catch:{ Exception -> 0x0415 }
-            float r5 = (float) r5     // Catch:{ Exception -> 0x0415 }
-            r0 = r0[r4]     // Catch:{ Exception -> 0x0415 }
-            float r0 = (float) r0     // Catch:{ Exception -> 0x0415 }
-            android.graphics.Paint r4 = r1.roundPaint     // Catch:{ Exception -> 0x0415 }
-            r3.drawRoundRect(r2, r5, r0, r4)     // Catch:{ Exception -> 0x0415 }
-            goto L_0x04d1
-        L_0x0415:
-            r0 = move-exception
-            r4 = r35
-            if (r4 != 0) goto L_0x041f
-            r5 = r21
-            r1.onBitmapException(r5)
-        L_0x041f:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            goto L_0x04d1
-        L_0x0424:
-            r6 = r29
-            r2 = 0
-        L_0x0427:
-            int[] r0 = r1.roundRadius
-            int r3 = r0.length
-            if (r2 >= r3) goto L_0x043f
-            float[] r3 = radii
-            int r4 = r2 * 2
-            r5 = r0[r2]
-            float r5 = (float) r5
-            r3[r4] = r5
-            r5 = 1
-            int r4 = r4 + r5
-            r0 = r0[r2]
-            float r0 = (float) r0
-            r3[r4] = r0
-            int r2 = r2 + 1
-            goto L_0x0427
-        L_0x043f:
-            android.graphics.Path r0 = r1.roundPath
-            r0.reset()
-            android.graphics.Path r0 = r1.roundPath
-            android.graphics.RectF r2 = r1.roundRect
-            float[] r3 = radii
-            android.graphics.Path$Direction r4 = android.graphics.Path.Direction.CW
-            r0.addRoundRect(r2, r3, r4)
-            android.graphics.Path r0 = r1.roundPath
-            r0.close()
-            android.graphics.Path r0 = r1.roundPath
-            android.graphics.Paint r2 = r1.roundPaint
-            r6.drawPath(r0, r2)
-            goto L_0x04d1
-        L_0x045d:
-            r6 = r29
-            r4 = r7
-            r26 = r11
-            r16 = r15
-            r11 = r31
-            r7 = r5
-            r5 = r14
-            r14 = r20
-            boolean r15 = r1.isAspectFit
-            if (r15 == 0) goto L_0x04d4
-            float r2 = java.lang.Math.max(r13, r2)
-            r29.save()
-            float r3 = (float) r12
-            float r3 = r3 / r2
-            int r3 = (int) r3
-            float r0 = (float) r0
-            float r0 = r0 / r2
-            int r0 = (int) r0
-            if (r4 != 0) goto L_0x04ba
-            float r2 = (float) r3
-            float r3 = r26 - r2
-            float r3 = r3 / r17
-            float r3 = r3 + r8
-            float r0 = (float) r0
-            float r7 = r10 - r0
-            float r7 = r7 / r17
-            float r7 = r7 + r9
-            float r2 = r26 + r2
-            float r2 = r2 / r17
-            float r8 = r8 + r2
-            float r10 = r10 + r0
-            float r10 = r10 / r17
-            float r9 = r9 + r10
-            r14.set(r3, r7, r8, r9)
-            float r0 = r14.left
-            int r0 = (int) r0
-            float r2 = r14.top
-            int r2 = (int) r2
-            float r3 = r14.right
-            int r3 = (int) r3
-            float r7 = r14.bottom
-            int r7 = (int) r7
-            r5.setBounds(r0, r2, r3, r7)
-            boolean r0 = r5 instanceof org.telegram.ui.Components.AnimatedFileDrawable
-            if (r0 == 0) goto L_0x04ba
-            r0 = r5
-            org.telegram.ui.Components.AnimatedFileDrawable r0 = (org.telegram.ui.Components.AnimatedFileDrawable) r0
-            float r2 = r14.left
-            float r3 = r14.top
-            float r7 = r14.width()
-            float r8 = r14.height()
-            r0.setActualDrawRect(r2, r3, r7, r8)
-        L_0x04ba:
-            boolean r0 = r1.isVisible
-            if (r0 == 0) goto L_0x04ce
-            r5.setAlpha(r11)     // Catch:{ Exception -> 0x04c5 }
-            r1.drawBitmapDrawable(r6, r5, r4, r11)     // Catch:{ Exception -> 0x04c5 }
-            goto L_0x04ce
-        L_0x04c5:
-            r0 = move-exception
-            if (r4 != 0) goto L_0x04cb
-            r1.onBitmapException(r5)
-        L_0x04cb:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x04ce:
-            r29.restore()
-        L_0x04d1:
-            r11 = r1
-            goto L_0x0654
-        L_0x04d4:
-            float r15 = r13 - r2
-            float r15 = java.lang.Math.abs(r15)
-            r20 = 925353388(0x3727c5ac, float:1.0E-5)
-            int r15 = (r15 > r20 ? 1 : (r15 == r20 ? 0 : -1))
-            if (r15 <= 0) goto L_0x05af
-            r29.save()
-            boolean r15 = r1.clip
-            if (r15 == 0) goto L_0x04ef
-            float r15 = r8 + r26
-            float r11 = r9 + r10
-            r6.clipRect(r8, r9, r15, r11)
-        L_0x04ef:
-            int r11 = r7 % 360
-            if (r11 == 0) goto L_0x0505
-            boolean r15 = r1.centerRotation
-            if (r15 == 0) goto L_0x0500
-            float r7 = (float) r7
-            float r15 = r26 / r17
-            float r1 = r10 / r17
-            r6.rotate(r7, r15, r1)
-            goto L_0x0505
-        L_0x0500:
-            float r1 = (float) r7
-            r7 = 0
-            r6.rotate(r1, r7, r7)
-        L_0x0505:
-            float r1 = (float) r12
-            float r1 = r1 / r2
-            int r2 = (r1 > r26 ? 1 : (r1 == r26 ? 0 : -1))
-            if (r2 <= 0) goto L_0x051e
-            int r0 = (int) r1
-            float r0 = (float) r0
-            float r1 = r0 - r26
-            float r1 = r1 / r17
-            float r1 = r8 - r1
-            float r0 = r0 + r26
-            float r0 = r0 / r17
-            float r0 = r0 + r8
-            float r2 = r9 + r10
-            r14.set(r1, r9, r0, r2)
-            goto L_0x0531
-        L_0x051e:
-            float r0 = (float) r0
-            float r0 = r0 / r13
-            int r0 = (int) r0
-            float r0 = (float) r0
-            float r1 = r0 - r10
-            float r1 = r1 / r17
-            float r1 = r9 - r1
-            float r2 = r8 + r26
-            float r0 = r0 + r10
-            float r0 = r0 / r17
-            float r0 = r0 + r9
-            r14.set(r8, r1, r2, r0)
-        L_0x0531:
-            if (r3 == 0) goto L_0x053b
-            r0 = r5
-            org.telegram.ui.Components.AnimatedFileDrawable r0 = (org.telegram.ui.Components.AnimatedFileDrawable) r0
-            r1 = r26
-            r0.setActualDrawRect(r8, r9, r1, r10)
-        L_0x053b:
-            if (r4 != 0) goto L_0x0577
-            r0 = 90
-            if (r11 == r0) goto L_0x0556
-            r0 = 270(0x10e, float:3.78E-43)
-            if (r11 != r0) goto L_0x0546
-            goto L_0x0556
-        L_0x0546:
-            float r0 = r14.left
-            int r0 = (int) r0
-            float r1 = r14.top
-            int r1 = (int) r1
-            float r2 = r14.right
-            int r2 = (int) r2
-            float r3 = r14.bottom
-            int r3 = (int) r3
-            r5.setBounds(r0, r1, r2, r3)
-            goto L_0x0577
-        L_0x0556:
-            float r0 = r14.width()
-            float r0 = r0 / r17
-            float r1 = r14.height()
-            float r1 = r1 / r17
-            float r2 = r14.centerX()
-            float r3 = r14.centerY()
-            float r7 = r2 - r1
-            int r7 = (int) r7
-            float r8 = r3 - r0
-            int r8 = (int) r8
-            float r2 = r2 + r1
-            int r1 = (int) r2
-            float r3 = r3 + r0
-            int r0 = (int) r3
-            r5.setBounds(r7, r8, r1, r0)
-        L_0x0577:
-            r11 = r28
-            boolean r0 = r11.isVisible
-            if (r0 == 0) goto L_0x05aa
-            r0 = r16
-            r1 = 29
-            if (r0 < r1) goto L_0x059b
-            java.lang.Object r0 = r11.blendMode     // Catch:{ Exception -> 0x05a1 }
-            if (r0 == 0) goto L_0x0593
-            android.graphics.Paint r0 = r5.getPaint()     // Catch:{ Exception -> 0x05a1 }
-            java.lang.Object r1 = r11.blendMode     // Catch:{ Exception -> 0x05a1 }
-            android.graphics.BlendMode r1 = (android.graphics.BlendMode) r1     // Catch:{ Exception -> 0x05a1 }
-            r0.setBlendMode(r1)     // Catch:{ Exception -> 0x05a1 }
-            goto L_0x059b
-        L_0x0593:
-            android.graphics.Paint r0 = r5.getPaint()     // Catch:{ Exception -> 0x05a1 }
-            r1 = 0
-            r0.setBlendMode(r1)     // Catch:{ Exception -> 0x05a1 }
-        L_0x059b:
-            r12 = r31
-            r11.drawBitmapDrawable(r6, r5, r4, r12)     // Catch:{ Exception -> 0x05a1 }
-            goto L_0x05aa
-        L_0x05a1:
-            r0 = move-exception
-            if (r4 != 0) goto L_0x05a7
-            r11.onBitmapException(r5)
-        L_0x05a7:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x05aa:
-            r29.restore()
-            goto L_0x0654
-        L_0x05af:
-            r12 = r11
-            r0 = r16
-            r11 = r1
-            r1 = r26
-            r29.save()
-            int r2 = r7 % 360
-            if (r2 == 0) goto L_0x05ce
-            boolean r13 = r11.centerRotation
-            if (r13 == 0) goto L_0x05c9
-            float r7 = (float) r7
-            float r13 = r1 / r17
-            float r15 = r10 / r17
-            r6.rotate(r7, r13, r15)
-            goto L_0x05ce
-        L_0x05c9:
-            float r7 = (float) r7
-            r13 = 0
-            r6.rotate(r7, r13, r13)
-        L_0x05ce:
-            float r7 = r8 + r1
-            float r13 = r9 + r10
-            r14.set(r8, r9, r7, r13)
-            boolean r7 = r11.isRoundVideo
-            if (r7 == 0) goto L_0x05e2
-            int r7 = org.telegram.messenger.AndroidUtilities.roundMessageInset
-            int r13 = -r7
-            float r13 = (float) r13
-            int r7 = -r7
-            float r7 = (float) r7
-            r14.inset(r13, r7)
-        L_0x05e2:
-            if (r3 == 0) goto L_0x05ea
-            r3 = r5
-            org.telegram.ui.Components.AnimatedFileDrawable r3 = (org.telegram.ui.Components.AnimatedFileDrawable) r3
-            r3.setActualDrawRect(r8, r9, r1, r10)
-        L_0x05ea:
-            if (r4 != 0) goto L_0x0626
-            r1 = 90
-            if (r2 == r1) goto L_0x0605
-            r1 = 270(0x10e, float:3.78E-43)
-            if (r2 != r1) goto L_0x05f5
-            goto L_0x0605
-        L_0x05f5:
-            float r1 = r14.left
-            int r1 = (int) r1
-            float r2 = r14.top
-            int r2 = (int) r2
-            float r3 = r14.right
-            int r3 = (int) r3
-            float r7 = r14.bottom
-            int r7 = (int) r7
-            r5.setBounds(r1, r2, r3, r7)
-            goto L_0x0626
-        L_0x0605:
-            float r1 = r14.width()
-            float r1 = r1 / r17
-            float r2 = r14.height()
-            float r2 = r2 / r17
-            float r3 = r14.centerX()
-            float r7 = r14.centerY()
-            float r8 = r3 - r2
-            int r8 = (int) r8
-            float r9 = r7 - r1
-            int r9 = (int) r9
-            float r3 = r3 + r2
-            int r2 = (int) r3
-            float r7 = r7 + r1
-            int r1 = (int) r7
-            r5.setBounds(r8, r9, r2, r1)
-        L_0x0626:
-            boolean r1 = r11.isVisible
-            if (r1 == 0) goto L_0x0651
-            r1 = 29
-            if (r0 < r1) goto L_0x0646
-            java.lang.Object r0 = r11.blendMode     // Catch:{ Exception -> 0x064a }
-            if (r0 == 0) goto L_0x063e
-            android.graphics.Paint r0 = r5.getPaint()     // Catch:{ Exception -> 0x064a }
-            java.lang.Object r1 = r11.blendMode     // Catch:{ Exception -> 0x064a }
-            android.graphics.BlendMode r1 = (android.graphics.BlendMode) r1     // Catch:{ Exception -> 0x064a }
-            r0.setBlendMode(r1)     // Catch:{ Exception -> 0x064a }
-            goto L_0x0646
-        L_0x063e:
-            android.graphics.Paint r0 = r5.getPaint()     // Catch:{ Exception -> 0x064a }
-            r1 = 0
-            r0.setBlendMode(r1)     // Catch:{ Exception -> 0x064a }
-        L_0x0646:
-            r11.drawBitmapDrawable(r6, r5, r4, r12)     // Catch:{ Exception -> 0x064a }
-            goto L_0x0651
-        L_0x064a:
-            r0 = move-exception
-            r11.onBitmapException(r5)
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x0651:
-            r29.restore()
-        L_0x0654:
-            if (r19 == 0) goto L_0x0660
-            r3 = r30
-            r0 = r3
-            org.telegram.ui.Components.RLottieDrawable r0 = (org.telegram.ui.Components.RLottieDrawable) r0
-            r1 = 0
-            r0.skipFrameUpdate = r1
-            goto L_0x0714
-        L_0x0660:
-            r3 = r30
-            r1 = 0
-            boolean r0 = r3 instanceof org.telegram.ui.Components.AnimatedFileDrawable
-            if (r0 == 0) goto L_0x0714
-            r0 = r3
-            org.telegram.ui.Components.AnimatedFileDrawable r0 = (org.telegram.ui.Components.AnimatedFileDrawable) r0
-            r0.skipFrameUpdate = r1
-            goto L_0x0714
-        L_0x066e:
-            r6 = r3
-            r4 = r7
-            r14 = r12
-            r12 = r0
-            r3 = r2
-            r2 = 1065353216(0x3var_, float:1.0)
-            r27 = r11
-            r11 = r1
-            r1 = r27
-            if (r4 != 0) goto L_0x06db
-            boolean r0 = r11.isAspectFit
-            if (r0 == 0) goto L_0x06c6
-            int r0 = r30.getIntrinsicWidth()
-            int r5 = r30.getIntrinsicHeight()
-            float r7 = r11.sideClip
-            float r13 = r7 * r17
-            float r13 = r1 - r13
-            float r7 = r7 * r17
-            float r7 = r10 - r7
-            r15 = 0
-            int r16 = (r1 > r15 ? 1 : (r1 == r15 ? 0 : -1))
-            if (r16 != 0) goto L_0x0698
-            goto L_0x069a
-        L_0x0698:
-            float r2 = (float) r0
-            float r2 = r2 / r13
-        L_0x069a:
-            int r13 = (r10 > r15 ? 1 : (r10 == r15 ? 0 : -1))
-            if (r13 != 0) goto L_0x06a1
-            r15 = 1065353216(0x3var_, float:1.0)
-            goto L_0x06a4
-        L_0x06a1:
-            float r13 = (float) r5
-            float r15 = r13 / r7
-        L_0x06a4:
-            float r2 = java.lang.Math.max(r2, r15)
-            float r0 = (float) r0
-            float r0 = r0 / r2
-            int r0 = (int) r0
-            float r5 = (float) r5
-            float r5 = r5 / r2
-            int r2 = (int) r5
-            float r0 = (float) r0
-            float r5 = r1 - r0
-            float r5 = r5 / r17
-            float r5 = r5 + r8
-            float r2 = (float) r2
-            float r7 = r10 - r2
-            float r7 = r7 / r17
-            float r7 = r7 + r9
-            float r0 = r0 + r1
-            float r0 = r0 / r17
-            float r8 = r8 + r0
-            float r10 = r10 + r2
-            float r10 = r10 / r17
-            float r9 = r9 + r10
-            r14.set(r5, r7, r8, r9)
-            goto L_0x06cc
-        L_0x06c6:
-            float r0 = r8 + r1
-            float r10 = r10 + r9
-            r14.set(r8, r9, r0, r10)
-        L_0x06cc:
-            float r0 = r14.left
-            int r0 = (int) r0
-            float r1 = r14.top
-            int r1 = (int) r1
-            float r2 = r14.right
-            int r2 = (int) r2
-            float r5 = r14.bottom
-            int r5 = (int) r5
-            r3.setBounds(r0, r1, r2, r5)
-        L_0x06db:
-            boolean r0 = r11.isVisible
-            if (r0 == 0) goto L_0x0714
-            r30.setAlpha(r31)     // Catch:{ Exception -> 0x0710 }
-            if (r4 == 0) goto L_0x070c
-            boolean r0 = r3 instanceof org.telegram.messenger.SvgHelper.SvgDrawable     // Catch:{ Exception -> 0x0710 }
-            if (r0 == 0) goto L_0x0708
-            long r0 = r4.time     // Catch:{ Exception -> 0x0710 }
-            r7 = 0
-            int r2 = (r0 > r7 ? 1 : (r0 == r7 ? 0 : -1))
-            if (r2 != 0) goto L_0x06f4
-            long r0 = java.lang.System.currentTimeMillis()     // Catch:{ Exception -> 0x0710 }
-        L_0x06f4:
-            r2 = r3
-            org.telegram.messenger.SvgHelper$SvgDrawable r2 = (org.telegram.messenger.SvgHelper.SvgDrawable) r2     // Catch:{ Exception -> 0x0710 }
-            r5 = 1
-            float r7 = r4.imageX     // Catch:{ Exception -> 0x0710 }
-            float r8 = r4.imageY     // Catch:{ Exception -> 0x0710 }
-            float r9 = r4.imageW     // Catch:{ Exception -> 0x0710 }
-            float r10 = r4.imageH     // Catch:{ Exception -> 0x0710 }
-            r3 = r29
-            r4 = r5
-            r5 = r0
-            r2.drawInternal(r3, r4, r5, r7, r8, r9, r10)     // Catch:{ Exception -> 0x0710 }
-            goto L_0x0714
-        L_0x0708:
-            r3.draw(r6)     // Catch:{ Exception -> 0x0710 }
-            goto L_0x0714
-        L_0x070c:
-            r3.draw(r6)     // Catch:{ Exception -> 0x0710 }
-            goto L_0x0714
-        L_0x0710:
-            r0 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x0714:
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ImageReceiver.drawDrawable(android.graphics.Canvas, android.graphics.drawable.Drawable, int, android.graphics.BitmapShader, int, int, org.telegram.messenger.ImageReceiver$BackgroundThreadDrawHolder):void");
+    public void drawDrawable(Canvas canvas, Drawable drawable, int i, BitmapShader bitmapShader, int i2, int i3, BackgroundThreadDrawHolder backgroundThreadDrawHolder) {
+        int[] iArr;
+        ColorFilter colorFilter2;
+        RectF rectF;
+        float f;
+        float f2;
+        float f3;
+        float f4;
+        int[] iArr2;
+        boolean z;
+        Paint paint;
+        int i4;
+        int i5;
+        BitmapDrawable bitmapDrawable;
+        int i6;
+        Canvas canvas2 = canvas;
+        Drawable drawable2 = drawable;
+        int i7 = i;
+        BitmapShader bitmapShader2 = bitmapShader;
+        int i8 = i2;
+        int i9 = i3;
+        BackgroundThreadDrawHolder backgroundThreadDrawHolder2 = backgroundThreadDrawHolder;
+        if (backgroundThreadDrawHolder2 != null) {
+            f4 = backgroundThreadDrawHolder2.imageX;
+            f3 = backgroundThreadDrawHolder2.imageY;
+            f2 = backgroundThreadDrawHolder2.imageH;
+            f = backgroundThreadDrawHolder2.imageW;
+            rectF = backgroundThreadDrawHolder2.drawRegion;
+            colorFilter2 = backgroundThreadDrawHolder2.colorFilter;
+            iArr = backgroundThreadDrawHolder.roundRadius;
+        } else {
+            f4 = this.imageX;
+            f3 = this.imageY;
+            f2 = this.imageH;
+            f = this.imageW;
+            rectF = this.drawRegion;
+            colorFilter2 = this.colorFilter;
+            iArr = this.roundRadius;
+        }
+        if (drawable2 instanceof BitmapDrawable) {
+            BitmapDrawable bitmapDrawable2 = (BitmapDrawable) drawable2;
+            boolean z2 = drawable2 instanceof RLottieDrawable;
+            if (z2) {
+                z = z2;
+                iArr2 = iArr;
+                ((RLottieDrawable) drawable2).skipFrameUpdate = this.skipUpdateFrame;
+            } else {
+                z = z2;
+                iArr2 = iArr;
+                if (drawable2 instanceof AnimatedFileDrawable) {
+                    ((AnimatedFileDrawable) drawable2).skipFrameUpdate = this.skipUpdateFrame;
+                }
+            }
+            if (bitmapShader2 != null) {
+                paint = this.roundPaint;
+            } else {
+                paint = bitmapDrawable2.getPaint();
+            }
+            int i10 = Build.VERSION.SDK_INT;
+            RectF rectF2 = rectF;
+            if (i10 >= 29) {
+                Object obj = this.blendMode;
+                if (obj == null || this.gradientShader != null) {
+                    paint.setBlendMode((BlendMode) null);
+                } else {
+                    paint.setBlendMode((BlendMode) obj);
+                }
+            }
+            boolean z3 = (paint == null || paint.getColorFilter() == null) ? false : true;
+            if (!z3 || i9 != 0) {
+                if (!z3 && i9 != 0) {
+                    if (i9 == 1) {
+                        if (bitmapShader2 != null) {
+                            this.roundPaint.setColorFilter(selectedColorFilter);
+                        } else {
+                            bitmapDrawable2.setColorFilter(selectedColorFilter);
+                        }
+                    } else if (bitmapShader2 != null) {
+                        this.roundPaint.setColorFilter(selectedGroupColorFilter);
+                    } else {
+                        bitmapDrawable2.setColorFilter(selectedGroupColorFilter);
+                    }
+                }
+            } else if (bitmapShader2 != null) {
+                this.roundPaint.setColorFilter((ColorFilter) null);
+            } else if (this.staticThumbDrawable != drawable2) {
+                bitmapDrawable2.setColorFilter((ColorFilter) null);
+            }
+            if (colorFilter2 != null && this.gradientShader == null) {
+                if (bitmapShader2 != null) {
+                    this.roundPaint.setColorFilter(colorFilter2);
+                } else {
+                    bitmapDrawable2.setColorFilter(colorFilter2);
+                }
+            }
+            boolean z4 = bitmapDrawable2 instanceof AnimatedFileDrawable;
+            if (z4 || (bitmapDrawable2 instanceof RLottieDrawable)) {
+                int i11 = i8 % 360;
+                if (i11 == 90 || i11 == 270) {
+                    i4 = bitmapDrawable2.getIntrinsicHeight();
+                    i5 = bitmapDrawable2.getIntrinsicWidth();
+                } else {
+                    i4 = bitmapDrawable2.getIntrinsicWidth();
+                    i5 = bitmapDrawable2.getIntrinsicHeight();
+                }
+            } else {
+                Bitmap bitmap = bitmapDrawable2.getBitmap();
+                if (bitmap == null || !bitmap.isRecycled()) {
+                    int i12 = i8 % 360;
+                    if (i12 == 90 || i12 == 270) {
+                        i4 = bitmap.getHeight();
+                        i5 = bitmap.getWidth();
+                    } else {
+                        i4 = bitmap.getWidth();
+                        i5 = bitmap.getHeight();
+                    }
+                } else {
+                    return;
+                }
+            }
+            float f5 = this.sideClip;
+            float f6 = f - (f5 * 2.0f);
+            float f7 = f2 - (f5 * 2.0f);
+            float f8 = f == 0.0f ? 1.0f : ((float) i4) / f6;
+            float f9 = f2 == 0.0f ? 1.0f : ((float) i5) / f7;
+            if (bitmapShader2 == null || backgroundThreadDrawHolder2 != null) {
+                BackgroundThreadDrawHolder backgroundThreadDrawHolder3 = backgroundThreadDrawHolder2;
+                float var_ = f;
+                BitmapDrawable bitmapDrawable3 = bitmapDrawable2;
+                int[] iArr3 = iArr2;
+                Canvas canvas3 = canvas;
+                int i13 = i8;
+                int i14 = i10;
+                RectF rectF3 = rectF2;
+                int i15 = i5;
+                int i16 = i;
+                boolean z5 = z4;
+                if (this.isAspectFit) {
+                    float max = Math.max(f8, f9);
+                    canvas.save();
+                    int i17 = (int) (((float) i4) / max);
+                    int i18 = (int) (((float) i15) / max);
+                    if (backgroundThreadDrawHolder3 == null) {
+                        float var_ = (float) i17;
+                        float var_ = (float) i18;
+                        rectF3.set(((var_ - var_) / 2.0f) + f4, ((f2 - var_) / 2.0f) + f3, ((var_ + var_) / 2.0f) + f4, ((var_ + f2) / 2.0f) + f3);
+                        bitmapDrawable3.setBounds((int) rectF3.left, (int) rectF3.top, (int) rectF3.right, (int) rectF3.bottom);
+                        if (bitmapDrawable3 instanceof AnimatedFileDrawable) {
+                            ((AnimatedFileDrawable) bitmapDrawable3).setActualDrawRect(rectF3.left, rectF3.top, rectF3.width(), rectF3.height());
+                        }
+                    }
+                    if (!(backgroundThreadDrawHolder3 == null || iArr3 == null || iArr3[0] <= 0)) {
+                        canvas.save();
+                        Path access$502 = backgroundThreadDrawHolder.roundPath == null ? backgroundThreadDrawHolder3.roundPath = new Path() : backgroundThreadDrawHolder.roundPath;
+                        access$502.rewind();
+                        RectF rectF4 = AndroidUtilities.rectTmp;
+                        rectF4.set(f4, f3, f4 + var_, f2 + f3);
+                        access$502.addRoundRect(rectF4, (float) iArr3[0], (float) iArr3[2], Path.Direction.CW);
+                        canvas3.clipPath(access$502);
+                    }
+                    if (this.isVisible) {
+                        try {
+                            bitmapDrawable3.setAlpha(i16);
+                            drawBitmapDrawable(canvas3, bitmapDrawable3, backgroundThreadDrawHolder3, i16);
+                        } catch (Exception e) {
+                            if (backgroundThreadDrawHolder3 == null) {
+                                onBitmapException(bitmapDrawable3);
+                            }
+                            FileLog.e((Throwable) e);
+                        }
+                    }
+                    canvas.restore();
+                    if (!(backgroundThreadDrawHolder3 == null || iArr3 == null || iArr3[0] <= 0)) {
+                        canvas.restore();
+                    }
+                } else if (Math.abs(f8 - f9) > 1.0E-5f) {
+                    canvas.save();
+                    if (this.clip) {
+                        canvas3.clipRect(f4, f3, f4 + var_, f3 + f2);
+                    }
+                    int i19 = i13 % 360;
+                    if (i19 != 0) {
+                        if (this.centerRotation) {
+                            canvas3.rotate((float) i13, var_ / 2.0f, f2 / 2.0f);
+                        } else {
+                            canvas3.rotate((float) i13, 0.0f, 0.0f);
+                        }
+                    }
+                    float var_ = ((float) i4) / f9;
+                    if (var_ > var_) {
+                        float var_ = (float) ((int) var_);
+                        rectF3.set(f4 - ((var_ - var_) / 2.0f), f3, ((var_ + var_) / 2.0f) + f4, f3 + f2);
+                    } else {
+                        float var_ = (float) ((int) (((float) i15) / f8));
+                        rectF3.set(f4, f3 - ((var_ - f2) / 2.0f), f4 + var_, ((var_ + f2) / 2.0f) + f3);
+                    }
+                    if (z5) {
+                        ((AnimatedFileDrawable) bitmapDrawable3).setActualDrawRect(f4, f3, var_, f2);
+                    }
+                    if (backgroundThreadDrawHolder3 == null) {
+                        if (i19 == 90 || i19 == 270) {
+                            float width = rectF3.width() / 2.0f;
+                            float height = rectF3.height() / 2.0f;
+                            float centerX = rectF3.centerX();
+                            float centerY = rectF3.centerY();
+                            bitmapDrawable3.setBounds((int) (centerX - height), (int) (centerY - width), (int) (centerX + height), (int) (centerY + width));
+                        } else {
+                            bitmapDrawable3.setBounds((int) rectF3.left, (int) rectF3.top, (int) rectF3.right, (int) rectF3.bottom);
+                        }
+                    }
+                    if (this.isVisible) {
+                        if (i14 >= 29) {
+                            try {
+                                if (this.blendMode != null) {
+                                    bitmapDrawable3.getPaint().setBlendMode((BlendMode) this.blendMode);
+                                } else {
+                                    bitmapDrawable3.getPaint().setBlendMode((BlendMode) null);
+                                }
+                            } catch (Exception e2) {
+                                if (backgroundThreadDrawHolder3 == null) {
+                                    onBitmapException(bitmapDrawable3);
+                                }
+                                FileLog.e((Throwable) e2);
+                            }
+                        }
+                        drawBitmapDrawable(canvas3, bitmapDrawable3, backgroundThreadDrawHolder3, i);
+                    }
+                    canvas.restore();
+                } else {
+                    int i20 = i16;
+                    int i21 = i14;
+                    float var_ = var_;
+                    canvas.save();
+                    int i22 = i13 % 360;
+                    if (i22 != 0) {
+                        if (this.centerRotation) {
+                            canvas3.rotate((float) i13, var_ / 2.0f, f2 / 2.0f);
+                        } else {
+                            canvas3.rotate((float) i13, 0.0f, 0.0f);
+                        }
+                    }
+                    rectF3.set(f4, f3, f4 + var_, f3 + f2);
+                    if (this.isRoundVideo) {
+                        int i23 = AndroidUtilities.roundMessageInset;
+                        rectF3.inset((float) (-i23), (float) (-i23));
+                    }
+                    if (z5) {
+                        ((AnimatedFileDrawable) bitmapDrawable3).setActualDrawRect(f4, f3, var_, f2);
+                    }
+                    if (backgroundThreadDrawHolder3 == null) {
+                        if (i22 == 90 || i22 == 270) {
+                            float width2 = rectF3.width() / 2.0f;
+                            float height2 = rectF3.height() / 2.0f;
+                            float centerX2 = rectF3.centerX();
+                            float centerY2 = rectF3.centerY();
+                            bitmapDrawable3.setBounds((int) (centerX2 - height2), (int) (centerY2 - width2), (int) (centerX2 + height2), (int) (centerY2 + width2));
+                        } else {
+                            bitmapDrawable3.setBounds((int) rectF3.left, (int) rectF3.top, (int) rectF3.right, (int) rectF3.bottom);
+                        }
+                    }
+                    if (this.isVisible) {
+                        if (i21 >= 29) {
+                            try {
+                                if (this.blendMode != null) {
+                                    bitmapDrawable3.getPaint().setBlendMode((BlendMode) this.blendMode);
+                                } else {
+                                    bitmapDrawable3.getPaint().setBlendMode((BlendMode) null);
+                                }
+                            } catch (Exception e3) {
+                                onBitmapException(bitmapDrawable3);
+                                FileLog.e((Throwable) e3);
+                            }
+                        }
+                        drawBitmapDrawable(canvas3, bitmapDrawable3, backgroundThreadDrawHolder3, i20);
+                    }
+                    canvas.restore();
+                }
+            } else if (this.isAspectFit) {
+                float max2 = Math.max(f8, f9);
+                float var_ = (float) ((int) (((float) i4) / max2));
+                float var_ = (float) ((int) (((float) i5) / max2));
+                RectF rectF5 = rectF2;
+                rectF5.set(((f - var_) / 2.0f) + f4, ((f2 - var_) / 2.0f) + f3, f4 + ((f + var_) / 2.0f), f3 + ((f2 + var_) / 2.0f));
+                if (this.isVisible) {
+                    this.shaderMatrix.reset();
+                    this.shaderMatrix.setTranslate((float) ((int) rectF5.left), (float) ((int) rectF5.top));
+                    float var_ = 1.0f / max2;
+                    this.shaderMatrix.preScale(var_, var_);
+                    bitmapShader2.setLocalMatrix(this.shaderMatrix);
+                    this.roundPaint.setShader(bitmapShader2);
+                    this.roundPaint.setAlpha(i);
+                    this.roundRect.set(rectF5);
+                    if (this.isRoundRect) {
+                        try {
+                            if (iArr2[0] == 0) {
+                                canvas.drawRect(this.roundRect, this.roundPaint);
+                            } else {
+                                canvas.drawRoundRect(this.roundRect, (float) iArr2[0], (float) iArr2[0], this.roundPaint);
+                            }
+                        } catch (Exception e4) {
+                            onBitmapException(bitmapDrawable2);
+                            FileLog.e((Throwable) e4);
+                        }
+                    } else {
+                        Canvas canvas4 = canvas;
+                        int[] iArr4 = iArr2;
+                        for (int i24 = 0; i24 < iArr4.length; i24++) {
+                            float[] fArr = radii;
+                            int i25 = i24 * 2;
+                            fArr[i25] = (float) iArr4[i24];
+                            fArr[i25 + 1] = (float) iArr4[i24];
+                        }
+                        this.roundPath.reset();
+                        this.roundPath.addRoundRect(this.roundRect, radii, Path.Direction.CW);
+                        this.roundPath.close();
+                        canvas4.drawPath(this.roundPath, this.roundPaint);
+                    }
+                }
+            } else {
+                int i26 = i;
+                RectF rectF6 = rectF2;
+                if (this.legacyCanvas != null) {
+                    i6 = i5;
+                    this.roundRect.set(0.0f, 0.0f, (float) this.legacyBitmap.getWidth(), (float) this.legacyBitmap.getHeight());
+                    this.legacyCanvas.drawBitmap(this.gradientBitmap, (Rect) null, this.roundRect, (Paint) null);
+                    bitmapDrawable = bitmapDrawable2;
+                    this.legacyCanvas.drawBitmap(bitmapDrawable2.getBitmap(), (Rect) null, this.roundRect, this.legacyPaint);
+                } else {
+                    i6 = i5;
+                    bitmapDrawable = bitmapDrawable2;
+                }
+                if (bitmapShader2 != this.imageShader || this.gradientShader == null) {
+                    this.roundPaint.setShader(bitmapShader2);
+                } else {
+                    ComposeShader composeShader2 = this.composeShader;
+                    if (composeShader2 != null) {
+                        this.roundPaint.setShader(composeShader2);
+                    } else {
+                        this.roundPaint.setShader(this.legacyShader);
+                    }
+                }
+                float min = 1.0f / Math.min(f8, f9);
+                RectF rectF7 = this.roundRect;
+                float var_ = this.sideClip;
+                float var_ = f;
+                rectF7.set(f4 + var_, f3 + var_, (f4 + f) - var_, (f3 + f2) - var_);
+                if (Math.abs(f8 - f9) > 5.0E-4f) {
+                    float var_ = ((float) i4) / f9;
+                    if (var_ > f6) {
+                        float var_ = (float) ((int) var_);
+                        rectF6.set(f4 - ((var_ - f6) / 2.0f), f3, ((var_ + f6) / 2.0f) + f4, f3 + f7);
+                    } else {
+                        float var_ = (float) ((int) (((float) i6) / f8));
+                        rectF6.set(f4, f3 - ((var_ - f7) / 2.0f), f4 + f6, ((var_ + f7) / 2.0f) + f3);
+                    }
+                } else {
+                    rectF6.set(f4, f3, f4 + f6, f3 + f7);
+                }
+                if (this.isVisible) {
+                    this.shaderMatrix.reset();
+                    Matrix matrix = this.shaderMatrix;
+                    float var_ = rectF6.left;
+                    float var_ = this.sideClip;
+                    matrix.setTranslate((float) ((int) (var_ + var_)), (float) ((int) (rectF6.top + var_)));
+                    int i27 = i2;
+                    if (i27 == 90) {
+                        this.shaderMatrix.preRotate(90.0f);
+                        this.shaderMatrix.preTranslate(0.0f, -rectF6.width());
+                    } else if (i27 == 180) {
+                        this.shaderMatrix.preRotate(180.0f);
+                        this.shaderMatrix.preTranslate(-rectF6.width(), -rectF6.height());
+                    } else if (i27 == 270) {
+                        this.shaderMatrix.preRotate(270.0f);
+                        this.shaderMatrix.preTranslate(-rectF6.height(), 0.0f);
+                    }
+                    this.shaderMatrix.preScale(min, min);
+                    if (this.isRoundVideo) {
+                        float var_ = (f6 + ((float) (AndroidUtilities.roundMessageInset * 2))) / f6;
+                        this.shaderMatrix.postScale(var_, var_, rectF6.centerX(), rectF6.centerY());
+                    }
+                    BitmapShader bitmapShader3 = this.legacyShader;
+                    if (bitmapShader3 != null) {
+                        bitmapShader3.setLocalMatrix(this.shaderMatrix);
+                    }
+                    bitmapShader2.setLocalMatrix(this.shaderMatrix);
+                    if (this.composeShader != null) {
+                        int width3 = this.gradientBitmap.getWidth();
+                        int height3 = this.gradientBitmap.getHeight();
+                        float var_ = var_ == 0.0f ? 1.0f : ((float) width3) / f6;
+                        float var_ = f2 == 0.0f ? 1.0f : ((float) height3) / f7;
+                        if (Math.abs(var_ - var_) > 5.0E-4f) {
+                            float var_ = ((float) width3) / var_;
+                            if (var_ > f6) {
+                                width3 = (int) var_;
+                                float var_ = (float) width3;
+                                rectF6.set(f4 - ((var_ - f6) / 2.0f), f3, f4 + ((var_ + f6) / 2.0f), f3 + f7);
+                            } else {
+                                height3 = (int) (((float) height3) / var_);
+                                float var_ = (float) height3;
+                                rectF6.set(f4, f3 - ((var_ - f7) / 2.0f), f4 + f6, f3 + ((var_ + f7) / 2.0f));
+                            }
+                        } else {
+                            rectF6.set(f4, f3, f4 + f6, f3 + f7);
+                        }
+                        float min2 = 1.0f / Math.min(var_ == 0.0f ? 1.0f : ((float) width3) / f6, f2 == 0.0f ? 1.0f : ((float) height3) / f7);
+                        this.shaderMatrix.reset();
+                        Matrix matrix2 = this.shaderMatrix;
+                        float var_ = rectF6.left;
+                        float var_ = this.sideClip;
+                        matrix2.setTranslate(var_ + var_, rectF6.top + var_);
+                        this.shaderMatrix.preScale(min2, min2);
+                        this.gradientShader.setLocalMatrix(this.shaderMatrix);
+                    }
+                    this.roundPaint.setAlpha(i);
+                    if (this.isRoundRect) {
+                        try {
+                            if (iArr2[0] == 0) {
+                                canvas.drawRect(this.roundRect, this.roundPaint);
+                            } else {
+                                int[] iArr5 = iArr2;
+                                canvas.drawRoundRect(this.roundRect, (float) iArr5[0], (float) iArr5[0], this.roundPaint);
+                            }
+                        } catch (Exception e5) {
+                            if (backgroundThreadDrawHolder == null) {
+                                onBitmapException(bitmapDrawable);
+                            }
+                            FileLog.e((Throwable) e5);
+                        }
+                    } else {
+                        Canvas canvas5 = canvas;
+                        int[] iArr6 = iArr2;
+                        for (int i28 = 0; i28 < iArr6.length; i28++) {
+                            float[] fArr2 = radii;
+                            int i29 = i28 * 2;
+                            fArr2[i29] = (float) iArr6[i28];
+                            fArr2[i29 + 1] = (float) iArr6[i28];
+                        }
+                        this.roundPath.reset();
+                        this.roundPath.addRoundRect(this.roundRect, radii, Path.Direction.CW);
+                        this.roundPath.close();
+                        canvas5.drawPath(this.roundPath, this.roundPaint);
+                    }
+                }
+            }
+            if (z) {
+                ((RLottieDrawable) drawable).skipFrameUpdate = false;
+                return;
+            }
+            Drawable drawable3 = drawable;
+            if (drawable3 instanceof AnimatedFileDrawable) {
+                ((AnimatedFileDrawable) drawable3).skipFrameUpdate = false;
+                return;
+            }
+            return;
+        }
+        Canvas canvas6 = canvas;
+        int i30 = i7;
+        Drawable drawable4 = drawable2;
+        BackgroundThreadDrawHolder backgroundThreadDrawHolder4 = backgroundThreadDrawHolder2;
+        float var_ = f;
+        RectF rectF8 = rectF;
+        if (backgroundThreadDrawHolder4 == null) {
+            if (this.isAspectFit) {
+                int intrinsicWidth = drawable.getIntrinsicWidth();
+                int intrinsicHeight = drawable.getIntrinsicHeight();
+                float var_ = this.sideClip;
+                float max3 = Math.max(var_ == 0.0f ? 1.0f : ((float) intrinsicWidth) / (var_ - (var_ * 2.0f)), f2 == 0.0f ? 1.0f : ((float) intrinsicHeight) / (f2 - (var_ * 2.0f)));
+                float var_ = (float) ((int) (((float) intrinsicWidth) / max3));
+                float var_ = (float) ((int) (((float) intrinsicHeight) / max3));
+                rectF8.set(((var_ - var_) / 2.0f) + f4, ((f2 - var_) / 2.0f) + f3, f4 + ((var_ + var_) / 2.0f), f3 + ((f2 + var_) / 2.0f));
+            } else {
+                rectF8.set(f4, f3, f4 + var_, f2 + f3);
+            }
+            drawable4.setBounds((int) rectF8.left, (int) rectF8.top, (int) rectF8.right, (int) rectF8.bottom);
+        }
+        if (this.isVisible) {
+            try {
+                drawable.setAlpha(i);
+                if (backgroundThreadDrawHolder4 == null) {
+                    drawable4.draw(canvas6);
+                } else if (drawable4 instanceof SvgHelper.SvgDrawable) {
+                    long j = backgroundThreadDrawHolder4.time;
+                    if (j == 0) {
+                        j = System.currentTimeMillis();
+                    }
+                    ((SvgHelper.SvgDrawable) drawable4).drawInternal(canvas, true, j, backgroundThreadDrawHolder4.imageX, backgroundThreadDrawHolder4.imageY, backgroundThreadDrawHolder4.imageW, backgroundThreadDrawHolder4.imageH);
+                } else {
+                    drawable4.draw(canvas6);
+                }
+            } catch (Exception e6) {
+                FileLog.e((Throwable) e6);
+            }
+        }
     }
 
     private void drawBitmapDrawable(Canvas canvas, BitmapDrawable bitmapDrawable, BackgroundThreadDrawHolder backgroundThreadDrawHolder, int i) {
@@ -4381,6 +3817,8 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
         Paint paint;
         /* access modifiers changed from: private */
         public float previousAlpha;
+        /* access modifiers changed from: private */
+        public Path roundPath;
         /* access modifiers changed from: private */
         public int[] roundRadius = new int[4];
         /* access modifiers changed from: private */

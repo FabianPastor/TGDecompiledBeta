@@ -46,6 +46,7 @@ import org.telegram.tgnet.TLRPC$TL_messagePeerReaction;
 import org.telegram.tgnet.TLRPC$TL_messages_getMessageReactionsList;
 import org.telegram.tgnet.TLRPC$TL_messages_messageReactionsList;
 import org.telegram.tgnet.TLRPC$TL_peerUser;
+import org.telegram.tgnet.TLRPC$TL_reactionCustomEmoji;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.tgnet.TLRPC$UserProfilePhoto;
 import org.telegram.ui.ActionBar.Theme;
@@ -94,6 +95,7 @@ public class ReactedUsersListView extends FrameLayout {
         super(context);
         TLRPC$Reaction tLRPC$Reaction;
         int i2;
+        TLRPC$Reaction tLRPC$Reaction2;
         this.currentAccount = i;
         this.message = messageObject;
         if (tLRPC$ReactionCount == null) {
@@ -192,6 +194,11 @@ public class ReactedUsersListView extends FrameLayout {
         r5.setIsSingleCell(true);
         this.loadingView.setItemsCount(this.predictiveCount);
         addView(this.loadingView, LayoutHelper.createFrame(-1, -1.0f));
+        if (!z && (tLRPC$Reaction2 = this.filter) != null && (tLRPC$Reaction2 instanceof TLRPC$TL_reactionCustomEmoji)) {
+            this.customReactionsEmoji.clear();
+            this.customReactionsEmoji.add(ReactionsLayoutInBubble.VisibleReaction.fromTLReaction(this.filter));
+            updateCustomReactionsButton();
+        }
         this.loadingView.setViewType(this.customReactionsEmoji.isEmpty() ? 16 : 23);
     }
 
@@ -213,13 +220,13 @@ public class ReactedUsersListView extends FrameLayout {
     public ReactedUsersListView setSeenUsers(List<TLRPC$User> list) {
         ArrayList arrayList = new ArrayList(list.size());
         for (TLRPC$User next : list) {
-            ArrayList arrayList2 = this.peerReactionMap.get(next.id);
-            if (arrayList2 == null) {
+            if (this.peerReactionMap.get(next.id) == null) {
                 TLRPC$TL_messagePeerReaction tLRPC$TL_messagePeerReaction = new TLRPC$TL_messagePeerReaction();
                 tLRPC$TL_messagePeerReaction.reaction = null;
                 TLRPC$TL_peerUser tLRPC$TL_peerUser = new TLRPC$TL_peerUser();
                 tLRPC$TL_messagePeerReaction.peer_id = tLRPC$TL_peerUser;
                 tLRPC$TL_peerUser.user_id = next.id;
+                ArrayList arrayList2 = new ArrayList();
                 arrayList2.add(tLRPC$TL_messagePeerReaction);
                 this.peerReactionMap.put(MessageObject.getPeerId(tLRPC$TL_messagePeerReaction.peer_id), arrayList2);
                 arrayList.add(tLRPC$TL_messagePeerReaction);

@@ -876,6 +876,7 @@ public final class R {
         public static final int msg_premium_prolfilestar = NUM;
         public static final int msg_premium_reactions = NUM;
         public static final int msg_premium_speed = NUM;
+        public static final int msg_premium_status = NUM;
         public static final int msg_premium_stickers = NUM;
         public static final int msg_premium_tools = NUM;
         public static final int msg_premium_uploads = NUM;

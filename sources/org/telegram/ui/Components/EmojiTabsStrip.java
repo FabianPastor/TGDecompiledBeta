@@ -757,6 +757,10 @@ public class EmojiTabsStrip extends ScrollableHorizontalScrollView {
                 setBackground(Theme.createRadSelectorDrawable(EmojiTabsStrip.this.selectorColor(), 8, 8));
             }
             AnonymousClass1 r4 = new ImageView(context, EmojiTabsStrip.this) {
+                /* access modifiers changed from: protected */
+                public void onDraw(Canvas canvas) {
+                }
+
                 public void invalidate() {
                     super.invalidate();
                     EmojiTabButton.this.updateLockImageReceiver();
@@ -764,10 +768,15 @@ public class EmojiTabsStrip extends ScrollableHorizontalScrollView {
 
                 /* access modifiers changed from: protected */
                 public void dispatchDraw(Canvas canvas) {
-                    if (getDrawable() != null) {
-                        getDrawable().setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
-                        getDrawable().setAlpha(255);
-                        getDrawable().draw(canvas);
+                    Drawable drawable = getDrawable();
+                    if (drawable != null) {
+                        drawable.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
+                        drawable.setAlpha(255);
+                        if (drawable instanceof AnimatedEmojiDrawable) {
+                            ((AnimatedEmojiDrawable) drawable).draw(canvas, false);
+                        } else {
+                            drawable.draw(canvas);
+                        }
                     }
                 }
             };

@@ -339,10 +339,6 @@ public class DrawerProfileCell extends FrameLayout implements NotificationCenter
                     float f = (float) dp2;
                     imageReceiver.setImageCoords(((float) (getMeasuredWidth() - dp2)) / 2.0f, ((float) (getMeasuredHeight() - dp2)) / 2.0f, f, f);
                     imageReceiver.draw(canvas);
-                    if (imageReceiver.getLottieAnimation() != null && imageReceiver.getLottieAnimation().isRunning() && imageReceiver.getLottieAnimation().isLastFrame()) {
-                        imageReceiver.onDetachedFromWindow();
-                        this.animations.remove(imageReceiver);
-                    }
                 } else if (obj instanceof AnimatedEmojiEffect) {
                     AnimatedEmojiEffect animatedEmojiEffect = (AnimatedEmojiEffect) obj;
                     animatedEmojiEffect.setBounds((int) (((float) (getMeasuredWidth() - dp)) / 2.0f), (int) (((float) (getMeasuredHeight() - dp)) / 2.0f), (int) (((float) (getMeasuredWidth() + dp)) / 2.0f), (int) (((float) (getMeasuredHeight() + dp)) / 2.0f));
@@ -396,31 +392,31 @@ public class DrawerProfileCell extends FrameLayout implements NotificationCenter
             } else {
                 tLRPC$TL_availableReaction = tLRPC$TL_availableReaction2;
             }
-            if (tLRPC$TL_availableReaction != null) {
-                ImageReceiver imageReceiver = new ImageReceiver();
-                imageReceiver.setParentView(this);
-                int i = this.animationUniq;
-                this.animationUniq = i + 1;
-                imageReceiver.setUniqKeyPrefix(Integer.toString(i));
-                ImageLocation forDocument = ImageLocation.getForDocument(tLRPC$TL_availableReaction.around_animation);
-                imageReceiver.setImage(forDocument, this.effectsSize + "_" + this.effectsSize + "_nolimit", (Drawable) null, "tgs", tLRPC$TL_availableReaction, 1);
-                imageReceiver.setAutoRepeat(0);
-                imageReceiver.onAttachedToWindow();
-                this.animations.add(imageReceiver);
+            if (tLRPC$Document != null || tLRPC$TL_availableReaction == null) {
+                if (tLRPC$Document == null) {
+                    animatedEmojiDrawable = AnimatedEmojiDrawable.make(2, UserConfig.selectedAccount, visibleReaction.documentId);
+                } else {
+                    animatedEmojiDrawable = AnimatedEmojiDrawable.make(2, UserConfig.selectedAccount, tLRPC$Document);
+                }
+                if (this.color != null) {
+                    animatedEmojiDrawable.setColorFilter(new PorterDuffColorFilter(this.color.intValue(), PorterDuff.Mode.MULTIPLY));
+                }
+                AnimatedEmojiEffect createFrom = AnimatedEmojiEffect.createFrom(animatedEmojiDrawable, false, !animatedEmojiDrawable.canOverrideColor());
+                createFrom.setView(this);
+                this.animations.add(createFrom);
                 invalidate();
                 return;
             }
-            if (tLRPC$Document == null) {
-                animatedEmojiDrawable = AnimatedEmojiDrawable.make(2, UserConfig.selectedAccount, visibleReaction.documentId);
-            } else {
-                animatedEmojiDrawable = AnimatedEmojiDrawable.make(2, UserConfig.selectedAccount, tLRPC$Document);
-            }
-            if (this.color != null) {
-                animatedEmojiDrawable.setColorFilter(new PorterDuffColorFilter(this.color.intValue(), PorterDuff.Mode.MULTIPLY));
-            }
-            AnimatedEmojiEffect createFrom = AnimatedEmojiEffect.createFrom(animatedEmojiDrawable, false, !animatedEmojiDrawable.canOverrideColor());
-            createFrom.setView(this);
-            this.animations.add(createFrom);
+            ImageReceiver imageReceiver = new ImageReceiver();
+            imageReceiver.setParentView(this);
+            int i = this.animationUniq;
+            this.animationUniq = i + 1;
+            imageReceiver.setUniqKeyPrefix(Integer.toString(i));
+            ImageLocation forDocument = ImageLocation.getForDocument(tLRPC$TL_availableReaction.around_animation);
+            imageReceiver.setImage(forDocument, this.effectsSize + "_" + this.effectsSize + "_nolimit", (Drawable) null, "tgs", tLRPC$TL_availableReaction, 1);
+            imageReceiver.setAutoRepeat(0);
+            imageReceiver.onAttachedToWindow();
+            this.animations.add(imageReceiver);
             invalidate();
         }
 

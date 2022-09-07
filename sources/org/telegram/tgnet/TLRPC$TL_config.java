@@ -44,7 +44,6 @@ public class TLRPC$TL_config extends TLObject {
     public int push_chat_limit;
     public int push_chat_period_ms;
     public int rating_e_decay;
-    public TLRPC$Reaction reactions_default;
     public boolean revoke_pm_inbox;
     public int revoke_pm_time_limit;
     public int revoke_time_limit;
@@ -156,9 +155,6 @@ public class TLRPC$TL_config extends TLObject {
             if ((this.flags & 4) != 0) {
                 this.base_lang_pack_version = abstractSerializedData.readInt32(z);
             }
-            if ((this.flags & 32768) != 0) {
-                this.reactions_default = TLRPC$Reaction.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
-            }
         } else if (z) {
             throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt322)}));
         }
@@ -249,9 +245,6 @@ public class TLRPC$TL_config extends TLObject {
         }
         if ((this.flags & 4) != 0) {
             abstractSerializedData.writeInt32(this.base_lang_pack_version);
-        }
-        if ((this.flags & 32768) != 0) {
-            this.reactions_default.serializeToStream(abstractSerializedData);
         }
     }
 }

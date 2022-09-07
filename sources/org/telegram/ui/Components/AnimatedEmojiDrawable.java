@@ -48,6 +48,7 @@ public class AnimatedEmojiDrawable extends Drawable {
     private boolean attached;
     /* access modifiers changed from: private */
     public int cacheType;
+    private Boolean canOverrideColorCached;
     private ColorFilter colorFilterToSet;
     private TLRPC$Document document;
     private long documentId;
@@ -384,6 +385,7 @@ public class AnimatedEmojiDrawable extends Drawable {
 
     public AnimatedEmojiDrawable(int i, int i2, long j) {
         new AnimatedFloat(1.0f, (Runnable) new AnimatedEmojiDrawable$$ExternalSyntheticLambda0(this), 0, 150, (TimeInterpolator) new LinearInterpolator());
+        this.canOverrideColorCached = null;
         this.cacheType = i;
         updateSize();
         this.documentId = j;
@@ -398,6 +400,7 @@ public class AnimatedEmojiDrawable extends Drawable {
 
     public AnimatedEmojiDrawable(int i, int i2, TLRPC$Document tLRPC$Document) {
         new AnimatedFloat(1.0f, (Runnable) new AnimatedEmojiDrawable$$ExternalSyntheticLambda0(this), 0, 150, (TimeInterpolator) new LinearInterpolator());
+        this.canOverrideColorCached = null;
         this.cacheType = i;
         this.document = tLRPC$Document;
         updateSize();
@@ -764,6 +767,15 @@ public class AnimatedEmojiDrawable extends Drawable {
     }
 
     public void draw(Canvas canvas) {
+        draw(canvas, true);
+    }
+
+    public void draw(Canvas canvas, boolean z) {
+        int saveCount = canvas.getSaveCount();
+        if (canOverrideColor() && z) {
+            canvas.save();
+            canvas.translate((float) AndroidUtilities.dp(-4.0f), 0.0f);
+        }
         ImageReceiver imageReceiver2 = this.imageReceiver;
         if (imageReceiver2 != null) {
             imageReceiver2.setImageCoords(getBounds());
@@ -771,9 +783,15 @@ public class AnimatedEmojiDrawable extends Drawable {
             this.imageReceiver.draw(canvas);
         }
         drawPlaceholder(canvas, (float) getBounds().centerX(), (float) getBounds().centerY(), ((float) getBounds().width()) / 2.0f);
+        canvas.restoreToCount(saveCount);
     }
 
     public void draw(Canvas canvas, Rect rect, float f) {
+        int saveCount = canvas.getSaveCount();
+        if (canOverrideColor()) {
+            canvas.save();
+            canvas.translate((float) AndroidUtilities.dp(-4.0f), 0.0f);
+        }
         ImageReceiver imageReceiver2 = this.imageReceiver;
         if (imageReceiver2 != null) {
             imageReceiver2.setImageCoords(rect);
@@ -783,9 +801,15 @@ public class AnimatedEmojiDrawable extends Drawable {
         if (rect != null) {
             drawPlaceholder(canvas, (float) rect.centerX(), (float) rect.centerY(), ((float) rect.width()) / 2.0f);
         }
+        canvas.restoreToCount(saveCount);
     }
 
-    public void draw(Canvas canvas, ImageReceiver.BackgroundThreadDrawHolder backgroundThreadDrawHolder) {
+    public void draw(Canvas canvas, ImageReceiver.BackgroundThreadDrawHolder backgroundThreadDrawHolder, boolean z) {
+        int saveCount = canvas.getSaveCount();
+        if (canOverrideColor() && z) {
+            canvas.save();
+            canvas.translate((float) AndroidUtilities.dp(-4.0f), 0.0f);
+        }
         ImageReceiver imageReceiver2 = this.imageReceiver;
         if (imageReceiver2 != null) {
             imageReceiver2.setAlpha(this.alpha);
@@ -796,6 +820,7 @@ public class AnimatedEmojiDrawable extends Drawable {
             float f2 = backgroundThreadDrawHolder.imageW;
             drawPlaceholder(canvas, f + (f2 / 2.0f), backgroundThreadDrawHolder.imageY + (backgroundThreadDrawHolder.imageH / 2.0f), f2 / 2.0f);
         }
+        canvas.restoreToCount(saveCount);
     }
 
     public void addView(View view) {
@@ -877,15 +902,22 @@ public class AnimatedEmojiDrawable extends Drawable {
     }
 
     public boolean canOverrideColor() {
+        Boolean bool = this.canOverrideColorCached;
+        if (bool != null) {
+            return bool.booleanValue();
+        }
         TLRPC$Document tLRPC$Document = this.document;
+        boolean z = false;
         if (tLRPC$Document == null) {
             return false;
         }
         TLRPC$InputStickerSet inputStickerSet = MessageObject.getInputStickerSet(tLRPC$Document);
         if ((inputStickerSet instanceof TLRPC$TL_inputStickerSetEmojiDefaultStatuses) || ((inputStickerSet instanceof TLRPC$TL_inputStickerSetID) && inputStickerSet.id == 773947703670341676L)) {
-            return true;
+            z = true;
         }
-        return false;
+        Boolean valueOf = Boolean.valueOf(z);
+        this.canOverrideColorCached = valueOf;
+        return valueOf.booleanValue();
     }
 
     public int getAlpha() {

@@ -3349,14 +3349,14 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                     ImageViewEmoji imageViewEmoji = this.drawInBackgroundViews.get(i);
                     AnimatedEmojiDrawable animatedEmojiDrawable = imageViewEmoji.drawable;
                     if (animatedEmojiDrawable != null) {
-                        animatedEmojiDrawable.draw(canvas, imageViewEmoji.backgroundThreadDrawHolder);
+                        animatedEmojiDrawable.draw(canvas, imageViewEmoji.backgroundThreadDrawHolder, false);
                     }
                 }
             }
 
             /* access modifiers changed from: protected */
-            /* JADX WARNING: Removed duplicated region for block: B:34:0x017d  */
-            /* JADX WARNING: Removed duplicated region for block: B:35:0x0194  */
+            /* JADX WARNING: Removed duplicated region for block: B:34:0x017e  */
+            /* JADX WARNING: Removed duplicated region for block: B:35:0x0196  */
             /* Code decompiled incorrectly, please refer to instructions dump. */
             public void drawInUiThread(android.graphics.Canvas r21, float r22) {
                 /*
@@ -3364,7 +3364,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                     r0 = r20
                     r1 = r21
                     java.util.ArrayList<org.telegram.ui.Components.EmojiView$ImageViewEmoji> r2 = r0.imageViewEmojis
-                    if (r2 == 0) goto L_0x019f
+                    if (r2 == 0) goto L_0x01a2
                     r21.save()
                     int r2 = r0.startOffset
                     int r2 = -r2
@@ -3376,7 +3376,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                 L_0x0016:
                     java.util.ArrayList<org.telegram.ui.Components.EmojiView$ImageViewEmoji> r6 = r0.imageViewEmojis
                     int r6 = r6.size()
-                    if (r5 >= r6) goto L_0x019c
+                    if (r5 >= r6) goto L_0x019f
                     java.util.ArrayList<org.telegram.ui.Components.EmojiView$ImageViewEmoji> r6 = r0.imageViewEmojis
                     java.lang.Object r6 = r6.get(r5)
                     org.telegram.ui.Components.EmojiView$ImageViewEmoji r6 = (org.telegram.ui.Components.EmojiView.ImageViewEmoji) r6
@@ -3391,11 +3391,12 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                     long r8 = r8.getDocumentId()
                     java.lang.Object r7 = r7.get(r8)
                     org.telegram.ui.Components.AnimatedEmojiDrawable r7 = (org.telegram.ui.Components.AnimatedEmojiDrawable) r7
-                    if (r7 != 0) goto L_0x0048
+                    if (r7 != 0) goto L_0x0049
                 L_0x0045:
+                    r2 = 0
                     r12 = 0
-                    goto L_0x0197
-                L_0x0048:
+                    goto L_0x019a
+                L_0x0049:
                     int r8 = r6.getHeight()
                     float r8 = (float) r8
                     r9 = 1022739087(0x3cf5CLASSNAMEf, float:0.03)
@@ -3418,23 +3419,23 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                     float r8 = r6.pressedProgress
                     r10 = 1065353216(0x3var_, float:1.0)
                     int r11 = (r8 > r3 ? 1 : (r8 == r3 ? 0 : -1))
-                    if (r11 == 0) goto L_0x008f
+                    if (r11 == 0) goto L_0x0090
                     r11 = 1061997773(0x3f4ccccd, float:0.8)
                     r12 = 1045220557(0x3e4ccccd, float:0.2)
                     float r8 = r10 - r8
                     float r8 = r8 * r12
                     float r8 = r8 + r11
                     float r8 = r8 * r10
-                    goto L_0x0091
-                L_0x008f:
+                    goto L_0x0092
+                L_0x0090:
                     r8 = 1065353216(0x3var_, float:1.0)
-                L_0x0091:
+                L_0x0092:
                     org.telegram.ui.Components.EmojiView$EmojiGridView r11 = org.telegram.ui.Components.EmojiView.EmojiGridView.this
                     org.telegram.ui.Components.EmojiView r11 = org.telegram.ui.Components.EmojiView.this
                     long r11 = r11.animateExpandStartTime
                     r13 = 0
                     int r15 = (r11 > r13 ? 1 : (r11 == r13 ? 0 : -1))
-                    if (r15 <= 0) goto L_0x00b8
+                    if (r15 <= 0) goto L_0x00b9
                     long r11 = android.os.SystemClock.elapsedRealtime()
                     org.telegram.ui.Components.EmojiView$EmojiGridView r15 = org.telegram.ui.Components.EmojiView.EmojiGridView.this
                     org.telegram.ui.Components.EmojiView r15 = org.telegram.ui.Components.EmojiView.this
@@ -3443,26 +3444,26 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                     org.telegram.ui.Components.EmojiView$EmojiGridView r15 = org.telegram.ui.Components.EmojiView.EmojiGridView.this
                     long r15 = r15.animateExpandDuration()
                     int r17 = (r11 > r15 ? 1 : (r11 == r15 ? 0 : -1))
-                    if (r17 >= 0) goto L_0x00b8
+                    if (r17 >= 0) goto L_0x00b9
                     r11 = 1
-                    goto L_0x00b9
-                L_0x00b8:
-                    r11 = 0
+                    goto L_0x00ba
                 L_0x00b9:
-                    if (r11 == 0) goto L_0x016d
+                    r11 = 0
+                L_0x00ba:
+                    if (r11 == 0) goto L_0x016e
                     org.telegram.ui.Components.EmojiView$EmojiGridView r11 = org.telegram.ui.Components.EmojiView.EmojiGridView.this
                     org.telegram.ui.Components.EmojiView r11 = org.telegram.ui.Components.EmojiView.this
                     int r11 = r11.animateExpandFromPosition
-                    if (r11 < 0) goto L_0x016d
+                    if (r11 < 0) goto L_0x016e
                     org.telegram.ui.Components.EmojiView$EmojiGridView r11 = org.telegram.ui.Components.EmojiView.EmojiGridView.this
                     org.telegram.ui.Components.EmojiView r11 = org.telegram.ui.Components.EmojiView.this
                     int r11 = r11.animateExpandToPosition
-                    if (r11 < 0) goto L_0x016d
+                    if (r11 < 0) goto L_0x016e
                     org.telegram.ui.Components.EmojiView$EmojiGridView r11 = org.telegram.ui.Components.EmojiView.EmojiGridView.this
                     org.telegram.ui.Components.EmojiView r11 = org.telegram.ui.Components.EmojiView.this
                     long r11 = r11.animateExpandStartTime
                     int r15 = (r11 > r13 ? 1 : (r11 == r13 ? 0 : -1))
-                    if (r15 <= 0) goto L_0x016d
+                    if (r15 <= 0) goto L_0x016e
                     org.telegram.ui.Components.EmojiView$EmojiGridView r11 = org.telegram.ui.Components.EmojiView.EmojiGridView.this
                     int r6 = r11.getChildAdapterPosition(r6)
                     org.telegram.ui.Components.EmojiView$EmojiGridView r11 = org.telegram.ui.Components.EmojiView.EmojiGridView.this
@@ -3476,8 +3477,8 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                     org.telegram.ui.Components.EmojiView r12 = org.telegram.ui.Components.EmojiView.this
                     int r12 = r12.animateExpandFromPosition
                     int r11 = r11 - r12
-                    if (r6 < 0) goto L_0x016d
-                    if (r6 >= r11) goto L_0x016d
+                    if (r6 < 0) goto L_0x016e
+                    if (r6 >= r11) goto L_0x016e
                     org.telegram.ui.Components.EmojiView$EmojiGridView r12 = org.telegram.ui.Components.EmojiView.EmojiGridView.this
                     long r12 = r12.animateExpandAppearDuration()
                     float r12 = (float) r12
@@ -3527,35 +3528,37 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                     float r2 = r2 + r3
                     float r8 = r8 * r2
                     float r4 = r4 * r13
-                    goto L_0x016e
-                L_0x016d:
-                    r12 = 0
+                    goto L_0x016f
                 L_0x016e:
+                    r12 = 0
+                L_0x016f:
                     r2 = 1132396544(0x437var_, float:255.0)
                     float r2 = r2 * r4
                     int r2 = (int) r2
                     r7.setAlpha(r2)
                     r7.setBounds(r9)
                     int r2 = (r8 > r10 ? 1 : (r8 == r10 ? 0 : -1))
-                    if (r2 == 0) goto L_0x0194
+                    if (r2 == 0) goto L_0x0196
                     r21.save()
                     int r2 = r9.centerX()
                     float r2 = (float) r2
                     int r3 = r9.centerY()
                     float r3 = (float) r3
                     r1.scale(r8, r8, r2, r3)
-                    r7.draw(r1)
+                    r2 = 0
+                    r7.draw(r1, r2)
                     r21.restore()
-                    goto L_0x0197
-                L_0x0194:
-                    r7.draw(r1)
-                L_0x0197:
+                    goto L_0x019a
+                L_0x0196:
+                    r2 = 0
+                    r7.draw(r1, r2)
+                L_0x019a:
                     int r5 = r5 + 1
                     r3 = 0
                     goto L_0x0016
-                L_0x019c:
-                    r21.restore()
                 L_0x019f:
+                    r21.restore()
+                L_0x01a2:
                     return
                 */
                 throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.EmojiView.EmojiGridView.DrawingInBackgroundLine.drawInUiThread(android.graphics.Canvas, float):void");

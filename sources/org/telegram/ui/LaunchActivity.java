@@ -3048,7 +3048,7 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
     /* JADX WARNING: type inference failed for: r8v5 */
     /* JADX WARNING: type inference failed for: r8v6 */
     /* JADX WARNING: type inference failed for: r8v7 */
-    /* JADX WARNING: type inference failed for: r3v0, types: [boolean, int] */
+    /* JADX WARNING: type inference failed for: r3v0, types: [int, boolean] */
     /* JADX WARNING: type inference failed for: r8v8 */
     /* JADX WARNING: type inference failed for: r8v10 */
     /* JADX WARNING: type inference failed for: r8v11 */
