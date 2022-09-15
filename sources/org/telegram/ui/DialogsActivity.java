@@ -441,7 +441,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     public long startArchivePullingTime;
     /* access modifiers changed from: private */
     public boolean startedTracking;
-    private AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable statusDrawable;
+    /* access modifiers changed from: private */
+    public AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable statusDrawable;
     /* access modifiers changed from: private */
     public ActionBarMenuItem switchItem;
     /* access modifiers changed from: private */
@@ -533,13 +534,13 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         /* access modifiers changed from: private */
         public SwipeController swipeController;
 
-        static /* synthetic */ int access$11208(ViewPage viewPage) {
+        static /* synthetic */ int access$11308(ViewPage viewPage) {
             int i = viewPage.lastItemsCount;
             viewPage.lastItemsCount = i + 1;
             return i;
         }
 
-        static /* synthetic */ int access$11210(ViewPage viewPage) {
+        static /* synthetic */ int access$11310(ViewPage viewPage) {
             int i = viewPage.lastItemsCount;
             viewPage.lastItemsCount = i - 1;
             return i;
@@ -563,6 +564,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         private int startedTrackingX;
         private int startedTrackingY;
         private VelocityTracker velocityTracker;
+        private boolean wasPortrait;
         private Paint windowBackgroundPaint = new Paint();
 
         public boolean hasOverlappingRendering() {
@@ -937,6 +939,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             int i3;
             int size = View.MeasureSpec.getSize(i);
             int size2 = View.MeasureSpec.getSize(i2);
+            boolean z = size2 > size;
             setMeasuredDimension(size, size2);
             int paddingTop = size2 - getPaddingTop();
             if (DialogsActivity.this.doneItem != null) {
@@ -978,25 +981,25 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 if (!(childAt == null || childAt.getVisibility() == 8 || childAt == DialogsActivity.this.commentView || childAt == DialogsActivity.this.actionBar)) {
                     if (childAt instanceof DatabaseMigrationHint) {
                         childAt.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec(Math.max(AndroidUtilities.dp(10.0f), (((View.MeasureSpec.getSize(i2) + measureKeyboardHeight) - this.inputFieldHeight) + AndroidUtilities.dp(2.0f)) - DialogsActivity.this.actionBar.getMeasuredHeight()), NUM));
-                    } else if (childAt instanceof ViewPage) {
-                        int makeMeasureSpec = View.MeasureSpec.makeMeasureSpec(size, NUM);
-                        if (DialogsActivity.this.filterTabsView == null || DialogsActivity.this.filterTabsView.getVisibility() != 0) {
-                            i3 = (((paddingTop - this.inputFieldHeight) + AndroidUtilities.dp(2.0f)) - (DialogsActivity.this.onlySelect ? 0 : DialogsActivity.this.actionBar.getMeasuredHeight())) - DialogsActivity.this.topPadding;
-                        } else {
-                            i3 = (((paddingTop - this.inputFieldHeight) + AndroidUtilities.dp(2.0f)) - AndroidUtilities.dp(44.0f)) - DialogsActivity.this.topPadding;
-                        }
-                        if (DialogsActivity.this.filtersTabAnimator == null || DialogsActivity.this.filterTabsView == null || DialogsActivity.this.filterTabsView.getVisibility() != 0) {
-                            childAt.setTranslationY(f);
-                        } else {
-                            i3 = (int) (((float) i3) + DialogsActivity.this.filterTabsMoveFrom);
-                        }
-                        DialogsActivity dialogsActivity = DialogsActivity.this;
-                        int i6 = (dialogsActivity.isSlideBackTransition || dialogsActivity.isDrawerTransition) ? (int) (((float) i3) * 0.05f) : 0;
-                        childAt.setPadding(childAt.getPaddingLeft(), childAt.getPaddingTop(), childAt.getPaddingRight(), i6);
-                        childAt.measure(makeMeasureSpec, View.MeasureSpec.makeMeasureSpec(Math.max(AndroidUtilities.dp(10.0f), i3 + i6), NUM));
-                        childAt.setPivotX((float) (childAt.getMeasuredWidth() / 2));
                     } else {
-                        if (childAt == DialogsActivity.this.searchViewPager) {
+                        if (childAt instanceof ViewPage) {
+                            int makeMeasureSpec = View.MeasureSpec.makeMeasureSpec(size, NUM);
+                            if (DialogsActivity.this.filterTabsView == null || DialogsActivity.this.filterTabsView.getVisibility() != 0) {
+                                i3 = (((paddingTop - this.inputFieldHeight) + AndroidUtilities.dp(2.0f)) - (DialogsActivity.this.onlySelect ? 0 : DialogsActivity.this.actionBar.getMeasuredHeight())) - DialogsActivity.this.topPadding;
+                            } else {
+                                i3 = (((paddingTop - this.inputFieldHeight) + AndroidUtilities.dp(2.0f)) - AndroidUtilities.dp(44.0f)) - DialogsActivity.this.topPadding;
+                            }
+                            if (DialogsActivity.this.filtersTabAnimator == null || DialogsActivity.this.filterTabsView == null || DialogsActivity.this.filterTabsView.getVisibility() != 0) {
+                                childAt.setTranslationY(f);
+                            } else {
+                                i3 = (int) (((float) i3) + DialogsActivity.this.filterTabsMoveFrom);
+                            }
+                            DialogsActivity dialogsActivity = DialogsActivity.this;
+                            int i6 = (dialogsActivity.isSlideBackTransition || dialogsActivity.isDrawerTransition) ? (int) (((float) i3) * 0.05f) : 0;
+                            childAt.setPadding(childAt.getPaddingLeft(), childAt.getPaddingTop(), childAt.getPaddingRight(), i6);
+                            childAt.measure(makeMeasureSpec, View.MeasureSpec.makeMeasureSpec(Math.max(AndroidUtilities.dp(10.0f), i3 + i6), NUM));
+                            childAt.setPivotX((float) (childAt.getMeasuredWidth() / 2));
+                        } else if (childAt == DialogsActivity.this.searchViewPager) {
                             DialogsActivity.this.searchViewPager.setTranslationY(0.0f);
                             childAt.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec(Math.max(AndroidUtilities.dp(10.0f), ((((View.MeasureSpec.getSize(i2) + measureKeyboardHeight) - this.inputFieldHeight) + AndroidUtilities.dp(2.0f)) - (DialogsActivity.this.onlySelect ? 0 : DialogsActivity.this.actionBar.getMeasuredHeight())) - DialogsActivity.this.topPadding) - (DialogsActivity.this.searchTabsView == null ? 0 : AndroidUtilities.dp(44.0f)), NUM));
                             childAt.setPivotX((float) (childAt.getMeasuredWidth() / 2));
@@ -1015,6 +1018,18 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 }
                 i5++;
                 f = 0.0f;
+            }
+            if (z != this.wasPortrait) {
+                post(new DialogsActivity$ContentView$$ExternalSyntheticLambda0(this));
+                this.wasPortrait = z;
+            }
+        }
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$onMeasure$0() {
+            if (DialogsActivity.this.selectAnimatedEmojiDialog != null) {
+                DialogsActivity.this.selectAnimatedEmojiDialog.dismiss();
+                SelectAnimatedEmojiDialog.SelectAnimatedEmojiDialogWindow unused = DialogsActivity.this.selectAnimatedEmojiDialog = null;
             }
         }
 
@@ -1383,7 +1398,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     } else {
                         dispatchTouchEvent(MotionEvent.obtain(0, 0, 3, 0.0f, 0.0f, 0));
                         DialogsActivity.this.filterTabsView.shakeLock(DialogsActivity.this.viewPages[1].selectedType);
-                        AndroidUtilities.runOnUIThread(new DialogsActivity$ContentView$$ExternalSyntheticLambda0(this), 200);
+                        AndroidUtilities.runOnUIThread(new DialogsActivity$ContentView$$ExternalSyntheticLambda1(this), 200);
                         return false;
                     }
                 }
@@ -1486,7 +1501,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         }
 
         /* access modifiers changed from: private */
-        public /* synthetic */ void lambda$onTouchEvent$0() {
+        public /* synthetic */ void lambda$onTouchEvent$1() {
             DialogsActivity.this.showDialog(new LimitReachedBottomSheet(DialogsActivity.this, getContext(), 3, DialogsActivity.this.currentAccount));
         }
 
@@ -1728,11 +1743,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             boolean z = false;
             int unused = this.parentPage.archivePullViewState = SharedConfig.archiveHidden ? 2 : 0;
             if (this.parentPage.pullForegroundDrawable != null) {
-                PullForegroundDrawable access$10600 = this.parentPage.pullForegroundDrawable;
+                PullForegroundDrawable access$10700 = this.parentPage.pullForegroundDrawable;
                 if (this.parentPage.archivePullViewState != 0) {
                     z = true;
                 }
-                access$10600.setWillDraw(z);
+                access$10700.setWillDraw(z);
             }
         }
 
@@ -2074,7 +2089,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 if (DialogsActivity.this.getMessagesController().isPromoDialog(tLRPC$Dialog.id, false)) {
                     DialogsActivity.this.getMessagesController().hidePromoDialog();
                     this.parentPage.dialogsItemAnimator.prepareForRemove();
-                    ViewPage.access$11210(this.parentPage);
+                    ViewPage.access$11310(this.parentPage);
                     this.parentPage.dialogsAdapter.notifyItemRemoved(i2);
                     int unused2 = DialogsActivity.this.dialogRemoveFinished = 2;
                     return;
@@ -2082,7 +2097,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 int addDialogToFolder = DialogsActivity.this.getMessagesController().addDialogToFolder(tLRPC$Dialog.id, DialogsActivity.this.folderId == 0 ? 1 : 0, -1, 0);
                 if (!(addDialogToFolder == 2 && i2 == 0)) {
                     this.parentPage.dialogsItemAnimator.prepareForRemove();
-                    ViewPage.access$11210(this.parentPage);
+                    ViewPage.access$11310(this.parentPage);
                     this.parentPage.dialogsAdapter.notifyItemRemoved(i2);
                     int unused3 = DialogsActivity.this.dialogRemoveFinished = 2;
                 }
@@ -2094,7 +2109,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                             DialogsActivity.this.setDialogsListFrozen(true);
                             this.parentPage.dialogsAdapter.notifyItemChanged(0);
                         } else {
-                            ViewPage.access$11208(this.parentPage);
+                            ViewPage.access$11308(this.parentPage);
                             this.parentPage.dialogsAdapter.notifyItemInserted(0);
                             if (!SharedConfig.archiveHidden && this.parentPage.layoutManager.findFirstVisibleItemPosition() == 0) {
                                 boolean unused5 = DialogsActivity.this.disableActionBarScrolling = true;
@@ -2140,7 +2155,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     int unused3 = DialogsActivity.this.dialogInsertFinished = 2;
                     DialogsActivity.this.setDialogsListFrozen(true);
                     this.parentPage.dialogsItemAnimator.prepareForRemove();
-                    ViewPage.access$11208(this.parentPage);
+                    ViewPage.access$11308(this.parentPage);
                     this.parentPage.dialogsAdapter.notifyItemInserted(indexOf);
                 }
                 if (dialogs2.isEmpty()) {
@@ -2153,7 +2168,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     }
                     DialogsActivity.this.frozenDialogsList.remove(0);
                     this.parentPage.dialogsItemAnimator.prepareForRemove();
-                    ViewPage.access$11210(this.parentPage);
+                    ViewPage.access$11310(this.parentPage);
                     this.parentPage.dialogsAdapter.notifyItemRemoved(0);
                     return;
                 }
@@ -2294,120 +2309,131 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:25:0x00cc  */
-    /* JADX WARNING: Removed duplicated region for block: B:30:0x00df  */
-    /* JADX WARNING: Removed duplicated region for block: B:34:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:25:0x00db  */
+    /* JADX WARNING: Removed duplicated region for block: B:30:0x00ee  */
+    /* JADX WARNING: Removed duplicated region for block: B:39:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void updateStatus(org.telegram.tgnet.TLRPC$User r7, boolean r8) {
+    public void updateStatus(org.telegram.tgnet.TLRPC$User r8, boolean r9) {
         /*
-            r6 = this;
-            org.telegram.ui.Components.AnimatedEmojiDrawable$SwapAnimatedEmojiDrawable r0 = r6.statusDrawable
-            if (r0 == 0) goto L_0x00f2
-            org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
+            r7 = this;
+            org.telegram.ui.Components.AnimatedEmojiDrawable$SwapAnimatedEmojiDrawable r0 = r7.statusDrawable
+            if (r0 == 0) goto L_0x010a
+            org.telegram.ui.ActionBar.ActionBar r0 = r7.actionBar
             if (r0 != 0) goto L_0x000a
-            goto L_0x00f2
+            goto L_0x010a
         L_0x000a:
             java.lang.String r0 = "profile_verifiedBackground"
-            if (r7 == 0) goto L_0x0039
-            org.telegram.tgnet.TLRPC$EmojiStatus r1 = r7.emoji_status
-            boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_emojiStatusUntil
-            if (r2 == 0) goto L_0x0039
-            org.telegram.tgnet.TLRPC$TL_emojiStatusUntil r1 = (org.telegram.tgnet.TLRPC$TL_emojiStatusUntil) r1
-            int r1 = r1.until
-            long r2 = java.lang.System.currentTimeMillis()
-            r4 = 1000(0x3e8, double:4.94E-321)
-            long r2 = r2 / r4
-            int r3 = (int) r2
-            if (r1 <= r3) goto L_0x0039
-            org.telegram.ui.Components.AnimatedEmojiDrawable$SwapAnimatedEmojiDrawable r1 = r6.statusDrawable
-            org.telegram.tgnet.TLRPC$EmojiStatus r7 = r7.emoji_status
-            org.telegram.tgnet.TLRPC$TL_emojiStatusUntil r7 = (org.telegram.tgnet.TLRPC$TL_emojiStatusUntil) r7
-            long r2 = r7.document_id
-            r1.set((long) r2, (boolean) r8)
-            org.telegram.ui.ActionBar.ActionBar r7 = r6.actionBar
-            org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda25 r8 = new org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda25
-            r8.<init>(r6)
-            r7.setRightDrawableOnClick(r8)
-            goto L_0x00bb
-        L_0x0039:
-            if (r7 == 0) goto L_0x0055
-            org.telegram.tgnet.TLRPC$EmojiStatus r1 = r7.emoji_status
-            boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_emojiStatus
-            if (r2 == 0) goto L_0x0055
-            org.telegram.ui.Components.AnimatedEmojiDrawable$SwapAnimatedEmojiDrawable r7 = r6.statusDrawable
-            org.telegram.tgnet.TLRPC$TL_emojiStatus r1 = (org.telegram.tgnet.TLRPC$TL_emojiStatus) r1
-            long r1 = r1.document_id
-            r7.set((long) r1, (boolean) r8)
-            org.telegram.ui.ActionBar.ActionBar r7 = r6.actionBar
-            org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda19 r8 = new org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda19
-            r8.<init>(r6)
-            r7.setRightDrawableOnClick(r8)
-            goto L_0x00bb
-        L_0x0055:
-            if (r7 == 0) goto L_0x00b0
-            int r1 = r6.currentAccount
-            org.telegram.messenger.MessagesController r1 = org.telegram.messenger.MessagesController.getInstance(r1)
-            boolean r7 = r1.isPremiumUser(r7)
-            if (r7 == 0) goto L_0x00b0
-            android.graphics.drawable.Drawable r7 = r6.premiumStar
-            if (r7 != 0) goto L_0x008e
-            android.content.Context r7 = r6.getContext()
-            android.content.res.Resources r7 = r7.getResources()
-            int r1 = org.telegram.messenger.R.drawable.msg_premium_liststar
-            android.graphics.drawable.Drawable r7 = r7.getDrawable(r1)
-            android.graphics.drawable.Drawable r7 = r7.mutate()
-            r6.premiumStar = r7
-            org.telegram.ui.DialogsActivity$2 r7 = new org.telegram.ui.DialogsActivity$2
-            android.graphics.drawable.Drawable r1 = r6.premiumStar
-            r2 = 1099956224(0x41900000, float:18.0)
-            int r3 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            r7.<init>(r6, r1, r3, r2)
-            r6.premiumStar = r7
-        L_0x008e:
-            android.graphics.drawable.Drawable r7 = r6.premiumStar
-            android.graphics.PorterDuffColorFilter r1 = new android.graphics.PorterDuffColorFilter
-            int r2 = org.telegram.ui.ActionBar.Theme.getColor(r0)
-            android.graphics.PorterDuff$Mode r3 = android.graphics.PorterDuff.Mode.MULTIPLY
-            r1.<init>(r2, r3)
-            r7.setColorFilter(r1)
-            org.telegram.ui.Components.AnimatedEmojiDrawable$SwapAnimatedEmojiDrawable r7 = r6.statusDrawable
-            android.graphics.drawable.Drawable r1 = r6.premiumStar
-            r7.set((android.graphics.drawable.Drawable) r1, (boolean) r8)
-            org.telegram.ui.ActionBar.ActionBar r7 = r6.actionBar
-            org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda24 r8 = new org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda24
-            r8.<init>(r6)
-            r7.setRightDrawableOnClick(r8)
-            goto L_0x00bb
-        L_0x00b0:
-            org.telegram.ui.Components.AnimatedEmojiDrawable$SwapAnimatedEmojiDrawable r7 = r6.statusDrawable
             r1 = 0
-            r7.set((android.graphics.drawable.Drawable) r1, (boolean) r8)
-            org.telegram.ui.ActionBar.ActionBar r7 = r6.actionBar
-            r7.setRightDrawableOnClick(r1)
-        L_0x00bb:
-            org.telegram.ui.Components.AnimatedEmojiDrawable$SwapAnimatedEmojiDrawable r7 = r6.statusDrawable
-            int r8 = org.telegram.ui.ActionBar.Theme.getColor(r0)
-            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
-            r7.setColor(r8)
-            org.telegram.ui.Cells.DrawerProfileCell$AnimatedStatusView r7 = r6.animatedStatusView
-            if (r7 == 0) goto L_0x00d3
-            int r8 = org.telegram.ui.ActionBar.Theme.getColor(r0)
-            r7.setColor(r8)
-        L_0x00d3:
-            org.telegram.ui.SelectAnimatedEmojiDialog$SelectAnimatedEmojiDialogWindow r7 = r6.selectAnimatedEmojiDialog
-            if (r7 == 0) goto L_0x00f2
-            android.view.View r7 = r7.getContentView()
-            boolean r7 = r7 instanceof org.telegram.ui.SelectAnimatedEmojiDialog
-            if (r7 == 0) goto L_0x00f2
-            org.telegram.ui.SelectAnimatedEmojiDialog$SelectAnimatedEmojiDialogWindow r7 = r6.selectAnimatedEmojiDialog
-            android.view.View r7 = r7.getContentView()
-            org.telegram.ui.SelectAnimatedEmojiDialog r7 = (org.telegram.ui.SelectAnimatedEmojiDialog) r7
-            org.telegram.ui.Components.AnimatedEmojiDrawable$SwapAnimatedEmojiDrawable r8 = r6.statusDrawable
-            org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
-            org.telegram.ui.ActionBar.SimpleTextView r0 = r0.getTitleTextView()
-            r7.setScrimDrawable(r8, r0)
-        L_0x00f2:
+            if (r8 == 0) goto L_0x003f
+            org.telegram.tgnet.TLRPC$EmojiStatus r2 = r8.emoji_status
+            boolean r3 = r2 instanceof org.telegram.tgnet.TLRPC$TL_emojiStatusUntil
+            if (r3 == 0) goto L_0x003f
+            org.telegram.tgnet.TLRPC$TL_emojiStatusUntil r2 = (org.telegram.tgnet.TLRPC$TL_emojiStatusUntil) r2
+            int r2 = r2.until
+            long r3 = java.lang.System.currentTimeMillis()
+            r5 = 1000(0x3e8, double:4.94E-321)
+            long r3 = r3 / r5
+            int r4 = (int) r3
+            if (r2 <= r4) goto L_0x003f
+            org.telegram.ui.Components.AnimatedEmojiDrawable$SwapAnimatedEmojiDrawable r2 = r7.statusDrawable
+            org.telegram.tgnet.TLRPC$EmojiStatus r8 = r8.emoji_status
+            org.telegram.tgnet.TLRPC$TL_emojiStatusUntil r8 = (org.telegram.tgnet.TLRPC$TL_emojiStatusUntil) r8
+            long r3 = r8.document_id
+            r2.set((long) r3, (boolean) r9)
+            org.telegram.ui.ActionBar.ActionBar r8 = r7.actionBar
+            org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda25 r9 = new org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda25
+            r9.<init>(r7)
+            r8.setRightDrawableOnClick(r9)
+            int r8 = r7.currentAccount
+            org.telegram.ui.SelectAnimatedEmojiDialog.preload(r8)
+            goto L_0x00ca
+        L_0x003f:
+            if (r8 == 0) goto L_0x0060
+            org.telegram.tgnet.TLRPC$EmojiStatus r2 = r8.emoji_status
+            boolean r3 = r2 instanceof org.telegram.tgnet.TLRPC$TL_emojiStatus
+            if (r3 == 0) goto L_0x0060
+            org.telegram.ui.Components.AnimatedEmojiDrawable$SwapAnimatedEmojiDrawable r8 = r7.statusDrawable
+            org.telegram.tgnet.TLRPC$TL_emojiStatus r2 = (org.telegram.tgnet.TLRPC$TL_emojiStatus) r2
+            long r2 = r2.document_id
+            r8.set((long) r2, (boolean) r9)
+            org.telegram.ui.ActionBar.ActionBar r8 = r7.actionBar
+            org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda19 r9 = new org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda19
+            r9.<init>(r7)
+            r8.setRightDrawableOnClick(r9)
+            int r8 = r7.currentAccount
+            org.telegram.ui.SelectAnimatedEmojiDialog.preload(r8)
+            goto L_0x00ca
+        L_0x0060:
+            if (r8 == 0) goto L_0x00c0
+            int r2 = r7.currentAccount
+            org.telegram.messenger.MessagesController r2 = org.telegram.messenger.MessagesController.getInstance(r2)
+            boolean r8 = r2.isPremiumUser(r8)
+            if (r8 == 0) goto L_0x00c0
+            android.graphics.drawable.Drawable r8 = r7.premiumStar
+            if (r8 != 0) goto L_0x0099
+            android.content.Context r8 = r7.getContext()
+            android.content.res.Resources r8 = r8.getResources()
+            int r2 = org.telegram.messenger.R.drawable.msg_premium_liststar
+            android.graphics.drawable.Drawable r8 = r8.getDrawable(r2)
+            android.graphics.drawable.Drawable r8 = r8.mutate()
+            r7.premiumStar = r8
+            org.telegram.ui.DialogsActivity$2 r8 = new org.telegram.ui.DialogsActivity$2
+            android.graphics.drawable.Drawable r2 = r7.premiumStar
+            r3 = 1099956224(0x41900000, float:18.0)
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            r8.<init>(r7, r2, r4, r3)
+            r7.premiumStar = r8
+        L_0x0099:
+            android.graphics.drawable.Drawable r8 = r7.premiumStar
+            android.graphics.PorterDuffColorFilter r2 = new android.graphics.PorterDuffColorFilter
+            int r3 = org.telegram.ui.ActionBar.Theme.getColor(r0)
+            android.graphics.PorterDuff$Mode r4 = android.graphics.PorterDuff.Mode.MULTIPLY
+            r2.<init>(r3, r4)
+            r8.setColorFilter(r2)
+            org.telegram.ui.Components.AnimatedEmojiDrawable$SwapAnimatedEmojiDrawable r8 = r7.statusDrawable
+            android.graphics.drawable.Drawable r2 = r7.premiumStar
+            r8.set((android.graphics.drawable.Drawable) r2, (boolean) r9)
+            org.telegram.ui.ActionBar.ActionBar r8 = r7.actionBar
+            org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda24 r9 = new org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda24
+            r9.<init>(r7)
+            r8.setRightDrawableOnClick(r9)
+            int r8 = r7.currentAccount
+            org.telegram.ui.SelectAnimatedEmojiDialog.preload(r8)
+            goto L_0x00ca
+        L_0x00c0:
+            org.telegram.ui.Components.AnimatedEmojiDrawable$SwapAnimatedEmojiDrawable r8 = r7.statusDrawable
+            r8.set((android.graphics.drawable.Drawable) r1, (boolean) r9)
+            org.telegram.ui.ActionBar.ActionBar r8 = r7.actionBar
+            r8.setRightDrawableOnClick(r1)
+        L_0x00ca:
+            org.telegram.ui.Components.AnimatedEmojiDrawable$SwapAnimatedEmojiDrawable r8 = r7.statusDrawable
+            int r9 = org.telegram.ui.ActionBar.Theme.getColor(r0)
+            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            r8.setColor(r9)
+            org.telegram.ui.Cells.DrawerProfileCell$AnimatedStatusView r8 = r7.animatedStatusView
+            if (r8 == 0) goto L_0x00e2
+            int r9 = org.telegram.ui.ActionBar.Theme.getColor(r0)
+            r8.setColor(r9)
+        L_0x00e2:
+            org.telegram.ui.SelectAnimatedEmojiDialog$SelectAnimatedEmojiDialogWindow r8 = r7.selectAnimatedEmojiDialog
+            if (r8 == 0) goto L_0x010a
+            android.view.View r8 = r8.getContentView()
+            boolean r8 = r8 instanceof org.telegram.ui.SelectAnimatedEmojiDialog
+            if (r8 == 0) goto L_0x010a
+            org.telegram.ui.ActionBar.ActionBar r8 = r7.actionBar
+            org.telegram.ui.ActionBar.SimpleTextView r8 = r8.getTitleTextView()
+            org.telegram.ui.SelectAnimatedEmojiDialog$SelectAnimatedEmojiDialogWindow r9 = r7.selectAnimatedEmojiDialog
+            android.view.View r9 = r9.getContentView()
+            org.telegram.ui.SelectAnimatedEmojiDialog r9 = (org.telegram.ui.SelectAnimatedEmojiDialog) r9
+            if (r8 == 0) goto L_0x0107
+            android.graphics.drawable.Drawable r0 = r8.getRightDrawable()
+            org.telegram.ui.Components.AnimatedEmojiDrawable$SwapAnimatedEmojiDrawable r2 = r7.statusDrawable
+            if (r0 != r2) goto L_0x0107
+            r1 = r2
+        L_0x0107:
+            r9.setScrimDrawable(r1, r8)
+        L_0x010a:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.DialogsActivity.updateStatus(org.telegram.tgnet.TLRPC$User, boolean):void");
@@ -2505,6 +2531,14 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     return super.drawChild(canvas, view, j);
                 }
                 return false;
+            }
+
+            public void setTitleOverlayText(String str, int i, Runnable runnable) {
+                super.setTitleOverlayText(str, i, runnable);
+                if (DialogsActivity.this.selectAnimatedEmojiDialog != null && (DialogsActivity.this.selectAnimatedEmojiDialog.getContentView() instanceof SelectAnimatedEmojiDialog)) {
+                    SimpleTextView titleTextView = getTitleTextView();
+                    ((SelectAnimatedEmojiDialog) DialogsActivity.this.selectAnimatedEmojiDialog.getContentView()).setScrimDrawable((titleTextView == null || titleTextView.getRightDrawable() != DialogsActivity.this.statusDrawable) ? null : DialogsActivity.this.statusDrawable, titleTextView);
+                }
             }
         };
         r0.setItemsBackgroundColor(Theme.getColor("actionBarDefaultSelector"), false);
@@ -4031,11 +4065,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 public void didFinishChatCreation(GroupCreateFinalActivity groupCreateFinalActivity, long j) {
                     ArrayList arrayList = new ArrayList();
                     arrayList.add(Long.valueOf(-j));
-                    DialogsActivityDelegate access$25400 = DialogsActivity.this.delegate;
+                    DialogsActivityDelegate access$25600 = DialogsActivity.this.delegate;
                     if (DialogsActivity.this.closeFragment) {
                         DialogsActivity.this.removeSelfFromStack();
                     }
-                    access$25400.didSelectDialogs(DialogsActivity.this, arrayList, (CharSequence) null, true);
+                    access$25600.didSelectDialogs(DialogsActivity.this, arrayList, (CharSequence) null, true);
                 }
             });
             presentFragment(groupCreateFinalActivity);
@@ -4531,11 +4565,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                                 dialogsActivity4.performSelectedDialogsAction(dialogsActivity4.selectedDialogs, i2, true);
                             }
                         } else if (DialogsActivity.this.getParentActivity() != null) {
-                            DialogsActivityDelegate access$25400 = DialogsActivity.this.delegate;
+                            DialogsActivityDelegate access$25600 = DialogsActivity.this.delegate;
                             LaunchActivity launchActivity = (LaunchActivity) DialogsActivity.this.getParentActivity();
                             launchActivity.switchToAccount(i2 - 10, true);
                             DialogsActivity dialogsActivity5 = new DialogsActivity(DialogsActivity.this.arguments);
-                            dialogsActivity5.setDelegate(access$25400);
+                            dialogsActivity5.setDelegate(access$25600);
                             launchActivity.presentFragment(dialogsActivity5, false, true);
                         }
                     }
@@ -5899,8 +5933,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     public void setSearchAnimationProgress(float f) {
         this.searchAnimationProgress = f;
         if (this.whiteActionBar) {
-            this.actionBar.setItemsColor(ColorUtils.blendARGB(Theme.getColor(this.folderId != 0 ? "actionBarDefaultArchivedIcon" : "actionBarDefaultIcon"), Theme.getColor("windowBackgroundWhiteGrayText2"), this.searchAnimationProgress), false);
-            this.actionBar.setItemsColor(ColorUtils.blendARGB(Theme.getColor("actionBarActionModeDefaultIcon"), Theme.getColor("windowBackgroundWhiteGrayText2"), this.searchAnimationProgress), true);
+            this.actionBar.setItemsColor(ColorUtils.blendARGB(Theme.getColor(this.folderId != 0 ? "actionBarDefaultArchivedIcon" : "actionBarDefaultIcon"), Theme.getColor("actionBarActionModeDefaultIcon"), this.searchAnimationProgress), false);
+            this.actionBar.setItemsColor(ColorUtils.blendARGB(Theme.getColor("actionBarActionModeDefaultIcon"), Theme.getColor("actionBarActionModeDefaultIcon"), this.searchAnimationProgress), true);
             this.actionBar.setItemsBackgroundColor(ColorUtils.blendARGB(Theme.getColor(this.folderId != 0 ? "actionBarDefaultArchivedSelector" : "actionBarDefaultSelector"), Theme.getColor("actionBarActionModeDefaultSelector"), this.searchAnimationProgress), false);
         }
         View view = this.fragmentView;
@@ -6563,6 +6597,19 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.DialogsActivity.onItemClick(android.view.View, int, androidx.recyclerview.widget.RecyclerView$Adapter):void");
+    }
+
+    public void setOpenedDialogId(long j) {
+        this.openedDialogId = j;
+        ViewPage[] viewPageArr = this.viewPages;
+        if (viewPageArr != null) {
+            for (ViewPage viewPage : viewPageArr) {
+                if (viewPage.isDefaultDialogType() && AndroidUtilities.isTablet()) {
+                    viewPage.dialogsAdapter.setOpenedDialogId(this.openedDialogId);
+                }
+            }
+            updateVisibleRows(MessagesController.UPDATE_MASK_SELECT_DIALOG);
+        }
     }
 
     /* access modifiers changed from: private */

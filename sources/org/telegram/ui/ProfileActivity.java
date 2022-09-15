@@ -52,6 +52,7 @@ import androidx.collection.LongSparseArray;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.core.graphics.ColorUtils;
+import androidx.core.math.MathUtils;
 import androidx.core.view.NestedScrollingParent3;
 import androidx.core.view.NestedScrollingParentHelper;
 import androidx.recyclerview.widget.DiffUtil;
@@ -3981,13 +3982,17 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             getEmojiStatusLocation(rect2);
             int i = this.nameTextView[1].getScaleX() < 1.5f ? 16 : 32;
             int dp = (-(this.avatarContainer2.getHeight() - rect2.centerY())) - AndroidUtilities.dp((float) i);
-            int centerX = rect2.centerX() - (AndroidUtilities.displaySize.x - ((int) Math.min((float) AndroidUtilities.dp(324.0f), ((float) AndroidUtilities.displaySize.x) * 0.95f)));
+            int min = (int) Math.min((float) AndroidUtilities.dp(324.0f), ((float) AndroidUtilities.displaySize.x) * 0.95f);
+            int centerX = rect2.centerX();
+            int clamp = MathUtils.clamp(centerX - (min / 2), 0, AndroidUtilities.displaySize.x - min);
+            int i2 = centerX - clamp;
             AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable[] swapAnimatedEmojiDrawableArr = this.emojiStatusDrawable;
             if (swapAnimatedEmojiDrawableArr[1] != null) {
                 boolean z = swapAnimatedEmojiDrawableArr[1].getDrawable() instanceof AnimatedEmojiDrawable;
             }
+            AnonymousClass28 r14 = r0;
             final SelectAnimatedEmojiDialog.SelectAnimatedEmojiDialogWindow[] selectAnimatedEmojiDialogWindowArr2 = selectAnimatedEmojiDialogWindowArr;
-            AnonymousClass28 r1 = new SelectAnimatedEmojiDialog(this, this, getContext(), true, Integer.valueOf(centerX), 0, this.resourcesProvider, i) {
+            AnonymousClass28 r0 = new SelectAnimatedEmojiDialog(this, this, getContext(), true, Integer.valueOf(Math.max(0, i2)), 0, this.resourcesProvider, i) {
                 final /* synthetic */ ProfileActivity this$0;
 
                 {
@@ -4045,22 +4050,27 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             if (user != null) {
                 TLRPC$EmojiStatus tLRPC$EmojiStatus = user.emoji_status;
                 if ((tLRPC$EmojiStatus instanceof TLRPC$TL_emojiStatusUntil) && ((TLRPC$TL_emojiStatusUntil) tLRPC$EmojiStatus).until > ((int) (System.currentTimeMillis() / 1000))) {
-                    r1.setExpireDateHint(((TLRPC$TL_emojiStatusUntil) user.emoji_status).until);
+                    r14.setExpireDateHint(((TLRPC$TL_emojiStatusUntil) user.emoji_status).until);
                 }
             }
             AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable[] swapAnimatedEmojiDrawableArr2 = this.emojiStatusDrawable;
-            r1.setSelected((swapAnimatedEmojiDrawableArr2[1] == null || !(swapAnimatedEmojiDrawableArr2[1].getDrawable() instanceof AnimatedEmojiDrawable)) ? null : Long.valueOf(((AnimatedEmojiDrawable) this.emojiStatusDrawable[1].getDrawable()).getDocumentId()));
-            r1.setSaveState(3);
-            r1.setScrimDrawable(this.emojiStatusDrawable[1], this.nameTextView[1]);
-            AnonymousClass29 r0 = new SelectAnimatedEmojiDialog.SelectAnimatedEmojiDialogWindow(r1, -2, -2) {
+            r14.setSelected((swapAnimatedEmojiDrawableArr2[1] == null || !(swapAnimatedEmojiDrawableArr2[1].getDrawable() instanceof AnimatedEmojiDrawable)) ? null : Long.valueOf(((AnimatedEmojiDrawable) this.emojiStatusDrawable[1].getDrawable()).getDocumentId()));
+            r14.setSaveState(3);
+            r14.setScrimDrawable(this.emojiStatusDrawable[1], this.nameTextView[1]);
+            AnonymousClass29 r02 = new SelectAnimatedEmojiDialog.SelectAnimatedEmojiDialogWindow(r14, -2, -2) {
                 public void dismiss() {
                     super.dismiss();
                     SelectAnimatedEmojiDialog.SelectAnimatedEmojiDialogWindow unused = ProfileActivity.this.selectAnimatedEmojiDialog = null;
                 }
             };
-            this.selectAnimatedEmojiDialog = r0;
-            selectAnimatedEmojiDialogWindowArr[0] = r0;
-            selectAnimatedEmojiDialogWindowArr[0].showAsDropDown(this.avatarContainer2, 0, dp, 53);
+            this.selectAnimatedEmojiDialog = r02;
+            selectAnimatedEmojiDialogWindowArr[0] = r02;
+            int[] iArr = new int[2];
+            SimpleTextView[] simpleTextViewArr = this.nameTextView;
+            if (simpleTextViewArr[1] != null) {
+                simpleTextViewArr[1].getLocationOnScreen(iArr);
+            }
+            selectAnimatedEmojiDialogWindowArr[0].showAsDropDown(this.fragmentView, clamp, dp, 51);
             selectAnimatedEmojiDialogWindowArr[0].dimBehind();
         }
     }
@@ -9176,6 +9186,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 }
                 String str2 = str;
                 backupImageView.setLayerNum(7);
+                backupImageView.setRoundRadius(AndroidUtilities.dp(4.0f));
                 backupImageView.setImage(forDocument, str2, ImageLocation.getForDocument(closestPhotoSizeWithSize, document), "140_140", (Drawable) svgThumb, (Object) document);
                 if (((AnimatedEmojiDrawable) this.emojiStatusDrawable[1].getDrawable()).canOverrideColor()) {
                     backupImageView.setColorFilter(new PorterDuffColorFilter(getThemedColor("windowBackgroundWhiteBlueIcon"), PorterDuff.Mode.MULTIPLY));

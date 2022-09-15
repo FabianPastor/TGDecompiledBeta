@@ -686,6 +686,13 @@ public class SharedConfig {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SharedConfig.loadConfig():void");
     }
 
+    public static void updateTabletConfig() {
+        SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("userconfing", 0);
+        int i = sharedPreferences.getInt("fons_size", AndroidUtilities.isTablet() ? 18 : 16);
+        fontSize = i;
+        ivFontSize = sharedPreferences.getInt("iv_font_size", i);
+    }
+
     public static void increaseBadPasscodeTries() {
         int i = badPasscodeTries + 1;
         badPasscodeTries = i;

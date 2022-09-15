@@ -186,17 +186,26 @@ public class ChatNotificationsPopupWrapper {
     private String formatMuteForTime(int i) {
         StringBuilder sb = new StringBuilder();
         int i2 = i / 86400;
-        int i3 = (i - (86400 * i2)) / 3600;
+        int i3 = i - (86400 * i2);
+        int i4 = i3 / 3600;
+        int i5 = (i3 - (i4 * 3600)) / 60;
         if (i2 != 0) {
             sb.append(i2);
             sb.append(LocaleController.getString("SecretChatTimerDays", R.string.SecretChatTimerDays));
         }
-        if (i3 != 0) {
+        if (i4 != 0) {
             if (sb.length() > 0) {
                 sb.append(" ");
             }
-            sb.append(i3);
+            sb.append(i4);
             sb.append(LocaleController.getString("SecretChatTimerHours", R.string.SecretChatTimerHours));
+        }
+        if (i5 != 0) {
+            if (sb.length() > 0) {
+                sb.append(" ");
+            }
+            sb.append(i5);
+            sb.append(LocaleController.getString("SecretChatTimerMinutes", R.string.SecretChatTimerMinutes));
         }
         return LocaleController.formatString("MuteForButton", R.string.MuteForButton, sb.toString());
     }

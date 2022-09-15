@@ -53,7 +53,8 @@ public class AnimatedEmojiDrawable extends Drawable {
     private TLRPC$Document document;
     private long documentId;
     private ArrayList<AnimatedEmojiSpan.InvalidateHolder> holders;
-    private ImageReceiver imageReceiver;
+    /* access modifiers changed from: private */
+    public ImageReceiver imageReceiver;
     public int sizedp;
     private ArrayList<View> views;
 
@@ -436,21 +437,21 @@ public class AnimatedEmojiDrawable extends Drawable {
     /* JADX WARNING: Removed duplicated region for block: B:63:0x0186  */
     /* JADX WARNING: Removed duplicated region for block: B:66:0x018c  */
     /* JADX WARNING: Removed duplicated region for block: B:67:0x01ac  */
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x01e8  */
-    /* JADX WARNING: Removed duplicated region for block: B:80:0x0206  */
-    /* JADX WARNING: Removed duplicated region for block: B:81:0x0217  */
-    /* JADX WARNING: Removed duplicated region for block: B:86:0x0235  */
-    /* JADX WARNING: Removed duplicated region for block: B:87:0x0237  */
+    /* JADX WARNING: Removed duplicated region for block: B:81:0x0205  */
+    /* JADX WARNING: Removed duplicated region for block: B:84:0x0215  */
+    /* JADX WARNING: Removed duplicated region for block: B:85:0x0226  */
+    /* JADX WARNING: Removed duplicated region for block: B:90:0x0244  */
+    /* JADX WARNING: Removed duplicated region for block: B:91:0x0246  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private void initDocument() {
         /*
             r30 = this;
             r0 = r30
             org.telegram.tgnet.TLRPC$Document r1 = r0.document
-            if (r1 == 0) goto L_0x0248
+            if (r1 == 0) goto L_0x0257
             org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
             if (r1 == 0) goto L_0x000c
-            goto L_0x0248
+            goto L_0x0257
         L_0x000c:
             org.telegram.ui.Components.AnimatedEmojiDrawable$1 r1 = new org.telegram.ui.Components.AnimatedEmojiDrawable$1
             r1.<init>()
@@ -675,26 +676,35 @@ public class AnimatedEmojiDrawable extends Drawable {
             r17.setImage(r18, r19, r20, r21, r22, r23, r24, r25, r27, r28, r29)
         L_0x01e3:
             int r1 = r0.cacheType
-            r2 = 7
-            if (r1 != r2) goto L_0x01ed
+            r2 = 9
+            r4 = 7
+            if (r1 == r4) goto L_0x01ec
+            if (r1 != r2) goto L_0x01f1
+        L_0x01ec:
             org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
             r1.setAutoRepeatCount(r6)
-        L_0x01ed:
+        L_0x01f1:
             int r1 = r0.cacheType
-            r4 = 3
-            if (r1 == r4) goto L_0x01f8
-            r4 = 5
-            if (r1 == r4) goto L_0x01f8
-            r4 = 4
-            if (r1 != r4) goto L_0x01fd
-        L_0x01f8:
+            r5 = 3
+            if (r1 == r5) goto L_0x01fc
+            r5 = 5
+            if (r1 == r5) goto L_0x01fc
+            r5 = 4
+            if (r1 != r5) goto L_0x0201
+        L_0x01fc:
             org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
+            r1.setLayerNum(r4)
+        L_0x0201:
+            int r1 = r0.cacheType
+            if (r1 != r2) goto L_0x020c
+            org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
+            r2 = 6656(0x1a00, float:9.327E-42)
             r1.setLayerNum(r2)
-        L_0x01fd:
+        L_0x020c:
             org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
             r1.setAspectFit(r3)
             int r1 = r0.cacheType
-            if (r1 == r10) goto L_0x0217
+            if (r1 == r10) goto L_0x0226
             org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
             r1.setAllowStartLottieAnimation(r3)
             org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
@@ -702,8 +712,8 @@ public class AnimatedEmojiDrawable extends Drawable {
             org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
             r1.setAutoRepeat(r3)
             r2 = 0
-            goto L_0x0227
-        L_0x0217:
+            goto L_0x0236
+        L_0x0226:
             org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
             r2 = 0
             r1.setAllowStartAnimation(r2)
@@ -711,27 +721,27 @@ public class AnimatedEmojiDrawable extends Drawable {
             r1.setAllowStartLottieAnimation(r2)
             org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
             r1.setAutoRepeat(r2)
-        L_0x0227:
+        L_0x0236:
             org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
             r1.setAllowDecodeSingleFrame(r3)
             int r1 = r0.cacheType
             r3 = 5
-            if (r1 == r3) goto L_0x0237
+            if (r1 == r3) goto L_0x0246
             r3 = 6
-            if (r1 != r3) goto L_0x0235
-            goto L_0x0237
-        L_0x0235:
+            if (r1 != r3) goto L_0x0244
+            goto L_0x0246
+        L_0x0244:
             r7 = 0
-            goto L_0x023d
-        L_0x0237:
+            goto L_0x024c
+        L_0x0246:
             r1 = 1086324736(0x40CLASSNAME, float:6.0)
             int r7 = org.telegram.messenger.AndroidUtilities.dp(r1)
-        L_0x023d:
+        L_0x024c:
             org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
             r1.setRoundRadius((int) r7)
             r30.updateAttachState()
             r30.invalidate()
-        L_0x0248:
+        L_0x0257:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AnimatedEmojiDrawable.initDocument():void");
@@ -771,11 +781,6 @@ public class AnimatedEmojiDrawable extends Drawable {
     }
 
     public void draw(Canvas canvas, boolean z) {
-        int saveCount = canvas.getSaveCount();
-        if (canOverrideColor() && z) {
-            canvas.save();
-            canvas.translate((float) AndroidUtilities.dp(-4.0f), 0.0f);
-        }
         ImageReceiver imageReceiver2 = this.imageReceiver;
         if (imageReceiver2 != null) {
             imageReceiver2.setImageCoords(getBounds());
@@ -783,15 +788,9 @@ public class AnimatedEmojiDrawable extends Drawable {
             this.imageReceiver.draw(canvas);
         }
         drawPlaceholder(canvas, (float) getBounds().centerX(), (float) getBounds().centerY(), ((float) getBounds().width()) / 2.0f);
-        canvas.restoreToCount(saveCount);
     }
 
     public void draw(Canvas canvas, Rect rect, float f) {
-        int saveCount = canvas.getSaveCount();
-        if (canOverrideColor()) {
-            canvas.save();
-            canvas.translate((float) AndroidUtilities.dp(-4.0f), 0.0f);
-        }
         ImageReceiver imageReceiver2 = this.imageReceiver;
         if (imageReceiver2 != null) {
             imageReceiver2.setImageCoords(rect);
@@ -801,15 +800,9 @@ public class AnimatedEmojiDrawable extends Drawable {
         if (rect != null) {
             drawPlaceholder(canvas, (float) rect.centerX(), (float) rect.centerY(), ((float) rect.width()) / 2.0f);
         }
-        canvas.restoreToCount(saveCount);
     }
 
     public void draw(Canvas canvas, ImageReceiver.BackgroundThreadDrawHolder backgroundThreadDrawHolder, boolean z) {
-        int saveCount = canvas.getSaveCount();
-        if (canOverrideColor() && z) {
-            canvas.save();
-            canvas.translate((float) AndroidUtilities.dp(-4.0f), 0.0f);
-        }
         ImageReceiver imageReceiver2 = this.imageReceiver;
         if (imageReceiver2 != null) {
             imageReceiver2.setAlpha(this.alpha);
@@ -820,7 +813,6 @@ public class AnimatedEmojiDrawable extends Drawable {
             float f2 = backgroundThreadDrawHolder.imageW;
             drawPlaceholder(canvas, f + (f2 / 2.0f), backgroundThreadDrawHolder.imageY + (backgroundThreadDrawHolder.imageH / 2.0f), f2 / 2.0f);
         }
-        canvas.restoreToCount(saveCount);
     }
 
     public void addView(View view) {
@@ -1074,22 +1066,26 @@ public class AnimatedEmojiDrawable extends Drawable {
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public void play() {
             /*
-                r3 = this;
-                android.graphics.drawable.Drawable r0 = r3.getDrawable()
+                r4 = this;
+                android.graphics.drawable.Drawable r0 = r4.getDrawable()
                 boolean r0 = r0 instanceof org.telegram.ui.Components.AnimatedEmojiDrawable
-                if (r0 == 0) goto L_0x0022
-                android.graphics.drawable.Drawable r0 = r3.getDrawable()
+                if (r0 == 0) goto L_0x002a
+                android.graphics.drawable.Drawable r0 = r4.getDrawable()
                 org.telegram.ui.Components.AnimatedEmojiDrawable r0 = (org.telegram.ui.Components.AnimatedEmojiDrawable) r0
                 org.telegram.messenger.ImageReceiver r1 = r0.getImageReceiver()
-                if (r1 == 0) goto L_0x0022
+                if (r1 == 0) goto L_0x002a
+                int r2 = r0.cacheType
+                r3 = 7
+                if (r2 == r3) goto L_0x0023
                 int r0 = r0.cacheType
-                r2 = 7
-                if (r0 != r2) goto L_0x001f
+                r2 = 9
+                if (r0 != r2) goto L_0x0027
+            L_0x0023:
                 r0 = 2
                 r1.setAutoRepeatCount(r0)
-            L_0x001f:
+            L_0x0027:
                 r1.startAnimation()
-            L_0x0022:
+            L_0x002a:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable.play():void");
@@ -1098,7 +1094,7 @@ public class AnimatedEmojiDrawable extends Drawable {
         public void setColor(Integer num) {
             Integer num2 = this.lastColor;
             if (num2 != null || num != null) {
-                if (num2 == null || num == null || num2 != num) {
+                if (num2 == null || !num2.equals(num)) {
                     this.lastColor = num;
                     this.colorFilter = num != null ? new PorterDuffColorFilter(num.intValue(), PorterDuff.Mode.MULTIPLY) : null;
                 }
@@ -1129,7 +1125,11 @@ public class AnimatedEmojiDrawable extends Drawable {
             }
             if (this.drawables[0] != null) {
                 canvas.save();
-                if (this.drawables[0] instanceof AnimatedEmojiDrawable) {
+                Drawable[] drawableArr3 = this.drawables;
+                if (drawableArr3[0] instanceof AnimatedEmojiDrawable) {
+                    if (((AnimatedEmojiDrawable) drawableArr3[0]).imageReceiver != null) {
+                        ((AnimatedEmojiDrawable) this.drawables[0]).imageReceiver.setRoundRadius(AndroidUtilities.dp(4.0f));
+                    }
                     if (f < 1.0f) {
                         float interpolation = this.overshootInterpolator.getInterpolation(f);
                         canvas.scale(interpolation, interpolation, (float) bounds.centerX(), (float) bounds.centerY());

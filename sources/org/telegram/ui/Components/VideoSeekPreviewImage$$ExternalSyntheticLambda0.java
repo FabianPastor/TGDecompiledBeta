@@ -8,6 +8,6 @@ public final /* synthetic */ class VideoSeekPreviewImage$$ExternalSyntheticLambd
     }
 
     public final void run() {
-        this.f$0.lambda$close$4();
+        this.f$0.lambda$close$5();
     }
 }

@@ -468,6 +468,10 @@ public class PipVideoOverlay {
         AndroidUtilities.cancelRunOnUIThread(this.longClickCallback);
     }
 
+    public static View getInnerView() {
+        return instance.innerView;
+    }
+
     /* access modifiers changed from: private */
     public void cancelRewind() {
         PhotoViewer photoViewer2 = this.photoViewer;

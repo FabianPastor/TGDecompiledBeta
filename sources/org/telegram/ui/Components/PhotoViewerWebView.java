@@ -14,15 +14,27 @@ import android.view.ViewGroup;
 import android.webkit.CookieManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.ValueCallback;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BringAppForegroundService;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.Utilities;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.tgnet.TLRPC$WebPage;
 import org.telegram.ui.PhotoViewer;
@@ -34,6 +46,8 @@ public class PhotoViewerWebView extends FrameLayout {
     /* access modifiers changed from: private */
     public int currentPosition;
     private TLRPC$WebPage currentWebpage;
+    /* access modifiers changed from: private */
+    public String currentYoutubeId;
     /* access modifiers changed from: private */
     public boolean isPlaying;
     private boolean isTouchDisabled;
@@ -55,6 +69,9 @@ public class PhotoViewerWebView extends FrameLayout {
     /* access modifiers changed from: private */
     public int videoDuration;
     private WebView webView;
+    private List<String> youtubeStoryboards = new ArrayList();
+    /* access modifiers changed from: private */
+    public String youtubeStoryboardsSpecUrl;
 
     /* access modifiers changed from: protected */
     public void drawBlackBackground(Canvas canvas, int i, int i2) {
@@ -92,7 +109,6 @@ public class PhotoViewerWebView extends FrameLayout {
         /* access modifiers changed from: private */
         public /* synthetic */ void lambda$onPlayerLoaded$0() {
             PhotoViewerWebView.this.progressBar.setVisibility(4);
-            PhotoViewerWebView.this.progressBarBlackBackground.setVisibility(4);
             if (PhotoViewerWebView.this.setPlaybackSpeed) {
                 boolean unused = PhotoViewerWebView.this.setPlaybackSpeed = false;
                 PhotoViewerWebView photoViewerWebView = PhotoViewerWebView.this;
@@ -100,6 +116,9 @@ public class PhotoViewerWebView extends FrameLayout {
             }
             PhotoViewerWebView.this.pipItem.setEnabled(true);
             PhotoViewerWebView.this.pipItem.setAlpha(1.0f);
+            if (PhotoViewerWebView.this.photoViewer != null) {
+                PhotoViewerWebView.this.photoViewer.checkFullscreenButton();
+            }
         }
 
         @JavascriptInterface
@@ -107,32 +126,46 @@ public class PhotoViewerWebView extends FrameLayout {
             int parseInt = Integer.parseInt(str);
             boolean access$000 = PhotoViewerWebView.this.isPlaying;
             boolean z = false;
-            int i = 3;
+            int i = 1;
             boolean unused = PhotoViewerWebView.this.isPlaying = parseInt == 1 || parseInt == 3;
             PhotoViewerWebView.this.checkPlayingPoll(access$000);
-            if (parseInt == 0) {
-                i = 4;
-            } else if (parseInt == 1) {
-                z = true;
-            } else if (parseInt != 2) {
-                if (parseInt != 3) {
-                    i = 1;
-                } else {
+            if (parseInt != 0) {
+                if (parseInt == 1) {
                     z = true;
-                    i = 2;
+                } else if (parseInt != 2) {
+                    if (parseInt == 3) {
+                        z = true;
+                        i = 2;
+                    }
                 }
+                i = 3;
+            } else {
+                i = 4;
             }
-            AndroidUtilities.runOnUIThread(new PhotoViewerWebView$YoutubeProxy$$ExternalSyntheticLambda1(this, z, i));
+            if (i == 3 && PhotoViewerWebView.this.progressBarBlackBackground.getVisibility() != 4) {
+                AndroidUtilities.runOnUIThread(new PhotoViewerWebView$YoutubeProxy$$ExternalSyntheticLambda1(this), 300);
+            }
+            AndroidUtilities.runOnUIThread(new PhotoViewerWebView$YoutubeProxy$$ExternalSyntheticLambda2(this, z, i));
         }
 
         /* access modifiers changed from: private */
-        public /* synthetic */ void lambda$onPlayerStateChange$1(boolean z, int i) {
+        public /* synthetic */ void lambda$onPlayerStateChange$1() {
+            PhotoViewerWebView.this.progressBarBlackBackground.setVisibility(4);
+        }
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$onPlayerStateChange$2(boolean z, int i) {
             PhotoViewerWebView.this.photoViewer.updateWebPlayerState(z, i);
         }
 
         @JavascriptInterface
         public void onPlayerNotifyDuration(int i) {
             int unused = PhotoViewerWebView.this.videoDuration = i * 1000;
+            if (PhotoViewerWebView.this.youtubeStoryboardsSpecUrl != null) {
+                PhotoViewerWebView photoViewerWebView = PhotoViewerWebView.this;
+                photoViewerWebView.processYoutubeStoryboards(photoViewerWebView.youtubeStoryboardsSpecUrl);
+                String unused2 = PhotoViewerWebView.this.youtubeStoryboardsSpecUrl = null;
+            }
         }
 
         @JavascriptInterface
@@ -156,6 +189,14 @@ public class PhotoViewerWebView extends FrameLayout {
                 PhotoViewerWebView.this.processTouch(motionEvent);
                 return super.onTouchEvent(motionEvent);
             }
+
+            public void draw(Canvas canvas) {
+                super.draw(canvas);
+                if (PipVideoOverlay.getInnerView() == this && PhotoViewerWebView.this.progressBarBlackBackground.getVisibility() == 0) {
+                    canvas.drawColor(-16777216);
+                    PhotoViewerWebView.this.drawBlackBackground(canvas, getWidth(), getHeight());
+                }
+            }
         };
         this.webView = r4;
         r4.getSettings().setJavaScriptEnabled(true);
@@ -176,6 +217,57 @@ public class PhotoViewerWebView extends FrameLayout {
                     PhotoViewerWebView.this.progressBarBlackBackground.setVisibility(4);
                     PhotoViewerWebView.this.pipItem.setEnabled(true);
                     PhotoViewerWebView.this.pipItem.setAlpha(1.0f);
+                }
+            }
+
+            public WebResourceResponse shouldInterceptRequest(WebView webView, WebResourceRequest webResourceRequest) {
+                String uri = webResourceRequest.getUrl().toString();
+                if (!PhotoViewerWebView.this.isYouTube || !uri.startsWith("https://www.youtube.com/youtubei/v1/player?key=")) {
+                    return null;
+                }
+                Utilities.externalNetworkQueue.postRunnable(new PhotoViewerWebView$2$$ExternalSyntheticLambda0(this, uri, webResourceRequest));
+                return null;
+            }
+
+            /* access modifiers changed from: private */
+            public /* synthetic */ void lambda$shouldInterceptRequest$0(String str, WebResourceRequest webResourceRequest) {
+                JSONObject optJSONObject;
+                String optString;
+                try {
+                    HttpURLConnection httpURLConnection = (HttpURLConnection) new URL(str).openConnection();
+                    httpURLConnection.setRequestMethod("POST");
+                    for (Map.Entry next : webResourceRequest.getRequestHeaders().entrySet()) {
+                        httpURLConnection.addRequestProperty((String) next.getKey(), (String) next.getValue());
+                    }
+                    httpURLConnection.setDoOutput(true);
+                    OutputStream outputStream = httpURLConnection.getOutputStream();
+                    JSONObject jSONObject = new JSONObject();
+                    JSONObject jSONObject2 = new JSONObject();
+                    JSONObject put = new JSONObject().put("userAgent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36,gzip(gfe)").put("clientName", "WEB").put("clientVersion", webResourceRequest.getRequestHeaders().get("X-Youtube-Client-Version")).put("osName", "Windows").put("osVersion", "10.0");
+                    outputStream.write(jSONObject.put("context", jSONObject2.put("client", put.put("originalUrl", "https://www.youtube.com/watch?v=" + PhotoViewerWebView.this.currentYoutubeId).put("platform", "DESKTOP"))).put("videoId", PhotoViewerWebView.this.currentYoutubeId).toString().getBytes("UTF-8"));
+                    outputStream.close();
+                    InputStream inputStream = httpURLConnection.getResponseCode() == 200 ? httpURLConnection.getInputStream() : httpURLConnection.getErrorStream();
+                    byte[] bArr = new byte[10240];
+                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                    while (true) {
+                        int read = inputStream.read(bArr);
+                        if (read == -1) {
+                            break;
+                        }
+                        byteArrayOutputStream.write(bArr, 0, read);
+                    }
+                    byteArrayOutputStream.close();
+                    inputStream.close();
+                    JSONObject optJSONObject2 = new JSONObject(byteArrayOutputStream.toString("UTF-8")).optJSONObject("storyboards");
+                    if (optJSONObject2 != null && (optJSONObject = optJSONObject2.optJSONObject("playerStoryboardSpecRenderer")) != null && (optString = optJSONObject.optString("spec")) != null) {
+                        if (PhotoViewerWebView.this.videoDuration == 0) {
+                            String unused = PhotoViewerWebView.this.youtubeStoryboardsSpecUrl = optString;
+                        } else {
+                            PhotoViewerWebView.this.processYoutubeStoryboards(optString);
+                        }
+                    }
+                } catch (Exception e) {
+                    FileLog.e((Throwable) e);
                 }
             }
 
@@ -203,6 +295,171 @@ public class PhotoViewerWebView extends FrameLayout {
         this.progressBar = radialProgressView;
         radialProgressView.setVisibility(4);
         addView(this.progressBar, LayoutHelper.createFrame(-2, -2, 17));
+    }
+
+    public boolean hasYoutubeStoryboards() {
+        return !this.youtubeStoryboards.isEmpty();
+    }
+
+    /* access modifiers changed from: private */
+    /* JADX WARNING: Removed duplicated region for block: B:19:0x0091 A[LOOP:0: B:18:0x008f->B:19:0x0091, LOOP_END] */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public void processYoutubeStoryboards(java.lang.String r13) {
+        /*
+            r12 = this;
+            int r0 = r12.getVideoDuration()
+            r1 = 1000(0x3e8, float:1.401E-42)
+            int r0 = r0 / r1
+            java.util.List<java.lang.String> r2 = r12.youtubeStoryboards
+            r2.clear()
+            java.lang.String r2 = "\\|"
+            java.lang.String[] r13 = r13.split(r2)
+            java.lang.StringBuilder r2 = new java.lang.StringBuilder
+            r2.<init>()
+            r3 = 0
+            r4 = r13[r3]
+            java.lang.String r5 = "\\$"
+            java.lang.String[] r4 = r4.split(r5)
+            r4 = r4[r3]
+            r2.append(r4)
+            java.lang.String r4 = "2/"
+            r2.append(r4)
+            java.lang.String r2 = r2.toString()
+            r4 = r13[r3]
+            java.lang.String r5 = "\\$N"
+            java.lang.String[] r4 = r4.split(r5)
+            r5 = 1
+            r4 = r4[r5]
+            int r6 = r13.length
+            java.lang.String r7 = "M#"
+            r8 = 2
+            r9 = 3
+            if (r6 != r9) goto L_0x0049
+            r13 = r13[r8]
+            java.lang.String[] r13 = r13.split(r7)
+            r13 = r13[r5]
+            goto L_0x005f
+        L_0x0049:
+            int r6 = r13.length
+            if (r6 != r8) goto L_0x0057
+            r13 = r13[r5]
+            java.lang.String r6 = "t#"
+            java.lang.String[] r13 = r13.split(r6)
+            r13 = r13[r5]
+            goto L_0x005f
+        L_0x0057:
+            r13 = r13[r9]
+            java.lang.String[] r13 = r13.split(r7)
+            r13 = r13[r5]
+        L_0x005f:
+            r6 = 250(0xfa, float:3.5E-43)
+            r7 = 1103626240(0x41CLASSNAME, float:25.0)
+            if (r0 >= r6) goto L_0x0071
+            float r0 = (float) r0
+            r1 = 1073741824(0x40000000, float:2.0)
+            float r0 = r0 / r1
+            float r0 = r0 / r7
+            double r0 = (double) r0
+            double r0 = java.lang.Math.ceil(r0)
+        L_0x006f:
+            int r0 = (int) r0
+            goto L_0x008e
+        L_0x0071:
+            if (r0 < r6) goto L_0x0080
+            if (r0 >= r1) goto L_0x0080
+            float r0 = (float) r0
+            r1 = 1082130432(0x40800000, float:4.0)
+            float r0 = r0 / r1
+            float r0 = r0 / r7
+            double r0 = (double) r0
+            double r0 = java.lang.Math.ceil(r0)
+            goto L_0x006f
+        L_0x0080:
+            if (r0 < r1) goto L_0x008d
+            float r0 = (float) r0
+            r1 = 1092616192(0x41200000, float:10.0)
+            float r0 = r0 / r1
+            float r0 = r0 / r7
+            double r0 = (double) r0
+            double r0 = java.lang.Math.ceil(r0)
+            goto L_0x006f
+        L_0x008d:
+            r0 = 0
+        L_0x008e:
+            r1 = 0
+        L_0x008f:
+            if (r1 >= r0) goto L_0x00b0
+            java.util.List<java.lang.String> r6 = r12.youtubeStoryboards
+            java.util.Locale r7 = java.util.Locale.ROOT
+            r10 = 4
+            java.lang.Object[] r10 = new java.lang.Object[r10]
+            r10[r3] = r2
+            java.lang.Integer r11 = java.lang.Integer.valueOf(r1)
+            r10[r5] = r11
+            r10[r8] = r4
+            r10[r9] = r13
+            java.lang.String r11 = "%sM%d%s&sigh=%s"
+            java.lang.String r7 = java.lang.String.format(r7, r11, r10)
+            r6.add(r7)
+            int r1 = r1 + 1
+            goto L_0x008f
+        L_0x00b0:
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PhotoViewerWebView.processYoutubeStoryboards(java.lang.String):void");
+    }
+
+    public int getYoutubeStoryboardImageCount(int i) {
+        double ceil;
+        int indexOf = this.youtubeStoryboards.indexOf(getYoutubeStoryboard(i));
+        int i2 = 0;
+        if (indexOf == -1) {
+            return 0;
+        }
+        if (indexOf != this.youtubeStoryboards.size() - 1) {
+            return 25;
+        }
+        int videoDuration2 = getVideoDuration() / 1000;
+        if (videoDuration2 < 250) {
+            ceil = Math.ceil((double) (((float) videoDuration2) / 2.0f));
+        } else if (videoDuration2 < 250 || videoDuration2 >= 1000) {
+            if (videoDuration2 >= 1000) {
+                ceil = Math.ceil((double) (((float) videoDuration2) / 10.0f));
+            }
+            return i2 - ((this.youtubeStoryboards.size() - 1) * 25);
+        } else {
+            ceil = Math.ceil((double) (((float) videoDuration2) / 4.0f));
+        }
+        i2 = (int) ceil;
+        return i2 - ((this.youtubeStoryboards.size() - 1) * 25);
+    }
+
+    public String getYoutubeStoryboard(int i) {
+        int i2;
+        int videoDuration2 = getVideoDuration() / 1000;
+        if (videoDuration2 < 250) {
+            i2 = ((int) (((float) i) / 2.0f)) / 25;
+        } else {
+            i2 = (videoDuration2 < 250 || videoDuration2 >= 1000) ? videoDuration2 >= 1000 ? (int) ((((float) i) / 10.0f) / 25.0f) : -1 : ((int) (((float) i) / 4.0f)) / 25;
+        }
+        if (i2 == -1 || i2 >= this.youtubeStoryboards.size()) {
+            return null;
+        }
+        return this.youtubeStoryboards.get(i2);
+    }
+
+    public int getYoutubeStoryboardImageIndex(int i) {
+        int videoDuration2 = getVideoDuration() / 1000;
+        if (videoDuration2 < 250) {
+            return ((int) Math.ceil((double) (((float) i) / 2.0f))) % 25;
+        }
+        if (videoDuration2 >= 250 && videoDuration2 < 1000) {
+            return ((int) Math.ceil((double) (((float) i) / 4.0f))) % 25;
+        }
+        if (videoDuration2 >= 1000) {
+            return ((int) Math.ceil((double) (((float) i) / 10.0f))) % 25;
+        }
+        return -1;
     }
 
     public void setTouchDisabled(boolean z) {
@@ -324,6 +581,7 @@ public class PhotoViewerWebView extends FrameLayout {
             AndroidUtilities.runOnUIThread(new PhotoViewerWebView$$ExternalSyntheticLambda0(this), 300);
             return true;
         }
+        this.progressBarBlackBackground.setVisibility(0);
         WebView webView2 = this.webView;
         TLRPC$WebPage tLRPC$WebPage = this.currentWebpage;
         if (PipVideoOverlay.show(isInAppOnly, (Activity) getContext(), this, webView2, tLRPC$WebPage.embed_width, tLRPC$WebPage.embed_height, false)) {
@@ -332,8 +590,12 @@ public class PhotoViewerWebView extends FrameLayout {
         return true;
     }
 
-    public boolean isControllable() {
+    public boolean isYouTube() {
         return this.isYouTube;
+    }
+
+    public boolean isControllable() {
+        return isYouTube();
     }
 
     public boolean isPlaying() {
@@ -365,148 +627,153 @@ public class PhotoViewerWebView extends FrameLayout {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:27:0x00a6 A[Catch:{ Exception -> 0x00e9 }, LOOP:0: B:25:0x009f->B:27:0x00a6, LOOP_END] */
-    /* JADX WARNING: Removed duplicated region for block: B:40:0x00aa A[EDGE_INSN: B:40:0x00aa->B:28:0x00aa ?: BREAK  , SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:28:0x00aa A[Catch:{ Exception -> 0x00ef }, LOOP:0: B:26:0x00a3->B:28:0x00aa, LOOP_END] */
+    /* JADX WARNING: Removed duplicated region for block: B:41:0x00ae A[EDGE_INSN: B:41:0x00ae->B:29:0x00ae ?: BREAK  , SYNTHETIC] */
     @android.annotation.SuppressLint({"AddJavascriptInterface"})
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void init(int r12, org.telegram.tgnet.TLRPC$WebPage r13) {
+    public void init(int r11, org.telegram.tgnet.TLRPC$WebPage r12) {
         /*
-            r11 = this;
+            r10 = this;
             java.lang.String r0 = "m"
-            r11.currentWebpage = r13
-            java.lang.String r1 = r13.embed_url
+            r10.currentWebpage = r12
+            java.lang.String r1 = r12.embed_url
             java.lang.String r1 = org.telegram.ui.Components.WebPlayerView.getYouTubeVideoId(r1)
-            java.lang.String r2 = r13.url
-            r11.requestLayout()
-            r3 = 1
-            r4 = 0
-            if (r1 == 0) goto L_0x00d5
-            android.view.View r13 = r11.progressBarBlackBackground     // Catch:{ Exception -> 0x00e9 }
-            r13.setVisibility(r4)     // Catch:{ Exception -> 0x00e9 }
-            r11.isYouTube = r3     // Catch:{ Exception -> 0x00e9 }
-            int r13 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x00e9 }
-            r5 = 17
-            r6 = 0
-            if (r13 < r5) goto L_0x002d
-            android.webkit.WebView r13 = r11.webView     // Catch:{ Exception -> 0x00e9 }
-            org.telegram.ui.Components.PhotoViewerWebView$YoutubeProxy r5 = new org.telegram.ui.Components.PhotoViewerWebView$YoutubeProxy     // Catch:{ Exception -> 0x00e9 }
-            r5.<init>()     // Catch:{ Exception -> 0x00e9 }
-            java.lang.String r7 = "YoutubeProxy"
-            r13.addJavascriptInterface(r5, r7)     // Catch:{ Exception -> 0x00e9 }
-        L_0x002d:
-            if (r2 == 0) goto L_0x0087
-            android.net.Uri r13 = android.net.Uri.parse(r2)     // Catch:{ Exception -> 0x0083 }
-            if (r12 <= 0) goto L_0x0046
-            java.lang.StringBuilder r2 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0083 }
-            r2.<init>()     // Catch:{ Exception -> 0x0083 }
-            java.lang.String r5 = ""
-            r2.append(r5)     // Catch:{ Exception -> 0x0083 }
-            r2.append(r12)     // Catch:{ Exception -> 0x0083 }
-            java.lang.String r6 = r2.toString()     // Catch:{ Exception -> 0x0083 }
-        L_0x0046:
-            if (r6 != 0) goto L_0x0056
-            java.lang.String r12 = "t"
-            java.lang.String r6 = r13.getQueryParameter(r12)     // Catch:{ Exception -> 0x0083 }
-            if (r6 != 0) goto L_0x0056
-            java.lang.String r12 = "time_continue"
-            java.lang.String r6 = r13.getQueryParameter(r12)     // Catch:{ Exception -> 0x0083 }
-        L_0x0056:
-            if (r6 == 0) goto L_0x0087
-            boolean r12 = r6.contains(r0)     // Catch:{ Exception -> 0x0083 }
-            if (r12 == 0) goto L_0x007a
-            java.lang.String[] r12 = r6.split(r0)     // Catch:{ Exception -> 0x0083 }
-            r13 = r12[r4]     // Catch:{ Exception -> 0x0083 }
-            java.lang.Integer r13 = org.telegram.messenger.Utilities.parseInt((java.lang.CharSequence) r13)     // Catch:{ Exception -> 0x0083 }
-            int r13 = r13.intValue()     // Catch:{ Exception -> 0x0083 }
-            int r13 = r13 * 60
-            r12 = r12[r3]     // Catch:{ Exception -> 0x0083 }
-            java.lang.Integer r12 = org.telegram.messenger.Utilities.parseInt((java.lang.CharSequence) r12)     // Catch:{ Exception -> 0x0083 }
-            int r12 = r12.intValue()     // Catch:{ Exception -> 0x0083 }
-            int r13 = r13 + r12
-            goto L_0x0088
-        L_0x007a:
-            java.lang.Integer r12 = org.telegram.messenger.Utilities.parseInt((java.lang.CharSequence) r6)     // Catch:{ Exception -> 0x0083 }
-            int r13 = r12.intValue()     // Catch:{ Exception -> 0x0083 }
-            goto L_0x0088
-        L_0x0083:
-            r12 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r12)     // Catch:{ Exception -> 0x00e9 }
+            r10.currentYoutubeId = r1
+            java.lang.String r1 = r12.url
+            r10.requestLayout()
+            r2 = 1
+            r3 = 0
+            java.lang.String r4 = r10.currentYoutubeId     // Catch:{ Exception -> 0x00ef }
+            if (r4 == 0) goto L_0x00db
+            android.view.View r12 = r10.progressBarBlackBackground     // Catch:{ Exception -> 0x00ef }
+            r12.setVisibility(r3)     // Catch:{ Exception -> 0x00ef }
+            r10.isYouTube = r2     // Catch:{ Exception -> 0x00ef }
+            int r12 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x00ef }
+            r4 = 17
+            r5 = 0
+            if (r12 < r4) goto L_0x0031
+            android.webkit.WebView r12 = r10.webView     // Catch:{ Exception -> 0x00ef }
+            org.telegram.ui.Components.PhotoViewerWebView$YoutubeProxy r4 = new org.telegram.ui.Components.PhotoViewerWebView$YoutubeProxy     // Catch:{ Exception -> 0x00ef }
+            r4.<init>()     // Catch:{ Exception -> 0x00ef }
+            java.lang.String r6 = "YoutubeProxy"
+            r12.addJavascriptInterface(r4, r6)     // Catch:{ Exception -> 0x00ef }
+        L_0x0031:
+            if (r1 == 0) goto L_0x008b
+            android.net.Uri r12 = android.net.Uri.parse(r1)     // Catch:{ Exception -> 0x0087 }
+            if (r11 <= 0) goto L_0x004a
+            java.lang.StringBuilder r1 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0087 }
+            r1.<init>()     // Catch:{ Exception -> 0x0087 }
+            java.lang.String r4 = ""
+            r1.append(r4)     // Catch:{ Exception -> 0x0087 }
+            r1.append(r11)     // Catch:{ Exception -> 0x0087 }
+            java.lang.String r5 = r1.toString()     // Catch:{ Exception -> 0x0087 }
+        L_0x004a:
+            if (r5 != 0) goto L_0x005a
+            java.lang.String r11 = "t"
+            java.lang.String r5 = r12.getQueryParameter(r11)     // Catch:{ Exception -> 0x0087 }
+            if (r5 != 0) goto L_0x005a
+            java.lang.String r11 = "time_continue"
+            java.lang.String r5 = r12.getQueryParameter(r11)     // Catch:{ Exception -> 0x0087 }
+        L_0x005a:
+            if (r5 == 0) goto L_0x008b
+            boolean r11 = r5.contains(r0)     // Catch:{ Exception -> 0x0087 }
+            if (r11 == 0) goto L_0x007e
+            java.lang.String[] r11 = r5.split(r0)     // Catch:{ Exception -> 0x0087 }
+            r12 = r11[r3]     // Catch:{ Exception -> 0x0087 }
+            java.lang.Integer r12 = org.telegram.messenger.Utilities.parseInt((java.lang.CharSequence) r12)     // Catch:{ Exception -> 0x0087 }
+            int r12 = r12.intValue()     // Catch:{ Exception -> 0x0087 }
+            int r12 = r12 * 60
+            r11 = r11[r2]     // Catch:{ Exception -> 0x0087 }
+            java.lang.Integer r11 = org.telegram.messenger.Utilities.parseInt((java.lang.CharSequence) r11)     // Catch:{ Exception -> 0x0087 }
+            int r11 = r11.intValue()     // Catch:{ Exception -> 0x0087 }
+            int r12 = r12 + r11
+            goto L_0x008c
+        L_0x007e:
+            java.lang.Integer r11 = org.telegram.messenger.Utilities.parseInt((java.lang.CharSequence) r5)     // Catch:{ Exception -> 0x0087 }
+            int r12 = r11.intValue()     // Catch:{ Exception -> 0x0087 }
+            goto L_0x008c
         L_0x0087:
-            r13 = 0
-        L_0x0088:
-            android.content.Context r12 = r11.getContext()     // Catch:{ Exception -> 0x00e9 }
-            android.content.res.AssetManager r12 = r12.getAssets()     // Catch:{ Exception -> 0x00e9 }
+            r11 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r11)     // Catch:{ Exception -> 0x00ef }
+        L_0x008b:
+            r12 = 0
+        L_0x008c:
+            android.content.Context r11 = r10.getContext()     // Catch:{ Exception -> 0x00ef }
+            android.content.res.AssetManager r11 = r11.getAssets()     // Catch:{ Exception -> 0x00ef }
             java.lang.String r0 = "youtube_embed.html"
-            java.io.InputStream r12 = r12.open(r0)     // Catch:{ Exception -> 0x00e9 }
-            java.io.ByteArrayOutputStream r0 = new java.io.ByteArrayOutputStream     // Catch:{ Exception -> 0x00e9 }
-            r0.<init>()     // Catch:{ Exception -> 0x00e9 }
-            r2 = 10240(0x2800, float:1.4349E-41)
-            byte[] r2 = new byte[r2]     // Catch:{ Exception -> 0x00e9 }
-        L_0x009f:
-            int r5 = r12.read(r2)     // Catch:{ Exception -> 0x00e9 }
-            r6 = -1
-            if (r5 == r6) goto L_0x00aa
-            r0.write(r2, r4, r5)     // Catch:{ Exception -> 0x00e9 }
-            goto L_0x009f
-        L_0x00aa:
-            r0.close()     // Catch:{ Exception -> 0x00e9 }
-            r12.close()     // Catch:{ Exception -> 0x00e9 }
-            android.webkit.WebView r5 = r11.webView     // Catch:{ Exception -> 0x00e9 }
-            java.lang.String r6 = "https://messenger.telegram.org/"
-            java.util.Locale r12 = java.util.Locale.US     // Catch:{ Exception -> 0x00e9 }
-            java.lang.String r2 = "UTF-8"
-            java.lang.String r0 = r0.toString(r2)     // Catch:{ Exception -> 0x00e9 }
-            r2 = 2
-            java.lang.Object[] r2 = new java.lang.Object[r2]     // Catch:{ Exception -> 0x00e9 }
-            r2[r4] = r1     // Catch:{ Exception -> 0x00e9 }
-            java.lang.Integer r13 = java.lang.Integer.valueOf(r13)     // Catch:{ Exception -> 0x00e9 }
-            r2[r3] = r13     // Catch:{ Exception -> 0x00e9 }
-            java.lang.String r7 = java.lang.String.format(r12, r0, r2)     // Catch:{ Exception -> 0x00e9 }
-            java.lang.String r8 = "text/html"
-            java.lang.String r9 = "UTF-8"
-            java.lang.String r10 = "https://youtube.com"
-            r5.loadDataWithBaseURL(r6, r7, r8, r9, r10)     // Catch:{ Exception -> 0x00e9 }
-            goto L_0x00ed
-        L_0x00d5:
-            java.util.HashMap r12 = new java.util.HashMap     // Catch:{ Exception -> 0x00e9 }
-            r12.<init>()     // Catch:{ Exception -> 0x00e9 }
+            java.io.InputStream r11 = r11.open(r0)     // Catch:{ Exception -> 0x00ef }
+            java.io.ByteArrayOutputStream r0 = new java.io.ByteArrayOutputStream     // Catch:{ Exception -> 0x00ef }
+            r0.<init>()     // Catch:{ Exception -> 0x00ef }
+            r1 = 10240(0x2800, float:1.4349E-41)
+            byte[] r1 = new byte[r1]     // Catch:{ Exception -> 0x00ef }
+        L_0x00a3:
+            int r4 = r11.read(r1)     // Catch:{ Exception -> 0x00ef }
+            r5 = -1
+            if (r4 == r5) goto L_0x00ae
+            r0.write(r1, r3, r4)     // Catch:{ Exception -> 0x00ef }
+            goto L_0x00a3
+        L_0x00ae:
+            r0.close()     // Catch:{ Exception -> 0x00ef }
+            r11.close()     // Catch:{ Exception -> 0x00ef }
+            android.webkit.WebView r4 = r10.webView     // Catch:{ Exception -> 0x00ef }
+            java.lang.String r5 = "https://messenger.telegram.org/"
+            java.util.Locale r11 = java.util.Locale.US     // Catch:{ Exception -> 0x00ef }
+            java.lang.String r1 = "UTF-8"
+            java.lang.String r0 = r0.toString(r1)     // Catch:{ Exception -> 0x00ef }
+            r1 = 2
+            java.lang.Object[] r1 = new java.lang.Object[r1]     // Catch:{ Exception -> 0x00ef }
+            java.lang.String r6 = r10.currentYoutubeId     // Catch:{ Exception -> 0x00ef }
+            r1[r3] = r6     // Catch:{ Exception -> 0x00ef }
+            java.lang.Integer r12 = java.lang.Integer.valueOf(r12)     // Catch:{ Exception -> 0x00ef }
+            r1[r2] = r12     // Catch:{ Exception -> 0x00ef }
+            java.lang.String r6 = java.lang.String.format(r11, r0, r1)     // Catch:{ Exception -> 0x00ef }
+            java.lang.String r7 = "text/html"
+            java.lang.String r8 = "UTF-8"
+            java.lang.String r9 = "https://youtube.com"
+            r4.loadDataWithBaseURL(r5, r6, r7, r8, r9)     // Catch:{ Exception -> 0x00ef }
+            goto L_0x00f3
+        L_0x00db:
+            java.util.HashMap r11 = new java.util.HashMap     // Catch:{ Exception -> 0x00ef }
+            r11.<init>()     // Catch:{ Exception -> 0x00ef }
             java.lang.String r0 = "Referer"
-            java.lang.String r2 = "messenger.telegram.org"
-            r12.put(r0, r2)     // Catch:{ Exception -> 0x00e9 }
-            android.webkit.WebView r0 = r11.webView     // Catch:{ Exception -> 0x00e9 }
-            java.lang.String r13 = r13.embed_url     // Catch:{ Exception -> 0x00e9 }
-            r0.loadUrl(r13, r12)     // Catch:{ Exception -> 0x00e9 }
-            goto L_0x00ed
-        L_0x00e9:
-            r12 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r12)
-        L_0x00ed:
-            android.view.View r12 = r11.pipItem
-            r12.setEnabled(r4)
-            android.view.View r12 = r11.pipItem
-            r13 = 1056964608(0x3var_, float:0.5)
-            r12.setAlpha(r13)
-            org.telegram.ui.Components.RadialProgressView r12 = r11.progressBar
-            r12.setVisibility(r4)
-            if (r1 == 0) goto L_0x0105
-            android.view.View r12 = r11.progressBarBlackBackground
-            r12.setVisibility(r4)
-        L_0x0105:
-            android.webkit.WebView r12 = r11.webView
-            r12.setVisibility(r4)
-            android.webkit.WebView r12 = r11.webView
-            r12.setKeepScreenOn(r3)
-            if (r1 == 0) goto L_0x0128
-            int r12 = r11.currentAccount
-            org.telegram.messenger.MessagesController r12 = org.telegram.messenger.MessagesController.getInstance(r12)
-            java.lang.String r12 = r12.youtubePipType
-            java.lang.String r13 = "disabled"
-            boolean r12 = r13.equals(r12)
-            if (r12 == 0) goto L_0x0128
-            android.view.View r12 = r11.pipItem
-            r13 = 8
-            r12.setVisibility(r13)
-        L_0x0128:
+            java.lang.String r1 = "messenger.telegram.org"
+            r11.put(r0, r1)     // Catch:{ Exception -> 0x00ef }
+            android.webkit.WebView r0 = r10.webView     // Catch:{ Exception -> 0x00ef }
+            java.lang.String r12 = r12.embed_url     // Catch:{ Exception -> 0x00ef }
+            r0.loadUrl(r12, r11)     // Catch:{ Exception -> 0x00ef }
+            goto L_0x00f3
+        L_0x00ef:
+            r11 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r11)
+        L_0x00f3:
+            android.view.View r11 = r10.pipItem
+            r11.setEnabled(r3)
+            android.view.View r11 = r10.pipItem
+            r12 = 1056964608(0x3var_, float:0.5)
+            r11.setAlpha(r12)
+            org.telegram.ui.Components.RadialProgressView r11 = r10.progressBar
+            r11.setVisibility(r3)
+            java.lang.String r11 = r10.currentYoutubeId
+            if (r11 == 0) goto L_0x010d
+            android.view.View r11 = r10.progressBarBlackBackground
+            r11.setVisibility(r3)
+        L_0x010d:
+            android.webkit.WebView r11 = r10.webView
+            r11.setVisibility(r3)
+            android.webkit.WebView r11 = r10.webView
+            r11.setKeepScreenOn(r2)
+            java.lang.String r11 = r10.currentYoutubeId
+            if (r11 == 0) goto L_0x0132
+            int r11 = r10.currentAccount
+            org.telegram.messenger.MessagesController r11 = org.telegram.messenger.MessagesController.getInstance(r11)
+            java.lang.String r11 = r11.youtubePipType
+            java.lang.String r12 = "disabled"
+            boolean r11 = r12.equals(r11)
+            if (r11 == 0) goto L_0x0132
+            android.view.View r11 = r10.pipItem
+            r12 = 8
+            r11.setVisibility(r12)
+        L_0x0132:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PhotoViewerWebView.init(int, org.telegram.tgnet.TLRPC$WebPage):void");
@@ -529,6 +796,7 @@ public class PhotoViewerWebView extends FrameLayout {
                     FileLog.e(th);
                 }
             }
+            this.progressBarBlackBackground.setVisibility(0);
             ViewGroup viewGroup = (ViewGroup) this.webView.getParent();
             if (viewGroup != null) {
                 viewGroup.removeView(this.webView);

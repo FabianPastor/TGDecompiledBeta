@@ -6,6 +6,7 @@ import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
@@ -20,6 +21,7 @@ import org.telegram.messenger.Bitmaps;
 import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLocation;
+import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.R;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.utils.BitmapsCache;
@@ -41,6 +43,8 @@ public class VideoSeekPreviewImage extends View {
     private AnimatedFileDrawable fileDrawable;
     private Drawable frameDrawable;
     private String frameTime;
+    private boolean isYoutube;
+    private int lastYoutubePosition;
     private Runnable loadRunnable;
     private Matrix matrix = new Matrix();
     private Paint paint = new Paint(2);
@@ -51,6 +55,13 @@ public class VideoSeekPreviewImage extends View {
     private TextPaint textPaint = new TextPaint(1);
     private int timeWidth;
     private Uri videoUri;
+    private PhotoViewerWebView webView;
+    private ImageReceiver youtubeBoardsReceiver;
+    private int ytImageHeight;
+    private int ytImageWidth;
+    private int ytImageX;
+    private int ytImageY;
+    private Path ytPath = new Path();
 
     public interface VideoSeekPreviewImageDelegate {
         void onReady();
@@ -63,9 +74,85 @@ public class VideoSeekPreviewImage extends View {
         this.textPaint.setTextSize((float) AndroidUtilities.dp(13.0f));
         this.textPaint.setColor(-1);
         this.delegate = videoSeekPreviewImageDelegate;
+        ImageReceiver imageReceiver = new ImageReceiver();
+        this.youtubeBoardsReceiver = imageReceiver;
+        imageReceiver.setParentView(this);
+        this.youtubeBoardsReceiver.setDelegate(new VideoSeekPreviewImage$$ExternalSyntheticLambda5(this));
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$0(ImageReceiver imageReceiver, boolean z, boolean z2, boolean z3) {
+        int i;
+        if (z && this.webView != null) {
+            int dp = AndroidUtilities.dp(150.0f);
+            int youtubeStoryboardImageCount = this.webView.getYoutubeStoryboardImageCount(this.lastYoutubePosition);
+            float bitmapWidth = ((float) this.youtubeBoardsReceiver.getBitmapWidth()) / ((float) Math.min(youtubeStoryboardImageCount, 5));
+            float bitmapHeight = ((float) this.youtubeBoardsReceiver.getBitmapHeight()) / ((float) ((int) Math.ceil((double) (((float) youtubeStoryboardImageCount) / 5.0f))));
+            int min = Math.min(this.webView.getYoutubeStoryboardImageIndex(this.lastYoutubePosition), youtubeStoryboardImageCount - 1);
+            this.ytImageX = (int) (((float) (min % 5)) * bitmapWidth);
+            this.ytImageY = (int) (((float) (min / 5)) * bitmapHeight);
+            this.ytImageWidth = (int) bitmapWidth;
+            this.ytImageHeight = (int) bitmapHeight;
+            float f = bitmapWidth / bitmapHeight;
+            if (f > 1.0f) {
+                i = (int) (((float) dp) / f);
+            } else {
+                i = dp;
+                dp = (int) (((float) dp) * f);
+            }
+            ViewGroup.LayoutParams layoutParams = getLayoutParams();
+            if (getVisibility() != 0 || layoutParams.width != dp || layoutParams.height != i) {
+                layoutParams.width = dp;
+                layoutParams.height = i;
+                setVisibility(0);
+                requestLayout();
+            }
+        }
+    }
+
+    /* access modifiers changed from: protected */
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        this.youtubeBoardsReceiver.onAttachedToWindow();
+    }
+
+    /* access modifiers changed from: protected */
+    public void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        this.youtubeBoardsReceiver.onDetachedFromWindow();
+    }
+
+    public void setProgressForYouTube(PhotoViewerWebView photoViewerWebView, float f, int i) {
+        this.webView = photoViewerWebView;
+        this.isYoutube = true;
+        if (i != 0) {
+            this.pixelWidth = i;
+            int i2 = ((int) (((float) i) * f)) / 5;
+            if (this.currentPixel != i2) {
+                this.currentPixel = i2;
+            } else {
+                return;
+            }
+        }
+        String formatShortDuration = AndroidUtilities.formatShortDuration((int) (((long) (((float) photoViewerWebView.getVideoDuration()) * f)) / 1000));
+        this.frameTime = formatShortDuration;
+        this.timeWidth = (int) Math.ceil((double) this.textPaint.measureText(formatShortDuration));
+        invalidate();
+        if (this.progressRunnable != null) {
+            Utilities.globalQueue.cancelRunnable(this.progressRunnable);
+        }
+        int videoDuration = (int) ((f * ((float) photoViewerWebView.getVideoDuration())) / 1000.0f);
+        this.lastYoutubePosition = videoDuration;
+        String youtubeStoryboard = photoViewerWebView.getYoutubeStoryboard(videoDuration);
+        if (youtubeStoryboard != null) {
+            this.youtubeBoardsReceiver.setImage(youtubeStoryboard, (String) null, (Drawable) null, (String) null, 0);
+        }
     }
 
     public void setProgress(float f, int i) {
+        this.webView = null;
+        this.isYoutube = false;
+        this.youtubeBoardsReceiver.setImageBitmap((Drawable) null);
         if (i != 0) {
             this.pixelWidth = i;
             int i2 = ((int) (((float) i) * f)) / 5;
@@ -94,7 +181,7 @@ public class VideoSeekPreviewImage extends View {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$setProgress$1(float f, long j) {
+    public /* synthetic */ void lambda$setProgress$2(float f, long j) {
         int i;
         if (this.fileDrawable == null) {
             this.pendingProgress = f;
@@ -127,7 +214,7 @@ public class VideoSeekPreviewImage extends View {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$setProgress$0(Bitmap bitmap) {
+    public /* synthetic */ void lambda$setProgress$1(Bitmap bitmap) {
         int i;
         if (bitmap != null) {
             if (this.bitmapToDraw != null) {
@@ -176,7 +263,7 @@ public class VideoSeekPreviewImage extends View {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$open$3(Uri uri) {
+    public /* synthetic */ void lambda$open$4(Uri uri) {
         String str;
         if ("tg".equals(uri.getScheme())) {
             int intValue = Utilities.parseInt((CharSequence) uri.getQueryParameter("account")).intValue();
@@ -184,7 +271,7 @@ public class VideoSeekPreviewImage extends View {
             TLRPC$TL_document tLRPC$TL_document = new TLRPC$TL_document();
             tLRPC$TL_document.access_hash = Utilities.parseLong(uri.getQueryParameter("hash")).longValue();
             tLRPC$TL_document.id = Utilities.parseLong(uri.getQueryParameter("id")).longValue();
-            tLRPC$TL_document.size = (long) Utilities.parseInt((CharSequence) uri.getQueryParameter("size")).intValue();
+            tLRPC$TL_document.size = Utilities.parseLong(uri.getQueryParameter("size")).longValue();
             tLRPC$TL_document.dc_id = Utilities.parseInt((CharSequence) uri.getQueryParameter("dc")).intValue();
             tLRPC$TL_document.mime_type = uri.getQueryParameter("mime");
             tLRPC$TL_document.file_reference = Utilities.hexToBytes(uri.getQueryParameter("reference"));
@@ -212,7 +299,7 @@ public class VideoSeekPreviewImage extends View {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$open$2() {
+    public /* synthetic */ void lambda$open$3() {
         this.loadRunnable = null;
         if (this.fileDrawable != null) {
             this.ready = true;
@@ -239,7 +326,23 @@ public class VideoSeekPreviewImage extends View {
             canvas.drawRoundRect(this.bitmapRect, (float) AndroidUtilities.dp(6.0f), (float) AndroidUtilities.dp(6.0f), this.bitmapPaint);
             this.frameDrawable.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
             this.frameDrawable.draw(canvas);
-            canvas.drawText(this.frameTime, (float) ((getMeasuredWidth() - this.timeWidth) / 2), (float) (getMeasuredHeight() - AndroidUtilities.dp(9.0f)), this.textPaint);
+            canvas.drawText(this.frameTime, ((float) (getMeasuredWidth() - this.timeWidth)) / 2.0f, (float) (getMeasuredHeight() - AndroidUtilities.dp(9.0f)), this.textPaint);
+        } else if (this.isYoutube) {
+            canvas.save();
+            this.ytPath.rewind();
+            RectF rectF = AndroidUtilities.rectTmp;
+            rectF.set(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight());
+            this.ytPath.addRoundRect(rectF, (float) AndroidUtilities.dp(6.0f), (float) AndroidUtilities.dp(6.0f), Path.Direction.CW);
+            canvas.clipPath(this.ytPath);
+            canvas.scale(((float) getWidth()) / ((float) this.ytImageWidth), ((float) getHeight()) / ((float) this.ytImageHeight));
+            canvas.translate((float) (-this.ytImageX), (float) (-this.ytImageY));
+            ImageReceiver imageReceiver = this.youtubeBoardsReceiver;
+            imageReceiver.setImageCoords(0.0f, 0.0f, (float) imageReceiver.getBitmapWidth(), (float) this.youtubeBoardsReceiver.getBitmapHeight());
+            this.youtubeBoardsReceiver.draw(canvas);
+            canvas.restore();
+            this.frameDrawable.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
+            this.frameDrawable.draw(canvas);
+            canvas.drawText(this.frameTime, ((float) (getMeasuredWidth() - this.timeWidth)) / 2.0f, (float) (getMeasuredHeight() - AndroidUtilities.dp(9.0f)), this.textPaint);
         }
     }
 
@@ -267,7 +370,7 @@ public class VideoSeekPreviewImage extends View {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$close$4() {
+    public /* synthetic */ void lambda$close$5() {
         this.pendingProgress = 0.0f;
         AnimatedFileDrawable animatedFileDrawable = this.fileDrawable;
         if (animatedFileDrawable != null) {

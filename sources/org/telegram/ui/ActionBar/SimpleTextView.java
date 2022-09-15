@@ -276,11 +276,11 @@ public class SimpleTextView extends View {
                 Drawable drawable = this.leftDrawable;
                 int intrinsicWidth = drawable != null ? (i - drawable.getIntrinsicWidth()) - this.drawablePadding : i;
                 Drawable drawable2 = this.rightDrawable;
-                if (drawable2 != null) {
+                if (drawable2 == null || this.rightDrawableOutside) {
+                    i2 = 0;
+                } else {
                     i2 = (int) (((float) drawable2.getIntrinsicWidth()) * this.rightDrawableScale);
                     intrinsicWidth = (intrinsicWidth - i2) - this.drawablePadding;
-                } else {
-                    i2 = 0;
                 }
                 SpannableStringBuilder spannableStringBuilder = charSequence;
                 if (this.replacedText != null) {
@@ -300,7 +300,7 @@ public class SimpleTextView extends View {
                         }
                     }
                 }
-                if (this.canHideRightDrawable && i2 != 0 && !spannableStringBuilder.equals(TextUtils.ellipsize(spannableStringBuilder, this.textPaint, (float) intrinsicWidth, TextUtils.TruncateAt.END))) {
+                if (this.canHideRightDrawable && i2 != 0 && !this.rightDrawableOutside && !spannableStringBuilder.equals(TextUtils.ellipsize(spannableStringBuilder, this.textPaint, (float) intrinsicWidth, TextUtils.TruncateAt.END))) {
                     this.rightDrawableHidden = true;
                     intrinsicWidth = intrinsicWidth + i2 + this.drawablePadding;
                 }
@@ -393,26 +393,79 @@ public class SimpleTextView extends View {
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
-        int size = View.MeasureSpec.getSize(i);
-        int size2 = View.MeasureSpec.getSize(i2);
-        int i3 = this.lastWidth;
-        int i4 = AndroidUtilities.displaySize.x;
-        if (i3 != i4) {
-            this.lastWidth = i4;
-            this.scrollingOffset = 0.0f;
-            this.currentScrollDelay = 500;
-        }
-        createLayout(((size - getPaddingLeft()) - getPaddingRight()) - this.minusWidth);
-        if (View.MeasureSpec.getMode(i2) != NUM) {
-            size2 = getPaddingBottom() + getPaddingTop() + this.textHeight;
-        }
-        setMeasuredDimension(size, size2);
-        if ((this.gravity & 112) == 16) {
-            this.offsetY = getPaddingTop() + ((((getMeasuredHeight() - getPaddingTop()) - getPaddingBottom()) - this.textHeight) / 2);
-        } else {
-            this.offsetY = getPaddingTop();
-        }
+    /* JADX WARNING: Code restructure failed: missing block: B:5:0x002b, code lost:
+        r2 = r4.rightDrawable;
+     */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public void onMeasure(int r5, int r6) {
+        /*
+            r4 = this;
+            int r5 = android.view.View.MeasureSpec.getSize(r5)
+            int r0 = android.view.View.MeasureSpec.getSize(r6)
+            int r1 = r4.lastWidth
+            android.graphics.Point r2 = org.telegram.messenger.AndroidUtilities.displaySize
+            int r2 = r2.x
+            if (r1 == r2) goto L_0x0019
+            r4.lastWidth = r2
+            r1 = 0
+            r4.scrollingOffset = r1
+            r1 = 500(0x1f4, float:7.0E-43)
+            r4.currentScrollDelay = r1
+        L_0x0019:
+            int r1 = r4.getPaddingLeft()
+            int r1 = r5 - r1
+            int r2 = r4.getPaddingRight()
+            int r1 = r1 - r2
+            int r2 = r4.minusWidth
+            int r1 = r1 - r2
+            boolean r2 = r4.rightDrawableOutside
+            if (r2 == 0) goto L_0x0037
+            android.graphics.drawable.Drawable r2 = r4.rightDrawable
+            if (r2 == 0) goto L_0x0037
+            int r2 = r2.getIntrinsicWidth()
+            int r3 = r4.drawablePadding
+            int r2 = r2 + r3
+            goto L_0x0038
+        L_0x0037:
+            r2 = 0
+        L_0x0038:
+            int r1 = r1 - r2
+            r4.createLayout(r1)
+            int r6 = android.view.View.MeasureSpec.getMode(r6)
+            r1 = 1073741824(0x40000000, float:2.0)
+            if (r6 != r1) goto L_0x0045
+            goto L_0x0051
+        L_0x0045:
+            int r6 = r4.getPaddingTop()
+            int r0 = r4.textHeight
+            int r6 = r6 + r0
+            int r0 = r4.getPaddingBottom()
+            int r0 = r0 + r6
+        L_0x0051:
+            r4.setMeasuredDimension(r5, r0)
+            int r5 = r4.gravity
+            r5 = r5 & 112(0x70, float:1.57E-43)
+            r6 = 16
+            if (r5 != r6) goto L_0x0077
+            int r5 = r4.getPaddingTop()
+            int r6 = r4.getMeasuredHeight()
+            int r0 = r4.getPaddingTop()
+            int r6 = r6 - r0
+            int r0 = r4.getPaddingBottom()
+            int r6 = r6 - r0
+            int r0 = r4.textHeight
+            int r6 = r6 - r0
+            int r6 = r6 / 2
+            int r5 = r5 + r6
+            r4.offsetY = r5
+            goto L_0x007d
+        L_0x0077:
+            int r5 = r4.getPaddingTop()
+            r4.offsetY = r5
+        L_0x007d:
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.SimpleTextView.onMeasure(int, int):void");
     }
 
     /* access modifiers changed from: protected */
@@ -552,7 +605,9 @@ public class SimpleTextView extends View {
             return false;
         }
         this.text = charSequence;
-        this.scrollingOffset = 0.0f;
+        if (!(charSequence == null && charSequence == null) && (charSequence == null || !charSequence.equals(charSequence))) {
+            this.scrollingOffset = 0.0f;
+        }
         this.currentScrollDelay = 500;
         recreateLayoutMaybe();
         return true;

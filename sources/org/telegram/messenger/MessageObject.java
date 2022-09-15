@@ -302,6 +302,7 @@ public class MessageObject {
     public boolean wasJustSent;
     public boolean wasUnread;
     public ArrayList<TLRPC$MessageEntity> webPageDescriptionEntities;
+    public CharSequence youtubeDescription;
 
     public static class SendAnimationData {
         public float currentScale;
@@ -8971,7 +8972,7 @@ public class MessageObject {
         L_0x0037:
             java.util.regex.Pattern r5 = videoTimeUrlPattern     // Catch:{ Exception -> 0x0214 }
             if (r5 != 0) goto L_0x0043
-            java.lang.String r5 = "\\b(?:(\\d{1,2}):)?(\\d{1,3}):([0-5][0-9])\\b([^\\n]*)"
+            java.lang.String r5 = "\\b(?:(\\d{1,2}):)?(\\d{1,3}):([0-5][0-9])\\b(?: - |)([^\\n]*)"
             java.util.regex.Pattern r5 = java.util.regex.Pattern.compile(r5)     // Catch:{ Exception -> 0x0214 }
             videoTimeUrlPattern = r5     // Catch:{ Exception -> 0x0214 }
         L_0x0043:

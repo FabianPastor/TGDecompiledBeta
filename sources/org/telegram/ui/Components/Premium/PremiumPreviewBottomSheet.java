@@ -3,6 +3,7 @@ package org.telegram.ui.Components.Premium;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -202,6 +203,7 @@ public class PremiumPreviewBottomSheet extends BottomSheetWithRecyclerListView i
 
     public void onViewCreated(FrameLayout frameLayout) {
         super.onViewCreated(frameLayout);
+        this.currentAccount = UserConfig.selectedAccount;
         PremiumButtonView premiumButtonView = new PremiumButtonView(getContext(), false);
         premiumButtonView.setButton(PremiumPreviewFragment.getPremiumButtonText(this.currentAccount, (PremiumPreviewFragment.SubscriptionTier) null), new PremiumPreviewBottomSheet$$ExternalSyntheticLambda2(this));
         this.buttonContainer = new FrameLayout(getContext());
@@ -339,7 +341,15 @@ public class PremiumPreviewBottomSheet extends BottomSheetWithRecyclerListView i
     public /* synthetic */ void lambda$setTitle$3(ClickableSpan clickableSpan) {
         ArrayList arrayList = new ArrayList();
         arrayList.add(this.statusStickerSet);
-        new EmojiPacksAlert(new BaseFragment() {
+        AnonymousClass2 r2 = new BaseFragment() {
+            public Activity getParentActivity() {
+                BaseFragment baseFragment = PremiumPreviewBottomSheet.this.fragment;
+                if (baseFragment == null) {
+                    return null;
+                }
+                return baseFragment.getParentActivity();
+            }
+
             public int getCurrentAccount() {
                 return this.currentAccount;
             }
@@ -356,7 +366,12 @@ public class PremiumPreviewBottomSheet extends BottomSheetWithRecyclerListView i
                 dialog.show();
                 return dialog;
             }
-        }, getContext(), this.resourcesProvider, arrayList) {
+        };
+        BaseFragment baseFragment = this.fragment;
+        if (baseFragment != null) {
+            r2.setParentFragment(baseFragment);
+        }
+        new EmojiPacksAlert(r2, getContext(), this.resourcesProvider, arrayList) {
             /* access modifiers changed from: protected */
             public void onCloseByLink() {
                 PremiumPreviewBottomSheet.this.dismiss();
@@ -426,7 +441,7 @@ public class PremiumPreviewBottomSheet extends BottomSheetWithRecyclerListView i
                 }
                 if (PremiumPreviewBottomSheet.this.titleView == null) {
                     final PorterDuffColorFilter porterDuffColorFilter = new PorterDuffColorFilter(ColorUtils.setAlphaComponent(PremiumPreviewBottomSheet.this.getThemedColor("windowBackgroundWhiteLinkText"), 178), PorterDuff.Mode.MULTIPLY);
-                    LinkSpanDrawable.LinksTextView unused = PremiumPreviewBottomSheet.this.titleView = new LinkSpanDrawable.LinksTextView(this, context) {
+                    LinkSpanDrawable.LinksTextView unused = PremiumPreviewBottomSheet.this.titleView = new LinkSpanDrawable.LinksTextView(this, context, PremiumPreviewBottomSheet.this.resourcesProvider) {
                         private Layout lastLayout;
                         AnimatedEmojiSpan.EmojiGroupedSpans stack;
 

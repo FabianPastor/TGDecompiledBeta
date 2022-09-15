@@ -12,6 +12,6 @@ public final /* synthetic */ class VideoSeekPreviewImage$$ExternalSyntheticLambd
     }
 
     public final void run() {
-        this.f$0.lambda$open$3(this.f$1);
+        this.f$0.lambda$open$4(this.f$1);
     }
 }

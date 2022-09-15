@@ -19,6 +19,6 @@ public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda96 imp
     }
 
     public final void onItemClick(View view, int i, float f, float f2) {
-        this.f$0.lambda$onCreate$4(view, i, f, f2);
+        this.f$0.lambda$onCreate$2(view, i, f, f2);
     }
 }

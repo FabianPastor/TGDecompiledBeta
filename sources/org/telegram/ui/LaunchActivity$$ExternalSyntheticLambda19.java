@@ -9,6 +9,6 @@ public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda19 imp
     }
 
     public final void onClick(View view) {
-        LaunchActivity.lambda$onCreate$1(view);
+        LaunchActivity.lambda$setupActionBarLayout$7(view);
     }
 }

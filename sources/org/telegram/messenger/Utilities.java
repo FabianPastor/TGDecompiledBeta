@@ -20,6 +20,7 @@ import java.util.regex.Pattern;
 public class Utilities {
     private static final String RANDOM_STRING_CHARS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     public static volatile DispatchQueue cacheClearQueue = new DispatchQueue("cacheClearQueue");
+    public static volatile DispatchQueue externalNetworkQueue = new DispatchQueue("externalNetworkQueue");
     public static Random fastRandom = new Xoroshiro128PlusRandom(random.nextLong());
     public static volatile DispatchQueue globalQueue = new DispatchQueue("globalQueue");
     protected static final char[] hexArray = "0123456789ABCDEF".toCharArray();

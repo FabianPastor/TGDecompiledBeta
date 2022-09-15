@@ -37,6 +37,7 @@ import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.arch.core.util.Function;
@@ -166,6 +167,7 @@ import org.telegram.ui.Components.StickersAlert;
 import org.telegram.ui.Components.TermsOfServiceView;
 import org.telegram.ui.Components.ThemeEditorView;
 import org.telegram.ui.Components.UpdateAppAlertDialog;
+import org.telegram.ui.Components.VerticalPositionAutoAnimator;
 import org.telegram.ui.Components.voip.VoIPHelper;
 import org.telegram.ui.DialogsActivity;
 import org.telegram.ui.PaymentFormActivity;
@@ -208,6 +210,7 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
     private boolean isNavigationBarColorFrozen = false;
     /* access modifiers changed from: private */
     public SideMenultItemAnimator itemAnimator;
+    private RelativeLayout launchLayout;
     /* access modifiers changed from: private */
     public ActionBarLayout layersActionBarLayout;
     private boolean loadingLocaleDialog;
@@ -273,7 +276,7 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
     private boolean wasMutedByAdminRaisedHand;
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$onCreate$1(View view) {
+    public static /* synthetic */ void lambda$setupActionBarLayout$7(View view) {
     }
 
     /* access modifiers changed from: protected */
@@ -445,201 +448,98 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
             r4.<init>(r12)
             r12.fireworksOverlay = r4
             r2.addView(r4)
-            boolean r2 = org.telegram.messenger.AndroidUtilities.isTablet()
-            r4 = 0
-            if (r2 == 0) goto L_0x0267
-            android.view.Window r2 = r12.getWindow()
-            r7 = 16
-            r2.setSoftInputMode(r7)
-            org.telegram.ui.LaunchActivity$5 r2 = new org.telegram.ui.LaunchActivity$5
-            r2.<init>(r12)
-            org.telegram.ui.ActionBar.DrawerLayoutContainer r7 = r12.drawerLayoutContainer
-            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r8, r10)
-            r7.addView(r2, r9)
-            org.telegram.ui.LaunchActivity$6 r7 = new org.telegram.ui.LaunchActivity$6
-            r7.<init>(r12, r12)
-            r12.backgroundTablet = r7
-            r7.setOccupyStatusBar(r4)
-            org.telegram.ui.Components.SizeNotifierFrameLayout r7 = r12.backgroundTablet
-            android.graphics.drawable.Drawable r9 = org.telegram.ui.ActionBar.Theme.getCachedWallpaper()
-            boolean r11 = org.telegram.ui.ActionBar.Theme.isWallpaperMotion()
-            r7.setBackgroundImage(r9, r11)
-            org.telegram.ui.Components.SizeNotifierFrameLayout r7 = r12.backgroundTablet
-            android.widget.RelativeLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createRelative(r8, r8)
-            r2.addView(r7, r9)
-            org.telegram.ui.ActionBar.ActionBarLayout r7 = r12.actionBarLayout
-            r2.addView(r7)
-            org.telegram.ui.ActionBar.ActionBarLayout r7 = new org.telegram.ui.ActionBar.ActionBarLayout
-            r7.<init>(r12)
-            r12.rightActionBarLayout = r7
-            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r9 = rightFragmentsStack
-            r7.init(r9)
-            org.telegram.ui.ActionBar.ActionBarLayout r7 = r12.rightActionBarLayout
-            r7.setDelegate(r12)
-            org.telegram.ui.ActionBar.ActionBarLayout r7 = r12.rightActionBarLayout
-            r2.addView(r7)
-            android.widget.FrameLayout r7 = new android.widget.FrameLayout
-            r7.<init>(r12)
-            r12.shadowTabletSide = r7
-            r9 = 1076449908(0x40295274, float:2.6456575)
-            r7.setBackgroundColor(r9)
-            android.widget.FrameLayout r7 = r12.shadowTabletSide
-            r2.addView(r7)
-            android.widget.FrameLayout r7 = new android.widget.FrameLayout
-            r7.<init>(r12)
-            r12.shadowTablet = r7
-            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r9 = layerFragmentsStack
-            boolean r9 = r9.isEmpty()
-            if (r9 == 0) goto L_0x01fc
-            r9 = 8
-            goto L_0x01fd
-        L_0x01fc:
-            r9 = 0
-        L_0x01fd:
-            r7.setVisibility(r9)
-            android.widget.FrameLayout r7 = r12.shadowTablet
-            r9 = 2130706432(0x7var_, float:1.7014118E38)
-            r7.setBackgroundColor(r9)
-            android.widget.FrameLayout r7 = r12.shadowTablet
-            r2.addView(r7)
-            android.widget.FrameLayout r7 = r12.shadowTablet
-            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda20 r9 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda20
-            r9.<init>(r12)
-            r7.setOnTouchListener(r9)
-            android.widget.FrameLayout r7 = r12.shadowTablet
-            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda19 r9 = org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda19.INSTANCE
-            r7.setOnClickListener(r9)
-            org.telegram.ui.ActionBar.ActionBarLayout r7 = new org.telegram.ui.ActionBar.ActionBarLayout
-            r7.<init>(r12)
-            r12.layersActionBarLayout = r7
-            r7.setRemoveActionBarExtraHeight(r1)
-            org.telegram.ui.ActionBar.ActionBarLayout r7 = r12.layersActionBarLayout
-            android.widget.FrameLayout r9 = r12.shadowTablet
-            r7.setBackgroundView(r9)
-            org.telegram.ui.ActionBar.ActionBarLayout r7 = r12.layersActionBarLayout
-            r7.setUseAlphaAnimations(r1)
-            org.telegram.ui.ActionBar.ActionBarLayout r7 = r12.layersActionBarLayout
-            int r9 = org.telegram.messenger.R.drawable.boxshadow
-            r7.setBackgroundResource(r9)
-            org.telegram.ui.ActionBar.ActionBarLayout r7 = r12.layersActionBarLayout
-            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r9 = layerFragmentsStack
-            r7.init(r9)
-            org.telegram.ui.ActionBar.ActionBarLayout r7 = r12.layersActionBarLayout
-            r7.setDelegate(r12)
-            org.telegram.ui.ActionBar.ActionBarLayout r7 = r12.layersActionBarLayout
-            org.telegram.ui.ActionBar.DrawerLayoutContainer r9 = r12.drawerLayoutContainer
-            r7.setDrawerLayoutContainer(r9)
-            org.telegram.ui.ActionBar.ActionBarLayout r7 = r12.layersActionBarLayout
-            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r9 = layerFragmentsStack
-            boolean r9 = r9.isEmpty()
-            if (r9 == 0) goto L_0x0258
-            goto L_0x0259
-        L_0x0258:
-            r6 = 0
-        L_0x0259:
-            r7.setVisibility(r6)
-            org.telegram.ui.ActionBar.ActionBarLayout r6 = r12.layersActionBarLayout
-            org.telegram.ui.Components.VerticalPositionAutoAnimator.attach(r6)
-            org.telegram.ui.ActionBar.ActionBarLayout r6 = r12.layersActionBarLayout
-            r2.addView(r6)
-            goto L_0x0273
-        L_0x0267:
-            org.telegram.ui.ActionBar.DrawerLayoutContainer r2 = r12.drawerLayoutContainer
-            org.telegram.ui.ActionBar.ActionBarLayout r6 = r12.actionBarLayout
-            android.view.ViewGroup$LayoutParams r7 = new android.view.ViewGroup$LayoutParams
-            r7.<init>(r8, r8)
-            r2.addView(r6, r7)
-        L_0x0273:
+            r12.setupActionBarLayout()
             android.widget.FrameLayout r2 = new android.widget.FrameLayout
             r2.<init>(r12)
             r12.sideMenuContainer = r2
-            org.telegram.ui.LaunchActivity$7 r2 = new org.telegram.ui.LaunchActivity$7
+            org.telegram.ui.LaunchActivity$5 r2 = new org.telegram.ui.LaunchActivity$5
             r2.<init>(r12)
             r12.sideMenu = r2
-            org.telegram.ui.Components.SideMenultItemAnimator r6 = new org.telegram.ui.Components.SideMenultItemAnimator
-            r6.<init>(r2)
-            r12.itemAnimator = r6
+            org.telegram.ui.Components.SideMenultItemAnimator r4 = new org.telegram.ui.Components.SideMenultItemAnimator
+            r4.<init>(r2)
+            r12.itemAnimator = r4
             org.telegram.ui.Components.RecyclerListView r2 = r12.sideMenu
-            r2.setItemAnimator(r6)
+            r2.setItemAnimator(r4)
             org.telegram.ui.Components.RecyclerListView r2 = r12.sideMenu
-            java.lang.String r6 = "chats_menuBackground"
-            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r6)
-            r2.setBackgroundColor(r6)
+            java.lang.String r4 = "chats_menuBackground"
+            int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
+            r2.setBackgroundColor(r4)
             org.telegram.ui.Components.RecyclerListView r2 = r12.sideMenu
-            androidx.recyclerview.widget.LinearLayoutManager r6 = new androidx.recyclerview.widget.LinearLayoutManager
-            r6.<init>(r12, r1, r4)
-            r2.setLayoutManager(r6)
+            androidx.recyclerview.widget.LinearLayoutManager r4 = new androidx.recyclerview.widget.LinearLayoutManager
+            r6 = 0
+            r4.<init>(r12, r1, r6)
+            r2.setLayoutManager(r4)
             org.telegram.ui.Components.RecyclerListView r2 = r12.sideMenu
-            r2.setAllowItemsInteractionDuringAnimation(r4)
+            r2.setAllowItemsInteractionDuringAnimation(r6)
             org.telegram.ui.Components.RecyclerListView r2 = r12.sideMenu
-            org.telegram.ui.Adapters.DrawerLayoutAdapter r6 = new org.telegram.ui.Adapters.DrawerLayoutAdapter
+            org.telegram.ui.Adapters.DrawerLayoutAdapter r4 = new org.telegram.ui.Adapters.DrawerLayoutAdapter
             org.telegram.ui.Components.SideMenultItemAnimator r7 = r12.itemAnimator
             org.telegram.ui.ActionBar.DrawerLayoutContainer r9 = r12.drawerLayoutContainer
-            r6.<init>(r12, r7, r9)
-            r12.drawerLayoutAdapter = r6
-            r2.setAdapter(r6)
+            r4.<init>(r12, r7, r9)
+            r12.drawerLayoutAdapter = r4
+            r2.setAdapter(r4)
             org.telegram.ui.Adapters.DrawerLayoutAdapter r2 = r12.drawerLayoutAdapter
-            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda17 r6 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda17
-            r6.<init>(r12)
-            r2.setOnPremiumDrawableClick(r6)
+            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda16 r4 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda16
+            r4.<init>(r12)
+            r2.setOnPremiumDrawableClick(r4)
             android.widget.FrameLayout r2 = r12.sideMenuContainer
-            org.telegram.ui.Components.RecyclerListView r6 = r12.sideMenu
+            org.telegram.ui.Components.RecyclerListView r4 = r12.sideMenu
             android.widget.FrameLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createFrame(r8, r10)
-            r2.addView(r6, r7)
+            r2.addView(r4, r7)
             org.telegram.ui.ActionBar.DrawerLayoutContainer r2 = r12.drawerLayoutContainer
-            android.widget.FrameLayout r6 = r12.sideMenuContainer
-            r2.setDrawerLayout(r6)
+            android.widget.FrameLayout r4 = r12.sideMenuContainer
+            r2.setDrawerLayout(r4)
             android.widget.FrameLayout r2 = r12.sideMenuContainer
             android.view.ViewGroup$LayoutParams r2 = r2.getLayoutParams()
             android.widget.FrameLayout$LayoutParams r2 = (android.widget.FrameLayout.LayoutParams) r2
-            android.graphics.Point r6 = org.telegram.messenger.AndroidUtilities.getRealScreenSize()
+            android.graphics.Point r4 = org.telegram.messenger.AndroidUtilities.getRealScreenSize()
             boolean r7 = org.telegram.messenger.AndroidUtilities.isTablet()
             r9 = 1134559232(0x43a00000, float:320.0)
-            if (r7 == 0) goto L_0x02ec
-            int r6 = org.telegram.messenger.AndroidUtilities.dp(r9)
-            goto L_0x0303
-        L_0x02ec:
+            if (r7 == 0) goto L_0x01fc
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            goto L_0x0213
+        L_0x01fc:
             int r7 = org.telegram.messenger.AndroidUtilities.dp(r9)
-            int r9 = r6.x
-            int r6 = r6.y
-            int r6 = java.lang.Math.min(r9, r6)
+            int r9 = r4.x
+            int r4 = r4.y
+            int r4 = java.lang.Math.min(r9, r4)
             r9 = 1113587712(0x42600000, float:56.0)
             int r9 = org.telegram.messenger.AndroidUtilities.dp(r9)
-            int r6 = r6 - r9
-            int r6 = java.lang.Math.min(r7, r6)
-        L_0x0303:
-            r2.width = r6
+            int r4 = r4 - r9
+            int r4 = java.lang.Math.min(r7, r4)
+        L_0x0213:
+            r2.width = r4
             r2.height = r8
-            android.widget.FrameLayout r6 = r12.sideMenuContainer
-            r6.setLayoutParams(r2)
+            android.widget.FrameLayout r4 = r12.sideMenuContainer
+            r4.setLayoutParams(r2)
             org.telegram.ui.Components.RecyclerListView r2 = r12.sideMenu
-            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda96 r6 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda96
-            r6.<init>(r12)
-            r2.setOnItemClickListener((org.telegram.ui.Components.RecyclerListView.OnItemClickListenerExtended) r6)
+            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda96 r4 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda96
+            r4.<init>(r12)
+            r2.setOnItemClickListener((org.telegram.ui.Components.RecyclerListView.OnItemClickListenerExtended) r4)
             androidx.recyclerview.widget.ItemTouchHelper r2 = new androidx.recyclerview.widget.ItemTouchHelper
-            org.telegram.ui.LaunchActivity$8 r6 = new org.telegram.ui.LaunchActivity$8
+            org.telegram.ui.LaunchActivity$6 r4 = new org.telegram.ui.LaunchActivity$6
             r7 = 3
-            r6.<init>(r7, r4)
-            r2.<init>(r6)
-            org.telegram.ui.Components.RecyclerListView r6 = r12.sideMenu
-            r2.attachToRecyclerView(r6)
-            org.telegram.ui.Components.RecyclerListView r6 = r12.sideMenu
+            r4.<init>(r7, r6)
+            r2.<init>(r4)
+            org.telegram.ui.Components.RecyclerListView r4 = r12.sideMenu
+            r2.attachToRecyclerView(r4)
+            org.telegram.ui.Components.RecyclerListView r4 = r12.sideMenu
             org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda97 r9 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda97
             r9.<init>(r12, r2)
-            r6.setOnItemLongClickListener((org.telegram.ui.Components.RecyclerListView.OnItemLongClickListener) r9)
+            r4.setOnItemLongClickListener((org.telegram.ui.Components.RecyclerListView.OnItemLongClickListener) r9)
             org.telegram.ui.ActionBar.DrawerLayoutContainer r2 = r12.drawerLayoutContainer
-            org.telegram.ui.ActionBar.ActionBarLayout r6 = r12.actionBarLayout
-            r2.setParentActionBarLayout(r6)
+            org.telegram.ui.ActionBar.ActionBarLayout r4 = r12.actionBarLayout
+            r2.setParentActionBarLayout(r4)
             org.telegram.ui.ActionBar.ActionBarLayout r2 = r12.actionBarLayout
-            org.telegram.ui.ActionBar.DrawerLayoutContainer r6 = r12.drawerLayoutContainer
-            r2.setDrawerLayoutContainer(r6)
+            org.telegram.ui.ActionBar.DrawerLayoutContainer r4 = r12.drawerLayoutContainer
+            r2.setDrawerLayoutContainer(r4)
             org.telegram.ui.ActionBar.ActionBarLayout r2 = r12.actionBarLayout
-            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r6 = mainFragmentsStack
-            r2.init(r6)
+            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r4 = mainFragmentsStack
+            r2.init(r4)
             org.telegram.ui.ActionBar.ActionBarLayout r2 = r12.actionBarLayout
-            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda30 r6 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda30
-            r6.<init>(r12)
-            r2.setFragmentStackChangedListener(r6)
+            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda32 r4 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda32
+            r4.<init>(r12)
+            r2.setFragmentStackChangedListener(r4)
             org.telegram.ui.ActionBar.ActionBarLayout r2 = r12.actionBarLayout
             r2.setDelegate(r12)
             org.telegram.ui.ActionBar.Theme.loadWallpaper()
@@ -647,10 +547,10 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
             int r2 = r12.currentAccount
             r12.updateCurrentConnectionState(r2)
             org.telegram.messenger.NotificationCenter r2 = org.telegram.messenger.NotificationCenter.getGlobalInstance()
-            int r6 = org.telegram.messenger.NotificationCenter.closeOtherAppActivities
+            int r4 = org.telegram.messenger.NotificationCenter.closeOtherAppActivities
             java.lang.Object[] r9 = new java.lang.Object[r1]
-            r9[r4] = r12
-            r2.postNotificationName(r6, r9)
+            r9[r6] = r12
+            r2.postNotificationName(r4, r9)
             int r2 = r12.currentAccount
             org.telegram.tgnet.ConnectionsManager r2 = org.telegram.tgnet.ConnectionsManager.getInstance(r2)
             int r2 = r2.getConnectionState()
@@ -674,47 +574,47 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
             int r9 = org.telegram.messenger.NotificationCenter.needCheckSystemBarColors
             r2.addObserver(r12, r9)
             org.telegram.messenger.NotificationCenter r2 = org.telegram.messenger.NotificationCenter.getGlobalInstance()
-            r2.addObserver(r12, r6)
+            r2.addObserver(r12, r4)
             org.telegram.messenger.NotificationCenter r2 = org.telegram.messenger.NotificationCenter.getGlobalInstance()
-            int r6 = org.telegram.messenger.NotificationCenter.didSetPasscode
-            r2.addObserver(r12, r6)
+            int r4 = org.telegram.messenger.NotificationCenter.didSetPasscode
+            r2.addObserver(r12, r4)
             org.telegram.messenger.NotificationCenter r2 = org.telegram.messenger.NotificationCenter.getGlobalInstance()
-            int r6 = org.telegram.messenger.NotificationCenter.didSetNewWallpapper
-            r2.addObserver(r12, r6)
+            int r4 = org.telegram.messenger.NotificationCenter.didSetNewWallpapper
+            r2.addObserver(r12, r4)
             org.telegram.messenger.NotificationCenter r2 = org.telegram.messenger.NotificationCenter.getGlobalInstance()
-            int r6 = org.telegram.messenger.NotificationCenter.notificationsCountUpdated
-            r2.addObserver(r12, r6)
+            int r4 = org.telegram.messenger.NotificationCenter.notificationsCountUpdated
+            r2.addObserver(r12, r4)
             org.telegram.messenger.NotificationCenter r2 = org.telegram.messenger.NotificationCenter.getGlobalInstance()
-            int r6 = org.telegram.messenger.NotificationCenter.screenStateChanged
-            r2.addObserver(r12, r6)
+            int r4 = org.telegram.messenger.NotificationCenter.screenStateChanged
+            r2.addObserver(r12, r4)
             org.telegram.messenger.NotificationCenter r2 = org.telegram.messenger.NotificationCenter.getGlobalInstance()
-            int r6 = org.telegram.messenger.NotificationCenter.showBulletin
-            r2.addObserver(r12, r6)
+            int r4 = org.telegram.messenger.NotificationCenter.showBulletin
+            r2.addObserver(r12, r4)
             org.telegram.messenger.NotificationCenter r2 = org.telegram.messenger.NotificationCenter.getGlobalInstance()
-            int r6 = org.telegram.messenger.NotificationCenter.appUpdateAvailable
-            r2.addObserver(r12, r6)
+            int r4 = org.telegram.messenger.NotificationCenter.appUpdateAvailable
+            r2.addObserver(r12, r4)
             org.telegram.messenger.NotificationCenter r2 = org.telegram.messenger.NotificationCenter.getGlobalInstance()
-            int r6 = org.telegram.messenger.NotificationCenter.requestPermissions
-            r2.addObserver(r12, r6)
+            int r4 = org.telegram.messenger.NotificationCenter.requestPermissions
+            r2.addObserver(r12, r4)
             int r2 = r12.currentAccount
             org.telegram.messenger.NotificationCenter r2 = org.telegram.messenger.NotificationCenter.getInstance(r2)
-            int r6 = org.telegram.messenger.NotificationCenter.currentUserPremiumStatusChanged
-            r2.addObserver(r12, r6)
+            int r4 = org.telegram.messenger.NotificationCenter.currentUserPremiumStatusChanged
+            r2.addObserver(r12, r4)
             org.telegram.ui.ActionBar.ActionBarLayout r2 = r12.actionBarLayout
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r2 = r2.fragmentsStack
             boolean r2 = r2.isEmpty()
-            if (r2 == 0) goto L_0x051d
+            if (r2 == 0) goto L_0x042d
             int r2 = r12.currentAccount
             org.telegram.messenger.UserConfig r2 = org.telegram.messenger.UserConfig.getInstance(r2)
             boolean r2 = r2.isClientActivated()
-            if (r2 != 0) goto L_0x0424
+            if (r2 != 0) goto L_0x0334
             org.telegram.ui.ActionBar.ActionBarLayout r2 = r12.actionBarLayout
             org.telegram.ui.ActionBar.BaseFragment r3 = r12.getClientNotActivatedFragment()
             r2.addFragmentToStack(r3)
             org.telegram.ui.ActionBar.DrawerLayoutContainer r2 = r12.drawerLayoutContainer
-            r2.setAllowOpenDrawer(r4, r4)
-            goto L_0x0438
-        L_0x0424:
+            r2.setAllowOpenDrawer(r6, r6)
+            goto L_0x0348
+        L_0x0334:
             org.telegram.ui.DialogsActivity r2 = new org.telegram.ui.DialogsActivity
             r2.<init>(r3)
             org.telegram.ui.Components.RecyclerListView r3 = r12.sideMenu
@@ -722,315 +622,292 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
             org.telegram.ui.ActionBar.ActionBarLayout r3 = r12.actionBarLayout
             r3.addFragmentToStack(r2)
             org.telegram.ui.ActionBar.DrawerLayoutContainer r2 = r12.drawerLayoutContainer
-            r2.setAllowOpenDrawer(r1, r4)
-        L_0x0438:
-            if (r13 == 0) goto L_0x059c
+            r2.setAllowOpenDrawer(r1, r6)
+        L_0x0348:
+            if (r13 == 0) goto L_0x04ac
             java.lang.String r2 = "fragment"
-            java.lang.String r2 = r13.getString(r2)     // Catch:{ Exception -> 0x0517 }
-            if (r2 == 0) goto L_0x059c
+            java.lang.String r2 = r13.getString(r2)     // Catch:{ Exception -> 0x0427 }
+            if (r2 == 0) goto L_0x04ac
             java.lang.String r3 = "args"
-            android.os.Bundle r3 = r13.getBundle(r3)     // Catch:{ Exception -> 0x0517 }
-            int r6 = r2.hashCode()     // Catch:{ Exception -> 0x0517 }
+            android.os.Bundle r3 = r13.getBundle(r3)     // Catch:{ Exception -> 0x0427 }
+            int r4 = r2.hashCode()     // Catch:{ Exception -> 0x0427 }
             r9 = 5
             r10 = 4
             r11 = 2
-            switch(r6) {
-                case -1529105743: goto L_0x0485;
-                case -1349522494: goto L_0x047b;
-                case 3052376: goto L_0x0471;
-                case 98629247: goto L_0x0467;
-                case 738950403: goto L_0x045d;
-                case 1434631203: goto L_0x0453;
-                default: goto L_0x0452;
-            }     // Catch:{ Exception -> 0x0517 }
-        L_0x0452:
-            goto L_0x048e
-        L_0x0453:
-            java.lang.String r6 = "settings"
-            boolean r2 = r2.equals(r6)     // Catch:{ Exception -> 0x0517 }
-            if (r2 == 0) goto L_0x048e
+            switch(r4) {
+                case -1529105743: goto L_0x0395;
+                case -1349522494: goto L_0x038b;
+                case 3052376: goto L_0x0381;
+                case 98629247: goto L_0x0377;
+                case 738950403: goto L_0x036d;
+                case 1434631203: goto L_0x0363;
+                default: goto L_0x0362;
+            }     // Catch:{ Exception -> 0x0427 }
+        L_0x0362:
+            goto L_0x039e
+        L_0x0363:
+            java.lang.String r4 = "settings"
+            boolean r2 = r2.equals(r4)     // Catch:{ Exception -> 0x0427 }
+            if (r2 == 0) goto L_0x039e
             r8 = 1
-            goto L_0x048e
-        L_0x045d:
-            java.lang.String r6 = "channel"
-            boolean r2 = r2.equals(r6)     // Catch:{ Exception -> 0x0517 }
-            if (r2 == 0) goto L_0x048e
+            goto L_0x039e
+        L_0x036d:
+            java.lang.String r4 = "channel"
+            boolean r2 = r2.equals(r4)     // Catch:{ Exception -> 0x0427 }
+            if (r2 == 0) goto L_0x039e
             r8 = 3
-            goto L_0x048e
-        L_0x0467:
-            java.lang.String r6 = "group"
-            boolean r2 = r2.equals(r6)     // Catch:{ Exception -> 0x0517 }
-            if (r2 == 0) goto L_0x048e
+            goto L_0x039e
+        L_0x0377:
+            java.lang.String r4 = "group"
+            boolean r2 = r2.equals(r4)     // Catch:{ Exception -> 0x0427 }
+            if (r2 == 0) goto L_0x039e
             r8 = 2
-            goto L_0x048e
-        L_0x0471:
-            java.lang.String r6 = "chat"
-            boolean r2 = r2.equals(r6)     // Catch:{ Exception -> 0x0517 }
-            if (r2 == 0) goto L_0x048e
+            goto L_0x039e
+        L_0x0381:
+            java.lang.String r4 = "chat"
+            boolean r2 = r2.equals(r4)     // Catch:{ Exception -> 0x0427 }
+            if (r2 == 0) goto L_0x039e
             r8 = 0
-            goto L_0x048e
-        L_0x047b:
-            java.lang.String r6 = "chat_profile"
-            boolean r2 = r2.equals(r6)     // Catch:{ Exception -> 0x0517 }
-            if (r2 == 0) goto L_0x048e
+            goto L_0x039e
+        L_0x038b:
+            java.lang.String r4 = "chat_profile"
+            boolean r2 = r2.equals(r4)     // Catch:{ Exception -> 0x0427 }
+            if (r2 == 0) goto L_0x039e
             r8 = 4
-            goto L_0x048e
-        L_0x0485:
-            java.lang.String r6 = "wallpapers"
-            boolean r2 = r2.equals(r6)     // Catch:{ Exception -> 0x0517 }
-            if (r2 == 0) goto L_0x048e
+            goto L_0x039e
+        L_0x0395:
+            java.lang.String r4 = "wallpapers"
+            boolean r2 = r2.equals(r4)     // Catch:{ Exception -> 0x0427 }
+            if (r2 == 0) goto L_0x039e
             r8 = 5
-        L_0x048e:
-            if (r8 == 0) goto L_0x0503
-            if (r8 == r1) goto L_0x04e7
-            if (r8 == r11) goto L_0x04d3
-            if (r8 == r7) goto L_0x04bf
-            if (r8 == r10) goto L_0x04ab
-            if (r8 == r9) goto L_0x049c
-            goto L_0x059c
-        L_0x049c:
-            org.telegram.ui.WallpapersListActivity r2 = new org.telegram.ui.WallpapersListActivity     // Catch:{ Exception -> 0x0517 }
-            r2.<init>(r4)     // Catch:{ Exception -> 0x0517 }
-            org.telegram.ui.ActionBar.ActionBarLayout r3 = r12.actionBarLayout     // Catch:{ Exception -> 0x0517 }
-            r3.addFragmentToStack(r2)     // Catch:{ Exception -> 0x0517 }
-            r2.restoreSelfArgs(r13)     // Catch:{ Exception -> 0x0517 }
-            goto L_0x059c
-        L_0x04ab:
-            if (r3 == 0) goto L_0x059c
-            org.telegram.ui.ProfileActivity r2 = new org.telegram.ui.ProfileActivity     // Catch:{ Exception -> 0x0517 }
-            r2.<init>(r3)     // Catch:{ Exception -> 0x0517 }
-            org.telegram.ui.ActionBar.ActionBarLayout r3 = r12.actionBarLayout     // Catch:{ Exception -> 0x0517 }
-            boolean r3 = r3.addFragmentToStack(r2)     // Catch:{ Exception -> 0x0517 }
-            if (r3 == 0) goto L_0x059c
-            r2.restoreSelfArgs(r13)     // Catch:{ Exception -> 0x0517 }
-            goto L_0x059c
-        L_0x04bf:
-            if (r3 == 0) goto L_0x059c
-            org.telegram.ui.ChannelCreateActivity r2 = new org.telegram.ui.ChannelCreateActivity     // Catch:{ Exception -> 0x0517 }
-            r2.<init>(r3)     // Catch:{ Exception -> 0x0517 }
-            org.telegram.ui.ActionBar.ActionBarLayout r3 = r12.actionBarLayout     // Catch:{ Exception -> 0x0517 }
-            boolean r3 = r3.addFragmentToStack(r2)     // Catch:{ Exception -> 0x0517 }
-            if (r3 == 0) goto L_0x059c
-            r2.restoreSelfArgs(r13)     // Catch:{ Exception -> 0x0517 }
-            goto L_0x059c
-        L_0x04d3:
-            if (r3 == 0) goto L_0x059c
-            org.telegram.ui.GroupCreateFinalActivity r2 = new org.telegram.ui.GroupCreateFinalActivity     // Catch:{ Exception -> 0x0517 }
-            r2.<init>(r3)     // Catch:{ Exception -> 0x0517 }
-            org.telegram.ui.ActionBar.ActionBarLayout r3 = r12.actionBarLayout     // Catch:{ Exception -> 0x0517 }
-            boolean r3 = r3.addFragmentToStack(r2)     // Catch:{ Exception -> 0x0517 }
-            if (r3 == 0) goto L_0x059c
-            r2.restoreSelfArgs(r13)     // Catch:{ Exception -> 0x0517 }
-            goto L_0x059c
-        L_0x04e7:
+        L_0x039e:
+            if (r8 == 0) goto L_0x0413
+            if (r8 == r1) goto L_0x03f7
+            if (r8 == r11) goto L_0x03e3
+            if (r8 == r7) goto L_0x03cf
+            if (r8 == r10) goto L_0x03bb
+            if (r8 == r9) goto L_0x03ac
+            goto L_0x04ac
+        L_0x03ac:
+            org.telegram.ui.WallpapersListActivity r2 = new org.telegram.ui.WallpapersListActivity     // Catch:{ Exception -> 0x0427 }
+            r2.<init>(r6)     // Catch:{ Exception -> 0x0427 }
+            org.telegram.ui.ActionBar.ActionBarLayout r3 = r12.actionBarLayout     // Catch:{ Exception -> 0x0427 }
+            r3.addFragmentToStack(r2)     // Catch:{ Exception -> 0x0427 }
+            r2.restoreSelfArgs(r13)     // Catch:{ Exception -> 0x0427 }
+            goto L_0x04ac
+        L_0x03bb:
+            if (r3 == 0) goto L_0x04ac
+            org.telegram.ui.ProfileActivity r2 = new org.telegram.ui.ProfileActivity     // Catch:{ Exception -> 0x0427 }
+            r2.<init>(r3)     // Catch:{ Exception -> 0x0427 }
+            org.telegram.ui.ActionBar.ActionBarLayout r3 = r12.actionBarLayout     // Catch:{ Exception -> 0x0427 }
+            boolean r3 = r3.addFragmentToStack(r2)     // Catch:{ Exception -> 0x0427 }
+            if (r3 == 0) goto L_0x04ac
+            r2.restoreSelfArgs(r13)     // Catch:{ Exception -> 0x0427 }
+            goto L_0x04ac
+        L_0x03cf:
+            if (r3 == 0) goto L_0x04ac
+            org.telegram.ui.ChannelCreateActivity r2 = new org.telegram.ui.ChannelCreateActivity     // Catch:{ Exception -> 0x0427 }
+            r2.<init>(r3)     // Catch:{ Exception -> 0x0427 }
+            org.telegram.ui.ActionBar.ActionBarLayout r3 = r12.actionBarLayout     // Catch:{ Exception -> 0x0427 }
+            boolean r3 = r3.addFragmentToStack(r2)     // Catch:{ Exception -> 0x0427 }
+            if (r3 == 0) goto L_0x04ac
+            r2.restoreSelfArgs(r13)     // Catch:{ Exception -> 0x0427 }
+            goto L_0x04ac
+        L_0x03e3:
+            if (r3 == 0) goto L_0x04ac
+            org.telegram.ui.GroupCreateFinalActivity r2 = new org.telegram.ui.GroupCreateFinalActivity     // Catch:{ Exception -> 0x0427 }
+            r2.<init>(r3)     // Catch:{ Exception -> 0x0427 }
+            org.telegram.ui.ActionBar.ActionBarLayout r3 = r12.actionBarLayout     // Catch:{ Exception -> 0x0427 }
+            boolean r3 = r3.addFragmentToStack(r2)     // Catch:{ Exception -> 0x0427 }
+            if (r3 == 0) goto L_0x04ac
+            r2.restoreSelfArgs(r13)     // Catch:{ Exception -> 0x0427 }
+            goto L_0x04ac
+        L_0x03f7:
             java.lang.String r2 = "user_id"
-            int r6 = r12.currentAccount     // Catch:{ Exception -> 0x0517 }
-            org.telegram.messenger.UserConfig r6 = org.telegram.messenger.UserConfig.getInstance(r6)     // Catch:{ Exception -> 0x0517 }
-            long r6 = r6.clientUserId     // Catch:{ Exception -> 0x0517 }
-            r3.putLong(r2, r6)     // Catch:{ Exception -> 0x0517 }
-            org.telegram.ui.ProfileActivity r2 = new org.telegram.ui.ProfileActivity     // Catch:{ Exception -> 0x0517 }
-            r2.<init>(r3)     // Catch:{ Exception -> 0x0517 }
-            org.telegram.ui.ActionBar.ActionBarLayout r3 = r12.actionBarLayout     // Catch:{ Exception -> 0x0517 }
-            r3.addFragmentToStack(r2)     // Catch:{ Exception -> 0x0517 }
-            r2.restoreSelfArgs(r13)     // Catch:{ Exception -> 0x0517 }
-            goto L_0x059c
-        L_0x0503:
-            if (r3 == 0) goto L_0x059c
-            org.telegram.ui.ChatActivity r2 = new org.telegram.ui.ChatActivity     // Catch:{ Exception -> 0x0517 }
-            r2.<init>(r3)     // Catch:{ Exception -> 0x0517 }
-            org.telegram.ui.ActionBar.ActionBarLayout r3 = r12.actionBarLayout     // Catch:{ Exception -> 0x0517 }
-            boolean r3 = r3.addFragmentToStack(r2)     // Catch:{ Exception -> 0x0517 }
-            if (r3 == 0) goto L_0x059c
-            r2.restoreSelfArgs(r13)     // Catch:{ Exception -> 0x0517 }
-            goto L_0x059c
-        L_0x0517:
+            int r4 = r12.currentAccount     // Catch:{ Exception -> 0x0427 }
+            org.telegram.messenger.UserConfig r4 = org.telegram.messenger.UserConfig.getInstance(r4)     // Catch:{ Exception -> 0x0427 }
+            long r7 = r4.clientUserId     // Catch:{ Exception -> 0x0427 }
+            r3.putLong(r2, r7)     // Catch:{ Exception -> 0x0427 }
+            org.telegram.ui.ProfileActivity r2 = new org.telegram.ui.ProfileActivity     // Catch:{ Exception -> 0x0427 }
+            r2.<init>(r3)     // Catch:{ Exception -> 0x0427 }
+            org.telegram.ui.ActionBar.ActionBarLayout r3 = r12.actionBarLayout     // Catch:{ Exception -> 0x0427 }
+            r3.addFragmentToStack(r2)     // Catch:{ Exception -> 0x0427 }
+            r2.restoreSelfArgs(r13)     // Catch:{ Exception -> 0x0427 }
+            goto L_0x04ac
+        L_0x0413:
+            if (r3 == 0) goto L_0x04ac
+            org.telegram.ui.ChatActivity r2 = new org.telegram.ui.ChatActivity     // Catch:{ Exception -> 0x0427 }
+            r2.<init>(r3)     // Catch:{ Exception -> 0x0427 }
+            org.telegram.ui.ActionBar.ActionBarLayout r3 = r12.actionBarLayout     // Catch:{ Exception -> 0x0427 }
+            boolean r3 = r3.addFragmentToStack(r2)     // Catch:{ Exception -> 0x0427 }
+            if (r3 == 0) goto L_0x04ac
+            r2.restoreSelfArgs(r13)     // Catch:{ Exception -> 0x0427 }
+            goto L_0x04ac
+        L_0x0427:
             r2 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r2)
-            goto L_0x059c
-        L_0x051d:
+            goto L_0x04ac
+        L_0x042d:
             org.telegram.ui.ActionBar.ActionBarLayout r2 = r12.actionBarLayout
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r2 = r2.fragmentsStack
-            java.lang.Object r2 = r2.get(r4)
+            java.lang.Object r2 = r2.get(r6)
             org.telegram.ui.ActionBar.BaseFragment r2 = (org.telegram.ui.ActionBar.BaseFragment) r2
             boolean r3 = r2 instanceof org.telegram.ui.DialogsActivity
-            if (r3 == 0) goto L_0x0532
+            if (r3 == 0) goto L_0x0442
             org.telegram.ui.DialogsActivity r2 = (org.telegram.ui.DialogsActivity) r2
             org.telegram.ui.Components.RecyclerListView r3 = r12.sideMenu
             r2.setSideMenu(r3)
-        L_0x0532:
+        L_0x0442:
             boolean r2 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r2 == 0) goto L_0x0573
+            if (r2 == 0) goto L_0x0483
             org.telegram.ui.ActionBar.ActionBarLayout r2 = r12.actionBarLayout
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r2 = r2.fragmentsStack
             int r2 = r2.size()
-            if (r2 > r1) goto L_0x054e
+            if (r2 > r1) goto L_0x045e
             org.telegram.ui.ActionBar.ActionBarLayout r2 = r12.layersActionBarLayout
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r2 = r2.fragmentsStack
             boolean r2 = r2.isEmpty()
-            if (r2 == 0) goto L_0x054e
+            if (r2 == 0) goto L_0x045e
             r2 = 1
-            goto L_0x054f
-        L_0x054e:
+            goto L_0x045f
+        L_0x045e:
             r2 = 0
-        L_0x054f:
+        L_0x045f:
             org.telegram.ui.ActionBar.ActionBarLayout r3 = r12.layersActionBarLayout
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r3 = r3.fragmentsStack
             int r3 = r3.size()
-            if (r3 != r1) goto L_0x0574
+            if (r3 != r1) goto L_0x0484
             org.telegram.ui.ActionBar.ActionBarLayout r3 = r12.layersActionBarLayout
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r3 = r3.fragmentsStack
-            java.lang.Object r3 = r3.get(r4)
+            java.lang.Object r3 = r3.get(r6)
             boolean r3 = r3 instanceof org.telegram.ui.LoginActivity
-            if (r3 != 0) goto L_0x0571
+            if (r3 != 0) goto L_0x0481
             org.telegram.ui.ActionBar.ActionBarLayout r3 = r12.layersActionBarLayout
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r3 = r3.fragmentsStack
-            java.lang.Object r3 = r3.get(r4)
+            java.lang.Object r3 = r3.get(r6)
             boolean r3 = r3 instanceof org.telegram.ui.IntroActivity
-            if (r3 == 0) goto L_0x0574
-        L_0x0571:
+            if (r3 == 0) goto L_0x0484
+        L_0x0481:
             r2 = 0
-            goto L_0x0574
-        L_0x0573:
+            goto L_0x0484
+        L_0x0483:
             r2 = 1
-        L_0x0574:
+        L_0x0484:
             org.telegram.ui.ActionBar.ActionBarLayout r3 = r12.actionBarLayout
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r3 = r3.fragmentsStack
             int r3 = r3.size()
-            if (r3 != r1) goto L_0x0597
+            if (r3 != r1) goto L_0x04a7
             org.telegram.ui.ActionBar.ActionBarLayout r3 = r12.actionBarLayout
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r3 = r3.fragmentsStack
-            java.lang.Object r3 = r3.get(r4)
+            java.lang.Object r3 = r3.get(r6)
             boolean r3 = r3 instanceof org.telegram.ui.LoginActivity
-            if (r3 != 0) goto L_0x0596
+            if (r3 != 0) goto L_0x04a6
             org.telegram.ui.ActionBar.ActionBarLayout r3 = r12.actionBarLayout
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r3 = r3.fragmentsStack
-            java.lang.Object r3 = r3.get(r4)
+            java.lang.Object r3 = r3.get(r6)
             boolean r3 = r3 instanceof org.telegram.ui.IntroActivity
-            if (r3 == 0) goto L_0x0597
-        L_0x0596:
+            if (r3 == 0) goto L_0x04a7
+        L_0x04a6:
             r2 = 0
-        L_0x0597:
+        L_0x04a7:
             org.telegram.ui.ActionBar.DrawerLayoutContainer r3 = r12.drawerLayoutContainer
-            r3.setAllowOpenDrawer(r2, r4)
-        L_0x059c:
+            r3.setAllowOpenDrawer(r2, r6)
+        L_0x04ac:
             r12.checkLayout()
             r12.checkSystemBarColors()
             android.content.Intent r2 = r12.getIntent()
-            if (r13 == 0) goto L_0x05aa
+            if (r13 == 0) goto L_0x04ba
             r13 = 1
-            goto L_0x05ab
-        L_0x05aa:
+            goto L_0x04bb
+        L_0x04ba:
             r13 = 0
-        L_0x05ab:
-            r12.handleIntent(r2, r4, r13, r4)
-            java.lang.String r13 = android.os.Build.DISPLAY     // Catch:{ Exception -> 0x060f }
-            java.lang.String r2 = android.os.Build.USER     // Catch:{ Exception -> 0x060f }
+        L_0x04bb:
+            r12.handleIntent(r2, r6, r13, r6)
+            java.lang.String r13 = android.os.Build.DISPLAY     // Catch:{ Exception -> 0x051f }
+            java.lang.String r2 = android.os.Build.USER     // Catch:{ Exception -> 0x051f }
             java.lang.String r3 = ""
-            if (r13 == 0) goto L_0x05bb
-            java.lang.String r13 = r13.toLowerCase()     // Catch:{ Exception -> 0x060f }
-            goto L_0x05bc
-        L_0x05bb:
+            if (r13 == 0) goto L_0x04cb
+            java.lang.String r13 = r13.toLowerCase()     // Catch:{ Exception -> 0x051f }
+            goto L_0x04cc
+        L_0x04cb:
             r13 = r3
-        L_0x05bc:
-            if (r2 == 0) goto L_0x05c2
-            java.lang.String r3 = r13.toLowerCase()     // Catch:{ Exception -> 0x060f }
-        L_0x05c2:
-            boolean r2 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x060f }
-            if (r2 == 0) goto L_0x05e2
-            java.lang.StringBuilder r2 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x060f }
-            r2.<init>()     // Catch:{ Exception -> 0x060f }
-            java.lang.String r6 = "OS name "
-            r2.append(r6)     // Catch:{ Exception -> 0x060f }
-            r2.append(r13)     // Catch:{ Exception -> 0x060f }
-            java.lang.String r6 = " "
-            r2.append(r6)     // Catch:{ Exception -> 0x060f }
-            r2.append(r3)     // Catch:{ Exception -> 0x060f }
-            java.lang.String r2 = r2.toString()     // Catch:{ Exception -> 0x060f }
-            org.telegram.messenger.FileLog.d(r2)     // Catch:{ Exception -> 0x060f }
-        L_0x05e2:
-            boolean r13 = r13.contains(r0)     // Catch:{ Exception -> 0x060f }
-            if (r13 != 0) goto L_0x05ee
-            boolean r13 = r3.contains(r0)     // Catch:{ Exception -> 0x060f }
-            if (r13 == 0) goto L_0x0613
-        L_0x05ee:
-            int r13 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x060f }
-            if (r13 > r5) goto L_0x0613
-            org.telegram.messenger.AndroidUtilities.incorrectDisplaySizeFix = r1     // Catch:{ Exception -> 0x060f }
-            android.view.Window r13 = r12.getWindow()     // Catch:{ Exception -> 0x060f }
-            android.view.View r13 = r13.getDecorView()     // Catch:{ Exception -> 0x060f }
-            android.view.View r13 = r13.getRootView()     // Catch:{ Exception -> 0x060f }
-            android.view.ViewTreeObserver r0 = r13.getViewTreeObserver()     // Catch:{ Exception -> 0x060f }
-            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda21 r2 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda21     // Catch:{ Exception -> 0x060f }
-            r2.<init>(r13)     // Catch:{ Exception -> 0x060f }
-            r12.onGlobalLayoutListener = r2     // Catch:{ Exception -> 0x060f }
-            r0.addOnGlobalLayoutListener(r2)     // Catch:{ Exception -> 0x060f }
-            goto L_0x0613
-        L_0x060f:
+        L_0x04cc:
+            if (r2 == 0) goto L_0x04d2
+            java.lang.String r3 = r13.toLowerCase()     // Catch:{ Exception -> 0x051f }
+        L_0x04d2:
+            boolean r2 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x051f }
+            if (r2 == 0) goto L_0x04f2
+            java.lang.StringBuilder r2 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x051f }
+            r2.<init>()     // Catch:{ Exception -> 0x051f }
+            java.lang.String r4 = "OS name "
+            r2.append(r4)     // Catch:{ Exception -> 0x051f }
+            r2.append(r13)     // Catch:{ Exception -> 0x051f }
+            java.lang.String r4 = " "
+            r2.append(r4)     // Catch:{ Exception -> 0x051f }
+            r2.append(r3)     // Catch:{ Exception -> 0x051f }
+            java.lang.String r2 = r2.toString()     // Catch:{ Exception -> 0x051f }
+            org.telegram.messenger.FileLog.d(r2)     // Catch:{ Exception -> 0x051f }
+        L_0x04f2:
+            boolean r13 = r13.contains(r0)     // Catch:{ Exception -> 0x051f }
+            if (r13 != 0) goto L_0x04fe
+            boolean r13 = r3.contains(r0)     // Catch:{ Exception -> 0x051f }
+            if (r13 == 0) goto L_0x0523
+        L_0x04fe:
+            int r13 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x051f }
+            if (r13 > r5) goto L_0x0523
+            org.telegram.messenger.AndroidUtilities.incorrectDisplaySizeFix = r1     // Catch:{ Exception -> 0x051f }
+            android.view.Window r13 = r12.getWindow()     // Catch:{ Exception -> 0x051f }
+            android.view.View r13 = r13.getDecorView()     // Catch:{ Exception -> 0x051f }
+            android.view.View r13 = r13.getRootView()     // Catch:{ Exception -> 0x051f }
+            android.view.ViewTreeObserver r0 = r13.getViewTreeObserver()     // Catch:{ Exception -> 0x051f }
+            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda21 r2 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda21     // Catch:{ Exception -> 0x051f }
+            r2.<init>(r13)     // Catch:{ Exception -> 0x051f }
+            r12.onGlobalLayoutListener = r2     // Catch:{ Exception -> 0x051f }
+            r0.addOnGlobalLayoutListener(r2)     // Catch:{ Exception -> 0x051f }
+            goto L_0x0523
+        L_0x051f:
             r13 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r13)
-        L_0x0613:
+        L_0x0523:
             org.telegram.messenger.MediaController r13 = org.telegram.messenger.MediaController.getInstance()
             r13.setBaseActivity(r12, r1)
             org.telegram.messenger.AndroidUtilities.startAppCenter(r12)
-            r12.updateAppUpdateViews(r4)
+            r12.updateAppUpdateViews(r6)
             int r13 = android.os.Build.VERSION.SDK_INT
             r0 = 23
-            if (r13 < r0) goto L_0x0629
+            if (r13 < r0) goto L_0x0539
             org.telegram.messenger.FingerprintController.checkKeyReady()
-        L_0x0629:
+        L_0x0539:
             r0 = 28
-            if (r13 < r0) goto L_0x0659
+            if (r13 < r0) goto L_0x0569
             java.lang.String r13 = "activity"
             java.lang.Object r13 = r12.getSystemService(r13)
             android.app.ActivityManager r13 = (android.app.ActivityManager) r13
             boolean r13 = r13.isBackgroundRestricted()
-            if (r13 == 0) goto L_0x0659
+            if (r13 == 0) goto L_0x0569
             long r0 = java.lang.System.currentTimeMillis()
             long r2 = org.telegram.messenger.SharedConfig.BackgroundActivityPrefs.getLastCheckedBackgroundActivity()
             long r0 = r0 - r2
             r2 = 86400000(0x5265CLASSNAME, double:4.2687272E-316)
             int r13 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
-            if (r13 < 0) goto L_0x0659
+            if (r13 < 0) goto L_0x0569
             android.app.Dialog r13 = org.telegram.ui.Components.AlertsCreator.createBackgroundActivityDialog(r12)
             r13.show()
             long r0 = java.lang.System.currentTimeMillis()
             org.telegram.messenger.SharedConfig.BackgroundActivityPrefs.setLastCheckedBackgroundActivity(r0)
-        L_0x0659:
+        L_0x0569:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LaunchActivity.onCreate(android.os.Bundle):void");
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ boolean lambda$onCreate$0(View view, MotionEvent motionEvent) {
-        if (!this.actionBarLayout.fragmentsStack.isEmpty() && motionEvent.getAction() == 1) {
-            float x = motionEvent.getX();
-            float y = motionEvent.getY();
-            int[] iArr = new int[2];
-            this.layersActionBarLayout.getLocationOnScreen(iArr);
-            int i = iArr[0];
-            int i2 = iArr[1];
-            if (!this.layersActionBarLayout.checkTransitionAnimation() && (x <= ((float) i) || x >= ((float) (i + this.layersActionBarLayout.getWidth())) || y <= ((float) i2) || y >= ((float) (i2 + this.layersActionBarLayout.getHeight())))) {
-                if (!this.layersActionBarLayout.fragmentsStack.isEmpty()) {
-                    while (this.layersActionBarLayout.fragmentsStack.size() - 1 > 0) {
-                        ActionBarLayout actionBarLayout2 = this.layersActionBarLayout;
-                        actionBarLayout2.removeFragmentFromStack(actionBarLayout2.fragmentsStack.get(0));
-                    }
-                    this.layersActionBarLayout.closeLastFragment(true);
-                }
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onCreate$2(View view) {
+    public /* synthetic */ void lambda$onCreate$0(View view) {
         showSelectStatusDialog();
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onCreate$4(View view, int i, float f, float f2) {
+    public /* synthetic */ void lambda$onCreate$2(View view, int i, float f, float f2) {
         boolean z = true;
         if (i == 0) {
             DrawerProfileCell drawerProfileCell = (DrawerProfileCell) view;
@@ -1146,12 +1023,12 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onCreate$3() {
+    public /* synthetic */ void lambda$onCreate$1() {
         this.drawerLayoutContainer.closeDrawer(false);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ boolean lambda$onCreate$5(ItemTouchHelper itemTouchHelper, View view, int i) {
+    public /* synthetic */ boolean lambda$onCreate$3(ItemTouchHelper itemTouchHelper, View view, int i) {
         if (!(view instanceof DrawerUserCell)) {
             return false;
         }
@@ -1160,7 +1037,7 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
             itemTouchHelper.startDrag(this.sideMenu.getChildViewHolder(view));
             return false;
         }
-        AnonymousClass9 r2 = new DialogsActivity((Bundle) null) {
+        AnonymousClass7 r2 = new DialogsActivity((Bundle) null) {
             /* access modifiers changed from: protected */
             public void onTransitionAnimationEnd(boolean z, boolean z2) {
                 super.onTransitionAnimationEnd(z, z2);
@@ -1184,12 +1061,12 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onCreate$6() {
+    public /* synthetic */ void lambda$onCreate$4() {
         checkSystemBarColors(true, false);
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$onCreate$7(View view) {
+    public static /* synthetic */ void lambda$onCreate$5(View view) {
         int measuredHeight = view.getMeasuredHeight();
         FileLog.d("height = " + measuredHeight + " displayHeight = " + AndroidUtilities.displaySize.y);
         if (Build.VERSION.SDK_INT >= 21) {
@@ -1205,6 +1082,169 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
                 }
             }
         }
+    }
+
+    private void setupActionBarLayout() {
+        View view;
+        DrawerLayoutContainer drawerLayoutContainer2;
+        if (this.drawerLayoutContainer.indexOfChild(this.launchLayout) != -1) {
+            drawerLayoutContainer2 = this.drawerLayoutContainer;
+            view = this.launchLayout;
+        } else {
+            drawerLayoutContainer2 = this.drawerLayoutContainer;
+            view = this.actionBarLayout;
+        }
+        int indexOfChild = drawerLayoutContainer2.indexOfChild(view);
+        if (indexOfChild != -1) {
+            this.drawerLayoutContainer.removeViewAt(indexOfChild);
+        }
+        if (AndroidUtilities.isTablet()) {
+            getWindow().setSoftInputMode(16);
+            AnonymousClass8 r2 = new RelativeLayout(this) {
+                private boolean inLayout;
+
+                public void requestLayout() {
+                    if (!this.inLayout) {
+                        super.requestLayout();
+                    }
+                }
+
+                /* access modifiers changed from: protected */
+                public void onMeasure(int i, int i2) {
+                    this.inLayout = true;
+                    int size = View.MeasureSpec.getSize(i);
+                    int size2 = View.MeasureSpec.getSize(i2);
+                    setMeasuredDimension(size, size2);
+                    if (AndroidUtilities.isInMultiwindow || (AndroidUtilities.isSmallTablet() && getResources().getConfiguration().orientation != 2)) {
+                        boolean unused = LaunchActivity.this.tabletFullSize = true;
+                        LaunchActivity.this.actionBarLayout.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec(size2, NUM));
+                    } else {
+                        boolean unused2 = LaunchActivity.this.tabletFullSize = false;
+                        int i3 = (size / 100) * 35;
+                        if (i3 < AndroidUtilities.dp(320.0f)) {
+                            i3 = AndroidUtilities.dp(320.0f);
+                        }
+                        LaunchActivity.this.actionBarLayout.measure(View.MeasureSpec.makeMeasureSpec(i3, NUM), View.MeasureSpec.makeMeasureSpec(size2, NUM));
+                        LaunchActivity.this.shadowTabletSide.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1.0f), NUM), View.MeasureSpec.makeMeasureSpec(size2, NUM));
+                        LaunchActivity.this.rightActionBarLayout.measure(View.MeasureSpec.makeMeasureSpec(size - i3, NUM), View.MeasureSpec.makeMeasureSpec(size2, NUM));
+                    }
+                    LaunchActivity.this.backgroundTablet.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec(size2, NUM));
+                    LaunchActivity.this.shadowTablet.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec(size2, NUM));
+                    LaunchActivity.this.layersActionBarLayout.measure(View.MeasureSpec.makeMeasureSpec(Math.min(AndroidUtilities.dp(530.0f), size), NUM), View.MeasureSpec.makeMeasureSpec(Math.min(AndroidUtilities.dp(528.0f), size2), NUM));
+                    this.inLayout = false;
+                }
+
+                /* access modifiers changed from: protected */
+                public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+                    int i5 = i3 - i;
+                    int i6 = i4 - i2;
+                    if (AndroidUtilities.isInMultiwindow || (AndroidUtilities.isSmallTablet() && getResources().getConfiguration().orientation != 2)) {
+                        LaunchActivity.this.actionBarLayout.layout(0, 0, LaunchActivity.this.actionBarLayout.getMeasuredWidth(), LaunchActivity.this.actionBarLayout.getMeasuredHeight());
+                    } else {
+                        int i7 = (i5 / 100) * 35;
+                        if (i7 < AndroidUtilities.dp(320.0f)) {
+                            i7 = AndroidUtilities.dp(320.0f);
+                        }
+                        LaunchActivity.this.shadowTabletSide.layout(i7, 0, LaunchActivity.this.shadowTabletSide.getMeasuredWidth() + i7, LaunchActivity.this.shadowTabletSide.getMeasuredHeight());
+                        LaunchActivity.this.actionBarLayout.layout(0, 0, LaunchActivity.this.actionBarLayout.getMeasuredWidth(), LaunchActivity.this.actionBarLayout.getMeasuredHeight());
+                        LaunchActivity.this.rightActionBarLayout.layout(i7, 0, LaunchActivity.this.rightActionBarLayout.getMeasuredWidth() + i7, LaunchActivity.this.rightActionBarLayout.getMeasuredHeight());
+                    }
+                    int measuredWidth = (i5 - LaunchActivity.this.layersActionBarLayout.getMeasuredWidth()) / 2;
+                    int measuredHeight = (i6 - LaunchActivity.this.layersActionBarLayout.getMeasuredHeight()) / 2;
+                    LaunchActivity.this.layersActionBarLayout.layout(measuredWidth, measuredHeight, LaunchActivity.this.layersActionBarLayout.getMeasuredWidth() + measuredWidth, LaunchActivity.this.layersActionBarLayout.getMeasuredHeight() + measuredHeight);
+                    LaunchActivity.this.backgroundTablet.layout(0, 0, LaunchActivity.this.backgroundTablet.getMeasuredWidth(), LaunchActivity.this.backgroundTablet.getMeasuredHeight());
+                    LaunchActivity.this.shadowTablet.layout(0, 0, LaunchActivity.this.shadowTablet.getMeasuredWidth(), LaunchActivity.this.shadowTablet.getMeasuredHeight());
+                }
+            };
+            this.launchLayout = r2;
+            if (indexOfChild != -1) {
+                this.drawerLayoutContainer.addView(r2, indexOfChild, LayoutHelper.createFrame(-1, -1.0f));
+            } else {
+                this.drawerLayoutContainer.addView(r2, LayoutHelper.createFrame(-1, -1.0f));
+            }
+            AnonymousClass9 r0 = new SizeNotifierFrameLayout(this, this) {
+                /* access modifiers changed from: protected */
+                public boolean isActionBarVisible() {
+                    return false;
+                }
+            };
+            this.backgroundTablet = r0;
+            int i = 0;
+            r0.setOccupyStatusBar(false);
+            this.backgroundTablet.setBackgroundImage(Theme.getCachedWallpaper(), Theme.isWallpaperMotion());
+            this.launchLayout.addView(this.backgroundTablet, LayoutHelper.createRelative(-1, -1));
+            ViewGroup viewGroup = (ViewGroup) this.actionBarLayout.getParent();
+            if (viewGroup != null) {
+                viewGroup.removeView(this.actionBarLayout);
+            }
+            this.launchLayout.addView(this.actionBarLayout);
+            ActionBarLayout actionBarLayout2 = new ActionBarLayout(this);
+            this.rightActionBarLayout = actionBarLayout2;
+            actionBarLayout2.init(rightFragmentsStack);
+            this.rightActionBarLayout.setDelegate(this);
+            this.launchLayout.addView(this.rightActionBarLayout);
+            FrameLayout frameLayout2 = new FrameLayout(this);
+            this.shadowTabletSide = frameLayout2;
+            frameLayout2.setBackgroundColor(NUM);
+            this.launchLayout.addView(this.shadowTabletSide);
+            FrameLayout frameLayout3 = new FrameLayout(this);
+            this.shadowTablet = frameLayout3;
+            frameLayout3.setVisibility(layerFragmentsStack.isEmpty() ? 8 : 0);
+            this.shadowTablet.setBackgroundColor(NUM);
+            this.launchLayout.addView(this.shadowTablet);
+            this.shadowTablet.setOnTouchListener(new LaunchActivity$$ExternalSyntheticLambda20(this));
+            this.shadowTablet.setOnClickListener(LaunchActivity$$ExternalSyntheticLambda19.INSTANCE);
+            ActionBarLayout actionBarLayout3 = new ActionBarLayout(this);
+            this.layersActionBarLayout = actionBarLayout3;
+            actionBarLayout3.setRemoveActionBarExtraHeight(true);
+            this.layersActionBarLayout.setBackgroundView(this.shadowTablet);
+            this.layersActionBarLayout.setUseAlphaAnimations(true);
+            this.layersActionBarLayout.setBackgroundResource(R.drawable.boxshadow);
+            this.layersActionBarLayout.init(layerFragmentsStack);
+            this.layersActionBarLayout.setDelegate(this);
+            this.layersActionBarLayout.setDrawerLayoutContainer(this.drawerLayoutContainer);
+            ActionBarLayout actionBarLayout4 = this.layersActionBarLayout;
+            if (layerFragmentsStack.isEmpty()) {
+                i = 8;
+            }
+            actionBarLayout4.setVisibility(i);
+            VerticalPositionAutoAnimator.attach(this.layersActionBarLayout);
+            this.launchLayout.addView(this.layersActionBarLayout);
+            return;
+        }
+        ViewGroup viewGroup2 = (ViewGroup) this.actionBarLayout.getParent();
+        if (viewGroup2 != null) {
+            viewGroup2.removeView(this.actionBarLayout);
+        }
+        this.actionBarLayout.init(mainFragmentsStack);
+        if (indexOfChild != -1) {
+            this.drawerLayoutContainer.addView(this.actionBarLayout, indexOfChild, new ViewGroup.LayoutParams(-1, -1));
+        } else {
+            this.drawerLayoutContainer.addView(this.actionBarLayout, new ViewGroup.LayoutParams(-1, -1));
+        }
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ boolean lambda$setupActionBarLayout$6(View view, MotionEvent motionEvent) {
+        if (!this.actionBarLayout.fragmentsStack.isEmpty() && motionEvent.getAction() == 1) {
+            float x = motionEvent.getX();
+            float y = motionEvent.getY();
+            int[] iArr = new int[2];
+            this.layersActionBarLayout.getLocationOnScreen(iArr);
+            int i = iArr[0];
+            int i2 = iArr[1];
+            if (!this.layersActionBarLayout.checkTransitionAnimation() && (x <= ((float) i) || x >= ((float) (i + this.layersActionBarLayout.getWidth())) || y <= ((float) i2) || y >= ((float) (i2 + this.layersActionBarLayout.getHeight())))) {
+                if (!this.layersActionBarLayout.fragmentsStack.isEmpty()) {
+                    while (this.layersActionBarLayout.fragmentsStack.size() - 1 > 0) {
+                        ActionBarLayout actionBarLayout2 = this.layersActionBarLayout;
+                        actionBarLayout2.removeFragmentFromStack(actionBarLayout2.fragmentsStack.get(0));
+                    }
+                    this.layersActionBarLayout.closeLastFragment(true);
+                }
+                return true;
+            }
+        }
+        return false;
     }
 
     public void addOnUserLeaveHintListener(Runnable runnable) {
@@ -1246,6 +1286,9 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
                 drawerProfileCell.getEmojiStatusLocation(rect);
                 int dp = (-(childAt.getHeight() - rect.centerY())) - AndroidUtilities.dp(16.0f);
                 i2 = rect.centerX();
+                if (!(Build.VERSION.SDK_INT < 23 || getWindow() == null || getWindow().getDecorView() == null || getWindow().getDecorView().getRootWindowInsets() == null)) {
+                    i2 -= getWindow().getDecorView().getRootWindowInsets().getStableInsetLeft();
+                }
                 i = dp;
                 swapAnimatedEmojiDrawable = emojiStatusDrawable;
                 view = emojiStatusDrawableParent;
@@ -10899,7 +10942,7 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
                 this.updateLayout.setBackground(Theme.getSelectorDrawable(NUM, false));
             }
             this.sideMenuContainer.addView(this.updateLayout, LayoutHelper.createFrame(-1, 44, 83));
-            this.updateLayout.setOnClickListener(new LaunchActivity$$ExternalSyntheticLambda16(this));
+            this.updateLayout.setOnClickListener(new LaunchActivity$$ExternalSyntheticLambda17(this));
             RadialProgress2 radialProgress2 = new RadialProgress2(this.updateLayout);
             this.updateLayoutIcon = radialProgress2;
             radialProgress2.setColors(-1, -1, -1, -1);
@@ -11683,8 +11726,14 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
         onPasscodePause();
         this.actionBarLayout.onPause();
         if (AndroidUtilities.isTablet()) {
-            this.rightActionBarLayout.onPause();
-            this.layersActionBarLayout.onPause();
+            ActionBarLayout actionBarLayout2 = this.rightActionBarLayout;
+            if (actionBarLayout2 != null) {
+                actionBarLayout2.onPause();
+            }
+            ActionBarLayout actionBarLayout3 = this.layersActionBarLayout;
+            if (actionBarLayout3 != null) {
+                actionBarLayout3.onPause();
+            }
         }
         PasscodeView passcodeView2 = this.passcodeView;
         if (passcodeView2 != null) {
@@ -11822,14 +11871,26 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
         if (passcodeView2 == null || passcodeView2.getVisibility() != 0) {
             this.actionBarLayout.onResume();
             if (AndroidUtilities.isTablet()) {
-                this.rightActionBarLayout.onResume();
-                this.layersActionBarLayout.onResume();
+                ActionBarLayout actionBarLayout2 = this.rightActionBarLayout;
+                if (actionBarLayout2 != null) {
+                    actionBarLayout2.onResume();
+                }
+                ActionBarLayout actionBarLayout3 = this.layersActionBarLayout;
+                if (actionBarLayout3 != null) {
+                    actionBarLayout3.onResume();
+                }
             }
         } else {
             this.actionBarLayout.dismissDialogs();
             if (AndroidUtilities.isTablet()) {
-                this.rightActionBarLayout.dismissDialogs();
-                this.layersActionBarLayout.dismissDialogs();
+                ActionBarLayout actionBarLayout4 = this.rightActionBarLayout;
+                if (actionBarLayout4 != null) {
+                    actionBarLayout4.dismissDialogs();
+                }
+                ActionBarLayout actionBarLayout5 = this.layersActionBarLayout;
+                if (actionBarLayout5 != null) {
+                    actionBarLayout5.dismissDialogs();
+                }
             }
             this.passcodeView.onResume();
         }
@@ -11857,12 +11918,83 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
         if (VoIPFragment.getInstance() != null) {
             VoIPFragment.onResume();
         }
+        invalidateTabletMode();
     }
 
     /* access modifiers changed from: private */
     public static /* synthetic */ void lambda$onResume$83() {
         ApplicationLoader.mainInterfacePausedStageQueue = false;
         ApplicationLoader.mainInterfacePausedStageQueueTime = System.currentTimeMillis();
+    }
+
+    private void invalidateTabletMode() {
+        long j;
+        Boolean wasTablet = AndroidUtilities.getWasTablet();
+        if (wasTablet != null) {
+            AndroidUtilities.resetWasTabletFlag();
+            if (wasTablet.booleanValue() != AndroidUtilities.isTablet()) {
+                long j2 = 0;
+                if (wasTablet.booleanValue()) {
+                    mainFragmentsStack.addAll(rightFragmentsStack);
+                    mainFragmentsStack.addAll(layerFragmentsStack);
+                    rightFragmentsStack.clear();
+                    layerFragmentsStack.clear();
+                } else {
+                    if (rightFragmentsStack.isEmpty()) {
+                        ArrayList<BaseFragment> arrayList = new ArrayList<>(mainFragmentsStack);
+                        mainFragmentsStack.clear();
+                        rightFragmentsStack.clear();
+                        layerFragmentsStack.clear();
+                        j = 0;
+                        for (BaseFragment baseFragment : arrayList) {
+                            if (!(baseFragment instanceof DialogsActivity) || !((DialogsActivity) baseFragment).isMainDialogList()) {
+                                if (baseFragment instanceof ChatActivity) {
+                                    ChatActivity chatActivity = (ChatActivity) baseFragment;
+                                    if (!chatActivity.isInScheduleMode()) {
+                                        rightFragmentsStack.add(baseFragment);
+                                        if (j == 0) {
+                                            j = chatActivity.getDialogId();
+                                        }
+                                    }
+                                }
+                                layerFragmentsStack.add(baseFragment);
+                            } else {
+                                mainFragmentsStack.add(baseFragment);
+                            }
+                        }
+                    } else {
+                        Iterator<BaseFragment> it = rightFragmentsStack.iterator();
+                        j = 0;
+                        while (it.hasNext()) {
+                            BaseFragment next = it.next();
+                            if (next instanceof ChatActivity) {
+                                ChatActivity chatActivity2 = (ChatActivity) next;
+                                if (!chatActivity2.isInScheduleMode() && j == 0) {
+                                    j = chatActivity2.getDialogId();
+                                }
+                            }
+                        }
+                    }
+                    j2 = j;
+                }
+                setupActionBarLayout();
+                this.actionBarLayout.showLastFragment();
+                if (AndroidUtilities.isTablet()) {
+                    this.rightActionBarLayout.showLastFragment();
+                    this.layersActionBarLayout.showLastFragment();
+                    Iterator<BaseFragment> it2 = mainFragmentsStack.iterator();
+                    while (it2.hasNext()) {
+                        BaseFragment next2 = it2.next();
+                        if (next2 instanceof DialogsActivity) {
+                            DialogsActivity dialogsActivity = (DialogsActivity) next2;
+                            if (dialogsActivity.isMainDialogList()) {
+                                dialogsActivity.setOpenedDialogId(j2);
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public void onConfigurationChanged(Configuration configuration) {
@@ -13367,7 +13499,7 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
         SharedConfig.checkKeepMedia();
         SharedConfig.checkLogsToDelete();
         if (Build.VERSION.SDK_INT < 26) {
-            Utilities.globalQueue.postRunnable(new LaunchActivity$$ExternalSyntheticLambda32(this), 2000);
+            Utilities.globalQueue.postRunnable(new LaunchActivity$$ExternalSyntheticLambda31(this), 2000);
         }
     }
 
@@ -13795,7 +13927,7 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
             int i2 = 0;
             int connectionState = ConnectionsManager.getInstance(this.currentAccount).getConnectionState();
             this.currentConnectionState = connectionState;
-            LaunchActivity$$ExternalSyntheticLambda31 launchActivity$$ExternalSyntheticLambda31 = null;
+            LaunchActivity$$ExternalSyntheticLambda30 launchActivity$$ExternalSyntheticLambda30 = null;
             if (connectionState == 2) {
                 i2 = R.string.WaitingForNetwork;
                 str = "WaitingForNetwork";
@@ -13812,9 +13944,9 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
                 str = null;
             }
             if (connectionState == 1 || connectionState == 4) {
-                launchActivity$$ExternalSyntheticLambda31 = new LaunchActivity$$ExternalSyntheticLambda31(this);
+                launchActivity$$ExternalSyntheticLambda30 = new LaunchActivity$$ExternalSyntheticLambda30(this);
             }
-            this.actionBarLayout.setTitleOverlayText(str, i2, launchActivity$$ExternalSyntheticLambda31);
+            this.actionBarLayout.setTitleOverlayText(str, i2, launchActivity$$ExternalSyntheticLambda30);
         }
     }
 
@@ -13877,14 +14009,18 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
             super.onSaveInstanceState(bundle);
             BaseFragment baseFragment = null;
             if (AndroidUtilities.isTablet()) {
-                if (!this.layersActionBarLayout.fragmentsStack.isEmpty()) {
-                    ArrayList<BaseFragment> arrayList = this.layersActionBarLayout.fragmentsStack;
-                    baseFragment = arrayList.get(arrayList.size() - 1);
-                } else if (!this.rightActionBarLayout.fragmentsStack.isEmpty()) {
-                    ArrayList<BaseFragment> arrayList2 = this.rightActionBarLayout.fragmentsStack;
-                    baseFragment = arrayList2.get(arrayList2.size() - 1);
-                } else if (!this.actionBarLayout.fragmentsStack.isEmpty()) {
-                    ArrayList<BaseFragment> arrayList3 = this.actionBarLayout.fragmentsStack;
+                ActionBarLayout actionBarLayout2 = this.layersActionBarLayout;
+                if (actionBarLayout2 == null || actionBarLayout2.fragmentsStack.isEmpty()) {
+                    ActionBarLayout actionBarLayout3 = this.rightActionBarLayout;
+                    if (actionBarLayout3 != null && !actionBarLayout3.fragmentsStack.isEmpty()) {
+                        ArrayList<BaseFragment> arrayList = this.rightActionBarLayout.fragmentsStack;
+                        baseFragment = arrayList.get(arrayList.size() - 1);
+                    } else if (!this.actionBarLayout.fragmentsStack.isEmpty()) {
+                        ArrayList<BaseFragment> arrayList2 = this.actionBarLayout.fragmentsStack;
+                        baseFragment = arrayList2.get(arrayList2.size() - 1);
+                    }
+                } else {
+                    ArrayList<BaseFragment> arrayList3 = this.layersActionBarLayout.fragmentsStack;
                     baseFragment = arrayList3.get(arrayList3.size() - 1);
                 }
             } else if (!this.actionBarLayout.fragmentsStack.isEmpty()) {

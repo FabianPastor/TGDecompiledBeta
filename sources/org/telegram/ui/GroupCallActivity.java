@@ -1714,8 +1714,11 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             applyCallParticipantUpdates(true);
             AndroidUtilities.updateVisibleRows(this.listView);
         } else if (i == NotificationCenter.updateInterfaces) {
-            if ((objArr[0].intValue() & MessagesController.UPDATE_MASK_CHAT_NAME) != 0) {
+            int intValue = objArr[0].intValue();
+            if ((MessagesController.UPDATE_MASK_CHAT_NAME & intValue) != 0) {
                 applyCallParticipantUpdates(true);
+            }
+            if ((MessagesController.UPDATE_MASK_CHAT_NAME & intValue) != 0 || (intValue & MessagesController.UPDATE_MASK_EMOJI_STATUS) != 0) {
                 AndroidUtilities.updateVisibleRows(this.listView);
             }
         } else if (i == NotificationCenter.groupCallScreencastStateChanged) {
@@ -7786,26 +7789,26 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Code restructure failed: missing block: B:91:0x02ba, code lost:
-        if ((r10 instanceof org.telegram.tgnet.TLRPC$TL_chatParticipantCreator) == false) goto L_0x02bd;
+    /* JADX WARNING: Code restructure failed: missing block: B:103:0x02ee, code lost:
+        if (r3 == (-r7.currentChat.id)) goto L_0x02cd;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:93:0x02bf, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:97:0x02c8, code lost:
+        if ((r10 instanceof org.telegram.tgnet.TLRPC$TL_chatParticipantCreator) == false) goto L_0x02cb;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:99:0x02cd, code lost:
         r6 = true;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:97:0x02e0, code lost:
-        if (r3 == (-r7.currentChat.id)) goto L_0x02bf;
-     */
-    /* JADX WARNING: Removed duplicated region for block: B:100:0x02eb  */
-    /* JADX WARNING: Removed duplicated region for block: B:128:0x03b3  */
-    /* JADX WARNING: Removed duplicated region for block: B:166:0x051a  */
-    /* JADX WARNING: Removed duplicated region for block: B:181:0x05b7  */
-    /* JADX WARNING: Removed duplicated region for block: B:184:0x05c4  */
-    /* JADX WARNING: Removed duplicated region for block: B:185:0x05dd  */
-    /* JADX WARNING: Removed duplicated region for block: B:190:0x0600  */
-    /* JADX WARNING: Removed duplicated region for block: B:191:0x0602  */
-    /* JADX WARNING: Removed duplicated region for block: B:196:0x060b  */
-    /* JADX WARNING: Removed duplicated region for block: B:211:0x0667  */
-    /* JADX WARNING: Removed duplicated region for block: B:217:0x06af  */
+    /* JADX WARNING: Removed duplicated region for block: B:106:0x02f9  */
+    /* JADX WARNING: Removed duplicated region for block: B:134:0x03c1  */
+    /* JADX WARNING: Removed duplicated region for block: B:172:0x0528  */
+    /* JADX WARNING: Removed duplicated region for block: B:187:0x05c5  */
+    /* JADX WARNING: Removed duplicated region for block: B:190:0x05d2  */
+    /* JADX WARNING: Removed duplicated region for block: B:191:0x05eb  */
+    /* JADX WARNING: Removed duplicated region for block: B:196:0x060e  */
+    /* JADX WARNING: Removed duplicated region for block: B:197:0x0610  */
+    /* JADX WARNING: Removed duplicated region for block: B:202:0x0619  */
+    /* JADX WARNING: Removed duplicated region for block: B:217:0x0675  */
+    /* JADX WARNING: Removed duplicated region for block: B:223:0x06bd  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public boolean showMenuForCell(android.view.View r29) {
         /*
@@ -7820,10 +7823,10 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
         L_0x000e:
             boolean r1 = r7.avatarPriviewTransitionInProgress
             r9 = 1
-            if (r1 != 0) goto L_0x0812
+            if (r1 != 0) goto L_0x0820
             boolean r1 = r7.avatarsPreviewShowed
             if (r1 == 0) goto L_0x0019
-            goto L_0x0812
+            goto L_0x0820
         L_0x0019:
             org.telegram.ui.ActionBar.ActionBarPopupWindow r1 = r7.scrimPopupWindow
             r2 = 0
@@ -7834,7 +7837,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
         L_0x0024:
             r28.clearScrimView()
             boolean r1 = r0 instanceof org.telegram.ui.Components.voip.GroupCallGridCell
-            if (r1 == 0) goto L_0x0080
+            if (r1 == 0) goto L_0x0087
             org.telegram.ui.Components.voip.GroupCallGridCell r0 = (org.telegram.ui.Components.voip.GroupCallGridCell) r0
             org.telegram.messenger.ChatObject$VideoParticipant r1 = r0.getParticipant()
             org.telegram.messenger.ChatObject$Call r3 = r7.call
@@ -7855,14 +7858,18 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r17 = 0
             r10 = r1
             r10.setData(r11, r12, r13, r14, r16, r17)
+            org.telegram.ui.Components.AnimatedEmojiDrawable$SwapAnimatedEmojiDrawable r3 = r1.rightDrawable
+            if (r3 == 0) goto L_0x0060
+            r3.play()
+        L_0x0060:
             r7.hasScrimAnchorView = r8
             r7.scrimGridView = r0
             org.telegram.ui.Components.voip.GroupCallMiniTextureView r0 = r0.getRenderer()
             r7.scrimRenderer = r0
             boolean r0 = isTabletMode
-            if (r0 != 0) goto L_0x00de
+            if (r0 != 0) goto L_0x00ec
             boolean r0 = isLandscapeMode
-            if (r0 != 0) goto L_0x00de
+            if (r0 != 0) goto L_0x00ec
             android.view.ViewGroup r0 = r7.containerView
             r10 = -1
             r11 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
@@ -7873,18 +7880,18 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r16 = 0
             android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r11, r12, r13, r14, r15, r16)
             r0.addView(r1, r3)
-            goto L_0x00de
-        L_0x0080:
+            goto L_0x00ec
+        L_0x0087:
             boolean r1 = r0 instanceof org.telegram.ui.Components.GroupCallFullscreenAdapter.GroupCallUserCell
-            if (r1 == 0) goto L_0x00d9
+            if (r1 == 0) goto L_0x00e7
             org.telegram.ui.Components.GroupCallFullscreenAdapter$GroupCallUserCell r0 = (org.telegram.ui.Components.GroupCallFullscreenAdapter.GroupCallUserCell) r0
             org.telegram.tgnet.TLRPC$TL_groupCallParticipant r1 = r0.getParticipant()
             org.telegram.messenger.ChatObject$Call r3 = r7.call
             org.telegram.messenger.ChatObject$VideoParticipant r3 = r3.videoNotAvailableParticipant
             org.telegram.tgnet.TLRPC$TL_groupCallParticipant r3 = r3.participant
-            if (r1 != r3) goto L_0x0093
+            if (r1 != r3) goto L_0x009a
             return r8
-        L_0x0093:
+        L_0x009a:
             org.telegram.ui.Cells.GroupCallUserCell r1 = new org.telegram.ui.Cells.GroupCallUserCell
             android.content.Context r3 = r0.getContext()
             r1.<init>(r3)
@@ -7897,15 +7904,19 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r17 = 0
             r10 = r1
             r10.setData(r11, r12, r13, r14, r16, r17)
+            org.telegram.ui.Components.AnimatedEmojiDrawable$SwapAnimatedEmojiDrawable r3 = r1.rightDrawable
+            if (r3 == 0) goto L_0x00c0
+            r3.play()
+        L_0x00c0:
             r7.hasScrimAnchorView = r8
             r7.scrimFullscreenView = r0
             org.telegram.ui.Components.voip.GroupCallMiniTextureView r0 = r0.getRenderer()
             r7.scrimRenderer = r0
-            if (r0 == 0) goto L_0x00c4
+            if (r0 == 0) goto L_0x00d2
             boolean r0 = r0.showingInFullscreen
-            if (r0 == 0) goto L_0x00c4
+            if (r0 == 0) goto L_0x00d2
             r7.scrimRenderer = r2
-        L_0x00c4:
+        L_0x00d2:
             android.view.ViewGroup r0 = r7.containerView
             r10 = -1
             r11 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
@@ -7916,27 +7927,27 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r16 = 0
             android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r11, r12, r13, r14, r15, r16)
             r0.addView(r1, r3)
-            goto L_0x00de
-        L_0x00d9:
+            goto L_0x00ec
+        L_0x00e7:
             r1 = r0
             org.telegram.ui.Cells.GroupCallUserCell r1 = (org.telegram.ui.Cells.GroupCallUserCell) r1
             r7.hasScrimAnchorView = r9
-        L_0x00de:
+        L_0x00ec:
             r10 = r1
-            if (r10 != 0) goto L_0x00e2
+            if (r10 != 0) goto L_0x00f0
             return r8
-        L_0x00e2:
-            boolean r0 = isLandscapeMode
-            if (r0 != 0) goto L_0x00f0
-            boolean r0 = isTabletMode
-            if (r0 != 0) goto L_0x00f0
-            boolean r0 = org.telegram.messenger.AndroidUtilities.isInMultiwindow
-            if (r0 != 0) goto L_0x00f0
-            r11 = 1
-            goto L_0x00f1
         L_0x00f0:
+            boolean r0 = isLandscapeMode
+            if (r0 != 0) goto L_0x00fe
+            boolean r0 = isTabletMode
+            if (r0 != 0) goto L_0x00fe
+            boolean r0 = org.telegram.messenger.AndroidUtilities.isInMultiwindow
+            if (r0 != 0) goto L_0x00fe
+            r11 = 1
+            goto L_0x00ff
+        L_0x00fe:
             r11 = 0
-        L_0x00f1:
+        L_0x00ff:
             org.telegram.tgnet.TLRPC$TL_groupCallParticipant r12 = r10.getParticipant()
             android.graphics.Rect r0 = new android.graphics.Rect
             r0.<init>()
@@ -7955,14 +7966,14 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             android.content.Context r0 = r28.getContext()
             r14.<init>(r0)
             boolean r0 = r12.muted_by_you
-            if (r0 != 0) goto L_0x0130
+            if (r0 != 0) goto L_0x013e
             android.widget.LinearLayout r0 = new android.widget.LinearLayout
             android.content.Context r1 = r28.getContext()
             r0.<init>(r1)
-            goto L_0x0131
-        L_0x0130:
+            goto L_0x013f
+        L_0x013e:
             r0 = r2
-        L_0x0131:
+        L_0x013f:
             r7.currentOptionsLayout = r14
             org.telegram.ui.GroupCallActivity$54 r15 = new org.telegram.ui.GroupCallActivity$54
             android.content.Context r1 = r28.getContext()
@@ -7978,16 +7989,16 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             float r5 = r7.colorProgress
             r6 = 1065353216(0x3var_, float:1.0)
             int r3 = org.telegram.messenger.AndroidUtilities.getOffsetColor(r3, r4, r5, r6)
-            if (r0 == 0) goto L_0x01b1
+            if (r0 == 0) goto L_0x01bf
             boolean r4 = r10.isSelfUser()
-            if (r4 != 0) goto L_0x01b1
+            if (r4 != 0) goto L_0x01bf
             boolean r4 = r12.muted_by_you
-            if (r4 != 0) goto L_0x01b1
+            if (r4 != 0) goto L_0x01bf
             boolean r4 = r12.muted
-            if (r4 == 0) goto L_0x0170
+            if (r4 == 0) goto L_0x017e
             boolean r4 = r12.can_self_unmute
-            if (r4 == 0) goto L_0x01b1
-        L_0x0170:
+            if (r4 == 0) goto L_0x01bf
+        L_0x017e:
             android.content.Context r2 = r28.getContext()
             android.content.res.Resources r2 = r2.getResources()
             int r4 = org.telegram.messenger.R.drawable.popup_fixed_alert
@@ -8012,7 +8023,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r4 = -1
             r5 = 48
             r0.addView(r2, r4, r5)
-        L_0x01b1:
+        L_0x01bf:
             r16 = r2
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r1)
             r14.setMinimumWidth(r0)
@@ -8031,20 +8042,20 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r18 = -2
             r19 = 0
             r6 = 0
-            if (r16 == 0) goto L_0x01ea
+            if (r16 == 0) goto L_0x01f8
             r0 = -1056964608(0xffffffffCLASSNAME, float:-8.0)
             r20 = -1056964608(0xffffffffCLASSNAME, float:-8.0)
-            goto L_0x01ec
-        L_0x01ea:
+            goto L_0x01fa
+        L_0x01f8:
             r20 = 0
-        L_0x01ec:
+        L_0x01fa:
             r21 = 0
             r22 = 0
             android.widget.LinearLayout$LayoutParams r0 = org.telegram.ui.Components.LayoutHelper.createLinear(r17, r18, r19, r20, r21, r22)
             r15.addView(r14, r0)
             int r0 = android.os.Build.VERSION.SDK_INT
             r1 = 21
-            if (r0 < r1) goto L_0x0210
+            if (r0 < r1) goto L_0x021e
             org.telegram.ui.GroupCallActivity$55 r17 = new org.telegram.ui.GroupCallActivity$55
             android.content.Context r2 = r28.getContext()
             r3 = 0
@@ -8054,12 +8065,12 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r1 = r28
             r6 = r15
             r0.<init>(r1, r2, r3, r4, r5, r6)
-            goto L_0x0219
-        L_0x0210:
+            goto L_0x0227
+        L_0x021e:
             android.widget.ScrollView r0 = new android.widget.ScrollView
             android.content.Context r1 = r28.getContext()
             r0.<init>(r1)
-        L_0x0219:
+        L_0x0227:
             r0.setClipToPadding(r8)
             r1 = -2
             r2 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
@@ -8076,10 +8087,10 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r1.<init>(r6)
             org.telegram.tgnet.TLRPC$Peer r6 = r12.peer
             boolean r6 = r6 instanceof org.telegram.tgnet.TLRPC$TL_peerUser
-            if (r6 == 0) goto L_0x02cf
+            if (r6 == 0) goto L_0x02dd
             org.telegram.tgnet.TLRPC$Chat r6 = r7.currentChat
             boolean r6 = org.telegram.messenger.ChatObject.isChannel(r6)
-            if (r6 == 0) goto L_0x0277
+            if (r6 == 0) goto L_0x0285
             org.telegram.messenger.AccountInstance r6 = r7.accountInstance
             org.telegram.messenger.MessagesController r6 = r6.getMessagesController()
             org.telegram.tgnet.TLRPC$Peer r8 = r12.peer
@@ -8090,22 +8101,22 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r23 = r14
             long r13 = r8.id
             org.telegram.tgnet.TLRPC$ChannelParticipant r6 = r6.getAdminInChannel(r9, r13)
-            if (r6 == 0) goto L_0x0270
+            if (r6 == 0) goto L_0x027e
             boolean r8 = r6 instanceof org.telegram.tgnet.TLRPC$TL_channelParticipantCreator
-            if (r8 != 0) goto L_0x026e
+            if (r8 != 0) goto L_0x027c
             org.telegram.tgnet.TLRPC$TL_chatAdminRights r6 = r6.admin_rights
             boolean r6 = r6.manage_call
-            if (r6 == 0) goto L_0x0270
-        L_0x026e:
+            if (r6 == 0) goto L_0x027e
+        L_0x027c:
             r6 = 1
-            goto L_0x0271
-        L_0x0270:
+            goto L_0x027f
+        L_0x027e:
             r6 = 0
-        L_0x0271:
+        L_0x027f:
             r25 = r11
             r26 = r12
-            goto L_0x02e3
-        L_0x0277:
+            goto L_0x02f1
+        L_0x0285:
             r21 = r10
             r22 = r13
             r23 = r14
@@ -8114,14 +8125,14 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             org.telegram.tgnet.TLRPC$Chat r8 = r7.currentChat
             long r8 = r8.id
             org.telegram.tgnet.TLRPC$ChatFull r6 = r6.getChatFull(r8)
-            if (r6 == 0) goto L_0x02ca
+            if (r6 == 0) goto L_0x02d8
             org.telegram.tgnet.TLRPC$ChatParticipants r8 = r6.participants
-            if (r8 == 0) goto L_0x02ca
+            if (r8 == 0) goto L_0x02d8
             java.util.ArrayList<org.telegram.tgnet.TLRPC$ChatParticipant> r8 = r8.participants
             int r8 = r8.size()
             r9 = 0
-        L_0x0298:
-            if (r9 >= r8) goto L_0x02ca
+        L_0x02a6:
+            if (r9 >= r8) goto L_0x02d8
             org.telegram.tgnet.TLRPC$ChatParticipants r10 = r6.participants
             java.util.ArrayList<org.telegram.tgnet.TLRPC$ChatParticipant> r10 = r10.participants
             java.lang.Object r10 = r10.get(r9)
@@ -8133,29 +8144,29 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r26 = r12
             long r11 = r6.user_id
             int r6 = (r13 > r11 ? 1 : (r13 == r11 ? 0 : -1))
-            if (r6 != 0) goto L_0x02c1
+            if (r6 != 0) goto L_0x02cf
             boolean r6 = r10 instanceof org.telegram.tgnet.TLRPC$TL_chatParticipantAdmin
-            if (r6 != 0) goto L_0x02bf
+            if (r6 != 0) goto L_0x02cd
             boolean r6 = r10 instanceof org.telegram.tgnet.TLRPC$TL_chatParticipantCreator
-            if (r6 == 0) goto L_0x02bd
-            goto L_0x02bf
-        L_0x02bd:
+            if (r6 == 0) goto L_0x02cb
+            goto L_0x02cd
+        L_0x02cb:
             r6 = 0
-            goto L_0x02e3
-        L_0x02bf:
+            goto L_0x02f1
+        L_0x02cd:
             r6 = 1
-            goto L_0x02e3
-        L_0x02c1:
+            goto L_0x02f1
+        L_0x02cf:
             int r9 = r9 + 1
             r6 = r24
             r11 = r25
             r12 = r26
-            goto L_0x0298
-        L_0x02ca:
+            goto L_0x02a6
+        L_0x02d8:
             r25 = r11
             r26 = r12
-            goto L_0x02bd
-        L_0x02cf:
+            goto L_0x02cb
+        L_0x02dd:
             r21 = r10
             r25 = r11
             r26 = r12
@@ -8165,14 +8176,14 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             long r8 = r6.id
             long r8 = -r8
             int r6 = (r3 > r8 ? 1 : (r3 == r8 ? 0 : -1))
-            if (r6 != 0) goto L_0x02bd
-            goto L_0x02bf
-        L_0x02e3:
+            if (r6 != 0) goto L_0x02cb
+            goto L_0x02cd
+        L_0x02f1:
             boolean r8 = r21.isSelfUser()
             r9 = 0
-            if (r8 == 0) goto L_0x03b3
+            if (r8 == 0) goto L_0x03c1
             boolean r6 = r21.isHandRaised()
-            if (r6 == 0) goto L_0x030d
+            if (r6 == 0) goto L_0x031b
             int r6 = org.telegram.messenger.R.string.VoipGroupCancelRaiseHand
             java.lang.String r8 = "VoipGroupCancelRaiseHand"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r8, r6)
@@ -8183,16 +8194,16 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r6 = 7
             java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
             r1.add(r6)
-        L_0x030d:
+        L_0x031b:
             boolean r6 = r21.hasAvatarSet()
-            if (r6 == 0) goto L_0x0318
+            if (r6 == 0) goto L_0x0326
             int r6 = org.telegram.messenger.R.string.VoipAddPhoto
             java.lang.String r8 = "VoipAddPhoto"
-            goto L_0x031c
-        L_0x0318:
+            goto L_0x032a
+        L_0x0326:
             int r6 = org.telegram.messenger.R.string.VoipSetNewPhoto
             java.lang.String r8 = "VoipSetNewPhoto"
-        L_0x031c:
+        L_0x032a:
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r8, r6)
             r5.add(r6)
             int r6 = org.telegram.messenger.R.drawable.msg_addphoto
@@ -8202,58 +8213,58 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
             r1.add(r6)
             int r6 = (r3 > r9 ? 1 : (r3 == r9 ? 0 : -1))
-            if (r6 <= 0) goto L_0x0354
+            if (r6 <= 0) goto L_0x0362
             r8 = r26
             java.lang.String r6 = r8.about
             boolean r6 = android.text.TextUtils.isEmpty(r6)
-            if (r6 == 0) goto L_0x0348
+            if (r6 == 0) goto L_0x0356
             int r6 = org.telegram.messenger.R.string.VoipAddBio
             java.lang.String r11 = "VoipAddBio"
-            goto L_0x034c
-        L_0x0348:
+            goto L_0x035a
+        L_0x0356:
             int r6 = org.telegram.messenger.R.string.VoipEditBio
             java.lang.String r11 = "VoipEditBio"
-        L_0x034c:
+        L_0x035a:
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r11, r6)
             r5.add(r6)
-            goto L_0x036e
-        L_0x0354:
+            goto L_0x037c
+        L_0x0362:
             r8 = r26
             java.lang.String r6 = r8.about
             boolean r6 = android.text.TextUtils.isEmpty(r6)
-            if (r6 == 0) goto L_0x0363
+            if (r6 == 0) goto L_0x0371
             int r6 = org.telegram.messenger.R.string.VoipAddDescription
             java.lang.String r11 = "VoipAddDescription"
-            goto L_0x0367
-        L_0x0363:
+            goto L_0x0375
+        L_0x0371:
             int r6 = org.telegram.messenger.R.string.VoipEditDescription
             java.lang.String r11 = "VoipEditDescription"
-        L_0x0367:
+        L_0x0375:
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r11, r6)
             r5.add(r6)
-        L_0x036e:
+        L_0x037c:
             java.lang.String r6 = r8.about
             boolean r6 = android.text.TextUtils.isEmpty(r6)
-            if (r6 == 0) goto L_0x0379
+            if (r6 == 0) goto L_0x0387
             int r6 = org.telegram.messenger.R.drawable.msg_addbio
-            goto L_0x037b
-        L_0x0379:
+            goto L_0x0389
+        L_0x0387:
             int r6 = org.telegram.messenger.R.drawable.msg_info
-        L_0x037b:
+        L_0x0389:
             java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
             r2.add(r6)
             r6 = 10
             java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
             r1.add(r6)
             int r6 = (r3 > r9 ? 1 : (r3 == r9 ? 0 : -1))
-            if (r6 <= 0) goto L_0x0394
+            if (r6 <= 0) goto L_0x03a2
             int r6 = org.telegram.messenger.R.string.VoipEditName
             java.lang.String r11 = "VoipEditName"
-            goto L_0x0398
-        L_0x0394:
+            goto L_0x03a6
+        L_0x03a2:
             int r6 = org.telegram.messenger.R.string.VoipEditTitle
             java.lang.String r11 = "VoipEditTitle"
-        L_0x0398:
+        L_0x03a6:
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r11, r6)
             r5.add(r6)
             int r6 = org.telegram.messenger.R.drawable.msg_edit
@@ -8262,27 +8273,27 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r6 = 11
             java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
             r1.add(r6)
-            goto L_0x0513
-        L_0x03b3:
+            goto L_0x0521
+        L_0x03c1:
             r8 = r26
             org.telegram.tgnet.TLRPC$Chat r11 = r7.currentChat
             boolean r11 = org.telegram.messenger.ChatObject.canManageCalls(r11)
             java.lang.String r13 = "VoipGroupOpenChannel"
-            if (r11 == 0) goto L_0x048d
-            if (r6 == 0) goto L_0x03c8
+            if (r11 == 0) goto L_0x049b
+            if (r6 == 0) goto L_0x03d6
             boolean r11 = r8.muted
-            if (r11 != 0) goto L_0x03c6
-            goto L_0x03c8
-        L_0x03c6:
+            if (r11 != 0) goto L_0x03d4
+            goto L_0x03d6
+        L_0x03d4:
             r14 = r13
-            goto L_0x041c
-        L_0x03c8:
+            goto L_0x042a
+        L_0x03d6:
             boolean r11 = r8.muted
-            if (r11 == 0) goto L_0x03ff
+            if (r11 == 0) goto L_0x040d
             boolean r11 = r8.can_self_unmute
-            if (r11 == 0) goto L_0x03d1
-            goto L_0x03ff
-        L_0x03d1:
+            if (r11 == 0) goto L_0x03df
+            goto L_0x040d
+        L_0x03df:
             int r11 = org.telegram.messenger.R.string.VoipGroupAllowToSpeak
             java.lang.String r14 = "VoipGroupAllowToSpeak"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r14, r11)
@@ -8290,21 +8301,21 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r14 = r13
             long r12 = r8.raise_hand_rating
             int r26 = (r12 > r9 ? 1 : (r12 == r9 ? 0 : -1))
-            if (r26 == 0) goto L_0x03ed
+            if (r26 == 0) goto L_0x03fb
             int r12 = org.telegram.messenger.R.drawable.msg_allowspeak
             java.lang.Integer r12 = java.lang.Integer.valueOf(r12)
             r2.add(r12)
-            goto L_0x03f6
-        L_0x03ed:
+            goto L_0x0404
+        L_0x03fb:
             int r12 = org.telegram.messenger.R.drawable.msg_voice_unmuted
             java.lang.Integer r12 = java.lang.Integer.valueOf(r12)
             r2.add(r12)
-        L_0x03f6:
+        L_0x0404:
             r12 = 1
             java.lang.Integer r13 = java.lang.Integer.valueOf(r12)
             r1.add(r13)
-            goto L_0x041c
-        L_0x03ff:
+            goto L_0x042a
+        L_0x040d:
             r14 = r13
             int r12 = org.telegram.messenger.R.string.VoipGroupMute
             java.lang.String r13 = "VoipGroupMute"
@@ -8316,14 +8327,14 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r12 = 0
             java.lang.Integer r13 = java.lang.Integer.valueOf(r12)
             r1.add(r13)
-        L_0x041c:
+        L_0x042a:
             org.telegram.tgnet.TLRPC$Peer r12 = r8.peer
             long r12 = r12.channel_id
             int r26 = (r12 > r9 ? 1 : (r12 == r9 ? 0 : -1))
-            if (r26 == 0) goto L_0x0449
+            if (r26 == 0) goto L_0x0457
             int r11 = r7.currentAccount
             boolean r11 = org.telegram.messenger.ChatObject.isMegagroup(r11, r12)
-            if (r11 != 0) goto L_0x0449
+            if (r11 != 0) goto L_0x0457
             int r11 = org.telegram.messenger.R.string.VoipGroupOpenChannel
             r12 = r14
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
@@ -8334,8 +8345,8 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r11 = 8
             java.lang.Integer r11 = java.lang.Integer.valueOf(r11)
             r1.add(r11)
-            goto L_0x0465
-        L_0x0449:
+            goto L_0x0473
+        L_0x0457:
             int r11 = org.telegram.messenger.R.string.VoipGroupOpenProfile
             java.lang.String r12 = "VoipGroupOpenProfile"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
@@ -8346,11 +8357,11 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r11 = 6
             java.lang.Integer r11 = java.lang.Integer.valueOf(r11)
             r1.add(r11)
-        L_0x0465:
-            if (r6 != 0) goto L_0x0513
+        L_0x0473:
+            if (r6 != 0) goto L_0x0521
             org.telegram.tgnet.TLRPC$Chat r6 = r7.currentChat
             boolean r6 = org.telegram.messenger.ChatObject.canBlockUsers(r6)
-            if (r6 == 0) goto L_0x0513
+            if (r6 == 0) goto L_0x0521
             int r6 = org.telegram.messenger.R.string.VoipGroupUserRemove
             java.lang.String r11 = "VoipGroupUserRemove"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r11, r6)
@@ -8361,11 +8372,11 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r6 = 2
             java.lang.Integer r11 = java.lang.Integer.valueOf(r6)
             r1.add(r11)
-            goto L_0x0513
-        L_0x048d:
+            goto L_0x0521
+        L_0x049b:
             r12 = r13
             boolean r6 = r8.muted_by_you
-            if (r6 == 0) goto L_0x04af
+            if (r6 == 0) goto L_0x04bd
             int r6 = org.telegram.messenger.R.string.VoipGroupUnmuteForMe
             java.lang.String r13 = "VoipGroupUnmuteForMe"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r13, r6)
@@ -8376,8 +8387,8 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r6 = 4
             java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
             r1.add(r6)
-            goto L_0x04cb
-        L_0x04af:
+            goto L_0x04d9
+        L_0x04bd:
             int r6 = org.telegram.messenger.R.string.VoipGroupMuteForMe
             java.lang.String r13 = "VoipGroupMuteForMe"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r13, r6)
@@ -8388,14 +8399,14 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r6 = 5
             java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
             r1.add(r6)
-        L_0x04cb:
+        L_0x04d9:
             org.telegram.tgnet.TLRPC$Peer r6 = r8.peer
             long r13 = r6.channel_id
             int r6 = (r13 > r9 ? 1 : (r13 == r9 ? 0 : -1))
-            if (r6 == 0) goto L_0x04f7
+            if (r6 == 0) goto L_0x0505
             int r6 = r7.currentAccount
             boolean r6 = org.telegram.messenger.ChatObject.isMegagroup(r6, r13)
-            if (r6 != 0) goto L_0x04f7
+            if (r6 != 0) goto L_0x0505
             int r6 = org.telegram.messenger.R.string.VoipGroupOpenChannel
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r12, r6)
             r5.add(r6)
@@ -8405,8 +8416,8 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r6 = 8
             java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
             r1.add(r6)
-            goto L_0x0513
-        L_0x04f7:
+            goto L_0x0521
+        L_0x0505:
             int r6 = org.telegram.messenger.R.string.VoipGroupOpenChat
             java.lang.String r11 = "VoipGroupOpenChat"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r11, r6)
@@ -8417,43 +8428,43 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r6 = 6
             java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
             r1.add(r6)
-        L_0x0513:
+        L_0x0521:
             int r6 = r5.size()
             r11 = 0
-        L_0x0518:
-            if (r11 >= r6) goto L_0x058c
+        L_0x0526:
+            if (r11 >= r6) goto L_0x059a
             org.telegram.ui.ActionBar.ActionBarMenuSubItem r12 = new org.telegram.ui.ActionBar.ActionBarMenuSubItem
             android.content.Context r13 = r28.getContext()
-            if (r11 != 0) goto L_0x0524
+            if (r11 != 0) goto L_0x0532
             r14 = 1
-            goto L_0x0525
-        L_0x0524:
+            goto L_0x0533
+        L_0x0532:
             r14 = 0
-        L_0x0525:
+        L_0x0533:
             int r9 = r6 + -1
-            if (r11 != r9) goto L_0x052b
+            if (r11 != r9) goto L_0x0539
             r9 = 1
-            goto L_0x052c
-        L_0x052b:
+            goto L_0x053a
+        L_0x0539:
             r9 = 0
-        L_0x052c:
+        L_0x053a:
             r12.<init>(r13, r14, r9)
             java.lang.Object r9 = r1.get(r11)
             java.lang.Integer r9 = (java.lang.Integer) r9
             int r9 = r9.intValue()
             r10 = 2
-            if (r9 == r10) goto L_0x054a
+            if (r9 == r10) goto L_0x0558
             java.lang.String r9 = "voipgroup_actionBarItems"
             int r10 = org.telegram.ui.ActionBar.Theme.getColor(r9)
             int r9 = org.telegram.ui.ActionBar.Theme.getColor(r9)
             r12.setColors(r10, r9)
-            goto L_0x0557
-        L_0x054a:
+            goto L_0x0565
+        L_0x0558:
             java.lang.String r9 = "voipgroup_leaveCallMenu"
             int r10 = org.telegram.ui.ActionBar.Theme.getColor(r9)
             int r9 = org.telegram.ui.ActionBar.Theme.getColor(r9)
             r12.setColors(r10, r9)
-        L_0x0557:
+        L_0x0565:
             java.lang.String r9 = "voipgroup_listSelector"
             int r9 = org.telegram.ui.ActionBar.Theme.getColor(r9)
             r12.setSelectorColor(r9)
@@ -8472,8 +8483,8 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r12.setOnClickListener(r10)
             int r11 = r11 + 1
             r9 = 0
-            goto L_0x0518
-        L_0x058c:
+            goto L_0x0526
+        L_0x059a:
             r1 = 51
             r2 = -2
             android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createScroll(r2, r2, r1)
@@ -8492,14 +8503,14 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             org.telegram.ui.Components.RecyclerListView r2 = r7.listView
             r2.invalidate()
             android.animation.AnimatorSet r2 = r7.scrimAnimatorSet
-            if (r2 == 0) goto L_0x05ba
+            if (r2 == 0) goto L_0x05c8
             r2.cancel()
-        L_0x05ba:
+        L_0x05c8:
             r2 = r22
             r7.scrimPopupLayout = r2
             r5 = 0
             int r8 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
-            if (r8 <= 0) goto L_0x05dd
+            if (r8 <= 0) goto L_0x05eb
             org.telegram.messenger.AccountInstance r5 = r7.accountInstance
             org.telegram.messenger.MessagesController r5 = r5.getMessagesController()
             java.lang.Long r6 = java.lang.Long.valueOf(r3)
@@ -8508,8 +8519,8 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             org.telegram.messenger.ImageLocation r8 = org.telegram.messenger.ImageLocation.getForUserOrChat(r5, r6)
             r9 = 1
             org.telegram.messenger.ImageLocation r5 = org.telegram.messenger.ImageLocation.getForUserOrChat(r5, r9)
-            goto L_0x05f6
-        L_0x05dd:
+            goto L_0x0604
+        L_0x05eb:
             r6 = 0
             r9 = 1
             org.telegram.messenger.AccountInstance r5 = r7.accountInstance
@@ -8519,22 +8530,22 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             org.telegram.tgnet.TLRPC$Chat r5 = r5.getChat(r8)
             org.telegram.messenger.ImageLocation r8 = org.telegram.messenger.ImageLocation.getForUserOrChat(r5, r6)
             org.telegram.messenger.ImageLocation r5 = org.telegram.messenger.ImageLocation.getForUserOrChat(r5, r9)
-        L_0x05f6:
+        L_0x0604:
             org.telegram.ui.Components.voip.GroupCallMiniTextureView r6 = r7.scrimRenderer
-            if (r6 == 0) goto L_0x0602
+            if (r6 == 0) goto L_0x0610
             boolean r6 = r6.isAttached()
-            if (r6 == 0) goto L_0x0602
+            if (r6 == 0) goto L_0x0610
             r6 = 1
-            goto L_0x0603
-        L_0x0602:
+            goto L_0x0611
+        L_0x0610:
             r6 = 0
-        L_0x0603:
-            if (r8 != 0) goto L_0x0609
-            if (r6 != 0) goto L_0x0609
+        L_0x0611:
+            if (r8 != 0) goto L_0x0617
+            if (r6 != 0) goto L_0x0617
             r11 = 0
-            goto L_0x0661
-        L_0x0609:
-            if (r25 == 0) goto L_0x065f
+            goto L_0x066f
+        L_0x0617:
+            if (r25 == 0) goto L_0x066d
             org.telegram.ui.Components.ProfileGalleryView r9 = r7.avatarsViewPager
             org.telegram.ui.Cells.GroupCallUserCell r10 = r7.scrimView
             org.telegram.ui.Components.BackupImageView r10 = r10.getAvatarImageView()
@@ -8549,19 +8560,19 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             org.telegram.ui.Components.ProfileGalleryView r6 = r7.avatarsViewPager
             r6.initIfEmpty(r8, r5, r9)
             org.telegram.ui.Components.voip.GroupCallMiniTextureView r5 = r7.scrimRenderer
-            if (r5 == 0) goto L_0x0632
+            if (r5 == 0) goto L_0x0640
             r5.setShowingAsScrimView(r9, r9)
-        L_0x0632:
+        L_0x0640:
             org.telegram.tgnet.TLRPC$Peer r5 = r7.selfPeer
             long r5 = org.telegram.messenger.MessageObject.getPeerId(r5)
             int r8 = (r5 > r3 ? 1 : (r5 == r3 ? 0 : -1))
-            if (r8 != 0) goto L_0x065f
+            if (r8 != 0) goto L_0x066d
             org.telegram.ui.Components.ImageUpdater r3 = r7.currentAvatarUpdater
-            if (r3 == 0) goto L_0x065f
+            if (r3 == 0) goto L_0x066d
             org.telegram.ui.GroupCallActivity$AvatarUpdaterDelegate r3 = r7.avatarUpdaterDelegate
-            if (r3 == 0) goto L_0x065f
+            if (r3 == 0) goto L_0x066d
             org.telegram.tgnet.TLRPC$FileLocation r3 = r3.avatar
-            if (r3 == 0) goto L_0x065f
+            if (r3 == 0) goto L_0x066d
             org.telegram.ui.Components.ProfileGalleryView r3 = r7.avatarsViewPager
             org.telegram.ui.GroupCallActivity$AvatarUpdaterDelegate r4 = r7.avatarUpdaterDelegate
             org.telegram.messenger.ImageLocation r4 = r4.uploadingImageLocation
@@ -8569,12 +8580,12 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             org.telegram.tgnet.TLRPC$FileLocation r5 = r5.avatar
             org.telegram.messenger.ImageLocation r5 = org.telegram.messenger.ImageLocation.getForLocal(r5)
             r3.addUploadingImage(r4, r5)
-        L_0x065f:
+        L_0x066d:
             r11 = r25
-        L_0x0661:
+        L_0x066f:
             r3 = -2147483648(0xfffffffvar_, float:-0.0)
             r4 = 1148846080(0x447a0000, float:1000.0)
-            if (r11 == 0) goto L_0x06af
+            if (r11 == 0) goto L_0x06bd
             r5 = 1
             r7.avatarsPreviewShowed = r5
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r4)
@@ -8594,19 +8605,19 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             android.widget.FrameLayout r1 = r7.avatarPreviewContainer
             r2 = 0
             r1.setVisibility(r2)
-            if (r16 == 0) goto L_0x069d
+            if (r16 == 0) goto L_0x06ab
             r16.invalidate()
-        L_0x069d:
+        L_0x06ab:
             r7.runAvatarPreviewTransition(r5, r0)
             org.telegram.ui.Components.GroupCallFullscreenAdapter$GroupCallUserCell r0 = r7.scrimFullscreenView
-            if (r0 == 0) goto L_0x06ac
+            if (r0 == 0) goto L_0x06ba
             org.telegram.ui.Components.BackupImageView r0 = r0.getAvatarImageView()
             r1 = 0
             r0.setAlpha(r1)
-        L_0x06ac:
+        L_0x06ba:
             r0 = 1
-            goto L_0x0811
-        L_0x06af:
+            goto L_0x081f
+        L_0x06bd:
             r5 = 1
             r6 = 0
             r7.avatarsPreviewShowed = r6
@@ -8643,9 +8654,9 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r4 = 1
             r3.setFocusableInTouchMode(r4)
             org.telegram.ui.Components.GroupCallFullscreenAdapter$GroupCallUserCell r3 = r7.scrimFullscreenView
-            if (r3 == 0) goto L_0x077f
+            if (r3 == 0) goto L_0x078d
             boolean r0 = isLandscapeMode
-            if (r0 == 0) goto L_0x0749
+            if (r0 == 0) goto L_0x0757
             float r0 = r3.getX()
             org.telegram.ui.Components.RecyclerListView r3 = r7.fullscreenUsersListView
             float r3 = r3.getX()
@@ -8671,8 +8682,8 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r3 = 1086324736(0x40CLASSNAME, float:6.0)
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
             int r2 = r2 - r3
-            goto L_0x07da
-        L_0x0749:
+            goto L_0x07e8
+        L_0x0757:
             float r0 = r3.getX()
             org.telegram.ui.Components.RecyclerListView r3 = r7.fullscreenUsersListView
             float r3 = r3.getX()
@@ -8696,8 +8707,8 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             float r2 = (float) r2
             float r3 = r3 - r2
             int r2 = (int) r3
-            goto L_0x07da
-        L_0x077f:
+            goto L_0x07e8
+        L_0x078d:
             org.telegram.ui.Components.RecyclerListView r3 = r7.listView
             float r3 = r3.getX()
             org.telegram.ui.Components.RecyclerListView r4 = r7.listView
@@ -8713,7 +8724,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             float r3 = r3 - r2
             int r2 = (int) r3
             boolean r3 = r7.hasScrimAnchorView
-            if (r3 == 0) goto L_0x07b8
+            if (r3 == 0) goto L_0x07c6
             org.telegram.ui.Components.RecyclerListView r3 = r7.listView
             float r3 = r3.getY()
             float r4 = r0.getY()
@@ -8722,14 +8733,14 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             float r0 = (float) r0
             float r3 = r3 + r0
             int r0 = (int) r3
-        L_0x07b2:
+        L_0x07c0:
             r27 = r2
             r2 = r0
             r0 = r27
-            goto L_0x07da
-        L_0x07b8:
+            goto L_0x07e8
+        L_0x07c6:
             org.telegram.ui.Components.voip.GroupCallGridCell r0 = r7.scrimGridView
-            if (r0 == 0) goto L_0x07d2
+            if (r0 == 0) goto L_0x07e0
             org.telegram.ui.Components.RecyclerListView r0 = r7.listView
             float r0 = r0.getY()
             org.telegram.ui.Components.voip.GroupCallGridCell r3 = r7.scrimGridView
@@ -8739,14 +8750,14 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             int r3 = r3.getMeasuredHeight()
             float r3 = (float) r3
             float r0 = r0 + r3
-            goto L_0x07d8
-        L_0x07d2:
+            goto L_0x07e6
+        L_0x07e0:
             org.telegram.ui.Components.RecyclerListView r0 = r7.listView
             float r0 = r0.getY()
-        L_0x07d8:
+        L_0x07e6:
             int r0 = (int) r0
-            goto L_0x07b2
-        L_0x07da:
+            goto L_0x07c0
+        L_0x07e8:
             org.telegram.ui.ActionBar.ActionBarPopupWindow r3 = r7.scrimPopupWindow
             org.telegram.ui.Components.RecyclerListView r4 = r7.listView
             r3.showAtLocation(r4, r1, r0, r2)
@@ -8769,10 +8780,10 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r0.setDuration(r1)
             android.animation.AnimatorSet r0 = r7.scrimAnimatorSet
             r0.start()
-            goto L_0x06ac
-        L_0x0811:
+            goto L_0x06ba
+        L_0x081f:
             return r0
-        L_0x0812:
+        L_0x0820:
             r0 = 1
             r7.dismissAvatarPreview(r0)
             r0 = 0

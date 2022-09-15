@@ -9,6 +9,7 @@ import android.graphics.RectF;
 import android.os.Build;
 import android.os.SystemClock;
 import android.text.Layout;
+import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.StaticLayout;
@@ -269,6 +270,13 @@ public class VideoPlayerSeekBar {
             return;
         }
         CharSequence charSequence = messageObject.caption;
+        if (messageObject.isYouTubeVideo()) {
+            if (messageObject.youtubeDescription == null) {
+                messageObject.youtubeDescription = SpannableString.valueOf(messageObject.messageOwner.media.webpage.description);
+                MessageObject.addUrlsByPattern(messageObject.isOut(), messageObject.youtubeDescription, false, 3, (int) j, false);
+            }
+            charSequence = messageObject.youtubeDescription;
+        }
         if (charSequence != this.lastCaption || this.lastVideoDuration != j) {
             this.lastCaption = charSequence;
             this.lastVideoDuration = j;

@@ -11,6 +11,6 @@ public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda20 imp
     }
 
     public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return this.f$0.lambda$onCreate$0(view, motionEvent);
+        return this.f$0.lambda$setupActionBarLayout$6(view, motionEvent);
     }
 }

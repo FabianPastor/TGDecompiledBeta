@@ -215,6 +215,7 @@ public class AndroidUtilities {
     private static Vibrator vibrator;
     private static boolean waitingForCall = false;
     private static boolean waitingForSms = false;
+    private static Boolean wasTablet = null;
 
     public interface IntColorCallback {
         void run(int i);
@@ -2445,6 +2446,22 @@ public class AndroidUtilities {
             isTablet = Boolean.valueOf(ApplicationLoader.applicationContext != null && ApplicationLoader.applicationContext.getResources().getBoolean(R.bool.isTablet));
         }
         return isTablet.booleanValue();
+    }
+
+    public static void resetTabletFlag() {
+        if (wasTablet == null) {
+            wasTablet = Boolean.valueOf(isTabletInternal());
+        }
+        isTablet = null;
+        SharedConfig.updateTabletConfig();
+    }
+
+    public static void resetWasTabletFlag() {
+        wasTablet = null;
+    }
+
+    public static Boolean getWasTablet() {
+        return wasTablet;
     }
 
     public static boolean isTablet() {

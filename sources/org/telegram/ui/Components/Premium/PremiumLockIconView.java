@@ -105,11 +105,12 @@ public class PremiumLockIconView extends ImageView {
     /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
         if (this.waitingImage) {
-            if (this.imageReceiver.getBitmap() != null) {
+            ImageReceiver imageReceiver2 = this.imageReceiver;
+            if (imageReceiver2 == null || imageReceiver2.getBitmap() == null) {
+                invalidate();
+            } else {
                 this.waitingImage = false;
                 setColor(getDominantColor(this.imageReceiver.getBitmap()));
-            } else {
-                invalidate();
             }
         }
         if (this.type == TYPE_REACTIONS) {

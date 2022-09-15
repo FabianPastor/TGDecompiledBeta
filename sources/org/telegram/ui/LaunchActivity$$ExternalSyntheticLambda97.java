@@ -14,6 +14,6 @@ public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda97 imp
     }
 
     public final boolean onItemClick(View view, int i) {
-        return this.f$0.lambda$onCreate$5(this.f$1, view, i);
+        return this.f$0.lambda$onCreate$3(this.f$1, view, i);
     }
 }
