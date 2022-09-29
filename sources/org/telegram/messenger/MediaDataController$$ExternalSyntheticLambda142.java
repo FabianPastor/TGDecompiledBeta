@@ -1,15 +1,15 @@
 package org.telegram.messenger;
 
-import org.telegram.ui.Components.Bulletin;
+import org.telegram.tgnet.TLRPC$Document;
 
 public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda142 implements Runnable {
-    public final /* synthetic */ Bulletin.UndoButton f$0;
+    public final /* synthetic */ TLRPC$Document f$0;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda142(Bulletin.UndoButton undoButton) {
-        this.f$0 = undoButton;
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda142(TLRPC$Document tLRPC$Document) {
+        this.f$0 = tLRPC$Document;
     }
 
     public final void run() {
-        this.f$0.undo();
+        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, 0, this.f$0, 7);
     }
 }

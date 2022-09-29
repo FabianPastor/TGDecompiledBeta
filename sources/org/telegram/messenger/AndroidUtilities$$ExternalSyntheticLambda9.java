@@ -10,6 +10,6 @@ public final /* synthetic */ class AndroidUtilities$$ExternalSyntheticLambda9 im
     }
 
     public final void run() {
-        Utilities.globalQueue.postRunnable(new AndroidUtilities$$ExternalSyntheticLambda8(this.f$0));
+        AndroidUtilities.lambda$recycleBitmaps$0(this.f$0);
     }
 }

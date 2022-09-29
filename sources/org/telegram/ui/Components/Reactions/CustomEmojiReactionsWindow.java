@@ -12,7 +12,6 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -34,7 +33,6 @@ import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.Bulletin;
 import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.CubicBezierInterpolator;
-import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.Premium.PremiumFeatureBottomSheet;
 import org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble;
@@ -55,16 +53,20 @@ public class CustomEmojiReactionsWindow {
     RectF fromRect = new RectF();
     /* access modifiers changed from: private */
     public boolean invalidatePath;
+    float keyboardHeight;
     private Runnable onDismiss;
     Path pathToClip = new Path();
     List<ReactionsLayoutInBubble.VisibleReaction> reactions;
     ReactionsContainerLayout reactionsContainerLayout;
     Theme.ResourcesProvider resourcesProvider;
     SelectAnimatedEmojiDialog selectAnimatedEmojiDialog;
+    /* access modifiers changed from: private */
+    public boolean wasFocused;
     WindowManager windowManager;
     FrameLayout windowView;
+    float yTranslation;
 
-    static /* synthetic */ int access$508(CustomEmojiReactionsWindow customEmojiReactionsWindow) {
+    static /* synthetic */ int access$808(CustomEmojiReactionsWindow customEmojiReactionsWindow) {
         int i = customEmojiReactionsWindow.frameDrawCount;
         customEmojiReactionsWindow.frameDrawCount = i + 1;
         return i;
@@ -90,13 +92,23 @@ public class CustomEmojiReactionsWindow {
                 CustomEmojiReactionsWindow.this.dismiss();
                 return true;
             }
+
+            /* access modifiers changed from: protected */
+            public boolean fitSystemWindows(Rect rect) {
+                CustomEmojiReactionsWindow customEmojiReactionsWindow = CustomEmojiReactionsWindow.this;
+                if (customEmojiReactionsWindow.keyboardHeight != ((float) rect.bottom) && customEmojiReactionsWindow.wasFocused) {
+                    CustomEmojiReactionsWindow customEmojiReactionsWindow2 = CustomEmojiReactionsWindow.this;
+                    customEmojiReactionsWindow2.keyboardHeight = (float) rect.bottom;
+                    customEmojiReactionsWindow2.updateWindowPosition();
+                }
+                return super.fitSystemWindows(rect);
+            }
         };
         this.windowView = r0;
         r0.setOnClickListener(new CustomEmojiReactionsWindow$$ExternalSyntheticLambda2(this));
         this.containerView = new ContainerView(context);
-        final ReactionsContainerLayout reactionsContainerLayout4 = reactionsContainerLayout2;
-        AnonymousClass2 r13 = r0;
         final BaseFragment baseFragment3 = baseFragment2;
+        final ReactionsContainerLayout reactionsContainerLayout4 = reactionsContainerLayout2;
         AnonymousClass2 r02 = new SelectAnimatedEmojiDialog(this, baseFragment2, context, false, (Integer) null, 1, resourcesProvider3) {
             final /* synthetic */ CustomEmojiReactionsWindow this$0;
 
@@ -105,8 +117,22 @@ public class CustomEmojiReactionsWindow {
             }
 
             /* access modifiers changed from: protected */
+            public void onInputFocus() {
+                if (!this.this$0.wasFocused) {
+                    boolean unused = this.this$0.wasFocused = true;
+                    CustomEmojiReactionsWindow customEmojiReactionsWindow = this.this$0;
+                    customEmojiReactionsWindow.windowManager.updateViewLayout(customEmojiReactionsWindow.windowView, customEmojiReactionsWindow.createLayoutParams(true));
+                    BaseFragment baseFragment = baseFragment3;
+                    if (baseFragment instanceof ChatActivity) {
+                        ((ChatActivity) baseFragment).needEnterText();
+                    }
+                }
+            }
+
+            /* access modifiers changed from: protected */
             public void onReactionClick(SelectAnimatedEmojiDialog.ImageViewEmoji imageViewEmoji, ReactionsLayoutInBubble.VisibleReaction visibleReaction) {
                 reactionsContainerLayout4.onReactionClicked(imageViewEmoji, visibleReaction, false);
+                AndroidUtilities.hideKeyboard(this.this$0.windowView);
             }
 
             /* access modifiers changed from: protected */
@@ -117,6 +143,7 @@ public class CustomEmojiReactionsWindow {
                     return;
                 }
                 reactionsContainerLayout4.onReactionClicked(view, ReactionsLayoutInBubble.VisibleReaction.fromCustomEmoji(l), false);
+                AndroidUtilities.hideKeyboard(this.this$0.windowView);
             }
 
             /* access modifiers changed from: private */
@@ -124,8 +151,8 @@ public class CustomEmojiReactionsWindow {
                 this.this$0.showUnlockPremiumAlert();
             }
         };
-        this.selectAnimatedEmojiDialog = r13;
-        r13.setOnLongPressedListener(new SelectAnimatedEmojiDialog.onLongPressedListener(this) {
+        this.selectAnimatedEmojiDialog = r02;
+        r02.setOnLongPressedListener(new SelectAnimatedEmojiDialog.onLongPressedListener(this) {
             public void onLongPressed(SelectAnimatedEmojiDialog.ImageViewEmoji imageViewEmoji) {
                 if (imageViewEmoji.isDefaultReaction) {
                     reactionsContainerLayout3.onReactionClicked(imageViewEmoji, imageViewEmoji.reaction, true);
@@ -146,32 +173,10 @@ public class CustomEmojiReactionsWindow {
         this.containerView.addView(this.selectAnimatedEmojiDialog, LayoutHelper.createFrame(-1, -2.0f, 0, 0.0f, 0.0f, 0.0f, 0.0f));
         this.windowView.addView(this.containerView, LayoutHelper.createFrame(-1, -1.0f, 48, 16.0f, 16.0f, 16.0f, 16.0f));
         this.windowView.setClipChildren(false);
-        new EditTextBoldCursor(context) {
-            boolean focusable = false;
-
-            public boolean dispatchTouchEvent(MotionEvent motionEvent) {
-                if (!this.focusable) {
-                    WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
-                    layoutParams.height = -1;
-                    layoutParams.width = -1;
-                    layoutParams.type = 1000;
-                    layoutParams.flags = 65792;
-                    layoutParams.format = -3;
-                    CustomEmojiReactionsWindow customEmojiReactionsWindow = CustomEmojiReactionsWindow.this;
-                    customEmojiReactionsWindow.windowManager.updateViewLayout(customEmojiReactionsWindow.windowView, layoutParams);
-                }
-                return super.dispatchTouchEvent(motionEvent);
-            }
-        }.setBackgroundColor(-16777216);
-        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
-        layoutParams.height = -1;
-        layoutParams.width = -1;
-        layoutParams.type = 1000;
-        layoutParams.flags = 65800;
-        layoutParams.format = -3;
+        WindowManager.LayoutParams createLayoutParams = createLayoutParams(false);
         WindowManager windowManager2 = baseFragment2.getParentActivity().getWindowManager();
         this.windowManager = windowManager2;
-        windowManager2.addView(this.windowView, layoutParams);
+        windowManager2.addView(this.windowView, createLayoutParams);
         this.reactionsContainerLayout = reactionsContainerLayout3;
         reactionsContainerLayout3.prepareAnimation(true);
         this.containerView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
@@ -190,6 +195,36 @@ public class CustomEmojiReactionsWindow {
     }
 
     /* access modifiers changed from: private */
+    public void updateWindowPosition() {
+        if (!this.dismissed) {
+            float f = this.yTranslation;
+            if (((float) this.containerView.getMeasuredHeight()) + f > (((float) this.windowView.getMeasuredHeight()) - this.keyboardHeight) - ((float) AndroidUtilities.dp(32.0f))) {
+                f = ((((float) this.windowView.getMeasuredHeight()) - this.keyboardHeight) - ((float) this.containerView.getMeasuredHeight())) - ((float) AndroidUtilities.dp(32.0f));
+            }
+            if (f < 0.0f) {
+                f = 0.0f;
+            }
+            this.containerView.animate().translationY(f).setDuration(250).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
+        }
+    }
+
+    /* access modifiers changed from: private */
+    public WindowManager.LayoutParams createLayoutParams(boolean z) {
+        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+        layoutParams.height = -1;
+        layoutParams.width = -1;
+        layoutParams.type = 1000;
+        layoutParams.softInputMode = 16;
+        if (z) {
+            layoutParams.flags = 65792;
+        } else {
+            layoutParams.flags = 65800;
+        }
+        layoutParams.format = -3;
+        return layoutParams;
+    }
+
+    /* access modifiers changed from: private */
     public void showUnlockPremiumAlert() {
         BaseFragment baseFragment2 = this.baseFragment;
         if (baseFragment2 instanceof ChatActivity) {
@@ -203,17 +238,24 @@ public class CustomEmojiReactionsWindow {
         ReactionsContainerLayout reactionsContainerLayout2 = this.reactionsContainerLayout;
         this.fromRadius = reactionsContainerLayout2.radius;
         int[] iArr = new int[2];
+        int[] iArr2 = new int[2];
         reactionsContainerLayout2.getLocationOnScreen(iArr);
-        float dp = (float) ((iArr[1] - AndroidUtilities.dp(44.0f)) - AndroidUtilities.dp(34.0f));
+        this.windowView.getLocationOnScreen(iArr2);
+        float dp = (float) (((iArr[1] - iArr2[1]) - AndroidUtilities.dp(44.0f)) - AndroidUtilities.dp(34.0f));
         if (((float) this.containerView.getMeasuredHeight()) + dp > ((float) (this.windowView.getMeasuredHeight() - AndroidUtilities.dp(32.0f)))) {
             dp = (float) ((this.windowView.getMeasuredHeight() - AndroidUtilities.dp(32.0f)) - this.containerView.getMeasuredHeight());
         }
         if (dp < ((float) AndroidUtilities.dp(16.0f))) {
             dp = (float) AndroidUtilities.dp(16.0f);
         }
-        this.containerView.setTranslationX((float) (iArr[0] - AndroidUtilities.dp(2.0f)));
-        this.containerView.setTranslationY(dp);
-        this.fromRect.offset(((float) iArr[0]) - this.containerView.getX(), ((float) iArr[1]) - this.containerView.getY());
+        this.containerView.setTranslationX((float) ((iArr[0] - iArr2[0]) - AndroidUtilities.dp(2.0f)));
+        if (!z) {
+            this.yTranslation = this.containerView.getTranslationY();
+        } else {
+            this.yTranslation = dp;
+        }
+        this.containerView.setTranslationY(this.yTranslation);
+        this.fromRect.offset(((float) (iArr[0] - iArr2[0])) - this.containerView.getX(), ((float) (iArr[1] - iArr2[1])) - this.containerView.getY());
         this.reactionsContainerLayout.setCustomEmojiEnterProgress(this.enterTransitionProgress);
         float[] fArr = new float[2];
         fArr[0] = this.enterTransitionProgress;
@@ -280,7 +322,14 @@ public class CustomEmojiReactionsWindow {
         if (!this.dismissed) {
             Bulletin.hideVisible();
             this.dismissed = true;
+            AndroidUtilities.hideKeyboard(this.windowView);
             createTransition(false);
+            if (this.wasFocused) {
+                BaseFragment baseFragment2 = this.baseFragment;
+                if (baseFragment2 instanceof ChatActivity) {
+                    ((ChatActivity) baseFragment2).onEditTextDialogClose(true, true);
+                }
+            }
         }
     }
 
@@ -467,26 +516,26 @@ public class CustomEmojiReactionsWindow {
                 org.telegram.ui.Components.Reactions.CustomEmojiReactionsWindow r1 = org.telegram.ui.Components.Reactions.CustomEmojiReactionsWindow.this
                 org.telegram.ui.Components.ReactionsContainerLayout r2 = r1.reactionsContainerLayout
                 r13 = 0
-                if (r2 == 0) goto L_0x04a5
+                if (r2 == 0) goto L_0x04b0
                 float r1 = r1.enterTransitionProgress
                 int r1 = (r1 > r12 ? 1 : (r1 == r12 ? 0 : -1))
-                if (r1 == 0) goto L_0x04a5
+                if (r1 == 0) goto L_0x04b0
                 r1 = 0
             L_0x00f6:
                 org.telegram.ui.Components.Reactions.CustomEmojiReactionsWindow r2 = org.telegram.ui.Components.Reactions.CustomEmojiReactionsWindow.this
                 org.telegram.ui.SelectAnimatedEmojiDialog r2 = r2.selectAnimatedEmojiDialog
-                org.telegram.ui.Components.RecyclerListView r2 = r2.emojiGridView
+                org.telegram.ui.SelectAnimatedEmojiDialog$EmojiListView r2 = r2.emojiGridView
                 int r2 = r2.getChildCount()
                 if (r1 >= r2) goto L_0x012d
                 org.telegram.ui.Components.Reactions.CustomEmojiReactionsWindow r2 = org.telegram.ui.Components.Reactions.CustomEmojiReactionsWindow.this
                 org.telegram.ui.SelectAnimatedEmojiDialog r2 = r2.selectAnimatedEmojiDialog
-                org.telegram.ui.Components.RecyclerListView r2 = r2.emojiGridView
+                org.telegram.ui.SelectAnimatedEmojiDialog$EmojiListView r2 = r2.emojiGridView
                 android.view.View r2 = r2.getChildAt(r1)
                 boolean r2 = r2 instanceof org.telegram.ui.SelectAnimatedEmojiDialog.ImageViewEmoji
                 if (r2 == 0) goto L_0x012a
                 org.telegram.ui.Components.Reactions.CustomEmojiReactionsWindow r2 = org.telegram.ui.Components.Reactions.CustomEmojiReactionsWindow.this
                 org.telegram.ui.SelectAnimatedEmojiDialog r2 = r2.selectAnimatedEmojiDialog
-                org.telegram.ui.Components.RecyclerListView r2 = r2.emojiGridView
+                org.telegram.ui.SelectAnimatedEmojiDialog$EmojiListView r2 = r2.emojiGridView
                 android.view.View r2 = r2.getChildAt(r1)
                 org.telegram.ui.SelectAnimatedEmojiDialog$ImageViewEmoji r2 = (org.telegram.ui.SelectAnimatedEmojiDialog.ImageViewEmoji) r2
                 org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble$VisibleReaction r3 = r2.reaction
@@ -524,7 +573,7 @@ public class CustomEmojiReactionsWindow {
                 org.telegram.ui.Components.ReactionsContainerLayout r1 = r1.reactionsContainerLayout
                 org.telegram.ui.Components.RecyclerListView r1 = r1.recyclerListView
                 int r1 = r1.getChildCount()
-                if (r7 >= r1) goto L_0x0497
+                if (r7 >= r1) goto L_0x04a2
                 if (r7 != r15) goto L_0x016b
                 org.telegram.ui.Components.Reactions.CustomEmojiReactionsWindow r1 = org.telegram.ui.Components.Reactions.CustomEmojiReactionsWindow.this
                 org.telegram.ui.Components.ReactionsContainerLayout r1 = r1.reactionsContainerLayout
@@ -538,15 +587,15 @@ public class CustomEmojiReactionsWindow {
             L_0x0175:
                 r6 = r1
                 int r1 = r6.getLeft()
-                if (r1 < 0) goto L_0x0486
+                if (r1 < 0) goto L_0x0491
                 int r1 = r6.getVisibility()
                 r2 = 8
                 if (r1 != r2) goto L_0x0186
-                goto L_0x0486
+                goto L_0x0491
             L_0x0186:
                 r26.save()
                 boolean r1 = r6 instanceof org.telegram.ui.Components.ReactionsContainerLayout.ReactionHolderView
-                if (r1 == 0) goto L_0x040f
+                if (r1 == 0) goto L_0x041a
                 r1 = r6
                 org.telegram.ui.Components.ReactionsContainerLayout$ReactionHolderView r1 = (org.telegram.ui.Components.ReactionsContainerLayout.ReactionHolderView) r1
                 java.util.HashMap<org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble$VisibleReaction, org.telegram.ui.SelectAnimatedEmojiDialog$ImageViewEmoji> r2 = r0.transitionReactions
@@ -554,7 +603,7 @@ public class CustomEmojiReactionsWindow {
                 java.lang.Object r2 = r2.get(r3)
                 org.telegram.ui.SelectAnimatedEmojiDialog$ImageViewEmoji r2 = (org.telegram.ui.SelectAnimatedEmojiDialog.ImageViewEmoji) r2
                 r3 = 1073741824(0x40000000, float:2.0)
-                if (r2 == 0) goto L_0x0295
+                if (r2 == 0) goto L_0x02a0
                 float r4 = r6.getX()
                 org.telegram.ui.Components.BackupImageView r5 = r1.loopImageView
                 float r5 = r5.getX()
@@ -582,7 +631,7 @@ public class CustomEmojiReactionsWindow {
                 float r6 = r6 + r15
                 org.telegram.ui.Components.Reactions.CustomEmojiReactionsWindow r15 = org.telegram.ui.Components.Reactions.CustomEmojiReactionsWindow.this
                 org.telegram.ui.SelectAnimatedEmojiDialog r15 = r15.selectAnimatedEmojiDialog
-                org.telegram.ui.Components.RecyclerListView r15 = r15.emojiGridView
+                org.telegram.ui.SelectAnimatedEmojiDialog$EmojiListView r15 = r15.emojiGridView
                 float r15 = r15.getX()
                 float r6 = r6 + r15
                 float r15 = r2.getY()
@@ -592,13 +641,18 @@ public class CustomEmojiReactionsWindow {
                 float r15 = r15 + r13
                 org.telegram.ui.Components.Reactions.CustomEmojiReactionsWindow r13 = org.telegram.ui.Components.Reactions.CustomEmojiReactionsWindow.this
                 org.telegram.ui.SelectAnimatedEmojiDialog r13 = r13.selectAnimatedEmojiDialog
-                org.telegram.ui.Components.RecyclerListView r13 = r13.emojiGridView
+                android.widget.FrameLayout r13 = r13.gridViewContainer
+                float r13 = r13.getY()
+                float r15 = r15 + r13
+                org.telegram.ui.Components.Reactions.CustomEmojiReactionsWindow r13 = org.telegram.ui.Components.Reactions.CustomEmojiReactionsWindow.this
+                org.telegram.ui.SelectAnimatedEmojiDialog r13 = r13.selectAnimatedEmojiDialog
+                org.telegram.ui.SelectAnimatedEmojiDialog$EmojiListView r13 = r13.emojiGridView
                 float r13 = r13.getY()
                 float r15 = r15 + r13
                 int r13 = r2.getMeasuredWidth()
                 float r13 = (float) r13
                 boolean r9 = r2.selected
-                if (r9 == 0) goto L_0x020f
+                if (r9 == 0) goto L_0x021a
                 r9 = 1063004406(0x3f5CLASSNAMEf6, float:0.86)
                 float r9 = r9 * r13
                 float r13 = r13 - r9
@@ -606,7 +660,7 @@ public class CustomEmojiReactionsWindow {
                 float r6 = r6 + r13
                 float r15 = r15 + r13
                 r13 = r9
-            L_0x020f:
+            L_0x021a:
                 org.telegram.ui.Components.Reactions.CustomEmojiReactionsWindow r9 = org.telegram.ui.Components.Reactions.CustomEmojiReactionsWindow.this
                 float r9 = r9.enterTransitionProgress
                 float r9 = org.telegram.messenger.AndroidUtilities.lerp((float) r4, (float) r6, (float) r9)
@@ -622,33 +676,33 @@ public class CustomEmojiReactionsWindow {
                 float r3 = org.telegram.messenger.AndroidUtilities.lerp((float) r12, (float) r13, (float) r3)
                 int r12 = r1.position
                 r22 = 1086324736(0x40CLASSNAME, float:6.0)
-                if (r12 != 0) goto L_0x023d
+                if (r12 != 0) goto L_0x0248
                 int r12 = org.telegram.messenger.AndroidUtilities.dp(r22)
                 float r12 = (float) r12
                 r22 = r12
-                goto L_0x0250
-            L_0x023d:
+                goto L_0x025b
+            L_0x0248:
                 boolean r12 = r1.selected
-                if (r12 == 0) goto L_0x024d
+                if (r12 == 0) goto L_0x0258
                 int r12 = org.telegram.messenger.AndroidUtilities.dp(r22)
                 float r12 = (float) r12
                 r22 = r12
                 r23 = r22
                 r24 = r23
-                goto L_0x0254
-            L_0x024d:
+                goto L_0x025f
+            L_0x0258:
                 r12 = 0
                 r22 = 0
-            L_0x0250:
+            L_0x025b:
                 r23 = 0
                 r24 = 0
-            L_0x0254:
+            L_0x025f:
                 r8.translate(r9, r14)
                 r8.scale(r3, r3)
                 int r9 = (r16 > r10 ? 1 : (r16 == r10 ? 0 : -1))
-                if (r9 != 0) goto L_0x028e
+                if (r9 != 0) goto L_0x0299
                 int r9 = (r17 > r10 ? 1 : (r17 == r10 ? 0 : -1))
-                if (r9 != 0) goto L_0x028e
+                if (r9 != 0) goto L_0x0299
                 org.telegram.ui.Components.Reactions.CustomEmojiReactionsWindow r9 = org.telegram.ui.Components.Reactions.CustomEmojiReactionsWindow.this
                 android.graphics.RectF r14 = r9.fromRect
                 float r14 = r14.left
@@ -670,12 +724,12 @@ public class CustomEmojiReactionsWindow {
                 float r18 = org.telegram.messenger.AndroidUtilities.lerp((float) r5, (float) r4, (float) r9)
                 r19 = r6
                 r20 = r15
-            L_0x028e:
+            L_0x0299:
                 r4 = r22
                 r5 = r23
                 r6 = r24
-                goto L_0x02b4
-            L_0x0295:
+                goto L_0x02bf
+            L_0x02a0:
                 float r3 = r6.getX()
                 org.telegram.ui.Components.BackupImageView r4 = r1.loopImageView
                 float r4 = r4.getX()
@@ -690,17 +744,17 @@ public class CustomEmojiReactionsWindow {
                 r5 = 0
                 r6 = 0
                 r12 = 0
-            L_0x02b4:
+            L_0x02bf:
                 org.telegram.ui.Components.BackupImageView r9 = r1.loopImageView
                 int r9 = r9.getVisibility()
-                if (r9 != 0) goto L_0x03a2
-                if (r2 == 0) goto L_0x03a2
+                if (r9 != 0) goto L_0x03ad
+                if (r2 == 0) goto L_0x03ad
                 org.telegram.ui.Components.Reactions.CustomEmojiReactionsWindow r9 = org.telegram.ui.Components.Reactions.CustomEmojiReactionsWindow.this
                 org.telegram.ui.Components.BackupImageView r13 = r1.loopImageView
                 boolean r9 = r9.imageIsEquals(r13, r2)
-                if (r9 == 0) goto L_0x03a2
+                if (r9 == 0) goto L_0x03ad
                 boolean r9 = r2.selected
-                if (r9 == 0) goto L_0x0327
+                if (r9 == 0) goto L_0x0332
                 org.telegram.ui.Components.BackupImageView r9 = r1.loopImageView
                 int r9 = r9.getMeasuredWidth()
                 float r9 = (float) r9
@@ -742,40 +796,40 @@ public class CustomEmojiReactionsWindow {
                 org.telegram.ui.SelectAnimatedEmojiDialog r7 = r7.selectAnimatedEmojiDialog
                 android.graphics.Paint r7 = r7.selectorPaint
                 r8.drawRoundRect(r10, r3, r3, r7)
-                goto L_0x0329
-            L_0x0327:
+                goto L_0x0334
+            L_0x0332:
                 r22 = r7
-            L_0x0329:
+            L_0x0334:
                 r3 = 0
                 int r7 = (r12 > r3 ? 1 : (r12 == r3 ? 0 : -1))
-                if (r7 != 0) goto L_0x0335
+                if (r7 != 0) goto L_0x0340
                 org.telegram.ui.Components.BackupImageView r1 = r1.loopImageView
                 r1.draw(r8)
                 r9 = 0
-                goto L_0x0397
-            L_0x0335:
+                goto L_0x03a2
+            L_0x0340:
                 org.telegram.ui.Components.BackupImageView r3 = r1.loopImageView
                 org.telegram.messenger.ImageReceiver r3 = r3.getImageReceiver()
                 org.telegram.ui.Components.BackupImageView r7 = r1.loopImageView
                 org.telegram.ui.Components.AnimatedEmojiDrawable r7 = r7.animatedEmojiDrawable
-                if (r7 == 0) goto L_0x034f
+                if (r7 == 0) goto L_0x035a
                 org.telegram.messenger.ImageReceiver r7 = r7.getImageReceiver()
-                if (r7 == 0) goto L_0x034f
+                if (r7 == 0) goto L_0x035a
                 org.telegram.ui.Components.BackupImageView r3 = r1.loopImageView
                 org.telegram.ui.Components.AnimatedEmojiDrawable r3 = r3.animatedEmojiDrawable
                 org.telegram.messenger.ImageReceiver r3 = r3.getImageReceiver()
-            L_0x034f:
+            L_0x035a:
                 int[] r7 = r3.getRoundRadius()
                 r9 = 0
-            L_0x0354:
+            L_0x035f:
                 r10 = 4
-                if (r9 >= r10) goto L_0x0360
+                if (r9 >= r10) goto L_0x036b
                 int[] r10 = r0.radiusTmp
                 r13 = r7[r9]
                 r10[r9] = r13
                 int r9 = r9 + 1
-                goto L_0x0354
-            L_0x0360:
+                goto L_0x035f
+            L_0x036b:
                 org.telegram.ui.Components.Reactions.CustomEmojiReactionsWindow r7 = org.telegram.ui.Components.Reactions.CustomEmojiReactionsWindow.this
                 float r7 = r7.enterTransitionProgress
                 r9 = 0
@@ -800,18 +854,18 @@ public class CustomEmojiReactionsWindow {
                 r1.draw(r8)
                 int[] r1 = r0.radiusTmp
                 r3.setRoundRadius((int[]) r1)
-            L_0x0397:
+            L_0x03a2:
                 boolean r1 = r2.notDraw
-                if (r1 != 0) goto L_0x0408
+                if (r1 != 0) goto L_0x0413
                 r1 = 1
                 r2.notDraw = r1
                 r2.invalidate()
-                goto L_0x0408
-            L_0x03a2:
+                goto L_0x0413
+            L_0x03ad:
                 r22 = r7
                 r9 = 0
                 boolean r2 = r1.hasEnterAnimation
-                if (r2 == 0) goto L_0x03d5
+                if (r2 == 0) goto L_0x03e0
                 org.telegram.ui.Components.BackupImageView r2 = r1.enterImageView
                 org.telegram.messenger.ImageReceiver r2 = r2.getImageReceiver()
                 float r2 = r2.getAlpha()
@@ -828,19 +882,19 @@ public class CustomEmojiReactionsWindow {
                 org.telegram.ui.Components.BackupImageView r1 = r1.enterImageView
                 org.telegram.messenger.ImageReceiver r1 = r1.getImageReceiver()
                 r1.setAlpha(r2)
-                goto L_0x0408
-            L_0x03d5:
+                goto L_0x0413
+            L_0x03e0:
                 org.telegram.ui.Components.BackupImageView r2 = r1.loopImageView
                 org.telegram.messenger.ImageReceiver r2 = r2.getImageReceiver()
                 org.telegram.ui.Components.BackupImageView r3 = r1.loopImageView
                 org.telegram.ui.Components.AnimatedEmojiDrawable r3 = r3.animatedEmojiDrawable
-                if (r3 == 0) goto L_0x03ef
+                if (r3 == 0) goto L_0x03fa
                 org.telegram.messenger.ImageReceiver r3 = r3.getImageReceiver()
-                if (r3 == 0) goto L_0x03ef
+                if (r3 == 0) goto L_0x03fa
                 org.telegram.ui.Components.BackupImageView r2 = r1.loopImageView
                 org.telegram.ui.Components.AnimatedEmojiDrawable r2 = r2.animatedEmojiDrawable
                 org.telegram.messenger.ImageReceiver r2 = r2.getImageReceiver()
-            L_0x03ef:
+            L_0x03fa:
                 float r3 = r2.getAlpha()
                 org.telegram.ui.Components.Reactions.CustomEmojiReactionsWindow r4 = org.telegram.ui.Components.Reactions.CustomEmojiReactionsWindow.this
                 float r4 = r4.enterTransitionProgress
@@ -851,12 +905,12 @@ public class CustomEmojiReactionsWindow {
                 org.telegram.ui.Components.BackupImageView r1 = r1.loopImageView
                 r1.draw(r8)
                 r2.setAlpha(r3)
-            L_0x0408:
+            L_0x0413:
                 r15 = r22
                 r2 = 1065353216(0x3var_, float:1.0)
                 r10 = 1132396544(0x437var_, float:255.0)
-                goto L_0x0482
-            L_0x040f:
+                goto L_0x048d
+            L_0x041a:
                 r22 = r7
                 r9 = 0
                 float r1 = r6.getX()
@@ -913,15 +967,15 @@ public class CustomEmojiReactionsWindow {
                 r8.scale(r12, r1, r3, r4)
                 r13.draw(r8)
                 r26.restore()
-            L_0x0482:
+            L_0x048d:
                 r26.restore()
-                goto L_0x048c
-            L_0x0486:
+                goto L_0x0497
+            L_0x0491:
                 r15 = r7
                 r2 = 1065353216(0x3var_, float:1.0)
                 r9 = 0
                 r10 = 1132396544(0x437var_, float:255.0)
-            L_0x048c:
+            L_0x0497:
                 int r7 = r15 + 1
                 r9 = 1132396544(0x437var_, float:255.0)
                 r10 = 0
@@ -929,25 +983,25 @@ public class CustomEmojiReactionsWindow {
                 r13 = 0
                 r15 = -1
                 goto L_0x0156
-            L_0x0497:
+            L_0x04a2:
                 r26.restore()
                 r10 = r16
                 r9 = r17
                 r12 = r18
                 r1 = r19
                 r2 = r20
-                goto L_0x04ad
-            L_0x04a5:
+                goto L_0x04b8
+            L_0x04b0:
                 r2 = 1065353216(0x3var_, float:1.0)
                 r9 = 0
                 r1 = 0
                 r2 = 0
                 r10 = 0
                 r12 = 1065353216(0x3var_, float:1.0)
-            L_0x04ad:
+            L_0x04b8:
                 org.telegram.ui.Components.Reactions.CustomEmojiReactionsWindow r3 = org.telegram.ui.Components.Reactions.CustomEmojiReactionsWindow.this
                 boolean r3 = r3.invalidatePath
-                if (r3 == 0) goto L_0x04cd
+                if (r3 == 0) goto L_0x04d8
                 org.telegram.ui.Components.Reactions.CustomEmojiReactionsWindow r3 = org.telegram.ui.Components.Reactions.CustomEmojiReactionsWindow.this
                 r4 = 0
                 boolean unused = r3.invalidatePath = r4
@@ -959,7 +1013,7 @@ public class CustomEmojiReactionsWindow {
                 android.graphics.RectF r3 = r3.drawingRect
                 android.graphics.Path$Direction r5 = android.graphics.Path.Direction.CW
                 r4.addRoundRect(r3, r11, r11, r5)
-            L_0x04cd:
+            L_0x04d8:
                 r26.save()
                 org.telegram.ui.Components.Reactions.CustomEmojiReactionsWindow r3 = org.telegram.ui.Components.Reactions.CustomEmojiReactionsWindow.this
                 android.graphics.Path r3 = r3.pathToClip
@@ -975,19 +1029,19 @@ public class CustomEmojiReactionsWindow {
                 org.telegram.ui.Components.Reactions.CustomEmojiReactionsWindow r1 = org.telegram.ui.Components.Reactions.CustomEmojiReactionsWindow.this
                 int r1 = r1.frameDrawCount
                 r2 = 5
-                if (r1 >= r2) goto L_0x050b
+                if (r1 >= r2) goto L_0x0516
                 org.telegram.ui.Components.Reactions.CustomEmojiReactionsWindow r1 = org.telegram.ui.Components.Reactions.CustomEmojiReactionsWindow.this
                 int r1 = r1.frameDrawCount
                 r2 = 3
-                if (r1 != r2) goto L_0x0506
+                if (r1 != r2) goto L_0x0511
                 org.telegram.ui.Components.Reactions.CustomEmojiReactionsWindow r1 = org.telegram.ui.Components.Reactions.CustomEmojiReactionsWindow.this
                 org.telegram.ui.Components.ReactionsContainerLayout r1 = r1.reactionsContainerLayout
                 r2 = 1
                 r1.setSkipDraw(r2)
-            L_0x0506:
+            L_0x0511:
                 org.telegram.ui.Components.Reactions.CustomEmojiReactionsWindow r1 = org.telegram.ui.Components.Reactions.CustomEmojiReactionsWindow.this
-                org.telegram.ui.Components.Reactions.CustomEmojiReactionsWindow.access$508(r1)
-            L_0x050b:
+                org.telegram.ui.Components.Reactions.CustomEmojiReactionsWindow.access$808(r1)
+            L_0x0516:
                 org.telegram.ui.Components.Reactions.CustomEmojiReactionsWindow r1 = org.telegram.ui.Components.Reactions.CustomEmojiReactionsWindow.this
                 org.telegram.ui.SelectAnimatedEmojiDialog r1 = r1.selectAnimatedEmojiDialog
                 r1.drawBigReaction(r8, r0)

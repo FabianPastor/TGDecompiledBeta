@@ -441,57 +441,52 @@ public class NotificationsController extends BaseController {
         ApplicationLoader.applicationContext.sendBroadcast(new Intent("android.intent.action.CLOSE_SYSTEM_DIALOGS"));
     }
 
-    public void removeDeletedMessagesFromNotifications(LongSparseArray<ArrayList<Integer>> longSparseArray) {
-        notificationsQueue.postRunnable(new NotificationsController$$ExternalSyntheticLambda25(this, longSparseArray, new ArrayList(0)));
+    public void removeDeletedMessagesFromNotifications(LongSparseArray<ArrayList<Integer>> longSparseArray, boolean z) {
+        notificationsQueue.postRunnable(new NotificationsController$$ExternalSyntheticLambda25(this, longSparseArray, z, new ArrayList(0)));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$removeDeletedMessagesFromNotifications$9(LongSparseArray longSparseArray, ArrayList arrayList) {
+    public /* synthetic */ void lambda$removeDeletedMessagesFromNotifications$9(LongSparseArray longSparseArray, boolean z, ArrayList arrayList) {
+        long j;
         Integer num;
-        ArrayList arrayList2;
-        Integer num2;
         LongSparseArray longSparseArray2 = longSparseArray;
-        ArrayList arrayList3 = arrayList;
+        ArrayList arrayList2 = arrayList;
         int i = this.total_unread_count;
         getAccountInstance().getNotificationsSettings();
         int i2 = 0;
-        int i3 = 0;
-        while (i3 < longSparseArray.size()) {
-            long keyAt = longSparseArray2.keyAt(i3);
+        while (i2 < longSparseArray.size()) {
+            long keyAt = longSparseArray2.keyAt(i2);
             SparseArray sparseArray = this.pushMessagesDict.get(keyAt);
-            if (sparseArray == null) {
-                num = i2;
-            } else {
-                ArrayList arrayList4 = (ArrayList) longSparseArray2.get(keyAt);
-                int size = arrayList4.size();
-                int i4 = 0;
-                while (i4 < size) {
-                    int intValue = ((Integer) arrayList4.get(i4)).intValue();
+            if (sparseArray != null) {
+                ArrayList arrayList3 = (ArrayList) longSparseArray2.get(keyAt);
+                int size = arrayList3.size();
+                int i3 = 0;
+                while (i3 < size) {
+                    int intValue = ((Integer) arrayList3.get(i3)).intValue();
                     MessageObject messageObject = (MessageObject) sparseArray.get(intValue);
-                    Integer num3 = i2;
-                    if (messageObject != null) {
+                    if (messageObject == null || (z && !messageObject.isReactionPush)) {
+                        j = keyAt;
+                    } else {
+                        j = keyAt;
                         long dialogId = messageObject.getDialogId();
-                        Integer num4 = this.pushDialogs.get(dialogId);
-                        if (num4 == null) {
-                            num4 = num3;
+                        Integer num2 = this.pushDialogs.get(dialogId);
+                        if (num2 == null) {
+                            num2 = 0;
                         }
-                        Integer valueOf = Integer.valueOf(num4.intValue() - 1);
+                        Integer valueOf = Integer.valueOf(num2.intValue() - 1);
                         if (valueOf.intValue() <= 0) {
                             this.smartNotificationsDialogs.remove(dialogId);
-                            num2 = num3;
+                            num = 0;
                         } else {
-                            num2 = valueOf;
+                            num = valueOf;
                         }
-                        if (!num2.equals(num4)) {
-                            arrayList2 = arrayList4;
-                            int intValue2 = this.total_unread_count - num4.intValue();
+                        if (!num.equals(num2)) {
+                            int intValue2 = this.total_unread_count - num2.intValue();
                             this.total_unread_count = intValue2;
-                            this.total_unread_count = intValue2 + num2.intValue();
-                            this.pushDialogs.put(dialogId, num2);
-                        } else {
-                            arrayList2 = arrayList4;
+                            this.total_unread_count = intValue2 + num.intValue();
+                            this.pushDialogs.put(dialogId, num);
                         }
-                        if (num2.intValue() == 0) {
+                        if (num.intValue() == 0) {
                             this.pushDialogs.remove(dialogId);
                             this.pushDialogsOverrideMention.remove(dialogId);
                         }
@@ -501,26 +496,22 @@ public class NotificationsController extends BaseController {
                         if (isPersonalMessage(messageObject)) {
                             this.personalCount--;
                         }
-                        arrayList3.add(messageObject);
-                    } else {
-                        arrayList2 = arrayList4;
+                        arrayList2.add(messageObject);
                     }
-                    i4++;
+                    i3++;
                     LongSparseArray longSparseArray3 = longSparseArray;
-                    i2 = num3;
-                    arrayList4 = arrayList2;
+                    keyAt = j;
                 }
-                num = i2;
+                long j2 = keyAt;
                 if (sparseArray.size() == 0) {
-                    this.pushMessagesDict.remove(keyAt);
+                    this.pushMessagesDict.remove(j2);
                 }
             }
-            i3++;
+            i2++;
             longSparseArray2 = longSparseArray;
-            i2 = num;
         }
         if (!arrayList.isEmpty()) {
-            AndroidUtilities.runOnUIThread(new NotificationsController$$ExternalSyntheticLambda27(this, arrayList3));
+            AndroidUtilities.runOnUIThread(new NotificationsController$$ExternalSyntheticLambda27(this, arrayList2));
         }
         if (i != this.total_unread_count) {
             if (!this.notifyCheck) {

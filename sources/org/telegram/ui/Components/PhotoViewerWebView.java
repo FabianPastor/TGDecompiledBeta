@@ -26,6 +26,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
@@ -302,117 +303,43 @@ public class PhotoViewerWebView extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:19:0x0091 A[LOOP:0: B:18:0x008f->B:19:0x0091, LOOP_END] */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void processYoutubeStoryboards(java.lang.String r13) {
-        /*
-            r12 = this;
-            int r0 = r12.getVideoDuration()
-            r1 = 1000(0x3e8, float:1.401E-42)
-            int r0 = r0 / r1
-            java.util.List<java.lang.String> r2 = r12.youtubeStoryboards
-            r2.clear()
-            java.lang.String r2 = "\\|"
-            java.lang.String[] r13 = r13.split(r2)
-            java.lang.StringBuilder r2 = new java.lang.StringBuilder
-            r2.<init>()
-            r3 = 0
-            r4 = r13[r3]
-            java.lang.String r5 = "\\$"
-            java.lang.String[] r4 = r4.split(r5)
-            r4 = r4[r3]
-            r2.append(r4)
-            java.lang.String r4 = "2/"
-            r2.append(r4)
-            java.lang.String r2 = r2.toString()
-            r4 = r13[r3]
-            java.lang.String r5 = "\\$N"
-            java.lang.String[] r4 = r4.split(r5)
-            r5 = 1
-            r4 = r4[r5]
-            int r6 = r13.length
-            java.lang.String r7 = "M#"
-            r8 = 2
-            r9 = 3
-            if (r6 != r9) goto L_0x0049
-            r13 = r13[r8]
-            java.lang.String[] r13 = r13.split(r7)
-            r13 = r13[r5]
-            goto L_0x005f
-        L_0x0049:
-            int r6 = r13.length
-            if (r6 != r8) goto L_0x0057
-            r13 = r13[r5]
-            java.lang.String r6 = "t#"
-            java.lang.String[] r13 = r13.split(r6)
-            r13 = r13[r5]
-            goto L_0x005f
-        L_0x0057:
-            r13 = r13[r9]
-            java.lang.String[] r13 = r13.split(r7)
-            r13 = r13[r5]
-        L_0x005f:
-            r6 = 250(0xfa, float:3.5E-43)
-            r7 = 1103626240(0x41CLASSNAME, float:25.0)
-            if (r0 >= r6) goto L_0x0071
-            float r0 = (float) r0
-            r1 = 1073741824(0x40000000, float:2.0)
-            float r0 = r0 / r1
-            float r0 = r0 / r7
-            double r0 = (double) r0
-            double r0 = java.lang.Math.ceil(r0)
-        L_0x006f:
-            int r0 = (int) r0
-            goto L_0x008e
-        L_0x0071:
-            if (r0 < r6) goto L_0x0080
-            if (r0 >= r1) goto L_0x0080
-            float r0 = (float) r0
-            r1 = 1082130432(0x40800000, float:4.0)
-            float r0 = r0 / r1
-            float r0 = r0 / r7
-            double r0 = (double) r0
-            double r0 = java.lang.Math.ceil(r0)
-            goto L_0x006f
-        L_0x0080:
-            if (r0 < r1) goto L_0x008d
-            float r0 = (float) r0
-            r1 = 1092616192(0x41200000, float:10.0)
-            float r0 = r0 / r1
-            float r0 = r0 / r7
-            double r0 = (double) r0
-            double r0 = java.lang.Math.ceil(r0)
-            goto L_0x006f
-        L_0x008d:
-            r0 = 0
-        L_0x008e:
-            r1 = 0
-        L_0x008f:
-            if (r1 >= r0) goto L_0x00b0
-            java.util.List<java.lang.String> r6 = r12.youtubeStoryboards
-            java.util.Locale r7 = java.util.Locale.ROOT
-            r10 = 4
-            java.lang.Object[] r10 = new java.lang.Object[r10]
-            r10[r3] = r2
-            java.lang.Integer r11 = java.lang.Integer.valueOf(r1)
-            r10[r5] = r11
-            r10[r8] = r4
-            r10[r9] = r13
-            java.lang.String r11 = "%sM%d%s&sigh=%s"
-            java.lang.String r7 = java.lang.String.format(r7, r11, r10)
-            r6.add(r7)
-            int r1 = r1 + 1
-            goto L_0x008f
-        L_0x00b0:
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PhotoViewerWebView.processYoutubeStoryboards(java.lang.String):void");
+    public void processYoutubeStoryboards(String str) {
+        String str2;
+        double ceil;
+        int videoDuration2 = getVideoDuration() / 1000;
+        this.youtubeStoryboards.clear();
+        if (videoDuration2 > 15) {
+            String[] split = str.split("\\|");
+            String str3 = split[0].split("\\$")[0] + "2/";
+            String str4 = split[0].split("\\$N")[1];
+            if (split.length == 3) {
+                str2 = split[2].split("M#")[1];
+            } else if (split.length == 2) {
+                str2 = split[1].split("t#")[1];
+            } else {
+                str2 = split[3].split("M#")[1];
+            }
+            if (videoDuration2 <= 100) {
+                ceil = Math.ceil((double) (((float) videoDuration2) / 25.0f));
+            } else if (videoDuration2 <= 250) {
+                ceil = Math.ceil((double) ((((float) videoDuration2) / 2.0f) / 25.0f));
+            } else if (videoDuration2 <= 500) {
+                ceil = Math.ceil((double) ((((float) videoDuration2) / 4.0f) / 25.0f));
+            } else if (videoDuration2 <= 1000) {
+                ceil = Math.ceil((double) ((((float) videoDuration2) / 5.0f) / 25.0f));
+            } else {
+                ceil = Math.ceil((double) ((((float) videoDuration2) / 10.0f) / 25.0f));
+            }
+            int i = (int) ceil;
+            for (int i2 = 0; i2 < i; i2++) {
+                this.youtubeStoryboards.add(String.format(Locale.ROOT, "%sM%d%s&sigh=%s", new Object[]{str3, Integer.valueOf(i2), str4, str2}));
+            }
+        }
     }
 
     public int getYoutubeStoryboardImageCount(int i) {
         double ceil;
         int indexOf = this.youtubeStoryboards.indexOf(getYoutubeStoryboard(i));
-        int i2 = 0;
         if (indexOf == -1) {
             return 0;
         }
@@ -420,46 +347,99 @@ public class PhotoViewerWebView extends FrameLayout {
             return 25;
         }
         int videoDuration2 = getVideoDuration() / 1000;
-        if (videoDuration2 < 250) {
+        if (videoDuration2 <= 100) {
+            ceil = Math.ceil((double) videoDuration2);
+        } else if (videoDuration2 <= 250) {
             ceil = Math.ceil((double) (((float) videoDuration2) / 2.0f));
-        } else if (videoDuration2 < 250 || videoDuration2 >= 1000) {
-            if (videoDuration2 >= 1000) {
-                ceil = Math.ceil((double) (((float) videoDuration2) / 10.0f));
-            }
-            return i2 - ((this.youtubeStoryboards.size() - 1) * 25);
-        } else {
+        } else if (videoDuration2 <= 500) {
             ceil = Math.ceil((double) (((float) videoDuration2) / 4.0f));
+        } else if (videoDuration2 <= 1000) {
+            ceil = Math.ceil((double) (((float) videoDuration2) / 5.0f));
+        } else {
+            ceil = Math.ceil((double) (((float) videoDuration2) / 10.0f));
         }
-        i2 = (int) ceil;
-        return i2 - ((this.youtubeStoryboards.size() - 1) * 25);
+        return Math.min(25, (((int) ceil) - ((this.youtubeStoryboards.size() - 1) * 25)) + 1);
     }
 
-    public String getYoutubeStoryboard(int i) {
-        int i2;
-        int videoDuration2 = getVideoDuration() / 1000;
-        if (videoDuration2 < 250) {
-            i2 = ((int) (((float) i) / 2.0f)) / 25;
-        } else {
-            i2 = (videoDuration2 < 250 || videoDuration2 >= 1000) ? videoDuration2 >= 1000 ? (int) ((((float) i) / 10.0f) / 25.0f) : -1 : ((int) (((float) i) / 4.0f)) / 25;
-        }
-        if (i2 == -1 || i2 >= this.youtubeStoryboards.size()) {
-            return null;
-        }
-        return this.youtubeStoryboards.get(i2);
+    /* JADX WARNING: Removed duplicated region for block: B:15:0x0040  */
+    /* JADX WARNING: Removed duplicated region for block: B:16:0x0049 A[ORIG_RETURN, RETURN, SYNTHETIC] */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public java.lang.String getYoutubeStoryboard(int r5) {
+        /*
+            r4 = this;
+            int r0 = r4.getVideoDuration()
+            r1 = 1000(0x3e8, float:1.401E-42)
+            int r0 = r0 / r1
+            r2 = 1103626240(0x41CLASSNAME, float:25.0)
+            r3 = 100
+            if (r0 > r3) goto L_0x0011
+            float r5 = (float) r5
+        L_0x000e:
+            float r5 = r5 / r2
+            int r5 = (int) r5
+            goto L_0x0038
+        L_0x0011:
+            r3 = 250(0xfa, float:3.5E-43)
+            if (r0 > r3) goto L_0x001d
+            float r5 = (float) r5
+            r0 = 1073741824(0x40000000, float:2.0)
+            float r5 = r5 / r0
+            int r5 = (int) r5
+            int r5 = r5 / 25
+            goto L_0x0038
+        L_0x001d:
+            r3 = 500(0x1f4, float:7.0E-43)
+            if (r0 > r3) goto L_0x0029
+            float r5 = (float) r5
+            r0 = 1082130432(0x40800000, float:4.0)
+            float r5 = r5 / r0
+            int r5 = (int) r5
+            int r5 = r5 / 25
+            goto L_0x0038
+        L_0x0029:
+            if (r0 > r1) goto L_0x0033
+            float r5 = (float) r5
+            r0 = 1084227584(0x40a00000, float:5.0)
+            float r5 = r5 / r0
+            int r5 = (int) r5
+            int r5 = r5 / 25
+            goto L_0x0038
+        L_0x0033:
+            float r5 = (float) r5
+            r0 = 1092616192(0x41200000, float:10.0)
+            float r5 = r5 / r0
+            goto L_0x000e
+        L_0x0038:
+            java.util.List<java.lang.String> r0 = r4.youtubeStoryboards
+            int r0 = r0.size()
+            if (r5 >= r0) goto L_0x0049
+            java.util.List<java.lang.String> r0 = r4.youtubeStoryboards
+            java.lang.Object r5 = r0.get(r5)
+            java.lang.String r5 = (java.lang.String) r5
+            goto L_0x004a
+        L_0x0049:
+            r5 = 0
+        L_0x004a:
+            return r5
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PhotoViewerWebView.getYoutubeStoryboard(int):java.lang.String");
     }
 
     public int getYoutubeStoryboardImageIndex(int i) {
         int videoDuration2 = getVideoDuration() / 1000;
-        if (videoDuration2 < 250) {
+        if (videoDuration2 <= 100) {
+            return ((int) Math.ceil((double) i)) % 25;
+        }
+        if (videoDuration2 <= 250) {
             return ((int) Math.ceil((double) (((float) i) / 2.0f))) % 25;
         }
-        if (videoDuration2 >= 250 && videoDuration2 < 1000) {
+        if (videoDuration2 <= 500) {
             return ((int) Math.ceil((double) (((float) i) / 4.0f))) % 25;
         }
-        if (videoDuration2 >= 1000) {
-            return ((int) Math.ceil((double) (((float) i) / 10.0f))) % 25;
+        if (videoDuration2 <= 1000) {
+            return ((int) Math.ceil((double) (((float) i) / 5.0f))) % 25;
         }
-        return -1;
+        return ((int) Math.ceil((double) (((float) i) / 10.0f))) % 25;
     }
 
     public void setTouchDisabled(boolean z) {
@@ -810,6 +790,8 @@ public class PhotoViewerWebView extends FrameLayout {
         this.webView.stopLoading();
         this.webView.loadUrl("about:blank");
         this.webView.destroy();
+        this.videoDuration = 0;
+        this.currentPosition = 0;
         AndroidUtilities.cancelRunOnUIThread(this.progressRunnable);
     }
 }

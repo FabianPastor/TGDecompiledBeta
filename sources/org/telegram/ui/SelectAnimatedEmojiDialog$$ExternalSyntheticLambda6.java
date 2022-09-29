@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
-import android.view.View;
+import android.content.DialogInterface;
 
-public final /* synthetic */ class SelectAnimatedEmojiDialog$$ExternalSyntheticLambda6 implements View.OnLongClickListener {
+public final /* synthetic */ class SelectAnimatedEmojiDialog$$ExternalSyntheticLambda6 implements DialogInterface.OnClickListener {
     public final /* synthetic */ SelectAnimatedEmojiDialog f$0;
 
     public /* synthetic */ SelectAnimatedEmojiDialog$$ExternalSyntheticLambda6(SelectAnimatedEmojiDialog selectAnimatedEmojiDialog) {
         this.f$0 = selectAnimatedEmojiDialog;
     }
 
-    public final boolean onLongClick(View view) {
-        return this.f$0.lambda$new$1(view);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        this.f$0.lambda$onRecentLongClick$3(dialogInterface, i);
     }
 }

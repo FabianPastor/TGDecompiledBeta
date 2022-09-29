@@ -13,6 +13,6 @@ public final /* synthetic */ class AndroidUtilities$$ExternalSyntheticLambda2 im
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        AndroidUtilities.lambda$isMapsInstalled$4(this.f$0, this.f$1, dialogInterface, i);
+        AndroidUtilities.lambda$isMapsInstalled$5(this.f$0, this.f$1, dialogInterface, i);
     }
 }

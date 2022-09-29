@@ -14,6 +14,6 @@ public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda1
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$loadArchivedStickersCount$58(this.f$1, tLObject, tLRPC$TL_error);
+        this.f$0.lambda$loadRecents$37(this.f$1, tLObject, tLRPC$TL_error);
     }
 }

@@ -33,6 +33,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.PowerManager;
 import android.os.SystemClock;
@@ -89,9 +90,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 import com.android.internal.telephony.ITelephony;
 import com.google.android.gms.auth.api.phone.SmsRetriever;
-import com.microsoft.appcenter.AppCenter;
-import com.microsoft.appcenter.crashes.Crashes;
-import com.microsoft.appcenter.distribute.Distribute;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -120,14 +118,19 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.messenger.utils.CustomHtml;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC$Document;
+import org.telegram.tgnet.TLRPC$MessageEntity;
+import org.telegram.tgnet.TLRPC$ReplyMarkup;
 import org.telegram.tgnet.TLRPC$TL_chatBannedRights;
 import org.telegram.tgnet.TLRPC$TL_wallPaper;
+import org.telegram.tgnet.TLRPC$User;
 import org.telegram.tgnet.TLRPC$WallPaperSettings;
+import org.telegram.tgnet.TLRPC$WebPage;
 import org.telegram.ui.ActionBar.ActionBarLayout;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -186,7 +189,6 @@ public class AndroidUtilities {
     public static boolean isInMultiwindow;
     private static Boolean isSmallScreen = null;
     private static Boolean isTablet = null;
-    private static long lastUpdateCheckTime;
     public static int leftBaseline = (isTablet() ? 80 : 72);
     private static Field mAttachInfoField;
     private static Field mStableInsetsField;
@@ -259,7 +261,7 @@ public class AndroidUtilities {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ String lambda$formatSpannableSimple$7(Integer num) {
+    public static /* synthetic */ String lambda$formatSpannableSimple$8(Integer num) {
         return "%s";
     }
 
@@ -474,7 +476,7 @@ public class AndroidUtilities {
 
     public static void recycleBitmaps(ArrayList<Bitmap> arrayList) {
         if (arrayList != null && !arrayList.isEmpty()) {
-            runOnUIThread(new AndroidUtilities$$ExternalSyntheticLambda9(arrayList), 36);
+            runOnUIThread(new AndroidUtilities$$ExternalSyntheticLambda10(arrayList), 36);
         }
     }
 
@@ -489,6 +491,41 @@ public class AndroidUtilities {
                     FileLog.e((Throwable) e);
                 }
             }
+        }
+    }
+
+    public static void googleVoiceClientService_performAction(Intent intent, boolean z, Bundle bundle) {
+        if (z) {
+            runOnUIThread(new AndroidUtilities$$ExternalSyntheticLambda8(intent));
+        }
+    }
+
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$googleVoiceClientService_performAction$2(Intent intent) {
+        Intent intent2 = intent;
+        try {
+            int i = UserConfig.selectedAccount;
+            ApplicationLoader.postInitApplication();
+            if (needShowPasscode()) {
+                return;
+            }
+            if (!SharedConfig.isWaitingForPasscodeEnter) {
+                String stringExtra = intent2.getStringExtra("android.intent.extra.TEXT");
+                if (!TextUtils.isEmpty(stringExtra)) {
+                    String stringExtra2 = intent2.getStringExtra("com.google.android.voicesearch.extra.RECIPIENT_CONTACT_URI");
+                    long parseLong = Long.parseLong(intent2.getStringExtra("com.google.android.voicesearch.extra.RECIPIENT_CONTACT_CHAT_ID"));
+                    TLRPC$User user = MessagesController.getInstance(i).getUser(Long.valueOf(parseLong));
+                    if (user == null && (user = MessagesStorage.getInstance(i).getUserSync(parseLong)) != null) {
+                        MessagesController.getInstance(i).putUser(user, true);
+                    }
+                    if (user != null) {
+                        ContactsController.getInstance(i).markAsContacted(stringExtra2);
+                        SendMessagesHelper.getInstance(i).sendMessage(stringExtra, user.id, (MessageObject) null, (MessageObject) null, (TLRPC$WebPage) null, true, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, true, 0, (MessageObject.SendAnimationData) null, false);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            FileLog.e((Throwable) e);
         }
     }
 
@@ -546,7 +583,7 @@ public class AndroidUtilities {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ boolean lambda$static$2(CharSequence charSequence, int i, int i2) {
+    public static /* synthetic */ boolean lambda$static$3(CharSequence charSequence, int i, int i2) {
         return i == 0 || charSequence.charAt(i - 1) != '@';
     }
 
@@ -599,7 +636,7 @@ public class AndroidUtilities {
 
     private static void pruneOverlaps(ArrayList<LinkSpec> arrayList) {
         int i;
-        Collections.sort(arrayList, AndroidUtilities$$ExternalSyntheticLambda11.INSTANCE);
+        Collections.sort(arrayList, AndroidUtilities$$ExternalSyntheticLambda12.INSTANCE);
         int size = arrayList.size();
         int i2 = 0;
         while (i2 < size - 1) {
@@ -621,7 +658,7 @@ public class AndroidUtilities {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ int lambda$pruneOverlaps$3(LinkSpec linkSpec, LinkSpec linkSpec2) {
+    public static /* synthetic */ int lambda$pruneOverlaps$4(LinkSpec linkSpec, LinkSpec linkSpec2) {
         int i;
         int i2;
         int i3 = linkSpec.start;
@@ -964,7 +1001,7 @@ public class AndroidUtilities {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$isMapsInstalled$4(String str, BaseFragment baseFragment, DialogInterface dialogInterface, int i) {
+    public static /* synthetic */ void lambda$isMapsInstalled$5(String str, BaseFragment baseFragment, DialogInterface dialogInterface, int i) {
         try {
             baseFragment.getParentActivity().startActivityForResult(new Intent("android.intent.action.VIEW", Uri.parse("market://details?id=" + str)), 500);
         } catch (Exception e) {
@@ -1971,7 +2008,7 @@ public class AndroidUtilities {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$setWaitingForSms$5(Void voidR) {
+    public static /* synthetic */ void lambda$setWaitingForSms$6(Void voidR) {
         if (BuildVars.DEBUG_VERSION) {
             FileLog.d("sms listener registered");
         }
@@ -2954,40 +2991,14 @@ public class AndroidUtilities {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$shakeViewSpring$6(Runnable runnable, DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
+    public static /* synthetic */ void lambda$shakeViewSpring$7(Runnable runnable, DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
         if (runnable != null) {
             runnable.run();
         }
     }
 
-    public static void startAppCenter(Activity activity) {
-        try {
-            if (BuildVars.DEBUG_VERSION) {
-                Distribute.setEnabledForDebuggableBuild(true);
-                AppCenter.start(activity.getApplication(), BuildVars.APPCENTER_HASH, Distribute.class, Crashes.class);
-                AppCenter.setUserId("uid=" + UserConfig.getInstance(UserConfig.selectedAccount).clientUserId);
-            }
-        } catch (Throwable th) {
-            FileLog.e(th);
-        }
-    }
-
-    public static void checkForUpdates() {
-        try {
-            if (BuildVars.DEBUG_VERSION && SystemClock.elapsedRealtime() - lastUpdateCheckTime >= 3600000) {
-                lastUpdateCheckTime = SystemClock.elapsedRealtime();
-                Distribute.checkForUpdate();
-            }
-        } catch (Throwable th) {
-            FileLog.e(th);
-        }
-    }
-
     public static void appCenterLog(Throwable th) {
-        try {
-            Crashes.trackError(th);
-        } catch (Throwable unused) {
-        }
+        ApplicationLoader.appCenterLog(th);
     }
 
     public static boolean shouldShowClipboardToast() {
@@ -3906,18 +3917,18 @@ public class AndroidUtilities {
     }
 
     public static SpannableStringBuilder formatSpannableSimple(String str, CharSequence... charSequenceArr) {
-        return formatSpannable(str, AndroidUtilities$$ExternalSyntheticLambda13.INSTANCE, charSequenceArr);
+        return formatSpannable(str, AndroidUtilities$$ExternalSyntheticLambda14.INSTANCE, charSequenceArr);
     }
 
     public static SpannableStringBuilder formatSpannable(String str, CharSequence... charSequenceArr) {
         if (str.contains("%s")) {
             return formatSpannableSimple(str, charSequenceArr);
         }
-        return formatSpannable(str, AndroidUtilities$$ExternalSyntheticLambda12.INSTANCE, charSequenceArr);
+        return formatSpannable(str, AndroidUtilities$$ExternalSyntheticLambda13.INSTANCE, charSequenceArr);
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ String lambda$formatSpannable$8(Integer num) {
+    public static /* synthetic */ String lambda$formatSpannable$9(Integer num) {
         return "%" + (num.intValue() + 1) + "$s";
     }
 
@@ -4436,7 +4447,7 @@ public class AndroidUtilities {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$showProxyAlert$10(String str, String str2, String str3, String str4, String str5, Runnable runnable, View view) {
+    public static /* synthetic */ void lambda$showProxyAlert$11(String str, String str2, String str3, String str4, String str5, Runnable runnable, View view) {
         SharedConfig.ProxyInfo proxyInfo;
         SharedPreferences.Editor edit = MessagesController.getGlobalMainSettings().edit();
         edit.putBoolean("proxy_enabled", true);
@@ -4779,11 +4790,11 @@ public class AndroidUtilities {
         }
         arrayList.add(Long.valueOf(random));
         updateFlagSecure(window);
-        return new AndroidUtilities$$ExternalSyntheticLambda10(arrayList, random, window);
+        return new AndroidUtilities$$ExternalSyntheticLambda11(arrayList, random, window);
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$registerFlagSecure$11(ArrayList arrayList, long j, Window window) {
+    public static /* synthetic */ void lambda$registerFlagSecure$12(ArrayList arrayList, long j, Window window) {
         arrayList.remove(Long.valueOf(j));
         updateFlagSecure(window);
     }
@@ -4952,7 +4963,7 @@ public class AndroidUtilities {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$setNavigationBarColor$12(IntColorCallback intColorCallback, Window window, ValueAnimator valueAnimator) {
+    public static /* synthetic */ void lambda$setNavigationBarColor$13(IntColorCallback intColorCallback, Window window, ValueAnimator valueAnimator) {
         int intValue = ((Integer) valueAnimator.getAnimatedValue()).intValue();
         if (intColorCallback != null) {
             intColorCallback.run(intValue);
@@ -5051,7 +5062,7 @@ public class AndroidUtilities {
                 Field declaredField = baseFragment.getClass().getDeclaredField("listView");
                 declaredField.setAccessible(true);
                 RecyclerListView recyclerListView = (RecyclerListView) declaredField.get(baseFragment);
-                recyclerListView.highlightRow(new AndroidUtilities$$ExternalSyntheticLambda14(baseFragment, str, recyclerListView));
+                recyclerListView.highlightRow(new AndroidUtilities$$ExternalSyntheticLambda15(baseFragment, str, recyclerListView));
                 declaredField.setAccessible(false);
             } catch (Throwable unused) {
             }
@@ -5059,7 +5070,7 @@ public class AndroidUtilities {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ int lambda$scrollToFragmentRow$13(BaseFragment baseFragment, String str, RecyclerListView recyclerListView) {
+    public static /* synthetic */ int lambda$scrollToFragmentRow$14(BaseFragment baseFragment, String str, RecyclerListView recyclerListView) {
         int i = -1;
         try {
             Field declaredField = baseFragment.getClass().getDeclaredField(str);
@@ -5102,7 +5113,7 @@ public class AndroidUtilities {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$updateImageViewImageAnimated$14(ImageView imageView, AtomicBoolean atomicBoolean, Drawable drawable, ValueAnimator valueAnimator) {
+    public static /* synthetic */ void lambda$updateImageViewImageAnimated$15(ImageView imageView, AtomicBoolean atomicBoolean, Drawable drawable, ValueAnimator valueAnimator) {
         float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         float abs = Math.abs(floatValue - 0.5f) + 0.5f;
         imageView.setScaleX(abs);

@@ -1,15 +1,15 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
+import android.content.Intent;
 
 public final /* synthetic */ class AndroidUtilities$$ExternalSyntheticLambda8 implements Runnable {
-    public final /* synthetic */ ArrayList f$0;
+    public final /* synthetic */ Intent f$0;
 
-    public /* synthetic */ AndroidUtilities$$ExternalSyntheticLambda8(ArrayList arrayList) {
-        this.f$0 = arrayList;
+    public /* synthetic */ AndroidUtilities$$ExternalSyntheticLambda8(Intent intent) {
+        this.f$0 = intent;
     }
 
     public final void run() {
-        AndroidUtilities.lambda$recycleBitmaps$0(this.f$0);
+        AndroidUtilities.lambda$googleVoiceClientService_performAction$2(this.f$0);
     }
 }

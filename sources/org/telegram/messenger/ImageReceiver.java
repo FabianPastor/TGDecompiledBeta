@@ -915,6 +915,11 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
 
     public void setLayerNum(int i) {
         this.currentLayerNum = i;
+        if (this.attachedToWindow) {
+            int currentHeavyOperationFlags = NotificationCenter.getGlobalInstance().getCurrentHeavyOperationFlags();
+            this.currentOpenedLayerFlags = currentHeavyOperationFlags;
+            this.currentOpenedLayerFlags = currentHeavyOperationFlags & (this.currentLayerNum ^ -1);
+        }
     }
 
     public void setImageBitmap(Bitmap bitmap) {

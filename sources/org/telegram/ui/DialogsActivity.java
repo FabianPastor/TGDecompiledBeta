@@ -534,13 +534,13 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         /* access modifiers changed from: private */
         public SwipeController swipeController;
 
-        static /* synthetic */ int access$11308(ViewPage viewPage) {
+        static /* synthetic */ int access$11408(ViewPage viewPage) {
             int i = viewPage.lastItemsCount;
             viewPage.lastItemsCount = i + 1;
             return i;
         }
 
-        static /* synthetic */ int access$11310(ViewPage viewPage) {
+        static /* synthetic */ int access$11410(ViewPage viewPage) {
             int i = viewPage.lastItemsCount;
             viewPage.lastItemsCount = i - 1;
             return i;
@@ -1080,7 +1080,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 r6 = -1
                 r7 = -1
             L_0x0051:
-                if (r7 >= r1) goto L_0x01bd
+                if (r7 >= r1) goto L_0x01cf
                 if (r7 != r6) goto L_0x005c
                 org.telegram.ui.DialogsActivity r8 = org.telegram.ui.DialogsActivity.this
                 org.telegram.ui.Components.ChatActivityEnterView r8 = r8.commentView
@@ -1088,11 +1088,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             L_0x005c:
                 android.view.View r8 = r15.getChildAt(r7)
             L_0x0060:
-                if (r8 == 0) goto L_0x01b9
+                if (r8 == 0) goto L_0x01cb
                 int r9 = r8.getVisibility()
                 r10 = 8
                 if (r9 != r10) goto L_0x006c
-                goto L_0x01b9
+                goto L_0x01cb
             L_0x006c:
                 android.view.ViewGroup$LayoutParams r9 = r8.getLayoutParams()
                 android.widget.FrameLayout$LayoutParams r9 = (android.widget.FrameLayout.LayoutParams) r9
@@ -1173,23 +1173,23 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 int r12 = org.telegram.messenger.AndroidUtilities.dp(r12)
             L_0x00f7:
                 int r9 = r9 + r12
-                goto L_0x01b4
+                goto L_0x01c6
             L_0x00fa:
                 org.telegram.ui.DialogsActivity r9 = org.telegram.ui.DialogsActivity.this
                 org.telegram.ui.Components.ChatActivityEnterView r9 = r9.commentView
                 int r9 = r9.getBottom()
-                goto L_0x01b4
+                goto L_0x01c6
             L_0x0106:
                 org.telegram.ui.DialogsActivity r12 = org.telegram.ui.DialogsActivity.this
                 org.telegram.ui.Components.FilterTabsView r12 = r12.filterTabsView
-                if (r8 == r12) goto L_0x01aa
+                if (r8 == r12) goto L_0x01bc
                 org.telegram.ui.DialogsActivity r12 = org.telegram.ui.DialogsActivity.this
                 org.telegram.ui.Components.ViewPagerFixed$TabsView r12 = r12.searchTabsView
-                if (r8 == r12) goto L_0x01aa
+                if (r8 == r12) goto L_0x01bc
                 org.telegram.ui.DialogsActivity r12 = org.telegram.ui.DialogsActivity.this
                 org.telegram.ui.Adapters.FiltersView r12 = r12.filtersView
                 if (r8 != r12) goto L_0x0120
-                goto L_0x01aa
+                goto L_0x01bc
             L_0x0120:
                 org.telegram.ui.DialogsActivity r12 = org.telegram.ui.DialogsActivity.this
                 org.telegram.ui.Components.SearchViewPager r12 = r12.searchViewPager
@@ -1222,7 +1222,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 org.telegram.ui.DialogsActivity r9 = org.telegram.ui.DialogsActivity.this
                 org.telegram.ui.ActionBar.ActionBar r9 = r9.actionBar
                 int r9 = r9.getMeasuredHeight()
-                goto L_0x01b4
+                goto L_0x01c6
             L_0x0163:
                 boolean r12 = r8 instanceof org.telegram.ui.DialogsActivity.ViewPage
                 if (r12 == 0) goto L_0x019a
@@ -1248,23 +1248,32 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 goto L_0x00f7
             L_0x019a:
                 boolean r12 = r8 instanceof org.telegram.ui.Components.FragmentContextView
-                if (r12 == 0) goto L_0x01b4
+                if (r12 == 0) goto L_0x01aa
                 org.telegram.ui.DialogsActivity r12 = org.telegram.ui.DialogsActivity.this
                 org.telegram.ui.ActionBar.ActionBar r12 = r12.actionBar
                 int r12 = r12.getMeasuredHeight()
                 goto L_0x00f7
             L_0x01aa:
+                org.telegram.ui.DialogsActivity r12 = org.telegram.ui.DialogsActivity.this
+                android.widget.FrameLayout r12 = r12.floatingButtonContainer
+                if (r8 != r12) goto L_0x01c6
+                org.telegram.ui.DialogsActivity r12 = org.telegram.ui.DialogsActivity.this
+                org.telegram.ui.SelectAnimatedEmojiDialog$SelectAnimatedEmojiDialogWindow r12 = r12.selectAnimatedEmojiDialog
+                if (r12 == 0) goto L_0x01c6
+                int r9 = r9 + r3
+                goto L_0x01c6
+            L_0x01bc:
                 org.telegram.ui.DialogsActivity r9 = org.telegram.ui.DialogsActivity.this
                 org.telegram.ui.ActionBar.ActionBar r9 = r9.actionBar
                 int r9 = r9.getMeasuredHeight()
-            L_0x01b4:
+            L_0x01c6:
                 int r10 = r10 + r13
                 int r11 = r11 + r9
                 r8.layout(r13, r9, r10, r11)
-            L_0x01b9:
+            L_0x01cb:
                 int r7 = r7 + 1
                 goto L_0x0051
-            L_0x01bd:
+            L_0x01cf:
                 org.telegram.ui.DialogsActivity r1 = org.telegram.ui.DialogsActivity.this
                 org.telegram.ui.Components.SearchViewPager r1 = r1.searchViewPager
                 r1.setKeyboardHeight(r3)
@@ -1743,11 +1752,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             boolean z = false;
             int unused = this.parentPage.archivePullViewState = SharedConfig.archiveHidden ? 2 : 0;
             if (this.parentPage.pullForegroundDrawable != null) {
-                PullForegroundDrawable access$10700 = this.parentPage.pullForegroundDrawable;
+                PullForegroundDrawable access$10800 = this.parentPage.pullForegroundDrawable;
                 if (this.parentPage.archivePullViewState != 0) {
                     z = true;
                 }
-                access$10700.setWillDraw(z);
+                access$10800.setWillDraw(z);
             }
         }
 
@@ -2089,7 +2098,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 if (DialogsActivity.this.getMessagesController().isPromoDialog(tLRPC$Dialog.id, false)) {
                     DialogsActivity.this.getMessagesController().hidePromoDialog();
                     this.parentPage.dialogsItemAnimator.prepareForRemove();
-                    ViewPage.access$11310(this.parentPage);
+                    ViewPage.access$11410(this.parentPage);
                     this.parentPage.dialogsAdapter.notifyItemRemoved(i2);
                     int unused2 = DialogsActivity.this.dialogRemoveFinished = 2;
                     return;
@@ -2097,7 +2106,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 int addDialogToFolder = DialogsActivity.this.getMessagesController().addDialogToFolder(tLRPC$Dialog.id, DialogsActivity.this.folderId == 0 ? 1 : 0, -1, 0);
                 if (!(addDialogToFolder == 2 && i2 == 0)) {
                     this.parentPage.dialogsItemAnimator.prepareForRemove();
-                    ViewPage.access$11310(this.parentPage);
+                    ViewPage.access$11410(this.parentPage);
                     this.parentPage.dialogsAdapter.notifyItemRemoved(i2);
                     int unused3 = DialogsActivity.this.dialogRemoveFinished = 2;
                 }
@@ -2109,7 +2118,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                             DialogsActivity.this.setDialogsListFrozen(true);
                             this.parentPage.dialogsAdapter.notifyItemChanged(0);
                         } else {
-                            ViewPage.access$11308(this.parentPage);
+                            ViewPage.access$11408(this.parentPage);
                             this.parentPage.dialogsAdapter.notifyItemInserted(0);
                             if (!SharedConfig.archiveHidden && this.parentPage.layoutManager.findFirstVisibleItemPosition() == 0) {
                                 boolean unused5 = DialogsActivity.this.disableActionBarScrolling = true;
@@ -2155,7 +2164,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     int unused3 = DialogsActivity.this.dialogInsertFinished = 2;
                     DialogsActivity.this.setDialogsListFrozen(true);
                     this.parentPage.dialogsItemAnimator.prepareForRemove();
-                    ViewPage.access$11308(this.parentPage);
+                    ViewPage.access$11408(this.parentPage);
                     this.parentPage.dialogsAdapter.notifyItemInserted(indexOf);
                 }
                 if (dialogs2.isEmpty()) {
@@ -2168,7 +2177,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     }
                     DialogsActivity.this.frozenDialogsList.remove(0);
                     this.parentPage.dialogsItemAnimator.prepareForRemove();
-                    ViewPage.access$11310(this.parentPage);
+                    ViewPage.access$11410(this.parentPage);
                     this.parentPage.dialogsAdapter.notifyItemRemoved(0);
                     return;
                 }
@@ -9463,8 +9472,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             if (this.viewPages != null && !this.dialogsListFrozen) {
                 boolean z2 = this.floatingProgressVisible;
                 setFloatingProgressVisible(false, true);
-                for (ViewPage access$9100 : this.viewPages) {
-                    access$9100.dialogsAdapter.setForceUpdatingContacts(false);
+                for (ViewPage access$9300 : this.viewPages) {
+                    access$9300.dialogsAdapter.setForceUpdatingContacts(false);
                 }
                 if (z2) {
                     setContactsAlpha(0.0f);
@@ -10039,10 +10048,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     public void setContactsAlpha(float f) {
         this.contactsAlpha = f;
         for (ViewPage viewPage : this.viewPages) {
-            DialogsRecyclerView access$10400 = viewPage.listView;
-            for (int i = 0; i < access$10400.getChildCount(); i++) {
-                View childAt = access$10400.getChildAt(i);
-                if (access$10400.getChildAdapterPosition(childAt) >= viewPage.dialogsAdapter.getDialogsCount() + 1) {
+            DialogsRecyclerView access$10600 = viewPage.listView;
+            for (int i = 0; i < access$10600.getChildCount(); i++) {
+                View childAt = access$10600.getChildAt(i);
+                if (access$10600.getChildAdapterPosition(childAt) >= viewPage.dialogsAdapter.getDialogsCount() + 1) {
                     childAt.setAlpha(f);
                 }
             }
@@ -10050,8 +10059,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     public void setScrollDisabled(boolean z) {
-        for (ViewPage access$10400 : this.viewPages) {
-            ((LinearLayoutManager) access$10400.listView.getLayoutManager()).setScrollDisabled(z);
+        for (ViewPage access$10600 : this.viewPages) {
+            ((LinearLayoutManager) access$10600.listView.getLayoutManager()).setScrollDisabled(z);
         }
     }
 

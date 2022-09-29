@@ -10,6 +10,6 @@ public final /* synthetic */ class AndroidUtilities$$ExternalSyntheticLambda6 im
     }
 
     public final void onAnimationEnd(DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
-        AndroidUtilities.lambda$shakeViewSpring$6(this.f$0, dynamicAnimation, z, f, f2);
+        AndroidUtilities.lambda$shakeViewSpring$7(this.f$0, dynamicAnimation, z, f, f2);
     }
 }

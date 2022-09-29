@@ -10,6 +10,6 @@ public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda6
     }
 
     public final void run() {
-        this.f$0.lambda$fetchNewEmojiKeywords$186(this.f$1);
+        this.f$0.lambda$processLoadedDiceStickers$68(this.f$1);
     }
 }

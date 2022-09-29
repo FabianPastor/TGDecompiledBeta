@@ -1,19 +1,19 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
-import org.telegram.messenger.Utilities;
-import org.telegram.tgnet.TLRPC$StickerSet;
+import org.telegram.messenger.ImageReceiver;
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda156 implements Utilities.Callback {
-    public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ TLRPC$StickerSet f$1;
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda156 implements ImageReceiver.ImageReceiverDelegate {
+    public final /* synthetic */ ImageReceiver f$0;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda156(MediaDataController mediaDataController, TLRPC$StickerSet tLRPC$StickerSet) {
-        this.f$0 = mediaDataController;
-        this.f$1 = tLRPC$StickerSet;
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda156(ImageReceiver imageReceiver) {
+        this.f$0 = imageReceiver;
     }
 
-    public final void run(Object obj) {
-        this.f$0.lambda$toggleStickerSetInternal$94(this.f$1, (ArrayList) obj);
+    public final void didSetImage(ImageReceiver imageReceiver, boolean z, boolean z2, boolean z3) {
+        MediaDataController.lambda$preloadImage$14(this.f$0, imageReceiver, z, z2, z3);
+    }
+
+    public /* synthetic */ void onAnimationReady(ImageReceiver imageReceiver) {
+        ImageReceiver.ImageReceiverDelegate.CC.$default$onAnimationReady(this, imageReceiver);
     }
 }

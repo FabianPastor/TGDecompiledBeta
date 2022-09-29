@@ -17,6 +17,6 @@ public final /* synthetic */ class AndroidUtilities$$ExternalSyntheticLambda0 im
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        AndroidUtilities.lambda$updateImageViewImageAnimated$14(this.f$0, this.f$1, this.f$2, valueAnimator);
+        AndroidUtilities.lambda$updateImageViewImageAnimated$15(this.f$0, this.f$1, this.f$2, valueAnimator);
     }
 }

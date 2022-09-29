@@ -11,6 +11,6 @@ public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda2
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        MediaDataController.lambda$saveDraft$164(tLObject, tLRPC$TL_error);
+        MediaDataController.lambda$markFeaturedStickersAsRead$51(tLObject, tLRPC$TL_error);
     }
 }

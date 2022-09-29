@@ -55,6 +55,14 @@ public class ApplicationLoader extends Application {
     public static long startTime;
 
     /* access modifiers changed from: protected */
+    public void appCenterLogInternal(Throwable th) {
+    }
+
+    /* access modifiers changed from: protected */
+    public void checkForUpdatesInternal() {
+    }
+
+    /* access modifiers changed from: protected */
     public boolean isHuaweiBuild() {
         return false;
     }
@@ -62,6 +70,10 @@ public class ApplicationLoader extends Application {
     /* access modifiers changed from: protected */
     public String onGetApplicationId() {
         return null;
+    }
+
+    /* access modifiers changed from: protected */
+    public void startAppCenterInternal(Activity activity) {
     }
 
     /* access modifiers changed from: protected */
@@ -461,5 +473,17 @@ public class ApplicationLoader extends Application {
             FileLog.d("network online mismatch");
         }
         return isNetworkOnlineRealtime;
+    }
+
+    public static void startAppCenter(Activity activity) {
+        applicationLoaderInstance.startAppCenterInternal(activity);
+    }
+
+    public static void checkForUpdates() {
+        applicationLoaderInstance.checkForUpdatesInternal();
+    }
+
+    public static void appCenterLog(Throwable th) {
+        applicationLoaderInstance.appCenterLogInternal(th);
     }
 }

@@ -1,17 +1,16 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class SelectAnimatedEmojiDialog$$ExternalSyntheticLambda9 implements Runnable {
-    public final /* synthetic */ SelectAnimatedEmojiDialog f$0;
-    public final /* synthetic */ float f$1;
-    public final /* synthetic */ int f$2;
+import android.view.MotionEvent;
+import android.view.View;
 
-    public /* synthetic */ SelectAnimatedEmojiDialog$$ExternalSyntheticLambda9(SelectAnimatedEmojiDialog selectAnimatedEmojiDialog, float f, int i) {
+public final /* synthetic */ class SelectAnimatedEmojiDialog$$ExternalSyntheticLambda9 implements View.OnTouchListener {
+    public final /* synthetic */ SelectAnimatedEmojiDialog f$0;
+
+    public /* synthetic */ SelectAnimatedEmojiDialog$$ExternalSyntheticLambda9(SelectAnimatedEmojiDialog selectAnimatedEmojiDialog) {
         this.f$0 = selectAnimatedEmojiDialog;
-        this.f$1 = f;
-        this.f$2 = i;
     }
 
-    public final void run() {
-        this.f$0.lambda$expand$9(this.f$1, this.f$2);
+    public final boolean onTouch(View view, MotionEvent motionEvent) {
+        return this.f$0.lambda$new$0(view, motionEvent);
     }
 }

@@ -5498,6 +5498,7 @@ public final class R {
         public static final int PasswordReset = NUM;
         public static final int PasteFromClipboard = NUM;
         public static final int PauseAll = NUM;
+        public static final int PaymentAppNotFoundForDeeplink = NUM;
         public static final int PaymentBillingAddress = NUM;
         public static final int PaymentCardCvv = NUM;
         public static final int PaymentCardExpireDate = NUM;
@@ -5993,6 +5994,7 @@ public final class R {
         public static final int Reacted_other = NUM;
         public static final int Reacted_two = NUM;
         public static final int Reacted_zero = NUM;
+        public static final int ReactionInDialog = NUM;
         public static final int Reactions = NUM;
         public static final int ReactionsAll = NUM;
         public static final int ReactionsCount = NUM;
@@ -7483,27 +7485,6 @@ public final class R {
         public static final int YourPhone = NUM;
         public static final int YourPublicCommunities = NUM;
         public static final int ZoomOut = NUM;
-        public static final int appcenter_distribute_dialog_actioned_on_disabled_toast = NUM;
-        public static final int appcenter_distribute_download_progress_number_format = NUM;
-        public static final int appcenter_distribute_downloading_error = NUM;
-        public static final int appcenter_distribute_downloading_mandatory_update = NUM;
-        public static final int appcenter_distribute_downloading_update = NUM;
-        public static final int appcenter_distribute_install = NUM;
-        public static final int appcenter_distribute_install_ready_message = NUM;
-        public static final int appcenter_distribute_install_ready_title = NUM;
-        public static final int appcenter_distribute_notification_category = NUM;
-        public static final int appcenter_distribute_unknown_sources_dialog_message = NUM;
-        public static final int appcenter_distribute_unknown_sources_dialog_settings = NUM;
-        public static final int appcenter_distribute_update_dialog_download = NUM;
-        public static final int appcenter_distribute_update_dialog_message_mandatory = NUM;
-        public static final int appcenter_distribute_update_dialog_message_optional = NUM;
-        public static final int appcenter_distribute_update_dialog_postpone = NUM;
-        public static final int appcenter_distribute_update_dialog_title = NUM;
-        public static final int appcenter_distribute_update_dialog_view_release_notes = NUM;
-        public static final int appcenter_distribute_update_failed_dialog_ignore = NUM;
-        public static final int appcenter_distribute_update_failed_dialog_message = NUM;
-        public static final int appcenter_distribute_update_failed_dialog_reinstall = NUM;
-        public static final int appcenter_distribute_update_failed_dialog_title = NUM;
         public static final int chatDate = NUM;
         public static final int chatFullDate = NUM;
         public static final int common_google_play_services_enable_button = NUM;
@@ -7558,6 +7539,48 @@ public final class R {
         public static final int messages_zero = NUM;
         public static final int status_bar_notification_info_overflow = NUM;
         public static final int wallet_buy_button_place_holder = NUM;
+        /* added by JADX */
+        public static final int appcenter_distribute_dialog_actioned_on_disabled_toast = NUM;
+        /* added by JADX */
+        public static final int appcenter_distribute_download_progress_number_format = NUM;
+        /* added by JADX */
+        public static final int appcenter_distribute_downloading_error = NUM;
+        /* added by JADX */
+        public static final int appcenter_distribute_downloading_mandatory_update = NUM;
+        /* added by JADX */
+        public static final int appcenter_distribute_downloading_update = NUM;
+        /* added by JADX */
+        public static final int appcenter_distribute_install = NUM;
+        /* added by JADX */
+        public static final int appcenter_distribute_install_ready_message = NUM;
+        /* added by JADX */
+        public static final int appcenter_distribute_install_ready_title = NUM;
+        /* added by JADX */
+        public static final int appcenter_distribute_notification_category = NUM;
+        /* added by JADX */
+        public static final int appcenter_distribute_unknown_sources_dialog_message = NUM;
+        /* added by JADX */
+        public static final int appcenter_distribute_unknown_sources_dialog_settings = NUM;
+        /* added by JADX */
+        public static final int appcenter_distribute_update_dialog_download = NUM;
+        /* added by JADX */
+        public static final int appcenter_distribute_update_dialog_message_mandatory = NUM;
+        /* added by JADX */
+        public static final int appcenter_distribute_update_dialog_message_optional = NUM;
+        /* added by JADX */
+        public static final int appcenter_distribute_update_dialog_postpone = NUM;
+        /* added by JADX */
+        public static final int appcenter_distribute_update_dialog_title = NUM;
+        /* added by JADX */
+        public static final int appcenter_distribute_update_dialog_view_release_notes = NUM;
+        /* added by JADX */
+        public static final int appcenter_distribute_update_failed_dialog_ignore = NUM;
+        /* added by JADX */
+        public static final int appcenter_distribute_update_failed_dialog_message = NUM;
+        /* added by JADX */
+        public static final int appcenter_distribute_update_failed_dialog_reinstall = NUM;
+        /* added by JADX */
+        public static final int appcenter_distribute_update_failed_dialog_title = NUM;
         /* added by JADX */
         public static final int default_web_client_id = NUM;
         /* added by JADX */

@@ -32,10 +32,7 @@ import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.NativeByteBuffer;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Document;
-import org.telegram.tgnet.TLRPC$InputStickerSet;
 import org.telegram.tgnet.TLRPC$TL_error;
-import org.telegram.tgnet.TLRPC$TL_inputStickerSetEmojiDefaultStatuses;
-import org.telegram.tgnet.TLRPC$TL_inputStickerSetID;
 import org.telegram.tgnet.TLRPC$TL_messages_getCustomEmojiDocuments;
 import org.telegram.tgnet.TLRPC$Vector;
 import org.telegram.ui.ActionBar.Theme;
@@ -893,23 +890,44 @@ public class AnimatedEmojiDrawable extends Drawable {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AnimatedEmojiDrawable.updateAttachState():void");
     }
 
+    /* JADX WARNING: Code restructure failed: missing block: B:13:0x002c, code lost:
+        if (r2 != 2964141614563343L) goto L_0x002f;
+     */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
     public boolean canOverrideColor() {
-        Boolean bool = this.canOverrideColorCached;
-        if (bool != null) {
-            return bool.booleanValue();
-        }
-        TLRPC$Document tLRPC$Document = this.document;
-        boolean z = false;
-        if (tLRPC$Document == null) {
-            return false;
-        }
-        TLRPC$InputStickerSet inputStickerSet = MessageObject.getInputStickerSet(tLRPC$Document);
-        if ((inputStickerSet instanceof TLRPC$TL_inputStickerSetEmojiDefaultStatuses) || ((inputStickerSet instanceof TLRPC$TL_inputStickerSetID) && inputStickerSet.id == 773947703670341676L)) {
-            z = true;
-        }
-        Boolean valueOf = Boolean.valueOf(z);
-        this.canOverrideColorCached = valueOf;
-        return valueOf.booleanValue();
+        /*
+            r6 = this;
+            java.lang.Boolean r0 = r6.canOverrideColorCached
+            if (r0 == 0) goto L_0x0009
+            boolean r0 = r0.booleanValue()
+            return r0
+        L_0x0009:
+            org.telegram.tgnet.TLRPC$Document r0 = r6.document
+            r1 = 0
+            if (r0 == 0) goto L_0x003a
+            org.telegram.tgnet.TLRPC$InputStickerSet r0 = org.telegram.messenger.MessageObject.getInputStickerSet((org.telegram.tgnet.TLRPC$Document) r0)
+            boolean r2 = r0 instanceof org.telegram.tgnet.TLRPC$TL_inputStickerSetEmojiDefaultStatuses
+            if (r2 != 0) goto L_0x002e
+            boolean r2 = r0 instanceof org.telegram.tgnet.TLRPC$TL_inputStickerSetID
+            if (r2 == 0) goto L_0x002f
+            long r2 = r0.id
+            r4 = 773947703670341676(0xabd9d560000002c, double:6.163529620788447E-257)
+            int r0 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1))
+            if (r0 == 0) goto L_0x002e
+            r4 = 2964141614563343(0xa87dvar_f, double:1.4644805411641533E-308)
+            int r0 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1))
+            if (r0 != 0) goto L_0x002f
+        L_0x002e:
+            r1 = 1
+        L_0x002f:
+            java.lang.Boolean r0 = java.lang.Boolean.valueOf(r1)
+            r6.canOverrideColorCached = r0
+            boolean r0 = r0.booleanValue()
+            return r0
+        L_0x003a:
+            return r1
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AnimatedEmojiDrawable.canOverrideColor():boolean");
     }
 
     public int getAlpha() {

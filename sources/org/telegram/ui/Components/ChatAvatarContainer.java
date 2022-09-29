@@ -160,7 +160,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
         this.titleTextView.setCanHideRightDrawable(false);
         this.titleTextView.setRightDrawableOutside(true);
         this.titleTextView.setEllipsizeByGradient(true);
-        this.titleTextView.setPadding(0, AndroidUtilities.dp(6.0f), AndroidUtilities.dp(12.0f), AndroidUtilities.dp(12.0f));
+        this.titleTextView.setPadding(0, AndroidUtilities.dp(6.0f), 0, AndroidUtilities.dp(12.0f));
         addView(this.titleTextView);
         AnonymousClass3 r112 = new SimpleTextView(context) {
             public boolean setText(CharSequence charSequence) {
@@ -249,6 +249,15 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$new$2(View view) {
         openProfile(false);
+    }
+
+    public void setTitleExpand(boolean z) {
+        int dp = z ? AndroidUtilities.dp(16.0f) : 0;
+        if (this.titleTextView.getPaddingRight() != dp) {
+            this.titleTextView.setPadding(0, AndroidUtilities.dp(6.0f), dp, AndroidUtilities.dp(12.0f));
+            requestLayout();
+            invalidate();
+        }
     }
 
     public void setOverrideSubtitleColor(Integer num) {
@@ -460,7 +469,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
         int i3 = 54;
         int dp = size - AndroidUtilities.dp((float) ((this.avatarImageView.getVisibility() == 0 ? 54 : 0) + 16));
         this.avatarImageView.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(42.0f), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(42.0f), NUM));
-        this.titleTextView.measure(View.MeasureSpec.makeMeasureSpec(dp, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(42.0f), Integer.MIN_VALUE));
+        this.titleTextView.measure(View.MeasureSpec.makeMeasureSpec(dp, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(32.0f) + this.titleTextView.getPaddingRight(), Integer.MIN_VALUE));
         this.subtitleTextView.measure(View.MeasureSpec.makeMeasureSpec(dp, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(20.0f), Integer.MIN_VALUE));
         ImageView imageView = this.timeItem;
         if (imageView != null) {

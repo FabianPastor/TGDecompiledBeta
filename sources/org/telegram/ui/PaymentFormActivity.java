@@ -56,6 +56,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -147,6 +148,10 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.CountrySelectActivity;
 
 public class PaymentFormActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
+    /* access modifiers changed from: private */
+    public static final List<String> BLACKLISTED_PROTOCOLS = Collections.singletonList("tg");
+    /* access modifiers changed from: private */
+    public static final List<String> WEBVIEW_PROTOCOLS = Arrays.asList(new String[]{"http", "https"});
     private TLRPC$User botUser;
     private TextInfoPrivacyCell[] bottomCell;
     private BottomFrameLayout bottomLayout;
@@ -162,7 +167,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     public ArrayList<String> countriesArray;
     private HashMap<String, String> countriesMap;
     private String countryName;
-    private String currentBotName;
+    /* access modifiers changed from: private */
+    public String currentBotName;
     private String currentItemName;
     /* access modifiers changed from: private */
     public TLRPC$account_Password currentPassword;
@@ -4199,7 +4205,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         L_0x1ce4:
             android.webkit.WebView r0 = r7.webView
             org.telegram.ui.PaymentFormActivity$18 r1 = new org.telegram.ui.PaymentFormActivity$18
-            r1.<init>()
+            r1.<init>(r8)
             r0.setWebViewClient(r1)
             org.telegram.tgnet.TLRPC$TL_payments_paymentForm r0 = r7.paymentForm
             org.telegram.tgnet.TLRPC$TL_invoice r0 = r0.invoice

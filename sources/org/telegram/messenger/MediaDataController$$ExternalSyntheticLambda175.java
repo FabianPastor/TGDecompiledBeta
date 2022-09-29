@@ -9,16 +9,14 @@ public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda1
     public final /* synthetic */ MediaDataController f$0;
     public final /* synthetic */ int f$1;
     public final /* synthetic */ Utilities.Callback f$2;
-    public final /* synthetic */ long f$3;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda175(MediaDataController mediaDataController, int i, Utilities.Callback callback, long j) {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda175(MediaDataController mediaDataController, int i, Utilities.Callback callback) {
         this.f$0 = mediaDataController;
         this.f$1 = i;
         this.f$2 = callback;
-        this.f$3 = j;
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$loadStickers$83(this.f$1, this.f$2, this.f$3, tLObject, tLRPC$TL_error);
+        this.f$0.lambda$loadStickers$79(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
     }
 }

@@ -2,19 +2,18 @@ package org.telegram.messenger;
 
 import java.util.ArrayList;
 import org.telegram.messenger.Utilities;
+import org.telegram.tgnet.TLRPC$StickerSet;
 
 public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda158 implements Utilities.Callback {
-    public final /* synthetic */ boolean[] f$0;
-    public final /* synthetic */ ArrayList[] f$1;
-    public final /* synthetic */ Runnable f$2;
+    public final /* synthetic */ MediaDataController f$0;
+    public final /* synthetic */ TLRPC$StickerSet f$1;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda158(boolean[] zArr, ArrayList[] arrayListArr, Runnable runnable) {
-        this.f$0 = zArr;
-        this.f$1 = arrayListArr;
-        this.f$2 = runnable;
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda158(MediaDataController mediaDataController, TLRPC$StickerSet tLRPC$StickerSet) {
+        this.f$0 = mediaDataController;
+        this.f$1 = tLRPC$StickerSet;
     }
 
     public final void run(Object obj) {
-        MediaDataController.lambda$fillWithAnimatedEmoji$196(this.f$0, this.f$1, this.f$2, (ArrayList) obj);
+        this.f$0.lambda$toggleStickerSetInternal$97(this.f$1, (ArrayList) obj);
     }
 }

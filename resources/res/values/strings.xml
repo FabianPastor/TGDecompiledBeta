@@ -3534,6 +3534,7 @@
     <string name="PasswordReset">Password deactivated</string>
     <string name="PasteFromClipboard">Paste from clipboard</string>
     <string name="PauseAll">Pause all</string>
+    <string name="PaymentAppNotFoundForDeeplink">No app found to handle this deep link.</string>
     <string name="PaymentBillingAddress">Billing address</string>
     <string name="PaymentCardCvv">Security Code (CVV)</string>
     <string name="PaymentCardExpireDate">MM/YY</string>
@@ -4029,6 +4030,7 @@
     <string name="Reacted_other">%1$s Reacted</string>
     <string name="Reacted_two">%1$s Reacted</string>
     <string name="Reacted_zero">%1$s Reacted</string>
+    <string name="ReactionInDialog">%s Reaction</string>
     <string name="Reactions">Reactions</string>
     <string name="ReactionsAll">All</string>
     <string name="ReactionsCount">%1$s/%2$s</string>

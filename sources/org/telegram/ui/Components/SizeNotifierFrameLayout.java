@@ -34,7 +34,7 @@ import org.telegram.ui.BlurSettingsBottomSheet;
 
 public class SizeNotifierFrameLayout extends FrameLayout {
     private static DispatchQueue blurQueue;
-    protected AdjustPanLayoutHelper adjustPanLayoutHelper;
+    public AdjustPanLayoutHelper adjustPanLayoutHelper;
     /* access modifiers changed from: private */
     public boolean animationInProgress;
     /* access modifiers changed from: private */

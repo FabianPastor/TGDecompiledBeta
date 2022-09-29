@@ -90,7 +90,9 @@ import androidx.core.util.ObjectsCompat$$ExternalSyntheticBackport0;
 import androidx.core.view.inputmethod.InputContentInfoCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.dynamicanimation.animation.DynamicAnimation;
+import androidx.dynamicanimation.animation.FloatValueHolder;
 import androidx.dynamicanimation.animation.SpringAnimation;
+import androidx.dynamicanimation.animation.SpringForce;
 import androidx.exifinterface.media.ExifInterface;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -3289,13 +3291,21 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
 
     private class VideoPlayerControlFrameLayout extends FrameLayout {
         private boolean ignoreLayout;
+        private int lastTimeWidth;
         /* access modifiers changed from: private */
         public int parentHeight;
         /* access modifiers changed from: private */
         public int parentWidth;
         private float progress = 1.0f;
         private boolean seekBarTransitionEnabled;
+        private SpringAnimation timeSpring = ((SpringAnimation) new SpringAnimation(this.timeValue).setSpring(new SpringForce(0.0f).setStiffness(750.0f).setDampingRatio(1.0f)).addUpdateListener(new PhotoViewer$VideoPlayerControlFrameLayout$$ExternalSyntheticLambda0(this)));
+        private FloatValueHolder timeValue = new FloatValueHolder(0.0f);
         private boolean translationYAnimationEnabled = true;
+
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$new$0(DynamicAnimation dynamicAnimation, float f, float f2) {
+            PhotoViewer.this.videoPlayerSeekbar.setSize((int) ((((float) (getMeasuredWidth() - AndroidUtilities.dp(16.0f))) - f) - ((float) (this.parentWidth > this.parentHeight ? AndroidUtilities.dp(48.0f) : 0))), getMeasuredHeight());
+        }
 
         public VideoPlayerControlFrameLayout(Context context) {
             super(context);
@@ -3311,6 +3321,13 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 PhotoViewer.this.videoPlayerSeekbarView.invalidate();
             }
             return true;
+        }
+
+        /* access modifiers changed from: protected */
+        public void onDetachedFromWindow() {
+            super.onDetachedFromWindow();
+            this.timeValue.setValue(0.0f);
+            this.lastTimeWidth = 0;
         }
 
         public void requestLayout() {
@@ -3356,9 +3373,19 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             } else {
                 str = String.format(Locale.ROOT, "%02d:%02d", new Object[]{Long.valueOf(j3), Long.valueOf(j2 % 60)});
             }
-            VideoPlayerSeekBar access$1000 = PhotoViewer.this.videoPlayerSeekbar;
-            int measuredWidth = getMeasuredWidth() - AndroidUtilities.dp(16.0f);
-            access$1000.setSize((measuredWidth - ((int) Math.ceil((double) PhotoViewer.this.videoPlayerTime.getPaint().measureText(String.format(Locale.ROOT, "%1$s / %1$s", new Object[]{str}))))) - i3, getMeasuredHeight());
+            int ceil = (int) Math.ceil((double) PhotoViewer.this.videoPlayerTime.getPaint().measureText(String.format(Locale.ROOT, "%1$s / %1$s", new Object[]{str})));
+            this.timeSpring.cancel();
+            if (this.lastTimeWidth != 0) {
+                float f = (float) ceil;
+                if (this.timeValue.getValue() != f) {
+                    this.timeSpring.getSpring().setFinalPosition(f);
+                    this.timeSpring.start();
+                    this.lastTimeWidth = ceil;
+                }
+            }
+            PhotoViewer.this.videoPlayerSeekbar.setSize(((getMeasuredWidth() - AndroidUtilities.dp(16.0f)) - ceil) - i3, getMeasuredHeight());
+            this.timeValue.setValue((float) ceil);
+            this.lastTimeWidth = ceil;
         }
 
         /* access modifiers changed from: protected */
@@ -21787,6 +21814,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             if (this.photoViewerWebView.isControllable()) {
                 setVideoPlayerControlVisible(true, true);
             }
+            this.videoPlayerSeekbar.clearTimestamps();
             updateVideoPlayerTime();
         }
     }

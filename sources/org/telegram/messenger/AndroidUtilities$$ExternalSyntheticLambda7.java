@@ -9,6 +9,6 @@ public final /* synthetic */ class AndroidUtilities$$ExternalSyntheticLambda7 im
     }
 
     public final void onSuccess(Object obj) {
-        AndroidUtilities.lambda$setWaitingForSms$5((Void) obj);
+        AndroidUtilities.lambda$setWaitingForSms$6((Void) obj);
     }
 }

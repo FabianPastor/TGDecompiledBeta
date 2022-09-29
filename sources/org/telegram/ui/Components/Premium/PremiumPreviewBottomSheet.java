@@ -163,12 +163,7 @@ public class PremiumPreviewBottomSheet extends BottomSheetWithRecyclerListView i
         if (view instanceof PremiumFeatureCell) {
             PremiumFeatureCell premiumFeatureCell = (PremiumFeatureCell) view;
             PremiumPreviewFragment.sentShowFeaturePreview(i, premiumFeatureCell.data.type);
-            int i3 = premiumFeatureCell.data.type;
-            if (i3 == 0) {
-                showDialog(new DoubledLimitsBottomSheet(baseFragment, i));
-            } else {
-                showDialog(new PremiumFeatureBottomSheet(baseFragment, i3, false));
-            }
+            showDialog(new PremiumFeatureBottomSheet(baseFragment, premiumFeatureCell.data.type, false));
         }
     }
 

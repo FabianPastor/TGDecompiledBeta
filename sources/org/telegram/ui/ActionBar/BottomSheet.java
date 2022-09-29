@@ -62,10 +62,8 @@ public class BottomSheet extends Dialog {
     /* access modifiers changed from: private */
     public boolean applyTopPadding;
     protected ColorDrawable backDrawable;
-    /* access modifiers changed from: protected */
-    public int backgroundPaddingLeft;
-    /* access modifiers changed from: protected */
-    public int backgroundPaddingTop;
+    protected int backgroundPaddingLeft;
+    protected int backgroundPaddingTop;
     protected int behindKeyboardColor;
     protected String behindKeyboardColorKey;
     /* access modifiers changed from: private */
@@ -75,16 +73,15 @@ public class BottomSheet extends Dialog {
     protected boolean calcMandatoryInsets;
     private boolean canDismissWithSwipe;
     protected ContainerView container;
-    /* access modifiers changed from: protected */
-    public ViewGroup containerView;
-    /* access modifiers changed from: protected */
-    public int currentAccount;
+    protected ViewGroup containerView;
+    protected int currentAccount;
     /* access modifiers changed from: private */
     public float currentPanTranslationY;
     protected AnimatorSet currentSheetAnimation;
     protected int currentSheetAnimationType;
     /* access modifiers changed from: private */
     public View customView;
+    protected int customViewGravity;
     protected BottomSheetDelegateInterface delegate;
     protected boolean dimBehind;
     protected int dimBehindAlpha;
@@ -101,8 +98,7 @@ public class BottomSheet extends Dialog {
     protected boolean fullWidth;
     /* access modifiers changed from: private */
     public float hideSystemVerticalInsetsProgress;
-    /* access modifiers changed from: protected */
-    public boolean isFullscreen;
+    protected boolean isFullscreen;
     protected boolean isPortrait;
     /* access modifiers changed from: private */
     public int[] itemIcons;
@@ -111,8 +107,7 @@ public class BottomSheet extends Dialog {
     public CharSequence[] items;
     /* access modifiers changed from: private */
     public ValueAnimator keyboardContentAnimator;
-    /* access modifiers changed from: protected */
-    public boolean keyboardVisible;
+    protected boolean keyboardVisible;
     /* access modifiers changed from: private */
     public WindowInsets lastInsets;
     /* access modifiers changed from: private */
@@ -121,10 +116,8 @@ public class BottomSheet extends Dialog {
     public int leftInset;
     /* access modifiers changed from: private */
     public boolean multipleLinesTitle;
-    /* access modifiers changed from: protected */
-    public int navBarColor;
-    /* access modifiers changed from: protected */
-    public String navBarColorKey;
+    protected int navBarColor;
+    protected String navBarColorKey;
     protected float navigationBarAlpha;
     protected ValueAnimator navigationBarAnimation;
     protected View nestedScrollChild;
@@ -1698,6 +1691,7 @@ public class BottomSheet extends Dialog {
         this.navigationBarAlpha = 0.0f;
         this.navBarColorKey = "windowBackgroundGray";
         this.useBackgroundTopPadding = true;
+        this.customViewGravity = 51;
         this.resourcesProvider = resourcesProvider2;
         int i = Build.VERSION.SDK_INT;
         if (i >= 30) {
@@ -1868,9 +1862,9 @@ public class BottomSheet extends Dialog {
                 this.containerView.setClipChildren(false);
                 this.container.setClipToPadding(false);
                 this.container.setClipChildren(false);
-                this.containerView.addView(this.customView, LayoutHelper.createFrame(-1, -2.0f, 51, 0.0f, (float) ((-this.backgroundPaddingTop) + i), 0.0f, 0.0f));
+                this.containerView.addView(this.customView, LayoutHelper.createFrame(-1, -2.0f, this.customViewGravity, 0.0f, (float) ((-this.backgroundPaddingTop) + i), 0.0f, 0.0f));
             } else {
-                this.containerView.addView(this.customView, LayoutHelper.createFrame(-1, -2.0f, 51, 0.0f, (float) i, 0.0f, 0.0f));
+                this.containerView.addView(this.customView, LayoutHelper.createFrame(-1, -2.0f, this.customViewGravity, 0.0f, (float) i, 0.0f, 0.0f));
             }
         } else if (this.items != null) {
             int i2 = 0;

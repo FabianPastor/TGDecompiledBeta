@@ -5350,6 +5350,7 @@
     <public type="string" name="PasswordReset" id="NUM" />
     <public type="string" name="PasteFromClipboard" id="NUM" />
     <public type="string" name="PauseAll" id="NUM" />
+    <public type="string" name="PaymentAppNotFoundForDeeplink" id="NUM" />
     <public type="string" name="PaymentBillingAddress" id="NUM" />
     <public type="string" name="PaymentCardCvv" id="NUM" />
     <public type="string" name="PaymentCardExpireDate" id="NUM" />
@@ -5845,6 +5846,7 @@
     <public type="string" name="Reacted_other" id="NUM" />
     <public type="string" name="Reacted_two" id="NUM" />
     <public type="string" name="Reacted_zero" id="NUM" />
+    <public type="string" name="ReactionInDialog" id="NUM" />
     <public type="string" name="Reactions" id="NUM" />
     <public type="string" name="ReactionsAll" id="NUM" />
     <public type="string" name="ReactionsCount" id="NUM" />

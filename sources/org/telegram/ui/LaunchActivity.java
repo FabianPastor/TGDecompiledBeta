@@ -871,7 +871,7 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
         L_0x0523:
             org.telegram.messenger.MediaController r13 = org.telegram.messenger.MediaController.getInstance()
             r13.setBaseActivity(r12, r1)
-            org.telegram.messenger.AndroidUtilities.startAppCenter(r12)
+            org.telegram.messenger.ApplicationLoader.startAppCenter(r12)
             r12.updateAppUpdateViews(r6)
             int r13 = android.os.Build.VERSION.SDK_INT
             r0 = 23

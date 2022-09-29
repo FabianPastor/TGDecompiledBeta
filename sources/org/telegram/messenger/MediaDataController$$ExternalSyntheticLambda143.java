@@ -1,15 +1,15 @@
 package org.telegram.messenger;
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda143 implements Runnable {
-    public final /* synthetic */ boolean[] f$0;
-    public final /* synthetic */ Runnable f$1;
+import org.telegram.ui.Components.Bulletin;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda143(boolean[] zArr, Runnable runnable) {
-        this.f$0 = zArr;
-        this.f$1 = runnable;
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda143 implements Runnable {
+    public final /* synthetic */ Bulletin.UndoButton f$0;
+
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda143(Bulletin.UndoButton undoButton) {
+        this.f$0 = undoButton;
     }
 
     public final void run() {
-        MediaDataController.lambda$fillWithAnimatedEmoji$198(this.f$0, this.f$1);
+        this.f$0.undo();
     }
 }

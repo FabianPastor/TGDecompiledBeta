@@ -237,6 +237,10 @@ public class VideoPlayerSeekBar {
     public void setSize(int i, int i2) {
         this.width = i;
         this.height = i2;
+        View view = this.parentView;
+        if (view != null) {
+            view.invalidate();
+        }
     }
 
     public int getWidth() {
@@ -254,25 +258,30 @@ public class VideoPlayerSeekBar {
         this.horizontalPadding = i;
     }
 
+    public void clearTimestamps() {
+        this.timestamps = null;
+        this.currentTimestamp = -1;
+        this.timestampsAppearing = 0.0f;
+        StaticLayout[] staticLayoutArr = this.timestampLabel;
+        if (staticLayoutArr != null) {
+            staticLayoutArr[1] = null;
+            staticLayoutArr[0] = null;
+        }
+        this.lastCaption = null;
+        this.lastVideoDuration = -1;
+    }
+
     public void updateTimestamps(MessageObject messageObject, long j) {
         Integer parseInt;
+        String str;
         if (messageObject == null || j < 0) {
-            this.timestamps = null;
-            this.currentTimestamp = -1;
-            this.timestampsAppearing = 0.0f;
-            StaticLayout[] staticLayoutArr = this.timestampLabel;
-            if (staticLayoutArr != null) {
-                staticLayoutArr[1] = null;
-                staticLayoutArr[0] = null;
-            }
-            this.lastCaption = null;
-            this.lastVideoDuration = -1;
+            clearTimestamps();
             return;
         }
         CharSequence charSequence = messageObject.caption;
         if (messageObject.isYouTubeVideo()) {
-            if (messageObject.youtubeDescription == null) {
-                messageObject.youtubeDescription = SpannableString.valueOf(messageObject.messageOwner.media.webpage.description);
+            if (messageObject.youtubeDescription == null && (str = messageObject.messageOwner.media.webpage.description) != null) {
+                messageObject.youtubeDescription = SpannableString.valueOf(str);
                 MessageObject.addUrlsByPattern(messageObject.isOut(), messageObject.youtubeDescription, false, 3, (int) j, false);
             }
             charSequence = messageObject.youtubeDescription;
@@ -284,10 +293,10 @@ public class VideoPlayerSeekBar {
                 this.timestamps = null;
                 this.currentTimestamp = -1;
                 this.timestampsAppearing = 0.0f;
-                StaticLayout[] staticLayoutArr2 = this.timestampLabel;
-                if (staticLayoutArr2 != null) {
-                    staticLayoutArr2[1] = null;
-                    staticLayoutArr2[0] = null;
+                StaticLayout[] staticLayoutArr = this.timestampLabel;
+                if (staticLayoutArr != null) {
+                    staticLayoutArr[1] = null;
+                    staticLayoutArr[0] = null;
                     return;
                 }
                 return;
@@ -317,10 +326,10 @@ public class VideoPlayerSeekBar {
                 this.timestamps = null;
                 this.currentTimestamp = -1;
                 this.timestampsAppearing = 0.0f;
-                StaticLayout[] staticLayoutArr3 = this.timestampLabel;
-                if (staticLayoutArr3 != null) {
-                    staticLayoutArr3[1] = null;
-                    staticLayoutArr3[0] = null;
+                StaticLayout[] staticLayoutArr2 = this.timestampLabel;
+                if (staticLayoutArr2 != null) {
+                    staticLayoutArr2[1] = null;
+                    staticLayoutArr2[0] = null;
                 }
             }
         }
@@ -482,6 +491,7 @@ public class VideoPlayerSeekBar {
         Canvas canvas2 = canvas;
         RectF rectF2 = rectF;
         Paint paint3 = paint2;
+        int i2 = 1;
         float dp = (float) AndroidUtilities.dp((float) AndroidUtilities.lerp(2, 1, this.transitionProgress));
         ArrayList<Pair<Float, CharSequence>> arrayList = this.timestamps;
         if (arrayList == null || arrayList.isEmpty()) {
@@ -498,20 +508,20 @@ public class VideoPlayerSeekBar {
         }
         tmpPath.reset();
         float dp3 = ((float) AndroidUtilities.dp(4.0f)) / (lerp2 - lerp);
-        int i2 = 0;
+        int i3 = 0;
         while (true) {
             i = -1;
-            if (i2 >= this.timestamps.size()) {
-                i2 = -1;
+            if (i3 >= this.timestamps.size()) {
+                i3 = -1;
                 break;
-            } else if (((Float) this.timestamps.get(i2).first).floatValue() >= dp3) {
+            } else if (((Float) this.timestamps.get(i3).first).floatValue() >= dp3) {
                 break;
             } else {
-                i2++;
+                i3++;
             }
         }
-        if (i2 < 0) {
-            i2 = 0;
+        if (i3 < 0) {
+            i3 = 0;
         }
         int size = this.timestamps.size() - 1;
         while (true) {
@@ -527,22 +537,26 @@ public class VideoPlayerSeekBar {
         if (i < 0) {
             i = this.timestamps.size();
         }
-        int i3 = i;
-        int i4 = i2;
-        while (i4 <= i3) {
-            if (i4 == i2) {
+        int i4 = i;
+        int i5 = i3;
+        while (i5 <= i4) {
+            if (i5 == i3) {
                 f = 0.0f;
             } else {
-                f = ((Float) this.timestamps.get(i4 - 1).first).floatValue();
+                f = ((Float) this.timestamps.get(i5 - 1).first).floatValue();
             }
-            if (i4 == i3) {
+            if (i5 == i4) {
                 f2 = 1.0f;
             } else {
-                f2 = ((Float) this.timestamps.get(i4).first).floatValue();
+                f2 = ((Float) this.timestamps.get(i5).first).floatValue();
+            }
+            while (i5 != i4 && i5 != 0 && i5 < this.timestamps.size() - i2 && ((Float) this.timestamps.get(i5).first).floatValue() - f <= dp3) {
+                i5++;
+                f2 = ((Float) this.timestamps.get(i5).first).floatValue();
             }
             RectF rectF3 = AndroidUtilities.rectTmp;
-            rectF3.left = AndroidUtilities.lerp(lerp, lerp2, f) + (i4 > 0 ? dp2 : 0.0f);
-            float lerp3 = AndroidUtilities.lerp(lerp, lerp2, f2) - (i4 < i3 ? dp2 : 0.0f);
+            rectF3.left = AndroidUtilities.lerp(lerp, lerp2, f) + (i5 > 0 ? dp2 : 0.0f);
+            float lerp3 = AndroidUtilities.lerp(lerp, lerp2, f2) - (i5 < i4 ? dp2 : 0.0f);
             rectF3.right = lerp3;
             float f5 = rectF2.right;
             boolean z = lerp3 > f5;
@@ -560,7 +574,7 @@ public class VideoPlayerSeekBar {
                 if (tmpRadii == null) {
                     tmpRadii = new float[8];
                 }
-                if (i4 == i2 || (z && rectF3.left >= rectF2.left)) {
+                if (i5 == i3 || (z && rectF3.left >= rectF2.left)) {
                     f3 = lerp;
                     float[] fArr = tmpRadii;
                     fArr[7] = dp;
@@ -572,8 +586,9 @@ public class VideoPlayerSeekBar {
                     fArr[4] = f8;
                     fArr[3] = f8;
                     fArr[2] = f8;
-                } else if (i4 >= i3) {
+                } else if (i5 >= i4) {
                     float[] fArr2 = tmpRadii;
+                    f3 = lerp;
                     float f9 = 0.7f * dp * this.timestampsAppearing;
                     fArr2[7] = f9;
                     fArr2[6] = f9;
@@ -583,11 +598,10 @@ public class VideoPlayerSeekBar {
                     fArr2[4] = dp;
                     fArr2[3] = dp;
                     fArr2[2] = dp;
-                    f3 = lerp;
                 } else {
-                    float[] fArr3 = tmpRadii;
                     f3 = lerp;
-                    float var_ = 0.7f * dp * this.timestampsAppearing;
+                    float[] fArr3 = tmpRadii;
+                    float var_ = this.timestampsAppearing * 0.7f * dp;
                     fArr3[5] = var_;
                     fArr3[4] = var_;
                     fArr3[3] = var_;
@@ -602,8 +616,9 @@ public class VideoPlayerSeekBar {
                     break;
                 }
             }
-            i4++;
+            i5++;
             lerp = f3;
+            i2 = 1;
         }
         canvas2.drawPath(tmpPath, paint3);
     }

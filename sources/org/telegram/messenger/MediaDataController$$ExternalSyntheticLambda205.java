@@ -11,6 +11,6 @@ public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda2
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        MediaDataController.lambda$markFeaturedStickersByIdAsRead$52(tLObject, tLRPC$TL_error);
+        MediaDataController.lambda$removePeer$132(tLObject, tLRPC$TL_error);
     }
 }

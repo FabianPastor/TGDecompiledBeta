@@ -10,6 +10,6 @@ public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda1
     }
 
     public final int compare(Object obj, Object obj2) {
-        return MediaDataController.lambda$increaseInlineRaiting$130((TLRPC$TL_topPeer) obj, (TLRPC$TL_topPeer) obj2);
+        return MediaDataController.lambda$increasePeerRaiting$133((TLRPC$TL_topPeer) obj, (TLRPC$TL_topPeer) obj2);
     }
 }

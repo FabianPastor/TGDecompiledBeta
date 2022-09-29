@@ -98,7 +98,6 @@ import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.FillLastLinearLayoutManager;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.Premium.AboutPremiumView;
-import org.telegram.ui.Components.Premium.DoubledLimitsBottomSheet;
 import org.telegram.ui.Components.Premium.GLIcon.GLIconTextureView;
 import org.telegram.ui.Components.Premium.PremiumButtonView;
 import org.telegram.ui.Components.Premium.PremiumFeatureBottomSheet;
@@ -733,12 +732,6 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
         if (view instanceof PremiumFeatureCell) {
             PremiumFeatureCell premiumFeatureCell = (PremiumFeatureCell) view;
             sentShowFeaturePreview(this.currentAccount, premiumFeatureCell.data.type);
-            if (premiumFeatureCell.data.type == 0) {
-                DoubledLimitsBottomSheet doubledLimitsBottomSheet = new DoubledLimitsBottomSheet(this, this.currentAccount, this.subscriptionTiers.get(this.selectedTierIndex));
-                doubledLimitsBottomSheet.setParentFragment(this);
-                showDialog(doubledLimitsBottomSheet);
-                return;
-            }
             showDialog(new PremiumFeatureBottomSheet(this, premiumFeatureCell.data.type, false, this.subscriptionTiers.get(this.selectedTierIndex)));
         }
     }

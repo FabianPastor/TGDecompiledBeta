@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
+import java.util.Iterator;
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DispatchQueue;
@@ -420,9 +421,21 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
 
     private void updateRows(ArrayList<MessageObject> arrayList, ArrayList<MessageObject> arrayList2) {
         this.currentLoadingFiles.clear();
-        this.currentLoadingFiles.addAll(arrayList);
+        Iterator<MessageObject> it = arrayList.iterator();
+        while (it.hasNext()) {
+            MessageObject next = it.next();
+            if (!next.isRoundVideo() && !next.isVoice()) {
+                this.currentLoadingFiles.add(next);
+            }
+        }
         this.recentLoadingFiles.clear();
-        this.recentLoadingFiles.addAll(arrayList2);
+        Iterator<MessageObject> it2 = arrayList2.iterator();
+        while (it2.hasNext()) {
+            MessageObject next2 = it2.next();
+            if (!next2.isRoundVideo() && !next2.isVoice()) {
+                this.recentLoadingFiles.add(next2);
+            }
+        }
         int i = 0;
         this.rowCount = 0;
         this.downloadingFilesHeader = -1;

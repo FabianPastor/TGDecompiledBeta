@@ -891,14 +891,13 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
         /* JADX WARNING: Code restructure failed: missing block: B:55:0x012b, code lost:
             if (r12.contains(" " + r0) != false) goto L_0x0131;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:91:0x0222, code lost:
-            if (r6.contains(" " + r12) != false) goto L_0x0231;
+        /* JADX WARNING: Code restructure failed: missing block: B:96:0x0234, code lost:
+            if (r6.contains(" " + r12) != false) goto L_0x0243;
          */
         /* JADX WARNING: Multi-variable type inference failed */
-        /* JADX WARNING: Removed duplicated region for block: B:104:0x0270 A[LOOP:3: B:82:0x01e8->B:104:0x0270, LOOP_END] */
-        /* JADX WARNING: Removed duplicated region for block: B:111:0x0134 A[SYNTHETIC] */
-        /* JADX WARNING: Removed duplicated region for block: B:116:0x0234 A[SYNTHETIC] */
-        /* JADX WARNING: Removed duplicated region for block: B:70:0x018c A[LOOP:1: B:27:0x00a5->B:70:0x018c, LOOP_END] */
+        /* JADX WARNING: Removed duplicated region for block: B:111:0x0286 A[LOOP:3: B:87:0x01fa->B:111:0x0286, LOOP_END] */
+        /* JADX WARNING: Removed duplicated region for block: B:125:0x024a A[SYNTHETIC] */
+        /* JADX WARNING: Removed duplicated region for block: B:75:0x019e A[LOOP:1: B:27:0x00a5->B:75:0x019e, LOOP_END] */
         /* JADX WARNING: Unknown variable types count: 1 */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public /* synthetic */ void lambda$processSearch$1(java.lang.String r19, java.util.ArrayList r20, java.util.ArrayList r21, int r22, int r23) {
@@ -954,7 +953,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
                 int r11 = r20.size()
                 java.lang.String r13 = "@"
                 java.lang.String r14 = " "
-                if (r10 >= r11) goto L_0x01a2
+                if (r10 >= r11) goto L_0x01b4
                 r11 = r20
                 java.lang.Object r15 = r11.get(r10)
                 org.telegram.messenger.ContactsController$Contact r15 = (org.telegram.messenger.ContactsController.Contact) r15
@@ -984,7 +983,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
                 r11 = 0
                 r16 = 0
             L_0x00a5:
-                if (r11 >= r7) goto L_0x0198
+                if (r11 >= r7) goto L_0x01aa
                 r0 = r8[r11]
                 if (r5 == 0) goto L_0x00c6
                 boolean r17 = r5.startsWith(r0)
@@ -1046,24 +1045,32 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
             L_0x0131:
                 r1 = 3
             L_0x0132:
-                if (r1 == 0) goto L_0x018c
+                r16 = r4
+                if (r1 == 0) goto L_0x019e
+                java.util.ArrayList<java.lang.String> r4 = r15.phones
+                boolean r4 = r4.isEmpty()
+                if (r4 == 0) goto L_0x0146
+                java.util.ArrayList<java.lang.String> r4 = r15.shortPhones
+                boolean r4 = r4.isEmpty()
+                if (r4 != 0) goto L_0x019e
+            L_0x0146:
                 r4 = 3
-                if (r1 != r4) goto L_0x0143
+                if (r1 != r4) goto L_0x0155
                 java.lang.String r1 = r15.first_name
                 java.lang.String r4 = r15.last_name
                 java.lang.CharSequence r0 = org.telegram.messenger.AndroidUtilities.generateSearchName(r1, r4, r0)
                 r3.add(r0)
-                goto L_0x017e
-            L_0x0143:
+                goto L_0x0190
+            L_0x0155:
                 r4 = 1
-                if (r1 != r4) goto L_0x0154
+                if (r1 != r4) goto L_0x0166
                 org.telegram.tgnet.TLRPC$User r1 = r15.user
                 java.lang.String r4 = r1.first_name
                 java.lang.String r1 = r1.last_name
                 java.lang.CharSequence r0 = org.telegram.messenger.AndroidUtilities.generateSearchName(r4, r1, r0)
                 r3.add(r0)
-                goto L_0x017e
-            L_0x0154:
+                goto L_0x0190
+            L_0x0166:
                 java.lang.StringBuilder r1 = new java.lang.StringBuilder
                 r1.<init>()
                 r1.append(r13)
@@ -1079,45 +1086,45 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
                 r4 = 0
                 java.lang.CharSequence r0 = org.telegram.messenger.AndroidUtilities.generateSearchName(r1, r4, r0)
                 r3.add(r0)
-            L_0x017e:
+            L_0x0190:
                 org.telegram.tgnet.TLRPC$User r0 = r15.user
-                if (r0 == 0) goto L_0x0188
+                if (r0 == 0) goto L_0x019a
                 long r0 = r0.id
                 r4 = 1
                 r9.put(r0, r4)
-            L_0x0188:
+            L_0x019a:
                 r2.add(r15)
-                goto L_0x0198
-            L_0x018c:
-                r16 = r4
+                goto L_0x01aa
+            L_0x019e:
                 int r11 = r11 + 1
                 r0 = r18
+                r4 = r16
                 r16 = r1
                 r1 = r19
                 goto L_0x00a5
-            L_0x0198:
+            L_0x01aa:
                 int r10 = r10 + 1
                 r4 = 0
                 r6 = 1
                 r0 = r18
                 r1 = r19
                 goto L_0x005a
-            L_0x01a2:
+            L_0x01b4:
                 r0 = 0
-            L_0x01a3:
+            L_0x01b5:
                 int r1 = r21.size()
-                if (r0 >= r1) goto L_0x027a
+                if (r0 >= r1) goto L_0x0290
                 r1 = r21
                 java.lang.Object r4 = r1.get(r0)
                 org.telegram.tgnet.TLRPC$TL_contact r4 = (org.telegram.tgnet.TLRPC$TL_contact) r4
                 long r5 = r4.user_id
                 int r5 = r9.indexOfKey(r5)
-                if (r5 < 0) goto L_0x01bd
-            L_0x01b9:
+                if (r5 < 0) goto L_0x01cf
+            L_0x01cb:
                 r12 = 0
                 r15 = 1
-                goto L_0x0276
-            L_0x01bd:
+                goto L_0x028c
+            L_0x01cf:
                 org.telegram.messenger.MessagesController r5 = org.telegram.messenger.MessagesController.getInstance(r22)
                 long r10 = r4.user_id
                 java.lang.Long r4 = java.lang.Long.valueOf(r10)
@@ -1129,54 +1136,56 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
                 org.telegram.messenger.LocaleController r6 = org.telegram.messenger.LocaleController.getInstance()
                 java.lang.String r6 = r6.getTranslitString(r5)
                 boolean r10 = r5.equals(r6)
-                if (r10 == 0) goto L_0x01e6
+                if (r10 == 0) goto L_0x01f8
                 r6 = 0
-            L_0x01e6:
+            L_0x01f8:
                 r10 = 0
                 r11 = 0
-            L_0x01e8:
-                if (r11 >= r7) goto L_0x01b9
+            L_0x01fa:
+                if (r11 >= r7) goto L_0x01cb
                 r12 = r8[r11]
                 boolean r15 = r5.startsWith(r12)
-                if (r15 != 0) goto L_0x0231
+                if (r15 != 0) goto L_0x0243
                 java.lang.StringBuilder r15 = new java.lang.StringBuilder
                 r15.<init>()
                 r15.append(r14)
                 r15.append(r12)
                 java.lang.String r15 = r15.toString()
                 boolean r15 = r5.contains(r15)
-                if (r15 != 0) goto L_0x0231
-                if (r6 == 0) goto L_0x0225
+                if (r15 != 0) goto L_0x0243
+                if (r6 == 0) goto L_0x0237
                 boolean r15 = r6.startsWith(r12)
-                if (r15 != 0) goto L_0x0231
+                if (r15 != 0) goto L_0x0243
                 java.lang.StringBuilder r15 = new java.lang.StringBuilder
                 r15.<init>()
                 r15.append(r14)
                 r15.append(r12)
                 java.lang.String r15 = r15.toString()
                 boolean r15 = r6.contains(r15)
-                if (r15 == 0) goto L_0x0225
-                goto L_0x0231
-            L_0x0225:
+                if (r15 == 0) goto L_0x0237
+                goto L_0x0243
+            L_0x0237:
                 java.lang.String r15 = r4.username
-                if (r15 == 0) goto L_0x0232
+                if (r15 == 0) goto L_0x0244
                 boolean r15 = r15.startsWith(r12)
-                if (r15 == 0) goto L_0x0232
+                if (r15 == 0) goto L_0x0244
                 r10 = 2
-                goto L_0x0232
-            L_0x0231:
+                goto L_0x0244
+            L_0x0243:
                 r10 = 1
-            L_0x0232:
-                if (r10 == 0) goto L_0x0270
+            L_0x0244:
+                if (r10 == 0) goto L_0x0286
+                java.lang.String r15 = r4.phone
+                if (r15 == 0) goto L_0x0286
                 r15 = 1
-                if (r10 != r15) goto L_0x0244
+                if (r10 != r15) goto L_0x025a
                 java.lang.String r5 = r4.first_name
                 java.lang.String r6 = r4.last_name
                 java.lang.CharSequence r5 = org.telegram.messenger.AndroidUtilities.generateSearchName(r5, r6, r12)
                 r3.add(r5)
                 r12 = 0
-                goto L_0x026c
-            L_0x0244:
+                goto L_0x0282
+            L_0x025a:
                 java.lang.StringBuilder r5 = new java.lang.StringBuilder
                 r5.<init>()
                 r5.append(r13)
@@ -1191,18 +1200,18 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
                 r12 = 0
                 java.lang.CharSequence r5 = org.telegram.messenger.AndroidUtilities.generateSearchName(r5, r12, r6)
                 r3.add(r5)
-            L_0x026c:
+            L_0x0282:
                 r2.add(r4)
-                goto L_0x0276
-            L_0x0270:
+                goto L_0x028c
+            L_0x0286:
                 r12 = 0
                 r15 = 1
                 int r11 = r11 + 1
-                goto L_0x01e8
-            L_0x0276:
+                goto L_0x01fa
+            L_0x028c:
                 int r0 = r0 + 1
-                goto L_0x01a3
-            L_0x027a:
+                goto L_0x01b5
+            L_0x0290:
                 r0 = r18
                 r4 = r19
                 r5 = r23

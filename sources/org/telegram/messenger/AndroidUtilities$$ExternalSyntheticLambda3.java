@@ -9,6 +9,6 @@ public final /* synthetic */ class AndroidUtilities$$ExternalSyntheticLambda3 im
     }
 
     public final boolean acceptMatch(CharSequence charSequence, int i, int i2) {
-        return AndroidUtilities.lambda$static$2(charSequence, i, i2);
+        return AndroidUtilities.lambda$static$3(charSequence, i, i2);
     }
 }

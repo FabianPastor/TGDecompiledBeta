@@ -1,23 +1,25 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
+import androidx.collection.LongSparseArray;
 
 public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda56 implements Runnable {
     public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ Integer f$1;
-    public final /* synthetic */ ArrayList f$2;
-    public final /* synthetic */ ArrayList[] f$3;
-    public final /* synthetic */ Runnable f$4;
+    public final /* synthetic */ LongSparseArray f$1;
+    public final /* synthetic */ LongSparseArray f$2;
+    public final /* synthetic */ boolean f$3;
+    public final /* synthetic */ long f$4;
+    public final /* synthetic */ Runnable f$5;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda56(MediaDataController mediaDataController, Integer num, ArrayList arrayList, ArrayList[] arrayListArr, Runnable runnable) {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda56(MediaDataController mediaDataController, LongSparseArray longSparseArray, LongSparseArray longSparseArray2, boolean z, long j, Runnable runnable) {
         this.f$0 = mediaDataController;
-        this.f$1 = num;
-        this.f$2 = arrayList;
-        this.f$3 = arrayListArr;
-        this.f$4 = runnable;
+        this.f$1 = longSparseArray;
+        this.f$2 = longSparseArray2;
+        this.f$3 = z;
+        this.f$4 = j;
+        this.f$5 = runnable;
     }
 
     public final void run() {
-        this.f$0.lambda$fillWithAnimatedEmoji$195(this.f$1, this.f$2, this.f$3, this.f$4);
+        this.f$0.lambda$loadReplyMessagesForMessages$153(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
     }
 }

@@ -1,19 +1,12 @@
 package org.telegram.messenger;
 
-import org.telegram.messenger.ImageReceiver;
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda155 implements GenericProvider {
+    public static final /* synthetic */ MediaDataController$$ExternalSyntheticLambda155 INSTANCE = new MediaDataController$$ExternalSyntheticLambda155();
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda155 implements ImageReceiver.ImageReceiverDelegate {
-    public final /* synthetic */ ImageReceiver f$0;
-
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda155(ImageReceiver imageReceiver) {
-        this.f$0 = imageReceiver;
+    private /* synthetic */ MediaDataController$$ExternalSyntheticLambda155() {
     }
 
-    public final void didSetImage(ImageReceiver imageReceiver, boolean z, boolean z2, boolean z3) {
-        MediaDataController.lambda$preloadImage$14(this.f$0, imageReceiver, z, z2, z3);
-    }
-
-    public /* synthetic */ void onAnimationReady(ImageReceiver imageReceiver) {
-        ImageReceiver.ImageReceiverDelegate.CC.$default$onAnimationReady(this, imageReceiver);
+    public final Object provide(Object obj) {
+        return MediaDataController.lambda$getEntities$157((Void) obj);
     }
 }

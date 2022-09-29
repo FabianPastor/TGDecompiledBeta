@@ -10,6 +10,6 @@ public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda1
     }
 
     public final int compare(Object obj, Object obj2) {
-        return MediaDataController.lambda$getTextStyleRuns$156((TLRPC$MessageEntity) obj, (TLRPC$MessageEntity) obj2);
+        return MediaDataController.lambda$static$138((TLRPC$MessageEntity) obj, (TLRPC$MessageEntity) obj2);
     }
 }

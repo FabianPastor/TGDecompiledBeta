@@ -91,7 +91,7 @@ public class ReactedUsersListView extends FrameLayout {
         void onProfileSelected(ReactedUsersListView reactedUsersListView, long j, TLRPC$MessagePeerReaction tLRPC$MessagePeerReaction);
     }
 
-    public ReactedUsersListView(final Context context, final Theme.ResourcesProvider resourcesProvider2, int i, MessageObject messageObject, TLRPC$ReactionCount tLRPC$ReactionCount, boolean z) {
+    public ReactedUsersListView(final Context context, final Theme.ResourcesProvider resourcesProvider2, final int i, MessageObject messageObject, TLRPC$ReactionCount tLRPC$ReactionCount, boolean z) {
         super(context);
         TLRPC$Reaction tLRPC$Reaction;
         int i2;
@@ -132,7 +132,7 @@ public class ReactedUsersListView extends FrameLayout {
             this.listView.setVerticalScrollbarThumbDrawable(new ColorDrawable(Theme.getColor("listSelectorSDK21")));
         }
         RecyclerListView recyclerListView = this.listView;
-        AnonymousClass2 r7 = new RecyclerView.Adapter() {
+        AnonymousClass2 r1 = new RecyclerView.Adapter() {
             public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
                 FrameLayout frameLayout;
                 if (i != 0) {
@@ -161,15 +161,15 @@ public class ReactedUsersListView extends FrameLayout {
             }
 
             public int getItemCount() {
-                return ReactedUsersListView.this.userReactions.size() + (ReactedUsersListView.this.customReactionsEmoji.isEmpty() ^ true ? 1 : 0);
+                return ReactedUsersListView.this.userReactions.size() + ((ReactedUsersListView.this.customReactionsEmoji.isEmpty() || MessagesController.getInstance(i).premiumLocked) ? 0 : 1);
             }
 
             public int getItemViewType(int i) {
                 return i < ReactedUsersListView.this.userReactions.size() ? 0 : 1;
             }
         };
-        this.adapter = r7;
-        recyclerListView.setAdapter(r7);
+        this.adapter = r1;
+        recyclerListView.setAdapter(r1);
         this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new ReactedUsersListView$$ExternalSyntheticLambda6(this));
         this.listView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             public void onScrolled(RecyclerView recyclerView, int i, int i2) {
@@ -182,16 +182,17 @@ public class ReactedUsersListView extends FrameLayout {
         this.listView.setVerticalScrollBarEnabled(true);
         this.listView.setAlpha(0.0f);
         addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        AnonymousClass4 r5 = new FlickerLoadingView(context, resourcesProvider2) {
+        AnonymousClass4 r6 = new FlickerLoadingView(context, resourcesProvider2) {
             public int getAdditionalHeight() {
-                if (!ReactedUsersListView.this.customReactionsEmoji.isEmpty()) {
-                    return ReactedUsersListView.this.messageContainsEmojiButton.getMeasuredHeight() + AndroidUtilities.dp(8.0f);
+                MessageContainsEmojiButton messageContainsEmojiButton;
+                if (ReactedUsersListView.this.customReactionsEmoji.isEmpty() || (messageContainsEmojiButton = ReactedUsersListView.this.messageContainsEmojiButton) == null) {
+                    return 0;
                 }
-                return 0;
+                return messageContainsEmojiButton.getMeasuredHeight() + AndroidUtilities.dp(8.0f);
             }
         };
-        this.loadingView = r5;
-        r5.setIsSingleCell(true);
+        this.loadingView = r6;
+        r6.setIsSingleCell(true);
         this.loadingView.setItemsCount(this.predictiveCount);
         addView(this.loadingView, LayoutHelper.createFrame(-1, -1.0f));
         if (!z && (tLRPC$Reaction2 = this.filter) != null && (tLRPC$Reaction2 instanceof TLRPC$TL_reactionCustomEmoji)) {
@@ -361,6 +362,7 @@ public class ReactedUsersListView extends FrameLayout {
 
     /* access modifiers changed from: private */
     public void updateCustomReactionsButton() {
+        this.customEmojiStickerSets.clear();
         ArrayList arrayList = new ArrayList();
         HashSet hashSet = new HashSet();
         for (int i = 0; i < this.customReactionsEmoji.size(); i++) {
@@ -370,11 +372,12 @@ public class ReactedUsersListView extends FrameLayout {
                 hashSet.add(Long.valueOf(inputStickerSet.id));
             }
         }
-        this.customEmojiStickerSets.clear();
-        this.customEmojiStickerSets.addAll(arrayList);
-        MessageContainsEmojiButton messageContainsEmojiButton2 = new MessageContainsEmojiButton(this.currentAccount, getContext(), this.resourcesProvider, arrayList, 1);
-        this.messageContainsEmojiButton = messageContainsEmojiButton2;
-        messageContainsEmojiButton2.checkWidth = false;
+        if (!MessagesController.getInstance(this.currentAccount).premiumLocked) {
+            this.customEmojiStickerSets.addAll(arrayList);
+            MessageContainsEmojiButton messageContainsEmojiButton2 = new MessageContainsEmojiButton(this.currentAccount, getContext(), this.resourcesProvider, arrayList, 1);
+            this.messageContainsEmojiButton = messageContainsEmojiButton2;
+            messageContainsEmojiButton2.checkWidth = false;
+        }
     }
 
     /* access modifiers changed from: private */

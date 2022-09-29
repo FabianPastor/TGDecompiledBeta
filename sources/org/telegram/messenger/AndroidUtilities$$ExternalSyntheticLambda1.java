@@ -14,6 +14,6 @@ public final /* synthetic */ class AndroidUtilities$$ExternalSyntheticLambda1 im
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        AndroidUtilities.lambda$setNavigationBarColor$12(this.f$0, this.f$1, valueAnimator);
+        AndroidUtilities.lambda$setNavigationBarColor$13(this.f$0, this.f$1, valueAnimator);
     }
 }
