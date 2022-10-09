@@ -1,6 +1,7 @@
 package org.telegram.messenger.utils;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import java.io.File;
 import java.io.IOException;
@@ -29,6 +30,7 @@ public class BitmapsCache {
     String fileName;
     private int frameIndex;
     int h;
+    BitmapFactory.Options options;
     volatile boolean recycled;
     private final Cacheable source;
     int w;
@@ -250,14 +252,14 @@ public class BitmapsCache {
         }
     }
 
-    /* JADX WARN: Removed duplicated region for block: B:62:0x00d0 A[EXC_TOP_SPLITTER, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:65:0x00df A[EXC_TOP_SPLITTER, SYNTHETIC] */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
     public int getFrame(int r10, android.graphics.Bitmap r11) {
         /*
-            Method dump skipped, instructions count: 217
+            Method dump skipped, instructions count: 232
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.utils.BitmapsCache.getFrame(int, android.graphics.Bitmap):int");

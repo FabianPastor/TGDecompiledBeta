@@ -417,7 +417,8 @@ public class MessageObject {
     }
 
     public void copyStableParams(MessageObject messageObject) {
-        ArrayList<TLRPC$ReactionCount> arrayList;
+        ArrayList<TextLayoutBlock> arrayList;
+        ArrayList<TLRPC$ReactionCount> arrayList2;
         TLRPC$TL_messageReactions tLRPC$TL_messageReactions;
         this.stableId = messageObject.stableId;
         TLRPC$Message tLRPC$Message = this.messageOwner;
@@ -425,7 +426,7 @@ public class MessageObject {
         this.forcePlayEffect = messageObject.forcePlayEffect;
         this.wasJustSent = messageObject.wasJustSent;
         TLRPC$TL_messageReactions tLRPC$TL_messageReactions2 = tLRPC$Message.reactions;
-        if (tLRPC$TL_messageReactions2 != null && (arrayList = tLRPC$TL_messageReactions2.results) != null && !arrayList.isEmpty() && (tLRPC$TL_messageReactions = messageObject.messageOwner.reactions) != null && tLRPC$TL_messageReactions.results != null) {
+        if (tLRPC$TL_messageReactions2 != null && (arrayList2 = tLRPC$TL_messageReactions2.results) != null && !arrayList2.isEmpty() && (tLRPC$TL_messageReactions = messageObject.messageOwner.reactions) != null && tLRPC$TL_messageReactions.results != null) {
             for (int i = 0; i < this.messageOwner.reactions.results.size(); i++) {
                 TLRPC$ReactionCount tLRPC$ReactionCount = this.messageOwner.reactions.results.get(i);
                 for (int i2 = 0; i2 < messageObject.messageOwner.reactions.results.size(); i2++) {
@@ -438,11 +439,12 @@ public class MessageObject {
         }
         boolean z = messageObject.isSpoilersRevealed;
         this.isSpoilersRevealed = z;
-        if (z) {
-            Iterator<TextLayoutBlock> it = this.textLayoutBlocks.iterator();
-            while (it.hasNext()) {
-                it.next().spoilers.clear();
-            }
+        if (!z || (arrayList = this.textLayoutBlocks) == null) {
+            return;
+        }
+        Iterator<TextLayoutBlock> it = arrayList.iterator();
+        while (it.hasNext()) {
+            it.next().spoilers.clear();
         }
     }
 

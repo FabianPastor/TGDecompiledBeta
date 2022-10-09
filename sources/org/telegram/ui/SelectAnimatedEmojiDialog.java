@@ -24,7 +24,9 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Parcelable;
 import android.os.SystemClock;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.LongSparseArray;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
@@ -3444,7 +3446,27 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
             this.box.addView(this.search, LayoutHelper.createFrame(36, 36, 51));
             AnonymousClass2 anonymousClass2 = new AnonymousClass2(context, SelectAnimatedEmojiDialog.this.resourcesProvider, SelectAnimatedEmojiDialog.this);
             this.input = anonymousClass2;
-            anonymousClass2.setBackground(null);
+            anonymousClass2.addTextChangedListener(new TextWatcher(SelectAnimatedEmojiDialog.this) { // from class: org.telegram.ui.SelectAnimatedEmojiDialog.SearchBox.3
+                @Override // android.text.TextWatcher
+                public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+                }
+
+                @Override // android.text.TextWatcher
+                public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+                }
+
+                @Override // android.text.TextWatcher
+                public void afterTextChanged(Editable editable) {
+                    SearchBox searchBox = SearchBox.this;
+                    SelectAnimatedEmojiDialog selectAnimatedEmojiDialog = SelectAnimatedEmojiDialog.this;
+                    String str = null;
+                    if (searchBox.input.getText() != null && AndroidUtilities.trim(SearchBox.this.input.getText(), null).length() != 0) {
+                        str = SearchBox.this.input.getText().toString();
+                    }
+                    selectAnimatedEmojiDialog.search(str);
+                }
+            });
+            this.input.setBackground(null);
             this.input.setPadding(0, 0, AndroidUtilities.dp(4.0f), 0);
             this.input.setTextSize(1, 16.0f);
             this.input.setHint(LocaleController.getString(SelectAnimatedEmojiDialog.this.type == 0 ? R.string.SearchEmojiHint : R.string.SearchReactionsHint));
@@ -3461,7 +3483,7 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
             this.clear = imageView2;
             imageView2.setScaleType(ImageView.ScaleType.CENTER);
             ImageView imageView3 = this.clear;
-            CloseProgressDrawable2 closeProgressDrawable2 = new CloseProgressDrawable2(1.25f, SelectAnimatedEmojiDialog.this) { // from class: org.telegram.ui.SelectAnimatedEmojiDialog.SearchBox.3
+            CloseProgressDrawable2 closeProgressDrawable2 = new CloseProgressDrawable2(1.25f, SelectAnimatedEmojiDialog.this) { // from class: org.telegram.ui.SelectAnimatedEmojiDialog.SearchBox.4
                 @Override // org.telegram.ui.Components.CloseProgressDrawable2
                 protected int getCurrentColor() {
                     return Theme.getColor("chat_emojiSearchIcon", SelectAnimatedEmojiDialog.this.resourcesProvider);
@@ -3494,18 +3516,6 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
         public class AnonymousClass2 extends EditTextCaption {
             AnonymousClass2(Context context, Theme.ResourcesProvider resourcesProvider, SelectAnimatedEmojiDialog selectAnimatedEmojiDialog) {
                 super(context, resourcesProvider);
-            }
-
-            /* JADX INFO: Access modifiers changed from: protected */
-            @Override // org.telegram.ui.Components.EditTextEffects, android.widget.TextView
-            public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-                super.onTextChanged(charSequence, i, i2, i3);
-                SelectAnimatedEmojiDialog selectAnimatedEmojiDialog = SelectAnimatedEmojiDialog.this;
-                String str = null;
-                if (charSequence != null && AndroidUtilities.trim(charSequence, null).length() != 0) {
-                    str = charSequence.toString();
-                }
-                selectAnimatedEmojiDialog.search(str);
             }
 
             /* JADX INFO: Access modifiers changed from: protected */

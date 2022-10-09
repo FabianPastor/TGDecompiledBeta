@@ -269,7 +269,10 @@ public class BotHelpCell extends View {
     @Override // android.view.View
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
         super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
-        accessibilityNodeInfo.setText(this.textLayout.getText());
+        StaticLayout staticLayout = this.textLayout;
+        if (staticLayout != null) {
+            accessibilityNodeInfo.setText(staticLayout.getText());
+        }
     }
 
     public boolean animating() {
