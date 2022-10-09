@@ -993,7 +993,7 @@ public class DialogCell extends BaseCell {
     /* JADX WARN: Removed duplicated region for block: B:849:0x15ef  */
     /* JADX WARN: Removed duplicated region for block: B:860:0x1612  */
     /* JADX WARN: Removed duplicated region for block: B:870:? A[RETURN, SYNTHETIC] */
-    /* JADX WARN: Type inference failed for: r9v28, types: [int, boolean] */
+    /* JADX WARN: Type inference failed for: r9v28, types: [boolean, int] */
     /* JADX WARN: Type inference failed for: r9v29 */
     /* JADX WARN: Type inference failed for: r9v58 */
     @Override // android.view.View

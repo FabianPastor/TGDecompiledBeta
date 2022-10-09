@@ -420,7 +420,7 @@ public class AboutLinkCell extends FrameLayout {
             } else if (i != 1) {
             } else {
                 AndroidUtilities.addToClipboard(str);
-                if (Build.VERSION.SDK_INT >= 31) {
+                if (!AndroidUtilities.shouldShowClipboardToast()) {
                     return;
                 }
                 if (str.startsWith("@")) {

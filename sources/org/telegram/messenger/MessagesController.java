@@ -7762,7 +7762,7 @@ public class MessagesController extends BaseController implements NotificationCe
     /* JADX WARN: Removed duplicated region for block: B:374:0x03c7  */
     /* JADX WARN: Type inference failed for: r2v32 */
     /* JADX WARN: Type inference failed for: r2v6 */
-    /* JADX WARN: Type inference failed for: r2v7, types: [int, boolean] */
+    /* JADX WARN: Type inference failed for: r2v7, types: [boolean, int] */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
@@ -15747,8 +15747,11 @@ public class MessagesController extends BaseController implements NotificationCe
         if (baseFragment == null || baseFragment.getParentActivity() == null) {
             return;
         }
-        AlertDialog.Builder builder = new AlertDialog.Builder(baseFragment.getParentActivity());
-        builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+        AlertDialog.Builder builder = new AlertDialog.Builder(baseFragment.getParentActivity(), baseFragment.getResourceProvider());
+        HashMap hashMap = new HashMap();
+        hashMap.put("info1.**", Integer.valueOf(baseFragment.getThemedColor("dialogTopBackground")));
+        hashMap.put("info2.**", Integer.valueOf(baseFragment.getThemedColor("dialogTopBackground")));
+        builder.setTopAnimation(R.raw.info, 72, false, baseFragment.getThemedColor("dialogTopBackground"), hashMap);
         builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
         builder.setMessage(str);
         baseFragment.showDialog(builder.create());

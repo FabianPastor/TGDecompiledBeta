@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import androidx.core.content.ContextCompat;
+import com.google.android.exoplayer2.util.Log;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -66,6 +67,7 @@ public class CustomEmojiReactionsWindow {
     RectF fromRect = new RectF();
     public RectF drawingRect = new RectF();
     Path pathToClip = new Path();
+    int[] location = new int[2];
     private int frameDrawCount = 0;
 
     static /* synthetic */ int access$808(CustomEmojiReactionsWindow customEmojiReactionsWindow) {
@@ -260,24 +262,26 @@ public class CustomEmojiReactionsWindow {
         ReactionsContainerLayout reactionsContainerLayout = this.reactionsContainerLayout;
         this.fromRadius = reactionsContainerLayout.radius;
         int[] iArr = new int[2];
-        int[] iArr2 = new int[2];
-        reactionsContainerLayout.getLocationOnScreen(iArr);
-        this.windowView.getLocationOnScreen(iArr2);
-        float dp = ((iArr[1] - iArr2[1]) - AndroidUtilities.dp(44.0f)) - AndroidUtilities.dp(34.0f);
+        if (z) {
+            reactionsContainerLayout.getLocationOnScreen(this.location);
+        }
+        this.windowView.getLocationOnScreen(iArr);
+        float dp = ((this.location[1] - iArr[1]) - AndroidUtilities.dp(44.0f)) - AndroidUtilities.dp(34.0f);
         if (this.containerView.getMeasuredHeight() + dp > this.windowView.getMeasuredHeight() - AndroidUtilities.dp(32.0f)) {
             dp = (this.windowView.getMeasuredHeight() - AndroidUtilities.dp(32.0f)) - this.containerView.getMeasuredHeight();
         }
         if (dp < AndroidUtilities.dp(16.0f)) {
             dp = AndroidUtilities.dp(16.0f);
         }
-        this.containerView.setTranslationX((iArr[0] - iArr2[0]) - AndroidUtilities.dp(2.0f));
+        this.containerView.setTranslationX((this.location[0] - iArr[0]) - AndroidUtilities.dp(2.0f));
         if (!z) {
             this.yTranslation = this.containerView.getTranslationY();
         } else {
             this.yTranslation = dp;
+            this.containerView.setTranslationY(dp);
         }
-        this.containerView.setTranslationY(this.yTranslation);
-        this.fromRect.offset((iArr[0] - iArr2[0]) - this.containerView.getX(), (iArr[1] - iArr2[1]) - this.containerView.getY());
+        Log.d("kek", "" + this.reactionsContainerLayout.rect.top + " " + this.location[1] + " " + iArr[1] + " " + this.containerView.getY());
+        this.fromRect.offset(((float) (this.location[0] - iArr[0])) - this.containerView.getX(), ((float) (this.location[1] - iArr[1])) - this.containerView.getY());
         this.reactionsContainerLayout.setCustomEmojiEnterProgress(this.enterTransitionProgress);
         float[] fArr = new float[2];
         fArr[0] = this.enterTransitionProgress;

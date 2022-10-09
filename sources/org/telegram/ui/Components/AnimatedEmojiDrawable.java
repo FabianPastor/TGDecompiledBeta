@@ -477,20 +477,20 @@ public class AnimatedEmojiDrawable extends Drawable {
         return this.document;
     }
 
-    /* JADX WARN: Removed duplicated region for block: B:66:0x0183  */
-    /* JADX WARN: Removed duplicated region for block: B:67:0x0186  */
-    /* JADX WARN: Removed duplicated region for block: B:70:0x018c  */
-    /* JADX WARN: Removed duplicated region for block: B:71:0x01ac  */
-    /* JADX WARN: Removed duplicated region for block: B:85:0x0205  */
-    /* JADX WARN: Removed duplicated region for block: B:88:0x0215  */
-    /* JADX WARN: Removed duplicated region for block: B:89:0x0226  */
+    /* JADX WARN: Removed duplicated region for block: B:68:0x0189  */
+    /* JADX WARN: Removed duplicated region for block: B:69:0x018c  */
+    /* JADX WARN: Removed duplicated region for block: B:72:0x0192  */
+    /* JADX WARN: Removed duplicated region for block: B:73:0x01b2  */
+    /* JADX WARN: Removed duplicated region for block: B:87:0x020b  */
+    /* JADX WARN: Removed duplicated region for block: B:90:0x021b  */
+    /* JADX WARN: Removed duplicated region for block: B:91:0x022c  */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
     private void initDocument() {
         /*
-            Method dump skipped, instructions count: 600
+            Method dump skipped, instructions count: 606
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AnimatedEmojiDrawable.initDocument():void");

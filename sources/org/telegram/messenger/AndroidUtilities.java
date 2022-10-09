@@ -3014,7 +3014,10 @@ public class AndroidUtilities {
                 return;
             }
             AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+            HashMap hashMap = new HashMap();
+            hashMap.put("info1.**", Integer.valueOf(baseFragment.getThemedColor("dialogTopBackground")));
+            hashMap.put("info2.**", Integer.valueOf(baseFragment.getThemedColor("dialogTopBackground")));
+            builder.setTopAnimation(R.raw.info, 72, false, baseFragment.getThemedColor("dialogTopBackground"), hashMap);
             builder.setMessage(LocaleController.getString("IncorrectTheme", R.string.IncorrectTheme));
             builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
             baseFragment.showDialog(builder.create());
@@ -3053,14 +3056,13 @@ public class AndroidUtilities {
                 return;
             }
             AlertDialog.Builder builder2 = new AlertDialog.Builder(activity);
-            builder2.setTitle(LocaleController.getString("AppName", R.string.AppName));
+            HashMap hashMap2 = new HashMap();
+            hashMap2.put("info1.**", Integer.valueOf(baseFragment.getThemedColor("dialogTopBackground")));
+            hashMap2.put("info2.**", Integer.valueOf(baseFragment.getThemedColor("dialogTopBackground")));
+            builder2.setTopAnimation(R.raw.info, 72, false, baseFragment.getThemedColor("dialogTopBackground"), hashMap2);
             builder2.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
             builder2.setMessage(LocaleController.formatString("NoHandleAppInstalled", R.string.NoHandleAppInstalled, messageObject.getDocument().mime_type));
-            if (baseFragment != null) {
-                baseFragment.showDialog(builder2.create());
-            } else {
-                builder2.show();
-            }
+            baseFragment.showDialog(builder2.create());
         }
     }
 

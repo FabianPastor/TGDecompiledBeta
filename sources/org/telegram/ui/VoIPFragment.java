@@ -1139,9 +1139,9 @@ public class VoIPFragment implements VoIPService.StateListener, NotificationCent
     }
 
     private void initRenderers() {
-        this.currentUserTextureView.renderer.init(VideoCapturerDevice.getEglBase().mo2366getEglBaseContext(), new AnonymousClass10());
-        this.callingUserTextureView.renderer.init(VideoCapturerDevice.getEglBase().mo2366getEglBaseContext(), new AnonymousClass11(), EglBase.CONFIG_PLAIN, new GlRectDrawer());
-        this.callingUserMiniTextureRenderer.init(VideoCapturerDevice.getEglBase().mo2366getEglBaseContext(), null);
+        this.currentUserTextureView.renderer.init(VideoCapturerDevice.getEglBase().mo2367getEglBaseContext(), new AnonymousClass10());
+        this.callingUserTextureView.renderer.init(VideoCapturerDevice.getEglBase().mo2367getEglBaseContext(), new AnonymousClass11(), EglBase.CONFIG_PLAIN, new GlRectDrawer());
+        this.callingUserMiniTextureRenderer.init(VideoCapturerDevice.getEglBase().mo2367getEglBaseContext(), null);
     }
 
     /* JADX INFO: Access modifiers changed from: package-private */

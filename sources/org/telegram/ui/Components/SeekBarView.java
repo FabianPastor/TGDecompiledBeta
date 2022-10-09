@@ -22,6 +22,7 @@ public class SeekBarView extends FrameLayout {
     private Drawable hoverDrawable;
     private Paint innerPaint1;
     private long lastUpdateTime;
+    int lastValue;
     private Paint outerPaint1;
     private boolean pressed;
     private int[] pressedState;
@@ -74,7 +75,7 @@ public class SeekBarView extends FrameLayout {
 
     public SeekBarView(Context context, boolean z, Theme.ResourcesProvider resourcesProvider) {
         super(context);
-        this.animatedThumbX = new AnimatedFloat(this, 150L, CubicBezierInterpolator.DEFAULT);
+        this.animatedThumbX = new AnimatedFloat(this, 0L, 80L, CubicBezierInterpolator.EASE_OUT);
         this.progressToSet = -100.0f;
         this.pressedState = new int[]{16842910, 16842919};
         this.transitionProgress = 1.0f;
@@ -108,10 +109,7 @@ public class SeekBarView extends FrameLayout {
             public void setProgress(float f) {
                 SeekBarView.this.pressed = true;
                 SeekBarView.this.setProgress(f);
-                SeekBarViewDelegate seekBarViewDelegate = SeekBarView.this.delegate;
-                if (seekBarViewDelegate != null) {
-                    seekBarViewDelegate.onSeekBarDrag(true, f);
-                }
+                SeekBarView.this.setSeekBarDrag(true, f);
                 SeekBarView.this.pressed = false;
             }
 
@@ -123,7 +121,7 @@ public class SeekBarView extends FrameLayout {
 
             @Override // org.telegram.ui.Components.SeekBarAccessibilityDelegate
             /* renamed from: getContentDescription */
-            public CharSequence mo2137getContentDescription(View view) {
+            public CharSequence mo2136getContentDescription(View view) {
                 SeekBarViewDelegate seekBarViewDelegate = SeekBarView.this.delegate;
                 if (seekBarViewDelegate != null) {
                     return seekBarViewDelegate.getContentDescription();
@@ -210,12 +208,12 @@ public class SeekBarView extends FrameLayout {
                         float measuredWidth = (getMeasuredWidth() - this.selectorWidth) / 2;
                         int i = this.thumbX;
                         if (i >= measuredWidth) {
-                            this.delegate.onSeekBarDrag(false, (i - measuredWidth) / measuredWidth);
+                            setSeekBarDrag(false, (i - measuredWidth) / measuredWidth);
                         } else {
-                            this.delegate.onSeekBarDrag(false, -Math.max(0.01f, 1.0f - ((measuredWidth - i) / measuredWidth)));
+                            setSeekBarDrag(false, -Math.max(0.01f, 1.0f - ((measuredWidth - i) / measuredWidth)));
                         }
                     } else {
-                        this.delegate.onSeekBarDrag(true, this.thumbX / (getMeasuredWidth() - this.selectorWidth));
+                        setSeekBarDrag(true, this.thumbX / (getMeasuredWidth() - this.selectorWidth));
                     }
                 }
                 if (Build.VERSION.SDK_INT >= 21 && (drawable = this.hoverDrawable) != null) {
@@ -267,12 +265,12 @@ public class SeekBarView extends FrameLayout {
                         float measuredWidth2 = (getMeasuredWidth() - this.selectorWidth) / 2;
                         int i2 = this.thumbX;
                         if (i2 >= measuredWidth2) {
-                            this.delegate.onSeekBarDrag(false, (i2 - measuredWidth2) / measuredWidth2);
+                            setSeekBarDrag(false, (i2 - measuredWidth2) / measuredWidth2);
                         } else {
-                            this.delegate.onSeekBarDrag(false, -Math.max(0.01f, 1.0f - ((measuredWidth2 - i2) / measuredWidth2)));
+                            setSeekBarDrag(false, -Math.max(0.01f, 1.0f - ((measuredWidth2 - i2) / measuredWidth2)));
                         }
                     } else {
-                        this.delegate.onSeekBarDrag(false, this.thumbX / (getMeasuredWidth() - this.selectorWidth));
+                        setSeekBarDrag(false, this.thumbX / (getMeasuredWidth() - this.selectorWidth));
                     }
                 }
                 if (Build.VERSION.SDK_INT >= 21 && (drawable2 = this.hoverDrawable) != null) {
@@ -283,6 +281,24 @@ public class SeekBarView extends FrameLayout {
             }
         }
         return false;
+    }
+
+    public void setSeekBarDrag(boolean z, float f) {
+        SeekBarViewDelegate seekBarViewDelegate = this.delegate;
+        if (seekBarViewDelegate != null) {
+            seekBarViewDelegate.onSeekBarDrag(z, f);
+        }
+        int i = this.separatorsCount;
+        if (i > 1) {
+            int round = Math.round((i - 1) * f);
+            if (!z && round != this.lastValue) {
+                try {
+                    performHapticFeedback(9, 1);
+                } catch (Exception unused) {
+                }
+            }
+            this.lastValue = round;
+        }
     }
 
     public float getProgress() {
@@ -355,18 +371,18 @@ public class SeekBarView extends FrameLayout {
         return this.pressed;
     }
 
-    /* JADX WARN: Removed duplicated region for block: B:136:0x029a  */
-    /* JADX WARN: Removed duplicated region for block: B:140:0x02e2  */
-    /* JADX WARN: Removed duplicated region for block: B:142:0x02f7  */
-    /* JADX WARN: Removed duplicated region for block: B:147:? A[RETURN, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:101:0x0211  */
+    /* JADX WARN: Removed duplicated region for block: B:105:0x0259  */
+    /* JADX WARN: Removed duplicated region for block: B:107:0x026e  */
+    /* JADX WARN: Removed duplicated region for block: B:109:? A[RETURN, SYNTHETIC] */
     @Override // android.view.View
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    protected void onDraw(android.graphics.Canvas r16) {
+    protected void onDraw(android.graphics.Canvas r15) {
         /*
-            Method dump skipped, instructions count: 763
+            Method dump skipped, instructions count: 626
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.SeekBarView.onDraw(android.graphics.Canvas):void");

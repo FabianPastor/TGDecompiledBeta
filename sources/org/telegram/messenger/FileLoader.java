@@ -164,7 +164,7 @@ public class FileLoader extends BaseController {
 
     public FileLoader(int i) {
         super(i);
-        this.largeFilesQueue = new FileLoaderPriorityQueue("large files queue", 1);
+        this.largeFilesQueue = new FileLoaderPriorityQueue("large files queue", 2);
         this.filesQueue = new FileLoaderPriorityQueue("files queue", 3);
         this.imagesQueue = new FileLoaderPriorityQueue("imagesQueue queue", 6);
         this.audioQueue = new FileLoaderPriorityQueue("audioQueue queue", 3);

@@ -187,7 +187,7 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
     /* JADX WARN: Removed duplicated region for block: B:59:0x0180  */
     /* JADX WARN: Removed duplicated region for block: B:75:0x01ca  */
     /* JADX WARN: Removed duplicated region for block: B:85:0x01ec  */
-    /* JADX WARN: Type inference failed for: r3v2, types: [int, boolean] */
+    /* JADX WARN: Type inference failed for: r3v2, types: [boolean, int] */
     /* JADX WARN: Type inference failed for: r3v36 */
     /* JADX WARN: Type inference failed for: r3v37 */
     /* JADX WARN: Type inference failed for: r3v38 */

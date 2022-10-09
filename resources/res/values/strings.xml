@@ -2862,6 +2862,11 @@
     <string name="Meters_two">%1$d meters</string>
     <string name="Meters_zero">%1$d meters</string>
     <string name="Mi">mi</string>
+    <string name="MicrophoneForVoiceMessages">Microphone for voice messages</string>
+    <string name="MicrophoneForVoiceMessagesBuiltIn">Built-In</string>
+    <string name="MicrophoneForVoiceMessagesSco">Headset</string>
+    <string name="MicrophoneForVoiceMessagesScoHint">Using a headset microphone may reduce background noise but will slightly decrease audio quality.</string>
+    <string name="MicrophoneForVoiceMessagesScoIfConnected">Headset (if connected)</string>
     <string name="MigrateOldFolder">Migrate old folder to Scoped Storage</string>
     <string name="MigrateOldFolderButton">Move Files Now</string>
     <string name="MigrateOldFolderDescription">Due to a change made by **Google**, we need to move the files you downloaded using **Telegram** to a new folder.\n\nThis may take a few moments. You can continue using the app while the files are moved.</string>
@@ -3018,6 +3023,7 @@
     <string name="NoPlayerInstalled">You don\'t have a video player, please install one to continue</string>
     <string name="NoPopup">No popup</string>
     <string name="NoReactions">No reactions</string>
+    <string name="NoReactionsFound">No reactions found</string>
     <string name="NoRecent">No recent</string>
     <string name="NoRecentCalls">No recent calls</string>
     <string name="NoRecentCallsInfo">Your recent voice and video calls\nwill appear here.</string>
@@ -4313,6 +4319,7 @@
     <string name="SearchMembers">Search members</string>
     <string name="SearchMessages">Messages</string>
     <string name="SearchMusic">Search music</string>
+    <string name="SearchReactionsHint">Search reactions</string>
     <string name="SearchRecentFiles">Search Recent Files</string>
     <string name="SearchStickersHint">Search sticker sets</string>
     <string name="SearchTipToday">Today</string>

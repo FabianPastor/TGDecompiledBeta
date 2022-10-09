@@ -105,7 +105,7 @@ public class AnimatedFloat {
 
     public float set(float f, boolean z) {
         long elapsedRealtime = SystemClock.elapsedRealtime();
-        if (z || this.firstSet) {
+        if (z || this.transitionDuration <= 0 || this.firstSet) {
             this.targetValue = f;
             this.value = f;
             this.transition = false;

@@ -11,8 +11,8 @@ public final /* synthetic */ class PasscodeView$$ExternalSyntheticLambda5 implem
 
     @Override // android.view.View.OnTouchListener
     public final boolean onTouch(View view, MotionEvent motionEvent) {
-        boolean lambda$onShow$8;
-        lambda$onShow$8 = PasscodeView.lambda$onShow$8(view, motionEvent);
-        return lambda$onShow$8;
+        boolean lambda$onShow$13;
+        lambda$onShow$13 = PasscodeView.lambda$onShow$13(view, motionEvent);
+        return lambda$onShow$13;
     }
 }

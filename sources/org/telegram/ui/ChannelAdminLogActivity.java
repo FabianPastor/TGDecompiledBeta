@@ -1876,7 +1876,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1754onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
             ChatActionCell chatActionCell;
             View view;
             if (i == 0) {
@@ -2198,7 +2198,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                 MessageObject messageObject = chatMessageCell.getMessageObject();
                 if (characterStyle instanceof URLSpanMono) {
                     ((URLSpanMono) characterStyle).copyToClipboard();
-                    if (Build.VERSION.SDK_INT >= 31) {
+                    if (!AndroidUtilities.shouldShowClipboardToast()) {
                         return;
                     }
                     Toast.makeText(ChannelAdminLogActivity.this.getParentActivity(), LocaleController.getString("TextCopied", R.string.TextCopied), 0).show();

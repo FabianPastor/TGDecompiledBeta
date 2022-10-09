@@ -3087,6 +3087,14 @@ public class Theme {
     public static class AdaptiveRipple {
         private static float[] tempHSV;
 
+        public static Drawable circle(int i) {
+            return circle(i, -1.0f);
+        }
+
+        public static Drawable circle(int i, float f) {
+            return createCircle(calcRippleColor(i), f);
+        }
+
         public static Drawable rect() {
             return rect(Theme.getColor("windowBackgroundWhite"));
         }
@@ -3152,6 +3160,79 @@ public class Theme {
             stateListDrawable.addState(new int[]{16842913}, layerDrawable);
             stateListDrawable.addState(StateSet.WILD_CARD, drawable);
             return stateListDrawable;
+        }
+
+        private static Drawable createCircle(int i, float f) {
+            return createCircle(0, i, f);
+        }
+
+        private static Drawable createCircle(int i, int i2, float f) {
+            return createCircle(i == 0 ? null : new CircleDrawable(f, i), i2, f);
+        }
+
+        private static Drawable createCircle(Drawable drawable, int i, float f) {
+            if (Build.VERSION.SDK_INT >= 21) {
+                return new RippleDrawable(new ColorStateList(new int[][]{StateSet.WILD_CARD}, new int[]{i}), drawable, new CircleDrawable(f));
+            }
+            StateListDrawable stateListDrawable = new StateListDrawable();
+            LayerDrawable layerDrawable = new LayerDrawable(new Drawable[]{drawable, new CircleDrawable(f, i)});
+            stateListDrawable.addState(new int[]{16842919}, layerDrawable);
+            stateListDrawable.addState(new int[]{16842913}, layerDrawable);
+            stateListDrawable.addState(StateSet.WILD_CARD, drawable);
+            return stateListDrawable;
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        /* loaded from: classes3.dex */
+        public static class CircleDrawable extends Drawable {
+            private static Paint maskPaint;
+            private Paint paint;
+            private float radius;
+
+            @Override // android.graphics.drawable.Drawable
+            @Deprecated
+            public int getOpacity() {
+                return -2;
+            }
+
+            @Override // android.graphics.drawable.Drawable
+            public void setAlpha(int i) {
+            }
+
+            @Override // android.graphics.drawable.Drawable
+            public void setColorFilter(ColorFilter colorFilter) {
+            }
+
+            public CircleDrawable(float f) {
+                this.radius = f;
+                if (maskPaint == null) {
+                    Paint paint = new Paint(1);
+                    maskPaint = paint;
+                    paint.setColor(-1);
+                }
+                this.paint = maskPaint;
+            }
+
+            public CircleDrawable(float f, int i) {
+                this.radius = f;
+                Paint paint = new Paint(1);
+                this.paint = paint;
+                paint.setColor(i);
+            }
+
+            @Override // android.graphics.drawable.Drawable
+            public void draw(Canvas canvas) {
+                int dp;
+                Rect bounds = getBounds();
+                if (Math.abs(this.radius - (-1.0f)) < 0.01f) {
+                    dp = Math.max(bounds.width(), bounds.height()) / 2;
+                } else if (Math.abs(this.radius - (-2.0f)) < 0.01f) {
+                    dp = (int) Math.ceil(Math.sqrt(((bounds.left - bounds.centerX()) * (bounds.left - bounds.centerX())) + ((bounds.top - bounds.centerY()) * (bounds.top - bounds.centerY()))));
+                } else {
+                    dp = AndroidUtilities.dp(this.radius);
+                }
+                canvas.drawCircle(bounds.centerX(), bounds.centerY(), dp, this.paint);
+            }
         }
 
         private static float[] calcRadii(float... fArr) {

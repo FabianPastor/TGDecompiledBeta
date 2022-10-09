@@ -1039,7 +1039,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     }
 
     private org.telegram.messenger.camera.Size chooseOptimalSize(ArrayList<org.telegram.messenger.camera.Size> arrayList) {
-        ArrayList arrayList2 = new ArrayList();
+        ArrayList<org.telegram.messenger.camera.Size> arrayList2 = new ArrayList<>();
         for (int i = 0; i < arrayList.size(); i++) {
             if (Math.max(arrayList.get(i).mHeight, arrayList.get(i).mWidth) <= 1200 && Math.min(arrayList.get(i).mHeight, arrayList.get(i).mWidth) >= 320) {
                 arrayList2.add(arrayList.get(i));
@@ -1047,12 +1047,15 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
         if (arrayList2.isEmpty() || SharedConfig.getDevicePerformanceClass() == 0 || SharedConfig.getDevicePerformanceClass() == 1) {
             if (!arrayList2.isEmpty()) {
-                return CameraController.chooseOptimalSize(arrayList2, 480, 270, this.aspectRatio);
+                arrayList = arrayList2;
+            }
+            if (Build.MANUFACTURER.equalsIgnoreCase("Xiaomi")) {
+                return CameraController.chooseOptimalSize(arrayList, 640, 480, this.aspectRatio);
             }
             return CameraController.chooseOptimalSize(arrayList, 480, 270, this.aspectRatio);
         }
         Collections.sort(arrayList2, InstantCameraView$$ExternalSyntheticLambda6.INSTANCE);
-        return (org.telegram.messenger.camera.Size) arrayList2.get(0);
+        return arrayList2.get(0);
     }
 
     /* JADX INFO: Access modifiers changed from: private */

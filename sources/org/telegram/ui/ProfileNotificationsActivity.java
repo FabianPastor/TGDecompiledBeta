@@ -581,7 +581,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1754onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
             View headerCell;
             View textInfoPrivacyCell;
             switch (i) {

@@ -279,27 +279,28 @@ public class UserConfig extends BaseController {
             TLRPC$User tLRPC$User2 = this.currentUser;
             this.currentUser = tLRPC$User;
             this.clientUserId = tLRPC$User.id;
-            checkPremium(tLRPC$User2, tLRPC$User);
+            checkPremiumSelf(tLRPC$User2, tLRPC$User);
         }
     }
 
-    private void checkPremium(TLRPC$User tLRPC$User, final TLRPC$User tLRPC$User2) {
+    private void checkPremiumSelf(TLRPC$User tLRPC$User, final TLRPC$User tLRPC$User2) {
         if (tLRPC$User == null || !(tLRPC$User2 == null || tLRPC$User.premium == tLRPC$User2.premium)) {
             AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.UserConfig$$ExternalSyntheticLambda0
                 @Override // java.lang.Runnable
                 public final void run() {
-                    UserConfig.this.lambda$checkPremium$1(tLRPC$User2);
+                    UserConfig.this.lambda$checkPremiumSelf$1(tLRPC$User2);
                 }
             });
         }
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$checkPremium$1(TLRPC$User tLRPC$User) {
+    public /* synthetic */ void lambda$checkPremiumSelf$1(TLRPC$User tLRPC$User) {
         getMessagesController().updatePremium(tLRPC$User.premium);
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.currentUserPremiumStatusChanged, new Object[0]);
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.premiumStatusChangedGlobal, new Object[0]);
         getMediaDataController().loadPremiumPromo(false);
+        getMediaDataController().loadReactions(false, true);
     }
 
     /* JADX WARN: Can't wrap try/catch for region: R(22:9|(1:11)|12|(18:17|18|(1:24)|25|26|27|(1:31)|33|(1:35)|36|(1:40)|41|(1:45)|46|(1:48)|49|50|51)|54|18|(3:20|22|24)|25|26|27|(2:29|31)|33|(0)|36|(2:38|40)|41|(2:43|45)|46|(0)|49|50|51) */

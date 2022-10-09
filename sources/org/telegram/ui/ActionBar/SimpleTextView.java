@@ -1023,6 +1023,10 @@ public class SimpleTextView extends View {
         this.rightDrawableOutside = z;
     }
 
+    public boolean getRightDrawableOutside() {
+        return this.rightDrawableOutside;
+    }
+
     public void setRightDrawableOnClick(View.OnClickListener onClickListener) {
         this.rightDrawableOnClickListener = onClickListener;
     }

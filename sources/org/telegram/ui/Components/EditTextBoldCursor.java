@@ -663,19 +663,24 @@ public class EditTextBoldCursor extends EditTextEffects {
     }
 
     public void invalidateForce() {
-        Object obj;
+        invalidate();
         if (!isHardwareAccelerated()) {
-            invalidate();
             return;
         }
         try {
-            Method method = mEditorInvalidateDisplayList;
-            if (method != null && (obj = this.editor) != null) {
-                method.invoke(obj, new Object[0]);
+            if (mEditorInvalidateDisplayList == null) {
+                return;
             }
+            if (this.editor == null) {
+                this.editor = mEditor.get(this);
+            }
+            Object obj = this.editor;
+            if (obj == null) {
+                return;
+            }
+            mEditorInvalidateDisplayList.invoke(obj, new Object[0]);
         } catch (Exception unused) {
         }
-        invalidate();
     }
 
     /* JADX INFO: Access modifiers changed from: protected */

@@ -3,7 +3,7 @@ package j$.wrappers;
 import java.util.PrimitiveIterator;
 import java.util.function.Consumer;
 import java.util.function.LongConsumer;
-/* renamed from: j$.wrappers.f  reason: case insensitive filesystem */
+/* renamed from: j$.wrappers.f */
 /* loaded from: classes2.dex */
 public final /* synthetic */ class CLASSNAMEf implements PrimitiveIterator.OfLong {
     final /* synthetic */ j$.util.r a;
@@ -30,7 +30,7 @@ public final /* synthetic */ class CLASSNAMEf implements PrimitiveIterator.OfLon
     }
 
     @Override // java.util.PrimitiveIterator.OfLong
-    /* renamed from: forEachRemaining  reason: avoid collision after fix types in other method */
+    /* renamed from: forEachRemaining */
     public /* synthetic */ void forEachRemaining2(LongConsumer longConsumer) {
         this.a.d(CLASSNAMEf0.b(longConsumer));
     }
@@ -48,7 +48,7 @@ public final /* synthetic */ class CLASSNAMEf implements PrimitiveIterator.OfLon
 
     /* JADX WARN: Type inference failed for: r0v0, types: [j$.util.Iterator, j$.util.r] */
     @Override // java.util.PrimitiveIterator.OfLong, java.util.Iterator
-    /* renamed from: next  reason: collision with other method in class */
+    /* renamed from: next */
     public /* synthetic */ Object mo312next() {
         return this.a.mo307next();
     }

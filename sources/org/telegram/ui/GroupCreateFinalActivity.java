@@ -549,11 +549,11 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         this.avatarEditor.setAnimation(this.cameraDrawable);
         this.avatarEditor.setEnabled(false);
         this.avatarEditor.setClickable(false);
-        this.avatarEditor.setPadding(AndroidUtilities.dp(2.0f), 0, 0, AndroidUtilities.dp(1.0f));
+        this.avatarEditor.setPadding(AndroidUtilities.dp(0.0f), 0, 0, AndroidUtilities.dp(1.0f));
         FrameLayout frameLayout4 = this.editTextContainer;
         RLottieImageView rLottieImageView2 = this.avatarEditor;
         boolean z3 = LocaleController.isRTL;
-        frameLayout4.addView(rLottieImageView2, LayoutHelper.createFrame(64, 64.0f, (z3 ? 5 : 3) | 48, z3 ? 0.0f : 16.0f, 16.0f, z3 ? 16.0f : 0.0f, 16.0f));
+        frameLayout4.addView(rLottieImageView2, LayoutHelper.createFrame(64, 64.0f, (z3 ? 5 : 3) | 48, z3 ? 0.0f : 15.0f, 16.0f, z3 ? 15.0f : 0.0f, 16.0f));
         RadialProgressView radialProgressView = new RadialProgressView(context) { // from class: org.telegram.ui.GroupCreateFinalActivity.7
             @Override // org.telegram.ui.Components.RadialProgressView, android.view.View
             public void setAlpha(float f) {
@@ -647,14 +647,13 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         }
         VerticalPositionAutoAnimator.attach(this.floatingButtonContainer);
         View view2 = this.floatingButtonContainer;
-        int i6 = 60;
-        int i7 = i5 >= 21 ? 56 : 60;
+        int i6 = i5 >= 21 ? 56 : 60;
         float f = i5 >= 21 ? 56.0f : 60.0f;
         boolean z6 = LocaleController.isRTL;
         if (!z6) {
             i2 = 5;
         }
-        sizeNotifierFrameLayout.addView(view2, LayoutHelper.createFrame(i7, f, i2 | 80, z6 ? 14.0f : 0.0f, 0.0f, z6 ? 0.0f : 14.0f, 14.0f));
+        sizeNotifierFrameLayout.addView(view2, LayoutHelper.createFrame(i6, f, i2 | 80, z6 ? 14.0f : 0.0f, 0.0f, z6 ? 0.0f : 14.0f, 14.0f));
         this.floatingButtonContainer.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.GroupCreateFinalActivity$$ExternalSyntheticLambda1
             @Override // android.view.View.OnClickListener
             public final void onClick(View view3) {
@@ -668,12 +667,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         this.floatingButtonIcon.setImageResource(R.drawable.checkbig);
         this.floatingButtonIcon.setPadding(0, AndroidUtilities.dp(2.0f), 0, 0);
         this.floatingButtonContainer.setContentDescription(LocaleController.getString("Done", R.string.Done));
-        FrameLayout frameLayout7 = this.floatingButtonContainer;
-        ImageView imageView2 = this.floatingButtonIcon;
-        if (i5 >= 21) {
-            i6 = 56;
-        }
-        frameLayout7.addView(imageView2, LayoutHelper.createFrame(i6, i5 >= 21 ? 56.0f : 60.0f));
+        this.floatingButtonContainer.addView(this.floatingButtonIcon, LayoutHelper.createFrame(i5 >= 21 ? 56 : 60, i5 >= 21 ? 56.0f : 60.0f));
         ContextProgressView contextProgressView = new ContextProgressView(context, 1);
         this.progressView = contextProgressView;
         contextProgressView.setAlpha(0.0f);
@@ -1046,7 +1040,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1754onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
             TextSettingsCell textSettingsCell;
             if (i == 0) {
                 View shadowSectionCell = new ShadowSectionCell(this.context);

@@ -667,6 +667,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             SeekBarView seekBarView = new SeekBarView(context);
             this.sizeBar = seekBarView;
             seekBarView.setReportChanges(true);
+            this.sizeBar.setSeparatorsCount((this.endFontSize - this.startFontSize) + 1);
             this.sizeBar.setDelegate(new SeekBarView.SeekBarViewDelegate(ArticleViewer.this) { // from class: org.telegram.ui.ArticleViewer.TextSizeCell.1
                 @Override // org.telegram.ui.Components.SeekBarView.SeekBarViewDelegate
                 public void onSeekBarPressed(boolean z) {
@@ -1517,7 +1518,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         DrawingText drawingText = this.pressedLinkOwnerLayout;
         if (drawingText != null) {
             AndroidUtilities.addToClipboard(drawingText.getText());
-            if (Build.VERSION.SDK_INT < 31) {
+            if (AndroidUtilities.shouldShowClipboardToast()) {
                 Toast.makeText(this.parentActivity, LocaleController.getString("TextCopied", R.string.TextCopied), 0).show();
             }
         }
@@ -1893,8 +1894,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 TLRPC$TL_pageBlockParagraph tLRPC$TL_pageBlockParagraph = new TLRPC$TL_pageBlockParagraph();
                 tLRPC$TL_pageBlockParagraph.text = tLRPC$TL_textAnchor.text;
                 int typeForBlock = this.adapter[0].getTypeForBlock(tLRPC$TL_pageBlockParagraph);
-                RecyclerView.ViewHolder mo1754onCreateViewHolder = this.adapter[0].mo1754onCreateViewHolder(null, typeForBlock);
-                this.adapter[0].bindBlockToHolder(typeForBlock, mo1754onCreateViewHolder, tLRPC$TL_pageBlockParagraph, 0, 0);
+                RecyclerView.ViewHolder mo1753onCreateViewHolder = this.adapter[0].mo1753onCreateViewHolder(null, typeForBlock);
+                this.adapter[0].bindBlockToHolder(typeForBlock, mo1753onCreateViewHolder, tLRPC$TL_pageBlockParagraph, 0, 0);
                 BottomSheet.Builder builder = new BottomSheet.Builder(this.parentActivity);
                 builder.setApplyTopPadding(false);
                 builder.setApplyBottomPadding(false);
@@ -1925,8 +1926,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 textView.setTextColor(getTextColor());
                 textView.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
                 linearLayout.addView(textView, new LinearLayout.LayoutParams(-1, AndroidUtilities.dp(48.0f) + 1));
-                mo1754onCreateViewHolder.itemView.setTag("bottomSheet");
-                linearLayout.addView(mo1754onCreateViewHolder.itemView, LayoutHelper.createLinear(-1, -2, 0.0f, 7.0f, 0.0f, 0.0f));
+                mo1753onCreateViewHolder.itemView.setTag("bottomSheet");
+                linearLayout.addView(mo1753onCreateViewHolder.itemView, LayoutHelper.createLinear(-1, -2, 0.0f, 7.0f, 0.0f, 0.0f));
                 TextSelectionHelper<Cell>.TextSelectionOverlay overlayView = this.textSelectionHelperBottomSheet.getOverlayView(this.parentActivity);
                 FrameLayout frameLayout = new FrameLayout(this.parentActivity) { // from class: org.telegram.ui.ArticleViewer.5
                     @Override // android.view.ViewGroup, android.view.View
@@ -1990,9 +1991,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 if (num3 != null) {
                     if (num3.intValue() == -1) {
                         int typeForBlock2 = this.adapter[0].getTypeForBlock(tLRPC$PageBlock);
-                        RecyclerView.ViewHolder mo1754onCreateViewHolder2 = this.adapter[0].mo1754onCreateViewHolder(null, typeForBlock2);
-                        this.adapter[0].bindBlockToHolder(typeForBlock2, mo1754onCreateViewHolder2, tLRPC$PageBlock, 0, 0);
-                        mo1754onCreateViewHolder2.itemView.measure(View.MeasureSpec.makeMeasureSpec(this.listView[0].getMeasuredWidth(), NUM), View.MeasureSpec.makeMeasureSpec(0, 0));
+                        RecyclerView.ViewHolder mo1753onCreateViewHolder2 = this.adapter[0].mo1753onCreateViewHolder(null, typeForBlock2);
+                        this.adapter[0].bindBlockToHolder(typeForBlock2, mo1753onCreateViewHolder2, tLRPC$PageBlock, 0, 0);
+                        mo1753onCreateViewHolder2.itemView.measure(View.MeasureSpec.makeMeasureSpec(this.listView[0].getMeasuredWidth(), NUM), View.MeasureSpec.makeMeasureSpec(0, 0));
                         Integer num4 = (Integer) this.adapter[0].anchorsOffset.get(lowerCase);
                         if (num4.intValue() != -1) {
                             num = num4;
@@ -3634,7 +3635,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
             @Override // org.telegram.ui.Cells.TextSelectionHelper.Callback
             public void onTextCopied() {
-                if (Build.VERSION.SDK_INT < 31) {
+                if (AndroidUtilities.shouldShowClipboardToast()) {
                     BulletinFactory.of(ArticleViewer.this.containerView, null).createCopyBulletin(LocaleController.getString("TextCopied", R.string.TextCopied)).show();
                 }
             }
@@ -5372,7 +5373,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1754onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
             TextView textView;
             View blockVideoCell;
             if (i != 90) {
@@ -7891,7 +7892,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             RecyclerView.Adapter adapter = new RecyclerView.Adapter(ArticleViewer.this) { // from class: org.telegram.ui.ArticleViewer.BlockCollageCell.5
                 @Override // androidx.recyclerview.widget.RecyclerView.Adapter
                 /* renamed from: onCreateViewHolder */
-                public RecyclerView.ViewHolder mo1754onCreateViewHolder(ViewGroup viewGroup, int i) {
+                public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
                     View blockPhotoCell;
                     if (i == 0) {
                         BlockCollageCell blockCollageCell = BlockCollageCell.this;
@@ -8160,7 +8161,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 /* JADX WARN: Multi-variable type inference failed */
                 @Override // androidx.viewpager.widget.PagerAdapter
                 /* renamed from: instantiateItem */
-                public Object mo1568instantiateItem(ViewGroup viewGroup, int i) {
+                public Object mo1567instantiateItem(ViewGroup viewGroup, int i) {
                     BlockVideoCell blockVideoCell;
                     TLRPC$PageBlock tLRPC$PageBlock = BlockSlideshowCell.this.currentBlock.items.get(i);
                     if (tLRPC$PageBlock instanceof TLRPC$TL_pageBlockPhoto) {
@@ -8372,9 +8373,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 if (this.currentBlock.blockItem != null) {
                     int typeForBlock = this.parentAdapter.getTypeForBlock(this.currentBlock.blockItem);
                     this.currentBlockType = typeForBlock;
-                    RecyclerView.ViewHolder mo1754onCreateViewHolder = this.parentAdapter.mo1754onCreateViewHolder(this, typeForBlock);
-                    this.blockLayout = mo1754onCreateViewHolder;
-                    addView(mo1754onCreateViewHolder.itemView);
+                    RecyclerView.ViewHolder mo1753onCreateViewHolder = this.parentAdapter.mo1753onCreateViewHolder(this, typeForBlock);
+                    this.blockLayout = mo1753onCreateViewHolder;
+                    addView(mo1753onCreateViewHolder.itemView);
                 }
             }
             if (this.currentBlock.blockItem != null) {
@@ -8523,9 +8524,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 if (this.currentBlock.blockItem != null) {
                     int typeForBlock = this.parentAdapter.getTypeForBlock(this.currentBlock.blockItem);
                     this.currentBlockType = typeForBlock;
-                    RecyclerView.ViewHolder mo1754onCreateViewHolder = this.parentAdapter.mo1754onCreateViewHolder(this, typeForBlock);
-                    this.blockLayout = mo1754onCreateViewHolder;
-                    addView(mo1754onCreateViewHolder.itemView);
+                    RecyclerView.ViewHolder mo1753onCreateViewHolder = this.parentAdapter.mo1753onCreateViewHolder(this, typeForBlock);
+                    this.blockLayout = mo1753onCreateViewHolder;
+                    addView(mo1753onCreateViewHolder.itemView);
                 }
             }
             if (this.currentBlock.blockItem != null) {

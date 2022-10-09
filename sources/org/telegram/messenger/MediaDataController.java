@@ -2726,8 +2726,9 @@ public class MediaDataController extends BaseController {
     /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$processLoadedFeaturedStickers$46(ArrayList arrayList, long j, boolean z) {
         if (arrayList != null && j != 0) {
-            this.loadFeaturedHash[z ? 1 : 0] = j;
+            this.loadFeaturedHash[z] = j;
         }
+        this.loadingFeaturedStickers[z ? 1 : 0] = false;
         loadFeaturedStickers(z, false, false);
     }
 

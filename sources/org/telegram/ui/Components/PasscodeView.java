@@ -37,12 +37,19 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.core.os.CancellationSignal;
+import androidx.dynamicanimation.animation.DynamicAnimation;
+import androidx.dynamicanimation.animation.FloatValueHolder;
+import androidx.dynamicanimation.animation.SpringAnimation;
+import androidx.dynamicanimation.animation.SpringForce;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.Locale;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.FingerprintController;
+import org.telegram.messenger.GenericProvider;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
@@ -54,8 +61,11 @@ import org.telegram.ui.Components.PasscodeView;
 /* loaded from: classes3.dex */
 public class PasscodeView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
     private static final int[] ids = {R.id.passcode_btn_0, R.id.passcode_btn_1, R.id.passcode_btn_2, R.id.passcode_btn_3, R.id.passcode_btn_4, R.id.passcode_btn_5, R.id.passcode_btn_6, R.id.passcode_btn_7, R.id.passcode_btn_8, R.id.passcode_btn_9, R.id.passcode_btn_backspace, R.id.passcode_btn_fingerprint};
+    private SpringAnimation backgroundAnimationSpring;
     private Drawable backgroundDrawable;
     private FrameLayout backgroundFrameLayout;
+    private LinkedList<Boolean> backgroundSpringNextQueue;
+    private LinkedList<Runnable> backgroundSpringQueue;
     private CancellationSignal cancellationSignal;
     private ImageView checkImage;
     private Runnable checkRunnable;
@@ -90,7 +100,7 @@ public class PasscodeView extends FrameLayout implements NotificationCenter.Noti
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public static /* synthetic */ boolean lambda$onShow$8(View view, MotionEvent motionEvent) {
+    public static /* synthetic */ boolean lambda$onShow$13(View view, MotionEvent motionEvent) {
         return true;
     }
 
@@ -433,6 +443,8 @@ public class PasscodeView extends FrameLayout implements NotificationCenter.Noti
         char c = 0;
         this.keyboardHeight = 0;
         this.rect = new android.graphics.Rect();
+        this.backgroundSpringQueue = new LinkedList<>();
+        this.backgroundSpringNextQueue = new LinkedList<>();
         this.innerAnimators = new ArrayList<>();
         this.checkRunnable = new Runnable() { // from class: org.telegram.ui.Components.PasscodeView.7
             @Override // java.lang.Runnable
@@ -523,30 +535,7 @@ public class PasscodeView extends FrameLayout implements NotificationCenter.Noti
                 return lambda$new$0;
             }
         });
-        this.passwordEditText.addTextChangedListener(new TextWatcher() { // from class: org.telegram.ui.Components.PasscodeView.2
-            @Override // android.text.TextWatcher
-            public void onTextChanged(CharSequence charSequence, int i2, int i3, int i4) {
-            }
-
-            @Override // android.text.TextWatcher
-            public void beforeTextChanged(CharSequence charSequence, int i2, int i3, int i4) {
-                if (PasscodeView.this.backgroundDrawable instanceof MotionBackgroundDrawable) {
-                    if (i3 == 0 && i4 == 1) {
-                        ((MotionBackgroundDrawable) PasscodeView.this.backgroundDrawable).switchToNextPosition(true);
-                    } else if (i3 != 1 || i4 != 0) {
-                    } else {
-                        ((MotionBackgroundDrawable) PasscodeView.this.backgroundDrawable).switchToPrevPosition(true);
-                    }
-                }
-            }
-
-            @Override // android.text.TextWatcher
-            public void afterTextChanged(Editable editable) {
-                if (PasscodeView.this.passwordEditText.length() == 4 && SharedConfig.passcodeType == 0) {
-                    PasscodeView.this.processDone(false);
-                }
-            }
-        });
+        this.passwordEditText.addTextChangedListener(new AnonymousClass2());
         this.passwordEditText.setCustomSelectionActionModeCallback(new ActionMode.Callback(this) { // from class: org.telegram.ui.Components.PasscodeView.3
             @Override // android.view.ActionMode.Callback
             public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
@@ -589,7 +578,7 @@ public class PasscodeView extends FrameLayout implements NotificationCenter.Noti
         this.fingerprintImage.setBackgroundResource(i2);
         this.passwordFrameLayout.addView(this.fingerprintImage, LayoutHelper.createFrame(60, 60.0f, 83, 10.0f, 0.0f, 0.0f, 4.0f));
         this.fingerprintImage.setContentDescription(LocaleController.getString("AccDescrFingerprint", R.string.AccDescrFingerprint));
-        this.fingerprintImage.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.Components.PasscodeView$$ExternalSyntheticLambda2
+        this.fingerprintImage.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.Components.PasscodeView$$ExternalSyntheticLambda1
             @Override // android.view.View.OnClickListener
             public final void onClick(View view) {
                 PasscodeView.this.lambda$new$2(view);
@@ -716,10 +705,10 @@ public class PasscodeView extends FrameLayout implements NotificationCenter.Noti
                 }
             }
             frameLayout5.setId(ids[i4]);
-            frameLayout5.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.Components.PasscodeView$$ExternalSyntheticLambda1
+            frameLayout5.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.Components.PasscodeView$$ExternalSyntheticLambda2
                 @Override // android.view.View.OnClickListener
                 public final void onClick(View view) {
-                    PasscodeView.this.lambda$new$4(view);
+                    PasscodeView.this.lambda$new$6(view);
                 }
             });
             this.numberFrameLayouts.add(frameLayout5);
@@ -734,6 +723,85 @@ public class PasscodeView extends FrameLayout implements NotificationCenter.Noti
             return true;
         }
         return false;
+    }
+
+    /* JADX INFO: Access modifiers changed from: package-private */
+    /* renamed from: org.telegram.ui.Components.PasscodeView$2  reason: invalid class name */
+    /* loaded from: classes3.dex */
+    public class AnonymousClass2 implements TextWatcher {
+        @Override // android.text.TextWatcher
+        public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+        }
+
+        AnonymousClass2() {
+        }
+
+        @Override // android.text.TextWatcher
+        public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+            final boolean z;
+            if (PasscodeView.this.backgroundDrawable instanceof MotionBackgroundDrawable) {
+                final MotionBackgroundDrawable motionBackgroundDrawable = (MotionBackgroundDrawable) PasscodeView.this.backgroundDrawable;
+                motionBackgroundDrawable.setAnimationProgressProvider(null);
+                float posAnimationProgress = motionBackgroundDrawable.getPosAnimationProgress();
+                boolean z2 = true;
+                if (i2 == 0 && i3 == 1) {
+                    motionBackgroundDrawable.switchToNextPosition(true);
+                    z = true;
+                } else if (i2 == 1 && i3 == 0) {
+                    motionBackgroundDrawable.switchToPrevPosition(true);
+                    z = false;
+                } else {
+                    z = false;
+                    z2 = false;
+                }
+                if (!z2) {
+                    return;
+                }
+                if (posAnimationProgress >= 1.0f) {
+                    PasscodeView.this.animateBackground(motionBackgroundDrawable);
+                    return;
+                }
+                PasscodeView.this.backgroundSpringQueue.offer(new Runnable() { // from class: org.telegram.ui.Components.PasscodeView$2$$ExternalSyntheticLambda0
+                    @Override // java.lang.Runnable
+                    public final void run() {
+                        PasscodeView.AnonymousClass2.this.lambda$beforeTextChanged$0(z, motionBackgroundDrawable);
+                    }
+                });
+                PasscodeView.this.backgroundSpringNextQueue.offer(Boolean.valueOf(z));
+                ArrayList<Runnable> arrayList = new ArrayList();
+                ArrayList<Integer> arrayList2 = new ArrayList();
+                for (int i4 = 0; i4 < PasscodeView.this.backgroundSpringQueue.size(); i4++) {
+                    Runnable runnable = (Runnable) PasscodeView.this.backgroundSpringQueue.get(i4);
+                    if (((Boolean) PasscodeView.this.backgroundSpringNextQueue.get(i4)).booleanValue() != z) {
+                        arrayList.add(runnable);
+                        arrayList2.add(Integer.valueOf(i4));
+                    }
+                }
+                for (Runnable runnable2 : arrayList) {
+                    PasscodeView.this.backgroundSpringQueue.remove(runnable2);
+                }
+                for (Integer num : arrayList2) {
+                    PasscodeView.this.backgroundSpringNextQueue.remove(num.intValue());
+                }
+            }
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$beforeTextChanged$0(boolean z, MotionBackgroundDrawable motionBackgroundDrawable) {
+            if (z) {
+                motionBackgroundDrawable.switchToNextPosition(true);
+            } else {
+                motionBackgroundDrawable.switchToPrevPosition(true);
+            }
+            PasscodeView.this.animateBackground(motionBackgroundDrawable);
+        }
+
+        @Override // android.text.TextWatcher
+        public void afterTextChanged(Editable editable) {
+            if (PasscodeView.this.passwordEditText.length() == 4 && SharedConfig.passcodeType == 0) {
+                PasscodeView.this.processDone(false);
+            }
+        }
     }
 
     /* JADX INFO: Access modifiers changed from: private */
@@ -759,8 +827,9 @@ public class PasscodeView extends FrameLayout implements NotificationCenter.Noti
 
     /* JADX INFO: Access modifiers changed from: private */
     /* JADX WARN: Can't fix incorrect switch cases order, some code will duplicate */
-    public /* synthetic */ void lambda$new$4(View view) {
+    public /* synthetic */ void lambda$new$6(View view) {
         boolean z;
+        final boolean z2;
         int intValue = ((Integer) view.getTag()).intValue();
         switch (intValue) {
             case 0:
@@ -820,19 +889,121 @@ public class PasscodeView extends FrameLayout implements NotificationCenter.Noti
         if (intValue == 11) {
             return;
         }
-        if (intValue != 10) {
-            Drawable drawable = this.backgroundDrawable;
-            if (!(drawable instanceof MotionBackgroundDrawable)) {
-                return;
+        Drawable drawable = this.backgroundDrawable;
+        if (!(drawable instanceof MotionBackgroundDrawable)) {
+            return;
+        }
+        final MotionBackgroundDrawable motionBackgroundDrawable = (MotionBackgroundDrawable) drawable;
+        motionBackgroundDrawable.setAnimationProgressProvider(null);
+        float posAnimationProgress = motionBackgroundDrawable.getPosAnimationProgress();
+        boolean z3 = true;
+        if (intValue == 10) {
+            if (z) {
+                motionBackgroundDrawable.switchToPrevPosition(true);
+            } else {
+                z3 = false;
             }
-            ((MotionBackgroundDrawable) drawable).switchToNextPosition(true);
-        } else if (!z) {
+            z2 = false;
         } else {
-            Drawable drawable2 = this.backgroundDrawable;
-            if (!(drawable2 instanceof MotionBackgroundDrawable)) {
+            motionBackgroundDrawable.switchToNextPosition(true);
+            z2 = true;
+        }
+        if (!z3) {
+            return;
+        }
+        if (posAnimationProgress >= 1.0f) {
+            animateBackground(motionBackgroundDrawable);
+            return;
+        }
+        this.backgroundSpringQueue.offer(new Runnable() { // from class: org.telegram.ui.Components.PasscodeView$$ExternalSyntheticLambda11
+            @Override // java.lang.Runnable
+            public final void run() {
+                PasscodeView.this.lambda$new$4(z2, motionBackgroundDrawable);
+            }
+        });
+        this.backgroundSpringNextQueue.offer(Boolean.valueOf(z2));
+        ArrayList<Runnable> arrayList = new ArrayList();
+        ArrayList<Integer> arrayList2 = new ArrayList();
+        for (int i = 0; i < this.backgroundSpringQueue.size(); i++) {
+            Runnable runnable = this.backgroundSpringQueue.get(i);
+            Boolean bool = this.backgroundSpringNextQueue.get(i);
+            if (bool != null && bool.booleanValue() != z2) {
+                arrayList.add(runnable);
+                arrayList2.add(Integer.valueOf(i));
+            }
+        }
+        for (Runnable runnable2 : arrayList) {
+            this.backgroundSpringQueue.remove(runnable2);
+        }
+        Collections.sort(arrayList2, PasscodeView$$ExternalSyntheticLambda12.INSTANCE);
+        for (Integer num : arrayList2) {
+            this.backgroundSpringNextQueue.remove(num.intValue());
+        }
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$4(boolean z, MotionBackgroundDrawable motionBackgroundDrawable) {
+        if (z) {
+            motionBackgroundDrawable.switchToNextPosition(true);
+        } else {
+            motionBackgroundDrawable.switchToPrevPosition(true);
+        }
+        animateBackground(motionBackgroundDrawable);
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
+    public static /* synthetic */ int lambda$new$5(Integer num, Integer num2) {
+        return num2.intValue() - num.intValue();
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
+    public void animateBackground(final MotionBackgroundDrawable motionBackgroundDrawable) {
+        SpringAnimation springAnimation = this.backgroundAnimationSpring;
+        if (springAnimation != null && springAnimation.isRunning()) {
+            this.backgroundAnimationSpring.cancel();
+        }
+        final FloatValueHolder floatValueHolder = new FloatValueHolder(0.0f);
+        motionBackgroundDrawable.setAnimationProgressProvider(new GenericProvider() { // from class: org.telegram.ui.Components.PasscodeView$$ExternalSyntheticLambda13
+            @Override // org.telegram.messenger.GenericProvider
+            public final Object provide(Object obj) {
+                Float lambda$animateBackground$7;
+                lambda$animateBackground$7 = PasscodeView.lambda$animateBackground$7(FloatValueHolder.this, (MotionBackgroundDrawable) obj);
+                return lambda$animateBackground$7;
+            }
+        });
+        SpringAnimation spring = new SpringAnimation(floatValueHolder).setSpring(new SpringForce(100.0f).setStiffness(300.0f).setDampingRatio(1.0f));
+        this.backgroundAnimationSpring = spring;
+        spring.addEndListener(new DynamicAnimation.OnAnimationEndListener() { // from class: org.telegram.ui.Components.PasscodeView$$ExternalSyntheticLambda7
+            @Override // androidx.dynamicanimation.animation.DynamicAnimation.OnAnimationEndListener
+            public final void onAnimationEnd(DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
+                PasscodeView.this.lambda$animateBackground$8(motionBackgroundDrawable, dynamicAnimation, z, f, f2);
+            }
+        });
+        this.backgroundAnimationSpring.addUpdateListener(new DynamicAnimation.OnAnimationUpdateListener() { // from class: org.telegram.ui.Components.PasscodeView$$ExternalSyntheticLambda8
+            @Override // androidx.dynamicanimation.animation.DynamicAnimation.OnAnimationUpdateListener
+            public final void onAnimationUpdate(DynamicAnimation dynamicAnimation, float f, float f2) {
+                MotionBackgroundDrawable.this.updateAnimation(true);
+            }
+        });
+        this.backgroundAnimationSpring.start();
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
+    public static /* synthetic */ Float lambda$animateBackground$7(FloatValueHolder floatValueHolder, MotionBackgroundDrawable motionBackgroundDrawable) {
+        return Float.valueOf(floatValueHolder.getValue() / 100.0f);
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
+    public /* synthetic */ void lambda$animateBackground$8(MotionBackgroundDrawable motionBackgroundDrawable, DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
+        this.backgroundAnimationSpring = null;
+        motionBackgroundDrawable.setAnimationProgressProvider(null);
+        if (!z) {
+            motionBackgroundDrawable.setPosAnimationProgress(1.0f);
+            if (this.backgroundSpringQueue.isEmpty()) {
                 return;
             }
-            ((MotionBackgroundDrawable) drawable2).switchToPrevPosition(true);
+            this.backgroundSpringQueue.poll().run();
+            this.backgroundSpringNextQueue.poll();
         }
     }
 
@@ -875,7 +1046,16 @@ public class PasscodeView extends FrameLayout implements NotificationCenter.Noti
                 if (!(drawable instanceof MotionBackgroundDrawable)) {
                     return;
                 }
-                ((MotionBackgroundDrawable) drawable).rotatePreview(true);
+                MotionBackgroundDrawable motionBackgroundDrawable = (MotionBackgroundDrawable) drawable;
+                SpringAnimation springAnimation = this.backgroundAnimationSpring;
+                if (springAnimation != null) {
+                    springAnimation.cancel();
+                    motionBackgroundDrawable.setPosAnimationProgress(1.0f);
+                }
+                if (motionBackgroundDrawable.getPosAnimationProgress() < 1.0f) {
+                    return;
+                }
+                motionBackgroundDrawable.rotatePreview(true);
                 return;
             }
         }
@@ -893,16 +1073,16 @@ public class PasscodeView extends FrameLayout implements NotificationCenter.Noti
         if (passcodeViewDelegate != null) {
             passcodeViewDelegate.didAcceptedPassword();
         }
-        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.PasscodeView$$ExternalSyntheticLambda7
+        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.PasscodeView$$ExternalSyntheticLambda10
             @Override // java.lang.Runnable
             public final void run() {
-                PasscodeView.this.lambda$processDone$5();
+                PasscodeView.this.lambda$processDone$10();
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$processDone$5() {
+    public /* synthetic */ void lambda$processDone$10() {
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.setDuration(200L);
         animatorSet.playTogether(ObjectAnimator.ofFloat(this, View.TRANSLATION_Y, AndroidUtilities.dp(20.0f)), ObjectAnimator.ofFloat(this, View.ALPHA, AndroidUtilities.dp(0.0f)));
@@ -999,10 +1179,10 @@ public class PasscodeView extends FrameLayout implements NotificationCenter.Noti
                     editTextBoldCursor.requestFocus();
                     AndroidUtilities.showKeyboard(this.passwordEditText);
                 }
-                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.PasscodeView$$ExternalSyntheticLambda8
+                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.PasscodeView$$ExternalSyntheticLambda9
                     @Override // java.lang.Runnable
                     public final void run() {
-                        PasscodeView.this.lambda$onResume$6();
+                        PasscodeView.this.lambda$onResume$11();
                     }
                 }, 200L);
             }
@@ -1011,7 +1191,7 @@ public class PasscodeView extends FrameLayout implements NotificationCenter.Noti
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$onResume$6() {
+    public /* synthetic */ void lambda$onResume$11() {
         EditTextBoldCursor editTextBoldCursor;
         if (this.retryTextView.getVisibility() == 0 || (editTextBoldCursor = this.passwordEditText) == null) {
             return;
@@ -1111,7 +1291,7 @@ public class PasscodeView extends FrameLayout implements NotificationCenter.Noti
                 builder.setOnDismissListener(new DialogInterface.OnDismissListener() { // from class: org.telegram.ui.Components.PasscodeView$$ExternalSyntheticLambda0
                     @Override // android.content.DialogInterface.OnDismissListener
                     public final void onDismiss(DialogInterface dialogInterface) {
-                        PasscodeView.this.lambda$checkFingerprint$7(dialogInterface);
+                        PasscodeView.this.lambda$checkFingerprint$12(dialogInterface);
                     }
                 });
                 AlertDialog alertDialog2 = this.fingerprintDialog;
@@ -1175,7 +1355,7 @@ public class PasscodeView extends FrameLayout implements NotificationCenter.Noti
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$checkFingerprint$7(DialogInterface dialogInterface) {
+    public /* synthetic */ void lambda$checkFingerprint$12(DialogInterface dialogInterface) {
         CancellationSignal cancellationSignal = this.cancellationSignal;
         if (cancellationSignal != null) {
             this.selfCancelled = true;

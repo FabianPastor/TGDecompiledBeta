@@ -411,8 +411,9 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     private float maxX;
     private float maxY;
     private LinearLayoutManager mentionLayoutManager;
-    private AnimatorSet mentionListAnimation;
+    private SpringAnimation mentionListAnimation;
     private RecyclerListView mentionListView;
+    private boolean mentionListViewVisible;
     private MentionsAdapter mentionsAdapter;
     private ActionBarMenuItem menuItem;
     private long mergeDialogId;
@@ -2417,7 +2418,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 }
                 if (view == PhotoViewer.this.mentionListView) {
                     canvas.save();
-                    canvas.clipRect(view.getX(), view.getY(), view.getX() + view.getWidth(), view.getY() + view.getHeight());
+                    canvas.clipRect(view.getX(), view.getY(), view.getX() + view.getWidth(), PhotoViewer.this.captionEditText.getTop());
+                    canvas.drawColor(NUM);
                     boolean drawChild = super.drawChild(canvas, view, j);
                     canvas.restore();
                     return drawChild;
@@ -4403,24 +4405,9 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         }
         this.captionEditText.setVisibility(8);
         this.containerView.addView(this.captionEditText, LayoutHelper.createFrame(-1, -2, 83));
-        RecyclerListView recyclerListView = new RecyclerListView(this.activityContext, resourcesProvider) { // from class: org.telegram.ui.PhotoViewer.32
-            @Override // org.telegram.ui.Components.RecyclerListView, android.view.ViewGroup, android.view.View
-            public boolean dispatchTouchEvent(MotionEvent motionEvent) {
-                return !PhotoViewer.this.bottomTouchEnabled && super.dispatchTouchEvent(motionEvent);
-            }
-
-            @Override // org.telegram.ui.Components.RecyclerListView, androidx.recyclerview.widget.RecyclerView, android.view.ViewGroup
-            public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
-                return !PhotoViewer.this.bottomTouchEnabled && super.onInterceptTouchEvent(motionEvent);
-            }
-
-            @Override // org.telegram.ui.Components.RecyclerListView, androidx.recyclerview.widget.RecyclerView, android.view.View
-            public boolean onTouchEvent(MotionEvent motionEvent) {
-                return !PhotoViewer.this.bottomTouchEnabled && super.onTouchEvent(motionEvent);
-            }
-        };
-        this.mentionListView = recyclerListView;
-        recyclerListView.setTag(5);
+        AnonymousClass32 anonymousClass32 = new AnonymousClass32(this.activityContext, resourcesProvider);
+        this.mentionListView = anonymousClass32;
+        anonymousClass32.setTag(5);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, this.activityContext) { // from class: org.telegram.ui.PhotoViewer.33
             @Override // androidx.recyclerview.widget.LinearLayoutManager, androidx.recyclerview.widget.RecyclerView.LayoutManager
             public boolean supportsPredictiveItemAnimations() {
@@ -4430,92 +4417,14 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         this.mentionLayoutManager = linearLayoutManager;
         linearLayoutManager.setOrientation(1);
         this.mentionListView.setLayoutManager(this.mentionLayoutManager);
-        this.mentionListView.setBackgroundColor(NUM);
         this.mentionListView.setVisibility(8);
         this.mentionListView.setClipToPadding(true);
         this.mentionListView.setOverScrollMode(2);
         this.containerView.addView(this.mentionListView, LayoutHelper.createFrame(-1, 110, 83));
-        RecyclerListView recyclerListView2 = this.mentionListView;
-        MentionsAdapter mentionsAdapter = new MentionsAdapter(this.activityContext, true, 0L, 0, new MentionsAdapter.MentionsAdapterDelegate() { // from class: org.telegram.ui.PhotoViewer.34
-            @Override // org.telegram.ui.Adapters.MentionsAdapter.MentionsAdapterDelegate
-            public void onContextClick(TLRPC$BotInlineResult tLRPC$BotInlineResult) {
-            }
-
-            @Override // org.telegram.ui.Adapters.MentionsAdapter.MentionsAdapterDelegate
-            public void onContextSearch(boolean z) {
-            }
-
-            @Override // org.telegram.ui.Adapters.MentionsAdapter.MentionsAdapterDelegate
-            public void onItemCountUpdate(int i10, int i11) {
-            }
-
-            @Override // org.telegram.ui.Adapters.MentionsAdapter.MentionsAdapterDelegate
-            public void needChangePanelVisibility(boolean z) {
-                if (z) {
-                    FrameLayout.LayoutParams layoutParams2 = (FrameLayout.LayoutParams) PhotoViewer.this.mentionListView.getLayoutParams();
-                    float min = (Math.min(3, PhotoViewer.this.mentionsAdapter.getItemCount()) * 36) + (PhotoViewer.this.mentionsAdapter.getItemCount() > 3 ? 18 : 0);
-                    layoutParams2.height = AndroidUtilities.dp(min);
-                    layoutParams2.topMargin = -AndroidUtilities.dp(min);
-                    PhotoViewer.this.mentionListView.setLayoutParams(layoutParams2);
-                    if (PhotoViewer.this.mentionListAnimation != null) {
-                        PhotoViewer.this.mentionListAnimation.cancel();
-                        PhotoViewer.this.mentionListAnimation = null;
-                    }
-                    if (PhotoViewer.this.mentionListView.getVisibility() == 0) {
-                        PhotoViewer.this.mentionListView.setAlpha(1.0f);
-                        return;
-                    }
-                    PhotoViewer.this.mentionLayoutManager.scrollToPositionWithOffset(0, 10000);
-                    if (PhotoViewer.this.allowMentions) {
-                        PhotoViewer.this.mentionListView.setVisibility(0);
-                        PhotoViewer.this.mentionListAnimation = new AnimatorSet();
-                        PhotoViewer.this.mentionListAnimation.playTogether(ObjectAnimator.ofFloat(PhotoViewer.this.mentionListView, View.ALPHA, 0.0f, 1.0f));
-                        PhotoViewer.this.mentionListAnimation.addListener(new AnimatorListenerAdapter() { // from class: org.telegram.ui.PhotoViewer.34.1
-                            @Override // android.animation.AnimatorListenerAdapter, android.animation.Animator.AnimatorListener
-                            public void onAnimationEnd(Animator animator) {
-                                if (PhotoViewer.this.mentionListAnimation == null || !PhotoViewer.this.mentionListAnimation.equals(animator)) {
-                                    return;
-                                }
-                                PhotoViewer.this.mentionListAnimation = null;
-                            }
-                        });
-                        PhotoViewer.this.mentionListAnimation.setDuration(200L);
-                        PhotoViewer.this.mentionListAnimation.start();
-                        return;
-                    }
-                    PhotoViewer.this.mentionListView.setAlpha(1.0f);
-                    PhotoViewer.this.mentionListView.setVisibility(4);
-                    return;
-                }
-                if (PhotoViewer.this.mentionListAnimation != null) {
-                    PhotoViewer.this.mentionListAnimation.cancel();
-                    PhotoViewer.this.mentionListAnimation = null;
-                }
-                if (PhotoViewer.this.mentionListView.getVisibility() == 8) {
-                    return;
-                }
-                if (PhotoViewer.this.allowMentions) {
-                    PhotoViewer.this.mentionListAnimation = new AnimatorSet();
-                    PhotoViewer.this.mentionListAnimation.playTogether(ObjectAnimator.ofFloat(PhotoViewer.this.mentionListView, View.ALPHA, 0.0f));
-                    PhotoViewer.this.mentionListAnimation.addListener(new AnimatorListenerAdapter() { // from class: org.telegram.ui.PhotoViewer.34.2
-                        @Override // android.animation.AnimatorListenerAdapter, android.animation.Animator.AnimatorListener
-                        public void onAnimationEnd(Animator animator) {
-                            if (PhotoViewer.this.mentionListAnimation == null || !PhotoViewer.this.mentionListAnimation.equals(animator)) {
-                                return;
-                            }
-                            PhotoViewer.this.mentionListView.setVisibility(8);
-                            PhotoViewer.this.mentionListAnimation = null;
-                        }
-                    });
-                    PhotoViewer.this.mentionListAnimation.setDuration(200L);
-                    PhotoViewer.this.mentionListAnimation.start();
-                    return;
-                }
-                PhotoViewer.this.mentionListView.setVisibility(8);
-            }
-        }, resourcesProvider);
+        RecyclerListView recyclerListView = this.mentionListView;
+        MentionsAdapter mentionsAdapter = new MentionsAdapter(this.activityContext, true, 0L, 0, new AnonymousClass34(), resourcesProvider);
         this.mentionsAdapter = mentionsAdapter;
-        recyclerListView2.setAdapter(mentionsAdapter);
+        recyclerListView.setAdapter(mentionsAdapter);
         this.mentionListView.setOnItemClickListener(new RecyclerListView.OnItemClickListener() { // from class: org.telegram.ui.PhotoViewer$$ExternalSyntheticLambda81
             @Override // org.telegram.ui.Components.RecyclerListView.OnItemClickListener
             public final void onItemClick(View view2, int i10) {
@@ -5828,6 +5737,155 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         this.ignoreDidSetImage = false;
     }
 
+    /* JADX INFO: Access modifiers changed from: package-private */
+    /* renamed from: org.telegram.ui.PhotoViewer$32  reason: invalid class name */
+    /* loaded from: classes3.dex */
+    public class AnonymousClass32 extends RecyclerListView {
+        AnonymousClass32(Context context, Theme.ResourcesProvider resourcesProvider) {
+            super(context, resourcesProvider);
+        }
+
+        @Override // org.telegram.ui.Components.RecyclerListView, android.view.ViewGroup, android.view.View
+        public boolean dispatchTouchEvent(MotionEvent motionEvent) {
+            return !PhotoViewer.this.bottomTouchEnabled && super.dispatchTouchEvent(motionEvent);
+        }
+
+        @Override // org.telegram.ui.Components.RecyclerListView, androidx.recyclerview.widget.RecyclerView, android.view.ViewGroup
+        public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
+            return !PhotoViewer.this.bottomTouchEnabled && super.onInterceptTouchEvent(motionEvent);
+        }
+
+        @Override // org.telegram.ui.Components.RecyclerListView, androidx.recyclerview.widget.RecyclerView, android.view.View
+        public boolean onTouchEvent(MotionEvent motionEvent) {
+            return !PhotoViewer.this.bottomTouchEnabled && super.onTouchEvent(motionEvent);
+        }
+
+        @Override // org.telegram.ui.Components.RecyclerListView, android.view.View
+        public void setTranslationY(float f) {
+            super.setTranslationY(f);
+            invalidate();
+            if (getParent() != null) {
+                ((View) getParent()).invalidate();
+            }
+        }
+
+        @Override // org.telegram.ui.Components.RecyclerListView, androidx.recyclerview.widget.RecyclerView, android.view.View
+        protected void onSizeChanged(int i, int i2, int i3, int i4) {
+            super.onSizeChanged(i, i2, i3, i4);
+            if (PhotoViewer.this.mentionListViewVisible && getVisibility() == 0 && PhotoViewer.this.mentionListAnimation == null) {
+                int i5 = i2 - i4;
+                setTranslationY(i5);
+                PhotoViewer.this.mentionListAnimation = new SpringAnimation(this, DynamicAnimation.TRANSLATION_Y).setMinValue(Math.min(i5, 0)).setMaxValue(Math.max(i5, 0)).setSpring(new SpringForce(0.0f).setStiffness(750.0f).setDampingRatio(1.0f));
+                PhotoViewer.this.mentionListAnimation.addEndListener(new DynamicAnimation.OnAnimationEndListener() { // from class: org.telegram.ui.PhotoViewer$32$$ExternalSyntheticLambda0
+                    @Override // androidx.dynamicanimation.animation.DynamicAnimation.OnAnimationEndListener
+                    public final void onAnimationEnd(DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
+                        PhotoViewer.AnonymousClass32.this.lambda$onSizeChanged$0(dynamicAnimation, z, f, f2);
+                    }
+                });
+                PhotoViewer.this.mentionListAnimation.start();
+            }
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$onSizeChanged$0(DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
+            if (PhotoViewer.this.mentionListAnimation == dynamicAnimation) {
+                PhotoViewer.this.mentionListAnimation = null;
+            }
+        }
+    }
+
+    /* JADX INFO: Access modifiers changed from: package-private */
+    /* renamed from: org.telegram.ui.PhotoViewer$34  reason: invalid class name */
+    /* loaded from: classes3.dex */
+    public class AnonymousClass34 implements MentionsAdapter.MentionsAdapterDelegate {
+        @Override // org.telegram.ui.Adapters.MentionsAdapter.MentionsAdapterDelegate
+        public void onContextClick(TLRPC$BotInlineResult tLRPC$BotInlineResult) {
+        }
+
+        @Override // org.telegram.ui.Adapters.MentionsAdapter.MentionsAdapterDelegate
+        public void onContextSearch(boolean z) {
+        }
+
+        @Override // org.telegram.ui.Adapters.MentionsAdapter.MentionsAdapterDelegate
+        public void onItemCountUpdate(int i, int i2) {
+        }
+
+        AnonymousClass34() {
+        }
+
+        @Override // org.telegram.ui.Adapters.MentionsAdapter.MentionsAdapterDelegate
+        public void needChangePanelVisibility(boolean z) {
+            if (z) {
+                FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) PhotoViewer.this.mentionListView.getLayoutParams();
+                float min = (Math.min(3, PhotoViewer.this.mentionsAdapter.getItemCount()) * 36) + (PhotoViewer.this.mentionsAdapter.getItemCount() > 3 ? 18 : 0);
+                layoutParams.height = AndroidUtilities.dp(min);
+                layoutParams.topMargin = -AndroidUtilities.dp(min);
+                PhotoViewer.this.mentionListView.setLayoutParams(layoutParams);
+                if (PhotoViewer.this.mentionListAnimation != null) {
+                    PhotoViewer.this.mentionListAnimation.cancel();
+                    PhotoViewer.this.mentionListAnimation = null;
+                }
+                if (PhotoViewer.this.mentionListView.getVisibility() == 0) {
+                    PhotoViewer.this.mentionListView.setTranslationY(0.0f);
+                    return;
+                }
+                PhotoViewer.this.mentionLayoutManager.scrollToPositionWithOffset(0, 10000);
+                if (PhotoViewer.this.allowMentions) {
+                    PhotoViewer.this.mentionListView.setVisibility(0);
+                    PhotoViewer.this.mentionListViewVisible = true;
+                    PhotoViewer.this.mentionListView.setTranslationY(AndroidUtilities.dp(min));
+                    PhotoViewer.this.mentionListAnimation = new SpringAnimation(PhotoViewer.this.mentionListView, DynamicAnimation.TRANSLATION_Y).setMinValue(0.0f).setMaxValue(AndroidUtilities.dp(min)).setSpring(new SpringForce(0.0f).setStiffness(750.0f).setDampingRatio(1.0f));
+                    PhotoViewer.this.mentionListAnimation.addEndListener(new DynamicAnimation.OnAnimationEndListener() { // from class: org.telegram.ui.PhotoViewer$34$$ExternalSyntheticLambda0
+                        @Override // androidx.dynamicanimation.animation.DynamicAnimation.OnAnimationEndListener
+                        public final void onAnimationEnd(DynamicAnimation dynamicAnimation, boolean z2, float f, float f2) {
+                            PhotoViewer.AnonymousClass34.this.lambda$needChangePanelVisibility$0(dynamicAnimation, z2, f, f2);
+                        }
+                    });
+                    PhotoViewer.this.mentionListAnimation.start();
+                    return;
+                }
+                PhotoViewer.this.mentionListView.setTranslationY(0.0f);
+                PhotoViewer.this.mentionListView.setVisibility(4);
+                return;
+            }
+            if (PhotoViewer.this.mentionListAnimation != null) {
+                PhotoViewer.this.mentionListAnimation.cancel();
+                PhotoViewer.this.mentionListAnimation = null;
+            }
+            if (PhotoViewer.this.mentionListView.getVisibility() == 8) {
+                return;
+            }
+            if (PhotoViewer.this.allowMentions) {
+                PhotoViewer.this.mentionListViewVisible = false;
+                PhotoViewer.this.mentionListAnimation = new SpringAnimation(PhotoViewer.this.mentionListView, DynamicAnimation.TRANSLATION_Y).setMinValue(0.0f).setMaxValue(PhotoViewer.this.mentionListView.getMeasuredHeight()).setSpring(new SpringForce(PhotoViewer.this.mentionListView.getMeasuredHeight()).setStiffness(750.0f).setDampingRatio(1.0f));
+                PhotoViewer.this.mentionListAnimation.addEndListener(new DynamicAnimation.OnAnimationEndListener() { // from class: org.telegram.ui.PhotoViewer$34$$ExternalSyntheticLambda1
+                    @Override // androidx.dynamicanimation.animation.DynamicAnimation.OnAnimationEndListener
+                    public final void onAnimationEnd(DynamicAnimation dynamicAnimation, boolean z2, float f, float f2) {
+                        PhotoViewer.AnonymousClass34.this.lambda$needChangePanelVisibility$1(dynamicAnimation, z2, f, f2);
+                    }
+                });
+                PhotoViewer.this.mentionListAnimation.start();
+                return;
+            }
+            PhotoViewer.this.mentionListView.setVisibility(8);
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$needChangePanelVisibility$0(DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
+            if (PhotoViewer.this.mentionListAnimation == dynamicAnimation) {
+                PhotoViewer.this.mentionListAnimation = null;
+            }
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$needChangePanelVisibility$1(DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
+            if (PhotoViewer.this.mentionListAnimation == dynamicAnimation) {
+                PhotoViewer.this.mentionListView.setVisibility(8);
+                PhotoViewer.this.mentionListAnimation = null;
+            }
+        }
+    }
+
     /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$setParentActivity$39(View view, int i) {
         AnimatedEmojiSpan animatedEmojiSpan;
@@ -6951,7 +7009,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
 
             @Override // org.telegram.ui.Components.SeekBarAccessibilityDelegate
             /* renamed from: getContentDescription  reason: collision with other method in class */
-            public String mo2137getContentDescription(View view) {
+            public String mo2136getContentDescription(View view) {
                 return LocaleController.formatString("AccDescrPlayerDuration", R.string.AccDescrPlayerDuration, LocaleController.formatPluralString("Minutes", PhotoViewer.this.videoPlayerCurrentTime[0], new Object[0]) + ' ' + LocaleController.formatPluralString("Seconds", PhotoViewer.this.videoPlayerCurrentTime[1], new Object[0]), LocaleController.formatPluralString("Minutes", PhotoViewer.this.videoPlayerTotalTime[0], new Object[0]) + ' ' + LocaleController.formatPluralString("Seconds", PhotoViewer.this.videoPlayerTotalTime[1], new Object[0]));
             }
         };
@@ -13781,7 +13839,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     /* JADX WARN: Type inference failed for: r15v28 */
     /* JADX WARN: Type inference failed for: r15v3 */
     /* JADX WARN: Type inference failed for: r15v37 */
-    /* JADX WARN: Type inference failed for: r15v4, types: [int, boolean] */
+    /* JADX WARN: Type inference failed for: r15v4, types: [boolean, int] */
     @android.annotation.SuppressLint({"NewApi", "DrawAllocation"})
     /*
         Code decompiled incorrectly, please refer to instructions dump.
@@ -14770,7 +14828,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1754onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
             PhotoPickerPhotoCell photoPickerPhotoCell = new PhotoPickerPhotoCell(this.mContext);
             photoPickerPhotoCell.checkFrame.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.PhotoViewer$ListAdapter$$ExternalSyntheticLambda0
                 @Override // android.view.View.OnClickListener

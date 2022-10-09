@@ -2296,7 +2296,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 FrameLayout frameLayout4 = this.avatarContainer2;
                 SimpleTextView simpleTextView = this.nameTextView[i3];
                 if (i3 == 0) {
-                    f = f2 - (z ? 16 : 0);
+                    f = f2 - (z ? 10 : 0);
                 } else {
                     f = 0.0f;
                 }
@@ -4841,25 +4841,35 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity(), this.resourcesProvider);
             ArrayList arrayList = new ArrayList();
             final ArrayList arrayList2 = new ArrayList();
+            ArrayList arrayList3 = new ArrayList();
             if (i == this.phoneRow) {
                 TLRPC$UserFull tLRPC$UserFull2 = this.userInfo;
                 if (tLRPC$UserFull2 != null && tLRPC$UserFull2.phone_calls_available) {
+                    arrayList3.add(Integer.valueOf(R.drawable.msg_calls));
                     arrayList.add(LocaleController.getString("CallViaTelegram", R.string.CallViaTelegram));
                     arrayList2.add(2);
                     if (Build.VERSION.SDK_INT >= 18 && this.userInfo.video_calls_available) {
+                        arrayList3.add(Integer.valueOf(R.drawable.msg_videocall));
                         arrayList.add(LocaleController.getString("VideoCallViaTelegram", R.string.VideoCallViaTelegram));
                         arrayList2.add(3);
                     }
                 }
+                arrayList3.add(Integer.valueOf(R.drawable.msg_calls_regular));
                 arrayList.add(LocaleController.getString("Call", R.string.Call));
                 arrayList2.add(0);
             }
+            arrayList3.add(Integer.valueOf(R.drawable.msg_copy));
             arrayList.add(LocaleController.getString("Copy", R.string.Copy));
             arrayList2.add(1);
-            builder.setItems((CharSequence[]) arrayList.toArray(new CharSequence[0]), new DialogInterface.OnClickListener() { // from class: org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda8
+            int size = arrayList3.size();
+            int[] iArr = new int[size];
+            for (int i2 = 0; i2 < size; i2++) {
+                iArr[i2] = ((Integer) arrayList3.get(i2)).intValue();
+            }
+            builder.setItems((CharSequence[]) arrayList.toArray(new CharSequence[0]), iArr, new DialogInterface.OnClickListener() { // from class: org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda8
                 @Override // android.content.DialogInterface.OnClickListener
-                public final void onClick(DialogInterface dialogInterface, int i2) {
-                    ProfileActivity.this.lambda$processOnClickOrPress$21(arrayList2, user2, dialogInterface, i2);
+                public final void onClick(DialogInterface dialogInterface, int i3) {
+                    ProfileActivity.this.lambda$processOnClickOrPress$21(arrayList2, user2, dialogInterface, i3);
                 }
             });
             showDialog(builder.create());
@@ -4977,7 +4987,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         } else {
             try {
                 ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", "+" + tLRPC$User.phone));
-                if (Build.VERSION.SDK_INT >= 31) {
+                if (!AndroidUtilities.shouldShowClipboardToast()) {
                     return;
                 }
                 BulletinFactory.of(this).createCopyBulletin(LocaleController.getString("PhoneCopied", R.string.PhoneCopied)).show();
@@ -4993,7 +5003,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity(), this.resourcesProvider);
-        builder.setItems(zArr[0] ? new CharSequence[]{LocaleController.getString("Copy", R.string.Copy), LocaleController.getString("TranslateMessage", R.string.TranslateMessage)} : new CharSequence[]{LocaleController.getString("Copy", R.string.Copy)}, new DialogInterface.OnClickListener() { // from class: org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda6
+        builder.setItems(zArr[0] ? new CharSequence[]{LocaleController.getString("Copy", R.string.Copy), LocaleController.getString("TranslateMessage", R.string.TranslateMessage)} : new CharSequence[]{LocaleController.getString("Copy", R.string.Copy)}, zArr[0] ? new int[]{R.drawable.msg_copy, R.drawable.msg_translate} : new int[]{R.drawable.msg_copy}, new DialogInterface.OnClickListener() { // from class: org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda6
             @Override // android.content.DialogInterface.OnClickListener
             public final void onClick(DialogInterface dialogInterface, int i2) {
                 ProfileActivity.this.lambda$processOnClickOrPress$23(str, i, strArr, str2, dialogInterface, i2);
@@ -6890,23 +6900,34 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     /* JADX WARN: Removed duplicated region for block: B:112:0x0246  */
     /* JADX WARN: Removed duplicated region for block: B:113:0x0248  */
     /* JADX WARN: Removed duplicated region for block: B:116:0x024e  */
-    /* JADX WARN: Removed duplicated region for block: B:145:0x02e0  */
-    /* JADX WARN: Removed duplicated region for block: B:251:0x0570  */
-    /* JADX WARN: Removed duplicated region for block: B:348:0x07a8  */
-    /* JADX WARN: Removed duplicated region for block: B:351:0x07af  */
-    /* JADX WARN: Removed duplicated region for block: B:352:0x07b2  */
-    /* JADX WARN: Removed duplicated region for block: B:355:0x07d1 A[ADDED_TO_REGION] */
-    /* JADX WARN: Removed duplicated region for block: B:362:0x07f4  */
-    /* JADX WARN: Removed duplicated region for block: B:368:0x0802  */
-    /* JADX WARN: Removed duplicated region for block: B:370:0x0811  */
-    /* JADX WARN: Removed duplicated region for block: B:379:0x0843  */
+    /* JADX WARN: Removed duplicated region for block: B:146:0x02ef  */
+    /* JADX WARN: Removed duplicated region for block: B:172:0x0350 A[ADDED_TO_REGION] */
+    /* JADX WARN: Removed duplicated region for block: B:177:0x035f  */
+    /* JADX WARN: Removed duplicated region for block: B:182:0x037b  */
+    /* JADX WARN: Removed duplicated region for block: B:255:0x0582  */
+    /* JADX WARN: Removed duplicated region for block: B:304:0x0679 A[ADDED_TO_REGION] */
+    /* JADX WARN: Removed duplicated region for block: B:310:0x0698  */
+    /* JADX WARN: Removed duplicated region for block: B:320:0x06b1  */
+    /* JADX WARN: Removed duplicated region for block: B:332:0x06da  */
+    /* JADX WARN: Removed duplicated region for block: B:342:0x0750  */
+    /* JADX WARN: Removed duplicated region for block: B:345:0x078c  */
+    /* JADX WARN: Removed duplicated region for block: B:346:0x078f  */
+    /* JADX WARN: Removed duplicated region for block: B:352:0x07ab  */
+    /* JADX WARN: Removed duplicated region for block: B:355:0x07b2  */
+    /* JADX WARN: Removed duplicated region for block: B:356:0x07b6  */
+    /* JADX WARN: Removed duplicated region for block: B:359:0x07d5 A[ADDED_TO_REGION] */
+    /* JADX WARN: Removed duplicated region for block: B:366:0x07f8  */
+    /* JADX WARN: Removed duplicated region for block: B:372:0x0806  */
+    /* JADX WARN: Removed duplicated region for block: B:374:0x0815  */
+    /* JADX WARN: Removed duplicated region for block: B:383:0x0847  */
+    /* JADX WARN: Removed duplicated region for block: B:397:0x0393 A[ADDED_TO_REGION, SYNTHETIC] */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
     public void updateProfileData(boolean r29) {
         /*
-            Method dump skipped, instructions count: 2127
+            Method dump skipped, instructions count: 2131
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ProfileActivity.updateProfileData(boolean):void");
@@ -7697,7 +7718,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1754onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
             View headerCell;
             String str;
             switch (i) {
@@ -9299,7 +9320,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1754onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
             View settingsSearchCell;
             if (i == 0) {
                 settingsSearchCell = new SettingsSearchCell(this.mContext);

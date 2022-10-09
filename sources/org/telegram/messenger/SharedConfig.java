@@ -60,6 +60,7 @@ public class SharedConfig {
     public static int emojiInteractionsHintCount = 0;
     public static int fastScrollHintCount = 0;
     public static int fontSize = 0;
+    public static boolean fontSizeIsDefault = false;
     public static boolean forceDisableTabletMode = false;
     public static boolean forceRtmpStream = false;
     public static boolean forwardingOptionsHintShown = false;
@@ -149,7 +150,7 @@ public class SharedConfig {
         autoplayGifs = true;
         autoplayVideo = true;
         raiseToSpeak = false;
-        recordViaSco = true;
+        recordViaSco = false;
         customTabs = true;
         directShare = true;
         inappCamera = true;
@@ -271,27 +272,31 @@ public class SharedConfig {
         return i;
     }
 
-    /* JADX WARN: Removed duplicated region for block: B:38:0x016a A[Catch: Exception -> 0x0188, all -> 0x03dd, TryCatch #1 {Exception -> 0x0188, blocks: (B:22:0x011b, B:24:0x0123, B:26:0x0133, B:27:0x0147, B:38:0x016a, B:40:0x016e, B:41:0x0170, B:43:0x0174, B:45:0x017a, B:47:0x0180, B:36:0x0164), top: B:85:0x011b, outer: #3 }] */
-    /* JADX WARN: Removed duplicated region for block: B:40:0x016e A[Catch: Exception -> 0x0188, all -> 0x03dd, TryCatch #1 {Exception -> 0x0188, blocks: (B:22:0x011b, B:24:0x0123, B:26:0x0133, B:27:0x0147, B:38:0x016a, B:40:0x016e, B:41:0x0170, B:43:0x0174, B:45:0x017a, B:47:0x0180, B:36:0x0164), top: B:85:0x011b, outer: #3 }] */
+    /* JADX WARN: Removed duplicated region for block: B:38:0x016a A[Catch: Exception -> 0x0188, all -> 0x03ea, TryCatch #1 {Exception -> 0x0188, blocks: (B:22:0x011b, B:24:0x0123, B:26:0x0133, B:27:0x0147, B:38:0x016a, B:40:0x016e, B:41:0x0170, B:43:0x0174, B:45:0x017a, B:47:0x0180, B:36:0x0164), top: B:89:0x011b, outer: #2 }] */
+    /* JADX WARN: Removed duplicated region for block: B:40:0x016e A[Catch: Exception -> 0x0188, all -> 0x03ea, TryCatch #1 {Exception -> 0x0188, blocks: (B:22:0x011b, B:24:0x0123, B:26:0x0133, B:27:0x0147, B:38:0x016a, B:40:0x016e, B:41:0x0170, B:43:0x0174, B:45:0x017a, B:47:0x0180, B:36:0x0164), top: B:89:0x011b, outer: #2 }] */
     /* JADX WARN: Removed duplicated region for block: B:65:0x0232  */
     /* JADX WARN: Removed duplicated region for block: B:66:0x0235  */
+    /* JADX WARN: Removed duplicated region for block: B:69:0x0245  */
+    /* JADX WARN: Removed duplicated region for block: B:70:0x0247  */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
     public static void loadConfig() {
         /*
-            Method dump skipped, instructions count: 992
+            Method dump skipped, instructions count: 1005
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SharedConfig.loadConfig():void");
     }
 
     public static void updateTabletConfig() {
-        SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("userconfing", 0);
-        int i = sharedPreferences.getInt("fons_size", AndroidUtilities.isTablet() ? 18 : 16);
-        fontSize = i;
-        ivFontSize = sharedPreferences.getInt("iv_font_size", i);
+        if (fontSizeIsDefault) {
+            SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("userconfing", 0);
+            int i = sharedPreferences.getInt("fons_size", AndroidUtilities.isTablet() ? 18 : 16);
+            fontSize = i;
+            ivFontSize = sharedPreferences.getInt("iv_font_size", i);
+        }
     }
 
     public static void increaseBadPasscodeTries() {
@@ -787,13 +792,6 @@ public class SharedConfig {
         edit.commit();
     }
 
-    public static void toggleRecordViaSco() {
-        recordViaSco = !recordViaSco;
-        SharedPreferences.Editor edit = MessagesController.getGlobalMainSettings().edit();
-        edit.putBoolean("record_via_sco", recordViaSco);
-        edit.commit();
-    }
-
     public static void toggleCustomTabs() {
         customTabs = !customTabs;
         SharedPreferences.Editor edit = MessagesController.getGlobalMainSettings().edit();
@@ -1098,7 +1096,7 @@ public class SharedConfig {
                 devicePerformanceClass = 2;
             }
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.d("device performance info selected_class = " + devicePerformanceClass + " (cpu_count = " + i2 + ", freq = " + ceil + ", memoryClass = " + memoryClass + ", android version " + i + ")");
+                FileLog.d("device performance info selected_class = " + devicePerformanceClass + " (cpu_count = " + i2 + ", freq = " + ceil + ", memoryClass = " + memoryClass + ", android version " + i + ", manufacture " + Build.MANUFACTURER + ")");
             }
         }
         return devicePerformanceClass;

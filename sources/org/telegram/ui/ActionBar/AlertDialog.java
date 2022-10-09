@@ -29,6 +29,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import java.util.ArrayList;
+import java.util.Map;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -37,6 +38,7 @@ import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.LineProgressView;
+import org.telegram.ui.Components.RLottieDrawable;
 import org.telegram.ui.Components.RLottieImageView;
 import org.telegram.ui.Components.RadialProgressView;
 import org.telegram.ui.Components.spoilers.SpoilersTextView;
@@ -100,6 +102,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
     private TextView titleTextView;
     private boolean topAnimationAutoRepeat;
     private int topAnimationId;
+    private Map<String, Integer> topAnimationLayerColors;
     private int topAnimationSize;
     private int topBackgroundColor;
     private Drawable topDrawable;
@@ -271,6 +274,12 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                     int i4 = this.topAnimationId;
                     int i5 = this.topAnimationSize;
                     rLottieImageView2.setAnimation(i4, i5, i5);
+                    if (this.topAnimationLayerColors != null) {
+                        RLottieDrawable animatedDrawable = this.topImageView.getAnimatedDrawable();
+                        for (Map.Entry<String, Integer> entry : this.topAnimationLayerColors.entrySet()) {
+                            animatedDrawable.setLayerColor(entry.getKey(), entry.getValue().intValue());
+                        }
+                    }
                     this.topImageView.playAnimation();
                 }
             }
@@ -1240,10 +1249,15 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         }
 
         public Builder setTopAnimation(int i, int i2, boolean z, int i3) {
+            return setTopAnimation(i, i2, z, i3, null);
+        }
+
+        public Builder setTopAnimation(int i, int i2, boolean z, int i3, Map<String, Integer> map) {
             this.alertDialog.topAnimationId = i;
             this.alertDialog.topAnimationSize = i2;
             this.alertDialog.topAnimationAutoRepeat = z;
             this.alertDialog.topBackgroundColor = i3;
+            this.alertDialog.topAnimationLayerColors = map;
             return this;
         }
 

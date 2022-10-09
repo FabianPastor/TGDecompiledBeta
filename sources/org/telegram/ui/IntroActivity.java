@@ -575,7 +575,7 @@ public class IntroActivity extends BaseFragment implements NotificationCenter.No
 
         @Override // androidx.viewpager.widget.PagerAdapter
         /* renamed from: instantiateItem */
-        public Object mo1568instantiateItem(ViewGroup viewGroup, int i) {
+        public Object mo1567instantiateItem(ViewGroup viewGroup, int i) {
             final TextView textView = new TextView(viewGroup.getContext());
             textView.setTag(IntroActivity.this.pagerHeaderTag);
             final TextView textView2 = new TextView(viewGroup.getContext());

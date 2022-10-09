@@ -239,7 +239,7 @@ public class StickerEmojiCell extends FrameLayout implements NotificationCenter.
             layoutParams.height = dp;
             layoutParams.gravity = 81;
             layoutParams.rightMargin = 0;
-            layoutParams.bottomMargin = 0;
+            layoutParams.bottomMargin = AndroidUtilities.dp(8.0f);
             this.premiumIconView.setPadding(AndroidUtilities.dp(4.0f), AndroidUtilities.dp(4.0f), AndroidUtilities.dp(4.0f), AndroidUtilities.dp(4.0f));
         } else {
             int dp2 = AndroidUtilities.dp(16.0f);

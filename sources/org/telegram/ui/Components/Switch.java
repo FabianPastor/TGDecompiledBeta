@@ -23,7 +23,6 @@ import android.view.View;
 import android.view.accessibility.AccessibilityNodeInfo;
 import androidx.annotation.Keep;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.OneUIUtilities;
 import org.telegram.ui.ActionBar.Theme;
 /* loaded from: classes3.dex */
 public class Switch extends View {
@@ -411,9 +410,8 @@ public class Switch extends View {
             if (!isHapticFeedbackEnabled() || Build.VERSION.SDK_INT < 28) {
                 return;
             }
-            Vibrator vibrator = (Vibrator) getContext().getSystemService("vibrator");
-            int i = OneUIUtilities.isOneUI() ? 5 : 15;
-            VibrationEffect createWaveform = VibrationEffect.createWaveform(z ? new long[]{80, 25, 15} : new long[]{25, 80, 10}, z ? new int[]{i, 0, 255} : new int[]{0, i, 140}, -1);
+            Vibrator vibrator = AndroidUtilities.getVibrator();
+            VibrationEffect createWaveform = VibrationEffect.createWaveform(new long[]{75, 10, 5, 10}, new int[]{5, 20, 110, 20}, -1);
             vibrator.cancel();
             vibrator.vibrate(createWaveform);
             this.semHaptics = true;

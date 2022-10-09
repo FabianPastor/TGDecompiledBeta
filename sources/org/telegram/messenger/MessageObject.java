@@ -425,16 +425,23 @@ public class MessageObject {
         this.forcePlayEffect = messageObject.forcePlayEffect;
         this.wasJustSent = messageObject.wasJustSent;
         TLRPC$TL_messageReactions tLRPC$TL_messageReactions2 = tLRPC$Message.reactions;
-        if (tLRPC$TL_messageReactions2 == null || (arrayList = tLRPC$TL_messageReactions2.results) == null || arrayList.isEmpty() || (tLRPC$TL_messageReactions = messageObject.messageOwner.reactions) == null || tLRPC$TL_messageReactions.results == null) {
-            return;
-        }
-        for (int i = 0; i < this.messageOwner.reactions.results.size(); i++) {
-            TLRPC$ReactionCount tLRPC$ReactionCount = this.messageOwner.reactions.results.get(i);
-            for (int i2 = 0; i2 < messageObject.messageOwner.reactions.results.size(); i2++) {
-                TLRPC$ReactionCount tLRPC$ReactionCount2 = messageObject.messageOwner.reactions.results.get(i2);
-                if (ReactionsLayoutInBubble.equalsTLReaction(tLRPC$ReactionCount.reaction, tLRPC$ReactionCount2.reaction)) {
-                    tLRPC$ReactionCount.lastDrawnPosition = tLRPC$ReactionCount2.lastDrawnPosition;
+        if (tLRPC$TL_messageReactions2 != null && (arrayList = tLRPC$TL_messageReactions2.results) != null && !arrayList.isEmpty() && (tLRPC$TL_messageReactions = messageObject.messageOwner.reactions) != null && tLRPC$TL_messageReactions.results != null) {
+            for (int i = 0; i < this.messageOwner.reactions.results.size(); i++) {
+                TLRPC$ReactionCount tLRPC$ReactionCount = this.messageOwner.reactions.results.get(i);
+                for (int i2 = 0; i2 < messageObject.messageOwner.reactions.results.size(); i2++) {
+                    TLRPC$ReactionCount tLRPC$ReactionCount2 = messageObject.messageOwner.reactions.results.get(i2);
+                    if (ReactionsLayoutInBubble.equalsTLReaction(tLRPC$ReactionCount.reaction, tLRPC$ReactionCount2.reaction)) {
+                        tLRPC$ReactionCount.lastDrawnPosition = tLRPC$ReactionCount2.lastDrawnPosition;
+                    }
                 }
+            }
+        }
+        boolean z = messageObject.isSpoilersRevealed;
+        this.isSpoilersRevealed = z;
+        if (z) {
+            Iterator<TextLayoutBlock> it = this.textLayoutBlocks.iterator();
+            while (it.hasNext()) {
+                it.next().spoilers.clear();
             }
         }
     }
