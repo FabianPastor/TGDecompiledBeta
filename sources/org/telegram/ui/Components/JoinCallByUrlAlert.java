@@ -1,7 +1,6 @@
 package org.telegram.ui.Components;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -15,18 +14,17 @@ import org.telegram.messenger.R;
 import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
-
+/* loaded from: classes3.dex */
 public class JoinCallByUrlAlert extends BottomSheet {
     private boolean joinAfterDismiss;
 
-    /* access modifiers changed from: protected */
-    public void onJoin() {
+    protected void onJoin() {
         throw null;
     }
 
+    /* loaded from: classes3.dex */
     public static class BottomSheetCell extends FrameLayout {
-        /* access modifiers changed from: private */
-        public View background;
+        private View background;
         private TextView textView;
 
         public BottomSheetCell(Context context) {
@@ -35,9 +33,9 @@ public class JoinCallByUrlAlert extends BottomSheet {
             this.background = view;
             view.setBackground(Theme.AdaptiveRipple.filledRect("featuredStickers_addButton", 4.0f));
             addView(this.background, LayoutHelper.createFrame(-1, -1.0f, 0, 16.0f, 16.0f, 16.0f, 16.0f));
-            TextView textView2 = new TextView(context);
-            this.textView = textView2;
-            textView2.setLines(1);
+            TextView textView = new TextView(context);
+            this.textView = textView;
+            textView.setLines(1);
             this.textView.setSingleLine(true);
             this.textView.setGravity(1);
             this.textView.setEllipsize(TextUtils.TruncateAt.END);
@@ -48,8 +46,8 @@ public class JoinCallByUrlAlert extends BottomSheet {
             addView(this.textView, LayoutHelper.createFrame(-2, -2, 17));
         }
 
-        /* access modifiers changed from: protected */
-        public void onMeasure(int i, int i2) {
+        @Override // android.widget.FrameLayout, android.view.View
+        protected void onMeasure(int i, int i2) {
             super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(80.0f), NUM));
         }
 
@@ -98,22 +96,28 @@ public class JoinCallByUrlAlert extends BottomSheet {
             textView2.setText(LocaleController.getString("NoOneJoinedYet", R.string.NoOneJoinedYet));
         }
         BottomSheetCell bottomSheetCell = new BottomSheetCell(context);
-        bottomSheetCell.setBackground((Drawable) null);
+        bottomSheetCell.setBackground(null);
         if (ChatObject.isChannelOrGiga(tLRPC$Chat)) {
             bottomSheetCell.setText(LocaleController.getString("VoipChannelJoinVoiceChatUrl", R.string.VoipChannelJoinVoiceChatUrl));
         } else {
             bottomSheetCell.setText(LocaleController.getString("VoipGroupJoinVoiceChatUrl", R.string.VoipGroupJoinVoiceChatUrl));
         }
-        bottomSheetCell.background.setOnClickListener(new JoinCallByUrlAlert$$ExternalSyntheticLambda0(this));
+        bottomSheetCell.background.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.Components.JoinCallByUrlAlert$$ExternalSyntheticLambda0
+            @Override // android.view.View.OnClickListener
+            public final void onClick(View view) {
+                JoinCallByUrlAlert.this.lambda$new$0(view);
+            }
+        });
         linearLayout.addView(bottomSheetCell, LayoutHelper.createLinear(-1, 50, 51, 0, 30, 0, 0));
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$new$0(View view) {
         this.joinAfterDismiss = true;
         dismiss();
     }
 
+    @Override // org.telegram.ui.ActionBar.BottomSheet
     public void dismissInternal() {
         super.dismissInternal();
         if (this.joinAfterDismiss) {

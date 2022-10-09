@@ -1,5 +1,5 @@
 package org.webrtc;
-
+/* loaded from: classes3.dex */
 public class DtmfSender {
     private long nativeDtmfSender;
 
@@ -45,12 +45,13 @@ public class DtmfSender {
     public void dispose() {
         checkDtmfSenderExists();
         JniCommon.nativeReleaseRef(this.nativeDtmfSender);
-        this.nativeDtmfSender = 0;
+        this.nativeDtmfSender = 0L;
     }
 
     private void checkDtmfSenderExists() {
-        if (this.nativeDtmfSender == 0) {
-            throw new IllegalStateException("DtmfSender has been disposed.");
+        if (this.nativeDtmfSender != 0) {
+            return;
         }
+        throw new IllegalStateException("DtmfSender has been disposed.");
     }
 }

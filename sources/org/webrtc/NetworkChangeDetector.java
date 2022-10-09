@@ -1,9 +1,10 @@
 package org.webrtc;
 
 import java.util.List;
-
+/* loaded from: classes3.dex */
 public interface NetworkChangeDetector {
 
+    /* loaded from: classes3.dex */
     public enum ConnectionType {
         CONNECTION_UNKNOWN,
         CONNECTION_ETHERNET,
@@ -18,6 +19,7 @@ public interface NetworkChangeDetector {
         CONNECTION_NONE
     }
 
+    /* loaded from: classes3.dex */
     public interface Observer {
         void onConnectionTypeChanged(ConnectionType connectionType);
 
@@ -36,6 +38,7 @@ public interface NetworkChangeDetector {
 
     boolean supportNetworkCallback();
 
+    /* loaded from: classes3.dex */
     public static class IPAddress {
         public final byte[] address;
 
@@ -49,6 +52,7 @@ public interface NetworkChangeDetector {
         }
     }
 
+    /* loaded from: classes3.dex */
     public static class NetworkInformation {
         public final long handle;
         public final IPAddress[] ipAddresses;

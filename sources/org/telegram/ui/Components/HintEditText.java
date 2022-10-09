@@ -2,30 +2,31 @@ package org.telegram.ui.Components;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Rect;
+import android.graphics.Paint;
 import android.text.TextPaint;
 import android.util.TypedValue;
 import org.telegram.ui.ActionBar.Theme;
-
+/* loaded from: classes3.dex */
 public class HintEditText extends EditTextBoldCursor {
-    protected TextPaint hintPaint = new TextPaint(1);
+    protected TextPaint hintPaint;
     private String hintText;
-    private Rect rect = new Rect();
+    private android.graphics.Rect rect;
 
-    /* access modifiers changed from: protected */
-    public void onPreDrawHintCharacter(int i, Canvas canvas, float f, float f2) {
+    protected void onPreDrawHintCharacter(int i, Canvas canvas, float f, float f2) {
     }
 
-    /* access modifiers changed from: protected */
-    public boolean shouldDrawBehindText(int i) {
+    protected boolean shouldDrawBehindText(int i) {
         return false;
     }
 
     public HintEditText(Context context) {
         super(context);
+        this.hintPaint = new TextPaint(1);
+        this.rect = new android.graphics.Rect();
         this.hintPaint.setColor(Theme.getColor("windowBackgroundWhiteHintText"));
     }
 
+    @Override // android.widget.TextView
     public void setTextSize(int i, float f) {
         super.setTextSize(i, f);
         this.hintPaint.setTextSize(TypedValue.applyDimension(i, f, getResources().getDisplayMetrics()));
@@ -41,7 +42,8 @@ public class HintEditText extends EditTextBoldCursor {
         setText(getText());
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
+    @Override // org.telegram.ui.Components.EditTextEffects, android.widget.TextView, android.view.View
     public void onLayout(boolean z, int i, int i2, int i3, int i4) {
         super.onLayout(z, i, i2, i3, i4);
         onTextChange();
@@ -51,32 +53,33 @@ public class HintEditText extends EditTextBoldCursor {
         invalidate();
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
+    @Override // org.telegram.ui.Components.EditTextBoldCursor, org.telegram.ui.Components.EditTextEffects, android.widget.TextView, android.view.View
     public void onDraw(Canvas canvas) {
-        float f;
+        float measureText;
         if (this.hintText != null && length() < this.hintText.length()) {
-            float f2 = 0.0f;
+            float f = 0.0f;
             for (int i = 0; i < this.hintText.length(); i++) {
                 if (i < length()) {
-                    f = getPaint().measureText(getText(), i, i + 1);
+                    measureText = getPaint().measureText(getText(), i, i + 1);
                 } else {
-                    f = this.hintPaint.measureText(this.hintText, i, i + 1);
+                    measureText = this.hintPaint.measureText(this.hintText, i, i + 1);
                 }
-                float f3 = f;
+                float f2 = measureText;
                 if (shouldDrawBehindText(i) || i >= length()) {
                     int color = this.hintPaint.getColor();
                     canvas.save();
                     TextPaint textPaint = this.hintPaint;
                     String str = this.hintText;
                     textPaint.getTextBounds(str, 0, str.length(), this.rect);
-                    float height = ((float) (getHeight() + this.rect.height())) / 2.0f;
-                    onPreDrawHintCharacter(i, canvas, f2, height);
-                    canvas.drawText(this.hintText, i, i + 1, f2, height, this.hintPaint);
-                    f2 += f3;
+                    float height = (getHeight() + this.rect.height()) / 2.0f;
+                    onPreDrawHintCharacter(i, canvas, f, height);
+                    canvas.drawText(this.hintText, i, i + 1, f, height, (Paint) this.hintPaint);
+                    f += f2;
                     canvas.restore();
                     this.hintPaint.setColor(color);
                 } else {
-                    f2 += f3;
+                    f += f2;
                 }
             }
         }

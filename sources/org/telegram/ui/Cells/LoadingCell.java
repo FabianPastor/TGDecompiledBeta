@@ -6,7 +6,7 @@ import android.widget.FrameLayout;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RadialProgressView;
-
+/* loaded from: classes3.dex */
 public class LoadingCell extends FrameLayout {
     private int height;
     private RadialProgressView progressBar;
@@ -24,8 +24,8 @@ public class LoadingCell extends FrameLayout {
         addView(this.progressBar, LayoutHelper.createFrame(-2, -2, 17));
     }
 
-    /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
+    @Override // android.widget.FrameLayout, android.view.View
+    protected void onMeasure(int i, int i2) {
         super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(this.height, NUM));
     }
 }

@@ -1,13 +1,12 @@
 package j$.util.stream;
-
-import j$.util.function.y;
-
-public final /* synthetic */ class Z implements y {
+/* loaded from: classes2.dex */
+public final /* synthetic */ class Z implements j$.util.function.y {
     public static final /* synthetic */ Z a = new Z();
 
     private /* synthetic */ Z() {
     }
 
+    @Override // j$.util.function.y
     public final Object get() {
         return new CLASSNAMEe0();
     }

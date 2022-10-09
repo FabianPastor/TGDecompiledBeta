@@ -9,23 +9,24 @@ import android.view.animation.DecelerateInterpolator;
 import androidx.viewpager.widget.ViewPager;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
-
+/* loaded from: classes3.dex */
 public class BottomPagesView extends View {
     private String colorKey;
     private int currentPage;
     private int pagesCount;
-    private Paint paint = new Paint(1);
+    private Paint paint;
     private float progress;
     private RectF rect;
     private int scrollPosition;
     private String selectedColorKey;
     private ViewPager viewPager;
 
-    public BottomPagesView(Context context, ViewPager viewPager2, int i) {
+    public BottomPagesView(Context context, ViewPager viewPager, int i) {
         super(context);
+        this.paint = new Paint(1);
         new DecelerateInterpolator();
         this.rect = new RectF();
-        this.viewPager = viewPager2;
+        this.viewPager = viewPager;
         this.pagesCount = i;
     }
 
@@ -45,12 +46,12 @@ public class BottomPagesView extends View {
         this.selectedColorKey = str2;
     }
 
-    /* access modifiers changed from: protected */
-    public void onDraw(Canvas canvas) {
+    @Override // android.view.View
+    protected void onDraw(Canvas canvas) {
         AndroidUtilities.dp(5.0f);
         String str = this.colorKey;
         if (str != null) {
-            this.paint.setColor((Theme.getColor(str) & 16777215) | -NUM);
+            this.paint.setColor((Theme.getColor(str) & 16777215) | (-NUM));
         } else {
             this.paint.setColor(Theme.getCurrentTheme().isDark() ? -11184811 : -4473925);
         }
@@ -58,8 +59,8 @@ public class BottomPagesView extends View {
         for (int i = 0; i < this.pagesCount; i++) {
             if (i != this.currentPage) {
                 int dp = AndroidUtilities.dp(11.0f) * i;
-                this.rect.set((float) dp, 0.0f, (float) (dp + AndroidUtilities.dp(5.0f)), (float) AndroidUtilities.dp(5.0f));
-                canvas.drawRoundRect(this.rect, (float) AndroidUtilities.dp(2.5f), (float) AndroidUtilities.dp(2.5f), this.paint);
+                this.rect.set(dp, 0.0f, dp + AndroidUtilities.dp(5.0f), AndroidUtilities.dp(5.0f));
+                canvas.drawRoundRect(this.rect, AndroidUtilities.dp(2.5f), AndroidUtilities.dp(2.5f), this.paint);
             }
         }
         String str2 = this.selectedColorKey;
@@ -69,13 +70,15 @@ public class BottomPagesView extends View {
             this.paint.setColor(-13851168);
         }
         int dp2 = this.currentPage * AndroidUtilities.dp(11.0f);
-        if (this.progress == 0.0f) {
-            this.rect.set((float) dp2, 0.0f, (float) (dp2 + AndroidUtilities.dp(5.0f)), (float) AndroidUtilities.dp(5.0f));
-        } else if (this.scrollPosition >= this.currentPage) {
-            this.rect.set((float) dp2, 0.0f, ((float) (dp2 + AndroidUtilities.dp(5.0f))) + (((float) AndroidUtilities.dp(11.0f)) * this.progress), (float) AndroidUtilities.dp(5.0f));
+        if (this.progress != 0.0f) {
+            if (this.scrollPosition >= this.currentPage) {
+                this.rect.set(dp2, 0.0f, dp2 + AndroidUtilities.dp(5.0f) + (AndroidUtilities.dp(11.0f) * this.progress), AndroidUtilities.dp(5.0f));
+            } else {
+                this.rect.set(dp2 - (AndroidUtilities.dp(11.0f) * (1.0f - this.progress)), 0.0f, dp2 + AndroidUtilities.dp(5.0f), AndroidUtilities.dp(5.0f));
+            }
         } else {
-            this.rect.set(((float) dp2) - (((float) AndroidUtilities.dp(11.0f)) * (1.0f - this.progress)), 0.0f, (float) (dp2 + AndroidUtilities.dp(5.0f)), (float) AndroidUtilities.dp(5.0f));
+            this.rect.set(dp2, 0.0f, dp2 + AndroidUtilities.dp(5.0f), AndroidUtilities.dp(5.0f));
         }
-        canvas.drawRoundRect(this.rect, (float) AndroidUtilities.dp(2.5f), (float) AndroidUtilities.dp(2.5f), this.paint);
+        canvas.drawRoundRect(this.rect, AndroidUtilities.dp(2.5f), AndroidUtilities.dp(2.5f), this.paint);
     }
 }

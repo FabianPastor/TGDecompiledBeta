@@ -1,27 +1,26 @@
 package j$.util.stream;
 
-import j$.util.CLASSNAMEa;
+import j$.util.AbstractCLASSNAMEa;
 import j$.util.function.Consumer;
-import j$.util.function.q;
-import j$.util.function.y;
-import j$.util.u;
-import j$.util.v;
-
-final class s4 extends CLASSNAMEf4 implements v {
-    s4(CLASSNAMEy2 y2Var, y yVar, boolean z) {
-        super(y2Var, yVar, z);
+/* loaded from: classes2.dex */
+final class s4 extends AbstractCLASSNAMEf4 implements j$.util.v {
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public s4(AbstractCLASSNAMEy2 abstractCLASSNAMEy2, j$.util.function.y yVar, boolean z) {
+        super(abstractCLASSNAMEy2, yVar, z);
     }
 
-    s4(CLASSNAMEy2 y2Var, u uVar, boolean z) {
-        super(y2Var, uVar, z);
+    s4(AbstractCLASSNAMEy2 abstractCLASSNAMEy2, j$.util.u uVar, boolean z) {
+        super(abstractCLASSNAMEy2, uVar, z);
     }
 
+    @Override // j$.util.u
     public /* synthetic */ boolean b(Consumer consumer) {
-        return CLASSNAMEa.l(this, consumer);
+        return AbstractCLASSNAMEa.l(this, consumer);
     }
 
+    @Override // j$.util.w
     /* renamed from: d */
-    public void forEachRemaining(q qVar) {
+    public void forEachRemaining(j$.util.function.q qVar) {
         if (this.h != null || this.i) {
             do {
             } while (tryAdvance(qVar));
@@ -33,12 +32,14 @@ final class s4 extends CLASSNAMEf4 implements v {
         this.i = true;
     }
 
+    @Override // j$.util.u
     public /* synthetic */ void forEachRemaining(Consumer consumer) {
-        CLASSNAMEa.d(this, consumer);
+        AbstractCLASSNAMEa.d(this, consumer);
     }
 
+    @Override // j$.util.w
     /* renamed from: i */
-    public boolean tryAdvance(q qVar) {
+    public boolean tryAdvance(j$.util.function.q qVar) {
         qVar.getClass();
         boolean a = a();
         if (a) {
@@ -50,20 +51,22 @@ final class s4 extends CLASSNAMEf4 implements v {
         return a;
     }
 
-    /* access modifiers changed from: package-private */
-    public void j() {
+    @Override // j$.util.stream.AbstractCLASSNAMEf4
+    void j() {
         Y3 y3 = new Y3();
         this.h = y3;
         this.e = this.b.v0(new r4(y3));
         this.f = new CLASSNAMEb(this);
     }
 
-    /* access modifiers changed from: package-private */
-    public CLASSNAMEf4 l(u uVar) {
+    @Override // j$.util.stream.AbstractCLASSNAMEf4
+    AbstractCLASSNAMEf4 l(j$.util.u uVar) {
         return new s4(this.b, uVar, this.a);
     }
 
-    public v trySplit() {
-        return (v) super.trySplit();
+    @Override // j$.util.stream.AbstractCLASSNAMEf4, j$.util.u
+    /* renamed from: trySplit  reason: collision with other method in class */
+    public j$.util.v mo322trySplit() {
+        return (j$.util.v) super.mo322trySplit();
     }
 }

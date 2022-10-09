@@ -3,24 +3,27 @@ package org.telegram.ui.Components;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.text.TextPaint;
 import android.view.View;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
-
+/* loaded from: classes3.dex */
 public class LoginOrView extends View {
-    private Paint linePaint = new Paint(1);
+    private Paint linePaint;
     private View measureAfter;
-    private String string = LocaleController.getString(R.string.LoginOrSingInWithGoogle);
-    private Rect textBounds = new Rect();
-    private TextPaint textPaint = new TextPaint(1);
+    private String string;
+    private android.graphics.Rect textBounds;
+    private TextPaint textPaint;
 
     public LoginOrView(Context context) {
         super(context);
-        this.textPaint.setTextSize((float) AndroidUtilities.dp(14.0f));
+        this.textPaint = new TextPaint(1);
+        this.linePaint = new Paint(1);
+        this.textBounds = new android.graphics.Rect();
+        this.string = LocaleController.getString(R.string.LoginOrSingInWithGoogle);
+        this.textPaint.setTextSize(AndroidUtilities.dp(14.0f));
         updateColors();
     }
 
@@ -34,24 +37,24 @@ public class LoginOrView extends View {
         invalidate();
     }
 
-    /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
+    @Override // android.view.View
+    protected void onMeasure(int i, int i2) {
         View view = this.measureAfter;
         if (view != null) {
             i = View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(view.getMeasuredWidth()), NUM);
         }
         super.onMeasure(i, i2);
-        TextPaint textPaint2 = this.textPaint;
+        TextPaint textPaint = this.textPaint;
         String str = this.string;
-        textPaint2.getTextBounds(str, 0, str.length(), this.textBounds);
+        textPaint.getTextBounds(str, 0, str.length(), this.textBounds);
     }
 
-    /* access modifiers changed from: protected */
-    public void onDraw(Canvas canvas) {
+    @Override // android.view.View
+    protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        float width = this.measureAfter != null ? ((float) ((((getWidth() - this.textBounds.width()) - AndroidUtilities.dp(8.0f)) - this.measureAfter.getPaddingLeft()) - this.measureAfter.getPaddingRight())) / 2.0f : (float) AndroidUtilities.dp(48.0f);
-        canvas.drawLine(((((float) (getWidth() - this.textBounds.width())) / 2.0f) - ((float) AndroidUtilities.dp(8.0f))) - width, ((float) getHeight()) / 2.0f, (((float) (getWidth() - this.textBounds.width())) / 2.0f) - ((float) AndroidUtilities.dp(8.0f)), ((float) getHeight()) / 2.0f, this.linePaint);
-        canvas.drawLine((((float) (getWidth() + this.textBounds.width())) / 2.0f) + ((float) AndroidUtilities.dp(8.0f)), ((float) getHeight()) / 2.0f, (((float) (getWidth() + this.textBounds.width())) / 2.0f) + ((float) AndroidUtilities.dp(8.0f)) + width, ((float) getHeight()) / 2.0f, this.linePaint);
-        canvas.drawText(this.string, ((float) (getWidth() - this.textBounds.width())) / 2.0f, ((float) (getHeight() + this.textBounds.height())) / 2.0f, this.textPaint);
+        float width = this.measureAfter != null ? ((((getWidth() - this.textBounds.width()) - AndroidUtilities.dp(8.0f)) - this.measureAfter.getPaddingLeft()) - this.measureAfter.getPaddingRight()) / 2.0f : AndroidUtilities.dp(48.0f);
+        canvas.drawLine((((getWidth() - this.textBounds.width()) / 2.0f) - AndroidUtilities.dp(8.0f)) - width, getHeight() / 2.0f, ((getWidth() - this.textBounds.width()) / 2.0f) - AndroidUtilities.dp(8.0f), getHeight() / 2.0f, this.linePaint);
+        canvas.drawLine(((getWidth() + this.textBounds.width()) / 2.0f) + AndroidUtilities.dp(8.0f), getHeight() / 2.0f, ((getWidth() + this.textBounds.width()) / 2.0f) + AndroidUtilities.dp(8.0f) + width, getHeight() / 2.0f, this.linePaint);
+        canvas.drawText(this.string, (getWidth() - this.textBounds.width()) / 2.0f, (getHeight() + this.textBounds.height()) / 2.0f, this.textPaint);
     }
 }

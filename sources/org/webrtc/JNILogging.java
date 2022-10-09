@@ -1,12 +1,12 @@
 package org.webrtc;
 
 import org.webrtc.Logging;
-
+/* loaded from: classes3.dex */
 class JNILogging {
     private final Loggable loggable;
 
-    public JNILogging(Loggable loggable2) {
-        this.loggable = loggable2;
+    public JNILogging(Loggable loggable) {
+        this.loggable = loggable;
     }
 
     @CalledByNative

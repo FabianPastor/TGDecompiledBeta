@@ -18,7 +18,7 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RLottieDrawable;
 import org.telegram.ui.Components.RLottieImageView;
-
+/* loaded from: classes3.dex */
 public class TextCell extends FrameLayout {
     public int imageLeft;
     public final RLottieImageView imageView;
@@ -33,26 +33,26 @@ public class TextCell extends FrameLayout {
     public final SimpleTextView valueTextView;
 
     public TextCell(Context context) {
-        this(context, 23, false, (Theme.ResourcesProvider) null);
+        this(context, 23, false, null);
     }
 
-    public TextCell(Context context, Theme.ResourcesProvider resourcesProvider2) {
-        this(context, 23, false, resourcesProvider2);
+    public TextCell(Context context, Theme.ResourcesProvider resourcesProvider) {
+        this(context, 23, false, resourcesProvider);
     }
 
     public TextCell(Context context, int i, boolean z) {
-        this(context, i, z, (Theme.ResourcesProvider) null);
+        this(context, i, z, null);
     }
 
-    public TextCell(Context context, int i, boolean z, Theme.ResourcesProvider resourcesProvider2) {
+    public TextCell(Context context, int i, boolean z, Theme.ResourcesProvider resourcesProvider) {
         super(context);
         this.offsetFromImage = 71;
         this.imageLeft = 21;
-        this.resourcesProvider = resourcesProvider2;
+        this.resourcesProvider = resourcesProvider;
         this.leftPadding = i;
         SimpleTextView simpleTextView = new SimpleTextView(context);
         this.textView = simpleTextView;
-        simpleTextView.setTextColor(Theme.getColor(z ? "dialogTextBlack" : "windowBackgroundWhiteBlackText", resourcesProvider2));
+        simpleTextView.setTextColor(Theme.getColor(z ? "dialogTextBlack" : "windowBackgroundWhiteBlackText", resourcesProvider));
         simpleTextView.setTextSize(16);
         int i2 = 5;
         simpleTextView.setGravity(LocaleController.isRTL ? 5 : 3);
@@ -60,7 +60,7 @@ public class TextCell extends FrameLayout {
         addView(simpleTextView, LayoutHelper.createFrame(-2, -1.0f));
         SimpleTextView simpleTextView2 = new SimpleTextView(context);
         this.valueTextView = simpleTextView2;
-        simpleTextView2.setTextColor(Theme.getColor(z ? "dialogTextBlue2" : "windowBackgroundWhiteValueText", resourcesProvider2));
+        simpleTextView2.setTextColor(Theme.getColor(z ? "dialogTextBlue2" : "windowBackgroundWhiteValueText", resourcesProvider));
         simpleTextView2.setTextSize(16);
         simpleTextView2.setGravity(LocaleController.isRTL ? 3 : i2);
         simpleTextView2.setImportantForAccessibility(2);
@@ -68,11 +68,11 @@ public class TextCell extends FrameLayout {
         RLottieImageView rLottieImageView = new RLottieImageView(context);
         this.imageView = rLottieImageView;
         rLottieImageView.setScaleType(ImageView.ScaleType.CENTER);
-        rLottieImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(z ? "dialogIcon" : "windowBackgroundWhiteGrayIcon", resourcesProvider2), PorterDuff.Mode.MULTIPLY));
+        rLottieImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(z ? "dialogIcon" : "windowBackgroundWhiteGrayIcon", resourcesProvider), PorterDuff.Mode.MULTIPLY));
         addView(rLottieImageView);
-        ImageView imageView2 = new ImageView(context);
-        this.valueImageView = imageView2;
-        imageView2.setScaleType(ImageView.ScaleType.CENTER);
+        ImageView imageView = new ImageView(context);
+        this.valueImageView = imageView;
+        imageView.setScaleType(ImageView.ScaleType.CENTER);
         addView(this.valueImageView);
         setFocusable(true);
     }
@@ -102,16 +102,16 @@ public class TextCell extends FrameLayout {
         requestLayout();
     }
 
-    /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
+    @Override // android.widget.FrameLayout, android.view.View
+    protected void onMeasure(int i, int i2) {
         int size = View.MeasureSpec.getSize(i);
         int dp = AndroidUtilities.dp(48.0f);
         if (this.prioritizeTitleOverValue) {
-            this.textView.measure(View.MeasureSpec.makeMeasureSpec(size - AndroidUtilities.dp((float) (this.leftPadding + 71)), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(20.0f), NUM));
-            this.valueTextView.measure(View.MeasureSpec.makeMeasureSpec((size - AndroidUtilities.dp((float) (this.leftPadding + 103))) - this.textView.getTextWidth(), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(20.0f), NUM));
+            this.textView.measure(View.MeasureSpec.makeMeasureSpec(size - AndroidUtilities.dp(this.leftPadding + 71), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(20.0f), NUM));
+            this.valueTextView.measure(View.MeasureSpec.makeMeasureSpec((size - AndroidUtilities.dp(this.leftPadding + 103)) - this.textView.getTextWidth(), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(20.0f), NUM));
         } else {
-            this.valueTextView.measure(View.MeasureSpec.makeMeasureSpec(size - AndroidUtilities.dp((float) this.leftPadding), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(20.0f), NUM));
-            this.textView.measure(View.MeasureSpec.makeMeasureSpec((size - AndroidUtilities.dp((float) (this.leftPadding + 71))) - this.valueTextView.getTextWidth(), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(20.0f), NUM));
+            this.valueTextView.measure(View.MeasureSpec.makeMeasureSpec(size - AndroidUtilities.dp(this.leftPadding), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(20.0f), NUM));
+            this.textView.measure(View.MeasureSpec.makeMeasureSpec((size - AndroidUtilities.dp(this.leftPadding + 71)) - this.valueTextView.getTextWidth(), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(20.0f), NUM));
         }
         if (this.imageView.getVisibility() == 0) {
             this.imageView.measure(View.MeasureSpec.makeMeasureSpec(size, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(dp, Integer.MIN_VALUE));
@@ -122,37 +122,38 @@ public class TextCell extends FrameLayout {
         setMeasuredDimension(size, AndroidUtilities.dp(50.0f) + (this.needDivider ? 1 : 0));
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
+    @Override // android.widget.FrameLayout, android.view.ViewGroup, android.view.View
     public void onLayout(boolean z, int i, int i2, int i3, int i4) {
-        int i5;
-        int i6 = i4 - i2;
-        int i7 = i3 - i;
-        int textHeight = (i6 - this.valueTextView.getTextHeight()) / 2;
-        int dp = LocaleController.isRTL ? AndroidUtilities.dp((float) this.leftPadding) : 0;
+        int dp;
+        int i5 = i4 - i2;
+        int i6 = i3 - i;
+        int textHeight = (i5 - this.valueTextView.getTextHeight()) / 2;
+        int dp2 = LocaleController.isRTL ? AndroidUtilities.dp(this.leftPadding) : 0;
         if (this.prioritizeTitleOverValue && !LocaleController.isRTL) {
-            dp = (i7 - this.valueTextView.getMeasuredWidth()) - AndroidUtilities.dp((float) this.leftPadding);
+            dp2 = (i6 - this.valueTextView.getMeasuredWidth()) - AndroidUtilities.dp(this.leftPadding);
         }
         SimpleTextView simpleTextView = this.valueTextView;
-        simpleTextView.layout(dp, textHeight, simpleTextView.getMeasuredWidth() + dp, this.valueTextView.getMeasuredHeight() + textHeight);
-        int textHeight2 = (i6 - this.textView.getTextHeight()) / 2;
+        simpleTextView.layout(dp2, textHeight, simpleTextView.getMeasuredWidth() + dp2, this.valueTextView.getMeasuredHeight() + textHeight);
+        int textHeight2 = (i5 - this.textView.getTextHeight()) / 2;
         if (LocaleController.isRTL) {
-            i5 = (getMeasuredWidth() - this.textView.getMeasuredWidth()) - AndroidUtilities.dp((float) (this.imageView.getVisibility() == 0 ? this.offsetFromImage : this.leftPadding));
+            dp = (getMeasuredWidth() - this.textView.getMeasuredWidth()) - AndroidUtilities.dp(this.imageView.getVisibility() == 0 ? this.offsetFromImage : this.leftPadding);
         } else {
-            i5 = AndroidUtilities.dp((float) (this.imageView.getVisibility() == 0 ? this.offsetFromImage : this.leftPadding));
+            dp = AndroidUtilities.dp(this.imageView.getVisibility() == 0 ? this.offsetFromImage : this.leftPadding);
         }
         SimpleTextView simpleTextView2 = this.textView;
-        simpleTextView2.layout(i5, textHeight2, simpleTextView2.getMeasuredWidth() + i5, this.textView.getMeasuredHeight() + textHeight2);
+        simpleTextView2.layout(dp, textHeight2, simpleTextView2.getMeasuredWidth() + dp, this.textView.getMeasuredHeight() + textHeight2);
         if (this.imageView.getVisibility() == 0) {
-            int dp2 = AndroidUtilities.dp(5.0f);
-            int dp3 = !LocaleController.isRTL ? AndroidUtilities.dp((float) this.imageLeft) : (i7 - this.imageView.getMeasuredWidth()) - AndroidUtilities.dp((float) this.imageLeft);
+            int dp3 = AndroidUtilities.dp(5.0f);
+            int dp4 = !LocaleController.isRTL ? AndroidUtilities.dp(this.imageLeft) : (i6 - this.imageView.getMeasuredWidth()) - AndroidUtilities.dp(this.imageLeft);
             RLottieImageView rLottieImageView = this.imageView;
-            rLottieImageView.layout(dp3, dp2, rLottieImageView.getMeasuredWidth() + dp3, this.imageView.getMeasuredHeight() + dp2);
+            rLottieImageView.layout(dp4, dp3, rLottieImageView.getMeasuredWidth() + dp4, this.imageView.getMeasuredHeight() + dp3);
         }
         if (this.valueImageView.getVisibility() == 0) {
-            int measuredHeight = (i6 - this.valueImageView.getMeasuredHeight()) / 2;
-            int dp4 = LocaleController.isRTL ? AndroidUtilities.dp(23.0f) : (i7 - this.valueImageView.getMeasuredWidth()) - AndroidUtilities.dp(23.0f);
-            ImageView imageView2 = this.valueImageView;
-            imageView2.layout(dp4, measuredHeight, imageView2.getMeasuredWidth() + dp4, this.valueImageView.getMeasuredHeight() + measuredHeight);
+            int measuredHeight = (i5 - this.valueImageView.getMeasuredHeight()) / 2;
+            int dp5 = LocaleController.isRTL ? AndroidUtilities.dp(23.0f) : (i6 - this.valueImageView.getMeasuredWidth()) - AndroidUtilities.dp(23.0f);
+            ImageView imageView = this.valueImageView;
+            imageView.layout(dp5, measuredHeight, imageView.getMeasuredWidth() + dp5, this.valueImageView.getMeasuredHeight() + measuredHeight);
         }
     }
 
@@ -172,7 +173,7 @@ public class TextCell extends FrameLayout {
     public void setText(String str, boolean z) {
         this.imageLeft = 21;
         this.textView.setText(str);
-        this.valueTextView.setText((CharSequence) null);
+        this.valueTextView.setText(null);
         this.imageView.setVisibility(8);
         this.valueTextView.setVisibility(8);
         this.valueImageView.setVisibility(8);
@@ -184,7 +185,7 @@ public class TextCell extends FrameLayout {
         this.imageLeft = 21;
         this.offsetFromImage = 71;
         this.textView.setText(str);
-        this.valueTextView.setText((CharSequence) null);
+        this.valueTextView.setText(null);
         this.imageView.setImageResource(i);
         this.imageView.setVisibility(0);
         this.valueTextView.setVisibility(8);
@@ -198,7 +199,7 @@ public class TextCell extends FrameLayout {
         this.offsetFromImage = 68;
         this.imageLeft = 18;
         this.textView.setText(str);
-        this.valueTextView.setText((CharSequence) null);
+        this.valueTextView.setText(null);
         this.imageView.setColorFilter((ColorFilter) null);
         if (drawable instanceof RLottieDrawable) {
             this.imageView.setAnimation((RLottieDrawable) drawable);
@@ -251,7 +252,7 @@ public class TextCell extends FrameLayout {
         this.imageLeft = 21;
         this.offsetFromImage = 71;
         this.textView.setText(str);
-        this.valueTextView.setText((CharSequence) null);
+        this.valueTextView.setText(null);
         this.valueImageView.setVisibility(0);
         this.valueImageView.setImageDrawable(drawable);
         this.valueTextView.setVisibility(8);
@@ -261,48 +262,49 @@ public class TextCell extends FrameLayout {
         setWillNotDraw(!z);
     }
 
-    /* access modifiers changed from: protected */
-    public void onDraw(Canvas canvas) {
+    @Override // android.view.View
+    protected void onDraw(Canvas canvas) {
         float f;
+        float dp;
         int i;
-        float f2;
         if (this.needDivider) {
             int i2 = 72;
-            float f3 = 20.0f;
+            float f2 = 20.0f;
             if (LocaleController.isRTL) {
-                f = 0.0f;
+                dp = 0.0f;
             } else {
                 if (this.imageView.getVisibility() == 0) {
-                    f2 = (float) (this.inDialogs ? 72 : 68);
+                    f = this.inDialogs ? 72 : 68;
                 } else {
-                    f2 = 20.0f;
+                    f = 20.0f;
                 }
-                f = (float) AndroidUtilities.dp(f2);
+                dp = AndroidUtilities.dp(f);
             }
-            float measuredHeight = (float) (getMeasuredHeight() - 1);
+            float measuredHeight = getMeasuredHeight() - 1;
             int measuredWidth = getMeasuredWidth();
             if (LocaleController.isRTL) {
                 if (this.imageView.getVisibility() == 0) {
                     if (!this.inDialogs) {
                         i2 = 68;
                     }
-                    f3 = (float) i2;
+                    f2 = i2;
                 }
-                i = AndroidUtilities.dp(f3);
+                i = AndroidUtilities.dp(f2);
             } else {
                 i = 0;
             }
-            canvas.drawLine(f, measuredHeight, (float) (measuredWidth - i), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
+            canvas.drawLine(dp, measuredHeight, measuredWidth - i, getMeasuredHeight() - 1, Theme.dividerPaint);
         }
     }
 
+    @Override // android.view.View
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
         super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
         CharSequence text = this.textView.getText();
         if (!TextUtils.isEmpty(text)) {
             CharSequence text2 = this.valueTextView.getText();
             if (!TextUtils.isEmpty(text2)) {
-                accessibilityNodeInfo.setText(text + ": " + text2);
+                accessibilityNodeInfo.setText(((Object) text) + ": " + ((Object) text2));
             } else {
                 accessibilityNodeInfo.setText(text);
             }

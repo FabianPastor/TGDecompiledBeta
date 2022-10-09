@@ -1,9 +1,8 @@
 package j$.util;
 
 import j$.util.function.Consumer;
-import j$.util.function.q;
 import java.util.Comparator;
-
+/* loaded from: classes2.dex */
 final class K implements v {
     private final long[] a;
     private int b;
@@ -17,57 +16,68 @@ final class K implements v {
         this.d = i3 | 64 | 16384;
     }
 
+    @Override // j$.util.v, j$.util.u
     public /* synthetic */ boolean b(Consumer consumer) {
-        return CLASSNAMEa.l(this, consumer);
+        return AbstractCLASSNAMEa.l(this, consumer);
     }
 
+    @Override // j$.util.u
     public int characteristics() {
         return this.d;
     }
 
+    @Override // j$.util.w
     /* renamed from: d */
-    public void forEachRemaining(q qVar) {
+    public void forEachRemaining(j$.util.function.q qVar) {
         int i;
         qVar.getClass();
         long[] jArr = this.a;
         int length = jArr.length;
         int i2 = this.c;
-        if (length >= i2 && (i = this.b) >= 0) {
-            this.b = i2;
-            if (i < i2) {
-                do {
-                    qVar.accept(jArr[i]);
-                    i++;
-                } while (i < i2);
-            }
+        if (length < i2 || (i = this.b) < 0) {
+            return;
         }
+        this.b = i2;
+        if (i >= i2) {
+            return;
+        }
+        do {
+            qVar.accept(jArr[i]);
+            i++;
+        } while (i < i2);
     }
 
+    @Override // j$.util.u
     public long estimateSize() {
-        return (long) (this.c - this.b);
+        return this.c - this.b;
     }
 
+    @Override // j$.util.v, j$.util.u
     public /* synthetic */ void forEachRemaining(Consumer consumer) {
-        CLASSNAMEa.d(this, consumer);
+        AbstractCLASSNAMEa.d(this, consumer);
     }
 
+    @Override // j$.util.u
     public Comparator getComparator() {
-        if (CLASSNAMEa.f(this, 4)) {
+        if (AbstractCLASSNAMEa.f(this, 4)) {
             return null;
         }
         throw new IllegalStateException();
     }
 
+    @Override // j$.util.u
     public /* synthetic */ long getExactSizeIfKnown() {
-        return CLASSNAMEa.e(this);
+        return AbstractCLASSNAMEa.e(this);
     }
 
+    @Override // j$.util.u
     public /* synthetic */ boolean hasCharacteristics(int i) {
-        return CLASSNAMEa.f(this, i);
+        return AbstractCLASSNAMEa.f(this, i);
     }
 
+    @Override // j$.util.w
     /* renamed from: i */
-    public boolean tryAdvance(q qVar) {
+    public boolean tryAdvance(j$.util.function.q qVar) {
         qVar.getClass();
         int i = this.b;
         if (i < 0 || i >= this.c) {
@@ -79,7 +89,9 @@ final class K implements v {
         return true;
     }
 
-    public v trySplit() {
+    @Override // j$.util.v, j$.util.w, j$.util.u
+    /* renamed from: trySplit  reason: collision with other method in class */
+    public v mo322trySplit() {
         int i = this.b;
         int i2 = (this.c + i) >>> 1;
         if (i >= i2) {

@@ -4,7 +4,7 @@ import android.content.Context;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-
+/* loaded from: classes3.dex */
 public final class ObjLoader {
     public float[] normals;
     public int numFaces;
@@ -32,9 +32,9 @@ public final class ObjLoader {
             }
             int readInt4 = dataInputStream.readInt();
             this.numFaces = readInt4;
-            this.normals = new float[(readInt4 * 3)];
-            this.textureCoordinates = new float[(readInt4 * 2)];
-            this.positions = new float[(readInt4 * 3)];
+            this.normals = new float[readInt4 * 3];
+            this.textureCoordinates = new float[readInt4 * 2];
+            this.positions = new float[readInt4 * 3];
             int i5 = 0;
             int i6 = 0;
             int i7 = 0;

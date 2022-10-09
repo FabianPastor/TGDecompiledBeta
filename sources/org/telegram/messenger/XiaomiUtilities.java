@@ -5,7 +5,7 @@ import android.app.AppOpsManager;
 import android.content.Intent;
 import android.os.Process;
 import android.text.TextUtils;
-
+/* loaded from: classes.dex */
 public class XiaomiUtilities {
     public static final int OP_ACCESS_XIAOMI_ACCOUNT = 10015;
     public static final int OP_AUTO_START = 10008;
@@ -39,26 +39,23 @@ public class XiaomiUtilities {
     public static boolean isCustomPermissionGranted(int i) {
         try {
             Class cls = Integer.TYPE;
-            if (((Integer) AppOpsManager.class.getMethod("checkOpNoThrow", new Class[]{cls, cls, String.class}).invoke((AppOpsManager) ApplicationLoader.applicationContext.getSystemService("appops"), new Object[]{Integer.valueOf(i), Integer.valueOf(Process.myUid()), ApplicationLoader.applicationContext.getPackageName()})).intValue() == 0) {
-                return true;
-            }
-            return false;
+            return ((Integer) AppOpsManager.class.getMethod("checkOpNoThrow", cls, cls, String.class).invoke((AppOpsManager) ApplicationLoader.applicationContext.getSystemService("appops"), Integer.valueOf(i), Integer.valueOf(Process.myUid()), ApplicationLoader.applicationContext.getPackageName())).intValue() == 0;
         } catch (Exception e) {
-            FileLog.e((Throwable) e);
+            FileLog.e(e);
             return true;
         }
     }
 
     public static int getMIUIMajorVersion() {
         String systemProperty = AndroidUtilities.getSystemProperty("ro.miui.ui.version.name");
-        if (systemProperty == null) {
-            return -1;
+        if (systemProperty != null) {
+            try {
+                return Integer.parseInt(systemProperty.replace("V", ""));
+            } catch (NumberFormatException unused) {
+                return -1;
+            }
         }
-        try {
-            return Integer.parseInt(systemProperty.replace("V", ""));
-        } catch (NumberFormatException unused) {
-            return -1;
-        }
+        return -1;
     }
 
     public static Intent getPermissionManagerIntent() {

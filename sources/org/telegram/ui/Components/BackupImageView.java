@@ -12,16 +12,19 @@ import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.SecureDocument;
 import org.telegram.tgnet.TLObject;
-
+/* loaded from: classes3.dex */
 public class BackupImageView extends View {
     public AnimatedEmojiDrawable animatedEmojiDrawable;
     boolean attached;
-    protected int height = -1;
-    protected ImageReceiver imageReceiver = new ImageReceiver(this);
-    protected int width = -1;
+    protected int height;
+    protected ImageReceiver imageReceiver;
+    protected int width;
 
     public BackupImageView(Context context) {
         super(context);
+        this.width = -1;
+        this.height = -1;
+        this.imageReceiver = new ImageReceiver(this);
     }
 
     public void setOrientation(int i, boolean z) {
@@ -29,23 +32,23 @@ public class BackupImageView extends View {
     }
 
     public void setImage(SecureDocument secureDocument, String str) {
-        setImage(ImageLocation.getForSecureDocument(secureDocument), str, (ImageLocation) null, (String) null, (Drawable) null, (Bitmap) null, (String) null, 0, (Object) null);
+        setImage(ImageLocation.getForSecureDocument(secureDocument), str, null, null, null, null, null, 0, null);
     }
 
     public void setImage(ImageLocation imageLocation, String str, String str2, Drawable drawable, Object obj) {
-        setImage(imageLocation, str, (ImageLocation) null, (String) null, drawable, (Bitmap) null, str2, 0, obj);
+        setImage(imageLocation, str, null, null, drawable, null, str2, 0, obj);
     }
 
     public void setImage(ImageLocation imageLocation, String str, Drawable drawable, Object obj) {
-        setImage(imageLocation, str, (ImageLocation) null, (String) null, drawable, (Bitmap) null, (String) null, 0, obj);
+        setImage(imageLocation, str, null, null, drawable, null, null, 0, obj);
     }
 
     public void setImage(ImageLocation imageLocation, String str, ImageLocation imageLocation2, String str2, Drawable drawable, Object obj) {
-        this.imageReceiver.setImage(imageLocation, str, imageLocation2, str2, (ImageLocation) null, (String) null, drawable, 0, (String) null, obj, 1);
+        this.imageReceiver.setImage(imageLocation, str, imageLocation2, str2, null, null, drawable, 0L, null, obj, 1);
     }
 
     public void setImage(ImageLocation imageLocation, String str, Drawable drawable, int i, Object obj) {
-        setImage(imageLocation, str, (ImageLocation) null, (String) null, drawable, (Bitmap) null, (String) null, i, obj);
+        setImage(imageLocation, str, null, null, drawable, null, null, i, obj);
     }
 
     public void setForUserOrChat(TLObject tLObject, AvatarDrawable avatarDrawable) {
@@ -57,53 +60,49 @@ public class BackupImageView extends View {
     }
 
     public void setImageMedia(ImageLocation imageLocation, String str, ImageLocation imageLocation2, String str2, Bitmap bitmap, int i, int i2, Object obj) {
-        BitmapDrawable bitmapDrawable;
         BackupImageView backupImageView;
-        Bitmap bitmap2 = bitmap;
-        if (bitmap2 != null) {
-            BitmapDrawable bitmapDrawable2 = new BitmapDrawable((Resources) null, bitmap2);
+        BitmapDrawable bitmapDrawable;
+        if (bitmap != null) {
             backupImageView = this;
-            bitmapDrawable = bitmapDrawable2;
+            bitmapDrawable = new BitmapDrawable((Resources) null, bitmap);
         } else {
             backupImageView = this;
             bitmapDrawable = null;
         }
-        backupImageView.imageReceiver.setImage(imageLocation, str, imageLocation2, str2, (ImageLocation) null, (String) null, bitmapDrawable, (long) i, (String) null, obj, i2);
+        backupImageView.imageReceiver.setImage(imageLocation, str, imageLocation2, str2, null, null, bitmapDrawable, i, null, obj, i2);
     }
 
     public void setImage(ImageLocation imageLocation, String str, ImageLocation imageLocation2, String str2, int i, Object obj) {
-        setImage(imageLocation, str, imageLocation2, str2, (Drawable) null, (Bitmap) null, (String) null, i, obj);
+        setImage(imageLocation, str, imageLocation2, str2, null, null, null, i, obj);
     }
 
     public void setImage(String str, String str2, Drawable drawable) {
-        setImage(ImageLocation.getForPath(str), str2, (ImageLocation) null, (String) null, drawable, (Bitmap) null, (String) null, 0, (Object) null);
+        setImage(ImageLocation.getForPath(str), str2, null, null, drawable, null, null, 0, null);
     }
 
     public void setImage(String str, String str2, String str3, String str4) {
-        setImage(ImageLocation.getForPath(str), str2, ImageLocation.getForPath(str3), str4, (Drawable) null, (Bitmap) null, (String) null, 0, (Object) null);
+        setImage(ImageLocation.getForPath(str), str2, ImageLocation.getForPath(str3), str4, null, null, null, 0, null);
     }
 
     public void setImage(ImageLocation imageLocation, String str, ImageLocation imageLocation2, String str2, Drawable drawable, Bitmap bitmap, String str3, int i, Object obj) {
-        BitmapDrawable bitmapDrawable;
         BackupImageView backupImageView;
-        Bitmap bitmap2 = bitmap;
-        if (bitmap2 != null) {
-            BitmapDrawable bitmapDrawable2 = new BitmapDrawable((Resources) null, bitmap2);
+        BitmapDrawable bitmapDrawable;
+        if (bitmap != null) {
             backupImageView = this;
-            bitmapDrawable = bitmapDrawable2;
+            bitmapDrawable = new BitmapDrawable((Resources) null, bitmap);
         } else {
             backupImageView = this;
             bitmapDrawable = drawable;
         }
-        backupImageView.imageReceiver.setImage(imageLocation, str, imageLocation2, str2, bitmapDrawable, (long) i, str3, obj, 0);
+        backupImageView.imageReceiver.setImage(imageLocation, str, imageLocation2, str2, bitmapDrawable, i, str3, obj, 0);
     }
 
     public void setImage(ImageLocation imageLocation, String str, ImageLocation imageLocation2, String str2, String str3, long j, int i, Object obj) {
-        this.imageReceiver.setImage(imageLocation, str, imageLocation2, str2, (Drawable) null, j, str3, obj, i);
+        this.imageReceiver.setImage(imageLocation, str, imageLocation2, str2, null, j, str3, obj, i);
     }
 
     public void setImageMedia(ImageLocation imageLocation, String str, ImageLocation imageLocation2, String str2, ImageLocation imageLocation3, String str3, String str4, int i, int i2, Object obj) {
-        this.imageReceiver.setImage(imageLocation, str, imageLocation2, str2, imageLocation3, str3, (Drawable) null, (long) i, str4, obj, i2);
+        this.imageReceiver.setImage(imageLocation, str, imageLocation2, str2, imageLocation3, str3, null, i, str4, obj, i2);
     }
 
     public void setImageBitmap(Bitmap bitmap) {
@@ -151,58 +150,64 @@ public class BackupImageView extends View {
         invalidate();
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
+    @Override // android.view.View
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         this.attached = false;
         this.imageReceiver.onDetachedFromWindow();
-        AnimatedEmojiDrawable animatedEmojiDrawable2 = this.animatedEmojiDrawable;
-        if (animatedEmojiDrawable2 != null) {
-            animatedEmojiDrawable2.removeView((View) this);
+        AnimatedEmojiDrawable animatedEmojiDrawable = this.animatedEmojiDrawable;
+        if (animatedEmojiDrawable != null) {
+            animatedEmojiDrawable.removeView(this);
         }
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
+    @Override // android.view.View
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
         this.attached = true;
         this.imageReceiver.onAttachedToWindow();
-        AnimatedEmojiDrawable animatedEmojiDrawable2 = this.animatedEmojiDrawable;
-        if (animatedEmojiDrawable2 != null) {
-            animatedEmojiDrawable2.addView((View) this);
+        AnimatedEmojiDrawable animatedEmojiDrawable = this.animatedEmojiDrawable;
+        if (animatedEmojiDrawable != null) {
+            animatedEmojiDrawable.addView(this);
         }
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
+    @Override // android.view.View
     public void onDraw(Canvas canvas) {
-        AnimatedEmojiDrawable animatedEmojiDrawable2 = this.animatedEmojiDrawable;
-        ImageReceiver imageReceiver2 = animatedEmojiDrawable2 != null ? animatedEmojiDrawable2.getImageReceiver() : this.imageReceiver;
-        if (imageReceiver2 != null) {
-            if (this.width == -1 || this.height == -1) {
-                imageReceiver2.setImageCoords(0.0f, 0.0f, (float) getWidth(), (float) getHeight());
-            } else {
-                int height2 = getHeight();
-                int i = this.height;
-                imageReceiver2.setImageCoords((float) ((getWidth() - this.width) / 2), (float) ((height2 - i) / 2), (float) this.width, (float) i);
-            }
-            imageReceiver2.draw(canvas);
+        AnimatedEmojiDrawable animatedEmojiDrawable = this.animatedEmojiDrawable;
+        ImageReceiver imageReceiver = animatedEmojiDrawable != null ? animatedEmojiDrawable.getImageReceiver() : this.imageReceiver;
+        if (imageReceiver == null) {
+            return;
         }
+        if (this.width != -1 && this.height != -1) {
+            int height = getHeight();
+            int i = this.height;
+            imageReceiver.setImageCoords((getWidth() - this.width) / 2, (height - i) / 2, this.width, i);
+        } else {
+            imageReceiver.setImageCoords(0.0f, 0.0f, getWidth(), getHeight());
+        }
+        imageReceiver.draw(canvas);
     }
 
     public void setColorFilter(ColorFilter colorFilter) {
         this.imageReceiver.setColorFilter(colorFilter);
     }
 
-    public void setAnimatedEmojiDrawable(AnimatedEmojiDrawable animatedEmojiDrawable2) {
-        AnimatedEmojiDrawable animatedEmojiDrawable3 = this.animatedEmojiDrawable;
-        if (animatedEmojiDrawable3 != animatedEmojiDrawable2) {
-            if (this.attached && animatedEmojiDrawable3 != null) {
-                animatedEmojiDrawable3.removeView((View) this);
-            }
-            this.animatedEmojiDrawable = animatedEmojiDrawable2;
-            if (this.attached && animatedEmojiDrawable2 != null) {
-                animatedEmojiDrawable2.addView((View) this);
-            }
+    public void setAnimatedEmojiDrawable(AnimatedEmojiDrawable animatedEmojiDrawable) {
+        AnimatedEmojiDrawable animatedEmojiDrawable2 = this.animatedEmojiDrawable;
+        if (animatedEmojiDrawable2 == animatedEmojiDrawable) {
+            return;
         }
+        if (this.attached && animatedEmojiDrawable2 != null) {
+            animatedEmojiDrawable2.removeView(this);
+        }
+        this.animatedEmojiDrawable = animatedEmojiDrawable;
+        if (!this.attached || animatedEmojiDrawable == null) {
+            return;
+        }
+        animatedEmojiDrawable.addView(this);
     }
 }

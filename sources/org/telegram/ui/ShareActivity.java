@@ -20,12 +20,12 @@ import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.SerializedData;
 import org.telegram.tgnet.TLRPC$Message;
 import org.telegram.ui.Components.ShareAlert;
-
+/* loaded from: classes3.dex */
 public class ShareActivity extends Activity {
     private Dialog visibleDialog;
 
-    /* access modifiers changed from: protected */
-    public void onCreate(Bundle bundle) {
+    @Override // android.app.Activity
+    protected void onCreate(Bundle bundle) {
         ApplicationLoader.postInitApplication();
         AndroidUtilities.checkDisplaySize(this, getResources().getConfiguration());
         requestWindowFeature(1);
@@ -46,7 +46,7 @@ public class ShareActivity extends Activity {
             return;
         }
         SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("botshare", 0);
-        String string = sharedPreferences.getString(queryParameter + "_m", (String) null);
+        String string = sharedPreferences.getString(queryParameter + "_m", null);
         if (TextUtils.isEmpty(string)) {
             finish();
             return;
@@ -57,24 +57,29 @@ public class ShareActivity extends Activity {
             finish();
             return;
         }
-        TLdeserialize.readAttachPath(serializedData, 0);
+        TLdeserialize.readAttachPath(serializedData, 0L);
         serializedData.cleanup();
-        String string2 = sharedPreferences.getString(queryParameter + "_link", (String) null);
+        String string2 = sharedPreferences.getString(queryParameter + "_link", null);
         MessageObject messageObject = new MessageObject(UserConfig.selectedAccount, TLdeserialize, false, true);
         messageObject.messageOwner.with_my_score = true;
         try {
-            ShareAlert createShareAlert = ShareAlert.createShareAlert(this, messageObject, (String) null, false, string2, false);
+            ShareAlert createShareAlert = ShareAlert.createShareAlert(this, messageObject, null, false, string2, false);
             this.visibleDialog = createShareAlert;
             createShareAlert.setCanceledOnTouchOutside(true);
-            this.visibleDialog.setOnDismissListener(new ShareActivity$$ExternalSyntheticLambda0(this));
+            this.visibleDialog.setOnDismissListener(new DialogInterface.OnDismissListener() { // from class: org.telegram.ui.ShareActivity$$ExternalSyntheticLambda0
+                @Override // android.content.DialogInterface.OnDismissListener
+                public final void onDismiss(DialogInterface dialogInterface) {
+                    ShareActivity.this.lambda$onCreate$0(dialogInterface);
+                }
+            });
             this.visibleDialog.show();
         } catch (Exception e) {
-            FileLog.e((Throwable) e);
+            FileLog.e(e);
             finish();
         }
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$onCreate$0(DialogInterface dialogInterface) {
         if (!isFinishing()) {
             finish();
@@ -82,16 +87,18 @@ public class ShareActivity extends Activity {
         this.visibleDialog = null;
     }
 
+    @Override // android.app.Activity
     public void onPause() {
         super.onPause();
         try {
             Dialog dialog = this.visibleDialog;
-            if (dialog != null && dialog.isShowing()) {
-                this.visibleDialog.dismiss();
-                this.visibleDialog = null;
+            if (dialog == null || !dialog.isShowing()) {
+                return;
             }
+            this.visibleDialog.dismiss();
+            this.visibleDialog = null;
         } catch (Exception e) {
-            FileLog.e((Throwable) e);
+            FileLog.e(e);
         }
     }
 }

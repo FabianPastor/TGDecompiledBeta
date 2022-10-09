@@ -5,18 +5,21 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import org.telegram.messenger.AndroidUtilities;
-
+/* loaded from: classes3.dex */
 public class VoIPButtonsLayout extends FrameLayout {
     int childPadding;
-    private int childSize = 68;
+    private int childSize;
     int childWidth;
-    private boolean startPadding = true;
+    private boolean startPadding;
     int visibleChildCount;
 
     public VoIPButtonsLayout(Context context) {
         super(context);
+        this.childSize = 68;
+        this.startPadding = true;
     }
 
+    @Override // android.view.ViewGroup, android.view.View
     public boolean dispatchTouchEvent(MotionEvent motionEvent) {
         if (!isEnabled()) {
             return false;
@@ -24,8 +27,8 @@ public class VoIPButtonsLayout extends FrameLayout {
         return super.dispatchTouchEvent(motionEvent);
     }
 
-    /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
+    @Override // android.widget.FrameLayout, android.view.View
+    protected void onMeasure(int i, int i2) {
         int size = View.MeasureSpec.getSize(i);
         this.visibleChildCount = 0;
         for (int i3 = 0; i3 < getChildCount(); i3++) {
@@ -33,7 +36,7 @@ public class VoIPButtonsLayout extends FrameLayout {
                 this.visibleChildCount++;
             }
         }
-        this.childWidth = AndroidUtilities.dp((float) this.childSize);
+        this.childWidth = AndroidUtilities.dp(this.childSize);
         this.childPadding = ((size / getChildCount()) - this.childWidth) / 2;
         int i4 = 0;
         for (int i5 = 0; i5 < getChildCount(); i5++) {
@@ -47,10 +50,10 @@ public class VoIPButtonsLayout extends FrameLayout {
         setMeasuredDimension(size, Math.max(i4, AndroidUtilities.dp(80.0f)));
     }
 
-    /* access modifiers changed from: protected */
-    public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+    @Override // android.widget.FrameLayout, android.view.ViewGroup, android.view.View
+    protected void onLayout(boolean z, int i, int i2, int i3, int i4) {
         if (this.startPadding) {
-            int childCount = (int) ((((float) (getChildCount() - this.visibleChildCount)) / 2.0f) * ((float) (this.childWidth + (this.childPadding * 2))));
+            int childCount = (int) (((getChildCount() - this.visibleChildCount) / 2.0f) * (this.childWidth + (this.childPadding * 2)));
             for (int i5 = 0; i5 < getChildCount(); i5++) {
                 View childAt = getChildAt(i5);
                 if (childAt.getVisibility() != 8) {

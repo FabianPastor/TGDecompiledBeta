@@ -25,14 +25,14 @@ import org.telegram.tgnet.TLRPC$ReactionCount;
 import org.telegram.tgnet.TLRPC$TL_availableReaction;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble;
-
+/* loaded from: classes3.dex */
 public class ReactionTabHolderView extends FrameLayout {
-    private Paint bgPaint = new Paint(1);
+    private Paint bgPaint;
     private int count;
     private TextView counterView;
     Drawable drawable;
     private ImageView iconView;
-    private Paint outlinePaint = new Paint(1);
+    private Paint outlinePaint;
     private float outlineProgress;
     View overlaySelectorView;
     private float radius;
@@ -42,9 +42,11 @@ public class ReactionTabHolderView extends FrameLayout {
 
     public ReactionTabHolderView(Context context) {
         super(context);
+        this.outlinePaint = new Paint(1);
+        this.bgPaint = new Paint(1);
         new Path();
         this.rect = new RectF();
-        this.radius = (float) AndroidUtilities.dp(32.0f);
+        this.radius = AndroidUtilities.dp(32.0f);
         View view = new View(context);
         this.overlaySelectorView = view;
         addView(view, LayoutHelper.createFrame(-1, -1.0f));
@@ -63,7 +65,7 @@ public class ReactionTabHolderView extends FrameLayout {
         this.counterView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         addView(this.counterView, LayoutHelper.createFrameRelatively(-1.0f, -2.0f, 8388627, 40.0f, 0.0f, 8.0f, 0.0f));
         this.outlinePaint.setStyle(Paint.Style.STROKE);
-        this.outlinePaint.setStrokeWidth((float) AndroidUtilities.dp(1.0f));
+        this.outlinePaint.setStrokeWidth(AndroidUtilities.dp(1.0f));
         setWillNotDraw(false);
         setOutlineProgress(this.outlineProgress);
     }
@@ -86,7 +88,7 @@ public class ReactionTabHolderView extends FrameLayout {
 
     public void setCounter(int i) {
         this.count = i;
-        this.counterView.setText(String.format("%s", new Object[]{LocaleController.formatShortNumber(i, (int[]) null)}));
+        this.counterView.setText(String.format("%s", LocaleController.formatShortNumber(i, null)));
         this.iconView.setVisibility(0);
         this.reactView.setVisibility(8);
     }
@@ -94,13 +96,13 @@ public class ReactionTabHolderView extends FrameLayout {
     public void setCounter(int i, TLRPC$ReactionCount tLRPC$ReactionCount) {
         int i2 = tLRPC$ReactionCount.count;
         this.count = i2;
-        this.counterView.setText(String.format("%s", new Object[]{LocaleController.formatShortNumber(i2, (int[]) null)}));
+        this.counterView.setText(String.format("%s", LocaleController.formatShortNumber(i2, null)));
         ReactionsLayoutInBubble.VisibleReaction fromTLReaction = ReactionsLayoutInBubble.VisibleReaction.fromTLReaction(tLRPC$ReactionCount.reaction);
         this.reaction = fromTLReaction;
         if (fromTLReaction.emojicon != null) {
-            for (TLRPC$TL_availableReaction next : MediaDataController.getInstance(i).getReactionsList()) {
-                if (next.reaction.equals(this.reaction.emojicon)) {
-                    this.reactView.setImage(ImageLocation.getForDocument(next.center_icon), "40_40_lastframe", "webp", (Drawable) DocumentObject.getSvgThumb(next.static_icon, "windowBackgroundGray", 1.0f), (Object) next);
+            for (TLRPC$TL_availableReaction tLRPC$TL_availableReaction : MediaDataController.getInstance(i).getReactionsList()) {
+                if (tLRPC$TL_availableReaction.reaction.equals(this.reaction.emojicon)) {
+                    this.reactView.setImage(ImageLocation.getForDocument(tLRPC$TL_availableReaction.center_icon), "40_40_lastframe", "webp", DocumentObject.getSvgThumb(tLRPC$TL_availableReaction.static_icon, "windowBackgroundGray", 1.0f), tLRPC$TL_availableReaction);
                     this.reactView.setVisibility(0);
                     this.iconView.setVisibility(8);
                     return;
@@ -113,27 +115,28 @@ public class ReactionTabHolderView extends FrameLayout {
         this.iconView.setVisibility(8);
     }
 
-    /* access modifiers changed from: protected */
-    public void dispatchDraw(Canvas canvas) {
-        this.rect.set(0.0f, 0.0f, (float) getWidth(), (float) getHeight());
+    @Override // android.view.ViewGroup, android.view.View
+    protected void dispatchDraw(Canvas canvas) {
+        this.rect.set(0.0f, 0.0f, getWidth(), getHeight());
         RectF rectF = this.rect;
         float f = this.radius;
         canvas.drawRoundRect(rectF, f, f, this.bgPaint);
         super.dispatchDraw(canvas);
     }
 
+    @Override // android.view.View
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
         super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
         accessibilityNodeInfo.setClassName("android.widget.Button");
         accessibilityNodeInfo.setClickable(true);
-        if (((double) this.outlineProgress) > 0.5d) {
+        if (this.outlineProgress > 0.5d) {
             accessibilityNodeInfo.setSelected(true);
         }
         ReactionsLayoutInBubble.VisibleReaction visibleReaction = this.reaction;
         if (visibleReaction != null) {
             accessibilityNodeInfo.setText(LocaleController.formatPluralString("AccDescrNumberOfPeopleReactions", this.count, visibleReaction));
-            return;
+        } else {
+            accessibilityNodeInfo.setText(LocaleController.formatPluralString("AccDescrNumberOfReactions", this.count, new Object[0]));
         }
-        accessibilityNodeInfo.setText(LocaleController.formatPluralString("AccDescrNumberOfReactions", this.count, new Object[0]));
     }
 }

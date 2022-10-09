@@ -8,19 +8,22 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import androidx.annotation.Keep;
 import org.telegram.messenger.AndroidUtilities;
-
+/* loaded from: classes3.dex */
 public class FabBackgroundDrawable extends Drawable {
     private Paint bgPaint = new Paint(1);
     private Bitmap shadowBitmap;
     private Paint shadowPaint;
 
+    @Override // android.graphics.drawable.Drawable
     public int getOpacity() {
         return -2;
     }
 
+    @Override // android.graphics.drawable.Drawable
     public void setAlpha(int i) {
     }
 
+    @Override // android.graphics.drawable.Drawable
     public void setColorFilter(ColorFilter colorFilter) {
     }
 
@@ -30,22 +33,24 @@ public class FabBackgroundDrawable extends Drawable {
         paint.setColor(NUM);
     }
 
+    @Override // android.graphics.drawable.Drawable
     public void draw(Canvas canvas) {
+        int i;
         if (this.shadowBitmap == null) {
             onBoundsChange(getBounds());
         }
         int min = Math.min(getBounds().width(), getBounds().height());
         Bitmap bitmap = this.shadowBitmap;
         if (bitmap != null) {
-            canvas.drawBitmap(bitmap, (float) (getBounds().centerX() - (this.shadowBitmap.getWidth() / 2)), (float) (getBounds().centerY() - (this.shadowBitmap.getHeight() / 2)), this.shadowPaint);
+            canvas.drawBitmap(bitmap, getBounds().centerX() - (this.shadowBitmap.getWidth() / 2), getBounds().centerY() - (this.shadowBitmap.getHeight() / 2), this.shadowPaint);
         }
-        int i = min / 2;
-        float f = (float) i;
-        canvas.drawCircle(f, f, (float) (i - AndroidUtilities.dp(4.0f)), this.bgPaint);
+        float f = min / 2;
+        canvas.drawCircle(f, f, i - AndroidUtilities.dp(4.0f), this.bgPaint);
     }
 
-    /* access modifiers changed from: protected */
-    public void onBoundsChange(Rect rect) {
+    @Override // android.graphics.drawable.Drawable
+    protected void onBoundsChange(Rect rect) {
+        int i;
         int min = Math.min(rect.width(), rect.height());
         if (min <= 0) {
             this.shadowBitmap = null;
@@ -54,10 +59,9 @@ public class FabBackgroundDrawable extends Drawable {
         this.shadowBitmap = Bitmap.createBitmap(min, min, Bitmap.Config.ALPHA_8);
         Canvas canvas = new Canvas(this.shadowBitmap);
         Paint paint = new Paint(1);
-        paint.setShadowLayer((float) AndroidUtilities.dp(3.33333f), 0.0f, (float) AndroidUtilities.dp(0.666f), -1);
-        int i = min / 2;
-        float f = (float) i;
-        canvas.drawCircle(f, f, (float) (i - AndroidUtilities.dp(4.0f)), paint);
+        paint.setShadowLayer(AndroidUtilities.dp(3.33333f), 0.0f, AndroidUtilities.dp(0.666f), -1);
+        float f = min / 2;
+        canvas.drawCircle(f, f, i - AndroidUtilities.dp(4.0f), paint);
     }
 
     @Keep
@@ -66,6 +70,7 @@ public class FabBackgroundDrawable extends Drawable {
         invalidateSelf();
     }
 
+    @Override // android.graphics.drawable.Drawable
     public boolean getPadding(Rect rect) {
         int dp = AndroidUtilities.dp(4.0f);
         rect.set(dp, dp, dp, dp);

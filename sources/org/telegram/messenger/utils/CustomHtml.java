@@ -5,7 +5,7 @@ import org.telegram.ui.Components.AnimatedEmojiSpan;
 import org.telegram.ui.Components.TextStyleSpan;
 import org.telegram.ui.Components.URLSpanMono;
 import org.telegram.ui.Components.URLSpanReplacement;
-
+/* loaded from: classes.dex */
 public class CustomHtml {
     public static String toHtml(Spanned spanned) {
         StringBuilder sb = new StringBuilder();
@@ -39,7 +39,7 @@ public class CustomHtml {
                         if ((styleFlags & 8) > 0) {
                             sb.append("<s>");
                         }
-                        if (!((styleFlags & 128) <= 0 || textStyleSpan.getTextStyleRun() == null || textStyleSpan.getTextStyleRun().urlEntity == null)) {
+                        if ((styleFlags & 128) > 0 && textStyleSpan.getTextStyleRun() != null && textStyleSpan.getTextStyleRun().urlEntity != null) {
                             sb.append("<a href=\"");
                             sb.append(textStyleSpan.getTextStyleRun().urlEntity.url);
                             sb.append("\">");
@@ -54,7 +54,7 @@ public class CustomHtml {
                 for (TextStyleSpan textStyleSpan2 : textStyleSpanArr) {
                     if (textStyleSpan2 != null) {
                         int styleFlags2 = textStyleSpan2.getStyleFlags();
-                        if (!((styleFlags2 & 128) <= 0 || textStyleSpan2.getTextStyleRun() == null || textStyleSpan2.getTextStyleRun().urlEntity == null)) {
+                        if ((styleFlags2 & 128) > 0 && textStyleSpan2.getTextStyleRun() != null && textStyleSpan2.getTextStyleRun().urlEntity != null) {
                             sb.append("</a>");
                         }
                         if ((styleFlags2 & 8) > 0) {
@@ -87,9 +87,9 @@ public class CustomHtml {
             }
             URLSpanReplacement[] uRLSpanReplacementArr = (URLSpanReplacement[]) spanned.getSpans(i, nextSpanTransition, URLSpanReplacement.class);
             if (uRLSpanReplacementArr != null) {
-                for (URLSpanReplacement url : uRLSpanReplacementArr) {
+                for (URLSpanReplacement uRLSpanReplacement : uRLSpanReplacementArr) {
                     sb.append("<a href=\"");
-                    sb.append(url.getURL());
+                    sb.append(uRLSpanReplacement.getURL());
                     sb.append("\">");
                 }
             }
@@ -160,7 +160,7 @@ public class CustomHtml {
         char charAt;
         while (i < i2) {
             char charAt2 = charSequence.charAt(i);
-            if (charAt2 == 10) {
+            if (charAt2 == '\n') {
                 sb.append("<br>");
             } else if (charAt2 == '<') {
                 sb.append("&lt;");
@@ -171,17 +171,16 @@ public class CustomHtml {
             } else if (charAt2 < 55296 || charAt2 > 57343) {
                 if (charAt2 > '~' || charAt2 < ' ') {
                     sb.append("&#");
-                    sb.append(charAt2);
+                    sb.append((int) charAt2);
                     sb.append(";");
                 } else if (charAt2 == ' ') {
                     while (true) {
                         int i4 = i + 1;
                         if (i4 >= i2 || charSequence.charAt(i4) != ' ') {
-                            sb.append(' ');
-                        } else {
-                            sb.append("&nbsp;");
-                            i = i4;
+                            break;
                         }
+                        sb.append("&nbsp;");
+                        i = i4;
                     }
                     sb.append(' ');
                 } else {

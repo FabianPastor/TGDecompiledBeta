@@ -1,5 +1,5 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_inputStickerSetItem extends TLObject {
     public static int constructor = -6249322;
     public TLRPC$InputDocument document;
@@ -7,6 +7,7 @@ public class TLRPC$TL_inputStickerSetItem extends TLObject {
     public int flags;
     public TLRPC$TL_maskCoords mask_coords;
 
+    @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         this.flags = abstractSerializedData.readInt32(z);
         this.document = TLRPC$InputDocument.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
@@ -16,6 +17,7 @@ public class TLRPC$TL_inputStickerSetItem extends TLObject {
         }
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
         abstractSerializedData.writeInt32(this.flags);

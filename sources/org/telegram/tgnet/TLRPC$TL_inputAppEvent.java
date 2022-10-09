@@ -1,5 +1,5 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_inputAppEvent extends TLObject {
     public static int constructor = NUM;
     public TLRPC$JSONValue data;
@@ -7,6 +7,7 @@ public class TLRPC$TL_inputAppEvent extends TLObject {
     public double time;
     public String type;
 
+    @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         this.time = abstractSerializedData.readDouble(z);
         this.type = abstractSerializedData.readString(z);
@@ -14,6 +15,7 @@ public class TLRPC$TL_inputAppEvent extends TLObject {
         this.data = TLRPC$JSONValue.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
         abstractSerializedData.writeDouble(this.time);

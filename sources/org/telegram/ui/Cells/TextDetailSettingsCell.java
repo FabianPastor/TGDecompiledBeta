@@ -13,7 +13,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
-
+/* loaded from: classes3.dex */
 public class TextDetailSettingsCell extends FrameLayout {
     private ImageView imageView;
     private boolean multiline;
@@ -23,9 +23,9 @@ public class TextDetailSettingsCell extends FrameLayout {
 
     public TextDetailSettingsCell(Context context) {
         super(context);
-        TextView textView2 = new TextView(context);
-        this.textView = textView2;
-        textView2.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+        TextView textView = new TextView(context);
+        this.textView = textView;
+        textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
@@ -34,9 +34,9 @@ public class TextDetailSettingsCell extends FrameLayout {
         int i = 5;
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         addView(this.textView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, 21.0f, 10.0f, 21.0f, 0.0f));
-        TextView textView3 = new TextView(context);
-        this.valueTextView = textView3;
-        textView3.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2"));
+        TextView textView2 = new TextView(context);
+        this.valueTextView = textView2;
+        textView2.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2"));
         this.valueTextView.setTextSize(1, 13.0f);
         this.valueTextView.setGravity(LocaleController.isRTL ? 5 : 3);
         this.valueTextView.setLines(1);
@@ -44,16 +44,16 @@ public class TextDetailSettingsCell extends FrameLayout {
         this.valueTextView.setSingleLine(true);
         this.valueTextView.setPadding(0, 0, 0, 0);
         addView(this.valueTextView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, 21.0f, 35.0f, 21.0f, 0.0f));
-        ImageView imageView2 = new ImageView(context);
-        this.imageView = imageView2;
-        imageView2.setScaleType(ImageView.ScaleType.CENTER);
+        ImageView imageView = new ImageView(context);
+        this.imageView = imageView;
+        imageView.setScaleType(ImageView.ScaleType.CENTER);
         this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayIcon"), PorterDuff.Mode.MULTIPLY));
         this.imageView.setVisibility(8);
         addView(this.imageView, LayoutHelper.createFrame(52, 52.0f, (!LocaleController.isRTL ? 3 : i) | 48, 8.0f, 6.0f, 8.0f, 0.0f));
     }
 
-    /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
+    @Override // android.widget.FrameLayout, android.view.View
+    protected void onMeasure(int i, int i2) {
         if (!this.multiline) {
             super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(64.0f) + (this.needDivider ? 1 : 0), NUM));
         } else {
@@ -107,33 +107,35 @@ public class TextDetailSettingsCell extends FrameLayout {
         this.valueTextView.setText(charSequence);
     }
 
+    @Override // android.view.View
     public void invalidate() {
         super.invalidate();
         this.textView.invalidate();
     }
 
-    /* access modifiers changed from: protected */
-    public void onDraw(Canvas canvas) {
-        float f;
+    @Override // android.view.View
+    protected void onDraw(Canvas canvas) {
+        float dp;
         int i;
-        if (this.needDivider && Theme.dividerPaint != null) {
-            float f2 = 71.0f;
-            if (LocaleController.isRTL) {
-                f = 0.0f;
-            } else {
-                f = (float) AndroidUtilities.dp(this.imageView.getVisibility() == 0 ? 71.0f : 20.0f);
-            }
-            float measuredHeight = (float) (getMeasuredHeight() - 1);
-            int measuredWidth = getMeasuredWidth();
-            if (LocaleController.isRTL) {
-                if (this.imageView.getVisibility() != 0) {
-                    f2 = 20.0f;
-                }
-                i = AndroidUtilities.dp(f2);
-            } else {
-                i = 0;
-            }
-            canvas.drawLine(f, measuredHeight, (float) (measuredWidth - i), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
+        if (!this.needDivider || Theme.dividerPaint == null) {
+            return;
         }
+        float f = 71.0f;
+        if (LocaleController.isRTL) {
+            dp = 0.0f;
+        } else {
+            dp = AndroidUtilities.dp(this.imageView.getVisibility() == 0 ? 71.0f : 20.0f);
+        }
+        float measuredHeight = getMeasuredHeight() - 1;
+        int measuredWidth = getMeasuredWidth();
+        if (LocaleController.isRTL) {
+            if (this.imageView.getVisibility() != 0) {
+                f = 20.0f;
+            }
+            i = AndroidUtilities.dp(f);
+        } else {
+            i = 0;
+        }
+        canvas.drawLine(dp, measuredHeight, measuredWidth - i, getMeasuredHeight() - 1, Theme.dividerPaint);
     }
 }

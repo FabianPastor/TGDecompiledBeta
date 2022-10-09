@@ -1,40 +1,45 @@
 package j$.util.stream;
 
 import j$.util.function.Consumer;
-import j$.util.function.m;
-import j$.util.u;
-import j$.util.w;
-
-final class P1 extends R1 implements CLASSNAMEw1 {
-    P1(CLASSNAMEw1 w1Var, CLASSNAMEw1 w1Var2) {
-        super(w1Var, w1Var2);
+/* loaded from: classes2.dex */
+final class P1 extends R1 implements InterfaceCLASSNAMEw1 {
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public P1(InterfaceCLASSNAMEw1 interfaceCLASSNAMEw1, InterfaceCLASSNAMEw1 interfaceCLASSNAMEw12) {
+        super(interfaceCLASSNAMEw1, interfaceCLASSNAMEw12);
     }
 
+    @Override // j$.util.stream.A1
     /* renamed from: a */
     public /* synthetic */ void i(Integer[] numArr, int i) {
-        CLASSNAMEo1.i(this, numArr, i);
+        AbstractCLASSNAMEo1.i(this, numArr, i);
     }
 
+    @Override // j$.util.stream.InterfaceCLASSNAMEz1
     /* renamed from: f */
     public int[] c(int i) {
         return new int[i];
     }
 
+    @Override // j$.util.stream.A1
     public /* synthetic */ void forEach(Consumer consumer) {
-        CLASSNAMEo1.l(this, consumer);
+        AbstractCLASSNAMEo1.l(this, consumer);
     }
 
+    @Override // j$.util.stream.A1
     /* renamed from: h */
-    public /* synthetic */ CLASSNAMEw1 r(long j, long j2, m mVar) {
-        return CLASSNAMEo1.o(this, j, j2, mVar);
+    public /* synthetic */ InterfaceCLASSNAMEw1 r(long j, long j2, j$.util.function.m mVar) {
+        return AbstractCLASSNAMEo1.o(this, j, j2, mVar);
     }
 
+    @Override // j$.util.stream.A1
     /* renamed from: spliterator  reason: collision with other method in class */
-    public w m2spliterator() {
+    public j$.util.w mo285spliterator() {
         return new CLASSNAMEg2(this);
     }
 
-    public u spliterator() {
+    @Override // j$.util.stream.A1
+    /* renamed from: spliterator */
+    public j$.util.u mo285spliterator() {
         return new CLASSNAMEg2(this);
     }
 }

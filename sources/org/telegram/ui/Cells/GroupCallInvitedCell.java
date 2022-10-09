@@ -19,24 +19,26 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
-
+/* loaded from: classes3.dex */
 public class GroupCallInvitedCell extends FrameLayout {
     private AvatarDrawable avatarDrawable;
     private BackupImageView avatarImageView;
     private TLRPC$User currentUser;
     private Paint dividerPaint;
-    private String grayIconColor = "voipgroup_mutedIcon";
+    private String grayIconColor;
     private ImageView muteButton;
     private SimpleTextView nameTextView;
     private boolean needDivider;
     private SimpleTextView statusTextView;
 
+    @Override // android.view.View
     public boolean hasOverlappingRendering() {
         return false;
     }
 
     public GroupCallInvitedCell(Context context) {
         super(context);
+        this.grayIconColor = "voipgroup_mutedIcon";
         Paint paint = new Paint();
         this.dividerPaint = paint;
         paint.setColor(Theme.getColor("voipgroup_actionBar"));
@@ -114,15 +116,16 @@ public class GroupCallInvitedCell extends FrameLayout {
         return this.avatarImageView.getImageReceiver().hasNotThumb();
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
+    @Override // android.widget.FrameLayout, android.view.View
     public void onMeasure(int i, int i2) {
         super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(58.0f), NUM));
     }
 
-    /* access modifiers changed from: protected */
-    public void dispatchDraw(Canvas canvas) {
+    @Override // android.view.ViewGroup, android.view.View
+    protected void dispatchDraw(Canvas canvas) {
         if (this.needDivider) {
-            canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.dp(68.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(68.0f) : 0)), (float) (getMeasuredHeight() - 1), this.dividerPaint);
+            canvas.drawLine(LocaleController.isRTL ? 0.0f : AndroidUtilities.dp(68.0f), getMeasuredHeight() - 1, getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(68.0f) : 0), getMeasuredHeight() - 1, this.dividerPaint);
         }
         super.dispatchDraw(canvas);
     }

@@ -1,7 +1,7 @@
 package org.telegram.tgnet;
 
 import java.util.ArrayList;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_theme extends TLRPC$Theme {
     public static int constructor = -NUM;
     public long access_hash;
@@ -17,10 +17,10 @@ public class TLRPC$TL_theme extends TLRPC$Theme {
     public String slug;
     public String title;
 
+    @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
-        int i = 0;
         this.creator = (readInt32 & 1) != 0;
         this.isDefault = (readInt32 & 2) != 0;
         this.for_chat = (readInt32 & 32) != 0;
@@ -33,21 +33,19 @@ public class TLRPC$TL_theme extends TLRPC$Theme {
         }
         if ((this.flags & 8) != 0) {
             int readInt322 = abstractSerializedData.readInt32(z);
-            if (readInt322 == NUM) {
-                int readInt323 = abstractSerializedData.readInt32(z);
-                while (i < readInt323) {
-                    TLRPC$TL_themeSettings TLdeserialize = TLRPC$TL_themeSettings.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
-                    if (TLdeserialize != null) {
-                        this.settings.add(TLdeserialize);
-                        i++;
-                    } else {
-                        return;
-                    }
+            if (readInt322 != NUM) {
+                if (z) {
+                    throw new RuntimeException(String.format("wrong Vector magic, got %x", Integer.valueOf(readInt322)));
                 }
-            } else if (z) {
-                throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt322)}));
-            } else {
                 return;
+            }
+            int readInt323 = abstractSerializedData.readInt32(z);
+            for (int i = 0; i < readInt323; i++) {
+                TLRPC$TL_themeSettings TLdeserialize = TLRPC$TL_themeSettings.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+                if (TLdeserialize == null) {
+                    return;
+                }
+                this.settings.add(TLdeserialize);
             }
         }
         if ((this.flags & 64) != 0) {
@@ -58,13 +56,14 @@ public class TLRPC$TL_theme extends TLRPC$Theme {
         }
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
-        int i = this.creator ? this.flags | 1 : this.flags & -2;
+        int i = this.creator ? this.flags | 1 : this.flags & (-2);
         this.flags = i;
-        int i2 = this.isDefault ? i | 2 : i & -3;
+        int i2 = this.isDefault ? i | 2 : i & (-3);
         this.flags = i2;
-        int i3 = this.for_chat ? i2 | 32 : i2 & -33;
+        int i3 = this.for_chat ? i2 | 32 : i2 & (-33);
         this.flags = i3;
         abstractSerializedData.writeInt32(i3);
         abstractSerializedData.writeInt64(this.id);

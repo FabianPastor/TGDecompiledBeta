@@ -21,7 +21,6 @@ import androidx.core.graphics.ColorUtils;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
-import java.io.File;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
@@ -42,7 +41,7 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.Premium.PremiumGradient;
 import org.telegram.ui.Components.RLottieDrawable;
 import org.telegram.ui.PremiumPreviewFragment;
-
+/* loaded from: classes3.dex */
 public class PremiumFeatureBottomSheet extends BottomSheet implements NotificationCenter.NotificationCenterDelegate {
     ActionBar actionBar;
     private final BaseFragment baseFragment;
@@ -53,360 +52,382 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
     FrameLayout content;
     int contentHeight;
     boolean enterAnimationIsRunning;
-    /* access modifiers changed from: private */
-    public int gradientAlpha;
-    /* access modifiers changed from: private */
-    public final boolean onlySelectedType;
+    private int gradientAlpha;
+    private final boolean onlySelectedType;
     private PremiumButtonView premiumButtonView;
     ArrayList<PremiumPreviewFragment.PremiumFeatureData> premiumFeatures;
     float progressToFullscreenView;
     private PremiumPreviewFragment.SubscriptionTier selectedTier;
-    /* access modifiers changed from: private */
-    public final int startType;
+    private final int startType;
     SvgHelper.SvgDrawable svgIcon;
     int topCurrentOffset;
     int topGlobalOffset;
     ViewPager viewPager;
 
-    public PremiumFeatureBottomSheet(BaseFragment baseFragment2, int i, boolean z) {
-        this(baseFragment2, i, z, (PremiumPreviewFragment.SubscriptionTier) null);
+    public PremiumFeatureBottomSheet(BaseFragment baseFragment, int i, boolean z) {
+        this(baseFragment, i, z, null);
     }
 
-    public PremiumFeatureBottomSheet(BaseFragment baseFragment2, int i, boolean z, PremiumPreviewFragment.SubscriptionTier subscriptionTier) {
-        this(baseFragment2, baseFragment2.getContext(), baseFragment2.getCurrentAccount(), i, z, subscriptionTier);
+    public PremiumFeatureBottomSheet(BaseFragment baseFragment, int i, boolean z, PremiumPreviewFragment.SubscriptionTier subscriptionTier) {
+        this(baseFragment, baseFragment.getContext(), baseFragment.getCurrentAccount(), i, z, subscriptionTier);
     }
 
-    public PremiumFeatureBottomSheet(BaseFragment baseFragment2, Context context, int i, int i2, boolean z) {
-        this(baseFragment2, context, i, i2, z, (PremiumPreviewFragment.SubscriptionTier) null);
+    public PremiumFeatureBottomSheet(BaseFragment baseFragment, Context context, int i, int i2, boolean z) {
+        this(baseFragment, context, i, i2, z, null);
     }
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public PremiumFeatureBottomSheet(BaseFragment baseFragment2, Context context, int i, int i2, boolean z, PremiumPreviewFragment.SubscriptionTier subscriptionTier) {
+    public PremiumFeatureBottomSheet(final BaseFragment baseFragment, Context context, int i, int i2, final boolean z, PremiumPreviewFragment.SubscriptionTier subscriptionTier) {
         super(context, false);
-        BaseFragment baseFragment3 = baseFragment2;
-        int i3 = i2;
-        boolean z2 = z;
         this.premiumFeatures = new ArrayList<>();
         this.gradientAlpha = 255;
-        this.baseFragment = baseFragment3;
-        if (baseFragment3 != null) {
-            this.selectedTier = subscriptionTier;
-            fixNavigationBar();
-            this.startType = i3;
-            this.onlySelectedType = z2;
-            this.svgIcon = SvgHelper.getDrawable(RLottieDrawable.readRes((File) null, R.raw.star_loader));
-            AnonymousClass1 r5 = new FrameLayout(getContext()) {
-                /* access modifiers changed from: protected */
-                public void onMeasure(int i, int i2) {
-                    if (PremiumFeatureBottomSheet.this.isPortrait) {
-                        PremiumFeatureBottomSheet.this.contentHeight = View.MeasureSpec.getSize(i);
-                    } else {
-                        PremiumFeatureBottomSheet.this.contentHeight = (int) (((float) View.MeasureSpec.getSize(i2)) * 0.65f);
-                    }
-                    super.onMeasure(i, i2);
-                }
-            };
-            PremiumPreviewFragment.fillPremiumFeaturesList(this.premiumFeatures, i);
-            int i4 = 0;
-            while (true) {
-                if (i4 >= this.premiumFeatures.size()) {
-                    i4 = 0;
-                    break;
-                } else if (this.premiumFeatures.get(i4).type == i3) {
-                    break;
+        this.baseFragment = baseFragment;
+        if (baseFragment == null) {
+            throw new RuntimeException("fragmnet can't be null");
+        }
+        this.selectedTier = subscriptionTier;
+        fixNavigationBar();
+        this.startType = i2;
+        this.onlySelectedType = z;
+        this.svgIcon = SvgHelper.getDrawable(RLottieDrawable.readRes(null, R.raw.star_loader));
+        FrameLayout frameLayout = new FrameLayout(getContext()) { // from class: org.telegram.ui.Components.Premium.PremiumFeatureBottomSheet.1
+            @Override // android.widget.FrameLayout, android.view.View
+            protected void onMeasure(int i3, int i4) {
+                if (((BottomSheet) PremiumFeatureBottomSheet.this).isPortrait) {
+                    PremiumFeatureBottomSheet.this.contentHeight = View.MeasureSpec.getSize(i3);
                 } else {
-                    i4++;
+                    PremiumFeatureBottomSheet.this.contentHeight = (int) (View.MeasureSpec.getSize(i4) * 0.65f);
                 }
+                super.onMeasure(i3, i4);
             }
-            if (z2) {
-                this.premiumFeatures.clear();
-                this.premiumFeatures.add(this.premiumFeatures.get(i4));
-                i4 = 0;
+        };
+        PremiumPreviewFragment.fillPremiumFeaturesList(this.premiumFeatures, i);
+        int i3 = 0;
+        while (true) {
+            if (i3 >= this.premiumFeatures.size()) {
+                i3 = 0;
+                break;
+            } else if (this.premiumFeatures.get(i3).type == i2) {
+                break;
+            } else {
+                i3++;
             }
-            PremiumPreviewFragment.PremiumFeatureData premiumFeatureData = this.premiumFeatures.get(i4);
-            setApplyBottomPadding(false);
-            this.useBackgroundTopPadding = false;
-            final PremiumGradient.GradientTools gradientTools = new PremiumGradient.GradientTools("premiumGradientBottomSheet1", "premiumGradientBottomSheet2", "premiumGradientBottomSheet3", (String) null);
-            gradientTools.x1 = 0.0f;
-            gradientTools.y1 = 1.1f;
-            gradientTools.x2 = 1.5f;
-            gradientTools.y2 = -0.2f;
-            gradientTools.exactly = true;
-            this.content = new FrameLayout(getContext()) {
-                /* access modifiers changed from: protected */
-                public void onMeasure(int i, int i2) {
-                    super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(PremiumFeatureBottomSheet.this.contentHeight + AndroidUtilities.dp(2.0f), NUM));
-                }
-
-                /* access modifiers changed from: protected */
-                public void dispatchDraw(Canvas canvas) {
-                    gradientTools.gradientMatrix(0, 0, getMeasuredWidth(), getMeasuredHeight(), 0.0f, 0.0f);
-                    RectF rectF = AndroidUtilities.rectTmp;
-                    rectF.set(0.0f, (float) AndroidUtilities.dp(2.0f), (float) getMeasuredWidth(), (float) (getMeasuredHeight() + AndroidUtilities.dp(18.0f)));
-                    canvas.save();
-                    canvas.clipRect(0, 0, getMeasuredWidth(), getMeasuredHeight());
-                    gradientTools.paint.setAlpha(PremiumFeatureBottomSheet.this.gradientAlpha);
-                    canvas.drawRoundRect(rectF, (float) (AndroidUtilities.dp(12.0f) - 1), (float) (AndroidUtilities.dp(12.0f) - 1), gradientTools.paint);
-                    canvas.restore();
-                    super.dispatchDraw(canvas);
-                }
-            };
-            this.closeLayout = new FrameLayout(getContext());
-            ImageView imageView = new ImageView(getContext());
-            imageView.setImageResource(R.drawable.msg_close);
-            imageView.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(12.0f), ColorUtils.setAlphaComponent(-1, 40), ColorUtils.setAlphaComponent(-1, 100)));
-            this.closeLayout.addView(imageView, LayoutHelper.createFrame(24, 24, 17));
-            this.closeLayout.setOnClickListener(new PremiumFeatureBottomSheet$$ExternalSyntheticLambda1(this));
-            r5.addView(this.content, LayoutHelper.createLinear(-1, -2, 1, 0, 16, 0, 0));
-            AnonymousClass3 r9 = new ViewPager(getContext()) {
-                /* access modifiers changed from: protected */
-                public void onMeasure(int i, int i2) {
-                    int dp = AndroidUtilities.dp(100.0f);
-                    if (getChildCount() > 0) {
-                        getChildAt(0).measure(i, View.MeasureSpec.makeMeasureSpec(0, 0));
-                        dp = getChildAt(0).getMeasuredHeight();
-                    }
-                    super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(dp + PremiumFeatureBottomSheet.this.topGlobalOffset, NUM));
-                }
-
-                public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
-                    try {
-                        return super.onInterceptTouchEvent(motionEvent);
-                    } catch (Exception unused) {
-                        return false;
-                    }
-                }
-
-                public boolean onTouchEvent(MotionEvent motionEvent) {
-                    if (PremiumFeatureBottomSheet.this.enterAnimationIsRunning) {
-                        return false;
-                    }
-                    return super.onTouchEvent(motionEvent);
-                }
-            };
-            this.viewPager = r9;
-            r9.setOverScrollMode(2);
-            this.viewPager.setOffscreenPageLimit(0);
-            this.viewPager.setAdapter(new PagerAdapter() {
-                public boolean isViewFromObject(View view, Object obj) {
-                    return view == obj;
-                }
-
-                public int getCount() {
-                    return PremiumFeatureBottomSheet.this.premiumFeatures.size();
-                }
-
-                public Object instantiateItem(ViewGroup viewGroup, int i) {
-                    PremiumFeatureBottomSheet premiumFeatureBottomSheet = PremiumFeatureBottomSheet.this;
-                    ViewPage viewPage = new ViewPage(premiumFeatureBottomSheet.getContext(), i);
-                    viewGroup.addView(viewPage);
-                    viewPage.position = i;
-                    viewPage.setFeatureDate(PremiumFeatureBottomSheet.this.premiumFeatures.get(i));
-                    return viewPage;
-                }
-
-                public void destroyItem(ViewGroup viewGroup, int i, Object obj) {
-                    viewGroup.removeView((View) obj);
-                }
-            });
-            this.viewPager.setCurrentItem(i4);
-            r5.addView(this.viewPager, LayoutHelper.createFrame(-1, 100.0f, 0, 0.0f, 18.0f, 0.0f, 0.0f));
-            r5.addView(this.closeLayout, LayoutHelper.createFrame(52, 52.0f, 53, 0.0f, 16.0f, 0.0f, 0.0f));
-            final BottomPagesView bottomPagesView = new BottomPagesView(getContext(), this.viewPager, this.premiumFeatures.size());
-            this.viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-                float progress;
-                int selectedPosition;
-                int toPosition;
-
-                public void onPageScrollStateChanged(int i) {
-                }
-
-                public void onPageScrolled(int i, float f, int i2) {
-                    bottomPagesView.setPageOffset(i, f);
-                    this.selectedPosition = i;
-                    this.toPosition = i2 > 0 ? i + 1 : i - 1;
-                    this.progress = f;
-                    checkPage();
-                }
-
-                public void onPageSelected(int i) {
-                    checkPage();
-                }
-
-                private void checkPage() {
-                    float measuredWidth;
-                    boolean z = false;
-                    int i = 0;
-                    while (true) {
-                        float f = 0.0f;
-                        if (i >= PremiumFeatureBottomSheet.this.viewPager.getChildCount()) {
-                            break;
-                        }
-                        ViewPage viewPage = (ViewPage) PremiumFeatureBottomSheet.this.viewPager.getChildAt(i);
-                        if (!PremiumFeatureBottomSheet.this.enterAnimationIsRunning || !(viewPage.topView instanceof PremiumAppIconsPreviewView)) {
-                            int i2 = viewPage.position;
-                            if (i2 == this.selectedPosition) {
-                                PagerHeaderView pagerHeaderView = viewPage.topHeader;
-                                measuredWidth = ((float) (-viewPage.getMeasuredWidth())) * this.progress;
-                                pagerHeaderView.setOffset(measuredWidth);
-                            } else if (i2 == this.toPosition) {
-                                PagerHeaderView pagerHeaderView2 = viewPage.topHeader;
-                                measuredWidth = (((float) (-viewPage.getMeasuredWidth())) * this.progress) + ((float) viewPage.getMeasuredWidth());
-                                pagerHeaderView2.setOffset(measuredWidth);
-                            } else {
-                                viewPage.topHeader.setOffset((float) viewPage.getMeasuredWidth());
-                            }
-                            f = measuredWidth;
-                        }
-                        if (viewPage.topView instanceof PremiumAppIconsPreviewView) {
-                            viewPage.setTranslationX(-f);
-                            viewPage.title.setTranslationX(f);
-                            viewPage.description.setTranslationX(f);
-                        }
-                        i++;
-                    }
-                    PremiumFeatureBottomSheet premiumFeatureBottomSheet = PremiumFeatureBottomSheet.this;
-                    premiumFeatureBottomSheet.containerViewsProgress = this.progress;
-                    int i3 = this.toPosition;
-                    int i4 = this.selectedPosition;
-                    if (i3 > i4) {
-                        z = true;
-                    }
-                    premiumFeatureBottomSheet.containerViewsForward = z;
-                    if (premiumFeatureBottomSheet.premiumFeatures.get(i4).type == 0) {
-                        PremiumFeatureBottomSheet.this.progressToFullscreenView = 1.0f - this.progress;
-                    } else if (PremiumFeatureBottomSheet.this.premiumFeatures.get(this.toPosition).type == 0) {
-                        PremiumFeatureBottomSheet.this.progressToFullscreenView = this.progress;
-                    } else {
-                        PremiumFeatureBottomSheet.this.progressToFullscreenView = 0.0f;
-                    }
-                    PremiumFeatureBottomSheet premiumFeatureBottomSheet2 = PremiumFeatureBottomSheet.this;
-                    int i5 = (int) ((1.0f - premiumFeatureBottomSheet2.progressToFullscreenView) * 255.0f);
-                    if (i5 != premiumFeatureBottomSheet2.gradientAlpha) {
-                        int unused = PremiumFeatureBottomSheet.this.gradientAlpha = i5;
-                        PremiumFeatureBottomSheet.this.content.invalidate();
-                        PremiumFeatureBottomSheet.this.checkTopOffset();
-                    }
-                }
-            });
-            LinearLayout linearLayout = new LinearLayout(getContext());
-            linearLayout.addView(r5);
-            linearLayout.setOrientation(1);
-            bottomPagesView.setColor("chats_unreadCounterMuted", "chats_actionBackground");
-            if (!z2) {
-                linearLayout.addView(bottomPagesView, LayoutHelper.createLinear(this.premiumFeatures.size() * 11, 5, 1, 0, 0, 0, 10));
+        }
+        if (z) {
+            this.premiumFeatures.clear();
+            this.premiumFeatures.add(this.premiumFeatures.get(i3));
+            i3 = 0;
+        }
+        final PremiumPreviewFragment.PremiumFeatureData premiumFeatureData = this.premiumFeatures.get(i3);
+        setApplyBottomPadding(false);
+        this.useBackgroundTopPadding = false;
+        final PremiumGradient.GradientTools gradientTools = new PremiumGradient.GradientTools("premiumGradientBottomSheet1", "premiumGradientBottomSheet2", "premiumGradientBottomSheet3", null);
+        gradientTools.x1 = 0.0f;
+        gradientTools.y1 = 1.1f;
+        gradientTools.x2 = 1.5f;
+        gradientTools.y2 = -0.2f;
+        gradientTools.exactly = true;
+        this.content = new FrameLayout(getContext()) { // from class: org.telegram.ui.Components.Premium.PremiumFeatureBottomSheet.2
+            @Override // android.widget.FrameLayout, android.view.View
+            protected void onMeasure(int i4, int i5) {
+                super.onMeasure(i4, View.MeasureSpec.makeMeasureSpec(PremiumFeatureBottomSheet.this.contentHeight + AndroidUtilities.dp(2.0f), NUM));
             }
-            PremiumButtonView premiumButtonView2 = new PremiumButtonView(getContext(), true);
-            this.premiumButtonView = premiumButtonView2;
-            premiumButtonView2.buttonLayout.setOnClickListener(new PremiumFeatureBottomSheet$$ExternalSyntheticLambda2(this, baseFragment3, z2, premiumFeatureData));
-            this.premiumButtonView.overlayTextView.setOnClickListener(new PremiumFeatureBottomSheet$$ExternalSyntheticLambda0(this));
-            FrameLayout frameLayout = new FrameLayout(getContext());
-            this.buttonContainer = frameLayout;
-            frameLayout.addView(this.premiumButtonView, LayoutHelper.createFrame(-1, 48.0f, 16, 16.0f, 0.0f, 16.0f, 0.0f));
-            this.buttonContainer.setBackgroundColor(getThemedColor("dialogBackground"));
-            linearLayout.addView(this.buttonContainer, LayoutHelper.createLinear(-1, 68, 80));
-            if (UserConfig.getInstance(i).isPremium()) {
-                this.premiumButtonView.setOverlayText(LocaleController.getString("OK", R.string.OK), false, false);
+
+            @Override // android.view.ViewGroup, android.view.View
+            protected void dispatchDraw(Canvas canvas) {
+                gradientTools.gradientMatrix(0, 0, getMeasuredWidth(), getMeasuredHeight(), 0.0f, 0.0f);
+                RectF rectF = AndroidUtilities.rectTmp;
+                rectF.set(0.0f, AndroidUtilities.dp(2.0f), getMeasuredWidth(), getMeasuredHeight() + AndroidUtilities.dp(18.0f));
+                canvas.save();
+                canvas.clipRect(0, 0, getMeasuredWidth(), getMeasuredHeight());
+                gradientTools.paint.setAlpha(PremiumFeatureBottomSheet.this.gradientAlpha);
+                canvas.drawRoundRect(rectF, AndroidUtilities.dp(12.0f) - 1, AndroidUtilities.dp(12.0f) - 1, gradientTools.paint);
+                canvas.restore();
+                super.dispatchDraw(canvas);
             }
-            final ScrollView scrollView = new ScrollView(getContext());
-            scrollView.addView(linearLayout);
-            setCustomView(scrollView);
-            MediaDataController.getInstance(i).preloadPremiumPreviewStickers();
-            setButtonText();
-            this.customViewGravity = 83;
-            final Drawable mutate = ContextCompat.getDrawable(getContext(), R.drawable.header_shadow).mutate();
-            AnonymousClass6 r3 = new FrameLayout(getContext()) {
-                public boolean hasOverlappingRendering() {
+        };
+        this.closeLayout = new FrameLayout(getContext());
+        ImageView imageView = new ImageView(getContext());
+        imageView.setImageResource(R.drawable.msg_close);
+        imageView.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(12.0f), ColorUtils.setAlphaComponent(-1, 40), ColorUtils.setAlphaComponent(-1, 100)));
+        this.closeLayout.addView(imageView, LayoutHelper.createFrame(24, 24, 17));
+        this.closeLayout.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.Components.Premium.PremiumFeatureBottomSheet$$ExternalSyntheticLambda1
+            @Override // android.view.View.OnClickListener
+            public final void onClick(View view) {
+                PremiumFeatureBottomSheet.this.lambda$new$0(view);
+            }
+        });
+        frameLayout.addView(this.content, LayoutHelper.createLinear(-1, -2, 1, 0, 16, 0, 0));
+        ViewPager viewPager = new ViewPager(getContext()) { // from class: org.telegram.ui.Components.Premium.PremiumFeatureBottomSheet.3
+            /* JADX INFO: Access modifiers changed from: protected */
+            @Override // androidx.viewpager.widget.ViewPager, android.view.View
+            public void onMeasure(int i4, int i5) {
+                int dp = AndroidUtilities.dp(100.0f);
+                if (getChildCount() > 0) {
+                    getChildAt(0).measure(i4, View.MeasureSpec.makeMeasureSpec(0, 0));
+                    dp = getChildAt(0).getMeasuredHeight();
+                }
+                super.onMeasure(i4, View.MeasureSpec.makeMeasureSpec(dp + PremiumFeatureBottomSheet.this.topGlobalOffset, NUM));
+            }
+
+            @Override // androidx.viewpager.widget.ViewPager, android.view.ViewGroup
+            public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
+                try {
+                    return super.onInterceptTouchEvent(motionEvent);
+                } catch (Exception unused) {
                     return false;
                 }
+            }
 
-                public void setTranslationY(float f) {
-                    super.setTranslationY(f);
-                    PremiumFeatureBottomSheet.this.onContainerTranslationYChanged(f);
+            @Override // androidx.viewpager.widget.ViewPager, android.view.View
+            public boolean onTouchEvent(MotionEvent motionEvent) {
+                if (PremiumFeatureBottomSheet.this.enterAnimationIsRunning) {
+                    return false;
                 }
+                return super.onTouchEvent(motionEvent);
+            }
+        };
+        this.viewPager = viewPager;
+        viewPager.setOverScrollMode(2);
+        this.viewPager.setOffscreenPageLimit(0);
+        this.viewPager.setAdapter(new PagerAdapter() { // from class: org.telegram.ui.Components.Premium.PremiumFeatureBottomSheet.4
+            @Override // androidx.viewpager.widget.PagerAdapter
+            public boolean isViewFromObject(View view, Object obj) {
+                return view == obj;
+            }
 
-                /* access modifiers changed from: protected */
-                public void onMeasure(int i, int i2) {
-                    PremiumFeatureBottomSheet.this.topGlobalOffset = 0;
-                    scrollView.measure(i, View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i2), Integer.MIN_VALUE));
-                    PremiumFeatureBottomSheet.this.topGlobalOffset = (View.MeasureSpec.getSize(i2) - scrollView.getMeasuredHeight()) + PremiumFeatureBottomSheet.this.backgroundPaddingTop;
-                    super.onMeasure(i, i2);
+            @Override // androidx.viewpager.widget.PagerAdapter
+            public int getCount() {
+                return PremiumFeatureBottomSheet.this.premiumFeatures.size();
+            }
+
+            @Override // androidx.viewpager.widget.PagerAdapter
+            /* renamed from: instantiateItem */
+            public Object mo1568instantiateItem(ViewGroup viewGroup, int i4) {
+                PremiumFeatureBottomSheet premiumFeatureBottomSheet = PremiumFeatureBottomSheet.this;
+                ViewPage viewPage = new ViewPage(premiumFeatureBottomSheet.getContext(), i4);
+                viewGroup.addView(viewPage);
+                viewPage.position = i4;
+                viewPage.setFeatureDate(PremiumFeatureBottomSheet.this.premiumFeatures.get(i4));
+                return viewPage;
+            }
+
+            @Override // androidx.viewpager.widget.PagerAdapter
+            public void destroyItem(ViewGroup viewGroup, int i4, Object obj) {
+                viewGroup.removeView((View) obj);
+            }
+        });
+        this.viewPager.setCurrentItem(i3);
+        frameLayout.addView(this.viewPager, LayoutHelper.createFrame(-1, 100.0f, 0, 0.0f, 18.0f, 0.0f, 0.0f));
+        frameLayout.addView(this.closeLayout, LayoutHelper.createFrame(52, 52.0f, 53, 0.0f, 16.0f, 0.0f, 0.0f));
+        final BottomPagesView bottomPagesView = new BottomPagesView(getContext(), this.viewPager, this.premiumFeatures.size());
+        this.viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() { // from class: org.telegram.ui.Components.Premium.PremiumFeatureBottomSheet.5
+            float progress;
+            int selectedPosition;
+            int toPosition;
+
+            @Override // androidx.viewpager.widget.ViewPager.OnPageChangeListener
+            public void onPageScrollStateChanged(int i4) {
+            }
+
+            @Override // androidx.viewpager.widget.ViewPager.OnPageChangeListener
+            public void onPageScrolled(int i4, float f, int i5) {
+                bottomPagesView.setPageOffset(i4, f);
+                this.selectedPosition = i4;
+                this.toPosition = i5 > 0 ? i4 + 1 : i4 - 1;
+                this.progress = f;
+                checkPage();
+            }
+
+            @Override // androidx.viewpager.widget.ViewPager.OnPageChangeListener
+            public void onPageSelected(int i4) {
+                checkPage();
+            }
+
+            private void checkPage() {
+                float measuredWidth;
+                boolean z2 = false;
+                int i4 = 0;
+                while (true) {
+                    float f = 0.0f;
+                    if (i4 >= PremiumFeatureBottomSheet.this.viewPager.getChildCount()) {
+                        break;
+                    }
+                    ViewPage viewPage = (ViewPage) PremiumFeatureBottomSheet.this.viewPager.getChildAt(i4);
+                    if (!PremiumFeatureBottomSheet.this.enterAnimationIsRunning || !(viewPage.topView instanceof PremiumAppIconsPreviewView)) {
+                        int i5 = viewPage.position;
+                        if (i5 == this.selectedPosition) {
+                            PagerHeaderView pagerHeaderView = viewPage.topHeader;
+                            measuredWidth = (-viewPage.getMeasuredWidth()) * this.progress;
+                            pagerHeaderView.setOffset(measuredWidth);
+                        } else if (i5 == this.toPosition) {
+                            PagerHeaderView pagerHeaderView2 = viewPage.topHeader;
+                            measuredWidth = ((-viewPage.getMeasuredWidth()) * this.progress) + viewPage.getMeasuredWidth();
+                            pagerHeaderView2.setOffset(measuredWidth);
+                        } else {
+                            viewPage.topHeader.setOffset(viewPage.getMeasuredWidth());
+                        }
+                        f = measuredWidth;
+                    }
+                    if (viewPage.topView instanceof PremiumAppIconsPreviewView) {
+                        viewPage.setTranslationX(-f);
+                        viewPage.title.setTranslationX(f);
+                        viewPage.description.setTranslationX(f);
+                    }
+                    i4++;
+                }
+                PremiumFeatureBottomSheet premiumFeatureBottomSheet = PremiumFeatureBottomSheet.this;
+                premiumFeatureBottomSheet.containerViewsProgress = this.progress;
+                int i6 = this.toPosition;
+                int i7 = this.selectedPosition;
+                if (i6 > i7) {
+                    z2 = true;
+                }
+                premiumFeatureBottomSheet.containerViewsForward = z2;
+                if (premiumFeatureBottomSheet.premiumFeatures.get(i7).type == 0) {
+                    PremiumFeatureBottomSheet.this.progressToFullscreenView = 1.0f - this.progress;
+                } else if (PremiumFeatureBottomSheet.this.premiumFeatures.get(this.toPosition).type == 0) {
+                    PremiumFeatureBottomSheet.this.progressToFullscreenView = this.progress;
+                } else {
+                    PremiumFeatureBottomSheet.this.progressToFullscreenView = 0.0f;
+                }
+                PremiumFeatureBottomSheet premiumFeatureBottomSheet2 = PremiumFeatureBottomSheet.this;
+                int i8 = (int) ((1.0f - premiumFeatureBottomSheet2.progressToFullscreenView) * 255.0f);
+                if (i8 != premiumFeatureBottomSheet2.gradientAlpha) {
+                    PremiumFeatureBottomSheet.this.gradientAlpha = i8;
+                    PremiumFeatureBottomSheet.this.content.invalidate();
                     PremiumFeatureBottomSheet.this.checkTopOffset();
                 }
+            }
+        });
+        LinearLayout linearLayout = new LinearLayout(getContext());
+        linearLayout.addView(frameLayout);
+        linearLayout.setOrientation(1);
+        bottomPagesView.setColor("chats_unreadCounterMuted", "chats_actionBackground");
+        if (!z) {
+            linearLayout.addView(bottomPagesView, LayoutHelper.createLinear(this.premiumFeatures.size() * 11, 5, 1, 0, 0, 0, 10));
+        }
+        PremiumButtonView premiumButtonView = new PremiumButtonView(getContext(), true);
+        this.premiumButtonView = premiumButtonView;
+        premiumButtonView.buttonLayout.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.Components.Premium.PremiumFeatureBottomSheet$$ExternalSyntheticLambda2
+            @Override // android.view.View.OnClickListener
+            public final void onClick(View view) {
+                PremiumFeatureBottomSheet.this.lambda$new$1(baseFragment, z, premiumFeatureData, view);
+            }
+        });
+        this.premiumButtonView.overlayTextView.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.Components.Premium.PremiumFeatureBottomSheet$$ExternalSyntheticLambda0
+            @Override // android.view.View.OnClickListener
+            public final void onClick(View view) {
+                PremiumFeatureBottomSheet.this.lambda$new$2(view);
+            }
+        });
+        FrameLayout frameLayout2 = new FrameLayout(getContext());
+        this.buttonContainer = frameLayout2;
+        frameLayout2.addView(this.premiumButtonView, LayoutHelper.createFrame(-1, 48.0f, 16, 16.0f, 0.0f, 16.0f, 0.0f));
+        this.buttonContainer.setBackgroundColor(getThemedColor("dialogBackground"));
+        linearLayout.addView(this.buttonContainer, LayoutHelper.createLinear(-1, 68, 80));
+        if (UserConfig.getInstance(i).isPremium()) {
+            this.premiumButtonView.setOverlayText(LocaleController.getString("OK", R.string.OK), false, false);
+        }
+        final ScrollView scrollView = new ScrollView(getContext());
+        scrollView.addView(linearLayout);
+        setCustomView(scrollView);
+        MediaDataController.getInstance(i).preloadPremiumPreviewStickers();
+        setButtonText();
+        this.customViewGravity = 83;
+        final Drawable mutate = ContextCompat.getDrawable(getContext(), R.drawable.header_shadow).mutate();
+        FrameLayout frameLayout3 = new FrameLayout(getContext()) { // from class: org.telegram.ui.Components.Premium.PremiumFeatureBottomSheet.6
+            @Override // android.view.View
+            public boolean hasOverlappingRendering() {
+                return false;
+            }
 
-                /* access modifiers changed from: protected */
-                public void dispatchDraw(Canvas canvas) {
-                    Drawable access$500 = PremiumFeatureBottomSheet.this.shadowDrawable;
-                    PremiumFeatureBottomSheet premiumFeatureBottomSheet = PremiumFeatureBottomSheet.this;
-                    access$500.setBounds(0, (premiumFeatureBottomSheet.topCurrentOffset - premiumFeatureBottomSheet.backgroundPaddingTop) + AndroidUtilities.dp(2.0f), getMeasuredWidth(), getMeasuredHeight());
-                    PremiumFeatureBottomSheet.this.shadowDrawable.draw(canvas);
-                    super.dispatchDraw(canvas);
-                    ActionBar actionBar = PremiumFeatureBottomSheet.this.actionBar;
-                    if (actionBar != null && actionBar.getVisibility() == 0 && PremiumFeatureBottomSheet.this.actionBar.getAlpha() != 0.0f) {
-                        mutate.setBounds(0, PremiumFeatureBottomSheet.this.actionBar.getBottom(), getMeasuredWidth(), PremiumFeatureBottomSheet.this.actionBar.getBottom() + mutate.getIntrinsicHeight());
-                        mutate.setAlpha((int) (PremiumFeatureBottomSheet.this.actionBar.getAlpha() * 255.0f));
-                        mutate.draw(canvas);
-                    }
+            @Override // android.view.View
+            public void setTranslationY(float f) {
+                super.setTranslationY(f);
+                PremiumFeatureBottomSheet.this.onContainerTranslationYChanged(f);
+            }
+
+            @Override // android.widget.FrameLayout, android.view.View
+            protected void onMeasure(int i4, int i5) {
+                PremiumFeatureBottomSheet.this.topGlobalOffset = 0;
+                scrollView.measure(i4, View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i5), Integer.MIN_VALUE));
+                PremiumFeatureBottomSheet.this.topGlobalOffset = (View.MeasureSpec.getSize(i5) - scrollView.getMeasuredHeight()) + ((BottomSheet) PremiumFeatureBottomSheet.this).backgroundPaddingTop;
+                super.onMeasure(i4, i5);
+                PremiumFeatureBottomSheet.this.checkTopOffset();
+            }
+
+            @Override // android.view.ViewGroup, android.view.View
+            protected void dispatchDraw(Canvas canvas) {
+                Drawable drawable = ((BottomSheet) PremiumFeatureBottomSheet.this).shadowDrawable;
+                PremiumFeatureBottomSheet premiumFeatureBottomSheet = PremiumFeatureBottomSheet.this;
+                drawable.setBounds(0, (premiumFeatureBottomSheet.topCurrentOffset - ((BottomSheet) premiumFeatureBottomSheet).backgroundPaddingTop) + AndroidUtilities.dp(2.0f), getMeasuredWidth(), getMeasuredHeight());
+                ((BottomSheet) PremiumFeatureBottomSheet.this).shadowDrawable.draw(canvas);
+                super.dispatchDraw(canvas);
+                ActionBar actionBar = PremiumFeatureBottomSheet.this.actionBar;
+                if (actionBar == null || actionBar.getVisibility() != 0 || PremiumFeatureBottomSheet.this.actionBar.getAlpha() == 0.0f) {
+                    return;
                 }
+                mutate.setBounds(0, PremiumFeatureBottomSheet.this.actionBar.getBottom(), getMeasuredWidth(), PremiumFeatureBottomSheet.this.actionBar.getBottom() + mutate.getIntrinsicHeight());
+                mutate.setAlpha((int) (PremiumFeatureBottomSheet.this.actionBar.getAlpha() * 255.0f));
+                mutate.draw(canvas);
+            }
 
-                /* access modifiers changed from: protected */
-                public boolean drawChild(Canvas canvas, View view, long j) {
-                    if (view != scrollView) {
-                        return super.drawChild(canvas, view, j);
-                    }
+            @Override // android.view.ViewGroup
+            protected boolean drawChild(Canvas canvas, View view, long j) {
+                if (view == scrollView) {
                     canvas.save();
                     canvas.clipRect(0, PremiumFeatureBottomSheet.this.topCurrentOffset + AndroidUtilities.dp(2.0f), getMeasuredWidth(), getMeasuredHeight());
                     super.drawChild(canvas, view, j);
                     canvas.restore();
                     return true;
                 }
+                return super.drawChild(canvas, view, j);
+            }
 
-                public boolean dispatchTouchEvent(MotionEvent motionEvent) {
-                    if (motionEvent.getAction() == 0) {
-                        float y = motionEvent.getY();
-                        PremiumFeatureBottomSheet premiumFeatureBottomSheet = PremiumFeatureBottomSheet.this;
-                        if (y < ((float) ((premiumFeatureBottomSheet.topCurrentOffset - premiumFeatureBottomSheet.backgroundPaddingTop) + AndroidUtilities.dp(2.0f)))) {
-                            PremiumFeatureBottomSheet.this.dismiss();
-                        }
+            @Override // android.view.ViewGroup, android.view.View
+            public boolean dispatchTouchEvent(MotionEvent motionEvent) {
+                if (motionEvent.getAction() == 0) {
+                    float y = motionEvent.getY();
+                    PremiumFeatureBottomSheet premiumFeatureBottomSheet = PremiumFeatureBottomSheet.this;
+                    if (y < (premiumFeatureBottomSheet.topCurrentOffset - ((BottomSheet) premiumFeatureBottomSheet).backgroundPaddingTop) + AndroidUtilities.dp(2.0f)) {
+                        PremiumFeatureBottomSheet.this.dismiss();
                     }
-                    return super.dispatchTouchEvent(motionEvent);
                 }
-            };
-            this.containerView = r3;
-            int i5 = this.backgroundPaddingLeft;
-            r3.setPadding(i5, this.backgroundPaddingTop - 1, i5, 0);
-            return;
-        }
-        throw new RuntimeException("fragmnet can't be null");
+                return super.dispatchTouchEvent(motionEvent);
+            }
+        };
+        this.containerView = frameLayout3;
+        int i4 = this.backgroundPaddingLeft;
+        frameLayout3.setPadding(i4, this.backgroundPaddingTop - 1, i4, 0);
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$new$0(View view) {
         dismiss();
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$1(BaseFragment baseFragment2, boolean z, PremiumPreviewFragment.PremiumFeatureData premiumFeatureData, View view) {
-        if (baseFragment2 instanceof ChatActivity) {
-            ChatActivity chatActivity = (ChatActivity) baseFragment2;
+    /* JADX INFO: Access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$1(BaseFragment baseFragment, boolean z, PremiumPreviewFragment.PremiumFeatureData premiumFeatureData, View view) {
+        if (baseFragment instanceof ChatActivity) {
+            ChatActivity chatActivity = (ChatActivity) baseFragment;
             chatActivity.closeMenu();
             ChatAttachAlert chatAttachAlert = chatActivity.chatAttachAlert;
             if (chatAttachAlert != null) {
                 chatAttachAlert.dismiss(true);
             }
         }
-        if (!(baseFragment2 == null || baseFragment2.getVisibleDialog() == null)) {
-            baseFragment2.getVisibleDialog().dismiss();
+        if (baseFragment != null && baseFragment.getVisibleDialog() != null) {
+            baseFragment.getVisibleDialog().dismiss();
         }
-        if (!z || baseFragment2 == null) {
-            PremiumPreviewFragment.buyPremium(baseFragment2, this.selectedTier, PremiumPreviewFragment.featureTypeToServerString(premiumFeatureData.type));
+        if (z && baseFragment != null) {
+            baseFragment.presentFragment(new PremiumPreviewFragment(PremiumPreviewFragment.featureTypeToServerString(premiumFeatureData.type)));
         } else {
-            baseFragment2.presentFragment(new PremiumPreviewFragment(PremiumPreviewFragment.featureTypeToServerString(premiumFeatureData.type)));
+            PremiumPreviewFragment.buyPremium(baseFragment, this.selectedTier, PremiumPreviewFragment.featureTypeToServerString(premiumFeatureData.type));
         }
         dismiss();
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$new$2(View view) {
         dismiss();
     }
@@ -417,60 +438,70 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
             if (i == 4) {
                 this.premiumButtonView.buttonTextView.setText(LocaleController.getString(R.string.UnlockPremiumReactions));
                 this.premiumButtonView.setIcon(R.raw.unlock_icon);
+                return;
             } else if (i == 3) {
                 this.premiumButtonView.buttonTextView.setText(LocaleController.getString(R.string.AboutTelegramPremium));
-            } else if (i == 10) {
+                return;
+            } else if (i != 10) {
+                return;
+            } else {
                 this.premiumButtonView.buttonTextView.setText(LocaleController.getString(R.string.UnlockPremiumIcons));
                 this.premiumButtonView.setIcon(R.raw.unlock_icon);
+                return;
             }
-        } else {
-            this.premiumButtonView.buttonTextView.setText(PremiumPreviewFragment.getPremiumButtonText(this.currentAccount, this.selectedTier));
         }
+        this.premiumButtonView.buttonTextView.setText(PremiumPreviewFragment.getPremiumButtonText(this.currentAccount, this.selectedTier));
     }
 
+    @Override // org.telegram.ui.ActionBar.BottomSheet, android.app.Dialog
     public void show() {
         super.show();
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.stopAllHeavyOperations, 16);
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
+    @Override // org.telegram.ui.ActionBar.BottomSheet, android.app.Dialog
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.billingProductDetailsUpdated);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.premiumPromoUpdated);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.currentUserPremiumStatusChanged);
-        AnonymousClass7 r11 = new ActionBar(getContext()) {
+        ActionBar actionBar = new ActionBar(getContext()) { // from class: org.telegram.ui.Components.Premium.PremiumFeatureBottomSheet.7
+            @Override // android.view.View
             public void setAlpha(float f) {
                 if (getAlpha() != f) {
                     super.setAlpha(f);
-                    PremiumFeatureBottomSheet.this.containerView.invalidate();
+                    ((BottomSheet) PremiumFeatureBottomSheet.this).containerView.invalidate();
                 }
             }
 
+            @Override // android.view.View
             public void setTag(Object obj) {
                 super.setTag(obj);
                 PremiumFeatureBottomSheet.this.updateStatusBar();
             }
         };
-        this.actionBar = r11;
-        r11.setBackgroundColor(getThemedColor("dialogBackground"));
+        this.actionBar = actionBar;
+        actionBar.setBackgroundColor(getThemedColor("dialogBackground"));
         this.actionBar.setTitleColor(getThemedColor("windowBackgroundWhiteBlackText"));
         this.actionBar.setItemsBackgroundColor(getThemedColor("actionBarActionModeDefaultSelector"), false);
         this.actionBar.setItemsColor(getThemedColor("actionBarActionModeDefaultIcon"), false);
         this.actionBar.setCastShadows(true);
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setTitle(LocaleController.getString("DoubledLimits", R.string.DoubledLimits));
-        this.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
+        this.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() { // from class: org.telegram.ui.Components.Premium.PremiumFeatureBottomSheet.8
+            @Override // org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick
             public void onItemClick(int i) {
                 if (i == -1) {
                     PremiumFeatureBottomSheet.this.dismiss();
                 }
             }
         });
-        this.containerView.addView(this.actionBar, LayoutHelper.createFrame(-1, -2.0f, 0, 0.0f, (float) (-this.backgroundPaddingTop), 0.0f, 0.0f));
+        this.containerView.addView(this.actionBar, LayoutHelper.createFrame(-1, -2.0f, 0, 0.0f, -this.backgroundPaddingTop, 0.0f, 0.0f));
         AndroidUtilities.updateViewVisibilityAnimated(this.actionBar, false, 1.0f, false);
     }
 
+    @Override // org.telegram.ui.ActionBar.BottomSheet, android.app.Dialog, android.content.DialogInterface
     public void dismiss() {
         super.dismiss();
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.billingProductDetailsUpdated);
@@ -479,6 +510,7 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.startAllHeavyOperations, 16);
     }
 
+    @Override // org.telegram.messenger.NotificationCenter.NotificationCenterDelegate
     public void didReceivedNotification(int i, int i2, Object... objArr) {
         if (i == NotificationCenter.billingProductDetailsUpdated || i == NotificationCenter.premiumPromoUpdated) {
             setButtonText();
@@ -492,11 +524,13 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
         }
     }
 
-    private class ViewPage extends LinearLayout {
+    /* JADX INFO: Access modifiers changed from: private */
+    /* loaded from: classes3.dex */
+    public class ViewPage extends LinearLayout {
         TextView description;
         public int position;
         TextView title;
-        PagerHeaderView topHeader = ((PagerHeaderView) this.topView);
+        PagerHeaderView topHeader;
         View topView;
         boolean topViewOnFullHeight;
 
@@ -506,6 +540,7 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
             View viewForPosition = PremiumFeatureBottomSheet.this.getViewForPosition(context, i);
             this.topView = viewForPosition;
             addView(viewForPosition);
+            this.topHeader = (PagerHeaderView) this.topView;
             TextView textView = new TextView(context);
             this.title = textView;
             textView.setGravity(1);
@@ -525,8 +560,8 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
             setClipChildren(false);
         }
 
-        /* access modifiers changed from: protected */
-        public void onMeasure(int i, int i2) {
+        @Override // android.widget.LinearLayout, android.view.View
+        protected void onMeasure(int i, int i2) {
             this.title.setVisibility(0);
             View view = this.topView;
             if (view instanceof DoubleLimitsPageView) {
@@ -535,9 +570,9 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
             ViewGroup.LayoutParams layoutParams = this.topView.getLayoutParams();
             PremiumFeatureBottomSheet premiumFeatureBottomSheet = PremiumFeatureBottomSheet.this;
             layoutParams.height = premiumFeatureBottomSheet.contentHeight;
-            this.description.setVisibility(premiumFeatureBottomSheet.isPortrait ? 0 : 8);
+            this.description.setVisibility(((BottomSheet) premiumFeatureBottomSheet).isPortrait ? 0 : 8);
             ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) this.title.getLayoutParams();
-            if (PremiumFeatureBottomSheet.this.isPortrait) {
+            if (((BottomSheet) PremiumFeatureBottomSheet.this).isPortrait) {
                 marginLayoutParams.topMargin = AndroidUtilities.dp(20.0f);
                 marginLayoutParams.bottomMargin = 0;
             } else {
@@ -555,69 +590,75 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
             }
         }
 
-        /* access modifiers changed from: protected */
-        public boolean drawChild(Canvas canvas, View view, long j) {
-            if (view != this.topView) {
-                return super.drawChild(canvas, view, j);
+        @Override // android.view.ViewGroup
+        protected boolean drawChild(Canvas canvas, View view, long j) {
+            if (view == this.topView) {
+                boolean z = view instanceof DoubleLimitsPageView;
+                if (z) {
+                    setTranslationY(0.0f);
+                } else {
+                    setTranslationY(PremiumFeatureBottomSheet.this.topGlobalOffset);
+                }
+                if ((view instanceof CarouselView) || z) {
+                    return super.drawChild(canvas, view, j);
+                }
+                canvas.save();
+                canvas.clipRect(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
+                boolean drawChild = super.drawChild(canvas, view, j);
+                canvas.restore();
+                return drawChild;
             }
-            boolean z = view instanceof DoubleLimitsPageView;
-            if (z) {
-                setTranslationY(0.0f);
-            } else {
-                setTranslationY((float) PremiumFeatureBottomSheet.this.topGlobalOffset);
-            }
-            if ((view instanceof CarouselView) || z) {
-                return super.drawChild(canvas, view, j);
-            }
-            canvas.save();
-            canvas.clipRect(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
-            boolean drawChild = super.drawChild(canvas, view, j);
-            canvas.restore();
-            return drawChild;
+            return super.drawChild(canvas, view, j);
         }
 
-        /* access modifiers changed from: package-private */
-        public void setFeatureDate(PremiumPreviewFragment.PremiumFeatureData premiumFeatureData) {
-            if (premiumFeatureData.type == 0) {
+        void setFeatureDate(PremiumPreviewFragment.PremiumFeatureData premiumFeatureData) {
+            if (premiumFeatureData.type != 0) {
+                if (PremiumFeatureBottomSheet.this.onlySelectedType) {
+                    if (PremiumFeatureBottomSheet.this.startType != 4) {
+                        if (PremiumFeatureBottomSheet.this.startType != 3) {
+                            if (PremiumFeatureBottomSheet.this.startType == 10) {
+                                this.title.setText(LocaleController.getString("PremiumPreviewAppIcon", R.string.PremiumPreviewAppIcon));
+                                this.description.setText(LocaleController.getString("PremiumPreviewAppIconDescription2", R.string.PremiumPreviewAppIconDescription2));
+                            }
+                        } else {
+                            this.title.setText(LocaleController.getString("PremiumPreviewNoAds", R.string.PremiumPreviewNoAds));
+                            this.description.setText(LocaleController.getString("PremiumPreviewNoAdsDescription2", R.string.PremiumPreviewNoAdsDescription2));
+                        }
+                    } else {
+                        this.title.setText(LocaleController.getString("AdditionalReactions", R.string.AdditionalReactions));
+                        this.description.setText(LocaleController.getString("AdditionalReactionsDescription", R.string.AdditionalReactionsDescription));
+                    }
+                    this.topViewOnFullHeight = false;
+                } else {
+                    this.title.setText(premiumFeatureData.title);
+                    this.description.setText(premiumFeatureData.description);
+                    this.topViewOnFullHeight = false;
+                }
+            } else {
                 this.title.setText("");
                 this.description.setText("");
                 this.topViewOnFullHeight = true;
-            } else if (PremiumFeatureBottomSheet.this.onlySelectedType) {
-                if (PremiumFeatureBottomSheet.this.startType == 4) {
-                    this.title.setText(LocaleController.getString("AdditionalReactions", R.string.AdditionalReactions));
-                    this.description.setText(LocaleController.getString("AdditionalReactionsDescription", R.string.AdditionalReactionsDescription));
-                } else if (PremiumFeatureBottomSheet.this.startType == 3) {
-                    this.title.setText(LocaleController.getString("PremiumPreviewNoAds", R.string.PremiumPreviewNoAds));
-                    this.description.setText(LocaleController.getString("PremiumPreviewNoAdsDescription2", R.string.PremiumPreviewNoAdsDescription2));
-                } else if (PremiumFeatureBottomSheet.this.startType == 10) {
-                    this.title.setText(LocaleController.getString("PremiumPreviewAppIcon", R.string.PremiumPreviewAppIcon));
-                    this.description.setText(LocaleController.getString("PremiumPreviewAppIconDescription2", R.string.PremiumPreviewAppIconDescription2));
-                }
-                this.topViewOnFullHeight = false;
-            } else {
-                this.title.setText(premiumFeatureData.title);
-                this.description.setText(premiumFeatureData.description);
-                this.topViewOnFullHeight = false;
             }
             requestLayout();
         }
     }
 
-    /* access modifiers changed from: package-private */
-    public View getViewForPosition(Context context, int i) {
+    View getViewForPosition(Context context, int i) {
         PremiumPreviewFragment.PremiumFeatureData premiumFeatureData = this.premiumFeatures.get(i);
         int i2 = premiumFeatureData.type;
         if (i2 == 0) {
             DoubleLimitsPageView doubleLimitsPageView = new DoubleLimitsPageView(context);
-            doubleLimitsPageView.recyclerListView.setOnScrollListener(new RecyclerView.OnScrollListener() {
-                public void onScrolled(RecyclerView recyclerView, int i, int i2) {
-                    super.onScrolled(recyclerView, i, i2);
+            doubleLimitsPageView.recyclerListView.setOnScrollListener(new RecyclerView.OnScrollListener() { // from class: org.telegram.ui.Components.Premium.PremiumFeatureBottomSheet.9
+                @Override // androidx.recyclerview.widget.RecyclerView.OnScrollListener
+                public void onScrolled(RecyclerView recyclerView, int i3, int i4) {
+                    super.onScrolled(recyclerView, i3, i4);
                     PremiumFeatureBottomSheet.this.checkTopOffset();
                 }
             });
             return doubleLimitsPageView;
         } else if (i2 == 5) {
-            return new PremiumStickersPreviewRecycler(this, context, this.currentAccount) {
+            return new PremiumStickersPreviewRecycler(this, context, this.currentAccount) { // from class: org.telegram.ui.Components.Premium.PremiumFeatureBottomSheet.10
+                @Override // org.telegram.ui.Components.Premium.PremiumStickersPreviewRecycler, org.telegram.ui.Components.Premium.PagerHeaderView
                 public void setOffset(float f) {
                     setAutoPlayEnabled(f == 0.0f);
                     super.setOffset(f);
@@ -631,30 +672,33 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
         }
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
+    @Override // org.telegram.ui.ActionBar.BottomSheet
     public boolean onCustomOpenAnimation() {
         if (this.viewPager.getChildCount() > 0) {
             ViewPage viewPage = (ViewPage) this.viewPager.getChildAt(0);
             View view = viewPage.topView;
             if (view instanceof PremiumAppIconsPreviewView) {
                 final PremiumAppIconsPreviewView premiumAppIconsPreviewView = (PremiumAppIconsPreviewView) view;
-                ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{(float) viewPage.getMeasuredWidth(), 0.0f});
-                premiumAppIconsPreviewView.setOffset((float) viewPage.getMeasuredWidth());
+                ValueAnimator ofFloat = ValueAnimator.ofFloat(viewPage.getMeasuredWidth(), 0.0f);
+                premiumAppIconsPreviewView.setOffset(viewPage.getMeasuredWidth());
                 this.enterAnimationIsRunning = true;
-                ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(this) {
+                ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(this) { // from class: org.telegram.ui.Components.Premium.PremiumFeatureBottomSheet.11
+                    @Override // android.animation.ValueAnimator.AnimatorUpdateListener
                     public void onAnimationUpdate(ValueAnimator valueAnimator) {
                         premiumAppIconsPreviewView.setOffset(((Float) valueAnimator.getAnimatedValue()).floatValue());
                     }
                 });
-                ofFloat.addListener(new AnimatorListenerAdapter() {
+                ofFloat.addListener(new AnimatorListenerAdapter() { // from class: org.telegram.ui.Components.Premium.PremiumFeatureBottomSheet.12
+                    @Override // android.animation.AnimatorListenerAdapter, android.animation.Animator.AnimatorListener
                     public void onAnimationEnd(Animator animator) {
                         PremiumFeatureBottomSheet.this.enterAnimationIsRunning = false;
                         premiumAppIconsPreviewView.setOffset(0.0f);
                         super.onAnimationEnd(animator);
                     }
                 });
-                ofFloat.setDuration(500);
-                ofFloat.setStartDelay(100);
+                ofFloat.setDuration(500L);
+                ofFloat.setStartDelay(100L);
                 ofFloat.setInterpolator(CubicBezierInterpolator.EASE_OUT_QUINT);
                 ofFloat.start();
             }
@@ -662,8 +706,7 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
         return super.onCustomOpenAnimation();
     }
 
-    /* access modifiers changed from: package-private */
-    public void checkTopOffset() {
+    void checkTopOffset() {
         int i;
         int i2;
         boolean z = false;
@@ -683,7 +726,7 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
         }
         if (i >= 0) {
             float f = this.progressToFullscreenView;
-            i2 = (int) ((((float) i) * f) + (((float) this.topGlobalOffset) * (1.0f - f)));
+            i2 = (int) ((i * f) + (this.topGlobalOffset * (1.0f - f)));
         } else {
             i2 = this.topGlobalOffset;
         }
@@ -694,16 +737,16 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
             this.closeLayout.setVisibility(0);
         }
         FrameLayout frameLayout = this.content;
-        frameLayout.setTranslationX(((float) frameLayout.getMeasuredWidth()) * this.progressToFullscreenView);
+        frameLayout.setTranslationX(frameLayout.getMeasuredWidth() * this.progressToFullscreenView);
         if (i2 != this.topCurrentOffset) {
             this.topCurrentOffset = i2;
             for (int i4 = 0; i4 < this.viewPager.getChildCount(); i4++) {
                 if (!((ViewPage) this.viewPager.getChildAt(i4)).topViewOnFullHeight) {
-                    this.viewPager.getChildAt(i4).setTranslationY((float) this.topCurrentOffset);
+                    this.viewPager.getChildAt(i4).setTranslationY(this.topCurrentOffset);
                 }
             }
-            this.content.setTranslationY((float) this.topCurrentOffset);
-            this.closeLayout.setTranslationY((float) this.topCurrentOffset);
+            this.content.setTranslationY(this.topCurrentOffset);
+            this.closeLayout.setTranslationY(this.topCurrentOffset);
             this.containerView.invalidate();
             if (this.topCurrentOffset < AndroidUtilities.dp(30.0f)) {
                 z = true;
@@ -712,12 +755,13 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
         }
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public void updateStatusBar() {
-        ActionBar actionBar2 = this.actionBar;
-        if (actionBar2 != null && actionBar2.getTag() != null) {
+        ActionBar actionBar = this.actionBar;
+        if (actionBar != null && actionBar.getTag() != null) {
             AndroidUtilities.setLightStatusBar(getWindow(), isLightStatusBar());
-        } else if (this.baseFragment != null) {
+        } else if (this.baseFragment == null) {
+        } else {
             AndroidUtilities.setLightStatusBar(getWindow(), this.baseFragment.isLightStatusBar());
         }
     }

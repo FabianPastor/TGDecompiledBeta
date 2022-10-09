@@ -11,7 +11,7 @@ import java.util.zip.Inflater;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.FileLog;
-
+/* loaded from: classes3.dex */
 public class Slice {
     private RectF bounds;
     private File file;
@@ -21,17 +21,18 @@ public class Slice {
         try {
             this.file = File.createTempFile("paint", ".bin", ApplicationLoader.applicationContext.getCacheDir());
         } catch (Exception e) {
-            FileLog.e((Throwable) e);
+            FileLog.e(e);
         }
-        if (this.file != null) {
-            storeData(byteBuffer);
+        if (this.file == null) {
+            return;
         }
+        storeData(byteBuffer);
     }
 
     public void cleanResources() {
-        File file2 = this.file;
-        if (file2 != null) {
-            file2.delete();
+        File file = this.file;
+        if (file != null) {
+            file.delete();
             this.file = null;
         }
     }
@@ -50,7 +51,7 @@ public class Slice {
             deflater.end();
             fileOutputStream.close();
         } catch (Exception e) {
-            FileLog.e((Throwable) e);
+            FileLog.e(e);
         }
     }
 
@@ -73,17 +74,18 @@ public class Slice {
                     }
                     byteArrayOutputStream.write(bArr2, 0, inflate);
                 }
-                if (inflater.finished()) {
+                if (!inflater.finished()) {
+                    inflater.needsInput();
+                } else {
                     inflater.end();
                     ByteBuffer wrap = ByteBuffer.wrap(byteArrayOutputStream.toByteArray(), 0, byteArrayOutputStream.size());
                     byteArrayOutputStream.close();
                     fileInputStream.close();
                     return wrap;
                 }
-                inflater.needsInput();
             }
         } catch (Exception e) {
-            FileLog.e((Throwable) e);
+            FileLog.e(e);
             return null;
         }
     }

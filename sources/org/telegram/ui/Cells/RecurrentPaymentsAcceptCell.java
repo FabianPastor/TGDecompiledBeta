@@ -10,7 +10,7 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.CheckBoxSquare;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.LinkSpanDrawable;
-
+/* loaded from: classes3.dex */
 public class RecurrentPaymentsAcceptCell extends FrameLayout {
     private CheckBoxSquare checkBox;
     private LinkSpanDrawable.LinkCollector links;
@@ -36,9 +36,9 @@ public class RecurrentPaymentsAcceptCell extends FrameLayout {
         this.textView.setMaxLines(2);
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         this.textView.setEllipsize(TextUtils.TruncateAt.END);
-        TextView textView2 = this.textView;
+        TextView textView = this.textView;
         boolean z = LocaleController.isRTL;
-        addView(textView2, LayoutHelper.createFrame(-1, -1.0f, (!z ? 3 : i) | 48, z ? 16.0f : 58.0f, 21.0f, z ? 58.0f : 16.0f, 21.0f));
+        addView(textView, LayoutHelper.createFrame(-1, -1.0f, (!z ? 3 : i) | 48, z ? 16.0f : 58.0f, 21.0f, z ? 58.0f : 16.0f, 21.0f));
         setWillNotDraw(false);
     }
 
@@ -54,12 +54,12 @@ public class RecurrentPaymentsAcceptCell extends FrameLayout {
         this.checkBox.setChecked(z, true);
     }
 
-    /* access modifiers changed from: protected */
-    public void onDraw(Canvas canvas) {
+    @Override // android.view.View
+    protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if (this.links != null) {
             canvas.save();
-            canvas.translate((float) this.textView.getLeft(), (float) this.textView.getTop());
+            canvas.translate(this.textView.getLeft(), this.textView.getTop());
             if (this.links.draw(canvas)) {
                 invalidate();
             }

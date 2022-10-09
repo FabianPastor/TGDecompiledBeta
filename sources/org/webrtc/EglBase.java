@@ -3,21 +3,21 @@ package org.webrtc;
 import android.graphics.SurfaceTexture;
 import android.view.Surface;
 import java.util.ArrayList;
-import javax.microedition.khronos.egl.EGLContext;
 import org.webrtc.EglBase10;
 import org.webrtc.EglBase14;
-
+/* loaded from: classes3.dex */
 public interface EglBase {
-    public static final int[] CONFIG_PIXEL_BUFFER = CC.configBuilder().setSupportsPixelBuffer(true).createConfigAttributes();
-    public static final int[] CONFIG_PIXEL_RGBA_BUFFER = CC.configBuilder().setHasAlphaChannel(true).setSupportsPixelBuffer(true).createConfigAttributes();
-    public static final int[] CONFIG_PLAIN = CC.configBuilder().createConfigAttributes();
-    public static final int[] CONFIG_RECORDABLE = CC.configBuilder().setIsRecordable(true).createConfigAttributes();
-    public static final int[] CONFIG_RGBA = CC.configBuilder().setHasAlphaChannel(true).createConfigAttributes();
     public static final int EGL_OPENGL_ES2_BIT = 4;
     public static final int EGL_OPENGL_ES3_BIT = 64;
     public static final int EGL_RECORDABLE_ANDROID = 12610;
     public static final Object lock = new Object();
+    public static final int[] CONFIG_PLAIN = CC.configBuilder().createConfigAttributes();
+    public static final int[] CONFIG_RGBA = CC.configBuilder().setHasAlphaChannel(true).createConfigAttributes();
+    public static final int[] CONFIG_PIXEL_BUFFER = CC.configBuilder().setSupportsPixelBuffer(true).createConfigAttributes();
+    public static final int[] CONFIG_PIXEL_RGBA_BUFFER = CC.configBuilder().setHasAlphaChannel(true).setSupportsPixelBuffer(true).createConfigAttributes();
+    public static final int[] CONFIG_RECORDABLE = CC.configBuilder().setIsRecordable(true).createConfigAttributes();
 
+    /* loaded from: classes3.dex */
     public interface Context {
         public static final long NO_CONTEXT = 0;
 
@@ -36,7 +36,8 @@ public interface EglBase {
 
     void detachCurrent();
 
-    Context getEglBaseContext();
+    /* renamed from: getEglBaseContext */
+    Context mo2366getEglBaseContext();
 
     boolean hasBackgroundSurface();
 
@@ -59,6 +60,7 @@ public interface EglBase {
     void swapBuffers(boolean z);
 
     /* renamed from: org.webrtc.EglBase$-CC  reason: invalid class name */
+    /* loaded from: classes3.dex */
     public final /* synthetic */ class CC {
         static {
             Object obj = EglBase.lock;
@@ -75,10 +77,7 @@ public interface EglBase {
                     if (i2 == 4) {
                         return 2;
                     }
-                    if (i2 != 64) {
-                        return 1;
-                    }
-                    return 3;
+                    return i2 != 64 ? 1 : 3;
                 }
             }
             return 1;
@@ -86,10 +85,7 @@ public interface EglBase {
 
         public static EglBase create(Context context, int[] iArr) {
             if (context == null) {
-                if (EglBase14Impl.isEGL14Supported()) {
-                    return createEgl14(iArr);
-                }
-                return createEgl10(iArr);
+                return EglBase14Impl.isEGL14Supported() ? createEgl14(iArr) : createEgl10(iArr);
             } else if (context instanceof EglBase14.Context) {
                 return createEgl14((EglBase14.Context) context, iArr);
             } else {
@@ -101,34 +97,23 @@ public interface EglBase {
         }
 
         public static EglBase10 createEgl10(int[] iArr) {
-            return new EglBase10Impl((EGLContext) null, iArr);
+            return new EglBase10Impl(null, iArr);
         }
 
         public static EglBase10 createEgl10(EglBase10.Context context, int[] iArr) {
-            EGLContext eGLContext;
-            if (context == null) {
-                eGLContext = null;
-            } else {
-                eGLContext = context.getRawContext();
-            }
-            return new EglBase10Impl(eGLContext, iArr);
+            return new EglBase10Impl(context == null ? null : context.getRawContext(), iArr);
         }
 
         public static EglBase14 createEgl14(int[] iArr) {
-            return new EglBase14Impl((android.opengl.EGLContext) null, iArr);
+            return new EglBase14Impl(null, iArr);
         }
 
         public static EglBase14 createEgl14(EglBase14.Context context, int[] iArr) {
-            android.opengl.EGLContext eGLContext;
-            if (context == null) {
-                eGLContext = null;
-            } else {
-                eGLContext = context.getRawContext();
-            }
-            return new EglBase14Impl(eGLContext, iArr);
+            return new EglBase14Impl(context == null ? null : context.getRawContext(), iArr);
         }
     }
 
+    /* loaded from: classes3.dex */
     public static class ConfigBuilder {
         private boolean hasAlphaChannel;
         private boolean isRecordable;

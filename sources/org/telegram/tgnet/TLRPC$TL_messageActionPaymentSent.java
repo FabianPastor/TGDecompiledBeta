@@ -1,8 +1,9 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_messageActionPaymentSent extends TLRPC$MessageAction {
     public static int constructor = -NUM;
 
+    @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
@@ -19,11 +20,12 @@ public class TLRPC$TL_messageActionPaymentSent extends TLRPC$MessageAction {
         }
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
-        int i = this.recurring_init ? this.flags | 4 : this.flags & -5;
+        int i = this.recurring_init ? this.flags | 4 : this.flags & (-5);
         this.flags = i;
-        int i2 = this.recurring_used ? i | 8 : i & -9;
+        int i2 = this.recurring_used ? i | 8 : i & (-9);
         this.flags = i2;
         abstractSerializedData.writeInt32(i2);
         abstractSerializedData.writeString(this.currency);

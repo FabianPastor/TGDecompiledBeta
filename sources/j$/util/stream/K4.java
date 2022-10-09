@@ -1,71 +1,71 @@
 package j$.util.stream;
 
 import j$.util.function.Consumer;
-
-public final /* synthetic */ class K4 implements CLASSNAMEm3 {
+/* loaded from: classes2.dex */
+public final /* synthetic */ class K4 implements InterfaceCLASSNAMEm3 {
     public final /* synthetic */ int a = 0;
     public final /* synthetic */ Object b;
 
-    public /* synthetic */ K4(Consumer consumer) {
-        this.b = consumer;
-    }
-
+    @Override // j$.util.stream.InterfaceCLASSNAMEm3
     public /* synthetic */ void accept(double d) {
         switch (this.a) {
             case 0:
-                CLASSNAMEo1.f(this);
+                AbstractCLASSNAMEo1.f(this);
                 throw null;
             default:
-                CLASSNAMEo1.f(this);
+                AbstractCLASSNAMEo1.f(this);
                 throw null;
         }
     }
 
+    @Override // j$.util.function.Consumer
     public /* synthetic */ Consumer andThen(Consumer consumer) {
         switch (this.a) {
             case 0:
-                return Consumer.CC.$default$andThen(this, consumer);
+                return consumer.getClass();
             default:
-                return Consumer.CC.$default$andThen(this, consumer);
+                return consumer.getClass();
         }
     }
 
+    @Override // j$.util.stream.InterfaceCLASSNAMEm3
     public /* synthetic */ void m() {
     }
 
+    @Override // j$.util.stream.InterfaceCLASSNAMEm3
     public /* synthetic */ void n(long j) {
     }
 
+    @Override // j$.util.stream.InterfaceCLASSNAMEm3
     public /* synthetic */ boolean o() {
         return false;
     }
 
-    public /* synthetic */ K4(CLASSNAMEa4 a4Var) {
-        this.b = a4Var;
-    }
-
+    @Override // j$.util.stream.InterfaceCLASSNAMEm3
     public /* synthetic */ void accept(int i) {
         switch (this.a) {
             case 0:
-                CLASSNAMEo1.d(this);
+                AbstractCLASSNAMEo1.d(this);
                 throw null;
             default:
-                CLASSNAMEo1.d(this);
+                AbstractCLASSNAMEo1.d(this);
                 throw null;
         }
     }
 
+    @Override // j$.util.stream.InterfaceCLASSNAMEm3, j$.util.stream.InterfaceCLASSNAMEl3, j$.util.function.q
     public /* synthetic */ void accept(long j) {
         switch (this.a) {
             case 0:
-                CLASSNAMEo1.e(this);
+                AbstractCLASSNAMEo1.e(this);
                 throw null;
             default:
-                CLASSNAMEo1.e(this);
+                AbstractCLASSNAMEo1.e(this);
                 throw null;
         }
     }
 
+    @Override // j$.util.function.Consumer
     public final void accept(Object obj) {
         switch (this.a) {
             case 0:

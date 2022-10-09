@@ -5,9 +5,12 @@ import android.content.DialogInterface;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.text.Editable;
 import android.text.TextPaint;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -16,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.DialogObject;
@@ -26,7 +30,7 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.support.LongSparseIntArray;
-import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$InputPeer;
@@ -55,82 +59,53 @@ import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RLottieImageView;
 import org.telegram.ui.Components.RecyclerListView;
-
+import org.telegram.ui.FilterCreateActivity;
+import org.telegram.ui.FilterUsersActivity;
+/* loaded from: classes3.dex */
 public class FilterCreateActivity extends BaseFragment {
     private ListAdapter adapter;
     private boolean creatingNew;
     private ActionBarMenuItem doneItem;
-    /* access modifiers changed from: private */
-    public int excludeAddRow;
-    /* access modifiers changed from: private */
-    public int excludeArchivedRow;
-    /* access modifiers changed from: private */
-    public int excludeEndRow;
+    private int excludeAddRow;
+    private int excludeArchivedRow;
+    private int excludeEndRow;
     private boolean excludeExpanded;
-    /* access modifiers changed from: private */
-    public int excludeHeaderRow;
-    /* access modifiers changed from: private */
-    public int excludeMutedRow;
-    /* access modifiers changed from: private */
-    public int excludeReadRow;
-    /* access modifiers changed from: private */
-    public int excludeSectionRow;
-    /* access modifiers changed from: private */
-    public int excludeShowMoreRow;
-    /* access modifiers changed from: private */
-    public int excludeStartRow;
+    private int excludeHeaderRow;
+    private int excludeMutedRow;
+    private int excludeReadRow;
+    private int excludeSectionRow;
+    private int excludeShowMoreRow;
+    private int excludeStartRow;
     private MessagesController.DialogFilter filter;
     private boolean hasUserChanged;
-    /* access modifiers changed from: private */
-    public int imageRow;
-    /* access modifiers changed from: private */
-    public int includeAddRow;
-    /* access modifiers changed from: private */
-    public int includeBotsRow;
-    /* access modifiers changed from: private */
-    public int includeChannelsRow;
-    /* access modifiers changed from: private */
-    public int includeContactsRow;
-    /* access modifiers changed from: private */
-    public int includeEndRow;
+    private int imageRow;
+    private int includeAddRow;
+    private int includeBotsRow;
+    private int includeChannelsRow;
+    private int includeContactsRow;
+    private int includeEndRow;
     private boolean includeExpanded;
-    /* access modifiers changed from: private */
-    public int includeGroupsRow;
-    /* access modifiers changed from: private */
-    public int includeHeaderRow;
-    /* access modifiers changed from: private */
-    public int includeNonContactsRow;
-    /* access modifiers changed from: private */
-    public int includeSectionRow;
-    /* access modifiers changed from: private */
-    public int includeShowMoreRow;
-    /* access modifiers changed from: private */
-    public int includeStartRow;
-    /* access modifiers changed from: private */
-    public RecyclerListView listView;
-    /* access modifiers changed from: private */
-    public boolean nameChangedManually;
-    /* access modifiers changed from: private */
-    public int namePreSectionRow;
-    /* access modifiers changed from: private */
-    public int nameRow;
-    /* access modifiers changed from: private */
-    public int nameSectionRow;
-    /* access modifiers changed from: private */
-    public ArrayList<Long> newAlwaysShow;
+    private int includeGroupsRow;
+    private int includeHeaderRow;
+    private int includeNonContactsRow;
+    private int includeSectionRow;
+    private int includeShowMoreRow;
+    private int includeStartRow;
+    private RecyclerListView listView;
+    private boolean nameChangedManually;
+    private int namePreSectionRow;
+    private int nameRow;
+    private int nameSectionRow;
+    private ArrayList<Long> newAlwaysShow;
     private int newFilterFlags;
-    /* access modifiers changed from: private */
-    public String newFilterName;
-    /* access modifiers changed from: private */
-    public ArrayList<Long> newNeverShow;
+    private String newFilterName;
+    private ArrayList<Long> newNeverShow;
     private LongSparseIntArray newPinned;
-    /* access modifiers changed from: private */
-    public int removeRow;
-    /* access modifiers changed from: private */
-    public int removeSectionRow;
-    /* access modifiers changed from: private */
-    public int rowCount;
+    private int removeRow;
+    private int removeSectionRow;
+    private int rowCount;
 
+    /* loaded from: classes3.dex */
     public static class HintInnerCell extends FrameLayout {
         private RLottieImageView imageView;
 
@@ -142,10 +117,15 @@ public class FilterCreateActivity extends BaseFragment {
             this.imageView.setScaleType(ImageView.ScaleType.CENTER);
             this.imageView.playAnimation();
             addView(this.imageView, LayoutHelper.createFrame(100, 100.0f, 17, 0.0f, 0.0f, 0.0f, 0.0f));
-            this.imageView.setOnClickListener(new FilterCreateActivity$HintInnerCell$$ExternalSyntheticLambda0(this));
+            this.imageView.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.FilterCreateActivity$HintInnerCell$$ExternalSyntheticLambda0
+                @Override // android.view.View.OnClickListener
+                public final void onClick(View view) {
+                    FilterCreateActivity.HintInnerCell.this.lambda$new$0(view);
+                }
+            });
         }
 
-        /* access modifiers changed from: private */
+        /* JADX INFO: Access modifiers changed from: private */
         public /* synthetic */ void lambda$new$0(View view) {
             if (!this.imageView.isPlaying()) {
                 this.imageView.setProgress(0.0f);
@@ -153,18 +133,18 @@ public class FilterCreateActivity extends BaseFragment {
             }
         }
 
-        /* access modifiers changed from: protected */
-        public void onMeasure(int i, int i2) {
+        @Override // android.widget.FrameLayout, android.view.View
+        protected void onMeasure(int i, int i2) {
             super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(156.0f), NUM));
         }
     }
 
     public FilterCreateActivity() {
-        this((MessagesController.DialogFilter) null, (ArrayList<Long>) null);
+        this(null, null);
     }
 
     public FilterCreateActivity(MessagesController.DialogFilter dialogFilter) {
-        this(dialogFilter, (ArrayList<Long>) null);
+        this(dialogFilter, null);
     }
 
     public FilterCreateActivity(MessagesController.DialogFilter dialogFilter, ArrayList<Long> arrayList) {
@@ -192,6 +172,7 @@ public class FilterCreateActivity extends BaseFragment {
         this.newPinned = this.filter.pinnedDialogs.clone();
     }
 
+    @Override // org.telegram.ui.ActionBar.BaseFragment
     public boolean onFragmentCreate() {
         updateRows();
         return super.onFragmentCreate();
@@ -343,6 +324,7 @@ public class FilterCreateActivity extends BaseFragment {
         }
     }
 
+    @Override // org.telegram.ui.ActionBar.BaseFragment
     public View createView(Context context) {
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
@@ -351,94 +333,123 @@ public class FilterCreateActivity extends BaseFragment {
             this.actionBar.setTitle(LocaleController.getString("FilterNew", R.string.FilterNew));
         } else {
             TextPaint textPaint = new TextPaint(1);
-            textPaint.setTextSize((float) AndroidUtilities.dp(20.0f));
+            textPaint.setTextSize(AndroidUtilities.dp(20.0f));
             this.actionBar.setTitle(Emoji.replaceEmoji(this.filter.name, textPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false));
         }
-        this.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
+        this.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() { // from class: org.telegram.ui.FilterCreateActivity.1
+            @Override // org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick
             public void onItemClick(int i) {
                 if (i == -1) {
-                    if (FilterCreateActivity.this.checkDiscard()) {
-                        FilterCreateActivity.this.finishFragment();
+                    if (!FilterCreateActivity.this.checkDiscard()) {
+                        return;
                     }
-                } else if (i == 1) {
+                    FilterCreateActivity.this.finishFragment();
+                } else if (i != 1) {
+                } else {
                     FilterCreateActivity.this.processDone();
                 }
             }
         });
-        this.doneItem = createMenu.addItem(1, (CharSequence) LocaleController.getString("Save", R.string.Save).toUpperCase());
+        this.doneItem = createMenu.addItem(1, LocaleController.getString("Save", R.string.Save).toUpperCase());
         FrameLayout frameLayout = new FrameLayout(context);
         this.fragmentView = frameLayout;
         FrameLayout frameLayout2 = frameLayout;
         frameLayout2.setBackgroundColor(Theme.getColor("windowBackgroundGray"));
-        AnonymousClass2 r2 = new RecyclerListView(this, context) {
+        RecyclerListView recyclerListView = new RecyclerListView(this, context) { // from class: org.telegram.ui.FilterCreateActivity.2
+            @Override // android.view.ViewGroup, android.view.View
             public boolean requestFocus(int i, Rect rect) {
                 return false;
             }
         };
-        this.listView = r2;
-        r2.setLayoutManager(new LinearLayoutManager(context, 1, false));
+        this.listView = recyclerListView;
+        recyclerListView.setLayoutManager(new LinearLayoutManager(context, 1, false));
         this.listView.setVerticalScrollBarEnabled(false);
         frameLayout2.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        RecyclerListView recyclerListView = this.listView;
+        RecyclerListView recyclerListView2 = this.listView;
         ListAdapter listAdapter = new ListAdapter(context);
         this.adapter = listAdapter;
-        recyclerListView.setAdapter(listAdapter);
-        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new FilterCreateActivity$$ExternalSyntheticLambda12(this));
-        this.listView.setOnItemLongClickListener((RecyclerListView.OnItemLongClickListener) new FilterCreateActivity$$ExternalSyntheticLambda13(this));
+        recyclerListView2.setAdapter(listAdapter);
+        this.listView.setOnItemClickListener(new RecyclerListView.OnItemClickListener() { // from class: org.telegram.ui.FilterCreateActivity$$ExternalSyntheticLambda12
+            @Override // org.telegram.ui.Components.RecyclerListView.OnItemClickListener
+            public final void onItemClick(View view, int i) {
+                FilterCreateActivity.this.lambda$createView$4(view, i);
+            }
+        });
+        this.listView.setOnItemLongClickListener(new RecyclerListView.OnItemLongClickListener() { // from class: org.telegram.ui.FilterCreateActivity$$ExternalSyntheticLambda13
+            @Override // org.telegram.ui.Components.RecyclerListView.OnItemLongClickListener
+            public final boolean onItemClick(View view, int i) {
+                boolean lambda$createView$5;
+                lambda$createView$5 = FilterCreateActivity.this.lambda$createView$5(view, i);
+                return lambda$createView$5;
+            }
+        });
         checkDoneButton(false);
         return this.fragmentView;
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$4(View view, int i) {
-        if (getParentActivity() != null) {
-            boolean z = true;
-            if (i == this.includeShowMoreRow) {
-                this.includeExpanded = true;
-                updateRows();
-            } else if (i == this.excludeShowMoreRow) {
-                this.excludeExpanded = true;
-                updateRows();
-            } else {
-                int i2 = this.includeAddRow;
-                if (i == i2 || i == this.excludeAddRow) {
-                    ArrayList<Long> arrayList = i == this.excludeAddRow ? this.newNeverShow : this.newAlwaysShow;
-                    if (i != i2) {
-                        z = false;
-                    }
-                    FilterUsersActivity filterUsersActivity = new FilterUsersActivity(z, arrayList, this.newFilterFlags);
-                    filterUsersActivity.setDelegate(new FilterCreateActivity$$ExternalSyntheticLambda14(this, i));
-                    presentFragment(filterUsersActivity);
-                } else if (i == this.removeRow) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
-                    builder.setTitle(LocaleController.getString("FilterDelete", R.string.FilterDelete));
-                    builder.setMessage(LocaleController.getString("FilterDeleteAlert", R.string.FilterDeleteAlert));
-                    builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), (DialogInterface.OnClickListener) null);
-                    builder.setPositiveButton(LocaleController.getString("Delete", R.string.Delete), new FilterCreateActivity$$ExternalSyntheticLambda2(this));
-                    AlertDialog create = builder.create();
-                    showDialog(create);
-                    TextView textView = (TextView) create.getButton(-1);
-                    if (textView != null) {
-                        textView.setTextColor(Theme.getColor("dialogTextRed2"));
-                    }
-                } else if (i == this.nameRow) {
-                    PollEditTextCell pollEditTextCell = (PollEditTextCell) view;
-                    pollEditTextCell.getTextView().requestFocus();
-                    AndroidUtilities.showKeyboard(pollEditTextCell.getTextView());
-                } else if (view instanceof UserCell) {
-                    UserCell userCell = (UserCell) view;
-                    CharSequence name = userCell.getName();
-                    Object currentObject = userCell.getCurrentObject();
-                    if (i >= this.includeSectionRow) {
-                        z = false;
-                    }
-                    showRemoveAlert(i, name, currentObject, z);
+    /* JADX INFO: Access modifiers changed from: private */
+    public /* synthetic */ void lambda$createView$4(View view, final int i) {
+        if (getParentActivity() == null) {
+            return;
+        }
+        boolean z = true;
+        if (i == this.includeShowMoreRow) {
+            this.includeExpanded = true;
+            updateRows();
+        } else if (i == this.excludeShowMoreRow) {
+            this.excludeExpanded = true;
+            updateRows();
+        } else {
+            int i2 = this.includeAddRow;
+            if (i == i2 || i == this.excludeAddRow) {
+                ArrayList<Long> arrayList = i == this.excludeAddRow ? this.newNeverShow : this.newAlwaysShow;
+                if (i != i2) {
+                    z = false;
                 }
+                FilterUsersActivity filterUsersActivity = new FilterUsersActivity(z, arrayList, this.newFilterFlags);
+                filterUsersActivity.setDelegate(new FilterUsersActivity.FilterUsersActivityDelegate() { // from class: org.telegram.ui.FilterCreateActivity$$ExternalSyntheticLambda14
+                    @Override // org.telegram.ui.FilterUsersActivity.FilterUsersActivityDelegate
+                    public final void didSelectChats(ArrayList arrayList2, int i3) {
+                        FilterCreateActivity.this.lambda$createView$0(i, arrayList2, i3);
+                    }
+                });
+                presentFragment(filterUsersActivity);
+            } else if (i == this.removeRow) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+                builder.setTitle(LocaleController.getString("FilterDelete", R.string.FilterDelete));
+                builder.setMessage(LocaleController.getString("FilterDeleteAlert", R.string.FilterDeleteAlert));
+                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                builder.setPositiveButton(LocaleController.getString("Delete", R.string.Delete), new DialogInterface.OnClickListener() { // from class: org.telegram.ui.FilterCreateActivity$$ExternalSyntheticLambda2
+                    @Override // android.content.DialogInterface.OnClickListener
+                    public final void onClick(DialogInterface dialogInterface, int i3) {
+                        FilterCreateActivity.this.lambda$createView$3(dialogInterface, i3);
+                    }
+                });
+                AlertDialog create = builder.create();
+                showDialog(create);
+                TextView textView = (TextView) create.getButton(-1);
+                if (textView == null) {
+                    return;
+                }
+                textView.setTextColor(Theme.getColor("dialogTextRed2"));
+            } else if (i == this.nameRow) {
+                PollEditTextCell pollEditTextCell = (PollEditTextCell) view;
+                pollEditTextCell.getTextView().requestFocus();
+                AndroidUtilities.showKeyboard(pollEditTextCell.getTextView());
+            } else if (!(view instanceof UserCell)) {
+            } else {
+                UserCell userCell = (UserCell) view;
+                CharSequence name = userCell.getName();
+                Object currentObject = userCell.getCurrentObject();
+                if (i >= this.includeSectionRow) {
+                    z = false;
+                }
+                showRemoveAlert(i, name, currentObject, z);
             }
         }
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$createView$0(int i, ArrayList arrayList, int i2) {
         this.newFilterFlags = i2;
         if (i == this.excludeAddRow) {
@@ -471,9 +482,9 @@ public class FilterCreateActivity extends BaseFragment {
         updateRows();
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$createView$3(DialogInterface dialogInterface, int i) {
-        AlertDialog alertDialog;
+        final AlertDialog alertDialog;
         if (getParentActivity() != null) {
             alertDialog = new AlertDialog(getParentActivity(), 3);
             alertDialog.setCanCancel(false);
@@ -483,21 +494,31 @@ public class FilterCreateActivity extends BaseFragment {
         }
         TLRPC$TL_messages_updateDialogFilter tLRPC$TL_messages_updateDialogFilter = new TLRPC$TL_messages_updateDialogFilter();
         tLRPC$TL_messages_updateDialogFilter.id = this.filter.id;
-        getConnectionsManager().sendRequest(tLRPC$TL_messages_updateDialogFilter, new FilterCreateActivity$$ExternalSyntheticLambda9(this, alertDialog));
+        getConnectionsManager().sendRequest(tLRPC$TL_messages_updateDialogFilter, new RequestDelegate() { // from class: org.telegram.ui.FilterCreateActivity$$ExternalSyntheticLambda9
+            @Override // org.telegram.tgnet.RequestDelegate
+            public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+                FilterCreateActivity.this.lambda$createView$2(alertDialog, tLObject, tLRPC$TL_error);
+            }
+        });
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$2(AlertDialog alertDialog, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new FilterCreateActivity$$ExternalSyntheticLambda6(this, alertDialog));
+    /* JADX INFO: Access modifiers changed from: private */
+    public /* synthetic */ void lambda$createView$2(final AlertDialog alertDialog, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.FilterCreateActivity$$ExternalSyntheticLambda6
+            @Override // java.lang.Runnable
+            public final void run() {
+                FilterCreateActivity.this.lambda$createView$1(alertDialog);
+            }
+        });
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$createView$1(AlertDialog alertDialog) {
         if (alertDialog != null) {
             try {
                 alertDialog.dismiss();
             } catch (Exception e) {
-                FileLog.e((Throwable) e);
+                FileLog.e(e);
             }
         }
         getMessagesController().removeFilter(this.filter);
@@ -505,22 +526,23 @@ public class FilterCreateActivity extends BaseFragment {
         finishFragment();
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ boolean lambda$createView$5(View view, int i) {
         boolean z = false;
-        if (!(view instanceof UserCell)) {
-            return false;
+        if (view instanceof UserCell) {
+            UserCell userCell = (UserCell) view;
+            CharSequence name = userCell.getName();
+            Object currentObject = userCell.getCurrentObject();
+            if (i < this.includeSectionRow) {
+                z = true;
+            }
+            showRemoveAlert(i, name, currentObject, z);
+            return true;
         }
-        UserCell userCell = (UserCell) view;
-        CharSequence name = userCell.getName();
-        Object currentObject = userCell.getCurrentObject();
-        if (i < this.includeSectionRow) {
-            z = true;
-        }
-        showRemoveAlert(i, name, currentObject, z);
-        return true;
+        return false;
     }
 
+    @Override // org.telegram.ui.ActionBar.BaseFragment
     public void onResume() {
         super.onResume();
         ListAdapter listAdapter = this.adapter;
@@ -529,162 +551,133 @@ public class FilterCreateActivity extends BaseFragment {
         }
     }
 
+    @Override // org.telegram.ui.ActionBar.BaseFragment
     public boolean onBackPressed() {
         return checkDiscard();
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:46:0x00b8  */
-    /* JADX WARNING: Removed duplicated region for block: B:49:? A[RETURN, SYNTHETIC] */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
     private void fillFilterName() {
-        /*
-            r5 = this;
-            boolean r0 = r5.creatingNew
-            if (r0 == 0) goto L_0x00bd
-            java.lang.String r0 = r5.newFilterName
-            boolean r0 = android.text.TextUtils.isEmpty(r0)
-            if (r0 != 0) goto L_0x0012
-            boolean r0 = r5.nameChangedManually
-            if (r0 == 0) goto L_0x0012
-            goto L_0x00bd
-        L_0x0012:
-            int r0 = r5.newFilterFlags
-            int r1 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_ALL_CHATS
-            r2 = r0 & r1
-            r3 = r2 & r1
-            java.lang.String r4 = ""
-            if (r3 != r1) goto L_0x003b
-            int r1 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_READ
-            r1 = r1 & r0
-            if (r1 == 0) goto L_0x002d
-            int r0 = org.telegram.messenger.R.string.FilterNameUnread
-            java.lang.String r1 = "FilterNameUnread"
-            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-            goto L_0x00a0
-        L_0x002d:
-            int r1 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
-            r0 = r0 & r1
-            if (r0 == 0) goto L_0x009f
-            int r0 = org.telegram.messenger.R.string.FilterNameNonMuted
-            java.lang.String r1 = "FilterNameNonMuted"
-            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-            goto L_0x00a0
-        L_0x003b:
-            int r0 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_CONTACTS
-            r1 = r2 & r0
-            if (r1 == 0) goto L_0x004f
-            r0 = r0 ^ -1
-            r0 = r0 & r2
-            if (r0 != 0) goto L_0x009f
-            int r0 = org.telegram.messenger.R.string.FilterContacts
-            java.lang.String r1 = "FilterContacts"
-            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-            goto L_0x00a0
-        L_0x004f:
-            int r0 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS
-            r1 = r2 & r0
-            if (r1 == 0) goto L_0x0063
-            r0 = r0 ^ -1
-            r0 = r0 & r2
-            if (r0 != 0) goto L_0x009f
-            int r0 = org.telegram.messenger.R.string.FilterNonContacts
-            java.lang.String r1 = "FilterNonContacts"
-            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-            goto L_0x00a0
-        L_0x0063:
-            int r0 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_GROUPS
-            r1 = r2 & r0
-            if (r1 == 0) goto L_0x0077
-            r0 = r0 ^ -1
-            r0 = r0 & r2
-            if (r0 != 0) goto L_0x009f
-            int r0 = org.telegram.messenger.R.string.FilterGroups
-            java.lang.String r1 = "FilterGroups"
-            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-            goto L_0x00a0
-        L_0x0077:
-            int r0 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_BOTS
-            r1 = r2 & r0
-            if (r1 == 0) goto L_0x008b
-            r0 = r0 ^ -1
-            r0 = r0 & r2
-            if (r0 != 0) goto L_0x009f
-            int r0 = org.telegram.messenger.R.string.FilterBots
-            java.lang.String r1 = "FilterBots"
-            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-            goto L_0x00a0
-        L_0x008b:
-            int r0 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_CHANNELS
-            r1 = r2 & r0
-            if (r1 == 0) goto L_0x009f
-            r0 = r0 ^ -1
-            r0 = r0 & r2
-            if (r0 != 0) goto L_0x009f
-            int r0 = org.telegram.messenger.R.string.FilterChannels
-            java.lang.String r1 = "FilterChannels"
-            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-            goto L_0x00a0
-        L_0x009f:
-            r0 = r4
-        L_0x00a0:
-            if (r0 == 0) goto L_0x00ab
-            int r1 = r0.length()
-            r2 = 12
-            if (r1 <= r2) goto L_0x00ab
-            goto L_0x00ac
-        L_0x00ab:
-            r4 = r0
-        L_0x00ac:
-            r5.newFilterName = r4
-            org.telegram.ui.Components.RecyclerListView r0 = r5.listView
-            int r1 = r5.nameRow
-            androidx.recyclerview.widget.RecyclerView$ViewHolder r0 = r0.findViewHolderForAdapterPosition(r1)
-            if (r0 == 0) goto L_0x00bd
-            org.telegram.ui.FilterCreateActivity$ListAdapter r1 = r5.adapter
-            r1.onViewAttachedToWindow(r0)
-        L_0x00bd:
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.FilterCreateActivity.fillFilterName():void");
-    }
-
-    /* access modifiers changed from: private */
-    public boolean checkDiscard() {
-        if (this.doneItem.getAlpha() != 1.0f) {
-            return true;
-        }
-        AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
+        String string;
         if (this.creatingNew) {
-            builder.setTitle(LocaleController.getString("FilterDiscardNewTitle", R.string.FilterDiscardNewTitle));
-            builder.setMessage(LocaleController.getString("FilterDiscardNewAlert", R.string.FilterDiscardNewAlert));
-            builder.setPositiveButton(LocaleController.getString("FilterDiscardNewSave", R.string.FilterDiscardNewSave), new FilterCreateActivity$$ExternalSyntheticLambda3(this));
-        } else {
-            builder.setTitle(LocaleController.getString("FilterDiscardTitle", R.string.FilterDiscardTitle));
-            builder.setMessage(LocaleController.getString("FilterDiscardAlert", R.string.FilterDiscardAlert));
-            builder.setPositiveButton(LocaleController.getString("ApplyTheme", R.string.ApplyTheme), new FilterCreateActivity$$ExternalSyntheticLambda0(this));
+            if (!TextUtils.isEmpty(this.newFilterName) && this.nameChangedManually) {
+                return;
+            }
+            int i = this.newFilterFlags;
+            int i2 = MessagesController.DIALOG_FILTER_FLAG_ALL_CHATS;
+            int i3 = i & i2;
+            String str = "";
+            if ((i3 & i2) == i2) {
+                if ((MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_READ & i) != 0) {
+                    string = LocaleController.getString("FilterNameUnread", R.string.FilterNameUnread);
+                } else {
+                    if ((i & MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED) != 0) {
+                        string = LocaleController.getString("FilterNameNonMuted", R.string.FilterNameNonMuted);
+                    }
+                    string = str;
+                }
+            } else {
+                int i4 = MessagesController.DIALOG_FILTER_FLAG_CONTACTS;
+                if ((i3 & i4) != 0) {
+                    if (((i4 ^ (-1)) & i3) == 0) {
+                        string = LocaleController.getString("FilterContacts", R.string.FilterContacts);
+                    }
+                    string = str;
+                } else {
+                    int i5 = MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS;
+                    if ((i3 & i5) != 0) {
+                        if (((i5 ^ (-1)) & i3) == 0) {
+                            string = LocaleController.getString("FilterNonContacts", R.string.FilterNonContacts);
+                        }
+                        string = str;
+                    } else {
+                        int i6 = MessagesController.DIALOG_FILTER_FLAG_GROUPS;
+                        if ((i3 & i6) != 0) {
+                            if (((i6 ^ (-1)) & i3) == 0) {
+                                string = LocaleController.getString("FilterGroups", R.string.FilterGroups);
+                            }
+                            string = str;
+                        } else {
+                            int i7 = MessagesController.DIALOG_FILTER_FLAG_BOTS;
+                            if ((i3 & i7) != 0) {
+                                if (((i7 ^ (-1)) & i3) == 0) {
+                                    string = LocaleController.getString("FilterBots", R.string.FilterBots);
+                                }
+                                string = str;
+                            } else {
+                                int i8 = MessagesController.DIALOG_FILTER_FLAG_CHANNELS;
+                                if ((i3 & i8) != 0 && ((i8 ^ (-1)) & i3) == 0) {
+                                    string = LocaleController.getString("FilterChannels", R.string.FilterChannels);
+                                }
+                                string = str;
+                            }
+                        }
+                    }
+                }
+            }
+            if (string == null || string.length() <= 12) {
+                str = string;
+            }
+            this.newFilterName = str;
+            RecyclerView.ViewHolder findViewHolderForAdapterPosition = this.listView.findViewHolderForAdapterPosition(this.nameRow);
+            if (findViewHolderForAdapterPosition == null) {
+                return;
+            }
+            this.adapter.onViewAttachedToWindow(findViewHolderForAdapterPosition);
         }
-        builder.setNegativeButton(LocaleController.getString("PassportDiscard", R.string.PassportDiscard), new FilterCreateActivity$$ExternalSyntheticLambda1(this));
-        showDialog(builder.create());
-        return false;
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
+    public boolean checkDiscard() {
+        if (this.doneItem.getAlpha() == 1.0f) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+            if (this.creatingNew) {
+                builder.setTitle(LocaleController.getString("FilterDiscardNewTitle", R.string.FilterDiscardNewTitle));
+                builder.setMessage(LocaleController.getString("FilterDiscardNewAlert", R.string.FilterDiscardNewAlert));
+                builder.setPositiveButton(LocaleController.getString("FilterDiscardNewSave", R.string.FilterDiscardNewSave), new DialogInterface.OnClickListener() { // from class: org.telegram.ui.FilterCreateActivity$$ExternalSyntheticLambda3
+                    @Override // android.content.DialogInterface.OnClickListener
+                    public final void onClick(DialogInterface dialogInterface, int i) {
+                        FilterCreateActivity.this.lambda$checkDiscard$6(dialogInterface, i);
+                    }
+                });
+            } else {
+                builder.setTitle(LocaleController.getString("FilterDiscardTitle", R.string.FilterDiscardTitle));
+                builder.setMessage(LocaleController.getString("FilterDiscardAlert", R.string.FilterDiscardAlert));
+                builder.setPositiveButton(LocaleController.getString("ApplyTheme", R.string.ApplyTheme), new DialogInterface.OnClickListener() { // from class: org.telegram.ui.FilterCreateActivity$$ExternalSyntheticLambda0
+                    @Override // android.content.DialogInterface.OnClickListener
+                    public final void onClick(DialogInterface dialogInterface, int i) {
+                        FilterCreateActivity.this.lambda$checkDiscard$7(dialogInterface, i);
+                    }
+                });
+            }
+            builder.setNegativeButton(LocaleController.getString("PassportDiscard", R.string.PassportDiscard), new DialogInterface.OnClickListener() { // from class: org.telegram.ui.FilterCreateActivity$$ExternalSyntheticLambda1
+                @Override // android.content.DialogInterface.OnClickListener
+                public final void onClick(DialogInterface dialogInterface, int i) {
+                    FilterCreateActivity.this.lambda$checkDiscard$8(dialogInterface, i);
+                }
+            });
+            showDialog(builder.create());
+            return false;
+        }
+        return true;
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$checkDiscard$6(DialogInterface dialogInterface, int i) {
         processDone();
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$checkDiscard$7(DialogInterface dialogInterface, int i) {
         processDone();
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$checkDiscard$8(DialogInterface dialogInterface, int i) {
         finishFragment();
     }
 
-    private void showRemoveAlert(int i, CharSequence charSequence, Object obj, boolean z) {
-        AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
+    private void showRemoveAlert(final int i, CharSequence charSequence, Object obj, final boolean z) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
         if (z) {
             builder.setTitle(LocaleController.getString("FilterRemoveInclusionTitle", R.string.FilterRemoveInclusionTitle));
             if (obj instanceof String) {
@@ -704,8 +697,13 @@ public class FilterCreateActivity extends BaseFragment {
                 builder.setMessage(LocaleController.formatString("FilterRemoveExclusionChatText", R.string.FilterRemoveExclusionChatText, charSequence));
             }
         }
-        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), (DialogInterface.OnClickListener) null);
-        builder.setPositiveButton(LocaleController.getString("StickersRemove", R.string.StickersRemove), new FilterCreateActivity$$ExternalSyntheticLambda4(this, i, z));
+        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+        builder.setPositiveButton(LocaleController.getString("StickersRemove", R.string.StickersRemove), new DialogInterface.OnClickListener() { // from class: org.telegram.ui.FilterCreateActivity$$ExternalSyntheticLambda4
+            @Override // android.content.DialogInterface.OnClickListener
+            public final void onClick(DialogInterface dialogInterface, int i2) {
+                FilterCreateActivity.this.lambda$showRemoveAlert$9(i, z, dialogInterface, i2);
+            }
+        });
         AlertDialog create = builder.create();
         showDialog(create);
         TextView textView = (TextView) create.getButton(-1);
@@ -714,24 +712,24 @@ public class FilterCreateActivity extends BaseFragment {
         }
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$showRemoveAlert$9(int i, boolean z, DialogInterface dialogInterface, int i2) {
         if (i == this.includeContactsRow) {
-            this.newFilterFlags &= MessagesController.DIALOG_FILTER_FLAG_CONTACTS ^ -1;
+            this.newFilterFlags &= MessagesController.DIALOG_FILTER_FLAG_CONTACTS ^ (-1);
         } else if (i == this.includeNonContactsRow) {
-            this.newFilterFlags &= MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS ^ -1;
+            this.newFilterFlags &= MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS ^ (-1);
         } else if (i == this.includeGroupsRow) {
-            this.newFilterFlags &= MessagesController.DIALOG_FILTER_FLAG_GROUPS ^ -1;
+            this.newFilterFlags &= MessagesController.DIALOG_FILTER_FLAG_GROUPS ^ (-1);
         } else if (i == this.includeChannelsRow) {
-            this.newFilterFlags &= MessagesController.DIALOG_FILTER_FLAG_CHANNELS ^ -1;
+            this.newFilterFlags &= MessagesController.DIALOG_FILTER_FLAG_CHANNELS ^ (-1);
         } else if (i == this.includeBotsRow) {
-            this.newFilterFlags &= MessagesController.DIALOG_FILTER_FLAG_BOTS ^ -1;
+            this.newFilterFlags &= MessagesController.DIALOG_FILTER_FLAG_BOTS ^ (-1);
         } else if (i == this.excludeArchivedRow) {
-            this.newFilterFlags &= MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED ^ -1;
+            this.newFilterFlags &= MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED ^ (-1);
         } else if (i == this.excludeMutedRow) {
-            this.newFilterFlags &= MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED ^ -1;
+            this.newFilterFlags &= MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED ^ (-1);
         } else if (i == this.excludeReadRow) {
-            this.newFilterFlags &= MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_READ ^ -1;
+            this.newFilterFlags &= MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_READ ^ (-1);
         } else if (z) {
             this.newAlwaysShow.remove(i - this.includeStartRow);
         } else {
@@ -742,12 +740,17 @@ public class FilterCreateActivity extends BaseFragment {
         checkDoneButton(true);
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public void processDone() {
-        saveFilterToServer(this.filter, this.newFilterFlags, this.newFilterName, this.newAlwaysShow, this.newNeverShow, this.newPinned, this.creatingNew, false, this.hasUserChanged, true, true, this, new FilterCreateActivity$$ExternalSyntheticLambda5(this));
+        saveFilterToServer(this.filter, this.newFilterFlags, this.newFilterName, this.newAlwaysShow, this.newNeverShow, this.newPinned, this.creatingNew, false, this.hasUserChanged, true, true, this, new Runnable() { // from class: org.telegram.ui.FilterCreateActivity$$ExternalSyntheticLambda5
+            @Override // java.lang.Runnable
+            public final void run() {
+                FilterCreateActivity.this.lambda$processDone$10();
+            }
+        });
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$processDone$10() {
         getNotificationCenter().postNotificationName(NotificationCenter.dialogFiltersUpdated, new Object[0]);
         finishFragment();
@@ -775,106 +778,116 @@ public class FilterCreateActivity extends BaseFragment {
         }
     }
 
-    public static void saveFilterToServer(MessagesController.DialogFilter dialogFilter, int i, String str, ArrayList<Long> arrayList, ArrayList<Long> arrayList2, LongSparseIntArray longSparseIntArray, boolean z, boolean z2, boolean z3, boolean z4, boolean z5, BaseFragment baseFragment, Runnable runnable) {
+    public static void saveFilterToServer(final MessagesController.DialogFilter dialogFilter, final int i, final String str, final ArrayList<Long> arrayList, final ArrayList<Long> arrayList2, final LongSparseIntArray longSparseIntArray, final boolean z, final boolean z2, final boolean z3, final boolean z4, final boolean z5, final BaseFragment baseFragment, final Runnable runnable) {
         AlertDialog alertDialog;
-        ArrayList<Long> arrayList3;
-        ArrayList<TLRPC$InputPeer> arrayList4;
-        MessagesController.DialogFilter dialogFilter2 = dialogFilter;
-        LongSparseIntArray longSparseIntArray2 = longSparseIntArray;
-        if (baseFragment != null && baseFragment.getParentActivity() != null) {
-            int i2 = 3;
-            if (z5) {
-                alertDialog = new AlertDialog(baseFragment.getParentActivity(), 3);
-                alertDialog.setCanCancel(false);
-                alertDialog.show();
+        ArrayList<TLRPC$InputPeer> arrayList3;
+        ArrayList<Long> arrayList4;
+        if (baseFragment == null || baseFragment.getParentActivity() == null) {
+            return;
+        }
+        int i2 = 3;
+        if (z5) {
+            alertDialog = new AlertDialog(baseFragment.getParentActivity(), 3);
+            alertDialog.setCanCancel(false);
+            alertDialog.show();
+        } else {
+            alertDialog = null;
+        }
+        TLRPC$TL_messages_updateDialogFilter tLRPC$TL_messages_updateDialogFilter = new TLRPC$TL_messages_updateDialogFilter();
+        tLRPC$TL_messages_updateDialogFilter.id = dialogFilter.id;
+        int i3 = 1;
+        tLRPC$TL_messages_updateDialogFilter.flags |= 1;
+        TLRPC$TL_dialogFilter tLRPC$TL_dialogFilter = new TLRPC$TL_dialogFilter();
+        tLRPC$TL_messages_updateDialogFilter.filter = tLRPC$TL_dialogFilter;
+        tLRPC$TL_dialogFilter.contacts = (i & MessagesController.DIALOG_FILTER_FLAG_CONTACTS) != 0;
+        tLRPC$TL_dialogFilter.non_contacts = (i & MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS) != 0;
+        tLRPC$TL_dialogFilter.groups = (i & MessagesController.DIALOG_FILTER_FLAG_GROUPS) != 0;
+        tLRPC$TL_dialogFilter.broadcasts = (i & MessagesController.DIALOG_FILTER_FLAG_CHANNELS) != 0;
+        tLRPC$TL_dialogFilter.bots = (i & MessagesController.DIALOG_FILTER_FLAG_BOTS) != 0;
+        tLRPC$TL_dialogFilter.exclude_muted = (i & MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED) != 0;
+        tLRPC$TL_dialogFilter.exclude_read = (i & MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_READ) != 0;
+        tLRPC$TL_dialogFilter.exclude_archived = (i & MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED) != 0;
+        tLRPC$TL_dialogFilter.id = dialogFilter.id;
+        tLRPC$TL_dialogFilter.title = str;
+        MessagesController messagesController = baseFragment.getMessagesController();
+        ArrayList<Long> arrayList5 = new ArrayList<>();
+        if (longSparseIntArray.size() != 0) {
+            int size = longSparseIntArray.size();
+            for (int i4 = 0; i4 < size; i4++) {
+                long keyAt = longSparseIntArray.keyAt(i4);
+                if (!DialogObject.isEncryptedDialog(keyAt)) {
+                    arrayList5.add(Long.valueOf(keyAt));
+                }
+            }
+            Collections.sort(arrayList5, new Comparator() { // from class: org.telegram.ui.FilterCreateActivity$$ExternalSyntheticLambda8
+                @Override // java.util.Comparator
+                public final int compare(Object obj, Object obj2) {
+                    int lambda$saveFilterToServer$11;
+                    lambda$saveFilterToServer$11 = FilterCreateActivity.lambda$saveFilterToServer$11(LongSparseIntArray.this, (Long) obj, (Long) obj2);
+                    return lambda$saveFilterToServer$11;
+                }
+            });
+        }
+        int i5 = 0;
+        while (i5 < i2) {
+            if (i5 == 0) {
+                arrayList3 = tLRPC$TL_messages_updateDialogFilter.filter.include_peers;
+                arrayList4 = arrayList;
+            } else if (i5 == i3) {
+                arrayList3 = tLRPC$TL_messages_updateDialogFilter.filter.exclude_peers;
+                arrayList4 = arrayList2;
             } else {
-                alertDialog = null;
+                arrayList3 = tLRPC$TL_messages_updateDialogFilter.filter.pinned_peers;
+                arrayList4 = arrayList5;
             }
-            TLRPC$TL_messages_updateDialogFilter tLRPC$TL_messages_updateDialogFilter = new TLRPC$TL_messages_updateDialogFilter();
-            tLRPC$TL_messages_updateDialogFilter.id = dialogFilter2.id;
-            int i3 = 1;
-            tLRPC$TL_messages_updateDialogFilter.flags |= 1;
-            TLRPC$TL_dialogFilter tLRPC$TL_dialogFilter = new TLRPC$TL_dialogFilter();
-            tLRPC$TL_messages_updateDialogFilter.filter = tLRPC$TL_dialogFilter;
-            tLRPC$TL_dialogFilter.contacts = (i & MessagesController.DIALOG_FILTER_FLAG_CONTACTS) != 0;
-            tLRPC$TL_dialogFilter.non_contacts = (i & MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS) != 0;
-            tLRPC$TL_dialogFilter.groups = (i & MessagesController.DIALOG_FILTER_FLAG_GROUPS) != 0;
-            tLRPC$TL_dialogFilter.broadcasts = (i & MessagesController.DIALOG_FILTER_FLAG_CHANNELS) != 0;
-            tLRPC$TL_dialogFilter.bots = (i & MessagesController.DIALOG_FILTER_FLAG_BOTS) != 0;
-            tLRPC$TL_dialogFilter.exclude_muted = (i & MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED) != 0;
-            tLRPC$TL_dialogFilter.exclude_read = (i & MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_READ) != 0;
-            tLRPC$TL_dialogFilter.exclude_archived = (i & MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED) != 0;
-            tLRPC$TL_dialogFilter.id = dialogFilter2.id;
-            tLRPC$TL_dialogFilter.title = str;
-            MessagesController messagesController = baseFragment.getMessagesController();
-            ArrayList<Long> arrayList5 = new ArrayList<>();
-            if (longSparseIntArray.size() != 0) {
-                int size = longSparseIntArray.size();
-                for (int i4 = 0; i4 < size; i4++) {
-                    long keyAt = longSparseIntArray2.keyAt(i4);
-                    if (!DialogObject.isEncryptedDialog(keyAt)) {
-                        arrayList5.add(Long.valueOf(keyAt));
-                    }
-                }
-                Collections.sort(arrayList5, new FilterCreateActivity$$ExternalSyntheticLambda8(longSparseIntArray2));
-            }
-            int i5 = 0;
-            while (i5 < i2) {
-                if (i5 == 0) {
-                    arrayList4 = tLRPC$TL_messages_updateDialogFilter.filter.include_peers;
-                    arrayList3 = arrayList;
-                } else if (i5 == i3) {
-                    arrayList4 = tLRPC$TL_messages_updateDialogFilter.filter.exclude_peers;
-                    arrayList3 = arrayList2;
-                } else {
-                    arrayList4 = tLRPC$TL_messages_updateDialogFilter.filter.pinned_peers;
-                    arrayList3 = arrayList5;
-                }
-                int size2 = arrayList3.size();
-                for (int i6 = 0; i6 < size2; i6++) {
-                    long longValue = arrayList3.get(i6).longValue();
-                    if ((i5 != 0 || longSparseIntArray2.indexOfKey(longValue) < 0) && !DialogObject.isEncryptedDialog(longValue)) {
-                        if (longValue > 0) {
-                            TLRPC$User user = messagesController.getUser(Long.valueOf(longValue));
-                            if (user != null) {
-                                TLRPC$TL_inputPeerUser tLRPC$TL_inputPeerUser = new TLRPC$TL_inputPeerUser();
-                                tLRPC$TL_inputPeerUser.user_id = longValue;
-                                tLRPC$TL_inputPeerUser.access_hash = user.access_hash;
-                                arrayList4.add(tLRPC$TL_inputPeerUser);
-                            }
-                        } else {
-                            long j = -longValue;
-                            TLRPC$Chat chat = messagesController.getChat(Long.valueOf(j));
-                            if (chat != null) {
-                                if (ChatObject.isChannel(chat)) {
-                                    TLRPC$TL_inputPeerChannel tLRPC$TL_inputPeerChannel = new TLRPC$TL_inputPeerChannel();
-                                    tLRPC$TL_inputPeerChannel.channel_id = j;
-                                    tLRPC$TL_inputPeerChannel.access_hash = chat.access_hash;
-                                    arrayList4.add(tLRPC$TL_inputPeerChannel);
-                                } else {
-                                    TLRPC$TL_inputPeerChat tLRPC$TL_inputPeerChat = new TLRPC$TL_inputPeerChat();
-                                    tLRPC$TL_inputPeerChat.chat_id = j;
-                                    arrayList4.add(tLRPC$TL_inputPeerChat);
-                                }
+            int size2 = arrayList4.size();
+            for (int i6 = 0; i6 < size2; i6++) {
+                long longValue = arrayList4.get(i6).longValue();
+                if ((i5 != 0 || longSparseIntArray.indexOfKey(longValue) < 0) && !DialogObject.isEncryptedDialog(longValue)) {
+                    if (longValue > 0) {
+                        TLRPC$User user = messagesController.getUser(Long.valueOf(longValue));
+                        if (user != null) {
+                            TLRPC$TL_inputPeerUser tLRPC$TL_inputPeerUser = new TLRPC$TL_inputPeerUser();
+                            tLRPC$TL_inputPeerUser.user_id = longValue;
+                            tLRPC$TL_inputPeerUser.access_hash = user.access_hash;
+                            arrayList3.add(tLRPC$TL_inputPeerUser);
+                        }
+                    } else {
+                        long j = -longValue;
+                        TLRPC$Chat chat = messagesController.getChat(Long.valueOf(j));
+                        if (chat != null) {
+                            if (ChatObject.isChannel(chat)) {
+                                TLRPC$TL_inputPeerChannel tLRPC$TL_inputPeerChannel = new TLRPC$TL_inputPeerChannel();
+                                tLRPC$TL_inputPeerChannel.channel_id = j;
+                                tLRPC$TL_inputPeerChannel.access_hash = chat.access_hash;
+                                arrayList3.add(tLRPC$TL_inputPeerChannel);
+                            } else {
+                                TLRPC$TL_inputPeerChat tLRPC$TL_inputPeerChat = new TLRPC$TL_inputPeerChat();
+                                tLRPC$TL_inputPeerChat.chat_id = j;
+                                arrayList3.add(tLRPC$TL_inputPeerChat);
                             }
                         }
                     }
                 }
-                i5++;
-                i2 = 3;
-                i3 = 1;
             }
-            FilterCreateActivity$$ExternalSyntheticLambda10 filterCreateActivity$$ExternalSyntheticLambda10 = r0;
-            ConnectionsManager connectionsManager = baseFragment.getConnectionsManager();
-            FilterCreateActivity$$ExternalSyntheticLambda10 filterCreateActivity$$ExternalSyntheticLambda102 = new FilterCreateActivity$$ExternalSyntheticLambda10(z5, alertDialog, dialogFilter, i, str, arrayList, arrayList2, z, z2, z3, z4, baseFragment, runnable);
-            connectionsManager.sendRequest(tLRPC$TL_messages_updateDialogFilter, filterCreateActivity$$ExternalSyntheticLambda10);
-            if (!z5) {
-                processAddFilter(dialogFilter, i, str, arrayList, arrayList2, z, z2, z3, z4, baseFragment, runnable);
-            }
+            i5++;
+            i2 = 3;
+            i3 = 1;
         }
+        final AlertDialog alertDialog2 = alertDialog;
+        baseFragment.getConnectionsManager().sendRequest(tLRPC$TL_messages_updateDialogFilter, new RequestDelegate() { // from class: org.telegram.ui.FilterCreateActivity$$ExternalSyntheticLambda10
+            @Override // org.telegram.tgnet.RequestDelegate
+            public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+                FilterCreateActivity.lambda$saveFilterToServer$13(z5, alertDialog2, dialogFilter, i, str, arrayList, arrayList2, z, z2, z3, z4, baseFragment, runnable, tLObject, tLRPC$TL_error);
+            }
+        });
+        if (z5) {
+            return;
+        }
+        processAddFilter(dialogFilter, i, str, arrayList, arrayList2, z, z2, z3, z4, baseFragment, runnable);
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public static /* synthetic */ int lambda$saveFilterToServer$11(LongSparseIntArray longSparseIntArray, Long l, Long l2) {
         int i = longSparseIntArray.get(l.longValue());
         int i2 = longSparseIntArray.get(l2.longValue());
@@ -884,20 +897,31 @@ public class FilterCreateActivity extends BaseFragment {
         return i < i2 ? -1 : 0;
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
+    public static /* synthetic */ void lambda$saveFilterToServer$13(final boolean z, final AlertDialog alertDialog, final MessagesController.DialogFilter dialogFilter, final int i, final String str, final ArrayList arrayList, final ArrayList arrayList2, final boolean z2, final boolean z3, final boolean z4, final boolean z5, final BaseFragment baseFragment, final Runnable runnable, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.FilterCreateActivity$$ExternalSyntheticLambda7
+            @Override // java.lang.Runnable
+            public final void run() {
+                FilterCreateActivity.lambda$saveFilterToServer$12(z, alertDialog, dialogFilter, i, str, arrayList, arrayList2, z2, z3, z4, z5, baseFragment, runnable);
+            }
+        });
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
     public static /* synthetic */ void lambda$saveFilterToServer$12(boolean z, AlertDialog alertDialog, MessagesController.DialogFilter dialogFilter, int i, String str, ArrayList arrayList, ArrayList arrayList2, boolean z2, boolean z3, boolean z4, boolean z5, BaseFragment baseFragment, Runnable runnable) {
         if (z) {
             if (alertDialog != null) {
                 try {
                     alertDialog.dismiss();
                 } catch (Exception e) {
-                    FileLog.e((Throwable) e);
+                    FileLog.e(e);
                 }
             }
             processAddFilter(dialogFilter, i, str, arrayList, arrayList2, z2, z3, z4, z5, baseFragment, runnable);
         }
     }
 
+    @Override // org.telegram.ui.ActionBar.BaseFragment
     public boolean canBeginSlide() {
         return checkDiscard();
     }
@@ -928,7 +952,7 @@ public class FilterCreateActivity extends BaseFragment {
         return true;
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public void checkDoneButton(boolean z) {
         boolean z2 = true;
         boolean z3 = !TextUtils.isEmpty(this.newFilterName) && this.newFilterName.length() <= 12;
@@ -938,35 +962,36 @@ public class FilterCreateActivity extends BaseFragment {
             }
             z3 = (!z2 || this.creatingNew) ? z2 : hasChanges();
         }
-        if (this.doneItem.isEnabled() != z3) {
-            this.doneItem.setEnabled(z3);
-            float f = 1.0f;
-            if (z) {
-                ViewPropertyAnimator scaleX = this.doneItem.animate().alpha(z3 ? 1.0f : 0.0f).scaleX(z3 ? 1.0f : 0.0f);
-                if (!z3) {
-                    f = 0.0f;
-                }
-                scaleX.scaleY(f).setDuration(180).start();
-                return;
-            }
-            this.doneItem.setAlpha(z3 ? 1.0f : 0.0f);
-            this.doneItem.setScaleX(z3 ? 1.0f : 0.0f);
-            ActionBarMenuItem actionBarMenuItem = this.doneItem;
+        if (this.doneItem.isEnabled() == z3) {
+            return;
+        }
+        this.doneItem.setEnabled(z3);
+        float f = 1.0f;
+        if (z) {
+            ViewPropertyAnimator scaleX = this.doneItem.animate().alpha(z3 ? 1.0f : 0.0f).scaleX(z3 ? 1.0f : 0.0f);
             if (!z3) {
                 f = 0.0f;
             }
-            actionBarMenuItem.setScaleY(f);
+            scaleX.scaleY(f).setDuration(180L).start();
+            return;
         }
+        this.doneItem.setAlpha(z3 ? 1.0f : 0.0f);
+        this.doneItem.setScaleX(z3 ? 1.0f : 0.0f);
+        ActionBarMenuItem actionBarMenuItem = this.doneItem;
+        if (!z3) {
+            f = 0.0f;
+        }
+        actionBarMenuItem.setScaleY(f);
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public void setTextLeft(View view) {
         if (view instanceof PollEditTextCell) {
             PollEditTextCell pollEditTextCell = (PollEditTextCell) view;
             String str = this.newFilterName;
             int length = 12 - (str != null ? str.length() : 0);
-            if (((float) length) <= 3.6000004f) {
-                pollEditTextCell.setText2(String.format("%d", new Object[]{Integer.valueOf(length)}));
+            if (length <= 3.6000004f) {
+                pollEditTextCell.setText2(String.format("%d", Integer.valueOf(length)));
                 SimpleTextView textView2 = pollEditTextCell.getTextView2();
                 String str2 = length < 0 ? "windowBackgroundWhiteRedText5" : "windowBackgroundWhiteGrayText3";
                 textView2.setTextColor(Theme.getColor(str2));
@@ -978,585 +1003,151 @@ public class FilterCreateActivity extends BaseFragment {
         }
     }
 
-    private class ListAdapter extends RecyclerListView.SelectionAdapter {
+    /* JADX INFO: Access modifiers changed from: private */
+    /* loaded from: classes3.dex */
+    public class ListAdapter extends RecyclerListView.SelectionAdapter {
         private Context mContext;
 
         public ListAdapter(Context context) {
             this.mContext = context;
         }
 
+        @Override // org.telegram.ui.Components.RecyclerListView.SelectionAdapter
         public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
             int itemViewType = viewHolder.getItemViewType();
             return (itemViewType == 3 || itemViewType == 0 || itemViewType == 2 || itemViewType == 5) ? false : true;
         }
 
+        @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         public int getItemCount() {
             return FilterCreateActivity.this.rowCount;
         }
 
-        /* access modifiers changed from: private */
+        /* JADX INFO: Access modifiers changed from: private */
         public /* synthetic */ void lambda$onCreateViewHolder$0(PollEditTextCell pollEditTextCell, View view, boolean z) {
             pollEditTextCell.getTextView2().setAlpha((z || FilterCreateActivity.this.newFilterName.length() > 12) ? 1.0f : 0.0f);
         }
 
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v2, resolved type: org.telegram.ui.Cells.HeaderCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v10, resolved type: org.telegram.ui.Cells.HeaderCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v11, resolved type: org.telegram.ui.Cells.HeaderCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v12, resolved type: org.telegram.ui.Cells.HeaderCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v13, resolved type: org.telegram.ui.Cells.TextCell} */
-        /* JADX WARNING: Multi-variable type inference failed */
-        /* Code decompiled incorrectly, please refer to instructions dump. */
-        public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(android.view.ViewGroup r5, int r6) {
-            /*
-                r4 = this;
-                java.lang.String r5 = "windowBackgroundWhite"
-                if (r6 == 0) goto L_0x007f
-                r0 = 1
-                if (r6 == r0) goto L_0x006b
-                r1 = 2
-                if (r6 == r1) goto L_0x003b
-                r0 = 3
-                if (r6 == r0) goto L_0x0033
-                r0 = 4
-                if (r6 == r0) goto L_0x0024
-                r5 = 5
-                if (r6 == r5) goto L_0x001c
-                org.telegram.ui.Cells.TextInfoPrivacyCell r5 = new org.telegram.ui.Cells.TextInfoPrivacyCell
-                android.content.Context r6 = r4.mContext
-                r5.<init>(r6)
-                goto L_0x008e
-            L_0x001c:
-                org.telegram.ui.FilterCreateActivity$HintInnerCell r5 = new org.telegram.ui.FilterCreateActivity$HintInnerCell
-                android.content.Context r6 = r4.mContext
-                r5.<init>(r6)
-                goto L_0x008e
-            L_0x0024:
-                org.telegram.ui.Cells.TextCell r6 = new org.telegram.ui.Cells.TextCell
-                android.content.Context r0 = r4.mContext
-                r6.<init>(r0)
-                int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
-                r6.setBackgroundColor(r5)
-                goto L_0x008d
-            L_0x0033:
-                org.telegram.ui.Cells.ShadowSectionCell r5 = new org.telegram.ui.Cells.ShadowSectionCell
-                android.content.Context r6 = r4.mContext
-                r5.<init>(r6)
-                goto L_0x008e
-            L_0x003b:
-                org.telegram.ui.Cells.PollEditTextCell r6 = new org.telegram.ui.Cells.PollEditTextCell
-                android.content.Context r1 = r4.mContext
-                r2 = 0
-                r6.<init>(r1, r2)
-                r6.createErrorTextView()
-                int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
-                r6.setBackgroundColor(r5)
-                org.telegram.ui.FilterCreateActivity$ListAdapter$1 r5 = new org.telegram.ui.FilterCreateActivity$ListAdapter$1
-                r5.<init>(r6)
-                r6.addTextWatcher(r5)
-                org.telegram.ui.Components.EditTextBoldCursor r5 = r6.getTextView()
-                r6.setShowNextButton(r0)
-                org.telegram.ui.FilterCreateActivity$ListAdapter$$ExternalSyntheticLambda0 r0 = new org.telegram.ui.FilterCreateActivity$ListAdapter$$ExternalSyntheticLambda0
-                r0.<init>(r4, r6)
-                r5.setOnFocusChangeListener(r0)
-                r0 = 268435462(0x10000006, float:2.5243567E-29)
-                r5.setImeOptions(r0)
-                goto L_0x008d
-            L_0x006b:
-                org.telegram.ui.Cells.UserCell r6 = new org.telegram.ui.Cells.UserCell
-                android.content.Context r1 = r4.mContext
-                r2 = 6
-                r3 = 0
-                r6.<init>(r1, r2, r3, r3)
-                r6.setSelfAsSavedMessages(r0)
-                int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
-                r6.setBackgroundColor(r5)
-                goto L_0x008d
-            L_0x007f:
-                org.telegram.ui.Cells.HeaderCell r6 = new org.telegram.ui.Cells.HeaderCell
-                android.content.Context r0 = r4.mContext
-                r6.<init>(r0)
-                int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
-                r6.setBackgroundColor(r5)
-            L_0x008d:
-                r5 = r6
-            L_0x008e:
-                org.telegram.ui.Components.RecyclerListView$Holder r6 = new org.telegram.ui.Components.RecyclerListView$Holder
-                r6.<init>(r5)
-                return r6
-            */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.FilterCreateActivity.ListAdapter.onCreateViewHolder(android.view.ViewGroup, int):androidx.recyclerview.widget.RecyclerView$ViewHolder");
+        @Override // androidx.recyclerview.widget.RecyclerView.Adapter
+        /* renamed from: onCreateViewHolder */
+        public RecyclerView.ViewHolder mo1754onCreateViewHolder(ViewGroup viewGroup, int i) {
+            PollEditTextCell pollEditTextCell;
+            View view;
+            if (i == 0) {
+                FrameLayout headerCell = new HeaderCell(this.mContext);
+                headerCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
+                pollEditTextCell = headerCell;
+            } else if (i == 1) {
+                UserCell userCell = new UserCell(this.mContext, 6, 0, false);
+                userCell.setSelfAsSavedMessages(true);
+                userCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
+                pollEditTextCell = userCell;
+            } else if (i == 2) {
+                final PollEditTextCell pollEditTextCell2 = new PollEditTextCell(this.mContext, null);
+                pollEditTextCell2.createErrorTextView();
+                pollEditTextCell2.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
+                pollEditTextCell2.addTextWatcher(new TextWatcher() { // from class: org.telegram.ui.FilterCreateActivity.ListAdapter.1
+                    @Override // android.text.TextWatcher
+                    public void beforeTextChanged(CharSequence charSequence, int i2, int i3, int i4) {
+                    }
+
+                    @Override // android.text.TextWatcher
+                    public void onTextChanged(CharSequence charSequence, int i2, int i3, int i4) {
+                    }
+
+                    @Override // android.text.TextWatcher
+                    public void afterTextChanged(Editable editable) {
+                        if (pollEditTextCell2.getTag() != null) {
+                            return;
+                        }
+                        String obj = editable.toString();
+                        if (!TextUtils.equals(obj, FilterCreateActivity.this.newFilterName)) {
+                            FilterCreateActivity.this.nameChangedManually = !TextUtils.isEmpty(obj);
+                            FilterCreateActivity.this.newFilterName = obj;
+                        }
+                        RecyclerView.ViewHolder findViewHolderForAdapterPosition = FilterCreateActivity.this.listView.findViewHolderForAdapterPosition(FilterCreateActivity.this.nameRow);
+                        if (findViewHolderForAdapterPosition != null) {
+                            FilterCreateActivity.this.setTextLeft(findViewHolderForAdapterPosition.itemView);
+                        }
+                        FilterCreateActivity.this.checkDoneButton(true);
+                    }
+                });
+                EditTextBoldCursor textView = pollEditTextCell2.getTextView();
+                pollEditTextCell2.setShowNextButton(true);
+                textView.setOnFocusChangeListener(new View.OnFocusChangeListener() { // from class: org.telegram.ui.FilterCreateActivity$ListAdapter$$ExternalSyntheticLambda0
+                    @Override // android.view.View.OnFocusChangeListener
+                    public final void onFocusChange(View view2, boolean z) {
+                        FilterCreateActivity.ListAdapter.this.lambda$onCreateViewHolder$0(pollEditTextCell2, view2, z);
+                    }
+                });
+                textView.setImeOptions(NUM);
+                pollEditTextCell = pollEditTextCell2;
+            } else {
+                if (i == 3) {
+                    view = new ShadowSectionCell(this.mContext);
+                } else if (i == 4) {
+                    FrameLayout textCell = new TextCell(this.mContext);
+                    textCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
+                    pollEditTextCell = textCell;
+                } else if (i == 5) {
+                    view = new HintInnerCell(this.mContext);
+                } else {
+                    view = new TextInfoPrivacyCell(this.mContext);
+                }
+                return new RecyclerListView.Holder(view);
+            }
+            view = pollEditTextCell;
+            return new RecyclerListView.Holder(view);
         }
 
+        @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         public void onViewAttachedToWindow(RecyclerView.ViewHolder viewHolder) {
             if (viewHolder.getItemViewType() == 2) {
                 FilterCreateActivity.this.setTextLeft(viewHolder.itemView);
                 PollEditTextCell pollEditTextCell = (PollEditTextCell) viewHolder.itemView;
                 pollEditTextCell.setTag(1);
                 pollEditTextCell.setTextAndHint(FilterCreateActivity.this.newFilterName != null ? FilterCreateActivity.this.newFilterName : "", LocaleController.getString("FilterNameHint", R.string.FilterNameHint), false);
-                pollEditTextCell.setTag((Object) null);
+                pollEditTextCell.setTag(null);
             }
         }
 
+        @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         public void onViewDetachedFromWindow(RecyclerView.ViewHolder viewHolder) {
             if (viewHolder.getItemViewType() == 2) {
                 EditTextBoldCursor textView = ((PollEditTextCell) viewHolder.itemView).getTextView();
-                if (textView.isFocused()) {
-                    textView.clearFocus();
-                    AndroidUtilities.hideKeyboard(textView);
+                if (!textView.isFocused()) {
+                    return;
                 }
+                textView.clearFocus();
+                AndroidUtilities.hideKeyboard(textView);
             }
         }
 
-        /* JADX WARNING: Code restructure failed: missing block: B:54:0x0184, code lost:
-            if (r12 == (org.telegram.ui.FilterCreateActivity.access$1200(r10.this$0) - 1)) goto L_0x0187;
+        /* JADX WARN: Code restructure failed: missing block: B:57:0x0184, code lost:
+            if (r12 == (r10.this$0.includeEndRow - 1)) goto L68;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:64:0x01bd, code lost:
-            if (r12 == (org.telegram.ui.FilterCreateActivity.access$1600(r10.this$0) - 1)) goto L_0x0187;
+        /* JADX WARN: Code restructure failed: missing block: B:59:0x0187, code lost:
+            r3 = false;
          */
-        /* JADX WARNING: Removed duplicated region for block: B:67:0x01ca  */
-        /* JADX WARNING: Removed duplicated region for block: B:78:0x0201  */
-        /* Code decompiled incorrectly, please refer to instructions dump. */
+        /* JADX WARN: Code restructure failed: missing block: B:68:0x01bd, code lost:
+            if (r12 == (r10.this$0.excludeEndRow - 1)) goto L68;
+         */
+        /* JADX WARN: Removed duplicated region for block: B:72:0x01ca  */
+        /* JADX WARN: Removed duplicated region for block: B:83:0x0201  */
+        @Override // androidx.recyclerview.widget.RecyclerView.Adapter
+        /*
+            Code decompiled incorrectly, please refer to instructions dump.
+            To view partially-correct add '--show-bad-code' argument
+        */
         public void onBindViewHolder(androidx.recyclerview.widget.RecyclerView.ViewHolder r11, int r12) {
             /*
-                r10 = this;
-                int r0 = r11.getItemViewType()
-                if (r0 == 0) goto L_0x0358
-                r1 = -1
-                r2 = 0
-                r3 = 1
-                if (r0 == r3) goto L_0x014c
-                r4 = 3
-                java.lang.String r5 = "windowBackgroundGrayShadow"
-                if (r0 == r4) goto L_0x0126
-                r4 = 4
-                if (r0 == r4) goto L_0x0071
-                r2 = 6
-                if (r0 == r2) goto L_0x0018
-                goto L_0x0383
-            L_0x0018:
-                android.view.View r0 = r11.itemView
-                org.telegram.ui.Cells.TextInfoPrivacyCell r0 = (org.telegram.ui.Cells.TextInfoPrivacyCell) r0
-                org.telegram.ui.FilterCreateActivity r2 = org.telegram.ui.FilterCreateActivity.this
-                int r2 = r2.includeSectionRow
-                if (r12 != r2) goto L_0x0030
-                int r2 = org.telegram.messenger.R.string.FilterIncludeInfo
-                java.lang.String r3 = "FilterIncludeInfo"
-                java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
-                r0.setText(r2)
-                goto L_0x0043
-            L_0x0030:
-                org.telegram.ui.FilterCreateActivity r2 = org.telegram.ui.FilterCreateActivity.this
-                int r2 = r2.excludeSectionRow
-                if (r12 != r2) goto L_0x0043
-                int r2 = org.telegram.messenger.R.string.FilterExcludeInfo
-                java.lang.String r3 = "FilterExcludeInfo"
-                java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
-                r0.setText(r2)
-            L_0x0043:
-                org.telegram.ui.FilterCreateActivity r0 = org.telegram.ui.FilterCreateActivity.this
-                int r0 = r0.excludeSectionRow
-                if (r12 != r0) goto L_0x0062
-                org.telegram.ui.FilterCreateActivity r12 = org.telegram.ui.FilterCreateActivity.this
-                int r12 = r12.removeSectionRow
-                if (r12 != r1) goto L_0x0062
-                android.view.View r11 = r11.itemView
-                android.content.Context r12 = r10.mContext
-                int r0 = org.telegram.messenger.R.drawable.greydivider_bottom
-                android.graphics.drawable.Drawable r12 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r12, (int) r0, (java.lang.String) r5)
-                r11.setBackgroundDrawable(r12)
-                goto L_0x0383
-            L_0x0062:
-                android.view.View r11 = r11.itemView
-                android.content.Context r12 = r10.mContext
-                int r0 = org.telegram.messenger.R.drawable.greydivider
-                android.graphics.drawable.Drawable r12 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r12, (int) r0, (java.lang.String) r5)
-                r11.setBackgroundDrawable(r12)
-                goto L_0x0383
-            L_0x0071:
-                android.view.View r11 = r11.itemView
-                org.telegram.ui.Cells.TextCell r11 = (org.telegram.ui.Cells.TextCell) r11
-                org.telegram.ui.FilterCreateActivity r0 = org.telegram.ui.FilterCreateActivity.this
-                int r0 = r0.removeRow
-                if (r12 != r0) goto L_0x0090
-                r12 = 0
-                java.lang.String r0 = "windowBackgroundWhiteRedText5"
-                r11.setColors(r12, r0)
-                int r12 = org.telegram.messenger.R.string.FilterDelete
-                java.lang.String r0 = "FilterDelete"
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
-                r11.setText(r12, r2)
-                goto L_0x0383
-            L_0x0090:
-                org.telegram.ui.FilterCreateActivity r0 = org.telegram.ui.FilterCreateActivity.this
-                int r0 = r0.includeShowMoreRow
-                java.lang.String r1 = "FilterShowMoreChats"
-                java.lang.String r4 = "windowBackgroundWhiteBlueText4"
-                java.lang.String r5 = "switchTrackChecked"
-                if (r12 != r0) goto L_0x00ba
-                r11.setColors(r5, r4)
-                org.telegram.ui.FilterCreateActivity r12 = org.telegram.ui.FilterCreateActivity.this
-                java.util.ArrayList r12 = r12.newAlwaysShow
-                int r12 = r12.size()
-                int r12 = r12 + -5
-                java.lang.Object[] r0 = new java.lang.Object[r2]
-                java.lang.String r12 = org.telegram.messenger.LocaleController.formatPluralString(r1, r12, r0)
-                int r0 = org.telegram.messenger.R.drawable.arrow_more
-                r11.setTextAndIcon((java.lang.String) r12, (int) r0, (boolean) r2)
-                goto L_0x0383
-            L_0x00ba:
-                org.telegram.ui.FilterCreateActivity r0 = org.telegram.ui.FilterCreateActivity.this
-                int r0 = r0.excludeShowMoreRow
-                if (r12 != r0) goto L_0x00de
-                r11.setColors(r5, r4)
-                org.telegram.ui.FilterCreateActivity r12 = org.telegram.ui.FilterCreateActivity.this
-                java.util.ArrayList r12 = r12.newNeverShow
-                int r12 = r12.size()
-                int r12 = r12 + -5
-                java.lang.Object[] r0 = new java.lang.Object[r2]
-                java.lang.String r12 = org.telegram.messenger.LocaleController.formatPluralString(r1, r12, r0)
-                int r0 = org.telegram.messenger.R.drawable.arrow_more
-                r11.setTextAndIcon((java.lang.String) r12, (int) r0, (boolean) r2)
-                goto L_0x0383
-            L_0x00de:
-                org.telegram.ui.FilterCreateActivity r0 = org.telegram.ui.FilterCreateActivity.this
-                int r0 = r0.includeAddRow
-                if (r12 != r0) goto L_0x0102
-                r11.setColors(r5, r4)
-                int r0 = org.telegram.messenger.R.string.FilterAddChats
-                java.lang.String r1 = "FilterAddChats"
-                java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-                int r1 = org.telegram.messenger.R.drawable.msg_chats_add
-                int r12 = r12 + r3
-                org.telegram.ui.FilterCreateActivity r4 = org.telegram.ui.FilterCreateActivity.this
-                int r4 = r4.includeSectionRow
-                if (r12 == r4) goto L_0x00fd
-                r2 = 1
-            L_0x00fd:
-                r11.setTextAndIcon((java.lang.String) r0, (int) r1, (boolean) r2)
-                goto L_0x0383
-            L_0x0102:
-                org.telegram.ui.FilterCreateActivity r0 = org.telegram.ui.FilterCreateActivity.this
-                int r0 = r0.excludeAddRow
-                if (r12 != r0) goto L_0x0383
-                r11.setColors(r5, r4)
-                int r0 = org.telegram.messenger.R.string.FilterRemoveChats
-                java.lang.String r1 = "FilterRemoveChats"
-                java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-                int r1 = org.telegram.messenger.R.drawable.msg_chats_add
-                int r12 = r12 + r3
-                org.telegram.ui.FilterCreateActivity r4 = org.telegram.ui.FilterCreateActivity.this
-                int r4 = r4.excludeSectionRow
-                if (r12 == r4) goto L_0x0121
-                r2 = 1
-            L_0x0121:
-                r11.setTextAndIcon((java.lang.String) r0, (int) r1, (boolean) r2)
-                goto L_0x0383
-            L_0x0126:
-                org.telegram.ui.FilterCreateActivity r0 = org.telegram.ui.FilterCreateActivity.this
-                int r0 = r0.removeSectionRow
-                if (r12 != r0) goto L_0x013d
-                android.view.View r11 = r11.itemView
-                android.content.Context r12 = r10.mContext
-                int r0 = org.telegram.messenger.R.drawable.greydivider_bottom
-                android.graphics.drawable.Drawable r12 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r12, (int) r0, (java.lang.String) r5)
-                r11.setBackgroundDrawable(r12)
-                goto L_0x0383
-            L_0x013d:
-                android.view.View r11 = r11.itemView
-                android.content.Context r12 = r10.mContext
-                int r0 = org.telegram.messenger.R.drawable.greydivider
-                android.graphics.drawable.Drawable r12 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r12, (int) r0, (java.lang.String) r5)
-                r11.setBackgroundDrawable(r12)
-                goto L_0x0383
-            L_0x014c:
-                android.view.View r11 = r11.itemView
-                r4 = r11
-                org.telegram.ui.Cells.UserCell r4 = (org.telegram.ui.Cells.UserCell) r4
-                org.telegram.ui.FilterCreateActivity r11 = org.telegram.ui.FilterCreateActivity.this
-                int r11 = r11.includeStartRow
-                if (r12 < r11) goto L_0x018a
-                org.telegram.ui.FilterCreateActivity r11 = org.telegram.ui.FilterCreateActivity.this
-                int r11 = r11.includeEndRow
-                if (r12 >= r11) goto L_0x018a
-                org.telegram.ui.FilterCreateActivity r11 = org.telegram.ui.FilterCreateActivity.this
-                java.util.ArrayList r11 = r11.newAlwaysShow
-                org.telegram.ui.FilterCreateActivity r0 = org.telegram.ui.FilterCreateActivity.this
-                int r0 = r0.includeStartRow
-                int r0 = r12 - r0
-                java.lang.Object r11 = r11.get(r0)
-                java.lang.Long r11 = (java.lang.Long) r11
-                org.telegram.ui.FilterCreateActivity r0 = org.telegram.ui.FilterCreateActivity.this
-                int r0 = r0.includeShowMoreRow
-                if (r0 != r1) goto L_0x0188
-                org.telegram.ui.FilterCreateActivity r0 = org.telegram.ui.FilterCreateActivity.this
-                int r0 = r0.includeEndRow
-                int r0 = r0 - r3
-                if (r12 == r0) goto L_0x0187
-                goto L_0x0188
-            L_0x0187:
-                r3 = 0
-            L_0x0188:
-                r9 = r3
-                goto L_0x01c0
-            L_0x018a:
-                org.telegram.ui.FilterCreateActivity r11 = org.telegram.ui.FilterCreateActivity.this
-                int r11 = r11.excludeStartRow
-                if (r12 < r11) goto L_0x026b
-                org.telegram.ui.FilterCreateActivity r11 = org.telegram.ui.FilterCreateActivity.this
-                int r11 = r11.excludeEndRow
-                if (r12 >= r11) goto L_0x026b
-                org.telegram.ui.FilterCreateActivity r11 = org.telegram.ui.FilterCreateActivity.this
-                java.util.ArrayList r11 = r11.newNeverShow
-                org.telegram.ui.FilterCreateActivity r0 = org.telegram.ui.FilterCreateActivity.this
-                int r0 = r0.excludeStartRow
-                int r0 = r12 - r0
-                java.lang.Object r11 = r11.get(r0)
-                java.lang.Long r11 = (java.lang.Long) r11
-                org.telegram.ui.FilterCreateActivity r0 = org.telegram.ui.FilterCreateActivity.this
-                int r0 = r0.excludeShowMoreRow
-                if (r0 != r1) goto L_0x0188
-                org.telegram.ui.FilterCreateActivity r0 = org.telegram.ui.FilterCreateActivity.this
-                int r0 = r0.excludeEndRow
-                int r0 = r0 - r3
-                if (r12 == r0) goto L_0x0187
-                goto L_0x0188
-            L_0x01c0:
-                long r0 = r11.longValue()
-                r5 = 0
-                int r12 = (r0 > r5 ? 1 : (r0 == r5 ? 0 : -1))
-                if (r12 <= 0) goto L_0x0201
-                org.telegram.ui.FilterCreateActivity r12 = org.telegram.ui.FilterCreateActivity.this
-                org.telegram.messenger.MessagesController r12 = r12.getMessagesController()
-                org.telegram.tgnet.TLRPC$User r5 = r12.getUser(r11)
-                if (r5 == 0) goto L_0x0383
-                boolean r11 = r5.bot
-                if (r11 == 0) goto L_0x01e4
-                int r11 = org.telegram.messenger.R.string.Bot
-                java.lang.String r12 = "Bot"
-                java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
-            L_0x01e2:
-                r7 = r11
-                goto L_0x01fa
-            L_0x01e4:
-                boolean r11 = r5.contact
-                if (r11 == 0) goto L_0x01f1
-                int r11 = org.telegram.messenger.R.string.FilterContact
-                java.lang.String r12 = "FilterContact"
-                java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
-                goto L_0x01e2
-            L_0x01f1:
-                int r11 = org.telegram.messenger.R.string.FilterNonContact
-                java.lang.String r12 = "FilterNonContact"
-                java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
-                goto L_0x01e2
-            L_0x01fa:
-                r6 = 0
-                r8 = 0
-                r4.setData(r5, r6, r7, r8, r9)
-                goto L_0x0383
-            L_0x0201:
-                org.telegram.ui.FilterCreateActivity r12 = org.telegram.ui.FilterCreateActivity.this
-                org.telegram.messenger.MessagesController r12 = r12.getMessagesController()
-                long r0 = r11.longValue()
-                long r0 = -r0
-                java.lang.Long r11 = java.lang.Long.valueOf(r0)
-                org.telegram.tgnet.TLRPC$Chat r5 = r12.getChat(r11)
-                if (r5 == 0) goto L_0x0383
-                int r11 = r5.participants_count
-                if (r11 == 0) goto L_0x0224
-                java.lang.Object[] r12 = new java.lang.Object[r2]
-                java.lang.String r0 = "Members"
-                java.lang.String r11 = org.telegram.messenger.LocaleController.formatPluralString(r0, r11, r12)
-            L_0x0222:
-                r7 = r11
-                goto L_0x0264
-            L_0x0224:
-                java.lang.String r11 = r5.username
-                boolean r11 = android.text.TextUtils.isEmpty(r11)
-                if (r11 == 0) goto L_0x0248
-                boolean r11 = org.telegram.messenger.ChatObject.isChannel(r5)
-                if (r11 == 0) goto L_0x023f
-                boolean r11 = r5.megagroup
-                if (r11 != 0) goto L_0x023f
-                int r11 = org.telegram.messenger.R.string.ChannelPrivate
-                java.lang.String r12 = "ChannelPrivate"
-                java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
-                goto L_0x0222
-            L_0x023f:
-                int r11 = org.telegram.messenger.R.string.MegaPrivate
-                java.lang.String r12 = "MegaPrivate"
-                java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
-                goto L_0x0222
-            L_0x0248:
-                boolean r11 = org.telegram.messenger.ChatObject.isChannel(r5)
-                if (r11 == 0) goto L_0x025b
-                boolean r11 = r5.megagroup
-                if (r11 != 0) goto L_0x025b
-                int r11 = org.telegram.messenger.R.string.ChannelPublic
-                java.lang.String r12 = "ChannelPublic"
-                java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
-                goto L_0x0222
-            L_0x025b:
-                int r11 = org.telegram.messenger.R.string.MegaPublic
-                java.lang.String r12 = "MegaPublic"
-                java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
-                goto L_0x0222
-            L_0x0264:
-                r6 = 0
-                r8 = 0
-                r4.setData(r5, r6, r7, r8, r9)
-                goto L_0x0383
-            L_0x026b:
-                org.telegram.ui.FilterCreateActivity r11 = org.telegram.ui.FilterCreateActivity.this
-                int r11 = r11.includeContactsRow
-                if (r12 != r11) goto L_0x028c
-                int r11 = org.telegram.messenger.R.string.FilterContacts
-                java.lang.String r0 = "FilterContacts"
-                java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r0, r11)
-                int r12 = r12 + r3
-                org.telegram.ui.FilterCreateActivity r0 = org.telegram.ui.FilterCreateActivity.this
-                int r0 = r0.includeSectionRow
-                if (r12 == r0) goto L_0x0285
-                r2 = 1
-            L_0x0285:
-                java.lang.String r12 = "contacts"
-            L_0x0287:
-                r6 = r11
-                r5 = r12
-                r9 = r2
-                goto L_0x0352
-            L_0x028c:
-                org.telegram.ui.FilterCreateActivity r11 = org.telegram.ui.FilterCreateActivity.this
-                int r11 = r11.includeNonContactsRow
-                if (r12 != r11) goto L_0x02a9
-                int r11 = org.telegram.messenger.R.string.FilterNonContacts
-                java.lang.String r0 = "FilterNonContacts"
-                java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r0, r11)
-                int r12 = r12 + r3
-                org.telegram.ui.FilterCreateActivity r0 = org.telegram.ui.FilterCreateActivity.this
-                int r0 = r0.includeSectionRow
-                if (r12 == r0) goto L_0x02a6
-                r2 = 1
-            L_0x02a6:
-                java.lang.String r12 = "non_contacts"
-                goto L_0x0287
-            L_0x02a9:
-                org.telegram.ui.FilterCreateActivity r11 = org.telegram.ui.FilterCreateActivity.this
-                int r11 = r11.includeGroupsRow
-                if (r12 != r11) goto L_0x02c6
-                int r11 = org.telegram.messenger.R.string.FilterGroups
-                java.lang.String r0 = "FilterGroups"
-                java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r0, r11)
-                int r12 = r12 + r3
-                org.telegram.ui.FilterCreateActivity r0 = org.telegram.ui.FilterCreateActivity.this
-                int r0 = r0.includeSectionRow
-                if (r12 == r0) goto L_0x02c3
-                r2 = 1
-            L_0x02c3:
-                java.lang.String r12 = "groups"
-                goto L_0x0287
-            L_0x02c6:
-                org.telegram.ui.FilterCreateActivity r11 = org.telegram.ui.FilterCreateActivity.this
-                int r11 = r11.includeChannelsRow
-                if (r12 != r11) goto L_0x02e3
-                int r11 = org.telegram.messenger.R.string.FilterChannels
-                java.lang.String r0 = "FilterChannels"
-                java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r0, r11)
-                int r12 = r12 + r3
-                org.telegram.ui.FilterCreateActivity r0 = org.telegram.ui.FilterCreateActivity.this
-                int r0 = r0.includeSectionRow
-                if (r12 == r0) goto L_0x02e0
-                r2 = 1
-            L_0x02e0:
-                java.lang.String r12 = "channels"
-                goto L_0x0287
-            L_0x02e3:
-                org.telegram.ui.FilterCreateActivity r11 = org.telegram.ui.FilterCreateActivity.this
-                int r11 = r11.includeBotsRow
-                if (r12 != r11) goto L_0x0300
-                int r11 = org.telegram.messenger.R.string.FilterBots
-                java.lang.String r0 = "FilterBots"
-                java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r0, r11)
-                int r12 = r12 + r3
-                org.telegram.ui.FilterCreateActivity r0 = org.telegram.ui.FilterCreateActivity.this
-                int r0 = r0.includeSectionRow
-                if (r12 == r0) goto L_0x02fd
-                r2 = 1
-            L_0x02fd:
-                java.lang.String r12 = "bots"
-                goto L_0x0287
-            L_0x0300:
-                org.telegram.ui.FilterCreateActivity r11 = org.telegram.ui.FilterCreateActivity.this
-                int r11 = r11.excludeMutedRow
-                if (r12 != r11) goto L_0x031e
-                int r11 = org.telegram.messenger.R.string.FilterMuted
-                java.lang.String r0 = "FilterMuted"
-                java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r0, r11)
-                int r12 = r12 + r3
-                org.telegram.ui.FilterCreateActivity r0 = org.telegram.ui.FilterCreateActivity.this
-                int r0 = r0.excludeSectionRow
-                if (r12 == r0) goto L_0x031a
-                r2 = 1
-            L_0x031a:
-                java.lang.String r12 = "muted"
-                goto L_0x0287
-            L_0x031e:
-                org.telegram.ui.FilterCreateActivity r11 = org.telegram.ui.FilterCreateActivity.this
-                int r11 = r11.excludeReadRow
-                if (r12 != r11) goto L_0x033c
-                int r11 = org.telegram.messenger.R.string.FilterRead
-                java.lang.String r0 = "FilterRead"
-                java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r0, r11)
-                int r12 = r12 + r3
-                org.telegram.ui.FilterCreateActivity r0 = org.telegram.ui.FilterCreateActivity.this
-                int r0 = r0.excludeSectionRow
-                if (r12 == r0) goto L_0x0338
-                r2 = 1
-            L_0x0338:
-                java.lang.String r12 = "read"
-                goto L_0x0287
-            L_0x033c:
-                int r11 = org.telegram.messenger.R.string.FilterArchived
-                java.lang.String r0 = "FilterArchived"
-                java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r0, r11)
-                int r12 = r12 + r3
-                org.telegram.ui.FilterCreateActivity r0 = org.telegram.ui.FilterCreateActivity.this
-                int r0 = r0.excludeSectionRow
-                if (r12 == r0) goto L_0x034e
-                r2 = 1
-            L_0x034e:
-                java.lang.String r12 = "archived"
-                goto L_0x0287
-            L_0x0352:
-                r7 = 0
-                r8 = 0
-                r4.setData(r5, r6, r7, r8, r9)
-                return
-            L_0x0358:
-                android.view.View r11 = r11.itemView
-                org.telegram.ui.Cells.HeaderCell r11 = (org.telegram.ui.Cells.HeaderCell) r11
-                org.telegram.ui.FilterCreateActivity r0 = org.telegram.ui.FilterCreateActivity.this
-                int r0 = r0.includeHeaderRow
-                if (r12 != r0) goto L_0x0370
-                int r12 = org.telegram.messenger.R.string.FilterInclude
-                java.lang.String r0 = "FilterInclude"
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
-                r11.setText(r12)
-                goto L_0x0383
-            L_0x0370:
-                org.telegram.ui.FilterCreateActivity r0 = org.telegram.ui.FilterCreateActivity.this
-                int r0 = r0.excludeHeaderRow
-                if (r12 != r0) goto L_0x0383
-                int r12 = org.telegram.messenger.R.string.FilterExclude
-                java.lang.String r0 = "FilterExclude"
-                java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
-                r11.setText(r12)
-            L_0x0383:
-                return
+                Method dump skipped, instructions count: 900
+                To view this dump add '--comments-level debug' option
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.FilterCreateActivity.ListAdapter.onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder, int):void");
         }
 
+        @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         public int getItemViewType(int i) {
             if (i == FilterCreateActivity.this.includeHeaderRow || i == FilterCreateActivity.this.excludeHeaderRow) {
                 return 0;
@@ -1580,45 +1171,54 @@ public class FilterCreateActivity extends BaseFragment {
         }
     }
 
+    @Override // org.telegram.ui.ActionBar.BaseFragment
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         ArrayList<ThemeDescription> arrayList = new ArrayList<>();
-        FilterCreateActivity$$ExternalSyntheticLambda11 filterCreateActivity$$ExternalSyntheticLambda11 = new FilterCreateActivity$$ExternalSyntheticLambda11(this);
-        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{HeaderCell.class, TextCell.class, PollEditTextCell.class, UserCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
-        arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGray"));
-        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"));
-        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"));
-        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultIcon"));
-        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultTitle"));
-        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSelector"));
-        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "listSelectorSDK21"));
-        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "divider"));
-        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueHeader"));
-        arrayList.add(new ThemeDescription((View) this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-        arrayList.add(new ThemeDescription((View) this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteRedText5"));
-        arrayList.add(new ThemeDescription((View) this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueText4"));
-        arrayList.add(new ThemeDescription((View) this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextCell.class}, new String[]{"ImageView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "switchTrackChecked"));
-        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGrayShadow"));
-        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGrayShadow"));
-        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText4"));
-        arrayList.add(new ThemeDescription((View) this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{UserCell.class}, new String[]{"adminTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "profile_creatorIcon"));
-        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{UserCell.class}, new String[]{"imageView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayIcon"));
-        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{UserCell.class}, new String[]{"nameTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-        FilterCreateActivity$$ExternalSyntheticLambda11 filterCreateActivity$$ExternalSyntheticLambda112 = filterCreateActivity$$ExternalSyntheticLambda11;
-        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) filterCreateActivity$$ExternalSyntheticLambda112, "windowBackgroundWhiteGrayText"));
-        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusOnlineColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) filterCreateActivity$$ExternalSyntheticLambda112, "windowBackgroundWhiteBlueText"));
-        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, (Paint) null, Theme.avatarDrawables, (ThemeDescription.ThemeDescriptionDelegate) null, "avatar_text"));
-        FilterCreateActivity$$ExternalSyntheticLambda11 filterCreateActivity$$ExternalSyntheticLambda113 = filterCreateActivity$$ExternalSyntheticLambda11;
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, filterCreateActivity$$ExternalSyntheticLambda113, "avatar_backgroundRed"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, filterCreateActivity$$ExternalSyntheticLambda113, "avatar_backgroundOrange"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, filterCreateActivity$$ExternalSyntheticLambda113, "avatar_backgroundViolet"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, filterCreateActivity$$ExternalSyntheticLambda113, "avatar_backgroundGreen"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, filterCreateActivity$$ExternalSyntheticLambda113, "avatar_backgroundCyan"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, filterCreateActivity$$ExternalSyntheticLambda113, "avatar_backgroundBlue"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, filterCreateActivity$$ExternalSyntheticLambda113, "avatar_backgroundPink"));
+        ThemeDescription.ThemeDescriptionDelegate themeDescriptionDelegate = new ThemeDescription.ThemeDescriptionDelegate() { // from class: org.telegram.ui.FilterCreateActivity$$ExternalSyntheticLambda11
+            @Override // org.telegram.ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate
+            public final void didSetColor() {
+                FilterCreateActivity.this.lambda$getThemeDescriptions$14();
+            }
+
+            @Override // org.telegram.ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate
+            public /* synthetic */ void onAnimationProgress(float f) {
+                ThemeDescription.ThemeDescriptionDelegate.CC.$default$onAnimationProgress(this, f);
+            }
+        };
+        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{HeaderCell.class, TextCell.class, PollEditTextCell.class, UserCell.class}, null, null, null, "windowBackgroundWhite"));
+        arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundGray"));
+        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "actionBarDefault"));
+        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, "actionBarDefault"));
+        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, "actionBarDefaultIcon"));
+        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, "actionBarDefaultTitle"));
+        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, "actionBarDefaultSelector"));
+        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, "listSelectorSDK21"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, "divider"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueHeader"));
+        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteRedText5"));
+        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueText4"));
+        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextCell.class}, new String[]{"ImageView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "switchTrackChecked"));
+        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, null, null, null, "windowBackgroundGrayShadow"));
+        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, "windowBackgroundGrayShadow"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText4"));
+        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{UserCell.class}, new String[]{"adminTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "profile_creatorIcon"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"imageView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayIcon"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"nameTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusColor"}, (Paint[]) null, (Drawable[]) null, themeDescriptionDelegate, "windowBackgroundWhiteGrayText"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusOnlineColor"}, (Paint[]) null, (Drawable[]) null, themeDescriptionDelegate, "windowBackgroundWhiteBlueText"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, null, Theme.avatarDrawables, null, "avatar_text"));
+        arrayList.add(new ThemeDescription(null, 0, null, null, null, themeDescriptionDelegate, "avatar_backgroundRed"));
+        arrayList.add(new ThemeDescription(null, 0, null, null, null, themeDescriptionDelegate, "avatar_backgroundOrange"));
+        arrayList.add(new ThemeDescription(null, 0, null, null, null, themeDescriptionDelegate, "avatar_backgroundViolet"));
+        arrayList.add(new ThemeDescription(null, 0, null, null, null, themeDescriptionDelegate, "avatar_backgroundGreen"));
+        arrayList.add(new ThemeDescription(null, 0, null, null, null, themeDescriptionDelegate, "avatar_backgroundCyan"));
+        arrayList.add(new ThemeDescription(null, 0, null, null, null, themeDescriptionDelegate, "avatar_backgroundBlue"));
+        arrayList.add(new ThemeDescription(null, 0, null, null, null, themeDescriptionDelegate, "avatar_backgroundPink"));
         return arrayList;
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$getThemeDescriptions$14() {
         RecyclerListView recyclerListView = this.listView;
         if (recyclerListView != null) {

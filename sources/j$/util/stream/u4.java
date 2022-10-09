@@ -1,34 +1,35 @@
 package j$.util.stream;
 
-import j$.util.CLASSNAMEa;
+import j$.util.AbstractCLASSNAMEa;
 import j$.util.function.Consumer;
-import j$.util.t;
-import j$.util.u;
-
-final class u4 extends z4 implements t {
-    u4(t tVar, long j, long j2) {
+/* loaded from: classes2.dex */
+final class u4 extends z4 implements j$.util.t {
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public u4(j$.util.t tVar, long j, long j2) {
         super(tVar, j, j2);
     }
 
-    u4(t tVar, long j, long j2, long j3, long j4) {
-        super(tVar, j, j2, j3, j4, (CLASSNAMEo1) null);
+    u4(j$.util.t tVar, long j, long j2, long j3, long j4) {
+        super(tVar, j, j2, j3, j4, null);
     }
 
-    /* access modifiers changed from: protected */
-    public u a(u uVar, long j, long j2, long j3, long j4) {
-        return new u4((t) uVar, j, j2, j3, j4);
+    @Override // j$.util.stream.D4
+    protected j$.util.u a(j$.util.u uVar, long j, long j2, long j3, long j4) {
+        return new u4((j$.util.t) uVar, j, j2, j3, j4);
     }
 
+    @Override // j$.util.u
     public /* synthetic */ boolean b(Consumer consumer) {
-        return CLASSNAMEa.j(this, consumer);
+        return AbstractCLASSNAMEa.j(this, consumer);
     }
 
-    /* access modifiers changed from: protected */
-    public /* bridge */ /* synthetic */ Object f() {
+    @Override // j$.util.stream.z4
+    protected /* bridge */ /* synthetic */ Object f() {
         return t4.a;
     }
 
+    @Override // j$.util.u
     public /* synthetic */ void forEachRemaining(Consumer consumer) {
-        CLASSNAMEa.b(this, consumer);
+        AbstractCLASSNAMEa.b(this, consumer);
     }
 }

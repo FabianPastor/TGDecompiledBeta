@@ -1,5 +1,5 @@
 package org.telegram.messenger.audioinfo.mp3;
-
+/* loaded from: classes.dex */
 public enum ID3v1Genre {
     Blues("Blues"),
     ClassicRock("Classic Rock"),
@@ -138,7 +138,7 @@ public enum ID3v1Genre {
         return values[i];
     }
 
-    private ID3v1Genre(String str) {
+    ID3v1Genre(String str) {
         this.description = str;
     }
 

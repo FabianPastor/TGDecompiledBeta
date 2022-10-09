@@ -5,11 +5,10 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.os.Build;
-import android.view.ViewOutlineProvider;
 import android.widget.Button;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
-
+/* loaded from: classes3.dex */
 public class ProgressButton extends Button {
     private int angle;
     private boolean drawProgress;
@@ -24,7 +23,7 @@ public class ProgressButton extends Button {
         setTextSize(1, 14.0f);
         setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         if (Build.VERSION.SDK_INT >= 21) {
-            setOutlineProvider((ViewOutlineProvider) null);
+            setOutlineProvider(null);
         }
         ViewHelper.setPadding(this, 8.0f, 0.0f, 8.0f, 0.0f);
         int dp = AndroidUtilities.dp(60.0f);
@@ -35,21 +34,21 @@ public class ProgressButton extends Button {
         this.progressPaint = paint;
         paint.setStrokeCap(Paint.Cap.ROUND);
         paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
+        paint.setStrokeWidth(AndroidUtilities.dp(2.0f));
     }
 
-    /* access modifiers changed from: protected */
-    public void onDraw(Canvas canvas) {
+    @Override // android.widget.TextView, android.view.View
+    protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if (this.drawProgress || this.progressAlpha != 0.0f) {
             int measuredWidth = getMeasuredWidth() - AndroidUtilities.dp(11.0f);
-            this.progressRect.set((float) measuredWidth, (float) AndroidUtilities.dp(3.0f), (float) (measuredWidth + AndroidUtilities.dp(8.0f)), (float) AndroidUtilities.dp(11.0f));
+            this.progressRect.set(measuredWidth, AndroidUtilities.dp(3.0f), measuredWidth + AndroidUtilities.dp(8.0f), AndroidUtilities.dp(11.0f));
             this.progressPaint.setAlpha(Math.min(255, (int) (this.progressAlpha * 255.0f)));
-            canvas.drawArc(this.progressRect, (float) this.angle, 220.0f, false, this.progressPaint);
+            canvas.drawArc(this.progressRect, this.angle, 220.0f, false, this.progressPaint);
             long currentTimeMillis = System.currentTimeMillis();
             if (Math.abs(this.lastUpdateTime - System.currentTimeMillis()) < 1000) {
                 long j = currentTimeMillis - this.lastUpdateTime;
-                int i = (int) (((float) this.angle) + (((float) (360 * j)) / 2000.0f));
+                int i = (int) (this.angle + (((float) (360 * j)) / 2000.0f));
                 this.angle = i;
                 this.angle = i - ((i / 360) * 360);
                 if (this.drawProgress) {

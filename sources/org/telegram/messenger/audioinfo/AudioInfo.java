@@ -7,7 +7,7 @@ import java.io.FileInputStream;
 import java.io.RandomAccessFile;
 import org.telegram.messenger.audioinfo.m4a.M4AInfo;
 import org.telegram.messenger.audioinfo.mp3.MP3Info;
-
+/* loaded from: classes.dex */
 public abstract class AudioInfo {
     protected String album;
     protected String albumArtist;
@@ -107,20 +107,22 @@ public abstract class AudioInfo {
     }
 
     public static AudioInfo getAudioInfo(File file) {
+        byte[] bArr;
+        BufferedInputStream bufferedInputStream;
         try {
-            byte[] bArr = new byte[12];
+            bArr = new byte[12];
             RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r");
             randomAccessFile.readFully(bArr, 0, 8);
             randomAccessFile.close();
-            BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(file));
-            if (bArr[4] == 102 && bArr[5] == 116 && bArr[6] == 121 && bArr[7] == 112) {
-                return new M4AInfo(bufferedInputStream);
-            }
-            if (file.getAbsolutePath().endsWith("mp3")) {
-                return new MP3Info(bufferedInputStream, file.length());
-            }
-            return null;
+            bufferedInputStream = new BufferedInputStream(new FileInputStream(file));
         } catch (Exception unused) {
         }
+        if (bArr[4] == 102 && bArr[5] == 116 && bArr[6] == 121 && bArr[7] == 112) {
+            return new M4AInfo(bufferedInputStream);
+        }
+        if (file.getAbsolutePath().endsWith("mp3")) {
+            return new MP3Info(bufferedInputStream, file.length());
+        }
+        return null;
     }
 }

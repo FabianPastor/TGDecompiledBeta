@@ -14,9 +14,10 @@ import org.telegram.tgnet.TLRPC$TL_wallPaper;
 import org.telegram.tgnet.TLRPC$ThemeSettings;
 import org.telegram.tgnet.TLRPC$WallPaper;
 import org.telegram.ui.ActionBar.Theme;
-
+/* loaded from: classes.dex */
 public class DocumentObject {
 
+    /* loaded from: classes.dex */
     public static class ThemeDocument extends TLRPC$TL_document {
         public Theme.ThemeAccent accent;
         public Theme.ThemeInfo baseTheme;
@@ -58,19 +59,16 @@ public class DocumentObject {
         TLRPC$TL_photoPathSize tLRPC$TL_photoPathSize = null;
         int i = 0;
         int i2 = 0;
-        int i3 = 0;
-        while (i < size) {
-            TLRPC$PhotoSize tLRPC$PhotoSize = arrayList.get(i);
+        for (int i3 = 0; i3 < size; i3++) {
+            TLRPC$PhotoSize tLRPC$PhotoSize = arrayList.get(i3);
             if (tLRPC$PhotoSize instanceof TLRPC$TL_photoPathSize) {
                 tLRPC$TL_photoPathSize = (TLRPC$TL_photoPathSize) tLRPC$PhotoSize;
             } else {
-                i2 = tLRPC$PhotoSize.w;
-                i3 = tLRPC$PhotoSize.h;
+                i = tLRPC$PhotoSize.w;
+                i2 = tLRPC$PhotoSize.h;
             }
-            if (tLRPC$TL_photoPathSize == null || i2 == 0 || i3 == 0) {
-                i++;
-            } else {
-                SvgHelper.SvgDrawable drawableByPath = SvgHelper.getDrawableByPath(SvgHelper.decompress(tLRPC$TL_photoPathSize.bytes), i2, i3);
+            if (tLRPC$TL_photoPathSize != null && i != 0 && i2 != 0) {
+                SvgHelper.SvgDrawable drawableByPath = SvgHelper.getDrawableByPath(SvgHelper.decompress(tLRPC$TL_photoPathSize.bytes), i, i2);
                 if (drawableByPath != null) {
                     drawableByPath.setupGradient(str, f, false);
                 }
@@ -81,7 +79,7 @@ public class DocumentObject {
     }
 
     public static SvgHelper.SvgDrawable getCircleThumb(float f, String str, float f2) {
-        return getCircleThumb(f, str, (Theme.ResourcesProvider) null, f2);
+        return getCircleThumb(f, str, null, f2);
     }
 
     public static SvgHelper.SvgDrawable getCircleThumb(float f, String str, Theme.ResourcesProvider resourcesProvider, float f2) {
@@ -95,7 +93,7 @@ public class DocumentObject {
             svgDrawable.setupGradient(str, f2, false);
             return svgDrawable;
         } catch (Exception e) {
-            FileLog.e((Throwable) e);
+            FileLog.e(e);
             return null;
         }
     }
@@ -150,7 +148,7 @@ public class DocumentObject {
                     }
                     i4++;
                 }
-                if (i != 0 && i2 != 0 && (svgDrawable = SvgHelper.getDrawableByPath(SvgHelper.decompress(tLRPC$PhotoSize.bytes), (int) (((float) i) * f2), (int) (((float) i2) * f2))) != null) {
+                if (i != 0 && i2 != 0 && (svgDrawable = SvgHelper.getDrawableByPath(SvgHelper.decompress(tLRPC$PhotoSize.bytes), (int) (i * f2), (int) (i2 * f2))) != null) {
                     svgDrawable.setupGradient(str, f, false);
                 }
             } else {

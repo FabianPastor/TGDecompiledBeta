@@ -2,35 +2,37 @@ package j$.util;
 
 import j$.util.Iterator;
 import j$.util.function.Consumer;
-import j$.util.function.e;
-import j$.util.function.f;
 import java.util.NoSuchElementException;
-
-class A implements CLASSNAMEn, f, Iterator {
+/* loaded from: classes2.dex */
+class A implements InterfaceCLASSNAMEn, j$.util.function.f, Iterator {
     boolean a = false;
     double b;
     final /* synthetic */ t c;
 
-    A(t tVar) {
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public A(t tVar) {
         this.c = tVar;
     }
 
+    @Override // j$.util.function.f
     public void accept(double d) {
         this.a = true;
         this.b = d;
     }
 
+    @Override // j$.util.p
     /* renamed from: e */
-    public void forEachRemaining(f fVar) {
+    public void forEachRemaining(j$.util.function.f fVar) {
         fVar.getClass();
         while (hasNext()) {
             fVar.accept(nextDouble());
         }
     }
 
+    @Override // j$.util.InterfaceCLASSNAMEn, j$.util.Iterator
     public void forEachRemaining(Consumer consumer) {
-        if (consumer instanceof f) {
-            forEachRemaining((f) consumer);
+        if (consumer instanceof j$.util.function.f) {
+            forEachRemaining((j$.util.function.f) consumer);
             return;
         }
         consumer.getClass();
@@ -42,6 +44,7 @@ class A implements CLASSNAMEn, f, Iterator {
         }
     }
 
+    @Override // java.util.Iterator, j$.util.Iterator
     public boolean hasNext() {
         if (!this.a) {
             this.c.k(this);
@@ -49,12 +52,15 @@ class A implements CLASSNAMEn, f, Iterator {
         return this.a;
     }
 
-    public f j(f fVar) {
+    @Override // j$.util.function.f
+    public j$.util.function.f j(j$.util.function.f fVar) {
         fVar.getClass();
-        return new e(this, fVar);
+        return new j$.util.function.e(this, fVar);
     }
 
-    public Double next() {
+    @Override // j$.util.InterfaceCLASSNAMEn, java.util.Iterator, j$.util.Iterator
+    /* renamed from: next */
+    public Double mo307next() {
         if (!N.a) {
             return Double.valueOf(nextDouble());
         }
@@ -62,6 +68,7 @@ class A implements CLASSNAMEn, f, Iterator {
         throw null;
     }
 
+    @Override // j$.util.InterfaceCLASSNAMEn
     public double nextDouble() {
         if (this.a || hasNext()) {
             this.a = false;
@@ -70,6 +77,7 @@ class A implements CLASSNAMEn, f, Iterator {
         throw new NoSuchElementException();
     }
 
+    @Override // java.util.Iterator, j$.util.Iterator
     public /* synthetic */ void remove() {
         Iterator.CC.a(this);
         throw null;

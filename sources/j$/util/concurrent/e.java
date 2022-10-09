@@ -1,11 +1,8 @@
 package j$.util.concurrent;
-
+/* loaded from: classes2.dex */
 class e extends ThreadLocal {
-    e() {
-    }
-
-    /* access modifiers changed from: protected */
-    public Object initialValue() {
-        return new i((d) null);
+    @Override // java.lang.ThreadLocal
+    protected Object initialValue() {
+        return new i(null);
     }
 }

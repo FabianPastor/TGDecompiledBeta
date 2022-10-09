@@ -3,18 +3,18 @@ package org.telegram.ui.Components;
 import android.graphics.Typeface;
 import android.text.TextPaint;
 import android.text.style.MetricAffectingSpan;
-
+/* loaded from: classes3.dex */
 public class TypefaceSpan extends MetricAffectingSpan {
     private int color;
     private int textSize;
     private Typeface typeface;
 
-    public TypefaceSpan(Typeface typeface2) {
-        this.typeface = typeface2;
+    public TypefaceSpan(Typeface typeface) {
+        this.typeface = typeface;
     }
 
-    public TypefaceSpan(Typeface typeface2, int i, int i2) {
-        this.typeface = typeface2;
+    public TypefaceSpan(Typeface typeface, int i, int i2) {
+        this.typeface = typeface;
         if (i > 0) {
             this.textSize = i;
         }
@@ -25,26 +25,28 @@ public class TypefaceSpan extends MetricAffectingSpan {
         this.color = i;
     }
 
+    @Override // android.text.style.MetricAffectingSpan
     public void updateMeasureState(TextPaint textPaint) {
-        Typeface typeface2 = this.typeface;
-        if (typeface2 != null) {
-            textPaint.setTypeface(typeface2);
+        Typeface typeface = this.typeface;
+        if (typeface != null) {
+            textPaint.setTypeface(typeface);
         }
         int i = this.textSize;
         if (i != 0) {
-            textPaint.setTextSize((float) i);
+            textPaint.setTextSize(i);
         }
         textPaint.setFlags(textPaint.getFlags() | 128);
     }
 
+    @Override // android.text.style.CharacterStyle
     public void updateDrawState(TextPaint textPaint) {
-        Typeface typeface2 = this.typeface;
-        if (typeface2 != null) {
-            textPaint.setTypeface(typeface2);
+        Typeface typeface = this.typeface;
+        if (typeface != null) {
+            textPaint.setTypeface(typeface);
         }
         int i = this.textSize;
         if (i != 0) {
-            textPaint.setTextSize((float) i);
+            textPaint.setTextSize(i);
         }
         int i2 = this.color;
         if (i2 != 0) {

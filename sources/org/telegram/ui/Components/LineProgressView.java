@@ -8,11 +8,11 @@ import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.Components.voip.CellFlickerDrawable;
-
+/* loaded from: classes3.dex */
 public class LineProgressView extends View {
     private static DecelerateInterpolator decelerateInterpolator;
     private static Paint progressPaint;
-    private float animatedAlphaValue = 1.0f;
+    private float animatedAlphaValue;
     private float animatedProgressValue;
     private float animationProgressStart;
     private int backColor;
@@ -21,16 +21,18 @@ public class LineProgressView extends View {
     private long currentProgressTime;
     private long lastUpdateTime;
     private int progressColor;
-    private RectF rect = new RectF();
+    private RectF rect;
 
     public LineProgressView(Context context) {
         super(context);
+        this.animatedAlphaValue = 1.0f;
+        this.rect = new RectF();
         if (decelerateInterpolator == null) {
             decelerateInterpolator = new DecelerateInterpolator();
             Paint paint = new Paint(1);
             progressPaint = paint;
             paint.setStrokeCap(Paint.Cap.ROUND);
-            progressPaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
+            progressPaint.setStrokeWidth(AndroidUtilities.dp(2.0f));
         }
     }
 
@@ -50,7 +52,7 @@ public class LineProgressView extends View {
                     if (j2 >= 300) {
                         this.animatedProgressValue = f2;
                         this.animationProgressStart = f2;
-                        this.currentProgressTime = 0;
+                        this.currentProgressTime = 0L;
                     } else {
                         this.animatedProgressValue = f3 + (f4 * decelerateInterpolator.getInterpolation(((float) j2) / 300.0f));
                     }
@@ -59,17 +61,19 @@ public class LineProgressView extends View {
             }
         }
         float f5 = this.animatedProgressValue;
-        if (f5 >= 1.0f && f5 == 1.0f) {
-            float f6 = this.animatedAlphaValue;
-            if (f6 != 0.0f) {
-                float f7 = f6 - (((float) j) / 200.0f);
-                this.animatedAlphaValue = f7;
-                if (f7 <= 0.0f) {
-                    this.animatedAlphaValue = 0.0f;
-                }
-                invalidate();
-            }
+        if (f5 < 1.0f || f5 != 1.0f) {
+            return;
         }
+        float f6 = this.animatedAlphaValue;
+        if (f6 == 0.0f) {
+            return;
+        }
+        float f7 = f6 - (((float) j) / 200.0f);
+        this.animatedAlphaValue = f7;
+        if (f7 <= 0.0f) {
+            this.animatedAlphaValue = 0.0f;
+        }
+        invalidate();
     }
 
     public void setProgressColor(int i) {
@@ -91,7 +95,7 @@ public class LineProgressView extends View {
             this.animatedAlphaValue = 1.0f;
         }
         this.currentProgress = f;
-        this.currentProgressTime = 0;
+        this.currentProgressTime = 0L;
         this.lastUpdateTime = System.currentTimeMillis();
         invalidate();
     }
@@ -100,29 +104,30 @@ public class LineProgressView extends View {
         return this.currentProgress;
     }
 
+    @Override // android.view.View
     public void onDraw(Canvas canvas) {
         int i = this.backColor;
-        if (!(i == 0 || this.animatedProgressValue == 1.0f)) {
+        if (i != 0 && this.animatedProgressValue != 1.0f) {
             progressPaint.setColor(i);
             progressPaint.setAlpha((int) (this.animatedAlphaValue * 255.0f));
             getWidth();
-            this.rect.set(0.0f, 0.0f, (float) getWidth(), (float) getHeight());
-            canvas.drawRoundRect(this.rect, ((float) getHeight()) / 2.0f, ((float) getHeight()) / 2.0f, progressPaint);
+            this.rect.set(0.0f, 0.0f, getWidth(), getHeight());
+            canvas.drawRoundRect(this.rect, getHeight() / 2.0f, getHeight() / 2.0f, progressPaint);
         }
         progressPaint.setColor(this.progressColor);
         progressPaint.setAlpha((int) (this.animatedAlphaValue * 255.0f));
-        this.rect.set(0.0f, 0.0f, ((float) getWidth()) * this.animatedProgressValue, (float) getHeight());
-        canvas.drawRoundRect(this.rect, ((float) getHeight()) / 2.0f, ((float) getHeight()) / 2.0f, progressPaint);
+        this.rect.set(0.0f, 0.0f, getWidth() * this.animatedProgressValue, getHeight());
+        canvas.drawRoundRect(this.rect, getHeight() / 2.0f, getHeight() / 2.0f, progressPaint);
         if (this.animatedAlphaValue > 0.0f) {
             if (this.cellFlickerDrawable == null) {
-                CellFlickerDrawable cellFlickerDrawable2 = new CellFlickerDrawable(160, 0);
-                this.cellFlickerDrawable = cellFlickerDrawable2;
-                cellFlickerDrawable2.drawFrame = false;
-                cellFlickerDrawable2.animationSpeedScale = 0.8f;
-                cellFlickerDrawable2.repeatProgress = 1.2f;
+                CellFlickerDrawable cellFlickerDrawable = new CellFlickerDrawable(160, 0);
+                this.cellFlickerDrawable = cellFlickerDrawable;
+                cellFlickerDrawable.drawFrame = false;
+                cellFlickerDrawable.animationSpeedScale = 0.8f;
+                cellFlickerDrawable.repeatProgress = 1.2f;
             }
             this.cellFlickerDrawable.setParentWidth(getMeasuredWidth());
-            this.cellFlickerDrawable.draw(canvas, this.rect, ((float) getHeight()) / 2.0f, (View) null);
+            this.cellFlickerDrawable.draw(canvas, this.rect, getHeight() / 2.0f, null);
             invalidate();
         }
         updateAnimation();

@@ -13,16 +13,20 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Region;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.Layout;
+import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.StaticLayout;
 import android.text.TextPaint;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.ReplacementSpan;
 import android.text.style.URLSpan;
 import android.view.View;
 import android.widget.TextView;
@@ -35,18 +39,17 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
+import java.util.concurrent.atomic.AtomicReference;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.Emoji;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.Utilities;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.Easings;
 import org.telegram.ui.Components.TextStyleSpan;
-
+/* loaded from: classes3.dex */
 public class SpoilerEffect extends Drawable {
-    public static final float[] ALPHAS = {0.3f, 0.6f, 1.0f};
-    public static final int MAX_PARTICLES_PER_ENTITY = measureMaxParticlesCount();
-    public static final int PARTICLES_PER_CHARACTER = measureParticlesPerCharacter();
-    private static Path tempPath = new Path();
     private static Paint xRefPaint;
     public boolean drawPoints;
     private boolean enableAlpha;
@@ -57,21 +60,16 @@ public class SpoilerEffect extends Drawable {
     private long lastDrawTime;
     private int mAlpha;
     private View mParent;
-    /* access modifiers changed from: private */
-    public int maxParticles;
-    /* access modifiers changed from: private */
-    public Runnable onRippleEndCallback;
+    private int maxParticles;
+    private Runnable onRippleEndCallback;
     private Paint[] particlePaints;
     float[][] particlePoints;
     private float[] particleRands;
-    /* access modifiers changed from: private */
-    public ArrayList<Particle> particles;
-    /* access modifiers changed from: private */
-    public Stack<Particle> particlesPool = new Stack<>();
+    private ArrayList<Particle> particles;
+    private Stack<Particle> particlesPool;
     private int[] renderCount;
     private boolean reverseAnimator;
-    /* access modifiers changed from: private */
-    public ValueAnimator rippleAnimator;
+    private ValueAnimator rippleAnimator;
     private TimeInterpolator rippleInterpolator;
     private float rippleMaxRadius;
     private float rippleProgress;
@@ -80,12 +78,17 @@ public class SpoilerEffect extends Drawable {
     private boolean shouldInvalidateColor;
     private List<RectF> spaces;
     private RectF visibleRect;
+    public static final int MAX_PARTICLES_PER_ENTITY = measureMaxParticlesCount();
+    public static final int PARTICLES_PER_CHARACTER = measureParticlesPerCharacter();
+    public static final float[] ALPHAS = {0.3f, 0.6f, 1.0f};
+    private static Path tempPath = new Path();
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public static /* synthetic */ float lambda$new$0(float f) {
         return f;
     }
 
+    @Override // android.graphics.drawable.Drawable
     public int getOpacity() {
         return -2;
     }
@@ -101,11 +104,8 @@ public class SpoilerEffect extends Drawable {
     public SpoilerEffect() {
         float[] fArr = ALPHAS;
         this.particlePaints = new Paint[fArr.length];
-        int length = fArr.length;
-        int[] iArr = new int[2];
-        iArr[1] = MAX_PARTICLES_PER_ENTITY * 2;
-        iArr[0] = length;
-        this.particlePoints = (float[][]) Array.newInstance(float.class, iArr);
+        this.particlesPool = new Stack<>();
+        this.particlePoints = (float[][]) Array.newInstance(float.class, fArr.length, MAX_PARTICLES_PER_ENTITY * 2);
         this.particleRands = new float[14];
         this.renderCount = new int[fArr.length];
         this.particles = new ArrayList<>();
@@ -116,11 +116,11 @@ public class SpoilerEffect extends Drawable {
         for (int i = 0; i < ALPHAS.length; i++) {
             this.particlePaints[i] = new Paint();
             if (i == 0) {
-                this.particlePaints[i].setStrokeWidth((float) AndroidUtilities.dp(1.4f));
+                this.particlePaints[i].setStrokeWidth(AndroidUtilities.dp(1.4f));
                 this.particlePaints[i].setStyle(Paint.Style.STROKE);
                 this.particlePaints[i].setStrokeCap(Paint.Cap.ROUND);
             } else {
-                this.particlePaints[i].setStrokeWidth((float) AndroidUtilities.dp(1.2f));
+                this.particlePaints[i].setStrokeWidth(AndroidUtilities.dp(1.2f));
                 this.particlePaints[i].setStyle(Paint.Style.STROKE);
                 this.particlePaints[i].setStrokeCap(Paint.Cap.ROUND);
             }
@@ -163,18 +163,24 @@ public class SpoilerEffect extends Drawable {
         if (valueAnimator != null) {
             valueAnimator.cancel();
         }
-        int alpha = this.reverseAnimator ? 255 : this.particlePaints[ALPHAS.length - 1].getAlpha();
+        final int alpha = this.reverseAnimator ? 255 : this.particlePaints[ALPHAS.length - 1].getAlpha();
         float[] fArr = new float[2];
         fArr[0] = this.rippleProgress;
         if (z) {
             f4 = 0.0f;
         }
         fArr[1] = f4;
-        ValueAnimator duration = ValueAnimator.ofFloat(fArr).setDuration((long) MathUtils.clamp(this.rippleMaxRadius * 0.3f, 250.0f, 550.0f));
+        ValueAnimator duration = ValueAnimator.ofFloat(fArr).setDuration(MathUtils.clamp(this.rippleMaxRadius * 0.3f, 250.0f, 550.0f));
         this.rippleAnimator = duration;
         duration.setInterpolator(this.rippleInterpolator);
-        this.rippleAnimator.addUpdateListener(new SpoilerEffect$$ExternalSyntheticLambda1(this, alpha));
-        this.rippleAnimator.addListener(new AnimatorListenerAdapter() {
+        this.rippleAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() { // from class: org.telegram.ui.Components.spoilers.SpoilerEffect$$ExternalSyntheticLambda1
+            @Override // android.animation.ValueAnimator.AnimatorUpdateListener
+            public final void onAnimationUpdate(ValueAnimator valueAnimator2) {
+                SpoilerEffect.this.lambda$startRipple$1(alpha, valueAnimator2);
+            }
+        });
+        this.rippleAnimator.addListener(new AnimatorListenerAdapter() { // from class: org.telegram.ui.Components.spoilers.SpoilerEffect.1
+            @Override // android.animation.AnimatorListenerAdapter, android.animation.Animator.AnimatorListener
             public void onAnimationEnd(Animator animator) {
                 Iterator it = SpoilerEffect.this.particles.iterator();
                 while (it.hasNext()) {
@@ -186,9 +192,9 @@ public class SpoilerEffect extends Drawable {
                 }
                 if (SpoilerEffect.this.onRippleEndCallback != null) {
                     SpoilerEffect.this.onRippleEndCallback.run();
-                    Runnable unused = SpoilerEffect.this.onRippleEndCallback = null;
+                    SpoilerEffect.this.onRippleEndCallback = null;
                 }
-                ValueAnimator unused2 = SpoilerEffect.this.rippleAnimator = null;
+                SpoilerEffect.this.rippleAnimator = null;
                 SpoilerEffect.this.invalidateSelf();
             }
         });
@@ -196,11 +202,11 @@ public class SpoilerEffect extends Drawable {
         invalidateSelf();
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$startRipple$1(int i, ValueAnimator valueAnimator) {
         float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         this.rippleProgress = floatValue;
-        setAlpha((int) (((float) i) * (1.0f - floatValue)));
+        setAlpha((int) (i * (1.0f - floatValue)));
         this.shouldInvalidateColor = true;
         invalidateSelf();
     }
@@ -237,6 +243,7 @@ public class SpoilerEffect extends Drawable {
         this.shouldInvalidateColor = true;
     }
 
+    @Override // android.graphics.drawable.Drawable
     public void setBounds(int i, int i2, int i3, int i4) {
         super.setBounds(i, i2, i3, i4);
         Iterator<Particle> it = this.particles.iterator();
@@ -251,13 +258,14 @@ public class SpoilerEffect extends Drawable {
         }
     }
 
+    @Override // android.graphics.drawable.Drawable
     public void draw(Canvas canvas) {
         Particle particle;
         int i;
         float f;
         if (this.drawPoints) {
             long currentTimeMillis = System.currentTimeMillis();
-            int min = (int) Math.min(currentTimeMillis - this.lastDrawTime, 34);
+            int min = (int) Math.min(currentTimeMillis - this.lastDrawTime, 34L);
             this.lastDrawTime = currentTimeMillis;
             int i2 = getBounds().left;
             int i3 = getBounds().top;
@@ -269,124 +277,98 @@ public class SpoilerEffect extends Drawable {
             int i7 = 0;
             while (i7 < this.particles.size()) {
                 Particle particle2 = this.particles.get(i7);
-                float f2 = (float) min;
-                float unused = particle2.currentTime = Math.min(particle2.currentTime + f2, particle2.lifeTime);
-                if (particle2.currentTime < particle2.lifeTime) {
-                    float f3 = f2;
-                    if (!isOutOfBounds(i2, i3, i4, i5, particle2.x, particle2.y)) {
-                        float access$900 = (particle2.velocity * f3) / 500.0f;
-                        Particle.access$516(particle2, particle2.vecX * access$900);
-                        Particle.access$616(particle2, particle2.vecY * access$900);
-                        int access$1200 = particle2.alpha;
-                        this.particlePoints[access$1200][this.renderCount[access$1200] * 2] = particle2.x;
-                        this.particlePoints[access$1200][(this.renderCount[access$1200] * 2) + 1] = particle2.y;
-                        int[] iArr = this.renderCount;
-                        iArr[access$1200] = iArr[access$1200] + 1;
-                        i7++;
+                float f2 = min;
+                particle2.currentTime = Math.min(particle2.currentTime + f2, particle2.lifeTime);
+                if (particle2.currentTime >= particle2.lifeTime || isOutOfBounds(i2, i3, i4, i5, particle2.x, particle2.y)) {
+                    if (this.particlesPool.size() < this.maxParticles) {
+                        this.particlesPool.push(particle2);
                     }
+                    this.particles.remove(i7);
+                    i7--;
+                } else {
+                    float f3 = (particle2.velocity * f2) / 500.0f;
+                    Particle.access$516(particle2, particle2.vecX * f3);
+                    Particle.access$616(particle2, particle2.vecY * f3);
+                    int i8 = particle2.alpha;
+                    this.particlePoints[i8][this.renderCount[i8] * 2] = particle2.x;
+                    this.particlePoints[i8][(this.renderCount[i8] * 2) + 1] = particle2.y;
+                    int[] iArr = this.renderCount;
+                    iArr[i8] = iArr[i8] + 1;
                 }
-                if (this.particlesPool.size() < this.maxParticles) {
-                    this.particlesPool.push(particle2);
-                }
-                this.particles.remove(i7);
-                i7--;
                 i7++;
             }
             int size = this.particles.size();
-            int i8 = this.maxParticles;
-            if (size < i8) {
-                int size2 = i8 - this.particles.size();
+            int i9 = this.maxParticles;
+            if (size < i9) {
+                int size2 = i9 - this.particles.size();
                 float f4 = -1.0f;
                 Arrays.fill(this.particleRands, -1.0f);
-                int i9 = 0;
-                while (i9 < size2) {
+                int i10 = 0;
+                while (i10 < size2) {
                     float[] fArr = this.particleRands;
-                    int i10 = i9 % 14;
-                    float f5 = fArr[i10];
+                    int i11 = i10 % 14;
+                    float f5 = fArr[i11];
                     if (f5 == f4) {
                         f5 = Utilities.fastRandom.nextFloat();
-                        fArr[i10] = f5;
+                        fArr[i11] = f5;
                     }
                     float f6 = f5;
                     Particle pop = !this.particlesPool.isEmpty() ? this.particlesPool.pop() : new Particle();
-                    int i11 = 0;
+                    int i12 = 0;
                     while (true) {
-                        generateRandomLocation(pop, i9);
-                        float access$500 = pop.x;
-                        float access$600 = pop.y;
-                        int i12 = i11 + 1;
+                        generateRandomLocation(pop, i10);
+                        int i13 = i12 + 1;
                         particle = pop;
-                        float f7 = access$500;
                         i = size2;
                         f = f6;
-                        if (!isOutOfBounds(i2, i3, i4, i5, f7, access$600) || i12 >= 4) {
-                            double d = (double) f;
-                            Double.isNaN(d);
-                            double d2 = ((d * 3.141592653589793d) * 2.0d) - 3.141592653589793d;
-                            float unused2 = particle.vecX = (float) Math.cos(d2);
-                            float unused3 = particle.vecY = (float) Math.sin(d2);
-                            float unused4 = particle.currentTime = 0.0f;
-                            float unused5 = particle.lifeTime = (float) (Math.abs(Utilities.fastRandom.nextInt(2000)) + 1000);
-                            float unused6 = particle.velocity = (f * 6.0f) + 4.0f;
-                            int unused7 = particle.alpha = Utilities.fastRandom.nextInt(ALPHAS.length);
-                            this.particles.add(particle);
-                            int access$12002 = particle.alpha;
-                            this.particlePoints[access$12002][this.renderCount[access$12002] * 2] = particle.x;
-                            this.particlePoints[access$12002][(this.renderCount[access$12002] * 2) + 1] = particle.y;
-                            int[] iArr2 = this.renderCount;
-                            iArr2[access$12002] = iArr2[access$12002] + 1;
-                            i9++;
-                            size2 = i;
-                            f4 = -1.0f;
-                        } else {
+                        if (isOutOfBounds(i2, i3, i4, i5, pop.x, pop.y) && i13 < 4) {
                             f6 = f;
                             pop = particle;
-                            i11 = i12;
+                            i12 = i13;
                             size2 = i;
                         }
                     }
-                    double d3 = (double) f;
-                    Double.isNaN(d3);
-                    double d22 = ((d3 * 3.141592653589793d) * 2.0d) - 3.141592653589793d;
-                    float unused8 = particle.vecX = (float) Math.cos(d22);
-                    float unused9 = particle.vecY = (float) Math.sin(d22);
-                    float unused10 = particle.currentTime = 0.0f;
-                    float unused11 = particle.lifeTime = (float) (Math.abs(Utilities.fastRandom.nextInt(2000)) + 1000);
-                    float unused12 = particle.velocity = (f * 6.0f) + 4.0f;
-                    int unused13 = particle.alpha = Utilities.fastRandom.nextInt(ALPHAS.length);
+                    double d = f;
+                    Double.isNaN(d);
+                    double d2 = ((d * 3.141592653589793d) * 2.0d) - 3.141592653589793d;
+                    particle.vecX = (float) Math.cos(d2);
+                    particle.vecY = (float) Math.sin(d2);
+                    particle.currentTime = 0.0f;
+                    particle.lifeTime = Math.abs(Utilities.fastRandom.nextInt(2000)) + 1000;
+                    particle.velocity = (f * 6.0f) + 4.0f;
+                    particle.alpha = Utilities.fastRandom.nextInt(ALPHAS.length);
                     this.particles.add(particle);
-                    int access$120022 = particle.alpha;
-                    this.particlePoints[access$120022][this.renderCount[access$120022] * 2] = particle.x;
-                    this.particlePoints[access$120022][(this.renderCount[access$120022] * 2) + 1] = particle.y;
-                    int[] iArr22 = this.renderCount;
-                    iArr22[access$120022] = iArr22[access$120022] + 1;
-                    i9++;
+                    int i14 = particle.alpha;
+                    this.particlePoints[i14][this.renderCount[i14] * 2] = particle.x;
+                    this.particlePoints[i14][(this.renderCount[i14] * 2) + 1] = particle.y;
+                    int[] iArr2 = this.renderCount;
+                    iArr2[i14] = iArr2[i14] + 1;
+                    i10++;
                     size2 = i;
                     f4 = -1.0f;
                 }
             }
             for (int length = this.enableAlpha ? 0 : ALPHAS.length - 1; length < ALPHAS.length; length++) {
-                int i13 = 0;
-                int i14 = 0;
-                for (int i15 = 0; i15 < this.particles.size(); i15++) {
-                    Particle particle3 = this.particles.get(i15);
+                int i15 = 0;
+                int i16 = 0;
+                for (int i17 = 0; i17 < this.particles.size(); i17++) {
+                    Particle particle3 = this.particles.get(i17);
                     RectF rectF = this.visibleRect;
                     if ((rectF == null || rectF.contains(particle3.x, particle3.y)) && (particle3.alpha == length || !this.enableAlpha)) {
-                        int i16 = (i15 - i14) * 2;
-                        this.particlePoints[length][i16] = particle3.x;
-                        this.particlePoints[length][i16 + 1] = particle3.y;
-                        i13 += 2;
+                        int i18 = (i17 - i16) * 2;
+                        this.particlePoints[length][i18] = particle3.x;
+                        this.particlePoints[length][i18 + 1] = particle3.y;
+                        i15 += 2;
                     } else {
-                        i14++;
+                        i16++;
                     }
                 }
-                canvas.drawPoints(this.particlePoints[length], 0, i13, this.particlePaints[length]);
+                canvas.drawPoints(this.particlePoints[length], 0, i15, this.particlePaints[length]);
             }
             return;
         }
-        Canvas canvas2 = canvas;
         SpoilerEffectBitmapFactory.getInstance().getPaint().setColorFilter(new PorterDuffColorFilter(this.lastColor, PorterDuff.Mode.SRC_IN));
-        canvas.drawRect((float) getBounds().left, (float) getBounds().top, (float) getBounds().right, (float) getBounds().bottom, SpoilerEffectBitmapFactory.getInstance().getPaint());
+        canvas.drawRect(getBounds().left, getBounds().top, getBounds().right, getBounds().bottom, SpoilerEffectBitmapFactory.getInstance().getPaint());
         invalidateSelf();
         SpoilerEffectBitmapFactory.getInstance().checkUpdate();
     }
@@ -404,7 +386,7 @@ public class SpoilerEffect extends Drawable {
     }
 
     private boolean isOutOfBounds(int i, int i2, int i3, int i4, float f, float f2) {
-        if (f < ((float) i) || f > ((float) i3) || f2 < ((float) (i2 + AndroidUtilities.dp(2.5f))) || f2 > ((float) (i4 - AndroidUtilities.dp(2.5f)))) {
+        if (f < i || f > i3 || f2 < i2 + AndroidUtilities.dp(2.5f) || f2 > i4 - AndroidUtilities.dp(2.5f)) {
             return true;
         }
         for (int i5 = 0; i5 < this.spaces.size(); i5++) {
@@ -417,28 +399,28 @@ public class SpoilerEffect extends Drawable {
 
     private void generateRandomLocation(Particle particle, int i) {
         List<Long> list = this.keyPoints;
-        if (list == null || list.isEmpty()) {
-            float unused = particle.x = ((float) getBounds().left) + (Utilities.fastRandom.nextFloat() * ((float) getBounds().width()));
-            float unused2 = particle.y = ((float) getBounds().top) + (Utilities.fastRandom.nextFloat() * ((float) getBounds().height()));
+        if (list != null && !list.isEmpty()) {
+            float f = this.particleRands[i % 14];
+            List<Long> list2 = this.keyPoints;
+            long longValue = list2.get(Utilities.fastRandom.nextInt(list2.size())).longValue();
+            particle.x = (((float) (getBounds().left + (longValue >> 16))) + (AndroidUtilities.dp(5.0f) * f)) - AndroidUtilities.dp(2.5f);
+            particle.y = (((float) (getBounds().top + (longValue & 65535))) + (f * AndroidUtilities.dp(5.0f))) - AndroidUtilities.dp(2.5f);
             return;
         }
-        float f = this.particleRands[i % 14];
-        List<Long> list2 = this.keyPoints;
-        long longValue = list2.get(Utilities.fastRandom.nextInt(list2.size())).longValue();
-        float unused3 = particle.x = (((float) (((long) getBounds().left) + (longValue >> 16))) + (((float) AndroidUtilities.dp(5.0f)) * f)) - ((float) AndroidUtilities.dp(2.5f));
-        float unused4 = particle.y = (((float) (((long) getBounds().top) + (longValue & 65535))) + (f * ((float) AndroidUtilities.dp(5.0f)))) - ((float) AndroidUtilities.dp(2.5f));
+        particle.x = getBounds().left + (Utilities.fastRandom.nextFloat() * getBounds().width());
+        particle.y = getBounds().top + (Utilities.fastRandom.nextFloat() * getBounds().height());
     }
 
+    @Override // android.graphics.drawable.Drawable
     public void invalidateSelf() {
         super.invalidateSelf();
         View view = this.mParent;
-        if (view == null) {
-            return;
-        }
-        if (view.getParent() == null || !this.invalidateParent) {
-            view.invalidate();
-        } else {
-            ((View) view.getParent()).invalidate();
+        if (view != null) {
+            if (view.getParent() != null && this.invalidateParent) {
+                ((View) view.getParent()).invalidate();
+            } else {
+                view.invalidate();
+            }
         }
     }
 
@@ -450,13 +432,14 @@ public class SpoilerEffect extends Drawable {
         return this.mParent;
     }
 
+    @Override // android.graphics.drawable.Drawable
     public void setAlpha(int i) {
         this.mAlpha = i;
         int i2 = 0;
         while (true) {
             float[] fArr = ALPHAS;
             if (i2 < fArr.length) {
-                this.particlePaints[i2].setAlpha((int) (fArr[i2] * ((float) i)));
+                this.particlePaints[i2].setAlpha((int) (fArr[i2] * i));
                 i2++;
             } else {
                 return;
@@ -464,9 +447,10 @@ public class SpoilerEffect extends Drawable {
         }
     }
 
+    @Override // android.graphics.drawable.Drawable
     public void setColorFilter(ColorFilter colorFilter) {
-        for (Paint colorFilter2 : this.particlePaints) {
-            colorFilter2.setColorFilter(colorFilter);
+        for (Paint paint : this.particlePaints) {
+            paint.setColorFilter(colorFilter);
         }
     }
 
@@ -476,7 +460,7 @@ public class SpoilerEffect extends Drawable {
             while (true) {
                 float[] fArr = ALPHAS;
                 if (i2 < fArr.length) {
-                    this.particlePaints[i2].setColor(ColorUtils.setAlphaComponent(i, (int) (((float) this.mAlpha) * fArr[i2])));
+                    this.particlePaints[i2].setColor(ColorUtils.setAlphaComponent(i, (int) (this.mAlpha * fArr[i2])));
                     i2++;
                 } else {
                     this.lastColor = i;
@@ -490,32 +474,29 @@ public class SpoilerEffect extends Drawable {
         synchronized (SpoilerEffect.class) {
             int width = layout.getWidth();
             int height = layout.getHeight();
-            if (width > 0) {
-                if (height > 0) {
-                    Bitmap createBitmap = Bitmap.createBitmap(Math.round((float) width), Math.round((float) height), Bitmap.Config.ARGB_4444);
-                    layout.draw(new Canvas(createBitmap));
-                    int width2 = createBitmap.getWidth() * createBitmap.getHeight();
-                    int[] iArr = new int[width2];
-                    createBitmap.getPixels(iArr, 0, createBitmap.getWidth(), 0, 0, width, height);
-                    ArrayList arrayList = new ArrayList(width2);
-                    int i = -1;
-                    for (int i2 = 0; i2 < width; i2++) {
-                        for (int i3 = 0; i3 < height; i3++) {
-                            if (Color.alpha(iArr[(createBitmap.getWidth() * i3) + i2]) >= 128) {
-                                if (i == -1) {
-                                    i = i2;
-                                }
-                                arrayList.add(Long.valueOf((((long) (i2 - i)) << 16) + ((long) i3)));
+            if (width > 0 && height > 0) {
+                Bitmap createBitmap = Bitmap.createBitmap(Math.round(width), Math.round(height), Bitmap.Config.ARGB_4444);
+                layout.draw(new Canvas(createBitmap));
+                int width2 = createBitmap.getWidth() * createBitmap.getHeight();
+                int[] iArr = new int[width2];
+                createBitmap.getPixels(iArr, 0, createBitmap.getWidth(), 0, 0, width, height);
+                ArrayList arrayList = new ArrayList(width2);
+                int i = -1;
+                for (int i2 = 0; i2 < width; i2++) {
+                    for (int i3 = 0; i3 < height; i3++) {
+                        if (Color.alpha(iArr[(createBitmap.getWidth() * i3) + i2]) >= 128) {
+                            if (i == -1) {
+                                i = i2;
                             }
+                            arrayList.add(Long.valueOf(((i2 - i) << 16) + i3));
                         }
                     }
-                    arrayList.trimToSize();
-                    createBitmap.recycle();
-                    return arrayList;
                 }
+                arrayList.trimToSize();
+                createBitmap.recycle();
+                return arrayList;
             }
-            List<Long> emptyList = Collections.emptyList();
-            return emptyList;
+            return Collections.emptyList();
         }
     }
 
@@ -539,478 +520,280 @@ public class SpoilerEffect extends Drawable {
     public static void addSpoilers(View view, Layout layout, Spanned spanned, Stack<SpoilerEffect> stack, List<SpoilerEffect> list) {
         int i;
         int i2;
-        int i3;
         TextStyleSpan[] textStyleSpanArr;
+        int i3;
         int i4;
-        int i5;
         float f;
         float f2;
-        Layout layout2 = layout;
-        Spanned spanned2 = spanned;
+        int i5;
         int i6 = 0;
         while (i6 < layout.getLineCount()) {
-            float lineLeft = layout2.getLineLeft(i6);
-            float lineTop = (float) layout2.getLineTop(i6);
-            float lineRight = layout2.getLineRight(i6);
-            float lineBottom = (float) layout2.getLineBottom(i6);
-            int lineStart = layout2.getLineStart(i6);
-            int lineEnd = layout2.getLineEnd(i6);
-            TextStyleSpan[] textStyleSpanArr2 = (TextStyleSpan[]) spanned2.getSpans(lineStart, lineEnd, TextStyleSpan.class);
+            float lineLeft = layout.getLineLeft(i6);
+            float lineTop = layout.getLineTop(i6);
+            float lineRight = layout.getLineRight(i6);
+            float lineBottom = layout.getLineBottom(i6);
+            int lineStart = layout.getLineStart(i6);
+            int lineEnd = layout.getLineEnd(i6);
+            TextStyleSpan[] textStyleSpanArr2 = (TextStyleSpan[]) spanned.getSpans(lineStart, lineEnd, TextStyleSpan.class);
             int length = textStyleSpanArr2.length;
             int i7 = 0;
             while (i7 < length) {
                 TextStyleSpan textStyleSpan = textStyleSpanArr2[i7];
                 if (textStyleSpan.isSpoiler()) {
-                    int spanStart = spanned2.getSpanStart(textStyleSpan);
-                    int spanEnd = spanned2.getSpanEnd(textStyleSpan);
+                    int spanStart = spanned.getSpanStart(textStyleSpan);
+                    int spanEnd = spanned.getSpanEnd(textStyleSpan);
                     int max = Math.max(lineStart, spanStart);
                     int min = Math.min(lineEnd, spanEnd);
                     if (min - max != 0) {
-                        i5 = i7;
-                        i4 = length;
+                        i = i7;
+                        i2 = length;
                         textStyleSpanArr = textStyleSpanArr2;
                         i3 = lineEnd;
-                        float f3 = lineBottom;
-                        i2 = lineStart;
-                        int i8 = max;
-                        f2 = lineBottom;
-                        int i9 = min;
-                        f = lineTop;
-                        i = i6;
-                        addSpoilersInternal(view, spanned, layout, lineStart, lineEnd, lineLeft, lineTop, lineRight, f3, i8, i9, stack, list);
-                        i7 = i5 + 1;
-                        lineBottom = f2;
-                        lineTop = f;
-                        length = i4;
+                        i4 = lineStart;
+                        f = lineBottom;
+                        f2 = lineTop;
+                        i5 = i6;
+                        addSpoilersInternal(view, spanned, layout, lineStart, lineEnd, lineLeft, lineTop, lineRight, lineBottom, max, min, stack, list);
+                        i7 = i + 1;
+                        lineBottom = f;
+                        lineTop = f2;
+                        length = i2;
                         textStyleSpanArr2 = textStyleSpanArr;
                         lineEnd = i3;
-                        lineStart = i2;
-                        i6 = i;
+                        lineStart = i4;
+                        i6 = i5;
                     }
                 }
-                i5 = i7;
-                i4 = length;
+                i = i7;
+                i2 = length;
                 textStyleSpanArr = textStyleSpanArr2;
                 i3 = lineEnd;
-                i2 = lineStart;
-                f2 = lineBottom;
-                f = lineTop;
-                i = i6;
-                i7 = i5 + 1;
-                lineBottom = f2;
-                lineTop = f;
-                length = i4;
+                i4 = lineStart;
+                f = lineBottom;
+                f2 = lineTop;
+                i5 = i6;
+                i7 = i + 1;
+                lineBottom = f;
+                lineTop = f2;
+                length = i2;
                 textStyleSpanArr2 = textStyleSpanArr;
                 lineEnd = i3;
-                lineStart = i2;
-                i6 = i;
+                lineStart = i4;
+                i6 = i5;
             }
             i6++;
         }
-        if ((view instanceof TextView) && stack != null) {
-            stack.clear();
+        if (!(view instanceof TextView) || stack == null) {
+            return;
         }
+        stack.clear();
     }
 
     @SuppressLint({"WrongConstant"})
     private static void addSpoilersInternal(View view, Spanned spanned, Layout layout, int i, int i2, float f, float f2, float f3, float f4, int i3, int i4, Stack<SpoilerEffect> stack, List<SpoilerEffect> list) {
         StaticLayout staticLayout;
         int i5;
-        float f5;
         int i6;
-        View view2 = view;
-        Spanned spanned2 = spanned;
-        Layout layout2 = layout;
-        int i7 = i2;
-        int i8 = i3;
-        int i9 = i4;
-        Stack<SpoilerEffect> stack2 = stack;
-        SpannableStringBuilder valueOf = SpannableStringBuilder.valueOf(AndroidUtilities.replaceNewLines(new SpannableStringBuilder(spanned2, i8, i9)));
-        for (TextStyleSpan removeSpan : (TextStyleSpan[]) valueOf.getSpans(0, valueOf.length(), TextStyleSpan.class)) {
-            valueOf.removeSpan(removeSpan);
+        SpannableStringBuilder valueOf = SpannableStringBuilder.valueOf(AndroidUtilities.replaceNewLines(new SpannableStringBuilder(spanned, i3, i4)));
+        for (TextStyleSpan textStyleSpan : (TextStyleSpan[]) valueOf.getSpans(0, valueOf.length(), TextStyleSpan.class)) {
+            valueOf.removeSpan(textStyleSpan);
         }
-        for (URLSpan removeSpan2 : (URLSpan[]) valueOf.getSpans(0, valueOf.length(), URLSpan.class)) {
-            valueOf.removeSpan(removeSpan2);
+        for (URLSpan uRLSpan : (URLSpan[]) valueOf.getSpans(0, valueOf.length(), URLSpan.class)) {
+            valueOf.removeSpan(uRLSpan);
         }
-        if (valueOf.toString().trim().length() != 0) {
-            int ellipsizedWidth = layout.getEllipsizedWidth() > 0 ? layout.getEllipsizedWidth() : layout.getWidth();
-            TextPaint textPaint = new TextPaint(layout.getPaint());
-            textPaint.setColor(-16777216);
-            if (Build.VERSION.SDK_INT >= 24) {
-                staticLayout = StaticLayout.Builder.obtain(valueOf, 0, valueOf.length(), textPaint, ellipsizedWidth).setBreakStrategy(1).setHyphenationFrequency(0).setAlignment(Layout.Alignment.ALIGN_NORMAL).setLineSpacing(layout.getSpacingAdd(), layout.getSpacingMultiplier()).build();
-                i5 = 0;
-            } else {
-                i5 = 0;
-                staticLayout = new StaticLayout(valueOf, textPaint, ellipsizedWidth, Layout.Alignment.ALIGN_NORMAL, layout.getSpacingMultiplier(), layout.getSpacingAdd(), false);
-            }
-            boolean z = (LocaleController.isRTLCharacter(valueOf.charAt(i5)) || LocaleController.isRTLCharacter(valueOf.charAt(valueOf.length() + -1))) && !LocaleController.isRTL;
-            SpoilerEffect spoilerEffect = (stack2 == null || stack.isEmpty()) ? new SpoilerEffect() : (SpoilerEffect) stack2.remove(i5);
-            spoilerEffect.setRippleProgress(-1.0f);
-            if (i8 == i) {
-                f5 = f;
-            } else {
-                f5 = layout2.getPrimaryHorizontal(i8);
-            }
-            float primaryHorizontal = (i9 == i7 || (z && i9 == (i6 = i7 + -1) && spanned2.charAt(i6) == 8230)) ? f3 : layout2.getPrimaryHorizontal(i9);
-            spoilerEffect.setBounds((int) Math.min(f5, primaryHorizontal), (int) f2, (int) Math.max(f5, primaryHorizontal), (int) f4);
-            spoilerEffect.setColor(layout.getPaint().getColor());
-            spoilerEffect.setRippleInterpolator(Easings.easeInQuad);
-            if (!spoilerEffect.isLowDevice) {
-                spoilerEffect.setKeyPoints(measureKeyPoints(staticLayout));
-            }
-            spoilerEffect.updateMaxParticles();
-            View view3 = view;
-            if (view3 != null) {
-                spoilerEffect.setParentView(view3);
-            }
-            spoilerEffect.spaces.clear();
-            for (int i10 = 0; i10 < valueOf.length(); i10++) {
-                if (valueOf.charAt(i10) == ' ') {
-                    RectF rectF = new RectF();
-                    int i11 = i8 + i10;
-                    int lineForOffset = layout2.getLineForOffset(i11);
-                    rectF.top = (float) layout2.getLineTop(lineForOffset);
-                    rectF.bottom = (float) layout2.getLineBottom(lineForOffset);
-                    float primaryHorizontal2 = layout2.getPrimaryHorizontal(i11);
-                    float primaryHorizontal3 = layout2.getPrimaryHorizontal(i11 + 1);
-                    rectF.left = (float) ((int) Math.min(primaryHorizontal2, primaryHorizontal3));
-                    rectF.right = (float) ((int) Math.max(primaryHorizontal2, primaryHorizontal3));
-                    if (Math.abs(primaryHorizontal2 - primaryHorizontal3) <= ((float) AndroidUtilities.dp(20.0f))) {
-                        spoilerEffect.spaces.add(rectF);
-                    }
+        if (valueOf.toString().trim().length() == 0) {
+            return;
+        }
+        int ellipsizedWidth = layout.getEllipsizedWidth() > 0 ? layout.getEllipsizedWidth() : layout.getWidth();
+        TextPaint textPaint = new TextPaint(layout.getPaint());
+        textPaint.setColor(-16777216);
+        if (Build.VERSION.SDK_INT >= 24) {
+            staticLayout = StaticLayout.Builder.obtain(valueOf, 0, valueOf.length(), textPaint, ellipsizedWidth).setBreakStrategy(1).setHyphenationFrequency(0).setAlignment(Layout.Alignment.ALIGN_NORMAL).setLineSpacing(layout.getSpacingAdd(), layout.getSpacingMultiplier()).build();
+            i5 = 0;
+        } else {
+            i5 = 0;
+            staticLayout = new StaticLayout(valueOf, textPaint, ellipsizedWidth, Layout.Alignment.ALIGN_NORMAL, layout.getSpacingMultiplier(), layout.getSpacingAdd(), false);
+        }
+        boolean z = (LocaleController.isRTLCharacter(valueOf.charAt(i5)) || LocaleController.isRTLCharacter(valueOf.charAt(valueOf.length() + (-1)))) && !LocaleController.isRTL;
+        SpoilerEffect spoilerEffect = (stack == null || stack.isEmpty()) ? new SpoilerEffect() : stack.remove(i5);
+        spoilerEffect.setRippleProgress(-1.0f);
+        float primaryHorizontal = i3 == i ? f : layout.getPrimaryHorizontal(i3);
+        float primaryHorizontal2 = (i4 == i2 || (z && i4 == (i6 = i2 + (-1)) && spanned.charAt(i6) == 8230)) ? f3 : layout.getPrimaryHorizontal(i4);
+        spoilerEffect.setBounds((int) Math.min(primaryHorizontal, primaryHorizontal2), (int) f2, (int) Math.max(primaryHorizontal, primaryHorizontal2), (int) f4);
+        spoilerEffect.setColor(layout.getPaint().getColor());
+        spoilerEffect.setRippleInterpolator(Easings.easeInQuad);
+        if (!spoilerEffect.isLowDevice) {
+            spoilerEffect.setKeyPoints(measureKeyPoints(staticLayout));
+        }
+        spoilerEffect.updateMaxParticles();
+        if (view != null) {
+            spoilerEffect.setParentView(view);
+        }
+        spoilerEffect.spaces.clear();
+        for (int i7 = 0; i7 < valueOf.length(); i7++) {
+            if (valueOf.charAt(i7) == ' ') {
+                RectF rectF = new RectF();
+                int i8 = i3 + i7;
+                int lineForOffset = layout.getLineForOffset(i8);
+                rectF.top = layout.getLineTop(lineForOffset);
+                rectF.bottom = layout.getLineBottom(lineForOffset);
+                float primaryHorizontal3 = layout.getPrimaryHorizontal(i8);
+                float primaryHorizontal4 = layout.getPrimaryHorizontal(i8 + 1);
+                rectF.left = (int) Math.min(primaryHorizontal3, primaryHorizontal4);
+                rectF.right = (int) Math.max(primaryHorizontal3, primaryHorizontal4);
+                if (Math.abs(primaryHorizontal3 - primaryHorizontal4) <= AndroidUtilities.dp(20.0f)) {
+                    spoilerEffect.spaces.add(rectF);
                 }
             }
-            list.add(spoilerEffect);
         }
+        list.add(spoilerEffect);
     }
 
     public static void clipOutCanvas(Canvas canvas, List<SpoilerEffect> list) {
         tempPath.rewind();
-        for (SpoilerEffect bounds : list) {
-            Rect bounds2 = bounds.getBounds();
-            tempPath.addRect((float) bounds2.left, (float) bounds2.top, (float) bounds2.right, (float) bounds2.bottom, Path.Direction.CW);
+        for (SpoilerEffect spoilerEffect : list) {
+            Rect bounds = spoilerEffect.getBounds();
+            tempPath.addRect(bounds.left, bounds.top, bounds.right, bounds.bottom, Path.Direction.CW);
         }
         canvas.clipPath(tempPath, Region.Op.DIFFERENCE);
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:11:0x0045, code lost:
-        if (r5 != r6) goto L_0x0047;
-     */
-    @android.annotation.SuppressLint({"WrongConstant"})
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public static void renderWithRipple(android.view.View r22, boolean r23, int r24, int r25, java.util.concurrent.atomic.AtomicReference<android.text.Layout> r26, android.text.Layout r27, java.util.List<org.telegram.ui.Components.spoilers.SpoilerEffect> r28, android.graphics.Canvas r29, boolean r30) {
-        /*
-            r0 = r22
-            r1 = r24
-            r2 = r27
-            r3 = r28
-            r11 = r29
-            boolean r4 = r28.isEmpty()
-            if (r4 == 0) goto L_0x0014
-            r2.draw(r11)
-            return
-        L_0x0014:
-            java.lang.Object r4 = r26.get()
-            android.text.Layout r4 = (android.text.Layout) r4
-            r13 = 0
-            if (r4 == 0) goto L_0x0047
-            java.lang.CharSequence r5 = r27.getText()
-            java.lang.String r5 = r5.toString()
-            java.lang.CharSequence r6 = r4.getText()
-            java.lang.String r6 = r6.toString()
-            boolean r5 = r5.equals(r6)
-            if (r5 == 0) goto L_0x0047
-            int r5 = r27.getWidth()
-            int r6 = r4.getWidth()
-            if (r5 != r6) goto L_0x0047
-            int r5 = r27.getHeight()
-            int r6 = r4.getHeight()
-            if (r5 == r6) goto L_0x0134
-        L_0x0047:
-            android.text.SpannableStringBuilder r15 = new android.text.SpannableStringBuilder
-            java.lang.CharSequence r4 = r27.getText()
-            r15.<init>(r4)
-            java.lang.CharSequence r4 = r27.getText()
-            boolean r4 = r4 instanceof android.text.Spannable
-            if (r4 == 0) goto L_0x00dc
-            java.lang.CharSequence r4 = r27.getText()
-            android.text.Spannable r4 = (android.text.Spannable) r4
-            int r5 = r4.length()
-            java.lang.Class<org.telegram.ui.Components.TextStyleSpan> r6 = org.telegram.ui.Components.TextStyleSpan.class
-            java.lang.Object[] r5 = r4.getSpans(r13, r5, r6)
-            org.telegram.ui.Components.TextStyleSpan[] r5 = (org.telegram.ui.Components.TextStyleSpan[]) r5
-            int r6 = r5.length
-            r7 = 0
-        L_0x006c:
-            if (r7 >= r6) goto L_0x00dc
-            r8 = r5[r7]
-            boolean r9 = r8.isSpoiler()
-            if (r9 == 0) goto L_0x00d0
-            int r9 = r4.getSpanStart(r8)
-            int r10 = r4.getSpanEnd(r8)
-            java.lang.Class<org.telegram.messenger.Emoji$EmojiSpan> r14 = org.telegram.messenger.Emoji.EmojiSpan.class
-            java.lang.Object[] r9 = r4.getSpans(r9, r10, r14)
-            org.telegram.messenger.Emoji$EmojiSpan[] r9 = (org.telegram.messenger.Emoji.EmojiSpan[]) r9
-            int r10 = r9.length
-            r14 = 0
-        L_0x0088:
-            if (r14 >= r10) goto L_0x00b3
-            r12 = r9[r14]
-            org.telegram.ui.Components.spoilers.SpoilerEffect$2 r13 = new org.telegram.ui.Components.spoilers.SpoilerEffect$2
-            r13.<init>()
-            r16 = r5
-            int r5 = r4.getSpanStart(r12)
-            r17 = r6
-            int r6 = r4.getSpanEnd(r12)
-            r18 = r9
-            int r9 = r4.getSpanFlags(r8)
-            r15.setSpan(r13, r5, r6, r9)
-            r15.removeSpan(r12)
-            int r14 = r14 + 1
-            r5 = r16
-            r6 = r17
-            r9 = r18
-            r13 = 0
-            goto L_0x0088
-        L_0x00b3:
-            r16 = r5
-            r17 = r6
-            android.text.style.ForegroundColorSpan r5 = new android.text.style.ForegroundColorSpan
-            r6 = 0
-            r5.<init>(r6)
-            int r6 = r4.getSpanStart(r8)
-            int r9 = r4.getSpanEnd(r8)
-            int r10 = r4.getSpanFlags(r8)
-            r15.setSpan(r5, r6, r9, r10)
-            r15.removeSpan(r8)
-            goto L_0x00d4
-        L_0x00d0:
-            r16 = r5
-            r17 = r6
-        L_0x00d4:
-            int r7 = r7 + 1
-            r5 = r16
-            r6 = r17
-            r13 = 0
-            goto L_0x006c
-        L_0x00dc:
-            int r4 = android.os.Build.VERSION.SDK_INT
-            r5 = 24
-            if (r4 < r5) goto L_0x0113
-            int r4 = r15.length()
-            android.text.TextPaint r5 = r27.getPaint()
-            int r6 = r27.getWidth()
-            r7 = 0
-            android.text.StaticLayout$Builder r4 = android.text.StaticLayout.Builder.obtain(r15, r7, r4, r5, r6)
-            r5 = 1
-            android.text.StaticLayout$Builder r4 = r4.setBreakStrategy(r5)
-            android.text.StaticLayout$Builder r4 = r4.setHyphenationFrequency(r7)
-            android.text.Layout$Alignment r5 = android.text.Layout.Alignment.ALIGN_NORMAL
-            android.text.StaticLayout$Builder r4 = r4.setAlignment(r5)
-            float r5 = r27.getSpacingAdd()
-            float r6 = r27.getSpacingMultiplier()
-            android.text.StaticLayout$Builder r4 = r4.setLineSpacing(r5, r6)
-            android.text.StaticLayout r4 = r4.build()
-            goto L_0x012f
-        L_0x0113:
-            android.text.StaticLayout r4 = new android.text.StaticLayout
-            android.text.TextPaint r16 = r27.getPaint()
-            int r17 = r27.getWidth()
-            android.text.Layout$Alignment r18 = r27.getAlignment()
-            float r19 = r27.getSpacingMultiplier()
-            float r20 = r27.getSpacingAdd()
-            r21 = 0
-            r14 = r4
-            r14.<init>(r15, r16, r17, r18, r19, r20, r21)
-        L_0x012f:
-            r5 = r26
-            r5.set(r4)
-        L_0x0134:
-            boolean r5 = r28.isEmpty()
-            r12 = 0
-            if (r5 != 0) goto L_0x014b
-            r29.save()
-            r5 = r25
-            float r5 = (float) r5
-            r11.translate(r12, r5)
-            r4.draw(r11)
-            r29.restore()
-            goto L_0x014e
-        L_0x014b:
-            r2.draw(r11)
-        L_0x014e:
-            boolean r4 = r28.isEmpty()
-            if (r4 != 0) goto L_0x028f
-            android.graphics.Path r4 = tempPath
-            r4.rewind()
-            java.util.Iterator r4 = r28.iterator()
-        L_0x015d:
-            boolean r5 = r4.hasNext()
-            if (r5 == 0) goto L_0x0185
-            java.lang.Object r5 = r4.next()
-            org.telegram.ui.Components.spoilers.SpoilerEffect r5 = (org.telegram.ui.Components.spoilers.SpoilerEffect) r5
-            android.graphics.Rect r5 = r5.getBounds()
-            android.graphics.Path r13 = tempPath
-            int r6 = r5.left
-            float r14 = (float) r6
-            int r6 = r5.top
-            float r15 = (float) r6
-            int r6 = r5.right
-            float r6 = (float) r6
-            int r5 = r5.bottom
-            float r5 = (float) r5
-            android.graphics.Path$Direction r18 = android.graphics.Path.Direction.CW
-            r16 = r6
-            r17 = r5
-            r13.addRect(r14, r15, r16, r17, r18)
-            goto L_0x015d
-        L_0x0185:
-            boolean r4 = r28.isEmpty()
-            r5 = -1082130432(0xffffffffbvar_, float:-1.0)
-            if (r4 != 0) goto L_0x01cd
-            r4 = 0
-            java.lang.Object r6 = r3.get(r4)
-            org.telegram.ui.Components.spoilers.SpoilerEffect r6 = (org.telegram.ui.Components.spoilers.SpoilerEffect) r6
-            float r4 = r6.rippleProgress
-            int r4 = (r4 > r5 ? 1 : (r4 == r5 ? 0 : -1))
-            if (r4 == 0) goto L_0x01cd
-            r29.save()
-            android.graphics.Path r4 = tempPath
-            r11.clipPath(r4)
-            android.graphics.Path r4 = tempPath
-            r4.rewind()
-            boolean r4 = r28.isEmpty()
-            if (r4 != 0) goto L_0x01b9
-            r4 = 0
-            java.lang.Object r6 = r3.get(r4)
-            org.telegram.ui.Components.spoilers.SpoilerEffect r6 = (org.telegram.ui.Components.spoilers.SpoilerEffect) r6
-            android.graphics.Path r4 = tempPath
-            r6.getRipplePath(r4)
-        L_0x01b9:
-            android.graphics.Path r4 = tempPath
-            r11.clipPath(r4)
-            int r4 = r22.getPaddingTop()
-            int r4 = -r4
-            float r4 = (float) r4
-            r11.translate(r12, r4)
-            r2.draw(r11)
-            r29.restore()
-        L_0x01cd:
-            r2 = 0
-            java.lang.Object r4 = r3.get(r2)
-            org.telegram.ui.Components.spoilers.SpoilerEffect r4 = (org.telegram.ui.Components.spoilers.SpoilerEffect) r4
-            float r2 = r4.rippleProgress
-            int r2 = (r2 > r5 ? 1 : (r2 == r5 ? 0 : -1))
-            if (r2 == 0) goto L_0x01dc
-            r2 = 1
-            goto L_0x01dd
-        L_0x01dc:
-            r2 = 0
-        L_0x01dd:
-            if (r2 == 0) goto L_0x0208
-            int r4 = r22.getMeasuredWidth()
-            if (r30 == 0) goto L_0x01f7
-            android.view.ViewParent r5 = r22.getParent()
-            boolean r5 = r5 instanceof android.view.View
-            if (r5 == 0) goto L_0x01f7
-            android.view.ViewParent r4 = r22.getParent()
-            android.view.View r4 = (android.view.View) r4
-            int r4 = r4.getMeasuredWidth()
-        L_0x01f7:
-            r5 = 0
-            r6 = 0
-            float r7 = (float) r4
-            int r4 = r22.getMeasuredHeight()
-            float r8 = (float) r4
-            r9 = 0
-            r10 = 31
-            r4 = r29
-            r4.saveLayer(r5, r6, r7, r8, r9, r10)
-            goto L_0x020b
-        L_0x0208:
-            r29.save()
-        L_0x020b:
-            int r4 = r22.getPaddingTop()
-            int r4 = -r4
-            float r4 = (float) r4
-            r11.translate(r12, r4)
-            java.util.Iterator r4 = r28.iterator()
-        L_0x0218:
-            boolean r5 = r4.hasNext()
-            if (r5 == 0) goto L_0x0255
-            java.lang.Object r5 = r4.next()
-            org.telegram.ui.Components.spoilers.SpoilerEffect r5 = (org.telegram.ui.Components.spoilers.SpoilerEffect) r5
-            r6 = r23
-            r5.setInvalidateParent(r6)
-            android.view.View r7 = r5.getParentView()
-            if (r7 == r0) goto L_0x0232
-            r5.setParentView(r0)
-        L_0x0232:
-            boolean r7 = r5.shouldInvalidateColor()
-            if (r7 == 0) goto L_0x024e
-            android.text.TextPaint r7 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint
-            int r7 = r7.getColor()
-            float r8 = r5.getRippleProgress()
-            float r8 = java.lang.Math.max(r12, r8)
-            int r7 = androidx.core.graphics.ColorUtils.blendARGB(r1, r7, r8)
-            r5.setColor(r7)
-            goto L_0x0251
-        L_0x024e:
-            r5.setColor(r1)
-        L_0x0251:
-            r5.draw(r11)
-            goto L_0x0218
-        L_0x0255:
-            if (r2 == 0) goto L_0x028c
-            android.graphics.Path r0 = tempPath
-            r0.rewind()
-            r0 = 0
-            java.lang.Object r0 = r3.get(r0)
-            org.telegram.ui.Components.spoilers.SpoilerEffect r0 = (org.telegram.ui.Components.spoilers.SpoilerEffect) r0
-            android.graphics.Path r1 = tempPath
-            r0.getRipplePath(r1)
-            android.graphics.Paint r0 = xRefPaint
-            if (r0 != 0) goto L_0x0285
-            android.graphics.Paint r0 = new android.graphics.Paint
-            r1 = 1
-            r0.<init>(r1)
-            xRefPaint = r0
-            r1 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
-            r0.setColor(r1)
-            android.graphics.Paint r0 = xRefPaint
-            android.graphics.PorterDuffXfermode r1 = new android.graphics.PorterDuffXfermode
-            android.graphics.PorterDuff$Mode r2 = android.graphics.PorterDuff.Mode.CLEAR
-            r1.<init>(r2)
-            r0.setXfermode(r1)
-        L_0x0285:
-            android.graphics.Path r0 = tempPath
-            android.graphics.Paint r1 = xRefPaint
-            r11.drawPath(r0, r1)
-        L_0x028c:
-            r29.restore()
-        L_0x028f:
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.spoilers.SpoilerEffect.renderWithRipple(android.view.View, boolean, int, int, java.util.concurrent.atomic.AtomicReference, android.text.Layout, java.util.List, android.graphics.Canvas, boolean):void");
+    @SuppressLint({"WrongConstant"})
+    public static void renderWithRipple(View view, boolean z, int i, int i2, AtomicReference<Layout> atomicReference, Layout layout, List<SpoilerEffect> list, Canvas canvas, boolean z2) {
+        TextStyleSpan[] textStyleSpanArr;
+        int i3;
+        if (list.isEmpty()) {
+            layout.draw(canvas);
+            return;
+        }
+        Layout layout2 = atomicReference.get();
+        if (layout2 == null || !layout.getText().toString().equals(layout2.getText().toString()) || layout.getWidth() != layout2.getWidth() || layout.getHeight() != layout2.getHeight()) {
+            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(layout.getText());
+            if (layout.getText() instanceof Spannable) {
+                Spannable spannable = (Spannable) layout.getText();
+                TextStyleSpan[] textStyleSpanArr2 = (TextStyleSpan[]) spannable.getSpans(0, spannable.length(), TextStyleSpan.class);
+                int length = textStyleSpanArr2.length;
+                int i4 = 0;
+                while (i4 < length) {
+                    TextStyleSpan textStyleSpan = textStyleSpanArr2[i4];
+                    if (textStyleSpan.isSpoiler()) {
+                        Emoji.EmojiSpan[] emojiSpanArr = (Emoji.EmojiSpan[]) spannable.getSpans(spannable.getSpanStart(textStyleSpan), spannable.getSpanEnd(textStyleSpan), Emoji.EmojiSpan.class);
+                        int length2 = emojiSpanArr.length;
+                        int i5 = 0;
+                        while (i5 < length2) {
+                            final Emoji.EmojiSpan emojiSpan = emojiSpanArr[i5];
+                            spannableStringBuilder.setSpan(new ReplacementSpan() { // from class: org.telegram.ui.Components.spoilers.SpoilerEffect.2
+                                @Override // android.text.style.ReplacementSpan
+                                public void draw(Canvas canvas2, CharSequence charSequence, int i6, int i7, float f, int i8, int i9, int i10, Paint paint) {
+                                }
+
+                                @Override // android.text.style.ReplacementSpan
+                                public int getSize(Paint paint, CharSequence charSequence, int i6, int i7, Paint.FontMetricsInt fontMetricsInt) {
+                                    return Emoji.EmojiSpan.this.getSize(paint, charSequence, i6, i7, fontMetricsInt);
+                                }
+                            }, spannable.getSpanStart(emojiSpan), spannable.getSpanEnd(emojiSpan), spannable.getSpanFlags(textStyleSpan));
+                            spannableStringBuilder.removeSpan(emojiSpan);
+                            i5++;
+                            textStyleSpanArr2 = textStyleSpanArr2;
+                            length = length;
+                            emojiSpanArr = emojiSpanArr;
+                        }
+                        textStyleSpanArr = textStyleSpanArr2;
+                        i3 = length;
+                        spannableStringBuilder.setSpan(new ForegroundColorSpan(0), spannable.getSpanStart(textStyleSpan), spannable.getSpanEnd(textStyleSpan), spannable.getSpanFlags(textStyleSpan));
+                        spannableStringBuilder.removeSpan(textStyleSpan);
+                    } else {
+                        textStyleSpanArr = textStyleSpanArr2;
+                        i3 = length;
+                    }
+                    i4++;
+                    textStyleSpanArr2 = textStyleSpanArr;
+                    length = i3;
+                }
+            }
+            if (Build.VERSION.SDK_INT >= 24) {
+                layout2 = StaticLayout.Builder.obtain(spannableStringBuilder, 0, spannableStringBuilder.length(), layout.getPaint(), layout.getWidth()).setBreakStrategy(1).setHyphenationFrequency(0).setAlignment(Layout.Alignment.ALIGN_NORMAL).setLineSpacing(layout.getSpacingAdd(), layout.getSpacingMultiplier()).build();
+            } else {
+                layout2 = new StaticLayout(spannableStringBuilder, layout.getPaint(), layout.getWidth(), layout.getAlignment(), layout.getSpacingMultiplier(), layout.getSpacingAdd(), false);
+            }
+            atomicReference.set(layout2);
+        }
+        if (!list.isEmpty()) {
+            canvas.save();
+            canvas.translate(0.0f, i2);
+            layout2.draw(canvas);
+            canvas.restore();
+        } else {
+            layout.draw(canvas);
+        }
+        if (list.isEmpty()) {
+            return;
+        }
+        tempPath.rewind();
+        for (SpoilerEffect spoilerEffect : list) {
+            Rect bounds = spoilerEffect.getBounds();
+            tempPath.addRect(bounds.left, bounds.top, bounds.right, bounds.bottom, Path.Direction.CW);
+        }
+        if (!list.isEmpty() && list.get(0).rippleProgress != -1.0f) {
+            canvas.save();
+            canvas.clipPath(tempPath);
+            tempPath.rewind();
+            if (!list.isEmpty()) {
+                list.get(0).getRipplePath(tempPath);
+            }
+            canvas.clipPath(tempPath);
+            canvas.translate(0.0f, -view.getPaddingTop());
+            layout.draw(canvas);
+            canvas.restore();
+        }
+        boolean z3 = list.get(0).rippleProgress != -1.0f;
+        if (z3) {
+            int measuredWidth = view.getMeasuredWidth();
+            if (z2 && (view.getParent() instanceof View)) {
+                measuredWidth = ((View) view.getParent()).getMeasuredWidth();
+            }
+            canvas.saveLayer(0.0f, 0.0f, measuredWidth, view.getMeasuredHeight(), null, 31);
+        } else {
+            canvas.save();
+        }
+        canvas.translate(0.0f, -view.getPaddingTop());
+        for (SpoilerEffect spoilerEffect2 : list) {
+            spoilerEffect2.setInvalidateParent(z);
+            if (spoilerEffect2.getParentView() != view) {
+                spoilerEffect2.setParentView(view);
+            }
+            if (spoilerEffect2.shouldInvalidateColor()) {
+                spoilerEffect2.setColor(ColorUtils.blendARGB(i, Theme.chat_msgTextPaint.getColor(), Math.max(0.0f, spoilerEffect2.getRippleProgress())));
+            } else {
+                spoilerEffect2.setColor(i);
+            }
+            spoilerEffect2.draw(canvas);
+        }
+        if (z3) {
+            tempPath.rewind();
+            list.get(0).getRipplePath(tempPath);
+            if (xRefPaint == null) {
+                Paint paint = new Paint(1);
+                xRefPaint = paint;
+                paint.setColor(-16777216);
+                xRefPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+            }
+            canvas.drawPath(tempPath, xRefPaint);
+        }
+        canvas.restore();
     }
 
-    private static class Particle {
-        /* access modifiers changed from: private */
-        public int alpha;
-        /* access modifiers changed from: private */
-        public float currentTime;
-        /* access modifiers changed from: private */
-        public float lifeTime;
-        /* access modifiers changed from: private */
-        public float vecX;
-        /* access modifiers changed from: private */
-        public float vecY;
-        /* access modifiers changed from: private */
-        public float velocity;
-        /* access modifiers changed from: private */
-        public float x;
-        /* access modifiers changed from: private */
-        public float y;
+    /* JADX INFO: Access modifiers changed from: private */
+    /* loaded from: classes3.dex */
+    public static class Particle {
+        private int alpha;
+        private float currentTime;
+        private float lifeTime;
+        private float vecX;
+        private float vecY;
+        private float velocity;
+        private float x;
+        private float y;
 
         private Particle() {
         }

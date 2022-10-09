@@ -1,19 +1,19 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public abstract class TLRPC$EmojiKeyword extends TLObject {
     public static TLRPC$EmojiKeyword TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-        TLRPC$EmojiKeyword tLRPC$EmojiKeyword;
+        TLRPC$EmojiKeyword tLRPC$TL_emojiKeyword;
         if (i != -NUM) {
-            tLRPC$EmojiKeyword = i != NUM ? null : new TLRPC$TL_emojiKeywordDeleted();
+            tLRPC$TL_emojiKeyword = i != NUM ? null : new TLRPC$TL_emojiKeywordDeleted();
         } else {
-            tLRPC$EmojiKeyword = new TLRPC$TL_emojiKeyword();
+            tLRPC$TL_emojiKeyword = new TLRPC$TL_emojiKeyword();
         }
-        if (tLRPC$EmojiKeyword != null || !z) {
-            if (tLRPC$EmojiKeyword != null) {
-                tLRPC$EmojiKeyword.readParams(abstractSerializedData, z);
+        if (tLRPC$TL_emojiKeyword != null || !z) {
+            if (tLRPC$TL_emojiKeyword != null) {
+                tLRPC$TL_emojiKeyword.readParams(abstractSerializedData, z);
             }
-            return tLRPC$EmojiKeyword;
+            return tLRPC$TL_emojiKeyword;
         }
-        throw new RuntimeException(String.format("can't parse magic %x in EmojiKeyword", new Object[]{Integer.valueOf(i)}));
+        throw new RuntimeException(String.format("can't parse magic %x in EmojiKeyword", Integer.valueOf(i)));
     }
 }

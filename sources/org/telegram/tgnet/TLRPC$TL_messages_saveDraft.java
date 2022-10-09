@@ -1,7 +1,7 @@
 package org.telegram.tgnet;
 
 import java.util.ArrayList;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_messages_saveDraft extends TLObject {
     public static int constructor = -NUM;
     public ArrayList<TLRPC$MessageEntity> entities = new ArrayList<>();
@@ -11,13 +11,15 @@ public class TLRPC$TL_messages_saveDraft extends TLObject {
     public TLRPC$InputPeer peer;
     public int reply_to_msg_id;
 
+    @Override // org.telegram.tgnet.TLObject
     public TLObject deserializeResponse(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         return TLRPC$Bool.TLdeserialize(abstractSerializedData, i, z);
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
-        int i = this.no_webpage ? this.flags | 2 : this.flags & -3;
+        int i = this.no_webpage ? this.flags | 2 : this.flags & (-3);
         this.flags = i;
         abstractSerializedData.writeInt32(i);
         if ((this.flags & 1) != 0) {

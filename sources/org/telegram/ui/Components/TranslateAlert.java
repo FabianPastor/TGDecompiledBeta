@@ -4,24 +4,33 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.app.Dialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.Rect;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.RectF;
 import android.graphics.Region;
 import android.graphics.Shader;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Layout;
 import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.TextPaint;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.URLSpan;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,12 +44,25 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.core.widget.NestedScrollView;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URI;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Iterator;
+import org.json.JSONArray;
+import org.json.JSONTokener;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.DispatchQueue;
+import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.R;
+import org.telegram.messenger.XiaomiUtilities;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$InputPeer;
@@ -49,38 +71,29 @@ import org.telegram.tgnet.TLRPC$TL_messages_translateText;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LinkSpanDrawable;
-
+import org.telegram.ui.Components.TranslateAlert;
+/* loaded from: classes3.dex */
 public class TranslateAlert extends Dialog {
-    /* access modifiers changed from: private */
-    public static final int MOST_SPEC = View.MeasureSpec.makeMeasureSpec(999999, Integer.MIN_VALUE);
-    public static volatile DispatchQueue translateQueue = new DispatchQueue("translateQueue", false);
     private Spannable allTexts;
-    /* access modifiers changed from: private */
-    public TextView allTextsView;
-    /* access modifiers changed from: private */
-    public boolean allowScroll;
+    private TextView allTextsView;
+    private boolean allowScroll;
     private ImageView backButton;
     protected ColorDrawable backDrawable;
-    private Rect backRect;
+    private android.graphics.Rect backRect;
     private int blockIndex;
-    /* access modifiers changed from: private */
-    public FrameLayout bulletinContainer;
-    private Rect buttonRect;
+    private FrameLayout bulletinContainer;
+    private android.graphics.Rect buttonRect;
     private FrameLayout buttonShadowView;
     private TextView buttonTextView;
     private FrameLayout buttonView;
-    /* access modifiers changed from: private */
-    public FrameLayout container;
-    /* access modifiers changed from: private */
-    public float containerOpenAnimationT;
-    private Rect containerRect;
+    private FrameLayout container;
+    private float containerOpenAnimationT;
+    private android.graphics.Rect containerRect;
     private FrameLayout contentView;
     private boolean dismissed;
-    /* access modifiers changed from: private */
-    public boolean fastHide;
+    private boolean fastHide;
     private int firstMinHeight;
-    /* access modifiers changed from: private */
-    public BaseFragment fragment;
+    private BaseFragment fragment;
     private String fromLanguage;
     private boolean fromScrollRect;
     private float fromScrollViewY;
@@ -89,109 +102,101 @@ public class TranslateAlert extends Dialog {
     private FrameLayout header;
     private FrameLayout.LayoutParams headerLayout;
     private FrameLayout headerShadowView;
-    /* access modifiers changed from: private */
-    public float heightMaxPercent;
-    /* access modifiers changed from: private */
-    public LinkSpanDrawable.LinkCollector links;
+    private float heightMaxPercent;
+    private LinkSpanDrawable.LinkCollector links;
     private boolean loaded;
     private boolean loading;
     private boolean maybeScrolling;
-    /* access modifiers changed from: private */
-    public boolean noforwards;
+    private boolean noforwards;
     private Runnable onDismiss;
-    /* access modifiers changed from: private */
-    public OnLinkPress onLinkPress;
+    private OnLinkPress onLinkPress;
     private ValueAnimator openAnimationToAnimator;
-    /* access modifiers changed from: private */
-    public boolean openAnimationToAnimatorPriority;
+    private boolean openAnimationToAnimatorPriority;
     private ValueAnimator openingAnimator;
-    /* access modifiers changed from: private */
-    public boolean openingAnimatorPriority;
-    /* access modifiers changed from: private */
-    public float openingT;
+    private boolean openingAnimatorPriority;
+    private float openingT;
     private LinkSpanDrawable pressedLink;
     private boolean pressedOutside;
-    private Rect scrollRect;
-    /* access modifiers changed from: private */
-    public NestedScrollView scrollView;
+    private android.graphics.Rect scrollRect;
+    private NestedScrollView scrollView;
     private FrameLayout.LayoutParams scrollViewLayout;
     private boolean scrolling;
     private ImageView subtitleArrowView;
-    /* access modifiers changed from: private */
-    public InlineLoadingTextView subtitleFromView;
+    private InlineLoadingTextView subtitleFromView;
     private FrameLayout.LayoutParams subtitleLayout;
     private TextView subtitleToView;
     private LinearLayout subtitleView;
     private ArrayList<CharSequence> textBlocks;
-    private Rect textRect;
-    /* access modifiers changed from: private */
-    public FrameLayout textsContainerView;
-    /* access modifiers changed from: private */
-    public TextBlocksLayout textsView;
+    private android.graphics.Rect textRect;
+    private FrameLayout textsContainerView;
+    private TextBlocksLayout textsView;
     private FrameLayout.LayoutParams titleLayout;
     private TextView titleView;
     private String toLanguage;
+    public static volatile DispatchQueue translateQueue = new DispatchQueue("translateQueue", false);
+    private static final int MOST_SPEC = View.MeasureSpec.makeMeasureSpec(999999, Integer.MIN_VALUE);
 
+    /* loaded from: classes3.dex */
     public interface OnLinkPress {
         boolean run(URLSpan uRLSpan);
     }
 
+    /* loaded from: classes3.dex */
     public interface OnTranslationFail {
         void run(boolean z);
     }
 
+    /* loaded from: classes3.dex */
     public interface OnTranslationSuccess {
         void run(String str, String str2);
     }
 
-    /* access modifiers changed from: private */
     public static /* synthetic */ void lambda$translateText$13(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
     }
 
-    /* access modifiers changed from: private */
     public void openAnimation(float f) {
         float f2 = 1.0f;
         float min = Math.min(Math.max(f, 0.0f), 1.0f);
-        if (this.containerOpenAnimationT != min) {
-            this.containerOpenAnimationT = min;
-            this.titleView.setScaleX(AndroidUtilities.lerp(1.0f, 0.9473f, min));
-            this.titleView.setScaleY(AndroidUtilities.lerp(1.0f, 0.9473f, min));
-            FrameLayout.LayoutParams layoutParams = this.titleLayout;
-            int dp = AndroidUtilities.dp((float) AndroidUtilities.lerp(22, 72, min));
-            int dp2 = AndroidUtilities.dp((float) AndroidUtilities.lerp(22, 8, min));
-            FrameLayout.LayoutParams layoutParams2 = this.titleLayout;
-            layoutParams.setMargins(dp, dp2, layoutParams2.rightMargin, layoutParams2.bottomMargin);
-            this.titleView.setLayoutParams(this.titleLayout);
-            FrameLayout.LayoutParams layoutParams3 = this.subtitleLayout;
-            int dp3 = AndroidUtilities.dp((float) AndroidUtilities.lerp(22, 72, min)) - LoadingTextView2.paddingHorizontal;
-            int dp4 = AndroidUtilities.dp((float) AndroidUtilities.lerp(47, 30, min)) - LoadingTextView2.paddingVertical;
-            FrameLayout.LayoutParams layoutParams4 = this.subtitleLayout;
-            layoutParams3.setMargins(dp3, dp4, layoutParams4.rightMargin, layoutParams4.bottomMargin);
-            this.subtitleView.setLayoutParams(this.subtitleLayout);
-            this.backButton.setAlpha(min);
-            float f3 = (0.25f * min) + 0.75f;
-            this.backButton.setScaleX(f3);
-            this.backButton.setScaleY(f3);
-            this.backButton.setClickable(min > 0.5f);
-            FrameLayout frameLayout = this.headerShadowView;
-            if (this.scrollView.getScrollY() <= 0) {
-                f2 = min;
-            }
-            frameLayout.setAlpha(f2);
-            this.headerLayout.height = AndroidUtilities.lerp(AndroidUtilities.dp(70.0f), AndroidUtilities.dp(56.0f), min);
-            this.header.setLayoutParams(this.headerLayout);
-            FrameLayout.LayoutParams layoutParams5 = this.scrollViewLayout;
-            int i = layoutParams5.leftMargin;
-            int lerp = AndroidUtilities.lerp(AndroidUtilities.dp(70.0f), AndroidUtilities.dp(56.0f), min);
-            FrameLayout.LayoutParams layoutParams6 = this.scrollViewLayout;
-            layoutParams5.setMargins(i, lerp, layoutParams6.rightMargin, layoutParams6.bottomMargin);
-            this.scrollView.setLayoutParams(this.scrollViewLayout);
+        if (this.containerOpenAnimationT == min) {
+            return;
         }
+        this.containerOpenAnimationT = min;
+        this.titleView.setScaleX(AndroidUtilities.lerp(1.0f, 0.9473f, min));
+        this.titleView.setScaleY(AndroidUtilities.lerp(1.0f, 0.9473f, min));
+        FrameLayout.LayoutParams layoutParams = this.titleLayout;
+        int dp = AndroidUtilities.dp(AndroidUtilities.lerp(22, 72, min));
+        int dp2 = AndroidUtilities.dp(AndroidUtilities.lerp(22, 8, min));
+        FrameLayout.LayoutParams layoutParams2 = this.titleLayout;
+        layoutParams.setMargins(dp, dp2, layoutParams2.rightMargin, layoutParams2.bottomMargin);
+        this.titleView.setLayoutParams(this.titleLayout);
+        FrameLayout.LayoutParams layoutParams3 = this.subtitleLayout;
+        int dp3 = AndroidUtilities.dp(AndroidUtilities.lerp(22, 72, min)) - LoadingTextView2.paddingHorizontal;
+        int dp4 = AndroidUtilities.dp(AndroidUtilities.lerp(47, 30, min)) - LoadingTextView2.paddingVertical;
+        FrameLayout.LayoutParams layoutParams4 = this.subtitleLayout;
+        layoutParams3.setMargins(dp3, dp4, layoutParams4.rightMargin, layoutParams4.bottomMargin);
+        this.subtitleView.setLayoutParams(this.subtitleLayout);
+        this.backButton.setAlpha(min);
+        float f3 = (0.25f * min) + 0.75f;
+        this.backButton.setScaleX(f3);
+        this.backButton.setScaleY(f3);
+        this.backButton.setClickable(min > 0.5f);
+        FrameLayout frameLayout = this.headerShadowView;
+        if (this.scrollView.getScrollY() <= 0) {
+            f2 = min;
+        }
+        frameLayout.setAlpha(f2);
+        this.headerLayout.height = AndroidUtilities.lerp(AndroidUtilities.dp(70.0f), AndroidUtilities.dp(56.0f), min);
+        this.header.setLayoutParams(this.headerLayout);
+        FrameLayout.LayoutParams layoutParams5 = this.scrollViewLayout;
+        int i = layoutParams5.leftMargin;
+        int lerp = AndroidUtilities.lerp(AndroidUtilities.dp(70.0f), AndroidUtilities.dp(56.0f), min);
+        FrameLayout.LayoutParams layoutParams6 = this.scrollViewLayout;
+        layoutParams5.setMargins(i, lerp, layoutParams6.rightMargin, layoutParams6.bottomMargin);
+        this.scrollView.setLayoutParams(this.scrollViewLayout);
     }
 
-    /* access modifiers changed from: private */
     public void openAnimationTo(float f, boolean z) {
-        openAnimationTo(f, z, (Runnable) null);
+        openAnimationTo(f, z, null);
     }
 
     private void openAnimationTo(float f, boolean z, final Runnable runnable) {
@@ -202,37 +207,47 @@ public class TranslateAlert extends Dialog {
             if (valueAnimator != null) {
                 valueAnimator.cancel();
             }
-            ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{this.containerOpenAnimationT, min});
+            ValueAnimator ofFloat = ValueAnimator.ofFloat(this.containerOpenAnimationT, min);
             this.openAnimationToAnimator = ofFloat;
-            ofFloat.addUpdateListener(new TranslateAlert$$ExternalSyntheticLambda0(this));
-            this.openAnimationToAnimator.addListener(new AnimatorListenerAdapter() {
+            ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() { // from class: org.telegram.ui.Components.TranslateAlert$$ExternalSyntheticLambda0
+                @Override // android.animation.ValueAnimator.AnimatorUpdateListener
+                public final void onAnimationUpdate(ValueAnimator valueAnimator2) {
+                    TranslateAlert.this.lambda$openAnimationTo$0(valueAnimator2);
+                }
+            });
+            this.openAnimationToAnimator.addListener(new AnimatorListenerAdapter() { // from class: org.telegram.ui.Components.TranslateAlert.1
+                {
+                    TranslateAlert.this = this;
+                }
+
+                @Override // android.animation.AnimatorListenerAdapter, android.animation.Animator.AnimatorListener
                 public void onAnimationEnd(Animator animator) {
-                    boolean unused = TranslateAlert.this.openAnimationToAnimatorPriority = false;
-                    Runnable runnable = runnable;
-                    if (runnable != null) {
-                        runnable.run();
+                    TranslateAlert.this.openAnimationToAnimatorPriority = false;
+                    Runnable runnable2 = runnable;
+                    if (runnable2 != null) {
+                        runnable2.run();
                     }
                 }
 
+                @Override // android.animation.AnimatorListenerAdapter, android.animation.Animator.AnimatorListener
                 public void onAnimationCancel(Animator animator) {
-                    boolean unused = TranslateAlert.this.openAnimationToAnimatorPriority = false;
+                    TranslateAlert.this.openAnimationToAnimatorPriority = false;
                 }
             });
             this.openAnimationToAnimator.setInterpolator(CubicBezierInterpolator.EASE_OUT);
-            this.openAnimationToAnimator.setDuration(220);
+            this.openAnimationToAnimator.setDuration(220L);
             this.openAnimationToAnimator.start();
-            if (((double) min) >= 0.5d && this.blockIndex <= 1) {
-                fetchNext();
+            if (min < 0.5d || this.blockIndex > 1) {
+                return;
             }
+            fetchNext();
         }
     }
 
-    /* access modifiers changed from: private */
     public /* synthetic */ void lambda$openAnimationTo$0(ValueAnimator valueAnimator) {
         openAnimation(((Float) valueAnimator.getAnimatedValue()).floatValue());
     }
 
-    /* access modifiers changed from: private */
     public int minHeight() {
         return minHeight(false);
     }
@@ -247,15 +262,10 @@ public class TranslateAlert extends Dialog {
         return (this.firstMinHeight <= 0 || this.textBlocks.size() <= 1 || z) ? dp : this.firstMinHeight;
     }
 
-    /* access modifiers changed from: private */
     public boolean canExpand() {
-        if (this.textsView.getBlocksCount() < this.textBlocks.size() || ((float) minHeight(true)) >= ((float) AndroidUtilities.displayMetrics.heightPixels) * this.heightMaxPercent) {
-            return true;
-        }
-        return false;
+        return this.textsView.getBlocksCount() < this.textBlocks.size() || ((float) minHeight(true)) >= ((float) AndroidUtilities.displayMetrics.heightPixels) * this.heightMaxPercent;
     }
 
-    /* access modifiers changed from: private */
     public void updateCanExpand() {
         boolean canExpand = canExpand();
         float f = 0.0f;
@@ -267,694 +277,398 @@ public class TranslateAlert extends Dialog {
         if (canExpand) {
             f = 1.0f;
         }
-        alpha.setDuration((long) (Math.abs(alpha2 - f) * 220.0f)).start();
+        alpha.setDuration(Math.abs(alpha2 - f) * 220.0f).start();
     }
 
-    public TranslateAlert(BaseFragment baseFragment, Context context, String str, String str2, CharSequence charSequence, boolean z, OnLinkPress onLinkPress2, Runnable runnable) {
-        this(baseFragment, context, -1, (TLRPC$InputPeer) null, -1, str, str2, charSequence, z, onLinkPress2, runnable);
+    public TranslateAlert(BaseFragment baseFragment, Context context, String str, String str2, CharSequence charSequence, boolean z, OnLinkPress onLinkPress, Runnable runnable) {
+        this(baseFragment, context, -1, null, -1, str, str2, charSequence, z, onLinkPress, runnable);
     }
 
-    /* JADX WARNING: Illegal instructions before constructor call */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public TranslateAlert(org.telegram.ui.ActionBar.BaseFragment r33, android.content.Context r34, int r35, org.telegram.tgnet.TLRPC$InputPeer r36, int r37, java.lang.String r38, java.lang.String r39, java.lang.CharSequence r40, boolean r41, org.telegram.ui.Components.TranslateAlert.OnLinkPress r42, java.lang.Runnable r43) {
-        /*
-            r32 = this;
-            r6 = r32
-            r7 = r34
-            r0 = r36
-            r1 = r38
-            r8 = r39
-            r9 = r41
-            int r2 = org.telegram.messenger.R.style.TransparentDialog
-            r6.<init>(r7, r2)
-            r10 = 0
-            r6.blockIndex = r10
-            r11 = 0
-            r6.containerOpenAnimationT = r11
-            r6.openAnimationToAnimatorPriority = r10
-            r2 = 0
-            r6.openAnimationToAnimator = r2
-            r12 = -1
-            r6.firstMinHeight = r12
-            r13 = 1
-            r6.allowScroll = r13
-            r6.fromScrollY = r11
-            android.graphics.Rect r3 = new android.graphics.Rect
-            r3.<init>()
-            r6.containerRect = r3
-            android.graphics.Rect r3 = new android.graphics.Rect
-            r3.<init>()
-            r6.textRect = r3
-            android.graphics.Rect r3 = new android.graphics.Rect
-            r3.<init>()
-            android.graphics.Rect r3 = new android.graphics.Rect
-            r3.<init>()
-            r6.buttonRect = r3
-            android.graphics.Rect r3 = new android.graphics.Rect
-            r3.<init>()
-            r6.backRect = r3
-            android.graphics.Rect r3 = new android.graphics.Rect
-            r3.<init>()
-            r6.scrollRect = r3
-            r6.fromY = r11
-            r6.pressedOutside = r10
-            r6.maybeScrolling = r10
-            r6.scrolling = r10
-            r6.fromScrollRect = r10
-            r6.fromScrollViewY = r11
-            r6.allTexts = r2
-            r6.openingT = r11
-            org.telegram.ui.Components.TranslateAlert$6 r3 = new org.telegram.ui.Components.TranslateAlert$6
-            r4 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
-            r3.<init>(r4)
-            r6.backDrawable = r3
-            r6.dismissed = r10
-            r3 = 1062836634(0x3var_a, float:0.85)
-            r6.heightMaxPercent = r3
-            r6.fastHide = r10
-            r6.openingAnimatorPriority = r10
-            r6.loading = r10
-            r6.loaded = r10
-            java.lang.String r3 = "und"
-            if (r0 == 0) goto L_0x008d
-            if (r1 == 0) goto L_0x0085
-            boolean r4 = r1.equals(r3)
-            if (r4 == 0) goto L_0x0085
-            r4 = r35
-            r5 = r37
-            goto L_0x008a
-        L_0x0085:
-            r4 = r35
-            r5 = r37
-            r2 = r1
-        L_0x008a:
-            translateText(r4, r0, r5, r2, r8)
-        L_0x008d:
-            r0 = r42
-            r6.onLinkPress = r0
-            r6.noforwards = r9
-            r0 = r33
-            r6.fragment = r0
-            if (r1 == 0) goto L_0x00a2
-            boolean r0 = r1.equals(r3)
-            if (r0 == 0) goto L_0x00a2
-            java.lang.String r0 = "auto"
-            goto L_0x00a3
-        L_0x00a2:
-            r0 = r1
-        L_0x00a3:
-            r6.fromLanguage = r0
-            r6.toLanguage = r8
-            r0 = 1024(0x400, float:1.435E-42)
-            r2 = r40
-            java.util.ArrayList r0 = r6.cutInBlocks(r2, r0)
-            r6.textBlocks = r0
-            r0 = r43
-            r6.onDismiss = r0
-            int r14 = android.os.Build.VERSION.SDK_INT
-            r0 = 21
-            r2 = 30
-            if (r14 < r2) goto L_0x00c8
-            android.view.Window r3 = r32.getWindow()
-            r4 = -2147483392(0xfffffffvar_, float:-3.59E-43)
-            r3.addFlags(r4)
-            goto L_0x00d4
-        L_0x00c8:
-            if (r14 < r0) goto L_0x00d4
-            android.view.Window r3 = r32.getWindow()
-            r4 = -2147417856(0xfffffffvar_, float:-9.2194E-41)
-            r3.addFlags(r4)
-        L_0x00d4:
-            if (r9 == 0) goto L_0x00df
-            android.view.Window r3 = r32.getWindow()
-            r4 = 8192(0x2000, float:1.14794E-41)
-            r3.addFlags(r4)
-        L_0x00df:
-            android.widget.FrameLayout r3 = new android.widget.FrameLayout
-            r3.<init>(r7)
-            r6.contentView = r3
-            android.graphics.drawable.ColorDrawable r4 = r6.backDrawable
-            r3.setBackground(r4)
-            android.widget.FrameLayout r3 = r6.contentView
-            r3.setClipChildren(r10)
-            android.widget.FrameLayout r3 = r6.contentView
-            r3.setClipToPadding(r10)
-            if (r14 < r0) goto L_0x010d
-            android.widget.FrameLayout r0 = r6.contentView
-            r0.setFitsSystemWindows(r13)
-            if (r14 < r2) goto L_0x0106
-            android.widget.FrameLayout r0 = r6.contentView
-            r2 = 1792(0x700, float:2.511E-42)
-            r0.setSystemUiVisibility(r2)
-            goto L_0x010d
-        L_0x0106:
-            android.widget.FrameLayout r0 = r6.contentView
-            r2 = 1280(0x500, float:1.794E-42)
-            r0.setSystemUiVisibility(r2)
-        L_0x010d:
-            android.graphics.Paint r0 = new android.graphics.Paint
-            r0.<init>()
-            java.lang.String r2 = "dialogBackground"
-            int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
-            r0.setColor(r2)
-            r2 = 1073741824(0x40000000, float:2.0)
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            float r2 = (float) r2
-            r3 = -1087834685(0xffffffffbvar_f5c3, float:-0.66)
-            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            float r3 = (float) r3
-            r4 = 503316480(0x1e000000, float:6.7762636E-21)
-            r0.setShadowLayer(r2, r11, r3, r4)
-            org.telegram.ui.Components.TranslateAlert$2 r2 = new org.telegram.ui.Components.TranslateAlert$2
-            r2.<init>(r7, r0)
-            r6.container = r2
-            r2.setWillNotDraw(r10)
-            android.widget.FrameLayout r0 = new android.widget.FrameLayout
-            r0.<init>(r7)
-            r6.header = r0
-            android.widget.TextView r0 = new android.widget.TextView
-            r0.<init>(r7)
-            r6.titleView = r0
-            boolean r2 = org.telegram.messenger.LocaleController.isRTL
-            if (r2 == 0) goto L_0x0151
-            int r2 = r0.getWidth()
-            float r2 = (float) r2
-            goto L_0x0152
-        L_0x0151:
-            r2 = 0
-        L_0x0152:
-            r0.setPivotX(r2)
-            android.widget.TextView r0 = r6.titleView
-            r0.setPivotY(r11)
-            android.widget.TextView r0 = r6.titleView
-            r0.setLines(r13)
-            android.widget.TextView r0 = r6.titleView
-            int r2 = org.telegram.messenger.R.string.AutomaticTranslation
-            java.lang.String r3 = "AutomaticTranslation"
-            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
-            r0.setText(r2)
-            android.widget.TextView r0 = r6.titleView
-            boolean r2 = org.telegram.messenger.LocaleController.isRTL
-            r5 = 3
-            if (r2 == 0) goto L_0x0175
-            r2 = 5
-            goto L_0x0176
-        L_0x0175:
-            r2 = 3
-        L_0x0176:
-            r0.setGravity(r2)
-            android.widget.TextView r0 = r6.titleView
-            java.lang.String r16 = "fonts/rmedium.ttf"
-            android.graphics.Typeface r2 = org.telegram.messenger.AndroidUtilities.getTypeface(r16)
-            r0.setTypeface(r2)
-            android.widget.TextView r0 = r6.titleView
-            java.lang.String r17 = "dialogTextBlack"
-            int r2 = org.telegram.ui.ActionBar.Theme.getColor(r17)
-            r0.setTextColor(r2)
-            android.widget.TextView r0 = r6.titleView
-            r2 = 1100480512(0x41980000, float:19.0)
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            float r2 = (float) r2
-            r0.setTextSize(r10, r2)
-            android.widget.FrameLayout r0 = r6.header
-            android.widget.TextView r2 = r6.titleView
-            r18 = -1
-            r19 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-            r20 = 55
-            r21 = 1102053376(0x41b00000, float:22.0)
-            r22 = 1102053376(0x41b00000, float:22.0)
-            r23 = 1102053376(0x41b00000, float:22.0)
-            r24 = 0
-            android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r18, r19, r20, r21, r22, r23, r24)
-            r6.titleLayout = r3
-            r0.addView(r2, r3)
-            android.widget.TextView r0 = r6.titleView
-            org.telegram.ui.Components.TranslateAlert$$ExternalSyntheticLambda8 r2 = new org.telegram.ui.Components.TranslateAlert$$ExternalSyntheticLambda8
-            r2.<init>(r6)
-            r0.post(r2)
-            android.widget.LinearLayout r0 = new android.widget.LinearLayout
-            r0.<init>(r7)
-            r6.subtitleView = r0
-            r0.setOrientation(r10)
-            r4 = 17
-            if (r14 < r4) goto L_0x01d5
-            android.widget.LinearLayout r0 = r6.subtitleView
-            boolean r2 = org.telegram.messenger.LocaleController.isRTL
-            r0.setLayoutDirection(r2)
-        L_0x01d5:
-            android.widget.LinearLayout r0 = r6.subtitleView
-            boolean r2 = org.telegram.messenger.LocaleController.isRTL
-            if (r2 == 0) goto L_0x01dd
-            r2 = 5
-            goto L_0x01de
-        L_0x01dd:
-            r2 = 3
-        L_0x01de:
-            r0.setGravity(r2)
-            java.lang.String r3 = r6.languageName(r1)
-            org.telegram.ui.Components.TranslateAlert$3 r2 = new org.telegram.ui.Components.TranslateAlert$3
-            if (r3 != 0) goto L_0x01f0
-            java.lang.String r0 = r6.languageName(r8)
-            r18 = r0
-            goto L_0x01f2
-        L_0x01f0:
-            r18 = r3
-        L_0x01f2:
-            r1 = 1096810496(0x41600000, float:14.0)
-            int r19 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            java.lang.String r20 = "player_actionBarSubtitle"
-            int r21 = org.telegram.ui.ActionBar.Theme.getColor(r20)
-            r0 = r2
-            r33 = 1096810496(0x41600000, float:14.0)
-            r1 = r32
-            r15 = r2
-            r2 = r34
-            r12 = r3
-            r3 = r18
-            r4 = r19
-            r5 = r21
-            r0.<init>(r2, r3, r4, r5)
-            r6.subtitleFromView = r15
-            r15.showLoadingText = r10
-            android.widget.ImageView r0 = new android.widget.ImageView
-            r0.<init>(r7)
-            r6.subtitleArrowView = r0
-            int r1 = org.telegram.messenger.R.drawable.search_arrow
-            r0.setImageResource(r1)
-            android.widget.ImageView r0 = r6.subtitleArrowView
-            android.graphics.PorterDuffColorFilter r1 = new android.graphics.PorterDuffColorFilter
-            int r2 = org.telegram.ui.ActionBar.Theme.getColor(r20)
-            android.graphics.PorterDuff$Mode r3 = android.graphics.PorterDuff.Mode.MULTIPLY
-            r1.<init>(r2, r3)
-            r0.setColorFilter(r1)
-            boolean r0 = org.telegram.messenger.LocaleController.isRTL
-            if (r0 == 0) goto L_0x023b
-            android.widget.ImageView r0 = r6.subtitleArrowView
-            r1 = -1082130432(0xffffffffbvar_, float:-1.0)
-            r0.setScaleX(r1)
-        L_0x023b:
-            android.widget.TextView r0 = new android.widget.TextView
-            r0.<init>(r7)
-            r6.subtitleToView = r0
-            r0.setLines(r13)
-            android.widget.TextView r0 = r6.subtitleToView
-            int r1 = org.telegram.ui.ActionBar.Theme.getColor(r20)
-            r0.setTextColor(r1)
-            android.widget.TextView r0 = r6.subtitleToView
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r33)
-            float r1 = (float) r1
-            r0.setTextSize(r10, r1)
-            android.widget.TextView r0 = r6.subtitleToView
-            java.lang.String r1 = r6.languageName(r8)
-            r0.setText(r1)
-            boolean r0 = org.telegram.messenger.LocaleController.isRTL
-            r1 = 16
-            r2 = -2
-            if (r0 == 0) goto L_0x02a3
-            android.widget.LinearLayout r0 = r6.subtitleView
-            int r3 = org.telegram.ui.Components.TranslateAlert.InlineLoadingTextView.paddingHorizontal
-            r0.setPadding(r3, r10, r10, r10)
-            android.widget.LinearLayout r0 = r6.subtitleView
-            android.widget.TextView r3 = r6.subtitleToView
-            android.widget.LinearLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r2, (int) r2, (int) r1)
-            r0.addView(r3, r1)
-            android.widget.LinearLayout r0 = r6.subtitleView
-            android.widget.ImageView r1 = r6.subtitleArrowView
-            r25 = -2
-            r26 = -2
-            r27 = 16
-            r28 = 3
-            r29 = 1
-            r30 = 0
-            r31 = 0
-            android.widget.LinearLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r25, (int) r26, (int) r27, (int) r28, (int) r29, (int) r30, (int) r31)
-            r0.addView(r1, r3)
-            android.widget.LinearLayout r0 = r6.subtitleView
-            org.telegram.ui.Components.TranslateAlert$InlineLoadingTextView r1 = r6.subtitleFromView
-            r28 = 2
-            r29 = 0
-            android.widget.LinearLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r25, (int) r26, (int) r27, (int) r28, (int) r29, (int) r30, (int) r31)
-            r0.addView(r1, r3)
-            goto L_0x02dd
-        L_0x02a3:
-            android.widget.LinearLayout r0 = r6.subtitleView
-            int r3 = org.telegram.ui.Components.TranslateAlert.InlineLoadingTextView.paddingHorizontal
-            r0.setPadding(r10, r10, r3, r10)
-            android.widget.LinearLayout r0 = r6.subtitleView
-            org.telegram.ui.Components.TranslateAlert$InlineLoadingTextView r3 = r6.subtitleFromView
-            r25 = -2
-            r26 = -2
-            r27 = 16
-            r28 = 0
-            r29 = 0
-            r30 = 2
-            r31 = 0
-            android.widget.LinearLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r25, (int) r26, (int) r27, (int) r28, (int) r29, (int) r30, (int) r31)
-            r0.addView(r3, r4)
-            android.widget.LinearLayout r0 = r6.subtitleView
-            android.widget.ImageView r3 = r6.subtitleArrowView
-            r29 = 1
-            r30 = 3
-            android.widget.LinearLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r25, (int) r26, (int) r27, (int) r28, (int) r29, (int) r30, (int) r31)
-            r0.addView(r3, r4)
-            android.widget.LinearLayout r0 = r6.subtitleView
-            android.widget.TextView r3 = r6.subtitleToView
-            android.widget.LinearLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r2, (int) r2, (int) r1)
-            r0.addView(r3, r1)
-        L_0x02dd:
-            if (r12 == 0) goto L_0x02e4
-            org.telegram.ui.Components.TranslateAlert$InlineLoadingTextView r0 = r6.subtitleFromView
-            r0.set(r12)
-        L_0x02e4:
-            android.widget.FrameLayout r0 = r6.header
-            android.widget.LinearLayout r1 = r6.subtitleView
-            r25 = -1
-            r26 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-            boolean r3 = org.telegram.messenger.LocaleController.isRTL
-            if (r3 == 0) goto L_0x02f2
-            r15 = 5
-            goto L_0x02f3
-        L_0x02f2:
-            r15 = 3
-        L_0x02f3:
-            r27 = r15 | 48
-            int r3 = org.telegram.ui.Components.TranslateAlert.LoadingTextView2.paddingHorizontal
-            float r4 = (float) r3
-            float r5 = org.telegram.messenger.AndroidUtilities.density
-            float r4 = r4 / r5
-            r5 = 1102053376(0x41b00000, float:22.0)
-            float r28 = r5 - r4
-            r4 = 1111228416(0x423CLASSNAME, float:47.0)
-            int r8 = org.telegram.ui.Components.TranslateAlert.LoadingTextView2.paddingVertical
-            float r8 = (float) r8
-            float r12 = org.telegram.messenger.AndroidUtilities.density
-            float r8 = r8 / r12
-            float r29 = r4 - r8
-            float r3 = (float) r3
-            float r3 = r3 / r12
-            float r30 = r5 - r3
-            r31 = 0
-            android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r25, r26, r27, r28, r29, r30, r31)
-            r6.subtitleLayout = r3
-            r0.addView(r1, r3)
-            android.widget.ImageView r0 = new android.widget.ImageView
-            r0.<init>(r7)
-            r6.backButton = r0
-            int r1 = org.telegram.messenger.R.drawable.ic_ab_back
-            r0.setImageResource(r1)
-            android.widget.ImageView r0 = r6.backButton
-            android.graphics.PorterDuffColorFilter r1 = new android.graphics.PorterDuffColorFilter
-            int r3 = org.telegram.ui.ActionBar.Theme.getColor(r17)
-            android.graphics.PorterDuff$Mode r4 = android.graphics.PorterDuff.Mode.MULTIPLY
-            r1.<init>(r3, r4)
-            r0.setColorFilter(r1)
-            android.widget.ImageView r0 = r6.backButton
-            android.widget.ImageView$ScaleType r1 = android.widget.ImageView.ScaleType.FIT_CENTER
-            r0.setScaleType(r1)
-            android.widget.ImageView r0 = r6.backButton
-            r1 = 1098907648(0x41800000, float:16.0)
-            int r3 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            r0.setPadding(r3, r10, r4, r10)
-            android.widget.ImageView r0 = r6.backButton
-            java.lang.String r3 = "dialogButtonSelector"
-            int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
-            android.graphics.drawable.Drawable r3 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r3)
-            r0.setBackground(r3)
-            android.widget.ImageView r0 = r6.backButton
-            r0.setClickable(r10)
-            android.widget.ImageView r0 = r6.backButton
-            r0.setAlpha(r11)
-            android.widget.ImageView r0 = r6.backButton
-            org.telegram.ui.Components.TranslateAlert$$ExternalSyntheticLambda2 r3 = new org.telegram.ui.Components.TranslateAlert$$ExternalSyntheticLambda2
-            r3.<init>(r6)
-            r0.setOnClickListener(r3)
-            android.widget.FrameLayout r0 = r6.header
-            android.widget.ImageView r3 = r6.backButton
-            r4 = 56
-            r8 = 3
-            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r4, (int) r4, (int) r8)
-            r0.addView(r3, r4)
-            android.widget.FrameLayout r0 = new android.widget.FrameLayout
-            r0.<init>(r7)
-            r6.headerShadowView = r0
-            java.lang.String r3 = "dialogShadowLine"
-            int r4 = org.telegram.ui.ActionBar.Theme.getColor(r3)
-            r0.setBackgroundColor(r4)
-            android.widget.FrameLayout r0 = r6.headerShadowView
-            r0.setAlpha(r11)
-            android.widget.FrameLayout r0 = r6.header
-            android.widget.FrameLayout r4 = r6.headerShadowView
-            r8 = 87
-            r11 = -1
-            android.widget.FrameLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r11, (int) r13, (int) r8)
-            r0.addView(r4, r8)
-            android.widget.FrameLayout r0 = r6.header
-            r0.setClipChildren(r10)
-            android.widget.FrameLayout r0 = r6.container
-            android.widget.FrameLayout r4 = r6.header
-            r8 = 70
-            r12 = 55
-            android.widget.FrameLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r11, (int) r8, (int) r12)
-            r6.headerLayout = r8
-            r0.addView(r4, r8)
-            org.telegram.ui.Components.TranslateAlert$4 r0 = new org.telegram.ui.Components.TranslateAlert$4
-            r0.<init>(r7)
-            r6.scrollView = r0
-            r0.setClipChildren(r13)
-            org.telegram.ui.Components.TranslateAlert$5 r0 = new org.telegram.ui.Components.TranslateAlert$5
-            r0.<init>(r7)
-            r6.allTextsView = r0
-            org.telegram.ui.Components.LinkSpanDrawable$LinkCollector r4 = new org.telegram.ui.Components.LinkSpanDrawable$LinkCollector
-            r4.<init>(r0)
-            r6.links = r4
-            android.widget.TextView r0 = r6.allTextsView
-            r0.setTextColor(r10)
-            android.widget.TextView r0 = r6.allTextsView
-            r0.setTextSize(r13, r1)
-            android.widget.TextView r0 = r6.allTextsView
-            r4 = r9 ^ 1
-            r0.setTextIsSelectable(r4)
-            android.widget.TextView r0 = r6.allTextsView
-            java.lang.String r4 = "chat_inTextSelectionHighlight"
-            int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
-            r0.setHighlightColor(r4)
-            java.lang.String r0 = "chat_TextSelectionCursor"
-            int r0 = org.telegram.ui.ActionBar.Theme.getColor(r0)
-            r4 = 29
-            if (r14 < r4) goto L_0x0418
-            boolean r4 = org.telegram.messenger.XiaomiUtilities.isMIUI()     // Catch:{ Exception -> 0x0418 }
-            if (r4 != 0) goto L_0x0418
-            android.widget.TextView r4 = r6.allTextsView     // Catch:{ Exception -> 0x0418 }
-            android.graphics.drawable.Drawable r4 = r4.getTextSelectHandleLeft()     // Catch:{ Exception -> 0x0418 }
-            android.graphics.PorterDuff$Mode r8 = android.graphics.PorterDuff.Mode.SRC_IN     // Catch:{ Exception -> 0x0418 }
-            r4.setColorFilter(r0, r8)     // Catch:{ Exception -> 0x0418 }
-            android.widget.TextView r8 = r6.allTextsView     // Catch:{ Exception -> 0x0418 }
-            r8.setTextSelectHandleLeft(r4)     // Catch:{ Exception -> 0x0418 }
-            android.widget.TextView r4 = r6.allTextsView     // Catch:{ Exception -> 0x0418 }
-            android.graphics.drawable.Drawable r4 = r4.getTextSelectHandleRight()     // Catch:{ Exception -> 0x0418 }
-            android.graphics.PorterDuff$Mode r8 = android.graphics.PorterDuff.Mode.SRC_IN     // Catch:{ Exception -> 0x0418 }
-            r4.setColorFilter(r0, r8)     // Catch:{ Exception -> 0x0418 }
-            android.widget.TextView r0 = r6.allTextsView     // Catch:{ Exception -> 0x0418 }
-            r0.setTextSelectHandleRight(r4)     // Catch:{ Exception -> 0x0418 }
-        L_0x0418:
-            android.widget.TextView r0 = r6.allTextsView
-            r0.setFocusable(r13)
-            android.widget.TextView r0 = r6.allTextsView
-            android.text.method.LinkMovementMethod r4 = new android.text.method.LinkMovementMethod
-            r4.<init>()
-            r0.setMovementMethod(r4)
-            org.telegram.ui.Components.TranslateAlert$TextBlocksLayout r0 = new org.telegram.ui.Components.TranslateAlert$TextBlocksLayout
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            int r4 = org.telegram.ui.ActionBar.Theme.getColor(r17)
-            android.widget.TextView r8 = r6.allTextsView
-            r0.<init>(r7, r1, r4, r8)
-            r6.textsView = r0
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            int r4 = org.telegram.ui.Components.TranslateAlert.LoadingTextView2.paddingHorizontal
-            int r1 = r1 - r4
-            r8 = 1094713344(0x41400000, float:12.0)
-            int r9 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            int r11 = org.telegram.ui.Components.TranslateAlert.LoadingTextView2.paddingVertical
-            int r9 = r9 - r11
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            int r5 = r5 - r4
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            int r4 = r4 - r11
-            r0.setPadding(r1, r9, r5, r4)
-            java.util.ArrayList<java.lang.CharSequence> r0 = r6.textBlocks
-            java.util.Iterator r0 = r0.iterator()
-        L_0x045b:
-            boolean r1 = r0.hasNext()
-            if (r1 == 0) goto L_0x046d
-            java.lang.Object r1 = r0.next()
-            java.lang.CharSequence r1 = (java.lang.CharSequence) r1
-            org.telegram.ui.Components.TranslateAlert$TextBlocksLayout r4 = r6.textsView
-            r4.addBlock(r1)
-            goto L_0x045b
-        L_0x046d:
-            android.widget.FrameLayout r0 = new android.widget.FrameLayout
-            r0.<init>(r7)
-            r6.textsContainerView = r0
-            org.telegram.ui.Components.TranslateAlert$TextBlocksLayout r1 = r6.textsView
-            r4 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-            r5 = -1
-            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r5, r4)
-            r0.addView(r1, r4)
-            androidx.core.widget.NestedScrollView r0 = r6.scrollView
-            android.widget.FrameLayout r1 = r6.textsContainerView
-            r4 = 1065353216(0x3var_, float:1.0)
-            android.widget.LinearLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r5, (int) r2, (float) r4)
-            r0.addView((android.view.View) r1, (android.view.ViewGroup.LayoutParams) r4)
-            android.widget.FrameLayout r0 = r6.container
-            androidx.core.widget.NestedScrollView r1 = r6.scrollView
-            r4 = -1
-            r5 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-            r8 = 119(0x77, float:1.67E-43)
-            r9 = 0
-            r11 = 1116471296(0x428CLASSNAME, float:70.0)
-            r12 = 0
-            r14 = 1117913088(0x42a20000, float:81.0)
-            r35 = r4
-            r36 = r5
-            r37 = r8
-            r38 = r9
-            r39 = r11
-            r40 = r12
-            r41 = r14
-            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r35, r36, r37, r38, r39, r40, r41)
-            r6.scrollViewLayout = r4
-            r0.addView(r1, r4)
-            r32.fetchNext()
-            android.widget.FrameLayout r0 = new android.widget.FrameLayout
-            r0.<init>(r7)
-            r6.buttonShadowView = r0
-            int r1 = org.telegram.ui.ActionBar.Theme.getColor(r3)
-            r0.setBackgroundColor(r1)
-            android.widget.FrameLayout r0 = r6.container
-            android.widget.FrameLayout r1 = r6.buttonShadowView
-            r3 = -1
-            r4 = 1065353216(0x3var_, float:1.0)
-            r5 = 87
-            r8 = 0
-            r11 = 0
-            r12 = 1117782016(0x42a00000, float:80.0)
-            r35 = r3
-            r36 = r4
-            r37 = r5
-            r38 = r8
-            r39 = r9
-            r40 = r11
-            r41 = r12
-            android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r35, r36, r37, r38, r39, r40, r41)
-            r0.addView(r1, r3)
-            android.widget.TextView r0 = new android.widget.TextView
-            r0.<init>(r7)
-            r6.buttonTextView = r0
-            r0.setLines(r13)
-            android.widget.TextView r0 = r6.buttonTextView
-            r0.setSingleLine(r13)
-            android.widget.TextView r0 = r6.buttonTextView
-            r0.setGravity(r13)
-            android.widget.TextView r0 = r6.buttonTextView
-            android.text.TextUtils$TruncateAt r1 = android.text.TextUtils.TruncateAt.END
-            r0.setEllipsize(r1)
-            android.widget.TextView r0 = r6.buttonTextView
-            r1 = 17
-            r0.setGravity(r1)
-            android.widget.TextView r0 = r6.buttonTextView
-            java.lang.String r1 = "featuredStickers_buttonText"
-            int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
-            r0.setTextColor(r1)
-            android.widget.TextView r0 = r6.buttonTextView
-            android.graphics.Typeface r1 = org.telegram.messenger.AndroidUtilities.getTypeface(r16)
-            r0.setTypeface(r1)
-            android.widget.TextView r0 = r6.buttonTextView
-            r1 = 1096810496(0x41600000, float:14.0)
-            r0.setTextSize(r13, r1)
-            android.widget.TextView r0 = r6.buttonTextView
-            int r1 = org.telegram.messenger.R.string.CloseTranslation
-            java.lang.String r3 = "CloseTranslation"
-            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
-            r0.setText(r1)
-            android.widget.FrameLayout r0 = new android.widget.FrameLayout
-            r0.<init>(r7)
-            r6.buttonView = r0
-            java.lang.String r1 = "featuredStickers_addButton"
-            int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
-            float[] r3 = new float[r13]
-            r4 = 1082130432(0x40800000, float:4.0)
-            r3[r10] = r4
-            android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.AdaptiveRipple.filledRect((int) r1, (float[]) r3)
-            r0.setBackground(r1)
-            android.widget.FrameLayout r0 = r6.buttonView
-            android.widget.TextView r1 = r6.buttonTextView
-            r0.addView(r1)
-            android.widget.FrameLayout r0 = r6.buttonView
-            org.telegram.ui.Components.TranslateAlert$$ExternalSyntheticLambda3 r1 = new org.telegram.ui.Components.TranslateAlert$$ExternalSyntheticLambda3
-            r1.<init>(r6)
-            r0.setOnClickListener(r1)
-            android.widget.FrameLayout r0 = r6.container
-            android.widget.FrameLayout r1 = r6.buttonView
-            r3 = -1
-            r4 = 1111490560(0x42400000, float:48.0)
-            r5 = 80
-            r8 = 1098907648(0x41800000, float:16.0)
-            r9 = 1098907648(0x41800000, float:16.0)
-            r10 = 1098907648(0x41800000, float:16.0)
-            r11 = 1098907648(0x41800000, float:16.0)
-            r35 = r3
-            r36 = r4
-            r37 = r5
-            r38 = r8
-            r39 = r9
-            r40 = r10
-            r41 = r11
-            android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r35, r36, r37, r38, r39, r40, r41)
-            r0.addView(r1, r3)
-            android.widget.FrameLayout r0 = r6.contentView
-            android.widget.FrameLayout r1 = r6.container
-            r3 = 81
-            r4 = -1
-            android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r4, (int) r2, (int) r3)
-            r0.addView(r1, r2)
-            android.widget.FrameLayout r0 = new android.widget.FrameLayout
-            r0.<init>(r7)
-            r6.bulletinContainer = r0
-            android.widget.FrameLayout r1 = r6.contentView
-            r2 = -1
-            r3 = -1082130432(0xffffffffbvar_, float:-1.0)
-            r4 = 119(0x77, float:1.67E-43)
-            r5 = 0
-            r7 = 0
-            r8 = 0
-            r9 = 1117913088(0x42a20000, float:81.0)
-            r33 = r2
-            r34 = r3
-            r35 = r4
-            r36 = r5
-            r37 = r7
-            r38 = r8
-            r39 = r9
-            android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r33, r34, r35, r36, r37, r38, r39)
-            r1.addView(r0, r2)
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.TranslateAlert.<init>(org.telegram.ui.ActionBar.BaseFragment, android.content.Context, int, org.telegram.tgnet.TLRPC$InputPeer, int, java.lang.String, java.lang.String, java.lang.CharSequence, boolean, org.telegram.ui.Components.TranslateAlert$OnLinkPress, java.lang.Runnable):void");
+    public TranslateAlert(BaseFragment baseFragment, Context context, int i, TLRPC$InputPeer tLRPC$InputPeer, int i2, String str, String str2, CharSequence charSequence, boolean z, OnLinkPress onLinkPress, Runnable runnable) {
+        super(context, R.style.TransparentDialog);
+        int i3;
+        int i4;
+        this.blockIndex = 0;
+        this.containerOpenAnimationT = 0.0f;
+        this.openAnimationToAnimatorPriority = false;
+        String str3 = null;
+        this.openAnimationToAnimator = null;
+        this.firstMinHeight = -1;
+        this.allowScroll = true;
+        this.fromScrollY = 0.0f;
+        this.containerRect = new android.graphics.Rect();
+        this.textRect = new android.graphics.Rect();
+        new android.graphics.Rect();
+        this.buttonRect = new android.graphics.Rect();
+        this.backRect = new android.graphics.Rect();
+        this.scrollRect = new android.graphics.Rect();
+        this.fromY = 0.0f;
+        this.pressedOutside = false;
+        this.maybeScrolling = false;
+        this.scrolling = false;
+        this.fromScrollRect = false;
+        this.fromScrollViewY = 0.0f;
+        this.allTexts = null;
+        this.openingT = 0.0f;
+        this.backDrawable = new ColorDrawable(-16777216) { // from class: org.telegram.ui.Components.TranslateAlert.6
+            {
+                TranslateAlert.this = this;
+            }
+
+            @Override // android.graphics.drawable.ColorDrawable, android.graphics.drawable.Drawable
+            public void setAlpha(int i5) {
+                super.setAlpha(i5);
+                TranslateAlert.this.container.invalidate();
+            }
+        };
+        this.dismissed = false;
+        this.heightMaxPercent = 0.85f;
+        this.fastHide = false;
+        this.openingAnimatorPriority = false;
+        this.loading = false;
+        this.loaded = false;
+        if (tLRPC$InputPeer != null) {
+            if (str == null || !str.equals("und")) {
+                i3 = i;
+                i4 = i2;
+                str3 = str;
+            } else {
+                i3 = i;
+                i4 = i2;
+            }
+            translateText(i3, tLRPC$InputPeer, i4, str3, str2);
+        }
+        this.onLinkPress = onLinkPress;
+        this.noforwards = z;
+        this.fragment = baseFragment;
+        this.fromLanguage = (str == null || !str.equals("und")) ? str : "auto";
+        this.toLanguage = str2;
+        this.textBlocks = cutInBlocks(charSequence, 1024);
+        this.onDismiss = runnable;
+        int i5 = Build.VERSION.SDK_INT;
+        if (i5 >= 30) {
+            getWindow().addFlags(-NUM);
+        } else if (i5 >= 21) {
+            getWindow().addFlags(-NUM);
+        }
+        if (z) {
+            getWindow().addFlags(8192);
+        }
+        FrameLayout frameLayout = new FrameLayout(context);
+        this.contentView = frameLayout;
+        frameLayout.setBackground(this.backDrawable);
+        this.contentView.setClipChildren(false);
+        this.contentView.setClipToPadding(false);
+        if (i5 >= 21) {
+            this.contentView.setFitsSystemWindows(true);
+            if (i5 >= 30) {
+                this.contentView.setSystemUiVisibility(1792);
+            } else {
+                this.contentView.setSystemUiVisibility(1280);
+            }
+        }
+        final Paint paint = new Paint();
+        paint.setColor(Theme.getColor("dialogBackground"));
+        paint.setShadowLayer(AndroidUtilities.dp(2.0f), 0.0f, AndroidUtilities.dp(-0.66f), NUM);
+        FrameLayout frameLayout2 = new FrameLayout(context) { // from class: org.telegram.ui.Components.TranslateAlert.2
+            private RectF containerRect;
+            private int contentHeight = Integer.MAX_VALUE;
+
+            {
+                TranslateAlert.this = this;
+                new Path();
+                this.containerRect = new RectF();
+                new RectF();
+            }
+
+            @Override // android.widget.FrameLayout, android.view.View
+            protected void onMeasure(int i6, int i7) {
+                int size = View.MeasureSpec.getSize(i6);
+                View.MeasureSpec.getSize(i6);
+                int i8 = (int) (AndroidUtilities.displayMetrics.heightPixels * TranslateAlert.this.heightMaxPercent);
+                if (TranslateAlert.this.textsView != null && TranslateAlert.this.textsView.getMeasuredHeight() <= 0) {
+                    TranslateAlert.this.textsView.measure(View.MeasureSpec.makeMeasureSpec((((View.MeasureSpec.getSize(i6) - TranslateAlert.this.textsView.getPaddingLeft()) - TranslateAlert.this.textsView.getPaddingRight()) - TranslateAlert.this.textsContainerView.getPaddingLeft()) - TranslateAlert.this.textsContainerView.getPaddingRight(), NUM), 0);
+                }
+                int min = Math.min(i8, TranslateAlert.this.minHeight());
+                int i9 = (int) (min + ((AndroidUtilities.displayMetrics.heightPixels - min) * TranslateAlert.this.containerOpenAnimationT));
+                TranslateAlert.this.updateCanExpand();
+                super.onMeasure(View.MeasureSpec.makeMeasureSpec((int) Math.max(size * 0.8f, Math.min(AndroidUtilities.dp(480.0f), size)), View.MeasureSpec.getMode(i6)), View.MeasureSpec.makeMeasureSpec(i9, NUM));
+            }
+
+            @Override // android.widget.FrameLayout, android.view.ViewGroup, android.view.View
+            protected void onLayout(boolean z2, int i6, int i7, int i8, int i9) {
+                super.onLayout(z2, i6, i7, i8, i9);
+                this.contentHeight = Math.min(this.contentHeight, i9 - i7);
+            }
+
+            @Override // android.view.View
+            protected void onDraw(Canvas canvas) {
+                int width = getWidth();
+                int height = getHeight();
+                int dp = AndroidUtilities.dp((1.0f - TranslateAlert.this.containerOpenAnimationT) * 12.0f);
+                canvas.clipRect(0, 0, width, height);
+                this.containerRect.set(0.0f, 0.0f, width, height + dp);
+                canvas.translate(0.0f, (1.0f - TranslateAlert.this.openingT) * height);
+                float f = dp;
+                canvas.drawRoundRect(this.containerRect, f, f, paint);
+                super.onDraw(canvas);
+            }
+        };
+        this.container = frameLayout2;
+        frameLayout2.setWillNotDraw(false);
+        this.header = new FrameLayout(context);
+        TextView textView = new TextView(context);
+        this.titleView = textView;
+        textView.setPivotX(LocaleController.isRTL ? textView.getWidth() : 0.0f);
+        this.titleView.setPivotY(0.0f);
+        this.titleView.setLines(1);
+        this.titleView.setText(LocaleController.getString("AutomaticTranslation", R.string.AutomaticTranslation));
+        this.titleView.setGravity(LocaleController.isRTL ? 5 : 3);
+        this.titleView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        this.titleView.setTextColor(Theme.getColor("dialogTextBlack"));
+        this.titleView.setTextSize(0, AndroidUtilities.dp(19.0f));
+        FrameLayout frameLayout3 = this.header;
+        View view = this.titleView;
+        FrameLayout.LayoutParams createFrame = LayoutHelper.createFrame(-1, -2.0f, 55, 22.0f, 22.0f, 22.0f, 0.0f);
+        this.titleLayout = createFrame;
+        frameLayout3.addView(view, createFrame);
+        this.titleView.post(new Runnable() { // from class: org.telegram.ui.Components.TranslateAlert$$ExternalSyntheticLambda8
+            @Override // java.lang.Runnable
+            public final void run() {
+                TranslateAlert.this.lambda$new$1();
+            }
+        });
+        LinearLayout linearLayout = new LinearLayout(context);
+        this.subtitleView = linearLayout;
+        linearLayout.setOrientation(0);
+        if (i5 >= 17) {
+            this.subtitleView.setLayoutDirection(LocaleController.isRTL ? 1 : 0);
+        }
+        this.subtitleView.setGravity(LocaleController.isRTL ? 5 : 3);
+        String languageName = languageName(str);
+        InlineLoadingTextView inlineLoadingTextView = new InlineLoadingTextView(context, languageName == null ? languageName(str2) : languageName, AndroidUtilities.dp(14.0f), Theme.getColor("player_actionBarSubtitle")) { // from class: org.telegram.ui.Components.TranslateAlert.3
+            {
+                TranslateAlert.this = this;
+            }
+
+            @Override // org.telegram.ui.Components.TranslateAlert.InlineLoadingTextView
+            protected void onLoadAnimation(float f) {
+                ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) TranslateAlert.this.subtitleFromView.getLayoutParams();
+                if (marginLayoutParams != null) {
+                    if (LocaleController.isRTL) {
+                        marginLayoutParams.leftMargin = AndroidUtilities.dp(2.0f - (f * 6.0f));
+                    } else {
+                        marginLayoutParams.rightMargin = AndroidUtilities.dp(2.0f - (f * 6.0f));
+                    }
+                    TranslateAlert.this.subtitleFromView.setLayoutParams(marginLayoutParams);
+                }
+            }
+        };
+        this.subtitleFromView = inlineLoadingTextView;
+        inlineLoadingTextView.showLoadingText = false;
+        ImageView imageView = new ImageView(context);
+        this.subtitleArrowView = imageView;
+        imageView.setImageResource(R.drawable.search_arrow);
+        this.subtitleArrowView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("player_actionBarSubtitle"), PorterDuff.Mode.MULTIPLY));
+        if (LocaleController.isRTL) {
+            this.subtitleArrowView.setScaleX(-1.0f);
+        }
+        TextView textView2 = new TextView(context);
+        this.subtitleToView = textView2;
+        textView2.setLines(1);
+        this.subtitleToView.setTextColor(Theme.getColor("player_actionBarSubtitle"));
+        this.subtitleToView.setTextSize(0, AndroidUtilities.dp(14.0f));
+        this.subtitleToView.setText(languageName(str2));
+        if (LocaleController.isRTL) {
+            this.subtitleView.setPadding(InlineLoadingTextView.paddingHorizontal, 0, 0, 0);
+            this.subtitleView.addView(this.subtitleToView, LayoutHelper.createLinear(-2, -2, 16));
+            this.subtitleView.addView(this.subtitleArrowView, LayoutHelper.createLinear(-2, -2, 16, 3, 1, 0, 0));
+            this.subtitleView.addView(this.subtitleFromView, LayoutHelper.createLinear(-2, -2, 16, 2, 0, 0, 0));
+        } else {
+            this.subtitleView.setPadding(0, 0, InlineLoadingTextView.paddingHorizontal, 0);
+            this.subtitleView.addView(this.subtitleFromView, LayoutHelper.createLinear(-2, -2, 16, 0, 0, 2, 0));
+            this.subtitleView.addView(this.subtitleArrowView, LayoutHelper.createLinear(-2, -2, 16, 0, 1, 3, 0));
+            this.subtitleView.addView(this.subtitleToView, LayoutHelper.createLinear(-2, -2, 16));
+        }
+        if (languageName != null) {
+            this.subtitleFromView.set(languageName);
+        }
+        FrameLayout frameLayout4 = this.header;
+        View view2 = this.subtitleView;
+        int i6 = LocaleController.isRTL ? 5 : 3;
+        int i7 = LoadingTextView2.paddingHorizontal;
+        float f = AndroidUtilities.density;
+        FrameLayout.LayoutParams createFrame2 = LayoutHelper.createFrame(-1, -2.0f, i6 | 48, 22.0f - (i7 / AndroidUtilities.density), 47.0f - (LoadingTextView2.paddingVertical / f), 22.0f - (i7 / f), 0.0f);
+        this.subtitleLayout = createFrame2;
+        frameLayout4.addView(view2, createFrame2);
+        ImageView imageView2 = new ImageView(context);
+        this.backButton = imageView2;
+        imageView2.setImageResource(R.drawable.ic_ab_back);
+        this.backButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogTextBlack"), PorterDuff.Mode.MULTIPLY));
+        this.backButton.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        this.backButton.setPadding(AndroidUtilities.dp(16.0f), 0, AndroidUtilities.dp(16.0f), 0);
+        this.backButton.setBackground(Theme.createSelectorDrawable(Theme.getColor("dialogButtonSelector")));
+        this.backButton.setClickable(false);
+        this.backButton.setAlpha(0.0f);
+        this.backButton.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.Components.TranslateAlert$$ExternalSyntheticLambda2
+            @Override // android.view.View.OnClickListener
+            public final void onClick(View view3) {
+                TranslateAlert.this.lambda$new$2(view3);
+            }
+        });
+        this.header.addView(this.backButton, LayoutHelper.createFrame(56, 56, 3));
+        FrameLayout frameLayout5 = new FrameLayout(context);
+        this.headerShadowView = frameLayout5;
+        frameLayout5.setBackgroundColor(Theme.getColor("dialogShadowLine"));
+        this.headerShadowView.setAlpha(0.0f);
+        this.header.addView(this.headerShadowView, LayoutHelper.createFrame(-1, 1, 87));
+        this.header.setClipChildren(false);
+        FrameLayout frameLayout6 = this.container;
+        View view3 = this.header;
+        FrameLayout.LayoutParams createFrame3 = LayoutHelper.createFrame(-1, 70, 55);
+        this.headerLayout = createFrame3;
+        frameLayout6.addView(view3, createFrame3);
+        NestedScrollView nestedScrollView = new NestedScrollView(context) { // from class: org.telegram.ui.Components.TranslateAlert.4
+            {
+                TranslateAlert.this = this;
+            }
+
+            @Override // androidx.core.widget.NestedScrollView, android.view.ViewGroup
+            public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
+                return TranslateAlert.this.allowScroll && TranslateAlert.this.containerOpenAnimationT >= 1.0f && TranslateAlert.this.canExpand() && super.onInterceptTouchEvent(motionEvent);
+            }
+
+            @Override // androidx.core.widget.NestedScrollView, android.view.ViewGroup, android.view.ViewParent, androidx.core.view.NestedScrollingParent
+            public void onNestedScroll(View view4, int i8, int i9, int i10, int i11) {
+                super.onNestedScroll(view4, i8, i9, i10, i11);
+            }
+
+            /* JADX INFO: Access modifiers changed from: protected */
+            @Override // androidx.core.widget.NestedScrollView, android.view.View
+            public void onScrollChanged(int i8, int i9, int i10, int i11) {
+                super.onScrollChanged(i8, i9, i10, i11);
+                if (TranslateAlert.this.checkForNextLoading()) {
+                    TranslateAlert.this.openAnimationTo(1.0f, true);
+                }
+            }
+        };
+        this.scrollView = nestedScrollView;
+        nestedScrollView.setClipChildren(true);
+        TextView textView3 = new TextView(context) { // from class: org.telegram.ui.Components.TranslateAlert.5
+            {
+                TranslateAlert.this = this;
+            }
+
+            @Override // android.widget.TextView, android.view.View
+            protected void onMeasure(int i8, int i9) {
+                super.onMeasure(i8, TranslateAlert.MOST_SPEC);
+            }
+
+            @Override // android.widget.TextView, android.view.View
+            protected void onDraw(Canvas canvas) {
+                super.onDraw(canvas);
+                canvas.translate(getPaddingLeft(), getPaddingTop());
+                if (TranslateAlert.this.links == null || !TranslateAlert.this.links.draw(canvas)) {
+                    return;
+                }
+                invalidate();
+            }
+
+            @Override // android.widget.TextView
+            public boolean onTextContextMenuItem(int i8) {
+                if (i8 == 16908321 && isFocused()) {
+                    ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", getText().subSequence(Math.max(0, Math.min(getSelectionStart(), getSelectionEnd())), Math.max(0, Math.max(getSelectionStart(), getSelectionEnd())))));
+                    BulletinFactory.of(TranslateAlert.this.bulletinContainer, null).createCopyBulletin(LocaleController.getString("TextCopied", R.string.TextCopied)).show();
+                    clearFocus();
+                    return true;
+                }
+                return super.onTextContextMenuItem(i8);
+            }
+        };
+        this.allTextsView = textView3;
+        this.links = new LinkSpanDrawable.LinkCollector(textView3);
+        this.allTextsView.setTextColor(0);
+        this.allTextsView.setTextSize(1, 16.0f);
+        this.allTextsView.setTextIsSelectable(!z);
+        this.allTextsView.setHighlightColor(Theme.getColor("chat_inTextSelectionHighlight"));
+        int color = Theme.getColor("chat_TextSelectionCursor");
+        if (i5 >= 29) {
+            try {
+                if (!XiaomiUtilities.isMIUI()) {
+                    Drawable textSelectHandleLeft = this.allTextsView.getTextSelectHandleLeft();
+                    textSelectHandleLeft.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+                    this.allTextsView.setTextSelectHandleLeft(textSelectHandleLeft);
+                    Drawable textSelectHandleRight = this.allTextsView.getTextSelectHandleRight();
+                    textSelectHandleRight.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+                    this.allTextsView.setTextSelectHandleRight(textSelectHandleRight);
+                }
+            } catch (Exception unused) {
+            }
+        }
+        this.allTextsView.setFocusable(true);
+        this.allTextsView.setMovementMethod(new LinkMovementMethod());
+        TextBlocksLayout textBlocksLayout = new TextBlocksLayout(context, AndroidUtilities.dp(16.0f), Theme.getColor("dialogTextBlack"), this.allTextsView);
+        this.textsView = textBlocksLayout;
+        int dp = AndroidUtilities.dp(22.0f);
+        int i8 = LoadingTextView2.paddingHorizontal;
+        int dp2 = AndroidUtilities.dp(12.0f);
+        int i9 = LoadingTextView2.paddingVertical;
+        textBlocksLayout.setPadding(dp - i8, dp2 - i9, AndroidUtilities.dp(22.0f) - i8, AndroidUtilities.dp(12.0f) - i9);
+        Iterator<CharSequence> it = this.textBlocks.iterator();
+        while (it.hasNext()) {
+            this.textsView.addBlock(it.next());
+        }
+        FrameLayout frameLayout7 = new FrameLayout(context);
+        this.textsContainerView = frameLayout7;
+        frameLayout7.addView(this.textsView, LayoutHelper.createFrame(-1, -2.0f));
+        this.scrollView.addView(this.textsContainerView, LayoutHelper.createLinear(-1, -2, 1.0f));
+        FrameLayout frameLayout8 = this.container;
+        View view4 = this.scrollView;
+        FrameLayout.LayoutParams createFrame4 = LayoutHelper.createFrame(-1, -2.0f, 119, 0.0f, 70.0f, 0.0f, 81.0f);
+        this.scrollViewLayout = createFrame4;
+        frameLayout8.addView(view4, createFrame4);
+        fetchNext();
+        FrameLayout frameLayout9 = new FrameLayout(context);
+        this.buttonShadowView = frameLayout9;
+        frameLayout9.setBackgroundColor(Theme.getColor("dialogShadowLine"));
+        this.container.addView(this.buttonShadowView, LayoutHelper.createFrame(-1, 1.0f, 87, 0.0f, 0.0f, 0.0f, 80.0f));
+        TextView textView4 = new TextView(context);
+        this.buttonTextView = textView4;
+        textView4.setLines(1);
+        this.buttonTextView.setSingleLine(true);
+        this.buttonTextView.setGravity(1);
+        this.buttonTextView.setEllipsize(TextUtils.TruncateAt.END);
+        this.buttonTextView.setGravity(17);
+        this.buttonTextView.setTextColor(Theme.getColor("featuredStickers_buttonText"));
+        this.buttonTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        this.buttonTextView.setTextSize(1, 14.0f);
+        this.buttonTextView.setText(LocaleController.getString("CloseTranslation", R.string.CloseTranslation));
+        FrameLayout frameLayout10 = new FrameLayout(context);
+        this.buttonView = frameLayout10;
+        frameLayout10.setBackground(Theme.AdaptiveRipple.filledRect(Theme.getColor("featuredStickers_addButton"), 4.0f));
+        this.buttonView.addView(this.buttonTextView);
+        this.buttonView.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.Components.TranslateAlert$$ExternalSyntheticLambda3
+            @Override // android.view.View.OnClickListener
+            public final void onClick(View view5) {
+                TranslateAlert.this.lambda$new$3(view5);
+            }
+        });
+        this.container.addView(this.buttonView, LayoutHelper.createFrame(-1, 48.0f, 80, 16.0f, 16.0f, 16.0f, 16.0f));
+        this.contentView.addView(this.container, LayoutHelper.createFrame(-1, -2, 81));
+        FrameLayout frameLayout11 = new FrameLayout(context);
+        this.bulletinContainer = frameLayout11;
+        this.contentView.addView(frameLayout11, LayoutHelper.createFrame(-1, -1.0f, 119, 0.0f, 0.0f, 0.0f, 81.0f));
     }
 
-    /* access modifiers changed from: private */
     public /* synthetic */ void lambda$new$1() {
         TextView textView = this.titleView;
-        textView.setPivotX(LocaleController.isRTL ? (float) textView.getWidth() : 0.0f);
+        textView.setPivotX(LocaleController.isRTL ? textView.getWidth() : 0.0f);
     }
 
-    /* access modifiers changed from: private */
     public /* synthetic */ void lambda$new$2(View view) {
         dismiss();
     }
 
-    /* access modifiers changed from: private */
     public /* synthetic */ void lambda$new$3(View view) {
         dismiss();
     }
@@ -970,10 +684,7 @@ public class TranslateAlert extends Dialog {
         if (firstUnloadedBlock != null) {
             bottom = firstUnloadedBlock.getTop();
         }
-        if (bottom - (this.scrollView.getHeight() + this.scrollView.getScrollY()) <= this.textsContainerView.getPaddingBottom()) {
-            return true;
-        }
-        return false;
+        return bottom - (this.scrollView.getHeight() + this.scrollView.getScrollY()) <= this.textsContainerView.getPaddingBottom();
     }
 
     private void setScrollY(float f) {
@@ -982,11 +693,11 @@ public class TranslateAlert extends Dialog {
         this.openingT = max;
         this.backDrawable.setAlpha((int) (max * 51.0f));
         this.container.invalidate();
-        this.bulletinContainer.setTranslationY((1.0f - this.openingT) * Math.min((float) minHeight(), ((float) AndroidUtilities.displayMetrics.heightPixels) * this.heightMaxPercent));
+        this.bulletinContainer.setTranslationY((1.0f - this.openingT) * Math.min(minHeight(), AndroidUtilities.displayMetrics.heightPixels * this.heightMaxPercent));
     }
 
     private void scrollYTo(float f) {
-        scrollYTo(f, (Runnable) null);
+        scrollYTo(f, null);
     }
 
     private void scrollYTo(float f, Runnable runnable) {
@@ -1002,7 +713,9 @@ public class TranslateAlert extends Dialog {
         return this.allTextsView.hasSelection();
     }
 
+    @Override // android.app.Dialog, android.view.Window.Callback
     public boolean dispatchTouchEvent(MotionEvent motionEvent) {
+        float round;
         float f;
         ClickableSpan[] clickableSpanArr;
         try {
@@ -1026,9 +739,9 @@ public class TranslateAlert extends Dialog {
                 this.allTextsView.getGlobalVisibleRect(this.textRect);
                 if (this.textRect.contains(i, i2) && !this.maybeScrolling) {
                     Layout layout = this.allTextsView.getLayout();
-                    int top = (int) ((((y - ((float) this.allTextsView.getTop())) - ((float) this.container.getTop())) - ((float) this.scrollView.getTop())) + ((float) this.scrollView.getScrollY()));
+                    int top = (int) ((((y - this.allTextsView.getTop()) - this.container.getTop()) - this.scrollView.getTop()) + this.scrollView.getScrollY());
                     int lineForVertical = layout.getLineForVertical(top);
-                    float left = (float) ((int) ((x - ((float) this.allTextsView.getLeft())) - ((float) this.container.getLeft())));
+                    float left = (int) ((x - this.allTextsView.getLeft()) - this.container.getLeft());
                     int offsetForHorizontal = layout.getOffsetForHorizontal(lineForVertical, left);
                     float lineLeft = layout.getLineLeft(lineForVertical);
                     if ((this.allTexts instanceof Spannable) && lineLeft <= left && lineLeft + layout.getLineWidth(lineForVertical) >= left && (clickableSpanArr = (ClickableSpan[]) this.allTexts.getSpans(offsetForHorizontal, offsetForHorizontal, ClickableSpan.class)) != null && clickableSpanArr.length >= 1) {
@@ -1041,7 +754,7 @@ public class TranslateAlert extends Dialog {
                             this.pressedLink = null;
                             this.allTextsView.setTextIsSelectable(!this.noforwards);
                         } else if (motionEvent.getAction() == 0) {
-                            LinkSpanDrawable linkSpanDrawable = new LinkSpanDrawable(clickableSpanArr[0], this.fragment.getResourceProvider(), left, (float) top, false);
+                            LinkSpanDrawable linkSpanDrawable = new LinkSpanDrawable(clickableSpanArr[0], this.fragment.getResourceProvider(), left, top, false);
                             this.pressedLink = linkSpanDrawable;
                             LinkSpanDrawable.LinkCollector linkCollector2 = this.links;
                             if (linkCollector2 != null) {
@@ -1080,25 +793,25 @@ public class TranslateAlert extends Dialog {
                     this.scrolling = z;
                     this.fromY = y;
                     this.fromScrollY = getScrollY();
-                    this.fromScrollViewY = (float) this.scrollView.getScrollY();
+                    this.fromScrollViewY = this.scrollView.getScrollY();
                     super.dispatchTouchEvent(motionEvent);
                     return true;
                 } else if (this.maybeScrolling && (motionEvent.getAction() == 2 || motionEvent.getAction() == 1)) {
                     float f2 = this.fromY - y;
                     if (this.fromScrollRect) {
-                        f2 = -Math.max(0.0f, (-(this.fromScrollViewY + ((float) AndroidUtilities.dp(48.0f)))) - f2);
+                        f2 = -Math.max(0.0f, (-(this.fromScrollViewY + AndroidUtilities.dp(48.0f))) - f2);
                         if (f2 < 0.0f) {
                             this.scrolling = true;
                             this.allTextsView.setTextIsSelectable(false);
                         }
-                    } else if (Math.abs(f2) > ((float) AndroidUtilities.dp(4.0f)) && !this.fromScrollRect) {
+                    } else if (Math.abs(f2) > AndroidUtilities.dp(4.0f) && !this.fromScrollRect) {
                         this.scrolling = true;
                         this.allTextsView.setTextIsSelectable(false);
                         this.scrollView.stopNestedScroll();
                         this.allowScroll = false;
                     }
-                    float f3 = (float) AndroidUtilities.displayMetrics.heightPixels;
-                    float min = Math.min((float) minHeight(), this.heightMaxPercent * f3);
+                    float f3 = AndroidUtilities.displayMetrics.heightPixels;
+                    float min = Math.min(minHeight(), this.heightMaxPercent * f3);
                     float f4 = -1.0f;
                     float f5 = f3 - min;
                     float min2 = ((1.0f - (-Math.min(Math.max(this.fromScrollY, -1.0f), 0.0f))) * min) + (Math.min(1.0f, Math.max(this.fromScrollY, 0.0f)) * f5) + f2;
@@ -1114,17 +827,21 @@ public class TranslateAlert extends Dialog {
                             this.allTextsView.setTextIsSelectable(!this.noforwards);
                             this.maybeScrolling = false;
                             this.allowScroll = true;
-                            if (Math.abs(f2) > ((float) AndroidUtilities.dp(16.0f))) {
-                                float round = (float) Math.round(this.fromScrollY);
-                                float f7 = this.fromScrollY;
-                                if (f6 > f7) {
+                            if (Math.abs(f2) > AndroidUtilities.dp(16.0f)) {
+                                float round2 = Math.round(this.fromScrollY);
+                                if (f6 > this.fromScrollY) {
                                     f4 = 1.0f;
                                 }
-                                f = round + (f4 * ((float) Math.ceil((double) Math.abs(f7 - f6))));
+                                round = round2 + (f4 * ((float) Math.ceil(Math.abs(f - f6))));
                             } else {
-                                f = (float) Math.round(this.fromScrollY);
+                                round = Math.round(this.fromScrollY);
                             }
-                            scrollYTo(f, new TranslateAlert$$ExternalSyntheticLambda7(this));
+                            scrollYTo(round, new Runnable() { // from class: org.telegram.ui.Components.TranslateAlert$$ExternalSyntheticLambda7
+                                @Override // java.lang.Runnable
+                                public final void run() {
+                                    TranslateAlert.this.lambda$dispatchTouchEvent$4();
+                                }
+                            });
                         }
                         return true;
                     }
@@ -1135,7 +852,7 @@ public class TranslateAlert extends Dialog {
                 this.allTextsView.setTextIsSelectable(!this.noforwards);
                 this.maybeScrolling = false;
                 this.allowScroll = true;
-                scrollYTo((float) Math.round(this.fromScrollY));
+                scrollYTo(Math.round(this.fromScrollY));
             }
             return super.dispatchTouchEvent(motionEvent);
         } catch (Exception e2) {
@@ -1144,13 +861,13 @@ public class TranslateAlert extends Dialog {
         }
     }
 
-    /* access modifiers changed from: private */
     public /* synthetic */ void lambda$dispatchTouchEvent$4() {
         this.contentView.post(new TranslateAlert$$ExternalSyntheticLambda10(this));
     }
 
-    /* access modifiers changed from: protected */
-    public void onCreate(Bundle bundle) {
+    @Override // android.app.Dialog
+    protected void onCreate(Bundle bundle) {
+        int color;
         super.onCreate(bundle);
         boolean z = false;
         this.contentView.setPadding(0, 0, 0, 0);
@@ -1161,36 +878,38 @@ public class TranslateAlert extends Dialog {
         attributes.width = -1;
         attributes.gravity = 51;
         attributes.dimAmount = 0.0f;
-        int i = attributes.flags & -3;
+        int i = attributes.flags & (-3);
         attributes.flags = i;
         int i2 = i | 131072;
         attributes.flags = i2;
         if (Build.VERSION.SDK_INT >= 21) {
-            attributes.flags = i2 | -NUM;
+            attributes.flags = i2 | (-NUM);
         }
         attributes.flags |= 256;
         attributes.height = -1;
         window.setAttributes(attributes);
-        int color = Theme.getColor("windowBackgroundWhite");
-        AndroidUtilities.setNavigationBarColor(window, color);
-        if (((double) AndroidUtilities.computePerceivedBrightness(color)) > 0.721d) {
+        AndroidUtilities.setNavigationBarColor(window, Theme.getColor("windowBackgroundWhite"));
+        if (AndroidUtilities.computePerceivedBrightness(color) > 0.721d) {
             z = true;
         }
         AndroidUtilities.setLightNavigationBar(window, z);
         this.container.forceLayout();
     }
 
+    @Override // android.app.Dialog
     public void show() {
         super.show();
         openAnimation(0.0f);
         openTo(1.0f, true, true);
     }
 
+    @Override // android.app.Dialog, android.content.DialogInterface
     public void dismiss() {
-        if (!this.dismissed) {
-            this.dismissed = true;
-            openTo(0.0f, true);
+        if (this.dismissed) {
+            return;
         }
+        this.dismissed = true;
+        openTo(0.0f, true);
     }
 
     private void openTo(float f, boolean z) {
@@ -1206,13 +925,23 @@ public class TranslateAlert extends Dialog {
             if (valueAnimator != null) {
                 valueAnimator.cancel();
             }
-            this.openingAnimator = ValueAnimator.ofFloat(new float[]{this.openingT, min});
+            this.openingAnimator = ValueAnimator.ofFloat(this.openingT, min);
             this.backDrawable.setAlpha((int) (this.openingT * 51.0f));
-            this.openingAnimator.addUpdateListener(new TranslateAlert$$ExternalSyntheticLambda1(this));
+            this.openingAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() { // from class: org.telegram.ui.Components.TranslateAlert$$ExternalSyntheticLambda1
+                @Override // android.animation.ValueAnimator.AnimatorUpdateListener
+                public final void onAnimationUpdate(ValueAnimator valueAnimator2) {
+                    TranslateAlert.this.lambda$openTo$5(valueAnimator2);
+                }
+            });
             if (min <= 0.0f && (runnable = this.onDismiss) != null) {
                 runnable.run();
             }
-            this.openingAnimator.addListener(new AnimatorListenerAdapter() {
+            this.openingAnimator.addListener(new AnimatorListenerAdapter() { // from class: org.telegram.ui.Components.TranslateAlert.7
+                {
+                    TranslateAlert.this = this;
+                }
+
+                @Override // android.animation.AnimatorListenerAdapter, android.animation.Animator.AnimatorListener
                 public void onAnimationEnd(Animator animator) {
                     if (min <= 0.0f) {
                         TranslateAlert.this.dismissInternal();
@@ -1222,29 +951,28 @@ public class TranslateAlert extends Dialog {
                         TranslateAlert.this.scrollView.stopNestedScroll();
                         TranslateAlert.this.openAnimation(min - 1.0f);
                     }
-                    boolean unused = TranslateAlert.this.openingAnimatorPriority = false;
+                    TranslateAlert.this.openingAnimatorPriority = false;
                 }
             });
             this.openingAnimator.setInterpolator(CubicBezierInterpolator.EASE_OUT_QUINT);
-            this.openingAnimator.setDuration((long) (Math.abs(this.openingT - min) * ((float) (this.fastHide ? 200 : 380))));
-            this.openingAnimator.setStartDelay(z2 ? 60 : 0);
+            this.openingAnimator.setDuration(Math.abs(this.openingT - min) * (this.fastHide ? 200 : 380));
+            this.openingAnimator.setStartDelay(z2 ? 60L : 0L);
             this.openingAnimator.start();
         }
     }
 
-    /* access modifiers changed from: private */
     public /* synthetic */ void lambda$openTo$5(ValueAnimator valueAnimator) {
         this.openingT = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         this.container.invalidate();
         this.backDrawable.setAlpha((int) (this.openingT * 51.0f));
-        this.bulletinContainer.setTranslationY((1.0f - this.openingT) * Math.min((float) minHeight(), ((float) AndroidUtilities.displayMetrics.heightPixels) * this.heightMaxPercent));
+        this.bulletinContainer.setTranslationY((1.0f - this.openingT) * Math.min(minHeight(), AndroidUtilities.displayMetrics.heightPixels * this.heightMaxPercent));
     }
 
     public void dismissInternal() {
         try {
             super.dismiss();
         } catch (Exception e) {
-            FileLog.e((Throwable) e);
+            FileLog.e(e);
         }
     }
 
@@ -1267,11 +995,13 @@ public class TranslateAlert extends Dialog {
         if (languageName(this.fromLanguage) != null) {
             this.subtitleView.setAlpha(1.0f);
             InlineLoadingTextView inlineLoadingTextView = this.subtitleFromView;
-            if (!inlineLoadingTextView.loaded) {
-                inlineLoadingTextView.loaded(languageName(this.fromLanguage));
+            if (inlineLoadingTextView.loaded) {
+                return;
             }
-        } else if (this.loaded) {
-            this.subtitleView.animate().alpha(0.0f).setDuration(150).start();
+            inlineLoadingTextView.loaded(languageName(this.fromLanguage));
+        } else if (!this.loaded) {
+        } else {
+            this.subtitleView.animate().alpha(0.0f).setDuration(150L).start();
         }
     }
 
@@ -1310,141 +1040,130 @@ public class TranslateAlert extends Dialog {
         if (this.blockIndex >= this.textBlocks.size()) {
             return false;
         }
-        fetchTranslation(this.textBlocks.get(this.blockIndex), (long) Math.min((this.blockIndex + 1) * 1000, 3500), new TranslateAlert$$ExternalSyntheticLambda14(this), new TranslateAlert$$ExternalSyntheticLambda13(this));
+        fetchTranslation(this.textBlocks.get(this.blockIndex), Math.min((this.blockIndex + 1) * 1000, 3500), new OnTranslationSuccess() { // from class: org.telegram.ui.Components.TranslateAlert$$ExternalSyntheticLambda14
+            @Override // org.telegram.ui.Components.TranslateAlert.OnTranslationSuccess
+            public final void run(String str, String str2) {
+                TranslateAlert.this.lambda$fetchNext$7(str, str2);
+            }
+        }, new OnTranslationFail() { // from class: org.telegram.ui.Components.TranslateAlert$$ExternalSyntheticLambda13
+            @Override // org.telegram.ui.Components.TranslateAlert.OnTranslationFail
+            public final void run(boolean z) {
+                TranslateAlert.this.lambda$fetchNext$8(z);
+            }
+        });
         return true;
     }
 
-    /* JADX WARNING: type inference failed for: r1v15, types: [android.text.Spannable] */
-    /* access modifiers changed from: private */
-    /* JADX WARNING: Multi-variable type inference failed */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$fetchNext$7(java.lang.String r11, java.lang.String r12) {
-        /*
-            r10 = this;
-            r0 = 1
-            r10.loaded = r0
-            android.text.SpannableStringBuilder r7 = new android.text.SpannableStringBuilder
-            r7.<init>(r11)
-            r1 = 0
-            r3 = 0
-            r4 = 0
-            r5 = 0
-            r6 = 1
-            r11 = 0
-            r2 = r7
-            org.telegram.messenger.MessageObject.addUrlsByPattern(r1, r2, r3, r4, r5, r6)     // Catch:{ Exception -> 0x008a }
-            int r1 = r7.length()     // Catch:{ Exception -> 0x008a }
-            java.lang.Class<android.text.style.URLSpan> r2 = android.text.style.URLSpan.class
-            java.lang.Object[] r1 = r7.getSpans(r11, r1, r2)     // Catch:{ Exception -> 0x008a }
-            android.text.style.URLSpan[] r1 = (android.text.style.URLSpan[]) r1     // Catch:{ Exception -> 0x008a }
-            r2 = 0
-        L_0x001f:
-            int r3 = r1.length     // Catch:{ Exception -> 0x008a }
-            r4 = 33
-            r5 = -1
-            if (r2 >= r3) goto L_0x0042
-            r3 = r1[r2]     // Catch:{ Exception -> 0x008a }
-            int r6 = r7.getSpanStart(r3)     // Catch:{ Exception -> 0x008a }
-            int r8 = r7.getSpanEnd(r3)     // Catch:{ Exception -> 0x008a }
-            if (r6 == r5) goto L_0x003f
-            if (r8 != r5) goto L_0x0034
-            goto L_0x003f
-        L_0x0034:
-            r7.removeSpan(r3)     // Catch:{ Exception -> 0x008a }
-            org.telegram.ui.Components.TranslateAlert$8 r5 = new org.telegram.ui.Components.TranslateAlert$8     // Catch:{ Exception -> 0x008a }
-            r5.<init>(r3)     // Catch:{ Exception -> 0x008a }
-            r7.setSpan(r5, r6, r8, r4)     // Catch:{ Exception -> 0x008a }
-        L_0x003f:
-            int r2 = r2 + 1
-            goto L_0x001f
-        L_0x0042:
-            org.telegram.messenger.AndroidUtilities.addLinks(r7, r0)     // Catch:{ Exception -> 0x008a }
-            int r1 = r7.length()     // Catch:{ Exception -> 0x008a }
-            java.lang.Class<android.text.style.URLSpan> r2 = android.text.style.URLSpan.class
-            java.lang.Object[] r1 = r7.getSpans(r11, r1, r2)     // Catch:{ Exception -> 0x008a }
-            android.text.style.URLSpan[] r1 = (android.text.style.URLSpan[]) r1     // Catch:{ Exception -> 0x008a }
-            r2 = 0
-        L_0x0052:
-            int r3 = r1.length     // Catch:{ Exception -> 0x008a }
-            if (r2 >= r3) goto L_0x0072
-            r3 = r1[r2]     // Catch:{ Exception -> 0x008a }
-            int r6 = r7.getSpanStart(r3)     // Catch:{ Exception -> 0x008a }
-            int r8 = r7.getSpanEnd(r3)     // Catch:{ Exception -> 0x008a }
-            if (r6 == r5) goto L_0x006f
-            if (r8 != r5) goto L_0x0064
-            goto L_0x006f
-        L_0x0064:
-            r7.removeSpan(r3)     // Catch:{ Exception -> 0x008a }
-            org.telegram.ui.Components.TranslateAlert$9 r9 = new org.telegram.ui.Components.TranslateAlert$9     // Catch:{ Exception -> 0x008a }
-            r9.<init>(r3)     // Catch:{ Exception -> 0x008a }
-            r7.setSpan(r9, r6, r8, r4)     // Catch:{ Exception -> 0x008a }
-        L_0x006f:
-            int r2 = r2 + 1
-            goto L_0x0052
-        L_0x0072:
-            android.widget.TextView r1 = r10.allTextsView     // Catch:{ Exception -> 0x008a }
-            android.text.TextPaint r1 = r1.getPaint()     // Catch:{ Exception -> 0x008a }
-            android.graphics.Paint$FontMetricsInt r1 = r1.getFontMetricsInt()     // Catch:{ Exception -> 0x008a }
-            r2 = 1096810496(0x41600000, float:14.0)
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)     // Catch:{ Exception -> 0x008a }
-            java.lang.CharSequence r1 = org.telegram.messenger.Emoji.replaceEmoji(r7, r1, r2, r11)     // Catch:{ Exception -> 0x008a }
-            android.text.Spannable r1 = (android.text.Spannable) r1     // Catch:{ Exception -> 0x008a }
-            r7 = r1
-            goto L_0x008e
-        L_0x008a:
-            r1 = move-exception
-            r1.printStackTrace()
-        L_0x008e:
-            android.text.SpannableStringBuilder r1 = new android.text.SpannableStringBuilder
-            android.text.Spannable r2 = r10.allTexts
-            if (r2 != 0) goto L_0x0096
-            java.lang.String r2 = ""
-        L_0x0096:
-            r1.<init>(r2)
-            int r2 = r10.blockIndex
-            if (r2 == 0) goto L_0x00a2
-            java.lang.String r2 = "\n"
-            r1.append(r2)
-        L_0x00a2:
-            r1.append(r7)
-            r10.allTexts = r1
-            org.telegram.ui.Components.TranslateAlert$TextBlocksLayout r2 = r10.textsView
-            r2.setWholeText(r1)
-            org.telegram.ui.Components.TranslateAlert$TextBlocksLayout r1 = r10.textsView
-            int r2 = r10.blockIndex
-            org.telegram.ui.Components.TranslateAlert$LoadingTextView2 r1 = r1.getBlockAt(r2)
-            if (r1 == 0) goto L_0x00be
-            org.telegram.ui.Components.TranslateAlert$$ExternalSyntheticLambda9 r2 = new org.telegram.ui.Components.TranslateAlert$$ExternalSyntheticLambda9
-            r2.<init>(r10)
-            r1.loaded(r7, r2)
-        L_0x00be:
-            if (r12 == 0) goto L_0x00c5
-            r10.fromLanguage = r12
-            r10.updateSourceLanguage()
-        L_0x00c5:
-            int r12 = r10.blockIndex
-            if (r12 != 0) goto L_0x00d6
-            boolean r12 = org.telegram.messenger.AndroidUtilities.isAccessibilityScreenReaderEnabled()
-            if (r12 == 0) goto L_0x00d6
-            android.widget.TextView r12 = r10.allTextsView
-            if (r12 == 0) goto L_0x00d6
-            r12.requestFocus()
-        L_0x00d6:
-            int r12 = r10.blockIndex
-            int r12 = r12 + r0
-            r10.blockIndex = r12
-            r10.loading = r11
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.TranslateAlert.lambda$fetchNext$7(java.lang.String, java.lang.String):void");
+    public /* synthetic */ void lambda$fetchNext$7(String str, String str2) {
+        TextView textView;
+        URLSpan[] uRLSpanArr;
+        URLSpan[] uRLSpanArr2;
+        this.loaded = true;
+        Spannable spannableStringBuilder = new SpannableStringBuilder(str);
+        try {
+            MessageObject.addUrlsByPattern(false, spannableStringBuilder, false, 0, 0, true);
+            for (final URLSpan uRLSpan : (URLSpan[]) spannableStringBuilder.getSpans(0, spannableStringBuilder.length(), URLSpan.class)) {
+                int spanStart = spannableStringBuilder.getSpanStart(uRLSpan);
+                int spanEnd = spannableStringBuilder.getSpanEnd(uRLSpan);
+                if (spanStart != -1 && spanEnd != -1) {
+                    spannableStringBuilder.removeSpan(uRLSpan);
+                    spannableStringBuilder.setSpan(new ClickableSpan() { // from class: org.telegram.ui.Components.TranslateAlert.8
+                        {
+                            TranslateAlert.this = this;
+                        }
+
+                        @Override // android.text.style.ClickableSpan
+                        public void onClick(View view) {
+                            if (TranslateAlert.this.onLinkPress != null) {
+                                if (!TranslateAlert.this.onLinkPress.run(uRLSpan)) {
+                                    return;
+                                }
+                                TranslateAlert.this.fastHide = true;
+                                TranslateAlert.this.dismiss();
+                                return;
+                            }
+                            AlertsCreator.showOpenUrlAlert(TranslateAlert.this.fragment, uRLSpan.getURL(), false, false);
+                        }
+
+                        @Override // android.text.style.ClickableSpan, android.text.style.CharacterStyle
+                        public void updateDrawState(TextPaint textPaint) {
+                            int min = Math.min(textPaint.getAlpha(), (textPaint.getColor() >> 24) & 255);
+                            if (!(uRLSpan instanceof URLSpanNoUnderline)) {
+                                textPaint.setUnderlineText(true);
+                            }
+                            textPaint.setColor(Theme.getColor("dialogTextLink"));
+                            textPaint.setAlpha(min);
+                        }
+                    }, spanStart, spanEnd, 33);
+                }
+            }
+            AndroidUtilities.addLinks(spannableStringBuilder, 1);
+            for (final URLSpan uRLSpan2 : (URLSpan[]) spannableStringBuilder.getSpans(0, spannableStringBuilder.length(), URLSpan.class)) {
+                int spanStart2 = spannableStringBuilder.getSpanStart(uRLSpan2);
+                int spanEnd2 = spannableStringBuilder.getSpanEnd(uRLSpan2);
+                if (spanStart2 != -1 && spanEnd2 != -1) {
+                    spannableStringBuilder.removeSpan(uRLSpan2);
+                    spannableStringBuilder.setSpan(new ClickableSpan() { // from class: org.telegram.ui.Components.TranslateAlert.9
+                        {
+                            TranslateAlert.this = this;
+                        }
+
+                        @Override // android.text.style.ClickableSpan
+                        public void onClick(View view) {
+                            AlertsCreator.showOpenUrlAlert(TranslateAlert.this.fragment, uRLSpan2.getURL(), false, false);
+                        }
+
+                        @Override // android.text.style.ClickableSpan, android.text.style.CharacterStyle
+                        public void updateDrawState(TextPaint textPaint) {
+                            int min = Math.min(textPaint.getAlpha(), (textPaint.getColor() >> 24) & 255);
+                            if (!(uRLSpan2 instanceof URLSpanNoUnderline)) {
+                                textPaint.setUnderlineText(true);
+                            }
+                            textPaint.setColor(Theme.getColor("dialogTextLink"));
+                            textPaint.setAlpha(min);
+                        }
+                    }, spanStart2, spanEnd2, 33);
+                }
+            }
+            spannableStringBuilder = (Spannable) Emoji.replaceEmoji(spannableStringBuilder, this.allTextsView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(14.0f), false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        CharSequence charSequence = this.allTexts;
+        if (charSequence == null) {
+            charSequence = "";
+        }
+        SpannableStringBuilder spannableStringBuilder2 = new SpannableStringBuilder(charSequence);
+        if (this.blockIndex != 0) {
+            spannableStringBuilder2.append((CharSequence) "\n");
+        }
+        spannableStringBuilder2.append((CharSequence) spannableStringBuilder);
+        this.allTexts = spannableStringBuilder2;
+        this.textsView.setWholeText(spannableStringBuilder2);
+        LoadingTextView2 blockAt = this.textsView.getBlockAt(this.blockIndex);
+        if (blockAt != null) {
+            blockAt.loaded(spannableStringBuilder, new Runnable() { // from class: org.telegram.ui.Components.TranslateAlert$$ExternalSyntheticLambda9
+                @Override // java.lang.Runnable
+                public final void run() {
+                    TranslateAlert.this.lambda$fetchNext$6();
+                }
+            });
+        }
+        if (str2 != null) {
+            this.fromLanguage = str2;
+            updateSourceLanguage();
+        }
+        if (this.blockIndex == 0 && AndroidUtilities.isAccessibilityScreenReaderEnabled() && (textView = this.allTextsView) != null) {
+            textView.requestFocus();
+        }
+        this.blockIndex++;
+        this.loading = false;
     }
 
-    /* access modifiers changed from: private */
     public /* synthetic */ void lambda$fetchNext$6() {
         this.contentView.post(new TranslateAlert$$ExternalSyntheticLambda10(this));
     }
 
-    /* access modifiers changed from: private */
     public /* synthetic */ void lambda$fetchNext$8(boolean z) {
         if (z) {
             Toast.makeText(getContext(), LocaleController.getString("TranslationFailedAlert1", R.string.TranslationFailedAlert1), 0).show();
@@ -1456,219 +1175,123 @@ public class TranslateAlert extends Dialog {
         }
     }
 
-    /* access modifiers changed from: private */
     public boolean checkForNextLoading() {
-        if (!scrollAtBottom()) {
-            return false;
+        if (scrollAtBottom()) {
+            fetchNext();
+            return true;
         }
-        fetchNext();
-        return true;
+        return false;
     }
 
-    private void fetchTranslation(CharSequence charSequence, long j, OnTranslationSuccess onTranslationSuccess, OnTranslationFail onTranslationFail) {
+    private void fetchTranslation(final CharSequence charSequence, final long j, final OnTranslationSuccess onTranslationSuccess, final OnTranslationFail onTranslationFail) {
         if (!translateQueue.isAlive()) {
             translateQueue.start();
         }
-        translateQueue.postRunnable(new TranslateAlert$$ExternalSyntheticLambda11(this, charSequence, onTranslationSuccess, j, onTranslationFail));
+        translateQueue.postRunnable(new Runnable() { // from class: org.telegram.ui.Components.TranslateAlert$$ExternalSyntheticLambda11
+            @Override // java.lang.Runnable
+            public final void run() {
+                TranslateAlert.this.lambda$fetchTranslation$12(charSequence, onTranslationSuccess, j, onTranslationFail);
+            }
+        });
     }
 
-    /* access modifiers changed from: private */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:40:0x013a */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$fetchTranslation$12(java.lang.CharSequence r14, org.telegram.ui.Components.TranslateAlert.OnTranslationSuccess r15, long r16, org.telegram.ui.Components.TranslateAlert.OnTranslationFail r18) {
-        /*
-            r13 = this;
-            r1 = r13
-            r2 = r18
-            java.lang.String r0 = "-"
-            long r3 = android.os.SystemClock.elapsedRealtime()
-            r5 = 0
-            r6 = 0
-            java.lang.String r7 = "https://translate.googleapis.com/translate_a/single?client=gtx&sl="
-            java.lang.StringBuilder r8 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x013e }
-            r8.<init>()     // Catch:{ Exception -> 0x013e }
-            r8.append(r7)     // Catch:{ Exception -> 0x013e }
-            java.lang.String r7 = r1.fromLanguage     // Catch:{ Exception -> 0x013e }
-            java.lang.String r7 = android.net.Uri.encode(r7)     // Catch:{ Exception -> 0x013e }
-            r8.append(r7)     // Catch:{ Exception -> 0x013e }
-            java.lang.String r7 = r8.toString()     // Catch:{ Exception -> 0x013e }
-            java.lang.StringBuilder r8 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x013e }
-            r8.<init>()     // Catch:{ Exception -> 0x013e }
-            r8.append(r7)     // Catch:{ Exception -> 0x013e }
-            java.lang.String r7 = "&tl="
-            r8.append(r7)     // Catch:{ Exception -> 0x013e }
-            java.lang.String r7 = r8.toString()     // Catch:{ Exception -> 0x013e }
-            java.lang.StringBuilder r8 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x013e }
-            r8.<init>()     // Catch:{ Exception -> 0x013e }
-            r8.append(r7)     // Catch:{ Exception -> 0x013e }
-            java.lang.String r7 = r1.toLanguage     // Catch:{ Exception -> 0x013e }
-            java.lang.String r7 = android.net.Uri.encode(r7)     // Catch:{ Exception -> 0x013e }
-            r8.append(r7)     // Catch:{ Exception -> 0x013e }
-            java.lang.String r7 = r8.toString()     // Catch:{ Exception -> 0x013e }
-            java.lang.StringBuilder r8 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x013e }
-            r8.<init>()     // Catch:{ Exception -> 0x013e }
-            r8.append(r7)     // Catch:{ Exception -> 0x013e }
-            java.lang.String r7 = "&dt=t&ie=UTF-8&oe=UTF-8&otf=1&ssel=0&tsel=0&kc=7&dt=at&dt=bd&dt=ex&dt=ld&dt=md&dt=qca&dt=rw&dt=rm&dt=ss&q="
-            r8.append(r7)     // Catch:{ Exception -> 0x013e }
-            java.lang.String r7 = r8.toString()     // Catch:{ Exception -> 0x013e }
-            java.lang.StringBuilder r8 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x013e }
-            r8.<init>()     // Catch:{ Exception -> 0x013e }
-            r8.append(r7)     // Catch:{ Exception -> 0x013e }
-            java.lang.String r7 = r14.toString()     // Catch:{ Exception -> 0x013e }
-            java.lang.String r7 = android.net.Uri.encode(r7)     // Catch:{ Exception -> 0x013e }
-            r8.append(r7)     // Catch:{ Exception -> 0x013e }
-            java.lang.String r7 = r8.toString()     // Catch:{ Exception -> 0x013e }
-            java.net.URI r8 = new java.net.URI     // Catch:{ Exception -> 0x013e }
-            r8.<init>(r7)     // Catch:{ Exception -> 0x013e }
-            java.net.URL r7 = r8.toURL()     // Catch:{ Exception -> 0x013e }
-            java.net.URLConnection r7 = r7.openConnection()     // Catch:{ Exception -> 0x013e }
-            java.net.HttpURLConnection r7 = (java.net.HttpURLConnection) r7     // Catch:{ Exception -> 0x013e }
-            java.lang.String r8 = "GET"
-            r7.setRequestMethod(r8)     // Catch:{ Exception -> 0x013b }
-            java.lang.String r8 = "User-Agent"
-            java.lang.String r9 = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36"
-            r7.setRequestProperty(r8, r9)     // Catch:{ Exception -> 0x013b }
-            java.lang.String r8 = "Content-Type"
-            java.lang.String r9 = "application/json"
-            r7.setRequestProperty(r8, r9)     // Catch:{ Exception -> 0x013b }
-            java.lang.StringBuilder r8 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x013b }
-            r8.<init>()     // Catch:{ Exception -> 0x013b }
-            java.io.BufferedReader r9 = new java.io.BufferedReader     // Catch:{ Exception -> 0x013b }
-            java.io.InputStreamReader r10 = new java.io.InputStreamReader     // Catch:{ Exception -> 0x013b }
-            java.io.InputStream r11 = r7.getInputStream()     // Catch:{ Exception -> 0x013b }
-            java.lang.String r12 = "UTF-8"
-            java.nio.charset.Charset r12 = java.nio.charset.Charset.forName(r12)     // Catch:{ Exception -> 0x013b }
-            r10.<init>(r11, r12)     // Catch:{ Exception -> 0x013b }
-            r9.<init>(r10)     // Catch:{ Exception -> 0x013b }
-        L_0x00ab:
-            int r10 = r9.read()     // Catch:{ all -> 0x0136 }
-            r11 = -1
-            if (r10 == r11) goto L_0x00b7
-            char r10 = (char) r10     // Catch:{ all -> 0x0136 }
-            r8.append(r10)     // Catch:{ all -> 0x0136 }
-            goto L_0x00ab
-        L_0x00b7:
-            r9.close()     // Catch:{ Exception -> 0x013b }
-            java.lang.String r8 = r8.toString()     // Catch:{ Exception -> 0x013b }
-            org.json.JSONTokener r9 = new org.json.JSONTokener     // Catch:{ Exception -> 0x013b }
-            r9.<init>(r8)     // Catch:{ Exception -> 0x013b }
-            org.json.JSONArray r8 = new org.json.JSONArray     // Catch:{ Exception -> 0x013b }
-            r8.<init>(r9)     // Catch:{ Exception -> 0x013b }
-            org.json.JSONArray r9 = r8.getJSONArray(r6)     // Catch:{ Exception -> 0x013b }
-            r10 = 2
-            java.lang.String r8 = r8.getString(r10)     // Catch:{ Exception -> 0x00d2 }
-            goto L_0x00d3
-        L_0x00d2:
-            r8 = r5
-        L_0x00d3:
-            if (r8 == 0) goto L_0x00e3
-            boolean r10 = r8.contains(r0)     // Catch:{ Exception -> 0x013b }
-            if (r10 == 0) goto L_0x00e3
-            int r0 = r8.indexOf(r0)     // Catch:{ Exception -> 0x013b }
-            java.lang.String r8 = r8.substring(r6, r0)     // Catch:{ Exception -> 0x013b }
-        L_0x00e3:
-            java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x013b }
-            r0.<init>()     // Catch:{ Exception -> 0x013b }
-            r10 = 0
-        L_0x00e9:
-            int r11 = r9.length()     // Catch:{ Exception -> 0x013b }
-            if (r10 >= r11) goto L_0x0107
-            org.json.JSONArray r11 = r9.getJSONArray(r10)     // Catch:{ Exception -> 0x013b }
-            java.lang.String r11 = r11.getString(r6)     // Catch:{ Exception -> 0x013b }
-            if (r11 == 0) goto L_0x0104
-            java.lang.String r12 = "null"
-            boolean r12 = r11.equals(r12)     // Catch:{ Exception -> 0x013b }
-            if (r12 != 0) goto L_0x0104
-            r0.append(r11)     // Catch:{ Exception -> 0x013b }
-        L_0x0104:
-            int r10 = r10 + 1
-            goto L_0x00e9
-        L_0x0107:
-            int r9 = r14.length()     // Catch:{ Exception -> 0x013b }
-            if (r9 <= 0) goto L_0x011b
-            r9 = r14
-            char r9 = r14.charAt(r6)     // Catch:{ Exception -> 0x013b }
-            r10 = 10
-            if (r9 != r10) goto L_0x011b
-            java.lang.String r9 = "\n"
-            r0.insert(r6, r9)     // Catch:{ Exception -> 0x013b }
-        L_0x011b:
-            java.lang.String r0 = r0.toString()     // Catch:{ Exception -> 0x013b }
-            long r9 = android.os.SystemClock.elapsedRealtime()     // Catch:{ Exception -> 0x013b }
-            long r9 = r9 - r3
-            org.telegram.ui.Components.TranslateAlert$$ExternalSyntheticLambda6 r3 = new org.telegram.ui.Components.TranslateAlert$$ExternalSyntheticLambda6     // Catch:{ Exception -> 0x013b }
-            r4 = r15
-            r3.<init>(r15, r0, r8)     // Catch:{ Exception -> 0x013b }
-            r11 = 0
-            long r9 = r16 - r9
-            long r8 = java.lang.Math.max(r11, r9)     // Catch:{ Exception -> 0x013b }
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r3, r8)     // Catch:{ Exception -> 0x013b }
-            goto L_0x019b
-        L_0x0136:
-            r0 = move-exception
-            r9.close()     // Catch:{ all -> 0x013a }
-        L_0x013a:
-            throw r0     // Catch:{ Exception -> 0x013b }
-        L_0x013b:
-            r0 = move-exception
-            r3 = r0
-            goto L_0x0141
-        L_0x013e:
-            r0 = move-exception
-            r3 = r0
-            r7 = r5
-        L_0x0141:
-            java.lang.String r0 = "translate"
-            java.lang.StringBuilder r4 = new java.lang.StringBuilder     // Catch:{ IOException -> 0x0172 }
-            r4.<init>()     // Catch:{ IOException -> 0x0172 }
-            java.lang.String r8 = "failed to translate a text "
-            r4.append(r8)     // Catch:{ IOException -> 0x0172 }
-            if (r7 == 0) goto L_0x0158
-            int r8 = r7.getResponseCode()     // Catch:{ IOException -> 0x0172 }
-            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)     // Catch:{ IOException -> 0x0172 }
-            goto L_0x0159
-        L_0x0158:
-            r8 = r5
-        L_0x0159:
-            r4.append(r8)     // Catch:{ IOException -> 0x0172 }
-            java.lang.String r8 = " "
-            r4.append(r8)     // Catch:{ IOException -> 0x0172 }
-            if (r7 == 0) goto L_0x0167
-            java.lang.String r5 = r7.getResponseMessage()     // Catch:{ IOException -> 0x0172 }
-        L_0x0167:
-            r4.append(r5)     // Catch:{ IOException -> 0x0172 }
-            java.lang.String r4 = r4.toString()     // Catch:{ IOException -> 0x0172 }
-            android.util.Log.e(r0, r4)     // Catch:{ IOException -> 0x0172 }
-            goto L_0x0176
-        L_0x0172:
-            r0 = move-exception
-            r0.printStackTrace()
-        L_0x0176:
-            r3.printStackTrace()
-            if (r2 == 0) goto L_0x019b
-            boolean r0 = r1.dismissed
-            if (r0 != 0) goto L_0x019b
-            if (r7 == 0) goto L_0x018a
-            int r0 = r7.getResponseCode()     // Catch:{ Exception -> 0x0193 }
-            r3 = 429(0x1ad, float:6.01E-43)
-            if (r0 != r3) goto L_0x018a
-            r6 = 1
-        L_0x018a:
-            org.telegram.ui.Components.TranslateAlert$$ExternalSyntheticLambda5 r0 = new org.telegram.ui.Components.TranslateAlert$$ExternalSyntheticLambda5     // Catch:{ Exception -> 0x0193 }
-            r0.<init>(r2, r6)     // Catch:{ Exception -> 0x0193 }
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)     // Catch:{ Exception -> 0x0193 }
-            goto L_0x019b
-        L_0x0193:
-            org.telegram.ui.Components.TranslateAlert$$ExternalSyntheticLambda4 r0 = new org.telegram.ui.Components.TranslateAlert$$ExternalSyntheticLambda4
-            r0.<init>(r2)
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
-        L_0x019b:
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.TranslateAlert.lambda$fetchTranslation$12(java.lang.CharSequence, org.telegram.ui.Components.TranslateAlert$OnTranslationSuccess, long, org.telegram.ui.Components.TranslateAlert$OnTranslationFail):void");
+    public /* synthetic */ void lambda$fetchTranslation$12(CharSequence charSequence, final OnTranslationSuccess onTranslationSuccess, long j, final OnTranslationFail onTranslationFail) {
+        Exception exc;
+        HttpURLConnection httpURLConnection;
+        final String str;
+        long elapsedRealtime = SystemClock.elapsedRealtime();
+        String str2 = null;
+        final boolean z = false;
+        try {
+            httpURLConnection = (HttpURLConnection) new URI((((("https://translate.googleapis.com/translate_a/single?client=gtx&sl=" + Uri.encode(this.fromLanguage)) + "&tl=") + Uri.encode(this.toLanguage)) + "&dt=t&ie=UTF-8&oe=UTF-8&otf=1&ssel=0&tsel=0&kc=7&dt=at&dt=bd&dt=ex&dt=ld&dt=md&dt=qca&dt=rw&dt=rm&dt=ss&q=") + Uri.encode(charSequence.toString())).toURL().openConnection();
+            try {
+                httpURLConnection.setRequestMethod("GET");
+                httpURLConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36");
+                httpURLConnection.setRequestProperty("Content-Type", "application/json");
+                StringBuilder sb = new StringBuilder();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream(), Charset.forName("UTF-8")));
+                while (true) {
+                    int read = bufferedReader.read();
+                    if (read == -1) {
+                        break;
+                    }
+                    sb.append((char) read);
+                }
+                bufferedReader.close();
+                JSONArray jSONArray = new JSONArray(new JSONTokener(sb.toString()));
+                JSONArray jSONArray2 = jSONArray.getJSONArray(0);
+                try {
+                    str = jSONArray.getString(2);
+                } catch (Exception unused) {
+                    str = null;
+                }
+                if (str != null && str.contains("-")) {
+                    str = str.substring(0, str.indexOf("-"));
+                }
+                StringBuilder sb2 = new StringBuilder();
+                for (int i = 0; i < jSONArray2.length(); i++) {
+                    String string = jSONArray2.getJSONArray(i).getString(0);
+                    if (string != null && !string.equals("null")) {
+                        sb2.append(string);
+                    }
+                }
+                if (charSequence.length() > 0 && charSequence.charAt(0) == '\n') {
+                    sb2.insert(0, "\n");
+                }
+                final String sb3 = sb2.toString();
+                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.TranslateAlert$$ExternalSyntheticLambda6
+                    @Override // java.lang.Runnable
+                    public final void run() {
+                        TranslateAlert.lambda$fetchTranslation$9(TranslateAlert.OnTranslationSuccess.this, sb3, str);
+                    }
+                }, Math.max(0L, j - (SystemClock.elapsedRealtime() - elapsedRealtime)));
+            } catch (Exception e) {
+                exc = e;
+                try {
+                    StringBuilder sb4 = new StringBuilder();
+                    sb4.append("failed to translate a text ");
+                    sb4.append(httpURLConnection != null ? Integer.valueOf(httpURLConnection.getResponseCode()) : null);
+                    sb4.append(" ");
+                    if (httpURLConnection != null) {
+                        str2 = httpURLConnection.getResponseMessage();
+                    }
+                    sb4.append(str2);
+                    Log.e("translate", sb4.toString());
+                } catch (IOException e2) {
+                    e2.printStackTrace();
+                }
+                exc.printStackTrace();
+                if (onTranslationFail == null || this.dismissed) {
+                    return;
+                }
+                if (httpURLConnection != null) {
+                    try {
+                        if (httpURLConnection.getResponseCode() == 429) {
+                            z = true;
+                        }
+                    } catch (Exception unused2) {
+                        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.TranslateAlert$$ExternalSyntheticLambda4
+                            @Override // java.lang.Runnable
+                            public final void run() {
+                                TranslateAlert.OnTranslationFail.this.run(false);
+                            }
+                        });
+                        return;
+                    }
+                }
+                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.TranslateAlert$$ExternalSyntheticLambda5
+                    @Override // java.lang.Runnable
+                    public final void run() {
+                        TranslateAlert.OnTranslationFail.this.run(z);
+                    }
+                });
+            }
+        } catch (Exception e3) {
+            exc = e3;
+            httpURLConnection = null;
+        }
     }
 
-    /* access modifiers changed from: private */
     public static /* synthetic */ void lambda$fetchTranslation$9(OnTranslationSuccess onTranslationSuccess, String str, String str2) {
         if (onTranslationSuccess != null) {
             onTranslationSuccess.run(str, str2);
@@ -1689,40 +1312,42 @@ public class TranslateAlert extends Dialog {
         try {
             ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_messages_translateText, TranslateAlert$$ExternalSyntheticLambda12.INSTANCE);
         } catch (Exception e) {
-            FileLog.e((Throwable) e);
+            FileLog.e(e);
         }
     }
 
-    public static TranslateAlert showAlert(Context context, BaseFragment baseFragment, int i, TLRPC$InputPeer tLRPC$InputPeer, int i2, String str, String str2, CharSequence charSequence, boolean z, OnLinkPress onLinkPress2, Runnable runnable) {
-        BaseFragment baseFragment2 = baseFragment;
-        TranslateAlert translateAlert = new TranslateAlert(baseFragment, context, i, tLRPC$InputPeer, i2, str, str2, charSequence, z, onLinkPress2, runnable);
-        if (baseFragment2 == null) {
+    public static TranslateAlert showAlert(Context context, BaseFragment baseFragment, int i, TLRPC$InputPeer tLRPC$InputPeer, int i2, String str, String str2, CharSequence charSequence, boolean z, OnLinkPress onLinkPress, Runnable runnable) {
+        TranslateAlert translateAlert = new TranslateAlert(baseFragment, context, i, tLRPC$InputPeer, i2, str, str2, charSequence, z, onLinkPress, runnable);
+        if (baseFragment != null) {
+            if (baseFragment.getParentActivity() != null) {
+                baseFragment.showDialog(translateAlert);
+            }
+        } else {
             translateAlert.show();
-        } else if (baseFragment.getParentActivity() != null) {
-            baseFragment.showDialog(translateAlert);
         }
         return translateAlert;
     }
 
-    public static TranslateAlert showAlert(Context context, BaseFragment baseFragment, String str, String str2, CharSequence charSequence, boolean z, OnLinkPress onLinkPress2, Runnable runnable) {
-        BaseFragment baseFragment2 = baseFragment;
-        TranslateAlert translateAlert = new TranslateAlert(baseFragment, context, str, str2, charSequence, z, onLinkPress2, runnable);
-        if (baseFragment2 == null) {
+    public static TranslateAlert showAlert(Context context, BaseFragment baseFragment, String str, String str2, CharSequence charSequence, boolean z, OnLinkPress onLinkPress, Runnable runnable) {
+        TranslateAlert translateAlert = new TranslateAlert(baseFragment, context, str, str2, charSequence, z, onLinkPress, runnable);
+        if (baseFragment != null) {
+            if (baseFragment.getParentActivity() != null) {
+                baseFragment.showDialog(translateAlert);
+            }
+        } else {
             translateAlert.show();
-        } else if (baseFragment.getParentActivity() != null) {
-            baseFragment.showDialog(translateAlert);
         }
         return translateAlert;
     }
 
+    /* loaded from: classes3.dex */
     public static class TextBlocksLayout extends ViewGroup {
-        private static final int gap = (((-LoadingTextView2.paddingVertical) * 4) + AndroidUtilities.dp(0.48f));
+        private static final int gap = ((-LoadingTextView2.paddingVertical) * 4) + AndroidUtilities.dp(0.48f);
         private final int fontSize;
         private final int textColor;
         private TextView wholeTextView;
 
-        /* access modifiers changed from: protected */
-        public void onHeightUpdated(int i) {
+        protected void onHeightUpdated(int i) {
         }
 
         public TextBlocksLayout(Context context, int i, int i2, TextView textView) {
@@ -1804,8 +1429,8 @@ public class TranslateAlert extends Dialog {
             }
         }
 
-        /* access modifiers changed from: protected */
-        public void onMeasure(int i, int i2) {
+        @Override // android.view.View
+        protected void onMeasure(int i, int i2) {
             int blocksCount = getBlocksCount();
             int makeMeasureSpec = View.MeasureSpec.makeMeasureSpec((View.MeasureSpec.getSize(i) - getPaddingLeft()) - getPaddingRight(), View.MeasureSpec.getMode(i));
             for (int i3 = 0; i3 < blocksCount; i3++) {
@@ -1814,8 +1439,8 @@ public class TranslateAlert extends Dialog {
             super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(height(), NUM));
         }
 
-        /* access modifiers changed from: protected */
-        public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+        @Override // android.view.ViewGroup, android.view.View
+        protected void onLayout(boolean z, int i, int i2, int i3, int i4) {
             int blocksCount = getBlocksCount();
             int i5 = 0;
             int i6 = 0;
@@ -1836,102 +1461,113 @@ public class TranslateAlert extends Dialog {
         }
     }
 
+    /* loaded from: classes3.dex */
     public static class InlineLoadingTextView extends ViewGroup {
         public static final int paddingHorizontal = AndroidUtilities.dp(6.0f);
         private final TextView fromTextView;
         private final float gradientWidth;
-        private final Path inPath = new Path();
-        public boolean loaded = false;
-        private ValueAnimator loadedAnimator = null;
+        private final Path inPath;
+        public boolean loaded;
+        private ValueAnimator loadedAnimator;
         private final ValueAnimator loadingAnimator;
         private final Paint loadingPaint;
-        private final Path loadingPath = new Path();
-        public float loadingT = 0.0f;
-        private final RectF rect = new RectF();
-        private final Path shadePath = new Path();
-        public boolean showLoadingText = true;
-        private final long start = SystemClock.elapsedRealtime();
-        private final Path tempPath = new Path();
+        private final Path loadingPath;
+        public float loadingT;
+        private final RectF rect;
+        private final Path shadePath;
+        public boolean showLoadingText;
+        private final long start;
+        private final Path tempPath;
         private final TextView toTextView;
 
-        /* access modifiers changed from: protected */
-        public boolean drawChild(Canvas canvas, View view, long j) {
+        @Override // android.view.ViewGroup
+        protected boolean drawChild(Canvas canvas, View view, long j) {
             return false;
         }
 
-        /* access modifiers changed from: protected */
-        public void onLoadAnimation(float f) {
+        protected void onLoadAnimation(float f) {
         }
 
-        /* JADX INFO: super call moved to the top of the method (can break code semantics) */
         public InlineLoadingTextView(Context context, CharSequence charSequence, int i, int i2) {
             super(context);
-            Context context2 = context;
-            int i3 = i2;
+            this.showLoadingText = true;
+            this.start = SystemClock.elapsedRealtime();
+            this.loaded = false;
+            this.loadingT = 0.0f;
+            this.loadedAnimator = null;
+            this.rect = new RectF();
+            this.inPath = new Path();
+            this.tempPath = new Path();
+            this.loadingPath = new Path();
+            this.shadePath = new Path();
             Paint paint = new Paint();
             this.loadingPaint = paint;
-            float dp = (float) AndroidUtilities.dp(350.0f);
+            float dp = AndroidUtilities.dp(350.0f);
             this.gradientWidth = dp;
-            int i4 = paddingHorizontal;
-            setPadding(i4, 0, i4, 0);
+            int i3 = paddingHorizontal;
+            setPadding(i3, 0, i3, 0);
             setClipChildren(false);
             setWillNotDraw(false);
-            AnonymousClass1 r7 = new TextView(this, context2) {
-                /* access modifiers changed from: protected */
-                public void onMeasure(int i, int i2) {
+            TextView textView = new TextView(this, context) { // from class: org.telegram.ui.Components.TranslateAlert.InlineLoadingTextView.1
+                @Override // android.widget.TextView, android.view.View
+                protected void onMeasure(int i4, int i5) {
                     super.onMeasure(TranslateAlert.MOST_SPEC, TranslateAlert.MOST_SPEC);
                 }
             };
-            this.fromTextView = r7;
-            float f = (float) i;
-            r7.setTextSize(0, f);
-            r7.setTextColor(i3);
-            r7.setText(charSequence);
-            r7.setLines(1);
-            r7.setMaxLines(1);
-            r7.setSingleLine(true);
-            r7.setEllipsize((TextUtils.TruncateAt) null);
-            r7.setFocusable(false);
-            r7.setImportantForAccessibility(2);
-            addView(r7);
-            AnonymousClass2 r72 = new TextView(this, context2) {
-                /* access modifiers changed from: protected */
-                public void onMeasure(int i, int i2) {
+            this.fromTextView = textView;
+            float f = i;
+            textView.setTextSize(0, f);
+            textView.setTextColor(i2);
+            textView.setText(charSequence);
+            textView.setLines(1);
+            textView.setMaxLines(1);
+            textView.setSingleLine(true);
+            textView.setEllipsize(null);
+            textView.setFocusable(false);
+            textView.setImportantForAccessibility(2);
+            addView(textView);
+            TextView textView2 = new TextView(this, context) { // from class: org.telegram.ui.Components.TranslateAlert.InlineLoadingTextView.2
+                @Override // android.widget.TextView, android.view.View
+                protected void onMeasure(int i4, int i5) {
                     super.onMeasure(TranslateAlert.MOST_SPEC, TranslateAlert.MOST_SPEC);
                 }
             };
-            this.toTextView = r72;
-            r72.setTextSize(0, f);
-            r72.setTextColor(i3);
-            r72.setLines(1);
-            r72.setMaxLines(1);
-            r72.setSingleLine(true);
-            r72.setEllipsize((TextUtils.TruncateAt) null);
-            r72.setFocusable(true);
-            addView(r72);
+            this.toTextView = textView2;
+            textView2.setTextSize(0, f);
+            textView2.setTextColor(i2);
+            textView2.setLines(1);
+            textView2.setMaxLines(1);
+            textView2.setSingleLine(true);
+            textView2.setEllipsize(null);
+            textView2.setFocusable(true);
+            addView(textView2);
             int color = Theme.getColor("dialogBackground");
             paint.setShader(new LinearGradient(0.0f, 0.0f, dp, 0.0f, new int[]{color, Theme.getColor("dialogBackgroundGray"), color}, new float[]{0.0f, 0.67f, 1.0f}, Shader.TileMode.REPEAT));
-            ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
+            ValueAnimator ofFloat = ValueAnimator.ofFloat(0.0f, 1.0f);
             this.loadingAnimator = ofFloat;
-            ofFloat.addUpdateListener(new TranslateAlert$InlineLoadingTextView$$ExternalSyntheticLambda0(this));
+            ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() { // from class: org.telegram.ui.Components.TranslateAlert$InlineLoadingTextView$$ExternalSyntheticLambda0
+                @Override // android.animation.ValueAnimator.AnimatorUpdateListener
+                public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+                    TranslateAlert.InlineLoadingTextView.this.lambda$new$0(valueAnimator);
+                }
+            });
             ofFloat.setDuration(Long.MAX_VALUE);
             ofFloat.start();
         }
 
-        /* access modifiers changed from: private */
         public /* synthetic */ void lambda$new$0(ValueAnimator valueAnimator) {
             invalidate();
         }
 
-        /* access modifiers changed from: protected */
-        public void onMeasure(int i, int i2) {
+        @Override // android.view.View
+        protected void onMeasure(int i, int i2) {
             this.fromTextView.measure(0, 0);
             this.toTextView.measure(0, 0);
             super.onMeasure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.lerp(this.fromTextView.getMeasuredWidth(), this.toTextView.getMeasuredWidth(), this.loadingT) + getPaddingLeft() + getPaddingRight(), NUM), View.MeasureSpec.makeMeasureSpec(Math.max(this.fromTextView.getMeasuredHeight(), this.toTextView.getMeasuredHeight()), NUM));
         }
 
-        /* access modifiers changed from: protected */
-        public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+        @Override // android.view.ViewGroup, android.view.View
+        protected void onLayout(boolean z, int i, int i2, int i3, int i4) {
             this.fromTextView.layout(getPaddingLeft(), getPaddingTop(), getPaddingLeft() + this.fromTextView.getMeasuredWidth(), getPaddingTop() + this.fromTextView.getMeasuredHeight());
             this.toTextView.layout(getPaddingLeft(), getPaddingTop(), getPaddingLeft() + this.toTextView.getMeasuredWidth(), getPaddingTop() + this.toTextView.getMeasuredHeight());
             updateWidth();
@@ -1957,7 +1593,7 @@ public class TranslateAlert extends Dialog {
         }
 
         public void loaded(CharSequence charSequence) {
-            loaded(charSequence, 350, (Runnable) null);
+            loaded(charSequence, 350L, null);
         }
 
         public void loaded(CharSequence charSequence, long j, final Runnable runnable) {
@@ -1967,14 +1603,20 @@ public class TranslateAlert extends Dialog {
                 this.loadingAnimator.cancel();
             }
             if (this.loadedAnimator == null) {
-                ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
+                ValueAnimator ofFloat = ValueAnimator.ofFloat(0.0f, 1.0f);
                 this.loadedAnimator = ofFloat;
-                ofFloat.addUpdateListener(new TranslateAlert$InlineLoadingTextView$$ExternalSyntheticLambda1(this));
-                this.loadedAnimator.addListener(new AnimatorListenerAdapter(this) {
+                ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() { // from class: org.telegram.ui.Components.TranslateAlert$InlineLoadingTextView$$ExternalSyntheticLambda1
+                    @Override // android.animation.ValueAnimator.AnimatorUpdateListener
+                    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+                        TranslateAlert.InlineLoadingTextView.this.lambda$loaded$1(valueAnimator);
+                    }
+                });
+                this.loadedAnimator.addListener(new AnimatorListenerAdapter(this) { // from class: org.telegram.ui.Components.TranslateAlert.InlineLoadingTextView.3
+                    @Override // android.animation.AnimatorListenerAdapter, android.animation.Animator.AnimatorListener
                     public void onAnimationEnd(Animator animator) {
-                        Runnable runnable = runnable;
-                        if (runnable != null) {
-                            runnable.run();
+                        Runnable runnable2 = runnable;
+                        if (runnable2 != null) {
+                            runnable2.run();
                         }
                     }
                 });
@@ -1984,7 +1626,6 @@ public class TranslateAlert extends Dialog {
             }
         }
 
-        /* access modifiers changed from: private */
         public /* synthetic */ void lambda$loaded$1(ValueAnimator valueAnimator) {
             this.loadingT = ((Float) valueAnimator.getAnimatedValue()).floatValue();
             updateWidth();
@@ -2010,10 +1651,10 @@ public class TranslateAlert extends Dialog {
             onLoadAnimation(1.0f);
         }
 
-        /* access modifiers changed from: protected */
-        public void onDraw(Canvas canvas) {
-            float width = (float) getWidth();
-            float height = (float) getHeight();
+        @Override // android.view.View
+        protected void onDraw(Canvas canvas) {
+            float width = getWidth();
+            float height = getHeight();
             float max = LocaleController.isRTL ? Math.max(width / 2.0f, width - 8.0f) : Math.min(width / 2.0f, 8.0f);
             float min = Math.min(height / 2.0f, 8.0f);
             float f = max * max;
@@ -2022,7 +1663,7 @@ public class TranslateAlert extends Dialog {
             float f4 = f3 * f3;
             float f5 = height - min;
             float f6 = f5 * f5;
-            float sqrt = this.loadingT * ((float) Math.sqrt((double) Math.max(Math.max(f + f2, f2 + f4), Math.max(f + f6, f4 + f6))));
+            float sqrt = this.loadingT * ((float) Math.sqrt(Math.max(Math.max(f + f2, f2 + f4), Math.max(f + f6, f4 + f6))));
             this.inPath.reset();
             this.inPath.addCircle(max, min, sqrt, Path.Direction.CW);
             canvas.save();
@@ -2035,7 +1676,7 @@ public class TranslateAlert extends Dialog {
             this.shadePath.addRect(0.0f, 0.0f, width, height, Path.Direction.CW);
             this.loadingPath.reset();
             this.rect.set(0.0f, 0.0f, width, height);
-            this.loadingPath.addRoundRect(this.rect, (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), Path.Direction.CW);
+            this.loadingPath.addRoundRect(this.rect, AndroidUtilities.dp(4.0f), AndroidUtilities.dp(4.0f), Path.Direction.CW);
             canvas.clipPath(this.loadingPath);
             canvas.translate(-elapsedRealtime, 0.0f);
             this.shadePath.offset(elapsedRealtime, 0.0f, this.tempPath);
@@ -2046,7 +1687,7 @@ public class TranslateAlert extends Dialog {
                 canvas.save();
                 this.rect.set(0.0f, 0.0f, width, height);
                 canvas.clipPath(this.inPath, Region.Op.DIFFERENCE);
-                canvas.translate((float) paddingHorizontal, 0.0f);
+                canvas.translate(paddingHorizontal, 0.0f);
                 canvas.saveLayerAlpha(this.rect, 20, 31);
                 this.fromTextView.draw(canvas);
                 canvas.restore();
@@ -2055,7 +1696,7 @@ public class TranslateAlert extends Dialog {
             if (this.toTextView != null) {
                 canvas.save();
                 canvas.clipPath(this.inPath);
-                canvas.translate((float) paddingHorizontal, 0.0f);
+                canvas.translate(paddingHorizontal, 0.0f);
                 canvas.saveLayerAlpha(this.rect, (int) (this.loadingT * 255.0f), 31);
                 this.toTextView.draw(canvas);
                 if (this.loadingT < 1.0f) {
@@ -2066,109 +1707,124 @@ public class TranslateAlert extends Dialog {
         }
     }
 
+    /* loaded from: classes3.dex */
     public static class LoadingTextView2 extends ViewGroup {
         public static final int paddingHorizontal = AndroidUtilities.dp(6.0f);
         public static final int paddingVertical = AndroidUtilities.dp(1.5f);
-        private RectF fetchedPathRect = new RectF();
+        private RectF fetchedPathRect;
         private final TextView fromTextView;
         private final float gradientWidth;
-        private final Path inPath = new Path();
-        int lastWidth = 0;
-        public boolean loaded = false;
-        private ValueAnimator loadedAnimator = null;
+        private final Path inPath;
+        int lastWidth;
+        public boolean loaded;
+        private ValueAnimator loadedAnimator;
         private final ValueAnimator loadingAnimator;
         private final Paint loadingPaint;
-        private final Path loadingPath = new Path();
-        private float loadingT = 0.0f;
-        private final RectF rect = new RectF();
-        private float scaleT = 1.0f;
-        private final Path shadePath = new Path();
-        public boolean showLoadingText = true;
-        private final long start = SystemClock.elapsedRealtime();
-        private final Path tempPath = new Path();
+        private final Path loadingPath;
+        private float loadingT;
+        private final RectF rect;
+        private float scaleT;
+        private final Path shadePath;
+        public boolean showLoadingText;
+        private final long start;
+        private final Path tempPath;
         private final TextView toTextView;
 
-        /* access modifiers changed from: protected */
-        public boolean drawChild(Canvas canvas, View view, long j) {
+        @Override // android.view.ViewGroup
+        protected boolean drawChild(Canvas canvas, View view, long j) {
             return false;
         }
 
-        /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-        public LoadingTextView2(Context context, CharSequence charSequence, boolean z, int i, int i2) {
+        public LoadingTextView2(Context context, CharSequence charSequence, final boolean z, int i, int i2) {
             super(context);
-            Context context2 = context;
-            boolean z2 = z;
-            int i3 = i2;
+            this.showLoadingText = true;
+            this.start = SystemClock.elapsedRealtime();
+            this.scaleT = 1.0f;
+            this.loaded = false;
+            this.loadingT = 0.0f;
+            this.loadedAnimator = null;
+            this.lastWidth = 0;
+            this.fetchedPathRect = new RectF();
+            this.rect = new RectF();
+            this.inPath = new Path();
+            this.tempPath = new Path();
+            this.loadingPath = new Path();
+            this.shadePath = new Path();
             Paint paint = new Paint();
             this.loadingPaint = paint;
-            float dp = (float) AndroidUtilities.dp(350.0f);
+            float dp = AndroidUtilities.dp(350.0f);
             this.gradientWidth = dp;
-            int i4 = paddingHorizontal;
-            int i5 = paddingVertical;
-            setPadding(i4, i5, i4, i5);
+            int i3 = paddingHorizontal;
+            int i4 = paddingVertical;
+            setPadding(i3, i4, i3, i4);
             setClipChildren(false);
             setWillNotDraw(false);
             setFocusable(false);
-            AnonymousClass1 r9 = new TextView(this, context2) {
-                /* access modifiers changed from: protected */
-                public void onMeasure(int i, int i2) {
-                    super.onMeasure(i, TranslateAlert.MOST_SPEC);
+            TextView textView = new TextView(this, context) { // from class: org.telegram.ui.Components.TranslateAlert.LoadingTextView2.1
+                @Override // android.widget.TextView, android.view.View
+                protected void onMeasure(int i5, int i6) {
+                    super.onMeasure(i5, TranslateAlert.MOST_SPEC);
                 }
             };
-            this.fromTextView = r9;
-            float f = (float) i;
-            r9.setTextSize(0, f);
-            r9.setTextColor(i3);
-            r9.setText(charSequence);
-            r9.setLines(0);
-            r9.setMaxLines(0);
-            r9.setSingleLine(false);
-            r9.setEllipsize((TextUtils.TruncateAt) null);
-            r9.setFocusable(false);
-            r9.setImportantForAccessibility(2);
-            addView(r9);
-            AnonymousClass2 r92 = new TextView(this, context2) {
-                /* access modifiers changed from: protected */
-                public void onMeasure(int i, int i2) {
-                    super.onMeasure(i, TranslateAlert.MOST_SPEC);
+            this.fromTextView = textView;
+            float f = i;
+            textView.setTextSize(0, f);
+            textView.setTextColor(i2);
+            textView.setText(charSequence);
+            textView.setLines(0);
+            textView.setMaxLines(0);
+            textView.setSingleLine(false);
+            textView.setEllipsize(null);
+            textView.setFocusable(false);
+            textView.setImportantForAccessibility(2);
+            addView(textView);
+            TextView textView2 = new TextView(this, context) { // from class: org.telegram.ui.Components.TranslateAlert.LoadingTextView2.2
+                @Override // android.widget.TextView, android.view.View
+                protected void onMeasure(int i5, int i6) {
+                    super.onMeasure(i5, TranslateAlert.MOST_SPEC);
                 }
             };
-            this.toTextView = r92;
-            r92.setTextSize(0, f);
-            r92.setTextColor(i3);
-            r92.setLines(0);
-            r92.setMaxLines(0);
-            r92.setSingleLine(false);
-            r92.setEllipsize((TextUtils.TruncateAt) null);
-            r92.setFocusable(false);
-            r92.setImportantForAccessibility(2);
-            addView(r92);
+            this.toTextView = textView2;
+            textView2.setTextSize(0, f);
+            textView2.setTextColor(i2);
+            textView2.setLines(0);
+            textView2.setMaxLines(0);
+            textView2.setSingleLine(false);
+            textView2.setEllipsize(null);
+            textView2.setFocusable(false);
+            textView2.setImportantForAccessibility(2);
+            addView(textView2);
             int color = Theme.getColor("dialogBackground");
             paint.setShader(new LinearGradient(0.0f, 0.0f, dp, 0.0f, new int[]{color, Theme.getColor("dialogBackgroundGray"), color}, new float[]{0.0f, 0.67f, 1.0f}, Shader.TileMode.REPEAT));
-            ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
+            ValueAnimator ofFloat = ValueAnimator.ofFloat(0.0f, 1.0f);
             this.loadingAnimator = ofFloat;
-            if (z2) {
+            if (z) {
                 this.scaleT = 0.0f;
             }
-            ofFloat.addUpdateListener(new TranslateAlert$LoadingTextView2$$ExternalSyntheticLambda1(this, z2));
+            ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() { // from class: org.telegram.ui.Components.TranslateAlert$LoadingTextView2$$ExternalSyntheticLambda1
+                @Override // android.animation.ValueAnimator.AnimatorUpdateListener
+                public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+                    TranslateAlert.LoadingTextView2.this.lambda$new$0(z, valueAnimator);
+                }
+            });
             ofFloat.setDuration(Long.MAX_VALUE);
             ofFloat.start();
         }
 
-        /* access modifiers changed from: private */
         public /* synthetic */ void lambda$new$0(boolean z, ValueAnimator valueAnimator) {
             invalidate();
             if (z) {
                 boolean z2 = this.scaleT < 1.0f;
                 this.scaleT = Math.min(1.0f, ((float) (SystemClock.elapsedRealtime() - this.start)) / 400.0f);
-                if (z2) {
-                    updateHeight();
+                if (!z2) {
+                    return;
                 }
+                updateHeight();
             }
         }
 
         public int innerHeight() {
-            return (int) (((float) AndroidUtilities.lerp(this.fromTextView.getMeasuredHeight(), this.toTextView.getMeasuredHeight(), this.loadingT)) * this.scaleT);
+            return (int) (AndroidUtilities.lerp(this.fromTextView.getMeasuredHeight(), this.toTextView.getMeasuredHeight(), this.loadingT) * this.scaleT);
         }
 
         public int height() {
@@ -2190,32 +1846,37 @@ public class TranslateAlert extends Dialog {
                 this.loadingAnimator.cancel();
             }
             if (this.loadedAnimator == null) {
-                ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
+                ValueAnimator ofFloat = ValueAnimator.ofFloat(0.0f, 1.0f);
                 this.loadedAnimator = ofFloat;
-                ofFloat.addUpdateListener(new TranslateAlert$LoadingTextView2$$ExternalSyntheticLambda0(this));
-                this.loadedAnimator.addListener(new AnimatorListenerAdapter(this) {
+                ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() { // from class: org.telegram.ui.Components.TranslateAlert$LoadingTextView2$$ExternalSyntheticLambda0
+                    @Override // android.animation.ValueAnimator.AnimatorUpdateListener
+                    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+                        TranslateAlert.LoadingTextView2.this.lambda$loaded$1(valueAnimator);
+                    }
+                });
+                this.loadedAnimator.addListener(new AnimatorListenerAdapter(this) { // from class: org.telegram.ui.Components.TranslateAlert.LoadingTextView2.3
+                    @Override // android.animation.AnimatorListenerAdapter, android.animation.Animator.AnimatorListener
                     public void onAnimationEnd(Animator animator) {
-                        Runnable runnable = runnable;
-                        if (runnable != null) {
-                            runnable.run();
+                        Runnable runnable2 = runnable;
+                        if (runnable2 != null) {
+                            runnable2.run();
                         }
                     }
                 });
-                this.loadedAnimator.setDuration(350);
+                this.loadedAnimator.setDuration(350L);
                 this.loadedAnimator.setInterpolator(CubicBezierInterpolator.EASE_BOTH);
                 this.loadedAnimator.start();
             }
         }
 
-        /* access modifiers changed from: private */
         public /* synthetic */ void lambda$loaded$1(ValueAnimator valueAnimator) {
             this.loadingT = ((Float) valueAnimator.getAnimatedValue()).floatValue();
             updateHeight();
             invalidate();
         }
 
-        /* access modifiers changed from: protected */
-        public void onMeasure(int i, int i2) {
+        @Override // android.view.View
+        protected void onMeasure(int i, int i2) {
             int size = View.MeasureSpec.getSize(i);
             int paddingLeft = (size - getPaddingLeft()) - getPaddingRight();
             if (this.fromTextView.getMeasuredWidth() <= 0 || this.lastWidth != paddingLeft) {
@@ -2229,8 +1890,8 @@ public class TranslateAlert extends Dialog {
             super.onMeasure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec(height(), NUM));
         }
 
-        /* access modifiers changed from: protected */
-        public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+        @Override // android.view.ViewGroup, android.view.View
+        protected void onLayout(boolean z, int i, int i2, int i3, int i4) {
             layout(((i3 - i) - getPaddingLeft()) - getPaddingRight(), true);
         }
 
@@ -2265,49 +1926,50 @@ public class TranslateAlert extends Dialog {
         private void updateLoadingPath() {
             boolean z;
             TextView textView = this.fromTextView;
-            if (textView != null && textView.getMeasuredWidth() > 0) {
-                this.loadingPath.reset();
-                Layout layout = this.fromTextView.getLayout();
-                if (layout != null) {
-                    CharSequence text = layout.getText();
-                    int lineCount = layout.getLineCount();
-                    for (int i = 0; i < lineCount; i++) {
-                        float lineLeft = layout.getLineLeft(i);
-                        float lineRight = layout.getLineRight(i);
-                        float min = Math.min(lineLeft, lineRight);
-                        float max = Math.max(lineLeft, lineRight);
-                        int lineStart = layout.getLineStart(i);
-                        int lineEnd = layout.getLineEnd(i);
-                        while (true) {
-                            if (lineStart < lineEnd) {
-                                char charAt = text.charAt(lineStart);
-                                if (charAt != 10 && charAt != 9 && charAt != ' ') {
-                                    z = true;
-                                    break;
-                                }
-                                lineStart++;
-                            } else {
-                                z = false;
-                                break;
-                            }
-                        }
-                        if (z) {
-                            RectF rectF = this.fetchedPathRect;
-                            int i2 = paddingHorizontal;
-                            int lineTop = layout.getLineTop(i);
-                            int i3 = paddingVertical;
-                            rectF.set(min - ((float) i2), (float) (lineTop - i3), max + ((float) i2), (float) (layout.getLineBottom(i) + i3));
-                            this.loadingPath.addRoundRect(this.fetchedPathRect, (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), Path.Direction.CW);
-                        }
+            if (textView == null || textView.getMeasuredWidth() <= 0) {
+                return;
+            }
+            this.loadingPath.reset();
+            Layout layout = this.fromTextView.getLayout();
+            if (layout == null) {
+                return;
+            }
+            CharSequence text = layout.getText();
+            int lineCount = layout.getLineCount();
+            for (int i = 0; i < lineCount; i++) {
+                float lineLeft = layout.getLineLeft(i);
+                float lineRight = layout.getLineRight(i);
+                float min = Math.min(lineLeft, lineRight);
+                float max = Math.max(lineLeft, lineRight);
+                int lineStart = layout.getLineStart(i);
+                int lineEnd = layout.getLineEnd(i);
+                while (true) {
+                    if (lineStart >= lineEnd) {
+                        z = false;
+                        break;
                     }
+                    char charAt = text.charAt(lineStart);
+                    if (charAt != '\n' && charAt != '\t' && charAt != ' ') {
+                        z = true;
+                        break;
+                    }
+                    lineStart++;
+                }
+                if (z) {
+                    RectF rectF = this.fetchedPathRect;
+                    int i2 = paddingHorizontal;
+                    int lineTop = layout.getLineTop(i);
+                    int i3 = paddingVertical;
+                    rectF.set(min - i2, lineTop - i3, max + i2, layout.getLineBottom(i) + i3);
+                    this.loadingPath.addRoundRect(this.fetchedPathRect, AndroidUtilities.dp(4.0f), AndroidUtilities.dp(4.0f), Path.Direction.CW);
                 }
             }
         }
 
-        /* access modifiers changed from: protected */
-        public void onDraw(Canvas canvas) {
-            float width = (float) getWidth();
-            float height = (float) getHeight();
+        @Override // android.view.View
+        protected void onDraw(Canvas canvas) {
+            float width = getWidth();
+            float height = getHeight();
             float max = LocaleController.isRTL ? Math.max(width / 2.0f, width - 8.0f) : Math.min(width / 2.0f, 8.0f);
             float min = Math.min(height / 2.0f, 8.0f);
             float f = max * max;
@@ -2316,7 +1978,7 @@ public class TranslateAlert extends Dialog {
             float f4 = f3 * f3;
             float f5 = height - min;
             float f6 = f5 * f5;
-            float sqrt = this.loadingT * ((float) Math.sqrt((double) Math.max(Math.max(f + f2, f2 + f4), Math.max(f + f6, f4 + f6))));
+            float sqrt = this.loadingT * ((float) Math.sqrt(Math.max(Math.max(f + f2, f2 + f4), Math.max(f + f6, f4 + f6))));
             this.inPath.reset();
             this.inPath.addCircle(max, min, sqrt, Path.Direction.CW);
             canvas.save();
@@ -2329,9 +1991,9 @@ public class TranslateAlert extends Dialog {
             this.shadePath.addRect(0.0f, 0.0f, width, height, Path.Direction.CW);
             int i = paddingHorizontal;
             int i2 = paddingVertical;
-            canvas.translate((float) i, (float) i2);
+            canvas.translate(i, i2);
             canvas.clipPath(this.loadingPath);
-            canvas.translate((float) (-i), (float) (-i2));
+            canvas.translate(-i, -i2);
             canvas.translate(-elapsedRealtime, 0.0f);
             this.shadePath.offset(elapsedRealtime, 0.0f, this.tempPath);
             canvas.drawPath(this.tempPath, this.loadingPaint);
@@ -2341,7 +2003,7 @@ public class TranslateAlert extends Dialog {
                 canvas.save();
                 this.rect.set(0.0f, 0.0f, width, height);
                 canvas.clipPath(this.inPath, Region.Op.DIFFERENCE);
-                canvas.translate((float) i, (float) i2);
+                canvas.translate(i, i2);
                 canvas.saveLayerAlpha(this.rect, 20, 31);
                 this.fromTextView.draw(canvas);
                 canvas.restore();
@@ -2350,7 +2012,7 @@ public class TranslateAlert extends Dialog {
             if (this.toTextView != null) {
                 canvas.save();
                 canvas.clipPath(this.inPath);
-                canvas.translate((float) i, (float) i2);
+                canvas.translate(i, i2);
                 canvas.saveLayerAlpha(this.rect, (int) (this.loadingT * 255.0f), 31);
                 this.toTextView.draw(canvas);
                 if (this.loadingT < 1.0f) {

@@ -1,9 +1,8 @@
 package j$.time.format;
-
-import j$.time.temporal.l;
-
+/* loaded from: classes2.dex */
 class o implements g {
-    o(l lVar, String str) {
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public o(j$.time.temporal.l lVar, String str) {
     }
 
     public String toString() {

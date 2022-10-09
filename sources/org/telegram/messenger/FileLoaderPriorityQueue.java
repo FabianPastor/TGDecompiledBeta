@@ -1,49 +1,52 @@
 package org.telegram.messenger;
 
 import java.util.ArrayList;
-
+/* loaded from: classes.dex */
 public class FileLoaderPriorityQueue {
-    private int PRIORITY_VALUE_LOW = 0;
-    private int PRIORITY_VALUE_MAX = 1048576;
-    private int PRIORITY_VALUE_NORMAL = 65536;
-    ArrayList<FileLoadOperation> activeOperations = new ArrayList<>();
-    ArrayList<FileLoadOperation> allOperations = new ArrayList<>();
     private final int maxActiveOperationsCount;
     String name;
+    ArrayList<FileLoadOperation> allOperations = new ArrayList<>();
+    ArrayList<FileLoadOperation> activeOperations = new ArrayList<>();
+    private int PRIORITY_VALUE_MAX = 1048576;
+    private int PRIORITY_VALUE_NORMAL = 65536;
+    private int PRIORITY_VALUE_LOW = 0;
 
-    FileLoaderPriorityQueue(String str, int i) {
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public FileLoaderPriorityQueue(String str, int i) {
         this.name = str;
         this.maxActiveOperationsCount = i;
     }
 
     public void add(FileLoadOperation fileLoadOperation) {
-        if (fileLoadOperation != null) {
-            int i = -1;
-            this.allOperations.remove(fileLoadOperation);
-            int i2 = 0;
-            while (true) {
-                if (i2 >= this.allOperations.size()) {
-                    break;
-                } else if (fileLoadOperation.getPriority() > this.allOperations.get(i2).getPriority()) {
-                    i = i2;
-                    break;
-                } else {
-                    i2++;
-                }
-            }
-            if (i >= 0) {
-                this.allOperations.add(i, fileLoadOperation);
+        if (fileLoadOperation == null) {
+            return;
+        }
+        int i = -1;
+        this.allOperations.remove(fileLoadOperation);
+        int i2 = 0;
+        while (true) {
+            if (i2 >= this.allOperations.size()) {
+                break;
+            } else if (fileLoadOperation.getPriority() > this.allOperations.get(i2).getPriority()) {
+                i = i2;
+                break;
             } else {
-                this.allOperations.add(fileLoadOperation);
+                i2++;
             }
+        }
+        if (i >= 0) {
+            this.allOperations.add(i, fileLoadOperation);
+        } else {
+            this.allOperations.add(fileLoadOperation);
         }
     }
 
     public void cancel(FileLoadOperation fileLoadOperation) {
-        if (fileLoadOperation != null) {
-            this.allOperations.remove(fileLoadOperation);
-            fileLoadOperation.cancel();
+        if (fileLoadOperation == null) {
+            return;
         }
+        this.allOperations.remove(fileLoadOperation);
+        fileLoadOperation.cancel();
     }
 
     public void checkLoadingOperations() {
@@ -64,9 +67,10 @@ public class FileLoaderPriorityQueue {
     }
 
     public void remove(FileLoadOperation fileLoadOperation) {
-        if (fileLoadOperation != null) {
-            this.allOperations.remove(fileLoadOperation);
+        if (fileLoadOperation == null) {
+            return;
         }
+        this.allOperations.remove(fileLoadOperation);
     }
 
     private FileLoadOperation remove() {

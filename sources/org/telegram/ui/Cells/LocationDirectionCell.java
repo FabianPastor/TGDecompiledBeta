@@ -9,18 +9,18 @@ import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
-
+/* loaded from: classes3.dex */
 public class LocationDirectionCell extends FrameLayout {
     private SimpleTextView buttonTextView;
     private FrameLayout frameLayout;
     private final Theme.ResourcesProvider resourcesProvider;
 
-    public LocationDirectionCell(Context context, Theme.ResourcesProvider resourcesProvider2) {
+    public LocationDirectionCell(Context context, Theme.ResourcesProvider resourcesProvider) {
         super(context);
-        this.resourcesProvider = resourcesProvider2;
-        FrameLayout frameLayout2 = new FrameLayout(context);
-        this.frameLayout = frameLayout2;
-        frameLayout2.setBackground(Theme.AdaptiveRipple.filledRect(getThemedColor("featuredStickers_addButton"), 4.0f));
+        this.resourcesProvider = resourcesProvider;
+        FrameLayout frameLayout = new FrameLayout(context);
+        this.frameLayout = frameLayout;
+        frameLayout.setBackground(Theme.AdaptiveRipple.filledRect(getThemedColor("featuredStickers_addButton"), 4.0f));
         addView(this.frameLayout, LayoutHelper.createFrame(-1, 48.0f, 51, 16.0f, 10.0f, 16.0f, 0.0f));
         SimpleTextView simpleTextView = new SimpleTextView(context);
         this.buttonTextView = simpleTextView;
@@ -35,8 +35,8 @@ public class LocationDirectionCell extends FrameLayout {
         this.frameLayout.addView(this.buttonTextView, LayoutHelper.createFrame(-1, -1.0f));
     }
 
-    /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
+    @Override // android.widget.FrameLayout, android.view.View
+    protected void onMeasure(int i, int i2) {
         super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(73.0f), NUM));
     }
 
@@ -45,8 +45,8 @@ public class LocationDirectionCell extends FrameLayout {
     }
 
     private int getThemedColor(String str) {
-        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
-        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        Theme.ResourcesProvider resourcesProvider = this.resourcesProvider;
+        Integer color = resourcesProvider != null ? resourcesProvider.getColor(str) : null;
         return color != null ? color.intValue() : Theme.getColor(str);
     }
 }

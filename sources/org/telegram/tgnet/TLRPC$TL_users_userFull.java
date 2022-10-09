@@ -1,61 +1,61 @@
 package org.telegram.tgnet;
 
 import java.util.ArrayList;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_users_userFull extends TLObject {
     public static int constructor = NUM;
-    public ArrayList<TLRPC$Chat> chats = new ArrayList<>();
     public TLRPC$UserFull full_user;
+    public ArrayList<TLRPC$Chat> chats = new ArrayList<>();
     public ArrayList<TLRPC$User> users = new ArrayList<>();
 
     public static TLRPC$TL_users_userFull TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-        if (constructor == i) {
-            TLRPC$TL_users_userFull tLRPC$TL_users_userFull = new TLRPC$TL_users_userFull();
-            tLRPC$TL_users_userFull.readParams(abstractSerializedData, z);
-            return tLRPC$TL_users_userFull;
-        } else if (!z) {
+        if (constructor != i) {
+            if (z) {
+                throw new RuntimeException(String.format("can't parse magic %x in TL_users_userFull", Integer.valueOf(i)));
+            }
             return null;
-        } else {
-            throw new RuntimeException(String.format("can't parse magic %x in TL_users_userFull", new Object[]{Integer.valueOf(i)}));
         }
+        TLRPC$TL_users_userFull tLRPC$TL_users_userFull = new TLRPC$TL_users_userFull();
+        tLRPC$TL_users_userFull.readParams(abstractSerializedData, z);
+        return tLRPC$TL_users_userFull;
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         this.full_user = TLRPC$UserFull.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         int readInt32 = abstractSerializedData.readInt32(z);
-        int i = 0;
-        if (readInt32 == NUM) {
-            int readInt322 = abstractSerializedData.readInt32(z);
-            int i2 = 0;
-            while (i2 < readInt322) {
-                TLRPC$Chat TLdeserialize = TLRPC$Chat.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
-                if (TLdeserialize != null) {
-                    this.chats.add(TLdeserialize);
-                    i2++;
-                } else {
-                    return;
-                }
+        if (readInt32 != NUM) {
+            if (z) {
+                throw new RuntimeException(String.format("wrong Vector magic, got %x", Integer.valueOf(readInt32)));
             }
-            int readInt323 = abstractSerializedData.readInt32(z);
-            if (readInt323 == NUM) {
-                int readInt324 = abstractSerializedData.readInt32(z);
-                while (i < readInt324) {
-                    TLRPC$User TLdeserialize2 = TLRPC$User.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
-                    if (TLdeserialize2 != null) {
-                        this.users.add(TLdeserialize2);
-                        i++;
-                    } else {
-                        return;
-                    }
-                }
-            } else if (z) {
-                throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt323)}));
+            return;
+        }
+        int readInt322 = abstractSerializedData.readInt32(z);
+        for (int i = 0; i < readInt322; i++) {
+            TLRPC$Chat TLdeserialize = TLRPC$Chat.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+            if (TLdeserialize == null) {
+                return;
             }
-        } else if (z) {
-            throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt32)}));
+            this.chats.add(TLdeserialize);
+        }
+        int readInt323 = abstractSerializedData.readInt32(z);
+        if (readInt323 != NUM) {
+            if (z) {
+                throw new RuntimeException(String.format("wrong Vector magic, got %x", Integer.valueOf(readInt323)));
+            }
+            return;
+        }
+        int readInt324 = abstractSerializedData.readInt32(z);
+        for (int i2 = 0; i2 < readInt324; i2++) {
+            TLRPC$User TLdeserialize2 = TLRPC$User.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+            if (TLdeserialize2 == null) {
+                return;
+            }
+            this.users.add(TLdeserialize2);
         }
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
         this.full_user.serializeToStream(abstractSerializedData);

@@ -1,43 +1,43 @@
 package j$.util.stream;
 
 import j$.util.function.Function;
-import j$.util.function.f;
-import j$.util.function.l;
-import j$.util.function.q;
 import java.util.HashSet;
 import java.util.Set;
-
-class r extends CLASSNAMEi3 {
+/* loaded from: classes2.dex */
+class r extends AbstractCLASSNAMEi3 {
     public final /* synthetic */ int b = 3;
     Object c;
     final /* synthetic */ Object d;
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public r(CLASSNAMEs sVar, CLASSNAMEm3 m3Var) {
-        super(m3Var);
-        this.d = sVar;
+    /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+    public r(CLASSNAMEs CLASSNAMEs, InterfaceCLASSNAMEm3 interfaceCLASSNAMEm3) {
+        super(interfaceCLASSNAMEm3);
+        this.d = CLASSNAMEs;
     }
 
+    @Override // j$.util.function.Consumer
     public void accept(Object obj) {
         switch (this.b) {
             case 0:
-                if (!((Set) this.c).contains(obj)) {
-                    ((Set) this.c).add(obj);
-                    this.a.accept(obj);
+                if (((Set) this.c).contains(obj)) {
                     return;
                 }
+                ((Set) this.c).add(obj);
+                this.a.accept((InterfaceCLASSNAMEm3) obj);
                 return;
             case 1:
-                CLASSNAMEe1 e1Var = (CLASSNAMEe1) ((Function) ((N) this.d).m).apply(obj);
-                if (e1Var != null) {
+                InterfaceCLASSNAMEe1 interfaceCLASSNAMEe1 = (InterfaceCLASSNAMEe1) ((Function) ((N) this.d).m).apply(obj);
+                if (interfaceCLASSNAMEe1 != null) {
                     try {
-                        e1Var.sequential().d((q) this.c);
-                    } catch (Throwable unused) {
-                        break;
+                        interfaceCLASSNAMEe1.mo305sequential().d((j$.util.function.q) this.c);
+                    } finally {
+                        try {
+                            interfaceCLASSNAMEe1.close();
+                        } catch (Throwable unused) {
+                        }
                     }
                 }
-                if (e1Var != null) {
-                    e1Var.close();
+                if (interfaceCLASSNAMEe1 == null) {
                     return;
                 }
                 return;
@@ -45,13 +45,15 @@ class r extends CLASSNAMEi3 {
                 IntStream intStream = (IntStream) ((Function) ((M) this.d).m).apply(obj);
                 if (intStream != null) {
                     try {
-                        intStream.sequential().U((l) this.c);
-                    } catch (Throwable unused2) {
-                        break;
+                        intStream.mo305sequential().U((j$.util.function.l) this.c);
+                    } finally {
+                        try {
+                            intStream.close();
+                        } catch (Throwable unused2) {
+                        }
                     }
                 }
-                if (intStream != null) {
-                    intStream.close();
+                if (intStream == null) {
                     return;
                 }
                 return;
@@ -59,22 +61,22 @@ class r extends CLASSNAMEi3 {
                 U u = (U) ((Function) ((K) this.d).m).apply(obj);
                 if (u != null) {
                     try {
-                        u.sequential().j((f) this.c);
-                    } catch (Throwable unused3) {
-                        break;
+                        u.mo305sequential().j((j$.util.function.f) this.c);
+                    } finally {
+                        try {
+                            u.close();
+                        } catch (Throwable unused3) {
+                        }
                     }
                 }
-                if (u != null) {
-                    u.close();
+                if (u == null) {
                     return;
                 }
                 return;
         }
-        throw th;
-        throw th;
-        throw th;
     }
 
+    @Override // j$.util.stream.AbstractCLASSNAMEi3, j$.util.stream.InterfaceCLASSNAMEm3
     public void m() {
         switch (this.b) {
             case 0:
@@ -87,42 +89,43 @@ class r extends CLASSNAMEi3 {
         }
     }
 
+    @Override // j$.util.stream.InterfaceCLASSNAMEm3
     public void n(long j) {
         switch (this.b) {
             case 0:
                 this.c = new HashSet();
-                this.a.n(-1);
+                this.a.n(-1L);
                 return;
             case 1:
-                this.a.n(-1);
+                this.a.n(-1L);
                 return;
             case 2:
-                this.a.n(-1);
+                this.a.n(-1L);
                 return;
             default:
-                this.a.n(-1);
+                this.a.n(-1L);
                 return;
         }
     }
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public r(K k, CLASSNAMEm3 m3Var) {
-        super(m3Var);
+    /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+    public r(K k, InterfaceCLASSNAMEm3 interfaceCLASSNAMEm3) {
+        super(interfaceCLASSNAMEm3);
         this.d = k;
-        this.c = new F(m3Var);
+        this.c = new F(interfaceCLASSNAMEm3);
     }
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public r(M m, CLASSNAMEm3 m3Var) {
-        super(m3Var);
+    /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+    public r(M m, InterfaceCLASSNAMEm3 interfaceCLASSNAMEm3) {
+        super(interfaceCLASSNAMEm3);
         this.d = m;
-        this.c = new B0(m3Var);
+        this.c = new B0(interfaceCLASSNAMEm3);
     }
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public r(N n, CLASSNAMEm3 m3Var) {
-        super(m3Var);
+    /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+    public r(N n, InterfaceCLASSNAMEm3 interfaceCLASSNAMEm3) {
+        super(interfaceCLASSNAMEm3);
         this.d = n;
-        this.c = new W0(m3Var);
+        this.c = new W0(interfaceCLASSNAMEm3);
     }
 }

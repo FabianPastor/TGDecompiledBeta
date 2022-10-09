@@ -1,22 +1,25 @@
 package j$.util.stream;
 
 import java.util.Arrays;
-
+/* loaded from: classes2.dex */
 final class H3 extends D3 {
     private W3 c;
 
-    H3(CLASSNAMEm3 m3Var) {
-        super(m3Var);
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public H3(InterfaceCLASSNAMEm3 interfaceCLASSNAMEm3) {
+        super(interfaceCLASSNAMEm3);
     }
 
+    @Override // j$.util.stream.InterfaceCLASSNAMEk3, j$.util.stream.InterfaceCLASSNAMEm3
     public void accept(int i) {
         this.c.accept(i);
     }
 
+    @Override // j$.util.stream.AbstractCLASSNAMEg3, j$.util.stream.InterfaceCLASSNAMEm3
     public void m() {
         int[] iArr = (int[]) this.c.e();
         Arrays.sort(iArr);
-        this.a.n((long) iArr.length);
+        this.a.n(iArr.length);
         int i = 0;
         if (!this.b) {
             int length = iArr.length;
@@ -38,15 +41,10 @@ final class H3 extends D3 {
         this.a.m();
     }
 
+    @Override // j$.util.stream.InterfaceCLASSNAMEm3
     public void n(long j) {
-        W3 w3;
         if (j < NUM) {
-            if (j > 0) {
-                int i = (int) j;
-            } else {
-                w3 = new W3();
-            }
-            this.c = w3;
+            this.c = j > 0 ? new W3((int) j) : new W3();
             return;
         }
         throw new IllegalArgumentException("Stream size exceeds max array size");

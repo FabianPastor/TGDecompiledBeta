@@ -1,5 +1,5 @@
 package org.telegram.messenger.video;
-
+/* loaded from: classes.dex */
 public class Sample {
     private long offset;
     private long size;

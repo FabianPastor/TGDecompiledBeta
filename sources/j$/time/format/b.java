@@ -1,8 +1,6 @@
 package j$.time.format;
-
-import j$.time.temporal.l;
-
-public final /* synthetic */ class b implements l {
+/* loaded from: classes2.dex */
+public final /* synthetic */ class b implements j$.time.temporal.l {
     public static final /* synthetic */ b a = new b();
 
     private /* synthetic */ b() {

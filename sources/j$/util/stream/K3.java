@@ -1,25 +1,26 @@
 package j$.util.stream;
 
-import j$.util.function.m;
-import j$.util.u;
 import java.util.Arrays;
-
+/* loaded from: classes2.dex */
 final class K3 extends J0 {
-    K3(CLASSNAMEc cVar) {
-        super(cVar, CLASSNAMEe4.INT_VALUE, CLASSNAMEd4.q | CLASSNAMEd4.o);
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public K3(AbstractCLASSNAMEc abstractCLASSNAMEc) {
+        super(abstractCLASSNAMEc, EnumCLASSNAMEe4.INT_VALUE, EnumCLASSNAMEd4.q | EnumCLASSNAMEd4.o);
     }
 
-    public A1 E0(CLASSNAMEy2 y2Var, u uVar, m mVar) {
-        if (CLASSNAMEd4.SORTED.d(y2Var.s0())) {
-            return y2Var.p0(uVar, false, mVar);
+    @Override // j$.util.stream.AbstractCLASSNAMEc
+    public A1 E0(AbstractCLASSNAMEy2 abstractCLASSNAMEy2, j$.util.u uVar, j$.util.function.m mVar) {
+        if (EnumCLASSNAMEd4.SORTED.d(abstractCLASSNAMEy2.s0())) {
+            return abstractCLASSNAMEy2.p0(uVar, false, mVar);
         }
-        int[] iArr = (int[]) ((CLASSNAMEw1) y2Var.p0(uVar, true, mVar)).e();
+        int[] iArr = (int[]) ((InterfaceCLASSNAMEw1) abstractCLASSNAMEy2.p0(uVar, true, mVar)).e();
         Arrays.sort(iArr);
         return new CLASSNAMEc2(iArr);
     }
 
-    public CLASSNAMEm3 H0(int i, CLASSNAMEm3 m3Var) {
-        m3Var.getClass();
-        return CLASSNAMEd4.SORTED.d(i) ? m3Var : CLASSNAMEd4.SIZED.d(i) ? new P3(m3Var) : new H3(m3Var);
+    @Override // j$.util.stream.AbstractCLASSNAMEc
+    public InterfaceCLASSNAMEm3 H0(int i, InterfaceCLASSNAMEm3 interfaceCLASSNAMEm3) {
+        interfaceCLASSNAMEm3.getClass();
+        return EnumCLASSNAMEd4.SORTED.d(i) ? interfaceCLASSNAMEm3 : EnumCLASSNAMEd4.SIZED.d(i) ? new P3(interfaceCLASSNAMEm3) : new H3(interfaceCLASSNAMEm3);
     }
 }

@@ -9,26 +9,26 @@ import android.view.Surface;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import org.telegram.messenger.FileLog;
-
+/* loaded from: classes.dex */
 public class AudioRecoder {
-    private final int TIMEOUT_USEC = 2500;
     private final MediaCodec decoder;
-    private boolean decoderDone = false;
     private ByteBuffer[] decoderInputBuffers;
-    private final MediaCodec.BufferInfo decoderOutputBufferInfo = new MediaCodec.BufferInfo();
     private ByteBuffer[] decoderOutputBuffers;
     private final MediaCodec encoder;
-    private boolean encoderDone = false;
     private ByteBuffer[] encoderInputBuffers;
-    private final MediaCodec.BufferInfo encoderOutputBufferInfo = new MediaCodec.BufferInfo();
     private ByteBuffer[] encoderOutputBuffers;
-    public long endTime = 0;
     private final MediaExtractor extractor;
-    private boolean extractorDone = false;
     public final MediaFormat format;
-    private int pendingAudioDecoderOutputBufferIndex = -1;
-    public long startTime = 0;
     private final int trackIndex;
+    private final MediaCodec.BufferInfo decoderOutputBufferInfo = new MediaCodec.BufferInfo();
+    private final MediaCodec.BufferInfo encoderOutputBufferInfo = new MediaCodec.BufferInfo();
+    private boolean extractorDone = false;
+    private boolean decoderDone = false;
+    private boolean encoderDone = false;
+    private int pendingAudioDecoderOutputBufferIndex = -1;
+    private final int TIMEOUT_USEC = 2500;
+    public long startTime = 0;
+    public long endTime = 0;
 
     public AudioRecoder(MediaFormat mediaFormat, MediaExtractor mediaExtractor, int i) throws IOException {
         this.extractor = mediaExtractor;
@@ -57,7 +57,7 @@ public class AudioRecoder {
             this.extractor.unselectTrack(this.trackIndex);
             this.extractor.release();
         } catch (Exception e) {
-            FileLog.e((Throwable) e);
+            FileLog.e(e);
         }
     }
 
@@ -67,7 +67,7 @@ public class AudioRecoder {
         int dequeueOutputBuffer2;
         int dequeueInputBuffer2;
         ByteBuffer byteBuffer;
-        if (!this.extractorDone && (dequeueInputBuffer2 = this.decoder.dequeueInputBuffer(2500)) != -1) {
+        if (!this.extractorDone && (dequeueInputBuffer2 = this.decoder.dequeueInputBuffer(2500L)) != -1) {
             if (Build.VERSION.SDK_INT >= 21) {
                 byteBuffer = this.decoder.getInputBuffer(dequeueInputBuffer2);
             } else {
@@ -86,10 +86,10 @@ public class AudioRecoder {
             boolean z = !this.extractor.advance();
             this.extractorDone = z;
             if (z) {
-                this.decoder.queueInputBuffer(this.decoder.dequeueInputBuffer(2500), 0, 0, 0, 4);
+                this.decoder.queueInputBuffer(this.decoder.dequeueInputBuffer(2500L), 0, 0, 0L, 4);
             }
         }
-        if (!this.decoderDone && this.pendingAudioDecoderOutputBufferIndex == -1 && (dequeueOutputBuffer2 = this.decoder.dequeueOutputBuffer(this.decoderOutputBufferInfo, 2500)) != -1) {
+        if (!this.decoderDone && this.pendingAudioDecoderOutputBufferIndex == -1 && (dequeueOutputBuffer2 = this.decoder.dequeueOutputBuffer(this.decoderOutputBufferInfo, 2500L)) != -1) {
             if (dequeueOutputBuffer2 == -3) {
                 this.decoderOutputBuffers = this.decoder.getOutputBuffers();
             } else if (dequeueOutputBuffer2 != -2) {
@@ -100,7 +100,7 @@ public class AudioRecoder {
                 }
             }
         }
-        if (!(this.pendingAudioDecoderOutputBufferIndex == -1 || (dequeueInputBuffer = this.encoder.dequeueInputBuffer(2500)) == -1)) {
+        if (this.pendingAudioDecoderOutputBufferIndex != -1 && (dequeueInputBuffer = this.encoder.dequeueInputBuffer(2500L)) != -1) {
             ByteBuffer byteBuffer2 = this.encoderInputBuffers[dequeueInputBuffer];
             MediaCodec.BufferInfo bufferInfo = this.decoderOutputBufferInfo;
             int i2 = bufferInfo.size;
@@ -119,7 +119,7 @@ public class AudioRecoder {
                 this.decoderDone = true;
             }
         }
-        if (!this.encoderDone && (dequeueOutputBuffer = this.encoder.dequeueOutputBuffer(this.encoderOutputBufferInfo, 2500)) != -1) {
+        if (!this.encoderDone && (dequeueOutputBuffer = this.encoder.dequeueOutputBuffer(this.encoderOutputBufferInfo, 2500L)) != -1) {
             if (dequeueOutputBuffer == -3) {
                 this.encoderOutputBuffers = this.encoder.getOutputBuffers();
             } else if (dequeueOutputBuffer != -2) {

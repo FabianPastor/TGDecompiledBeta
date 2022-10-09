@@ -1,9 +1,5 @@
 package j$.time.format;
 
-import j$.time.chrono.b;
-import j$.time.temporal.a;
-import j$.time.temporal.j;
-import j$.time.temporal.k;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -11,8 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
-
+/* loaded from: classes2.dex */
 public final class p {
     private p a;
     private final p b;
@@ -22,34 +17,34 @@ public final class p {
 
     static {
         HashMap hashMap = new HashMap();
-        hashMap.put('G', a.ERA);
-        hashMap.put('y', a.YEAR_OF_ERA);
-        hashMap.put('u', a.YEAR);
-        k kVar = j.a;
+        hashMap.put('G', j$.time.temporal.a.ERA);
+        hashMap.put('y', j$.time.temporal.a.YEAR_OF_ERA);
+        hashMap.put('u', j$.time.temporal.a.YEAR);
+        j$.time.temporal.k kVar = j$.time.temporal.j.a;
         hashMap.put('Q', kVar);
         hashMap.put('q', kVar);
-        a aVar = a.MONTH_OF_YEAR;
+        j$.time.temporal.a aVar = j$.time.temporal.a.MONTH_OF_YEAR;
         hashMap.put('M', aVar);
         hashMap.put('L', aVar);
-        hashMap.put('D', a.DAY_OF_YEAR);
-        hashMap.put('d', a.DAY_OF_MONTH);
-        hashMap.put('F', a.ALIGNED_DAY_OF_WEEK_IN_MONTH);
-        a aVar2 = a.DAY_OF_WEEK;
+        hashMap.put('D', j$.time.temporal.a.DAY_OF_YEAR);
+        hashMap.put('d', j$.time.temporal.a.DAY_OF_MONTH);
+        hashMap.put('F', j$.time.temporal.a.ALIGNED_DAY_OF_WEEK_IN_MONTH);
+        j$.time.temporal.a aVar2 = j$.time.temporal.a.DAY_OF_WEEK;
         hashMap.put('E', aVar2);
         hashMap.put('c', aVar2);
         hashMap.put('e', aVar2);
-        hashMap.put('a', a.AMPM_OF_DAY);
-        hashMap.put('H', a.HOUR_OF_DAY);
-        hashMap.put('k', a.CLOCK_HOUR_OF_DAY);
-        hashMap.put('K', a.HOUR_OF_AMPM);
-        hashMap.put('h', a.CLOCK_HOUR_OF_AMPM);
-        hashMap.put('m', a.MINUTE_OF_HOUR);
-        hashMap.put('s', a.SECOND_OF_MINUTE);
-        a aVar3 = a.NANO_OF_SECOND;
+        hashMap.put('a', j$.time.temporal.a.AMPM_OF_DAY);
+        hashMap.put('H', j$.time.temporal.a.HOUR_OF_DAY);
+        hashMap.put('k', j$.time.temporal.a.CLOCK_HOUR_OF_DAY);
+        hashMap.put('K', j$.time.temporal.a.HOUR_OF_AMPM);
+        hashMap.put('h', j$.time.temporal.a.CLOCK_HOUR_OF_AMPM);
+        hashMap.put('m', j$.time.temporal.a.MINUTE_OF_HOUR);
+        hashMap.put('s', j$.time.temporal.a.SECOND_OF_MINUTE);
+        j$.time.temporal.a aVar3 = j$.time.temporal.a.NANO_OF_SECOND;
         hashMap.put('S', aVar3);
-        hashMap.put('A', a.MILLI_OF_DAY);
+        hashMap.put('A', j$.time.temporal.a.MILLI_OF_DAY);
         hashMap.put('n', aVar3);
-        hashMap.put('N', a.NANO_OF_DAY);
+        hashMap.put('N', j$.time.temporal.a.NANO_OF_DAY);
     }
 
     public p() {
@@ -81,32 +76,36 @@ public final class p {
     }
 
     private p j(j jVar) {
-        j jVar2;
+        j b;
+        s sVar;
         p pVar = this.a;
         int i = pVar.e;
         if (i >= 0) {
-            j jVar3 = (j) pVar.c.get(i);
-            if (jVar.b == jVar.c && jVar.d == s.NOT_NEGATIVE) {
-                jVar2 = jVar3.c(jVar.c);
-                d(jVar.b());
-                this.a.e = i;
-            } else {
-                jVar2 = jVar3.b();
-                this.a.e = d(jVar);
+            j jVar2 = (j) pVar.c.get(i);
+            if (jVar.b == jVar.c) {
+                sVar = jVar.d;
+                if (sVar == s.NOT_NEGATIVE) {
+                    b = jVar2.c(jVar.c);
+                    d(jVar.b());
+                    this.a.e = i;
+                    this.a.c.set(i, b);
+                }
             }
-            this.a.c.set(i, jVar2);
+            b = jVar2.b();
+            this.a.e = d(jVar);
+            this.a.c.set(i, b);
         } else {
             pVar.e = d(jVar);
         }
         return this;
     }
 
-    private a t(Locale locale, int i, b bVar) {
+    private a t(Locale locale, int i, j$.time.chrono.b bVar) {
         if (locale != null) {
             while (this.a.b != null) {
                 n();
             }
-            return new a(new f(this.c, false), locale, r.a, i, (Set) null, bVar);
+            return new a(new f(this.c, false), locale, r.a, i, null, bVar);
         }
         throw new NullPointerException("locale");
     }
@@ -119,7 +118,7 @@ public final class p {
         throw new NullPointerException("formatter");
     }
 
-    public p b(k kVar, int i, int i2, boolean z) {
+    public p b(j$.time.temporal.k kVar, int i, int i2, boolean z) {
         d(new h(kVar, i, i2, z));
         return this;
     }
@@ -129,8 +128,8 @@ public final class p {
         return this;
     }
 
-    public p e(char c2) {
-        d(new e(c2));
+    public p e(char c) {
+        d(new e(c));
         return this;
     }
 
@@ -151,7 +150,7 @@ public final class p {
         return this;
     }
 
-    public p i(k kVar, Map map) {
+    public p i(j$.time.temporal.k kVar, Map map) {
         if (kVar != null) {
             LinkedHashMap linkedHashMap = new LinkedHashMap(map);
             t tVar = t.FULL;
@@ -161,34 +160,37 @@ public final class p {
         throw new NullPointerException("field");
     }
 
-    public p k(k kVar, int i) {
-        if (kVar == null) {
-            throw new NullPointerException("field");
-        } else if (i < 1 || i > 19) {
+    public p k(j$.time.temporal.k kVar, int i) {
+        if (kVar != null) {
+            if (i >= 1 && i <= 19) {
+                j(new j(kVar, i, i, s.NOT_NEGATIVE));
+                return this;
+            }
             throw new IllegalArgumentException("The width must be from 1 to 19 inclusive but was " + i);
-        } else {
-            j(new j(kVar, i, i, s.NOT_NEGATIVE));
-            return this;
         }
+        throw new NullPointerException("field");
     }
 
-    public p l(k kVar, int i, int i2, s sVar) {
+    public p l(j$.time.temporal.k kVar, int i, int i2, s sVar) {
         if (i == i2 && sVar == s.NOT_NEGATIVE) {
             k(kVar, i2);
             return this;
         } else if (kVar == null) {
             throw new NullPointerException("field");
-        } else if (sVar == null) {
-            throw new NullPointerException("signStyle");
-        } else if (i < 1 || i > 19) {
-            throw new IllegalArgumentException("The minimum width must be from 1 to 19 inclusive but was " + i);
-        } else if (i2 < 1 || i2 > 19) {
-            throw new IllegalArgumentException("The maximum width must be from 1 to 19 inclusive but was " + i2);
-        } else if (i2 >= i) {
-            j(new j(kVar, i, i2, sVar));
-            return this;
         } else {
-            throw new IllegalArgumentException("The maximum width must exceed or equal the minimum width but " + i2 + " < " + i);
+            if (sVar == null) {
+                throw new NullPointerException("signStyle");
+            }
+            if (i < 1 || i > 19) {
+                throw new IllegalArgumentException("The minimum width must be from 1 to 19 inclusive but was " + i);
+            } else if (i2 < 1 || i2 > 19) {
+                throw new IllegalArgumentException("The maximum width must be from 1 to 19 inclusive but was " + i2);
+            } else if (i2 >= i) {
+                j(new j(kVar, i, i2, sVar));
+                return this;
+            } else {
+                throw new IllegalArgumentException("The maximum width must exceed or equal the minimum width but " + i2 + " < " + i);
+            }
         }
     }
 
@@ -236,11 +238,11 @@ public final class p {
     }
 
     public a s() {
-        return t(Locale.getDefault(), 2, (b) null);
+        return t(Locale.getDefault(), 2, null);
     }
 
-    /* access modifiers changed from: package-private */
-    public a u(int i, b bVar) {
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public a u(int i, j$.time.chrono.b bVar) {
         return t(Locale.getDefault(), i, bVar);
     }
 }

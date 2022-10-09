@@ -14,7 +14,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
-
+/* loaded from: classes3.dex */
 public class ThemeTypeCell extends FrameLayout {
     private ImageView checkImage;
     private boolean needDivider;
@@ -23,9 +23,9 @@ public class ThemeTypeCell extends FrameLayout {
     public ThemeTypeCell(Context context) {
         super(context);
         setWillNotDraw(false);
-        TextView textView2 = new TextView(context);
-        this.textView = textView2;
-        textView2.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+        TextView textView = new TextView(context);
+        this.textView = textView;
+        textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
@@ -33,9 +33,9 @@ public class ThemeTypeCell extends FrameLayout {
         this.textView.setEllipsize(TextUtils.TruncateAt.END);
         int i = 5;
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
-        TextView textView3 = this.textView;
+        TextView textView2 = this.textView;
         boolean z = LocaleController.isRTL;
-        addView(textView3, LayoutHelper.createFrame(-1, -1.0f, (z ? 5 : 3) | 48, z ? 71.0f : 21.0f, 0.0f, z ? 21.0f : 23.0f, 0.0f));
+        addView(textView2, LayoutHelper.createFrame(-1, -1.0f, (z ? 5 : 3) | 48, z ? 71.0f : 21.0f, 0.0f, z ? 21.0f : 23.0f, 0.0f));
         ImageView imageView = new ImageView(context);
         this.checkImage = imageView;
         imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("featuredStickers_addedIcon"), PorterDuff.Mode.MULTIPLY));
@@ -43,8 +43,8 @@ public class ThemeTypeCell extends FrameLayout {
         addView(this.checkImage, LayoutHelper.createFrame(19, 14.0f, (LocaleController.isRTL ? 3 : i) | 16, 23.0f, 0.0f, 23.0f, 0.0f));
     }
 
-    /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
+    @Override // android.widget.FrameLayout, android.view.View
+    protected void onMeasure(int i, int i2) {
         super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(50.0f) + (this.needDivider ? 1 : 0), NUM));
     }
 
@@ -58,10 +58,10 @@ public class ThemeTypeCell extends FrameLayout {
         this.checkImage.setVisibility(z ? 0 : 4);
     }
 
-    /* access modifiers changed from: protected */
-    public void onDraw(Canvas canvas) {
+    @Override // android.view.View
+    protected void onDraw(Canvas canvas) {
         if (this.needDivider) {
-            canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.dp(20.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(20.0f) : 0)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
+            canvas.drawLine(LocaleController.isRTL ? 0.0f : AndroidUtilities.dp(20.0f), getMeasuredHeight() - 1, getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(20.0f) : 0), getMeasuredHeight() - 1, Theme.dividerPaint);
         }
     }
 }

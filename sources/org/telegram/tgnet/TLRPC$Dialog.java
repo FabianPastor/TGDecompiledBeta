@@ -1,5 +1,5 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public abstract class TLRPC$Dialog extends TLObject {
     public TLRPC$DraftMessage draft;
     public int flags;
@@ -20,18 +20,18 @@ public abstract class TLRPC$Dialog extends TLObject {
     public int unread_reactions_count;
 
     public static TLRPC$Dialog TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-        TLRPC$Dialog tLRPC$Dialog;
-        if (i != -NUM) {
-            tLRPC$Dialog = i != NUM ? null : new TLRPC$TL_dialogFolder();
+        TLRPC$Dialog tLRPC$TL_dialog;
+        if (i == -NUM) {
+            tLRPC$TL_dialog = new TLRPC$TL_dialog();
         } else {
-            tLRPC$Dialog = new TLRPC$TL_dialog();
+            tLRPC$TL_dialog = i != NUM ? null : new TLRPC$TL_dialogFolder();
         }
-        if (tLRPC$Dialog != null || !z) {
-            if (tLRPC$Dialog != null) {
-                tLRPC$Dialog.readParams(abstractSerializedData, z);
+        if (tLRPC$TL_dialog != null || !z) {
+            if (tLRPC$TL_dialog != null) {
+                tLRPC$TL_dialog.readParams(abstractSerializedData, z);
             }
-            return tLRPC$Dialog;
+            return tLRPC$TL_dialog;
         }
-        throw new RuntimeException(String.format("can't parse magic %x in Dialog", new Object[]{Integer.valueOf(i)}));
+        throw new RuntimeException(String.format("can't parse magic %x in Dialog", Integer.valueOf(i)));
     }
 }

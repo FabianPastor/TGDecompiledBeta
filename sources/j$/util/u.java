@@ -1,21 +1,25 @@
 package j$.util;
 
 import j$.util.function.Consumer;
-import j$.util.function.l;
 import java.util.Comparator;
-
+/* loaded from: classes2.dex */
 public interface u {
 
+    /* loaded from: classes2.dex */
     public interface a extends w {
+        @Override // j$.util.u
         boolean b(Consumer consumer);
 
-        void c(l lVar);
+        void c(j$.util.function.l lVar);
 
+        @Override // j$.util.u
         void forEachRemaining(Consumer consumer);
 
-        boolean g(l lVar);
+        boolean g(j$.util.function.l lVar);
 
-        a trySplit();
+        @Override // j$.util.w, j$.util.u
+        /* renamed from: trySplit */
+        a mo322trySplit();
     }
 
     boolean b(Consumer consumer);
@@ -32,5 +36,6 @@ public interface u {
 
     boolean hasCharacteristics(int i);
 
-    u trySplit();
+    /* renamed from: trySplit */
+    u mo322trySplit();
 }

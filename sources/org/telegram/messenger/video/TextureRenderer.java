@@ -7,6 +7,7 @@ import android.graphics.SurfaceTexture;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
 import android.opengl.Matrix;
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -19,23 +20,18 @@ import org.telegram.ui.Components.AnimatedFileDrawable;
 import org.telegram.ui.Components.FilterShaders;
 import org.telegram.ui.Components.Paint.Views.EditTextOutline;
 import org.telegram.ui.Components.RLottieDrawable;
-
+/* loaded from: classes.dex */
 public class TextureRenderer {
     private static final String FRAGMENT_EXTERNAL_SHADER = "#extension GL_OES_EGL_image_external : require\nprecision highp float;\nvarying vec2 vTextureCoord;\nuniform samplerExternalOES sTexture;\nvoid main() {\n  gl_FragColor = texture2D(sTexture, vTextureCoord);\n}\n";
     private static final String FRAGMENT_SHADER = "precision highp float;\nvarying vec2 vTextureCoord;\nuniform sampler2D sTexture;\nvoid main() {\n  gl_FragColor = texture2D(sTexture, vTextureCoord);\n}\n";
     private static final String VERTEX_SHADER = "uniform mat4 uMVPMatrix;\nuniform mat4 uSTMatrix;\nattribute vec4 aPosition;\nattribute vec4 aTextureCoord;\nvarying vec2 vTextureCoord;\nvoid main() {\n  gl_Position = uMVPMatrix * aPosition;\n  vTextureCoord = (uSTMatrix * aTextureCoord).xy;\n}\n";
-    float[] bitmapData = {-1.0f, 1.0f, 1.0f, 1.0f, -1.0f, -1.0f, 1.0f, -1.0f};
     private FloatBuffer bitmapVerticesBuffer;
     private boolean blendEnabled;
     private FilterShaders filterShaders;
-    private boolean firstFrame = true;
     private int imageOrientation;
     private String imagePath;
     private boolean isPhoto;
-    private float[] mMVPMatrix = new float[16];
     private int[] mProgram;
-    private float[] mSTMatrix = new float[16];
-    private float[] mSTMatrixIdentity = new float[16];
     private int mTextureID;
     private int[] maPositionHandle;
     private int[] maTextureHandle;
@@ -59,34 +55,37 @@ public class TextureRenderer {
     private int transformedWidth;
     private FloatBuffer verticesBuffer;
     private float videoFps;
+    float[] bitmapData = {-1.0f, 1.0f, 1.0f, 1.0f, -1.0f, -1.0f, 1.0f, -1.0f};
+    private float[] mMVPMatrix = new float[16];
+    private float[] mSTMatrix = new float[16];
+    private float[] mSTMatrixIdentity = new float[16];
+    private boolean firstFrame = true;
 
     public TextureRenderer(MediaController.SavedFilterState savedFilterState, String str, String str2, ArrayList<VideoEditedInfo.MediaEntity> arrayList, MediaController.CropState cropState, int i, int i2, int i3, int i4, int i5, float f, boolean z) {
         int i6;
-        float[] fArr;
-        MediaController.CropState cropState2 = cropState;
         int i7 = i;
         int i8 = i2;
         float f2 = f;
         this.isPhoto = z;
-        float[] fArr2 = {0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f};
+        float[] fArr = {0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f};
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("start textureRenderer w = " + i7 + " h = " + i8 + " r = " + i5 + " fps = " + f2);
-            if (cropState2 != null) {
-                FileLog.d("cropState px = " + cropState2.cropPx + " py = " + cropState2.cropPy + " cScale = " + cropState2.cropScale + " cropRotate = " + cropState2.cropRotate + " pw = " + cropState2.cropPw + " ph = " + cropState2.cropPh + " tw = " + cropState2.transformWidth + " th = " + cropState2.transformHeight + " tr = " + cropState2.transformRotation + " mirror = " + cropState2.mirrored);
+            if (cropState != null) {
+                FileLog.d("cropState px = " + cropState.cropPx + " py = " + cropState.cropPy + " cScale = " + cropState.cropScale + " cropRotate = " + cropState.cropRotate + " pw = " + cropState.cropPw + " ph = " + cropState.cropPh + " tw = " + cropState.transformWidth + " th = " + cropState.transformHeight + " tr = " + cropState.transformRotation + " mirror = " + cropState.mirrored);
             }
         }
         FloatBuffer asFloatBuffer = ByteBuffer.allocateDirect(32).order(ByteOrder.nativeOrder()).asFloatBuffer();
         this.textureBuffer = asFloatBuffer;
-        asFloatBuffer.put(fArr2).position(0);
+        asFloatBuffer.put(fArr).position(0);
         FloatBuffer asFloatBuffer2 = ByteBuffer.allocateDirect(this.bitmapData.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
         this.bitmapVerticesBuffer = asFloatBuffer2;
         asFloatBuffer2.put(this.bitmapData).position(0);
         Matrix.setIdentityM(this.mSTMatrix, 0);
         Matrix.setIdentityM(this.mSTMatrixIdentity, 0);
         if (savedFilterState != null) {
-            FilterShaders filterShaders2 = new FilterShaders(true);
-            this.filterShaders = filterShaders2;
-            filterShaders2.setDelegate(FilterShaders.getFilterShadersDelegate(savedFilterState));
+            FilterShaders filterShaders = new FilterShaders(true);
+            this.filterShaders = filterShaders;
+            filterShaders.setDelegate(FilterShaders.getFilterShadersDelegate(savedFilterState));
         }
         this.transformedWidth = i7;
         this.transformedHeight = i8;
@@ -103,14 +102,22 @@ public class TextureRenderer {
         this.maPositionHandle = new int[i9];
         this.maTextureHandle = new int[i9];
         Matrix.setIdentityM(this.mMVPMatrix, 0);
-        if (cropState2 != null) {
-            float f3 = (float) i7;
-            float f4 = (float) i8;
-            float[] fArr3 = {0.0f, 0.0f, f3, 0.0f, 0.0f, f4, f3, f4};
-            i6 = cropState2.transformRotation;
-            this.transformedWidth = (int) (((float) this.transformedWidth) * cropState2.cropPw);
-            this.transformedHeight = (int) (((float) this.transformedHeight) * cropState2.cropPh);
-            double d = (double) (-cropState2.cropRotate);
+        if (cropState != null) {
+            float[] fArr2 = new float[8];
+            fArr2[0] = 0.0f;
+            fArr2[1] = 0.0f;
+            float f3 = i7;
+            fArr2[2] = f3;
+            fArr2[3] = 0.0f;
+            fArr2[4] = 0.0f;
+            float f4 = i8;
+            fArr2[5] = f4;
+            fArr2[6] = f3;
+            fArr2[7] = f4;
+            i6 = cropState.transformRotation;
+            this.transformedWidth = (int) (this.transformedWidth * cropState.cropPw);
+            this.transformedHeight = (int) (this.transformedHeight * cropState.cropPh);
+            double d = -cropState.cropRotate;
             Double.isNaN(d);
             float f5 = (float) (d * 0.017453292519943295d);
             int i10 = 0;
@@ -118,27 +125,26 @@ public class TextureRenderer {
                 int i12 = i10 * 2;
                 int i13 = i12 + 1;
                 float f6 = f3;
-                double d2 = (double) (fArr3[i12] - ((float) (i7 / 2)));
-                double d3 = (double) f5;
+                double d2 = fArr2[i12] - (i7 / 2);
+                double d3 = f5;
                 double cos = Math.cos(d3);
                 Double.isNaN(d2);
-                double d4 = (double) (fArr3[i13] - ((float) (i8 / 2)));
+                double d4 = fArr2[i13] - (i8 / 2);
                 double sin = Math.sin(d3);
                 Double.isNaN(d4);
-                int i14 = i13;
-                double d5 = (double) (cropState2.cropPx * f6);
+                double d5 = cropState.cropPx * f6;
                 Double.isNaN(d5);
-                float f7 = ((float) (((cos * d2) - (sin * d4)) + d5)) * cropState2.cropScale;
+                float f7 = ((float) (((cos * d2) - (sin * d4)) + d5)) * cropState.cropScale;
                 double sin2 = Math.sin(d3);
                 Double.isNaN(d2);
                 double cos2 = Math.cos(d3);
                 Double.isNaN(d4);
                 double d6 = (d2 * sin2) + (d4 * cos2);
-                double d7 = (double) (cropState2.cropPy * f4);
+                double d7 = cropState.cropPy * f4;
                 Double.isNaN(d7);
-                float f8 = ((float) (d6 - d7)) * cropState2.cropScale;
-                fArr3[i12] = (f7 / ((float) this.transformedWidth)) * 2.0f;
-                fArr3[i14] = (f8 / ((float) this.transformedHeight)) * 2.0f;
+                float f8 = ((float) (d6 - d7)) * cropState.cropScale;
+                fArr2[i12] = (f7 / this.transformedWidth) * 2.0f;
+                fArr2[i13] = (f8 / this.transformedHeight) * 2.0f;
                 i10++;
                 f3 = f6;
                 i7 = i;
@@ -146,47 +152,29 @@ public class TextureRenderer {
             }
             FloatBuffer asFloatBuffer3 = ByteBuffer.allocateDirect(32).order(ByteOrder.nativeOrder()).asFloatBuffer();
             this.verticesBuffer = asFloatBuffer3;
-            asFloatBuffer3.put(fArr3).position(0);
+            asFloatBuffer3.put(fArr2).position(0);
         } else {
             FloatBuffer asFloatBuffer4 = ByteBuffer.allocateDirect(32).order(ByteOrder.nativeOrder()).asFloatBuffer();
             this.verticesBuffer = asFloatBuffer4;
             asFloatBuffer4.put(new float[]{-1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f}).position(0);
             i6 = 0;
         }
-        if (this.filterShaders != null) {
-            if (i6 == 90) {
-                fArr = new float[]{1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f};
-            } else if (i6 == 180) {
-                fArr = new float[]{1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f};
-            } else if (i6 == 270) {
-                fArr = new float[]{0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f};
-            } else {
-                fArr = new float[]{0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f};
-            }
-        } else if (i6 == 90) {
-            fArr = new float[]{1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f};
-        } else if (i6 == 180) {
-            fArr = new float[]{1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f};
-        } else if (i6 == 270) {
-            fArr = new float[]{0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f};
-        } else {
-            fArr = new float[]{0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f};
-        }
-        if (cropState2 != null && cropState2.mirrored) {
-            int i15 = 0;
-            for (int i16 = 4; i15 < i16; i16 = 4) {
-                int i17 = i15 * 2;
-                if (fArr[i17] > 0.5f) {
-                    fArr[i17] = 0.0f;
+        float[] fArr3 = this.filterShaders != null ? i6 == 90 ? new float[]{1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f} : i6 == 180 ? new float[]{1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f} : i6 == 270 ? new float[]{0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f} : new float[]{0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f} : i6 == 90 ? new float[]{1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f} : i6 == 180 ? new float[]{1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f} : i6 == 270 ? new float[]{0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f} : new float[]{0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f};
+        if (cropState != null && cropState.mirrored) {
+            int i14 = 0;
+            for (int i15 = 4; i14 < i15; i15 = 4) {
+                int i16 = i14 * 2;
+                if (fArr3[i16] > 0.5f) {
+                    fArr3[i16] = 0.0f;
                 } else {
-                    fArr[i17] = 1.0f;
+                    fArr3[i16] = 1.0f;
                 }
-                i15++;
+                i14++;
             }
         }
-        FloatBuffer asFloatBuffer5 = ByteBuffer.allocateDirect(fArr.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
+        FloatBuffer asFloatBuffer5 = ByteBuffer.allocateDirect(fArr3.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
         this.renderTextureBuffer = asFloatBuffer5;
-        asFloatBuffer5.put(fArr).position(0);
+        asFloatBuffer5.put(fArr3).position(0);
     }
 
     public int getTextureId() {
@@ -194,16 +182,16 @@ public class TextureRenderer {
     }
 
     public void drawFrame(SurfaceTexture surfaceTexture) {
-        char c;
-        float[] fArr;
         int i;
         int i2;
+        float[] fArr;
+        char c;
         if (this.isPhoto) {
             GLES20.glUseProgram(this.simpleShaderProgram);
             GLES20.glActiveTexture(33984);
             GLES20.glUniform1i(this.simpleSourceImageHandle, 0);
             GLES20.glEnableVertexAttribArray(this.simpleInputTexCoordHandle);
-            GLES20.glVertexAttribPointer(this.simpleInputTexCoordHandle, 2, 5126, false, 8, this.textureBuffer);
+            GLES20.glVertexAttribPointer(this.simpleInputTexCoordHandle, 2, 5126, false, 8, (Buffer) this.textureBuffer);
             GLES20.glEnableVertexAttribArray(this.simplePositionHandle);
         } else {
             surfaceTexture.getTransformMatrix(this.mSTMatrix);
@@ -219,16 +207,16 @@ public class TextureRenderer {
                     sb.append(", ");
                     i3++;
                 }
-                FileLog.d("stMatrix = " + sb);
+                FileLog.d("stMatrix = " + ((Object) sb));
                 this.firstFrame = false;
             }
             if (this.blendEnabled) {
                 GLES20.glDisable(3042);
                 this.blendEnabled = false;
             }
-            FilterShaders filterShaders2 = this.filterShaders;
-            if (filterShaders2 != null) {
-                filterShaders2.onVideoFrameUpdate(this.mSTMatrix);
+            FilterShaders filterShaders = this.filterShaders;
+            if (filterShaders != null) {
+                filterShaders.onVideoFrameUpdate(this.mSTMatrix);
                 GLES20.glViewport(0, 0, this.originalWidth, this.originalHeight);
                 this.filterShaders.drawSkinSmoothPass();
                 this.filterShaders.drawEnhancePass();
@@ -237,36 +225,36 @@ public class TextureRenderer {
                 boolean drawBlurPass = this.filterShaders.drawBlurPass();
                 GLES20.glBindFramebuffer(36160, 0);
                 int i4 = this.transformedWidth;
-                if (!(i4 == this.originalWidth && this.transformedHeight == this.originalHeight)) {
+                if (i4 != this.originalWidth || this.transformedHeight != this.originalHeight) {
                     GLES20.glViewport(0, 0, i4, this.transformedHeight);
                 }
-                i2 = this.filterShaders.getRenderTexture(drawBlurPass ^ true ? 1 : 0);
+                i = this.filterShaders.getRenderTexture(!drawBlurPass);
                 fArr = this.mSTMatrixIdentity;
-                i = 3553;
+                i2 = 3553;
                 c = 1;
             } else {
-                i2 = this.mTextureID;
-                i = 36197;
+                i = this.mTextureID;
+                i2 = 36197;
                 fArr = this.mSTMatrix;
                 c = 0;
             }
             GLES20.glUseProgram(this.mProgram[c]);
             GLES20.glActiveTexture(33984);
-            GLES20.glBindTexture(i, i2);
-            GLES20.glVertexAttribPointer(this.maPositionHandle[c], 2, 5126, false, 8, this.verticesBuffer);
+            GLES20.glBindTexture(i2, i);
+            GLES20.glVertexAttribPointer(this.maPositionHandle[c], 2, 5126, false, 8, (Buffer) this.verticesBuffer);
             GLES20.glEnableVertexAttribArray(this.maPositionHandle[c]);
-            GLES20.glVertexAttribPointer(this.maTextureHandle[c], 2, 5126, false, 8, this.renderTextureBuffer);
+            GLES20.glVertexAttribPointer(this.maTextureHandle[c], 2, 5126, false, 8, (Buffer) this.renderTextureBuffer);
             GLES20.glEnableVertexAttribArray(this.maTextureHandle[c]);
             GLES20.glUniformMatrix4fv(this.muSTMatrixHandle[c], 1, false, fArr, 0);
             GLES20.glUniformMatrix4fv(this.muMVPMatrixHandle[c], 1, false, this.mMVPMatrix, 0);
             GLES20.glDrawArrays(5, 0, 4);
         }
-        if (!(this.paintTexture == null && this.stickerTexture == null)) {
+        if (this.paintTexture != null || this.stickerTexture != null) {
             GLES20.glUseProgram(this.simpleShaderProgram);
             GLES20.glActiveTexture(33984);
             GLES20.glUniform1i(this.simpleSourceImageHandle, 0);
             GLES20.glEnableVertexAttribArray(this.simpleInputTexCoordHandle);
-            GLES20.glVertexAttribPointer(this.simpleInputTexCoordHandle, 2, 5126, false, 8, this.textureBuffer);
+            GLES20.glVertexAttribPointer(this.simpleInputTexCoordHandle, 2, 5126, false, 8, (Buffer) this.textureBuffer);
             GLES20.glEnableVertexAttribArray(this.simplePositionHandle);
         }
         if (this.paintTexture != null) {
@@ -292,7 +280,7 @@ public class TextureRenderer {
                     GLUtils.texImage2D(3553, 0, this.stickerBitmap, 0);
                     float f = mediaEntity.currentFrame + mediaEntity.framesPerDraw;
                     mediaEntity.currentFrame = f;
-                    if (f >= ((float) mediaEntity.metadata[0])) {
+                    if (f >= mediaEntity.metadata[0]) {
                         mediaEntity.currentFrame = 0.0f;
                     }
                     drawTexture(false, this.stickerTexture[0], mediaEntity.x, mediaEntity.y, mediaEntity.width, mediaEntity.height, mediaEntity.rotation, (mediaEntity.subType & 2) != 0);
@@ -309,7 +297,7 @@ public class TextureRenderer {
                         this.stickerCanvas = new Canvas(this.stickerBitmap);
                     }
                     Bitmap bitmap2 = this.stickerBitmap;
-                    if (!(bitmap2 == null || backgroundBitmap == null)) {
+                    if (bitmap2 != null && backgroundBitmap != null) {
                         bitmap2.eraseColor(0);
                         this.stickerCanvas.drawBitmap(backgroundBitmap, 0.0f, 0.0f, (Paint) null);
                         GLES20.glBindTexture(3553, this.stickerTexture[0]);
@@ -331,7 +319,6 @@ public class TextureRenderer {
     }
 
     private void drawTexture(boolean z, int i, float f, float f2, float f3, float f4, float f5, boolean z2) {
-        float f6 = f5;
         if (!this.blendEnabled) {
             GLES20.glEnable(3042);
             GLES20.glBlendFunc(1, 771);
@@ -348,19 +335,19 @@ public class TextureRenderer {
             fArr[6] = 1.0f;
             fArr[7] = -1.0f;
         } else {
-            float f7 = (f * 2.0f) - 1.0f;
-            float f8 = ((1.0f - f2) * 2.0f) - 1.0f;
+            float f6 = (f * 2.0f) - 1.0f;
+            float f7 = ((1.0f - f2) * 2.0f) - 1.0f;
             float[] fArr2 = this.bitmapData;
-            fArr2[0] = f7;
-            fArr2[1] = f8;
-            float f9 = (f3 * 2.0f) + f7;
-            fArr2[2] = f9;
-            fArr2[3] = f8;
-            fArr2[4] = f7;
-            float var_ = f8 - (f4 * 2.0f);
-            fArr2[5] = var_;
-            fArr2[6] = f9;
-            fArr2[7] = var_;
+            fArr2[0] = f6;
+            fArr2[1] = f7;
+            float f8 = (f3 * 2.0f) + f6;
+            fArr2[2] = f8;
+            fArr2[3] = f7;
+            fArr2[4] = f6;
+            float f9 = f7 - (f4 * 2.0f);
+            fArr2[5] = f9;
+            fArr2[6] = f8;
+            fArr2[7] = f9;
         }
         float[] fArr3 = this.bitmapData;
         float var_ = (fArr3[0] + fArr3[2]) / 2.0f;
@@ -372,19 +359,19 @@ public class TextureRenderer {
             fArr3[6] = fArr3[4];
             fArr3[4] = var_;
         }
-        if (f6 != 0.0f) {
-            float var_ = ((float) this.transformedWidth) / ((float) this.transformedHeight);
+        if (f5 != 0.0f) {
+            float var_ = this.transformedWidth / this.transformedHeight;
             float var_ = (fArr3[5] + fArr3[1]) / 2.0f;
             int i2 = 0;
             for (int i3 = 4; i2 < i3; i3 = 4) {
                 float[] fArr4 = this.bitmapData;
                 int i4 = i2 * 2;
                 int i5 = i4 + 1;
-                double d = (double) (fArr4[i4] - var_);
-                double d2 = (double) f6;
+                double d = fArr4[i4] - var_;
+                double d2 = f5;
                 double cos = Math.cos(d2);
                 Double.isNaN(d);
-                double d3 = (double) ((fArr4[i5] - var_) / var_);
+                double d3 = (fArr4[i5] - var_) / var_;
                 double sin = Math.sin(d2);
                 Double.isNaN(d3);
                 fArr4[i4] = ((float) ((cos * d) - (sin * d3))) + var_;
@@ -398,7 +385,7 @@ public class TextureRenderer {
             }
         }
         this.bitmapVerticesBuffer.put(this.bitmapData).position(0);
-        GLES20.glVertexAttribPointer(this.simplePositionHandle, 2, 5126, false, 8, this.bitmapVerticesBuffer);
+        GLES20.glVertexAttribPointer(this.simplePositionHandle, 2, 5126, false, 8, (Buffer) this.bitmapVerticesBuffer);
         if (z) {
             GLES20.glBindTexture(3553, i);
         }
@@ -409,560 +396,17 @@ public class TextureRenderer {
         editTextOutline.setBreakStrategy(0);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:123:0x0204 A[SYNTHETIC] */
-    /* JADX WARNING: Removed duplicated region for block: B:60:0x0164 A[ADDED_TO_REGION, Catch:{ all -> 0x0214 }] */
+    /* JADX WARN: Removed duplicated region for block: B:133:0x0204 A[SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:59:0x0164  */
     @android.annotation.SuppressLint({"WrongConstant"})
-    /* Code decompiled incorrectly, please refer to instructions dump. */
+    /*
+        Code decompiled incorrectly, please refer to instructions dump.
+        To view partially-correct add '--show-bad-code' argument
+    */
     public void surfaceCreated() {
         /*
-            r32 = this;
-            r1 = r32
-            r2 = 0
-            r0 = 0
-        L_0x0004:
-            int[] r3 = r1.mProgram
-            int r4 = r3.length
-            if (r0 >= r4) goto L_0x0053
-            if (r0 != 0) goto L_0x000e
-            java.lang.String r4 = "#extension GL_OES_EGL_image_external : require\nprecision highp float;\nvarying vec2 vTextureCoord;\nuniform samplerExternalOES sTexture;\nvoid main() {\n  gl_FragColor = texture2D(sTexture, vTextureCoord);\n}\n"
-            goto L_0x0010
-        L_0x000e:
-            java.lang.String r4 = "precision highp float;\nvarying vec2 vTextureCoord;\nuniform sampler2D sTexture;\nvoid main() {\n  gl_FragColor = texture2D(sTexture, vTextureCoord);\n}\n"
-        L_0x0010:
-            java.lang.String r5 = "uniform mat4 uMVPMatrix;\nuniform mat4 uSTMatrix;\nattribute vec4 aPosition;\nattribute vec4 aTextureCoord;\nvarying vec2 vTextureCoord;\nvoid main() {\n  gl_Position = uMVPMatrix * aPosition;\n  vTextureCoord = (uSTMatrix * aTextureCoord).xy;\n}\n"
-            int r4 = r1.createProgram(r5, r4)
-            r3[r0] = r4
-            int[] r3 = r1.maPositionHandle
-            int[] r4 = r1.mProgram
-            r4 = r4[r0]
-            java.lang.String r5 = "aPosition"
-            int r4 = android.opengl.GLES20.glGetAttribLocation(r4, r5)
-            r3[r0] = r4
-            int[] r3 = r1.maTextureHandle
-            int[] r4 = r1.mProgram
-            r4 = r4[r0]
-            java.lang.String r5 = "aTextureCoord"
-            int r4 = android.opengl.GLES20.glGetAttribLocation(r4, r5)
-            r3[r0] = r4
-            int[] r3 = r1.muMVPMatrixHandle
-            int[] r4 = r1.mProgram
-            r4 = r4[r0]
-            java.lang.String r5 = "uMVPMatrix"
-            int r4 = android.opengl.GLES20.glGetUniformLocation(r4, r5)
-            r3[r0] = r4
-            int[] r3 = r1.muSTMatrixHandle
-            int[] r4 = r1.mProgram
-            r4 = r4[r0]
-            java.lang.String r5 = "uSTMatrix"
-            int r4 = android.opengl.GLES20.glGetUniformLocation(r4, r5)
-            r3[r0] = r4
-            int r0 = r0 + 1
-            goto L_0x0004
-        L_0x0053:
-            r3 = 1
-            int[] r0 = new int[r3]
-            android.opengl.GLES20.glGenTextures(r3, r0, r2)
-            r0 = r0[r2]
-            r1.mTextureID = r0
-            r4 = 36197(0x8d65, float:5.0723E-41)
-            android.opengl.GLES20.glBindTexture(r4, r0)
-            r5 = 10241(0x2801, float:1.435E-41)
-            r6 = 9729(0x2601, float:1.3633E-41)
-            android.opengl.GLES20.glTexParameteri(r4, r5, r6)
-            r7 = 10240(0x2800, float:1.4349E-41)
-            android.opengl.GLES20.glTexParameteri(r4, r7, r6)
-            r8 = 10242(0x2802, float:1.4352E-41)
-            r9 = 33071(0x812f, float:4.6342E-41)
-            android.opengl.GLES20.glTexParameteri(r4, r8, r9)
-            r10 = 10243(0x2803, float:1.4354E-41)
-            android.opengl.GLES20.glTexParameteri(r4, r10, r9)
-            org.telegram.ui.Components.FilterShaders r0 = r1.filterShaders
-            if (r0 != 0) goto L_0x008c
-            java.lang.String r0 = r1.imagePath
-            if (r0 != 0) goto L_0x008c
-            java.lang.String r0 = r1.paintPath
-            if (r0 != 0) goto L_0x008c
-            java.util.ArrayList<org.telegram.messenger.VideoEditedInfo$MediaEntity> r0 = r1.mediaEntities
-            if (r0 == 0) goto L_0x00f3
-        L_0x008c:
-            r0 = 35633(0x8b31, float:4.9932E-41)
-            java.lang.String r4 = "attribute vec4 position;attribute vec2 inputTexCoord;varying vec2 texCoord;void main() {gl_Position = position;texCoord = inputTexCoord;}"
-            int r0 = org.telegram.ui.Components.FilterShaders.loadShader(r0, r4)
-            r4 = 35632(0x8b30, float:4.9931E-41)
-            java.lang.String r11 = "varying highp vec2 texCoord;uniform sampler2D sourceImage;void main() {gl_FragColor = texture2D(sourceImage, texCoord);}"
-            int r4 = org.telegram.ui.Components.FilterShaders.loadShader(r4, r11)
-            if (r0 == 0) goto L_0x00f3
-            if (r4 == 0) goto L_0x00f3
-            int r11 = android.opengl.GLES20.glCreateProgram()
-            r1.simpleShaderProgram = r11
-            android.opengl.GLES20.glAttachShader(r11, r0)
-            int r0 = r1.simpleShaderProgram
-            android.opengl.GLES20.glAttachShader(r0, r4)
-            int r0 = r1.simpleShaderProgram
-            java.lang.String r4 = "position"
-            android.opengl.GLES20.glBindAttribLocation(r0, r2, r4)
-            int r0 = r1.simpleShaderProgram
-            java.lang.String r11 = "inputTexCoord"
-            android.opengl.GLES20.glBindAttribLocation(r0, r3, r11)
-            int r0 = r1.simpleShaderProgram
-            android.opengl.GLES20.glLinkProgram(r0)
-            int[] r0 = new int[r3]
-            int r12 = r1.simpleShaderProgram
-            r13 = 35714(0x8b82, float:5.0046E-41)
-            android.opengl.GLES20.glGetProgramiv(r12, r13, r0, r2)
-            r0 = r0[r2]
-            if (r0 != 0) goto L_0x00d9
-            int r0 = r1.simpleShaderProgram
-            android.opengl.GLES20.glDeleteProgram(r0)
-            r1.simpleShaderProgram = r2
-            goto L_0x00f3
-        L_0x00d9:
-            int r0 = r1.simpleShaderProgram
-            int r0 = android.opengl.GLES20.glGetAttribLocation(r0, r4)
-            r1.simplePositionHandle = r0
-            int r0 = r1.simpleShaderProgram
-            int r0 = android.opengl.GLES20.glGetAttribLocation(r0, r11)
-            r1.simpleInputTexCoordHandle = r0
-            int r0 = r1.simpleShaderProgram
-            java.lang.String r4 = "sourceImage"
-            int r0 = android.opengl.GLES20.glGetUniformLocation(r0, r4)
-            r1.simpleSourceImageHandle = r0
-        L_0x00f3:
-            org.telegram.ui.Components.FilterShaders r0 = r1.filterShaders
-            if (r0 == 0) goto L_0x0109
-            r0.create()
-            org.telegram.ui.Components.FilterShaders r11 = r1.filterShaders
-            r12 = 0
-            r13 = 0
-            int r14 = r1.mTextureID
-            int r15 = r1.originalWidth
-            int r0 = r1.originalHeight
-            r16 = r0
-            r11.setRenderData(r12, r13, r14, r15, r16)
-        L_0x0109:
-            java.lang.String r0 = r1.imagePath
-            r4 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
-            r11 = 3
-            r12 = 1065353216(0x3var_, float:1.0)
-            r13 = 3553(0xde1, float:4.979E-42)
-            if (r0 != 0) goto L_0x0118
-            java.lang.String r14 = r1.paintPath
-            if (r14 == 0) goto L_0x0218
-        L_0x0118:
-            if (r0 == 0) goto L_0x011c
-            r0 = 1
-            goto L_0x011d
-        L_0x011c:
-            r0 = 0
-        L_0x011d:
-            java.lang.String r14 = r1.paintPath
-            if (r14 == 0) goto L_0x0123
-            r14 = 1
-            goto L_0x0124
-        L_0x0123:
-            r14 = 0
-        L_0x0124:
-            int r0 = r0 + r14
-            int[] r0 = new int[r0]
-            r1.paintTexture = r0
-            int r14 = r0.length
-            android.opengl.GLES20.glGenTextures(r14, r0, r2)
-            r0 = 0
-        L_0x012e:
-            int[] r14 = r1.paintTexture     // Catch:{ all -> 0x0214 }
-            int r14 = r14.length     // Catch:{ all -> 0x0214 }
-            if (r0 >= r14) goto L_0x0218
-            r14 = 270(0x10e, float:3.78E-43)
-            r15 = 90
-            if (r0 != 0) goto L_0x015b
-            java.lang.String r2 = r1.imagePath     // Catch:{ all -> 0x0214 }
-            if (r2 == 0) goto L_0x015b
-            androidx.exifinterface.media.ExifInterface r10 = new androidx.exifinterface.media.ExifInterface     // Catch:{ all -> 0x015d }
-            r10.<init>((java.lang.String) r2)     // Catch:{ all -> 0x015d }
-            java.lang.String r8 = "Orientation"
-            int r8 = r10.getAttributeInt(r8, r3)     // Catch:{ all -> 0x015d }
-            if (r8 == r11) goto L_0x0158
-            r10 = 6
-            if (r8 == r10) goto L_0x0155
-            r10 = 8
-            if (r8 == r10) goto L_0x0152
-            goto L_0x015d
-        L_0x0152:
-            r8 = 270(0x10e, float:3.78E-43)
-            goto L_0x015e
-        L_0x0155:
-            r8 = 90
-            goto L_0x015e
-        L_0x0158:
-            r8 = 180(0xb4, float:2.52E-43)
-            goto L_0x015e
-        L_0x015b:
-            java.lang.String r2 = r1.paintPath     // Catch:{ all -> 0x0214 }
-        L_0x015d:
-            r8 = 0
-        L_0x015e:
-            android.graphics.Bitmap r2 = android.graphics.BitmapFactory.decodeFile(r2)     // Catch:{ all -> 0x0214 }
-            if (r2 == 0) goto L_0x0204
-            if (r0 != 0) goto L_0x01e6
-            java.lang.String r10 = r1.imagePath     // Catch:{ all -> 0x0214 }
-            if (r10 == 0) goto L_0x01e6
-            int r10 = r1.transformedWidth     // Catch:{ all -> 0x0214 }
-            int r11 = r1.transformedHeight     // Catch:{ all -> 0x0214 }
-            android.graphics.Bitmap$Config r3 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ all -> 0x0214 }
-            android.graphics.Bitmap r3 = android.graphics.Bitmap.createBitmap(r10, r11, r3)     // Catch:{ all -> 0x0214 }
-            r3.eraseColor(r4)     // Catch:{ all -> 0x0214 }
-            android.graphics.Canvas r10 = new android.graphics.Canvas     // Catch:{ all -> 0x0214 }
-            r10.<init>(r3)     // Catch:{ all -> 0x0214 }
-            if (r8 == r15) goto L_0x0198
-            if (r8 != r14) goto L_0x0181
-            goto L_0x0198
-        L_0x0181:
-            int r11 = r2.getWidth()     // Catch:{ all -> 0x0214 }
-            float r11 = (float) r11     // Catch:{ all -> 0x0214 }
-            int r14 = r1.transformedWidth     // Catch:{ all -> 0x0214 }
-            float r14 = (float) r14     // Catch:{ all -> 0x0214 }
-            float r11 = r11 / r14
-            int r14 = r2.getHeight()     // Catch:{ all -> 0x0214 }
-            float r14 = (float) r14     // Catch:{ all -> 0x0214 }
-            int r15 = r1.transformedHeight     // Catch:{ all -> 0x0214 }
-            float r15 = (float) r15     // Catch:{ all -> 0x0214 }
-            float r14 = r14 / r15
-            float r11 = java.lang.Math.max(r11, r14)     // Catch:{ all -> 0x0214 }
-            goto L_0x01ae
-        L_0x0198:
-            int r11 = r2.getHeight()     // Catch:{ all -> 0x0214 }
-            float r11 = (float) r11     // Catch:{ all -> 0x0214 }
-            int r14 = r1.transformedWidth     // Catch:{ all -> 0x0214 }
-            float r14 = (float) r14     // Catch:{ all -> 0x0214 }
-            float r11 = r11 / r14
-            int r14 = r2.getWidth()     // Catch:{ all -> 0x0214 }
-            float r14 = (float) r14     // Catch:{ all -> 0x0214 }
-            int r15 = r1.transformedHeight     // Catch:{ all -> 0x0214 }
-            float r15 = (float) r15     // Catch:{ all -> 0x0214 }
-            float r14 = r14 / r15
-            float r11 = java.lang.Math.max(r11, r14)     // Catch:{ all -> 0x0214 }
-        L_0x01ae:
-            android.graphics.Matrix r14 = new android.graphics.Matrix     // Catch:{ all -> 0x0214 }
-            r14.<init>()     // Catch:{ all -> 0x0214 }
-            int r15 = r2.getWidth()     // Catch:{ all -> 0x0214 }
-            int r15 = -r15
-            r4 = 2
-            int r15 = r15 / r4
-            float r15 = (float) r15     // Catch:{ all -> 0x0214 }
-            int r9 = r2.getHeight()     // Catch:{ all -> 0x0214 }
-            int r9 = -r9
-            int r9 = r9 / r4
-            float r9 = (float) r9     // Catch:{ all -> 0x0214 }
-            r14.postTranslate(r15, r9)     // Catch:{ all -> 0x0214 }
-            float r9 = r12 / r11
-            r14.postScale(r9, r9)     // Catch:{ all -> 0x0214 }
-            float r8 = (float) r8     // Catch:{ all -> 0x0214 }
-            r14.postRotate(r8)     // Catch:{ all -> 0x0214 }
-            int r8 = r3.getWidth()     // Catch:{ all -> 0x0214 }
-            int r8 = r8 / r4
-            float r8 = (float) r8     // Catch:{ all -> 0x0214 }
-            int r9 = r3.getHeight()     // Catch:{ all -> 0x0214 }
-            int r9 = r9 / r4
-            float r9 = (float) r9     // Catch:{ all -> 0x0214 }
-            r14.postTranslate(r8, r9)     // Catch:{ all -> 0x0214 }
-            android.graphics.Paint r8 = new android.graphics.Paint     // Catch:{ all -> 0x0214 }
-            r8.<init>(r4)     // Catch:{ all -> 0x0214 }
-            r10.drawBitmap(r2, r14, r8)     // Catch:{ all -> 0x0214 }
-            r2 = r3
-        L_0x01e6:
-            int[] r3 = r1.paintTexture     // Catch:{ all -> 0x0214 }
-            r3 = r3[r0]     // Catch:{ all -> 0x0214 }
-            android.opengl.GLES20.glBindTexture(r13, r3)     // Catch:{ all -> 0x0214 }
-            android.opengl.GLES20.glTexParameteri(r13, r5, r6)     // Catch:{ all -> 0x0214 }
-            android.opengl.GLES20.glTexParameteri(r13, r7, r6)     // Catch:{ all -> 0x0214 }
-            r3 = 10242(0x2802, float:1.4352E-41)
-            r4 = 33071(0x812f, float:4.6342E-41)
-            android.opengl.GLES20.glTexParameteri(r13, r3, r4)     // Catch:{ all -> 0x0214 }
-            r3 = 10243(0x2803, float:1.4354E-41)
-            android.opengl.GLES20.glTexParameteri(r13, r3, r4)     // Catch:{ all -> 0x0214 }
-            r3 = 0
-            android.opengl.GLUtils.texImage2D(r13, r3, r2, r3)     // Catch:{ all -> 0x0214 }
-        L_0x0204:
-            int r0 = r0 + 1
-            r2 = 0
-            r3 = 1
-            r4 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
-            r8 = 10242(0x2802, float:1.4352E-41)
-            r9 = 33071(0x812f, float:4.6342E-41)
-            r10 = 10243(0x2803, float:1.4354E-41)
-            r11 = 3
-            goto L_0x012e
-        L_0x0214:
-            r0 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x0218:
-            java.util.ArrayList<org.telegram.messenger.VideoEditedInfo$MediaEntity> r0 = r1.mediaEntities
-            if (r0 == 0) goto L_0x0437
-            android.graphics.Bitmap$Config r0 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ all -> 0x0433 }
-            r2 = 512(0x200, float:7.175E-43)
-            android.graphics.Bitmap r0 = android.graphics.Bitmap.createBitmap(r2, r2, r0)     // Catch:{ all -> 0x0433 }
-            r1.stickerBitmap = r0     // Catch:{ all -> 0x0433 }
-            r2 = 1
-            int[] r0 = new int[r2]     // Catch:{ all -> 0x0433 }
-            r1.stickerTexture = r0     // Catch:{ all -> 0x0433 }
-            r3 = 0
-            android.opengl.GLES20.glGenTextures(r2, r0, r3)     // Catch:{ all -> 0x0433 }
-            int[] r0 = r1.stickerTexture     // Catch:{ all -> 0x0433 }
-            r0 = r0[r3]     // Catch:{ all -> 0x0433 }
-            android.opengl.GLES20.glBindTexture(r13, r0)     // Catch:{ all -> 0x0433 }
-            android.opengl.GLES20.glTexParameteri(r13, r5, r6)     // Catch:{ all -> 0x0433 }
-            android.opengl.GLES20.glTexParameteri(r13, r7, r6)     // Catch:{ all -> 0x0433 }
-            r2 = 10242(0x2802, float:1.4352E-41)
-            r3 = 33071(0x812f, float:4.6342E-41)
-            android.opengl.GLES20.glTexParameteri(r13, r2, r3)     // Catch:{ all -> 0x0433 }
-            r2 = 10243(0x2803, float:1.4354E-41)
-            android.opengl.GLES20.glTexParameteri(r13, r2, r3)     // Catch:{ all -> 0x0433 }
-            java.util.ArrayList<org.telegram.messenger.VideoEditedInfo$MediaEntity> r0 = r1.mediaEntities     // Catch:{ all -> 0x0433 }
-            int r0 = r0.size()     // Catch:{ all -> 0x0433 }
-            r3 = 0
-        L_0x0250:
-            if (r3 >= r0) goto L_0x0437
-            java.util.ArrayList<org.telegram.messenger.VideoEditedInfo$MediaEntity> r2 = r1.mediaEntities     // Catch:{ all -> 0x0433 }
-            java.lang.Object r2 = r2.get(r3)     // Catch:{ all -> 0x0433 }
-            org.telegram.messenger.VideoEditedInfo$MediaEntity r2 = (org.telegram.messenger.VideoEditedInfo.MediaEntity) r2     // Catch:{ all -> 0x0433 }
-            byte r4 = r2.type     // Catch:{ all -> 0x0433 }
-            r5 = 0
-            r6 = 0
-            if (r4 != 0) goto L_0x035a
-            byte r4 = r2.subType     // Catch:{ all -> 0x0433 }
-            r7 = r4 & 1
-            if (r7 == 0) goto L_0x0292
-            r7 = 3
-            int[] r4 = new int[r7]     // Catch:{ all -> 0x0433 }
-            r2.metadata = r4     // Catch:{ all -> 0x0433 }
-            java.lang.String r5 = r2.text     // Catch:{ all -> 0x0433 }
-            r18 = 0
-            r19 = 512(0x200, float:7.175E-43)
-            r20 = 512(0x200, float:7.175E-43)
-            r22 = 0
-            r23 = 0
-            r24 = 0
-            r25 = 0
-            r17 = r5
-            r21 = r4
-            long r4 = org.telegram.ui.Components.RLottieDrawable.create(r17, r18, r19, r20, r21, r22, r23, r24, r25)     // Catch:{ all -> 0x0433 }
-            r2.ptr = r4     // Catch:{ all -> 0x0433 }
-            int[] r4 = r2.metadata     // Catch:{ all -> 0x0433 }
-            r5 = 1
-            r4 = r4[r5]     // Catch:{ all -> 0x0433 }
-            float r4 = (float) r4     // Catch:{ all -> 0x0433 }
-            float r5 = r1.videoFps     // Catch:{ all -> 0x0433 }
-            float r4 = r4 / r5
-            r2.framesPerDraw = r4     // Catch:{ all -> 0x0433 }
-            goto L_0x0355
-        L_0x0292:
-            r7 = 3
-            r4 = r4 & 4
-            if (r4 == 0) goto L_0x02ca
-            org.telegram.ui.Components.AnimatedFileDrawable r4 = new org.telegram.ui.Components.AnimatedFileDrawable     // Catch:{ all -> 0x0433 }
-            java.io.File r5 = new java.io.File     // Catch:{ all -> 0x0433 }
-            java.lang.String r8 = r2.text     // Catch:{ all -> 0x0433 }
-            r5.<init>(r8)     // Catch:{ all -> 0x0433 }
-            r19 = 1
-            r20 = 0
-            r22 = 0
-            r23 = 0
-            r24 = 0
-            r25 = 0
-            int r27 = org.telegram.messenger.UserConfig.selectedAccount     // Catch:{ all -> 0x0433 }
-            r28 = 1
-            r29 = 512(0x200, float:7.175E-43)
-            r30 = 512(0x200, float:7.175E-43)
-            r31 = 0
-            r17 = r4
-            r18 = r5
-            r17.<init>(r18, r19, r20, r22, r23, r24, r25, r27, r28, r29, r30, r31)     // Catch:{ all -> 0x0433 }
-            r2.animatedFileDrawable = r4     // Catch:{ all -> 0x0433 }
-            float r4 = r1.videoFps     // Catch:{ all -> 0x0433 }
-            r5 = 1106247680(0x41var_, float:30.0)
-            float r4 = r4 / r5
-            r2.framesPerDraw = r4     // Catch:{ all -> 0x0433 }
-            r2.currentFrame = r6     // Catch:{ all -> 0x0433 }
-            goto L_0x0355
-        L_0x02ca:
-            int r4 = android.os.Build.VERSION.SDK_INT     // Catch:{ all -> 0x0433 }
-            r6 = 19
-            if (r4 < r6) goto L_0x02d9
-            java.lang.String r4 = r2.text     // Catch:{ all -> 0x0433 }
-            android.graphics.Bitmap r4 = android.graphics.BitmapFactory.decodeFile(r4)     // Catch:{ all -> 0x0433 }
-            r2.bitmap = r4     // Catch:{ all -> 0x0433 }
-            goto L_0x031d
-        L_0x02d9:
-            java.io.File r4 = new java.io.File     // Catch:{ all -> 0x0433 }
-            java.lang.String r6 = r2.text     // Catch:{ all -> 0x0433 }
-            r4.<init>(r6)     // Catch:{ all -> 0x0433 }
-            java.io.RandomAccessFile r6 = new java.io.RandomAccessFile     // Catch:{ all -> 0x0433 }
-            java.lang.String r8 = "r"
-            r6.<init>(r4, r8)     // Catch:{ all -> 0x0433 }
-            java.nio.channels.FileChannel r17 = r6.getChannel()     // Catch:{ all -> 0x0433 }
-            java.nio.channels.FileChannel$MapMode r18 = java.nio.channels.FileChannel.MapMode.READ_ONLY     // Catch:{ all -> 0x0433 }
-            r19 = 0
-            long r21 = r4.length()     // Catch:{ all -> 0x0433 }
-            java.nio.MappedByteBuffer r4 = r17.map(r18, r19, r21)     // Catch:{ all -> 0x0433 }
-            android.graphics.BitmapFactory$Options r8 = new android.graphics.BitmapFactory$Options     // Catch:{ all -> 0x0433 }
-            r8.<init>()     // Catch:{ all -> 0x0433 }
-            r9 = 1
-            r8.inJustDecodeBounds = r9     // Catch:{ all -> 0x0433 }
-            int r10 = r4.limit()     // Catch:{ all -> 0x0433 }
-            org.telegram.messenger.Utilities.loadWebpImage(r5, r4, r10, r8, r9)     // Catch:{ all -> 0x0433 }
-            int r9 = r8.outWidth     // Catch:{ all -> 0x0433 }
-            int r8 = r8.outHeight     // Catch:{ all -> 0x0433 }
-            android.graphics.Bitmap$Config r10 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ all -> 0x0433 }
-            android.graphics.Bitmap r8 = org.telegram.messenger.Bitmaps.createBitmap(r9, r8, r10)     // Catch:{ all -> 0x0433 }
-            r2.bitmap = r8     // Catch:{ all -> 0x0433 }
-            int r9 = r4.limit()     // Catch:{ all -> 0x0433 }
-            r10 = 1
-            org.telegram.messenger.Utilities.loadWebpImage(r8, r4, r9, r5, r10)     // Catch:{ all -> 0x0433 }
-            r6.close()     // Catch:{ all -> 0x0433 }
-        L_0x031d:
-            android.graphics.Bitmap r4 = r2.bitmap     // Catch:{ all -> 0x0433 }
-            if (r4 == 0) goto L_0x0355
-            int r4 = r4.getWidth()     // Catch:{ all -> 0x0433 }
-            float r4 = (float) r4     // Catch:{ all -> 0x0433 }
-            android.graphics.Bitmap r5 = r2.bitmap     // Catch:{ all -> 0x0433 }
-            int r5 = r5.getHeight()     // Catch:{ all -> 0x0433 }
-            float r5 = (float) r5     // Catch:{ all -> 0x0433 }
-            float r4 = r4 / r5
-            int r5 = (r4 > r12 ? 1 : (r4 == r12 ? 0 : -1))
-            if (r5 <= 0) goto L_0x0342
-            float r5 = r2.height     // Catch:{ all -> 0x0433 }
-            float r4 = r5 / r4
-            float r6 = r2.y     // Catch:{ all -> 0x0433 }
-            float r5 = r5 - r4
-            r8 = 1073741824(0x40000000, float:2.0)
-            float r5 = r5 / r8
-            float r6 = r6 + r5
-            r2.y = r6     // Catch:{ all -> 0x0433 }
-            r2.height = r4     // Catch:{ all -> 0x0433 }
-            goto L_0x0355
-        L_0x0342:
-            int r5 = (r4 > r12 ? 1 : (r4 == r12 ? 0 : -1))
-            if (r5 >= 0) goto L_0x0355
-            float r5 = r2.width     // Catch:{ all -> 0x0433 }
-            float r4 = r4 * r5
-            float r6 = r2.x     // Catch:{ all -> 0x0433 }
-            float r5 = r5 - r4
-            r8 = 1073741824(0x40000000, float:2.0)
-            float r5 = r5 / r8
-            float r6 = r6 + r5
-            r2.x = r6     // Catch:{ all -> 0x0433 }
-            r2.width = r4     // Catch:{ all -> 0x0433 }
-        L_0x0355:
-            r5 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
-            r8 = 1
-            goto L_0x042e
-        L_0x035a:
-            r7 = 3
-            r8 = 1
-            if (r4 != r8) goto L_0x042c
-            org.telegram.ui.Components.Paint.Views.EditTextOutline r4 = new org.telegram.ui.Components.Paint.Views.EditTextOutline     // Catch:{ all -> 0x0433 }
-            android.content.Context r8 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0433 }
-            r4.<init>(r8)     // Catch:{ all -> 0x0433 }
-            r8 = 0
-            r4.setBackgroundColor(r8)     // Catch:{ all -> 0x0433 }
-            r8 = 1088421888(0x40e00000, float:7.0)
-            int r9 = org.telegram.messenger.AndroidUtilities.dp(r8)     // Catch:{ all -> 0x0433 }
-            int r10 = org.telegram.messenger.AndroidUtilities.dp(r8)     // Catch:{ all -> 0x0433 }
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r8)     // Catch:{ all -> 0x0433 }
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)     // Catch:{ all -> 0x0433 }
-            r4.setPadding(r9, r10, r11, r8)     // Catch:{ all -> 0x0433 }
-            int r8 = r2.fontSize     // Catch:{ all -> 0x0433 }
-            float r8 = (float) r8     // Catch:{ all -> 0x0433 }
-            r9 = 0
-            r4.setTextSize(r9, r8)     // Catch:{ all -> 0x0433 }
-            java.lang.String r8 = r2.text     // Catch:{ all -> 0x0433 }
-            r4.setText(r8)     // Catch:{ all -> 0x0433 }
-            int r8 = r2.color     // Catch:{ all -> 0x0433 }
-            r4.setTextColor(r8)     // Catch:{ all -> 0x0433 }
-            r8 = 1
-            r4.setTypeface(r5, r8)     // Catch:{ all -> 0x0433 }
-            r5 = 17
-            r4.setGravity(r5)     // Catch:{ all -> 0x0433 }
-            r5 = 0
-            r4.setHorizontallyScrolling(r5)     // Catch:{ all -> 0x0433 }
-            r5 = 268435456(0x10000000, float:2.5243549E-29)
-            r4.setImeOptions(r5)     // Catch:{ all -> 0x0433 }
-            r4.setFocusableInTouchMode(r8)     // Catch:{ all -> 0x0433 }
-            int r5 = r4.getInputType()     // Catch:{ all -> 0x0433 }
-            r5 = r5 | 16384(0x4000, float:2.2959E-41)
-            r4.setInputType(r5)     // Catch:{ all -> 0x0433 }
-            int r5 = android.os.Build.VERSION.SDK_INT     // Catch:{ all -> 0x0433 }
-            r9 = 23
-            if (r5 < r9) goto L_0x03b6
-            r1.setBreakStrategy(r4)     // Catch:{ all -> 0x0433 }
-        L_0x03b6:
-            byte r5 = r2.subType     // Catch:{ all -> 0x0433 }
-            r9 = r5 & 1
-            if (r9 == 0) goto L_0x03cf
-            r5 = -1
-            r4.setTextColor(r5)     // Catch:{ all -> 0x0433 }
-            int r5 = r2.color     // Catch:{ all -> 0x0433 }
-            r4.setStrokeColor(r5)     // Catch:{ all -> 0x0433 }
-            r5 = 0
-            r4.setFrameColor(r5)     // Catch:{ all -> 0x0433 }
-            r4.setShadowLayer(r6, r6, r6, r5)     // Catch:{ all -> 0x0433 }
-            r5 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
-            goto L_0x03fa
-        L_0x03cf:
-            r5 = r5 & 4
-            if (r5 == 0) goto L_0x03e5
-            r5 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
-            r4.setTextColor(r5)     // Catch:{ all -> 0x0433 }
-            r9 = 0
-            r4.setStrokeColor(r9)     // Catch:{ all -> 0x0433 }
-            int r10 = r2.color     // Catch:{ all -> 0x0433 }
-            r4.setFrameColor(r10)     // Catch:{ all -> 0x0433 }
-            r4.setShadowLayer(r6, r6, r6, r9)     // Catch:{ all -> 0x0433 }
-            goto L_0x03fa
-        L_0x03e5:
-            r5 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
-            int r9 = r2.color     // Catch:{ all -> 0x0433 }
-            r4.setTextColor(r9)     // Catch:{ all -> 0x0433 }
-            r9 = 0
-            r4.setStrokeColor(r9)     // Catch:{ all -> 0x0433 }
-            r4.setFrameColor(r9)     // Catch:{ all -> 0x0433 }
-            r9 = 1084227584(0x40a00000, float:5.0)
-            r10 = 1711276032(0x66000000, float:1.5111573E23)
-            r4.setShadowLayer(r9, r6, r12, r10)     // Catch:{ all -> 0x0433 }
-        L_0x03fa:
-            int r6 = r2.viewWidth     // Catch:{ all -> 0x0433 }
-            r9 = 1073741824(0x40000000, float:2.0)
-            int r6 = android.view.View.MeasureSpec.makeMeasureSpec(r6, r9)     // Catch:{ all -> 0x0433 }
-            int r9 = r2.viewHeight     // Catch:{ all -> 0x0433 }
-            r10 = 1073741824(0x40000000, float:2.0)
-            int r9 = android.view.View.MeasureSpec.makeMeasureSpec(r9, r10)     // Catch:{ all -> 0x0433 }
-            r4.measure(r6, r9)     // Catch:{ all -> 0x0433 }
-            int r6 = r2.viewWidth     // Catch:{ all -> 0x0433 }
-            int r9 = r2.viewHeight     // Catch:{ all -> 0x0433 }
-            r10 = 0
-            r4.layout(r10, r10, r6, r9)     // Catch:{ all -> 0x0433 }
-            int r6 = r2.viewWidth     // Catch:{ all -> 0x0433 }
-            int r9 = r2.viewHeight     // Catch:{ all -> 0x0433 }
-            android.graphics.Bitmap$Config r11 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ all -> 0x0433 }
-            android.graphics.Bitmap r6 = android.graphics.Bitmap.createBitmap(r6, r9, r11)     // Catch:{ all -> 0x0433 }
-            r2.bitmap = r6     // Catch:{ all -> 0x0433 }
-            android.graphics.Canvas r6 = new android.graphics.Canvas     // Catch:{ all -> 0x0433 }
-            android.graphics.Bitmap r2 = r2.bitmap     // Catch:{ all -> 0x0433 }
-            r6.<init>(r2)     // Catch:{ all -> 0x0433 }
-            r4.draw(r6)     // Catch:{ all -> 0x0433 }
-            goto L_0x042f
-        L_0x042c:
-            r5 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
-        L_0x042e:
-            r10 = 0
-        L_0x042f:
-            int r3 = r3 + 1
-            goto L_0x0250
-        L_0x0433:
-            r0 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x0437:
-            return
+            Method dump skipped, instructions count: 1080
+            To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.video.TextureRenderer.surfaceCreated():void");
     }

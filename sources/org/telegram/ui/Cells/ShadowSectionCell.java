@@ -7,7 +7,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.CombinedDrawable;
-
+/* loaded from: classes3.dex */
 public class ShadowSectionCell extends View {
     private int size;
 
@@ -30,7 +30,7 @@ public class ShadowSectionCell extends View {
     }
 
     public ShadowSectionCell(Context context, int i, int i2) {
-        this(context, i, i2, (Theme.ResourcesProvider) null);
+        this(context, i, i2, null);
     }
 
     public ShadowSectionCell(Context context, int i, int i2, Theme.ResourcesProvider resourcesProvider) {
@@ -41,8 +41,8 @@ public class ShadowSectionCell extends View {
         this.size = i;
     }
 
-    /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
-        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp((float) this.size), NUM));
+    @Override // android.view.View
+    protected void onMeasure(int i, int i2) {
+        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(this.size), NUM));
     }
 }

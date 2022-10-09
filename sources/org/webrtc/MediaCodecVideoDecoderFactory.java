@@ -5,14 +5,15 @@ import android.os.Build;
 import java.util.ArrayList;
 import org.webrtc.EglBase;
 import org.webrtc.VideoDecoderFactory;
-
+/* loaded from: classes3.dex */
 class MediaCodecVideoDecoderFactory implements VideoDecoderFactory {
     private static final String TAG = "MediaCodecVideoDecoderFactory";
     private final Predicate<MediaCodecInfo> codecAllowedPredicate;
     private final EglBase.Context sharedContext;
 
+    @Override // org.webrtc.VideoDecoderFactory
     public /* synthetic */ VideoDecoder createDecoder(String str) {
-        return VideoDecoderFactory.CC.$default$createDecoder((VideoDecoderFactory) this, str);
+        return VideoDecoderFactory.CC.$default$createDecoder(this, str);
     }
 
     public MediaCodecVideoDecoderFactory(EglBase.Context context, Predicate<MediaCodecInfo> predicate) {
@@ -20,6 +21,7 @@ class MediaCodecVideoDecoderFactory implements VideoDecoderFactory {
         this.codecAllowedPredicate = predicate;
     }
 
+    @Override // org.webrtc.VideoDecoderFactory
     public VideoDecoder createDecoder(VideoCodecInfo videoCodecInfo) {
         VideoCodecMimeType valueOf = VideoCodecMimeType.valueOf(videoCodecInfo.getName());
         MediaCodecInfo findCodecForType = findCodecForType(valueOf);
@@ -29,6 +31,7 @@ class MediaCodecVideoDecoderFactory implements VideoDecoderFactory {
         return new AndroidVideoDecoder(new MediaCodecWrapperFactoryImpl(), findCodecForType.getName(), valueOf, MediaCodecUtils.selectColorFormat(MediaCodecUtils.DECODER_COLOR_FORMATS, findCodecForType.getCapabilitiesForType(valueOf.mimeType())).intValue(), this.sharedContext);
     }
 
+    @Override // org.webrtc.VideoDecoderFactory
     public VideoCodecInfo[] getSupportedCodecs() {
         ArrayList arrayList = new ArrayList();
         VideoCodecMimeType[] videoCodecMimeTypeArr = {VideoCodecMimeType.VP8, VideoCodecMimeType.VP9, VideoCodecMimeType.H264, VideoCodecMimeType.H265};
@@ -80,11 +83,8 @@ class MediaCodecVideoDecoderFactory implements VideoDecoderFactory {
     private boolean isH264HighProfileSupported(MediaCodecInfo mediaCodecInfo) {
         String name = mediaCodecInfo.getName();
         int i = Build.VERSION.SDK_INT;
-        if (i >= 21 && name.startsWith("OMX.qcom.")) {
-            return true;
-        }
-        if (i < 23 || !name.startsWith("OMX.Exynos.")) {
-            return false;
+        if (i < 21 || !name.startsWith("OMX.qcom.")) {
+            return i >= 23 && name.startsWith("OMX.Exynos.");
         }
         return true;
     }

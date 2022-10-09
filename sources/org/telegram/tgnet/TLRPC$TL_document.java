@@ -1,10 +1,10 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_document extends TLRPC$Document {
     public static int constructor = -NUM;
 
+    @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
-        boolean z2 = z;
         this.flags = abstractSerializedData.readInt32(z);
         this.id = abstractSerializedData.readInt64(z);
         this.access_hash = abstractSerializedData.readInt64(z);
@@ -12,66 +12,62 @@ public class TLRPC$TL_document extends TLRPC$Document {
         this.date = abstractSerializedData.readInt32(z);
         this.mime_type = abstractSerializedData.readString(z);
         this.size = abstractSerializedData.readInt64(z);
-        int i = 0;
         if ((this.flags & 1) != 0) {
             int readInt32 = abstractSerializedData.readInt32(z);
-            if (readInt32 == NUM) {
-                int readInt322 = abstractSerializedData.readInt32(z);
-                int i2 = 0;
-                while (i2 < readInt322) {
-                    int i3 = i2;
-                    TLRPC$PhotoSize TLdeserialize = TLRPC$PhotoSize.TLdeserialize(0, this.id, 0, abstractSerializedData, abstractSerializedData.readInt32(z), z);
-                    if (TLdeserialize != null) {
-                        this.thumbs.add(TLdeserialize);
-                        i2 = i3 + 1;
-                    } else {
-                        return;
-                    }
+            if (readInt32 != NUM) {
+                if (z) {
+                    throw new RuntimeException(String.format("wrong Vector magic, got %x", Integer.valueOf(readInt32)));
                 }
-            } else if (z2) {
-                throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt32)}));
-            } else {
                 return;
+            }
+            int readInt322 = abstractSerializedData.readInt32(z);
+            int i = 0;
+            while (i < readInt322) {
+                int i2 = i;
+                TLRPC$PhotoSize TLdeserialize = TLRPC$PhotoSize.TLdeserialize(0L, this.id, 0L, abstractSerializedData, abstractSerializedData.readInt32(z), z);
+                if (TLdeserialize == null) {
+                    return;
+                }
+                this.thumbs.add(TLdeserialize);
+                i = i2 + 1;
             }
         }
         if ((this.flags & 2) != 0) {
             int readInt323 = abstractSerializedData.readInt32(z);
-            if (readInt323 == NUM) {
-                int readInt324 = abstractSerializedData.readInt32(z);
-                int i4 = 0;
-                while (i4 < readInt324) {
-                    TLRPC$VideoSize TLdeserialize2 = TLRPC$VideoSize.TLdeserialize(0, this.id, abstractSerializedData, abstractSerializedData.readInt32(z), z);
-                    if (TLdeserialize2 != null) {
-                        this.video_thumbs.add(TLdeserialize2);
-                        i4++;
-                    } else {
-                        return;
-                    }
+            if (readInt323 != NUM) {
+                if (z) {
+                    throw new RuntimeException(String.format("wrong Vector magic, got %x", Integer.valueOf(readInt323)));
                 }
-            } else if (z2) {
-                throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt323)}));
-            } else {
                 return;
+            }
+            int readInt324 = abstractSerializedData.readInt32(z);
+            for (int i3 = 0; i3 < readInt324; i3++) {
+                TLRPC$VideoSize TLdeserialize2 = TLRPC$VideoSize.TLdeserialize(0L, this.id, abstractSerializedData, abstractSerializedData.readInt32(z), z);
+                if (TLdeserialize2 == null) {
+                    return;
+                }
+                this.video_thumbs.add(TLdeserialize2);
             }
         }
         this.dc_id = abstractSerializedData.readInt32(z);
         int readInt325 = abstractSerializedData.readInt32(z);
-        if (readInt325 == NUM) {
-            int readInt326 = abstractSerializedData.readInt32(z);
-            while (i < readInt326) {
-                TLRPC$DocumentAttribute TLdeserialize3 = TLRPC$DocumentAttribute.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z2);
-                if (TLdeserialize3 != null) {
-                    this.attributes.add(TLdeserialize3);
-                    i++;
-                } else {
-                    return;
-                }
+        if (readInt325 != NUM) {
+            if (z) {
+                throw new RuntimeException(String.format("wrong Vector magic, got %x", Integer.valueOf(readInt325)));
             }
-        } else if (z2) {
-            throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt325)}));
+            return;
+        }
+        int readInt326 = abstractSerializedData.readInt32(z);
+        for (int i4 = 0; i4 < readInt326; i4++) {
+            TLRPC$DocumentAttribute TLdeserialize3 = TLRPC$DocumentAttribute.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+            if (TLdeserialize3 == null) {
+                return;
+            }
+            this.attributes.add(TLdeserialize3);
         }
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
         abstractSerializedData.writeInt32(this.flags);

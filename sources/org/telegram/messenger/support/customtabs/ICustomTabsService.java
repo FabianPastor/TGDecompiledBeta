@@ -5,12 +5,13 @@ import android.os.IBinder;
 import android.os.IInterface;
 import android.os.Parcel;
 import android.os.RemoteException;
-
+/* loaded from: classes.dex */
 public interface ICustomTabsService extends IInterface {
     boolean newSession(ICustomTabsCallback iCustomTabsCallback) throws RemoteException;
 
     boolean warmup(long j) throws RemoteException;
 
+    /* loaded from: classes.dex */
     public static abstract class Stub extends Binder implements ICustomTabsService {
         public static ICustomTabsService asInterface(IBinder iBinder) {
             if (iBinder == null) {
@@ -20,6 +21,7 @@ public interface ICustomTabsService extends IInterface {
             return (queryLocalInterface == null || !(queryLocalInterface instanceof ICustomTabsService)) ? new Proxy(iBinder) : (ICustomTabsService) queryLocalInterface;
         }
 
+        /* loaded from: classes.dex */
         private static class Proxy implements ICustomTabsService {
             private IBinder mRemote;
 
@@ -27,10 +29,12 @@ public interface ICustomTabsService extends IInterface {
                 this.mRemote = iBinder;
             }
 
+            @Override // android.os.IInterface
             public IBinder asBinder() {
                 return this.mRemote;
             }
 
+            @Override // org.telegram.messenger.support.customtabs.ICustomTabsService
             public boolean warmup(long j) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
@@ -50,6 +54,7 @@ public interface ICustomTabsService extends IInterface {
                 }
             }
 
+            @Override // org.telegram.messenger.support.customtabs.ICustomTabsService
             public boolean newSession(ICustomTabsCallback iCustomTabsCallback) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();

@@ -14,38 +14,37 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.PhotoEditorSeekBar;
-
+/* loaded from: classes3.dex */
 public class PhotoEditToolCell extends FrameLayout {
-    /* access modifiers changed from: private */
-    public Runnable hideValueRunnable = new Runnable() {
-        public void run() {
-            PhotoEditToolCell.this.valueTextView.setTag((Object) null);
-            AnimatorSet unused = PhotoEditToolCell.this.valueAnimation = new AnimatorSet();
-            PhotoEditToolCell.this.valueAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(PhotoEditToolCell.this.valueTextView, View.ALPHA, new float[]{0.0f}), ObjectAnimator.ofFloat(PhotoEditToolCell.this.nameTextView, View.ALPHA, new float[]{1.0f})});
-            PhotoEditToolCell.this.valueAnimation.setDuration(250);
-            PhotoEditToolCell.this.valueAnimation.setInterpolator(new DecelerateInterpolator());
-            PhotoEditToolCell.this.valueAnimation.addListener(new AnimatorListenerAdapter() {
-                public void onAnimationEnd(Animator animator) {
-                    if (animator.equals(PhotoEditToolCell.this.valueAnimation)) {
-                        AnimatorSet unused = PhotoEditToolCell.this.valueAnimation = null;
-                    }
-                }
-            });
-            PhotoEditToolCell.this.valueAnimation.start();
-        }
-    };
-    /* access modifiers changed from: private */
-    public TextView nameTextView;
+    private Runnable hideValueRunnable;
+    private TextView nameTextView;
     private final Theme.ResourcesProvider resourcesProvider;
     private PhotoEditorSeekBar seekBar;
-    /* access modifiers changed from: private */
-    public AnimatorSet valueAnimation;
-    /* access modifiers changed from: private */
-    public TextView valueTextView;
+    private AnimatorSet valueAnimation;
+    private TextView valueTextView;
 
-    public PhotoEditToolCell(Context context, Theme.ResourcesProvider resourcesProvider2) {
+    public PhotoEditToolCell(Context context, Theme.ResourcesProvider resourcesProvider) {
         super(context);
-        this.resourcesProvider = resourcesProvider2;
+        this.hideValueRunnable = new Runnable() { // from class: org.telegram.ui.Cells.PhotoEditToolCell.1
+            @Override // java.lang.Runnable
+            public void run() {
+                PhotoEditToolCell.this.valueTextView.setTag(null);
+                PhotoEditToolCell.this.valueAnimation = new AnimatorSet();
+                PhotoEditToolCell.this.valueAnimation.playTogether(ObjectAnimator.ofFloat(PhotoEditToolCell.this.valueTextView, View.ALPHA, 0.0f), ObjectAnimator.ofFloat(PhotoEditToolCell.this.nameTextView, View.ALPHA, 1.0f));
+                PhotoEditToolCell.this.valueAnimation.setDuration(250L);
+                PhotoEditToolCell.this.valueAnimation.setInterpolator(new DecelerateInterpolator());
+                PhotoEditToolCell.this.valueAnimation.addListener(new AnimatorListenerAdapter() { // from class: org.telegram.ui.Cells.PhotoEditToolCell.1.1
+                    @Override // android.animation.AnimatorListenerAdapter, android.animation.Animator.AnimatorListener
+                    public void onAnimationEnd(Animator animator) {
+                        if (animator.equals(PhotoEditToolCell.this.valueAnimation)) {
+                            PhotoEditToolCell.this.valueAnimation = null;
+                        }
+                    }
+                });
+                PhotoEditToolCell.this.valueAnimation.start();
+            }
+        };
+        this.resourcesProvider = resourcesProvider;
         TextView textView = new TextView(context);
         this.nameTextView = textView;
         textView.setGravity(5);
@@ -67,11 +66,16 @@ public class PhotoEditToolCell extends FrameLayout {
         addView(photoEditorSeekBar, LayoutHelper.createFrame(-1, 40.0f, 19, 96.0f, 0.0f, 24.0f, 0.0f));
     }
 
-    public void setSeekBarDelegate(PhotoEditorSeekBar.PhotoEditorSeekBarDelegate photoEditorSeekBarDelegate) {
-        this.seekBar.setDelegate(new PhotoEditToolCell$$ExternalSyntheticLambda0(this, photoEditorSeekBarDelegate));
+    public void setSeekBarDelegate(final PhotoEditorSeekBar.PhotoEditorSeekBarDelegate photoEditorSeekBarDelegate) {
+        this.seekBar.setDelegate(new PhotoEditorSeekBar.PhotoEditorSeekBarDelegate() { // from class: org.telegram.ui.Cells.PhotoEditToolCell$$ExternalSyntheticLambda0
+            @Override // org.telegram.ui.Components.PhotoEditorSeekBar.PhotoEditorSeekBarDelegate
+            public final void onProgressChanged(int i, int i2) {
+                PhotoEditToolCell.this.lambda$setSeekBarDelegate$0(photoEditorSeekBarDelegate, i, i2);
+            }
+        });
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$setSeekBarDelegate$0(PhotoEditorSeekBar.PhotoEditorSeekBarDelegate photoEditorSeekBarDelegate, int i, int i2) {
         photoEditorSeekBarDelegate.onProgressChanged(i, i2);
         if (i2 > 0) {
@@ -89,28 +93,30 @@ public class PhotoEditToolCell extends FrameLayout {
             this.valueTextView.setTag(1);
             AnimatorSet animatorSet2 = new AnimatorSet();
             this.valueAnimation = animatorSet2;
-            animatorSet2.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.valueTextView, View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.nameTextView, View.ALPHA, new float[]{0.0f})});
-            this.valueAnimation.setDuration(250);
+            animatorSet2.playTogether(ObjectAnimator.ofFloat(this.valueTextView, View.ALPHA, 1.0f), ObjectAnimator.ofFloat(this.nameTextView, View.ALPHA, 0.0f));
+            this.valueAnimation.setDuration(250L);
             this.valueAnimation.setInterpolator(new DecelerateInterpolator());
-            this.valueAnimation.addListener(new AnimatorListenerAdapter() {
+            this.valueAnimation.addListener(new AnimatorListenerAdapter() { // from class: org.telegram.ui.Cells.PhotoEditToolCell.2
+                @Override // android.animation.AnimatorListenerAdapter, android.animation.Animator.AnimatorListener
                 public void onAnimationEnd(Animator animator) {
-                    AndroidUtilities.runOnUIThread(PhotoEditToolCell.this.hideValueRunnable, 1000);
+                    AndroidUtilities.runOnUIThread(PhotoEditToolCell.this.hideValueRunnable, 1000L);
                 }
             });
             this.valueAnimation.start();
             return;
         }
         AndroidUtilities.cancelRunOnUIThread(this.hideValueRunnable);
-        AndroidUtilities.runOnUIThread(this.hideValueRunnable, 1000);
+        AndroidUtilities.runOnUIThread(this.hideValueRunnable, 1000L);
     }
 
+    @Override // android.view.View
     public void setTag(Object obj) {
         super.setTag(obj);
         this.seekBar.setTag(obj);
     }
 
-    /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
+    @Override // android.widget.FrameLayout, android.view.View
+    protected void onMeasure(int i, int i2) {
         super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(40.0f), NUM));
     }
 
@@ -121,7 +127,7 @@ public class PhotoEditToolCell extends FrameLayout {
             this.valueAnimation = null;
         }
         AndroidUtilities.cancelRunOnUIThread(this.hideValueRunnable);
-        this.valueTextView.setTag((Object) null);
+        this.valueTextView.setTag(null);
         TextView textView = this.nameTextView;
         textView.setText(str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase());
         if (f > 0.0f) {
@@ -138,8 +144,8 @@ public class PhotoEditToolCell extends FrameLayout {
     }
 
     private int getThemedColor(String str) {
-        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
-        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        Theme.ResourcesProvider resourcesProvider = this.resourcesProvider;
+        Integer color = resourcesProvider != null ? resourcesProvider.getColor(str) : null;
         return color != null ? color.intValue() : Theme.getColor(str);
     }
 }

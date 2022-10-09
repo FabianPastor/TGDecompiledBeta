@@ -12,7 +12,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 import org.telegram.messenger.ApplicationLoader;
-
+/* loaded from: classes.dex */
 public class CustomTabsHelper {
     private static String sPackageNameToUse;
 
@@ -29,12 +29,12 @@ public class CustomTabsHelper {
         String str2 = resolveActivity != null ? resolveActivity.activityInfo.packageName : null;
         List<ResolveInfo> queryIntentActivities = packageManager2.queryIntentActivities(intent, 0);
         ArrayList arrayList = new ArrayList();
-        for (ResolveInfo next : queryIntentActivities) {
+        for (ResolveInfo resolveInfo : queryIntentActivities) {
             Intent intent2 = new Intent();
             intent2.setAction("android.support.customtabs.action.CustomTabsService");
-            intent2.setPackage(next.activityInfo.packageName);
+            intent2.setPackage(resolveInfo.activityInfo.packageName);
             if (packageManager2.resolveService(intent2, 0) != null) {
-                arrayList.add(next.activityInfo.packageName);
+                arrayList.add(resolveInfo.activityInfo.packageName);
             }
         }
         if (arrayList.isEmpty()) {
@@ -53,8 +53,8 @@ public class CustomTabsHelper {
             sPackageNameToUse = "com.google.android.apps.chrome";
         }
         try {
-            if ("com.sec.android.app.sbrowser".equalsIgnoreCase(sPackageNameToUse) && (applicationInfo = packageManager.getApplicationInfo("com.android.chrome", 0)) != null && applicationInfo.enabled) {
-                (packageManager = ApplicationLoader.applicationContext.getPackageManager()).getPackageInfo("com.android.chrome", 1);
+            if ("com.sec.android.app.sbrowser".equalsIgnoreCase(sPackageNameToUse) && (applicationInfo = (packageManager = ApplicationLoader.applicationContext.getPackageManager()).getApplicationInfo("com.android.chrome", 0)) != null && applicationInfo.enabled) {
+                packageManager.getPackageInfo("com.android.chrome", 1);
                 sPackageNameToUse = "com.android.chrome";
             }
         } catch (Throwable unused) {
@@ -63,28 +63,21 @@ public class CustomTabsHelper {
     }
 
     private static boolean hasSpecializedHandlerIntents(Context context, Intent intent) {
+        List<ResolveInfo> queryIntentActivities;
         try {
-            List<ResolveInfo> queryIntentActivities = context.getPackageManager().queryIntentActivities(intent, 64);
-            if (queryIntentActivities != null) {
-                if (queryIntentActivities.size() != 0) {
-                    for (ResolveInfo next : queryIntentActivities) {
-                        IntentFilter intentFilter = next.filter;
-                        if (intentFilter != null) {
-                            if (intentFilter.countDataAuthorities() == 0) {
-                                continue;
-                            } else if (intentFilter.countDataPaths() != 0) {
-                                if (next.activityInfo != null) {
-                                    return true;
-                                }
-                            }
-                        }
-                    }
-                    return false;
-                }
-            }
-            return false;
+            queryIntentActivities = context.getPackageManager().queryIntentActivities(intent, 64);
         } catch (RuntimeException unused) {
             Log.e("CustomTabsHelper", "Runtime exception while getting specialized handlers");
         }
+        if (queryIntentActivities != null && queryIntentActivities.size() != 0) {
+            for (ResolveInfo resolveInfo : queryIntentActivities) {
+                IntentFilter intentFilter = resolveInfo.filter;
+                if (intentFilter != null && intentFilter.countDataAuthorities() != 0 && intentFilter.countDataPaths() != 0 && resolveInfo.activityInfo != null) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        return false;
     }
 }

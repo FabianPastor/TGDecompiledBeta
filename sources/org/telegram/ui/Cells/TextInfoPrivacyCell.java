@@ -19,7 +19,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.LinkSpanDrawable;
-
+/* loaded from: classes3.dex */
 public class TextInfoPrivacyCell extends FrameLayout {
     private int bottomPadding;
     private int fixedSize;
@@ -30,40 +30,38 @@ public class TextInfoPrivacyCell extends FrameLayout {
     private TextView textView;
     private int topPadding;
 
-    /* access modifiers changed from: protected */
-    public void afterTextDraw() {
+    protected void afterTextDraw() {
     }
 
-    /* access modifiers changed from: protected */
-    public void onTextDraw() {
+    protected void onTextDraw() {
     }
 
     public TextInfoPrivacyCell(Context context) {
-        this(context, 21, (Theme.ResourcesProvider) null);
+        this(context, 21, null);
     }
 
-    public TextInfoPrivacyCell(Context context, Theme.ResourcesProvider resourcesProvider2) {
-        this(context, 21, resourcesProvider2);
+    public TextInfoPrivacyCell(Context context, Theme.ResourcesProvider resourcesProvider) {
+        this(context, 21, resourcesProvider);
     }
 
-    public TextInfoPrivacyCell(Context context, int i, Theme.ResourcesProvider resourcesProvider2) {
+    public TextInfoPrivacyCell(Context context, int i, Theme.ResourcesProvider resourcesProvider) {
         super(context);
         this.linkTextColorKey = "windowBackgroundWhiteLinkText";
         this.topPadding = 10;
         this.bottomPadding = 17;
-        this.resourcesProvider = resourcesProvider2;
+        this.resourcesProvider = resourcesProvider;
         LinkSpanDrawable.LinkCollector linkCollector = new LinkSpanDrawable.LinkCollector(this);
         this.links = linkCollector;
-        AnonymousClass1 r0 = new LinkSpanDrawable.LinksTextView(context, linkCollector, resourcesProvider2) {
-            /* access modifiers changed from: protected */
-            public void onDraw(Canvas canvas) {
+        LinkSpanDrawable.LinksTextView linksTextView = new LinkSpanDrawable.LinksTextView(context, linkCollector, resourcesProvider) { // from class: org.telegram.ui.Cells.TextInfoPrivacyCell.1
+            @Override // org.telegram.ui.Components.LinkSpanDrawable.LinksTextView, android.widget.TextView, android.view.View
+            protected void onDraw(Canvas canvas) {
                 TextInfoPrivacyCell.this.onTextDraw();
                 super.onDraw(canvas);
                 TextInfoPrivacyCell.this.afterTextDraw();
             }
         };
-        this.textView = r0;
-        r0.setTextSize(1, 14.0f);
+        this.textView = linksTextView;
+        linksTextView.setTextSize(1, 14.0f);
         int i2 = 5;
         this.textView.setGravity(LocaleController.isRTL ? 5 : 3);
         this.textView.setPadding(0, AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(17.0f));
@@ -71,16 +69,16 @@ public class TextInfoPrivacyCell extends FrameLayout {
         this.textView.setTextColor(getThemedColor("windowBackgroundWhiteGrayText4"));
         this.textView.setLinkTextColor(getThemedColor(this.linkTextColorKey));
         this.textView.setImportantForAccessibility(2);
-        float f = (float) i;
+        float f = i;
         addView(this.textView, LayoutHelper.createFrame(-1, -2.0f, (!LocaleController.isRTL ? 3 : i2) | 48, f, 0.0f, f, 0.0f));
         setWillNotDraw(false);
     }
 
-    /* access modifiers changed from: protected */
-    public void onDraw(Canvas canvas) {
+    @Override // android.view.View
+    protected void onDraw(Canvas canvas) {
         if (this.links != null) {
             canvas.save();
-            canvas.translate((float) this.textView.getLeft(), (float) this.textView.getTop());
+            canvas.translate(this.textView.getLeft(), this.textView.getTop());
             if (this.links.draw(canvas)) {
                 invalidate();
             }
@@ -93,10 +91,10 @@ public class TextInfoPrivacyCell extends FrameLayout {
         this.linkTextColorKey = str;
     }
 
-    /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
+    @Override // android.widget.FrameLayout, android.view.View
+    protected void onMeasure(int i, int i2) {
         if (this.fixedSize != 0) {
-            super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp((float) this.fixedSize), NUM));
+            super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(this.fixedSize), NUM));
         } else {
             super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(0, 0));
         }
@@ -120,15 +118,15 @@ public class TextInfoPrivacyCell extends FrameLayout {
             if (charSequence == null) {
                 this.textView.setPadding(0, AndroidUtilities.dp(2.0f), 0, 0);
             } else {
-                this.textView.setPadding(0, AndroidUtilities.dp((float) this.topPadding), 0, AndroidUtilities.dp((float) this.bottomPadding));
+                this.textView.setPadding(0, AndroidUtilities.dp(this.topPadding), 0, AndroidUtilities.dp(this.bottomPadding));
             }
             SpannableString spannableString = null;
             if (charSequence != null) {
                 int length = charSequence.length();
                 for (int i = 0; i < length - 1; i++) {
-                    if (charSequence.charAt(i) == 10) {
+                    if (charSequence.charAt(i) == '\n') {
                         int i2 = i + 1;
-                        if (charSequence.charAt(i2) == 10) {
+                        if (charSequence.charAt(i2) == '\n') {
                             if (spannableString == null) {
                                 spannableString = new SpannableString(charSequence);
                             }
@@ -137,11 +135,11 @@ public class TextInfoPrivacyCell extends FrameLayout {
                     }
                 }
             }
-            TextView textView2 = this.textView;
+            TextView textView = this.textView;
             if (spannableString != null) {
                 charSequence = spannableString;
             }
-            textView2.setText(charSequence);
+            textView.setText(charSequence);
         }
     }
 
@@ -165,23 +163,24 @@ public class TextInfoPrivacyCell extends FrameLayout {
     public void setEnabled(boolean z, ArrayList<Animator> arrayList) {
         float f = 1.0f;
         if (arrayList != null) {
-            TextView textView2 = this.textView;
+            TextView textView = this.textView;
             Property property = View.ALPHA;
             float[] fArr = new float[1];
             if (!z) {
                 f = 0.5f;
             }
             fArr[0] = f;
-            arrayList.add(ObjectAnimator.ofFloat(textView2, property, fArr));
+            arrayList.add(ObjectAnimator.ofFloat(textView, property, fArr));
             return;
         }
-        TextView textView3 = this.textView;
+        TextView textView2 = this.textView;
         if (!z) {
             f = 0.5f;
         }
-        textView3.setAlpha(f);
+        textView2.setAlpha(f);
     }
 
+    @Override // android.view.View
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
         super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
         accessibilityNodeInfo.setClassName(TextView.class.getName());
@@ -189,8 +188,8 @@ public class TextInfoPrivacyCell extends FrameLayout {
     }
 
     private int getThemedColor(String str) {
-        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
-        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        Theme.ResourcesProvider resourcesProvider = this.resourcesProvider;
+        Integer color = resourcesProvider != null ? resourcesProvider.getColor(str) : null;
         return color != null ? color.intValue() : Theme.getColor(str);
     }
 }

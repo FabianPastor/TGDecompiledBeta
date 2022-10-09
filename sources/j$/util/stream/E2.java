@@ -2,19 +2,18 @@ package j$.util.stream;
 
 import j$.util.CLASSNAMEj;
 import j$.util.function.Consumer;
-import j$.util.function.d;
-import j$.util.function.e;
-import j$.util.function.f;
-
-class E2 implements S2, CLASSNAMEj3 {
+/* loaded from: classes2.dex */
+class E2 implements S2, InterfaceCLASSNAMEj3 {
     private boolean a;
     private double b;
-    final /* synthetic */ d c;
+    final /* synthetic */ j$.util.function.d c;
 
-    E2(d dVar) {
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public E2(j$.util.function.d dVar) {
         this.c = dVar;
     }
 
+    @Override // j$.util.stream.InterfaceCLASSNAMEm3
     public void accept(double d) {
         if (this.a) {
             this.a = false;
@@ -24,29 +23,35 @@ class E2 implements S2, CLASSNAMEj3 {
         this.b = d;
     }
 
+    @Override // j$.util.stream.InterfaceCLASSNAMEm3
     public /* synthetic */ void accept(int i) {
-        CLASSNAMEo1.d(this);
+        AbstractCLASSNAMEo1.d(this);
         throw null;
     }
 
+    @Override // j$.util.stream.InterfaceCLASSNAMEm3, j$.util.stream.InterfaceCLASSNAMEl3, j$.util.function.q
     public /* synthetic */ void accept(long j) {
-        CLASSNAMEo1.e(this);
+        AbstractCLASSNAMEo1.e(this);
         throw null;
     }
 
+    @Override // j$.util.function.Consumer
     public /* synthetic */ Consumer andThen(Consumer consumer) {
-        return Consumer.CC.$default$andThen(this, consumer);
+        return consumer.getClass();
     }
 
+    @Override // j$.util.function.Consumer
     /* renamed from: b */
     public /* synthetic */ void accept(Double d) {
-        CLASSNAMEo1.a(this, d);
+        AbstractCLASSNAMEo1.a(this, d);
     }
 
+    @Override // j$.util.function.y
     public Object get() {
         return this.a ? CLASSNAMEj.a() : CLASSNAMEj.d(this.b);
     }
 
+    @Override // j$.util.stream.S2
     public void h(S2 s2) {
         E2 e2 = (E2) s2;
         if (!e2.a) {
@@ -54,19 +59,23 @@ class E2 implements S2, CLASSNAMEj3 {
         }
     }
 
-    public f j(f fVar) {
+    @Override // j$.util.function.f
+    public j$.util.function.f j(j$.util.function.f fVar) {
         fVar.getClass();
-        return new e(this, fVar);
+        return new j$.util.function.e(this, fVar);
     }
 
+    @Override // j$.util.stream.InterfaceCLASSNAMEm3
     public /* synthetic */ void m() {
     }
 
+    @Override // j$.util.stream.InterfaceCLASSNAMEm3
     public void n(long j) {
         this.a = true;
         this.b = 0.0d;
     }
 
+    @Override // j$.util.stream.InterfaceCLASSNAMEm3
     public /* synthetic */ boolean o() {
         return false;
     }

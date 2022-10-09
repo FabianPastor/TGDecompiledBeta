@@ -30,17 +30,17 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.DotDividerSpan;
 import org.telegram.ui.Components.RadialProgress2;
 import org.telegram.ui.FilteredSearchView;
-
+/* loaded from: classes3.dex */
 public class AudioPlayerCell extends View implements DownloadController.FileDownloadProgressListener {
     private int TAG;
     private boolean buttonPressed;
     private int buttonState;
     private int buttonX;
     private int buttonY;
-    private int currentAccount = UserConfig.selectedAccount;
+    private int currentAccount;
     private MessageObject currentMessageObject;
     private StaticLayout descriptionLayout;
-    private int descriptionY = AndroidUtilities.dp(29.0f);
+    private int descriptionY;
     private SpannableStringBuilder dotSpan;
     private int hasMiniProgress;
     private boolean miniButtonPressed;
@@ -48,17 +48,21 @@ public class AudioPlayerCell extends View implements DownloadController.FileDown
     private RadialProgress2 radialProgress;
     private final Theme.ResourcesProvider resourcesProvider;
     private StaticLayout titleLayout;
-    private int titleY = AndroidUtilities.dp(9.0f);
+    private int titleY;
     private int viewType;
 
+    @Override // org.telegram.messenger.DownloadController.FileDownloadProgressListener
     public void onProgressUpload(String str, long j, long j2, boolean z) {
     }
 
-    public AudioPlayerCell(Context context, int i, Theme.ResourcesProvider resourcesProvider2) {
+    public AudioPlayerCell(Context context, int i, Theme.ResourcesProvider resourcesProvider) {
         super(context);
-        this.resourcesProvider = resourcesProvider2;
+        this.titleY = AndroidUtilities.dp(9.0f);
+        this.descriptionY = AndroidUtilities.dp(29.0f);
+        this.currentAccount = UserConfig.selectedAccount;
+        this.resourcesProvider = resourcesProvider;
         this.viewType = i;
-        RadialProgress2 radialProgress2 = new RadialProgress2(this, resourcesProvider2);
+        RadialProgress2 radialProgress2 = new RadialProgress2(this, resourcesProvider);
         this.radialProgress = radialProgress2;
         radialProgress2.setColors("chat_inLoader", "chat_inLoaderSelected", "chat_inMediaIcon", "chat_inMediaIconSelected");
         this.TAG = DownloadController.getInstance(this.currentAccount).generateObserverTag();
@@ -70,26 +74,26 @@ public class AudioPlayerCell extends View implements DownloadController.FileDown
         }
     }
 
-    /* access modifiers changed from: protected */
+    @Override // android.view.View
     @SuppressLint({"DrawAllocation"})
-    public void onMeasure(int i, int i2) {
+    protected void onMeasure(int i, int i2) {
         this.descriptionLayout = null;
         this.titleLayout = null;
-        int size = (View.MeasureSpec.getSize(i) - AndroidUtilities.dp((float) AndroidUtilities.leftBaseline)) - AndroidUtilities.dp(28.0f);
+        int size = (View.MeasureSpec.getSize(i) - AndroidUtilities.dp(AndroidUtilities.leftBaseline)) - AndroidUtilities.dp(28.0f);
         try {
             String musicTitle = this.currentMessageObject.getMusicTitle();
-            this.titleLayout = new StaticLayout(TextUtils.ellipsize(musicTitle.replace(10, ' '), Theme.chat_contextResult_titleTextPaint, (float) Math.min((int) Math.ceil((double) Theme.chat_contextResult_titleTextPaint.measureText(musicTitle)), size), TextUtils.TruncateAt.END), Theme.chat_contextResult_titleTextPaint, size + AndroidUtilities.dp(4.0f), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+            this.titleLayout = new StaticLayout(TextUtils.ellipsize(musicTitle.replace('\n', ' '), Theme.chat_contextResult_titleTextPaint, Math.min((int) Math.ceil(Theme.chat_contextResult_titleTextPaint.measureText(musicTitle)), size), TextUtils.TruncateAt.END), Theme.chat_contextResult_titleTextPaint, size + AndroidUtilities.dp(4.0f), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
         } catch (Exception e) {
-            FileLog.e((Throwable) e);
+            FileLog.e(e);
         }
         try {
-            CharSequence replace = this.currentMessageObject.getMusicAuthor().replace(10, ' ');
+            CharSequence replace = this.currentMessageObject.getMusicAuthor().replace('\n', ' ');
             if (this.viewType == 1) {
-                replace = new SpannableStringBuilder(replace).append(' ').append(this.dotSpan).append(' ').append(FilteredSearchView.createFromInfoString(this.currentMessageObject));
+                replace = new SpannableStringBuilder(replace).append(' ').append((CharSequence) this.dotSpan).append(' ').append(FilteredSearchView.createFromInfoString(this.currentMessageObject));
             }
-            this.descriptionLayout = new StaticLayout(TextUtils.ellipsize(replace, Theme.chat_contextResult_descriptionTextPaint, (float) size, TextUtils.TruncateAt.END), Theme.chat_contextResult_descriptionTextPaint, size + AndroidUtilities.dp(4.0f), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+            this.descriptionLayout = new StaticLayout(TextUtils.ellipsize(replace, Theme.chat_contextResult_descriptionTextPaint, size, TextUtils.TruncateAt.END), Theme.chat_contextResult_descriptionTextPaint, size + AndroidUtilities.dp(4.0f), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
         } catch (Exception e2) {
-            FileLog.e((Throwable) e2);
+            FileLog.e(e2);
         }
         setMeasuredDimension(View.MeasureSpec.getSize(i), AndroidUtilities.dp(56.0f));
         int size2 = LocaleController.isRTL ? (View.MeasureSpec.getSize(i) - AndroidUtilities.dp(8.0f)) - AndroidUtilities.dp(52.0f) : AndroidUtilities.dp(8.0f);
@@ -112,22 +116,22 @@ public class AudioPlayerCell extends View implements DownloadController.FileDown
             if (!TextUtils.isEmpty(artworkUrl)) {
                 this.radialProgress.setImageOverlay(artworkUrl);
             } else {
-                this.radialProgress.setImageOverlay((TLRPC$PhotoSize) null, (TLRPC$Document) null, (Object) null);
+                this.radialProgress.setImageOverlay(null, null, null);
             }
         }
         requestLayout();
         updateButtonState(false, false);
     }
 
-    /* access modifiers changed from: protected */
-    public void onDetachedFromWindow() {
+    @Override // android.view.View
+    protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         this.radialProgress.onDetachedFromWindow();
         DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
     }
 
-    /* access modifiers changed from: protected */
-    public void onAttachedToWindow() {
+    @Override // android.view.View
+    protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         this.radialProgress.onAttachedToWindow();
     }
@@ -136,9 +140,12 @@ public class AudioPlayerCell extends View implements DownloadController.FileDown
         return this.currentMessageObject;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:14:0x0039  */
-    /* JADX WARNING: Removed duplicated region for block: B:16:0x0046  */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
+    /* JADX WARN: Removed duplicated region for block: B:16:0x0039  */
+    /* JADX WARN: Removed duplicated region for block: B:18:0x0046  */
+    /*
+        Code decompiled incorrectly, please refer to instructions dump.
+        To view partially-correct add '--show-bad-code' argument
+    */
     private boolean checkAudioMotionEvent(android.view.MotionEvent r9) {
         /*
             r8 = this;
@@ -151,70 +158,71 @@ public class AudioPlayerCell extends View implements DownloadController.FileDown
             int r3 = r8.miniButtonState
             r4 = 1
             r5 = 0
-            if (r3 < 0) goto L_0x0032
+            if (r3 < 0) goto L32
             r3 = 1104674816(0x41d80000, float:27.0)
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
             int r6 = r8.buttonX
             int r7 = r6 + r3
-            if (r0 < r7) goto L_0x0032
+            if (r0 < r7) goto L32
             int r6 = r6 + r3
             int r6 = r6 + r2
-            if (r0 > r6) goto L_0x0032
+            if (r0 > r6) goto L32
             int r0 = r8.buttonY
             int r6 = r0 + r3
-            if (r1 < r6) goto L_0x0032
+            if (r1 < r6) goto L32
             int r0 = r0 + r3
             int r0 = r0 + r2
-            if (r1 > r0) goto L_0x0032
+            if (r1 > r0) goto L32
             r0 = 1
-            goto L_0x0033
-        L_0x0032:
+            goto L33
+        L32:
             r0 = 0
-        L_0x0033:
+        L33:
             int r1 = r9.getAction()
-            if (r1 != 0) goto L_0x0046
-            if (r0 == 0) goto L_0x007e
+            if (r1 != 0) goto L46
+            if (r0 == 0) goto L7e
             r8.miniButtonPressed = r4
             org.telegram.ui.Components.RadialProgress2 r9 = r8.radialProgress
             r9.setPressed(r4, r4)
             r8.invalidate()
-            goto L_0x007f
-        L_0x0046:
+            goto L7f
+        L46:
             boolean r1 = r8.miniButtonPressed
-            if (r1 == 0) goto L_0x007e
+            if (r1 == 0) goto L7e
             int r1 = r9.getAction()
-            if (r1 != r4) goto L_0x005c
+            if (r1 != r4) goto L5c
             r8.miniButtonPressed = r5
             r8.playSoundEffect(r5)
             r8.didPressedMiniButton(r4)
             r8.invalidate()
-            goto L_0x0077
-        L_0x005c:
+            goto L77
+        L5c:
             int r1 = r9.getAction()
             r2 = 3
-            if (r1 != r2) goto L_0x0069
+            if (r1 != r2) goto L69
             r8.miniButtonPressed = r5
             r8.invalidate()
-            goto L_0x0077
-        L_0x0069:
+            goto L77
+        L69:
             int r9 = r9.getAction()
             r1 = 2
-            if (r9 != r1) goto L_0x0077
-            if (r0 != 0) goto L_0x0077
+            if (r9 != r1) goto L77
+            if (r0 != 0) goto L77
             r8.miniButtonPressed = r5
             r8.invalidate()
-        L_0x0077:
+        L77:
             org.telegram.ui.Components.RadialProgress2 r9 = r8.radialProgress
             boolean r0 = r8.miniButtonPressed
             r9.setPressed(r0, r4)
-        L_0x007e:
+        L7e:
             r4 = 0
-        L_0x007f:
+        L7f:
             return r4
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.AudioPlayerCell.checkAudioMotionEvent(android.view.MotionEvent):boolean");
     }
 
+    @Override // android.view.View
     public boolean onTouchEvent(MotionEvent motionEvent) {
         if (this.currentMessageObject == null) {
             return super.onTouchEvent(motionEvent);
@@ -236,7 +244,8 @@ public class AudioPlayerCell extends View implements DownloadController.FileDown
             FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.getDocument(), this.currentMessageObject, 3, 0);
             this.radialProgress.setMiniIcon(getMiniIconForCurrentState(), false, true);
             invalidate();
-        } else if (i == 1) {
+        } else if (i != 1) {
+        } else {
             if (MediaController.getInstance().isPlayingMessage(this.currentMessageObject)) {
                 MediaController.getInstance().cleanupPlayer(true, true);
             }
@@ -253,29 +262,32 @@ public class AudioPlayerCell extends View implements DownloadController.FileDown
             if (this.miniButtonState == 0) {
                 FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.getDocument(), this.currentMessageObject, 1, 0);
             }
-            if (MediaController.getInstance().findMessageInPlaylistAndPlay(this.currentMessageObject)) {
-                if (this.hasMiniProgress == 2 && this.miniButtonState != 1) {
-                    this.miniButtonState = 1;
-                    this.radialProgress.setProgress(0.0f, false);
-                    this.radialProgress.setMiniIcon(getMiniIconForCurrentState(), false, true);
-                }
-                this.buttonState = 1;
-                this.radialProgress.setIcon(getIconForCurrentState(), false, true);
-                invalidate();
+            if (!MediaController.getInstance().findMessageInPlaylistAndPlay(this.currentMessageObject)) {
+                return;
             }
+            if (this.hasMiniProgress == 2 && this.miniButtonState != 1) {
+                this.miniButtonState = 1;
+                this.radialProgress.setProgress(0.0f, false);
+                this.radialProgress.setMiniIcon(getMiniIconForCurrentState(), false, true);
+            }
+            this.buttonState = 1;
+            this.radialProgress.setIcon(getIconForCurrentState(), false, true);
+            invalidate();
         } else if (i == 1) {
-            if (MediaController.getInstance().lambda$startAudioAgain$7(this.currentMessageObject)) {
-                this.buttonState = 0;
-                this.radialProgress.setIcon(getIconForCurrentState(), false, true);
-                invalidate();
+            if (!MediaController.getInstance().lambda$startAudioAgain$7(this.currentMessageObject)) {
+                return;
             }
+            this.buttonState = 0;
+            this.radialProgress.setIcon(getIconForCurrentState(), false, true);
+            invalidate();
         } else if (i == 2) {
             this.radialProgress.setProgress(0.0f, false);
             FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.getDocument(), this.currentMessageObject, 1, 0);
             this.buttonState = 4;
             this.radialProgress.setIcon(getIconForCurrentState(), false, true);
             invalidate();
-        } else if (i == 4) {
+        } else if (i != 4) {
+        } else {
             FileLoader.getInstance(this.currentAccount).cancelLoadFile(this.currentMessageObject.getDocument());
             this.buttonState = 2;
             this.radialProgress.setIcon(getIconForCurrentState(), false, true);
@@ -283,12 +295,12 @@ public class AudioPlayerCell extends View implements DownloadController.FileDown
         }
     }
 
-    /* access modifiers changed from: protected */
-    public void onDraw(Canvas canvas) {
+    @Override // android.view.View
+    protected void onDraw(Canvas canvas) {
         float f = 8.0f;
         if (this.titleLayout != null) {
             canvas.save();
-            canvas.translate((float) AndroidUtilities.dp(LocaleController.isRTL ? 8.0f : (float) AndroidUtilities.leftBaseline), (float) this.titleY);
+            canvas.translate(AndroidUtilities.dp(LocaleController.isRTL ? 8.0f : AndroidUtilities.leftBaseline), this.titleY);
             this.titleLayout.draw(canvas);
             canvas.restore();
         }
@@ -296,9 +308,9 @@ public class AudioPlayerCell extends View implements DownloadController.FileDown
             Theme.chat_contextResult_descriptionTextPaint.setColor(getThemedColor("windowBackgroundWhiteGrayText2"));
             canvas.save();
             if (!LocaleController.isRTL) {
-                f = (float) AndroidUtilities.leftBaseline;
+                f = AndroidUtilities.leftBaseline;
             }
-            canvas.translate((float) AndroidUtilities.dp(f), (float) this.descriptionY);
+            canvas.translate(AndroidUtilities.dp(f), this.descriptionY);
             this.descriptionLayout.draw(canvas);
             canvas.restore();
         }
@@ -337,50 +349,24 @@ public class AudioPlayerCell extends View implements DownloadController.FileDown
         if (file == null) {
             file = FileLoader.getInstance(this.currentAccount).getPathToAttach(this.currentMessageObject.getDocument());
         }
-        if (!TextUtils.isEmpty(fileName)) {
-            if (file.exists() && file.length() == 0) {
-                file.delete();
-            }
-            boolean exists = file.exists();
-            if (!SharedConfig.streamMedia || ((int) this.currentMessageObject.getDialogId()) == 0) {
-                this.miniButtonState = -1;
-            } else {
-                this.hasMiniProgress = exists ? 1 : 2;
-                exists = true;
-            }
-            if (this.hasMiniProgress != 0) {
-                this.radialProgress.setMiniProgressBackgroundColor(getThemedColor(this.currentMessageObject.isOutOwner() ? "chat_outLoader" : "chat_inLoader"));
+        if (TextUtils.isEmpty(fileName)) {
+            return;
+        }
+        if (file.exists() && file.length() == 0) {
+            file.delete();
+        }
+        boolean exists = file.exists();
+        if (SharedConfig.streamMedia && ((int) this.currentMessageObject.getDialogId()) != 0) {
+            this.hasMiniProgress = exists ? 1 : 2;
+            exists = true;
+        } else {
+            this.miniButtonState = -1;
+        }
+        if (this.hasMiniProgress == 0) {
+            if (exists) {
+                DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
                 boolean isPlayingMessage = MediaController.getInstance().isPlayingMessage(this.currentMessageObject);
                 if (!isPlayingMessage || (isPlayingMessage && MediaController.getInstance().isMessagePaused())) {
-                    this.buttonState = 0;
-                } else {
-                    this.buttonState = 1;
-                }
-                this.radialProgress.setIcon(getIconForCurrentState(), z, z2);
-                if (this.hasMiniProgress == 1) {
-                    DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
-                    this.miniButtonState = -1;
-                    this.radialProgress.setMiniIcon(getMiniIconForCurrentState(), z, z2);
-                    return;
-                }
-                DownloadController.getInstance(this.currentAccount).addLoadingFileObserver(fileName, this.currentMessageObject, this);
-                if (!FileLoader.getInstance(this.currentAccount).isLoadingFile(fileName)) {
-                    this.miniButtonState = 0;
-                    this.radialProgress.setMiniIcon(getMiniIconForCurrentState(), z, z2);
-                    return;
-                }
-                this.miniButtonState = 1;
-                this.radialProgress.setMiniIcon(getMiniIconForCurrentState(), z, z2);
-                Float fileProgress = ImageLoader.getInstance().getFileProgress(fileName);
-                if (fileProgress != null) {
-                    this.radialProgress.setProgress(fileProgress.floatValue(), z2);
-                } else {
-                    this.radialProgress.setProgress(0.0f, z2);
-                }
-            } else if (exists) {
-                DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
-                boolean isPlayingMessage2 = MediaController.getInstance().isPlayingMessage(this.currentMessageObject);
-                if (!isPlayingMessage2 || (isPlayingMessage2 && MediaController.getInstance().isMessagePaused())) {
                     this.buttonState = 0;
                 } else {
                     this.buttonState = 1;
@@ -388,62 +374,98 @@ public class AudioPlayerCell extends View implements DownloadController.FileDown
                 this.radialProgress.setProgress(1.0f, z2);
                 this.radialProgress.setIcon(getIconForCurrentState(), z, z2);
                 invalidate();
-            } else {
-                DownloadController.getInstance(this.currentAccount).addLoadingFileObserver(fileName, this);
-                if (!FileLoader.getInstance(this.currentAccount).isLoadingFile(fileName)) {
-                    this.buttonState = 2;
-                    this.radialProgress.setIcon(getIconForCurrentState(), z, z2);
-                } else {
-                    this.buttonState = 4;
-                    Float fileProgress2 = ImageLoader.getInstance().getFileProgress(fileName);
-                    if (fileProgress2 != null) {
-                        this.radialProgress.setProgress(fileProgress2.floatValue(), z2);
-                    } else {
-                        this.radialProgress.setProgress(0.0f, z2);
-                    }
-                    this.radialProgress.setIcon(getIconForCurrentState(), z, z2);
-                }
-                invalidate();
+                return;
             }
+            DownloadController.getInstance(this.currentAccount).addLoadingFileObserver(fileName, this);
+            if (!FileLoader.getInstance(this.currentAccount).isLoadingFile(fileName)) {
+                this.buttonState = 2;
+                this.radialProgress.setIcon(getIconForCurrentState(), z, z2);
+            } else {
+                this.buttonState = 4;
+                Float fileProgress = ImageLoader.getInstance().getFileProgress(fileName);
+                if (fileProgress != null) {
+                    this.radialProgress.setProgress(fileProgress.floatValue(), z2);
+                } else {
+                    this.radialProgress.setProgress(0.0f, z2);
+                }
+                this.radialProgress.setIcon(getIconForCurrentState(), z, z2);
+            }
+            invalidate();
+            return;
+        }
+        this.radialProgress.setMiniProgressBackgroundColor(getThemedColor(this.currentMessageObject.isOutOwner() ? "chat_outLoader" : "chat_inLoader"));
+        boolean isPlayingMessage2 = MediaController.getInstance().isPlayingMessage(this.currentMessageObject);
+        if (!isPlayingMessage2 || (isPlayingMessage2 && MediaController.getInstance().isMessagePaused())) {
+            this.buttonState = 0;
+        } else {
+            this.buttonState = 1;
+        }
+        this.radialProgress.setIcon(getIconForCurrentState(), z, z2);
+        if (this.hasMiniProgress == 1) {
+            DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
+            this.miniButtonState = -1;
+            this.radialProgress.setMiniIcon(getMiniIconForCurrentState(), z, z2);
+            return;
+        }
+        DownloadController.getInstance(this.currentAccount).addLoadingFileObserver(fileName, this.currentMessageObject, this);
+        if (!FileLoader.getInstance(this.currentAccount).isLoadingFile(fileName)) {
+            this.miniButtonState = 0;
+            this.radialProgress.setMiniIcon(getMiniIconForCurrentState(), z, z2);
+            return;
+        }
+        this.miniButtonState = 1;
+        this.radialProgress.setMiniIcon(getMiniIconForCurrentState(), z, z2);
+        Float fileProgress2 = ImageLoader.getInstance().getFileProgress(fileName);
+        if (fileProgress2 != null) {
+            this.radialProgress.setProgress(fileProgress2.floatValue(), z2);
+        } else {
+            this.radialProgress.setProgress(0.0f, z2);
         }
     }
 
+    @Override // org.telegram.messenger.DownloadController.FileDownloadProgressListener
     public void onFailedDownload(String str, boolean z) {
         updateButtonState(true, z);
     }
 
+    @Override // org.telegram.messenger.DownloadController.FileDownloadProgressListener
     public void onSuccessDownload(String str) {
         this.radialProgress.setProgress(1.0f, true);
         updateButtonState(false, true);
     }
 
+    @Override // org.telegram.messenger.DownloadController.FileDownloadProgressListener
     public void onProgressDownload(String str, long j, long j2) {
         this.radialProgress.setProgress(Math.min(1.0f, ((float) j) / ((float) j2)), true);
         if (this.hasMiniProgress != 0) {
-            if (this.miniButtonState != 1) {
-                updateButtonState(false, true);
+            if (this.miniButtonState == 1) {
+                return;
             }
-        } else if (this.buttonState != 4) {
+            updateButtonState(false, true);
+        } else if (this.buttonState == 4) {
+        } else {
             updateButtonState(false, true);
         }
     }
 
+    @Override // org.telegram.messenger.DownloadController.FileDownloadProgressListener
     public int getObserverTag() {
         return this.TAG;
     }
 
+    @Override // android.view.View
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
         super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
         if (this.currentMessageObject.isMusic()) {
             accessibilityNodeInfo.setText(LocaleController.formatString("AccDescrMusicInfo", R.string.AccDescrMusicInfo, this.currentMessageObject.getMusicAuthor(), this.currentMessageObject.getMusicTitle()));
             return;
         }
-        accessibilityNodeInfo.setText(this.titleLayout.getText() + ", " + this.descriptionLayout.getText());
+        accessibilityNodeInfo.setText(((Object) this.titleLayout.getText()) + ", " + ((Object) this.descriptionLayout.getText()));
     }
 
     private int getThemedColor(String str) {
-        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
-        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        Theme.ResourcesProvider resourcesProvider = this.resourcesProvider;
+        Integer color = resourcesProvider != null ? resourcesProvider.getColor(str) : null;
         return color != null ? color.intValue() : Theme.getColor(str);
     }
 }

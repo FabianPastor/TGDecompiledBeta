@@ -1,5 +1,5 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_pageBlockEmbed extends TLRPC$PageBlock {
     public static int constructor = -NUM;
     public boolean allow_scrolling;
@@ -12,6 +12,7 @@ public class TLRPC$TL_pageBlockEmbed extends TLRPC$PageBlock {
     public String url;
     public int w;
 
+    @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
@@ -39,11 +40,12 @@ public class TLRPC$TL_pageBlockEmbed extends TLRPC$PageBlock {
         this.caption = TLRPC$TL_pageCaption.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
-        int i = this.full_width ? this.flags | 1 : this.flags & -2;
+        int i = this.full_width ? this.flags | 1 : this.flags & (-2);
         this.flags = i;
-        int i2 = this.allow_scrolling ? i | 8 : i & -9;
+        int i2 = this.allow_scrolling ? i | 8 : i & (-9);
         this.flags = i2;
         abstractSerializedData.writeInt32(i2);
         if ((this.flags & 2) != 0) {

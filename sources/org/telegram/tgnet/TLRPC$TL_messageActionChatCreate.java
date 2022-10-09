@@ -1,21 +1,25 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_messageActionChatCreate extends TLRPC$MessageAction {
     public static int constructor = -NUM;
 
+    @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         this.title = abstractSerializedData.readString(z);
         int readInt32 = abstractSerializedData.readInt32(z);
-        if (readInt32 == NUM) {
-            int readInt322 = abstractSerializedData.readInt32(z);
-            for (int i = 0; i < readInt322; i++) {
-                this.users.add(Long.valueOf(abstractSerializedData.readInt64(z)));
+        if (readInt32 != NUM) {
+            if (z) {
+                throw new RuntimeException(String.format("wrong Vector magic, got %x", Integer.valueOf(readInt32)));
             }
-        } else if (z) {
-            throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt32)}));
+            return;
+        }
+        int readInt322 = abstractSerializedData.readInt32(z);
+        for (int i = 0; i < readInt322; i++) {
+            this.users.add(Long.valueOf(abstractSerializedData.readInt64(z)));
         }
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
         abstractSerializedData.writeString(this.title);

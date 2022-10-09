@@ -1,12 +1,14 @@
 package j$.util.stream;
-
-abstract class D3 extends CLASSNAMEg3 {
+/* loaded from: classes2.dex */
+abstract class D3 extends AbstractCLASSNAMEg3 {
     protected boolean b;
 
-    D3(CLASSNAMEm3 m3Var) {
-        super(m3Var);
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public D3(InterfaceCLASSNAMEm3 interfaceCLASSNAMEm3) {
+        super(interfaceCLASSNAMEm3);
     }
 
+    @Override // j$.util.stream.AbstractCLASSNAMEg3, j$.util.stream.InterfaceCLASSNAMEm3
     public final boolean o() {
         this.b = true;
         return false;

@@ -1,8 +1,9 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_geoPoint extends TLRPC$GeoPoint {
     public static int constructor = -NUM;
 
+    @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         this.flags = abstractSerializedData.readInt32(z);
         this._long = abstractSerializedData.readDouble(z);
@@ -13,6 +14,7 @@ public class TLRPC$TL_geoPoint extends TLRPC$GeoPoint {
         }
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
         abstractSerializedData.writeInt32(this.flags);

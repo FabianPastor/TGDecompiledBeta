@@ -1,5 +1,5 @@
 package j$.time.format;
-
+/* loaded from: classes2.dex */
 final class k implements g {
     static final String[] c = {"+HH", "+HHmm", "+HH:mm", "+HHMM", "+HH:MM", "+HHMMss", "+HH:MM:ss", "+HHMMSS", "+HH:MM:SS"};
     static final k d = new k("+HH:MM:ss", "Z");
@@ -10,10 +10,12 @@ final class k implements g {
         new k("+HH:MM:ss", "0");
     }
 
-    k(String str, String str2) {
-        if (str == null) {
-            throw new NullPointerException("pattern");
-        } else if (str2 != null) {
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public k(String str, String str2) {
+        if (str != null) {
+            if (str2 == null) {
+                throw new NullPointerException("noOffsetText");
+            }
             int i = 0;
             while (true) {
                 String[] strArr = c;
@@ -28,7 +30,7 @@ final class k implements g {
                 }
             }
         } else {
-            throw new NullPointerException("noOffsetText");
+            throw new NullPointerException("pattern");
         }
     }
 

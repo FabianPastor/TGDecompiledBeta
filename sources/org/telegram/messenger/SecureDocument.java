@@ -3,7 +3,7 @@ package org.telegram.messenger;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$TL_inputFile;
 import org.telegram.tgnet.TLRPC$TL_secureFile;
-
+/* loaded from: classes.dex */
 public class SecureDocument extends TLObject {
     public byte[] fileHash;
     public byte[] fileSecret;
@@ -13,8 +13,8 @@ public class SecureDocument extends TLObject {
     public TLRPC$TL_secureFile secureFile;
     public int type;
 
-    public SecureDocument(SecureDocumentKey secureDocumentKey2, TLRPC$TL_secureFile tLRPC$TL_secureFile, String str, byte[] bArr, byte[] bArr2) {
-        this.secureDocumentKey = secureDocumentKey2;
+    public SecureDocument(SecureDocumentKey secureDocumentKey, TLRPC$TL_secureFile tLRPC$TL_secureFile, String str, byte[] bArr, byte[] bArr2) {
+        this.secureDocumentKey = secureDocumentKey;
         this.secureFile = tLRPC$TL_secureFile;
         this.path = str;
         this.fileHash = bArr;

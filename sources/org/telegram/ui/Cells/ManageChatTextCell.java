@@ -11,7 +11,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
-
+/* loaded from: classes3.dex */
 public class ManageChatTextCell extends FrameLayout {
     private boolean divider;
     private String dividerColor;
@@ -34,9 +34,9 @@ public class ManageChatTextCell extends FrameLayout {
         this.valueTextView.setTextSize(16);
         this.valueTextView.setGravity(LocaleController.isRTL ? 3 : i);
         addView(this.valueTextView);
-        ImageView imageView2 = new ImageView(context);
-        this.imageView = imageView2;
-        imageView2.setScaleType(ImageView.ScaleType.CENTER);
+        ImageView imageView = new ImageView(context);
+        this.imageView = imageView;
+        imageView.setScaleType(ImageView.ScaleType.CENTER);
         this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayIcon"), PorterDuff.Mode.MULTIPLY));
         addView(this.imageView);
     }
@@ -53,8 +53,8 @@ public class ManageChatTextCell extends FrameLayout {
         this.dividerColor = str;
     }
 
-    /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
+    @Override // android.widget.FrameLayout, android.view.View
+    protected void onMeasure(int i, int i2) {
         int size = View.MeasureSpec.getSize(i);
         int dp = AndroidUtilities.dp(48.0f);
         this.valueTextView.measure(View.MeasureSpec.makeMeasureSpec(size - AndroidUtilities.dp(24.0f), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(20.0f), NUM));
@@ -63,8 +63,8 @@ public class ManageChatTextCell extends FrameLayout {
         setMeasuredDimension(size, AndroidUtilities.dp(56.0f) + (this.divider ? 1 : 0));
     }
 
-    /* access modifiers changed from: protected */
-    public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+    @Override // android.widget.FrameLayout, android.view.ViewGroup, android.view.View
+    protected void onLayout(boolean z, int i, int i2, int i3, int i4) {
         int i5 = i4 - i2;
         int i6 = i3 - i;
         int textHeight = (i5 - this.valueTextView.getTextHeight()) / 2;
@@ -77,8 +77,8 @@ public class ManageChatTextCell extends FrameLayout {
         simpleTextView2.layout(dp2, textHeight2, simpleTextView2.getMeasuredWidth() + dp2, this.textView.getMeasuredHeight() + textHeight2);
         int dp3 = AndroidUtilities.dp(9.0f);
         int dp4 = !LocaleController.isRTL ? AndroidUtilities.dp(21.0f) : (i6 - this.imageView.getMeasuredWidth()) - AndroidUtilities.dp(21.0f);
-        ImageView imageView2 = this.imageView;
-        imageView2.layout(dp4, dp3, imageView2.getMeasuredWidth() + dp4, this.imageView.getMeasuredHeight() + dp3);
+        ImageView imageView = this.imageView;
+        imageView.layout(dp4, dp3, imageView.getMeasuredWidth() + dp4, this.imageView.getMeasuredHeight() + dp3);
     }
 
     public void setTextColor(int i) {
@@ -104,20 +104,20 @@ public class ManageChatTextCell extends FrameLayout {
         } else {
             this.valueTextView.setVisibility(4);
         }
-        this.imageView.setPadding(0, AndroidUtilities.dp((float) i2), 0, 0);
+        this.imageView.setPadding(0, AndroidUtilities.dp(i2), 0, 0);
         this.imageView.setImageResource(i);
         this.divider = z;
         setWillNotDraw(!z);
     }
 
-    /* access modifiers changed from: protected */
-    public void onDraw(Canvas canvas) {
+    @Override // android.view.View
+    protected void onDraw(Canvas canvas) {
         if (this.divider) {
             String str = this.dividerColor;
             if (str != null) {
                 Theme.dividerExtraPaint.setColor(Theme.getColor(str));
             }
-            canvas.drawLine((float) AndroidUtilities.dp(71.0f), (float) (getMeasuredHeight() - 1), (float) getMeasuredWidth(), (float) (getMeasuredHeight() - 1), this.dividerColor != null ? Theme.dividerExtraPaint : Theme.dividerPaint);
+            canvas.drawLine(AndroidUtilities.dp(71.0f), getMeasuredHeight() - 1, getMeasuredWidth(), getMeasuredHeight() - 1, this.dividerColor != null ? Theme.dividerExtraPaint : Theme.dividerPaint);
         }
     }
 }

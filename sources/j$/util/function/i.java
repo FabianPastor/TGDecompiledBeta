@@ -1,7 +1,5 @@
 package j$.util.function;
-
-import j$.util.function.Function;
-
+/* loaded from: classes2.dex */
 public final /* synthetic */ class i implements Function {
     public final /* synthetic */ int a;
     public final /* synthetic */ Function b;
@@ -18,15 +16,17 @@ public final /* synthetic */ class i implements Function {
         this.c = function2;
     }
 
+    @Override // j$.util.function.Function
     public /* synthetic */ Function andThen(Function function) {
         switch (this.a) {
             case 0:
-                return Function.CC.$default$andThen(this, function);
+                return function.getClass();
             default:
-                return Function.CC.$default$andThen(this, function);
+                return function.getClass();
         }
     }
 
+    @Override // j$.util.function.Function
     public final Object apply(Object obj) {
         switch (this.a) {
             case 0:
@@ -36,12 +36,13 @@ public final /* synthetic */ class i implements Function {
         }
     }
 
+    @Override // j$.util.function.Function
     public /* synthetic */ Function compose(Function function) {
         switch (this.a) {
             case 0:
-                return Function.CC.$default$compose(this, function);
+                return function.getClass();
             default:
-                return Function.CC.$default$compose(this, function);
+                return function.getClass();
         }
     }
 }

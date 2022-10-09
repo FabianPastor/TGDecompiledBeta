@@ -1,7 +1,7 @@
 package org.telegram.tgnet;
 
 import java.util.ArrayList;
-
+/* loaded from: classes.dex */
 public abstract class TLRPC$DraftMessage extends TLObject {
     public int date;
     public ArrayList<TLRPC$MessageEntity> entities = new ArrayList<>();
@@ -13,7 +13,14 @@ public abstract class TLRPC$DraftMessage extends TLObject {
     public static TLRPC$DraftMessage TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         TLRPC$DraftMessage tLRPC$DraftMessage;
         if (i == -NUM) {
-            tLRPC$DraftMessage = new TLRPC$TL_draftMessageEmpty_layer81();
+            tLRPC$DraftMessage = new TLRPC$TL_draftMessageEmpty() { // from class: org.telegram.tgnet.TLRPC$TL_draftMessageEmpty_layer81
+                public static int constructor = -NUM;
+
+                @Override // org.telegram.tgnet.TLRPC$TL_draftMessageEmpty, org.telegram.tgnet.TLObject
+                public void serializeToStream(AbstractSerializedData abstractSerializedData2) {
+                    abstractSerializedData2.writeInt32(constructor);
+                }
+            };
         } else if (i != -40996577) {
             tLRPC$DraftMessage = i != NUM ? null : new TLRPC$TL_draftMessageEmpty();
         } else {
@@ -25,6 +32,6 @@ public abstract class TLRPC$DraftMessage extends TLObject {
             }
             return tLRPC$DraftMessage;
         }
-        throw new RuntimeException(String.format("can't parse magic %x in DraftMessage", new Object[]{Integer.valueOf(i)}));
+        throw new RuntimeException(String.format("can't parse magic %x in DraftMessage", Integer.valueOf(i)));
     }
 }

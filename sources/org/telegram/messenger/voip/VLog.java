@@ -3,7 +3,7 @@ package org.telegram.messenger.voip;
 import android.text.TextUtils;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-
+/* loaded from: classes.dex */
 class VLog {
     public static native void d(String str);
 
@@ -19,18 +19,19 @@ class VLog {
     }
 
     public static void e(Throwable th) {
-        e((String) null, th);
+        e(null, th);
     }
 
     public static void e(String str, Throwable th) {
         StringWriter stringWriter = new StringWriter();
         if (!TextUtils.isEmpty(str)) {
-            stringWriter.append(str);
-            stringWriter.append(": ");
+            stringWriter.append((CharSequence) str);
+            stringWriter.append((CharSequence) ": ");
         }
         th.printStackTrace(new PrintWriter(stringWriter));
-        for (String e : stringWriter.toString().split("\n")) {
-            e(e);
+        String[] split = stringWriter.toString().split("\n");
+        for (String str2 : split) {
+            e(str2);
         }
     }
 }

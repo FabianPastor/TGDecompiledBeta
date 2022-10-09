@@ -1,19 +1,19 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public abstract class TLRPC$PageListItem extends TLObject {
     public static TLRPC$PageListItem TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-        TLRPC$PageListItem tLRPC$PageListItem;
+        TLRPC$PageListItem tLRPC$TL_pageListItemText;
         if (i != -NUM) {
-            tLRPC$PageListItem = i != NUM ? null : new TLRPC$TL_pageListItemBlocks();
+            tLRPC$TL_pageListItemText = i != NUM ? null : new TLRPC$TL_pageListItemBlocks();
         } else {
-            tLRPC$PageListItem = new TLRPC$TL_pageListItemText();
+            tLRPC$TL_pageListItemText = new TLRPC$TL_pageListItemText();
         }
-        if (tLRPC$PageListItem != null || !z) {
-            if (tLRPC$PageListItem != null) {
-                tLRPC$PageListItem.readParams(abstractSerializedData, z);
+        if (tLRPC$TL_pageListItemText != null || !z) {
+            if (tLRPC$TL_pageListItemText != null) {
+                tLRPC$TL_pageListItemText.readParams(abstractSerializedData, z);
             }
-            return tLRPC$PageListItem;
+            return tLRPC$TL_pageListItemText;
         }
-        throw new RuntimeException(String.format("can't parse magic %x in PageListItem", new Object[]{Integer.valueOf(i)}));
+        throw new RuntimeException(String.format("can't parse magic %x in PageListItem", Integer.valueOf(i)));
     }
 }

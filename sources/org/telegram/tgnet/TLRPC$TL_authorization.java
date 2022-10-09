@@ -1,5 +1,5 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_authorization extends TLObject {
     public static int constructor = -NUM;
     public int api_id;
@@ -22,17 +22,18 @@ public class TLRPC$TL_authorization extends TLObject {
     public String system_version;
 
     public static TLRPC$TL_authorization TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-        if (constructor == i) {
-            TLRPC$TL_authorization tLRPC$TL_authorization = new TLRPC$TL_authorization();
-            tLRPC$TL_authorization.readParams(abstractSerializedData, z);
-            return tLRPC$TL_authorization;
-        } else if (!z) {
+        if (constructor != i) {
+            if (z) {
+                throw new RuntimeException(String.format("can't parse magic %x in TL_authorization", Integer.valueOf(i)));
+            }
             return null;
-        } else {
-            throw new RuntimeException(String.format("can't parse magic %x in TL_authorization", new Object[]{Integer.valueOf(i)}));
         }
+        TLRPC$TL_authorization tLRPC$TL_authorization = new TLRPC$TL_authorization();
+        tLRPC$TL_authorization.readParams(abstractSerializedData, z);
+        return tLRPC$TL_authorization;
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
@@ -59,17 +60,18 @@ public class TLRPC$TL_authorization extends TLObject {
         this.region = abstractSerializedData.readString(z);
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
-        int i = this.current ? this.flags | 1 : this.flags & -2;
+        int i = this.current ? this.flags | 1 : this.flags & (-2);
         this.flags = i;
-        int i2 = this.official_app ? i | 2 : i & -3;
+        int i2 = this.official_app ? i | 2 : i & (-3);
         this.flags = i2;
-        int i3 = this.password_pending ? i2 | 4 : i2 & -5;
+        int i3 = this.password_pending ? i2 | 4 : i2 & (-5);
         this.flags = i3;
-        int i4 = this.encrypted_requests_disabled ? i3 | 8 : i3 & -9;
+        int i4 = this.encrypted_requests_disabled ? i3 | 8 : i3 & (-9);
         this.flags = i4;
-        int i5 = this.call_requests_disabled ? i4 | 16 : i4 & -17;
+        int i5 = this.call_requests_disabled ? i4 | 16 : i4 & (-17);
         this.flags = i5;
         abstractSerializedData.writeInt32(i5);
         abstractSerializedData.writeInt64(this.hash);

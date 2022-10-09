@@ -1,16 +1,14 @@
 package j$.time.format;
-
-import j$.time.temporal.k;
-
+/* loaded from: classes2.dex */
 class j implements g {
-    final k a;
+    final j$.time.temporal.k a;
     final int b;
     final int c;
-    /* access modifiers changed from: private */
-    public final s d;
+    private final s d;
     final int e;
 
-    j(k kVar, int i, int i2, s sVar) {
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public j(j$.time.temporal.k kVar, int i, int i2, s sVar) {
         this.a = kVar;
         this.b = i;
         this.c = i2;
@@ -18,7 +16,7 @@ class j implements g {
         this.e = 0;
     }
 
-    protected j(k kVar, int i, int i2, s sVar, int i3) {
+    protected j(j$.time.temporal.k kVar, int i, int i2, s sVar, int i3) {
         this.a = kVar;
         this.b = i;
         this.c = i2;
@@ -26,12 +24,12 @@ class j implements g {
         this.e = i3;
     }
 
-    /* access modifiers changed from: package-private */
+    /* JADX INFO: Access modifiers changed from: package-private */
     public j b() {
         return this.e == -1 ? this : new j(this.a, this.b, this.c, this.d, -1);
     }
 
-    /* access modifiers changed from: package-private */
+    /* JADX INFO: Access modifiers changed from: package-private */
     public j c(int i) {
         return new j(this.a, this.b, this.c, this.d, this.e + i);
     }

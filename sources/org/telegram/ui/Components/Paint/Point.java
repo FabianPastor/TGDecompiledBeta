@@ -1,7 +1,7 @@
 package org.telegram.ui.Components.Paint;
 
 import android.graphics.PointF;
-
+/* loaded from: classes3.dex */
 public class Point {
     public boolean edge;
     public double x;
@@ -25,38 +25,35 @@ public class Point {
             return false;
         }
         Point point = (Point) obj;
-        if (this.x == point.x && this.y == point.y && this.z == point.z) {
-            return true;
-        }
-        return false;
+        return this.x == point.x && this.y == point.y && this.z == point.z;
     }
 
-    /* access modifiers changed from: package-private */
+    /* JADX INFO: Access modifiers changed from: package-private */
     public Point multiplySum(Point point, double d) {
         return new Point((this.x + point.x) * d, (this.y + point.y) * d, (this.z + point.z) * d);
     }
 
-    /* access modifiers changed from: package-private */
+    /* JADX INFO: Access modifiers changed from: package-private */
     public Point add(Point point) {
         return new Point(this.x + point.x, this.y + point.y, this.z + point.z);
     }
 
-    /* access modifiers changed from: package-private */
+    /* JADX INFO: Access modifiers changed from: package-private */
     public Point substract(Point point) {
         return new Point(this.x - point.x, this.y - point.y, this.z - point.z);
     }
 
-    /* access modifiers changed from: package-private */
+    /* JADX INFO: Access modifiers changed from: package-private */
     public Point multiplyByScalar(double d) {
         return new Point(this.x * d, this.y * d, this.z * d);
     }
 
-    /* access modifiers changed from: package-private */
+    /* JADX INFO: Access modifiers changed from: package-private */
     public float getDistanceTo(Point point) {
         return (float) Math.sqrt(Math.pow(this.x - point.x, 2.0d) + Math.pow(this.y - point.y, 2.0d) + Math.pow(this.z - point.z, 2.0d));
     }
 
-    /* access modifiers changed from: package-private */
+    /* JADX INFO: Access modifiers changed from: package-private */
     public PointF toPointF() {
         return new PointF((float) this.x, (float) this.y);
     }

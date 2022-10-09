@@ -1,22 +1,28 @@
 package j$.util.stream;
-
-abstract class K0 extends L0 {
-    K0(CLASSNAMEc cVar, CLASSNAMEe4 e4Var, int i) {
-        super(cVar, i);
+/* JADX INFO: Access modifiers changed from: package-private */
+/* loaded from: classes2.dex */
+public abstract class K0 extends L0 {
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public K0(AbstractCLASSNAMEc abstractCLASSNAMEc, EnumCLASSNAMEe4 enumCLASSNAMEe4, int i) {
+        super(abstractCLASSNAMEc, i);
     }
 
-    /* access modifiers changed from: package-private */
-    public final boolean G0() {
+    @Override // j$.util.stream.AbstractCLASSNAMEc
+    final boolean G0() {
         return false;
     }
 
-    public /* bridge */ /* synthetic */ IntStream parallel() {
-        parallel();
+    @Override // j$.util.stream.AbstractCLASSNAMEc, j$.util.stream.InterfaceCLASSNAMEg, j$.util.stream.IntStream
+    /* renamed from: parallel */
+    public /* bridge */ /* synthetic */ IntStream mo304parallel() {
+        mo304parallel();
         return this;
     }
 
-    public /* bridge */ /* synthetic */ IntStream sequential() {
-        sequential();
+    @Override // j$.util.stream.AbstractCLASSNAMEc, j$.util.stream.InterfaceCLASSNAMEg, j$.util.stream.IntStream
+    /* renamed from: sequential */
+    public /* bridge */ /* synthetic */ IntStream mo305sequential() {
+        mo305sequential();
         return this;
     }
 }

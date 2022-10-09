@@ -1,30 +1,33 @@
 package j$.util.stream;
 
-import j$.util.CLASSNAMEa;
+import j$.util.AbstractCLASSNAMEa;
 import j$.util.Collection$EL;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
-
+/* loaded from: classes2.dex */
 final class N3 extends F3 {
     private ArrayList d;
 
-    N3(CLASSNAMEm3 m3Var, Comparator comparator) {
-        super(m3Var, comparator);
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public N3(InterfaceCLASSNAMEm3 interfaceCLASSNAMEm3, Comparator comparator) {
+        super(interfaceCLASSNAMEm3, comparator);
     }
 
+    @Override // j$.util.function.Consumer
     public void accept(Object obj) {
         this.d.add(obj);
     }
 
+    @Override // j$.util.stream.AbstractCLASSNAMEi3, j$.util.stream.InterfaceCLASSNAMEm3
     public void m() {
-        CLASSNAMEa.G(this.d, this.b);
-        this.a.n((long) this.d.size());
+        AbstractCLASSNAMEa.G(this.d, this.b);
+        this.a.n(this.d.size());
         if (!this.c) {
             ArrayList arrayList = this.d;
-            CLASSNAMEm3 m3Var = this.a;
-            m3Var.getClass();
-            Collection$EL.a(arrayList, new CLASSNAMEb(m3Var));
+            InterfaceCLASSNAMEm3 interfaceCLASSNAMEm3 = this.a;
+            interfaceCLASSNAMEm3.getClass();
+            Collection$EL.a(arrayList, new CLASSNAMEb(interfaceCLASSNAMEm3));
         } else {
             Iterator it = this.d.iterator();
             while (it.hasNext()) {
@@ -32,22 +35,17 @@ final class N3 extends F3 {
                 if (this.a.o()) {
                     break;
                 }
-                this.a.accept(next);
+                this.a.accept((InterfaceCLASSNAMEm3) next);
             }
         }
         this.a.m();
         this.d = null;
     }
 
+    @Override // j$.util.stream.InterfaceCLASSNAMEm3
     public void n(long j) {
-        ArrayList arrayList;
         if (j < NUM) {
-            if (j >= 0) {
-                int i = (int) j;
-            } else {
-                arrayList = new ArrayList();
-            }
-            this.d = arrayList;
+            this.d = j >= 0 ? new ArrayList((int) j) : new ArrayList();
             return;
         }
         throw new IllegalArgumentException("Stream size exceeds max array size");

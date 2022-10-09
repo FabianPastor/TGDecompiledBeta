@@ -15,7 +15,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
-
+/* loaded from: classes3.dex */
 public class TooManyCommunitiesHintCell extends FrameLayout {
     private TextView headerTextView;
     private FrameLayout imageLayout;
@@ -24,9 +24,9 @@ public class TooManyCommunitiesHintCell extends FrameLayout {
 
     public TooManyCommunitiesHintCell(Context context) {
         super(context);
-        ImageView imageView2 = new ImageView(context);
-        this.imageView = imageView2;
-        imageView2.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chats_nameMessage_threeLines"), PorterDuff.Mode.MULTIPLY));
+        ImageView imageView = new ImageView(context);
+        this.imageView = imageView;
+        imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chats_nameMessage_threeLines"), PorterDuff.Mode.MULTIPLY));
         TextView textView = new TextView(context);
         this.headerTextView = textView;
         textView.setTextColor(Theme.getColor("chats_nameMessage_threeLines"));
@@ -42,28 +42,28 @@ public class TooManyCommunitiesHintCell extends FrameLayout {
         addView(this.messageTextView, LayoutHelper.createFrame(-1, -2.0f, 51, 36.0f, 110.0f, 36.0f, 0.0f));
         final TextPaint textPaint = new TextPaint(1);
         textPaint.setColor(-1);
-        textPaint.setTextSize((float) AndroidUtilities.dp(12.0f));
+        textPaint.setTextSize(AndroidUtilities.dp(12.0f));
         textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         final Paint paint = new Paint(1);
-        AnonymousClass1 r4 = new FrameLayout(this, context, "500") {
+        FrameLayout frameLayout = new FrameLayout(this, context) { // from class: org.telegram.ui.Cells.TooManyCommunitiesHintCell.1
             RectF rect = new RectF();
 
-            /* access modifiers changed from: protected */
-            public void onDraw(Canvas canvas) {
+            @Override // android.view.View
+            protected void onDraw(Canvas canvas) {
                 super.onDraw(canvas);
                 paint.setColor(Theme.getColor("windowBackgroundWhiteRedText"));
                 canvas.save();
-                canvas.translate((((float) getMeasuredWidth()) - textPaint.measureText("500")) - ((float) AndroidUtilities.dp(8.0f)), AndroidUtilities.dpf2(7.0f));
-                this.rect.set(0.0f, 0.0f, textPaint.measureText("500"), textPaint.getTextSize());
-                this.rect.inset((float) (-AndroidUtilities.dp(6.0f)), (float) (-AndroidUtilities.dp(3.0f)));
-                float textSize = (textPaint.getTextSize() / 2.0f) + ((float) AndroidUtilities.dp(3.0f));
+                canvas.translate((getMeasuredWidth() - textPaint.measureText(r5)) - AndroidUtilities.dp(8.0f), AndroidUtilities.dpf2(7.0f));
+                this.rect.set(0.0f, 0.0f, textPaint.measureText(r5), textPaint.getTextSize());
+                this.rect.inset(-AndroidUtilities.dp(6.0f), -AndroidUtilities.dp(3.0f));
+                float textSize = (textPaint.getTextSize() / 2.0f) + AndroidUtilities.dp(3.0f);
                 canvas.drawRoundRect(this.rect, textSize, textSize, paint);
-                canvas.drawText("500", 0.0f, textPaint.getTextSize() - AndroidUtilities.dpf2(2.0f), textPaint);
+                canvas.drawText(r5, 0.0f, textPaint.getTextSize() - AndroidUtilities.dpf2(2.0f), textPaint);
                 canvas.restore();
             }
         };
-        this.imageLayout = r4;
-        r4.setWillNotDraw(false);
+        this.imageLayout = frameLayout;
+        frameLayout.setWillNotDraw(false);
         this.imageLayout.addView(this.imageView, LayoutHelper.createFrame(-2, -2, 1));
         addView(this.imageLayout, LayoutHelper.createFrame(-2, -2.0f, 49, 0.0f, 12.0f, 0.0f, 6.0f));
         this.headerTextView.setText(LocaleController.getString("TooManyCommunities", R.string.TooManyCommunities));

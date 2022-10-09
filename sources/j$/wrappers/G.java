@@ -1,7 +1,7 @@
 package j$.wrappers;
 
 import java.util.function.DoubleToIntFunction;
-
+/* loaded from: classes2.dex */
 public final /* synthetic */ class G {
     final /* synthetic */ DoubleToIntFunction a;
 

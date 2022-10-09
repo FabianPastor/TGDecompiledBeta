@@ -8,7 +8,7 @@ import org.telegram.messenger.voip.VoIPService;
 import org.webrtc.EglBase;
 import org.webrtc.EglBase14;
 import org.webrtc.VideoEncoderFactory;
-
+/* loaded from: classes3.dex */
 public class HardwareVideoEncoderFactory implements VideoEncoderFactory {
     private static final int QCOM_VP8_KEY_FRAME_INTERVAL_ANDROID_L_MS = 15000;
     private static final int QCOM_VP8_KEY_FRAME_INTERVAL_ANDROID_M_MS = 20000;
@@ -19,16 +19,20 @@ public class HardwareVideoEncoderFactory implements VideoEncoderFactory {
     private final boolean enableIntelVp8Encoder;
     private final EglBase14.Context sharedContext;
 
+    @Override // org.webrtc.VideoEncoderFactory
     public /* synthetic */ VideoEncoderFactory.VideoEncoderSelector getEncoderSelector() {
         return VideoEncoderFactory.CC.$default$getEncoderSelector(this);
     }
 
+    @Override // org.webrtc.VideoEncoderFactory
     public /* synthetic */ VideoCodecInfo[] getImplementations() {
-        return VideoEncoderFactory.CC.$default$getImplementations(this);
+        VideoCodecInfo[] supportedCodecs;
+        supportedCodecs = getSupportedCodecs();
+        return supportedCodecs;
     }
 
     public HardwareVideoEncoderFactory(EglBase.Context context, boolean z, boolean z2) {
-        this(context, z, z2, (Predicate<MediaCodecInfo>) null);
+        this(context, z, z2, null);
     }
 
     public HardwareVideoEncoderFactory(EglBase.Context context, boolean z, boolean z2, Predicate<MediaCodecInfo> predicate) {
@@ -45,72 +49,36 @@ public class HardwareVideoEncoderFactory implements VideoEncoderFactory {
 
     @Deprecated
     public HardwareVideoEncoderFactory(boolean z, boolean z2) {
-        this((EglBase.Context) null, z, z2);
+        this(null, z, z2);
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:3:0x0008, code lost:
-        r5 = org.webrtc.VideoCodecMimeType.valueOf(r14.name);
-     */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public org.webrtc.VideoEncoder createEncoder(org.webrtc.VideoCodecInfo r14) {
-        /*
-            r13 = this;
-            int r0 = android.os.Build.VERSION.SDK_INT
-            r1 = 0
-            r2 = 19
-            if (r0 >= r2) goto L_0x0008
-            return r1
-        L_0x0008:
-            java.lang.String r0 = r14.name
-            org.webrtc.VideoCodecMimeType r5 = org.webrtc.VideoCodecMimeType.valueOf(r0)
-            android.media.MediaCodecInfo r0 = r13.findCodecForType(r5)
-            if (r0 != 0) goto L_0x0015
-            return r1
-        L_0x0015:
-            java.lang.String r4 = r0.getName()
-            java.lang.String r2 = r5.mimeType()
-            int[] r3 = org.webrtc.MediaCodecUtils.TEXTURE_COLOR_FORMATS
-            android.media.MediaCodecInfo$CodecCapabilities r6 = r0.getCapabilitiesForType(r2)
-            java.lang.Integer r6 = org.webrtc.MediaCodecUtils.selectColorFormat(r3, r6)
-            int[] r3 = org.webrtc.MediaCodecUtils.ENCODER_COLOR_FORMATS
-            android.media.MediaCodecInfo$CodecCapabilities r2 = r0.getCapabilitiesForType(r2)
-            java.lang.Integer r7 = org.webrtc.MediaCodecUtils.selectColorFormat(r3, r2)
-            org.webrtc.VideoCodecMimeType r2 = org.webrtc.VideoCodecMimeType.H264
-            if (r5 != r2) goto L_0x0059
-            java.util.Map<java.lang.String, java.lang.String> r2 = r14.params
-            r3 = 1
-            java.util.Map r3 = org.webrtc.MediaCodecUtils.getCodecProperties(r5, r3)
-            boolean r2 = org.webrtc.H264Utils.isSameH264Profile(r2, r3)
-            java.util.Map<java.lang.String, java.lang.String> r3 = r14.params
-            r8 = 0
-            java.util.Map r8 = org.webrtc.MediaCodecUtils.getCodecProperties(r5, r8)
-            boolean r3 = org.webrtc.H264Utils.isSameH264Profile(r3, r8)
-            if (r2 != 0) goto L_0x0050
-            if (r3 != 0) goto L_0x0050
-            return r1
-        L_0x0050:
-            if (r2 == 0) goto L_0x0059
-            boolean r0 = r13.isH264HighProfileSupported(r0)
-            if (r0 != 0) goto L_0x0059
-            return r1
-        L_0x0059:
-            org.webrtc.HardwareVideoEncoder r0 = new org.webrtc.HardwareVideoEncoder
-            org.webrtc.MediaCodecWrapperFactoryImpl r3 = new org.webrtc.MediaCodecWrapperFactoryImpl
-            r3.<init>()
-            java.util.Map<java.lang.String, java.lang.String> r8 = r14.params
-            int r9 = r13.getKeyFrameIntervalSec(r5)
-            int r10 = r13.getForcedKeyFrameIntervalMs(r5, r4)
-            org.webrtc.BitrateAdjuster r11 = r13.createBitrateAdjuster(r5, r4)
-            org.webrtc.EglBase14$Context r12 = r13.sharedContext
-            r2 = r0
-            r2.<init>(r3, r4, r5, r6, r7, r8, r9, r10, r11, r12)
-            return r0
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.webrtc.HardwareVideoEncoderFactory.createEncoder(org.webrtc.VideoCodecInfo):org.webrtc.VideoEncoder");
+    @Override // org.webrtc.VideoEncoderFactory
+    public VideoEncoder createEncoder(VideoCodecInfo videoCodecInfo) {
+        VideoCodecMimeType valueOf;
+        MediaCodecInfo findCodecForType;
+        if (Build.VERSION.SDK_INT >= 19 && (findCodecForType = findCodecForType((valueOf = VideoCodecMimeType.valueOf(videoCodecInfo.name)))) != null) {
+            String name = findCodecForType.getName();
+            String mimeType = valueOf.mimeType();
+            Integer selectColorFormat = MediaCodecUtils.selectColorFormat(MediaCodecUtils.TEXTURE_COLOR_FORMATS, findCodecForType.getCapabilitiesForType(mimeType));
+            Integer selectColorFormat2 = MediaCodecUtils.selectColorFormat(MediaCodecUtils.ENCODER_COLOR_FORMATS, findCodecForType.getCapabilitiesForType(mimeType));
+            if (valueOf == VideoCodecMimeType.H264) {
+                boolean isSameH264Profile = H264Utils.isSameH264Profile(videoCodecInfo.params, MediaCodecUtils.getCodecProperties(valueOf, true));
+                boolean isSameH264Profile2 = H264Utils.isSameH264Profile(videoCodecInfo.params, MediaCodecUtils.getCodecProperties(valueOf, false));
+                if (!isSameH264Profile && !isSameH264Profile2) {
+                    return null;
+                }
+                if (isSameH264Profile && !isH264HighProfileSupported(findCodecForType)) {
+                    return null;
+                }
+            }
+            return new HardwareVideoEncoder(new MediaCodecWrapperFactoryImpl(), name, valueOf, selectColorFormat, selectColorFormat2, videoCodecInfo.params, getKeyFrameIntervalSec(valueOf), getForcedKeyFrameIntervalMs(valueOf, name), createBitrateAdjuster(valueOf, name), this.sharedContext);
+        }
+        return null;
     }
 
+    @Override // org.webrtc.VideoEncoderFactory
     public VideoCodecInfo[] getSupportedCodecs() {
-        if (Build.VERSION.SDK_INT < 19 || (VoIPService.getSharedInstance() != null && VoIPService.getSharedInstance().groupCall != null)) {
+        if (Build.VERSION.SDK_INT < 19 || !(VoIPService.getSharedInstance() == null || VoIPService.getSharedInstance().groupCall == null)) {
             return new VideoCodecInfo[0];
         }
         ArrayList arrayList = new ArrayList();
@@ -142,77 +110,58 @@ public class HardwareVideoEncoderFactory implements VideoEncoderFactory {
     }
 
     private boolean isSupportedCodec(MediaCodecInfo mediaCodecInfo, VideoCodecMimeType videoCodecMimeType) {
-        if (MediaCodecUtils.codecSupportsType(mediaCodecInfo, videoCodecMimeType) && MediaCodecUtils.selectColorFormat(MediaCodecUtils.ENCODER_COLOR_FORMATS, mediaCodecInfo.getCapabilitiesForType(videoCodecMimeType.mimeType())) != null && isHardwareSupportedInCurrentSdk(mediaCodecInfo, videoCodecMimeType) && isMediaCodecAllowed(mediaCodecInfo)) {
-            return true;
+        return MediaCodecUtils.codecSupportsType(mediaCodecInfo, videoCodecMimeType) && MediaCodecUtils.selectColorFormat(MediaCodecUtils.ENCODER_COLOR_FORMATS, mediaCodecInfo.getCapabilitiesForType(videoCodecMimeType.mimeType())) != null && isHardwareSupportedInCurrentSdk(mediaCodecInfo, videoCodecMimeType) && isMediaCodecAllowed(mediaCodecInfo);
+    }
+
+    private boolean isHardwareSupportedInCurrentSdk(MediaCodecInfo mediaCodecInfo, VideoCodecMimeType videoCodecMimeType) {
+        if (VoIPService.getSharedInstance() == null || VoIPService.getSharedInstance().groupCall == null) {
+            Instance.ServerConfig globalServerConfig = Instance.getGlobalServerConfig();
+            if (!globalServerConfig.enable_h264_encoder && !globalServerConfig.enable_h265_encoder && !globalServerConfig.enable_vp8_encoder && !globalServerConfig.enable_vp9_encoder) {
+                return false;
+            }
+            int i = AnonymousClass1.$SwitchMap$org$webrtc$VideoCodecMimeType[videoCodecMimeType.ordinal()];
+            if (i == 1) {
+                return isHardwareSupportedInCurrentSdkVp8(mediaCodecInfo);
+            }
+            if (i == 2) {
+                return isHardwareSupportedInCurrentSdkVp9(mediaCodecInfo);
+            }
+            if (i == 3) {
+                return isHardwareSupportedInCurrentSdkH264(mediaCodecInfo);
+            }
+            if (i == 4) {
+                return isHardwareSupportedInCurrentSdkH265(mediaCodecInfo);
+            }
+            return false;
         }
         return false;
     }
 
-    private boolean isHardwareSupportedInCurrentSdk(MediaCodecInfo mediaCodecInfo, VideoCodecMimeType videoCodecMimeType) {
-        if (VoIPService.getSharedInstance() != null && VoIPService.getSharedInstance().groupCall != null) {
-            return false;
-        }
-        Instance.ServerConfig globalServerConfig = Instance.getGlobalServerConfig();
-        if (!globalServerConfig.enable_h264_encoder && !globalServerConfig.enable_h265_encoder && !globalServerConfig.enable_vp8_encoder && !globalServerConfig.enable_vp9_encoder) {
-            return false;
-        }
-        int i = AnonymousClass1.$SwitchMap$org$webrtc$VideoCodecMimeType[videoCodecMimeType.ordinal()];
-        if (i == 1) {
-            return isHardwareSupportedInCurrentSdkVp8(mediaCodecInfo);
-        }
-        if (i == 2) {
-            return isHardwareSupportedInCurrentSdkVp9(mediaCodecInfo);
-        }
-        if (i == 3) {
-            return isHardwareSupportedInCurrentSdkH264(mediaCodecInfo);
-        }
-        if (i != 4) {
-            return false;
-        }
-        return isHardwareSupportedInCurrentSdkH265(mediaCodecInfo);
-    }
-
+    /* JADX INFO: Access modifiers changed from: package-private */
     /* renamed from: org.webrtc.HardwareVideoEncoderFactory$1  reason: invalid class name */
-    static /* synthetic */ class AnonymousClass1 {
+    /* loaded from: classes3.dex */
+    public static /* synthetic */ class AnonymousClass1 {
         static final /* synthetic */ int[] $SwitchMap$org$webrtc$VideoCodecMimeType;
 
-        /* JADX WARNING: Can't wrap try/catch for region: R(8:0|1|2|3|4|5|6|(3:7|8|10)) */
-        /* JADX WARNING: Failed to process nested try/catch */
-        /* JADX WARNING: Missing exception handler attribute for start block: B:3:0x0012 */
-        /* JADX WARNING: Missing exception handler attribute for start block: B:5:0x001d */
-        /* JADX WARNING: Missing exception handler attribute for start block: B:7:0x0028 */
         static {
-            /*
-                org.webrtc.VideoCodecMimeType[] r0 = org.webrtc.VideoCodecMimeType.values()
-                int r0 = r0.length
-                int[] r0 = new int[r0]
-                $SwitchMap$org$webrtc$VideoCodecMimeType = r0
-                org.webrtc.VideoCodecMimeType r1 = org.webrtc.VideoCodecMimeType.VP8     // Catch:{ NoSuchFieldError -> 0x0012 }
-                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x0012 }
-                r2 = 1
-                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x0012 }
-            L_0x0012:
-                int[] r0 = $SwitchMap$org$webrtc$VideoCodecMimeType     // Catch:{ NoSuchFieldError -> 0x001d }
-                org.webrtc.VideoCodecMimeType r1 = org.webrtc.VideoCodecMimeType.VP9     // Catch:{ NoSuchFieldError -> 0x001d }
-                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x001d }
-                r2 = 2
-                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x001d }
-            L_0x001d:
-                int[] r0 = $SwitchMap$org$webrtc$VideoCodecMimeType     // Catch:{ NoSuchFieldError -> 0x0028 }
-                org.webrtc.VideoCodecMimeType r1 = org.webrtc.VideoCodecMimeType.H264     // Catch:{ NoSuchFieldError -> 0x0028 }
-                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x0028 }
-                r2 = 3
-                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x0028 }
-            L_0x0028:
-                int[] r0 = $SwitchMap$org$webrtc$VideoCodecMimeType     // Catch:{ NoSuchFieldError -> 0x0033 }
-                org.webrtc.VideoCodecMimeType r1 = org.webrtc.VideoCodecMimeType.H265     // Catch:{ NoSuchFieldError -> 0x0033 }
-                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x0033 }
-                r2 = 4
-                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x0033 }
-            L_0x0033:
-                return
-            */
-            throw new UnsupportedOperationException("Method not decompiled: org.webrtc.HardwareVideoEncoderFactory.AnonymousClass1.<clinit>():void");
+            int[] iArr = new int[VideoCodecMimeType.values().length];
+            $SwitchMap$org$webrtc$VideoCodecMimeType = iArr;
+            try {
+                iArr[VideoCodecMimeType.VP8.ordinal()] = 1;
+            } catch (NoSuchFieldError unused) {
+            }
+            try {
+                $SwitchMap$org$webrtc$VideoCodecMimeType[VideoCodecMimeType.VP9.ordinal()] = 2;
+            } catch (NoSuchFieldError unused2) {
+            }
+            try {
+                $SwitchMap$org$webrtc$VideoCodecMimeType[VideoCodecMimeType.H264.ordinal()] = 3;
+            } catch (NoSuchFieldError unused3) {
+            }
+            try {
+                $SwitchMap$org$webrtc$VideoCodecMimeType[VideoCodecMimeType.H265.ordinal()] = 4;
+            } catch (NoSuchFieldError unused4) {
+            }
         }
     }
 
@@ -221,10 +170,7 @@ public class HardwareVideoEncoderFactory implements VideoEncoderFactory {
             return false;
         }
         String name = mediaCodecInfo.getName();
-        if ((!name.startsWith("OMX.qcom.") || Build.VERSION.SDK_INT < 19) && ((!name.startsWith("OMX.hisi.") || Build.VERSION.SDK_INT < 19) && ((!name.startsWith("OMX.Exynos.") || Build.VERSION.SDK_INT < 23) && (!name.startsWith("OMX.Intel.") || Build.VERSION.SDK_INT < 21 || !this.enableIntelVp8Encoder)))) {
-            return false;
-        }
-        return true;
+        return (name.startsWith("OMX.qcom.") && Build.VERSION.SDK_INT >= 19) || (name.startsWith("OMX.hisi.") && Build.VERSION.SDK_INT >= 19) || ((name.startsWith("OMX.Exynos.") && Build.VERSION.SDK_INT >= 23) || (name.startsWith("OMX.Intel.") && Build.VERSION.SDK_INT >= 21 && this.enableIntelVp8Encoder));
     }
 
     private boolean isHardwareSupportedInCurrentSdkVp9(MediaCodecInfo mediaCodecInfo) {
@@ -232,10 +178,7 @@ public class HardwareVideoEncoderFactory implements VideoEncoderFactory {
             return false;
         }
         String name = mediaCodecInfo.getName();
-        if ((name.startsWith("OMX.qcom.") || name.startsWith("OMX.Exynos.") || name.startsWith("OMX.hisi.")) && Build.VERSION.SDK_INT >= 24) {
-            return true;
-        }
-        return false;
+        return (name.startsWith("OMX.qcom.") || name.startsWith("OMX.Exynos.") || name.startsWith("OMX.hisi.")) && Build.VERSION.SDK_INT >= 24;
     }
 
     private boolean isHardwareSupportedInCurrentSdkH264(MediaCodecInfo mediaCodecInfo) {
@@ -243,10 +186,7 @@ public class HardwareVideoEncoderFactory implements VideoEncoderFactory {
             return false;
         }
         String name = mediaCodecInfo.getName();
-        if ((!name.startsWith("OMX.qcom.") || Build.VERSION.SDK_INT < 19) && (!name.startsWith("OMX.Exynos.") || Build.VERSION.SDK_INT < 21)) {
-            return false;
-        }
-        return true;
+        return (name.startsWith("OMX.qcom.") && Build.VERSION.SDK_INT >= 19) || (name.startsWith("OMX.Exynos.") && Build.VERSION.SDK_INT >= 21);
     }
 
     private boolean isHardwareSupportedInCurrentSdkH265(MediaCodecInfo mediaCodecInfo) {
@@ -254,10 +194,7 @@ public class HardwareVideoEncoderFactory implements VideoEncoderFactory {
             return false;
         }
         String name = mediaCodecInfo.getName();
-        if ((!name.startsWith("OMX.qcom.") || Build.VERSION.SDK_INT < 19) && (!name.startsWith("OMX.Exynos.") || Build.VERSION.SDK_INT < 21)) {
-            return false;
-        }
-        return true;
+        return (name.startsWith("OMX.qcom.") && Build.VERSION.SDK_INT >= 19) || (name.startsWith("OMX.Exynos.") && Build.VERSION.SDK_INT >= 21);
     }
 
     private boolean isMediaCodecAllowed(MediaCodecInfo mediaCodecInfo) {
@@ -284,22 +221,25 @@ public class HardwareVideoEncoderFactory implements VideoEncoderFactory {
             return 0;
         }
         int i = Build.VERSION.SDK_INT;
-        if (!(i == 21 || i == 22)) {
+        if (i != 21 && i != 22) {
             if (i == 23) {
                 return 20000;
             }
-            return i > 23 ? 15000 : 0;
+            if (i <= 23) {
+                return 0;
+            }
         }
+        return 15000;
     }
 
     private BitrateAdjuster createBitrateAdjuster(VideoCodecMimeType videoCodecMimeType, String str) {
-        if (!str.startsWith("OMX.Exynos.")) {
-            return new BaseBitrateAdjuster();
+        if (str.startsWith("OMX.Exynos.")) {
+            if (videoCodecMimeType == VideoCodecMimeType.VP8) {
+                return new DynamicBitrateAdjuster();
+            }
+            return new FramerateBitrateAdjuster();
         }
-        if (videoCodecMimeType == VideoCodecMimeType.VP8) {
-            return new DynamicBitrateAdjuster();
-        }
-        return new FramerateBitrateAdjuster();
+        return new BaseBitrateAdjuster();
     }
 
     private boolean isH264HighProfileSupported(MediaCodecInfo mediaCodecInfo) {

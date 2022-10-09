@@ -7,7 +7,7 @@ import android.view.View;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.tgnet.TLObject;
 import org.telegram.ui.Components.TextStyleSpan;
-
+/* loaded from: classes3.dex */
 public class URLSpanNoUnderline extends URLSpan {
     private boolean forceNoUnderline;
     public String label;
@@ -23,13 +23,13 @@ public class URLSpanNoUnderline extends URLSpan {
         this.forceNoUnderline = z;
     }
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
     public URLSpanNoUnderline(String str, TextStyleSpan.TextStyleRun textStyleRun) {
-        super(str != null ? str.replace(8238, ' ') : str);
+        super(str != null ? str.replace((char) 8238, ' ') : str);
         this.forceNoUnderline = false;
         this.style = textStyleRun;
     }
 
+    @Override // android.text.style.URLSpan, android.text.style.ClickableSpan
     public void onClick(View view) {
         String url = getURL();
         if (url.startsWith("@")) {
@@ -39,6 +39,7 @@ public class URLSpanNoUnderline extends URLSpan {
         Browser.openUrl(view.getContext(), url);
     }
 
+    @Override // android.text.style.ClickableSpan, android.text.style.CharacterStyle
     public void updateDrawState(TextPaint textPaint) {
         int i = textPaint.linkColor;
         int color = textPaint.getColor();

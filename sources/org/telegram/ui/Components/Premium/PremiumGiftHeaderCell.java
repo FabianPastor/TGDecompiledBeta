@@ -14,9 +14,9 @@ import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.Premium.StarParticlesView;
-
+/* loaded from: classes3.dex */
 public class PremiumGiftHeaderCell extends LinearLayout {
-    private AvatarDrawable avatarDrawable = new AvatarDrawable();
+    private AvatarDrawable avatarDrawable;
     private BackupImageView avatarImageView;
     private StarParticlesView.Drawable drawable;
     private TextView subtitleView;
@@ -25,6 +25,7 @@ public class PremiumGiftHeaderCell extends LinearLayout {
     public PremiumGiftHeaderCell(Context context) {
         super(context);
         setOrientation(1);
+        this.avatarDrawable = new AvatarDrawable();
         BackupImageView backupImageView = new BackupImageView(context);
         this.avatarImageView = backupImageView;
         backupImageView.setRoundRadius(AndroidUtilities.dp(50.0f));
@@ -43,28 +44,28 @@ public class PremiumGiftHeaderCell extends LinearLayout {
         this.subtitleView.setGravity(1);
         addView(this.subtitleView, LayoutHelper.createFrame(-2, -2.0f, 1, 24.0f, 8.0f, 24.0f, 28.0f));
         setLayoutParams(new RecyclerView.LayoutParams(-1, -2));
-        StarParticlesView.Drawable drawable2 = new StarParticlesView.Drawable(50);
-        this.drawable = drawable2;
-        drawable2.useGradient = true;
-        drawable2.roundEffect = true;
-        drawable2.init();
+        StarParticlesView.Drawable drawable = new StarParticlesView.Drawable(50);
+        this.drawable = drawable;
+        drawable.useGradient = true;
+        drawable.roundEffect = true;
+        drawable.init();
         setWillNotDraw(false);
     }
 
-    /* access modifiers changed from: protected */
-    public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+    @Override // android.widget.LinearLayout, android.view.ViewGroup, android.view.View
+    protected void onLayout(boolean z, int i, int i2, int i3, int i4) {
         super.onLayout(z, i, i2, i3, i4);
-        float x = this.avatarImageView.getX() + (((float) this.avatarImageView.getWidth()) / 2.0f);
-        float paddingTop = ((((float) this.avatarImageView.getPaddingTop()) + this.avatarImageView.getY()) + (((float) this.avatarImageView.getHeight()) / 2.0f)) - ((float) AndroidUtilities.dp(3.0f));
-        float dp = (float) AndroidUtilities.dp(32.0f);
+        float x = this.avatarImageView.getX() + (this.avatarImageView.getWidth() / 2.0f);
+        float paddingTop = ((this.avatarImageView.getPaddingTop() + this.avatarImageView.getY()) + (this.avatarImageView.getHeight() / 2.0f)) - AndroidUtilities.dp(3.0f);
+        float dp = AndroidUtilities.dp(32.0f);
         this.drawable.rect.set(x - dp, paddingTop - dp, x + dp, paddingTop + dp);
         if (z) {
             this.drawable.resetPositions();
         }
     }
 
-    /* access modifiers changed from: protected */
-    public void onDraw(Canvas canvas) {
+    @Override // android.widget.LinearLayout, android.view.View
+    protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         this.drawable.onDraw(canvas);
         invalidate();

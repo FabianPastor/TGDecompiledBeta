@@ -1,10 +1,11 @@
 package j$.util;
 
 import j$.util.function.Consumer;
-
+/* loaded from: classes2.dex */
 public interface Iterator<E> {
 
     /* renamed from: j$.util.Iterator$-CC  reason: invalid class name */
+    /* loaded from: classes2.dex */
     public final /* synthetic */ class CC {
         public static void $default$forEachRemaining(java.util.Iterator it, Consumer consumer) {
             consumer.getClass();
@@ -22,7 +23,8 @@ public interface Iterator<E> {
 
     boolean hasNext();
 
-    E next();
+    /* renamed from: next */
+    E mo307next();
 
     void remove();
 }

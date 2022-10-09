@@ -1,59 +1,57 @@
 package j$.util.stream;
 
-import j$.lang.a;
 import j$.util.function.Consumer;
 import j$.util.function.Predicate;
-import j$.util.function.g;
-import j$.util.function.m;
-import j$.util.function.r;
-
-class L extends CLASSNAMEd3 {
+/* JADX INFO: Access modifiers changed from: package-private */
+/* loaded from: classes2.dex */
+public class L extends AbstractCLASSNAMEd3 {
     public final /* synthetic */ int l = 1;
     final /* synthetic */ Object m;
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public L(T t, CLASSNAMEc cVar, CLASSNAMEe4 e4Var, int i, g gVar) {
-        super(cVar, e4Var, i);
+    /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+    public L(T t, AbstractCLASSNAMEc abstractCLASSNAMEc, EnumCLASSNAMEe4 enumCLASSNAMEe4, int i, j$.util.function.g gVar) {
+        super(abstractCLASSNAMEc, enumCLASSNAMEe4, i);
         this.m = gVar;
     }
 
-    /* access modifiers changed from: package-private */
-    public CLASSNAMEm3 H0(int i, CLASSNAMEm3 m3Var) {
+    /* JADX INFO: Access modifiers changed from: package-private */
+    @Override // j$.util.stream.AbstractCLASSNAMEc
+    public InterfaceCLASSNAMEm3 H0(int i, InterfaceCLASSNAMEm3 interfaceCLASSNAMEm3) {
         switch (this.l) {
             case 0:
-                return new J(this, m3Var);
+                return new J(this, interfaceCLASSNAMEm3);
             case 1:
-                return new F0(this, m3Var);
+                return new F0(this, interfaceCLASSNAMEm3);
             case 2:
-                return new Z0(this, m3Var);
+                return new Z0(this, interfaceCLASSNAMEm3);
             case 3:
-                return new Y2(this, m3Var);
+                return new Y2(this, interfaceCLASSNAMEm3);
             default:
-                return new Y2(this, m3Var, (a) null);
+                return new Y2(this, interfaceCLASSNAMEm3, (j$.lang.a) null);
         }
     }
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public L(L0 l0, CLASSNAMEc cVar, CLASSNAMEe4 e4Var, int i, m mVar) {
-        super(cVar, e4Var, i);
+    /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+    public L(L0 l0, AbstractCLASSNAMEc abstractCLASSNAMEc, EnumCLASSNAMEe4 enumCLASSNAMEe4, int i, j$.util.function.m mVar) {
+        super(abstractCLASSNAMEc, enumCLASSNAMEe4, i);
         this.m = mVar;
     }
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public L(CLASSNAMEd1 d1Var, CLASSNAMEc cVar, CLASSNAMEe4 e4Var, int i, r rVar) {
-        super(cVar, e4Var, i);
+    /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+    public L(AbstractCLASSNAMEd1 abstractCLASSNAMEd1, AbstractCLASSNAMEc abstractCLASSNAMEc, EnumCLASSNAMEe4 enumCLASSNAMEe4, int i, j$.util.function.r rVar) {
+        super(abstractCLASSNAMEc, enumCLASSNAMEe4, i);
         this.m = rVar;
     }
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public L(CLASSNAMEe3 e3Var, CLASSNAMEc cVar, CLASSNAMEe4 e4Var, int i, Consumer consumer) {
-        super(cVar, e4Var, i);
+    /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+    public L(AbstractCLASSNAMEe3 abstractCLASSNAMEe3, AbstractCLASSNAMEc abstractCLASSNAMEc, EnumCLASSNAMEe4 enumCLASSNAMEe4, int i, Consumer consumer) {
+        super(abstractCLASSNAMEc, enumCLASSNAMEe4, i);
         this.m = consumer;
     }
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public L(CLASSNAMEe3 e3Var, CLASSNAMEc cVar, CLASSNAMEe4 e4Var, int i, Predicate predicate) {
-        super(cVar, e4Var, i);
+    /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+    public L(AbstractCLASSNAMEe3 abstractCLASSNAMEe3, AbstractCLASSNAMEc abstractCLASSNAMEc, EnumCLASSNAMEe4 enumCLASSNAMEe4, int i, Predicate predicate) {
+        super(abstractCLASSNAMEc, enumCLASSNAMEe4, i);
         this.m = predicate;
     }
 }

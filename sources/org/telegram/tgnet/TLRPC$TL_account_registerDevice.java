@@ -1,7 +1,7 @@
 package org.telegram.tgnet;
 
 import java.util.ArrayList;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_account_registerDevice extends TLObject {
     public static int constructor = -NUM;
     public boolean app_sandbox;
@@ -12,13 +12,15 @@ public class TLRPC$TL_account_registerDevice extends TLObject {
     public String token;
     public int token_type;
 
+    @Override // org.telegram.tgnet.TLObject
     public TLObject deserializeResponse(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         return TLRPC$Bool.TLdeserialize(abstractSerializedData, i, z);
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
-        int i = this.no_muted ? this.flags | 1 : this.flags & -2;
+        int i = this.no_muted ? this.flags | 1 : this.flags & (-2);
         this.flags = i;
         abstractSerializedData.writeInt32(i);
         abstractSerializedData.writeInt32(this.token_type);

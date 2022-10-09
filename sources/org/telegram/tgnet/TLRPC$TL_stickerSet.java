@@ -1,12 +1,12 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_stickerSet extends TLRPC$StickerSet {
     public static int constructor = NUM;
 
+    @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
-        int i = 0;
         this.archived = (readInt32 & 2) != 0;
         this.official = (readInt32 & 4) != 0;
         this.masks = (readInt32 & 8) != 0;
@@ -22,21 +22,19 @@ public class TLRPC$TL_stickerSet extends TLRPC$StickerSet {
         this.short_name = abstractSerializedData.readString(z);
         if ((this.flags & 16) != 0) {
             int readInt322 = abstractSerializedData.readInt32(z);
-            if (readInt322 == NUM) {
-                int readInt323 = abstractSerializedData.readInt32(z);
-                while (i < readInt323) {
-                    TLRPC$PhotoSize TLdeserialize = TLRPC$PhotoSize.TLdeserialize(0, 0, this.id, abstractSerializedData, abstractSerializedData.readInt32(z), z);
-                    if (TLdeserialize != null) {
-                        this.thumbs.add(TLdeserialize);
-                        i++;
-                    } else {
-                        return;
-                    }
+            if (readInt322 != NUM) {
+                if (z) {
+                    throw new RuntimeException(String.format("wrong Vector magic, got %x", Integer.valueOf(readInt322)));
                 }
-            } else if (z) {
-                throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt322)}));
-            } else {
                 return;
+            }
+            int readInt323 = abstractSerializedData.readInt32(z);
+            for (int i = 0; i < readInt323; i++) {
+                TLRPC$PhotoSize TLdeserialize = TLRPC$PhotoSize.TLdeserialize(0L, 0L, this.id, abstractSerializedData, abstractSerializedData.readInt32(z), z);
+                if (TLdeserialize == null) {
+                    return;
+                }
+                this.thumbs.add(TLdeserialize);
             }
         }
         if ((this.flags & 16) != 0) {
@@ -52,19 +50,20 @@ public class TLRPC$TL_stickerSet extends TLRPC$StickerSet {
         this.hash = abstractSerializedData.readInt32(z);
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
-        int i = this.archived ? this.flags | 2 : this.flags & -3;
+        int i = this.archived ? this.flags | 2 : this.flags & (-3);
         this.flags = i;
-        int i2 = this.official ? i | 4 : i & -5;
+        int i2 = this.official ? i | 4 : i & (-5);
         this.flags = i2;
-        int i3 = this.masks ? i2 | 8 : i2 & -9;
+        int i3 = this.masks ? i2 | 8 : i2 & (-9);
         this.flags = i3;
-        int i4 = this.animated ? i3 | 32 : i3 & -33;
+        int i4 = this.animated ? i3 | 32 : i3 & (-33);
         this.flags = i4;
-        int i5 = this.videos ? i4 | 64 : i4 & -65;
+        int i5 = this.videos ? i4 | 64 : i4 & (-65);
         this.flags = i5;
-        int i6 = this.emojis ? i5 | 128 : i5 & -129;
+        int i6 = this.emojis ? i5 | 128 : i5 & (-129);
         this.flags = i6;
         abstractSerializedData.writeInt32(i6);
         if ((this.flags & 1) != 0) {

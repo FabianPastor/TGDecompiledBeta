@@ -4,30 +4,26 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.accessibility.AccessibilityNodeInfo;
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
-
+/* loaded from: classes3.dex */
 public abstract class FloatSeekBarAccessibilityDelegate extends SeekBarAccessibilityDelegate {
     private final boolean setPercentsEnabled;
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
     public float getDelta() {
         return 0.05f;
     }
 
-    /* access modifiers changed from: protected */
-    public float getMaxValue() {
+    protected float getMaxValue() {
         return 1.0f;
     }
 
-    /* access modifiers changed from: protected */
-    public float getMinValue() {
+    protected float getMinValue() {
         return 0.0f;
     }
 
-    /* access modifiers changed from: protected */
-    public abstract float getProgress();
+    protected abstract float getProgress();
 
-    /* access modifiers changed from: protected */
-    public abstract void setProgress(float f);
+    protected abstract void setProgress(float f);
 
     public FloatSeekBarAccessibilityDelegate() {
         this(false);
@@ -37,6 +33,7 @@ public abstract class FloatSeekBarAccessibilityDelegate extends SeekBarAccessibi
         this.setPercentsEnabled = z;
     }
 
+    @Override // org.telegram.ui.Components.SeekBarAccessibilityDelegate
     public void onInitializeAccessibilityNodeInfoInternal(View view, AccessibilityNodeInfo accessibilityNodeInfo) {
         super.onInitializeAccessibilityNodeInfoInternal(view, accessibilityNodeInfo);
         if (this.setPercentsEnabled) {
@@ -46,6 +43,7 @@ public abstract class FloatSeekBarAccessibilityDelegate extends SeekBarAccessibi
         }
     }
 
+    @Override // org.telegram.ui.Components.SeekBarAccessibilityDelegate
     public boolean performAccessibilityActionInternal(View view, int i, Bundle bundle) {
         if (super.performAccessibilityActionInternal(view, i, bundle)) {
             return true;
@@ -57,8 +55,8 @@ public abstract class FloatSeekBarAccessibilityDelegate extends SeekBarAccessibi
         return true;
     }
 
-    /* access modifiers changed from: protected */
-    public void doScroll(View view, boolean z) {
+    @Override // org.telegram.ui.Components.SeekBarAccessibilityDelegate
+    protected void doScroll(View view, boolean z) {
         float delta = getDelta();
         if (z) {
             delta *= -1.0f;
@@ -66,13 +64,13 @@ public abstract class FloatSeekBarAccessibilityDelegate extends SeekBarAccessibi
         setProgress(Math.min(getMaxValue(), Math.max(getMinValue(), getProgress() + delta)));
     }
 
-    /* access modifiers changed from: protected */
-    public boolean canScrollBackward(View view) {
+    @Override // org.telegram.ui.Components.SeekBarAccessibilityDelegate
+    protected boolean canScrollBackward(View view) {
         return getProgress() > getMinValue();
     }
 
-    /* access modifiers changed from: protected */
-    public boolean canScrollForward(View view) {
+    @Override // org.telegram.ui.Components.SeekBarAccessibilityDelegate
+    protected boolean canScrollForward(View view) {
         return getProgress() < getMaxValue();
     }
 }

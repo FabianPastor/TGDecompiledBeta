@@ -4,7 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.view.View;
 import org.telegram.tgnet.TLObject;
-
+/* loaded from: classes3.dex */
 public class AvatarsImageView extends View {
     public final AvatarsDarawable avatarsDarawable;
 
@@ -13,27 +13,28 @@ public class AvatarsImageView extends View {
         this.avatarsDarawable = new AvatarsDarawable(this, z);
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
+    @Override // android.view.View
     public void onMeasure(int i, int i2) {
         super.onMeasure(i, i2);
         this.avatarsDarawable.width = getMeasuredWidth();
         this.avatarsDarawable.height = getMeasuredHeight();
     }
 
-    /* access modifiers changed from: protected */
-    public void onAttachedToWindow() {
+    @Override // android.view.View
+    protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         this.avatarsDarawable.onAttachedToWindow();
     }
 
-    /* access modifiers changed from: protected */
-    public void onDraw(Canvas canvas) {
+    @Override // android.view.View
+    protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         this.avatarsDarawable.onDraw(canvas);
     }
 
-    /* access modifiers changed from: protected */
-    public void onDetachedFromWindow() {
+    @Override // android.view.View
+    protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         this.avatarsDarawable.onDetachedFromWindow();
     }

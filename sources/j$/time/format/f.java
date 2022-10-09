@@ -1,12 +1,13 @@
 package j$.time.format;
 
 import java.util.List;
-
+/* loaded from: classes2.dex */
 final class f implements g {
     private final g[] a;
     private final boolean b;
 
-    f(List list, boolean z) {
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public f(List list, boolean z) {
         this.a = (g[]) list.toArray(new g[list.size()]);
         this.b = z;
     }
@@ -24,8 +25,8 @@ final class f implements g {
         StringBuilder sb = new StringBuilder();
         if (this.a != null) {
             sb.append(this.b ? "[" : "(");
-            for (g append : this.a) {
-                sb.append(append);
+            for (g gVar : this.a) {
+                sb.append(gVar);
             }
             sb.append(this.b ? "]" : ")");
         }

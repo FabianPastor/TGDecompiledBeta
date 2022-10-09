@@ -2,18 +2,22 @@ package org.telegram.PhoneFormat;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-
+/* loaded from: classes.dex */
 public class CallingCodeInfo {
-    public String callingCode = "";
-    public ArrayList<String> intlPrefixes = new ArrayList<>();
-    public ArrayList<RuleSet> ruleSets = new ArrayList<>();
-    public ArrayList<String> trunkPrefixes = new ArrayList<>();
+    public String callingCode;
+    public ArrayList<String> intlPrefixes;
+    public ArrayList<RuleSet> ruleSets;
+    public ArrayList<String> trunkPrefixes;
 
     public CallingCodeInfo() {
         new ArrayList();
+        this.callingCode = "";
+        this.trunkPrefixes = new ArrayList<>();
+        this.intlPrefixes = new ArrayList<>();
+        this.ruleSets = new ArrayList<>();
     }
 
-    /* access modifiers changed from: package-private */
+    /* JADX INFO: Access modifiers changed from: package-private */
     public String matchingAccessCode(String str) {
         Iterator<String> it = this.intlPrefixes.iterator();
         while (it.hasNext()) {
@@ -25,8 +29,7 @@ public class CallingCodeInfo {
         return null;
     }
 
-    /* access modifiers changed from: package-private */
-    public String matchingTrunkCode(String str) {
+    String matchingTrunkCode(String str) {
         Iterator<String> it = this.trunkPrefixes.iterator();
         while (it.hasNext()) {
             String next = it.next();
@@ -37,7 +40,7 @@ public class CallingCodeInfo {
         return null;
     }
 
-    /* access modifiers changed from: package-private */
+    /* JADX INFO: Access modifiers changed from: package-private */
     public String format(String str) {
         String str2;
         String str3;
@@ -70,9 +73,6 @@ public class CallingCodeInfo {
                 return format2;
             }
         }
-        if (str3 == null || str2.length() == 0) {
-            return str;
-        }
-        return String.format("%s %s", new Object[]{str3, str2});
+        return (str3 == null || str2.length() == 0) ? str : String.format("%s %s", str3, str2);
     }
 }

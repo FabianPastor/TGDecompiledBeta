@@ -1,7 +1,7 @@
 package org.telegram.tgnet;
 
 import java.util.ArrayList;
-
+/* loaded from: classes.dex */
 public abstract class TLRPC$PhoneCallProtocol extends TLObject {
     public int flags;
     public ArrayList<String> library_versions = new ArrayList<>();
@@ -11,18 +11,46 @@ public abstract class TLRPC$PhoneCallProtocol extends TLObject {
     public boolean udp_reflector;
 
     public static TLRPC$PhoneCallProtocol TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-        TLRPC$PhoneCallProtocol tLRPC$PhoneCallProtocol;
+        TLRPC$TL_phoneCallProtocol tLRPC$TL_phoneCallProtocol;
         if (i != -NUM) {
-            tLRPC$PhoneCallProtocol = i != -58224696 ? null : new TLRPC$TL_phoneCallProtocol();
+            tLRPC$TL_phoneCallProtocol = i != -58224696 ? null : new TLRPC$TL_phoneCallProtocol();
         } else {
-            tLRPC$PhoneCallProtocol = new TLRPC$TL_phoneCallProtocol_layer110();
+            tLRPC$TL_phoneCallProtocol = new TLRPC$TL_phoneCallProtocol() { // from class: org.telegram.tgnet.TLRPC$TL_phoneCallProtocol_layer110
+                public static int constructor = -NUM;
+
+                @Override // org.telegram.tgnet.TLRPC$TL_phoneCallProtocol, org.telegram.tgnet.TLObject
+                public void readParams(AbstractSerializedData abstractSerializedData2, boolean z2) {
+                    int readInt32 = abstractSerializedData2.readInt32(z2);
+                    this.flags = readInt32;
+                    boolean z3 = false;
+                    this.udp_p2p = (readInt32 & 1) != 0;
+                    if ((readInt32 & 2) != 0) {
+                        z3 = true;
+                    }
+                    this.udp_reflector = z3;
+                    this.min_layer = abstractSerializedData2.readInt32(z2);
+                    this.max_layer = abstractSerializedData2.readInt32(z2);
+                }
+
+                @Override // org.telegram.tgnet.TLRPC$TL_phoneCallProtocol, org.telegram.tgnet.TLObject
+                public void serializeToStream(AbstractSerializedData abstractSerializedData2) {
+                    abstractSerializedData2.writeInt32(constructor);
+                    int i2 = this.udp_p2p ? this.flags | 1 : this.flags & (-2);
+                    this.flags = i2;
+                    int i3 = this.udp_reflector ? i2 | 2 : i2 & (-3);
+                    this.flags = i3;
+                    abstractSerializedData2.writeInt32(i3);
+                    abstractSerializedData2.writeInt32(this.min_layer);
+                    abstractSerializedData2.writeInt32(this.max_layer);
+                }
+            };
         }
-        if (tLRPC$PhoneCallProtocol != null || !z) {
-            if (tLRPC$PhoneCallProtocol != null) {
-                tLRPC$PhoneCallProtocol.readParams(abstractSerializedData, z);
+        if (tLRPC$TL_phoneCallProtocol != null || !z) {
+            if (tLRPC$TL_phoneCallProtocol != null) {
+                tLRPC$TL_phoneCallProtocol.readParams(abstractSerializedData, z);
             }
-            return tLRPC$PhoneCallProtocol;
+            return tLRPC$TL_phoneCallProtocol;
         }
-        throw new RuntimeException(String.format("can't parse magic %x in PhoneCallProtocol", new Object[]{Integer.valueOf(i)}));
+        throw new RuntimeException(String.format("can't parse magic %x in PhoneCallProtocol", Integer.valueOf(i)));
     }
 }

@@ -7,20 +7,20 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
-
-/* renamed from: j$.util.Collection$-EL  reason: invalid class name */
+/* renamed from: j$.util.Collection$-EL */
+/* loaded from: classes2.dex */
 public final /* synthetic */ class Collection$EL {
     public static /* synthetic */ void a(Collection collection, Consumer consumer) {
-        if (collection instanceof CLASSNAMEb) {
-            ((CLASSNAMEb) collection).forEach(consumer);
+        if (collection instanceof InterfaceCLASSNAMEb) {
+            ((InterfaceCLASSNAMEb) collection).forEach(consumer);
         } else {
-            CLASSNAMEa.a(collection, consumer);
+            AbstractCLASSNAMEa.a(collection, consumer);
         }
     }
 
     public static u b(Collection collection) {
-        if (collection instanceof CLASSNAMEb) {
-            return ((CLASSNAMEb) collection).spliterator();
+        if (collection instanceof InterfaceCLASSNAMEb) {
+            return ((InterfaceCLASSNAMEb) collection).mo289spliterator();
         }
         if (collection instanceof LinkedHashSet) {
             LinkedHashSet linkedHashSet = (LinkedHashSet) collection;
@@ -44,6 +44,6 @@ public final /* synthetic */ class Collection$EL {
     }
 
     public static /* synthetic */ boolean removeIf(Collection collection, Predicate predicate) {
-        return collection instanceof CLASSNAMEb ? ((CLASSNAMEb) collection).k(predicate) : CLASSNAMEa.h(collection, predicate);
+        return collection instanceof InterfaceCLASSNAMEb ? ((InterfaceCLASSNAMEb) collection).k(predicate) : AbstractCLASSNAMEa.h(collection, predicate);
     }
 }

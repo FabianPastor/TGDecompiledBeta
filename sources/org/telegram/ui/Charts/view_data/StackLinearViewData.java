@@ -3,7 +3,7 @@ package org.telegram.ui.Charts.view_data;
 import android.graphics.Paint;
 import org.telegram.ui.Charts.BaseChartView;
 import org.telegram.ui.Charts.data.ChartData;
-
+/* loaded from: classes3.dex */
 public class StackLinearViewData extends LineViewData {
     public StackLinearViewData(ChartData.Line line) {
         super(line);

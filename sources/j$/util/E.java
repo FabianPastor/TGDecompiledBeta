@@ -1,40 +1,55 @@
 package j$.util;
 
 import j$.util.function.Consumer;
-import j$.util.function.l;
 import j$.util.u;
 import java.util.Comparator;
-
+/* loaded from: classes2.dex */
 final class E extends H implements u.a {
-    E() {
-    }
-
+    @Override // j$.util.u.a, j$.util.u
     public /* synthetic */ boolean b(Consumer consumer) {
-        return CLASSNAMEa.k(this, consumer);
+        return AbstractCLASSNAMEa.k(this, consumer);
     }
 
-    public void c(l lVar) {
+    @Override // j$.util.u.a
+    public void c(j$.util.function.l lVar) {
         lVar.getClass();
     }
 
+    @Override // j$.util.u.a, j$.util.u
     public /* synthetic */ void forEachRemaining(Consumer consumer) {
-        CLASSNAMEa.c(this, consumer);
+        AbstractCLASSNAMEa.c(this, consumer);
     }
 
-    public boolean g(l lVar) {
+    @Override // j$.util.u.a
+    public boolean g(j$.util.function.l lVar) {
         lVar.getClass();
         return false;
     }
 
+    @Override // j$.util.u
     public Comparator getComparator() {
         throw new IllegalStateException();
     }
 
+    @Override // j$.util.u
     public /* synthetic */ long getExactSizeIfKnown() {
-        return CLASSNAMEa.e(this);
+        return AbstractCLASSNAMEa.e(this);
     }
 
+    @Override // j$.util.u
     public /* synthetic */ boolean hasCharacteristics(int i) {
-        return CLASSNAMEa.f(this, i);
+        return AbstractCLASSNAMEa.f(this, i);
+    }
+
+    @Override // j$.util.H, j$.util.t, j$.util.w, j$.util.u
+    /* renamed from: trySplit */
+    public /* bridge */ /* synthetic */ u.a mo322trySplit() {
+        return null;
+    }
+
+    @Override // j$.util.H, j$.util.t, j$.util.w, j$.util.u
+    /* renamed from: trySplit  reason: collision with other method in class */
+    public /* bridge */ /* synthetic */ w mo322trySplit() {
+        return null;
     }
 }

@@ -1,8 +1,9 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_video_layer45 extends TLRPC$Video {
     public static int constructor = -NUM;
 
+    @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         this.id = abstractSerializedData.readInt64(z);
         this.access_hash = abstractSerializedData.readInt64(z);
@@ -10,12 +11,13 @@ public class TLRPC$TL_video_layer45 extends TLRPC$Video {
         this.duration = abstractSerializedData.readInt32(z);
         this.mime_type = abstractSerializedData.readString(z);
         this.size = abstractSerializedData.readInt32(z);
-        this.thumb = TLRPC$PhotoSize.TLdeserialize(0, 0, 0, abstractSerializedData, abstractSerializedData.readInt32(z), z);
+        this.thumb = TLRPC$PhotoSize.TLdeserialize(0L, 0L, 0L, abstractSerializedData, abstractSerializedData.readInt32(z), z);
         this.dc_id = abstractSerializedData.readInt32(z);
         this.w = abstractSerializedData.readInt32(z);
         this.h = abstractSerializedData.readInt32(z);
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
         abstractSerializedData.writeInt64(this.id);

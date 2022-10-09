@@ -1,7 +1,7 @@
 package org.telegram.ui.Components;
 
 import android.graphics.drawable.Drawable;
-
+/* loaded from: classes3.dex */
 public abstract class StatusDrawable extends Drawable {
     public abstract void setColor(int i);
 

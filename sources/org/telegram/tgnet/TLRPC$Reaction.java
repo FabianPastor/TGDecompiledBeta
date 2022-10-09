@@ -1,19 +1,28 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public abstract class TLRPC$Reaction extends TLObject {
     public static TLRPC$Reaction TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-        TLRPC$Reaction tLRPC$Reaction;
-        if (i != -NUM) {
-            tLRPC$Reaction = i != NUM ? i != NUM ? null : new TLRPC$TL_reactionEmpty() : new TLRPC$TL_reactionEmoji();
+        TLRPC$Reaction tLRPC$TL_reactionCustomEmoji;
+        if (i == -NUM) {
+            tLRPC$TL_reactionCustomEmoji = new TLRPC$TL_reactionCustomEmoji();
+        } else if (i != NUM) {
+            tLRPC$TL_reactionCustomEmoji = i != NUM ? null : new TLRPC$Reaction() { // from class: org.telegram.tgnet.TLRPC$TL_reactionEmpty
+                public static int constructor = NUM;
+
+                @Override // org.telegram.tgnet.TLObject
+                public void serializeToStream(AbstractSerializedData abstractSerializedData2) {
+                    abstractSerializedData2.writeInt32(constructor);
+                }
+            };
         } else {
-            tLRPC$Reaction = new TLRPC$TL_reactionCustomEmoji();
+            tLRPC$TL_reactionCustomEmoji = new TLRPC$TL_reactionEmoji();
         }
-        if (tLRPC$Reaction != null || !z) {
-            if (tLRPC$Reaction != null) {
-                tLRPC$Reaction.readParams(abstractSerializedData, z);
+        if (tLRPC$TL_reactionCustomEmoji != null || !z) {
+            if (tLRPC$TL_reactionCustomEmoji != null) {
+                tLRPC$TL_reactionCustomEmoji.readParams(abstractSerializedData, z);
             }
-            return tLRPC$Reaction;
+            return tLRPC$TL_reactionCustomEmoji;
         }
-        throw new RuntimeException(String.format("can't parse magic %x in Reaction", new Object[]{Integer.valueOf(i)}));
+        throw new RuntimeException(String.format("can't parse magic %x in Reaction", Integer.valueOf(i)));
     }
 }

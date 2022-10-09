@@ -12,33 +12,34 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
-
+/* loaded from: classes3.dex */
 public class PhotoAttachPermissionCell extends FrameLayout {
     private ImageView imageView;
     private ImageView imageView2;
-    private int itemSize = AndroidUtilities.dp(80.0f);
+    private int itemSize;
     private final Theme.ResourcesProvider resourcesProvider;
     private TextView textView;
 
-    public PhotoAttachPermissionCell(Context context, Theme.ResourcesProvider resourcesProvider2) {
+    public PhotoAttachPermissionCell(Context context, Theme.ResourcesProvider resourcesProvider) {
         super(context);
-        this.resourcesProvider = resourcesProvider2;
-        ImageView imageView3 = new ImageView(context);
-        this.imageView = imageView3;
-        imageView3.setScaleType(ImageView.ScaleType.CENTER);
+        this.resourcesProvider = resourcesProvider;
+        ImageView imageView = new ImageView(context);
+        this.imageView = imageView;
+        imageView.setScaleType(ImageView.ScaleType.CENTER);
         this.imageView.setColorFilter(new PorterDuffColorFilter(getThemedColor("chat_attachPermissionImage"), PorterDuff.Mode.MULTIPLY));
         addView(this.imageView, LayoutHelper.createFrame(44, 44.0f, 17, 5.0f, 0.0f, 0.0f, 27.0f));
-        ImageView imageView4 = new ImageView(context);
-        this.imageView2 = imageView4;
-        imageView4.setScaleType(ImageView.ScaleType.CENTER);
+        ImageView imageView2 = new ImageView(context);
+        this.imageView2 = imageView2;
+        imageView2.setScaleType(ImageView.ScaleType.CENTER);
         this.imageView2.setColorFilter(new PorterDuffColorFilter(getThemedColor("chat_attachPermissionMark"), PorterDuff.Mode.MULTIPLY));
         addView(this.imageView2, LayoutHelper.createFrame(44, 44.0f, 17, 5.0f, 0.0f, 0.0f, 27.0f));
-        TextView textView2 = new TextView(context);
-        this.textView = textView2;
-        textView2.setTextColor(getThemedColor("chat_attachPermissionText"));
+        TextView textView = new TextView(context);
+        this.textView = textView;
+        textView.setTextColor(getThemedColor("chat_attachPermissionText"));
         this.textView.setTextSize(1, 12.0f);
         this.textView.setGravity(17);
         addView(this.textView, LayoutHelper.createFrame(-2, -2.0f, 17, 5.0f, 13.0f, 5.0f, 0.0f));
+        this.itemSize = AndroidUtilities.dp(80.0f);
     }
 
     public void setItemSize(int i) {
@@ -61,14 +62,14 @@ public class PhotoAttachPermissionCell extends FrameLayout {
         this.imageView2.setLayoutParams(LayoutHelper.createFrame(44, 44.0f, 17, 0.0f, 0.0f, 2.0f, 27.0f));
     }
 
-    /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
+    @Override // android.widget.FrameLayout, android.view.View
+    protected void onMeasure(int i, int i2) {
         super.onMeasure(View.MeasureSpec.makeMeasureSpec(this.itemSize, NUM), View.MeasureSpec.makeMeasureSpec(this.itemSize + AndroidUtilities.dp(5.0f), NUM));
     }
 
     private int getThemedColor(String str) {
-        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
-        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        Theme.ResourcesProvider resourcesProvider = this.resourcesProvider;
+        Integer color = resourcesProvider != null ? resourcesProvider.getColor(str) : null;
         return color != null ? color.intValue() : Theme.getColor(str);
     }
 }

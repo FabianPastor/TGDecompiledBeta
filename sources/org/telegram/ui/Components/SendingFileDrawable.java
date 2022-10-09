@@ -5,21 +5,24 @@ import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
-
+/* loaded from: classes3.dex */
 public class SendingFileDrawable extends StatusDrawable {
     Paint currentPaint;
+    private float progress;
     private boolean isChat = false;
     private long lastUpdateTime = 0;
-    private float progress;
     private boolean started = false;
 
+    @Override // android.graphics.drawable.Drawable
     public int getOpacity() {
         return 0;
     }
 
+    @Override // android.graphics.drawable.Drawable
     public void setAlpha(int i) {
     }
 
+    @Override // android.graphics.drawable.Drawable
     public void setColorFilter(ColorFilter colorFilter) {
     }
 
@@ -29,10 +32,11 @@ public class SendingFileDrawable extends StatusDrawable {
             this.currentPaint = paint;
             paint.setStyle(Paint.Style.STROKE);
             this.currentPaint.setStrokeCap(Paint.Cap.ROUND);
-            this.currentPaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
+            this.currentPaint.setStrokeWidth(AndroidUtilities.dp(2.0f));
         }
     }
 
+    @Override // org.telegram.ui.Components.StatusDrawable
     public void setColor(int i) {
         Paint paint = this.currentPaint;
         if (paint != null) {
@@ -40,6 +44,7 @@ public class SendingFileDrawable extends StatusDrawable {
         }
     }
 
+    @Override // org.telegram.ui.Components.StatusDrawable
     public void setIsChat(boolean z) {
         this.isChat = z;
     }
@@ -63,16 +68,19 @@ public class SendingFileDrawable extends StatusDrawable {
         }
     }
 
+    @Override // org.telegram.ui.Components.StatusDrawable
     public void start() {
         this.lastUpdateTime = System.currentTimeMillis();
         this.started = true;
         invalidateSelf();
     }
 
+    @Override // org.telegram.ui.Components.StatusDrawable
     public void stop() {
         this.started = false;
     }
 
+    @Override // android.graphics.drawable.Drawable
     public void draw(Canvas canvas) {
         Paint paint = this.currentPaint;
         if (paint == null) {
@@ -86,25 +94,27 @@ public class SendingFileDrawable extends StatusDrawable {
             } else {
                 paint.setAlpha(255);
             }
-            float dp = ((float) (AndroidUtilities.dp(5.0f) * i)) + (((float) AndroidUtilities.dp(5.0f)) * this.progress);
+            float dp = (AndroidUtilities.dp(5.0f) * i) + (AndroidUtilities.dp(5.0f) * this.progress);
             float f = 7.0f;
-            canvas.drawLine(dp, (float) AndroidUtilities.dp(this.isChat ? 3.0f : 4.0f), dp + ((float) AndroidUtilities.dp(4.0f)), (float) AndroidUtilities.dp(this.isChat ? 7.0f : 8.0f), paint);
-            float dp2 = (float) AndroidUtilities.dp(this.isChat ? 11.0f : 12.0f);
-            float dp3 = dp + ((float) AndroidUtilities.dp(4.0f));
+            canvas.drawLine(dp, AndroidUtilities.dp(this.isChat ? 3.0f : 4.0f), dp + AndroidUtilities.dp(4.0f), AndroidUtilities.dp(this.isChat ? 7.0f : 8.0f), paint);
+            float dp2 = AndroidUtilities.dp(this.isChat ? 11.0f : 12.0f);
+            float dp3 = dp + AndroidUtilities.dp(4.0f);
             if (!this.isChat) {
                 f = 8.0f;
             }
-            canvas.drawLine(dp, dp2, dp3, (float) AndroidUtilities.dp(f), paint);
+            canvas.drawLine(dp, dp2, dp3, AndroidUtilities.dp(f), paint);
         }
         if (this.started) {
             update();
         }
     }
 
+    @Override // android.graphics.drawable.Drawable
     public int getIntrinsicWidth() {
         return AndroidUtilities.dp(18.0f);
     }
 
+    @Override // android.graphics.drawable.Drawable
     public int getIntrinsicHeight() {
         return AndroidUtilities.dp(14.0f);
     }

@@ -1,41 +1,42 @@
 package j$.util.stream;
 
-import j$.util.function.b;
-import j$.util.function.r;
-import j$.util.u;
 import java.util.concurrent.CountedCompleter;
+/* loaded from: classes2.dex */
+class N1 extends AbstractCLASSNAMEf {
+    protected final AbstractCLASSNAMEy2 h;
+    protected final j$.util.function.r i;
+    protected final j$.util.function.b j;
 
-class N1 extends CLASSNAMEf {
-    protected final CLASSNAMEy2 h;
-    protected final r i;
-    protected final b j;
-
-    N1(N1 n1, u uVar) {
-        super((CLASSNAMEf) n1, uVar);
+    N1(N1 n1, j$.util.u uVar) {
+        super(n1, uVar);
         this.h = n1.h;
         this.i = n1.i;
         this.j = n1.j;
     }
 
-    N1(CLASSNAMEy2 y2Var, u uVar, r rVar, b bVar) {
-        super(y2Var, uVar);
-        this.h = y2Var;
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public N1(AbstractCLASSNAMEy2 abstractCLASSNAMEy2, j$.util.u uVar, j$.util.function.r rVar, j$.util.function.b bVar) {
+        super(abstractCLASSNAMEy2, uVar);
+        this.h = abstractCLASSNAMEy2;
         this.i = rVar;
         this.j = bVar;
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
+    @Override // j$.util.stream.AbstractCLASSNAMEf
     public Object a() {
-        CLASSNAMEs1 s1Var = (CLASSNAMEs1) this.i.apply(this.h.q0(this.b));
-        this.h.u0(s1Var, this.b);
-        return s1Var.a();
+        InterfaceCLASSNAMEs1 interfaceCLASSNAMEs1 = (InterfaceCLASSNAMEs1) this.i.apply(this.h.q0(this.b));
+        this.h.u0(interfaceCLASSNAMEs1, this.b);
+        return interfaceCLASSNAMEs1.mo287a();
     }
 
-    /* access modifiers changed from: protected */
-    public CLASSNAMEf f(u uVar) {
+    /* JADX INFO: Access modifiers changed from: protected */
+    @Override // j$.util.stream.AbstractCLASSNAMEf
+    public AbstractCLASSNAMEf f(j$.util.u uVar) {
         return new N1(this, uVar);
     }
 
+    @Override // j$.util.stream.AbstractCLASSNAMEf, java.util.concurrent.CountedCompleter
     public void onCompletion(CountedCompleter countedCompleter) {
         if (!d()) {
             g((A1) this.j.apply((A1) ((N1) this.d).b(), (A1) ((N1) this.e).b()));

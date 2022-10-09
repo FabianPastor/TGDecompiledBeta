@@ -17,47 +17,47 @@ import androidx.dynamicanimation.animation.SpringAnimation;
 import androidx.dynamicanimation.animation.SpringForce;
 import java.util.ArrayList;
 import java.util.List;
-
+/* loaded from: classes3.dex */
 public class AnimatedPhoneNumberEditText extends HintEditText {
-    /* access modifiers changed from: private */
-    public ObjectAnimator animator;
+    private ObjectAnimator animator;
     private Runnable hintAnimationCallback;
-    /* access modifiers changed from: private */
-    public List<Float> hintAnimationValues = new ArrayList();
-    private List<SpringAnimation> hintAnimations = new ArrayList();
-    private HintFadeProperty hintFadeProperty = new HintFadeProperty();
-    private ArrayList<StaticLayout> letters = new ArrayList<>();
-    /* access modifiers changed from: private */
-    public ArrayList<StaticLayout> oldLetters = new ArrayList<>();
-    private String oldText = "";
+    private List<Float> hintAnimationValues;
+    private List<SpringAnimation> hintAnimations;
+    private HintFadeProperty hintFadeProperty;
+    private ArrayList<StaticLayout> letters;
+    private ArrayList<StaticLayout> oldLetters;
+    private String oldText;
     private float progress;
-    private TextPaint textPaint = new TextPaint(1);
+    private TextPaint textPaint;
     private String wasHint;
     private Boolean wasHintVisible;
 
     public AnimatedPhoneNumberEditText(Context context) {
         super(context);
+        this.letters = new ArrayList<>();
+        this.oldLetters = new ArrayList<>();
+        this.textPaint = new TextPaint(1);
+        this.oldText = "";
+        this.hintFadeProperty = new HintFadeProperty();
+        this.hintAnimationValues = new ArrayList();
+        this.hintAnimations = new ArrayList();
     }
 
-    public void setHintText(String str) {
-        String str2;
-        boolean z = !TextUtils.isEmpty(str);
+    @Override // org.telegram.ui.Components.HintEditText
+    public void setHintText(final String str) {
+        final boolean z = !TextUtils.isEmpty(str);
         boolean z2 = false;
         Boolean bool = this.wasHintVisible;
         if (bool == null || bool.booleanValue() != z) {
             this.hintAnimationValues.clear();
-            for (SpringAnimation cancel : this.hintAnimations) {
-                cancel.cancel();
+            for (SpringAnimation springAnimation : this.hintAnimations) {
+                springAnimation.cancel();
             }
             this.hintAnimations.clear();
             this.wasHintVisible = Boolean.valueOf(z);
             z2 = TextUtils.isEmpty(getText());
         }
-        if (z) {
-            str2 = str;
-        } else {
-            str2 = this.wasHint;
-        }
+        String str2 = z ? str : this.wasHint;
         if (str2 == null) {
             str2 = "";
         }
@@ -66,21 +66,27 @@ public class AnimatedPhoneNumberEditText extends HintEditText {
             super.setHintText(str);
         }
         if (z2) {
-            runHintAnimation(str2.length(), z, new AnimatedPhoneNumberEditText$$ExternalSyntheticLambda1(this, z, str));
+            runHintAnimation(str2.length(), z, new Runnable() { // from class: org.telegram.ui.Components.AnimatedPhoneNumberEditText$$ExternalSyntheticLambda1
+                @Override // java.lang.Runnable
+                public final void run() {
+                    AnimatedPhoneNumberEditText.this.lambda$setHintText$0(z, str);
+                }
+            });
         }
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$setHintText$0(boolean z, String str) {
         this.hintAnimationValues.clear();
-        for (SpringAnimation cancel : this.hintAnimations) {
-            cancel.cancel();
+        for (SpringAnimation springAnimation : this.hintAnimations) {
+            springAnimation.cancel();
         }
         if (!z) {
             super.setHintText(str);
         }
     }
 
+    @Override // org.telegram.ui.Components.HintEditText
     public String getHintText() {
         return this.wasHint;
     }
@@ -97,84 +103,95 @@ public class AnimatedPhoneNumberEditText extends HintEditText {
                 f = 1.0f;
             }
             float f3 = f * 100.0f;
-            SpringAnimation springAnimation = (SpringAnimation) new SpringAnimation(Integer.valueOf(i2), this.hintFadeProperty).setSpring(new SpringForce(f3).setStiffness(500.0f).setDampingRatio(1.0f).setFinalPosition(f3)).setStartValue(100.0f * f2);
-            this.hintAnimations.add(springAnimation);
+            final SpringAnimation startValue = new SpringAnimation(Integer.valueOf(i2), this.hintFadeProperty).setSpring(new SpringForce(f3).setStiffness(500.0f).setDampingRatio(1.0f).setFinalPosition(f3)).setStartValue(100.0f * f2);
+            this.hintAnimations.add(startValue);
             this.hintAnimationValues.add(Float.valueOf(f2));
-            springAnimation.getClass();
-            postDelayed(new AnimatedPhoneNumberEditText$$ExternalSyntheticLambda0(springAnimation), ((long) i2) * 5);
+            startValue.getClass();
+            postDelayed(new Runnable() { // from class: org.telegram.ui.Components.AnimatedPhoneNumberEditText$$ExternalSyntheticLambda0
+                @Override // java.lang.Runnable
+                public final void run() {
+                    SpringAnimation.this.start();
+                }
+            }, i2 * 5);
         }
         this.hintAnimationCallback = runnable;
-        postDelayed(runnable, (((long) i) * 5) + 150);
+        postDelayed(runnable, (i * 5) + 150);
     }
 
+    @Override // org.telegram.ui.Components.HintEditText, android.widget.TextView
     public void setTextSize(int i, float f) {
         super.setTextSize(i, f);
         this.textPaint.setTextSize(TypedValue.applyDimension(i, f, getResources().getDisplayMetrics()));
     }
 
+    @Override // android.widget.TextView
     public void setTextColor(int i) {
         super.setTextColor(i);
         this.textPaint.setColor(i);
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
+    @Override // org.telegram.ui.Components.EditTextEffects, android.widget.TextView
     public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
         super.onTextChanged(charSequence, i, i2, i3);
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
+    @Override // org.telegram.ui.Components.HintEditText, org.telegram.ui.Components.EditTextBoldCursor, org.telegram.ui.Components.EditTextEffects, android.widget.TextView, android.view.View
     public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
     }
 
     public void setNewText(String str) {
-        if (this.oldLetters != null && this.letters != null && !ObjectsCompat$$ExternalSyntheticBackport0.m(this.oldText, str)) {
-            ObjectAnimator objectAnimator = this.animator;
-            if (objectAnimator != null) {
-                objectAnimator.cancel();
-                this.animator = null;
-            }
-            this.oldLetters.clear();
-            this.oldLetters.addAll(this.letters);
-            this.letters.clear();
-            int i = 0;
-            boolean z = TextUtils.isEmpty(this.oldText) && !TextUtils.isEmpty(str);
-            this.progress = 0.0f;
-            while (i < str.length()) {
-                int i2 = i + 1;
-                String substring = str.substring(i, i2);
-                String substring2 = (this.oldLetters.isEmpty() || i >= this.oldText.length()) ? null : this.oldText.substring(i, i2);
-                if (z || substring2 == null || !substring2.equals(substring)) {
-                    if (z && substring2 == null) {
-                        this.oldLetters.add(new StaticLayout("", this.textPaint, 0, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false));
-                    }
-                    TextPaint textPaint2 = this.textPaint;
-                    this.letters.add(new StaticLayout(substring, textPaint2, (int) Math.ceil((double) textPaint2.measureText(substring)), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false));
-                } else {
-                    this.letters.add(this.oldLetters.get(i));
-                    this.oldLetters.set(i, (Object) null);
-                }
-                i = i2;
-            }
-            if (!this.oldLetters.isEmpty()) {
-                ObjectAnimator ofFloat = ObjectAnimator.ofFloat(this, "progress", new float[]{-1.0f, 0.0f});
-                this.animator = ofFloat;
-                ofFloat.setDuration(150);
-                this.animator.addListener(new AnimatorListenerAdapter() {
-                    public void onAnimationEnd(Animator animator) {
-                        ObjectAnimator unused = AnimatedPhoneNumberEditText.this.animator = null;
-                        AnimatedPhoneNumberEditText.this.oldLetters.clear();
-                    }
-                });
-                this.animator.start();
-            }
-            this.oldText = str;
-            invalidate();
+        if (this.oldLetters == null || this.letters == null || ObjectsCompat$$ExternalSyntheticBackport0.m(this.oldText, str)) {
+            return;
         }
+        ObjectAnimator objectAnimator = this.animator;
+        if (objectAnimator != null) {
+            objectAnimator.cancel();
+            this.animator = null;
+        }
+        this.oldLetters.clear();
+        this.oldLetters.addAll(this.letters);
+        this.letters.clear();
+        int i = 0;
+        boolean z = TextUtils.isEmpty(this.oldText) && !TextUtils.isEmpty(str);
+        this.progress = 0.0f;
+        while (i < str.length()) {
+            int i2 = i + 1;
+            String substring = str.substring(i, i2);
+            String substring2 = (this.oldLetters.isEmpty() || i >= this.oldText.length()) ? null : this.oldText.substring(i, i2);
+            if (!z && substring2 != null && substring2.equals(substring)) {
+                this.letters.add(this.oldLetters.get(i));
+                this.oldLetters.set(i, null);
+            } else {
+                if (z && substring2 == null) {
+                    this.oldLetters.add(new StaticLayout("", this.textPaint, 0, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false));
+                }
+                TextPaint textPaint = this.textPaint;
+                this.letters.add(new StaticLayout(substring, textPaint, (int) Math.ceil(textPaint.measureText(substring)), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false));
+            }
+            i = i2;
+        }
+        if (!this.oldLetters.isEmpty()) {
+            ObjectAnimator ofFloat = ObjectAnimator.ofFloat(this, "progress", -1.0f, 0.0f);
+            this.animator = ofFloat;
+            ofFloat.setDuration(150L);
+            this.animator.addListener(new AnimatorListenerAdapter() { // from class: org.telegram.ui.Components.AnimatedPhoneNumberEditText.1
+                @Override // android.animation.AnimatorListenerAdapter, android.animation.Animator.AnimatorListener
+                public void onAnimationEnd(Animator animator) {
+                    AnimatedPhoneNumberEditText.this.animator = null;
+                    AnimatedPhoneNumberEditText.this.oldLetters.clear();
+                }
+            });
+            this.animator.start();
+        }
+        this.oldText = str;
+        invalidate();
     }
 
-    /* access modifiers changed from: protected */
-    public void onPreDrawHintCharacter(int i, Canvas canvas, float f, float f2) {
+    @Override // org.telegram.ui.Components.HintEditText
+    protected void onPreDrawHintCharacter(int i, Canvas canvas, float f, float f2) {
         if (i < this.hintAnimationValues.size()) {
             this.hintPaint.setAlpha((int) (this.hintAnimationValues.get(i).floatValue() * 255.0f));
         }
@@ -182,10 +199,11 @@ public class AnimatedPhoneNumberEditText extends HintEditText {
 
     @Keep
     public void setProgress(float f) {
-        if (this.progress != f) {
-            this.progress = f;
-            invalidate();
+        if (this.progress == f) {
+            return;
         }
+        this.progress = f;
+        invalidate();
     }
 
     @Keep
@@ -193,11 +211,14 @@ public class AnimatedPhoneNumberEditText extends HintEditText {
         return this.progress;
     }
 
-    private final class HintFadeProperty extends FloatPropertyCompat<Integer> {
+    /* JADX INFO: Access modifiers changed from: private */
+    /* loaded from: classes3.dex */
+    public final class HintFadeProperty extends FloatPropertyCompat<Integer> {
         public HintFadeProperty() {
             super("hint_fade");
         }
 
+        @Override // androidx.dynamicanimation.animation.FloatPropertyCompat
         public float getValue(Integer num) {
             if (num.intValue() < AnimatedPhoneNumberEditText.this.hintAnimationValues.size()) {
                 return ((Float) AnimatedPhoneNumberEditText.this.hintAnimationValues.get(num.intValue())).floatValue() * 100.0f;
@@ -205,6 +226,7 @@ public class AnimatedPhoneNumberEditText extends HintEditText {
             return 0.0f;
         }
 
+        @Override // androidx.dynamicanimation.animation.FloatPropertyCompat
         public void setValue(Integer num, float f) {
             if (num.intValue() < AnimatedPhoneNumberEditText.this.hintAnimationValues.size()) {
                 AnimatedPhoneNumberEditText.this.hintAnimationValues.set(num.intValue(), Float.valueOf(f / 100.0f));

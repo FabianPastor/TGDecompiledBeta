@@ -5,14 +5,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.zip.InflaterInputStream;
 import org.telegram.messenger.audioinfo.util.RangeInputStream;
-
+/* loaded from: classes.dex */
 public class ID3v2TagBody {
     private final ID3v2DataInput data;
     private final RangeInputStream input;
     private final ID3v2TagHeader tagHeader;
 
-    ID3v2TagBody(InputStream inputStream, long j, int i, ID3v2TagHeader iD3v2TagHeader) throws IOException {
-        RangeInputStream rangeInputStream = new RangeInputStream(inputStream, j, (long) i);
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public ID3v2TagBody(InputStream inputStream, long j, int i, ID3v2TagHeader iD3v2TagHeader) throws IOException {
+        RangeInputStream rangeInputStream = new RangeInputStream(inputStream, j, i);
         this.input = rangeInputStream;
         this.data = new ID3v2DataInput(rangeInputStream);
         this.tagHeader = iD3v2TagHeader;
@@ -55,17 +56,17 @@ public class ID3v2TagBody {
             inputStream = new ByteArrayInputStream(readFully, 0, i2);
             bodySize = i2;
         }
-        if (!iD3v2FrameHeader.isEncryption()) {
-            if (iD3v2FrameHeader.isCompression()) {
-                i = iD3v2FrameHeader.getDataLengthIndicator();
-                inflaterInputStream = new InflaterInputStream(inputStream);
-            } else {
-                i = bodySize;
-                inflaterInputStream = inputStream;
-            }
-            return new ID3v2FrameBody(inflaterInputStream, (long) iD3v2FrameHeader.getHeaderSize(), i, this.tagHeader, iD3v2FrameHeader);
+        if (iD3v2FrameHeader.isEncryption()) {
+            throw new ID3v2Exception("Frame encryption is not supported");
         }
-        throw new ID3v2Exception("Frame encryption is not supported");
+        if (iD3v2FrameHeader.isCompression()) {
+            i = iD3v2FrameHeader.getDataLengthIndicator();
+            inflaterInputStream = new InflaterInputStream(inputStream);
+        } else {
+            i = bodySize;
+            inflaterInputStream = inputStream;
+        }
+        return new ID3v2FrameBody(inflaterInputStream, iD3v2FrameHeader.getHeaderSize(), i, this.tagHeader, iD3v2FrameHeader);
     }
 
     public String toString() {

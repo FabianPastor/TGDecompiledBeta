@@ -1,48 +1,44 @@
 package j$.util.stream;
-
-import j$.util.function.b;
-import j$.util.function.d;
-import j$.util.function.j;
-import j$.util.function.o;
-
+/* loaded from: classes2.dex */
 class D2 extends U2 {
     public final /* synthetic */ int b = 1;
     final /* synthetic */ Object c;
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public D2(CLASSNAMEe4 e4Var, b bVar) {
-        super(e4Var);
+    /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+    public D2(EnumCLASSNAMEe4 enumCLASSNAMEe4, j$.util.function.b bVar) {
+        super(enumCLASSNAMEe4);
         this.c = bVar;
     }
 
+    @Override // j$.util.stream.U2
     public S2 a() {
         switch (this.b) {
             case 0:
-                return new E2((d) this.c);
+                return new E2((j$.util.function.d) this.c);
             case 1:
-                return new H2((b) this.c);
+                return new H2((j$.util.function.b) this.c);
             case 2:
-                return new N2((j) this.c);
+                return new N2((j$.util.function.j) this.c);
             default:
-                return new R2((o) this.c);
+                return new R2((j$.util.function.o) this.c);
         }
     }
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public D2(CLASSNAMEe4 e4Var, d dVar) {
-        super(e4Var);
+    /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+    public D2(EnumCLASSNAMEe4 enumCLASSNAMEe4, j$.util.function.d dVar) {
+        super(enumCLASSNAMEe4);
         this.c = dVar;
     }
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public D2(CLASSNAMEe4 e4Var, j jVar) {
-        super(e4Var);
+    /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+    public D2(EnumCLASSNAMEe4 enumCLASSNAMEe4, j$.util.function.j jVar) {
+        super(enumCLASSNAMEe4);
         this.c = jVar;
     }
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public D2(CLASSNAMEe4 e4Var, o oVar) {
-        super(e4Var);
+    /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+    public D2(EnumCLASSNAMEe4 enumCLASSNAMEe4, j$.util.function.o oVar) {
+        super(enumCLASSNAMEe4);
         this.c = oVar;
     }
 }

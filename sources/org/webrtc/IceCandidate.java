@@ -2,7 +2,7 @@ package org.webrtc;
 
 import java.util.Arrays;
 import org.webrtc.PeerConnection;
-
+/* loaded from: classes3.dex */
 public class IceCandidate {
     public final PeerConnection.AdapterType adapterType;
     public final String sdp;
@@ -19,27 +19,25 @@ public class IceCandidate {
     }
 
     @CalledByNative
-    IceCandidate(String str, int i, String str2, String str3, PeerConnection.AdapterType adapterType2) {
+    IceCandidate(String str, int i, String str2, String str3, PeerConnection.AdapterType adapterType) {
         this.sdpMid = str;
         this.sdpMLineIndex = i;
         this.sdp = str2;
         this.serverUrl = str3;
-        this.adapterType = adapterType2;
+        this.adapterType = adapterType;
     }
 
     public String toString() {
         return this.sdpMid + ":" + this.sdpMLineIndex + ":" + this.sdp + ":" + this.serverUrl + ":" + this.adapterType.toString();
     }
 
-    /* access modifiers changed from: package-private */
     @CalledByNative
-    public String getSdpMid() {
+    String getSdpMid() {
         return this.sdpMid;
     }
 
-    /* access modifiers changed from: package-private */
     @CalledByNative
-    public String getSdp() {
+    String getSdp() {
         return this.sdp;
     }
 
@@ -48,10 +46,7 @@ public class IceCandidate {
             return false;
         }
         IceCandidate iceCandidate = (IceCandidate) obj;
-        if (!objectEquals(this.sdpMid, iceCandidate.sdpMid) || this.sdpMLineIndex != iceCandidate.sdpMLineIndex || !objectEquals(this.sdp, iceCandidate.sdp)) {
-            return false;
-        }
-        return true;
+        return objectEquals(this.sdpMid, iceCandidate.sdpMid) && this.sdpMLineIndex == iceCandidate.sdpMLineIndex && objectEquals(this.sdp, iceCandidate.sdp);
     }
 
     public int hashCode() {

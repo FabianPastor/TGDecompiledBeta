@@ -1,12 +1,10 @@
 package j$.util.stream;
 
-import j$.util.concurrent.a;
 import j$.util.function.BiConsumer;
 import j$.util.function.BiFunction;
 import j$.util.function.Function;
-import j$.util.function.b;
-
-public final /* synthetic */ class C implements b {
+/* loaded from: classes2.dex */
+public final /* synthetic */ class C implements j$.util.function.b {
     public final /* synthetic */ int a;
     public final /* synthetic */ BiConsumer b;
 
@@ -21,20 +19,22 @@ public final /* synthetic */ class C implements b {
         }
     }
 
+    @Override // j$.util.function.BiFunction
     public BiFunction andThen(Function function) {
         switch (this.a) {
             case 0:
                 function.getClass();
-                return new a((BiFunction) this, function);
+                return new j$.util.concurrent.a(this, function);
             case 1:
                 function.getClass();
-                return new a((BiFunction) this, function);
+                return new j$.util.concurrent.a(this, function);
             default:
                 function.getClass();
-                return new a((BiFunction) this, function);
+                return new j$.util.concurrent.a(this, function);
         }
     }
 
+    @Override // j$.util.function.BiFunction
     public final Object apply(Object obj, Object obj2) {
         switch (this.a) {
             case 0:

@@ -5,16 +5,11 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.R;
-
+/* loaded from: classes.dex */
 public class LauncherIconController {
     public static void tryFixLauncherIconIfNeeded() {
-        LauncherIcon[] values = LauncherIcon.values();
-        int length = values.length;
-        int i = 0;
-        while (i < length) {
-            if (!isEnabled(values[i])) {
-                i++;
-            } else {
+        for (LauncherIcon launcherIcon : LauncherIcon.values()) {
+            if (isEnabled(launcherIcon)) {
                 return;
             }
         }
@@ -24,13 +19,10 @@ public class LauncherIconController {
     public static boolean isEnabled(LauncherIcon launcherIcon) {
         Context context = ApplicationLoader.applicationContext;
         int componentEnabledSetting = context.getPackageManager().getComponentEnabledSetting(launcherIcon.getComponentName(context));
-        if (componentEnabledSetting == 1) {
-            return true;
+        if (componentEnabledSetting != 1) {
+            return componentEnabledSetting == 0 && launcherIcon == LauncherIcon.DEFAULT;
         }
-        if (componentEnabledSetting == 0 && launcherIcon == LauncherIcon.DEFAULT) {
-            return true;
-        }
-        return false;
+        return true;
     }
 
     public static void setIcon(LauncherIcon launcherIcon) {
@@ -44,13 +36,17 @@ public class LauncherIconController {
         }
     }
 
+    /* JADX WARN: Init of enum AQUA can be incorrect */
+    /* JADX WARN: Init of enum DEFAULT can be incorrect */
+    /* JADX WARN: Init of enum NOX can be incorrect */
+    /* loaded from: classes3.dex */
     public enum LauncherIcon {
         DEFAULT("DefaultIcon", r4, r15, R.string.AppIconDefault),
         VINTAGE("VintageIcon", R.drawable.icon_6_background_sa, R.mipmap.icon_6_foreground_sa, R.string.AppIconVintage),
-        AQUA("AquaIcon", R.drawable.icon_4_background_sa, r13, R.string.AppIconAqua),
+        AQUA("AquaIcon", R.drawable.icon_4_background_sa, r15, R.string.AppIconAqua),
         PREMIUM("PremiumIcon", R.drawable.icon_3_background_sa, R.mipmap.icon_3_foreground_sa, R.string.AppIconPremium, true),
         TURBO("TurboIcon", R.drawable.icon_5_background_sa, R.mipmap.icon_5_foreground_sa, R.string.AppIconTurbo, true),
-        NOX("NoxIcon", R.drawable.icon_2_background_sa, r13, R.string.AppIconNox, true);
+        NOX("NoxIcon", R.drawable.icon_2_background_sa, r15, R.string.AppIconNox, true);
         
         public final int background;
         private ComponentName componentName;
@@ -58,6 +54,11 @@ public class LauncherIconController {
         public final String key;
         public final boolean premium;
         public final int title;
+
+        static {
+            int i = R.drawable.icon_background_sa;
+            int i2 = R.mipmap.icon_foreground_sa;
+        }
 
         public ComponentName getComponentName(Context context) {
             if (this.componentName == null) {
@@ -67,11 +68,11 @@ public class LauncherIconController {
             return this.componentName;
         }
 
-        private LauncherIcon(String str, int i, int i2, int i3) {
-            this(r9, r10, str, i, i2, i3, false);
+        LauncherIcon(String str, int i, int i2, int i3) {
+            this(str, i, i2, i3, false);
         }
 
-        private LauncherIcon(String str, int i, int i2, int i3, boolean z) {
+        LauncherIcon(String str, int i, int i2, int i3, boolean z) {
             this.key = str;
             this.background = i;
             this.foreground = i2;

@@ -16,26 +16,22 @@ import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.SeekBarView;
-
+/* loaded from: classes3.dex */
 public class MaxFileSizeCell extends FrameLayout {
-    /* access modifiers changed from: private */
-    public long currentSize;
+    private long currentSize;
     private SeekBarView seekBarView;
-    /* access modifiers changed from: private */
-    public TextView sizeTextView;
-    /* access modifiers changed from: private */
-    public TextView textView;
+    private TextView sizeTextView;
+    private TextView textView;
 
-    /* access modifiers changed from: protected */
-    public void didChangedSizeValue(int i) {
+    protected void didChangedSizeValue(int i) {
     }
 
     public MaxFileSizeCell(Context context) {
         super(context);
         setWillNotDraw(false);
-        TextView textView2 = new TextView(context);
-        this.textView = textView2;
-        textView2.setTextColor(Theme.getColor("dialogTextBlack"));
+        TextView textView = new TextView(context);
+        this.textView = textView;
+        textView.setTextColor(Theme.getColor("dialogTextBlack"));
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
@@ -45,9 +41,9 @@ public class MaxFileSizeCell extends FrameLayout {
         this.textView.setEllipsize(TextUtils.TruncateAt.END);
         this.textView.setImportantForAccessibility(2);
         addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, 21.0f, 13.0f, 21.0f, 0.0f));
-        TextView textView3 = new TextView(context);
-        this.sizeTextView = textView3;
-        textView3.setTextColor(Theme.getColor("dialogTextBlue2"));
+        TextView textView2 = new TextView(context);
+        this.sizeTextView = textView2;
+        textView2.setTextColor(Theme.getColor("dialogTextBlue2"));
         this.sizeTextView.setTextSize(1, 16.0f);
         this.sizeTextView.setLines(1);
         this.sizeTextView.setMaxLines(1);
@@ -55,7 +51,8 @@ public class MaxFileSizeCell extends FrameLayout {
         this.sizeTextView.setGravity((LocaleController.isRTL ? 3 : 5) | 48);
         this.sizeTextView.setImportantForAccessibility(2);
         addView(this.sizeTextView, LayoutHelper.createFrame(-2, -1.0f, (LocaleController.isRTL ? 3 : i) | 48, 21.0f, 13.0f, 21.0f, 0.0f));
-        AnonymousClass1 r0 = new SeekBarView(this, context) {
+        SeekBarView seekBarView = new SeekBarView(this, context) { // from class: org.telegram.ui.Cells.MaxFileSizeCell.1
+            @Override // org.telegram.ui.Components.SeekBarView, android.view.View
             public boolean onTouchEvent(MotionEvent motionEvent) {
                 if (motionEvent.getAction() == 0) {
                     getParent().requestDisallowInterceptTouchEvent(true);
@@ -63,51 +60,54 @@ public class MaxFileSizeCell extends FrameLayout {
                 return super.onTouchEvent(motionEvent);
             }
         };
-        this.seekBarView = r0;
-        r0.setReportChanges(true);
-        this.seekBarView.setDelegate(new SeekBarView.SeekBarViewDelegate() {
+        this.seekBarView = seekBarView;
+        seekBarView.setReportChanges(true);
+        this.seekBarView.setDelegate(new SeekBarView.SeekBarViewDelegate() { // from class: org.telegram.ui.Cells.MaxFileSizeCell.2
+            @Override // org.telegram.ui.Components.SeekBarView.SeekBarViewDelegate
             public /* synthetic */ int getStepsCount() {
                 return SeekBarView.SeekBarViewDelegate.CC.$default$getStepsCount(this);
             }
 
+            @Override // org.telegram.ui.Components.SeekBarView.SeekBarViewDelegate
             public void onSeekBarPressed(boolean z) {
             }
 
+            @Override // org.telegram.ui.Components.SeekBarView.SeekBarViewDelegate
             public void onSeekBarDrag(boolean z, float f) {
-                int i;
+                int i2;
                 float f2;
                 float f3;
                 if (f <= 0.25f) {
-                    f2 = (float) 512000;
+                    f2 = 512000;
                     f3 = 536576.0f;
                 } else {
                     f -= 0.25f;
                     if (f < 0.25f) {
-                        f2 = (float) 1048576;
+                        f2 = 1048576;
                         f3 = 9437184.0f;
                     } else {
                         f -= 0.25f;
-                        if (f <= 0.25f) {
-                            f2 = (float) 10485760;
-                            f3 = 9.437184E7f;
-                        } else {
-                            i = (int) (((float) NUM) + (((float) (NUM - ((long) NUM))) * ((f - 0.25f) / 0.25f)));
-                            long j = (long) i;
+                        if (f > 0.25f) {
+                            i2 = (int) (NUM + (((float) (NUM - NUM)) * ((f - 0.25f) / 0.25f)));
+                            long j = i2;
                             MaxFileSizeCell.this.sizeTextView.setText(LocaleController.formatString("AutodownloadSizeLimitUpTo", R.string.AutodownloadSizeLimitUpTo, AndroidUtilities.formatFileSize(j)));
-                            long unused = MaxFileSizeCell.this.currentSize = j;
-                            MaxFileSizeCell.this.didChangedSizeValue(i);
+                            MaxFileSizeCell.this.currentSize = j;
+                            MaxFileSizeCell.this.didChangedSizeValue(i2);
                         }
+                        f2 = 10485760;
+                        f3 = 9.437184E7f;
                     }
                 }
-                i = (int) (f2 + ((f / 0.25f) * f3));
-                long j2 = (long) i;
+                i2 = (int) (f2 + ((f / 0.25f) * f3));
+                long j2 = i2;
                 MaxFileSizeCell.this.sizeTextView.setText(LocaleController.formatString("AutodownloadSizeLimitUpTo", R.string.AutodownloadSizeLimitUpTo, AndroidUtilities.formatFileSize(j2)));
-                long unused2 = MaxFileSizeCell.this.currentSize = j2;
-                MaxFileSizeCell.this.didChangedSizeValue(i);
+                MaxFileSizeCell.this.currentSize = j2;
+                MaxFileSizeCell.this.didChangedSizeValue(i2);
             }
 
+            @Override // org.telegram.ui.Components.SeekBarView.SeekBarViewDelegate
             public CharSequence getContentDescription() {
-                return MaxFileSizeCell.this.textView.getText() + " " + MaxFileSizeCell.this.sizeTextView.getText();
+                return ((Object) MaxFileSizeCell.this.textView.getText()) + " " + ((Object) MaxFileSizeCell.this.sizeTextView.getText());
             }
         });
         this.seekBarView.setImportantForAccessibility(2);
@@ -124,8 +124,8 @@ public class MaxFileSizeCell extends FrameLayout {
         return this.currentSize;
     }
 
-    /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
+    @Override // android.widget.FrameLayout, android.view.View
+    protected void onMeasure(int i, int i2) {
         super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(80.0f), NUM));
         setMeasuredDimension(View.MeasureSpec.getSize(i), AndroidUtilities.dp(80.0f));
         int measuredWidth = getMeasuredWidth() - AndroidUtilities.dp(42.0f);
@@ -134,6 +134,7 @@ public class MaxFileSizeCell extends FrameLayout {
         this.seekBarView.measure(View.MeasureSpec.makeMeasureSpec(getMeasuredWidth() - AndroidUtilities.dp(20.0f), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(30.0f), NUM));
     }
 
+    @Override // android.view.ViewGroup
     public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
         if (!isEnabled()) {
             return true;
@@ -141,6 +142,7 @@ public class MaxFileSizeCell extends FrameLayout {
         return super.onInterceptTouchEvent(motionEvent);
     }
 
+    @Override // android.view.ViewGroup, android.view.View
     public boolean dispatchTouchEvent(MotionEvent motionEvent) {
         if (!isEnabled()) {
             return true;
@@ -148,6 +150,7 @@ public class MaxFileSizeCell extends FrameLayout {
         return super.dispatchTouchEvent(motionEvent);
     }
 
+    @Override // android.view.View
     public boolean onTouchEvent(MotionEvent motionEvent) {
         if (!isEnabled()) {
             return true;
@@ -156,8 +159,8 @@ public class MaxFileSizeCell extends FrameLayout {
     }
 
     public void setSize(long j) {
+        float max;
         float f;
-        float f2;
         this.currentSize = j;
         this.sizeTextView.setText(LocaleController.formatString("AutodownloadSizeLimitUpTo", R.string.AutodownloadSizeLimitUpTo, AndroidUtilities.formatFileSize(j)));
         long j2 = j - 512000;
@@ -168,15 +171,15 @@ public class MaxFileSizeCell extends FrameLayout {
             if (j3 < 9437184) {
                 f = (Math.max(0.0f, ((float) j3) / 9437184.0f) * 0.25f) + 0.25f;
             } else {
-                float f3 = 0.5f;
+                float f2 = 0.5f;
                 long j4 = j3 - 9437184;
                 if (j4 < 94371840) {
-                    f2 = Math.max(0.0f, ((float) j4) / 9.437184E7f);
+                    max = Math.max(0.0f, ((float) j4) / 9.437184E7f);
                 } else {
-                    f3 = 0.75f;
-                    f2 = Math.max(0.0f, ((float) (j4 - 94371840)) / 1.9922944E9f);
+                    f2 = 0.75f;
+                    max = Math.max(0.0f, ((float) (j4 - 94371840)) / 1.9922944E9f);
                 }
-                f = (f2 * 0.25f) + f3;
+                f = (max * 0.25f) + f2;
             }
         }
         this.seekBarView.setProgress(Math.min(1.0f, f));
@@ -186,34 +189,34 @@ public class MaxFileSizeCell extends FrameLayout {
         super.setEnabled(z);
         float f = 1.0f;
         if (arrayList != null) {
-            TextView textView2 = this.textView;
+            TextView textView = this.textView;
             float[] fArr = new float[1];
             fArr[0] = z ? 1.0f : 0.5f;
-            arrayList.add(ObjectAnimator.ofFloat(textView2, "alpha", fArr));
-            SeekBarView seekBarView2 = this.seekBarView;
+            arrayList.add(ObjectAnimator.ofFloat(textView, "alpha", fArr));
+            SeekBarView seekBarView = this.seekBarView;
             float[] fArr2 = new float[1];
             fArr2[0] = z ? 1.0f : 0.5f;
-            arrayList.add(ObjectAnimator.ofFloat(seekBarView2, "alpha", fArr2));
-            TextView textView3 = this.sizeTextView;
+            arrayList.add(ObjectAnimator.ofFloat(seekBarView, "alpha", fArr2));
+            TextView textView2 = this.sizeTextView;
             float[] fArr3 = new float[1];
             if (!z) {
                 f = 0.5f;
             }
             fArr3[0] = f;
-            arrayList.add(ObjectAnimator.ofFloat(textView3, "alpha", fArr3));
+            arrayList.add(ObjectAnimator.ofFloat(textView2, "alpha", fArr3));
             return;
         }
         this.textView.setAlpha(z ? 1.0f : 0.5f);
         this.seekBarView.setAlpha(z ? 1.0f : 0.5f);
-        TextView textView4 = this.sizeTextView;
+        TextView textView3 = this.sizeTextView;
         if (!z) {
             f = 0.5f;
         }
-        textView4.setAlpha(f);
+        textView3.setAlpha(f);
     }
 
-    /* access modifiers changed from: protected */
-    public void onDraw(Canvas canvas) {
-        canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.dp(20.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(20.0f) : 0)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
+    @Override // android.view.View
+    protected void onDraw(Canvas canvas) {
+        canvas.drawLine(LocaleController.isRTL ? 0.0f : AndroidUtilities.dp(20.0f), getMeasuredHeight() - 1, getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(20.0f) : 0), getMeasuredHeight() - 1, Theme.dividerPaint);
     }
 }

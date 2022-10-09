@@ -1,14 +1,14 @@
 package org.telegram.tgnet;
 
 import android.text.TextUtils;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_message extends TLRPC$Message {
     public static int constructor = NUM;
 
+    @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
-        int i = 0;
         this.out = (readInt32 & 2) != 0;
         this.mentioned = (readInt32 & 16) != 0;
         this.media_unread = (readInt32 & 32) != 0;
@@ -50,22 +50,19 @@ public class TLRPC$TL_message extends TLRPC$Message {
         }
         if ((this.flags & 128) != 0) {
             int readInt322 = abstractSerializedData.readInt32(z);
-            if (readInt322 == NUM) {
-                int readInt323 = abstractSerializedData.readInt32(z);
-                int i2 = 0;
-                while (i2 < readInt323) {
-                    TLRPC$MessageEntity TLdeserialize2 = TLRPC$MessageEntity.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
-                    if (TLdeserialize2 != null) {
-                        this.entities.add(TLdeserialize2);
-                        i2++;
-                    } else {
-                        return;
-                    }
+            if (readInt322 != NUM) {
+                if (z) {
+                    throw new RuntimeException(String.format("wrong Vector magic, got %x", Integer.valueOf(readInt322)));
                 }
-            } else if (z) {
-                throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt322)}));
-            } else {
                 return;
+            }
+            int readInt323 = abstractSerializedData.readInt32(z);
+            for (int i = 0; i < readInt323; i++) {
+                TLRPC$MessageEntity TLdeserialize2 = TLRPC$MessageEntity.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+                if (TLdeserialize2 == null) {
+                    return;
+                }
+                this.entities.add(TLdeserialize2);
             }
         }
         if ((this.flags & 1024) != 0) {
@@ -91,21 +88,19 @@ public class TLRPC$TL_message extends TLRPC$Message {
         }
         if ((this.flags & 4194304) != 0) {
             int readInt324 = abstractSerializedData.readInt32(z);
-            if (readInt324 == NUM) {
-                int readInt325 = abstractSerializedData.readInt32(z);
-                while (i < readInt325) {
-                    TLRPC$TL_restrictionReason TLdeserialize3 = TLRPC$TL_restrictionReason.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
-                    if (TLdeserialize3 != null) {
-                        this.restriction_reason.add(TLdeserialize3);
-                        i++;
-                    } else {
-                        return;
-                    }
+            if (readInt324 != NUM) {
+                if (z) {
+                    throw new RuntimeException(String.format("wrong Vector magic, got %x", Integer.valueOf(readInt324)));
                 }
-            } else if (z) {
-                throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt324)}));
-            } else {
                 return;
+            }
+            int readInt325 = abstractSerializedData.readInt32(z);
+            for (int i2 = 0; i2 < readInt325; i2++) {
+                TLRPC$TL_restrictionReason TLdeserialize3 = TLRPC$TL_restrictionReason.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+                if (TLdeserialize3 == null) {
+                    return;
+                }
+                this.restriction_reason.add(TLdeserialize3);
             }
         }
         if ((this.flags & 33554432) != 0) {
@@ -113,27 +108,28 @@ public class TLRPC$TL_message extends TLRPC$Message {
         }
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
-        int i = this.out ? this.flags | 2 : this.flags & -3;
+        int i = this.out ? this.flags | 2 : this.flags & (-3);
         this.flags = i;
-        int i2 = this.mentioned ? i | 16 : i & -17;
+        int i2 = this.mentioned ? i | 16 : i & (-17);
         this.flags = i2;
-        int i3 = this.media_unread ? i2 | 32 : i2 & -33;
+        int i3 = this.media_unread ? i2 | 32 : i2 & (-33);
         this.flags = i3;
-        int i4 = this.silent ? i3 | 8192 : i3 & -8193;
+        int i4 = this.silent ? i3 | 8192 : i3 & (-8193);
         this.flags = i4;
-        int i5 = this.post ? i4 | 16384 : i4 & -16385;
+        int i5 = this.post ? i4 | 16384 : i4 & (-16385);
         this.flags = i5;
-        int i6 = this.from_scheduled ? i5 | 262144 : i5 & -262145;
+        int i6 = this.from_scheduled ? i5 | 262144 : i5 & (-262145);
         this.flags = i6;
-        int i7 = this.legacy ? i6 | 524288 : i6 & -524289;
+        int i7 = this.legacy ? i6 | 524288 : i6 & (-524289);
         this.flags = i7;
-        int i8 = this.edit_hide ? i7 | 2097152 : i7 & -2097153;
+        int i8 = this.edit_hide ? i7 | 2097152 : i7 & (-2097153);
         this.flags = i8;
-        int i9 = this.pinned ? i8 | 16777216 : i8 & -16777217;
+        int i9 = this.pinned ? i8 | 16777216 : i8 & (-16777217);
         this.flags = i9;
-        int i10 = this.noforwards ? i9 | 67108864 : i9 & -67108865;
+        int i10 = this.noforwards ? i9 | 67108864 : i9 & (-67108865);
         this.flags = i10;
         abstractSerializedData.writeInt32(i10);
         abstractSerializedData.writeInt32(this.id);

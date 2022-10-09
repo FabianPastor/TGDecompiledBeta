@@ -1,9 +1,10 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_decryptedMessageMediaVideo extends TLRPC$DecryptedMessageMedia {
     public static int constructor = -NUM;
     public byte[] thumb;
 
+    @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         this.thumb = abstractSerializedData.readByteArray(z);
         this.thumb_w = abstractSerializedData.readInt32(z);
@@ -12,12 +13,13 @@ public class TLRPC$TL_decryptedMessageMediaVideo extends TLRPC$DecryptedMessageM
         this.mime_type = abstractSerializedData.readString(z);
         this.w = abstractSerializedData.readInt32(z);
         this.h = abstractSerializedData.readInt32(z);
-        this.size = (long) abstractSerializedData.readInt32(z);
+        this.size = abstractSerializedData.readInt32(z);
         this.key = abstractSerializedData.readByteArray(z);
         this.iv = abstractSerializedData.readByteArray(z);
         this.caption = abstractSerializedData.readString(z);
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
         abstractSerializedData.writeByteArray(this.thumb);

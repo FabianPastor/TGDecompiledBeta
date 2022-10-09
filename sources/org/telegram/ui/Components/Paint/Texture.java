@@ -2,28 +2,29 @@ package org.telegram.ui.Components.Paint;
 
 import android.graphics.Bitmap;
 import android.opengl.GLES20;
-import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import org.telegram.ui.Components.Size;
-
+/* loaded from: classes3.dex */
 public class Texture {
     private Bitmap bitmap;
     private int texture;
 
-    public Texture(Bitmap bitmap2) {
-        this.bitmap = bitmap2;
+    public Texture(Bitmap bitmap) {
+        this.bitmap = bitmap;
     }
 
     public void cleanResources(boolean z) {
         int i = this.texture;
-        if (i != 0) {
-            GLES20.glDeleteTextures(1, new int[]{i}, 0);
-            this.texture = 0;
-            if (z) {
-                this.bitmap.recycle();
-            }
+        if (i == 0) {
+            return;
         }
+        GLES20.glDeleteTextures(1, new int[]{i}, 0);
+        this.texture = 0;
+        if (!z) {
+            return;
+        }
+        this.bitmap.recycle();
     }
 
     public int texture() {
@@ -50,7 +51,7 @@ public class Texture {
         this.bitmap.getPixels(iArr2, 0, width, 0, 0, width, height);
         for (int i4 = 0; i4 < i3; i4++) {
             int i5 = iArr2[i4];
-            iArr2[i4] = ((i5 >> 16) & 255) | (-16711936 & i5) | ((i5 & 255) << 16);
+            iArr2[i4] = ((i5 >> 16) & 255) | ((-16711936) & i5) | ((i5 & 255) << 16);
         }
         GLES20.glTexImage2D(3553, 0, 6408, width, height, 0, 6408, 5121, IntBuffer.wrap(iArr2));
         int pixel = this.bitmap.getPixel(0, 0);
@@ -70,7 +71,7 @@ public class Texture {
         GLES20.glTexParameteri(3553, 10243, 33071);
         GLES20.glTexParameteri(3553, 10240, 9729);
         GLES20.glTexParameteri(3553, 10241, 9729);
-        GLES20.glTexImage2D(3553, 0, 6408, (int) size.width, (int) size.height, 0, 6408, 5121, (Buffer) null);
+        GLES20.glTexImage2D(3553, 0, 6408, (int) size.width, (int) size.height, 0, 6408, 5121, null);
         return i;
     }
 }

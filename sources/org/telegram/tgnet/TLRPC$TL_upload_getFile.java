@@ -1,5 +1,5 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_upload_getFile extends TLObject {
     public static int constructor = -NUM;
     public boolean cdn_supported;
@@ -9,15 +9,17 @@ public class TLRPC$TL_upload_getFile extends TLObject {
     public long offset;
     public boolean precise;
 
+    @Override // org.telegram.tgnet.TLObject
     public TLObject deserializeResponse(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         return TLRPC$upload_File.TLdeserialize(abstractSerializedData, i, z);
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
-        int i = this.precise ? this.flags | 1 : this.flags & -2;
+        int i = this.precise ? this.flags | 1 : this.flags & (-2);
         this.flags = i;
-        int i2 = this.cdn_supported ? i | 2 : i & -3;
+        int i2 = this.cdn_supported ? i | 2 : i & (-3);
         this.flags = i2;
         abstractSerializedData.writeInt32(i2);
         this.location.serializeToStream(abstractSerializedData);

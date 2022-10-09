@@ -1,12 +1,12 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_userFull extends TLRPC$UserFull {
     public static int constructor = -NUM;
 
+    @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
-        int i = 0;
         this.blocked = (readInt32 & 1) != 0;
         this.phone_calls_available = (readInt32 & 16) != 0;
         this.phone_calls_private = (readInt32 & 32) != 0;
@@ -50,38 +50,39 @@ public class TLRPC$TL_userFull extends TLRPC$UserFull {
         }
         if ((this.flags & 524288) != 0) {
             int readInt322 = abstractSerializedData.readInt32(z);
-            if (readInt322 == NUM) {
-                int readInt323 = abstractSerializedData.readInt32(z);
-                while (i < readInt323) {
-                    TLRPC$TL_premiumGiftOption TLdeserialize = TLRPC$TL_premiumGiftOption.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
-                    if (TLdeserialize != null) {
-                        this.premium_gifts.add(TLdeserialize);
-                        i++;
-                    } else {
-                        return;
-                    }
+            if (readInt322 != NUM) {
+                if (z) {
+                    throw new RuntimeException(String.format("wrong Vector magic, got %x", Integer.valueOf(readInt322)));
                 }
-            } else if (z) {
-                throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt322)}));
+                return;
+            }
+            int readInt323 = abstractSerializedData.readInt32(z);
+            for (int i = 0; i < readInt323; i++) {
+                TLRPC$TL_premiumGiftOption TLdeserialize = TLRPC$TL_premiumGiftOption.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+                if (TLdeserialize == null) {
+                    return;
+                }
+                this.premium_gifts.add(TLdeserialize);
             }
         }
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
-        int i = this.blocked ? this.flags | 1 : this.flags & -2;
+        int i = this.blocked ? this.flags | 1 : this.flags & (-2);
         this.flags = i;
-        int i2 = this.phone_calls_available ? i | 16 : i & -17;
+        int i2 = this.phone_calls_available ? i | 16 : i & (-17);
         this.flags = i2;
-        int i3 = this.phone_calls_private ? i2 | 32 : i2 & -33;
+        int i3 = this.phone_calls_private ? i2 | 32 : i2 & (-33);
         this.flags = i3;
-        int i4 = this.can_pin_message ? i3 | 128 : i3 & -129;
+        int i4 = this.can_pin_message ? i3 | 128 : i3 & (-129);
         this.flags = i4;
-        int i5 = this.has_scheduled ? i4 | 4096 : i4 & -4097;
+        int i5 = this.has_scheduled ? i4 | 4096 : i4 & (-4097);
         this.flags = i5;
-        int i6 = this.video_calls_available ? i5 | 8192 : i5 & -8193;
+        int i6 = this.video_calls_available ? i5 | 8192 : i5 & (-8193);
         this.flags = i6;
-        int i7 = this.voice_messages_forbidden ? i6 | 1048576 : i6 & -1048577;
+        int i7 = this.voice_messages_forbidden ? i6 | 1048576 : i6 & (-1048577);
         this.flags = i7;
         abstractSerializedData.writeInt32(i7);
         abstractSerializedData.writeInt64(this.id);

@@ -5,7 +5,7 @@ import android.os.SystemClock;
 import android.view.View;
 import androidx.core.math.MathUtils;
 import org.telegram.messenger.AndroidUtilities;
-
+/* loaded from: classes3.dex */
 public class AnimatedFloat {
     private boolean firstSet;
     private Runnable invalidate;
@@ -20,8 +20,8 @@ public class AnimatedFloat {
     private float value;
 
     public AnimatedFloat(long j, TimeInterpolator timeInterpolator) {
-        this.transitionDelay = 0;
-        this.transitionDuration = 200;
+        this.transitionDelay = 0L;
+        this.transitionDuration = 200L;
         this.transitionInterpolator = CubicBezierInterpolator.DEFAULT;
         this.parent = null;
         this.transitionDuration = j;
@@ -30,8 +30,8 @@ public class AnimatedFloat {
     }
 
     public AnimatedFloat(long j, long j2, TimeInterpolator timeInterpolator) {
-        this.transitionDelay = 0;
-        this.transitionDuration = 200;
+        this.transitionDelay = 0L;
+        this.transitionDuration = 200L;
         this.transitionInterpolator = CubicBezierInterpolator.DEFAULT;
         this.parent = null;
         this.transitionDelay = j;
@@ -41,16 +41,16 @@ public class AnimatedFloat {
     }
 
     public AnimatedFloat(View view) {
-        this.transitionDelay = 0;
-        this.transitionDuration = 200;
+        this.transitionDelay = 0L;
+        this.transitionDuration = 200L;
         this.transitionInterpolator = CubicBezierInterpolator.DEFAULT;
         this.parent = view;
         this.firstSet = true;
     }
 
     public AnimatedFloat(View view, long j, TimeInterpolator timeInterpolator) {
-        this.transitionDelay = 0;
-        this.transitionDuration = 200;
+        this.transitionDelay = 0L;
+        this.transitionDuration = 200L;
         this.transitionInterpolator = CubicBezierInterpolator.DEFAULT;
         this.parent = view;
         this.transitionDuration = j;
@@ -59,8 +59,8 @@ public class AnimatedFloat {
     }
 
     public AnimatedFloat(View view, long j, long j2, TimeInterpolator timeInterpolator) {
-        this.transitionDelay = 0;
-        this.transitionDuration = 200;
+        this.transitionDelay = 0L;
+        this.transitionDuration = 200L;
         this.transitionInterpolator = CubicBezierInterpolator.DEFAULT;
         this.parent = view;
         this.transitionDelay = j;
@@ -70,8 +70,8 @@ public class AnimatedFloat {
     }
 
     public AnimatedFloat(float f, View view, long j, long j2, TimeInterpolator timeInterpolator) {
-        this.transitionDelay = 0;
-        this.transitionDuration = 200;
+        this.transitionDelay = 0L;
+        this.transitionDuration = 200L;
         this.transitionInterpolator = CubicBezierInterpolator.DEFAULT;
         this.parent = view;
         this.targetValue = f;
@@ -83,8 +83,8 @@ public class AnimatedFloat {
     }
 
     public AnimatedFloat(float f, Runnable runnable, long j, long j2, TimeInterpolator timeInterpolator) {
-        this.transitionDelay = 0;
-        this.transitionDuration = 200;
+        this.transitionDelay = 0L;
+        this.transitionDuration = 200L;
         this.transitionInterpolator = CubicBezierInterpolator.DEFAULT;
         this.invalidate = runnable;
         this.targetValue = f;

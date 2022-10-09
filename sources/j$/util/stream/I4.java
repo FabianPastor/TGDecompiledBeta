@@ -1,33 +1,36 @@
 package j$.util.stream;
 
-import j$.util.CLASSNAMEa;
+import j$.util.AbstractCLASSNAMEa;
 import j$.util.function.Consumer;
-import j$.util.u;
 import java.util.Comparator;
-
-final class I4 extends J4 implements u, Consumer {
+/* loaded from: classes2.dex */
+final class I4 extends J4 implements j$.util.u, Consumer {
     Object e;
 
-    I4(u uVar, long j, long j2) {
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public I4(j$.util.u uVar, long j, long j2) {
         super(uVar, j, j2);
     }
 
-    I4(u uVar, I4 i4) {
+    I4(j$.util.u uVar, I4 i4) {
         super(uVar, i4);
     }
 
+    @Override // j$.util.function.Consumer
     public final void accept(Object obj) {
         this.e = obj;
     }
 
+    @Override // j$.util.function.Consumer
     public /* synthetic */ Consumer andThen(Consumer consumer) {
-        return Consumer.CC.$default$andThen(this, consumer);
+        return consumer.getClass();
     }
 
+    @Override // j$.util.u
     public boolean b(Consumer consumer) {
         consumer.getClass();
         while (r() != 1 && this.a.b(this)) {
-            if (p(1) == 1) {
+            if (p(1L) == 1) {
                 consumer.accept(this.e);
                 this.e = null;
                 return true;
@@ -36,56 +39,60 @@ final class I4 extends J4 implements u, Consumer {
         return false;
     }
 
+    @Override // j$.util.u
     public void forEachRemaining(Consumer consumer) {
         consumer.getClass();
-        CLASSNAMEk4 k4Var = null;
+        CLASSNAMEk4 CLASSNAMEk4 = null;
         while (true) {
             int r = r();
-            if (r == 1) {
-                return;
-            }
-            if (r == 2) {
-                if (k4Var == null) {
-                    k4Var = new CLASSNAMEk4(128);
-                } else {
-                    k4Var.a = 0;
-                }
-                long j = 0;
-                while (this.a.b(k4Var)) {
-                    j++;
-                    if (j >= 128) {
-                        break;
+            if (r != 1) {
+                if (r == 2) {
+                    if (CLASSNAMEk4 == null) {
+                        CLASSNAMEk4 = new CLASSNAMEk4(128);
+                    } else {
+                        CLASSNAMEk4.a = 0;
                     }
-                }
-                if (j != 0) {
+                    long j = 0;
+                    while (this.a.b(CLASSNAMEk4)) {
+                        j++;
+                        if (j >= 128) {
+                            break;
+                        }
+                    }
+                    if (j == 0) {
+                        return;
+                    }
                     long p = p(j);
-                    for (int i = 0; ((long) i) < p; i++) {
-                        consumer.accept(k4Var.b[i]);
+                    for (int i = 0; i < p; i++) {
+                        consumer.accept(CLASSNAMEk4.b[i]);
                     }
                 } else {
+                    this.a.forEachRemaining(consumer);
                     return;
                 }
             } else {
-                this.a.forEachRemaining(consumer);
                 return;
             }
         }
     }
 
+    @Override // j$.util.u
     public Comparator getComparator() {
         throw new IllegalStateException();
     }
 
+    @Override // j$.util.u
     public /* synthetic */ long getExactSizeIfKnown() {
-        return CLASSNAMEa.e(this);
+        return AbstractCLASSNAMEa.e(this);
     }
 
+    @Override // j$.util.u
     public /* synthetic */ boolean hasCharacteristics(int i) {
-        return CLASSNAMEa.f(this, i);
+        return AbstractCLASSNAMEa.f(this, i);
     }
 
-    /* access modifiers changed from: protected */
-    public u q(u uVar) {
+    @Override // j$.util.stream.J4
+    protected j$.util.u q(j$.util.u uVar) {
         return new I4(uVar, this);
     }
 }

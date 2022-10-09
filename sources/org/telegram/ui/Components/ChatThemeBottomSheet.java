@@ -8,20 +8,23 @@ import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Shader;
-import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.core.util.ObjectsCompat$$ExternalSyntheticBackport0;
@@ -29,426 +32,275 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 import java.io.File;
+import java.io.FileInputStream;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ChatThemeController;
 import org.telegram.messenger.FileLoader;
+import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
+import org.telegram.messenger.Utilities;
+import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.ResultCallback;
 import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_account_getWallPaper;
 import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC$TL_inputWallPaperSlug;
 import org.telegram.tgnet.TLRPC$TL_wallPaper;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.tgnet.TLRPC$WallPaper;
 import org.telegram.ui.ActionBar.AlertDialog;
-import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.EmojiThemes;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.DrawerProfileCell;
+import org.telegram.ui.Cells.ThemesHorizontalListCell;
 import org.telegram.ui.ChatActivity;
-import org.telegram.ui.Components.Bulletin;
+import org.telegram.ui.Components.ChatThemeBottomSheet;
 import org.telegram.ui.Components.RecyclerListView;
-
+/* loaded from: classes3.dex */
 public class ChatThemeBottomSheet extends BottomSheet implements NotificationCenter.NotificationCenterDelegate {
-    /* access modifiers changed from: private */
-    public final Adapter adapter;
+    private final Adapter adapter;
     private final View applyButton;
     private TextView applyTextView;
-    /* access modifiers changed from: private */
-    public View changeDayNightView;
-    /* access modifiers changed from: private */
-    public ValueAnimator changeDayNightViewAnimator;
-    /* access modifiers changed from: private */
-    public float changeDayNightViewProgress;
+    private View changeDayNightView;
+    private ValueAnimator changeDayNightViewAnimator;
+    private float changeDayNightViewProgress;
     private final ChatActivity chatActivity;
-    /* access modifiers changed from: private */
-    public final RLottieDrawable darkThemeDrawable;
-    /* access modifiers changed from: private */
-    public final RLottieImageView darkThemeView;
-    /* access modifiers changed from: private */
-    public boolean forceDark;
+    private final RLottieDrawable darkThemeDrawable;
+    private final RLottieImageView darkThemeView;
+    private boolean forceDark;
     HintView hintView;
     private boolean isApplyClicked;
-    /* access modifiers changed from: private */
-    public boolean isLightDarkChangeAnimation;
+    private boolean isLightDarkChangeAnimation;
     private final LinearLayoutManager layoutManager;
     private final boolean originalIsDark;
     private final EmojiThemes originalTheme;
-    /* access modifiers changed from: private */
-    public int prevSelectedPosition = -1;
+    private int prevSelectedPosition;
     private final FlickerLoadingView progressView;
-    /* access modifiers changed from: private */
-    public final RecyclerListView recyclerView;
+    private final RecyclerListView recyclerView;
     private TextView resetTextView;
     private FrameLayout rootLayout;
-    /* access modifiers changed from: private */
-    public final LinearSmoothScroller scroller;
+    private final LinearSmoothScroller scroller;
     private ChatThemeItem selectedItem;
-    /* access modifiers changed from: private */
-    public final ChatActivity.ThemeDelegate themeDelegate;
+    private final ChatActivity.ThemeDelegate themeDelegate;
     private final TextView titleView;
 
-    /* JADX WARNING: Illegal instructions before constructor call */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public ChatThemeBottomSheet(org.telegram.ui.ChatActivity r18, org.telegram.ui.ChatActivity.ThemeDelegate r19) {
-        /*
-            r17 = this;
-            r0 = r17
-            r1 = r19
-            android.app.Activity r2 = r18.getParentActivity()
-            r3 = 1
-            r0.<init>(r2, r3, r1)
-            r2 = -1
-            r0.prevSelectedPosition = r2
-            r2 = r18
-            r0.chatActivity = r2
-            r0.themeDelegate = r1
-            org.telegram.ui.ActionBar.EmojiThemes r2 = r19.getCurrentTheme()
-            r0.originalTheme = r2
-            org.telegram.ui.ActionBar.Theme$ThemeInfo r2 = org.telegram.ui.ActionBar.Theme.getActiveTheme()
-            boolean r2 = r2.isDark()
-            r0.originalIsDark = r2
-            org.telegram.ui.Components.ChatThemeBottomSheet$Adapter r2 = new org.telegram.ui.Components.ChatThemeBottomSheet$Adapter
-            int r4 = r0.currentAccount
-            r5 = 0
-            r2.<init>(r4, r1, r5)
-            r0.adapter = r2
-            r0.setDimBehind(r5)
-            r0.setCanDismissWithSwipe(r5)
-            r0.setApplyBottomPadding(r5)
-            r0.drawNavigationBar = r3
-            android.widget.FrameLayout r4 = new android.widget.FrameLayout
-            android.content.Context r6 = r17.getContext()
-            r4.<init>(r6)
-            r0.rootLayout = r4
-            r0.setCustomView(r4)
-            android.widget.TextView r4 = new android.widget.TextView
-            android.content.Context r6 = r17.getContext()
-            r4.<init>(r6)
-            r0.titleView = r4
-            android.text.TextUtils$TruncateAt r6 = android.text.TextUtils.TruncateAt.MIDDLE
-            r4.setEllipsize(r6)
-            r4.setLines(r3)
-            r4.setSingleLine(r3)
-            int r6 = org.telegram.messenger.R.string.SelectTheme
-            java.lang.String r7 = "SelectTheme"
-            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
-            r4.setText(r6)
-            java.lang.String r6 = "dialogTextBlack"
-            int r6 = r0.getThemedColor(r6)
-            r4.setTextColor(r6)
-            r6 = 1101004800(0x41a00000, float:20.0)
-            r4.setTextSize(r3, r6)
-            java.lang.String r6 = "fonts/rmedium.ttf"
-            android.graphics.Typeface r7 = org.telegram.messenger.AndroidUtilities.getTypeface(r6)
-            r4.setTypeface(r7)
-            r7 = 1101529088(0x41a80000, float:21.0)
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r9 = 1086324736(0x40CLASSNAME, float:6.0)
-            int r10 = org.telegram.messenger.AndroidUtilities.dp(r9)
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r11 = 1090519040(0x41000000, float:8.0)
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r11)
-            r4.setPadding(r8, r10, r7, r11)
-            android.widget.FrameLayout r7 = r0.rootLayout
-            r10 = -1
-            r11 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-            r12 = 8388659(0x800033, float:1.1755015E-38)
-            r13 = 0
-            r14 = 0
-            r15 = 1115160576(0x42780000, float:62.0)
-            r16 = 0
-            android.widget.FrameLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r11, r12, r13, r14, r15, r16)
-            r7.addView(r4, r8)
-            java.lang.String r4 = "featuredStickers_addButton"
-            int r7 = r0.getThemedColor(r4)
-            r8 = 1105199104(0x41e00000, float:28.0)
-            int r14 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            org.telegram.ui.Components.RLottieDrawable r8 = new org.telegram.ui.Components.RLottieDrawable
-            int r11 = org.telegram.messenger.R.raw.sun_outline
-            java.lang.StringBuilder r10 = new java.lang.StringBuilder
-            r10.<init>()
-            java.lang.String r12 = ""
-            r10.append(r12)
-            r10.append(r11)
-            java.lang.String r12 = r10.toString()
-            r15 = 0
-            r16 = 0
-            r10 = r8
-            r13 = r14
-            r10.<init>(r11, r12, r13, r14, r15, r16)
-            r0.darkThemeDrawable = r8
-            org.telegram.ui.ActionBar.Theme$ThemeInfo r10 = org.telegram.ui.ActionBar.Theme.getActiveTheme()
-            boolean r10 = r10.isDark()
-            r10 = r10 ^ r3
-            r0.forceDark = r10
-            org.telegram.ui.ActionBar.Theme$ThemeInfo r10 = org.telegram.ui.ActionBar.Theme.getActiveTheme()
-            boolean r10 = r10.isDark()
-            r0.setForceDark(r10, r5)
-            r8.setAllowDecodeSingleFrame(r3)
-            r8.setPlayInDirectionOfCustomEndFrame(r3)
-            android.graphics.PorterDuffColorFilter r10 = new android.graphics.PorterDuffColorFilter
-            android.graphics.PorterDuff$Mode r11 = android.graphics.PorterDuff.Mode.MULTIPLY
-            r10.<init>(r7, r11)
-            r8.setColorFilter(r10)
-            org.telegram.ui.Components.ChatThemeBottomSheet$1 r7 = new org.telegram.ui.Components.ChatThemeBottomSheet$1
-            android.content.Context r10 = r17.getContext()
-            r7.<init>(r10)
-            r0.darkThemeView = r7
-            r7.setAnimation(r8)
-            android.widget.ImageView$ScaleType r8 = android.widget.ImageView.ScaleType.CENTER
-            r7.setScaleType(r8)
-            org.telegram.ui.Components.ChatThemeBottomSheet$$ExternalSyntheticLambda2 r8 = new org.telegram.ui.Components.ChatThemeBottomSheet$$ExternalSyntheticLambda2
-            r8.<init>(r0)
-            r7.setOnClickListener(r8)
-            android.widget.FrameLayout r8 = r0.rootLayout
-            r10 = 44
-            r11 = 1110441984(0x42300000, float:44.0)
-            r12 = 8388661(0x800035, float:1.1755018E-38)
-            r13 = 0
-            r14 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-            r15 = 1088421888(0x40e00000, float:7.0)
-            r16 = 0
-            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r11, r12, r13, r14, r15, r16)
-            r8.addView(r7, r10)
-            org.telegram.ui.Components.ChatThemeBottomSheet$2 r7 = new org.telegram.ui.Components.ChatThemeBottomSheet$2
-            android.content.Context r8 = r17.getContext()
-            r7.<init>(r0, r8)
-            r0.scroller = r7
-            org.telegram.ui.Components.RecyclerListView r7 = new org.telegram.ui.Components.RecyclerListView
-            android.content.Context r8 = r17.getContext()
-            r7.<init>(r8)
-            r0.recyclerView = r7
-            r7.setAdapter(r2)
-            r7.setClipChildren(r5)
-            r7.setClipToPadding(r5)
-            r7.setHasFixedSize(r3)
-            r2 = 0
-            r7.setItemAnimator(r2)
-            r7.setNestedScrollingEnabled(r5)
-            androidx.recyclerview.widget.LinearLayoutManager r2 = new androidx.recyclerview.widget.LinearLayoutManager
-            android.content.Context r8 = r17.getContext()
-            r2.<init>(r8, r5, r5)
-            r0.layoutManager = r2
-            r7.setLayoutManager(r2)
-            r2 = 1094713344(0x41400000, float:12.0)
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            r7.setPadding(r8, r5, r2, r5)
-            org.telegram.ui.Components.ChatThemeBottomSheet$$ExternalSyntheticLambda6 r2 = new org.telegram.ui.Components.ChatThemeBottomSheet$$ExternalSyntheticLambda6
-            r2.<init>(r0, r1)
-            r7.setOnItemClickListener((org.telegram.ui.Components.RecyclerListView.OnItemClickListener) r2)
-            org.telegram.ui.Components.FlickerLoadingView r2 = new org.telegram.ui.Components.FlickerLoadingView
-            android.content.Context r8 = r17.getContext()
-            org.telegram.ui.ActionBar.Theme$ResourcesProvider r10 = r0.resourcesProvider
-            r2.<init>(r8, r10)
-            r0.progressView = r2
-            r8 = 14
-            r2.setViewType(r8)
-            r2.setVisibility(r5)
-            android.widget.FrameLayout r8 = r0.rootLayout
-            r10 = -1
-            r11 = 1120927744(0x42d00000, float:104.0)
-            r12 = 8388611(0x800003, float:1.1754948E-38)
-            r14 = 1110441984(0x42300000, float:44.0)
-            r15 = 0
-            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r11, r12, r13, r14, r15, r16)
-            r8.addView(r2, r10)
-            android.widget.FrameLayout r2 = r0.rootLayout
-            r10 = -1
-            android.widget.FrameLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r11, r12, r13, r14, r15, r16)
-            r2.addView(r7, r8)
-            android.view.View r2 = new android.view.View
-            android.content.Context r7 = r17.getContext()
-            r2.<init>(r7)
-            r0.applyButton = r2
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r9)
-            int r4 = r0.getThemedColor(r4)
-            java.lang.String r8 = "featuredStickers_addButtonPressed"
-            int r8 = r0.getThemedColor(r8)
-            android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.createSimpleSelectorRoundRectDrawable(r7, r4, r8)
-            r2.setBackground(r4)
-            r2.setEnabled(r5)
-            org.telegram.ui.Components.ChatThemeBottomSheet$$ExternalSyntheticLambda3 r4 = new org.telegram.ui.Components.ChatThemeBottomSheet$$ExternalSyntheticLambda3
-            r4.<init>(r0)
-            r2.setOnClickListener(r4)
-            android.widget.FrameLayout r4 = r0.rootLayout
-            r7 = -1
-            r8 = 1111490560(0x42400000, float:48.0)
-            r9 = 8388611(0x800003, float:1.1754948E-38)
-            r10 = 1098907648(0x41800000, float:16.0)
-            r11 = 1126301696(0x43220000, float:162.0)
-            r12 = 1098907648(0x41800000, float:16.0)
-            r13 = 1098907648(0x41800000, float:16.0)
-            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r7, r8, r9, r10, r11, r12, r13)
-            r4.addView(r2, r5)
-            android.widget.TextView r2 = new android.widget.TextView
-            android.content.Context r4 = r17.getContext()
-            r2.<init>(r4)
-            r0.resetTextView = r2
-            r4 = 0
-            r2.setAlpha(r4)
-            android.widget.TextView r2 = r0.resetTextView
-            android.text.TextUtils$TruncateAt r4 = android.text.TextUtils.TruncateAt.END
-            r2.setEllipsize(r4)
-            android.widget.TextView r2 = r0.resetTextView
-            r4 = 17
-            r2.setGravity(r4)
-            android.widget.TextView r2 = r0.resetTextView
-            r2.setLines(r3)
-            android.widget.TextView r2 = r0.resetTextView
-            r2.setSingleLine(r3)
-            android.widget.TextView r2 = r0.resetTextView
-            org.telegram.ui.ActionBar.EmojiThemes r1 = r19.getCurrentTheme()
-            if (r1 != 0) goto L_0x0224
-            int r1 = org.telegram.messenger.R.string.DoNoSetTheme
-            java.lang.String r5 = "DoNoSetTheme"
-            goto L_0x0228
-        L_0x0224:
-            int r1 = org.telegram.messenger.R.string.ChatResetTheme
-            java.lang.String r5 = "ChatResetTheme"
-        L_0x0228:
-            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r5, r1)
-            r2.setText(r1)
-            android.widget.TextView r1 = r0.resetTextView
-            java.lang.String r2 = "featuredStickers_buttonText"
-            int r5 = r0.getThemedColor(r2)
-            r1.setTextColor(r5)
-            android.widget.TextView r1 = r0.resetTextView
-            r5 = 1097859072(0x41700000, float:15.0)
-            r1.setTextSize(r3, r5)
-            android.widget.TextView r1 = r0.resetTextView
-            android.graphics.Typeface r7 = org.telegram.messenger.AndroidUtilities.getTypeface(r6)
-            r1.setTypeface(r7)
-            android.widget.TextView r1 = r0.resetTextView
-            r7 = 4
-            r1.setVisibility(r7)
-            android.widget.FrameLayout r1 = r0.rootLayout
-            android.widget.TextView r8 = r0.resetTextView
-            r9 = -1
-            r10 = 1111490560(0x42400000, float:48.0)
-            r11 = 8388611(0x800003, float:1.1754948E-38)
-            r12 = 1098907648(0x41800000, float:16.0)
-            r13 = 1126301696(0x43220000, float:162.0)
-            r14 = 1098907648(0x41800000, float:16.0)
-            r15 = 1098907648(0x41800000, float:16.0)
-            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r10, r11, r12, r13, r14, r15)
-            r1.addView(r8, r9)
-            android.widget.TextView r1 = new android.widget.TextView
-            android.content.Context r8 = r17.getContext()
-            r1.<init>(r8)
-            r0.applyTextView = r1
-            android.text.TextUtils$TruncateAt r8 = android.text.TextUtils.TruncateAt.END
-            r1.setEllipsize(r8)
-            android.widget.TextView r1 = r0.applyTextView
-            r1.setGravity(r4)
-            android.widget.TextView r1 = r0.applyTextView
-            r1.setLines(r3)
-            android.widget.TextView r1 = r0.applyTextView
-            r1.setSingleLine(r3)
-            android.widget.TextView r1 = r0.applyTextView
-            int r4 = org.telegram.messenger.R.string.ChatApplyTheme
-            java.lang.String r8 = "ChatApplyTheme"
-            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r8, r4)
-            r1.setText(r4)
-            android.widget.TextView r1 = r0.applyTextView
-            int r2 = r0.getThemedColor(r2)
-            r1.setTextColor(r2)
-            android.widget.TextView r1 = r0.applyTextView
-            r1.setTextSize(r3, r5)
-            android.widget.TextView r1 = r0.applyTextView
-            android.graphics.Typeface r2 = org.telegram.messenger.AndroidUtilities.getTypeface(r6)
-            r1.setTypeface(r2)
-            android.widget.TextView r1 = r0.applyTextView
-            r1.setVisibility(r7)
-            android.widget.FrameLayout r1 = r0.rootLayout
-            android.widget.TextView r2 = r0.applyTextView
-            r3 = -1
-            r4 = 1111490560(0x42400000, float:48.0)
-            r5 = 8388611(0x800003, float:1.1754948E-38)
-            r6 = 1098907648(0x41800000, float:16.0)
-            r7 = 1126301696(0x43220000, float:162.0)
-            r8 = 1098907648(0x41800000, float:16.0)
-            r9 = 1098907648(0x41800000, float:16.0)
-            android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r3, r4, r5, r6, r7, r8, r9)
-            r1.addView(r2, r3)
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatThemeBottomSheet.<init>(org.telegram.ui.ChatActivity, org.telegram.ui.ChatActivity$ThemeDelegate):void");
+    public ChatThemeBottomSheet(ChatActivity chatActivity, final ChatActivity.ThemeDelegate themeDelegate) {
+        super(chatActivity.getParentActivity(), true, themeDelegate);
+        int i;
+        String str;
+        this.prevSelectedPosition = -1;
+        this.chatActivity = chatActivity;
+        this.themeDelegate = themeDelegate;
+        this.originalTheme = themeDelegate.getCurrentTheme();
+        this.originalIsDark = Theme.getActiveTheme().isDark();
+        Adapter adapter = new Adapter(this.currentAccount, themeDelegate, 0);
+        this.adapter = adapter;
+        setDimBehind(false);
+        setCanDismissWithSwipe(false);
+        setApplyBottomPadding(false);
+        this.drawNavigationBar = true;
+        FrameLayout frameLayout = new FrameLayout(getContext());
+        this.rootLayout = frameLayout;
+        setCustomView(frameLayout);
+        TextView textView = new TextView(getContext());
+        this.titleView = textView;
+        textView.setEllipsize(TextUtils.TruncateAt.MIDDLE);
+        textView.setLines(1);
+        textView.setSingleLine(true);
+        textView.setText(LocaleController.getString("SelectTheme", R.string.SelectTheme));
+        textView.setTextColor(getThemedColor("dialogTextBlack"));
+        textView.setTextSize(1, 20.0f);
+        textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        textView.setPadding(AndroidUtilities.dp(21.0f), AndroidUtilities.dp(6.0f), AndroidUtilities.dp(21.0f), AndroidUtilities.dp(8.0f));
+        this.rootLayout.addView(textView, LayoutHelper.createFrame(-1, -2.0f, 8388659, 0.0f, 0.0f, 62.0f, 0.0f));
+        int themedColor = getThemedColor("featuredStickers_addButton");
+        int dp = AndroidUtilities.dp(28.0f);
+        int i2 = R.raw.sun_outline;
+        RLottieDrawable rLottieDrawable = new RLottieDrawable(i2, "" + i2, dp, dp, false, null);
+        this.darkThemeDrawable = rLottieDrawable;
+        this.forceDark = Theme.getActiveTheme().isDark() ^ true;
+        setForceDark(Theme.getActiveTheme().isDark(), false);
+        rLottieDrawable.setAllowDecodeSingleFrame(true);
+        rLottieDrawable.setPlayInDirectionOfCustomEndFrame(true);
+        rLottieDrawable.setColorFilter(new PorterDuffColorFilter(themedColor, PorterDuff.Mode.MULTIPLY));
+        RLottieImageView rLottieImageView = new RLottieImageView(getContext()) { // from class: org.telegram.ui.Components.ChatThemeBottomSheet.1
+            @Override // android.view.View
+            public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+                super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+                if (ChatThemeBottomSheet.this.forceDark) {
+                    accessibilityNodeInfo.setText(LocaleController.getString("AccDescrSwitchToDayTheme", R.string.AccDescrSwitchToDayTheme));
+                } else {
+                    accessibilityNodeInfo.setText(LocaleController.getString("AccDescrSwitchToNightTheme", R.string.AccDescrSwitchToNightTheme));
+                }
+            }
+        };
+        this.darkThemeView = rLottieImageView;
+        rLottieImageView.setAnimation(rLottieDrawable);
+        rLottieImageView.setScaleType(ImageView.ScaleType.CENTER);
+        rLottieImageView.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.Components.ChatThemeBottomSheet$$ExternalSyntheticLambda2
+            @Override // android.view.View.OnClickListener
+            public final void onClick(View view) {
+                ChatThemeBottomSheet.this.lambda$new$0(view);
+            }
+        });
+        this.rootLayout.addView(rLottieImageView, LayoutHelper.createFrame(44, 44.0f, 8388661, 0.0f, -2.0f, 7.0f, 0.0f));
+        this.scroller = new LinearSmoothScroller(this, getContext()) { // from class: org.telegram.ui.Components.ChatThemeBottomSheet.2
+            /* JADX INFO: Access modifiers changed from: protected */
+            @Override // androidx.recyclerview.widget.LinearSmoothScroller
+            public int calculateTimeForScrolling(int i3) {
+                return super.calculateTimeForScrolling(i3) * 6;
+            }
+        };
+        RecyclerListView recyclerListView = new RecyclerListView(getContext());
+        this.recyclerView = recyclerListView;
+        recyclerListView.setAdapter(adapter);
+        recyclerListView.setClipChildren(false);
+        recyclerListView.setClipToPadding(false);
+        recyclerListView.setHasFixedSize(true);
+        recyclerListView.setItemAnimator(null);
+        recyclerListView.setNestedScrollingEnabled(false);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), 0, false);
+        this.layoutManager = linearLayoutManager;
+        recyclerListView.setLayoutManager(linearLayoutManager);
+        recyclerListView.setPadding(AndroidUtilities.dp(12.0f), 0, AndroidUtilities.dp(12.0f), 0);
+        recyclerListView.setOnItemClickListener(new RecyclerListView.OnItemClickListener() { // from class: org.telegram.ui.Components.ChatThemeBottomSheet$$ExternalSyntheticLambda6
+            @Override // org.telegram.ui.Components.RecyclerListView.OnItemClickListener
+            public final void onItemClick(View view, int i3) {
+                ChatThemeBottomSheet.this.lambda$new$1(themeDelegate, view, i3);
+            }
+        });
+        FlickerLoadingView flickerLoadingView = new FlickerLoadingView(getContext(), this.resourcesProvider);
+        this.progressView = flickerLoadingView;
+        flickerLoadingView.setViewType(14);
+        flickerLoadingView.setVisibility(0);
+        this.rootLayout.addView(flickerLoadingView, LayoutHelper.createFrame(-1, 104.0f, 8388611, 0.0f, 44.0f, 0.0f, 0.0f));
+        this.rootLayout.addView(recyclerListView, LayoutHelper.createFrame(-1, 104.0f, 8388611, 0.0f, 44.0f, 0.0f, 0.0f));
+        View view = new View(getContext());
+        this.applyButton = view;
+        view.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(6.0f), getThemedColor("featuredStickers_addButton"), getThemedColor("featuredStickers_addButtonPressed")));
+        view.setEnabled(false);
+        view.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.Components.ChatThemeBottomSheet$$ExternalSyntheticLambda3
+            @Override // android.view.View.OnClickListener
+            public final void onClick(View view2) {
+                ChatThemeBottomSheet.this.lambda$new$2(view2);
+            }
+        });
+        this.rootLayout.addView(view, LayoutHelper.createFrame(-1, 48.0f, 8388611, 16.0f, 162.0f, 16.0f, 16.0f));
+        TextView textView2 = new TextView(getContext());
+        this.resetTextView = textView2;
+        textView2.setAlpha(0.0f);
+        this.resetTextView.setEllipsize(TextUtils.TruncateAt.END);
+        this.resetTextView.setGravity(17);
+        this.resetTextView.setLines(1);
+        this.resetTextView.setSingleLine(true);
+        TextView textView3 = this.resetTextView;
+        if (themeDelegate.getCurrentTheme() == null) {
+            i = R.string.DoNoSetTheme;
+            str = "DoNoSetTheme";
+        } else {
+            i = R.string.ChatResetTheme;
+            str = "ChatResetTheme";
+        }
+        textView3.setText(LocaleController.getString(str, i));
+        this.resetTextView.setTextColor(getThemedColor("featuredStickers_buttonText"));
+        this.resetTextView.setTextSize(1, 15.0f);
+        this.resetTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        this.resetTextView.setVisibility(4);
+        this.rootLayout.addView(this.resetTextView, LayoutHelper.createFrame(-1, 48.0f, 8388611, 16.0f, 162.0f, 16.0f, 16.0f));
+        TextView textView4 = new TextView(getContext());
+        this.applyTextView = textView4;
+        textView4.setEllipsize(TextUtils.TruncateAt.END);
+        this.applyTextView.setGravity(17);
+        this.applyTextView.setLines(1);
+        this.applyTextView.setSingleLine(true);
+        this.applyTextView.setText(LocaleController.getString("ChatApplyTheme", R.string.ChatApplyTheme));
+        this.applyTextView.setTextColor(getThemedColor("featuredStickers_buttonText"));
+        this.applyTextView.setTextSize(1, 15.0f);
+        this.applyTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        this.applyTextView.setVisibility(4);
+        this.rootLayout.addView(this.applyTextView, LayoutHelper.createFrame(-1, 48.0f, 8388611, 16.0f, 162.0f, 16.0f, 16.0f));
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$new$0(View view) {
-        if (this.changeDayNightViewAnimator == null) {
-            setupLightDarkTheme(!this.forceDark);
+        if (this.changeDayNightViewAnimator != null) {
+            return;
         }
+        setupLightDarkTheme(!this.forceDark);
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$1(ChatActivity.ThemeDelegate themeDelegate2, View view, final int i) {
-        if (this.adapter.items.get(i) != this.selectedItem && this.changeDayNightView == null) {
-            ChatThemeItem chatThemeItem = this.adapter.items.get(i);
-            this.selectedItem = chatThemeItem;
-            this.isLightDarkChangeAnimation = false;
-            EmojiThemes emojiThemes = chatThemeItem.chatTheme;
-            if (emojiThemes == null || emojiThemes.showAsDefaultStub) {
-                this.applyTextView.animate().alpha(0.0f).setDuration(300).start();
-                this.resetTextView.animate().alpha(1.0f).setDuration(300).start();
-            } else {
-                this.resetTextView.animate().alpha(0.0f).setDuration(300).start();
-                this.applyTextView.animate().alpha(1.0f).setDuration(300).start();
-            }
-            EmojiThemes emojiThemes2 = this.selectedItem.chatTheme;
-            if (emojiThemes2.showAsDefaultStub) {
-                themeDelegate2.setCurrentTheme((EmojiThemes) null, true, Boolean.valueOf(this.forceDark));
-            } else {
-                themeDelegate2.setCurrentTheme(emojiThemes2, true, Boolean.valueOf(this.forceDark));
-            }
-            this.adapter.setSelectedItem(i);
-            this.containerView.postDelayed(new Runnable() {
-                public void run() {
-                    int i;
-                    RecyclerView.LayoutManager layoutManager = ChatThemeBottomSheet.this.recyclerView.getLayoutManager();
-                    if (layoutManager != null) {
-                        if (i > ChatThemeBottomSheet.this.prevSelectedPosition) {
-                            i = Math.min(i + 1, ChatThemeBottomSheet.this.adapter.items.size() - 1);
-                        } else {
-                            i = Math.max(i - 1, 0);
-                        }
-                        ChatThemeBottomSheet.this.scroller.setTargetPosition(i);
-                        layoutManager.startSmoothScroll(ChatThemeBottomSheet.this.scroller);
+    /* JADX INFO: Access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$1(ChatActivity.ThemeDelegate themeDelegate, View view, final int i) {
+        if (this.adapter.items.get(i) == this.selectedItem || this.changeDayNightView != null) {
+            return;
+        }
+        ChatThemeItem chatThemeItem = this.adapter.items.get(i);
+        this.selectedItem = chatThemeItem;
+        this.isLightDarkChangeAnimation = false;
+        EmojiThemes emojiThemes = chatThemeItem.chatTheme;
+        if (emojiThemes == null || emojiThemes.showAsDefaultStub) {
+            this.applyTextView.animate().alpha(0.0f).setDuration(300L).start();
+            this.resetTextView.animate().alpha(1.0f).setDuration(300L).start();
+        } else {
+            this.resetTextView.animate().alpha(0.0f).setDuration(300L).start();
+            this.applyTextView.animate().alpha(1.0f).setDuration(300L).start();
+        }
+        EmojiThemes emojiThemes2 = this.selectedItem.chatTheme;
+        if (emojiThemes2.showAsDefaultStub) {
+            themeDelegate.setCurrentTheme(null, true, Boolean.valueOf(this.forceDark));
+        } else {
+            themeDelegate.setCurrentTheme(emojiThemes2, true, Boolean.valueOf(this.forceDark));
+        }
+        this.adapter.setSelectedItem(i);
+        this.containerView.postDelayed(new Runnable() { // from class: org.telegram.ui.Components.ChatThemeBottomSheet.3
+            @Override // java.lang.Runnable
+            public void run() {
+                int max;
+                RecyclerView.LayoutManager layoutManager = ChatThemeBottomSheet.this.recyclerView.getLayoutManager();
+                if (layoutManager != null) {
+                    if (i > ChatThemeBottomSheet.this.prevSelectedPosition) {
+                        max = Math.min(i + 1, ChatThemeBottomSheet.this.adapter.items.size() - 1);
+                    } else {
+                        max = Math.max(i - 1, 0);
                     }
-                    int unused = ChatThemeBottomSheet.this.prevSelectedPosition = i;
+                    ChatThemeBottomSheet.this.scroller.setTargetPosition(max);
+                    layoutManager.startSmoothScroll(ChatThemeBottomSheet.this.scroller);
                 }
-            }, 100);
-            for (int i2 = 0; i2 < this.recyclerView.getChildCount(); i2++) {
-                ThemeSmallPreviewView themeSmallPreviewView = (ThemeSmallPreviewView) this.recyclerView.getChildAt(i2);
-                if (themeSmallPreviewView != view) {
-                    themeSmallPreviewView.cancelAnimation();
-                }
+                ChatThemeBottomSheet.this.prevSelectedPosition = i;
             }
-            if (!this.adapter.items.get(i).chatTheme.showAsDefaultStub) {
-                ((ThemeSmallPreviewView) view).playEmojiAnimation();
+        }, 100L);
+        for (int i2 = 0; i2 < this.recyclerView.getChildCount(); i2++) {
+            ThemeSmallPreviewView themeSmallPreviewView = (ThemeSmallPreviewView) this.recyclerView.getChildAt(i2);
+            if (themeSmallPreviewView != view) {
+                themeSmallPreviewView.cancelAnimation();
             }
         }
+        if (this.adapter.items.get(i).chatTheme.showAsDefaultStub) {
+            return;
+        }
+        ((ThemeSmallPreviewView) view).playEmojiAnimation();
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$new$2(View view) {
         applySelectedTheme();
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
+    @Override // org.telegram.ui.ActionBar.BottomSheet, android.app.Dialog
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         ChatThemeController.preloadAllWallpaperThumbs(true);
@@ -459,7 +311,8 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
         this.isApplyClicked = false;
         List<EmojiThemes> cachedThemes = this.themeDelegate.getCachedThemes();
         if (cachedThemes == null || cachedThemes.isEmpty()) {
-            ChatThemeController.requestAllChatThemes(new ResultCallback<List<EmojiThemes>>() {
+            ChatThemeController.requestAllChatThemes(new ResultCallback<List<EmojiThemes>>() { // from class: org.telegram.ui.Components.ChatThemeBottomSheet.4
+                @Override // org.telegram.tgnet.ResultCallback
                 public void onComplete(List<EmojiThemes> list) {
                     if (list != null && !list.isEmpty()) {
                         ChatThemeBottomSheet.this.themeDelegate.setCachedThemes(list);
@@ -467,6 +320,7 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
                     ChatThemeBottomSheet.this.onDataLoaded(list);
                 }
 
+                @Override // org.telegram.tgnet.ResultCallback
                 public void onError(TLRPC$TL_error tLRPC$TL_error) {
                     Toast.makeText(ChatThemeBottomSheet.this.getContext(), tLRPC$TL_error.text, 0).show();
                 }
@@ -474,35 +328,44 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
         } else {
             onDataLoaded(cachedThemes);
         }
-        if (this.chatActivity.getCurrentUser() != null && SharedConfig.dayNightThemeSwitchHintCount > 0 && !this.chatActivity.getCurrentUser().self) {
-            SharedConfig.updateDayNightThemeSwitchHintCount(SharedConfig.dayNightThemeSwitchHintCount - 1);
-            HintView hintView2 = new HintView(getContext(), 9, this.chatActivity.getResourceProvider());
-            this.hintView = hintView2;
-            hintView2.setVisibility(4);
-            this.hintView.setShowingDuration(5000);
-            this.hintView.setBottomOffset(-AndroidUtilities.dp(8.0f));
-            this.hintView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("ChatThemeDayNightSwitchTooltip", R.string.ChatThemeDayNightSwitchTooltip, this.chatActivity.getCurrentUser().first_name)));
-            AndroidUtilities.runOnUIThread(new ChatThemeBottomSheet$$ExternalSyntheticLambda4(this), 1500);
-            this.container.addView(this.hintView, LayoutHelper.createFrame(-2, -2.0f, 51, 10.0f, 0.0f, 10.0f, 0.0f));
+        if (this.chatActivity.getCurrentUser() == null || SharedConfig.dayNightThemeSwitchHintCount <= 0 || this.chatActivity.getCurrentUser().self) {
+            return;
         }
+        SharedConfig.updateDayNightThemeSwitchHintCount(SharedConfig.dayNightThemeSwitchHintCount - 1);
+        HintView hintView = new HintView(getContext(), 9, this.chatActivity.getResourceProvider());
+        this.hintView = hintView;
+        hintView.setVisibility(4);
+        this.hintView.setShowingDuration(5000L);
+        this.hintView.setBottomOffset(-AndroidUtilities.dp(8.0f));
+        this.hintView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("ChatThemeDayNightSwitchTooltip", R.string.ChatThemeDayNightSwitchTooltip, this.chatActivity.getCurrentUser().first_name)));
+        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.ChatThemeBottomSheet$$ExternalSyntheticLambda4
+            @Override // java.lang.Runnable
+            public final void run() {
+                ChatThemeBottomSheet.this.lambda$onCreate$3();
+            }
+        }, 1500L);
+        this.container.addView(this.hintView, LayoutHelper.createFrame(-2, -2.0f, 51, 10.0f, 0.0f, 10.0f, 0.0f));
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$onCreate$3() {
         this.hintView.showForView(this.darkThemeView, true);
     }
 
+    @Override // org.telegram.ui.ActionBar.BottomSheet
     public void onContainerTranslationYChanged(float f) {
-        HintView hintView2 = this.hintView;
-        if (hintView2 != null) {
-            hintView2.hide();
+        HintView hintView = this.hintView;
+        if (hintView != null) {
+            hintView.hide();
         }
     }
 
+    @Override // android.app.Dialog
     public void onBackPressed() {
         close();
     }
 
+    @Override // org.telegram.ui.ActionBar.BottomSheet, android.app.Dialog, android.content.DialogInterface
     public void dismiss() {
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiLoaded);
         super.dismiss();
@@ -516,24 +379,35 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), this.resourcesProvider);
             builder.setTitle(LocaleController.getString("ChatThemeSaveDialogTitle", R.string.ChatThemeSaveDialogTitle));
             builder.setSubtitle(LocaleController.getString("ChatThemeSaveDialogText", R.string.ChatThemeSaveDialogText));
-            builder.setPositiveButton(LocaleController.getString("ChatThemeSaveDialogApply", R.string.ChatThemeSaveDialogApply), new ChatThemeBottomSheet$$ExternalSyntheticLambda0(this));
-            builder.setNegativeButton(LocaleController.getString("ChatThemeSaveDialogDiscard", R.string.ChatThemeSaveDialogDiscard), new ChatThemeBottomSheet$$ExternalSyntheticLambda1(this));
+            builder.setPositiveButton(LocaleController.getString("ChatThemeSaveDialogApply", R.string.ChatThemeSaveDialogApply), new DialogInterface.OnClickListener() { // from class: org.telegram.ui.Components.ChatThemeBottomSheet$$ExternalSyntheticLambda0
+                @Override // android.content.DialogInterface.OnClickListener
+                public final void onClick(DialogInterface dialogInterface, int i) {
+                    ChatThemeBottomSheet.this.lambda$close$4(dialogInterface, i);
+                }
+            });
+            builder.setNegativeButton(LocaleController.getString("ChatThemeSaveDialogDiscard", R.string.ChatThemeSaveDialogDiscard), new DialogInterface.OnClickListener() { // from class: org.telegram.ui.Components.ChatThemeBottomSheet$$ExternalSyntheticLambda1
+                @Override // android.content.DialogInterface.OnClickListener
+                public final void onClick(DialogInterface dialogInterface, int i) {
+                    ChatThemeBottomSheet.this.lambda$close$5(dialogInterface, i);
+                }
+            });
             builder.show();
             return;
         }
         dismiss();
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$close$4(DialogInterface dialogInterface, int i) {
         applySelectedTheme();
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$close$5(DialogInterface dialogInterface, int i) {
         dismiss();
     }
 
+    @Override // org.telegram.messenger.NotificationCenter.NotificationCenterDelegate
     @SuppressLint({"NotifyDataSetChanged"})
     public void didReceivedNotification(int i, int i2, Object... objArr) {
         if (i == NotificationCenter.emojiLoaded) {
@@ -541,13 +415,16 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
         }
     }
 
+    @Override // org.telegram.ui.ActionBar.BottomSheet
     public ArrayList<ThemeDescription> getThemeDescriptions() {
-        AnonymousClass5 r7 = new ThemeDescription.ThemeDescriptionDelegate() {
+        ThemeDescription.ThemeDescriptionDelegate themeDescriptionDelegate = new ThemeDescription.ThemeDescriptionDelegate() { // from class: org.telegram.ui.Components.ChatThemeBottomSheet.5
             private boolean isAnimationStarted = false;
 
+            @Override // org.telegram.ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate
             public void didSetColor() {
             }
 
+            @Override // org.telegram.ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate
             public void onAnimationProgress(float f) {
                 if (f == 0.0f && !this.isAnimationStarted) {
                     ChatThemeBottomSheet.this.onAnimationStart();
@@ -559,19 +436,20 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
                 if (ChatThemeBottomSheet.this.isLightDarkChangeAnimation) {
                     ChatThemeBottomSheet.this.setItemsAnimationProgress(f);
                 }
-                if (f == 1.0f && this.isAnimationStarted) {
-                    boolean unused = ChatThemeBottomSheet.this.isLightDarkChangeAnimation = false;
-                    ChatThemeBottomSheet.this.onAnimationEnd();
-                    this.isAnimationStarted = false;
+                if (f != 1.0f || !this.isAnimationStarted) {
+                    return;
                 }
+                ChatThemeBottomSheet.this.isLightDarkChangeAnimation = false;
+                ChatThemeBottomSheet.this.onAnimationEnd();
+                this.isAnimationStarted = false;
             }
         };
         ArrayList<ThemeDescription> arrayList = new ArrayList<>();
-        arrayList.add(new ThemeDescription((View) null, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, new Drawable[]{this.shadowDrawable}, r7, "dialogBackground"));
-        arrayList.add(new ThemeDescription(this.titleView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogTextBlack"));
-        arrayList.add(new ThemeDescription(this.recyclerView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{ThemeSmallPreviewView.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogBackgroundGray"));
-        arrayList.add(new ThemeDescription(this.applyButton, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "featuredStickers_addButton"));
-        arrayList.add(new ThemeDescription(this.applyButton, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "featuredStickers_addButtonPressed"));
+        arrayList.add(new ThemeDescription(null, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, new Drawable[]{this.shadowDrawable}, themeDescriptionDelegate, "dialogBackground"));
+        arrayList.add(new ThemeDescription(this.titleView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "dialogTextBlack"));
+        arrayList.add(new ThemeDescription(this.recyclerView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{ThemeSmallPreviewView.class}, null, null, null, "dialogBackgroundGray"));
+        arrayList.add(new ThemeDescription(this.applyButton, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "featuredStickers_addButton"));
+        arrayList.add(new ThemeDescription(this.applyButton, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, "featuredStickers_addButtonPressed"));
         Iterator<ThemeDescription> it = arrayList.iterator();
         while (it.hasNext()) {
             it.next().resourcesProvider = this.themeDelegate;
@@ -580,8 +458,7 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
     }
 
     @SuppressLint({"NotifyDataSetChanged"})
-    public void setupLightDarkTheme(boolean z) {
-        boolean z2 = z;
+    public void setupLightDarkTheme(final boolean z) {
         ValueAnimator valueAnimator = this.changeDayNightViewAnimator;
         if (valueAnimator != null) {
             valueAnimator.cancel();
@@ -600,104 +477,103 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
         paint2.setFilterBitmap(true);
         int[] iArr = new int[2];
         this.darkThemeView.getLocationInWindow(iArr);
-        float f = (float) iArr[0];
-        float f2 = (float) iArr[1];
-        final float measuredWidth = f + (((float) this.darkThemeView.getMeasuredWidth()) / 2.0f);
-        float measuredHeight = f2 + (((float) this.darkThemeView.getMeasuredHeight()) / 2.0f);
-        float max = ((float) Math.max(createBitmap.getHeight(), createBitmap.getWidth())) * 0.9f;
+        final float f = iArr[0];
+        final float f2 = iArr[1];
+        final float measuredWidth = f + (this.darkThemeView.getMeasuredWidth() / 2.0f);
+        final float measuredHeight = f2 + (this.darkThemeView.getMeasuredHeight() / 2.0f);
+        final float max = Math.max(createBitmap.getHeight(), createBitmap.getWidth()) * 0.9f;
         Shader.TileMode tileMode = Shader.TileMode.CLAMP;
         paint2.setShader(new BitmapShader(createBitmap, tileMode, tileMode));
-        FrameLayout frameLayout2 = frameLayout;
-        AnonymousClass6 r15 = r0;
-        final boolean z3 = z;
-        float f3 = f2;
-        final float f4 = measuredHeight;
-        float f5 = f;
-        final float f6 = max;
-        final float f7 = f5;
-        final float f8 = f3;
-        AnonymousClass6 r0 = new View(getContext()) {
-            /* access modifiers changed from: protected */
-            public void onDraw(Canvas canvas) {
-                super.onDraw(canvas);
-                if (z3) {
+        this.changeDayNightView = new View(getContext()) { // from class: org.telegram.ui.Components.ChatThemeBottomSheet.6
+            @Override // android.view.View
+            protected void onDraw(Canvas canvas2) {
+                super.onDraw(canvas2);
+                if (z) {
                     if (ChatThemeBottomSheet.this.changeDayNightViewProgress > 0.0f) {
-                        canvas.drawCircle(measuredWidth, f4, f6 * ChatThemeBottomSheet.this.changeDayNightViewProgress, paint);
+                        canvas.drawCircle(measuredWidth, measuredHeight, max * ChatThemeBottomSheet.this.changeDayNightViewProgress, paint);
                     }
-                    canvas.drawBitmap(createBitmap, 0.0f, 0.0f, paint2);
+                    canvas2.drawBitmap(createBitmap, 0.0f, 0.0f, paint2);
                 } else {
-                    canvas.drawCircle(measuredWidth, f4, f6 * (1.0f - ChatThemeBottomSheet.this.changeDayNightViewProgress), paint2);
+                    canvas2.drawCircle(measuredWidth, measuredHeight, max * (1.0f - ChatThemeBottomSheet.this.changeDayNightViewProgress), paint2);
                 }
-                canvas.save();
-                canvas.translate(f7, f8);
-                ChatThemeBottomSheet.this.darkThemeView.draw(canvas);
-                canvas.restore();
+                canvas2.save();
+                canvas2.translate(f, f2);
+                ChatThemeBottomSheet.this.darkThemeView.draw(canvas2);
+                canvas2.restore();
             }
         };
-        this.changeDayNightView = r15;
         this.changeDayNightViewProgress = 0.0f;
-        ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
+        ValueAnimator ofFloat = ValueAnimator.ofFloat(0.0f, 1.0f);
         this.changeDayNightViewAnimator = ofFloat;
-        final boolean z4 = z;
-        ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+        ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() { // from class: org.telegram.ui.Components.ChatThemeBottomSheet.7
             boolean changedNavigationBarColor = false;
 
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                float unused = ChatThemeBottomSheet.this.changeDayNightViewProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
+            @Override // android.animation.ValueAnimator.AnimatorUpdateListener
+            public void onAnimationUpdate(ValueAnimator valueAnimator2) {
+                ChatThemeBottomSheet.this.changeDayNightViewProgress = ((Float) valueAnimator2.getAnimatedValue()).floatValue();
                 ChatThemeBottomSheet.this.changeDayNightView.invalidate();
-                if (!this.changedNavigationBarColor && ChatThemeBottomSheet.this.changeDayNightViewProgress > 0.5f) {
-                    this.changedNavigationBarColor = true;
-                    AndroidUtilities.setLightNavigationBar(ChatThemeBottomSheet.this.getWindow(), true ^ z4);
-                    AndroidUtilities.setNavigationBarColor(ChatThemeBottomSheet.this.getWindow(), ChatThemeBottomSheet.this.getThemedColor("windowBackgroundGray"));
+                if (this.changedNavigationBarColor || ChatThemeBottomSheet.this.changeDayNightViewProgress <= 0.5f) {
+                    return;
                 }
+                this.changedNavigationBarColor = true;
+                AndroidUtilities.setLightNavigationBar(ChatThemeBottomSheet.this.getWindow(), true ^ z);
+                AndroidUtilities.setNavigationBarColor(ChatThemeBottomSheet.this.getWindow(), ChatThemeBottomSheet.this.getThemedColor("windowBackgroundGray"));
             }
         });
-        this.changeDayNightViewAnimator.addListener(new AnimatorListenerAdapter() {
+        this.changeDayNightViewAnimator.addListener(new AnimatorListenerAdapter() { // from class: org.telegram.ui.Components.ChatThemeBottomSheet.8
+            @Override // android.animation.AnimatorListenerAdapter, android.animation.Animator.AnimatorListener
             public void onAnimationEnd(Animator animator) {
                 if (ChatThemeBottomSheet.this.changeDayNightView != null) {
                     if (ChatThemeBottomSheet.this.changeDayNightView.getParent() != null) {
                         ((ViewGroup) ChatThemeBottomSheet.this.changeDayNightView.getParent()).removeView(ChatThemeBottomSheet.this.changeDayNightView);
                     }
-                    View unused = ChatThemeBottomSheet.this.changeDayNightView = null;
+                    ChatThemeBottomSheet.this.changeDayNightView = null;
                 }
-                ValueAnimator unused2 = ChatThemeBottomSheet.this.changeDayNightViewAnimator = null;
+                ChatThemeBottomSheet.this.changeDayNightViewAnimator = null;
                 super.onAnimationEnd(animator);
             }
         });
-        this.changeDayNightViewAnimator.setDuration(400);
+        this.changeDayNightViewAnimator.setDuration(400L);
         this.changeDayNightViewAnimator.setInterpolator(Easings.easeInOutQuad);
         this.changeDayNightViewAnimator.start();
-        frameLayout2.addView(this.changeDayNightView, new ViewGroup.LayoutParams(-1, -1));
-        AndroidUtilities.runOnUIThread(new ChatThemeBottomSheet$$ExternalSyntheticLambda5(this, z4));
+        frameLayout.addView(this.changeDayNightView, new ViewGroup.LayoutParams(-1, -1));
+        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.ChatThemeBottomSheet$$ExternalSyntheticLambda5
+            @Override // java.lang.Runnable
+            public final void run() {
+                ChatThemeBottomSheet.this.lambda$setupLightDarkTheme$6(z);
+            }
+        });
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$setupLightDarkTheme$6(boolean z) {
-        Adapter adapter2 = this.adapter;
-        if (adapter2 != null && adapter2.items != null) {
-            setForceDark(z, true);
-            ChatThemeItem chatThemeItem = this.selectedItem;
-            if (chatThemeItem != null) {
-                this.isLightDarkChangeAnimation = true;
-                EmojiThemes emojiThemes = chatThemeItem.chatTheme;
-                if (emojiThemes.showAsDefaultStub) {
-                    this.themeDelegate.setCurrentTheme((EmojiThemes) null, false, Boolean.valueOf(z));
-                } else {
-                    this.themeDelegate.setCurrentTheme(emojiThemes, false, Boolean.valueOf(z));
-                }
-            }
-            Adapter adapter3 = this.adapter;
-            if (adapter3 != null && adapter3.items != null) {
-                for (int i = 0; i < this.adapter.items.size(); i++) {
-                    this.adapter.items.get(i).themeIndex = z ? 1 : 0;
-                }
-                this.adapter.notifyDataSetChanged();
+        Adapter adapter = this.adapter;
+        if (adapter == null || adapter.items == null) {
+            return;
+        }
+        setForceDark(z, true);
+        ChatThemeItem chatThemeItem = this.selectedItem;
+        if (chatThemeItem != null) {
+            this.isLightDarkChangeAnimation = true;
+            EmojiThemes emojiThemes = chatThemeItem.chatTheme;
+            if (emojiThemes.showAsDefaultStub) {
+                this.themeDelegate.setCurrentTheme(null, false, Boolean.valueOf(z));
+            } else {
+                this.themeDelegate.setCurrentTheme(emojiThemes, false, Boolean.valueOf(z));
             }
         }
+        Adapter adapter2 = this.adapter;
+        if (adapter2 == null || adapter2.items == null) {
+            return;
+        }
+        for (int i = 0; i < this.adapter.items.size(); i++) {
+            this.adapter.items.get(i).themeIndex = z ? 1 : 0;
+        }
+        this.adapter.notifyDataSetChanged();
     }
 
-    /* access modifiers changed from: protected */
-    public boolean onContainerTouchEvent(MotionEvent motionEvent) {
+    @Override // org.telegram.ui.ActionBar.BottomSheet
+    protected boolean onContainerTouchEvent(MotionEvent motionEvent) {
         if (motionEvent == null || !hasChanges()) {
             return false;
         }
@@ -709,73 +585,74 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
         return true;
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public void onDataLoaded(List<EmojiThemes> list) {
-        if (list != null && !list.isEmpty()) {
-            boolean z = false;
-            ChatThemeItem chatThemeItem = new ChatThemeItem(list.get(0));
-            ArrayList arrayList = new ArrayList(list.size());
-            EmojiThemes currentTheme = this.themeDelegate.getCurrentTheme();
-            arrayList.add(0, chatThemeItem);
-            this.selectedItem = chatThemeItem;
-            for (int i = 1; i < list.size(); i++) {
-                EmojiThemes emojiThemes = list.get(i);
-                ChatThemeItem chatThemeItem2 = new ChatThemeItem(emojiThemes);
-                emojiThemes.loadPreviewColors(this.currentAccount);
-                chatThemeItem2.themeIndex = this.forceDark ? 1 : 0;
-                arrayList.add(chatThemeItem2);
-            }
-            this.adapter.setItems(arrayList);
-            this.applyButton.setEnabled(true);
-            this.applyTextView.setAlpha(0.0f);
-            this.resetTextView.setAlpha(0.0f);
-            this.recyclerView.setAlpha(0.0f);
-            this.applyTextView.setVisibility(0);
-            this.resetTextView.setVisibility(0);
-            this.darkThemeView.setVisibility(0);
-            if (currentTheme != null) {
-                int i2 = 0;
-                while (true) {
-                    if (i2 == arrayList.size()) {
-                        i2 = -1;
-                        break;
-                    } else if (((ChatThemeItem) arrayList.get(i2)).chatTheme.getEmoticon().equals(currentTheme.getEmoticon())) {
-                        this.selectedItem = (ChatThemeItem) arrayList.get(i2);
-                        break;
-                    } else {
-                        i2++;
-                    }
-                }
-                if (i2 != -1) {
-                    this.prevSelectedPosition = i2;
-                    this.adapter.setSelectedItem(i2);
-                    if (i2 > 0 && i2 < arrayList.size() / 2) {
-                        i2--;
-                    }
-                    this.layoutManager.scrollToPositionWithOffset(Math.min(i2, this.adapter.items.size() - 1), 0);
-                }
-            } else {
-                this.adapter.setSelectedItem(0);
-                this.layoutManager.scrollToPositionWithOffset(0, 0);
-                z = true;
-            }
-            float f = 1.0f;
-            this.recyclerView.animate().alpha(1.0f).setDuration(150).start();
-            this.resetTextView.animate().alpha(z ? 1.0f : 0.0f).setDuration(150).start();
-            ViewPropertyAnimator animate = this.applyTextView.animate();
-            if (z) {
-                f = 0.0f;
-            }
-            animate.alpha(f).setDuration(150).start();
-            this.progressView.animate().alpha(0.0f).setListener(new HideViewAfterAnimation(this.progressView)).setDuration(150).start();
+        if (list == null || list.isEmpty()) {
+            return;
         }
+        boolean z = false;
+        ChatThemeItem chatThemeItem = new ChatThemeItem(list.get(0));
+        ArrayList arrayList = new ArrayList(list.size());
+        EmojiThemes currentTheme = this.themeDelegate.getCurrentTheme();
+        arrayList.add(0, chatThemeItem);
+        this.selectedItem = chatThemeItem;
+        for (int i = 1; i < list.size(); i++) {
+            EmojiThemes emojiThemes = list.get(i);
+            ChatThemeItem chatThemeItem2 = new ChatThemeItem(emojiThemes);
+            emojiThemes.loadPreviewColors(this.currentAccount);
+            chatThemeItem2.themeIndex = this.forceDark ? 1 : 0;
+            arrayList.add(chatThemeItem2);
+        }
+        this.adapter.setItems(arrayList);
+        this.applyButton.setEnabled(true);
+        this.applyTextView.setAlpha(0.0f);
+        this.resetTextView.setAlpha(0.0f);
+        this.recyclerView.setAlpha(0.0f);
+        this.applyTextView.setVisibility(0);
+        this.resetTextView.setVisibility(0);
+        this.darkThemeView.setVisibility(0);
+        if (currentTheme != null) {
+            int i2 = 0;
+            while (true) {
+                if (i2 == arrayList.size()) {
+                    i2 = -1;
+                    break;
+                } else if (((ChatThemeItem) arrayList.get(i2)).chatTheme.getEmoticon().equals(currentTheme.getEmoticon())) {
+                    this.selectedItem = (ChatThemeItem) arrayList.get(i2);
+                    break;
+                } else {
+                    i2++;
+                }
+            }
+            if (i2 != -1) {
+                this.prevSelectedPosition = i2;
+                this.adapter.setSelectedItem(i2);
+                if (i2 > 0 && i2 < arrayList.size() / 2) {
+                    i2--;
+                }
+                this.layoutManager.scrollToPositionWithOffset(Math.min(i2, this.adapter.items.size() - 1), 0);
+            }
+        } else {
+            this.adapter.setSelectedItem(0);
+            this.layoutManager.scrollToPositionWithOffset(0, 0);
+            z = true;
+        }
+        float f = 1.0f;
+        this.recyclerView.animate().alpha(1.0f).setDuration(150L).start();
+        this.resetTextView.animate().alpha(z ? 1.0f : 0.0f).setDuration(150L).start();
+        ViewPropertyAnimator animate = this.applyTextView.animate();
+        if (z) {
+            f = 0.0f;
+        }
+        animate.alpha(f).setDuration(150L).start();
+        this.progressView.animate().alpha(0.0f).setListener(new HideViewAfterAnimation(this.progressView)).setDuration(150L).start();
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public void onAnimationStart() {
         List<ChatThemeItem> list;
-        Adapter adapter2 = this.adapter;
-        if (!(adapter2 == null || (list = adapter2.items) == null)) {
+        Adapter adapter = this.adapter;
+        if (adapter != null && (list = adapter.items) != null) {
             for (ChatThemeItem chatThemeItem : list) {
                 chatThemeItem.themeIndex = this.forceDark ? 1 : 0;
             }
@@ -785,39 +662,41 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
         }
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public void onAnimationEnd() {
         this.isLightDarkChangeAnimation = false;
     }
 
     private void setForceDark(boolean z, boolean z2) {
-        if (this.forceDark != z) {
-            this.forceDark = z;
-            int i = 0;
-            if (z2) {
-                RLottieDrawable rLottieDrawable = this.darkThemeDrawable;
-                if (z) {
-                    i = rLottieDrawable.getFramesCount();
-                }
-                rLottieDrawable.setCustomEndFrame(i);
-                RLottieImageView rLottieImageView = this.darkThemeView;
-                if (rLottieImageView != null) {
-                    rLottieImageView.playAnimation();
-                    return;
-                }
+        if (this.forceDark == z) {
+            return;
+        }
+        this.forceDark = z;
+        int i = 0;
+        if (z2) {
+            RLottieDrawable rLottieDrawable = this.darkThemeDrawable;
+            if (z) {
+                i = rLottieDrawable.getFramesCount();
+            }
+            rLottieDrawable.setCustomEndFrame(i);
+            RLottieImageView rLottieImageView = this.darkThemeView;
+            if (rLottieImageView == null) {
                 return;
             }
-            int framesCount = z ? this.darkThemeDrawable.getFramesCount() - 1 : 0;
-            this.darkThemeDrawable.setCurrentFrame(framesCount, false, true);
-            this.darkThemeDrawable.setCustomEndFrame(framesCount);
-            RLottieImageView rLottieImageView2 = this.darkThemeView;
-            if (rLottieImageView2 != null) {
-                rLottieImageView2.invalidate();
-            }
+            rLottieImageView.playAnimation();
+            return;
         }
+        int framesCount = z ? this.darkThemeDrawable.getFramesCount() - 1 : 0;
+        this.darkThemeDrawable.setCurrentFrame(framesCount, false, true);
+        this.darkThemeDrawable.setCustomEndFrame(framesCount);
+        RLottieImageView rLottieImageView2 = this.darkThemeView;
+        if (rLottieImageView2 == null) {
+            return;
+        }
+        rLottieImageView2.invalidate();
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public void setItemsAnimationProgress(float f) {
         for (int i = 0; i < this.adapter.getItemCount(); i++) {
             this.adapter.items.get(i).animationProgress = f;
@@ -831,13 +710,13 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
         boolean z2 = emojiThemes.showAsDefaultStub;
         Bulletin bulletin = null;
         EmojiThemes emojiThemes2 = z2 ? null : emojiThemes;
-        if (!(chatThemeItem == null || emojiThemes2 == this.originalTheme)) {
+        if (chatThemeItem != null && emojiThemes2 != this.originalTheme) {
             String emoticon = (emojiThemes == null || z2) ? null : emojiThemes.getEmoticon();
             ChatThemeController.getInstance(this.currentAccount).setDialogTheme(this.chatActivity.getDialogId(), emoticon, true);
-            if (emojiThemes == null || emojiThemes.showAsDefaultStub) {
-                this.themeDelegate.setCurrentTheme((EmojiThemes) null, true, Boolean.valueOf(this.originalIsDark));
-            } else {
+            if (emojiThemes != null && !emojiThemes.showAsDefaultStub) {
                 this.themeDelegate.setCurrentTheme(emojiThemes, true, Boolean.valueOf(this.originalIsDark));
+            } else {
+                this.themeDelegate.setCurrentTheme(null, true, Boolean.valueOf(this.originalIsDark));
             }
             this.isApplyClicked = true;
             TLRPC$User currentUser = this.chatActivity.getCurrentUser();
@@ -848,15 +727,15 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
                 } else {
                     z = false;
                 }
-                StickerSetBulletinLayout stickerSetBulletinLayout = new StickerSetBulletinLayout(getContext(), (TLObject) null, -1, emoticon != null ? MediaDataController.getInstance(this.currentAccount).getEmojiAnimatedSticker(emoticon) : null, this.chatActivity.getResourceProvider());
+                StickerSetBulletinLayout stickerSetBulletinLayout = new StickerSetBulletinLayout(getContext(), null, -1, emoticon != null ? MediaDataController.getInstance(this.currentAccount).getEmojiAnimatedSticker(emoticon) : null, this.chatActivity.getResourceProvider());
                 stickerSetBulletinLayout.subtitleTextView.setVisibility(8);
                 if (z) {
                     stickerSetBulletinLayout.titleTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("ThemeAlsoDisabledForHint", R.string.ThemeAlsoDisabledForHint, currentUser.first_name)));
                 } else {
                     stickerSetBulletinLayout.titleTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("ThemeAlsoAppliedForHint", R.string.ThemeAlsoAppliedForHint, currentUser.first_name)));
                 }
-                stickerSetBulletinLayout.titleTextView.setTypeface((Typeface) null);
-                bulletin = Bulletin.make((BaseFragment) this.chatActivity, (Bulletin.Layout) stickerSetBulletinLayout, 2750);
+                stickerSetBulletinLayout.titleTextView.setTypeface(null);
+                bulletin = Bulletin.make(this.chatActivity, stickerSetBulletinLayout, 2750);
             }
         }
         dismiss();
@@ -887,26 +766,30 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
     }
 
     @SuppressLint({"NotifyDataSetChanged"})
+    /* loaded from: classes3.dex */
     public static class Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         private final int currentAccount;
         private final int currentViewType;
         public List<ChatThemeItem> items;
+        private final Theme.ResourcesProvider resourcesProvider;
+        private WeakReference<ThemeSmallPreviewView> selectedViewRef;
+        private int selectedItemPosition = -1;
         private HashMap<String, Theme.ThemeInfo> loadingThemes = new HashMap<>();
         private HashMap<Theme.ThemeInfo, String> loadingWallpapers = new HashMap<>();
-        private final Theme.ResourcesProvider resourcesProvider;
-        private int selectedItemPosition = -1;
-        private WeakReference<ThemeSmallPreviewView> selectedViewRef;
 
-        public Adapter(int i, Theme.ResourcesProvider resourcesProvider2, int i2) {
+        public Adapter(int i, Theme.ResourcesProvider resourcesProvider, int i2) {
             this.currentViewType = i2;
-            this.resourcesProvider = resourcesProvider2;
+            this.resourcesProvider = resourcesProvider;
             this.currentAccount = i;
         }
 
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+        @Override // androidx.recyclerview.widget.RecyclerView.Adapter
+        /* renamed from: onCreateViewHolder */
+        public RecyclerView.ViewHolder mo1754onCreateViewHolder(ViewGroup viewGroup, int i) {
             return new RecyclerListView.Holder(new ThemeSmallPreviewView(viewGroup.getContext(), this.currentAccount, this.resourcesProvider, this.currentViewType));
         }
 
+        @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
             ThemeSmallPreviewView themeSmallPreviewView = (ThemeSmallPreviewView) viewHolder.itemView;
             Theme.ThemeInfo themeInfo = this.items.get(i).chatTheme.getThemeInfo(this.items.get(i).themeIndex);
@@ -930,467 +813,268 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
             }
         }
 
-        /* JADX WARNING: Can't fix incorrect switch cases order */
-        /* JADX WARNING: Can't wrap try/catch for region: R(2:92|93) */
-        /* JADX WARNING: Can't wrap try/catch for region: R(5:144|150|151|152|153) */
-        /* JADX WARNING: Code restructure failed: missing block: B:116:0x0223, code lost:
-            r13 = 65535;
-         */
-        /* JADX WARNING: Code restructure failed: missing block: B:117:0x0224, code lost:
-            if (r13 == 0) goto L_0x0246;
-         */
-        /* JADX WARNING: Code restructure failed: missing block: B:119:0x0227, code lost:
-            if (r13 == 1) goto L_0x0242;
-         */
-        /* JADX WARNING: Code restructure failed: missing block: B:120:0x0229, code lost:
-            if (r13 == 2) goto L_0x023e;
-         */
-        /* JADX WARNING: Code restructure failed: missing block: B:122:0x022c, code lost:
-            if (r13 == 3) goto L_0x023b;
-         */
-        /* JADX WARNING: Code restructure failed: missing block: B:124:0x022f, code lost:
-            if (r13 == 4) goto L_0x0238;
-         */
-        /* JADX WARNING: Code restructure failed: missing block: B:126:0x0232, code lost:
-            if (r13 == 5) goto L_0x0235;
-         */
-        /* JADX WARNING: Code restructure failed: missing block: B:128:0x0235, code lost:
-            r2.previewBackgroundGradientColor3 = r3;
-         */
-        /* JADX WARNING: Code restructure failed: missing block: B:129:0x0238, code lost:
-            r2.previewBackgroundGradientColor2 = r3;
-         */
-        /* JADX WARNING: Code restructure failed: missing block: B:130:0x023b, code lost:
-            r2.previewBackgroundGradientColor1 = r3;
-         */
-        /* JADX WARNING: Code restructure failed: missing block: B:131:0x023e, code lost:
-            r2.setPreviewBackgroundColor(r3);
-         */
-        /* JADX WARNING: Code restructure failed: missing block: B:132:0x0242, code lost:
-            r2.setPreviewOutColor(r3);
-         */
-        /* JADX WARNING: Code restructure failed: missing block: B:133:0x0246, code lost:
-            r2.setPreviewInColor(r3);
-         */
-        /* JADX WARNING: Code restructure failed: missing block: B:84:0x01bd, code lost:
-            if (r13.equals("key_chat_wallpaper_gradient_to3") == false) goto L_0x0250;
-         */
-        /* JADX WARNING: Code restructure failed: missing block: B:93:?, code lost:
-            r3 = org.telegram.messenger.Utilities.parseInt((java.lang.CharSequence) r3).intValue();
-         */
-        /* JADX WARNING: Missing exception handler attribute for start block: B:152:0x028e */
-        /* JADX WARNING: Missing exception handler attribute for start block: B:92:0x01d9 */
-        /* JADX WARNING: Unknown top exception splitter block from list: {B:146:0x0284=Splitter:B:146:0x0284, B:152:0x028e=Splitter:B:152:0x028e} */
-        /* Code decompiled incorrectly, please refer to instructions dump. */
-        private boolean parseTheme(org.telegram.ui.ActionBar.Theme.ThemeInfo r21) {
-            /*
-                r20 = this;
-                r1 = r20
-                r2 = r21
-                java.lang.String r0 = "chat_inBubble"
-                if (r2 == 0) goto L_0x02df
-                java.lang.String r4 = r2.pathToFile
-                if (r4 != 0) goto L_0x000e
-                goto L_0x02df
-            L_0x000e:
-                java.io.File r4 = new java.io.File
-                java.lang.String r5 = r2.pathToFile
-                r4.<init>(r5)
-                r5 = 1
-                java.io.FileInputStream r6 = new java.io.FileInputStream     // Catch:{ all -> 0x028f }
-                r6.<init>(r4)     // Catch:{ all -> 0x028f }
-                r4 = 0
-                r7 = 0
-            L_0x001d:
-                byte[] r8 = org.telegram.ui.Cells.ThemesHorizontalListCell.bytes     // Catch:{ all -> 0x0288 }
-                int r8 = r6.read(r8)     // Catch:{ all -> 0x0288 }
-                r9 = -1
-                if (r8 == r9) goto L_0x0282
-                r12 = r4
-                r10 = 0
-                r11 = 0
-            L_0x0029:
-                if (r10 >= r8) goto L_0x0267
-                byte[] r13 = org.telegram.ui.Cells.ThemesHorizontalListCell.bytes     // Catch:{ all -> 0x0288 }
-                byte r14 = r13[r10]     // Catch:{ all -> 0x0288 }
-                r15 = 10
-                if (r14 != r15) goto L_0x0253
-                int r14 = r10 - r11
-                int r14 = r14 + r5
-                java.lang.String r15 = new java.lang.String     // Catch:{ all -> 0x0288 }
-                int r9 = r14 + -1
-                java.lang.String r3 = "UTF-8"
-                r15.<init>(r13, r11, r9, r3)     // Catch:{ all -> 0x0288 }
-                java.lang.String r3 = "WLS="
-                boolean r3 = r15.startsWith(r3)     // Catch:{ all -> 0x0288 }
-                r9 = 4
-                if (r3 == 0) goto L_0x016d
-                java.lang.String r3 = r15.substring(r9)     // Catch:{ all -> 0x0288 }
-                android.net.Uri r9 = android.net.Uri.parse(r3)     // Catch:{ all -> 0x0288 }
-                java.lang.String r13 = "slug"
-                java.lang.String r13 = r9.getQueryParameter(r13)     // Catch:{ all -> 0x0288 }
-                r2.slug = r13     // Catch:{ all -> 0x0288 }
-                java.io.File r13 = new java.io.File     // Catch:{ all -> 0x0288 }
-                java.io.File r15 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed()     // Catch:{ all -> 0x0288 }
-                java.lang.StringBuilder r5 = new java.lang.StringBuilder     // Catch:{ all -> 0x0288 }
-                r5.<init>()     // Catch:{ all -> 0x0288 }
-                java.lang.String r3 = org.telegram.messenger.Utilities.MD5(r3)     // Catch:{ all -> 0x0288 }
-                r5.append(r3)     // Catch:{ all -> 0x0288 }
-                java.lang.String r3 = ".wp"
-                r5.append(r3)     // Catch:{ all -> 0x0288 }
-                java.lang.String r3 = r5.toString()     // Catch:{ all -> 0x0288 }
-                r13.<init>(r15, r3)     // Catch:{ all -> 0x0288 }
-                java.lang.String r3 = r13.getAbsolutePath()     // Catch:{ all -> 0x0288 }
-                r2.pathToWallpaper = r3     // Catch:{ all -> 0x0288 }
-                java.lang.String r3 = "mode"
-                java.lang.String r3 = r9.getQueryParameter(r3)     // Catch:{ all -> 0x0288 }
-                if (r3 == 0) goto L_0x00a8
-                java.lang.String r3 = r3.toLowerCase()     // Catch:{ all -> 0x0288 }
-                java.lang.String r5 = " "
-                java.lang.String[] r3 = r3.split(r5)     // Catch:{ all -> 0x0288 }
-                if (r3 == 0) goto L_0x00a8
-                int r5 = r3.length     // Catch:{ all -> 0x0288 }
-                if (r5 <= 0) goto L_0x00a8
-                r5 = 0
-            L_0x0094:
-                int r13 = r3.length     // Catch:{ all -> 0x0288 }
-                if (r5 >= r13) goto L_0x00a8
-                java.lang.String r13 = "blur"
-                r15 = r3[r5]     // Catch:{ all -> 0x0288 }
-                boolean r13 = r13.equals(r15)     // Catch:{ all -> 0x0288 }
-                if (r13 == 0) goto L_0x00a5
-                r13 = 1
-                r2.isBlured = r13     // Catch:{ all -> 0x0288 }
-                goto L_0x00a8
-            L_0x00a5:
-                int r5 = r5 + 1
-                goto L_0x0094
-            L_0x00a8:
-                java.lang.String r3 = "pattern"
-                java.lang.String r3 = r9.getQueryParameter(r3)     // Catch:{ all -> 0x0288 }
-                boolean r3 = android.text.TextUtils.isEmpty(r3)     // Catch:{ all -> 0x0288 }
-                if (r3 != 0) goto L_0x024a
-                java.lang.String r3 = "bg_color"
-                java.lang.String r3 = r9.getQueryParameter(r3)     // Catch:{ Exception -> 0x0137 }
-                boolean r5 = android.text.TextUtils.isEmpty(r3)     // Catch:{ Exception -> 0x0137 }
-                if (r5 != 0) goto L_0x0137
-                r5 = 6
-                r13 = 0
-                java.lang.String r15 = r3.substring(r13, r5)     // Catch:{ Exception -> 0x0137 }
-                r13 = 16
-                int r15 = java.lang.Integer.parseInt(r15, r13)     // Catch:{ Exception -> 0x0137 }
-                r16 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
-                r15 = r15 | r16
-                r2.patternBgColor = r15     // Catch:{ Exception -> 0x0137 }
-                int r15 = r3.length()     // Catch:{ Exception -> 0x0137 }
-                r13 = 13
-                if (r15 < r13) goto L_0x00f3
-                char r5 = r3.charAt(r5)     // Catch:{ Exception -> 0x0137 }
-                boolean r5 = org.telegram.messenger.AndroidUtilities.isValidWallChar(r5)     // Catch:{ Exception -> 0x0137 }
-                if (r5 == 0) goto L_0x00f3
-                r5 = 7
-                java.lang.String r5 = r3.substring(r5, r13)     // Catch:{ Exception -> 0x0137 }
-                r15 = 16
-                int r5 = java.lang.Integer.parseInt(r5, r15)     // Catch:{ Exception -> 0x0137 }
-                r5 = r5 | r16
-                r2.patternBgGradientColor1 = r5     // Catch:{ Exception -> 0x0137 }
-            L_0x00f3:
-                int r5 = r3.length()     // Catch:{ Exception -> 0x0137 }
-                r15 = 20
-                if (r5 < r15) goto L_0x0115
-                char r5 = r3.charAt(r13)     // Catch:{ Exception -> 0x0137 }
-                boolean r5 = org.telegram.messenger.AndroidUtilities.isValidWallChar(r5)     // Catch:{ Exception -> 0x0137 }
-                if (r5 == 0) goto L_0x0115
-                r5 = 14
-                java.lang.String r5 = r3.substring(r5, r15)     // Catch:{ Exception -> 0x0137 }
-                r13 = 16
-                int r5 = java.lang.Integer.parseInt(r5, r13)     // Catch:{ Exception -> 0x0137 }
-                r5 = r5 | r16
-                r2.patternBgGradientColor2 = r5     // Catch:{ Exception -> 0x0137 }
-            L_0x0115:
-                int r5 = r3.length()     // Catch:{ Exception -> 0x0137 }
-                r13 = 27
-                if (r5 != r13) goto L_0x0137
-                char r5 = r3.charAt(r15)     // Catch:{ Exception -> 0x0137 }
-                boolean r5 = org.telegram.messenger.AndroidUtilities.isValidWallChar(r5)     // Catch:{ Exception -> 0x0137 }
-                if (r5 == 0) goto L_0x0137
-                r5 = 21
-                java.lang.String r3 = r3.substring(r5)     // Catch:{ Exception -> 0x0137 }
-                r5 = 16
-                int r3 = java.lang.Integer.parseInt(r3, r5)     // Catch:{ Exception -> 0x0137 }
-                r3 = r3 | r16
-                r2.patternBgGradientColor3 = r3     // Catch:{ Exception -> 0x0137 }
-            L_0x0137:
-                java.lang.String r3 = "rotation"
-                java.lang.String r3 = r9.getQueryParameter(r3)     // Catch:{ Exception -> 0x014d }
-                boolean r5 = android.text.TextUtils.isEmpty(r3)     // Catch:{ Exception -> 0x014d }
-                if (r5 != 0) goto L_0x014d
-                java.lang.Integer r3 = org.telegram.messenger.Utilities.parseInt((java.lang.CharSequence) r3)     // Catch:{ Exception -> 0x014d }
-                int r3 = r3.intValue()     // Catch:{ Exception -> 0x014d }
-                r2.patternBgGradientRotation = r3     // Catch:{ Exception -> 0x014d }
-            L_0x014d:
-                java.lang.String r3 = "intensity"
-                java.lang.String r3 = r9.getQueryParameter(r3)     // Catch:{ all -> 0x0288 }
-                boolean r5 = android.text.TextUtils.isEmpty(r3)     // Catch:{ all -> 0x0288 }
-                if (r5 != 0) goto L_0x0163
-                java.lang.Integer r3 = org.telegram.messenger.Utilities.parseInt((java.lang.CharSequence) r3)     // Catch:{ all -> 0x0288 }
-                int r3 = r3.intValue()     // Catch:{ all -> 0x0288 }
-                r2.patternIntensity = r3     // Catch:{ all -> 0x0288 }
-            L_0x0163:
-                int r3 = r2.patternIntensity     // Catch:{ all -> 0x0288 }
-                if (r3 != 0) goto L_0x024a
-                r3 = 50
-                r2.patternIntensity = r3     // Catch:{ all -> 0x0288 }
-                goto L_0x024a
-            L_0x016d:
-                java.lang.String r3 = "WPS"
-                boolean r3 = r15.startsWith(r3)     // Catch:{ all -> 0x0288 }
-                if (r3 == 0) goto L_0x017d
-                int r14 = r14 + r12
-                r2.previewWallpaperOffset = r14     // Catch:{ all -> 0x0288 }
-                r19 = r6
-                r7 = 1
-                goto L_0x026b
-            L_0x017d:
-                r3 = 61
-                int r3 = r15.indexOf(r3)     // Catch:{ all -> 0x0288 }
-                r13 = -1
-                if (r3 == r13) goto L_0x024a
-                r5 = 0
-                java.lang.String r13 = r15.substring(r5, r3)     // Catch:{ all -> 0x0288 }
-                boolean r5 = r13.equals(r0)     // Catch:{ all -> 0x0288 }
-                java.lang.String r9 = "key_chat_wallpaper_gradient_to3"
-                r17 = r7
-                java.lang.String r7 = "key_chat_wallpaper_gradient_to2"
-                r18 = r8
-                java.lang.String r8 = "chat_wallpaper_gradient_to"
-                java.lang.String r1 = "chat_wallpaper"
-                r19 = r6
-                java.lang.String r6 = "chat_outBubble"
-                if (r5 != 0) goto L_0x01bf
-                boolean r5 = r13.equals(r6)     // Catch:{ all -> 0x0280 }
-                if (r5 != 0) goto L_0x01bf
-                boolean r5 = r13.equals(r1)     // Catch:{ all -> 0x0280 }
-                if (r5 != 0) goto L_0x01bf
-                boolean r5 = r13.equals(r8)     // Catch:{ all -> 0x0280 }
-                if (r5 != 0) goto L_0x01bf
-                boolean r5 = r13.equals(r7)     // Catch:{ all -> 0x0280 }
-                if (r5 != 0) goto L_0x01bf
-                boolean r5 = r13.equals(r9)     // Catch:{ all -> 0x0280 }
-                if (r5 == 0) goto L_0x0250
-            L_0x01bf:
-                int r3 = r3 + 1
-                java.lang.String r3 = r15.substring(r3)     // Catch:{ all -> 0x0280 }
-                int r5 = r3.length()     // Catch:{ all -> 0x0280 }
-                if (r5 <= 0) goto L_0x01e2
-                r5 = 0
-                char r15 = r3.charAt(r5)     // Catch:{ all -> 0x0280 }
-                r5 = 35
-                if (r15 != r5) goto L_0x01e2
-                int r3 = android.graphics.Color.parseColor(r3)     // Catch:{ Exception -> 0x01d9 }
-                goto L_0x01ea
-            L_0x01d9:
-                java.lang.Integer r3 = org.telegram.messenger.Utilities.parseInt((java.lang.CharSequence) r3)     // Catch:{ all -> 0x0280 }
-                int r3 = r3.intValue()     // Catch:{ all -> 0x0280 }
-                goto L_0x01ea
-            L_0x01e2:
-                java.lang.Integer r3 = org.telegram.messenger.Utilities.parseInt((java.lang.CharSequence) r3)     // Catch:{ all -> 0x0280 }
-                int r3 = r3.intValue()     // Catch:{ all -> 0x0280 }
-            L_0x01ea:
-                int r5 = r13.hashCode()     // Catch:{ all -> 0x0280 }
-                r15 = 2
-                switch(r5) {
-                    case -1625862693: goto L_0x021b;
-                    case -633951866: goto L_0x0213;
-                    case 1269980952: goto L_0x020b;
-                    case 1381936524: goto L_0x0203;
-                    case 1381936525: goto L_0x01fb;
-                    case 2052611411: goto L_0x01f3;
-                    default: goto L_0x01f2;
-                }     // Catch:{ all -> 0x0280 }
-            L_0x01f2:
-                goto L_0x0223
-            L_0x01f3:
-                boolean r1 = r13.equals(r6)     // Catch:{ all -> 0x0280 }
-                if (r1 == 0) goto L_0x0223
-                r13 = 1
-                goto L_0x0224
-            L_0x01fb:
-                boolean r1 = r13.equals(r9)     // Catch:{ all -> 0x0280 }
-                if (r1 == 0) goto L_0x0223
-                r13 = 5
-                goto L_0x0224
-            L_0x0203:
-                boolean r1 = r13.equals(r7)     // Catch:{ all -> 0x0280 }
-                if (r1 == 0) goto L_0x0223
-                r13 = 4
-                goto L_0x0224
-            L_0x020b:
-                boolean r1 = r13.equals(r0)     // Catch:{ all -> 0x0280 }
-                if (r1 == 0) goto L_0x0223
-                r13 = 0
-                goto L_0x0224
-            L_0x0213:
-                boolean r1 = r13.equals(r8)     // Catch:{ all -> 0x0280 }
-                if (r1 == 0) goto L_0x0223
-                r13 = 3
-                goto L_0x0224
-            L_0x021b:
-                boolean r1 = r13.equals(r1)     // Catch:{ all -> 0x0280 }
-                if (r1 == 0) goto L_0x0223
-                r13 = 2
-                goto L_0x0224
-            L_0x0223:
-                r13 = -1
-            L_0x0224:
-                if (r13 == 0) goto L_0x0246
-                r1 = 1
-                if (r13 == r1) goto L_0x0242
-                if (r13 == r15) goto L_0x023e
-                r1 = 3
-                if (r13 == r1) goto L_0x023b
-                r1 = 4
-                if (r13 == r1) goto L_0x0238
-                r1 = 5
-                if (r13 == r1) goto L_0x0235
-                goto L_0x0250
-            L_0x0235:
-                r2.previewBackgroundGradientColor3 = r3     // Catch:{ all -> 0x0280 }
-                goto L_0x0250
-            L_0x0238:
-                r2.previewBackgroundGradientColor2 = r3     // Catch:{ all -> 0x0280 }
-                goto L_0x0250
-            L_0x023b:
-                r2.previewBackgroundGradientColor1 = r3     // Catch:{ all -> 0x0280 }
-                goto L_0x0250
-            L_0x023e:
-                r2.setPreviewBackgroundColor(r3)     // Catch:{ all -> 0x0280 }
-                goto L_0x0250
-            L_0x0242:
-                r2.setPreviewOutColor(r3)     // Catch:{ all -> 0x0280 }
-                goto L_0x0250
-            L_0x0246:
-                r2.setPreviewInColor(r3)     // Catch:{ all -> 0x0280 }
-                goto L_0x0250
-            L_0x024a:
-                r19 = r6
-                r17 = r7
-                r18 = r8
-            L_0x0250:
-                int r11 = r11 + r14
-                int r12 = r12 + r14
-                goto L_0x0259
-            L_0x0253:
-                r19 = r6
-                r17 = r7
-                r18 = r8
-            L_0x0259:
-                int r10 = r10 + 1
-                r1 = r20
-                r7 = r17
-                r8 = r18
-                r6 = r19
-                r5 = 1
-                r9 = -1
-                goto L_0x0029
-            L_0x0267:
-                r19 = r6
-                r17 = r7
-            L_0x026b:
-                if (r7 != 0) goto L_0x0284
-                if (r4 != r12) goto L_0x0270
-                goto L_0x0284
-            L_0x0270:
-                java.nio.channels.FileChannel r1 = r19.getChannel()     // Catch:{ all -> 0x0280 }
-                long r3 = (long) r12     // Catch:{ all -> 0x0280 }
-                r1.position(r3)     // Catch:{ all -> 0x0280 }
-                r1 = r20
-                r4 = r12
-                r6 = r19
-                r5 = 1
-                goto L_0x001d
-            L_0x0280:
-                r0 = move-exception
-                goto L_0x028b
-            L_0x0282:
-                r19 = r6
-            L_0x0284:
-                r19.close()     // Catch:{ all -> 0x028f }
-                goto L_0x0293
-            L_0x0288:
-                r0 = move-exception
-                r19 = r6
-            L_0x028b:
-                r19.close()     // Catch:{ all -> 0x028e }
-            L_0x028e:
-                throw r0     // Catch:{ all -> 0x028f }
-            L_0x028f:
-                r0 = move-exception
-                org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            L_0x0293:
-                java.lang.String r0 = r2.pathToWallpaper
-                if (r0 == 0) goto L_0x02d9
-                boolean r0 = r2.badWallpaper
-                if (r0 != 0) goto L_0x02d9
-                java.io.File r0 = new java.io.File
-                java.lang.String r1 = r2.pathToWallpaper
-                r0.<init>(r1)
-                boolean r0 = r0.exists()
-                if (r0 != 0) goto L_0x02d9
-                r1 = r20
-                java.util.HashMap<org.telegram.ui.ActionBar.Theme$ThemeInfo, java.lang.String> r0 = r1.loadingWallpapers
-                boolean r0 = r0.containsKey(r2)
-                if (r0 != 0) goto L_0x02d7
-                java.util.HashMap<org.telegram.ui.ActionBar.Theme$ThemeInfo, java.lang.String> r0 = r1.loadingWallpapers
-                java.lang.String r3 = r2.slug
-                r0.put(r2, r3)
-                org.telegram.tgnet.TLRPC$TL_account_getWallPaper r0 = new org.telegram.tgnet.TLRPC$TL_account_getWallPaper
-                r0.<init>()
-                org.telegram.tgnet.TLRPC$TL_inputWallPaperSlug r3 = new org.telegram.tgnet.TLRPC$TL_inputWallPaperSlug
-                r3.<init>()
-                java.lang.String r4 = r2.slug
-                r3.slug = r4
-                r0.wallpaper = r3
-                int r3 = r2.account
-                org.telegram.tgnet.ConnectionsManager r3 = org.telegram.tgnet.ConnectionsManager.getInstance(r3)
-                org.telegram.ui.Components.ChatThemeBottomSheet$Adapter$$ExternalSyntheticLambda1 r4 = new org.telegram.ui.Components.ChatThemeBottomSheet$Adapter$$ExternalSyntheticLambda1
-                r4.<init>(r1, r2)
-                r3.sendRequest(r0, r4)
-            L_0x02d7:
-                r2 = 0
-                return r2
-            L_0x02d9:
-                r1 = r20
-                r3 = 1
-                r2.previewParsed = r3
-                return r3
-            L_0x02df:
-                r2 = 0
-                return r2
-            */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatThemeBottomSheet.Adapter.parseTheme(org.telegram.ui.ActionBar.Theme$ThemeInfo):boolean");
+        private boolean parseTheme(final Theme.ThemeInfo themeInfo) {
+            FileInputStream fileInputStream;
+            boolean z;
+            int i;
+            int intValue;
+            char c;
+            String[] split;
+            if (themeInfo == null || themeInfo.pathToFile == null) {
+                return false;
+            }
+            int i2 = 1;
+            try {
+                FileInputStream fileInputStream2 = new FileInputStream(new File(themeInfo.pathToFile));
+                int i3 = 0;
+                boolean z2 = false;
+                while (true) {
+                    try {
+                        int read = fileInputStream2.read(ThemesHorizontalListCell.bytes);
+                        if (read != -1) {
+                            int i4 = i3;
+                            int i5 = 0;
+                            int i6 = 0;
+                            while (true) {
+                                if (i5 < read) {
+                                    byte[] bArr = ThemesHorizontalListCell.bytes;
+                                    if (bArr[i5] == 10) {
+                                        int i7 = (i5 - i6) + i2;
+                                        String str = new String(bArr, i6, i7 - 1, "UTF-8");
+                                        if (str.startsWith("WLS=")) {
+                                            String substring = str.substring(4);
+                                            Uri parse = Uri.parse(substring);
+                                            themeInfo.slug = parse.getQueryParameter("slug");
+                                            File filesDirFixed = ApplicationLoader.getFilesDirFixed();
+                                            themeInfo.pathToWallpaper = new File(filesDirFixed, Utilities.MD5(substring) + ".wp").getAbsolutePath();
+                                            String queryParameter = parse.getQueryParameter("mode");
+                                            if (queryParameter != null && (split = queryParameter.toLowerCase().split(" ")) != null && split.length > 0) {
+                                                int i8 = 0;
+                                                while (true) {
+                                                    if (i8 < split.length) {
+                                                        if ("blur".equals(split[i8])) {
+                                                            themeInfo.isBlured = true;
+                                                        } else {
+                                                            i8++;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            if (!TextUtils.isEmpty(parse.getQueryParameter("pattern"))) {
+                                                try {
+                                                    String queryParameter2 = parse.getQueryParameter("bg_color");
+                                                    if (!TextUtils.isEmpty(queryParameter2)) {
+                                                        themeInfo.patternBgColor = Integer.parseInt(queryParameter2.substring(0, 6), 16) | (-16777216);
+                                                        if (queryParameter2.length() >= 13 && AndroidUtilities.isValidWallChar(queryParameter2.charAt(6))) {
+                                                            themeInfo.patternBgGradientColor1 = Integer.parseInt(queryParameter2.substring(7, 13), 16) | (-16777216);
+                                                        }
+                                                        if (queryParameter2.length() >= 20 && AndroidUtilities.isValidWallChar(queryParameter2.charAt(13))) {
+                                                            themeInfo.patternBgGradientColor2 = Integer.parseInt(queryParameter2.substring(14, 20), 16) | (-16777216);
+                                                        }
+                                                        if (queryParameter2.length() == 27 && AndroidUtilities.isValidWallChar(queryParameter2.charAt(20))) {
+                                                            themeInfo.patternBgGradientColor3 = Integer.parseInt(queryParameter2.substring(21), 16) | (-16777216);
+                                                        }
+                                                    }
+                                                } catch (Exception unused) {
+                                                }
+                                                try {
+                                                    String queryParameter3 = parse.getQueryParameter("rotation");
+                                                    if (!TextUtils.isEmpty(queryParameter3)) {
+                                                        themeInfo.patternBgGradientRotation = Utilities.parseInt((CharSequence) queryParameter3).intValue();
+                                                    }
+                                                } catch (Exception unused2) {
+                                                }
+                                                String queryParameter4 = parse.getQueryParameter("intensity");
+                                                if (!TextUtils.isEmpty(queryParameter4)) {
+                                                    themeInfo.patternIntensity = Utilities.parseInt((CharSequence) queryParameter4).intValue();
+                                                }
+                                                if (themeInfo.patternIntensity == 0) {
+                                                    themeInfo.patternIntensity = 50;
+                                                }
+                                            }
+                                        } else if (str.startsWith("WPS")) {
+                                            themeInfo.previewWallpaperOffset = i7 + i4;
+                                            fileInputStream = fileInputStream2;
+                                            z2 = true;
+                                        } else {
+                                            int indexOf = str.indexOf(61);
+                                            if (indexOf != -1) {
+                                                String substring2 = str.substring(0, indexOf);
+                                                z = z2;
+                                                i = read;
+                                                fileInputStream = fileInputStream2;
+                                                if (substring2.equals("chat_inBubble") || substring2.equals("chat_outBubble") || substring2.equals("chat_wallpaper") || substring2.equals("chat_wallpaper_gradient_to") || substring2.equals("key_chat_wallpaper_gradient_to2") || substring2.equals("key_chat_wallpaper_gradient_to3")) {
+                                                    String substring3 = str.substring(indexOf + 1);
+                                                    if (substring3.length() > 0 && substring3.charAt(0) == '#') {
+                                                        try {
+                                                            intValue = Color.parseColor(substring3);
+                                                        } catch (Exception unused3) {
+                                                            intValue = Utilities.parseInt((CharSequence) substring3).intValue();
+                                                        }
+                                                    } else {
+                                                        intValue = Utilities.parseInt((CharSequence) substring3).intValue();
+                                                    }
+                                                    switch (substring2.hashCode()) {
+                                                        case -1625862693:
+                                                            if (substring2.equals("chat_wallpaper")) {
+                                                                c = 2;
+                                                                break;
+                                                            }
+                                                            c = 65535;
+                                                            break;
+                                                        case -633951866:
+                                                            if (substring2.equals("chat_wallpaper_gradient_to")) {
+                                                                c = 3;
+                                                                break;
+                                                            }
+                                                            c = 65535;
+                                                            break;
+                                                        case 1269980952:
+                                                            if (substring2.equals("chat_inBubble")) {
+                                                                c = 0;
+                                                                break;
+                                                            }
+                                                            c = 65535;
+                                                            break;
+                                                        case 1381936524:
+                                                            if (substring2.equals("key_chat_wallpaper_gradient_to2")) {
+                                                                c = 4;
+                                                                break;
+                                                            }
+                                                            c = 65535;
+                                                            break;
+                                                        case 1381936525:
+                                                            if (substring2.equals("key_chat_wallpaper_gradient_to3")) {
+                                                                c = 5;
+                                                                break;
+                                                            }
+                                                            c = 65535;
+                                                            break;
+                                                        case 2052611411:
+                                                            if (substring2.equals("chat_outBubble")) {
+                                                                c = 1;
+                                                                break;
+                                                            }
+                                                            c = 65535;
+                                                            break;
+                                                        default:
+                                                            c = 65535;
+                                                            break;
+                                                    }
+                                                    if (c == 0) {
+                                                        themeInfo.setPreviewInColor(intValue);
+                                                    } else if (c == 1) {
+                                                        themeInfo.setPreviewOutColor(intValue);
+                                                    } else if (c == 2) {
+                                                        themeInfo.setPreviewBackgroundColor(intValue);
+                                                    } else if (c == 3) {
+                                                        themeInfo.previewBackgroundGradientColor1 = intValue;
+                                                    } else if (c == 4) {
+                                                        themeInfo.previewBackgroundGradientColor2 = intValue;
+                                                    } else if (c == 5) {
+                                                        themeInfo.previewBackgroundGradientColor3 = intValue;
+                                                    }
+                                                }
+                                                i6 += i7;
+                                                i4 += i7;
+                                                continue;
+                                            }
+                                        }
+                                        fileInputStream = fileInputStream2;
+                                        z = z2;
+                                        i = read;
+                                        i6 += i7;
+                                        i4 += i7;
+                                        continue;
+                                    } else {
+                                        fileInputStream = fileInputStream2;
+                                        z = z2;
+                                        i = read;
+                                        continue;
+                                    }
+                                    i5++;
+                                    z2 = z;
+                                    read = i;
+                                    fileInputStream2 = fileInputStream;
+                                    i2 = 1;
+                                } else {
+                                    fileInputStream = fileInputStream2;
+                                }
+                            }
+                            if (!z2 && i3 != i4) {
+                                try {
+                                    fileInputStream.getChannel().position(i4);
+                                    i3 = i4;
+                                    fileInputStream2 = fileInputStream;
+                                    i2 = 1;
+                                } catch (Throwable th) {
+                                    th = th;
+                                    try {
+                                        fileInputStream.close();
+                                    } catch (Throwable unused4) {
+                                    }
+                                    throw th;
+                                }
+                            }
+                        } else {
+                            fileInputStream = fileInputStream2;
+                        }
+                    } catch (Throwable th2) {
+                        th = th2;
+                        fileInputStream = fileInputStream2;
+                    }
+                }
+                fileInputStream.close();
+            } catch (Throwable th3) {
+                FileLog.e(th3);
+            }
+            if (themeInfo.pathToWallpaper != null && !themeInfo.badWallpaper && !new File(themeInfo.pathToWallpaper).exists()) {
+                if (this.loadingWallpapers.containsKey(themeInfo)) {
+                    return false;
+                }
+                this.loadingWallpapers.put(themeInfo, themeInfo.slug);
+                TLRPC$TL_account_getWallPaper tLRPC$TL_account_getWallPaper = new TLRPC$TL_account_getWallPaper();
+                TLRPC$TL_inputWallPaperSlug tLRPC$TL_inputWallPaperSlug = new TLRPC$TL_inputWallPaperSlug();
+                tLRPC$TL_inputWallPaperSlug.slug = themeInfo.slug;
+                tLRPC$TL_account_getWallPaper.wallpaper = tLRPC$TL_inputWallPaperSlug;
+                ConnectionsManager.getInstance(themeInfo.account).sendRequest(tLRPC$TL_account_getWallPaper, new RequestDelegate() { // from class: org.telegram.ui.Components.ChatThemeBottomSheet$Adapter$$ExternalSyntheticLambda1
+                    @Override // org.telegram.tgnet.RequestDelegate
+                    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+                        ChatThemeBottomSheet.Adapter.this.lambda$parseTheme$1(themeInfo, tLObject, tLRPC$TL_error);
+                    }
+                });
+                return false;
+            }
+            themeInfo.previewParsed = true;
+            return true;
         }
 
-        /* access modifiers changed from: private */
-        public /* synthetic */ void lambda$parseTheme$1(Theme.ThemeInfo themeInfo, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-            AndroidUtilities.runOnUIThread(new ChatThemeBottomSheet$Adapter$$ExternalSyntheticLambda0(this, tLObject, themeInfo));
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$parseTheme$1(final Theme.ThemeInfo themeInfo, final TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+            AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.ChatThemeBottomSheet$Adapter$$ExternalSyntheticLambda0
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ChatThemeBottomSheet.Adapter.this.lambda$parseTheme$0(tLObject, themeInfo);
+                }
+            });
         }
 
-        /* access modifiers changed from: private */
+        /* JADX INFO: Access modifiers changed from: private */
         public /* synthetic */ void lambda$parseTheme$0(TLObject tLObject, Theme.ThemeInfo themeInfo) {
             if (tLObject instanceof TLRPC$TL_wallPaper) {
                 TLRPC$WallPaper tLRPC$WallPaper = (TLRPC$WallPaper) tLObject;
                 String attachFileName = FileLoader.getAttachFileName(tLRPC$WallPaper.document);
-                if (!this.loadingThemes.containsKey(attachFileName)) {
-                    this.loadingThemes.put(attachFileName, themeInfo);
-                    FileLoader.getInstance(themeInfo.account).loadFile(tLRPC$WallPaper.document, tLRPC$WallPaper, 1, 1);
+                if (this.loadingThemes.containsKey(attachFileName)) {
                     return;
                 }
+                this.loadingThemes.put(attachFileName, themeInfo);
+                FileLoader.getInstance(themeInfo.account).loadFile(tLRPC$WallPaper.document, tLRPC$WallPaper, 1, 1);
                 return;
             }
             themeInfo.badWallpaper = true;
         }
 
+        @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         public int getItemCount() {
             List<ChatThemeItem> list = this.items;
             if (list == null) {
@@ -1406,21 +1090,23 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
 
         public void setSelectedItem(int i) {
             int i2 = this.selectedItemPosition;
-            if (i2 != i) {
-                if (i2 >= 0) {
-                    notifyItemChanged(i2);
-                    WeakReference<ThemeSmallPreviewView> weakReference = this.selectedViewRef;
-                    ThemeSmallPreviewView themeSmallPreviewView = weakReference == null ? null : (ThemeSmallPreviewView) weakReference.get();
-                    if (themeSmallPreviewView != null) {
-                        themeSmallPreviewView.setSelected(false);
-                    }
-                }
-                this.selectedItemPosition = i;
-                notifyItemChanged(i);
+            if (i2 == i) {
+                return;
             }
+            if (i2 >= 0) {
+                notifyItemChanged(i2);
+                WeakReference<ThemeSmallPreviewView> weakReference = this.selectedViewRef;
+                ThemeSmallPreviewView themeSmallPreviewView = weakReference == null ? null : weakReference.get();
+                if (themeSmallPreviewView != null) {
+                    themeSmallPreviewView.setSelected(false);
+                }
+            }
+            this.selectedItemPosition = i;
+            notifyItemChanged(i);
         }
     }
 
+    /* loaded from: classes3.dex */
     public static class ChatThemeItem {
         public float animationProgress;
         public final EmojiThemes chatTheme;
@@ -1434,9 +1120,10 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
         }
     }
 
+    @Override // org.telegram.ui.ActionBar.BottomSheet, android.app.Dialog
     public void show() {
-        String str;
         int i;
+        String str;
         super.show();
         TextView textView = this.resetTextView;
         if (this.themeDelegate.getCurrentTheme() == null) {

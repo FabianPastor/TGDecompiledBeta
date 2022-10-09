@@ -7,24 +7,28 @@ import android.graphics.RectF;
 import android.view.View;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
-
+/* loaded from: classes3.dex */
 public class ContextProgressView extends View {
-    private RectF cicleRect = new RectF();
+    private RectF cicleRect;
     private int innerColor;
     private String innerKey;
-    private Paint innerPaint = new Paint(1);
+    private Paint innerPaint;
     private long lastUpdateTime;
     private int outerColor;
     private String outerKey;
-    private Paint outerPaint = new Paint(1);
-    private int radOffset = 0;
+    private Paint outerPaint;
+    private int radOffset;
 
     public ContextProgressView(Context context, int i) {
         super(context);
+        this.innerPaint = new Paint(1);
+        this.outerPaint = new Paint(1);
+        this.cicleRect = new RectF();
+        this.radOffset = 0;
         this.innerPaint.setStyle(Paint.Style.STROKE);
-        this.innerPaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
+        this.innerPaint.setStrokeWidth(AndroidUtilities.dp(2.0f));
         this.outerPaint.setStyle(Paint.Style.STROKE);
-        this.outerPaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
+        this.outerPaint.setStrokeWidth(AndroidUtilities.dp(2.0f));
         this.outerPaint.setStrokeCap(Paint.Cap.ROUND);
         if (i == 0) {
             this.innerKey = "contextProgressInner1";
@@ -66,32 +70,34 @@ public class ContextProgressView extends View {
         invalidate();
     }
 
+    @Override // android.view.View
     public void setVisibility(int i) {
         super.setVisibility(i);
         this.lastUpdateTime = System.currentTimeMillis();
         invalidate();
     }
 
-    /* access modifiers changed from: protected */
-    public void onAttachedToWindow() {
+    @Override // android.view.View
+    protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         this.lastUpdateTime = System.currentTimeMillis();
         invalidate();
     }
 
-    /* access modifiers changed from: protected */
-    public void onDraw(Canvas canvas) {
-        if (getVisibility() == 0) {
-            long currentTimeMillis = System.currentTimeMillis();
-            long j = currentTimeMillis - this.lastUpdateTime;
-            this.lastUpdateTime = currentTimeMillis;
-            this.radOffset = (int) (((float) this.radOffset) + (((float) (j * 360)) / 1000.0f));
-            int measuredWidth = (getMeasuredWidth() / 2) - AndroidUtilities.dp(9.0f);
-            int measuredHeight = (getMeasuredHeight() / 2) - AndroidUtilities.dp(9.0f);
-            this.cicleRect.set((float) measuredWidth, (float) measuredHeight, (float) (measuredWidth + AndroidUtilities.dp(18.0f)), (float) (measuredHeight + AndroidUtilities.dp(18.0f)));
-            canvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), (float) AndroidUtilities.dp(9.0f), this.innerPaint);
-            canvas.drawArc(this.cicleRect, (float) (this.radOffset - 90), 90.0f, false, this.outerPaint);
-            invalidate();
+    @Override // android.view.View
+    protected void onDraw(Canvas canvas) {
+        if (getVisibility() != 0) {
+            return;
         }
+        long currentTimeMillis = System.currentTimeMillis();
+        long j = currentTimeMillis - this.lastUpdateTime;
+        this.lastUpdateTime = currentTimeMillis;
+        this.radOffset = (int) (this.radOffset + (((float) (j * 360)) / 1000.0f));
+        int measuredWidth = (getMeasuredWidth() / 2) - AndroidUtilities.dp(9.0f);
+        int measuredHeight = (getMeasuredHeight() / 2) - AndroidUtilities.dp(9.0f);
+        this.cicleRect.set(measuredWidth, measuredHeight, measuredWidth + AndroidUtilities.dp(18.0f), measuredHeight + AndroidUtilities.dp(18.0f));
+        canvas.drawCircle(getMeasuredWidth() / 2, getMeasuredHeight() / 2, AndroidUtilities.dp(9.0f), this.innerPaint);
+        canvas.drawArc(this.cicleRect, this.radOffset - 90, 90.0f, false, this.outerPaint);
+        invalidate();
     }
 }

@@ -7,22 +7,22 @@ import android.view.ScaleGestureDetector;
 import android.view.VelocityTracker;
 import android.view.ViewConfiguration;
 import org.telegram.messenger.AndroidUtilities;
-
+/* loaded from: classes3.dex */
 public class CropGestureDetector {
-    private int mActivePointerId = -1;
-    private int mActivePointerIndex = 0;
     private ScaleGestureDetector mDetector;
     private boolean mIsDragging;
     private float mLastTouchX;
     private float mLastTouchY;
-    /* access modifiers changed from: private */
-    public CropGestureListener mListener;
+    private CropGestureListener mListener;
     private final float mMinimumVelocity;
-    private final float mTouchSlop = ((float) AndroidUtilities.dp(1.0f));
     private VelocityTracker mVelocityTracker;
     private boolean started;
     private long touchTime;
+    private final float mTouchSlop = AndroidUtilities.dp(1.0f);
+    private int mActivePointerId = -1;
+    private int mActivePointerIndex = 0;
 
+    /* loaded from: classes3.dex */
     public interface CropGestureListener {
         void onDrag(float f, float f2);
 
@@ -34,15 +34,18 @@ public class CropGestureDetector {
     }
 
     public CropGestureDetector(Context context) {
-        this.mMinimumVelocity = (float) ViewConfiguration.get(context).getScaledMinimumFlingVelocity();
-        this.mDetector = new ScaleGestureDetector(context, new ScaleGestureDetector.OnScaleGestureListener() {
+        this.mMinimumVelocity = ViewConfiguration.get(context).getScaledMinimumFlingVelocity();
+        this.mDetector = new ScaleGestureDetector(context, new ScaleGestureDetector.OnScaleGestureListener() { // from class: org.telegram.ui.Components.Crop.CropGestureDetector.1
+            @Override // android.view.ScaleGestureDetector.OnScaleGestureListener
             public boolean onScaleBegin(ScaleGestureDetector scaleGestureDetector) {
                 return true;
             }
 
+            @Override // android.view.ScaleGestureDetector.OnScaleGestureListener
             public void onScaleEnd(ScaleGestureDetector scaleGestureDetector) {
             }
 
+            @Override // android.view.ScaleGestureDetector.OnScaleGestureListener
             public boolean onScale(ScaleGestureDetector scaleGestureDetector) {
                 float scaleFactor = scaleGestureDetector.getScaleFactor();
                 if (Float.isNaN(scaleFactor) || Float.isInfinite(scaleFactor)) {
@@ -54,8 +57,7 @@ public class CropGestureDetector {
         });
     }
 
-    /* access modifiers changed from: package-private */
-    public float getActiveX(MotionEvent motionEvent) {
+    float getActiveX(MotionEvent motionEvent) {
         try {
             return motionEvent.getX(this.mActivePointerIndex);
         } catch (Exception unused) {
@@ -63,8 +65,7 @@ public class CropGestureDetector {
         }
     }
 
-    /* access modifiers changed from: package-private */
-    public float getActiveY(MotionEvent motionEvent) {
+    float getActiveY(MotionEvent motionEvent) {
         try {
             return motionEvent.getY(this.mActivePointerIndex);
         } catch (Exception unused) {
@@ -163,7 +164,7 @@ public class CropGestureDetector {
         float f = activeX - this.mLastTouchX;
         float f2 = activeY - this.mLastTouchY;
         if (!this.mIsDragging) {
-            if (((float) Math.sqrt((double) ((f * f) + (f2 * f2)))) >= this.mTouchSlop) {
+            if (((float) Math.sqrt((f * f) + (f2 * f2))) >= this.mTouchSlop) {
                 z = true;
             }
             this.mIsDragging = z;

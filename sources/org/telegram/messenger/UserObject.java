@@ -5,10 +5,11 @@ import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.tgnet.TLRPC$TL_userContact_old2;
 import org.telegram.tgnet.TLRPC$TL_userDeleted_old2;
 import org.telegram.tgnet.TLRPC$TL_userEmpty;
+import org.telegram.tgnet.TLRPC$TL_userProfilePhotoEmpty;
 import org.telegram.tgnet.TLRPC$TL_userSelf_old3;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.tgnet.TLRPC$UserProfilePhoto;
-
+/* loaded from: classes.dex */
 public class UserObject {
     public static boolean isReplyUser(long j) {
         return j == 708513 || j == NUM;
@@ -44,8 +45,8 @@ public class UserObject {
         if (formatName.length() != 0 || TextUtils.isEmpty(tLRPC$User.phone)) {
             return formatName;
         }
-        PhoneFormat instance = PhoneFormat.getInstance();
-        return instance.format("+" + tLRPC$User.phone);
+        PhoneFormat phoneFormat = PhoneFormat.getInstance();
+        return phoneFormat.format("+" + tLRPC$User.phone);
     }
 
     public static String getFirstName(TLRPC$User tLRPC$User) {
@@ -65,25 +66,9 @@ public class UserObject {
         return !TextUtils.isEmpty(str) ? str : LocaleController.getString("HiddenName", R.string.HiddenName);
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:1:0x0002, code lost:
-        r0 = r0.photo;
-     */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public static boolean hasPhoto(org.telegram.tgnet.TLRPC$User r0) {
-        /*
-            if (r0 == 0) goto L_0x000c
-            org.telegram.tgnet.TLRPC$UserProfilePhoto r0 = r0.photo
-            if (r0 == 0) goto L_0x000c
-            boolean r0 = r0 instanceof org.telegram.tgnet.TLRPC$TL_userProfilePhotoEmpty
-            if (r0 != 0) goto L_0x000c
-            r0 = 1
-            goto L_0x000d
-        L_0x000c:
-            r0 = 0
-        L_0x000d:
-            return r0
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.UserObject.hasPhoto(org.telegram.tgnet.TLRPC$User):boolean");
+    public static boolean hasPhoto(TLRPC$User tLRPC$User) {
+        TLRPC$UserProfilePhoto tLRPC$UserProfilePhoto;
+        return (tLRPC$User == null || (tLRPC$UserProfilePhoto = tLRPC$User.photo) == null || (tLRPC$UserProfilePhoto instanceof TLRPC$TL_userProfilePhotoEmpty)) ? false : true;
     }
 
     public static TLRPC$UserProfilePhoto getPhoto(TLRPC$User tLRPC$User) {

@@ -1,304 +1,606 @@
 package org.telegram.tgnet;
 
+import java.util.ArrayList;
+/* loaded from: classes.dex */
 public abstract class TLRPC$Update extends TLObject {
     public static TLRPC$Update TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-        TLRPC$Update tLRPC$Update;
+        TLRPC$Update tLRPC$TL_updateTheme;
         switch (i) {
             case -2112423005:
-                tLRPC$Update = new TLRPC$TL_updateTheme();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateTheme();
                 break;
             case -2092401936:
-                tLRPC$Update = new TLRPC$TL_updateChatUserTyping();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateChatUserTyping();
                 break;
             case -2030252155:
-                tLRPC$Update = new TLRPC$TL_updateMoveStickerSetToTop();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateMoveStickerSetToTop();
                 break;
             case -2027964103:
-                tLRPC$Update = new TLRPC$TL_updateGeoLiveViewed();
+                tLRPC$TL_updateTheme = new TLRPC$Update() { // from class: org.telegram.tgnet.TLRPC$TL_updateGeoLiveViewed
+                    public static int constructor = -NUM;
+                    public int msg_id;
+                    public TLRPC$Peer peer;
+
+                    @Override // org.telegram.tgnet.TLObject
+                    public void readParams(AbstractSerializedData abstractSerializedData2, boolean z2) {
+                        this.peer = TLRPC$Peer.TLdeserialize(abstractSerializedData2, abstractSerializedData2.readInt32(z2), z2);
+                        this.msg_id = abstractSerializedData2.readInt32(z2);
+                    }
+
+                    @Override // org.telegram.tgnet.TLObject
+                    public void serializeToStream(AbstractSerializedData abstractSerializedData2) {
+                        abstractSerializedData2.writeInt32(constructor);
+                        this.peer.serializeToStream(abstractSerializedData2);
+                        abstractSerializedData2.writeInt32(this.msg_id);
+                    }
+                };
                 break;
             case -2006880112:
-                tLRPC$Update = new TLRPC$TL_updateTranscribeAudio();
+                tLRPC$TL_updateTheme = new TLRPC$Update() { // from class: org.telegram.tgnet.TLRPC$TL_updateTranscribeAudio
+                    public static int constructor = -NUM;
+                    public int flags;
+                    public boolean isFinal;
+                    public String text;
+                    public long transcription_id;
+
+                    @Override // org.telegram.tgnet.TLObject
+                    public void readParams(AbstractSerializedData abstractSerializedData2, boolean z2) {
+                        int readInt32 = abstractSerializedData2.readInt32(z2);
+                        this.flags = readInt32;
+                        boolean z3 = true;
+                        if ((readInt32 & 1) == 0) {
+                            z3 = false;
+                        }
+                        this.isFinal = z3;
+                        this.transcription_id = abstractSerializedData2.readInt64(z2);
+                        this.text = abstractSerializedData2.readString(z2);
+                    }
+
+                    @Override // org.telegram.tgnet.TLObject
+                    public void serializeToStream(AbstractSerializedData abstractSerializedData2) {
+                        abstractSerializedData2.writeInt32(constructor);
+                        int i2 = this.isFinal ? this.flags | 1 : this.flags & (-2);
+                        this.flags = i2;
+                        abstractSerializedData2.writeInt32(i2);
+                        abstractSerializedData2.writeInt64(this.transcription_id);
+                        abstractSerializedData2.writeString(this.text);
+                    }
+                };
                 break;
             case -1937192669:
-                tLRPC$Update = new TLRPC$TL_updateChannelUserTyping();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateChannelUserTyping();
                 break;
             case -1906403213:
-                tLRPC$Update = new TLRPC$TL_updateDcOptions();
+                tLRPC$TL_updateTheme = new TLRPC$Update() { // from class: org.telegram.tgnet.TLRPC$TL_updateDcOptions
+                    public static int constructor = -NUM;
+                    public ArrayList<TLRPC$TL_dcOption> dc_options = new ArrayList<>();
+
+                    @Override // org.telegram.tgnet.TLObject
+                    public void readParams(AbstractSerializedData abstractSerializedData2, boolean z2) {
+                        int readInt32 = abstractSerializedData2.readInt32(z2);
+                        if (readInt32 != NUM) {
+                            if (z2) {
+                                throw new RuntimeException(String.format("wrong Vector magic, got %x", Integer.valueOf(readInt32)));
+                            }
+                            return;
+                        }
+                        int readInt322 = abstractSerializedData2.readInt32(z2);
+                        for (int i2 = 0; i2 < readInt322; i2++) {
+                            TLRPC$TL_dcOption TLdeserialize = TLRPC$TL_dcOption.TLdeserialize(abstractSerializedData2, abstractSerializedData2.readInt32(z2), z2);
+                            if (TLdeserialize == null) {
+                                return;
+                            }
+                            this.dc_options.add(TLdeserialize);
+                        }
+                    }
+
+                    @Override // org.telegram.tgnet.TLObject
+                    public void serializeToStream(AbstractSerializedData abstractSerializedData2) {
+                        abstractSerializedData2.writeInt32(constructor);
+                        abstractSerializedData2.writeInt32(NUM);
+                        int size = this.dc_options.size();
+                        abstractSerializedData2.writeInt32(size);
+                        for (int i2 = 0; i2 < size; i2++) {
+                            this.dc_options.get(i2).serializeToStream(abstractSerializedData2);
+                        }
+                    }
+                };
                 break;
             case -1870238482:
-                tLRPC$Update = new TLRPC$TL_updateDeleteScheduledMessages();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateDeleteScheduledMessages();
                 break;
             case -1842450928:
-                tLRPC$Update = new TLRPC$TL_updateReadChannelInbox();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateReadChannelInbox();
                 break;
             case -1821035490:
-                tLRPC$Update = new TLRPC$TL_updateSavedGifs();
+                tLRPC$TL_updateTheme = new TLRPC$Update() { // from class: org.telegram.tgnet.TLRPC$TL_updateSavedGifs
+                    public static int constructor = -NUM;
+
+                    @Override // org.telegram.tgnet.TLObject
+                    public void serializeToStream(AbstractSerializedData abstractSerializedData2) {
+                        abstractSerializedData2.writeInt32(constructor);
+                    }
+                };
                 break;
             case -1738720581:
-                tLRPC$Update = new TLRPC$TL_updateChannelParticipant();
+                tLRPC$TL_updateTheme = new TLRPC$Update() { // from class: org.telegram.tgnet.TLRPC$TL_updateChannelParticipant
+                    public static int constructor = -NUM;
+                    public long actor_id;
+                    public long channel_id;
+                    public int date;
+                    public int flags;
+                    public TLRPC$ExportedChatInvite invite;
+                    public TLRPC$ChannelParticipant new_participant;
+                    public TLRPC$ChannelParticipant prev_participant;
+                    public int qts;
+                    public long user_id;
+
+                    @Override // org.telegram.tgnet.TLObject
+                    public void readParams(AbstractSerializedData abstractSerializedData2, boolean z2) {
+                        this.flags = abstractSerializedData2.readInt32(z2);
+                        this.channel_id = abstractSerializedData2.readInt64(z2);
+                        this.date = abstractSerializedData2.readInt32(z2);
+                        this.actor_id = abstractSerializedData2.readInt64(z2);
+                        this.user_id = abstractSerializedData2.readInt64(z2);
+                        if ((this.flags & 1) != 0) {
+                            this.prev_participant = TLRPC$ChannelParticipant.TLdeserialize(abstractSerializedData2, abstractSerializedData2.readInt32(z2), z2);
+                        }
+                        if ((this.flags & 2) != 0) {
+                            this.new_participant = TLRPC$ChannelParticipant.TLdeserialize(abstractSerializedData2, abstractSerializedData2.readInt32(z2), z2);
+                        }
+                        if ((this.flags & 4) != 0) {
+                            this.invite = TLRPC$ExportedChatInvite.TLdeserialize(abstractSerializedData2, abstractSerializedData2.readInt32(z2), z2);
+                        }
+                        this.qts = abstractSerializedData2.readInt32(z2);
+                    }
+
+                    @Override // org.telegram.tgnet.TLObject
+                    public void serializeToStream(AbstractSerializedData abstractSerializedData2) {
+                        abstractSerializedData2.writeInt32(constructor);
+                        abstractSerializedData2.writeInt32(this.flags);
+                        abstractSerializedData2.writeInt64(this.channel_id);
+                        abstractSerializedData2.writeInt32(this.date);
+                        abstractSerializedData2.writeInt64(this.actor_id);
+                        abstractSerializedData2.writeInt64(this.user_id);
+                        if ((this.flags & 1) != 0) {
+                            this.prev_participant.serializeToStream(abstractSerializedData2);
+                        }
+                        if ((this.flags & 2) != 0) {
+                            this.new_participant.serializeToStream(abstractSerializedData2);
+                        }
+                        if ((this.flags & 4) != 0) {
+                            this.invite.serializeToStream(abstractSerializedData2);
+                        }
+                        abstractSerializedData2.writeInt32(this.qts);
+                    }
+                };
                 break;
             case -1706939360:
-                tLRPC$Update = new TLRPC$TL_updateRecentStickers();
+                tLRPC$TL_updateTheme = new TLRPC$Update() { // from class: org.telegram.tgnet.TLRPC$TL_updateRecentStickers
+                    public static int constructor = -NUM;
+
+                    @Override // org.telegram.tgnet.TLObject
+                    public void serializeToStream(AbstractSerializedData abstractSerializedData2) {
+                        abstractSerializedData2.writeInt32(constructor);
+                    }
+                };
                 break;
             case -1667805217:
-                tLRPC$Update = new TLRPC$TL_updateReadHistoryInbox();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateReadHistoryInbox();
                 break;
             case -1576161051:
-                tLRPC$Update = new TLRPC$TL_updateDeleteMessages();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateDeleteMessages();
                 break;
             case -1574314746:
-                tLRPC$Update = new TLRPC$TL_updateConfig();
+                tLRPC$TL_updateTheme = new TLRPC$Update() { // from class: org.telegram.tgnet.TLRPC$TL_updateConfig
+                    public static int constructor = -NUM;
+
+                    @Override // org.telegram.tgnet.TLObject
+                    public void serializeToStream(AbstractSerializedData abstractSerializedData2) {
+                        abstractSerializedData2.writeInt32(constructor);
+                    }
+                };
                 break;
             case -1512627963:
-                tLRPC$Update = new TLRPC$TL_updateDialogFilterOrder();
+                tLRPC$TL_updateTheme = new TLRPC$Update() { // from class: org.telegram.tgnet.TLRPC$TL_updateDialogFilterOrder
+                    public static int constructor = -NUM;
+                    public ArrayList<Integer> order = new ArrayList<>();
+
+                    @Override // org.telegram.tgnet.TLObject
+                    public void readParams(AbstractSerializedData abstractSerializedData2, boolean z2) {
+                        int readInt32 = abstractSerializedData2.readInt32(z2);
+                        if (readInt32 != NUM) {
+                            if (z2) {
+                                throw new RuntimeException(String.format("wrong Vector magic, got %x", Integer.valueOf(readInt32)));
+                            }
+                            return;
+                        }
+                        int readInt322 = abstractSerializedData2.readInt32(z2);
+                        for (int i2 = 0; i2 < readInt322; i2++) {
+                            this.order.add(Integer.valueOf(abstractSerializedData2.readInt32(z2)));
+                        }
+                    }
+
+                    @Override // org.telegram.tgnet.TLObject
+                    public void serializeToStream(AbstractSerializedData abstractSerializedData2) {
+                        abstractSerializedData2.writeInt32(constructor);
+                        abstractSerializedData2.writeInt32(NUM);
+                        int size = this.order.size();
+                        abstractSerializedData2.writeInt32(size);
+                        for (int i2 = 0; i2 < size; i2++) {
+                            abstractSerializedData2.writeInt32(this.order.get(i2).intValue());
+                        }
+                    }
+                };
                 break;
             case -1425052898:
-                tLRPC$Update = new TLRPC$TL_updatePhoneCall();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updatePhoneCall();
                 break;
             case -1398708869:
-                tLRPC$Update = new TLRPC$TL_updateMessagePoll();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateMessagePoll();
                 break;
             case -1304443240:
-                tLRPC$Update = new TLRPC$TL_updateChannelAvailableMessages();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateChannelAvailableMessages();
                 break;
             case -1264392051:
-                tLRPC$Update = new TLRPC$TL_updateEncryption();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateEncryption();
                 break;
             case -1263546448:
-                tLRPC$Update = new TLRPC$TL_updatePeerLocated();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updatePeerLocated();
                 break;
             case -1218471511:
-                tLRPC$Update = new TLRPC$TL_updateReadChannelOutbox();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateReadChannelOutbox();
                 break;
             case -1147422299:
-                tLRPC$Update = new TLRPC$TL_updatePeerHistoryTTL();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updatePeerHistoryTTL();
                 break;
             case -1094555409:
-                tLRPC$Update = new TLRPC$TL_updateNotifySettings();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateNotifySettings();
                 break;
             case -1071741569:
-                tLRPC$Update = new TLRPC$TL_updateUserTyping();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateUserTyping();
                 break;
             case -1020437742:
-                tLRPC$Update = new TLRPC$TL_updateDeleteChannelMessages();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateDeleteChannelMessages();
                 break;
             case -1007549728:
-                tLRPC$Update = new TLRPC$TL_updateUserName();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateUserName();
                 break;
             case -761649164:
-                tLRPC$Update = new TLRPC$TL_updateChannelMessageForwards();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateChannelMessageForwards();
                 break;
             case -693004986:
-                tLRPC$Update = new TLRPC$TL_updateReadChannelDiscussionInbox();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateReadChannelDiscussionInbox();
                 break;
             case -674602590:
-                tLRPC$Update = new TLRPC$TL_updateChatParticipantAdmin();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateChatParticipantAdmin();
                 break;
             case -513517117:
-                tLRPC$Update = new TLRPC$TL_updateDialogUnreadMark();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateDialogUnreadMark();
                 break;
             case -483443337:
-                tLRPC$Update = new TLRPC$TL_updateChatParticipantDelete();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateChatParticipantDelete();
                 break;
             case -469536605:
-                tLRPC$Update = new TLRPC$TL_updateEditMessage();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateEditMessage();
                 break;
             case -451831443:
-                tLRPC$Update = new TLRPC$TL_updateFavedStickers();
+                tLRPC$TL_updateTheme = new TLRPC$Update() { // from class: org.telegram.tgnet.TLRPC$TL_updateFavedStickers
+                    public static int constructor = -NUM;
+
+                    @Override // org.telegram.tgnet.TLObject
+                    public void serializeToStream(AbstractSerializedData abstractSerializedData2) {
+                        abstractSerializedData2.writeInt32(constructor);
+                    }
+                };
                 break;
             case -440534818:
-                tLRPC$Update = new TLRPC$TL_updateUserStatus();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateUserStatus();
                 break;
             case -337352679:
-                tLRPC$Update = new TLRPC$TL_updateServiceNotification();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateServiceNotification();
                 break;
             case -309990731:
-                tLRPC$Update = new TLRPC$TL_updatePinnedMessages();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updatePinnedMessages();
                 break;
             case -299124375:
-                tLRPC$Update = new TLRPC$TL_updateDraftMessage();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateDraftMessage();
                 break;
             case -298113238:
-                tLRPC$Update = new TLRPC$TL_updatePrivacy();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updatePrivacy();
                 break;
             case -232346616:
-                tLRPC$Update = new TLRPC$TL_updateChannelMessageViews();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateChannelMessageViews();
                 break;
             case -232290676:
-                tLRPC$Update = new TLRPC$TL_updateUserPhoto();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateUserPhoto();
                 break;
             case -219423922:
-                tLRPC$Update = new TLRPC$TL_updateGroupCallParticipants();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateGroupCallParticipants();
                 break;
             case -124097970:
-                tLRPC$Update = new TLRPC$TL_updateChat();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateChat();
                 break;
             case -99664734:
-                tLRPC$Update = new TLRPC$TL_updatePinnedDialogs();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updatePinnedDialogs();
                 break;
             case -78886548:
-                tLRPC$Update = new TLRPC$TL_updateReadFeaturedEmojiStickers();
+                tLRPC$TL_updateTheme = new TLRPC$Update() { // from class: org.telegram.tgnet.TLRPC$TL_updateReadFeaturedEmojiStickers
+                    public static int constructor = -78886548;
+
+                    @Override // org.telegram.tgnet.TLObject
+                    public void serializeToStream(AbstractSerializedData abstractSerializedData2) {
+                        abstractSerializedData2.writeInt32(constructor);
+                    }
+                };
                 break;
             case 8703322:
-                tLRPC$Update = new TLRPC$TL_updateTranscribedAudio();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateTranscribedAudio();
                 break;
             case 88680979:
-                tLRPC$Update = new TLRPC$TL_updateUserPhone();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateUserPhone();
                 break;
             case 125178264:
-                tLRPC$Update = new TLRPC$TL_updateChatParticipants();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateChatParticipants();
                 break;
             case 192428418:
-                tLRPC$Update = new TLRPC$TL_updateGroupCallConnection();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateGroupCallConnection();
                 break;
             case 196268545:
-                tLRPC$Update = new TLRPC$TL_updateStickerSetsOrder();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateStickerSetsOrder();
                 break;
             case 277713951:
-                tLRPC$Update = new TLRPC$TL_updateChannelTooLong();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateChannelTooLong();
                 break;
             case 314359194:
-                tLRPC$Update = new TLRPC$TL_updateNewEncryptedMessage();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateNewEncryptedMessage();
                 break;
             case 347227392:
-                tLRPC$Update = new TLRPC$TL_updateGroupCall();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateGroupCall();
                 break;
             case 347625491:
-                tLRPC$Update = new TLRPC$TL_updateBotMenuButton();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateBotMenuButton();
                 break;
             case 357013699:
-                tLRPC$Update = new TLRPC$TL_updateMessageReactions();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateMessageReactions();
                 break;
             case 361936797:
-                tLRPC$Update = new TLRPC$TL_updateWebViewResultSent();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateWebViewResultSent();
                 break;
             case 386986326:
-                tLRPC$Update = new TLRPC$TL_updateEncryptedChatTyping();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateEncryptedChatTyping();
                 break;
             case 397910539:
-                tLRPC$Update = new TLRPC$TL_updateAttachMenuBots();
+                tLRPC$TL_updateTheme = new TLRPC$Update() { // from class: org.telegram.tgnet.TLRPC$TL_updateAttachMenuBots
+                    public static int constructor = NUM;
+
+                    @Override // org.telegram.tgnet.TLObject
+                    public void serializeToStream(AbstractSerializedData abstractSerializedData2) {
+                        abstractSerializedData2.writeInt32(constructor);
+                    }
+                };
                 break;
             case 422972864:
-                tLRPC$Update = new TLRPC$TL_updateFolderPeers();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateFolderPeers();
                 break;
             case 457133559:
-                tLRPC$Update = new TLRPC$TL_updateEditChannelMessage();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateEditChannelMessage();
                 break;
             case 522914557:
-                tLRPC$Update = new TLRPC$TL_updateNewMessage();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateNewMessage();
                 break;
             case 610945826:
-                tLRPC$Update = new TLRPC$TL_updatePeerBlocked();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updatePeerBlocked();
                 break;
             case 643940105:
-                tLRPC$Update = new TLRPC$TL_updatePhoneCallSignalingData();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updatePhoneCallSignalingData();
                 break;
             case 654302845:
-                tLRPC$Update = new TLRPC$TL_updateDialogFilter();
+                tLRPC$TL_updateTheme = new TLRPC$Update() { // from class: org.telegram.tgnet.TLRPC$TL_updateDialogFilter
+                    public static int constructor = NUM;
+                    public TLRPC$DialogFilter filter;
+                    public int flags;
+                    public int id;
+
+                    @Override // org.telegram.tgnet.TLObject
+                    public void readParams(AbstractSerializedData abstractSerializedData2, boolean z2) {
+                        this.flags = abstractSerializedData2.readInt32(z2);
+                        this.id = abstractSerializedData2.readInt32(z2);
+                        if ((this.flags & 1) != 0) {
+                            this.filter = TLRPC$DialogFilter.TLdeserialize(abstractSerializedData2, abstractSerializedData2.readInt32(z2), z2);
+                        }
+                    }
+
+                    @Override // org.telegram.tgnet.TLObject
+                    public void serializeToStream(AbstractSerializedData abstractSerializedData2) {
+                        abstractSerializedData2.writeInt32(constructor);
+                        abstractSerializedData2.writeInt32(this.flags);
+                        abstractSerializedData2.writeInt32(this.id);
+                        if ((this.flags & 1) != 0) {
+                            this.filter.serializeToStream(abstractSerializedData2);
+                        }
+                    }
+                };
                 break;
             case 674706841:
-                tLRPC$Update = new TLRPC$TL_updateUserEmojiStatus();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateUserEmojiStatus();
                 break;
             case 791390623:
-                tLRPC$Update = new TLRPC$TL_updateChannelWebPage();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateChannelWebPage();
                 break;
             case 791617983:
-                tLRPC$Update = new TLRPC$TL_updateReadHistoryOutbox();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateReadHistoryOutbox();
                 break;
             case 821314523:
-                tLRPC$Update = new TLRPC$TL_updateRecentEmojiStatuses();
+                tLRPC$TL_updateTheme = new TLRPC$Update() { // from class: org.telegram.tgnet.TLRPC$TL_updateRecentEmojiStatuses
+                    public static int constructor = NUM;
+
+                    @Override // org.telegram.tgnet.TLObject
+                    public void serializeToStream(AbstractSerializedData abstractSerializedData2) {
+                        abstractSerializedData2.writeInt32(constructor);
+                    }
+                };
                 break;
             case 834816008:
-                tLRPC$Update = new TLRPC$TL_updateStickerSets();
+                tLRPC$TL_updateTheme = new TLRPC$Update() { // from class: org.telegram.tgnet.TLRPC$TL_updateStickerSets
+                    public static int constructor = NUM;
+                    public boolean emojis;
+                    public int flags;
+                    public boolean masks;
+
+                    @Override // org.telegram.tgnet.TLObject
+                    public void readParams(AbstractSerializedData abstractSerializedData2, boolean z2) {
+                        int readInt32 = abstractSerializedData2.readInt32(z2);
+                        this.flags = readInt32;
+                        boolean z3 = false;
+                        this.masks = (readInt32 & 1) != 0;
+                        if ((readInt32 & 2) != 0) {
+                            z3 = true;
+                        }
+                        this.emojis = z3;
+                    }
+
+                    @Override // org.telegram.tgnet.TLObject
+                    public void serializeToStream(AbstractSerializedData abstractSerializedData2) {
+                        abstractSerializedData2.writeInt32(constructor);
+                        int i2 = this.masks ? this.flags | 1 : this.flags & (-2);
+                        this.flags = i2;
+                        int i3 = this.emojis ? i2 | 2 : i2 & (-3);
+                        this.flags = i3;
+                        abstractSerializedData2.writeInt32(i3);
+                    }
+                };
                 break;
             case 889491791:
-                tLRPC$Update = new TLRPC$TL_updateDialogFilters();
+                tLRPC$TL_updateTheme = new TLRPC$Update() { // from class: org.telegram.tgnet.TLRPC$TL_updateDialogFilters
+                    public static int constructor = NUM;
+
+                    @Override // org.telegram.tgnet.TLObject
+                    public void serializeToStream(AbstractSerializedData abstractSerializedData2) {
+                        abstractSerializedData2.writeInt32(constructor);
+                    }
+                };
                 break;
             case 956179895:
-                tLRPC$Update = new TLRPC$TL_updateEncryptedMessagesRead();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateEncryptedMessagesRead();
                 break;
             case 967122427:
-                tLRPC$Update = new TLRPC$TL_updateNewScheduledMessage();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateNewScheduledMessage();
                 break;
             case 1037718609:
-                tLRPC$Update = new TLRPC$TL_updateChatParticipantAdd();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateChatParticipantAdd();
                 break;
             case 1153291573:
-                tLRPC$Update = new TLRPC$TL_updateChannelReadMessagesContents();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateChannelReadMessagesContents();
                 break;
             case 1180041828:
-                tLRPC$Update = new TLRPC$TL_updateLangPackTooLong();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateLangPackTooLong();
                 break;
             case 1299263278:
-                tLRPC$Update = new TLRPC$TL_updateBotCommands();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateBotCommands();
                 break;
             case 1318109142:
-                tLRPC$Update = new TLRPC$TL_updateMessageID();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateMessageID();
                 break;
             case 1421875280:
-                tLRPC$Update = new TLRPC$TL_updateChatDefaultBannedRights();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateChatDefaultBannedRights();
                 break;
             case 1442983757:
-                tLRPC$Update = new TLRPC$TL_updateLangPack();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateLangPack();
                 break;
             case 1448076945:
-                tLRPC$Update = new TLRPC$TL_updateLoginToken();
+                tLRPC$TL_updateTheme = new TLRPC$Update() { // from class: org.telegram.tgnet.TLRPC$TL_updateLoginToken
+                    public static int constructor = NUM;
+
+                    @Override // org.telegram.tgnet.TLObject
+                    public void serializeToStream(AbstractSerializedData abstractSerializedData2) {
+                        abstractSerializedData2.writeInt32(constructor);
+                    }
+                };
                 break;
             case 1461528386:
-                tLRPC$Update = new TLRPC$TL_updateReadFeaturedStickers();
+                tLRPC$TL_updateTheme = new TLRPC$Update() { // from class: org.telegram.tgnet.TLRPC$TL_updateReadFeaturedStickers
+                    public static int constructor = NUM;
+
+                    @Override // org.telegram.tgnet.TLObject
+                    public void serializeToStream(AbstractSerializedData abstractSerializedData2) {
+                        abstractSerializedData2.writeInt32(constructor);
+                    }
+                };
                 break;
             case 1517529484:
-                tLRPC$Update = new TLRPC$TL_updateMessageExtendedMedia();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateMessageExtendedMedia();
                 break;
             case 1538885128:
-                tLRPC$Update = new TLRPC$TL_updatePinnedChannelMessages();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updatePinnedChannelMessages();
                 break;
             case 1656358105:
-                tLRPC$Update = new TLRPC$TL_updateNewChannelMessage();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateNewChannelMessage();
                 break;
             case 1666927625:
-                tLRPC$Update = new TLRPC$TL_updateChannel();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateChannel();
                 break;
             case 1753886890:
-                tLRPC$Update = new TLRPC$TL_updateNewStickerSet();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateNewStickerSet();
                 break;
             case 1757493555:
-                tLRPC$Update = new TLRPC$TL_updateReadMessagesContents();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateReadMessagesContents();
                 break;
             case 1767677564:
-                tLRPC$Update = new TLRPC$TL_updateReadChannelDiscussionOutbox();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateReadChannelDiscussionOutbox();
                 break;
             case 1786671974:
-                tLRPC$Update = new TLRPC$TL_updatePeerSettings();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updatePeerSettings();
                 break;
             case 1852826908:
-                tLRPC$Update = new TLRPC$TL_updateDialogPinned();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateDialogPinned();
                 break;
             case 1870160884:
-                tLRPC$Update = new TLRPC$TL_updateRecentReactions();
+                tLRPC$TL_updateTheme = new TLRPC$Update() { // from class: org.telegram.tgnet.TLRPC$TL_updateRecentReactions
+                    public static int constructor = NUM;
+
+                    @Override // org.telegram.tgnet.TLObject
+                    public void serializeToStream(AbstractSerializedData abstractSerializedData2) {
+                        abstractSerializedData2.writeInt32(constructor);
+                    }
+                };
                 break;
             case 1885586395:
-                tLRPC$Update = new TLRPC$TL_updatePendingJoinRequests();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updatePendingJoinRequests();
                 break;
             case 1887741886:
-                tLRPC$Update = new TLRPC$TL_updateContactsReset();
+                tLRPC$TL_updateTheme = new TLRPC$Update() { // from class: org.telegram.tgnet.TLRPC$TL_updateContactsReset
+                    public static int constructor = NUM;
+
+                    @Override // org.telegram.tgnet.TLObject
+                    public void serializeToStream(AbstractSerializedData abstractSerializedData2) {
+                        abstractSerializedData2.writeInt32(constructor);
+                    }
+                };
                 break;
             case 1960361625:
-                tLRPC$Update = new TLRPC$TL_updateSavedRingtones();
+                tLRPC$TL_updateTheme = new TLRPC$Update() { // from class: org.telegram.tgnet.TLRPC$TL_updateSavedRingtones
+                    public static int constructor = NUM;
+
+                    @Override // org.telegram.tgnet.TLObject
+                    public void serializeToStream(AbstractSerializedData abstractSerializedData2) {
+                        abstractSerializedData2.writeInt32(constructor);
+                    }
+                };
                 break;
             case 2139689491:
-                tLRPC$Update = new TLRPC$TL_updateWebPage();
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateWebPage();
                 break;
             default:
-                tLRPC$Update = null;
+                tLRPC$TL_updateTheme = null;
                 break;
         }
-        if (tLRPC$Update != null || !z) {
-            if (tLRPC$Update != null) {
-                tLRPC$Update.readParams(abstractSerializedData, z);
+        if (tLRPC$TL_updateTheme != null || !z) {
+            if (tLRPC$TL_updateTheme != null) {
+                tLRPC$TL_updateTheme.readParams(abstractSerializedData, z);
             }
-            return tLRPC$Update;
+            return tLRPC$TL_updateTheme;
         }
-        throw new RuntimeException(String.format("can't parse magic %x in Update", new Object[]{Integer.valueOf(i)}));
+        throw new RuntimeException(String.format("can't parse magic %x in Update", Integer.valueOf(i)));
     }
 }

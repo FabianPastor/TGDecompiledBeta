@@ -1,5 +1,5 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_folder extends TLObject {
     public static int constructor = -11252123;
     public boolean autofill_new_broadcasts;
@@ -11,17 +11,18 @@ public class TLRPC$TL_folder extends TLObject {
     public String title;
 
     public static TLRPC$TL_folder TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-        if (constructor == i) {
-            TLRPC$TL_folder tLRPC$TL_folder = new TLRPC$TL_folder();
-            tLRPC$TL_folder.readParams(abstractSerializedData, z);
-            return tLRPC$TL_folder;
-        } else if (!z) {
+        if (constructor != i) {
+            if (z) {
+                throw new RuntimeException(String.format("can't parse magic %x in TL_folder", Integer.valueOf(i)));
+            }
             return null;
-        } else {
-            throw new RuntimeException(String.format("can't parse magic %x in TL_folder", new Object[]{Integer.valueOf(i)}));
         }
+        TLRPC$TL_folder tLRPC$TL_folder = new TLRPC$TL_folder();
+        tLRPC$TL_folder.readParams(abstractSerializedData, z);
+        return tLRPC$TL_folder;
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
@@ -39,13 +40,14 @@ public class TLRPC$TL_folder extends TLObject {
         }
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
-        int i = this.autofill_new_broadcasts ? this.flags | 1 : this.flags & -2;
+        int i = this.autofill_new_broadcasts ? this.flags | 1 : this.flags & (-2);
         this.flags = i;
-        int i2 = this.autofill_public_groups ? i | 2 : i & -3;
+        int i2 = this.autofill_public_groups ? i | 2 : i & (-3);
         this.flags = i2;
-        int i3 = this.autofill_new_correspondents ? i2 | 4 : i2 & -5;
+        int i3 = this.autofill_new_correspondents ? i2 | 4 : i2 & (-5);
         this.flags = i3;
         abstractSerializedData.writeInt32(i3);
         abstractSerializedData.writeInt32(this.id);

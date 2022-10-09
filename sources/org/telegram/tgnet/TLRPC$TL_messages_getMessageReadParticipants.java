@@ -1,10 +1,11 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_messages_getMessageReadParticipants extends TLObject {
     public static int constructor = NUM;
     public int msg_id;
     public TLRPC$InputPeer peer;
 
+    @Override // org.telegram.tgnet.TLObject
     public TLObject deserializeResponse(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         TLRPC$Vector tLRPC$Vector = new TLRPC$Vector();
         int readInt32 = abstractSerializedData.readInt32(z);
@@ -14,6 +15,7 @@ public class TLRPC$TL_messages_getMessageReadParticipants extends TLObject {
         return tLRPC$Vector;
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
         this.peer.serializeToStream(abstractSerializedData);

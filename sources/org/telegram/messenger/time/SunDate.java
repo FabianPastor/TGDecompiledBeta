@@ -2,14 +2,14 @@ package org.telegram.messenger.time;
 
 import java.util.Calendar;
 import java.util.TimeZone;
-
+/* loaded from: classes.dex */
 public class SunDate {
     private static final double DEGRAD = 0.017453292519943295d;
     private static final double INV360 = 0.002777777777777778d;
     private static final double RADEG = 57.29577951308232d;
 
     private static long days_since_2000_Jan_0(int i, int i2, int i3) {
-        return ((((((long) i) * 367) - ((long) (((i + ((i2 + 9) / 12)) * 7) / 4))) + ((long) ((i2 * 275) / 9))) + ((long) i3)) - 730530;
+        return ((((i * 367) - (((i + ((i2 + 9) / 12)) * 7) / 4)) + ((i2 * 275) / 9)) + i3) - 730530;
     }
 
     private static double revolution(double d) {
@@ -74,7 +74,7 @@ public class SunDate {
         double[] dArr2 = new double[1];
         double[] dArr3 = new double[1];
         double[] dArr4 = new double[1];
-        double days_since_2000_Jan_0 = (double) days_since_2000_Jan_0(i, i2, i3);
+        double days_since_2000_Jan_0 = days_since_2000_Jan_0(i, i2, i3);
         Double.isNaN(days_since_2000_Jan_0);
         double d4 = (days_since_2000_Jan_0 + 0.5d) - (d / 360.0d);
         double revolution = revolution(GMST0(d4) + 180.0d + d);
@@ -101,10 +101,10 @@ public class SunDate {
     }
 
     public static int[] calculateSunriseSunset(double d, double d2) {
-        Calendar instance = Calendar.getInstance();
-        instance.setTimeInMillis(System.currentTimeMillis());
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
         double[] dArr = new double[2];
-        sunRiseSetForYear(instance.get(1), instance.get(2) + 1, instance.get(5), d2, d, dArr);
+        sunRiseSetForYear(calendar.get(1), calendar.get(2) + 1, calendar.get(5), d2, d, dArr);
         int offset = (TimeZone.getDefault().getOffset(System.currentTimeMillis()) / 1000) / 60;
         int i = ((int) (dArr[0] * 60.0d)) + offset;
         int i2 = ((int) (dArr[1] * 60.0d)) + offset;

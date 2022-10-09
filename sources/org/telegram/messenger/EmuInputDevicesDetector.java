@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-
+/* loaded from: classes.dex */
 public final class EmuInputDevicesDetector {
     private static final String INPUT_DEVICES_FILE = "/proc/bus/input/devices";
     private static final String NAME_PREFIX = "N: Name=\"";
@@ -20,16 +20,10 @@ public final class EmuInputDevicesDetector {
     public static boolean detect() {
         List<String> inputDevicesNames = getInputDevicesNames();
         if (inputDevicesNames != null) {
-            for (String next : inputDevicesNames) {
-                String[] strArr = RESTRICTED_DEVICES;
-                int length = strArr.length;
-                int i = 0;
-                while (true) {
-                    if (i < length) {
-                        if (next.toLowerCase().contains(strArr[i])) {
-                            return true;
-                        }
-                        i++;
+            for (String str : inputDevicesNames) {
+                for (String str2 : RESTRICTED_DEVICES) {
+                    if (str.toLowerCase().contains(str2)) {
+                        return true;
                     }
                 }
             }
@@ -58,7 +52,7 @@ public final class EmuInputDevicesDetector {
                 }
             }
         } catch (IOException e) {
-            FileLog.e((Throwable) e);
+            FileLog.e(e);
             return null;
         }
     }

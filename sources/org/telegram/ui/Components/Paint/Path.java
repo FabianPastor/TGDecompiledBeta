@@ -2,7 +2,7 @@ package org.telegram.ui.Components.Paint;
 
 import java.util.Arrays;
 import java.util.Vector;
-
+/* loaded from: classes3.dex */
 public class Path {
     private float baseWeight;
     private Brush brush;
@@ -48,9 +48,9 @@ public class Path {
         return this.brush;
     }
 
-    public void setup(int i, float f, Brush brush2) {
+    public void setup(int i, float f, Brush brush) {
         this.color = i;
         this.baseWeight = f;
-        this.brush = brush2;
+        this.brush = brush;
     }
 }

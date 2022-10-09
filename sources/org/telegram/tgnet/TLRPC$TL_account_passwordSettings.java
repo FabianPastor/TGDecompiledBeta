@@ -1,5 +1,5 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_account_passwordSettings extends TLObject {
     public static int constructor = -NUM;
     public String email;
@@ -7,17 +7,18 @@ public class TLRPC$TL_account_passwordSettings extends TLObject {
     public TLRPC$TL_secureSecretSettings secure_settings;
 
     public static TLRPC$TL_account_passwordSettings TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-        if (constructor == i) {
-            TLRPC$TL_account_passwordSettings tLRPC$TL_account_passwordSettings = new TLRPC$TL_account_passwordSettings();
-            tLRPC$TL_account_passwordSettings.readParams(abstractSerializedData, z);
-            return tLRPC$TL_account_passwordSettings;
-        } else if (!z) {
+        if (constructor != i) {
+            if (z) {
+                throw new RuntimeException(String.format("can't parse magic %x in TL_account_passwordSettings", Integer.valueOf(i)));
+            }
             return null;
-        } else {
-            throw new RuntimeException(String.format("can't parse magic %x in TL_account_passwordSettings", new Object[]{Integer.valueOf(i)}));
         }
+        TLRPC$TL_account_passwordSettings tLRPC$TL_account_passwordSettings = new TLRPC$TL_account_passwordSettings();
+        tLRPC$TL_account_passwordSettings.readParams(abstractSerializedData, z);
+        return tLRPC$TL_account_passwordSettings;
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
@@ -29,6 +30,7 @@ public class TLRPC$TL_account_passwordSettings extends TLObject {
         }
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
         abstractSerializedData.writeInt32(this.flags);

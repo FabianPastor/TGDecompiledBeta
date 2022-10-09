@@ -26,16 +26,14 @@ import androidx.core.graphics.ColorUtils;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.R;
 import org.telegram.ui.Components.CubicBezierInterpolator;
-
+/* loaded from: classes3.dex */
 public class VoIPFloatingLayout extends FrameLayout {
     private boolean active;
     public boolean alwaysFloating;
     public int bottomOffset;
     float bottomPadding;
-    /* access modifiers changed from: private */
-    public VoIPFloatingLayoutDelegate delegate;
-    /* access modifiers changed from: private */
-    public boolean floatingMode;
+    private VoIPFloatingLayoutDelegate delegate;
+    private boolean floatingMode;
     int lastH;
     WindowInsets lastInsets;
     int lastW;
@@ -47,12 +45,10 @@ public class VoIPFloatingLayout extends FrameLayout {
     Paint mutedPaint;
     float mutedProgress;
     private ValueAnimator.AnimatorUpdateListener mutedUpdateListener;
-    /* access modifiers changed from: private */
-    public float overrideCornerRadius;
-    final Path path = new Path();
-    /* access modifiers changed from: private */
-    public ValueAnimator.AnimatorUpdateListener progressUpdateListener;
-    final RectF rectF = new RectF();
+    private float overrideCornerRadius;
+    final Path path;
+    private ValueAnimator.AnimatorUpdateListener progressUpdateListener;
+    final RectF rectF;
     public float relativePositionToSetX;
     float relativePositionToSetY;
     float rightPadding;
@@ -65,8 +61,7 @@ public class VoIPFloatingLayout extends FrameLayout {
     float startMovingFromY;
     long startTime;
     ValueAnimator switchToFloatingModeAnimator;
-    /* access modifiers changed from: private */
-    public boolean switchingToFloatingMode;
+    private boolean switchingToFloatingMode;
     public boolean switchingToPip;
     View.OnClickListener tapListener;
     float toFloatingModeProgress;
@@ -76,15 +71,17 @@ public class VoIPFloatingLayout extends FrameLayout {
     public float updatePositionFromX;
     public float updatePositionFromY;
 
+    /* loaded from: classes3.dex */
     public interface VoIPFloatingLayoutDelegate {
         void onChange(float f, boolean z);
     }
 
+    @Override // android.view.ViewGroup
     public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
         return true;
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$new$0(ValueAnimator valueAnimator) {
         this.mutedProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidate();
@@ -92,6 +89,8 @@ public class VoIPFloatingLayout extends FrameLayout {
 
     public VoIPFloatingLayout(Context context) {
         super(context);
+        this.path = new Path();
+        this.rectF = new RectF();
         new Paint(1);
         this.mutedPaint = new Paint(1);
         this.relativePositionToSetX = -1.0f;
@@ -100,33 +99,40 @@ public class VoIPFloatingLayout extends FrameLayout {
         this.mutedProgress = 0.0f;
         this.overrideCornerRadius = -1.0f;
         this.active = true;
-        this.progressUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
+        this.progressUpdateListener = new ValueAnimator.AnimatorUpdateListener() { // from class: org.telegram.ui.Components.voip.VoIPFloatingLayout.1
+            @Override // android.animation.ValueAnimator.AnimatorUpdateListener
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
                 VoIPFloatingLayout.this.toFloatingModeProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
                 if (VoIPFloatingLayout.this.delegate != null) {
-                    VoIPFloatingLayoutDelegate access$000 = VoIPFloatingLayout.this.delegate;
+                    VoIPFloatingLayoutDelegate voIPFloatingLayoutDelegate = VoIPFloatingLayout.this.delegate;
                     VoIPFloatingLayout voIPFloatingLayout = VoIPFloatingLayout.this;
-                    access$000.onChange(voIPFloatingLayout.toFloatingModeProgress, voIPFloatingLayout.measuredAsFloatingMode);
+                    voIPFloatingLayoutDelegate.onChange(voIPFloatingLayout.toFloatingModeProgress, voIPFloatingLayout.measuredAsFloatingMode);
                 }
                 VoIPFloatingLayout.this.invalidate();
             }
         };
-        this.mutedUpdateListener = new VoIPFloatingLayout$$ExternalSyntheticLambda0(this);
-        this.touchSlop = (float) ViewConfiguration.get(context).getScaledTouchSlop();
+        this.mutedUpdateListener = new ValueAnimator.AnimatorUpdateListener() { // from class: org.telegram.ui.Components.voip.VoIPFloatingLayout$$ExternalSyntheticLambda0
+            @Override // android.animation.ValueAnimator.AnimatorUpdateListener
+            public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+                VoIPFloatingLayout.this.lambda$new$0(valueAnimator);
+            }
+        };
+        this.touchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
         if (Build.VERSION.SDK_INT >= 21) {
-            setOutlineProvider(new ViewOutlineProvider() {
+            setOutlineProvider(new ViewOutlineProvider() { // from class: org.telegram.ui.Components.voip.VoIPFloatingLayout.2
+                @Override // android.view.ViewOutlineProvider
                 @TargetApi(21)
                 public void getOutline(View view, Outline outline) {
                     if (VoIPFloatingLayout.this.overrideCornerRadius >= 0.0f) {
-                        if (VoIPFloatingLayout.this.overrideCornerRadius < 1.0f) {
-                            outline.setRect(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
-                        } else {
+                        if (VoIPFloatingLayout.this.overrideCornerRadius >= 1.0f) {
                             outline.setRoundRect(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight(), VoIPFloatingLayout.this.overrideCornerRadius);
+                        } else {
+                            outline.setRect(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
                         }
-                    } else if (!VoIPFloatingLayout.this.floatingMode) {
-                        outline.setRect(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
+                    } else if (VoIPFloatingLayout.this.floatingMode) {
+                        outline.setRoundRect(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight(), VoIPFloatingLayout.this.floatingMode ? AndroidUtilities.dp(4.0f) : 0.0f);
                     } else {
-                        outline.setRoundRect(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight(), VoIPFloatingLayout.this.floatingMode ? (float) AndroidUtilities.dp(4.0f) : 0.0f);
+                        outline.setRect(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
                     }
                 }
             });
@@ -136,14 +142,14 @@ public class VoIPFloatingLayout extends FrameLayout {
         this.mutedDrawable = ContextCompat.getDrawable(context, R.drawable.calls_mute_mini);
     }
 
-    /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
+    @Override // android.widget.FrameLayout, android.view.View
+    protected void onMeasure(int i, int i2) {
         int size = View.MeasureSpec.getSize(i);
         int size2 = View.MeasureSpec.getSize(i2);
         this.measuredAsFloatingMode = false;
         if (this.floatingMode) {
-            size = (int) (((float) size) * 0.23f);
-            size2 = (int) (((float) size2) * 0.23f);
+            size = (int) (size * 0.23f);
+            size2 = (int) (size2 * 0.23f);
             this.measuredAsFloatingMode = true;
         } else if (!this.switchingToPip) {
             setTranslationX(0.0f);
@@ -154,10 +160,10 @@ public class VoIPFloatingLayout extends FrameLayout {
             voIPFloatingLayoutDelegate.onChange(this.toFloatingModeProgress, this.measuredAsFloatingMode);
         }
         super.onMeasure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec(size2, NUM));
-        if (!(getMeasuredHeight() == this.lastH || getMeasuredWidth() == this.lastW)) {
+        if (getMeasuredHeight() != this.lastH && getMeasuredWidth() != this.lastW) {
             this.path.reset();
-            this.rectF.set(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight());
-            this.path.addRoundRect(this.rectF, (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), Path.Direction.CW);
+            this.rectF.set(0.0f, 0.0f, getMeasuredWidth(), getMeasuredHeight());
+            this.path.addRoundRect(this.rectF, AndroidUtilities.dp(4.0f), AndroidUtilities.dp(4.0f), Path.Direction.CW);
             this.path.toggleInverseFillType();
         }
         this.lastH = getMeasuredHeight();
@@ -167,235 +173,39 @@ public class VoIPFloatingLayout extends FrameLayout {
 
     private void updatePadding() {
         float f = 16.0f;
-        this.leftPadding = (float) AndroidUtilities.dp(16.0f);
-        this.rightPadding = (float) AndroidUtilities.dp(16.0f);
-        this.topPadding = (float) (this.uiVisible ? AndroidUtilities.dp(60.0f) : AndroidUtilities.dp(16.0f));
+        this.leftPadding = AndroidUtilities.dp(16.0f);
+        this.rightPadding = AndroidUtilities.dp(16.0f);
+        this.topPadding = this.uiVisible ? AndroidUtilities.dp(60.0f) : AndroidUtilities.dp(16.0f);
         if (this.uiVisible) {
             f = 100.0f;
         }
-        this.bottomPadding = (float) (AndroidUtilities.dp(f) + this.bottomOffset);
+        this.bottomPadding = AndroidUtilities.dp(f) + this.bottomOffset;
     }
 
     public void setDelegate(VoIPFloatingLayoutDelegate voIPFloatingLayoutDelegate) {
         this.delegate = voIPFloatingLayoutDelegate;
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:12:0x0025, code lost:
-        if (r1 != 3) goto L_0x01b3;
+    /* JADX WARN: Code restructure failed: missing block: B:15:0x0025, code lost:
+        if (r1 != 3) goto L14;
      */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
+    @Override // android.view.View
+    /*
+        Code decompiled incorrectly, please refer to instructions dump.
+        To view partially-correct add '--show-bad-code' argument
+    */
     public boolean onTouchEvent(android.view.MotionEvent r10) {
         /*
-            r9 = this;
-            android.view.ViewParent r0 = r9.getParent()
-            boolean r1 = r9.floatingMode
-            r2 = 0
-            if (r1 == 0) goto L_0x01b4
-            boolean r1 = r9.switchingToFloatingMode
-            if (r1 != 0) goto L_0x01b4
-            boolean r1 = r9.active
-            if (r1 != 0) goto L_0x0013
-            goto L_0x01b4
-        L_0x0013:
-            int r1 = r10.getAction()
-            r3 = 0
-            r5 = 0
-            r6 = 1065353216(0x3var_, float:1.0)
-            r7 = 1
-            if (r1 == 0) goto L_0x016a
-            if (r1 == r7) goto L_0x0090
-            r8 = 2
-            if (r1 == r8) goto L_0x0029
-            r10 = 3
-            if (r1 == r10) goto L_0x0090
-            goto L_0x01b3
-        L_0x0029:
-            float r1 = r10.getX()
-            float r2 = r9.getX()
-            float r1 = r1 + r2
-            float r2 = r9.starX
-            float r1 = r1 - r2
-            float r2 = r10.getY()
-            float r3 = r9.getY()
-            float r2 = r2 + r3
-            float r3 = r9.starY
-            float r2 = r2 - r3
-            boolean r3 = r9.moving
-            r4 = 0
-            if (r3 != 0) goto L_0x007e
-            float r3 = r1 * r1
-            float r5 = r2 * r2
-            float r3 = r3 + r5
-            float r5 = r9.touchSlop
-            float r5 = r5 * r5
-            int r3 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
-            if (r3 <= 0) goto L_0x007e
-            if (r0 == 0) goto L_0x0058
-            r0.requestDisallowInterceptTouchEvent(r7)
-        L_0x0058:
-            r9.moving = r7
-            float r0 = r10.getX()
-            float r1 = r9.getX()
-            float r0 = r0 + r1
-            r9.starX = r0
-            float r10 = r10.getY()
-            float r0 = r9.getY()
-            float r10 = r10 + r0
-            r9.starY = r10
-            float r10 = r9.getTranslationX()
-            r9.startMovingFromX = r10
-            float r10 = r9.getTranslationY()
-            r9.startMovingFromY = r10
-            r1 = 0
-            r2 = 0
-        L_0x007e:
-            boolean r10 = r9.moving
-            if (r10 == 0) goto L_0x01b3
-            float r10 = r9.startMovingFromX
-            float r10 = r10 + r1
-            r9.setTranslationX(r10)
-            float r10 = r9.startMovingFromY
-            float r10 = r10 + r2
-            r9.setTranslationY(r10)
-            goto L_0x01b3
-        L_0x0090:
-            if (r0 == 0) goto L_0x0167
-            boolean r10 = r9.floatingMode
-            if (r10 == 0) goto L_0x0167
-            boolean r10 = r9.switchingToFloatingMode
-            if (r10 != 0) goto L_0x0167
-            r0.requestDisallowInterceptTouchEvent(r2)
-            android.view.ViewPropertyAnimator r10 = r9.animate()
-            android.view.ViewPropertyAnimator r10 = r10.setListener(r5)
-            r10.cancel()
-            android.view.ViewPropertyAnimator r10 = r9.animate()
-            android.view.ViewPropertyAnimator r10 = r10.scaleX(r6)
-            android.view.ViewPropertyAnimator r10 = r10.scaleY(r6)
-            android.view.ViewPropertyAnimator r10 = r10.alpha(r6)
-            android.view.ViewPropertyAnimator r10 = r10.setStartDelay(r3)
-            android.view.View$OnClickListener r0 = r9.tapListener
-            if (r0 == 0) goto L_0x00d6
-            boolean r0 = r9.moving
-            if (r0 != 0) goto L_0x00d6
-            long r0 = java.lang.System.currentTimeMillis()
-            long r3 = r9.startTime
-            long r0 = r0 - r3
-            r3 = 200(0xc8, double:9.9E-322)
-            int r5 = (r0 > r3 ? 1 : (r0 == r3 ? 0 : -1))
-            if (r5 >= 0) goto L_0x00d6
-            android.view.View$OnClickListener r0 = r9.tapListener
-            r0.onClick(r9)
-        L_0x00d6:
-            android.view.ViewParent r0 = r9.getParent()
-            android.view.View r0 = (android.view.View) r0
-            int r0 = r0.getMeasuredWidth()
-            android.view.ViewParent r1 = r9.getParent()
-            android.view.View r1 = (android.view.View) r1
-            int r1 = r1.getMeasuredHeight()
-            float r3 = r9.topPadding
-            float r4 = r9.bottomPadding
-            int r5 = android.os.Build.VERSION.SDK_INT
-            r6 = 20
-            if (r5 <= r6) goto L_0x0106
-            android.view.WindowInsets r5 = r9.lastInsets
-            if (r5 == 0) goto L_0x0106
-            int r5 = r5.getSystemWindowInsetTop()
-            float r5 = (float) r5
-            float r3 = r3 + r5
-            android.view.WindowInsets r5 = r9.lastInsets
-            int r5 = r5.getSystemWindowInsetBottom()
-            float r5 = (float) r5
-            float r4 = r4 + r5
-        L_0x0106:
-            float r5 = r9.getX()
-            float r6 = r9.leftPadding
-            int r5 = (r5 > r6 ? 1 : (r5 == r6 ? 0 : -1))
-            if (r5 >= 0) goto L_0x0114
-            r10.translationX(r6)
-            goto L_0x0132
-        L_0x0114:
-            float r5 = r9.getX()
-            int r6 = r9.getMeasuredWidth()
-            float r6 = (float) r6
-            float r5 = r5 + r6
-            float r6 = (float) r0
-            float r8 = r9.rightPadding
-            float r6 = r6 - r8
-            int r5 = (r5 > r6 ? 1 : (r5 == r6 ? 0 : -1))
-            if (r5 <= 0) goto L_0x0132
-            int r5 = r9.getMeasuredWidth()
-            int r0 = r0 - r5
-            float r0 = (float) r0
-            float r5 = r9.rightPadding
-            float r0 = r0 - r5
-            r10.translationX(r0)
-        L_0x0132:
-            float r0 = r9.getY()
-            int r0 = (r0 > r3 ? 1 : (r0 == r3 ? 0 : -1))
-            if (r0 >= 0) goto L_0x013e
-            r10.translationY(r3)
-            goto L_0x0158
-        L_0x013e:
-            float r0 = r9.getY()
-            int r3 = r9.getMeasuredHeight()
-            float r3 = (float) r3
-            float r0 = r0 + r3
-            float r3 = (float) r1
-            float r3 = r3 - r4
-            int r0 = (r0 > r3 ? 1 : (r0 == r3 ? 0 : -1))
-            if (r0 <= 0) goto L_0x0158
-            int r0 = r9.getMeasuredHeight()
-            int r1 = r1 - r0
-            float r0 = (float) r1
-            float r0 = r0 - r4
-            r10.translationY(r0)
-        L_0x0158:
-            r0 = 150(0x96, double:7.4E-322)
-            android.view.ViewPropertyAnimator r10 = r10.setDuration(r0)
-            org.telegram.ui.Components.CubicBezierInterpolator r0 = org.telegram.ui.Components.CubicBezierInterpolator.DEFAULT
-            android.view.ViewPropertyAnimator r10 = r10.setInterpolator(r0)
-            r10.start()
-        L_0x0167:
-            r9.moving = r2
-            goto L_0x01b3
-        L_0x016a:
-            boolean r0 = r9.floatingMode
-            if (r0 == 0) goto L_0x01b3
-            boolean r0 = r9.switchingToFloatingMode
-            if (r0 != 0) goto L_0x01b3
-            long r0 = java.lang.System.currentTimeMillis()
-            r9.startTime = r0
-            float r0 = r10.getX()
-            float r1 = r9.getX()
-            float r0 = r0 + r1
-            r9.starX = r0
-            float r10 = r10.getY()
-            float r0 = r9.getY()
-            float r10 = r10 + r0
-            r9.starY = r10
-            android.view.ViewPropertyAnimator r10 = r9.animate()
-            android.view.ViewPropertyAnimator r10 = r10.setListener(r5)
-            r10.cancel()
-            android.view.ViewPropertyAnimator r10 = r9.animate()
-            r0 = 1065772646(0x3var_, float:1.05)
-            android.view.ViewPropertyAnimator r10 = r10.scaleY(r0)
-            android.view.ViewPropertyAnimator r10 = r10.scaleX(r0)
-            android.view.ViewPropertyAnimator r10 = r10.alpha(r6)
-            android.view.ViewPropertyAnimator r10 = r10.setStartDelay(r3)
-            r10.start()
-        L_0x01b3:
-            return r7
-        L_0x01b4:
-            return r2
+            Method dump skipped, instructions count: 437
+            To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.voip.VoIPFloatingLayout.onTouchEvent(android.view.MotionEvent):boolean");
     }
 
-    /* access modifiers changed from: protected */
-    public void dispatchDraw(Canvas canvas) {
-        boolean z;
+    @Override // android.view.ViewGroup, android.view.View
+    protected void dispatchDraw(Canvas canvas) {
         if (this.updatePositionFromX >= 0.0f) {
-            animate().setListener((Animator.AnimatorListener) null).cancel();
+            animate().setListener(null).cancel();
             setTranslationX(this.updatePositionFromX);
             setTranslationY(this.updatePositionFromY);
             setScaleX(1.0f);
@@ -410,16 +220,20 @@ public class VoIPFloatingLayout extends FrameLayout {
             this.relativePositionToSetY = -1.0f;
         }
         super.dispatchDraw(canvas);
-        if (!this.switchingToFloatingMode && this.floatingMode != (z = this.setedFloatingMode)) {
-            setFloatingMode(z, true);
+        if (!this.switchingToFloatingMode) {
+            boolean z = this.floatingMode;
+            boolean z2 = this.setedFloatingMode;
+            if (z != z2) {
+                setFloatingMode(z2, true);
+            }
         }
         int measuredWidth = getMeasuredWidth() >> 1;
-        int measuredHeight = getMeasuredHeight() - ((int) ((((float) AndroidUtilities.dp(18.0f)) * 1.0f) / getScaleY()));
+        int measuredHeight = getMeasuredHeight() - ((int) ((AndroidUtilities.dp(18.0f) * 1.0f) / getScaleY()));
         canvas.save();
-        float f = (float) measuredWidth;
-        float f2 = (float) measuredHeight;
+        float f = measuredWidth;
+        float f2 = measuredHeight;
         canvas.scale((1.0f / getScaleX()) * this.toFloatingModeProgress * this.mutedProgress, (1.0f / getScaleY()) * this.toFloatingModeProgress * this.mutedProgress, f, f2);
-        canvas.drawCircle(f, f2, (float) AndroidUtilities.dp(14.0f), this.mutedPaint);
+        canvas.drawCircle(f, f2, AndroidUtilities.dp(14.0f), this.mutedPaint);
         Drawable drawable = this.mutedDrawable;
         drawable.setBounds(measuredWidth - (drawable.getIntrinsicWidth() / 2), measuredHeight - (this.mutedDrawable.getIntrinsicHeight() / 2), measuredWidth + (this.mutedDrawable.getIntrinsicWidth() / 2), measuredHeight + (this.mutedDrawable.getIntrinsicHeight() / 2));
         this.mutedDrawable.draw(canvas);
@@ -459,108 +273,35 @@ public class VoIPFloatingLayout extends FrameLayout {
         }
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:10:0x001b, code lost:
-        r4 = r6.lastInsets;
-     */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    private void setRelativePositionInternal(float r7, float r8, int r9, int r10, boolean r11) {
-        /*
-            r6 = this;
-            android.view.ViewParent r0 = r6.getParent()
-            if (r0 == 0) goto L_0x00c1
-            boolean r1 = r6.floatingMode
-            if (r1 == 0) goto L_0x00c1
-            boolean r1 = r6.switchingToFloatingMode
-            if (r1 != 0) goto L_0x00c1
-            boolean r1 = r6.active
-            if (r1 != 0) goto L_0x0014
-            goto L_0x00c1
-        L_0x0014:
-            int r1 = android.os.Build.VERSION.SDK_INT
-            r2 = 0
-            r3 = 20
-            if (r1 < r3) goto L_0x0029
-            android.view.WindowInsets r4 = r6.lastInsets
-            if (r4 != 0) goto L_0x0020
-            goto L_0x0029
-        L_0x0020:
-            int r4 = r4.getSystemWindowInsetTop()
-            float r4 = (float) r4
-            float r5 = r6.topPadding
-            float r4 = r4 + r5
-            goto L_0x002a
-        L_0x0029:
-            r4 = 0
-        L_0x002a:
-            if (r1 < r3) goto L_0x0039
-            android.view.WindowInsets r1 = r6.lastInsets
-            if (r1 != 0) goto L_0x0031
-            goto L_0x0039
-        L_0x0031:
-            int r1 = r1.getSystemWindowInsetBottom()
-            float r1 = (float) r1
-            float r2 = r6.bottomPadding
-            float r2 = r2 + r1
-        L_0x0039:
-            float r1 = r6.leftPadding
-            android.view.View r0 = (android.view.View) r0
-            int r3 = r0.getMeasuredWidth()
-            float r3 = (float) r3
-            float r5 = r6.leftPadding
-            float r3 = r3 - r5
-            float r5 = r6.rightPadding
-            float r3 = r3 - r5
-            float r9 = (float) r9
-            float r3 = r3 - r9
-            float r3 = r3 * r7
-            float r1 = r1 + r3
-            int r7 = r0.getMeasuredHeight()
-            float r7 = (float) r7
-            float r7 = r7 - r2
-            float r7 = r7 - r4
-            float r9 = (float) r10
-            float r7 = r7 - r9
-            float r7 = r7 * r8
-            float r4 = r4 + r7
-            r7 = 150(0x96, double:7.4E-322)
-            r9 = 0
-            r10 = 1065353216(0x3var_, float:1.0)
-            if (r11 == 0) goto L_0x0097
-            android.view.ViewPropertyAnimator r11 = r6.animate()
-            android.view.ViewPropertyAnimator r9 = r11.setListener(r9)
-            r9.cancel()
-            android.view.ViewPropertyAnimator r9 = r6.animate()
-            android.view.ViewPropertyAnimator r9 = r9.scaleX(r10)
-            android.view.ViewPropertyAnimator r9 = r9.scaleY(r10)
-            android.view.ViewPropertyAnimator r9 = r9.translationX(r1)
-            android.view.ViewPropertyAnimator r9 = r9.translationY(r4)
-            android.view.ViewPropertyAnimator r9 = r9.alpha(r10)
-            r10 = 0
-            android.view.ViewPropertyAnimator r9 = r9.setStartDelay(r10)
-            android.view.ViewPropertyAnimator r7 = r9.setDuration(r7)
-            org.telegram.ui.Components.CubicBezierInterpolator r8 = org.telegram.ui.Components.CubicBezierInterpolator.DEFAULT
-            android.view.ViewPropertyAnimator r7 = r7.setInterpolator(r8)
-            r7.start()
-            goto L_0x00c1
-        L_0x0097:
-            boolean r11 = r6.alwaysFloating
-            if (r11 != 0) goto L_0x00bb
-            android.view.ViewPropertyAnimator r11 = r6.animate()
-            android.view.ViewPropertyAnimator r9 = r11.setListener(r9)
-            r9.cancel()
-            r6.setScaleX(r10)
-            r6.setScaleY(r10)
-            android.view.ViewPropertyAnimator r9 = r6.animate()
-            android.view.ViewPropertyAnimator r9 = r9.alpha(r10)
-            android.view.ViewPropertyAnimator r7 = r9.setDuration(r7)
-            r7.start()
-        L_0x00bb:
-            r6.setTranslationX(r1)
-            r6.setTranslationY(r4)
-        L_0x00c1:
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.voip.VoIPFloatingLayout.setRelativePositionInternal(float, float, int, int, boolean):void");
+    private void setRelativePositionInternal(float f, float f2, int i, int i2, boolean z) {
+        WindowInsets windowInsets;
+        WindowInsets windowInsets2;
+        ViewParent parent = getParent();
+        if (parent == null || !this.floatingMode || this.switchingToFloatingMode || !this.active) {
+            return;
+        }
+        int i3 = Build.VERSION.SDK_INT;
+        float f3 = 0.0f;
+        float systemWindowInsetTop = (i3 < 20 || (windowInsets2 = this.lastInsets) == null) ? 0.0f : windowInsets2.getSystemWindowInsetTop() + this.topPadding;
+        if (i3 >= 20 && (windowInsets = this.lastInsets) != null) {
+            f3 = this.bottomPadding + windowInsets.getSystemWindowInsetBottom();
+        }
+        View view = (View) parent;
+        float measuredWidth = this.leftPadding + ((((view.getMeasuredWidth() - this.leftPadding) - this.rightPadding) - i) * f);
+        float measuredHeight = systemWindowInsetTop + ((((view.getMeasuredHeight() - f3) - systemWindowInsetTop) - i2) * f2);
+        if (z) {
+            animate().setListener(null).cancel();
+            animate().scaleX(1.0f).scaleY(1.0f).translationX(measuredWidth).translationY(measuredHeight).alpha(1.0f).setStartDelay(0L).setDuration(150L).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
+            return;
+        }
+        if (!this.alwaysFloating) {
+            animate().setListener(null).cancel();
+            setScaleX(1.0f);
+            setScaleY(1.0f);
+            animate().alpha(1.0f).setDuration(150L).start();
+        }
+        setTranslationX(measuredWidth);
+        setTranslationY(measuredHeight);
     }
 
     public void setFloatingMode(boolean z, boolean z2) {
@@ -569,18 +310,20 @@ public class VoIPFloatingLayout extends FrameLayout {
         }
         float f = 1.0f;
         if (!z2) {
-            if (this.floatingMode != z) {
-                this.floatingMode = z;
-                this.setedFloatingMode = z;
-                if (!z) {
-                    f = 0.0f;
-                }
-                this.toFloatingModeProgress = f;
-                requestLayout();
-                if (Build.VERSION.SDK_INT >= 21) {
-                    invalidateOutline();
-                }
+            if (this.floatingMode == z) {
+                return;
             }
+            this.floatingMode = z;
+            this.setedFloatingMode = z;
+            if (!z) {
+                f = 0.0f;
+            }
+            this.toFloatingModeProgress = f;
+            requestLayout();
+            if (Build.VERSION.SDK_INT < 21) {
+                return;
+            }
+            invalidateOutline();
         } else if (this.switchingToFloatingMode) {
             this.setedFloatingMode = z;
         } else if (z && !this.floatingMode) {
@@ -589,7 +332,7 @@ public class VoIPFloatingLayout extends FrameLayout {
             updatePadding();
             float f2 = this.relativePositionToSetX;
             if (f2 >= 0.0f) {
-                setRelativePositionInternal(f2, this.relativePositionToSetY, (int) (((float) getMeasuredWidth()) * 0.23f), (int) (((float) getMeasuredHeight()) * 0.23f), false);
+                setRelativePositionInternal(f2, this.relativePositionToSetY, (int) (getMeasuredWidth() * 0.23f), (int) (getMeasuredHeight() * 0.23f), false);
             }
             this.floatingMode = false;
             this.switchingToFloatingMode = true;
@@ -602,33 +345,26 @@ public class VoIPFloatingLayout extends FrameLayout {
             if (valueAnimator != null) {
                 valueAnimator.cancel();
             }
-            ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{this.toFloatingModeProgress, 1.0f});
+            ValueAnimator ofFloat = ValueAnimator.ofFloat(this.toFloatingModeProgress, 1.0f);
             this.switchToFloatingModeAnimator = ofFloat;
             ofFloat.addUpdateListener(this.progressUpdateListener);
-            this.switchToFloatingModeAnimator.setDuration(300);
+            this.switchToFloatingModeAnimator.setDuration(300L);
             this.switchToFloatingModeAnimator.start();
-            animate().setListener((Animator.AnimatorListener) null).cancel();
-            ViewPropertyAnimator duration = animate().scaleX(0.23f).scaleY(0.23f).translationX(translationX - ((((float) getMeasuredWidth()) - (((float) getMeasuredWidth()) * 0.23f)) / 2.0f)).translationY(translationY - ((((float) getMeasuredHeight()) - (((float) getMeasuredHeight()) * 0.23f)) / 2.0f)).alpha(1.0f).setStartDelay(0).setDuration(300);
+            animate().setListener(null).cancel();
+            ViewPropertyAnimator duration = animate().scaleX(0.23f).scaleY(0.23f).translationX(translationX - ((getMeasuredWidth() - (getMeasuredWidth() * 0.23f)) / 2.0f)).translationY(translationY - ((getMeasuredHeight() - (getMeasuredHeight() * 0.23f)) / 2.0f)).alpha(1.0f).setStartDelay(0L).setDuration(300L);
             CubicBezierInterpolator cubicBezierInterpolator = CubicBezierInterpolator.DEFAULT;
-            duration.setInterpolator(cubicBezierInterpolator).setListener(new AnimatorListenerAdapter() {
+            duration.setInterpolator(cubicBezierInterpolator).setListener(new AnimatorListenerAdapter() { // from class: org.telegram.ui.Components.voip.VoIPFloatingLayout.3
+                @Override // android.animation.AnimatorListenerAdapter, android.animation.Animator.AnimatorListener
                 public void onAnimationEnd(Animator animator) {
-                    boolean unused = VoIPFloatingLayout.this.switchingToFloatingMode = false;
-                    boolean unused2 = VoIPFloatingLayout.this.floatingMode = true;
+                    VoIPFloatingLayout.this.switchingToFloatingMode = false;
+                    VoIPFloatingLayout.this.floatingMode = true;
                     VoIPFloatingLayout voIPFloatingLayout = VoIPFloatingLayout.this;
                     voIPFloatingLayout.updatePositionFromX = translationX;
                     voIPFloatingLayout.updatePositionFromY = translationY;
                     voIPFloatingLayout.requestLayout();
                 }
             }).setInterpolator(cubicBezierInterpolator).start();
-        } else if (z || !this.floatingMode) {
-            if (!this.floatingMode) {
-                f = 0.0f;
-            }
-            this.toFloatingModeProgress = f;
-            this.floatingMode = z;
-            this.setedFloatingMode = z;
-            requestLayout();
-        } else {
+        } else if (!z && this.floatingMode) {
             this.setedFloatingMode = z;
             final float translationX2 = getTranslationX();
             final float translationY2 = getTranslationY();
@@ -636,41 +372,51 @@ public class VoIPFloatingLayout extends FrameLayout {
             this.floatingMode = false;
             this.switchingToFloatingMode = true;
             requestLayout();
-            animate().setListener((Animator.AnimatorListener) null).cancel();
-            getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            animate().setListener(null).cancel();
+            getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() { // from class: org.telegram.ui.Components.voip.VoIPFloatingLayout.4
+                @Override // android.view.ViewTreeObserver.OnPreDrawListener
                 public boolean onPreDraw() {
                     VoIPFloatingLayout voIPFloatingLayout = VoIPFloatingLayout.this;
-                    if (!voIPFloatingLayout.measuredAsFloatingMode) {
-                        ValueAnimator valueAnimator = voIPFloatingLayout.switchToFloatingModeAnimator;
-                        if (valueAnimator != null) {
-                            valueAnimator.cancel();
+                    if (voIPFloatingLayout.measuredAsFloatingMode) {
+                        voIPFloatingLayout.floatingMode = false;
+                        VoIPFloatingLayout.this.requestLayout();
+                    } else {
+                        ValueAnimator valueAnimator2 = voIPFloatingLayout.switchToFloatingModeAnimator;
+                        if (valueAnimator2 != null) {
+                            valueAnimator2.cancel();
                         }
                         VoIPFloatingLayout voIPFloatingLayout2 = VoIPFloatingLayout.this;
-                        voIPFloatingLayout2.switchToFloatingModeAnimator = ValueAnimator.ofFloat(new float[]{voIPFloatingLayout2.toFloatingModeProgress, 0.0f});
+                        voIPFloatingLayout2.switchToFloatingModeAnimator = ValueAnimator.ofFloat(voIPFloatingLayout2.toFloatingModeProgress, 0.0f);
                         VoIPFloatingLayout voIPFloatingLayout3 = VoIPFloatingLayout.this;
                         voIPFloatingLayout3.switchToFloatingModeAnimator.addUpdateListener(voIPFloatingLayout3.progressUpdateListener);
-                        VoIPFloatingLayout.this.switchToFloatingModeAnimator.setDuration(300);
+                        VoIPFloatingLayout.this.switchToFloatingModeAnimator.setDuration(300L);
                         VoIPFloatingLayout.this.switchToFloatingModeAnimator.start();
-                        float measuredWidth = translationX2 - ((((float) VoIPFloatingLayout.this.getMeasuredWidth()) - (((float) VoIPFloatingLayout.this.getMeasuredWidth()) * 0.23f)) / 2.0f);
+                        float measuredWidth = translationX2 - ((VoIPFloatingLayout.this.getMeasuredWidth() - (VoIPFloatingLayout.this.getMeasuredWidth() * 0.23f)) / 2.0f);
                         VoIPFloatingLayout.this.getViewTreeObserver().removeOnPreDrawListener(this);
                         VoIPFloatingLayout.this.setTranslationX(measuredWidth);
-                        VoIPFloatingLayout.this.setTranslationY(translationY2 - ((((float) VoIPFloatingLayout.this.getMeasuredHeight()) - (((float) VoIPFloatingLayout.this.getMeasuredHeight()) * 0.23f)) / 2.0f));
+                        VoIPFloatingLayout.this.setTranslationY(translationY2 - ((VoIPFloatingLayout.this.getMeasuredHeight() - (VoIPFloatingLayout.this.getMeasuredHeight() * 0.23f)) / 2.0f));
                         VoIPFloatingLayout.this.setScaleX(0.23f);
                         VoIPFloatingLayout.this.setScaleY(0.23f);
-                        VoIPFloatingLayout.this.animate().setListener((Animator.AnimatorListener) null).cancel();
-                        VoIPFloatingLayout.this.animate().setListener(new AnimatorListenerAdapter() {
+                        VoIPFloatingLayout.this.animate().setListener(null).cancel();
+                        VoIPFloatingLayout.this.animate().setListener(new AnimatorListenerAdapter() { // from class: org.telegram.ui.Components.voip.VoIPFloatingLayout.4.1
+                            @Override // android.animation.AnimatorListenerAdapter, android.animation.Animator.AnimatorListener
                             public void onAnimationEnd(Animator animator) {
-                                boolean unused = VoIPFloatingLayout.this.switchingToFloatingMode = false;
+                                VoIPFloatingLayout.this.switchingToFloatingMode = false;
                                 VoIPFloatingLayout.this.requestLayout();
                             }
-                        }).scaleX(1.0f).scaleY(1.0f).translationX(0.0f).translationY(0.0f).alpha(1.0f).setDuration(300).setStartDelay(0).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
-                    } else {
-                        boolean unused = voIPFloatingLayout.floatingMode = false;
-                        VoIPFloatingLayout.this.requestLayout();
+                        }).scaleX(1.0f).scaleY(1.0f).translationX(0.0f).translationY(0.0f).alpha(1.0f).setDuration(300L).setStartDelay(0L).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
                     }
                     return false;
                 }
             });
+        } else {
+            if (!this.floatingMode) {
+                f = 0.0f;
+            }
+            this.toFloatingModeProgress = f;
+            this.floatingMode = z;
+            this.setedFloatingMode = z;
+            requestLayout();
         }
     }
 
@@ -701,7 +447,7 @@ public class VoIPFloatingLayout extends FrameLayout {
         ValueAnimator ofFloat = ValueAnimator.ofFloat(fArr);
         this.mutedAnimator = ofFloat;
         ofFloat.addUpdateListener(this.mutedUpdateListener);
-        this.mutedAnimator.setDuration(150);
+        this.mutedAnimator.setDuration(150L);
         this.mutedAnimator.start();
     }
 
@@ -716,183 +462,53 @@ public class VoIPFloatingLayout extends FrameLayout {
         this.tapListener = onClickListener;
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:5:0x000e, code lost:
-        r4 = r7.lastInsets;
-     */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void setRelativePosition(org.telegram.ui.Components.voip.VoIPFloatingLayout r8) {
-        /*
-            r7 = this;
-            android.view.ViewParent r0 = r7.getParent()
-            if (r0 != 0) goto L_0x0007
-            return
-        L_0x0007:
-            int r1 = android.os.Build.VERSION.SDK_INT
-            r2 = 20
-            r3 = 0
-            if (r1 < r2) goto L_0x001c
-            android.view.WindowInsets r4 = r7.lastInsets
-            if (r4 != 0) goto L_0x0013
-            goto L_0x001c
-        L_0x0013:
-            int r4 = r4.getSystemWindowInsetTop()
-            float r4 = (float) r4
-            float r5 = r7.topPadding
-            float r4 = r4 + r5
-            goto L_0x001d
-        L_0x001c:
-            r4 = 0
-        L_0x001d:
-            if (r1 < r2) goto L_0x002d
-            android.view.WindowInsets r1 = r7.lastInsets
-            if (r1 != 0) goto L_0x0024
-            goto L_0x002d
-        L_0x0024:
-            int r1 = r1.getSystemWindowInsetBottom()
-            float r1 = (float) r1
-            float r2 = r7.bottomPadding
-            float r1 = r1 + r2
-            goto L_0x002e
-        L_0x002d:
-            r1 = 0
-        L_0x002e:
-            float r2 = r8.getTranslationX()
-            float r5 = r7.leftPadding
-            float r2 = r2 - r5
-            android.view.View r0 = (android.view.View) r0
-            int r5 = r0.getMeasuredWidth()
-            float r5 = (float) r5
-            float r6 = r7.leftPadding
-            float r5 = r5 - r6
-            float r6 = r7.rightPadding
-            float r5 = r5 - r6
-            int r6 = r8.getMeasuredWidth()
-            float r6 = (float) r6
-            float r5 = r5 - r6
-            float r2 = r2 / r5
-            float r5 = r8.getTranslationY()
-            float r5 = r5 - r4
-            int r0 = r0.getMeasuredHeight()
-            float r0 = (float) r0
-            float r0 = r0 - r1
-            float r0 = r0 - r4
-            int r8 = r8.getMeasuredHeight()
-            float r8 = (float) r8
-            float r0 = r0 - r8
-            float r5 = r5 / r0
-            float r8 = java.lang.Math.max(r3, r2)
-            r0 = 1065353216(0x3var_, float:1.0)
-            float r8 = java.lang.Math.min(r0, r8)
-            float r1 = java.lang.Math.max(r3, r5)
-            float r0 = java.lang.Math.min(r0, r1)
-            r7.setRelativePosition(r8, r0)
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.voip.VoIPFloatingLayout.setRelativePosition(org.telegram.ui.Components.voip.VoIPFloatingLayout):void");
+    public void setRelativePosition(VoIPFloatingLayout voIPFloatingLayout) {
+        WindowInsets windowInsets;
+        WindowInsets windowInsets2;
+        ViewParent parent = getParent();
+        if (parent == null) {
+            return;
+        }
+        int i = Build.VERSION.SDK_INT;
+        float systemWindowInsetTop = (i < 20 || (windowInsets2 = this.lastInsets) == null) ? 0.0f : windowInsets2.getSystemWindowInsetTop() + this.topPadding;
+        View view = (View) parent;
+        setRelativePosition(Math.min(1.0f, Math.max(0.0f, (voIPFloatingLayout.getTranslationX() - this.leftPadding) / (((view.getMeasuredWidth() - this.leftPadding) - this.rightPadding) - voIPFloatingLayout.getMeasuredWidth()))), Math.min(1.0f, Math.max(0.0f, (voIPFloatingLayout.getTranslationY() - systemWindowInsetTop) / (((view.getMeasuredHeight() - ((i < 20 || (windowInsets = this.lastInsets) == null) ? 0.0f : windowInsets.getSystemWindowInsetBottom() + this.bottomPadding)) - systemWindowInsetTop) - voIPFloatingLayout.getMeasuredHeight()))));
     }
 
     public void setIsActive(boolean z) {
         this.active = z;
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:9:0x001a, code lost:
-        r4 = r7.lastInsets;
-     */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
     public void saveRelativePosition() {
-        /*
-            r7 = this;
-            int r0 = r7.getMeasuredWidth()
-            if (r0 <= 0) goto L_0x0087
-            float r0 = r7.relativePositionToSetX
-            r1 = 0
-            int r0 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-            if (r0 >= 0) goto L_0x0087
-            android.view.ViewParent r0 = r7.getParent()
-            if (r0 != 0) goto L_0x0014
-            return
-        L_0x0014:
-            int r2 = android.os.Build.VERSION.SDK_INT
-            r3 = 20
-            if (r2 < r3) goto L_0x0028
-            android.view.WindowInsets r4 = r7.lastInsets
-            if (r4 != 0) goto L_0x001f
-            goto L_0x0028
-        L_0x001f:
-            int r4 = r4.getSystemWindowInsetTop()
-            float r4 = (float) r4
-            float r5 = r7.topPadding
-            float r4 = r4 + r5
-            goto L_0x0029
-        L_0x0028:
-            r4 = 0
-        L_0x0029:
-            if (r2 < r3) goto L_0x0039
-            android.view.WindowInsets r2 = r7.lastInsets
-            if (r2 != 0) goto L_0x0030
-            goto L_0x0039
-        L_0x0030:
-            int r2 = r2.getSystemWindowInsetBottom()
-            float r2 = (float) r2
-            float r3 = r7.bottomPadding
-            float r2 = r2 + r3
-            goto L_0x003a
-        L_0x0039:
-            r2 = 0
-        L_0x003a:
-            float r3 = r7.getTranslationX()
-            float r5 = r7.leftPadding
-            float r3 = r3 - r5
-            android.view.View r0 = (android.view.View) r0
-            int r5 = r0.getMeasuredWidth()
-            float r5 = (float) r5
-            float r6 = r7.leftPadding
-            float r5 = r5 - r6
-            float r6 = r7.rightPadding
-            float r5 = r5 - r6
-            int r6 = r7.getMeasuredWidth()
-            float r6 = (float) r6
-            float r5 = r5 - r6
-            float r3 = r3 / r5
-            r7.savedRelativePositionX = r3
-            float r3 = r7.getTranslationY()
-            float r3 = r3 - r4
-            int r0 = r0.getMeasuredHeight()
-            float r0 = (float) r0
-            float r0 = r0 - r2
-            float r0 = r0 - r4
-            int r2 = r7.getMeasuredHeight()
-            float r2 = (float) r2
-            float r0 = r0 - r2
-            float r3 = r3 / r0
-            r7.savedRelativePositionY = r3
-            float r0 = r7.savedRelativePositionX
-            r2 = 1065353216(0x3var_, float:1.0)
-            float r0 = java.lang.Math.min(r2, r0)
-            float r0 = java.lang.Math.max(r1, r0)
-            r7.savedRelativePositionX = r0
-            float r0 = r7.savedRelativePositionY
-            float r0 = java.lang.Math.min(r2, r0)
-            float r0 = java.lang.Math.max(r1, r0)
-            r7.savedRelativePositionY = r0
-            goto L_0x008d
-        L_0x0087:
-            r0 = -1082130432(0xffffffffbvar_, float:-1.0)
-            r7.savedRelativePositionX = r0
-            r7.savedRelativePositionY = r0
-        L_0x008d:
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.voip.VoIPFloatingLayout.saveRelativePosition():void");
+        WindowInsets windowInsets;
+        WindowInsets windowInsets2;
+        if (getMeasuredWidth() > 0 && this.relativePositionToSetX < 0.0f) {
+            ViewParent parent = getParent();
+            if (parent == null) {
+                return;
+            }
+            int i = Build.VERSION.SDK_INT;
+            float systemWindowInsetTop = (i < 20 || (windowInsets2 = this.lastInsets) == null) ? 0.0f : windowInsets2.getSystemWindowInsetTop() + this.topPadding;
+            float systemWindowInsetBottom = (i < 20 || (windowInsets = this.lastInsets) == null) ? 0.0f : windowInsets.getSystemWindowInsetBottom() + this.bottomPadding;
+            View view = (View) parent;
+            this.savedRelativePositionX = (getTranslationX() - this.leftPadding) / (((view.getMeasuredWidth() - this.leftPadding) - this.rightPadding) - getMeasuredWidth());
+            this.savedRelativePositionY = (getTranslationY() - systemWindowInsetTop) / (((view.getMeasuredHeight() - systemWindowInsetBottom) - systemWindowInsetTop) - getMeasuredHeight());
+            this.savedRelativePositionX = Math.max(0.0f, Math.min(1.0f, this.savedRelativePositionX));
+            this.savedRelativePositionY = Math.max(0.0f, Math.min(1.0f, this.savedRelativePositionY));
+            return;
+        }
+        this.savedRelativePositionX = -1.0f;
+        this.savedRelativePositionY = -1.0f;
     }
 
     public void restoreRelativePosition() {
         updatePadding();
         float f = this.savedRelativePositionX;
-        if (f >= 0.0f && !this.switchingToFloatingMode) {
-            setRelativePositionInternal(f, this.savedRelativePositionY, getMeasuredWidth(), getMeasuredHeight(), true);
-            this.savedRelativePositionX = -1.0f;
-            this.savedRelativePositionY = -1.0f;
+        if (f < 0.0f || this.switchingToFloatingMode) {
+            return;
         }
+        setRelativePositionInternal(f, this.savedRelativePositionY, getMeasuredWidth(), getMeasuredHeight(), true);
+        this.savedRelativePositionX = -1.0f;
+        this.savedRelativePositionY = -1.0f;
     }
 }

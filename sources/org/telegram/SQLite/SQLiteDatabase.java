@@ -3,23 +3,19 @@ package org.telegram.SQLite;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
-
+/* loaded from: classes.dex */
 public class SQLiteDatabase {
     private boolean inTransaction;
     private boolean isOpen = true;
     private final long sqliteHandle;
 
-    /* access modifiers changed from: package-private */
-    public native void beginTransaction(long j);
+    native void beginTransaction(long j);
 
-    /* access modifiers changed from: package-private */
-    public native void closedb(long j) throws SQLiteException;
+    native void closedb(long j) throws SQLiteException;
 
-    /* access modifiers changed from: package-private */
-    public native void commitTransaction(long j);
+    native void commitTransaction(long j);
 
-    /* access modifiers changed from: package-private */
-    public native long opendb(String str, String str2) throws SQLiteException;
+    native long opendb(String str, String str2) throws SQLiteException;
 
     public long getSQLiteHandle() {
         return this.sqliteHandle;
@@ -31,10 +27,7 @@ public class SQLiteDatabase {
 
     public boolean tableExists(String str) throws SQLiteException {
         checkOpened();
-        if (executeInt("SELECT rowid FROM sqlite_master WHERE type='table' AND name=?;", str) != null) {
-            return true;
-        }
-        return false;
+        return executeInt("SELECT rowid FROM sqlite_master WHERE type='table' AND name=?;", str) != null;
     }
 
     public SQLitePreparedStatement executeFast(String str) throws SQLiteException {
@@ -45,12 +38,10 @@ public class SQLiteDatabase {
         checkOpened();
         SQLiteCursor queryFinalized = queryFinalized(str, objArr);
         try {
-            if (!queryFinalized.next()) {
-                return null;
+            if (queryFinalized.next()) {
+                return Integer.valueOf(queryFinalized.intValue(0));
             }
-            Integer valueOf = Integer.valueOf(queryFinalized.intValue(0));
-            queryFinalized.dispose();
-            return valueOf;
+            return null;
         } finally {
             queryFinalized.dispose();
         }
@@ -83,18 +74,18 @@ public class SQLiteDatabase {
                 closedb(this.sqliteHandle);
             } catch (SQLiteException e) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.e(e.getMessage(), (Throwable) e);
+                    FileLog.e(e.getMessage(), e);
                 }
             }
             this.isOpen = false;
         }
     }
 
-    /* access modifiers changed from: package-private */
-    public void checkOpened() throws SQLiteException {
-        if (!this.isOpen) {
-            throw new SQLiteException("Database closed");
+    void checkOpened() throws SQLiteException {
+        if (this.isOpen) {
+            return;
         }
+        throw new SQLiteException("Database closed");
     }
 
     public void finalize() throws Throwable {
@@ -103,18 +94,18 @@ public class SQLiteDatabase {
     }
 
     public void beginTransaction() throws SQLiteException {
-        if (!this.inTransaction) {
-            this.inTransaction = true;
-            beginTransaction(this.sqliteHandle);
-            return;
+        if (this.inTransaction) {
+            throw new SQLiteException("database already in transaction");
         }
-        throw new SQLiteException("database already in transaction");
+        this.inTransaction = true;
+        beginTransaction(this.sqliteHandle);
     }
 
     public void commitTransaction() {
-        if (this.inTransaction) {
-            this.inTransaction = false;
-            commitTransaction(this.sqliteHandle);
+        if (!this.inTransaction) {
+            return;
         }
+        this.inTransaction = false;
+        commitTransaction(this.sqliteHandle);
     }
 }

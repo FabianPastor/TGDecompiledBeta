@@ -1,22 +1,23 @@
 package org.webrtc.audio;
-
-import org.webrtc.voiceengine.WebRtcAudioRecord;
-import org.webrtc.voiceengine.WebRtcAudioTrack;
-
 @Deprecated
+/* loaded from: classes3.dex */
 public class LegacyAudioDeviceModule implements AudioDeviceModule {
+    @Override // org.webrtc.audio.AudioDeviceModule
     public long getNativeAudioDeviceModulePointer() {
-        return 0;
+        return 0L;
     }
 
+    @Override // org.webrtc.audio.AudioDeviceModule
     public void release() {
     }
 
+    @Override // org.webrtc.audio.AudioDeviceModule
     public void setSpeakerMute(boolean z) {
-        WebRtcAudioTrack.setSpeakerMute(z);
+        org.webrtc.voiceengine.WebRtcAudioTrack.setSpeakerMute(z);
     }
 
+    @Override // org.webrtc.audio.AudioDeviceModule
     public void setMicrophoneMute(boolean z) {
-        WebRtcAudioRecord.setMicrophoneMute(z);
+        org.webrtc.voiceengine.WebRtcAudioRecord.setMicrophoneMute(z);
     }
 }

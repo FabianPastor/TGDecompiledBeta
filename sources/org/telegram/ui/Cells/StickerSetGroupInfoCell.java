@@ -9,7 +9,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
-
+/* loaded from: classes3.dex */
 public class StickerSetGroupInfoCell extends LinearLayout {
     private TextView addButton;
     private boolean isLast;
@@ -34,14 +34,15 @@ public class StickerSetGroupInfoCell extends LinearLayout {
         addView(this.addButton, LayoutHelper.createLinear(-2, 28, 51, 17, 10, 14, 8));
     }
 
-    /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
+    @Override // android.widget.LinearLayout, android.view.View
+    protected void onMeasure(int i, int i2) {
         View view;
         int measuredHeight;
         super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), i2);
-        if (this.isLast && (view = (View) getParent()) != null && getMeasuredHeight() < (measuredHeight = ((view.getMeasuredHeight() - view.getPaddingBottom()) - view.getPaddingTop()) - AndroidUtilities.dp(24.0f))) {
-            setMeasuredDimension(getMeasuredWidth(), measuredHeight);
+        if (!this.isLast || (view = (View) getParent()) == null || getMeasuredHeight() >= (measuredHeight = ((view.getMeasuredHeight() - view.getPaddingBottom()) - view.getPaddingTop()) - AndroidUtilities.dp(24.0f))) {
+            return;
         }
+        setMeasuredDimension(getMeasuredWidth(), measuredHeight);
     }
 
     public void setAddOnClickListener(View.OnClickListener onClickListener) {

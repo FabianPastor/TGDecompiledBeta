@@ -9,10 +9,11 @@ import java.security.Signature;
 import javax.crypto.Cipher;
 import javax.crypto.Mac;
 import org.telegram.messenger.FileLog;
-
 @TargetApi(23)
+/* loaded from: classes.dex */
 public final class FingerprintManagerCompatApi23 {
 
+    /* loaded from: classes.dex */
     public static abstract class AuthenticationCallback {
         public abstract void onAuthenticationError(int i, CharSequence charSequence);
 
@@ -30,12 +31,12 @@ public final class FingerprintManagerCompatApi23 {
     public static boolean hasEnrolledFingerprints(Context context) {
         try {
             FingerprintManager fingerprintManager = getFingerprintManager(context);
-            if (fingerprintManager == null) {
-                return false;
+            if (fingerprintManager != null) {
+                return fingerprintManager.hasEnrolledFingerprints();
             }
-            return fingerprintManager.hasEnrolledFingerprints();
+            return false;
         } catch (Exception e) {
-            FileLog.e((Throwable) e);
+            FileLog.e(e);
             return false;
         }
     }
@@ -43,12 +44,12 @@ public final class FingerprintManagerCompatApi23 {
     public static boolean isHardwareDetected(Context context) {
         try {
             FingerprintManager fingerprintManager = getFingerprintManager(context);
-            if (fingerprintManager == null) {
-                return false;
+            if (fingerprintManager != null) {
+                return fingerprintManager.isHardwareDetected();
             }
-            return fingerprintManager.isHardwareDetected();
+            return false;
         } catch (Exception e) {
-            FileLog.e((Throwable) e);
+            FileLog.e(e);
             return false;
         }
     }
@@ -57,7 +58,7 @@ public final class FingerprintManagerCompatApi23 {
         try {
             getFingerprintManager(context).authenticate(wrapCryptoObject(cryptoObject), (CancellationSignal) obj, i, wrapCallback(authenticationCallback), handler);
         } catch (Exception e) {
-            FileLog.e((Throwable) e);
+            FileLog.e(e);
         }
     }
 
@@ -71,13 +72,13 @@ public final class FingerprintManagerCompatApi23 {
         if (cryptoObject.getSignature() != null) {
             return new FingerprintManager.CryptoObject(cryptoObject.getSignature());
         }
-        if (cryptoObject.getMac() != null) {
-            return new FingerprintManager.CryptoObject(cryptoObject.getMac());
+        if (cryptoObject.getMac() == null) {
+            return null;
         }
-        return null;
+        return new FingerprintManager.CryptoObject(cryptoObject.getMac());
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public static CryptoObject unwrapCryptoObject(FingerprintManager.CryptoObject cryptoObject) {
         if (cryptoObject == null) {
             return null;
@@ -88,32 +89,37 @@ public final class FingerprintManagerCompatApi23 {
         if (cryptoObject.getSignature() != null) {
             return new CryptoObject(cryptoObject.getSignature());
         }
-        if (cryptoObject.getMac() != null) {
-            return new CryptoObject(cryptoObject.getMac());
+        if (cryptoObject.getMac() == null) {
+            return null;
         }
-        return null;
+        return new CryptoObject(cryptoObject.getMac());
     }
 
     private static FingerprintManager.AuthenticationCallback wrapCallback(final AuthenticationCallback authenticationCallback) {
-        return new FingerprintManager.AuthenticationCallback() {
+        return new FingerprintManager.AuthenticationCallback() { // from class: org.telegram.messenger.support.fingerprint.FingerprintManagerCompatApi23.1
+            @Override // android.hardware.fingerprint.FingerprintManager.AuthenticationCallback
             public void onAuthenticationError(int i, CharSequence charSequence) {
                 AuthenticationCallback.this.onAuthenticationError(i, charSequence);
             }
 
+            @Override // android.hardware.fingerprint.FingerprintManager.AuthenticationCallback
             public void onAuthenticationHelp(int i, CharSequence charSequence) {
                 AuthenticationCallback.this.onAuthenticationHelp(i, charSequence);
             }
 
+            @Override // android.hardware.fingerprint.FingerprintManager.AuthenticationCallback
             public void onAuthenticationSucceeded(FingerprintManager.AuthenticationResult authenticationResult) {
                 AuthenticationCallback.this.onAuthenticationSucceeded(new AuthenticationResultInternal(FingerprintManagerCompatApi23.unwrapCryptoObject(authenticationResult.getCryptoObject())));
             }
 
+            @Override // android.hardware.fingerprint.FingerprintManager.AuthenticationCallback
             public void onAuthenticationFailed() {
                 AuthenticationCallback.this.onAuthenticationFailed();
             }
         };
     }
 
+    /* loaded from: classes.dex */
     public static class CryptoObject {
         private final Cipher mCipher;
         private final Mac mMac;
@@ -150,6 +156,7 @@ public final class FingerprintManagerCompatApi23 {
         }
     }
 
+    /* loaded from: classes.dex */
     public static final class AuthenticationResultInternal {
         private CryptoObject mCryptoObject;
 

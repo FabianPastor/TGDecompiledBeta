@@ -8,9 +8,10 @@ import android.telecom.ConnectionService;
 import android.telecom.PhoneAccountHandle;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
-
 @TargetApi(26)
+/* loaded from: classes.dex */
 public class TelegramConnectionService extends ConnectionService {
+    @Override // android.app.Service
     public void onCreate() {
         super.onCreate();
         if (BuildVars.LOGS_ENABLED) {
@@ -18,6 +19,7 @@ public class TelegramConnectionService extends ConnectionService {
         }
     }
 
+    @Override // android.app.Service
     public void onDestroy() {
         super.onDestroy();
         if (BuildVars.LOGS_ENABLED) {
@@ -25,6 +27,7 @@ public class TelegramConnectionService extends ConnectionService {
         }
     }
 
+    @Override // android.telecom.ConnectionService
     public Connection onCreateIncomingConnection(PhoneAccountHandle phoneAccountHandle, ConnectionRequest connectionRequest) {
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("onCreateIncomingConnection ");
@@ -32,15 +35,16 @@ public class TelegramConnectionService extends ConnectionService {
         Bundle extras = connectionRequest.getExtras();
         if (extras.getInt("call_type") == 1) {
             VoIPService sharedInstance = VoIPService.getSharedInstance();
-            if (sharedInstance != null && !sharedInstance.isOutgoing()) {
-                return sharedInstance.getConnectionAndStartCall();
+            if (sharedInstance == null || sharedInstance.isOutgoing()) {
+                return null;
             }
-            return null;
+            return sharedInstance.getConnectionAndStartCall();
         }
         extras.getInt("call_type");
         return null;
     }
 
+    @Override // android.telecom.ConnectionService
     public void onCreateIncomingConnectionFailed(PhoneAccountHandle phoneAccountHandle, ConnectionRequest connectionRequest) {
         if (BuildVars.LOGS_ENABLED) {
             FileLog.e("onCreateIncomingConnectionFailed ");
@@ -50,6 +54,7 @@ public class TelegramConnectionService extends ConnectionService {
         }
     }
 
+    @Override // android.telecom.ConnectionService
     public void onCreateOutgoingConnectionFailed(PhoneAccountHandle phoneAccountHandle, ConnectionRequest connectionRequest) {
         if (BuildVars.LOGS_ENABLED) {
             FileLog.e("onCreateOutgoingConnectionFailed ");
@@ -59,6 +64,7 @@ public class TelegramConnectionService extends ConnectionService {
         }
     }
 
+    @Override // android.telecom.ConnectionService
     public Connection onCreateOutgoingConnection(PhoneAccountHandle phoneAccountHandle, ConnectionRequest connectionRequest) {
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("onCreateOutgoingConnection ");
@@ -66,10 +72,10 @@ public class TelegramConnectionService extends ConnectionService {
         Bundle extras = connectionRequest.getExtras();
         if (extras.getInt("call_type") == 1) {
             VoIPService sharedInstance = VoIPService.getSharedInstance();
-            if (sharedInstance == null) {
-                return null;
+            if (sharedInstance != null) {
+                return sharedInstance.getConnectionAndStartCall();
             }
-            return sharedInstance.getConnectionAndStartCall();
+            return null;
         }
         extras.getInt("call_type");
         return null;

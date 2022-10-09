@@ -19,36 +19,43 @@ import androidx.core.view.NestedScrollingParentHelper;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
-
+/* loaded from: classes3.dex */
 public class BotCommandsMenuContainer extends FrameLayout implements NestedScrollingParent {
-    Paint backgroundPaint = new Paint();
-    /* access modifiers changed from: private */
-    public ObjectAnimator currentAnimation = null;
-    boolean dismissed = true;
+    Paint backgroundPaint;
+    private ObjectAnimator currentAnimation;
+    boolean dismissed;
     private boolean entering;
     public RecyclerListView listView;
-    private NestedScrollingParentHelper nestedScrollingParentHelper = new NestedScrollingParentHelper(this);
+    private NestedScrollingParentHelper nestedScrollingParentHelper;
     float scrollYOffset;
     Drawable shadowDrawable;
-    Paint topBackground = new Paint(1);
+    Paint topBackground;
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
     public void onDismiss() {
     }
 
+    @Override // android.view.ViewGroup, android.view.ViewParent, androidx.core.view.NestedScrollingParent
     public boolean onNestedFling(View view, float f, float f2, boolean z) {
         return false;
     }
 
+    @Override // android.view.ViewGroup, android.view.ViewParent, androidx.core.view.NestedScrollingParent
     public boolean onNestedPreFling(View view, float f, float f2) {
         return false;
     }
 
     public BotCommandsMenuContainer(Context context) {
         super(context);
+        this.currentAnimation = null;
+        this.backgroundPaint = new Paint();
+        this.topBackground = new Paint(1);
+        this.dismissed = true;
+        this.nestedScrollingParentHelper = new NestedScrollingParentHelper(this);
         this.shadowDrawable = context.getResources().getDrawable(R.drawable.sheet_shadow_round).mutate();
-        AnonymousClass1 r0 = new RecyclerListView(context) {
-            /* access modifiers changed from: protected */
+        RecyclerListView recyclerListView = new RecyclerListView(context) { // from class: org.telegram.ui.Components.BotCommandsMenuContainer.1
+            /* JADX INFO: Access modifiers changed from: protected */
+            @Override // org.telegram.ui.Components.RecyclerListView, android.view.ViewGroup, android.view.View
             public void dispatchDraw(Canvas canvas) {
                 if (BotCommandsMenuContainer.this.listView.getLayoutManager() == null || BotCommandsMenuContainer.this.listView.getAdapter() == null || BotCommandsMenuContainer.this.listView.getAdapter().getItemCount() == 0) {
                     super.dispatchDraw(canvas);
@@ -60,86 +67,99 @@ public class BotCommandsMenuContainer extends FrameLayout implements NestedScrol
                     y = 0.0f;
                 }
                 BotCommandsMenuContainer.this.scrollYOffset = y;
-                float dp = y - ((float) AndroidUtilities.dp(8.0f));
+                float dp = y - AndroidUtilities.dp(8.0f);
                 if (dp > 0.0f) {
                     int i = (int) dp;
                     BotCommandsMenuContainer.this.shadowDrawable.setBounds(-AndroidUtilities.dp(8.0f), i - AndroidUtilities.dp(24.0f), getMeasuredWidth() + AndroidUtilities.dp(8.0f), i);
                     BotCommandsMenuContainer.this.shadowDrawable.draw(canvas);
                 }
-                canvas.drawRect(0.0f, dp, (float) getMeasuredWidth(), (float) (getMeasuredHeight() + AndroidUtilities.dp(16.0f)), BotCommandsMenuContainer.this.backgroundPaint);
+                canvas.drawRect(0.0f, dp, getMeasuredWidth(), getMeasuredHeight() + AndroidUtilities.dp(16.0f), BotCommandsMenuContainer.this.backgroundPaint);
                 RectF rectF = AndroidUtilities.rectTmp;
-                rectF.set((((float) getMeasuredWidth()) / 2.0f) - ((float) AndroidUtilities.dp(12.0f)), dp - ((float) AndroidUtilities.dp(4.0f)), (((float) getMeasuredWidth()) / 2.0f) + ((float) AndroidUtilities.dp(12.0f)), dp);
-                canvas.drawRoundRect(rectF, (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), BotCommandsMenuContainer.this.topBackground);
+                rectF.set((getMeasuredWidth() / 2.0f) - AndroidUtilities.dp(12.0f), dp - AndroidUtilities.dp(4.0f), (getMeasuredWidth() / 2.0f) + AndroidUtilities.dp(12.0f), dp);
+                canvas.drawRoundRect(rectF, AndroidUtilities.dp(4.0f), AndroidUtilities.dp(4.0f), BotCommandsMenuContainer.this.topBackground);
                 super.dispatchDraw(canvas);
             }
         };
-        this.listView = r0;
-        r0.setOverScrollMode(2);
+        this.listView = recyclerListView;
+        recyclerListView.setOverScrollMode(2);
         this.listView.setClipToPadding(false);
         addView(this.listView);
         updateColors();
         setClipChildren(false);
     }
 
+    @Override // android.view.ViewGroup, android.view.ViewParent, androidx.core.view.NestedScrollingParent
     public boolean onStartNestedScroll(View view, View view2, int i) {
         return !this.dismissed && i == 2;
     }
 
+    @Override // android.view.ViewGroup, android.view.ViewParent, androidx.core.view.NestedScrollingParent
     public void onNestedScrollAccepted(View view, View view2, int i) {
         this.nestedScrollingParentHelper.onNestedScrollAccepted(view, view2, i);
-        if (!this.dismissed) {
-            cancelCurrentAnimation();
+        if (this.dismissed) {
+            return;
         }
+        cancelCurrentAnimation();
     }
 
+    @Override // android.view.ViewGroup, android.view.ViewParent, androidx.core.view.NestedScrollingParent
     public void onStopNestedScroll(View view) {
         this.nestedScrollingParentHelper.onStopNestedScroll(view);
-        if (!this.dismissed) {
-            checkDismiss();
+        if (this.dismissed) {
+            return;
         }
+        checkDismiss();
     }
 
     private void checkDismiss() {
-        if (!this.dismissed) {
-            if (this.listView.getTranslationY() > ((float) AndroidUtilities.dp(16.0f))) {
-                dismiss();
-            } else {
-                playEnterAnim(false);
-            }
+        if (this.dismissed) {
+            return;
+        }
+        if (this.listView.getTranslationY() > AndroidUtilities.dp(16.0f)) {
+            dismiss();
+        } else {
+            playEnterAnim(false);
         }
     }
 
+    @Override // android.view.ViewGroup, android.view.ViewParent, androidx.core.view.NestedScrollingParent
     public void onNestedScroll(View view, int i, int i2, int i3, int i4) {
-        if (!this.dismissed) {
-            cancelCurrentAnimation();
-            if (i4 != 0) {
-                float translationY = this.listView.getTranslationY() - ((float) i4);
-                if (translationY < 0.0f) {
-                    translationY = 0.0f;
-                }
-                this.listView.setTranslationY(translationY);
-                invalidate();
-            }
+        if (this.dismissed) {
+            return;
         }
+        cancelCurrentAnimation();
+        if (i4 == 0) {
+            return;
+        }
+        float translationY = this.listView.getTranslationY() - i4;
+        if (translationY < 0.0f) {
+            translationY = 0.0f;
+        }
+        this.listView.setTranslationY(translationY);
+        invalidate();
     }
 
+    @Override // android.view.ViewGroup, android.view.ViewParent, androidx.core.view.NestedScrollingParent
     public void onNestedPreScroll(View view, int i, int i2, int[] iArr) {
-        if (!this.dismissed) {
-            cancelCurrentAnimation();
-            float translationY = this.listView.getTranslationY();
-            float f = 0.0f;
-            if (translationY > 0.0f && i2 > 0) {
-                float f2 = translationY - ((float) i2);
-                iArr[1] = i2;
-                if (f2 >= 0.0f) {
-                    f = f2;
-                }
-                this.listView.setTranslationY(f);
-                invalidate();
-            }
+        if (this.dismissed) {
+            return;
         }
+        cancelCurrentAnimation();
+        float translationY = this.listView.getTranslationY();
+        float f = 0.0f;
+        if (translationY <= 0.0f || i2 <= 0) {
+            return;
+        }
+        float f2 = translationY - i2;
+        iArr[1] = i2;
+        if (f2 >= 0.0f) {
+            f = f2;
+        }
+        this.listView.setTranslationY(f);
+        invalidate();
     }
 
+    @Override // android.view.ViewGroup
     public int getNestedScrollAxes() {
         return this.nestedScrollingParentHelper.getNestedScrollAxes();
     }
@@ -159,38 +179,41 @@ public class BotCommandsMenuContainer extends FrameLayout implements NestedScrol
             this.listView.scrollToPosition(0);
             this.entering = true;
             this.dismissed = false;
-        } else if (this.dismissed) {
+        } else if (!this.dismissed) {
+        } else {
             this.dismissed = false;
             cancelCurrentAnimation();
             playEnterAnim(false);
         }
     }
 
-    /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
+    @Override // android.widget.FrameLayout, android.view.View
+    protected void onMeasure(int i, int i2) {
         super.onMeasure(i, i2);
-        if (this.entering && !this.dismissed) {
-            RecyclerListView recyclerListView = this.listView;
-            recyclerListView.setTranslationY((float) ((recyclerListView.getMeasuredHeight() - this.listView.getPaddingTop()) + AndroidUtilities.dp(16.0f)));
-            playEnterAnim(true);
-            this.entering = false;
+        if (!this.entering || this.dismissed) {
+            return;
         }
+        RecyclerListView recyclerListView = this.listView;
+        recyclerListView.setTranslationY((recyclerListView.getMeasuredHeight() - this.listView.getPaddingTop()) + AndroidUtilities.dp(16.0f));
+        playEnterAnim(true);
+        this.entering = false;
     }
 
     private void playEnterAnim(boolean z) {
-        if (!this.dismissed) {
-            RecyclerListView recyclerListView = this.listView;
-            ObjectAnimator ofFloat = ObjectAnimator.ofFloat(recyclerListView, FrameLayout.TRANSLATION_Y, new float[]{recyclerListView.getTranslationY(), 0.0f});
-            this.currentAnimation = ofFloat;
-            if (z) {
-                ofFloat.setDuration(320);
-                this.currentAnimation.setInterpolator(new OvershootInterpolator(0.8f));
-            } else {
-                ofFloat.setDuration(150);
-                this.currentAnimation.setInterpolator(CubicBezierInterpolator.DEFAULT);
-            }
-            this.currentAnimation.start();
+        if (this.dismissed) {
+            return;
         }
+        RecyclerListView recyclerListView = this.listView;
+        ObjectAnimator ofFloat = ObjectAnimator.ofFloat(recyclerListView, FrameLayout.TRANSLATION_Y, recyclerListView.getTranslationY(), 0.0f);
+        this.currentAnimation = ofFloat;
+        if (z) {
+            ofFloat.setDuration(320L);
+            this.currentAnimation.setInterpolator(new OvershootInterpolator(0.8f));
+        } else {
+            ofFloat.setDuration(150L);
+            this.currentAnimation.setInterpolator(CubicBezierInterpolator.DEFAULT);
+        }
+        this.currentAnimation.start();
     }
 
     public void dismiss() {
@@ -198,23 +221,25 @@ public class BotCommandsMenuContainer extends FrameLayout implements NestedScrol
             this.dismissed = true;
             cancelCurrentAnimation();
             RecyclerListView recyclerListView = this.listView;
-            ObjectAnimator ofFloat = ObjectAnimator.ofFloat(recyclerListView, FrameLayout.TRANSLATION_Y, new float[]{recyclerListView.getTranslationY(), (((float) getMeasuredHeight()) - this.scrollYOffset) + ((float) AndroidUtilities.dp(40.0f))});
+            ObjectAnimator ofFloat = ObjectAnimator.ofFloat(recyclerListView, FrameLayout.TRANSLATION_Y, recyclerListView.getTranslationY(), (getMeasuredHeight() - this.scrollYOffset) + AndroidUtilities.dp(40.0f));
             this.currentAnimation = ofFloat;
-            ofFloat.addListener(new AnimatorListenerAdapter() {
+            ofFloat.addListener(new AnimatorListenerAdapter() { // from class: org.telegram.ui.Components.BotCommandsMenuContainer.2
+                @Override // android.animation.AnimatorListenerAdapter, android.animation.Animator.AnimatorListener
                 public void onAnimationEnd(Animator animator) {
                     BotCommandsMenuContainer.this.setVisibility(8);
-                    ObjectAnimator unused = BotCommandsMenuContainer.this.currentAnimation = null;
+                    BotCommandsMenuContainer.this.currentAnimation = null;
                 }
             });
-            this.currentAnimation.setDuration(150);
+            this.currentAnimation.setDuration(150L);
             this.currentAnimation.setInterpolator(CubicBezierInterpolator.DEFAULT);
             this.currentAnimation.start();
             onDismiss();
         }
     }
 
+    @Override // android.view.ViewGroup, android.view.View
     public boolean dispatchTouchEvent(MotionEvent motionEvent) {
-        if (motionEvent.getAction() != 0 || motionEvent.getY() >= this.scrollYOffset - ((float) AndroidUtilities.dp(24.0f))) {
+        if (motionEvent.getAction() != 0 || motionEvent.getY() >= this.scrollYOffset - AndroidUtilities.dp(24.0f)) {
             return super.dispatchTouchEvent(motionEvent);
         }
         return false;

@@ -1,5 +1,5 @@
 package j$.util.function;
-
+/* loaded from: classes2.dex */
 public final /* synthetic */ class s implements t {
     public final /* synthetic */ int a;
     public final /* synthetic */ t b;
@@ -16,6 +16,7 @@ public final /* synthetic */ class s implements t {
         this.c = tVar2;
     }
 
+    @Override // j$.util.function.t
     public t a(t tVar) {
         switch (this.a) {
             case 0:
@@ -27,6 +28,7 @@ public final /* synthetic */ class s implements t {
         }
     }
 
+    @Override // j$.util.function.t
     public final long applyAsLong(long j) {
         switch (this.a) {
             case 0:
@@ -36,6 +38,7 @@ public final /* synthetic */ class s implements t {
         }
     }
 
+    @Override // j$.util.function.t
     public t b(t tVar) {
         switch (this.a) {
             case 0:

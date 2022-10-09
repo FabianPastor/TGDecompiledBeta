@@ -1,88 +1,82 @@
 package j$.util.stream;
 
-import j$.lang.a;
-import j$.lang.b;
-import j$.lang.c;
 import j$.util.function.Function;
 import j$.util.function.ToIntFunction;
-import j$.util.function.l;
-import j$.util.function.m;
 import j$.wrappers.CLASSNAMEb0;
 import j$.wrappers.CLASSNAMEn0;
-import j$.wrappers.G;
-import j$.wrappers.V;
-
+/* loaded from: classes2.dex */
 class M extends K0 {
     public final /* synthetic */ int l = 1;
     final /* synthetic */ Object m;
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public M(T t, CLASSNAMEc cVar, CLASSNAMEe4 e4Var, int i, G g) {
-        super(cVar, e4Var, i);
+    /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+    public M(T t, AbstractCLASSNAMEc abstractCLASSNAMEc, EnumCLASSNAMEe4 enumCLASSNAMEe4, int i, j$.wrappers.G g) {
+        super(abstractCLASSNAMEc, enumCLASSNAMEe4, i);
         this.m = g;
     }
 
-    /* access modifiers changed from: package-private */
-    public CLASSNAMEm3 H0(int i, CLASSNAMEm3 m3Var) {
+    /* JADX INFO: Access modifiers changed from: package-private */
+    @Override // j$.util.stream.AbstractCLASSNAMEc
+    public InterfaceCLASSNAMEm3 H0(int i, InterfaceCLASSNAMEm3 interfaceCLASSNAMEm3) {
         switch (this.l) {
             case 0:
-                return new J(this, m3Var);
+                return new J(this, interfaceCLASSNAMEm3);
             case 1:
-                return new F0(this, m3Var);
+                return new F0(this, interfaceCLASSNAMEm3);
             case 2:
-                return new F0(this, m3Var, (a) null);
+                return new F0(this, interfaceCLASSNAMEm3, (j$.lang.a) null);
             case 3:
-                return new F0(this, m3Var, (b) null);
+                return new F0(this, interfaceCLASSNAMEm3, (j$.lang.b) null);
             case 4:
-                return new F0(this, m3Var, (c) null);
+                return new F0(this, interfaceCLASSNAMEm3, (j$.lang.c) null);
             case 5:
-                return new Z0(this, m3Var);
+                return new Z0(this, interfaceCLASSNAMEm3);
             case 6:
-                return new Y2(this, m3Var);
+                return new Y2(this, interfaceCLASSNAMEm3);
             default:
-                return new r(this, m3Var);
+                return new r(this, interfaceCLASSNAMEm3);
         }
     }
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public M(L0 l0, CLASSNAMEc cVar, CLASSNAMEe4 e4Var, int i, l lVar) {
-        super(cVar, e4Var, i);
+    /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+    public M(L0 l0, AbstractCLASSNAMEc abstractCLASSNAMEc, EnumCLASSNAMEe4 enumCLASSNAMEe4, int i, j$.util.function.l lVar) {
+        super(abstractCLASSNAMEc, enumCLASSNAMEe4, i);
         this.m = lVar;
     }
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public M(L0 l0, CLASSNAMEc cVar, CLASSNAMEe4 e4Var, int i, m mVar) {
-        super(cVar, e4Var, i);
+    /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+    public M(L0 l0, AbstractCLASSNAMEc abstractCLASSNAMEc, EnumCLASSNAMEe4 enumCLASSNAMEe4, int i, j$.util.function.m mVar) {
+        super(abstractCLASSNAMEc, enumCLASSNAMEe4, i);
         this.m = mVar;
     }
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public M(L0 l0, CLASSNAMEc cVar, CLASSNAMEe4 e4Var, int i, V v) {
-        super(cVar, e4Var, i);
+    /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+    public M(L0 l0, AbstractCLASSNAMEc abstractCLASSNAMEc, EnumCLASSNAMEe4 enumCLASSNAMEe4, int i, j$.wrappers.V v) {
+        super(abstractCLASSNAMEc, enumCLASSNAMEe4, i);
         this.m = v;
     }
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public M(L0 l0, CLASSNAMEc cVar, CLASSNAMEe4 e4Var, int i, CLASSNAMEb0 b0Var) {
-        super(cVar, e4Var, i);
-        this.m = b0Var;
+    /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+    public M(L0 l0, AbstractCLASSNAMEc abstractCLASSNAMEc, EnumCLASSNAMEe4 enumCLASSNAMEe4, int i, CLASSNAMEb0 CLASSNAMEb0) {
+        super(abstractCLASSNAMEc, enumCLASSNAMEe4, i);
+        this.m = CLASSNAMEb0;
     }
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public M(CLASSNAMEd1 d1Var, CLASSNAMEc cVar, CLASSNAMEe4 e4Var, int i, CLASSNAMEn0 n0Var) {
-        super(cVar, e4Var, i);
-        this.m = n0Var;
+    /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+    public M(AbstractCLASSNAMEd1 abstractCLASSNAMEd1, AbstractCLASSNAMEc abstractCLASSNAMEc, EnumCLASSNAMEe4 enumCLASSNAMEe4, int i, CLASSNAMEn0 CLASSNAMEn0) {
+        super(abstractCLASSNAMEc, enumCLASSNAMEe4, i);
+        this.m = CLASSNAMEn0;
     }
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public M(CLASSNAMEe3 e3Var, CLASSNAMEc cVar, CLASSNAMEe4 e4Var, int i, Function function) {
-        super(cVar, e4Var, i);
+    /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+    public M(AbstractCLASSNAMEe3 abstractCLASSNAMEe3, AbstractCLASSNAMEc abstractCLASSNAMEc, EnumCLASSNAMEe4 enumCLASSNAMEe4, int i, Function function) {
+        super(abstractCLASSNAMEc, enumCLASSNAMEe4, i);
         this.m = function;
     }
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public M(CLASSNAMEe3 e3Var, CLASSNAMEc cVar, CLASSNAMEe4 e4Var, int i, ToIntFunction toIntFunction) {
-        super(cVar, e4Var, i);
+    /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+    public M(AbstractCLASSNAMEe3 abstractCLASSNAMEe3, AbstractCLASSNAMEc abstractCLASSNAMEc, EnumCLASSNAMEe4 enumCLASSNAMEe4, int i, ToIntFunction toIntFunction) {
+        super(abstractCLASSNAMEc, enumCLASSNAMEe4, i);
         this.m = toIntFunction;
     }
 }

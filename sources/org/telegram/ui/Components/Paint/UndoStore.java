@@ -6,12 +6,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import org.telegram.messenger.AndroidUtilities;
-
+/* loaded from: classes3.dex */
 public class UndoStore {
     private UndoStoreDelegate delegate;
-    private List<UUID> operations = new ArrayList();
     private Map<UUID, Runnable> uuidToOperationMap = new HashMap();
+    private List<UUID> operations = new ArrayList();
 
+    /* loaded from: classes3.dex */
     public interface UndoStoreDelegate {
         void historyChanged();
     }
@@ -37,21 +38,27 @@ public class UndoStore {
     }
 
     public void undo() {
-        if (this.operations.size() != 0) {
-            int size = this.operations.size() - 1;
-            UUID uuid = this.operations.get(size);
-            this.uuidToOperationMap.remove(uuid);
-            this.operations.remove(size);
-            this.uuidToOperationMap.get(uuid).run();
-            notifyOfHistoryChanges();
+        if (this.operations.size() == 0) {
+            return;
         }
+        int size = this.operations.size() - 1;
+        UUID uuid = this.operations.get(size);
+        this.uuidToOperationMap.remove(uuid);
+        this.operations.remove(size);
+        this.uuidToOperationMap.get(uuid).run();
+        notifyOfHistoryChanges();
     }
 
     private void notifyOfHistoryChanges() {
-        AndroidUtilities.runOnUIThread(new UndoStore$$ExternalSyntheticLambda0(this));
+        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.Paint.UndoStore$$ExternalSyntheticLambda0
+            @Override // java.lang.Runnable
+            public final void run() {
+                UndoStore.this.lambda$notifyOfHistoryChanges$0();
+            }
+        });
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$notifyOfHistoryChanges$0() {
         UndoStoreDelegate undoStoreDelegate = this.delegate;
         if (undoStoreDelegate != null) {

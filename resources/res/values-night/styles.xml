@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="ActionBar.Transparent.TMessages.Start">
+    <style name="ActionBar.Transparent.TMessages.Start" parent="@android:style/Widget.Material.Light.ActionBar">
         <item name="android:textColor">#ffffff</item>
         <item name="android:background">#fvar_d3a</item>
         <item name="android:title" />
         <item name="android:logo">@drawable/transparent</item>
     </style>
-    <style name="Theme.TMessages.Start">
+    <style name="Theme.TMessages.Start" parent="@android:style/Theme.Material">
         <item name="android:colorBackground">#1var_</item>
         <item name="android:windowBackground">#1var_</item>
         <item name="android:windowContentOverlay">@null</item>

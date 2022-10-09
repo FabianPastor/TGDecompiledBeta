@@ -1,12 +1,12 @@
 package j$.time.format;
-
-import j$.time.temporal.k;
-
-final class n implements g {
-    private final k a;
+/* JADX INFO: Access modifiers changed from: package-private */
+/* loaded from: classes2.dex */
+public final class n implements g {
+    private final j$.time.temporal.k a;
     private final t b;
 
-    n(k kVar, t tVar, c cVar) {
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public n(j$.time.temporal.k kVar, t tVar, c cVar) {
         this.a = kVar;
         this.b = tVar;
     }

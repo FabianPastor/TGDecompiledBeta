@@ -9,7 +9,7 @@ import java.util.Map;
 import org.webrtc.DataChannel;
 import org.webrtc.MediaStreamTrack;
 import org.webrtc.RtpTransceiver;
-
+/* loaded from: classes3.dex */
 public class PeerConnection {
     private final List<MediaStream> localStreams;
     private final long nativePeerConnection;
@@ -17,22 +17,26 @@ public class PeerConnection {
     private List<RtpSender> senders;
     private List<RtpTransceiver> transceivers;
 
+    /* loaded from: classes3.dex */
     public enum BundlePolicy {
         BALANCED,
         MAXBUNDLE,
         MAXCOMPAT
     }
 
+    /* loaded from: classes3.dex */
     public enum CandidateNetworkPolicy {
         ALL,
         LOW_COST
     }
 
+    /* loaded from: classes3.dex */
     public enum ContinualGatheringPolicy {
         GATHER_ONCE,
         GATHER_CONTINUALLY
     }
 
+    /* loaded from: classes3.dex */
     public enum IceTransportsType {
         NONE,
         RELAY,
@@ -40,14 +44,17 @@ public class PeerConnection {
         ALL
     }
 
+    /* loaded from: classes3.dex */
     public enum KeyType {
         RSA,
         ECDSA
     }
 
+    /* loaded from: classes3.dex */
     public interface Observer {
 
         /* renamed from: org.webrtc.PeerConnection$Observer$-CC  reason: invalid class name */
+        /* loaded from: classes3.dex */
         public final /* synthetic */ class CC {
             @CalledByNative("Observer")
             public static void $default$onConnectionChange(Observer observer, PeerConnectionState peerConnectionState) {
@@ -112,27 +119,32 @@ public class PeerConnection {
         void onTrack(RtpTransceiver rtpTransceiver);
     }
 
+    /* loaded from: classes3.dex */
     public enum PortPrunePolicy {
         NO_PRUNE,
         PRUNE_BASED_ON_PRIORITY,
         KEEP_FIRST_READY
     }
 
+    /* loaded from: classes3.dex */
     public enum RtcpMuxPolicy {
         NEGOTIATE,
         REQUIRE
     }
 
+    /* loaded from: classes3.dex */
     public enum SdpSemantics {
         PLAN_B,
         UNIFIED_PLAN
     }
 
+    /* loaded from: classes3.dex */
     public enum TcpCandidatePolicy {
         ENABLED,
         DISABLED
     }
 
+    /* loaded from: classes3.dex */
     public enum TlsCertPolicy {
         TLS_CERT_POLICY_SECURE,
         TLS_CERT_POLICY_INSECURE_NO_CHECK
@@ -210,6 +222,7 @@ public class PeerConnection {
 
     private native void nativeStopRtcEventLog();
 
+    /* loaded from: classes3.dex */
     public enum IceGatheringState {
         NEW,
         GATHERING,
@@ -221,6 +234,7 @@ public class PeerConnection {
         }
     }
 
+    /* loaded from: classes3.dex */
     public enum IceConnectionState {
         NEW,
         CHECKING,
@@ -236,6 +250,7 @@ public class PeerConnection {
         }
     }
 
+    /* loaded from: classes3.dex */
     public enum PeerConnectionState {
         NEW,
         CONNECTING,
@@ -250,6 +265,7 @@ public class PeerConnection {
         }
     }
 
+    /* loaded from: classes3.dex */
     public enum SignalingState {
         STABLE,
         HAVE_LOCAL_OFFER,
@@ -264,6 +280,7 @@ public class PeerConnection {
         }
     }
 
+    /* loaded from: classes3.dex */
     public static class IceServer {
         public final String hostname;
         public final String password;
@@ -286,16 +303,16 @@ public class PeerConnection {
         }
 
         @Deprecated
-        public IceServer(String str, String str2, String str3, TlsCertPolicy tlsCertPolicy2) {
-            this(str, str2, str3, tlsCertPolicy2, "");
+        public IceServer(String str, String str2, String str3, TlsCertPolicy tlsCertPolicy) {
+            this(str, str2, str3, tlsCertPolicy, "");
         }
 
         @Deprecated
-        public IceServer(String str, String str2, String str3, TlsCertPolicy tlsCertPolicy2, String str4) {
-            this(str, Collections.singletonList(str), str2, str3, tlsCertPolicy2, str4, (List<String>) null, (List<String>) null);
+        public IceServer(String str, String str2, String str3, TlsCertPolicy tlsCertPolicy, String str4) {
+            this(str, Collections.singletonList(str), str2, str3, tlsCertPolicy, str4, null, null);
         }
 
-        private IceServer(String str, List<String> list, String str2, String str3, TlsCertPolicy tlsCertPolicy2, String str4, List<String> list2, List<String> list3) {
+        private IceServer(String str, List<String> list, String str2, String str3, TlsCertPolicy tlsCertPolicy, String str4, List<String> list2, List<String> list3) {
             if (str == null || list == null || list.isEmpty()) {
                 throw new IllegalArgumentException("uri == null || urls == null || urls.isEmpty()");
             }
@@ -306,20 +323,21 @@ public class PeerConnection {
             }
             if (str2 == null) {
                 throw new IllegalArgumentException("username == null");
-            } else if (str3 == null) {
+            }
+            if (str3 == null) {
                 throw new IllegalArgumentException("password == null");
-            } else if (str4 != null) {
-                this.uri = str;
-                this.urls = list;
-                this.username = str2;
-                this.password = str3;
-                this.tlsCertPolicy = tlsCertPolicy2;
-                this.hostname = str4;
-                this.tlsAlpnProtocols = list2;
-                this.tlsEllipticCurves = list3;
-            } else {
+            }
+            if (str4 == null) {
                 throw new IllegalArgumentException("hostname == null");
             }
+            this.uri = str;
+            this.urls = list;
+            this.username = str2;
+            this.password = str3;
+            this.tlsCertPolicy = tlsCertPolicy;
+            this.hostname = str4;
+            this.tlsAlpnProtocols = list2;
+            this.tlsEllipticCurves = list3;
         }
 
         public String toString() {
@@ -337,10 +355,7 @@ public class PeerConnection {
                 return false;
             }
             IceServer iceServer = (IceServer) obj;
-            if (!this.uri.equals(iceServer.uri) || !this.urls.equals(iceServer.urls) || !this.username.equals(iceServer.username) || !this.password.equals(iceServer.password) || !this.tlsCertPolicy.equals(iceServer.tlsCertPolicy) || !this.hostname.equals(iceServer.hostname) || !this.tlsAlpnProtocols.equals(iceServer.tlsAlpnProtocols) || !this.tlsEllipticCurves.equals(iceServer.tlsEllipticCurves)) {
-                return false;
-            }
-            return true;
+            return this.uri.equals(iceServer.uri) && this.urls.equals(iceServer.urls) && this.username.equals(iceServer.username) && this.password.equals(iceServer.password) && this.tlsCertPolicy.equals(iceServer.tlsCertPolicy) && this.hostname.equals(iceServer.hostname) && this.tlsAlpnProtocols.equals(iceServer.tlsAlpnProtocols) && this.tlsEllipticCurves.equals(iceServer.tlsEllipticCurves);
         }
 
         public int hashCode() {
@@ -355,6 +370,7 @@ public class PeerConnection {
             return new Builder(list);
         }
 
+        /* loaded from: classes3.dex */
         public static class Builder {
             private String hostname;
             private String password;
@@ -385,8 +401,8 @@ public class PeerConnection {
                 return this;
             }
 
-            public Builder setTlsCertPolicy(TlsCertPolicy tlsCertPolicy2) {
-                this.tlsCertPolicy = tlsCertPolicy2;
+            public Builder setTlsCertPolicy(TlsCertPolicy tlsCertPolicy) {
+                this.tlsCertPolicy = tlsCertPolicy;
                 return this;
             }
 
@@ -410,49 +426,43 @@ public class PeerConnection {
             }
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("IceServer")
-        public List<String> getUrls() {
+        List<String> getUrls() {
             return this.urls;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("IceServer")
-        public String getUsername() {
+        String getUsername() {
             return this.username;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("IceServer")
-        public String getPassword() {
+        String getPassword() {
             return this.password;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("IceServer")
-        public TlsCertPolicy getTlsCertPolicy() {
+        TlsCertPolicy getTlsCertPolicy() {
             return this.tlsCertPolicy;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("IceServer")
-        public String getHostname() {
+        String getHostname() {
             return this.hostname;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("IceServer")
-        public List<String> getTlsAlpnProtocols() {
+        List<String> getTlsAlpnProtocols() {
             return this.tlsAlpnProtocols;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("IceServer")
-        public List<String> getTlsEllipticCurves() {
+        List<String> getTlsEllipticCurves() {
             return this.tlsEllipticCurves;
         }
     }
 
+    /* loaded from: classes3.dex */
     public enum AdapterType {
         UNKNOWN(0),
         ETHERNET(1),
@@ -466,18 +476,17 @@ public class PeerConnection {
         CELLULAR_4G(256),
         CELLULAR_5G(512);
         
-        private static final Map<Integer, AdapterType> BY_BITMASK = null;
+        private static final Map<Integer, AdapterType> BY_BITMASK = new HashMap();
         public final Integer bitMask;
 
         static {
-            int i;
-            BY_BITMASK = new HashMap();
+            AdapterType[] values;
             for (AdapterType adapterType : values()) {
                 BY_BITMASK.put(adapterType.bitMask, adapterType);
             }
         }
 
-        private AdapterType(Integer num) {
+        AdapterType(Integer num) {
             this.bitMask = num;
         }
 
@@ -487,330 +496,257 @@ public class PeerConnection {
         }
     }
 
+    /* loaded from: classes3.dex */
     public static class RTCConfiguration {
-        public boolean activeResetSrtpParams;
-        public Boolean allowCodecSwitching;
-        public boolean audioJitterBufferFastAccelerate;
-        public int audioJitterBufferMaxPackets;
-        public BundlePolicy bundlePolicy = BundlePolicy.BALANCED;
-        public CandidateNetworkPolicy candidateNetworkPolicy = CandidateNetworkPolicy.ALL;
         public RtcCertificatePem certificate;
-        public Boolean combinedAudioVideoBwe;
-        public ContinualGatheringPolicy continualGatheringPolicy;
-        public CryptoOptions cryptoOptions;
-        public boolean disableIPv6OnWifi;
-        public boolean disableIpv6;
-        public boolean enableCpuOveruseDetection;
-        public boolean enableDscp;
-        public Boolean enableDtlsSrtp;
-        public boolean enableRtpDataChannel;
-        public int iceBackupCandidatePairPingInterval;
-        public int iceCandidatePoolSize;
-        public Integer iceCheckIntervalStrongConnectivityMs;
-        public Integer iceCheckIntervalWeakConnectivityMs;
-        public Integer iceCheckMinInterval;
-        public int iceConnectionReceivingTimeout;
         public List<IceServer> iceServers;
-        public IceTransportsType iceTransportsType = IceTransportsType.ALL;
-        public Integer iceUnwritableMinChecks;
-        public Integer iceUnwritableTimeMs;
-        public KeyType keyType;
-        public int maxIPv6Networks;
-        public AdapterType networkPreference;
-        public boolean presumeWritableWhenFullyRelayed;
-        @Deprecated
-        public boolean pruneTurnPorts;
-        public RtcpMuxPolicy rtcpMuxPolicy = RtcpMuxPolicy.REQUIRE;
-        public Integer screencastMinBitrate;
-        public SdpSemantics sdpSemantics;
-        public Integer stunCandidateKeepaliveIntervalMs;
-        public boolean surfaceIceCandidatesOnIceTransportTypeChanged;
-        public boolean suspendBelowMinBitrate;
-        public TcpCandidatePolicy tcpCandidatePolicy = TcpCandidatePolicy.ENABLED;
         public TurnCustomizer turnCustomizer;
-        public String turnLoggingId;
-        public PortPrunePolicy turnPortPrunePolicy;
+        public IceTransportsType iceTransportsType = IceTransportsType.ALL;
+        public BundlePolicy bundlePolicy = BundlePolicy.BALANCED;
+        public RtcpMuxPolicy rtcpMuxPolicy = RtcpMuxPolicy.REQUIRE;
+        public TcpCandidatePolicy tcpCandidatePolicy = TcpCandidatePolicy.ENABLED;
+        public CandidateNetworkPolicy candidateNetworkPolicy = CandidateNetworkPolicy.ALL;
+        public int audioJitterBufferMaxPackets = 50;
+        public boolean audioJitterBufferFastAccelerate = false;
+        public int iceConnectionReceivingTimeout = -1;
+        public int iceBackupCandidatePairPingInterval = -1;
+        public KeyType keyType = KeyType.ECDSA;
+        public ContinualGatheringPolicy continualGatheringPolicy = ContinualGatheringPolicy.GATHER_ONCE;
+        public int iceCandidatePoolSize = 0;
+        @Deprecated
+        public boolean pruneTurnPorts = false;
+        public PortPrunePolicy turnPortPrunePolicy = PortPrunePolicy.NO_PRUNE;
+        public boolean presumeWritableWhenFullyRelayed = false;
+        public boolean surfaceIceCandidatesOnIceTransportTypeChanged = false;
+        public Integer iceCheckIntervalStrongConnectivityMs = null;
+        public Integer iceCheckIntervalWeakConnectivityMs = null;
+        public Integer iceCheckMinInterval = null;
+        public Integer iceUnwritableTimeMs = null;
+        public Integer iceUnwritableMinChecks = null;
+        public Integer stunCandidateKeepaliveIntervalMs = null;
+        public boolean disableIPv6OnWifi = false;
+        public int maxIPv6Networks = 5;
+        public boolean disableIpv6 = false;
+        public boolean enableDscp = false;
+        public boolean enableCpuOveruseDetection = true;
+        public boolean enableRtpDataChannel = false;
+        public boolean suspendBelowMinBitrate = false;
+        public Integer screencastMinBitrate = null;
+        public Boolean combinedAudioVideoBwe = null;
+        public Boolean enableDtlsSrtp = null;
+        public AdapterType networkPreference = AdapterType.UNKNOWN;
+        public SdpSemantics sdpSemantics = SdpSemantics.PLAN_B;
+        public boolean activeResetSrtpParams = false;
+        public CryptoOptions cryptoOptions = null;
+        public String turnLoggingId = null;
+        public Boolean allowCodecSwitching = null;
 
         public RTCConfiguration(List<IceServer> list) {
             this.iceServers = list;
-            this.audioJitterBufferMaxPackets = 50;
-            this.audioJitterBufferFastAccelerate = false;
-            this.iceConnectionReceivingTimeout = -1;
-            this.iceBackupCandidatePairPingInterval = -1;
-            this.keyType = KeyType.ECDSA;
-            this.continualGatheringPolicy = ContinualGatheringPolicy.GATHER_ONCE;
-            this.iceCandidatePoolSize = 0;
-            this.pruneTurnPorts = false;
-            this.turnPortPrunePolicy = PortPrunePolicy.NO_PRUNE;
-            this.presumeWritableWhenFullyRelayed = false;
-            this.surfaceIceCandidatesOnIceTransportTypeChanged = false;
-            this.iceCheckIntervalStrongConnectivityMs = null;
-            this.iceCheckIntervalWeakConnectivityMs = null;
-            this.iceCheckMinInterval = null;
-            this.iceUnwritableTimeMs = null;
-            this.iceUnwritableMinChecks = null;
-            this.stunCandidateKeepaliveIntervalMs = null;
-            this.disableIPv6OnWifi = false;
-            this.maxIPv6Networks = 5;
-            this.disableIpv6 = false;
-            this.enableDscp = false;
-            this.enableCpuOveruseDetection = true;
-            this.enableRtpDataChannel = false;
-            this.suspendBelowMinBitrate = false;
-            this.screencastMinBitrate = null;
-            this.combinedAudioVideoBwe = null;
-            this.enableDtlsSrtp = null;
-            this.networkPreference = AdapterType.UNKNOWN;
-            this.sdpSemantics = SdpSemantics.PLAN_B;
-            this.activeResetSrtpParams = false;
-            this.cryptoOptions = null;
-            this.turnLoggingId = null;
-            this.allowCodecSwitching = null;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("RTCConfiguration")
-        public IceTransportsType getIceTransportsType() {
+        IceTransportsType getIceTransportsType() {
             return this.iceTransportsType;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("RTCConfiguration")
-        public List<IceServer> getIceServers() {
+        List<IceServer> getIceServers() {
             return this.iceServers;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("RTCConfiguration")
-        public BundlePolicy getBundlePolicy() {
+        BundlePolicy getBundlePolicy() {
             return this.bundlePolicy;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("RTCConfiguration")
-        public PortPrunePolicy getTurnPortPrunePolicy() {
+        PortPrunePolicy getTurnPortPrunePolicy() {
             return this.turnPortPrunePolicy;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("RTCConfiguration")
-        public RtcCertificatePem getCertificate() {
+        RtcCertificatePem getCertificate() {
             return this.certificate;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("RTCConfiguration")
-        public RtcpMuxPolicy getRtcpMuxPolicy() {
+        RtcpMuxPolicy getRtcpMuxPolicy() {
             return this.rtcpMuxPolicy;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("RTCConfiguration")
-        public TcpCandidatePolicy getTcpCandidatePolicy() {
+        TcpCandidatePolicy getTcpCandidatePolicy() {
             return this.tcpCandidatePolicy;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("RTCConfiguration")
-        public CandidateNetworkPolicy getCandidateNetworkPolicy() {
+        CandidateNetworkPolicy getCandidateNetworkPolicy() {
             return this.candidateNetworkPolicy;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("RTCConfiguration")
-        public int getAudioJitterBufferMaxPackets() {
+        int getAudioJitterBufferMaxPackets() {
             return this.audioJitterBufferMaxPackets;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("RTCConfiguration")
-        public boolean getAudioJitterBufferFastAccelerate() {
+        boolean getAudioJitterBufferFastAccelerate() {
             return this.audioJitterBufferFastAccelerate;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("RTCConfiguration")
-        public int getIceConnectionReceivingTimeout() {
+        int getIceConnectionReceivingTimeout() {
             return this.iceConnectionReceivingTimeout;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("RTCConfiguration")
-        public int getIceBackupCandidatePairPingInterval() {
+        int getIceBackupCandidatePairPingInterval() {
             return this.iceBackupCandidatePairPingInterval;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("RTCConfiguration")
-        public KeyType getKeyType() {
+        KeyType getKeyType() {
             return this.keyType;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("RTCConfiguration")
-        public ContinualGatheringPolicy getContinualGatheringPolicy() {
+        ContinualGatheringPolicy getContinualGatheringPolicy() {
             return this.continualGatheringPolicy;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("RTCConfiguration")
-        public int getIceCandidatePoolSize() {
+        int getIceCandidatePoolSize() {
             return this.iceCandidatePoolSize;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("RTCConfiguration")
-        public boolean getPruneTurnPorts() {
+        boolean getPruneTurnPorts() {
             return this.pruneTurnPorts;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("RTCConfiguration")
-        public boolean getPresumeWritableWhenFullyRelayed() {
+        boolean getPresumeWritableWhenFullyRelayed() {
             return this.presumeWritableWhenFullyRelayed;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("RTCConfiguration")
-        public boolean getSurfaceIceCandidatesOnIceTransportTypeChanged() {
+        boolean getSurfaceIceCandidatesOnIceTransportTypeChanged() {
             return this.surfaceIceCandidatesOnIceTransportTypeChanged;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("RTCConfiguration")
-        public Integer getIceCheckIntervalStrongConnectivity() {
+        Integer getIceCheckIntervalStrongConnectivity() {
             return this.iceCheckIntervalStrongConnectivityMs;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("RTCConfiguration")
-        public Integer getIceCheckIntervalWeakConnectivity() {
+        Integer getIceCheckIntervalWeakConnectivity() {
             return this.iceCheckIntervalWeakConnectivityMs;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("RTCConfiguration")
-        public Integer getIceCheckMinInterval() {
+        Integer getIceCheckMinInterval() {
             return this.iceCheckMinInterval;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("RTCConfiguration")
-        public Integer getIceUnwritableTimeout() {
+        Integer getIceUnwritableTimeout() {
             return this.iceUnwritableTimeMs;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("RTCConfiguration")
-        public Integer getIceUnwritableMinChecks() {
+        Integer getIceUnwritableMinChecks() {
             return this.iceUnwritableMinChecks;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("RTCConfiguration")
-        public Integer getStunCandidateKeepaliveInterval() {
+        Integer getStunCandidateKeepaliveInterval() {
             return this.stunCandidateKeepaliveIntervalMs;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("RTCConfiguration")
-        public boolean getDisableIPv6OnWifi() {
+        boolean getDisableIPv6OnWifi() {
             return this.disableIPv6OnWifi;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("RTCConfiguration")
-        public int getMaxIPv6Networks() {
+        int getMaxIPv6Networks() {
             return this.maxIPv6Networks;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("RTCConfiguration")
-        public TurnCustomizer getTurnCustomizer() {
+        TurnCustomizer getTurnCustomizer() {
             return this.turnCustomizer;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("RTCConfiguration")
-        public boolean getDisableIpv6() {
+        boolean getDisableIpv6() {
             return this.disableIpv6;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("RTCConfiguration")
-        public boolean getEnableDscp() {
+        boolean getEnableDscp() {
             return this.enableDscp;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("RTCConfiguration")
-        public boolean getEnableCpuOveruseDetection() {
+        boolean getEnableCpuOveruseDetection() {
             return this.enableCpuOveruseDetection;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("RTCConfiguration")
-        public boolean getEnableRtpDataChannel() {
+        boolean getEnableRtpDataChannel() {
             return this.enableRtpDataChannel;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("RTCConfiguration")
-        public boolean getSuspendBelowMinBitrate() {
+        boolean getSuspendBelowMinBitrate() {
             return this.suspendBelowMinBitrate;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("RTCConfiguration")
-        public Integer getScreencastMinBitrate() {
+        Integer getScreencastMinBitrate() {
             return this.screencastMinBitrate;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("RTCConfiguration")
-        public Boolean getCombinedAudioVideoBwe() {
+        Boolean getCombinedAudioVideoBwe() {
             return this.combinedAudioVideoBwe;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("RTCConfiguration")
-        public Boolean getEnableDtlsSrtp() {
+        Boolean getEnableDtlsSrtp() {
             return this.enableDtlsSrtp;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("RTCConfiguration")
-        public AdapterType getNetworkPreference() {
+        AdapterType getNetworkPreference() {
             return this.networkPreference;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("RTCConfiguration")
-        public SdpSemantics getSdpSemantics() {
+        SdpSemantics getSdpSemantics() {
             return this.sdpSemantics;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("RTCConfiguration")
-        public boolean getActiveResetSrtpParams() {
+        boolean getActiveResetSrtpParams() {
             return this.activeResetSrtpParams;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("RTCConfiguration")
-        public Boolean getAllowCodecSwitching() {
+        Boolean getAllowCodecSwitching() {
             return this.allowCodecSwitching;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("RTCConfiguration")
-        public CryptoOptions getCryptoOptions() {
+        CryptoOptions getCryptoOptions() {
             return this.cryptoOptions;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("RTCConfiguration")
-        public String getTurnLoggingId() {
+        String getTurnLoggingId() {
             return this.turnLoggingId;
         }
     }
@@ -819,7 +755,8 @@ public class PeerConnection {
         this(nativePeerConnectionFactory.createNativePeerConnection());
     }
 
-    PeerConnection(long j) {
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public PeerConnection(long j) {
         this.localStreams = new ArrayList();
         this.senders = new ArrayList();
         this.receivers = new ArrayList();
@@ -901,8 +838,8 @@ public class PeerConnection {
     }
 
     public List<RtpSender> getSenders() {
-        for (RtpSender dispose : this.senders) {
-            dispose.dispose();
+        for (RtpSender rtpSender : this.senders) {
+            rtpSender.dispose();
         }
         List<RtpSender> nativeGetSenders = nativeGetSenders();
         this.senders = nativeGetSenders;
@@ -910,8 +847,8 @@ public class PeerConnection {
     }
 
     public List<RtpReceiver> getReceivers() {
-        for (RtpReceiver dispose : this.receivers) {
-            dispose.dispose();
+        for (RtpReceiver rtpReceiver : this.receivers) {
+            rtpReceiver.dispose();
         }
         List<RtpReceiver> nativeGetReceivers = nativeGetReceivers();
         this.receivers = nativeGetReceivers;
@@ -919,8 +856,8 @@ public class PeerConnection {
     }
 
     public List<RtpTransceiver> getTransceivers() {
-        for (RtpTransceiver dispose : this.transceivers) {
-            dispose.dispose();
+        for (RtpTransceiver rtpTransceiver : this.transceivers) {
+            rtpTransceiver.dispose();
         }
         List<RtpTransceiver> nativeGetTransceivers = nativeGetTransceivers();
         this.transceivers = nativeGetTransceivers;
@@ -936,18 +873,18 @@ public class PeerConnection {
             throw new NullPointerException("No MediaStreamTrack specified in addTrack.");
         }
         RtpSender nativeAddTrack = nativeAddTrack(mediaStreamTrack.getNativeMediaStreamTrack(), list);
-        if (nativeAddTrack != null) {
-            this.senders.add(nativeAddTrack);
-            return nativeAddTrack;
+        if (nativeAddTrack == null) {
+            throw new IllegalStateException("C++ addTrack failed.");
         }
-        throw new IllegalStateException("C++ addTrack failed.");
+        this.senders.add(nativeAddTrack);
+        return nativeAddTrack;
     }
 
     public boolean removeTrack(RtpSender rtpSender) {
-        if (rtpSender != null) {
-            return nativeRemoveTrack(rtpSender.getNativeRtpSender());
+        if (rtpSender == null) {
+            throw new NullPointerException("No RtpSender specified for removeTrack.");
         }
-        throw new NullPointerException("No RtpSender specified for removeTrack.");
+        return nativeRemoveTrack(rtpSender.getNativeRtpSender());
     }
 
     public RtpTransceiver addTransceiver(MediaStreamTrack mediaStreamTrack) {
@@ -955,18 +892,18 @@ public class PeerConnection {
     }
 
     public RtpTransceiver addTransceiver(MediaStreamTrack mediaStreamTrack, RtpTransceiver.RtpTransceiverInit rtpTransceiverInit) {
-        if (mediaStreamTrack != null) {
-            if (rtpTransceiverInit == null) {
-                rtpTransceiverInit = new RtpTransceiver.RtpTransceiverInit();
-            }
-            RtpTransceiver nativeAddTransceiverWithTrack = nativeAddTransceiverWithTrack(mediaStreamTrack.getNativeMediaStreamTrack(), rtpTransceiverInit);
-            if (nativeAddTransceiverWithTrack != null) {
-                this.transceivers.add(nativeAddTransceiverWithTrack);
-                return nativeAddTransceiverWithTrack;
-            }
+        if (mediaStreamTrack == null) {
+            throw new NullPointerException("No MediaStreamTrack specified for addTransceiver.");
+        }
+        if (rtpTransceiverInit == null) {
+            rtpTransceiverInit = new RtpTransceiver.RtpTransceiverInit();
+        }
+        RtpTransceiver nativeAddTransceiverWithTrack = nativeAddTransceiverWithTrack(mediaStreamTrack.getNativeMediaStreamTrack(), rtpTransceiverInit);
+        if (nativeAddTransceiverWithTrack == null) {
             throw new IllegalStateException("C++ addTransceiver failed.");
         }
-        throw new NullPointerException("No MediaStreamTrack specified for addTransceiver.");
+        this.transceivers.add(nativeAddTransceiverWithTrack);
+        return nativeAddTransceiverWithTrack;
     }
 
     public RtpTransceiver addTransceiver(MediaStreamTrack.MediaType mediaType) {
@@ -974,23 +911,23 @@ public class PeerConnection {
     }
 
     public RtpTransceiver addTransceiver(MediaStreamTrack.MediaType mediaType, RtpTransceiver.RtpTransceiverInit rtpTransceiverInit) {
-        if (mediaType != null) {
-            if (rtpTransceiverInit == null) {
-                rtpTransceiverInit = new RtpTransceiver.RtpTransceiverInit();
-            }
-            RtpTransceiver nativeAddTransceiverOfType = nativeAddTransceiverOfType(mediaType, rtpTransceiverInit);
-            if (nativeAddTransceiverOfType != null) {
-                this.transceivers.add(nativeAddTransceiverOfType);
-                return nativeAddTransceiverOfType;
-            }
+        if (mediaType == null) {
+            throw new NullPointerException("No MediaType specified for addTransceiver.");
+        }
+        if (rtpTransceiverInit == null) {
+            rtpTransceiverInit = new RtpTransceiver.RtpTransceiverInit();
+        }
+        RtpTransceiver nativeAddTransceiverOfType = nativeAddTransceiverOfType(mediaType, rtpTransceiverInit);
+        if (nativeAddTransceiverOfType == null) {
             throw new IllegalStateException("C++ addTransceiver failed.");
         }
-        throw new NullPointerException("No MediaType specified for addTransceiver.");
+        this.transceivers.add(nativeAddTransceiverOfType);
+        return nativeAddTransceiverOfType;
     }
 
     @Deprecated
     public boolean getStats(StatsObserver statsObserver, MediaStreamTrack mediaStreamTrack) {
-        return nativeOldGetStats(statsObserver, mediaStreamTrack == null ? 0 : mediaStreamTrack.getNativeMediaStreamTrack());
+        return nativeOldGetStats(statsObserver, mediaStreamTrack == null ? 0L : mediaStreamTrack.getNativeMediaStreamTrack());
     }
 
     public void getStats(RTCStatsCollectorCallback rTCStatsCollectorCallback) {
@@ -1031,20 +968,20 @@ public class PeerConnection {
 
     public void dispose() {
         close();
-        for (MediaStream next : this.localStreams) {
-            nativeRemoveLocalStream(next.getNativeMediaStream());
-            next.dispose();
+        for (MediaStream mediaStream : this.localStreams) {
+            nativeRemoveLocalStream(mediaStream.getNativeMediaStream());
+            mediaStream.dispose();
         }
         this.localStreams.clear();
-        for (RtpSender dispose : this.senders) {
-            dispose.dispose();
+        for (RtpSender rtpSender : this.senders) {
+            rtpSender.dispose();
         }
         this.senders.clear();
-        for (RtpReceiver dispose2 : this.receivers) {
-            dispose2.dispose();
+        for (RtpReceiver rtpReceiver : this.receivers) {
+            rtpReceiver.dispose();
         }
-        for (RtpTransceiver dispose3 : this.transceivers) {
-            dispose3.dispose();
+        for (RtpTransceiver rtpTransceiver : this.transceivers) {
+            rtpTransceiver.dispose();
         }
         this.transceivers.clear();
         this.receivers.clear();
@@ -1055,9 +992,8 @@ public class PeerConnection {
         return nativeGetNativePeerConnection();
     }
 
-    /* access modifiers changed from: package-private */
     @CalledByNative
-    public long getNativeOwnedPeerConnection() {
+    long getNativeOwnedPeerConnection() {
         return this.nativePeerConnection;
     }
 

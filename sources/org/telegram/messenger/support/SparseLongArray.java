@@ -1,5 +1,5 @@
 package org.telegram.messenger.support;
-
+/* loaded from: classes.dex */
 public class SparseLongArray implements Cloneable {
     private int[] mKeys;
     private int mSize;
@@ -26,26 +26,23 @@ public class SparseLongArray implements Cloneable {
                 return sparseLongArray2;
             } catch (CloneNotSupportedException unused) {
                 sparseLongArray = sparseLongArray2;
+                return sparseLongArray;
             }
         } catch (CloneNotSupportedException unused2) {
-            return sparseLongArray;
         }
     }
 
     public long get(int i) {
-        return get(i, 0);
+        return get(i, 0L);
     }
 
     public long get(int i, long j) {
-        int binarySearch = binarySearch(this.mKeys, 0, this.mSize, (long) i);
-        if (binarySearch < 0) {
-            return j;
-        }
-        return this.mValues[binarySearch];
+        int binarySearch = binarySearch(this.mKeys, 0, this.mSize, i);
+        return binarySearch < 0 ? j : this.mValues[binarySearch];
     }
 
     public void delete(int i) {
-        int binarySearch = binarySearch(this.mKeys, 0, this.mSize, (long) i);
+        int binarySearch = binarySearch(this.mKeys, 0, this.mSize, i);
         if (binarySearch >= 0) {
             removeAt(binarySearch);
         }
@@ -61,12 +58,12 @@ public class SparseLongArray implements Cloneable {
     }
 
     public void put(int i, long j) {
-        int binarySearch = binarySearch(this.mKeys, 0, this.mSize, (long) i);
+        int binarySearch = binarySearch(this.mKeys, 0, this.mSize, i);
         if (binarySearch >= 0) {
             this.mValues[binarySearch] = j;
             return;
         }
-        int i2 = binarySearch ^ -1;
+        int i2 = binarySearch ^ (-1);
         int i3 = this.mSize;
         if (i3 >= this.mKeys.length) {
             growKeyAndValueArrays(i3 + 1);
@@ -97,7 +94,7 @@ public class SparseLongArray implements Cloneable {
     }
 
     public int indexOfKey(int i) {
-        return binarySearch(this.mKeys, 0, this.mSize, (long) i);
+        return binarySearch(this.mKeys, 0, this.mSize, i);
     }
 
     public int indexOfValue(long j) {
@@ -115,16 +112,16 @@ public class SparseLongArray implements Cloneable {
 
     public void append(int i, long j) {
         int i2 = this.mSize;
-        if (i2 == 0 || i > this.mKeys[i2 - 1]) {
-            if (i2 >= this.mKeys.length) {
-                growKeyAndValueArrays(i2 + 1);
-            }
-            this.mKeys[i2] = i;
-            this.mValues[i2] = j;
-            this.mSize = i2 + 1;
+        if (i2 != 0 && i <= this.mKeys[i2 - 1]) {
+            put(i, j);
             return;
         }
-        put(i, j);
+        if (i2 >= this.mKeys.length) {
+            growKeyAndValueArrays(i2 + 1);
+        }
+        this.mKeys[i2] = i;
+        this.mValues[i2] = j;
+        this.mSize = i2 + 1;
     }
 
     private void growKeyAndValueArrays(int i) {
@@ -145,15 +142,12 @@ public class SparseLongArray implements Cloneable {
         int i5 = i3;
         while (i5 - i4 > 1) {
             int i6 = (i5 + i4) / 2;
-            if (((long) iArr[i6]) < j) {
+            if (iArr[i6] < j) {
                 i4 = i6;
             } else {
                 i5 = i6;
             }
         }
-        if (i5 == i3) {
-            return i3 ^ -1;
-        }
-        return ((long) iArr[i5]) == j ? i5 : i5 ^ -1;
+        return i5 == i3 ? i3 ^ (-1) : ((long) iArr[i5]) == j ? i5 : i5 ^ (-1);
     }
 }

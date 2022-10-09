@@ -1,88 +1,16 @@
 package org.webrtc;
 
+import org.webrtc.VideoProcessor;
+import org.webrtc.VideoSink;
+/* loaded from: classes3.dex */
 public class VideoSource extends MediaSource {
-    private final CapturerObserver capturerObserver = new CapturerObserver() {
-        public void onCapturerStarted(boolean z) {
-            VideoSource.this.nativeAndroidVideoTrackSource.setState(z);
-            synchronized (VideoSource.this.videoProcessorLock) {
-                boolean unused = VideoSource.this.isCapturerRunning = z;
-                if (VideoSource.this.videoProcessor != null) {
-                    VideoSource.this.videoProcessor.onCapturerStarted(z);
-                }
-            }
-        }
+    private final CapturerObserver capturerObserver;
+    private boolean isCapturerRunning;
+    private final NativeAndroidVideoTrackSource nativeAndroidVideoTrackSource;
+    private VideoProcessor videoProcessor;
+    private final Object videoProcessorLock;
 
-        public void onCapturerStopped() {
-            VideoSource.this.nativeAndroidVideoTrackSource.setState(false);
-            synchronized (VideoSource.this.videoProcessorLock) {
-                boolean unused = VideoSource.this.isCapturerRunning = false;
-                if (VideoSource.this.videoProcessor != null) {
-                    VideoSource.this.videoProcessor.onCapturerStopped();
-                }
-            }
-        }
-
-        /* JADX WARNING: Code restructure failed: missing block: B:10:0x0029, code lost:
-            if (r4 == null) goto L_?;
-         */
-        /* JADX WARNING: Code restructure failed: missing block: B:11:0x002b, code lost:
-            org.webrtc.VideoSource.access$000(r3.this$0).onFrameCaptured(r4);
-            r4.release();
-         */
-        /* JADX WARNING: Code restructure failed: missing block: B:19:?, code lost:
-            return;
-         */
-        /* JADX WARNING: Code restructure failed: missing block: B:20:?, code lost:
-            return;
-         */
-        /* JADX WARNING: Code restructure failed: missing block: B:9:0x0025, code lost:
-            r4 = org.webrtc.VideoProcessor.CC.applyFrameAdaptationParameters(r4, r0);
-         */
-        /* Code decompiled incorrectly, please refer to instructions dump. */
-        public void onFrameCaptured(org.webrtc.VideoFrame r4) {
-            /*
-                r3 = this;
-                org.webrtc.VideoSource r0 = org.webrtc.VideoSource.this
-                org.webrtc.NativeAndroidVideoTrackSource r0 = r0.nativeAndroidVideoTrackSource
-                org.webrtc.VideoProcessor$FrameAdaptationParameters r0 = r0.adaptFrame(r4)
-                org.webrtc.VideoSource r1 = org.webrtc.VideoSource.this
-                java.lang.Object r1 = r1.videoProcessorLock
-                monitor-enter(r1)
-                org.webrtc.VideoSource r2 = org.webrtc.VideoSource.this     // Catch:{ all -> 0x0038 }
-                org.webrtc.VideoProcessor r2 = r2.videoProcessor     // Catch:{ all -> 0x0038 }
-                if (r2 == 0) goto L_0x0024
-                org.webrtc.VideoSource r2 = org.webrtc.VideoSource.this     // Catch:{ all -> 0x0038 }
-                org.webrtc.VideoProcessor r2 = r2.videoProcessor     // Catch:{ all -> 0x0038 }
-                r2.onFrameCaptured(r4, r0)     // Catch:{ all -> 0x0038 }
-                monitor-exit(r1)     // Catch:{ all -> 0x0038 }
-                return
-            L_0x0024:
-                monitor-exit(r1)     // Catch:{ all -> 0x0038 }
-                org.webrtc.VideoFrame r4 = org.webrtc.VideoProcessor.CC.applyFrameAdaptationParameters(r4, r0)
-                if (r4 == 0) goto L_0x0037
-                org.webrtc.VideoSource r0 = org.webrtc.VideoSource.this
-                org.webrtc.NativeAndroidVideoTrackSource r0 = r0.nativeAndroidVideoTrackSource
-                r0.onFrameCaptured(r4)
-                r4.release()
-            L_0x0037:
-                return
-            L_0x0038:
-                r4 = move-exception
-                monitor-exit(r1)     // Catch:{ all -> 0x0038 }
-                throw r4
-            */
-            throw new UnsupportedOperationException("Method not decompiled: org.webrtc.VideoSource.AnonymousClass1.onFrameCaptured(org.webrtc.VideoFrame):void");
-        }
-    };
-    /* access modifiers changed from: private */
-    public boolean isCapturerRunning;
-    /* access modifiers changed from: private */
-    public final NativeAndroidVideoTrackSource nativeAndroidVideoTrackSource;
-    /* access modifiers changed from: private */
-    public VideoProcessor videoProcessor;
-    /* access modifiers changed from: private */
-    public final Object videoProcessorLock = new Object();
-
+    /* loaded from: classes3.dex */
     public static class AspectRatio {
         public static final AspectRatio UNDEFINED = new AspectRatio(0, 0);
         public final int height;
@@ -96,6 +24,47 @@ public class VideoSource extends MediaSource {
 
     public VideoSource(long j) {
         super(j);
+        this.videoProcessorLock = new Object();
+        this.capturerObserver = new CapturerObserver() { // from class: org.webrtc.VideoSource.1
+            @Override // org.webrtc.CapturerObserver
+            public void onCapturerStarted(boolean z) {
+                VideoSource.this.nativeAndroidVideoTrackSource.setState(z);
+                synchronized (VideoSource.this.videoProcessorLock) {
+                    VideoSource.this.isCapturerRunning = z;
+                    if (VideoSource.this.videoProcessor != null) {
+                        VideoSource.this.videoProcessor.onCapturerStarted(z);
+                    }
+                }
+            }
+
+            @Override // org.webrtc.CapturerObserver
+            public void onCapturerStopped() {
+                VideoSource.this.nativeAndroidVideoTrackSource.setState(false);
+                synchronized (VideoSource.this.videoProcessorLock) {
+                    VideoSource.this.isCapturerRunning = false;
+                    if (VideoSource.this.videoProcessor != null) {
+                        VideoSource.this.videoProcessor.onCapturerStopped();
+                    }
+                }
+            }
+
+            @Override // org.webrtc.CapturerObserver
+            public void onFrameCaptured(VideoFrame videoFrame) {
+                VideoProcessor.FrameAdaptationParameters adaptFrame = VideoSource.this.nativeAndroidVideoTrackSource.adaptFrame(videoFrame);
+                synchronized (VideoSource.this.videoProcessorLock) {
+                    if (VideoSource.this.videoProcessor != null) {
+                        VideoSource.this.videoProcessor.onFrameCaptured(videoFrame, adaptFrame);
+                        return;
+                    }
+                    VideoFrame applyFrameAdaptationParameters = VideoProcessor.CC.applyFrameAdaptationParameters(videoFrame, adaptFrame);
+                    if (applyFrameAdaptationParameters == null) {
+                        return;
+                    }
+                    VideoSource.this.nativeAndroidVideoTrackSource.onFrameCaptured(applyFrameAdaptationParameters);
+                    applyFrameAdaptationParameters.release();
+                }
+            }
+        };
         this.nativeAndroidVideoTrackSource = new NativeAndroidVideoTrackSource(j);
     }
 
@@ -117,46 +86,62 @@ public class VideoSource extends MediaSource {
         this.nativeAndroidVideoTrackSource.setIsScreencast(z);
     }
 
-    public void setVideoProcessor(VideoProcessor videoProcessor2) {
+    public void setVideoProcessor(VideoProcessor videoProcessor) {
         synchronized (this.videoProcessorLock) {
-            VideoProcessor videoProcessor3 = this.videoProcessor;
-            if (videoProcessor3 != null) {
-                videoProcessor3.setSink((VideoSink) null);
+            VideoProcessor videoProcessor2 = this.videoProcessor;
+            if (videoProcessor2 != null) {
+                videoProcessor2.setSink(null);
                 if (this.isCapturerRunning) {
                     this.videoProcessor.onCapturerStopped();
                 }
             }
-            this.videoProcessor = videoProcessor2;
-            if (videoProcessor2 != null) {
-                videoProcessor2.setSink(new VideoSource$$ExternalSyntheticLambda1(this));
+            this.videoProcessor = videoProcessor;
+            if (videoProcessor != null) {
+                videoProcessor.setSink(new VideoSink() { // from class: org.webrtc.VideoSource$$ExternalSyntheticLambda1
+                    @Override // org.webrtc.VideoSink
+                    public final void onFrame(VideoFrame videoFrame) {
+                        VideoSource.this.lambda$setVideoProcessor$1(videoFrame);
+                    }
+
+                    @Override // org.webrtc.VideoSink
+                    public /* synthetic */ void setParentSink(VideoSink videoSink) {
+                        VideoSink.CC.$default$setParentSink(this, videoSink);
+                    }
+                });
                 if (this.isCapturerRunning) {
-                    videoProcessor2.onCapturerStarted(true);
+                    videoProcessor.onCapturerStarted(true);
                 }
             }
         }
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$setVideoProcessor$0(VideoFrame videoFrame) {
         this.nativeAndroidVideoTrackSource.onFrameCaptured(videoFrame);
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$setVideoProcessor$1(VideoFrame videoFrame) {
-        runWithReference(new VideoSource$$ExternalSyntheticLambda0(this, videoFrame));
+    /* JADX INFO: Access modifiers changed from: private */
+    public /* synthetic */ void lambda$setVideoProcessor$1(final VideoFrame videoFrame) {
+        runWithReference(new Runnable() { // from class: org.webrtc.VideoSource$$ExternalSyntheticLambda0
+            @Override // java.lang.Runnable
+            public final void run() {
+                VideoSource.this.lambda$setVideoProcessor$0(videoFrame);
+            }
+        });
     }
 
     public CapturerObserver getCapturerObserver() {
         return this.capturerObserver;
     }
 
-    /* access modifiers changed from: package-private */
+    /* JADX INFO: Access modifiers changed from: package-private */
     public long getNativeVideoTrackSource() {
         return getNativeMediaSource();
     }
 
+    @Override // org.webrtc.MediaSource
     public void dispose() {
-        setVideoProcessor((VideoProcessor) null);
+        setVideoProcessor(null);
         super.dispose();
     }
 }

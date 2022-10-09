@@ -1,9 +1,10 @@
 package j$.time.format;
-
+/* loaded from: classes2.dex */
 final class m implements g {
     private final String a;
 
-    m(String str) {
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public m(String str) {
         this.a = str;
     }
 

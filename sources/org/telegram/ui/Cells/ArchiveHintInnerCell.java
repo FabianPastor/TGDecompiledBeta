@@ -11,7 +11,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
-
+/* loaded from: classes3.dex */
 public class ArchiveHintInnerCell extends FrameLayout {
     private TextView headerTextView;
     private ImageView imageView;
@@ -20,9 +20,9 @@ public class ArchiveHintInnerCell extends FrameLayout {
 
     public ArchiveHintInnerCell(Context context, int i) {
         super(context);
-        ImageView imageView3 = new ImageView(context);
-        this.imageView = imageView3;
-        imageView3.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chats_nameMessage_threeLines"), PorterDuff.Mode.MULTIPLY));
+        ImageView imageView = new ImageView(context);
+        this.imageView = imageView;
+        imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chats_nameMessage_threeLines"), PorterDuff.Mode.MULTIPLY));
         TextView textView = new TextView(context);
         this.headerTextView = textView;
         textView.setTextColor(Theme.getColor("chats_nameMessage_threeLines"));
@@ -38,9 +38,9 @@ public class ArchiveHintInnerCell extends FrameLayout {
         addView(this.messageTextView, LayoutHelper.createFrame(-1, -2.0f, 51, 52.0f, 110.0f, 52.0f, 0.0f));
         if (i == 0) {
             addView(this.imageView, LayoutHelper.createFrame(-2, -2.0f, 49, 0.0f, 20.0f, 8.0f, 0.0f));
-            ImageView imageView4 = new ImageView(context);
-            this.imageView2 = imageView4;
-            imageView4.setImageResource(R.drawable.chats_archive_arrow);
+            ImageView imageView2 = new ImageView(context);
+            this.imageView2 = imageView2;
+            imageView2.setImageResource(R.drawable.chats_archive_arrow);
             this.imageView2.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chats_unreadCounter"), PorterDuff.Mode.MULTIPLY));
             addView(this.imageView2, LayoutHelper.createFrame(-2, -2.0f, 49, 0.0f, 20.0f, 8.0f, 0.0f));
             this.headerTextView.setText(LocaleController.getString("ArchiveHintHeader1", R.string.ArchiveHintHeader1));
@@ -51,7 +51,8 @@ public class ArchiveHintInnerCell extends FrameLayout {
             this.headerTextView.setText(LocaleController.getString("ArchiveHintHeader2", R.string.ArchiveHintHeader2));
             this.messageTextView.setText(LocaleController.getString("ArchiveHintText2", R.string.ArchiveHintText2));
             this.imageView.setImageResource(R.drawable.chats_archive_muted);
-        } else if (i == 2) {
+        } else if (i != 2) {
+        } else {
             addView(this.imageView, LayoutHelper.createFrame(-2, -2.0f, 49, 0.0f, 18.0f, 0.0f, 0.0f));
             this.headerTextView.setText(LocaleController.getString("ArchiveHintHeader3", R.string.ArchiveHintHeader3));
             this.messageTextView.setText(LocaleController.getString("ArchiveHintText3", R.string.ArchiveHintText3));

@@ -1,24 +1,28 @@
 package j$.util.stream;
 
-import j$.lang.e;
-import j$.util.CLASSNAMEa;
+import j$.util.AbstractCLASSNAMEa;
 import j$.util.u;
-import j$.util.w;
+import j$.wrappers.CLASSNAMEh;
 import java.util.Arrays;
 import java.util.Comparator;
-
-abstract class Z3 extends CLASSNAMEe implements Iterable, e {
-    Object e = c(16);
+import java.util.Spliterator;
+/* JADX INFO: Access modifiers changed from: package-private */
+/* loaded from: classes2.dex */
+public abstract class Z3 extends AbstractCLASSNAMEe implements Iterable, j$.lang.e {
+    Object e;
     Object[] f;
 
-    abstract class a implements w {
+    /* JADX INFO: Access modifiers changed from: package-private */
+    /* loaded from: classes2.dex */
+    public abstract class a implements j$.util.w {
         int a;
         final int b;
         int c;
         final int d;
         Object e;
 
-        a(int i, int i2, int i3, int i4) {
+        /* JADX INFO: Access modifiers changed from: package-private */
+        public a(int i, int i2, int i3, int i4) {
             this.a = i;
             this.b = i2;
             this.c = i3;
@@ -27,26 +31,27 @@ abstract class Z3 extends CLASSNAMEe implements Iterable, e {
             this.e = objArr == null ? Z3.this.e : objArr[i];
         }
 
-        /* access modifiers changed from: package-private */
-        public abstract void a(Object obj, int i, Object obj2);
+        abstract void a(Object obj, int i, Object obj2);
 
+        @Override // j$.util.u
         public int characteristics() {
             return 16464;
         }
 
+        @Override // j$.util.u
         public long estimateSize() {
             int i = this.a;
             int i2 = this.b;
             if (i == i2) {
-                return ((long) this.d) - ((long) this.c);
+                return this.d - this.c;
             }
             long[] jArr = Z3.this.d;
-            return ((jArr[i2] + ((long) this.d)) - jArr[i]) - ((long) this.c);
+            return ((jArr[i2] + this.d) - jArr[i]) - this.c;
         }
 
-        /* access modifiers changed from: package-private */
-        public abstract w f(Object obj, int i, int i2);
+        abstract j$.util.w f(Object obj, int i, int i2);
 
+        @Override // j$.util.w
         /* renamed from: forEachRemaining */
         public void e(Object obj) {
             int i;
@@ -72,52 +77,75 @@ abstract class Z3 extends CLASSNAMEe implements Iterable, e {
             }
         }
 
+        @Override // j$.util.u
         public Comparator getComparator() {
             throw new IllegalStateException();
         }
 
+        @Override // j$.util.u
         public /* synthetic */ long getExactSizeIfKnown() {
-            return CLASSNAMEa.e(this);
+            return AbstractCLASSNAMEa.e(this);
         }
 
-        /* access modifiers changed from: package-private */
-        public abstract w h(int i, int i2, int i3, int i4);
+        abstract j$.util.w h(int i, int i2, int i3, int i4);
 
+        @Override // j$.util.u
         public /* synthetic */ boolean hasCharacteristics(int i) {
-            return CLASSNAMEa.f(this, i);
+            return AbstractCLASSNAMEa.f(this, i);
         }
 
+        @Override // j$.util.w
         /* renamed from: tryAdvance */
         public boolean k(Object obj) {
             obj.getClass();
             int i = this.a;
             int i2 = this.b;
-            if (i >= i2 && (i != i2 || this.c >= this.d)) {
-                return false;
-            }
-            Object obj2 = this.e;
-            int i3 = this.c;
-            this.c = i3 + 1;
-            a(obj2, i3, obj);
-            if (this.c == Z3.this.u(this.e)) {
-                this.c = 0;
-                int i4 = this.a + 1;
-                this.a = i4;
-                Object[] objArr = Z3.this.f;
-                if (objArr != null && i4 <= this.b) {
-                    this.e = objArr[i4];
+            if (i < i2 || (i == i2 && this.c < this.d)) {
+                Object obj2 = this.e;
+                int i3 = this.c;
+                this.c = i3 + 1;
+                a(obj2, i3, obj);
+                if (this.c == Z3.this.u(this.e)) {
+                    this.c = 0;
+                    int i4 = this.a + 1;
+                    this.a = i4;
+                    Object[] objArr = Z3.this.f;
+                    if (objArr != null && i4 <= this.b) {
+                        this.e = objArr[i4];
+                    }
                 }
+                return true;
             }
-            return true;
+            return false;
         }
 
-        public w trySplit() {
+        @Override // j$.util.w, j$.util.u
+        /* renamed from: trySplit */
+        public /* bridge */ /* synthetic */ j$.util.t mo322trySplit() {
+            return (j$.util.t) mo322trySplit();
+        }
+
+        @Override // j$.util.w, j$.util.u
+        /* renamed from: trySplit  reason: collision with other method in class */
+        public /* bridge */ /* synthetic */ u.a mo322trySplit() {
+            return (u.a) mo322trySplit();
+        }
+
+        @Override // j$.util.w, j$.util.u
+        /* renamed from: trySplit  reason: collision with other method in class */
+        public /* bridge */ /* synthetic */ j$.util.v mo322trySplit() {
+            return (j$.util.v) mo322trySplit();
+        }
+
+        @Override // j$.util.w, j$.util.u
+        /* renamed from: trySplit */
+        public j$.util.w mo322trySplit() {
             int i = this.a;
             int i2 = this.b;
             if (i < i2) {
                 int i3 = this.c;
                 Z3 z3 = Z3.this;
-                w h = h(i, i2 - 1, i3, z3.u(z3.f[i2 - 1]));
+                j$.util.w h = h(i, i2 - 1, i3, z3.u(z3.f[i2 - 1]));
                 int i4 = this.b;
                 this.a = i4;
                 this.c = 0;
@@ -132,18 +160,22 @@ abstract class Z3 extends CLASSNAMEe implements Iterable, e {
                 if (i7 == 0) {
                     return null;
                 }
-                w f2 = f(this.e, i6, i7);
+                j$.util.w f = f(this.e, i6, i7);
                 this.c += i7;
-                return f2;
+                return f;
             }
         }
     }
 
-    Z3() {
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public Z3() {
+        this.e = c(16);
     }
 
-    Z3(int i) {
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public Z3(int i) {
         super(i);
+        this.e = c(1 << this.a);
     }
 
     private void y() {
@@ -155,7 +187,7 @@ abstract class Z3 extends CLASSNAMEe implements Iterable, e {
         }
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
     public void A() {
         if (this.b == u(this.e)) {
             y();
@@ -174,6 +206,7 @@ abstract class Z3 extends CLASSNAMEe implements Iterable, e {
 
     public abstract Object c(int i);
 
+    @Override // j$.util.stream.AbstractCLASSNAMEe
     public void clear() {
         Object[] objArr = this.f;
         if (objArr != null) {
@@ -186,23 +219,25 @@ abstract class Z3 extends CLASSNAMEe implements Iterable, e {
     }
 
     public void d(Object obj, int i) {
-        long j = (long) i;
+        long j = i;
         long count = count() + j;
-        if (count > ((long) u(obj)) || count < j) {
+        if (count > u(obj) || count < j) {
             throw new IndexOutOfBoundsException("does not fit");
-        } else if (this.c == 0) {
-            System.arraycopy(this.e, 0, obj, i, this.b);
-        } else {
-            for (int i2 = 0; i2 < this.c; i2++) {
-                Object[] objArr = this.f;
-                System.arraycopy(objArr[i2], 0, obj, i, u(objArr[i2]));
-                i += u(this.f[i2]);
-            }
-            int i3 = this.b;
-            if (i3 > 0) {
-                System.arraycopy(this.e, 0, obj, i, i3);
-            }
         }
+        if (this.c == 0) {
+            System.arraycopy(this.e, 0, obj, i, this.b);
+            return;
+        }
+        for (int i2 = 0; i2 < this.c; i2++) {
+            Object[] objArr = this.f;
+            System.arraycopy(objArr[i2], 0, obj, i, u(objArr[i2]));
+            i += u(this.f[i2]);
+        }
+        int i3 = this.b;
+        if (i3 <= 0) {
+            return;
+        }
+        System.arraycopy(this.e, 0, obj, i, i3);
     }
 
     public Object e() {
@@ -223,70 +258,72 @@ abstract class Z3 extends CLASSNAMEe implements Iterable, e {
         t(this.e, 0, this.b, obj);
     }
 
-    public abstract u spliterator();
+    /* renamed from: spliterator */
+    public abstract j$.util.u mo289spliterator();
 
-    /* access modifiers changed from: protected */
-    public abstract void t(Object obj, int i, int i2, Object obj2);
-
-    /* access modifiers changed from: protected */
-    public abstract int u(Object obj);
-
-    /* access modifiers changed from: protected */
-    public long v() {
-        int i = this.c;
-        if (i == 0) {
-            return (long) u(this.e);
-        }
-        return ((long) u(this.f[i])) + this.d[i];
+    @Override // java.lang.Iterable, j$.lang.e
+    /* renamed from: spliterator  reason: collision with other method in class */
+    public /* synthetic */ Spliterator mo289spliterator() {
+        return CLASSNAMEh.a(mo289spliterator());
     }
 
-    /* access modifiers changed from: protected */
+    protected abstract void t(Object obj, int i, int i2, Object obj2);
+
+    protected abstract int u(Object obj);
+
+    protected long v() {
+        int i = this.c;
+        if (i == 0) {
+            return u(this.e);
+        }
+        return u(this.f[i]) + this.d[i];
+    }
+
+    /* JADX INFO: Access modifiers changed from: protected */
     public int w(long j) {
         if (this.c == 0) {
-            if (j < ((long) this.b)) {
-                return 0;
+            if (j >= this.b) {
+                throw new IndexOutOfBoundsException(Long.toString(j));
             }
+            return 0;
+        } else if (j >= count()) {
             throw new IndexOutOfBoundsException(Long.toString(j));
-        } else if (j < count()) {
+        } else {
             for (int i = 0; i <= this.c; i++) {
-                if (j < this.d[i] + ((long) u(this.f[i]))) {
+                if (j < this.d[i] + u(this.f[i])) {
                     return i;
                 }
             }
             throw new IndexOutOfBoundsException(Long.toString(j));
-        } else {
-            throw new IndexOutOfBoundsException(Long.toString(j));
         }
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
     public final void x(long j) {
+        int i;
         long v = v();
         if (j > v) {
             y();
-            int i = this.c;
+            int i2 = this.c;
             while (true) {
-                i++;
-                if (j > v) {
-                    Object[] objArr = this.f;
-                    if (i >= objArr.length) {
-                        int length = objArr.length * 2;
-                        this.f = Arrays.copyOf(objArr, length);
-                        this.d = Arrays.copyOf(this.d, length);
-                    }
-                    int s = s(i);
-                    this.f[i] = c(s);
-                    long[] jArr = this.d;
-                    int i2 = i - 1;
-                    jArr[i] = jArr[i2] + ((long) u(this.f[i2]));
-                    v += (long) s;
-                } else {
+                i2++;
+                if (j <= v) {
                     return;
                 }
+                Object[] objArr = this.f;
+                if (i2 >= objArr.length) {
+                    int length = objArr.length * 2;
+                    this.f = Arrays.copyOf(objArr, length);
+                    this.d = Arrays.copyOf(this.d, length);
+                }
+                int s = s(i2);
+                this.f[i2] = c(s);
+                long[] jArr = this.d;
+                jArr[i2] = jArr[i2 - 1] + u(this.f[i]);
+                v += s;
             }
         }
     }
 
-    /* access modifiers changed from: protected */
-    public abstract Object[] z(int i);
+    protected abstract Object[] z(int i);
 }

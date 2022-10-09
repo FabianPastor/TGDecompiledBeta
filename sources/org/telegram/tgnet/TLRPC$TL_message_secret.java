@@ -1,14 +1,14 @@
 package org.telegram.tgnet;
 
 import android.text.TextUtils;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_message_secret extends TLRPC$TL_message {
     public static int constructor = NUM;
 
+    @Override // org.telegram.tgnet.TLRPC$TL_message, org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
-        int i = 0;
         this.unread = (readInt32 & 1) != 0;
         this.out = (readInt32 & 2) != 0;
         this.mentioned = (readInt32 & 16) != 0;
@@ -17,7 +17,7 @@ public class TLRPC$TL_message_secret extends TLRPC$TL_message {
         this.ttl = abstractSerializedData.readInt32(z);
         TLRPC$TL_peerUser tLRPC$TL_peerUser = new TLRPC$TL_peerUser();
         this.from_id = tLRPC$TL_peerUser;
-        tLRPC$TL_peerUser.user_id = (long) abstractSerializedData.readInt32(z);
+        tLRPC$TL_peerUser.user_id = abstractSerializedData.readInt32(z);
         this.peer_id = TLRPC$Peer.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         this.date = abstractSerializedData.readInt32(z);
         this.message = abstractSerializedData.readString(z);
@@ -27,42 +27,44 @@ public class TLRPC$TL_message_secret extends TLRPC$TL_message {
             this.message = this.media.captionLegacy;
         }
         int readInt322 = abstractSerializedData.readInt32(z);
-        if (readInt322 == NUM) {
-            int readInt323 = abstractSerializedData.readInt32(z);
-            while (i < readInt323) {
-                TLRPC$MessageEntity TLdeserialize2 = TLRPC$MessageEntity.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
-                if (TLdeserialize2 != null) {
-                    this.entities.add(TLdeserialize2);
-                    i++;
-                } else {
-                    return;
-                }
+        if (readInt322 != NUM) {
+            if (z) {
+                throw new RuntimeException(String.format("wrong Vector magic, got %x", Integer.valueOf(readInt322)));
             }
-            if ((this.flags & 2048) != 0) {
-                this.via_bot_name = abstractSerializedData.readString(z);
-            }
-            if ((this.flags & 8) != 0) {
-                TLRPC$TL_messageReplyHeader tLRPC$TL_messageReplyHeader = new TLRPC$TL_messageReplyHeader();
-                this.reply_to = tLRPC$TL_messageReplyHeader;
-                tLRPC$TL_messageReplyHeader.reply_to_random_id = abstractSerializedData.readInt64(z);
-            }
-            if ((this.flags & 131072) != 0) {
-                this.grouped_id = abstractSerializedData.readInt64(z);
-            }
-        } else if (z) {
-            throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt322)}));
+            return;
         }
+        int readInt323 = abstractSerializedData.readInt32(z);
+        for (int i = 0; i < readInt323; i++) {
+            TLRPC$MessageEntity TLdeserialize2 = TLRPC$MessageEntity.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+            if (TLdeserialize2 == null) {
+                return;
+            }
+            this.entities.add(TLdeserialize2);
+        }
+        if ((this.flags & 2048) != 0) {
+            this.via_bot_name = abstractSerializedData.readString(z);
+        }
+        if ((this.flags & 8) != 0) {
+            TLRPC$TL_messageReplyHeader tLRPC$TL_messageReplyHeader = new TLRPC$TL_messageReplyHeader();
+            this.reply_to = tLRPC$TL_messageReplyHeader;
+            tLRPC$TL_messageReplyHeader.reply_to_random_id = abstractSerializedData.readInt64(z);
+        }
+        if ((this.flags & 131072) == 0) {
+            return;
+        }
+        this.grouped_id = abstractSerializedData.readInt64(z);
     }
 
+    @Override // org.telegram.tgnet.TLRPC$TL_message, org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
-        int i = this.unread ? this.flags | 1 : this.flags & -2;
+        int i = this.unread ? this.flags | 1 : this.flags & (-2);
         this.flags = i;
-        int i2 = this.out ? i | 2 : i & -3;
+        int i2 = this.out ? i | 2 : i & (-3);
         this.flags = i2;
-        int i3 = this.mentioned ? i2 | 16 : i2 & -17;
+        int i3 = this.mentioned ? i2 | 16 : i2 & (-17);
         this.flags = i3;
-        int i4 = this.media_unread ? i3 | 32 : i3 & -33;
+        int i4 = this.media_unread ? i3 | 32 : i3 & (-33);
         this.flags = i4;
         abstractSerializedData.writeInt32(i4);
         abstractSerializedData.writeInt32(this.id);

@@ -12,15 +12,15 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
-
+/* loaded from: classes3.dex */
 public class DrawerAddCell extends FrameLayout {
     private TextView textView;
 
     public DrawerAddCell(Context context) {
         super(context);
-        TextView textView2 = new TextView(context);
-        this.textView = textView2;
-        textView2.setTextColor(Theme.getColor("chats_menuItemText"));
+        TextView textView = new TextView(context);
+        this.textView = textView;
+        textView.setTextColor(Theme.getColor("chats_menuItemText"));
         this.textView.setTextSize(1, 15.0f);
         this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.textView.setLines(1);
@@ -31,13 +31,13 @@ public class DrawerAddCell extends FrameLayout {
         addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, 51, 19.0f, 0.0f, 16.0f, 0.0f));
     }
 
-    /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
+    @Override // android.widget.FrameLayout, android.view.View
+    protected void onMeasure(int i, int i2) {
         super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));
     }
 
-    /* access modifiers changed from: protected */
-    public void onAttachedToWindow() {
+    @Override // android.view.ViewGroup, android.view.View
+    protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         this.textView.setTextColor(Theme.getColor("chats_menuItemText"));
         this.textView.setText(LocaleController.getString("AddAccount", R.string.AddAccount));

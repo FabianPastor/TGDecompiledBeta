@@ -9,12 +9,13 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$InputFile;
 import org.telegram.tgnet.TLRPC$TL_account_uploadRingtone;
 import org.telegram.tgnet.TLRPC$TL_error;
-
+/* loaded from: classes.dex */
 public class RingtoneUploader implements NotificationCenter.NotificationCenterDelegate {
     private boolean canceled;
     private int currentAccount;
@@ -27,32 +28,44 @@ public class RingtoneUploader implements NotificationCenter.NotificationCenterDe
         FileLoader.getInstance(i).uploadFile(str, false, true, 50331648);
     }
 
+    @Override // org.telegram.messenger.NotificationCenter.NotificationCenterDelegate
     public void didReceivedNotification(int i, int i2, Object... objArr) {
         if (i == NotificationCenter.fileUploaded) {
-            String str = objArr[0];
-            if (!this.canceled && str.equals(this.filePath)) {
-                TLRPC$InputFile tLRPC$InputFile = objArr[1];
-                TLRPC$TL_account_uploadRingtone tLRPC$TL_account_uploadRingtone = new TLRPC$TL_account_uploadRingtone();
-                tLRPC$TL_account_uploadRingtone.file = tLRPC$InputFile;
-                tLRPC$TL_account_uploadRingtone.file_name = tLRPC$InputFile.name;
-                String fileExtension = FileLoader.getFileExtension(new File(tLRPC$InputFile.name));
-                tLRPC$TL_account_uploadRingtone.mime_type = fileExtension;
-                if ("ogg".equals(fileExtension)) {
-                    tLRPC$TL_account_uploadRingtone.mime_type = "audio/ogg";
-                } else {
-                    tLRPC$TL_account_uploadRingtone.mime_type = "audio/mpeg";
-                }
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_uploadRingtone, new RingtoneUploader$$ExternalSyntheticLambda2(this));
+            String str = (String) objArr[0];
+            if (this.canceled || !str.equals(this.filePath)) {
+                return;
             }
+            TLRPC$InputFile tLRPC$InputFile = (TLRPC$InputFile) objArr[1];
+            TLRPC$TL_account_uploadRingtone tLRPC$TL_account_uploadRingtone = new TLRPC$TL_account_uploadRingtone();
+            tLRPC$TL_account_uploadRingtone.file = tLRPC$InputFile;
+            tLRPC$TL_account_uploadRingtone.file_name = tLRPC$InputFile.name;
+            String fileExtension = FileLoader.getFileExtension(new File(tLRPC$InputFile.name));
+            tLRPC$TL_account_uploadRingtone.mime_type = fileExtension;
+            if ("ogg".equals(fileExtension)) {
+                tLRPC$TL_account_uploadRingtone.mime_type = "audio/ogg";
+            } else {
+                tLRPC$TL_account_uploadRingtone.mime_type = "audio/mpeg";
+            }
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_uploadRingtone, new RequestDelegate() { // from class: org.telegram.messenger.ringtone.RingtoneUploader$$ExternalSyntheticLambda2
+                @Override // org.telegram.tgnet.RequestDelegate
+                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+                    RingtoneUploader.this.lambda$didReceivedNotification$1(tLObject, tLRPC$TL_error);
+                }
+            });
         }
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$didReceivedNotification$1(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new RingtoneUploader$$ExternalSyntheticLambda0(this, tLObject, tLRPC$TL_error));
+    /* JADX INFO: Access modifiers changed from: private */
+    public /* synthetic */ void lambda$didReceivedNotification$1(final TLObject tLObject, final TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.ringtone.RingtoneUploader$$ExternalSyntheticLambda0
+            @Override // java.lang.Runnable
+            public final void run() {
+                RingtoneUploader.this.lambda$didReceivedNotification$0(tLObject, tLRPC$TL_error);
+            }
+        });
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$didReceivedNotification$0(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject != null) {
             onComplete((TLRPC$Document) tLObject);
@@ -80,18 +93,23 @@ public class RingtoneUploader implements NotificationCenter.NotificationCenterDe
         this.canceled = true;
         unsubscribe();
         FileLoader.getInstance(this.currentAccount).cancelFileUpload(this.filePath, false);
-        MediaDataController.getInstance(this.currentAccount).onRingtoneUploaded(this.filePath, (TLRPC$Document) null, true);
+        MediaDataController.getInstance(this.currentAccount).onRingtoneUploaded(this.filePath, null, true);
     }
 
-    public void error(TLRPC$TL_error tLRPC$TL_error) {
+    public void error(final TLRPC$TL_error tLRPC$TL_error) {
         unsubscribe();
-        MediaDataController.getInstance(this.currentAccount).onRingtoneUploaded(this.filePath, (TLRPC$Document) null, true);
+        MediaDataController.getInstance(this.currentAccount).onRingtoneUploaded(this.filePath, null, true);
         if (tLRPC$TL_error != null) {
-            NotificationCenter.getInstance(this.currentAccount).doOnIdle(new RingtoneUploader$$ExternalSyntheticLambda1(this, tLRPC$TL_error));
+            NotificationCenter.getInstance(this.currentAccount).doOnIdle(new Runnable() { // from class: org.telegram.messenger.ringtone.RingtoneUploader$$ExternalSyntheticLambda1
+                @Override // java.lang.Runnable
+                public final void run() {
+                    RingtoneUploader.this.lambda$error$2(tLRPC$TL_error);
+                }
+            });
         }
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$error$2(TLRPC$TL_error tLRPC$TL_error) {
         if (tLRPC$TL_error.text.equals("RINGTONE_DURATION_TOO_LONG")) {
             NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, 4, LocaleController.formatString("TooLongError", R.string.TooLongError, new Object[0]), LocaleController.formatString("ErrorRingtoneDurationTooLong", R.string.ErrorRingtoneDurationTooLong, Integer.valueOf(MessagesController.getInstance(this.currentAccount).ringtoneDurationMax)));

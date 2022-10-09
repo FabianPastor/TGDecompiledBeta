@@ -1,9 +1,10 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_messageMediaInvoice extends TLRPC$MessageMedia {
     public static int constructor = -NUM;
     public TLRPC$WebDocument photo;
 
+    @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
@@ -29,11 +30,12 @@ public class TLRPC$TL_messageMediaInvoice extends TLRPC$MessageMedia {
         }
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
-        int i = this.shipping_address_requested ? this.flags | 2 : this.flags & -3;
+        int i = this.shipping_address_requested ? this.flags | 2 : this.flags & (-3);
         this.flags = i;
-        int i2 = this.test ? i | 8 : i & -9;
+        int i2 = this.test ? i | 8 : i & (-9);
         this.flags = i2;
         abstractSerializedData.writeInt32(i2);
         abstractSerializedData.writeString(this.title);

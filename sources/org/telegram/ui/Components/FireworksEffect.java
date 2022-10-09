@@ -8,15 +8,16 @@ import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Utilities;
 import org.telegram.ui.ActionBar.Theme;
-
+/* loaded from: classes3.dex */
 public class FireworksEffect {
-    private ArrayList<Particle> freeParticles = new ArrayList<>();
     private long lastAnimationTime;
-    /* access modifiers changed from: private */
-    public Paint particlePaint;
+    private Paint particlePaint;
     private ArrayList<Particle> particles = new ArrayList<>();
+    private ArrayList<Particle> freeParticles = new ArrayList<>();
 
-    private class Particle {
+    /* JADX INFO: Access modifiers changed from: private */
+    /* loaded from: classes3.dex */
+    public class Particle {
         float alpha;
         int color;
         float currentTime;
@@ -33,20 +34,21 @@ public class FireworksEffect {
         }
 
         public void draw(Canvas canvas) {
-            if (this.type == 0) {
-                FireworksEffect.this.particlePaint.setColor(this.color);
-                FireworksEffect.this.particlePaint.setStrokeWidth(((float) AndroidUtilities.dp(1.5f)) * this.scale);
-                FireworksEffect.this.particlePaint.setAlpha((int) (this.alpha * 255.0f));
-                canvas.drawPoint(this.x, this.y, FireworksEffect.this.particlePaint);
+            if (this.type != 0) {
+                return;
             }
+            FireworksEffect.this.particlePaint.setColor(this.color);
+            FireworksEffect.this.particlePaint.setStrokeWidth(AndroidUtilities.dp(1.5f) * this.scale);
+            FireworksEffect.this.particlePaint.setAlpha((int) (this.alpha * 255.0f));
+            canvas.drawPoint(this.x, this.y, FireworksEffect.this.particlePaint);
         }
     }
 
     public FireworksEffect() {
         Paint paint = new Paint(1);
         this.particlePaint = paint;
-        paint.setStrokeWidth((float) AndroidUtilities.dp(1.5f));
-        this.particlePaint.setColor(Theme.getColor("actionBarDefaultTitle") & -1644826);
+        paint.setStrokeWidth(AndroidUtilities.dp(1.5f));
+        this.particlePaint.setColor(Theme.getColor("actionBarDefaultTitle") & (-1644826));
         this.particlePaint.setStrokeCap(Paint.Cap.ROUND);
         this.particlePaint.setStyle(Paint.Style.STROKE);
         for (int i = 0; i < 20; i++) {
@@ -87,47 +89,48 @@ public class FireworksEffect {
 
     public void onDraw(View view, Canvas canvas) {
         Particle particle;
-        if (view != null && canvas != null) {
-            int size = this.particles.size();
-            for (int i = 0; i < size; i++) {
-                this.particles.get(i).draw(canvas);
-            }
-            if (Utilities.random.nextBoolean() && this.particles.size() + 8 < 150) {
-                int i2 = Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0;
-                float nextFloat = Utilities.random.nextFloat() * ((float) view.getMeasuredWidth());
-                float nextFloat2 = ((float) i2) + (Utilities.random.nextFloat() * ((float) ((view.getMeasuredHeight() - AndroidUtilities.dp(20.0f)) - i2)));
-                int nextInt = Utilities.random.nextInt(4);
-                int i3 = nextInt != 0 ? nextInt != 1 ? nextInt != 2 ? nextInt != 3 ? -5752 : -15088582 : -207021 : -843755 : -13357350;
-                for (int i4 = 0; i4 < 8; i4++) {
-                    double nextInt2 = (double) (Utilities.random.nextInt(270) - 225);
-                    Double.isNaN(nextInt2);
-                    double d = nextInt2 * 0.017453292519943295d;
-                    float cos = (float) Math.cos(d);
-                    float sin = (float) Math.sin(d);
-                    if (!this.freeParticles.isEmpty()) {
-                        particle = this.freeParticles.get(0);
-                        this.freeParticles.remove(0);
-                    } else {
-                        particle = new Particle();
-                    }
-                    particle.x = nextFloat;
-                    particle.y = nextFloat2;
-                    particle.vx = cos * 1.5f;
-                    particle.vy = sin;
-                    particle.color = i3;
-                    particle.alpha = 1.0f;
-                    particle.currentTime = 0.0f;
-                    particle.scale = Math.max(1.0f, Utilities.random.nextFloat() * 1.5f);
-                    particle.type = 0;
-                    particle.lifeTime = (float) (Utilities.random.nextInt(1000) + 1000);
-                    particle.velocity = (Utilities.random.nextFloat() * 4.0f) + 20.0f;
-                    this.particles.add(particle);
-                }
-            }
-            long currentTimeMillis = System.currentTimeMillis();
-            updateParticles(Math.min(17, currentTimeMillis - this.lastAnimationTime));
-            this.lastAnimationTime = currentTimeMillis;
-            view.invalidate();
+        if (view == null || canvas == null) {
+            return;
         }
+        int size = this.particles.size();
+        for (int i = 0; i < size; i++) {
+            this.particles.get(i).draw(canvas);
+        }
+        if (Utilities.random.nextBoolean() && this.particles.size() + 8 < 150) {
+            int i2 = Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0;
+            float nextFloat = Utilities.random.nextFloat() * view.getMeasuredWidth();
+            float nextFloat2 = i2 + (Utilities.random.nextFloat() * ((view.getMeasuredHeight() - AndroidUtilities.dp(20.0f)) - i2));
+            int nextInt = Utilities.random.nextInt(4);
+            int i3 = nextInt != 0 ? nextInt != 1 ? nextInt != 2 ? nextInt != 3 ? -5752 : -15088582 : -207021 : -843755 : -13357350;
+            for (int i4 = 0; i4 < 8; i4++) {
+                double nextInt2 = Utilities.random.nextInt(270) - 225;
+                Double.isNaN(nextInt2);
+                double d = nextInt2 * 0.017453292519943295d;
+                float cos = (float) Math.cos(d);
+                float sin = (float) Math.sin(d);
+                if (!this.freeParticles.isEmpty()) {
+                    particle = this.freeParticles.get(0);
+                    this.freeParticles.remove(0);
+                } else {
+                    particle = new Particle();
+                }
+                particle.x = nextFloat;
+                particle.y = nextFloat2;
+                particle.vx = cos * 1.5f;
+                particle.vy = sin;
+                particle.color = i3;
+                particle.alpha = 1.0f;
+                particle.currentTime = 0.0f;
+                particle.scale = Math.max(1.0f, Utilities.random.nextFloat() * 1.5f);
+                particle.type = 0;
+                particle.lifeTime = Utilities.random.nextInt(1000) + 1000;
+                particle.velocity = (Utilities.random.nextFloat() * 4.0f) + 20.0f;
+                this.particles.add(particle);
+            }
+        }
+        long currentTimeMillis = System.currentTimeMillis();
+        updateParticles(Math.min(17L, currentTimeMillis - this.lastAnimationTime));
+        this.lastAnimationTime = currentTimeMillis;
+        view.invalidate();
     }
 }

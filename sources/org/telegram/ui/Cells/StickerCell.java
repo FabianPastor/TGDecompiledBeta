@@ -27,7 +27,7 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.Premium.PremiumLockIconView;
-
+/* loaded from: classes3.dex */
 public class StickerCell extends FrameLayout {
     private boolean clearsInputField;
     private BackupImageView imageView;
@@ -59,11 +59,12 @@ public class StickerCell extends FrameLayout {
         addView(this.premiumIconView, LayoutHelper.createFrame(24, 24.0f, 81, 0.0f, 0.0f, 0.0f, 0.0f));
     }
 
-    /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
+    @Override // android.widget.FrameLayout, android.view.View
+    protected void onMeasure(int i, int i2) {
         super.onMeasure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(76.0f) + getPaddingLeft() + getPaddingRight(), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(78.0f), NUM));
     }
 
+    @Override // android.view.View
     public void setPressed(boolean z) {
         if (this.imageView.getImageReceiver().getPressed() != z) {
             this.imageView.getImageReceiver().setPressed(z ? 1 : 0);
@@ -81,34 +82,33 @@ public class StickerCell extends FrameLayout {
     }
 
     public void setSticker(TLRPC$Document tLRPC$Document, Object obj) {
-        TLRPC$Document tLRPC$Document2 = tLRPC$Document;
         this.parentObject = obj;
-        boolean isPremiumSticker2 = MessageObject.isPremiumSticker(tLRPC$Document);
-        this.isPremiumSticker = isPremiumSticker2;
-        if (isPremiumSticker2) {
+        boolean isPremiumSticker = MessageObject.isPremiumSticker(tLRPC$Document);
+        this.isPremiumSticker = isPremiumSticker;
+        if (isPremiumSticker) {
             this.premiumIconView.setColor(Theme.getColor("windowBackgroundWhite"));
             this.premiumIconView.setWaitingImage();
         }
-        if (tLRPC$Document2 != null) {
-            TLRPC$PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(tLRPC$Document2.thumbs, 90);
-            SvgHelper.SvgDrawable svgThumb = DocumentObject.getSvgThumb(tLRPC$Document2, "windowBackgroundGray", 1.0f);
+        if (tLRPC$Document != null) {
+            TLRPC$PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(tLRPC$Document.thumbs, 90);
+            SvgHelper.SvgDrawable svgThumb = DocumentObject.getSvgThumb(tLRPC$Document, "windowBackgroundGray", 1.0f);
             if (MessageObject.canAutoplayAnimatedSticker(tLRPC$Document)) {
                 if (svgThumb != null) {
-                    this.imageView.setImage(ImageLocation.getForDocument(tLRPC$Document), "80_80", (String) null, (Drawable) svgThumb, this.parentObject);
+                    this.imageView.setImage(ImageLocation.getForDocument(tLRPC$Document), "80_80", (String) null, svgThumb, this.parentObject);
                 } else if (closestPhotoSizeWithSize != null) {
-                    this.imageView.setImage(ImageLocation.getForDocument(tLRPC$Document), "80_80", ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$Document2), (String) null, 0, this.parentObject);
+                    this.imageView.setImage(ImageLocation.getForDocument(tLRPC$Document), "80_80", ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$Document), (String) null, 0, this.parentObject);
                 } else {
                     this.imageView.setImage(ImageLocation.getForDocument(tLRPC$Document), "80_80", (String) null, (Drawable) null, this.parentObject);
                 }
             } else if (svgThumb == null) {
-                this.imageView.setImage(ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$Document2), (String) null, "webp", (Drawable) null, this.parentObject);
+                this.imageView.setImage(ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$Document), (String) null, "webp", (Drawable) null, this.parentObject);
             } else if (closestPhotoSizeWithSize != null) {
-                this.imageView.setImage(ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$Document2), (String) null, "webp", (Drawable) svgThumb, this.parentObject);
+                this.imageView.setImage(ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$Document), (String) null, "webp", svgThumb, this.parentObject);
             } else {
-                this.imageView.setImage(ImageLocation.getForDocument(tLRPC$Document), (String) null, "webp", (Drawable) svgThumb, this.parentObject);
+                this.imageView.setImage(ImageLocation.getForDocument(tLRPC$Document), (String) null, "webp", svgThumb, this.parentObject);
             }
         }
-        this.sticker = tLRPC$Document2;
+        this.sticker = tLRPC$Document;
         Drawable background = getBackground();
         if (background != null) {
             background.setAlpha(230);
@@ -143,18 +143,18 @@ public class StickerCell extends FrameLayout {
         MessageObject.SendAnimationData sendAnimationData = new MessageObject.SendAnimationData();
         int[] iArr = new int[2];
         this.imageView.getLocationInWindow(iArr);
-        sendAnimationData.x = imageReceiver.getCenterX() + ((float) iArr[0]);
-        sendAnimationData.y = imageReceiver.getCenterY() + ((float) iArr[1]);
+        sendAnimationData.x = imageReceiver.getCenterX() + iArr[0];
+        sendAnimationData.y = imageReceiver.getCenterY() + iArr[1];
         sendAnimationData.width = imageReceiver.getImageWidth();
         sendAnimationData.height = imageReceiver.getImageHeight();
         return sendAnimationData;
     }
 
-    /* access modifiers changed from: protected */
-    public boolean drawChild(Canvas canvas, View view, long j) {
+    @Override // android.view.ViewGroup
+    protected boolean drawChild(Canvas canvas, View view, long j) {
         boolean z;
         boolean drawChild = super.drawChild(canvas, view, j);
-        if (view == this.imageView && ((z && this.scale != 0.8f) || (!(z = this.scaled) && this.scale != 1.0f))) {
+        if (view == this.imageView && (((z = this.scaled) && this.scale != 0.8f) || (!z && this.scale != 1.0f))) {
             long currentTimeMillis = System.currentTimeMillis();
             long j2 = currentTimeMillis - this.lastUpdateTime;
             this.lastUpdateTime = currentTimeMillis;
@@ -185,24 +185,26 @@ public class StickerCell extends FrameLayout {
         return drawChild;
     }
 
+    @Override // android.view.View
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
         super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
-        if (this.sticker != null) {
-            String str = null;
-            for (int i = 0; i < this.sticker.attributes.size(); i++) {
-                TLRPC$DocumentAttribute tLRPC$DocumentAttribute = this.sticker.attributes.get(i);
-                if (tLRPC$DocumentAttribute instanceof TLRPC$TL_documentAttributeSticker) {
-                    String str2 = tLRPC$DocumentAttribute.alt;
-                    str = (str2 == null || str2.length() <= 0) ? null : tLRPC$DocumentAttribute.alt;
-                }
-            }
-            if (str != null) {
-                accessibilityNodeInfo.setText(str + " " + LocaleController.getString("AttachSticker", R.string.AttachSticker));
-            } else {
-                accessibilityNodeInfo.setText(LocaleController.getString("AttachSticker", R.string.AttachSticker));
-            }
-            accessibilityNodeInfo.setEnabled(true);
+        if (this.sticker == null) {
+            return;
         }
+        String str = null;
+        for (int i = 0; i < this.sticker.attributes.size(); i++) {
+            TLRPC$DocumentAttribute tLRPC$DocumentAttribute = this.sticker.attributes.get(i);
+            if (tLRPC$DocumentAttribute instanceof TLRPC$TL_documentAttributeSticker) {
+                String str2 = tLRPC$DocumentAttribute.alt;
+                str = (str2 == null || str2.length() <= 0) ? null : tLRPC$DocumentAttribute.alt;
+            }
+        }
+        if (str != null) {
+            accessibilityNodeInfo.setText(str + " " + LocaleController.getString("AttachSticker", R.string.AttachSticker));
+        } else {
+            accessibilityNodeInfo.setText(LocaleController.getString("AttachSticker", R.string.AttachSticker));
+        }
+        accessibilityNodeInfo.setEnabled(true);
     }
 
     private void updatePremiumStatus(boolean z) {

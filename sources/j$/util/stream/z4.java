@@ -1,68 +1,61 @@
 package j$.util.stream;
 
-import j$.util.CLASSNAMEa;
-import j$.util.w;
+import j$.util.AbstractCLASSNAMEa;
 import java.util.Comparator;
-
-abstract class z4 extends D4 implements w {
-    /* JADX WARNING: Illegal instructions before constructor call */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    z4(j$.util.w r13, long r14, long r16) {
-        /*
-            r12 = this;
-            long r0 = r13.estimateSize()
-            r6 = r16
-            long r10 = java.lang.Math.min(r0, r6)
-            r8 = 0
-            r2 = r12
-            r3 = r13
-            r4 = r14
-            r2.<init>(r3, r4, r6, r8, r10)
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: j$.util.stream.z4.<init>(j$.util.w, long, long):void");
+/* JADX INFO: Access modifiers changed from: package-private */
+/* loaded from: classes2.dex */
+public abstract class z4 extends D4 implements j$.util.w {
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public z4(j$.util.w wVar, long j, long j2) {
+        super(wVar, j, j2, 0L, Math.min(wVar.estimateSize(), j2));
     }
 
-    /* access modifiers changed from: protected */
-    public abstract Object f();
+    protected abstract Object f();
 
+    @Override // j$.util.w
     /* renamed from: forEachRemaining */
     public void e(Object obj) {
         obj.getClass();
         long j = this.a;
         long j2 = this.e;
-        if (j < j2) {
-            long j3 = this.d;
-            if (j3 < j2) {
-                if (j3 < j || ((w) this.c).estimateSize() + j3 > this.b) {
-                    while (this.a > this.d) {
-                        ((w) this.c).tryAdvance(f());
-                        this.d++;
-                    }
-                    while (this.d < this.e) {
-                        ((w) this.c).tryAdvance(obj);
-                        this.d++;
-                    }
-                    return;
-                }
-                ((w) this.c).forEachRemaining(obj);
-                this.d = this.e;
-            }
+        if (j >= j2) {
+            return;
+        }
+        long j3 = this.d;
+        if (j3 >= j2) {
+            return;
+        }
+        if (j3 >= j && ((j$.util.w) this.c).estimateSize() + j3 <= this.b) {
+            ((j$.util.w) this.c).forEachRemaining(obj);
+            this.d = this.e;
+            return;
+        }
+        while (this.a > this.d) {
+            ((j$.util.w) this.c).tryAdvance(f());
+            this.d++;
+        }
+        while (this.d < this.e) {
+            ((j$.util.w) this.c).tryAdvance(obj);
+            this.d++;
         }
     }
 
+    @Override // j$.util.u
     public Comparator getComparator() {
         throw new IllegalStateException();
     }
 
+    @Override // j$.util.u
     public /* synthetic */ long getExactSizeIfKnown() {
-        return CLASSNAMEa.e(this);
+        return AbstractCLASSNAMEa.e(this);
     }
 
+    @Override // j$.util.u
     public /* synthetic */ boolean hasCharacteristics(int i) {
-        return CLASSNAMEa.f(this, i);
+        return AbstractCLASSNAMEa.f(this, i);
     }
 
+    @Override // j$.util.w
     /* renamed from: tryAdvance */
     public boolean k(Object obj) {
         long j;
@@ -76,17 +69,18 @@ abstract class z4 extends D4 implements w {
             if (j2 <= j) {
                 break;
             }
-            ((w) this.c).tryAdvance(f());
+            ((j$.util.w) this.c).tryAdvance(f());
             this.d++;
         }
         if (j >= this.e) {
             return false;
         }
         this.d = j + 1;
-        return ((w) this.c).tryAdvance(obj);
+        return ((j$.util.w) this.c).tryAdvance(obj);
     }
 
-    z4(w wVar, long j, long j2, long j3, long j4, CLASSNAMEo1 o1Var) {
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public z4(j$.util.w wVar, long j, long j2, long j3, long j4, AbstractCLASSNAMEo1 abstractCLASSNAMEo1) {
         super(wVar, j, j2, j3, j4);
     }
 }

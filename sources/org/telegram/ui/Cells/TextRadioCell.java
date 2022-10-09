@@ -17,12 +17,11 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AnimationProperties;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RadioButton;
-
+/* loaded from: classes3.dex */
 public class TextRadioCell extends FrameLayout {
     private int animatedColorBackground;
     private Paint animationPaint;
-    /* access modifiers changed from: private */
-    public float animationProgress;
+    private float animationProgress;
     private int height;
     private boolean isMultiline;
     private float lastTouchX;
@@ -32,12 +31,14 @@ public class TextRadioCell extends FrameLayout {
     private TextView valueTextView;
 
     static {
-        new AnimationProperties.FloatProperty<TextRadioCell>("animationProgress") {
+        new AnimationProperties.FloatProperty<TextRadioCell>("animationProgress") { // from class: org.telegram.ui.Cells.TextRadioCell.1
+            @Override // org.telegram.ui.Components.AnimationProperties.FloatProperty
             public void setValue(TextRadioCell textRadioCell, float f) {
                 textRadioCell.setAnimationProgress(f);
                 textRadioCell.invalidate();
             }
 
+            @Override // android.util.Property
             public Float get(TextRadioCell textRadioCell) {
                 return Float.valueOf(textRadioCell.animationProgress);
             }
@@ -52,28 +53,25 @@ public class TextRadioCell extends FrameLayout {
         this(context, i, false);
     }
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
     public TextRadioCell(Context context, int i, boolean z) {
         super(context);
-        Context context2 = context;
-        int i2 = i;
         this.height = 50;
-        TextView textView2 = new TextView(context2);
-        this.textView = textView2;
-        textView2.setTextColor(Theme.getColor(z ? "dialogTextBlack" : "windowBackgroundWhiteBlackText"));
+        TextView textView = new TextView(context);
+        this.textView = textView;
+        textView.setTextColor(Theme.getColor(z ? "dialogTextBlack" : "windowBackgroundWhiteBlackText"));
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
         this.textView.setSingleLine(true);
-        int i3 = 5;
+        int i2 = 5;
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         this.textView.setEllipsize(TextUtils.TruncateAt.END);
-        TextView textView3 = this.textView;
+        TextView textView2 = this.textView;
         boolean z2 = LocaleController.isRTL;
-        addView(textView3, LayoutHelper.createFrame(-1, -1.0f, (z2 ? 5 : 3) | 48, z2 ? (float) i2 : 64.0f, 0.0f, z2 ? 64.0f : (float) i2, 0.0f));
-        TextView textView4 = new TextView(context2);
-        this.valueTextView = textView4;
-        textView4.setTextColor(Theme.getColor(z ? "dialogIcon" : "windowBackgroundWhiteGrayText2"));
+        addView(textView2, LayoutHelper.createFrame(-1, -1.0f, (z2 ? 5 : 3) | 48, z2 ? i : 64.0f, 0.0f, z2 ? 64.0f : i, 0.0f));
+        TextView textView3 = new TextView(context);
+        this.valueTextView = textView3;
+        textView3.setTextColor(Theme.getColor(z ? "dialogIcon" : "windowBackgroundWhiteGrayText2"));
         this.valueTextView.setTextSize(1, 13.0f);
         this.valueTextView.setGravity(LocaleController.isRTL ? 5 : 3);
         this.valueTextView.setLines(1);
@@ -81,26 +79,27 @@ public class TextRadioCell extends FrameLayout {
         this.valueTextView.setSingleLine(true);
         this.valueTextView.setPadding(0, 0, 0, 0);
         this.valueTextView.setEllipsize(TextUtils.TruncateAt.END);
-        TextView textView5 = this.valueTextView;
+        TextView textView4 = this.valueTextView;
         boolean z3 = LocaleController.isRTL;
-        addView(textView5, LayoutHelper.createFrame(-2, -2.0f, (z3 ? 5 : 3) | 48, z3 ? (float) i2 : 64.0f, 36.0f, z3 ? 64.0f : (float) i2, 0.0f));
-        RadioButton radioButton2 = new RadioButton(context2);
-        this.radioButton = radioButton2;
-        radioButton2.setSize(AndroidUtilities.dp(20.0f));
+        addView(textView4, LayoutHelper.createFrame(-2, -2.0f, (z3 ? 5 : 3) | 48, z3 ? i : 64.0f, 36.0f, z3 ? 64.0f : i, 0.0f));
+        RadioButton radioButton = new RadioButton(context);
+        this.radioButton = radioButton;
+        radioButton.setSize(AndroidUtilities.dp(20.0f));
         this.radioButton.setColor(Theme.getColor("radioBackground"), Theme.getColor("radioBackgroundChecked"));
-        addView(this.radioButton, LayoutHelper.createFrame(20, 20.0f, (!LocaleController.isRTL ? 3 : i3) | 16, 22.0f, 0.0f, 22.0f, 0.0f));
+        addView(this.radioButton, LayoutHelper.createFrame(20, 20.0f, (!LocaleController.isRTL ? 3 : i2) | 16, 22.0f, 0.0f, 22.0f, 0.0f));
         setClipChildren(false);
     }
 
-    /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
+    @Override // android.widget.FrameLayout, android.view.View
+    protected void onMeasure(int i, int i2) {
         if (this.isMultiline) {
             super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(0, 0));
         } else {
-            super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(this.valueTextView.getVisibility() == 0 ? 64.0f : (float) this.height) + (this.needDivider ? 1 : 0), NUM));
+            super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(this.valueTextView.getVisibility() == 0 ? 64.0f : this.height) + (this.needDivider ? 1 : 0), NUM));
         }
     }
 
+    @Override // android.view.View
     public boolean onTouchEvent(MotionEvent motionEvent) {
         this.lastTouchX = motionEvent.getX();
         return super.onTouchEvent(motionEvent);
@@ -114,6 +113,7 @@ public class TextRadioCell extends FrameLayout {
         this.height = i;
     }
 
+    @Override // android.view.View
     public void setPressed(boolean z) {
         super.setPressed(z);
     }
@@ -129,7 +129,7 @@ public class TextRadioCell extends FrameLayout {
             this.valueTextView.setLines(0);
             this.valueTextView.setMaxLines(0);
             this.valueTextView.setSingleLine(false);
-            this.valueTextView.setEllipsize((TextUtils.TruncateAt) null);
+            this.valueTextView.setEllipsize(null);
             this.valueTextView.setPadding(0, 0, 0, AndroidUtilities.dp(11.0f));
         } else {
             this.valueTextView.setLines(1);
@@ -149,33 +149,35 @@ public class TextRadioCell extends FrameLayout {
         this.radioButton.setChecked(z, true);
     }
 
+    @Override // android.view.View
     public void setBackgroundColor(int i) {
         clearAnimation();
         this.animatedColorBackground = 0;
         super.setBackgroundColor(i);
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public void setAnimationProgress(float f) {
         this.animationProgress = f;
-        Math.max(this.lastTouchX, ((float) getMeasuredWidth()) - this.lastTouchX);
+        Math.max(this.lastTouchX, getMeasuredWidth() - this.lastTouchX);
         AndroidUtilities.dp(40.0f);
         int measuredHeight = getMeasuredHeight() / 2;
     }
 
-    /* access modifiers changed from: protected */
-    public void onDraw(Canvas canvas) {
+    @Override // android.view.View
+    protected void onDraw(Canvas canvas) {
         if (this.animatedColorBackground != 0) {
-            canvas.drawCircle(this.lastTouchX, (float) (getMeasuredHeight() / 2), (Math.max(this.lastTouchX, ((float) getMeasuredWidth()) - this.lastTouchX) + ((float) AndroidUtilities.dp(40.0f))) * this.animationProgress, this.animationPaint);
+            canvas.drawCircle(this.lastTouchX, getMeasuredHeight() / 2, (Math.max(this.lastTouchX, getMeasuredWidth() - this.lastTouchX) + AndroidUtilities.dp(40.0f)) * this.animationProgress, this.animationPaint);
         }
         if (this.needDivider) {
-            canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.dp(64.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(64.0f) : 0)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
+            canvas.drawLine(LocaleController.isRTL ? 0.0f : AndroidUtilities.dp(64.0f), getMeasuredHeight() - 1, getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(64.0f) : 0), getMeasuredHeight() - 1, Theme.dividerPaint);
         }
     }
 
+    @Override // android.view.View
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
-        String str;
         int i;
+        String str;
         super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
         accessibilityNodeInfo.setCheckable(true);
         accessibilityNodeInfo.setChecked(this.radioButton.isChecked());

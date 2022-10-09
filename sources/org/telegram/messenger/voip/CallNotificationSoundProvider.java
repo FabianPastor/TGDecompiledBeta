@@ -7,36 +7,45 @@ import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 import java.io.FileNotFoundException;
 import org.telegram.messenger.ApplicationLoader;
-
+/* loaded from: classes.dex */
 public class CallNotificationSoundProvider extends ContentProvider {
+    @Override // android.content.ContentProvider
     public int delete(Uri uri, String str, String[] strArr) {
         return 0;
     }
 
+    @Override // android.content.ContentProvider
     public String getType(Uri uri) {
         return null;
     }
 
+    @Override // android.content.ContentProvider
     public Uri insert(Uri uri, ContentValues contentValues) {
         return null;
     }
 
+    @Override // android.content.ContentProvider
     public boolean onCreate() {
         return true;
     }
 
+    @Override // android.content.ContentProvider
     public Cursor query(Uri uri, String[] strArr, String str, String[] strArr2, String str2) {
         return null;
     }
 
+    @Override // android.content.ContentProvider
     public int update(Uri uri, ContentValues contentValues, String str, String[] strArr) {
         return 0;
     }
 
+    @Override // android.content.ContentProvider
     public ParcelFileDescriptor openFile(Uri uri, String str) throws FileNotFoundException {
         if (!"r".equals(str)) {
             throw new SecurityException("Unexpected file mode " + str);
-        } else if (ApplicationLoader.applicationContext != null) {
+        } else if (ApplicationLoader.applicationContext == null) {
+            throw new FileNotFoundException("Unexpected application state");
+        } else {
             try {
                 VoIPService sharedInstance = VoIPService.getSharedInstance();
                 if (sharedInstance != null) {
@@ -50,8 +59,6 @@ public class CallNotificationSoundProvider extends ContentProvider {
             } catch (Exception e) {
                 throw new FileNotFoundException(e.getMessage());
             }
-        } else {
-            throw new FileNotFoundException("Unexpected application state");
         }
     }
 }

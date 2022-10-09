@@ -12,7 +12,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.CheckBoxSquare;
 import org.telegram.ui.Components.LayoutHelper;
-
+/* loaded from: classes3.dex */
 public class TextCheckBoxCell extends FrameLayout {
     private CheckBoxSquare checkBox;
     private boolean needDivider;
@@ -22,9 +22,9 @@ public class TextCheckBoxCell extends FrameLayout {
         super(context);
         boolean z3 = LocaleController.isRTL;
         z3 = z2 ? !z3 : z3;
-        TextView textView2 = new TextView(context);
-        this.textView = textView2;
-        textView2.setTextColor(Theme.getColor(z ? "dialogTextBlack" : "windowBackgroundWhiteBlackText"));
+        TextView textView = new TextView(context);
+        this.textView = textView;
+        textView.setTextColor(Theme.getColor(z ? "dialogTextBlack" : "windowBackgroundWhiteBlackText"));
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
@@ -42,13 +42,14 @@ public class TextCheckBoxCell extends FrameLayout {
         addView(this.checkBox, LayoutHelper.createFrame(18, 18.0f, (z3 ? 3 : i) | 16, 21.0f, 0.0f, 21.0f, 0.0f));
     }
 
+    @Override // android.view.View
     public void invalidate() {
         super.invalidate();
         this.checkBox.invalidate();
     }
 
-    /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
+    @Override // android.widget.FrameLayout, android.view.View
+    protected void onMeasure(int i, int i2) {
         super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(50.0f) + (this.needDivider ? 1 : 0), NUM));
     }
 
@@ -67,13 +68,14 @@ public class TextCheckBoxCell extends FrameLayout {
         return this.checkBox.isChecked();
     }
 
-    /* access modifiers changed from: protected */
-    public void onDraw(Canvas canvas) {
+    @Override // android.view.View
+    protected void onDraw(Canvas canvas) {
         if (this.needDivider) {
-            canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.dp(20.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(20.0f) : 0)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
+            canvas.drawLine(LocaleController.isRTL ? 0.0f : AndroidUtilities.dp(20.0f), getMeasuredHeight() - 1, getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(20.0f) : 0), getMeasuredHeight() - 1, Theme.dividerPaint);
         }
     }
 
+    @Override // android.view.View
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
         super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
         accessibilityNodeInfo.setClassName("android.widget.CheckBox");

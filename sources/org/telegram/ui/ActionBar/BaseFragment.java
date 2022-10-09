@@ -41,36 +41,29 @@ import org.telegram.messenger.SecretChatHelper;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.ui.ActionBar.ActionBarPopupWindow;
 import org.telegram.ui.ActionBar.Theme;
-
+/* loaded from: classes3.dex */
 public abstract class BaseFragment {
-    /* access modifiers changed from: protected */
-    public ActionBar actionBar;
-    /* access modifiers changed from: protected */
-    public Bundle arguments;
-    /* access modifiers changed from: protected */
-    public int classGuid;
-    /* access modifiers changed from: protected */
-    public int currentAccount;
+    protected ActionBar actionBar;
+    protected Bundle arguments;
     protected boolean finishing;
     protected boolean fragmentBeginToShow;
-    /* access modifiers changed from: protected */
-    public View fragmentView;
-    protected boolean hasOwnBackground;
+    protected View fragmentView;
     protected boolean inBubbleMode;
     protected boolean inMenuMode;
-    /* access modifiers changed from: protected */
-    public boolean inPreviewMode;
+    protected boolean inPreviewMode;
     private boolean isFinished;
-    protected boolean isPaused;
     protected Dialog parentDialog;
-    /* access modifiers changed from: protected */
-    public ActionBarLayout parentLayout;
+    protected ActionBarLayout parentLayout;
     private boolean removingFromStack;
     protected Dialog visibleDialog;
+    protected int currentAccount = UserConfig.selectedAccount;
+    protected boolean hasOwnBackground = false;
+    protected boolean isPaused = true;
+    protected int classGuid = ConnectionsManager.generateClassGuid();
 
-    /* access modifiers changed from: protected */
-    public boolean allowPresentFragment() {
+    protected boolean allowPresentFragment() {
         return true;
     }
 
@@ -90,12 +83,12 @@ public abstract class BaseFragment {
         return false;
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
     public Animator getCustomSlideTransition(boolean z, boolean z2, float f) {
         return null;
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
     public int getPreviewHeight() {
         return -1;
     }
@@ -108,7 +101,7 @@ public abstract class BaseFragment {
         return false;
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
     public boolean hideKeyboardOnShow() {
         return true;
     }
@@ -128,19 +121,19 @@ public abstract class BaseFragment {
         return true;
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
     public void onBecomeFullyHidden() {
     }
 
     public void onConfigurationChanged(Configuration configuration) {
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
     public AnimatorSet onCustomTransitionAnimation(boolean z, Runnable runnable) {
         return null;
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
     public void onDialogDismiss(Dialog dialog) {
     }
 
@@ -151,33 +144,33 @@ public abstract class BaseFragment {
     public void onLowMemory() {
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
     public void onPreviewOpenAnimationEnd() {
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
     public void onRemoveFromParent() {
     }
 
     public void onRequestPermissionsResultFragment(int i, String[] strArr, int[] iArr) {
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
     public void onSlideProgress(boolean z, float f) {
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
     public void onTransitionAnimationEnd(boolean z, boolean z2) {
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
     public void onTransitionAnimationProgress(boolean z, float f) {
     }
 
     public void onUserLeaveHint() {
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
     public void prepareFragmentToSlide(boolean z, boolean z2) {
     }
 
@@ -190,32 +183,23 @@ public abstract class BaseFragment {
     public void setProgressToDrawerOpened(float f) {
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
     public boolean shouldOverrideSlideTransition(boolean z, boolean z2) {
         return false;
     }
 
     public BaseFragment() {
-        this.currentAccount = UserConfig.selectedAccount;
-        this.hasOwnBackground = false;
-        this.isPaused = true;
-        this.classGuid = ConnectionsManager.generateClassGuid();
     }
 
     public BaseFragment(Bundle bundle) {
-        this.currentAccount = UserConfig.selectedAccount;
-        this.hasOwnBackground = false;
-        this.isPaused = true;
         this.arguments = bundle;
-        this.classGuid = ConnectionsManager.generateClassGuid();
     }
 
     public void setCurrentAccount(int i) {
-        if (this.fragmentView == null) {
-            this.currentAccount = i;
-            return;
+        if (this.fragmentView != null) {
+            throw new IllegalStateException("trying to set current account when fragment UI already created");
         }
-        throw new IllegalStateException("trying to set current account when fragment UI already created");
+        this.currentAccount = i;
     }
 
     public ActionBar getActionBar() {
@@ -250,29 +234,29 @@ public abstract class BaseFragment {
         return this.inPreviewMode;
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
     public void setInPreviewMode(boolean z) {
         this.inPreviewMode = z;
-        ActionBar actionBar2 = this.actionBar;
-        if (actionBar2 != null) {
+        ActionBar actionBar = this.actionBar;
+        if (actionBar != null) {
             boolean z2 = false;
             if (z) {
-                actionBar2.setOccupyStatusBar(false);
+                actionBar.setOccupyStatusBar(false);
                 return;
             }
             if (Build.VERSION.SDK_INT >= 21) {
                 z2 = true;
             }
-            actionBar2.setOccupyStatusBar(z2);
+            actionBar.setOccupyStatusBar(z2);
         }
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
     public void setInMenuMode(boolean z) {
         this.inMenuMode = z;
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
     public void clearViews() {
         View view = this.fragmentView;
         if (view != null) {
@@ -282,19 +266,19 @@ public abstract class BaseFragment {
                     onRemoveFromParent();
                     viewGroup.removeViewInLayout(this.fragmentView);
                 } catch (Exception e) {
-                    FileLog.e((Throwable) e);
+                    FileLog.e(e);
                 }
             }
             this.fragmentView = null;
         }
-        ActionBar actionBar2 = this.actionBar;
-        if (actionBar2 != null) {
-            ViewGroup viewGroup2 = (ViewGroup) actionBar2.getParent();
+        ActionBar actionBar = this.actionBar;
+        if (actionBar != null) {
+            ViewGroup viewGroup2 = (ViewGroup) actionBar.getParent();
             if (viewGroup2 != null) {
                 try {
                     viewGroup2.removeViewInLayout(this.actionBar);
                 } catch (Exception e2) {
-                    FileLog.e((Throwable) e2);
+                    FileLog.e(e2);
                 }
             }
             this.actionBar = null;
@@ -307,7 +291,7 @@ public abstract class BaseFragment {
         this.fragmentView = createView(this.parentLayout.getContext());
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
     public void setParentLayout(ActionBarLayout actionBarLayout) {
         ViewGroup viewGroup;
         if (this.parentLayout != actionBarLayout) {
@@ -322,11 +306,11 @@ public abstract class BaseFragment {
                         onRemoveFromParent();
                         viewGroup2.removeViewInLayout(this.fragmentView);
                     } catch (Exception e) {
-                        FileLog.e((Throwable) e);
+                        FileLog.e(e);
                     }
                 }
                 ActionBarLayout actionBarLayout2 = this.parentLayout;
-                if (!(actionBarLayout2 == null || actionBarLayout2.getContext() == this.fragmentView.getContext())) {
+                if (actionBarLayout2 != null && actionBarLayout2.getContext() != this.fragmentView.getContext()) {
                     this.fragmentView = null;
                 }
             }
@@ -339,7 +323,7 @@ public abstract class BaseFragment {
                     try {
                         viewGroup.removeViewInLayout(this.actionBar);
                     } catch (Exception e2) {
-                        FileLog.e((Throwable) e2);
+                        FileLog.e(e2);
                     }
                 }
                 if (z) {
@@ -347,28 +331,30 @@ public abstract class BaseFragment {
                 }
             }
             ActionBarLayout actionBarLayout4 = this.parentLayout;
-            if (actionBarLayout4 != null && this.actionBar == null) {
-                ActionBar createActionBar = createActionBar(actionBarLayout4.getContext());
-                this.actionBar = createActionBar;
-                if (createActionBar != null) {
-                    createActionBar.parentFragment = this;
-                }
+            if (actionBarLayout4 == null || this.actionBar != null) {
+                return;
             }
+            ActionBar createActionBar = createActionBar(actionBarLayout4.getContext());
+            this.actionBar = createActionBar;
+            if (createActionBar == null) {
+                return;
+            }
+            createActionBar.parentFragment = this;
         }
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
     public ActionBar createActionBar(Context context) {
-        ActionBar actionBar2 = new ActionBar(context, getResourceProvider());
-        actionBar2.setBackgroundColor(getThemedColor("actionBarDefault"));
-        actionBar2.setItemsBackgroundColor(getThemedColor("actionBarDefaultSelector"), false);
-        actionBar2.setItemsBackgroundColor(getThemedColor("actionBarActionModeDefaultSelector"), true);
-        actionBar2.setItemsColor(getThemedColor("actionBarDefaultIcon"), false);
-        actionBar2.setItemsColor(getThemedColor("actionBarActionModeDefaultIcon"), true);
+        ActionBar actionBar = new ActionBar(context, getResourceProvider());
+        actionBar.setBackgroundColor(getThemedColor("actionBarDefault"));
+        actionBar.setItemsBackgroundColor(getThemedColor("actionBarDefaultSelector"), false);
+        actionBar.setItemsBackgroundColor(getThemedColor("actionBarActionModeDefaultSelector"), true);
+        actionBar.setItemsColor(getThemedColor("actionBarDefaultIcon"), false);
+        actionBar.setItemsColor(getThemedColor("actionBarActionModeDefaultIcon"), true);
         if (this.inPreviewMode || this.inBubbleMode) {
-            actionBar2.setOccupyStatusBar(false);
+            actionBar.setOccupyStatusBar(false);
         }
-        return actionBar2;
+        return actionBar;
     }
 
     public void movePreviewFragment(float f) {
@@ -390,25 +376,27 @@ public abstract class BaseFragment {
 
     public void finishFragment(boolean z) {
         ActionBarLayout actionBarLayout;
-        if (!this.isFinished && (actionBarLayout = this.parentLayout) != null) {
-            this.finishing = true;
-            actionBarLayout.closeLastFragment(z);
+        if (this.isFinished || (actionBarLayout = this.parentLayout) == null) {
+            return;
         }
+        this.finishing = true;
+        actionBarLayout.closeLastFragment(z);
     }
 
     public void removeSelfFromStack() {
         ActionBarLayout actionBarLayout;
-        if (!this.isFinished && (actionBarLayout = this.parentLayout) != null) {
-            Dialog dialog = this.parentDialog;
-            if (dialog != null) {
-                dialog.dismiss();
-            } else {
-                actionBarLayout.removeFragmentFromStack(this);
-            }
+        if (this.isFinished || (actionBarLayout = this.parentLayout) == null) {
+            return;
+        }
+        Dialog dialog = this.parentDialog;
+        if (dialog != null) {
+            dialog.dismiss();
+        } else {
+            actionBarLayout.removeFragmentFromStack(this);
         }
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
     public boolean isFinishing() {
         return this.finishing;
     }
@@ -418,20 +406,21 @@ public abstract class BaseFragment {
         getMessagesStorage().cancelTasksForGuid(this.classGuid);
         boolean z = true;
         this.isFinished = true;
-        ActionBar actionBar2 = this.actionBar;
-        if (actionBar2 != null) {
-            actionBar2.setEnabled(false);
+        ActionBar actionBar = this.actionBar;
+        if (actionBar != null) {
+            actionBar.setEnabled(false);
         }
-        if (hasForceLightStatusBar() && !AndroidUtilities.isTablet() && getParentLayout().getLastFragment() == this && getParentActivity() != null && !this.finishing) {
-            Window window = getParentActivity().getWindow();
-            if (Theme.getColor("actionBarDefault") != -1) {
-                z = false;
-            }
-            AndroidUtilities.setLightStatusBar(window, z);
+        if (!hasForceLightStatusBar() || AndroidUtilities.isTablet() || getParentLayout().getLastFragment() != this || getParentActivity() == null || this.finishing) {
+            return;
         }
+        Window window = getParentActivity().getWindow();
+        if (Theme.getColor("actionBarDefault") != -1) {
+            z = false;
+        }
+        AndroidUtilities.setLightStatusBar(window, z);
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
     public void resumeDelayedFragmentAnimation() {
         ActionBarLayout actionBarLayout = this.parentLayout;
         if (actionBarLayout != null) {
@@ -444,19 +433,20 @@ public abstract class BaseFragment {
     }
 
     public void onPause() {
-        ActionBar actionBar2 = this.actionBar;
-        if (actionBar2 != null) {
-            actionBar2.onPause();
+        ActionBar actionBar = this.actionBar;
+        if (actionBar != null) {
+            actionBar.onPause();
         }
         this.isPaused = true;
         try {
             Dialog dialog = this.visibleDialog;
-            if (dialog != null && dialog.isShowing() && dismissDialogOnPause(this.visibleDialog)) {
-                this.visibleDialog.dismiss();
-                this.visibleDialog = null;
+            if (dialog == null || !dialog.isShowing() || !dismissDialogOnPause(this.visibleDialog)) {
+                return;
             }
+            this.visibleDialog.dismiss();
+            this.visibleDialog = null;
         } catch (Exception e) {
-            FileLog.e((Throwable) e);
+            FileLog.e(e);
         }
     }
 
@@ -486,135 +476,39 @@ public abstract class BaseFragment {
 
     public FrameLayout getLayoutContainer() {
         View view = this.fragmentView;
-        if (view == null) {
-            return null;
-        }
-        ViewParent parent = view.getParent();
-        if (parent instanceof FrameLayout) {
+        if (view != null) {
+            ViewParent parent = view.getParent();
+            if (!(parent instanceof FrameLayout)) {
+                return null;
+            }
             return (FrameLayout) parent;
         }
         return null;
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:2:0x0006, code lost:
-        r0 = r1.parentLayout;
-     */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public boolean presentFragmentAsPreview(org.telegram.ui.ActionBar.BaseFragment r2) {
-        /*
-            r1 = this;
-            boolean r0 = r1.allowPresentFragment()
-            if (r0 == 0) goto L_0x0012
-            org.telegram.ui.ActionBar.ActionBarLayout r0 = r1.parentLayout
-            if (r0 == 0) goto L_0x0012
-            boolean r2 = r0.presentFragmentAsPreview(r2)
-            if (r2 == 0) goto L_0x0012
-            r2 = 1
-            goto L_0x0013
-        L_0x0012:
-            r2 = 0
-        L_0x0013:
-            return r2
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.BaseFragment.presentFragmentAsPreview(org.telegram.ui.ActionBar.BaseFragment):boolean");
+    public boolean presentFragmentAsPreview(BaseFragment baseFragment) {
+        ActionBarLayout actionBarLayout;
+        return allowPresentFragment() && (actionBarLayout = this.parentLayout) != null && actionBarLayout.presentFragmentAsPreview(baseFragment);
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:2:0x0006, code lost:
-        r0 = r1.parentLayout;
-     */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public boolean presentFragmentAsPreviewWithMenu(org.telegram.ui.ActionBar.BaseFragment r2, org.telegram.ui.ActionBar.ActionBarPopupWindow.ActionBarPopupWindowLayout r3) {
-        /*
-            r1 = this;
-            boolean r0 = r1.allowPresentFragment()
-            if (r0 == 0) goto L_0x0012
-            org.telegram.ui.ActionBar.ActionBarLayout r0 = r1.parentLayout
-            if (r0 == 0) goto L_0x0012
-            boolean r2 = r0.presentFragmentAsPreviewWithMenu(r2, r3)
-            if (r2 == 0) goto L_0x0012
-            r2 = 1
-            goto L_0x0013
-        L_0x0012:
-            r2 = 0
-        L_0x0013:
-            return r2
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.BaseFragment.presentFragmentAsPreviewWithMenu(org.telegram.ui.ActionBar.BaseFragment, org.telegram.ui.ActionBar.ActionBarPopupWindow$ActionBarPopupWindowLayout):boolean");
+    public boolean presentFragmentAsPreviewWithMenu(BaseFragment baseFragment, ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout) {
+        ActionBarLayout actionBarLayout;
+        return allowPresentFragment() && (actionBarLayout = this.parentLayout) != null && actionBarLayout.presentFragmentAsPreviewWithMenu(baseFragment, actionBarPopupWindowLayout);
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:2:0x0006, code lost:
-        r0 = r1.parentLayout;
-     */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public boolean presentFragment(org.telegram.ui.ActionBar.BaseFragment r2) {
-        /*
-            r1 = this;
-            boolean r0 = r1.allowPresentFragment()
-            if (r0 == 0) goto L_0x0012
-            org.telegram.ui.ActionBar.ActionBarLayout r0 = r1.parentLayout
-            if (r0 == 0) goto L_0x0012
-            boolean r2 = r0.presentFragment(r2)
-            if (r2 == 0) goto L_0x0012
-            r2 = 1
-            goto L_0x0013
-        L_0x0012:
-            r2 = 0
-        L_0x0013:
-            return r2
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.BaseFragment.presentFragment(org.telegram.ui.ActionBar.BaseFragment):boolean");
+    public boolean presentFragment(BaseFragment baseFragment) {
+        ActionBarLayout actionBarLayout;
+        return allowPresentFragment() && (actionBarLayout = this.parentLayout) != null && actionBarLayout.presentFragment(baseFragment);
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:2:0x0006, code lost:
-        r0 = r1.parentLayout;
-     */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public boolean presentFragment(org.telegram.ui.ActionBar.BaseFragment r2, boolean r3) {
-        /*
-            r1 = this;
-            boolean r0 = r1.allowPresentFragment()
-            if (r0 == 0) goto L_0x0012
-            org.telegram.ui.ActionBar.ActionBarLayout r0 = r1.parentLayout
-            if (r0 == 0) goto L_0x0012
-            boolean r2 = r0.presentFragment(r2, r3)
-            if (r2 == 0) goto L_0x0012
-            r2 = 1
-            goto L_0x0013
-        L_0x0012:
-            r2 = 0
-        L_0x0013:
-            return r2
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.BaseFragment.presentFragment(org.telegram.ui.ActionBar.BaseFragment, boolean):boolean");
+    public boolean presentFragment(BaseFragment baseFragment, boolean z) {
+        ActionBarLayout actionBarLayout;
+        return allowPresentFragment() && (actionBarLayout = this.parentLayout) != null && actionBarLayout.presentFragment(baseFragment, z);
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:2:0x0006, code lost:
-        r1 = r8.parentLayout;
-     */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public boolean presentFragment(org.telegram.ui.ActionBar.BaseFragment r9, boolean r10, boolean r11) {
-        /*
-            r8 = this;
-            boolean r0 = r8.allowPresentFragment()
-            if (r0 == 0) goto L_0x0018
-            org.telegram.ui.ActionBar.ActionBarLayout r1 = r8.parentLayout
-            if (r1 == 0) goto L_0x0018
-            r5 = 1
-            r6 = 0
-            r7 = 0
-            r2 = r9
-            r3 = r10
-            r4 = r11
-            boolean r9 = r1.presentFragment(r2, r3, r4, r5, r6, r7)
-            if (r9 == 0) goto L_0x0018
-            r9 = 1
-            goto L_0x0019
-        L_0x0018:
-            r9 = 0
-        L_0x0019:
-            return r9
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.BaseFragment.presentFragment(org.telegram.ui.ActionBar.BaseFragment, boolean, boolean):boolean");
+    public boolean presentFragment(BaseFragment baseFragment, boolean z, boolean z2) {
+        ActionBarLayout actionBarLayout;
+        return allowPresentFragment() && (actionBarLayout = this.parentLayout) != null && actionBarLayout.presentFragment(baseFragment, z, z2, true, false, null);
     }
 
     public Activity getParentActivity() {
@@ -629,7 +523,7 @@ public abstract class BaseFragment {
         return getParentActivity();
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
     public void setParentActivityTitle(CharSequence charSequence) {
         Activity parentActivity = getParentActivity();
         if (parentActivity != null) {
@@ -646,13 +540,14 @@ public abstract class BaseFragment {
 
     public void dismissCurrentDialog() {
         Dialog dialog = this.visibleDialog;
-        if (dialog != null) {
-            try {
-                dialog.dismiss();
-                this.visibleDialog = null;
-            } catch (Exception e) {
-                FileLog.e((Throwable) e);
-            }
+        if (dialog == null) {
+            return;
+        }
+        try {
+            dialog.dismiss();
+            this.visibleDialog = null;
+        } catch (Exception e) {
+            FileLog.e(e);
         }
     }
 
@@ -664,41 +559,43 @@ public abstract class BaseFragment {
                 this.visibleDialog = null;
             }
         } catch (Exception e) {
-            FileLog.e((Throwable) e);
+            FileLog.e(e);
         }
-        ActionBar actionBar2 = this.actionBar;
-        if (actionBar2 != null) {
-            actionBar2.onPause();
+        ActionBar actionBar = this.actionBar;
+        if (actionBar != null) {
+            actionBar.onPause();
         }
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
     public void onTransitionAnimationStart(boolean z, boolean z2) {
         if (z) {
             this.fragmentBeginToShow = true;
         }
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
     public void onBecomeFullyVisible() {
-        ActionBar actionBar2;
-        if (((AccessibilityManager) ApplicationLoader.applicationContext.getSystemService("accessibility")).isEnabled() && (actionBar2 = getActionBar()) != null) {
-            String title = actionBar2.getTitle();
-            if (!TextUtils.isEmpty(title)) {
-                setParentActivityTitle(title);
-            }
+        ActionBar actionBar;
+        if (!((AccessibilityManager) ApplicationLoader.applicationContext.getSystemService("accessibility")).isEnabled() || (actionBar = getActionBar()) == null) {
+            return;
         }
+        String title = actionBar.getTitle();
+        if (TextUtils.isEmpty(title)) {
+            return;
+        }
+        setParentActivityTitle(title);
     }
 
     public Dialog showDialog(Dialog dialog) {
-        return showDialog(dialog, false, (DialogInterface.OnDismissListener) null);
+        return showDialog(dialog, false, null);
     }
 
     public Dialog showDialog(Dialog dialog, DialogInterface.OnDismissListener onDismissListener) {
         return showDialog(dialog, false, onDismissListener);
     }
 
-    public Dialog showDialog(Dialog dialog, boolean z, DialogInterface.OnDismissListener onDismissListener) {
+    public Dialog showDialog(Dialog dialog, boolean z, final DialogInterface.OnDismissListener onDismissListener) {
         ActionBarLayout actionBarLayout;
         if (dialog != null && (actionBarLayout = this.parentLayout) != null && !actionBarLayout.animationInProgress && !actionBarLayout.startedTracking && (z || !actionBarLayout.checkTransitionAnimation())) {
             try {
@@ -708,22 +605,27 @@ public abstract class BaseFragment {
                     this.visibleDialog = null;
                 }
             } catch (Exception e) {
-                FileLog.e((Throwable) e);
+                FileLog.e(e);
             }
             try {
                 this.visibleDialog = dialog;
                 dialog.setCanceledOnTouchOutside(true);
-                this.visibleDialog.setOnDismissListener(new BaseFragment$$ExternalSyntheticLambda0(this, onDismissListener));
+                this.visibleDialog.setOnDismissListener(new DialogInterface.OnDismissListener() { // from class: org.telegram.ui.ActionBar.BaseFragment$$ExternalSyntheticLambda0
+                    @Override // android.content.DialogInterface.OnDismissListener
+                    public final void onDismiss(DialogInterface dialogInterface) {
+                        BaseFragment.this.lambda$showDialog$0(onDismissListener, dialogInterface);
+                    }
+                });
                 this.visibleDialog.show();
                 return this.visibleDialog;
             } catch (Exception e2) {
-                FileLog.e((Throwable) e2);
+                FileLog.e(e2);
             }
         }
         return null;
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$showDialog$0(DialogInterface.OnDismissListener onDismissListener, DialogInterface dialogInterface) {
         if (onDismissListener != null) {
             onDismissListener.onDismiss(dialogInterface);
@@ -754,7 +656,7 @@ public abstract class BaseFragment {
         return getAccountInstance().getMessagesController();
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
     public ContactsController getContactsController() {
         return getAccountInstance().getContactsController();
     }
@@ -771,7 +673,7 @@ public abstract class BaseFragment {
         return getAccountInstance().getLocationController();
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
     public NotificationsController getNotificationsController() {
         return getAccountInstance().getNotificationsController();
     }
@@ -788,7 +690,7 @@ public abstract class BaseFragment {
         return getAccountInstance().getFileLoader();
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
     public SecretChatHelper getSecretChatHelper() {
         return getAccountInstance().getSecretChatHelper();
     }
@@ -797,7 +699,7 @@ public abstract class BaseFragment {
         return getAccountInstance().getDownloadController();
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
     public SharedPreferences getNotificationsSettings() {
         return getAccountInstance().getNotificationsSettings();
     }
@@ -826,47 +728,60 @@ public abstract class BaseFragment {
             return null;
         }
         ActionBarLayout[] actionBarLayoutArr = {new ActionBarLayout(getParentActivity())};
-        AnonymousClass1 r1 = new BottomSheet(this, getParentActivity(), true, actionBarLayoutArr, baseFragment) {
-            final /* synthetic */ ActionBarLayout[] val$actionBarLayout;
-            final /* synthetic */ BaseFragment val$fragment;
-
-            /* access modifiers changed from: protected */
-            public boolean canDismissWithSwipe() {
-                return false;
-            }
-
-            {
-                this.val$actionBarLayout = r4;
-                this.val$fragment = r5;
-                r4[0].init(new ArrayList());
-                r4[0].addFragmentToStack(r5);
-                r4[0].showLastFragment();
-                ActionBarLayout actionBarLayout = r4[0];
-                int i = this.backgroundPaddingLeft;
-                actionBarLayout.setPadding(i, 0, i, 0);
-                this.containerView = r4[0];
-                setApplyBottomPadding(false);
-                setApplyBottomPadding(false);
-                setOnDismissListener(new BaseFragment$1$$ExternalSyntheticLambda0(r5));
-            }
-
-            public void onBackPressed() {
-                ActionBarLayout[] actionBarLayoutArr = this.val$actionBarLayout;
-                if (actionBarLayoutArr[0] == null || actionBarLayoutArr[0].fragmentsStack.size() <= 1) {
-                    super.onBackPressed();
-                } else {
-                    this.val$actionBarLayout[0].onBackPressed();
-                }
-            }
-
-            public void dismiss() {
-                super.dismiss();
-                this.val$actionBarLayout[0] = null;
-            }
-        };
-        baseFragment.setParentDialog(r1);
-        r1.show();
+        AnonymousClass1 anonymousClass1 = new AnonymousClass1(this, getParentActivity(), true, actionBarLayoutArr, baseFragment);
+        baseFragment.setParentDialog(anonymousClass1);
+        anonymousClass1.show();
         return actionBarLayoutArr;
+    }
+
+    /* renamed from: org.telegram.ui.ActionBar.BaseFragment$1  reason: invalid class name */
+    /* loaded from: classes3.dex */
+    class AnonymousClass1 extends BottomSheet {
+        final /* synthetic */ ActionBarLayout[] val$actionBarLayout;
+        final /* synthetic */ BaseFragment val$fragment;
+
+        @Override // org.telegram.ui.ActionBar.BottomSheet
+        protected boolean canDismissWithSwipe() {
+            return false;
+        }
+
+        /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+        AnonymousClass1(BaseFragment baseFragment, Context context, boolean z, ActionBarLayout[] actionBarLayoutArr, final BaseFragment baseFragment2) {
+            super(context, z);
+            this.val$actionBarLayout = actionBarLayoutArr;
+            this.val$fragment = baseFragment2;
+            actionBarLayoutArr[0].init(new ArrayList<>());
+            actionBarLayoutArr[0].addFragmentToStack(baseFragment2);
+            actionBarLayoutArr[0].showLastFragment();
+            ActionBarLayout actionBarLayout = actionBarLayoutArr[0];
+            int i = this.backgroundPaddingLeft;
+            actionBarLayout.setPadding(i, 0, i, 0);
+            this.containerView = actionBarLayoutArr[0];
+            setApplyBottomPadding(false);
+            setApplyBottomPadding(false);
+            setOnDismissListener(new DialogInterface.OnDismissListener() { // from class: org.telegram.ui.ActionBar.BaseFragment$1$$ExternalSyntheticLambda0
+                @Override // android.content.DialogInterface.OnDismissListener
+                public final void onDismiss(DialogInterface dialogInterface) {
+                    BaseFragment.this.onFragmentDestroy();
+                }
+            });
+        }
+
+        @Override // android.app.Dialog
+        public void onBackPressed() {
+            ActionBarLayout[] actionBarLayoutArr = this.val$actionBarLayout;
+            if (actionBarLayoutArr[0] == null || actionBarLayoutArr[0].fragmentsStack.size() <= 1) {
+                super.onBackPressed();
+            } else {
+                this.val$actionBarLayout[0].onBackPressed();
+            }
+        }
+
+        @Override // org.telegram.ui.ActionBar.BottomSheet, android.app.Dialog, android.content.DialogInterface
+        public void dismiss() {
+            super.dismiss();
+            this.val$actionBarLayout[0] = null;
+        }
     }
 
     public int getThemedColor(String str) {
@@ -885,10 +800,11 @@ public abstract class BaseFragment {
         Activity parentActivity = getParentActivity();
         if (parentActivity != null) {
             Window window = parentActivity.getWindow();
-            if (Build.VERSION.SDK_INT >= 26 && window != null && window.getNavigationBarColor() != i) {
-                window.setNavigationBarColor(i);
-                AndroidUtilities.setLightNavigationBar(window, AndroidUtilities.computePerceivedBrightness(i) >= 0.721f);
+            if (Build.VERSION.SDK_INT < 26 || window == null || window.getNavigationBarColor() == i) {
+                return;
             }
+            window.setNavigationBarColor(i);
+            AndroidUtilities.setLightNavigationBar(window, AndroidUtilities.computePerceivedBrightness(i) >= 0.721f);
         }
     }
 
@@ -909,21 +825,18 @@ public abstract class BaseFragment {
     }
 
     public boolean isLightStatusBar() {
-        int i;
-        if (hasForceLightStatusBar() && !Theme.getCurrentTheme().isDark()) {
-            return true;
+        int color;
+        if (!hasForceLightStatusBar() || Theme.getCurrentTheme().isDark()) {
+            Theme.ResourcesProvider resourceProvider = getResourceProvider();
+            ActionBar actionBar = this.actionBar;
+            String str = (actionBar == null || !actionBar.isActionModeShowed()) ? "actionBarDefault" : "actionBarActionModeDefault";
+            if (resourceProvider != null) {
+                color = resourceProvider.getColorOrDefault(str);
+            } else {
+                color = Theme.getColor(str, null, true);
+            }
+            return ColorUtils.calculateLuminance(color) > 0.699999988079071d;
         }
-        Theme.ResourcesProvider resourceProvider = getResourceProvider();
-        ActionBar actionBar2 = this.actionBar;
-        String str = (actionBar2 == null || !actionBar2.isActionModeShowed()) ? "actionBarDefault" : "actionBarActionModeDefault";
-        if (resourceProvider != null) {
-            i = resourceProvider.getColorOrDefault(str);
-        } else {
-            i = Theme.getColor(str, (boolean[]) null, true);
-        }
-        if (ColorUtils.calculateLuminance(i) > 0.699999988079071d) {
-            return true;
-        }
-        return false;
+        return true;
     }
 }

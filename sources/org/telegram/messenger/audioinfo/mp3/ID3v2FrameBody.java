@@ -3,10 +3,11 @@ package org.telegram.messenger.audioinfo.mp3;
 import java.io.IOException;
 import java.io.InputStream;
 import org.telegram.messenger.audioinfo.util.RangeInputStream;
-
+/* loaded from: classes.dex */
 public class ID3v2FrameBody {
-    static final ThreadLocal<Buffer> textBuffer = new ThreadLocal<Buffer>() {
-        /* access modifiers changed from: protected */
+    static final ThreadLocal<Buffer> textBuffer = new ThreadLocal<Buffer>() { // from class: org.telegram.messenger.audioinfo.mp3.ID3v2FrameBody.1
+        /* JADX INFO: Access modifiers changed from: protected */
+        @Override // java.lang.ThreadLocal
         public Buffer initialValue() {
             return new Buffer(4096);
         }
@@ -16,15 +17,16 @@ public class ID3v2FrameBody {
     private final RangeInputStream input;
     private final ID3v2TagHeader tagHeader;
 
-    static final class Buffer {
+    /* JADX INFO: Access modifiers changed from: package-private */
+    /* loaded from: classes.dex */
+    public static final class Buffer {
         byte[] bytes;
 
         Buffer(int i) {
             this.bytes = new byte[i];
         }
 
-        /* access modifiers changed from: package-private */
-        public byte[] bytes(int i) {
+        byte[] bytes(int i) {
             byte[] bArr = this.bytes;
             if (i > bArr.length) {
                 int length = bArr.length;
@@ -37,8 +39,9 @@ public class ID3v2FrameBody {
         }
     }
 
-    ID3v2FrameBody(InputStream inputStream, long j, int i, ID3v2TagHeader iD3v2TagHeader, ID3v2FrameHeader iD3v2FrameHeader) throws IOException {
-        RangeInputStream rangeInputStream = new RangeInputStream(inputStream, j, (long) i);
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public ID3v2FrameBody(InputStream inputStream, long j, int i, ID3v2TagHeader iD3v2TagHeader, ID3v2FrameHeader iD3v2FrameHeader) throws IOException {
+        RangeInputStream rangeInputStream = new RangeInputStream(inputStream, j, i);
         this.input = rangeInputStream;
         this.data = new ID3v2DataInput(rangeInputStream);
         this.tagHeader = iD3v2TagHeader;
@@ -68,20 +71,16 @@ public class ID3v2FrameBody {
     private String extractString(byte[] bArr, int i, int i2, ID3v2Encoding iD3v2Encoding, boolean z) {
         if (z) {
             int i3 = 0;
-            int i4 = 0;
-            while (true) {
-                if (i3 < i2) {
-                    int i5 = i + i3;
-                    if (bArr[i5] != 0 || (iD3v2Encoding == ID3v2Encoding.UTF_16 && i4 == 0 && i5 % 2 != 0)) {
-                        i4 = 0;
-                    } else {
-                        i4++;
-                        if (i4 == iD3v2Encoding.getZeroBytes()) {
-                            i2 = (i3 + 1) - iD3v2Encoding.getZeroBytes();
-                            break;
-                        }
-                    }
+            for (int i4 = 0; i4 < i2; i4++) {
+                int i5 = i + i4;
+                if (bArr[i5] == 0 && (iD3v2Encoding != ID3v2Encoding.UTF_16 || i3 != 0 || i5 % 2 == 0)) {
                     i3++;
+                    if (i3 == iD3v2Encoding.getZeroBytes()) {
+                        i2 = (i4 + 1) - iD3v2Encoding.getZeroBytes();
+                        break;
+                    }
+                } else {
+                    i3 = 0;
                 }
             }
         }
@@ -113,29 +112,29 @@ public class ID3v2FrameBody {
     }
 
     public String readFixedLengthString(int i, ID3v2Encoding iD3v2Encoding) throws IOException, ID3v2Exception {
-        if (((long) i) <= getRemainingLength()) {
-            byte[] bytes = textBuffer.get().bytes(i);
-            this.data.readFully(bytes, 0, i);
-            return extractString(bytes, 0, i, iD3v2Encoding, true);
+        if (i > getRemainingLength()) {
+            throw new ID3v2Exception("Could not read fixed-length string of length: " + i);
         }
-        throw new ID3v2Exception("Could not read fixed-length string of length: " + i);
+        byte[] bytes = textBuffer.get().bytes(i);
+        this.data.readFully(bytes, 0, i);
+        return extractString(bytes, 0, i, iD3v2Encoding, true);
     }
 
     public ID3v2Encoding readEncoding() throws IOException, ID3v2Exception {
         byte readByte = this.data.readByte();
-        if (readByte == 0) {
-            return ID3v2Encoding.ISO_8859_1;
+        if (readByte != 0) {
+            if (readByte == 1) {
+                return ID3v2Encoding.UTF_16;
+            }
+            if (readByte == 2) {
+                return ID3v2Encoding.UTF_16BE;
+            }
+            if (readByte == 3) {
+                return ID3v2Encoding.UTF_8;
+            }
+            throw new ID3v2Exception("Invalid encoding: " + ((int) readByte));
         }
-        if (readByte == 1) {
-            return ID3v2Encoding.UTF_16;
-        }
-        if (readByte == 2) {
-            return ID3v2Encoding.UTF_16BE;
-        }
-        if (readByte == 3) {
-            return ID3v2Encoding.UTF_8;
-        }
-        throw new ID3v2Exception("Invalid encoding: " + readByte);
+        return ID3v2Encoding.ISO_8859_1;
     }
 
     public String toString() {

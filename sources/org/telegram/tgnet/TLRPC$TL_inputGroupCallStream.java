@@ -1,5 +1,5 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_inputGroupCallStream extends TLRPC$InputFileLocation {
     public static int constructor = 93890858;
     public TLRPC$TL_inputGroupCall call;
@@ -9,6 +9,7 @@ public class TLRPC$TL_inputGroupCallStream extends TLRPC$InputFileLocation {
     public int video_channel;
     public int video_quality;
 
+    @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         this.flags = abstractSerializedData.readInt32(z);
         this.call = TLRPC$TL_inputGroupCall.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
@@ -22,6 +23,7 @@ public class TLRPC$TL_inputGroupCallStream extends TLRPC$InputFileLocation {
         }
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
         abstractSerializedData.writeInt32(this.flags);

@@ -4,10 +4,11 @@ import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.opengl.GLES20;
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
-
+/* loaded from: classes3.dex */
 public class Render {
     public static RectF RenderPath(Path path, RenderState renderState) {
         renderState.baseWeight = path.getBaseWeight();
@@ -38,32 +39,28 @@ public class Render {
     private static void PaintSegment(Point point, Point point2, RenderState renderState) {
         boolean z;
         int i;
-        float f;
-        Point point3 = point;
-        Point point4 = point2;
-        RenderState renderState2 = renderState;
-        double distanceTo = (double) point.getDistanceTo(point2);
-        Point substract = point4.substract(point3);
-        Point point5 = new Point(1.0d, 1.0d, 0.0d);
-        float atan2 = Math.abs(renderState2.angle) > 0.0f ? renderState2.angle : (float) Math.atan2(substract.y, substract.x);
-        float f2 = ((renderState2.baseWeight * renderState2.scale) * 1.0f) / renderState2.viewportScale;
-        double max = (double) Math.max(1.0f, renderState2.spacing * f2);
+        double distanceTo = point.getDistanceTo(point2);
+        Point substract = point2.substract(point);
+        Point point3 = new Point(1.0d, 1.0d, 0.0d);
+        float atan2 = Math.abs(renderState.angle) > 0.0f ? renderState.angle : (float) Math.atan2(substract.y, substract.x);
+        float f = ((renderState.baseWeight * renderState.scale) * 1.0f) / renderState.viewportScale;
+        double max = Math.max(1.0f, renderState.spacing * f);
         if (distanceTo > 0.0d) {
             Double.isNaN(distanceTo);
-            point5 = substract.multiplyByScalar(1.0d / distanceTo);
+            point3 = substract.multiplyByScalar(1.0d / distanceTo);
         }
-        Point point6 = point5;
-        float min = Math.min(1.0f, renderState2.alpha * 1.15f);
-        boolean z2 = point3.edge;
-        boolean z3 = point4.edge;
-        double d = renderState2.remainder;
+        Point point4 = point3;
+        float min = Math.min(1.0f, renderState.alpha * 1.15f);
+        boolean z2 = point.edge;
+        boolean z3 = point2.edge;
+        double d = renderState.remainder;
         Double.isNaN(distanceTo);
         Double.isNaN(max);
         int count = renderState.getCount();
-        renderState2.appendValuesCount((int) Math.ceil((distanceTo - d) / max));
-        renderState2.setPosition(count);
-        Point add = point3.add(point6.multiplyByScalar(renderState2.remainder));
-        double d2 = renderState2.remainder;
+        renderState.appendValuesCount((int) Math.ceil((distanceTo - d) / max));
+        renderState.setPosition(count);
+        Point add = point.add(point4.multiplyByScalar(renderState.remainder));
+        double d2 = renderState.remainder;
         boolean z4 = true;
         while (true) {
             if (d2 > distanceTo) {
@@ -71,31 +68,24 @@ public class Render {
                 i = 1;
                 break;
             }
-            if (z2) {
-                f = min;
-            } else {
-                f = renderState2.alpha;
-            }
             i = 1;
-            float f3 = f;
             z = z3;
-            z4 = renderState.addPoint(add.toPointF(), f2, atan2, f3, -1);
+            z4 = renderState.addPoint(add.toPointF(), f, atan2, z2 ? min : renderState.alpha, -1);
             if (!z4) {
                 break;
             }
-            add = add.add(point6.multiplyByScalar(max));
+            add = add.add(point4.multiplyByScalar(max));
             z2 = false;
             Double.isNaN(max);
             d2 += max;
-            Point point7 = point2;
             z3 = z;
         }
         if (z4 && z) {
-            renderState2.appendValuesCount(i);
-            renderState.addPoint(point2.toPointF(), f2, atan2, min, -1);
+            renderState.appendValuesCount(i);
+            renderState.addPoint(point2.toPointF(), f, atan2, min, -1);
         }
         Double.isNaN(distanceTo);
-        renderState2.remainder = d2 - distanceTo;
+        renderState.remainder = d2 - distanceTo;
     }
 
     private static void PaintStamp(Point point, RenderState renderState) {
@@ -109,8 +99,8 @@ public class Render {
     }
 
     private static RectF Draw(RenderState renderState) {
-        float f;
         int i;
+        float f;
         RectF rectF = new RectF(0.0f, 0.0f, 0.0f, 0.0f);
         int count = renderState.getCount();
         if (count == 0) {
@@ -148,7 +138,7 @@ public class Render {
             float centerX = rectF2.centerX();
             float centerY = rectF2.centerY();
             Matrix matrix = new Matrix();
-            matrix.setRotate((float) Math.toDegrees((double) read4), centerX, centerY);
+            matrix.setRotate((float) Math.toDegrees(read4), centerX, centerY);
             matrix.mapPoints(fArr);
             matrix.mapRect(rectF2);
             Utils.RectFIntegral(rectF2);
@@ -196,17 +186,16 @@ public class Render {
                 i4++;
             }
             i3++;
-            RenderState renderState2 = renderState;
             c = 0;
         }
         asFloatBuffer.position(0);
-        GLES20.glVertexAttribPointer(0, 2, 5126, false, 20, asFloatBuffer.slice());
+        GLES20.glVertexAttribPointer(0, 2, 5126, false, 20, (Buffer) asFloatBuffer.slice());
         GLES20.glEnableVertexAttribArray(0);
         asFloatBuffer.position(2);
-        GLES20.glVertexAttribPointer(1, 2, 5126, true, 20, asFloatBuffer.slice());
+        GLES20.glVertexAttribPointer(1, 2, 5126, true, 20, (Buffer) asFloatBuffer.slice());
         GLES20.glEnableVertexAttribArray(1);
         asFloatBuffer.position(4);
-        GLES20.glVertexAttribPointer(2, 1, 5126, true, 20, asFloatBuffer.slice());
+        GLES20.glVertexAttribPointer(2, 1, 5126, true, 20, (Buffer) asFloatBuffer.slice());
         GLES20.glEnableVertexAttribArray(2);
         GLES20.glDrawArrays(5, 0, i4);
         return rectF;

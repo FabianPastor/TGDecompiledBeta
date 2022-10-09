@@ -1,10 +1,11 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_auth_authorizationSignUpRequired extends TLRPC$auth_Authorization {
     public static int constructor = NUM;
     public int flags;
     public TLRPC$TL_help_termsOfService terms_of_service;
 
+    @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
@@ -13,6 +14,7 @@ public class TLRPC$TL_auth_authorizationSignUpRequired extends TLRPC$auth_Author
         }
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
         abstractSerializedData.writeInt32(this.flags);

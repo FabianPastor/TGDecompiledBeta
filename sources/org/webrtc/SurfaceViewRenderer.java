@@ -11,7 +11,7 @@ import org.webrtc.EglBase;
 import org.webrtc.EglRenderer;
 import org.webrtc.RendererCommon;
 import org.webrtc.VideoSink;
-
+/* loaded from: classes3.dex */
 public class SurfaceViewRenderer extends SurfaceView implements SurfaceHolder.Callback, VideoSink, RendererCommon.RendererEvents {
     private static final String TAG = "SurfaceViewRenderer";
     private final SurfaceEglRenderer eglRenderer;
@@ -22,23 +22,27 @@ public class SurfaceViewRenderer extends SurfaceView implements SurfaceHolder.Ca
     private int rotatedFrameWidth;
     private int surfaceHeight;
     private int surfaceWidth;
-    private final RendererCommon.VideoLayoutMeasure videoLayoutMeasure = new RendererCommon.VideoLayoutMeasure();
+    private final RendererCommon.VideoLayoutMeasure videoLayoutMeasure;
 
+    @Override // org.webrtc.VideoSink
     public /* synthetic */ void setParentSink(VideoSink videoSink) {
         VideoSink.CC.$default$setParentSink(this, videoSink);
     }
 
+    @Override // android.view.SurfaceHolder.Callback
     public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i2, int i3) {
     }
 
+    @Override // android.view.SurfaceHolder.Callback
     public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
     }
 
     public SurfaceViewRenderer(Context context) {
         super(context);
-        String resourceName2 = getResourceName();
-        this.resourceName = resourceName2;
-        SurfaceEglRenderer surfaceEglRenderer = new SurfaceEglRenderer(resourceName2);
+        this.videoLayoutMeasure = new RendererCommon.VideoLayoutMeasure();
+        String resourceName = getResourceName();
+        this.resourceName = resourceName;
+        SurfaceEglRenderer surfaceEglRenderer = new SurfaceEglRenderer(resourceName);
         this.eglRenderer = surfaceEglRenderer;
         getHolder().addCallback(this);
         getHolder().addCallback(surfaceEglRenderer);
@@ -46,21 +50,22 @@ public class SurfaceViewRenderer extends SurfaceView implements SurfaceHolder.Ca
 
     public SurfaceViewRenderer(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
-        String resourceName2 = getResourceName();
-        this.resourceName = resourceName2;
-        SurfaceEglRenderer surfaceEglRenderer = new SurfaceEglRenderer(resourceName2);
+        this.videoLayoutMeasure = new RendererCommon.VideoLayoutMeasure();
+        String resourceName = getResourceName();
+        this.resourceName = resourceName;
+        SurfaceEglRenderer surfaceEglRenderer = new SurfaceEglRenderer(resourceName);
         this.eglRenderer = surfaceEglRenderer;
         getHolder().addCallback(this);
         getHolder().addCallback(surfaceEglRenderer);
     }
 
-    public void init(EglBase.Context context, RendererCommon.RendererEvents rendererEvents2) {
-        init(context, rendererEvents2, EglBase.CONFIG_PLAIN, new GlRectDrawer());
+    public void init(EglBase.Context context, RendererCommon.RendererEvents rendererEvents) {
+        init(context, rendererEvents, EglBase.CONFIG_PLAIN, new GlRectDrawer());
     }
 
-    public void init(EglBase.Context context, RendererCommon.RendererEvents rendererEvents2, int[] iArr, RendererCommon.GlDrawer glDrawer) {
+    public void init(EglBase.Context context, RendererCommon.RendererEvents rendererEvents, int[] iArr, RendererCommon.GlDrawer glDrawer) {
         ThreadUtils.checkIsOnMainThread();
-        this.rendererEvents = rendererEvents2;
+        this.rendererEvents = rendererEvents;
         this.rotatedFrameWidth = 0;
         this.rotatedFrameHeight = 0;
         this.eglRenderer.init(context, this, iArr, glDrawer);
@@ -116,51 +121,54 @@ public class SurfaceViewRenderer extends SurfaceView implements SurfaceHolder.Ca
         this.eglRenderer.pauseVideo();
     }
 
+    @Override // org.webrtc.VideoSink
     public void onFrame(VideoFrame videoFrame) {
         this.eglRenderer.onFrame(videoFrame);
     }
 
-    /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
+    @Override // android.view.SurfaceView, android.view.View
+    protected void onMeasure(int i, int i2) {
         ThreadUtils.checkIsOnMainThread();
         Point measure = this.videoLayoutMeasure.measure(true, i, i2, this.rotatedFrameWidth, this.rotatedFrameHeight);
         setMeasuredDimension(measure.x, measure.y);
         logD("onMeasure(). New size: " + measure.x + "x" + measure.y);
     }
 
-    /* access modifiers changed from: protected */
-    public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+    @Override // android.view.View
+    protected void onLayout(boolean z, int i, int i2, int i3, int i4) {
         ThreadUtils.checkIsOnMainThread();
-        this.eglRenderer.setLayoutAspectRatio(((float) (i3 - i)) / ((float) (i4 - i2)));
+        this.eglRenderer.setLayoutAspectRatio((i3 - i) / (i4 - i2));
         updateSurfaceSize();
     }
 
     private void updateSurfaceSize() {
         ThreadUtils.checkIsOnMainThread();
-        if (!this.enableFixedSize || this.rotatedFrameWidth == 0 || this.rotatedFrameHeight == 0 || getWidth() == 0 || getHeight() == 0) {
-            this.surfaceHeight = 0;
-            this.surfaceWidth = 0;
-            getHolder().setSizeFromLayout();
-            return;
-        }
-        float width = ((float) getWidth()) / ((float) getHeight());
-        int i = this.rotatedFrameWidth;
-        int i2 = this.rotatedFrameHeight;
-        if (((float) i) / ((float) i2) > width) {
-            i = (int) (((float) i2) * width);
-        } else {
-            i2 = (int) (((float) i) / width);
-        }
-        int min = Math.min(getWidth(), i);
-        int min2 = Math.min(getHeight(), i2);
-        logD("updateSurfaceSize. Layout size: " + getWidth() + "x" + getHeight() + ", frame size: " + this.rotatedFrameWidth + "x" + this.rotatedFrameHeight + ", requested surface size: " + min + "x" + min2 + ", old surface size: " + this.surfaceWidth + "x" + this.surfaceHeight);
-        if (min != this.surfaceWidth || min2 != this.surfaceHeight) {
+        if (this.enableFixedSize && this.rotatedFrameWidth != 0 && this.rotatedFrameHeight != 0 && getWidth() != 0 && getHeight() != 0) {
+            float width = getWidth() / getHeight();
+            int i = this.rotatedFrameWidth;
+            int i2 = this.rotatedFrameHeight;
+            if (i / i2 > width) {
+                i = (int) (i2 * width);
+            } else {
+                i2 = (int) (i / width);
+            }
+            int min = Math.min(getWidth(), i);
+            int min2 = Math.min(getHeight(), i2);
+            logD("updateSurfaceSize. Layout size: " + getWidth() + "x" + getHeight() + ", frame size: " + this.rotatedFrameWidth + "x" + this.rotatedFrameHeight + ", requested surface size: " + min + "x" + min2 + ", old surface size: " + this.surfaceWidth + "x" + this.surfaceHeight);
+            if (min == this.surfaceWidth && min2 == this.surfaceHeight) {
+                return;
+            }
             this.surfaceWidth = min;
             this.surfaceHeight = min2;
             getHolder().setFixedSize(min, min2);
+            return;
         }
+        this.surfaceHeight = 0;
+        this.surfaceWidth = 0;
+        getHolder().setSizeFromLayout();
     }
 
+    @Override // android.view.SurfaceHolder.Callback
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
         ThreadUtils.checkIsOnMainThread();
         this.surfaceHeight = 0;
@@ -180,26 +188,33 @@ public class SurfaceViewRenderer extends SurfaceView implements SurfaceHolder.Ca
         this.eglRenderer.clearImage();
     }
 
+    @Override // org.webrtc.RendererCommon.RendererEvents
     public void onFirstFrameRendered() {
-        RendererCommon.RendererEvents rendererEvents2 = this.rendererEvents;
-        if (rendererEvents2 != null) {
-            rendererEvents2.onFirstFrameRendered();
+        RendererCommon.RendererEvents rendererEvents = this.rendererEvents;
+        if (rendererEvents != null) {
+            rendererEvents.onFirstFrameRendered();
         }
     }
 
-    public void onFrameResolutionChanged(int i, int i2, int i3) {
-        RendererCommon.RendererEvents rendererEvents2 = this.rendererEvents;
-        if (rendererEvents2 != null) {
-            rendererEvents2.onFrameResolutionChanged(i, i2, i3);
+    @Override // org.webrtc.RendererCommon.RendererEvents
+    public void onFrameResolutionChanged(final int i, int i2, int i3) {
+        RendererCommon.RendererEvents rendererEvents = this.rendererEvents;
+        if (rendererEvents != null) {
+            rendererEvents.onFrameResolutionChanged(i, i2, i3);
         }
-        int i4 = (i3 == 0 || i3 == 180) ? i : i2;
+        final int i4 = (i3 == 0 || i3 == 180) ? i : i2;
         if (i3 == 0 || i3 == 180) {
             i = i2;
         }
-        postOrRun(new SurfaceViewRenderer$$ExternalSyntheticLambda0(this, i4, i));
+        postOrRun(new Runnable() { // from class: org.webrtc.SurfaceViewRenderer$$ExternalSyntheticLambda0
+            @Override // java.lang.Runnable
+            public final void run() {
+                SurfaceViewRenderer.this.lambda$onFrameResolutionChanged$0(i4, i);
+            }
+        });
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$onFrameResolutionChanged$0(int i, int i2) {
         this.rotatedFrameWidth = i;
         this.rotatedFrameHeight = i2;

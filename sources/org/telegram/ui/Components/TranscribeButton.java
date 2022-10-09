@@ -1,12 +1,10 @@
 package org.telegram.ui.Components;
 
-import android.animation.TimeInterpolator;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.RippleDrawable;
@@ -16,7 +14,6 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.style.ImageSpan;
 import android.util.StateSet;
-import android.view.View;
 import androidx.core.graphics.ColorUtils;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import java.util.Arrays;
@@ -32,6 +29,7 @@ import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$InputPeer;
 import org.telegram.tgnet.TLRPC$Message;
@@ -41,63 +39,72 @@ import org.telegram.tgnet.TLRPC$TL_messages_transcribedAudio;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.ChatMessageCell;
 import org.telegram.ui.PremiumPreviewFragment;
-
+/* loaded from: classes3.dex */
 public class TranscribeButton {
     private static final int[] pressedState = {16842910, 16842919};
     private static HashMap<Integer, MessageObject> transcribeOperationsByDialogPosition;
     private static HashMap<Long, MessageObject> transcribeOperationsById;
     private int backgroundColor;
     private Paint backgroundPaint;
-    private Rect bounds;
     private Path boundsPath;
     private int color;
     private int iconColor;
     private RLottieDrawable inIconDrawable;
-    private final FastOutSlowInInterpolator interpolator = new FastOutSlowInInterpolator();
     private boolean isOpen;
     private boolean loading;
     private AnimatedFloat loadingFloat;
     private RLottieDrawable outIconDrawable;
     private ChatMessageCell parent;
     private boolean premium;
-    private Rect pressBounds;
-    private boolean pressed = false;
+    private android.graphics.Rect pressBounds;
     private Path progressClipPath;
     private int rippleColor;
     private SeekBarWaveform seekBar;
     private float[] segments;
     private Drawable selectorDrawable;
     private boolean shouldBeOpen;
-    private long start = SystemClock.elapsedRealtime();
     private Paint strokePaint;
+    private boolean pressed = false;
+    private final FastOutSlowInInterpolator interpolator = new FastOutSlowInInterpolator();
+    private long start = SystemClock.elapsedRealtime();
+    private android.graphics.Rect bounds = new android.graphics.Rect(0, 0, AndroidUtilities.dp(30.0f), AndroidUtilities.dp(30.0f));
 
     public TranscribeButton(ChatMessageCell chatMessageCell, SeekBarWaveform seekBarWaveform) {
         this.parent = chatMessageCell;
         this.seekBar = seekBarWaveform;
-        this.bounds = new Rect(0, 0, AndroidUtilities.dp(30.0f), AndroidUtilities.dp(30.0f));
-        Rect rect = new Rect(this.bounds);
+        android.graphics.Rect rect = new android.graphics.Rect(this.bounds);
         this.pressBounds = rect;
         rect.inset(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f));
         RLottieDrawable rLottieDrawable = new RLottieDrawable(R.raw.transcribe_out, "transcribe_out", AndroidUtilities.dp(26.0f), AndroidUtilities.dp(26.0f));
         this.outIconDrawable = rLottieDrawable;
         rLottieDrawable.setCurrentFrame(0);
         this.outIconDrawable.setCallback(chatMessageCell);
-        this.outIconDrawable.setOnFinishCallback(new TranscribeButton$$ExternalSyntheticLambda5(this), 19);
+        this.outIconDrawable.setOnFinishCallback(new Runnable() { // from class: org.telegram.ui.Components.TranscribeButton$$ExternalSyntheticLambda5
+            @Override // java.lang.Runnable
+            public final void run() {
+                TranscribeButton.this.lambda$new$0();
+            }
+        }, 19);
         this.outIconDrawable.setAllowDecodeSingleFrame(true);
         RLottieDrawable rLottieDrawable2 = new RLottieDrawable(R.raw.transcribe_in, "transcribe_in", AndroidUtilities.dp(26.0f), AndroidUtilities.dp(26.0f));
         this.inIconDrawable = rLottieDrawable2;
         rLottieDrawable2.setCurrentFrame(0);
         this.inIconDrawable.setCallback(chatMessageCell);
         this.inIconDrawable.setMasterParent(chatMessageCell);
-        this.inIconDrawable.setOnFinishCallback(new TranscribeButton$$ExternalSyntheticLambda4(this), 19);
+        this.inIconDrawable.setOnFinishCallback(new Runnable() { // from class: org.telegram.ui.Components.TranscribeButton$$ExternalSyntheticLambda4
+            @Override // java.lang.Runnable
+            public final void run() {
+                TranscribeButton.this.lambda$new$1();
+            }
+        }, 19);
         this.inIconDrawable.setAllowDecodeSingleFrame(true);
         this.isOpen = false;
         this.shouldBeOpen = false;
         this.premium = AccountInstance.getInstance(chatMessageCell.getMessageObject().currentAccount).getUserConfig().isPremium();
-        this.loadingFloat = new AnimatedFloat((View) chatMessageCell, 250, (TimeInterpolator) CubicBezierInterpolator.EASE_OUT_QUINT);
+        this.loadingFloat = new AnimatedFloat(chatMessageCell, 250L, CubicBezierInterpolator.EASE_OUT_QUINT);
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$new$0() {
         this.outIconDrawable.stop();
         this.inIconDrawable.stop();
@@ -106,7 +113,7 @@ public class TranscribeButton {
         this.inIconDrawable.setCurrentFrame(0);
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$new$1() {
         this.inIconDrawable.stop();
         this.outIconDrawable.stop();
@@ -162,12 +169,12 @@ public class TranscribeButton {
 
     public boolean onTouch(int i, float f, float f2) {
         if (i == 1 || i == 3) {
-            if (!this.pressed || i != 1) {
-                this.pressed = false;
-                return false;
+            if (this.pressed && i == 1) {
+                onTap();
+                return true;
             }
-            onTap();
-            return true;
+            this.pressed = false;
+            return false;
         } else if (!this.pressBounds.contains((int) f, (int) f2)) {
             return false;
         } else {
@@ -208,13 +215,15 @@ public class TranscribeButton {
             }
         }
         this.pressed = false;
-        if (!z3) {
-            return;
-        }
-        if (this.premium || !z2) {
+        if (z3) {
+            if (!this.premium && z2) {
+                if (this.parent.getDelegate() == null) {
+                    return;
+                }
+                this.parent.getDelegate().needShowPremiumFeatures(PremiumPreviewFragment.featureTypeToServerString(8));
+                return;
+            }
             transcribePressed(this.parent.getMessageObject(), z2);
-        } else if (this.parent.getDelegate() != null) {
-            this.parent.getDelegate().needShowPremiumFeatures(PremiumPreviewFragment.featureTypeToServerString(8));
         }
     }
 
@@ -222,9 +231,9 @@ public class TranscribeButton {
         boolean z2 = this.color != i;
         this.color = i;
         this.iconColor = i;
-        int alphaComponent = ColorUtils.setAlphaComponent(i, (int) (((float) Color.alpha(i)) * 0.156f));
+        int alphaComponent = ColorUtils.setAlphaComponent(i, (int) (Color.alpha(i) * 0.156f));
         this.backgroundColor = alphaComponent;
-        this.rippleColor = Theme.blendOver(alphaComponent, ColorUtils.setAlphaComponent(i, (int) (((float) Color.alpha(i)) * (Theme.isCurrentThemeDark() ? 0.3f : 0.2f))));
+        this.rippleColor = Theme.blendOver(alphaComponent, ColorUtils.setAlphaComponent(i, (int) (Color.alpha(i) * (Theme.isCurrentThemeDark() ? 0.3f : 0.2f))));
         if (this.backgroundPaint == null) {
             this.backgroundPaint = new Paint();
         }
@@ -239,12 +248,12 @@ public class TranscribeButton {
             this.inIconDrawable.setLayerColor("Artboard Outlines.**", this.iconColor);
             this.inIconDrawable.commitApplyLayerColors();
             this.inIconDrawable.setAllowDecodeSingleFrame(true);
-            this.inIconDrawable.updateCurrentFrame(0, false);
+            this.inIconDrawable.updateCurrentFrame(0L, false);
             this.outIconDrawable.beginApplyLayerColors();
             this.outIconDrawable.setLayerColor("Artboard Outlines.**", this.iconColor);
             this.outIconDrawable.commitApplyLayerColors();
             this.outIconDrawable.setAllowDecodeSingleFrame(true);
-            this.outIconDrawable.updateCurrentFrame(0, false);
+            this.outIconDrawable.updateCurrentFrame(0L, false);
         }
         if (this.strokePaint == null) {
             Paint paint = new Paint(1);
@@ -261,7 +270,7 @@ public class TranscribeButton {
             this.boundsPath = new Path();
             RectF rectF = AndroidUtilities.rectTmp;
             rectF.set(this.bounds);
-            this.boundsPath.addRoundRect(rectF, (float) AndroidUtilities.dp(8.0f), (float) AndroidUtilities.dp(8.0f), Path.Direction.CW);
+            this.boundsPath.addRoundRect(rectF, AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), Path.Direction.CW);
         }
         canvas.save();
         canvas.clipPath(this.boundsPath);
@@ -278,7 +287,7 @@ public class TranscribeButton {
         float f = 1.0f;
         float f2 = this.loadingFloat.set(this.loading ? 1.0f : 0.0f);
         if (f2 > 0.0f) {
-            float[] segments2 = getSegments((long) (((float) (SystemClock.elapsedRealtime() - this.start)) * 0.75f));
+            float[] segments = getSegments(((float) (SystemClock.elapsedRealtime() - this.start)) * 0.75f);
             canvas.save();
             if (this.progressClipPath == null) {
                 this.progressClipPath = new Path();
@@ -286,9 +295,9 @@ public class TranscribeButton {
             this.progressClipPath.reset();
             RectF rectF2 = AndroidUtilities.rectTmp;
             rectF2.set(this.pressBounds);
-            float max = Math.max(40.0f * f2, segments2[1] - segments2[0]);
+            float max = Math.max(40.0f * f2, segments[1] - segments[0]);
             Path path = this.progressClipPath;
-            float f3 = segments2[0];
+            float f3 = segments[0];
             float f4 = (1.0f - f2) * max;
             if (this.loading) {
                 f = 0.0f;
@@ -298,13 +307,13 @@ public class TranscribeButton {
             this.progressClipPath.close();
             canvas.clipPath(this.progressClipPath);
             rectF2.set(this.bounds);
-            this.strokePaint.setStrokeWidth((float) AndroidUtilities.dp(1.5f));
-            canvas.drawRoundRect(rectF2, (float) AndroidUtilities.dp(8.0f), (float) AndroidUtilities.dp(8.0f), this.strokePaint);
+            this.strokePaint.setStrokeWidth(AndroidUtilities.dp(1.5f));
+            canvas.drawRoundRect(rectF2, AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), this.strokePaint);
             canvas.restore();
             this.parent.invalidate();
         }
         canvas.save();
-        canvas.translate((float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(2.0f));
+        canvas.translate(AndroidUtilities.dp(2.0f), AndroidUtilities.dp(2.0f));
         if (this.isOpen) {
             this.inIconDrawable.draw(canvas);
         } else {
@@ -325,28 +334,32 @@ public class TranscribeButton {
         for (int i = 0; i < 4; i++) {
             int i2 = i * 1350;
             float[] fArr2 = this.segments;
-            fArr2[1] = fArr2[1] + (this.interpolator.getInterpolation(((float) (j2 - ((long) i2))) / 667.0f) * 250.0f);
+            fArr2[1] = fArr2[1] + (this.interpolator.getInterpolation(((float) (j2 - i2)) / 667.0f) * 250.0f);
             float[] fArr3 = this.segments;
-            fArr3[0] = fArr3[0] + (this.interpolator.getInterpolation(((float) (j2 - ((long) (i2 + 667)))) / 667.0f) * 250.0f);
+            fArr3[0] = fArr3[0] + (this.interpolator.getInterpolation(((float) (j2 - (i2 + 667))) / 667.0f) * 250.0f);
         }
         return this.segments;
     }
 
+    /* loaded from: classes3.dex */
     public static class LoadingPointsSpan extends ImageSpan {
         private static LoadingPointsDrawable drawable;
 
-        /* JADX WARNING: Illegal instructions before constructor call */
-        /* Code decompiled incorrectly, please refer to instructions dump. */
+        /* JADX WARN: Illegal instructions before constructor call */
+        /*
+            Code decompiled incorrectly, please refer to instructions dump.
+            To view partially-correct add '--show-bad-code' argument
+        */
         public LoadingPointsSpan() {
             /*
                 r6 = this;
-                org.telegram.ui.Components.TranscribeButton$LoadingPointsDrawable r0 = drawable
-                if (r0 != 0) goto L_0x000d
+                org.telegram.ui.Components.TranscribeButton$LoadingPointsDrawable r0 = org.telegram.ui.Components.TranscribeButton.LoadingPointsSpan.drawable
+                if (r0 != 0) goto Ld
                 org.telegram.ui.Components.TranscribeButton$LoadingPointsDrawable r0 = new org.telegram.ui.Components.TranscribeButton$LoadingPointsDrawable
                 android.text.TextPaint r1 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint
                 r0.<init>(r1)
-                drawable = r0
-            L_0x000d:
+                org.telegram.ui.Components.TranscribeButton.LoadingPointsSpan.drawable = r0
+            Ld:
                 r1 = 0
                 r6.<init>(r0, r1)
                 android.text.TextPaint r0 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint
@@ -368,6 +381,7 @@ public class TranscribeButton {
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.TranscribeButton.LoadingPointsSpan.<init>():void");
         }
 
+        @Override // android.text.style.ReplacementSpan, android.text.style.CharacterStyle
         public void updateDrawState(TextPaint textPaint) {
             float textSize = textPaint.getTextSize() * 0.89f;
             int i = (int) (0.02f * textSize);
@@ -376,32 +390,37 @@ public class TranscribeButton {
         }
     }
 
+    /* loaded from: classes3.dex */
     private static class LoadingPointsDrawable extends Drawable {
         private int lastColor;
         private RLottieDrawable lottie;
         private Paint paint;
 
+        @Override // android.graphics.drawable.Drawable
         public int getOpacity() {
             return -2;
         }
 
+        @Override // android.graphics.drawable.Drawable
         public void setAlpha(int i) {
         }
 
+        @Override // android.graphics.drawable.Drawable
         public void setColorFilter(ColorFilter colorFilter) {
         }
 
         public LoadingPointsDrawable(TextPaint textPaint) {
             this.paint = textPaint;
             float textSize = textPaint.getTextSize() * 0.89f;
-            AnonymousClass1 r0 = new RLottieDrawable(this, R.raw.dots_loading, "dots_loading", (int) textSize, (int) (textSize * 1.25f)) {
-                /* access modifiers changed from: protected */
+            RLottieDrawable rLottieDrawable = new RLottieDrawable(this, R.raw.dots_loading, "dots_loading", (int) textSize, (int) (textSize * 1.25f)) { // from class: org.telegram.ui.Components.TranscribeButton.LoadingPointsDrawable.1
+                /* JADX INFO: Access modifiers changed from: protected */
+                @Override // org.telegram.ui.Components.RLottieDrawable
                 public boolean hasParentView() {
                     return true;
                 }
             };
-            this.lottie = r0;
-            r0.setAutoRepeat(1);
+            this.lottie = rLottieDrawable;
+            rLottieDrawable.setAutoRepeat(1);
             this.lottie.setCurrentFrame((int) ((((float) SystemClock.elapsedRealtime()) / 16.0f) % 60.0f));
             this.lottie.setAllowDecodeSingleFrame(true);
             this.lottie.start();
@@ -412,9 +431,10 @@ public class TranscribeButton {
             this.lottie.setLayerColor("Comp 1.**", i);
             this.lottie.commitApplyLayerColors();
             this.lottie.setAllowDecodeSingleFrame(true);
-            this.lottie.updateCurrentFrame(0, false);
+            this.lottie.updateCurrentFrame(0L, false);
         }
 
+        @Override // android.graphics.drawable.Drawable
         public void draw(Canvas canvas) {
             int color = this.paint.getColor();
             if (color != this.lastColor) {
@@ -432,95 +452,79 @@ public class TranscribeButton {
         return Arrays.hashCode(new Object[]{Integer.valueOf(messageObject.currentAccount), Long.valueOf(messageObject.getDialogId()), Integer.valueOf(messageObject.getId())});
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:6:0x001a, code lost:
-        r0 = transcribeOperationsById;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:9:0x0020, code lost:
-        r3 = r3.messageOwner;
-     */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public static boolean isTranscribing(org.telegram.messenger.MessageObject r3) {
-        /*
-            java.util.HashMap<java.lang.Integer, org.telegram.messenger.MessageObject> r0 = transcribeOperationsByDialogPosition
-            if (r0 == 0) goto L_0x001a
-            boolean r0 = r0.containsValue(r3)
-            if (r0 != 0) goto L_0x0030
-            java.util.HashMap<java.lang.Integer, org.telegram.messenger.MessageObject> r0 = transcribeOperationsByDialogPosition
-            int r1 = reqInfoHash(r3)
-            java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
-            boolean r0 = r0.containsKey(r1)
-            if (r0 != 0) goto L_0x0030
-        L_0x001a:
-            java.util.HashMap<java.lang.Long, org.telegram.messenger.MessageObject> r0 = transcribeOperationsById
-            if (r0 == 0) goto L_0x0032
-            if (r3 == 0) goto L_0x0032
-            org.telegram.tgnet.TLRPC$Message r3 = r3.messageOwner
-            if (r3 == 0) goto L_0x0032
-            long r1 = r3.voiceTranscriptionId
-            java.lang.Long r3 = java.lang.Long.valueOf(r1)
-            boolean r3 = r0.containsKey(r3)
-            if (r3 == 0) goto L_0x0032
-        L_0x0030:
-            r3 = 1
-            goto L_0x0033
-        L_0x0032:
-            r3 = 0
-        L_0x0033:
-            return r3
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.TranscribeButton.isTranscribing(org.telegram.messenger.MessageObject):boolean");
+    public static boolean isTranscribing(MessageObject messageObject) {
+        HashMap<Long, MessageObject> hashMap;
+        TLRPC$Message tLRPC$Message;
+        HashMap<Integer, MessageObject> hashMap2 = transcribeOperationsByDialogPosition;
+        return (hashMap2 != null && (hashMap2.containsValue(messageObject) || transcribeOperationsByDialogPosition.containsKey(Integer.valueOf(reqInfoHash(messageObject))))) || !((hashMap = transcribeOperationsById) == null || messageObject == null || (tLRPC$Message = messageObject.messageOwner) == null || !hashMap.containsKey(Long.valueOf(tLRPC$Message.voiceTranscriptionId)));
     }
 
-    private static void transcribePressed(MessageObject messageObject, boolean z) {
-        if (messageObject != null && messageObject.messageOwner != null && messageObject.isSent()) {
-            int i = messageObject.currentAccount;
-            long elapsedRealtime = SystemClock.elapsedRealtime();
-            TLRPC$InputPeer inputPeer = MessagesController.getInstance(i).getInputPeer(messageObject.messageOwner.peer_id);
-            long peerDialogId = DialogObject.getPeerDialogId(inputPeer);
-            TLRPC$Message tLRPC$Message = messageObject.messageOwner;
-            int i2 = tLRPC$Message.id;
-            if (!z) {
-                HashMap<Integer, MessageObject> hashMap = transcribeOperationsByDialogPosition;
-                if (hashMap != null) {
-                    hashMap.remove(Integer.valueOf(reqInfoHash(messageObject)));
-                }
-                messageObject.messageOwner.voiceTranscriptionOpen = false;
-                MessagesStorage.getInstance(i).updateMessageVoiceTranscriptionOpen(peerDialogId, i2, messageObject.messageOwner);
-                AndroidUtilities.runOnUIThread(new TranscribeButton$$ExternalSyntheticLambda0(i, messageObject));
-            } else if (tLRPC$Message.voiceTranscription == null || !tLRPC$Message.voiceTranscriptionFinal) {
-                TLRPC$TL_messages_transcribeAudio tLRPC$TL_messages_transcribeAudio = new TLRPC$TL_messages_transcribeAudio();
-                tLRPC$TL_messages_transcribeAudio.peer = inputPeer;
-                tLRPC$TL_messages_transcribeAudio.msg_id = i2;
-                if (transcribeOperationsByDialogPosition == null) {
-                    transcribeOperationsByDialogPosition = new HashMap<>();
-                }
-                transcribeOperationsByDialogPosition.put(Integer.valueOf(reqInfoHash(messageObject)), messageObject);
-                ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_messages_transcribeAudio, new TranscribeButton$$ExternalSyntheticLambda6(messageObject, elapsedRealtime, i, peerDialogId, i2));
-            } else {
+    private static void transcribePressed(final MessageObject messageObject, boolean z) {
+        if (messageObject == null || messageObject.messageOwner == null || !messageObject.isSent()) {
+            return;
+        }
+        final int i = messageObject.currentAccount;
+        final long elapsedRealtime = SystemClock.elapsedRealtime();
+        TLRPC$InputPeer inputPeer = MessagesController.getInstance(i).getInputPeer(messageObject.messageOwner.peer_id);
+        final long peerDialogId = DialogObject.getPeerDialogId(inputPeer);
+        TLRPC$Message tLRPC$Message = messageObject.messageOwner;
+        final int i2 = tLRPC$Message.id;
+        if (z) {
+            if (tLRPC$Message.voiceTranscription != null && tLRPC$Message.voiceTranscriptionFinal) {
                 tLRPC$Message.voiceTranscriptionOpen = true;
                 MessagesStorage.getInstance(i).updateMessageVoiceTranscriptionOpen(peerDialogId, i2, messageObject.messageOwner);
-                AndroidUtilities.runOnUIThread(new TranscribeButton$$ExternalSyntheticLambda1(i, messageObject));
+                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.TranscribeButton$$ExternalSyntheticLambda1
+                    @Override // java.lang.Runnable
+                    public final void run() {
+                        TranscribeButton.lambda$transcribePressed$2(i, messageObject);
+                    }
+                });
+                return;
             }
+            TLRPC$TL_messages_transcribeAudio tLRPC$TL_messages_transcribeAudio = new TLRPC$TL_messages_transcribeAudio();
+            tLRPC$TL_messages_transcribeAudio.peer = inputPeer;
+            tLRPC$TL_messages_transcribeAudio.msg_id = i2;
+            if (transcribeOperationsByDialogPosition == null) {
+                transcribeOperationsByDialogPosition = new HashMap<>();
+            }
+            transcribeOperationsByDialogPosition.put(Integer.valueOf(reqInfoHash(messageObject)), messageObject);
+            ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_messages_transcribeAudio, new RequestDelegate() { // from class: org.telegram.ui.Components.TranscribeButton$$ExternalSyntheticLambda6
+                @Override // org.telegram.tgnet.RequestDelegate
+                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+                    TranscribeButton.lambda$transcribePressed$4(MessageObject.this, elapsedRealtime, i, peerDialogId, i2, tLObject, tLRPC$TL_error);
+                }
+            });
+            return;
         }
+        HashMap<Integer, MessageObject> hashMap = transcribeOperationsByDialogPosition;
+        if (hashMap != null) {
+            hashMap.remove(Integer.valueOf(reqInfoHash(messageObject)));
+        }
+        messageObject.messageOwner.voiceTranscriptionOpen = false;
+        MessagesStorage.getInstance(i).updateMessageVoiceTranscriptionOpen(peerDialogId, i2, messageObject.messageOwner);
+        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.TranscribeButton$$ExternalSyntheticLambda0
+            @Override // java.lang.Runnable
+            public final void run() {
+                TranscribeButton.lambda$transcribePressed$5(i, messageObject);
+            }
+        });
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public static /* synthetic */ void lambda$transcribePressed$2(int i, MessageObject messageObject) {
-        NotificationCenter instance = NotificationCenter.getInstance(i);
+        NotificationCenter notificationCenter = NotificationCenter.getInstance(i);
         int i2 = NotificationCenter.voiceTranscriptionUpdate;
         Boolean bool = Boolean.TRUE;
-        instance.postNotificationName(i2, messageObject, null, null, bool, bool);
+        notificationCenter.postNotificationName(i2, messageObject, null, null, bool, bool);
     }
 
-    /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$transcribePressed$4(MessageObject messageObject, long j, int i, long j2, int i2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        long j3;
+    /* JADX INFO: Access modifiers changed from: private */
+    public static /* synthetic */ void lambda$transcribePressed$4(final MessageObject messageObject, long j, int i, long j2, int i2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        final long j3;
         boolean z;
-        MessageObject messageObject2 = messageObject;
-        TLObject tLObject2 = tLObject;
-        String str = "";
-        if (tLObject2 instanceof TLRPC$TL_messages_transcribedAudio) {
-            TLRPC$TL_messages_transcribedAudio tLRPC$TL_messages_transcribedAudio = (TLRPC$TL_messages_transcribedAudio) tLObject2;
+        final String str = "";
+        if (tLObject instanceof TLRPC$TL_messages_transcribedAudio) {
+            TLRPC$TL_messages_transcribedAudio tLRPC$TL_messages_transcribedAudio = (TLRPC$TL_messages_transcribedAudio) tLObject;
             String str2 = tLRPC$TL_messages_transcribedAudio.text;
             long j4 = tLRPC$TL_messages_transcribedAudio.transcription_id;
             z = !tLRPC$TL_messages_transcribedAudio.pending;
@@ -532,27 +536,37 @@ public class TranscribeButton {
             if (transcribeOperationsById == null) {
                 transcribeOperationsById = new HashMap<>();
             }
-            transcribeOperationsById.put(Long.valueOf(j4), messageObject2);
-            messageObject2.messageOwner.voiceTranscriptionId = j4;
+            transcribeOperationsById.put(Long.valueOf(j4), messageObject);
+            messageObject.messageOwner.voiceTranscriptionId = j4;
             j3 = j4;
         } else {
             j3 = 0;
             z = true;
         }
         long elapsedRealtime = SystemClock.elapsedRealtime() - j;
-        TLRPC$Message tLRPC$Message = messageObject2.messageOwner;
+        TLRPC$Message tLRPC$Message = messageObject.messageOwner;
         tLRPC$Message.voiceTranscriptionOpen = true;
         tLRPC$Message.voiceTranscriptionFinal = z;
         if (BuildVars.LOGS_ENABLED) {
             FileLog.e("Transcription request sent, received final=" + z + " id=" + j3 + " text=" + str);
         }
-        MessagesStorage.getInstance(i).updateMessageVoiceTranscription(j2, i2, str, messageObject2.messageOwner);
+        MessagesStorage.getInstance(i).updateMessageVoiceTranscription(j2, i2, str, messageObject.messageOwner);
         if (z) {
-            AndroidUtilities.runOnUIThread(new TranscribeButton$$ExternalSyntheticLambda3(messageObject2, j3, str), Math.max(0, 350 - elapsedRealtime));
+            AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.TranscribeButton$$ExternalSyntheticLambda3
+                @Override // java.lang.Runnable
+                public final void run() {
+                    TranscribeButton.finishTranscription(MessageObject.this, j3, str);
+                }
+            }, Math.max(0L, 350 - elapsedRealtime));
         }
     }
 
-    public static boolean finishTranscription(MessageObject messageObject, long j, String str) {
+    /* JADX INFO: Access modifiers changed from: private */
+    public static /* synthetic */ void lambda$transcribePressed$5(int i, MessageObject messageObject) {
+        NotificationCenter.getInstance(i).postNotificationName(NotificationCenter.voiceTranscriptionUpdate, messageObject, null, null, Boolean.FALSE, null);
+    }
+
+    public static boolean finishTranscription(final MessageObject messageObject, final long j, final String str) {
         MessageObject messageObject2 = null;
         try {
             HashMap<Long, MessageObject> hashMap = transcribeOperationsById;
@@ -562,28 +576,31 @@ public class TranscribeButton {
             if (messageObject == null) {
                 messageObject = messageObject2;
             }
-            if (messageObject != null) {
-                if (messageObject.messageOwner != null) {
-                    HashMap<Integer, MessageObject> hashMap2 = transcribeOperationsByDialogPosition;
-                    if (hashMap2 != null) {
-                        hashMap2.remove(Integer.valueOf(reqInfoHash(messageObject)));
-                    }
-                    messageObject.messageOwner.voiceTranscriptionFinal = true;
-                    MessagesStorage.getInstance(messageObject.currentAccount).updateMessageVoiceTranscription(messageObject.getDialogId(), messageObject.getId(), str, messageObject.messageOwner);
-                    AndroidUtilities.runOnUIThread(new TranscribeButton$$ExternalSyntheticLambda2(messageObject, j, str));
-                    return true;
+            if (messageObject != null && messageObject.messageOwner != null) {
+                HashMap<Integer, MessageObject> hashMap2 = transcribeOperationsByDialogPosition;
+                if (hashMap2 != null) {
+                    hashMap2.remove(Integer.valueOf(reqInfoHash(messageObject)));
                 }
+                messageObject.messageOwner.voiceTranscriptionFinal = true;
+                MessagesStorage.getInstance(messageObject.currentAccount).updateMessageVoiceTranscription(messageObject.getDialogId(), messageObject.getId(), str, messageObject.messageOwner);
+                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.TranscribeButton$$ExternalSyntheticLambda2
+                    @Override // java.lang.Runnable
+                    public final void run() {
+                        TranscribeButton.lambda$finishTranscription$6(MessageObject.this, j, str);
+                    }
+                });
+                return true;
             }
         } catch (Exception unused) {
         }
         return false;
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public static /* synthetic */ void lambda$finishTranscription$6(MessageObject messageObject, long j, String str) {
-        NotificationCenter instance = NotificationCenter.getInstance(messageObject.currentAccount);
+        NotificationCenter notificationCenter = NotificationCenter.getInstance(messageObject.currentAccount);
         int i = NotificationCenter.voiceTranscriptionUpdate;
         Boolean bool = Boolean.TRUE;
-        instance.postNotificationName(i, messageObject, Long.valueOf(j), str, bool, bool);
+        notificationCenter.postNotificationName(i, messageObject, Long.valueOf(j), str, bool, bool);
     }
 }

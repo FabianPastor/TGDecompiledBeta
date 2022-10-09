@@ -1,43 +1,54 @@
 package j$.util.stream;
 
-import j$.util.L;
 import j$.util.function.Consumer;
-import j$.util.function.m;
-import j$.util.u;
-import j$.util.w;
-
-final class X1 extends CLASSNAMEa2 implements CLASSNAMEw1 {
-    X1() {
-    }
-
+/* loaded from: classes2.dex */
+final class X1 extends AbstractCLASSNAMEa2 implements InterfaceCLASSNAMEw1 {
+    @Override // j$.util.stream.A1
     /* renamed from: a */
     public /* synthetic */ void i(Integer[] numArr, int i) {
-        CLASSNAMEo1.i(this, numArr, i);
+        AbstractCLASSNAMEo1.i(this, numArr, i);
     }
 
-    public CLASSNAMEz1 b(int i) {
+    @Override // j$.util.stream.AbstractCLASSNAMEa2, j$.util.stream.A1
+    /* renamed from: b  reason: collision with other method in class */
+    public InterfaceCLASSNAMEz1 mo288b(int i) {
         throw new IndexOutOfBoundsException();
     }
 
+    @Override // j$.util.stream.InterfaceCLASSNAMEz1
     public Object e() {
-        return CLASSNAMEx2.e;
+        int[] iArr;
+        iArr = AbstractCLASSNAMEx2.e;
+        return iArr;
     }
 
+    @Override // j$.util.stream.AbstractCLASSNAMEa2, j$.util.stream.A1
     /* renamed from: f */
-    public /* synthetic */ CLASSNAMEw1 r(long j, long j2, m mVar) {
-        return CLASSNAMEo1.o(this, j, j2, mVar);
+    public /* synthetic */ InterfaceCLASSNAMEw1 r(long j, long j2, j$.util.function.m mVar) {
+        return AbstractCLASSNAMEo1.o(this, j, j2, mVar);
     }
 
+    @Override // j$.util.stream.A1
     public /* synthetic */ void forEach(Consumer consumer) {
-        CLASSNAMEo1.l(this, consumer);
+        AbstractCLASSNAMEo1.l(this, consumer);
     }
 
+    @Override // j$.util.stream.A1
     /* renamed from: spliterator  reason: collision with other method in class */
-    public w m9spliterator() {
-        return L.c();
+    public j$.util.w mo285spliterator() {
+        return j$.util.L.c();
     }
 
-    public u spliterator() {
-        return L.c();
+    @Override // j$.util.stream.AbstractCLASSNAMEa2, j$.util.stream.A1
+    /* renamed from: b */
+    public /* bridge */ /* synthetic */ A1 mo288b(int i) {
+        mo288b(i);
+        throw null;
+    }
+
+    @Override // j$.util.stream.A1
+    /* renamed from: spliterator */
+    public j$.util.u mo285spliterator() {
+        return j$.util.L.c();
     }
 }

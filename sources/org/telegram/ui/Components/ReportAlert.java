@@ -5,23 +5,25 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
-
+/* loaded from: classes3.dex */
 public class ReportAlert extends BottomSheet {
     private BottomSheetCell clearButton;
     private EditTextBoldCursor editText;
 
-    /* access modifiers changed from: protected */
-    public void onSend(int i, String str) {
+    protected void onSend(int i, String str) {
         throw null;
     }
 
+    /* loaded from: classes3.dex */
     public static class BottomSheetCell extends FrameLayout {
-        /* access modifiers changed from: private */
-        public View background;
+        private View background;
         private TextView textView;
 
         public BottomSheetCell(Context context) {
@@ -30,9 +32,9 @@ public class ReportAlert extends BottomSheet {
             this.background = view;
             view.setBackground(Theme.AdaptiveRipple.filledRect("featuredStickers_addButton", 4.0f));
             addView(this.background, LayoutHelper.createFrame(-1, -1.0f, 0, 16.0f, 16.0f, 16.0f, 16.0f));
-            TextView textView2 = new TextView(context);
-            this.textView = textView2;
-            textView2.setLines(1);
+            TextView textView = new TextView(context);
+            this.textView = textView;
+            textView.setLines(1);
             this.textView.setSingleLine(true);
             this.textView.setGravity(1);
             this.textView.setEllipsize(TextUtils.TruncateAt.END);
@@ -43,8 +45,8 @@ public class ReportAlert extends BottomSheet {
             addView(this.textView, LayoutHelper.createFrame(-2, -2, 17));
         }
 
-        /* access modifiers changed from: protected */
-        public void onMeasure(int i, int i2) {
+        @Override // android.widget.FrameLayout, android.view.View
+        protected void onMeasure(int i, int i2) {
             super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(80.0f), NUM));
         }
 
@@ -53,242 +55,95 @@ public class ReportAlert extends BottomSheet {
         }
     }
 
-    /* JADX WARNING: Illegal instructions before constructor call */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public ReportAlert(android.content.Context r19, int r20) {
-        /*
-            r18 = this;
-            r0 = r18
-            r1 = r19
-            r2 = r20
-            r3 = 1
-            r0.<init>(r1, r3)
-            r4 = 0
-            r0.setApplyBottomPadding(r4)
-            r0.setApplyTopPadding(r4)
-            android.widget.ScrollView r5 = new android.widget.ScrollView
-            r5.<init>(r1)
-            r5.setFillViewport(r3)
-            r0.setCustomView(r5)
-            android.widget.FrameLayout r6 = new android.widget.FrameLayout
-            r6.<init>(r1)
-            r7 = -1
-            r8 = -2
-            r9 = 51
-            android.widget.FrameLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createScroll(r7, r8, r9)
-            r5.addView(r6, r7)
-            org.telegram.ui.Components.RLottieImageView r5 = new org.telegram.ui.Components.RLottieImageView
-            r5.<init>(r1)
-            int r7 = org.telegram.messenger.R.raw.report_police
-            r8 = 120(0x78, float:1.68E-43)
-            r5.setAnimation((int) r7, (int) r8, (int) r8)
-            r5.playAnimation()
-            r9 = 160(0xa0, float:2.24E-43)
-            r10 = 1126170624(0x43200000, float:160.0)
-            r11 = 49
-            r12 = 1099431936(0x41880000, float:17.0)
-            r13 = 1096810496(0x41600000, float:14.0)
-            r14 = 1099431936(0x41880000, float:17.0)
-            r15 = 0
-            android.widget.FrameLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r10, r11, r12, r13, r14, r15)
-            r6.addView(r5, r7)
-            android.widget.TextView r5 = new android.widget.TextView
-            r5.<init>(r1)
-            java.lang.String r7 = "fonts/rmedium.ttf"
-            android.graphics.Typeface r7 = org.telegram.messenger.AndroidUtilities.getTypeface(r7)
-            r5.setTypeface(r7)
-            r7 = 1103101952(0x41CLASSNAME, float:24.0)
-            r5.setTextSize(r3, r7)
-            java.lang.String r7 = "dialogTextBlack"
-            int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)
-            r5.setTextColor(r7)
-            r7 = 5
-            r8 = 6
-            if (r2 != 0) goto L_0x007b
-            int r9 = org.telegram.messenger.R.string.ReportTitleSpam
-            java.lang.String r10 = "ReportTitleSpam"
-            java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
-            r5.setText(r9)
-            goto L_0x00c3
-        L_0x007b:
-            if (r2 != r8) goto L_0x0089
-            int r9 = org.telegram.messenger.R.string.ReportTitleFake
-            java.lang.String r10 = "ReportTitleFake"
-            java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
-            r5.setText(r9)
-            goto L_0x00c3
-        L_0x0089:
-            if (r2 != r3) goto L_0x0097
-            int r9 = org.telegram.messenger.R.string.ReportTitleViolence
-            java.lang.String r10 = "ReportTitleViolence"
-            java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
-            r5.setText(r9)
-            goto L_0x00c3
-        L_0x0097:
-            r9 = 2
-            if (r2 != r9) goto L_0x00a6
-            int r9 = org.telegram.messenger.R.string.ReportTitleChild
-            java.lang.String r10 = "ReportTitleChild"
-            java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
-            r5.setText(r9)
-            goto L_0x00c3
-        L_0x00a6:
-            if (r2 != r7) goto L_0x00b4
-            int r9 = org.telegram.messenger.R.string.ReportTitlePornography
-            java.lang.String r10 = "ReportTitlePornography"
-            java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
-            r5.setText(r9)
-            goto L_0x00c3
-        L_0x00b4:
-            r9 = 100
-            if (r2 != r9) goto L_0x00c3
-            int r9 = org.telegram.messenger.R.string.ReportChat
-            java.lang.String r10 = "ReportChat"
-            java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
-            r5.setText(r9)
-        L_0x00c3:
-            r10 = -2
-            r11 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-            r12 = 49
-            r13 = 1099431936(0x41880000, float:17.0)
-            r14 = 1128595456(0x43450000, float:197.0)
-            r15 = 1099431936(0x41880000, float:17.0)
-            r16 = 0
-            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r11, r12, r13, r14, r15, r16)
-            r6.addView(r5, r9)
-            android.widget.TextView r5 = new android.widget.TextView
-            r5.<init>(r1)
-            r9 = 1096810496(0x41600000, float:14.0)
-            r5.setTextSize(r3, r9)
-            java.lang.String r9 = "dialogTextGray3"
-            int r9 = org.telegram.ui.ActionBar.Theme.getColor(r9)
-            r5.setTextColor(r9)
-            r5.setGravity(r3)
-            int r9 = org.telegram.messenger.R.string.ReportInfo
-            java.lang.String r10 = "ReportInfo"
-            java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
-            r5.setText(r9)
-            r10 = -2
-            r13 = 1106247680(0x41var_, float:30.0)
-            r14 = 1131085824(0x436b0000, float:235.0)
-            r15 = 1106247680(0x41var_, float:30.0)
-            r16 = 1110441984(0x42300000, float:44.0)
-            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r11, r12, r13, r14, r15, r16)
-            r6.addView(r5, r9)
-            org.telegram.ui.Components.EditTextBoldCursor r5 = new org.telegram.ui.Components.EditTextBoldCursor
-            r5.<init>(r1)
-            r0.editText = r5
-            r9 = 1099956224(0x41900000, float:18.0)
-            r5.setTextSize(r3, r9)
-            org.telegram.ui.Components.EditTextBoldCursor r5 = r0.editText
-            java.lang.String r9 = "windowBackgroundWhiteHintText"
-            int r9 = org.telegram.ui.ActionBar.Theme.getColor(r9)
-            r5.setHintTextColor(r9)
-            org.telegram.ui.Components.EditTextBoldCursor r5 = r0.editText
-            java.lang.String r9 = "windowBackgroundWhiteBlackText"
-            int r10 = org.telegram.ui.ActionBar.Theme.getColor(r9)
-            r5.setTextColor(r10)
-            org.telegram.ui.Components.EditTextBoldCursor r5 = r0.editText
-            r10 = 0
-            r5.setBackgroundDrawable(r10)
-            org.telegram.ui.Components.EditTextBoldCursor r5 = r0.editText
-            java.lang.String r11 = "windowBackgroundWhiteInputField"
-            int r11 = r0.getThemedColor(r11)
-            java.lang.String r12 = "windowBackgroundWhiteInputFieldActivated"
-            int r12 = r0.getThemedColor(r12)
-            java.lang.String r13 = "windowBackgroundWhiteRedText3"
-            int r13 = r0.getThemedColor(r13)
-            r5.setLineColors(r11, r12, r13)
-            org.telegram.ui.Components.EditTextBoldCursor r5 = r0.editText
-            r5.setMaxLines(r3)
-            org.telegram.ui.Components.EditTextBoldCursor r5 = r0.editText
-            r5.setLines(r3)
-            org.telegram.ui.Components.EditTextBoldCursor r5 = r0.editText
-            r5.setPadding(r4, r4, r4, r4)
-            org.telegram.ui.Components.EditTextBoldCursor r4 = r0.editText
-            r4.setSingleLine(r3)
-            org.telegram.ui.Components.EditTextBoldCursor r4 = r0.editText
-            boolean r5 = org.telegram.messenger.LocaleController.isRTL
-            if (r5 == 0) goto L_0x0162
-            goto L_0x0163
-        L_0x0162:
-            r7 = 3
-        L_0x0163:
-            r4.setGravity(r7)
-            org.telegram.ui.Components.EditTextBoldCursor r4 = r0.editText
-            r5 = 180224(0x2CLASSNAME, float:2.52548E-40)
-            r4.setInputType(r5)
-            org.telegram.ui.Components.EditTextBoldCursor r4 = r0.editText
-            r4.setImeOptions(r8)
-            org.telegram.ui.Components.EditTextBoldCursor r4 = r0.editText
-            int r5 = org.telegram.messenger.R.string.ReportHint
-            java.lang.String r7 = "ReportHint"
-            java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r7, r5)
-            r4.setHint(r5)
-            org.telegram.ui.Components.EditTextBoldCursor r4 = r0.editText
-            int r5 = org.telegram.ui.ActionBar.Theme.getColor(r9)
-            r4.setCursorColor(r5)
-            org.telegram.ui.Components.EditTextBoldCursor r4 = r0.editText
-            r5 = 1101004800(0x41a00000, float:20.0)
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            r4.setCursorSize(r5)
-            org.telegram.ui.Components.EditTextBoldCursor r4 = r0.editText
-            r5 = 1069547520(0x3fCLASSNAME, float:1.5)
-            r4.setCursorWidth(r5)
-            org.telegram.ui.Components.EditTextBoldCursor r4 = r0.editText
-            org.telegram.ui.Components.ReportAlert$$ExternalSyntheticLambda1 r5 = new org.telegram.ui.Components.ReportAlert$$ExternalSyntheticLambda1
-            r5.<init>(r0)
-            r4.setOnEditorActionListener(r5)
-            org.telegram.ui.Components.EditTextBoldCursor r4 = r0.editText
-            r11 = -1
-            r12 = 1108344832(0x42100000, float:36.0)
-            r13 = 51
-            r14 = 1099431936(0x41880000, float:17.0)
-            r15 = 1134067712(0x43988000, float:305.0)
-            r16 = 1099431936(0x41880000, float:17.0)
-            r17 = 0
-            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r12, r13, r14, r15, r16, r17)
-            r6.addView(r4, r5)
-            org.telegram.ui.Components.ReportAlert$BottomSheetCell r4 = new org.telegram.ui.Components.ReportAlert$BottomSheetCell
-            r4.<init>(r1)
-            r0.clearButton = r4
-            r4.setBackground(r10)
-            org.telegram.ui.Components.ReportAlert$BottomSheetCell r1 = r0.clearButton
-            int r4 = org.telegram.messenger.R.string.ReportSend
-            java.lang.String r5 = "ReportSend"
-            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
-            r1.setText(r4)
-            org.telegram.ui.Components.ReportAlert$BottomSheetCell r1 = r0.clearButton
-            android.view.View r1 = r1.background
-            org.telegram.ui.Components.ReportAlert$$ExternalSyntheticLambda0 r4 = new org.telegram.ui.Components.ReportAlert$$ExternalSyntheticLambda0
-            r4.<init>(r0, r2)
-            r1.setOnClickListener(r4)
-            org.telegram.ui.Components.ReportAlert$BottomSheetCell r1 = r0.clearButton
-            r7 = -1
-            r8 = 1112014848(0x42480000, float:50.0)
-            r9 = 51
-            r10 = 0
-            r11 = 1135771648(0x43b28000, float:357.0)
-            r12 = 0
-            r13 = 0
-            android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r7, r8, r9, r10, r11, r12, r13)
-            r6.addView(r1, r2)
-            r0.smoothKeyboardAnimationEnabled = r3
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ReportAlert.<init>(android.content.Context, int):void");
-    }
-
-    /* access modifiers changed from: private */
-    public /* synthetic */ boolean lambda$new$0(TextView textView, int i, KeyEvent keyEvent) {
-        if (i != 6) {
-            return false;
+    public ReportAlert(Context context, final int i) {
+        super(context, true);
+        setApplyBottomPadding(false);
+        setApplyTopPadding(false);
+        ScrollView scrollView = new ScrollView(context);
+        scrollView.setFillViewport(true);
+        setCustomView(scrollView);
+        FrameLayout frameLayout = new FrameLayout(context);
+        scrollView.addView(frameLayout, LayoutHelper.createScroll(-1, -2, 51));
+        RLottieImageView rLottieImageView = new RLottieImageView(context);
+        rLottieImageView.setAnimation(R.raw.report_police, 120, 120);
+        rLottieImageView.playAnimation();
+        frameLayout.addView(rLottieImageView, LayoutHelper.createFrame(160, 160.0f, 49, 17.0f, 14.0f, 17.0f, 0.0f));
+        TextView textView = new TextView(context);
+        textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        textView.setTextSize(1, 24.0f);
+        textView.setTextColor(Theme.getColor("dialogTextBlack"));
+        int i2 = 5;
+        if (i == 0) {
+            textView.setText(LocaleController.getString("ReportTitleSpam", R.string.ReportTitleSpam));
+        } else if (i == 6) {
+            textView.setText(LocaleController.getString("ReportTitleFake", R.string.ReportTitleFake));
+        } else if (i == 1) {
+            textView.setText(LocaleController.getString("ReportTitleViolence", R.string.ReportTitleViolence));
+        } else if (i == 2) {
+            textView.setText(LocaleController.getString("ReportTitleChild", R.string.ReportTitleChild));
+        } else if (i == 5) {
+            textView.setText(LocaleController.getString("ReportTitlePornography", R.string.ReportTitlePornography));
+        } else if (i == 100) {
+            textView.setText(LocaleController.getString("ReportChat", R.string.ReportChat));
         }
-        this.clearButton.background.callOnClick();
-        return true;
+        frameLayout.addView(textView, LayoutHelper.createFrame(-2, -2.0f, 49, 17.0f, 197.0f, 17.0f, 0.0f));
+        TextView textView2 = new TextView(context);
+        textView2.setTextSize(1, 14.0f);
+        textView2.setTextColor(Theme.getColor("dialogTextGray3"));
+        textView2.setGravity(1);
+        textView2.setText(LocaleController.getString("ReportInfo", R.string.ReportInfo));
+        frameLayout.addView(textView2, LayoutHelper.createFrame(-2, -2.0f, 49, 30.0f, 235.0f, 30.0f, 44.0f));
+        EditTextBoldCursor editTextBoldCursor = new EditTextBoldCursor(context);
+        this.editText = editTextBoldCursor;
+        editTextBoldCursor.setTextSize(1, 18.0f);
+        this.editText.setHintTextColor(Theme.getColor("windowBackgroundWhiteHintText"));
+        this.editText.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+        this.editText.setBackgroundDrawable(null);
+        this.editText.setLineColors(getThemedColor("windowBackgroundWhiteInputField"), getThemedColor("windowBackgroundWhiteInputFieldActivated"), getThemedColor("windowBackgroundWhiteRedText3"));
+        this.editText.setMaxLines(1);
+        this.editText.setLines(1);
+        this.editText.setPadding(0, 0, 0, 0);
+        this.editText.setSingleLine(true);
+        this.editText.setGravity(!LocaleController.isRTL ? 3 : i2);
+        this.editText.setInputType(180224);
+        this.editText.setImeOptions(6);
+        this.editText.setHint(LocaleController.getString("ReportHint", R.string.ReportHint));
+        this.editText.setCursorColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+        this.editText.setCursorSize(AndroidUtilities.dp(20.0f));
+        this.editText.setCursorWidth(1.5f);
+        this.editText.setOnEditorActionListener(new TextView.OnEditorActionListener() { // from class: org.telegram.ui.Components.ReportAlert$$ExternalSyntheticLambda1
+            @Override // android.widget.TextView.OnEditorActionListener
+            public final boolean onEditorAction(TextView textView3, int i3, KeyEvent keyEvent) {
+                boolean lambda$new$0;
+                lambda$new$0 = ReportAlert.this.lambda$new$0(textView3, i3, keyEvent);
+                return lambda$new$0;
+            }
+        });
+        frameLayout.addView(this.editText, LayoutHelper.createFrame(-1, 36.0f, 51, 17.0f, 305.0f, 17.0f, 0.0f));
+        BottomSheetCell bottomSheetCell = new BottomSheetCell(context);
+        this.clearButton = bottomSheetCell;
+        bottomSheetCell.setBackground(null);
+        this.clearButton.setText(LocaleController.getString("ReportSend", R.string.ReportSend));
+        this.clearButton.background.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.Components.ReportAlert$$ExternalSyntheticLambda0
+            @Override // android.view.View.OnClickListener
+            public final void onClick(View view) {
+                ReportAlert.this.lambda$new$1(i, view);
+            }
+        });
+        frameLayout.addView(this.clearButton, LayoutHelper.createFrame(-1, 50.0f, 51, 0.0f, 357.0f, 0.0f, 0.0f));
+        this.smoothKeyboardAnimationEnabled = true;
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
+    public /* synthetic */ boolean lambda$new$0(TextView textView, int i, KeyEvent keyEvent) {
+        if (i == 6) {
+            this.clearButton.background.callOnClick();
+            return true;
+        }
+        return false;
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$new$1(int i, View view) {
         AndroidUtilities.hideKeyboard(this.editText);
         onSend(i, this.editText.getText().toString());

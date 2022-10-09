@@ -1,29 +1,30 @@
 package j$.util.stream;
-
+/* loaded from: classes2.dex */
 class O extends S {
     public final /* synthetic */ int l = 1;
 
-    public O(T t, CLASSNAMEc cVar, CLASSNAMEe4 e4Var, int i) {
-        super(cVar, e4Var, i);
+    public O(T t, AbstractCLASSNAMEc abstractCLASSNAMEc, EnumCLASSNAMEe4 enumCLASSNAMEe4, int i) {
+        super(abstractCLASSNAMEc, enumCLASSNAMEe4, i);
     }
 
-    /* access modifiers changed from: package-private */
-    public CLASSNAMEm3 H0(int i, CLASSNAMEm3 m3Var) {
+    /* JADX INFO: Access modifiers changed from: package-private */
+    @Override // j$.util.stream.AbstractCLASSNAMEc
+    public InterfaceCLASSNAMEm3 H0(int i, InterfaceCLASSNAMEm3 interfaceCLASSNAMEm3) {
         switch (this.l) {
             case 0:
-                return m3Var;
+                return interfaceCLASSNAMEm3;
             case 1:
-                return new F0(this, m3Var);
+                return new F0(this, interfaceCLASSNAMEm3);
             default:
-                return new Z0(this, m3Var);
+                return new Z0(this, interfaceCLASSNAMEm3);
         }
     }
 
-    public O(L0 l0, CLASSNAMEc cVar, CLASSNAMEe4 e4Var, int i) {
-        super(cVar, e4Var, i);
+    public O(L0 l0, AbstractCLASSNAMEc abstractCLASSNAMEc, EnumCLASSNAMEe4 enumCLASSNAMEe4, int i) {
+        super(abstractCLASSNAMEc, enumCLASSNAMEe4, i);
     }
 
-    public O(CLASSNAMEd1 d1Var, CLASSNAMEc cVar, CLASSNAMEe4 e4Var, int i) {
-        super(cVar, e4Var, i);
+    public O(AbstractCLASSNAMEd1 abstractCLASSNAMEd1, AbstractCLASSNAMEc abstractCLASSNAMEc, EnumCLASSNAMEe4 enumCLASSNAMEe4, int i) {
+        super(abstractCLASSNAMEc, enumCLASSNAMEe4, i);
     }
 }

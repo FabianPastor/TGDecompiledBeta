@@ -17,13 +17,13 @@ import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Charts.BaseChartView;
 import org.telegram.ui.Components.LayoutHelper;
-
+/* loaded from: classes3.dex */
 public class ChartHeaderView extends FrameLayout {
     public TextView back;
     private TextView dates;
     private TextView datesTmp;
-    SimpleDateFormat formatter = new SimpleDateFormat("d MMM yyyy");
-    private boolean showDate = true;
+    SimpleDateFormat formatter;
+    private boolean showDate;
     int textMargin;
     private TextView title;
     private boolean useWeekInterval;
@@ -31,6 +31,8 @@ public class ChartHeaderView extends FrameLayout {
 
     public ChartHeaderView(Context context) {
         super(context);
+        this.showDate = true;
+        this.formatter = new SimpleDateFormat("d MMM yyyy");
         TextPaint textPaint = new TextPaint();
         textPaint.setTextSize(14.0f);
         textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -39,7 +41,7 @@ public class ChartHeaderView extends FrameLayout {
         this.title = textView;
         textView.setTextSize(1, 15.0f);
         this.title.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        addView(this.title, LayoutHelper.createFrame(-2, -2.0f, 8388627, 16.0f, 0.0f, (float) this.textMargin, 0.0f));
+        addView(this.title, LayoutHelper.createFrame(-2, -2.0f, 8388627, 16.0f, 0.0f, this.textMargin, 0.0f));
         TextView textView2 = new TextView(context);
         this.back = textView2;
         textView2.setTextSize(1, 15.0f);
@@ -67,16 +69,21 @@ public class ChartHeaderView extends FrameLayout {
         this.back.setCompoundDrawablePadding(AndroidUtilities.dp(4.0f));
         this.back.setPadding(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(4.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(4.0f));
         this.back.setBackground(Theme.getRoundRectSelectorDrawable(Theme.getColor("featuredStickers_removeButtonText")));
-        this.datesTmp.addOnLayoutChangeListener(new ChartHeaderView$$ExternalSyntheticLambda0(this));
+        this.datesTmp.addOnLayoutChangeListener(new View.OnLayoutChangeListener() { // from class: org.telegram.ui.Charts.view_data.ChartHeaderView$$ExternalSyntheticLambda0
+            @Override // android.view.View.OnLayoutChangeListener
+            public final void onLayoutChange(View view, int i, int i2, int i3, int i4, int i5, int i6, int i7, int i8) {
+                ChartHeaderView.this.lambda$new$0(view, i, i2, i3, i4, i5, i6, i7, i8);
+            }
+        });
         recolor();
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$new$0(View view, int i, int i2, int i3, int i4, int i5, int i6, int i7, int i8) {
         TextView textView = this.datesTmp;
-        textView.setPivotX(((float) textView.getMeasuredWidth()) * 0.7f);
+        textView.setPivotX(textView.getMeasuredWidth() * 0.7f);
         TextView textView2 = this.dates;
-        textView2.setPivotX(((float) textView2.getMeasuredWidth()) * 0.7f);
+        textView2.setPivotX(textView2.getMeasuredWidth() * 0.7f);
     }
 
     public void recolor() {
@@ -88,7 +95,7 @@ public class ChartHeaderView extends FrameLayout {
     }
 
     public void setDates(long j, long j2) {
-        String str;
+        String format;
         if (!this.showDate) {
             this.dates.setVisibility(8);
             this.datesTmp.setVisibility(8);
@@ -98,11 +105,11 @@ public class ChartHeaderView extends FrameLayout {
             j2 += NUM;
         }
         if (j2 - j >= 86400000) {
-            str = this.formatter.format(new Date(j)) + " — " + this.formatter.format(new Date(j2));
+            format = this.formatter.format(new Date(j)) + " — " + this.formatter.format(new Date(j2));
         } else {
-            str = this.formatter.format(new Date(j));
+            format = this.formatter.format(new Date(j));
         }
-        this.dates.setText(str);
+        this.dates.setText(format);
         this.dates.setVisibility(0);
     }
 
@@ -118,8 +125,8 @@ public class ChartHeaderView extends FrameLayout {
             this.back.setScaleX(0.3f);
             this.back.setScaleY(0.3f);
             this.back.setPivotX(0.0f);
-            this.back.setPivotY((float) AndroidUtilities.dp(40.0f));
-            this.back.animate().alpha(1.0f).scaleY(1.0f).scaleX(1.0f).setDuration(200).start();
+            this.back.setPivotY(AndroidUtilities.dp(40.0f));
+            this.back.animate().alpha(1.0f).scaleY(1.0f).scaleX(1.0f).setDuration(200L).start();
             this.title.setAlpha(1.0f);
             this.title.setTranslationX(0.0f);
             this.title.setTranslationY(0.0f);
@@ -127,7 +134,7 @@ public class ChartHeaderView extends FrameLayout {
             this.title.setScaleY(1.0f);
             this.title.setPivotX(0.0f);
             this.title.setPivotY(0.0f);
-            this.title.animate().alpha(0.0f).scaleY(0.3f).scaleX(0.3f).setDuration(200).start();
+            this.title.animate().alpha(0.0f).scaleY(0.3f).scaleX(0.3f).setDuration(200L).start();
             return;
         }
         this.back.setAlpha(1.0f);
@@ -146,14 +153,14 @@ public class ChartHeaderView extends FrameLayout {
             this.title.setScaleY(0.3f);
             this.title.setPivotX(0.0f);
             this.title.setPivotY(0.0f);
-            this.title.animate().alpha(1.0f).scaleY(1.0f).scaleX(1.0f).setDuration(200).start();
+            this.title.animate().alpha(1.0f).scaleY(1.0f).scaleX(1.0f).setDuration(200L).start();
             this.back.setAlpha(1.0f);
             this.back.setTranslationX(0.0f);
             this.back.setTranslationY(0.0f);
             this.back.setScaleX(1.0f);
             this.back.setScaleY(1.0f);
-            this.back.setPivotY((float) AndroidUtilities.dp(40.0f));
-            this.back.animate().alpha(0.0f).scaleY(0.3f).scaleX(0.3f).setDuration(200).start();
+            this.back.setPivotY(AndroidUtilities.dp(40.0f));
+            this.back.animate().alpha(0.0f).scaleY(0.3f).scaleX(0.3f).setDuration(200L).start();
             return;
         }
         this.title.setAlpha(1.0f);
@@ -175,6 +182,6 @@ public class ChartHeaderView extends FrameLayout {
             this.title.requestLayout();
             return;
         }
-        this.title.setLayoutParams(LayoutHelper.createFrame(-2, -2.0f, 8388627, 16.0f, 0.0f, (float) this.textMargin, 0.0f));
+        this.title.setLayoutParams(LayoutHelper.createFrame(-2, -2.0f, 8388627, 16.0f, 0.0f, this.textMargin, 0.0f));
     }
 }

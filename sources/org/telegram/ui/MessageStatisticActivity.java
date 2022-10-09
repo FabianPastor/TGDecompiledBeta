@@ -8,6 +8,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -29,7 +30,7 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.QuickAckDelegate;
+import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$ChatFull;
@@ -45,7 +46,6 @@ import org.telegram.tgnet.TLRPC$TL_stats_getMessageStats;
 import org.telegram.tgnet.TLRPC$TL_stats_loadAsyncGraph;
 import org.telegram.tgnet.TLRPC$TL_stats_messageStats;
 import org.telegram.tgnet.TLRPC$messages_Messages;
-import org.telegram.tgnet.WriteToSocketDelegate;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.SimpleTextView;
@@ -53,10 +53,12 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.EmptyCell;
 import org.telegram.ui.Cells.HeaderCell;
+import org.telegram.ui.Cells.LoadingCell;
 import org.telegram.ui.Cells.ManageChatUserCell;
 import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Charts.BaseChartView;
 import org.telegram.ui.Charts.data.ChartData;
+import org.telegram.ui.Charts.data.StackLinearChartData;
 import org.telegram.ui.Charts.view_data.ChartHeaderView;
 import org.telegram.ui.Components.ChatAvatarContainer;
 import org.telegram.ui.Components.CombinedDrawable;
@@ -64,81 +66,59 @@ import org.telegram.ui.Components.EmptyTextProgressView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RLottieImageView;
 import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.ui.MessageStatisticActivity;
 import org.telegram.ui.StatisticActivity;
-
+/* loaded from: classes3.dex */
 public class MessageStatisticActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
-    /* access modifiers changed from: private */
-    public ChatAvatarContainer avatarContainer;
-    /* access modifiers changed from: private */
-    public TLRPC$ChatFull chat;
+    private ChatAvatarContainer avatarContainer;
+    private TLRPC$ChatFull chat;
     private final long chatId;
-    /* access modifiers changed from: private */
-    public LruCache<ChartData> childDataCache = new LruCache<>(15);
     boolean drawPlay;
-    /* access modifiers changed from: private */
-    public int emptyRow;
+    private int emptyRow;
     private EmptyTextProgressView emptyView;
-    /* access modifiers changed from: private */
-    public boolean endReached;
-    /* access modifiers changed from: private */
-    public int endRow;
+    private boolean endReached;
+    private int endRow;
     private boolean firstLoaded;
-    /* access modifiers changed from: private */
-    public int headerRow;
+    private int headerRow;
     private RLottieImageView imageView;
-    /* access modifiers changed from: private */
-    public int interactionsChartRow;
-    /* access modifiers changed from: private */
-    public StatisticActivity.ChartViewData interactionsViewData;
-    /* access modifiers changed from: private */
-    public StatisticActivity.ZoomCancelable lastCancelable;
-    /* access modifiers changed from: private */
-    public LinearLayoutManager layoutManager;
+    private int interactionsChartRow;
+    private StatisticActivity.ChartViewData interactionsViewData;
+    private StatisticActivity.ZoomCancelable lastCancelable;
+    private LinearLayoutManager layoutManager;
     private FrameLayout listContainer;
-    /* access modifiers changed from: private */
-    public RecyclerListView listView;
+    private RecyclerListView listView;
     private ListAdapter listViewAdapter;
-    /* access modifiers changed from: private */
-    public boolean loading;
-    /* access modifiers changed from: private */
-    public int loadingRow;
+    private boolean loading;
+    private int loadingRow;
     private final int messageId;
-    /* access modifiers changed from: private */
-    public MessageObject messageObject;
-    /* access modifiers changed from: private */
-    public ArrayList<TLRPC$Message> messages = new ArrayList<>();
+    private MessageObject messageObject;
     private int nextRate;
-    /* access modifiers changed from: private */
-    public int overviewHeaderRow;
-    /* access modifiers changed from: private */
-    public int overviewRow;
-    /* access modifiers changed from: private */
-    public LinearLayout progressLayout;
-    /* access modifiers changed from: private */
-    public int publicChats;
-    /* access modifiers changed from: private */
-    public int rowCount;
+    private int overviewHeaderRow;
+    private int overviewRow;
+    private LinearLayout progressLayout;
+    private int publicChats;
+    private int rowCount;
+    private BaseChartView.SharedUiComponents sharedUi;
+    private int startRow;
+    private boolean statsLoaded;
+    ImageReceiver thumbImage;
+    private LruCache<ChartData> childDataCache = new LruCache<>(15);
+    private ArrayList<TLRPC$Message> messages = new ArrayList<>();
     ArraySet<Integer> shadowDivideCells = new ArraySet<>();
-    /* access modifiers changed from: private */
-    public BaseChartView.SharedUiComponents sharedUi;
-    private final Runnable showProgressbar = new Runnable() {
+    private final Runnable showProgressbar = new Runnable() { // from class: org.telegram.ui.MessageStatisticActivity.1
+        @Override // java.lang.Runnable
         public void run() {
-            MessageStatisticActivity.this.progressLayout.animate().alpha(1.0f).setDuration(230);
+            MessageStatisticActivity.this.progressLayout.animate().alpha(1.0f).setDuration(230L);
         }
     };
-    /* access modifiers changed from: private */
-    public int startRow;
-    /* access modifiers changed from: private */
-    public boolean statsLoaded;
-    ImageReceiver thumbImage;
 
-    public MessageStatisticActivity(MessageObject messageObject2) {
-        this.messageObject = messageObject2;
-        if (messageObject2.messageOwner.fwd_from == null) {
-            this.chatId = messageObject2.getChatId();
+    public MessageStatisticActivity(MessageObject messageObject) {
+        this.messageObject = messageObject;
+        if (messageObject.messageOwner.fwd_from == null) {
+            this.chatId = messageObject.getChatId();
             this.messageId = this.messageObject.getId();
         } else {
-            this.chatId = -messageObject2.getFromChatId();
+            this.chatId = -messageObject.getFromChatId();
             this.messageId = this.messageObject.messageOwner.fwd_msg_id;
         }
         this.chat = getMessagesController().getChatFull(this.chatId);
@@ -157,7 +137,8 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
         if (this.firstLoaded && this.statsLoaded) {
             AndroidUtilities.cancelRunOnUIThread(this.showProgressbar);
             if (this.listContainer.getVisibility() == 8) {
-                this.progressLayout.animate().alpha(0.0f).setListener(new AnimatorListenerAdapter() {
+                this.progressLayout.animate().alpha(0.0f).setListener(new AnimatorListenerAdapter() { // from class: org.telegram.ui.MessageStatisticActivity.2
+                    @Override // android.animation.AnimatorListenerAdapter, android.animation.Animator.AnimatorListener
                     public void onAnimationEnd(Animator animator) {
                         MessageStatisticActivity.this.progressLayout.setVisibility(8);
                     }
@@ -213,6 +194,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
         }
     }
 
+    @Override // org.telegram.ui.ActionBar.BaseFragment
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
         if (this.chat != null) {
@@ -225,467 +207,71 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
         return true;
     }
 
+    @Override // org.telegram.ui.ActionBar.BaseFragment
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.chatInfoDidLoad);
     }
 
+    @Override // org.telegram.messenger.NotificationCenter.NotificationCenterDelegate
     public void didReceivedNotification(int i, int i2, Object... objArr) {
         if (i == NotificationCenter.chatInfoDidLoad) {
-            TLRPC$ChatFull tLRPC$ChatFull = objArr[0];
-            if (this.chat == null && tLRPC$ChatFull.id == this.chatId) {
-                TLRPC$Chat chat2 = getMessagesController().getChat(Long.valueOf(this.chatId));
-                if (chat2 != null) {
-                    this.avatarContainer.setChatAvatar(chat2);
-                    this.avatarContainer.setTitle(chat2.title);
-                }
-                this.chat = tLRPC$ChatFull;
-                loadStat();
-                loadChats(100);
-                updateMenu();
+            TLRPC$ChatFull tLRPC$ChatFull = (TLRPC$ChatFull) objArr[0];
+            if (this.chat != null || tLRPC$ChatFull.id != this.chatId) {
+                return;
             }
+            TLRPC$Chat chat = getMessagesController().getChat(Long.valueOf(this.chatId));
+            if (chat != null) {
+                this.avatarContainer.setChatAvatar(chat);
+                this.avatarContainer.setTitle(chat.title);
+            }
+            this.chat = tLRPC$ChatFull;
+            loadStat();
+            loadChats(100);
+            updateMenu();
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:53:0x02cc  */
-    /* JADX WARNING: Removed duplicated region for block: B:54:0x02d1  */
-    /* JADX WARNING: Removed duplicated region for block: B:62:0x030c  */
-    /* JADX WARNING: Removed duplicated region for block: B:63:0x032c  */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
+    /* JADX WARN: Removed duplicated region for block: B:57:0x02cc  */
+    /* JADX WARN: Removed duplicated region for block: B:58:0x02d1  */
+    /* JADX WARN: Removed duplicated region for block: B:66:0x030c  */
+    /* JADX WARN: Removed duplicated region for block: B:67:0x032c  */
+    @Override // org.telegram.ui.ActionBar.BaseFragment
+    /*
+        Code decompiled incorrectly, please refer to instructions dump.
+        To view partially-correct add '--show-bad-code' argument
+    */
     public android.view.View createView(android.content.Context r22) {
         /*
-            r21 = this;
-            r0 = r21
-            r1 = r22
-            org.telegram.ui.ActionBar.ActionBar r2 = r0.actionBar
-            int r3 = org.telegram.messenger.R.drawable.ic_ab_back
-            r2.setBackButtonImage(r3)
-            android.widget.FrameLayout r2 = new android.widget.FrameLayout
-            r2.<init>(r1)
-            r0.fragmentView = r2
-            java.lang.String r3 = "windowBackgroundGray"
-            int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
-            r2.setBackgroundColor(r3)
-            android.view.View r2 = r0.fragmentView
-            android.widget.FrameLayout r2 = (android.widget.FrameLayout) r2
-            org.telegram.ui.Components.EmptyTextProgressView r3 = new org.telegram.ui.Components.EmptyTextProgressView
-            r3.<init>(r1)
-            r0.emptyView = r3
-            int r4 = org.telegram.messenger.R.string.NoResult
-            java.lang.String r5 = "NoResult"
-            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
-            r3.setText(r4)
-            org.telegram.ui.Components.EmptyTextProgressView r3 = r0.emptyView
-            r4 = 8
-            r3.setVisibility(r4)
-            android.widget.LinearLayout r3 = new android.widget.LinearLayout
-            r3.<init>(r1)
-            r0.progressLayout = r3
-            r5 = 1
-            r3.setOrientation(r5)
-            org.telegram.ui.Components.RLottieImageView r3 = new org.telegram.ui.Components.RLottieImageView
-            r3.<init>(r1)
-            r0.imageView = r3
-            r3.setAutoRepeat(r5)
-            org.telegram.ui.Components.RLottieImageView r3 = r0.imageView
-            int r6 = org.telegram.messenger.R.raw.statistic_preload
-            r7 = 120(0x78, float:1.68E-43)
-            r3.setAnimation((int) r6, (int) r7, (int) r7)
-            org.telegram.ui.Components.RLottieImageView r3 = r0.imageView
-            r3.playAnimation()
-            android.widget.TextView r3 = new android.widget.TextView
-            r3.<init>(r1)
-            r6 = 1101004800(0x41a00000, float:20.0)
-            r3.setTextSize(r5, r6)
-            java.lang.String r6 = "fonts/rmedium.ttf"
-            android.graphics.Typeface r6 = org.telegram.messenger.AndroidUtilities.getTypeface(r6)
-            r3.setTypeface(r6)
-            java.lang.String r6 = "player_actionBarTitle"
-            int r7 = org.telegram.ui.ActionBar.Theme.getColor(r6)
-            r3.setTextColor(r7)
-            r3.setTag(r6)
-            int r7 = org.telegram.messenger.R.string.LoadingStats
-            java.lang.String r8 = "LoadingStats"
-            java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
-            r3.setText(r7)
-            r3.setGravity(r5)
-            android.widget.TextView r7 = new android.widget.TextView
-            r7.<init>(r1)
-            r8 = 1097859072(0x41700000, float:15.0)
-            r7.setTextSize(r5, r8)
-            java.lang.String r8 = "player_actionBarSubtitle"
-            int r9 = org.telegram.ui.ActionBar.Theme.getColor(r8)
-            r7.setTextColor(r9)
-            r7.setTag(r8)
-            int r9 = org.telegram.messenger.R.string.LoadingStatsDescription
-            java.lang.String r10 = "LoadingStatsDescription"
-            java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
-            r7.setText(r9)
-            r7.setGravity(r5)
-            android.widget.LinearLayout r9 = r0.progressLayout
-            org.telegram.ui.Components.RLottieImageView r10 = r0.imageView
-            r11 = 120(0x78, float:1.68E-43)
-            r12 = 120(0x78, float:1.68E-43)
-            r13 = 1
-            r14 = 0
-            r15 = 0
-            r16 = 0
-            r17 = 20
-            android.widget.LinearLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r11, (int) r12, (int) r13, (int) r14, (int) r15, (int) r16, (int) r17)
-            r9.addView(r10, r11)
-            android.widget.LinearLayout r9 = r0.progressLayout
-            r10 = -2
-            r11 = -2
-            r12 = 1
-            r13 = 0
-            r16 = 10
-            android.widget.LinearLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r10, (int) r11, (int) r12, (int) r13, (int) r14, (int) r15, (int) r16)
-            r9.addView(r3, r10)
-            android.widget.LinearLayout r3 = r0.progressLayout
-            r9 = -2
-            android.widget.LinearLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r9, (int) r9, (int) r5)
-            r3.addView(r7, r9)
-            android.widget.LinearLayout r3 = r0.progressLayout
-            r7 = 0
-            r3.setAlpha(r7)
-            android.widget.LinearLayout r3 = r0.progressLayout
-            r9 = 240(0xf0, float:3.36E-43)
-            r10 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-            r11 = 17
-            r12 = 0
-            r13 = 0
-            r14 = 0
-            r15 = 1106247680(0x41var_, float:30.0)
-            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r10, r11, r12, r13, r14, r15)
-            r2.addView(r3, r9)
-            org.telegram.ui.Components.RecyclerListView r3 = new org.telegram.ui.Components.RecyclerListView
-            r3.<init>(r1)
-            r0.listView = r3
-            androidx.recyclerview.widget.LinearLayoutManager r9 = new androidx.recyclerview.widget.LinearLayoutManager
-            r10 = 0
-            r9.<init>(r1, r5, r10)
-            r0.layoutManager = r9
-            r3.setLayoutManager(r9)
-            org.telegram.ui.Components.RecyclerListView r3 = r0.listView
-            androidx.recyclerview.widget.RecyclerView$ItemAnimator r3 = r3.getItemAnimator()
-            androidx.recyclerview.widget.SimpleItemAnimator r3 = (androidx.recyclerview.widget.SimpleItemAnimator) r3
-            r3.setSupportsChangeAnimations(r10)
-            org.telegram.ui.Components.RecyclerListView r3 = r0.listView
-            org.telegram.ui.MessageStatisticActivity$ListAdapter r9 = new org.telegram.ui.MessageStatisticActivity$ListAdapter
-            r9.<init>(r1)
-            r0.listViewAdapter = r9
-            r3.setAdapter(r9)
-            org.telegram.ui.Components.RecyclerListView r3 = r0.listView
-            boolean r9 = org.telegram.messenger.LocaleController.isRTL
-            if (r9 == 0) goto L_0x0126
-            r9 = 1
-            goto L_0x0127
-        L_0x0126:
-            r9 = 2
-        L_0x0127:
-            r3.setVerticalScrollbarPosition(r9)
-            org.telegram.ui.Components.RecyclerListView r3 = r0.listView
-            org.telegram.ui.MessageStatisticActivity$$ExternalSyntheticLambda9 r9 = new org.telegram.ui.MessageStatisticActivity$$ExternalSyntheticLambda9
-            r9.<init>(r0)
-            r3.setOnItemClickListener((org.telegram.ui.Components.RecyclerListView.OnItemClickListener) r9)
-            org.telegram.ui.Components.RecyclerListView r3 = r0.listView
-            org.telegram.ui.MessageStatisticActivity$3 r9 = new org.telegram.ui.MessageStatisticActivity$3
-            r9.<init>()
-            r3.setOnScrollListener(r9)
-            org.telegram.ui.Components.EmptyTextProgressView r3 = r0.emptyView
-            r3.showTextView()
-            android.widget.FrameLayout r3 = new android.widget.FrameLayout
-            r3.<init>(r1)
-            r0.listContainer = r3
-            org.telegram.ui.Components.RecyclerListView r9 = r0.listView
-            r11 = -1
-            r12 = -1082130432(0xffffffffbvar_, float:-1.0)
-            android.widget.FrameLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r12)
-            r3.addView(r9, r13)
-            android.widget.FrameLayout r3 = r0.listContainer
-            org.telegram.ui.Components.EmptyTextProgressView r9 = r0.emptyView
-            android.widget.FrameLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r12)
-            r3.addView(r9, r13)
-            android.widget.FrameLayout r3 = r0.listContainer
-            r3.setVisibility(r4)
-            android.widget.FrameLayout r3 = r0.listContainer
-            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r12)
-            r2.addView(r3, r4)
-            java.lang.Runnable r2 = r0.showProgressbar
-            r3 = 300(0x12c, double:1.48E-321)
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r2, r3)
-            r21.updateRows()
-            org.telegram.ui.Components.RecyclerListView r2 = r0.listView
-            org.telegram.ui.Components.EmptyTextProgressView r3 = r0.emptyView
-            r2.setEmptyView(r3)
-            org.telegram.ui.MessageStatisticActivity$4 r2 = new org.telegram.ui.MessageStatisticActivity$4
-            r3 = 0
-            r2.<init>(r1, r3, r10)
-            r0.avatarContainer = r2
-            org.telegram.messenger.ImageReceiver r1 = new org.telegram.messenger.ImageReceiver
-            r1.<init>()
-            r0.thumbImage = r1
-            org.telegram.ui.Components.ChatAvatarContainer r2 = r0.avatarContainer
-            r1.setParentView(r2)
-            org.telegram.messenger.ImageReceiver r1 = r0.thumbImage
-            r2 = 1073741824(0x40000000, float:2.0)
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            r1.setRoundRadius((int) r2)
-            org.telegram.ui.ActionBar.ActionBar r1 = r0.actionBar
-            org.telegram.ui.Components.ChatAvatarContainer r2 = r0.avatarContainer
-            r11 = -2
-            r13 = 51
-            boolean r4 = r0.inPreviewMode
-            if (r4 != 0) goto L_0x01af
-            r7 = 1113587712(0x42600000, float:56.0)
-            r14 = 1113587712(0x42600000, float:56.0)
-            goto L_0x01b0
-        L_0x01af:
-            r14 = 0
-        L_0x01b0:
-            r15 = 0
-            r16 = 1109393408(0x42200000, float:40.0)
-            r17 = 0
-            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r12, r13, r14, r15, r16, r17)
-            r1.addView(r2, r10, r4)
-            org.telegram.messenger.MessagesController r1 = r21.getMessagesController()
-            long r11 = r0.chatId
-            java.lang.Long r2 = java.lang.Long.valueOf(r11)
-            org.telegram.tgnet.TLRPC$Chat r1 = r1.getChat(r2)
-            if (r1 == 0) goto L_0x01d8
-            org.telegram.ui.Components.ChatAvatarContainer r2 = r0.avatarContainer
-            r2.setChatAvatar(r1)
-            org.telegram.ui.Components.ChatAvatarContainer r2 = r0.avatarContainer
-            java.lang.String r1 = r1.title
-            r2.setTitle(r1)
-        L_0x01d8:
-            org.telegram.messenger.MessageObject r1 = r0.messageObject
-            boolean r1 = r1.needDrawBluredPreview()
-            if (r1 != 0) goto L_0x02c1
-            org.telegram.messenger.MessageObject r1 = r0.messageObject
-            boolean r1 = r1.isPhoto()
-            if (r1 != 0) goto L_0x01f8
-            org.telegram.messenger.MessageObject r1 = r0.messageObject
-            boolean r1 = r1.isNewGif()
-            if (r1 != 0) goto L_0x01f8
-            org.telegram.messenger.MessageObject r1 = r0.messageObject
-            boolean r1 = r1.isVideo()
-            if (r1 == 0) goto L_0x02c1
-        L_0x01f8:
-            org.telegram.messenger.MessageObject r1 = r0.messageObject
-            boolean r1 = r1.isWebpage()
-            if (r1 == 0) goto L_0x020b
-            org.telegram.messenger.MessageObject r1 = r0.messageObject
-            org.telegram.tgnet.TLRPC$Message r1 = r1.messageOwner
-            org.telegram.tgnet.TLRPC$MessageMedia r1 = r1.media
-            org.telegram.tgnet.TLRPC$WebPage r1 = r1.webpage
-            java.lang.String r1 = r1.type
-            goto L_0x020c
-        L_0x020b:
-            r1 = r3
-        L_0x020c:
-            java.lang.String r2 = "app"
-            boolean r2 = r2.equals(r1)
-            if (r2 != 0) goto L_0x02c1
-            java.lang.String r2 = "profile"
-            boolean r2 = r2.equals(r1)
-            if (r2 != 0) goto L_0x02c1
-            java.lang.String r2 = "article"
-            boolean r2 = r2.equals(r1)
-            if (r2 != 0) goto L_0x02c1
-            if (r1 == 0) goto L_0x022e
-            java.lang.String r2 = "telegram_"
-            boolean r1 = r1.startsWith(r2)
-            if (r1 != 0) goto L_0x02c1
-        L_0x022e:
-            org.telegram.messenger.MessageObject r1 = r0.messageObject
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r1 = r1.photoThumbs
-            r2 = 40
-            org.telegram.tgnet.TLRPC$PhotoSize r1 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r1, r2)
-            org.telegram.messenger.MessageObject r2 = r0.messageObject
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r2 = r2.photoThumbs
-            int r4 = org.telegram.messenger.AndroidUtilities.getPhotoSize()
-            org.telegram.tgnet.TLRPC$PhotoSize r2 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r2, r4)
-            if (r1 != r2) goto L_0x0247
-            goto L_0x0248
-        L_0x0247:
-            r3 = r2
-        L_0x0248:
-            if (r1 == 0) goto L_0x02c1
-            org.telegram.messenger.MessageObject r2 = r0.messageObject
-            boolean r2 = r2.isVideo()
-            r0.drawPlay = r2
-            java.lang.String r2 = org.telegram.messenger.FileLoader.getAttachFileName(r3)
-            org.telegram.messenger.MessageObject r4 = r0.messageObject
-            boolean r4 = r4.mediaExists
-            if (r4 != 0) goto L_0x0291
-            int r4 = r0.currentAccount
-            org.telegram.messenger.DownloadController r4 = org.telegram.messenger.DownloadController.getInstance(r4)
-            org.telegram.messenger.MessageObject r7 = r0.messageObject
-            boolean r4 = r4.canDownloadMedia((org.telegram.messenger.MessageObject) r7)
-            if (r4 != 0) goto L_0x0291
-            int r4 = r0.currentAccount
-            org.telegram.messenger.FileLoader r4 = org.telegram.messenger.FileLoader.getInstance(r4)
-            boolean r2 = r4.isLoadingFile(r2)
-            if (r2 == 0) goto L_0x0277
-            goto L_0x0291
-        L_0x0277:
-            org.telegram.messenger.ImageReceiver r11 = r0.thumbImage
-            r12 = 0
-            r13 = 0
-            org.telegram.messenger.MessageObject r2 = r0.messageObject
-            org.telegram.tgnet.TLObject r2 = r2.photoThumbsObject
-            org.telegram.messenger.ImageLocation r14 = org.telegram.messenger.ImageLocation.getForObject(r1, r2)
-            r16 = 0
-            org.telegram.messenger.MessageObject r1 = r0.messageObject
-            r18 = 0
-            java.lang.String r15 = "20_20"
-            r17 = r1
-            r11.setImage((org.telegram.messenger.ImageLocation) r12, (java.lang.String) r13, (org.telegram.messenger.ImageLocation) r14, (java.lang.String) r15, (android.graphics.drawable.Drawable) r16, (java.lang.Object) r17, (int) r18)
-            goto L_0x02bf
-        L_0x0291:
-            org.telegram.messenger.MessageObject r2 = r0.messageObject
-            int r4 = r2.type
-            if (r4 != r5) goto L_0x029c
-            if (r3 == 0) goto L_0x029c
-            int r4 = r3.size
-            goto L_0x029d
-        L_0x029c:
-            r4 = 0
-        L_0x029d:
-            org.telegram.messenger.ImageReceiver r11 = r0.thumbImage
-            org.telegram.tgnet.TLObject r2 = r2.photoThumbsObject
-            org.telegram.messenger.ImageLocation r12 = org.telegram.messenger.ImageLocation.getForObject(r3, r2)
-            org.telegram.messenger.MessageObject r2 = r0.messageObject
-            org.telegram.tgnet.TLObject r2 = r2.photoThumbsObject
-            org.telegram.messenger.ImageLocation r14 = org.telegram.messenger.ImageLocation.getForObject(r1, r2)
-            long r1 = (long) r4
-            r18 = 0
-            org.telegram.messenger.MessageObject r3 = r0.messageObject
-            r20 = 0
-            java.lang.String r13 = "20_20"
-            java.lang.String r15 = "20_20"
-            r16 = r1
-            r19 = r3
-            r11.setImage(r12, r13, r14, r15, r16, r18, r19, r20)
-        L_0x02bf:
-            r1 = 1
-            goto L_0x02c2
-        L_0x02c1:
-            r1 = 0
-        L_0x02c2:
-            org.telegram.messenger.MessageObject r2 = r0.messageObject
-            java.lang.CharSequence r2 = r2.caption
-            boolean r2 = android.text.TextUtils.isEmpty(r2)
-            if (r2 != 0) goto L_0x02d1
-            org.telegram.messenger.MessageObject r2 = r0.messageObject
-            java.lang.CharSequence r2 = r2.caption
-            goto L_0x030a
-        L_0x02d1:
-            org.telegram.messenger.MessageObject r2 = r0.messageObject
-            org.telegram.tgnet.TLRPC$Message r2 = r2.messageOwner
-            java.lang.String r2 = r2.message
-            boolean r2 = android.text.TextUtils.isEmpty(r2)
-            if (r2 != 0) goto L_0x0306
-            org.telegram.messenger.MessageObject r2 = r0.messageObject
-            java.lang.CharSequence r2 = r2.messageText
-            int r3 = r2.length()
-            r4 = 150(0x96, float:2.1E-43)
-            if (r3 <= r4) goto L_0x02ed
-            java.lang.CharSequence r2 = r2.subSequence(r10, r4)
-        L_0x02ed:
-            org.telegram.ui.Components.ChatAvatarContainer r3 = r0.avatarContainer
-            org.telegram.ui.ActionBar.SimpleTextView r3 = r3.getSubtitleTextView()
-            android.text.TextPaint r3 = r3.getTextPaint()
-            android.graphics.Paint$FontMetricsInt r3 = r3.getFontMetricsInt()
-            r4 = 1099431936(0x41880000, float:17.0)
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            java.lang.CharSequence r2 = org.telegram.messenger.Emoji.replaceEmoji(r2, r3, r4, r10)
-            goto L_0x030a
-        L_0x0306:
-            org.telegram.messenger.MessageObject r2 = r0.messageObject
-            java.lang.CharSequence r2 = r2.messageText
-        L_0x030a:
-            if (r1 == 0) goto L_0x032c
-            android.text.SpannableStringBuilder r1 = new android.text.SpannableStringBuilder
-            r1.<init>(r2)
-            java.lang.String r2 = " "
-            r1.insert(r10, r2)
-            org.telegram.ui.Cells.DialogCell$FixedWidthSpan r2 = new org.telegram.ui.Cells.DialogCell$FixedWidthSpan
-            r3 = 1103101952(0x41CLASSNAME, float:24.0)
-            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            r2.<init>(r3)
-            r3 = 33
-            r1.setSpan(r2, r10, r5, r3)
-            org.telegram.ui.Components.ChatAvatarContainer r2 = r0.avatarContainer
-            r2.setSubtitle(r1)
-            goto L_0x0335
-        L_0x032c:
-            org.telegram.ui.Components.ChatAvatarContainer r1 = r0.avatarContainer
-            org.telegram.messenger.MessageObject r2 = r0.messageObject
-            java.lang.CharSequence r2 = r2.messageText
-            r1.setSubtitle(r2)
-        L_0x0335:
-            org.telegram.ui.ActionBar.ActionBar r1 = r0.actionBar
-            org.telegram.ui.ActionBar.BackDrawable r2 = new org.telegram.ui.ActionBar.BackDrawable
-            r2.<init>(r10)
-            r1.setBackButtonDrawable(r2)
-            org.telegram.ui.ActionBar.ActionBar r1 = r0.actionBar
-            org.telegram.ui.MessageStatisticActivity$5 r2 = new org.telegram.ui.MessageStatisticActivity$5
-            r2.<init>()
-            r1.setActionBarMenuOnItemClick(r2)
-            org.telegram.ui.Components.ChatAvatarContainer r1 = r0.avatarContainer
-            int r2 = org.telegram.ui.ActionBar.Theme.getColor(r6)
-            int r3 = org.telegram.ui.ActionBar.Theme.getColor(r8)
-            r1.setTitleColors(r2, r3)
-            org.telegram.ui.Components.ChatAvatarContainer r1 = r0.avatarContainer
-            org.telegram.ui.ActionBar.SimpleTextView r1 = r1.getSubtitleTextView()
-            int r2 = org.telegram.ui.ActionBar.Theme.getColor(r8)
-            r1.setLinkTextColor(r2)
-            org.telegram.ui.ActionBar.ActionBar r1 = r0.actionBar
-            java.lang.String r2 = "windowBackgroundWhiteGrayText2"
-            int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
-            r1.setItemsColor(r2, r10)
-            org.telegram.ui.ActionBar.ActionBar r1 = r0.actionBar
-            java.lang.String r2 = "actionBarActionModeDefaultSelector"
-            int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
-            r1.setItemsBackgroundColor(r2, r10)
-            org.telegram.ui.ActionBar.ActionBar r1 = r0.actionBar
-            java.lang.String r2 = "windowBackgroundWhite"
-            int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
-            r1.setBackgroundColor(r2)
-            org.telegram.ui.Components.ChatAvatarContainer r1 = r0.avatarContainer
-            org.telegram.ui.MessageStatisticActivity$$ExternalSyntheticLambda0 r2 = new org.telegram.ui.MessageStatisticActivity$$ExternalSyntheticLambda0
-            r2.<init>(r0)
-            r1.setOnClickListener(r2)
-            r21.updateMenu()
-            android.view.View r1 = r0.fragmentView
-            return r1
+            Method dump skipped, instructions count: 916
+            To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.MessageStatisticActivity.createView(android.content.Context):android.view.View");
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$createView$0(View view, int i) {
         int i2 = this.startRow;
-        if (i >= i2 && i < this.endRow) {
-            TLRPC$Message tLRPC$Message = this.messages.get(i - i2);
-            long dialogId = MessageObject.getDialogId(tLRPC$Message);
-            Bundle bundle = new Bundle();
-            if (DialogObject.isUserDialog(dialogId)) {
-                bundle.putLong("user_id", dialogId);
-            } else {
-                bundle.putLong("chat_id", -dialogId);
-            }
-            bundle.putInt("message_id", tLRPC$Message.id);
-            bundle.putBoolean("need_remove_previous_same_chat_activity", false);
-            if (getMessagesController().checkCanOpenChat(bundle, this)) {
-                presentFragment(new ChatActivity(bundle));
-            }
+        if (i < i2 || i >= this.endRow) {
+            return;
         }
+        TLRPC$Message tLRPC$Message = this.messages.get(i - i2);
+        long dialogId = MessageObject.getDialogId(tLRPC$Message);
+        Bundle bundle = new Bundle();
+        if (DialogObject.isUserDialog(dialogId)) {
+            bundle.putLong("user_id", dialogId);
+        } else {
+            bundle.putLong("chat_id", -dialogId);
+        }
+        bundle.putInt("message_id", tLRPC$Message.id);
+        bundle.putBoolean("need_remove_previous_same_chat_activity", false);
+        if (!getMessagesController().checkCanOpenChat(bundle, this)) {
+            return;
+        }
+        presentFragment(new ChatActivity(bundle));
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$createView$1(View view) {
         if (getParentLayout().fragmentsStack.size() > 1) {
             BaseFragment baseFragment = getParentLayout().fragmentsStack.get(getParentLayout().fragmentsStack.size() - 2);
@@ -703,51 +289,63 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
 
     private void updateMenu() {
         TLRPC$ChatFull tLRPC$ChatFull = this.chat;
-        if (tLRPC$ChatFull != null && tLRPC$ChatFull.can_view_stats) {
-            ActionBarMenu createMenu = this.actionBar.createMenu();
-            createMenu.clearItems();
-            createMenu.addItem(0, R.drawable.ic_ab_other).addSubItem(1, R.drawable.msg_stats, LocaleController.getString("ViewChannelStats", R.string.ViewChannelStats));
+        if (tLRPC$ChatFull == null || !tLRPC$ChatFull.can_view_stats) {
+            return;
         }
+        ActionBarMenu createMenu = this.actionBar.createMenu();
+        createMenu.clearItems();
+        createMenu.addItem(0, R.drawable.ic_ab_other).addSubItem(1, R.drawable.msg_stats, LocaleController.getString("ViewChannelStats", R.string.ViewChannelStats));
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public void loadChats(int i) {
-        if (!this.loading) {
-            this.loading = true;
-            ListAdapter listAdapter = this.listViewAdapter;
-            if (listAdapter != null) {
-                listAdapter.notifyDataSetChanged();
-            }
-            TLRPC$TL_stats_getMessagePublicForwards tLRPC$TL_stats_getMessagePublicForwards = new TLRPC$TL_stats_getMessagePublicForwards();
-            tLRPC$TL_stats_getMessagePublicForwards.limit = i;
-            MessageObject messageObject2 = this.messageObject;
-            TLRPC$MessageFwdHeader tLRPC$MessageFwdHeader = messageObject2.messageOwner.fwd_from;
-            if (tLRPC$MessageFwdHeader != null) {
-                tLRPC$TL_stats_getMessagePublicForwards.msg_id = tLRPC$MessageFwdHeader.saved_from_msg_id;
-                tLRPC$TL_stats_getMessagePublicForwards.channel = getMessagesController().getInputChannel(-this.messageObject.getFromChatId());
-            } else {
-                tLRPC$TL_stats_getMessagePublicForwards.msg_id = messageObject2.getId();
-                tLRPC$TL_stats_getMessagePublicForwards.channel = getMessagesController().getInputChannel(-this.messageObject.getDialogId());
-            }
-            if (!this.messages.isEmpty()) {
-                ArrayList<TLRPC$Message> arrayList = this.messages;
-                TLRPC$Message tLRPC$Message = arrayList.get(arrayList.size() - 1);
-                tLRPC$TL_stats_getMessagePublicForwards.offset_id = tLRPC$Message.id;
-                tLRPC$TL_stats_getMessagePublicForwards.offset_peer = getMessagesController().getInputPeer(MessageObject.getDialogId(tLRPC$Message));
-                tLRPC$TL_stats_getMessagePublicForwards.offset_rate = this.nextRate;
-            } else {
-                tLRPC$TL_stats_getMessagePublicForwards.offset_peer = new TLRPC$TL_inputPeerEmpty();
-            }
-            getConnectionsManager().bindRequestToGuid(getConnectionsManager().sendRequest(tLRPC$TL_stats_getMessagePublicForwards, new MessageStatisticActivity$$ExternalSyntheticLambda5(this), (QuickAckDelegate) null, (WriteToSocketDelegate) null, 0, this.chat.stats_dc, 1, true), this.classGuid);
+        if (this.loading) {
+            return;
         }
+        this.loading = true;
+        ListAdapter listAdapter = this.listViewAdapter;
+        if (listAdapter != null) {
+            listAdapter.notifyDataSetChanged();
+        }
+        TLRPC$TL_stats_getMessagePublicForwards tLRPC$TL_stats_getMessagePublicForwards = new TLRPC$TL_stats_getMessagePublicForwards();
+        tLRPC$TL_stats_getMessagePublicForwards.limit = i;
+        MessageObject messageObject = this.messageObject;
+        TLRPC$MessageFwdHeader tLRPC$MessageFwdHeader = messageObject.messageOwner.fwd_from;
+        if (tLRPC$MessageFwdHeader != null) {
+            tLRPC$TL_stats_getMessagePublicForwards.msg_id = tLRPC$MessageFwdHeader.saved_from_msg_id;
+            tLRPC$TL_stats_getMessagePublicForwards.channel = getMessagesController().getInputChannel(-this.messageObject.getFromChatId());
+        } else {
+            tLRPC$TL_stats_getMessagePublicForwards.msg_id = messageObject.getId();
+            tLRPC$TL_stats_getMessagePublicForwards.channel = getMessagesController().getInputChannel(-this.messageObject.getDialogId());
+        }
+        if (!this.messages.isEmpty()) {
+            ArrayList<TLRPC$Message> arrayList = this.messages;
+            TLRPC$Message tLRPC$Message = arrayList.get(arrayList.size() - 1);
+            tLRPC$TL_stats_getMessagePublicForwards.offset_id = tLRPC$Message.id;
+            tLRPC$TL_stats_getMessagePublicForwards.offset_peer = getMessagesController().getInputPeer(MessageObject.getDialogId(tLRPC$Message));
+            tLRPC$TL_stats_getMessagePublicForwards.offset_rate = this.nextRate;
+        } else {
+            tLRPC$TL_stats_getMessagePublicForwards.offset_peer = new TLRPC$TL_inputPeerEmpty();
+        }
+        getConnectionsManager().bindRequestToGuid(getConnectionsManager().sendRequest(tLRPC$TL_stats_getMessagePublicForwards, new RequestDelegate() { // from class: org.telegram.ui.MessageStatisticActivity$$ExternalSyntheticLambda5
+            @Override // org.telegram.tgnet.RequestDelegate
+            public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+                MessageStatisticActivity.this.lambda$loadChats$3(tLObject, tLRPC$TL_error);
+            }
+        }, null, null, 0, this.chat.stats_dc, 1, true), this.classGuid);
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadChats$3(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new MessageStatisticActivity$$ExternalSyntheticLambda3(this, tLRPC$TL_error, tLObject));
+    /* JADX INFO: Access modifiers changed from: private */
+    public /* synthetic */ void lambda$loadChats$3(final TLObject tLObject, final TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.MessageStatisticActivity$$ExternalSyntheticLambda3
+            @Override // java.lang.Runnable
+            public final void run() {
+                MessageStatisticActivity.this.lambda$loadChats$2(tLRPC$TL_error, tLObject);
+            }
+        });
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$loadChats$2(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         if (tLRPC$TL_error == null) {
             TLRPC$messages_Messages tLRPC$messages_Messages = (TLRPC$messages_Messages) tLObject;
@@ -776,24 +374,34 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
 
     private void loadStat() {
         TLRPC$TL_stats_getMessageStats tLRPC$TL_stats_getMessageStats = new TLRPC$TL_stats_getMessageStats();
-        MessageObject messageObject2 = this.messageObject;
-        TLRPC$MessageFwdHeader tLRPC$MessageFwdHeader = messageObject2.messageOwner.fwd_from;
+        MessageObject messageObject = this.messageObject;
+        TLRPC$MessageFwdHeader tLRPC$MessageFwdHeader = messageObject.messageOwner.fwd_from;
         if (tLRPC$MessageFwdHeader != null) {
             tLRPC$TL_stats_getMessageStats.msg_id = tLRPC$MessageFwdHeader.saved_from_msg_id;
             tLRPC$TL_stats_getMessageStats.channel = getMessagesController().getInputChannel(-this.messageObject.getFromChatId());
         } else {
-            tLRPC$TL_stats_getMessageStats.msg_id = messageObject2.getId();
+            tLRPC$TL_stats_getMessageStats.msg_id = messageObject.getId();
             tLRPC$TL_stats_getMessageStats.channel = getMessagesController().getInputChannel(-this.messageObject.getDialogId());
         }
-        getConnectionsManager().sendRequest(tLRPC$TL_stats_getMessageStats, new MessageStatisticActivity$$ExternalSyntheticLambda6(this), (QuickAckDelegate) null, (WriteToSocketDelegate) null, 0, this.chat.stats_dc, 1, true);
+        getConnectionsManager().sendRequest(tLRPC$TL_stats_getMessageStats, new RequestDelegate() { // from class: org.telegram.ui.MessageStatisticActivity$$ExternalSyntheticLambda6
+            @Override // org.telegram.tgnet.RequestDelegate
+            public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+                MessageStatisticActivity.this.lambda$loadStat$8(tLObject, tLRPC$TL_error);
+            }
+        }, null, null, 0, this.chat.stats_dc, 1, true);
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadStat$8(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new MessageStatisticActivity$$ExternalSyntheticLambda2(this, tLRPC$TL_error, tLObject));
+    /* JADX INFO: Access modifiers changed from: private */
+    public /* synthetic */ void lambda$loadStat$8(final TLObject tLObject, final TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.MessageStatisticActivity$$ExternalSyntheticLambda2
+            @Override // java.lang.Runnable
+            public final void run() {
+                MessageStatisticActivity.this.lambda$loadStat$7(tLRPC$TL_error, tLObject);
+            }
+        });
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$loadStat$7(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         this.statsLoaded = true;
         if (tLRPC$TL_error != null) {
@@ -802,22 +410,28 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
         }
         StatisticActivity.ChartViewData createViewData = StatisticActivity.createViewData(((TLRPC$TL_stats_messageStats) tLObject).views_graph, LocaleController.getString("InteractionsChartTitle", R.string.InteractionsChartTitle), 1, false);
         this.interactionsViewData = createViewData;
-        if (createViewData == null || createViewData.chartData.x.length > 5) {
-            updateRows();
+        if (createViewData != null && createViewData.chartData.x.length <= 5) {
+            this.statsLoaded = false;
+            final TLRPC$TL_stats_loadAsyncGraph tLRPC$TL_stats_loadAsyncGraph = new TLRPC$TL_stats_loadAsyncGraph();
+            StatisticActivity.ChartViewData chartViewData = this.interactionsViewData;
+            tLRPC$TL_stats_loadAsyncGraph.token = chartViewData.zoomToken;
+            long[] jArr = chartViewData.chartData.x;
+            tLRPC$TL_stats_loadAsyncGraph.x = jArr[jArr.length - 1];
+            tLRPC$TL_stats_loadAsyncGraph.flags |= 1;
+            final String str = this.interactionsViewData.zoomToken + "_" + tLRPC$TL_stats_loadAsyncGraph.x;
+            ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_stats_loadAsyncGraph, new RequestDelegate() { // from class: org.telegram.ui.MessageStatisticActivity$$ExternalSyntheticLambda7
+                @Override // org.telegram.tgnet.RequestDelegate
+                public final void run(TLObject tLObject2, TLRPC$TL_error tLRPC$TL_error2) {
+                    MessageStatisticActivity.this.lambda$loadStat$6(str, tLRPC$TL_stats_loadAsyncGraph, tLObject2, tLRPC$TL_error2);
+                }
+            }, null, null, 0, this.chat.stats_dc, 1, true), this.classGuid);
             return;
         }
-        this.statsLoaded = false;
-        TLRPC$TL_stats_loadAsyncGraph tLRPC$TL_stats_loadAsyncGraph = new TLRPC$TL_stats_loadAsyncGraph();
-        StatisticActivity.ChartViewData chartViewData = this.interactionsViewData;
-        tLRPC$TL_stats_loadAsyncGraph.token = chartViewData.zoomToken;
-        long[] jArr = chartViewData.chartData.x;
-        tLRPC$TL_stats_loadAsyncGraph.x = jArr[jArr.length - 1];
-        tLRPC$TL_stats_loadAsyncGraph.flags |= 1;
-        ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_stats_loadAsyncGraph, new MessageStatisticActivity$$ExternalSyntheticLambda7(this, this.interactionsViewData.zoomToken + "_" + tLRPC$TL_stats_loadAsyncGraph.x, tLRPC$TL_stats_loadAsyncGraph), (QuickAckDelegate) null, (WriteToSocketDelegate) null, 0, this.chat.stats_dc, 1, true), this.classGuid);
+        updateRows();
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadStat$6(String str, TLRPC$TL_stats_loadAsyncGraph tLRPC$TL_stats_loadAsyncGraph, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* JADX INFO: Access modifiers changed from: private */
+    public /* synthetic */ void lambda$loadStat$6(final String str, final TLRPC$TL_stats_loadAsyncGraph tLRPC$TL_stats_loadAsyncGraph, final TLObject tLObject, final TLRPC$TL_error tLRPC$TL_error) {
         ChartData chartData = null;
         if (tLObject instanceof TLRPC$TL_statsGraph) {
             try {
@@ -826,19 +440,30 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
                 e.printStackTrace();
             }
         } else if (tLObject instanceof TLRPC$TL_statsGraphError) {
-            AndroidUtilities.runOnUIThread(new MessageStatisticActivity$$ExternalSyntheticLambda1(this, tLObject));
+            AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.MessageStatisticActivity$$ExternalSyntheticLambda1
+                @Override // java.lang.Runnable
+                public final void run() {
+                    MessageStatisticActivity.this.lambda$loadStat$4(tLObject);
+                }
+            });
         }
-        AndroidUtilities.runOnUIThread(new MessageStatisticActivity$$ExternalSyntheticLambda4(this, tLRPC$TL_error, chartData, str, tLRPC$TL_stats_loadAsyncGraph));
+        final ChartData chartData2 = chartData;
+        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.MessageStatisticActivity$$ExternalSyntheticLambda4
+            @Override // java.lang.Runnable
+            public final void run() {
+                MessageStatisticActivity.this.lambda$loadStat$5(tLRPC$TL_error, chartData2, str, tLRPC$TL_stats_loadAsyncGraph);
+            }
+        });
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$loadStat$4(TLObject tLObject) {
         if (getParentActivity() != null) {
             Toast.makeText(getParentActivity(), ((TLRPC$TL_statsGraphError) tLObject).error, 1).show();
         }
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$loadStat$5(TLRPC$TL_error tLRPC$TL_error, ChartData chartData, String str, TLRPC$TL_stats_loadAsyncGraph tLRPC$TL_stats_loadAsyncGraph) {
         this.statsLoaded = true;
         if (tLRPC$TL_error != null || chartData == null) {
@@ -852,6 +477,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
         updateRows();
     }
 
+    @Override // org.telegram.ui.ActionBar.BaseFragment
     public void onResume() {
         super.onResume();
         AndroidUtilities.requestAdjustResize(getParentActivity(), this.classGuid);
@@ -861,13 +487,16 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
         }
     }
 
-    private class ListAdapter extends RecyclerListView.SelectionAdapter {
+    /* JADX INFO: Access modifiers changed from: private */
+    /* loaded from: classes3.dex */
+    public class ListAdapter extends RecyclerListView.SelectionAdapter {
         private Context mContext;
 
         public ListAdapter(Context context) {
             this.mContext = context;
         }
 
+        @Override // org.telegram.ui.Components.RecyclerListView.SelectionAdapter
         public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
             if (viewHolder.getItemViewType() == 0) {
                 return ((ManageChatUserCell) viewHolder.itemView).getCurrentObject() instanceof TLObject;
@@ -875,251 +504,171 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             return false;
         }
 
+        @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         public int getItemCount() {
             return MessageStatisticActivity.this.rowCount;
         }
 
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v2, resolved type: org.telegram.ui.Cells.ManageChatUserCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v4, resolved type: org.telegram.ui.Cells.HeaderCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v5, resolved type: org.telegram.ui.Cells.ShadowSectionCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v7, resolved type: org.telegram.ui.MessageStatisticActivity$ListAdapter$1} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v8, resolved type: org.telegram.ui.MessageStatisticActivity$OverviewCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v9, resolved type: org.telegram.ui.Cells.EmptyCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v10, resolved type: org.telegram.ui.Cells.LoadingCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v11, resolved type: org.telegram.ui.Cells.HeaderCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v3, resolved type: org.telegram.ui.Cells.HeaderCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v12, resolved type: org.telegram.ui.Cells.HeaderCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v13, resolved type: org.telegram.ui.Cells.HeaderCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v14, resolved type: org.telegram.ui.Cells.HeaderCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v15, resolved type: org.telegram.ui.Cells.HeaderCell} */
-        /* JADX WARNING: type inference failed for: r9v2, types: [android.view.View] */
-        /* JADX WARNING: Multi-variable type inference failed */
-        /* Code decompiled incorrectly, please refer to instructions dump. */
-        public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(android.view.ViewGroup r9, int r10) {
-            /*
-                r8 = this;
-                r9 = 6
-                r0 = 2
-                java.lang.String r1 = "windowBackgroundWhite"
-                if (r10 == 0) goto L_0x009a
-                r2 = 1
-                if (r10 == r2) goto L_0x0092
-                if (r10 == r0) goto L_0x0076
-                r0 = 4
-                if (r10 == r0) goto L_0x005c
-                r0 = 5
-                r2 = -1
-                if (r10 == r0) goto L_0x0042
-                if (r10 == r9) goto L_0x0029
-                org.telegram.ui.Cells.LoadingCell r9 = new org.telegram.ui.Cells.LoadingCell
-                android.content.Context r10 = r8.mContext
-                r0 = 1109393408(0x42200000, float:40.0)
-                int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
-                r1 = 1123024896(0x42var_, float:120.0)
-                int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
-                r9.<init>(r10, r0, r1)
-                goto L_0x00aa
-            L_0x0029:
-                org.telegram.ui.Cells.EmptyCell r9 = new org.telegram.ui.Cells.EmptyCell
-                android.content.Context r10 = r8.mContext
-                r0 = 16
-                r9.<init>(r10, r0)
-                androidx.recyclerview.widget.RecyclerView$LayoutParams r10 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
-                r10.<init>((int) r2, (int) r0)
-                r9.setLayoutParams(r10)
-                int r10 = org.telegram.ui.ActionBar.Theme.getColor(r1)
-                r9.setBackgroundColor(r10)
-                goto L_0x00aa
-            L_0x0042:
-                org.telegram.ui.MessageStatisticActivity$OverviewCell r9 = new org.telegram.ui.MessageStatisticActivity$OverviewCell
-                org.telegram.ui.MessageStatisticActivity r10 = org.telegram.ui.MessageStatisticActivity.this
-                android.content.Context r0 = r8.mContext
-                r9.<init>(r0)
-                androidx.recyclerview.widget.RecyclerView$LayoutParams r10 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
-                r0 = -2
-                r10.<init>((int) r2, (int) r0)
-                r9.setLayoutParams(r10)
-                int r10 = org.telegram.ui.ActionBar.Theme.getColor(r1)
-                r9.setBackgroundColor(r10)
-                goto L_0x00aa
-            L_0x005c:
-                org.telegram.ui.MessageStatisticActivity$ListAdapter$1 r9 = new org.telegram.ui.MessageStatisticActivity$ListAdapter$1
-                android.content.Context r10 = r8.mContext
-                org.telegram.ui.MessageStatisticActivity r0 = org.telegram.ui.MessageStatisticActivity.this
-                org.telegram.ui.Charts.BaseChartView$SharedUiComponents r3 = new org.telegram.ui.Charts.BaseChartView$SharedUiComponents
-                r3.<init>()
-                org.telegram.ui.Charts.BaseChartView$SharedUiComponents r0 = r0.sharedUi = r3
-                r9.<init>(r10, r2, r0)
-                int r10 = org.telegram.ui.ActionBar.Theme.getColor(r1)
-                r9.setBackgroundColor(r10)
-                goto L_0x00aa
-            L_0x0076:
-                org.telegram.ui.Cells.HeaderCell r9 = new org.telegram.ui.Cells.HeaderCell
-                android.content.Context r3 = r8.mContext
-                r5 = 16
-                r6 = 11
-                r7 = 0
-                java.lang.String r4 = "windowBackgroundWhiteBlueHeader"
-                r2 = r9
-                r2.<init>(r3, r4, r5, r6, r7)
-                int r10 = org.telegram.ui.ActionBar.Theme.getColor(r1)
-                r9.setBackgroundColor(r10)
-                r10 = 43
-                r9.setHeight(r10)
-                goto L_0x00aa
-            L_0x0092:
-                org.telegram.ui.Cells.ShadowSectionCell r9 = new org.telegram.ui.Cells.ShadowSectionCell
-                android.content.Context r10 = r8.mContext
-                r9.<init>(r10)
-                goto L_0x00aa
-            L_0x009a:
-                org.telegram.ui.Cells.ManageChatUserCell r10 = new org.telegram.ui.Cells.ManageChatUserCell
-                android.content.Context r2 = r8.mContext
-                r3 = 0
-                r10.<init>(r2, r9, r0, r3)
-                int r9 = org.telegram.ui.ActionBar.Theme.getColor(r1)
-                r10.setBackgroundColor(r9)
-                r9 = r10
-            L_0x00aa:
-                org.telegram.ui.Components.RecyclerListView$Holder r10 = new org.telegram.ui.Components.RecyclerListView$Holder
-                r10.<init>(r9)
-                return r10
-            */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.MessageStatisticActivity.ListAdapter.onCreateViewHolder(android.view.ViewGroup, int):androidx.recyclerview.widget.RecyclerView$ViewHolder");
+        /* JADX INFO: Access modifiers changed from: package-private */
+        /* renamed from: org.telegram.ui.MessageStatisticActivity$ListAdapter$1  reason: invalid class name */
+        /* loaded from: classes3.dex */
+        public class AnonymousClass1 extends StatisticActivity.BaseChartCell {
+            @Override // org.telegram.ui.StatisticActivity.BaseChartCell
+            void loadData(StatisticActivity.ChartViewData chartViewData) {
+            }
+
+            AnonymousClass1(Context context, int i, BaseChartView.SharedUiComponents sharedUiComponents) {
+                super(context, i, sharedUiComponents);
+            }
+
+            @Override // org.telegram.ui.StatisticActivity.BaseChartCell
+            public void onZoomed() {
+                if (this.data.activeZoom > 0) {
+                    return;
+                }
+                performClick();
+                BaseChartView baseChartView = this.chartView;
+                if (!baseChartView.legendSignatureView.canGoZoom) {
+                    return;
+                }
+                long selectedDate = baseChartView.getSelectedDate();
+                if (this.chartType == 4) {
+                    StatisticActivity.ChartViewData chartViewData = this.data;
+                    chartViewData.childChartData = new StackLinearChartData(chartViewData.chartData, selectedDate);
+                    zoomChart(false);
+                } else if (this.data.zoomToken == null) {
+                } else {
+                    zoomCanceled();
+                    final String str = this.data.zoomToken + "_" + selectedDate;
+                    ChartData chartData = (ChartData) MessageStatisticActivity.this.childDataCache.get(str);
+                    if (chartData != null) {
+                        this.data.childChartData = chartData;
+                        zoomChart(false);
+                        return;
+                    }
+                    TLRPC$TL_stats_loadAsyncGraph tLRPC$TL_stats_loadAsyncGraph = new TLRPC$TL_stats_loadAsyncGraph();
+                    tLRPC$TL_stats_loadAsyncGraph.token = this.data.zoomToken;
+                    if (selectedDate != 0) {
+                        tLRPC$TL_stats_loadAsyncGraph.x = selectedDate;
+                        tLRPC$TL_stats_loadAsyncGraph.flags |= 1;
+                    }
+                    MessageStatisticActivity messageStatisticActivity = MessageStatisticActivity.this;
+                    final StatisticActivity.ZoomCancelable zoomCancelable = new StatisticActivity.ZoomCancelable();
+                    messageStatisticActivity.lastCancelable = zoomCancelable;
+                    zoomCancelable.adapterPosition = MessageStatisticActivity.this.listView.getChildAdapterPosition(this);
+                    this.chartView.legendSignatureView.showProgress(true, false);
+                    ConnectionsManager.getInstance(((BaseFragment) MessageStatisticActivity.this).currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(((BaseFragment) MessageStatisticActivity.this).currentAccount).sendRequest(tLRPC$TL_stats_loadAsyncGraph, new RequestDelegate() { // from class: org.telegram.ui.MessageStatisticActivity$ListAdapter$1$$ExternalSyntheticLambda1
+                        @Override // org.telegram.tgnet.RequestDelegate
+                        public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+                            MessageStatisticActivity.ListAdapter.AnonymousClass1.this.lambda$onZoomed$1(str, zoomCancelable, tLObject, tLRPC$TL_error);
+                        }
+                    }, null, null, 0, MessageStatisticActivity.this.chat.stats_dc, 1, true), ((BaseFragment) MessageStatisticActivity.this).classGuid);
+                }
+            }
+
+            /* JADX INFO: Access modifiers changed from: private */
+            public /* synthetic */ void lambda$onZoomed$1(final String str, final StatisticActivity.ZoomCancelable zoomCancelable, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+                final ChartData chartData = null;
+                if (tLObject instanceof TLRPC$TL_statsGraph) {
+                    try {
+                        chartData = StatisticActivity.createChartData(new JSONObject(((TLRPC$TL_statsGraph) tLObject).json.data), this.data.graphType, false);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } else if (tLObject instanceof TLRPC$TL_statsGraphError) {
+                    Toast.makeText(getContext(), ((TLRPC$TL_statsGraphError) tLObject).error, 1).show();
+                }
+                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.MessageStatisticActivity$ListAdapter$1$$ExternalSyntheticLambda0
+                    @Override // java.lang.Runnable
+                    public final void run() {
+                        MessageStatisticActivity.ListAdapter.AnonymousClass1.this.lambda$onZoomed$0(chartData, str, zoomCancelable);
+                    }
+                });
+            }
+
+            /* JADX INFO: Access modifiers changed from: private */
+            public /* synthetic */ void lambda$onZoomed$0(ChartData chartData, String str, StatisticActivity.ZoomCancelable zoomCancelable) {
+                if (chartData != null) {
+                    MessageStatisticActivity.this.childDataCache.put(str, chartData);
+                }
+                if (chartData != null && !zoomCancelable.canceled && zoomCancelable.adapterPosition >= 0) {
+                    View findViewByPosition = MessageStatisticActivity.this.layoutManager.findViewByPosition(zoomCancelable.adapterPosition);
+                    if (findViewByPosition instanceof StatisticActivity.BaseChartCell) {
+                        this.data.childChartData = chartData;
+                        StatisticActivity.BaseChartCell baseChartCell = (StatisticActivity.BaseChartCell) findViewByPosition;
+                        baseChartCell.chartView.legendSignatureView.showProgress(false, false);
+                        baseChartCell.zoomChart(false);
+                    }
+                }
+                zoomCanceled();
+            }
+
+            @Override // org.telegram.ui.StatisticActivity.BaseChartCell
+            public void zoomCanceled() {
+                if (MessageStatisticActivity.this.lastCancelable != null) {
+                    MessageStatisticActivity.this.lastCancelable.canceled = true;
+                }
+                int childCount = MessageStatisticActivity.this.listView.getChildCount();
+                for (int i = 0; i < childCount; i++) {
+                    View childAt = MessageStatisticActivity.this.listView.getChildAt(i);
+                    if (childAt instanceof StatisticActivity.BaseChartCell) {
+                        ((StatisticActivity.BaseChartCell) childAt).chartView.legendSignatureView.showProgress(false, true);
+                    }
+                }
+            }
         }
 
-        /* JADX WARNING: Removed duplicated region for block: B:30:0x00e7  */
-        /* JADX WARNING: Removed duplicated region for block: B:40:? A[RETURN, SYNTHETIC] */
-        /* Code decompiled incorrectly, please refer to instructions dump. */
+        @Override // androidx.recyclerview.widget.RecyclerView.Adapter
+        /* renamed from: onCreateViewHolder */
+        public RecyclerView.ViewHolder mo1754onCreateViewHolder(ViewGroup viewGroup, int i) {
+            HeaderCell headerCell;
+            if (i == 0) {
+                View manageChatUserCell = new ManageChatUserCell(this.mContext, 6, 2, false);
+                manageChatUserCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
+                headerCell = manageChatUserCell;
+            } else if (i == 1) {
+                headerCell = new ShadowSectionCell(this.mContext);
+            } else if (i == 2) {
+                HeaderCell headerCell2 = new HeaderCell(this.mContext, "windowBackgroundWhiteBlueHeader", 16, 11, false);
+                headerCell2.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
+                headerCell2.setHeight(43);
+                headerCell = headerCell2;
+            } else if (i == 4) {
+                View anonymousClass1 = new AnonymousClass1(this.mContext, 1, MessageStatisticActivity.this.sharedUi = new BaseChartView.SharedUiComponents());
+                anonymousClass1.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
+                headerCell = anonymousClass1;
+            } else if (i == 5) {
+                View overviewCell = new OverviewCell(this.mContext);
+                overviewCell.setLayoutParams(new RecyclerView.LayoutParams(-1, -2));
+                overviewCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
+                headerCell = overviewCell;
+            } else if (i == 6) {
+                View emptyCell = new EmptyCell(this.mContext, 16);
+                emptyCell.setLayoutParams(new RecyclerView.LayoutParams(-1, 16));
+                emptyCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
+                headerCell = emptyCell;
+            } else {
+                headerCell = new LoadingCell(this.mContext, AndroidUtilities.dp(40.0f), AndroidUtilities.dp(120.0f));
+            }
+            return new RecyclerListView.Holder(headerCell);
+        }
+
+        /* JADX WARN: Removed duplicated region for block: B:33:0x00e7  */
+        /* JADX WARN: Removed duplicated region for block: B:44:? A[RETURN, SYNTHETIC] */
+        @Override // androidx.recyclerview.widget.RecyclerView.Adapter
+        /*
+            Code decompiled incorrectly, please refer to instructions dump.
+            To view partially-correct add '--show-bad-code' argument
+        */
         public void onBindViewHolder(androidx.recyclerview.widget.RecyclerView.ViewHolder r10, int r11) {
             /*
-                r9 = this;
-                int r0 = r10.getItemViewType()
-                r1 = 2
-                r2 = 1
-                r3 = 0
-                if (r0 == 0) goto L_0x0076
-                if (r0 == r2) goto L_0x0065
-                if (r0 == r1) goto L_0x0037
-                r11 = 4
-                if (r0 == r11) goto L_0x001e
-                r11 = 5
-                if (r0 == r11) goto L_0x0015
-                goto L_0x00f5
-            L_0x0015:
-                android.view.View r10 = r10.itemView
-                org.telegram.ui.MessageStatisticActivity$OverviewCell r10 = (org.telegram.ui.MessageStatisticActivity.OverviewCell) r10
-                r10.setData()
-                goto L_0x00f5
-            L_0x001e:
-                android.view.View r10 = r10.itemView
-                org.telegram.ui.StatisticActivity$BaseChartCell r10 = (org.telegram.ui.StatisticActivity.BaseChartCell) r10
-                org.telegram.ui.MessageStatisticActivity r11 = org.telegram.ui.MessageStatisticActivity.this
-                org.telegram.ui.StatisticActivity$ChartViewData r11 = r11.interactionsViewData
-                r10.updateData(r11, r3)
-                androidx.recyclerview.widget.RecyclerView$LayoutParams r11 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
-                r0 = -1
-                r1 = -2
-                r11.<init>((int) r0, (int) r1)
-                r10.setLayoutParams(r11)
-                goto L_0x00f5
-            L_0x0037:
-                android.view.View r10 = r10.itemView
-                org.telegram.ui.Cells.HeaderCell r10 = (org.telegram.ui.Cells.HeaderCell) r10
-                org.telegram.ui.MessageStatisticActivity r0 = org.telegram.ui.MessageStatisticActivity.this
-                int r0 = r0.overviewHeaderRow
-                if (r11 != r0) goto L_0x0052
-                int r11 = org.telegram.messenger.R.string.StatisticOverview
-                java.lang.Object[] r0 = new java.lang.Object[r3]
-                java.lang.String r1 = "StatisticOverview"
-                java.lang.String r11 = org.telegram.messenger.LocaleController.formatString(r1, r11, r0)
-                r10.setText(r11)
-                goto L_0x00f5
-            L_0x0052:
-                org.telegram.ui.MessageStatisticActivity r11 = org.telegram.ui.MessageStatisticActivity.this
-                int r11 = r11.publicChats
-                java.lang.Object[] r0 = new java.lang.Object[r3]
-                java.lang.String r1 = "PublicSharesCount"
-                java.lang.String r11 = org.telegram.messenger.LocaleController.formatPluralString(r1, r11, r0)
-                r10.setText(r11)
-                goto L_0x00f5
-            L_0x0065:
-                android.view.View r10 = r10.itemView
-                android.content.Context r11 = r9.mContext
-                int r0 = org.telegram.messenger.R.drawable.greydivider_bottom
-                java.lang.String r1 = "windowBackgroundGrayShadow"
-                android.graphics.drawable.Drawable r11 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r11, (int) r0, (java.lang.String) r1)
-                r10.setBackgroundDrawable(r11)
-                goto L_0x00f5
-            L_0x0076:
-                android.view.View r10 = r10.itemView
-                org.telegram.ui.Cells.ManageChatUserCell r10 = (org.telegram.ui.Cells.ManageChatUserCell) r10
-                org.telegram.tgnet.TLRPC$Message r0 = r9.getItem(r11)
-                long r4 = org.telegram.messenger.MessageObject.getDialogId(r0)
-                boolean r6 = org.telegram.messenger.DialogObject.isUserDialog(r4)
-                r7 = 0
-                if (r6 == 0) goto L_0x0098
-                org.telegram.ui.MessageStatisticActivity r0 = org.telegram.ui.MessageStatisticActivity.this
-                org.telegram.messenger.MessagesController r0 = r0.getMessagesController()
-                java.lang.Long r1 = java.lang.Long.valueOf(r4)
-                org.telegram.tgnet.TLRPC$User r0 = r0.getUser(r1)
-                goto L_0x00e4
-            L_0x0098:
-                org.telegram.ui.MessageStatisticActivity r6 = org.telegram.ui.MessageStatisticActivity.this
-                org.telegram.messenger.MessagesController r6 = r6.getMessagesController()
-                long r4 = -r4
-                java.lang.Long r4 = java.lang.Long.valueOf(r4)
-                org.telegram.tgnet.TLRPC$Chat r4 = r6.getChat(r4)
-                int r5 = r4.participants_count
-                if (r5 == 0) goto L_0x00e3
-                boolean r5 = org.telegram.messenger.ChatObject.isChannel(r4)
-                if (r5 == 0) goto L_0x00c0
-                boolean r5 = r4.megagroup
-                if (r5 != 0) goto L_0x00c0
-                int r5 = r4.participants_count
-                java.lang.Object[] r6 = new java.lang.Object[r3]
-                java.lang.String r8 = "Subscribers"
-                java.lang.String r5 = org.telegram.messenger.LocaleController.formatPluralString(r8, r5, r6)
-                goto L_0x00ca
-            L_0x00c0:
-                int r5 = r4.participants_count
-                java.lang.Object[] r6 = new java.lang.Object[r3]
-                java.lang.String r8 = "Members"
-                java.lang.String r5 = org.telegram.messenger.LocaleController.formatPluralString(r8, r5, r6)
-            L_0x00ca:
-                java.lang.Object[] r1 = new java.lang.Object[r1]
-                r1[r3] = r5
-                int r0 = r0.views
-                java.lang.Object[] r5 = new java.lang.Object[r3]
-                java.lang.String r6 = "Views"
-                java.lang.String r0 = org.telegram.messenger.LocaleController.formatPluralString(r6, r0, r5)
-                r1[r2] = r0
-                java.lang.String r0 = "%1$s, %2$s"
-                java.lang.String r0 = java.lang.String.format(r0, r1)
-                r1 = r0
-                r0 = r4
-                goto L_0x00e5
-            L_0x00e3:
-                r0 = r4
-            L_0x00e4:
-                r1 = r7
-            L_0x00e5:
-                if (r0 == 0) goto L_0x00f5
-                org.telegram.ui.MessageStatisticActivity r4 = org.telegram.ui.MessageStatisticActivity.this
-                int r4 = r4.endRow
-                int r4 = r4 - r2
-                if (r11 == r4) goto L_0x00f1
-                goto L_0x00f2
-            L_0x00f1:
-                r2 = 0
-            L_0x00f2:
-                r10.setData(r0, r7, r1, r2)
-            L_0x00f5:
-                return
+                Method dump skipped, instructions count: 246
+                To view this dump add '--comments-level debug' option
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.MessageStatisticActivity.ListAdapter.onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder, int):void");
         }
 
+        @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         public void onViewRecycled(RecyclerView.ViewHolder viewHolder) {
             View view = viewHolder.itemView;
             if (view instanceof ManageChatUserCell) {
@@ -1127,6 +676,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             }
         }
 
+        @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         public int getItemViewType(int i) {
             if (MessageStatisticActivity.this.shadowDivideCells.contains(Integer.valueOf(i))) {
                 return 1;
@@ -1154,13 +704,17 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
         }
     }
 
+    /* loaded from: classes3.dex */
     public class OverviewCell extends LinearLayout {
-        View[] cell = new View[3];
-        TextView[] primary = new TextView[3];
-        TextView[] title = new TextView[3];
+        View[] cell;
+        TextView[] primary;
+        TextView[] title;
 
         public OverviewCell(Context context) {
             super(context);
+            this.primary = new TextView[3];
+            this.title = new TextView[3];
+            this.cell = new View[3];
             setOrientation(1);
             setPadding(AndroidUtilities.dp(16.0f), 0, AndroidUtilities.dp(16.0f), AndroidUtilities.dp(16.0f));
             LinearLayout linearLayout = new LinearLayout(context);
@@ -1191,10 +745,10 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             } else {
                 this.cell[1].setVisibility(8);
             }
-            int access$2000 = MessageStatisticActivity.this.messageObject.messageOwner.forwards - MessageStatisticActivity.this.publicChats;
-            if (access$2000 > 0) {
+            int i = MessageStatisticActivity.this.messageObject.messageOwner.forwards - MessageStatisticActivity.this.publicChats;
+            if (i > 0) {
                 this.cell[2].setVisibility(0);
-                this.primary[2].setText(AndroidUtilities.formatWholeNumber(access$2000, 0));
+                this.primary[2].setText(AndroidUtilities.formatWholeNumber(i, 0));
                 this.title[2].setText(LocaleController.formatString("PrivateShares", R.string.PrivateShares, new Object[0]));
             } else {
                 this.cell[2].setVisibility(8);
@@ -1202,7 +756,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             updateColors();
         }
 
-        /* access modifiers changed from: private */
+        /* JADX INFO: Access modifiers changed from: private */
         public void updateColors() {
             for (int i = 0; i < 3; i++) {
                 this.primary[i].setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
@@ -1211,47 +765,56 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
         }
     }
 
+    @Override // org.telegram.ui.ActionBar.BaseFragment
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         ArrayList<ThemeDescription> arrayList = new ArrayList<>();
-        MessageStatisticActivity$$ExternalSyntheticLambda8 messageStatisticActivity$$ExternalSyntheticLambda8 = new MessageStatisticActivity$$ExternalSyntheticLambda8(this);
-        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{HeaderCell.class, ManageChatUserCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
-        arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGray"));
-        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
+        ThemeDescription.ThemeDescriptionDelegate themeDescriptionDelegate = new ThemeDescription.ThemeDescriptionDelegate() { // from class: org.telegram.ui.MessageStatisticActivity$$ExternalSyntheticLambda8
+            @Override // org.telegram.ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate
+            public final void didSetColor() {
+                MessageStatisticActivity.this.lambda$getThemeDescriptions$9();
+            }
+
+            @Override // org.telegram.ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate
+            public /* synthetic */ void onAnimationProgress(float f) {
+                ThemeDescription.ThemeDescriptionDelegate.CC.$default$onAnimationProgress(this, f);
+            }
+        };
+        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{HeaderCell.class, ManageChatUserCell.class}, null, null, null, "windowBackgroundWhite"));
+        arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundGray"));
+        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundWhite"));
         ChatAvatarContainer chatAvatarContainer = this.avatarContainer;
         SimpleTextView simpleTextView = null;
-        arrayList.add(new ThemeDescription(chatAvatarContainer != null ? chatAvatarContainer.getTitleTextView() : null, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "player_actionBarTitle"));
+        arrayList.add(new ThemeDescription(chatAvatarContainer != null ? chatAvatarContainer.getTitleTextView() : null, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "player_actionBarTitle"));
         ChatAvatarContainer chatAvatarContainer2 = this.avatarContainer;
         if (chatAvatarContainer2 != null) {
             simpleTextView = chatAvatarContainer2.getSubtitleTextView();
         }
-        arrayList.add(new ThemeDescription((View) simpleTextView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, (Class[]) null, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "player_actionBarSubtitle", (Object) null));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, messageStatisticActivity$$ExternalSyntheticLambda8, "statisticChartLineEmpty"));
-        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"));
-        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "listSelectorSDK21"));
-        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "divider"));
-        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGrayShadow"));
-        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueHeader"));
-        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"nameTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-        MessageStatisticActivity$$ExternalSyntheticLambda8 messageStatisticActivity$$ExternalSyntheticLambda82 = messageStatisticActivity$$ExternalSyntheticLambda8;
-        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"statusColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) messageStatisticActivity$$ExternalSyntheticLambda82, "windowBackgroundWhiteGrayText"));
-        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"statusOnlineColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) messageStatisticActivity$$ExternalSyntheticLambda82, "windowBackgroundWhiteBlueText"));
-        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{ManageChatUserCell.class}, (Paint) null, Theme.avatarDrawables, (ThemeDescription.ThemeDescriptionDelegate) null, "avatar_text"));
-        MessageStatisticActivity$$ExternalSyntheticLambda8 messageStatisticActivity$$ExternalSyntheticLambda83 = messageStatisticActivity$$ExternalSyntheticLambda8;
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, messageStatisticActivity$$ExternalSyntheticLambda83, "avatar_backgroundRed"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, messageStatisticActivity$$ExternalSyntheticLambda83, "avatar_backgroundOrange"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, messageStatisticActivity$$ExternalSyntheticLambda83, "avatar_backgroundViolet"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, messageStatisticActivity$$ExternalSyntheticLambda83, "avatar_backgroundGreen"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, messageStatisticActivity$$ExternalSyntheticLambda83, "avatar_backgroundCyan"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, messageStatisticActivity$$ExternalSyntheticLambda83, "avatar_backgroundBlue"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, messageStatisticActivity$$ExternalSyntheticLambda83, "avatar_backgroundPink"));
-        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBMENUBACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSubmenuBackground"));
-        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBMENUITEM, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSubmenuItem"));
-        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBMENUITEM | ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSubmenuItemIcon"));
-        StatisticActivity.putColorFromData(this.interactionsViewData, arrayList, messageStatisticActivity$$ExternalSyntheticLambda8);
+        arrayList.add(new ThemeDescription(simpleTextView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, (Class[]) null, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "player_actionBarSubtitle", (Object) null));
+        arrayList.add(new ThemeDescription(null, 0, null, null, null, themeDescriptionDelegate, "statisticChartLineEmpty"));
+        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, "actionBarDefault"));
+        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, "listSelectorSDK21"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, "divider"));
+        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, null, null, null, "windowBackgroundGrayShadow"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueHeader"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"nameTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"statusColor"}, (Paint[]) null, (Drawable[]) null, themeDescriptionDelegate, "windowBackgroundWhiteGrayText"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"statusOnlineColor"}, (Paint[]) null, (Drawable[]) null, themeDescriptionDelegate, "windowBackgroundWhiteBlueText"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{ManageChatUserCell.class}, null, Theme.avatarDrawables, null, "avatar_text"));
+        arrayList.add(new ThemeDescription(null, 0, null, null, null, themeDescriptionDelegate, "avatar_backgroundRed"));
+        arrayList.add(new ThemeDescription(null, 0, null, null, null, themeDescriptionDelegate, "avatar_backgroundOrange"));
+        arrayList.add(new ThemeDescription(null, 0, null, null, null, themeDescriptionDelegate, "avatar_backgroundViolet"));
+        arrayList.add(new ThemeDescription(null, 0, null, null, null, themeDescriptionDelegate, "avatar_backgroundGreen"));
+        arrayList.add(new ThemeDescription(null, 0, null, null, null, themeDescriptionDelegate, "avatar_backgroundCyan"));
+        arrayList.add(new ThemeDescription(null, 0, null, null, null, themeDescriptionDelegate, "avatar_backgroundBlue"));
+        arrayList.add(new ThemeDescription(null, 0, null, null, null, themeDescriptionDelegate, "avatar_backgroundPink"));
+        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBMENUBACKGROUND, null, null, null, null, "actionBarDefaultSubmenuBackground"));
+        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBMENUITEM, null, null, null, null, "actionBarDefaultSubmenuItem"));
+        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBMENUITEM | ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "actionBarDefaultSubmenuItemIcon"));
+        StatisticActivity.putColorFromData(this.interactionsViewData, arrayList, themeDescriptionDelegate);
         return arrayList;
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$getThemeDescriptions$9() {
         RecyclerListView recyclerListView = this.listView;
         if (recyclerListView != null) {

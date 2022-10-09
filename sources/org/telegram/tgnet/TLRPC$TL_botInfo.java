@@ -1,8 +1,9 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_botInfo extends TLRPC$BotInfo {
     public static int constructor = -NUM;
 
+    @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
@@ -20,22 +21,19 @@ public class TLRPC$TL_botInfo extends TLRPC$BotInfo {
         }
         if ((this.flags & 4) != 0) {
             int readInt322 = abstractSerializedData.readInt32(z);
-            int i = 0;
-            if (readInt322 == NUM) {
-                int readInt323 = abstractSerializedData.readInt32(z);
-                while (i < readInt323) {
-                    TLRPC$TL_botCommand TLdeserialize = TLRPC$TL_botCommand.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
-                    if (TLdeserialize != null) {
-                        this.commands.add(TLdeserialize);
-                        i++;
-                    } else {
-                        return;
-                    }
+            if (readInt322 != NUM) {
+                if (z) {
+                    throw new RuntimeException(String.format("wrong Vector magic, got %x", Integer.valueOf(readInt322)));
                 }
-            } else if (z) {
-                throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt322)}));
-            } else {
                 return;
+            }
+            int readInt323 = abstractSerializedData.readInt32(z);
+            for (int i = 0; i < readInt323; i++) {
+                TLRPC$TL_botCommand TLdeserialize = TLRPC$TL_botCommand.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+                if (TLdeserialize == null) {
+                    return;
+                }
+                this.commands.add(TLdeserialize);
             }
         }
         if ((this.flags & 8) != 0) {
@@ -43,6 +41,7 @@ public class TLRPC$TL_botInfo extends TLRPC$BotInfo {
         }
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
         abstractSerializedData.writeInt32(this.flags);

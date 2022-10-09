@@ -1,5 +1,5 @@
 package org.webrtc;
-
+/* loaded from: classes3.dex */
 public class VideoEncoderFallback extends WrappedNativeVideoEncoder {
     private final VideoEncoder fallback;
     private final VideoEncoder primary;
@@ -11,10 +11,12 @@ public class VideoEncoderFallback extends WrappedNativeVideoEncoder {
         this.primary = videoEncoder2;
     }
 
+    @Override // org.webrtc.WrappedNativeVideoEncoder, org.webrtc.VideoEncoder
     public long createNativeVideoEncoder() {
         return nativeCreateEncoder(this.fallback, this.primary);
     }
 
+    @Override // org.webrtc.WrappedNativeVideoEncoder, org.webrtc.VideoEncoder
     public boolean isHardwareEncoder() {
         return this.primary.isHardwareEncoder();
     }

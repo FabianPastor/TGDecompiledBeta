@@ -4,8 +4,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import org.telegram.tgnet.ConnectionsManager;
-
+/* loaded from: classes.dex */
 public class ScreenReceiver extends BroadcastReceiver {
+    @Override // android.content.BroadcastReceiver
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals("android.intent.action.SCREEN_OFF")) {
             if (BuildVars.LOGS_ENABLED) {

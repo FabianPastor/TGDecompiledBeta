@@ -1,36 +1,36 @@
 package j$.util.stream;
 
-import j$.util.t;
 import j$.util.u;
-import j$.util.v;
-
+/* loaded from: classes2.dex */
 abstract class B3 {
-    static u b(CLASSNAMEe4 e4Var, u uVar, long j, long j2) {
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public static j$.util.u b(EnumCLASSNAMEe4 enumCLASSNAMEe4, j$.util.u uVar, long j, long j2) {
         long d = d(j, j2);
-        int i = CLASSNAMEz3.a[e4Var.ordinal()];
-        if (i == 1) {
-            return new C4(uVar, j, d);
+        int i = AbstractCLASSNAMEz3.a[enumCLASSNAMEe4.ordinal()];
+        if (i != 1) {
+            if (i == 2) {
+                return new w4((u.a) uVar, j, d);
+            }
+            if (i == 3) {
+                return new y4((j$.util.v) uVar, j, d);
+            }
+            if (i == 4) {
+                return new u4((j$.util.t) uVar, j, d);
+            }
+            throw new IllegalStateException("Unknown shape " + enumCLASSNAMEe4);
         }
-        if (i == 2) {
-            return new w4((u.a) uVar, j, d);
-        }
-        if (i == 3) {
-            return new y4((v) uVar, j, d);
-        }
-        if (i == 4) {
-            return new u4((t) uVar, j, d);
-        }
-        throw new IllegalStateException("Unknown shape " + e4Var);
+        return new C4(uVar, j, d);
     }
 
-    static long c(long j, long j2, long j3) {
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public static long c(long j, long j2, long j3) {
         if (j >= 0) {
-            return Math.max(-1, Math.min(j - j2, j3));
+            return Math.max(-1L, Math.min(j - j2, j3));
         }
-        return -1;
+        return -1L;
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public static long d(long j, long j2) {
         long j3 = j2 >= 0 ? j + j2 : Long.MAX_VALUE;
         if (j3 >= 0) {
@@ -40,33 +40,33 @@ abstract class B3 {
     }
 
     private static int e(long j) {
-        return (j != -1 ? CLASSNAMEd4.u : 0) | CLASSNAMEd4.t;
+        return (j != -1 ? EnumCLASSNAMEd4.u : 0) | EnumCLASSNAMEd4.t;
     }
 
-    public static U f(CLASSNAMEc cVar, long j, long j2) {
+    public static U f(AbstractCLASSNAMEc abstractCLASSNAMEc, long j, long j2) {
         if (j >= 0) {
-            return new CLASSNAMEy3(cVar, CLASSNAMEe4.DOUBLE_VALUE, e(j2), j, j2);
+            return new CLASSNAMEy3(abstractCLASSNAMEc, EnumCLASSNAMEe4.DOUBLE_VALUE, e(j2), j, j2);
         }
         throw new IllegalArgumentException("Skip must be non-negative: " + j);
     }
 
-    public static IntStream g(CLASSNAMEc cVar, long j, long j2) {
+    public static IntStream g(AbstractCLASSNAMEc abstractCLASSNAMEc, long j, long j2) {
         if (j >= 0) {
-            return new CLASSNAMEs3(cVar, CLASSNAMEe4.INT_VALUE, e(j2), j, j2);
+            return new CLASSNAMEs3(abstractCLASSNAMEc, EnumCLASSNAMEe4.INT_VALUE, e(j2), j, j2);
         }
         throw new IllegalArgumentException("Skip must be non-negative: " + j);
     }
 
-    public static CLASSNAMEe1 h(CLASSNAMEc cVar, long j, long j2) {
+    public static InterfaceCLASSNAMEe1 h(AbstractCLASSNAMEc abstractCLASSNAMEc, long j, long j2) {
         if (j >= 0) {
-            return new CLASSNAMEv3(cVar, CLASSNAMEe4.LONG_VALUE, e(j2), j, j2);
+            return new CLASSNAMEv3(abstractCLASSNAMEc, EnumCLASSNAMEe4.LONG_VALUE, e(j2), j, j2);
         }
         throw new IllegalArgumentException("Skip must be non-negative: " + j);
     }
 
-    public static Stream i(CLASSNAMEc cVar, long j, long j2) {
+    public static Stream i(AbstractCLASSNAMEc abstractCLASSNAMEc, long j, long j2) {
         if (j >= 0) {
-            return new CLASSNAMEp3(cVar, CLASSNAMEe4.REFERENCE, e(j2), j, j2);
+            return new CLASSNAMEp3(abstractCLASSNAMEc, EnumCLASSNAMEe4.REFERENCE, e(j2), j, j2);
         }
         throw new IllegalArgumentException("Skip must be non-negative: " + j);
     }

@@ -5,7 +5,7 @@ import j$.util.function.BiFunction;
 import j$.util.function.Consumer;
 import j$.util.function.Function;
 import java.util.concurrent.ConcurrentMap;
-
+/* loaded from: classes2.dex */
 public final /* synthetic */ class a implements BiConsumer, BiFunction, Consumer {
     public final /* synthetic */ int a = 1;
     public final /* synthetic */ Object b;
@@ -16,32 +16,37 @@ public final /* synthetic */ class a implements BiConsumer, BiFunction, Consumer
         this.c = biConsumer2;
     }
 
+    @Override // j$.util.function.Consumer
     public void accept(Object obj) {
         ((Consumer) this.b).accept(obj);
         ((Consumer) this.c).accept(obj);
     }
 
+    @Override // j$.util.function.BiFunction
     public BiFunction andThen(Function function) {
         function.getClass();
-        return new a((BiFunction) this, function);
+        return new a(this, function);
     }
 
+    @Override // j$.util.function.Consumer
     public /* synthetic */ Consumer andThen(Consumer consumer) {
-        return Consumer.CC.$default$andThen(this, consumer);
+        return consumer.getClass();
     }
 
+    @Override // j$.util.function.BiFunction
     public Object apply(Object obj, Object obj2) {
         return ((Function) this.b).apply(((BiFunction) this.c).apply(obj, obj2));
     }
 
+    @Override // j$.util.function.BiConsumer
     public BiConsumer b(BiConsumer biConsumer) {
         switch (this.a) {
             case 0:
                 biConsumer.getClass();
-                return new a((BiConsumer) this, biConsumer);
+                return new a(this, biConsumer);
             default:
                 biConsumer.getClass();
-                return new a((BiConsumer) this, biConsumer);
+                return new a(this, biConsumer);
         }
     }
 
@@ -50,42 +55,20 @@ public final /* synthetic */ class a implements BiConsumer, BiFunction, Consumer
         this.b = function;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:3:0x000e A[LOOP:0: B:3:0x000e->B:6:0x001c, LOOP_START, PHI: r5 
-      PHI: (r5v1 java.lang.Object) = (r5v0 java.lang.Object), (r5v3 java.lang.Object) binds: [B:2:0x0006, B:6:0x001c] A[DONT_GENERATE, DONT_INLINE]] */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void accept(java.lang.Object r4, java.lang.Object r5) {
-        /*
-            r3 = this;
-            int r0 = r3.a
-            switch(r0) {
-                case 0: goto L_0x0006;
-                default: goto L_0x0005;
-            }
-        L_0x0005:
-            goto L_0x001f
-        L_0x0006:
-            java.lang.Object r0 = r3.b
-            java.util.concurrent.ConcurrentMap r0 = (java.util.concurrent.ConcurrentMap) r0
-            java.lang.Object r1 = r3.c
-            j$.util.function.BiFunction r1 = (j$.util.function.BiFunction) r1
-        L_0x000e:
-            java.lang.Object r2 = r1.apply(r4, r5)
-            boolean r5 = r0.replace(r4, r5, r2)
-            if (r5 != 0) goto L_0x001e
-            java.lang.Object r5 = r0.get(r4)
-            if (r5 != 0) goto L_0x000e
-        L_0x001e:
-            return
-        L_0x001f:
-            java.lang.Object r0 = r3.b
-            j$.util.function.BiConsumer r0 = (j$.util.function.BiConsumer) r0
-            java.lang.Object r1 = r3.c
-            j$.util.function.BiConsumer r1 = (j$.util.function.BiConsumer) r1
-            r0.accept(r4, r5)
-            r1.accept(r4, r5)
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: j$.util.concurrent.a.accept(java.lang.Object, java.lang.Object):void");
+    @Override // j$.util.function.BiConsumer
+    public void accept(Object obj, Object obj2) {
+        switch (this.a) {
+            case 0:
+                ConcurrentMap concurrentMap = (ConcurrentMap) this.b;
+                BiFunction biFunction = (BiFunction) this.c;
+                while (!concurrentMap.replace(obj, obj2, biFunction.apply(obj, obj2)) && (obj2 = concurrentMap.get(obj)) != null) {
+                }
+                return;
+            default:
+                ((BiConsumer) this.b).accept(obj, obj2);
+                ((BiConsumer) this.c).accept(obj, obj2);
+                return;
+        }
     }
 
     public /* synthetic */ a(Consumer consumer, Consumer consumer2) {

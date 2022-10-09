@@ -1,12 +1,13 @@
 package org.webrtc;
 
 import org.webrtc.MediaStreamTrack;
-
+/* loaded from: classes3.dex */
 public class RtpReceiver {
     private MediaStreamTrack cachedTrack;
     private long nativeObserver;
     private long nativeRtpReceiver;
 
+    /* loaded from: classes3.dex */
     public interface Observer {
         @CalledByNative("Observer")
         void onFirstPacketReceived(MediaStreamTrack.MediaType mediaType);
@@ -51,10 +52,10 @@ public class RtpReceiver {
         long j = this.nativeObserver;
         if (j != 0) {
             nativeUnsetObserver(this.nativeRtpReceiver, j);
-            this.nativeObserver = 0;
+            this.nativeObserver = 0L;
         }
         JniCommon.nativeReleaseRef(this.nativeRtpReceiver);
-        this.nativeRtpReceiver = 0;
+        this.nativeRtpReceiver = 0L;
     }
 
     public void SetObserver(Observer observer) {
@@ -72,8 +73,9 @@ public class RtpReceiver {
     }
 
     private void checkRtpReceiverExists() {
-        if (this.nativeRtpReceiver == 0) {
-            throw new IllegalStateException("RtpReceiver has been disposed.");
+        if (this.nativeRtpReceiver != 0) {
+            return;
         }
+        throw new IllegalStateException("RtpReceiver has been disposed.");
     }
 }

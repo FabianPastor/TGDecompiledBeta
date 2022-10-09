@@ -1,12 +1,12 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_updateShortMessage extends TLRPC$Updates {
     public static int constructor = NUM;
 
+    @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
-        int i = 0;
         this.out = (readInt32 & 2) != 0;
         this.mentioned = (readInt32 & 16) != 0;
         this.media_unread = (readInt32 & 32) != 0;
@@ -28,21 +28,19 @@ public class TLRPC$TL_updateShortMessage extends TLRPC$Updates {
         }
         if ((this.flags & 128) != 0) {
             int readInt322 = abstractSerializedData.readInt32(z);
-            if (readInt322 == NUM) {
-                int readInt323 = abstractSerializedData.readInt32(z);
-                while (i < readInt323) {
-                    TLRPC$MessageEntity TLdeserialize = TLRPC$MessageEntity.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
-                    if (TLdeserialize != null) {
-                        this.entities.add(TLdeserialize);
-                        i++;
-                    } else {
-                        return;
-                    }
+            if (readInt322 != NUM) {
+                if (z) {
+                    throw new RuntimeException(String.format("wrong Vector magic, got %x", Integer.valueOf(readInt322)));
                 }
-            } else if (z) {
-                throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt322)}));
-            } else {
                 return;
+            }
+            int readInt323 = abstractSerializedData.readInt32(z);
+            for (int i = 0; i < readInt323; i++) {
+                TLRPC$MessageEntity TLdeserialize = TLRPC$MessageEntity.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+                if (TLdeserialize == null) {
+                    return;
+                }
+                this.entities.add(TLdeserialize);
             }
         }
         if ((this.flags & 33554432) != 0) {

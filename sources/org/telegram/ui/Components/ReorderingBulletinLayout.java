@@ -5,8 +5,8 @@ import android.content.Context;
 import android.widget.ImageView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.Bulletin;
-
 @SuppressLint({"ViewConstructor"})
+/* loaded from: classes3.dex */
 public class ReorderingBulletinLayout extends Bulletin.SimpleLayout {
     private final ReorderingHintDrawable hintDrawable;
 
@@ -20,13 +20,15 @@ public class ReorderingBulletinLayout extends Bulletin.SimpleLayout {
         imageView.setImageDrawable(reorderingHintDrawable);
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
+    @Override // org.telegram.ui.Components.Bulletin.Layout
     public void onEnterTransitionEnd() {
         super.onEnterTransitionEnd();
         this.hintDrawable.startAnimation();
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
+    @Override // org.telegram.ui.Components.Bulletin.Layout
     public void onExitTransitionEnd() {
         super.onExitTransitionEnd();
         this.hintDrawable.resetAnimation();

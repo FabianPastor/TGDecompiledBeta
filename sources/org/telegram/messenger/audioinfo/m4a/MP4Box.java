@@ -5,7 +5,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import org.telegram.messenger.audioinfo.util.PositionInputStream;
 import org.telegram.messenger.audioinfo.util.RangeInputStream;
-
+/* loaded from: classes.dex */
 public class MP4Box<I extends PositionInputStream> {
     private MP4Atom child;
     protected final DataInput data;
@@ -36,7 +36,7 @@ public class MP4Box<I extends PositionInputStream> {
         return this.input;
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
     public MP4Atom getChild() {
         return this.child;
     }
@@ -52,9 +52,9 @@ public class MP4Box<I extends PositionInputStream> {
         this.data.readFully(bArr);
         String str = new String(bArr, "ISO8859_1");
         if (readInt == 1) {
-            rangeInputStream = new RangeInputStream(this.input, 16, this.data.readLong() - 16);
+            rangeInputStream = new RangeInputStream(this.input, 16L, this.data.readLong() - 16);
         } else {
-            rangeInputStream = new RangeInputStream(this.input, 8, (long) (readInt - 8));
+            rangeInputStream = new RangeInputStream(this.input, 8L, readInt - 8);
         }
         MP4Atom mP4Atom2 = new MP4Atom(rangeInputStream, this, str);
         this.child = mP4Atom2;

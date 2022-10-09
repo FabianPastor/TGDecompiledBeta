@@ -5,7 +5,7 @@ import android.media.MediaFormat;
 import com.googlecode.mp4parser.util.Matrix;
 import java.io.File;
 import java.util.ArrayList;
-
+/* loaded from: classes.dex */
 public class Mp4Movie {
     private File cacheFile;
     private int height;
@@ -36,7 +36,8 @@ public class Mp4Movie {
             this.matrix = Matrix.ROTATE_90;
         } else if (i == 180) {
             this.matrix = Matrix.ROTATE_180;
-        } else if (i == 270) {
+        } else if (i != 270) {
+        } else {
             this.matrix = Matrix.ROTATE_270;
         }
     }
@@ -55,9 +56,10 @@ public class Mp4Movie {
     }
 
     public void addSample(int i, long j, MediaCodec.BufferInfo bufferInfo) {
-        if (i >= 0 && i < this.tracks.size()) {
-            this.tracks.get(i).addSample(j, bufferInfo);
+        if (i < 0 || i >= this.tracks.size()) {
+            return;
         }
+        this.tracks.get(i).addSample(j, bufferInfo);
     }
 
     public int addTrack(MediaFormat mediaFormat, boolean z) {
@@ -67,7 +69,7 @@ public class Mp4Movie {
 
     public long getLastFrameTimestamp(int i) {
         if (i < 0 || i >= this.tracks.size()) {
-            return 0;
+            return 0L;
         }
         return this.tracks.get(i).getLastFrameTimestamp();
     }

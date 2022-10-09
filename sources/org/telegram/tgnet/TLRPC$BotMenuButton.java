@@ -1,19 +1,35 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public abstract class TLRPC$BotMenuButton extends TLObject {
     public static TLRPC$BotMenuButton TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-        TLRPC$BotMenuButton tLRPC$BotMenuButton;
-        if (i != -NUM) {
-            tLRPC$BotMenuButton = i != NUM ? i != NUM ? null : new TLRPC$TL_botMenuButtonDefault() : new TLRPC$TL_botMenuButtonCommands();
+        TLRPC$BotMenuButton tLRPC$TL_botMenuButton;
+        if (i == -NUM) {
+            tLRPC$TL_botMenuButton = new TLRPC$TL_botMenuButton();
+        } else if (i != NUM) {
+            tLRPC$TL_botMenuButton = i != NUM ? null : new TLRPC$BotMenuButton() { // from class: org.telegram.tgnet.TLRPC$TL_botMenuButtonDefault
+                public static int constructor = NUM;
+
+                @Override // org.telegram.tgnet.TLObject
+                public void serializeToStream(AbstractSerializedData abstractSerializedData2) {
+                    abstractSerializedData2.writeInt32(constructor);
+                }
+            };
         } else {
-            tLRPC$BotMenuButton = new TLRPC$TL_botMenuButton();
+            tLRPC$TL_botMenuButton = new TLRPC$BotMenuButton() { // from class: org.telegram.tgnet.TLRPC$TL_botMenuButtonCommands
+                public static int constructor = NUM;
+
+                @Override // org.telegram.tgnet.TLObject
+                public void serializeToStream(AbstractSerializedData abstractSerializedData2) {
+                    abstractSerializedData2.writeInt32(constructor);
+                }
+            };
         }
-        if (tLRPC$BotMenuButton != null || !z) {
-            if (tLRPC$BotMenuButton != null) {
-                tLRPC$BotMenuButton.readParams(abstractSerializedData, z);
+        if (tLRPC$TL_botMenuButton != null || !z) {
+            if (tLRPC$TL_botMenuButton != null) {
+                tLRPC$TL_botMenuButton.readParams(abstractSerializedData, z);
             }
-            return tLRPC$BotMenuButton;
+            return tLRPC$TL_botMenuButton;
         }
-        throw new RuntimeException(String.format("can't parse magic %x in BotMenuButton", new Object[]{Integer.valueOf(i)}));
+        throw new RuntimeException(String.format("can't parse magic %x in BotMenuButton", Integer.valueOf(i)));
     }
 }

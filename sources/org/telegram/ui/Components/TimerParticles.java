@@ -7,13 +7,15 @@ import android.os.SystemClock;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Utilities;
-
+/* loaded from: classes3.dex */
 public class TimerParticles {
-    private ArrayList<Particle> freeParticles = new ArrayList<>();
     private long lastAnimationTime;
     private ArrayList<Particle> particles = new ArrayList<>();
+    private ArrayList<Particle> freeParticles = new ArrayList<>();
 
-    private static class Particle {
+    /* JADX INFO: Access modifiers changed from: private */
+    /* loaded from: classes3.dex */
+    public static class Particle {
         float alpha;
         float currentTime;
         float lifeTime;
@@ -63,25 +65,24 @@ public class TimerParticles {
 
     public void draw(Canvas canvas, Paint paint, RectF rectF, float f, float f2) {
         Particle particle;
-        Paint paint2 = paint;
         int size = this.particles.size();
         for (int i = 0; i < size; i++) {
             Particle particle2 = this.particles.get(i);
-            paint2.setAlpha((int) (particle2.alpha * 255.0f * f2));
-            canvas.drawPoint(particle2.x, particle2.y, paint2);
+            paint.setAlpha((int) (particle2.alpha * 255.0f * f2));
+            canvas.drawPoint(particle2.x, particle2.y, paint);
         }
-        double d = (double) (f - 90.0f);
+        double d = f - 90.0f;
         Double.isNaN(d);
         double d2 = d * 0.017453292519943295d;
         double sin = Math.sin(d2);
         double d3 = -Math.cos(d2);
-        double width = (double) (rectF.width() / 2.0f);
+        double width = rectF.width() / 2.0f;
         Double.isNaN(width);
-        double centerX = (double) rectF.centerX();
+        double centerX = rectF.centerX();
         Double.isNaN(centerX);
         float f3 = (float) (((-d3) * width) + centerX);
         Double.isNaN(width);
-        double centerY = (double) rectF.centerY();
+        double centerY = rectF.centerY();
         Double.isNaN(centerY);
         float f4 = (float) ((width * sin) + centerY);
         for (int i2 = 0; i2 < 1; i2++) {
@@ -93,7 +94,7 @@ public class TimerParticles {
             }
             particle.x = f3;
             particle.y = f4;
-            double nextInt = (double) (Utilities.random.nextInt(140) - 70);
+            double nextInt = Utilities.random.nextInt(140) - 70;
             Double.isNaN(nextInt);
             double d4 = nextInt * 0.017453292519943295d;
             if (d4 < 0.0d) {
@@ -103,12 +104,12 @@ public class TimerParticles {
             particle.vy = (float) ((Math.sin(d4) * sin) + (Math.cos(d4) * d3));
             particle.alpha = 1.0f;
             particle.currentTime = 0.0f;
-            particle.lifeTime = (float) (Utilities.random.nextInt(100) + 400);
+            particle.lifeTime = Utilities.random.nextInt(100) + 400;
             particle.velocity = (Utilities.random.nextFloat() * 4.0f) + 20.0f;
             this.particles.add(particle);
         }
         long elapsedRealtime = SystemClock.elapsedRealtime();
-        updateParticles(Math.min(20, elapsedRealtime - this.lastAnimationTime));
+        updateParticles(Math.min(20L, elapsedRealtime - this.lastAnimationTime));
         this.lastAnimationTime = elapsedRealtime;
     }
 }

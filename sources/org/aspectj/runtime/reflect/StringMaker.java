@@ -1,17 +1,17 @@
 package org.aspectj.runtime.reflect;
 
 import java.lang.reflect.Modifier;
-
+/* loaded from: classes.dex */
 class StringMaker {
     static StringMaker longStringMaker;
     static StringMaker middleStringMaker;
     static StringMaker shortStringMaker;
     int cacheOffset;
-    boolean includeArgs = true;
-    boolean includeModifiers = false;
-    boolean includeThrows = false;
-    boolean shortPrimaryTypeNames = false;
     boolean shortTypeNames = true;
+    boolean includeArgs = true;
+    boolean includeThrows = false;
+    boolean includeModifiers = false;
+    boolean shortPrimaryTypeNames = false;
 
     StringMaker() {
     }
@@ -43,16 +43,13 @@ class StringMaker {
         stringMaker3.cacheOffset = 2;
     }
 
-    /* access modifiers changed from: package-private */
+    /* JADX INFO: Access modifiers changed from: package-private */
     public String makeKindName(String str) {
         int lastIndexOf = str.lastIndexOf(45);
-        if (lastIndexOf == -1) {
-            return str;
-        }
-        return str.substring(lastIndexOf + 1);
+        return lastIndexOf == -1 ? str : str.substring(lastIndexOf + 1);
     }
 
-    /* access modifiers changed from: package-private */
+    /* JADX INFO: Access modifiers changed from: package-private */
     public String makeModifiersString(int i) {
         if (!this.includeModifiers) {
             return "";
@@ -67,31 +64,26 @@ class StringMaker {
         return stringBuffer.toString();
     }
 
-    /* access modifiers changed from: package-private */
-    public String stripPackageName(String str) {
+    String stripPackageName(String str) {
         int lastIndexOf = str.lastIndexOf(46);
-        if (lastIndexOf == -1) {
-            return str;
-        }
-        return str.substring(lastIndexOf + 1);
+        return lastIndexOf == -1 ? str : str.substring(lastIndexOf + 1);
     }
 
-    /* access modifiers changed from: package-private */
-    public String makeTypeName(Class cls, String str, boolean z) {
+    String makeTypeName(Class cls, String str, boolean z) {
         if (cls == null) {
             return "ANONYMOUS";
         }
-        if (cls.isArray()) {
-            Class<?> componentType = cls.getComponentType();
-            StringBuffer stringBuffer = new StringBuffer();
-            stringBuffer.append(makeTypeName(componentType, componentType.getName(), z));
-            stringBuffer.append("[]");
-            return stringBuffer.toString();
-        } else if (z) {
-            return stripPackageName(str).replace('$', '.');
-        } else {
+        if (!cls.isArray()) {
+            if (z) {
+                return stripPackageName(str).replace('$', '.');
+            }
             return str.replace('$', '.');
         }
+        Class<?> componentType = cls.getComponentType();
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append(makeTypeName(componentType, componentType.getName(), z));
+        stringBuffer.append("[]");
+        return stringBuffer.toString();
     }
 
     public String makeTypeName(Class cls) {
@@ -112,23 +104,28 @@ class StringMaker {
     }
 
     public void addSignature(StringBuffer stringBuffer, Class[] clsArr) {
-        if (clsArr != null) {
-            if (this.includeArgs) {
-                stringBuffer.append("(");
-                addTypeNames(stringBuffer, clsArr);
-                stringBuffer.append(")");
-            } else if (clsArr.length == 0) {
+        if (clsArr == null) {
+            return;
+        }
+        if (!this.includeArgs) {
+            if (clsArr.length == 0) {
                 stringBuffer.append("()");
+                return;
             } else {
                 stringBuffer.append("(..)");
+                return;
             }
         }
+        stringBuffer.append("(");
+        addTypeNames(stringBuffer, clsArr);
+        stringBuffer.append(")");
     }
 
     public void addThrows(StringBuffer stringBuffer, Class[] clsArr) {
-        if (this.includeThrows && clsArr != null && clsArr.length != 0) {
-            stringBuffer.append(" throws ");
-            addTypeNames(stringBuffer, clsArr);
+        if (!this.includeThrows || clsArr == null || clsArr.length == 0) {
+            return;
         }
+        stringBuffer.append(" throws ");
+        addTypeNames(stringBuffer, clsArr);
     }
 }

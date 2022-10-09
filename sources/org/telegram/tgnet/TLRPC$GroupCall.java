@@ -1,5 +1,5 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public abstract class TLRPC$GroupCall extends TLObject {
     public long access_hash;
     public boolean can_change_join_muted;
@@ -23,18 +23,18 @@ public abstract class TLRPC$GroupCall extends TLObject {
     public int version;
 
     public static TLRPC$GroupCall TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-        TLRPC$GroupCall tLRPC$GroupCall;
+        TLRPC$GroupCall tLRPC$TL_groupCall;
         if (i != -NUM) {
-            tLRPC$GroupCall = i != NUM ? null : new TLRPC$TL_groupCallDiscarded();
+            tLRPC$TL_groupCall = i != NUM ? null : new TLRPC$TL_groupCallDiscarded();
         } else {
-            tLRPC$GroupCall = new TLRPC$TL_groupCall();
+            tLRPC$TL_groupCall = new TLRPC$TL_groupCall();
         }
-        if (tLRPC$GroupCall != null || !z) {
-            if (tLRPC$GroupCall != null) {
-                tLRPC$GroupCall.readParams(abstractSerializedData, z);
+        if (tLRPC$TL_groupCall != null || !z) {
+            if (tLRPC$TL_groupCall != null) {
+                tLRPC$TL_groupCall.readParams(abstractSerializedData, z);
             }
-            return tLRPC$GroupCall;
+            return tLRPC$TL_groupCall;
         }
-        throw new RuntimeException(String.format("can't parse magic %x in GroupCall", new Object[]{Integer.valueOf(i)}));
+        throw new RuntimeException(String.format("can't parse magic %x in GroupCall", Integer.valueOf(i)));
     }
 }

@@ -3,7 +3,7 @@ package org.telegram.ui.Components.Paint;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-
+/* loaded from: classes3.dex */
 public class ShaderSet {
     private static final Map<String, Map<String, Object>> AVAILBALBE_SHADERS = createMap();
 
@@ -62,9 +62,9 @@ public class ShaderSet {
 
     public static Map<String, Shader> setup() {
         HashMap hashMap = new HashMap();
-        for (Map.Entry next : AVAILBALBE_SHADERS.entrySet()) {
-            Map map = (Map) next.getValue();
-            hashMap.put((String) next.getKey(), new Shader((String) map.get("vertex"), (String) map.get("fragment"), (String[]) map.get("attributes"), (String[]) map.get("uniforms")));
+        for (Map.Entry<String, Map<String, Object>> entry : AVAILBALBE_SHADERS.entrySet()) {
+            Map<String, Object> value = entry.getValue();
+            hashMap.put(entry.getKey(), new Shader((String) value.get("vertex"), (String) value.get("fragment"), (String[]) value.get("attributes"), (String[]) value.get("uniforms")));
         }
         return Collections.unmodifiableMap(hashMap);
     }

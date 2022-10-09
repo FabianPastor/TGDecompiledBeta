@@ -1,7 +1,7 @@
 package org.telegram.messenger;
 
 import org.telegram.messenger.ChatObject;
-
+/* loaded from: classes.dex */
 public final /* synthetic */ class ChatObject$Call$$ExternalSyntheticLambda0 implements Runnable {
     public final /* synthetic */ ChatObject.Call f$0;
 
@@ -9,7 +9,8 @@ public final /* synthetic */ class ChatObject$Call$$ExternalSyntheticLambda0 imp
         this.f$0 = call;
     }
 
+    @Override // java.lang.Runnable
     public final void run() {
-        this.f$0.checkQueue();
+        ChatObject.Call.m334$r8$lambda$A9Iyjy8qm5XwdmVhsjek1P93bY(this.f$0);
     }
 }

@@ -1,5 +1,5 @@
 package org.webrtc;
-
+/* loaded from: classes3.dex */
 public class MediaStreamTrack {
     public static final String AUDIO_TRACK_KIND = "audio";
     public static final String VIDEO_TRACK_KIND = "video";
@@ -15,6 +15,7 @@ public class MediaStreamTrack {
 
     private static native boolean nativeSetEnabled(long j, boolean z);
 
+    /* loaded from: classes3.dex */
     public enum State {
         LIVE,
         ENDED;
@@ -25,24 +26,25 @@ public class MediaStreamTrack {
         }
     }
 
+    /* loaded from: classes3.dex */
     public enum MediaType {
         MEDIA_TYPE_AUDIO(0),
         MEDIA_TYPE_VIDEO(1);
         
         private final int nativeIndex;
 
-        private MediaType(int i) {
+        MediaType(int i) {
             this.nativeIndex = i;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("MediaType")
-        public int getNative() {
+        int getNative() {
             return this.nativeIndex;
         }
 
         @CalledByNative("MediaType")
         static MediaType fromNativeIndex(int i) {
+            MediaType[] values;
             for (MediaType mediaType : values()) {
                 if (mediaType.getNative() == i) {
                     return mediaType;
@@ -52,7 +54,8 @@ public class MediaStreamTrack {
         }
     }
 
-    static MediaStreamTrack createMediaStreamTrack(long j) {
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public static MediaStreamTrack createMediaStreamTrack(long j) {
         if (j == 0) {
             return null;
         }
@@ -60,18 +63,17 @@ public class MediaStreamTrack {
         if (nativeGetKind.equals("audio")) {
             return new AudioTrack(j);
         }
-        if (nativeGetKind.equals("video")) {
-            return new VideoTrack(j);
+        if (!nativeGetKind.equals("video")) {
+            return null;
         }
-        return null;
+        return new VideoTrack(j);
     }
 
     public MediaStreamTrack(long j) {
-        if (j != 0) {
-            this.nativeTrack = j;
-            return;
+        if (j == 0) {
+            throw new IllegalArgumentException("nativeTrack may not be null");
         }
-        throw new IllegalArgumentException("nativeTrack may not be null");
+        this.nativeTrack = j;
     }
 
     public String id() {
@@ -102,18 +104,19 @@ public class MediaStreamTrack {
     public void dispose() {
         checkMediaStreamTrackExists();
         JniCommon.nativeReleaseRef(this.nativeTrack);
-        this.nativeTrack = 0;
+        this.nativeTrack = 0L;
     }
 
-    /* access modifiers changed from: package-private */
+    /* JADX INFO: Access modifiers changed from: package-private */
     public long getNativeMediaStreamTrack() {
         checkMediaStreamTrackExists();
         return this.nativeTrack;
     }
 
     private void checkMediaStreamTrackExists() {
-        if (this.nativeTrack == 0) {
-            throw new IllegalStateException("MediaStreamTrack has been disposed.");
+        if (this.nativeTrack != 0) {
+            return;
         }
+        throw new IllegalStateException("MediaStreamTrack has been disposed.");
     }
 }

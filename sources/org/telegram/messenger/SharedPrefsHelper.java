@@ -2,7 +2,7 @@ package org.telegram.messenger;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-
+/* loaded from: classes.dex */
 public class SharedPrefsHelper {
     private static String WEB_VIEW_SHOWN_DIALOG_FORMAT = "confirm_shown_%d_%d";
     private static SharedPreferences webViewBotsPrefs;
@@ -12,20 +12,20 @@ public class SharedPrefsHelper {
     }
 
     public static boolean isWebViewConfirmShown(int i, long j) {
-        return webViewBotsPrefs.getBoolean(String.format(WEB_VIEW_SHOWN_DIALOG_FORMAT, new Object[]{Integer.valueOf(i), Long.valueOf(j)}), false);
+        return webViewBotsPrefs.getBoolean(String.format(WEB_VIEW_SHOWN_DIALOG_FORMAT, Integer.valueOf(i), Long.valueOf(j)), false);
     }
 
     public static void setWebViewConfirmShown(int i, long j, boolean z) {
-        webViewBotsPrefs.edit().putBoolean(String.format(WEB_VIEW_SHOWN_DIALOG_FORMAT, new Object[]{Integer.valueOf(i), Long.valueOf(j)}), z).apply();
+        webViewBotsPrefs.edit().putBoolean(String.format(WEB_VIEW_SHOWN_DIALOG_FORMAT, Integer.valueOf(i), Long.valueOf(j)), z).apply();
     }
 
     public static void cleanupAccount(int i) {
         SharedPreferences sharedPreferences = webViewBotsPrefs;
         if (sharedPreferences != null) {
             SharedPreferences.Editor edit = sharedPreferences.edit();
-            for (String next : webViewBotsPrefs.getAll().keySet()) {
-                if (next.startsWith("confirm_shown_" + i + "_")) {
-                    edit.remove(next);
+            for (String str : webViewBotsPrefs.getAll().keySet()) {
+                if (str.startsWith("confirm_shown_" + i + "_")) {
+                    edit.remove(str);
                 }
             }
             edit.apply();

@@ -2,35 +2,25 @@ package j$.util.stream;
 
 import j$.util.CLASSNAMEg;
 import j$.util.CLASSNAMEj;
-import j$.util.CLASSNAMEn;
+import j$.util.InterfaceCLASSNAMEn;
 import j$.util.function.BiConsumer;
-import j$.util.function.d;
-import j$.util.function.f;
-import j$.util.function.g;
-import j$.util.function.h;
-import j$.util.function.u;
-import j$.util.function.y;
-import j$.util.t;
-import j$.wrappers.E;
-import j$.wrappers.G;
-import j$.wrappers.K;
+/* loaded from: classes2.dex */
+public interface U extends InterfaceCLASSNAMEg {
+    CLASSNAMEj G(j$.util.function.d dVar);
 
-public interface U extends CLASSNAMEg {
-    CLASSNAMEj G(d dVar);
+    Object H(j$.util.function.y yVar, j$.util.function.u uVar, BiConsumer biConsumer);
 
-    Object H(y yVar, u uVar, BiConsumer biConsumer);
+    double K(double d, j$.util.function.d dVar);
 
-    double K(double d, d dVar);
+    Stream M(j$.util.function.g gVar);
 
-    Stream M(g gVar);
+    IntStream R(j$.wrappers.G g);
 
-    IntStream R(G g);
-
-    boolean Y(E e);
+    boolean Y(j$.wrappers.E e);
 
     CLASSNAMEj average();
 
-    U b(f fVar);
+    U b(j$.util.function.f fVar);
 
     Stream boxed();
 
@@ -42,15 +32,17 @@ public interface U extends CLASSNAMEg {
 
     CLASSNAMEj findFirst();
 
-    boolean h0(E e);
+    boolean h0(j$.wrappers.E e);
 
-    boolean i0(E e);
+    boolean i0(j$.wrappers.E e);
 
-    CLASSNAMEn iterator();
+    @Override // j$.util.stream.InterfaceCLASSNAMEg
+    /* renamed from: iterator */
+    InterfaceCLASSNAMEn mo303iterator();
 
-    void j(f fVar);
+    void j(j$.util.function.f fVar);
 
-    void l0(f fVar);
+    void l0(j$.util.function.f fVar);
 
     U limit(long j);
 
@@ -58,17 +50,23 @@ public interface U extends CLASSNAMEg {
 
     CLASSNAMEj min();
 
-    U parallel();
+    @Override // j$.util.stream.InterfaceCLASSNAMEg, j$.util.stream.IntStream
+    /* renamed from: parallel */
+    U mo304parallel();
 
-    U r(E e);
+    U r(j$.wrappers.E e);
 
-    U sequential();
+    @Override // j$.util.stream.InterfaceCLASSNAMEg, j$.util.stream.IntStream
+    /* renamed from: sequential */
+    U mo305sequential();
 
     U skip(long j);
 
     U sorted();
 
-    t spliterator();
+    @Override // j$.util.stream.InterfaceCLASSNAMEg
+    /* renamed from: spliterator */
+    j$.util.t mo306spliterator();
 
     double sum();
 
@@ -76,9 +74,9 @@ public interface U extends CLASSNAMEg {
 
     double[] toArray();
 
-    U w(g gVar);
+    U w(j$.util.function.g gVar);
 
-    CLASSNAMEe1 x(h hVar);
+    InterfaceCLASSNAMEe1 x(j$.util.function.h hVar);
 
-    U y(K k);
+    U y(j$.wrappers.K k);
 }

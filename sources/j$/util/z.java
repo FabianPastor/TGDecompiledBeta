@@ -2,40 +2,43 @@ package j$.util;
 
 import j$.util.Iterator;
 import j$.util.function.Consumer;
-import j$.util.function.p;
-import j$.util.function.q;
 import java.util.NoSuchElementException;
-
-class z implements r, q, Iterator {
+/* loaded from: classes2.dex */
+class z implements r, j$.util.function.q, Iterator {
     boolean a = false;
     long b;
     final /* synthetic */ v c;
 
-    z(v vVar) {
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public z(v vVar) {
         this.c = vVar;
     }
 
+    @Override // j$.util.function.q
     public void accept(long j) {
         this.a = true;
         this.b = j;
     }
 
+    @Override // j$.util.p
     /* renamed from: d */
-    public void forEachRemaining(q qVar) {
+    public void forEachRemaining(j$.util.function.q qVar) {
         qVar.getClass();
         while (hasNext()) {
             qVar.accept(nextLong());
         }
     }
 
-    public q f(q qVar) {
+    @Override // j$.util.function.q
+    public j$.util.function.q f(j$.util.function.q qVar) {
         qVar.getClass();
-        return new p(this, qVar);
+        return new j$.util.function.p(this, qVar);
     }
 
+    @Override // j$.util.r, j$.util.Iterator
     public void forEachRemaining(Consumer consumer) {
-        if (consumer instanceof q) {
-            forEachRemaining((q) consumer);
+        if (consumer instanceof j$.util.function.q) {
+            forEachRemaining((j$.util.function.q) consumer);
             return;
         }
         consumer.getClass();
@@ -47,6 +50,7 @@ class z implements r, q, Iterator {
         }
     }
 
+    @Override // java.util.Iterator, j$.util.Iterator
     public boolean hasNext() {
         if (!this.a) {
             this.c.i(this);
@@ -54,7 +58,9 @@ class z implements r, q, Iterator {
         return this.a;
     }
 
-    public Long next() {
+    @Override // j$.util.r, java.util.Iterator
+    /* renamed from: next */
+    public Long mo311next() {
         if (!N.a) {
             return Long.valueOf(nextLong());
         }
@@ -62,6 +68,7 @@ class z implements r, q, Iterator {
         throw null;
     }
 
+    @Override // j$.util.r
     public long nextLong() {
         if (this.a || hasNext()) {
             this.a = false;
@@ -70,6 +77,7 @@ class z implements r, q, Iterator {
         throw new NoSuchElementException();
     }
 
+    @Override // java.util.Iterator, j$.util.Iterator
     public /* synthetic */ void remove() {
         Iterator.CC.a(this);
         throw null;

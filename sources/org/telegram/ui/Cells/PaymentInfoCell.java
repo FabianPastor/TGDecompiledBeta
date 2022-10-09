@@ -17,23 +17,21 @@ import org.telegram.tgnet.TLRPC$WebDocument;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
-
+/* loaded from: classes3.dex */
 public class PaymentInfoCell extends FrameLayout {
     private TextView detailExTextView;
     private TextView detailTextView;
     private BackupImageView imageView;
     private TextView nameTextView;
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
     public PaymentInfoCell(Context context) {
         super(context);
-        Context context2 = context;
-        BackupImageView backupImageView = new BackupImageView(context2);
+        BackupImageView backupImageView = new BackupImageView(context);
         this.imageView = backupImageView;
         backupImageView.getImageReceiver().setRoundRadius(AndroidUtilities.dp(8.0f));
         int i = 5;
         addView(this.imageView, LayoutHelper.createFrame(100, 100.0f, LocaleController.isRTL ? 5 : 3, 10.0f, 10.0f, 10.0f, 0.0f));
-        TextView textView = new TextView(context2);
+        TextView textView = new TextView(context);
         this.nameTextView = textView;
         textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.nameTextView.setTextSize(1, 16.0f);
@@ -46,7 +44,7 @@ public class PaymentInfoCell extends FrameLayout {
         TextView textView2 = this.nameTextView;
         boolean z = LocaleController.isRTL;
         addView(textView2, LayoutHelper.createFrame(-1, -2.0f, (z ? 5 : 3) | 48, z ? 10.0f : 123.0f, 9.0f, z ? 123.0f : 10.0f, 0.0f));
-        TextView textView3 = new TextView(context2);
+        TextView textView3 = new TextView(context);
         this.detailTextView = textView3;
         textView3.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.detailTextView.setTextSize(1, 14.0f);
@@ -56,7 +54,7 @@ public class PaymentInfoCell extends FrameLayout {
         TextView textView4 = this.detailTextView;
         boolean z2 = LocaleController.isRTL;
         addView(textView4, LayoutHelper.createFrame(-1, -2.0f, (z2 ? 5 : 3) | 48, z2 ? 10.0f : 123.0f, 33.0f, z2 ? 123.0f : 10.0f, 0.0f));
-        TextView textView5 = new TextView(context2);
+        TextView textView5 = new TextView(context);
         this.detailExTextView = textView5;
         textView5.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2"));
         this.detailExTextView.setTextSize(1, 14.0f);
@@ -70,8 +68,8 @@ public class PaymentInfoCell extends FrameLayout {
         addView(textView6, LayoutHelper.createFrame(-1, -2.0f, (!z3 ? 3 : i) | 48, z3 ? 10.0f : 123.0f, 90.0f, z3 ? 123.0f : 10.0f, 9.0f));
     }
 
-    /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
+    @Override // android.widget.FrameLayout, android.view.View
+    protected void onMeasure(int i, int i2) {
         int i3;
         if (this.imageView.getVisibility() != 8) {
             i3 = View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(120.0f), NUM);
@@ -85,47 +83,46 @@ public class PaymentInfoCell extends FrameLayout {
     }
 
     public void setInfo(String str, String str2, TLRPC$WebDocument tLRPC$WebDocument, String str3, Object obj) {
-        int i;
-        TLRPC$WebDocument tLRPC$WebDocument2 = tLRPC$WebDocument;
+        int min;
         this.nameTextView.setText(str);
         this.detailTextView.setText(str2);
         this.detailExTextView.setText(str3);
         if (AndroidUtilities.isTablet()) {
-            i = AndroidUtilities.getMinTabletSide();
+            min = AndroidUtilities.getMinTabletSide();
         } else {
             Point point = AndroidUtilities.displaySize;
-            i = Math.min(point.x, point.y);
+            min = Math.min(point.x, point.y);
         }
-        float f = (float) 640;
-        float dp = f / ((float) (((int) (((float) i) * 0.7f)) - AndroidUtilities.dp(2.0f)));
-        int i2 = (int) (f / dp);
-        int i3 = (int) (((float) 360) / dp);
-        int i4 = 5;
-        if (tLRPC$WebDocument2 == null || !tLRPC$WebDocument2.mime_type.startsWith("image/")) {
-            this.nameTextView.setLayoutParams(LayoutHelper.createFrame(-1, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, 17.0f, 9.0f, 17.0f, 0.0f));
-            this.detailTextView.setLayoutParams(LayoutHelper.createFrame(-1, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, 17.0f, 33.0f, 17.0f, 0.0f));
-            TextView textView = this.detailExTextView;
-            if (!LocaleController.isRTL) {
-                i4 = 3;
+        float f = 640;
+        float dp = f / (((int) (min * 0.7f)) - AndroidUtilities.dp(2.0f));
+        int i = (int) (f / dp);
+        int i2 = (int) (360 / dp);
+        int i3 = 5;
+        if (tLRPC$WebDocument != null && tLRPC$WebDocument.mime_type.startsWith("image/")) {
+            TextView textView = this.nameTextView;
+            boolean z = LocaleController.isRTL;
+            textView.setLayoutParams(LayoutHelper.createFrame(-1, -2.0f, (z ? 5 : 3) | 48, z ? 10.0f : 123.0f, 9.0f, z ? 123.0f : 10.0f, 0.0f));
+            TextView textView2 = this.detailTextView;
+            boolean z2 = LocaleController.isRTL;
+            textView2.setLayoutParams(LayoutHelper.createFrame(-1, -2.0f, (z2 ? 5 : 3) | 48, z2 ? 10.0f : 123.0f, 33.0f, z2 ? 123.0f : 10.0f, 0.0f));
+            TextView textView3 = this.detailExTextView;
+            boolean z3 = LocaleController.isRTL;
+            if (!z3) {
+                i3 = 3;
             }
-            textView.setLayoutParams(LayoutHelper.createFrame(-1, -2.0f, i4 | 48, 17.0f, 90.0f, 17.0f, 9.0f));
-            this.imageView.setVisibility(8);
+            textView3.setLayoutParams(LayoutHelper.createFrame(-1, -2.0f, i3 | 48, z3 ? 10.0f : 123.0f, 90.0f, z3 ? 123.0f : 10.0f, 0.0f));
+            this.imageView.setVisibility(0);
+            this.imageView.getImageReceiver().setImage(ImageLocation.getForWebFile(WebFile.createWithWebDocument(tLRPC$WebDocument)), String.format(Locale.US, "%d_%d", Integer.valueOf(i), Integer.valueOf(i2)), null, null, -1L, null, obj, 1);
             return;
         }
-        TextView textView2 = this.nameTextView;
-        boolean z = LocaleController.isRTL;
-        textView2.setLayoutParams(LayoutHelper.createFrame(-1, -2.0f, (z ? 5 : 3) | 48, z ? 10.0f : 123.0f, 9.0f, z ? 123.0f : 10.0f, 0.0f));
-        TextView textView3 = this.detailTextView;
-        boolean z2 = LocaleController.isRTL;
-        textView3.setLayoutParams(LayoutHelper.createFrame(-1, -2.0f, (z2 ? 5 : 3) | 48, z2 ? 10.0f : 123.0f, 33.0f, z2 ? 123.0f : 10.0f, 0.0f));
+        this.nameTextView.setLayoutParams(LayoutHelper.createFrame(-1, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, 17.0f, 9.0f, 17.0f, 0.0f));
+        this.detailTextView.setLayoutParams(LayoutHelper.createFrame(-1, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, 17.0f, 33.0f, 17.0f, 0.0f));
         TextView textView4 = this.detailExTextView;
-        boolean z3 = LocaleController.isRTL;
-        if (!z3) {
-            i4 = 3;
+        if (!LocaleController.isRTL) {
+            i3 = 3;
         }
-        textView4.setLayoutParams(LayoutHelper.createFrame(-1, -2.0f, i4 | 48, z3 ? 10.0f : 123.0f, 90.0f, z3 ? 123.0f : 10.0f, 0.0f));
-        this.imageView.setVisibility(0);
-        this.imageView.getImageReceiver().setImage(ImageLocation.getForWebFile(WebFile.createWithWebDocument(tLRPC$WebDocument)), String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(i2), Integer.valueOf(i3)}), (ImageLocation) null, (String) null, -1, (String) null, obj, 1);
+        textView4.setLayoutParams(LayoutHelper.createFrame(-1, -2.0f, i3 | 48, 17.0f, 90.0f, 17.0f, 9.0f));
+        this.imageView.setVisibility(8);
     }
 
     public void setInvoice(TLRPC$TL_messageMediaInvoice tLRPC$TL_messageMediaInvoice, String str) {

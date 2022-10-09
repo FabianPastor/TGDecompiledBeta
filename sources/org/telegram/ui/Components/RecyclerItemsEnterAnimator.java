@@ -11,17 +11,16 @@ import android.view.ViewTreeObserver;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.HashSet;
-
+import org.telegram.ui.Components.RecyclerItemsEnterAnimator;
+/* loaded from: classes3.dex */
 public class RecyclerItemsEnterAnimator {
     boolean alwaysCheckItemsAlpha;
+    boolean invalidateAlpha;
+    private final RecyclerListView listView;
+    private final SparseArray<Float> listAlphaItems = new SparseArray<>();
+    HashSet<View> ignoreView = new HashSet<>();
     public boolean animateAlphaProgressView = true;
     ArrayList<AnimatorSet> currentAnimations = new ArrayList<>();
-    HashSet<View> ignoreView = new HashSet<>();
-    boolean invalidateAlpha;
-    /* access modifiers changed from: private */
-    public final SparseArray<Float> listAlphaItems = new SparseArray<>();
-    /* access modifiers changed from: private */
-    public final RecyclerListView listView;
     ArrayList<ViewTreeObserver.OnPreDrawListener> preDrawListeners = new ArrayList<>();
 
     public RecyclerItemsEnterAnimator(RecyclerListView recyclerListView, boolean z) {
@@ -36,7 +35,7 @@ public class RecyclerItemsEnterAnimator {
                 View childAt = this.listView.getChildAt(i);
                 int childAdapterPosition = this.listView.getChildAdapterPosition(childAt);
                 if (childAdapterPosition >= 0 && !this.ignoreView.contains(childAt)) {
-                    Float f = this.listAlphaItems.get(childAdapterPosition, (Object) null);
+                    Float f = this.listAlphaItems.get(childAdapterPosition, null);
                     if (f == null) {
                         childAt.setAlpha(1.0f);
                     } else {
@@ -48,21 +47,17 @@ public class RecyclerItemsEnterAnimator {
         }
     }
 
-    public void showItemsAnimated(final int i) {
-        Animator animator;
+    public void showItemsAnimated(int i) {
         final View progressView = getProgressView();
         final RecyclerView.LayoutManager layoutManager = this.listView.getLayoutManager();
-        if (!(progressView == null || layoutManager == null)) {
+        if (progressView != null && layoutManager != null) {
             this.listView.removeView(progressView);
             this.ignoreView.add(progressView);
             this.listView.addView(progressView);
             layoutManager.ignoreView(progressView);
-            if (this.animateAlphaProgressView) {
-                animator = ObjectAnimator.ofFloat(progressView, View.ALPHA, new float[]{progressView.getAlpha(), 0.0f});
-            } else {
-                animator = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
-            }
-            animator.addListener(new AnimatorListenerAdapter() {
+            Animator ofFloat = this.animateAlphaProgressView ? ObjectAnimator.ofFloat(progressView, View.ALPHA, progressView.getAlpha(), 0.0f) : ValueAnimator.ofFloat(0.0f, 1.0f);
+            ofFloat.addListener(new AnimatorListenerAdapter() { // from class: org.telegram.ui.Components.RecyclerItemsEnterAnimator.1
+                @Override // android.animation.AnimatorListenerAdapter, android.animation.Animator.AnimatorListener
                 public void onAnimationEnd(Animator animator) {
                     progressView.setAlpha(1.0f);
                     layoutManager.stopIgnoringView(progressView);
@@ -70,65 +65,86 @@ public class RecyclerItemsEnterAnimator {
                     RecyclerItemsEnterAnimator.this.listView.removeView(progressView);
                 }
             });
-            animator.start();
+            ofFloat.start();
             i--;
         }
-        AnonymousClass2 r1 = new ViewTreeObserver.OnPreDrawListener() {
-            public boolean onPreDraw() {
-                RecyclerItemsEnterAnimator.this.listView.getViewTreeObserver().removeOnPreDrawListener(this);
-                RecyclerItemsEnterAnimator.this.preDrawListeners.remove(this);
-                int childCount = RecyclerItemsEnterAnimator.this.listView.getChildCount();
-                final AnimatorSet animatorSet = new AnimatorSet();
-                for (int i = 0; i < childCount; i++) {
-                    View childAt = RecyclerItemsEnterAnimator.this.listView.getChildAt(i);
-                    final int childAdapterPosition = RecyclerItemsEnterAnimator.this.listView.getChildAdapterPosition(childAt);
-                    if (childAt != progressView && childAdapterPosition >= i - 1 && RecyclerItemsEnterAnimator.this.listAlphaItems.get(childAdapterPosition, (Object) null) == null) {
-                        RecyclerItemsEnterAnimator.this.listAlphaItems.put(childAdapterPosition, Float.valueOf(0.0f));
-                        RecyclerItemsEnterAnimator recyclerItemsEnterAnimator = RecyclerItemsEnterAnimator.this;
-                        recyclerItemsEnterAnimator.invalidateAlpha = true;
-                        recyclerItemsEnterAnimator.listView.invalidate();
-                        ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
-                        ofFloat.addUpdateListener(new RecyclerItemsEnterAnimator$2$$ExternalSyntheticLambda0(this, childAdapterPosition));
-                        ofFloat.addListener(new AnimatorListenerAdapter() {
-                            public void onAnimationEnd(Animator animator) {
-                                RecyclerItemsEnterAnimator.this.listAlphaItems.remove(childAdapterPosition);
-                                RecyclerItemsEnterAnimator recyclerItemsEnterAnimator = RecyclerItemsEnterAnimator.this;
-                                recyclerItemsEnterAnimator.invalidateAlpha = true;
-                                recyclerItemsEnterAnimator.listView.invalidate();
-                            }
-                        });
-                        ofFloat.setStartDelay((long) ((int) ((((float) Math.min(RecyclerItemsEnterAnimator.this.listView.getMeasuredHeight(), Math.max(0, childAt.getTop()))) / ((float) RecyclerItemsEnterAnimator.this.listView.getMeasuredHeight())) * 100.0f)));
-                        ofFloat.setDuration(200);
-                        animatorSet.playTogether(new Animator[]{ofFloat});
+        AnonymousClass2 anonymousClass2 = new AnonymousClass2(progressView, i);
+        this.preDrawListeners.add(anonymousClass2);
+        this.listView.getViewTreeObserver().addOnPreDrawListener(anonymousClass2);
+    }
+
+    /* JADX INFO: Access modifiers changed from: package-private */
+    /* renamed from: org.telegram.ui.Components.RecyclerItemsEnterAnimator$2  reason: invalid class name */
+    /* loaded from: classes3.dex */
+    public class AnonymousClass2 implements ViewTreeObserver.OnPreDrawListener {
+        final /* synthetic */ int val$finalFrom;
+        final /* synthetic */ View val$finalProgressView;
+
+        AnonymousClass2(View view, int i) {
+            this.val$finalProgressView = view;
+            this.val$finalFrom = i;
+        }
+
+        @Override // android.view.ViewTreeObserver.OnPreDrawListener
+        public boolean onPreDraw() {
+            RecyclerItemsEnterAnimator.this.listView.getViewTreeObserver().removeOnPreDrawListener(this);
+            RecyclerItemsEnterAnimator.this.preDrawListeners.remove(this);
+            int childCount = RecyclerItemsEnterAnimator.this.listView.getChildCount();
+            final AnimatorSet animatorSet = new AnimatorSet();
+            for (int i = 0; i < childCount; i++) {
+                View childAt = RecyclerItemsEnterAnimator.this.listView.getChildAt(i);
+                final int childAdapterPosition = RecyclerItemsEnterAnimator.this.listView.getChildAdapterPosition(childAt);
+                if (childAt != this.val$finalProgressView && childAdapterPosition >= this.val$finalFrom - 1 && RecyclerItemsEnterAnimator.this.listAlphaItems.get(childAdapterPosition, null) == null) {
+                    RecyclerItemsEnterAnimator.this.listAlphaItems.put(childAdapterPosition, Float.valueOf(0.0f));
+                    RecyclerItemsEnterAnimator recyclerItemsEnterAnimator = RecyclerItemsEnterAnimator.this;
+                    recyclerItemsEnterAnimator.invalidateAlpha = true;
+                    recyclerItemsEnterAnimator.listView.invalidate();
+                    ValueAnimator ofFloat = ValueAnimator.ofFloat(0.0f, 1.0f);
+                    ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() { // from class: org.telegram.ui.Components.RecyclerItemsEnterAnimator$2$$ExternalSyntheticLambda0
+                        @Override // android.animation.ValueAnimator.AnimatorUpdateListener
+                        public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+                            RecyclerItemsEnterAnimator.AnonymousClass2.this.lambda$onPreDraw$0(childAdapterPosition, valueAnimator);
+                        }
+                    });
+                    ofFloat.addListener(new AnimatorListenerAdapter() { // from class: org.telegram.ui.Components.RecyclerItemsEnterAnimator.2.1
+                        @Override // android.animation.AnimatorListenerAdapter, android.animation.Animator.AnimatorListener
+                        public void onAnimationEnd(Animator animator) {
+                            RecyclerItemsEnterAnimator.this.listAlphaItems.remove(childAdapterPosition);
+                            RecyclerItemsEnterAnimator recyclerItemsEnterAnimator2 = RecyclerItemsEnterAnimator.this;
+                            recyclerItemsEnterAnimator2.invalidateAlpha = true;
+                            recyclerItemsEnterAnimator2.listView.invalidate();
+                        }
+                    });
+                    ofFloat.setStartDelay((int) ((Math.min(RecyclerItemsEnterAnimator.this.listView.getMeasuredHeight(), Math.max(0, childAt.getTop())) / RecyclerItemsEnterAnimator.this.listView.getMeasuredHeight()) * 100.0f));
+                    ofFloat.setDuration(200L);
+                    animatorSet.playTogether(ofFloat);
+                }
+            }
+            RecyclerItemsEnterAnimator.this.currentAnimations.add(animatorSet);
+            animatorSet.start();
+            animatorSet.addListener(new AnimatorListenerAdapter() { // from class: org.telegram.ui.Components.RecyclerItemsEnterAnimator.2.2
+                @Override // android.animation.AnimatorListenerAdapter, android.animation.Animator.AnimatorListener
+                public void onAnimationEnd(Animator animator) {
+                    super.onAnimationEnd(animator);
+                    RecyclerItemsEnterAnimator.this.currentAnimations.remove(animatorSet);
+                    if (RecyclerItemsEnterAnimator.this.currentAnimations.isEmpty()) {
+                        RecyclerItemsEnterAnimator.this.listAlphaItems.clear();
+                        RecyclerItemsEnterAnimator recyclerItemsEnterAnimator2 = RecyclerItemsEnterAnimator.this;
+                        recyclerItemsEnterAnimator2.invalidateAlpha = true;
+                        recyclerItemsEnterAnimator2.listView.invalidate();
                     }
                 }
-                RecyclerItemsEnterAnimator.this.currentAnimations.add(animatorSet);
-                animatorSet.start();
-                animatorSet.addListener(new AnimatorListenerAdapter() {
-                    public void onAnimationEnd(Animator animator) {
-                        super.onAnimationEnd(animator);
-                        RecyclerItemsEnterAnimator.this.currentAnimations.remove(animatorSet);
-                        if (RecyclerItemsEnterAnimator.this.currentAnimations.isEmpty()) {
-                            RecyclerItemsEnterAnimator.this.listAlphaItems.clear();
-                            RecyclerItemsEnterAnimator recyclerItemsEnterAnimator = RecyclerItemsEnterAnimator.this;
-                            recyclerItemsEnterAnimator.invalidateAlpha = true;
-                            recyclerItemsEnterAnimator.listView.invalidate();
-                        }
-                    }
-                });
-                return false;
-            }
+            });
+            return false;
+        }
 
-            /* access modifiers changed from: private */
-            public /* synthetic */ void lambda$onPreDraw$0(int i, ValueAnimator valueAnimator) {
-                RecyclerItemsEnterAnimator.this.listAlphaItems.put(i, (Float) valueAnimator.getAnimatedValue());
-                RecyclerItemsEnterAnimator recyclerItemsEnterAnimator = RecyclerItemsEnterAnimator.this;
-                recyclerItemsEnterAnimator.invalidateAlpha = true;
-                recyclerItemsEnterAnimator.listView.invalidate();
-            }
-        };
-        this.preDrawListeners.add(r1);
-        this.listView.getViewTreeObserver().addOnPreDrawListener(r1);
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$onPreDraw$0(int i, ValueAnimator valueAnimator) {
+            RecyclerItemsEnterAnimator.this.listAlphaItems.put(i, (Float) valueAnimator.getAnimatedValue());
+            RecyclerItemsEnterAnimator recyclerItemsEnterAnimator = RecyclerItemsEnterAnimator.this;
+            recyclerItemsEnterAnimator.invalidateAlpha = true;
+            recyclerItemsEnterAnimator.listView.invalidate();
+        }
     }
 
     public View getProgressView() {

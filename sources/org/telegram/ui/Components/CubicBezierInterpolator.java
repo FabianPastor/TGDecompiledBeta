@@ -2,18 +2,18 @@ package org.telegram.ui.Components;
 
 import android.graphics.PointF;
 import android.view.animation.Interpolator;
-
+/* loaded from: classes3.dex */
 public class CubicBezierInterpolator implements Interpolator {
-    public static final CubicBezierInterpolator DEFAULT = new CubicBezierInterpolator(0.25d, 0.1d, 0.25d, 1.0d);
-    public static final CubicBezierInterpolator EASE_BOTH = new CubicBezierInterpolator(0.42d, 0.0d, 0.58d, 1.0d);
-    public static final CubicBezierInterpolator EASE_IN = new CubicBezierInterpolator(0.42d, 0.0d, 1.0d, 1.0d);
-    public static final CubicBezierInterpolator EASE_OUT = new CubicBezierInterpolator(0.0d, 0.0d, 0.58d, 1.0d);
-    public static final CubicBezierInterpolator EASE_OUT_QUINT = new CubicBezierInterpolator(0.23d, 1.0d, 0.32d, 1.0d);
     protected PointF a;
     protected PointF b;
     protected PointF c;
     protected PointF end;
     protected PointF start;
+    public static final CubicBezierInterpolator DEFAULT = new CubicBezierInterpolator(0.25d, 0.1d, 0.25d, 1.0d);
+    public static final CubicBezierInterpolator EASE_OUT = new CubicBezierInterpolator(0.0d, 0.0d, 0.58d, 1.0d);
+    public static final CubicBezierInterpolator EASE_OUT_QUINT = new CubicBezierInterpolator(0.23d, 1.0d, 0.32d, 1.0d);
+    public static final CubicBezierInterpolator EASE_IN = new CubicBezierInterpolator(0.42d, 0.0d, 1.0d, 1.0d);
+    public static final CubicBezierInterpolator EASE_BOTH = new CubicBezierInterpolator(0.42d, 0.0d, 0.58d, 1.0d);
 
     public CubicBezierInterpolator(PointF pointF, PointF pointF2) throws IllegalArgumentException {
         this.a = new PointF();
@@ -39,12 +39,12 @@ public class CubicBezierInterpolator implements Interpolator {
         this((float) d, (float) d2, (float) d3, (float) d4);
     }
 
+    @Override // android.animation.TimeInterpolator
     public float getInterpolation(float f) {
         return getBezierCoordinateY(getXForTime(f));
     }
 
-    /* access modifiers changed from: protected */
-    public float getBezierCoordinateY(float f) {
+    protected float getBezierCoordinateY(float f) {
         PointF pointF = this.c;
         PointF pointF2 = this.start;
         float f2 = pointF2.y * 3.0f;
@@ -58,12 +58,11 @@ public class CubicBezierInterpolator implements Interpolator {
         return f * (pointF.y + ((pointF3.y + (f4 * f)) * f));
     }
 
-    /* access modifiers changed from: protected */
-    public float getXForTime(float f) {
+    protected float getXForTime(float f) {
         float f2 = f;
         for (int i = 1; i < 14; i++) {
             float bezierCoordinateX = getBezierCoordinateX(f2) - f;
-            if (((double) Math.abs(bezierCoordinateX)) < 0.001d) {
+            if (Math.abs(bezierCoordinateX) < 0.001d) {
                 break;
             }
             f2 -= bezierCoordinateX / getXDerivate(f2);

@@ -46,55 +46,66 @@ import org.telegram.ui.Cells.SharedDocumentCell;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.FilteredSearchView;
 import org.telegram.ui.PhotoViewer;
-
+/* loaded from: classes3.dex */
 public class SearchDownloadsContainer extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
-    DownloadsAdapter adapter = new DownloadsAdapter();
+    DownloadsAdapter adapter;
     boolean checkingFilesExist;
-    /* access modifiers changed from: private */
-    public final int currentAccount;
-    ArrayList<MessageObject> currentLoadingFiles = new ArrayList<>();
-    ArrayList<MessageObject> currentLoadingFilesTmp = new ArrayList<>();
-    int downloadingFilesEndRow = -1;
-    int downloadingFilesHeader = -1;
-    int downloadingFilesStartRow = -1;
+    private final int currentAccount;
+    ArrayList<MessageObject> currentLoadingFiles;
+    ArrayList<MessageObject> currentLoadingFilesTmp;
+    int downloadingFilesEndRow;
+    int downloadingFilesHeader;
+    int downloadingFilesStartRow;
     StickerEmptyView emptyView;
-    /* access modifiers changed from: private */
-    public boolean hasCurrentDownload;
+    private boolean hasCurrentDownload;
     RecyclerItemsEnterAnimator itemsEnterAnimator;
     String lastQueryString;
     Runnable lastSearchRunnable;
     private final FlickerLoadingView loadingView;
-    /* access modifiers changed from: private */
-    public final FilteredSearchView.MessageHashId messageHashIdTmp = new FilteredSearchView.MessageHashId(0, 0);
+    private final FilteredSearchView.MessageHashId messageHashIdTmp;
     Activity parentActivity;
     BaseFragment parentFragment;
-    int recentFilesEndRow = -1;
-    int recentFilesHeader = -1;
-    int recentFilesStartRow = -1;
-    ArrayList<MessageObject> recentLoadingFiles = new ArrayList<>();
-    ArrayList<MessageObject> recentLoadingFilesTmp = new ArrayList<>();
+    int recentFilesEndRow;
+    int recentFilesHeader;
+    int recentFilesStartRow;
+    ArrayList<MessageObject> recentLoadingFiles;
+    ArrayList<MessageObject> recentLoadingFilesTmp;
     public RecyclerListView recyclerListView;
     int rowCount;
     String searchQuery;
     FilteredSearchView.UiCallback uiCallback;
 
-    public SearchDownloadsContainer(BaseFragment baseFragment, int i) {
+    public SearchDownloadsContainer(BaseFragment baseFragment, final int i) {
         super(baseFragment.getParentActivity());
+        this.adapter = new DownloadsAdapter();
+        this.currentLoadingFiles = new ArrayList<>();
+        this.recentLoadingFiles = new ArrayList<>();
+        this.currentLoadingFilesTmp = new ArrayList<>();
+        this.recentLoadingFilesTmp = new ArrayList<>();
+        this.downloadingFilesHeader = -1;
+        this.downloadingFilesStartRow = -1;
+        this.downloadingFilesEndRow = -1;
+        this.recentFilesHeader = -1;
+        this.recentFilesStartRow = -1;
+        this.recentFilesEndRow = -1;
+        this.messageHashIdTmp = new FilteredSearchView.MessageHashId(0, 0L);
         this.parentFragment = baseFragment;
         this.parentActivity = baseFragment.getParentActivity();
         this.currentAccount = i;
         this.recyclerListView = new BlurredRecyclerView(getContext());
         new ItemTouchHelper(new TouchHelperCallback()).attachToRecyclerView(this.recyclerListView);
         addView(this.recyclerListView);
-        this.recyclerListView.setLayoutManager(new LinearLayoutManager(this, baseFragment.getParentActivity()) {
+        this.recyclerListView.setLayoutManager(new LinearLayoutManager(this, baseFragment.getParentActivity()) { // from class: org.telegram.ui.Components.SearchDownloadsContainer.1
+            @Override // androidx.recyclerview.widget.LinearLayoutManager, androidx.recyclerview.widget.RecyclerView.LayoutManager
             public boolean supportsPredictiveItemAnimations() {
                 return true;
             }
         });
         this.recyclerListView.setAdapter(this.adapter);
-        this.recyclerListView.setOnScrollListener(new RecyclerView.OnScrollListener() {
-            public void onScrollStateChanged(RecyclerView recyclerView, int i) {
-                if (i == 1) {
+        this.recyclerListView.setOnScrollListener(new RecyclerView.OnScrollListener() { // from class: org.telegram.ui.Components.SearchDownloadsContainer.2
+            @Override // androidx.recyclerview.widget.RecyclerView.OnScrollListener
+            public void onScrollStateChanged(RecyclerView recyclerView, int i2) {
+                if (i2 == 1) {
                     AndroidUtilities.hideKeyboard(SearchDownloadsContainer.this.parentActivity.getCurrentFocus());
                 }
             }
@@ -103,8 +114,20 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
         defaultItemAnimator.setDelayAnimations(false);
         defaultItemAnimator.setSupportsChangeAnimations(false);
         this.recyclerListView.setItemAnimator(defaultItemAnimator);
-        this.recyclerListView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new SearchDownloadsContainer$$ExternalSyntheticLambda6(this, i));
-        this.recyclerListView.setOnItemLongClickListener((RecyclerListView.OnItemLongClickListener) new SearchDownloadsContainer$$ExternalSyntheticLambda7(this));
+        this.recyclerListView.setOnItemClickListener(new RecyclerListView.OnItemClickListener() { // from class: org.telegram.ui.Components.SearchDownloadsContainer$$ExternalSyntheticLambda6
+            @Override // org.telegram.ui.Components.RecyclerListView.OnItemClickListener
+            public final void onItemClick(View view, int i2) {
+                SearchDownloadsContainer.this.lambda$new$0(i, view, i2);
+            }
+        });
+        this.recyclerListView.setOnItemLongClickListener(new RecyclerListView.OnItemLongClickListener() { // from class: org.telegram.ui.Components.SearchDownloadsContainer$$ExternalSyntheticLambda7
+            @Override // org.telegram.ui.Components.RecyclerListView.OnItemLongClickListener
+            public final boolean onItemClick(View view, int i2) {
+                boolean lambda$new$1;
+                lambda$new$1 = SearchDownloadsContainer.this.lambda$new$1(view, i2);
+                return lambda$new$1;
+            }
+        });
         this.itemsEnterAnimator = new RecyclerItemsEnterAnimator(this.recyclerListView, true);
         FlickerLoadingView flickerLoadingView = new FlickerLoadingView(getContext());
         this.loadingView = flickerLoadingView;
@@ -119,122 +142,135 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
         FileLoader.getInstance(i).getCurrentLoadingFiles(this.currentLoadingFiles);
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$new$0(int i, View view, int i2) {
         TLRPC$Chat chat;
-        MessageObject access$500 = this.adapter.getMessage(i2);
-        if (access$500 != null) {
-            boolean z = false;
+        MessageObject message = this.adapter.getMessage(i2);
+        if (message == null) {
+            return;
+        }
+        boolean z = false;
+        if (this.uiCallback.actionModeShowing()) {
+            this.uiCallback.toggleItemSelection(message, view, 0);
+            this.messageHashIdTmp.set(message.getId(), message.getDialogId());
+            this.adapter.notifyItemChanged(i2);
             if (this.uiCallback.actionModeShowing()) {
-                this.uiCallback.toggleItemSelection(access$500, view, 0);
-                this.messageHashIdTmp.set(access$500.getId(), access$500.getDialogId());
-                this.adapter.notifyItemChanged(i2);
-                if (!this.uiCallback.actionModeShowing()) {
-                    DownloadsAdapter downloadsAdapter = this.adapter;
-                    downloadsAdapter.notifyItemRangeChanged(0, downloadsAdapter.getItemCount());
-                    return;
-                }
                 return;
             }
-            if (view instanceof Cell) {
-                SharedDocumentCell sharedDocumentCell = ((Cell) view).sharedDocumentCell;
-                MessageObject message = sharedDocumentCell.getMessage();
-                TLRPC$Document document = message.getDocument();
-                if (sharedDocumentCell.isLoaded()) {
-                    if (message.isRoundVideo() || message.isVoice()) {
-                        MediaController.getInstance().playMessage(message);
-                        return;
-                    }
-                    boolean canPreviewDocument = message.canPreviewDocument();
-                    if (!canPreviewDocument) {
-                        TLRPC$Message tLRPC$Message = message.messageOwner;
-                        boolean z2 = tLRPC$Message != null && tLRPC$Message.noforwards;
-                        if (message.isFromChat() && (chat = MessagesController.getInstance(i).getChat(Long.valueOf(-message.getFromChatId()))) != null) {
-                            z2 = chat.noforwards;
-                        }
-                        if (canPreviewDocument || z2) {
-                            z = true;
-                        }
-                        canPreviewDocument = z;
-                    }
-                    if (canPreviewDocument) {
-                        PhotoViewer.getInstance().setParentActivity(this.parentFragment);
-                        ArrayList arrayList = new ArrayList();
-                        arrayList.add(message);
-                        PhotoViewer.getInstance().setParentActivity(this.parentFragment);
-                        PhotoViewer.getInstance().openPhoto((ArrayList<MessageObject>) arrayList, 0, 0, 0, (PhotoViewer.PhotoViewerProvider) new PhotoViewer.EmptyPhotoViewerProvider());
-                        return;
-                    }
-                    AndroidUtilities.openDocument(message, this.parentActivity, this.parentFragment);
-                } else if (!sharedDocumentCell.isLoading()) {
-                    access$500.putInDownloadsStore = true;
-                    AccountInstance.getInstance(UserConfig.selectedAccount).getFileLoader().loadFile(document, access$500, 0, 0);
-                    sharedDocumentCell.updateFileExistIcon(true);
-                    DownloadController.getInstance(i).updateFilesLoadingPriority();
-                } else {
-                    AccountInstance.getInstance(UserConfig.selectedAccount).getFileLoader().cancelLoadFile(document);
-                    sharedDocumentCell.updateFileExistIcon(true);
-                }
-                update(true);
-            }
-            if (view instanceof SharedAudioCell) {
-                ((SharedAudioCell) view).didPressedButton();
-            }
-        }
-    }
-
-    /* access modifiers changed from: private */
-    public /* synthetic */ boolean lambda$new$1(View view, int i) {
-        MessageObject access$500 = this.adapter.getMessage(i);
-        if (access$500 == null) {
-            return false;
-        }
-        if (!this.uiCallback.actionModeShowing()) {
-            this.uiCallback.showActionMode();
             DownloadsAdapter downloadsAdapter = this.adapter;
             downloadsAdapter.notifyItemRangeChanged(0, downloadsAdapter.getItemCount());
+            return;
         }
-        if (!this.uiCallback.actionModeShowing()) {
+        if (view instanceof Cell) {
+            SharedDocumentCell sharedDocumentCell = ((Cell) view).sharedDocumentCell;
+            MessageObject message2 = sharedDocumentCell.getMessage();
+            TLRPC$Document document = message2.getDocument();
+            if (sharedDocumentCell.isLoaded()) {
+                if (message2.isRoundVideo() || message2.isVoice()) {
+                    MediaController.getInstance().playMessage(message2);
+                    return;
+                }
+                boolean canPreviewDocument = message2.canPreviewDocument();
+                if (!canPreviewDocument) {
+                    TLRPC$Message tLRPC$Message = message2.messageOwner;
+                    boolean z2 = tLRPC$Message != null && tLRPC$Message.noforwards;
+                    if (message2.isFromChat() && (chat = MessagesController.getInstance(i).getChat(Long.valueOf(-message2.getFromChatId()))) != null) {
+                        z2 = chat.noforwards;
+                    }
+                    if (canPreviewDocument || z2) {
+                        z = true;
+                    }
+                    canPreviewDocument = z;
+                }
+                if (canPreviewDocument) {
+                    PhotoViewer.getInstance().setParentActivity(this.parentFragment);
+                    ArrayList<MessageObject> arrayList = new ArrayList<>();
+                    arrayList.add(message2);
+                    PhotoViewer.getInstance().setParentActivity(this.parentFragment);
+                    PhotoViewer.getInstance().openPhoto(arrayList, 0, 0L, 0L, new PhotoViewer.EmptyPhotoViewerProvider());
+                    return;
+                }
+                AndroidUtilities.openDocument(message2, this.parentActivity, this.parentFragment);
+            } else if (!sharedDocumentCell.isLoading()) {
+                message.putInDownloadsStore = true;
+                AccountInstance.getInstance(UserConfig.selectedAccount).getFileLoader().loadFile(document, message, 0, 0);
+                sharedDocumentCell.updateFileExistIcon(true);
+                DownloadController.getInstance(i).updateFilesLoadingPriority();
+            } else {
+                AccountInstance.getInstance(UserConfig.selectedAccount).getFileLoader().cancelLoadFile(document);
+                sharedDocumentCell.updateFileExistIcon(true);
+            }
+            update(true);
+        }
+        if (!(view instanceof SharedAudioCell)) {
+            return;
+        }
+        ((SharedAudioCell) view).didPressedButton();
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
+    public /* synthetic */ boolean lambda$new$1(View view, int i) {
+        MessageObject message = this.adapter.getMessage(i);
+        if (message != null) {
+            if (!this.uiCallback.actionModeShowing()) {
+                this.uiCallback.showActionMode();
+                DownloadsAdapter downloadsAdapter = this.adapter;
+                downloadsAdapter.notifyItemRangeChanged(0, downloadsAdapter.getItemCount());
+            }
+            if (!this.uiCallback.actionModeShowing()) {
+                return true;
+            }
+            this.uiCallback.toggleItemSelection(message, view, 0);
+            if (!this.uiCallback.actionModeShowing()) {
+                DownloadsAdapter downloadsAdapter2 = this.adapter;
+                downloadsAdapter2.notifyItemRangeChanged(0, downloadsAdapter2.getItemCount());
+            }
+            this.messageHashIdTmp.set(message.getId(), message.getDialogId());
             return true;
         }
-        this.uiCallback.toggleItemSelection(access$500, view, 0);
-        if (!this.uiCallback.actionModeShowing()) {
-            DownloadsAdapter downloadsAdapter2 = this.adapter;
-            downloadsAdapter2.notifyItemRangeChanged(0, downloadsAdapter2.getItemCount());
-        }
-        this.messageHashIdTmp.set(access$500.getId(), access$500.getDialogId());
-        return true;
+        return false;
     }
 
     private void checkFilesExist() {
-        if (!this.checkingFilesExist) {
-            this.checkingFilesExist = true;
-            Utilities.searchQueue.postRunnable(new SearchDownloadsContainer$$ExternalSyntheticLambda2(this));
+        if (this.checkingFilesExist) {
+            return;
         }
+        this.checkingFilesExist = true;
+        Utilities.searchQueue.postRunnable(new Runnable() { // from class: org.telegram.ui.Components.SearchDownloadsContainer$$ExternalSyntheticLambda2
+            @Override // java.lang.Runnable
+            public final void run() {
+                SearchDownloadsContainer.this.lambda$checkFilesExist$3();
+            }
+        });
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$checkFilesExist$3() {
-        ArrayList arrayList = new ArrayList();
-        ArrayList arrayList2 = new ArrayList();
-        ArrayList arrayList3 = new ArrayList();
-        ArrayList arrayList4 = new ArrayList();
+        ArrayList<MessageObject> arrayList = new ArrayList<>();
+        ArrayList<MessageObject> arrayList2 = new ArrayList<>();
+        final ArrayList arrayList3 = new ArrayList();
+        final ArrayList arrayList4 = new ArrayList();
         FileLoader.getInstance(this.currentAccount).getCurrentLoadingFiles(arrayList);
         FileLoader.getInstance(this.currentAccount).getRecentLoadingFiles(arrayList2);
         for (int i = 0; i < arrayList.size(); i++) {
-            if (FileLoader.getInstance(this.currentAccount).getPathToMessage(((MessageObject) arrayList.get(i)).messageOwner).exists()) {
-                arrayList3.add((MessageObject) arrayList.get(i));
+            if (FileLoader.getInstance(this.currentAccount).getPathToMessage(arrayList.get(i).messageOwner).exists()) {
+                arrayList3.add(arrayList.get(i));
             }
         }
         for (int i2 = 0; i2 < arrayList2.size(); i2++) {
-            if (!FileLoader.getInstance(this.currentAccount).getPathToMessage(((MessageObject) arrayList2.get(i2)).messageOwner).exists()) {
-                arrayList4.add((MessageObject) arrayList2.get(i2));
+            if (!FileLoader.getInstance(this.currentAccount).getPathToMessage(arrayList2.get(i2).messageOwner).exists()) {
+                arrayList4.add(arrayList2.get(i2));
             }
         }
-        AndroidUtilities.runOnUIThread(new SearchDownloadsContainer$$ExternalSyntheticLambda5(this, arrayList3, arrayList4));
+        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.SearchDownloadsContainer$$ExternalSyntheticLambda5
+            @Override // java.lang.Runnable
+            public final void run() {
+                SearchDownloadsContainer.this.lambda$checkFilesExist$2(arrayList3, arrayList4);
+            }
+        });
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$checkFilesExist$2(ArrayList arrayList, ArrayList arrayList2) {
         for (int i = 0; i < arrayList.size(); i++) {
             DownloadController.getInstance(this.currentAccount).onDownloadComplete((MessageObject) arrayList.get(i));
@@ -260,10 +296,10 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
             FileLoader.getInstance(this.currentAccount).getCurrentLoadingFiles(this.currentLoadingFilesTmp);
             FileLoader.getInstance(this.currentAccount).getRecentLoadingFiles(this.recentLoadingFilesTmp);
             for (int i = 0; i < this.currentLoadingFiles.size(); i++) {
-                this.currentLoadingFiles.get(i).setQuery((String) null);
+                this.currentLoadingFiles.get(i).setQuery(null);
             }
             for (int i2 = 0; i2 < this.recentLoadingFiles.size(); i2++) {
-                this.recentLoadingFiles.get(i2).setQuery((String) null);
+                this.recentLoadingFiles.get(i2).setQuery(null);
             }
             this.lastQueryString = null;
             updateListInternal(z, this.currentLoadingFilesTmp, this.recentLoadingFilesTmp);
@@ -276,30 +312,36 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
             return;
         }
         this.emptyView.setStickerType(1);
-        ArrayList arrayList = new ArrayList();
-        ArrayList arrayList2 = new ArrayList();
+        final ArrayList<MessageObject> arrayList = new ArrayList<>();
+        final ArrayList<MessageObject> arrayList2 = new ArrayList<>();
         FileLoader.getInstance(this.currentAccount).getCurrentLoadingFiles(arrayList);
         FileLoader.getInstance(this.currentAccount).getRecentLoadingFiles(arrayList2);
-        String lowerCase = this.searchQuery.toLowerCase();
+        final String lowerCase = this.searchQuery.toLowerCase();
         boolean equals = lowerCase.equals(this.lastQueryString);
         this.lastQueryString = lowerCase;
         Utilities.searchQueue.cancelRunnable(this.lastSearchRunnable);
         DispatchQueue dispatchQueue = Utilities.searchQueue;
-        SearchDownloadsContainer$$ExternalSyntheticLambda4 searchDownloadsContainer$$ExternalSyntheticLambda4 = new SearchDownloadsContainer$$ExternalSyntheticLambda4(this, arrayList, lowerCase, arrayList2);
-        this.lastSearchRunnable = searchDownloadsContainer$$ExternalSyntheticLambda4;
-        dispatchQueue.postRunnable(searchDownloadsContainer$$ExternalSyntheticLambda4, equals ? 0 : 300);
+        Runnable runnable = new Runnable() { // from class: org.telegram.ui.Components.SearchDownloadsContainer$$ExternalSyntheticLambda4
+            @Override // java.lang.Runnable
+            public final void run() {
+                SearchDownloadsContainer.this.lambda$update$5(arrayList, lowerCase, arrayList2);
+            }
+        };
+        this.lastSearchRunnable = runnable;
+        dispatchQueue.postRunnable(runnable, equals ? 0L : 300L);
         this.recentLoadingFilesTmp.clear();
         this.currentLoadingFilesTmp.clear();
-        if (!equals) {
-            this.emptyView.showProgress(true, true);
-            updateListInternal(z, this.currentLoadingFilesTmp, this.recentLoadingFilesTmp);
+        if (equals) {
+            return;
         }
+        this.emptyView.showProgress(true, true);
+        updateListInternal(z, this.currentLoadingFilesTmp, this.recentLoadingFilesTmp);
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$update$5(ArrayList arrayList, String str, ArrayList arrayList2) {
-        ArrayList arrayList3 = new ArrayList();
-        ArrayList arrayList4 = new ArrayList();
+    /* JADX INFO: Access modifiers changed from: private */
+    public /* synthetic */ void lambda$update$5(ArrayList arrayList, final String str, ArrayList arrayList2) {
+        final ArrayList arrayList3 = new ArrayList();
+        final ArrayList arrayList4 = new ArrayList();
         for (int i = 0; i < arrayList.size(); i++) {
             if (FileLoader.getDocumentFileName(((MessageObject) arrayList.get(i)).getDocument()).toLowerCase().contains(str)) {
                 MessageObject messageObject = new MessageObject(this.currentAccount, ((MessageObject) arrayList.get(i)).messageOwner, false, false);
@@ -316,22 +358,28 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
                 arrayList4.add(messageObject2);
             }
         }
-        AndroidUtilities.runOnUIThread(new SearchDownloadsContainer$$ExternalSyntheticLambda3(this, str, arrayList3, arrayList4));
+        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.SearchDownloadsContainer$$ExternalSyntheticLambda3
+            @Override // java.lang.Runnable
+            public final void run() {
+                SearchDownloadsContainer.this.lambda$update$4(str, arrayList3, arrayList4);
+            }
+        });
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$update$4(String str, ArrayList arrayList, ArrayList arrayList2) {
         if (str.equals(this.lastQueryString)) {
             if (this.rowCount == 0) {
                 this.itemsEnterAnimator.showItemsAnimated(0);
             }
             updateListInternal(true, arrayList, arrayList2);
-            if (this.rowCount == 0) {
-                this.emptyView.showProgress(false, true);
-                this.emptyView.title.setText(LocaleController.getString("SearchEmptyViewTitle2", R.string.SearchEmptyViewTitle2));
-                this.emptyView.subtitle.setVisibility(0);
-                this.emptyView.subtitle.setText(LocaleController.getString("SearchEmptyViewFilteredSubtitle2", R.string.SearchEmptyViewFilteredSubtitle2));
+            if (this.rowCount != 0) {
+                return;
             }
+            this.emptyView.showProgress(false, true);
+            this.emptyView.title.setText(LocaleController.getString("SearchEmptyViewTitle2", R.string.SearchEmptyViewTitle2));
+            this.emptyView.subtitle.setVisibility(0);
+            this.emptyView.subtitle.setText(LocaleController.getString("SearchEmptyViewFilteredSubtitle2", R.string.SearchEmptyViewFilteredSubtitle2));
         }
     }
 
@@ -352,53 +400,54 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
             final ArrayList arrayList3 = new ArrayList(this.currentLoadingFiles);
             final ArrayList arrayList4 = new ArrayList(this.recentLoadingFiles);
             updateRows(arrayList, arrayList2);
-            DiffUtil.calculateDiff(new DiffUtil.Callback() {
+            DiffUtil.calculateDiff(new DiffUtil.Callback() { // from class: org.telegram.ui.Components.SearchDownloadsContainer.3
+                @Override // androidx.recyclerview.widget.DiffUtil.Callback
                 public int getOldListSize() {
                     return i7;
                 }
 
+                @Override // androidx.recyclerview.widget.DiffUtil.Callback
                 public int getNewListSize() {
                     return SearchDownloadsContainer.this.rowCount;
                 }
 
-                public boolean areItemsTheSame(int i, int i2) {
+                @Override // androidx.recyclerview.widget.DiffUtil.Callback
+                public boolean areItemsTheSame(int i8, int i9) {
                     MessageObject messageObject;
-                    if (i >= 0 && i2 >= 0) {
-                        if (i == i && i2 == SearchDownloadsContainer.this.downloadingFilesHeader) {
+                    if (i8 >= 0 && i9 >= 0) {
+                        if (i8 == i && i9 == SearchDownloadsContainer.this.downloadingFilesHeader) {
                             return true;
                         }
-                        if (i == i4 && i2 == SearchDownloadsContainer.this.recentFilesHeader) {
+                        if (i8 == i4 && i9 == SearchDownloadsContainer.this.recentFilesHeader) {
                             return true;
                         }
                     }
-                    int i3 = i2;
+                    int i10 = i2;
                     MessageObject messageObject2 = null;
-                    if (i < i3 || i >= i3) {
-                        int i4 = i5;
-                        messageObject = (i < i4 || i >= i6) ? null : (MessageObject) arrayList4.get(i - i4);
+                    if (i8 >= i10 && i8 < i3) {
+                        messageObject = (MessageObject) arrayList3.get(i8 - i10);
                     } else {
-                        messageObject = (MessageObject) arrayList3.get(i - i3);
+                        int i11 = i5;
+                        messageObject = (i8 < i11 || i8 >= i6) ? null : (MessageObject) arrayList4.get(i8 - i11);
                     }
                     SearchDownloadsContainer searchDownloadsContainer = SearchDownloadsContainer.this;
-                    int i5 = searchDownloadsContainer.downloadingFilesStartRow;
-                    if (i2 < i5 || i2 >= searchDownloadsContainer.downloadingFilesEndRow) {
-                        int i6 = searchDownloadsContainer.recentFilesStartRow;
-                        if (i2 >= i6 && i2 < searchDownloadsContainer.recentFilesEndRow) {
-                            messageObject2 = searchDownloadsContainer.recentLoadingFiles.get(i2 - i6);
-                        }
+                    int i12 = searchDownloadsContainer.downloadingFilesStartRow;
+                    if (i9 >= i12 && i9 < searchDownloadsContainer.downloadingFilesEndRow) {
+                        messageObject2 = searchDownloadsContainer.currentLoadingFiles.get(i9 - i12);
                     } else {
-                        messageObject2 = searchDownloadsContainer.currentLoadingFiles.get(i2 - i5);
+                        int i13 = searchDownloadsContainer.recentFilesStartRow;
+                        if (i9 >= i13 && i9 < searchDownloadsContainer.recentFilesEndRow) {
+                            messageObject2 = searchDownloadsContainer.recentLoadingFiles.get(i9 - i13);
+                        }
                     }
-                    if (messageObject2 == null || messageObject == null || messageObject2.getDocument().id != messageObject.getDocument().id) {
-                        return false;
-                    }
-                    return true;
+                    return (messageObject2 == null || messageObject == null || messageObject2.getDocument().id != messageObject.getDocument().id) ? false : true;
                 }
 
-                public boolean areContentsTheSame(int i, int i2) {
-                    return areItemsTheSame(i, i2);
+                @Override // androidx.recyclerview.widget.DiffUtil.Callback
+                public boolean areContentsTheSame(int i8, int i9) {
+                    return areItemsTheSame(i8, i9);
                 }
-            }).dispatchUpdatesTo((RecyclerView.Adapter) this.adapter);
+            }).dispatchUpdatesTo(this.adapter);
             for (int i8 = 0; i8 < this.recyclerListView.getChildCount(); i8++) {
                 View childAt = this.recyclerListView.getChildAt(i8);
                 int childAdapterPosition = this.recyclerListView.getChildAdapterPosition(childAt);
@@ -482,18 +531,23 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
         update(false);
     }
 
-    private class DownloadsAdapter extends RecyclerListView.SelectionAdapter {
+    /* JADX INFO: Access modifiers changed from: private */
+    /* loaded from: classes3.dex */
+    public class DownloadsAdapter extends RecyclerListView.SelectionAdapter {
         private DownloadsAdapter() {
         }
 
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+        @Override // androidx.recyclerview.widget.RecyclerView.Adapter
+        /* renamed from: onCreateViewHolder */
+        public RecyclerView.ViewHolder mo1754onCreateViewHolder(ViewGroup viewGroup, int i) {
             View view;
             if (i == 0) {
                 view = new GraySectionCell(viewGroup.getContext());
             } else if (i == 1) {
                 view = new Cell(SearchDownloadsContainer.this, viewGroup.getContext());
             } else {
-                view = new SharedAudioCell(this, viewGroup.getContext()) {
+                view = new SharedAudioCell(this, viewGroup.getContext()) { // from class: org.telegram.ui.Components.SearchDownloadsContainer.DownloadsAdapter.1
+                    @Override // org.telegram.ui.Cells.SharedAudioCell
                     public boolean needPlayMessage(MessageObject messageObject) {
                         return MediaController.getInstance().playMessage(messageObject);
                     }
@@ -503,192 +557,32 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
             return new RecyclerListView.Holder(view);
         }
 
-        /* JADX WARNING: Removed duplicated region for block: B:30:0x00a4  */
-        /* JADX WARNING: Removed duplicated region for block: B:42:0x010e  */
-        /* Code decompiled incorrectly, please refer to instructions dump. */
+        /* JADX WARN: Removed duplicated region for block: B:32:0x00a4  */
+        /* JADX WARN: Removed duplicated region for block: B:44:0x010e  */
+        @Override // androidx.recyclerview.widget.RecyclerView.Adapter
+        /*
+            Code decompiled incorrectly, please refer to instructions dump.
+            To view partially-correct add '--show-bad-code' argument
+        */
         public void onBindViewHolder(androidx.recyclerview.widget.RecyclerView.ViewHolder r9, int r10) {
             /*
-                r8 = this;
-                int r0 = r9.getItemViewType()
-                if (r0 != 0) goto L_0x0083
-                android.view.View r9 = r9.itemView
-                org.telegram.ui.Cells.GraySectionCell r9 = (org.telegram.ui.Cells.GraySectionCell) r9
-                org.telegram.ui.Components.SearchDownloadsContainer r0 = org.telegram.ui.Components.SearchDownloadsContainer.this
-                int r1 = r0.downloadingFilesHeader
-                if (r10 != r1) goto L_0x0065
-                int r10 = org.telegram.messenger.R.string.Downloading
-                java.lang.String r0 = "Downloading"
-                java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
-                java.lang.CharSequence r0 = r9.getText()
-                boolean r0 = r0.equals(r10)
-                java.lang.String r1 = "PauseAll"
-                java.lang.String r2 = "ResumeAll"
-                if (r0 == 0) goto L_0x0046
-                org.telegram.ui.Components.SearchDownloadsContainer r10 = org.telegram.ui.Components.SearchDownloadsContainer.this
-                boolean r10 = r10.hasCurrentDownload
-                if (r10 == 0) goto L_0x0035
-                int r10 = org.telegram.messenger.R.string.PauseAll
-                java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r1, r10)
-                goto L_0x003b
-            L_0x0035:
-                int r10 = org.telegram.messenger.R.string.ResumeAll
-                java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r2, r10)
-            L_0x003b:
-                org.telegram.ui.Components.SearchDownloadsContainer r0 = org.telegram.ui.Components.SearchDownloadsContainer.this
-                boolean r0 = r0.hasCurrentDownload
-                r9.setRightText(r10, r0)
-                goto L_0x0163
-            L_0x0046:
-                org.telegram.ui.Components.SearchDownloadsContainer r0 = org.telegram.ui.Components.SearchDownloadsContainer.this
-                boolean r0 = r0.hasCurrentDownload
-                if (r0 == 0) goto L_0x0055
-                int r0 = org.telegram.messenger.R.string.PauseAll
-                java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-                goto L_0x005b
-            L_0x0055:
-                int r0 = org.telegram.messenger.R.string.ResumeAll
-                java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
-            L_0x005b:
-                org.telegram.ui.Components.SearchDownloadsContainer$DownloadsAdapter$2 r1 = new org.telegram.ui.Components.SearchDownloadsContainer$DownloadsAdapter$2
-                r1.<init>()
-                r9.setText(r10, r0, r1)
-                goto L_0x0163
-            L_0x0065:
-                int r0 = r0.recentFilesHeader
-                if (r10 != r0) goto L_0x0163
-                int r10 = org.telegram.messenger.R.string.RecentlyDownloaded
-                java.lang.String r0 = "RecentlyDownloaded"
-                java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
-                int r0 = org.telegram.messenger.R.string.Settings
-                java.lang.String r1 = "Settings"
-                java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-                org.telegram.ui.Components.SearchDownloadsContainer$DownloadsAdapter$3 r1 = new org.telegram.ui.Components.SearchDownloadsContainer$DownloadsAdapter$3
-                r1.<init>()
-                r9.setText(r10, r0, r1)
-                goto L_0x0163
-            L_0x0083:
-                org.telegram.messenger.MessageObject r1 = r8.getMessage(r10)
-                if (r1 == 0) goto L_0x0163
-                org.telegram.ui.Components.SearchDownloadsContainer r2 = org.telegram.ui.Components.SearchDownloadsContainer.this
-                org.telegram.ui.FilteredSearchView$UiCallback r2 = r2.uiCallback
-                boolean r2 = r2.actionModeShowing()
-                r3 = 0
-                r4 = 1
-                if (r2 == 0) goto L_0x00a1
-                org.telegram.ui.Components.SearchDownloadsContainer r2 = org.telegram.ui.Components.SearchDownloadsContainer.this
-                int r5 = r2.downloadingFilesStartRow
-                if (r10 < r5) goto L_0x00a1
-                int r2 = r2.downloadingFilesEndRow
-                if (r10 >= r2) goto L_0x00a1
-                r10 = 1
-                goto L_0x00a2
-            L_0x00a1:
-                r10 = 0
-            L_0x00a2:
-                if (r0 != r4) goto L_0x010e
-                android.view.View r9 = r9.itemView
-                org.telegram.ui.Components.SearchDownloadsContainer$Cell r9 = (org.telegram.ui.Components.SearchDownloadsContainer.Cell) r9
-                java.lang.String r0 = "windowBackgroundWhite"
-                int r0 = org.telegram.ui.ActionBar.Theme.getColor(r0)
-                r9.setBackgroundColor(r0)
-                org.telegram.ui.Cells.SharedDocumentCell r0 = r9.sharedDocumentCell
-                org.telegram.messenger.MessageObject r0 = r0.getMessage()
-                if (r0 != 0) goto L_0x00bb
-                r0 = 0
-                goto L_0x00c5
-            L_0x00bb:
-                org.telegram.ui.Cells.SharedDocumentCell r0 = r9.sharedDocumentCell
-                org.telegram.messenger.MessageObject r0 = r0.getMessage()
-                int r0 = r0.getId()
-            L_0x00c5:
-                org.telegram.ui.Cells.SharedDocumentCell r2 = r9.sharedDocumentCell
-                r2.setDocument(r1, r4)
-                org.telegram.ui.Components.SearchDownloadsContainer r2 = org.telegram.ui.Components.SearchDownloadsContainer.this
-                org.telegram.ui.FilteredSearchView$MessageHashId r2 = r2.messageHashIdTmp
-                org.telegram.ui.Cells.SharedDocumentCell r5 = r9.sharedDocumentCell
-                org.telegram.messenger.MessageObject r5 = r5.getMessage()
-                int r5 = r5.getId()
-                org.telegram.ui.Cells.SharedDocumentCell r6 = r9.sharedDocumentCell
-                org.telegram.messenger.MessageObject r6 = r6.getMessage()
-                long r6 = r6.getDialogId()
-                r2.set(r5, r6)
-                org.telegram.ui.Cells.SharedDocumentCell r2 = r9.sharedDocumentCell
-                org.telegram.ui.Components.SearchDownloadsContainer r5 = org.telegram.ui.Components.SearchDownloadsContainer.this
-                org.telegram.ui.FilteredSearchView$UiCallback r6 = r5.uiCallback
-                org.telegram.ui.FilteredSearchView$MessageHashId r5 = r5.messageHashIdTmp
-                boolean r5 = r6.isSelected(r5)
-                int r6 = r1.getId()
-                if (r0 != r6) goto L_0x00fd
-                r6 = 1
-                goto L_0x00fe
-            L_0x00fd:
-                r6 = 0
-            L_0x00fe:
-                r2.setChecked(r5, r6)
-                org.telegram.ui.Cells.SharedDocumentCell r9 = r9.sharedDocumentCell
-                int r1 = r1.getId()
-                if (r0 != r1) goto L_0x010a
-                r3 = 1
-            L_0x010a:
-                r9.showReorderIcon(r10, r3)
-                goto L_0x0163
-            L_0x010e:
-                r2 = 2
-                if (r0 != r2) goto L_0x0163
-                android.view.View r9 = r9.itemView
-                org.telegram.ui.Cells.SharedAudioCell r9 = (org.telegram.ui.Cells.SharedAudioCell) r9
-                org.telegram.messenger.MessageObject r0 = r9.getMessage()
-                if (r0 != 0) goto L_0x011d
-                r0 = 0
-                goto L_0x0125
-            L_0x011d:
-                org.telegram.messenger.MessageObject r0 = r9.getMessage()
-                int r0 = r0.getId()
-            L_0x0125:
-                r9.setMessageObject(r1, r4)
-                org.telegram.ui.Components.SearchDownloadsContainer r2 = org.telegram.ui.Components.SearchDownloadsContainer.this
-                org.telegram.ui.FilteredSearchView$MessageHashId r2 = r2.messageHashIdTmp
-                org.telegram.messenger.MessageObject r5 = r9.getMessage()
-                int r5 = r5.getId()
-                org.telegram.messenger.MessageObject r6 = r9.getMessage()
-                long r6 = r6.getDialogId()
-                r2.set(r5, r6)
-                org.telegram.ui.Components.SearchDownloadsContainer r2 = org.telegram.ui.Components.SearchDownloadsContainer.this
-                org.telegram.ui.FilteredSearchView$UiCallback r5 = r2.uiCallback
-                org.telegram.ui.FilteredSearchView$MessageHashId r2 = r2.messageHashIdTmp
-                boolean r2 = r5.isSelected(r2)
-                int r5 = r1.getId()
-                if (r0 != r5) goto L_0x0155
-                r5 = 1
-                goto L_0x0156
-            L_0x0155:
-                r5 = 0
-            L_0x0156:
-                r9.setChecked(r2, r5)
-                int r1 = r1.getId()
-                if (r0 != r1) goto L_0x0160
-                r3 = 1
-            L_0x0160:
-                r9.showReorderIcon(r10, r3)
-            L_0x0163:
-                return
+                Method dump skipped, instructions count: 356
+                To view this dump add '--comments-level debug' option
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.SearchDownloadsContainer.DownloadsAdapter.onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder, int):void");
         }
 
+        @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         public int getItemViewType(int i) {
             SearchDownloadsContainer searchDownloadsContainer = SearchDownloadsContainer.this;
             if (i == searchDownloadsContainer.downloadingFilesHeader || i == searchDownloadsContainer.recentFilesHeader) {
                 return 0;
             }
             MessageObject message = getMessage(i);
-            if (message != null && message.isMusic()) {
-                return 2;
-            }
-            return 1;
+            return (message != null && message.isMusic()) ? 2 : 1;
         }
 
-        /* access modifiers changed from: private */
+        /* JADX INFO: Access modifiers changed from: private */
         public MessageObject getMessage(int i) {
             SearchDownloadsContainer searchDownloadsContainer = SearchDownloadsContainer.this;
             int i2 = searchDownloadsContainer.downloadingFilesStartRow;
@@ -696,76 +590,89 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
                 return searchDownloadsContainer.currentLoadingFiles.get(i - i2);
             }
             int i3 = searchDownloadsContainer.recentFilesStartRow;
-            if (i < i3 || i >= searchDownloadsContainer.recentFilesEndRow) {
-                return null;
+            if (i >= i3 && i < searchDownloadsContainer.recentFilesEndRow) {
+                return searchDownloadsContainer.recentLoadingFiles.get(i - i3);
             }
-            return searchDownloadsContainer.recentLoadingFiles.get(i - i3);
+            return null;
         }
 
+        @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         public int getItemCount() {
             return SearchDownloadsContainer.this.rowCount;
         }
 
+        @Override // org.telegram.ui.Components.RecyclerListView.SelectionAdapter
         public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
             return viewHolder.getItemViewType() == 1 || viewHolder.getItemViewType() == 2;
         }
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public void showSettingsDialog() {
-        if (this.parentFragment != null && this.parentActivity != null) {
-            BottomSheet bottomSheet = new BottomSheet(this.parentActivity, false);
-            Activity parentActivity2 = this.parentFragment.getParentActivity();
-            LinearLayout linearLayout = new LinearLayout(parentActivity2);
-            linearLayout.setOrientation(1);
-            StickerImageView stickerImageView = new StickerImageView(parentActivity2, this.currentAccount);
-            stickerImageView.setStickerNum(9);
-            stickerImageView.getImageReceiver().setAutoRepeat(1);
-            linearLayout.addView(stickerImageView, LayoutHelper.createLinear(144, 144, 1, 0, 16, 0, 0));
-            TextView textView = new TextView(parentActivity2);
-            textView.setGravity(1);
-            textView.setTextColor(Theme.getColor("dialogTextBlack"));
-            textView.setTextSize(1, 24.0f);
-            textView.setText(LocaleController.getString("DownloadedFiles", R.string.DownloadedFiles));
-            linearLayout.addView(textView, LayoutHelper.createFrame(-1, -2.0f, 0, 21.0f, 30.0f, 21.0f, 0.0f));
-            TextView textView2 = new TextView(parentActivity2);
-            textView2.setGravity(1);
-            textView2.setTextSize(1, 15.0f);
-            textView2.setTextColor(Theme.getColor("dialogTextHint"));
-            textView2.setText(LocaleController.formatString("DownloadedFilesMessage", R.string.DownloadedFilesMessage, new Object[0]));
-            linearLayout.addView(textView2, LayoutHelper.createFrame(-1, -2.0f, 0, 21.0f, 15.0f, 21.0f, 16.0f));
-            TextView textView3 = new TextView(parentActivity2);
-            textView3.setPadding(AndroidUtilities.dp(34.0f), 0, AndroidUtilities.dp(34.0f), 0);
-            textView3.setGravity(17);
-            textView3.setTextSize(1, 14.0f);
-            textView3.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-            textView3.setText(LocaleController.getString("ManageDeviceStorage", R.string.ManageDeviceStorage));
-            textView3.setTextColor(Theme.getColor("featuredStickers_buttonText"));
-            textView3.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(6.0f), Theme.getColor("featuredStickers_addButton"), ColorUtils.setAlphaComponent(Theme.getColor("windowBackgroundWhite"), 120)));
-            linearLayout.addView(textView3, LayoutHelper.createFrame(-1, 48.0f, 0, 16.0f, 15.0f, 16.0f, 16.0f));
-            TextView textView4 = new TextView(parentActivity2);
-            textView4.setPadding(AndroidUtilities.dp(34.0f), 0, AndroidUtilities.dp(34.0f), 0);
-            textView4.setGravity(17);
-            textView4.setTextSize(1, 14.0f);
-            textView4.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-            textView4.setText(LocaleController.getString("ClearDownloadsList", R.string.ClearDownloadsList));
-            textView4.setTextColor(Theme.getColor("featuredStickers_addButton"));
-            textView4.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(6.0f), 0, ColorUtils.setAlphaComponent(Theme.getColor("featuredStickers_addButton"), 120)));
-            linearLayout.addView(textView4, LayoutHelper.createFrame(-1, 48.0f, 0, 16.0f, 0.0f, 16.0f, 16.0f));
-            NestedScrollView nestedScrollView = new NestedScrollView(parentActivity2);
-            nestedScrollView.addView(linearLayout);
-            bottomSheet.setCustomView(nestedScrollView);
-            bottomSheet.show();
-            if (Build.VERSION.SDK_INT >= 23) {
-                AndroidUtilities.setLightStatusBar(bottomSheet.getWindow(), !Theme.isCurrentThemeDark());
-                AndroidUtilities.setLightNavigationBar(bottomSheet.getWindow(), !Theme.isCurrentThemeDark());
-            }
-            textView3.setOnClickListener(new SearchDownloadsContainer$$ExternalSyntheticLambda0(this, bottomSheet));
-            textView4.setOnClickListener(new SearchDownloadsContainer$$ExternalSyntheticLambda1(this, bottomSheet));
+        if (this.parentFragment == null || this.parentActivity == null) {
+            return;
         }
+        final BottomSheet bottomSheet = new BottomSheet(this.parentActivity, false);
+        Activity parentActivity = this.parentFragment.getParentActivity();
+        LinearLayout linearLayout = new LinearLayout(parentActivity);
+        linearLayout.setOrientation(1);
+        StickerImageView stickerImageView = new StickerImageView(parentActivity, this.currentAccount);
+        stickerImageView.setStickerNum(9);
+        stickerImageView.getImageReceiver().setAutoRepeat(1);
+        linearLayout.addView(stickerImageView, LayoutHelper.createLinear(144, 144, 1, 0, 16, 0, 0));
+        TextView textView = new TextView(parentActivity);
+        textView.setGravity(1);
+        textView.setTextColor(Theme.getColor("dialogTextBlack"));
+        textView.setTextSize(1, 24.0f);
+        textView.setText(LocaleController.getString("DownloadedFiles", R.string.DownloadedFiles));
+        linearLayout.addView(textView, LayoutHelper.createFrame(-1, -2.0f, 0, 21.0f, 30.0f, 21.0f, 0.0f));
+        TextView textView2 = new TextView(parentActivity);
+        textView2.setGravity(1);
+        textView2.setTextSize(1, 15.0f);
+        textView2.setTextColor(Theme.getColor("dialogTextHint"));
+        textView2.setText(LocaleController.formatString("DownloadedFilesMessage", R.string.DownloadedFilesMessage, new Object[0]));
+        linearLayout.addView(textView2, LayoutHelper.createFrame(-1, -2.0f, 0, 21.0f, 15.0f, 21.0f, 16.0f));
+        TextView textView3 = new TextView(parentActivity);
+        textView3.setPadding(AndroidUtilities.dp(34.0f), 0, AndroidUtilities.dp(34.0f), 0);
+        textView3.setGravity(17);
+        textView3.setTextSize(1, 14.0f);
+        textView3.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        textView3.setText(LocaleController.getString("ManageDeviceStorage", R.string.ManageDeviceStorage));
+        textView3.setTextColor(Theme.getColor("featuredStickers_buttonText"));
+        textView3.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(6.0f), Theme.getColor("featuredStickers_addButton"), ColorUtils.setAlphaComponent(Theme.getColor("windowBackgroundWhite"), 120)));
+        linearLayout.addView(textView3, LayoutHelper.createFrame(-1, 48.0f, 0, 16.0f, 15.0f, 16.0f, 16.0f));
+        TextView textView4 = new TextView(parentActivity);
+        textView4.setPadding(AndroidUtilities.dp(34.0f), 0, AndroidUtilities.dp(34.0f), 0);
+        textView4.setGravity(17);
+        textView4.setTextSize(1, 14.0f);
+        textView4.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        textView4.setText(LocaleController.getString("ClearDownloadsList", R.string.ClearDownloadsList));
+        textView4.setTextColor(Theme.getColor("featuredStickers_addButton"));
+        textView4.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(6.0f), 0, ColorUtils.setAlphaComponent(Theme.getColor("featuredStickers_addButton"), 120)));
+        linearLayout.addView(textView4, LayoutHelper.createFrame(-1, 48.0f, 0, 16.0f, 0.0f, 16.0f, 16.0f));
+        NestedScrollView nestedScrollView = new NestedScrollView(parentActivity);
+        nestedScrollView.addView(linearLayout);
+        bottomSheet.setCustomView(nestedScrollView);
+        bottomSheet.show();
+        if (Build.VERSION.SDK_INT >= 23) {
+            AndroidUtilities.setLightStatusBar(bottomSheet.getWindow(), !Theme.isCurrentThemeDark());
+            AndroidUtilities.setLightNavigationBar(bottomSheet.getWindow(), !Theme.isCurrentThemeDark());
+        }
+        textView3.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.Components.SearchDownloadsContainer$$ExternalSyntheticLambda0
+            @Override // android.view.View.OnClickListener
+            public final void onClick(View view) {
+                SearchDownloadsContainer.this.lambda$showSettingsDialog$6(bottomSheet, view);
+            }
+        });
+        textView4.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.Components.SearchDownloadsContainer$$ExternalSyntheticLambda1
+            @Override // android.view.View.OnClickListener
+            public final void onClick(View view) {
+                SearchDownloadsContainer.this.lambda$showSettingsDialog$7(bottomSheet, view);
+            }
+        });
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$showSettingsDialog$6(BottomSheet bottomSheet, View view) {
         bottomSheet.dismiss();
         BaseFragment baseFragment = this.parentFragment;
@@ -774,14 +681,14 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
         }
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$showSettingsDialog$7(BottomSheet bottomSheet, View view) {
         bottomSheet.dismiss();
         DownloadController.getInstance(this.currentAccount).clearRecentDownloadedFiles();
     }
 
-    /* access modifiers changed from: protected */
-    public void onAttachedToWindow() {
+    @Override // android.view.ViewGroup, android.view.View
+    protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.onDownloadingFilesChanged);
         if (getVisibility() == 0) {
@@ -791,12 +698,13 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
         update(false);
     }
 
-    /* access modifiers changed from: protected */
-    public void onDetachedFromWindow() {
+    @Override // android.view.ViewGroup, android.view.View
+    protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.onDownloadingFilesChanged);
     }
 
+    @Override // org.telegram.messenger.NotificationCenter.NotificationCenterDelegate
     public void didReceivedNotification(int i, int i2, Object... objArr) {
         if (i == NotificationCenter.onDownloadingFilesChanged) {
             if (getVisibility() == 0) {
@@ -806,42 +714,49 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
         }
     }
 
-    private class Cell extends FrameLayout {
+    /* JADX INFO: Access modifiers changed from: private */
+    /* loaded from: classes3.dex */
+    public class Cell extends FrameLayout {
         SharedDocumentCell sharedDocumentCell;
 
         public Cell(SearchDownloadsContainer searchDownloadsContainer, Context context) {
             super(context);
-            SharedDocumentCell sharedDocumentCell2 = new SharedDocumentCell(context, 2);
-            this.sharedDocumentCell = sharedDocumentCell2;
-            sharedDocumentCell2.rightDateTextView.setVisibility(8);
+            SharedDocumentCell sharedDocumentCell = new SharedDocumentCell(context, 2);
+            this.sharedDocumentCell = sharedDocumentCell;
+            sharedDocumentCell.rightDateTextView.setVisibility(8);
             addView(this.sharedDocumentCell);
         }
 
+        @Override // android.view.View
         public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
             super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
             this.sharedDocumentCell.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
         }
     }
 
-    public void setUiCallback(FilteredSearchView.UiCallback uiCallback2) {
-        this.uiCallback = uiCallback2;
+    public void setUiCallback(FilteredSearchView.UiCallback uiCallback) {
+        this.uiCallback = uiCallback;
     }
 
     public void setKeyboardHeight(int i, boolean z) {
         this.emptyView.setKeyboardHeight(i, z);
     }
 
+    /* loaded from: classes3.dex */
     public class TouchHelperCallback extends ItemTouchHelper.Callback {
+        @Override // androidx.recyclerview.widget.ItemTouchHelper.Callback
         public void onSwiped(RecyclerView.ViewHolder viewHolder, int i) {
         }
 
         public TouchHelperCallback() {
         }
 
+        @Override // androidx.recyclerview.widget.ItemTouchHelper.Callback
         public boolean isLongPressDragEnabled() {
             return SearchDownloadsContainer.this.uiCallback.actionModeShowing();
         }
 
+        @Override // androidx.recyclerview.widget.ItemTouchHelper.Callback
         public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
             if (!(viewHolder.getAdapterPosition() >= SearchDownloadsContainer.this.downloadingFilesStartRow && viewHolder.getAdapterPosition() < SearchDownloadsContainer.this.downloadingFilesEndRow)) {
                 return ItemTouchHelper.Callback.makeMovementFlags(0, 0);
@@ -849,6 +764,7 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
             return ItemTouchHelper.Callback.makeMovementFlags(3, 0);
         }
 
+        @Override // androidx.recyclerview.widget.ItemTouchHelper.Callback
         public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder viewHolder2) {
             if (!(viewHolder2.getAdapterPosition() >= SearchDownloadsContainer.this.downloadingFilesStartRow && viewHolder2.getAdapterPosition() < SearchDownloadsContainer.this.downloadingFilesEndRow)) {
                 return false;
@@ -871,10 +787,12 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
             return false;
         }
 
+        @Override // androidx.recyclerview.widget.ItemTouchHelper.Callback
         public void onChildDraw(Canvas canvas, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float f, float f2, int i, boolean z) {
             super.onChildDraw(canvas, recyclerView, viewHolder, f, f2, i, z);
         }
 
+        @Override // androidx.recyclerview.widget.ItemTouchHelper.Callback
         public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int i) {
             if (i != 0) {
                 SearchDownloadsContainer.this.recyclerListView.cancelClickRunnables(false);
@@ -883,6 +801,7 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
             super.onSelectedChanged(viewHolder, i);
         }
 
+        @Override // androidx.recyclerview.widget.ItemTouchHelper.Callback
         public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
             super.clearView(recyclerView, viewHolder);
             viewHolder.itemView.setPressed(false);

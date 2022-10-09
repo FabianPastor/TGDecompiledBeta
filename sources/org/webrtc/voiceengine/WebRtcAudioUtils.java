@@ -7,17 +7,17 @@ import java.util.Arrays;
 import java.util.List;
 import org.webrtc.ContextUtils;
 import org.webrtc.Logging;
-
+/* loaded from: classes3.dex */
 public final class WebRtcAudioUtils {
-    private static final String[] BLACKLISTED_AEC_MODELS = new String[0];
-    private static final String[] BLACKLISTED_NS_MODELS = new String[0];
-    private static final String[] BLACKLISTED_OPEN_SL_ES_MODELS = new String[0];
     private static final int DEFAULT_SAMPLE_RATE_HZ = 16000;
     private static final String TAG = "WebRtcAudioUtils";
     private static int defaultSampleRateHz = 16000;
     private static boolean isDefaultSampleRateOverridden;
     private static boolean useWebRtcBasedAcousticEchoCanceler;
     private static boolean useWebRtcBasedNoiseSuppressor;
+    private static final String[] BLACKLISTED_OPEN_SL_ES_MODELS = new String[0];
+    private static final String[] BLACKLISTED_AEC_MODELS = new String[0];
+    private static final String[] BLACKLISTED_NS_MODELS = new String[0];
 
     private static String deviceTypeToString(int i) {
         switch (i) {
@@ -74,7 +74,8 @@ public final class WebRtcAudioUtils {
         return false;
     }
 
-    static String modeToString(int i) {
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public static String modeToString(int i) {
         return i != 0 ? i != 1 ? i != 2 ? i != 3 ? "MODE_INVALID" : "MODE_IN_COMMUNICATION" : "MODE_IN_CALL" : "MODE_RINGTONE" : "MODE_NORMAL";
     }
 
@@ -183,7 +184,8 @@ public final class WebRtcAudioUtils {
         Logging.d(str, "Android SDK: " + Build.VERSION.SDK_INT + ", Release: " + Build.VERSION.RELEASE + ", Brand: " + Build.BRAND + ", Device: " + Build.DEVICE + ", Id: " + Build.ID + ", Hardware: " + Build.HARDWARE + ", Manufacturer: " + Build.MANUFACTURER + ", Model: " + Build.MODEL + ", Product: " + Build.PRODUCT);
     }
 
-    static void logAudioState(String str) {
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public static void logAudioState(String str) {
         logDeviceInfo(str);
         AudioManager audioManager = (AudioManager) ContextUtils.getApplicationContext().getSystemService("audio");
         logAudioStateBasic(str, audioManager);
@@ -230,35 +232,37 @@ public final class WebRtcAudioUtils {
     }
 
     private static void logAudioDeviceInfo(String str, AudioManager audioManager) {
-        if (Build.VERSION.SDK_INT >= 23) {
-            AudioDeviceInfo[] devices = audioManager.getDevices(3);
-            if (devices.length != 0) {
-                Logging.d(str, "Audio Devices: ");
-                for (AudioDeviceInfo audioDeviceInfo : devices) {
-                    StringBuilder sb = new StringBuilder();
-                    sb.append("  ");
-                    sb.append(deviceTypeToString(audioDeviceInfo.getType()));
-                    sb.append(audioDeviceInfo.isSource() ? "(in): " : "(out): ");
-                    if (audioDeviceInfo.getChannelCounts().length > 0) {
-                        sb.append("channels=");
-                        sb.append(Arrays.toString(audioDeviceInfo.getChannelCounts()));
-                        sb.append(", ");
-                    }
-                    if (audioDeviceInfo.getEncodings().length > 0) {
-                        sb.append("encodings=");
-                        sb.append(Arrays.toString(audioDeviceInfo.getEncodings()));
-                        sb.append(", ");
-                    }
-                    if (audioDeviceInfo.getSampleRates().length > 0) {
-                        sb.append("sample rates=");
-                        sb.append(Arrays.toString(audioDeviceInfo.getSampleRates()));
-                        sb.append(", ");
-                    }
-                    sb.append("id=");
-                    sb.append(audioDeviceInfo.getId());
-                    Logging.d(str, sb.toString());
-                }
+        if (Build.VERSION.SDK_INT < 23) {
+            return;
+        }
+        AudioDeviceInfo[] devices = audioManager.getDevices(3);
+        if (devices.length == 0) {
+            return;
+        }
+        Logging.d(str, "Audio Devices: ");
+        for (AudioDeviceInfo audioDeviceInfo : devices) {
+            StringBuilder sb = new StringBuilder();
+            sb.append("  ");
+            sb.append(deviceTypeToString(audioDeviceInfo.getType()));
+            sb.append(audioDeviceInfo.isSource() ? "(in): " : "(out): ");
+            if (audioDeviceInfo.getChannelCounts().length > 0) {
+                sb.append("channels=");
+                sb.append(Arrays.toString(audioDeviceInfo.getChannelCounts()));
+                sb.append(", ");
             }
+            if (audioDeviceInfo.getEncodings().length > 0) {
+                sb.append("encodings=");
+                sb.append(Arrays.toString(audioDeviceInfo.getEncodings()));
+                sb.append(", ");
+            }
+            if (audioDeviceInfo.getSampleRates().length > 0) {
+                sb.append("sample rates=");
+                sb.append(Arrays.toString(audioDeviceInfo.getSampleRates()));
+                sb.append(", ");
+            }
+            sb.append("id=");
+            sb.append(audioDeviceInfo.getId());
+            Logging.d(str, sb.toString());
         }
     }
 

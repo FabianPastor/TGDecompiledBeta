@@ -24,6 +24,7 @@ import android.text.style.URLSpan;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
+import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -39,6 +40,7 @@ import org.telegram.messenger.browser.Browser;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Cells.AboutLinkCell;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.LayoutHelper;
@@ -46,54 +48,377 @@ import org.telegram.ui.Components.LinkPath;
 import org.telegram.ui.Components.LinkSpanDrawable;
 import org.telegram.ui.Components.StaticLayoutEx;
 import org.telegram.ui.Components.URLSpanNoUnderline;
-
+/* loaded from: classes3.dex */
 public class AboutLinkCell extends FrameLayout {
     private static final int COLLAPSED_HEIGHT = AndroidUtilities.dp(76.0f);
     private static final int MOST_SPEC = View.MeasureSpec.makeMeasureSpec(999999, Integer.MIN_VALUE);
-    final float SPACE = ((float) AndroidUtilities.dp(3.0f));
-    private Paint backgroundPaint = new Paint();
+    final float SPACE;
+    private Paint backgroundPaint;
     private FrameLayout bottomShadow;
     private ValueAnimator collapseAnimator;
-    /* access modifiers changed from: private */
-    public FrameLayout container;
-    /* access modifiers changed from: private */
-    public float expandT = 0.0f;
-    /* access modifiers changed from: private */
-    public boolean expanded;
-    /* access modifiers changed from: private */
-    public StaticLayout firstThreeLinesLayout;
-    private int lastInlineLine = -1;
-    private int lastMaxWidth = 0;
+    private FrameLayout container;
+    private float expandT;
+    private boolean expanded;
+    private StaticLayout firstThreeLinesLayout;
+    private int lastInlineLine;
+    private int lastMaxWidth;
     private LinkSpanDrawable.LinkCollector links;
-    Runnable longPressedRunnable = new Runnable() {
-        public void run() {
-            String str;
-            if (AboutLinkCell.this.pressedLink != null) {
-                if (AboutLinkCell.this.pressedLink.getSpan() instanceof URLSpanNoUnderline) {
-                    str = ((URLSpanNoUnderline) AboutLinkCell.this.pressedLink.getSpan()).getURL();
-                } else if (AboutLinkCell.this.pressedLink.getSpan() instanceof URLSpan) {
-                    str = ((URLSpan) AboutLinkCell.this.pressedLink.getSpan()).getURL();
-                } else {
-                    str = AboutLinkCell.this.pressedLink.getSpan().toString();
+    Runnable longPressedRunnable;
+    private boolean moreButtonDisabled;
+    private boolean needSpace;
+    private StaticLayout[] nextLinesLayouts;
+    private Point[] nextLinesLayoutsPositions;
+    private String oldText;
+    private BaseFragment parentFragment;
+    private LinkSpanDrawable pressedLink;
+    private Theme.ResourcesProvider resourcesProvider;
+    private Drawable rippleBackground;
+    private boolean shouldExpand;
+    private Drawable showMoreBackgroundDrawable;
+    private FrameLayout showMoreTextBackgroundView;
+    private TextView showMoreTextView;
+    private SpannableStringBuilder stringBuilder;
+    private StaticLayout textLayout;
+    private int textX;
+    private int textY;
+    private TextView valueTextView;
+
+    protected void didExtend() {
+    }
+
+    protected void didPressUrl(String str) {
+    }
+
+    protected void didResizeEnd() {
+    }
+
+    protected void didResizeStart() {
+    }
+
+    @Override // android.view.ViewGroup
+    protected boolean drawChild(Canvas canvas, View view, long j) {
+        return false;
+    }
+
+    public AboutLinkCell(Context context, BaseFragment baseFragment, Theme.ResourcesProvider resourcesProvider) {
+        super(context);
+        new Point();
+        new LinkPath(true);
+        this.nextLinesLayouts = null;
+        this.lastInlineLine = -1;
+        this.needSpace = false;
+        this.backgroundPaint = new Paint();
+        this.SPACE = AndroidUtilities.dp(3.0f);
+        this.longPressedRunnable = new AnonymousClass3();
+        this.expandT = 0.0f;
+        this.lastMaxWidth = 0;
+        this.shouldExpand = false;
+        this.resourcesProvider = resourcesProvider;
+        this.parentFragment = baseFragment;
+        FrameLayout frameLayout = new FrameLayout(context) { // from class: org.telegram.ui.Cells.AboutLinkCell.1
+            /* JADX WARN: Code restructure failed: missing block: B:53:0x011b, code lost:
+                if (r1.checkTouchTextLayout(r1.textLayout, r11.this$0.textX, r11.this$0.textY, r0, r7) != false) goto L60;
+             */
+            @Override // android.view.View
+            /*
+                Code decompiled incorrectly, please refer to instructions dump.
+                To view partially-correct add '--show-bad-code' argument
+            */
+            public boolean onTouchEvent(android.view.MotionEvent r12) {
+                /*
+                    Method dump skipped, instructions count: 342
+                    To view this dump add '--comments-level debug' option
+                */
+                throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.AboutLinkCell.AnonymousClass1.onTouchEvent(android.view.MotionEvent):boolean");
+            }
+        };
+        this.container = frameLayout;
+        frameLayout.setImportantForAccessibility(2);
+        this.links = new LinkSpanDrawable.LinkCollector(this.container);
+        this.container.setClickable(true);
+        this.rippleBackground = Theme.createRadSelectorDrawable(Theme.getColor("listSelectorSDK21", resourcesProvider), 0, 0);
+        TextView textView = new TextView(context);
+        this.valueTextView = textView;
+        textView.setVisibility(8);
+        this.valueTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2", resourcesProvider));
+        this.valueTextView.setTextSize(1, 13.0f);
+        this.valueTextView.setLines(1);
+        this.valueTextView.setMaxLines(1);
+        this.valueTextView.setSingleLine(true);
+        int i = 5;
+        this.valueTextView.setGravity(LocaleController.isRTL ? 5 : 3);
+        this.valueTextView.setImportantForAccessibility(2);
+        this.valueTextView.setFocusable(false);
+        this.container.addView(this.valueTextView, LayoutHelper.createFrame(-2, -2.0f, (!LocaleController.isRTL ? 3 : i) | 80, 23.0f, 0.0f, 23.0f, 10.0f));
+        this.bottomShadow = new FrameLayout(context);
+        Drawable mutate = context.getResources().getDrawable(R.drawable.gradient_bottom).mutate();
+        mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhite", resourcesProvider), PorterDuff.Mode.SRC_ATOP));
+        this.bottomShadow.setBackground(mutate);
+        addView(this.bottomShadow, LayoutHelper.createFrame(-1, 12.0f, 87, 0.0f, 0.0f, 0.0f, 0.0f));
+        addView(this.container, LayoutHelper.createFrame(-1, -1, 55));
+        TextView textView2 = new TextView(this, context) { // from class: org.telegram.ui.Cells.AboutLinkCell.2
+            private boolean pressed = false;
+
+            @Override // android.widget.TextView, android.view.View
+            public boolean onTouchEvent(MotionEvent motionEvent) {
+                boolean z = this.pressed;
+                if (motionEvent.getAction() == 0) {
+                    this.pressed = true;
+                } else if (motionEvent.getAction() != 2) {
+                    this.pressed = false;
                 }
+                if (z != this.pressed) {
+                    invalidate();
+                }
+                return super.onTouchEvent(motionEvent);
+            }
+
+            @Override // android.widget.TextView, android.view.View
+            protected void onDraw(Canvas canvas) {
+                if (this.pressed) {
+                    RectF rectF = AndroidUtilities.rectTmp;
+                    rectF.set(0.0f, 0.0f, getWidth(), getHeight());
+                    canvas.drawRoundRect(rectF, AndroidUtilities.dp(4.0f), AndroidUtilities.dp(4.0f), Theme.chat_urlPaint);
+                }
+                super.onDraw(canvas);
+            }
+        };
+        this.showMoreTextView = textView2;
+        textView2.setTextColor(Theme.getColor("windowBackgroundWhiteBlueText", resourcesProvider));
+        this.showMoreTextView.setTextSize(1, 16.0f);
+        this.showMoreTextView.setLines(1);
+        this.showMoreTextView.setMaxLines(1);
+        this.showMoreTextView.setSingleLine(true);
+        this.showMoreTextView.setText(LocaleController.getString("DescriptionMore", R.string.DescriptionMore));
+        this.showMoreTextView.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.Cells.AboutLinkCell$$ExternalSyntheticLambda1
+            @Override // android.view.View.OnClickListener
+            public final void onClick(View view) {
+                AboutLinkCell.this.lambda$new$0(view);
+            }
+        });
+        this.showMoreTextView.setPadding(AndroidUtilities.dp(2.0f), 0, AndroidUtilities.dp(2.0f), 0);
+        this.showMoreTextBackgroundView = new FrameLayout(context);
+        Drawable mutate2 = context.getResources().getDrawable(R.drawable.gradient_left).mutate();
+        this.showMoreBackgroundDrawable = mutate2;
+        mutate2.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhite", resourcesProvider), PorterDuff.Mode.MULTIPLY));
+        this.showMoreTextBackgroundView.setBackground(this.showMoreBackgroundDrawable);
+        FrameLayout frameLayout2 = this.showMoreTextBackgroundView;
+        frameLayout2.setPadding(frameLayout2.getPaddingLeft() + AndroidUtilities.dp(4.0f), AndroidUtilities.dp(1.0f), 0, AndroidUtilities.dp(3.0f));
+        this.showMoreTextBackgroundView.addView(this.showMoreTextView, LayoutHelper.createFrame(-2, -2.0f));
+        FrameLayout frameLayout3 = this.showMoreTextBackgroundView;
+        addView(frameLayout3, LayoutHelper.createFrame(-2, -2.0f, 85, 22.0f - (frameLayout3.getPaddingLeft() / AndroidUtilities.density), 0.0f, 22.0f - (this.showMoreTextBackgroundView.getPaddingRight() / AndroidUtilities.density), 6.0f));
+        this.backgroundPaint.setColor(Theme.getColor("windowBackgroundWhite", resourcesProvider));
+        setWillNotDraw(false);
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$0(View view) {
+        updateCollapse(true, true);
+    }
+
+    private void setShowMoreMarginBottom(int i) {
+        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) this.showMoreTextBackgroundView.getLayoutParams();
+        if (layoutParams.bottomMargin != i) {
+            layoutParams.bottomMargin = i;
+            this.showMoreTextBackgroundView.setLayoutParams(layoutParams);
+        }
+    }
+
+    @Override // android.view.View
+    public void draw(Canvas canvas) {
+        View view = (View) getParent();
+        float pow = view == null ? 1.0f : (float) Math.pow(view.getAlpha(), 2.0d);
+        drawText(canvas);
+        float alpha = this.showMoreTextBackgroundView.getAlpha();
+        if (alpha > 0.0f) {
+            canvas.save();
+            canvas.saveLayerAlpha(0.0f, 0.0f, getWidth(), getHeight(), (int) (alpha * 255.0f), 31);
+            this.showMoreBackgroundDrawable.setAlpha((int) (pow * 255.0f));
+            canvas.translate(this.showMoreTextBackgroundView.getLeft(), this.showMoreTextBackgroundView.getTop());
+            this.showMoreTextBackgroundView.draw(canvas);
+            canvas.restore();
+        }
+        float alpha2 = this.bottomShadow.getAlpha();
+        if (alpha2 > 0.0f) {
+            canvas.save();
+            canvas.saveLayerAlpha(0.0f, 0.0f, getWidth(), getHeight(), (int) (alpha2 * 255.0f), 31);
+            canvas.translate(this.bottomShadow.getLeft(), this.bottomShadow.getTop());
+            this.bottomShadow.draw(canvas);
+            canvas.restore();
+        }
+        this.container.draw(canvas);
+        super.draw(canvas);
+    }
+
+    private void drawText(Canvas canvas) {
+        StaticLayout staticLayout;
+        int i;
+        int i2;
+        StaticLayout staticLayout2;
+        canvas.save();
+        canvas.clipRect(AndroidUtilities.dp(15.0f), AndroidUtilities.dp(8.0f), getWidth() - AndroidUtilities.dp(23.0f), getHeight());
+        int dp = AndroidUtilities.dp(23.0f);
+        this.textX = dp;
+        float f = 0.0f;
+        canvas.translate(dp, 0.0f);
+        LinkSpanDrawable.LinkCollector linkCollector = this.links;
+        if (linkCollector != null && linkCollector.draw(canvas)) {
+            invalidate();
+        }
+        int dp2 = AndroidUtilities.dp(8.0f);
+        this.textY = dp2;
+        canvas.translate(0.0f, dp2);
+        try {
+            Theme.profile_aboutTextPaint.linkColor = Theme.getColor("chat_messageLinkIn", this.resourcesProvider);
+            staticLayout = this.firstThreeLinesLayout;
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+        if (staticLayout != null && this.shouldExpand) {
+            staticLayout.draw(canvas);
+            int lineCount = this.firstThreeLinesLayout.getLineCount() - 1;
+            float lineTop = this.firstThreeLinesLayout.getLineTop(lineCount) + this.firstThreeLinesLayout.getTopPadding();
+            float lineRight = this.firstThreeLinesLayout.getLineRight(lineCount) + (this.needSpace ? this.SPACE : 0.0f);
+            float lineBottom = (this.firstThreeLinesLayout.getLineBottom(lineCount) - this.firstThreeLinesLayout.getLineTop(lineCount)) - this.firstThreeLinesLayout.getBottomPadding();
+            float easeInOutCubic = easeInOutCubic(1.0f - ((float) Math.pow(this.expandT, 0.25d)));
+            if (this.nextLinesLayouts != null) {
+                float f2 = lineRight;
+                int i3 = 0;
+                while (true) {
+                    StaticLayout[] staticLayoutArr = this.nextLinesLayouts;
+                    if (i3 >= staticLayoutArr.length) {
+                        break;
+                    }
+                    StaticLayout staticLayout3 = staticLayoutArr[i3];
+                    if (staticLayout3 != null) {
+                        int save = canvas.save();
+                        Point[] pointArr = this.nextLinesLayoutsPositions;
+                        if (pointArr[i3] != null) {
+                            pointArr[i3].set((int) (this.textX + (f2 * easeInOutCubic)), (int) (this.textY + lineTop + ((1.0f - easeInOutCubic) * lineBottom)));
+                        }
+                        int i4 = this.lastInlineLine;
+                        if (i4 != -1 && i4 <= i3) {
+                            canvas.translate(f, lineTop + lineBottom);
+                            i2 = save;
+                            staticLayout2 = staticLayout3;
+                            i = i3;
+                            canvas.saveLayerAlpha(0.0f, 0.0f, staticLayout3.getWidth(), staticLayout3.getHeight(), (int) (this.expandT * 255.0f), 31);
+                        } else {
+                            i2 = save;
+                            staticLayout2 = staticLayout3;
+                            i = i3;
+                            canvas.translate(f2 * easeInOutCubic, ((1.0f - easeInOutCubic) * lineBottom) + lineTop);
+                        }
+                        StaticLayout staticLayout4 = staticLayout2;
+                        staticLayout4.draw(canvas);
+                        canvas.restoreToCount(i2);
+                        f2 += staticLayout4.getLineRight(0) + this.SPACE;
+                        lineBottom += staticLayout4.getLineBottom(0) + staticLayout4.getTopPadding();
+                    } else {
+                        i = i3;
+                    }
+                    i3 = i + 1;
+                    f = 0.0f;
+                }
+            }
+            canvas.restore();
+        }
+        StaticLayout staticLayout5 = this.textLayout;
+        if (staticLayout5 != null) {
+            staticLayout5.draw(canvas);
+        }
+        canvas.restore();
+    }
+
+    @Override // android.view.View
+    public void setOnClickListener(View.OnClickListener onClickListener) {
+        this.container.setOnClickListener(onClickListener);
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
+    public void resetPressedLink() {
+        this.links.clear();
+        this.pressedLink = null;
+        AndroidUtilities.cancelRunOnUIThread(this.longPressedRunnable);
+        invalidate();
+    }
+
+    public void setText(String str, boolean z) {
+        setTextAndValue(str, null, z);
+    }
+
+    public void setTextAndValue(String str, String str2, boolean z) {
+        if (TextUtils.isEmpty(str) || TextUtils.equals(str, this.oldText)) {
+            return;
+        }
+        try {
+            this.oldText = AndroidUtilities.getSafeString(str);
+        } catch (Throwable unused) {
+            this.oldText = str;
+        }
+        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(this.oldText);
+        this.stringBuilder = spannableStringBuilder;
+        MessageObject.addLinks(false, spannableStringBuilder, false, false, !z);
+        Emoji.replaceEmoji(this.stringBuilder, Theme.profile_aboutTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
+        if (this.lastMaxWidth <= 0) {
+            this.lastMaxWidth = AndroidUtilities.displaySize.x - AndroidUtilities.dp(46.0f);
+        }
+        checkTextLayout(this.lastMaxWidth, true);
+        updateHeight();
+        int visibility = this.valueTextView.getVisibility();
+        if (TextUtils.isEmpty(str2)) {
+            this.valueTextView.setVisibility(8);
+        } else {
+            this.valueTextView.setText(str2);
+            this.valueTextView.setVisibility(0);
+        }
+        if (visibility != this.valueTextView.getVisibility()) {
+            checkTextLayout(this.lastMaxWidth, true);
+        }
+        requestLayout();
+    }
+
+    /* JADX INFO: Access modifiers changed from: package-private */
+    /* renamed from: org.telegram.ui.Cells.AboutLinkCell$3  reason: invalid class name */
+    /* loaded from: classes3.dex */
+    public class AnonymousClass3 implements Runnable {
+        AnonymousClass3() {
+        }
+
+        @Override // java.lang.Runnable
+        public void run() {
+            if (AboutLinkCell.this.pressedLink != null) {
+                final String url = AboutLinkCell.this.pressedLink.getSpan() instanceof URLSpanNoUnderline ? ((URLSpanNoUnderline) AboutLinkCell.this.pressedLink.getSpan()).getURL() : AboutLinkCell.this.pressedLink.getSpan() instanceof URLSpan ? ((URLSpan) AboutLinkCell.this.pressedLink.getSpan()).getURL() : AboutLinkCell.this.pressedLink.getSpan().toString();
                 try {
                     AboutLinkCell.this.performHapticFeedback(0, 2);
                 } catch (Exception unused) {
                 }
+                final ClickableSpan clickableSpan = (ClickableSpan) AboutLinkCell.this.pressedLink.getSpan();
                 BottomSheet.Builder builder = new BottomSheet.Builder(AboutLinkCell.this.parentFragment.getParentActivity());
-                builder.setTitle(str);
-                builder.setItems(new CharSequence[]{LocaleController.getString("Open", R.string.Open), LocaleController.getString("Copy", R.string.Copy)}, new AboutLinkCell$3$$ExternalSyntheticLambda0(this, (ClickableSpan) AboutLinkCell.this.pressedLink.getSpan(), str));
-                builder.setOnPreDismissListener(new AboutLinkCell$3$$ExternalSyntheticLambda1(this));
+                builder.setTitle(url);
+                builder.setItems(new CharSequence[]{LocaleController.getString("Open", R.string.Open), LocaleController.getString("Copy", R.string.Copy)}, new DialogInterface.OnClickListener() { // from class: org.telegram.ui.Cells.AboutLinkCell$3$$ExternalSyntheticLambda0
+                    @Override // android.content.DialogInterface.OnClickListener
+                    public final void onClick(DialogInterface dialogInterface, int i) {
+                        AboutLinkCell.AnonymousClass3.this.lambda$run$0(clickableSpan, url, dialogInterface, i);
+                    }
+                });
+                builder.setOnPreDismissListener(new DialogInterface.OnDismissListener() { // from class: org.telegram.ui.Cells.AboutLinkCell$3$$ExternalSyntheticLambda1
+                    @Override // android.content.DialogInterface.OnDismissListener
+                    public final void onDismiss(DialogInterface dialogInterface) {
+                        AboutLinkCell.AnonymousClass3.this.lambda$run$1(dialogInterface);
+                    }
+                });
                 builder.show();
-                LinkSpanDrawable unused2 = AboutLinkCell.this.pressedLink = null;
+                AboutLinkCell.this.pressedLink = null;
             }
         }
 
-        /* access modifiers changed from: private */
+        /* JADX INFO: Access modifiers changed from: private */
         public /* synthetic */ void lambda$run$0(ClickableSpan clickableSpan, String str, DialogInterface dialogInterface, int i) {
             if (i == 0) {
                 AboutLinkCell.this.onLinkClick(clickableSpan);
-            } else if (i == 1) {
+            } else if (i != 1) {
+            } else {
                 AndroidUtilities.addToClipboard(str);
                 if (Build.VERSION.SDK_INT >= 31) {
                     return;
@@ -108,496 +433,19 @@ public class AboutLinkCell extends FrameLayout {
             }
         }
 
-        /* access modifiers changed from: private */
+        /* JADX INFO: Access modifiers changed from: private */
         public /* synthetic */ void lambda$run$1(DialogInterface dialogInterface) {
             AboutLinkCell.this.resetPressedLink();
         }
-    };
-    private boolean moreButtonDisabled;
-    private boolean needSpace = false;
-    /* access modifiers changed from: private */
-    public StaticLayout[] nextLinesLayouts = null;
-    /* access modifiers changed from: private */
-    public Point[] nextLinesLayoutsPositions;
-    private String oldText;
-    /* access modifiers changed from: private */
-    public BaseFragment parentFragment;
-    /* access modifiers changed from: private */
-    public LinkSpanDrawable pressedLink;
-    private Theme.ResourcesProvider resourcesProvider;
-    /* access modifiers changed from: private */
-    public Drawable rippleBackground;
-    /* access modifiers changed from: private */
-    public boolean shouldExpand = false;
-    private Drawable showMoreBackgroundDrawable;
-    private FrameLayout showMoreTextBackgroundView;
-    /* access modifiers changed from: private */
-    public TextView showMoreTextView;
-    private SpannableStringBuilder stringBuilder;
-    /* access modifiers changed from: private */
-    public StaticLayout textLayout;
-    /* access modifiers changed from: private */
-    public int textX;
-    /* access modifiers changed from: private */
-    public int textY;
-    private TextView valueTextView;
-
-    /* access modifiers changed from: protected */
-    public void didExtend() {
     }
 
-    /* access modifiers changed from: protected */
-    public void didPressUrl(String str) {
-    }
-
-    /* access modifiers changed from: protected */
-    public void didResizeEnd() {
-    }
-
-    /* access modifiers changed from: protected */
-    public void didResizeStart() {
-    }
-
-    /* access modifiers changed from: protected */
-    public boolean drawChild(Canvas canvas, View view, long j) {
-        return false;
-    }
-
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public AboutLinkCell(Context context, BaseFragment baseFragment, Theme.ResourcesProvider resourcesProvider2) {
-        super(context);
-        Context context2 = context;
-        Theme.ResourcesProvider resourcesProvider3 = resourcesProvider2;
-        new Point();
-        new LinkPath(true);
-        this.resourcesProvider = resourcesProvider3;
-        this.parentFragment = baseFragment;
-        AnonymousClass1 r7 = new FrameLayout(context2) {
-            /* JADX WARNING: Code restructure failed: missing block: B:48:0x011b, code lost:
-                if (org.telegram.ui.Cells.AboutLinkCell.access$900(r1, org.telegram.ui.Cells.AboutLinkCell.access$000(r1), org.telegram.ui.Cells.AboutLinkCell.access$700(r11.this$0), org.telegram.ui.Cells.AboutLinkCell.access$800(r11.this$0), r0, r7) != false) goto L_0x011d;
-             */
-            /* JADX WARNING: Removed duplicated region for block: B:52:0x0122  */
-            /* JADX WARNING: Removed duplicated region for block: B:64:0x0154 A[ORIG_RETURN, RETURN, SYNTHETIC] */
-            /* JADX WARNING: Removed duplicated region for block: B:67:? A[RETURN, SYNTHETIC] */
-            /* Code decompiled incorrectly, please refer to instructions dump. */
-            public boolean onTouchEvent(android.view.MotionEvent r12) {
-                /*
-                    r11 = this;
-                    float r0 = r12.getX()
-                    int r0 = (int) r0
-                    float r1 = r12.getY()
-                    int r7 = (int) r1
-                    org.telegram.ui.Cells.AboutLinkCell r1 = org.telegram.ui.Cells.AboutLinkCell.this
-                    android.text.StaticLayout r1 = r1.textLayout
-                    r8 = 0
-                    r9 = 1
-                    if (r1 != 0) goto L_0x001c
-                    org.telegram.ui.Cells.AboutLinkCell r1 = org.telegram.ui.Cells.AboutLinkCell.this
-                    android.text.StaticLayout[] r1 = r1.nextLinesLayouts
-                    if (r1 == 0) goto L_0x014b
-                L_0x001c:
-                    int r1 = r12.getAction()
-                    if (r1 == 0) goto L_0x003f
-                    org.telegram.ui.Cells.AboutLinkCell r1 = org.telegram.ui.Cells.AboutLinkCell.this
-                    org.telegram.ui.Components.LinkSpanDrawable r1 = r1.pressedLink
-                    if (r1 == 0) goto L_0x0031
-                    int r1 = r12.getAction()
-                    if (r1 != r9) goto L_0x0031
-                    goto L_0x003f
-                L_0x0031:
-                    int r0 = r12.getAction()
-                    r1 = 3
-                    if (r0 != r1) goto L_0x014b
-                    org.telegram.ui.Cells.AboutLinkCell r0 = org.telegram.ui.Cells.AboutLinkCell.this
-                    r0.resetPressedLink()
-                    goto L_0x014b
-                L_0x003f:
-                    org.telegram.ui.Cells.AboutLinkCell r1 = org.telegram.ui.Cells.AboutLinkCell.this
-                    android.widget.TextView r1 = r1.showMoreTextView
-                    int r1 = r1.getLeft()
-                    if (r0 < r1) goto L_0x0074
-                    org.telegram.ui.Cells.AboutLinkCell r1 = org.telegram.ui.Cells.AboutLinkCell.this
-                    android.widget.TextView r1 = r1.showMoreTextView
-                    int r1 = r1.getRight()
-                    if (r0 > r1) goto L_0x0074
-                    org.telegram.ui.Cells.AboutLinkCell r1 = org.telegram.ui.Cells.AboutLinkCell.this
-                    android.widget.TextView r1 = r1.showMoreTextView
-                    int r1 = r1.getTop()
-                    if (r7 < r1) goto L_0x0074
-                    org.telegram.ui.Cells.AboutLinkCell r1 = org.telegram.ui.Cells.AboutLinkCell.this
-                    android.widget.TextView r1 = r1.showMoreTextView
-                    int r1 = r1.getBottom()
-                    if (r7 > r1) goto L_0x0074
-                    boolean r12 = super.onTouchEvent(r12)
-                    return r12
-                L_0x0074:
-                    int r1 = r11.getMeasuredWidth()
-                    if (r1 <= 0) goto L_0x008c
-                    int r1 = r11.getMeasuredWidth()
-                    r2 = 1102577664(0x41b80000, float:23.0)
-                    int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
-                    int r1 = r1 - r2
-                    if (r0 <= r1) goto L_0x008c
-                    boolean r12 = super.onTouchEvent(r12)
-                    return r12
-                L_0x008c:
-                    int r1 = r12.getAction()
-                    if (r1 != 0) goto L_0x0128
-                    org.telegram.ui.Cells.AboutLinkCell r1 = org.telegram.ui.Cells.AboutLinkCell.this
-                    android.text.StaticLayout r1 = r1.firstThreeLinesLayout
-                    if (r1 == 0) goto L_0x0103
-                    org.telegram.ui.Cells.AboutLinkCell r1 = org.telegram.ui.Cells.AboutLinkCell.this
-                    float r1 = r1.expandT
-                    r2 = 1065353216(0x3var_, float:1.0)
-                    int r1 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
-                    if (r1 >= 0) goto L_0x0103
-                    org.telegram.ui.Cells.AboutLinkCell r1 = org.telegram.ui.Cells.AboutLinkCell.this
-                    boolean r1 = r1.shouldExpand
-                    if (r1 == 0) goto L_0x0103
-                    org.telegram.ui.Cells.AboutLinkCell r1 = org.telegram.ui.Cells.AboutLinkCell.this
-                    android.text.StaticLayout r2 = r1.firstThreeLinesLayout
-                    org.telegram.ui.Cells.AboutLinkCell r3 = org.telegram.ui.Cells.AboutLinkCell.this
-                    int r3 = r3.textX
-                    org.telegram.ui.Cells.AboutLinkCell r4 = org.telegram.ui.Cells.AboutLinkCell.this
-                    int r4 = r4.textY
-                    r5 = r0
-                    r6 = r7
-                    boolean r1 = r1.checkTouchTextLayout(r2, r3, r4, r5, r6)
-                    if (r1 == 0) goto L_0x00c9
-                    goto L_0x011d
-                L_0x00c9:
-                    org.telegram.ui.Cells.AboutLinkCell r1 = org.telegram.ui.Cells.AboutLinkCell.this
-                    android.text.StaticLayout[] r1 = r1.nextLinesLayouts
-                    if (r1 == 0) goto L_0x011f
-                    r10 = 0
-                L_0x00d2:
-                    org.telegram.ui.Cells.AboutLinkCell r1 = org.telegram.ui.Cells.AboutLinkCell.this
-                    android.text.StaticLayout[] r1 = r1.nextLinesLayouts
-                    int r1 = r1.length
-                    if (r10 >= r1) goto L_0x011f
-                    org.telegram.ui.Cells.AboutLinkCell r1 = org.telegram.ui.Cells.AboutLinkCell.this
-                    android.text.StaticLayout[] r2 = r1.nextLinesLayouts
-                    r2 = r2[r10]
-                    org.telegram.ui.Cells.AboutLinkCell r3 = org.telegram.ui.Cells.AboutLinkCell.this
-                    android.graphics.Point[] r3 = r3.nextLinesLayoutsPositions
-                    r3 = r3[r10]
-                    int r3 = r3.x
-                    org.telegram.ui.Cells.AboutLinkCell r4 = org.telegram.ui.Cells.AboutLinkCell.this
-                    android.graphics.Point[] r4 = r4.nextLinesLayoutsPositions
-                    r4 = r4[r10]
-                    int r4 = r4.y
-                    r5 = r0
-                    r6 = r7
-                    boolean r1 = r1.checkTouchTextLayout(r2, r3, r4, r5, r6)
-                    if (r1 == 0) goto L_0x0100
-                    goto L_0x011d
-                L_0x0100:
-                    int r10 = r10 + 1
-                    goto L_0x00d2
-                L_0x0103:
-                    org.telegram.ui.Cells.AboutLinkCell r1 = org.telegram.ui.Cells.AboutLinkCell.this
-                    android.text.StaticLayout r2 = r1.textLayout
-                    org.telegram.ui.Cells.AboutLinkCell r3 = org.telegram.ui.Cells.AboutLinkCell.this
-                    int r3 = r3.textX
-                    org.telegram.ui.Cells.AboutLinkCell r4 = org.telegram.ui.Cells.AboutLinkCell.this
-                    int r4 = r4.textY
-                    r5 = r0
-                    r6 = r7
-                    boolean r0 = r1.checkTouchTextLayout(r2, r3, r4, r5, r6)
-                    if (r0 == 0) goto L_0x011f
-                L_0x011d:
-                    r0 = 1
-                    goto L_0x0120
-                L_0x011f:
-                    r0 = 0
-                L_0x0120:
-                    if (r0 != 0) goto L_0x014c
-                    org.telegram.ui.Cells.AboutLinkCell r1 = org.telegram.ui.Cells.AboutLinkCell.this
-                    r1.resetPressedLink()
-                    goto L_0x014c
-                L_0x0128:
-                    org.telegram.ui.Cells.AboutLinkCell r0 = org.telegram.ui.Cells.AboutLinkCell.this
-                    org.telegram.ui.Components.LinkSpanDrawable r0 = r0.pressedLink
-                    if (r0 == 0) goto L_0x014b
-                    org.telegram.ui.Cells.AboutLinkCell r0 = org.telegram.ui.Cells.AboutLinkCell.this     // Catch:{ Exception -> 0x0140 }
-                    org.telegram.ui.Components.LinkSpanDrawable r1 = r0.pressedLink     // Catch:{ Exception -> 0x0140 }
-                    android.text.style.CharacterStyle r1 = r1.getSpan()     // Catch:{ Exception -> 0x0140 }
-                    android.text.style.ClickableSpan r1 = (android.text.style.ClickableSpan) r1     // Catch:{ Exception -> 0x0140 }
-                    r0.onLinkClick(r1)     // Catch:{ Exception -> 0x0140 }
-                    goto L_0x0144
-                L_0x0140:
-                    r0 = move-exception
-                    org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-                L_0x0144:
-                    org.telegram.ui.Cells.AboutLinkCell r0 = org.telegram.ui.Cells.AboutLinkCell.this
-                    r0.resetPressedLink()
-                    r0 = 1
-                    goto L_0x014c
-                L_0x014b:
-                    r0 = 0
-                L_0x014c:
-                    if (r0 != 0) goto L_0x0154
-                    boolean r12 = super.onTouchEvent(r12)
-                    if (r12 == 0) goto L_0x0155
-                L_0x0154:
-                    r8 = 1
-                L_0x0155:
-                    return r8
-                */
-                throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.AboutLinkCell.AnonymousClass1.onTouchEvent(android.view.MotionEvent):boolean");
-            }
-        };
-        this.container = r7;
-        r7.setImportantForAccessibility(2);
-        this.links = new LinkSpanDrawable.LinkCollector(this.container);
-        this.container.setClickable(true);
-        this.rippleBackground = Theme.createRadSelectorDrawable(Theme.getColor("listSelectorSDK21", resourcesProvider3), 0, 0);
-        TextView textView = new TextView(context2);
-        this.valueTextView = textView;
-        textView.setVisibility(8);
-        this.valueTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2", resourcesProvider3));
-        this.valueTextView.setTextSize(1, 13.0f);
-        this.valueTextView.setLines(1);
-        this.valueTextView.setMaxLines(1);
-        this.valueTextView.setSingleLine(true);
-        int i = 5;
-        this.valueTextView.setGravity(LocaleController.isRTL ? 5 : 3);
-        this.valueTextView.setImportantForAccessibility(2);
-        this.valueTextView.setFocusable(false);
-        this.container.addView(this.valueTextView, LayoutHelper.createFrame(-2, -2.0f, (!LocaleController.isRTL ? 3 : i) | 80, 23.0f, 0.0f, 23.0f, 10.0f));
-        this.bottomShadow = new FrameLayout(context2);
-        Drawable mutate = context.getResources().getDrawable(R.drawable.gradient_bottom).mutate();
-        mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhite", resourcesProvider3), PorterDuff.Mode.SRC_ATOP));
-        this.bottomShadow.setBackground(mutate);
-        addView(this.bottomShadow, LayoutHelper.createFrame(-1, 12.0f, 87, 0.0f, 0.0f, 0.0f, 0.0f));
-        addView(this.container, LayoutHelper.createFrame(-1, -1, 55));
-        AnonymousClass2 r3 = new TextView(this, context2) {
-            private boolean pressed = false;
-
-            public boolean onTouchEvent(MotionEvent motionEvent) {
-                boolean z = this.pressed;
-                if (motionEvent.getAction() == 0) {
-                    this.pressed = true;
-                } else if (motionEvent.getAction() != 2) {
-                    this.pressed = false;
-                }
-                if (z != this.pressed) {
-                    invalidate();
-                }
-                return super.onTouchEvent(motionEvent);
-            }
-
-            /* access modifiers changed from: protected */
-            public void onDraw(Canvas canvas) {
-                if (this.pressed) {
-                    RectF rectF = AndroidUtilities.rectTmp;
-                    rectF.set(0.0f, 0.0f, (float) getWidth(), (float) getHeight());
-                    canvas.drawRoundRect(rectF, (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), Theme.chat_urlPaint);
-                }
-                super.onDraw(canvas);
-            }
-        };
-        this.showMoreTextView = r3;
-        r3.setTextColor(Theme.getColor("windowBackgroundWhiteBlueText", resourcesProvider3));
-        this.showMoreTextView.setTextSize(1, 16.0f);
-        this.showMoreTextView.setLines(1);
-        this.showMoreTextView.setMaxLines(1);
-        this.showMoreTextView.setSingleLine(true);
-        this.showMoreTextView.setText(LocaleController.getString("DescriptionMore", R.string.DescriptionMore));
-        this.showMoreTextView.setOnClickListener(new AboutLinkCell$$ExternalSyntheticLambda1(this));
-        this.showMoreTextView.setPadding(AndroidUtilities.dp(2.0f), 0, AndroidUtilities.dp(2.0f), 0);
-        this.showMoreTextBackgroundView = new FrameLayout(context2);
-        Drawable mutate2 = context.getResources().getDrawable(R.drawable.gradient_left).mutate();
-        this.showMoreBackgroundDrawable = mutate2;
-        mutate2.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhite", resourcesProvider3), PorterDuff.Mode.MULTIPLY));
-        this.showMoreTextBackgroundView.setBackground(this.showMoreBackgroundDrawable);
-        FrameLayout frameLayout = this.showMoreTextBackgroundView;
-        frameLayout.setPadding(frameLayout.getPaddingLeft() + AndroidUtilities.dp(4.0f), AndroidUtilities.dp(1.0f), 0, AndroidUtilities.dp(3.0f));
-        this.showMoreTextBackgroundView.addView(this.showMoreTextView, LayoutHelper.createFrame(-2, -2.0f));
-        FrameLayout frameLayout2 = this.showMoreTextBackgroundView;
-        addView(frameLayout2, LayoutHelper.createFrame(-2, -2.0f, 85, 22.0f - (((float) frameLayout2.getPaddingLeft()) / AndroidUtilities.density), 0.0f, 22.0f - (((float) this.showMoreTextBackgroundView.getPaddingRight()) / AndroidUtilities.density), 6.0f));
-        this.backgroundPaint.setColor(Theme.getColor("windowBackgroundWhite", resourcesProvider3));
-        setWillNotDraw(false);
-    }
-
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$0(View view) {
-        updateCollapse(true, true);
-    }
-
-    private void setShowMoreMarginBottom(int i) {
-        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) this.showMoreTextBackgroundView.getLayoutParams();
-        if (layoutParams.bottomMargin != i) {
-            layoutParams.bottomMargin = i;
-            this.showMoreTextBackgroundView.setLayoutParams(layoutParams);
-        }
-    }
-
-    public void draw(Canvas canvas) {
-        float f;
-        View view = (View) getParent();
-        if (view == null) {
-            f = 1.0f;
-        } else {
-            f = (float) Math.pow((double) view.getAlpha(), 2.0d);
-        }
-        drawText(canvas);
-        float alpha = this.showMoreTextBackgroundView.getAlpha();
-        if (alpha > 0.0f) {
-            canvas.save();
-            canvas.saveLayerAlpha(0.0f, 0.0f, (float) getWidth(), (float) getHeight(), (int) (alpha * 255.0f), 31);
-            this.showMoreBackgroundDrawable.setAlpha((int) (f * 255.0f));
-            canvas.translate((float) this.showMoreTextBackgroundView.getLeft(), (float) this.showMoreTextBackgroundView.getTop());
-            this.showMoreTextBackgroundView.draw(canvas);
-            canvas.restore();
-        }
-        float alpha2 = this.bottomShadow.getAlpha();
-        if (alpha2 > 0.0f) {
-            canvas.save();
-            canvas.saveLayerAlpha(0.0f, 0.0f, (float) getWidth(), (float) getHeight(), (int) (alpha2 * 255.0f), 31);
-            canvas.translate((float) this.bottomShadow.getLeft(), (float) this.bottomShadow.getTop());
-            this.bottomShadow.draw(canvas);
-            canvas.restore();
-        }
-        this.container.draw(canvas);
-        super.draw(canvas);
-    }
-
-    private void drawText(Canvas canvas) {
-        int i;
-        StaticLayout staticLayout;
-        int i2;
-        Canvas canvas2 = canvas;
-        canvas.save();
-        canvas2.clipRect(AndroidUtilities.dp(15.0f), AndroidUtilities.dp(8.0f), getWidth() - AndroidUtilities.dp(23.0f), getHeight());
-        int dp = AndroidUtilities.dp(23.0f);
-        this.textX = dp;
-        float f = 0.0f;
-        canvas2.translate((float) dp, 0.0f);
-        LinkSpanDrawable.LinkCollector linkCollector = this.links;
-        if (linkCollector != null && linkCollector.draw(canvas2)) {
-            invalidate();
-        }
-        int dp2 = AndroidUtilities.dp(8.0f);
-        this.textY = dp2;
-        canvas2.translate(0.0f, (float) dp2);
-        try {
-            Theme.profile_aboutTextPaint.linkColor = Theme.getColor("chat_messageLinkIn", this.resourcesProvider);
-            StaticLayout staticLayout2 = this.firstThreeLinesLayout;
-            if (staticLayout2 != null) {
-                if (this.shouldExpand) {
-                    staticLayout2.draw(canvas2);
-                    int lineCount = this.firstThreeLinesLayout.getLineCount() - 1;
-                    float lineTop = (float) (this.firstThreeLinesLayout.getLineTop(lineCount) + this.firstThreeLinesLayout.getTopPadding());
-                    float lineRight = this.firstThreeLinesLayout.getLineRight(lineCount) + (this.needSpace ? this.SPACE : 0.0f);
-                    float lineBottom = (float) ((this.firstThreeLinesLayout.getLineBottom(lineCount) - this.firstThreeLinesLayout.getLineTop(lineCount)) - this.firstThreeLinesLayout.getBottomPadding());
-                    float easeInOutCubic = easeInOutCubic(1.0f - ((float) Math.pow((double) this.expandT, 0.25d)));
-                    if (this.nextLinesLayouts != null) {
-                        float f2 = lineRight;
-                        int i3 = 0;
-                        while (true) {
-                            StaticLayout[] staticLayoutArr = this.nextLinesLayouts;
-                            if (i3 >= staticLayoutArr.length) {
-                                break;
-                            }
-                            StaticLayout staticLayout3 = staticLayoutArr[i3];
-                            if (staticLayout3 != null) {
-                                int save = canvas.save();
-                                Point[] pointArr = this.nextLinesLayoutsPositions;
-                                if (pointArr[i3] != null) {
-                                    pointArr[i3].set((int) (((float) this.textX) + (f2 * easeInOutCubic)), (int) (((float) this.textY) + lineTop + ((1.0f - easeInOutCubic) * lineBottom)));
-                                }
-                                int i4 = this.lastInlineLine;
-                                if (i4 == -1 || i4 > i3) {
-                                    i2 = save;
-                                    staticLayout = staticLayout3;
-                                    i = i3;
-                                    canvas2.translate(f2 * easeInOutCubic, ((1.0f - easeInOutCubic) * lineBottom) + lineTop);
-                                } else {
-                                    canvas2.translate(f, lineTop + lineBottom);
-                                    i2 = save;
-                                    staticLayout = staticLayout3;
-                                    i = i3;
-                                    canvas.saveLayerAlpha(0.0f, 0.0f, (float) staticLayout3.getWidth(), (float) staticLayout3.getHeight(), (int) (this.expandT * 255.0f), 31);
-                                }
-                                StaticLayout staticLayout4 = staticLayout;
-                                staticLayout4.draw(canvas2);
-                                canvas2.restoreToCount(i2);
-                                f2 += staticLayout4.getLineRight(0) + this.SPACE;
-                                lineBottom += (float) (staticLayout4.getLineBottom(0) + staticLayout4.getTopPadding());
-                            } else {
-                                i = i3;
-                            }
-                            i3 = i + 1;
-                            f = 0.0f;
-                        }
-                    }
-                    canvas.restore();
-                }
-            }
-            StaticLayout staticLayout5 = this.textLayout;
-            if (staticLayout5 != null) {
-                staticLayout5.draw(canvas2);
-            }
-        } catch (Exception e) {
-            FileLog.e((Throwable) e);
-        }
-        canvas.restore();
-    }
-
-    public void setOnClickListener(View.OnClickListener onClickListener) {
-        this.container.setOnClickListener(onClickListener);
-    }
-
-    /* access modifiers changed from: private */
-    public void resetPressedLink() {
-        this.links.clear();
-        this.pressedLink = null;
-        AndroidUtilities.cancelRunOnUIThread(this.longPressedRunnable);
-        invalidate();
-    }
-
-    public void setText(String str, boolean z) {
-        setTextAndValue(str, (String) null, z);
-    }
-
-    public void setTextAndValue(String str, String str2, boolean z) {
-        if (!TextUtils.isEmpty(str) && !TextUtils.equals(str, this.oldText)) {
-            try {
-                this.oldText = AndroidUtilities.getSafeString(str);
-            } catch (Throwable unused) {
-                this.oldText = str;
-            }
-            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(this.oldText);
-            this.stringBuilder = spannableStringBuilder;
-            MessageObject.addLinks(false, spannableStringBuilder, false, false, !z);
-            Emoji.replaceEmoji(this.stringBuilder, Theme.profile_aboutTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
-            if (this.lastMaxWidth <= 0) {
-                this.lastMaxWidth = AndroidUtilities.displaySize.x - AndroidUtilities.dp(46.0f);
-            }
-            checkTextLayout(this.lastMaxWidth, true);
-            updateHeight();
-            int visibility = this.valueTextView.getVisibility();
-            if (TextUtils.isEmpty(str2)) {
-                this.valueTextView.setVisibility(8);
-            } else {
-                this.valueTextView.setText(str2);
-                this.valueTextView.setVisibility(0);
-            }
-            if (visibility != this.valueTextView.getVisibility()) {
-                checkTextLayout(this.lastMaxWidth, true);
-            }
-            requestLayout();
-        }
-    }
-
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public boolean checkTouchTextLayout(StaticLayout staticLayout, int i, int i2, int i3, int i4) {
         int i5 = i3 - i;
         int i6 = i4 - i2;
         try {
             int lineForVertical = staticLayout.getLineForVertical(i6);
-            float f = (float) i5;
+            float f = i5;
             int offsetForHorizontal = staticLayout.getOffsetForHorizontal(lineForVertical, f);
             float lineLeft = staticLayout.getLineLeft(lineForVertical);
             if (lineLeft <= f && lineLeft + staticLayout.getLineWidth(lineForVertical) >= f && i6 >= 0 && i6 <= staticLayout.getHeight()) {
@@ -605,32 +453,33 @@ public class AboutLinkCell extends FrameLayout {
                 ClickableSpan[] clickableSpanArr = (ClickableSpan[]) spannable.getSpans(offsetForHorizontal, offsetForHorizontal, ClickableSpan.class);
                 if (clickableSpanArr.length != 0 && !AndroidUtilities.isAccessibilityScreenReaderEnabled()) {
                     resetPressedLink();
-                    LinkSpanDrawable linkSpanDrawable = new LinkSpanDrawable(clickableSpanArr[0], this.parentFragment.getResourceProvider(), (float) i3, (float) i4);
+                    LinkSpanDrawable linkSpanDrawable = new LinkSpanDrawable(clickableSpanArr[0], this.parentFragment.getResourceProvider(), i3, i4);
                     this.pressedLink = linkSpanDrawable;
                     this.links.addLink(linkSpanDrawable);
                     int spanStart = spannable.getSpanStart(this.pressedLink.getSpan());
                     int spanEnd = spannable.getSpanEnd(this.pressedLink.getSpan());
                     LinkPath obtainNewPath = this.pressedLink.obtainNewPath();
-                    obtainNewPath.setCurrentLayout(staticLayout, spanStart, (float) i2);
+                    obtainNewPath.setCurrentLayout(staticLayout, spanStart, i2);
                     staticLayout.getSelectionPath(spanStart, spanEnd, obtainNewPath);
-                    AndroidUtilities.runOnUIThread(this.longPressedRunnable, (long) ViewConfiguration.getLongPressTimeout());
+                    AndroidUtilities.runOnUIThread(this.longPressedRunnable, ViewConfiguration.getLongPressTimeout());
                     return true;
                 }
             }
             return false;
         } catch (Exception e) {
-            FileLog.e((Throwable) e);
+            FileLog.e(e);
             return false;
         }
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public void onLinkClick(ClickableSpan clickableSpan) {
         if (clickableSpan instanceof URLSpanNoUnderline) {
             String url = ((URLSpanNoUnderline) clickableSpan).getURL();
-            if (url.startsWith("@") || url.startsWith("#") || url.startsWith("/")) {
-                didPressUrl(url);
+            if (!url.startsWith("@") && !url.startsWith("#") && !url.startsWith("/")) {
+                return;
             }
+            didPressUrl(url);
         } else if (clickableSpan instanceof URLSpan) {
             String url2 = ((URLSpan) clickableSpan).getURL();
             if (AndroidUtilities.shouldShowUrlInAlert(url2)) {
@@ -643,10 +492,11 @@ public class AboutLinkCell extends FrameLayout {
         }
     }
 
+    /* loaded from: classes3.dex */
     public class SpringInterpolator {
         public float friction;
-        private float position = 0.0f;
         public float tension;
+        private float position = 0.0f;
         private float velocity = 0.0f;
 
         public SpringInterpolator(AboutLinkCell aboutLinkCell, float f, float f2) {
@@ -679,31 +529,40 @@ public class AboutLinkCell extends FrameLayout {
             valueAnimator.cancel();
             this.collapseAnimator = null;
         }
-        float f = this.expandT;
-        float f2 = z ? 1.0f : 0.0f;
+        final float f = this.expandT;
+        final float f2 = z ? 1.0f : 0.0f;
         if (z2) {
             if (f2 > 0.0f) {
                 didExtend();
             }
-            float textHeight = (float) textHeight();
-            float min = Math.min((float) COLLAPSED_HEIGHT, textHeight);
+            float textHeight = textHeight();
+            float min = Math.min(COLLAPSED_HEIGHT, textHeight);
             Math.abs(AndroidUtilities.lerp(min, textHeight, f2) - AndroidUtilities.lerp(min, textHeight, f));
-            this.collapseAnimator = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
-            this.collapseAnimator.addUpdateListener(new AboutLinkCell$$ExternalSyntheticLambda0(this, new AtomicReference(Float.valueOf(f)), f, f2, new SpringInterpolator(this, 380.0f, 20.17f)));
-            this.collapseAnimator.addListener(new AnimatorListenerAdapter() {
+            this.collapseAnimator = ValueAnimator.ofFloat(0.0f, 1.0f);
+            final SpringInterpolator springInterpolator = new SpringInterpolator(this, 380.0f, 20.17f);
+            final AtomicReference atomicReference = new AtomicReference(Float.valueOf(f));
+            this.collapseAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() { // from class: org.telegram.ui.Cells.AboutLinkCell$$ExternalSyntheticLambda0
+                @Override // android.animation.ValueAnimator.AnimatorUpdateListener
+                public final void onAnimationUpdate(ValueAnimator valueAnimator2) {
+                    AboutLinkCell.this.lambda$updateCollapse$1(atomicReference, f, f2, springInterpolator, valueAnimator2);
+                }
+            });
+            this.collapseAnimator.addListener(new AnimatorListenerAdapter() { // from class: org.telegram.ui.Cells.AboutLinkCell.4
+                @Override // android.animation.AnimatorListenerAdapter, android.animation.Animator.AnimatorListener
                 public void onAnimationEnd(Animator animator) {
                     AboutLinkCell.this.didResizeEnd();
                     if (AboutLinkCell.this.container.getBackground() == null) {
                         AboutLinkCell.this.container.setBackground(AboutLinkCell.this.rippleBackground);
                     }
-                    boolean unused = AboutLinkCell.this.expanded = true;
+                    AboutLinkCell.this.expanded = true;
                 }
 
+                @Override // android.animation.AnimatorListenerAdapter, android.animation.Animator.AnimatorListener
                 public void onAnimationStart(Animator animator) {
                     AboutLinkCell.this.didResizeStart();
                 }
             });
-            this.collapseAnimator.setDuration((long) (Math.abs(f - f2) * 1250.0f * 2.0f));
+            this.collapseAnimator.setDuration(Math.abs(f - f2) * 1250.0f * 2.0f);
             this.collapseAnimator.start();
             return;
         }
@@ -711,7 +570,7 @@ public class AboutLinkCell extends FrameLayout {
         forceLayout();
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$updateCollapse$1(AtomicReference atomicReference, float f, float f2, SpringInterpolator springInterpolator, ValueAnimator valueAnimator) {
         float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         AndroidUtilities.lerp(f, f2, ((Float) valueAnimator.getAnimatedValue()).floatValue());
@@ -721,7 +580,7 @@ public class AboutLinkCell extends FrameLayout {
             this.container.setBackground(this.rippleBackground);
         }
         this.showMoreTextBackgroundView.setAlpha(1.0f - this.expandT);
-        this.bottomShadow.setAlpha((float) Math.pow((double) (1.0f - this.expandT), 2.0d));
+        this.bottomShadow.setAlpha((float) Math.pow(1.0f - this.expandT, 2.0d));
         updateHeight();
         this.container.invalidate();
     }
@@ -732,9 +591,9 @@ public class AboutLinkCell extends FrameLayout {
 
     private int updateHeight() {
         int textHeight = textHeight();
-        float fromHeight = (float) fromHeight();
+        float fromHeight = fromHeight();
         if (this.shouldExpand) {
-            textHeight = (int) AndroidUtilities.lerp(fromHeight, (float) textHeight, this.expandT);
+            textHeight = (int) AndroidUtilities.lerp(fromHeight, textHeight, this.expandT);
         }
         setHeight(textHeight);
         return textHeight;
@@ -751,19 +610,19 @@ public class AboutLinkCell extends FrameLayout {
             }
             layoutParams = new RecyclerView.LayoutParams(-1, i);
         } else {
-            if (layoutParams.height == i) {
+            if (((ViewGroup.MarginLayoutParams) layoutParams).height == i) {
                 z = false;
             }
-            layoutParams.height = i;
+            ((ViewGroup.MarginLayoutParams) layoutParams).height = i;
         }
         if (z) {
             setLayoutParams(layoutParams);
         }
     }
 
-    /* access modifiers changed from: protected */
+    @Override // android.widget.FrameLayout, android.view.View
     @SuppressLint({"DrawAllocation"})
-    public void onMeasure(int i, int i2) {
+    protected void onMeasure(int i, int i2) {
         checkTextLayout(View.MeasureSpec.getSize(i) - AndroidUtilities.dp(46.0f), false);
         super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(updateHeight(), NUM));
     }
@@ -787,14 +646,14 @@ public class AboutLinkCell extends FrameLayout {
             this.shouldExpand = makeTextLayout.getLineCount() >= 4;
             if (this.textLayout.getLineCount() >= 3 && this.shouldExpand) {
                 int max = Math.max(this.textLayout.getLineStart(2), this.textLayout.getLineEnd(2));
-                if (this.stringBuilder.charAt(max - 1) == 10) {
+                if (this.stringBuilder.charAt(max - 1) == '\n') {
                     max--;
                 }
                 int i3 = max - 1;
-                this.needSpace = (this.stringBuilder.charAt(i3) == ' ' || this.stringBuilder.charAt(i3) == 10) ? false : true;
+                this.needSpace = (this.stringBuilder.charAt(i3) == ' ' || this.stringBuilder.charAt(i3) == '\n') ? false : true;
                 this.firstThreeLinesLayout = makeTextLayout(this.stringBuilder.subSequence(0, max), i);
-                this.nextLinesLayouts = new StaticLayout[(this.textLayout.getLineCount() - 3)];
-                this.nextLinesLayoutsPositions = new Point[(this.textLayout.getLineCount() - 3)];
+                this.nextLinesLayouts = new StaticLayout[this.textLayout.getLineCount() - 3];
+                this.nextLinesLayoutsPositions = new Point[this.textLayout.getLineCount() - 3];
                 float lineRight = this.firstThreeLinesLayout.getLineRight(this.firstThreeLinesLayout.getLineCount() - 1) + (this.needSpace ? this.SPACE : 0.0f);
                 this.lastInlineLine = -1;
                 if (this.showMoreTextBackgroundView.getMeasuredWidth() <= 0) {
@@ -809,12 +668,12 @@ public class AboutLinkCell extends FrameLayout {
                     int i6 = i5 - 3;
                     this.nextLinesLayouts[i6] = makeTextLayout2;
                     this.nextLinesLayoutsPositions[i6] = new Point();
-                    if (this.lastInlineLine == -1 && lineRight > ((float) ((i - this.showMoreTextBackgroundView.getMeasuredWidth()) + this.showMoreTextBackgroundView.getPaddingLeft()))) {
+                    if (this.lastInlineLine == -1 && lineRight > (i - this.showMoreTextBackgroundView.getMeasuredWidth()) + this.showMoreTextBackgroundView.getPaddingLeft()) {
                         this.lastInlineLine = i6;
                     }
                     lineRight += makeTextLayout2.getLineRight(0) + this.SPACE;
                 }
-                if (lineRight < ((float) ((i - this.showMoreTextBackgroundView.getMeasuredWidth()) + this.showMoreTextBackgroundView.getPaddingLeft()))) {
+                if (lineRight < (i - this.showMoreTextBackgroundView.getMeasuredWidth()) + this.showMoreTextBackgroundView.getPaddingLeft()) {
                     this.shouldExpand = false;
                 }
             }
@@ -838,9 +697,10 @@ public class AboutLinkCell extends FrameLayout {
         if (!this.shouldExpand && this.container.getBackground() == null) {
             this.container.setBackground(this.rippleBackground);
         }
-        if (this.shouldExpand && this.expandT < 1.0f && this.container.getBackground() != null) {
-            this.container.setBackground((Drawable) null);
+        if (!this.shouldExpand || this.expandT >= 1.0f || this.container.getBackground() == null) {
+            return;
         }
+        this.container.setBackground(null);
     }
 
     private int textHeight() {
@@ -858,9 +718,10 @@ public class AboutLinkCell extends FrameLayout {
     }
 
     private float easeInOutCubic(float f) {
-        return ((double) f) < 0.5d ? 4.0f * f * f * f : 1.0f - (((float) Math.pow((double) ((f * -2.0f) + 2.0f), 3.0d)) / 2.0f);
+        return ((double) f) < 0.5d ? 4.0f * f * f * f : 1.0f - (((float) Math.pow((f * (-2.0f)) + 2.0f, 3.0d)) / 2.0f);
     }
 
+    @Override // android.view.View
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
         super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
         if (this.textLayout != null) {
@@ -871,7 +732,7 @@ public class AboutLinkCell extends FrameLayout {
                 accessibilityNodeInfo.setText(spannableStringBuilder);
                 return;
             }
-            accessibilityNodeInfo.setText(text + ": " + spannableStringBuilder);
+            accessibilityNodeInfo.setText(((Object) text) + ": " + ((Object) spannableStringBuilder));
         }
     }
 

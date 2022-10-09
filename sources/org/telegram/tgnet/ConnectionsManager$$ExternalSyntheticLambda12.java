@@ -1,14 +1,13 @@
 package org.telegram.tgnet;
-
-import org.telegram.messenger.NotificationCenter;
-
+/* loaded from: classes.dex */
 public final /* synthetic */ class ConnectionsManager$$ExternalSyntheticLambda12 implements Runnable {
     public static final /* synthetic */ ConnectionsManager$$ExternalSyntheticLambda12 INSTANCE = new ConnectionsManager$$ExternalSyntheticLambda12();
 
     private /* synthetic */ ConnectionsManager$$ExternalSyntheticLambda12() {
     }
 
+    @Override // java.lang.Runnable
     public final void run() {
-        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needShowAlert, 3);
+        ConnectionsManager.lambda$onProxyError$10();
     }
 }

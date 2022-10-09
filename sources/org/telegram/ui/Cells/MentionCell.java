@@ -21,24 +21,25 @@ import org.telegram.ui.Components.AnimatedEmojiDrawable;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
-
+/* loaded from: classes3.dex */
 public class MentionCell extends LinearLayout {
     private boolean attached;
     private AvatarDrawable avatarDrawable;
     private Drawable emojiDrawable;
     private BackupImageView imageView;
     private TextView nameTextView;
-    private boolean needsDivider = false;
+    private boolean needsDivider;
     private Theme.ResourcesProvider resourcesProvider;
     private TextView usernameTextView;
 
-    public MentionCell(Context context, Theme.ResourcesProvider resourcesProvider2) {
+    public MentionCell(Context context, Theme.ResourcesProvider resourcesProvider) {
         super(context);
-        this.resourcesProvider = resourcesProvider2;
+        this.needsDivider = false;
+        this.resourcesProvider = resourcesProvider;
         setOrientation(0);
-        AvatarDrawable avatarDrawable2 = new AvatarDrawable();
-        this.avatarDrawable = avatarDrawable2;
-        avatarDrawable2.setTextSize(AndroidUtilities.dp(12.0f));
+        AvatarDrawable avatarDrawable = new AvatarDrawable();
+        this.avatarDrawable = avatarDrawable;
+        avatarDrawable.setTextSize(AndroidUtilities.dp(12.0f));
         BackupImageView backupImageView = new BackupImageView(context);
         this.imageView = backupImageView;
         backupImageView.setRoundRadius(AndroidUtilities.dp(14.0f));
@@ -61,8 +62,8 @@ public class MentionCell extends LinearLayout {
         addView(this.usernameTextView, LayoutHelper.createLinear(-2, -2, 16, 12, 0, 8, 0));
     }
 
-    /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
+    @Override // android.widget.LinearLayout, android.view.View
+    protected void onMeasure(int i, int i2) {
         super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(36.0f), NUM));
     }
 
@@ -71,15 +72,15 @@ public class MentionCell extends LinearLayout {
         if (tLRPC$User == null) {
             this.nameTextView.setText("");
             this.usernameTextView.setText("");
-            this.imageView.setImageDrawable((Drawable) null);
+            this.imageView.setImageDrawable(null);
             return;
         }
         this.avatarDrawable.setInfo(tLRPC$User);
         TLRPC$UserProfilePhoto tLRPC$UserProfilePhoto = tLRPC$User.photo;
-        if (tLRPC$UserProfilePhoto == null || tLRPC$UserProfilePhoto.photo_small == null) {
-            this.imageView.setImageDrawable(this.avatarDrawable);
-        } else {
+        if (tLRPC$UserProfilePhoto != null && tLRPC$UserProfilePhoto.photo_small != null) {
             this.imageView.setForUserOrChat(tLRPC$User, this.avatarDrawable);
+        } else {
+            this.imageView.setImageDrawable(this.avatarDrawable);
         }
         this.nameTextView.setText(UserObject.getUserName(tLRPC$User));
         if (tLRPC$User.username != null) {
@@ -100,11 +101,11 @@ public class MentionCell extends LinearLayout {
         }
     }
 
-    /* access modifiers changed from: protected */
-    public void onDraw(Canvas canvas) {
+    @Override // android.widget.LinearLayout, android.view.View
+    protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if (this.needsDivider) {
-            canvas.drawLine((float) AndroidUtilities.dp(52.0f), (float) (getHeight() - 1), (float) (getWidth() - AndroidUtilities.dp(8.0f)), (float) (getHeight() - 1), Theme.dividerPaint);
+            canvas.drawLine(AndroidUtilities.dp(52.0f), getHeight() - 1, getWidth() - AndroidUtilities.dp(8.0f), getHeight() - 1, Theme.dividerPaint);
         }
     }
 
@@ -113,15 +114,15 @@ public class MentionCell extends LinearLayout {
         if (tLRPC$Chat == null) {
             this.nameTextView.setText("");
             this.usernameTextView.setText("");
-            this.imageView.setImageDrawable((Drawable) null);
+            this.imageView.setImageDrawable(null);
             return;
         }
         this.avatarDrawable.setInfo(tLRPC$Chat);
         TLRPC$ChatPhoto tLRPC$ChatPhoto = tLRPC$Chat.photo;
-        if (tLRPC$ChatPhoto == null || tLRPC$ChatPhoto.photo_small == null) {
-            this.imageView.setImageDrawable(this.avatarDrawable);
-        } else {
+        if (tLRPC$ChatPhoto != null && tLRPC$ChatPhoto.photo_small != null) {
             this.imageView.setForUserOrChat(tLRPC$Chat, this.avatarDrawable);
+        } else {
+            this.imageView.setImageDrawable(this.avatarDrawable);
         }
         this.nameTextView.setText(tLRPC$Chat.title);
         if (tLRPC$Chat.username != null) {
@@ -141,6 +142,7 @@ public class MentionCell extends LinearLayout {
         this.nameTextView.setText(str);
     }
 
+    @Override // android.view.View
     public void invalidate() {
         super.invalidate();
         this.nameTextView.invalidate();
@@ -151,7 +153,7 @@ public class MentionCell extends LinearLayout {
         Drawable drawable = this.emojiDrawable;
         if (drawable != null) {
             if (drawable instanceof AnimatedEmojiDrawable) {
-                ((AnimatedEmojiDrawable) drawable).removeView((View) this);
+                ((AnimatedEmojiDrawable) drawable).removeView(this);
             }
             this.emojiDrawable = null;
             invalidate();
@@ -162,23 +164,23 @@ public class MentionCell extends LinearLayout {
         this.imageView.setVisibility(4);
         this.usernameTextView.setVisibility(4);
         String str = keywordResult.emoji;
-        if (str == null || !str.startsWith("animated_")) {
-            this.emojiDrawable = Emoji.getEmojiDrawable(keywordResult.emoji);
-        } else {
+        if (str != null && str.startsWith("animated_")) {
             try {
                 Drawable drawable = this.emojiDrawable;
                 if (drawable instanceof AnimatedEmojiDrawable) {
-                    ((AnimatedEmojiDrawable) drawable).removeView((View) this);
+                    ((AnimatedEmojiDrawable) drawable).removeView(this);
                     this.emojiDrawable = null;
                 }
                 AnimatedEmojiDrawable make = AnimatedEmojiDrawable.make(UserConfig.selectedAccount, 0, Long.parseLong(keywordResult.emoji.substring(9)));
                 this.emojiDrawable = make;
                 if (this.attached) {
-                    make.addView((View) this);
+                    make.addView(this);
                 }
             } catch (Exception unused) {
                 this.emojiDrawable = Emoji.getEmojiDrawable(keywordResult.emoji);
             }
+        } else {
+            this.emojiDrawable = Emoji.getEmojiDrawable(keywordResult.emoji);
         }
         if (this.emojiDrawable == null) {
             this.nameTextView.setPadding(0, 0, 0, 0);
@@ -198,8 +200,8 @@ public class MentionCell extends LinearLayout {
         textView2.setText(sb2);
     }
 
-    /* access modifiers changed from: protected */
-    public void dispatchDraw(Canvas canvas) {
+    @Override // android.view.ViewGroup, android.view.View
+    protected void dispatchDraw(Canvas canvas) {
         super.dispatchDraw(canvas);
         Drawable drawable = this.emojiDrawable;
         if (drawable != null) {
@@ -220,10 +222,10 @@ public class MentionCell extends LinearLayout {
             this.imageView.setVisibility(0);
             this.avatarDrawable.setInfo(tLRPC$User);
             TLRPC$UserProfilePhoto tLRPC$UserProfilePhoto = tLRPC$User.photo;
-            if (tLRPC$UserProfilePhoto == null || tLRPC$UserProfilePhoto.photo_small == null) {
-                this.imageView.setImageDrawable(this.avatarDrawable);
-            } else {
+            if (tLRPC$UserProfilePhoto != null && tLRPC$UserProfilePhoto.photo_small != null) {
                 this.imageView.setForUserOrChat(tLRPC$User, this.avatarDrawable);
+            } else {
+                this.imageView.setImageDrawable(this.avatarDrawable);
             }
         } else {
             this.imageView.setVisibility(4);
@@ -245,28 +247,28 @@ public class MentionCell extends LinearLayout {
     }
 
     private int getThemedColor(String str) {
-        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
-        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        Theme.ResourcesProvider resourcesProvider = this.resourcesProvider;
+        Integer color = resourcesProvider != null ? resourcesProvider.getColor(str) : null;
         return color != null ? color.intValue() : Theme.getColor(str);
     }
 
-    /* access modifiers changed from: protected */
-    public void onDetachedFromWindow() {
+    @Override // android.view.ViewGroup, android.view.View
+    protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         this.attached = false;
         Drawable drawable = this.emojiDrawable;
         if (drawable instanceof AnimatedEmojiDrawable) {
-            ((AnimatedEmojiDrawable) drawable).removeView((View) this);
+            ((AnimatedEmojiDrawable) drawable).removeView(this);
         }
     }
 
-    /* access modifiers changed from: protected */
-    public void onAttachedToWindow() {
+    @Override // android.view.ViewGroup, android.view.View
+    protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         this.attached = true;
         Drawable drawable = this.emojiDrawable;
         if (drawable instanceof AnimatedEmojiDrawable) {
-            ((AnimatedEmojiDrawable) drawable).addView((View) this);
+            ((AnimatedEmojiDrawable) drawable).addView(this);
         }
     }
 }

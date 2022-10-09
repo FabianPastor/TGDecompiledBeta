@@ -12,9 +12,9 @@ import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CheckBox2;
 import org.telegram.ui.Components.LayoutHelper;
-
+/* loaded from: classes3.dex */
 public class InviteUserCell extends FrameLayout {
-    private AvatarDrawable avatarDrawable = new AvatarDrawable();
+    private AvatarDrawable avatarDrawable;
     private BackupImageView avatarImageView;
     private CheckBox2 checkBox;
     private ContactsController.Contact currentContact;
@@ -22,22 +22,22 @@ public class InviteUserCell extends FrameLayout {
     private SimpleTextView nameTextView;
     private SimpleTextView statusTextView;
 
+    @Override // android.view.View
     public boolean hasOverlappingRendering() {
         return false;
     }
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
     public InviteUserCell(Context context, boolean z) {
         super(context);
-        Context context2 = context;
-        BackupImageView backupImageView = new BackupImageView(context2);
+        this.avatarDrawable = new AvatarDrawable();
+        BackupImageView backupImageView = new BackupImageView(context);
         this.avatarImageView = backupImageView;
         backupImageView.setRoundRadius(AndroidUtilities.dp(24.0f));
         BackupImageView backupImageView2 = this.avatarImageView;
         boolean z2 = LocaleController.isRTL;
         int i = 5;
         addView(backupImageView2, LayoutHelper.createFrame(50, 50.0f, (z2 ? 5 : 3) | 48, z2 ? 0.0f : 11.0f, 11.0f, z2 ? 11.0f : 0.0f, 0.0f));
-        SimpleTextView simpleTextView = new SimpleTextView(context2);
+        SimpleTextView simpleTextView = new SimpleTextView(context);
         this.nameTextView = simpleTextView;
         simpleTextView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -46,7 +46,7 @@ public class InviteUserCell extends FrameLayout {
         SimpleTextView simpleTextView2 = this.nameTextView;
         boolean z3 = LocaleController.isRTL;
         addView(simpleTextView2, LayoutHelper.createFrame(-1, 20.0f, (z3 ? 5 : 3) | 48, z3 ? 28.0f : 72.0f, 14.0f, z3 ? 72.0f : 28.0f, 0.0f));
-        SimpleTextView simpleTextView3 = new SimpleTextView(context2);
+        SimpleTextView simpleTextView3 = new SimpleTextView(context);
         this.statusTextView = simpleTextView3;
         simpleTextView3.setTextSize(16);
         this.statusTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
@@ -54,9 +54,9 @@ public class InviteUserCell extends FrameLayout {
         boolean z4 = LocaleController.isRTL;
         addView(simpleTextView4, LayoutHelper.createFrame(-1, 20.0f, (z4 ? 5 : 3) | 48, z4 ? 28.0f : 72.0f, 39.0f, z4 ? 72.0f : 28.0f, 0.0f));
         if (z) {
-            CheckBox2 checkBox2 = new CheckBox2(context2, 21);
+            CheckBox2 checkBox2 = new CheckBox2(context, 21);
             this.checkBox = checkBox2;
-            checkBox2.setColor((String) null, "windowBackgroundWhite", "checkboxCheck");
+            checkBox2.setColor(null, "windowBackgroundWhite", "checkboxCheck");
             this.checkBox.setDrawUnchecked(false);
             this.checkBox.setDrawBackgroundAsArc(3);
             CheckBox2 checkBox22 = this.checkBox;
@@ -79,8 +79,8 @@ public class InviteUserCell extends FrameLayout {
         return this.currentContact;
     }
 
-    /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
+    @Override // android.widget.FrameLayout, android.view.View
+    protected void onMeasure(int i, int i2) {
         super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(72.0f), NUM));
     }
 
@@ -90,26 +90,27 @@ public class InviteUserCell extends FrameLayout {
 
     public void update(int i) {
         ContactsController.Contact contact = this.currentContact;
-        if (contact != null) {
-            this.avatarDrawable.setInfo((long) contact.contact_id, contact.first_name, contact.last_name);
-            CharSequence charSequence = this.currentName;
-            if (charSequence != null) {
-                this.nameTextView.setText(charSequence, true);
-            } else {
-                SimpleTextView simpleTextView = this.nameTextView;
-                ContactsController.Contact contact2 = this.currentContact;
-                simpleTextView.setText(ContactsController.formatName(contact2.first_name, contact2.last_name));
-            }
-            this.statusTextView.setTag("windowBackgroundWhiteGrayText");
-            this.statusTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText"));
-            ContactsController.Contact contact3 = this.currentContact;
-            int i2 = contact3.imported;
-            if (i2 > 0) {
-                this.statusTextView.setText(LocaleController.formatPluralString("TelegramContacts", i2, new Object[0]));
-            } else {
-                this.statusTextView.setText(contact3.phones.get(0));
-            }
-            this.avatarImageView.setImageDrawable(this.avatarDrawable);
+        if (contact == null) {
+            return;
         }
+        this.avatarDrawable.setInfo(contact.contact_id, contact.first_name, contact.last_name);
+        CharSequence charSequence = this.currentName;
+        if (charSequence != null) {
+            this.nameTextView.setText(charSequence, true);
+        } else {
+            SimpleTextView simpleTextView = this.nameTextView;
+            ContactsController.Contact contact2 = this.currentContact;
+            simpleTextView.setText(ContactsController.formatName(contact2.first_name, contact2.last_name));
+        }
+        this.statusTextView.setTag("windowBackgroundWhiteGrayText");
+        this.statusTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText"));
+        ContactsController.Contact contact3 = this.currentContact;
+        int i2 = contact3.imported;
+        if (i2 > 0) {
+            this.statusTextView.setText(LocaleController.formatPluralString("TelegramContacts", i2, new Object[0]));
+        } else {
+            this.statusTextView.setText(contact3.phones.get(0));
+        }
+        this.avatarImageView.setImageDrawable(this.avatarDrawable);
     }
 }

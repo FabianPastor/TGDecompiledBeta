@@ -1,12 +1,11 @@
 package j$.util.stream;
 
-import j$.util.CLASSNAMEa;
-import j$.util.L;
+import j$.util.AbstractCLASSNAMEa;
 import j$.util.function.Consumer;
-import j$.util.u;
 import java.util.Comparator;
-
-class S3 implements u {
+/* JADX INFO: Access modifiers changed from: package-private */
+/* loaded from: classes2.dex */
+public class S3 implements j$.util.u {
     int a;
     final int b;
     int c;
@@ -14,53 +13,58 @@ class S3 implements u {
     Object[] e;
     final /* synthetic */ CLASSNAMEa4 f;
 
-    S3(CLASSNAMEa4 a4Var, int i, int i2, int i3, int i4) {
-        this.f = a4Var;
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public S3(CLASSNAMEa4 CLASSNAMEa4, int i, int i2, int i3, int i4) {
+        this.f = CLASSNAMEa4;
         this.a = i;
         this.b = i2;
         this.c = i3;
         this.d = i4;
-        Object[][] objArr = a4Var.f;
-        this.e = objArr == null ? a4Var.e : objArr[i];
+        Object[][] objArr = CLASSNAMEa4.f;
+        this.e = objArr == null ? CLASSNAMEa4.e : objArr[i];
     }
 
+    @Override // j$.util.u
     public boolean b(Consumer consumer) {
         consumer.getClass();
         int i = this.a;
         int i2 = this.b;
-        if (i >= i2 && (i != i2 || this.c >= this.d)) {
-            return false;
-        }
-        Object[] objArr = this.e;
-        int i3 = this.c;
-        this.c = i3 + 1;
-        consumer.accept(objArr[i3]);
-        if (this.c == this.e.length) {
-            this.c = 0;
-            int i4 = this.a + 1;
-            this.a = i4;
-            Object[][] objArr2 = this.f.f;
-            if (objArr2 != null && i4 <= this.b) {
-                this.e = objArr2[i4];
+        if (i < i2 || (i == i2 && this.c < this.d)) {
+            Object[] objArr = this.e;
+            int i3 = this.c;
+            this.c = i3 + 1;
+            consumer.accept(objArr[i3]);
+            if (this.c == this.e.length) {
+                this.c = 0;
+                int i4 = this.a + 1;
+                this.a = i4;
+                Object[][] objArr2 = this.f.f;
+                if (objArr2 != null && i4 <= this.b) {
+                    this.e = objArr2[i4];
+                }
             }
+            return true;
         }
-        return true;
+        return false;
     }
 
+    @Override // j$.util.u
     public int characteristics() {
         return 16464;
     }
 
+    @Override // j$.util.u
     public long estimateSize() {
         int i = this.a;
         int i2 = this.b;
         if (i == i2) {
-            return ((long) this.d) - ((long) this.c);
+            return this.d - this.c;
         }
         long[] jArr = this.f.d;
-        return ((jArr[i2] + ((long) this.d)) - jArr[i]) - ((long) this.c);
+        return ((jArr[i2] + this.d) - jArr[i]) - this.c;
     }
 
+    @Override // j$.util.u
     public void forEachRemaining(Consumer consumer) {
         int i;
         consumer.getClass();
@@ -92,25 +96,30 @@ class S3 implements u {
         }
     }
 
+    @Override // j$.util.u
     public Comparator getComparator() {
         throw new IllegalStateException();
     }
 
+    @Override // j$.util.u
     public /* synthetic */ long getExactSizeIfKnown() {
-        return CLASSNAMEa.e(this);
+        return AbstractCLASSNAMEa.e(this);
     }
 
+    @Override // j$.util.u
     public /* synthetic */ boolean hasCharacteristics(int i) {
-        return CLASSNAMEa.f(this, i);
+        return AbstractCLASSNAMEa.f(this, i);
     }
 
-    public u trySplit() {
+    @Override // j$.util.u
+    /* renamed from: trySplit */
+    public j$.util.u mo322trySplit() {
         int i = this.a;
         int i2 = this.b;
         if (i < i2) {
-            CLASSNAMEa4 a4Var = this.f;
+            CLASSNAMEa4 CLASSNAMEa4 = this.f;
             int i3 = i2 - 1;
-            S3 s3 = new S3(a4Var, i, i3, this.c, a4Var.f[i3].length);
+            S3 s3 = new S3(CLASSNAMEa4, i, i3, this.c, CLASSNAMEa4.f[i3].length);
             int i4 = this.b;
             this.a = i4;
             this.c = 0;
@@ -125,7 +134,7 @@ class S3 implements u {
             if (i7 == 0) {
                 return null;
             }
-            u m = L.m(this.e, i6, i6 + i7, 1040);
+            j$.util.u m = j$.util.L.m(this.e, i6, i6 + i7, 1040);
             this.c += i7;
             return m;
         }

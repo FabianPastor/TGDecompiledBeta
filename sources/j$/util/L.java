@@ -2,8 +2,7 @@ package j$.util;
 
 import j$.util.p;
 import j$.util.u;
-import java.util.Iterator;
-
+/* loaded from: classes2.dex */
 public abstract class L {
     private static final u a = new G();
     private static final u.a b = new E();
@@ -11,13 +10,16 @@ public abstract class L {
     private static final t d = new D();
 
     private static void a(int i, int i2, int i3) {
-        if (i2 > i3) {
-            throw new ArrayIndexOutOfBoundsException("origin(" + i2 + ") > fence(" + i3 + ")");
-        } else if (i2 < 0) {
-            throw new ArrayIndexOutOfBoundsException(i2);
-        } else if (i3 > i) {
-            throw new ArrayIndexOutOfBoundsException(i3);
+        if (i2 <= i3) {
+            if (i2 < 0) {
+                throw new ArrayIndexOutOfBoundsException(i2);
+            }
+            if (i3 > i) {
+                throw new ArrayIndexOutOfBoundsException(i3);
+            }
+            return;
         }
+        throw new ArrayIndexOutOfBoundsException("origin(" + i2 + ") > fence(" + i3 + ")");
     }
 
     public static t b() {
@@ -36,7 +38,7 @@ public abstract class L {
         return a;
     }
 
-    public static CLASSNAMEn f(t tVar) {
+    public static InterfaceCLASSNAMEn f(t tVar) {
         tVar.getClass();
         return new A(tVar);
     }
@@ -51,7 +53,7 @@ public abstract class L {
         return new z(vVar);
     }
 
-    public static Iterator i(u uVar) {
+    public static java.util.Iterator i(u uVar) {
         uVar.getClass();
         return new x(uVar);
     }

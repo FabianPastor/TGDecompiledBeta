@@ -6,11 +6,11 @@ import java.util.HashMap;
 import java.util.Map;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
-
+/* loaded from: classes3.dex */
 public class Shader {
-    protected int program = GLES20.glCreateProgram();
-    protected Map<String, Integer> uniformsMap = new HashMap();
     private int vertexShader;
+    protected Map<String, Integer> uniformsMap = new HashMap();
+    protected int program = GLES20.glCreateProgram();
 
     public Shader(String str, String str2, String[] strArr, String[] strArr2) {
         CompilationResult compileShader = compileShader(35633, str);
@@ -46,9 +46,10 @@ public class Shader {
             GLES20.glDeleteShader(i2);
         }
         int i3 = compileShader2.shader;
-        if (i3 != 0) {
-            GLES20.glDeleteShader(i3);
+        if (i3 == 0) {
+            return;
         }
+        GLES20.glDeleteShader(i3);
     }
 
     public void cleanResources() {
@@ -58,7 +59,9 @@ public class Shader {
         }
     }
 
-    private static class CompilationResult {
+    /* JADX INFO: Access modifiers changed from: private */
+    /* loaded from: classes3.dex */
+    public static class CompilationResult {
         int shader;
         int status;
 
@@ -107,6 +110,6 @@ public class Shader {
     }
 
     public static void SetColorUniform(int i, int i2) {
-        GLES20.glUniform4f(i, ((float) Color.red(i2)) / 255.0f, ((float) Color.green(i2)) / 255.0f, ((float) Color.blue(i2)) / 255.0f, ((float) Color.alpha(i2)) / 255.0f);
+        GLES20.glUniform4f(i, Color.red(i2) / 255.0f, Color.green(i2) / 255.0f, Color.blue(i2) / 255.0f, Color.alpha(i2) / 255.0f);
     }
 }

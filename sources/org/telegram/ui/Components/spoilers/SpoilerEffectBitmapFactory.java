@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.SharedConfig;
-
+/* loaded from: classes3.dex */
 public class SpoilerEffectBitmapFactory {
     private static SpoilerEffectBitmapFactory factory;
     Bitmap backgroundBitmap;
@@ -37,14 +37,14 @@ public class SpoilerEffectBitmapFactory {
         new Matrix();
         int dp = AndroidUtilities.dp(SharedConfig.getDevicePerformanceClass() == 2 ? 200.0f : 150.0f);
         Point point = AndroidUtilities.displaySize;
-        int min = (int) Math.min(((float) Math.min(point.x, point.y)) * 0.5f, (float) dp);
+        int min = (int) Math.min(Math.min(point.x, point.y) * 0.5f, dp);
         this.size = min;
         if (min < AndroidUtilities.dp(100.0f)) {
             this.size = AndroidUtilities.dp(100.0f);
         }
     }
 
-    /* access modifiers changed from: package-private */
+    /* JADX INFO: Access modifiers changed from: package-private */
     public Paint getPaint() {
         if (this.shaderBitmap == null) {
             int i = this.size;
@@ -57,8 +57,8 @@ public class SpoilerEffectBitmapFactory {
             Shader.TileMode tileMode = Shader.TileMode.REPEAT;
             paint.setShader(new BitmapShader(bitmap, tileMode, tileMode));
             int i2 = this.size;
-            int i3 = (int) (((float) i2) / 10.0f);
-            int dp = (int) ((((float) i2) / ((float) AndroidUtilities.dp(200.0f))) * 60.0f);
+            int i3 = (int) (i2 / 10.0f);
+            int dp = (int) ((i2 / AndroidUtilities.dp(200.0f)) * 60.0f);
             for (int i4 = 0; i4 < 10; i4++) {
                 for (int i5 = 0; i5 < 10; i5++) {
                     SpoilerEffect spoilerEffect = new SpoilerEffect();
@@ -66,11 +66,7 @@ public class SpoilerEffectBitmapFactory {
                     int i7 = i3 * i5;
                     spoilerEffect.setBounds(i6, i7 - AndroidUtilities.dp(5.0f), i6 + i3 + AndroidUtilities.dp(3.0f), i7 + i3 + AndroidUtilities.dp(5.0f));
                     spoilerEffect.drawPoints = true;
-                    int length = SpoilerEffect.ALPHAS.length;
-                    int[] iArr = new int[2];
-                    iArr[1] = dp * 2;
-                    iArr[0] = length;
-                    spoilerEffect.particlePoints = (float[][]) Array.newInstance(float.class, iArr);
+                    spoilerEffect.particlePoints = (float[][]) Array.newInstance(float.class, SpoilerEffect.ALPHAS.length, dp * 2);
                     spoilerEffect.setMaxParticlesCount(dp);
                     spoilerEffect.setColor(-1);
                     this.shaderSpoilerEffects.add(spoilerEffect);
@@ -91,15 +87,22 @@ public class SpoilerEffectBitmapFactory {
     }
 
     public void checkUpdate() {
-        if (System.currentTimeMillis() - this.lastUpdateTime > 32 && !this.isRunning) {
-            this.lastUpdateTime = System.currentTimeMillis();
-            this.isRunning = true;
-            this.dispatchQueue.postRunnable(new SpoilerEffectBitmapFactory$$ExternalSyntheticLambda0(this, this.bufferBitmap));
+        if (System.currentTimeMillis() - this.lastUpdateTime <= 32 || this.isRunning) {
+            return;
         }
+        this.lastUpdateTime = System.currentTimeMillis();
+        this.isRunning = true;
+        final Bitmap bitmap = this.bufferBitmap;
+        this.dispatchQueue.postRunnable(new Runnable() { // from class: org.telegram.ui.Components.spoilers.SpoilerEffectBitmapFactory$$ExternalSyntheticLambda0
+            @Override // java.lang.Runnable
+            public final void run() {
+                SpoilerEffectBitmapFactory.this.lambda$checkUpdate$1(bitmap);
+            }
+        });
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$checkUpdate$1(Bitmap bitmap) {
+    /* JADX INFO: Access modifiers changed from: private */
+    public /* synthetic */ void lambda$checkUpdate$1(final Bitmap bitmap) {
         if (bitmap == null) {
             int i = this.size;
             bitmap = Bitmap.createBitmap(i, i, Bitmap.Config.ARGB_8888);
@@ -120,10 +123,15 @@ public class SpoilerEffectBitmapFactory {
         }
         bitmap.eraseColor(0);
         canvas.drawBitmap(this.backgroundBitmap, 0.0f, 0.0f, (Paint) null);
-        AndroidUtilities.runOnUIThread(new SpoilerEffectBitmapFactory$$ExternalSyntheticLambda1(this, bitmap));
+        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.spoilers.SpoilerEffectBitmapFactory$$ExternalSyntheticLambda1
+            @Override // java.lang.Runnable
+            public final void run() {
+                SpoilerEffectBitmapFactory.this.lambda$checkUpdate$0(bitmap);
+            }
+        });
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$checkUpdate$0(Bitmap bitmap) {
         this.bufferBitmap = this.shaderBitmap;
         this.shaderBitmap = bitmap;

@@ -8,7 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.telegram.messenger.SegmentTree;
 import org.telegram.ui.Charts.data.ChartData;
-
+/* loaded from: classes3.dex */
 public class StackLinearChartData extends ChartData {
     public int simplifiedSize;
     public int[][] simplifiedY;
@@ -24,7 +24,7 @@ public class StackLinearChartData extends ChartData {
                 int length = this.x.length;
                 for (int i2 = 0; i2 < length; i2++) {
                     int i3 = this.lines.get(i).y[i2];
-                    jArr[i] = jArr[i] + ((long) i3);
+                    jArr[i] = jArr[i] + i3;
                     if (i3 == 0) {
                         iArr[i] = iArr[i] + 1;
                     }
@@ -33,11 +33,11 @@ public class StackLinearChartData extends ChartData {
             }
             ArrayList arrayList = new ArrayList();
             for (int i4 = 0; i4 < this.lines.size(); i4++) {
-                double d = (double) jArr[i4];
-                double d2 = (double) j;
+                double d = jArr[i4];
+                double d2 = j;
                 Double.isNaN(d);
                 Double.isNaN(d2);
-                if (d / d2 < 0.01d && ((float) iArr[i4]) > ((float) this.x.length) / 2.0f) {
+                if (d / d2 < 0.01d && iArr[i4] > this.x.length / 2.0f) {
                     arrayList.add(this.lines.get(i4));
                 }
             }
@@ -96,34 +96,32 @@ public class StackLinearChartData extends ChartData {
             i5++;
             i++;
         }
-        this.timeStep = 86400000;
+        this.timeStep = 86400000L;
         measure();
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
+    @Override // org.telegram.ui.Charts.data.ChartData
     public void measure() {
         super.measure();
         this.simplifiedSize = 0;
         int length = this.xPercentage.length;
         int size = this.lines.size();
-        int max = Math.max(1, Math.round(((float) length) / 140.0f));
+        int max = Math.max(1, Math.round(length / 140.0f));
         int i = length / max;
-        int[] iArr = new int[2];
-        iArr[1] = i;
-        iArr[0] = size;
-        this.simplifiedY = (int[][]) Array.newInstance(int.class, iArr);
-        int[] iArr2 = new int[size];
+        this.simplifiedY = (int[][]) Array.newInstance(int.class, size, i);
+        int[] iArr = new int[size];
         for (int i2 = 0; i2 < length; i2++) {
             for (int i3 = 0; i3 < size; i3++) {
-                int[] iArr3 = this.lines.get(i3).y;
-                if (iArr3[i2] > iArr2[i3]) {
-                    iArr2[i3] = iArr3[i2];
+                int[] iArr2 = this.lines.get(i3).y;
+                if (iArr2[i2] > iArr[i3]) {
+                    iArr[i3] = iArr2[i2];
                 }
             }
             if (i2 % max == 0) {
                 for (int i4 = 0; i4 < size; i4++) {
-                    this.simplifiedY[i4][this.simplifiedSize] = iArr2[i4];
-                    iArr2[i4] = 0;
+                    this.simplifiedY[i4][this.simplifiedSize] = iArr[i4];
+                    iArr[i4] = 0;
                 }
                 int i5 = this.simplifiedSize + 1;
                 this.simplifiedSize = i5;

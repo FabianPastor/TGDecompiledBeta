@@ -5,7 +5,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import org.telegram.messenger.AndroidUtilities;
-
+/* loaded from: classes3.dex */
 public class InfiniteProgress {
     private RectF cicleRect = new RectF();
     private float currentCircleLength;
@@ -26,7 +26,7 @@ public class InfiniteProgress {
     }
 
     public void setAlpha(float f) {
-        this.progressPaint.setAlpha((int) (f * ((float) Color.alpha(this.progressColor))));
+        this.progressPaint.setAlpha((int) (f * Color.alpha(this.progressColor)));
     }
 
     public void setColor(int i) {
@@ -43,7 +43,7 @@ public class InfiniteProgress {
         this.lastUpdateTime = currentTimeMillis;
         float f = this.radOffset + (((float) (360 * j)) / 2000.0f);
         this.radOffset = f;
-        this.radOffset = f - ((float) (((int) (f / 360.0f)) * 360));
+        this.radOffset = f - (((int) (f / 360.0f)) * 360);
         float f2 = this.currentProgressTime + ((float) j);
         this.currentProgressTime = f2;
         if (f2 >= 500.0f) {
@@ -68,8 +68,8 @@ public class InfiniteProgress {
     public void draw(Canvas canvas, float f, float f2, float f3) {
         RectF rectF = this.cicleRect;
         int i = this.radius;
-        rectF.set(f - (((float) i) * f3), f2 - (((float) i) * f3), f + (((float) i) * f3), f2 + (((float) i) * f3));
-        this.progressPaint.setStrokeWidth(((float) AndroidUtilities.dp(2.0f)) * f3);
+        rectF.set(f - (i * f3), f2 - (i * f3), f + (i * f3), f2 + (i * f3));
+        this.progressPaint.setStrokeWidth(AndroidUtilities.dp(2.0f) * f3);
         canvas.drawArc(this.cicleRect, this.radOffset, this.currentCircleLength, false, this.progressPaint);
         updateAnimation();
     }

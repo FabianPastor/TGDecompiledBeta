@@ -1,8 +1,9 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_chatFull extends TLRPC$ChatFull {
     public static int constructor = -NUM;
 
+    @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
@@ -20,22 +21,19 @@ public class TLRPC$TL_chatFull extends TLRPC$ChatFull {
         }
         if ((this.flags & 8) != 0) {
             int readInt322 = abstractSerializedData.readInt32(z);
-            if (readInt322 == NUM) {
-                int readInt323 = abstractSerializedData.readInt32(z);
-                int i = 0;
-                while (i < readInt323) {
-                    TLRPC$BotInfo TLdeserialize = TLRPC$BotInfo.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
-                    if (TLdeserialize != null) {
-                        this.bot_info.add(TLdeserialize);
-                        i++;
-                    } else {
-                        return;
-                    }
+            if (readInt322 != NUM) {
+                if (z) {
+                    throw new RuntimeException(String.format("wrong Vector magic, got %x", Integer.valueOf(readInt322)));
                 }
-            } else if (z) {
-                throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt322)}));
-            } else {
                 return;
+            }
+            int readInt323 = abstractSerializedData.readInt32(z);
+            for (int i = 0; i < readInt323; i++) {
+                TLRPC$BotInfo TLdeserialize = TLRPC$BotInfo.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+                if (TLdeserialize == null) {
+                    return;
+                }
+                this.bot_info.add(TLdeserialize);
             }
         }
         if ((this.flags & 64) != 0) {
@@ -61,15 +59,15 @@ public class TLRPC$TL_chatFull extends TLRPC$ChatFull {
         }
         if ((this.flags & 131072) != 0) {
             int readInt324 = abstractSerializedData.readInt32(z);
-            if (readInt324 == NUM) {
-                int readInt325 = abstractSerializedData.readInt32(z);
-                for (int i2 = 0; i2 < readInt325; i2++) {
-                    this.recent_requesters.add(Long.valueOf(abstractSerializedData.readInt64(z)));
+            if (readInt324 != NUM) {
+                if (z) {
+                    throw new RuntimeException(String.format("wrong Vector magic, got %x", Integer.valueOf(readInt324)));
                 }
-            } else if (z) {
-                throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt324)}));
-            } else {
                 return;
+            }
+            int readInt325 = abstractSerializedData.readInt32(z);
+            for (int i2 = 0; i2 < readInt325; i2++) {
+                this.recent_requesters.add(Long.valueOf(abstractSerializedData.readInt64(z)));
             }
         }
         if ((this.flags & 262144) != 0) {
@@ -77,11 +75,12 @@ public class TLRPC$TL_chatFull extends TLRPC$ChatFull {
         }
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
-        int i = this.can_set_username ? this.flags | 128 : this.flags & -129;
+        int i = this.can_set_username ? this.flags | 128 : this.flags & (-129);
         this.flags = i;
-        int i2 = this.has_scheduled ? i | 256 : i & -257;
+        int i2 = this.has_scheduled ? i | 256 : i & (-257);
         this.flags = i2;
         abstractSerializedData.writeInt32(i2);
         abstractSerializedData.writeInt64(this.id);

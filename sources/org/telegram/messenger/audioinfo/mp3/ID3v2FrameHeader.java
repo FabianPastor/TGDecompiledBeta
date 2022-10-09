@@ -1,7 +1,7 @@
 package org.telegram.messenger.audioinfo.mp3;
 
 import java.io.IOException;
-
+/* loaded from: classes.dex */
 public class ID3v2FrameHeader {
     private int bodySize;
     private boolean compression;
@@ -38,12 +38,12 @@ public class ID3v2FrameHeader {
             if (iD3v2TagBody.getTagHeader().getVersion() == 3) {
                 b4 = 128;
                 b3 = 0;
-                b2 = 32;
-                b = 0;
+                b = 32;
+                b2 = 0;
             } else {
-                b2 = 64;
+                b = 64;
                 b5 = 4;
-                b = 1;
+                b2 = 1;
             }
             this.compression = (b4 & readByte) != 0;
             this.unsynchronization = (readByte & b3) != 0;
@@ -57,12 +57,12 @@ public class ID3v2FrameHeader {
                     data.readByte();
                     this.bodySize--;
                 }
-                if ((readByte & b2) != 0) {
+                if ((readByte & b) != 0) {
                     data.readByte();
                     this.bodySize--;
                 }
             } else {
-                if ((readByte & b2) != 0) {
+                if ((readByte & b) != 0) {
                     data.readByte();
                     this.bodySize--;
                 }
@@ -70,7 +70,7 @@ public class ID3v2FrameHeader {
                     data.readByte();
                     this.bodySize--;
                 }
-                if ((readByte & b) != 0) {
+                if ((readByte & b2) != 0) {
                     this.dataLengthIndicator = data.readSyncsafeInt();
                     this.bodySize -= 4;
                 }
@@ -113,10 +113,7 @@ public class ID3v2FrameHeader {
                 return false;
             }
         }
-        if (this.bodySize > 0) {
-            return true;
-        }
-        return false;
+        return this.bodySize > 0;
     }
 
     public boolean isPadding() {
@@ -125,13 +122,10 @@ public class ID3v2FrameHeader {
                 return false;
             }
         }
-        if (this.bodySize == 0) {
-            return true;
-        }
-        return false;
+        return this.bodySize == 0;
     }
 
     public String toString() {
-        return String.format("%s[id=%s, bodysize=%d]", new Object[]{ID3v2FrameHeader.class.getSimpleName(), this.frameId, Integer.valueOf(this.bodySize)});
+        return String.format("%s[id=%s, bodysize=%d]", ID3v2FrameHeader.class.getSimpleName(), this.frameId, Integer.valueOf(this.bodySize));
     }
 }

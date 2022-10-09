@@ -1,9 +1,9 @@
 package org.webrtc;
 
 import java.util.IdentityHashMap;
-
+/* loaded from: classes3.dex */
 public class VideoTrack extends MediaStreamTrack {
-    private final IdentityHashMap<VideoSink, Long> sinks = new IdentityHashMap<>();
+    private final IdentityHashMap<VideoSink, Long> sinks;
 
     private static native void nativeAddSink(long j, long j2);
 
@@ -15,16 +15,19 @@ public class VideoTrack extends MediaStreamTrack {
 
     public VideoTrack(long j) {
         super(j);
+        this.sinks = new IdentityHashMap<>();
     }
 
     public void addSink(VideoSink videoSink) {
         if (videoSink == null) {
             throw new IllegalArgumentException("The VideoSink is not allowed to be null");
-        } else if (!this.sinks.containsKey(videoSink)) {
-            long nativeWrapSink = nativeWrapSink(videoSink);
-            this.sinks.put(videoSink, Long.valueOf(nativeWrapSink));
-            nativeAddSink(getNativeMediaStreamTrack(), nativeWrapSink);
         }
+        if (this.sinks.containsKey(videoSink)) {
+            return;
+        }
+        long nativeWrapSink = nativeWrapSink(videoSink);
+        this.sinks.put(videoSink, Long.valueOf(nativeWrapSink));
+        nativeAddSink(getNativeMediaStreamTrack(), nativeWrapSink);
     }
 
     public void removeSink(VideoSink videoSink) {
@@ -35,17 +38,18 @@ public class VideoTrack extends MediaStreamTrack {
         }
     }
 
+    @Override // org.webrtc.MediaStreamTrack
     public void dispose() {
-        for (Long longValue : this.sinks.values()) {
-            long longValue2 = longValue.longValue();
-            nativeRemoveSink(getNativeMediaStreamTrack(), longValue2);
-            nativeFreeSink(longValue2);
+        for (Long l : this.sinks.values()) {
+            long longValue = l.longValue();
+            nativeRemoveSink(getNativeMediaStreamTrack(), longValue);
+            nativeFreeSink(longValue);
         }
         this.sinks.clear();
         super.dispose();
     }
 
-    /* access modifiers changed from: package-private */
+    /* JADX INFO: Access modifiers changed from: package-private */
     public long getNativeVideoTrack() {
         return getNativeMediaStreamTrack();
     }

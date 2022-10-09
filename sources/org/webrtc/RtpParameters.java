@@ -3,7 +3,7 @@ package org.webrtc;
 import java.util.List;
 import java.util.Map;
 import org.webrtc.MediaStreamTrack;
-
+/* loaded from: classes3.dex */
 public class RtpParameters {
     public final List<Codec> codecs;
     public DegradationPreference degradationPreference;
@@ -12,6 +12,7 @@ public class RtpParameters {
     private final Rtcp rtcp;
     public final String transactionId;
 
+    /* loaded from: classes3.dex */
     public enum DegradationPreference {
         DISABLED,
         MAINTAIN_FRAMERATE,
@@ -24,19 +25,23 @@ public class RtpParameters {
         }
     }
 
+    /* loaded from: classes3.dex */
     public static class Encoding {
-        public boolean active = true;
-        public double bitratePriority = 1.0d;
+        public boolean active;
+        public double bitratePriority;
         public Integer maxBitrateBps;
         public Integer maxFramerate;
         public Integer minBitrateBps;
-        public int networkPriority = 0;
+        public int networkPriority;
         public Integer numTemporalLayers;
         public String rid;
         public Double scaleResolutionDownBy;
         public Long ssrc;
 
         public Encoding(String str, boolean z, Double d) {
+            this.active = true;
+            this.bitratePriority = 1.0d;
+            this.networkPriority = 0;
             this.rid = str;
             this.active = z;
             this.scaleResolutionDownBy = d;
@@ -44,6 +49,9 @@ public class RtpParameters {
 
         @CalledByNative("Encoding")
         Encoding(String str, boolean z, double d, int i, Integer num, Integer num2, Integer num3, Integer num4, Double d2, Long l) {
+            this.active = true;
+            this.bitratePriority = 1.0d;
+            this.networkPriority = 0;
             this.rid = str;
             this.active = z;
             this.bitratePriority = d;
@@ -56,67 +64,58 @@ public class RtpParameters {
             this.ssrc = l;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("Encoding")
-        public String getRid() {
+        String getRid() {
             return this.rid;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("Encoding")
-        public boolean getActive() {
+        boolean getActive() {
             return this.active;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("Encoding")
-        public double getBitratePriority() {
+        double getBitratePriority() {
             return this.bitratePriority;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("Encoding")
-        public int getNetworkPriority() {
+        int getNetworkPriority() {
             return this.networkPriority;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("Encoding")
-        public Integer getMaxBitrateBps() {
+        Integer getMaxBitrateBps() {
             return this.maxBitrateBps;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("Encoding")
-        public Integer getMinBitrateBps() {
+        Integer getMinBitrateBps() {
             return this.minBitrateBps;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("Encoding")
-        public Integer getMaxFramerate() {
+        Integer getMaxFramerate() {
             return this.maxFramerate;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("Encoding")
-        public Integer getNumTemporalLayers() {
+        Integer getNumTemporalLayers() {
             return this.numTemporalLayers;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("Encoding")
-        public Double getScaleResolutionDownBy() {
+        Double getScaleResolutionDownBy() {
             return this.scaleResolutionDownBy;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("Encoding")
-        public Long getSsrc() {
+        Long getSsrc() {
             return this.ssrc;
         }
     }
 
+    /* loaded from: classes3.dex */
     public static class Codec {
         public Integer clockRate;
         MediaStreamTrack.MediaType kind;
@@ -135,43 +134,38 @@ public class RtpParameters {
             this.parameters = map;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("Codec")
-        public int getPayloadType() {
+        int getPayloadType() {
             return this.payloadType;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("Codec")
-        public String getName() {
+        String getName() {
             return this.name;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("Codec")
-        public MediaStreamTrack.MediaType getKind() {
+        MediaStreamTrack.MediaType getKind() {
             return this.kind;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("Codec")
-        public Integer getClockRate() {
+        Integer getClockRate() {
             return this.clockRate;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("Codec")
-        public Integer getNumChannels() {
+        Integer getNumChannels() {
             return this.numChannels;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("Codec")
-        public Map getParameters() {
+        Map getParameters() {
             return this.parameters;
         }
     }
 
+    /* loaded from: classes3.dex */
     public static class Rtcp {
         private final String cname;
         private final boolean reducedSize;
@@ -193,6 +187,7 @@ public class RtpParameters {
         }
     }
 
+    /* loaded from: classes3.dex */
     public static class HeaderExtension {
         private final boolean encrypted;
         private final int id;
@@ -222,24 +217,22 @@ public class RtpParameters {
     }
 
     @CalledByNative
-    RtpParameters(String str, DegradationPreference degradationPreference2, Rtcp rtcp2, List<HeaderExtension> list, List<Encoding> list2, List<Codec> list3) {
+    RtpParameters(String str, DegradationPreference degradationPreference, Rtcp rtcp, List<HeaderExtension> list, List<Encoding> list2, List<Codec> list3) {
         this.transactionId = str;
-        this.degradationPreference = degradationPreference2;
-        this.rtcp = rtcp2;
+        this.degradationPreference = degradationPreference;
+        this.rtcp = rtcp;
         this.headerExtensions = list;
         this.encodings = list2;
         this.codecs = list3;
     }
 
-    /* access modifiers changed from: package-private */
     @CalledByNative
-    public String getTransactionId() {
+    String getTransactionId() {
         return this.transactionId;
     }
 
-    /* access modifiers changed from: package-private */
     @CalledByNative
-    public DegradationPreference getDegradationPreference() {
+    DegradationPreference getDegradationPreference() {
         return this.degradationPreference;
     }
 
@@ -253,15 +246,13 @@ public class RtpParameters {
         return this.headerExtensions;
     }
 
-    /* access modifiers changed from: package-private */
     @CalledByNative
-    public List<Encoding> getEncodings() {
+    List<Encoding> getEncodings() {
         return this.encodings;
     }
 
-    /* access modifiers changed from: package-private */
     @CalledByNative
-    public List<Codec> getCodecs() {
+    List<Codec> getCodecs() {
         return this.codecs;
     }
 }

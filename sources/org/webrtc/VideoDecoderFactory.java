@@ -1,5 +1,5 @@
 package org.webrtc;
-
+/* loaded from: classes3.dex */
 public interface VideoDecoderFactory {
     @Deprecated
     VideoDecoder createDecoder(String str);
@@ -11,6 +11,7 @@ public interface VideoDecoderFactory {
     VideoCodecInfo[] getSupportedCodecs();
 
     /* renamed from: org.webrtc.VideoDecoderFactory$-CC  reason: invalid class name */
+    /* loaded from: classes3.dex */
     public final /* synthetic */ class CC {
         @CalledByNative
         public static VideoCodecInfo[] $default$getSupportedCodecs(VideoDecoderFactory videoDecoderFactory) {
@@ -20,11 +21,6 @@ public interface VideoDecoderFactory {
         @Deprecated
         public static VideoDecoder $default$createDecoder(VideoDecoderFactory _this, String str) {
             throw new UnsupportedOperationException("Deprecated and not implemented.");
-        }
-
-        @CalledByNative
-        public static VideoDecoder $default$createDecoder(VideoDecoderFactory _this, VideoCodecInfo videoCodecInfo) {
-            return _this.createDecoder(videoCodecInfo.getName());
         }
     }
 }

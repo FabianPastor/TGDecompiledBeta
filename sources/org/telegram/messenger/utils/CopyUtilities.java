@@ -30,24 +30,19 @@ import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
-
+/* loaded from: classes.dex */
 public class CopyUtilities {
     public static Spannable fromHTML(String str) {
-        Spanned spanned;
         try {
-            if (Build.VERSION.SDK_INT >= 24) {
-                spanned = Html.fromHtml("<inject>" + str + "</inject>", 63, (Html.ImageGetter) null, new HTMLTagAttributesHandler(new HTMLTagHandler()));
-            } else {
-                spanned = Html.fromHtml("<inject>" + str + "</inject>", (Html.ImageGetter) null, new HTMLTagAttributesHandler(new HTMLTagHandler()));
-            }
-            if (spanned == null) {
+            Spanned fromHtml = Build.VERSION.SDK_INT >= 24 ? Html.fromHtml("<inject>" + str + "</inject>", 63, null, new HTMLTagAttributesHandler(new HTMLTagHandler())) : Html.fromHtml("<inject>" + str + "</inject>", null, new HTMLTagAttributesHandler(new HTMLTagHandler()));
+            if (fromHtml == null) {
                 return null;
             }
-            Object[] spans = spanned.getSpans(0, spanned.length(), Object.class);
+            Object[] spans = fromHtml.getSpans(0, fromHtml.length(), Object.class);
             ArrayList arrayList = new ArrayList(spans.length);
             for (Object obj : spans) {
-                int spanStart = spanned.getSpanStart(obj);
-                int spanEnd = spanned.getSpanEnd(obj);
+                int spanStart = fromHtml.getSpanStart(obj);
+                int spanEnd = fromHtml.getSpanEnd(obj);
                 if (obj instanceof StyleSpan) {
                     int style = ((StyleSpan) obj).getStyle();
                     if ((style & 1) > 0) {
@@ -75,13 +70,13 @@ public class CopyUtilities {
                     arrayList.add(setEntityStartEnd(tLRPC$TL_messageEntityCustomEmoji, spanStart, spanEnd));
                 }
             }
-            SpannableString spannableString = new SpannableString(spanned.toString());
-            MediaDataController.addTextStyleRuns((ArrayList<TLRPC$MessageEntity>) arrayList, (CharSequence) spannableString, (Spannable) spannableString);
+            SpannableString spannableString = new SpannableString(fromHtml.toString());
+            MediaDataController.addTextStyleRuns(arrayList, spannableString, spannableString);
             for (Object obj2 : spans) {
                 if (obj2 instanceof URLSpan) {
-                    int spanStart2 = spanned.getSpanStart(obj2);
-                    int spanEnd2 = spanned.getSpanEnd(obj2);
-                    String charSequence = spanned.subSequence(spanStart2, spanEnd2).toString();
+                    int spanStart2 = fromHtml.getSpanStart(obj2);
+                    int spanEnd2 = fromHtml.getSpanEnd(obj2);
+                    String charSequence = fromHtml.subSequence(spanStart2, spanEnd2).toString();
                     String url = ((URLSpan) obj2).getURL();
                     if (charSequence.equals(url)) {
                         spannableString.setSpan(new URLSpan(url), spanStart2, spanEnd2, 33);
@@ -90,10 +85,10 @@ public class CopyUtilities {
                     }
                 }
             }
-            MediaDataController.addAnimatedEmojiSpans(arrayList, spannableString, (Paint.FontMetricsInt) null);
+            MediaDataController.addAnimatedEmojiSpans(arrayList, spannableString, null);
             return spannableString;
         } catch (Exception e) {
-            FileLog.e("Html.fromHtml", (Throwable) e);
+            FileLog.e("Html.fromHtml", e);
             return null;
         }
     }
@@ -104,12 +99,14 @@ public class CopyUtilities {
         return tLRPC$MessageEntity;
     }
 
+    /* loaded from: classes.dex */
     public static class HTMLTagAttributesHandler implements Html.TagHandler, ContentHandler {
         private final TagHandler handler;
         private ArrayDeque<Boolean> tagStatus;
         private Editable text;
         private ContentHandler wrapped;
 
+        /* loaded from: classes.dex */
         public interface TagHandler {
             boolean handleTag(boolean z, String str, Editable editable, Attributes attributes);
         }
@@ -129,6 +126,7 @@ public class CopyUtilities {
             this.handler = tagHandler;
         }
 
+        @Override // android.text.Html.TagHandler
         public void handleTag(boolean z, String str, Editable editable, XMLReader xMLReader) {
             if (this.wrapped == null) {
                 this.text = editable;
@@ -138,6 +136,7 @@ public class CopyUtilities {
             }
         }
 
+        @Override // org.xml.sax.ContentHandler
         public void startElement(String str, String str2, String str3, Attributes attributes) throws SAXException {
             boolean handleTag = this.handler.handleTag(true, str2, this.text, attributes);
             this.tagStatus.addLast(Boolean.valueOf(handleTag));
@@ -146,56 +145,68 @@ public class CopyUtilities {
             }
         }
 
+        @Override // org.xml.sax.ContentHandler
         public void endElement(String str, String str2, String str3) throws SAXException {
             if (!this.tagStatus.removeLast().booleanValue()) {
                 this.wrapped.endElement(str, str2, str3);
             }
-            this.handler.handleTag(false, str2, this.text, (Attributes) null);
+            this.handler.handleTag(false, str2, this.text, null);
         }
 
+        @Override // org.xml.sax.ContentHandler
         public void setDocumentLocator(Locator locator) {
             this.wrapped.setDocumentLocator(locator);
         }
 
+        @Override // org.xml.sax.ContentHandler
         public void startDocument() throws SAXException {
             this.wrapped.startDocument();
         }
 
+        @Override // org.xml.sax.ContentHandler
         public void endDocument() throws SAXException {
             this.wrapped.endDocument();
         }
 
+        @Override // org.xml.sax.ContentHandler
         public void startPrefixMapping(String str, String str2) throws SAXException {
             this.wrapped.startPrefixMapping(str, str2);
         }
 
+        @Override // org.xml.sax.ContentHandler
         public void endPrefixMapping(String str) throws SAXException {
             this.wrapped.endPrefixMapping(str);
         }
 
+        @Override // org.xml.sax.ContentHandler
         public void characters(char[] cArr, int i, int i2) throws SAXException {
             this.wrapped.characters(cArr, i, i2);
         }
 
+        @Override // org.xml.sax.ContentHandler
         public void ignorableWhitespace(char[] cArr, int i, int i2) throws SAXException {
             this.wrapped.ignorableWhitespace(cArr, i, i2);
         }
 
+        @Override // org.xml.sax.ContentHandler
         public void processingInstruction(String str, String str2) throws SAXException {
             this.wrapped.processingInstruction(str, str2);
         }
 
+        @Override // org.xml.sax.ContentHandler
         public void skippedEntity(String str) throws SAXException {
             this.wrapped.skippedEntity(str);
         }
     }
 
-    private static class HTMLTagHandler implements HTMLTagAttributesHandler.TagHandler {
+    /* JADX INFO: Access modifiers changed from: private */
+    /* loaded from: classes.dex */
+    public static class HTMLTagHandler implements HTMLTagAttributesHandler.TagHandler {
         private HTMLTagHandler() {
         }
 
+        @Override // org.telegram.messenger.utils.CopyUtilities.HTMLTagAttributesHandler.TagHandler
         public boolean handleTag(boolean z, String str, Editable editable, Attributes attributes) {
-            Class<ParsedSpan> cls = ParsedSpan.class;
             if (str.startsWith("animated-emoji")) {
                 if (z) {
                     String value = HTMLTagAttributesHandler.getValue(attributes, "data-document-id");
@@ -219,7 +230,7 @@ public class CopyUtilities {
                     editable.setSpan(new ParsedSpan(0), editable.length(), editable.length(), 17);
                     return true;
                 }
-                ParsedSpan last = getLast(editable, cls, 0);
+                ParsedSpan last = getLast(editable, ParsedSpan.class, 0);
                 if (last != null) {
                     int spanStart2 = editable.getSpanStart(last);
                     editable.removeSpan(last);
@@ -233,7 +244,7 @@ public class CopyUtilities {
                     editable.setSpan(new ParsedSpan(1), editable.length(), editable.length(), 17);
                     return true;
                 }
-                ParsedSpan last2 = getLast(editable, cls, 1);
+                ParsedSpan last2 = getLast(editable, ParsedSpan.class, 1);
                 if (last2 != null) {
                     int spanStart3 = editable.getSpanStart(last2);
                     editable.removeSpan(last2);
@@ -247,35 +258,37 @@ public class CopyUtilities {
         }
 
         private <T> T getLast(Editable editable, Class<T> cls) {
-            T[] spans = editable.getSpans(0, editable.length(), cls);
+            Object[] spans = editable.getSpans(0, editable.length(), cls);
             if (spans.length == 0) {
                 return null;
             }
             for (int length = spans.length; length > 0; length--) {
                 int i = length - 1;
                 if (editable.getSpanFlags(spans[i]) == 17) {
-                    return spans[i];
+                    return (T) spans[i];
                 }
             }
             return null;
         }
 
         private <T extends ParsedSpan> T getLast(Editable editable, Class<T> cls, int i) {
-            T[] tArr = (ParsedSpan[]) editable.getSpans(0, editable.length(), cls);
-            if (tArr.length == 0) {
+            Object[] objArr = (ParsedSpan[]) editable.getSpans(0, editable.length(), cls);
+            if (objArr.length == 0) {
                 return null;
             }
-            for (int length = tArr.length; length > 0; length--) {
+            for (int length = objArr.length; length > 0; length--) {
                 int i2 = length - 1;
-                if (editable.getSpanFlags(tArr[i2]) == 17 && tArr[i2].type == i) {
-                    return tArr[i2];
+                if (editable.getSpanFlags(objArr[i2]) == 17 && objArr[i2].type == i) {
+                    return (T) objArr[i2];
                 }
             }
             return null;
         }
     }
 
-    private static class ParsedSpan {
+    /* JADX INFO: Access modifiers changed from: private */
+    /* loaded from: classes.dex */
+    public static class ParsedSpan {
         final int type;
 
         private ParsedSpan(int i) {

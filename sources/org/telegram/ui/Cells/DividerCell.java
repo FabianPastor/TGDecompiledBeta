@@ -7,36 +7,36 @@ import android.view.View;
 import androidx.core.graphics.ColorUtils;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
-
+/* loaded from: classes3.dex */
 public class DividerCell extends View {
     private boolean forceDarkTheme;
     private Paint paint;
     private Theme.ResourcesProvider resourcesProvider;
 
     public DividerCell(Context context) {
-        this(context, (Theme.ResourcesProvider) null);
+        this(context, null);
     }
 
-    public DividerCell(Context context, Theme.ResourcesProvider resourcesProvider2) {
+    public DividerCell(Context context, Theme.ResourcesProvider resourcesProvider) {
         super(context);
         this.paint = new Paint();
-        this.resourcesProvider = resourcesProvider2;
+        this.resourcesProvider = resourcesProvider;
         setPadding(0, AndroidUtilities.dp(8.0f), 0, AndroidUtilities.dp(8.0f));
     }
 
-    /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
+    @Override // android.view.View
+    protected void onMeasure(int i, int i2) {
         setMeasuredDimension(View.MeasureSpec.getSize(i), getPaddingTop() + getPaddingBottom() + 1);
     }
 
-    /* access modifiers changed from: protected */
-    public void onDraw(Canvas canvas) {
+    @Override // android.view.View
+    protected void onDraw(Canvas canvas) {
         if (this.forceDarkTheme) {
             this.paint.setColor(ColorUtils.blendARGB(-16777216, Theme.getColor("voipgroup_dialogBackground", this.resourcesProvider), 0.2f));
         } else {
             this.paint.setColor(Theme.getColor("divider", this.resourcesProvider));
         }
-        canvas.drawLine((float) getPaddingLeft(), (float) getPaddingTop(), (float) (getWidth() - getPaddingRight()), (float) getPaddingTop(), this.paint);
+        canvas.drawLine(getPaddingLeft(), getPaddingTop(), getWidth() - getPaddingRight(), getPaddingTop(), this.paint);
     }
 
     public void setForceDarkTheme(boolean z) {

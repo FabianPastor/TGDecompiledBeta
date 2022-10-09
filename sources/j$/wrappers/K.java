@@ -1,7 +1,7 @@
 package j$.wrappers;
 
 import java.util.function.DoubleUnaryOperator;
-
+/* loaded from: classes2.dex */
 public final /* synthetic */ class K {
     final /* synthetic */ DoubleUnaryOperator a;
 

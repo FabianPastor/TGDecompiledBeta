@@ -6,13 +6,15 @@ import android.os.SystemClock;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-
+/* loaded from: classes3.dex */
 public class ThreadUtils {
 
+    /* loaded from: classes3.dex */
     public interface BlockingOperation {
         void run() throws InterruptedException;
     }
 
+    /* loaded from: classes3.dex */
     public static class ThreadChecker {
         private Thread thread = Thread.currentThread();
 
@@ -20,9 +22,10 @@ public class ThreadUtils {
             if (this.thread == null) {
                 this.thread = Thread.currentThread();
             }
-            if (Thread.currentThread() != this.thread) {
-                throw new IllegalStateException("Wrong thread");
+            if (Thread.currentThread() == this.thread) {
+                return;
             }
+            throw new IllegalStateException("Wrong thread");
         }
 
         public void detachThread() {
@@ -31,9 +34,10 @@ public class ThreadUtils {
     }
 
     public static void checkIsOnMainThread() {
-        if (Thread.currentThread() != Looper.getMainLooper().getThread()) {
-            throw new IllegalStateException("Not on main thread!");
+        if (Thread.currentThread() == Looper.getMainLooper().getThread()) {
+            return;
         }
+        throw new IllegalStateException("Not on main thread!");
     }
 
     public static void executeUninterruptibly(BlockingOperation blockingOperation) {
@@ -71,7 +75,8 @@ public class ThreadUtils {
     }
 
     public static void joinUninterruptibly(final Thread thread) {
-        executeUninterruptibly(new BlockingOperation() {
+        executeUninterruptibly(new BlockingOperation() { // from class: org.webrtc.ThreadUtils.1
+            @Override // org.webrtc.ThreadUtils.BlockingOperation
             public void run() throws InterruptedException {
                 thread.join();
             }
@@ -79,7 +84,8 @@ public class ThreadUtils {
     }
 
     public static void awaitUninterruptibly(final CountDownLatch countDownLatch) {
-        executeUninterruptibly(new BlockingOperation() {
+        executeUninterruptibly(new BlockingOperation() { // from class: org.webrtc.ThreadUtils.2
+            @Override // org.webrtc.ThreadUtils.BlockingOperation
             public void run() throws InterruptedException {
                 countDownLatch.await();
             }
@@ -91,7 +97,7 @@ public class ThreadUtils {
         boolean z = false;
         long j2 = j;
         boolean z2 = false;
-        while (true) {
+        do {
             try {
                 z = countDownLatch.await(j2, TimeUnit.MILLISECONDS);
                 break;
@@ -99,10 +105,9 @@ public class ThreadUtils {
                 z2 = true;
                 j2 = j - (SystemClock.elapsedRealtime() - elapsedRealtime);
                 if (j2 <= 0) {
-                    break;
                 }
             }
-        }
+        } while (j2 <= 0);
         if (z2) {
             Thread.currentThread().interrupt();
         }
@@ -116,36 +121,54 @@ public class ThreadUtils {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-        } else {
-            final AnonymousClass1Result r0 = new Object() {
-                public V value;
-            };
-            final AnonymousClass1CaughtException r1 = new Object() {
-                Exception e;
-            };
-            final CountDownLatch countDownLatch = new CountDownLatch(1);
-            handler.post(new Runnable() {
-                public void run() {
-                    try {
-                        AnonymousClass1Result.this.value = callable.call();
-                    } catch (Exception e) {
-                        r1.e = e;
-                    }
-                    countDownLatch.countDown();
+        }
+        final C1Result c1Result = new C1Result();
+        final C1CaughtException c1CaughtException = new C1CaughtException();
+        final CountDownLatch countDownLatch = new CountDownLatch(1);
+        handler.post(new Runnable() { // from class: org.webrtc.ThreadUtils.3
+            /* JADX WARN: Type inference failed for: r1v2, types: [V, java.lang.Object] */
+            @Override // java.lang.Runnable
+            public void run() {
+                try {
+                    C1Result.this.value = callable.call();
+                } catch (Exception e2) {
+                    c1CaughtException.e = e2;
                 }
-            });
-            awaitUninterruptibly(countDownLatch);
-            if (r1.e == null) {
-                return r0.value;
+                countDownLatch.countDown();
             }
-            RuntimeException runtimeException = new RuntimeException(r1.e);
-            runtimeException.setStackTrace(concatStackTraces(r1.e.getStackTrace(), runtimeException.getStackTrace()));
+        });
+        awaitUninterruptibly(countDownLatch);
+        if (c1CaughtException.e != null) {
+            RuntimeException runtimeException = new RuntimeException(c1CaughtException.e);
+            runtimeException.setStackTrace(concatStackTraces(c1CaughtException.e.getStackTrace(), runtimeException.getStackTrace()));
             throw runtimeException;
+        }
+        return c1Result.value;
+    }
+
+    /* JADX INFO: Access modifiers changed from: package-private */
+    /* renamed from: org.webrtc.ThreadUtils$1CaughtException  reason: invalid class name */
+    /* loaded from: classes3.dex */
+    public class C1CaughtException {
+        Exception e;
+
+        C1CaughtException() {
+        }
+    }
+
+    /* JADX INFO: Access modifiers changed from: package-private */
+    /* renamed from: org.webrtc.ThreadUtils$1Result  reason: invalid class name */
+    /* loaded from: classes3.dex */
+    public class C1Result {
+        public V value;
+
+        C1Result() {
         }
     }
 
     public static void invokeAtFrontUninterruptibly(Handler handler, final Runnable runnable) {
-        invokeAtFrontUninterruptibly(handler, new Callable<Void>() {
+        invokeAtFrontUninterruptibly(handler, new Callable<Void>() { // from class: org.webrtc.ThreadUtils.4
+            @Override // java.util.concurrent.Callable
             public Void call() {
                 runnable.run();
                 return null;
@@ -154,7 +177,7 @@ public class ThreadUtils {
     }
 
     static StackTraceElement[] concatStackTraces(StackTraceElement[] stackTraceElementArr, StackTraceElement[] stackTraceElementArr2) {
-        StackTraceElement[] stackTraceElementArr3 = new StackTraceElement[(stackTraceElementArr.length + stackTraceElementArr2.length)];
+        StackTraceElement[] stackTraceElementArr3 = new StackTraceElement[stackTraceElementArr.length + stackTraceElementArr2.length];
         System.arraycopy(stackTraceElementArr, 0, stackTraceElementArr3, 0, stackTraceElementArr.length);
         System.arraycopy(stackTraceElementArr2, 0, stackTraceElementArr3, stackTraceElementArr.length, stackTraceElementArr2.length);
         return stackTraceElementArr3;

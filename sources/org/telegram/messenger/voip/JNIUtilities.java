@@ -18,7 +18,7 @@ import java.net.NetworkInterface;
 import java.util.Enumeration;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
-
+/* loaded from: classes.dex */
 public class JNIUtilities {
     public static int getMaxVideoResolution() {
         return 320;
@@ -49,14 +49,14 @@ public class JNIUtilities {
                 return null;
             }
             String str2 = null;
-            for (LinkAddress address : linkProperties.getLinkAddresses()) {
-                InetAddress address2 = address.getAddress();
-                if (address2 instanceof Inet4Address) {
-                    if (!address2.isLinkLocalAddress()) {
-                        str = address2.getHostAddress();
+            for (LinkAddress linkAddress : linkProperties.getLinkAddresses()) {
+                InetAddress address = linkAddress.getAddress();
+                if (address instanceof Inet4Address) {
+                    if (!address.isLinkLocalAddress()) {
+                        str = address.getHostAddress();
                     }
-                } else if ((address2 instanceof Inet6Address) && !address2.isLinkLocalAddress() && (address2.getAddress()[0] & 240) != 240) {
-                    str2 = address2.getHostAddress();
+                } else if ((address instanceof Inet6Address) && !address.isLinkLocalAddress() && (address.getAddress()[0] & 240) != 240) {
+                    str2 = address.getHostAddress();
                 }
             }
             return new String[]{linkProperties.getInterfaceName(), str, str2};
@@ -68,28 +68,26 @@ public class JNIUtilities {
             }
             while (networkInterfaces.hasMoreElements()) {
                 NetworkInterface nextElement = networkInterfaces.nextElement();
-                if (!nextElement.isLoopback()) {
-                    if (nextElement.isUp()) {
-                        Enumeration<InetAddress> inetAddresses = nextElement.getInetAddresses();
-                        String str3 = null;
-                        String str4 = null;
-                        while (inetAddresses.hasMoreElements()) {
-                            InetAddress nextElement2 = inetAddresses.nextElement();
-                            if (nextElement2 instanceof Inet4Address) {
-                                if (!nextElement2.isLinkLocalAddress()) {
-                                    str3 = nextElement2.getHostAddress();
-                                }
-                            } else if ((nextElement2 instanceof Inet6Address) && !nextElement2.isLinkLocalAddress() && (nextElement2.getAddress()[0] & 240) != 240) {
-                                str4 = nextElement2.getHostAddress();
+                if (!nextElement.isLoopback() && nextElement.isUp()) {
+                    Enumeration<InetAddress> inetAddresses = nextElement.getInetAddresses();
+                    String str3 = null;
+                    String str4 = null;
+                    while (inetAddresses.hasMoreElements()) {
+                        InetAddress nextElement2 = inetAddresses.nextElement();
+                        if (nextElement2 instanceof Inet4Address) {
+                            if (!nextElement2.isLinkLocalAddress()) {
+                                str3 = nextElement2.getHostAddress();
                             }
+                        } else if ((nextElement2 instanceof Inet6Address) && !nextElement2.isLinkLocalAddress() && (nextElement2.getAddress()[0] & 240) != 240) {
+                            str4 = nextElement2.getHostAddress();
                         }
-                        return new String[]{nextElement.getName(), str3, str4};
                     }
+                    return new String[]{nextElement.getName(), str3, str4};
                 }
             }
             return null;
         } catch (Exception e) {
-            FileLog.e((Throwable) e);
+            FileLog.e(e);
             return null;
         }
     }
@@ -100,18 +98,18 @@ public class JNIUtilities {
         if (Build.VERSION.SDK_INT >= 24) {
             telephonyManager = telephonyManager.createForSubscriptionId(SubscriptionManager.getDefaultDataSubscriptionId());
         }
-        if (TextUtils.isEmpty(telephonyManager.getNetworkOperatorName())) {
-            return null;
+        if (!TextUtils.isEmpty(telephonyManager.getNetworkOperatorName())) {
+            String networkOperator = telephonyManager.getNetworkOperator();
+            String str2 = "";
+            if (networkOperator == null || networkOperator.length() <= 3) {
+                str = str2;
+            } else {
+                str2 = networkOperator.substring(0, 3);
+                str = networkOperator.substring(3);
+            }
+            return new String[]{telephonyManager.getNetworkOperatorName(), telephonyManager.getNetworkCountryIso().toUpperCase(), str2, str};
         }
-        String networkOperator = telephonyManager.getNetworkOperator();
-        String str2 = "";
-        if (networkOperator == null || networkOperator.length() <= 3) {
-            str = str2;
-        } else {
-            str2 = networkOperator.substring(0, 3);
-            str = networkOperator.substring(3);
-        }
-        return new String[]{telephonyManager.getNetworkOperatorName(), telephonyManager.getNetworkCountryIso().toUpperCase(), str2, str};
+        return null;
     }
 
     public static int[] getWifiInfo() {

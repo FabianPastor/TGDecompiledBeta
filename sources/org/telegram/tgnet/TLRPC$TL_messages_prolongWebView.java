@@ -1,5 +1,5 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_messages_prolongWebView extends TLObject {
     public static int constructor = -NUM;
     public TLRPC$InputUser bot;
@@ -10,13 +10,15 @@ public class TLRPC$TL_messages_prolongWebView extends TLObject {
     public TLRPC$InputPeer send_as;
     public boolean silent;
 
+    @Override // org.telegram.tgnet.TLObject
     public TLObject deserializeResponse(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         return TLRPC$Bool.TLdeserialize(abstractSerializedData, i, z);
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
-        int i = this.silent ? this.flags | 32 : this.flags & -33;
+        int i = this.silent ? this.flags | 32 : this.flags & (-33);
         this.flags = i;
         abstractSerializedData.writeInt32(i);
         this.peer.serializeToStream(abstractSerializedData);

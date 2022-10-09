@@ -1,12 +1,13 @@
 package org.telegram.messenger;
-
+/* loaded from: classes.dex */
 public final /* synthetic */ class LocaleController$$ExternalSyntheticLambda10 implements Runnable {
     public static final /* synthetic */ LocaleController$$ExternalSyntheticLambda10 INSTANCE = new LocaleController$$ExternalSyntheticLambda10();
 
     private /* synthetic */ LocaleController$$ExternalSyntheticLambda10() {
     }
 
+    @Override // java.lang.Runnable
     public final void run() {
-        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.reloadInterface, new Object[0]);
+        LocaleController.lambda$applyLanguage$4();
     }
 }

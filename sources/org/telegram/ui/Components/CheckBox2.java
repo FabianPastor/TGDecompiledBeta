@@ -5,16 +5,15 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.view.View;
 import android.view.accessibility.AccessibilityNodeInfo;
-import android.widget.CheckBox;
 import org.telegram.messenger.GenericProvider;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.CheckBoxBase;
-
+/* loaded from: classes3.dex */
 public class CheckBox2 extends View {
     private CheckBoxBase checkBoxBase;
 
     public CheckBox2(Context context, int i) {
-        this(context, i, (Theme.ResourcesProvider) null);
+        this(context, i, null);
     }
 
     public CheckBox2(Context context, int i, Theme.ResourcesProvider resourcesProvider) {
@@ -50,6 +49,7 @@ public class CheckBox2 extends View {
         this.checkBoxBase.setColor(str, str2, str3);
     }
 
+    @Override // android.view.View
     public void setEnabled(boolean z) {
         this.checkBoxBase.setEnabled(z);
         super.setEnabled(z);
@@ -67,8 +67,8 @@ public class CheckBox2 extends View {
         return this.checkBoxBase.getProgress();
     }
 
-    /* access modifiers changed from: protected */
-    public void onAttachedToWindow() {
+    @Override // android.view.View
+    protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         this.checkBoxBase.onAttachedToWindow();
     }
@@ -77,26 +77,27 @@ public class CheckBox2 extends View {
         this.checkBoxBase.animationDuration = j;
     }
 
-    /* access modifiers changed from: protected */
-    public void onDetachedFromWindow() {
+    @Override // android.view.View
+    protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         this.checkBoxBase.onDetachedFromWindow();
     }
 
-    /* access modifiers changed from: protected */
-    public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+    @Override // android.view.View
+    protected void onLayout(boolean z, int i, int i2, int i3, int i4) {
         super.onLayout(z, i, i2, i3, i4);
         this.checkBoxBase.setBounds(0, 0, i3 - i, i4 - i2);
     }
 
-    /* access modifiers changed from: protected */
-    public void onDraw(Canvas canvas) {
+    @Override // android.view.View
+    protected void onDraw(Canvas canvas) {
         this.checkBoxBase.draw(canvas);
     }
 
+    @Override // android.view.View
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
         super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
-        accessibilityNodeInfo.setClassName(CheckBox.class.getName());
+        accessibilityNodeInfo.setClassName(android.widget.CheckBox.class.getName());
         accessibilityNodeInfo.setChecked(isChecked());
         accessibilityNodeInfo.setCheckable(true);
     }

@@ -17,46 +17,46 @@ import org.telegram.ui.Components.AnimatedTextView;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
-
+/* loaded from: classes3.dex */
 public class GraySectionCell extends FrameLayout {
     private final Theme.ResourcesProvider resourcesProvider;
     private AnimatedTextView rightTextView;
     private TextView textView;
 
     public GraySectionCell(Context context) {
-        this(context, (Theme.ResourcesProvider) null);
+        this(context, null);
     }
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public GraySectionCell(Context context, Theme.ResourcesProvider resourcesProvider2) {
+    public GraySectionCell(Context context, Theme.ResourcesProvider resourcesProvider) {
         super(context);
-        this.resourcesProvider = resourcesProvider2;
+        this.resourcesProvider = resourcesProvider;
         setBackgroundColor(getThemedColor("graySection"));
-        TextView textView2 = new TextView(getContext());
-        this.textView = textView2;
-        textView2.setTextSize(1, 14.0f);
+        TextView textView = new TextView(getContext());
+        this.textView = textView;
+        textView.setTextSize(1, 14.0f);
         this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.textView.setTextColor(getThemedColor("key_graySectionText"));
         int i = 5;
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, 16.0f, 0.0f, 16.0f, 0.0f));
-        AnonymousClass1 r0 = new AnimatedTextView(this, getContext(), true, true, true) {
+        AnimatedTextView animatedTextView = new AnimatedTextView(this, getContext(), true, true, true) { // from class: org.telegram.ui.Cells.GraySectionCell.1
+            @Override // android.view.View
             public CharSequence getAccessibilityClassName() {
                 return Button.class.getName();
             }
         };
-        this.rightTextView = r0;
-        r0.setPadding(AndroidUtilities.dp(2.0f), 0, AndroidUtilities.dp(2.0f), 0);
-        this.rightTextView.setAnimationProperties(1.0f, 0, 400, CubicBezierInterpolator.EASE_OUT_QUINT);
-        this.rightTextView.setTextSize((float) AndroidUtilities.dp(14.0f));
+        this.rightTextView = animatedTextView;
+        animatedTextView.setPadding(AndroidUtilities.dp(2.0f), 0, AndroidUtilities.dp(2.0f), 0);
+        this.rightTextView.setAnimationProperties(1.0f, 0L, 400L, CubicBezierInterpolator.EASE_OUT_QUINT);
+        this.rightTextView.setTextSize(AndroidUtilities.dp(14.0f));
         this.rightTextView.setTextColor(getThemedColor("key_graySectionText"));
         this.rightTextView.setGravity(LocaleController.isRTL ? 3 : 5);
         addView(this.rightTextView, LayoutHelper.createFrame(-2, -1.0f, (LocaleController.isRTL ? 3 : i) | 48, 16.0f, 0.0f, 16.0f, 0.0f));
         ViewCompat.setAccessibilityHeading(this, true);
     }
 
-    /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
+    @Override // android.widget.FrameLayout, android.view.View
+    protected void onMeasure(int i, int i2) {
         super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(32.0f), NUM));
     }
 
@@ -73,7 +73,7 @@ public class GraySectionCell extends FrameLayout {
     public void setText(String str) {
         this.textView.setText(str);
         this.rightTextView.setVisibility(8);
-        this.rightTextView.setOnClickListener((View.OnClickListener) null);
+        this.rightTextView.setOnClickListener(null);
     }
 
     public void setText(String str, String str2, View.OnClickListener onClickListener) {
@@ -93,10 +93,9 @@ public class GraySectionCell extends FrameLayout {
     }
 
     public static void createThemeDescriptions(List<ThemeDescription> list, RecyclerListView recyclerListView) {
-        List<ThemeDescription> list2 = list;
-        list2.add(new ThemeDescription((View) recyclerListView, 0, new Class[]{GraySectionCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "key_graySectionText"));
-        list2.add(new ThemeDescription((View) recyclerListView, 0, new Class[]{GraySectionCell.class}, new String[]{"rightTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "key_graySectionText"));
-        list2.add(new ThemeDescription(recyclerListView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{GraySectionCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "graySection"));
+        list.add(new ThemeDescription(recyclerListView, 0, new Class[]{GraySectionCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "key_graySectionText"));
+        list.add(new ThemeDescription(recyclerListView, 0, new Class[]{GraySectionCell.class}, new String[]{"rightTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "key_graySectionText"));
+        list.add(new ThemeDescription(recyclerListView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{GraySectionCell.class}, null, null, null, "graySection"));
     }
 
     public TextView getTextView() {
@@ -104,8 +103,8 @@ public class GraySectionCell extends FrameLayout {
     }
 
     private int getThemedColor(String str) {
-        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
-        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        Theme.ResourcesProvider resourcesProvider = this.resourcesProvider;
+        Integer color = resourcesProvider != null ? resourcesProvider.getColor(str) : null;
         return color != null ? color.intValue() : Theme.getColor(str);
     }
 }

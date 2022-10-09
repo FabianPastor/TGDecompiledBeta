@@ -3,14 +3,14 @@ package j$.time;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.regex.Pattern;
-
+/* loaded from: classes2.dex */
 public final class b implements Comparable, Serializable {
     public static final b c = new b(0, 0);
     private final long a;
     private final int b;
 
     static {
-        BigInteger.valueOf(NUM);
+        BigInteger.valueOf(1000000000L);
         Pattern.compile("([-+]?)P(?:([-+]?[0-9]+)D)?(T(?:([-+]?[0-9]+)H)?(?:([-+]?[0-9]+)M)?(?:([-+]?[0-9]+)(?:[.,]([0-9]{0,9}))?S)?)?", 2);
     }
 
@@ -27,7 +27,7 @@ public final class b implements Comparable, Serializable {
         long j2 = j / NUM;
         int i = (int) (j % NUM);
         if (i < 0) {
-            i = (int) (((long) i) + NUM);
+            i = (int) (i + NUM);
             j2--;
         }
         return a(j2, i);
@@ -49,7 +49,7 @@ public final class b implements Comparable, Serializable {
         if ((j ^ j5) >= 0) {
             z = true;
         }
-        if (z2 || z) {
+        if (z2 | z) {
             long j6 = j2 % NUM;
             if (j6 != 0) {
                 if ((1 | ((j2 ^ NUM) >> 63)) <= 0) {
@@ -62,6 +62,7 @@ public final class b implements Comparable, Serializable {
         throw new ArithmeticException();
     }
 
+    @Override // java.lang.Comparable
     public int compareTo(Object obj) {
         b bVar = (b) obj;
         int i = (this.a > bVar.a ? 1 : (this.a == bVar.a ? 0 : -1));
@@ -115,9 +116,9 @@ public final class b implements Comparable, Serializable {
         if (this.b > 0) {
             int length = sb.length();
             if (i2 < 0) {
-                sb.append(NUM - ((long) this.b));
+                sb.append(NUM - this.b);
             } else {
-                sb.append(((long) this.b) + NUM);
+                sb.append(this.b + NUM);
             }
             while (sb.charAt(sb.length() - 1) == '0') {
                 sb.setLength(sb.length() - 1);

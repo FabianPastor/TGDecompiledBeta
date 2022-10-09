@@ -1,47 +1,53 @@
 package j$.util.stream;
-
-import j$.util.function.l;
-import j$.util.u;
-
-class I0 extends L0 {
-    I0(u uVar, int i, boolean z) {
+/* JADX INFO: Access modifiers changed from: package-private */
+/* loaded from: classes2.dex */
+public class I0 extends L0 {
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public I0(j$.util.u uVar, int i, boolean z) {
         super(uVar, i, z);
     }
 
-    /* access modifiers changed from: package-private */
-    public final boolean G0() {
+    @Override // j$.util.stream.AbstractCLASSNAMEc
+    final boolean G0() {
         throw new UnsupportedOperationException();
     }
 
-    /* access modifiers changed from: package-private */
-    public final CLASSNAMEm3 H0(int i, CLASSNAMEm3 m3Var) {
+    /* JADX INFO: Access modifiers changed from: package-private */
+    @Override // j$.util.stream.AbstractCLASSNAMEc
+    public final InterfaceCLASSNAMEm3 H0(int i, InterfaceCLASSNAMEm3 interfaceCLASSNAMEm3) {
         throw new UnsupportedOperationException();
     }
 
-    public void I(l lVar) {
+    @Override // j$.util.stream.L0, j$.util.stream.IntStream
+    public void I(j$.util.function.l lVar) {
         if (!isParallel()) {
-            L0.M0(J0()).c(lVar);
+            L0.L0(J0()).c(lVar);
             return;
         }
         lVar.getClass();
         x0(new CLASSNAMEl0(lVar, true));
     }
 
-    public void U(l lVar) {
+    @Override // j$.util.stream.L0, j$.util.stream.IntStream
+    public void U(j$.util.function.l lVar) {
         if (!isParallel()) {
-            L0.M0(J0()).c(lVar);
+            L0.L0(J0()).c(lVar);
         } else {
             super.U(lVar);
         }
     }
 
-    public /* bridge */ /* synthetic */ IntStream parallel() {
-        parallel();
+    @Override // j$.util.stream.AbstractCLASSNAMEc, j$.util.stream.InterfaceCLASSNAMEg, j$.util.stream.IntStream
+    /* renamed from: parallel */
+    public /* bridge */ /* synthetic */ IntStream mo304parallel() {
+        mo304parallel();
         return this;
     }
 
-    public /* bridge */ /* synthetic */ IntStream sequential() {
-        sequential();
+    @Override // j$.util.stream.AbstractCLASSNAMEc, j$.util.stream.InterfaceCLASSNAMEg, j$.util.stream.IntStream
+    /* renamed from: sequential */
+    public /* bridge */ /* synthetic */ IntStream mo305sequential() {
+        mo305sequential();
         return this;
     }
 }

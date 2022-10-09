@@ -1,29 +1,32 @@
 package j$.util.stream;
+/* JADX INFO: Access modifiers changed from: package-private */
+/* loaded from: classes2.dex */
+public abstract class U2 implements N4 {
+    private final EnumCLASSNAMEe4 a;
 
-import j$.util.u;
-
-abstract class U2 implements N4 {
-    private final CLASSNAMEe4 a;
-
-    U2(CLASSNAMEe4 e4Var) {
-        this.a = e4Var;
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public U2(EnumCLASSNAMEe4 enumCLASSNAMEe4) {
+        this.a = enumCLASSNAMEe4;
     }
 
     public abstract S2 a();
 
+    @Override // j$.util.stream.N4
     public /* synthetic */ int b() {
         return 0;
     }
 
-    public Object c(CLASSNAMEy2 y2Var, u uVar) {
-        return ((S2) new V2(this, y2Var, uVar).invoke()).get();
+    @Override // j$.util.stream.N4
+    public Object c(AbstractCLASSNAMEy2 abstractCLASSNAMEy2, j$.util.u uVar) {
+        return ((S2) new V2(this, abstractCLASSNAMEy2, uVar).invoke()).get();
     }
 
-    public Object d(CLASSNAMEy2 y2Var, u uVar) {
-        S2 a2 = a();
-        CLASSNAMEc cVar = (CLASSNAMEc) y2Var;
-        a2.getClass();
-        cVar.n0(cVar.v0(a2), uVar);
-        return a2.get();
+    @Override // j$.util.stream.N4
+    public Object d(AbstractCLASSNAMEy2 abstractCLASSNAMEy2, j$.util.u uVar) {
+        S2 a = a();
+        AbstractCLASSNAMEc abstractCLASSNAMEc = (AbstractCLASSNAMEc) abstractCLASSNAMEy2;
+        a.getClass();
+        abstractCLASSNAMEc.n0(abstractCLASSNAMEc.v0(a), uVar);
+        return a.get();
     }
 }

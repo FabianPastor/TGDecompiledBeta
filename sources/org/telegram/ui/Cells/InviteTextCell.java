@@ -10,7 +10,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
-
+/* loaded from: classes3.dex */
 public class InviteTextCell extends FrameLayout {
     private ImageView imageView;
     private SimpleTextView textView;
@@ -23,9 +23,9 @@ public class InviteTextCell extends FrameLayout {
         this.textView.setTextSize(17);
         this.textView.setGravity(LocaleController.isRTL ? 5 : 3);
         addView(this.textView);
-        ImageView imageView2 = new ImageView(context);
-        this.imageView = imageView2;
-        imageView2.setScaleType(ImageView.ScaleType.CENTER);
+        ImageView imageView = new ImageView(context);
+        this.imageView = imageView;
+        imageView.setScaleType(ImageView.ScaleType.CENTER);
         this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayIcon"), PorterDuff.Mode.MULTIPLY));
         addView(this.imageView);
     }
@@ -34,8 +34,8 @@ public class InviteTextCell extends FrameLayout {
         return this.textView;
     }
 
-    /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
+    @Override // android.widget.FrameLayout, android.view.View
+    protected void onMeasure(int i, int i2) {
         int size = View.MeasureSpec.getSize(i);
         int dp = AndroidUtilities.dp(72.0f);
         this.textView.measure(View.MeasureSpec.makeMeasureSpec(size - AndroidUtilities.dp(95.0f), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(20.0f), NUM));
@@ -43,8 +43,8 @@ public class InviteTextCell extends FrameLayout {
         setMeasuredDimension(size, AndroidUtilities.dp(72.0f));
     }
 
-    /* access modifiers changed from: protected */
-    public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+    @Override // android.widget.FrameLayout, android.view.ViewGroup, android.view.View
+    protected void onLayout(boolean z, int i, int i2, int i3, int i4) {
         int i5 = i4 - i2;
         int i6 = i3 - i;
         int textHeight = (i5 - this.textView.getTextHeight()) / 2;
@@ -53,8 +53,8 @@ public class InviteTextCell extends FrameLayout {
         simpleTextView.layout(dp, textHeight, simpleTextView.getMeasuredWidth() + dp, this.textView.getMeasuredHeight() + textHeight);
         int measuredHeight = (i5 - this.imageView.getMeasuredHeight()) / 2;
         int dp2 = !LocaleController.isRTL ? AndroidUtilities.dp(20.0f) : (i6 - this.imageView.getMeasuredWidth()) - AndroidUtilities.dp(20.0f);
-        ImageView imageView2 = this.imageView;
-        imageView2.layout(dp2, measuredHeight, imageView2.getMeasuredWidth() + dp2, this.imageView.getMeasuredHeight() + measuredHeight);
+        ImageView imageView = this.imageView;
+        imageView.layout(dp2, measuredHeight, imageView.getMeasuredWidth() + dp2, this.imageView.getMeasuredHeight() + measuredHeight);
     }
 
     public void setTextColor(int i) {

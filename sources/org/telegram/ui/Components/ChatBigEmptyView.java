@@ -13,24 +13,24 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
-
+/* loaded from: classes3.dex */
 public class ChatBigEmptyView extends LinearLayout {
-    private ArrayList<ImageView> imageViews = new ArrayList<>();
+    private ArrayList<ImageView> imageViews;
     private final Theme.ResourcesProvider resourcesProvider;
     private TextView statusTextView;
-    private ArrayList<TextView> textViews = new ArrayList<>();
+    private ArrayList<TextView> textViews;
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public ChatBigEmptyView(Context context, View view, int i, Theme.ResourcesProvider resourcesProvider2) {
+    public ChatBigEmptyView(Context context, View view, int i, Theme.ResourcesProvider resourcesProvider) {
         super(context);
-        Context context2 = context;
-        int i2 = i;
-        this.resourcesProvider = resourcesProvider2;
+        int i2;
+        this.textViews = new ArrayList<>();
+        this.imageViews = new ArrayList<>();
+        this.resourcesProvider = resourcesProvider;
         setBackground(Theme.createServiceDrawable(AndroidUtilities.dp(18.0f), this, view, getThemedPaint("paintChatActionBackground")));
         setPadding(AndroidUtilities.dp(16.0f), AndroidUtilities.dp(12.0f), AndroidUtilities.dp(16.0f), AndroidUtilities.dp(12.0f));
         setOrientation(1);
-        if (i2 == 0) {
-            TextView textView = new TextView(context2);
+        if (i == 0) {
+            TextView textView = new TextView(context);
             this.statusTextView = textView;
             textView.setTextSize(1, 15.0f);
             this.statusTextView.setTextColor(getThemedColor("chat_serviceText"));
@@ -38,8 +38,8 @@ public class ChatBigEmptyView extends LinearLayout {
             this.statusTextView.setMaxWidth(AndroidUtilities.dp(210.0f));
             this.textViews.add(this.statusTextView);
             addView(this.statusTextView, LayoutHelper.createLinear(-2, -2, 49));
-        } else if (i2 == 1) {
-            TextView textView2 = new TextView(context2);
+        } else if (i == 1) {
+            TextView textView2 = new TextView(context);
             this.statusTextView = textView2;
             textView2.setTextSize(1, 15.0f);
             this.statusTextView.setTextColor(getThemedColor("chat_serviceText"));
@@ -48,17 +48,17 @@ public class ChatBigEmptyView extends LinearLayout {
             this.textViews.add(this.statusTextView);
             addView(this.statusTextView, LayoutHelper.createLinear(-2, -2, 49));
         } else {
-            RLottieImageView rLottieImageView = new RLottieImageView(context2);
+            RLottieImageView rLottieImageView = new RLottieImageView(context);
             rLottieImageView.setAutoRepeat(true);
             rLottieImageView.setAnimation(R.raw.utyan_saved_messages, 120, 120);
             rLottieImageView.playAnimation();
             addView(rLottieImageView, LayoutHelper.createLinear(-2, -2, 49, 0, 2, 0, 0));
         }
-        TextView textView3 = new TextView(context2);
-        if (i2 == 0) {
+        TextView textView3 = new TextView(context);
+        if (i == 0) {
             textView3.setText(LocaleController.getString("EncryptedDescriptionTitle", R.string.EncryptedDescriptionTitle));
             textView3.setTextSize(1, 15.0f);
-        } else if (i2 == 1) {
+        } else if (i == 1) {
             textView3.setText(LocaleController.getString("GroupEmptyTitle2", R.string.GroupEmptyTitle2));
             textView3.setTextSize(1, 15.0f);
         } else {
@@ -70,22 +70,27 @@ public class ChatBigEmptyView extends LinearLayout {
         textView3.setTextColor(getThemedColor("chat_serviceText"));
         this.textViews.add(textView3);
         textView3.setMaxWidth(AndroidUtilities.dp(260.0f));
-        addView(textView3, LayoutHelper.createLinear(-2, -2, (i2 != 2 ? LocaleController.isRTL ? 5 : 3 : 1) | 48, 0, 8, 0, i2 != 2 ? 0 : 8));
+        if (i != 2) {
+            i2 = LocaleController.isRTL ? 5 : 3;
+        } else {
+            i2 = 1;
+        }
+        addView(textView3, LayoutHelper.createLinear(-2, -2, i2 | 48, 0, 8, 0, i != 2 ? 0 : 8));
         for (int i3 = 0; i3 < 4; i3++) {
-            LinearLayout linearLayout = new LinearLayout(context2);
+            LinearLayout linearLayout = new LinearLayout(context);
             linearLayout.setOrientation(0);
             addView(linearLayout, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 0, 8, 0, 0));
-            ImageView imageView = new ImageView(context2);
+            ImageView imageView = new ImageView(context);
             imageView.setColorFilter(new PorterDuffColorFilter(getThemedColor("chat_serviceText"), PorterDuff.Mode.MULTIPLY));
-            if (i2 == 0) {
+            if (i == 0) {
                 imageView.setImageResource(R.drawable.ic_lock_white);
-            } else if (i2 == 2) {
+            } else if (i == 2) {
                 imageView.setImageResource(R.drawable.list_circle);
             } else {
                 imageView.setImageResource(R.drawable.groups_overview_check);
             }
             this.imageViews.add(imageView);
-            TextView textView4 = new TextView(context2);
+            TextView textView4 = new TextView(context);
             textView4.setTextSize(1, 15.0f);
             textView4.setTextColor(getThemedColor("chat_serviceText"));
             this.textViews.add(textView4);
@@ -95,48 +100,48 @@ public class ChatBigEmptyView extends LinearLayout {
                 if (i3 != 1) {
                     if (i3 != 2) {
                         if (i3 == 3) {
-                            if (i2 == 0) {
+                            if (i == 0) {
                                 textView4.setText(LocaleController.getString("EncryptedDescription4", R.string.EncryptedDescription4));
-                            } else if (i2 == 2) {
+                            } else if (i == 2) {
                                 textView4.setText(LocaleController.getString("ChatYourSelfDescription4", R.string.ChatYourSelfDescription4));
                             } else {
                                 textView4.setText(LocaleController.getString("GroupDescription4", R.string.GroupDescription4));
                             }
                         }
-                    } else if (i2 == 0) {
+                    } else if (i == 0) {
                         textView4.setText(LocaleController.getString("EncryptedDescription3", R.string.EncryptedDescription3));
-                    } else if (i2 == 2) {
+                    } else if (i == 2) {
                         textView4.setText(LocaleController.getString("ChatYourSelfDescription3", R.string.ChatYourSelfDescription3));
                     } else {
                         textView4.setText(LocaleController.getString("GroupDescription3", R.string.GroupDescription3));
                     }
-                } else if (i2 == 0) {
+                } else if (i == 0) {
                     textView4.setText(LocaleController.getString("EncryptedDescription2", R.string.EncryptedDescription2));
-                } else if (i2 == 2) {
+                } else if (i == 2) {
                     textView4.setText(LocaleController.getString("ChatYourSelfDescription2", R.string.ChatYourSelfDescription2));
                 } else {
                     textView4.setText(LocaleController.getString("GroupDescription2", R.string.GroupDescription2));
                 }
-            } else if (i2 == 0) {
+            } else if (i == 0) {
                 textView4.setText(LocaleController.getString("EncryptedDescription1", R.string.EncryptedDescription1));
-            } else if (i2 == 2) {
+            } else if (i == 2) {
                 textView4.setText(LocaleController.getString("ChatYourSelfDescription1", R.string.ChatYourSelfDescription1));
             } else {
                 textView4.setText(LocaleController.getString("GroupDescription1", R.string.GroupDescription1));
             }
             if (LocaleController.isRTL) {
                 linearLayout.addView(textView4, LayoutHelper.createLinear(-2, -2));
-                if (i2 == 0) {
+                if (i == 0) {
                     linearLayout.addView(imageView, LayoutHelper.createLinear(-2, -2, 8.0f, 3.0f, 0.0f, 0.0f));
-                } else if (i2 == 2) {
+                } else if (i == 2) {
                     linearLayout.addView(imageView, LayoutHelper.createLinear(-2, -2, 8.0f, 7.0f, 0.0f, 0.0f));
                 } else {
                     linearLayout.addView(imageView, LayoutHelper.createLinear(-2, -2, 8.0f, 3.0f, 0.0f, 0.0f));
                 }
             } else {
-                if (i2 == 0) {
+                if (i == 0) {
                     linearLayout.addView(imageView, LayoutHelper.createLinear(-2, -2, 0.0f, 4.0f, 8.0f, 0.0f));
-                } else if (i2 == 2) {
+                } else if (i == 2) {
                     linearLayout.addView(imageView, LayoutHelper.createLinear(-2, -2, 0.0f, 8.0f, 8.0f, 0.0f));
                 } else {
                     linearLayout.addView(imageView, LayoutHelper.createLinear(-2, -2, 0.0f, 4.0f, 8.0f, 0.0f));
@@ -160,14 +165,14 @@ public class ChatBigEmptyView extends LinearLayout {
     }
 
     private int getThemedColor(String str) {
-        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
-        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        Theme.ResourcesProvider resourcesProvider = this.resourcesProvider;
+        Integer color = resourcesProvider != null ? resourcesProvider.getColor(str) : null;
         return color != null ? color.intValue() : Theme.getColor(str);
     }
 
     private Paint getThemedPaint(String str) {
-        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
-        Paint paint = resourcesProvider2 != null ? resourcesProvider2.getPaint(str) : null;
+        Theme.ResourcesProvider resourcesProvider = this.resourcesProvider;
+        Paint paint = resourcesProvider != null ? resourcesProvider.getPaint(str) : null;
         return paint != null ? paint : Theme.getThemePaint(str);
     }
 }

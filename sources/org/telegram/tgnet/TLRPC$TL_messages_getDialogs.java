@@ -1,5 +1,5 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_messages_getDialogs extends TLObject {
     public static int constructor = -NUM;
     public boolean exclude_pinned;
@@ -11,13 +11,15 @@ public class TLRPC$TL_messages_getDialogs extends TLObject {
     public int offset_id;
     public TLRPC$InputPeer offset_peer;
 
+    @Override // org.telegram.tgnet.TLObject
     public TLObject deserializeResponse(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         return TLRPC$messages_Dialogs.TLdeserialize(abstractSerializedData, i, z);
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
-        int i = this.exclude_pinned ? this.flags | 1 : this.flags & -2;
+        int i = this.exclude_pinned ? this.flags | 1 : this.flags & (-2);
         this.flags = i;
         abstractSerializedData.writeInt32(i);
         if ((this.flags & 2) != 0) {

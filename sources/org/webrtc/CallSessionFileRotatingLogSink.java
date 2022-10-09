@@ -1,7 +1,7 @@
 package org.webrtc;
 
 import org.webrtc.Logging;
-
+/* loaded from: classes3.dex */
 public class CallSessionFileRotatingLogSink {
     private long nativeSink;
 
@@ -12,25 +12,24 @@ public class CallSessionFileRotatingLogSink {
     private static native byte[] nativeGetLogData(String str);
 
     public static byte[] getLogData(String str) {
-        if (str != null) {
-            return nativeGetLogData(str);
+        if (str == null) {
+            throw new IllegalArgumentException("dirPath may not be null.");
         }
-        throw new IllegalArgumentException("dirPath may not be null.");
+        return nativeGetLogData(str);
     }
 
     public CallSessionFileRotatingLogSink(String str, int i, Logging.Severity severity) {
-        if (str != null) {
-            this.nativeSink = nativeAddSink(str, i, severity.ordinal());
-            return;
+        if (str == null) {
+            throw new IllegalArgumentException("dirPath may not be null.");
         }
-        throw new IllegalArgumentException("dirPath may not be null.");
+        this.nativeSink = nativeAddSink(str, i, severity.ordinal());
     }
 
     public void dispose() {
         long j = this.nativeSink;
         if (j != 0) {
             nativeDeleteSink(j);
-            this.nativeSink = 0;
+            this.nativeSink = 0L;
         }
     }
 }

@@ -7,9 +7,9 @@ import org.aspectj.lang.Signature;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.aspectj.lang.reflect.SourceLocation;
 import org.aspectj.runtime.reflect.JoinPointImpl;
-
+/* loaded from: classes.dex */
 public final class Factory {
-    private static Object[] NO_ARGS = new Object[0];
+    private static Object[] NO_ARGS;
     static /* synthetic */ Class class$java$lang$ClassNotFoundException;
     static Hashtable prims;
     int count = 0;
@@ -29,9 +29,11 @@ public final class Factory {
         prims.put("long", Long.TYPE);
         prims.put("float", Float.TYPE);
         prims.put("double", Double.TYPE);
+        NO_ARGS = new Object[0];
     }
 
-    static Class makeClass(String str, ClassLoader classLoader) {
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public static Class makeClass(String str, ClassLoader classLoader) {
         if (str.equals("*")) {
             return null;
         }
@@ -39,11 +41,11 @@ public final class Factory {
         if (cls != null) {
             return cls;
         }
-        if (classLoader != null) {
-            return Class.forName(str, false, classLoader);
-        }
         try {
-            return Class.forName(str);
+            if (classLoader == null) {
+                return Class.forName(str);
+            }
+            return Class.forName(str, false, classLoader);
         } catch (ClassNotFoundException unused) {
             Class cls2 = class$java$lang$ClassNotFoundException;
             if (cls2 != null) {
@@ -84,11 +86,8 @@ public final class Factory {
     }
 
     public MethodSignature makeMethodSig(String str, String str2, String str3, String str4, String str5, String str6, String str7) {
-        String str8 = str;
         int parseInt = Integer.parseInt(str, 16);
-        String str9 = str3;
         Class makeClass = makeClass(str3, this.lookupClassLoader);
-        String str10 = str4;
         StringTokenizer stringTokenizer = new StringTokenizer(str4, ":");
         int countTokens = stringTokenizer.countTokens();
         Class[] clsArr = new Class[countTokens];

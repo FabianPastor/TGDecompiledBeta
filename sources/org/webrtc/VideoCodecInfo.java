@@ -3,7 +3,7 @@ package org.webrtc;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.Map;
-
+/* loaded from: classes3.dex */
 public class VideoCodecInfo {
     public static final String H264_CONSTRAINED_BASELINE_3_1 = "42e01f";
     public static final String H264_CONSTRAINED_HIGH_3_1 = "640c1f";
@@ -43,25 +43,21 @@ public class VideoCodecInfo {
             return false;
         }
         VideoCodecInfo videoCodecInfo = (VideoCodecInfo) obj;
-        if (!this.name.equalsIgnoreCase(videoCodecInfo.name) || !this.params.equals(videoCodecInfo.params)) {
-            return false;
-        }
-        return true;
+        return this.name.equalsIgnoreCase(videoCodecInfo.name) && this.params.equals(videoCodecInfo.params);
     }
 
     public int hashCode() {
         return Arrays.hashCode(new Object[]{this.name.toUpperCase(Locale.ROOT), this.params});
     }
 
-    /* access modifiers changed from: package-private */
+    /* JADX INFO: Access modifiers changed from: package-private */
     @CalledByNative
     public String getName() {
         return this.name;
     }
 
-    /* access modifiers changed from: package-private */
     @CalledByNative
-    public Map getParams() {
+    Map getParams() {
         return this.params;
     }
 }

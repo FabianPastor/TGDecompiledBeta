@@ -4,11 +4,11 @@ import j$.util.Iterator;
 import j$.util.function.Consumer;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.Iterator;
-
-class J implements u {
+/* JADX INFO: Access modifiers changed from: package-private */
+/* loaded from: classes2.dex */
+public class J implements u {
     private final Collection a;
-    private Iterator b = null;
+    private java.util.Iterator b = null;
     private final int c;
     private long d;
     private int e;
@@ -18,40 +18,44 @@ class J implements u {
         this.c = (i & 4096) == 0 ? i | 64 | 16384 : i;
     }
 
+    @Override // j$.util.u
     public boolean b(Consumer consumer) {
         consumer.getClass();
         if (this.b == null) {
             this.b = this.a.iterator();
-            this.d = (long) this.a.size();
+            this.d = this.a.size();
         }
-        if (!this.b.hasNext()) {
-            return false;
+        if (this.b.hasNext()) {
+            consumer.accept(this.b.next());
+            return true;
         }
-        consumer.accept(this.b.next());
-        return true;
+        return false;
     }
 
+    @Override // j$.util.u
     public int characteristics() {
         return this.c;
     }
 
+    @Override // j$.util.u
     public long estimateSize() {
-        if (this.b != null) {
-            return this.d;
+        if (this.b == null) {
+            this.b = this.a.iterator();
+            long size = this.a.size();
+            this.d = size;
+            return size;
         }
-        this.b = this.a.iterator();
-        long size = (long) this.a.size();
-        this.d = size;
-        return size;
+        return this.d;
     }
 
+    @Override // j$.util.u
     public void forEachRemaining(Consumer consumer) {
         consumer.getClass();
-        Iterator it = this.b;
+        java.util.Iterator it = this.b;
         if (it == null) {
             it = this.a.iterator();
             this.b = it;
-            this.d = (long) this.a.size();
+            this.d = this.a.size();
         }
         if (it instanceof Iterator) {
             ((Iterator) it).forEachRemaining(consumer);
@@ -60,28 +64,33 @@ class J implements u {
         }
     }
 
+    @Override // j$.util.u
     public Comparator getComparator() {
-        if (CLASSNAMEa.f(this, 4)) {
+        if (AbstractCLASSNAMEa.f(this, 4)) {
             return null;
         }
         throw new IllegalStateException();
     }
 
+    @Override // j$.util.u
     public /* synthetic */ long getExactSizeIfKnown() {
-        return CLASSNAMEa.e(this);
+        return AbstractCLASSNAMEa.e(this);
     }
 
+    @Override // j$.util.u
     public /* synthetic */ boolean hasCharacteristics(int i) {
-        return CLASSNAMEa.f(this, i);
+        return AbstractCLASSNAMEa.f(this, i);
     }
 
-    public u trySplit() {
+    @Override // j$.util.u
+    /* renamed from: trySplit */
+    public u mo322trySplit() {
         long j;
         java.util.Iterator it = this.b;
         if (it == null) {
             it = this.a.iterator();
             this.b = it;
-            j = (long) this.a.size();
+            j = this.a.size();
             this.d = j;
         } else {
             j = this.d;
@@ -90,7 +99,7 @@ class J implements u {
             return null;
         }
         int i = this.e + 1024;
-        if (((long) i) > j) {
+        if (i > j) {
             i = (int) j;
         }
         if (i > 33554432) {
@@ -101,18 +110,14 @@ class J implements u {
         do {
             objArr[i2] = it.next();
             i2++;
-            if (i2 >= i || !it.hasNext()) {
-                this.e = i2;
-                long j2 = this.d;
+            if (i2 >= i) {
+                break;
             }
-            objArr[i2] = it.next();
-            i2++;
-            break;
-        } while (!it.hasNext());
+        } while (it.hasNext());
         this.e = i2;
-        long j22 = this.d;
-        if (j22 != Long.MAX_VALUE) {
-            this.d = j22 - ((long) i2);
+        long j2 = this.d;
+        if (j2 != Long.MAX_VALUE) {
+            this.d = j2 - i2;
         }
         return new B(objArr, 0, i2, this.c);
     }

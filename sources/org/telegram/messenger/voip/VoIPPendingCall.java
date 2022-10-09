@@ -11,7 +11,7 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.tgnet.TLRPC$UserFull;
 import org.telegram.ui.Components.voip.VoIPHelper;
-
+/* loaded from: classes.dex */
 public final class VoIPPendingCall {
     private AccountInstance accountInstance;
     private final Activity activity;
@@ -23,38 +23,48 @@ public final class VoIPPendingCall {
     private final long userId;
     private final boolean video;
 
-    public static VoIPPendingCall startOrSchedule(Activity activity2, long j, boolean z, AccountInstance accountInstance2) {
-        return new VoIPPendingCall(activity2, j, z, 1000, accountInstance2);
+    public static VoIPPendingCall startOrSchedule(Activity activity, long j, boolean z, AccountInstance accountInstance) {
+        return new VoIPPendingCall(activity, j, z, 1000L, accountInstance);
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$new$0(int i, int i2, Object[] objArr) {
         if (i == NotificationCenter.didUpdateConnectionState) {
             onConnectionStateUpdated(false);
         }
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$new$1() {
         onConnectionStateUpdated(true);
     }
 
-    private VoIPPendingCall(Activity activity2, long j, boolean z, long j2, AccountInstance accountInstance2) {
-        VoIPPendingCall$$ExternalSyntheticLambda1 voIPPendingCall$$ExternalSyntheticLambda1 = new VoIPPendingCall$$ExternalSyntheticLambda1(this);
-        this.observer = voIPPendingCall$$ExternalSyntheticLambda1;
-        VoIPPendingCall$$ExternalSyntheticLambda0 voIPPendingCall$$ExternalSyntheticLambda0 = new VoIPPendingCall$$ExternalSyntheticLambda0(this);
-        this.releaseRunnable = voIPPendingCall$$ExternalSyntheticLambda0;
-        this.activity = activity2;
+    private VoIPPendingCall(Activity activity, long j, boolean z, long j2, AccountInstance accountInstance) {
+        NotificationCenter.NotificationCenterDelegate notificationCenterDelegate = new NotificationCenter.NotificationCenterDelegate() { // from class: org.telegram.messenger.voip.VoIPPendingCall$$ExternalSyntheticLambda1
+            @Override // org.telegram.messenger.NotificationCenter.NotificationCenterDelegate
+            public final void didReceivedNotification(int i, int i2, Object[] objArr) {
+                VoIPPendingCall.this.lambda$new$0(i, i2, objArr);
+            }
+        };
+        this.observer = notificationCenterDelegate;
+        Runnable runnable = new Runnable() { // from class: org.telegram.messenger.voip.VoIPPendingCall$$ExternalSyntheticLambda0
+            @Override // java.lang.Runnable
+            public final void run() {
+                VoIPPendingCall.this.lambda$new$1();
+            }
+        };
+        this.releaseRunnable = runnable;
+        this.activity = activity;
         this.userId = j;
         this.video = z;
-        this.accountInstance = accountInstance2;
+        this.accountInstance = accountInstance;
         if (!onConnectionStateUpdated(false)) {
-            NotificationCenter instance = NotificationCenter.getInstance(UserConfig.selectedAccount);
-            this.notificationCenter = instance;
-            instance.addObserver(voIPPendingCall$$ExternalSyntheticLambda1, NotificationCenter.didUpdateConnectionState);
-            Handler handler2 = new Handler(Looper.myLooper());
-            this.handler = handler2;
-            handler2.postDelayed(voIPPendingCall$$ExternalSyntheticLambda0, j2);
+            NotificationCenter notificationCenter = NotificationCenter.getInstance(UserConfig.selectedAccount);
+            this.notificationCenter = notificationCenter;
+            notificationCenter.addObserver(notificationCenterDelegate, NotificationCenter.didUpdateConnectionState);
+            Handler handler = new Handler(Looper.myLooper());
+            this.handler = handler;
+            handler.postDelayed(runnable, j2);
         }
     }
 
@@ -68,14 +78,14 @@ public final class VoIPPendingCall {
             TLRPC$UserFull userFull = messagesController.getUserFull(user.id);
             VoIPHelper.startCall(user, this.video, userFull != null && userFull.video_calls_available, this.activity, userFull, this.accountInstance);
         } else if (isAirplaneMode()) {
-            VoIPHelper.startCall((TLRPC$User) null, this.video, false, this.activity, (TLRPC$UserFull) null, this.accountInstance);
+            VoIPHelper.startCall(null, this.video, false, this.activity, null, this.accountInstance);
         }
         release();
         return true;
     }
 
-    private boolean isConnected(AccountInstance accountInstance2) {
-        return accountInstance2.getConnectionsManager().getConnectionState() == 3;
+    private boolean isConnected(AccountInstance accountInstance) {
+        return accountInstance.getConnectionsManager().getConnectionState() == 3;
     }
 
     private boolean isAirplaneMode() {
@@ -84,13 +94,13 @@ public final class VoIPPendingCall {
 
     public void release() {
         if (!this.released) {
-            NotificationCenter notificationCenter2 = this.notificationCenter;
-            if (notificationCenter2 != null) {
-                notificationCenter2.removeObserver(this.observer, NotificationCenter.didUpdateConnectionState);
+            NotificationCenter notificationCenter = this.notificationCenter;
+            if (notificationCenter != null) {
+                notificationCenter.removeObserver(this.observer, NotificationCenter.didUpdateConnectionState);
             }
-            Handler handler2 = this.handler;
-            if (handler2 != null) {
-                handler2.removeCallbacks(this.releaseRunnable);
+            Handler handler = this.handler;
+            if (handler != null) {
+                handler.removeCallbacks(this.releaseRunnable);
             }
             this.released = true;
         }

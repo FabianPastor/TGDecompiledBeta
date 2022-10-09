@@ -5,17 +5,15 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.SystemClock;
 import java.util.ArrayList;
-
+/* loaded from: classes.dex */
 public class DispatchQueueMainThreadSync extends Thread {
     private static int indexPointer;
     private volatile Handler handler;
     public final int index;
     private boolean isRecycled;
-    /* access modifiers changed from: private */
-    public boolean isRunning;
+    private boolean isRunning;
     private long lastTaskTime;
-    /* access modifiers changed from: private */
-    public ArrayList<PostponedTask> postponedTasks;
+    private ArrayList<PostponedTask> postponedTasks;
 
     public void handleMessage(Message message) {
     }
@@ -38,14 +36,15 @@ public class DispatchQueueMainThreadSync extends Thread {
 
     public void sendMessage(Message message, int i) {
         checkThread();
-        if (!this.isRecycled) {
-            if (!this.isRunning) {
-                this.postponedTasks.add(new PostponedTask(message, i));
-            } else if (i <= 0) {
-                this.handler.sendMessage(message);
-            } else {
-                this.handler.sendMessageDelayed(message, (long) i);
-            }
+        if (this.isRecycled) {
+            return;
+        }
+        if (!this.isRunning) {
+            this.postponedTasks.add(new PostponedTask(message, i));
+        } else if (i <= 0) {
+            this.handler.sendMessage(message);
+        } else {
+            this.handler.sendMessageDelayed(message, i);
         }
     }
 
@@ -74,15 +73,15 @@ public class DispatchQueueMainThreadSync extends Thread {
 
     public void cancelRunnables(Runnable[] runnableArr) {
         checkThread();
-        for (Runnable cancelRunnable : runnableArr) {
-            cancelRunnable(cancelRunnable);
+        for (Runnable runnable : runnableArr) {
+            cancelRunnable(runnable);
         }
     }
 
     public boolean postRunnable(Runnable runnable) {
         checkThread();
         this.lastTaskTime = SystemClock.elapsedRealtime();
-        return postRunnable(runnable, 0);
+        return postRunnable(runnable, 0L);
     }
 
     public boolean postRunnable(Runnable runnable, long j) {
@@ -103,7 +102,7 @@ public class DispatchQueueMainThreadSync extends Thread {
     public void cleanupQueue() {
         checkThread();
         this.postponedTasks.clear();
-        this.handler.removeCallbacksAndMessages((Object) null);
+        this.handler.removeCallbacksAndMessages(null);
     }
 
     public long getLastTaskTime() {
@@ -112,21 +111,35 @@ public class DispatchQueueMainThreadSync extends Thread {
 
     public void recycle() {
         checkThread();
-        postRunnable(new DispatchQueueMainThreadSync$$ExternalSyntheticLambda1(this));
+        postRunnable(new Runnable() { // from class: org.telegram.messenger.DispatchQueueMainThreadSync$$ExternalSyntheticLambda1
+            @Override // java.lang.Runnable
+            public final void run() {
+                DispatchQueueMainThreadSync.this.lambda$recycle$0();
+            }
+        });
         this.isRecycled = true;
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$recycle$0() {
         this.handler.getLooper().quit();
     }
 
+    @Override // java.lang.Thread, java.lang.Runnable
     public void run() {
         Looper.prepare();
-        this.handler = new Handler(Looper.myLooper(), new DispatchQueueMainThreadSync$$ExternalSyntheticLambda0(this));
-        AndroidUtilities.runOnUIThread(new Runnable() {
+        this.handler = new Handler(Looper.myLooper(), new Handler.Callback() { // from class: org.telegram.messenger.DispatchQueueMainThreadSync$$ExternalSyntheticLambda0
+            @Override // android.os.Handler.Callback
+            public final boolean handleMessage(Message message) {
+                boolean lambda$run$1;
+                lambda$run$1 = DispatchQueueMainThreadSync.this.lambda$run$1(message);
+                return lambda$run$1;
+            }
+        });
+        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.DispatchQueueMainThreadSync.1
+            @Override // java.lang.Runnable
             public void run() {
-                boolean unused = DispatchQueueMainThreadSync.this.isRunning = true;
+                DispatchQueueMainThreadSync.this.isRunning = true;
                 for (int i = 0; i < DispatchQueueMainThreadSync.this.postponedTasks.size(); i++) {
                     ((PostponedTask) DispatchQueueMainThreadSync.this.postponedTasks.get(i)).run();
                 }
@@ -136,7 +149,7 @@ public class DispatchQueueMainThreadSync extends Thread {
         Looper.loop();
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ boolean lambda$run$1(Message message) {
         handleMessage(message);
         return true;
@@ -150,25 +163,27 @@ public class DispatchQueueMainThreadSync extends Thread {
         return this.handler;
     }
 
-    private class PostponedTask {
+    /* JADX INFO: Access modifiers changed from: private */
+    /* loaded from: classes.dex */
+    public class PostponedTask {
         long delay;
         Message message;
         Runnable runnable;
 
-        public PostponedTask(Message message2, int i) {
-            this.message = message2;
-            this.delay = (long) i;
+        public PostponedTask(Message message, int i) {
+            this.message = message;
+            this.delay = i;
         }
 
-        public PostponedTask(Runnable runnable2, long j) {
-            this.runnable = runnable2;
+        public PostponedTask(Runnable runnable, long j) {
+            this.runnable = runnable;
             this.delay = j;
         }
 
         public void run() {
-            Runnable runnable2 = this.runnable;
-            if (runnable2 != null) {
-                DispatchQueueMainThreadSync.this.postRunnable(runnable2, this.delay);
+            Runnable runnable = this.runnable;
+            if (runnable != null) {
+                DispatchQueueMainThreadSync.this.postRunnable(runnable, this.delay);
             } else {
                 DispatchQueueMainThreadSync.this.sendMessage(this.message, (int) this.delay);
             }

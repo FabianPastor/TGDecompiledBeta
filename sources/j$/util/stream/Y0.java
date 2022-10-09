@@ -1,25 +1,25 @@
 package j$.util.stream;
-
-import j$.util.function.s;
-import j$.util.function.t;
-
-public final /* synthetic */ class Y0 implements t {
+/* loaded from: classes2.dex */
+public final /* synthetic */ class Y0 implements j$.util.function.t {
     public static final /* synthetic */ Y0 a = new Y0();
 
     private /* synthetic */ Y0() {
     }
 
-    public t a(t tVar) {
+    @Override // j$.util.function.t
+    public j$.util.function.t a(j$.util.function.t tVar) {
         tVar.getClass();
-        return new s(this, tVar, 0);
+        return new j$.util.function.s(this, tVar, 0);
     }
 
+    @Override // j$.util.function.t
     public final long applyAsLong(long j) {
-        return 1;
+        return 1L;
     }
 
-    public t b(t tVar) {
+    @Override // j$.util.function.t
+    public j$.util.function.t b(j$.util.function.t tVar) {
         tVar.getClass();
-        return new s(this, tVar, 1);
+        return new j$.util.function.s(this, tVar, 1);
     }
 }

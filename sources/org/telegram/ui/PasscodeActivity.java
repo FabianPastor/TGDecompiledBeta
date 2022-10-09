@@ -14,7 +14,6 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -32,7 +31,9 @@ import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.support.fingerprint.FingerprintManagerCompat;
+import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
+import org.telegram.ui.ActionBar.ActionBarMenuSubItem;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -53,66 +54,50 @@ import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.TextViewSwitcher;
 import org.telegram.ui.Components.TransformableLoginButtonView;
 import org.telegram.ui.Components.VerticalPositionAutoAnimator;
-
+import org.telegram.ui.PasscodeActivity;
+/* loaded from: classes3.dex */
 public class PasscodeActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
-    /* access modifiers changed from: private */
-    public int autoLockDetailRow;
-    /* access modifiers changed from: private */
-    public int autoLockRow;
-    /* access modifiers changed from: private */
-    public int captureDetailRow;
-    /* access modifiers changed from: private */
-    public int captureHeaderRow;
-    /* access modifiers changed from: private */
-    public int captureRow;
-    /* access modifiers changed from: private */
-    public int changePasscodeRow;
-    /* access modifiers changed from: private */
-    public CodeFieldContainer codeFieldContainer;
-    /* access modifiers changed from: private */
-    public int currentPasswordType = 0;
+    private int autoLockDetailRow;
+    private int autoLockRow;
+    private int captureDetailRow;
+    private int captureHeaderRow;
+    private int captureRow;
+    private int changePasscodeRow;
+    private CodeFieldContainer codeFieldContainer;
     private TextViewSwitcher descriptionTextSwitcher;
-    /* access modifiers changed from: private */
-    public int disablePasscodeRow;
-    /* access modifiers changed from: private */
-    public int fingerprintRow;
+    private int disablePasscodeRow;
+    private int fingerprintRow;
     private String firstPassword;
     private VerticalPositionAutoAnimator floatingAutoAnimator;
-    /* access modifiers changed from: private */
-    public Animator floatingButtonAnimator;
-    /* access modifiers changed from: private */
-    public FrameLayout floatingButtonContainer;
+    private Animator floatingButtonAnimator;
+    private FrameLayout floatingButtonContainer;
     private TransformableLoginButtonView floatingButtonIcon;
-    /* access modifiers changed from: private */
-    public Runnable hidePasscodesDoNotMatch = new PasscodeActivity$$ExternalSyntheticLambda14(this);
-    /* access modifiers changed from: private */
-    public int hintRow;
-    /* access modifiers changed from: private */
-    public CustomPhoneKeyboardView keyboardView;
+    private int hintRow;
+    private CustomPhoneKeyboardView keyboardView;
     private ListAdapter listAdapter;
     private RecyclerListView listView;
     private RLottieImageView lockImageView;
     private Runnable onShowKeyboardCallback;
     private ActionBarMenuItem otherItem;
     private OutlineTextContainerView outlinePasswordView;
-    /* access modifiers changed from: private */
-    public int passcodeSetStep = 0;
     private TextView passcodesDoNotMatchTextView;
-    /* access modifiers changed from: private */
-    public ImageView passwordButton;
-    /* access modifiers changed from: private */
-    public EditTextBoldCursor passwordEditText;
-    /* access modifiers changed from: private */
-    public boolean postedHidePasscodesDoNotMatch;
-    /* access modifiers changed from: private */
-    public int rowCount;
+    private ImageView passwordButton;
+    private EditTextBoldCursor passwordEditText;
+    private boolean postedHidePasscodesDoNotMatch;
+    private int rowCount;
     private TextView titleTextView;
-    /* access modifiers changed from: private */
-    public int type;
-    /* access modifiers changed from: private */
-    public int utyanRow;
+    private int type;
+    private int utyanRow;
+    private int currentPasswordType = 0;
+    private int passcodeSetStep = 0;
+    private Runnable hidePasscodesDoNotMatch = new Runnable() { // from class: org.telegram.ui.PasscodeActivity$$ExternalSyntheticLambda14
+        @Override // java.lang.Runnable
+        public final void run() {
+            PasscodeActivity.this.lambda$new$0();
+        }
+    };
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$new$0() {
         this.postedHidePasscodesDoNotMatch = false;
         AndroidUtilities.updateViewVisibilityAnimated(this.passcodesDoNotMatchTextView, false);
@@ -122,16 +107,18 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
         this.type = i;
     }
 
+    @Override // org.telegram.ui.ActionBar.BaseFragment
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
         updateRows();
-        if (this.type != 0) {
+        if (this.type == 0) {
+            NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didSetPasscode);
             return true;
         }
-        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didSetPasscode);
         return true;
     }
 
+    @Override // org.telegram.ui.ActionBar.BaseFragment
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
         if (this.type == 0) {
@@ -140,757 +127,117 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
         AndroidUtilities.removeAdjustResize(getParentActivity(), this.classGuid);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:28:0x0145  */
-    /* JADX WARNING: Removed duplicated region for block: B:32:0x0169  */
-    /* JADX WARNING: Removed duplicated region for block: B:35:0x01e9  */
-    /* JADX WARNING: Removed duplicated region for block: B:36:0x01eb  */
-    /* JADX WARNING: Removed duplicated region for block: B:39:0x01fe  */
-    /* JADX WARNING: Removed duplicated region for block: B:40:0x0200  */
-    /* JADX WARNING: Removed duplicated region for block: B:43:0x021a  */
-    /* JADX WARNING: Removed duplicated region for block: B:44:0x021d  */
-    /* JADX WARNING: Removed duplicated region for block: B:47:0x02b5  */
-    /* JADX WARNING: Removed duplicated region for block: B:48:0x02b7  */
-    /* JADX WARNING: Removed duplicated region for block: B:51:0x02c4  */
-    /* JADX WARNING: Removed duplicated region for block: B:52:0x02cd  */
-    /* JADX WARNING: Removed duplicated region for block: B:57:0x035c  */
-    /* JADX WARNING: Removed duplicated region for block: B:58:0x035e  */
-    /* JADX WARNING: Removed duplicated region for block: B:61:0x03e9 A[LOOP:0: B:60:0x03e7->B:61:0x03e9, LOOP_END] */
-    /* JADX WARNING: Removed duplicated region for block: B:64:0x0440  */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x044e  */
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x04c3  */
-    /* JADX WARNING: Removed duplicated region for block: B:71:0x04c8  */
-    /* JADX WARNING: Removed duplicated region for block: B:73:0x04ce  */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x04d1  */
-    /* JADX WARNING: Removed duplicated region for block: B:77:0x051f  */
-    /* JADX WARNING: Removed duplicated region for block: B:78:0x0522  */
-    /* JADX WARNING: Removed duplicated region for block: B:80:0x0526  */
-    /* JADX WARNING: Removed duplicated region for block: B:81:0x0529  */
-    /* JADX WARNING: Removed duplicated region for block: B:84:0x0548  */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public android.view.View createView(android.content.Context r30) {
+    /* JADX WARN: Removed duplicated region for block: B:31:0x0145  */
+    /* JADX WARN: Removed duplicated region for block: B:35:0x0169  */
+    /* JADX WARN: Removed duplicated region for block: B:38:0x01e9  */
+    /* JADX WARN: Removed duplicated region for block: B:39:0x01eb  */
+    /* JADX WARN: Removed duplicated region for block: B:42:0x01fe  */
+    /* JADX WARN: Removed duplicated region for block: B:43:0x0200  */
+    /* JADX WARN: Removed duplicated region for block: B:46:0x021a  */
+    /* JADX WARN: Removed duplicated region for block: B:47:0x021d  */
+    /* JADX WARN: Removed duplicated region for block: B:50:0x02b5  */
+    /* JADX WARN: Removed duplicated region for block: B:51:0x02b7  */
+    /* JADX WARN: Removed duplicated region for block: B:54:0x02c4  */
+    /* JADX WARN: Removed duplicated region for block: B:55:0x02cd  */
+    /* JADX WARN: Removed duplicated region for block: B:64:0x03e9 A[LOOP:0: B:63:0x03e7->B:64:0x03e9, LOOP_END] */
+    /* JADX WARN: Removed duplicated region for block: B:67:0x0440  */
+    /* JADX WARN: Removed duplicated region for block: B:70:0x044e  */
+    /* JADX WARN: Removed duplicated region for block: B:73:0x04c3  */
+    /* JADX WARN: Removed duplicated region for block: B:74:0x04c8  */
+    /* JADX WARN: Removed duplicated region for block: B:76:0x04ce  */
+    /* JADX WARN: Removed duplicated region for block: B:77:0x04d1  */
+    /* JADX WARN: Removed duplicated region for block: B:80:0x051f  */
+    /* JADX WARN: Removed duplicated region for block: B:81:0x0522  */
+    /* JADX WARN: Removed duplicated region for block: B:83:0x0526  */
+    /* JADX WARN: Removed duplicated region for block: B:84:0x0529  */
+    /* JADX WARN: Removed duplicated region for block: B:87:0x0548  */
+    @Override // org.telegram.ui.ActionBar.BaseFragment
+    /*
+        Code decompiled incorrectly, please refer to instructions dump.
+        To view partially-correct add '--show-bad-code' argument
+    */
+    public android.view.View createView(final android.content.Context r30) {
         /*
-            r29 = this;
-            r0 = r29
-            r1 = r30
-            org.telegram.ui.ActionBar.ActionBar r2 = r0.actionBar
-            int r3 = org.telegram.messenger.R.drawable.ic_ab_back
-            r2.setBackButtonImage(r3)
-            org.telegram.ui.ActionBar.ActionBar r2 = r0.actionBar
-            r4 = 0
-            r2.setAllowOverlayTitle(r4)
-            org.telegram.ui.ActionBar.ActionBar r2 = r0.actionBar
-            org.telegram.ui.PasscodeActivity$1 r5 = new org.telegram.ui.PasscodeActivity$1
-            r5.<init>()
-            r2.setActionBarMenuOnItemClick(r5)
-            android.widget.FrameLayout r2 = new android.widget.FrameLayout
-            r2.<init>(r1)
-            int r5 = r0.type
-            r6 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-            r7 = -1
-            r8 = 1
-            if (r5 != 0) goto L_0x002a
-            r5 = r2
-            goto L_0x0039
-        L_0x002a:
-            android.widget.ScrollView r5 = new android.widget.ScrollView
-            r5.<init>(r1)
-            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r7, r6)
-            r5.addView(r2, r9)
-            r5.setFillViewport(r8)
-        L_0x0039:
-            org.telegram.ui.PasscodeActivity$2 r9 = new org.telegram.ui.PasscodeActivity$2
-            r9.<init>(r1, r5)
-            org.telegram.ui.PasscodeActivity$$ExternalSyntheticLambda23 r10 = new org.telegram.ui.PasscodeActivity$$ExternalSyntheticLambda23
-            r10.<init>(r0)
-            r9.setDelegate(r10)
-            r0.fragmentView = r9
-            r10 = 1065353216(0x3var_, float:1.0)
-            android.widget.LinearLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r7, (int) r4, (float) r10)
-            r9.addView(r5, r11)
-            org.telegram.ui.Components.CustomPhoneKeyboardView r5 = new org.telegram.ui.Components.CustomPhoneKeyboardView
-            r5.<init>(r1)
-            r0.keyboardView = r5
-            boolean r11 = r29.isCustomKeyboardVisible()
-            if (r11 == 0) goto L_0x0060
-            r11 = 0
-            goto L_0x0062
-        L_0x0060:
-            r11 = 8
-        L_0x0062:
-            r5.setVisibility(r11)
-            org.telegram.ui.Components.CustomPhoneKeyboardView r5 = r0.keyboardView
-            r11 = 230(0xe6, float:3.22E-43)
-            android.widget.LinearLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createLinear(r7, r11)
-            r9.addView(r5, r11)
-            int r5 = r0.type
-            r9 = -1082130432(0xffffffffbvar_, float:-1.0)
-            if (r5 == 0) goto L_0x057c
-            r13 = 2
-            if (r5 == r8) goto L_0x007d
-            if (r5 == r13) goto L_0x007d
-            goto L_0x05d4
-        L_0x007d:
-            org.telegram.ui.ActionBar.ActionBar r5 = r0.actionBar
-            java.lang.String r14 = "windowBackgroundWhite"
-            java.lang.String r15 = "windowBackgroundWhiteBlackText"
-            if (r5 == 0) goto L_0x00d4
-            int r12 = org.telegram.ui.ActionBar.Theme.getColor(r14)
-            r5.setBackgroundColor(r12)
-            org.telegram.ui.ActionBar.ActionBar r5 = r0.actionBar
-            r5.setBackButtonImage(r3)
-            org.telegram.ui.ActionBar.ActionBar r3 = r0.actionBar
-            int r5 = org.telegram.ui.ActionBar.Theme.getColor(r15)
-            r3.setItemsColor(r5, r4)
-            org.telegram.ui.ActionBar.ActionBar r3 = r0.actionBar
-            java.lang.String r5 = "actionBarWhiteSelector"
-            int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
-            r3.setItemsBackgroundColor(r5, r4)
-            org.telegram.ui.ActionBar.ActionBar r3 = r0.actionBar
-            r3.setCastShadows(r4)
-            org.telegram.ui.ActionBar.ActionBar r3 = r0.actionBar
-            org.telegram.ui.ActionBar.ActionBarMenu r3 = r3.createMenu()
-            int r5 = r0.type
-            if (r5 != r8) goto L_0x00c9
-            int r5 = org.telegram.messenger.R.drawable.ic_ab_other
-            org.telegram.ui.ActionBar.ActionBarMenuItem r3 = r3.addItem((int) r4, (int) r5)
-            r0.otherItem = r3
-            int r5 = org.telegram.messenger.R.drawable.msg_permissions
-            int r12 = org.telegram.messenger.R.string.PasscodeSwitchToPassword
-            java.lang.String r12 = org.telegram.messenger.LocaleController.getString((int) r12)
-            org.telegram.ui.ActionBar.ActionBarMenuSubItem r3 = r3.addSubItem(r8, r5, r12)
-            goto L_0x00ca
-        L_0x00c9:
-            r3 = 0
-        L_0x00ca:
-            org.telegram.ui.ActionBar.ActionBar r5 = r0.actionBar
-            org.telegram.ui.PasscodeActivity$4 r12 = new org.telegram.ui.PasscodeActivity$4
-            r12.<init>(r3)
-            r5.setActionBarMenuOnItemClick(r12)
-        L_0x00d4:
-            android.widget.FrameLayout r3 = new android.widget.FrameLayout
-            r3.<init>(r1)
-            android.widget.LinearLayout r5 = new android.widget.LinearLayout
-            r5.<init>(r1)
-            r5.setOrientation(r8)
-            r5.setGravity(r8)
-            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r7, r9)
-            r2.addView(r5, r9)
-            org.telegram.ui.Components.RLottieImageView r9 = new org.telegram.ui.Components.RLottieImageView
-            r9.<init>(r1)
-            r0.lockImageView = r9
-            r9.setFocusable(r4)
-            org.telegram.ui.Components.RLottieImageView r9 = r0.lockImageView
-            int r12 = org.telegram.messenger.R.raw.tsv_setup_intro
-            r6 = 120(0x78, float:1.68E-43)
-            r9.setAnimation((int) r12, (int) r6, (int) r6)
-            org.telegram.ui.Components.RLottieImageView r9 = r0.lockImageView
-            r9.setAutoRepeat(r4)
-            org.telegram.ui.Components.RLottieImageView r9 = r0.lockImageView
-            r9.playAnimation()
-            org.telegram.ui.Components.RLottieImageView r9 = r0.lockImageView
-            boolean r12 = org.telegram.messenger.AndroidUtilities.isSmallScreen()
-            if (r12 != 0) goto L_0x011a
-            android.graphics.Point r12 = org.telegram.messenger.AndroidUtilities.displaySize
-            int r7 = r12.x
-            int r12 = r12.y
-            if (r7 >= r12) goto L_0x011a
-            r7 = 0
-            goto L_0x011c
-        L_0x011a:
-            r7 = 8
-        L_0x011c:
-            r9.setVisibility(r7)
-            org.telegram.ui.Components.RLottieImageView r7 = r0.lockImageView
-            android.widget.LinearLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r6, (int) r6, (int) r8)
-            r5.addView(r7, r6)
-            android.widget.TextView r6 = new android.widget.TextView
-            r6.<init>(r1)
-            r0.titleTextView = r6
-            int r7 = org.telegram.ui.ActionBar.Theme.getColor(r15)
-            r6.setTextColor(r7)
-            android.widget.TextView r6 = r0.titleTextView
-            java.lang.String r7 = "fonts/rmedium.ttf"
-            android.graphics.Typeface r7 = org.telegram.messenger.AndroidUtilities.getTypeface(r7)
-            r6.setTypeface(r7)
-            int r6 = r0.type
-            if (r6 != r8) goto L_0x0169
-            java.lang.String r6 = org.telegram.messenger.SharedConfig.passcodeHash
-            int r6 = r6.length()
-            if (r6 == 0) goto L_0x015b
-            android.widget.TextView r6 = r0.titleTextView
-            int r7 = org.telegram.messenger.R.string.EnterNewPasscode
-            java.lang.String r9 = "EnterNewPasscode"
-            java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r9, r7)
-            r6.setText(r7)
-            goto L_0x0174
-        L_0x015b:
-            android.widget.TextView r6 = r0.titleTextView
-            int r7 = org.telegram.messenger.R.string.CreatePasscode
-            java.lang.String r9 = "CreatePasscode"
-            java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r9, r7)
-            r6.setText(r7)
-            goto L_0x0174
-        L_0x0169:
-            android.widget.TextView r6 = r0.titleTextView
-            int r7 = org.telegram.messenger.R.string.EnterYourPasscode
-            java.lang.String r7 = org.telegram.messenger.LocaleController.getString((int) r7)
-            r6.setText(r7)
-        L_0x0174:
-            android.widget.TextView r6 = r0.titleTextView
-            r7 = 1099956224(0x41900000, float:18.0)
-            r6.setTextSize(r8, r7)
-            android.widget.TextView r6 = r0.titleTextView
-            r6.setGravity(r8)
-            android.widget.TextView r6 = r0.titleTextView
-            r19 = -2
-            r20 = -2
-            r21 = 1
-            r22 = 0
-            r23 = 16
-            r24 = 0
-            r25 = 0
-            android.widget.LinearLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r19, (int) r20, (int) r21, (int) r22, (int) r23, (int) r24, (int) r25)
-            r5.addView(r6, r9)
-            org.telegram.ui.Components.TextViewSwitcher r6 = new org.telegram.ui.Components.TextViewSwitcher
-            r6.<init>(r1)
-            r0.descriptionTextSwitcher = r6
-            org.telegram.ui.PasscodeActivity$$ExternalSyntheticLambda10 r9 = new org.telegram.ui.PasscodeActivity$$ExternalSyntheticLambda10
-            r9.<init>(r1)
-            r6.setFactory(r9)
-            org.telegram.ui.Components.TextViewSwitcher r6 = r0.descriptionTextSwitcher
-            int r9 = org.telegram.messenger.R.anim.alpha_in
-            r6.setInAnimation(r1, r9)
-            org.telegram.ui.Components.TextViewSwitcher r6 = r0.descriptionTextSwitcher
-            int r9 = org.telegram.messenger.R.anim.alpha_out
-            r6.setOutAnimation(r1, r9)
-            org.telegram.ui.Components.TextViewSwitcher r6 = r0.descriptionTextSwitcher
-            r22 = 20
-            r23 = 8
-            r24 = 20
-            android.widget.LinearLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r19, (int) r20, (int) r21, (int) r22, (int) r23, (int) r24, (int) r25)
-            r5.addView(r6, r9)
-            android.widget.TextView r6 = new android.widget.TextView
-            r6.<init>(r1)
-            r9 = 1096810496(0x41600000, float:14.0)
-            r6.setTextSize(r8, r9)
-            java.lang.String r12 = "featuredStickers_addButton"
-            int r12 = org.telegram.ui.ActionBar.Theme.getColor(r12)
-            r6.setTextColor(r12)
-            r12 = 1107296256(0x42000000, float:32.0)
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r12)
-            int r12 = org.telegram.messenger.AndroidUtilities.dp(r12)
-            r6.setPadding(r11, r4, r12, r4)
-            boolean r11 = r29.isPassword()
-            if (r11 == 0) goto L_0x01eb
-            r11 = 3
-            goto L_0x01ec
-        L_0x01eb:
-            r11 = 1
-        L_0x01ec:
-            r12 = 16
-            r11 = r11 | r12
-            r6.setGravity(r11)
-            org.telegram.ui.PasscodeActivity$$ExternalSyntheticLambda4 r11 = new org.telegram.ui.PasscodeActivity$$ExternalSyntheticLambda4
-            r11.<init>(r1)
-            r6.setOnClickListener(r11)
-            int r11 = r0.type
-            if (r11 != r13) goto L_0x0200
-            r11 = 0
-            goto L_0x0202
-        L_0x0200:
-            r11 = 8
-        L_0x0202:
-            r6.setVisibility(r11)
-            int r11 = org.telegram.messenger.R.string.ForgotPasscode
-            java.lang.String r11 = org.telegram.messenger.LocaleController.getString((int) r11)
-            r6.setText(r11)
-            r21 = -1
-            int r11 = android.os.Build.VERSION.SDK_INT
-            r16 = 1114636288(0x42700000, float:60.0)
-            r28 = 1113587712(0x42600000, float:56.0)
-            r13 = 21
-            if (r11 < r13) goto L_0x021d
-            r22 = 1113587712(0x42600000, float:56.0)
-            goto L_0x021f
-        L_0x021d:
-            r22 = 1114636288(0x42700000, float:60.0)
-        L_0x021f:
-            r23 = 81
-            r24 = 0
-            r25 = 0
-            r26 = 0
-            r27 = 1098907648(0x41800000, float:16.0)
-            android.widget.FrameLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createFrame(r21, r22, r23, r24, r25, r26, r27)
-            r2.addView(r6, r11)
-            org.telegram.ui.Components.VerticalPositionAutoAnimator.attach(r6)
-            android.widget.TextView r6 = new android.widget.TextView
-            r6.<init>(r1)
-            r0.passcodesDoNotMatchTextView = r6
-            r6.setTextSize(r8, r9)
-            android.widget.TextView r6 = r0.passcodesDoNotMatchTextView
-            java.lang.String r9 = "windowBackgroundWhiteGrayText6"
-            int r9 = org.telegram.ui.ActionBar.Theme.getColor(r9)
-            r6.setTextColor(r9)
-            android.widget.TextView r6 = r0.passcodesDoNotMatchTextView
-            int r9 = org.telegram.messenger.R.string.PasscodesDoNotMatchTryAgain
-            java.lang.String r9 = org.telegram.messenger.LocaleController.getString((int) r9)
-            r6.setText(r9)
-            android.widget.TextView r6 = r0.passcodesDoNotMatchTextView
-            r9 = 1094713344(0x41400000, float:12.0)
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r9)
-            int r9 = org.telegram.messenger.AndroidUtilities.dp(r9)
-            r6.setPadding(r4, r11, r4, r9)
-            android.widget.TextView r6 = r0.passcodesDoNotMatchTextView
-            org.telegram.messenger.AndroidUtilities.updateViewVisibilityAnimated(r6, r4, r10, r4)
-            android.widget.TextView r6 = r0.passcodesDoNotMatchTextView
-            r21 = -2
-            r22 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r21, r22, r23, r24, r25, r26, r27)
-            r2.addView(r6, r9)
-            org.telegram.ui.Components.OutlineTextContainerView r6 = new org.telegram.ui.Components.OutlineTextContainerView
-            r6.<init>(r1)
-            r0.outlinePasswordView = r6
-            int r9 = org.telegram.messenger.R.string.EnterPassword
-            java.lang.String r9 = org.telegram.messenger.LocaleController.getString((int) r9)
-            r6.setText(r9)
-            org.telegram.ui.Components.EditTextBoldCursor r6 = new org.telegram.ui.Components.EditTextBoldCursor
-            r6.<init>(r1)
-            r0.passwordEditText = r6
-            r9 = 524417(0x80081, float:7.34865E-40)
-            r6.setInputType(r9)
-            org.telegram.ui.Components.EditTextBoldCursor r6 = r0.passwordEditText
-            r6.setTextSize(r8, r7)
-            org.telegram.ui.Components.EditTextBoldCursor r6 = r0.passwordEditText
-            int r7 = org.telegram.ui.ActionBar.Theme.getColor(r15)
-            r6.setTextColor(r7)
-            org.telegram.ui.Components.EditTextBoldCursor r6 = r0.passwordEditText
-            r7 = 0
-            r6.setBackground(r7)
-            org.telegram.ui.Components.EditTextBoldCursor r6 = r0.passwordEditText
-            r6.setMaxLines(r8)
-            org.telegram.ui.Components.EditTextBoldCursor r6 = r0.passwordEditText
-            r6.setLines(r8)
-            org.telegram.ui.Components.EditTextBoldCursor r6 = r0.passwordEditText
-            boolean r7 = org.telegram.messenger.LocaleController.isRTL
-            if (r7 == 0) goto L_0x02b7
-            r7 = 5
-            goto L_0x02b8
-        L_0x02b7:
-            r7 = 3
-        L_0x02b8:
-            r6.setGravity(r7)
-            org.telegram.ui.Components.EditTextBoldCursor r6 = r0.passwordEditText
-            r6.setSingleLine(r8)
-            int r6 = r0.type
-            if (r6 != r8) goto L_0x02cd
-            r0.passcodeSetStep = r4
-            org.telegram.ui.Components.EditTextBoldCursor r6 = r0.passwordEditText
-            r7 = 5
-            r6.setImeOptions(r7)
-            goto L_0x02d5
-        L_0x02cd:
-            r0.passcodeSetStep = r8
-            org.telegram.ui.Components.EditTextBoldCursor r6 = r0.passwordEditText
-            r7 = 6
-            r6.setImeOptions(r7)
-        L_0x02d5:
-            org.telegram.ui.Components.EditTextBoldCursor r6 = r0.passwordEditText
-            android.text.method.PasswordTransformationMethod r7 = android.text.method.PasswordTransformationMethod.getInstance()
-            r6.setTransformationMethod(r7)
-            org.telegram.ui.Components.EditTextBoldCursor r6 = r0.passwordEditText
-            android.graphics.Typeface r7 = android.graphics.Typeface.DEFAULT
-            r6.setTypeface(r7)
-            org.telegram.ui.Components.EditTextBoldCursor r6 = r0.passwordEditText
-            java.lang.String r7 = "windowBackgroundWhiteInputFieldActivated"
-            int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)
-            r6.setCursorColor(r7)
-            org.telegram.ui.Components.EditTextBoldCursor r6 = r0.passwordEditText
-            r7 = 1101004800(0x41a00000, float:20.0)
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r6.setCursorSize(r7)
-            org.telegram.ui.Components.EditTextBoldCursor r6 = r0.passwordEditText
-            r7 = 1069547520(0x3fCLASSNAME, float:1.5)
-            r6.setCursorWidth(r7)
-            r6 = 1098907648(0x41800000, float:16.0)
-            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
-            org.telegram.ui.Components.EditTextBoldCursor r7 = r0.passwordEditText
-            r7.setPadding(r6, r6, r6, r6)
-            org.telegram.ui.Components.EditTextBoldCursor r6 = r0.passwordEditText
-            org.telegram.ui.PasscodeActivity$$ExternalSyntheticLambda7 r7 = new org.telegram.ui.PasscodeActivity$$ExternalSyntheticLambda7
-            r7.<init>(r0)
-            r6.setOnFocusChangeListener(r7)
-            android.widget.LinearLayout r6 = new android.widget.LinearLayout
-            r6.<init>(r1)
-            r6.setOrientation(r4)
-            r6.setGravity(r12)
-            org.telegram.ui.Components.EditTextBoldCursor r7 = r0.passwordEditText
-            r9 = -2
-            android.widget.LinearLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r4, (int) r9, (float) r10)
-            r6.addView(r7, r9)
-            android.widget.ImageView r7 = new android.widget.ImageView
-            r7.<init>(r1)
-            r0.passwordButton = r7
-            int r9 = org.telegram.messenger.R.drawable.msg_message
-            r7.setImageResource(r9)
-            android.widget.ImageView r7 = r0.passwordButton
-            java.lang.String r9 = "windowBackgroundWhiteHintText"
-            int r9 = org.telegram.ui.ActionBar.Theme.getColor(r9)
-            r7.setColorFilter(r9)
-            android.widget.ImageView r7 = r0.passwordButton
-            java.lang.String r9 = "listSelectorSDK21"
-            int r9 = r0.getThemedColor(r9)
-            android.graphics.drawable.Drawable r9 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r9, r8)
-            r7.setBackground(r9)
-            android.widget.ImageView r7 = r0.passwordButton
-            int r9 = r0.type
-            if (r9 != r8) goto L_0x035e
-            int r9 = r0.passcodeSetStep
-            if (r9 != 0) goto L_0x035e
-            r9 = 1
-            goto L_0x035f
-        L_0x035e:
-            r9 = 0
-        L_0x035f:
-            r10 = 1036831949(0x3dcccccd, float:0.1)
-            org.telegram.messenger.AndroidUtilities.updateViewVisibilityAnimated(r7, r9, r10, r4)
-            java.util.concurrent.atomic.AtomicBoolean r7 = new java.util.concurrent.atomic.AtomicBoolean
-            r7.<init>(r4)
-            org.telegram.ui.Components.EditTextBoldCursor r9 = r0.passwordEditText
-            org.telegram.ui.PasscodeActivity$5 r10 = new org.telegram.ui.PasscodeActivity$5
-            r10.<init>(r7)
-            r9.addTextChangedListener(r10)
-            android.widget.ImageView r9 = r0.passwordButton
-            org.telegram.ui.PasscodeActivity$$ExternalSyntheticLambda6 r10 = new org.telegram.ui.PasscodeActivity$$ExternalSyntheticLambda6
-            r10.<init>(r0, r7)
-            r9.setOnClickListener(r10)
-            android.widget.ImageView r7 = r0.passwordButton
-            r19 = 1103101952(0x41CLASSNAME, float:24.0)
-            r20 = 1103101952(0x41CLASSNAME, float:24.0)
-            r21 = 0
-            r22 = 0
-            r23 = 0
-            r24 = 1096810496(0x41600000, float:14.0)
-            r25 = 0
-            android.widget.LinearLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createLinearRelatively(r19, r20, r21, r22, r23, r24, r25)
-            r6.addView(r7, r9)
-            org.telegram.ui.Components.OutlineTextContainerView r7 = r0.outlinePasswordView
-            r9 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-            r10 = -1
-            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r9)
-            r7.addView(r6, r9)
-            org.telegram.ui.Components.OutlineTextContainerView r6 = r0.outlinePasswordView
-            r17 = -1
-            r18 = -2
-            r19 = 1
-            r20 = 32
-            r22 = 32
-            r23 = 0
-            android.widget.LinearLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r17, (int) r18, (int) r19, (int) r20, (int) r21, (int) r22, (int) r23)
-            r3.addView(r6, r7)
-            org.telegram.ui.Components.EditTextBoldCursor r6 = r0.passwordEditText
-            org.telegram.ui.PasscodeActivity$$ExternalSyntheticLambda9 r7 = new org.telegram.ui.PasscodeActivity$$ExternalSyntheticLambda9
-            r7.<init>(r0)
-            r6.setOnEditorActionListener(r7)
-            org.telegram.ui.Components.EditTextBoldCursor r6 = r0.passwordEditText
-            org.telegram.ui.PasscodeActivity$6 r7 = new org.telegram.ui.PasscodeActivity$6
-            r7.<init>()
-            r6.addTextChangedListener(r7)
-            org.telegram.ui.Components.EditTextBoldCursor r6 = r0.passwordEditText
-            org.telegram.ui.PasscodeActivity$7 r7 = new org.telegram.ui.PasscodeActivity$7
-            r7.<init>(r0)
-            r6.setCustomSelectionActionModeCallback(r7)
-            org.telegram.ui.PasscodeActivity$8 r6 = new org.telegram.ui.PasscodeActivity$8
-            r6.<init>(r1)
-            r0.codeFieldContainer = r6
-            r7 = 4
-            r9 = 10
-            r6.setNumbersCount(r7, r9)
-            org.telegram.ui.CodeFieldContainer r6 = r0.codeFieldContainer
-            org.telegram.ui.CodeNumberField[] r6 = r6.codeField
-            int r7 = r6.length
-            r9 = 0
-        L_0x03e7:
-            if (r9 >= r7) goto L_0x0412
-            r10 = r6[r9]
-            boolean r11 = r29.isCustomKeyboardVisible()
-            r11 = r11 ^ r8
-            r10.setShowSoftInputOnFocusCompat(r11)
-            android.text.method.PasswordTransformationMethod r11 = android.text.method.PasswordTransformationMethod.getInstance()
-            r10.setTransformationMethod(r11)
-            r11 = 1103101952(0x41CLASSNAME, float:24.0)
-            r10.setTextSize(r8, r11)
-            org.telegram.ui.PasscodeActivity$9 r11 = new org.telegram.ui.PasscodeActivity$9
-            r11.<init>()
-            r10.addTextChangedListener(r11)
-            org.telegram.ui.PasscodeActivity$$ExternalSyntheticLambda8 r11 = new org.telegram.ui.PasscodeActivity$$ExternalSyntheticLambda8
-            r11.<init>(r0, r10)
-            r10.setOnFocusChangeListener(r11)
-            int r9 = r9 + 1
-            goto L_0x03e7
-        L_0x0412:
-            org.telegram.ui.CodeFieldContainer r6 = r0.codeFieldContainer
-            r17 = -2
-            r18 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-            r19 = 1
-            r20 = 1109393408(0x42200000, float:40.0)
-            r21 = 1092616192(0x41200000, float:10.0)
-            r22 = 1109393408(0x42200000, float:40.0)
-            r23 = 0
-            android.widget.FrameLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
-            r3.addView(r6, r7)
-            r17 = -1
-            r18 = -2
-            r20 = 0
-            r21 = 32
-            r22 = 0
-            r23 = 72
-            android.widget.LinearLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r17, (int) r18, (int) r19, (int) r20, (int) r21, (int) r22, (int) r23)
-            r5.addView(r3, r6)
-            int r3 = r0.type
-            if (r3 != r8) goto L_0x0443
-            r2.setTag(r14)
-        L_0x0443:
-            android.widget.FrameLayout r3 = new android.widget.FrameLayout
-            r3.<init>(r1)
-            r0.floatingButtonContainer = r3
-            int r3 = android.os.Build.VERSION.SDK_INT
-            if (r3 < r13) goto L_0x04b7
-            android.animation.StateListAnimator r5 = new android.animation.StateListAnimator
-            r5.<init>()
-            int[] r6 = new int[r8]
-            r7 = 16842919(0x10100a7, float:2.3694026E-38)
-            r6[r4] = r7
-            org.telegram.ui.Components.TransformableLoginButtonView r7 = r0.floatingButtonIcon
-            r9 = 2
-            float[] r10 = new float[r9]
-            r9 = 1073741824(0x40000000, float:2.0)
-            int r9 = org.telegram.messenger.AndroidUtilities.dp(r9)
-            float r9 = (float) r9
-            r10[r4] = r9
-            r9 = 1082130432(0x40800000, float:4.0)
-            int r9 = org.telegram.messenger.AndroidUtilities.dp(r9)
-            float r9 = (float) r9
-            r10[r8] = r9
-            java.lang.String r9 = "translationZ"
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r9, r10)
-            r9 = 200(0xc8, double:9.9E-322)
-            android.animation.ObjectAnimator r7 = r7.setDuration(r9)
-            r5.addState(r6, r7)
-            int[] r6 = new int[r4]
-            org.telegram.ui.Components.TransformableLoginButtonView r7 = r0.floatingButtonIcon
-            r9 = 2
-            float[] r9 = new float[r9]
-            r10 = 1082130432(0x40800000, float:4.0)
-            int r10 = org.telegram.messenger.AndroidUtilities.dp(r10)
-            float r10 = (float) r10
-            r9[r4] = r10
-            r10 = 1073741824(0x40000000, float:2.0)
-            int r10 = org.telegram.messenger.AndroidUtilities.dp(r10)
-            float r10 = (float) r10
-            r9[r8] = r10
-            java.lang.String r10 = "translationZ"
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r10, r9)
-            r9 = 200(0xc8, double:9.9E-322)
-            android.animation.ObjectAnimator r7 = r7.setDuration(r9)
-            r5.addState(r6, r7)
-            android.widget.FrameLayout r6 = r0.floatingButtonContainer
-            r6.setStateListAnimator(r5)
-            android.widget.FrameLayout r5 = r0.floatingButtonContainer
-            org.telegram.ui.PasscodeActivity$10 r6 = new org.telegram.ui.PasscodeActivity$10
-            r6.<init>(r0)
-            r5.setOutlineProvider(r6)
-        L_0x04b7:
-            android.widget.FrameLayout r5 = r0.floatingButtonContainer
-            org.telegram.ui.Components.VerticalPositionAutoAnimator r5 = org.telegram.ui.Components.VerticalPositionAutoAnimator.attach(r5)
-            r0.floatingAutoAnimator = r5
-            android.widget.FrameLayout r5 = r0.floatingButtonContainer
-            if (r3 < r13) goto L_0x04c8
-            r6 = 56
-            r17 = 56
-            goto L_0x04cc
-        L_0x04c8:
-            r6 = 60
-            r17 = 60
-        L_0x04cc:
-            if (r3 < r13) goto L_0x04d1
-            r18 = 1113587712(0x42600000, float:56.0)
-            goto L_0x04d3
-        L_0x04d1:
-            r18 = 1114636288(0x42700000, float:60.0)
-        L_0x04d3:
-            r19 = 85
-            r20 = 0
-            r21 = 0
-            r22 = 1103101952(0x41CLASSNAME, float:24.0)
-            r23 = 1098907648(0x41800000, float:16.0)
-            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
-            r2.addView(r5, r6)
-            android.widget.FrameLayout r2 = r0.floatingButtonContainer
-            org.telegram.ui.PasscodeActivity$$ExternalSyntheticLambda5 r5 = new org.telegram.ui.PasscodeActivity$$ExternalSyntheticLambda5
-            r5.<init>(r0)
-            r2.setOnClickListener(r5)
-            org.telegram.ui.Components.TransformableLoginButtonView r2 = new org.telegram.ui.Components.TransformableLoginButtonView
-            r2.<init>(r1)
-            r0.floatingButtonIcon = r2
-            r2.setTransformType(r8)
-            org.telegram.ui.Components.TransformableLoginButtonView r2 = r0.floatingButtonIcon
-            r5 = 0
-            r2.setProgress(r5)
-            org.telegram.ui.Components.TransformableLoginButtonView r2 = r0.floatingButtonIcon
-            java.lang.String r5 = "chats_actionIcon"
-            int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
-            r2.setColor(r5)
-            org.telegram.ui.Components.TransformableLoginButtonView r2 = r0.floatingButtonIcon
-            r2.setDrawBackground(r4)
-            android.widget.FrameLayout r2 = r0.floatingButtonContainer
-            int r5 = org.telegram.messenger.R.string.Next
-            java.lang.String r5 = org.telegram.messenger.LocaleController.getString((int) r5)
-            r2.setContentDescription(r5)
-            android.widget.FrameLayout r2 = r0.floatingButtonContainer
-            org.telegram.ui.Components.TransformableLoginButtonView r5 = r0.floatingButtonIcon
-            if (r3 < r13) goto L_0x0522
-            r6 = 56
-            goto L_0x0524
-        L_0x0522:
-            r6 = 60
-        L_0x0524:
-            if (r3 < r13) goto L_0x0529
-            r7 = 1113587712(0x42600000, float:56.0)
-            goto L_0x052b
-        L_0x0529:
-            r7 = 1114636288(0x42700000, float:60.0)
-        L_0x052b:
-            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r7)
-            r2.addView(r5, r6)
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r28)
-            java.lang.String r5 = "chats_actionBackground"
-            int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
-            java.lang.String r6 = "chats_actionPressedBackground"
-            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r6)
-            android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.createSimpleSelectorCircleDrawable(r2, r5, r6)
-            if (r3 >= r13) goto L_0x0573
-            android.content.res.Resources r1 = r30.getResources()
-            int r3 = org.telegram.messenger.R.drawable.floating_shadow
-            android.graphics.drawable.Drawable r1 = r1.getDrawable(r3)
-            android.graphics.drawable.Drawable r1 = r1.mutate()
-            android.graphics.PorterDuffColorFilter r3 = new android.graphics.PorterDuffColorFilter
-            r5 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
-            android.graphics.PorterDuff$Mode r6 = android.graphics.PorterDuff.Mode.MULTIPLY
-            r3.<init>(r5, r6)
-            r1.setColorFilter(r3)
-            org.telegram.ui.Components.CombinedDrawable r3 = new org.telegram.ui.Components.CombinedDrawable
-            r3.<init>(r1, r2, r4, r4)
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r28)
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r28)
-            r3.setIconSize(r1, r2)
-            r2 = r3
-        L_0x0573:
-            android.widget.FrameLayout r1 = r0.floatingButtonContainer
-            r1.setBackground(r2)
-            r29.updateFields()
-            goto L_0x05d4
-        L_0x057c:
-            org.telegram.ui.ActionBar.ActionBar r3 = r0.actionBar
-            int r5 = org.telegram.messenger.R.string.Passcode
-            java.lang.String r6 = "Passcode"
-            java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
-            r3.setTitle(r5)
-            java.lang.String r3 = "windowBackgroundGray"
-            r2.setTag(r3)
-            int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
-            r2.setBackgroundColor(r3)
-            org.telegram.ui.Components.RecyclerListView r3 = new org.telegram.ui.Components.RecyclerListView
-            r3.<init>(r1)
-            r0.listView = r3
-            org.telegram.ui.PasscodeActivity$3 r5 = new org.telegram.ui.PasscodeActivity$3
-            r5.<init>(r0, r1, r8, r4)
-            r3.setLayoutManager(r5)
-            org.telegram.ui.Components.RecyclerListView r3 = r0.listView
-            r3.setVerticalScrollBarEnabled(r4)
-            org.telegram.ui.Components.RecyclerListView r3 = r0.listView
-            r4 = 0
-            r3.setItemAnimator(r4)
-            org.telegram.ui.Components.RecyclerListView r3 = r0.listView
-            r3.setLayoutAnimation(r4)
-            org.telegram.ui.Components.RecyclerListView r3 = r0.listView
-            r4 = -1
-            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r9)
-            r2.addView(r3, r4)
-            org.telegram.ui.Components.RecyclerListView r2 = r0.listView
-            org.telegram.ui.PasscodeActivity$ListAdapter r3 = new org.telegram.ui.PasscodeActivity$ListAdapter
-            r3.<init>(r1)
-            r0.listAdapter = r3
-            r2.setAdapter(r3)
-            org.telegram.ui.Components.RecyclerListView r1 = r0.listView
-            org.telegram.ui.PasscodeActivity$$ExternalSyntheticLambda22 r2 = new org.telegram.ui.PasscodeActivity$$ExternalSyntheticLambda22
-            r2.<init>(r0)
-            r1.setOnItemClickListener((org.telegram.ui.Components.RecyclerListView.OnItemClickListener) r2)
-        L_0x05d4:
-            android.view.View r1 = r0.fragmentView
-            return r1
+            Method dump skipped, instructions count: 1495
+            To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PasscodeActivity.createView(android.content.Context):android.view.View");
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$createView$1(int i, boolean z) {
         Runnable runnable;
-        if (i >= AndroidUtilities.dp(20.0f) && (runnable = this.onShowKeyboardCallback) != null) {
-            runnable.run();
-            this.onShowKeyboardCallback = null;
+        if (i < AndroidUtilities.dp(20.0f) || (runnable = this.onShowKeyboardCallback) == null) {
+            return;
         }
+        runnable.run();
+        this.onShowKeyboardCallback = null;
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$5(View view, int i) {
-        if (view.isEnabled()) {
-            if (i == this.disablePasscodeRow) {
-                AlertDialog create = new AlertDialog.Builder((Context) getParentActivity()).setTitle(LocaleController.getString(R.string.DisablePasscode)).setMessage(LocaleController.getString(R.string.DisablePasscodeConfirmMessage)).setNegativeButton(LocaleController.getString(R.string.Cancel), (DialogInterface.OnClickListener) null).setPositiveButton(LocaleController.getString(R.string.DisablePasscodeTurnOff), new PasscodeActivity$$ExternalSyntheticLambda2(this)).create();
-                create.show();
-                ((TextView) create.getButton(-1)).setTextColor(Theme.getColor("dialogTextRed"));
-            } else if (i == this.changePasscodeRow) {
-                presentFragment(new PasscodeActivity(1));
-            } else if (i == this.autoLockRow) {
-                if (getParentActivity() != null) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
-                    builder.setTitle(LocaleController.getString("AutoLock", R.string.AutoLock));
-                    NumberPicker numberPicker = new NumberPicker(getParentActivity());
-                    numberPicker.setMinValue(0);
-                    numberPicker.setMaxValue(4);
-                    int i2 = SharedConfig.autoLockIn;
-                    if (i2 == 0) {
-                        numberPicker.setValue(0);
-                    } else if (i2 == 60) {
-                        numberPicker.setValue(1);
-                    } else if (i2 == 300) {
-                        numberPicker.setValue(2);
-                    } else if (i2 == 3600) {
-                        numberPicker.setValue(3);
-                    } else if (i2 == 18000) {
-                        numberPicker.setValue(4);
-                    }
-                    numberPicker.setFormatter(PasscodeActivity$$ExternalSyntheticLambda21.INSTANCE);
-                    builder.setView(numberPicker);
-                    builder.setNegativeButton(LocaleController.getString("Done", R.string.Done), new PasscodeActivity$$ExternalSyntheticLambda3(this, numberPicker, i));
-                    showDialog(builder.create());
+    /* JADX INFO: Access modifiers changed from: private */
+    public /* synthetic */ void lambda$createView$5(View view, final int i) {
+        if (!view.isEnabled()) {
+            return;
+        }
+        if (i == this.disablePasscodeRow) {
+            AlertDialog create = new AlertDialog.Builder(getParentActivity()).setTitle(LocaleController.getString(R.string.DisablePasscode)).setMessage(LocaleController.getString(R.string.DisablePasscodeConfirmMessage)).setNegativeButton(LocaleController.getString(R.string.Cancel), null).setPositiveButton(LocaleController.getString(R.string.DisablePasscodeTurnOff), new DialogInterface.OnClickListener() { // from class: org.telegram.ui.PasscodeActivity$$ExternalSyntheticLambda2
+                @Override // android.content.DialogInterface.OnClickListener
+                public final void onClick(DialogInterface dialogInterface, int i2) {
+                    PasscodeActivity.this.lambda$createView$2(dialogInterface, i2);
                 }
-            } else if (i == this.fingerprintRow) {
-                SharedConfig.useFingerprint = !SharedConfig.useFingerprint;
-                UserConfig.getInstance(this.currentAccount).saveConfig(false);
-                ((TextCheckCell) view).setChecked(SharedConfig.useFingerprint);
-            } else if (i == this.captureRow) {
-                SharedConfig.allowScreenCapture = !SharedConfig.allowScreenCapture;
-                UserConfig.getInstance(this.currentAccount).saveConfig(false);
-                ((TextCheckCell) view).setChecked(SharedConfig.allowScreenCapture);
-                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didSetPasscode, Boolean.FALSE);
-                if (!SharedConfig.allowScreenCapture) {
-                    AlertsCreator.showSimpleAlert(this, LocaleController.getString("ScreenCaptureAlert", R.string.ScreenCaptureAlert));
-                }
+            }).create();
+            create.show();
+            ((TextView) create.getButton(-1)).setTextColor(Theme.getColor("dialogTextRed"));
+        } else if (i == this.changePasscodeRow) {
+            presentFragment(new PasscodeActivity(1));
+        } else if (i == this.autoLockRow) {
+            if (getParentActivity() == null) {
+                return;
             }
+            AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+            builder.setTitle(LocaleController.getString("AutoLock", R.string.AutoLock));
+            final NumberPicker numberPicker = new NumberPicker(getParentActivity());
+            numberPicker.setMinValue(0);
+            numberPicker.setMaxValue(4);
+            int i2 = SharedConfig.autoLockIn;
+            if (i2 == 0) {
+                numberPicker.setValue(0);
+            } else if (i2 == 60) {
+                numberPicker.setValue(1);
+            } else if (i2 == 300) {
+                numberPicker.setValue(2);
+            } else if (i2 == 3600) {
+                numberPicker.setValue(3);
+            } else if (i2 == 18000) {
+                numberPicker.setValue(4);
+            }
+            numberPicker.setFormatter(PasscodeActivity$$ExternalSyntheticLambda21.INSTANCE);
+            builder.setView(numberPicker);
+            builder.setNegativeButton(LocaleController.getString("Done", R.string.Done), new DialogInterface.OnClickListener() { // from class: org.telegram.ui.PasscodeActivity$$ExternalSyntheticLambda3
+                @Override // android.content.DialogInterface.OnClickListener
+                public final void onClick(DialogInterface dialogInterface, int i3) {
+                    PasscodeActivity.this.lambda$createView$4(numberPicker, i, dialogInterface, i3);
+                }
+            });
+            showDialog(builder.create());
+        } else if (i == this.fingerprintRow) {
+            SharedConfig.useFingerprint = !SharedConfig.useFingerprint;
+            UserConfig.getInstance(this.currentAccount).saveConfig(false);
+            ((TextCheckCell) view).setChecked(SharedConfig.useFingerprint);
+        } else if (i != this.captureRow) {
+        } else {
+            SharedConfig.allowScreenCapture = !SharedConfig.allowScreenCapture;
+            UserConfig.getInstance(this.currentAccount).saveConfig(false);
+            ((TextCheckCell) view).setChecked(SharedConfig.allowScreenCapture);
+            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didSetPasscode, Boolean.FALSE);
+            if (SharedConfig.allowScreenCapture) {
+                return;
+            }
+            AlertsCreator.showSimpleAlert(this, LocaleController.getString("ScreenCaptureAlert", R.string.ScreenCaptureAlert));
         }
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$createView$2(DialogInterface dialogInterface, int i) {
         SharedConfig.passcodeHash = "";
         SharedConfig.appLocked = false;
@@ -913,25 +260,15 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
         finishFragment();
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public static /* synthetic */ String lambda$createView$3(int i) {
         if (i == 0) {
             return LocaleController.getString("AutoLockDisabled", R.string.AutoLockDisabled);
         }
-        if (i == 1) {
-            return LocaleController.formatString("AutoLockInTime", R.string.AutoLockInTime, LocaleController.formatPluralString("Minutes", 1, new Object[0]));
-        } else if (i == 2) {
-            return LocaleController.formatString("AutoLockInTime", R.string.AutoLockInTime, LocaleController.formatPluralString("Minutes", 5, new Object[0]));
-        } else if (i == 3) {
-            return LocaleController.formatString("AutoLockInTime", R.string.AutoLockInTime, LocaleController.formatPluralString("Hours", 1, new Object[0]));
-        } else if (i != 4) {
-            return "";
-        } else {
-            return LocaleController.formatString("AutoLockInTime", R.string.AutoLockInTime, LocaleController.formatPluralString("Hours", 5, new Object[0]));
-        }
+        return i == 1 ? LocaleController.formatString("AutoLockInTime", R.string.AutoLockInTime, LocaleController.formatPluralString("Minutes", 1, new Object[0])) : i == 2 ? LocaleController.formatString("AutoLockInTime", R.string.AutoLockInTime, LocaleController.formatPluralString("Minutes", 5, new Object[0])) : i == 3 ? LocaleController.formatString("AutoLockInTime", R.string.AutoLockInTime, LocaleController.formatPluralString("Hours", 1, new Object[0])) : i == 4 ? LocaleController.formatString("AutoLockInTime", R.string.AutoLockInTime, LocaleController.formatPluralString("Hours", 5, new Object[0])) : "";
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$createView$4(NumberPicker numberPicker, int i, DialogInterface dialogInterface, int i2) {
         int value = numberPicker.getValue();
         if (value == 0) {
@@ -949,22 +286,78 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
         UserConfig.getInstance(this.currentAccount).saveConfig(false);
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: package-private */
+    /* renamed from: org.telegram.ui.PasscodeActivity$4  reason: invalid class name */
+    /* loaded from: classes3.dex */
+    public class AnonymousClass4 extends ActionBar.ActionBarMenuOnItemClick {
+        final /* synthetic */ ActionBarMenuSubItem val$switchItem;
+
+        AnonymousClass4(ActionBarMenuSubItem actionBarMenuSubItem) {
+            this.val$switchItem = actionBarMenuSubItem;
+        }
+
+        @Override // org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick
+        public void onItemClick(int i) {
+            if (i == -1) {
+                PasscodeActivity.this.finishFragment();
+                return;
+            }
+            int i2 = 1;
+            if (i != 1) {
+                return;
+            }
+            PasscodeActivity passcodeActivity = PasscodeActivity.this;
+            if (passcodeActivity.currentPasswordType != 0) {
+                i2 = 0;
+            }
+            passcodeActivity.currentPasswordType = i2;
+            final ActionBarMenuSubItem actionBarMenuSubItem = this.val$switchItem;
+            AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.PasscodeActivity$4$$ExternalSyntheticLambda0
+                @Override // java.lang.Runnable
+                public final void run() {
+                    PasscodeActivity.AnonymousClass4.this.lambda$onItemClick$0(actionBarMenuSubItem);
+                }
+            }, 150L);
+            PasscodeActivity.this.passwordEditText.setText("");
+            for (CodeNumberField codeNumberField : PasscodeActivity.this.codeFieldContainer.codeField) {
+                codeNumberField.setText("");
+            }
+            PasscodeActivity.this.updateFields();
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$onItemClick$0(ActionBarMenuSubItem actionBarMenuSubItem) {
+            actionBarMenuSubItem.setText(LocaleController.getString(PasscodeActivity.this.currentPasswordType == 0 ? R.string.PasscodeSwitchToPassword : R.string.PasscodeSwitchToPIN));
+            actionBarMenuSubItem.setIcon(PasscodeActivity.this.currentPasswordType == 0 ? R.drawable.msg_permissions : R.drawable.msg_pin_code);
+            PasscodeActivity.this.showKeyboard();
+            if (PasscodeActivity.this.isPinCode()) {
+                PasscodeActivity.this.passwordEditText.setInputType(524417);
+                AndroidUtilities.updateViewVisibilityAnimated(PasscodeActivity.this.passwordButton, true, 0.1f, false);
+            }
+        }
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
     public static /* synthetic */ View lambda$createView$6(Context context) {
         TextView textView = new TextView(context);
         textView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText6"));
         textView.setGravity(1);
-        textView.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
+        textView.setLineSpacing(AndroidUtilities.dp(2.0f), 1.0f);
         textView.setTextSize(1, 15.0f);
         return textView;
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
+    public static /* synthetic */ void lambda$createView$7(Context context, View view) {
+        AlertsCreator.createForgotPasscodeDialog(context).show();
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$createView$8(View view, boolean z) {
         this.outlinePasswordView.animateSelection(z ? 1.0f : 0.0f);
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$createView$9(AtomicBoolean atomicBoolean, View view) {
         atomicBoolean.set(!atomicBoolean.get());
         int selectionStart = this.passwordEditText.getSelectionStart();
@@ -974,7 +367,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
         this.passwordButton.setColorFilter(Theme.getColor(atomicBoolean.get() ? "windowBackgroundWhiteInputFieldActivated" : "windowBackgroundWhiteHintText"));
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ boolean lambda$createView$10(TextView textView, int i, KeyEvent keyEvent) {
         int i2 = this.passcodeSetStep;
         if (i2 == 0) {
@@ -988,26 +381,56 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
         }
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: package-private */
+    /* renamed from: org.telegram.ui.PasscodeActivity$8  reason: invalid class name */
+    /* loaded from: classes3.dex */
+    public class AnonymousClass8 extends CodeFieldContainer {
+        AnonymousClass8(Context context) {
+            super(context);
+        }
+
+        @Override // org.telegram.ui.CodeFieldContainer
+        protected void processNextPressed() {
+            if (PasscodeActivity.this.passcodeSetStep != 0) {
+                PasscodeActivity.this.processDone();
+            } else {
+                postDelayed(new Runnable() { // from class: org.telegram.ui.PasscodeActivity$8$$ExternalSyntheticLambda0
+                    @Override // java.lang.Runnable
+                    public final void run() {
+                        PasscodeActivity.AnonymousClass8.this.lambda$processNextPressed$0();
+                    }
+                }, 260L);
+            }
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$processNextPressed$0() {
+            PasscodeActivity.this.processNext();
+        }
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$createView$11(CodeNumberField codeNumberField, View view, boolean z) {
         this.keyboardView.setEditText(codeNumberField);
         this.keyboardView.setDispatchBackWhenEmpty(true);
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$createView$12(View view) {
         int i = this.type;
-        if (i == 1) {
-            if (this.passcodeSetStep == 0) {
-                processNext();
-            } else {
-                processDone();
+        if (i != 1) {
+            if (i != 2) {
+                return;
             }
-        } else if (i == 2) {
+            processDone();
+        } else if (this.passcodeSetStep == 0) {
+            processNext();
+        } else {
             processDone();
         }
     }
 
+    @Override // org.telegram.ui.ActionBar.BaseFragment
     public boolean hasForceLightStatusBar() {
         return this.type != 0;
     }
@@ -1035,7 +458,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
             customPhoneKeyboardView2.setAlpha(f);
             CustomPhoneKeyboardView customPhoneKeyboardView3 = this.keyboardView;
             if (!z) {
-                f2 = (float) AndroidUtilities.dp(230.0f);
+                f2 = AndroidUtilities.dp(230.0f);
             }
             customPhoneKeyboardView3.setTranslationY(f2);
             this.fragmentView.requestLayout();
@@ -1047,16 +470,23 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
             f = 0.0f;
         }
         fArr[1] = f;
-        ValueAnimator duration = ValueAnimator.ofFloat(fArr).setDuration(150);
+        ValueAnimator duration = ValueAnimator.ofFloat(fArr).setDuration(150L);
         duration.setInterpolator(z ? CubicBezierInterpolator.DEFAULT : Easings.easeInOutQuad);
-        duration.addUpdateListener(new PasscodeActivity$$ExternalSyntheticLambda0(this));
-        duration.addListener(new AnimatorListenerAdapter() {
+        duration.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() { // from class: org.telegram.ui.PasscodeActivity$$ExternalSyntheticLambda0
+            @Override // android.animation.ValueAnimator.AnimatorUpdateListener
+            public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+                PasscodeActivity.this.lambda$setCustomKeyboardVisible$13(valueAnimator);
+            }
+        });
+        duration.addListener(new AnimatorListenerAdapter() { // from class: org.telegram.ui.PasscodeActivity.11
+            @Override // android.animation.AnimatorListenerAdapter, android.animation.Animator.AnimatorListener
             public void onAnimationStart(Animator animator) {
                 if (z) {
                     PasscodeActivity.this.keyboardView.setVisibility(0);
                 }
             }
 
+            @Override // android.animation.AnimatorListenerAdapter, android.animation.Animator.AnimatorListener
             public void onAnimationEnd(Animator animator) {
                 if (!z) {
                     PasscodeActivity.this.keyboardView.setVisibility(8);
@@ -1066,11 +496,11 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
         duration.start();
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$setCustomKeyboardVisible$13(ValueAnimator valueAnimator) {
         float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         this.keyboardView.setAlpha(floatValue);
-        this.keyboardView.setTranslationY((1.0f - floatValue) * ((float) AndroidUtilities.dp(230.0f)) * 0.75f);
+        this.keyboardView.setTranslationY((1.0f - floatValue) * AndroidUtilities.dp(230.0f) * 0.75f);
         this.fragmentView.requestLayout();
     }
 
@@ -1083,7 +513,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
         int i = 0;
         float f = 1.0f;
         if (!z2) {
-            this.floatingAutoAnimator.setOffsetY(z ? 0.0f : (float) AndroidUtilities.dp(70.0f));
+            this.floatingAutoAnimator.setOffsetY(z ? 0.0f : AndroidUtilities.dp(70.0f));
             FrameLayout frameLayout = this.floatingButtonContainer;
             if (!z) {
                 f = 0.0f;
@@ -1102,22 +532,29 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
             f = 0.0f;
         }
         fArr[1] = f;
-        ValueAnimator duration = ValueAnimator.ofFloat(fArr).setDuration(150);
+        ValueAnimator duration = ValueAnimator.ofFloat(fArr).setDuration(150L);
         duration.setInterpolator(z ? AndroidUtilities.decelerateInterpolator : AndroidUtilities.accelerateInterpolator);
-        duration.addUpdateListener(new PasscodeActivity$$ExternalSyntheticLambda1(this));
-        duration.addListener(new AnimatorListenerAdapter() {
-            public void onAnimationStart(Animator animator) {
+        duration.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() { // from class: org.telegram.ui.PasscodeActivity$$ExternalSyntheticLambda1
+            @Override // android.animation.ValueAnimator.AnimatorUpdateListener
+            public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+                PasscodeActivity.this.lambda$setFloatingButtonVisible$14(valueAnimator);
+            }
+        });
+        duration.addListener(new AnimatorListenerAdapter() { // from class: org.telegram.ui.PasscodeActivity.12
+            @Override // android.animation.AnimatorListenerAdapter, android.animation.Animator.AnimatorListener
+            public void onAnimationStart(Animator animator2) {
                 if (z) {
                     PasscodeActivity.this.floatingButtonContainer.setVisibility(0);
                 }
             }
 
-            public void onAnimationEnd(Animator animator) {
+            @Override // android.animation.AnimatorListenerAdapter, android.animation.Animator.AnimatorListener
+            public void onAnimationEnd(Animator animator2) {
                 if (!z) {
                     PasscodeActivity.this.floatingButtonContainer.setVisibility(8);
                 }
-                if (PasscodeActivity.this.floatingButtonAnimator == animator) {
-                    Animator unused = PasscodeActivity.this.floatingButtonAnimator = null;
+                if (PasscodeActivity.this.floatingButtonAnimator == animator2) {
+                    PasscodeActivity.this.floatingButtonAnimator = null;
                 }
             }
         });
@@ -1125,10 +562,10 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
         this.floatingButtonAnimator = duration;
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$setFloatingButtonVisible$14(ValueAnimator valueAnimator) {
         float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
-        this.floatingAutoAnimator.setOffsetY(((float) AndroidUtilities.dp(70.0f)) * (1.0f - floatValue));
+        this.floatingAutoAnimator.setOffsetY(AndroidUtilities.dp(70.0f) * (1.0f - floatValue));
         this.floatingButtonContainer.setAlpha(floatValue);
     }
 
@@ -1139,34 +576,45 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
         return new ActionIntroActivity(6);
     }
 
-    private void animateSuccessAnimation(Runnable runnable) {
+    private void animateSuccessAnimation(final Runnable runnable) {
         if (!isPinCode()) {
             runnable.run();
             return;
         }
         int i = 0;
         while (true) {
-            CodeFieldContainer codeFieldContainer2 = this.codeFieldContainer;
-            CodeNumberField[] codeNumberFieldArr = codeFieldContainer2.codeField;
+            CodeFieldContainer codeFieldContainer = this.codeFieldContainer;
+            CodeNumberField[] codeNumberFieldArr = codeFieldContainer.codeField;
             if (i < codeNumberFieldArr.length) {
-                CodeNumberField codeNumberField = codeNumberFieldArr[i];
-                codeNumberField.postDelayed(new PasscodeActivity$$ExternalSyntheticLambda11(codeNumberField), ((long) i) * 75);
+                final CodeNumberField codeNumberField = codeNumberFieldArr[i];
+                codeNumberField.postDelayed(new Runnable() { // from class: org.telegram.ui.PasscodeActivity$$ExternalSyntheticLambda11
+                    @Override // java.lang.Runnable
+                    public final void run() {
+                        CodeNumberField.this.animateSuccessProgress(1.0f);
+                    }
+                }, i * 75);
                 i++;
             } else {
-                codeFieldContainer2.postDelayed(new PasscodeActivity$$ExternalSyntheticLambda18(this, runnable), (((long) this.codeFieldContainer.codeField.length) * 75) + 350);
+                codeFieldContainer.postDelayed(new Runnable() { // from class: org.telegram.ui.PasscodeActivity$$ExternalSyntheticLambda18
+                    @Override // java.lang.Runnable
+                    public final void run() {
+                        PasscodeActivity.this.lambda$animateSuccessAnimation$16(runnable);
+                    }
+                }, (this.codeFieldContainer.codeField.length * 75) + 350);
                 return;
             }
         }
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$animateSuccessAnimation$16(Runnable runnable) {
-        for (CodeNumberField animateSuccessProgress : this.codeFieldContainer.codeField) {
-            animateSuccessProgress.animateSuccessProgress(0.0f);
+        for (CodeNumberField codeNumberField : this.codeFieldContainer.codeField) {
+            codeNumberField.animateSuccessProgress(0.0f);
         }
         runnable.run();
     }
 
+    @Override // org.telegram.ui.ActionBar.BaseFragment
     public void onConfigurationChanged(Configuration configuration) {
         int i;
         super.onConfigurationChanged(configuration);
@@ -1183,21 +631,25 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
             i = 8;
             rLottieImageView.setVisibility(i);
         }
-        CodeNumberField[] codeNumberFieldArr = this.codeFieldContainer.codeField;
-        int length = codeNumberFieldArr.length;
-        for (int i2 = 0; i2 < length; i2++) {
-            codeNumberFieldArr[i2].setShowSoftInputOnFocusCompat(!isCustomKeyboardVisible());
+        for (CodeNumberField codeNumberField : this.codeFieldContainer.codeField) {
+            codeNumberField.setShowSoftInputOnFocusCompat(!isCustomKeyboardVisible());
         }
     }
 
+    @Override // org.telegram.ui.ActionBar.BaseFragment
     public void onResume() {
         super.onResume();
-        ListAdapter listAdapter2 = this.listAdapter;
-        if (listAdapter2 != null) {
-            listAdapter2.notifyDataSetChanged();
+        ListAdapter listAdapter = this.listAdapter;
+        if (listAdapter != null) {
+            listAdapter.notifyDataSetChanged();
         }
         if (this.type != 0 && !isCustomKeyboardVisible()) {
-            AndroidUtilities.runOnUIThread(new PasscodeActivity$$ExternalSyntheticLambda15(this), 200);
+            AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.PasscodeActivity$$ExternalSyntheticLambda15
+                @Override // java.lang.Runnable
+                public final void run() {
+                    PasscodeActivity.this.showKeyboard();
+                }
+            }, 200L);
         }
         AndroidUtilities.requestAdjustResize(getParentActivity(), this.classGuid);
         if (isCustomKeyboardVisible()) {
@@ -1206,21 +658,24 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
         }
     }
 
+    @Override // org.telegram.ui.ActionBar.BaseFragment
     public void onPause() {
         super.onPause();
         AndroidUtilities.removeAltFocusable(getParentActivity(), this.classGuid);
     }
 
+    @Override // org.telegram.messenger.NotificationCenter.NotificationCenterDelegate
     public void didReceivedNotification(int i, int i2, Object... objArr) {
-        if (i != NotificationCenter.didSetPasscode) {
-            return;
-        }
-        if ((objArr.length == 0 || objArr[0].booleanValue()) && this.type == 0) {
-            updateRows();
-            ListAdapter listAdapter2 = this.listAdapter;
-            if (listAdapter2 != null) {
-                listAdapter2.notifyDataSetChanged();
+        if (i == NotificationCenter.didSetPasscode) {
+            if ((objArr.length != 0 && !((Boolean) objArr[0]).booleanValue()) || this.type != 0) {
+                return;
             }
+            updateRows();
+            ListAdapter listAdapter = this.listAdapter;
+            if (listAdapter == null) {
+                return;
+            }
+            listAdapter.notifyDataSetChanged();
         }
     }
 
@@ -1235,14 +690,16 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
         this.rowCount = i2 + 1;
         this.changePasscodeRow = i2;
         try {
-            if (Build.VERSION.SDK_INT < 23) {
-                this.fingerprintRow = -1;
-            } else if (!FingerprintManagerCompat.from(ApplicationLoader.applicationContext).isHardwareDetected() || !AndroidUtilities.isKeyguardSecure()) {
-                this.fingerprintRow = -1;
+            if (Build.VERSION.SDK_INT >= 23) {
+                if (FingerprintManagerCompat.from(ApplicationLoader.applicationContext).isHardwareDetected() && AndroidUtilities.isKeyguardSecure()) {
+                    int i3 = this.rowCount;
+                    this.rowCount = i3 + 1;
+                    this.fingerprintRow = i3;
+                } else {
+                    this.fingerprintRow = -1;
+                }
             } else {
-                int i3 = this.rowCount;
-                this.rowCount = i3 + 1;
-                this.fingerprintRow = i3;
+                this.fingerprintRow = -1;
             }
         } catch (Throwable th) {
             FileLog.e(th);
@@ -1267,36 +724,40 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
         this.disablePasscodeRow = i9;
     }
 
+    @Override // org.telegram.ui.ActionBar.BaseFragment
     public void onTransitionAnimationEnd(boolean z, boolean z2) {
-        if (z && this.type != 0) {
-            showKeyboard();
+        if (!z || this.type == 0) {
+            return;
         }
+        showKeyboard();
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public void showKeyboard() {
         if (isPinCode()) {
             this.codeFieldContainer.codeField[0].requestFocus();
-            if (!isCustomKeyboardVisible()) {
-                AndroidUtilities.showKeyboard(this.codeFieldContainer.codeField[0]);
+            if (isCustomKeyboardVisible()) {
+                return;
             }
-        } else if (isPassword()) {
+            AndroidUtilities.showKeyboard(this.codeFieldContainer.codeField[0]);
+        } else if (!isPassword()) {
+        } else {
             this.passwordEditText.requestFocus();
             AndroidUtilities.showKeyboard(this.passwordEditText);
         }
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public void updateFields() {
-        String str;
+        String charSequence;
         if (this.type == 2) {
-            str = LocaleController.getString(R.string.EnterYourPasscodeInfo);
+            charSequence = LocaleController.getString(R.string.EnterYourPasscodeInfo);
         } else if (this.passcodeSetStep == 0) {
-            str = LocaleController.getString(this.currentPasswordType == 0 ? R.string.CreatePasscodeInfoPIN : R.string.CreatePasscodeInfoPassword);
+            charSequence = LocaleController.getString(this.currentPasswordType == 0 ? R.string.CreatePasscodeInfoPIN : R.string.CreatePasscodeInfoPassword);
         } else {
-            str = this.descriptionTextSwitcher.getCurrentView().getText().toString();
+            charSequence = this.descriptionTextSwitcher.getCurrentView().getText().toString();
         }
-        boolean z = !this.descriptionTextSwitcher.getCurrentView().getText().equals(str) && !TextUtils.isEmpty(this.descriptionTextSwitcher.getCurrentView().getText());
+        final boolean z = !this.descriptionTextSwitcher.getCurrentView().getText().equals(charSequence) && !TextUtils.isEmpty(this.descriptionTextSwitcher.getCurrentView().getText());
         if (this.type == 2) {
             this.descriptionTextSwitcher.setText(LocaleController.getString(R.string.EnterYourPasscodeInfo), z);
         } else if (this.passcodeSetStep == 0) {
@@ -1309,11 +770,16 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
             AndroidUtilities.updateViewVisibilityAnimated(this.codeFieldContainer, false, 1.0f, z);
             AndroidUtilities.updateViewVisibilityAnimated(this.outlinePasswordView, true, 1.0f, z);
         }
-        boolean isPassword = isPassword();
+        final boolean isPassword = isPassword();
         if (isPassword) {
-            PasscodeActivity$$ExternalSyntheticLambda20 passcodeActivity$$ExternalSyntheticLambda20 = new PasscodeActivity$$ExternalSyntheticLambda20(this, isPassword, z);
-            this.onShowKeyboardCallback = passcodeActivity$$ExternalSyntheticLambda20;
-            AndroidUtilities.runOnUIThread(passcodeActivity$$ExternalSyntheticLambda20, 3000);
+            Runnable runnable = new Runnable() { // from class: org.telegram.ui.PasscodeActivity$$ExternalSyntheticLambda20
+                @Override // java.lang.Runnable
+                public final void run() {
+                    PasscodeActivity.this.lambda$updateFields$17(isPassword, z);
+                }
+            };
+            this.onShowKeyboardCallback = runnable;
+            AndroidUtilities.runOnUIThread(runnable, 3000L);
         } else {
             setFloatingButtonVisible(isPassword, z);
         }
@@ -1321,43 +787,46 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
         showKeyboard();
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$updateFields$17(boolean z, boolean z2) {
         setFloatingButtonVisible(z, z2);
         AndroidUtilities.cancelRunOnUIThread(this.onShowKeyboardCallback);
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public boolean isCustomKeyboardVisible() {
         if (isPinCode() && this.type != 0 && !AndroidUtilities.isTablet()) {
             Point point = AndroidUtilities.displaySize;
-            return point.x < point.y && !AndroidUtilities.isAccessibilityTouchExplorationEnabled();
+            if (point.x < point.y && !AndroidUtilities.isAccessibilityTouchExplorationEnabled()) {
+                return true;
+            }
         }
+        return false;
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public void processNext() {
-        if (!(this.currentPasswordType == 1 && this.passwordEditText.getText().length() == 0) && (this.currentPasswordType != 0 || this.codeFieldContainer.getCode().length() == 4)) {
-            ActionBarMenuItem actionBarMenuItem = this.otherItem;
-            if (actionBarMenuItem != null) {
-                actionBarMenuItem.setVisibility(8);
-            }
-            this.titleTextView.setText(LocaleController.getString("ConfirmCreatePasscode", R.string.ConfirmCreatePasscode));
-            this.descriptionTextSwitcher.setText(AndroidUtilities.replaceTags(LocaleController.getString("PasscodeReinstallNotice", R.string.PasscodeReinstallNotice)));
-            this.firstPassword = isPinCode() ? this.codeFieldContainer.getCode() : this.passwordEditText.getText().toString();
-            this.passwordEditText.setText("");
-            this.passwordEditText.setInputType(524417);
-            for (CodeNumberField text : this.codeFieldContainer.codeField) {
-                text.setText("");
-            }
-            showKeyboard();
-            this.passcodeSetStep = 1;
+        if ((this.currentPasswordType == 1 && this.passwordEditText.getText().length() == 0) || (this.currentPasswordType == 0 && this.codeFieldContainer.getCode().length() != 4)) {
+            onPasscodeError();
             return;
         }
-        onPasscodeError();
+        ActionBarMenuItem actionBarMenuItem = this.otherItem;
+        if (actionBarMenuItem != null) {
+            actionBarMenuItem.setVisibility(8);
+        }
+        this.titleTextView.setText(LocaleController.getString("ConfirmCreatePasscode", R.string.ConfirmCreatePasscode));
+        this.descriptionTextSwitcher.setText(AndroidUtilities.replaceTags(LocaleController.getString("PasscodeReinstallNotice", R.string.PasscodeReinstallNotice)));
+        this.firstPassword = isPinCode() ? this.codeFieldContainer.getCode() : this.passwordEditText.getText().toString();
+        this.passwordEditText.setText("");
+        this.passwordEditText.setInputType(524417);
+        for (CodeNumberField codeNumberField : this.codeFieldContainer.codeField) {
+            codeNumberField.setText("");
+        }
+        showKeyboard();
+        this.passcodeSetStep = 1;
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public boolean isPinCode() {
         int i = this.type;
         if (i == 1 && this.currentPasswordType == 0) {
@@ -1374,109 +843,124 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
         return i == 2 && SharedConfig.passcodeType == 1;
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public void processDone() {
-        if (!isPassword() || this.passwordEditText.getText().length() != 0) {
-            String code = isPinCode() ? this.codeFieldContainer.getCode() : this.passwordEditText.getText().toString();
-            int i = this.type;
-            int i2 = 0;
-            if (i == 1) {
-                if (!this.firstPassword.equals(code)) {
-                    AndroidUtilities.updateViewVisibilityAnimated(this.passcodesDoNotMatchTextView, true);
-                    for (CodeNumberField text : this.codeFieldContainer.codeField) {
-                        text.setText("");
-                    }
-                    if (isPinCode()) {
-                        this.codeFieldContainer.codeField[0].requestFocus();
-                    }
-                    this.passwordEditText.setText("");
-                    onPasscodeError();
-                    this.codeFieldContainer.removeCallbacks(this.hidePasscodesDoNotMatch);
-                    this.codeFieldContainer.post(new PasscodeActivity$$ExternalSyntheticLambda12(this));
-                    return;
+        if (isPassword() && this.passwordEditText.getText().length() == 0) {
+            onPasscodeError();
+            return;
+        }
+        String code = isPinCode() ? this.codeFieldContainer.getCode() : this.passwordEditText.getText().toString();
+        int i = this.type;
+        int i2 = 0;
+        if (i == 1) {
+            if (!this.firstPassword.equals(code)) {
+                AndroidUtilities.updateViewVisibilityAnimated(this.passcodesDoNotMatchTextView, true);
+                for (CodeNumberField codeNumberField : this.codeFieldContainer.codeField) {
+                    codeNumberField.setText("");
                 }
-                boolean z = SharedConfig.passcodeHash.length() == 0;
-                try {
-                    SharedConfig.passcodeSalt = new byte[16];
-                    Utilities.random.nextBytes(SharedConfig.passcodeSalt);
-                    byte[] bytes = this.firstPassword.getBytes("UTF-8");
-                    int length = bytes.length + 32;
-                    byte[] bArr = new byte[length];
-                    System.arraycopy(SharedConfig.passcodeSalt, 0, bArr, 0, 16);
-                    System.arraycopy(bytes, 0, bArr, 16, bytes.length);
-                    System.arraycopy(SharedConfig.passcodeSalt, 0, bArr, bytes.length + 16, 16);
-                    SharedConfig.passcodeHash = Utilities.bytesToHex(Utilities.computeSHA256(bArr, 0, (long) length));
-                } catch (Exception e) {
-                    FileLog.e((Throwable) e);
+                if (isPinCode()) {
+                    this.codeFieldContainer.codeField[0].requestFocus();
                 }
-                SharedConfig.allowScreenCapture = true;
-                SharedConfig.passcodeType = this.currentPasswordType;
+                this.passwordEditText.setText("");
+                onPasscodeError();
+                this.codeFieldContainer.removeCallbacks(this.hidePasscodesDoNotMatch);
+                this.codeFieldContainer.post(new Runnable() { // from class: org.telegram.ui.PasscodeActivity$$ExternalSyntheticLambda12
+                    @Override // java.lang.Runnable
+                    public final void run() {
+                        PasscodeActivity.this.lambda$processDone$18();
+                    }
+                });
+                return;
+            }
+            final boolean z = SharedConfig.passcodeHash.length() == 0;
+            try {
+                SharedConfig.passcodeSalt = new byte[16];
+                Utilities.random.nextBytes(SharedConfig.passcodeSalt);
+                byte[] bytes = this.firstPassword.getBytes("UTF-8");
+                int length = bytes.length + 32;
+                byte[] bArr = new byte[length];
+                System.arraycopy(SharedConfig.passcodeSalt, 0, bArr, 0, 16);
+                System.arraycopy(bytes, 0, bArr, 16, bytes.length);
+                System.arraycopy(SharedConfig.passcodeSalt, 0, bArr, bytes.length + 16, 16);
+                SharedConfig.passcodeHash = Utilities.bytesToHex(Utilities.computeSHA256(bArr, 0, length));
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+            SharedConfig.allowScreenCapture = true;
+            SharedConfig.passcodeType = this.currentPasswordType;
+            SharedConfig.saveConfig();
+            this.passwordEditText.clearFocus();
+            AndroidUtilities.hideKeyboard(this.passwordEditText);
+            CodeNumberField[] codeNumberFieldArr = this.codeFieldContainer.codeField;
+            int length2 = codeNumberFieldArr.length;
+            while (i2 < length2) {
+                CodeNumberField codeNumberField2 = codeNumberFieldArr[i2];
+                codeNumberField2.clearFocus();
+                AndroidUtilities.hideKeyboard(codeNumberField2);
+                i2++;
+            }
+            this.keyboardView.setEditText(null);
+            animateSuccessAnimation(new Runnable() { // from class: org.telegram.ui.PasscodeActivity$$ExternalSyntheticLambda19
+                @Override // java.lang.Runnable
+                public final void run() {
+                    PasscodeActivity.this.lambda$processDone$19(z);
+                }
+            });
+        } else if (i == 2) {
+            long j = SharedConfig.passcodeRetryInMs;
+            if (j > 0) {
+                double d = j;
+                Double.isNaN(d);
+                Toast.makeText(getParentActivity(), LocaleController.formatString("TooManyTries", R.string.TooManyTries, LocaleController.formatPluralString("Seconds", Math.max(1, (int) Math.ceil(d / 1000.0d)), new Object[0])), 0).show();
+                for (CodeNumberField codeNumberField3 : this.codeFieldContainer.codeField) {
+                    codeNumberField3.setText("");
+                }
+                this.passwordEditText.setText("");
+                if (isPinCode()) {
+                    this.codeFieldContainer.codeField[0].requestFocus();
+                }
+                onPasscodeError();
+            } else if (!SharedConfig.checkPasscode(code)) {
+                SharedConfig.increaseBadPasscodeTries();
+                this.passwordEditText.setText("");
+                for (CodeNumberField codeNumberField4 : this.codeFieldContainer.codeField) {
+                    codeNumberField4.setText("");
+                }
+                if (isPinCode()) {
+                    this.codeFieldContainer.codeField[0].requestFocus();
+                }
+                onPasscodeError();
+            } else {
+                SharedConfig.badPasscodeTries = 0;
                 SharedConfig.saveConfig();
                 this.passwordEditText.clearFocus();
                 AndroidUtilities.hideKeyboard(this.passwordEditText);
-                CodeNumberField[] codeNumberFieldArr = this.codeFieldContainer.codeField;
-                int length2 = codeNumberFieldArr.length;
-                while (i2 < length2) {
-                    CodeNumberField codeNumberField = codeNumberFieldArr[i2];
-                    codeNumberField.clearFocus();
-                    AndroidUtilities.hideKeyboard(codeNumberField);
+                CodeNumberField[] codeNumberFieldArr2 = this.codeFieldContainer.codeField;
+                int length3 = codeNumberFieldArr2.length;
+                while (i2 < length3) {
+                    CodeNumberField codeNumberField5 = codeNumberFieldArr2[i2];
+                    codeNumberField5.clearFocus();
+                    AndroidUtilities.hideKeyboard(codeNumberField5);
                     i2++;
                 }
-                this.keyboardView.setEditText((EditText) null);
-                animateSuccessAnimation(new PasscodeActivity$$ExternalSyntheticLambda19(this, z));
-            } else if (i == 2) {
-                long j = SharedConfig.passcodeRetryInMs;
-                if (j > 0) {
-                    double d = (double) j;
-                    Double.isNaN(d);
-                    Toast.makeText(getParentActivity(), LocaleController.formatString("TooManyTries", R.string.TooManyTries, LocaleController.formatPluralString("Seconds", Math.max(1, (int) Math.ceil(d / 1000.0d)), new Object[0])), 0).show();
-                    for (CodeNumberField text2 : this.codeFieldContainer.codeField) {
-                        text2.setText("");
+                this.keyboardView.setEditText(null);
+                animateSuccessAnimation(new Runnable() { // from class: org.telegram.ui.PasscodeActivity$$ExternalSyntheticLambda17
+                    @Override // java.lang.Runnable
+                    public final void run() {
+                        PasscodeActivity.this.lambda$processDone$20();
                     }
-                    this.passwordEditText.setText("");
-                    if (isPinCode()) {
-                        this.codeFieldContainer.codeField[0].requestFocus();
-                    }
-                    onPasscodeError();
-                } else if (!SharedConfig.checkPasscode(code)) {
-                    SharedConfig.increaseBadPasscodeTries();
-                    this.passwordEditText.setText("");
-                    for (CodeNumberField text3 : this.codeFieldContainer.codeField) {
-                        text3.setText("");
-                    }
-                    if (isPinCode()) {
-                        this.codeFieldContainer.codeField[0].requestFocus();
-                    }
-                    onPasscodeError();
-                } else {
-                    SharedConfig.badPasscodeTries = 0;
-                    SharedConfig.saveConfig();
-                    this.passwordEditText.clearFocus();
-                    AndroidUtilities.hideKeyboard(this.passwordEditText);
-                    CodeNumberField[] codeNumberFieldArr2 = this.codeFieldContainer.codeField;
-                    int length3 = codeNumberFieldArr2.length;
-                    while (i2 < length3) {
-                        CodeNumberField codeNumberField2 = codeNumberFieldArr2[i2];
-                        codeNumberField2.clearFocus();
-                        AndroidUtilities.hideKeyboard(codeNumberField2);
-                        i2++;
-                    }
-                    this.keyboardView.setEditText((EditText) null);
-                    animateSuccessAnimation(new PasscodeActivity$$ExternalSyntheticLambda17(this));
-                }
+                });
             }
-        } else {
-            onPasscodeError();
         }
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$processDone$18() {
-        this.codeFieldContainer.postDelayed(this.hidePasscodesDoNotMatch, 3000);
+        this.codeFieldContainer.postDelayed(this.hidePasscodesDoNotMatch, 3000L);
         this.postedHidePasscodesDoNotMatch = true;
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$processDone$19(boolean z) {
         getMediaDataController().buildShortcuts();
         if (z) {
@@ -1487,163 +971,201 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didSetPasscode, new Object[0]);
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$processDone$20() {
         presentFragment(new PasscodeActivity(0), true);
     }
 
     private void onPasscodeError() {
-        if (getParentActivity() != null) {
-            try {
-                this.fragmentView.performHapticFeedback(3, 2);
-            } catch (Exception unused) {
-            }
-            if (isPinCode()) {
-                for (CodeNumberField animateErrorProgress : this.codeFieldContainer.codeField) {
-                    animateErrorProgress.animateErrorProgress(1.0f);
-                }
-            } else {
-                this.outlinePasswordView.animateError(1.0f);
-            }
-            AndroidUtilities.shakeViewSpring(isPinCode() ? this.codeFieldContainer : this.outlinePasswordView, isPinCode() ? 10.0f : 4.0f, new PasscodeActivity$$ExternalSyntheticLambda16(this));
+        if (getParentActivity() == null) {
+            return;
         }
+        try {
+            this.fragmentView.performHapticFeedback(3, 2);
+        } catch (Exception unused) {
+        }
+        if (isPinCode()) {
+            for (CodeNumberField codeNumberField : this.codeFieldContainer.codeField) {
+                codeNumberField.animateErrorProgress(1.0f);
+            }
+        } else {
+            this.outlinePasswordView.animateError(1.0f);
+        }
+        AndroidUtilities.shakeViewSpring(isPinCode() ? this.codeFieldContainer : this.outlinePasswordView, isPinCode() ? 10.0f : 4.0f, new Runnable() { // from class: org.telegram.ui.PasscodeActivity$$ExternalSyntheticLambda16
+            @Override // java.lang.Runnable
+            public final void run() {
+                PasscodeActivity.this.lambda$onPasscodeError$22();
+            }
+        });
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$onPasscodeError$22() {
-        AndroidUtilities.runOnUIThread(new PasscodeActivity$$ExternalSyntheticLambda13(this), isPinCode() ? 150 : 1000);
+        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.PasscodeActivity$$ExternalSyntheticLambda13
+            @Override // java.lang.Runnable
+            public final void run() {
+                PasscodeActivity.this.lambda$onPasscodeError$21();
+            }
+        }, isPinCode() ? 150L : 1000L);
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$onPasscodeError$21() {
         if (isPinCode()) {
-            for (CodeNumberField animateErrorProgress : this.codeFieldContainer.codeField) {
-                animateErrorProgress.animateErrorProgress(0.0f);
+            for (CodeNumberField codeNumberField : this.codeFieldContainer.codeField) {
+                codeNumberField.animateErrorProgress(0.0f);
             }
             return;
         }
         this.outlinePasswordView.animateError(0.0f);
     }
 
-    private class ListAdapter extends RecyclerListView.SelectionAdapter {
+    /* JADX INFO: Access modifiers changed from: private */
+    /* loaded from: classes3.dex */
+    public class ListAdapter extends RecyclerListView.SelectionAdapter {
         private Context mContext;
 
         public ListAdapter(Context context) {
             this.mContext = context;
         }
 
+        @Override // org.telegram.ui.Components.RecyclerListView.SelectionAdapter
         public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
             int adapterPosition = viewHolder.getAdapterPosition();
             return adapterPosition == PasscodeActivity.this.fingerprintRow || adapterPosition == PasscodeActivity.this.autoLockRow || adapterPosition == PasscodeActivity.this.captureRow || adapterPosition == PasscodeActivity.this.changePasscodeRow || adapterPosition == PasscodeActivity.this.disablePasscodeRow;
         }
 
+        @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         public int getItemCount() {
             return PasscodeActivity.this.rowCount;
         }
 
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+        @Override // androidx.recyclerview.widget.RecyclerView.Adapter
+        /* renamed from: onCreateViewHolder */
+        public RecyclerView.ViewHolder mo1754onCreateViewHolder(ViewGroup viewGroup, int i) {
+            View textCheckCell;
             View view;
-            View view2;
             if (i == 0) {
-                view2 = new TextCheckCell(this.mContext);
-                view2.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
+                textCheckCell = new TextCheckCell(this.mContext);
+                textCheckCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
             } else if (i == 1) {
-                view2 = new TextSettingsCell(this.mContext);
-                view2.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-            } else if (i != 3) {
-                if (i != 4) {
-                    view = new TextInfoPrivacyCell(this.mContext);
-                } else {
+                textCheckCell = new TextSettingsCell(this.mContext);
+                textCheckCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
+            } else if (i == 3) {
+                textCheckCell = new HeaderCell(this.mContext);
+                textCheckCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
+            } else {
+                if (i == 4) {
                     view = new RLottieImageHolderView(this.mContext);
+                } else {
+                    view = new TextInfoPrivacyCell(this.mContext);
                 }
                 return new RecyclerListView.Holder(view);
-            } else {
-                view2 = new HeaderCell(this.mContext);
-                view2.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
             }
-            view = view2;
+            view = textCheckCell;
             return new RecyclerListView.Holder(view);
         }
 
+        @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
-            String str;
+            String formatString;
             int itemViewType = viewHolder.getItemViewType();
             if (itemViewType == 0) {
                 TextCheckCell textCheckCell = (TextCheckCell) viewHolder.itemView;
-                if (i == PasscodeActivity.this.fingerprintRow) {
-                    textCheckCell.setTextAndCheck(LocaleController.getString("UnlockFingerprint", R.string.UnlockFingerprint), SharedConfig.useFingerprint, true);
-                } else if (i == PasscodeActivity.this.captureRow) {
-                    textCheckCell.setTextAndCheck(LocaleController.getString(R.string.ScreenCaptureShowContent), SharedConfig.allowScreenCapture, false);
-                }
-            } else if (itemViewType != 1) {
-                int i2 = 3;
-                if (itemViewType == 2) {
-                    TextInfoPrivacyCell textInfoPrivacyCell = (TextInfoPrivacyCell) viewHolder.itemView;
-                    if (i == PasscodeActivity.this.hintRow) {
-                        textInfoPrivacyCell.setText(LocaleController.getString(R.string.PasscodeScreenHint));
-                        textInfoPrivacyCell.setBackground((Drawable) null);
-                        textInfoPrivacyCell.getTextView().setGravity(1);
-                    } else if (i == PasscodeActivity.this.autoLockDetailRow) {
-                        textInfoPrivacyCell.setText(LocaleController.getString(R.string.AutoLockInfo));
-                        textInfoPrivacyCell.setBackground(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider, "windowBackgroundGrayShadow"));
-                        TextView textView = textInfoPrivacyCell.getTextView();
-                        if (LocaleController.isRTL) {
-                            i2 = 5;
-                        }
-                        textView.setGravity(i2);
-                    } else if (i == PasscodeActivity.this.captureDetailRow) {
-                        textInfoPrivacyCell.setText(LocaleController.getString(R.string.ScreenCaptureInfo));
-                        textInfoPrivacyCell.setBackground(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, "windowBackgroundGrayShadow"));
-                        TextView textView2 = textInfoPrivacyCell.getTextView();
-                        if (LocaleController.isRTL) {
-                            i2 = 5;
-                        }
-                        textView2.setGravity(i2);
-                    }
-                } else if (itemViewType == 3) {
-                    HeaderCell headerCell = (HeaderCell) viewHolder.itemView;
-                    headerCell.setHeight(46);
-                    if (i == PasscodeActivity.this.captureHeaderRow) {
-                        headerCell.setText(LocaleController.getString(R.string.ScreenCaptureHeader));
-                    }
-                } else if (itemViewType == 4) {
-                    RLottieImageHolderView rLottieImageHolderView = (RLottieImageHolderView) viewHolder.itemView;
-                    rLottieImageHolderView.imageView.setAnimation(R.raw.utyan_passcode, 100, 100);
-                    rLottieImageHolderView.imageView.playAnimation();
-                }
-            } else {
-                TextSettingsCell textSettingsCell = (TextSettingsCell) viewHolder.itemView;
-                if (i == PasscodeActivity.this.changePasscodeRow) {
-                    textSettingsCell.setText(LocaleController.getString("ChangePasscode", R.string.ChangePasscode), true);
-                    if (SharedConfig.passcodeHash.length() == 0) {
-                        textSettingsCell.setTag("windowBackgroundWhiteGrayText7");
-                        textSettingsCell.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText7"));
+                if (i != PasscodeActivity.this.fingerprintRow) {
+                    if (i != PasscodeActivity.this.captureRow) {
                         return;
                     }
-                    textSettingsCell.setTag("windowBackgroundWhiteBlackText");
-                    textSettingsCell.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
-                } else if (i == PasscodeActivity.this.autoLockRow) {
-                    int i3 = SharedConfig.autoLockIn;
-                    if (i3 == 0) {
-                        str = LocaleController.formatString("AutoLockDisabled", R.string.AutoLockDisabled, new Object[0]);
-                    } else if (i3 < 3600) {
-                        str = LocaleController.formatString("AutoLockInTime", R.string.AutoLockInTime, LocaleController.formatPluralString("Minutes", i3 / 60, new Object[0]));
-                    } else if (i3 < 86400) {
-                        str = LocaleController.formatString("AutoLockInTime", R.string.AutoLockInTime, LocaleController.formatPluralString("Hours", (int) Math.ceil((double) ((((float) i3) / 60.0f) / 60.0f)), new Object[0]));
-                    } else {
-                        str = LocaleController.formatString("AutoLockInTime", R.string.AutoLockInTime, LocaleController.formatPluralString("Days", (int) Math.ceil((double) (((((float) i3) / 60.0f) / 60.0f) / 24.0f)), new Object[0]));
-                    }
-                    textSettingsCell.setTextAndValue(LocaleController.getString("AutoLock", R.string.AutoLock), str, true);
-                    textSettingsCell.setTag("windowBackgroundWhiteBlackText");
-                    textSettingsCell.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
-                } else if (i == PasscodeActivity.this.disablePasscodeRow) {
-                    textSettingsCell.setText(LocaleController.getString(R.string.DisablePasscode), false);
-                    textSettingsCell.setTag("dialogTextRed");
-                    textSettingsCell.setTextColor(Theme.getColor("dialogTextRed"));
+                    textCheckCell.setTextAndCheck(LocaleController.getString(R.string.ScreenCaptureShowContent), SharedConfig.allowScreenCapture, false);
+                    return;
                 }
+                textCheckCell.setTextAndCheck(LocaleController.getString("UnlockFingerprint", R.string.UnlockFingerprint), SharedConfig.useFingerprint, true);
+            } else if (itemViewType == 1) {
+                TextSettingsCell textSettingsCell = (TextSettingsCell) viewHolder.itemView;
+                if (i != PasscodeActivity.this.changePasscodeRow) {
+                    if (i != PasscodeActivity.this.autoLockRow) {
+                        if (i != PasscodeActivity.this.disablePasscodeRow) {
+                            return;
+                        }
+                        textSettingsCell.setText(LocaleController.getString(R.string.DisablePasscode), false);
+                        textSettingsCell.setTag("dialogTextRed");
+                        textSettingsCell.setTextColor(Theme.getColor("dialogTextRed"));
+                        return;
+                    }
+                    int i2 = SharedConfig.autoLockIn;
+                    if (i2 == 0) {
+                        formatString = LocaleController.formatString("AutoLockDisabled", R.string.AutoLockDisabled, new Object[0]);
+                    } else if (i2 < 3600) {
+                        formatString = LocaleController.formatString("AutoLockInTime", R.string.AutoLockInTime, LocaleController.formatPluralString("Minutes", i2 / 60, new Object[0]));
+                    } else if (i2 < 86400) {
+                        formatString = LocaleController.formatString("AutoLockInTime", R.string.AutoLockInTime, LocaleController.formatPluralString("Hours", (int) Math.ceil((i2 / 60.0f) / 60.0f), new Object[0]));
+                    } else {
+                        formatString = LocaleController.formatString("AutoLockInTime", R.string.AutoLockInTime, LocaleController.formatPluralString("Days", (int) Math.ceil(((i2 / 60.0f) / 60.0f) / 24.0f), new Object[0]));
+                    }
+                    textSettingsCell.setTextAndValue(LocaleController.getString("AutoLock", R.string.AutoLock), formatString, true);
+                    textSettingsCell.setTag("windowBackgroundWhiteBlackText");
+                    textSettingsCell.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+                    return;
+                }
+                textSettingsCell.setText(LocaleController.getString("ChangePasscode", R.string.ChangePasscode), true);
+                if (SharedConfig.passcodeHash.length() == 0) {
+                    textSettingsCell.setTag("windowBackgroundWhiteGrayText7");
+                    textSettingsCell.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText7"));
+                    return;
+                }
+                textSettingsCell.setTag("windowBackgroundWhiteBlackText");
+                textSettingsCell.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+            } else {
+                int i3 = 3;
+                if (itemViewType != 2) {
+                    if (itemViewType != 3) {
+                        if (itemViewType != 4) {
+                            return;
+                        }
+                        RLottieImageHolderView rLottieImageHolderView = (RLottieImageHolderView) viewHolder.itemView;
+                        rLottieImageHolderView.imageView.setAnimation(R.raw.utyan_passcode, 100, 100);
+                        rLottieImageHolderView.imageView.playAnimation();
+                        return;
+                    }
+                    HeaderCell headerCell = (HeaderCell) viewHolder.itemView;
+                    headerCell.setHeight(46);
+                    if (i != PasscodeActivity.this.captureHeaderRow) {
+                        return;
+                    }
+                    headerCell.setText(LocaleController.getString(R.string.ScreenCaptureHeader));
+                    return;
+                }
+                TextInfoPrivacyCell textInfoPrivacyCell = (TextInfoPrivacyCell) viewHolder.itemView;
+                if (i != PasscodeActivity.this.hintRow) {
+                    if (i != PasscodeActivity.this.autoLockDetailRow) {
+                        if (i != PasscodeActivity.this.captureDetailRow) {
+                            return;
+                        }
+                        textInfoPrivacyCell.setText(LocaleController.getString(R.string.ScreenCaptureInfo));
+                        textInfoPrivacyCell.setBackground(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, "windowBackgroundGrayShadow"));
+                        TextView textView = textInfoPrivacyCell.getTextView();
+                        if (LocaleController.isRTL) {
+                            i3 = 5;
+                        }
+                        textView.setGravity(i3);
+                        return;
+                    }
+                    textInfoPrivacyCell.setText(LocaleController.getString(R.string.AutoLockInfo));
+                    textInfoPrivacyCell.setBackground(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider, "windowBackgroundGrayShadow"));
+                    TextView textView2 = textInfoPrivacyCell.getTextView();
+                    if (LocaleController.isRTL) {
+                        i3 = 5;
+                    }
+                    textView2.setGravity(i3);
+                    return;
+                }
+                textInfoPrivacyCell.setText(LocaleController.getString(R.string.PasscodeScreenHint));
+                textInfoPrivacyCell.setBackground(null);
+                textInfoPrivacyCell.getTextView().setGravity(1);
             }
         }
 
+        @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         public int getItemViewType(int i) {
             if (i == PasscodeActivity.this.fingerprintRow || i == PasscodeActivity.this.captureRow) {
                 return 0;
@@ -1657,52 +1179,56 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
             if (i == PasscodeActivity.this.captureHeaderRow) {
                 return 3;
             }
-            if (i == PasscodeActivity.this.utyanRow) {
-                return 4;
-            }
-            return 0;
+            return i == PasscodeActivity.this.utyanRow ? 4 : 0;
         }
     }
 
+    @Override // org.telegram.ui.ActionBar.BaseFragment
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         ArrayList<ThemeDescription> arrayList = new ArrayList<>();
-        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{TextCheckCell.class, TextSettingsCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
-        arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND | ThemeDescription.FLAG_CHECKTAG, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
-        arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_CHECKTAG | ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGray"));
-        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"));
-        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"));
-        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultIcon"));
-        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultTitle"));
-        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSelector"));
-        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBMENUBACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSubmenuBackground"));
-        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBMENUITEM, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSubmenuItem"));
-        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_IMAGECOLOR | ThemeDescription.FLAG_AB_SUBMENUITEM, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSubmenuItemIcon"));
-        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "listSelectorSDK21"));
-        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "divider"));
-        arrayList.add(new ThemeDescription(this.titleTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText6"));
-        arrayList.add(new ThemeDescription(this.passwordEditText, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-        arrayList.add(new ThemeDescription(this.passwordEditText, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputField"));
-        arrayList.add(new ThemeDescription(this.passwordEditText, ThemeDescription.FLAG_DRAWABLESELECTEDSTATE | ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputFieldActivated"));
-        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "switchTrack"));
-        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "switchTrackChecked"));
-        arrayList.add(new ThemeDescription((View) this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-        arrayList.add(new ThemeDescription((View) this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText7"));
-        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"valueTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteValueText"));
-        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGrayShadow"));
-        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText4"));
+        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{TextCheckCell.class, TextSettingsCell.class}, null, null, null, "windowBackgroundWhite"));
+        arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND | ThemeDescription.FLAG_CHECKTAG, null, null, null, null, "windowBackgroundWhite"));
+        arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_CHECKTAG | ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundGray"));
+        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "actionBarDefault"));
+        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, "actionBarDefault"));
+        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, "actionBarDefaultIcon"));
+        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, "actionBarDefaultTitle"));
+        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, "actionBarDefaultSelector"));
+        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBMENUBACKGROUND, null, null, null, null, "actionBarDefaultSubmenuBackground"));
+        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBMENUITEM, null, null, null, null, "actionBarDefaultSubmenuItem"));
+        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_IMAGECOLOR | ThemeDescription.FLAG_AB_SUBMENUITEM, null, null, null, null, "actionBarDefaultSubmenuItemIcon"));
+        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, "listSelectorSDK21"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, "divider"));
+        arrayList.add(new ThemeDescription(this.titleTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteGrayText6"));
+        arrayList.add(new ThemeDescription(this.passwordEditText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText"));
+        arrayList.add(new ThemeDescription(this.passwordEditText, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "windowBackgroundWhiteInputField"));
+        arrayList.add(new ThemeDescription(this.passwordEditText, ThemeDescription.FLAG_DRAWABLESELECTEDSTATE | ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "windowBackgroundWhiteInputFieldActivated"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "switchTrack"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "switchTrackChecked"));
+        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText7"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"valueTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteValueText"));
+        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, "windowBackgroundGrayShadow"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText4"));
         return arrayList;
     }
 
-    private static final class RLottieImageHolderView extends FrameLayout {
-        /* access modifiers changed from: private */
-        public RLottieImageView imageView;
+    /* JADX INFO: Access modifiers changed from: private */
+    /* loaded from: classes3.dex */
+    public static final class RLottieImageHolderView extends FrameLayout {
+        private RLottieImageView imageView;
 
         private RLottieImageHolderView(Context context) {
             super(context);
             RLottieImageView rLottieImageView = new RLottieImageView(context);
             this.imageView = rLottieImageView;
-            rLottieImageView.setOnClickListener(new PasscodeActivity$RLottieImageHolderView$$ExternalSyntheticLambda0(this));
+            rLottieImageView.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.PasscodeActivity$RLottieImageHolderView$$ExternalSyntheticLambda0
+                @Override // android.view.View.OnClickListener
+                public final void onClick(View view) {
+                    PasscodeActivity.RLottieImageHolderView.this.lambda$new$0(view);
+                }
+            });
             int dp = AndroidUtilities.dp(120.0f);
             FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(dp, dp);
             layoutParams.gravity = 1;
@@ -1711,7 +1237,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
             setLayoutParams(new RecyclerView.LayoutParams(-1, -2));
         }
 
-        /* access modifiers changed from: private */
+        /* JADX INFO: Access modifiers changed from: private */
         public /* synthetic */ void lambda$new$0(View view) {
             if (!this.imageView.getAnimatedDrawable().isRunning()) {
                 this.imageView.getAnimatedDrawable().setCurrentFrame(0, false);

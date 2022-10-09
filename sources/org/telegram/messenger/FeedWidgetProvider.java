@@ -9,19 +9,22 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.widget.RemoteViews;
 import org.telegram.ui.LaunchActivity;
-
+/* loaded from: classes.dex */
 public class FeedWidgetProvider extends AppWidgetProvider {
+    @Override // android.appwidget.AppWidgetProvider, android.content.BroadcastReceiver
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
     }
 
+    @Override // android.appwidget.AppWidgetProvider
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] iArr) {
         super.onUpdate(context, appWidgetManager, iArr);
-        for (int updateWidget : iArr) {
-            updateWidget(context, appWidgetManager, updateWidget);
+        for (int i : iArr) {
+            updateWidget(context, appWidgetManager, i);
         }
     }
 
+    @Override // android.appwidget.AppWidgetProvider
     public void onDeleted(Context context, int[] iArr) {
         super.onDeleted(context, iArr);
         for (int i = 0; i < iArr.length; i++) {

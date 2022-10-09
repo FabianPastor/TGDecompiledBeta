@@ -9,16 +9,11 @@ import androidx.core.graphics.ColorUtils;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 import org.telegram.ui.ActionBar.Theme;
-
+/* loaded from: classes3.dex */
 public class GLIconRenderer implements GLSurfaceView.Renderer {
-    public float angleX = 0.0f;
-    public float angleX2 = 0.0f;
-    public float angleY = 0.0f;
     Bitmap backgroundBitmap;
     int color1;
     int color2;
-    public String colorKey1 = "premiumStarGradient1";
-    public String colorKey2 = "premiumStarGradient2";
     Context context;
     public float gradientScaleX;
     public float gradientScaleY;
@@ -26,16 +21,21 @@ public class GLIconRenderer implements GLSurfaceView.Renderer {
     public float gradientStartY;
     public boolean isDarkBackground;
     private int mHeight;
-    private final float[] mMVPMatrix = new float[16];
-    private final float[] mProjectionMatrix = new float[16];
-    private final float[] mRotationMatrix = new float[16];
-    private final float[] mViewMatrix = new float[16];
     private int mWidth;
     public Star3DIcon star;
     private final int style;
+    public float angleX = 0.0f;
+    public float angleX2 = 0.0f;
+    public float angleY = 0.0f;
+    private final float[] mMVPMatrix = new float[16];
+    private final float[] mProjectionMatrix = new float[16];
+    private final float[] mViewMatrix = new float[16];
+    private final float[] mRotationMatrix = new float[16];
+    public String colorKey1 = "premiumStarGradient1";
+    public String colorKey2 = "premiumStarGradient2";
 
-    public GLIconRenderer(Context context2, int i) {
-        this.context = context2;
+    public GLIconRenderer(Context context, int i) {
+        this.context = context;
         this.style = i;
         updateColors();
     }
@@ -55,6 +55,7 @@ public class GLIconRenderer implements GLSurfaceView.Renderer {
         throw new RuntimeException("Could not compile program: " + GLES20.glGetShaderInfoLog(glCreateShader) + " " + str);
     }
 
+    @Override // android.opengl.GLSurfaceView.Renderer
     public void onSurfaceCreated(GL10 gl10, EGLConfig eGLConfig) {
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         Star3DIcon star3DIcon = this.star;
@@ -74,6 +75,7 @@ public class GLIconRenderer implements GLSurfaceView.Renderer {
         }
     }
 
+    @Override // android.opengl.GLSurfaceView.Renderer
     public void onDrawFrame(GL10 gl10) {
         GLES20.glClear(16640);
         GLES20.glEnable(2929);
@@ -93,11 +95,12 @@ public class GLIconRenderer implements GLSurfaceView.Renderer {
         }
     }
 
+    @Override // android.opengl.GLSurfaceView.Renderer
     public void onSurfaceChanged(GL10 gl10, int i, int i2) {
         this.mWidth = i;
         this.mHeight = i2;
         GLES20.glViewport(0, 0, i, i2);
-        Matrix.perspectiveM(this.mProjectionMatrix, 0, 53.13f, ((float) i) / ((float) i2), 1.0f, 200.0f);
+        Matrix.perspectiveM(this.mProjectionMatrix, 0, 53.13f, i / i2, 1.0f, 200.0f);
     }
 
     public void setBackground(Bitmap bitmap) {

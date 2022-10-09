@@ -2,37 +2,39 @@ package j$.util;
 
 import j$.util.Iterator;
 import j$.util.function.Consumer;
-import j$.util.function.k;
-import j$.util.function.l;
 import j$.util.p;
 import j$.util.u;
 import java.util.NoSuchElementException;
-
-class y implements p.a, l, Iterator {
+/* loaded from: classes2.dex */
+class y implements p.a, j$.util.function.l, Iterator {
     boolean a = false;
     int b;
     final /* synthetic */ u.a c;
 
-    y(u.a aVar) {
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public y(u.a aVar) {
         this.c = aVar;
     }
 
+    @Override // j$.util.function.l
     public void accept(int i) {
         this.a = true;
         this.b = i;
     }
 
+    @Override // j$.util.p
     /* renamed from: c */
-    public void forEachRemaining(l lVar) {
+    public void forEachRemaining(j$.util.function.l lVar) {
         lVar.getClass();
         while (hasNext()) {
             lVar.accept(nextInt());
         }
     }
 
+    @Override // j$.util.p.a, j$.util.Iterator
     public void forEachRemaining(Consumer consumer) {
-        if (consumer instanceof l) {
-            forEachRemaining((l) consumer);
+        if (consumer instanceof j$.util.function.l) {
+            forEachRemaining((j$.util.function.l) consumer);
             return;
         }
         consumer.getClass();
@@ -44,6 +46,7 @@ class y implements p.a, l, Iterator {
         }
     }
 
+    @Override // java.util.Iterator, j$.util.Iterator
     public boolean hasNext() {
         if (!this.a) {
             this.c.g(this);
@@ -51,12 +54,15 @@ class y implements p.a, l, Iterator {
         return this.a;
     }
 
-    public l l(l lVar) {
+    @Override // j$.util.function.l
+    public j$.util.function.l l(j$.util.function.l lVar) {
         lVar.getClass();
-        return new k(this, lVar);
+        return new j$.util.function.k(this, lVar);
     }
 
-    public Integer next() {
+    @Override // j$.util.p.a, java.util.Iterator
+    /* renamed from: next */
+    public Integer mo309next() {
         if (!N.a) {
             return Integer.valueOf(nextInt());
         }
@@ -64,6 +70,7 @@ class y implements p.a, l, Iterator {
         throw null;
     }
 
+    @Override // j$.util.p.a
     public int nextInt() {
         if (this.a || hasNext()) {
             this.a = false;
@@ -72,6 +79,7 @@ class y implements p.a, l, Iterator {
         throw new NoSuchElementException();
     }
 
+    @Override // java.util.Iterator, j$.util.Iterator
     public /* synthetic */ void remove() {
         Iterator.CC.a(this);
         throw null;

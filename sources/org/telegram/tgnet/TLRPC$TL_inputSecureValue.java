@@ -1,19 +1,20 @@
 package org.telegram.tgnet;
 
 import java.util.ArrayList;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_inputSecureValue extends TLObject {
     public static int constructor = -NUM;
     public TLRPC$TL_secureData data;
-    public ArrayList<TLRPC$InputSecureFile> files = new ArrayList<>();
     public int flags;
     public TLRPC$InputSecureFile front_side;
     public TLRPC$SecurePlainData plain_data;
     public TLRPC$InputSecureFile reverse_side;
     public TLRPC$InputSecureFile selfie;
-    public ArrayList<TLRPC$InputSecureFile> translation = new ArrayList<>();
     public TLRPC$SecureValueType type;
+    public ArrayList<TLRPC$InputSecureFile> translation = new ArrayList<>();
+    public ArrayList<TLRPC$InputSecureFile> files = new ArrayList<>();
 
+    @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         this.flags = abstractSerializedData.readInt32(z);
         this.type = TLRPC$SecureValueType.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
@@ -29,44 +30,38 @@ public class TLRPC$TL_inputSecureValue extends TLObject {
         if ((this.flags & 8) != 0) {
             this.selfie = TLRPC$InputSecureFile.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         }
-        int i = 0;
         if ((this.flags & 64) != 0) {
             int readInt32 = abstractSerializedData.readInt32(z);
-            if (readInt32 == NUM) {
-                int readInt322 = abstractSerializedData.readInt32(z);
-                int i2 = 0;
-                while (i2 < readInt322) {
-                    TLRPC$InputSecureFile TLdeserialize = TLRPC$InputSecureFile.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
-                    if (TLdeserialize != null) {
-                        this.translation.add(TLdeserialize);
-                        i2++;
-                    } else {
-                        return;
-                    }
+            if (readInt32 != NUM) {
+                if (z) {
+                    throw new RuntimeException(String.format("wrong Vector magic, got %x", Integer.valueOf(readInt32)));
                 }
-            } else if (z) {
-                throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt32)}));
-            } else {
                 return;
+            }
+            int readInt322 = abstractSerializedData.readInt32(z);
+            for (int i = 0; i < readInt322; i++) {
+                TLRPC$InputSecureFile TLdeserialize = TLRPC$InputSecureFile.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+                if (TLdeserialize == null) {
+                    return;
+                }
+                this.translation.add(TLdeserialize);
             }
         }
         if ((this.flags & 16) != 0) {
             int readInt323 = abstractSerializedData.readInt32(z);
-            if (readInt323 == NUM) {
-                int readInt324 = abstractSerializedData.readInt32(z);
-                while (i < readInt324) {
-                    TLRPC$InputSecureFile TLdeserialize2 = TLRPC$InputSecureFile.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
-                    if (TLdeserialize2 != null) {
-                        this.files.add(TLdeserialize2);
-                        i++;
-                    } else {
-                        return;
-                    }
+            if (readInt323 != NUM) {
+                if (z) {
+                    throw new RuntimeException(String.format("wrong Vector magic, got %x", Integer.valueOf(readInt323)));
                 }
-            } else if (z) {
-                throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt323)}));
-            } else {
                 return;
+            }
+            int readInt324 = abstractSerializedData.readInt32(z);
+            for (int i2 = 0; i2 < readInt324; i2++) {
+                TLRPC$InputSecureFile TLdeserialize2 = TLRPC$InputSecureFile.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+                if (TLdeserialize2 == null) {
+                    return;
+                }
+                this.files.add(TLdeserialize2);
             }
         }
         if ((this.flags & 32) != 0) {
@@ -74,6 +69,7 @@ public class TLRPC$TL_inputSecureValue extends TLObject {
         }
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
         abstractSerializedData.writeInt32(this.flags);

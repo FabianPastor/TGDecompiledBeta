@@ -2,16 +2,15 @@ package org.telegram.ui.Components;
 
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
-import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-
+/* loaded from: classes3.dex */
 public class CrossfadeDrawable extends Drawable {
     private final Drawable bottomDrawable;
     float globalAlpha = 255.0f;
-    /* access modifiers changed from: private */
-    public float progress;
+    private float progress;
     private final Drawable topDrawable;
 
+    @Override // android.graphics.drawable.Drawable
     public int getOpacity() {
         return -3;
     }
@@ -20,20 +19,23 @@ public class CrossfadeDrawable extends Drawable {
         this.topDrawable = drawable;
         this.bottomDrawable = drawable2;
         if (drawable != null) {
-            drawable.setCallback(new Drawable.Callback() {
-                public void invalidateDrawable(Drawable drawable) {
+            drawable.setCallback(new Drawable.Callback() { // from class: org.telegram.ui.Components.CrossfadeDrawable.1
+                @Override // android.graphics.drawable.Drawable.Callback
+                public void invalidateDrawable(Drawable drawable3) {
                     if (CrossfadeDrawable.this.progress < 1.0f) {
                         CrossfadeDrawable.this.invalidateSelf();
                     }
                 }
 
-                public void scheduleDrawable(Drawable drawable, Runnable runnable, long j) {
+                @Override // android.graphics.drawable.Drawable.Callback
+                public void scheduleDrawable(Drawable drawable3, Runnable runnable, long j) {
                     if (CrossfadeDrawable.this.progress < 1.0f) {
                         CrossfadeDrawable.this.scheduleSelf(runnable, j);
                     }
                 }
 
-                public void unscheduleDrawable(Drawable drawable, Runnable runnable) {
+                @Override // android.graphics.drawable.Drawable.Callback
+                public void unscheduleDrawable(Drawable drawable3, Runnable runnable) {
                     if (CrossfadeDrawable.this.progress < 1.0f) {
                         CrossfadeDrawable.this.unscheduleSelf(runnable);
                     }
@@ -41,14 +43,17 @@ public class CrossfadeDrawable extends Drawable {
             });
         }
         if (drawable2 != null) {
-            drawable2.setCallback(new Drawable.Callback() {
-                public void scheduleDrawable(Drawable drawable, Runnable runnable, long j) {
+            drawable2.setCallback(new Drawable.Callback() { // from class: org.telegram.ui.Components.CrossfadeDrawable.2
+                @Override // android.graphics.drawable.Drawable.Callback
+                public void scheduleDrawable(Drawable drawable3, Runnable runnable, long j) {
                 }
 
-                public void unscheduleDrawable(Drawable drawable, Runnable runnable) {
+                @Override // android.graphics.drawable.Drawable.Callback
+                public void unscheduleDrawable(Drawable drawable3, Runnable runnable) {
                 }
 
-                public void invalidateDrawable(Drawable drawable) {
+                @Override // android.graphics.drawable.Drawable.Callback
+                public void invalidateDrawable(Drawable drawable3) {
                     if (CrossfadeDrawable.this.progress > 0.0f) {
                         CrossfadeDrawable.this.invalidateSelf();
                     }
@@ -57,12 +62,13 @@ public class CrossfadeDrawable extends Drawable {
         }
     }
 
-    /* access modifiers changed from: protected */
-    public void onBoundsChange(Rect rect) {
+    @Override // android.graphics.drawable.Drawable
+    protected void onBoundsChange(android.graphics.Rect rect) {
         this.topDrawable.setBounds(rect);
         this.bottomDrawable.setBounds(rect);
     }
 
+    @Override // android.graphics.drawable.Drawable
     public void draw(Canvas canvas) {
         Drawable drawable = this.topDrawable;
         int i = (int) (this.globalAlpha * (1.0f - this.progress));
@@ -78,18 +84,22 @@ public class CrossfadeDrawable extends Drawable {
         }
     }
 
+    @Override // android.graphics.drawable.Drawable
     public void setAlpha(int i) {
-        this.globalAlpha = (float) i;
+        this.globalAlpha = i;
     }
 
+    @Override // android.graphics.drawable.Drawable
     public void setColorFilter(ColorFilter colorFilter) {
         this.topDrawable.setColorFilter(colorFilter);
     }
 
+    @Override // android.graphics.drawable.Drawable
     public int getIntrinsicWidth() {
         return this.topDrawable.getIntrinsicWidth();
     }
 
+    @Override // android.graphics.drawable.Drawable
     public int getIntrinsicHeight() {
         return this.topDrawable.getIntrinsicHeight();
     }

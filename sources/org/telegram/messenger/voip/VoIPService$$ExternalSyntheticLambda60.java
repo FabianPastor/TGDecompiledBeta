@@ -1,14 +1,13 @@
 package org.telegram.messenger.voip;
-
-import org.telegram.messenger.NotificationCenter;
-
+/* loaded from: classes.dex */
 public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda60 implements Runnable {
     public static final /* synthetic */ VoIPService$$ExternalSyntheticLambda60 INSTANCE = new VoIPService$$ExternalSyntheticLambda60();
 
     private /* synthetic */ VoIPService$$ExternalSyntheticLambda60() {
     }
 
+    @Override // java.lang.Runnable
     public final void run() {
-        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didStartedCall, new Object[0]);
+        VoIPService.lambda$acceptIncomingCall$67();
     }
 }

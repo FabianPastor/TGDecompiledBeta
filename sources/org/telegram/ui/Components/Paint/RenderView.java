@@ -24,32 +24,25 @@ import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.FileLog;
 import org.telegram.ui.Components.Paint.Painting;
+import org.telegram.ui.Components.Paint.RenderView;
 import org.telegram.ui.Components.Size;
-
+/* loaded from: classes3.dex */
 public class RenderView extends TextureView {
-    /* access modifiers changed from: private */
-    public Bitmap bitmap;
+    private Bitmap bitmap;
     private Brush brush;
     private int color;
-    /* access modifiers changed from: private */
-    public RenderViewDelegate delegate;
-    /* access modifiers changed from: private */
-    public boolean firstDrawSent;
-    private Input input = new Input(this);
-    /* access modifiers changed from: private */
-    public CanvasInternal internal;
-    /* access modifiers changed from: private */
-    public Painting painting;
-    /* access modifiers changed from: private */
-    public DispatchQueue queue;
-    /* access modifiers changed from: private */
-    public boolean shuttingDown;
-    /* access modifiers changed from: private */
-    public boolean transformedBitmap;
-    /* access modifiers changed from: private */
-    public UndoStore undoStore;
+    private RenderViewDelegate delegate;
+    private boolean firstDrawSent;
+    private Input input;
+    private CanvasInternal internal;
+    private Painting painting;
+    private DispatchQueue queue;
+    private boolean shuttingDown;
+    private boolean transformedBitmap;
+    private UndoStore undoStore;
     private float weight;
 
+    /* loaded from: classes3.dex */
     public interface RenderViewDelegate {
         void onBeganDrawing();
 
@@ -60,79 +53,109 @@ public class RenderView extends TextureView {
         boolean shouldDraw();
     }
 
-    public RenderView(Context context, Painting painting2, Bitmap bitmap2) {
+    public RenderView(Context context, Painting painting, Bitmap bitmap) {
         super(context);
         setOpaque(false);
-        this.bitmap = bitmap2;
-        this.painting = painting2;
-        painting2.setRenderView(this);
-        setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
-            public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
-            }
-
-            public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int i, int i2) {
-                if (surfaceTexture != null && RenderView.this.internal == null) {
-                    CanvasInternal unused = RenderView.this.internal = new CanvasInternal(surfaceTexture);
-                    RenderView.this.internal.setBufferSize(i, i2);
-                    RenderView.this.updateTransform();
-                    RenderView.this.internal.requestRender();
-                    if (RenderView.this.painting.isPaused()) {
-                        RenderView.this.painting.onResume();
-                    }
-                }
-            }
-
-            public void onSurfaceTextureSizeChanged(SurfaceTexture surfaceTexture, int i, int i2) {
-                if (RenderView.this.internal != null) {
-                    RenderView.this.internal.setBufferSize(i, i2);
-                    RenderView.this.updateTransform();
-                    RenderView.this.internal.requestRender();
-                    RenderView.this.internal.postRunnable(new RenderView$1$$ExternalSyntheticLambda1(this));
-                }
-            }
-
-            /* access modifiers changed from: private */
-            public /* synthetic */ void lambda$onSurfaceTextureSizeChanged$0() {
-                if (RenderView.this.internal != null) {
-                    RenderView.this.internal.requestRender();
-                }
-            }
-
-            public boolean onSurfaceTextureDestroyed(SurfaceTexture surfaceTexture) {
-                if (RenderView.this.internal != null && !RenderView.this.shuttingDown) {
-                    RenderView.this.painting.onPause(new RenderView$1$$ExternalSyntheticLambda0(this));
-                }
-                return true;
-            }
-
-            /* access modifiers changed from: private */
-            public /* synthetic */ void lambda$onSurfaceTextureDestroyed$1() {
-                RenderView.this.internal.shutdown();
-                CanvasInternal unused = RenderView.this.internal = null;
-            }
-        });
-        this.painting.setDelegate(new Painting.PaintingDelegate() {
+        this.bitmap = bitmap;
+        this.painting = painting;
+        painting.setRenderView(this);
+        setSurfaceTextureListener(new AnonymousClass1());
+        this.input = new Input(this);
+        this.painting.setDelegate(new Painting.PaintingDelegate() { // from class: org.telegram.ui.Components.Paint.RenderView.2
+            @Override // org.telegram.ui.Components.Paint.Painting.PaintingDelegate
             public void contentChanged() {
                 if (RenderView.this.internal != null) {
                     RenderView.this.internal.scheduleRedraw();
                 }
             }
 
+            @Override // org.telegram.ui.Components.Paint.Painting.PaintingDelegate
             public UndoStore requestUndoStore() {
                 return RenderView.this.undoStore;
             }
 
+            @Override // org.telegram.ui.Components.Paint.Painting.PaintingDelegate
             public DispatchQueue requestDispatchQueue() {
                 return RenderView.this.queue;
             }
         });
     }
 
+    /* JADX INFO: Access modifiers changed from: package-private */
+    /* renamed from: org.telegram.ui.Components.Paint.RenderView$1  reason: invalid class name */
+    /* loaded from: classes3.dex */
+    public class AnonymousClass1 implements TextureView.SurfaceTextureListener {
+        @Override // android.view.TextureView.SurfaceTextureListener
+        public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
+        }
+
+        AnonymousClass1() {
+        }
+
+        @Override // android.view.TextureView.SurfaceTextureListener
+        public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int i, int i2) {
+            if (surfaceTexture == null || RenderView.this.internal != null) {
+                return;
+            }
+            RenderView.this.internal = new CanvasInternal(surfaceTexture);
+            RenderView.this.internal.setBufferSize(i, i2);
+            RenderView.this.updateTransform();
+            RenderView.this.internal.requestRender();
+            if (!RenderView.this.painting.isPaused()) {
+                return;
+            }
+            RenderView.this.painting.onResume();
+        }
+
+        @Override // android.view.TextureView.SurfaceTextureListener
+        public void onSurfaceTextureSizeChanged(SurfaceTexture surfaceTexture, int i, int i2) {
+            if (RenderView.this.internal == null) {
+                return;
+            }
+            RenderView.this.internal.setBufferSize(i, i2);
+            RenderView.this.updateTransform();
+            RenderView.this.internal.requestRender();
+            RenderView.this.internal.postRunnable(new Runnable() { // from class: org.telegram.ui.Components.Paint.RenderView$1$$ExternalSyntheticLambda1
+                @Override // java.lang.Runnable
+                public final void run() {
+                    RenderView.AnonymousClass1.this.lambda$onSurfaceTextureSizeChanged$0();
+                }
+            });
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$onSurfaceTextureSizeChanged$0() {
+            if (RenderView.this.internal != null) {
+                RenderView.this.internal.requestRender();
+            }
+        }
+
+        @Override // android.view.TextureView.SurfaceTextureListener
+        public boolean onSurfaceTextureDestroyed(SurfaceTexture surfaceTexture) {
+            if (RenderView.this.internal != null && !RenderView.this.shuttingDown) {
+                RenderView.this.painting.onPause(new Runnable() { // from class: org.telegram.ui.Components.Paint.RenderView$1$$ExternalSyntheticLambda0
+                    @Override // java.lang.Runnable
+                    public final void run() {
+                        RenderView.AnonymousClass1.this.lambda$onSurfaceTextureDestroyed$1();
+                    }
+                });
+            }
+            return true;
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$onSurfaceTextureDestroyed$1() {
+            RenderView.this.internal.shutdown();
+            RenderView.this.internal = null;
+        }
+    }
+
     public void redraw() {
         CanvasInternal canvasInternal = this.internal;
-        if (canvasInternal != null) {
-            canvasInternal.requestRender();
+        if (canvasInternal == null) {
+            return;
         }
+        canvasInternal.requestRender();
     }
 
     public boolean onTouch(MotionEvent motionEvent) {
@@ -146,8 +169,8 @@ public class RenderView extends TextureView {
         return true;
     }
 
-    public void setUndoStore(UndoStore undoStore2) {
-        this.undoStore = undoStore2;
+    public void setUndoStore(UndoStore undoStore) {
+        this.undoStore = undoStore;
     }
 
     public void setQueue(DispatchQueue dispatchQueue) {
@@ -187,26 +210,26 @@ public class RenderView extends TextureView {
         return this.brush;
     }
 
-    public void setBrush(Brush brush2) {
-        Painting painting2 = this.painting;
-        this.brush = brush2;
-        painting2.setBrush(brush2);
+    public void setBrush(Brush brush) {
+        Painting painting = this.painting;
+        this.brush = brush;
+        painting.setBrush(brush);
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public void updateTransform() {
         Matrix matrix = new Matrix();
         float f = 1.0f;
-        float width = this.painting != null ? ((float) getWidth()) / this.painting.getSize().width : 1.0f;
+        float width = this.painting != null ? getWidth() / this.painting.getSize().width : 1.0f;
         if (width > 0.0f) {
             f = width;
         }
         Size size = getPainting().getSize();
-        matrix.preTranslate(((float) getWidth()) / 2.0f, ((float) getHeight()) / 2.0f);
+        matrix.preTranslate(getWidth() / 2.0f, getHeight() / 2.0f);
         matrix.preScale(f, -f);
         matrix.preTranslate((-size.width) / 2.0f, (-size.height) / 2.0f);
         this.input.setMatrix(matrix);
-        this.painting.setRenderProjection(GLMatrix.MultiplyMat4f(GLMatrix.LoadOrtho(0.0f, (float) this.internal.bufferWidth, 0.0f, (float) this.internal.bufferHeight, -1.0f, 1.0f), GLMatrix.LoadGraphicsMatrix(matrix)));
+        this.painting.setRenderProjection(GLMatrix.MultiplyMat4f(GLMatrix.LoadOrtho(0.0f, this.internal.bufferWidth, 0.0f, this.internal.bufferHeight, -1.0f, 1.0f), GLMatrix.LoadGraphicsMatrix(matrix)));
     }
 
     public boolean shouldDraw() {
@@ -231,79 +254,57 @@ public class RenderView extends TextureView {
     public void shutdown() {
         this.shuttingDown = true;
         if (this.internal != null) {
-            performInContext(new RenderView$$ExternalSyntheticLambda0(this));
+            performInContext(new Runnable() { // from class: org.telegram.ui.Components.Paint.RenderView$$ExternalSyntheticLambda0
+                @Override // java.lang.Runnable
+                public final void run() {
+                    RenderView.this.lambda$shutdown$0();
+                }
+            });
         }
         setVisibility(8);
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$shutdown$0() {
         this.painting.cleanResources(this.transformedBitmap);
         this.internal.shutdown();
         this.internal = null;
     }
 
-    private class CanvasInternal extends DispatchQueue {
-        /* access modifiers changed from: private */
-        public int bufferHeight;
-        /* access modifiers changed from: private */
-        public int bufferWidth;
-        private Runnable drawRunnable = new Runnable() {
-            public void run() {
-                if (CanvasInternal.this.initialized && !RenderView.this.shuttingDown) {
-                    boolean unused = CanvasInternal.this.setCurrentContext();
-                    GLES20.glBindFramebuffer(36160, 0);
-                    GLES20.glViewport(0, 0, CanvasInternal.this.bufferWidth, CanvasInternal.this.bufferHeight);
-                    GLES20.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-                    GLES20.glClear(16384);
-                    RenderView.this.painting.render();
-                    GLES20.glBlendFunc(1, 771);
-                    CanvasInternal.this.egl10.eglSwapBuffers(CanvasInternal.this.eglDisplay, CanvasInternal.this.eglSurface);
-                    if (!RenderView.this.firstDrawSent) {
-                        boolean unused2 = RenderView.this.firstDrawSent = true;
-                        AndroidUtilities.runOnUIThread(new RenderView$CanvasInternal$1$$ExternalSyntheticLambda0(this));
-                    }
-                    if (!CanvasInternal.this.ready) {
-                        boolean unused3 = CanvasInternal.this.ready = true;
-                    }
-                }
-            }
-
-            /* access modifiers changed from: private */
-            public /* synthetic */ void lambda$run$0() {
-                RenderView.this.delegate.onFirstDraw();
-            }
-        };
-        /* access modifiers changed from: private */
-        public EGL10 egl10;
+    /* JADX INFO: Access modifiers changed from: private */
+    /* loaded from: classes3.dex */
+    public class CanvasInternal extends DispatchQueue {
+        private int bufferHeight;
+        private int bufferWidth;
+        private Runnable drawRunnable;
+        private EGL10 egl10;
         private EGLContext eglContext;
-        /* access modifiers changed from: private */
-        public EGLDisplay eglDisplay;
-        /* access modifiers changed from: private */
-        public EGLSurface eglSurface;
-        /* access modifiers changed from: private */
-        public boolean initialized;
-        /* access modifiers changed from: private */
-        public volatile boolean ready;
+        private EGLDisplay eglDisplay;
+        private EGLSurface eglSurface;
+        private boolean initialized;
+        private volatile boolean ready;
         private Runnable scheduledRunnable;
         private SurfaceTexture surfaceTexture;
 
-        public CanvasInternal(SurfaceTexture surfaceTexture2) {
+        public CanvasInternal(SurfaceTexture surfaceTexture) {
             super("CanvasInternal");
-            this.surfaceTexture = surfaceTexture2;
+            this.drawRunnable = new AnonymousClass1();
+            this.surfaceTexture = surfaceTexture;
         }
 
+        @Override // org.telegram.messenger.DispatchQueue, java.lang.Thread, java.lang.Runnable
         public void run() {
-            if (RenderView.this.bitmap != null && !RenderView.this.bitmap.isRecycled()) {
-                this.initialized = initGL();
-                super.run();
+            if (RenderView.this.bitmap == null || RenderView.this.bitmap.isRecycled()) {
+                return;
             }
+            this.initialized = initGL();
+            super.run();
         }
 
         private boolean initGL() {
-            EGL10 egl102 = (EGL10) EGLContext.getEGL();
-            this.egl10 = egl102;
-            EGLDisplay eglGetDisplay = egl102.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
+            EGL10 egl10 = (EGL10) EGLContext.getEGL();
+            this.egl10 = egl10;
+            EGLDisplay eglGetDisplay = egl10.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
             this.eglDisplay = eglGetDisplay;
             if (eglGetDisplay == EGL10.EGL_NO_DISPLAY) {
                 if (BuildVars.LOGS_ENABLED) {
@@ -338,9 +339,9 @@ public class RenderView extends TextureView {
                     finish();
                     return false;
                 }
-                SurfaceTexture surfaceTexture2 = this.surfaceTexture;
-                if (surfaceTexture2 instanceof SurfaceTexture) {
-                    EGLSurface eglCreateWindowSurface = this.egl10.eglCreateWindowSurface(this.eglDisplay, eGLConfig, surfaceTexture2, (int[]) null);
+                SurfaceTexture surfaceTexture = this.surfaceTexture;
+                if (surfaceTexture instanceof SurfaceTexture) {
+                    EGLSurface eglCreateWindowSurface = this.egl10.eglCreateWindowSurface(this.eglDisplay, eGLConfig, surfaceTexture, null);
                     this.eglSurface = eglCreateWindowSurface;
                     if (eglCreateWindowSurface == null || eglCreateWindowSurface == EGL10.EGL_NO_SURFACE) {
                         if (BuildVars.LOGS_ENABLED) {
@@ -365,10 +366,9 @@ public class RenderView extends TextureView {
                         Utils.HasGLError();
                         return true;
                     }
-                } else {
-                    finish();
-                    return false;
                 }
+                finish();
+                return false;
             } else {
                 if (BuildVars.LOGS_ENABLED) {
                     FileLog.e("eglConfig not initialized");
@@ -380,15 +380,16 @@ public class RenderView extends TextureView {
 
         private void checkBitmap() {
             Size size = RenderView.this.painting.getSize();
-            if (((float) RenderView.this.bitmap.getWidth()) != size.width || ((float) RenderView.this.bitmap.getHeight()) != size.height) {
-                Bitmap createBitmap = Bitmap.createBitmap((int) size.width, (int) size.height, Bitmap.Config.ARGB_8888);
-                new Canvas(createBitmap).drawBitmap(RenderView.this.bitmap, (Rect) null, new RectF(0.0f, 0.0f, size.width, size.height), (Paint) null);
-                Bitmap unused = RenderView.this.bitmap = createBitmap;
-                boolean unused2 = RenderView.this.transformedBitmap = true;
+            if (RenderView.this.bitmap.getWidth() == size.width && RenderView.this.bitmap.getHeight() == size.height) {
+                return;
             }
+            Bitmap createBitmap = Bitmap.createBitmap((int) size.width, (int) size.height, Bitmap.Config.ARGB_8888);
+            new Canvas(createBitmap).drawBitmap(RenderView.this.bitmap, (Rect) null, new RectF(0.0f, 0.0f, size.width, size.height), (Paint) null);
+            RenderView.this.bitmap = createBitmap;
+            RenderView.this.transformedBitmap = true;
         }
 
-        /* access modifiers changed from: private */
+        /* JADX INFO: Access modifiers changed from: private */
         public boolean setCurrentContext() {
             if (!this.initialized) {
                 return false;
@@ -396,13 +397,51 @@ public class RenderView extends TextureView {
             if (this.eglContext.equals(this.egl10.eglGetCurrentContext()) && this.eglSurface.equals(this.egl10.eglGetCurrentSurface(12377))) {
                 return true;
             }
-            EGL10 egl102 = this.egl10;
+            EGL10 egl10 = this.egl10;
             EGLDisplay eGLDisplay = this.eglDisplay;
             EGLSurface eGLSurface = this.eglSurface;
-            if (!egl102.eglMakeCurrent(eGLDisplay, eGLSurface, eGLSurface, this.eglContext)) {
-                return false;
+            return egl10.eglMakeCurrent(eGLDisplay, eGLSurface, eGLSurface, this.eglContext);
+        }
+
+        /* JADX INFO: Access modifiers changed from: package-private */
+        /* renamed from: org.telegram.ui.Components.Paint.RenderView$CanvasInternal$1  reason: invalid class name */
+        /* loaded from: classes3.dex */
+        public class AnonymousClass1 implements Runnable {
+            AnonymousClass1() {
             }
-            return true;
+
+            @Override // java.lang.Runnable
+            public void run() {
+                if (!CanvasInternal.this.initialized || RenderView.this.shuttingDown) {
+                    return;
+                }
+                CanvasInternal.this.setCurrentContext();
+                GLES20.glBindFramebuffer(36160, 0);
+                GLES20.glViewport(0, 0, CanvasInternal.this.bufferWidth, CanvasInternal.this.bufferHeight);
+                GLES20.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+                GLES20.glClear(16384);
+                RenderView.this.painting.render();
+                GLES20.glBlendFunc(1, 771);
+                CanvasInternal.this.egl10.eglSwapBuffers(CanvasInternal.this.eglDisplay, CanvasInternal.this.eglSurface);
+                if (!RenderView.this.firstDrawSent) {
+                    RenderView.this.firstDrawSent = true;
+                    AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.Paint.RenderView$CanvasInternal$1$$ExternalSyntheticLambda0
+                        @Override // java.lang.Runnable
+                        public final void run() {
+                            RenderView.CanvasInternal.AnonymousClass1.this.lambda$run$0();
+                        }
+                    });
+                }
+                if (CanvasInternal.this.ready) {
+                    return;
+                }
+                CanvasInternal.this.ready = true;
+            }
+
+            /* JADX INFO: Access modifiers changed from: private */
+            public /* synthetic */ void lambda$run$0() {
+                RenderView.this.delegate.onFirstDraw();
+            }
         }
 
         public void setBufferSize(int i, int i2) {
@@ -410,13 +449,18 @@ public class RenderView extends TextureView {
             this.bufferHeight = i2;
         }
 
-        /* access modifiers changed from: private */
+        /* JADX INFO: Access modifiers changed from: private */
         public /* synthetic */ void lambda$requestRender$0() {
             this.drawRunnable.run();
         }
 
         public void requestRender() {
-            postRunnable(new RenderView$CanvasInternal$$ExternalSyntheticLambda0(this));
+            postRunnable(new Runnable() { // from class: org.telegram.ui.Components.Paint.RenderView$CanvasInternal$$ExternalSyntheticLambda0
+                @Override // java.lang.Runnable
+                public final void run() {
+                    RenderView.CanvasInternal.this.lambda$requestRender$0();
+                }
+            });
         }
 
         public void scheduleRedraw() {
@@ -425,12 +469,17 @@ public class RenderView extends TextureView {
                 cancelRunnable(runnable);
                 this.scheduledRunnable = null;
             }
-            RenderView$CanvasInternal$$ExternalSyntheticLambda2 renderView$CanvasInternal$$ExternalSyntheticLambda2 = new RenderView$CanvasInternal$$ExternalSyntheticLambda2(this);
-            this.scheduledRunnable = renderView$CanvasInternal$$ExternalSyntheticLambda2;
-            postRunnable(renderView$CanvasInternal$$ExternalSyntheticLambda2, 1);
+            Runnable runnable2 = new Runnable() { // from class: org.telegram.ui.Components.Paint.RenderView$CanvasInternal$$ExternalSyntheticLambda2
+                @Override // java.lang.Runnable
+                public final void run() {
+                    RenderView.CanvasInternal.this.lambda$scheduleRedraw$1();
+                }
+            };
+            this.scheduledRunnable = runnable2;
+            postRunnable(runnable2, 1L);
         }
 
-        /* access modifiers changed from: private */
+        /* JADX INFO: Access modifiers changed from: private */
         public /* synthetic */ void lambda$scheduleRedraw$1() {
             this.scheduledRunnable = null;
             this.drawRunnable.run();
@@ -438,10 +487,10 @@ public class RenderView extends TextureView {
 
         public void finish() {
             if (this.eglSurface != null) {
-                EGL10 egl102 = this.egl10;
+                EGL10 egl10 = this.egl10;
                 EGLDisplay eGLDisplay = this.eglDisplay;
                 EGLSurface eGLSurface = EGL10.EGL_NO_SURFACE;
-                egl102.eglMakeCurrent(eGLDisplay, eGLSurface, eGLSurface, EGL10.EGL_NO_CONTEXT);
+                egl10.eglMakeCurrent(eGLDisplay, eGLSurface, eGLSurface, EGL10.EGL_NO_CONTEXT);
                 this.egl10.eglDestroySurface(this.eglDisplay, this.eglSurface);
                 this.eglSurface = null;
             }
@@ -458,10 +507,15 @@ public class RenderView extends TextureView {
         }
 
         public void shutdown() {
-            postRunnable(new RenderView$CanvasInternal$$ExternalSyntheticLambda1(this));
+            postRunnable(new Runnable() { // from class: org.telegram.ui.Components.Paint.RenderView$CanvasInternal$$ExternalSyntheticLambda1
+                @Override // java.lang.Runnable
+                public final void run() {
+                    RenderView.CanvasInternal.this.lambda$shutdown$2();
+                }
+            });
         }
 
-        /* access modifiers changed from: private */
+        /* JADX INFO: Access modifiers changed from: private */
         public /* synthetic */ void lambda$shutdown$2() {
             finish();
             Looper myLooper = Looper.myLooper();
@@ -474,18 +528,23 @@ public class RenderView extends TextureView {
             if (!this.initialized) {
                 return null;
             }
-            CountDownLatch countDownLatch = new CountDownLatch(1);
-            Bitmap[] bitmapArr = new Bitmap[1];
+            final CountDownLatch countDownLatch = new CountDownLatch(1);
+            final Bitmap[] bitmapArr = new Bitmap[1];
             try {
-                postRunnable(new RenderView$CanvasInternal$$ExternalSyntheticLambda3(this, bitmapArr, countDownLatch));
+                postRunnable(new Runnable() { // from class: org.telegram.ui.Components.Paint.RenderView$CanvasInternal$$ExternalSyntheticLambda3
+                    @Override // java.lang.Runnable
+                    public final void run() {
+                        RenderView.CanvasInternal.this.lambda$getTexture$3(bitmapArr, countDownLatch);
+                    }
+                });
                 countDownLatch.await();
             } catch (Exception e) {
-                FileLog.e((Throwable) e);
+                FileLog.e(e);
             }
             return bitmapArr[0];
         }
 
-        /* access modifiers changed from: private */
+        /* JADX INFO: Access modifiers changed from: private */
         public /* synthetic */ void lambda$getTexture$3(Bitmap[] bitmapArr, CountDownLatch countDownLatch) {
             Painting.PaintingData paintingData = RenderView.this.painting.getPaintingData(new RectF(0.0f, 0.0f, RenderView.this.painting.getSize().width, RenderView.this.painting.getSize().height), false);
             if (paintingData != null) {
@@ -503,19 +562,26 @@ public class RenderView extends TextureView {
         return null;
     }
 
-    public void performInContext(Runnable runnable) {
+    public void performInContext(final Runnable runnable) {
         CanvasInternal canvasInternal = this.internal;
-        if (canvasInternal != null) {
-            canvasInternal.postRunnable(new RenderView$$ExternalSyntheticLambda1(this, runnable));
+        if (canvasInternal == null) {
+            return;
         }
+        canvasInternal.postRunnable(new Runnable() { // from class: org.telegram.ui.Components.Paint.RenderView$$ExternalSyntheticLambda1
+            @Override // java.lang.Runnable
+            public final void run() {
+                RenderView.this.lambda$performInContext$1(runnable);
+            }
+        });
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$performInContext$1(Runnable runnable) {
         CanvasInternal canvasInternal = this.internal;
-        if (canvasInternal != null && canvasInternal.initialized) {
-            boolean unused = this.internal.setCurrentContext();
-            runnable.run();
+        if (canvasInternal == null || !canvasInternal.initialized) {
+            return;
         }
+        this.internal.setCurrentContext();
+        runnable.run();
     }
 }

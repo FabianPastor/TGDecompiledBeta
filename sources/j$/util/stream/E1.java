@@ -1,32 +1,36 @@
 package j$.util.stream;
 
-import j$.util.CLASSNAMEa;
-import j$.util.CLASSNAMEb;
+import j$.util.AbstractCLASSNAMEa;
 import j$.util.Collection$EL;
+import j$.util.InterfaceCLASSNAMEb;
 import j$.util.function.Consumer;
-import j$.util.function.m;
-import j$.util.u;
 import java.util.Collection;
-
+/* loaded from: classes2.dex */
 final class E1 implements A1 {
     private final Collection a;
 
-    E1(Collection collection) {
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public E1(Collection collection) {
         this.a = collection;
     }
 
-    public A1 b(int i) {
+    @Override // j$.util.stream.A1
+    /* renamed from: b */
+    public A1 mo288b(int i) {
         throw new IndexOutOfBoundsException();
     }
 
+    @Override // j$.util.stream.A1
     public long count() {
-        return (long) this.a.size();
+        return this.a.size();
     }
 
+    @Override // j$.util.stream.A1
     public void forEach(Consumer consumer) {
         Collection$EL.a(this.a, consumer);
     }
 
+    @Override // j$.util.stream.A1
     public void i(Object[] objArr, int i) {
         for (Object obj : this.a) {
             objArr[i] = obj;
@@ -34,25 +38,30 @@ final class E1 implements A1 {
         }
     }
 
+    @Override // j$.util.stream.A1
     public /* synthetic */ int p() {
         return 0;
     }
 
-    public Object[] q(m mVar) {
+    @Override // j$.util.stream.A1
+    public Object[] q(j$.util.function.m mVar) {
         Collection collection = this.a;
         return collection.toArray((Object[]) mVar.apply(collection.size()));
     }
 
-    public /* synthetic */ A1 r(long j, long j2, m mVar) {
-        return CLASSNAMEo1.q(this, j, j2, mVar);
+    @Override // j$.util.stream.A1
+    public /* synthetic */ A1 r(long j, long j2, j$.util.function.m mVar) {
+        return AbstractCLASSNAMEo1.q(this, j, j2, mVar);
     }
 
-    public u spliterator() {
+    @Override // j$.util.stream.A1
+    /* renamed from: spliterator */
+    public j$.util.u mo285spliterator() {
         Collection collection = this.a;
-        return (collection instanceof CLASSNAMEb ? ((CLASSNAMEb) collection).stream() : CLASSNAMEa.i(collection)).spliterator();
+        return (collection instanceof InterfaceCLASSNAMEb ? ((InterfaceCLASSNAMEb) collection).mo238stream() : AbstractCLASSNAMEa.i(collection)).mo306spliterator();
     }
 
     public String toString() {
-        return String.format("CollectionNode[%d][%s]", new Object[]{Integer.valueOf(this.a.size()), this.a});
+        return String.format("CollectionNode[%d][%s]", Integer.valueOf(this.a.size()), this.a);
     }
 }

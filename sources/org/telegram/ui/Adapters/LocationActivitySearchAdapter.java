@@ -4,15 +4,15 @@ import android.content.Context;
 import android.view.ViewGroup;
 import androidx.recyclerview.widget.RecyclerView;
 import org.telegram.tgnet.TLRPC$TL_messageMediaVenue;
-import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.LocationCell;
 import org.telegram.ui.Components.FlickerLoadingView;
 import org.telegram.ui.Components.RecyclerListView;
-
+/* loaded from: classes3.dex */
 public class LocationActivitySearchAdapter extends BaseLocationAdapter {
     private FlickerLoadingView globalGradientView;
     private Context mContext;
 
+    @Override // org.telegram.ui.Components.RecyclerListView.SelectionAdapter
     public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
         return true;
     }
@@ -24,6 +24,7 @@ public class LocationActivitySearchAdapter extends BaseLocationAdapter {
         flickerLoadingView.setIsSingleCell(true);
     }
 
+    @Override // androidx.recyclerview.widget.RecyclerView.Adapter
     public int getItemCount() {
         if (isSearching()) {
             return 3;
@@ -35,10 +36,13 @@ public class LocationActivitySearchAdapter extends BaseLocationAdapter {
         return this.places.size() == 0;
     }
 
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        return new RecyclerListView.Holder(new LocationCell(this.mContext, false, (Theme.ResourcesProvider) null));
+    @Override // androidx.recyclerview.widget.RecyclerView.Adapter
+    /* renamed from: onCreateViewHolder */
+    public RecyclerView.ViewHolder mo1754onCreateViewHolder(ViewGroup viewGroup, int i) {
+        return new RecyclerListView.Holder(new LocationCell(this.mContext, false, null));
     }
 
+    @Override // androidx.recyclerview.widget.RecyclerView.Adapter
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
         TLRPC$TL_messageMediaVenue item = getItem(i);
         String str = (isSearching() || i < 0 || i >= this.iconUrls.size()) ? null : this.iconUrls.get(i);

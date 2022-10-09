@@ -7,16 +7,16 @@ import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
-
+/* loaded from: classes3.dex */
 public class LetterSectionCell extends FrameLayout {
     private TextView textView;
 
     public LetterSectionCell(Context context) {
         super(context);
         setLayoutParams(new ViewGroup.LayoutParams(AndroidUtilities.dp(54.0f), AndroidUtilities.dp(64.0f)));
-        TextView textView2 = new TextView(getContext());
-        this.textView = textView2;
-        textView2.setTextSize(1, 22.0f);
+        TextView textView = new TextView(getContext());
+        this.textView = textView;
+        textView.setTextSize(1, 22.0f);
         this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText4"));
         this.textView.setGravity(17);

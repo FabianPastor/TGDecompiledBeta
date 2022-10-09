@@ -1,9 +1,10 @@
 package org.webrtc;
 
 import android.media.MediaRecorder;
-
+/* loaded from: classes3.dex */
 public interface CameraVideoCapturer extends VideoCapturer {
 
+    /* loaded from: classes3.dex */
     public interface CameraEventsHandler {
         void onCameraClosed();
 
@@ -18,6 +19,7 @@ public interface CameraVideoCapturer extends VideoCapturer {
         void onFirstFrameAvailable();
     }
 
+    /* loaded from: classes3.dex */
     public interface CameraSwitchHandler {
         void onCameraSwitchDone(boolean z);
 
@@ -25,6 +27,7 @@ public interface CameraVideoCapturer extends VideoCapturer {
     }
 
     @Deprecated
+    /* loaded from: classes3.dex */
     public interface MediaRecorderHandler {
         void onMediaRecorderError(String str);
 
@@ -42,6 +45,7 @@ public interface CameraVideoCapturer extends VideoCapturer {
     void switchCamera(CameraSwitchHandler cameraSwitchHandler, String str);
 
     /* renamed from: org.webrtc.CameraVideoCapturer$-CC  reason: invalid class name */
+    /* loaded from: classes3.dex */
     public final /* synthetic */ class CC {
         @Deprecated
         public static void $default$addMediaRecorderToCamera(CameraVideoCapturer _this, MediaRecorder mediaRecorder, MediaRecorderHandler mediaRecorderHandler) {
@@ -54,19 +58,16 @@ public interface CameraVideoCapturer extends VideoCapturer {
         }
     }
 
+    /* loaded from: classes3.dex */
     public static class CameraStatistics {
         private static final int CAMERA_FREEZE_REPORT_TIMOUT_MS = 4000;
         private static final int CAMERA_OBSERVER_PERIOD_MS = 2000;
         private static final String TAG = "CameraStatistics";
         private final Runnable cameraObserver;
-        /* access modifiers changed from: private */
-        public final CameraEventsHandler eventsHandler;
-        /* access modifiers changed from: private */
-        public int frameCount;
-        /* access modifiers changed from: private */
-        public int freezePeriodCount;
-        /* access modifiers changed from: private */
-        public final SurfaceTextureHelper surfaceTextureHelper;
+        private final CameraEventsHandler eventsHandler;
+        private int frameCount;
+        private int freezePeriodCount;
+        private final SurfaceTextureHelper surfaceTextureHelper;
 
         static /* synthetic */ int access$104(CameraStatistics cameraStatistics) {
             int i = cameraStatistics.freezePeriodCount + 1;
@@ -74,12 +75,15 @@ public interface CameraVideoCapturer extends VideoCapturer {
             return i;
         }
 
-        public CameraStatistics(SurfaceTextureHelper surfaceTextureHelper2, CameraEventsHandler cameraEventsHandler) {
-            AnonymousClass1 r0 = new Runnable() {
+        public CameraStatistics(SurfaceTextureHelper surfaceTextureHelper, CameraEventsHandler cameraEventsHandler) {
+            Runnable runnable = new Runnable() { // from class: org.webrtc.CameraVideoCapturer.CameraStatistics.1
+                @Override // java.lang.Runnable
                 public void run() {
-                    int round = Math.round((((float) CameraStatistics.this.frameCount) * 1000.0f) / 2000.0f);
+                    int round = Math.round((CameraStatistics.this.frameCount * 1000.0f) / 2000.0f);
                     Logging.d("CameraStatistics", "Camera fps: " + round + ".");
-                    if (CameraStatistics.this.frameCount == 0) {
+                    if (CameraStatistics.this.frameCount != 0) {
+                        CameraStatistics.this.freezePeriodCount = 0;
+                    } else {
                         CameraStatistics.access$104(CameraStatistics.this);
                         if (CameraStatistics.this.freezePeriodCount * 2000 >= 4000 && CameraStatistics.this.eventsHandler != null) {
                             Logging.e("CameraStatistics", "Camera freezed.");
@@ -91,29 +95,27 @@ public interface CameraVideoCapturer extends VideoCapturer {
                                 return;
                             }
                         }
-                    } else {
-                        int unused = CameraStatistics.this.freezePeriodCount = 0;
                     }
-                    int unused2 = CameraStatistics.this.frameCount = 0;
-                    CameraStatistics.this.surfaceTextureHelper.getHandler().postDelayed(this, 2000);
+                    CameraStatistics.this.frameCount = 0;
+                    CameraStatistics.this.surfaceTextureHelper.getHandler().postDelayed(this, 2000L);
                 }
             };
-            this.cameraObserver = r0;
-            if (surfaceTextureHelper2 != null) {
-                this.surfaceTextureHelper = surfaceTextureHelper2;
-                this.eventsHandler = cameraEventsHandler;
-                this.frameCount = 0;
-                this.freezePeriodCount = 0;
-                surfaceTextureHelper2.getHandler().postDelayed(r0, 2000);
-                return;
+            this.cameraObserver = runnable;
+            if (surfaceTextureHelper == null) {
+                throw new IllegalArgumentException("SurfaceTextureHelper is null");
             }
-            throw new IllegalArgumentException("SurfaceTextureHelper is null");
+            this.surfaceTextureHelper = surfaceTextureHelper;
+            this.eventsHandler = cameraEventsHandler;
+            this.frameCount = 0;
+            this.freezePeriodCount = 0;
+            surfaceTextureHelper.getHandler().postDelayed(runnable, 2000L);
         }
 
         private void checkThread() {
-            if (Thread.currentThread() != this.surfaceTextureHelper.getHandler().getLooper().getThread()) {
-                throw new IllegalStateException("Wrong thread");
+            if (Thread.currentThread() == this.surfaceTextureHelper.getHandler().getLooper().getThread()) {
+                return;
             }
+            throw new IllegalStateException("Wrong thread");
         }
 
         public void addFrame() {

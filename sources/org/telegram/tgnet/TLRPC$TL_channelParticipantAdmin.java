@@ -1,8 +1,9 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_channelParticipantAdmin extends TLRPC$ChannelParticipant {
     public static int constructor = NUM;
 
+    @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
@@ -26,11 +27,12 @@ public class TLRPC$TL_channelParticipantAdmin extends TLRPC$ChannelParticipant {
         }
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
-        int i = this.can_edit ? this.flags | 1 : this.flags & -2;
+        int i = this.can_edit ? this.flags | 1 : this.flags & (-2);
         this.flags = i;
-        int i2 = this.self ? i | 2 : i & -3;
+        int i2 = this.self ? i | 2 : i & (-3);
         this.flags = i2;
         abstractSerializedData.writeInt32(i2);
         abstractSerializedData.writeInt64(this.peer.user_id);

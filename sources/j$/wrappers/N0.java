@@ -1,171 +1,247 @@
 package j$.wrappers;
 
-import j$.util.CLASSNAMEa;
+import j$.util.AbstractCLASSNAMEa;
 import j$.util.CLASSNAMEi;
 import j$.util.CLASSNAMEj;
 import j$.util.CLASSNAMEl;
 import j$.util.function.BiConsumer;
-import j$.util.function.o;
-import j$.util.function.q;
-import j$.util.function.r;
-import j$.util.function.t;
-import j$.util.function.w;
-import j$.util.function.y;
-import j$.util.stream.CLASSNAMEe1;
-import j$.util.stream.CLASSNAMEg;
 import j$.util.stream.IntStream;
+import j$.util.stream.InterfaceCLASSNAMEe1;
+import j$.util.stream.InterfaceCLASSNAMEg;
 import j$.util.stream.Stream;
-import j$.util.stream.U;
+import java.util.Iterator;
 import java.util.stream.LongStream;
-
-public final /* synthetic */ class N0 implements CLASSNAMEe1 {
+/* loaded from: classes2.dex */
+public final /* synthetic */ class N0 implements InterfaceCLASSNAMEe1 {
     final /* synthetic */ LongStream a;
 
     private /* synthetic */ N0(LongStream longStream) {
         this.a = longStream;
     }
 
-    public static /* synthetic */ CLASSNAMEe1 n0(LongStream longStream) {
+    public static /* synthetic */ InterfaceCLASSNAMEe1 n0(LongStream longStream) {
         if (longStream == null) {
             return null;
         }
         return longStream instanceof O0 ? ((O0) longStream).a : new N0(longStream);
     }
 
-    public /* synthetic */ long D(long j, o oVar) {
+    @Override // j$.util.stream.InterfaceCLASSNAMEe1
+    public /* synthetic */ long D(long j, j$.util.function.o oVar) {
         return this.a.reduce(j, CLASSNAMEe0.a(oVar));
     }
 
-    public /* synthetic */ boolean L(CLASSNAMEj0 j0Var) {
-        return this.a.allMatch(CLASSNAMEk0.a(j0Var));
+    @Override // j$.util.stream.InterfaceCLASSNAMEe1
+    public /* synthetic */ boolean L(CLASSNAMEj0 CLASSNAMEj0) {
+        return this.a.allMatch(AbstractCLASSNAMEk0.a(CLASSNAMEj0));
     }
 
-    public /* synthetic */ U O(CLASSNAMEl0 l0Var) {
-        return L0.n0(this.a.mapToDouble(l0Var == null ? null : l0Var.a));
+    @Override // j$.util.stream.InterfaceCLASSNAMEe1
+    public /* synthetic */ j$.util.stream.U O(CLASSNAMEl0 CLASSNAMEl0) {
+        return L0.n0(this.a.mapToDouble(CLASSNAMEl0 == null ? null : CLASSNAMEl0.a));
     }
 
-    public /* synthetic */ Stream Q(r rVar) {
+    @Override // j$.util.stream.InterfaceCLASSNAMEe1
+    public /* synthetic */ Stream Q(j$.util.function.r rVar) {
         return C$r8$wrapper$java$util$stream$Stream$VWRP.convert(this.a.mapToObj(CLASSNAMEi0.a(rVar)));
     }
 
-    public /* synthetic */ boolean S(CLASSNAMEj0 j0Var) {
-        return this.a.noneMatch(CLASSNAMEk0.a(j0Var));
+    @Override // j$.util.stream.InterfaceCLASSNAMEe1
+    public /* synthetic */ boolean S(CLASSNAMEj0 CLASSNAMEj0) {
+        return this.a.noneMatch(AbstractCLASSNAMEk0.a(CLASSNAMEj0));
     }
 
-    public /* synthetic */ void Z(q qVar) {
+    @Override // j$.util.stream.InterfaceCLASSNAMEe1
+    public /* synthetic */ void Z(j$.util.function.q qVar) {
         this.a.forEachOrdered(CLASSNAMEg0.a(qVar));
     }
 
-    public /* synthetic */ U asDoubleStream() {
+    @Override // j$.util.stream.InterfaceCLASSNAMEe1
+    public /* synthetic */ j$.util.stream.U asDoubleStream() {
         return L0.n0(this.a.asDoubleStream());
     }
 
+    @Override // j$.util.stream.InterfaceCLASSNAMEe1
     public /* synthetic */ CLASSNAMEj average() {
-        return CLASSNAMEa.q(this.a.average());
+        return AbstractCLASSNAMEa.q(this.a.average());
     }
 
+    @Override // j$.util.stream.InterfaceCLASSNAMEe1
     public /* synthetic */ Stream boxed() {
         return C$r8$wrapper$java$util$stream$Stream$VWRP.convert(this.a.boxed());
     }
 
+    @Override // j$.util.stream.InterfaceCLASSNAMEg, java.lang.AutoCloseable
     public /* synthetic */ void close() {
         this.a.close();
     }
 
+    @Override // j$.util.stream.InterfaceCLASSNAMEe1
     public /* synthetic */ long count() {
         return this.a.count();
     }
 
-    public /* synthetic */ void d(q qVar) {
+    @Override // j$.util.stream.InterfaceCLASSNAMEe1
+    public /* synthetic */ void d(j$.util.function.q qVar) {
         this.a.forEach(CLASSNAMEg0.a(qVar));
     }
 
-    public /* synthetic */ CLASSNAMEe1 distinct() {
+    @Override // j$.util.stream.InterfaceCLASSNAMEe1
+    public /* synthetic */ InterfaceCLASSNAMEe1 distinct() {
         return n0(this.a.distinct());
     }
 
-    public /* synthetic */ IntStream e0(CLASSNAMEn0 n0Var) {
-        return C$r8$wrapper$java$util$stream$IntStream$VWRP.convert(this.a.mapToInt(n0Var == null ? null : n0Var.a));
+    @Override // j$.util.stream.InterfaceCLASSNAMEe1
+    public /* synthetic */ IntStream e0(CLASSNAMEn0 CLASSNAMEn0) {
+        return C$r8$wrapper$java$util$stream$IntStream$VWRP.convert(this.a.mapToInt(CLASSNAMEn0 == null ? null : CLASSNAMEn0.a));
     }
 
-    public /* synthetic */ Object f0(y yVar, w wVar, BiConsumer biConsumer) {
+    @Override // j$.util.stream.InterfaceCLASSNAMEe1
+    public /* synthetic */ Object f0(j$.util.function.y yVar, j$.util.function.w wVar, BiConsumer biConsumer) {
         return this.a.collect(A0.a(yVar), w0.a(wVar), r.a(biConsumer));
     }
 
+    @Override // j$.util.stream.InterfaceCLASSNAMEe1
     public /* synthetic */ CLASSNAMEl findAny() {
-        return CLASSNAMEa.s(this.a.findAny());
+        return AbstractCLASSNAMEa.s(this.a.findAny());
     }
 
+    @Override // j$.util.stream.InterfaceCLASSNAMEe1
     public /* synthetic */ CLASSNAMEl findFirst() {
-        return CLASSNAMEa.s(this.a.findFirst());
+        return AbstractCLASSNAMEa.s(this.a.findFirst());
     }
 
-    public /* synthetic */ CLASSNAMEl g(o oVar) {
-        return CLASSNAMEa.s(this.a.reduce(CLASSNAMEe0.a(oVar)));
+    @Override // j$.util.stream.InterfaceCLASSNAMEe1
+    public /* synthetic */ CLASSNAMEl g(j$.util.function.o oVar) {
+        return AbstractCLASSNAMEa.s(this.a.reduce(CLASSNAMEe0.a(oVar)));
     }
 
+    @Override // j$.util.stream.InterfaceCLASSNAMEg
     public /* synthetic */ boolean isParallel() {
         return this.a.isParallel();
     }
 
-    public /* synthetic */ boolean k(CLASSNAMEj0 j0Var) {
-        return this.a.anyMatch(CLASSNAMEk0.a(j0Var));
+    @Override // j$.util.stream.InterfaceCLASSNAMEe1, j$.util.stream.InterfaceCLASSNAMEg
+    /* renamed from: iterator */
+    public /* synthetic */ j$.util.r mo303iterator() {
+        return CLASSNAMEe.a(this.a.iterator());
     }
 
-    public /* synthetic */ CLASSNAMEe1 limit(long j) {
+    @Override // j$.util.stream.InterfaceCLASSNAMEe1, j$.util.stream.InterfaceCLASSNAMEg
+    /* renamed from: iterator */
+    public /* synthetic */ Iterator mo303iterator() {
+        return this.a.iterator();
+    }
+
+    @Override // j$.util.stream.InterfaceCLASSNAMEe1
+    public /* synthetic */ boolean k(CLASSNAMEj0 CLASSNAMEj0) {
+        return this.a.anyMatch(AbstractCLASSNAMEk0.a(CLASSNAMEj0));
+    }
+
+    @Override // j$.util.stream.InterfaceCLASSNAMEe1
+    public /* synthetic */ InterfaceCLASSNAMEe1 limit(long j) {
         return n0(this.a.limit(j));
     }
 
+    @Override // j$.util.stream.InterfaceCLASSNAMEe1
     public /* synthetic */ CLASSNAMEl max() {
-        return CLASSNAMEa.s(this.a.max());
+        return AbstractCLASSNAMEa.s(this.a.max());
     }
 
+    @Override // j$.util.stream.InterfaceCLASSNAMEe1
     public /* synthetic */ CLASSNAMEl min() {
-        return CLASSNAMEa.s(this.a.min());
+        return AbstractCLASSNAMEa.s(this.a.min());
     }
 
-    public /* synthetic */ CLASSNAMEg onClose(Runnable runnable) {
+    @Override // j$.util.stream.InterfaceCLASSNAMEg
+    public /* synthetic */ InterfaceCLASSNAMEg onClose(Runnable runnable) {
         return H0.n0(this.a.onClose(runnable));
     }
 
-    public /* synthetic */ CLASSNAMEe1 p(q qVar) {
+    @Override // j$.util.stream.InterfaceCLASSNAMEe1
+    public /* synthetic */ InterfaceCLASSNAMEe1 p(j$.util.function.q qVar) {
         return n0(this.a.peek(CLASSNAMEg0.a(qVar)));
     }
 
-    public /* synthetic */ CLASSNAMEe1 s(r rVar) {
+    @Override // j$.util.stream.InterfaceCLASSNAMEe1, j$.util.stream.InterfaceCLASSNAMEg, j$.util.stream.IntStream
+    /* renamed from: parallel */
+    public /* synthetic */ InterfaceCLASSNAMEe1 mo304parallel() {
+        return n0(this.a.parallel());
+    }
+
+    @Override // j$.util.stream.InterfaceCLASSNAMEe1, j$.util.stream.InterfaceCLASSNAMEg, j$.util.stream.IntStream
+    /* renamed from: parallel */
+    public /* synthetic */ InterfaceCLASSNAMEg mo304parallel() {
+        return H0.n0(this.a.parallel());
+    }
+
+    @Override // j$.util.stream.InterfaceCLASSNAMEe1
+    public /* synthetic */ InterfaceCLASSNAMEe1 s(j$.util.function.r rVar) {
         return n0(this.a.flatMap(CLASSNAMEi0.a(rVar)));
     }
 
-    public /* synthetic */ CLASSNAMEe1 skip(long j) {
+    @Override // j$.util.stream.InterfaceCLASSNAMEe1, j$.util.stream.InterfaceCLASSNAMEg, j$.util.stream.IntStream
+    /* renamed from: sequential */
+    public /* synthetic */ InterfaceCLASSNAMEe1 mo305sequential() {
+        return n0(this.a.sequential());
+    }
+
+    @Override // j$.util.stream.InterfaceCLASSNAMEe1, j$.util.stream.InterfaceCLASSNAMEg, j$.util.stream.IntStream
+    /* renamed from: sequential */
+    public /* synthetic */ InterfaceCLASSNAMEg mo305sequential() {
+        return H0.n0(this.a.sequential());
+    }
+
+    @Override // j$.util.stream.InterfaceCLASSNAMEe1
+    public /* synthetic */ InterfaceCLASSNAMEe1 skip(long j) {
         return n0(this.a.skip(j));
     }
 
-    public /* synthetic */ CLASSNAMEe1 sorted() {
+    @Override // j$.util.stream.InterfaceCLASSNAMEe1
+    public /* synthetic */ InterfaceCLASSNAMEe1 sorted() {
         return n0(this.a.sorted());
     }
 
+    @Override // j$.util.stream.InterfaceCLASSNAMEe1, j$.util.stream.InterfaceCLASSNAMEg
+    /* renamed from: spliterator */
+    public /* synthetic */ j$.util.u mo306spliterator() {
+        return CLASSNAMEg.a(this.a.spliterator());
+    }
+
+    @Override // j$.util.stream.InterfaceCLASSNAMEe1, j$.util.stream.InterfaceCLASSNAMEg
+    /* renamed from: spliterator */
+    public /* synthetic */ j$.util.v mo306spliterator() {
+        return CLASSNAMEm.a(this.a.spliterator());
+    }
+
+    @Override // j$.util.stream.InterfaceCLASSNAMEe1
     public /* synthetic */ long sum() {
         return this.a.sum();
     }
 
+    @Override // j$.util.stream.InterfaceCLASSNAMEe1
     public CLASSNAMEi summaryStatistics() {
         this.a.summaryStatistics();
         throw new Error("Java 8+ API desugaring (library desugaring) cannot convert from java.util.LongSummaryStatistics");
     }
 
+    @Override // j$.util.stream.InterfaceCLASSNAMEe1
     public /* synthetic */ long[] toArray() {
         return this.a.toArray();
     }
 
-    public /* synthetic */ CLASSNAMEe1 u(CLASSNAMEj0 j0Var) {
-        return n0(this.a.filter(CLASSNAMEk0.a(j0Var)));
+    @Override // j$.util.stream.InterfaceCLASSNAMEe1
+    public /* synthetic */ InterfaceCLASSNAMEe1 u(CLASSNAMEj0 CLASSNAMEj0) {
+        return n0(this.a.filter(AbstractCLASSNAMEk0.a(CLASSNAMEj0)));
     }
 
-    public /* synthetic */ CLASSNAMEg unordered() {
+    @Override // j$.util.stream.InterfaceCLASSNAMEg
+    public /* synthetic */ InterfaceCLASSNAMEg unordered() {
         return H0.n0(this.a.unordered());
     }
 
-    public /* synthetic */ CLASSNAMEe1 z(t tVar) {
+    @Override // j$.util.stream.InterfaceCLASSNAMEe1
+    public /* synthetic */ InterfaceCLASSNAMEe1 z(j$.util.function.t tVar) {
         return n0(this.a.map(q0.a(tVar)));
     }
 }

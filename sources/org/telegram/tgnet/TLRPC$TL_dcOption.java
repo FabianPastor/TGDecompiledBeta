@@ -1,5 +1,5 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_dcOption extends TLObject {
     public static int constructor = NUM;
     public boolean cdn;
@@ -14,17 +14,18 @@ public class TLRPC$TL_dcOption extends TLObject {
     public boolean tcpo_only;
 
     public static TLRPC$TL_dcOption TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-        if (constructor == i) {
-            TLRPC$TL_dcOption tLRPC$TL_dcOption = new TLRPC$TL_dcOption();
-            tLRPC$TL_dcOption.readParams(abstractSerializedData, z);
-            return tLRPC$TL_dcOption;
-        } else if (!z) {
+        if (constructor != i) {
+            if (z) {
+                throw new RuntimeException(String.format("can't parse magic %x in TL_dcOption", Integer.valueOf(i)));
+            }
             return null;
-        } else {
-            throw new RuntimeException(String.format("can't parse magic %x in TL_dcOption", new Object[]{Integer.valueOf(i)}));
         }
+        TLRPC$TL_dcOption tLRPC$TL_dcOption = new TLRPC$TL_dcOption();
+        tLRPC$TL_dcOption.readParams(abstractSerializedData, z);
+        return tLRPC$TL_dcOption;
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
@@ -45,17 +46,18 @@ public class TLRPC$TL_dcOption extends TLObject {
         }
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
-        int i = this.ipv6 ? this.flags | 1 : this.flags & -2;
+        int i = this.ipv6 ? this.flags | 1 : this.flags & (-2);
         this.flags = i;
-        int i2 = this.media_only ? i | 2 : i & -3;
+        int i2 = this.media_only ? i | 2 : i & (-3);
         this.flags = i2;
-        int i3 = this.tcpo_only ? i2 | 4 : i2 & -5;
+        int i3 = this.tcpo_only ? i2 | 4 : i2 & (-5);
         this.flags = i3;
-        int i4 = this.cdn ? i3 | 8 : i3 & -9;
+        int i4 = this.cdn ? i3 | 8 : i3 & (-9);
         this.flags = i4;
-        int i5 = this.isStatic ? i4 | 16 : i4 & -17;
+        int i5 = this.isStatic ? i4 | 16 : i4 & (-17);
         this.flags = i5;
         abstractSerializedData.writeInt32(i5);
         abstractSerializedData.writeInt32(this.id);

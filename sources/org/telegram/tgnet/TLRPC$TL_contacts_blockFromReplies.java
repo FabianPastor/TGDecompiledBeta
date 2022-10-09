@@ -1,5 +1,5 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_contacts_blockFromReplies extends TLObject {
     public static int constructor = NUM;
     public boolean delete_history;
@@ -8,17 +8,19 @@ public class TLRPC$TL_contacts_blockFromReplies extends TLObject {
     public int msg_id;
     public boolean report_spam;
 
+    @Override // org.telegram.tgnet.TLObject
     public TLObject deserializeResponse(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         return TLRPC$Updates.TLdeserialize(abstractSerializedData, i, z);
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
-        int i = this.delete_message ? this.flags | 1 : this.flags & -2;
+        int i = this.delete_message ? this.flags | 1 : this.flags & (-2);
         this.flags = i;
-        int i2 = this.delete_history ? i | 2 : i & -3;
+        int i2 = this.delete_history ? i | 2 : i & (-3);
         this.flags = i2;
-        int i3 = this.report_spam ? i2 | 4 : i2 & -5;
+        int i3 = this.report_spam ? i2 | 4 : i2 & (-5);
         this.flags = i3;
         abstractSerializedData.writeInt32(i3);
         abstractSerializedData.writeInt32(this.msg_id);

@@ -14,6 +14,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -22,13 +23,11 @@ import org.telegram.messenger.R;
 import org.telegram.messenger.SvgHelper;
 import org.telegram.messenger.Utilities;
 import org.telegram.ui.ActionBar.Theme;
-
+/* loaded from: classes3.dex */
 public class Star3DIcon {
     private int alphaHandle;
     Bitmap backgroundBitmap;
-    public float diffuse = 1.0f;
     int diffuseHandle;
-    float enterAlpha = 0.0f;
     public int gradientColor1;
     int gradientColor1Handle;
     public int gradientColor2;
@@ -47,14 +46,9 @@ public class Star3DIcon {
     private FloatBuffer mTextures;
     private FloatBuffer mVertices;
     private int mWorldMatrixHandle;
-    public float normalSpec = 0.2f;
-    public int normalSpecColor = -1;
     int normalSpecColorHandle;
     int normalSpecHandle;
     int resolutionHandle;
-    public float spec1 = 2.0f;
-    public float spec2 = 0.13f;
-    public int specColor = -1;
     int specColorHandle;
     int specHandleBottom;
     int specHandleTop;
@@ -62,6 +56,13 @@ public class Star3DIcon {
     int trianglesCount;
     float xOffset;
     private int xOffsetHandle;
+    float enterAlpha = 0.0f;
+    public float spec1 = 2.0f;
+    public float spec2 = 0.13f;
+    public float diffuse = 1.0f;
+    public float normalSpec = 0.2f;
+    public int normalSpecColor = -1;
+    public int specColor = -1;
 
     public Star3DIcon(Context context) {
         ObjLoader objLoader = new ObjLoader(context, "models/star.binobj");
@@ -110,13 +111,13 @@ public class Star3DIcon {
         this.resolutionHandle = GLES20.glGetUniformLocation(this.mProgramObject, "resolution");
         this.gradientPositionHandle = GLES20.glGetUniformLocation(this.mProgramObject, "gradientPosition");
         this.mTextures.position(0);
-        GLES20.glVertexAttribPointer(this.mTextureCoordinateHandle, 2, 5126, false, 0, this.mTextures);
+        GLES20.glVertexAttribPointer(this.mTextureCoordinateHandle, 2, 5126, false, 0, (Buffer) this.mTextures);
         GLES20.glEnableVertexAttribArray(this.mTextureCoordinateHandle);
         this.mNormals.position(0);
-        GLES20.glVertexAttribPointer(this.mNormalCoordinateHandle, 3, 5126, false, 0, this.mNormals);
+        GLES20.glVertexAttribPointer(this.mNormalCoordinateHandle, 3, 5126, false, 0, (Buffer) this.mNormals);
         GLES20.glEnableVertexAttribArray(this.mNormalCoordinateHandle);
         this.mVertices.position(0);
-        GLES20.glVertexAttribPointer(0, 3, 5126, false, 0, this.mVertices);
+        GLES20.glVertexAttribPointer(0, 3, 5126, false, 0, (Buffer) this.mVertices);
         GLES20.glEnableVertexAttribArray(0);
         Bitmap bitmap = SvgHelper.getBitmap(R.raw.start_texture, 80, 80, -1);
         Utilities.stackBlurBitmap(bitmap, 3);
@@ -191,11 +192,11 @@ public class Star3DIcon {
         GLES20.glUniform1f(this.specHandleBottom, this.spec2);
         GLES20.glUniform1f(this.diffuseHandle, this.diffuse);
         GLES20.glUniform1f(this.normalSpecHandle, this.normalSpec);
-        GLES20.glUniform3f(this.gradientColor1Handle, ((float) Color.red(this.gradientColor1)) / 255.0f, ((float) Color.green(this.gradientColor1)) / 255.0f, ((float) Color.blue(this.gradientColor1)) / 255.0f);
-        GLES20.glUniform3f(this.gradientColor2Handle, ((float) Color.red(this.gradientColor2)) / 255.0f, ((float) Color.green(this.gradientColor2)) / 255.0f, ((float) Color.blue(this.gradientColor2)) / 255.0f);
-        GLES20.glUniform3f(this.normalSpecColorHandle, ((float) Color.red(this.normalSpecColor)) / 255.0f, ((float) Color.green(this.normalSpecColor)) / 255.0f, ((float) Color.blue(this.normalSpecColor)) / 255.0f);
-        GLES20.glUniform3f(this.specColorHandle, ((float) Color.red(this.specColor)) / 255.0f, ((float) Color.green(this.specColor)) / 255.0f, ((float) Color.blue(this.specColor)) / 255.0f);
-        GLES20.glUniform2f(this.resolutionHandle, (float) i, (float) i2);
+        GLES20.glUniform3f(this.gradientColor1Handle, Color.red(this.gradientColor1) / 255.0f, Color.green(this.gradientColor1) / 255.0f, Color.blue(this.gradientColor1) / 255.0f);
+        GLES20.glUniform3f(this.gradientColor2Handle, Color.red(this.gradientColor2) / 255.0f, Color.green(this.gradientColor2) / 255.0f, Color.blue(this.gradientColor2) / 255.0f);
+        GLES20.glUniform3f(this.normalSpecColorHandle, Color.red(this.normalSpecColor) / 255.0f, Color.green(this.normalSpecColor) / 255.0f, Color.blue(this.normalSpecColor) / 255.0f);
+        GLES20.glUniform3f(this.specColorHandle, Color.red(this.specColor) / 255.0f, Color.green(this.specColor) / 255.0f, Color.blue(this.specColor) / 255.0f);
+        GLES20.glUniform2f(this.resolutionHandle, i, i2);
         GLES20.glUniform4f(this.gradientPositionHandle, f, f2, f3, f4);
         float f5 = this.enterAlpha;
         if (f5 < 1.0f) {

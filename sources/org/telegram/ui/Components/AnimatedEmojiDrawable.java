@@ -1,11 +1,9 @@
 package org.telegram.ui.Components;
 
-import android.animation.TimeInterpolator;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
-import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Looper;
 import android.text.TextUtils;
@@ -30,31 +28,32 @@ import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.NativeByteBuffer;
+import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.tgnet.TLRPC$TL_messages_getCustomEmojiDocuments;
 import org.telegram.tgnet.TLRPC$Vector;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Components.AnimatedEmojiDrawable;
 import org.telegram.ui.Components.AnimatedEmojiSpan;
-
+/* loaded from: classes3.dex */
 public class AnimatedEmojiDrawable extends Drawable {
     private static HashMap<Integer, EmojiDocumentFetcher> fetchers;
     private static HashMap<Integer, HashMap<Long, AnimatedEmojiDrawable>> globalEmojiCache;
     private float alpha = 1.0f;
     private boolean attached;
-    /* access modifiers changed from: private */
-    public int cacheType;
+    private int cacheType;
     private Boolean canOverrideColorCached;
     private ColorFilter colorFilterToSet;
     private TLRPC$Document document;
     private long documentId;
     private ArrayList<AnimatedEmojiSpan.InvalidateHolder> holders;
-    /* access modifiers changed from: private */
-    public ImageReceiver imageReceiver;
+    private ImageReceiver imageReceiver;
     public int sizedp;
     private ArrayList<View> views;
 
+    /* loaded from: classes3.dex */
     public interface ReceivedDocument {
         void run(TLRPC$Document tLRPC$Document);
     }
@@ -62,6 +61,7 @@ public class AnimatedEmojiDrawable extends Drawable {
     private void drawPlaceholder(Canvas canvas, float f, float f2, float f3) {
     }
 
+    @Override // android.graphics.drawable.Drawable
     public int getOpacity() {
         return -2;
     }
@@ -71,22 +71,22 @@ public class AnimatedEmojiDrawable extends Drawable {
             globalEmojiCache = new HashMap<>();
         }
         int hashCode = Arrays.hashCode(new Object[]{Integer.valueOf(i), Integer.valueOf(i2)});
-        HashMap hashMap = globalEmojiCache.get(Integer.valueOf(hashCode));
+        HashMap<Long, AnimatedEmojiDrawable> hashMap = globalEmojiCache.get(Integer.valueOf(hashCode));
         if (hashMap == null) {
             HashMap<Integer, HashMap<Long, AnimatedEmojiDrawable>> hashMap2 = globalEmojiCache;
             Integer valueOf = Integer.valueOf(hashCode);
-            HashMap hashMap3 = new HashMap();
+            HashMap<Long, AnimatedEmojiDrawable> hashMap3 = new HashMap<>();
             hashMap2.put(valueOf, hashMap3);
             hashMap = hashMap3;
         }
-        AnimatedEmojiDrawable animatedEmojiDrawable = (AnimatedEmojiDrawable) hashMap.get(Long.valueOf(j));
-        if (animatedEmojiDrawable != null) {
-            return animatedEmojiDrawable;
+        AnimatedEmojiDrawable animatedEmojiDrawable = hashMap.get(Long.valueOf(j));
+        if (animatedEmojiDrawable == null) {
+            Long valueOf2 = Long.valueOf(j);
+            AnimatedEmojiDrawable animatedEmojiDrawable2 = new AnimatedEmojiDrawable(i2, i, j);
+            hashMap.put(valueOf2, animatedEmojiDrawable2);
+            return animatedEmojiDrawable2;
         }
-        Long valueOf2 = Long.valueOf(j);
-        AnimatedEmojiDrawable animatedEmojiDrawable2 = new AnimatedEmojiDrawable(i2, i, j);
-        hashMap.put(valueOf2, animatedEmojiDrawable2);
-        return animatedEmojiDrawable2;
+        return animatedEmojiDrawable;
     }
 
     public static AnimatedEmojiDrawable make(int i, int i2, TLRPC$Document tLRPC$Document) {
@@ -94,22 +94,22 @@ public class AnimatedEmojiDrawable extends Drawable {
             globalEmojiCache = new HashMap<>();
         }
         int hashCode = Arrays.hashCode(new Object[]{Integer.valueOf(i), Integer.valueOf(i2)});
-        HashMap hashMap = globalEmojiCache.get(Integer.valueOf(hashCode));
+        HashMap<Long, AnimatedEmojiDrawable> hashMap = globalEmojiCache.get(Integer.valueOf(hashCode));
         if (hashMap == null) {
             HashMap<Integer, HashMap<Long, AnimatedEmojiDrawable>> hashMap2 = globalEmojiCache;
             Integer valueOf = Integer.valueOf(hashCode);
-            HashMap hashMap3 = new HashMap();
+            HashMap<Long, AnimatedEmojiDrawable> hashMap3 = new HashMap<>();
             hashMap2.put(valueOf, hashMap3);
             hashMap = hashMap3;
         }
-        AnimatedEmojiDrawable animatedEmojiDrawable = (AnimatedEmojiDrawable) hashMap.get(Long.valueOf(tLRPC$Document.id));
-        if (animatedEmojiDrawable != null) {
-            return animatedEmojiDrawable;
+        AnimatedEmojiDrawable animatedEmojiDrawable = hashMap.get(Long.valueOf(tLRPC$Document.id));
+        if (animatedEmojiDrawable == null) {
+            Long valueOf2 = Long.valueOf(tLRPC$Document.id);
+            AnimatedEmojiDrawable animatedEmojiDrawable2 = new AnimatedEmojiDrawable(i2, i, tLRPC$Document);
+            hashMap.put(valueOf2, animatedEmojiDrawable2);
+            return animatedEmojiDrawable2;
         }
-        Long valueOf2 = Long.valueOf(tLRPC$Document.id);
-        AnimatedEmojiDrawable animatedEmojiDrawable2 = new AnimatedEmojiDrawable(i2, i, tLRPC$Document);
-        hashMap.put(valueOf2, animatedEmojiDrawable2);
-        return animatedEmojiDrawable2;
+        return animatedEmojiDrawable;
     }
 
     public static int getCacheTypeForEnterView() {
@@ -117,27 +117,28 @@ public class AnimatedEmojiDrawable extends Drawable {
     }
 
     public void setTime(long j) {
-        ImageReceiver imageReceiver2 = this.imageReceiver;
-        if (imageReceiver2 != null) {
+        ImageReceiver imageReceiver = this.imageReceiver;
+        if (imageReceiver != null) {
             if (this.cacheType == 8) {
                 j = 0;
             }
-            imageReceiver2.setCurrentTime(j);
+            imageReceiver.setCurrentTime(j);
         }
     }
 
     public void update(long j) {
-        ImageReceiver imageReceiver2 = this.imageReceiver;
-        if (imageReceiver2 != null) {
+        ImageReceiver imageReceiver = this.imageReceiver;
+        if (imageReceiver != null) {
             if (this.cacheType == 8) {
                 j = 0;
             }
-            if (imageReceiver2.getLottieAnimation() != null) {
+            if (imageReceiver.getLottieAnimation() != null) {
                 this.imageReceiver.getLottieAnimation().updateCurrentFrame(j, true);
             }
-            if (this.imageReceiver.getAnimation() != null) {
-                this.imageReceiver.getAnimation().updateCurrentFrame(j, true);
+            if (this.imageReceiver.getAnimation() == null) {
+                return;
             }
+            this.imageReceiver.getAnimation().updateCurrentFrame(j, true);
         }
     }
 
@@ -146,20 +147,20 @@ public class AnimatedEmojiDrawable extends Drawable {
             fetchers = new HashMap<>();
         }
         EmojiDocumentFetcher emojiDocumentFetcher = fetchers.get(Integer.valueOf(i));
-        if (emojiDocumentFetcher != null) {
-            return emojiDocumentFetcher;
+        if (emojiDocumentFetcher == null) {
+            HashMap<Integer, EmojiDocumentFetcher> hashMap = fetchers;
+            Integer valueOf = Integer.valueOf(i);
+            EmojiDocumentFetcher emojiDocumentFetcher2 = new EmojiDocumentFetcher(i);
+            hashMap.put(valueOf, emojiDocumentFetcher2);
+            return emojiDocumentFetcher2;
         }
-        HashMap<Integer, EmojiDocumentFetcher> hashMap = fetchers;
-        Integer valueOf = Integer.valueOf(i);
-        EmojiDocumentFetcher emojiDocumentFetcher2 = new EmojiDocumentFetcher(i);
-        hashMap.put(valueOf, emojiDocumentFetcher2);
-        return emojiDocumentFetcher2;
+        return emojiDocumentFetcher;
     }
 
+    /* loaded from: classes3.dex */
     public static class EmojiDocumentFetcher {
         private final int currentAccount;
-        /* access modifiers changed from: private */
-        public HashMap<Long, TLRPC$Document> emojiDocumentsCache;
+        private HashMap<Long, TLRPC$Document> emojiDocumentsCache;
         private Runnable fetchRunnable;
         private HashMap<Long, ArrayList<ReceivedDocument>> loadingDocuments;
         private HashSet<Long> toFetchDocuments;
@@ -172,103 +173,128 @@ public class AnimatedEmojiDrawable extends Drawable {
             TLRPC$Document tLRPC$Document;
             checkThread();
             HashMap<Long, TLRPC$Document> hashMap = this.emojiDocumentsCache;
-            if (hashMap == null || (tLRPC$Document = hashMap.get(Long.valueOf(j))) == null) {
-                if (receivedDocument != null) {
-                    if (this.loadingDocuments == null) {
-                        this.loadingDocuments = new HashMap<>();
-                    }
-                    ArrayList arrayList = this.loadingDocuments.get(Long.valueOf(j));
-                    if (arrayList != null) {
-                        arrayList.add(receivedDocument);
-                        return;
-                    }
-                    ArrayList arrayList2 = new ArrayList(1);
-                    arrayList2.add(receivedDocument);
-                    this.loadingDocuments.put(Long.valueOf(j), arrayList2);
-                }
-                if (this.toFetchDocuments == null) {
-                    this.toFetchDocuments = new HashSet<>();
-                }
-                this.toFetchDocuments.add(Long.valueOf(j));
-                if (this.fetchRunnable == null) {
-                    AnimatedEmojiDrawable$EmojiDocumentFetcher$$ExternalSyntheticLambda0 animatedEmojiDrawable$EmojiDocumentFetcher$$ExternalSyntheticLambda0 = new AnimatedEmojiDrawable$EmojiDocumentFetcher$$ExternalSyntheticLambda0(this);
-                    this.fetchRunnable = animatedEmojiDrawable$EmojiDocumentFetcher$$ExternalSyntheticLambda0;
-                    AndroidUtilities.runOnUIThread(animatedEmojiDrawable$EmojiDocumentFetcher$$ExternalSyntheticLambda0);
-                    return;
-                }
+            if (hashMap != null && (tLRPC$Document = hashMap.get(Long.valueOf(j))) != null) {
+                receivedDocument.run(tLRPC$Document);
                 return;
             }
-            receivedDocument.run(tLRPC$Document);
+            if (receivedDocument != null) {
+                if (this.loadingDocuments == null) {
+                    this.loadingDocuments = new HashMap<>();
+                }
+                ArrayList<ReceivedDocument> arrayList = this.loadingDocuments.get(Long.valueOf(j));
+                if (arrayList != null) {
+                    arrayList.add(receivedDocument);
+                    return;
+                }
+                ArrayList<ReceivedDocument> arrayList2 = new ArrayList<>(1);
+                arrayList2.add(receivedDocument);
+                this.loadingDocuments.put(Long.valueOf(j), arrayList2);
+            }
+            if (this.toFetchDocuments == null) {
+                this.toFetchDocuments = new HashSet<>();
+            }
+            this.toFetchDocuments.add(Long.valueOf(j));
+            if (this.fetchRunnable != null) {
+                return;
+            }
+            Runnable runnable = new Runnable() { // from class: org.telegram.ui.Components.AnimatedEmojiDrawable$EmojiDocumentFetcher$$ExternalSyntheticLambda0
+                @Override // java.lang.Runnable
+                public final void run() {
+                    AnimatedEmojiDrawable.EmojiDocumentFetcher.this.lambda$fetchDocument$0();
+                }
+            };
+            this.fetchRunnable = runnable;
+            AndroidUtilities.runOnUIThread(runnable);
         }
 
-        /* access modifiers changed from: private */
+        /* JADX INFO: Access modifiers changed from: private */
         public /* synthetic */ void lambda$fetchDocument$0() {
-            ArrayList arrayList = new ArrayList(this.toFetchDocuments);
+            ArrayList<Long> arrayList = new ArrayList<>(this.toFetchDocuments);
             this.toFetchDocuments.clear();
             loadFromDatabase(arrayList);
             this.fetchRunnable = null;
         }
 
         private void checkThread() {
-            if (BuildVars.DEBUG_VERSION && Thread.currentThread() != Looper.getMainLooper().getThread()) {
-                throw new IllegalStateException("Wrong thread");
+            if (!BuildVars.DEBUG_VERSION || Thread.currentThread() == Looper.getMainLooper().getThread()) {
+                return;
             }
+            throw new IllegalStateException("Wrong thread");
         }
 
-        private void loadFromDatabase(ArrayList<Long> arrayList) {
-            MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new AnimatedEmojiDrawable$EmojiDocumentFetcher$$ExternalSyntheticLambda1(this, arrayList));
+        private void loadFromDatabase(final ArrayList<Long> arrayList) {
+            MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() { // from class: org.telegram.ui.Components.AnimatedEmojiDrawable$EmojiDocumentFetcher$$ExternalSyntheticLambda1
+                @Override // java.lang.Runnable
+                public final void run() {
+                    AnimatedEmojiDrawable.EmojiDocumentFetcher.this.lambda$loadFromDatabase$2(arrayList);
+                }
+            });
         }
 
-        /* access modifiers changed from: private */
+        /* JADX INFO: Access modifiers changed from: private */
         public /* synthetic */ void lambda$loadFromDatabase$2(ArrayList arrayList) {
             SQLiteDatabase database = MessagesStorage.getInstance(this.currentAccount).getDatabase();
             try {
-                String join = TextUtils.join(",", arrayList);
-                SQLiteCursor queryFinalized = database.queryFinalized(String.format(Locale.US, "SELECT data FROM animated_emoji WHERE document_id IN (%s)", new Object[]{join}), new Object[0]);
-                ArrayList arrayList2 = new ArrayList();
-                HashSet hashSet = new HashSet(arrayList);
+                SQLiteCursor queryFinalized = database.queryFinalized(String.format(Locale.US, "SELECT data FROM animated_emoji WHERE document_id IN (%s)", TextUtils.join(",", arrayList)), new Object[0]);
+                final ArrayList arrayList2 = new ArrayList();
+                final HashSet hashSet = new HashSet(arrayList);
                 while (queryFinalized.next()) {
                     NativeByteBuffer byteBufferValue = queryFinalized.byteBufferValue(0);
                     try {
                         TLRPC$Document TLdeserialize = TLRPC$Document.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(true), true);
-                        if (!(TLdeserialize == null || TLdeserialize.id == 0)) {
+                        if (TLdeserialize != null && TLdeserialize.id != 0) {
                             arrayList2.add(TLdeserialize);
                             hashSet.remove(Long.valueOf(TLdeserialize.id));
                         }
                     } catch (Exception e) {
-                        FileLog.e((Throwable) e);
+                        FileLog.e(e);
                     }
                     if (byteBufferValue != null) {
                         byteBufferValue.reuse();
                     }
                 }
-                AndroidUtilities.runOnUIThread(new AnimatedEmojiDrawable$EmojiDocumentFetcher$$ExternalSyntheticLambda3(this, arrayList2, hashSet));
+                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.AnimatedEmojiDrawable$EmojiDocumentFetcher$$ExternalSyntheticLambda3
+                    @Override // java.lang.Runnable
+                    public final void run() {
+                        AnimatedEmojiDrawable.EmojiDocumentFetcher.this.lambda$loadFromDatabase$1(arrayList2, hashSet);
+                    }
+                });
                 queryFinalized.dispose();
             } catch (SQLiteException e2) {
-                FileLog.e((Throwable) e2);
+                FileLog.e(e2);
             }
         }
 
-        /* access modifiers changed from: private */
+        /* JADX INFO: Access modifiers changed from: private */
         public /* synthetic */ void lambda$loadFromDatabase$1(ArrayList arrayList, HashSet hashSet) {
             processDocuments(arrayList);
             if (!hashSet.isEmpty()) {
-                loadFromServer(new ArrayList(hashSet));
+                loadFromServer(new ArrayList<>(hashSet));
             }
         }
 
-        private void loadFromServer(ArrayList<Long> arrayList) {
+        private void loadFromServer(final ArrayList<Long> arrayList) {
             TLRPC$TL_messages_getCustomEmojiDocuments tLRPC$TL_messages_getCustomEmojiDocuments = new TLRPC$TL_messages_getCustomEmojiDocuments();
             tLRPC$TL_messages_getCustomEmojiDocuments.document_id = arrayList;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_getCustomEmojiDocuments, new AnimatedEmojiDrawable$EmojiDocumentFetcher$$ExternalSyntheticLambda5(this, arrayList));
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_getCustomEmojiDocuments, new RequestDelegate() { // from class: org.telegram.ui.Components.AnimatedEmojiDrawable$EmojiDocumentFetcher$$ExternalSyntheticLambda5
+                @Override // org.telegram.tgnet.RequestDelegate
+                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+                    AnimatedEmojiDrawable.EmojiDocumentFetcher.this.lambda$loadFromServer$4(arrayList, tLObject, tLRPC$TL_error);
+                }
+            });
         }
 
-        /* access modifiers changed from: private */
-        public /* synthetic */ void lambda$loadFromServer$4(ArrayList arrayList, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-            AndroidUtilities.runOnUIThread(new AnimatedEmojiDrawable$EmojiDocumentFetcher$$ExternalSyntheticLambda4(this, arrayList, tLObject));
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$loadFromServer$4(final ArrayList arrayList, final TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+            AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.AnimatedEmojiDrawable$EmojiDocumentFetcher$$ExternalSyntheticLambda4
+                @Override // java.lang.Runnable
+                public final void run() {
+                    AnimatedEmojiDrawable.EmojiDocumentFetcher.this.lambda$loadFromServer$3(arrayList, tLObject);
+                }
+            });
         }
 
-        /* access modifiers changed from: private */
+        /* JADX INFO: Access modifiers changed from: private */
         public /* synthetic */ void lambda$loadFromServer$3(ArrayList arrayList, TLObject tLObject) {
             HashSet hashSet = new HashSet(arrayList);
             if (tLObject instanceof TLRPC$Vector) {
@@ -280,20 +306,29 @@ public class AnimatedEmojiDrawable extends Drawable {
                         hashSet.remove(Long.valueOf(((TLRPC$Document) arrayList2.get(i)).id));
                     }
                 }
-                if (!hashSet.isEmpty()) {
-                    loadFromServer(new ArrayList(hashSet));
+                if (hashSet.isEmpty()) {
+                    return;
                 }
+                loadFromServer(new ArrayList<>(hashSet));
             }
         }
 
-        private void putToStorage(ArrayList<Object> arrayList) {
-            MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new AnimatedEmojiDrawable$EmojiDocumentFetcher$$ExternalSyntheticLambda2(this, arrayList));
+        private void putToStorage(final ArrayList<Object> arrayList) {
+            MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() { // from class: org.telegram.ui.Components.AnimatedEmojiDrawable$EmojiDocumentFetcher$$ExternalSyntheticLambda2
+                @Override // java.lang.Runnable
+                public final void run() {
+                    AnimatedEmojiDrawable.EmojiDocumentFetcher.this.lambda$putToStorage$5(arrayList);
+                }
+            });
         }
 
-        /* access modifiers changed from: private */
-        /* JADX WARNING: Removed duplicated region for block: B:19:0x004d A[Catch:{ SQLiteException -> 0x0057 }] */
-        /* JADX WARNING: Removed duplicated region for block: B:27:0x0050 A[SYNTHETIC] */
-        /* Code decompiled incorrectly, please refer to instructions dump. */
+        /* JADX INFO: Access modifiers changed from: private */
+        /* JADX WARN: Removed duplicated region for block: B:18:0x004d A[Catch: SQLiteException -> 0x0057, TryCatch #2 {SQLiteException -> 0x0057, blocks: (B:3:0x000a, B:4:0x0011, B:6:0x0017, B:8:0x001f, B:18:0x004d, B:16:0x0047, B:19:0x0050, B:20:0x0053), top: B:29:0x000a }] */
+        /* JADX WARN: Removed duplicated region for block: B:34:0x0050 A[SYNTHETIC] */
+        /*
+            Code decompiled incorrectly, please refer to instructions dump.
+            To view partially-correct add '--show-bad-code' argument
+        */
         public /* synthetic */ void lambda$putToStorage$5(java.util.ArrayList r7) {
             /*
                 r6 = this;
@@ -301,58 +336,58 @@ public class AnimatedEmojiDrawable extends Drawable {
                 org.telegram.messenger.MessagesStorage r0 = org.telegram.messenger.MessagesStorage.getInstance(r0)
                 org.telegram.SQLite.SQLiteDatabase r0 = r0.getDatabase()
                 java.lang.String r1 = "REPLACE INTO animated_emoji VALUES(?, ?)"
-                org.telegram.SQLite.SQLitePreparedStatement r0 = r0.executeFast(r1)     // Catch:{ SQLiteException -> 0x0057 }
+                org.telegram.SQLite.SQLitePreparedStatement r0 = r0.executeFast(r1)     // Catch: org.telegram.SQLite.SQLiteException -> L57
                 r1 = 0
-            L_0x0011:
-                int r2 = r7.size()     // Catch:{ SQLiteException -> 0x0057 }
-                if (r1 >= r2) goto L_0x0053
-                java.lang.Object r2 = r7.get(r1)     // Catch:{ SQLiteException -> 0x0057 }
-                boolean r2 = r2 instanceof org.telegram.tgnet.TLRPC$Document     // Catch:{ SQLiteException -> 0x0057 }
-                if (r2 == 0) goto L_0x0050
-                java.lang.Object r2 = r7.get(r1)     // Catch:{ SQLiteException -> 0x0057 }
-                org.telegram.tgnet.TLRPC$Document r2 = (org.telegram.tgnet.TLRPC$Document) r2     // Catch:{ SQLiteException -> 0x0057 }
+            L11:
+                int r2 = r7.size()     // Catch: org.telegram.SQLite.SQLiteException -> L57
+                if (r1 >= r2) goto L53
+                java.lang.Object r2 = r7.get(r1)     // Catch: org.telegram.SQLite.SQLiteException -> L57
+                boolean r2 = r2 instanceof org.telegram.tgnet.TLRPC$Document     // Catch: org.telegram.SQLite.SQLiteException -> L57
+                if (r2 == 0) goto L50
+                java.lang.Object r2 = r7.get(r1)     // Catch: org.telegram.SQLite.SQLiteException -> L57
+                org.telegram.tgnet.TLRPC$Document r2 = (org.telegram.tgnet.TLRPC$Document) r2     // Catch: org.telegram.SQLite.SQLiteException -> L57
                 r3 = 0
-                org.telegram.tgnet.NativeByteBuffer r4 = new org.telegram.tgnet.NativeByteBuffer     // Catch:{ Exception -> 0x0046 }
-                int r5 = r2.getObjectSize()     // Catch:{ Exception -> 0x0046 }
-                r4.<init>((int) r5)     // Catch:{ Exception -> 0x0046 }
-                r2.serializeToStream(r4)     // Catch:{ Exception -> 0x0043 }
-                r0.requery()     // Catch:{ Exception -> 0x0043 }
-                long r2 = r2.id     // Catch:{ Exception -> 0x0043 }
+                org.telegram.tgnet.NativeByteBuffer r4 = new org.telegram.tgnet.NativeByteBuffer     // Catch: java.lang.Exception -> L46
+                int r5 = r2.getObjectSize()     // Catch: java.lang.Exception -> L46
+                r4.<init>(r5)     // Catch: java.lang.Exception -> L46
+                r2.serializeToStream(r4)     // Catch: java.lang.Exception -> L43
+                r0.requery()     // Catch: java.lang.Exception -> L43
+                long r2 = r2.id     // Catch: java.lang.Exception -> L43
                 r5 = 1
-                r0.bindLong(r5, r2)     // Catch:{ Exception -> 0x0043 }
+                r0.bindLong(r5, r2)     // Catch: java.lang.Exception -> L43
                 r2 = 2
-                r0.bindByteBuffer((int) r2, (org.telegram.tgnet.NativeByteBuffer) r4)     // Catch:{ Exception -> 0x0043 }
-                r0.step()     // Catch:{ Exception -> 0x0043 }
-                goto L_0x004b
-            L_0x0043:
+                r0.bindByteBuffer(r2, r4)     // Catch: java.lang.Exception -> L43
+                r0.step()     // Catch: java.lang.Exception -> L43
+                goto L4b
+            L43:
                 r2 = move-exception
                 r3 = r4
-                goto L_0x0047
-            L_0x0046:
+                goto L47
+            L46:
                 r2 = move-exception
-            L_0x0047:
-                r2.printStackTrace()     // Catch:{ SQLiteException -> 0x0057 }
+            L47:
+                r2.printStackTrace()     // Catch: org.telegram.SQLite.SQLiteException -> L57
                 r4 = r3
-            L_0x004b:
-                if (r4 == 0) goto L_0x0050
-                r4.reuse()     // Catch:{ SQLiteException -> 0x0057 }
-            L_0x0050:
+            L4b:
+                if (r4 == 0) goto L50
+                r4.reuse()     // Catch: org.telegram.SQLite.SQLiteException -> L57
+            L50:
                 int r1 = r1 + 1
-                goto L_0x0011
-            L_0x0053:
-                r0.dispose()     // Catch:{ SQLiteException -> 0x0057 }
-                goto L_0x005b
-            L_0x0057:
+                goto L11
+            L53:
+                r0.dispose()     // Catch: org.telegram.SQLite.SQLiteException -> L57
+                goto L5b
+            L57:
                 r7 = move-exception
-                org.telegram.messenger.FileLog.e((java.lang.Throwable) r7)
-            L_0x005b:
+                org.telegram.messenger.FileLog.e(r7)
+            L5b:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AnimatedEmojiDrawable.EmojiDocumentFetcher.lambda$putToStorage$5(java.util.ArrayList):void");
         }
 
         public void processDocuments(ArrayList<?> arrayList) {
-            ArrayList remove;
+            ArrayList<ReceivedDocument> remove;
             checkThread();
             for (int i = 0; i < arrayList.size(); i++) {
                 if (arrayList.get(i) instanceof TLRPC$Document) {
@@ -362,9 +397,9 @@ public class AnimatedEmojiDrawable extends Drawable {
                     }
                     this.emojiDocumentsCache.put(Long.valueOf(tLRPC$Document.id), tLRPC$Document);
                     HashMap<Long, ArrayList<ReceivedDocument>> hashMap = this.loadingDocuments;
-                    if (!(hashMap == null || (remove = hashMap.remove(Long.valueOf(tLRPC$Document.id))) == null)) {
+                    if (hashMap != null && (remove = hashMap.remove(Long.valueOf(tLRPC$Document.id))) != null) {
                         for (int i2 = 0; i2 < remove.size(); i2++) {
-                            ((ReceivedDocument) remove.get(i2)).run(tLRPC$Document);
+                            remove.get(i2).run(tLRPC$Document);
                         }
                         remove.clear();
                     }
@@ -382,22 +417,37 @@ public class AnimatedEmojiDrawable extends Drawable {
     }
 
     public AnimatedEmojiDrawable(int i, int i2, long j) {
-        new AnimatedFloat(1.0f, (Runnable) new AnimatedEmojiDrawable$$ExternalSyntheticLambda0(this), 0, 150, (TimeInterpolator) new LinearInterpolator());
+        new AnimatedFloat(1.0f, new Runnable() { // from class: org.telegram.ui.Components.AnimatedEmojiDrawable$$ExternalSyntheticLambda0
+            @Override // java.lang.Runnable
+            public final void run() {
+                AnimatedEmojiDrawable.this.invalidate();
+            }
+        }, 0L, 150L, new LinearInterpolator());
         this.canOverrideColorCached = null;
         this.cacheType = i;
         updateSize();
         this.documentId = j;
-        getDocumentFetcher(i2).fetchDocument(j, new AnimatedEmojiDrawable$$ExternalSyntheticLambda1(this));
+        getDocumentFetcher(i2).fetchDocument(j, new ReceivedDocument() { // from class: org.telegram.ui.Components.AnimatedEmojiDrawable$$ExternalSyntheticLambda1
+            @Override // org.telegram.ui.Components.AnimatedEmojiDrawable.ReceivedDocument
+            public final void run(TLRPC$Document tLRPC$Document) {
+                AnimatedEmojiDrawable.this.lambda$new$0(tLRPC$Document);
+            }
+        });
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$new$0(TLRPC$Document tLRPC$Document) {
         this.document = tLRPC$Document;
         initDocument();
     }
 
     public AnimatedEmojiDrawable(int i, int i2, TLRPC$Document tLRPC$Document) {
-        new AnimatedFloat(1.0f, (Runnable) new AnimatedEmojiDrawable$$ExternalSyntheticLambda0(this), 0, 150, (TimeInterpolator) new LinearInterpolator());
+        new AnimatedFloat(1.0f, new Runnable() { // from class: org.telegram.ui.Components.AnimatedEmojiDrawable$$ExternalSyntheticLambda0
+            @Override // java.lang.Runnable
+            public final void run() {
+                AnimatedEmojiDrawable.this.invalidate();
+            }
+        }, 0L, 150L, new LinearInterpolator());
         this.canOverrideColorCached = null;
         this.cacheType = i;
         this.document = tLRPC$Document;
@@ -427,324 +477,26 @@ public class AnimatedEmojiDrawable extends Drawable {
         return this.document;
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:14:0x004f, code lost:
-        r1 = r0.cacheType;
-     */
-    /* JADX WARNING: Removed duplicated region for block: B:62:0x0183  */
-    /* JADX WARNING: Removed duplicated region for block: B:63:0x0186  */
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x018c  */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x01ac  */
-    /* JADX WARNING: Removed duplicated region for block: B:81:0x0205  */
-    /* JADX WARNING: Removed duplicated region for block: B:84:0x0215  */
-    /* JADX WARNING: Removed duplicated region for block: B:85:0x0226  */
-    /* JADX WARNING: Removed duplicated region for block: B:90:0x0244  */
-    /* JADX WARNING: Removed duplicated region for block: B:91:0x0246  */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
+    /* JADX WARN: Removed duplicated region for block: B:66:0x0183  */
+    /* JADX WARN: Removed duplicated region for block: B:67:0x0186  */
+    /* JADX WARN: Removed duplicated region for block: B:70:0x018c  */
+    /* JADX WARN: Removed duplicated region for block: B:71:0x01ac  */
+    /* JADX WARN: Removed duplicated region for block: B:85:0x0205  */
+    /* JADX WARN: Removed duplicated region for block: B:88:0x0215  */
+    /* JADX WARN: Removed duplicated region for block: B:89:0x0226  */
+    /*
+        Code decompiled incorrectly, please refer to instructions dump.
+        To view partially-correct add '--show-bad-code' argument
+    */
     private void initDocument() {
         /*
-            r30 = this;
-            r0 = r30
-            org.telegram.tgnet.TLRPC$Document r1 = r0.document
-            if (r1 == 0) goto L_0x0257
-            org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
-            if (r1 == 0) goto L_0x000c
-            goto L_0x0257
-        L_0x000c:
-            org.telegram.ui.Components.AnimatedEmojiDrawable$1 r1 = new org.telegram.ui.Components.AnimatedEmojiDrawable$1
-            r1.<init>()
-            r0.imageReceiver = r1
-            android.graphics.ColorFilter r1 = r0.colorFilterToSet
-            if (r1 == 0) goto L_0x0024
-            boolean r1 = r30.canOverrideColor()
-            if (r1 == 0) goto L_0x0024
-            org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
-            android.graphics.ColorFilter r2 = r0.colorFilterToSet
-            r1.setColorFilter(r2)
-        L_0x0024:
-            int r1 = r0.cacheType
-            java.lang.String r2 = "_"
-            if (r1 == 0) goto L_0x0040
-            org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
-            java.lang.StringBuilder r3 = new java.lang.StringBuilder
-            r3.<init>()
-            int r4 = r0.cacheType
-            r3.append(r4)
-            r3.append(r2)
-            java.lang.String r3 = r3.toString()
-            r1.setUniqKeyPrefix(r3)
-        L_0x0040:
-            org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
-            r3 = 1
-            r1.setVideoThumbIsSame(r3)
-            int r1 = org.telegram.messenger.SharedConfig.getDevicePerformanceClass()
-            r4 = 3
-            r5 = 5
-            r6 = 2
-            if (r1 != 0) goto L_0x0059
-            int r1 = r0.cacheType
-            if (r1 == r6) goto L_0x0057
-            if (r1 == r4) goto L_0x0057
-            if (r1 != r5) goto L_0x0059
-        L_0x0057:
-            r1 = 1
-            goto L_0x005a
-        L_0x0059:
-            r1 = 0
-        L_0x005a:
-            java.lang.StringBuilder r8 = new java.lang.StringBuilder
-            r8.<init>()
-            int r9 = r0.sizedp
-            r8.append(r9)
-            r8.append(r2)
-            int r9 = r0.sizedp
-            r8.append(r9)
-            java.lang.String r8 = r8.toString()
-            int r9 = r0.cacheType
-            r10 = 8
-            if (r9 == r10) goto L_0x008f
-            if (r9 != r3) goto L_0x007e
-            int r9 = org.telegram.messenger.SharedConfig.getDevicePerformanceClass()
-            if (r9 >= r6) goto L_0x008f
-        L_0x007e:
-            java.lang.StringBuilder r9 = new java.lang.StringBuilder
-            r9.<init>()
-            r9.append(r8)
-            java.lang.String r8 = "_pcache"
-            r9.append(r8)
-            java.lang.String r8 = r9.toString()
-        L_0x008f:
-            int r9 = r0.cacheType
-            if (r9 == 0) goto L_0x00a6
-            if (r9 == r3) goto L_0x00a6
-            java.lang.StringBuilder r9 = new java.lang.StringBuilder
-            r9.<init>()
-            r9.append(r8)
-            java.lang.String r8 = "_compress"
-            r9.append(r8)
-            java.lang.String r8 = r9.toString()
-        L_0x00a6:
-            int r9 = r0.cacheType
-            if (r9 != r10) goto L_0x00bb
-            java.lang.StringBuilder r9 = new java.lang.StringBuilder
-            r9.<init>()
-            r9.append(r8)
-            java.lang.String r8 = "firstframe"
-            r9.append(r8)
-            java.lang.String r8 = r9.toString()
-        L_0x00bb:
-            org.telegram.tgnet.TLRPC$Document r9 = r0.document
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r9 = r9.thumbs
-            r11 = 90
-            org.telegram.tgnet.TLRPC$PhotoSize r9 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r9, r11)
-            org.telegram.tgnet.TLRPC$Document r11 = r0.document
-            java.lang.String r11 = r11.mime_type
-            java.lang.String r12 = "video/webm"
-            boolean r11 = r12.equals(r11)
-            r12 = 1045220557(0x3e4ccccd, float:0.2)
-            java.lang.String r13 = "windowBackgroundWhiteGrayIcon"
-            if (r11 == 0) goto L_0x00fc
-            org.telegram.tgnet.TLRPC$Document r11 = r0.document
-            org.telegram.messenger.ImageLocation r11 = org.telegram.messenger.ImageLocation.getForDocument(r11)
-            java.lang.StringBuilder r15 = new java.lang.StringBuilder
-            r15.<init>()
-            r15.append(r8)
-            r15.append(r2)
-            java.lang.String r8 = "g"
-            r15.append(r8)
-            java.lang.String r8 = r15.toString()
-            org.telegram.tgnet.TLRPC$Document r15 = r0.document
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r15 = r15.thumbs
-            org.telegram.messenger.SvgHelper$SvgDrawable r12 = org.telegram.messenger.DocumentObject.getSvgThumb((java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize>) r15, (java.lang.String) r13, (float) r12)
-        L_0x00f8:
-            r24 = r12
-            goto L_0x0181
-        L_0x00fc:
-            org.telegram.tgnet.TLRPC$Document r11 = r0.document
-            java.lang.String r11 = r11.mime_type
-            java.lang.String r15 = "application/x-tgsticker"
-            boolean r11 = r15.equals(r11)
-            r15 = 512(0x200, float:7.175E-43)
-            if (r11 == 0) goto L_0x0169
-            java.lang.StringBuilder r11 = new java.lang.StringBuilder
-            r11.<init>()
-            int r14 = r0.cacheType
-            if (r14 == 0) goto L_0x0125
-            java.lang.StringBuilder r14 = new java.lang.StringBuilder
-            r14.<init>()
-            int r7 = r0.cacheType
-            r14.append(r7)
-            r14.append(r2)
-            java.lang.String r7 = r14.toString()
-            goto L_0x0127
-        L_0x0125:
-            java.lang.String r7 = ""
-        L_0x0127:
-            r11.append(r7)
-            long r4 = r0.documentId
-            r11.append(r4)
-            java.lang.String r4 = "@"
-            r11.append(r4)
-            r11.append(r8)
-            java.lang.String r4 = r11.toString()
-            int r5 = r0.cacheType
-            if (r5 == r6) goto L_0x014c
-            org.telegram.messenger.ImageLoader r5 = org.telegram.messenger.ImageLoader.getInstance()
-            boolean r4 = r5.hasLottieMemCache(r4)
-            if (r4 != 0) goto L_0x014a
-            goto L_0x014c
-        L_0x014a:
-            r12 = 0
-            goto L_0x0162
-        L_0x014c:
-            org.telegram.tgnet.TLRPC$Document r4 = r0.document
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r4 = r4.thumbs
-            org.telegram.messenger.SvgHelper$SvgDrawable r4 = org.telegram.messenger.DocumentObject.getSvgThumb((java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize>) r4, (java.lang.String) r13, (float) r12)
-            if (r4 == 0) goto L_0x0161
-            org.telegram.tgnet.TLRPC$Document r5 = r0.document
-            boolean r5 = org.telegram.messenger.MessageObject.isAnimatedStickerDocument(r5, r3)
-            if (r5 == 0) goto L_0x0161
-            r4.overrideWidthAndHeight(r15, r15)
-        L_0x0161:
-            r12 = r4
-        L_0x0162:
-            org.telegram.tgnet.TLRPC$Document r4 = r0.document
-            org.telegram.messenger.ImageLocation r11 = org.telegram.messenger.ImageLocation.getForDocument(r4)
-            goto L_0x00f8
-        L_0x0169:
-            org.telegram.tgnet.TLRPC$Document r4 = r0.document
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r4 = r4.thumbs
-            org.telegram.messenger.SvgHelper$SvgDrawable r12 = org.telegram.messenger.DocumentObject.getSvgThumb((java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize>) r4, (java.lang.String) r13, (float) r12)
-            if (r12 == 0) goto L_0x017e
-            org.telegram.tgnet.TLRPC$Document r4 = r0.document
-            boolean r4 = org.telegram.messenger.MessageObject.isAnimatedStickerDocument(r4, r3)
-            if (r4 == 0) goto L_0x017e
-            r12.overrideWidthAndHeight(r15, r15)
-        L_0x017e:
-            r24 = r12
-            r11 = 0
-        L_0x0181:
-            if (r1 == 0) goto L_0x0186
-            r16 = 0
-            goto L_0x0188
-        L_0x0186:
-            r16 = r11
-        L_0x0188:
-            int r1 = r0.cacheType
-            if (r1 != r10) goto L_0x01ac
-            org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
-            r18 = 0
-            r19 = 0
-            r22 = 0
-            r23 = 0
-            org.telegram.tgnet.TLRPC$Document r2 = r0.document
-            long r4 = r2.size
-            r27 = 0
-            r29 = 1
-            r17 = r1
-            r20 = r16
-            r21 = r8
-            r25 = r4
-            r28 = r2
-            r17.setImage(r18, r19, r20, r21, r22, r23, r24, r25, r27, r28, r29)
-            goto L_0x01e3
-        L_0x01ac:
-            org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
-            org.telegram.tgnet.TLRPC$Document r4 = r0.document
-            org.telegram.messenger.ImageLocation r20 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC$PhotoSize) r9, (org.telegram.tgnet.TLRPC$Document) r4)
-            java.lang.StringBuilder r4 = new java.lang.StringBuilder
-            r4.<init>()
-            int r5 = r0.sizedp
-            r4.append(r5)
-            r4.append(r2)
-            int r2 = r0.sizedp
-            r4.append(r2)
-            java.lang.String r21 = r4.toString()
-            r22 = 0
-            r23 = 0
-            org.telegram.tgnet.TLRPC$Document r2 = r0.document
-            long r4 = r2.size
-            r27 = 0
-            r29 = 1
-            r17 = r1
-            r18 = r16
-            r19 = r8
-            r25 = r4
-            r28 = r2
-            r17.setImage(r18, r19, r20, r21, r22, r23, r24, r25, r27, r28, r29)
-        L_0x01e3:
-            int r1 = r0.cacheType
-            r2 = 9
-            r4 = 7
-            if (r1 == r4) goto L_0x01ec
-            if (r1 != r2) goto L_0x01f1
-        L_0x01ec:
-            org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
-            r1.setAutoRepeatCount(r6)
-        L_0x01f1:
-            int r1 = r0.cacheType
-            r5 = 3
-            if (r1 == r5) goto L_0x01fc
-            r5 = 5
-            if (r1 == r5) goto L_0x01fc
-            r5 = 4
-            if (r1 != r5) goto L_0x0201
-        L_0x01fc:
-            org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
-            r1.setLayerNum(r4)
-        L_0x0201:
-            int r1 = r0.cacheType
-            if (r1 != r2) goto L_0x020c
-            org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
-            r2 = 6656(0x1a00, float:9.327E-42)
-            r1.setLayerNum(r2)
-        L_0x020c:
-            org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
-            r1.setAspectFit(r3)
-            int r1 = r0.cacheType
-            if (r1 == r10) goto L_0x0226
-            org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
-            r1.setAllowStartLottieAnimation(r3)
-            org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
-            r1.setAllowStartAnimation(r3)
-            org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
-            r1.setAutoRepeat(r3)
-            r2 = 0
-            goto L_0x0236
-        L_0x0226:
-            org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
-            r2 = 0
-            r1.setAllowStartAnimation(r2)
-            org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
-            r1.setAllowStartLottieAnimation(r2)
-            org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
-            r1.setAutoRepeat(r2)
-        L_0x0236:
-            org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
-            r1.setAllowDecodeSingleFrame(r3)
-            int r1 = r0.cacheType
-            r3 = 5
-            if (r1 == r3) goto L_0x0246
-            r3 = 6
-            if (r1 != r3) goto L_0x0244
-            goto L_0x0246
-        L_0x0244:
-            r7 = 0
-            goto L_0x024c
-        L_0x0246:
-            r1 = 1086324736(0x40CLASSNAME, float:6.0)
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r1)
-        L_0x024c:
-            org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
-            r1.setRoundRadius((int) r7)
-            r30.updateAttachState()
-            r30.invalidate()
-        L_0x0257:
-            return
+            Method dump skipped, instructions count: 600
+            To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AnimatedEmojiDrawable.initDocument():void");
     }
 
-    /* access modifiers changed from: package-private */
+    /* JADX INFO: Access modifiers changed from: package-private */
     public void invalidate() {
         if (this.views != null) {
             for (int i = 0; i < this.views.size(); i++) {
@@ -768,41 +520,42 @@ public class AnimatedEmojiDrawable extends Drawable {
         StringBuilder sb = new StringBuilder();
         sb.append("AnimatedEmojiDrawable{");
         TLRPC$Document tLRPC$Document = this.document;
-        sb.append(tLRPC$Document == null ? "null" : MessageObject.findAnimatedEmojiEmoticon(tLRPC$Document, (String) null));
+        sb.append(tLRPC$Document == null ? "null" : MessageObject.findAnimatedEmojiEmoticon(tLRPC$Document, null));
         sb.append("}");
         return sb.toString();
     }
 
+    @Override // android.graphics.drawable.Drawable
     public void draw(Canvas canvas) {
         draw(canvas, true);
     }
 
     public void draw(Canvas canvas, boolean z) {
-        ImageReceiver imageReceiver2 = this.imageReceiver;
-        if (imageReceiver2 != null) {
-            imageReceiver2.setImageCoords(getBounds());
+        ImageReceiver imageReceiver = this.imageReceiver;
+        if (imageReceiver != null) {
+            imageReceiver.setImageCoords(getBounds());
             this.imageReceiver.setAlpha(this.alpha);
             this.imageReceiver.draw(canvas);
         }
-        drawPlaceholder(canvas, (float) getBounds().centerX(), (float) getBounds().centerY(), ((float) getBounds().width()) / 2.0f);
+        drawPlaceholder(canvas, getBounds().centerX(), getBounds().centerY(), getBounds().width() / 2.0f);
     }
 
-    public void draw(Canvas canvas, Rect rect, float f) {
-        ImageReceiver imageReceiver2 = this.imageReceiver;
-        if (imageReceiver2 != null) {
-            imageReceiver2.setImageCoords(rect);
+    public void draw(Canvas canvas, android.graphics.Rect rect, float f) {
+        ImageReceiver imageReceiver = this.imageReceiver;
+        if (imageReceiver != null) {
+            imageReceiver.setImageCoords(rect);
             this.imageReceiver.setAlpha(f);
             this.imageReceiver.draw(canvas);
         }
         if (rect != null) {
-            drawPlaceholder(canvas, (float) rect.centerX(), (float) rect.centerY(), ((float) rect.width()) / 2.0f);
+            drawPlaceholder(canvas, rect.centerX(), rect.centerY(), rect.width() / 2.0f);
         }
     }
 
     public void draw(Canvas canvas, ImageReceiver.BackgroundThreadDrawHolder backgroundThreadDrawHolder, boolean z) {
-        ImageReceiver imageReceiver2 = this.imageReceiver;
-        if (imageReceiver2 != null) {
-            imageReceiver2.setAlpha(this.alpha);
+        ImageReceiver imageReceiver = this.imageReceiver;
+        if (imageReceiver != null) {
+            imageReceiver.setAlpha(this.alpha);
             this.imageReceiver.draw(canvas, backgroundThreadDrawHolder);
         }
         if (backgroundThreadDrawHolder != null) {
@@ -848,105 +601,88 @@ public class AnimatedEmojiDrawable extends Drawable {
         updateAttachState();
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:7:0x000f, code lost:
-        r0 = r2.holders;
-     */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
     private void updateAttachState() {
-        /*
-            r2 = this;
-            org.telegram.messenger.ImageReceiver r0 = r2.imageReceiver
-            if (r0 != 0) goto L_0x0005
-            return
-        L_0x0005:
-            java.util.ArrayList<android.view.View> r0 = r2.views
-            if (r0 == 0) goto L_0x000f
-            int r0 = r0.size()
-            if (r0 > 0) goto L_0x0019
-        L_0x000f:
-            java.util.ArrayList<org.telegram.ui.Components.AnimatedEmojiSpan$InvalidateHolder> r0 = r2.holders
-            if (r0 == 0) goto L_0x001b
-            int r0 = r0.size()
-            if (r0 <= 0) goto L_0x001b
-        L_0x0019:
-            r0 = 1
-            goto L_0x001c
-        L_0x001b:
-            r0 = 0
-        L_0x001c:
-            boolean r1 = r2.attached
-            if (r0 == r1) goto L_0x002f
-            r2.attached = r0
-            if (r0 == 0) goto L_0x002a
-            org.telegram.messenger.ImageReceiver r0 = r2.imageReceiver
-            r0.onAttachedToWindow()
-            goto L_0x002f
-        L_0x002a:
-            org.telegram.messenger.ImageReceiver r0 = r2.imageReceiver
-            r0.onDetachedFromWindow()
-        L_0x002f:
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AnimatedEmojiDrawable.updateAttachState():void");
+        ArrayList<AnimatedEmojiSpan.InvalidateHolder> arrayList;
+        if (this.imageReceiver == null) {
+            return;
+        }
+        ArrayList<View> arrayList2 = this.views;
+        boolean z = (arrayList2 != null && arrayList2.size() > 0) || ((arrayList = this.holders) != null && arrayList.size() > 0);
+        if (z == this.attached) {
+            return;
+        }
+        this.attached = z;
+        if (z) {
+            this.imageReceiver.onAttachedToWindow();
+        } else {
+            this.imageReceiver.onDetachedFromWindow();
+        }
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:13:0x002c, code lost:
-        if (r2 != 2964141614563343L) goto L_0x002f;
+    /* JADX WARN: Code restructure failed: missing block: B:15:0x002c, code lost:
+        if (r2 != 2964141614563343L) goto L16;
      */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
+    /*
+        Code decompiled incorrectly, please refer to instructions dump.
+        To view partially-correct add '--show-bad-code' argument
+    */
     public boolean canOverrideColor() {
         /*
             r6 = this;
             java.lang.Boolean r0 = r6.canOverrideColorCached
-            if (r0 == 0) goto L_0x0009
+            if (r0 == 0) goto L9
             boolean r0 = r0.booleanValue()
             return r0
-        L_0x0009:
+        L9:
             org.telegram.tgnet.TLRPC$Document r0 = r6.document
             r1 = 0
-            if (r0 == 0) goto L_0x003a
-            org.telegram.tgnet.TLRPC$InputStickerSet r0 = org.telegram.messenger.MessageObject.getInputStickerSet((org.telegram.tgnet.TLRPC$Document) r0)
+            if (r0 == 0) goto L3a
+            org.telegram.tgnet.TLRPC$InputStickerSet r0 = org.telegram.messenger.MessageObject.getInputStickerSet(r0)
             boolean r2 = r0 instanceof org.telegram.tgnet.TLRPC$TL_inputStickerSetEmojiDefaultStatuses
-            if (r2 != 0) goto L_0x002e
+            if (r2 != 0) goto L2e
             boolean r2 = r0 instanceof org.telegram.tgnet.TLRPC$TL_inputStickerSetID
-            if (r2 == 0) goto L_0x002f
+            if (r2 == 0) goto L2f
             long r2 = r0.id
             r4 = 773947703670341676(0xabd9d560000002c, double:6.163529620788447E-257)
             int r0 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1))
-            if (r0 == 0) goto L_0x002e
+            if (r0 == 0) goto L2e
             r4 = 2964141614563343(0xa87dvar_f, double:1.4644805411641533E-308)
             int r0 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1))
-            if (r0 != 0) goto L_0x002f
-        L_0x002e:
+            if (r0 != 0) goto L2f
+        L2e:
             r1 = 1
-        L_0x002f:
+        L2f:
             java.lang.Boolean r0 = java.lang.Boolean.valueOf(r1)
             r6.canOverrideColorCached = r0
             boolean r0 = r0.booleanValue()
             return r0
-        L_0x003a:
+        L3a:
             return r1
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AnimatedEmojiDrawable.canOverrideColor():boolean");
     }
 
+    @Override // android.graphics.drawable.Drawable
     public int getAlpha() {
         return (int) (this.alpha * 255.0f);
     }
 
+    @Override // android.graphics.drawable.Drawable
     public void setAlpha(int i) {
-        float f = ((float) i) / 255.0f;
+        float f = i / 255.0f;
         this.alpha = f;
-        ImageReceiver imageReceiver2 = this.imageReceiver;
-        if (imageReceiver2 != null) {
-            imageReceiver2.setAlpha(f);
+        ImageReceiver imageReceiver = this.imageReceiver;
+        if (imageReceiver != null) {
+            imageReceiver.setAlpha(f);
         }
     }
 
+    @Override // android.graphics.drawable.Drawable
     public void setColorFilter(ColorFilter colorFilter) {
         if (this.imageReceiver == null) {
             this.colorFilterToSet = colorFilter;
-        } else if (canOverrideColor()) {
+        } else if (!canOverrideColor()) {
+        } else {
             this.imageReceiver.setColorFilter(colorFilter);
         }
     }
@@ -955,14 +691,15 @@ public class AnimatedEmojiDrawable extends Drawable {
         return this.imageReceiver;
     }
 
+    /* loaded from: classes3.dex */
     public static class WrapSizeDrawable extends Drawable {
         private int alpha = 255;
         private Drawable drawable;
         int height;
         int width;
 
-        public WrapSizeDrawable(Drawable drawable2, int i, int i2) {
-            this.drawable = drawable2;
+        public WrapSizeDrawable(Drawable drawable, int i, int i2) {
+            this.drawable = drawable;
             this.width = i;
             this.height = i2;
         }
@@ -971,47 +708,54 @@ public class AnimatedEmojiDrawable extends Drawable {
             return this.drawable;
         }
 
+        @Override // android.graphics.drawable.Drawable
         public void draw(Canvas canvas) {
-            Drawable drawable2 = this.drawable;
-            if (drawable2 != null) {
-                drawable2.setBounds(getBounds());
+            Drawable drawable = this.drawable;
+            if (drawable != null) {
+                drawable.setBounds(getBounds());
                 this.drawable.setAlpha(this.alpha);
                 this.drawable.draw(canvas);
             }
         }
 
+        @Override // android.graphics.drawable.Drawable
         public int getIntrinsicWidth() {
             return this.width;
         }
 
+        @Override // android.graphics.drawable.Drawable
         public int getIntrinsicHeight() {
             return this.height;
         }
 
+        @Override // android.graphics.drawable.Drawable
         public void setAlpha(int i) {
             this.alpha = i;
-            Drawable drawable2 = this.drawable;
-            if (drawable2 != null) {
-                drawable2.setAlpha(i);
+            Drawable drawable = this.drawable;
+            if (drawable != null) {
+                drawable.setAlpha(i);
             }
         }
 
+        @Override // android.graphics.drawable.Drawable
         public void setColorFilter(ColorFilter colorFilter) {
-            Drawable drawable2 = this.drawable;
-            if (drawable2 != null) {
-                drawable2.setColorFilter(colorFilter);
+            Drawable drawable = this.drawable;
+            if (drawable != null) {
+                drawable.setColorFilter(colorFilter);
             }
         }
 
+        @Override // android.graphics.drawable.Drawable
         public int getOpacity() {
-            Drawable drawable2 = this.drawable;
-            if (drawable2 != null) {
-                return drawable2.getOpacity();
+            Drawable drawable = this.drawable;
+            if (drawable != null) {
+                return drawable.getOpacity();
             }
             return -2;
         }
     }
 
+    /* loaded from: classes3.dex */
     public static class SwapAnimatedEmojiDrawable extends Drawable {
         private int alpha;
         private int cacheType;
@@ -1024,11 +768,13 @@ public class AnimatedEmojiDrawable extends Drawable {
         private View parentView;
         private int size;
 
+        @Override // android.graphics.drawable.Drawable
         public int getOpacity() {
             return -2;
         }
 
-        public void setColorFilter(ColorFilter colorFilter2) {
+        @Override // android.graphics.drawable.Drawable
+        public void setColorFilter(ColorFilter colorFilter) {
         }
 
         public SwapAnimatedEmojiDrawable(View view, int i) {
@@ -1038,7 +784,7 @@ public class AnimatedEmojiDrawable extends Drawable {
         public SwapAnimatedEmojiDrawable(View view, int i, int i2) {
             this.center = false;
             this.overshootInterpolator = new OvershootInterpolator(2.0f);
-            AnimatedFloat animatedFloat = new AnimatedFloat((View) null, 300, (TimeInterpolator) CubicBezierInterpolator.EASE_OUT);
+            AnimatedFloat animatedFloat = new AnimatedFloat((View) null, 300L, CubicBezierInterpolator.EASE_OUT);
             this.changeProgress = animatedFloat;
             this.drawables = new Drawable[2];
             this.alpha = 255;
@@ -1078,57 +824,41 @@ public class AnimatedEmojiDrawable extends Drawable {
             }
         }
 
-        /* JADX WARNING: Code restructure failed: missing block: B:2:0x0008, code lost:
-            r0 = (org.telegram.ui.Components.AnimatedEmojiDrawable) getDrawable();
-         */
-        /* Code decompiled incorrectly, please refer to instructions dump. */
         public void play() {
-            /*
-                r4 = this;
-                android.graphics.drawable.Drawable r0 = r4.getDrawable()
-                boolean r0 = r0 instanceof org.telegram.ui.Components.AnimatedEmojiDrawable
-                if (r0 == 0) goto L_0x002a
-                android.graphics.drawable.Drawable r0 = r4.getDrawable()
-                org.telegram.ui.Components.AnimatedEmojiDrawable r0 = (org.telegram.ui.Components.AnimatedEmojiDrawable) r0
-                org.telegram.messenger.ImageReceiver r1 = r0.getImageReceiver()
-                if (r1 == 0) goto L_0x002a
-                int r2 = r0.cacheType
-                r3 = 7
-                if (r2 == r3) goto L_0x0023
-                int r0 = r0.cacheType
-                r2 = 9
-                if (r0 != r2) goto L_0x0027
-            L_0x0023:
-                r0 = 2
-                r1.setAutoRepeatCount(r0)
-            L_0x0027:
-                r1.startAnimation()
-            L_0x002a:
-                return
-            */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable.play():void");
+            AnimatedEmojiDrawable animatedEmojiDrawable;
+            ImageReceiver imageReceiver;
+            if (!(getDrawable() instanceof AnimatedEmojiDrawable) || (imageReceiver = (animatedEmojiDrawable = (AnimatedEmojiDrawable) getDrawable()).getImageReceiver()) == null) {
+                return;
+            }
+            if (animatedEmojiDrawable.cacheType == 7 || animatedEmojiDrawable.cacheType == 9) {
+                imageReceiver.setAutoRepeatCount(2);
+            }
+            imageReceiver.startAnimation();
         }
 
         public void setColor(Integer num) {
             Integer num2 = this.lastColor;
-            if (num2 != null || num != null) {
-                if (num2 == null || !num2.equals(num)) {
-                    this.lastColor = num;
-                    this.colorFilter = num != null ? new PorterDuffColorFilter(num.intValue(), PorterDuff.Mode.MULTIPLY) : null;
-                }
+            if (num2 == null && num == null) {
+                return;
             }
+            if (num2 != null && num2.equals(num)) {
+                return;
+            }
+            this.lastColor = num;
+            this.colorFilter = num != null ? new PorterDuffColorFilter(num.intValue(), PorterDuff.Mode.MULTIPLY) : null;
         }
 
         public Integer getColor() {
             return this.lastColor;
         }
 
+        @Override // android.graphics.drawable.Drawable
         public void draw(Canvas canvas) {
             float f = this.changeProgress.set(1.0f);
-            Rect bounds = getBounds();
+            android.graphics.Rect bounds = getBounds();
             Drawable[] drawableArr = this.drawables;
             if (drawableArr[1] != null && f < 1.0f) {
-                drawableArr[1].setAlpha((int) (((float) this.alpha) * (1.0f - f)));
+                drawableArr[1].setAlpha((int) (this.alpha * (1.0f - f)));
                 Drawable[] drawableArr2 = this.drawables;
                 if (drawableArr2[1] instanceof AnimatedEmojiDrawable) {
                     drawableArr2[1].setBounds(bounds);
@@ -1139,7 +869,7 @@ public class AnimatedEmojiDrawable extends Drawable {
                 }
                 this.drawables[1].setColorFilter(this.colorFilter);
                 this.drawables[1].draw(canvas);
-                this.drawables[1].setColorFilter((ColorFilter) null);
+                this.drawables[1].setColorFilter(null);
             }
             if (this.drawables[0] != null) {
                 canvas.save();
@@ -1150,26 +880,26 @@ public class AnimatedEmojiDrawable extends Drawable {
                     }
                     if (f < 1.0f) {
                         float interpolation = this.overshootInterpolator.getInterpolation(f);
-                        canvas.scale(interpolation, interpolation, (float) bounds.centerX(), (float) bounds.centerY());
+                        canvas.scale(interpolation, interpolation, bounds.centerX(), bounds.centerY());
                     }
                     this.drawables[0].setBounds(bounds);
                 } else if (this.center) {
                     if (f < 1.0f) {
                         float interpolation2 = this.overshootInterpolator.getInterpolation(f);
-                        canvas.scale(interpolation2, interpolation2, (float) bounds.centerX(), (float) bounds.centerY());
+                        canvas.scale(interpolation2, interpolation2, bounds.centerX(), bounds.centerY());
                     }
                     this.drawables[0].setBounds(bounds.centerX() - (this.drawables[0].getIntrinsicWidth() / 2), bounds.centerY() - (this.drawables[0].getIntrinsicHeight() / 2), bounds.centerX() + (this.drawables[0].getIntrinsicWidth() / 2), bounds.centerY() + (this.drawables[0].getIntrinsicHeight() / 2));
                 } else {
                     if (f < 1.0f) {
                         float interpolation3 = this.overshootInterpolator.getInterpolation(f);
-                        canvas.scale(interpolation3, interpolation3, ((float) bounds.left) + (((float) this.drawables[0].getIntrinsicWidth()) / 2.0f), (float) bounds.centerY());
+                        canvas.scale(interpolation3, interpolation3, bounds.left + (this.drawables[0].getIntrinsicWidth() / 2.0f), bounds.centerY());
                     }
                     this.drawables[0].setBounds(bounds.left, bounds.centerY() - (this.drawables[0].getIntrinsicHeight() / 2), bounds.left + this.drawables[0].getIntrinsicWidth(), bounds.centerY() + (this.drawables[0].getIntrinsicHeight() / 2));
                 }
                 this.drawables[0].setAlpha(this.alpha);
                 this.drawables[0].setColorFilter(this.colorFilter);
                 this.drawables[0].draw(canvas);
-                this.drawables[0].setColorFilter((ColorFilter) null);
+                this.drawables[0].setColorFilter(null);
                 canvas.restore();
             }
         }
@@ -1208,9 +938,10 @@ public class AnimatedEmojiDrawable extends Drawable {
                 this.colorFilter = null;
                 play();
                 View view = this.parentView;
-                if (view != null) {
-                    view.invalidate();
+                if (view == null) {
+                    return;
                 }
+                view.invalidate();
             }
         }
 
@@ -1252,39 +983,42 @@ public class AnimatedEmojiDrawable extends Drawable {
                 this.colorFilter = null;
                 play();
                 View view = this.parentView;
-                if (view != null) {
-                    view.invalidate();
+                if (view == null) {
+                    return;
                 }
+                view.invalidate();
             }
         }
 
         public void set(Drawable drawable, boolean z) {
-            if (this.drawables[0] != drawable) {
-                if (z) {
-                    this.changeProgress.set(0.0f, true);
-                    Drawable[] drawableArr = this.drawables;
-                    if (drawableArr[1] != null) {
-                        if (drawableArr[1] instanceof AnimatedEmojiDrawable) {
-                            ((AnimatedEmojiDrawable) drawableArr[1]).removeView(this.parentView);
-                        }
-                        this.drawables[1] = null;
-                    }
-                    Drawable[] drawableArr2 = this.drawables;
-                    drawableArr2[1] = drawableArr2[0];
-                    drawableArr2[0] = drawable;
-                } else {
-                    this.changeProgress.set(1.0f, true);
-                    detach();
-                    this.drawables[0] = drawable;
-                }
-                this.lastColor = -1;
-                this.colorFilter = null;
-                play();
-                View view = this.parentView;
-                if (view != null) {
-                    view.invalidate();
-                }
+            if (this.drawables[0] == drawable) {
+                return;
             }
+            if (z) {
+                this.changeProgress.set(0.0f, true);
+                Drawable[] drawableArr = this.drawables;
+                if (drawableArr[1] != null) {
+                    if (drawableArr[1] instanceof AnimatedEmojiDrawable) {
+                        ((AnimatedEmojiDrawable) drawableArr[1]).removeView(this.parentView);
+                    }
+                    this.drawables[1] = null;
+                }
+                Drawable[] drawableArr2 = this.drawables;
+                drawableArr2[1] = drawableArr2[0];
+                drawableArr2[0] = drawable;
+            } else {
+                this.changeProgress.set(1.0f, true);
+                detach();
+                this.drawables[0] = drawable;
+            }
+            this.lastColor = -1;
+            this.colorFilter = null;
+            play();
+            View view = this.parentView;
+            if (view == null) {
+                return;
+            }
+            view.invalidate();
         }
 
         public void detach() {
@@ -1309,14 +1043,17 @@ public class AnimatedEmojiDrawable extends Drawable {
             }
         }
 
+        @Override // android.graphics.drawable.Drawable
         public int getIntrinsicWidth() {
             return this.size;
         }
 
+        @Override // android.graphics.drawable.Drawable
         public int getIntrinsicHeight() {
             return this.size;
         }
 
+        @Override // android.graphics.drawable.Drawable
         public void setAlpha(int i) {
             this.alpha = i;
         }

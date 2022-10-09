@@ -1,8 +1,9 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_messageService extends TLRPC$Message {
     public static int constructor = NUM;
 
+    @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
@@ -31,19 +32,20 @@ public class TLRPC$TL_messageService extends TLRPC$Message {
         }
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
-        int i = this.out ? this.flags | 2 : this.flags & -3;
+        int i = this.out ? this.flags | 2 : this.flags & (-3);
         this.flags = i;
-        int i2 = this.mentioned ? i | 16 : i & -17;
+        int i2 = this.mentioned ? i | 16 : i & (-17);
         this.flags = i2;
-        int i3 = this.media_unread ? i2 | 32 : i2 & -33;
+        int i3 = this.media_unread ? i2 | 32 : i2 & (-33);
         this.flags = i3;
-        int i4 = this.silent ? i3 | 8192 : i3 & -8193;
+        int i4 = this.silent ? i3 | 8192 : i3 & (-8193);
         this.flags = i4;
-        int i5 = this.post ? i4 | 16384 : i4 & -16385;
+        int i5 = this.post ? i4 | 16384 : i4 & (-16385);
         this.flags = i5;
-        int i6 = this.legacy ? i5 | 524288 : i5 & -524289;
+        int i6 = this.legacy ? i5 | 524288 : i5 & (-524289);
         this.flags = i6;
         abstractSerializedData.writeInt32(i6);
         abstractSerializedData.writeInt32(this.id);

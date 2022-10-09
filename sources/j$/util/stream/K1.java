@@ -1,22 +1,22 @@
 package j$.util.stream;
 
-import j$.util.concurrent.a;
 import j$.util.function.BiFunction;
 import j$.util.function.Function;
-import j$.util.function.b;
-
-public final /* synthetic */ class K1 implements b {
+/* loaded from: classes2.dex */
+public final /* synthetic */ class K1 implements j$.util.function.b {
     public static final /* synthetic */ K1 a = new K1();
 
     private /* synthetic */ K1() {
     }
 
+    @Override // j$.util.function.BiFunction
     public BiFunction andThen(Function function) {
         function.getClass();
-        return new a((BiFunction) this, function);
+        return new j$.util.concurrent.a(this, function);
     }
 
+    @Override // j$.util.function.BiFunction
     public final Object apply(Object obj, Object obj2) {
-        return new Q1((CLASSNAMEy1) obj, (CLASSNAMEy1) obj2);
+        return new Q1((InterfaceCLASSNAMEy1) obj, (InterfaceCLASSNAMEy1) obj2);
     }
 }

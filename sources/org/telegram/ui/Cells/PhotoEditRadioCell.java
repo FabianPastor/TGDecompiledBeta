@@ -9,18 +9,20 @@ import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RadioButton;
-
+/* loaded from: classes3.dex */
 public class PhotoEditRadioCell extends FrameLayout {
     private int currentColor;
     private int currentType;
     private TextView nameTextView;
     private View.OnClickListener onClickListener;
     private LinearLayout tintButtonsContainer;
-    private final int[] tintHighlighsColors = {0, -1076602, -1388894, -859780, -5968466, -7742235, -13726776, -3303195};
-    private final int[] tintShadowColors = {0, -45747, -753630, -13056, -8269183, -9321002, -16747844, -10080879};
+    private final int[] tintHighlighsColors;
+    private final int[] tintShadowColors;
 
     public PhotoEditRadioCell(Context context) {
         super(context);
+        this.tintShadowColors = new int[]{0, -45747, -753630, -13056, -8269183, -9321002, -16747844, -10080879};
+        this.tintHighlighsColors = new int[]{0, -1076602, -1388894, -859780, -5968466, -7742235, -13726776, -3303195};
         TextView textView = new TextView(context);
         this.nameTextView = textView;
         textView.setGravity(5);
@@ -37,13 +39,18 @@ public class PhotoEditRadioCell extends FrameLayout {
             RadioButton radioButton = new RadioButton(context);
             radioButton.setSize(AndroidUtilities.dp(20.0f));
             radioButton.setTag(Integer.valueOf(i));
-            this.tintButtonsContainer.addView(radioButton, LayoutHelper.createLinear(0, -1, 1.0f / ((float) this.tintShadowColors.length)));
-            radioButton.setOnClickListener(new PhotoEditRadioCell$$ExternalSyntheticLambda0(this));
+            this.tintButtonsContainer.addView(radioButton, LayoutHelper.createLinear(0, -1, 1.0f / this.tintShadowColors.length));
+            radioButton.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.Cells.PhotoEditRadioCell$$ExternalSyntheticLambda0
+                @Override // android.view.View.OnClickListener
+                public final void onClick(View view) {
+                    PhotoEditRadioCell.this.lambda$new$0(view);
+                }
+            });
         }
         addView(this.tintButtonsContainer, LayoutHelper.createFrame(-1, 40.0f, 51, 96.0f, 0.0f, 24.0f, 0.0f));
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$new$0(View view) {
         RadioButton radioButton = (RadioButton) view;
         if (this.currentType == 0) {
@@ -82,12 +89,13 @@ public class PhotoEditRadioCell extends FrameLayout {
         }
     }
 
-    public void setOnClickListener(View.OnClickListener onClickListener2) {
-        this.onClickListener = onClickListener2;
+    @Override // android.view.View
+    public void setOnClickListener(View.OnClickListener onClickListener) {
+        this.onClickListener = onClickListener;
     }
 
-    /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
+    @Override // android.widget.FrameLayout, android.view.View
+    protected void onMeasure(int i, int i2) {
         super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(40.0f), NUM));
     }
 

@@ -17,9 +17,8 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
-
+/* loaded from: classes3.dex */
 public class PremiumNotAvailableBottomSheet extends BottomSheet {
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
     public PremiumNotAvailableBottomSheet(BaseFragment baseFragment) {
         super(baseFragment.getParentActivity(), false);
         Activity parentActivity = baseFragment.getParentActivity();
@@ -56,12 +55,12 @@ public class PremiumNotAvailableBottomSheet extends BottomSheet {
         setCustomView(scrollView);
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public static /* synthetic */ void lambda$new$0(View view) {
         try {
             view.getContext().startActivity(new Intent("android.intent.action.VIEW", Uri.parse("https://play.google.com/store/apps/details?id=org.telegram.messenger")));
         } catch (ActivityNotFoundException e) {
-            FileLog.e((Throwable) e);
+            FileLog.e(e);
         }
     }
 }

@@ -1,7 +1,7 @@
 package j$.wrappers;
 
 import java.util.function.ToIntFunction;
-
+/* loaded from: classes2.dex */
 public final /* synthetic */ class E0 implements ToIntFunction {
     final /* synthetic */ j$.util.function.ToIntFunction a;
 
@@ -16,6 +16,7 @@ public final /* synthetic */ class E0 implements ToIntFunction {
         return toIntFunction instanceof D0 ? ((D0) toIntFunction).a : new E0(toIntFunction);
     }
 
+    @Override // java.util.function.ToIntFunction
     public /* synthetic */ int applyAsInt(Object obj) {
         return this.a.applyAsInt(obj);
     }

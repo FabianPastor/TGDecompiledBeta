@@ -7,7 +7,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.TextStyleSpan;
-
+/* loaded from: classes3.dex */
 public class URLSpanMono extends MetricAffectingSpan {
     private int currentEnd;
     private CharSequence currentMessage;
@@ -27,8 +27,9 @@ public class URLSpanMono extends MetricAffectingSpan {
         AndroidUtilities.addToClipboard(this.currentMessage.subSequence(this.currentStart, this.currentEnd).toString());
     }
 
+    @Override // android.text.style.MetricAffectingSpan
     public void updateMeasureState(TextPaint textPaint) {
-        textPaint.setTextSize((float) AndroidUtilities.dp((float) (SharedConfig.fontSize - 1)));
+        textPaint.setTextSize(AndroidUtilities.dp(SharedConfig.fontSize - 1));
         textPaint.setFlags(textPaint.getFlags() | 128);
         TextStyleSpan.TextStyleRun textStyleRun = this.style;
         if (textStyleRun != null) {
@@ -38,8 +39,9 @@ public class URLSpanMono extends MetricAffectingSpan {
         }
     }
 
+    @Override // android.text.style.CharacterStyle
     public void updateDrawState(TextPaint textPaint) {
-        textPaint.setTextSize((float) AndroidUtilities.dp((float) (SharedConfig.fontSize - 1)));
+        textPaint.setTextSize(AndroidUtilities.dp(SharedConfig.fontSize - 1));
         byte b = this.currentType;
         if (b == 2) {
             textPaint.setColor(-1);

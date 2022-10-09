@@ -1,25 +1,29 @@
 package org.telegram.tgnet;
 
 import java.util.ArrayList;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_updateChannelReadMessagesContents extends TLRPC$Update {
     public static int constructor = NUM;
     public long channel_id;
     public ArrayList<Integer> messages = new ArrayList<>();
 
+    @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         this.channel_id = abstractSerializedData.readInt64(z);
         int readInt32 = abstractSerializedData.readInt32(z);
-        if (readInt32 == NUM) {
-            int readInt322 = abstractSerializedData.readInt32(z);
-            for (int i = 0; i < readInt322; i++) {
-                this.messages.add(Integer.valueOf(abstractSerializedData.readInt32(z)));
+        if (readInt32 != NUM) {
+            if (z) {
+                throw new RuntimeException(String.format("wrong Vector magic, got %x", Integer.valueOf(readInt32)));
             }
-        } else if (z) {
-            throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt32)}));
+            return;
+        }
+        int readInt322 = abstractSerializedData.readInt32(z);
+        for (int i = 0; i < readInt322; i++) {
+            this.messages.add(Integer.valueOf(abstractSerializedData.readInt32(z)));
         }
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
         abstractSerializedData.writeInt64(this.channel_id);

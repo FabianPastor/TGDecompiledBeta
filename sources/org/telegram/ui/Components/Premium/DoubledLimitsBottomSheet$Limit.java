@@ -1,5 +1,5 @@
 package org.telegram.ui.Components.Premium;
-
+/* loaded from: classes3.dex */
 class DoubledLimitsBottomSheet$Limit {
     final int defaultLimit;
     final int premiumLimit;
@@ -7,7 +7,8 @@ class DoubledLimitsBottomSheet$Limit {
     final String title;
     public int yOffset;
 
-    /* synthetic */ DoubledLimitsBottomSheet$Limit(String str, String str2, int i, int i2, DoubledLimitsBottomSheet$1 doubledLimitsBottomSheet$1) {
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public /* synthetic */ DoubledLimitsBottomSheet$Limit(String str, String str2, int i, int i2, DoubledLimitsBottomSheet$1 doubledLimitsBottomSheet$1) {
         this(str, str2, i, i2);
     }
 

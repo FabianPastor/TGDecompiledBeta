@@ -1,5 +1,5 @@
 package org.telegram.ui.Components;
-
+/* loaded from: classes3.dex */
 public class IntSize {
     public int height;
     public int width;
@@ -20,10 +20,7 @@ public class IntSize {
             return false;
         }
         IntSize intSize = (IntSize) obj;
-        if (this.width == intSize.width && this.height == intSize.height) {
-            return true;
-        }
-        return false;
+        return this.width == intSize.width && this.height == intSize.height;
     }
 
     public int hashCode() {

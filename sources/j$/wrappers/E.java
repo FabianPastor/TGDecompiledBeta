@@ -1,7 +1,7 @@
 package j$.wrappers;
 
 import java.util.function.DoublePredicate;
-
+/* loaded from: classes2.dex */
 public final /* synthetic */ class E {
     final /* synthetic */ DoublePredicate a;
 

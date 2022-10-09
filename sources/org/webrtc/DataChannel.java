@@ -1,11 +1,12 @@
 package org.webrtc;
 
 import java.nio.ByteBuffer;
-
+/* loaded from: classes3.dex */
 public class DataChannel {
     private long nativeDataChannel;
     private long nativeObserver;
 
+    /* loaded from: classes3.dex */
     public interface Observer {
         @CalledByNative("Observer")
         void onBufferedAmountChange(long j);
@@ -33,51 +34,47 @@ public class DataChannel {
 
     private native void nativeUnregisterObserver(long j);
 
+    /* loaded from: classes3.dex */
     public static class Init {
-        public int id = -1;
-        public int maxRetransmitTimeMs = -1;
-        public int maxRetransmits = -1;
         public boolean negotiated;
         public boolean ordered = true;
+        public int maxRetransmitTimeMs = -1;
+        public int maxRetransmits = -1;
         public String protocol = "";
+        public int id = -1;
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("Init")
-        public boolean getOrdered() {
+        boolean getOrdered() {
             return this.ordered;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("Init")
-        public int getMaxRetransmitTimeMs() {
+        int getMaxRetransmitTimeMs() {
             return this.maxRetransmitTimeMs;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("Init")
-        public int getMaxRetransmits() {
+        int getMaxRetransmits() {
             return this.maxRetransmits;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("Init")
-        public String getProtocol() {
+        String getProtocol() {
             return this.protocol;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("Init")
-        public boolean getNegotiated() {
+        boolean getNegotiated() {
             return this.negotiated;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("Init")
-        public int getId() {
+        int getId() {
             return this.id;
         }
     }
 
+    /* loaded from: classes3.dex */
     public static class Buffer {
         public final boolean binary;
         public final ByteBuffer data;
@@ -89,6 +86,7 @@ public class DataChannel {
         }
     }
 
+    /* loaded from: classes3.dex */
     public enum State {
         CONNECTING,
         OPEN,
@@ -155,18 +153,18 @@ public class DataChannel {
     public void dispose() {
         checkDataChannelExists();
         JniCommon.nativeReleaseRef(this.nativeDataChannel);
-        this.nativeDataChannel = 0;
+        this.nativeDataChannel = 0L;
     }
 
-    /* access modifiers changed from: package-private */
     @CalledByNative
-    public long getNativeDataChannel() {
+    long getNativeDataChannel() {
         return this.nativeDataChannel;
     }
 
     private void checkDataChannelExists() {
-        if (this.nativeDataChannel == 0) {
-            throw new IllegalStateException("DataChannel has been disposed.");
+        if (this.nativeDataChannel != 0) {
+            return;
         }
+        throw new IllegalStateException("DataChannel has been disposed.");
     }
 }

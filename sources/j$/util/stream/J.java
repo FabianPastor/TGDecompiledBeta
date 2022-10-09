@@ -1,74 +1,67 @@
 package j$.util.stream;
-
-import j$.lang.a;
-import j$.lang.b;
-import j$.lang.c;
-import j$.util.function.f;
-import j$.util.function.g;
-import j$.util.function.h;
-import j$.wrappers.E;
-import j$.wrappers.G;
-import j$.wrappers.K;
-
-class J extends CLASSNAMEf3 {
+/* loaded from: classes2.dex */
+class J extends AbstractCLASSNAMEf3 {
     public final /* synthetic */ int b = 0;
     final /* synthetic */ Object c;
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public J(K k, CLASSNAMEm3 m3Var) {
-        super(m3Var);
+    /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+    public J(K k, InterfaceCLASSNAMEm3 interfaceCLASSNAMEm3) {
+        super(interfaceCLASSNAMEm3);
         this.c = k;
     }
 
+    @Override // j$.util.stream.InterfaceCLASSNAMEj3, j$.util.stream.InterfaceCLASSNAMEm3
     public void accept(double d) {
         switch (this.b) {
             case 0:
-                this.a.accept(((K) ((K) this.c).m).a(d));
+                this.a.accept(((j$.wrappers.K) ((K) this.c).m).a(d));
                 return;
             case 1:
-                this.a.accept(((g) ((L) this.c).m).apply(d));
+                this.a.accept((InterfaceCLASSNAMEm3) ((j$.util.function.g) ((L) this.c).m).apply(d));
                 return;
             case 2:
-                this.a.accept(((G) ((M) this.c).m).a(d));
+                this.a.accept(((j$.wrappers.G) ((M) this.c).m).a(d));
                 return;
             case 3:
-                this.a.accept(((h) ((N) this.c).m).applyAsLong(d));
+                this.a.accept(((j$.util.function.h) ((N) this.c).m).applyAsLong(d));
                 return;
             case 4:
-                U u = (U) ((g) ((K) this.c).m).apply(d);
+                U u = (U) ((j$.util.function.g) ((K) this.c).m).apply(d);
                 if (u != null) {
                     try {
-                        u.sequential().j(new F(this));
-                    } catch (Throwable unused) {
-                        break;
+                        u.mo305sequential().j(new F(this));
+                    } finally {
+                        try {
+                            u.close();
+                        } catch (Throwable unused) {
+                        }
                     }
                 }
-                if (u != null) {
-                    u.close();
+                if (u == null) {
                     return;
                 }
                 return;
             case 5:
-                if (((E) ((K) this.c).m).b(d)) {
-                    this.a.accept(d);
+                if (!((j$.wrappers.E) ((K) this.c).m).b(d)) {
                     return;
                 }
+                this.a.accept(d);
                 return;
             default:
-                ((f) ((K) this.c).m).accept(d);
+                ((j$.util.function.f) ((K) this.c).m).accept(d);
                 this.a.accept(d);
                 return;
         }
-        throw th;
     }
 
+    @Override // j$.util.stream.InterfaceCLASSNAMEm3
     public void n(long j) {
         switch (this.b) {
             case 4:
-                this.a.n(-1);
+                this.a.n(-1L);
                 return;
             case 5:
-                this.a.n(-1);
+                this.a.n(-1L);
                 return;
             default:
                 this.a.n(j);
@@ -76,39 +69,39 @@ class J extends CLASSNAMEf3 {
         }
     }
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public J(K k, CLASSNAMEm3 m3Var, a aVar) {
-        super(m3Var);
+    /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+    public J(K k, InterfaceCLASSNAMEm3 interfaceCLASSNAMEm3, j$.lang.a aVar) {
+        super(interfaceCLASSNAMEm3);
         this.c = k;
     }
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public J(K k, CLASSNAMEm3 m3Var, b bVar) {
-        super(m3Var);
+    /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+    public J(K k, InterfaceCLASSNAMEm3 interfaceCLASSNAMEm3, j$.lang.b bVar) {
+        super(interfaceCLASSNAMEm3);
         this.c = k;
     }
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public J(K k, CLASSNAMEm3 m3Var, c cVar) {
-        super(m3Var);
+    /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+    public J(K k, InterfaceCLASSNAMEm3 interfaceCLASSNAMEm3, j$.lang.c cVar) {
+        super(interfaceCLASSNAMEm3);
         this.c = k;
     }
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public J(L l, CLASSNAMEm3 m3Var) {
-        super(m3Var);
+    /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+    public J(L l, InterfaceCLASSNAMEm3 interfaceCLASSNAMEm3) {
+        super(interfaceCLASSNAMEm3);
         this.c = l;
     }
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public J(M m, CLASSNAMEm3 m3Var) {
-        super(m3Var);
+    /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+    public J(M m, InterfaceCLASSNAMEm3 interfaceCLASSNAMEm3) {
+        super(interfaceCLASSNAMEm3);
         this.c = m;
     }
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public J(N n, CLASSNAMEm3 m3Var) {
-        super(m3Var);
+    /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+    public J(N n, InterfaceCLASSNAMEm3 interfaceCLASSNAMEm3) {
+        super(interfaceCLASSNAMEm3);
         this.c = n;
     }
 }

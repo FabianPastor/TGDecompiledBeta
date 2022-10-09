@@ -6,33 +6,38 @@ import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
-
+/* loaded from: classes3.dex */
 public class MapPlaceholderDrawable extends Drawable {
     private Paint linePaint;
     private Paint paint = new Paint();
 
+    @Override // android.graphics.drawable.Drawable
     public int getIntrinsicHeight() {
         return 0;
     }
 
+    @Override // android.graphics.drawable.Drawable
     public int getIntrinsicWidth() {
         return 0;
     }
 
+    @Override // android.graphics.drawable.Drawable
     public int getOpacity() {
         return 0;
     }
 
+    @Override // android.graphics.drawable.Drawable
     public void setAlpha(int i) {
     }
 
+    @Override // android.graphics.drawable.Drawable
     public void setColorFilter(ColorFilter colorFilter) {
     }
 
     public MapPlaceholderDrawable() {
-        Paint paint2 = new Paint();
-        this.linePaint = paint2;
-        paint2.setStrokeWidth((float) AndroidUtilities.dp(1.0f));
+        Paint paint = new Paint();
+        this.linePaint = paint;
+        paint.setStrokeWidth(AndroidUtilities.dp(1.0f));
         if (Theme.getCurrentTheme().isDark()) {
             this.paint.setColor(-14865331);
             this.linePaint.setColor(-15854042);
@@ -42,6 +47,7 @@ public class MapPlaceholderDrawable extends Drawable {
         this.linePaint.setColor(-3752002);
     }
 
+    @Override // android.graphics.drawable.Drawable
     public void draw(Canvas canvas) {
         canvas.drawRect(getBounds(), this.paint);
         int dp = AndroidUtilities.dp(9.0f);
@@ -53,13 +59,13 @@ public class MapPlaceholderDrawable extends Drawable {
         int i4 = 0;
         while (i4 < width) {
             i4++;
-            float f = (float) ((dp * i4) + i);
-            canvas.drawLine(f, (float) i2, f, (float) (getBounds().height() + i2), this.linePaint);
+            float f = (dp * i4) + i;
+            canvas.drawLine(f, i2, f, getBounds().height() + i2, this.linePaint);
         }
         while (i3 < height) {
             i3++;
-            float f2 = (float) ((dp * i3) + i2);
-            canvas.drawLine((float) i, f2, (float) (getBounds().width() + i), f2, this.linePaint);
+            float f2 = (dp * i3) + i2;
+            canvas.drawLine(i, f2, getBounds().width() + i, f2, this.linePaint);
         }
     }
 }

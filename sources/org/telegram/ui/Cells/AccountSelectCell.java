@@ -20,7 +20,7 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
-
+/* loaded from: classes3.dex */
 public class AccountSelectCell extends FrameLayout {
     private int accountNumber;
     private AvatarDrawable avatarDrawable;
@@ -31,16 +31,16 @@ public class AccountSelectCell extends FrameLayout {
 
     public AccountSelectCell(Context context, boolean z) {
         super(context);
-        AvatarDrawable avatarDrawable2 = new AvatarDrawable();
-        this.avatarDrawable = avatarDrawable2;
-        avatarDrawable2.setTextSize(AndroidUtilities.dp(12.0f));
+        AvatarDrawable avatarDrawable = new AvatarDrawable();
+        this.avatarDrawable = avatarDrawable;
+        avatarDrawable.setTextSize(AndroidUtilities.dp(12.0f));
         BackupImageView backupImageView = new BackupImageView(context);
         this.imageView = backupImageView;
         backupImageView.setRoundRadius(AndroidUtilities.dp(18.0f));
         addView(this.imageView, LayoutHelper.createFrame(36, 36.0f, 51, 10.0f, 10.0f, 0.0f, 0.0f));
-        TextView textView2 = new TextView(context);
-        this.textView = textView2;
-        textView2.setTextSize(1, 15.0f);
+        TextView textView = new TextView(context);
+        this.textView = textView;
+        textView.setTextSize(1, 15.0f);
         this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
@@ -51,9 +51,9 @@ public class AccountSelectCell extends FrameLayout {
             addView(this.textView, LayoutHelper.createFrame(-2, -2.0f, 51, 61.0f, 7.0f, 8.0f, 0.0f));
             this.textView.setTextColor(Theme.getColor("voipgroup_nameText"));
             this.textView.setText(LocaleController.getString("VoipGroupDisplayAs", R.string.VoipGroupDisplayAs));
-            TextView textView3 = new TextView(context);
-            this.infoTextView = textView3;
-            textView3.setTextColor(Theme.getColor("voipgroup_lastSeenText"));
+            TextView textView2 = new TextView(context);
+            this.infoTextView = textView2;
+            textView2.setTextColor(Theme.getColor("voipgroup_lastSeenText"));
             this.infoTextView.setTextSize(1, 15.0f);
             this.infoTextView.setLines(1);
             this.infoTextView.setMaxLines(1);
@@ -66,25 +66,25 @@ public class AccountSelectCell extends FrameLayout {
         }
         addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, 51, 61.0f, 0.0f, 56.0f, 0.0f));
         this.textView.setTextColor(Theme.getColor("actionBarDefaultSubmenuItem"));
-        ImageView imageView2 = new ImageView(context);
-        this.checkImageView = imageView2;
-        imageView2.setImageResource(R.drawable.account_check);
+        ImageView imageView = new ImageView(context);
+        this.checkImageView = imageView;
+        imageView.setImageResource(R.drawable.account_check);
         this.checkImageView.setScaleType(ImageView.ScaleType.CENTER);
         this.checkImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chats_menuItemCheck"), PorterDuff.Mode.MULTIPLY));
         addView(this.checkImageView, LayoutHelper.createFrame(40, -1.0f, 53, 0.0f, 0.0f, 6.0f, 0.0f));
     }
 
-    /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
-        if (this.checkImageView == null && (this.infoTextView == null || getLayoutParams().width == -2)) {
-            super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(56.0f), NUM));
-        } else {
+    @Override // android.widget.FrameLayout, android.view.View
+    protected void onMeasure(int i, int i2) {
+        if (this.checkImageView != null || (this.infoTextView != null && getLayoutParams().width != -2)) {
             super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(56.0f), NUM));
+        } else {
+            super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(56.0f), NUM));
         }
     }
 
-    /* access modifiers changed from: protected */
-    public void onAttachedToWindow() {
+    @Override // android.view.ViewGroup, android.view.View
+    protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         if (this.infoTextView == null) {
             this.textView.setTextColor(Theme.getColor("chats_menuItemText"));

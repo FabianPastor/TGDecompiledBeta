@@ -30,7 +30,7 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.MotionBackgroundDrawable;
 import org.webrtc.RendererCommon;
 import org.webrtc.TextureViewRenderer;
-
+/* loaded from: classes3.dex */
 public class VoIPTextureView extends FrameLayout {
     public static int SCALE_TYPE_ADAPTIVE = 2;
     public static int SCALE_TYPE_FILL = 0;
@@ -65,10 +65,8 @@ public class VoIPTextureView extends FrameLayout {
     public final TextureViewRenderer renderer;
     float roundRadius;
     public float scaleTextureToFill;
-    /* access modifiers changed from: private */
-    public float scaleTextureToFillBlur;
-    /* access modifiers changed from: private */
-    public float scaleThumb;
+    private float scaleTextureToFillBlur;
+    private float scaleThumb;
     public int scaleType;
     private boolean screencast;
     private ImageView screencastImage;
@@ -81,63 +79,61 @@ public class VoIPTextureView extends FrameLayout {
         this(context, z, z2, true, false);
     }
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
     public VoIPTextureView(Context context, boolean z, boolean z2, boolean z3, boolean z4) {
         super(context);
-        Context context2 = context;
-        boolean z5 = z2;
         this.stubVisibleProgress = 1.0f;
         this.animateOnNextLayoutAnimations = new ArrayList<>();
         this.aninateFromScale = 1.0f;
         this.aninateFromScaleBlur = 1.0f;
         this.animateFromThumbScale = 1.0f;
-        this.applyRotation = z5;
-        ImageView imageView2 = new ImageView(context2);
-        this.imageView = imageView2;
-        AnonymousClass1 r5 = new TextureViewRenderer(context2) {
+        this.applyRotation = z2;
+        ImageView imageView = new ImageView(context);
+        this.imageView = imageView;
+        TextureViewRenderer textureViewRenderer = new TextureViewRenderer(context) { // from class: org.telegram.ui.Components.voip.VoIPTextureView.1
+            @Override // org.webrtc.TextureViewRenderer, org.webrtc.RendererCommon.RendererEvents
             public void onFirstFrameRendered() {
                 super.onFirstFrameRendered();
                 VoIPTextureView.this.onFirstFrameRendered();
             }
 
-            /* access modifiers changed from: protected */
-            public void onSizeChanged(int i, int i2, int i3, int i4) {
+            @Override // android.view.TextureView, android.view.View
+            protected void onSizeChanged(int i, int i2, int i3, int i4) {
                 super.onSizeChanged(i, i2, i3, i4);
             }
         };
-        this.renderer = r5;
-        r5.setFpsReduction(30.0f);
-        r5.setOpaque(false);
-        r5.setEnableHardwareScaler(true);
-        r5.setIsCamera(!z5);
-        if (!z && z5) {
-            View view = new View(context2);
+        this.renderer = textureViewRenderer;
+        textureViewRenderer.setFpsReduction(30.0f);
+        textureViewRenderer.setOpaque(false);
+        textureViewRenderer.setEnableHardwareScaler(true);
+        textureViewRenderer.setIsCamera(!z2);
+        if (!z && z2) {
+            View view = new View(context);
             this.backgroundView = view;
             view.setBackgroundColor(-14999773);
             addView(this.backgroundView, LayoutHelper.createFrame(-1, -1.0f));
             if (z4) {
-                TextureView textureView = new TextureView(context2);
+                TextureView textureView = new TextureView(context);
                 this.blurRenderer = textureView;
                 addView(textureView, LayoutHelper.createFrame(-1, -2, 17));
             }
-            r5.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FIT);
-            addView(r5, LayoutHelper.createFrame(-1, -2, 17));
+            textureViewRenderer.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FIT);
+            addView(textureViewRenderer, LayoutHelper.createFrame(-1, -2, 17));
         } else if (!z) {
             if (z4) {
-                TextureView textureView2 = new TextureView(context2);
+                TextureView textureView2 = new TextureView(context);
                 this.blurRenderer = textureView2;
                 addView(textureView2, LayoutHelper.createFrame(-1, -2, 17));
             }
-            addView(r5, LayoutHelper.createFrame(-1, -2, 17));
+            addView(textureViewRenderer, LayoutHelper.createFrame(-1, -2, 17));
         } else {
             if (z4) {
-                TextureView textureView3 = new TextureView(context2);
+                TextureView textureView3 = new TextureView(context);
                 this.blurRenderer = textureView3;
                 addView(textureView3, LayoutHelper.createFrame(-1, -2, 17));
             }
-            addView(r5);
+            addView(textureViewRenderer);
         }
-        addView(imageView2);
+        addView(imageView);
         TextureView textureView4 = this.blurRenderer;
         if (textureView4 != null) {
             textureView4.setOpaque(false);
@@ -147,34 +143,35 @@ public class VoIPTextureView extends FrameLayout {
         frameLayout.setBackground(new MotionBackgroundDrawable(-14602694, -13935795, -14395293, -14203560, true));
         addView(this.screencastView, LayoutHelper.createFrame(-1, -1.0f));
         this.screencastView.setVisibility(8);
-        ImageView imageView3 = new ImageView(getContext());
-        this.screencastImage = imageView3;
-        imageView3.setScaleType(ImageView.ScaleType.CENTER);
+        ImageView imageView2 = new ImageView(getContext());
+        this.screencastImage = imageView2;
+        imageView2.setScaleType(ImageView.ScaleType.CENTER);
         this.screencastImage.setImageResource(R.drawable.screencast_big);
         this.screencastView.addView(this.screencastImage, LayoutHelper.createFrame(82, 82.0f, 17, 0.0f, 0.0f, 0.0f, 60.0f));
         TextView textView = new TextView(getContext());
         this.screencastText = textView;
         textView.setText(LocaleController.getString("VoipVideoScreenSharing", R.string.VoipVideoScreenSharing));
         this.screencastText.setGravity(17);
-        this.screencastText.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
+        this.screencastText.setLineSpacing(AndroidUtilities.dp(2.0f), 1.0f);
         this.screencastText.setTextColor(-1);
         this.screencastText.setTextSize(1, 15.0f);
         this.screencastText.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.screencastView.addView(this.screencastText, LayoutHelper.createFrame(-1, -2.0f, 17, 21.0f, 28.0f, 21.0f, 0.0f));
         if (z3 && Build.VERSION.SDK_INT >= 21) {
-            setOutlineProvider(new ViewOutlineProvider() {
+            setOutlineProvider(new ViewOutlineProvider() { // from class: org.telegram.ui.Components.voip.VoIPTextureView.2
+                @Override // android.view.ViewOutlineProvider
                 @TargetApi(21)
-                public void getOutline(View view, Outline outline) {
+                public void getOutline(View view2, Outline outline) {
                     VoIPTextureView voIPTextureView = VoIPTextureView.this;
                     if (voIPTextureView.roundRadius < 1.0f) {
-                        outline.setRect((int) voIPTextureView.currentClipHorizontal, (int) voIPTextureView.currentClipVertical, (int) (((float) view.getMeasuredWidth()) - VoIPTextureView.this.currentClipHorizontal), (int) (((float) view.getMeasuredHeight()) - VoIPTextureView.this.currentClipVertical));
+                        outline.setRect((int) voIPTextureView.currentClipHorizontal, (int) voIPTextureView.currentClipVertical, (int) (view2.getMeasuredWidth() - VoIPTextureView.this.currentClipHorizontal), (int) (view2.getMeasuredHeight() - VoIPTextureView.this.currentClipVertical));
                         return;
                     }
                     int i = (int) voIPTextureView.currentClipHorizontal;
                     int i2 = (int) voIPTextureView.currentClipVertical;
-                    int measuredWidth = (int) (((float) view.getMeasuredWidth()) - VoIPTextureView.this.currentClipHorizontal);
+                    int measuredWidth = (int) (view2.getMeasuredWidth() - VoIPTextureView.this.currentClipHorizontal);
                     VoIPTextureView voIPTextureView2 = VoIPTextureView.this;
-                    outline.setRoundRect(i, i2, measuredWidth, (int) (((float) view.getMeasuredHeight()) - voIPTextureView2.currentClipVertical), voIPTextureView2.roundRadius);
+                    outline.setRoundRect(i, i2, measuredWidth, (int) (view2.getMeasuredHeight() - voIPTextureView2.currentClipVertical), voIPTextureView2.roundRadius);
                 }
             });
             setClipToOutline(true);
@@ -186,33 +183,34 @@ public class VoIPTextureView extends FrameLayout {
                 if (decodeFile == null) {
                     this.cameraLastBitmap = BitmapFactory.decodeFile(new File(ApplicationLoader.getFilesDirFixed(), "icthumb.jpg").getAbsolutePath());
                 }
-                imageView2.setImageBitmap(this.cameraLastBitmap);
-                imageView2.setScaleType(ImageView.ScaleType.FIT_XY);
+                imageView.setImageBitmap(this.cameraLastBitmap);
+                imageView.setScaleType(ImageView.ScaleType.FIT_XY);
             } catch (Throwable unused) {
             }
         }
-        if (!z5) {
+        if (!z2) {
             this.renderer.setScreenRotation(((WindowManager) getContext().getSystemService("window")).getDefaultDisplay().getRotation());
         }
     }
 
     public void setScreenshareMiniProgress(float f, boolean z) {
         float f2;
-        if (this.screencast) {
-            float scaleX = ((View) getParent()).getScaleX();
-            float f3 = 1.0f;
-            this.screencastText.setAlpha(1.0f - f);
-            if (!z) {
-                f3 = 1.0f / scaleX;
-                f2 = (0.4f / scaleX) * f;
-            } else {
-                f2 = 0.4f * f;
-            }
-            float f4 = f3 - f2;
-            this.screencastImage.setScaleX(f4);
-            this.screencastImage.setScaleY(f4);
-            this.screencastImage.setTranslationY(((float) AndroidUtilities.dp(60.0f)) * f);
+        if (!this.screencast) {
+            return;
         }
+        float scaleX = ((View) getParent()).getScaleX();
+        float f3 = 1.0f;
+        this.screencastText.setAlpha(1.0f - f);
+        if (!z) {
+            f3 = 1.0f / scaleX;
+            f2 = (0.4f / scaleX) * f;
+        } else {
+            f2 = 0.4f * f;
+        }
+        float f4 = f3 - f2;
+        this.screencastImage.setScaleX(f4);
+        this.screencastImage.setScaleY(f4);
+        this.screencastImage.setTranslationY(AndroidUtilities.dp(60.0f) * f);
     }
 
     public void setIsScreencast(boolean z) {
@@ -229,37 +227,40 @@ public class VoIPTextureView extends FrameLayout {
         }
         this.renderer.setVisibility(0);
         TextureView textureView2 = this.blurRenderer;
-        if (textureView2 != null) {
-            textureView2.setVisibility(0);
+        if (textureView2 == null) {
+            return;
         }
+        textureView2.setVisibility(0);
     }
 
-    /* access modifiers changed from: protected */
-    public void onFirstFrameRendered() {
+    protected void onFirstFrameRendered() {
         invalidate();
         if (this.renderer.getAlpha() != 1.0f) {
-            this.renderer.animate().setDuration(300).alpha(1.0f);
+            this.renderer.animate().setDuration(300L).alpha(1.0f);
         }
         TextureView textureView = this.blurRenderer;
-        if (textureView != null && textureView.getAlpha() != 1.0f) {
-            this.blurRenderer.animate().setDuration(300).alpha(1.0f);
+        if (textureView == null || textureView.getAlpha() == 1.0f) {
+            return;
         }
+        this.blurRenderer.animate().setDuration(300L).alpha(1.0f);
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
+    @Override // android.view.ViewGroup, android.view.View
     public void dispatchDraw(Canvas canvas) {
         super.dispatchDraw(canvas);
-        if (this.imageView.getVisibility() == 0 && this.renderer.isFirstFrameRendered()) {
-            float f = this.stubVisibleProgress - 0.10666667f;
-            this.stubVisibleProgress = f;
-            if (f <= 0.0f) {
-                this.stubVisibleProgress = 0.0f;
-                this.imageView.setVisibility(8);
-                return;
-            }
-            invalidate();
-            this.imageView.setAlpha(this.stubVisibleProgress);
+        if (this.imageView.getVisibility() != 0 || !this.renderer.isFirstFrameRendered()) {
+            return;
         }
+        float f = this.stubVisibleProgress - 0.10666667f;
+        this.stubVisibleProgress = f;
+        if (f <= 0.0f) {
+            this.stubVisibleProgress = 0.0f;
+            this.imageView.setVisibility(8);
+            return;
+        }
+        invalidate();
+        this.imageView.setAlpha(this.stubVisibleProgress);
     }
 
     public void setRoundCorners(float f) {
@@ -275,62 +276,67 @@ public class VoIPTextureView extends FrameLayout {
 
     public void saveCameraLastBitmap() {
         Bitmap bitmap = this.renderer.getBitmap(150, 150);
-        if (bitmap != null && bitmap.getPixel(0, 0) != 0) {
-            Utilities.blurBitmap(bitmap, 3, 1, bitmap.getWidth(), bitmap.getHeight(), bitmap.getRowBytes());
-            try {
-                FileOutputStream fileOutputStream = new FileOutputStream(new File(ApplicationLoader.getFilesDirFixed(), "voip_icthumb.jpg"));
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
-                fileOutputStream.close();
-            } catch (Throwable unused) {
-            }
+        if (bitmap == null || bitmap.getPixel(0, 0) == 0) {
+            return;
+        }
+        Utilities.blurBitmap(bitmap, 3, 1, bitmap.getWidth(), bitmap.getHeight(), bitmap.getRowBytes());
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream(new File(ApplicationLoader.getFilesDirFixed(), "voip_icthumb.jpg"));
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
+            fileOutputStream.close();
+        } catch (Throwable unused) {
         }
     }
 
     public void setStub(VoIPTextureView voIPTextureView) {
-        if (!this.screencast) {
-            Bitmap bitmap = voIPTextureView.renderer.getBitmap();
-            if (bitmap == null || bitmap.getPixel(0, 0) == 0) {
-                this.imageView.setImageDrawable(voIPTextureView.imageView.getDrawable());
-            } else {
-                this.imageView.setImageBitmap(bitmap);
-                this.imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            }
-            this.stubVisibleProgress = 1.0f;
-            this.imageView.setVisibility(0);
-            this.imageView.setAlpha(1.0f);
+        if (this.screencast) {
+            return;
         }
+        Bitmap bitmap = voIPTextureView.renderer.getBitmap();
+        if (bitmap == null || bitmap.getPixel(0, 0) == 0) {
+            this.imageView.setImageDrawable(voIPTextureView.imageView.getDrawable());
+        } else {
+            this.imageView.setImageBitmap(bitmap);
+            this.imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        }
+        this.stubVisibleProgress = 1.0f;
+        this.imageView.setVisibility(0);
+        this.imageView.setAlpha(1.0f);
     }
 
     public void animateToLayout() {
-        if (!this.animateOnNextLayout && getMeasuredHeight() != 0 && getMeasuredWidth() != 0) {
-            this.animateFromHeight = getMeasuredHeight();
-            this.animateFromWidth = getMeasuredWidth();
-            if (!this.animateWithParent || getParent() == null) {
-                this.animateFromY = getY();
-                this.animateFromX = getX();
-            } else {
-                View view = (View) getParent();
-                this.animateFromY = view.getY();
-                this.animateFromX = view.getX();
-            }
-            this.aninateFromScale = this.scaleTextureToFill;
-            this.aninateFromScaleBlur = this.scaleTextureToFillBlur;
-            this.animateFromThumbScale = this.scaleThumb;
-            this.animateFromRendererW = (float) this.renderer.getMeasuredWidth();
-            this.renderer.getMeasuredHeight();
-            this.animateOnNextLayout = true;
-            requestLayout();
+        if (this.animateOnNextLayout || getMeasuredHeight() == 0 || getMeasuredWidth() == 0) {
+            return;
         }
+        this.animateFromHeight = getMeasuredHeight();
+        this.animateFromWidth = getMeasuredWidth();
+        if (this.animateWithParent && getParent() != null) {
+            View view = (View) getParent();
+            this.animateFromY = view.getY();
+            this.animateFromX = view.getX();
+        } else {
+            this.animateFromY = getY();
+            this.animateFromX = getX();
+        }
+        this.aninateFromScale = this.scaleTextureToFill;
+        this.aninateFromScaleBlur = this.scaleTextureToFillBlur;
+        this.animateFromThumbScale = this.scaleThumb;
+        this.animateFromRendererW = this.renderer.getMeasuredWidth();
+        this.renderer.getMeasuredHeight();
+        this.animateOnNextLayout = true;
+        requestLayout();
     }
 
+    @Override // android.view.View, android.view.ViewParent
     public void requestLayout() {
-        if (!this.ignoreLayout) {
-            super.requestLayout();
+        if (this.ignoreLayout) {
+            return;
         }
+        super.requestLayout();
     }
 
-    /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
+    @Override // android.widget.FrameLayout, android.view.View
+    protected void onMeasure(int i, int i2) {
         if (!this.applyRotation) {
             this.ignoreLayout = true;
             this.renderer.setScreenRotation(((WindowManager) getContext().getSystemService("window")).getDefaultDisplay().getRotation());
@@ -342,7 +348,7 @@ public class VoIPTextureView extends FrameLayout {
         this.renderer.updateRotation();
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
     public void updateRendererSize() {
         TextureView textureView = this.blurRenderer;
         if (textureView != null) {
@@ -351,24 +357,25 @@ public class VoIPTextureView extends FrameLayout {
         }
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
+    @Override // android.widget.FrameLayout, android.view.ViewGroup, android.view.View
     public void onLayout(boolean z, int i, int i2, int i3, int i4) {
-        float f;
-        float f2;
+        float top;
+        float left;
         super.onLayout(z, i, i2, i3, i4);
         if (this.blurRenderer != null) {
-            this.scaleTextureToFillBlur = Math.max(((float) getMeasuredHeight()) / ((float) this.blurRenderer.getMeasuredHeight()), ((float) getMeasuredWidth()) / ((float) this.blurRenderer.getMeasuredWidth()));
+            this.scaleTextureToFillBlur = Math.max(getMeasuredHeight() / this.blurRenderer.getMeasuredHeight(), getMeasuredWidth() / this.blurRenderer.getMeasuredWidth());
         }
         if (!this.applyRotation) {
             this.renderer.updateRotation();
         }
         if (this.scaleType == SCALE_TYPE_NONE) {
             TextureView textureView = this.blurRenderer;
-            if (textureView != null) {
-                textureView.setScaleX(this.scaleTextureToFillBlur);
-                this.blurRenderer.setScaleY(this.scaleTextureToFillBlur);
+            if (textureView == null) {
                 return;
             }
+            textureView.setScaleX(this.scaleTextureToFillBlur);
+            this.blurRenderer.setScaleY(this.scaleTextureToFillBlur);
             return;
         }
         if (this.renderer.getMeasuredHeight() == 0 || this.renderer.getMeasuredWidth() == 0 || getMeasuredHeight() == 0 || getMeasuredWidth() == 0) {
@@ -380,20 +387,20 @@ public class VoIPTextureView extends FrameLayout {
         } else {
             int i5 = this.scaleType;
             if (i5 == SCALE_TYPE_FILL) {
-                this.scaleTextureToFill = Math.max(((float) getMeasuredHeight()) / ((float) this.renderer.getMeasuredHeight()), ((float) getMeasuredWidth()) / ((float) this.renderer.getMeasuredWidth()));
+                this.scaleTextureToFill = Math.max(getMeasuredHeight() / this.renderer.getMeasuredHeight(), getMeasuredWidth() / this.renderer.getMeasuredWidth());
             } else if (i5 == SCALE_TYPE_ADAPTIVE) {
-                if (Math.abs((((float) getMeasuredHeight()) / ((float) getMeasuredWidth())) - 1.0f) < 0.02f) {
-                    this.scaleTextureToFill = Math.max(((float) getMeasuredHeight()) / ((float) this.renderer.getMeasuredHeight()), ((float) getMeasuredWidth()) / ((float) this.renderer.getMeasuredWidth()));
-                } else if (getMeasuredWidth() <= getMeasuredHeight() || this.renderer.getMeasuredHeight() <= this.renderer.getMeasuredWidth()) {
-                    this.scaleTextureToFill = Math.min(((float) getMeasuredHeight()) / ((float) this.renderer.getMeasuredHeight()), ((float) getMeasuredWidth()) / ((float) this.renderer.getMeasuredWidth()));
+                if (Math.abs((getMeasuredHeight() / getMeasuredWidth()) - 1.0f) < 0.02f) {
+                    this.scaleTextureToFill = Math.max(getMeasuredHeight() / this.renderer.getMeasuredHeight(), getMeasuredWidth() / this.renderer.getMeasuredWidth());
+                } else if (getMeasuredWidth() > getMeasuredHeight() && this.renderer.getMeasuredHeight() > this.renderer.getMeasuredWidth()) {
+                    this.scaleTextureToFill = Math.max(getMeasuredHeight() / this.renderer.getMeasuredHeight(), (getMeasuredWidth() / 2.0f) / this.renderer.getMeasuredWidth());
                 } else {
-                    this.scaleTextureToFill = Math.max(((float) getMeasuredHeight()) / ((float) this.renderer.getMeasuredHeight()), (((float) getMeasuredWidth()) / 2.0f) / ((float) this.renderer.getMeasuredWidth()));
+                    this.scaleTextureToFill = Math.min(getMeasuredHeight() / this.renderer.getMeasuredHeight(), getMeasuredWidth() / this.renderer.getMeasuredWidth());
                 }
             } else if (i5 == SCALE_TYPE_FIT) {
-                this.scaleTextureToFill = Math.min(((float) getMeasuredHeight()) / ((float) this.renderer.getMeasuredHeight()), ((float) getMeasuredWidth()) / ((float) this.renderer.getMeasuredWidth()));
+                this.scaleTextureToFill = Math.min(getMeasuredHeight() / this.renderer.getMeasuredHeight(), getMeasuredWidth() / this.renderer.getMeasuredWidth());
                 if (this.clipToTexture && !this.animateWithParent && this.currentAnimation == null && !this.animateOnNextLayout) {
-                    this.currentClipHorizontal = ((float) (getMeasuredWidth() - this.renderer.getMeasuredWidth())) / 2.0f;
-                    this.currentClipVertical = ((float) (getMeasuredHeight() - this.renderer.getMeasuredHeight())) / 2.0f;
+                    this.currentClipHorizontal = (getMeasuredWidth() - this.renderer.getMeasuredWidth()) / 2.0f;
+                    this.currentClipVertical = (getMeasuredHeight() - this.renderer.getMeasuredHeight()) / 2.0f;
                     if (Build.VERSION.SDK_INT >= 21) {
                         invalidateOutline();
                     }
@@ -401,36 +408,36 @@ public class VoIPTextureView extends FrameLayout {
             }
         }
         if (this.thumb != null) {
-            this.scaleThumb = Math.max(((float) getMeasuredWidth()) / ((float) this.thumb.getWidth()), ((float) getMeasuredHeight()) / ((float) this.thumb.getHeight()));
+            this.scaleThumb = Math.max(getMeasuredWidth() / this.thumb.getWidth(), getMeasuredHeight() / this.thumb.getHeight());
         }
         if (this.animateOnNextLayout) {
-            this.aninateFromScale /= ((float) this.renderer.getMeasuredWidth()) / this.animateFromRendererW;
-            this.aninateFromScaleBlur /= ((float) this.renderer.getMeasuredWidth()) / this.animateFromRendererW;
+            this.aninateFromScale /= this.renderer.getMeasuredWidth() / this.animateFromRendererW;
+            this.aninateFromScaleBlur /= this.renderer.getMeasuredWidth() / this.animateFromRendererW;
             this.animateOnNextLayout = false;
-            if (!this.animateWithParent || getParent() == null) {
-                f2 = this.animateFromY - ((float) getTop());
-                f = this.animateFromX - ((float) getLeft());
-            } else {
+            if (this.animateWithParent && getParent() != null) {
                 View view = (View) getParent();
-                f2 = this.animateFromY - ((float) view.getTop());
-                f = this.animateFromX - ((float) view.getLeft());
+                top = this.animateFromY - view.getTop();
+                left = this.animateFromX - view.getLeft();
+            } else {
+                top = this.animateFromY - getTop();
+                left = this.animateFromX - getLeft();
             }
             this.clipVertical = 0.0f;
             this.clipHorizontal = 0.0f;
             if (this.animateFromHeight != getMeasuredHeight()) {
-                float measuredHeight = ((float) (getMeasuredHeight() - this.animateFromHeight)) / 2.0f;
+                float measuredHeight = (getMeasuredHeight() - this.animateFromHeight) / 2.0f;
                 this.clipVertical = measuredHeight;
-                f2 -= measuredHeight;
+                top -= measuredHeight;
             }
-            float f3 = f2;
+            final float f = top;
             if (this.animateFromWidth != getMeasuredWidth()) {
-                float measuredWidth = ((float) (getMeasuredWidth() - this.animateFromWidth)) / 2.0f;
+                float measuredWidth = (getMeasuredWidth() - this.animateFromWidth) / 2.0f;
                 this.clipHorizontal = measuredWidth;
-                f -= measuredWidth;
+                left -= measuredWidth;
             }
-            float f4 = f;
-            setTranslationY(f3);
-            setTranslationX(f4);
+            final float f2 = left;
+            setTranslationY(f);
+            setTranslationX(f2);
             ValueAnimator valueAnimator = this.currentAnimation;
             if (valueAnimator != null) {
                 valueAnimator.removeAllListeners();
@@ -449,20 +456,26 @@ public class VoIPTextureView extends FrameLayout {
                 invalidateOutline();
             }
             invalidate();
-            float f5 = this.aninateFromScale;
-            float f6 = this.aninateFromScaleBlur;
-            float f7 = this.animateFromThumbScale;
-            ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{1.0f, 0.0f});
+            final float f3 = this.aninateFromScale;
+            final float f4 = this.aninateFromScaleBlur;
+            final float f5 = this.animateFromThumbScale;
+            ValueAnimator ofFloat = ValueAnimator.ofFloat(1.0f, 0.0f);
             this.currentAnimation = ofFloat;
-            ofFloat.addUpdateListener(new VoIPTextureView$$ExternalSyntheticLambda0(this, f5, f6, f4, f3, f7));
+            ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() { // from class: org.telegram.ui.Components.voip.VoIPTextureView$$ExternalSyntheticLambda0
+                @Override // android.animation.ValueAnimator.AnimatorUpdateListener
+                public final void onAnimationUpdate(ValueAnimator valueAnimator2) {
+                    VoIPTextureView.this.lambda$onLayout$0(f3, f4, f2, f, f5, valueAnimator2);
+                }
+            });
             long j = this.animateNextDuration;
             if (j != 0) {
                 this.currentAnimation.setDuration(j);
             } else {
-                this.currentAnimation.setDuration(350);
+                this.currentAnimation.setDuration(350L);
             }
             this.currentAnimation.setInterpolator(CubicBezierInterpolator.DEFAULT);
-            this.currentAnimation.addListener(new AnimatorListenerAdapter() {
+            this.currentAnimation.addListener(new AnimatorListenerAdapter() { // from class: org.telegram.ui.Components.voip.VoIPTextureView.3
+                @Override // android.animation.AnimatorListenerAdapter, android.animation.Animator.AnimatorListener
                 public void onAnimationEnd(Animator animator) {
                     VoIPTextureView voIPTextureView = VoIPTextureView.this;
                     voIPTextureView.currentClipVertical = 0.0f;
@@ -471,9 +484,9 @@ public class VoIPTextureView extends FrameLayout {
                     VoIPTextureView voIPTextureView2 = VoIPTextureView.this;
                     voIPTextureView2.renderer.setScaleY(voIPTextureView2.scaleTextureToFill);
                     VoIPTextureView voIPTextureView3 = VoIPTextureView.this;
-                    TextureView textureView = voIPTextureView3.blurRenderer;
-                    if (textureView != null) {
-                        textureView.setScaleX(voIPTextureView3.scaleTextureToFillBlur);
+                    TextureView textureView3 = voIPTextureView3.blurRenderer;
+                    if (textureView3 != null) {
+                        textureView3.setScaleX(voIPTextureView3.scaleTextureToFillBlur);
                         VoIPTextureView voIPTextureView4 = VoIPTextureView.this;
                         voIPTextureView4.blurRenderer.setScaleY(voIPTextureView4.scaleTextureToFillBlur);
                     }
@@ -491,7 +504,7 @@ public class VoIPTextureView extends FrameLayout {
                 }
             }
             this.animateOnNextLayoutAnimations.clear();
-            this.animateNextDuration = 0;
+            this.animateNextDuration = 0L;
         } else if (this.currentAnimation == null) {
             this.renderer.setScaleX(this.scaleTextureToFill);
             this.renderer.setScaleY(this.scaleTextureToFill);
@@ -504,7 +517,7 @@ public class VoIPTextureView extends FrameLayout {
         }
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$onLayout$0(float f, float f2, float f3, float f4, float f5, ValueAnimator valueAnimator) {
         float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         float f6 = 1.0f - floatValue;
@@ -543,7 +556,7 @@ public class VoIPTextureView extends FrameLayout {
 
     public void cancelAnimation() {
         this.animateOnNextLayout = false;
-        this.animateNextDuration = 0;
+        this.animateNextDuration = 0L;
     }
 
     public void setAnimateNextDuration(long j) {
@@ -558,9 +571,10 @@ public class VoIPTextureView extends FrameLayout {
         TextureView textureView = this.blurRenderer;
         if (textureView != null) {
             this.renderer.setBackgroundRenderer(textureView);
-            if (!this.renderer.isFirstFrameRendered()) {
-                this.blurRenderer.setAlpha(0.0f);
+            if (this.renderer.isFirstFrameRendered()) {
+                return;
             }
+            this.blurRenderer.setAlpha(0.0f);
         }
     }
 

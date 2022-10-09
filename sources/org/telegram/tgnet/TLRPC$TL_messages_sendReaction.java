@@ -1,7 +1,7 @@
 package org.telegram.tgnet;
 
 import java.util.ArrayList;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_messages_sendReaction extends TLObject {
     public static int constructor = -NUM;
     public boolean add_to_recent;
@@ -11,15 +11,17 @@ public class TLRPC$TL_messages_sendReaction extends TLObject {
     public TLRPC$InputPeer peer;
     public ArrayList<TLRPC$Reaction> reaction = new ArrayList<>();
 
+    @Override // org.telegram.tgnet.TLObject
     public TLObject deserializeResponse(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         return TLRPC$Updates.TLdeserialize(abstractSerializedData, i, z);
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
-        int i = this.big ? this.flags | 2 : this.flags & -3;
+        int i = this.big ? this.flags | 2 : this.flags & (-3);
         this.flags = i;
-        int i2 = this.add_to_recent ? i | 4 : i & -5;
+        int i2 = this.add_to_recent ? i | 4 : i & (-5);
         this.flags = i2;
         abstractSerializedData.writeInt32(i2);
         this.peer.serializeToStream(abstractSerializedData);

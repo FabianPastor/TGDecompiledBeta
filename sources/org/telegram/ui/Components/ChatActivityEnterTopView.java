@@ -6,7 +6,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
+/* loaded from: classes3.dex */
 public class ChatActivityEnterTopView extends FrameLayout {
     private boolean editMode;
     private EditView editView;
@@ -23,11 +23,11 @@ public class ChatActivityEnterTopView extends FrameLayout {
         }
     }
 
-    public void addEditView(EditView editView2, FrameLayout.LayoutParams layoutParams) {
+    public void addEditView(EditView editView, FrameLayout.LayoutParams layoutParams) {
         if (this.editView == null) {
-            this.editView = editView2;
-            editView2.setVisibility(8);
-            addView(editView2, layoutParams);
+            this.editView = editView;
+            editView.setVisibility(8);
+            addView(editView, layoutParams);
         }
     }
 
@@ -36,11 +36,11 @@ public class ChatActivityEnterTopView extends FrameLayout {
             this.editMode = z;
             int i = 8;
             this.replyView.setVisibility(z ? 8 : 0);
-            EditView editView2 = this.editView;
+            EditView editView = this.editView;
             if (z) {
                 i = 0;
             }
-            editView2.setVisibility(i);
+            editView.setVisibility(i);
         }
     }
 
@@ -52,11 +52,13 @@ public class ChatActivityEnterTopView extends FrameLayout {
         return this.editView;
     }
 
+    /* loaded from: classes3.dex */
     public static class EditView extends LinearLayout {
-        private EditViewButton[] buttons = new EditViewButton[2];
+        private EditViewButton[] buttons;
 
         public EditView(Context context) {
             super(context);
+            this.buttons = new EditViewButton[2];
         }
 
         public void addButton(EditViewButton editViewButton, LinearLayout.LayoutParams layoutParams) {
@@ -72,12 +74,13 @@ public class ChatActivityEnterTopView extends FrameLayout {
         }
 
         public void updateColors() {
-            for (EditViewButton updateColors : this.buttons) {
-                updateColors.updateColors();
+            for (EditViewButton editViewButton : this.buttons) {
+                editViewButton.updateColors();
             }
         }
     }
 
+    /* loaded from: classes3.dex */
     public static abstract class EditViewButton extends LinearLayout {
         private boolean editButton;
         private ImageView imageView;
@@ -89,17 +92,17 @@ public class ChatActivityEnterTopView extends FrameLayout {
             super(context);
         }
 
-        public void addImageView(ImageView imageView2, LinearLayout.LayoutParams layoutParams) {
+        public void addImageView(ImageView imageView, LinearLayout.LayoutParams layoutParams) {
             if (this.imageView == null) {
-                this.imageView = imageView2;
-                addView(imageView2, layoutParams);
+                this.imageView = imageView;
+                addView(imageView, layoutParams);
             }
         }
 
-        public void addTextView(TextView textView2, LinearLayout.LayoutParams layoutParams) {
+        public void addTextView(TextView textView, LinearLayout.LayoutParams layoutParams) {
             if (this.textView == null) {
-                this.textView = textView2;
-                addView(textView2, layoutParams);
+                this.textView = textView;
+                addView(textView, layoutParams);
             }
         }
 

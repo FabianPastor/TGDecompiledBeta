@@ -1,7 +1,7 @@
 package org.telegram.messenger.support;
 
 import java.lang.reflect.Array;
-
+/* loaded from: classes.dex */
 public class ArrayUtils {
     private static final int CACHE_SIZE = 73;
     private static Object[] EMPTY = new Object[0];
@@ -65,15 +65,15 @@ public class ArrayUtils {
 
     public static <T> T[] emptyArray(Class<T> cls) {
         if (cls == Object.class) {
-            return EMPTY;
+            return (T[]) EMPTY;
         }
         int identityHashCode = ((System.identityHashCode(cls) / 8) & Integer.MAX_VALUE) % 73;
         Object obj = sCache[identityHashCode];
         if (obj == null || obj.getClass().getComponentType() != cls) {
-            obj = Array.newInstance(cls, 0);
+            obj = Array.newInstance((Class<?>) cls, 0);
             sCache[identityHashCode] = obj;
         }
-        return (Object[]) obj;
+        return (T[]) ((Object[]) obj);
     }
 
     public static <T> boolean contains(T[] tArr, T t) {
@@ -99,13 +99,13 @@ public class ArrayUtils {
     }
 
     public static int indexOf(int[] iArr, int i) {
-        if (iArr == null) {
-            return -1;
-        }
-        for (int i2 = 0; i2 < iArr.length; i2++) {
-            if (iArr[i2] == i) {
-                return i2;
+        if (iArr != null) {
+            for (int i2 = 0; i2 < iArr.length; i2++) {
+                if (iArr[i2] == i) {
+                    return i2;
+                }
             }
+            return -1;
         }
         return -1;
     }
@@ -123,11 +123,11 @@ public class ArrayUtils {
         int i = 0;
         if (tArr != null) {
             int length = tArr.length;
-            tArr2 = (Object[]) Array.newInstance(cls, length + 1);
+            tArr2 = (T[]) ((Object[]) Array.newInstance((Class<?>) cls, length + 1));
             System.arraycopy(tArr, 0, tArr2, 0, length);
             i = length;
         } else {
-            tArr2 = (Object[]) Array.newInstance(cls, 1);
+            tArr2 = (T[]) ((Object[]) Array.newInstance((Class<?>) cls, 1));
         }
         tArr2[i] = t;
         return tArr2;
@@ -136,14 +136,12 @@ public class ArrayUtils {
     public static <T> T[] removeElement(Class<T> cls, T[] tArr, T t) {
         if (tArr != null) {
             int length = tArr.length;
-            int i = 0;
-            while (i < length) {
-                if (tArr[i] != t) {
-                    i++;
-                } else if (length == 1) {
-                    return null;
-                } else {
-                    T[] tArr2 = (Object[]) Array.newInstance(cls, length - 1);
+            for (int i = 0; i < length; i++) {
+                if (tArr[i] == t) {
+                    if (length == 1) {
+                        return null;
+                    }
+                    T[] tArr2 = (T[]) ((Object[]) Array.newInstance((Class<?>) cls, length - 1));
                     System.arraycopy(tArr, 0, tArr2, 0, i);
                     System.arraycopy(tArr, i + 1, tArr2, i, (length - i) - 1);
                     return tArr2;
@@ -157,14 +155,15 @@ public class ArrayUtils {
         if (iArr == null) {
             return new int[]{i};
         }
+        int length = iArr.length;
         for (int i2 : iArr) {
             if (i2 == i) {
                 return iArr;
             }
         }
-        int[] iArr2 = new int[(r1 + 1)];
-        System.arraycopy(iArr, 0, iArr2, 0, r1);
-        iArr2[r1] = i;
+        int[] iArr2 = new int[length + 1];
+        System.arraycopy(iArr, 0, iArr2, 0, length);
+        iArr2[length] = i;
         return iArr2;
     }
 

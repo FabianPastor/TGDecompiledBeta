@@ -5,12 +5,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import androidx.core.view.GestureDetectorCompat;
 import java.util.List;
-
+/* loaded from: classes3.dex */
 public class SpoilersClickDetector {
     private GestureDetectorCompat gestureDetector;
-    /* access modifiers changed from: private */
-    public boolean trackingTap;
+    private boolean trackingTap;
 
+    /* loaded from: classes3.dex */
     public interface OnSpoilerClickedListener {
         void onSpoilerClicked(SpoilerEffect spoilerEffect, float f, float f2);
     }
@@ -19,41 +19,39 @@ public class SpoilersClickDetector {
         this(view, list, true, onSpoilerClickedListener);
     }
 
-    public SpoilersClickDetector(View view, List<SpoilerEffect> list, boolean z, OnSpoilerClickedListener onSpoilerClickedListener) {
-        final View view2 = view;
-        final boolean z2 = z;
-        final List<SpoilerEffect> list2 = list;
-        final OnSpoilerClickedListener onSpoilerClickedListener2 = onSpoilerClickedListener;
-        this.gestureDetector = new GestureDetectorCompat(view.getContext(), new GestureDetector.SimpleOnGestureListener() {
+    public SpoilersClickDetector(final View view, final List<SpoilerEffect> list, final boolean z, final OnSpoilerClickedListener onSpoilerClickedListener) {
+        this.gestureDetector = new GestureDetectorCompat(view.getContext(), new GestureDetector.SimpleOnGestureListener() { // from class: org.telegram.ui.Components.spoilers.SpoilersClickDetector.1
+            @Override // android.view.GestureDetector.SimpleOnGestureListener, android.view.GestureDetector.OnGestureListener
             public boolean onDown(MotionEvent motionEvent) {
                 int x = (int) motionEvent.getX();
-                int y = ((int) motionEvent.getY()) + view2.getScrollY();
-                if (z2) {
-                    x -= view2.getPaddingLeft();
-                    y -= view2.getPaddingTop();
+                int y = ((int) motionEvent.getY()) + view.getScrollY();
+                if (z) {
+                    x -= view.getPaddingLeft();
+                    y -= view.getPaddingTop();
                 }
-                for (SpoilerEffect bounds : list2) {
-                    if (bounds.getBounds().contains(x, y)) {
-                        boolean unused = SpoilersClickDetector.this.trackingTap = true;
+                for (SpoilerEffect spoilerEffect : list) {
+                    if (spoilerEffect.getBounds().contains(x, y)) {
+                        SpoilersClickDetector.this.trackingTap = true;
                         return true;
                     }
                 }
                 return false;
             }
 
+            @Override // android.view.GestureDetector.SimpleOnGestureListener, android.view.GestureDetector.OnGestureListener
             public boolean onSingleTapUp(MotionEvent motionEvent) {
                 if (SpoilersClickDetector.this.trackingTap) {
-                    view2.playSoundEffect(0);
-                    boolean unused = SpoilersClickDetector.this.trackingTap = false;
+                    view.playSoundEffect(0);
+                    SpoilersClickDetector.this.trackingTap = false;
                     int x = (int) motionEvent.getX();
-                    int y = ((int) motionEvent.getY()) + view2.getScrollY();
-                    if (z2) {
-                        x -= view2.getPaddingLeft();
-                        y -= view2.getPaddingTop();
+                    int y = ((int) motionEvent.getY()) + view.getScrollY();
+                    if (z) {
+                        x -= view.getPaddingLeft();
+                        y -= view.getPaddingTop();
                     }
-                    for (SpoilerEffect spoilerEffect : list2) {
+                    for (SpoilerEffect spoilerEffect : list) {
                         if (spoilerEffect.getBounds().contains(x, y)) {
-                            onSpoilerClickedListener2.onSpoilerClicked(spoilerEffect, (float) x, (float) y);
+                            onSpoilerClickedListener.onSpoilerClicked(spoilerEffect, x, y);
                             return true;
                         }
                     }

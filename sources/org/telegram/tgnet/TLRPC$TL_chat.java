@@ -1,8 +1,9 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_chat extends TLRPC$Chat {
     public static int constructor = NUM;
 
+    @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
@@ -34,21 +35,22 @@ public class TLRPC$TL_chat extends TLRPC$Chat {
         }
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
-        int i = this.creator ? this.flags | 1 : this.flags & -2;
+        int i = this.creator ? this.flags | 1 : this.flags & (-2);
         this.flags = i;
-        int i2 = this.kicked ? i | 2 : i & -3;
+        int i2 = this.kicked ? i | 2 : i & (-3);
         this.flags = i2;
-        int i3 = this.left ? i2 | 4 : i2 & -5;
+        int i3 = this.left ? i2 | 4 : i2 & (-5);
         this.flags = i3;
-        int i4 = this.deactivated ? i3 | 32 : i3 & -33;
+        int i4 = this.deactivated ? i3 | 32 : i3 & (-33);
         this.flags = i4;
-        int i5 = this.call_active ? i4 | 8388608 : i4 & -8388609;
+        int i5 = this.call_active ? i4 | 8388608 : i4 & (-8388609);
         this.flags = i5;
-        int i6 = this.call_not_empty ? i5 | 16777216 : i5 & -16777217;
+        int i6 = this.call_not_empty ? i5 | 16777216 : i5 & (-16777217);
         this.flags = i6;
-        int i7 = this.noforwards ? i6 | 33554432 : i6 & -33554433;
+        int i7 = this.noforwards ? i6 | 33554432 : i6 & (-33554433);
         this.flags = i7;
         abstractSerializedData.writeInt32(i7);
         abstractSerializedData.writeInt64(this.id);

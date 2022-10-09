@@ -1,5 +1,5 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_postAddress extends TLObject {
     public static int constructor = NUM;
     public String city;
@@ -10,17 +10,18 @@ public class TLRPC$TL_postAddress extends TLObject {
     public String street_line2;
 
     public static TLRPC$TL_postAddress TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-        if (constructor == i) {
-            TLRPC$TL_postAddress tLRPC$TL_postAddress = new TLRPC$TL_postAddress();
-            tLRPC$TL_postAddress.readParams(abstractSerializedData, z);
-            return tLRPC$TL_postAddress;
-        } else if (!z) {
+        if (constructor != i) {
+            if (z) {
+                throw new RuntimeException(String.format("can't parse magic %x in TL_postAddress", Integer.valueOf(i)));
+            }
             return null;
-        } else {
-            throw new RuntimeException(String.format("can't parse magic %x in TL_postAddress", new Object[]{Integer.valueOf(i)}));
         }
+        TLRPC$TL_postAddress tLRPC$TL_postAddress = new TLRPC$TL_postAddress();
+        tLRPC$TL_postAddress.readParams(abstractSerializedData, z);
+        return tLRPC$TL_postAddress;
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         this.street_line1 = abstractSerializedData.readString(z);
         this.street_line2 = abstractSerializedData.readString(z);
@@ -30,6 +31,7 @@ public class TLRPC$TL_postAddress extends TLObject {
         this.post_code = abstractSerializedData.readString(z);
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
         abstractSerializedData.writeString(this.street_line1);

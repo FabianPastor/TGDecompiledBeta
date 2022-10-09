@@ -1,13 +1,13 @@
 package org.telegram.ui.Components.Paint;
 
 import android.graphics.Matrix;
-
+/* loaded from: classes3.dex */
 public class GLMatrix {
     public static float[] LoadOrtho(float f, float f2, float f3, float f4, float f5, float f6) {
         float f7 = f2 - f;
         float f8 = f4 - f3;
         float f9 = f6 - f5;
-        return new float[]{2.0f / f7, 0.0f, 0.0f, 0.0f, 0.0f, 2.0f / f8, 0.0f, 0.0f, 0.0f, 0.0f, -2.0f / f9, 0.0f, (-(f2 + f)) / f7, (-(f4 + f3)) / f8, (-(f6 + f5)) / f9, 1.0f};
+        return new float[]{2.0f / f7, 0.0f, 0.0f, 0.0f, 0.0f, 2.0f / f8, 0.0f, 0.0f, 0.0f, 0.0f, (-2.0f) / f9, 0.0f, (-(f2 + f)) / f7, (-(f4 + f3)) / f8, (-(f6 + f5)) / f9, 1.0f};
     }
 
     public static float[] LoadGraphicsMatrix(Matrix matrix) {

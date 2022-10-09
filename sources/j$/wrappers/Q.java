@@ -1,27 +1,28 @@
 package j$.wrappers;
 
-import j$.util.function.l;
 import java.util.function.IntConsumer;
-
-public final /* synthetic */ class Q implements l {
+/* loaded from: classes2.dex */
+public final /* synthetic */ class Q implements j$.util.function.l {
     final /* synthetic */ IntConsumer a;
 
     private /* synthetic */ Q(IntConsumer intConsumer) {
         this.a = intConsumer;
     }
 
-    public static /* synthetic */ l b(IntConsumer intConsumer) {
+    public static /* synthetic */ j$.util.function.l b(IntConsumer intConsumer) {
         if (intConsumer == null) {
             return null;
         }
         return intConsumer instanceof S ? ((S) intConsumer).a : new Q(intConsumer);
     }
 
+    @Override // j$.util.function.l
     public /* synthetic */ void accept(int i) {
         this.a.accept(i);
     }
 
-    public /* synthetic */ l l(l lVar) {
+    @Override // j$.util.function.l
+    public /* synthetic */ j$.util.function.l l(j$.util.function.l lVar) {
         return b(this.a.andThen(S.a(lVar)));
     }
 }

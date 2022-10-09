@@ -1,5 +1,5 @@
 package org.telegram.messenger.camera;
-
+/* loaded from: classes.dex */
 public final class Size {
     public final int mHeight;
     public final int mWidth;
@@ -28,10 +28,7 @@ public final class Size {
             return false;
         }
         Size size = (Size) obj;
-        if (this.mWidth == size.mWidth && this.mHeight == size.mHeight) {
-            return true;
-        }
-        return false;
+        return this.mWidth == size.mWidth && this.mHeight == size.mHeight;
     }
 
     public String toString() {
@@ -47,13 +44,12 @@ public final class Size {
         if (indexOf < 0) {
             indexOf = str.indexOf(120);
         }
-        if (indexOf >= 0) {
-            try {
-                return new Size(Integer.parseInt(str.substring(0, indexOf)), Integer.parseInt(str.substring(indexOf + 1)));
-            } catch (NumberFormatException unused) {
-                throw invalidSize(str);
-            }
-        } else {
+        if (indexOf < 0) {
+            throw invalidSize(str);
+        }
+        try {
+            return new Size(Integer.parseInt(str.substring(0, indexOf)), Integer.parseInt(str.substring(indexOf + 1)));
+        } catch (NumberFormatException unused) {
             throw invalidSize(str);
         }
     }

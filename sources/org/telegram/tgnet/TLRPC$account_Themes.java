@@ -1,19 +1,26 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public abstract class TLRPC$account_Themes extends TLObject {
     public static TLRPC$account_Themes TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-        TLRPC$account_Themes tLRPC$account_Themes;
-        if (i != -NUM) {
-            tLRPC$account_Themes = i != -NUM ? null : new TLRPC$TL_account_themesNotModified();
+        TLRPC$account_Themes tLRPC$TL_account_themes;
+        if (i == -NUM) {
+            tLRPC$TL_account_themes = new TLRPC$TL_account_themes();
         } else {
-            tLRPC$account_Themes = new TLRPC$TL_account_themes();
+            tLRPC$TL_account_themes = i != -NUM ? null : new TLRPC$account_Themes() { // from class: org.telegram.tgnet.TLRPC$TL_account_themesNotModified
+                public static int constructor = -NUM;
+
+                @Override // org.telegram.tgnet.TLObject
+                public void serializeToStream(AbstractSerializedData abstractSerializedData2) {
+                    abstractSerializedData2.writeInt32(constructor);
+                }
+            };
         }
-        if (tLRPC$account_Themes != null || !z) {
-            if (tLRPC$account_Themes != null) {
-                tLRPC$account_Themes.readParams(abstractSerializedData, z);
+        if (tLRPC$TL_account_themes != null || !z) {
+            if (tLRPC$TL_account_themes != null) {
+                tLRPC$TL_account_themes.readParams(abstractSerializedData, z);
             }
-            return tLRPC$account_Themes;
+            return tLRPC$TL_account_themes;
         }
-        throw new RuntimeException(String.format("can't parse magic %x in account_Themes", new Object[]{Integer.valueOf(i)}));
+        throw new RuntimeException(String.format("can't parse magic %x in account_Themes", Integer.valueOf(i)));
     }
 }

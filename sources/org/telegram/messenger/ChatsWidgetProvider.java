@@ -10,10 +10,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.widget.RemoteViews;
 import java.util.ArrayList;
-import org.telegram.tgnet.TLRPC$Chat;
-import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.LaunchActivity;
-
+/* loaded from: classes.dex */
 public class ChatsWidgetProvider extends AppWidgetProvider {
     private static int getCellsForSize(int i) {
         int i2 = 2;
@@ -23,22 +21,26 @@ public class ChatsWidgetProvider extends AppWidgetProvider {
         return i2 - 1;
     }
 
+    @Override // android.appwidget.AppWidgetProvider, android.content.BroadcastReceiver
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
     }
 
+    @Override // android.appwidget.AppWidgetProvider
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] iArr) {
         super.onUpdate(context, appWidgetManager, iArr);
-        for (int updateWidget : iArr) {
-            updateWidget(context, appWidgetManager, updateWidget);
+        for (int i : iArr) {
+            updateWidget(context, appWidgetManager, i);
         }
     }
 
+    @Override // android.appwidget.AppWidgetProvider
     public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager, int i, Bundle bundle) {
         updateWidget(context, appWidgetManager, i);
         super.onAppWidgetOptionsChanged(context, appWidgetManager, i, bundle);
     }
 
+    @Override // android.appwidget.AppWidgetProvider
     public void onDeleted(Context context, int[] iArr) {
         super.onDeleted(context, iArr);
         ApplicationLoader.postInitApplication();
@@ -71,9 +73,9 @@ public class ChatsWidgetProvider extends AppWidgetProvider {
                 edit.putInt("account" + i, UserConfig.selectedAccount);
                 edit.putInt("type" + i, 0).commit();
             }
-            ArrayList arrayList = new ArrayList();
+            ArrayList<Long> arrayList = new ArrayList<>();
             if (i3 >= 0) {
-                AccountInstance.getInstance(i3).getMessagesStorage().getWidgetDialogIds(i, 0, arrayList, (ArrayList<TLRPC$User>) null, (ArrayList<TLRPC$Chat>) null, false);
+                AccountInstance.getInstance(i3).getMessagesStorage().getWidgetDialogIds(i, 0, arrayList, null, null, false);
             }
             if (cellsForSize == 1 || arrayList.size() <= 1) {
                 i2 = R.layout.shortcut_widget_layout_1;

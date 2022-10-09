@@ -1,26 +1,27 @@
 package j$.util.stream;
 
-import j$.util.L;
 import j$.util.function.Consumer;
-import j$.util.function.p;
-import j$.util.function.q;
-import j$.util.v;
 import java.util.Arrays;
 import java.util.Iterator;
-
-class Y3 extends Z3 implements q {
-    Y3() {
+/* JADX INFO: Access modifiers changed from: package-private */
+/* loaded from: classes2.dex */
+public class Y3 extends Z3 implements j$.util.function.q {
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public Y3() {
     }
 
-    Y3(int i) {
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public Y3(int i) {
         super(i);
     }
 
+    @Override // j$.util.stream.Z3, java.lang.Iterable, j$.lang.e
     /* renamed from: B */
-    public v spliterator() {
+    public j$.util.v mo289spliterator() {
         return new X3(this, 0, this.c, 0, this.b);
     }
 
+    @Override // j$.util.function.q
     public void accept(long j) {
         A();
         int i = this.b;
@@ -28,34 +29,38 @@ class Y3 extends Z3 implements q {
         ((long[]) this.e)[i] = j;
     }
 
+    @Override // j$.util.stream.Z3
     public Object c(int i) {
         return new long[i];
     }
 
-    public q f(q qVar) {
+    @Override // j$.util.function.q
+    public j$.util.function.q f(j$.util.function.q qVar) {
         qVar.getClass();
-        return new p(this, qVar);
+        return new j$.util.function.p(this, qVar);
     }
 
+    @Override // j$.lang.e
     public void forEach(Consumer consumer) {
-        if (consumer instanceof q) {
-            g((q) consumer);
+        if (consumer instanceof j$.util.function.q) {
+            g((j$.util.function.q) consumer);
         } else if (!Q4.a) {
-            spliterator().forEachRemaining(consumer);
+            mo289spliterator().forEachRemaining(consumer);
         } else {
             Q4.a(getClass(), "{0} calling SpinedBuffer.OfLong.forEach(Consumer)");
             throw null;
         }
     }
 
+    @Override // java.lang.Iterable
     public Iterator iterator() {
-        return L.h(spliterator());
+        return j$.util.L.h(mo289spliterator());
     }
 
-    /* access modifiers changed from: protected */
-    public void t(Object obj, int i, int i2, Object obj2) {
+    @Override // j$.util.stream.Z3
+    protected void t(Object obj, int i, int i2, Object obj2) {
         long[] jArr = (long[]) obj;
-        q qVar = (q) obj2;
+        j$.util.function.q qVar = (j$.util.function.q) obj2;
         while (i < i2) {
             qVar.accept(jArr[i]);
             i++;
@@ -64,19 +69,16 @@ class Y3 extends Z3 implements q {
 
     public String toString() {
         long[] jArr = (long[]) e();
-        if (jArr.length < 200) {
-            return String.format("%s[length=%d, chunks=%d]%s", new Object[]{getClass().getSimpleName(), Integer.valueOf(jArr.length), Integer.valueOf(this.c), Arrays.toString(jArr)});
-        }
-        return String.format("%s[length=%d, chunks=%d]%s...", new Object[]{getClass().getSimpleName(), Integer.valueOf(jArr.length), Integer.valueOf(this.c), Arrays.toString(Arrays.copyOf(jArr, 200))});
+        return jArr.length < 200 ? String.format("%s[length=%d, chunks=%d]%s", getClass().getSimpleName(), Integer.valueOf(jArr.length), Integer.valueOf(this.c), Arrays.toString(jArr)) : String.format("%s[length=%d, chunks=%d]%s...", getClass().getSimpleName(), Integer.valueOf(jArr.length), Integer.valueOf(this.c), Arrays.toString(Arrays.copyOf(jArr, 200)));
     }
 
-    /* access modifiers changed from: protected */
-    public int u(Object obj) {
+    @Override // j$.util.stream.Z3
+    protected int u(Object obj) {
         return ((long[]) obj).length;
     }
 
-    /* access modifiers changed from: protected */
-    public Object[] z(int i) {
-        return new long[i][];
+    @Override // j$.util.stream.Z3
+    protected Object[] z(int i) {
+        return new long[i];
     }
 }

@@ -1,11 +1,13 @@
 package org.aspectj.runtime.reflect;
 
 import org.aspectj.lang.reflect.MethodSignature;
-
-class MethodSignatureImpl extends CodeSignatureImpl implements MethodSignature {
+/* JADX INFO: Access modifiers changed from: package-private */
+/* loaded from: classes.dex */
+public class MethodSignatureImpl extends CodeSignatureImpl implements MethodSignature {
     Class returnType;
 
-    MethodSignatureImpl(int i, String str, Class cls, Class[] clsArr, String[] strArr, Class[] clsArr2, Class cls2) {
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public MethodSignatureImpl(int i, String str, Class cls, Class[] clsArr, String[] strArr, Class[] clsArr2, Class cls2) {
         super(i, str, cls, clsArr, strArr, clsArr2);
         this.returnType = cls2;
     }
@@ -17,8 +19,8 @@ class MethodSignatureImpl extends CodeSignatureImpl implements MethodSignature {
         return this.returnType;
     }
 
-    /* access modifiers changed from: protected */
-    public String createToString(StringMaker stringMaker) {
+    @Override // org.aspectj.runtime.reflect.SignatureImpl
+    protected String createToString(StringMaker stringMaker) {
         StringBuffer stringBuffer = new StringBuffer();
         stringBuffer.append(stringMaker.makeModifiersString(getModifiers()));
         if (stringMaker.includeArgs) {

@@ -9,7 +9,6 @@ import android.graphics.LinearGradient;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
-import android.graphics.Rect;
 import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
 import android.os.SystemClock;
@@ -17,7 +16,7 @@ import android.view.View;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.SvgHelper;
 import org.telegram.ui.ActionBar.Theme;
-
+/* loaded from: classes3.dex */
 public class LoadingStickerDrawable extends Drawable {
     private Bitmap bitmap;
     int currentColor0;
@@ -26,68 +25,73 @@ public class LoadingStickerDrawable extends Drawable {
     private long lastUpdateTime;
     private View parentView;
     private LinearGradient placeholderGradient;
-    private Matrix placeholderMatrix;
-    private Paint placeholderPaint = new Paint(2);
     private float totalTranslation;
+    private Paint placeholderPaint = new Paint(2);
+    private Matrix placeholderMatrix = new Matrix();
 
+    @Override // android.graphics.drawable.Drawable
     public int getOpacity() {
         return -2;
     }
 
+    @Override // android.graphics.drawable.Drawable
     public void setAlpha(int i) {
     }
 
+    @Override // android.graphics.drawable.Drawable
     public void setColorFilter(ColorFilter colorFilter) {
     }
 
     public LoadingStickerDrawable(View view, String str, int i, int i2) {
         this.bitmap = SvgHelper.getBitmapByPathOnly(str, 512, 512, i, i2);
         this.parentView = view;
-        this.placeholderMatrix = new Matrix();
     }
 
     public void setColors(String str, String str2) {
         int color = Theme.getColor(str);
         int color2 = Theme.getColor(str2);
-        if (this.currentColor0 != color || this.currentColor1 != color2) {
-            this.currentColor0 = color;
-            this.currentColor1 = color2;
-            int averageColor = AndroidUtilities.getAverageColor(color2, color);
-            this.placeholderPaint.setColor(color2);
-            float dp = (float) AndroidUtilities.dp(500.0f);
-            this.gradientWidth = dp;
-            LinearGradient linearGradient = new LinearGradient(0.0f, 0.0f, dp, 0.0f, new int[]{color2, averageColor, color2}, new float[]{0.0f, 0.18f, 0.36f}, Shader.TileMode.REPEAT);
-            this.placeholderGradient = linearGradient;
-            linearGradient.setLocalMatrix(this.placeholderMatrix);
-            Bitmap bitmap2 = this.bitmap;
-            Shader.TileMode tileMode = Shader.TileMode.CLAMP;
-            this.placeholderPaint.setShader(new ComposeShader(this.placeholderGradient, new BitmapShader(bitmap2, tileMode, tileMode), PorterDuff.Mode.MULTIPLY));
+        if (this.currentColor0 == color && this.currentColor1 == color2) {
+            return;
         }
+        this.currentColor0 = color;
+        this.currentColor1 = color2;
+        int averageColor = AndroidUtilities.getAverageColor(color2, color);
+        this.placeholderPaint.setColor(color2);
+        float dp = AndroidUtilities.dp(500.0f);
+        this.gradientWidth = dp;
+        LinearGradient linearGradient = new LinearGradient(0.0f, 0.0f, dp, 0.0f, new int[]{color2, averageColor, color2}, new float[]{0.0f, 0.18f, 0.36f}, Shader.TileMode.REPEAT);
+        this.placeholderGradient = linearGradient;
+        linearGradient.setLocalMatrix(this.placeholderMatrix);
+        Bitmap bitmap = this.bitmap;
+        Shader.TileMode tileMode = Shader.TileMode.CLAMP;
+        this.placeholderPaint.setShader(new ComposeShader(this.placeholderGradient, new BitmapShader(bitmap, tileMode, tileMode), PorterDuff.Mode.MULTIPLY));
     }
 
+    @Override // android.graphics.drawable.Drawable
     public void draw(Canvas canvas) {
-        if (this.bitmap != null) {
-            setColors("dialogBackground", "dialogBackgroundGray");
-            Rect bounds = getBounds();
-            canvas.drawRect((float) bounds.left, (float) bounds.top, (float) bounds.right, (float) bounds.bottom, this.placeholderPaint);
-            long elapsedRealtime = SystemClock.elapsedRealtime();
-            long abs = Math.abs(this.lastUpdateTime - elapsedRealtime);
-            if (abs > 17) {
-                abs = 16;
-            }
-            this.lastUpdateTime = elapsedRealtime;
-            this.totalTranslation += (((float) abs) * this.gradientWidth) / 1800.0f;
-            while (true) {
-                float f = this.totalTranslation;
-                float f2 = this.gradientWidth;
-                if (f >= f2 * 2.0f) {
-                    this.totalTranslation = f - (f2 * 2.0f);
-                } else {
-                    this.placeholderMatrix.setTranslate(f, 0.0f);
-                    this.placeholderGradient.setLocalMatrix(this.placeholderMatrix);
-                    this.parentView.invalidate();
-                    return;
-                }
+        if (this.bitmap == null) {
+            return;
+        }
+        setColors("dialogBackground", "dialogBackgroundGray");
+        android.graphics.Rect bounds = getBounds();
+        canvas.drawRect(bounds.left, bounds.top, bounds.right, bounds.bottom, this.placeholderPaint);
+        long elapsedRealtime = SystemClock.elapsedRealtime();
+        long abs = Math.abs(this.lastUpdateTime - elapsedRealtime);
+        if (abs > 17) {
+            abs = 16;
+        }
+        this.lastUpdateTime = elapsedRealtime;
+        this.totalTranslation += (((float) abs) * this.gradientWidth) / 1800.0f;
+        while (true) {
+            float f = this.totalTranslation;
+            float f2 = this.gradientWidth;
+            if (f >= f2 * 2.0f) {
+                this.totalTranslation = f - (f2 * 2.0f);
+            } else {
+                this.placeholderMatrix.setTranslate(f, 0.0f);
+                this.placeholderGradient.setLocalMatrix(this.placeholderMatrix);
+                this.parentView.invalidate();
+                return;
             }
         }
     }

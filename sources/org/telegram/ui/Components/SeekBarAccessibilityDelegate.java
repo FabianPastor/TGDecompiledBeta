@@ -5,39 +5,37 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.accessibility.AccessibilityNodeInfo;
-import android.widget.SeekBar;
 import androidx.core.view.ViewCompat;
 import java.util.HashMap;
 import java.util.Map;
-
+/* loaded from: classes3.dex */
 public abstract class SeekBarAccessibilityDelegate extends View.AccessibilityDelegate {
-    private static final CharSequence SEEK_BAR_CLASS_NAME = SeekBar.class.getName();
-    /* access modifiers changed from: private */
-    public final Map<View, Runnable> accessibilityEventRunnables = new HashMap(4);
-    private final View.OnAttachStateChangeListener onAttachStateChangeListener = new View.OnAttachStateChangeListener() {
+    private static final CharSequence SEEK_BAR_CLASS_NAME = android.widget.SeekBar.class.getName();
+    private final Map<View, Runnable> accessibilityEventRunnables = new HashMap(4);
+    private final View.OnAttachStateChangeListener onAttachStateChangeListener = new View.OnAttachStateChangeListener() { // from class: org.telegram.ui.Components.SeekBarAccessibilityDelegate.1
+        @Override // android.view.View.OnAttachStateChangeListener
         public void onViewAttachedToWindow(View view) {
         }
 
+        @Override // android.view.View.OnAttachStateChangeListener
         public void onViewDetachedFromWindow(View view) {
             view.removeCallbacks((Runnable) SeekBarAccessibilityDelegate.this.accessibilityEventRunnables.remove(view));
             view.removeOnAttachStateChangeListener(this);
         }
     };
 
-    /* access modifiers changed from: protected */
-    public abstract boolean canScrollBackward(View view);
+    protected abstract boolean canScrollBackward(View view);
 
-    /* access modifiers changed from: protected */
-    public abstract boolean canScrollForward(View view);
+    protected abstract boolean canScrollForward(View view);
 
-    /* access modifiers changed from: protected */
-    public abstract void doScroll(View view, boolean z);
+    protected abstract void doScroll(View view, boolean z);
 
-    /* access modifiers changed from: protected */
-    public CharSequence getContentDescription(View view) {
+    /* renamed from: getContentDescription */
+    protected CharSequence mo2137getContentDescription(View view) {
         return null;
     }
 
+    @Override // android.view.View.AccessibilityDelegate
     public boolean performAccessibilityAction(View view, int i, Bundle bundle) {
         if (super.performAccessibilityAction(view, i, bundle)) {
             return true;
@@ -47,44 +45,51 @@ public abstract class SeekBarAccessibilityDelegate extends View.AccessibilityDel
 
     public boolean performAccessibilityActionInternal(View view, int i, Bundle bundle) {
         boolean z = false;
-        if (i != 4096 && i != 8192) {
-            return false;
+        if (i == 4096 || i == 8192) {
+            if (i == 8192) {
+                z = true;
+            }
+            doScroll(view, z);
+            if (view != null) {
+                postAccessibilityEventRunnable(view);
+            }
+            return true;
         }
-        if (i == 8192) {
-            z = true;
-        }
-        doScroll(view, z);
-        if (view != null) {
-            postAccessibilityEventRunnable(view);
-        }
-        return true;
+        return false;
     }
 
     public final boolean performAccessibilityActionInternal(int i, Bundle bundle) {
-        return performAccessibilityActionInternal((View) null, i, bundle);
+        return performAccessibilityActionInternal(null, i, bundle);
     }
 
-    private void postAccessibilityEventRunnable(View view) {
-        if (ViewCompat.isAttachedToWindow(view)) {
-            Runnable runnable = this.accessibilityEventRunnables.get(view);
-            if (runnable == null) {
-                Map<View, Runnable> map = this.accessibilityEventRunnables;
-                SeekBarAccessibilityDelegate$$ExternalSyntheticLambda0 seekBarAccessibilityDelegate$$ExternalSyntheticLambda0 = new SeekBarAccessibilityDelegate$$ExternalSyntheticLambda0(this, view);
-                map.put(view, seekBarAccessibilityDelegate$$ExternalSyntheticLambda0);
-                view.addOnAttachStateChangeListener(this.onAttachStateChangeListener);
-                runnable = seekBarAccessibilityDelegate$$ExternalSyntheticLambda0;
-            } else {
-                view.removeCallbacks(runnable);
-            }
-            view.postDelayed(runnable, 400);
+    private void postAccessibilityEventRunnable(final View view) {
+        if (!ViewCompat.isAttachedToWindow(view)) {
+            return;
         }
+        Runnable runnable = this.accessibilityEventRunnables.get(view);
+        if (runnable == null) {
+            Map<View, Runnable> map = this.accessibilityEventRunnables;
+            Runnable runnable2 = new Runnable() { // from class: org.telegram.ui.Components.SeekBarAccessibilityDelegate$$ExternalSyntheticLambda0
+                @Override // java.lang.Runnable
+                public final void run() {
+                    SeekBarAccessibilityDelegate.this.lambda$postAccessibilityEventRunnable$0(view);
+                }
+            };
+            map.put(view, runnable2);
+            view.addOnAttachStateChangeListener(this.onAttachStateChangeListener);
+            runnable = runnable2;
+        } else {
+            view.removeCallbacks(runnable);
+        }
+        view.postDelayed(runnable, 400L);
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$postAccessibilityEventRunnable$0(View view) {
         sendAccessibilityEvent(view, 4);
     }
 
+    @Override // android.view.View.AccessibilityDelegate
     public void onInitializeAccessibilityNodeInfo(View view, AccessibilityNodeInfo accessibilityNodeInfo) {
         super.onInitializeAccessibilityNodeInfo(view, accessibilityNodeInfo);
         onInitializeAccessibilityNodeInfoInternal(view, accessibilityNodeInfo);
@@ -92,21 +97,22 @@ public abstract class SeekBarAccessibilityDelegate extends View.AccessibilityDel
 
     public void onInitializeAccessibilityNodeInfoInternal(View view, AccessibilityNodeInfo accessibilityNodeInfo) {
         accessibilityNodeInfo.setClassName(SEEK_BAR_CLASS_NAME);
-        CharSequence contentDescription = getContentDescription(view);
-        if (!TextUtils.isEmpty(contentDescription)) {
-            accessibilityNodeInfo.setText(contentDescription);
+        CharSequence mo2137getContentDescription = mo2137getContentDescription(view);
+        if (!TextUtils.isEmpty(mo2137getContentDescription)) {
+            accessibilityNodeInfo.setText(mo2137getContentDescription);
         }
         if (Build.VERSION.SDK_INT >= 21) {
             if (canScrollBackward(view)) {
                 accessibilityNodeInfo.addAction(AccessibilityNodeInfo.AccessibilityAction.ACTION_SCROLL_BACKWARD);
             }
-            if (canScrollForward(view)) {
-                accessibilityNodeInfo.addAction(AccessibilityNodeInfo.AccessibilityAction.ACTION_SCROLL_FORWARD);
+            if (!canScrollForward(view)) {
+                return;
             }
+            accessibilityNodeInfo.addAction(AccessibilityNodeInfo.AccessibilityAction.ACTION_SCROLL_FORWARD);
         }
     }
 
     public final void onInitializeAccessibilityNodeInfoInternal(AccessibilityNodeInfo accessibilityNodeInfo) {
-        onInitializeAccessibilityNodeInfoInternal((View) null, accessibilityNodeInfo);
+        onInitializeAccessibilityNodeInfoInternal(null, accessibilityNodeInfo);
     }
 }

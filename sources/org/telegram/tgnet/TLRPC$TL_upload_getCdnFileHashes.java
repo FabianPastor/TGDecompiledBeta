@@ -1,10 +1,11 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_upload_getCdnFileHashes extends TLObject {
     public static int constructor = -NUM;
     public byte[] file_token;
     public long offset;
 
+    @Override // org.telegram.tgnet.TLObject
     public TLObject deserializeResponse(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         TLRPC$Vector tLRPC$Vector = new TLRPC$Vector();
         int readInt32 = abstractSerializedData.readInt32(z);
@@ -18,6 +19,7 @@ public class TLRPC$TL_upload_getCdnFileHashes extends TLObject {
         return tLRPC$Vector;
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
         abstractSerializedData.writeByteArray(this.file_token);

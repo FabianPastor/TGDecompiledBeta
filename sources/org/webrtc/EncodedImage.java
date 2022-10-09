@@ -2,7 +2,7 @@ package org.webrtc;
 
 import java.nio.ByteBuffer;
 import java.util.concurrent.TimeUnit;
-
+/* loaded from: classes3.dex */
 public class EncodedImage implements RefCounted {
     public final ByteBuffer buffer;
     public final long captureTimeMs;
@@ -14,6 +14,7 @@ public class EncodedImage implements RefCounted {
     private final RefCountDelegate refCountDelegate;
     public final int rotation;
 
+    /* loaded from: classes3.dex */
     public enum FrameType {
         EmptyFrame(0),
         VideoFrameKey(3),
@@ -21,7 +22,7 @@ public class EncodedImage implements RefCounted {
         
         private final int nativeIndex;
 
-        private FrameType(int i) {
+        FrameType(int i) {
             this.nativeIndex = i;
         }
 
@@ -31,6 +32,7 @@ public class EncodedImage implements RefCounted {
 
         @CalledByNative("FrameType")
         static FrameType fromNativeIndex(int i) {
+            FrameType[] values;
             for (FrameType frameType : values()) {
                 if (frameType.getNative() == i) {
                     return frameType;
@@ -40,22 +42,24 @@ public class EncodedImage implements RefCounted {
         }
     }
 
+    @Override // org.webrtc.RefCounted
     public void retain() {
         this.refCountDelegate.retain();
     }
 
+    @Override // org.webrtc.RefCounted
     public void release() {
         this.refCountDelegate.release();
     }
 
     @CalledByNative
-    private EncodedImage(ByteBuffer byteBuffer, Runnable runnable, int i, int i2, long j, FrameType frameType2, int i3, Integer num) {
+    private EncodedImage(ByteBuffer byteBuffer, Runnable runnable, int i, int i2, long j, FrameType frameType, int i3, Integer num) {
         this.buffer = byteBuffer;
         this.encodedWidth = i;
         this.encodedHeight = i2;
         this.captureTimeMs = TimeUnit.NANOSECONDS.toMillis(j);
         this.captureTimeNs = j;
-        this.frameType = frameType2;
+        this.frameType = frameType;
         this.rotation = i3;
         this.qp = num;
         this.refCountDelegate = new RefCountDelegate(runnable);
@@ -100,6 +104,7 @@ public class EncodedImage implements RefCounted {
         return new Builder();
     }
 
+    /* loaded from: classes3.dex */
     public static class Builder {
         private ByteBuffer buffer;
         private long captureTimeNs;
@@ -140,8 +145,8 @@ public class EncodedImage implements RefCounted {
             return this;
         }
 
-        public Builder setFrameType(FrameType frameType2) {
-            this.frameType = frameType2;
+        public Builder setFrameType(FrameType frameType) {
+            this.frameType = frameType;
             return this;
         }
 

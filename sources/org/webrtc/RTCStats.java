@@ -1,7 +1,7 @@
 package org.webrtc;
 
 import java.util.Map;
-
+/* loaded from: classes3.dex */
 public class RTCStats {
     private final String id;
     private final Map<String, Object> members;
@@ -16,7 +16,7 @@ public class RTCStats {
     }
 
     public double getTimestampUs() {
-        return (double) this.timestampUs;
+        return this.timestampUs;
     }
 
     public String getType() {
@@ -39,11 +39,11 @@ public class RTCStats {
         sb.append(this.type);
         sb.append(", id: ");
         sb.append(this.id);
-        for (Map.Entry next : this.members.entrySet()) {
+        for (Map.Entry<String, Object> entry : this.members.entrySet()) {
             sb.append(", ");
-            sb.append((String) next.getKey());
+            sb.append(entry.getKey());
             sb.append(": ");
-            appendValue(sb, next.getValue());
+            appendValue(sb, entry.getValue());
         }
         sb.append(" }");
         return sb.toString();

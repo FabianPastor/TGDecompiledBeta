@@ -1,62 +1,68 @@
 package j$.util.stream;
 
 import j$.util.function.Consumer;
-import j$.util.function.b;
-import j$.util.function.p;
-import j$.util.function.q;
-import j$.util.function.w;
-import j$.util.function.y;
+/* loaded from: classes2.dex */
+class A2 extends T2 implements S2, InterfaceCLASSNAMEl3 {
+    final /* synthetic */ j$.util.function.y b;
+    final /* synthetic */ j$.util.function.w c;
+    final /* synthetic */ j$.util.function.b d;
 
-class A2 extends T2 implements S2, CLASSNAMEl3 {
-    final /* synthetic */ y b;
-    final /* synthetic */ w c;
-    final /* synthetic */ b d;
-
-    A2(y yVar, w wVar, b bVar) {
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public A2(j$.util.function.y yVar, j$.util.function.w wVar, j$.util.function.b bVar) {
         this.b = yVar;
         this.c = wVar;
         this.d = bVar;
     }
 
-    public /* synthetic */ void accept(double d2) {
-        CLASSNAMEo1.f(this);
+    @Override // j$.util.stream.InterfaceCLASSNAMEm3
+    public /* synthetic */ void accept(double d) {
+        AbstractCLASSNAMEo1.f(this);
         throw null;
     }
 
+    @Override // j$.util.stream.InterfaceCLASSNAMEm3
     public /* synthetic */ void accept(int i) {
-        CLASSNAMEo1.d(this);
+        AbstractCLASSNAMEo1.d(this);
         throw null;
     }
 
+    @Override // j$.util.stream.InterfaceCLASSNAMEm3, j$.util.stream.InterfaceCLASSNAMEl3, j$.util.function.q
     public void accept(long j) {
         this.c.accept(this.a, j);
     }
 
+    @Override // j$.util.function.Consumer
     public /* synthetic */ Consumer andThen(Consumer consumer) {
-        return Consumer.CC.$default$andThen(this, consumer);
+        return consumer.getClass();
     }
 
+    @Override // j$.util.function.Consumer
     /* renamed from: b */
     public /* synthetic */ void accept(Long l) {
-        CLASSNAMEo1.c(this, l);
+        AbstractCLASSNAMEo1.c(this, l);
     }
 
-    public q f(q qVar) {
+    @Override // j$.util.function.q
+    public j$.util.function.q f(j$.util.function.q qVar) {
         qVar.getClass();
-        return new p(this, qVar);
+        return new j$.util.function.p(this, qVar);
     }
 
+    @Override // j$.util.stream.S2
     public void h(S2 s2) {
         this.a = this.d.apply(this.a, ((A2) s2).a);
     }
 
+    @Override // j$.util.stream.InterfaceCLASSNAMEm3
     public /* synthetic */ void m() {
     }
 
+    @Override // j$.util.stream.InterfaceCLASSNAMEm3
     public void n(long j) {
         this.a = this.b.get();
     }
 
+    @Override // j$.util.stream.InterfaceCLASSNAMEm3
     public /* synthetic */ boolean o() {
         return false;
     }

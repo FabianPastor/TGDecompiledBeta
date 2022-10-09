@@ -3,7 +3,7 @@ package org.telegram.SQLite;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 import org.telegram.tgnet.NativeByteBuffer;
-
+/* loaded from: classes.dex */
 public class SQLiteCursor {
     public static final int FIELD_TYPE_BYTEARRAY = 4;
     public static final int FIELD_TYPE_FLOAT = 2;
@@ -13,32 +13,23 @@ public class SQLiteCursor {
     private boolean inRow = false;
     private SQLitePreparedStatement preparedStatement;
 
-    /* access modifiers changed from: package-private */
-    public native byte[] columnByteArrayValue(long j, int i);
+    native byte[] columnByteArrayValue(long j, int i);
 
-    /* access modifiers changed from: package-private */
-    public native long columnByteBufferValue(long j, int i);
+    native long columnByteBufferValue(long j, int i);
 
-    /* access modifiers changed from: package-private */
-    public native int columnCount(long j);
+    native int columnCount(long j);
 
-    /* access modifiers changed from: package-private */
-    public native double columnDoubleValue(long j, int i);
+    native double columnDoubleValue(long j, int i);
 
-    /* access modifiers changed from: package-private */
-    public native int columnIntValue(long j, int i);
+    native int columnIntValue(long j, int i);
 
-    /* access modifiers changed from: package-private */
-    public native int columnIsNull(long j, int i);
+    native int columnIsNull(long j, int i);
 
-    /* access modifiers changed from: package-private */
-    public native long columnLongValue(long j, int i);
+    native long columnLongValue(long j, int i);
 
-    /* access modifiers changed from: package-private */
-    public native String columnStringValue(long j, int i);
+    native String columnStringValue(long j, int i);
 
-    /* access modifiers changed from: package-private */
-    public native int columnType(long j, int i);
+    native int columnType(long j, int i);
 
     public SQLiteCursor(SQLitePreparedStatement sQLitePreparedStatement) {
         this.preparedStatement = sQLitePreparedStatement;
@@ -106,15 +97,15 @@ public class SQLiteCursor {
                     if (BuildVars.LOGS_ENABLED) {
                         FileLog.d("sqlite busy, waiting...");
                     }
-                    Thread.sleep(500);
+                    Thread.sleep(500L);
                     step = this.preparedStatement.step();
-                    if (step == 0) {
-                        break;
-                    }
-                    i = i2;
                 } catch (Exception e) {
-                    FileLog.e((Throwable) e);
+                    FileLog.e(e);
                 }
+                if (step == 0) {
+                    break;
+                }
+                i = i2;
             }
             if (step == -1) {
                 throw new SQLiteException("sqlite busy");
@@ -137,10 +128,10 @@ public class SQLiteCursor {
         this.preparedStatement.dispose();
     }
 
-    /* access modifiers changed from: package-private */
-    public void checkRow() throws SQLiteException {
-        if (!this.inRow) {
-            throw new SQLiteException("You must call next before");
+    void checkRow() throws SQLiteException {
+        if (this.inRow) {
+            return;
         }
+        throw new SQLiteException("You must call next before");
     }
 }

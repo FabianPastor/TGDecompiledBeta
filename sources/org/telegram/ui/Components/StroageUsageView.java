@@ -19,28 +19,23 @@ import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.voip.CellFlickerDrawable;
-
+/* loaded from: classes3.dex */
 public class StroageUsageView extends FrameLayout {
-    /* access modifiers changed from: private */
-    public Paint bgPaint = new Paint();
-    /* access modifiers changed from: private */
-    public boolean calculating;
+    private Paint bgPaint;
+    private boolean calculating;
     float calculatingProgress;
     boolean calculatingProgressIncrement;
     TextView calculatingTextView;
-    CellFlickerDrawable cellFlickerDrawable = new CellFlickerDrawable(220, 255);
+    CellFlickerDrawable cellFlickerDrawable;
     View divider;
     EllipsizeSpanAnimator ellipsizeSpanAnimator;
     TextView freeSizeTextView;
     int lastProgressColor;
     public ViewGroup legendLayout;
-    private Paint paintCalculcating = new Paint(1);
-    /* access modifiers changed from: private */
-    public Paint paintFill = new Paint(1);
-    /* access modifiers changed from: private */
-    public Paint paintProgress = new Paint(1);
-    /* access modifiers changed from: private */
-    public Paint paintProgress2 = new Paint(1);
+    private Paint paintCalculcating;
+    private Paint paintFill;
+    private Paint paintProgress;
+    private Paint paintProgress2;
     float progress;
     float progress2;
     ProgressView progressView;
@@ -53,25 +48,31 @@ public class StroageUsageView extends FrameLayout {
 
     public StroageUsageView(Context context) {
         super(context);
+        this.paintFill = new Paint(1);
+        this.paintCalculcating = new Paint(1);
+        this.paintProgress = new Paint(1);
+        this.paintProgress2 = new Paint(1);
+        this.bgPaint = new Paint();
+        this.cellFlickerDrawable = new CellFlickerDrawable(220, 255);
         setWillNotDraw(false);
         this.cellFlickerDrawable.drawFrame = false;
-        this.paintFill.setStrokeWidth((float) AndroidUtilities.dp(6.0f));
-        this.paintCalculcating.setStrokeWidth((float) AndroidUtilities.dp(6.0f));
-        this.paintProgress.setStrokeWidth((float) AndroidUtilities.dp(6.0f));
-        this.paintProgress2.setStrokeWidth((float) AndroidUtilities.dp(6.0f));
+        this.paintFill.setStrokeWidth(AndroidUtilities.dp(6.0f));
+        this.paintCalculcating.setStrokeWidth(AndroidUtilities.dp(6.0f));
+        this.paintProgress.setStrokeWidth(AndroidUtilities.dp(6.0f));
+        this.paintProgress2.setStrokeWidth(AndroidUtilities.dp(6.0f));
         this.paintFill.setStrokeCap(Paint.Cap.ROUND);
         this.paintCalculcating.setStrokeCap(Paint.Cap.ROUND);
         this.paintProgress.setStrokeCap(Paint.Cap.ROUND);
         this.paintProgress2.setStrokeCap(Paint.Cap.ROUND);
-        ProgressView progressView2 = new ProgressView(context);
-        this.progressView = progressView2;
-        addView(progressView2, LayoutHelper.createFrame(-1, -2.0f));
+        ProgressView progressView = new ProgressView(context);
+        this.progressView = progressView;
+        addView(progressView, LayoutHelper.createFrame(-1, -2.0f));
         LinearLayout linearLayout = new LinearLayout(context);
         linearLayout.setOrientation(1);
         addView(linearLayout, LayoutHelper.createFrame(-1, -2.0f));
-        AnonymousClass1 r5 = new FrameLayout(this, context) {
-            /* access modifiers changed from: protected */
-            public void onMeasure(int i, int i2) {
+        FrameLayout frameLayout = new FrameLayout(this, context) { // from class: org.telegram.ui.Components.StroageUsageView.1
+            @Override // android.widget.FrameLayout, android.view.View
+            protected void onMeasure(int i, int i2) {
                 super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), i2);
                 int childCount = getChildCount();
                 int i3 = 0;
@@ -90,8 +91,8 @@ public class StroageUsageView extends FrameLayout {
                 setMeasuredDimension(getMeasuredWidth(), i3);
             }
 
-            /* access modifiers changed from: protected */
-            public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+            @Override // android.widget.FrameLayout, android.view.ViewGroup, android.view.View
+            protected void onLayout(boolean z, int i, int i2, int i3, int i4) {
                 int childCount = getChildCount();
                 int i5 = 0;
                 int i6 = 0;
@@ -107,8 +108,8 @@ public class StroageUsageView extends FrameLayout {
                 }
             }
         };
-        this.legendLayout = r5;
-        linearLayout.addView(r5, LayoutHelper.createLinear(-1, -2, 21.0f, 40.0f, 21.0f, 16.0f));
+        this.legendLayout = frameLayout;
+        linearLayout.addView(frameLayout, LayoutHelper.createLinear(-1, -2, 21.0f, 40.0f, 21.0f, 16.0f));
         TextView textView = new TextView(context);
         this.calculatingTextView = textView;
         textView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText"));
@@ -116,9 +117,9 @@ public class StroageUsageView extends FrameLayout {
         int indexOf = string.indexOf("...");
         if (indexOf >= 0) {
             SpannableString spannableString = new SpannableString(string);
-            EllipsizeSpanAnimator ellipsizeSpanAnimator2 = new EllipsizeSpanAnimator(this.calculatingTextView);
-            this.ellipsizeSpanAnimator = ellipsizeSpanAnimator2;
-            ellipsizeSpanAnimator2.wrap(spannableString, indexOf);
+            EllipsizeSpanAnimator ellipsizeSpanAnimator = new EllipsizeSpanAnimator(this.calculatingTextView);
+            this.ellipsizeSpanAnimator = ellipsizeSpanAnimator;
+            ellipsizeSpanAnimator.wrap(spannableString, indexOf);
             this.calculatingTextView.setText(spannableString);
         } else {
             this.calculatingTextView.setText(string);
@@ -158,9 +159,9 @@ public class StroageUsageView extends FrameLayout {
         linearLayout.addView(view, LayoutHelper.createLinear(-1, -2, 0, 21, 0, 0, 0));
         this.divider.getLayoutParams().height = 1;
         this.divider.setBackgroundColor(Theme.getColor("divider"));
-        TextSettingsCell textSettingsCell2 = new TextSettingsCell(getContext());
-        this.textSettingsCell = textSettingsCell2;
-        linearLayout.addView(textSettingsCell2, LayoutHelper.createLinear(-1, -2));
+        TextSettingsCell textSettingsCell = new TextSettingsCell(getContext());
+        this.textSettingsCell = textSettingsCell;
+        linearLayout.addView(textSettingsCell, LayoutHelper.createLinear(-1, -2));
     }
 
     public void setStorageUsage(boolean z, long j, long j2, long j3, long j4) {
@@ -178,14 +179,14 @@ public class StroageUsageView extends FrameLayout {
             this.textSettingsCell.setVisibility(8);
             this.progress = 0.0f;
             this.progress2 = 0.0f;
-            EllipsizeSpanAnimator ellipsizeSpanAnimator2 = this.ellipsizeSpanAnimator;
-            if (ellipsizeSpanAnimator2 != null) {
-                ellipsizeSpanAnimator2.addView(this.calculatingTextView);
+            EllipsizeSpanAnimator ellipsizeSpanAnimator = this.ellipsizeSpanAnimator;
+            if (ellipsizeSpanAnimator != null) {
+                ellipsizeSpanAnimator.addView(this.calculatingTextView);
             }
         } else {
-            EllipsizeSpanAnimator ellipsizeSpanAnimator3 = this.ellipsizeSpanAnimator;
-            if (ellipsizeSpanAnimator3 != null) {
-                ellipsizeSpanAnimator3.removeView(this.calculatingTextView);
+            EllipsizeSpanAnimator ellipsizeSpanAnimator2 = this.ellipsizeSpanAnimator;
+            if (ellipsizeSpanAnimator2 != null) {
+                ellipsizeSpanAnimator2.removeView(this.calculatingTextView);
             }
             this.calculatingTextView.setVisibility(8);
             if (j2 > 0) {
@@ -208,23 +209,33 @@ public class StroageUsageView extends FrameLayout {
             float f2 = ((float) (j2 + j)) / f;
             float f3 = ((float) j5) / f;
             if (this.progress != f2) {
-                ValueAnimator valueAnimator3 = this.valueAnimator;
-                if (valueAnimator3 != null) {
-                    valueAnimator3.cancel();
+                ValueAnimator valueAnimator = this.valueAnimator;
+                if (valueAnimator != null) {
+                    valueAnimator.cancel();
                 }
-                ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{this.progress, f2});
+                ValueAnimator ofFloat = ValueAnimator.ofFloat(this.progress, f2);
                 this.valueAnimator = ofFloat;
-                ofFloat.addUpdateListener(new StroageUsageView$$ExternalSyntheticLambda0(this));
+                ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() { // from class: org.telegram.ui.Components.StroageUsageView$$ExternalSyntheticLambda0
+                    @Override // android.animation.ValueAnimator.AnimatorUpdateListener
+                    public final void onAnimationUpdate(ValueAnimator valueAnimator2) {
+                        StroageUsageView.this.lambda$setStorageUsage$0(valueAnimator2);
+                    }
+                });
                 this.valueAnimator.start();
             }
             if (this.progress2 != f3) {
-                ValueAnimator valueAnimator4 = this.valueAnimator2;
-                if (valueAnimator4 != null) {
-                    valueAnimator4.cancel();
+                ValueAnimator valueAnimator2 = this.valueAnimator2;
+                if (valueAnimator2 != null) {
+                    valueAnimator2.cancel();
                 }
-                ValueAnimator ofFloat2 = ValueAnimator.ofFloat(new float[]{this.progress2, f3});
+                ValueAnimator ofFloat2 = ValueAnimator.ofFloat(this.progress2, f3);
                 this.valueAnimator2 = ofFloat2;
-                ofFloat2.addUpdateListener(new StroageUsageView$$ExternalSyntheticLambda1(this));
+                ofFloat2.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() { // from class: org.telegram.ui.Components.StroageUsageView$$ExternalSyntheticLambda1
+                    @Override // android.animation.ValueAnimator.AnimatorUpdateListener
+                    public final void onAnimationUpdate(ValueAnimator valueAnimator3) {
+                        StroageUsageView.this.lambda$setStorageUsage$1(valueAnimator3);
+                    }
+                });
                 this.valueAnimator2.start();
             }
         }
@@ -232,18 +243,19 @@ public class StroageUsageView extends FrameLayout {
         requestLayout();
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$setStorageUsage$0(ValueAnimator valueAnimator3) {
-        this.progress = ((Float) valueAnimator3.getAnimatedValue()).floatValue();
+    /* JADX INFO: Access modifiers changed from: private */
+    public /* synthetic */ void lambda$setStorageUsage$0(ValueAnimator valueAnimator) {
+        this.progress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidate();
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$setStorageUsage$1(ValueAnimator valueAnimator3) {
-        this.progress2 = ((Float) valueAnimator3.getAnimatedValue()).floatValue();
+    /* JADX INFO: Access modifiers changed from: private */
+    public /* synthetic */ void lambda$setStorageUsage$1(ValueAnimator valueAnimator) {
+        this.progress2 = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidate();
     }
 
+    @Override // android.view.View
     public void invalidate() {
         super.invalidate();
         this.progressView.invalidate();
@@ -262,18 +274,20 @@ public class StroageUsageView extends FrameLayout {
         this.divider.setBackgroundColor(Theme.getColor("divider"));
     }
 
-    private class ProgressView extends View {
+    /* JADX INFO: Access modifiers changed from: private */
+    /* loaded from: classes3.dex */
+    public class ProgressView extends View {
         public ProgressView(Context context) {
             super(context);
         }
 
-        /* access modifiers changed from: protected */
-        public void onMeasure(int i, int i2) {
+        @Override // android.view.View
+        protected void onMeasure(int i, int i2) {
             super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(40.0f), NUM));
         }
 
-        /* access modifiers changed from: protected */
-        public void onDraw(Canvas canvas) {
+        @Override // android.view.View
+        protected void onDraw(Canvas canvas) {
             super.onDraw(canvas);
             int color = Theme.getColor("player_progress");
             StroageUsageView.this.paintFill.setColor(color);
@@ -283,8 +297,7 @@ public class StroageUsageView extends FrameLayout {
             StroageUsageView.this.paintProgress2.setAlpha(82);
             StroageUsageView.this.paintFill.setAlpha(46);
             StroageUsageView.this.bgPaint.setColor(Theme.getColor("windowBackgroundWhite"));
-            Canvas canvas2 = canvas;
-            canvas2.drawLine((float) AndroidUtilities.dp(24.0f), (float) AndroidUtilities.dp(20.0f), (float) (getMeasuredWidth() - AndroidUtilities.dp(24.0f)), (float) AndroidUtilities.dp(20.0f), StroageUsageView.this.paintFill);
+            canvas.drawLine(AndroidUtilities.dp(24.0f), AndroidUtilities.dp(20.0f), getMeasuredWidth() - AndroidUtilities.dp(24.0f), AndroidUtilities.dp(20.0f), StroageUsageView.this.paintFill);
             if (StroageUsageView.this.calculating || StroageUsageView.this.calculatingProgress != 0.0f) {
                 if (StroageUsageView.this.calculating) {
                     StroageUsageView stroageUsageView = StroageUsageView.this;
@@ -313,48 +326,44 @@ public class StroageUsageView extends FrameLayout {
                 }
                 invalidate();
                 RectF rectF = AndroidUtilities.rectTmp;
-                rectF.set((float) AndroidUtilities.dp(24.0f), (float) AndroidUtilities.dp(17.0f), (float) (getMeasuredWidth() - AndroidUtilities.dp(24.0f)), (float) AndroidUtilities.dp(23.0f));
+                rectF.set(AndroidUtilities.dp(24.0f), AndroidUtilities.dp(17.0f), getMeasuredWidth() - AndroidUtilities.dp(24.0f), AndroidUtilities.dp(23.0f));
                 StroageUsageView.this.cellFlickerDrawable.setParentWidth(getMeasuredWidth());
-                StroageUsageView.this.cellFlickerDrawable.draw(canvas, rectF, (float) AndroidUtilities.dp(3.0f), (View) null);
-            } else {
-                Canvas canvas3 = canvas;
+                StroageUsageView.this.cellFlickerDrawable.draw(canvas, rectF, AndroidUtilities.dp(3.0f), null);
             }
             int dp = AndroidUtilities.dp(24.0f);
             if (!StroageUsageView.this.calculating) {
-                int measuredWidth = (int) (((float) (getMeasuredWidth() - (AndroidUtilities.dp(24.0f) * 2))) * StroageUsageView.this.progress2);
+                int measuredWidth = (int) ((getMeasuredWidth() - (AndroidUtilities.dp(24.0f) * 2)) * StroageUsageView.this.progress2);
                 int dp2 = AndroidUtilities.dp(24.0f) + measuredWidth;
-                Canvas canvas4 = canvas;
-                canvas4.drawLine((float) dp, (float) AndroidUtilities.dp(20.0f), (float) (AndroidUtilities.dp(24.0f) + measuredWidth), (float) AndroidUtilities.dp(20.0f), StroageUsageView.this.paintProgress2);
-                canvas4.drawRect((float) dp2, (float) (AndroidUtilities.dp(20.0f) - AndroidUtilities.dp(3.0f)), (float) (dp2 + AndroidUtilities.dp(3.0f)), (float) (AndroidUtilities.dp(20.0f) + AndroidUtilities.dp(3.0f)), StroageUsageView.this.bgPaint);
+                canvas.drawLine(dp, AndroidUtilities.dp(20.0f), AndroidUtilities.dp(24.0f) + measuredWidth, AndroidUtilities.dp(20.0f), StroageUsageView.this.paintProgress2);
+                canvas.drawRect(dp2, AndroidUtilities.dp(20.0f) - AndroidUtilities.dp(3.0f), dp2 + AndroidUtilities.dp(3.0f), AndroidUtilities.dp(20.0f) + AndroidUtilities.dp(3.0f), StroageUsageView.this.bgPaint);
             }
             if (!StroageUsageView.this.calculating) {
-                int measuredWidth2 = (int) (((float) (getMeasuredWidth() - (AndroidUtilities.dp(24.0f) * 2))) * StroageUsageView.this.progress);
+                int measuredWidth2 = (int) ((getMeasuredWidth() - (AndroidUtilities.dp(24.0f) * 2)) * StroageUsageView.this.progress);
                 if (measuredWidth2 < AndroidUtilities.dp(1.0f)) {
                     measuredWidth2 = AndroidUtilities.dp(1.0f);
                 }
                 int dp3 = AndroidUtilities.dp(24.0f) + measuredWidth2;
-                Canvas canvas5 = canvas;
-                canvas5.drawLine((float) dp, (float) AndroidUtilities.dp(20.0f), (float) (AndroidUtilities.dp(24.0f) + measuredWidth2), (float) AndroidUtilities.dp(20.0f), StroageUsageView.this.paintProgress);
-                canvas5.drawRect((float) dp3, (float) (AndroidUtilities.dp(20.0f) - AndroidUtilities.dp(3.0f)), (float) (dp3 + AndroidUtilities.dp(3.0f)), (float) (AndroidUtilities.dp(20.0f) + AndroidUtilities.dp(3.0f)), StroageUsageView.this.bgPaint);
+                canvas.drawLine(dp, AndroidUtilities.dp(20.0f), AndroidUtilities.dp(24.0f) + measuredWidth2, AndroidUtilities.dp(20.0f), StroageUsageView.this.paintProgress);
+                canvas.drawRect(dp3, AndroidUtilities.dp(20.0f) - AndroidUtilities.dp(3.0f), dp3 + AndroidUtilities.dp(3.0f), AndroidUtilities.dp(20.0f) + AndroidUtilities.dp(3.0f), StroageUsageView.this.bgPaint);
             }
         }
     }
 
-    /* access modifiers changed from: protected */
-    public void onAttachedToWindow() {
+    @Override // android.view.ViewGroup, android.view.View
+    protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        EllipsizeSpanAnimator ellipsizeSpanAnimator2 = this.ellipsizeSpanAnimator;
-        if (ellipsizeSpanAnimator2 != null) {
-            ellipsizeSpanAnimator2.onAttachedToWindow();
+        EllipsizeSpanAnimator ellipsizeSpanAnimator = this.ellipsizeSpanAnimator;
+        if (ellipsizeSpanAnimator != null) {
+            ellipsizeSpanAnimator.onAttachedToWindow();
         }
     }
 
-    /* access modifiers changed from: protected */
-    public void onDetachedFromWindow() {
+    @Override // android.view.ViewGroup, android.view.View
+    protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        EllipsizeSpanAnimator ellipsizeSpanAnimator2 = this.ellipsizeSpanAnimator;
-        if (ellipsizeSpanAnimator2 != null) {
-            ellipsizeSpanAnimator2.onDetachedFromWindow();
+        EllipsizeSpanAnimator ellipsizeSpanAnimator = this.ellipsizeSpanAnimator;
+        if (ellipsizeSpanAnimator != null) {
+            ellipsizeSpanAnimator.onDetachedFromWindow();
         }
     }
 }

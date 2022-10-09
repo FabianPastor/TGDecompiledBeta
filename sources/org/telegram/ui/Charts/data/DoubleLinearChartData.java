@@ -2,7 +2,7 @@ package org.telegram.ui.Charts.data;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
+/* loaded from: classes3.dex */
 public class DoubleLinearChartData extends ChartData {
     public float[] linesK;
 
@@ -10,7 +10,8 @@ public class DoubleLinearChartData extends ChartData {
         super(jSONObject);
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
+    @Override // org.telegram.ui.Charts.data.ChartData
     public void measure() {
         super.measure();
         int size = this.lines.size();
@@ -27,7 +28,7 @@ public class DoubleLinearChartData extends ChartData {
             if (i == i5) {
                 this.linesK[i4] = 1.0f;
             } else {
-                this.linesK[i4] = (float) (i / i5);
+                this.linesK[i4] = i / i5;
             }
         }
     }

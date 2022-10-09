@@ -2,7 +2,7 @@ package org.telegram.ui.Components;
 
 import android.text.InputFilter;
 import android.text.Spanned;
-
+/* loaded from: classes3.dex */
 public class CodepointsLengthInputFilter implements InputFilter {
     private final int mMax;
 
@@ -10,6 +10,7 @@ public class CodepointsLengthInputFilter implements InputFilter {
         this.mMax = i;
     }
 
+    @Override // android.text.InputFilter
     public CharSequence filter(CharSequence charSequence, int i, int i2, Spanned spanned, int i3, int i4) {
         int codePointCount = this.mMax - (Character.codePointCount(spanned, 0, spanned.length()) - Character.codePointCount(spanned, i3, i4));
         if (codePointCount <= 0) {
@@ -19,9 +20,6 @@ public class CodepointsLengthInputFilter implements InputFilter {
             return null;
         }
         int i5 = codePointCount + i;
-        if (!Character.isHighSurrogate(charSequence.charAt(i5 - 1)) || i5 - 1 != i) {
-            return charSequence.subSequence(i, i5);
-        }
-        return "";
+        return (!Character.isHighSurrogate(charSequence.charAt(i5 + (-1))) || (i5 = i5 + (-1)) != i) ? charSequence.subSequence(i, i5) : "";
     }
 }

@@ -2,7 +2,7 @@ package org.telegram.messenger;
 
 import android.os.Build;
 import java.lang.reflect.Field;
-
+/* loaded from: classes.dex */
 public class OneUIUtilities {
     public static final int ONE_UI_4_0 = 40000;
     private static Boolean isOneUI;
@@ -11,6 +11,7 @@ public class OneUIUtilities {
     private static float oneUIMinorVersion;
 
     public static boolean isOneUI() {
+        int intValue;
         Boolean bool = isOneUI;
         if (bool != null) {
             return bool.booleanValue();
@@ -18,19 +19,19 @@ public class OneUIUtilities {
         try {
             Field declaredField = Build.VERSION.class.getDeclaredField("SEM_PLATFORM_INT");
             declaredField.setAccessible(true);
-            int intValue = ((Integer) declaredField.get((Object) null)).intValue();
-            if (intValue < 100000) {
-                return false;
-            }
-            int i = intValue - 90000;
-            oneUIEncodedVersion = i;
-            oneUIMajorVersion = i / 10000;
-            oneUIMinorVersion = ((float) (i % 10000)) / 100.0f;
-            isOneUI = Boolean.TRUE;
-            return isOneUI.booleanValue();
+            intValue = ((Integer) declaredField.get(null)).intValue();
         } catch (Exception unused) {
             isOneUI = Boolean.FALSE;
         }
+        if (intValue < 100000) {
+            return false;
+        }
+        int i = intValue - 90000;
+        oneUIEncodedVersion = i;
+        oneUIMajorVersion = i / 10000;
+        oneUIMinorVersion = (i % 10000) / 100.0f;
+        isOneUI = Boolean.TRUE;
+        return isOneUI.booleanValue();
     }
 
     public static boolean hasBuiltInClipboardToasts() {

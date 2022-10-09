@@ -2,253 +2,254 @@ package j$.util.stream;
 
 import j$.util.CLASSNAMEg;
 import j$.util.CLASSNAMEj;
-import j$.util.CLASSNAMEn;
-import j$.util.L;
+import j$.util.InterfaceCLASSNAMEn;
 import j$.util.function.BiConsumer;
-import j$.util.function.b;
-import j$.util.function.d;
-import j$.util.function.f;
-import j$.util.function.g;
-import j$.util.function.h;
-import j$.util.function.m;
-import j$.util.function.y;
-import j$.util.t;
-import j$.util.u;
-import j$.wrappers.E;
-import j$.wrappers.G;
-import j$.wrappers.K;
 import java.util.Iterator;
-
-abstract class T extends CLASSNAMEc implements U {
-    T(CLASSNAMEc cVar, int i) {
-        super(cVar, i);
+/* loaded from: classes2.dex */
+public abstract class T extends AbstractCLASSNAMEc implements U {
+    public T(AbstractCLASSNAMEc abstractCLASSNAMEc, int i) {
+        super(abstractCLASSNAMEc, i);
     }
 
-    T(u uVar, int i, boolean z) {
+    public T(j$.util.u uVar, int i, boolean z) {
         super(uVar, i, z);
     }
 
-    /* access modifiers changed from: private */
-    public static t M0(u uVar) {
-        if (uVar instanceof t) {
-            return (t) uVar;
+    public static /* synthetic */ j$.util.t L0(j$.util.u uVar) {
+        return M0(uVar);
+    }
+
+    public static j$.util.t M0(j$.util.u uVar) {
+        if (uVar instanceof j$.util.t) {
+            return (j$.util.t) uVar;
         }
-        if (Q4.a) {
-            Q4.a(CLASSNAMEc.class, "using DoubleStream.adapt(Spliterator<Double> s)");
+        if (!Q4.a) {
+            throw new UnsupportedOperationException("DoubleStream.adapt(Spliterator<Double> s)");
+        }
+        Q4.a(AbstractCLASSNAMEc.class, "using DoubleStream.adapt(Spliterator<Double> s)");
+        throw null;
+    }
+
+    @Override // j$.util.stream.AbstractCLASSNAMEc
+    final void A0(j$.util.u uVar, InterfaceCLASSNAMEm3 interfaceCLASSNAMEm3) {
+        j$.util.function.f f;
+        j$.util.t M0 = M0(uVar);
+        if (interfaceCLASSNAMEm3 instanceof j$.util.function.f) {
+            f = (j$.util.function.f) interfaceCLASSNAMEm3;
+        } else if (Q4.a) {
+            Q4.a(AbstractCLASSNAMEc.class, "using DoubleStream.adapt(Sink<Double> s)");
             throw null;
+        } else {
+            f = new F(interfaceCLASSNAMEm3);
         }
-        throw new UnsupportedOperationException("DoubleStream.adapt(Spliterator<Double> s)");
+        while (!interfaceCLASSNAMEm3.o() && M0.k(f)) {
+        }
     }
 
-    /* access modifiers changed from: package-private */
-    /* JADX WARNING: Removed duplicated region for block: B:6:0x0015 A[LOOP:0: B:6:0x0015->B:9:0x001f, LOOP_START] */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public final void A0(j$.util.u r3, j$.util.stream.CLASSNAMEm3 r4) {
-        /*
-            r2 = this;
-            j$.util.t r3 = M0(r3)
-            boolean r0 = r4 instanceof j$.util.function.f
-            if (r0 == 0) goto L_0x000c
-            r0 = r4
-            j$.util.function.f r0 = (j$.util.function.f) r0
-            goto L_0x0015
-        L_0x000c:
-            boolean r0 = j$.util.stream.Q4.a
-            if (r0 != 0) goto L_0x0022
-            j$.util.stream.F r0 = new j$.util.stream.F
-            r0.<init>((j$.util.stream.CLASSNAMEm3) r4)
-        L_0x0015:
-            boolean r1 = r4.o()
-            if (r1 != 0) goto L_0x0021
-            boolean r1 = r3.k(r0)
-            if (r1 != 0) goto L_0x0015
-        L_0x0021:
-            return
-        L_0x0022:
-            java.lang.Class<j$.util.stream.c> r3 = j$.util.stream.CLASSNAMEc.class
-            java.lang.String r4 = "using DoubleStream.adapt(Sink<Double> s)"
-            j$.util.stream.Q4.a(r3, r4)
-            r3 = 0
-            goto L_0x002c
-        L_0x002b:
-            throw r3
-        L_0x002c:
-            goto L_0x002b
-        */
-        throw new UnsupportedOperationException("Method not decompiled: j$.util.stream.T.A0(j$.util.u, j$.util.stream.m3):void");
+    @Override // j$.util.stream.AbstractCLASSNAMEc
+    public final EnumCLASSNAMEe4 B0() {
+        return EnumCLASSNAMEe4.DOUBLE_VALUE;
     }
 
-    /* access modifiers changed from: package-private */
-    public final CLASSNAMEe4 B0() {
-        return CLASSNAMEe4.DOUBLE_VALUE;
-    }
-
-    public final CLASSNAMEj G(d dVar) {
+    @Override // j$.util.stream.U
+    public final CLASSNAMEj G(j$.util.function.d dVar) {
         dVar.getClass();
-        return (CLASSNAMEj) x0(new D2(CLASSNAMEe4.DOUBLE_VALUE, dVar));
+        return (CLASSNAMEj) x0(new D2(EnumCLASSNAMEe4.DOUBLE_VALUE, dVar));
     }
 
-    public final Object H(y yVar, j$.util.function.u uVar, BiConsumer biConsumer) {
+    @Override // j$.util.stream.U
+    public final Object H(j$.util.function.y yVar, j$.util.function.u uVar, BiConsumer biConsumer) {
         C c = new C(biConsumer, 0);
         yVar.getClass();
         uVar.getClass();
-        return x0(new CLASSNAMEz2(CLASSNAMEe4.DOUBLE_VALUE, (b) c, uVar, yVar));
+        return x0(new CLASSNAMEz2(EnumCLASSNAMEe4.DOUBLE_VALUE, c, uVar, yVar));
     }
 
-    public final double K(double d, d dVar) {
+    @Override // j$.util.stream.U
+    public final double K(double d, j$.util.function.d dVar) {
         dVar.getClass();
-        return ((Double) x0(new B2(CLASSNAMEe4.DOUBLE_VALUE, dVar, d))).doubleValue();
+        return ((Double) x0(new B2(EnumCLASSNAMEe4.DOUBLE_VALUE, dVar, d))).doubleValue();
     }
 
-    /* access modifiers changed from: package-private */
-    public final u K0(CLASSNAMEy2 y2Var, y yVar, boolean z) {
-        return new CLASSNAMEo4(y2Var, yVar, z);
+    @Override // j$.util.stream.AbstractCLASSNAMEc
+    final j$.util.u K0(AbstractCLASSNAMEy2 abstractCLASSNAMEy2, j$.util.function.y yVar, boolean z) {
+        return new CLASSNAMEo4(abstractCLASSNAMEy2, yVar, z);
     }
 
-    public final Stream M(g gVar) {
+    @Override // j$.util.stream.U
+    public final Stream M(j$.util.function.g gVar) {
         gVar.getClass();
-        return new L(this, (CLASSNAMEc) this, CLASSNAMEe4.DOUBLE_VALUE, CLASSNAMEd4.p | CLASSNAMEd4.n, gVar);
+        return new L(this, this, EnumCLASSNAMEe4.DOUBLE_VALUE, EnumCLASSNAMEd4.p | EnumCLASSNAMEd4.n, gVar);
     }
 
-    public final IntStream R(G g) {
+    @Override // j$.util.stream.U
+    public final IntStream R(j$.wrappers.G g) {
         g.getClass();
-        return new M(this, (CLASSNAMEc) this, CLASSNAMEe4.DOUBLE_VALUE, CLASSNAMEd4.p | CLASSNAMEd4.n, g);
+        return new M(this, this, EnumCLASSNAMEe4.DOUBLE_VALUE, EnumCLASSNAMEd4.p | EnumCLASSNAMEd4.n, g);
     }
 
-    public final boolean Y(E e) {
-        return ((Boolean) x0(CLASSNAMEo1.u(e, CLASSNAMEk1.ALL))).booleanValue();
+    @Override // j$.util.stream.U
+    public final boolean Y(j$.wrappers.E e) {
+        return ((Boolean) x0(AbstractCLASSNAMEo1.u(e, EnumCLASSNAMEk1.ALL))).booleanValue();
     }
 
+    @Override // j$.util.stream.U
     public final CLASSNAMEj average() {
         double[] dArr = (double[]) H(CLASSNAMEx.a, CLASSNAMEv.a, A.a);
-        return dArr[2] > 0.0d ? CLASSNAMEj.d(CLASSNAMEl.a(dArr) / dArr[2]) : CLASSNAMEj.a();
+        return dArr[2] > 0.0d ? CLASSNAMEj.d(AbstractCLASSNAMEl.a(dArr) / dArr[2]) : CLASSNAMEj.a();
     }
 
-    public final U b(f fVar) {
+    @Override // j$.util.stream.U
+    public final U b(j$.util.function.f fVar) {
         fVar.getClass();
-        return new K(this, (CLASSNAMEc) this, CLASSNAMEe4.DOUBLE_VALUE, 0, fVar);
+        return new K(this, this, EnumCLASSNAMEe4.DOUBLE_VALUE, 0, fVar);
     }
 
+    @Override // j$.util.stream.U
     public final Stream boxed() {
         return M(G.a);
     }
 
+    @Override // j$.util.stream.U
     public final long count() {
-        return ((CLASSNAMEd1) x(H.a)).sum();
+        return ((AbstractCLASSNAMEd1) x(H.a)).sum();
     }
 
+    @Override // j$.util.stream.U
     public final U distinct() {
-        return ((CLASSNAMEe3) M(G.a)).distinct().j0(CLASSNAMEz.a);
+        return ((AbstractCLASSNAMEe3) M(G.a)).distinct().j0(CLASSNAMEz.a);
     }
 
+    @Override // j$.util.stream.U
     public final CLASSNAMEj findAny() {
-        return (CLASSNAMEj) x0(new CLASSNAMEd0(false, CLASSNAMEe4.DOUBLE_VALUE, CLASSNAMEj.a(), W.a, Z.a));
+        return (CLASSNAMEj) x0(new CLASSNAMEd0(false, EnumCLASSNAMEe4.DOUBLE_VALUE, CLASSNAMEj.a(), W.a, Z.a));
     }
 
+    @Override // j$.util.stream.U
     public final CLASSNAMEj findFirst() {
-        return (CLASSNAMEj) x0(new CLASSNAMEd0(true, CLASSNAMEe4.DOUBLE_VALUE, CLASSNAMEj.a(), W.a, Z.a));
+        return (CLASSNAMEj) x0(new CLASSNAMEd0(true, EnumCLASSNAMEe4.DOUBLE_VALUE, CLASSNAMEj.a(), W.a, Z.a));
     }
 
-    public final boolean h0(E e) {
-        return ((Boolean) x0(CLASSNAMEo1.u(e, CLASSNAMEk1.ANY))).booleanValue();
+    @Override // j$.util.stream.U
+    public final boolean h0(j$.wrappers.E e) {
+        return ((Boolean) x0(AbstractCLASSNAMEo1.u(e, EnumCLASSNAMEk1.ANY))).booleanValue();
     }
 
-    public final boolean i0(E e) {
-        return ((Boolean) x0(CLASSNAMEo1.u(e, CLASSNAMEk1.NONE))).booleanValue();
+    @Override // j$.util.stream.U
+    public final boolean i0(j$.wrappers.E e) {
+        return ((Boolean) x0(AbstractCLASSNAMEo1.u(e, EnumCLASSNAMEk1.NONE))).booleanValue();
     }
 
-    public final CLASSNAMEn iterator() {
-        return L.f(spliterator());
+    @Override // j$.util.stream.InterfaceCLASSNAMEg
+    /* renamed from: iterator */
+    public final InterfaceCLASSNAMEn mo303iterator() {
+        return j$.util.L.f(mo306spliterator());
     }
 
-    /* renamed from: iterator  reason: collision with other method in class */
-    public Iterator m4iterator() {
-        return L.f(spliterator());
+    @Override // j$.util.stream.InterfaceCLASSNAMEg
+    /* renamed from: iterator */
+    public Iterator mo303iterator() {
+        return j$.util.L.f(mo306spliterator());
     }
 
-    public void j(f fVar) {
+    public void j(j$.util.function.f fVar) {
         fVar.getClass();
         x0(new CLASSNAMEk0(fVar, false));
     }
 
-    public void l0(f fVar) {
+    public void l0(j$.util.function.f fVar) {
         fVar.getClass();
         x0(new CLASSNAMEk0(fVar, true));
     }
 
+    @Override // j$.util.stream.U
     public final U limit(long j) {
         if (j >= 0) {
-            return B3.f(this, 0, j);
+            return B3.f(this, 0L, j);
         }
         throw new IllegalArgumentException(Long.toString(j));
     }
 
+    @Override // j$.util.stream.U
     public final CLASSNAMEj max() {
         return G(D.a);
     }
 
+    @Override // j$.util.stream.U
     public final CLASSNAMEj min() {
         return G(E.a);
     }
 
-    public final U r(E e) {
+    @Override // j$.util.stream.U
+    public final U r(j$.wrappers.E e) {
         e.getClass();
-        return new K(this, (CLASSNAMEc) this, CLASSNAMEe4.DOUBLE_VALUE, CLASSNAMEd4.t, e);
+        return new K(this, this, EnumCLASSNAMEe4.DOUBLE_VALUE, EnumCLASSNAMEd4.t, e);
     }
 
+    @Override // j$.util.stream.U
     public final U skip(long j) {
-        int i = (j > 0 ? 1 : (j == 0 ? 0 : -1));
+        int i = (j > 0L ? 1 : (j == 0L ? 0 : -1));
         if (i >= 0) {
-            return i == 0 ? this : B3.f(this, j, -1);
+            return i == 0 ? this : B3.f(this, j, -1L);
         }
         throw new IllegalArgumentException(Long.toString(j));
     }
 
+    @Override // j$.util.stream.U
     public final U sorted() {
         return new J3(this);
     }
 
-    public final t spliterator() {
-        return M0(super.spliterator());
+    @Override // j$.util.stream.AbstractCLASSNAMEc, j$.util.stream.InterfaceCLASSNAMEg
+    /* renamed from: spliterator */
+    public final j$.util.t mo306spliterator() {
+        return M0(super.mo306spliterator());
     }
 
+    @Override // j$.util.stream.U
     public final double sum() {
-        return CLASSNAMEl.a((double[]) H(CLASSNAMEy.a, CLASSNAMEw.a, B.a));
+        return AbstractCLASSNAMEl.a((double[]) H(CLASSNAMEy.a, CLASSNAMEw.a, B.a));
     }
 
+    @Override // j$.util.stream.U
     public final CLASSNAMEg summaryStatistics() {
         return (CLASSNAMEg) H(CLASSNAMEi.a, CLASSNAMEu.a, CLASSNAMEt.a);
     }
 
-    /* access modifiers changed from: package-private */
-    public final CLASSNAMEs1 t0(long j, m mVar) {
-        return CLASSNAMEx2.j(j);
+    @Override // j$.util.stream.AbstractCLASSNAMEy2
+    public final InterfaceCLASSNAMEs1 t0(long j, j$.util.function.m mVar) {
+        return AbstractCLASSNAMEx2.j(j);
     }
 
+    @Override // j$.util.stream.U
     public final double[] toArray() {
-        return (double[]) CLASSNAMEx2.m((CLASSNAMEu1) y0(I.a)).e();
+        return (double[]) AbstractCLASSNAMEx2.m((InterfaceCLASSNAMEu1) y0(I.a)).e();
     }
 
-    public CLASSNAMEg unordered() {
-        return !C0() ? this : new O(this, (CLASSNAMEc) this, CLASSNAMEe4.DOUBLE_VALUE, CLASSNAMEd4.r);
+    @Override // j$.util.stream.InterfaceCLASSNAMEg
+    public InterfaceCLASSNAMEg unordered() {
+        return !C0() ? this : new O(this, this, EnumCLASSNAMEe4.DOUBLE_VALUE, EnumCLASSNAMEd4.r);
     }
 
-    public final U w(g gVar) {
-        return new K(this, (CLASSNAMEc) this, CLASSNAMEe4.DOUBLE_VALUE, CLASSNAMEd4.p | CLASSNAMEd4.n | CLASSNAMEd4.t, gVar);
+    @Override // j$.util.stream.U
+    public final U w(j$.util.function.g gVar) {
+        return new K(this, this, EnumCLASSNAMEe4.DOUBLE_VALUE, EnumCLASSNAMEd4.p | EnumCLASSNAMEd4.n | EnumCLASSNAMEd4.t, gVar);
     }
 
-    public final CLASSNAMEe1 x(h hVar) {
+    @Override // j$.util.stream.U
+    public final InterfaceCLASSNAMEe1 x(j$.util.function.h hVar) {
         hVar.getClass();
-        return new N(this, (CLASSNAMEc) this, CLASSNAMEe4.DOUBLE_VALUE, CLASSNAMEd4.p | CLASSNAMEd4.n, hVar);
+        return new N(this, this, EnumCLASSNAMEe4.DOUBLE_VALUE, EnumCLASSNAMEd4.p | EnumCLASSNAMEd4.n, hVar);
     }
 
-    public final U y(K k) {
+    @Override // j$.util.stream.U
+    public final U y(j$.wrappers.K k) {
         k.getClass();
-        return new K(this, (CLASSNAMEc) this, CLASSNAMEe4.DOUBLE_VALUE, CLASSNAMEd4.p | CLASSNAMEd4.n, k);
+        return new K(this, this, EnumCLASSNAMEe4.DOUBLE_VALUE, EnumCLASSNAMEd4.p | EnumCLASSNAMEd4.n, k);
     }
 
-    /* access modifiers changed from: package-private */
-    public final A1 z0(CLASSNAMEy2 y2Var, u uVar, boolean z, m mVar) {
-        return CLASSNAMEx2.f(y2Var, uVar, z);
+    @Override // j$.util.stream.AbstractCLASSNAMEc
+    final A1 z0(AbstractCLASSNAMEy2 abstractCLASSNAMEy2, j$.util.u uVar, boolean z, j$.util.function.m mVar) {
+        return AbstractCLASSNAMEx2.f(abstractCLASSNAMEy2, uVar, z);
     }
 }

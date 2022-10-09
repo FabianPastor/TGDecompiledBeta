@@ -1,54 +1,55 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_messageReactions extends TLRPC$MessageReactions {
     public static int constructor = NUM;
 
+    @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
-        int i = 0;
         this.min = (readInt32 & 1) != 0;
         this.can_see_list = (readInt32 & 4) != 0;
         int readInt322 = abstractSerializedData.readInt32(z);
-        if (readInt322 == NUM) {
-            int readInt323 = abstractSerializedData.readInt32(z);
-            int i2 = 0;
-            while (i2 < readInt323) {
-                TLRPC$ReactionCount TLdeserialize = TLRPC$ReactionCount.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
-                if (TLdeserialize != null) {
-                    this.results.add(TLdeserialize);
-                    i2++;
-                } else {
-                    return;
-                }
+        if (readInt322 != NUM) {
+            if (z) {
+                throw new RuntimeException(String.format("wrong Vector magic, got %x", Integer.valueOf(readInt322)));
             }
-            if ((this.flags & 2) != 0) {
-                int readInt324 = abstractSerializedData.readInt32(z);
-                if (readInt324 == NUM) {
-                    int readInt325 = abstractSerializedData.readInt32(z);
-                    while (i < readInt325) {
-                        TLRPC$MessagePeerReaction TLdeserialize2 = TLRPC$MessagePeerReaction.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
-                        if (TLdeserialize2 != null) {
-                            this.recent_reactions.add(TLdeserialize2);
-                            i++;
-                        } else {
-                            return;
-                        }
-                    }
-                } else if (z) {
-                    throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt324)}));
-                }
+            return;
+        }
+        int readInt323 = abstractSerializedData.readInt32(z);
+        for (int i = 0; i < readInt323; i++) {
+            TLRPC$ReactionCount TLdeserialize = TLRPC$ReactionCount.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+            if (TLdeserialize == null) {
+                return;
             }
-        } else if (z) {
-            throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt322)}));
+            this.results.add(TLdeserialize);
+        }
+        if ((this.flags & 2) == 0) {
+            return;
+        }
+        int readInt324 = abstractSerializedData.readInt32(z);
+        if (readInt324 != NUM) {
+            if (z) {
+                throw new RuntimeException(String.format("wrong Vector magic, got %x", Integer.valueOf(readInt324)));
+            }
+            return;
+        }
+        int readInt325 = abstractSerializedData.readInt32(z);
+        for (int i2 = 0; i2 < readInt325; i2++) {
+            TLRPC$MessagePeerReaction TLdeserialize2 = TLRPC$MessagePeerReaction.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+            if (TLdeserialize2 == null) {
+                return;
+            }
+            this.recent_reactions.add(TLdeserialize2);
         }
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
-        int i = this.min ? this.flags | 1 : this.flags & -2;
+        int i = this.min ? this.flags | 1 : this.flags & (-2);
         this.flags = i;
-        int i2 = this.can_see_list ? i | 4 : i & -5;
+        int i2 = this.can_see_list ? i | 4 : i & (-5);
         this.flags = i2;
         abstractSerializedData.writeInt32(i2);
         abstractSerializedData.writeInt32(NUM);

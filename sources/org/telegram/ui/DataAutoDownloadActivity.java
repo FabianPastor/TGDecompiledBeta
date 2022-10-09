@@ -36,63 +36,38 @@ import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SlideChooseView;
-
+import org.telegram.ui.DataAutoDownloadActivity;
+/* loaded from: classes3.dex */
 public class DataAutoDownloadActivity extends BaseFragment {
-    /* access modifiers changed from: private */
-    public boolean animateChecked;
-    /* access modifiers changed from: private */
-    public int autoDownloadRow;
-    /* access modifiers changed from: private */
-    public int autoDownloadSectionRow;
-    /* access modifiers changed from: private */
-    public int currentPresetNum;
-    /* access modifiers changed from: private */
-    public int currentType;
+    private boolean animateChecked;
+    private int autoDownloadRow;
+    private int autoDownloadSectionRow;
+    private int currentPresetNum;
+    private int currentType;
     private DownloadController.Preset defaultPreset;
-    /* access modifiers changed from: private */
-    public int filesRow;
-    /* access modifiers changed from: private */
-    public DownloadController.Preset highPreset;
+    private int filesRow;
     private String key;
-    /* access modifiers changed from: private */
-    public String key2;
-    /* access modifiers changed from: private */
-    public ListAdapter listAdapter;
-    /* access modifiers changed from: private */
-    public RecyclerListView listView;
-    /* access modifiers changed from: private */
-    public DownloadController.Preset lowPreset;
-    /* access modifiers changed from: private */
-    public DownloadController.Preset mediumPreset;
-    /* access modifiers changed from: private */
-    public int photosRow;
-    /* access modifiers changed from: private */
-    public ArrayList<DownloadController.Preset> presets = new ArrayList<>();
-    /* access modifiers changed from: private */
-    public int rowCount;
+    private String key2;
+    private ListAdapter listAdapter;
+    private RecyclerListView listView;
+    private int photosRow;
+    private int rowCount;
+    private int typeHeaderRow;
+    private DownloadController.Preset typePreset;
+    private int typeSectionRow;
+    private int usageHeaderRow;
+    private int usageProgressRow;
+    private int usageSectionRow;
+    private int videosRow;
+    private boolean wereAnyChanges;
+    private ArrayList<DownloadController.Preset> presets = new ArrayList<>();
     private int selectedPreset = 1;
-    /* access modifiers changed from: private */
-    public int typeHeaderRow;
-    /* access modifiers changed from: private */
-    public DownloadController.Preset typePreset;
-    /* access modifiers changed from: private */
-    public int typeSectionRow;
-    /* access modifiers changed from: private */
-    public int usageHeaderRow;
-    /* access modifiers changed from: private */
-    public int usageProgressRow;
-    /* access modifiers changed from: private */
-    public int usageSectionRow;
-    /* access modifiers changed from: private */
-    public int videosRow;
-    /* access modifiers changed from: private */
-    public boolean wereAnyChanges;
+    private DownloadController.Preset lowPreset = DownloadController.getInstance(this.currentAccount).lowPreset;
+    private DownloadController.Preset mediumPreset = DownloadController.getInstance(this.currentAccount).mediumPreset;
+    private DownloadController.Preset highPreset = DownloadController.getInstance(this.currentAccount).highPreset;
 
     public DataAutoDownloadActivity(int i) {
         this.currentType = i;
-        this.lowPreset = DownloadController.getInstance(this.currentAccount).lowPreset;
-        this.mediumPreset = DownloadController.getInstance(this.currentAccount).mediumPreset;
-        this.highPreset = DownloadController.getInstance(this.currentAccount).highPreset;
         int i2 = this.currentType;
         if (i2 == 0) {
             this.currentPresetNum = DownloadController.getInstance(this.currentAccount).currentMobilePreset;
@@ -115,6 +90,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
         }
     }
 
+    @Override // org.telegram.ui.ActionBar.BaseFragment
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
         fillPresets();
@@ -122,6 +98,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
         return true;
     }
 
+    @Override // org.telegram.ui.ActionBar.BaseFragment
     public View createView(Context context) {
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         int i = this.currentType;
@@ -136,9 +113,10 @@ public class DataAutoDownloadActivity extends BaseFragment {
             this.actionBar.setOccupyStatusBar(false);
         }
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
-            public void onItemClick(int i) {
-                if (i == -1) {
+        this.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() { // from class: org.telegram.ui.DataAutoDownloadActivity.1
+            @Override // org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick
+            public void onItemClick(int i2) {
+                if (i2 == -1) {
                     DataAutoDownloadActivity.this.finishFragment();
                 }
             }
@@ -154,831 +132,126 @@ public class DataAutoDownloadActivity extends BaseFragment {
         this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
         ((FrameLayout) this.fragmentView).addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListenerExtended) new DataAutoDownloadActivity$$ExternalSyntheticLambda5(this));
+        this.listView.setOnItemClickListener(new RecyclerListView.OnItemClickListenerExtended() { // from class: org.telegram.ui.DataAutoDownloadActivity$$ExternalSyntheticLambda5
+            @Override // org.telegram.ui.Components.RecyclerListView.OnItemClickListenerExtended
+            public /* synthetic */ boolean hasDoubleTap(View view, int i2) {
+                return RecyclerListView.OnItemClickListenerExtended.CC.$default$hasDoubleTap(this, view, i2);
+            }
+
+            @Override // org.telegram.ui.Components.RecyclerListView.OnItemClickListenerExtended
+            public /* synthetic */ void onDoubleTap(View view, int i2, float f, float f2) {
+                RecyclerListView.OnItemClickListenerExtended.CC.$default$onDoubleTap(this, view, i2, f, f2);
+            }
+
+            @Override // org.telegram.ui.Components.RecyclerListView.OnItemClickListenerExtended
+            public final void onItemClick(View view, int i2, float f, float f2) {
+                DataAutoDownloadActivity.this.lambda$createView$4(view, i2, f, f2);
+            }
+        });
         return this.fragmentView;
     }
 
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r15v3, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v41, resolved type: org.telegram.ui.Cells.WallpaperCell$WallpaperView} */
-    /* JADX WARNING: type inference failed for: r15v0 */
-    /* JADX WARNING: type inference failed for: r15v1, types: [int] */
-    /* JADX WARNING: type inference failed for: r0v33, types: [boolean] */
-    /* JADX WARNING: type inference failed for: r0v34 */
-    /* JADX WARNING: type inference failed for: r0v35 */
-    /* JADX WARNING: type inference failed for: r15v7 */
-    /* JADX WARNING: type inference failed for: r15v34 */
-    /* access modifiers changed from: private */
-    /* JADX WARNING: Multi-variable type inference failed */
-    /* JADX WARNING: Removed duplicated region for block: B:18:0x005c  */
-    /* JADX WARNING: Removed duplicated region for block: B:19:0x005e  */
-    /* JADX WARNING: Removed duplicated region for block: B:22:0x006b  */
-    /* JADX WARNING: Removed duplicated region for block: B:25:0x007c  */
-    /* JADX WARNING: Removed duplicated region for block: B:26:0x0085  */
-    /* JADX WARNING: Removed duplicated region for block: B:29:0x00b4  */
-    /* JADX WARNING: Removed duplicated region for block: B:30:0x00bf  */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$createView$4(android.view.View r30, int r31, float r32, float r33) {
+    /* JADX INFO: Access modifiers changed from: private */
+    /* JADX WARN: Removed duplicated region for block: B:20:0x005c  */
+    /* JADX WARN: Removed duplicated region for block: B:21:0x005e  */
+    /* JADX WARN: Removed duplicated region for block: B:25:0x006b  */
+    /* JADX WARN: Removed duplicated region for block: B:28:0x007c  */
+    /* JADX WARN: Removed duplicated region for block: B:29:0x0085  */
+    /* JADX WARN: Removed duplicated region for block: B:32:0x00b4  */
+    /* JADX WARN: Removed duplicated region for block: B:33:0x00bf  */
+    /*
+        Code decompiled incorrectly, please refer to instructions dump.
+        To view partially-correct add '--show-bad-code' argument
+    */
+    public /* synthetic */ void lambda$createView$4(final android.view.View r30, final int r31, float r32, float r33) {
         /*
-            r29 = this;
-            r12 = r29
-            r11 = r30
-            r8 = r31
-            int r0 = r12.autoDownloadRow
-            r1 = 8
-            r9 = 2
-            r10 = 4
-            r13 = 3
-            r14 = 1
-            r15 = 0
-            if (r8 != r0) goto L_0x00eb
-            int r0 = r12.currentPresetNum
-            if (r0 == r13) goto L_0x0032
-            if (r0 != 0) goto L_0x001f
-            org.telegram.messenger.DownloadController$Preset r0 = r12.typePreset
-            org.telegram.messenger.DownloadController$Preset r2 = r12.lowPreset
-            r0.set((org.telegram.messenger.DownloadController.Preset) r2)
-            goto L_0x0032
-        L_0x001f:
-            if (r0 != r14) goto L_0x0029
-            org.telegram.messenger.DownloadController$Preset r0 = r12.typePreset
-            org.telegram.messenger.DownloadController$Preset r2 = r12.mediumPreset
-            r0.set((org.telegram.messenger.DownloadController.Preset) r2)
-            goto L_0x0032
-        L_0x0029:
-            if (r0 != r9) goto L_0x0032
-            org.telegram.messenger.DownloadController$Preset r0 = r12.typePreset
-            org.telegram.messenger.DownloadController$Preset r2 = r12.highPreset
-            r0.set((org.telegram.messenger.DownloadController.Preset) r2)
-        L_0x0032:
-            r0 = r11
-            org.telegram.ui.Cells.TextCheckCell r0 = (org.telegram.ui.Cells.TextCheckCell) r0
-            boolean r2 = r0.isChecked()
-            if (r2 != 0) goto L_0x004b
-            org.telegram.messenger.DownloadController$Preset r3 = r12.typePreset
-            boolean r4 = r3.enabled
-            if (r4 == 0) goto L_0x004b
-            org.telegram.messenger.DownloadController$Preset r4 = r12.defaultPreset
-            int[] r4 = r4.mask
-            int[] r3 = r3.mask
-            java.lang.System.arraycopy(r4, r15, r3, r15, r10)
-            goto L_0x0052
-        L_0x004b:
-            org.telegram.messenger.DownloadController$Preset r3 = r12.typePreset
-            boolean r4 = r3.enabled
-            r4 = r4 ^ r14
-            r3.enabled = r4
-        L_0x0052:
-            org.telegram.messenger.DownloadController$Preset r3 = r12.typePreset
-            boolean r3 = r3.enabled
-            java.lang.String r4 = "windowBackgroundChecked"
-            java.lang.String r5 = "windowBackgroundUnchecked"
-            if (r3 == 0) goto L_0x005e
-            r3 = r4
-            goto L_0x005f
-        L_0x005e:
-            r3 = r5
-        L_0x005f:
-            r11.setTag(r3)
-            r3 = r2 ^ 1
-            org.telegram.messenger.DownloadController$Preset r6 = r12.typePreset
-            boolean r6 = r6.enabled
-            if (r6 == 0) goto L_0x006b
-            goto L_0x006c
-        L_0x006b:
-            r4 = r5
-        L_0x006c:
-            int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
-            r0.setBackgroundColorAnimated(r3, r4)
-            r29.updateRows()
-            org.telegram.messenger.DownloadController$Preset r3 = r12.typePreset
-            boolean r3 = r3.enabled
-            if (r3 == 0) goto L_0x0085
-            org.telegram.ui.DataAutoDownloadActivity$ListAdapter r3 = r12.listAdapter
-            int r4 = r12.autoDownloadSectionRow
-            int r4 = r4 + r14
-            r3.notifyItemRangeInserted(r4, r1)
-            goto L_0x008d
-        L_0x0085:
-            org.telegram.ui.DataAutoDownloadActivity$ListAdapter r3 = r12.listAdapter
-            int r4 = r12.autoDownloadSectionRow
-            int r4 = r4 + r14
-            r3.notifyItemRangeRemoved(r4, r1)
-        L_0x008d:
-            org.telegram.ui.DataAutoDownloadActivity$ListAdapter r1 = r12.listAdapter
-            int r3 = r12.autoDownloadSectionRow
-            r1.notifyItemChanged(r3)
-            int r1 = r12.currentAccount
-            android.content.SharedPreferences r1 = org.telegram.messenger.MessagesController.getMainSettings(r1)
-            android.content.SharedPreferences$Editor r1 = r1.edit()
-            java.lang.String r3 = r12.key
-            org.telegram.messenger.DownloadController$Preset r4 = r12.typePreset
-            java.lang.String r4 = r4.toString()
-            r1.putString(r3, r4)
-            java.lang.String r3 = r12.key2
-            r12.currentPresetNum = r13
-            r1.putInt(r3, r13)
-            int r3 = r12.currentType
-            if (r3 != 0) goto L_0x00bf
-            int r3 = r12.currentAccount
-            org.telegram.messenger.DownloadController r3 = org.telegram.messenger.DownloadController.getInstance(r3)
-            int r4 = r12.currentPresetNum
-            r3.currentMobilePreset = r4
-            goto L_0x00d6
-        L_0x00bf:
-            if (r3 != r14) goto L_0x00cc
-            int r3 = r12.currentAccount
-            org.telegram.messenger.DownloadController r3 = org.telegram.messenger.DownloadController.getInstance(r3)
-            int r4 = r12.currentPresetNum
-            r3.currentWifiPreset = r4
-            goto L_0x00d6
-        L_0x00cc:
-            int r3 = r12.currentAccount
-            org.telegram.messenger.DownloadController r3 = org.telegram.messenger.DownloadController.getInstance(r3)
-            int r4 = r12.currentPresetNum
-            r3.currentRoamingPreset = r4
-        L_0x00d6:
-            r1.commit()
-            r1 = r2 ^ 1
-            r0.setChecked(r1)
-            int r0 = r12.currentAccount
-            org.telegram.messenger.DownloadController r0 = org.telegram.messenger.DownloadController.getInstance(r0)
-            r0.checkAutodownloadSettings()
-            r12.wereAnyChanges = r14
-            goto L_0x05b0
-        L_0x00eb:
-            int r0 = r12.photosRow
-            if (r8 == r0) goto L_0x00f7
-            int r0 = r12.videosRow
-            if (r8 == r0) goto L_0x00f7
-            int r0 = r12.filesRow
-            if (r8 != r0) goto L_0x05b0
-        L_0x00f7:
-            boolean r0 = r30.isEnabled()
-            if (r0 != 0) goto L_0x00fe
-            return
-        L_0x00fe:
-            int r0 = r12.photosRow
-            if (r8 != r0) goto L_0x0105
-            r16 = 1
-            goto L_0x010e
-        L_0x0105:
-            int r0 = r12.videosRow
-            if (r8 != r0) goto L_0x010c
-            r16 = 4
-            goto L_0x010e
-        L_0x010c:
-            r16 = 8
-        L_0x010e:
-            int r17 = org.telegram.messenger.DownloadController.typeToIndex(r16)
-            int r0 = r12.currentType
-            if (r0 != 0) goto L_0x0128
-            int r0 = r12.currentAccount
-            org.telegram.messenger.DownloadController r0 = org.telegram.messenger.DownloadController.getInstance(r0)
-            org.telegram.messenger.DownloadController$Preset r0 = r0.getCurrentMobilePreset()
-            java.lang.String r1 = "mobilePreset"
-            java.lang.String r2 = "currentMobilePreset"
-        L_0x0124:
-            r7 = r0
-            r6 = r1
-            r5 = r2
-            goto L_0x0148
-        L_0x0128:
-            if (r0 != r14) goto L_0x0139
-            int r0 = r12.currentAccount
-            org.telegram.messenger.DownloadController r0 = org.telegram.messenger.DownloadController.getInstance(r0)
-            org.telegram.messenger.DownloadController$Preset r0 = r0.getCurrentWiFiPreset()
-            java.lang.String r1 = "wifiPreset"
-            java.lang.String r2 = "currentWifiPreset"
-            goto L_0x0124
-        L_0x0139:
-            int r0 = r12.currentAccount
-            org.telegram.messenger.DownloadController r0 = org.telegram.messenger.DownloadController.getInstance(r0)
-            org.telegram.messenger.DownloadController$Preset r0 = r0.getCurrentRoamingPreset()
-            java.lang.String r1 = "roamingPreset"
-            java.lang.String r2 = "currentRoamingPreset"
-            goto L_0x0124
-        L_0x0148:
-            r0 = r11
-            org.telegram.ui.Cells.NotificationsCheckCell r0 = (org.telegram.ui.Cells.NotificationsCheckCell) r0
-            boolean r1 = r0.isChecked()
-            boolean r2 = org.telegram.messenger.LocaleController.isRTL
-            r3 = 1117257728(0x42980000, float:76.0)
-            if (r2 == 0) goto L_0x015e
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            float r2 = (float) r2
-            int r2 = (r32 > r2 ? 1 : (r32 == r2 ? 0 : -1))
-            if (r2 <= 0) goto L_0x0170
-        L_0x015e:
-            boolean r2 = org.telegram.messenger.LocaleController.isRTL
-            if (r2 != 0) goto L_0x0225
-            int r2 = r30.getMeasuredWidth()
-            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            int r2 = r2 - r3
-            float r2 = (float) r2
-            int r2 = (r32 > r2 ? 1 : (r32 == r2 ? 0 : -1))
-            if (r2 < 0) goto L_0x0225
-        L_0x0170:
-            int r2 = r12.currentPresetNum
-            if (r2 == r13) goto L_0x0191
-            if (r2 != 0) goto L_0x017e
-            org.telegram.messenger.DownloadController$Preset r2 = r12.typePreset
-            org.telegram.messenger.DownloadController$Preset r3 = r12.lowPreset
-            r2.set((org.telegram.messenger.DownloadController.Preset) r3)
-            goto L_0x0191
-        L_0x017e:
-            if (r2 != r14) goto L_0x0188
-            org.telegram.messenger.DownloadController$Preset r2 = r12.typePreset
-            org.telegram.messenger.DownloadController$Preset r3 = r12.mediumPreset
-            r2.set((org.telegram.messenger.DownloadController.Preset) r3)
-            goto L_0x0191
-        L_0x0188:
-            if (r2 != r9) goto L_0x0191
-            org.telegram.messenger.DownloadController$Preset r2 = r12.typePreset
-            org.telegram.messenger.DownloadController$Preset r3 = r12.highPreset
-            r2.set((org.telegram.messenger.DownloadController.Preset) r3)
-        L_0x0191:
-            r2 = 0
-        L_0x0192:
-            org.telegram.messenger.DownloadController$Preset r3 = r12.typePreset
-            int[] r3 = r3.mask
-            int r3 = r3.length
-            if (r2 >= r3) goto L_0x01a6
-            int[] r3 = r7.mask
-            r3 = r3[r2]
-            r3 = r3 & r16
-            if (r3 == 0) goto L_0x01a3
-            r2 = 1
-            goto L_0x01a7
-        L_0x01a3:
-            int r2 = r2 + 1
-            goto L_0x0192
-        L_0x01a6:
-            r2 = 0
-        L_0x01a7:
-            org.telegram.messenger.DownloadController$Preset r3 = r12.typePreset
-            int[] r3 = r3.mask
-            int r4 = r3.length
-            if (r15 >= r4) goto L_0x01c3
-            if (r1 == 0) goto L_0x01b8
-            r4 = r3[r15]
-            r7 = r16 ^ -1
-            r4 = r4 & r7
-            r3[r15] = r4
-            goto L_0x01c0
-        L_0x01b8:
-            if (r2 != 0) goto L_0x01c0
-            r4 = r3[r15]
-            r4 = r4 | r16
-            r3[r15] = r4
-        L_0x01c0:
-            int r15 = r15 + 1
-            goto L_0x01a7
-        L_0x01c3:
-            int r2 = r12.currentAccount
-            android.content.SharedPreferences r2 = org.telegram.messenger.MessagesController.getMainSettings(r2)
-            android.content.SharedPreferences$Editor r2 = r2.edit()
-            org.telegram.messenger.DownloadController$Preset r3 = r12.typePreset
-            java.lang.String r3 = r3.toString()
-            r2.putString(r6, r3)
-            r12.currentPresetNum = r13
-            r2.putInt(r5, r13)
-            int r3 = r12.currentType
-            if (r3 != 0) goto L_0x01ea
-            int r3 = r12.currentAccount
-            org.telegram.messenger.DownloadController r3 = org.telegram.messenger.DownloadController.getInstance(r3)
-            int r4 = r12.currentPresetNum
-            r3.currentMobilePreset = r4
-            goto L_0x0201
-        L_0x01ea:
-            if (r3 != r14) goto L_0x01f7
-            int r3 = r12.currentAccount
-            org.telegram.messenger.DownloadController r3 = org.telegram.messenger.DownloadController.getInstance(r3)
-            int r4 = r12.currentPresetNum
-            r3.currentWifiPreset = r4
-            goto L_0x0201
-        L_0x01f7:
-            int r3 = r12.currentAccount
-            org.telegram.messenger.DownloadController r3 = org.telegram.messenger.DownloadController.getInstance(r3)
-            int r4 = r12.currentPresetNum
-            r3.currentRoamingPreset = r4
-        L_0x0201:
-            r2.commit()
-            r1 = r1 ^ r14
-            r0.setChecked(r1)
-            org.telegram.ui.Components.RecyclerListView r0 = r12.listView
-            androidx.recyclerview.widget.RecyclerView$ViewHolder r0 = r0.findContainingViewHolder(r11)
-            if (r0 == 0) goto L_0x0215
-            org.telegram.ui.DataAutoDownloadActivity$ListAdapter r1 = r12.listAdapter
-            r1.onBindViewHolder(r0, r8)
-        L_0x0215:
-            int r0 = r12.currentAccount
-            org.telegram.messenger.DownloadController r0 = org.telegram.messenger.DownloadController.getInstance(r0)
-            r0.checkAutodownloadSettings()
-            r12.wereAnyChanges = r14
-            r29.fillPresets()
-            goto L_0x05b0
-        L_0x0225:
-            android.app.Activity r0 = r29.getParentActivity()
-            if (r0 != 0) goto L_0x022c
-            return
-        L_0x022c:
-            org.telegram.ui.ActionBar.BottomSheet$Builder r4 = new org.telegram.ui.ActionBar.BottomSheet$Builder
-            android.app.Activity r0 = r29.getParentActivity()
-            r4.<init>(r0)
-            r4.setApplyTopPadding(r15)
-            r4.setApplyBottomPadding(r15)
-            android.widget.LinearLayout r3 = new android.widget.LinearLayout
-            android.app.Activity r0 = r29.getParentActivity()
-            r3.<init>(r0)
-            r3.setOrientation(r14)
-            r4.setCustomView(r3)
-            org.telegram.ui.Cells.HeaderCell r0 = new org.telegram.ui.Cells.HeaderCell
-            android.app.Activity r19 = r29.getParentActivity()
-            r21 = 21
-            r22 = 15
-            r23 = 0
-            java.lang.String r20 = "dialogTextBlue2"
-            r18 = r0
-            r18.<init>(r19, r20, r21, r22, r23)
-            int r1 = r12.photosRow
-            if (r8 != r1) goto L_0x026d
-            int r1 = org.telegram.messenger.R.string.AutoDownloadPhotosTitle
-            java.lang.String r2 = "AutoDownloadPhotosTitle"
-            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
-            r0.setText(r1)
-            goto L_0x0288
-        L_0x026d:
-            int r1 = r12.videosRow
-            if (r8 != r1) goto L_0x027d
-            int r1 = org.telegram.messenger.R.string.AutoDownloadVideosTitle
-            java.lang.String r2 = "AutoDownloadVideosTitle"
-            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
-            r0.setText(r1)
-            goto L_0x0288
-        L_0x027d:
-            int r1 = org.telegram.messenger.R.string.AutoDownloadFilesTitle
-            java.lang.String r2 = "AutoDownloadFilesTitle"
-            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
-            r0.setText(r1)
-        L_0x0288:
-            r1 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-            r2 = -1
-            android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r2, r1)
-            r3.addView(r0, r1)
-            org.telegram.ui.Cells.MaxFileSizeCell[] r1 = new org.telegram.ui.Cells.MaxFileSizeCell[r14]
-            org.telegram.ui.Cells.TextCheckCell[] r0 = new org.telegram.ui.Cells.TextCheckCell[r14]
-            android.animation.AnimatorSet[] r13 = new android.animation.AnimatorSet[r14]
-            org.telegram.ui.Cells.TextCheckBoxCell[] r9 = new org.telegram.ui.Cells.TextCheckBoxCell[r10]
-            r14 = 0
-        L_0x029b:
-            if (r14 >= r10) goto L_0x0379
-            org.telegram.ui.Cells.TextCheckBoxCell r2 = new org.telegram.ui.Cells.TextCheckBoxCell
-            android.app.Activity r10 = r29.getParentActivity()
-            r21 = r0
-            r0 = 1
-            r2.<init>(r10, r0, r15)
-            r9[r14] = r2
-            if (r14 != 0) goto L_0x02cb
-            r0 = r9[r14]
-            int r10 = org.telegram.messenger.R.string.AutodownloadContacts
-            java.lang.String r15 = "AutodownloadContacts"
-            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r15, r10)
-            int[] r15 = r7.mask
-            r22 = 0
-            r15 = r15[r22]
-            r15 = r15 & r16
-            r23 = r1
-            r1 = 1
-            if (r15 == 0) goto L_0x02c6
-            r15 = 1
-            goto L_0x02c7
-        L_0x02c6:
-            r15 = 0
-        L_0x02c7:
-            r0.setTextAndCheck(r10, r15, r1)
-            goto L_0x0326
-        L_0x02cb:
-            r23 = r1
-            r1 = 1
-            if (r14 != r1) goto L_0x02e9
-            r0 = r9[r14]
-            int r10 = org.telegram.messenger.R.string.AutodownloadPrivateChats
-            java.lang.String r15 = "AutodownloadPrivateChats"
-            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r15, r10)
-            int[] r15 = r7.mask
-            r15 = r15[r1]
-            r15 = r15 & r16
-            if (r15 == 0) goto L_0x02e4
-            r15 = 1
-            goto L_0x02e5
-        L_0x02e4:
-            r15 = 0
-        L_0x02e5:
-            r0.setTextAndCheck(r10, r15, r1)
-            goto L_0x0326
-        L_0x02e9:
-            r10 = 2
-            if (r14 != r10) goto L_0x0306
-            r0 = r9[r14]
-            int r1 = org.telegram.messenger.R.string.AutodownloadGroupChats
-            java.lang.String r15 = "AutodownloadGroupChats"
-            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r15, r1)
-            int[] r15 = r7.mask
-            r15 = r15[r10]
-            r15 = r15 & r16
-            r10 = 1
-            if (r15 == 0) goto L_0x0301
-            r15 = 1
-            goto L_0x0302
-        L_0x0301:
-            r15 = 0
-        L_0x0302:
-            r0.setTextAndCheck(r1, r15, r10)
-            goto L_0x0326
-        L_0x0306:
-            r0 = r9[r14]
-            int r1 = org.telegram.messenger.R.string.AutodownloadChannels
-            java.lang.String r10 = "AutodownloadChannels"
-            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r10, r1)
-            int[] r10 = r7.mask
-            r15 = 3
-            r10 = r10[r15]
-            r10 = r10 & r16
-            if (r10 == 0) goto L_0x031b
-            r10 = 1
-            goto L_0x031c
-        L_0x031b:
-            r10 = 0
-        L_0x031c:
-            int r15 = r12.photosRow
-            if (r8 == r15) goto L_0x0322
-            r15 = 1
-            goto L_0x0323
-        L_0x0322:
-            r15 = 0
-        L_0x0323:
-            r0.setTextAndCheck(r1, r10, r15)
-        L_0x0326:
-            r0 = r9[r14]
-            r1 = 0
-            android.graphics.drawable.Drawable r10 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r1)
-            r0.setBackgroundDrawable(r10)
-            r10 = r9[r14]
-            org.telegram.ui.DataAutoDownloadActivity$$ExternalSyntheticLambda1 r15 = new org.telegram.ui.DataAutoDownloadActivity$$ExternalSyntheticLambda1
-            r1 = r21
-            r0 = r15
-            r21 = r23
-            r23 = r1
-            r1 = r29
-            r11 = -1
-            r24 = r3
-            r3 = r9
-            r25 = r4
-            r4 = r31
-            r26 = r5
-            r5 = r21
-            r27 = r6
-            r6 = r23
-            r28 = r7
-            r7 = r13
-            r0.<init>(r1, r2, r3, r4, r5, r6, r7)
-            r10.setOnClickListener(r15)
-            r0 = r9[r14]
-            r1 = 1112014848(0x42480000, float:50.0)
-            android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r1)
-            r7 = r24
-            r7.addView(r0, r1)
-            int r14 = r14 + 1
-            r11 = r30
-            r3 = r7
-            r1 = r21
-            r0 = r23
-            r4 = r25
-            r5 = r26
-            r6 = r27
-            r7 = r28
-            r2 = -1
-            r10 = 4
-            r15 = 0
-            goto L_0x029b
-        L_0x0379:
-            r23 = r0
-            r21 = r1
-            r25 = r4
-            r26 = r5
-            r27 = r6
-            r28 = r7
-            r11 = -1
-            r7 = r3
-            int r0 = r12.photosRow
-            r10 = -2
-            r14 = 0
-            if (r8 == r0) goto L_0x0474
-            org.telegram.ui.Cells.TextInfoPrivacyCell r15 = new org.telegram.ui.Cells.TextInfoPrivacyCell
-            android.app.Activity r0 = r29.getParentActivity()
-            r15.<init>(r0)
-            org.telegram.ui.DataAutoDownloadActivity$3 r18 = new org.telegram.ui.DataAutoDownloadActivity$3
-            android.app.Activity r2 = r29.getParentActivity()
-            r0 = r18
-            r1 = r29
-            r3 = r31
-            r4 = r15
-            r5 = r23
-            r6 = r13
-            r0.<init>(r2, r3, r4, r5, r6)
-            r0 = 0
-            r21[r0] = r18
-            r1 = r21[r0]
-            r2 = r28
-            long[] r3 = r2.sizes
-            r4 = r3[r17]
-            r1.setSize(r4)
-            r1 = r21[r0]
-            r3 = 50
-            android.widget.LinearLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createLinear(r11, r3)
-            r7.addView(r1, r3)
-            org.telegram.ui.Cells.TextCheckCell r1 = new org.telegram.ui.Cells.TextCheckCell
-            android.app.Activity r3 = r29.getParentActivity()
-            r4 = 21
-            r5 = 1
-            r1.<init>(r3, r4, r5)
-            r6 = r23
-            r6[r0] = r1
-            r1 = r6[r0]
-            r3 = 48
-            android.widget.LinearLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createLinear(r11, r3)
-            r7.addView(r1, r3)
-            r1 = r6[r0]
-            org.telegram.ui.DataAutoDownloadActivity$$ExternalSyntheticLambda3 r0 = new org.telegram.ui.DataAutoDownloadActivity$$ExternalSyntheticLambda3
-            r0.<init>(r6)
-            r1.setOnClickListener(r0)
-            android.app.Activity r0 = r29.getParentActivity()
-            int r1 = org.telegram.messenger.R.drawable.greydivider
-            java.lang.String r3 = "windowBackgroundGrayShadow"
-            android.graphics.drawable.Drawable r0 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r0, (int) r1, (java.lang.String) r3)
-            org.telegram.ui.Components.CombinedDrawable r1 = new org.telegram.ui.Components.CombinedDrawable
-            android.graphics.drawable.ColorDrawable r3 = new android.graphics.drawable.ColorDrawable
-            java.lang.String r4 = "windowBackgroundGray"
-            int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
-            r3.<init>(r4)
-            r1.<init>(r3, r0)
-            r0 = 1
-            r1.setFullsize(r0)
-            r15.setBackgroundDrawable(r1)
-            android.widget.LinearLayout$LayoutParams r0 = org.telegram.ui.Components.LayoutHelper.createLinear(r11, r10)
-            r7.addView(r15, r0)
-            int r0 = r12.videosRow
-            if (r8 != r0) goto L_0x044b
-            r0 = 0
-            r1 = r21[r0]
-            int r3 = org.telegram.messenger.R.string.AutoDownloadMaxVideoSize
-            java.lang.String r4 = "AutoDownloadMaxVideoSize"
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
-            r1.setText(r3)
-            r1 = r6[r0]
-            int r3 = org.telegram.messenger.R.string.AutoDownloadPreloadVideo
-            java.lang.String r4 = "AutoDownloadPreloadVideo"
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
-            boolean r4 = r2.preloadVideo
-            r1.setTextAndCheck(r3, r4, r0)
-            int r1 = org.telegram.messenger.R.string.AutoDownloadPreloadVideoInfo
-            r3 = 1
-            java.lang.Object[] r4 = new java.lang.Object[r3]
-            long[] r3 = r2.sizes
-            r22 = r3[r17]
-            java.lang.String r3 = org.telegram.messenger.AndroidUtilities.formatFileSize(r22)
-            r4[r0] = r3
-            java.lang.String r3 = "AutoDownloadPreloadVideoInfo"
-            java.lang.String r1 = org.telegram.messenger.LocaleController.formatString(r3, r1, r4)
-            r15.setText(r1)
-            goto L_0x0498
-        L_0x044b:
-            r0 = 0
-            r1 = r21[r0]
-            int r3 = org.telegram.messenger.R.string.AutoDownloadMaxFileSize
-            java.lang.String r4 = "AutoDownloadMaxFileSize"
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
-            r1.setText(r3)
-            r1 = r6[r0]
-            int r3 = org.telegram.messenger.R.string.AutoDownloadPreloadMusic
-            java.lang.String r4 = "AutoDownloadPreloadMusic"
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
-            boolean r4 = r2.preloadMusic
-            r1.setTextAndCheck(r3, r4, r0)
-            int r1 = org.telegram.messenger.R.string.AutoDownloadPreloadMusicInfo
-            java.lang.String r3 = "AutoDownloadPreloadMusicInfo"
-            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
-            r15.setText(r1)
-            goto L_0x0498
-        L_0x0474:
-            r6 = r23
-            r2 = r28
-            r0 = 0
-            r21[r0] = r14
-            r6[r0] = r14
-            android.view.View r0 = new android.view.View
-            android.app.Activity r1 = r29.getParentActivity()
-            r0.<init>(r1)
-            java.lang.String r1 = "divider"
-            int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
-            r0.setBackgroundColor(r1)
-            android.widget.LinearLayout$LayoutParams r1 = new android.widget.LinearLayout$LayoutParams
-            r3 = 1
-            r1.<init>(r11, r3)
-            r7.addView(r0, r1)
-        L_0x0498:
-            int r0 = r12.videosRow
-            if (r8 != r0) goto L_0x04cd
-            r0 = 0
-            r1 = 4
-        L_0x049e:
-            if (r0 >= r1) goto L_0x04ad
-            r3 = r9[r0]
-            boolean r3 = r3.isChecked()
-            if (r3 == 0) goto L_0x04aa
-            r0 = 1
-            goto L_0x04ae
-        L_0x04aa:
-            int r0 = r0 + 1
-            goto L_0x049e
-        L_0x04ad:
-            r0 = 0
-        L_0x04ae:
-            if (r0 != 0) goto L_0x04bc
-            r0 = 0
-            r1 = r21[r0]
-            r1.setEnabled(r0, r14)
-            r1 = r6[r0]
-            r1.setEnabled(r0, r14)
-            goto L_0x04bd
-        L_0x04bc:
-            r0 = 0
-        L_0x04bd:
-            long[] r1 = r2.sizes
-            r2 = r1[r17]
-            r4 = 2097152(0x200000, double:1.0361308E-317)
-            int r1 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1))
-            if (r1 > 0) goto L_0x04cd
-            r1 = r6[r0]
-            r1.setEnabled(r0, r14)
-        L_0x04cd:
-            android.widget.FrameLayout r0 = new android.widget.FrameLayout
-            android.app.Activity r1 = r29.getParentActivity()
-            r0.<init>(r1)
-            r1 = 1090519040(0x41000000, float:8.0)
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            int r3 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            r0.setPadding(r2, r3, r4, r1)
-            r1 = 52
-            android.widget.LinearLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createLinear(r11, r1)
-            r7.addView(r0, r1)
-            android.widget.TextView r1 = new android.widget.TextView
-            android.app.Activity r2 = r29.getParentActivity()
-            r1.<init>(r2)
-            r2 = 1096810496(0x41600000, float:14.0)
-            r3 = 1
-            r1.setTextSize(r3, r2)
-            java.lang.String r3 = "dialogTextBlue2"
-            int r4 = org.telegram.ui.ActionBar.Theme.getColor(r3)
-            r1.setTextColor(r4)
-            r4 = 17
-            r1.setGravity(r4)
-            java.lang.String r5 = "fonts/rmedium.ttf"
-            android.graphics.Typeface r7 = org.telegram.messenger.AndroidUtilities.getTypeface(r5)
-            r1.setTypeface(r7)
-            int r7 = org.telegram.messenger.R.string.Cancel
-            java.lang.String r11 = "Cancel"
-            java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r11, r7)
-            java.lang.String r7 = r7.toUpperCase()
-            r1.setText(r7)
-            r7 = 1092616192(0x41200000, float:10.0)
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            int r13 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r14 = 0
-            r1.setPadding(r11, r14, r13, r14)
-            r11 = 51
-            r13 = 36
-            android.widget.FrameLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r10, (int) r13, (int) r11)
-            r0.addView(r1, r11)
-            org.telegram.ui.DataAutoDownloadActivity$$ExternalSyntheticLambda0 r11 = new org.telegram.ui.DataAutoDownloadActivity$$ExternalSyntheticLambda0
-            r14 = r25
-            r11.<init>(r14)
-            r1.setOnClickListener(r11)
-            android.widget.TextView r15 = new android.widget.TextView
-            android.app.Activity r1 = r29.getParentActivity()
-            r15.<init>(r1)
-            r1 = 1
-            r15.setTextSize(r1, r2)
-            int r1 = org.telegram.ui.ActionBar.Theme.getColor(r3)
-            r15.setTextColor(r1)
-            r15.setGravity(r4)
-            android.graphics.Typeface r1 = org.telegram.messenger.AndroidUtilities.getTypeface(r5)
-            r15.setTypeface(r1)
-            int r1 = org.telegram.messenger.R.string.Save
-            java.lang.String r2 = "Save"
-            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
-            java.lang.String r1 = r1.toUpperCase()
-            r15.setText(r1)
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r3 = 0
-            r15.setPadding(r1, r3, r2, r3)
-            r1 = 53
-            android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r10, (int) r13, (int) r1)
-            r0.addView(r15, r1)
-            org.telegram.ui.DataAutoDownloadActivity$$ExternalSyntheticLambda2 r13 = new org.telegram.ui.DataAutoDownloadActivity$$ExternalSyntheticLambda2
-            r0 = r13
-            r1 = r29
-            r2 = r9
-            r3 = r16
-            r4 = r21
-            r5 = r17
-            r7 = r31
-            r8 = r27
-            r9 = r26
-            r10 = r14
-            r11 = r30
-            r0.<init>(r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11)
-            r15.setOnClickListener(r13)
-            org.telegram.ui.ActionBar.BottomSheet r0 = r14.create()
-            r12.showDialog(r0)
-        L_0x05b0:
-            return
+            Method dump skipped, instructions count: 1457
+            To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.DataAutoDownloadActivity.lambda$createView$4(android.view.View, int, float, float):void");
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$createView$0(TextCheckBoxCell textCheckBoxCell, TextCheckBoxCell[] textCheckBoxCellArr, int i, MaxFileSizeCell[] maxFileSizeCellArr, TextCheckCell[] textCheckCellArr, final AnimatorSet[] animatorSetArr, View view) {
-        if (view.isEnabled()) {
-            boolean z = true;
-            textCheckBoxCell.setChecked(!textCheckBoxCell.isChecked());
-            int i2 = 0;
-            while (true) {
-                if (i2 >= textCheckBoxCellArr.length) {
-                    z = false;
-                    break;
-                } else if (textCheckBoxCellArr[i2].isChecked()) {
-                    break;
-                } else {
-                    i2++;
-                }
-            }
-            if (i == this.videosRow && maxFileSizeCellArr[0].isEnabled() != z) {
-                ArrayList arrayList = new ArrayList();
-                maxFileSizeCellArr[0].setEnabled(z, arrayList);
-                if (maxFileSizeCellArr[0].getSize() > 2097152) {
-                    textCheckCellArr[0].setEnabled(z, arrayList);
-                }
-                if (animatorSetArr[0] != null) {
-                    animatorSetArr[0].cancel();
-                    animatorSetArr[0] = null;
-                }
-                animatorSetArr[0] = new AnimatorSet();
-                animatorSetArr[0].playTogether(arrayList);
-                animatorSetArr[0].addListener(new AnimatorListenerAdapter(this) {
-                    public void onAnimationEnd(Animator animator) {
-                        if (animator.equals(animatorSetArr[0])) {
-                            animatorSetArr[0] = null;
-                        }
-                    }
-                });
-                animatorSetArr[0].setDuration(150);
-                animatorSetArr[0].start();
+        if (!view.isEnabled()) {
+            return;
+        }
+        boolean z = true;
+        textCheckBoxCell.setChecked(!textCheckBoxCell.isChecked());
+        int i2 = 0;
+        while (true) {
+            if (i2 >= textCheckBoxCellArr.length) {
+                z = false;
+                break;
+            } else if (textCheckBoxCellArr[i2].isChecked()) {
+                break;
+            } else {
+                i2++;
             }
         }
+        if (i != this.videosRow || maxFileSizeCellArr[0].isEnabled() == z) {
+            return;
+        }
+        ArrayList<Animator> arrayList = new ArrayList<>();
+        maxFileSizeCellArr[0].setEnabled(z, arrayList);
+        if (maxFileSizeCellArr[0].getSize() > 2097152) {
+            textCheckCellArr[0].setEnabled(z, arrayList);
+        }
+        if (animatorSetArr[0] != null) {
+            animatorSetArr[0].cancel();
+            animatorSetArr[0] = null;
+        }
+        animatorSetArr[0] = new AnimatorSet();
+        animatorSetArr[0].playTogether(arrayList);
+        animatorSetArr[0].addListener(new AnimatorListenerAdapter(this) { // from class: org.telegram.ui.DataAutoDownloadActivity.2
+            @Override // android.animation.AnimatorListenerAdapter, android.animation.Animator.AnimatorListener
+            public void onAnimationEnd(Animator animator) {
+                if (animator.equals(animatorSetArr[0])) {
+                    animatorSetArr[0] = null;
+                }
+            }
+        });
+        animatorSetArr[0].setDuration(150L);
+        animatorSetArr[0].start();
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
+    public static /* synthetic */ void lambda$createView$1(TextCheckCell[] textCheckCellArr, View view) {
+        textCheckCellArr[0].setChecked(!textCheckCellArr[0].isChecked());
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
+    public static /* synthetic */ void lambda$createView$2(BottomSheet.Builder builder, View view) {
+        builder.getDismissRunnable().run();
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$createView$3(TextCheckBoxCell[] textCheckBoxCellArr, int i, MaxFileSizeCell[] maxFileSizeCellArr, int i2, TextCheckCell[] textCheckCellArr, int i3, String str, String str2, BottomSheet.Builder builder, View view, View view2) {
-        int i4 = i3;
-        int i5 = this.currentPresetNum;
-        if (i5 != 3) {
-            if (i5 == 0) {
+        int i4 = this.currentPresetNum;
+        if (i4 != 3) {
+            if (i4 == 0) {
                 this.typePreset.set(this.lowPreset);
-            } else if (i5 == 1) {
+            } else if (i4 == 1) {
                 this.typePreset.set(this.mediumPreset);
-            } else if (i5 == 2) {
+            } else if (i4 == 2) {
                 this.typePreset.set(this.highPreset);
             }
         }
-        for (int i6 = 0; i6 < 4; i6++) {
-            if (textCheckBoxCellArr[i6].isChecked()) {
+        for (int i5 = 0; i5 < 4; i5++) {
+            if (textCheckBoxCellArr[i5].isChecked()) {
                 int[] iArr = this.typePreset.mask;
-                iArr[i6] = iArr[i6] | i;
+                iArr[i5] = iArr[i5] | i;
             } else {
                 int[] iArr2 = this.typePreset.mask;
-                iArr2[i6] = iArr2[i6] & (i ^ -1);
+                iArr2[i5] = iArr2[i5] & (i ^ (-1));
             }
         }
         if (maxFileSizeCellArr[0] != null) {
             maxFileSizeCellArr[0].getSize();
-            this.typePreset.sizes[i2] = (long) ((int) maxFileSizeCellArr[0].getSize());
+            this.typePreset.sizes[i2] = (int) maxFileSizeCellArr[0].getSize();
         }
         if (textCheckCellArr[0] != null) {
-            if (i4 == this.videosRow) {
+            if (i3 == this.videosRow) {
                 this.typePreset.preloadVideo = textCheckCellArr[0].isChecked();
             } else {
                 this.typePreset.preloadMusic = textCheckCellArr[0].isChecked();
@@ -988,10 +261,10 @@ public class DataAutoDownloadActivity extends BaseFragment {
         edit.putString(str, this.typePreset.toString());
         this.currentPresetNum = 3;
         edit.putInt(str2, 3);
-        int i7 = this.currentType;
-        if (i7 == 0) {
+        int i6 = this.currentType;
+        if (i6 == 0) {
             DownloadController.getInstance(this.currentAccount).currentMobilePreset = this.currentPresetNum;
-        } else if (i7 == 1) {
+        } else if (i6 == 1) {
             DownloadController.getInstance(this.currentAccount).currentWifiPreset = this.currentPresetNum;
         } else {
             DownloadController.getInstance(this.currentAccount).currentRoamingPreset = this.currentPresetNum;
@@ -1009,14 +282,16 @@ public class DataAutoDownloadActivity extends BaseFragment {
         fillPresets();
     }
 
+    @Override // org.telegram.ui.ActionBar.BaseFragment
     public void onResume() {
         super.onResume();
-        ListAdapter listAdapter2 = this.listAdapter;
-        if (listAdapter2 != null) {
-            listAdapter2.notifyDataSetChanged();
+        ListAdapter listAdapter = this.listAdapter;
+        if (listAdapter != null) {
+            listAdapter.notifyDataSetChanged();
         }
     }
 
+    @Override // org.telegram.ui.ActionBar.BaseFragment
     public void onPause() {
         super.onPause();
         if (this.wereAnyChanges) {
@@ -1064,17 +339,15 @@ public class DataAutoDownloadActivity extends BaseFragment {
         }
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public static /* synthetic */ int lambda$fillPresets$5(DownloadController.Preset preset, DownloadController.Preset preset2) {
-        DownloadController.Preset preset3 = preset;
-        DownloadController.Preset preset4 = preset2;
         int typeToIndex = DownloadController.typeToIndex(4);
         int typeToIndex2 = DownloadController.typeToIndex(8);
         int i = 0;
         boolean z = false;
         boolean z2 = false;
         while (true) {
-            int[] iArr = preset3.mask;
+            int[] iArr = preset.mask;
             if (i < iArr.length) {
                 if ((iArr[i] & 4) != 0) {
                     z = true;
@@ -1094,7 +367,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
         boolean z3 = false;
         boolean z4 = false;
         while (true) {
-            int[] iArr2 = preset4.mask;
+            int[] iArr2 = preset2.mask;
             if (i2 < iArr2.length) {
                 if ((iArr2[i2] & 4) != 0) {
                     z3 = true;
@@ -1111,19 +384,16 @@ public class DataAutoDownloadActivity extends BaseFragment {
             }
         }
         long j = 0;
-        long j2 = (z ? preset3.sizes[typeToIndex] : 0) + (z2 ? preset3.sizes[typeToIndex2] : 0);
-        long j3 = z3 ? preset4.sizes[typeToIndex] : 0;
+        long j2 = (z ? preset.sizes[typeToIndex] : 0L) + (z2 ? preset.sizes[typeToIndex2] : 0L);
+        long j3 = z3 ? preset2.sizes[typeToIndex] : 0L;
         if (z4) {
-            j = preset4.sizes[typeToIndex2];
+            j = preset2.sizes[typeToIndex2];
         }
         long j4 = j3 + j;
         if (j2 > j4) {
             return 1;
         }
-        if (j2 < j4) {
-            return -1;
-        }
-        return 0;
+        return j2 < j4 ? -1 : 0;
     }
 
     private void updateRows() {
@@ -1170,214 +440,239 @@ public class DataAutoDownloadActivity extends BaseFragment {
         this.typeSectionRow = -1;
     }
 
-    private class ListAdapter extends RecyclerListView.SelectionAdapter {
+    /* JADX INFO: Access modifiers changed from: private */
+    /* loaded from: classes3.dex */
+    public class ListAdapter extends RecyclerListView.SelectionAdapter {
         private Context mContext;
 
         public ListAdapter(Context context) {
             this.mContext = context;
         }
 
+        @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         public int getItemCount() {
             return DataAutoDownloadActivity.this.rowCount;
         }
 
+        @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
-            String str;
             int i2;
-            DownloadController.Preset preset;
+            String string;
             StringBuilder sb;
-            RecyclerView.ViewHolder viewHolder2 = viewHolder;
-            int i3 = i;
             int itemViewType = viewHolder.getItemViewType();
             if (itemViewType == 0) {
-                TextCheckCell textCheckCell = (TextCheckCell) viewHolder2.itemView;
-                if (i3 == DataAutoDownloadActivity.this.autoDownloadRow) {
-                    textCheckCell.setDrawCheckRipple(true);
-                    textCheckCell.setTextAndCheck(LocaleController.getString("AutoDownloadMedia", R.string.AutoDownloadMedia), DataAutoDownloadActivity.this.typePreset.enabled, false);
-                    String str2 = "windowBackgroundChecked";
-                    textCheckCell.setTag(DataAutoDownloadActivity.this.typePreset.enabled ? str2 : "windowBackgroundUnchecked");
-                    if (!DataAutoDownloadActivity.this.typePreset.enabled) {
-                        str2 = "windowBackgroundUnchecked";
-                    }
-                    textCheckCell.setBackgroundColor(Theme.getColor(str2));
+                TextCheckCell textCheckCell = (TextCheckCell) viewHolder.itemView;
+                if (i != DataAutoDownloadActivity.this.autoDownloadRow) {
+                    return;
                 }
+                textCheckCell.setDrawCheckRipple(true);
+                textCheckCell.setTextAndCheck(LocaleController.getString("AutoDownloadMedia", R.string.AutoDownloadMedia), DataAutoDownloadActivity.this.typePreset.enabled, false);
+                String str = "windowBackgroundChecked";
+                textCheckCell.setTag(DataAutoDownloadActivity.this.typePreset.enabled ? str : "windowBackgroundUnchecked");
+                if (!DataAutoDownloadActivity.this.typePreset.enabled) {
+                    str = "windowBackgroundUnchecked";
+                }
+                textCheckCell.setBackgroundColor(Theme.getColor(str));
             } else if (itemViewType == 2) {
-                HeaderCell headerCell = (HeaderCell) viewHolder2.itemView;
-                if (i3 == DataAutoDownloadActivity.this.usageHeaderRow) {
-                    headerCell.setText(LocaleController.getString("AutoDownloadDataUsage", R.string.AutoDownloadDataUsage));
-                } else if (i3 == DataAutoDownloadActivity.this.typeHeaderRow) {
+                HeaderCell headerCell = (HeaderCell) viewHolder.itemView;
+                if (i != DataAutoDownloadActivity.this.usageHeaderRow) {
+                    if (i != DataAutoDownloadActivity.this.typeHeaderRow) {
+                        return;
+                    }
                     headerCell.setText(LocaleController.getString("AutoDownloadTypes", R.string.AutoDownloadTypes));
+                    return;
                 }
+                headerCell.setText(LocaleController.getString("AutoDownloadDataUsage", R.string.AutoDownloadDataUsage));
             } else if (itemViewType == 3) {
-                DataAutoDownloadActivity.this.updatePresetChoseView((SlideChooseView) viewHolder2.itemView);
-            } else if (itemViewType == 4) {
-                NotificationsCheckCell notificationsCheckCell = (NotificationsCheckCell) viewHolder2.itemView;
-                if (i3 == DataAutoDownloadActivity.this.photosRow) {
-                    str = LocaleController.getString("AutoDownloadPhotos", R.string.AutoDownloadPhotos);
-                    i2 = 1;
-                } else if (i3 == DataAutoDownloadActivity.this.videosRow) {
-                    str = LocaleController.getString("AutoDownloadVideos", R.string.AutoDownloadVideos);
-                    i2 = 4;
-                } else {
-                    i2 = 8;
-                    str = LocaleController.getString("AutoDownloadFiles", R.string.AutoDownloadFiles);
+                DataAutoDownloadActivity.this.updatePresetChoseView((SlideChooseView) viewHolder.itemView);
+            } else if (itemViewType != 4) {
+                if (itemViewType != 5) {
+                    return;
                 }
-                if (DataAutoDownloadActivity.this.currentType == 0) {
-                    preset = DownloadController.getInstance(DataAutoDownloadActivity.this.currentAccount).getCurrentMobilePreset();
-                } else if (DataAutoDownloadActivity.this.currentType == 1) {
-                    preset = DownloadController.getInstance(DataAutoDownloadActivity.this.currentAccount).getCurrentWiFiPreset();
-                } else {
-                    preset = DownloadController.getInstance(DataAutoDownloadActivity.this.currentAccount).getCurrentRoamingPreset();
-                }
-                long j = preset.sizes[DownloadController.typeToIndex(i2)];
-                StringBuilder sb2 = new StringBuilder();
-                int i4 = 0;
-                int i5 = 0;
-                while (true) {
-                    int[] iArr = preset.mask;
-                    if (i4 >= iArr.length) {
-                        break;
+                TextInfoPrivacyCell textInfoPrivacyCell = (TextInfoPrivacyCell) viewHolder.itemView;
+                if (i != DataAutoDownloadActivity.this.typeSectionRow) {
+                    if (i != DataAutoDownloadActivity.this.autoDownloadSectionRow) {
+                        return;
                     }
-                    if ((iArr[i4] & i2) != 0) {
-                        if (sb2.length() != 0) {
-                            sb2.append(", ");
-                        }
-                        if (i4 == 0) {
-                            sb2.append(LocaleController.getString("AutoDownloadContacts", R.string.AutoDownloadContacts));
-                        } else if (i4 == 1) {
-                            sb2.append(LocaleController.getString("AutoDownloadPm", R.string.AutoDownloadPm));
-                        } else if (i4 == 2) {
-                            sb2.append(LocaleController.getString("AutoDownloadGroups", R.string.AutoDownloadGroups));
-                        } else if (i4 == 3) {
-                            sb2.append(LocaleController.getString("AutoDownloadChannels", R.string.AutoDownloadChannels));
-                        }
-                        i5++;
-                    }
-                    i4++;
-                }
-                if (i5 == 4) {
-                    sb2.setLength(0);
-                    if (i3 == DataAutoDownloadActivity.this.photosRow) {
-                        sb2.append(LocaleController.getString("AutoDownloadOnAllChats", R.string.AutoDownloadOnAllChats));
-                    } else {
-                        sb2.append(LocaleController.formatString("AutoDownloadUpToOnAllChats", R.string.AutoDownloadUpToOnAllChats, AndroidUtilities.formatFileSize(j)));
-                    }
-                } else if (i5 == 0) {
-                    sb2.append(LocaleController.getString("AutoDownloadOff", R.string.AutoDownloadOff));
-                } else {
-                    if (i3 == DataAutoDownloadActivity.this.photosRow) {
-                        sb = new StringBuilder(LocaleController.formatString("AutoDownloadOnFor", R.string.AutoDownloadOnFor, sb2.toString()));
-                    } else {
-                        sb = new StringBuilder(LocaleController.formatString("AutoDownloadOnUpToFor", R.string.AutoDownloadOnUpToFor, AndroidUtilities.formatFileSize(j), sb2.toString()));
-                    }
-                    sb2 = sb;
-                }
-                if (DataAutoDownloadActivity.this.animateChecked) {
-                    notificationsCheckCell.setChecked(i5 != 0);
-                }
-                notificationsCheckCell.setTextAndValueAndCheck(str, sb2, i5 != 0, 0, true, i3 != DataAutoDownloadActivity.this.filesRow);
-            } else if (itemViewType == 5) {
-                TextInfoPrivacyCell textInfoPrivacyCell = (TextInfoPrivacyCell) viewHolder2.itemView;
-                if (i3 == DataAutoDownloadActivity.this.typeSectionRow) {
-                    textInfoPrivacyCell.setText(LocaleController.getString("AutoDownloadAudioInfo", R.string.AutoDownloadAudioInfo));
-                    textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider, "windowBackgroundGrayShadow"));
-                    textInfoPrivacyCell.setFixedSize(0);
-                    textInfoPrivacyCell.setImportantForAccessibility(1);
-                } else if (i3 != DataAutoDownloadActivity.this.autoDownloadSectionRow) {
-                } else {
                     if (DataAutoDownloadActivity.this.usageHeaderRow == -1) {
                         textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, "windowBackgroundGrayShadow"));
-                        if (DataAutoDownloadActivity.this.currentType == 0) {
+                        if (DataAutoDownloadActivity.this.currentType != 0) {
+                            if (DataAutoDownloadActivity.this.currentType != 1) {
+                                if (DataAutoDownloadActivity.this.currentType == 2) {
+                                    textInfoPrivacyCell.setText(LocaleController.getString("AutoDownloadOnRoamingDataInfo", R.string.AutoDownloadOnRoamingDataInfo));
+                                }
+                            } else {
+                                textInfoPrivacyCell.setText(LocaleController.getString("AutoDownloadOnWiFiDataInfo", R.string.AutoDownloadOnWiFiDataInfo));
+                            }
+                        } else {
                             textInfoPrivacyCell.setText(LocaleController.getString("AutoDownloadOnMobileDataInfo", R.string.AutoDownloadOnMobileDataInfo));
-                        } else if (DataAutoDownloadActivity.this.currentType == 1) {
-                            textInfoPrivacyCell.setText(LocaleController.getString("AutoDownloadOnWiFiDataInfo", R.string.AutoDownloadOnWiFiDataInfo));
-                        } else if (DataAutoDownloadActivity.this.currentType == 2) {
-                            textInfoPrivacyCell.setText(LocaleController.getString("AutoDownloadOnRoamingDataInfo", R.string.AutoDownloadOnRoamingDataInfo));
                         }
                         textInfoPrivacyCell.setImportantForAccessibility(1);
                         return;
                     }
                     textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider, "windowBackgroundGrayShadow"));
-                    textInfoPrivacyCell.setText((CharSequence) null);
+                    textInfoPrivacyCell.setText(null);
                     textInfoPrivacyCell.setFixedSize(12);
                     if (Build.VERSION.SDK_INT >= 19) {
                         textInfoPrivacyCell.setImportantForAccessibility(4);
+                        return;
                     } else {
                         textInfoPrivacyCell.setImportantForAccessibility(2);
+                        return;
                     }
                 }
+                textInfoPrivacyCell.setText(LocaleController.getString("AutoDownloadAudioInfo", R.string.AutoDownloadAudioInfo));
+                textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider, "windowBackgroundGrayShadow"));
+                textInfoPrivacyCell.setFixedSize(0);
+                textInfoPrivacyCell.setImportantForAccessibility(1);
+            } else {
+                NotificationsCheckCell notificationsCheckCell = (NotificationsCheckCell) viewHolder.itemView;
+                if (i != DataAutoDownloadActivity.this.photosRow) {
+                    if (i == DataAutoDownloadActivity.this.videosRow) {
+                        string = LocaleController.getString("AutoDownloadVideos", R.string.AutoDownloadVideos);
+                        i2 = 4;
+                    } else {
+                        i2 = 8;
+                        string = LocaleController.getString("AutoDownloadFiles", R.string.AutoDownloadFiles);
+                    }
+                } else {
+                    string = LocaleController.getString("AutoDownloadPhotos", R.string.AutoDownloadPhotos);
+                    i2 = 1;
+                }
+                DownloadController.Preset currentMobilePreset = DataAutoDownloadActivity.this.currentType == 0 ? DownloadController.getInstance(((BaseFragment) DataAutoDownloadActivity.this).currentAccount).getCurrentMobilePreset() : DataAutoDownloadActivity.this.currentType == 1 ? DownloadController.getInstance(((BaseFragment) DataAutoDownloadActivity.this).currentAccount).getCurrentWiFiPreset() : DownloadController.getInstance(((BaseFragment) DataAutoDownloadActivity.this).currentAccount).getCurrentRoamingPreset();
+                long j = currentMobilePreset.sizes[DownloadController.typeToIndex(i2)];
+                StringBuilder sb2 = new StringBuilder();
+                int i3 = 0;
+                int i4 = 0;
+                while (true) {
+                    int[] iArr = currentMobilePreset.mask;
+                    if (i3 >= iArr.length) {
+                        break;
+                    }
+                    if ((iArr[i3] & i2) != 0) {
+                        if (sb2.length() != 0) {
+                            sb2.append(", ");
+                        }
+                        if (i3 == 0) {
+                            sb2.append(LocaleController.getString("AutoDownloadContacts", R.string.AutoDownloadContacts));
+                        } else if (i3 == 1) {
+                            sb2.append(LocaleController.getString("AutoDownloadPm", R.string.AutoDownloadPm));
+                        } else if (i3 == 2) {
+                            sb2.append(LocaleController.getString("AutoDownloadGroups", R.string.AutoDownloadGroups));
+                        } else if (i3 == 3) {
+                            sb2.append(LocaleController.getString("AutoDownloadChannels", R.string.AutoDownloadChannels));
+                        }
+                        i4++;
+                    }
+                    i3++;
+                }
+                if (i4 == 4) {
+                    sb2.setLength(0);
+                    if (i == DataAutoDownloadActivity.this.photosRow) {
+                        sb2.append(LocaleController.getString("AutoDownloadOnAllChats", R.string.AutoDownloadOnAllChats));
+                    } else {
+                        sb2.append(LocaleController.formatString("AutoDownloadUpToOnAllChats", R.string.AutoDownloadUpToOnAllChats, AndroidUtilities.formatFileSize(j)));
+                    }
+                } else if (i4 != 0) {
+                    if (i == DataAutoDownloadActivity.this.photosRow) {
+                        sb = new StringBuilder(LocaleController.formatString("AutoDownloadOnFor", R.string.AutoDownloadOnFor, sb2.toString()));
+                    } else {
+                        sb = new StringBuilder(LocaleController.formatString("AutoDownloadOnUpToFor", R.string.AutoDownloadOnUpToFor, AndroidUtilities.formatFileSize(j), sb2.toString()));
+                    }
+                    sb2 = sb;
+                } else {
+                    sb2.append(LocaleController.getString("AutoDownloadOff", R.string.AutoDownloadOff));
+                }
+                if (DataAutoDownloadActivity.this.animateChecked) {
+                    notificationsCheckCell.setChecked(i4 != 0);
+                }
+                notificationsCheckCell.setTextAndValueAndCheck(string, sb2, i4 != 0, 0, true, i != DataAutoDownloadActivity.this.filesRow);
             }
         }
 
+        @Override // org.telegram.ui.Components.RecyclerListView.SelectionAdapter
         public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
             int adapterPosition = viewHolder.getAdapterPosition();
             return adapterPosition == DataAutoDownloadActivity.this.photosRow || adapterPosition == DataAutoDownloadActivity.this.videosRow || adapterPosition == DataAutoDownloadActivity.this.filesRow;
         }
 
-        /* access modifiers changed from: private */
+        /* JADX INFO: Access modifiers changed from: private */
         public /* synthetic */ void lambda$onCreateViewHolder$0(int i) {
             DownloadController.Preset preset = (DownloadController.Preset) DataAutoDownloadActivity.this.presets.get(i);
             if (preset == DataAutoDownloadActivity.this.lowPreset) {
-                int unused = DataAutoDownloadActivity.this.currentPresetNum = 0;
+                DataAutoDownloadActivity.this.currentPresetNum = 0;
             } else if (preset == DataAutoDownloadActivity.this.mediumPreset) {
-                int unused2 = DataAutoDownloadActivity.this.currentPresetNum = 1;
+                DataAutoDownloadActivity.this.currentPresetNum = 1;
             } else if (preset == DataAutoDownloadActivity.this.highPreset) {
-                int unused3 = DataAutoDownloadActivity.this.currentPresetNum = 2;
+                DataAutoDownloadActivity.this.currentPresetNum = 2;
             } else {
-                int unused4 = DataAutoDownloadActivity.this.currentPresetNum = 3;
+                DataAutoDownloadActivity.this.currentPresetNum = 3;
             }
             if (DataAutoDownloadActivity.this.currentType == 0) {
-                DownloadController.getInstance(DataAutoDownloadActivity.this.currentAccount).currentMobilePreset = DataAutoDownloadActivity.this.currentPresetNum;
+                DownloadController.getInstance(((BaseFragment) DataAutoDownloadActivity.this).currentAccount).currentMobilePreset = DataAutoDownloadActivity.this.currentPresetNum;
             } else if (DataAutoDownloadActivity.this.currentType == 1) {
-                DownloadController.getInstance(DataAutoDownloadActivity.this.currentAccount).currentWifiPreset = DataAutoDownloadActivity.this.currentPresetNum;
+                DownloadController.getInstance(((BaseFragment) DataAutoDownloadActivity.this).currentAccount).currentWifiPreset = DataAutoDownloadActivity.this.currentPresetNum;
             } else {
-                DownloadController.getInstance(DataAutoDownloadActivity.this.currentAccount).currentRoamingPreset = DataAutoDownloadActivity.this.currentPresetNum;
+                DownloadController.getInstance(((BaseFragment) DataAutoDownloadActivity.this).currentAccount).currentRoamingPreset = DataAutoDownloadActivity.this.currentPresetNum;
             }
-            SharedPreferences.Editor edit = MessagesController.getMainSettings(DataAutoDownloadActivity.this.currentAccount).edit();
+            SharedPreferences.Editor edit = MessagesController.getMainSettings(((BaseFragment) DataAutoDownloadActivity.this).currentAccount).edit();
             edit.putInt(DataAutoDownloadActivity.this.key2, DataAutoDownloadActivity.this.currentPresetNum);
             edit.commit();
-            DownloadController.getInstance(DataAutoDownloadActivity.this.currentAccount).checkAutodownloadSettings();
+            DownloadController.getInstance(((BaseFragment) DataAutoDownloadActivity.this).currentAccount).checkAutodownloadSettings();
             for (int i2 = 0; i2 < 3; i2++) {
                 RecyclerView.ViewHolder findViewHolderForAdapterPosition = DataAutoDownloadActivity.this.listView.findViewHolderForAdapterPosition(DataAutoDownloadActivity.this.photosRow + i2);
                 if (findViewHolderForAdapterPosition != null) {
                     DataAutoDownloadActivity.this.listAdapter.onBindViewHolder(findViewHolderForAdapterPosition, DataAutoDownloadActivity.this.photosRow + i2);
                 }
             }
-            boolean unused5 = DataAutoDownloadActivity.this.wereAnyChanges = true;
+            DataAutoDownloadActivity.this.wereAnyChanges = true;
         }
 
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            TextInfoPrivacyCell textInfoPrivacyCell;
+        @Override // androidx.recyclerview.widget.RecyclerView.Adapter
+        /* renamed from: onCreateViewHolder */
+        public RecyclerView.ViewHolder mo1754onCreateViewHolder(ViewGroup viewGroup, int i) {
+            SlideChooseView slideChooseView;
             if (i == 0) {
                 TextCheckCell textCheckCell = new TextCheckCell(this.mContext);
                 textCheckCell.setColors("windowBackgroundCheckText", "switchTrackBlue", "switchTrackBlueChecked", "switchTrackBlueThumb", "switchTrackBlueThumbChecked");
                 textCheckCell.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                 textCheckCell.setHeight(56);
-                textInfoPrivacyCell = textCheckCell;
+                slideChooseView = textCheckCell;
             } else if (i == 1) {
-                textInfoPrivacyCell = new ShadowSectionCell(this.mContext);
+                slideChooseView = new ShadowSectionCell(this.mContext);
             } else if (i == 2) {
-                HeaderCell headerCell = new HeaderCell(this.mContext);
+                View headerCell = new HeaderCell(this.mContext);
                 headerCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                textInfoPrivacyCell = headerCell;
+                slideChooseView = headerCell;
             } else if (i == 3) {
-                SlideChooseView slideChooseView = new SlideChooseView(this.mContext);
-                slideChooseView.setCallback(new DataAutoDownloadActivity$ListAdapter$$ExternalSyntheticLambda0(this));
-                slideChooseView.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                textInfoPrivacyCell = slideChooseView;
-            } else if (i != 4) {
-                TextInfoPrivacyCell textInfoPrivacyCell2 = new TextInfoPrivacyCell(this.mContext);
-                textInfoPrivacyCell2.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, "windowBackgroundGrayShadow"));
-                textInfoPrivacyCell = textInfoPrivacyCell2;
-            } else {
-                NotificationsCheckCell notificationsCheckCell = new NotificationsCheckCell(this.mContext);
+                SlideChooseView slideChooseView2 = new SlideChooseView(this.mContext);
+                slideChooseView2.setCallback(new SlideChooseView.Callback() { // from class: org.telegram.ui.DataAutoDownloadActivity$ListAdapter$$ExternalSyntheticLambda0
+                    @Override // org.telegram.ui.Components.SlideChooseView.Callback
+                    public final void onOptionSelected(int i2) {
+                        DataAutoDownloadActivity.ListAdapter.this.lambda$onCreateViewHolder$0(i2);
+                    }
+
+                    @Override // org.telegram.ui.Components.SlideChooseView.Callback
+                    public /* synthetic */ void onTouchEnd() {
+                        SlideChooseView.Callback.CC.$default$onTouchEnd(this);
+                    }
+                });
+                slideChooseView2.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
+                slideChooseView = slideChooseView2;
+            } else if (i == 4) {
+                View notificationsCheckCell = new NotificationsCheckCell(this.mContext);
                 notificationsCheckCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                textInfoPrivacyCell = notificationsCheckCell;
+                slideChooseView = notificationsCheckCell;
+            } else {
+                View textInfoPrivacyCell = new TextInfoPrivacyCell(this.mContext);
+                textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, "windowBackgroundGrayShadow"));
+                slideChooseView = textInfoPrivacyCell;
             }
-            textInfoPrivacyCell.setLayoutParams(new RecyclerView.LayoutParams(-1, -2));
-            return new RecyclerListView.Holder(textInfoPrivacyCell);
+            slideChooseView.setLayoutParams(new RecyclerView.LayoutParams(-1, -2));
+            return new RecyclerListView.Holder(slideChooseView);
         }
 
+        @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         public int getItemViewType(int i) {
             if (i == DataAutoDownloadActivity.this.autoDownloadRow) {
                 return 0;
@@ -1395,7 +690,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
         }
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public void updatePresetChoseView(SlideChooseView slideChooseView) {
         String[] strArr = new String[this.presets.size()];
         for (int i = 0; i < this.presets.size(); i++) {
@@ -1413,37 +708,38 @@ public class DataAutoDownloadActivity extends BaseFragment {
         slideChooseView.setOptions(this.selectedPreset, strArr);
     }
 
+    @Override // org.telegram.ui.ActionBar.BaseFragment
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         ArrayList<ThemeDescription> arrayList = new ArrayList<>();
-        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{HeaderCell.class, NotificationsCheckCell.class, SlideChooseView.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
-        arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGray"));
-        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"));
-        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"));
-        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultIcon"));
-        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultTitle"));
-        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSelector"));
-        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "listSelectorSDK21"));
-        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "divider"));
-        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGrayShadow"));
-        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueHeader"));
-        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{TextCheckCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundChecked"));
-        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{TextCheckCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundUnchecked"));
-        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundCheckText"));
-        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "switchTrackBlue"));
-        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "switchTrackBlueChecked"));
-        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "switchTrackBlueThumb"));
-        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "switchTrackBlueThumbChecked"));
-        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "switchTrackBlueSelector"));
-        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "switchTrackBlueSelectorChecked"));
-        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"valueTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText2"));
-        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "switchTrack"));
-        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "switchTrackChecked"));
-        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGrayShadow"));
-        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText4"));
-        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{SlideChooseView.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "switchTrack"));
-        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{SlideChooseView.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "switchTrackChecked"));
-        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{SlideChooseView.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText"));
+        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{HeaderCell.class, NotificationsCheckCell.class, SlideChooseView.class}, null, null, null, "windowBackgroundWhite"));
+        arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundGray"));
+        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "actionBarDefault"));
+        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, "actionBarDefault"));
+        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, "actionBarDefaultIcon"));
+        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, "actionBarDefaultTitle"));
+        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, "actionBarDefaultSelector"));
+        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, "listSelectorSDK21"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, "divider"));
+        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, null, null, null, "windowBackgroundGrayShadow"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueHeader"));
+        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{TextCheckCell.class}, null, null, null, "windowBackgroundChecked"));
+        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{TextCheckCell.class}, null, null, null, "windowBackgroundUnchecked"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundCheckText"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "switchTrackBlue"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "switchTrackBlueChecked"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "switchTrackBlueThumb"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "switchTrackBlueThumbChecked"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "switchTrackBlueSelector"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "switchTrackBlueSelectorChecked"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"valueTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText2"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "switchTrack"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "switchTrackChecked"));
+        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, "windowBackgroundGrayShadow"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText4"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{SlideChooseView.class}, null, null, null, "switchTrack"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{SlideChooseView.class}, null, null, null, "switchTrackChecked"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{SlideChooseView.class}, null, null, null, "windowBackgroundWhiteGrayText"));
         return arrayList;
     }
 }

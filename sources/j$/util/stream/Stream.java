@@ -1,22 +1,16 @@
 package j$.util.stream;
 
 import j$.util.Optional;
-import j$.util.function.A;
 import j$.util.function.BiConsumer;
 import j$.util.function.BiFunction;
 import j$.util.function.Consumer;
 import j$.util.function.Function;
 import j$.util.function.Predicate;
 import j$.util.function.ToIntFunction;
-import j$.util.function.b;
-import j$.util.function.m;
-import j$.util.function.y;
-import j$.util.function.z;
-import j$.wrappers.J0;
 import java.util.Comparator;
-
-public interface Stream<T> extends CLASSNAMEg {
-    Object B(Object obj, BiFunction biFunction, b bVar);
+/* loaded from: classes2.dex */
+public interface Stream<T> extends InterfaceCLASSNAMEg {
+    Object B(Object obj, BiFunction biFunction, j$.util.function.b bVar);
 
     U E(Function function);
 
@@ -26,14 +20,15 @@ public interface Stream<T> extends CLASSNAMEg {
 
     boolean W(Predicate predicate);
 
-    CLASSNAMEe1 X(Function function);
+    InterfaceCLASSNAMEe1 X(Function function);
 
     boolean a(Predicate predicate);
 
-    Object b0(J0 j0);
+    Object b0(j$.wrappers.J0 j0);
 
     IntStream c(Function function);
 
+    @Override // j$.util.stream.InterfaceCLASSNAMEg, java.lang.AutoCloseable
     /* synthetic */ void close();
 
     long count();
@@ -50,19 +45,19 @@ public interface Stream<T> extends CLASSNAMEg {
 
     void forEach(Consumer<? super T> consumer);
 
-    CLASSNAMEe1 g0(A a);
+    InterfaceCLASSNAMEe1 g0(j$.util.function.A a);
 
-    Object i(y yVar, BiConsumer biConsumer, BiConsumer biConsumer2);
+    Object i(j$.util.function.y yVar, BiConsumer biConsumer, BiConsumer biConsumer2);
 
-    U j0(z zVar);
+    U j0(j$.util.function.z zVar);
 
-    Object[] l(m mVar);
+    Object[] l(j$.util.function.m mVar);
 
     Stream limit(long j);
 
     IntStream m(ToIntFunction toIntFunction);
 
-    Object m0(Object obj, b bVar);
+    Object m0(Object obj, j$.util.function.b bVar);
 
     Optional max(Comparator comparator);
 
@@ -78,7 +73,7 @@ public interface Stream<T> extends CLASSNAMEg {
 
     Stream sorted(Comparator comparator);
 
-    Optional t(b bVar);
+    Optional t(j$.util.function.b bVar);
 
     Object[] toArray();
 }

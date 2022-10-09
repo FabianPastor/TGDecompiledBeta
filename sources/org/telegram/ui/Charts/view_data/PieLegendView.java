@@ -6,11 +6,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
-
+/* loaded from: classes3.dex */
 public class PieLegendView extends LegendSignatureView {
     TextView signature;
     TextView value;
 
+    @Override // org.telegram.ui.Charts.view_data.LegendSignatureView
     public void setSize(int i) {
     }
 
@@ -32,11 +33,13 @@ public class PieLegendView extends LegendSignatureView {
         this.zoomEnabled = false;
     }
 
+    @Override // org.telegram.ui.Charts.view_data.LegendSignatureView
     public void recolor() {
-        if (this.signature != null) {
-            super.recolor();
-            this.signature.setTextColor(Theme.getColor("dialogTextBlack"));
+        if (this.signature == null) {
+            return;
         }
+        super.recolor();
+        this.signature.setTextColor(Theme.getColor("dialogTextBlack"));
     }
 
     public void setData(String str, int i, int i2) {

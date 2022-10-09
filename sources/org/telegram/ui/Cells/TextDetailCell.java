@@ -14,7 +14,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
-
+/* loaded from: classes3.dex */
 public class TextDetailCell extends FrameLayout {
     private boolean contentDescriptionValueFirst;
     private final ImageView imageView;
@@ -24,42 +24,42 @@ public class TextDetailCell extends FrameLayout {
     private final TextView valueTextView;
 
     public TextDetailCell(Context context) {
-        this(context, (Theme.ResourcesProvider) null);
+        this(context, null);
     }
 
-    public TextDetailCell(Context context, Theme.ResourcesProvider resourcesProvider2) {
+    public TextDetailCell(Context context, Theme.ResourcesProvider resourcesProvider) {
         super(context);
-        this.resourcesProvider = resourcesProvider2;
+        this.resourcesProvider = resourcesProvider;
+        TextView textView = new TextView(context);
+        this.textView = textView;
+        textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText", resourcesProvider));
+        textView.setTextSize(1, 16.0f);
+        textView.setGravity(LocaleController.isRTL ? 5 : 3);
+        textView.setLines(1);
+        textView.setMaxLines(1);
+        textView.setSingleLine(true);
+        textView.setEllipsize(TextUtils.TruncateAt.END);
+        textView.setImportantForAccessibility(2);
+        addView(textView, LayoutHelper.createFrame(-2, -2.0f, LocaleController.isRTL ? 5 : 3, 23.0f, 8.0f, 23.0f, 0.0f));
         TextView textView2 = new TextView(context);
-        this.textView = textView2;
-        textView2.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText", resourcesProvider2));
-        textView2.setTextSize(1, 16.0f);
-        textView2.setGravity(LocaleController.isRTL ? 5 : 3);
+        this.valueTextView = textView2;
+        textView2.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2", resourcesProvider));
+        textView2.setTextSize(1, 13.0f);
         textView2.setLines(1);
         textView2.setMaxLines(1);
         textView2.setSingleLine(true);
-        textView2.setEllipsize(TextUtils.TruncateAt.END);
+        textView2.setGravity(LocaleController.isRTL ? 5 : 3);
         textView2.setImportantForAccessibility(2);
-        addView(textView2, LayoutHelper.createFrame(-2, -2.0f, LocaleController.isRTL ? 5 : 3, 23.0f, 8.0f, 23.0f, 0.0f));
-        TextView textView3 = new TextView(context);
-        this.valueTextView = textView3;
-        textView3.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2", resourcesProvider2));
-        textView3.setTextSize(1, 13.0f);
-        textView3.setLines(1);
-        textView3.setMaxLines(1);
-        textView3.setSingleLine(true);
-        textView3.setGravity(LocaleController.isRTL ? 5 : 3);
-        textView3.setImportantForAccessibility(2);
-        addView(textView3, LayoutHelper.createFrame(-2, -2.0f, LocaleController.isRTL ? 5 : 3, 23.0f, 33.0f, 23.0f, 0.0f));
-        ImageView imageView2 = new ImageView(context);
-        this.imageView = imageView2;
-        imageView2.setImportantForAccessibility(2);
-        imageView2.setScaleType(ImageView.ScaleType.CENTER);
-        addView(imageView2, LayoutHelper.createFrameRelatively(48.0f, 48.0f, 8388629, 0.0f, 0.0f, 12.0f, 0.0f));
+        addView(textView2, LayoutHelper.createFrame(-2, -2.0f, LocaleController.isRTL ? 5 : 3, 23.0f, 33.0f, 23.0f, 0.0f));
+        ImageView imageView = new ImageView(context);
+        this.imageView = imageView;
+        imageView.setImportantForAccessibility(2);
+        imageView.setScaleType(ImageView.ScaleType.CENTER);
+        addView(imageView, LayoutHelper.createFrameRelatively(48.0f, 48.0f, 8388629, 0.0f, 0.0f, 12.0f, 0.0f));
     }
 
-    /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
+    @Override // android.widget.FrameLayout, android.view.View
+    protected void onMeasure(int i, int i2) {
         super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(60.0f) + (this.needDivider ? 1 : 0), NUM));
     }
 
@@ -71,7 +71,7 @@ public class TextDetailCell extends FrameLayout {
     }
 
     public void setImage(Drawable drawable) {
-        setImage(drawable, (CharSequence) null);
+        setImage(drawable, null);
     }
 
     public void setImage(Drawable drawable, CharSequence charSequence) {
@@ -80,7 +80,7 @@ public class TextDetailCell extends FrameLayout {
         this.imageView.setFocusable(drawable != null);
         this.imageView.setContentDescription(charSequence);
         if (drawable == null) {
-            this.imageView.setBackground((Drawable) null);
+            this.imageView.setBackground(null);
             this.imageView.setImportantForAccessibility(2);
         } else {
             this.imageView.setBackground(Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(48.0f), 0, Theme.getColor("listSelectorSDK21", this.resourcesProvider)));
@@ -107,31 +107,34 @@ public class TextDetailCell extends FrameLayout {
         this.contentDescriptionValueFirst = z;
     }
 
+    @Override // android.view.View
     public void invalidate() {
         super.invalidate();
         this.textView.invalidate();
     }
 
-    /* access modifiers changed from: protected */
-    public void onDraw(Canvas canvas) {
+    @Override // android.view.View
+    protected void onDraw(Canvas canvas) {
         if (this.needDivider) {
-            canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.dp(20.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(20.0f) : 0)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
+            canvas.drawLine(LocaleController.isRTL ? 0.0f : AndroidUtilities.dp(20.0f), getMeasuredHeight() - 1, getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(20.0f) : 0), getMeasuredHeight() - 1, Theme.dividerPaint);
         }
     }
 
+    @Override // android.view.View
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
         super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
         CharSequence text = this.textView.getText();
         CharSequence text2 = this.valueTextView.getText();
-        if (!TextUtils.isEmpty(text) && !TextUtils.isEmpty(text2)) {
-            StringBuilder sb = new StringBuilder();
-            sb.append(this.contentDescriptionValueFirst ? text2 : text);
-            sb.append(": ");
-            if (!this.contentDescriptionValueFirst) {
-                text = text2;
-            }
-            sb.append(text);
-            accessibilityNodeInfo.setText(sb.toString());
+        if (TextUtils.isEmpty(text) || TextUtils.isEmpty(text2)) {
+            return;
         }
+        StringBuilder sb = new StringBuilder();
+        sb.append((Object) (this.contentDescriptionValueFirst ? text2 : text));
+        sb.append(": ");
+        if (!this.contentDescriptionValueFirst) {
+            text = text2;
+        }
+        sb.append((Object) text);
+        accessibilityNodeInfo.setText(sb.toString());
     }
 }

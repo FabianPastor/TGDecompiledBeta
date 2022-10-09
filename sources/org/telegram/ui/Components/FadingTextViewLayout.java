@@ -2,11 +2,8 @@ package org.telegram.ui.Components;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.content.Context;
-import android.graphics.Paint;
-import android.graphics.Point;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
@@ -14,20 +11,15 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import androidx.core.view.ViewCompat;
 import java.util.ArrayList;
-
+/* loaded from: classes3.dex */
 public class FadingTextViewLayout extends FrameLayout {
     private final ValueAnimator animator;
-    /* access modifiers changed from: private */
-    public TextView currentView;
-    /* access modifiers changed from: private */
-    public TextView foregroundView;
-    /* access modifiers changed from: private */
-    public TextView nextView;
-    /* access modifiers changed from: private */
-    public CharSequence text;
+    private TextView currentView;
+    private TextView foregroundView;
+    private TextView nextView;
+    private CharSequence text;
 
-    /* access modifiers changed from: protected */
-    public int getStaticCharsCount() {
+    protected int getStaticCharsCount() {
         return 0;
     }
 
@@ -37,7 +29,7 @@ public class FadingTextViewLayout extends FrameLayout {
 
     public FadingTextViewLayout(Context context, boolean z) {
         super(context);
-        for (int i = 0; i < (z ? 1 : 0) + true; i++) {
+        for (int i = 0; i < (z ? 1 : 0) + 2; i++) {
             TextView textView = new TextView(context);
             onTextViewCreated(textView);
             addView(textView);
@@ -53,15 +45,21 @@ public class FadingTextViewLayout extends FrameLayout {
                 }
             }
         }
-        ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
+        ValueAnimator ofFloat = ValueAnimator.ofFloat(0.0f, 1.0f);
         this.animator = ofFloat;
-        ofFloat.setDuration(200);
-        ofFloat.setInterpolator((TimeInterpolator) null);
-        ofFloat.addUpdateListener(new FadingTextViewLayout$$ExternalSyntheticLambda0(this));
-        ofFloat.addListener(new AnimatorListenerAdapter() {
+        ofFloat.setDuration(200L);
+        ofFloat.setInterpolator(null);
+        ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() { // from class: org.telegram.ui.Components.FadingTextViewLayout$$ExternalSyntheticLambda0
+            @Override // android.animation.ValueAnimator.AnimatorUpdateListener
+            public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+                FadingTextViewLayout.this.lambda$new$0(valueAnimator);
+            }
+        });
+        ofFloat.addListener(new AnimatorListenerAdapter() { // from class: org.telegram.ui.Components.FadingTextViewLayout.1
+            @Override // android.animation.AnimatorListenerAdapter, android.animation.Animator.AnimatorListener
             public void onAnimationEnd(Animator animator) {
-                FadingTextViewLayout.this.currentView.setLayerType(0, (Paint) null);
-                FadingTextViewLayout.this.nextView.setLayerType(0, (Paint) null);
+                FadingTextViewLayout.this.currentView.setLayerType(0, null);
+                FadingTextViewLayout.this.nextView.setLayerType(0, null);
                 FadingTextViewLayout.this.nextView.setVisibility(8);
                 if (FadingTextViewLayout.this.foregroundView != null) {
                     FadingTextViewLayout.this.currentView.setText(FadingTextViewLayout.this.text);
@@ -69,9 +67,10 @@ public class FadingTextViewLayout extends FrameLayout {
                 }
             }
 
+            @Override // android.animation.AnimatorListenerAdapter, android.animation.Animator.AnimatorListener
             public void onAnimationStart(Animator animator) {
-                FadingTextViewLayout.this.currentView.setLayerType(2, (Paint) null);
-                FadingTextViewLayout.this.nextView.setLayerType(2, (Paint) null);
+                FadingTextViewLayout.this.currentView.setLayerType(2, null);
+                FadingTextViewLayout.this.nextView.setLayerType(2, null);
                 if (ViewCompat.isAttachedToWindow(FadingTextViewLayout.this.currentView)) {
                     FadingTextViewLayout.this.currentView.buildLayer();
                 }
@@ -82,7 +81,7 @@ public class FadingTextViewLayout extends FrameLayout {
         });
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$new$0(ValueAnimator valueAnimator) {
         float animatedFraction = valueAnimator.getAnimatedFraction();
         TextView textView = this.currentView;
@@ -109,14 +108,14 @@ public class FadingTextViewLayout extends FrameLayout {
             this.text = charSequence;
             if (z) {
                 if (z2 && this.foregroundView != null && (staticCharsCount = getStaticCharsCount()) > 0) {
-                    CharSequence text2 = this.currentView.getText();
-                    int min = Math.min(staticCharsCount, Math.min(charSequence.length(), text2.length()));
+                    CharSequence text = this.currentView.getText();
+                    int min = Math.min(staticCharsCount, Math.min(charSequence.length(), text.length()));
                     ArrayList arrayList = new ArrayList();
                     int i = -1;
                     for (int i2 = 0; i2 < min; i2++) {
-                        if (charSequence.charAt(i2) == text2.charAt(i2)) {
+                        if (charSequence.charAt(i2) == text.charAt(i2)) {
                             if (i >= 0) {
-                                arrayList.add(new Point(i, i2));
+                                arrayList.add(new android.graphics.Point(i, i2));
                                 i = -1;
                             }
                         } else if (i == -1) {
@@ -125,19 +124,19 @@ public class FadingTextViewLayout extends FrameLayout {
                     }
                     if (i != 0) {
                         if (i > 0) {
-                            arrayList.add(new Point(i, min));
+                            arrayList.add(new android.graphics.Point(i, min));
                         } else {
-                            arrayList.add(new Point(min, 0));
+                            arrayList.add(new android.graphics.Point(min, 0));
                         }
                     }
                     if (!arrayList.isEmpty()) {
                         SpannableString spannableString = new SpannableString(charSequence.subSequence(0, min));
-                        SpannableString spannableString2 = new SpannableString(text2);
+                        SpannableString spannableString2 = new SpannableString(text);
                         SpannableString spannableString3 = new SpannableString(charSequence);
                         int size = arrayList.size();
                         int i3 = 0;
                         for (int i4 = 0; i4 < size; i4++) {
-                            Point point = (Point) arrayList.get(i4);
+                            android.graphics.Point point = (android.graphics.Point) arrayList.get(i4);
                             if (point.y > point.x) {
                                 spannableString.setSpan(new ForegroundColorSpan(0), point.x, point.y, 17);
                             }
@@ -181,7 +180,7 @@ public class FadingTextViewLayout extends FrameLayout {
         this.animator.start();
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
     public void onTextViewCreated(TextView textView) {
         textView.setSingleLine(true);
         textView.setMaxLines(1);

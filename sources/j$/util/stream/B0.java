@@ -1,20 +1,14 @@
 package j$.util.stream;
-
-import j$.util.function.k;
-import j$.util.function.l;
-
-public final /* synthetic */ class B0 implements l {
+/* loaded from: classes2.dex */
+public final /* synthetic */ class B0 implements j$.util.function.l {
     public final /* synthetic */ int a = 1;
     public final /* synthetic */ Object b;
 
-    public /* synthetic */ B0(F0 f0) {
-        this.b = f0;
-    }
-
+    @Override // j$.util.function.l
     public final void accept(int i) {
         switch (this.a) {
             case 0:
-                ((CLASSNAMEm3) this.b).accept(i);
+                ((InterfaceCLASSNAMEm3) this.b).accept(i);
                 return;
             default:
                 ((F0) this.b).a.accept(i);
@@ -22,18 +16,15 @@ public final /* synthetic */ class B0 implements l {
         }
     }
 
-    public l l(l lVar) {
+    @Override // j$.util.function.l
+    public j$.util.function.l l(j$.util.function.l lVar) {
         switch (this.a) {
             case 0:
                 lVar.getClass();
-                return new k(this, lVar);
+                return new j$.util.function.k(this, lVar);
             default:
                 lVar.getClass();
-                return new k(this, lVar);
+                return new j$.util.function.k(this, lVar);
         }
-    }
-
-    public /* synthetic */ B0(CLASSNAMEm3 m3Var) {
-        this.b = m3Var;
     }
 }

@@ -1,7 +1,7 @@
 package org.telegram.tgnet;
 
 import java.util.ArrayList;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_messages_sendMessage extends TLObject {
     public static int constructor = NUM;
     public boolean background;
@@ -20,23 +20,25 @@ public class TLRPC$TL_messages_sendMessage extends TLObject {
     public boolean silent;
     public boolean update_stickersets_order;
 
+    @Override // org.telegram.tgnet.TLObject
     public TLObject deserializeResponse(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         return TLRPC$Updates.TLdeserialize(abstractSerializedData, i, z);
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
-        int i = this.no_webpage ? this.flags | 2 : this.flags & -3;
+        int i = this.no_webpage ? this.flags | 2 : this.flags & (-3);
         this.flags = i;
-        int i2 = this.silent ? i | 32 : i & -33;
+        int i2 = this.silent ? i | 32 : i & (-33);
         this.flags = i2;
-        int i3 = this.background ? i2 | 64 : i2 & -65;
+        int i3 = this.background ? i2 | 64 : i2 & (-65);
         this.flags = i3;
-        int i4 = this.clear_draft ? i3 | 128 : i3 & -129;
+        int i4 = this.clear_draft ? i3 | 128 : i3 & (-129);
         this.flags = i4;
-        int i5 = this.noforwards ? i4 | 16384 : i4 & -16385;
+        int i5 = this.noforwards ? i4 | 16384 : i4 & (-16385);
         this.flags = i5;
-        int i6 = this.update_stickersets_order ? i5 | 32768 : i5 & -32769;
+        int i6 = this.update_stickersets_order ? i5 | 32768 : i5 & (-32769);
         this.flags = i6;
         abstractSerializedData.writeInt32(i6);
         this.peer.serializeToStream(abstractSerializedData);

@@ -13,7 +13,7 @@ import org.telegram.tgnet.TLRPC$TL_inputWebFileGeoPointLocation;
 import org.telegram.tgnet.TLRPC$TL_inputWebFileLocation;
 import org.telegram.tgnet.TLRPC$TL_webDocument;
 import org.telegram.tgnet.TLRPC$WebDocument;
-
+/* loaded from: classes.dex */
 public class WebFile extends TLObject {
     public ArrayList<TLRPC$DocumentAttribute> attributes;
     public TLRPC$InputGeoPoint geo_point;
@@ -51,7 +51,7 @@ public class WebFile extends TLObject {
         webFile.scale = i4;
         tLRPC$TL_inputWebFileGeoPointLocation.scale = i4;
         webFile.mime_type = "image/png";
-        webFile.url = String.format(Locale.US, "maps_%.6f_%.6f_%d_%d_%d_%d.png", new Object[]{Double.valueOf(d), Double.valueOf(d2), Integer.valueOf(i), Integer.valueOf(i2), Integer.valueOf(i3), Integer.valueOf(i4)});
+        webFile.url = String.format(Locale.US, "maps_%.6f_%.6f_%d_%d_%d_%d.png", Double.valueOf(d), Double.valueOf(d2), Integer.valueOf(i), Integer.valueOf(i2), Integer.valueOf(i3), Integer.valueOf(i4));
         webFile.attributes = new ArrayList<>();
         return webFile;
     }

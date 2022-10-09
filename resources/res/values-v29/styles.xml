@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.TMessages.PopupNotification">
+    <style name="Theme.TMessages.PopupNotification" parent="@style/Theme.TMessages">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsTranslucent">true</item>
@@ -8,9 +8,9 @@
         <item name="android:windowActionBar">false</item>
         <item name="android:colorPrimaryDark">#99000000</item>
         <item name="android:navigationBarColor">#000000</item>
-        <item name="?0x101058c">false</item>
+        <item name="android:forceDarkAllowed">false</item>
     </style>
-    <style name="Theme.TMessages.Start">
+    <style name="Theme.TMessages.Start" parent="@android:style/Theme.Material">
         <item name="android:colorBackground">@android:color/white</item>
         <item name="android:windowBackground">@android:color/white</item>
         <item name="android:windowContentOverlay">@null</item>
@@ -19,6 +19,6 @@
         <item name="android:colorPrimary">#527da3</item>
         <item name="android:colorPrimaryDark">#426482</item>
         <item name="android:navigationBarColor">#000000</item>
-        <item name="?0x101058c">false</item>
+        <item name="android:forceDarkAllowed">false</item>
     </style>
 </resources>

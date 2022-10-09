@@ -1,8 +1,9 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_messageMediaContact extends TLRPC$MessageMedia {
     public static int constructor = NUM;
 
+    @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         this.phone_number = abstractSerializedData.readString(z);
         this.first_name = abstractSerializedData.readString(z);
@@ -11,6 +12,7 @@ public class TLRPC$TL_messageMediaContact extends TLRPC$MessageMedia {
         this.user_id = abstractSerializedData.readInt64(z);
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
         abstractSerializedData.writeString(this.phone_number);

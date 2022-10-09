@@ -7,15 +7,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import org.telegram.ui.Components.Paint.Views.RotationGestureDetector;
-
+/* loaded from: classes3.dex */
 public class EntitiesContainerView extends FrameLayout implements ScaleGestureDetector.OnScaleGestureListener, RotationGestureDetector.OnRotationGestureListener {
     private EntitiesContainerViewDelegate delegate;
     private ScaleGestureDetector gestureDetector;
     private boolean hasTransformed;
     private float previousAngle;
-    private float previousScale = 1.0f;
+    private float previousScale;
     private RotationGestureDetector rotationGestureDetector;
 
+    /* loaded from: classes3.dex */
     public interface EntitiesContainerViewDelegate {
         void onEntityDeselect();
 
@@ -24,14 +25,17 @@ public class EntitiesContainerView extends FrameLayout implements ScaleGestureDe
         boolean shouldReceiveTouches();
     }
 
-    public void onRotationEnd(RotationGestureDetector rotationGestureDetector2) {
+    @Override // org.telegram.ui.Components.Paint.Views.RotationGestureDetector.OnRotationGestureListener
+    public void onRotationEnd(RotationGestureDetector rotationGestureDetector) {
     }
 
+    @Override // android.view.ScaleGestureDetector.OnScaleGestureListener
     public void onScaleEnd(ScaleGestureDetector scaleGestureDetector) {
     }
 
     public EntitiesContainerView(Context context, EntitiesContainerViewDelegate entitiesContainerViewDelegate) {
         super(context);
+        this.previousScale = 1.0f;
         this.gestureDetector = new ScaleGestureDetector(context, this);
         this.rotationGestureDetector = new RotationGestureDetector(this);
         this.delegate = entitiesContainerViewDelegate;
@@ -54,10 +58,12 @@ public class EntitiesContainerView extends FrameLayout implements ScaleGestureDe
         }
     }
 
+    @Override // android.view.ViewGroup
     public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
         return motionEvent.getPointerCount() == 2 && this.delegate.shouldReceiveTouches();
     }
 
+    @Override // android.view.View
     public boolean onTouchEvent(MotionEvent motionEvent) {
         EntitiesContainerViewDelegate entitiesContainerViewDelegate;
         if (this.delegate.onSelectedEntityRequest() == null) {
@@ -79,6 +85,7 @@ public class EntitiesContainerView extends FrameLayout implements ScaleGestureDe
         return true;
     }
 
+    @Override // android.view.ScaleGestureDetector.OnScaleGestureListener
     public boolean onScale(ScaleGestureDetector scaleGestureDetector) {
         float scaleFactor = scaleGestureDetector.getScaleFactor();
         this.delegate.onSelectedEntityRequest().scale(scaleFactor / this.previousScale);
@@ -86,26 +93,29 @@ public class EntitiesContainerView extends FrameLayout implements ScaleGestureDe
         return false;
     }
 
+    @Override // android.view.ScaleGestureDetector.OnScaleGestureListener
     public boolean onScaleBegin(ScaleGestureDetector scaleGestureDetector) {
         this.previousScale = 1.0f;
         this.hasTransformed = true;
         return true;
     }
 
-    public void onRotationBegin(RotationGestureDetector rotationGestureDetector2) {
-        this.previousAngle = rotationGestureDetector2.getStartAngle();
+    @Override // org.telegram.ui.Components.Paint.Views.RotationGestureDetector.OnRotationGestureListener
+    public void onRotationBegin(RotationGestureDetector rotationGestureDetector) {
+        this.previousAngle = rotationGestureDetector.getStartAngle();
         this.hasTransformed = true;
     }
 
-    public void onRotation(RotationGestureDetector rotationGestureDetector2) {
+    @Override // org.telegram.ui.Components.Paint.Views.RotationGestureDetector.OnRotationGestureListener
+    public void onRotation(RotationGestureDetector rotationGestureDetector) {
         EntityView onSelectedEntityRequest = this.delegate.onSelectedEntityRequest();
-        float angle = rotationGestureDetector2.getAngle();
+        float angle = rotationGestureDetector.getAngle();
         onSelectedEntityRequest.rotate(onSelectedEntityRequest.getRotation() + (this.previousAngle - angle));
         this.previousAngle = angle;
     }
 
-    /* access modifiers changed from: protected */
-    public void measureChildWithMargins(View view, int i, int i2, int i3, int i4) {
+    @Override // android.view.ViewGroup
+    protected void measureChildWithMargins(View view, int i, int i2, int i3, int i4) {
         if (view instanceof TextPaintView) {
             ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
             view.measure(FrameLayout.getChildMeasureSpec(i, getPaddingLeft() + getPaddingRight() + marginLayoutParams.leftMargin + marginLayoutParams.rightMargin + i2, marginLayoutParams.width), View.MeasureSpec.makeMeasureSpec(0, 0));

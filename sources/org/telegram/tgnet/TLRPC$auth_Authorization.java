@@ -1,19 +1,19 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public abstract class TLRPC$auth_Authorization extends TLObject {
     public static TLRPC$auth_Authorization TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-        TLRPC$auth_Authorization tLRPC$auth_Authorization;
+        TLRPC$auth_Authorization tLRPC$TL_auth_authorization;
         if (i != NUM) {
-            tLRPC$auth_Authorization = i != NUM ? null : new TLRPC$TL_auth_authorizationSignUpRequired();
+            tLRPC$TL_auth_authorization = i != NUM ? null : new TLRPC$TL_auth_authorizationSignUpRequired();
         } else {
-            tLRPC$auth_Authorization = new TLRPC$TL_auth_authorization();
+            tLRPC$TL_auth_authorization = new TLRPC$TL_auth_authorization();
         }
-        if (tLRPC$auth_Authorization != null || !z) {
-            if (tLRPC$auth_Authorization != null) {
-                tLRPC$auth_Authorization.readParams(abstractSerializedData, z);
+        if (tLRPC$TL_auth_authorization != null || !z) {
+            if (tLRPC$TL_auth_authorization != null) {
+                tLRPC$TL_auth_authorization.readParams(abstractSerializedData, z);
             }
-            return tLRPC$auth_Authorization;
+            return tLRPC$TL_auth_authorization;
         }
-        throw new RuntimeException(String.format("can't parse magic %x in auth_Authorization", new Object[]{Integer.valueOf(i)}));
+        throw new RuntimeException(String.format("can't parse magic %x in auth_Authorization", Integer.valueOf(i)));
     }
 }

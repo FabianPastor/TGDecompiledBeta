@@ -7,7 +7,7 @@ import android.media.AudioTrack;
 import android.os.Build;
 import org.webrtc.CalledByNative;
 import org.webrtc.Logging;
-
+/* loaded from: classes3.dex */
 class WebRtcAudioManager {
     private static final int BITS_PER_SAMPLE = 16;
     private static final int DEFAULT_FRAME_PER_BUFFER = 256;
@@ -46,8 +46,9 @@ class WebRtcAudioManager {
         return Build.VERSION.SDK_INT >= 21 && isLowLatencyOutputSupported(context);
     }
 
+    /* JADX INFO: Access modifiers changed from: package-private */
     @CalledByNative
-    static int getSampleRate(AudioManager audioManager) {
+    public static int getSampleRate(AudioManager audioManager) {
         if (WebRtcAudioUtils.runningOnEmulator()) {
             Logging.d("WebRtcAudioManagerExternal", "Running emulator, overriding sample rate to 8 kHz.");
             return 8000;

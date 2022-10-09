@@ -1,5 +1,5 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_urlAuthResultRequest extends TLRPC$UrlAuthResult {
     public static int constructor = -NUM;
     public TLRPC$User bot;
@@ -7,6 +7,7 @@ public class TLRPC$TL_urlAuthResultRequest extends TLRPC$UrlAuthResult {
     public int flags;
     public boolean request_write_access;
 
+    @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
@@ -19,9 +20,10 @@ public class TLRPC$TL_urlAuthResultRequest extends TLRPC$UrlAuthResult {
         this.domain = abstractSerializedData.readString(z);
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
-        int i = this.request_write_access ? this.flags | 1 : this.flags & -2;
+        int i = this.request_write_access ? this.flags | 1 : this.flags & (-2);
         this.flags = i;
         abstractSerializedData.writeInt32(i);
         this.bot.serializeToStream(abstractSerializedData);

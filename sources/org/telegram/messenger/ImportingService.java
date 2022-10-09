@@ -6,10 +6,11 @@ import android.os.IBinder;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import org.telegram.messenger.NotificationCenter;
-
+/* loaded from: classes.dex */
 public class ImportingService extends Service implements NotificationCenter.NotificationCenterDelegate {
     private NotificationCompat.Builder builder;
 
+    @Override // android.app.Service
     public IBinder onBind(Intent intent) {
         return null;
     }
@@ -21,6 +22,7 @@ public class ImportingService extends Service implements NotificationCenter.Noti
         }
     }
 
+    @Override // android.app.Service
     public void onDestroy() {
         super.onDestroy();
         try {
@@ -37,6 +39,7 @@ public class ImportingService extends Service implements NotificationCenter.Noti
         }
     }
 
+    @Override // org.telegram.messenger.NotificationCenter.NotificationCenterDelegate
     public void didReceivedNotification(int i, int i2, Object... objArr) {
         if ((i == NotificationCenter.historyImportProgressChanged || i == NotificationCenter.stickersImportProgressChanged) && !hasImportingStickers() && !hasImportingStickers()) {
             stopSelf();
@@ -61,37 +64,38 @@ public class ImportingService extends Service implements NotificationCenter.Noti
         return false;
     }
 
+    @Override // android.app.Service
     public int onStartCommand(Intent intent, int i, int i2) {
-        if (hasImportingStickers() || hasImportingHistory()) {
-            if (BuildVars.LOGS_ENABLED) {
-                FileLog.d("start import service");
-            }
-            if (this.builder == null) {
-                NotificationsController.checkOtherNotificationsChannel();
-                NotificationCompat.Builder builder2 = new NotificationCompat.Builder(ApplicationLoader.applicationContext);
-                this.builder = builder2;
-                builder2.setSmallIcon(17301640);
-                this.builder.setWhen(System.currentTimeMillis());
-                this.builder.setChannelId(NotificationsController.OTHER_NOTIFICATIONS_CHANNEL);
-                this.builder.setContentTitle(LocaleController.getString("AppName", R.string.AppName));
-                if (hasImportingHistory()) {
-                    NotificationCompat.Builder builder3 = this.builder;
-                    int i3 = R.string.ImporImportingService;
-                    builder3.setTicker(LocaleController.getString("ImporImportingService", i3));
-                    this.builder.setContentText(LocaleController.getString("ImporImportingService", i3));
-                } else {
-                    NotificationCompat.Builder builder4 = this.builder;
-                    int i4 = R.string.ImporImportingStickersService;
-                    builder4.setTicker(LocaleController.getString("ImporImportingStickersService", i4));
-                    this.builder.setContentText(LocaleController.getString("ImporImportingStickersService", i4));
-                }
-            }
-            this.builder.setProgress(100, 0, true);
-            startForeground(5, this.builder.build());
-            NotificationManagerCompat.from(ApplicationLoader.applicationContext).notify(5, this.builder.build());
+        if (!hasImportingStickers() && !hasImportingHistory()) {
+            stopSelf();
             return 2;
         }
-        stopSelf();
+        if (BuildVars.LOGS_ENABLED) {
+            FileLog.d("start import service");
+        }
+        if (this.builder == null) {
+            NotificationsController.checkOtherNotificationsChannel();
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(ApplicationLoader.applicationContext);
+            this.builder = builder;
+            builder.setSmallIcon(17301640);
+            this.builder.setWhen(System.currentTimeMillis());
+            this.builder.setChannelId(NotificationsController.OTHER_NOTIFICATIONS_CHANNEL);
+            this.builder.setContentTitle(LocaleController.getString("AppName", R.string.AppName));
+            if (hasImportingHistory()) {
+                NotificationCompat.Builder builder2 = this.builder;
+                int i3 = R.string.ImporImportingService;
+                builder2.setTicker(LocaleController.getString("ImporImportingService", i3));
+                this.builder.setContentText(LocaleController.getString("ImporImportingService", i3));
+            } else {
+                NotificationCompat.Builder builder3 = this.builder;
+                int i4 = R.string.ImporImportingStickersService;
+                builder3.setTicker(LocaleController.getString("ImporImportingStickersService", i4));
+                this.builder.setContentText(LocaleController.getString("ImporImportingStickersService", i4));
+            }
+        }
+        this.builder.setProgress(100, 0, true);
+        startForeground(5, this.builder.build());
+        NotificationManagerCompat.from(ApplicationLoader.applicationContext).notify(5, this.builder.build());
         return 2;
     }
 }

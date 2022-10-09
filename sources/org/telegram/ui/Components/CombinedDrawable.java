@@ -2,9 +2,8 @@ package org.telegram.ui.Components;
 
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
-import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-
+/* loaded from: classes3.dex */
 public class CombinedDrawable extends Drawable implements Drawable.Callback {
     private int backHeight;
     private int backWidth;
@@ -18,8 +17,8 @@ public class CombinedDrawable extends Drawable implements Drawable.Callback {
     private int offsetY;
     private int top;
 
-    /* access modifiers changed from: protected */
-    public boolean onStateChange(int[] iArr) {
+    @Override // android.graphics.drawable.Drawable
+    protected boolean onStateChange(int[] iArr) {
         return true;
     }
 
@@ -63,37 +62,44 @@ public class CombinedDrawable extends Drawable implements Drawable.Callback {
         this.fullSize = z;
     }
 
+    @Override // android.graphics.drawable.Drawable
     public void setColorFilter(ColorFilter colorFilter) {
         this.icon.setColorFilter(colorFilter);
     }
 
+    @Override // android.graphics.drawable.Drawable
     public boolean isStateful() {
         return this.icon.isStateful();
     }
 
+    @Override // android.graphics.drawable.Drawable
     public boolean setState(int[] iArr) {
         this.icon.setState(iArr);
         return true;
     }
 
+    @Override // android.graphics.drawable.Drawable
     public int[] getState() {
         return this.icon.getState();
     }
 
+    @Override // android.graphics.drawable.Drawable
     public void jumpToCurrentState() {
         this.icon.jumpToCurrentState();
     }
 
+    @Override // android.graphics.drawable.Drawable
     public Drawable.ConstantState getConstantState() {
         return this.icon.getConstantState();
     }
 
+    @Override // android.graphics.drawable.Drawable
     public void draw(Canvas canvas) {
         this.background.setBounds(getBounds());
         this.background.draw(canvas);
         if (this.icon != null) {
             if (this.fullSize) {
-                Rect bounds = getBounds();
+                android.graphics.Rect bounds = getBounds();
                 int i = this.left;
                 if (i != 0) {
                     int i2 = bounds.top;
@@ -118,43 +124,52 @@ public class CombinedDrawable extends Drawable implements Drawable.Callback {
         }
     }
 
+    @Override // android.graphics.drawable.Drawable
     public void setAlpha(int i) {
         this.icon.setAlpha(i);
         this.background.setAlpha(i);
     }
 
+    @Override // android.graphics.drawable.Drawable
     public int getIntrinsicWidth() {
         int i = this.backWidth;
         return i != 0 ? i : this.background.getIntrinsicWidth();
     }
 
+    @Override // android.graphics.drawable.Drawable
     public int getIntrinsicHeight() {
         int i = this.backHeight;
         return i != 0 ? i : this.background.getIntrinsicHeight();
     }
 
+    @Override // android.graphics.drawable.Drawable
     public int getMinimumWidth() {
         int i = this.backWidth;
         return i != 0 ? i : this.background.getMinimumWidth();
     }
 
+    @Override // android.graphics.drawable.Drawable
     public int getMinimumHeight() {
         int i = this.backHeight;
         return i != 0 ? i : this.background.getMinimumHeight();
     }
 
+    @Override // android.graphics.drawable.Drawable
     public int getOpacity() {
         return this.icon.getOpacity();
     }
 
+    @Override // android.graphics.drawable.Drawable.Callback
     public void invalidateDrawable(Drawable drawable) {
         invalidateSelf();
     }
 
+    @Override // android.graphics.drawable.Drawable.Callback
     public void scheduleDrawable(Drawable drawable, Runnable runnable, long j) {
         scheduleSelf(runnable, j);
     }
 
+    @Override // android.graphics.drawable.Drawable.Callback
     public void unscheduleDrawable(Drawable drawable, Runnable runnable) {
         unscheduleSelf(runnable);
     }

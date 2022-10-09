@@ -1,11 +1,12 @@
 package org.webrtc;
-
+/* loaded from: classes3.dex */
 public class StatsReport {
     public final String id;
     public final double timestamp;
     public final String type;
     public final Value[] values;
 
+    /* loaded from: classes3.dex */
     public static class Value {
         public final String name;
         public final String value;
@@ -41,12 +42,13 @@ public class StatsReport {
         int i = 0;
         while (true) {
             Value[] valueArr = this.values;
-            if (i >= valueArr.length) {
+            if (i < valueArr.length) {
+                sb.append(valueArr[i].toString());
+                sb.append(", ");
+                i++;
+            } else {
                 return sb.toString();
             }
-            sb.append(valueArr[i].toString());
-            sb.append(", ");
-            i++;
         }
     }
 }

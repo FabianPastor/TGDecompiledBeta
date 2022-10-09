@@ -7,18 +7,18 @@ import java.nio.ByteBuffer;
 import org.webrtc.GlGenericDrawer;
 import org.webrtc.RendererCommon;
 import org.webrtc.VideoFrame;
-
+/* loaded from: classes3.dex */
 public class VideoFrameDrawer {
     public static final String TAG = "VideoFrameDrawer";
     static final float[] srcPoints = {0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f};
-    private final float[] dstPoints = new float[6];
     private VideoFrame lastI420Frame;
     private int renderHeight;
+    private int renderWidth;
+    private final float[] dstPoints = new float[6];
+    private final Point renderSize = new Point();
+    private final YuvUploader yuvUploader = new YuvUploader(null);
     private final Matrix renderMatrix = new Matrix();
     private final Matrix renderRotateMatrix = new Matrix();
-    private final Point renderSize = new Point();
-    private int renderWidth;
-    private final YuvUploader yuvUploader = new YuvUploader((AnonymousClass1) null);
 
     public static void drawTexture(RendererCommon.GlDrawer glDrawer, VideoFrame.TextureBuffer textureBuffer, Matrix matrix, int i, int i2, int i3, int i4, int i5, int i6, int i7, int i8, boolean z) {
         Matrix matrix2 = new Matrix(textureBuffer.getTransformMatrix());
@@ -34,36 +34,23 @@ public class VideoFrameDrawer {
         }
     }
 
+    /* JADX INFO: Access modifiers changed from: package-private */
     /* renamed from: org.webrtc.VideoFrameDrawer$1  reason: invalid class name */
-    static /* synthetic */ class AnonymousClass1 {
+    /* loaded from: classes3.dex */
+    public static /* synthetic */ class AnonymousClass1 {
         static final /* synthetic */ int[] $SwitchMap$org$webrtc$VideoFrame$TextureBuffer$Type;
 
-        /* JADX WARNING: Can't wrap try/catch for region: R(6:0|1|2|3|4|6) */
-        /* JADX WARNING: Code restructure failed: missing block: B:7:?, code lost:
-            return;
-         */
-        /* JADX WARNING: Failed to process nested try/catch */
-        /* JADX WARNING: Missing exception handler attribute for start block: B:3:0x0012 */
         static {
-            /*
-                org.webrtc.VideoFrame$TextureBuffer$Type[] r0 = org.webrtc.VideoFrame.TextureBuffer.Type.values()
-                int r0 = r0.length
-                int[] r0 = new int[r0]
-                $SwitchMap$org$webrtc$VideoFrame$TextureBuffer$Type = r0
-                org.webrtc.VideoFrame$TextureBuffer$Type r1 = org.webrtc.VideoFrame.TextureBuffer.Type.OES     // Catch:{ NoSuchFieldError -> 0x0012 }
-                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x0012 }
-                r2 = 1
-                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x0012 }
-            L_0x0012:
-                int[] r0 = $SwitchMap$org$webrtc$VideoFrame$TextureBuffer$Type     // Catch:{ NoSuchFieldError -> 0x001d }
-                org.webrtc.VideoFrame$TextureBuffer$Type r1 = org.webrtc.VideoFrame.TextureBuffer.Type.RGB     // Catch:{ NoSuchFieldError -> 0x001d }
-                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x001d }
-                r2 = 2
-                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x001d }
-            L_0x001d:
-                return
-            */
-            throw new UnsupportedOperationException("Method not decompiled: org.webrtc.VideoFrameDrawer.AnonymousClass1.<clinit>():void");
+            int[] iArr = new int[VideoFrame.TextureBuffer.Type.values().length];
+            $SwitchMap$org$webrtc$VideoFrame$TextureBuffer$Type = iArr;
+            try {
+                iArr[VideoFrame.TextureBuffer.Type.OES.ordinal()] = 1;
+            } catch (NoSuchFieldError unused) {
+            }
+            try {
+                $SwitchMap$org$webrtc$VideoFrame$TextureBuffer$Type[VideoFrame.TextureBuffer.Type.RGB.ordinal()] = 2;
+            } catch (NoSuchFieldError unused2) {
+            }
         }
     }
 
@@ -73,14 +60,16 @@ public class VideoFrameDrawer {
         }
     }
 
-    private static class YuvUploader {
+    /* JADX INFO: Access modifiers changed from: private */
+    /* loaded from: classes3.dex */
+    public static class YuvUploader {
         private ByteBuffer copyBuffer;
         private int[] yuvTextures;
 
         private YuvUploader() {
         }
 
-        /* synthetic */ YuvUploader(AnonymousClass1 r1) {
+        /* synthetic */ YuvUploader(AnonymousClass1 anonymousClass1) {
             this();
         }
 
@@ -139,7 +128,7 @@ public class VideoFrameDrawer {
     }
 
     private static int distance(float f, float f2, float f3, float f4) {
-        return (int) Math.round(Math.hypot((double) (f3 - f), (double) (f4 - f2)));
+        return (int) Math.round(Math.hypot(f3 - f, f4 - f2));
     }
 
     private void calculateTransformedRenderSize(int i, int i2, Matrix matrix) {
@@ -152,9 +141,9 @@ public class VideoFrameDrawer {
         for (int i3 = 0; i3 < 3; i3++) {
             float[] fArr = this.dstPoints;
             int i4 = i3 * 2;
-            fArr[i4] = fArr[i4] * ((float) i);
+            fArr[i4] = fArr[i4] * i;
             int i5 = i4 + 1;
-            fArr[i5] = fArr[i5] * ((float) i2);
+            fArr[i5] = fArr[i5] * i2;
         }
         float[] fArr2 = this.dstPoints;
         this.renderWidth = distance(fArr2[0], fArr2[1], fArr2[2], fArr2[3]);
@@ -163,7 +152,7 @@ public class VideoFrameDrawer {
     }
 
     public void drawFrame(VideoFrame videoFrame, RendererCommon.GlDrawer glDrawer) {
-        drawFrame(videoFrame, glDrawer, (Matrix) null);
+        drawFrame(videoFrame, glDrawer, null);
     }
 
     public void drawFrame(VideoFrame videoFrame, RendererCommon.GlDrawer glDrawer, Matrix matrix) {
@@ -171,9 +160,7 @@ public class VideoFrameDrawer {
     }
 
     public void drawFrame(VideoFrame videoFrame, RendererCommon.GlDrawer glDrawer, Matrix matrix, int i, int i2, int i3, int i4, boolean z, boolean z2) {
-        VideoFrame videoFrame2 = videoFrame;
-        Matrix matrix2 = matrix;
-        calculateTransformedRenderSize(z ? videoFrame.getRotatedHeight() : videoFrame.getRotatedWidth(), z ? videoFrame.getRotatedWidth() : videoFrame.getRotatedHeight(), matrix2);
+        calculateTransformedRenderSize(z ? videoFrame.getRotatedHeight() : videoFrame.getRotatedWidth(), z ? videoFrame.getRotatedWidth() : videoFrame.getRotatedHeight(), matrix);
         if (this.renderWidth <= 0 || this.renderHeight <= 0) {
             Logging.w("VideoFrameDrawer", "Illegal frame size: " + this.renderWidth + "x" + this.renderHeight);
             return;
@@ -184,19 +171,19 @@ public class VideoFrameDrawer {
         if (!z3) {
             this.renderMatrix.preScale(1.0f, -1.0f);
         }
-        this.renderMatrix.preRotate((float) videoFrame.getRotation());
+        this.renderMatrix.preRotate(videoFrame.getRotation());
         this.renderMatrix.preTranslate(-0.5f, -0.5f);
         this.renderRotateMatrix.set(this.renderMatrix);
-        if (matrix2 != null) {
-            this.renderMatrix.preConcat(matrix2);
+        if (matrix != null) {
+            this.renderMatrix.preConcat(matrix);
         }
         if (z3) {
             this.lastI420Frame = null;
             drawTexture(glDrawer, (VideoFrame.TextureBuffer) videoFrame.getBuffer(), this.renderMatrix, videoFrame.getRotatedWidth(), videoFrame.getRotatedHeight(), this.renderWidth, this.renderHeight, i, i2, i3, i4, z2);
             return;
         }
-        if (videoFrame2 != this.lastI420Frame) {
-            this.lastI420Frame = videoFrame2;
+        if (videoFrame != this.lastI420Frame) {
+            this.lastI420Frame = videoFrame;
             VideoFrame.I420Buffer i420 = videoFrame.getBuffer().toI420();
             this.yuvUploader.uploadFromBuffer(i420);
             i420.release();

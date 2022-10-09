@@ -1,5 +1,5 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public abstract class TLRPC$InputFile extends TLObject {
     public long id;
     public String md5_checksum;
@@ -7,18 +7,18 @@ public abstract class TLRPC$InputFile extends TLObject {
     public int parts;
 
     public static TLRPC$InputFile TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-        TLRPC$InputFile tLRPC$InputFile;
+        TLRPC$InputFile tLRPC$TL_inputFile;
         if (i != -NUM) {
-            tLRPC$InputFile = i != -95482955 ? null : new TLRPC$TL_inputFileBig();
+            tLRPC$TL_inputFile = i != -95482955 ? null : new TLRPC$TL_inputFileBig();
         } else {
-            tLRPC$InputFile = new TLRPC$TL_inputFile();
+            tLRPC$TL_inputFile = new TLRPC$TL_inputFile();
         }
-        if (tLRPC$InputFile != null || !z) {
-            if (tLRPC$InputFile != null) {
-                tLRPC$InputFile.readParams(abstractSerializedData, z);
+        if (tLRPC$TL_inputFile != null || !z) {
+            if (tLRPC$TL_inputFile != null) {
+                tLRPC$TL_inputFile.readParams(abstractSerializedData, z);
             }
-            return tLRPC$InputFile;
+            return tLRPC$TL_inputFile;
         }
-        throw new RuntimeException(String.format("can't parse magic %x in InputFile", new Object[]{Integer.valueOf(i)}));
+        throw new RuntimeException(String.format("can't parse magic %x in InputFile", Integer.valueOf(i)));
     }
 }

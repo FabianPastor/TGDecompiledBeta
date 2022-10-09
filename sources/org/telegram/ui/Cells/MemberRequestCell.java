@@ -17,27 +17,27 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
-
+/* loaded from: classes3.dex */
 public class MemberRequestCell extends FrameLayout {
-    private final AvatarDrawable avatarDrawable = new AvatarDrawable();
+    private final AvatarDrawable avatarDrawable;
     private final BackupImageView avatarImageView;
     private TLRPC$TL_chatInviteImporter importer;
     private boolean isNeedDivider;
     private final SimpleTextView nameTextView;
     private final SimpleTextView statusTextView;
 
+    /* loaded from: classes3.dex */
     public interface OnClickListener {
         void onAddClicked(TLRPC$TL_chatInviteImporter tLRPC$TL_chatInviteImporter);
 
         void onDismissClicked(TLRPC$TL_chatInviteImporter tLRPC$TL_chatInviteImporter);
     }
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public MemberRequestCell(Context context, OnClickListener onClickListener, boolean z) {
+    public MemberRequestCell(Context context, final OnClickListener onClickListener, boolean z) {
         super(context);
-        String str;
         int i;
-        OnClickListener onClickListener2 = onClickListener;
+        String str;
+        this.avatarDrawable = new AvatarDrawable();
         BackupImageView backupImageView = new BackupImageView(getContext());
         this.avatarImageView = backupImageView;
         SimpleTextView simpleTextView = new SimpleTextView(getContext());
@@ -78,10 +78,15 @@ public class MemberRequestCell extends FrameLayout {
         textView.setTextColor(Theme.getColor("featuredStickers_buttonText"));
         textView.setTextSize(14.0f);
         textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        textView.setOnClickListener(new MemberRequestCell$$ExternalSyntheticLambda1(this, onClickListener2));
+        textView.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.Cells.MemberRequestCell$$ExternalSyntheticLambda1
+            @Override // android.view.View.OnClickListener
+            public final void onClick(View view) {
+                MemberRequestCell.this.lambda$new$0(onClickListener, view);
+            }
+        });
         boolean z4 = LocaleController.isRTL;
         addView(textView, LayoutHelper.createFrame(-2, 32.0f, z4 ? 5 : 3, z4 ? 0.0f : 73.0f, 62.0f, z4 ? 73.0f : 0.0f, 0.0f));
-        float measureText = textView.getPaint().measureText(textView.getText().toString()) + ((float) (dp * 2));
+        float measureText = textView.getPaint().measureText(textView.getText().toString()) + (dp * 2);
         TextView textView2 = new TextView(getContext());
         textView2.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), 0, Theme.getColor("listSelectorSDK21"), -16777216));
         textView2.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
@@ -91,28 +96,35 @@ public class MemberRequestCell extends FrameLayout {
         textView2.setTextColor(Theme.getColor("windowBackgroundWhiteBlueText"));
         textView2.setTextSize(14.0f);
         textView2.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        textView2.setOnClickListener(new MemberRequestCell$$ExternalSyntheticLambda0(this, onClickListener2));
+        textView2.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.Cells.MemberRequestCell$$ExternalSyntheticLambda0
+            @Override // android.view.View.OnClickListener
+            public final void onClick(View view) {
+                MemberRequestCell.this.lambda$new$1(onClickListener, view);
+            }
+        });
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(-2, AndroidUtilities.dp(32.0f), !LocaleController.isRTL ? 3 : i2);
         layoutParams.topMargin = AndroidUtilities.dp(62.0f);
-        layoutParams.leftMargin = LocaleController.isRTL ? 0 : (int) (((float) AndroidUtilities.dp(79.0f)) + measureText);
-        layoutParams.rightMargin = LocaleController.isRTL ? (int) (measureText + ((float) AndroidUtilities.dp(79.0f))) : i3;
+        layoutParams.leftMargin = LocaleController.isRTL ? 0 : (int) (AndroidUtilities.dp(79.0f) + measureText);
+        layoutParams.rightMargin = LocaleController.isRTL ? (int) (measureText + AndroidUtilities.dp(79.0f)) : i3;
         addView(textView2, layoutParams);
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$new$0(OnClickListener onClickListener, View view) {
         TLRPC$TL_chatInviteImporter tLRPC$TL_chatInviteImporter;
-        if (onClickListener != null && (tLRPC$TL_chatInviteImporter = this.importer) != null) {
-            onClickListener.onAddClicked(tLRPC$TL_chatInviteImporter);
+        if (onClickListener == null || (tLRPC$TL_chatInviteImporter = this.importer) == null) {
+            return;
         }
+        onClickListener.onAddClicked(tLRPC$TL_chatInviteImporter);
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$new$1(OnClickListener onClickListener, View view) {
         TLRPC$TL_chatInviteImporter tLRPC$TL_chatInviteImporter;
-        if (onClickListener != null && (tLRPC$TL_chatInviteImporter = this.importer) != null) {
-            onClickListener.onDismissClicked(tLRPC$TL_chatInviteImporter);
+        if (onClickListener == null || (tLRPC$TL_chatInviteImporter = this.importer) == null) {
+            return;
         }
+        onClickListener.onDismissClicked(tLRPC$TL_chatInviteImporter);
     }
 
     public void setData(LongSparseArray<TLRPC$User> longSparseArray, TLRPC$TL_chatInviteImporter tLRPC$TL_chatInviteImporter, boolean z) {
@@ -123,7 +135,7 @@ public class MemberRequestCell extends FrameLayout {
         this.avatarDrawable.setInfo(tLRPC$User);
         this.avatarImageView.setForUserOrChat(tLRPC$User, this.avatarDrawable);
         this.nameTextView.setText(UserObject.getUserName(tLRPC$User));
-        String formatDateAudio = LocaleController.formatDateAudio((long) tLRPC$TL_chatInviteImporter.date, false);
+        String formatDateAudio = LocaleController.formatDateAudio(tLRPC$TL_chatInviteImporter.date, false);
         long j = tLRPC$TL_chatInviteImporter.approved_by;
         if (j == 0) {
             this.statusTextView.setText(LocaleController.formatString("RequestedToJoinAt", R.string.RequestedToJoinAt, formatDateAudio));
@@ -132,9 +144,9 @@ public class MemberRequestCell extends FrameLayout {
         TLRPC$User tLRPC$User2 = longSparseArray.get(j);
         if (tLRPC$User2 != null) {
             this.statusTextView.setText(LocaleController.formatString("AddedBy", R.string.AddedBy, UserObject.getFirstName(tLRPC$User2), formatDateAudio));
-            return;
+        } else {
+            this.statusTextView.setText("");
         }
-        this.statusTextView.setText("");
     }
 
     public TLRPC$TL_chatInviteImporter getImporter() {
@@ -149,16 +161,16 @@ public class MemberRequestCell extends FrameLayout {
         return this.statusTextView.getText().toString();
     }
 
-    /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
+    @Override // android.widget.FrameLayout, android.view.View
+    protected void onMeasure(int i, int i2) {
         super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(107.0f), NUM));
     }
 
-    /* access modifiers changed from: protected */
-    public void onDraw(Canvas canvas) {
+    @Override // android.view.View
+    protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if (this.isNeedDivider) {
-            canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.dp(72.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(72.0f) : 0)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
+            canvas.drawLine(LocaleController.isRTL ? 0.0f : AndroidUtilities.dp(72.0f), getMeasuredHeight() - 1, getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(72.0f) : 0), getMeasuredHeight() - 1, Theme.dividerPaint);
         }
     }
 }

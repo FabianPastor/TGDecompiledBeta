@@ -1,8 +1,9 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_replyKeyboardForceReply extends TLRPC$ReplyMarkup {
     public static int constructor = -NUM;
 
+    @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
@@ -17,11 +18,12 @@ public class TLRPC$TL_replyKeyboardForceReply extends TLRPC$ReplyMarkup {
         }
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
-        int i = this.single_use ? this.flags | 2 : this.flags & -3;
+        int i = this.single_use ? this.flags | 2 : this.flags & (-3);
         this.flags = i;
-        int i2 = this.selective ? i | 4 : i & -5;
+        int i2 = this.selective ? i | 4 : i & (-5);
         this.flags = i2;
         abstractSerializedData.writeInt32(i2);
         if ((this.flags & 8) != 0) {

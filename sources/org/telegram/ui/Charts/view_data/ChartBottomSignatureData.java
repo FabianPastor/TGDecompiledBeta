@@ -1,5 +1,5 @@
 package org.telegram.ui.Charts.view_data;
-
+/* loaded from: classes3.dex */
 public class ChartBottomSignatureData {
     public int alpha;
     public int fixedAlpha = 255;

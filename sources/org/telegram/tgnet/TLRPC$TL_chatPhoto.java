@@ -4,10 +4,11 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_chatPhoto extends TLRPC$ChatPhoto {
     public static int constructor = NUM;
 
+    @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
@@ -29,18 +30,20 @@ public class TLRPC$TL_chatPhoto extends TLRPC$ChatPhoto {
         this.photo_big = tLRPC$TL_fileLocationToBeDeprecated2;
         tLRPC$TL_fileLocationToBeDeprecated2.volume_id = -this.photo_id;
         tLRPC$TL_fileLocationToBeDeprecated2.local_id = 99;
-        if (this.stripped_thumb != null && Build.VERSION.SDK_INT >= 21) {
-            try {
-                this.strippedBitmap = new BitmapDrawable(ImageLoader.getStrippedPhotoBitmap(this.stripped_thumb, "b"));
-            } catch (Throwable th) {
-                FileLog.e(th);
-            }
+        if (this.stripped_thumb == null || Build.VERSION.SDK_INT < 21) {
+            return;
+        }
+        try {
+            this.strippedBitmap = new BitmapDrawable(ImageLoader.getStrippedPhotoBitmap(this.stripped_thumb, "b"));
+        } catch (Throwable th) {
+            FileLog.e(th);
         }
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
-        int i = this.has_video ? this.flags | 1 : this.flags & -2;
+        int i = this.has_video ? this.flags | 1 : this.flags & (-2);
         this.flags = i;
         abstractSerializedData.writeInt32(i);
         abstractSerializedData.writeInt64(this.photo_id);

@@ -1,5 +1,5 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_channelBannedRights_layer92 extends TLObject {
     public static int constructor = NUM;
     public boolean embed_links;
@@ -14,17 +14,18 @@ public class TLRPC$TL_channelBannedRights_layer92 extends TLObject {
     public boolean view_messages;
 
     public static TLRPC$TL_channelBannedRights_layer92 TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-        if (constructor == i) {
-            TLRPC$TL_channelBannedRights_layer92 tLRPC$TL_channelBannedRights_layer92 = new TLRPC$TL_channelBannedRights_layer92();
-            tLRPC$TL_channelBannedRights_layer92.readParams(abstractSerializedData, z);
-            return tLRPC$TL_channelBannedRights_layer92;
-        } else if (!z) {
+        if (constructor != i) {
+            if (z) {
+                throw new RuntimeException(String.format("can't parse magic %x in TL_channelBannedRights_layer92", Integer.valueOf(i)));
+            }
             return null;
-        } else {
-            throw new RuntimeException(String.format("can't parse magic %x in TL_channelBannedRights_layer92", new Object[]{Integer.valueOf(i)}));
         }
+        TLRPC$TL_channelBannedRights_layer92 tLRPC$TL_channelBannedRights_layer92 = new TLRPC$TL_channelBannedRights_layer92();
+        tLRPC$TL_channelBannedRights_layer92.readParams(abstractSerializedData, z);
+        return tLRPC$TL_channelBannedRights_layer92;
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
@@ -43,23 +44,24 @@ public class TLRPC$TL_channelBannedRights_layer92 extends TLObject {
         this.until_date = abstractSerializedData.readInt32(z);
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
-        int i = this.view_messages ? this.flags | 1 : this.flags & -2;
+        int i = this.view_messages ? this.flags | 1 : this.flags & (-2);
         this.flags = i;
-        int i2 = this.send_messages ? i | 2 : i & -3;
+        int i2 = this.send_messages ? i | 2 : i & (-3);
         this.flags = i2;
-        int i3 = this.send_media ? i2 | 4 : i2 & -5;
+        int i3 = this.send_media ? i2 | 4 : i2 & (-5);
         this.flags = i3;
-        int i4 = this.send_stickers ? i3 | 8 : i3 & -9;
+        int i4 = this.send_stickers ? i3 | 8 : i3 & (-9);
         this.flags = i4;
-        int i5 = this.send_gifs ? i4 | 16 : i4 & -17;
+        int i5 = this.send_gifs ? i4 | 16 : i4 & (-17);
         this.flags = i5;
-        int i6 = this.send_games ? i5 | 32 : i5 & -33;
+        int i6 = this.send_games ? i5 | 32 : i5 & (-33);
         this.flags = i6;
-        int i7 = this.send_inline ? i6 | 64 : i6 & -65;
+        int i7 = this.send_inline ? i6 | 64 : i6 & (-65);
         this.flags = i7;
-        int i8 = this.embed_links ? i7 | 128 : i7 & -129;
+        int i8 = this.embed_links ? i7 | 128 : i7 & (-129);
         this.flags = i8;
         abstractSerializedData.writeInt32(i8);
         abstractSerializedData.writeInt32(this.until_date);

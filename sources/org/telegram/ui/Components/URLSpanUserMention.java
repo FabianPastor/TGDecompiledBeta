@@ -4,13 +4,13 @@ import android.text.TextPaint;
 import android.view.View;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.TextStyleSpan;
-
+/* loaded from: classes3.dex */
 public class URLSpanUserMention extends URLSpanNoUnderline {
     private int currentType;
     private TextStyleSpan.TextStyleRun style;
 
     public URLSpanUserMention(String str, int i) {
-        this(str, i, (TextStyleSpan.TextStyleRun) null);
+        this(str, i, null);
     }
 
     public URLSpanUserMention(String str, int i, TextStyleSpan.TextStyleRun textStyleRun) {
@@ -19,10 +19,12 @@ public class URLSpanUserMention extends URLSpanNoUnderline {
         this.style = textStyleRun;
     }
 
+    @Override // org.telegram.ui.Components.URLSpanNoUnderline, android.text.style.URLSpan, android.text.style.ClickableSpan
     public void onClick(View view) {
         super.onClick(view);
     }
 
+    @Override // org.telegram.ui.Components.URLSpanNoUnderline, android.text.style.ClickableSpan, android.text.style.CharacterStyle
     public void updateDrawState(TextPaint textPaint) {
         super.updateDrawState(textPaint);
         int i = this.currentType;

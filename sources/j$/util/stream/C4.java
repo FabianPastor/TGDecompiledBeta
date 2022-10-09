@@ -1,38 +1,25 @@
 package j$.util.stream;
 
-import j$.util.CLASSNAMEa;
+import j$.util.AbstractCLASSNAMEa;
 import j$.util.function.Consumer;
-import j$.util.u;
 import java.util.Comparator;
-
-final class C4 extends D4 implements u {
-    /* JADX WARNING: Illegal instructions before constructor call */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    C4(j$.util.u r13, long r14, long r16) {
-        /*
-            r12 = this;
-            long r0 = r13.estimateSize()
-            r6 = r16
-            long r10 = java.lang.Math.min(r0, r6)
-            r8 = 0
-            r2 = r12
-            r3 = r13
-            r4 = r14
-            r2.<init>(r3, r4, r6, r8, r10)
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: j$.util.stream.C4.<init>(j$.util.u, long, long):void");
+/* loaded from: classes2.dex */
+final class C4 extends D4 implements j$.util.u {
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public C4(j$.util.u uVar, long j, long j2) {
+        super(uVar, j, j2, 0L, Math.min(uVar.estimateSize(), j2));
     }
 
-    private C4(u uVar, long j, long j2, long j3, long j4) {
+    private C4(j$.util.u uVar, long j, long j2, long j3, long j4) {
         super(uVar, j, j2, j3, j4);
     }
 
-    /* access modifiers changed from: protected */
-    public u a(u uVar, long j, long j2, long j3, long j4) {
+    @Override // j$.util.stream.D4
+    protected j$.util.u a(j$.util.u uVar, long j, long j2, long j3, long j4) {
         return new C4(uVar, j, j2, j3, j4);
     }
 
+    @Override // j$.util.u
     public boolean b(Consumer consumer) {
         long j;
         consumer.getClass();
@@ -55,39 +42,45 @@ final class C4 extends D4 implements u {
         return this.c.b(consumer);
     }
 
+    @Override // j$.util.u
     public void forEachRemaining(Consumer consumer) {
         consumer.getClass();
         long j = this.a;
         long j2 = this.e;
-        if (j < j2) {
-            long j3 = this.d;
-            if (j3 < j2) {
-                if (j3 < j || this.c.estimateSize() + j3 > this.b) {
-                    while (this.a > this.d) {
-                        this.c.b(A4.a);
-                        this.d++;
-                    }
-                    while (this.d < this.e) {
-                        this.c.b(consumer);
-                        this.d++;
-                    }
-                    return;
-                }
-                this.c.forEachRemaining(consumer);
-                this.d = this.e;
-            }
+        if (j >= j2) {
+            return;
+        }
+        long j3 = this.d;
+        if (j3 >= j2) {
+            return;
+        }
+        if (j3 >= j && this.c.estimateSize() + j3 <= this.b) {
+            this.c.forEachRemaining(consumer);
+            this.d = this.e;
+            return;
+        }
+        while (this.a > this.d) {
+            this.c.b(A4.a);
+            this.d++;
+        }
+        while (this.d < this.e) {
+            this.c.b(consumer);
+            this.d++;
         }
     }
 
+    @Override // j$.util.u
     public Comparator getComparator() {
         throw new IllegalStateException();
     }
 
+    @Override // j$.util.u
     public /* synthetic */ long getExactSizeIfKnown() {
-        return CLASSNAMEa.e(this);
+        return AbstractCLASSNAMEa.e(this);
     }
 
+    @Override // j$.util.u
     public /* synthetic */ boolean hasCharacteristics(int i) {
-        return CLASSNAMEa.f(this, i);
+        return AbstractCLASSNAMEa.f(this, i);
     }
 }

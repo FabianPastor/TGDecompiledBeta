@@ -1,7 +1,7 @@
 package j$.wrappers;
 
 import java.util.function.IntToDoubleFunction;
-
+/* loaded from: classes2.dex */
 public final /* synthetic */ class X {
     final /* synthetic */ IntToDoubleFunction a;
 

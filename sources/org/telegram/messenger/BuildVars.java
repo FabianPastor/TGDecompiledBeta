@@ -4,29 +4,38 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import androidx.core.util.ObjectsCompat$$ExternalSyntheticBackport0;
 import com.android.billingclient.api.ProductDetails;
-import java.util.Iterator;
-
+/* loaded from: classes.dex */
 public class BuildVars {
-    public static String APP_HASH = "014b35b6184100b085b0d0572f9b5103";
-    public static int APP_ID = 4;
-    public static int BUILD_VERSION = 2802;
-    public static String BUILD_VERSION_STRING = "9.0.0";
+    public static String APP_HASH = null;
+    public static int APP_ID = 0;
+    public static int BUILD_VERSION = 0;
+    public static String BUILD_VERSION_STRING = null;
     public static boolean CHECK_UPDATES = true;
     public static boolean DEBUG_PRIVATE_VERSION = false;
     public static boolean DEBUG_VERSION = true;
-    public static String GOOGLE_AUTH_CLIENT_ID = "760348033671-81kmi3pi84p11ub8hp9a1funsv0rn2p9.apps.googleusercontent.com";
-    public static String HUAWEI_APP_ID = "NUM";
+    public static String GOOGLE_AUTH_CLIENT_ID = null;
+    public static String HUAWEI_APP_ID = null;
     public static boolean IS_BILLING_UNAVAILABLE = false;
     public static boolean LOGS_ENABLED = true;
-    public static boolean NO_SCOPED_STORAGE = (Build.VERSION.SDK_INT <= 29);
-    public static String PLAYSTORE_APP_URL = "https://play.google.com/store/apps/details?id=org.telegram.messenger";
-    public static String SMS_HASH = (isStandaloneApp() ? "w0lkcmTZkKh" : DEBUG_VERSION ? "O2P2z+/jBpJ" : "oLeq9AcOZkT");
+    public static boolean NO_SCOPED_STORAGE = false;
+    public static String PLAYSTORE_APP_URL = null;
+    public static String SMS_HASH = null;
     public static boolean USE_CLOUD_STRINGS = true;
     private static Boolean betaApp;
     private static Boolean standaloneApp;
 
     static {
         boolean z = true;
+        NO_SCOPED_STORAGE = Build.VERSION.SDK_INT <= 29;
+        BUILD_VERSION = 2802;
+        BUILD_VERSION_STRING = "9.0.0";
+        APP_ID = 4;
+        APP_HASH = "014b35b6184100b085b0d0572f9b5103";
+        SMS_HASH = isStandaloneApp() ? "w0lkcmTZkKh" : DEBUG_VERSION ? "O2P2z+/jBpJ" : "oLeq9AcOZkT";
+        PLAYSTORE_APP_URL = "https://play.google.com/store/apps/details?id=org.telegram.messenger";
+        GOOGLE_AUTH_CLIENT_ID = "760348033671-81kmi3pi84p11ub8hp9a1funsv0rn2p9.apps.googleusercontent.com";
+        HUAWEI_APP_ID = "NUM";
+        IS_BILLING_UNAVAILABLE = false;
         if (ApplicationLoader.applicationContext != null) {
             SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("systemConfig", 0);
             boolean z2 = DEBUG_VERSION;
@@ -44,18 +53,11 @@ public class BuildVars {
     private static boolean hasDirectCurrency() {
         ProductDetails productDetails;
         if (BillingController.getInstance().isReady() && (productDetails = BillingController.PREMIUM_PRODUCT_DETAILS) != null) {
-            for (ProductDetails.SubscriptionOfferDetails pricingPhases : productDetails.getSubscriptionOfferDetails()) {
-                Iterator<ProductDetails.PricingPhase> it = pricingPhases.getPricingPhases().getPricingPhaseList().iterator();
-                while (true) {
-                    if (it.hasNext()) {
-                        ProductDetails.PricingPhase next = it.next();
-                        Iterator<String> it2 = MessagesController.getInstance(UserConfig.selectedAccount).directPaymentsCurrency.iterator();
-                        while (true) {
-                            if (it2.hasNext()) {
-                                if (ObjectsCompat$$ExternalSyntheticBackport0.m(next.getPriceCurrencyCode(), it2.next())) {
-                                    return true;
-                                }
-                            }
+            for (ProductDetails.SubscriptionOfferDetails subscriptionOfferDetails : productDetails.getSubscriptionOfferDetails()) {
+                for (ProductDetails.PricingPhase pricingPhase : subscriptionOfferDetails.getPricingPhases().getPricingPhaseList()) {
+                    for (String str : MessagesController.getInstance(UserConfig.selectedAccount).directPaymentsCurrency) {
+                        if (ObjectsCompat$$ExternalSyntheticBackport0.m(pricingPhase.getPriceCurrencyCode(), str)) {
+                            return true;
                         }
                     }
                 }

@@ -1,5 +1,5 @@
 package org.webrtc;
-
+/* loaded from: classes3.dex */
 public class TurnCustomizer {
     private long nativeTurnCustomizer;
 
@@ -12,19 +12,19 @@ public class TurnCustomizer {
     public void dispose() {
         checkTurnCustomizerExists();
         nativeFreeTurnCustomizer(this.nativeTurnCustomizer);
-        this.nativeTurnCustomizer = 0;
+        this.nativeTurnCustomizer = 0L;
     }
 
-    /* access modifiers changed from: package-private */
     @CalledByNative
-    public long getNativeTurnCustomizer() {
+    long getNativeTurnCustomizer() {
         checkTurnCustomizerExists();
         return this.nativeTurnCustomizer;
     }
 
     private void checkTurnCustomizerExists() {
-        if (this.nativeTurnCustomizer == 0) {
-            throw new IllegalStateException("TurnCustomizer has been disposed.");
+        if (this.nativeTurnCustomizer != 0) {
+            return;
         }
+        throw new IllegalStateException("TurnCustomizer has been disposed.");
     }
 }

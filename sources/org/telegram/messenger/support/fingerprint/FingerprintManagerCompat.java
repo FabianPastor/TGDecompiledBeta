@@ -8,11 +8,12 @@ import java.security.Signature;
 import javax.crypto.Cipher;
 import javax.crypto.Mac;
 import org.telegram.messenger.support.fingerprint.FingerprintManagerCompatApi23;
-
+/* loaded from: classes.dex */
 public final class FingerprintManagerCompat {
     static final FingerprintManagerCompatImpl IMPL;
     private Context mContext;
 
+    /* loaded from: classes.dex */
     public static abstract class AuthenticationCallback {
         public abstract void onAuthenticationError(int i, CharSequence charSequence);
 
@@ -23,6 +24,7 @@ public final class FingerprintManagerCompat {
         public abstract void onAuthenticationSucceeded(AuthenticationResult authenticationResult);
     }
 
+    /* loaded from: classes.dex */
     private interface FingerprintManagerCompatImpl {
         void authenticate(Context context, CryptoObject cryptoObject, int i, CancellationSignal cancellationSignal, AuthenticationCallback authenticationCallback, Handler handler);
 
@@ -31,14 +33,18 @@ public final class FingerprintManagerCompat {
         boolean isHardwareDetected(Context context);
     }
 
+    /* loaded from: classes.dex */
     private static class LegacyFingerprintManagerCompatImpl implements FingerprintManagerCompatImpl {
+        @Override // org.telegram.messenger.support.fingerprint.FingerprintManagerCompat.FingerprintManagerCompatImpl
         public void authenticate(Context context, CryptoObject cryptoObject, int i, CancellationSignal cancellationSignal, AuthenticationCallback authenticationCallback, Handler handler) {
         }
 
+        @Override // org.telegram.messenger.support.fingerprint.FingerprintManagerCompat.FingerprintManagerCompatImpl
         public boolean hasEnrolledFingerprints(Context context) {
             return false;
         }
 
+        @Override // org.telegram.messenger.support.fingerprint.FingerprintManagerCompat.FingerprintManagerCompatImpl
         public boolean isHardwareDetected(Context context) {
             return false;
         }
@@ -72,6 +78,7 @@ public final class FingerprintManagerCompat {
         IMPL.authenticate(this.mContext, cryptoObject, i, cancellationSignal, authenticationCallback, handler);
     }
 
+    /* loaded from: classes.dex */
     public static class CryptoObject {
         private final Cipher mCipher;
         private final Mac mMac;
@@ -108,20 +115,25 @@ public final class FingerprintManagerCompat {
         }
     }
 
+    /* loaded from: classes.dex */
     public static final class AuthenticationResult {
         public AuthenticationResult(CryptoObject cryptoObject) {
         }
     }
 
+    /* loaded from: classes.dex */
     private static class Api23FingerprintManagerCompatImpl implements FingerprintManagerCompatImpl {
+        @Override // org.telegram.messenger.support.fingerprint.FingerprintManagerCompat.FingerprintManagerCompatImpl
         public boolean hasEnrolledFingerprints(Context context) {
             return FingerprintManagerCompatApi23.hasEnrolledFingerprints(context);
         }
 
+        @Override // org.telegram.messenger.support.fingerprint.FingerprintManagerCompat.FingerprintManagerCompatImpl
         public boolean isHardwareDetected(Context context) {
             return FingerprintManagerCompatApi23.isHardwareDetected(context);
         }
 
+        @Override // org.telegram.messenger.support.fingerprint.FingerprintManagerCompat.FingerprintManagerCompatImpl
         public void authenticate(Context context, CryptoObject cryptoObject, int i, CancellationSignal cancellationSignal, AuthenticationCallback authenticationCallback, Handler handler) {
             FingerprintManagerCompatApi23.authenticate(context, wrapCryptoObject(cryptoObject), i, cancellationSignal != null ? cancellationSignal.getCancellationSignalObject() : null, wrapCallback(authenticationCallback), handler);
         }
@@ -136,10 +148,10 @@ public final class FingerprintManagerCompat {
             if (cryptoObject.getSignature() != null) {
                 return new FingerprintManagerCompatApi23.CryptoObject(cryptoObject.getSignature());
             }
-            if (cryptoObject.getMac() != null) {
-                return new FingerprintManagerCompatApi23.CryptoObject(cryptoObject.getMac());
+            if (cryptoObject.getMac() == null) {
+                return null;
             }
-            return null;
+            return new FingerprintManagerCompatApi23.CryptoObject(cryptoObject.getMac());
         }
 
         static CryptoObject unwrapCryptoObject(FingerprintManagerCompatApi23.CryptoObject cryptoObject) {
@@ -152,26 +164,30 @@ public final class FingerprintManagerCompat {
             if (cryptoObject.getSignature() != null) {
                 return new CryptoObject(cryptoObject.getSignature());
             }
-            if (cryptoObject.getMac() != null) {
-                return new CryptoObject(cryptoObject.getMac());
+            if (cryptoObject.getMac() == null) {
+                return null;
             }
-            return null;
+            return new CryptoObject(cryptoObject.getMac());
         }
 
         private static FingerprintManagerCompatApi23.AuthenticationCallback wrapCallback(final AuthenticationCallback authenticationCallback) {
-            return new FingerprintManagerCompatApi23.AuthenticationCallback() {
+            return new FingerprintManagerCompatApi23.AuthenticationCallback() { // from class: org.telegram.messenger.support.fingerprint.FingerprintManagerCompat.Api23FingerprintManagerCompatImpl.1
+                @Override // org.telegram.messenger.support.fingerprint.FingerprintManagerCompatApi23.AuthenticationCallback
                 public void onAuthenticationError(int i, CharSequence charSequence) {
                     AuthenticationCallback.this.onAuthenticationError(i, charSequence);
                 }
 
+                @Override // org.telegram.messenger.support.fingerprint.FingerprintManagerCompatApi23.AuthenticationCallback
                 public void onAuthenticationHelp(int i, CharSequence charSequence) {
                     AuthenticationCallback.this.onAuthenticationHelp(i, charSequence);
                 }
 
+                @Override // org.telegram.messenger.support.fingerprint.FingerprintManagerCompatApi23.AuthenticationCallback
                 public void onAuthenticationSucceeded(FingerprintManagerCompatApi23.AuthenticationResultInternal authenticationResultInternal) {
                     AuthenticationCallback.this.onAuthenticationSucceeded(new AuthenticationResult(Api23FingerprintManagerCompatImpl.unwrapCryptoObject(authenticationResultInternal.getCryptoObject())));
                 }
 
+                @Override // org.telegram.messenger.support.fingerprint.FingerprintManagerCompatApi23.AuthenticationCallback
                 public void onAuthenticationFailed() {
                     AuthenticationCallback.this.onAuthenticationFailed();
                 }

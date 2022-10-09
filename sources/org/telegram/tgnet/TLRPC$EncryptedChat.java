@@ -1,5 +1,5 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public abstract class TLRPC$EncryptedChat extends TLObject {
     public byte[] a_or_b;
     public long access_hash;
@@ -34,25 +34,145 @@ public abstract class TLRPC$EncryptedChat extends TLObject {
         TLRPC$EncryptedChat tLRPC$EncryptedChat;
         switch (i) {
             case -1417756512:
-                tLRPC$EncryptedChat = new TLRPC$TL_encryptedChatEmpty();
+                tLRPC$EncryptedChat = new TLRPC$EncryptedChat() { // from class: org.telegram.tgnet.TLRPC$TL_encryptedChatEmpty
+                    public static int constructor = -NUM;
+
+                    @Override // org.telegram.tgnet.TLObject
+                    public void readParams(AbstractSerializedData abstractSerializedData2, boolean z2) {
+                        this.id = abstractSerializedData2.readInt32(z2);
+                    }
+
+                    @Override // org.telegram.tgnet.TLObject
+                    public void serializeToStream(AbstractSerializedData abstractSerializedData2) {
+                        abstractSerializedData2.writeInt32(constructor);
+                        abstractSerializedData2.writeInt32(this.id);
+                    }
+                };
                 break;
             case -931638658:
-                tLRPC$EncryptedChat = new TLRPC$TL_encryptedChatRequested_layer115();
+                tLRPC$EncryptedChat = new TLRPC$EncryptedChat() { // from class: org.telegram.tgnet.TLRPC$TL_encryptedChatRequested_layer115
+                    public static int constructor = -NUM;
+
+                    @Override // org.telegram.tgnet.TLObject
+                    public void readParams(AbstractSerializedData abstractSerializedData2, boolean z2) {
+                        this.id = abstractSerializedData2.readInt32(z2);
+                        this.access_hash = abstractSerializedData2.readInt64(z2);
+                        this.date = abstractSerializedData2.readInt32(z2);
+                        this.admin_id = abstractSerializedData2.readInt32(z2);
+                        this.participant_id = abstractSerializedData2.readInt32(z2);
+                        this.g_a = abstractSerializedData2.readByteArray(z2);
+                    }
+
+                    @Override // org.telegram.tgnet.TLObject
+                    public void serializeToStream(AbstractSerializedData abstractSerializedData2) {
+                        abstractSerializedData2.writeInt32(constructor);
+                        abstractSerializedData2.writeInt32(this.id);
+                        abstractSerializedData2.writeInt64(this.access_hash);
+                        abstractSerializedData2.writeInt32(this.date);
+                        abstractSerializedData2.writeInt32((int) this.admin_id);
+                        abstractSerializedData2.writeInt32((int) this.participant_id);
+                        abstractSerializedData2.writeByteArray(this.g_a);
+                    }
+                };
                 break;
             case -94974410:
-                tLRPC$EncryptedChat = new TLRPC$TL_encryptedChat_layer131();
+                tLRPC$EncryptedChat = new TLRPC$TL_encryptedChat() { // from class: org.telegram.tgnet.TLRPC$TL_encryptedChat_layer131
+                    public static int constructor = -94974410;
+
+                    @Override // org.telegram.tgnet.TLRPC$TL_encryptedChat, org.telegram.tgnet.TLObject
+                    public void readParams(AbstractSerializedData abstractSerializedData2, boolean z2) {
+                        this.id = abstractSerializedData2.readInt32(z2);
+                        this.access_hash = abstractSerializedData2.readInt64(z2);
+                        this.date = abstractSerializedData2.readInt32(z2);
+                        this.admin_id = abstractSerializedData2.readInt32(z2);
+                        this.participant_id = abstractSerializedData2.readInt32(z2);
+                        this.g_a_or_b = abstractSerializedData2.readByteArray(z2);
+                        this.key_fingerprint = abstractSerializedData2.readInt64(z2);
+                    }
+
+                    @Override // org.telegram.tgnet.TLRPC$TL_encryptedChat, org.telegram.tgnet.TLObject
+                    public void serializeToStream(AbstractSerializedData abstractSerializedData2) {
+                        abstractSerializedData2.writeInt32(constructor);
+                        abstractSerializedData2.writeInt32(this.id);
+                        abstractSerializedData2.writeInt64(this.access_hash);
+                        abstractSerializedData2.writeInt32(this.date);
+                        abstractSerializedData2.writeInt32((int) this.admin_id);
+                        abstractSerializedData2.writeInt32((int) this.participant_id);
+                        abstractSerializedData2.writeByteArray(this.g_a_or_b);
+                        abstractSerializedData2.writeInt64(this.key_fingerprint);
+                    }
+                };
                 break;
             case -39213129:
-                tLRPC$EncryptedChat = new TLRPC$TL_encryptedChatRequested_old();
+                tLRPC$EncryptedChat = new TLRPC$TL_encryptedChatRequested() { // from class: org.telegram.tgnet.TLRPC$TL_encryptedChatRequested_old
+                    public static int constructor = -39213129;
+
+                    @Override // org.telegram.tgnet.TLRPC$TL_encryptedChatRequested, org.telegram.tgnet.TLObject
+                    public void readParams(AbstractSerializedData abstractSerializedData2, boolean z2) {
+                        this.id = abstractSerializedData2.readInt32(z2);
+                        this.access_hash = abstractSerializedData2.readInt64(z2);
+                        this.date = abstractSerializedData2.readInt32(z2);
+                        this.admin_id = abstractSerializedData2.readInt32(z2);
+                        this.participant_id = abstractSerializedData2.readInt32(z2);
+                        this.g_a = abstractSerializedData2.readByteArray(z2);
+                        this.nonce = abstractSerializedData2.readByteArray(z2);
+                    }
+
+                    @Override // org.telegram.tgnet.TLRPC$TL_encryptedChatRequested, org.telegram.tgnet.TLObject
+                    public void serializeToStream(AbstractSerializedData abstractSerializedData2) {
+                        abstractSerializedData2.writeInt32(constructor);
+                        abstractSerializedData2.writeInt32(this.id);
+                        abstractSerializedData2.writeInt64(this.access_hash);
+                        abstractSerializedData2.writeInt32(this.date);
+                        abstractSerializedData2.writeInt32((int) this.admin_id);
+                        abstractSerializedData2.writeInt32((int) this.participant_id);
+                        abstractSerializedData2.writeByteArray(this.g_a);
+                        abstractSerializedData2.writeByteArray(this.nonce);
+                    }
+                };
                 break;
             case 332848423:
-                tLRPC$EncryptedChat = new TLRPC$TL_encryptedChatDiscarded_layer122();
+                tLRPC$EncryptedChat = new TLRPC$TL_encryptedChatDiscarded() { // from class: org.telegram.tgnet.TLRPC$TL_encryptedChatDiscarded_layer122
+                    public static int constructor = NUM;
+
+                    @Override // org.telegram.tgnet.TLRPC$TL_encryptedChatDiscarded, org.telegram.tgnet.TLObject
+                    public void readParams(AbstractSerializedData abstractSerializedData2, boolean z2) {
+                        this.id = abstractSerializedData2.readInt32(z2);
+                    }
+
+                    @Override // org.telegram.tgnet.TLRPC$TL_encryptedChatDiscarded, org.telegram.tgnet.TLObject
+                    public void serializeToStream(AbstractSerializedData abstractSerializedData2) {
+                        abstractSerializedData2.writeInt32(constructor);
+                        abstractSerializedData2.writeInt32(this.id);
+                    }
+                };
                 break;
             case 505183301:
                 tLRPC$EncryptedChat = new TLRPC$TL_encryptedChatDiscarded();
                 break;
             case 1006044124:
-                tLRPC$EncryptedChat = new TLRPC$TL_encryptedChatWaiting_layer131();
+                tLRPC$EncryptedChat = new TLRPC$TL_encryptedChatWaiting() { // from class: org.telegram.tgnet.TLRPC$TL_encryptedChatWaiting_layer131
+                    public static int constructor = NUM;
+
+                    @Override // org.telegram.tgnet.TLRPC$TL_encryptedChatWaiting, org.telegram.tgnet.TLObject
+                    public void readParams(AbstractSerializedData abstractSerializedData2, boolean z2) {
+                        this.id = abstractSerializedData2.readInt32(z2);
+                        this.access_hash = abstractSerializedData2.readInt64(z2);
+                        this.date = abstractSerializedData2.readInt32(z2);
+                        this.admin_id = abstractSerializedData2.readInt32(z2);
+                        this.participant_id = abstractSerializedData2.readInt32(z2);
+                    }
+
+                    @Override // org.telegram.tgnet.TLRPC$TL_encryptedChatWaiting, org.telegram.tgnet.TLObject
+                    public void serializeToStream(AbstractSerializedData abstractSerializedData2) {
+                        abstractSerializedData2.writeInt32(constructor);
+                        abstractSerializedData2.writeInt32(this.id);
+                        abstractSerializedData2.writeInt64(this.access_hash);
+                        abstractSerializedData2.writeInt32(this.date);
+                        abstractSerializedData2.writeInt32((int) this.admin_id);
+                        abstractSerializedData2.writeInt32((int) this.participant_id);
+                    }
+                };
                 break;
             case 1223809356:
                 tLRPC$EncryptedChat = new TLRPC$TL_encryptedChatRequested();
@@ -61,10 +181,69 @@ public abstract class TLRPC$EncryptedChat extends TLObject {
                 tLRPC$EncryptedChat = new TLRPC$TL_encryptedChat();
                 break;
             case 1651608194:
-                tLRPC$EncryptedChat = new TLRPC$TL_encryptedChatRequested_layer131();
+                tLRPC$EncryptedChat = new TLRPC$TL_encryptedChatRequested() { // from class: org.telegram.tgnet.TLRPC$TL_encryptedChatRequested_layer131
+                    public static int constructor = NUM;
+
+                    @Override // org.telegram.tgnet.TLRPC$TL_encryptedChatRequested, org.telegram.tgnet.TLObject
+                    public void readParams(AbstractSerializedData abstractSerializedData2, boolean z2) {
+                        int readInt32 = abstractSerializedData2.readInt32(z2);
+                        this.flags = readInt32;
+                        if ((readInt32 & 1) != 0) {
+                            this.folder_id = abstractSerializedData2.readInt32(z2);
+                        }
+                        this.id = abstractSerializedData2.readInt32(z2);
+                        this.access_hash = abstractSerializedData2.readInt64(z2);
+                        this.date = abstractSerializedData2.readInt32(z2);
+                        this.admin_id = abstractSerializedData2.readInt32(z2);
+                        this.participant_id = abstractSerializedData2.readInt32(z2);
+                        this.g_a = abstractSerializedData2.readByteArray(z2);
+                    }
+
+                    @Override // org.telegram.tgnet.TLRPC$TL_encryptedChatRequested, org.telegram.tgnet.TLObject
+                    public void serializeToStream(AbstractSerializedData abstractSerializedData2) {
+                        abstractSerializedData2.writeInt32(constructor);
+                        abstractSerializedData2.writeInt32(this.flags);
+                        if ((this.flags & 1) != 0) {
+                            abstractSerializedData2.writeInt32(this.folder_id);
+                        }
+                        abstractSerializedData2.writeInt32(this.id);
+                        abstractSerializedData2.writeInt64(this.access_hash);
+                        abstractSerializedData2.writeInt32(this.date);
+                        abstractSerializedData2.writeInt32((int) this.admin_id);
+                        abstractSerializedData2.writeInt32((int) this.participant_id);
+                        abstractSerializedData2.writeByteArray(this.g_a);
+                    }
+                };
                 break;
             case 1711395151:
-                tLRPC$EncryptedChat = new TLRPC$TL_encryptedChat_old();
+                tLRPC$EncryptedChat = new TLRPC$TL_encryptedChat() { // from class: org.telegram.tgnet.TLRPC$TL_encryptedChat_old
+                    public static int constructor = NUM;
+
+                    @Override // org.telegram.tgnet.TLRPC$TL_encryptedChat, org.telegram.tgnet.TLObject
+                    public void readParams(AbstractSerializedData abstractSerializedData2, boolean z2) {
+                        this.id = abstractSerializedData2.readInt32(z2);
+                        this.access_hash = abstractSerializedData2.readInt64(z2);
+                        this.date = abstractSerializedData2.readInt32(z2);
+                        this.admin_id = abstractSerializedData2.readInt32(z2);
+                        this.participant_id = abstractSerializedData2.readInt32(z2);
+                        this.g_a_or_b = abstractSerializedData2.readByteArray(z2);
+                        this.nonce = abstractSerializedData2.readByteArray(z2);
+                        this.key_fingerprint = abstractSerializedData2.readInt64(z2);
+                    }
+
+                    @Override // org.telegram.tgnet.TLRPC$TL_encryptedChat, org.telegram.tgnet.TLObject
+                    public void serializeToStream(AbstractSerializedData abstractSerializedData2) {
+                        abstractSerializedData2.writeInt32(constructor);
+                        abstractSerializedData2.writeInt32(this.id);
+                        abstractSerializedData2.writeInt64(this.access_hash);
+                        abstractSerializedData2.writeInt32(this.date);
+                        abstractSerializedData2.writeInt32((int) this.admin_id);
+                        abstractSerializedData2.writeInt32((int) this.participant_id);
+                        abstractSerializedData2.writeByteArray(this.g_a_or_b);
+                        abstractSerializedData2.writeByteArray(this.nonce);
+                        abstractSerializedData2.writeInt64(this.key_fingerprint);
+                    }
+                };
                 break;
             case 1722964307:
                 tLRPC$EncryptedChat = new TLRPC$TL_encryptedChatWaiting();
@@ -79,6 +258,6 @@ public abstract class TLRPC$EncryptedChat extends TLObject {
             }
             return tLRPC$EncryptedChat;
         }
-        throw new RuntimeException(String.format("can't parse magic %x in EncryptedChat", new Object[]{Integer.valueOf(i)}));
+        throw new RuntimeException(String.format("can't parse magic %x in EncryptedChat", Integer.valueOf(i)));
     }
 }

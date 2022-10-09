@@ -4,7 +4,7 @@ import android.graphics.RectF;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
 import android.util.Log;
-
+/* loaded from: classes3.dex */
 public class Utils {
     public static void HasGLError() {
         int glGetError = GLES20.glGetError();
@@ -14,9 +14,9 @@ public class Utils {
     }
 
     public static void RectFIntegral(RectF rectF) {
-        rectF.left = (float) ((int) Math.floor((double) rectF.left));
-        rectF.top = (float) ((int) Math.floor((double) rectF.top));
-        rectF.right = (float) ((int) Math.ceil((double) rectF.right));
-        rectF.bottom = (float) ((int) Math.ceil((double) rectF.bottom));
+        rectF.left = (int) Math.floor(rectF.left);
+        rectF.top = (int) Math.floor(rectF.top);
+        rectF.right = (int) Math.ceil(rectF.right);
+        rectF.bottom = (int) Math.ceil(rectF.bottom);
     }
 }

@@ -1,5 +1,5 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_channels_createChannel extends TLObject {
     public static int constructor = NUM;
     public String about;
@@ -11,17 +11,19 @@ public class TLRPC$TL_channels_createChannel extends TLObject {
     public boolean megagroup;
     public String title;
 
+    @Override // org.telegram.tgnet.TLObject
     public TLObject deserializeResponse(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         return TLRPC$Updates.TLdeserialize(abstractSerializedData, i, z);
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
-        int i = this.broadcast ? this.flags | 1 : this.flags & -2;
+        int i = this.broadcast ? this.flags | 1 : this.flags & (-2);
         this.flags = i;
-        int i2 = this.megagroup ? i | 2 : i & -3;
+        int i2 = this.megagroup ? i | 2 : i & (-3);
         this.flags = i2;
-        int i3 = this.for_import ? i2 | 8 : i2 & -9;
+        int i3 = this.for_import ? i2 | 8 : i2 & (-9);
         this.flags = i3;
         abstractSerializedData.writeInt32(i3);
         abstractSerializedData.writeString(this.title);

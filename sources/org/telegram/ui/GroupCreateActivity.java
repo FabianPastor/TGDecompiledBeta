@@ -43,6 +43,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
@@ -86,71 +87,50 @@ import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.StickerEmptyView;
 import org.telegram.ui.Components.TypefaceSpan;
 import org.telegram.ui.Components.VerticalPositionAutoAnimator;
-
+import org.telegram.ui.GroupCreateActivity;
+/* loaded from: classes3.dex */
 public class GroupCreateActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, View.OnClickListener {
-    /* access modifiers changed from: private */
-    public GroupCreateAdapter adapter;
-    /* access modifiers changed from: private */
-    public boolean addToGroup;
-    /* access modifiers changed from: private */
-    public ArrayList<GroupCreateSpan> allSpans = new ArrayList<>();
-    /* access modifiers changed from: private */
-    public long channelId;
+    private GroupCreateAdapter adapter;
+    private boolean addToGroup;
+    private ArrayList<GroupCreateSpan> allSpans;
+    private long channelId;
     private int chatAddType;
-    /* access modifiers changed from: private */
-    public long chatId;
-    private int chatType = 0;
-    /* access modifiers changed from: private */
-    public int containerHeight;
-    /* access modifiers changed from: private */
-    public AnimatorSet currentAnimation;
-    /* access modifiers changed from: private */
-    public GroupCreateSpan currentDeletingSpan;
+    private long chatId;
+    private int chatType;
+    private int containerHeight;
+    private AnimatorSet currentAnimation;
+    private GroupCreateSpan currentDeletingSpan;
     private AnimatorSet currentDoneButtonAnimation;
     private GroupCreateActivityDelegate delegate;
     private ContactsAddActivityDelegate delegate2;
     private boolean doneButtonVisible;
-    /* access modifiers changed from: private */
-    public EditTextBoldCursor editText;
-    /* access modifiers changed from: private */
-    public StickerEmptyView emptyView;
-    /* access modifiers changed from: private */
-    public int fieldY;
-    /* access modifiers changed from: private */
-    public ImageView floatingButton;
+    private EditTextBoldCursor editText;
+    private StickerEmptyView emptyView;
+    private int fieldY;
+    private ImageView floatingButton;
     private boolean forImport;
-    /* access modifiers changed from: private */
-    public boolean ignoreScrollEvent;
-    /* access modifiers changed from: private */
-    public LongSparseArray<TLObject> ignoreUsers;
+    private boolean ignoreScrollEvent;
+    private LongSparseArray<TLObject> ignoreUsers;
     private TLRPC$ChatFull info;
-    /* access modifiers changed from: private */
-    public boolean isAlwaysShare;
-    /* access modifiers changed from: private */
-    public boolean isNeverShare;
-    /* access modifiers changed from: private */
-    public GroupCreateDividerItemDecoration itemDecoration;
-    /* access modifiers changed from: private */
-    public RecyclerListView listView;
-    private int maxCount = getMessagesController().maxMegagroupCount;
+    private boolean isAlwaysShare;
+    private boolean isNeverShare;
+    private GroupCreateDividerItemDecoration itemDecoration;
+    private RecyclerListView listView;
+    private int maxCount;
     int maxSize;
-    /* access modifiers changed from: private */
-    public int measuredContainerHeight;
-    /* access modifiers changed from: private */
-    public ScrollView scrollView;
-    /* access modifiers changed from: private */
-    public boolean searchWas;
-    /* access modifiers changed from: private */
-    public boolean searching;
-    /* access modifiers changed from: private */
-    public LongSparseArray<GroupCreateSpan> selectedContacts = new LongSparseArray<>();
+    private int measuredContainerHeight;
+    private ScrollView scrollView;
+    private boolean searchWas;
+    private boolean searching;
+    private LongSparseArray<GroupCreateSpan> selectedContacts;
     private PermanentLinkBottomSheet sharedLinkBottomSheet;
-    /* access modifiers changed from: private */
-    public SpansContainer spansContainer;
+    private SpansContainer spansContainer;
 
+    /* loaded from: classes3.dex */
     public interface ContactsAddActivityDelegate {
 
         /* renamed from: org.telegram.ui.GroupCreateActivity$ContactsAddActivityDelegate$-CC  reason: invalid class name */
+        /* loaded from: classes3.dex */
         public final /* synthetic */ class CC {
             public static void $default$needAddBot(ContactsAddActivityDelegate contactsAddActivityDelegate, TLRPC$User tLRPC$User) {
             }
@@ -161,28 +141,29 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         void needAddBot(TLRPC$User tLRPC$User);
     }
 
+    /* loaded from: classes3.dex */
     public interface GroupCreateActivityDelegate {
         void didSelectUsers(ArrayList<Long> arrayList);
     }
 
-    private class SpansContainer extends ViewGroup {
-        /* access modifiers changed from: private */
-        public View addingSpan;
-        /* access modifiers changed from: private */
-        public int animationIndex = -1;
-        /* access modifiers changed from: private */
-        public boolean animationStarted;
-        private ArrayList<Animator> animators = new ArrayList<>();
-        /* access modifiers changed from: private */
-        public View removingSpan;
+    /* JADX INFO: Access modifiers changed from: private */
+    /* loaded from: classes3.dex */
+    public class SpansContainer extends ViewGroup {
+        private View addingSpan;
+        private int animationIndex;
+        private boolean animationStarted;
+        private ArrayList<Animator> animators;
+        private View removingSpan;
 
         public SpansContainer(Context context) {
             super(context);
+            this.animators = new ArrayList<>();
+            this.animationIndex = -1;
         }
 
-        /* access modifiers changed from: protected */
-        public void onMeasure(int i, int i2) {
-            int i3;
+        @Override // android.view.View
+        protected void onMeasure(int i, int i2) {
+            int min;
             boolean z;
             char c;
             int childCount = getChildCount();
@@ -190,35 +171,35 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             int dp = size - AndroidUtilities.dp(26.0f);
             int dp2 = AndroidUtilities.dp(10.0f);
             int dp3 = AndroidUtilities.dp(10.0f);
+            int i3 = 0;
             int i4 = 0;
-            int i5 = 0;
-            for (int i6 = 0; i6 < childCount; i6++) {
-                View childAt = getChildAt(i6);
+            for (int i5 = 0; i5 < childCount; i5++) {
+                View childAt = getChildAt(i5);
                 if (childAt instanceof GroupCreateSpan) {
                     childAt.measure(View.MeasureSpec.makeMeasureSpec(size, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(32.0f), NUM));
-                    if (childAt != this.removingSpan && childAt.getMeasuredWidth() + i4 > dp) {
+                    if (childAt != this.removingSpan && childAt.getMeasuredWidth() + i3 > dp) {
                         dp2 += childAt.getMeasuredHeight() + AndroidUtilities.dp(8.0f);
+                        i3 = 0;
+                    }
+                    if (childAt.getMeasuredWidth() + i4 > dp) {
+                        dp3 += childAt.getMeasuredHeight() + AndroidUtilities.dp(8.0f);
                         i4 = 0;
                     }
-                    if (childAt.getMeasuredWidth() + i5 > dp) {
-                        dp3 += childAt.getMeasuredHeight() + AndroidUtilities.dp(8.0f);
-                        i5 = 0;
-                    }
-                    int dp4 = AndroidUtilities.dp(13.0f) + i4;
+                    int dp4 = AndroidUtilities.dp(13.0f) + i3;
                     if (!this.animationStarted) {
                         View view = this.removingSpan;
                         if (childAt == view) {
-                            childAt.setTranslationX((float) (AndroidUtilities.dp(13.0f) + i5));
-                            childAt.setTranslationY((float) dp3);
+                            childAt.setTranslationX(AndroidUtilities.dp(13.0f) + i4);
+                            childAt.setTranslationY(dp3);
                         } else if (view != null) {
-                            float f = (float) dp4;
+                            float f = dp4;
                             if (childAt.getTranslationX() != f) {
                                 c = 0;
-                                this.animators.add(ObjectAnimator.ofFloat(childAt, "translationX", new float[]{f}));
+                                this.animators.add(ObjectAnimator.ofFloat(childAt, "translationX", f));
                             } else {
                                 c = 0;
                             }
-                            float f2 = (float) dp2;
+                            float f2 = dp2;
                             if (childAt.getTranslationY() != f2) {
                                 ArrayList<Animator> arrayList = this.animators;
                                 float[] fArr = new float[1];
@@ -226,77 +207,80 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                                 arrayList.add(ObjectAnimator.ofFloat(childAt, "translationY", fArr));
                             }
                         } else {
-                            childAt.setTranslationX((float) dp4);
-                            childAt.setTranslationY((float) dp2);
+                            childAt.setTranslationX(dp4);
+                            childAt.setTranslationY(dp2);
                         }
                     }
                     if (childAt != this.removingSpan) {
-                        i4 += childAt.getMeasuredWidth() + AndroidUtilities.dp(9.0f);
+                        i3 += childAt.getMeasuredWidth() + AndroidUtilities.dp(9.0f);
                     }
-                    i5 += childAt.getMeasuredWidth() + AndroidUtilities.dp(9.0f);
+                    i4 += childAt.getMeasuredWidth() + AndroidUtilities.dp(9.0f);
                 }
             }
             if (AndroidUtilities.isTablet()) {
-                i3 = AndroidUtilities.dp(372.0f) / 3;
+                min = AndroidUtilities.dp(372.0f) / 3;
             } else {
                 Point point = AndroidUtilities.displaySize;
-                i3 = (Math.min(point.x, point.y) - AndroidUtilities.dp(158.0f)) / 3;
+                min = (Math.min(point.x, point.y) - AndroidUtilities.dp(158.0f)) / 3;
             }
-            if (dp - i4 < i3) {
+            if (dp - i3 < min) {
                 dp2 += AndroidUtilities.dp(40.0f);
-                i4 = 0;
+                i3 = 0;
             }
-            if (dp - i5 < i3) {
+            if (dp - i4 < min) {
                 dp3 += AndroidUtilities.dp(40.0f);
             }
-            GroupCreateActivity.this.editText.measure(View.MeasureSpec.makeMeasureSpec(dp - i4, NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(32.0f), NUM));
-            if (!this.animationStarted) {
+            GroupCreateActivity.this.editText.measure(View.MeasureSpec.makeMeasureSpec(dp - i3, NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(32.0f), NUM));
+            if (this.animationStarted) {
+                if (GroupCreateActivity.this.currentAnimation != null && !GroupCreateActivity.this.ignoreScrollEvent && this.removingSpan == null) {
+                    GroupCreateActivity.this.editText.bringPointIntoView(GroupCreateActivity.this.editText.getSelectionStart());
+                }
+            } else {
                 int dp5 = dp3 + AndroidUtilities.dp(42.0f);
-                int dp6 = i4 + AndroidUtilities.dp(16.0f);
-                int unused = GroupCreateActivity.this.fieldY = dp2;
+                int dp6 = i3 + AndroidUtilities.dp(16.0f);
+                GroupCreateActivity.this.fieldY = dp2;
                 if (GroupCreateActivity.this.currentAnimation != null) {
                     int dp7 = dp2 + AndroidUtilities.dp(42.0f);
                     if (GroupCreateActivity.this.containerHeight != dp7) {
-                        this.animators.add(ObjectAnimator.ofInt(GroupCreateActivity.this, "containerHeight", new int[]{dp7}));
+                        this.animators.add(ObjectAnimator.ofInt(GroupCreateActivity.this, "containerHeight", dp7));
                     }
                     GroupCreateActivity groupCreateActivity = GroupCreateActivity.this;
-                    int unused2 = groupCreateActivity.measuredContainerHeight = Math.max(groupCreateActivity.containerHeight, dp7);
-                    float f3 = (float) dp6;
+                    groupCreateActivity.measuredContainerHeight = Math.max(groupCreateActivity.containerHeight, dp7);
+                    float f3 = dp6;
                     if (GroupCreateActivity.this.editText.getTranslationX() != f3) {
-                        this.animators.add(ObjectAnimator.ofFloat(GroupCreateActivity.this.editText, "translationX", new float[]{f3}));
+                        this.animators.add(ObjectAnimator.ofFloat(GroupCreateActivity.this.editText, "translationX", f3));
                     }
-                    if (GroupCreateActivity.this.editText.getTranslationY() != ((float) GroupCreateActivity.this.fieldY)) {
+                    if (GroupCreateActivity.this.editText.getTranslationY() != GroupCreateActivity.this.fieldY) {
                         z = false;
-                        this.animators.add(ObjectAnimator.ofFloat(GroupCreateActivity.this.editText, "translationY", new float[]{(float) GroupCreateActivity.this.fieldY}));
+                        this.animators.add(ObjectAnimator.ofFloat(GroupCreateActivity.this.editText, "translationY", GroupCreateActivity.this.fieldY));
                     } else {
                         z = false;
                     }
                     GroupCreateActivity.this.editText.setAllowDrawCursor(z);
                     GroupCreateActivity.this.currentAnimation.playTogether(this.animators);
-                    GroupCreateActivity.this.currentAnimation.addListener(new AnimatorListenerAdapter() {
+                    GroupCreateActivity.this.currentAnimation.addListener(new AnimatorListenerAdapter() { // from class: org.telegram.ui.GroupCreateActivity.SpansContainer.1
+                        @Override // android.animation.AnimatorListenerAdapter, android.animation.Animator.AnimatorListener
                         public void onAnimationEnd(Animator animator) {
                             GroupCreateActivity.this.getNotificationCenter().onAnimationFinish(SpansContainer.this.animationIndex);
                             SpansContainer.this.requestLayout();
                         }
                     });
-                    this.animationIndex = GroupCreateActivity.this.getNotificationCenter().setAnimationInProgress(this.animationIndex, (int[]) null);
+                    this.animationIndex = GroupCreateActivity.this.getNotificationCenter().setAnimationInProgress(this.animationIndex, null);
                     GroupCreateActivity.this.currentAnimation.start();
                     this.animationStarted = true;
                 } else {
                     GroupCreateActivity groupCreateActivity2 = GroupCreateActivity.this;
-                    int unused3 = groupCreateActivity2.measuredContainerHeight = groupCreateActivity2.containerHeight = dp5;
-                    GroupCreateActivity.this.editText.setTranslationX((float) dp6);
-                    GroupCreateActivity.this.editText.setTranslationY((float) GroupCreateActivity.this.fieldY);
+                    groupCreateActivity2.measuredContainerHeight = groupCreateActivity2.containerHeight = dp5;
+                    GroupCreateActivity.this.editText.setTranslationX(dp6);
+                    GroupCreateActivity.this.editText.setTranslationY(GroupCreateActivity.this.fieldY);
                 }
-            } else if (GroupCreateActivity.this.currentAnimation != null && !GroupCreateActivity.this.ignoreScrollEvent && this.removingSpan == null) {
-                GroupCreateActivity.this.editText.bringPointIntoView(GroupCreateActivity.this.editText.getSelectionStart());
             }
             setMeasuredDimension(size, GroupCreateActivity.this.measuredContainerHeight);
             GroupCreateActivity.this.listView.setTranslationY(0.0f);
         }
 
-        /* access modifiers changed from: protected */
-        public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+        @Override // android.view.ViewGroup, android.view.View
+        protected void onLayout(boolean z, int i, int i2, int i3, int i4) {
             int childCount = getChildCount();
             for (int i5 = 0; i5 < childCount; i5++) {
                 View childAt = getChildAt(i5);
@@ -313,62 +297,72 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                 GroupCreateActivity.this.currentAnimation.cancel();
             }
             this.animationStarted = false;
-            AnimatorSet unused = GroupCreateActivity.this.currentAnimation = new AnimatorSet();
-            GroupCreateActivity.this.currentAnimation.addListener(new AnimatorListenerAdapter() {
+            GroupCreateActivity.this.currentAnimation = new AnimatorSet();
+            GroupCreateActivity.this.currentAnimation.addListener(new AnimatorListenerAdapter() { // from class: org.telegram.ui.GroupCreateActivity.SpansContainer.2
+                @Override // android.animation.AnimatorListenerAdapter, android.animation.Animator.AnimatorListener
                 public void onAnimationEnd(Animator animator) {
-                    View unused = SpansContainer.this.addingSpan = null;
-                    AnimatorSet unused2 = GroupCreateActivity.this.currentAnimation = null;
-                    boolean unused3 = SpansContainer.this.animationStarted = false;
+                    SpansContainer.this.addingSpan = null;
+                    GroupCreateActivity.this.currentAnimation = null;
+                    SpansContainer.this.animationStarted = false;
                     GroupCreateActivity.this.editText.setAllowDrawCursor(true);
                 }
             });
-            GroupCreateActivity.this.currentAnimation.setDuration(150);
+            GroupCreateActivity.this.currentAnimation.setDuration(150L);
             this.addingSpan = groupCreateSpan;
             this.animators.clear();
-            this.animators.add(ObjectAnimator.ofFloat(this.addingSpan, View.SCALE_X, new float[]{0.01f, 1.0f}));
-            this.animators.add(ObjectAnimator.ofFloat(this.addingSpan, View.SCALE_Y, new float[]{0.01f, 1.0f}));
-            this.animators.add(ObjectAnimator.ofFloat(this.addingSpan, View.ALPHA, new float[]{0.0f, 1.0f}));
+            this.animators.add(ObjectAnimator.ofFloat(this.addingSpan, View.SCALE_X, 0.01f, 1.0f));
+            this.animators.add(ObjectAnimator.ofFloat(this.addingSpan, View.SCALE_Y, 0.01f, 1.0f));
+            this.animators.add(ObjectAnimator.ofFloat(this.addingSpan, View.ALPHA, 0.0f, 1.0f));
             addView(groupCreateSpan);
         }
 
         public void removeSpan(final GroupCreateSpan groupCreateSpan) {
-            boolean unused = GroupCreateActivity.this.ignoreScrollEvent = true;
+            GroupCreateActivity.this.ignoreScrollEvent = true;
             GroupCreateActivity.this.selectedContacts.remove(groupCreateSpan.getUid());
             GroupCreateActivity.this.allSpans.remove(groupCreateSpan);
-            groupCreateSpan.setOnClickListener((View.OnClickListener) null);
+            groupCreateSpan.setOnClickListener(null);
             if (GroupCreateActivity.this.currentAnimation != null) {
                 GroupCreateActivity.this.currentAnimation.setupEndValues();
                 GroupCreateActivity.this.currentAnimation.cancel();
             }
             this.animationStarted = false;
-            AnimatorSet unused2 = GroupCreateActivity.this.currentAnimation = new AnimatorSet();
-            GroupCreateActivity.this.currentAnimation.addListener(new AnimatorListenerAdapter() {
+            GroupCreateActivity.this.currentAnimation = new AnimatorSet();
+            GroupCreateActivity.this.currentAnimation.addListener(new AnimatorListenerAdapter() { // from class: org.telegram.ui.GroupCreateActivity.SpansContainer.3
+                @Override // android.animation.AnimatorListenerAdapter, android.animation.Animator.AnimatorListener
                 public void onAnimationEnd(Animator animator) {
                     SpansContainer.this.removeView(groupCreateSpan);
-                    View unused = SpansContainer.this.removingSpan = null;
-                    AnimatorSet unused2 = GroupCreateActivity.this.currentAnimation = null;
-                    boolean unused3 = SpansContainer.this.animationStarted = false;
+                    SpansContainer.this.removingSpan = null;
+                    GroupCreateActivity.this.currentAnimation = null;
+                    SpansContainer.this.animationStarted = false;
                     GroupCreateActivity.this.editText.setAllowDrawCursor(true);
                     if (GroupCreateActivity.this.allSpans.isEmpty()) {
                         GroupCreateActivity.this.editText.setHintVisible(true);
                     }
                 }
             });
-            GroupCreateActivity.this.currentAnimation.setDuration(150);
+            GroupCreateActivity.this.currentAnimation.setDuration(150L);
             this.removingSpan = groupCreateSpan;
             this.animators.clear();
-            this.animators.add(ObjectAnimator.ofFloat(this.removingSpan, View.SCALE_X, new float[]{1.0f, 0.01f}));
-            this.animators.add(ObjectAnimator.ofFloat(this.removingSpan, View.SCALE_Y, new float[]{1.0f, 0.01f}));
-            this.animators.add(ObjectAnimator.ofFloat(this.removingSpan, View.ALPHA, new float[]{1.0f, 0.0f}));
+            this.animators.add(ObjectAnimator.ofFloat(this.removingSpan, View.SCALE_X, 1.0f, 0.01f));
+            this.animators.add(ObjectAnimator.ofFloat(this.removingSpan, View.SCALE_Y, 1.0f, 0.01f));
+            this.animators.add(ObjectAnimator.ofFloat(this.removingSpan, View.ALPHA, 1.0f, 0.0f));
             requestLayout();
         }
     }
 
     public GroupCreateActivity() {
+        this.maxCount = getMessagesController().maxMegagroupCount;
+        this.chatType = 0;
+        this.selectedContacts = new LongSparseArray<>();
+        this.allSpans = new ArrayList<>();
     }
 
     public GroupCreateActivity(Bundle bundle) {
         super(bundle);
+        this.maxCount = getMessagesController().maxMegagroupCount;
+        this.chatType = 0;
+        this.selectedContacts = new LongSparseArray<>();
+        this.allSpans = new ArrayList<>();
         this.chatType = bundle.getInt("chatType", 0);
         this.forImport = bundle.getBoolean("forImport", false);
         this.isAlwaysShare = bundle.getBoolean("isAlwaysShare", false);
@@ -384,6 +378,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         }
     }
 
+    @Override // org.telegram.ui.ActionBar.BaseFragment
     public boolean onFragmentCreate() {
         getNotificationCenter().addObserver(this, NotificationCenter.contactsDidLoad);
         getNotificationCenter().addObserver(this, NotificationCenter.updateInterfaces);
@@ -391,6 +386,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         return super.onFragmentCreate();
     }
 
+    @Override // org.telegram.ui.ActionBar.BaseFragment
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
         getNotificationCenter().removeObserver(this, NotificationCenter.contactsDidLoad);
@@ -398,6 +394,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         getNotificationCenter().removeObserver(this, NotificationCenter.chatDidCreated);
     }
 
+    @Override // android.view.View.OnClickListener
     public void onClick(View view) {
         GroupCreateSpan groupCreateSpan = (GroupCreateSpan) view;
         if (groupCreateSpan.isDeleting()) {
@@ -415,9 +412,10 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         groupCreateSpan.startDeleteAnimation();
     }
 
-    public View createView(Context context) {
-        String str;
+    @Override // org.telegram.ui.ActionBar.BaseFragment
+    public View createView(final Context context) {
         int i;
+        String str;
         this.searching = false;
         this.searchWas = false;
         this.allSpans.clear();
@@ -464,37 +462,40 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             }
             actionBar.setTitle(LocaleController.getString(str, i));
         }
-        this.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
-            public void onItemClick(int i) {
-                if (i == -1) {
+        this.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() { // from class: org.telegram.ui.GroupCreateActivity.1
+            @Override // org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick
+            public void onItemClick(int i5) {
+                if (i5 == -1) {
                     GroupCreateActivity.this.finishFragment();
-                } else if (i == 1) {
-                    boolean unused = GroupCreateActivity.this.onDonePressed(true);
+                } else if (i5 != 1) {
+                } else {
+                    GroupCreateActivity.this.onDonePressed(true);
                 }
             }
         });
-        AnonymousClass2 r2 = new ViewGroup(context) {
+        ViewGroup viewGroup = new ViewGroup(context) { // from class: org.telegram.ui.GroupCreateActivity.2
             private VerticalPositionAutoAnimator verticalPositionAutoAnimator;
 
+            @Override // android.view.ViewGroup
             public void onViewAdded(View view) {
                 if (view == GroupCreateActivity.this.floatingButton && this.verticalPositionAutoAnimator == null) {
                     this.verticalPositionAutoAnimator = VerticalPositionAutoAnimator.attach(view);
                 }
             }
 
-            /* access modifiers changed from: protected */
-            public void onAttachedToWindow() {
+            @Override // android.view.ViewGroup, android.view.View
+            protected void onAttachedToWindow() {
                 super.onAttachedToWindow();
-                VerticalPositionAutoAnimator verticalPositionAutoAnimator2 = this.verticalPositionAutoAnimator;
-                if (verticalPositionAutoAnimator2 != null) {
-                    verticalPositionAutoAnimator2.ignoreNextLayout();
+                VerticalPositionAutoAnimator verticalPositionAutoAnimator = this.verticalPositionAutoAnimator;
+                if (verticalPositionAutoAnimator != null) {
+                    verticalPositionAutoAnimator.ignoreNextLayout();
                 }
             }
 
-            /* access modifiers changed from: protected */
-            public void onMeasure(int i, int i2) {
-                int size = View.MeasureSpec.getSize(i);
-                int size2 = View.MeasureSpec.getSize(i2);
+            @Override // android.view.View
+            protected void onMeasure(int i5, int i6) {
+                int size = View.MeasureSpec.getSize(i5);
+                int size2 = View.MeasureSpec.getSize(i6);
                 setMeasuredDimension(size, size2);
                 float f = 56.0f;
                 if (AndroidUtilities.isTablet() || size2 > size) {
@@ -514,59 +515,60 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                 }
             }
 
-            /* access modifiers changed from: protected */
-            public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+            @Override // android.view.ViewGroup, android.view.View
+            protected void onLayout(boolean z, int i5, int i6, int i7, int i8) {
                 GroupCreateActivity.this.scrollView.layout(0, 0, GroupCreateActivity.this.scrollView.getMeasuredWidth(), GroupCreateActivity.this.scrollView.getMeasuredHeight());
                 GroupCreateActivity.this.listView.layout(0, GroupCreateActivity.this.scrollView.getMeasuredHeight(), GroupCreateActivity.this.listView.getMeasuredWidth(), GroupCreateActivity.this.scrollView.getMeasuredHeight() + GroupCreateActivity.this.listView.getMeasuredHeight());
                 GroupCreateActivity.this.emptyView.layout(0, GroupCreateActivity.this.scrollView.getMeasuredHeight(), GroupCreateActivity.this.emptyView.getMeasuredWidth(), GroupCreateActivity.this.scrollView.getMeasuredHeight() + GroupCreateActivity.this.emptyView.getMeasuredHeight());
                 if (GroupCreateActivity.this.floatingButton != null) {
-                    int dp = LocaleController.isRTL ? AndroidUtilities.dp(14.0f) : ((i3 - i) - AndroidUtilities.dp(14.0f)) - GroupCreateActivity.this.floatingButton.getMeasuredWidth();
-                    int dp2 = ((i4 - i2) - AndroidUtilities.dp(14.0f)) - GroupCreateActivity.this.floatingButton.getMeasuredHeight();
+                    int dp = LocaleController.isRTL ? AndroidUtilities.dp(14.0f) : ((i7 - i5) - AndroidUtilities.dp(14.0f)) - GroupCreateActivity.this.floatingButton.getMeasuredWidth();
+                    int dp2 = ((i8 - i6) - AndroidUtilities.dp(14.0f)) - GroupCreateActivity.this.floatingButton.getMeasuredHeight();
                     GroupCreateActivity.this.floatingButton.layout(dp, dp2, GroupCreateActivity.this.floatingButton.getMeasuredWidth() + dp, GroupCreateActivity.this.floatingButton.getMeasuredHeight() + dp2);
                 }
             }
 
-            /* access modifiers changed from: protected */
-            public void dispatchDraw(Canvas canvas) {
+            @Override // android.view.ViewGroup, android.view.View
+            protected void dispatchDraw(Canvas canvas) {
                 super.dispatchDraw(canvas);
-                ActionBarLayout access$1700 = GroupCreateActivity.this.parentLayout;
+                ActionBarLayout actionBarLayout = ((BaseFragment) GroupCreateActivity.this).parentLayout;
                 GroupCreateActivity groupCreateActivity = GroupCreateActivity.this;
-                access$1700.drawHeaderShadow(canvas, Math.min(groupCreateActivity.maxSize, (groupCreateActivity.measuredContainerHeight + GroupCreateActivity.this.containerHeight) - GroupCreateActivity.this.measuredContainerHeight));
+                actionBarLayout.drawHeaderShadow(canvas, Math.min(groupCreateActivity.maxSize, (groupCreateActivity.measuredContainerHeight + GroupCreateActivity.this.containerHeight) - GroupCreateActivity.this.measuredContainerHeight));
             }
 
-            /* access modifiers changed from: protected */
-            public boolean drawChild(Canvas canvas, View view, long j) {
-                if (view == GroupCreateActivity.this.listView) {
-                    canvas.save();
-                    int left = view.getLeft();
-                    GroupCreateActivity groupCreateActivity = GroupCreateActivity.this;
-                    canvas.clipRect(left, Math.min(groupCreateActivity.maxSize, (groupCreateActivity.measuredContainerHeight + GroupCreateActivity.this.containerHeight) - GroupCreateActivity.this.measuredContainerHeight), view.getRight(), view.getBottom());
-                    boolean drawChild = super.drawChild(canvas, view, j);
-                    canvas.restore();
-                    return drawChild;
-                } else if (view != GroupCreateActivity.this.scrollView) {
+            @Override // android.view.ViewGroup
+            protected boolean drawChild(Canvas canvas, View view, long j) {
+                if (view != GroupCreateActivity.this.listView) {
+                    if (view == GroupCreateActivity.this.scrollView) {
+                        canvas.save();
+                        int left = view.getLeft();
+                        int top = view.getTop();
+                        int right = view.getRight();
+                        GroupCreateActivity groupCreateActivity = GroupCreateActivity.this;
+                        canvas.clipRect(left, top, right, Math.min(groupCreateActivity.maxSize, (groupCreateActivity.measuredContainerHeight + GroupCreateActivity.this.containerHeight) - GroupCreateActivity.this.measuredContainerHeight));
+                        boolean drawChild = super.drawChild(canvas, view, j);
+                        canvas.restore();
+                        return drawChild;
+                    }
                     return super.drawChild(canvas, view, j);
-                } else {
-                    canvas.save();
-                    int left2 = view.getLeft();
-                    int top = view.getTop();
-                    int right = view.getRight();
-                    GroupCreateActivity groupCreateActivity2 = GroupCreateActivity.this;
-                    canvas.clipRect(left2, top, right, Math.min(groupCreateActivity2.maxSize, (groupCreateActivity2.measuredContainerHeight + GroupCreateActivity.this.containerHeight) - GroupCreateActivity.this.measuredContainerHeight));
-                    boolean drawChild2 = super.drawChild(canvas, view, j);
-                    canvas.restore();
-                    return drawChild2;
                 }
+                canvas.save();
+                int left2 = view.getLeft();
+                GroupCreateActivity groupCreateActivity2 = GroupCreateActivity.this;
+                canvas.clipRect(left2, Math.min(groupCreateActivity2.maxSize, (groupCreateActivity2.measuredContainerHeight + GroupCreateActivity.this.containerHeight) - GroupCreateActivity.this.measuredContainerHeight), view.getRight(), view.getBottom());
+                boolean drawChild2 = super.drawChild(canvas, view, j);
+                canvas.restore();
+                return drawChild2;
             }
         };
-        this.fragmentView = r2;
-        ViewGroup viewGroup = r2;
-        viewGroup.setFocusableInTouchMode(true);
-        viewGroup.setDescendantFocusability(131072);
-        AnonymousClass3 r5 = new ScrollView(context) {
+        this.fragmentView = viewGroup;
+        ViewGroup viewGroup2 = viewGroup;
+        viewGroup2.setFocusableInTouchMode(true);
+        viewGroup2.setDescendantFocusability(131072);
+        ScrollView scrollView = new ScrollView(context) { // from class: org.telegram.ui.GroupCreateActivity.3
+            @Override // android.widget.ScrollView, android.view.ViewGroup, android.view.ViewParent
             public boolean requestChildRectangleOnScreen(View view, Rect rect, boolean z) {
                 if (GroupCreateActivity.this.ignoreScrollEvent) {
-                    boolean unused = GroupCreateActivity.this.ignoreScrollEvent = false;
+                    GroupCreateActivity.this.ignoreScrollEvent = false;
                     return false;
                 }
                 rect.offset(view.getLeft() - view.getScrollX(), view.getTop() - view.getScrollY());
@@ -575,21 +577,27 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                 return super.requestChildRectangleOnScreen(view, rect, z);
             }
         };
-        this.scrollView = r5;
-        r5.setClipChildren(false);
-        viewGroup.setClipChildren(false);
+        this.scrollView = scrollView;
+        scrollView.setClipChildren(false);
+        viewGroup2.setClipChildren(false);
         this.scrollView.setVerticalScrollBarEnabled(false);
         AndroidUtilities.setScrollViewEdgeEffectColor(this.scrollView, Theme.getColor("windowBackgroundWhite"));
-        viewGroup.addView(this.scrollView);
-        SpansContainer spansContainer2 = new SpansContainer(context);
-        this.spansContainer = spansContainer2;
-        this.scrollView.addView(spansContainer2, LayoutHelper.createFrame(-1, -2.0f));
-        this.spansContainer.setOnClickListener(new GroupCreateActivity$$ExternalSyntheticLambda2(this));
-        AnonymousClass4 r52 = new EditTextBoldCursor(context) {
+        viewGroup2.addView(this.scrollView);
+        SpansContainer spansContainer = new SpansContainer(context);
+        this.spansContainer = spansContainer;
+        this.scrollView.addView(spansContainer, LayoutHelper.createFrame(-1, -2.0f));
+        this.spansContainer.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.GroupCreateActivity$$ExternalSyntheticLambda2
+            @Override // android.view.View.OnClickListener
+            public final void onClick(View view) {
+                GroupCreateActivity.this.lambda$createView$0(view);
+            }
+        });
+        EditTextBoldCursor editTextBoldCursor = new EditTextBoldCursor(context) { // from class: org.telegram.ui.GroupCreateActivity.4
+            @Override // org.telegram.ui.Components.EditTextBoldCursor, android.widget.TextView, android.view.View
             public boolean onTouchEvent(MotionEvent motionEvent) {
                 if (GroupCreateActivity.this.currentDeletingSpan != null) {
                     GroupCreateActivity.this.currentDeletingSpan.cancelDeleteAnimation();
-                    GroupCreateSpan unused = GroupCreateActivity.this.currentDeletingSpan = null;
+                    GroupCreateActivity.this.currentDeletingSpan = null;
                 }
                 if (motionEvent.getAction() == 0 && !AndroidUtilities.showKeyboard(this)) {
                     clearFocus();
@@ -598,15 +606,15 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                 return super.onTouchEvent(motionEvent);
             }
         };
-        this.editText = r52;
-        r52.setTextSize(1, 16.0f);
+        this.editText = editTextBoldCursor;
+        editTextBoldCursor.setTextSize(1, 16.0f);
         this.editText.setHintColor(Theme.getColor("groupcreate_hintText"));
         this.editText.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.editText.setCursorColor(Theme.getColor("groupcreate_cursor"));
         this.editText.setCursorWidth(1.5f);
         this.editText.setInputType(655536);
         this.editText.setSingleLine(true);
-        this.editText.setBackgroundDrawable((Drawable) null);
+        this.editText.setBackgroundDrawable(null);
         this.editText.setVerticalScrollBarEnabled(false);
         this.editText.setHorizontalScrollBarEnabled(false);
         this.editText.setTextIsSelectable(false);
@@ -615,28 +623,40 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         this.editText.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         this.spansContainer.addView(this.editText);
         updateEditTextHint();
-        this.editText.setCustomSelectionActionModeCallback(new ActionMode.Callback(this) {
+        this.editText.setCustomSelectionActionModeCallback(new ActionMode.Callback(this) { // from class: org.telegram.ui.GroupCreateActivity.5
+            @Override // android.view.ActionMode.Callback
             public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
                 return false;
             }
 
+            @Override // android.view.ActionMode.Callback
             public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
                 return false;
             }
 
+            @Override // android.view.ActionMode.Callback
             public void onDestroyActionMode(ActionMode actionMode) {
             }
 
+            @Override // android.view.ActionMode.Callback
             public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
                 return false;
             }
         });
-        this.editText.setOnEditorActionListener(new GroupCreateActivity$$ExternalSyntheticLambda5(this));
-        this.editText.setOnKeyListener(new View.OnKeyListener() {
+        this.editText.setOnEditorActionListener(new TextView.OnEditorActionListener() { // from class: org.telegram.ui.GroupCreateActivity$$ExternalSyntheticLambda5
+            @Override // android.widget.TextView.OnEditorActionListener
+            public final boolean onEditorAction(TextView textView, int i5, KeyEvent keyEvent) {
+                boolean lambda$createView$1;
+                lambda$createView$1 = GroupCreateActivity.this.lambda$createView$1(textView, i5, keyEvent);
+                return lambda$createView$1;
+            }
+        });
+        this.editText.setOnKeyListener(new View.OnKeyListener() { // from class: org.telegram.ui.GroupCreateActivity.6
             private boolean wasEmpty;
 
-            public boolean onKey(View view, int i, KeyEvent keyEvent) {
-                if (i == 67) {
+            @Override // android.view.View.OnKeyListener
+            public boolean onKey(View view, int i5, KeyEvent keyEvent) {
+                if (i5 == 67) {
                     boolean z = true;
                     if (keyEvent.getAction() == 0) {
                         if (GroupCreateActivity.this.editText.length() != 0) {
@@ -653,28 +673,31 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                 return false;
             }
         });
-        this.editText.addTextChangedListener(new TextWatcher() {
-            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+        this.editText.addTextChangedListener(new TextWatcher() { // from class: org.telegram.ui.GroupCreateActivity.7
+            @Override // android.text.TextWatcher
+            public void beforeTextChanged(CharSequence charSequence, int i5, int i6, int i7) {
             }
 
-            public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+            @Override // android.text.TextWatcher
+            public void onTextChanged(CharSequence charSequence, int i5, int i6, int i7) {
             }
 
+            @Override // android.text.TextWatcher
             public void afterTextChanged(Editable editable) {
-                if (GroupCreateActivity.this.editText.length() != 0) {
-                    if (!GroupCreateActivity.this.adapter.searching) {
-                        boolean unused = GroupCreateActivity.this.searching = true;
-                        boolean unused2 = GroupCreateActivity.this.searchWas = true;
-                        GroupCreateActivity.this.adapter.setSearching(true);
-                        GroupCreateActivity.this.itemDecoration.setSearching(true);
-                        GroupCreateActivity.this.listView.setFastScrollVisible(false);
-                        GroupCreateActivity.this.listView.setVerticalScrollBarEnabled(true);
-                    }
-                    GroupCreateActivity.this.adapter.searchDialogs(GroupCreateActivity.this.editText.getText().toString());
-                    GroupCreateActivity.this.emptyView.showProgress(true, false);
+                if (GroupCreateActivity.this.editText.length() == 0) {
+                    GroupCreateActivity.this.closeSearch();
                     return;
                 }
-                GroupCreateActivity.this.closeSearch();
+                if (!GroupCreateActivity.this.adapter.searching) {
+                    GroupCreateActivity.this.searching = true;
+                    GroupCreateActivity.this.searchWas = true;
+                    GroupCreateActivity.this.adapter.setSearching(true);
+                    GroupCreateActivity.this.itemDecoration.setSearching(true);
+                    GroupCreateActivity.this.listView.setFastScrollVisible(false);
+                    GroupCreateActivity.this.listView.setVerticalScrollBarEnabled(true);
+                }
+                GroupCreateActivity.this.adapter.searchDialogs(GroupCreateActivity.this.editText.getText().toString());
+                GroupCreateActivity.this.emptyView.showProgress(true, false);
             }
         });
         FlickerLoadingView flickerLoadingView = new FlickerLoadingView(context);
@@ -685,7 +708,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         stickerEmptyView.addView(flickerLoadingView);
         this.emptyView.showProgress(true, false);
         this.emptyView.title.setText(LocaleController.getString("NoResult", R.string.NoResult));
-        viewGroup.addView(this.emptyView);
+        viewGroup2.addView(this.emptyView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, 1, false);
         RecyclerListView recyclerListView = new RecyclerListView(context);
         this.listView = recyclerListView;
@@ -702,11 +725,17 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         GroupCreateDividerItemDecoration groupCreateDividerItemDecoration = new GroupCreateDividerItemDecoration();
         this.itemDecoration = groupCreateDividerItemDecoration;
         recyclerListView3.addItemDecoration(groupCreateDividerItemDecoration);
-        viewGroup.addView(this.listView);
-        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new GroupCreateActivity$$ExternalSyntheticLambda7(this, context));
-        this.listView.setOnScrollListener(new RecyclerView.OnScrollListener() {
-            public void onScrollStateChanged(RecyclerView recyclerView, int i) {
-                if (i == 1) {
+        viewGroup2.addView(this.listView);
+        this.listView.setOnItemClickListener(new RecyclerListView.OnItemClickListener() { // from class: org.telegram.ui.GroupCreateActivity$$ExternalSyntheticLambda7
+            @Override // org.telegram.ui.Components.RecyclerListView.OnItemClickListener
+            public final void onItemClick(View view, int i5) {
+                GroupCreateActivity.this.lambda$createView$3(context, view, i5);
+            }
+        });
+        this.listView.setOnScrollListener(new RecyclerView.OnScrollListener() { // from class: org.telegram.ui.GroupCreateActivity.8
+            @Override // androidx.recyclerview.widget.RecyclerView.OnScrollListener
+            public void onScrollStateChanged(RecyclerView recyclerView, int i5) {
+                if (i5 == 1) {
                     GroupCreateActivity.this.editText.hideActionMode();
                     AndroidUtilities.hideKeyboard(GroupCreateActivity.this.editText);
                 }
@@ -736,18 +765,24 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         }
         if (i5 >= 21) {
             StateListAnimator stateListAnimator = new StateListAnimator();
-            stateListAnimator.addState(new int[]{16842919}, ObjectAnimator.ofFloat(this.floatingButton, "translationZ", new float[]{(float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(4.0f)}).setDuration(200));
-            stateListAnimator.addState(new int[0], ObjectAnimator.ofFloat(this.floatingButton, "translationZ", new float[]{(float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(2.0f)}).setDuration(200));
+            stateListAnimator.addState(new int[]{16842919}, ObjectAnimator.ofFloat(this.floatingButton, "translationZ", AndroidUtilities.dp(2.0f), AndroidUtilities.dp(4.0f)).setDuration(200L));
+            stateListAnimator.addState(new int[0], ObjectAnimator.ofFloat(this.floatingButton, "translationZ", AndroidUtilities.dp(4.0f), AndroidUtilities.dp(2.0f)).setDuration(200L));
             this.floatingButton.setStateListAnimator(stateListAnimator);
-            this.floatingButton.setOutlineProvider(new ViewOutlineProvider(this) {
+            this.floatingButton.setOutlineProvider(new ViewOutlineProvider(this) { // from class: org.telegram.ui.GroupCreateActivity.9
+                @Override // android.view.ViewOutlineProvider
                 @SuppressLint({"NewApi"})
                 public void getOutline(View view, Outline outline) {
                     outline.setOval(0, 0, AndroidUtilities.dp(56.0f), AndroidUtilities.dp(56.0f));
                 }
             });
         }
-        viewGroup.addView(this.floatingButton);
-        this.floatingButton.setOnClickListener(new GroupCreateActivity$$ExternalSyntheticLambda3(this));
+        viewGroup2.addView(this.floatingButton);
+        this.floatingButton.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.GroupCreateActivity$$ExternalSyntheticLambda3
+            @Override // android.view.View.OnClickListener
+            public final void onClick(View view) {
+                GroupCreateActivity.this.lambda$createView$4(view);
+            }
+        });
         if (this.chatType != 2) {
             this.floatingButton.setVisibility(4);
             this.floatingButton.setScaleX(0.0f);
@@ -759,19 +794,19 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         return this.fragmentView;
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$createView$0(View view) {
         this.editText.clearFocus();
         this.editText.requestFocus();
         AndroidUtilities.showKeyboard(this.editText);
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ boolean lambda$createView$1(TextView textView, int i, KeyEvent keyEvent) {
         return i == 6 && onDonePressed(true);
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$createView$3(Context context, View view, int i) {
         long j;
         boolean z = false;
@@ -779,85 +814,93 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             PermanentLinkBottomSheet permanentLinkBottomSheet = new PermanentLinkBottomSheet(context, false, this, this.info, this.chatId, this.channelId != 0);
             this.sharedLinkBottomSheet = permanentLinkBottomSheet;
             showDialog(permanentLinkBottomSheet);
-        } else if (view instanceof GroupCreateUserCell) {
+        } else if (!(view instanceof GroupCreateUserCell)) {
+        } else {
             GroupCreateUserCell groupCreateUserCell = (GroupCreateUserCell) view;
             Object object = groupCreateUserCell.getObject();
             boolean z2 = object instanceof TLRPC$User;
             if (z2) {
                 j = ((TLRPC$User) object).id;
-            } else if (object instanceof TLRPC$Chat) {
-                j = -((TLRPC$Chat) object).id;
-            } else {
+            } else if (!(object instanceof TLRPC$Chat)) {
                 return;
+            } else {
+                j = -((TLRPC$Chat) object).id;
             }
             LongSparseArray<TLObject> longSparseArray = this.ignoreUsers;
-            if (longSparseArray == null || longSparseArray.indexOfKey(j) < 0) {
-                if (this.selectedContacts.indexOfKey(j) >= 0) {
-                    z = true;
-                }
-                if (z) {
-                    this.spansContainer.removeSpan(this.selectedContacts.get(j));
-                } else if (this.maxCount != 0 && this.selectedContacts.size() == this.maxCount) {
+            if (longSparseArray != null && longSparseArray.indexOfKey(j) >= 0) {
+                return;
+            }
+            if (this.selectedContacts.indexOfKey(j) >= 0) {
+                z = true;
+            }
+            if (z) {
+                this.spansContainer.removeSpan(this.selectedContacts.get(j));
+            } else if (this.maxCount != 0 && this.selectedContacts.size() == this.maxCount) {
+                return;
+            } else {
+                if (this.chatType == 0 && this.selectedContacts.size() == getMessagesController().maxGroupCount) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+                    builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                    builder.setMessage(LocaleController.getString("SoftUserLimitAlert", R.string.SoftUserLimitAlert));
+                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                    showDialog(builder.create());
                     return;
-                } else {
-                    if (this.chatType == 0 && this.selectedContacts.size() == getMessagesController().maxGroupCount) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
-                        builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                        builder.setMessage(LocaleController.getString("SoftUserLimitAlert", R.string.SoftUserLimitAlert));
-                        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (DialogInterface.OnClickListener) null);
-                        showDialog(builder.create());
-                        return;
-                    }
-                    if (z2) {
-                        TLRPC$User tLRPC$User = (TLRPC$User) object;
-                        if (this.addToGroup && tLRPC$User.bot) {
-                            long j2 = this.channelId;
-                            if (j2 == 0 && tLRPC$User.bot_nochats) {
-                                try {
-                                    BulletinFactory.of(this).createErrorBulletin(LocaleController.getString("BotCantJoinGroups", R.string.BotCantJoinGroups)).show();
-                                    return;
-                                } catch (Exception e) {
-                                    FileLog.e((Throwable) e);
-                                    return;
-                                }
-                            } else if (j2 != 0) {
-                                TLRPC$Chat chat = getMessagesController().getChat(Long.valueOf(this.channelId));
-                                AlertDialog.Builder builder2 = new AlertDialog.Builder((Context) getParentActivity());
-                                if (ChatObject.canAddAdmins(chat)) {
-                                    builder2.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                                    builder2.setMessage(LocaleController.getString("AddBotAsAdmin", R.string.AddBotAsAdmin));
-                                    builder2.setPositiveButton(LocaleController.getString("MakeAdmin", R.string.MakeAdmin), new GroupCreateActivity$$ExternalSyntheticLambda0(this, tLRPC$User));
-                                    builder2.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), (DialogInterface.OnClickListener) null);
-                                } else {
-                                    builder2.setMessage(LocaleController.getString("CantAddBotAsAdmin", R.string.CantAddBotAsAdmin));
-                                    builder2.setPositiveButton(LocaleController.getString("OK", R.string.OK), (DialogInterface.OnClickListener) null);
-                                }
-                                showDialog(builder2.create());
+                }
+                if (z2) {
+                    final TLRPC$User tLRPC$User = (TLRPC$User) object;
+                    if (this.addToGroup && tLRPC$User.bot) {
+                        long j2 = this.channelId;
+                        if (j2 == 0 && tLRPC$User.bot_nochats) {
+                            try {
+                                BulletinFactory.of(this).createErrorBulletin(LocaleController.getString("BotCantJoinGroups", R.string.BotCantJoinGroups)).show();
+                                return;
+                            } catch (Exception e) {
+                                FileLog.e(e);
                                 return;
                             }
+                        } else if (j2 != 0) {
+                            TLRPC$Chat chat = getMessagesController().getChat(Long.valueOf(this.channelId));
+                            AlertDialog.Builder builder2 = new AlertDialog.Builder(getParentActivity());
+                            if (ChatObject.canAddAdmins(chat)) {
+                                builder2.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                                builder2.setMessage(LocaleController.getString("AddBotAsAdmin", R.string.AddBotAsAdmin));
+                                builder2.setPositiveButton(LocaleController.getString("MakeAdmin", R.string.MakeAdmin), new DialogInterface.OnClickListener() { // from class: org.telegram.ui.GroupCreateActivity$$ExternalSyntheticLambda0
+                                    @Override // android.content.DialogInterface.OnClickListener
+                                    public final void onClick(DialogInterface dialogInterface, int i2) {
+                                        GroupCreateActivity.this.lambda$createView$2(tLRPC$User, dialogInterface, i2);
+                                    }
+                                });
+                                builder2.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                            } else {
+                                builder2.setMessage(LocaleController.getString("CantAddBotAsAdmin", R.string.CantAddBotAsAdmin));
+                                builder2.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                            }
+                            showDialog(builder2.create());
+                            return;
                         }
-                        getMessagesController().putUser(tLRPC$User, !this.searching);
-                    } else {
-                        getMessagesController().putChat((TLRPC$Chat) object, !this.searching);
                     }
-                    GroupCreateSpan groupCreateSpan = new GroupCreateSpan(this.editText.getContext(), object);
-                    this.spansContainer.addSpan(groupCreateSpan);
-                    groupCreateSpan.setOnClickListener(this);
-                }
-                updateHint();
-                if (this.searching || this.searchWas) {
-                    AndroidUtilities.showKeyboard(this.editText);
+                    getMessagesController().putUser(tLRPC$User, !this.searching);
                 } else {
-                    groupCreateUserCell.setChecked(!z, true);
+                    getMessagesController().putChat((TLRPC$Chat) object, !this.searching);
                 }
-                if (this.editText.length() > 0) {
-                    this.editText.setText((CharSequence) null);
-                }
+                GroupCreateSpan groupCreateSpan = new GroupCreateSpan(this.editText.getContext(), object);
+                this.spansContainer.addSpan(groupCreateSpan);
+                groupCreateSpan.setOnClickListener(this);
             }
+            updateHint();
+            if (this.searching || this.searchWas) {
+                AndroidUtilities.showKeyboard(this.editText);
+            } else {
+                groupCreateUserCell.setChecked(!z, true);
+            }
+            if (this.editText.length() <= 0) {
+                return;
+            }
+            this.editText.setText((CharSequence) null);
         }
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$createView$2(TLRPC$User tLRPC$User, DialogInterface dialogInterface, int i) {
         this.delegate2.needAddBot(tLRPC$User);
         if (this.editText.length() > 0) {
@@ -865,75 +908,83 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         }
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$createView$4(View view) {
         onDonePressed(true);
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public void updateEditTextHint() {
         GroupCreateAdapter groupCreateAdapter;
         EditTextBoldCursor editTextBoldCursor = this.editText;
-        if (editTextBoldCursor != null) {
-            if (this.chatType == 2) {
-                editTextBoldCursor.setHintText(LocaleController.getString("AddMutual", R.string.AddMutual));
-            } else if (this.addToGroup || ((groupCreateAdapter = this.adapter) != null && groupCreateAdapter.noContactsStubRow == 0)) {
-                this.editText.setHintText(LocaleController.getString("SearchForPeople", R.string.SearchForPeople));
-            } else if (this.isAlwaysShare || this.isNeverShare) {
-                this.editText.setHintText(LocaleController.getString("SearchForPeopleAndGroups", R.string.SearchForPeopleAndGroups));
-            } else {
-                this.editText.setHintText(LocaleController.getString("SendMessageTo", R.string.SendMessageTo));
-            }
+        if (editTextBoldCursor == null) {
+            return;
+        }
+        if (this.chatType == 2) {
+            editTextBoldCursor.setHintText(LocaleController.getString("AddMutual", R.string.AddMutual));
+        } else if (this.addToGroup || ((groupCreateAdapter = this.adapter) != null && groupCreateAdapter.noContactsStubRow == 0)) {
+            this.editText.setHintText(LocaleController.getString("SearchForPeople", R.string.SearchForPeople));
+        } else if (this.isAlwaysShare || this.isNeverShare) {
+            this.editText.setHintText(LocaleController.getString("SearchForPeopleAndGroups", R.string.SearchForPeopleAndGroups));
+        } else {
+            this.editText.setHintText(LocaleController.getString("SendMessageTo", R.string.SendMessageTo));
         }
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public void showItemsAnimated(final int i) {
-        if (!this.isPaused) {
-            this.listView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                public boolean onPreDraw() {
-                    GroupCreateActivity.this.listView.getViewTreeObserver().removeOnPreDrawListener(this);
-                    int childCount = GroupCreateActivity.this.listView.getChildCount();
-                    AnimatorSet animatorSet = new AnimatorSet();
-                    for (int i = 0; i < childCount; i++) {
-                        View childAt = GroupCreateActivity.this.listView.getChildAt(i);
-                        if (GroupCreateActivity.this.listView.getChildAdapterPosition(childAt) >= i) {
-                            childAt.setAlpha(0.0f);
-                            ObjectAnimator ofFloat = ObjectAnimator.ofFloat(childAt, View.ALPHA, new float[]{0.0f, 1.0f});
-                            ofFloat.setStartDelay((long) ((int) ((((float) Math.min(GroupCreateActivity.this.listView.getMeasuredHeight(), Math.max(0, childAt.getTop()))) / ((float) GroupCreateActivity.this.listView.getMeasuredHeight())) * 100.0f)));
-                            ofFloat.setDuration(200);
-                            animatorSet.playTogether(new Animator[]{ofFloat});
-                        }
-                    }
-                    animatorSet.start();
-                    return true;
-                }
-            });
+        if (this.isPaused) {
+            return;
         }
+        this.listView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() { // from class: org.telegram.ui.GroupCreateActivity.10
+            @Override // android.view.ViewTreeObserver.OnPreDrawListener
+            public boolean onPreDraw() {
+                GroupCreateActivity.this.listView.getViewTreeObserver().removeOnPreDrawListener(this);
+                int childCount = GroupCreateActivity.this.listView.getChildCount();
+                AnimatorSet animatorSet = new AnimatorSet();
+                for (int i2 = 0; i2 < childCount; i2++) {
+                    View childAt = GroupCreateActivity.this.listView.getChildAt(i2);
+                    if (GroupCreateActivity.this.listView.getChildAdapterPosition(childAt) >= i) {
+                        childAt.setAlpha(0.0f);
+                        ObjectAnimator ofFloat = ObjectAnimator.ofFloat(childAt, View.ALPHA, 0.0f, 1.0f);
+                        ofFloat.setStartDelay((int) ((Math.min(GroupCreateActivity.this.listView.getMeasuredHeight(), Math.max(0, childAt.getTop())) / GroupCreateActivity.this.listView.getMeasuredHeight()) * 100.0f));
+                        ofFloat.setDuration(200L);
+                        animatorSet.playTogether(ofFloat);
+                    }
+                }
+                animatorSet.start();
+                return true;
+            }
+        });
     }
 
+    @Override // org.telegram.ui.ActionBar.BaseFragment
     public void onResume() {
         super.onResume();
         AndroidUtilities.requestAdjustResize(getParentActivity(), this.classGuid);
     }
 
+    @Override // org.telegram.messenger.NotificationCenter.NotificationCenterDelegate
     public void didReceivedNotification(int i, int i2, Object... objArr) {
         if (i == NotificationCenter.contactsDidLoad) {
             GroupCreateAdapter groupCreateAdapter = this.adapter;
-            if (groupCreateAdapter != null) {
-                groupCreateAdapter.notifyDataSetChanged();
+            if (groupCreateAdapter == null) {
+                return;
             }
+            groupCreateAdapter.notifyDataSetChanged();
         } else if (i == NotificationCenter.updateInterfaces) {
-            if (this.listView != null) {
-                int intValue = objArr[0].intValue();
-                int childCount = this.listView.getChildCount();
-                if ((MessagesController.UPDATE_MASK_AVATAR & intValue) != 0 || (MessagesController.UPDATE_MASK_NAME & intValue) != 0 || (MessagesController.UPDATE_MASK_STATUS & intValue) != 0) {
-                    for (int i3 = 0; i3 < childCount; i3++) {
-                        View childAt = this.listView.getChildAt(i3);
-                        if (childAt instanceof GroupCreateUserCell) {
-                            ((GroupCreateUserCell) childAt).update(intValue);
-                        }
-                    }
+            if (this.listView == null) {
+                return;
+            }
+            int intValue = ((Integer) objArr[0]).intValue();
+            int childCount = this.listView.getChildCount();
+            if ((MessagesController.UPDATE_MASK_AVATAR & intValue) == 0 && (MessagesController.UPDATE_MASK_NAME & intValue) == 0 && (MessagesController.UPDATE_MASK_STATUS & intValue) == 0) {
+                return;
+            }
+            for (int i3 = 0; i3 < childCount; i3++) {
+                View childAt = this.listView.getChildAt(i3);
+                if (childAt instanceof GroupCreateUserCell) {
+                    ((GroupCreateUserCell) childAt).update(intValue);
                 }
             }
         } else if (i == NotificationCenter.chatDidCreated) {
@@ -955,9 +1006,9 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         this.containerHeight = i;
         int min = Math.min(this.maxSize, this.measuredContainerHeight);
         int min2 = Math.min(this.maxSize, this.containerHeight);
-        ScrollView scrollView2 = this.scrollView;
-        scrollView2.scrollTo(0, Math.max(0, scrollView2.getScrollY() - i2));
-        this.listView.setTranslationY((float) (min2 - min));
+        ScrollView scrollView = this.scrollView;
+        scrollView.scrollTo(0, Math.max(0, scrollView.getScrollY() - i2));
+        this.listView.setTranslationY(min2 - min);
         this.fragmentView.invalidate();
     }
 
@@ -966,7 +1017,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         return this.containerHeight;
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public void checkVisibleRows() {
         long j;
         int childCount = this.listView.getChildCount();
@@ -978,16 +1029,16 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                 if (object instanceof TLRPC$User) {
                     j = ((TLRPC$User) object).id;
                 } else {
-                    j = object instanceof TLRPC$Chat ? -((TLRPC$Chat) object).id : 0;
+                    j = object instanceof TLRPC$Chat ? -((TLRPC$Chat) object).id : 0L;
                 }
                 if (j != 0) {
                     LongSparseArray<TLObject> longSparseArray = this.ignoreUsers;
-                    if (longSparseArray == null || longSparseArray.indexOfKey(j) < 0) {
-                        groupCreateUserCell.setChecked(this.selectedContacts.indexOfKey(j) >= 0, true);
-                        groupCreateUserCell.setCheckBoxEnabled(true);
-                    } else {
+                    if (longSparseArray != null && longSparseArray.indexOfKey(j) >= 0) {
                         groupCreateUserCell.setChecked(true, false);
                         groupCreateUserCell.setCheckBoxEnabled(false);
+                    } else {
+                        groupCreateUserCell.setChecked(this.selectedContacts.indexOfKey(j) >= 0, true);
+                        groupCreateUserCell.setCheckBoxEnabled(true);
                     }
                 }
             }
@@ -995,7 +1046,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
     }
 
     private void onAddToGroupDone(int i) {
-        ArrayList arrayList = new ArrayList();
+        ArrayList<TLRPC$User> arrayList = new ArrayList<>();
         for (int i2 = 0; i2 < this.selectedContacts.size(); i2++) {
             arrayList.add(getMessagesController().getUser(Long.valueOf(this.selectedContacts.keyAt(i2))));
         }
@@ -1006,23 +1057,96 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         finishFragment();
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public boolean onDonePressed(boolean z) {
-        String str;
-        String str2;
-        if (this.selectedContacts.size() == 0 && this.chatType != 2) {
-            return false;
-        }
-        if (!z || !this.addToGroup) {
-            if (this.chatType == 2) {
-                ArrayList arrayList = new ArrayList();
+        if (this.selectedContacts.size() != 0 || this.chatType == 2) {
+            if (z && this.addToGroup) {
+                if (getParentActivity() == null) {
+                    return false;
+                }
+                AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+                if (this.selectedContacts.size() == 1) {
+                    builder.setTitle(LocaleController.getString("AddOneMemberAlertTitle", R.string.AddOneMemberAlertTitle));
+                } else {
+                    builder.setTitle(LocaleController.formatString("AddMembersAlertTitle", R.string.AddMembersAlertTitle, LocaleController.formatPluralString("Members", this.selectedContacts.size(), new Object[0])));
+                }
+                StringBuilder sb = new StringBuilder();
                 for (int i = 0; i < this.selectedContacts.size(); i++) {
-                    TLRPC$InputUser inputUser = getMessagesController().getInputUser(getMessagesController().getUser(Long.valueOf(this.selectedContacts.keyAt(i))));
+                    TLRPC$User user = getMessagesController().getUser(Long.valueOf(this.selectedContacts.keyAt(i)));
+                    if (user != null) {
+                        if (sb.length() > 0) {
+                            sb.append(", ");
+                        }
+                        sb.append("**");
+                        sb.append(ContactsController.formatName(user.first_name, user.last_name));
+                        sb.append("**");
+                    }
+                }
+                MessagesController messagesController = getMessagesController();
+                long j = this.chatId;
+                if (j == 0) {
+                    j = this.channelId;
+                }
+                TLRPC$Chat chat = messagesController.getChat(Long.valueOf(j));
+                if (this.selectedContacts.size() > 5) {
+                    int i2 = R.string.AddMembersAlertNamesText;
+                    Object[] objArr = new Object[2];
+                    objArr[0] = LocaleController.formatPluralString("Members", this.selectedContacts.size(), new Object[0]);
+                    objArr[1] = chat == null ? "" : chat.title;
+                    SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(AndroidUtilities.replaceTags(LocaleController.formatString("AddMembersAlertNamesText", i2, objArr)));
+                    String format = String.format("%d", Integer.valueOf(this.selectedContacts.size()));
+                    int indexOf = TextUtils.indexOf(spannableStringBuilder, format);
+                    if (indexOf >= 0) {
+                        spannableStringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), indexOf, format.length() + indexOf, 33);
+                    }
+                    builder.setMessage(spannableStringBuilder);
+                } else {
+                    int i3 = R.string.AddMembersAlertNamesText;
+                    Object[] objArr2 = new Object[2];
+                    objArr2[0] = sb;
+                    objArr2[1] = chat == null ? "" : chat.title;
+                    builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("AddMembersAlertNamesText", i3, objArr2)));
+                }
+                final CheckBoxCell[] checkBoxCellArr = new CheckBoxCell[1];
+                if (!ChatObject.isChannel(chat)) {
+                    LinearLayout linearLayout = new LinearLayout(getParentActivity());
+                    linearLayout.setOrientation(1);
+                    checkBoxCellArr[0] = new CheckBoxCell(getParentActivity(), 1);
+                    checkBoxCellArr[0].setBackgroundDrawable(Theme.getSelectorDrawable(false));
+                    checkBoxCellArr[0].setMultiline(true);
+                    if (this.selectedContacts.size() == 1) {
+                        checkBoxCellArr[0].setText(AndroidUtilities.replaceTags(LocaleController.formatString("AddOneMemberForwardMessages", R.string.AddOneMemberForwardMessages, UserObject.getFirstName(getMessagesController().getUser(Long.valueOf(this.selectedContacts.keyAt(0)))))), "", true, false);
+                    } else {
+                        checkBoxCellArr[0].setText(LocaleController.getString("AddMembersForwardMessages", R.string.AddMembersForwardMessages), "", true, false);
+                    }
+                    checkBoxCellArr[0].setPadding(LocaleController.isRTL ? AndroidUtilities.dp(16.0f) : AndroidUtilities.dp(8.0f), 0, LocaleController.isRTL ? AndroidUtilities.dp(8.0f) : AndroidUtilities.dp(16.0f), 0);
+                    linearLayout.addView(checkBoxCellArr[0], LayoutHelper.createLinear(-1, -2));
+                    checkBoxCellArr[0].setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.GroupCreateActivity$$ExternalSyntheticLambda4
+                        @Override // android.view.View.OnClickListener
+                        public final void onClick(View view) {
+                            GroupCreateActivity.lambda$onDonePressed$5(checkBoxCellArr, view);
+                        }
+                    });
+                    builder.setCustomViewOffset(12);
+                    builder.setView(linearLayout);
+                }
+                builder.setPositiveButton(LocaleController.getString("Add", R.string.Add), new DialogInterface.OnClickListener() { // from class: org.telegram.ui.GroupCreateActivity$$ExternalSyntheticLambda1
+                    @Override // android.content.DialogInterface.OnClickListener
+                    public final void onClick(DialogInterface dialogInterface, int i4) {
+                        GroupCreateActivity.this.lambda$onDonePressed$6(checkBoxCellArr, dialogInterface, i4);
+                    }
+                });
+                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                showDialog(builder.create());
+            } else if (this.chatType == 2) {
+                ArrayList<TLRPC$InputUser> arrayList = new ArrayList<>();
+                for (int i4 = 0; i4 < this.selectedContacts.size(); i4++) {
+                    TLRPC$InputUser inputUser = getMessagesController().getInputUser(getMessagesController().getUser(Long.valueOf(this.selectedContacts.keyAt(i4))));
                     if (inputUser != null) {
                         arrayList.add(inputUser);
                     }
                 }
-                getMessagesController().addUsersToChannel(this.chatId, arrayList, (BaseFragment) null);
+                getMessagesController().addUsersToChannel(this.chatId, arrayList, null);
                 getNotificationCenter().postNotificationName(NotificationCenter.closeChats, new Object[0]);
                 Bundle bundle = new Bundle();
                 bundle.putLong("chat_id", this.chatId);
@@ -1033,9 +1157,9 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                 if (this.addToGroup) {
                     onAddToGroupDone(0);
                 } else {
-                    ArrayList arrayList2 = new ArrayList();
-                    for (int i2 = 0; i2 < this.selectedContacts.size(); i2++) {
-                        arrayList2.add(Long.valueOf(this.selectedContacts.keyAt(i2)));
+                    ArrayList<Long> arrayList2 = new ArrayList<>();
+                    for (int i5 = 0; i5 < this.selectedContacts.size(); i5++) {
+                        arrayList2.add(Long.valueOf(this.selectedContacts.keyAt(i5)));
                     }
                     if (this.isAlwaysShare || this.isNeverShare) {
                         GroupCreateActivityDelegate groupCreateActivityDelegate = this.delegate;
@@ -1047,8 +1171,8 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                         Bundle bundle2 = new Bundle();
                         int size = arrayList2.size();
                         long[] jArr = new long[size];
-                        for (int i3 = 0; i3 < size; i3++) {
-                            jArr[i3] = ((Long) arrayList2.get(i3)).longValue();
+                        for (int i6 = 0; i6 < size; i6++) {
+                            jArr[i6] = arrayList2.get(i6).longValue();
                         }
                         bundle2.putLongArray("result", jArr);
                         bundle2.putInt("chatType", this.chatType);
@@ -1057,88 +1181,17 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                     }
                 }
             }
-        } else if (getParentActivity() == null) {
-            return false;
-        } else {
-            AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
-            if (this.selectedContacts.size() == 1) {
-                builder.setTitle(LocaleController.getString("AddOneMemberAlertTitle", R.string.AddOneMemberAlertTitle));
-            } else {
-                builder.setTitle(LocaleController.formatString("AddMembersAlertTitle", R.string.AddMembersAlertTitle, LocaleController.formatPluralString("Members", this.selectedContacts.size(), new Object[0])));
-            }
-            StringBuilder sb = new StringBuilder();
-            for (int i4 = 0; i4 < this.selectedContacts.size(); i4++) {
-                TLRPC$User user = getMessagesController().getUser(Long.valueOf(this.selectedContacts.keyAt(i4)));
-                if (user != null) {
-                    if (sb.length() > 0) {
-                        sb.append(", ");
-                    }
-                    sb.append("**");
-                    sb.append(ContactsController.formatName(user.first_name, user.last_name));
-                    sb.append("**");
-                }
-            }
-            MessagesController messagesController = getMessagesController();
-            long j = this.chatId;
-            if (j == 0) {
-                j = this.channelId;
-            }
-            TLRPC$Chat chat = messagesController.getChat(Long.valueOf(j));
-            if (this.selectedContacts.size() > 5) {
-                int i5 = R.string.AddMembersAlertNamesText;
-                Object[] objArr = new Object[2];
-                objArr[0] = LocaleController.formatPluralString("Members", this.selectedContacts.size(), new Object[0]);
-                if (chat == null) {
-                    str2 = "";
-                } else {
-                    str2 = chat.title;
-                }
-                objArr[1] = str2;
-                SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(AndroidUtilities.replaceTags(LocaleController.formatString("AddMembersAlertNamesText", i5, objArr)));
-                String format = String.format("%d", new Object[]{Integer.valueOf(this.selectedContacts.size())});
-                int indexOf = TextUtils.indexOf(spannableStringBuilder, format);
-                if (indexOf >= 0) {
-                    spannableStringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), indexOf, format.length() + indexOf, 33);
-                }
-                builder.setMessage(spannableStringBuilder);
-            } else {
-                int i6 = R.string.AddMembersAlertNamesText;
-                Object[] objArr2 = new Object[2];
-                objArr2[0] = sb;
-                if (chat == null) {
-                    str = "";
-                } else {
-                    str = chat.title;
-                }
-                objArr2[1] = str;
-                builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("AddMembersAlertNamesText", i6, objArr2)));
-            }
-            CheckBoxCell[] checkBoxCellArr = new CheckBoxCell[1];
-            if (!ChatObject.isChannel(chat)) {
-                LinearLayout linearLayout = new LinearLayout(getParentActivity());
-                linearLayout.setOrientation(1);
-                checkBoxCellArr[0] = new CheckBoxCell(getParentActivity(), 1);
-                checkBoxCellArr[0].setBackgroundDrawable(Theme.getSelectorDrawable(false));
-                checkBoxCellArr[0].setMultiline(true);
-                if (this.selectedContacts.size() == 1) {
-                    checkBoxCellArr[0].setText(AndroidUtilities.replaceTags(LocaleController.formatString("AddOneMemberForwardMessages", R.string.AddOneMemberForwardMessages, UserObject.getFirstName(getMessagesController().getUser(Long.valueOf(this.selectedContacts.keyAt(0)))))), "", true, false);
-                } else {
-                    checkBoxCellArr[0].setText(LocaleController.getString("AddMembersForwardMessages", R.string.AddMembersForwardMessages), "", true, false);
-                }
-                checkBoxCellArr[0].setPadding(LocaleController.isRTL ? AndroidUtilities.dp(16.0f) : AndroidUtilities.dp(8.0f), 0, LocaleController.isRTL ? AndroidUtilities.dp(8.0f) : AndroidUtilities.dp(16.0f), 0);
-                linearLayout.addView(checkBoxCellArr[0], LayoutHelper.createLinear(-1, -2));
-                checkBoxCellArr[0].setOnClickListener(new GroupCreateActivity$$ExternalSyntheticLambda4(checkBoxCellArr));
-                builder.setCustomViewOffset(12);
-                builder.setView(linearLayout);
-            }
-            builder.setPositiveButton(LocaleController.getString("Add", R.string.Add), new GroupCreateActivity$$ExternalSyntheticLambda1(this, checkBoxCellArr));
-            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), (DialogInterface.OnClickListener) null);
-            showDialog(builder.create());
+            return true;
         }
-        return true;
+        return false;
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
+    public static /* synthetic */ void lambda$onDonePressed$5(CheckBoxCell[] checkBoxCellArr, View view) {
+        checkBoxCellArr[0].setChecked(!checkBoxCellArr[0].isChecked(), true);
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$onDonePressed$6(CheckBoxCell[] checkBoxCellArr, DialogInterface dialogInterface, int i) {
         int i2 = 0;
         if (checkBoxCellArr[0] != null && checkBoxCellArr[0].isChecked()) {
@@ -1147,19 +1200,19 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         onAddToGroupDone(i2);
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public void closeSearch() {
         this.searching = false;
         this.searchWas = false;
         this.itemDecoration.setSearching(false);
         this.adapter.setSearching(false);
-        this.adapter.searchDialogs((String) null);
+        this.adapter.searchDialogs(null);
         this.listView.setFastScrollVisible(true);
         this.listView.setVerticalScrollBarEnabled(false);
         showItemsAnimated(0);
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public void updateHint() {
         if (!this.isAlwaysShare && !this.isNeverShare && !this.addToGroup) {
             if (this.chatType == 2) {
@@ -1167,40 +1220,40 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             } else if (this.selectedContacts.size() == 0) {
                 this.actionBar.setSubtitle(LocaleController.formatString("MembersCountZero", R.string.MembersCountZero, LocaleController.formatPluralString("Members", this.maxCount, new Object[0])));
             } else {
-                String pluralString = LocaleController.getPluralString("MembersCountSelected", this.selectedContacts.size());
-                this.actionBar.setSubtitle(String.format(pluralString, new Object[]{Integer.valueOf(this.selectedContacts.size()), Integer.valueOf(this.maxCount)}));
+                this.actionBar.setSubtitle(String.format(LocaleController.getPluralString("MembersCountSelected", this.selectedContacts.size()), Integer.valueOf(this.selectedContacts.size()), Integer.valueOf(this.maxCount)));
             }
         }
-        if (this.chatType == 2) {
-            return;
-        }
-        if (this.doneButtonVisible && this.allSpans.isEmpty()) {
-            AnimatorSet animatorSet = this.currentDoneButtonAnimation;
-            if (animatorSet != null) {
-                animatorSet.cancel();
-            }
-            AnimatorSet animatorSet2 = new AnimatorSet();
-            this.currentDoneButtonAnimation = animatorSet2;
-            animatorSet2.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_X, new float[]{0.0f}), ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_Y, new float[]{0.0f}), ObjectAnimator.ofFloat(this.floatingButton, View.ALPHA, new float[]{0.0f})});
-            this.currentDoneButtonAnimation.addListener(new AnimatorListenerAdapter() {
-                public void onAnimationEnd(Animator animator) {
-                    GroupCreateActivity.this.floatingButton.setVisibility(4);
+        if (this.chatType != 2) {
+            if (this.doneButtonVisible && this.allSpans.isEmpty()) {
+                AnimatorSet animatorSet = this.currentDoneButtonAnimation;
+                if (animatorSet != null) {
+                    animatorSet.cancel();
                 }
-            });
-            this.currentDoneButtonAnimation.setDuration(180);
-            this.currentDoneButtonAnimation.start();
-            this.doneButtonVisible = false;
-        } else if (!this.doneButtonVisible && !this.allSpans.isEmpty()) {
-            AnimatorSet animatorSet3 = this.currentDoneButtonAnimation;
-            if (animatorSet3 != null) {
-                animatorSet3.cancel();
+                AnimatorSet animatorSet2 = new AnimatorSet();
+                this.currentDoneButtonAnimation = animatorSet2;
+                animatorSet2.playTogether(ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_X, 0.0f), ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_Y, 0.0f), ObjectAnimator.ofFloat(this.floatingButton, View.ALPHA, 0.0f));
+                this.currentDoneButtonAnimation.addListener(new AnimatorListenerAdapter() { // from class: org.telegram.ui.GroupCreateActivity.11
+                    @Override // android.animation.AnimatorListenerAdapter, android.animation.Animator.AnimatorListener
+                    public void onAnimationEnd(Animator animator) {
+                        GroupCreateActivity.this.floatingButton.setVisibility(4);
+                    }
+                });
+                this.currentDoneButtonAnimation.setDuration(180L);
+                this.currentDoneButtonAnimation.start();
+                this.doneButtonVisible = false;
+            } else if (this.doneButtonVisible || this.allSpans.isEmpty()) {
+            } else {
+                AnimatorSet animatorSet3 = this.currentDoneButtonAnimation;
+                if (animatorSet3 != null) {
+                    animatorSet3.cancel();
+                }
+                this.currentDoneButtonAnimation = new AnimatorSet();
+                this.floatingButton.setVisibility(0);
+                this.currentDoneButtonAnimation.playTogether(ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_X, 1.0f), ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_Y, 1.0f), ObjectAnimator.ofFloat(this.floatingButton, View.ALPHA, 1.0f));
+                this.currentDoneButtonAnimation.setDuration(180L);
+                this.currentDoneButtonAnimation.start();
+                this.doneButtonVisible = true;
             }
-            this.currentDoneButtonAnimation = new AnimatorSet();
-            this.floatingButton.setVisibility(0);
-            this.currentDoneButtonAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_X, new float[]{1.0f}), ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_Y, new float[]{1.0f}), ObjectAnimator.ofFloat(this.floatingButton, View.ALPHA, new float[]{1.0f})});
-            this.currentDoneButtonAnimation.setDuration(180);
-            this.currentDoneButtonAnimation.start();
-            this.doneButtonVisible = true;
         }
     }
 
@@ -1212,30 +1265,29 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         this.delegate2 = contactsAddActivityDelegate;
     }
 
+    /* loaded from: classes3.dex */
     public class GroupCreateAdapter extends RecyclerListView.FastScrollAdapter {
-        private ArrayList<TLObject> contacts = new ArrayList<>();
         private Context context;
         private int currentItemsCount;
-        /* access modifiers changed from: private */
-        public int inviteViaLink;
-        /* access modifiers changed from: private */
-        public int noContactsStubRow;
+        private int inviteViaLink;
+        private int noContactsStubRow;
         private SearchAdapterHelper searchAdapterHelper;
+        private Runnable searchRunnable;
+        private boolean searching;
+        private int usersStartRow;
         private ArrayList<Object> searchResult = new ArrayList<>();
         private ArrayList<CharSequence> searchResultNames = new ArrayList<>();
-        private Runnable searchRunnable;
-        /* access modifiers changed from: private */
-        public boolean searching;
-        private int usersStartRow;
+        private ArrayList<TLObject> contacts = new ArrayList<>();
 
+        @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         public void notifyDataSetChanged() {
             super.notifyDataSetChanged();
             GroupCreateActivity.this.updateEditTextHint();
         }
 
-        public GroupCreateAdapter(Context context2) {
+        public GroupCreateAdapter(Context context) {
             TLRPC$Chat chat;
-            this.context = context2;
+            this.context = context;
             ArrayList<TLRPC$TL_contact> arrayList = GroupCreateActivity.this.getContactsController().contacts;
             for (int i = 0; i < arrayList.size(); i++) {
                 TLRPC$User user = GroupCreateActivity.this.getMessagesController().getUser(Long.valueOf(arrayList.get(i).user_id));
@@ -1252,26 +1304,52 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                         this.contacts.add(chat);
                     }
                 }
-                Collections.sort(this.contacts, new Comparator<TLObject>(this, GroupCreateActivity.this) {
+                Collections.sort(this.contacts, new Comparator<TLObject>(this, GroupCreateActivity.this) { // from class: org.telegram.ui.GroupCreateActivity.GroupCreateAdapter.1
                     private String getName(TLObject tLObject) {
-                        if (!(tLObject instanceof TLRPC$User)) {
-                            return ((TLRPC$Chat) tLObject).title;
+                        if (tLObject instanceof TLRPC$User) {
+                            TLRPC$User tLRPC$User = (TLRPC$User) tLObject;
+                            return ContactsController.formatName(tLRPC$User.first_name, tLRPC$User.last_name);
                         }
-                        TLRPC$User tLRPC$User = (TLRPC$User) tLObject;
-                        return ContactsController.formatName(tLRPC$User.first_name, tLRPC$User.last_name);
+                        return ((TLRPC$Chat) tLObject).title;
                     }
 
+                    @Override // java.util.Comparator
                     public int compare(TLObject tLObject, TLObject tLObject2) {
                         return getName(tLObject).compareTo(getName(tLObject2));
                     }
                 });
             }
-            SearchAdapterHelper searchAdapterHelper2 = new SearchAdapterHelper(false);
-            this.searchAdapterHelper = searchAdapterHelper2;
-            searchAdapterHelper2.setDelegate(new GroupCreateActivity$GroupCreateAdapter$$ExternalSyntheticLambda4(this));
+            SearchAdapterHelper searchAdapterHelper = new SearchAdapterHelper(false);
+            this.searchAdapterHelper = searchAdapterHelper;
+            searchAdapterHelper.setDelegate(new SearchAdapterHelper.SearchAdapterHelperDelegate() { // from class: org.telegram.ui.GroupCreateActivity$GroupCreateAdapter$$ExternalSyntheticLambda4
+                @Override // org.telegram.ui.Adapters.SearchAdapterHelper.SearchAdapterHelperDelegate
+                public /* synthetic */ boolean canApplySearchResults(int i3) {
+                    return SearchAdapterHelper.SearchAdapterHelperDelegate.CC.$default$canApplySearchResults(this, i3);
+                }
+
+                @Override // org.telegram.ui.Adapters.SearchAdapterHelper.SearchAdapterHelperDelegate
+                public /* synthetic */ LongSparseArray getExcludeCallParticipants() {
+                    return SearchAdapterHelper.SearchAdapterHelperDelegate.CC.$default$getExcludeCallParticipants(this);
+                }
+
+                @Override // org.telegram.ui.Adapters.SearchAdapterHelper.SearchAdapterHelperDelegate
+                public /* synthetic */ LongSparseArray getExcludeUsers() {
+                    return SearchAdapterHelper.SearchAdapterHelperDelegate.CC.$default$getExcludeUsers(this);
+                }
+
+                @Override // org.telegram.ui.Adapters.SearchAdapterHelper.SearchAdapterHelperDelegate
+                public final void onDataSetChanged(int i3) {
+                    GroupCreateActivity.GroupCreateAdapter.this.lambda$new$0(i3);
+                }
+
+                @Override // org.telegram.ui.Adapters.SearchAdapterHelper.SearchAdapterHelperDelegate
+                public /* synthetic */ void onSetHashtags(ArrayList arrayList2, HashMap hashMap) {
+                    SearchAdapterHelper.SearchAdapterHelperDelegate.CC.$default$onSetHashtags(this, arrayList2, hashMap);
+                }
+            });
         }
 
-        /* access modifiers changed from: private */
+        /* JADX INFO: Access modifiers changed from: private */
         public /* synthetic */ void lambda$new$0(int i) {
             GroupCreateActivity.this.showItemsAnimated(this.currentItemsCount);
             if (this.searchRunnable == null && !this.searchAdapterHelper.isSearchInProgress() && getItemCount() == 0) {
@@ -1281,12 +1359,14 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         }
 
         public void setSearching(boolean z) {
-            if (this.searching != z) {
-                this.searching = z;
-                notifyDataSetChanged();
+            if (this.searching == z) {
+                return;
             }
+            this.searching = z;
+            notifyDataSetChanged();
         }
 
+        @Override // org.telegram.ui.Components.RecyclerListView.FastScrollAdapter
         public String getLetter(int i) {
             String str;
             String str2;
@@ -1301,29 +1381,30 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             TLObject tLObject = this.contacts.get(i - i2);
             if (tLObject instanceof TLRPC$User) {
                 TLRPC$User tLRPC$User = (TLRPC$User) tLObject;
-                str2 = tLRPC$User.first_name;
-                str = tLRPC$User.last_name;
+                str = tLRPC$User.first_name;
+                str2 = tLRPC$User.last_name;
             } else {
-                str2 = ((TLRPC$Chat) tLObject).title;
-                str = "";
+                str = ((TLRPC$Chat) tLObject).title;
+                str2 = "";
             }
             if (LocaleController.nameDisplayOrder == 1) {
-                if (!TextUtils.isEmpty(str2)) {
-                    return str2.substring(0, 1).toUpperCase();
-                }
                 if (!TextUtils.isEmpty(str)) {
                     return str.substring(0, 1).toUpperCase();
                 }
-            } else if (!TextUtils.isEmpty(str)) {
-                return str.substring(0, 1).toUpperCase();
-            } else {
                 if (!TextUtils.isEmpty(str2)) {
                     return str2.substring(0, 1).toUpperCase();
+                }
+            } else if (!TextUtils.isEmpty(str2)) {
+                return str2.substring(0, 1).toUpperCase();
+            } else {
+                if (!TextUtils.isEmpty(str)) {
+                    return str.substring(0, 1).toUpperCase();
                 }
             }
             return "";
         }
 
+        @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         public int getItemCount() {
             this.noContactsStubRow = -1;
             if (this.searching) {
@@ -1360,74 +1441,64 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             return size4;
         }
 
-        /* JADX WARNING: type inference failed for: r5v5, types: [android.widget.FrameLayout, org.telegram.ui.GroupCreateActivity$GroupCreateAdapter$2, org.telegram.ui.Components.StickerEmptyView] */
-        /* JADX WARNING: Multi-variable type inference failed */
-        /* JADX WARNING: Unknown variable types count: 1 */
-        /* Code decompiled incorrectly, please refer to instructions dump. */
-        public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(android.view.ViewGroup r4, int r5) {
-            /*
-                r3 = this;
-                if (r5 == 0) goto L_0x0043
-                r4 = 0
-                r0 = 1
-                if (r5 == r0) goto L_0x003a
-                r1 = 3
-                if (r5 == r1) goto L_0x0011
-                org.telegram.ui.Cells.TextCell r4 = new org.telegram.ui.Cells.TextCell
-                android.content.Context r5 = r3.context
-                r4.<init>(r5)
-                goto L_0x004a
-            L_0x0011:
-                org.telegram.ui.GroupCreateActivity$GroupCreateAdapter$2 r5 = new org.telegram.ui.GroupCreateActivity$GroupCreateAdapter$2
-                android.content.Context r1 = r3.context
-                r2 = 0
-                r5.<init>(r3, r1, r2, r4)
-                androidx.recyclerview.widget.RecyclerView$LayoutParams r4 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
-                r1 = -1
-                r4.<init>((int) r1, (int) r1)
-                r5.setLayoutParams(r4)
-                android.widget.TextView r4 = r5.subtitle
-                r1 = 8
-                r4.setVisibility(r1)
-                android.widget.TextView r4 = r5.title
-                int r1 = org.telegram.messenger.R.string.NoContacts
-                java.lang.String r2 = "NoContacts"
-                java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
-                r4.setText(r1)
-                r5.setAnimateLayoutChange(r0)
-                goto L_0x0041
-            L_0x003a:
-                org.telegram.ui.Cells.GroupCreateUserCell r5 = new org.telegram.ui.Cells.GroupCreateUserCell
-                android.content.Context r1 = r3.context
-                r5.<init>(r1, r0, r4, r4)
-            L_0x0041:
-                r4 = r5
-                goto L_0x004a
-            L_0x0043:
-                org.telegram.ui.Cells.GroupCreateSectionCell r4 = new org.telegram.ui.Cells.GroupCreateSectionCell
-                android.content.Context r5 = r3.context
-                r4.<init>(r5)
-            L_0x004a:
-                org.telegram.ui.Components.RecyclerListView$Holder r5 = new org.telegram.ui.Components.RecyclerListView$Holder
-                r5.<init>(r4)
-                return r5
-            */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.GroupCreateActivity.GroupCreateAdapter.onCreateViewHolder(android.view.ViewGroup, int):androidx.recyclerview.widget.RecyclerView$ViewHolder");
+        /* JADX WARN: Multi-variable type inference failed */
+        @Override // androidx.recyclerview.widget.RecyclerView.Adapter
+        /* renamed from: onCreateViewHolder */
+        public RecyclerView.ViewHolder mo1754onCreateViewHolder(ViewGroup viewGroup, int i) {
+            View groupCreateSectionCell;
+            GroupCreateUserCell groupCreateUserCell;
+            if (i != 0) {
+                if (i == 1) {
+                    groupCreateUserCell = new GroupCreateUserCell(this.context, 1, 0, false);
+                } else if (i == 3) {
+                    StickerEmptyView stickerEmptyView = new StickerEmptyView(this, this.context, null, 0) { // from class: org.telegram.ui.GroupCreateActivity.GroupCreateAdapter.2
+                        /* JADX INFO: Access modifiers changed from: protected */
+                        @Override // org.telegram.ui.Components.StickerEmptyView, android.view.ViewGroup, android.view.View
+                        public void onAttachedToWindow() {
+                            super.onAttachedToWindow();
+                            this.stickerView.getImageReceiver().startAnimation();
+                        }
+                    };
+                    stickerEmptyView.setLayoutParams(new RecyclerView.LayoutParams(-1, -1));
+                    stickerEmptyView.subtitle.setVisibility(8);
+                    stickerEmptyView.title.setText(LocaleController.getString("NoContacts", R.string.NoContacts));
+                    stickerEmptyView.setAnimateLayoutChange(true);
+                    groupCreateUserCell = stickerEmptyView;
+                } else {
+                    groupCreateSectionCell = new TextCell(this.context);
+                }
+                groupCreateSectionCell = groupCreateUserCell;
+            } else {
+                groupCreateSectionCell = new GroupCreateSectionCell(this.context);
+            }
+            return new RecyclerListView.Holder(groupCreateSectionCell);
         }
 
+        @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
-            SpannableStringBuilder spannableStringBuilder;
             TLObject tLObject;
+            SpannableStringBuilder spannableStringBuilder;
             long j;
             CharSequence charSequence;
             String str;
             int itemViewType = viewHolder.getItemViewType();
             if (itemViewType == 0) {
                 GroupCreateSectionCell groupCreateSectionCell = (GroupCreateSectionCell) viewHolder.itemView;
-                if (this.searching) {
-                    groupCreateSectionCell.setText(LocaleController.getString("GlobalSearch", R.string.GlobalSearch));
+                if (!this.searching) {
+                    return;
                 }
-            } else if (itemViewType == 1) {
+                groupCreateSectionCell.setText(LocaleController.getString("GlobalSearch", R.string.GlobalSearch));
+            } else if (itemViewType != 1) {
+                if (itemViewType != 2) {
+                    return;
+                }
+                TextCell textCell = (TextCell) viewHolder.itemView;
+                if (this.inviteViaLink == 2) {
+                    textCell.setTextAndIcon(LocaleController.getString("ChannelInviteViaLink", R.string.ChannelInviteViaLink), R.drawable.msg_link2, false);
+                } else {
+                    textCell.setTextAndIcon(LocaleController.getString("InviteToGroupByLink", R.string.InviteToGroupByLink), R.drawable.msg_link2, false);
+                }
+            } else {
                 GroupCreateUserCell groupCreateUserCell = (GroupCreateUserCell) viewHolder.itemView;
                 SpannableStringBuilder spannableStringBuilder2 = null;
                 if (this.searching) {
@@ -1436,10 +1507,10 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                     int size3 = this.searchAdapterHelper.getLocalServerSearch().size();
                     if (i >= 0 && i < size) {
                         tLObject = (TLObject) this.searchResult.get(i);
-                    } else if (i < size || i >= size3 + size) {
-                        tLObject = (i <= size + size3 || i > (size2 + size) + size3) ? null : this.searchAdapterHelper.getGlobalSearch().get(((i - size) - size3) - 1);
-                    } else {
+                    } else if (i >= size && i < size3 + size) {
                         tLObject = this.searchAdapterHelper.getLocalServerSearch().get(i - size);
+                    } else {
+                        tLObject = (i <= size + size3 || i > (size2 + size) + size3) ? null : this.searchAdapterHelper.getGlobalSearch().get(((i - size) - size3) - 1);
                     }
                     if (tLObject != null) {
                         if (tLObject instanceof TLRPC$User) {
@@ -1462,8 +1533,8 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                             }
                             try {
                                 SpannableStringBuilder spannableStringBuilder3 = new SpannableStringBuilder();
-                                spannableStringBuilder3.append("@");
-                                spannableStringBuilder3.append(str);
+                                spannableStringBuilder3.append((CharSequence) "@");
+                                spannableStringBuilder3.append((CharSequence) str);
                                 int indexOfIgnoreCase = AndroidUtilities.indexOfIgnoreCase(str, lastFoundUsername);
                                 if (indexOfIgnoreCase != -1) {
                                     int length = lastFoundUsername.length();
@@ -1497,7 +1568,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                 if (tLObject instanceof TLRPC$User) {
                     j = ((TLRPC$User) tLObject).id;
                 } else {
-                    j = tLObject instanceof TLRPC$Chat ? -((TLRPC$Chat) tLObject).id : 0;
+                    j = tLObject instanceof TLRPC$Chat ? -((TLRPC$Chat) tLObject).id : 0L;
                 }
                 if (j == 0) {
                     return;
@@ -1509,37 +1580,27 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                 }
                 groupCreateUserCell.setChecked(true, false);
                 groupCreateUserCell.setCheckBoxEnabled(false);
-            } else if (itemViewType == 2) {
-                TextCell textCell = (TextCell) viewHolder.itemView;
-                if (this.inviteViaLink == 2) {
-                    textCell.setTextAndIcon(LocaleController.getString("ChannelInviteViaLink", R.string.ChannelInviteViaLink), R.drawable.msg_link2, false);
-                } else {
-                    textCell.setTextAndIcon(LocaleController.getString("InviteToGroupByLink", R.string.InviteToGroupByLink), R.drawable.msg_link2, false);
-                }
             }
         }
 
+        @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         public int getItemViewType(int i) {
             if (this.searching) {
-                if (i == this.searchResult.size() + this.searchAdapterHelper.getLocalServerSearch().size()) {
-                    return 0;
-                }
-                return 1;
+                return i == this.searchResult.size() + this.searchAdapterHelper.getLocalServerSearch().size() ? 0 : 1;
             } else if (this.inviteViaLink != 0 && i == 0) {
                 return 2;
             } else {
-                if (this.noContactsStubRow == i) {
-                    return 3;
-                }
-                return 1;
+                return this.noContactsStubRow == i ? 3 : 1;
             }
         }
 
+        @Override // org.telegram.ui.Components.RecyclerListView.FastScrollAdapter
         public void getPositionForScrollProgress(RecyclerListView recyclerListView, float f, int[] iArr) {
-            iArr[0] = (int) (((float) getItemCount()) * f);
+            iArr[0] = (int) (getItemCount() * f);
             iArr[1] = 0;
         }
 
+        @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         public void onViewRecycled(RecyclerView.ViewHolder viewHolder) {
             View view = viewHolder.itemView;
             if (view instanceof GroupCreateUserCell) {
@@ -1547,293 +1608,165 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             }
         }
 
+        @Override // org.telegram.ui.Components.RecyclerListView.SelectionAdapter
         public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
-            if (GroupCreateActivity.this.ignoreUsers == null) {
-                return true;
+            if (GroupCreateActivity.this.ignoreUsers != null) {
+                View view = viewHolder.itemView;
+                if (!(view instanceof GroupCreateUserCell)) {
+                    return true;
+                }
+                Object object = ((GroupCreateUserCell) view).getObject();
+                return !(object instanceof TLRPC$User) || GroupCreateActivity.this.ignoreUsers.indexOfKey(((TLRPC$User) object).id) < 0;
             }
-            View view = viewHolder.itemView;
-            if (!(view instanceof GroupCreateUserCell)) {
-                return true;
-            }
-            Object object = ((GroupCreateUserCell) view).getObject();
-            if (!(object instanceof TLRPC$User) || GroupCreateActivity.this.ignoreUsers.indexOfKey(((TLRPC$User) object).id) < 0) {
-                return true;
-            }
-            return false;
+            return true;
         }
 
-        public void searchDialogs(String str) {
+        public void searchDialogs(final String str) {
             if (this.searchRunnable != null) {
                 Utilities.searchQueue.cancelRunnable(this.searchRunnable);
                 this.searchRunnable = null;
             }
             this.searchResult.clear();
             this.searchResultNames.clear();
-            this.searchAdapterHelper.mergeResults((ArrayList<Object>) null);
-            this.searchAdapterHelper.queryServerSearch((String) null, true, GroupCreateActivity.this.isAlwaysShare || GroupCreateActivity.this.isNeverShare, false, false, false, 0, false, 0, 0);
+            this.searchAdapterHelper.mergeResults(null);
+            this.searchAdapterHelper.queryServerSearch(null, true, GroupCreateActivity.this.isAlwaysShare || GroupCreateActivity.this.isNeverShare, false, false, false, 0L, false, 0, 0);
             notifyDataSetChanged();
             if (!TextUtils.isEmpty(str)) {
                 DispatchQueue dispatchQueue = Utilities.searchQueue;
-                GroupCreateActivity$GroupCreateAdapter$$ExternalSyntheticLambda2 groupCreateActivity$GroupCreateAdapter$$ExternalSyntheticLambda2 = new GroupCreateActivity$GroupCreateAdapter$$ExternalSyntheticLambda2(this, str);
-                this.searchRunnable = groupCreateActivity$GroupCreateAdapter$$ExternalSyntheticLambda2;
-                dispatchQueue.postRunnable(groupCreateActivity$GroupCreateAdapter$$ExternalSyntheticLambda2, 300);
+                Runnable runnable = new Runnable() { // from class: org.telegram.ui.GroupCreateActivity$GroupCreateAdapter$$ExternalSyntheticLambda2
+                    @Override // java.lang.Runnable
+                    public final void run() {
+                        GroupCreateActivity.GroupCreateAdapter.this.lambda$searchDialogs$3(str);
+                    }
+                };
+                this.searchRunnable = runnable;
+                dispatchQueue.postRunnable(runnable, 300L);
             }
         }
 
-        /* access modifiers changed from: private */
-        public /* synthetic */ void lambda$searchDialogs$3(String str) {
-            AndroidUtilities.runOnUIThread(new GroupCreateActivity$GroupCreateAdapter$$ExternalSyntheticLambda0(this, str));
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$searchDialogs$3(final String str) {
+            AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.GroupCreateActivity$GroupCreateAdapter$$ExternalSyntheticLambda0
+                @Override // java.lang.Runnable
+                public final void run() {
+                    GroupCreateActivity.GroupCreateAdapter.this.lambda$searchDialogs$2(str);
+                }
+            });
         }
 
-        /* access modifiers changed from: private */
-        public /* synthetic */ void lambda$searchDialogs$2(String str) {
-            this.searchAdapterHelper.queryServerSearch(str, true, GroupCreateActivity.this.isAlwaysShare || GroupCreateActivity.this.isNeverShare, true, false, false, 0, false, 0, 0);
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$searchDialogs$2(final String str) {
+            this.searchAdapterHelper.queryServerSearch(str, true, GroupCreateActivity.this.isAlwaysShare || GroupCreateActivity.this.isNeverShare, true, false, false, 0L, false, 0, 0);
             DispatchQueue dispatchQueue = Utilities.searchQueue;
-            GroupCreateActivity$GroupCreateAdapter$$ExternalSyntheticLambda1 groupCreateActivity$GroupCreateAdapter$$ExternalSyntheticLambda1 = new GroupCreateActivity$GroupCreateAdapter$$ExternalSyntheticLambda1(this, str);
-            this.searchRunnable = groupCreateActivity$GroupCreateAdapter$$ExternalSyntheticLambda1;
-            dispatchQueue.postRunnable(groupCreateActivity$GroupCreateAdapter$$ExternalSyntheticLambda1);
+            Runnable runnable = new Runnable() { // from class: org.telegram.ui.GroupCreateActivity$GroupCreateAdapter$$ExternalSyntheticLambda1
+                @Override // java.lang.Runnable
+                public final void run() {
+                    GroupCreateActivity.GroupCreateAdapter.this.lambda$searchDialogs$1(str);
+                }
+            };
+            this.searchRunnable = runnable;
+            dispatchQueue.postRunnable(runnable);
         }
 
-        /* access modifiers changed from: private */
-        /* JADX WARNING: Code restructure failed: missing block: B:36:0x00c8, code lost:
-            if (r13.contains(" " + r3) != false) goto L_0x00d5;
+        /* JADX INFO: Access modifiers changed from: private */
+        /* JADX WARN: Code restructure failed: missing block: B:38:0x00c8, code lost:
+            if (r13.contains(" " + r3) != false) goto L53;
          */
-        /* JADX WARNING: Removed duplicated region for block: B:51:0x0128 A[LOOP:1: B:27:0x008c->B:51:0x0128, LOOP_END] */
-        /* JADX WARNING: Removed duplicated region for block: B:60:0x00d8 A[SYNTHETIC] */
-        /* Code decompiled incorrectly, please refer to instructions dump. */
+        /* JADX WARN: Removed duplicated region for block: B:54:0x0128 A[LOOP:1: B:29:0x008c->B:54:0x0128, LOOP_END] */
+        /* JADX WARN: Removed duplicated region for block: B:63:0x00d8 A[SYNTHETIC] */
+        /*
+            Code decompiled incorrectly, please refer to instructions dump.
+            To view partially-correct add '--show-bad-code' argument
+        */
         public /* synthetic */ void lambda$searchDialogs$1(java.lang.String r18) {
             /*
-                r17 = this;
-                r0 = r17
-                java.lang.String r1 = r18.trim()
-                java.lang.String r1 = r1.toLowerCase()
-                int r2 = r1.length()
-                if (r2 != 0) goto L_0x001e
-                java.util.ArrayList r1 = new java.util.ArrayList
-                r1.<init>()
-                java.util.ArrayList r2 = new java.util.ArrayList
-                r2.<init>()
-                r0.updateSearchResults(r1, r2)
-                return
-            L_0x001e:
-                org.telegram.messenger.LocaleController r2 = org.telegram.messenger.LocaleController.getInstance()
-                java.lang.String r2 = r2.getTranslitString(r1)
-                boolean r3 = r1.equals(r2)
-                if (r3 != 0) goto L_0x0032
-                int r3 = r2.length()
-                if (r3 != 0) goto L_0x0033
-            L_0x0032:
-                r2 = 0
-            L_0x0033:
-                r3 = 0
-                r5 = 1
-                if (r2 == 0) goto L_0x0039
-                r6 = 1
-                goto L_0x003a
-            L_0x0039:
-                r6 = 0
-            L_0x003a:
-                int r6 = r6 + r5
-                java.lang.String[] r7 = new java.lang.String[r6]
-                r7[r3] = r1
-                if (r2 == 0) goto L_0x0043
-                r7[r5] = r2
-            L_0x0043:
-                java.util.ArrayList r1 = new java.util.ArrayList
-                r1.<init>()
-                java.util.ArrayList r2 = new java.util.ArrayList
-                r2.<init>()
-                r8 = 0
-            L_0x004e:
-                java.util.ArrayList<org.telegram.tgnet.TLObject> r9 = r0.contacts
-                int r9 = r9.size()
-                if (r8 >= r9) goto L_0x0138
-                java.util.ArrayList<org.telegram.tgnet.TLObject> r9 = r0.contacts
-                java.lang.Object r9 = r9.get(r8)
-                org.telegram.tgnet.TLObject r9 = (org.telegram.tgnet.TLObject) r9
-                boolean r10 = r9 instanceof org.telegram.tgnet.TLRPC$User
-                if (r10 == 0) goto L_0x0074
-                r11 = r9
-                org.telegram.tgnet.TLRPC$User r11 = (org.telegram.tgnet.TLRPC$User) r11
-                java.lang.String r12 = r11.first_name
-                java.lang.String r13 = r11.last_name
-                java.lang.String r12 = org.telegram.messenger.ContactsController.formatName(r12, r13)
-                java.lang.String r12 = r12.toLowerCase()
-                java.lang.String r11 = r11.username
-                goto L_0x007b
-            L_0x0074:
-                r11 = r9
-                org.telegram.tgnet.TLRPC$Chat r11 = (org.telegram.tgnet.TLRPC$Chat) r11
-                java.lang.String r12 = r11.title
-                java.lang.String r11 = r11.username
-            L_0x007b:
-                org.telegram.messenger.LocaleController r13 = org.telegram.messenger.LocaleController.getInstance()
-                java.lang.String r13 = r13.getTranslitString(r12)
-                boolean r14 = r12.equals(r13)
-                if (r14 == 0) goto L_0x008a
-                r13 = 0
-            L_0x008a:
-                r14 = 0
-                r15 = 0
-            L_0x008c:
-                if (r14 >= r6) goto L_0x0130
-                r3 = r7[r14]
-                boolean r16 = r12.startsWith(r3)
-                if (r16 != 0) goto L_0x00d5
-                java.lang.StringBuilder r4 = new java.lang.StringBuilder
-                r4.<init>()
-                java.lang.String r5 = " "
-                r4.append(r5)
-                r4.append(r3)
-                java.lang.String r4 = r4.toString()
-                boolean r4 = r12.contains(r4)
-                if (r4 != 0) goto L_0x00d5
-                if (r13 == 0) goto L_0x00cb
-                boolean r4 = r13.startsWith(r3)
-                if (r4 != 0) goto L_0x00d5
-                java.lang.StringBuilder r4 = new java.lang.StringBuilder
-                r4.<init>()
-                r4.append(r5)
-                r4.append(r3)
-                java.lang.String r4 = r4.toString()
-                boolean r4 = r13.contains(r4)
-                if (r4 == 0) goto L_0x00cb
-                goto L_0x00d5
-            L_0x00cb:
-                if (r11 == 0) goto L_0x00d6
-                boolean r4 = r11.startsWith(r3)
-                if (r4 == 0) goto L_0x00d6
-                r15 = 2
-                goto L_0x00d6
-            L_0x00d5:
-                r15 = 1
-            L_0x00d6:
-                if (r15 == 0) goto L_0x0128
-                r4 = 1
-                if (r15 != r4) goto L_0x00fb
-                if (r10 == 0) goto L_0x00ec
-                r5 = r9
-                org.telegram.tgnet.TLRPC$User r5 = (org.telegram.tgnet.TLRPC$User) r5
-                java.lang.String r10 = r5.first_name
-                java.lang.String r5 = r5.last_name
-                java.lang.CharSequence r3 = org.telegram.messenger.AndroidUtilities.generateSearchName(r10, r5, r3)
-                r2.add(r3)
-                goto L_0x00f9
-            L_0x00ec:
-                r5 = r9
-                org.telegram.tgnet.TLRPC$Chat r5 = (org.telegram.tgnet.TLRPC$Chat) r5
-                java.lang.String r5 = r5.title
-                r10 = 0
-                java.lang.CharSequence r3 = org.telegram.messenger.AndroidUtilities.generateSearchName(r5, r10, r3)
-                r2.add(r3)
-            L_0x00f9:
-                r10 = 0
-                goto L_0x0123
-            L_0x00fb:
-                java.lang.StringBuilder r5 = new java.lang.StringBuilder
-                r5.<init>()
-                java.lang.String r10 = "@"
-                r5.append(r10)
-                r5.append(r11)
-                java.lang.String r5 = r5.toString()
-                java.lang.StringBuilder r11 = new java.lang.StringBuilder
-                r11.<init>()
-                r11.append(r10)
-                r11.append(r3)
-                java.lang.String r3 = r11.toString()
-                r10 = 0
-                java.lang.CharSequence r3 = org.telegram.messenger.AndroidUtilities.generateSearchName(r5, r10, r3)
-                r2.add(r3)
-            L_0x0123:
-                r1.add(r9)
-                r3 = r10
-                goto L_0x0132
-            L_0x0128:
-                r3 = 0
-                r4 = 1
-                int r14 = r14 + 1
-                r3 = 0
-                r5 = 1
-                goto L_0x008c
-            L_0x0130:
-                r3 = 0
-                r4 = 1
-            L_0x0132:
-                int r8 = r8 + 1
-                r3 = 0
-                r5 = 1
-                goto L_0x004e
-            L_0x0138:
-                r0.updateSearchResults(r1, r2)
-                return
+                Method dump skipped, instructions count: 316
+                To view this dump add '--comments-level debug' option
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.GroupCreateActivity.GroupCreateAdapter.lambda$searchDialogs$1(java.lang.String):void");
         }
 
-        private void updateSearchResults(ArrayList<Object> arrayList, ArrayList<CharSequence> arrayList2) {
-            AndroidUtilities.runOnUIThread(new GroupCreateActivity$GroupCreateAdapter$$ExternalSyntheticLambda3(this, arrayList, arrayList2));
+        private void updateSearchResults(final ArrayList<Object> arrayList, final ArrayList<CharSequence> arrayList2) {
+            AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.GroupCreateActivity$GroupCreateAdapter$$ExternalSyntheticLambda3
+                @Override // java.lang.Runnable
+                public final void run() {
+                    GroupCreateActivity.GroupCreateAdapter.this.lambda$updateSearchResults$4(arrayList, arrayList2);
+                }
+            });
         }
 
-        /* access modifiers changed from: private */
+        /* JADX INFO: Access modifiers changed from: private */
         public /* synthetic */ void lambda$updateSearchResults$4(ArrayList arrayList, ArrayList arrayList2) {
-            if (this.searching) {
-                this.searchRunnable = null;
-                this.searchResult = arrayList;
-                this.searchResultNames = arrayList2;
-                this.searchAdapterHelper.mergeResults(arrayList);
-                GroupCreateActivity.this.showItemsAnimated(this.currentItemsCount);
-                notifyDataSetChanged();
-                if (this.searching && !this.searchAdapterHelper.isSearchInProgress() && getItemCount() == 0) {
-                    GroupCreateActivity.this.emptyView.showProgress(false, true);
-                }
+            if (!this.searching) {
+                return;
             }
+            this.searchRunnable = null;
+            this.searchResult = arrayList;
+            this.searchResultNames = arrayList2;
+            this.searchAdapterHelper.mergeResults(arrayList);
+            GroupCreateActivity.this.showItemsAnimated(this.currentItemsCount);
+            notifyDataSetChanged();
+            if (!this.searching || this.searchAdapterHelper.isSearchInProgress() || getItemCount() != 0) {
+                return;
+            }
+            GroupCreateActivity.this.emptyView.showProgress(false, true);
         }
     }
 
+    @Override // org.telegram.ui.ActionBar.BaseFragment
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         ArrayList<ThemeDescription> arrayList = new ArrayList<>();
-        GroupCreateActivity$$ExternalSyntheticLambda6 groupCreateActivity$$ExternalSyntheticLambda6 = new GroupCreateActivity$$ExternalSyntheticLambda6(this);
-        arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
-        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"));
-        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"));
-        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultIcon"));
-        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultTitle"));
-        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSelector"));
-        arrayList.add(new ThemeDescription(this.scrollView, ThemeDescription.FLAG_LISTGLOWCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
-        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "listSelectorSDK21"));
-        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_FASTSCROLL, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "fastScrollActive"));
-        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_FASTSCROLL, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "fastScrollInactive"));
-        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_FASTSCROLL, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "fastScrollText"));
-        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "divider"));
-        arrayList.add(new ThemeDescription(this.emptyView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "emptyListPlaceholder"));
-        arrayList.add(new ThemeDescription(this.emptyView, ThemeDescription.FLAG_PROGRESSBAR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "progressCircle"));
-        arrayList.add(new ThemeDescription(this.editText, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-        arrayList.add(new ThemeDescription(this.editText, ThemeDescription.FLAG_HINTTEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "groupcreate_hintText"));
-        arrayList.add(new ThemeDescription(this.editText, ThemeDescription.FLAG_CURSORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "groupcreate_cursor"));
-        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{GroupCreateSectionCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "graySection"));
-        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{GroupCreateSectionCell.class}, new String[]{"drawable"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "groupcreate_sectionShadow"));
-        arrayList.add(new ThemeDescription((View) this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{GroupCreateSectionCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "groupcreate_sectionText"));
-        arrayList.add(new ThemeDescription((View) this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{GroupCreateUserCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "groupcreate_sectionText"));
-        arrayList.add(new ThemeDescription((View) this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{GroupCreateUserCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "checkbox"));
-        arrayList.add(new ThemeDescription((View) this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{GroupCreateUserCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "checkboxDisabled"));
-        arrayList.add(new ThemeDescription((View) this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{GroupCreateUserCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "checkboxCheck"));
-        arrayList.add(new ThemeDescription((View) this.listView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{GroupCreateUserCell.class}, new String[]{"statusTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueText"));
-        arrayList.add(new ThemeDescription((View) this.listView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{GroupCreateUserCell.class}, new String[]{"statusTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText"));
-        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{GroupCreateUserCell.class}, (Paint) null, Theme.avatarDrawables, (ThemeDescription.ThemeDescriptionDelegate) null, "avatar_text"));
-        GroupCreateActivity$$ExternalSyntheticLambda6 groupCreateActivity$$ExternalSyntheticLambda62 = groupCreateActivity$$ExternalSyntheticLambda6;
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, groupCreateActivity$$ExternalSyntheticLambda62, "avatar_backgroundRed"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, groupCreateActivity$$ExternalSyntheticLambda62, "avatar_backgroundOrange"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, groupCreateActivity$$ExternalSyntheticLambda62, "avatar_backgroundViolet"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, groupCreateActivity$$ExternalSyntheticLambda62, "avatar_backgroundGreen"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, groupCreateActivity$$ExternalSyntheticLambda62, "avatar_backgroundCyan"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, groupCreateActivity$$ExternalSyntheticLambda62, "avatar_backgroundBlue"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, groupCreateActivity$$ExternalSyntheticLambda62, "avatar_backgroundPink"));
-        arrayList.add(new ThemeDescription(this.spansContainer, 0, new Class[]{GroupCreateSpan.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "groupcreate_spanBackground"));
-        arrayList.add(new ThemeDescription(this.spansContainer, 0, new Class[]{GroupCreateSpan.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "groupcreate_spanText"));
-        arrayList.add(new ThemeDescription(this.spansContainer, 0, new Class[]{GroupCreateSpan.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "groupcreate_spanDelete"));
-        arrayList.add(new ThemeDescription(this.spansContainer, 0, new Class[]{GroupCreateSpan.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "avatar_backgroundBlue"));
-        arrayList.add(new ThemeDescription(this.emptyView.title, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-        arrayList.add(new ThemeDescription(this.emptyView.subtitle, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText"));
+        ThemeDescription.ThemeDescriptionDelegate themeDescriptionDelegate = new ThemeDescription.ThemeDescriptionDelegate() { // from class: org.telegram.ui.GroupCreateActivity$$ExternalSyntheticLambda6
+            @Override // org.telegram.ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate
+            public final void didSetColor() {
+                GroupCreateActivity.this.lambda$getThemeDescriptions$7();
+            }
+
+            @Override // org.telegram.ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate
+            public /* synthetic */ void onAnimationProgress(float f) {
+                ThemeDescription.ThemeDescriptionDelegate.CC.$default$onAnimationProgress(this, f);
+            }
+        };
+        arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundWhite"));
+        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "actionBarDefault"));
+        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, "actionBarDefault"));
+        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, "actionBarDefaultIcon"));
+        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, "actionBarDefaultTitle"));
+        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, "actionBarDefaultSelector"));
+        arrayList.add(new ThemeDescription(this.scrollView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, "windowBackgroundWhite"));
+        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, "listSelectorSDK21"));
+        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_FASTSCROLL, null, null, null, null, "fastScrollActive"));
+        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_FASTSCROLL, null, null, null, null, "fastScrollInactive"));
+        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_FASTSCROLL, null, null, null, null, "fastScrollText"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, "divider"));
+        arrayList.add(new ThemeDescription(this.emptyView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "emptyListPlaceholder"));
+        arrayList.add(new ThemeDescription(this.emptyView, ThemeDescription.FLAG_PROGRESSBAR, null, null, null, null, "progressCircle"));
+        arrayList.add(new ThemeDescription(this.editText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText"));
+        arrayList.add(new ThemeDescription(this.editText, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, "groupcreate_hintText"));
+        arrayList.add(new ThemeDescription(this.editText, ThemeDescription.FLAG_CURSORCOLOR, null, null, null, null, "groupcreate_cursor"));
+        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{GroupCreateSectionCell.class}, null, null, null, "graySection"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{GroupCreateSectionCell.class}, new String[]{"drawable"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "groupcreate_sectionShadow"));
+        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{GroupCreateSectionCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "groupcreate_sectionText"));
+        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{GroupCreateUserCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "groupcreate_sectionText"));
+        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{GroupCreateUserCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "checkbox"));
+        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{GroupCreateUserCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "checkboxDisabled"));
+        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{GroupCreateUserCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "checkboxCheck"));
+        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{GroupCreateUserCell.class}, new String[]{"statusTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueText"));
+        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{GroupCreateUserCell.class}, new String[]{"statusTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{GroupCreateUserCell.class}, null, Theme.avatarDrawables, null, "avatar_text"));
+        arrayList.add(new ThemeDescription(null, 0, null, null, null, themeDescriptionDelegate, "avatar_backgroundRed"));
+        arrayList.add(new ThemeDescription(null, 0, null, null, null, themeDescriptionDelegate, "avatar_backgroundOrange"));
+        arrayList.add(new ThemeDescription(null, 0, null, null, null, themeDescriptionDelegate, "avatar_backgroundViolet"));
+        arrayList.add(new ThemeDescription(null, 0, null, null, null, themeDescriptionDelegate, "avatar_backgroundGreen"));
+        arrayList.add(new ThemeDescription(null, 0, null, null, null, themeDescriptionDelegate, "avatar_backgroundCyan"));
+        arrayList.add(new ThemeDescription(null, 0, null, null, null, themeDescriptionDelegate, "avatar_backgroundBlue"));
+        arrayList.add(new ThemeDescription(null, 0, null, null, null, themeDescriptionDelegate, "avatar_backgroundPink"));
+        arrayList.add(new ThemeDescription(this.spansContainer, 0, new Class[]{GroupCreateSpan.class}, null, null, null, "groupcreate_spanBackground"));
+        arrayList.add(new ThemeDescription(this.spansContainer, 0, new Class[]{GroupCreateSpan.class}, null, null, null, "groupcreate_spanText"));
+        arrayList.add(new ThemeDescription(this.spansContainer, 0, new Class[]{GroupCreateSpan.class}, null, null, null, "groupcreate_spanDelete"));
+        arrayList.add(new ThemeDescription(this.spansContainer, 0, new Class[]{GroupCreateSpan.class}, null, null, null, "avatar_backgroundBlue"));
+        arrayList.add(new ThemeDescription(this.emptyView.title, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText"));
+        arrayList.add(new ThemeDescription(this.emptyView.subtitle, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteGrayText"));
         PermanentLinkBottomSheet permanentLinkBottomSheet = this.sharedLinkBottomSheet;
         if (permanentLinkBottomSheet != null) {
             arrayList.addAll(permanentLinkBottomSheet.getThemeDescriptions());
@@ -1841,7 +1774,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         return arrayList;
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$getThemeDescriptions$7() {
         RecyclerListView recyclerListView = this.listView;
         if (recyclerListView != null) {

@@ -1,5 +1,5 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public abstract class TLRPC$MessageFwdHeader extends TLObject {
     public int channel_post;
     public int date;
@@ -13,36 +13,304 @@ public abstract class TLRPC$MessageFwdHeader extends TLObject {
     public TLRPC$Peer saved_from_peer;
 
     public static TLRPC$MessageFwdHeader TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-        TLRPC$MessageFwdHeader tLRPC$MessageFwdHeader;
+        TLRPC$TL_messageFwdHeader tLRPC$TL_messageFwdHeader;
         switch (i) {
             case -947462709:
-                tLRPC$MessageFwdHeader = new TLRPC$TL_messageFwdHeader_layer68();
+                tLRPC$TL_messageFwdHeader = new TLRPC$TL_messageFwdHeader() { // from class: org.telegram.tgnet.TLRPC$TL_messageFwdHeader_layer68
+                    public static int constructor = -NUM;
+
+                    @Override // org.telegram.tgnet.TLRPC$TL_messageFwdHeader, org.telegram.tgnet.TLObject
+                    public void readParams(AbstractSerializedData abstractSerializedData2, boolean z2) {
+                        int readInt32 = abstractSerializedData2.readInt32(z2);
+                        this.flags = readInt32;
+                        if ((readInt32 & 1) != 0) {
+                            TLRPC$TL_peerChannel tLRPC$TL_peerChannel = new TLRPC$TL_peerChannel();
+                            this.from_id = tLRPC$TL_peerChannel;
+                            tLRPC$TL_peerChannel.user_id = abstractSerializedData2.readInt32(z2);
+                        }
+                        this.date = abstractSerializedData2.readInt32(z2);
+                        if ((this.flags & 2) != 0) {
+                            TLRPC$TL_peerChannel tLRPC$TL_peerChannel2 = new TLRPC$TL_peerChannel();
+                            this.from_id = tLRPC$TL_peerChannel2;
+                            tLRPC$TL_peerChannel2.channel_id = abstractSerializedData2.readInt32(z2);
+                        }
+                        if ((this.flags & 4) != 0) {
+                            this.channel_post = abstractSerializedData2.readInt32(z2);
+                        }
+                    }
+
+                    @Override // org.telegram.tgnet.TLRPC$TL_messageFwdHeader, org.telegram.tgnet.TLObject
+                    public void serializeToStream(AbstractSerializedData abstractSerializedData2) {
+                        abstractSerializedData2.writeInt32(constructor);
+                        abstractSerializedData2.writeInt32(this.flags);
+                        if ((this.flags & 1) != 0) {
+                            abstractSerializedData2.writeInt32((int) this.from_id.user_id);
+                        }
+                        abstractSerializedData2.writeInt32(this.date);
+                        if ((this.flags & 2) != 0) {
+                            abstractSerializedData2.writeInt32((int) this.from_id.channel_id);
+                        }
+                        if ((this.flags & 4) != 0) {
+                            abstractSerializedData2.writeInt32(this.channel_post);
+                        }
+                    }
+                };
                 break;
             case -332168592:
-                tLRPC$MessageFwdHeader = new TLRPC$TL_messageFwdHeader_layer112();
+                tLRPC$TL_messageFwdHeader = new TLRPC$TL_messageFwdHeader() { // from class: org.telegram.tgnet.TLRPC$TL_messageFwdHeader_layer112
+                    public static int constructor = -NUM;
+
+                    @Override // org.telegram.tgnet.TLRPC$TL_messageFwdHeader, org.telegram.tgnet.TLObject
+                    public void readParams(AbstractSerializedData abstractSerializedData2, boolean z2) {
+                        int readInt32 = abstractSerializedData2.readInt32(z2);
+                        this.flags = readInt32;
+                        if ((readInt32 & 1) != 0) {
+                            TLRPC$TL_peerUser tLRPC$TL_peerUser = new TLRPC$TL_peerUser();
+                            this.from_id = tLRPC$TL_peerUser;
+                            tLRPC$TL_peerUser.user_id = abstractSerializedData2.readInt32(z2);
+                        }
+                        if ((this.flags & 32) != 0) {
+                            this.from_name = abstractSerializedData2.readString(z2);
+                        }
+                        this.date = abstractSerializedData2.readInt32(z2);
+                        if ((this.flags & 2) != 0) {
+                            TLRPC$TL_peerChannel tLRPC$TL_peerChannel = new TLRPC$TL_peerChannel();
+                            this.from_id = tLRPC$TL_peerChannel;
+                            tLRPC$TL_peerChannel.channel_id = abstractSerializedData2.readInt32(z2);
+                        }
+                        if ((this.flags & 4) != 0) {
+                            this.channel_post = abstractSerializedData2.readInt32(z2);
+                        }
+                        if ((this.flags & 8) != 0) {
+                            this.post_author = abstractSerializedData2.readString(z2);
+                        }
+                        if ((this.flags & 16) != 0) {
+                            this.saved_from_peer = TLRPC$Peer.TLdeserialize(abstractSerializedData2, abstractSerializedData2.readInt32(z2), z2);
+                        }
+                        if ((this.flags & 16) != 0) {
+                            this.saved_from_msg_id = abstractSerializedData2.readInt32(z2);
+                        }
+                    }
+
+                    @Override // org.telegram.tgnet.TLRPC$TL_messageFwdHeader, org.telegram.tgnet.TLObject
+                    public void serializeToStream(AbstractSerializedData abstractSerializedData2) {
+                        abstractSerializedData2.writeInt32(constructor);
+                        abstractSerializedData2.writeInt32(this.flags);
+                        if ((this.flags & 1) != 0) {
+                            abstractSerializedData2.writeInt32((int) this.from_id.user_id);
+                        }
+                        if ((this.flags & 32) != 0) {
+                            abstractSerializedData2.writeString(this.from_name);
+                        }
+                        abstractSerializedData2.writeInt32(this.date);
+                        if ((this.flags & 2) != 0) {
+                            abstractSerializedData2.writeInt32((int) this.from_id.channel_id);
+                        }
+                        if ((this.flags & 4) != 0) {
+                            abstractSerializedData2.writeInt32(this.channel_post);
+                        }
+                        if ((this.flags & 8) != 0) {
+                            abstractSerializedData2.writeString(this.post_author);
+                        }
+                        if ((this.flags & 16) != 0) {
+                            this.saved_from_peer.serializeToStream(abstractSerializedData2);
+                        }
+                        if ((this.flags & 16) != 0) {
+                            abstractSerializedData2.writeInt32(this.saved_from_msg_id);
+                        }
+                    }
+                };
                 break;
             case -85986132:
-                tLRPC$MessageFwdHeader = new TLRPC$TL_messageFwdHeader_layer72();
+                tLRPC$TL_messageFwdHeader = new TLRPC$TL_messageFwdHeader() { // from class: org.telegram.tgnet.TLRPC$TL_messageFwdHeader_layer72
+                    public static int constructor = -85986132;
+
+                    @Override // org.telegram.tgnet.TLRPC$TL_messageFwdHeader, org.telegram.tgnet.TLObject
+                    public void readParams(AbstractSerializedData abstractSerializedData2, boolean z2) {
+                        int readInt32 = abstractSerializedData2.readInt32(z2);
+                        this.flags = readInt32;
+                        if ((readInt32 & 1) != 0) {
+                            TLRPC$TL_peerUser tLRPC$TL_peerUser = new TLRPC$TL_peerUser();
+                            this.from_id = tLRPC$TL_peerUser;
+                            tLRPC$TL_peerUser.user_id = abstractSerializedData2.readInt32(z2);
+                        }
+                        this.date = abstractSerializedData2.readInt32(z2);
+                        if ((this.flags & 2) != 0) {
+                            TLRPC$TL_peerChannel tLRPC$TL_peerChannel = new TLRPC$TL_peerChannel();
+                            this.from_id = tLRPC$TL_peerChannel;
+                            tLRPC$TL_peerChannel.channel_id = abstractSerializedData2.readInt32(z2);
+                        }
+                        if ((this.flags & 4) != 0) {
+                            this.channel_post = abstractSerializedData2.readInt32(z2);
+                        }
+                        if ((this.flags & 8) != 0) {
+                            this.post_author = abstractSerializedData2.readString(z2);
+                        }
+                    }
+
+                    @Override // org.telegram.tgnet.TLRPC$TL_messageFwdHeader, org.telegram.tgnet.TLObject
+                    public void serializeToStream(AbstractSerializedData abstractSerializedData2) {
+                        abstractSerializedData2.writeInt32(constructor);
+                        abstractSerializedData2.writeInt32(this.flags);
+                        if ((this.flags & 1) != 0) {
+                            abstractSerializedData2.writeInt32((int) this.from_id.user_id);
+                        }
+                        abstractSerializedData2.writeInt32(this.date);
+                        if ((this.flags & 2) != 0) {
+                            abstractSerializedData2.writeInt32((int) this.from_id.channel_id);
+                        }
+                        if ((this.flags & 4) != 0) {
+                            abstractSerializedData2.writeInt32(this.channel_post);
+                        }
+                        if ((this.flags & 8) != 0) {
+                            abstractSerializedData2.writeString(this.post_author);
+                        }
+                    }
+                };
                 break;
             case 893020267:
-                tLRPC$MessageFwdHeader = new TLRPC$TL_messageFwdHeader_layer118();
+                tLRPC$TL_messageFwdHeader = new TLRPC$TL_messageFwdHeader() { // from class: org.telegram.tgnet.TLRPC$TL_messageFwdHeader_layer118
+                    public static int constructor = NUM;
+
+                    @Override // org.telegram.tgnet.TLRPC$TL_messageFwdHeader, org.telegram.tgnet.TLObject
+                    public void readParams(AbstractSerializedData abstractSerializedData2, boolean z2) {
+                        int readInt32 = abstractSerializedData2.readInt32(z2);
+                        this.flags = readInt32;
+                        if ((readInt32 & 1) != 0) {
+                            TLRPC$TL_peerUser tLRPC$TL_peerUser = new TLRPC$TL_peerUser();
+                            this.from_id = tLRPC$TL_peerUser;
+                            tLRPC$TL_peerUser.user_id = abstractSerializedData2.readInt32(z2);
+                        }
+                        if ((this.flags & 32) != 0) {
+                            this.from_name = abstractSerializedData2.readString(z2);
+                        }
+                        this.date = abstractSerializedData2.readInt32(z2);
+                        if ((this.flags & 2) != 0) {
+                            TLRPC$TL_peerChannel tLRPC$TL_peerChannel = new TLRPC$TL_peerChannel();
+                            this.from_id = tLRPC$TL_peerChannel;
+                            tLRPC$TL_peerChannel.channel_id = abstractSerializedData2.readInt32(z2);
+                        }
+                        if ((this.flags & 4) != 0) {
+                            this.channel_post = abstractSerializedData2.readInt32(z2);
+                        }
+                        if ((this.flags & 8) != 0) {
+                            this.post_author = abstractSerializedData2.readString(z2);
+                        }
+                        if ((this.flags & 16) != 0) {
+                            this.saved_from_peer = TLRPC$Peer.TLdeserialize(abstractSerializedData2, abstractSerializedData2.readInt32(z2), z2);
+                        }
+                        if ((this.flags & 16) != 0) {
+                            this.saved_from_msg_id = abstractSerializedData2.readInt32(z2);
+                        }
+                        if ((this.flags & 64) != 0) {
+                            this.psa_type = abstractSerializedData2.readString(z2);
+                        }
+                    }
+
+                    @Override // org.telegram.tgnet.TLRPC$TL_messageFwdHeader, org.telegram.tgnet.TLObject
+                    public void serializeToStream(AbstractSerializedData abstractSerializedData2) {
+                        abstractSerializedData2.writeInt32(constructor);
+                        abstractSerializedData2.writeInt32(this.flags);
+                        if ((this.flags & 1) != 0) {
+                            abstractSerializedData2.writeInt32((int) this.from_id.user_id);
+                        }
+                        if ((this.flags & 32) != 0) {
+                            abstractSerializedData2.writeString(this.from_name);
+                        }
+                        abstractSerializedData2.writeInt32(this.date);
+                        if ((this.flags & 2) != 0) {
+                            abstractSerializedData2.writeInt32((int) this.from_id.channel_id);
+                        }
+                        if ((this.flags & 4) != 0) {
+                            abstractSerializedData2.writeInt32(this.channel_post);
+                        }
+                        if ((this.flags & 8) != 0) {
+                            abstractSerializedData2.writeString(this.post_author);
+                        }
+                        if ((this.flags & 16) != 0) {
+                            this.saved_from_peer.serializeToStream(abstractSerializedData2);
+                        }
+                        if ((this.flags & 16) != 0) {
+                            abstractSerializedData2.writeInt32(this.saved_from_msg_id);
+                        }
+                        if ((this.flags & 64) != 0) {
+                            abstractSerializedData2.writeString(this.psa_type);
+                        }
+                    }
+                };
                 break;
             case 1436466797:
-                tLRPC$MessageFwdHeader = new TLRPC$TL_messageFwdHeader_layer96();
+                tLRPC$TL_messageFwdHeader = new TLRPC$TL_messageFwdHeader() { // from class: org.telegram.tgnet.TLRPC$TL_messageFwdHeader_layer96
+                    public static int constructor = NUM;
+
+                    @Override // org.telegram.tgnet.TLRPC$TL_messageFwdHeader, org.telegram.tgnet.TLObject
+                    public void readParams(AbstractSerializedData abstractSerializedData2, boolean z2) {
+                        int readInt32 = abstractSerializedData2.readInt32(z2);
+                        this.flags = readInt32;
+                        if ((readInt32 & 1) != 0) {
+                            TLRPC$TL_peerUser tLRPC$TL_peerUser = new TLRPC$TL_peerUser();
+                            this.from_id = tLRPC$TL_peerUser;
+                            tLRPC$TL_peerUser.user_id = abstractSerializedData2.readInt32(z2);
+                        }
+                        this.date = abstractSerializedData2.readInt32(z2);
+                        if ((this.flags & 2) != 0) {
+                            TLRPC$TL_peerChannel tLRPC$TL_peerChannel = new TLRPC$TL_peerChannel();
+                            this.from_id = tLRPC$TL_peerChannel;
+                            tLRPC$TL_peerChannel.channel_id = abstractSerializedData2.readInt32(z2);
+                        }
+                        if ((this.flags & 4) != 0) {
+                            this.channel_post = abstractSerializedData2.readInt32(z2);
+                        }
+                        if ((this.flags & 8) != 0) {
+                            this.post_author = abstractSerializedData2.readString(z2);
+                        }
+                        if ((this.flags & 16) != 0) {
+                            this.saved_from_peer = TLRPC$Peer.TLdeserialize(abstractSerializedData2, abstractSerializedData2.readInt32(z2), z2);
+                        }
+                        if ((this.flags & 16) != 0) {
+                            this.saved_from_msg_id = abstractSerializedData2.readInt32(z2);
+                        }
+                    }
+
+                    @Override // org.telegram.tgnet.TLRPC$TL_messageFwdHeader, org.telegram.tgnet.TLObject
+                    public void serializeToStream(AbstractSerializedData abstractSerializedData2) {
+                        abstractSerializedData2.writeInt32(constructor);
+                        abstractSerializedData2.writeInt32(this.flags);
+                        if ((this.flags & 1) != 0) {
+                            abstractSerializedData2.writeInt32((int) this.from_id.user_id);
+                        }
+                        abstractSerializedData2.writeInt32(this.date);
+                        if ((this.flags & 2) != 0) {
+                            abstractSerializedData2.writeInt32((int) this.from_id.channel_id);
+                        }
+                        if ((this.flags & 4) != 0) {
+                            abstractSerializedData2.writeInt32(this.channel_post);
+                        }
+                        if ((this.flags & 8) != 0) {
+                            abstractSerializedData2.writeString(this.post_author);
+                        }
+                        if ((this.flags & 16) != 0) {
+                            this.saved_from_peer.serializeToStream(abstractSerializedData2);
+                        }
+                        if ((this.flags & 16) != 0) {
+                            abstractSerializedData2.writeInt32(this.saved_from_msg_id);
+                        }
+                    }
+                };
                 break;
             case 1601666510:
-                tLRPC$MessageFwdHeader = new TLRPC$TL_messageFwdHeader();
+                tLRPC$TL_messageFwdHeader = new TLRPC$TL_messageFwdHeader();
                 break;
             default:
-                tLRPC$MessageFwdHeader = null;
+                tLRPC$TL_messageFwdHeader = null;
                 break;
         }
-        if (tLRPC$MessageFwdHeader != null || !z) {
-            if (tLRPC$MessageFwdHeader != null) {
-                tLRPC$MessageFwdHeader.readParams(abstractSerializedData, z);
+        if (tLRPC$TL_messageFwdHeader != null || !z) {
+            if (tLRPC$TL_messageFwdHeader != null) {
+                tLRPC$TL_messageFwdHeader.readParams(abstractSerializedData, z);
             }
-            return tLRPC$MessageFwdHeader;
+            return tLRPC$TL_messageFwdHeader;
         }
-        throw new RuntimeException(String.format("can't parse magic %x in MessageFwdHeader", new Object[]{Integer.valueOf(i)}));
+        throw new RuntimeException(String.format("can't parse magic %x in MessageFwdHeader", Integer.valueOf(i)));
     }
 }

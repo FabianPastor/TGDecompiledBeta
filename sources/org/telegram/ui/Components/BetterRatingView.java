@@ -10,47 +10,50 @@ import android.view.View;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
-
+/* loaded from: classes3.dex */
 public class BetterRatingView extends View {
-    private Bitmap filledStar = BitmapFactory.decodeResource(getResources(), R.drawable.ic_rating_star_filled).extractAlpha();
-    private Bitmap hollowStar = BitmapFactory.decodeResource(getResources(), R.drawable.ic_rating_star).extractAlpha();
+    private Bitmap filledStar;
+    private Bitmap hollowStar;
     private OnRatingChangeListener listener;
-    private int numStars = 5;
-    private Paint paint = new Paint();
-    private int selectedRating = 0;
+    private int numStars;
+    private Paint paint;
+    private int selectedRating;
 
+    /* loaded from: classes3.dex */
     public interface OnRatingChangeListener {
         void onRatingChanged(int i);
     }
 
     public BetterRatingView(Context context) {
         super(context);
+        this.paint = new Paint();
+        this.numStars = 5;
+        this.selectedRating = 0;
+        this.filledStar = BitmapFactory.decodeResource(getResources(), R.drawable.ic_rating_star_filled).extractAlpha();
+        this.hollowStar = BitmapFactory.decodeResource(getResources(), R.drawable.ic_rating_star).extractAlpha();
     }
 
-    /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
+    @Override // android.view.View
+    protected void onMeasure(int i, int i2) {
         setMeasuredDimension((this.numStars * AndroidUtilities.dp(32.0f)) + ((this.numStars - 1) * AndroidUtilities.dp(16.0f)), AndroidUtilities.dp(32.0f));
     }
 
-    /* access modifiers changed from: protected */
-    public void onDraw(Canvas canvas) {
+    @Override // android.view.View
+    protected void onDraw(Canvas canvas) {
         int i = 0;
         while (i < this.numStars) {
             this.paint.setColor(Theme.getColor(i < this.selectedRating ? "dialogTextBlue" : "dialogTextHint"));
-            canvas.drawBitmap(i < this.selectedRating ? this.filledStar : this.hollowStar, (float) (AndroidUtilities.dp(48.0f) * i), 0.0f, this.paint);
+            canvas.drawBitmap(i < this.selectedRating ? this.filledStar : this.hollowStar, AndroidUtilities.dp(48.0f) * i, 0.0f, this.paint);
             i++;
         }
     }
 
+    @Override // android.view.View
     public boolean onTouchEvent(MotionEvent motionEvent) {
         int i;
-        float dp = (float) AndroidUtilities.dp(-8.0f);
-        int i2 = 0;
-        while (i2 < this.numStars) {
-            if (motionEvent.getX() <= dp || motionEvent.getX() >= ((float) AndroidUtilities.dp(48.0f)) + dp || this.selectedRating == (i = i2 + 1)) {
-                dp += (float) AndroidUtilities.dp(48.0f);
-                i2++;
-            } else {
+        float dp = AndroidUtilities.dp(-8.0f);
+        for (int i2 = 0; i2 < this.numStars; i2++) {
+            if (motionEvent.getX() > dp && motionEvent.getX() < AndroidUtilities.dp(48.0f) + dp && this.selectedRating != (i = i2 + 1)) {
                 this.selectedRating = i;
                 OnRatingChangeListener onRatingChangeListener = this.listener;
                 if (onRatingChangeListener != null) {
@@ -59,6 +62,7 @@ public class BetterRatingView extends View {
                 invalidate();
                 return true;
             }
+            dp += AndroidUtilities.dp(48.0f);
         }
         return true;
     }

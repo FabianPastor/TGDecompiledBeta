@@ -1,9 +1,10 @@
 package org.webrtc;
 
 import org.webrtc.VideoEncoder;
-
-class VideoEncoderWrapper {
-    /* access modifiers changed from: private */
+/* JADX INFO: Access modifiers changed from: package-private */
+/* loaded from: classes3.dex */
+public class VideoEncoderWrapper {
+    /* JADX INFO: Access modifiers changed from: private */
     public static native void nativeOnEncodedFrame(long j, EncodedImage encodedImage);
 
     VideoEncoderWrapper() {
@@ -25,7 +26,12 @@ class VideoEncoderWrapper {
     }
 
     @CalledByNative
-    static VideoEncoder.Callback createEncoderCallback(long j) {
-        return new VideoEncoderWrapper$$ExternalSyntheticLambda0(j);
+    static VideoEncoder.Callback createEncoderCallback(final long j) {
+        return new VideoEncoder.Callback() { // from class: org.webrtc.VideoEncoderWrapper$$ExternalSyntheticLambda0
+            @Override // org.webrtc.VideoEncoder.Callback
+            public final void onEncodedFrame(EncodedImage encodedImage, VideoEncoder.CodecSpecificInfo codecSpecificInfo) {
+                VideoEncoderWrapper.nativeOnEncodedFrame(j, encodedImage);
+            }
+        };
     }
 }

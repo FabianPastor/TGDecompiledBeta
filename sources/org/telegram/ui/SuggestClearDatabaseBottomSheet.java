@@ -2,7 +2,6 @@ package org.telegram.ui;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -19,7 +18,7 @@ import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.StickerImageView;
-
+/* loaded from: classes3.dex */
 public class SuggestClearDatabaseBottomSheet extends BottomSheet {
     @SuppressLint({"StaticFieldLeak"})
     private static SuggestClearDatabaseBottomSheet dialog;
@@ -32,8 +31,7 @@ public class SuggestClearDatabaseBottomSheet extends BottomSheet {
         }
     }
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    private SuggestClearDatabaseBottomSheet(BaseFragment baseFragment) {
+    private SuggestClearDatabaseBottomSheet(final BaseFragment baseFragment) {
         super(baseFragment.getParentActivity(), false);
         Activity parentActivity = baseFragment.getParentActivity();
         LinearLayout linearLayout = new LinearLayout(parentActivity);
@@ -64,19 +62,29 @@ public class SuggestClearDatabaseBottomSheet extends BottomSheet {
         textView3.setTextColor(Theme.getColor("featuredStickers_buttonText"));
         textView3.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(6.0f), Theme.getColor("featuredStickers_addButton"), ColorUtils.setAlphaComponent(Theme.getColor("windowBackgroundWhite"), 120)));
         linearLayout.addView(textView3, LayoutHelper.createFrame(-1, 48.0f, 0, 16.0f, 15.0f, 16.0f, 16.0f));
-        textView3.setOnClickListener(new SuggestClearDatabaseBottomSheet$$ExternalSyntheticLambda1(this, baseFragment));
+        textView3.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.SuggestClearDatabaseBottomSheet$$ExternalSyntheticLambda1
+            @Override // android.view.View.OnClickListener
+            public final void onClick(View view) {
+                SuggestClearDatabaseBottomSheet.this.lambda$new$1(baseFragment, view);
+            }
+        });
         ScrollView scrollView = new ScrollView(parentActivity);
         scrollView.addView(linearLayout);
         setCustomView(scrollView);
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$1(BaseFragment baseFragment, View view) {
-        AlertDialog.Builder builder = new AlertDialog.Builder((Context) baseFragment.getParentActivity());
+    /* JADX INFO: Access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$1(final BaseFragment baseFragment, View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(baseFragment.getParentActivity());
         builder.setTitle(LocaleController.getString("LocalDatabaseClearTextTitle", R.string.LocalDatabaseClearTextTitle));
         builder.setMessage(LocaleController.getString("LocalDatabaseClearText", R.string.LocalDatabaseClearText));
-        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), (DialogInterface.OnClickListener) null);
-        builder.setPositiveButton(LocaleController.getString("CacheClear", R.string.CacheClear), new SuggestClearDatabaseBottomSheet$$ExternalSyntheticLambda0(this, baseFragment));
+        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+        builder.setPositiveButton(LocaleController.getString("CacheClear", R.string.CacheClear), new DialogInterface.OnClickListener() { // from class: org.telegram.ui.SuggestClearDatabaseBottomSheet$$ExternalSyntheticLambda0
+            @Override // android.content.DialogInterface.OnClickListener
+            public final void onClick(DialogInterface dialogInterface, int i) {
+                SuggestClearDatabaseBottomSheet.this.lambda$new$0(baseFragment, dialogInterface, i);
+            }
+        });
         AlertDialog create = builder.create();
         baseFragment.showDialog(create);
         TextView textView = (TextView) create.getButton(-1);
@@ -85,14 +93,16 @@ public class SuggestClearDatabaseBottomSheet extends BottomSheet {
         }
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$new$0(BaseFragment baseFragment, DialogInterface dialogInterface, int i) {
-        if (baseFragment.getParentActivity() != null) {
-            MessagesController.getInstance(this.currentAccount).clearQueryTime();
-            baseFragment.getMessagesStorage().clearLocalDatabase();
+        if (baseFragment.getParentActivity() == null) {
+            return;
         }
+        MessagesController.getInstance(this.currentAccount).clearQueryTime();
+        baseFragment.getMessagesStorage().clearLocalDatabase();
     }
 
+    @Override // org.telegram.ui.ActionBar.BottomSheet, android.app.Dialog, android.content.DialogInterface
     public void dismiss() {
         super.dismiss();
         dialog = null;

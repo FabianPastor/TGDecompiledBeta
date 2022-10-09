@@ -1,10 +1,11 @@
 package org.webrtc;
-
+/* loaded from: classes3.dex */
 public interface VideoProcessor extends CapturerObserver {
     void onFrameCaptured(VideoFrame videoFrame, FrameAdaptationParameters frameAdaptationParameters);
 
     void setSink(VideoSink videoSink);
 
+    /* loaded from: classes3.dex */
     public static class FrameAdaptationParameters {
         public final int cropHeight;
         public final int cropWidth;
@@ -28,6 +29,7 @@ public interface VideoProcessor extends CapturerObserver {
     }
 
     /* renamed from: org.webrtc.VideoProcessor$-CC  reason: invalid class name */
+    /* loaded from: classes3.dex */
     public final /* synthetic */ class CC {
         public static void $default$onFrameCaptured(VideoProcessor _this, VideoFrame videoFrame, FrameAdaptationParameters frameAdaptationParameters) {
             VideoFrame applyFrameAdaptationParameters = applyFrameAdaptationParameters(videoFrame, frameAdaptationParameters);

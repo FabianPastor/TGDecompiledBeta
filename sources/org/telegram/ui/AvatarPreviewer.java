@@ -36,8 +36,9 @@ import org.telegram.tgnet.TLRPC$User;
 import org.telegram.tgnet.TLRPC$UserFull;
 import org.telegram.tgnet.TLRPC$VideoSize;
 import org.telegram.ui.ActionBar.BottomSheet;
+import org.telegram.ui.AvatarPreviewer;
 import org.telegram.ui.Components.RadialProgress2;
-
+/* loaded from: classes3.dex */
 public class AvatarPreviewer {
     private static AvatarPreviewer INSTANCE;
     private Layout layout;
@@ -45,6 +46,7 @@ public class AvatarPreviewer {
     private boolean visible;
     private WindowManager windowManager;
 
+    /* loaded from: classes3.dex */
     public interface Callback {
         void onMenuClick(MenuItem menuItem);
     }
@@ -74,9 +76,9 @@ public class AvatarPreviewer {
             close();
             this.view = viewGroup;
             this.windowManager = (WindowManager) ContextCompat.getSystemService(context, WindowManager.class);
-            this.layout = new Layout(context, callback) {
-                /* access modifiers changed from: protected */
-                public void onHide() {
+            this.layout = new Layout(context, callback) { // from class: org.telegram.ui.AvatarPreviewer.1
+                @Override // org.telegram.ui.AvatarPreviewer.Layout
+                protected void onHide() {
                     AvatarPreviewer.this.close();
                 }
             };
@@ -111,12 +113,15 @@ public class AvatarPreviewer {
     }
 
     public void onTouchEvent(MotionEvent motionEvent) {
-        Layout layout2 = this.layout;
-        if (layout2 != null) {
-            layout2.onTouchEvent(motionEvent);
+        Layout layout = this.layout;
+        if (layout != null) {
+            layout.onTouchEvent(motionEvent);
         }
     }
 
+    /* JADX WARN: Init of enum OPEN_GROUP can be incorrect */
+    /* JADX WARN: Init of enum SEND_MESSAGE can be incorrect */
+    /* loaded from: classes3.dex */
     public enum MenuItem {
         OPEN_PROFILE("OpenProfile", R.string.OpenProfile, R.drawable.msg_openprofile),
         OPEN_CHANNEL("OpenChannel2", R.string.OpenChannel2, R.drawable.msg_channel),
@@ -124,174 +129,171 @@ public class AvatarPreviewer {
         SEND_MESSAGE("SendMessage", R.string.SendMessage, r12),
         MENTION("Mention", R.string.Mention, R.drawable.msg_mention);
         
-        /* access modifiers changed from: private */
-        public final int iconResId;
-        /* access modifiers changed from: private */
-        public final String labelKey;
-        /* access modifiers changed from: private */
-        public final int labelResId;
+        private final int iconResId;
+        private final String labelKey;
+        private final int labelResId;
 
-        private MenuItem(String str, int i, int i2) {
+        static {
+            int i = R.string.OpenGroup2;
+            int i2 = R.drawable.msg_discussion;
+        }
+
+        MenuItem(String str, int i, int i2) {
             this.labelKey = str;
             this.labelResId = i;
             this.iconResId = i2;
         }
     }
 
+    /* loaded from: classes3.dex */
     public static class Data {
-        /* access modifiers changed from: private */
-        public final String imageFilter;
-        /* access modifiers changed from: private */
-        public final ImageLocation imageLocation;
-        /* access modifiers changed from: private */
-        public final InfoLoadTask<?, ?> infoLoadTask;
-        /* access modifiers changed from: private */
-        public final MenuItem[] menuItems;
-        /* access modifiers changed from: private */
-        public final Object parentObject;
-        /* access modifiers changed from: private */
-        public final String thumbImageFilter;
-        /* access modifiers changed from: private */
-        public final ImageLocation thumbImageLocation;
-        /* access modifiers changed from: private */
-        public final String videoFileName;
-        /* access modifiers changed from: private */
-        public final String videoFilter;
-        /* access modifiers changed from: private */
-        public final ImageLocation videoLocation;
+        private final String imageFilter;
+        private final ImageLocation imageLocation;
+        private final InfoLoadTask<?, ?> infoLoadTask;
+        private final MenuItem[] menuItems;
+        private final Object parentObject;
+        private final String thumbImageFilter;
+        private final ImageLocation thumbImageLocation;
+        private final String videoFileName;
+        private final String videoFilter;
+        private final ImageLocation videoLocation;
 
         public static Data of(TLRPC$User tLRPC$User, int i, MenuItem... menuItemArr) {
             ImageLocation forUserOrChat = ImageLocation.getForUserOrChat(tLRPC$User, 0);
             ImageLocation forUserOrChat2 = ImageLocation.getForUserOrChat(tLRPC$User, 1);
-            return new Data(forUserOrChat, forUserOrChat2, (ImageLocation) null, (String) null, (forUserOrChat2 == null || !(forUserOrChat2.photoSize instanceof TLRPC$TL_photoStrippedSize)) ? null : "b", (String) null, (String) null, tLRPC$User, menuItemArr, new UserInfoLoadTask(tLRPC$User, i));
+            return new Data(forUserOrChat, forUserOrChat2, null, null, (forUserOrChat2 == null || !(forUserOrChat2.photoSize instanceof TLRPC$TL_photoStrippedSize)) ? null : "b", null, null, tLRPC$User, menuItemArr, new UserInfoLoadTask(tLRPC$User, i));
         }
 
         public static Data of(TLRPC$UserFull tLRPC$UserFull, MenuItem... menuItemArr) {
+            ImageLocation imageLocation;
             String str;
-            ImageLocation imageLocation2;
             ImageLocation forUserOrChat = ImageLocation.getForUserOrChat(tLRPC$UserFull.user, 0);
             ImageLocation forUserOrChat2 = ImageLocation.getForUserOrChat(tLRPC$UserFull.user, 1);
             String str2 = null;
             String str3 = (forUserOrChat2 == null || !(forUserOrChat2.photoSize instanceof TLRPC$TL_photoStrippedSize)) ? null : "b";
             TLRPC$Photo tLRPC$Photo = tLRPC$UserFull.profile_photo;
             if (tLRPC$Photo == null || tLRPC$Photo.video_sizes.isEmpty()) {
-                imageLocation2 = null;
+                imageLocation = null;
                 str = null;
             } else {
                 TLRPC$VideoSize tLRPC$VideoSize = tLRPC$UserFull.profile_photo.video_sizes.get(0);
                 ImageLocation forPhoto = ImageLocation.getForPhoto(tLRPC$VideoSize, tLRPC$UserFull.profile_photo);
                 str = FileLoader.getAttachFileName(tLRPC$VideoSize);
-                imageLocation2 = forPhoto;
+                imageLocation = forPhoto;
             }
-            if (imageLocation2 != null && imageLocation2.imageType == 2) {
+            if (imageLocation != null && imageLocation.imageType == 2) {
                 str2 = "g";
             }
-            return new Data(forUserOrChat, forUserOrChat2, imageLocation2, (String) null, str3, str2, str, tLRPC$UserFull.user, menuItemArr, (InfoLoadTask<?, ?>) null);
+            return new Data(forUserOrChat, forUserOrChat2, imageLocation, null, str3, str2, str, tLRPC$UserFull.user, menuItemArr, null);
         }
 
         public static Data of(TLRPC$Chat tLRPC$Chat, int i, MenuItem... menuItemArr) {
             ImageLocation forUserOrChat = ImageLocation.getForUserOrChat(tLRPC$Chat, 0);
             ImageLocation forUserOrChat2 = ImageLocation.getForUserOrChat(tLRPC$Chat, 1);
-            return new Data(forUserOrChat, forUserOrChat2, (ImageLocation) null, (String) null, (forUserOrChat2 == null || !(forUserOrChat2.photoSize instanceof TLRPC$TL_photoStrippedSize)) ? null : "b", (String) null, (String) null, tLRPC$Chat, menuItemArr, new ChatInfoLoadTask(tLRPC$Chat, i));
+            return new Data(forUserOrChat, forUserOrChat2, null, null, (forUserOrChat2 == null || !(forUserOrChat2.photoSize instanceof TLRPC$TL_photoStrippedSize)) ? null : "b", null, null, tLRPC$Chat, menuItemArr, new ChatInfoLoadTask(tLRPC$Chat, i));
         }
 
         public static Data of(TLRPC$Chat tLRPC$Chat, TLRPC$ChatFull tLRPC$ChatFull, MenuItem... menuItemArr) {
+            ImageLocation imageLocation;
             String str;
-            ImageLocation imageLocation2;
             ImageLocation forUserOrChat = ImageLocation.getForUserOrChat(tLRPC$Chat, 0);
             ImageLocation forUserOrChat2 = ImageLocation.getForUserOrChat(tLRPC$Chat, 1);
             String str2 = (forUserOrChat2 == null || !(forUserOrChat2.photoSize instanceof TLRPC$TL_photoStrippedSize)) ? null : "b";
             TLRPC$Photo tLRPC$Photo = tLRPC$ChatFull.chat_photo;
             if (tLRPC$Photo == null || tLRPC$Photo.video_sizes.isEmpty()) {
-                imageLocation2 = null;
+                imageLocation = null;
                 str = null;
             } else {
                 TLRPC$VideoSize tLRPC$VideoSize = tLRPC$ChatFull.chat_photo.video_sizes.get(0);
-                imageLocation2 = ImageLocation.getForPhoto(tLRPC$VideoSize, tLRPC$ChatFull.chat_photo);
+                imageLocation = ImageLocation.getForPhoto(tLRPC$VideoSize, tLRPC$ChatFull.chat_photo);
                 str = FileLoader.getAttachFileName(tLRPC$VideoSize);
             }
-            return new Data(forUserOrChat, forUserOrChat2, imageLocation2, (String) null, str2, (imageLocation2 == null || imageLocation2.imageType != 2) ? null : "g", str, tLRPC$Chat, menuItemArr, (InfoLoadTask<?, ?>) null);
+            return new Data(forUserOrChat, forUserOrChat2, imageLocation, null, str2, (imageLocation == null || imageLocation.imageType != 2) ? null : "g", str, tLRPC$Chat, menuItemArr, null);
         }
 
-        private Data(ImageLocation imageLocation2, ImageLocation imageLocation3, ImageLocation imageLocation4, String str, String str2, String str3, String str4, Object obj, MenuItem[] menuItemArr, InfoLoadTask<?, ?> infoLoadTask2) {
-            this.imageLocation = imageLocation2;
-            this.thumbImageLocation = imageLocation3;
-            this.videoLocation = imageLocation4;
+        private Data(ImageLocation imageLocation, ImageLocation imageLocation2, ImageLocation imageLocation3, String str, String str2, String str3, String str4, Object obj, MenuItem[] menuItemArr, InfoLoadTask<?, ?> infoLoadTask) {
+            this.imageLocation = imageLocation;
+            this.thumbImageLocation = imageLocation2;
+            this.videoLocation = imageLocation3;
             this.imageFilter = str;
             this.thumbImageFilter = str2;
             this.videoFilter = str3;
             this.videoFileName = str4;
             this.parentObject = obj;
             this.menuItems = menuItemArr;
-            this.infoLoadTask = infoLoadTask2;
+            this.infoLoadTask = infoLoadTask;
         }
     }
 
-    private static class UserInfoLoadTask extends InfoLoadTask<TLRPC$User, TLRPC$UserFull> {
+    /* JADX INFO: Access modifiers changed from: private */
+    /* loaded from: classes3.dex */
+    public static class UserInfoLoadTask extends InfoLoadTask<TLRPC$User, TLRPC$UserFull> {
         public UserInfoLoadTask(TLRPC$User tLRPC$User, int i) {
             super(tLRPC$User, i, NotificationCenter.userInfoDidLoad);
         }
 
-        /* access modifiers changed from: protected */
-        public void load() {
+        @Override // org.telegram.ui.AvatarPreviewer.InfoLoadTask
+        protected void load() {
             MessagesController.getInstance(UserConfig.selectedAccount).loadUserInfo((TLRPC$User) this.argument, false, this.classGuid);
         }
 
-        /* access modifiers changed from: protected */
-        public void onReceiveNotification(Object... objArr) {
-            if (objArr[0].longValue() == ((TLRPC$User) this.argument).id) {
-                onResult(objArr[1]);
+        @Override // org.telegram.ui.AvatarPreviewer.InfoLoadTask
+        protected void onReceiveNotification(Object... objArr) {
+            if (((Long) objArr[0]).longValue() == ((TLRPC$User) this.argument).id) {
+                onResult((TLRPC$UserFull) objArr[1]);
             }
         }
     }
 
-    private static class ChatInfoLoadTask extends InfoLoadTask<TLRPC$Chat, TLRPC$ChatFull> {
+    /* JADX INFO: Access modifiers changed from: private */
+    /* loaded from: classes3.dex */
+    public static class ChatInfoLoadTask extends InfoLoadTask<TLRPC$Chat, TLRPC$ChatFull> {
         public ChatInfoLoadTask(TLRPC$Chat tLRPC$Chat, int i) {
             super(tLRPC$Chat, i, NotificationCenter.chatInfoDidLoad);
         }
 
-        /* access modifiers changed from: protected */
-        public void load() {
+        @Override // org.telegram.ui.AvatarPreviewer.InfoLoadTask
+        protected void load() {
             MessagesController.getInstance(UserConfig.selectedAccount).loadFullChat(((TLRPC$Chat) this.argument).id, this.classGuid, false);
         }
 
-        /* access modifiers changed from: protected */
-        public void onReceiveNotification(Object... objArr) {
-            TLRPC$ChatFull tLRPC$ChatFull = objArr[0];
-            if (tLRPC$ChatFull != null && tLRPC$ChatFull.id == ((TLRPC$Chat) this.argument).id) {
-                onResult(tLRPC$ChatFull);
+        @Override // org.telegram.ui.AvatarPreviewer.InfoLoadTask
+        protected void onReceiveNotification(Object... objArr) {
+            TLRPC$ChatFull tLRPC$ChatFull = (TLRPC$ChatFull) objArr[0];
+            if (tLRPC$ChatFull == null || tLRPC$ChatFull.id != ((TLRPC$Chat) this.argument).id) {
+                return;
             }
+            onResult(tLRPC$ChatFull);
         }
     }
 
-    private static abstract class InfoLoadTask<A, B> {
+    /* JADX INFO: Access modifiers changed from: private */
+    /* loaded from: classes3.dex */
+    public static abstract class InfoLoadTask<A, B> {
         protected final A argument;
         protected final int classGuid;
-        /* access modifiers changed from: private */
-        public boolean loading;
-        private final NotificationCenter notificationCenter;
-        /* access modifiers changed from: private */
-        public final int notificationId;
-        private final NotificationCenter.NotificationCenterDelegate observer = new NotificationCenter.NotificationCenterDelegate() {
+        private boolean loading;
+        private final int notificationId;
+        private Consumer<B> onResult;
+        private final NotificationCenter.NotificationCenterDelegate observer = new NotificationCenter.NotificationCenterDelegate() { // from class: org.telegram.ui.AvatarPreviewer.InfoLoadTask.1
+            @Override // org.telegram.messenger.NotificationCenter.NotificationCenterDelegate
             public void didReceivedNotification(int i, int i2, Object... objArr) {
-                if (InfoLoadTask.this.loading && i == InfoLoadTask.this.notificationId) {
-                    InfoLoadTask.this.onReceiveNotification(objArr);
+                if (!InfoLoadTask.this.loading || i != InfoLoadTask.this.notificationId) {
+                    return;
                 }
+                InfoLoadTask.this.onReceiveNotification(objArr);
             }
         };
-        private Consumer<B> onResult;
+        private final NotificationCenter notificationCenter = NotificationCenter.getInstance(UserConfig.selectedAccount);
 
-        /* access modifiers changed from: protected */
-        public abstract void load();
+        protected abstract void load();
 
-        /* access modifiers changed from: protected */
-        public abstract void onReceiveNotification(Object... objArr);
+        protected abstract void onReceiveNotification(Object... objArr);
 
         public InfoLoadTask(A a, int i, int i2) {
             this.argument = a;
             this.classGuid = i;
             this.notificationId = i2;
-            this.notificationCenter = NotificationCenter.getInstance(UserConfig.selectedAccount);
         }
 
         public final void load(Consumer<B> consumer) {
@@ -310,8 +312,7 @@ public class AvatarPreviewer {
             }
         }
 
-        /* access modifiers changed from: protected */
-        public final void onResult(B b) {
+        protected final void onResult(B b) {
             if (this.loading) {
                 cancel();
                 this.onResult.accept(b);
@@ -319,7 +320,9 @@ public class AvatarPreviewer {
         }
     }
 
-    private static abstract class Layout extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
+    /* JADX INFO: Access modifiers changed from: private */
+    /* loaded from: classes3.dex */
+    public static abstract class Layout extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
         private final Drawable arrowDrawable;
         private final ColorDrawable backgroundDrawable;
         private final Callback callback;
@@ -336,32 +339,31 @@ public class AvatarPreviewer {
         private ValueAnimator progressHideAnimator;
         private ValueAnimator progressShowAnimator;
         private final RadialProgress2 radialProgress;
-        private final int radialProgressSize = AndroidUtilities.dp(64.0f);
+        private final int radialProgressSize;
         private boolean recycled;
-        /* access modifiers changed from: private */
-        public boolean showProgress;
+        private boolean showProgress;
         private boolean showing;
         private String videoFileName;
         private BottomSheet visibleSheet;
 
-        /* access modifiers changed from: protected */
-        public abstract void onHide();
+        protected abstract void onHide();
 
-        public Layout(Context context, Callback callback2) {
+        public Layout(Context context, Callback callback) {
             super(context);
+            this.radialProgressSize = AndroidUtilities.dp(64.0f);
             new Rect();
             this.interpolator = new AccelerateDecelerateInterpolator();
             this.backgroundDrawable = new ColorDrawable(NUM);
-            ImageReceiver imageReceiver2 = new ImageReceiver();
-            this.imageReceiver = imageReceiver2;
+            ImageReceiver imageReceiver = new ImageReceiver();
+            this.imageReceiver = imageReceiver;
             this.downY = -1.0f;
-            this.callback = callback2;
+            this.callback = callback;
             setWillNotDraw(false);
             setFitsSystemWindows(true);
-            imageReceiver2.setAspectFit(true);
-            imageReceiver2.setInvalidateAll(true);
-            imageReceiver2.setRoundRadius(AndroidUtilities.dp(6.0f));
-            imageReceiver2.setParentView(this);
+            imageReceiver.setAspectFit(true);
+            imageReceiver.setInvalidateAll(true);
+            imageReceiver.setRoundRadius(AndroidUtilities.dp(6.0f));
+            imageReceiver.setParentView(this);
             RadialProgress2 radialProgress2 = new RadialProgress2(this);
             this.radialProgress = radialProgress2;
             radialProgress2.setOverrideAlpha(0.0f);
@@ -370,34 +372,39 @@ public class AvatarPreviewer {
             this.arrowDrawable = ContextCompat.getDrawable(context, R.drawable.preview_arrow);
         }
 
-        /* access modifiers changed from: protected */
-        public void onAttachedToWindow() {
+        @Override // android.view.ViewGroup, android.view.View
+        protected void onAttachedToWindow() {
             super.onAttachedToWindow();
             this.imageReceiver.onAttachedToWindow();
             NotificationCenter.getInstance(UserConfig.selectedAccount).addObserver(this, NotificationCenter.fileLoaded);
             NotificationCenter.getInstance(UserConfig.selectedAccount).addObserver(this, NotificationCenter.fileLoadProgressChanged);
         }
 
-        /* access modifiers changed from: protected */
-        public void onDetachedFromWindow() {
+        @Override // android.view.ViewGroup, android.view.View
+        protected void onDetachedFromWindow() {
             super.onDetachedFromWindow();
             this.imageReceiver.onDetachedFromWindow();
             NotificationCenter.getInstance(UserConfig.selectedAccount).removeObserver(this, NotificationCenter.fileLoaded);
             NotificationCenter.getInstance(UserConfig.selectedAccount).removeObserver(this, NotificationCenter.fileLoadProgressChanged);
         }
 
+        @Override // org.telegram.messenger.NotificationCenter.NotificationCenterDelegate
         public void didReceivedNotification(int i, int i2, Object... objArr) {
-            if (this.showProgress && !TextUtils.isEmpty(this.videoFileName)) {
-                if (i == NotificationCenter.fileLoaded) {
-                    if (TextUtils.equals(objArr[0], this.videoFileName)) {
-                        this.radialProgress.setProgress(1.0f, true);
-                    }
-                } else if (i == NotificationCenter.fileLoadProgressChanged && TextUtils.equals(objArr[0], this.videoFileName) && this.radialProgress != null) {
-                    this.radialProgress.setProgress(Math.min(1.0f, ((float) objArr[1].longValue()) / ((float) objArr[2].longValue())), true);
+            if (!this.showProgress || TextUtils.isEmpty(this.videoFileName)) {
+                return;
+            }
+            if (i == NotificationCenter.fileLoaded) {
+                if (!TextUtils.equals((String) objArr[0], this.videoFileName)) {
+                    return;
                 }
+                this.radialProgress.setProgress(1.0f, true);
+            } else if (i != NotificationCenter.fileLoadProgressChanged || !TextUtils.equals((String) objArr[0], this.videoFileName) || this.radialProgress == null) {
+            } else {
+                this.radialProgress.setProgress(Math.min(1.0f, ((float) ((Long) objArr[1]).longValue()) / ((float) ((Long) objArr[2]).longValue())), true);
             }
         }
 
+        @Override // android.view.View
         public boolean onTouchEvent(MotionEvent motionEvent) {
             if (!this.showing) {
                 return false;
@@ -410,14 +417,19 @@ public class AvatarPreviewer {
                     if (this.downY < 0.0f) {
                         this.downY = motionEvent.getY();
                     } else {
-                        float max = Math.max(-1.0f, Math.min(0.0f, (motionEvent.getY() - this.downY) / ((float) AndroidUtilities.dp(56.0f))));
+                        float max = Math.max(-1.0f, Math.min(0.0f, (motionEvent.getY() - this.downY) / AndroidUtilities.dp(56.0f)));
                         this.moveProgress = max;
                         if (max == -1.0f) {
                             performHapticFeedback(0);
-                            ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{this.moveProgress, 0.0f});
+                            ValueAnimator ofFloat = ValueAnimator.ofFloat(this.moveProgress, 0.0f);
                             this.moveAnimator = ofFloat;
-                            ofFloat.setDuration(200);
-                            this.moveAnimator.addUpdateListener(new AvatarPreviewer$Layout$$ExternalSyntheticLambda0(this));
+                            ofFloat.setDuration(200L);
+                            this.moveAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() { // from class: org.telegram.ui.AvatarPreviewer$Layout$$ExternalSyntheticLambda0
+                                @Override // android.animation.ValueAnimator.AnimatorUpdateListener
+                                public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+                                    AvatarPreviewer.Layout.this.lambda$onTouchEvent$0(valueAnimator);
+                                }
+                            });
                             this.moveAnimator.start();
                             showBottomSheet();
                         }
@@ -428,7 +440,7 @@ public class AvatarPreviewer {
             return true;
         }
 
-        /* access modifiers changed from: private */
+        /* JADX INFO: Access modifiers changed from: private */
         public /* synthetic */ void lambda$onTouchEvent$0(ValueAnimator valueAnimator) {
             this.moveProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
             invalidate();
@@ -446,35 +458,46 @@ public class AvatarPreviewer {
                     iArr[i] = this.menuItems[i].iconResId;
                     i++;
                 } else {
-                    BottomSheet dimBehind = new BottomSheet.Builder(getContext()).setItems(charSequenceArr, iArr, new AvatarPreviewer$Layout$$ExternalSyntheticLambda3(this)).setDimBehind(false);
+                    BottomSheet dimBehind = new BottomSheet.Builder(getContext()).setItems(charSequenceArr, iArr, new DialogInterface.OnClickListener() { // from class: org.telegram.ui.AvatarPreviewer$Layout$$ExternalSyntheticLambda3
+                        @Override // android.content.DialogInterface.OnClickListener
+                        public final void onClick(DialogInterface dialogInterface, int i2) {
+                            AvatarPreviewer.Layout.this.lambda$showBottomSheet$1(dialogInterface, i2);
+                        }
+                    }).setDimBehind(false);
                     this.visibleSheet = dimBehind;
-                    dimBehind.setOnDismissListener(new AvatarPreviewer$Layout$$ExternalSyntheticLambda4(this));
+                    dimBehind.setOnDismissListener(new DialogInterface.OnDismissListener() { // from class: org.telegram.ui.AvatarPreviewer$Layout$$ExternalSyntheticLambda4
+                        @Override // android.content.DialogInterface.OnDismissListener
+                        public final void onDismiss(DialogInterface dialogInterface) {
+                            AvatarPreviewer.Layout.this.lambda$showBottomSheet$2(dialogInterface);
+                        }
+                    });
                     this.visibleSheet.show();
                     return;
                 }
             }
         }
 
-        /* access modifiers changed from: private */
+        /* JADX INFO: Access modifiers changed from: private */
         public /* synthetic */ void lambda$showBottomSheet$1(DialogInterface dialogInterface, int i) {
             this.callback.onMenuClick(this.menuItems[i]);
             setShowing(false);
         }
 
-        /* access modifiers changed from: private */
+        /* JADX INFO: Access modifiers changed from: private */
         public /* synthetic */ void lambda$showBottomSheet$2(DialogInterface dialogInterface) {
             this.visibleSheet = null;
             setShowing(false);
         }
 
+        @Override // android.view.View
         public WindowInsets onApplyWindowInsets(WindowInsets windowInsets) {
             this.insets = windowInsets;
             invalidateSize();
             return windowInsets.consumeStableInsets();
         }
 
-        /* access modifiers changed from: protected */
-        public void onSizeChanged(int i, int i2, int i3, int i4) {
+        @Override // android.view.View
+        protected void onSizeChanged(int i, int i2, int i3, int i4) {
             invalidateSize();
         }
 
@@ -483,327 +506,112 @@ public class AvatarPreviewer {
             int i2;
             int width = getWidth();
             int height = getHeight();
-            if (width != 0 && height != 0) {
-                int i3 = 0;
-                this.backgroundDrawable.setBounds(0, 0, width, height);
-                int dp = AndroidUtilities.dp(8.0f);
-                if (Build.VERSION.SDK_INT >= 21) {
-                    int stableInsetLeft = this.insets.getStableInsetLeft() + dp;
-                    i = this.insets.getStableInsetRight() + dp;
-                    int i4 = stableInsetLeft;
-                    i2 = dp + Math.max(this.insets.getStableInsetTop(), this.insets.getStableInsetBottom());
-                    dp = i4;
-                } else {
-                    i2 = dp;
-                    i = i2;
-                }
-                int intrinsicWidth = this.arrowDrawable.getIntrinsicWidth();
-                int intrinsicHeight = this.arrowDrawable.getIntrinsicHeight();
-                int dp2 = AndroidUtilities.dp(24.0f);
-                int i5 = width - (i + dp);
-                int i6 = height - (i2 * 2);
-                int min = Math.min(i5, i6);
-                int i7 = intrinsicHeight / 2;
-                int i8 = dp2 + i7;
-                int i9 = ((i5 - min) / 2) + dp;
-                int i10 = ((i6 - min) / 2) + i2 + (i5 > i6 ? i8 : 0);
-                ImageReceiver imageReceiver2 = this.imageReceiver;
-                float f = (float) i9;
-                float f2 = (float) i10;
-                float f3 = (float) min;
-                if (i5 > i6) {
-                    i3 = i8;
-                }
-                imageReceiver2.setImageCoords(f, f2, f3, (float) (min - i3));
-                int centerX = (int) this.imageReceiver.getCenterX();
-                int centerY = (int) this.imageReceiver.getCenterY();
-                RadialProgress2 radialProgress2 = this.radialProgress;
-                int i11 = this.radialProgressSize;
-                radialProgress2.setProgressRect(centerX - (i11 / 2), centerY - (i11 / 2), centerX + (i11 / 2), centerY + (i11 / 2));
-                int i12 = i9 + (min / 2);
-                int i13 = i10 - dp2;
-                int i14 = intrinsicWidth / 2;
-                this.arrowDrawable.setBounds(i12 - i14, i13 - i7, i12 + i14, i13 + i7);
+            if (width == 0 || height == 0) {
+                return;
             }
+            int i3 = 0;
+            this.backgroundDrawable.setBounds(0, 0, width, height);
+            int dp = AndroidUtilities.dp(8.0f);
+            if (Build.VERSION.SDK_INT >= 21) {
+                int stableInsetLeft = this.insets.getStableInsetLeft() + dp;
+                i2 = this.insets.getStableInsetRight() + dp;
+                i = dp + Math.max(this.insets.getStableInsetTop(), this.insets.getStableInsetBottom());
+                dp = stableInsetLeft;
+            } else {
+                i = dp;
+                i2 = i;
+            }
+            int intrinsicWidth = this.arrowDrawable.getIntrinsicWidth();
+            int intrinsicHeight = this.arrowDrawable.getIntrinsicHeight();
+            int dp2 = AndroidUtilities.dp(24.0f);
+            int i4 = width - (i2 + dp);
+            int i5 = height - (i * 2);
+            int min = Math.min(i4, i5);
+            int i6 = intrinsicHeight / 2;
+            int i7 = dp2 + i6;
+            int i8 = ((i4 - min) / 2) + dp;
+            int i9 = ((i5 - min) / 2) + i + (i4 > i5 ? i7 : 0);
+            ImageReceiver imageReceiver = this.imageReceiver;
+            float f = i8;
+            float f2 = i9;
+            float f3 = min;
+            if (i4 > i5) {
+                i3 = i7;
+            }
+            imageReceiver.setImageCoords(f, f2, f3, min - i3);
+            int centerX = (int) this.imageReceiver.getCenterX();
+            int centerY = (int) this.imageReceiver.getCenterY();
+            RadialProgress2 radialProgress2 = this.radialProgress;
+            int i10 = this.radialProgressSize;
+            radialProgress2.setProgressRect(centerX - (i10 / 2), centerY - (i10 / 2), centerX + (i10 / 2), centerY + (i10 / 2));
+            int i11 = i8 + (min / 2);
+            int i12 = i9 - dp2;
+            int i13 = intrinsicWidth / 2;
+            this.arrowDrawable.setBounds(i11 - i13, i12 - i6, i11 + i13, i12 + i6);
         }
 
-        /* access modifiers changed from: protected */
-        /* JADX WARNING: Removed duplicated region for block: B:17:0x005e  */
-        /* JADX WARNING: Removed duplicated region for block: B:20:0x007f  */
-        /* JADX WARNING: Removed duplicated region for block: B:21:0x0082  */
-        /* JADX WARNING: Removed duplicated region for block: B:23:0x0085  */
-        /* JADX WARNING: Removed duplicated region for block: B:24:0x008c  */
-        /* JADX WARNING: Removed duplicated region for block: B:27:0x00c2  */
-        /* JADX WARNING: Removed duplicated region for block: B:28:0x00cf  */
-        /* JADX WARNING: Removed duplicated region for block: B:31:0x00ea  */
-        /* JADX WARNING: Removed duplicated region for block: B:53:0x01ab  */
-        /* JADX WARNING: Removed duplicated region for block: B:54:0x01b9  */
-        /* Code decompiled incorrectly, please refer to instructions dump. */
-        public void onDraw(android.graphics.Canvas r10) {
+        /* JADX WARN: Removed duplicated region for block: B:19:0x005e  */
+        /* JADX WARN: Removed duplicated region for block: B:22:0x007f  */
+        /* JADX WARN: Removed duplicated region for block: B:23:0x0082  */
+        /* JADX WARN: Removed duplicated region for block: B:25:0x0085  */
+        /* JADX WARN: Removed duplicated region for block: B:26:0x008c  */
+        /* JADX WARN: Removed duplicated region for block: B:29:0x00c2  */
+        /* JADX WARN: Removed duplicated region for block: B:30:0x00cf  */
+        /* JADX WARN: Removed duplicated region for block: B:33:0x00ea  */
+        /* JADX WARN: Removed duplicated region for block: B:55:0x01ab  */
+        /* JADX WARN: Removed duplicated region for block: B:56:0x01b9  */
+        @Override // android.view.View
+        /*
+            Code decompiled incorrectly, please refer to instructions dump.
+            To view partially-correct add '--show-bad-code' argument
+        */
+        protected void onDraw(android.graphics.Canvas r10) {
             /*
-                r9 = this;
-                long r0 = android.view.animation.AnimationUtils.currentAnimationTimeMillis()
-                long r2 = r9.lastUpdateTime
-                long r2 = r0 - r2
-                r9.lastUpdateTime = r0
-                boolean r0 = r9.showing
-                r1 = 1125515264(0x43160000, float:150.0)
-                r4 = 0
-                r5 = 1065353216(0x3var_, float:1.0)
-                if (r0 == 0) goto L_0x0029
-                float r6 = r9.progress
-                int r7 = (r6 > r5 ? 1 : (r6 == r5 ? 0 : -1))
-                if (r7 >= 0) goto L_0x0029
-                float r0 = (float) r2
-                float r0 = r0 / r1
-                float r6 = r6 + r0
-                r9.progress = r6
-                int r0 = (r6 > r5 ? 1 : (r6 == r5 ? 0 : -1))
-                if (r0 >= 0) goto L_0x0026
-                r9.postInvalidateOnAnimation()
-                goto L_0x0043
-            L_0x0026:
-                r9.progress = r5
-                goto L_0x0043
-            L_0x0029:
-                if (r0 != 0) goto L_0x0043
-                float r0 = r9.progress
-                int r6 = (r0 > r4 ? 1 : (r0 == r4 ? 0 : -1))
-                if (r6 <= 0) goto L_0x0043
-                float r2 = (float) r2
-                float r2 = r2 / r1
-                float r0 = r0 - r2
-                r9.progress = r0
-                int r0 = (r0 > r4 ? 1 : (r0 == r4 ? 0 : -1))
-                if (r0 <= 0) goto L_0x003e
-                r9.postInvalidateOnAnimation()
-                goto L_0x0043
-            L_0x003e:
-                r9.progress = r4
-                r9.onHide()
-            L_0x0043:
-                android.view.animation.Interpolator r0 = r9.interpolator
-                float r1 = r9.progress
-                float r0 = r0.getInterpolation(r1)
-                android.graphics.drawable.ColorDrawable r1 = r9.backgroundDrawable
-                r2 = 1127481344(0x43340000, float:180.0)
-                float r2 = r2 * r0
-                int r2 = (int) r2
-                r1.setAlpha(r2)
-                android.graphics.drawable.ColorDrawable r1 = r9.backgroundDrawable
-                r1.draw(r10)
-                int r1 = (r0 > r5 ? 1 : (r0 == r5 ? 0 : -1))
-                if (r1 >= 0) goto L_0x0078
-                r1 = 1064514355(0x3var_, float:0.95)
-                float r2 = org.telegram.messenger.AndroidUtilities.lerp((float) r1, (float) r5, (float) r0)
-                float r1 = org.telegram.messenger.AndroidUtilities.lerp((float) r1, (float) r5, (float) r0)
-                org.telegram.messenger.ImageReceiver r3 = r9.imageReceiver
-                float r3 = r3.getCenterX()
-                org.telegram.messenger.ImageReceiver r6 = r9.imageReceiver
-                float r6 = r6.getCenterY()
-                r10.scale(r2, r1, r3, r6)
-            L_0x0078:
-                int r1 = android.os.Build.VERSION.SDK_INT
-                r2 = 21
-                r3 = 0
-                if (r1 < r2) goto L_0x0082
-                int r6 = org.telegram.messenger.AndroidUtilities.statusBarHeight
-                goto L_0x0083
-            L_0x0082:
-                r6 = 0
-            L_0x0083:
-                if (r1 < r2) goto L_0x008c
-                android.view.WindowInsets r1 = r9.insets
-                int r1 = r1.getStableInsetBottom()
-                goto L_0x008d
-            L_0x008c:
-                r1 = 0
-            L_0x008d:
-                org.telegram.ui.AvatarPreviewer$MenuItem[] r2 = r9.menuItems
-                int r2 = r2.length
-                r7 = 1111490560(0x42400000, float:48.0)
-                int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
-                int r2 = r2 * r7
-                r7 = 1098907648(0x41800000, float:16.0)
-                int r8 = org.telegram.messenger.AndroidUtilities.dp(r7)
-                int r2 = r2 + r8
-                int r8 = r9.getHeight()
-                int r1 = r1 + r2
-                int r2 = org.telegram.messenger.AndroidUtilities.dp(r7)
-                int r1 = r1 + r2
-                int r8 = r8 - r1
-                float r1 = (float) r8
-                org.telegram.messenger.ImageReceiver r2 = r9.imageReceiver
-                float r2 = r2.getImageY2()
-                float r1 = r1 - r2
-                float r1 = java.lang.Math.min(r4, r1)
-                org.telegram.messenger.ImageReceiver r2 = r9.imageReceiver
-                float r2 = r2.getImageY()
-                float r2 = r2 + r1
-                float r6 = (float) r6
-                int r2 = (r2 > r6 ? 1 : (r2 == r6 ? 0 : -1))
-                if (r2 >= 0) goto L_0x00cf
-                float r1 = r9.moveProgress
-                int r2 = org.telegram.messenger.AndroidUtilities.dp(r7)
-                float r2 = (float) r2
-                float r1 = r1 * r2
-                r10.translate(r4, r1)
-                goto L_0x00dc
-            L_0x00cf:
-                float r2 = r9.moveProgress
-                int r6 = org.telegram.messenger.AndroidUtilities.dp(r7)
-                float r6 = (float) r6
-                float r2 = r2 * r6
-                float r1 = r1 + r2
-                r10.translate(r4, r1)
-            L_0x00dc:
-                org.telegram.messenger.ImageReceiver r1 = r9.imageReceiver
-                r1.setAlpha(r0)
-                org.telegram.messenger.ImageReceiver r1 = r9.imageReceiver
-                r1.draw(r10)
-                boolean r1 = r9.showProgress
-                if (r1 == 0) goto L_0x01a5
-                org.telegram.messenger.ImageReceiver r1 = r9.imageReceiver
-                android.graphics.drawable.Drawable r1 = r1.getDrawable()
-                boolean r2 = r1 instanceof org.telegram.ui.Components.AnimatedFileDrawable
-                r6 = 2
-                r7 = 250(0xfa, double:1.235E-321)
-                if (r2 == 0) goto L_0x014e
-                org.telegram.ui.Components.AnimatedFileDrawable r1 = (org.telegram.ui.Components.AnimatedFileDrawable) r1
-                int r1 = r1.getDurationMs()
-                if (r1 <= 0) goto L_0x014e
-                android.animation.ValueAnimator r1 = r9.progressShowAnimator
-                if (r1 == 0) goto L_0x014b
-                r1.cancel()
-                org.telegram.ui.Components.RadialProgress2 r1 = r9.radialProgress
-                float r1 = r1.getProgress()
-                r2 = 1
-                int r1 = (r1 > r5 ? 1 : (r1 == r5 ? 0 : -1))
-                if (r1 >= 0) goto L_0x0116
-                org.telegram.ui.Components.RadialProgress2 r1 = r9.radialProgress
-                r1.setProgress(r5, r2)
-            L_0x0116:
-                float[] r1 = new float[r6]
-                android.animation.ValueAnimator r6 = r9.progressShowAnimator
-                java.lang.Object r6 = r6.getAnimatedValue()
-                java.lang.Float r6 = (java.lang.Float) r6
-                float r6 = r6.floatValue()
-                r1[r3] = r6
-                r1[r2] = r4
-                android.animation.ValueAnimator r1 = android.animation.ValueAnimator.ofFloat(r1)
-                r9.progressHideAnimator = r1
-                org.telegram.ui.AvatarPreviewer$Layout$1 r2 = new org.telegram.ui.AvatarPreviewer$Layout$1
-                r2.<init>()
-                r1.addListener(r2)
-                android.animation.ValueAnimator r1 = r9.progressHideAnimator
-                org.telegram.ui.AvatarPreviewer$Layout$$ExternalSyntheticLambda1 r2 = new org.telegram.ui.AvatarPreviewer$Layout$$ExternalSyntheticLambda1
-                r2.<init>(r9)
-                r1.addUpdateListener(r2)
-                android.animation.ValueAnimator r1 = r9.progressHideAnimator
-                r1.setDuration(r7)
-                android.animation.ValueAnimator r1 = r9.progressHideAnimator
-                r1.start()
-                goto L_0x0174
-            L_0x014b:
-                r9.showProgress = r3
-                goto L_0x0174
-            L_0x014e:
-                android.animation.ValueAnimator r1 = r9.progressShowAnimator
-                if (r1 != 0) goto L_0x0174
-                float[] r1 = new float[r6]
-                r1 = {0, NUM} // fill-array
-                android.animation.ValueAnimator r1 = android.animation.ValueAnimator.ofFloat(r1)
-                r9.progressShowAnimator = r1
-                org.telegram.ui.AvatarPreviewer$Layout$$ExternalSyntheticLambda2 r2 = new org.telegram.ui.AvatarPreviewer$Layout$$ExternalSyntheticLambda2
-                r2.<init>(r9)
-                r1.addUpdateListener(r2)
-                android.animation.ValueAnimator r1 = r9.progressShowAnimator
-                r1.setStartDelay(r7)
-                android.animation.ValueAnimator r1 = r9.progressShowAnimator
-                r1.setDuration(r7)
-                android.animation.ValueAnimator r1 = r9.progressShowAnimator
-                r1.start()
-            L_0x0174:
-                android.animation.ValueAnimator r1 = r9.progressHideAnimator
-                if (r1 == 0) goto L_0x018d
-                org.telegram.ui.Components.RadialProgress2 r2 = r9.radialProgress
-                java.lang.Object r1 = r1.getAnimatedValue()
-                java.lang.Float r1 = (java.lang.Float) r1
-                float r1 = r1.floatValue()
-                r2.setOverrideAlpha(r1)
-                org.telegram.ui.Components.RadialProgress2 r1 = r9.radialProgress
-                r1.draw(r10)
-                goto L_0x01a5
-            L_0x018d:
-                android.animation.ValueAnimator r1 = r9.progressShowAnimator
-                if (r1 == 0) goto L_0x01a5
-                org.telegram.ui.Components.RadialProgress2 r2 = r9.radialProgress
-                java.lang.Object r1 = r1.getAnimatedValue()
-                java.lang.Float r1 = (java.lang.Float) r1
-                float r1 = r1.floatValue()
-                r2.setOverrideAlpha(r1)
-                org.telegram.ui.Components.RadialProgress2 r1 = r9.radialProgress
-                r1.draw(r10)
-            L_0x01a5:
-                android.animation.ValueAnimator r1 = r9.moveAnimator
-                r2 = 1132396544(0x437var_, float:255.0)
-                if (r1 == 0) goto L_0x01b9
-                android.graphics.drawable.Drawable r0 = r9.arrowDrawable
-                float r1 = r1.getAnimatedFraction()
-                float r5 = r5 - r1
-                float r5 = r5 * r2
-                int r1 = (int) r5
-                r0.setAlpha(r1)
-                goto L_0x01c1
-            L_0x01b9:
-                android.graphics.drawable.Drawable r1 = r9.arrowDrawable
-                float r0 = r0 * r2
-                int r0 = (int) r0
-                r1.setAlpha(r0)
-            L_0x01c1:
-                android.graphics.drawable.Drawable r0 = r9.arrowDrawable
-                r0.draw(r10)
-                return
+                Method dump skipped, instructions count: 464
+                To view this dump add '--comments-level debug' option
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.AvatarPreviewer.Layout.onDraw(android.graphics.Canvas):void");
         }
 
-        /* access modifiers changed from: private */
+        /* JADX INFO: Access modifiers changed from: private */
         public /* synthetic */ void lambda$onDraw$3(ValueAnimator valueAnimator) {
             invalidate();
         }
 
-        /* access modifiers changed from: private */
+        /* JADX INFO: Access modifiers changed from: private */
         public /* synthetic */ void lambda$onDraw$4(ValueAnimator valueAnimator) {
             invalidate();
         }
 
-        public void setData(Data data) {
+        public void setData(final Data data) {
             this.menuItems = data.menuItems;
             this.showProgress = data.videoLocation != null;
             this.videoFileName = data.videoFileName;
             recycleInfoLoadTask();
             if (data.infoLoadTask != null) {
-                InfoLoadTask<?, ?> access$1100 = data.infoLoadTask;
-                this.infoLoadTask = access$1100;
-                access$1100.load(new AvatarPreviewer$Layout$$ExternalSyntheticLambda5(this, data));
-            } else {
-                Data data2 = data;
+                InfoLoadTask<?, ?> infoLoadTask = data.infoLoadTask;
+                this.infoLoadTask = infoLoadTask;
+                infoLoadTask.load(new Consumer() { // from class: org.telegram.ui.AvatarPreviewer$Layout$$ExternalSyntheticLambda5
+                    @Override // androidx.core.util.Consumer
+                    public final void accept(Object obj) {
+                        AvatarPreviewer.Layout.this.lambda$setData$5(data, obj);
+                    }
+                });
             }
             this.imageReceiver.setCurrentAccount(UserConfig.selectedAccount);
-            this.imageReceiver.setImage(data.videoLocation, data.videoFilter, data.imageLocation, data.imageFilter, data.thumbImageLocation, data.thumbImageFilter, (Drawable) null, 0, (String) null, data.parentObject, 1);
+            this.imageReceiver.setImage(data.videoLocation, data.videoFilter, data.imageLocation, data.imageFilter, data.thumbImageLocation, data.thumbImageFilter, null, 0L, null, data.parentObject, 1);
             setShowing(true);
         }
 
-        /* access modifiers changed from: private */
+        /* JADX INFO: Access modifiers changed from: private */
         public /* synthetic */ void lambda$setData$5(Data data, Object obj) {
-            if (this.recycled) {
-                return;
-            }
-            if (obj instanceof TLRPC$UserFull) {
-                setData(Data.of((TLRPC$UserFull) obj, data.menuItems));
-            } else if (obj instanceof TLRPC$ChatFull) {
-                setData(Data.of((TLRPC$Chat) data.infoLoadTask.argument, (TLRPC$ChatFull) obj, data.menuItems));
+            if (!this.recycled) {
+                if (obj instanceof TLRPC$UserFull) {
+                    setData(Data.of((TLRPC$UserFull) obj, data.menuItems));
+                } else if (!(obj instanceof TLRPC$ChatFull)) {
+                } else {
+                    setData(Data.of((TLRPC$Chat) data.infoLoadTask.argument, (TLRPC$ChatFull) obj, data.menuItems));
+                }
             }
         }
 
@@ -829,9 +637,9 @@ public class AvatarPreviewer {
         }
 
         private void recycleInfoLoadTask() {
-            InfoLoadTask<?, ?> infoLoadTask2 = this.infoLoadTask;
-            if (infoLoadTask2 != null) {
-                infoLoadTask2.cancel();
+            InfoLoadTask<?, ?> infoLoadTask = this.infoLoadTask;
+            if (infoLoadTask != null) {
+                infoLoadTask.cancel();
                 this.infoLoadTask = null;
             }
         }

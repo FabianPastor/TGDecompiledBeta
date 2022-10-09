@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import org.webrtc.MediaStreamTrack;
 import org.webrtc.RtpParameters;
-
+/* loaded from: classes3.dex */
 public class RtpTransceiver {
     private RtpReceiver cachedReceiver;
     private RtpSender cachedSender;
@@ -31,6 +31,7 @@ public class RtpTransceiver {
 
     private static native boolean nativeStopped(long j);
 
+    /* loaded from: classes3.dex */
     public enum RtpTransceiverDirection {
         SEND_RECV(0),
         SEND_ONLY(1),
@@ -39,18 +40,18 @@ public class RtpTransceiver {
         
         private final int nativeIndex;
 
-        private RtpTransceiverDirection(int i) {
+        RtpTransceiverDirection(int i) {
             this.nativeIndex = i;
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("RtpTransceiverDirection")
-        public int getNativeIndex() {
+        int getNativeIndex() {
             return this.nativeIndex;
         }
 
         @CalledByNative("RtpTransceiverDirection")
         static RtpTransceiverDirection fromNativeIndex(int i) {
+            RtpTransceiverDirection[] values;
             for (RtpTransceiverDirection rtpTransceiverDirection : values()) {
                 if (rtpTransceiverDirection.getNativeIndex() == i) {
                     return rtpTransceiverDirection;
@@ -60,6 +61,7 @@ public class RtpTransceiver {
         }
     }
 
+    /* loaded from: classes3.dex */
     public static final class RtpTransceiverInit {
         private final RtpTransceiverDirection direction;
         private final List<RtpParameters.Encoding> sendEncodings;
@@ -83,21 +85,18 @@ public class RtpTransceiver {
             this.sendEncodings = new ArrayList(list2);
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("RtpTransceiverInit")
-        public int getDirectionNativeIndex() {
+        int getDirectionNativeIndex() {
             return this.direction.getNativeIndex();
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("RtpTransceiverInit")
-        public List<String> getStreamIds() {
+        List<String> getStreamIds() {
             return new ArrayList(this.streamIds);
         }
 
-        /* access modifiers changed from: package-private */
         @CalledByNative("RtpTransceiverInit")
-        public List<RtpParameters.Encoding> getSendEncodings() {
+        List<RtpParameters.Encoding> getSendEncodings() {
             return new ArrayList(this.sendEncodings);
         }
     }
@@ -168,12 +167,13 @@ public class RtpTransceiver {
         this.cachedSender.dispose();
         this.cachedReceiver.dispose();
         JniCommon.nativeReleaseRef(this.nativeRtpTransceiver);
-        this.nativeRtpTransceiver = 0;
+        this.nativeRtpTransceiver = 0L;
     }
 
     private void checkRtpTransceiverExists() {
-        if (this.nativeRtpTransceiver == 0) {
-            throw new IllegalStateException("RtpTransceiver has been disposed.");
+        if (this.nativeRtpTransceiver != 0) {
+            return;
         }
+        throw new IllegalStateException("RtpTransceiver has been disposed.");
     }
 }

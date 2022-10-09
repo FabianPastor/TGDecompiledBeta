@@ -4,7 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
-
+/* loaded from: classes.dex */
 public class VoIPServerConfig {
     private static JSONObject config = new JSONObject();
 
@@ -15,9 +15,10 @@ public class VoIPServerConfig {
             config = new JSONObject(str);
             nativeSetConfig(str);
         } catch (JSONException e) {
-            if (BuildVars.LOGS_ENABLED) {
-                FileLog.e("Error parsing VoIP config", (Throwable) e);
+            if (!BuildVars.LOGS_ENABLED) {
+                return;
             }
+            FileLog.e("Error parsing VoIP config", e);
         }
     }
 

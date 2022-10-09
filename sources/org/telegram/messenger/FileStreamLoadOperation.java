@@ -2,12 +2,12 @@ package org.telegram.messenger;
 
 import android.net.Uri;
 import com.google.android.exoplayer2.upstream.BaseDataSource;
-import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DataSpec;
 import com.google.android.exoplayer2.upstream.TransferListener;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
@@ -16,7 +16,7 @@ import org.telegram.tgnet.TLRPC$TL_document;
 import org.telegram.tgnet.TLRPC$TL_documentAttributeAudio;
 import org.telegram.tgnet.TLRPC$TL_documentAttributeFilename;
 import org.telegram.tgnet.TLRPC$TL_documentAttributeVideo;
-
+/* loaded from: classes.dex */
 public class FileStreamLoadOperation extends BaseDataSource implements FileLoadOperationStream {
     private long bytesRemaining;
     private CountDownLatch countDownLatch;
@@ -29,8 +29,11 @@ public class FileStreamLoadOperation extends BaseDataSource implements FileLoadO
     private Object parentObject;
     private Uri uri;
 
+    @Override // com.google.android.exoplayer2.upstream.BaseDataSource, com.google.android.exoplayer2.upstream.DataSource
     public /* bridge */ /* synthetic */ Map<String, List<String>> getResponseHeaders() {
-        return DataSource.CC.$default$getResponseHeaders(this);
+        Map<String, List<String>> emptyMap;
+        emptyMap = Collections.emptyMap();
+        return emptyMap;
     }
 
     public FileStreamLoadOperation() {
@@ -45,10 +48,11 @@ public class FileStreamLoadOperation extends BaseDataSource implements FileLoadO
         }
     }
 
+    @Override // com.google.android.exoplayer2.upstream.DataSource
     public long open(DataSpec dataSpec) throws IOException {
-        Uri uri2 = dataSpec.uri;
-        this.uri = uri2;
-        int intValue = Utilities.parseInt((CharSequence) uri2.getQueryParameter("account")).intValue();
+        Uri uri = dataSpec.uri;
+        this.uri = uri;
+        int intValue = Utilities.parseInt((CharSequence) uri.getQueryParameter("account")).intValue();
         this.currentAccount = intValue;
         this.parentObject = FileLoader.getInstance(intValue).getParentObject(Utilities.parseInt((CharSequence) this.uri.getQueryParameter("rid")).intValue());
         TLRPC$TL_document tLRPC$TL_document = new TLRPC$TL_document();
@@ -67,30 +71,31 @@ public class FileStreamLoadOperation extends BaseDataSource implements FileLoadO
         } else if (this.document.mime_type.startsWith("audio")) {
             this.document.attributes.add(new TLRPC$TL_documentAttributeAudio());
         }
-        FileLoader instance = FileLoader.getInstance(this.currentAccount);
+        FileLoader fileLoader = FileLoader.getInstance(this.currentAccount);
         TLRPC$Document tLRPC$Document = this.document;
         Object obj = this.parentObject;
         long j = dataSpec.position;
         this.currentOffset = j;
-        this.loadOperation = instance.loadStreamFile(this, tLRPC$Document, (ImageLocation) null, obj, j, false);
+        this.loadOperation = fileLoader.loadStreamFile(this, tLRPC$Document, null, obj, j, false);
         long j2 = dataSpec.length;
         if (j2 == -1) {
             j2 = this.document.size - dataSpec.position;
         }
         this.bytesRemaining = j2;
-        if (j2 >= 0) {
-            this.opened = true;
-            transferStarted(dataSpec);
-            if (this.loadOperation != null) {
-                RandomAccessFile randomAccessFile = new RandomAccessFile(this.loadOperation.getCurrentFile(), "r");
-                this.file = randomAccessFile;
-                randomAccessFile.seek(this.currentOffset);
-            }
-            return this.bytesRemaining;
+        if (j2 < 0) {
+            throw new EOFException();
         }
-        throw new EOFException();
+        this.opened = true;
+        transferStarted(dataSpec);
+        if (this.loadOperation != null) {
+            RandomAccessFile randomAccessFile = new RandomAccessFile(this.loadOperation.getCurrentFile(), "r");
+            this.file = randomAccessFile;
+            randomAccessFile.seek(this.currentOffset);
+        }
+        return this.bytesRemaining;
     }
 
+    @Override // com.google.android.exoplayer2.upstream.DataSource
     public int read(byte[] bArr, int i, int i2) throws IOException {
         if (i2 == 0) {
             return 0;
@@ -99,7 +104,7 @@ public class FileStreamLoadOperation extends BaseDataSource implements FileLoadO
         if (j == 0) {
             return -1;
         }
-        if (j < ((long) i2)) {
+        if (j < i2) {
             i2 = (int) j;
         }
         int i3 = 0;
@@ -108,12 +113,12 @@ public class FileStreamLoadOperation extends BaseDataSource implements FileLoadO
                 if (!this.opened) {
                     break;
                 }
-                i3 = (int) this.loadOperation.getDownloadedLengthFromOffset(this.currentOffset, (long) i2)[0];
+                i3 = (int) this.loadOperation.getDownloadedLengthFromOffset(this.currentOffset, i2)[0];
                 if (i3 == 0) {
-                    FileLoader.getInstance(this.currentAccount).loadStreamFile(this, this.document, (ImageLocation) null, this.parentObject, this.currentOffset, false);
-                    CountDownLatch countDownLatch2 = new CountDownLatch(1);
-                    this.countDownLatch = countDownLatch2;
-                    countDownLatch2.await();
+                    FileLoader.getInstance(this.currentAccount).loadStreamFile(this, this.document, null, this.parentObject, this.currentOffset, false);
+                    CountDownLatch countDownLatch = new CountDownLatch(1);
+                    this.countDownLatch = countDownLatch;
+                    countDownLatch.await();
                 }
             } catch (Exception e) {
                 throw new IOException(e);
@@ -123,17 +128,19 @@ public class FileStreamLoadOperation extends BaseDataSource implements FileLoadO
             return 0;
         }
         this.file.readFully(bArr, i, i3);
-        long j2 = (long) i3;
+        long j2 = i3;
         this.currentOffset += j2;
         this.bytesRemaining -= j2;
         bytesTransferred(i3);
         return i3;
     }
 
+    @Override // com.google.android.exoplayer2.upstream.DataSource
     public Uri getUri() {
         return this.uri;
     }
 
+    @Override // com.google.android.exoplayer2.upstream.DataSource
     public void close() {
         FileLoadOperation fileLoadOperation = this.loadOperation;
         if (fileLoadOperation != null) {
@@ -144,7 +151,7 @@ public class FileStreamLoadOperation extends BaseDataSource implements FileLoadO
             try {
                 randomAccessFile.close();
             } catch (Exception e) {
-                FileLog.e((Throwable) e);
+                FileLog.e(e);
             }
             this.file = null;
         }
@@ -153,16 +160,17 @@ public class FileStreamLoadOperation extends BaseDataSource implements FileLoadO
             this.opened = false;
             transferEnded();
         }
-        CountDownLatch countDownLatch2 = this.countDownLatch;
-        if (countDownLatch2 != null) {
-            countDownLatch2.countDown();
+        CountDownLatch countDownLatch = this.countDownLatch;
+        if (countDownLatch != null) {
+            countDownLatch.countDown();
         }
     }
 
+    @Override // org.telegram.messenger.FileLoadOperationStream
     public void newDataAvailable() {
-        CountDownLatch countDownLatch2 = this.countDownLatch;
-        if (countDownLatch2 != null) {
-            countDownLatch2.countDown();
+        CountDownLatch countDownLatch = this.countDownLatch;
+        if (countDownLatch != null) {
+            countDownLatch.countDown();
         }
     }
 }

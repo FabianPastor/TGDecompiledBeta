@@ -1,5 +1,5 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_pageBlockPhoto extends TLRPC$PageBlock {
     public static int constructor = NUM;
     public TLRPC$TL_pageCaption caption;
@@ -8,6 +8,7 @@ public class TLRPC$TL_pageBlockPhoto extends TLRPC$PageBlock {
     public String url;
     public long webpage_id;
 
+    @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         this.flags = abstractSerializedData.readInt32(z);
         this.photo_id = abstractSerializedData.readInt64(z);
@@ -20,6 +21,7 @@ public class TLRPC$TL_pageBlockPhoto extends TLRPC$PageBlock {
         }
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
         abstractSerializedData.writeInt32(this.flags);

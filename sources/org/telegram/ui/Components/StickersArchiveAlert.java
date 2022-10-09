@@ -12,19 +12,17 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.tgnet.TLRPC$StickerSetCovered;
-import org.telegram.tgnet.TLRPC$TL_messages_stickerSet;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.ArchivedStickerSetCell;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.StickersActivity;
-
+/* loaded from: classes3.dex */
 public class StickersArchiveAlert extends AlertDialog.Builder {
     private int currentType;
     private BaseFragment parentFragment;
-    /* access modifiers changed from: private */
-    public ArrayList<TLRPC$StickerSetCovered> stickerSets;
+    private ArrayList<TLRPC$StickerSetCovered> stickerSets;
 
     public StickersArchiveAlert(Context context, BaseFragment baseFragment, ArrayList<TLRPC$StickerSetCovered> arrayList) {
         super(context);
@@ -61,37 +59,48 @@ public class StickersArchiveAlert extends AlertDialog.Builder {
         linearLayout.addView(recyclerListView, LayoutHelper.createLinear(-1, -2, 0.0f, 10.0f, 0.0f, 0.0f));
         setNegativeButton(LocaleController.getString("Close", R.string.Close), StickersArchiveAlert$$ExternalSyntheticLambda1.INSTANCE);
         if (this.parentFragment != null) {
-            setPositiveButton(LocaleController.getString("Settings", R.string.Settings), new StickersArchiveAlert$$ExternalSyntheticLambda0(this));
+            setPositiveButton(LocaleController.getString("Settings", R.string.Settings), new DialogInterface.OnClickListener() { // from class: org.telegram.ui.Components.StickersArchiveAlert$$ExternalSyntheticLambda0
+                @Override // android.content.DialogInterface.OnClickListener
+                public final void onClick(DialogInterface dialogInterface, int i) {
+                    StickersArchiveAlert.this.lambda$new$1(dialogInterface, i);
+                }
+            });
         }
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$new$1(DialogInterface dialogInterface, int i) {
-        this.parentFragment.presentFragment(new StickersActivity(this.currentType, (ArrayList<TLRPC$TL_messages_stickerSet>) null));
+        this.parentFragment.presentFragment(new StickersActivity(this.currentType, null));
         dialogInterface.dismiss();
     }
 
+    /* loaded from: classes3.dex */
     private class ListAdapter extends RecyclerListView.SelectionAdapter {
         Context context;
 
+        @Override // org.telegram.ui.Components.RecyclerListView.SelectionAdapter
         public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
             return false;
         }
 
-        public ListAdapter(Context context2) {
-            this.context = context2;
+        public ListAdapter(Context context) {
+            this.context = context;
         }
 
+        @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         public int getItemCount() {
             return StickersArchiveAlert.this.stickerSets.size();
         }
 
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+        @Override // androidx.recyclerview.widget.RecyclerView.Adapter
+        /* renamed from: onCreateViewHolder */
+        public RecyclerView.ViewHolder mo1754onCreateViewHolder(ViewGroup viewGroup, int i) {
             ArchivedStickerSetCell archivedStickerSetCell = new ArchivedStickerSetCell(this.context, false);
             archivedStickerSetCell.setLayoutParams(new RecyclerView.LayoutParams(-1, AndroidUtilities.dp(82.0f)));
             return new RecyclerListView.Holder(archivedStickerSetCell);
         }
 
+        @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
             ArchivedStickerSetCell archivedStickerSetCell = (ArchivedStickerSetCell) viewHolder.itemView;
             TLRPC$StickerSetCovered tLRPC$StickerSetCovered = (TLRPC$StickerSetCovered) StickersArchiveAlert.this.stickerSets.get(i);

@@ -1,11 +1,12 @@
 package org.webrtc;
-
+/* loaded from: classes3.dex */
 public class MediaSource {
     private long nativeSource;
     private final RefCountDelegate refCountDelegate;
 
     private static native State nativeGetState(long j);
 
+    /* loaded from: classes3.dex */
     public enum State {
         INITIALIZING,
         LIVE,
@@ -18,8 +19,13 @@ public class MediaSource {
         }
     }
 
-    public MediaSource(long j) {
-        this.refCountDelegate = new RefCountDelegate(new MediaSource$$ExternalSyntheticLambda0(j));
+    public MediaSource(final long j) {
+        this.refCountDelegate = new RefCountDelegate(new Runnable() { // from class: org.webrtc.MediaSource$$ExternalSyntheticLambda0
+            @Override // java.lang.Runnable
+            public final void run() {
+                JniCommon.nativeReleaseRef(j);
+            }
+        });
         this.nativeSource = j;
     }
 
@@ -31,16 +37,16 @@ public class MediaSource {
     public void dispose() {
         checkMediaSourceExists();
         this.refCountDelegate.release();
-        this.nativeSource = 0;
+        this.nativeSource = 0L;
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
     public long getNativeMediaSource() {
         checkMediaSourceExists();
         return this.nativeSource;
     }
 
-    /* access modifiers changed from: package-private */
+    /* JADX INFO: Access modifiers changed from: package-private */
     public void runWithReference(Runnable runnable) {
         if (this.refCountDelegate.safeRetain()) {
             try {
@@ -52,8 +58,9 @@ public class MediaSource {
     }
 
     private void checkMediaSourceExists() {
-        if (this.nativeSource == 0) {
-            throw new IllegalStateException("MediaSource has been disposed.");
+        if (this.nativeSource != 0) {
+            return;
         }
+        throw new IllegalStateException("MediaSource has been disposed.");
     }
 }

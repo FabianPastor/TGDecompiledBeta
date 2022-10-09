@@ -14,7 +14,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
-
+/* loaded from: classes3.dex */
 public class GroupCallTextCell extends FrameLayout {
     private Paint dividerPaint;
     private int imageLeft;
@@ -53,14 +53,14 @@ public class GroupCallTextCell extends FrameLayout {
         this.valueTextView.setGravity(LocaleController.isRTL ? 3 : i2);
         this.valueTextView.setImportantForAccessibility(2);
         addView(this.valueTextView);
-        ImageView imageView2 = new ImageView(context);
-        this.imageView = imageView2;
-        imageView2.setScaleType(ImageView.ScaleType.CENTER);
+        ImageView imageView = new ImageView(context);
+        this.imageView = imageView;
+        imageView.setScaleType(ImageView.ScaleType.CENTER);
         this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(z ? "dialogIcon" : "windowBackgroundWhiteGrayIcon"), PorterDuff.Mode.MULTIPLY));
         addView(this.imageView);
-        ImageView imageView3 = new ImageView(context);
-        this.valueImageView = imageView3;
-        imageView3.setScaleType(ImageView.ScaleType.CENTER);
+        ImageView imageView2 = new ImageView(context);
+        this.valueImageView = imageView2;
+        imageView2.setScaleType(ImageView.ScaleType.CENTER);
         addView(this.valueImageView);
         setFocusable(true);
     }
@@ -77,12 +77,13 @@ public class GroupCallTextCell extends FrameLayout {
         return this.valueImageView;
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
+    @Override // android.widget.FrameLayout, android.view.View
     public void onMeasure(int i, int i2) {
         int size = View.MeasureSpec.getSize(i);
         int dp = AndroidUtilities.dp(48.0f);
-        this.valueTextView.measure(View.MeasureSpec.makeMeasureSpec(size - AndroidUtilities.dp((float) this.leftPadding), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(20.0f), NUM));
-        this.textView.measure(View.MeasureSpec.makeMeasureSpec((size - AndroidUtilities.dp((float) (this.leftPadding + 71))) - this.valueTextView.getTextWidth(), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(20.0f), NUM));
+        this.valueTextView.measure(View.MeasureSpec.makeMeasureSpec(size - AndroidUtilities.dp(this.leftPadding), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(20.0f), NUM));
+        this.textView.measure(View.MeasureSpec.makeMeasureSpec((size - AndroidUtilities.dp(this.leftPadding + 71)) - this.valueTextView.getTextWidth(), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(20.0f), NUM));
         if (this.imageView.getVisibility() == 0) {
             this.imageView.measure(View.MeasureSpec.makeMeasureSpec(size, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(dp, Integer.MIN_VALUE));
         }
@@ -92,34 +93,34 @@ public class GroupCallTextCell extends FrameLayout {
         setMeasuredDimension(size, AndroidUtilities.dp(50.0f) + (this.needDivider ? 1 : 0));
     }
 
-    /* access modifiers changed from: protected */
-    public void onLayout(boolean z, int i, int i2, int i3, int i4) {
-        int i5;
-        int i6 = i4 - i2;
-        int i7 = i3 - i;
-        int textHeight = (i6 - this.valueTextView.getTextHeight()) / 2;
-        int dp = LocaleController.isRTL ? AndroidUtilities.dp((float) this.leftPadding) : 0;
+    @Override // android.widget.FrameLayout, android.view.ViewGroup, android.view.View
+    protected void onLayout(boolean z, int i, int i2, int i3, int i4) {
+        int dp;
+        int i5 = i4 - i2;
+        int i6 = i3 - i;
+        int textHeight = (i5 - this.valueTextView.getTextHeight()) / 2;
+        int dp2 = LocaleController.isRTL ? AndroidUtilities.dp(this.leftPadding) : 0;
         SimpleTextView simpleTextView = this.valueTextView;
-        simpleTextView.layout(dp, textHeight, simpleTextView.getMeasuredWidth() + dp, this.valueTextView.getMeasuredHeight() + textHeight);
-        int textHeight2 = (i6 - this.textView.getTextHeight()) / 2;
+        simpleTextView.layout(dp2, textHeight, simpleTextView.getMeasuredWidth() + dp2, this.valueTextView.getMeasuredHeight() + textHeight);
+        int textHeight2 = (i5 - this.textView.getTextHeight()) / 2;
         if (LocaleController.isRTL) {
-            i5 = (getMeasuredWidth() - this.textView.getMeasuredWidth()) - AndroidUtilities.dp((float) (this.imageView.getVisibility() == 0 ? this.offsetFromImage : this.leftPadding));
+            dp = (getMeasuredWidth() - this.textView.getMeasuredWidth()) - AndroidUtilities.dp(this.imageView.getVisibility() == 0 ? this.offsetFromImage : this.leftPadding);
         } else {
-            i5 = AndroidUtilities.dp((float) (this.imageView.getVisibility() == 0 ? this.offsetFromImage : this.leftPadding));
+            dp = AndroidUtilities.dp(this.imageView.getVisibility() == 0 ? this.offsetFromImage : this.leftPadding);
         }
         SimpleTextView simpleTextView2 = this.textView;
-        simpleTextView2.layout(i5, textHeight2, simpleTextView2.getMeasuredWidth() + i5, this.textView.getMeasuredHeight() + textHeight2);
+        simpleTextView2.layout(dp, textHeight2, simpleTextView2.getMeasuredWidth() + dp, this.textView.getMeasuredHeight() + textHeight2);
         if (this.imageView.getVisibility() == 0) {
-            int dp2 = AndroidUtilities.dp(5.0f);
-            int dp3 = !LocaleController.isRTL ? AndroidUtilities.dp((float) this.imageLeft) : (i7 - this.imageView.getMeasuredWidth()) - AndroidUtilities.dp((float) this.imageLeft);
-            ImageView imageView2 = this.imageView;
-            imageView2.layout(dp3, dp2, imageView2.getMeasuredWidth() + dp3, this.imageView.getMeasuredHeight() + dp2);
+            int dp3 = AndroidUtilities.dp(5.0f);
+            int dp4 = !LocaleController.isRTL ? AndroidUtilities.dp(this.imageLeft) : (i6 - this.imageView.getMeasuredWidth()) - AndroidUtilities.dp(this.imageLeft);
+            ImageView imageView = this.imageView;
+            imageView.layout(dp4, dp3, imageView.getMeasuredWidth() + dp4, this.imageView.getMeasuredHeight() + dp3);
         }
         if (this.valueImageView.getVisibility() == 0) {
-            int measuredHeight = (i6 - this.valueImageView.getMeasuredHeight()) / 2;
-            int dp4 = LocaleController.isRTL ? AndroidUtilities.dp(23.0f) : (i7 - this.valueImageView.getMeasuredWidth()) - AndroidUtilities.dp(23.0f);
-            ImageView imageView3 = this.valueImageView;
-            imageView3.layout(dp4, measuredHeight, imageView3.getMeasuredWidth() + dp4, this.valueImageView.getMeasuredHeight() + measuredHeight);
+            int measuredHeight = (i5 - this.valueImageView.getMeasuredHeight()) / 2;
+            int dp5 = LocaleController.isRTL ? AndroidUtilities.dp(23.0f) : (i6 - this.valueImageView.getMeasuredWidth()) - AndroidUtilities.dp(23.0f);
+            ImageView imageView2 = this.valueImageView;
+            imageView2.layout(dp5, measuredHeight, imageView2.getMeasuredWidth() + dp5, this.valueImageView.getMeasuredHeight() + measuredHeight);
         }
     }
 
@@ -129,14 +130,14 @@ public class GroupCallTextCell extends FrameLayout {
 
     public void setColors(int i, int i2) {
         this.textView.setTextColor(i2);
-        this.textView.setTag((Object) null);
+        this.textView.setTag(null);
         this.imageView.setColorFilter(new PorterDuffColorFilter(i, PorterDuff.Mode.MULTIPLY));
-        this.imageView.setTag((Object) null);
+        this.imageView.setTag(null);
     }
 
     public void setTextAndIcon(String str, int i, boolean z) {
         this.textView.setText(str);
-        this.valueTextView.setText((CharSequence) null);
+        this.valueTextView.setText(null);
         this.imageView.setImageResource(i);
         this.imageView.setVisibility(0);
         this.valueTextView.setVisibility(8);
@@ -150,38 +151,39 @@ public class GroupCallTextCell extends FrameLayout {
         this.offsetFromImage = i;
     }
 
-    /* access modifiers changed from: protected */
-    public void onDraw(Canvas canvas) {
-        float f;
+    @Override // android.view.View
+    protected void onDraw(Canvas canvas) {
+        float dp;
         int i;
         if (this.needDivider) {
-            float f2 = 68.0f;
+            float f = 68.0f;
             if (LocaleController.isRTL) {
-                f = 0.0f;
+                dp = 0.0f;
             } else {
-                f = (float) AndroidUtilities.dp(this.imageView.getVisibility() == 0 ? 68.0f : 20.0f);
+                dp = AndroidUtilities.dp(this.imageView.getVisibility() == 0 ? 68.0f : 20.0f);
             }
-            float measuredHeight = (float) (getMeasuredHeight() - 1);
+            float measuredHeight = getMeasuredHeight() - 1;
             int measuredWidth = getMeasuredWidth();
             if (LocaleController.isRTL) {
                 if (this.imageView.getVisibility() != 0) {
-                    f2 = 20.0f;
+                    f = 20.0f;
                 }
-                i = AndroidUtilities.dp(f2);
+                i = AndroidUtilities.dp(f);
             } else {
                 i = 0;
             }
-            canvas.drawLine(f, measuredHeight, (float) (measuredWidth - i), (float) (getMeasuredHeight() - 1), this.dividerPaint);
+            canvas.drawLine(dp, measuredHeight, measuredWidth - i, getMeasuredHeight() - 1, this.dividerPaint);
         }
     }
 
+    @Override // android.view.View
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
         super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
         CharSequence text = this.textView.getText();
         if (!TextUtils.isEmpty(text)) {
             CharSequence text2 = this.valueTextView.getText();
             if (!TextUtils.isEmpty(text2)) {
-                accessibilityNodeInfo.setText(text + ": " + text2);
+                accessibilityNodeInfo.setText(((Object) text) + ": " + ((Object) text2));
                 return;
             }
             accessibilityNodeInfo.setText(text);

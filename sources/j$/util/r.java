@@ -1,14 +1,15 @@
 package j$.util;
 
 import j$.util.function.Consumer;
-import j$.util.function.q;
-
+/* loaded from: classes2.dex */
 public interface r extends p {
-    void d(q qVar);
+    void d(j$.util.function.q qVar);
 
     void forEachRemaining(Consumer consumer);
 
-    Long next();
+    @Override // java.util.Iterator
+    /* renamed from: next */
+    Long mo311next();
 
     long nextLong();
 }

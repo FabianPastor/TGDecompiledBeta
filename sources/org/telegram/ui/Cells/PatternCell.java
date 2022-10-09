@@ -2,7 +2,6 @@ package org.telegram.ui.Cells;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.BlendMode;
 import android.graphics.Canvas;
 import android.graphics.LinearGradient;
@@ -13,7 +12,6 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.TextUtils;
 import android.view.View;
@@ -25,7 +23,6 @@ import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.MediaController;
-import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC$Photo;
 import org.telegram.tgnet.TLRPC$PhotoSize;
@@ -34,12 +31,12 @@ import org.telegram.ui.Components.BackgroundGradientDrawable;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.MotionBackgroundDrawable;
 import org.telegram.ui.Components.RadialProgress2;
-
+/* loaded from: classes3.dex */
 public class PatternCell extends BackupImageView implements DownloadController.FileDownloadProgressListener {
     private int TAG;
     private MotionBackgroundDrawable backgroundDrawable;
     private Paint backgroundPaint;
-    private int currentAccount = UserConfig.selectedAccount;
+    private int currentAccount;
     private int currentBackgroundColor;
     private int currentGradientAngle;
     private int currentGradientColor1;
@@ -50,8 +47,9 @@ public class PatternCell extends BackupImageView implements DownloadController.F
     private LinearGradient gradientShader;
     private int maxWallpaperSize;
     private RadialProgress2 radialProgress;
-    private RectF rect = new RectF();
+    private RectF rect;
 
+    /* loaded from: classes3.dex */
     public interface PatternCellDelegate {
         int getBackgroundColor();
 
@@ -72,11 +70,14 @@ public class PatternCell extends BackupImageView implements DownloadController.F
         TLRPC$TL_wallPaper getSelectedPattern();
     }
 
+    @Override // org.telegram.messenger.DownloadController.FileDownloadProgressListener
     public void onProgressUpload(String str, long j, long j2, boolean z) {
     }
 
     public PatternCell(Context context, int i, PatternCellDelegate patternCellDelegate) {
         super(context);
+        this.rect = new RectF();
+        this.currentAccount = UserConfig.selectedAccount;
         setRoundRadius(AndroidUtilities.dp(6.0f));
         this.maxWallpaperSize = i;
         this.delegate = patternCellDelegate;
@@ -86,9 +87,10 @@ public class PatternCell extends BackupImageView implements DownloadController.F
         this.backgroundPaint = new Paint(3);
         this.TAG = DownloadController.getInstance(this.currentAccount).generateObserverTag();
         if (Build.VERSION.SDK_INT >= 21) {
-            setOutlineProvider(new ViewOutlineProvider(this) {
+            setOutlineProvider(new ViewOutlineProvider(this) { // from class: org.telegram.ui.Cells.PatternCell.1
+                @Override // android.view.ViewOutlineProvider
                 public void getOutline(View view, Outline outline) {
-                    outline.setRoundRect(AndroidUtilities.dp(1.0f), AndroidUtilities.dp(1.0f), view.getMeasuredWidth() - AndroidUtilities.dp(1.0f), view.getMeasuredHeight() - AndroidUtilities.dp(1.0f), (float) AndroidUtilities.dp(6.0f));
+                    outline.setRoundRect(AndroidUtilities.dp(1.0f), AndroidUtilities.dp(1.0f), view.getMeasuredWidth() - AndroidUtilities.dp(1.0f), view.getMeasuredHeight() - AndroidUtilities.dp(1.0f), AndroidUtilities.dp(6.0f));
                 }
             });
             setClipToOutline(true);
@@ -98,14 +100,15 @@ public class PatternCell extends BackupImageView implements DownloadController.F
     public void setPattern(TLRPC$TL_wallPaper tLRPC$TL_wallPaper) {
         this.currentPattern = tLRPC$TL_wallPaper;
         if (tLRPC$TL_wallPaper != null) {
-            setImage(ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(tLRPC$TL_wallPaper.document.thumbs, AndroidUtilities.dp(100.0f)), tLRPC$TL_wallPaper.document), "100_100", (ImageLocation) null, (String) null, "png", 0, 1, tLRPC$TL_wallPaper);
+            setImage(ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(tLRPC$TL_wallPaper.document.thumbs, AndroidUtilities.dp(100.0f)), tLRPC$TL_wallPaper.document), "100_100", null, null, "png", 0L, 1, tLRPC$TL_wallPaper);
         } else {
-            setImageDrawable((Drawable) null);
+            setImageDrawable(null);
         }
         updateSelected(false);
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
+    @Override // org.telegram.ui.Components.BackupImageView, android.view.View
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
         updateSelected(false);
@@ -122,48 +125,48 @@ public class PatternCell extends BackupImageView implements DownloadController.F
         invalidate();
     }
 
+    @Override // android.view.View
     public void invalidate() {
         super.invalidate();
     }
 
     private void updateButtonState(Object obj, boolean z, boolean z2) {
-        File file;
-        String str;
+        File httpFilePath;
+        String name;
         boolean z3 = obj instanceof TLRPC$TL_wallPaper;
         if (z3 || (obj instanceof MediaController.SearchImage)) {
             if (z3) {
                 TLRPC$TL_wallPaper tLRPC$TL_wallPaper = (TLRPC$TL_wallPaper) obj;
-                str = FileLoader.getAttachFileName(tLRPC$TL_wallPaper.document);
-                if (!TextUtils.isEmpty(str)) {
-                    file = FileLoader.getInstance(this.currentAccount).getPathToAttach(tLRPC$TL_wallPaper.document, true);
-                } else {
+                name = FileLoader.getAttachFileName(tLRPC$TL_wallPaper.document);
+                if (TextUtils.isEmpty(name)) {
                     return;
                 }
+                httpFilePath = FileLoader.getInstance(this.currentAccount).getPathToAttach(tLRPC$TL_wallPaper.document, true);
             } else {
                 MediaController.SearchImage searchImage = (MediaController.SearchImage) obj;
                 TLRPC$Photo tLRPC$Photo = searchImage.photo;
                 if (tLRPC$Photo != null) {
                     TLRPC$PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(tLRPC$Photo.sizes, this.maxWallpaperSize, true);
                     File pathToAttach = FileLoader.getInstance(this.currentAccount).getPathToAttach(closestPhotoSizeWithSize, true);
-                    str = FileLoader.getAttachFileName(closestPhotoSizeWithSize);
-                    file = pathToAttach;
+                    name = FileLoader.getAttachFileName(closestPhotoSizeWithSize);
+                    httpFilePath = pathToAttach;
                 } else {
-                    file = ImageLoader.getHttpFilePath(searchImage.imageUrl, "jpg");
-                    str = file.getName();
+                    httpFilePath = ImageLoader.getHttpFilePath(searchImage.imageUrl, "jpg");
+                    name = httpFilePath.getName();
                 }
-                if (TextUtils.isEmpty(str)) {
+                if (TextUtils.isEmpty(name)) {
                     return;
                 }
             }
-            if (file.exists()) {
+            if (httpFilePath.exists()) {
                 DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
                 this.radialProgress.setProgress(1.0f, z2);
                 this.radialProgress.setIcon(6, z, z2);
                 return;
             }
-            DownloadController.getInstance(this.currentAccount).addLoadingFileObserver(str, (MessageObject) null, this);
-            FileLoader.getInstance(this.currentAccount).isLoadingFile(str);
-            Float fileProgress = ImageLoader.getInstance().getFileProgress(str);
+            DownloadController.getInstance(this.currentAccount).addLoadingFileObserver(name, null, this);
+            FileLoader.getInstance(this.currentAccount).isLoadingFile(name);
+            Float fileProgress = ImageLoader.getInstance().getFileProgress(name);
             if (fileProgress != null) {
                 this.radialProgress.setProgress(fileProgress.floatValue(), z2);
             } else {
@@ -175,93 +178,96 @@ public class PatternCell extends BackupImageView implements DownloadController.F
         this.radialProgress.setIcon(6, z, z2);
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
+    @Override // org.telegram.ui.Components.BackupImageView, android.view.View
     @SuppressLint({"DrawAllocation"})
     public void onDraw(Canvas canvas) {
-        Canvas canvas2 = canvas;
         float intensity = this.delegate.getIntensity();
-        this.imageReceiver.setBlendMode((Object) null);
+        this.imageReceiver.setBlendMode(null);
         int backgroundColor = this.delegate.getBackgroundColor();
         int backgroundGradientColor1 = this.delegate.getBackgroundGradientColor1();
         int backgroundGradientColor2 = this.delegate.getBackgroundGradientColor2();
         int backgroundGradientColor3 = this.delegate.getBackgroundGradientColor3();
         int backgroundGradientAngle = this.delegate.getBackgroundGradientAngle();
         int checkColor = this.delegate.getCheckColor();
-        if (backgroundGradientColor1 == 0) {
+        if (backgroundGradientColor1 != 0) {
+            if (this.gradientShader == null || backgroundColor != this.currentBackgroundColor || backgroundGradientColor1 != this.currentGradientColor1 || backgroundGradientColor2 != this.currentGradientColor2 || backgroundGradientColor3 != this.currentGradientColor3 || backgroundGradientAngle != this.currentGradientAngle) {
+                this.currentBackgroundColor = backgroundColor;
+                this.currentGradientColor1 = backgroundGradientColor1;
+                this.currentGradientColor2 = backgroundGradientColor2;
+                this.currentGradientColor3 = backgroundGradientColor3;
+                this.currentGradientAngle = backgroundGradientAngle;
+                if (backgroundGradientColor2 != 0) {
+                    this.gradientShader = null;
+                    MotionBackgroundDrawable motionBackgroundDrawable = this.backgroundDrawable;
+                    if (motionBackgroundDrawable != null) {
+                        motionBackgroundDrawable.setColors(backgroundColor, backgroundGradientColor1, backgroundGradientColor2, backgroundGradientColor3, 0, false);
+                    } else {
+                        MotionBackgroundDrawable motionBackgroundDrawable2 = new MotionBackgroundDrawable(backgroundColor, backgroundGradientColor1, backgroundGradientColor2, backgroundGradientColor3, true);
+                        this.backgroundDrawable = motionBackgroundDrawable2;
+                        motionBackgroundDrawable2.setRoundRadius(AndroidUtilities.dp(6.0f));
+                        this.backgroundDrawable.setParentView(this);
+                    }
+                    if (intensity < 0.0f) {
+                        this.imageReceiver.setGradientBitmap(this.backgroundDrawable.getBitmap());
+                    } else {
+                        this.imageReceiver.setGradientBitmap(null);
+                        if (Build.VERSION.SDK_INT >= 29) {
+                            this.imageReceiver.setBlendMode(BlendMode.SOFT_LIGHT);
+                        } else {
+                            this.imageReceiver.setColorFilter(new PorterDuffColorFilter(this.delegate.getPatternColor(), PorterDuff.Mode.SRC_IN));
+                        }
+                    }
+                } else {
+                    Rect gradientPoints = BackgroundGradientDrawable.getGradientPoints(backgroundGradientAngle, getMeasuredWidth(), getMeasuredHeight());
+                    this.gradientShader = new LinearGradient(gradientPoints.left, gradientPoints.top, gradientPoints.right, gradientPoints.bottom, new int[]{backgroundColor, backgroundGradientColor1}, (float[]) null, Shader.TileMode.CLAMP);
+                    this.backgroundDrawable = null;
+                    this.imageReceiver.setGradientBitmap(null);
+                }
+            }
+        } else {
             this.gradientShader = null;
             this.backgroundDrawable = null;
-            this.imageReceiver.setGradientBitmap((Bitmap) null);
-        } else if (!(this.gradientShader != null && backgroundColor == this.currentBackgroundColor && backgroundGradientColor1 == this.currentGradientColor1 && backgroundGradientColor2 == this.currentGradientColor2 && backgroundGradientColor3 == this.currentGradientColor3 && backgroundGradientAngle == this.currentGradientAngle)) {
-            this.currentBackgroundColor = backgroundColor;
-            this.currentGradientColor1 = backgroundGradientColor1;
-            this.currentGradientColor2 = backgroundGradientColor2;
-            this.currentGradientColor3 = backgroundGradientColor3;
-            this.currentGradientAngle = backgroundGradientAngle;
-            if (backgroundGradientColor2 != 0) {
-                this.gradientShader = null;
-                MotionBackgroundDrawable motionBackgroundDrawable = this.backgroundDrawable;
-                if (motionBackgroundDrawable != null) {
-                    motionBackgroundDrawable.setColors(backgroundColor, backgroundGradientColor1, backgroundGradientColor2, backgroundGradientColor3, 0, false);
-                } else {
-                    MotionBackgroundDrawable motionBackgroundDrawable2 = new MotionBackgroundDrawable(backgroundColor, backgroundGradientColor1, backgroundGradientColor2, backgroundGradientColor3, true);
-                    this.backgroundDrawable = motionBackgroundDrawable2;
-                    motionBackgroundDrawable2.setRoundRadius(AndroidUtilities.dp(6.0f));
-                    this.backgroundDrawable.setParentView(this);
-                }
-                if (intensity < 0.0f) {
-                    this.imageReceiver.setGradientBitmap(this.backgroundDrawable.getBitmap());
-                } else {
-                    this.imageReceiver.setGradientBitmap((Bitmap) null);
-                    if (Build.VERSION.SDK_INT >= 29) {
-                        this.imageReceiver.setBlendMode(BlendMode.SOFT_LIGHT);
-                    } else {
-                        this.imageReceiver.setColorFilter(new PorterDuffColorFilter(this.delegate.getPatternColor(), PorterDuff.Mode.SRC_IN));
-                    }
-                }
-            } else {
-                Rect gradientPoints = BackgroundGradientDrawable.getGradientPoints(backgroundGradientAngle, getMeasuredWidth(), getMeasuredHeight());
-                this.gradientShader = new LinearGradient((float) gradientPoints.left, (float) gradientPoints.top, (float) gradientPoints.right, (float) gradientPoints.bottom, new int[]{backgroundColor, backgroundGradientColor1}, (float[]) null, Shader.TileMode.CLAMP);
-                this.backgroundDrawable = null;
-                this.imageReceiver.setGradientBitmap((Bitmap) null);
-            }
+            this.imageReceiver.setGradientBitmap(null);
         }
         MotionBackgroundDrawable motionBackgroundDrawable3 = this.backgroundDrawable;
         if (motionBackgroundDrawable3 != null) {
             motionBackgroundDrawable3.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
-            this.backgroundDrawable.draw(canvas2);
+            this.backgroundDrawable.draw(canvas);
         } else {
             this.backgroundPaint.setShader(this.gradientShader);
             if (this.gradientShader == null) {
                 this.backgroundPaint.setColor(backgroundColor);
             }
-            this.rect.set(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight());
-            canvas2.drawRoundRect(this.rect, (float) AndroidUtilities.dp(6.0f), (float) AndroidUtilities.dp(6.0f), this.backgroundPaint);
+            this.rect.set(0.0f, 0.0f, getMeasuredWidth(), getMeasuredHeight());
+            canvas.drawRoundRect(this.rect, AndroidUtilities.dp(6.0f), AndroidUtilities.dp(6.0f), this.backgroundPaint);
         }
         super.onDraw(canvas);
         if (this.radialProgress.getIcon() != 4) {
             this.radialProgress.setColors(checkColor, checkColor, -1, -1);
-            this.radialProgress.draw(canvas2);
+            this.radialProgress.draw(canvas);
         }
     }
 
-    /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
+    @Override // android.view.View
+    protected void onMeasure(int i, int i2) {
         setMeasuredDimension(AndroidUtilities.dp(100.0f), AndroidUtilities.dp(100.0f));
     }
 
+    @Override // org.telegram.messenger.DownloadController.FileDownloadProgressListener
     public void onFailedDownload(String str, boolean z) {
         TLRPC$TL_wallPaper selectedPattern = this.delegate.getSelectedPattern();
         TLRPC$TL_wallPaper tLRPC$TL_wallPaper = this.currentPattern;
-        if (!((tLRPC$TL_wallPaper == null && selectedPattern == null) || !(selectedPattern == null || tLRPC$TL_wallPaper == null || tLRPC$TL_wallPaper.id != selectedPattern.id))) {
-            return;
-        }
-        if (z) {
-            this.radialProgress.setIcon(4, false, true);
-        } else {
-            updateButtonState(tLRPC$TL_wallPaper, true, z);
+        if ((tLRPC$TL_wallPaper == null && selectedPattern == null) || !(selectedPattern == null || tLRPC$TL_wallPaper == null || tLRPC$TL_wallPaper.id != selectedPattern.id)) {
+            if (z) {
+                this.radialProgress.setIcon(4, false, true);
+            } else {
+                updateButtonState(tLRPC$TL_wallPaper, true, z);
+            }
         }
     }
 
+    @Override // org.telegram.messenger.DownloadController.FileDownloadProgressListener
     public void onSuccessDownload(String str) {
         this.radialProgress.setProgress(1.0f, true);
         TLRPC$TL_wallPaper selectedPattern = this.delegate.getSelectedPattern();
@@ -271,15 +277,18 @@ public class PatternCell extends BackupImageView implements DownloadController.F
         }
     }
 
+    @Override // org.telegram.messenger.DownloadController.FileDownloadProgressListener
     public void onProgressDownload(String str, long j, long j2) {
         this.radialProgress.setProgress(Math.min(1.0f, ((float) j) / ((float) j2)), true);
         TLRPC$TL_wallPaper selectedPattern = this.delegate.getSelectedPattern();
         TLRPC$TL_wallPaper tLRPC$TL_wallPaper = this.currentPattern;
-        if (((tLRPC$TL_wallPaper == null && selectedPattern == null) || !(selectedPattern == null || tLRPC$TL_wallPaper == null || tLRPC$TL_wallPaper.id != selectedPattern.id)) && this.radialProgress.getIcon() != 10) {
-            updateButtonState(this.currentPattern, false, true);
+        if (!((tLRPC$TL_wallPaper == null && selectedPattern == null) || !(selectedPattern == null || tLRPC$TL_wallPaper == null || tLRPC$TL_wallPaper.id != selectedPattern.id)) || this.radialProgress.getIcon() == 10) {
+            return;
         }
+        updateButtonState(this.currentPattern, false, true);
     }
 
+    @Override // org.telegram.messenger.DownloadController.FileDownloadProgressListener
     public int getObserverTag() {
         return this.TAG;
     }

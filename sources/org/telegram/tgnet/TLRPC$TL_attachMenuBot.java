@@ -1,63 +1,63 @@
 package org.telegram.tgnet;
 
 import java.util.ArrayList;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_attachMenuBot extends TLRPC$AttachMenuBot {
     public static int constructor = -NUM;
     public long bot_id;
     public int flags;
     public boolean has_settings;
-    public ArrayList<TLRPC$TL_attachMenuBotIcon> icons = new ArrayList<>();
     public boolean inactive;
-    public ArrayList<TLRPC$AttachMenuPeerType> peer_types = new ArrayList<>();
     public String short_name;
+    public ArrayList<TLRPC$AttachMenuPeerType> peer_types = new ArrayList<>();
+    public ArrayList<TLRPC$TL_attachMenuBotIcon> icons = new ArrayList<>();
 
+    @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
-        int i = 0;
         this.inactive = (readInt32 & 1) != 0;
         this.has_settings = (readInt32 & 2) != 0;
         this.bot_id = abstractSerializedData.readInt64(z);
         this.short_name = abstractSerializedData.readString(z);
         int readInt322 = abstractSerializedData.readInt32(z);
-        if (readInt322 == NUM) {
-            int readInt323 = abstractSerializedData.readInt32(z);
-            int i2 = 0;
-            while (i2 < readInt323) {
-                TLRPC$AttachMenuPeerType TLdeserialize = TLRPC$AttachMenuPeerType.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
-                if (TLdeserialize != null) {
-                    this.peer_types.add(TLdeserialize);
-                    i2++;
-                } else {
-                    return;
-                }
+        if (readInt322 != NUM) {
+            if (z) {
+                throw new RuntimeException(String.format("wrong Vector magic, got %x", Integer.valueOf(readInt322)));
             }
-            int readInt324 = abstractSerializedData.readInt32(z);
-            if (readInt324 == NUM) {
-                int readInt325 = abstractSerializedData.readInt32(z);
-                while (i < readInt325) {
-                    TLRPC$TL_attachMenuBotIcon TLdeserialize2 = TLRPC$TL_attachMenuBotIcon.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
-                    if (TLdeserialize2 != null) {
-                        this.icons.add(TLdeserialize2);
-                        i++;
-                    } else {
-                        return;
-                    }
-                }
-            } else if (z) {
-                throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt324)}));
+            return;
+        }
+        int readInt323 = abstractSerializedData.readInt32(z);
+        for (int i = 0; i < readInt323; i++) {
+            TLRPC$AttachMenuPeerType TLdeserialize = TLRPC$AttachMenuPeerType.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+            if (TLdeserialize == null) {
+                return;
             }
-        } else if (z) {
-            throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt322)}));
+            this.peer_types.add(TLdeserialize);
+        }
+        int readInt324 = abstractSerializedData.readInt32(z);
+        if (readInt324 != NUM) {
+            if (z) {
+                throw new RuntimeException(String.format("wrong Vector magic, got %x", Integer.valueOf(readInt324)));
+            }
+            return;
+        }
+        int readInt325 = abstractSerializedData.readInt32(z);
+        for (int i2 = 0; i2 < readInt325; i2++) {
+            TLRPC$TL_attachMenuBotIcon TLdeserialize2 = TLRPC$TL_attachMenuBotIcon.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+            if (TLdeserialize2 == null) {
+                return;
+            }
+            this.icons.add(TLdeserialize2);
         }
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
-        int i = this.inactive ? this.flags | 1 : this.flags & -2;
+        int i = this.inactive ? this.flags | 1 : this.flags & (-2);
         this.flags = i;
-        int i2 = this.has_settings ? i | 2 : i & -3;
+        int i2 = this.has_settings ? i | 2 : i & (-3);
         this.flags = i2;
         abstractSerializedData.writeInt32(i2);
         abstractSerializedData.writeInt64(this.bot_id);

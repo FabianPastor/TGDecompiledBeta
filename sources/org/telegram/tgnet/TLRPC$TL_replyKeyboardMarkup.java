@@ -1,42 +1,44 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_replyKeyboardMarkup extends TLRPC$ReplyMarkup {
     public static int constructor = -NUM;
 
+    @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
-        int i = 0;
         this.resize = (readInt32 & 1) != 0;
         this.single_use = (readInt32 & 2) != 0;
         this.selective = (readInt32 & 4) != 0;
         int readInt322 = abstractSerializedData.readInt32(z);
-        if (readInt322 == NUM) {
-            int readInt323 = abstractSerializedData.readInt32(z);
-            while (i < readInt323) {
-                TLRPC$TL_keyboardButtonRow TLdeserialize = TLRPC$TL_keyboardButtonRow.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
-                if (TLdeserialize != null) {
-                    this.rows.add(TLdeserialize);
-                    i++;
-                } else {
-                    return;
-                }
+        if (readInt322 != NUM) {
+            if (z) {
+                throw new RuntimeException(String.format("wrong Vector magic, got %x", Integer.valueOf(readInt322)));
             }
-            if ((this.flags & 8) != 0) {
-                this.placeholder = abstractSerializedData.readString(z);
-            }
-        } else if (z) {
-            throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt322)}));
+            return;
         }
+        int readInt323 = abstractSerializedData.readInt32(z);
+        for (int i = 0; i < readInt323; i++) {
+            TLRPC$TL_keyboardButtonRow TLdeserialize = TLRPC$TL_keyboardButtonRow.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+            if (TLdeserialize == null) {
+                return;
+            }
+            this.rows.add(TLdeserialize);
+        }
+        if ((this.flags & 8) == 0) {
+            return;
+        }
+        this.placeholder = abstractSerializedData.readString(z);
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
-        int i = this.resize ? this.flags | 1 : this.flags & -2;
+        int i = this.resize ? this.flags | 1 : this.flags & (-2);
         this.flags = i;
-        int i2 = this.single_use ? i | 2 : i & -3;
+        int i2 = this.single_use ? i | 2 : i & (-3);
         this.flags = i2;
-        int i3 = this.selective ? i2 | 4 : i2 & -5;
+        int i3 = this.selective ? i2 | 4 : i2 & (-5);
         this.flags = i3;
         abstractSerializedData.writeInt32(i3);
         abstractSerializedData.writeInt32(NUM);

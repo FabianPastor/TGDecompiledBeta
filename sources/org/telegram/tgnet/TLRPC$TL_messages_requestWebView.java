@@ -1,5 +1,5 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_messages_requestWebView extends TLObject {
     public static int constructor = -58219204;
     public TLRPC$InputUser bot;
@@ -14,15 +14,17 @@ public class TLRPC$TL_messages_requestWebView extends TLObject {
     public TLRPC$TL_dataJSON theme_params;
     public String url;
 
+    @Override // org.telegram.tgnet.TLObject
     public TLObject deserializeResponse(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         return TLRPC$TL_webViewResultUrl.TLdeserialize(abstractSerializedData, i, z);
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
-        int i = this.from_bot_menu ? this.flags | 16 : this.flags & -17;
+        int i = this.from_bot_menu ? this.flags | 16 : this.flags & (-17);
         this.flags = i;
-        int i2 = this.silent ? i | 32 : i & -33;
+        int i2 = this.silent ? i | 32 : i & (-33);
         this.flags = i2;
         abstractSerializedData.writeInt32(i2);
         this.peer.serializeToStream(abstractSerializedData);

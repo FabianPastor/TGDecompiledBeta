@@ -11,7 +11,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.voip.NativeInstance;
 import org.webrtc.ContextUtils;
 import org.webrtc.VideoSink;
-
+/* loaded from: classes.dex */
 public final class Instance {
     public static final int AUDIO_STATE_ACTIVE = 1;
     public static final int AUDIO_STATE_MUTED = 0;
@@ -55,21 +55,25 @@ public final class Instance {
     public static final int VIDEO_STATE_INACTIVE = 0;
     public static final int VIDEO_STATE_PAUSED = 1;
     private static int bufferSize;
-    private static ServerConfig globalServerConfig = new ServerConfig(new JSONObject());
+    private static ServerConfig globalServerConfig;
     private static NativeInstance instance;
 
+    /* loaded from: classes.dex */
     public interface OnRemoteMediaStateUpdatedListener {
         void onMediaStateUpdated(int i, int i2);
     }
 
+    /* loaded from: classes.dex */
     public interface OnSignalBarsUpdatedListener {
         void onSignalBarsUpdated(int i);
     }
 
+    /* loaded from: classes.dex */
     public interface OnSignalingDataListener {
         void onSignalingData(byte[] bArr);
     }
 
+    /* loaded from: classes.dex */
     public interface OnStateUpdatedListener {
         void onStateUpdated(int i, boolean z);
     }
@@ -79,13 +83,8 @@ public final class Instance {
     }
 
     static {
-        List<String> list;
-        if (Build.VERSION.SDK_INT >= 18) {
-            list = Arrays.asList(new String[]{"4.1.2", "4.0.2", "4.0.1", "4.0.0", "3.0.0", "2.7.7", "2.4.4"});
-        } else {
-            list = Arrays.asList(new String[]{"2.4.4"});
-        }
-        AVAILABLE_VERSIONS = list;
+        AVAILABLE_VERSIONS = Build.VERSION.SDK_INT >= 18 ? Arrays.asList("4.1.2", "4.0.2", "4.0.1", "4.0.0", "3.0.0", "2.7.7", "2.4.4") : Arrays.asList("2.4.4");
+        globalServerConfig = new ServerConfig(new JSONObject());
     }
 
     private Instance() {
@@ -99,13 +98,15 @@ public final class Instance {
         try {
             globalServerConfig = new ServerConfig(new JSONObject(str));
             NativeInstance nativeInstance = instance;
-            if (nativeInstance != null) {
-                nativeInstance.setGlobalServerConfig(str);
+            if (nativeInstance == null) {
+                return;
             }
+            nativeInstance.setGlobalServerConfig(str);
         } catch (JSONException e) {
-            if (BuildVars.LOGS_ENABLED) {
-                FileLog.e("failed to parse tgvoip server config", (Throwable) e);
+            if (!BuildVars.LOGS_ENABLED) {
+                return;
             }
+            FileLog.e("failed to parse tgvoip server config", e);
         }
     }
 
@@ -140,11 +141,13 @@ public final class Instance {
     }
 
     private static void checkHasDelegate() {
-        if (instance == null) {
-            throw new IllegalStateException("tgvoip version is not set");
+        if (instance != null) {
+            return;
         }
+        throw new IllegalStateException("tgvoip version is not set");
     }
 
+    /* loaded from: classes.dex */
     public static final class Config {
         public final int dataSaving;
         public final boolean enableAec;
@@ -175,10 +178,11 @@ public final class Instance {
         }
 
         public String toString() {
-            return "Config{initializationTimeout=" + this.initializationTimeout + ", receiveTimeout=" + this.receiveTimeout + ", dataSaving=" + this.dataSaving + ", enableP2p=" + this.enableP2p + ", enableAec=" + this.enableAec + ", enableNs=" + this.enableNs + ", enableAgc=" + this.enableAgc + ", enableCallUpgrade=" + this.enableCallUpgrade + ", logPath='" + this.logPath + '\'' + ", statsLogPath='" + this.statsLogPath + '\'' + ", maxApiLayer=" + this.maxApiLayer + ", enableSm=" + this.enableSm + '}';
+            return "Config{initializationTimeout=" + this.initializationTimeout + ", receiveTimeout=" + this.receiveTimeout + ", dataSaving=" + this.dataSaving + ", enableP2p=" + this.enableP2p + ", enableAec=" + this.enableAec + ", enableNs=" + this.enableNs + ", enableAgc=" + this.enableAgc + ", enableCallUpgrade=" + this.enableCallUpgrade + ", logPath='" + this.logPath + "', statsLogPath='" + this.statsLogPath + "', maxApiLayer=" + this.maxApiLayer + ", enableSm=" + this.enableSm + '}';
         }
     }
 
+    /* loaded from: classes.dex */
     public static final class Endpoint {
         public final long id;
         public final String ipv4;
@@ -209,10 +213,11 @@ public final class Instance {
         }
 
         public String toString() {
-            return "Endpoint{id=" + this.id + ", ipv4='" + this.ipv4 + '\'' + ", ipv6='" + this.ipv6 + '\'' + ", port=" + this.port + ", type=" + this.type + ", peerTag=" + Arrays.toString(this.peerTag) + ", turn=" + this.turn + ", stun=" + this.stun + ", username=" + this.username + ", password=" + this.password + ", tcp=" + this.tcp + '}';
+            return "Endpoint{id=" + this.id + ", ipv4='" + this.ipv4 + "', ipv6='" + this.ipv6 + "', port=" + this.port + ", type=" + this.type + ", peerTag=" + Arrays.toString(this.peerTag) + ", turn=" + this.turn + ", stun=" + this.stun + ", username=" + this.username + ", password=" + this.password + ", tcp=" + this.tcp + '}';
         }
     }
 
+    /* loaded from: classes.dex */
     public static final class Proxy {
         public final String host;
         public final String login;
@@ -227,10 +232,11 @@ public final class Instance {
         }
 
         public String toString() {
-            return "Proxy{host='" + this.host + '\'' + ", port=" + this.port + ", login='" + this.login + '\'' + ", password='" + this.password + '\'' + '}';
+            return "Proxy{host='" + this.host + "', port=" + this.port + ", login='" + this.login + "', password='" + this.password + "'}";
         }
     }
 
+    /* loaded from: classes.dex */
     public static final class EncryptionKey {
         public final boolean isOutgoing;
         public final byte[] value;
@@ -245,24 +251,26 @@ public final class Instance {
         }
     }
 
+    /* loaded from: classes.dex */
     public static final class FinalState {
         public String debugLog;
         public final boolean isRatingSuggested;
         public final byte[] persistentState;
         public final TrafficStats trafficStats;
 
-        public FinalState(byte[] bArr, String str, TrafficStats trafficStats2, boolean z) {
+        public FinalState(byte[] bArr, String str, TrafficStats trafficStats, boolean z) {
             this.persistentState = bArr;
             this.debugLog = str;
-            this.trafficStats = trafficStats2;
+            this.trafficStats = trafficStats;
             this.isRatingSuggested = z;
         }
 
         public String toString() {
-            return "FinalState{persistentState=" + Arrays.toString(this.persistentState) + ", debugLog='" + this.debugLog + '\'' + ", trafficStats=" + this.trafficStats + ", isRatingSuggested=" + this.isRatingSuggested + '}';
+            return "FinalState{persistentState=" + Arrays.toString(this.persistentState) + ", debugLog='" + this.debugLog + "', trafficStats=" + this.trafficStats + ", isRatingSuggested=" + this.isRatingSuggested + '}';
         }
     }
 
+    /* loaded from: classes.dex */
     public static final class TrafficStats {
         public final long bytesReceivedMobile;
         public final long bytesReceivedWifi;
@@ -281,6 +289,7 @@ public final class Instance {
         }
     }
 
+    /* loaded from: classes.dex */
     public static final class Fingerprint {
         public final String fingerprint;
         public final String hash;
@@ -297,6 +306,7 @@ public final class Instance {
         }
     }
 
+    /* loaded from: classes.dex */
     public static final class Candidate {
         public final String component;
         public final String foundation;
@@ -333,6 +343,7 @@ public final class Instance {
         }
     }
 
+    /* loaded from: classes.dex */
     public static final class ServerConfig {
         public final boolean enableStunMarking;
         public final boolean enable_h264_decoder;
@@ -344,8 +355,7 @@ public final class Instance {
         public final boolean enable_vp9_decoder;
         public final boolean enable_vp9_encoder;
         public final double hangupUiTimeout;
-        /* access modifiers changed from: private */
-        public final JSONObject jsonObject;
+        private final JSONObject jsonObject;
         public final boolean useSystemAec;
         public final boolean useSystemNs;
 

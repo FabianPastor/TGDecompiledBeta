@@ -5,7 +5,7 @@ import android.view.MotionEvent;
 import java.util.Vector;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.Components.Paint.Brush;
-
+/* loaded from: classes3.dex */
 public class Input {
     private boolean beganDrawing;
     private boolean clearBuffer;
@@ -15,13 +15,13 @@ public class Input {
     private float lastAngle;
     private Point lastLocation;
     private double lastRemainder;
-    private Point[] points = new Point[3];
     private int pointsCount;
     private RenderView renderView;
+    private Point[] points = new Point[3];
     private float[] tempPoint = new float[2];
 
-    public Input(RenderView renderView2) {
-        this.renderView = renderView2;
+    public Input(RenderView renderView) {
+        this.renderView = renderView;
     }
 
     public void setMatrix(Matrix matrix) {
@@ -33,13 +33,13 @@ public class Input {
     public void process(MotionEvent motionEvent, float f) {
         int actionMasked = motionEvent.getActionMasked();
         float x = motionEvent.getX();
-        float height = ((float) this.renderView.getHeight()) - motionEvent.getY();
+        float height = this.renderView.getHeight() - motionEvent.getY();
         float[] fArr = this.tempPoint;
         fArr[0] = x;
         fArr[1] = height;
         this.invertMatrix.mapPoints(fArr);
         float[] fArr2 = this.tempPoint;
-        Point point = new Point((double) fArr2[0], (double) fArr2[1], 1.0d);
+        Point point = new Point(fArr2[0], fArr2[1], 1.0d);
         if (actionMasked != 0) {
             if (actionMasked == 1) {
                 if (!this.hasMoved) {
@@ -55,10 +55,10 @@ public class Input {
                         Point point2 = this.points[this.pointsCount - 1];
                         Point point3 = new Point(point2.x, point2.y, 0.800000011920929d);
                         double d = point2.x;
-                        double d2 = (double) f2;
+                        double d2 = f2;
                         Double.isNaN(d2);
                         double cos = Math.cos(d2 - 2.356194490192345d);
-                        double currentWeight = (double) (this.renderView.getCurrentWeight() * 4.5f);
+                        double currentWeight = this.renderView.getCurrentWeight() * 4.5f;
                         Double.isNaN(currentWeight);
                         double d3 = d + (cos * currentWeight);
                         double d4 = point2.y;
@@ -88,12 +88,12 @@ public class Input {
                 this.renderView.onFinishedDrawing(this.hasMoved);
                 return;
             } else if (actionMasked != 2) {
-                if (actionMasked == 3) {
-                    this.renderView.getPainting().clearStroke();
-                    this.pointsCount = 0;
-                    this.beganDrawing = false;
+                if (actionMasked != 3) {
                     return;
                 }
+                this.renderView.getPainting().clearStroke();
+                this.pointsCount = 0;
+                this.beganDrawing = false;
                 return;
             }
         }
@@ -105,7 +105,8 @@ public class Input {
             this.points[0] = point;
             this.pointsCount = 1;
             this.clearBuffer = true;
-        } else if (point.getDistanceTo(this.lastLocation) >= ((float) AndroidUtilities.dp(5.0f)) / f) {
+        } else if (point.getDistanceTo(this.lastLocation) < AndroidUtilities.dp(5.0f) / f) {
+        } else {
             if (!this.hasMoved) {
                 this.renderView.onBeganDrawing();
                 this.hasMoved = true;
@@ -135,81 +136,90 @@ public class Input {
             Point point = pointArr[0];
             Point point2 = pointArr[1];
             Point point3 = pointArr[2];
-            if (point3 != null && point2 != null && point != null) {
-                Point multiplySum = point2.multiplySum(point, 0.5d);
-                Point multiplySum2 = point3.multiplySum(point2, 0.5d);
-                int min = (int) Math.min(48.0d, Math.max(Math.floor((double) (multiplySum.getDistanceTo(multiplySum2) / ((float) 1))), 24.0d));
-                float f = 0.0f;
-                float f2 = 1.0f / ((float) min);
-                for (int i2 = 0; i2 < min; i2++) {
-                    Point smoothPoint = smoothPoint(multiplySum, multiplySum2, point2, f);
-                    if (this.isFirst) {
-                        smoothPoint.edge = true;
-                        this.isFirst = false;
-                    }
-                    vector.add(smoothPoint);
-                    f += f2;
-                }
-                if (z) {
-                    multiplySum2.edge = true;
-                }
-                vector.add(multiplySum2);
-                Point[] pointArr2 = new Point[vector.size()];
-                vector.toArray(pointArr2);
-                paintPath(new Path(pointArr2));
-                Point[] pointArr3 = this.points;
-                System.arraycopy(pointArr3, 1, pointArr3, 0, 2);
-                if (z) {
-                    this.pointsCount = 0;
-                } else {
-                    this.pointsCount = 2;
-                }
+            if (point3 == null || point2 == null || point == null) {
+                return;
             }
-        } else {
-            Point[] pointArr4 = new Point[i];
-            System.arraycopy(this.points, 0, pointArr4, 0, i);
-            paintPath(new Path(pointArr4));
+            Point multiplySum = point2.multiplySum(point, 0.5d);
+            Point multiplySum2 = point3.multiplySum(point2, 0.5d);
+            int min = (int) Math.min(48.0d, Math.max(Math.floor(multiplySum.getDistanceTo(multiplySum2) / 1), 24.0d));
+            float f = 0.0f;
+            float f2 = 1.0f / min;
+            for (int i2 = 0; i2 < min; i2++) {
+                Point smoothPoint = smoothPoint(multiplySum, multiplySum2, point2, f);
+                if (this.isFirst) {
+                    smoothPoint.edge = true;
+                    this.isFirst = false;
+                }
+                vector.add(smoothPoint);
+                f += f2;
+            }
+            if (z) {
+                multiplySum2.edge = true;
+            }
+            vector.add(multiplySum2);
+            Point[] pointArr2 = new Point[vector.size()];
+            vector.toArray(pointArr2);
+            paintPath(new Path(pointArr2));
+            Point[] pointArr3 = this.points;
+            System.arraycopy(pointArr3, 1, pointArr3, 0, 2);
+            if (z) {
+                this.pointsCount = 0;
+                return;
+            } else {
+                this.pointsCount = 2;
+                return;
+            }
         }
+        Point[] pointArr4 = new Point[i];
+        System.arraycopy(this.points, 0, pointArr4, 0, i);
+        paintPath(new Path(pointArr4));
     }
 
     private Point smoothPoint(Point point, Point point2, Point point3, float f) {
-        Point point4 = point;
-        Point point5 = point2;
-        Point point6 = point3;
         float f2 = 1.0f - f;
-        double pow = Math.pow((double) f2, 2.0d);
-        double d = (double) (f2 * 2.0f * f);
-        double d2 = (double) (f * f);
-        double d3 = point6.x;
+        double pow = Math.pow(f2, 2.0d);
+        double d = f2 * 2.0f * f;
+        double d2 = f * f;
+        double d3 = point3.x;
         Double.isNaN(d);
-        double d4 = (point4.x * pow) + (d3 * d);
-        double d5 = point5.x;
+        double d4 = (point.x * pow) + (d3 * d);
+        double d5 = point2.x;
         Double.isNaN(d2);
-        double d6 = point4.y * pow;
-        double d7 = point6.y;
+        double d6 = point.y * pow;
+        double d7 = point3.y;
         Double.isNaN(d);
-        double d8 = point5.y;
+        double d8 = point2.y;
         Double.isNaN(d2);
         return new Point(d4 + (d5 * d2), d6 + (d7 * d) + (d8 * d2), 1.0d);
     }
 
-    private void paintPath(Path path) {
+    private void paintPath(final Path path) {
         path.setup(this.renderView.getCurrentColor(), this.renderView.getCurrentWeight(), this.renderView.getCurrentBrush());
         if (this.clearBuffer) {
             this.lastRemainder = 0.0d;
         }
         path.remainder = this.lastRemainder;
-        this.renderView.getPainting().paintStroke(path, this.clearBuffer, new Input$$ExternalSyntheticLambda1(this, path));
+        this.renderView.getPainting().paintStroke(path, this.clearBuffer, new Runnable() { // from class: org.telegram.ui.Components.Paint.Input$$ExternalSyntheticLambda1
+            @Override // java.lang.Runnable
+            public final void run() {
+                Input.this.lambda$paintPath$1(path);
+            }
+        });
         this.clearBuffer = false;
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$paintPath$0(Path path) {
         this.lastRemainder = path.remainder;
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$paintPath$1(Path path) {
-        AndroidUtilities.runOnUIThread(new Input$$ExternalSyntheticLambda0(this, path));
+    /* JADX INFO: Access modifiers changed from: private */
+    public /* synthetic */ void lambda$paintPath$1(final Path path) {
+        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.Paint.Input$$ExternalSyntheticLambda0
+            @Override // java.lang.Runnable
+            public final void run() {
+                Input.this.lambda$paintPath$0(path);
+            }
+        });
     }
 }

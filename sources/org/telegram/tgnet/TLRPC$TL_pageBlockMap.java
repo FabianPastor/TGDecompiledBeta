@@ -1,5 +1,5 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_pageBlockMap extends TLRPC$PageBlock {
     public static int constructor = -NUM;
     public TLRPC$TL_pageCaption caption;
@@ -8,6 +8,7 @@ public class TLRPC$TL_pageBlockMap extends TLRPC$PageBlock {
     public int w;
     public int zoom;
 
+    @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         this.geo = TLRPC$GeoPoint.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         this.zoom = abstractSerializedData.readInt32(z);
@@ -16,6 +17,7 @@ public class TLRPC$TL_pageBlockMap extends TLRPC$PageBlock {
         this.caption = TLRPC$TL_pageCaption.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
         this.geo.serializeToStream(abstractSerializedData);

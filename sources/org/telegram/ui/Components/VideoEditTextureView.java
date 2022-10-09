@@ -4,25 +4,28 @@ import android.content.Context;
 import android.graphics.SurfaceTexture;
 import android.view.Surface;
 import android.view.TextureView;
-import org.telegram.ui.Components.FilterShaders;
-
+import org.telegram.ui.Components.FilterGLThread;
+/* loaded from: classes3.dex */
 public class VideoEditTextureView extends TextureView implements TextureView.SurfaceTextureListener {
     private VideoPlayer currentVideoPlayer;
     private VideoEditTextureViewDelegate delegate;
     private FilterGLThread eglThread;
     private int videoHeight;
     private int videoWidth;
-    private Rect viewRect = new Rect();
+    private Rect viewRect;
 
+    /* loaded from: classes3.dex */
     public interface VideoEditTextureViewDelegate {
         void onEGLThreadAvailable(FilterGLThread filterGLThread);
     }
 
+    @Override // android.view.TextureView.SurfaceTextureListener
     public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
     }
 
     public VideoEditTextureView(Context context, VideoPlayer videoPlayer) {
         super(context);
+        this.viewRect = new Rect();
         this.currentVideoPlayer = videoPlayer;
         setSurfaceTextureListener(this);
     }
@@ -30,13 +33,12 @@ public class VideoEditTextureView extends TextureView implements TextureView.Sur
     public void setDelegate(VideoEditTextureViewDelegate videoEditTextureViewDelegate) {
         this.delegate = videoEditTextureViewDelegate;
         FilterGLThread filterGLThread = this.eglThread;
-        if (filterGLThread == null) {
-            return;
-        }
-        if (videoEditTextureViewDelegate == null) {
-            filterGLThread.setFilterGLThreadDelegate((FilterShaders.FilterShadersDelegate) null);
-        } else {
-            videoEditTextureViewDelegate.onEGLThreadAvailable(filterGLThread);
+        if (filterGLThread != null) {
+            if (videoEditTextureViewDelegate == null) {
+                filterGLThread.setFilterGLThreadDelegate(null);
+            } else {
+                videoEditTextureViewDelegate.onEGLThreadAvailable(filterGLThread);
+            }
         }
     }
 
@@ -44,9 +46,10 @@ public class VideoEditTextureView extends TextureView implements TextureView.Sur
         this.videoWidth = i;
         this.videoHeight = i2;
         FilterGLThread filterGLThread = this.eglThread;
-        if (filterGLThread != null) {
-            filterGLThread.setVideoSize(i, i2);
+        if (filterGLThread == null) {
+            return;
         }
+        filterGLThread.setVideoSize(i, i2);
     }
 
     public int getVideoWidth() {
@@ -57,41 +60,56 @@ public class VideoEditTextureView extends TextureView implements TextureView.Sur
         return this.videoHeight;
     }
 
+    @Override // android.view.TextureView.SurfaceTextureListener
     public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int i, int i2) {
         int i3;
-        if (this.eglThread == null && surfaceTexture != null && this.currentVideoPlayer != null) {
-            FilterGLThread filterGLThread = new FilterGLThread(surfaceTexture, new VideoEditTextureView$$ExternalSyntheticLambda1(this));
-            this.eglThread = filterGLThread;
-            int i4 = this.videoWidth;
-            if (!(i4 == 0 || (i3 = this.videoHeight) == 0)) {
-                filterGLThread.setVideoSize(i4, i3);
-            }
-            this.eglThread.setSurfaceTextureSize(i, i2);
-            this.eglThread.requestRender(true, true, false);
-            VideoEditTextureViewDelegate videoEditTextureViewDelegate = this.delegate;
-            if (videoEditTextureViewDelegate != null) {
-                videoEditTextureViewDelegate.onEGLThreadAvailable(this.eglThread);
-            }
+        if (this.eglThread != null || surfaceTexture == null || this.currentVideoPlayer == null) {
+            return;
         }
+        FilterGLThread filterGLThread = new FilterGLThread(surfaceTexture, new FilterGLThread.FilterGLThreadVideoDelegate() { // from class: org.telegram.ui.Components.VideoEditTextureView$$ExternalSyntheticLambda1
+            @Override // org.telegram.ui.Components.FilterGLThread.FilterGLThreadVideoDelegate
+            public final void onVideoSurfaceCreated(SurfaceTexture surfaceTexture2) {
+                VideoEditTextureView.this.lambda$onSurfaceTextureAvailable$0(surfaceTexture2);
+            }
+        });
+        this.eglThread = filterGLThread;
+        int i4 = this.videoWidth;
+        if (i4 != 0 && (i3 = this.videoHeight) != 0) {
+            filterGLThread.setVideoSize(i4, i3);
+        }
+        this.eglThread.setSurfaceTextureSize(i, i2);
+        this.eglThread.requestRender(true, true, false);
+        VideoEditTextureViewDelegate videoEditTextureViewDelegate = this.delegate;
+        if (videoEditTextureViewDelegate == null) {
+            return;
+        }
+        videoEditTextureViewDelegate.onEGLThreadAvailable(this.eglThread);
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$onSurfaceTextureAvailable$0(SurfaceTexture surfaceTexture) {
-        if (this.currentVideoPlayer != null) {
-            this.currentVideoPlayer.setSurface(new Surface(surfaceTexture));
+        if (this.currentVideoPlayer == null) {
+            return;
         }
+        this.currentVideoPlayer.setSurface(new Surface(surfaceTexture));
     }
 
+    @Override // android.view.TextureView.SurfaceTextureListener
     public void onSurfaceTextureSizeChanged(SurfaceTexture surfaceTexture, int i, int i2) {
         FilterGLThread filterGLThread = this.eglThread;
         if (filterGLThread != null) {
             filterGLThread.setSurfaceTextureSize(i, i2);
             this.eglThread.requestRender(false, true, false);
-            this.eglThread.postRunnable(new VideoEditTextureView$$ExternalSyntheticLambda0(this));
+            this.eglThread.postRunnable(new Runnable() { // from class: org.telegram.ui.Components.VideoEditTextureView$$ExternalSyntheticLambda0
+                @Override // java.lang.Runnable
+                public final void run() {
+                    VideoEditTextureView.this.lambda$onSurfaceTextureSizeChanged$1();
+                }
+            });
         }
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$onSurfaceTextureSizeChanged$1() {
         FilterGLThread filterGLThread = this.eglThread;
         if (filterGLThread != null) {
@@ -99,13 +117,14 @@ public class VideoEditTextureView extends TextureView implements TextureView.Sur
         }
     }
 
+    @Override // android.view.TextureView.SurfaceTextureListener
     public boolean onSurfaceTextureDestroyed(SurfaceTexture surfaceTexture) {
         FilterGLThread filterGLThread = this.eglThread;
-        if (filterGLThread == null) {
+        if (filterGLThread != null) {
+            filterGLThread.shutdown();
+            this.eglThread = null;
             return true;
         }
-        filterGLThread.shutdown();
-        this.eglThread = null;
         return true;
     }
 
@@ -130,7 +149,10 @@ public class VideoEditTextureView extends TextureView implements TextureView.Sur
         float f3 = rect.x;
         if (f >= f3 && f <= f3 + rect.width) {
             float f4 = rect.y;
-            return f2 >= f4 && f2 <= f4 + rect.height;
+            if (f2 >= f4 && f2 <= f4 + rect.height) {
+                return true;
+            }
         }
+        return false;
     }
 }

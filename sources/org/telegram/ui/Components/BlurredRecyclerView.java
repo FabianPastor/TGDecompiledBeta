@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.SharedConfig;
-
+/* loaded from: classes3.dex */
 public class BlurredRecyclerView extends RecyclerListView {
     public int additionalClipBottom;
     public int blurTopPadding;
@@ -17,7 +17,8 @@ public class BlurredRecyclerView extends RecyclerListView {
         super(context);
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
+    @Override // org.telegram.ui.Components.RecyclerListView, androidx.recyclerview.widget.RecyclerView, android.view.View
     public void onMeasure(int i, int i2) {
         this.globalIgnoreLayout = true;
         updateTopPadding();
@@ -26,31 +27,36 @@ public class BlurredRecyclerView extends RecyclerListView {
         super.onMeasure(i, i2);
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
+    @Override // org.telegram.ui.Components.RecyclerListView, androidx.recyclerview.widget.RecyclerView, android.view.ViewGroup, android.view.View
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
         updateTopPadding();
     }
 
     private void updateTopPadding() {
-        if (getLayoutParams() != null) {
-            if (SharedConfig.chatBlurEnabled()) {
-                this.blurTopPadding = AndroidUtilities.dp(203.0f);
-                ((ViewGroup.MarginLayoutParams) getLayoutParams()).topMargin = -this.blurTopPadding;
-                return;
-            }
-            this.blurTopPadding = 0;
-            ((ViewGroup.MarginLayoutParams) getLayoutParams()).topMargin = 0;
+        if (getLayoutParams() == null) {
+            return;
         }
+        if (SharedConfig.chatBlurEnabled()) {
+            this.blurTopPadding = AndroidUtilities.dp(203.0f);
+            ((ViewGroup.MarginLayoutParams) getLayoutParams()).topMargin = -this.blurTopPadding;
+            return;
+        }
+        this.blurTopPadding = 0;
+        ((ViewGroup.MarginLayoutParams) getLayoutParams()).topMargin = 0;
     }
 
+    @Override // org.telegram.ui.Components.RecyclerListView, androidx.recyclerview.widget.RecyclerView, android.view.View, android.view.ViewParent
     public void requestLayout() {
-        if (!this.globalIgnoreLayout) {
-            super.requestLayout();
+        if (this.globalIgnoreLayout) {
+            return;
         }
+        super.requestLayout();
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
+    @Override // org.telegram.ui.Components.RecyclerListView, android.view.ViewGroup, android.view.View
     public void dispatchDraw(Canvas canvas) {
         int i = this.blurTopPadding;
         if (i != 0) {
@@ -61,13 +67,15 @@ public class BlurredRecyclerView extends RecyclerListView {
         super.dispatchDraw(canvas);
     }
 
+    @Override // androidx.recyclerview.widget.RecyclerView, android.view.ViewGroup
     public boolean drawChild(Canvas canvas, View view, long j) {
-        if (view.getY() + ((float) view.getMeasuredHeight()) < ((float) this.blurTopPadding)) {
+        if (view.getY() + view.getMeasuredHeight() < this.blurTopPadding) {
             return true;
         }
         return super.drawChild(canvas, view, j);
     }
 
+    @Override // android.view.View
     public void setPadding(int i, int i2, int i3, int i4) {
         this.topPadding = i2;
         super.setPadding(i, i2 + this.blurTopPadding, i3, i4);

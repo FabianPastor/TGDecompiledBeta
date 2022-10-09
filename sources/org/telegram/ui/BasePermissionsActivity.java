@@ -1,7 +1,6 @@
 package org.telegram.ui;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -17,13 +16,12 @@ import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.camera.CameraController;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.Theme;
-
+/* loaded from: classes3.dex */
 public class BasePermissionsActivity extends Activity {
     protected int currentAccount = -1;
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
     public boolean checkPermissionsResult(int i, String[] strArr, int[] iArr) {
-        String str;
         if (iArr == null) {
             iArr = new int[0];
         }
@@ -42,13 +40,7 @@ public class BasePermissionsActivity extends Activity {
             }
         } else if (i == 4 || i == 151) {
             if (!z) {
-                int i2 = R.raw.permission_request_folder;
-                if (i == 151) {
-                    str = LocaleController.getString("PermissionNoStorageAvatar", R.string.PermissionNoStorageAvatar);
-                } else {
-                    str = LocaleController.getString("PermissionStorageWithHint", R.string.PermissionStorageWithHint);
-                }
-                showPermissionErrorAlert(i2, str);
+                showPermissionErrorAlert(R.raw.permission_request_folder, i == 151 ? LocaleController.getString("PermissionNoStorageAvatar", R.string.PermissionNoStorageAvatar) : LocaleController.getString("PermissionStorageWithHint", R.string.PermissionStorageWithHint));
             } else {
                 ImageLoader.getInstance().checkMediaPaths();
             }
@@ -62,14 +54,14 @@ public class BasePermissionsActivity extends Activity {
             int min = Math.min(strArr.length, iArr.length);
             boolean z2 = true;
             boolean z3 = true;
-            for (int i3 = 0; i3 < min; i3++) {
-                if ("android.permission.RECORD_AUDIO".equals(strArr[i3])) {
-                    z2 = iArr[i3] == 0;
-                } else if ("android.permission.CAMERA".equals(strArr[i3])) {
-                    z3 = iArr[i3] == 0;
+            for (int i2 = 0; i2 < min; i2++) {
+                if ("android.permission.RECORD_AUDIO".equals(strArr[i2])) {
+                    z2 = iArr[i2] == 0;
+                } else if ("android.permission.CAMERA".equals(strArr[i2])) {
+                    z3 = iArr[i2] == 0;
                 }
             }
-            if (i == 150 && (!z2 || !z3)) {
+            if (i == 150 && !(z2 && z3)) {
                 showPermissionErrorAlert(R.raw.permission_request_camera, LocaleController.getString("PermissionNoCameraMicVideo", R.string.PermissionNoCameraMicVideo));
             } else if (!z2) {
                 showPermissionErrorAlert(R.raw.permission_request_microphone, LocaleController.getString("PermissionNoAudioWithHint", R.string.PermissionNoAudioWithHint));
@@ -77,7 +69,7 @@ public class BasePermissionsActivity extends Activity {
                 showPermissionErrorAlert(R.raw.permission_request_camera, LocaleController.getString("PermissionNoCameraWithHint", R.string.PermissionNoCameraWithHint));
             } else {
                 if (SharedConfig.inappCamera) {
-                    CameraController.getInstance().initCamera((Runnable) null);
+                    CameraController.getInstance().initCamera(null);
                 }
                 return false;
             }
@@ -91,19 +83,24 @@ public class BasePermissionsActivity extends Activity {
         return true;
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
     public AlertDialog createPermissionErrorAlert(int i, String str) {
-        return new AlertDialog.Builder((Context) this).setTopAnimation(i, 72, false, Theme.getColor("dialogTopBackground")).setMessage(AndroidUtilities.replaceTags(str)).setPositiveButton(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), new BasePermissionsActivity$$ExternalSyntheticLambda0(this)).setNegativeButton(LocaleController.getString("ContactsPermissionAlertNotNow", R.string.ContactsPermissionAlertNotNow), (DialogInterface.OnClickListener) null).create();
+        return new AlertDialog.Builder(this).setTopAnimation(i, 72, false, Theme.getColor("dialogTopBackground")).setMessage(AndroidUtilities.replaceTags(str)).setPositiveButton(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), new DialogInterface.OnClickListener() { // from class: org.telegram.ui.BasePermissionsActivity$$ExternalSyntheticLambda0
+            @Override // android.content.DialogInterface.OnClickListener
+            public final void onClick(DialogInterface dialogInterface, int i2) {
+                BasePermissionsActivity.this.lambda$createPermissionErrorAlert$0(dialogInterface, i2);
+            }
+        }).setNegativeButton(LocaleController.getString("ContactsPermissionAlertNotNow", R.string.ContactsPermissionAlertNotNow), null).create();
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$createPermissionErrorAlert$0(DialogInterface dialogInterface, int i) {
         try {
             Intent intent = new Intent("android.settings.APPLICATION_DETAILS_SETTINGS");
             intent.setData(Uri.parse("package:" + ApplicationLoader.applicationContext.getPackageName()));
             startActivity(intent);
         } catch (Exception e) {
-            FileLog.e((Throwable) e);
+            FileLog.e(e);
         }
     }
 

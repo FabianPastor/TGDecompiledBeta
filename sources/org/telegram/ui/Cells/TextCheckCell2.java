@@ -13,7 +13,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.Switch;
-
+/* loaded from: classes3.dex */
 public class TextCheckCell2 extends FrameLayout {
     private Switch checkBox;
     private boolean isMultiline;
@@ -23,9 +23,9 @@ public class TextCheckCell2 extends FrameLayout {
 
     public TextCheckCell2(Context context) {
         super(context);
-        TextView textView2 = new TextView(context);
-        this.textView = textView2;
-        textView2.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+        TextView textView = new TextView(context);
+        this.textView = textView;
+        textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
@@ -33,12 +33,12 @@ public class TextCheckCell2 extends FrameLayout {
         int i = 5;
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         this.textView.setEllipsize(TextUtils.TruncateAt.END);
-        TextView textView3 = this.textView;
+        TextView textView2 = this.textView;
         boolean z = LocaleController.isRTL;
-        addView(textView3, LayoutHelper.createFrame(-1, -1.0f, (z ? 5 : 3) | 48, z ? 64.0f : 21.0f, 0.0f, z ? 21.0f : 64.0f, 0.0f));
-        TextView textView4 = new TextView(context);
-        this.valueTextView = textView4;
-        textView4.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2"));
+        addView(textView2, LayoutHelper.createFrame(-1, -1.0f, (z ? 5 : 3) | 48, z ? 64.0f : 21.0f, 0.0f, z ? 21.0f : 64.0f, 0.0f));
+        TextView textView3 = new TextView(context);
+        this.valueTextView = textView3;
+        textView3.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2"));
         this.valueTextView.setTextSize(1, 13.0f);
         this.valueTextView.setGravity(LocaleController.isRTL ? 5 : 3);
         this.valueTextView.setLines(1);
@@ -46,17 +46,17 @@ public class TextCheckCell2 extends FrameLayout {
         this.valueTextView.setSingleLine(true);
         this.valueTextView.setPadding(0, 0, 0, 0);
         this.valueTextView.setEllipsize(TextUtils.TruncateAt.END);
-        TextView textView5 = this.valueTextView;
+        TextView textView4 = this.valueTextView;
         boolean z2 = LocaleController.isRTL;
-        addView(textView5, LayoutHelper.createFrame(-2, -2.0f, (z2 ? 5 : 3) | 48, z2 ? 64.0f : 21.0f, 35.0f, z2 ? 21.0f : 64.0f, 0.0f));
-        Switch switchR = new Switch(context);
-        this.checkBox = switchR;
-        switchR.setDrawIconType(1);
+        addView(textView4, LayoutHelper.createFrame(-2, -2.0f, (z2 ? 5 : 3) | 48, z2 ? 64.0f : 21.0f, 35.0f, z2 ? 21.0f : 64.0f, 0.0f));
+        Switch r0 = new Switch(context);
+        this.checkBox = r0;
+        r0.setDrawIconType(1);
         addView(this.checkBox, LayoutHelper.createFrame(37, 40.0f, (LocaleController.isRTL ? 3 : i) | 16, 22.0f, 0.0f, 22.0f, 0.0f));
     }
 
-    /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
+    @Override // android.widget.FrameLayout, android.view.View
+    protected void onMeasure(int i, int i2) {
         if (this.isMultiline) {
             super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(0, 0));
         } else {
@@ -77,6 +77,7 @@ public class TextCheckCell2 extends FrameLayout {
         setWillNotDraw(!z2);
     }
 
+    @Override // android.view.View
     public void setEnabled(boolean z) {
         super.setEnabled(z);
         this.textView.clearAnimation();
@@ -96,26 +97,28 @@ public class TextCheckCell2 extends FrameLayout {
     public void setEnabled(boolean z, boolean z2) {
         super.setEnabled(z);
         float f = 1.0f;
-        if (z2) {
-            this.textView.clearAnimation();
-            this.valueTextView.clearAnimation();
-            this.checkBox.clearAnimation();
-            this.textView.animate().alpha(z ? 1.0f : 0.5f).start();
-            this.valueTextView.animate().alpha(z ? 1.0f : 0.5f).start();
-            ViewPropertyAnimator animate = this.checkBox.animate();
-            if (!z) {
-                f = 0.5f;
+        if (!z2) {
+            if (z) {
+                this.textView.setAlpha(1.0f);
+                this.valueTextView.setAlpha(1.0f);
+                this.checkBox.setAlpha(1.0f);
+                return;
             }
-            animate.alpha(f).start();
-        } else if (z) {
-            this.textView.setAlpha(1.0f);
-            this.valueTextView.setAlpha(1.0f);
-            this.checkBox.setAlpha(1.0f);
-        } else {
             this.checkBox.setAlpha(0.5f);
             this.textView.setAlpha(0.5f);
             this.valueTextView.setAlpha(0.5f);
+            return;
         }
+        this.textView.clearAnimation();
+        this.valueTextView.clearAnimation();
+        this.checkBox.clearAnimation();
+        this.textView.animate().alpha(z ? 1.0f : 0.5f).start();
+        this.valueTextView.animate().alpha(z ? 1.0f : 0.5f).start();
+        ViewPropertyAnimator animate = this.checkBox.animate();
+        if (!z) {
+            f = 0.5f;
+        }
+        animate.alpha(f).start();
     }
 
     public void setChecked(boolean z) {
@@ -134,13 +137,14 @@ public class TextCheckCell2 extends FrameLayout {
         return this.checkBox.isChecked();
     }
 
-    /* access modifiers changed from: protected */
-    public void onDraw(Canvas canvas) {
+    @Override // android.view.View
+    protected void onDraw(Canvas canvas) {
         if (this.needDivider) {
-            canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.dp(20.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(20.0f) : 0)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
+            canvas.drawLine(LocaleController.isRTL ? 0.0f : AndroidUtilities.dp(20.0f), getMeasuredHeight() - 1, getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(20.0f) : 0), getMeasuredHeight() - 1, Theme.dividerPaint);
         }
     }
 
+    @Override // android.view.View
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
         super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
         accessibilityNodeInfo.setClassName("android.widget.Switch");

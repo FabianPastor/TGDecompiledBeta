@@ -9,12 +9,13 @@ import android.os.Looper;
 import android.os.RemoteException;
 import android.text.TextUtils;
 import org.telegram.messenger.support.customtabs.ICustomTabsCallback;
-
+/* loaded from: classes.dex */
 public class CustomTabsClient {
     private final ICustomTabsService mService;
     private final ComponentName mServiceComponentName;
 
-    CustomTabsClient(ICustomTabsService iCustomTabsService, ComponentName componentName) {
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public CustomTabsClient(ICustomTabsService iCustomTabsService, ComponentName componentName) {
         this.mService = iCustomTabsService;
         this.mServiceComponentName = componentName;
     }
@@ -36,54 +37,66 @@ public class CustomTabsClient {
     }
 
     public CustomTabsSession newSession(final CustomTabsCallback customTabsCallback) {
-        AnonymousClass2 r0 = new ICustomTabsCallback.Stub(this) {
+        ICustomTabsCallback.Stub stub = new ICustomTabsCallback.Stub(this) { // from class: org.telegram.messenger.support.customtabs.CustomTabsClient.2
             private Handler mHandler = new Handler(Looper.getMainLooper());
 
+            @Override // org.telegram.messenger.support.customtabs.ICustomTabsCallback
             public void onNavigationEvent(final int i, final Bundle bundle) {
-                if (customTabsCallback != null) {
-                    this.mHandler.post(new Runnable() {
-                        public void run() {
-                            customTabsCallback.onNavigationEvent(i, bundle);
-                        }
-                    });
+                if (customTabsCallback == null) {
+                    return;
                 }
+                this.mHandler.post(new Runnable() { // from class: org.telegram.messenger.support.customtabs.CustomTabsClient.2.1
+                    @Override // java.lang.Runnable
+                    public void run() {
+                        customTabsCallback.onNavigationEvent(i, bundle);
+                    }
+                });
             }
 
+            @Override // org.telegram.messenger.support.customtabs.ICustomTabsCallback
             public void extraCallback(final String str, final Bundle bundle) throws RemoteException {
-                if (customTabsCallback != null) {
-                    this.mHandler.post(new Runnable() {
-                        public void run() {
-                            customTabsCallback.extraCallback(str, bundle);
-                        }
-                    });
+                if (customTabsCallback == null) {
+                    return;
                 }
+                this.mHandler.post(new Runnable() { // from class: org.telegram.messenger.support.customtabs.CustomTabsClient.2.2
+                    @Override // java.lang.Runnable
+                    public void run() {
+                        customTabsCallback.extraCallback(str, bundle);
+                    }
+                });
             }
 
+            @Override // org.telegram.messenger.support.customtabs.ICustomTabsCallback
             public void onMessageChannelReady(final Bundle bundle) throws RemoteException {
-                if (customTabsCallback != null) {
-                    this.mHandler.post(new Runnable() {
-                        public void run() {
-                            customTabsCallback.onMessageChannelReady(bundle);
-                        }
-                    });
+                if (customTabsCallback == null) {
+                    return;
                 }
+                this.mHandler.post(new Runnable() { // from class: org.telegram.messenger.support.customtabs.CustomTabsClient.2.3
+                    @Override // java.lang.Runnable
+                    public void run() {
+                        customTabsCallback.onMessageChannelReady(bundle);
+                    }
+                });
             }
 
+            @Override // org.telegram.messenger.support.customtabs.ICustomTabsCallback
             public void onPostMessage(final String str, final Bundle bundle) throws RemoteException {
-                if (customTabsCallback != null) {
-                    this.mHandler.post(new Runnable() {
-                        public void run() {
-                            customTabsCallback.onPostMessage(str, bundle);
-                        }
-                    });
+                if (customTabsCallback == null) {
+                    return;
                 }
+                this.mHandler.post(new Runnable() { // from class: org.telegram.messenger.support.customtabs.CustomTabsClient.2.4
+                    @Override // java.lang.Runnable
+                    public void run() {
+                        customTabsCallback.onPostMessage(str, bundle);
+                    }
+                });
             }
         };
         try {
-            if (!this.mService.newSession(r0)) {
-                return null;
+            if (this.mService.newSession(stub)) {
+                return new CustomTabsSession(this.mService, stub, this.mServiceComponentName);
             }
-            return new CustomTabsSession(this.mService, r0, this.mServiceComponentName);
+            return null;
         } catch (RemoteException unused) {
             return null;
         }

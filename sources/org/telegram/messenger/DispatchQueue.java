@@ -5,7 +5,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.SystemClock;
 import java.util.concurrent.CountDownLatch;
-
+/* loaded from: classes.dex */
 public class DispatchQueue extends Thread {
     private static int indexPointer;
     private volatile Handler handler;
@@ -38,7 +38,7 @@ public class DispatchQueue extends Thread {
             if (i <= 0) {
                 this.handler.sendMessage(message);
             } else {
-                this.handler.sendMessageDelayed(message, (long) i);
+                this.handler.sendMessageDelayed(message, i);
             }
         } catch (Exception unused) {
         }
@@ -56,8 +56,8 @@ public class DispatchQueue extends Thread {
     public void cancelRunnables(Runnable[] runnableArr) {
         try {
             this.syncLatch.await();
-            for (Runnable removeCallbacks : runnableArr) {
-                this.handler.removeCallbacks(removeCallbacks);
+            for (Runnable runnable : runnableArr) {
+                this.handler.removeCallbacks(runnable);
             }
         } catch (Exception e) {
             FileLog.e((Throwable) e, false);
@@ -66,7 +66,7 @@ public class DispatchQueue extends Thread {
 
     public boolean postRunnable(Runnable runnable) {
         this.lastTaskTime = SystemClock.elapsedRealtime();
-        return postRunnable(runnable, 0);
+        return postRunnable(runnable, 0L);
     }
 
     public boolean postRunnable(Runnable runnable, long j) {
@@ -84,7 +84,7 @@ public class DispatchQueue extends Thread {
     public void cleanupQueue() {
         try {
             this.syncLatch.await();
-            this.handler.removeCallbacksAndMessages((Object) null);
+            this.handler.removeCallbacksAndMessages(null);
         } catch (Exception e) {
             FileLog.e((Throwable) e, false);
         }
@@ -98,14 +98,22 @@ public class DispatchQueue extends Thread {
         this.handler.getLooper().quit();
     }
 
+    @Override // java.lang.Thread, java.lang.Runnable
     public void run() {
         Looper.prepare();
-        this.handler = new Handler(Looper.myLooper(), new DispatchQueue$$ExternalSyntheticLambda0(this));
+        this.handler = new Handler(Looper.myLooper(), new Handler.Callback() { // from class: org.telegram.messenger.DispatchQueue$$ExternalSyntheticLambda0
+            @Override // android.os.Handler.Callback
+            public final boolean handleMessage(Message message) {
+                boolean lambda$run$0;
+                lambda$run$0 = DispatchQueue.this.lambda$run$0(message);
+                return lambda$run$0;
+            }
+        });
         this.syncLatch.countDown();
         Looper.loop();
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ boolean lambda$run$0(Message message) {
         handleMessage(message);
         return true;

@@ -3,14 +3,14 @@ package org.telegram.ui.Components;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import org.telegram.messenger.AndroidUtilities;
-
+/* loaded from: classes3.dex */
 public class ProgressView {
-    public float currentProgress = 0.0f;
     public int height;
+    public int width;
+    public float currentProgress = 0.0f;
+    public float progressHeight = AndroidUtilities.dp(2.0f);
     private Paint innerPaint = new Paint();
     private Paint outerPaint = new Paint();
-    public float progressHeight = ((float) AndroidUtilities.dp(2.0f));
-    public int width;
 
     public void setProgressColors(int i, int i2) {
         this.innerPaint.setColor(i);
@@ -21,7 +21,8 @@ public class ProgressView {
         this.currentProgress = f;
         if (f < 0.0f) {
             this.currentProgress = 0.0f;
-        } else if (f > 1.0f) {
+        } else if (f <= 1.0f) {
+        } else {
             this.currentProgress = 1.0f;
         }
     }
@@ -29,10 +30,9 @@ public class ProgressView {
     public void draw(Canvas canvas) {
         int i = this.height;
         float f = this.progressHeight;
-        Canvas canvas2 = canvas;
-        canvas2.drawRect(0.0f, ((float) (i / 2)) - (f / 2.0f), (float) this.width, ((float) (i / 2)) + (f / 2.0f), this.innerPaint);
+        canvas.drawRect(0.0f, (i / 2) - (f / 2.0f), this.width, (i / 2) + (f / 2.0f), this.innerPaint);
         int i2 = this.height;
         float f2 = this.progressHeight;
-        canvas2.drawRect(0.0f, ((float) (i2 / 2)) - (f2 / 2.0f), ((float) this.width) * this.currentProgress, ((float) (i2 / 2)) + (f2 / 2.0f), this.outerPaint);
+        canvas.drawRect(0.0f, (i2 / 2) - (f2 / 2.0f), this.width * this.currentProgress, (i2 / 2) + (f2 / 2.0f), this.outerPaint);
     }
 }

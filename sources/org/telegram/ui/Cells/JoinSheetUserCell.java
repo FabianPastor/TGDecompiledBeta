@@ -1,7 +1,6 @@
 package org.telegram.ui.Cells;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -15,15 +14,17 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
-
+/* loaded from: classes3.dex */
 public class JoinSheetUserCell extends FrameLayout {
-    private AvatarDrawable avatarDrawable = new AvatarDrawable();
+    private AvatarDrawable avatarDrawable;
     private BackupImageView imageView;
     private TextView nameTextView;
-    private int[] result = new int[1];
+    private int[] result;
 
     public JoinSheetUserCell(Context context) {
         super(context);
+        this.avatarDrawable = new AvatarDrawable();
+        this.result = new int[1];
         BackupImageView backupImageView = new BackupImageView(context);
         this.imageView = backupImageView;
         backupImageView.setRoundRadius(AndroidUtilities.dp(27.0f));
@@ -40,8 +41,8 @@ public class JoinSheetUserCell extends FrameLayout {
         addView(this.nameTextView, LayoutHelper.createFrame(-1, -2.0f, 51, 6.0f, 65.0f, 6.0f, 0.0f));
     }
 
-    /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
+    @Override // android.widget.FrameLayout, android.view.View
+    protected void onMeasure(int i, int i2) {
         super.onMeasure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(100.0f), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(90.0f), NUM));
     }
 
@@ -53,8 +54,8 @@ public class JoinSheetUserCell extends FrameLayout {
 
     public void setCount(int i) {
         this.nameTextView.setText("");
-        AvatarDrawable avatarDrawable2 = this.avatarDrawable;
-        avatarDrawable2.setInfo(0, (String) null, (String) null, "+" + LocaleController.formatShortNumber(i, this.result));
-        this.imageView.setImage((ImageLocation) null, "50_50", (Drawable) this.avatarDrawable, (Object) null);
+        AvatarDrawable avatarDrawable = this.avatarDrawable;
+        avatarDrawable.setInfo(0L, null, null, "+" + LocaleController.formatShortNumber(i, this.result));
+        this.imageView.setImage((ImageLocation) null, "50_50", this.avatarDrawable, (Object) null);
     }
 }

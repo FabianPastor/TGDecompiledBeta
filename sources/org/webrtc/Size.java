@@ -1,5 +1,5 @@
 package org.webrtc;
-
+/* loaded from: classes3.dex */
 public class Size {
     public int height;
     public int width;
@@ -18,10 +18,7 @@ public class Size {
             return false;
         }
         Size size = (Size) obj;
-        if (this.width == size.width && this.height == size.height) {
-            return true;
-        }
-        return false;
+        return this.width == size.width && this.height == size.height;
     }
 
     public int hashCode() {

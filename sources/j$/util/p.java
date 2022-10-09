@@ -1,17 +1,18 @@
 package j$.util;
 
 import j$.util.function.Consumer;
-import j$.util.function.l;
-import java.util.Iterator;
+/* loaded from: classes2.dex */
+public interface p extends java.util.Iterator {
 
-public interface p extends Iterator {
-
+    /* loaded from: classes2.dex */
     public interface a extends p {
-        void c(l lVar);
+        void c(j$.util.function.l lVar);
 
         void forEachRemaining(Consumer consumer);
 
-        Integer next();
+        @Override // java.util.Iterator
+        /* renamed from: next */
+        Integer mo309next();
 
         int nextInt();
     }

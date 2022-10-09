@@ -1,17 +1,18 @@
 package j$.util.stream;
-
-import j$.util.function.m;
-
-abstract class R1 extends C1 implements CLASSNAMEz1 {
-    R1(CLASSNAMEz1 z1Var, CLASSNAMEz1 z1Var2) {
-        super(z1Var, z1Var2);
+/* loaded from: classes2.dex */
+abstract class R1 extends C1 implements InterfaceCLASSNAMEz1 {
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public R1(InterfaceCLASSNAMEz1 interfaceCLASSNAMEz1, InterfaceCLASSNAMEz1 interfaceCLASSNAMEz12) {
+        super(interfaceCLASSNAMEz1, interfaceCLASSNAMEz12);
     }
 
+    @Override // j$.util.stream.InterfaceCLASSNAMEz1
     public void d(Object obj, int i) {
-        ((CLASSNAMEz1) this.a).d(obj, i);
-        ((CLASSNAMEz1) this.b).d(obj, i + ((int) ((CLASSNAMEz1) this.a).count()));
+        ((InterfaceCLASSNAMEz1) this.a).d(obj, i);
+        ((InterfaceCLASSNAMEz1) this.b).d(obj, i + ((int) ((InterfaceCLASSNAMEz1) this.a).count()));
     }
 
+    @Override // j$.util.stream.InterfaceCLASSNAMEz1
     public Object e() {
         long count = count();
         if (count < NUM) {
@@ -22,19 +23,18 @@ abstract class R1 extends C1 implements CLASSNAMEz1 {
         throw new IllegalArgumentException("Stream size exceeds max array size");
     }
 
+    @Override // j$.util.stream.InterfaceCLASSNAMEz1
     public void g(Object obj) {
-        ((CLASSNAMEz1) this.a).g(obj);
-        ((CLASSNAMEz1) this.b).g(obj);
+        ((InterfaceCLASSNAMEz1) this.a).g(obj);
+        ((InterfaceCLASSNAMEz1) this.b).g(obj);
     }
 
-    public /* synthetic */ Object[] q(m mVar) {
-        return CLASSNAMEo1.g(this, mVar);
+    @Override // j$.util.stream.A1
+    public /* synthetic */ Object[] q(j$.util.function.m mVar) {
+        return AbstractCLASSNAMEo1.g(this, mVar);
     }
 
     public String toString() {
-        if (count() < 32) {
-            return String.format("%s[%s.%s]", new Object[]{getClass().getName(), this.a, this.b});
-        }
-        return String.format("%s[size=%d]", new Object[]{getClass().getName(), Long.valueOf(count())});
+        return count() < 32 ? String.format("%s[%s.%s]", getClass().getName(), this.a, this.b) : String.format("%s[size=%d]", getClass().getName(), Long.valueOf(count()));
     }
 }

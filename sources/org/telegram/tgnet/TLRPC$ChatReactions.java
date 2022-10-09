@@ -1,21 +1,21 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public abstract class TLRPC$ChatReactions extends TLObject {
     public static TLRPC$ChatReactions TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-        TLRPC$ChatReactions tLRPC$ChatReactions;
+        TLRPC$ChatReactions tLRPC$TL_chatReactionsNone;
         if (i == -NUM) {
-            tLRPC$ChatReactions = new TLRPC$TL_chatReactionsNone();
+            tLRPC$TL_chatReactionsNone = new TLRPC$TL_chatReactionsNone();
         } else if (i != NUM) {
-            tLRPC$ChatReactions = i != NUM ? null : new TLRPC$TL_chatReactionsSome();
+            tLRPC$TL_chatReactionsNone = i != NUM ? null : new TLRPC$TL_chatReactionsSome();
         } else {
-            tLRPC$ChatReactions = new TLRPC$TL_chatReactionsAll();
+            tLRPC$TL_chatReactionsNone = new TLRPC$TL_chatReactionsAll();
         }
-        if (tLRPC$ChatReactions != null || !z) {
-            if (tLRPC$ChatReactions != null) {
-                tLRPC$ChatReactions.readParams(abstractSerializedData, z);
+        if (tLRPC$TL_chatReactionsNone != null || !z) {
+            if (tLRPC$TL_chatReactionsNone != null) {
+                tLRPC$TL_chatReactionsNone.readParams(abstractSerializedData, z);
             }
-            return tLRPC$ChatReactions;
+            return tLRPC$TL_chatReactionsNone;
         }
-        throw new RuntimeException(String.format("can't parse magic %x in ChatReactions", new Object[]{Integer.valueOf(i)}));
+        throw new RuntimeException(String.format("can't parse magic %x in ChatReactions", Integer.valueOf(i)));
     }
 }

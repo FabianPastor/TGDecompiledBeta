@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="ActionBar.Transparent.TMessages.Start">
+    <style name="ActionBar.Transparent.TMessages.Start" parent="@android:style/Widget.Material.Light.ActionBar">
         <item name="android:background">#fvar_da3</item>
         <item name="android:title" />
         <item name="android:logo">@drawable/transparent</item>
@@ -9,17 +9,17 @@
         <item name="android:windowEnterAnimation">@null</item>
         <item name="android:windowExitAnimation">@null</item>
     </style>
-    <style name="MyTextViewStyle">
+    <style name="MyTextViewStyle" parent="@android:style/Widget.Material.Light.TextView">
     </style>
-    <style name="TextAppearance.Compat.Notification">
+    <style name="TextAppearance.Compat.Notification" parent="@android:style/TextAppearance.Material.Notification">
     </style>
-    <style name="TextAppearance.Compat.Notification.Info">
+    <style name="TextAppearance.Compat.Notification.Info" parent="@android:style/TextAppearance.Material.Notification.Info">
     </style>
-    <style name="TextAppearance.Compat.Notification.Time">
+    <style name="TextAppearance.Compat.Notification.Time" parent="@android:style/TextAppearance.Material.Notification.Time">
     </style>
-    <style name="TextAppearance.Compat.Notification.Title">
+    <style name="TextAppearance.Compat.Notification.Title" parent="@android:style/TextAppearance.Material.Notification.Title">
     </style>
-    <style name="Theme.TMessages">
+    <style name="Theme.TMessages" parent="@android:style/Theme.Material.Light">
         <item name="android:colorBackground">@android:color/white</item>
         <item name="android:windowBackground">@android:color/white</item>
         <item name="android:windowNoTitle">true</item>
@@ -43,30 +43,30 @@
         <item name="android:timePickerDialogTheme">@style/Theme.TMessages.Dialog.Alert</item>
         <item name="android:datePickerDialogTheme">@style/Theme.TMessages.Dialog.Alert</item>
     </style>
-    <style name="Theme.TMessages.BorderLessButton">
+    <style name="Theme.TMessages.BorderLessButton" parent="@android:style/Widget.Material.Light.ButtonBar.AlertDialog">
         <item name="android:textColor">#4991cc</item>
     </style>
-    <style name="Theme.TMessages.CalendarView">
+    <style name="Theme.TMessages.CalendarView" parent="@android:style/Widget.Material.CalendarView">
         <item name="android:weekDayTextAppearance">@style/Theme.TMessages.DayOfWeek</item>
     </style>
-    <style name="Theme.TMessages.DatePicker">
+    <style name="Theme.TMessages.DatePicker" parent="@android:style/Widget.Material.Light.DatePicker">
         <item name="android:headerBackground">#408bc8</item>
     </style>
-    <style name="Theme.TMessages.DayOfWeek">
+    <style name="Theme.TMessages.DayOfWeek" parent="@android:style/TextAppearance.Material.Caption">
         <item name="android:textSize">0dp</item>
         <item name="android:textColor">#00000000</item>
     </style>
-    <style name="Theme.TMessages.Dialog.Alert">
+    <style name="Theme.TMessages.Dialog.Alert" parent="@android:style/Theme.Material.Light.Dialog.Alert">
         <item name="android:colorControlActivated">#808080</item>
         <item name="android:colorPrimary">#527da3</item>
         <item name="android:colorAccent">#4991cc</item>
     </style>
-    <style name="Theme.TMessages.ListView">
-        <item name="android:fadingEdge">@null</item>
+    <style name="Theme.TMessages.ListView" parent="@android:style/Widget.Material.Light.ListView">
+        <item name="android:fadingEdge">0x0</item>
         <item name="android:divider">@color/divider</item>
         <item name="android:dividerHeight">1dp</item>
     </style>
-    <style name="Theme.TMessages.PopupNotification">
+    <style name="Theme.TMessages.PopupNotification" parent="@style/Theme.TMessages">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsTranslucent">true</item>
@@ -75,7 +75,7 @@
         <item name="android:colorPrimaryDark">#99000000</item>
         <item name="android:navigationBarColor">#000000</item>
     </style>
-    <style name="Theme.TMessages.Start">
+    <style name="Theme.TMessages.Start" parent="@android:style/Theme.Material">
         <item name="android:colorBackground">@android:color/white</item>
         <item name="android:windowBackground">@android:color/white</item>
         <item name="android:windowContentOverlay">@null</item>
@@ -85,10 +85,10 @@
         <item name="android:colorPrimaryDark">#426482</item>
         <item name="android:navigationBarColor">#000000</item>
     </style>
-    <style name="Theme.TMessages.TimePicker">
+    <style name="Theme.TMessages.TimePicker" parent="@android:style/Widget.Material.Light.TimePicker">
         <item name="android:headerBackground">#408bc8</item>
     </style>
-    <style name="TransparentDialog">
+    <style name="TransparentDialog" parent="@android:style/Theme.Dialog">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsFloating">true</item>
@@ -102,7 +102,7 @@
         <item name="android:colorPrimary">#527da3</item>
         <item name="android:colorAccent">#4991cc</item>
     </style>
-    <style name="TransparentDialog2">
+    <style name="TransparentDialog2" parent="@style/TransparentDialog">
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>

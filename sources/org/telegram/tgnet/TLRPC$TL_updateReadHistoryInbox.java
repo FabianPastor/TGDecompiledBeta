@@ -1,5 +1,5 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_updateReadHistoryInbox extends TLRPC$Update {
     public static int constructor = -NUM;
     public int flags;
@@ -10,6 +10,7 @@ public class TLRPC$TL_updateReadHistoryInbox extends TLRPC$Update {
     public int pts_count;
     public int still_unread_count;
 
+    @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
@@ -23,6 +24,7 @@ public class TLRPC$TL_updateReadHistoryInbox extends TLRPC$Update {
         this.pts_count = abstractSerializedData.readInt32(z);
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
         abstractSerializedData.writeInt32(this.flags);

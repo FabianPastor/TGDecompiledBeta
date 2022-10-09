@@ -1,8 +1,9 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_fileEncryptedLocation extends TLRPC$FileLocation {
     public static int constructor = NUM;
 
+    @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         this.dc_id = abstractSerializedData.readInt32(z);
         this.volume_id = abstractSerializedData.readInt64(z);
@@ -12,6 +13,7 @@ public class TLRPC$TL_fileEncryptedLocation extends TLRPC$FileLocation {
         this.iv = abstractSerializedData.readByteArray(z);
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
         abstractSerializedData.writeInt32(this.dc_id);

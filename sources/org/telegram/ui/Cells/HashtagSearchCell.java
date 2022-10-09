@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
-
+/* loaded from: classes3.dex */
 public class HashtagSearchCell extends TextView {
     private boolean needDivider;
 
@@ -22,16 +22,16 @@ public class HashtagSearchCell extends TextView {
         this.needDivider = z;
     }
 
-    /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
+    @Override // android.widget.TextView, android.view.View
+    protected void onMeasure(int i, int i2) {
         setMeasuredDimension(View.MeasureSpec.getSize(i), AndroidUtilities.dp(48.0f) + 1);
     }
 
-    /* access modifiers changed from: protected */
-    public void onDraw(Canvas canvas) {
+    @Override // android.widget.TextView, android.view.View
+    protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if (this.needDivider) {
-            canvas.drawLine(0.0f, (float) (getHeight() - 1), (float) getWidth(), (float) (getHeight() - 1), Theme.dividerPaint);
+            canvas.drawLine(0.0f, getHeight() - 1, getWidth(), getHeight() - 1, Theme.dividerPaint);
         }
     }
 }

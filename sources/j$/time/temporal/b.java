@@ -1,5 +1,5 @@
 package j$.time.temporal;
-
+/* loaded from: classes2.dex */
 public enum b implements m {
     NANOS("Nanos", j$.time.b.b(1)),
     MICROS("Micros", j$.time.b.b(1000)),
@@ -20,10 +20,11 @@ public enum b implements m {
     
     private final String a;
 
-    private b(String str, j$.time.b bVar) {
+    b(String str, j$.time.b bVar) {
         this.a = str;
     }
 
+    @Override // java.lang.Enum
     public String toString() {
         return this.a;
     }

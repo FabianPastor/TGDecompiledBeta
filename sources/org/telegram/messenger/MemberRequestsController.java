@@ -12,10 +12,10 @@ import org.telegram.tgnet.TLRPC$TL_messages_chatInviteImporters;
 import org.telegram.tgnet.TLRPC$TL_messages_getChatInviteImporters;
 import org.telegram.tgnet.TLRPC$TL_updatePendingJoinRequests;
 import org.telegram.tgnet.TLRPC$User;
-
+/* loaded from: classes.dex */
 public class MemberRequestsController extends BaseController {
     private static final MemberRequestsController[] instances = new MemberRequestsController[4];
-    private final LongSparseArray<TLRPC$TL_messages_chatInviteImporters> firstImportersCache = new LongSparseArray<>();
+    private final LongSparseArray<TLRPC$TL_messages_chatInviteImporters> firstImportersCache;
 
     public static MemberRequestsController getInstance(int i) {
         MemberRequestsController[] memberRequestsControllerArr = instances;
@@ -34,13 +34,14 @@ public class MemberRequestsController extends BaseController {
 
     public MemberRequestsController(int i) {
         super(i);
+        this.firstImportersCache = new LongSparseArray<>();
     }
 
     public TLRPC$TL_messages_chatInviteImporters getCachedImporters(long j) {
         return this.firstImportersCache.get(j);
     }
 
-    public int getImporters(long j, String str, TLRPC$TL_chatInviteImporter tLRPC$TL_chatInviteImporter, LongSparseArray<TLRPC$User> longSparseArray, RequestDelegate requestDelegate) {
+    public int getImporters(final long j, String str, TLRPC$TL_chatInviteImporter tLRPC$TL_chatInviteImporter, LongSparseArray<TLRPC$User> longSparseArray, final RequestDelegate requestDelegate) {
         boolean isEmpty = TextUtils.isEmpty(str);
         TLRPC$TL_messages_getChatInviteImporters tLRPC$TL_messages_getChatInviteImporters = new TLRPC$TL_messages_getChatInviteImporters();
         tLRPC$TL_messages_getChatInviteImporters.peer = MessagesController.getInstance(this.currentAccount).getInputPeer(-j);
@@ -56,15 +57,25 @@ public class MemberRequestsController extends BaseController {
             tLRPC$TL_messages_getChatInviteImporters.offset_user = getMessagesController().getInputUser(longSparseArray.get(tLRPC$TL_chatInviteImporter.user_id));
             tLRPC$TL_messages_getChatInviteImporters.offset_date = tLRPC$TL_chatInviteImporter.date;
         }
-        return getConnectionsManager().sendRequest(tLRPC$TL_messages_getChatInviteImporters, new MemberRequestsController$$ExternalSyntheticLambda1(this, j, requestDelegate));
+        return getConnectionsManager().sendRequest(tLRPC$TL_messages_getChatInviteImporters, new RequestDelegate() { // from class: org.telegram.messenger.MemberRequestsController$$ExternalSyntheticLambda1
+            @Override // org.telegram.tgnet.RequestDelegate
+            public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+                MemberRequestsController.this.lambda$getImporters$1(j, requestDelegate, tLObject, tLRPC$TL_error);
+            }
+        });
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$getImporters$1(long j, RequestDelegate requestDelegate, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new MemberRequestsController$$ExternalSyntheticLambda0(this, tLRPC$TL_error, tLObject, j, requestDelegate));
+    /* JADX INFO: Access modifiers changed from: private */
+    public /* synthetic */ void lambda$getImporters$1(final long j, final RequestDelegate requestDelegate, final TLObject tLObject, final TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MemberRequestsController$$ExternalSyntheticLambda0
+            @Override // java.lang.Runnable
+            public final void run() {
+                MemberRequestsController.this.lambda$getImporters$0(tLRPC$TL_error, tLObject, j, requestDelegate);
+            }
+        });
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$getImporters$0(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, long j, RequestDelegate requestDelegate) {
         if (tLRPC$TL_error == null) {
             this.firstImportersCache.put(j, (TLRPC$TL_messages_chatInviteImporters) tLObject);
@@ -74,7 +85,7 @@ public class MemberRequestsController extends BaseController {
 
     public void onPendingRequestsUpdated(TLRPC$TL_updatePendingJoinRequests tLRPC$TL_updatePendingJoinRequests) {
         long j = -MessageObject.getPeerId(tLRPC$TL_updatePendingJoinRequests.peer);
-        this.firstImportersCache.put(j, (Object) null);
+        this.firstImportersCache.put(j, null);
         TLRPC$ChatFull chatFull = getMessagesController().getChatFull(j);
         if (chatFull != null) {
             chatFull.requests_pending = tLRPC$TL_updatePendingJoinRequests.requests_pending;

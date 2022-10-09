@@ -22,23 +22,21 @@ import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$ChatInvite;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.Theme;
-
+/* loaded from: classes3.dex */
 public class SenderSelectView extends View {
     private static final FloatPropertyCompat<SenderSelectView> MENU_PROGRESS = new SimpleFloatPropertyCompat("menuProgress", SenderSelectView$$ExternalSyntheticLambda3.INSTANCE, SenderSelectView$$ExternalSyntheticLambda4.INSTANCE).setMultiplier(100.0f);
-    private AvatarDrawable avatarDrawable = new AvatarDrawable();
-    private ImageReceiver avatarImage = new ImageReceiver(this);
-    private Paint backgroundPaint = new Paint(1);
-    /* access modifiers changed from: private */
-    public ValueAnimator menuAnimator;
-    private Paint menuPaint = new Paint(1);
-    /* access modifiers changed from: private */
-    public float menuProgress;
+    private AvatarDrawable avatarDrawable;
+    private ImageReceiver avatarImage;
+    private Paint backgroundPaint;
+    private ValueAnimator menuAnimator;
+    private Paint menuPaint;
+    private float menuProgress;
     private SpringAnimation menuSpring;
     private boolean scaleIn;
     private boolean scaleOut;
     private Drawable selectorDrawable;
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public static /* synthetic */ void lambda$static$1(SenderSelectView senderSelectView, float f) {
         senderSelectView.menuProgress = f;
         senderSelectView.invalidate();
@@ -46,8 +44,12 @@ public class SenderSelectView extends View {
 
     public SenderSelectView(Context context) {
         super(context);
+        this.avatarImage = new ImageReceiver(this);
+        this.avatarDrawable = new AvatarDrawable();
+        this.backgroundPaint = new Paint(1);
+        this.menuPaint = new Paint(1);
         this.avatarImage.setRoundRadius(AndroidUtilities.dp(28.0f));
-        this.menuPaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
+        this.menuPaint.setStrokeWidth(AndroidUtilities.dp(2.0f));
         this.menuPaint.setStrokeCap(Paint.Cap.ROUND);
         this.menuPaint.setStyle(Paint.Style.STROKE);
         updateColors();
@@ -62,26 +64,26 @@ public class SenderSelectView extends View {
         createSimpleSelectorRoundRectDrawable.setCallback(this);
     }
 
-    /* access modifiers changed from: protected */
-    public void onAttachedToWindow() {
+    @Override // android.view.View
+    protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         this.avatarImage.onAttachedToWindow();
     }
 
-    /* access modifiers changed from: protected */
-    public void onDetachedFromWindow() {
+    @Override // android.view.View
+    protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         this.avatarImage.onDetachedFromWindow();
     }
 
-    /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
+    @Override // android.view.View
+    protected void onMeasure(int i, int i2) {
         super.onMeasure(View.MeasureSpec.makeMeasureSpec(getLayoutParams().width, NUM), View.MeasureSpec.makeMeasureSpec(getLayoutParams().height, NUM));
-        this.avatarImage.setImageCoords(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight());
+        this.avatarImage.setImageCoords(0.0f, 0.0f, getMeasuredWidth(), getMeasuredHeight());
     }
 
-    /* access modifiers changed from: protected */
-    public void onDraw(Canvas canvas) {
+    @Override // android.view.View
+    protected void onDraw(Canvas canvas) {
         canvas.save();
         float f = 1.0f;
         if (this.scaleOut) {
@@ -89,19 +91,17 @@ public class SenderSelectView extends View {
         } else if (this.scaleIn) {
             f = this.menuProgress;
         }
-        canvas.scale(f, f, ((float) getWidth()) / 2.0f, ((float) getHeight()) / 2.0f);
+        canvas.scale(f, f, getWidth() / 2.0f, getHeight() / 2.0f);
         super.onDraw(canvas);
         this.avatarImage.draw(canvas);
         int i = (int) (this.menuProgress * 255.0f);
         this.backgroundPaint.setAlpha(i);
-        canvas.drawCircle(((float) getWidth()) / 2.0f, ((float) getHeight()) / 2.0f, ((float) Math.min(getWidth(), getHeight())) / 2.0f, this.backgroundPaint);
+        canvas.drawCircle(getWidth() / 2.0f, getHeight() / 2.0f, Math.min(getWidth(), getHeight()) / 2.0f, this.backgroundPaint);
         canvas.save();
         this.menuPaint.setAlpha(i);
-        float dp = ((float) AndroidUtilities.dp(9.0f)) + this.menuPaint.getStrokeWidth();
-        Canvas canvas2 = canvas;
-        float f2 = dp;
-        canvas2.drawLine(f2, dp, ((float) getWidth()) - dp, ((float) getHeight()) - dp, this.menuPaint);
-        canvas2.drawLine(f2, ((float) getHeight()) - dp, ((float) getWidth()) - dp, dp, this.menuPaint);
+        float dp = AndroidUtilities.dp(9.0f) + this.menuPaint.getStrokeWidth();
+        canvas.drawLine(dp, dp, getWidth() - dp, getHeight() - dp, this.menuPaint);
+        canvas.drawLine(dp, getHeight() - dp, getWidth() - dp, dp, this.menuPaint);
         canvas.restore();
         this.selectorDrawable.setBounds(0, 0, getWidth(), getHeight());
         this.selectorDrawable.draw(canvas);
@@ -140,33 +140,49 @@ public class SenderSelectView extends View {
             if (valueAnimator != null) {
                 valueAnimator.cancel();
             }
-            boolean z3 = false;
+            final boolean z3 = false;
             this.scaleIn = false;
             this.scaleOut = false;
             if (z2) {
-                float f2 = this.menuProgress * 100.0f;
-                SpringAnimation springAnimation2 = (SpringAnimation) new SpringAnimation(this, MENU_PROGRESS).setStartValue(f2);
-                this.menuSpring = springAnimation2;
+                final float f2 = this.menuProgress * 100.0f;
+                SpringAnimation startValue = new SpringAnimation(this, MENU_PROGRESS).setStartValue(f2);
+                this.menuSpring = startValue;
                 if (f < this.menuProgress) {
                     z3 = true;
                 }
-                float f3 = f * 100.0f;
+                final float f3 = f * 100.0f;
                 this.scaleIn = z3;
                 this.scaleOut = !z3;
-                springAnimation2.setSpring(new SpringForce(f3).setFinalPosition(f3).setStiffness(450.0f).setDampingRatio(1.0f));
-                this.menuSpring.addUpdateListener(new SenderSelectView$$ExternalSyntheticLambda2(this, z3, f2, f3));
-                this.menuSpring.addEndListener(new SenderSelectView$$ExternalSyntheticLambda1(this));
+                startValue.setSpring(new SpringForce(f3).setFinalPosition(f3).setStiffness(450.0f).setDampingRatio(1.0f));
+                this.menuSpring.addUpdateListener(new DynamicAnimation.OnAnimationUpdateListener() { // from class: org.telegram.ui.Components.SenderSelectView$$ExternalSyntheticLambda2
+                    @Override // androidx.dynamicanimation.animation.DynamicAnimation.OnAnimationUpdateListener
+                    public final void onAnimationUpdate(DynamicAnimation dynamicAnimation, float f4, float f5) {
+                        SenderSelectView.this.lambda$setProgress$2(z3, f2, f3, dynamicAnimation, f4, f5);
+                    }
+                });
+                this.menuSpring.addEndListener(new DynamicAnimation.OnAnimationEndListener() { // from class: org.telegram.ui.Components.SenderSelectView$$ExternalSyntheticLambda1
+                    @Override // androidx.dynamicanimation.animation.DynamicAnimation.OnAnimationEndListener
+                    public final void onAnimationEnd(DynamicAnimation dynamicAnimation, boolean z4, float f4, float f5) {
+                        SenderSelectView.this.lambda$setProgress$3(dynamicAnimation, z4, f4, f5);
+                    }
+                });
                 this.menuSpring.start();
                 return;
             }
-            ValueAnimator duration = ValueAnimator.ofFloat(new float[]{this.menuProgress, f}).setDuration(200);
+            ValueAnimator duration = ValueAnimator.ofFloat(this.menuProgress, f).setDuration(200L);
             this.menuAnimator = duration;
             duration.setInterpolator(CubicBezierInterpolator.DEFAULT);
-            this.menuAnimator.addUpdateListener(new SenderSelectView$$ExternalSyntheticLambda0(this));
-            this.menuAnimator.addListener(new AnimatorListenerAdapter() {
+            this.menuAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() { // from class: org.telegram.ui.Components.SenderSelectView$$ExternalSyntheticLambda0
+                @Override // android.animation.ValueAnimator.AnimatorUpdateListener
+                public final void onAnimationUpdate(ValueAnimator valueAnimator2) {
+                    SenderSelectView.this.lambda$setProgress$4(valueAnimator2);
+                }
+            });
+            this.menuAnimator.addListener(new AnimatorListenerAdapter() { // from class: org.telegram.ui.Components.SenderSelectView.1
+                @Override // android.animation.AnimatorListenerAdapter, android.animation.Animator.AnimatorListener
                 public void onAnimationEnd(Animator animator) {
                     if (animator == SenderSelectView.this.menuAnimator) {
-                        ValueAnimator unused = SenderSelectView.this.menuAnimator = null;
+                        SenderSelectView.this.menuAnimator = null;
                     }
                 }
             });
@@ -177,7 +193,7 @@ public class SenderSelectView extends View {
         invalidate();
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$setProgress$2(boolean z, float f, float f2, DynamicAnimation dynamicAnimation, float f3, float f4) {
         if (z) {
             if (f3 > f / 2.0f || !this.scaleIn) {
@@ -190,7 +206,7 @@ public class SenderSelectView extends View {
         this.scaleOut = z;
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$setProgress$3(DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
         this.scaleIn = false;
         this.scaleOut = false;
@@ -202,7 +218,7 @@ public class SenderSelectView extends View {
         }
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$setProgress$4(ValueAnimator valueAnimator) {
         this.menuProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidate();
@@ -212,17 +228,18 @@ public class SenderSelectView extends View {
         return this.menuProgress;
     }
 
-    /* access modifiers changed from: protected */
-    public boolean verifyDrawable(Drawable drawable) {
+    @Override // android.view.View
+    protected boolean verifyDrawable(Drawable drawable) {
         return super.verifyDrawable(drawable) || this.selectorDrawable == drawable;
     }
 
-    /* access modifiers changed from: protected */
-    public void drawableStateChanged() {
+    @Override // android.view.View
+    protected void drawableStateChanged() {
         super.drawableStateChanged();
         this.selectorDrawable.setState(getDrawableState());
     }
 
+    @Override // android.view.View
     public void jumpDrawablesToCurrentState() {
         super.jumpDrawablesToCurrentState();
         this.selectorDrawable.jumpToCurrentState();

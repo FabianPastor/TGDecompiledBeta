@@ -1,6 +1,7 @@
 package org.webrtc;
-
-class Histogram {
+/* JADX INFO: Access modifiers changed from: package-private */
+/* loaded from: classes3.dex */
+public class Histogram {
     private final long handle;
 
     private static native void nativeAddSample(long j, int i);

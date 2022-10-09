@@ -4,7 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.view.View;
 import org.telegram.ui.ActionBar.Theme;
-
+/* loaded from: classes3.dex */
 public class BluredView extends View {
     public final BlurBehindDrawable drawable;
 
@@ -16,13 +16,13 @@ public class BluredView extends View {
         blurBehindDrawable.show(true);
     }
 
-    /* access modifiers changed from: protected */
-    public void onDraw(Canvas canvas) {
+    @Override // android.view.View
+    protected void onDraw(Canvas canvas) {
         this.drawable.draw(canvas);
     }
 
-    /* access modifiers changed from: protected */
-    public void onSizeChanged(int i, int i2, int i3, int i4) {
+    @Override // android.view.View
+    protected void onSizeChanged(int i, int i2, int i3, int i4) {
         super.onSizeChanged(i, i2, i3, i4);
         this.drawable.checkSizes();
     }

@@ -9,32 +9,38 @@ import java.util.Iterator;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
-
+/* loaded from: classes.dex */
 public class ForegroundDetector implements Application.ActivityLifecycleCallbacks {
     private static ForegroundDetector Instance;
-    private long enterBackgroundTime = 0;
-    private CopyOnWriteArrayList<Listener> listeners = new CopyOnWriteArrayList<>();
     private int refs;
     private boolean wasInBackground = true;
+    private long enterBackgroundTime = 0;
+    private CopyOnWriteArrayList<Listener> listeners = new CopyOnWriteArrayList<>();
 
+    /* loaded from: classes3.dex */
     public interface Listener {
         void onBecameBackground();
 
         void onBecameForeground();
     }
 
+    @Override // android.app.Application.ActivityLifecycleCallbacks
     public void onActivityCreated(Activity activity, Bundle bundle) {
     }
 
+    @Override // android.app.Application.ActivityLifecycleCallbacks
     public void onActivityDestroyed(Activity activity) {
     }
 
+    @Override // android.app.Application.ActivityLifecycleCallbacks
     public void onActivityPaused(Activity activity) {
     }
 
+    @Override // android.app.Application.ActivityLifecycleCallbacks
     public void onActivityResumed(Activity activity) {
     }
 
+    @Override // android.app.Application.ActivityLifecycleCallbacks
     public void onActivitySaveInstanceState(Activity activity, Bundle bundle) {
     }
 
@@ -63,6 +69,7 @@ public class ForegroundDetector implements Application.ActivityLifecycleCallback
         this.listeners.remove(listener);
     }
 
+    @Override // android.app.Application.ActivityLifecycleCallbacks
     public void onActivityStarted(Activity activity) {
         int i = this.refs + 1;
         this.refs = i;
@@ -78,7 +85,7 @@ public class ForegroundDetector implements Application.ActivityLifecycleCallback
                 try {
                     it.next().onBecameForeground();
                 } catch (Exception e) {
-                    FileLog.e((Throwable) e);
+                    FileLog.e(e);
                 }
             }
         }
@@ -95,6 +102,7 @@ public class ForegroundDetector implements Application.ActivityLifecycleCallback
         this.wasInBackground = false;
     }
 
+    @Override // android.app.Application.ActivityLifecycleCallbacks
     public void onActivityStopped(Activity activity) {
         int i = this.refs - 1;
         this.refs = i;
@@ -109,7 +117,7 @@ public class ForegroundDetector implements Application.ActivityLifecycleCallback
                 try {
                     it.next().onBecameBackground();
                 } catch (Exception e) {
-                    FileLog.e((Throwable) e);
+                    FileLog.e(e);
                 }
             }
         }

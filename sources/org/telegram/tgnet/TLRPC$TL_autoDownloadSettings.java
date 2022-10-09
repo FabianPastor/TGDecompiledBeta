@@ -1,5 +1,5 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_autoDownloadSettings extends TLObject {
     public static int constructor = -NUM;
     public boolean audio_preload_next;
@@ -13,17 +13,18 @@ public class TLRPC$TL_autoDownloadSettings extends TLObject {
     public int video_upload_maxbitrate;
 
     public static TLRPC$TL_autoDownloadSettings TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-        if (constructor == i) {
-            TLRPC$TL_autoDownloadSettings tLRPC$TL_autoDownloadSettings = new TLRPC$TL_autoDownloadSettings();
-            tLRPC$TL_autoDownloadSettings.readParams(abstractSerializedData, z);
-            return tLRPC$TL_autoDownloadSettings;
-        } else if (!z) {
+        if (constructor != i) {
+            if (z) {
+                throw new RuntimeException(String.format("can't parse magic %x in TL_autoDownloadSettings", Integer.valueOf(i)));
+            }
             return null;
-        } else {
-            throw new RuntimeException(String.format("can't parse magic %x in TL_autoDownloadSettings", new Object[]{Integer.valueOf(i)}));
         }
+        TLRPC$TL_autoDownloadSettings tLRPC$TL_autoDownloadSettings = new TLRPC$TL_autoDownloadSettings();
+        tLRPC$TL_autoDownloadSettings.readParams(abstractSerializedData, z);
+        return tLRPC$TL_autoDownloadSettings;
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
@@ -41,15 +42,16 @@ public class TLRPC$TL_autoDownloadSettings extends TLObject {
         this.video_upload_maxbitrate = abstractSerializedData.readInt32(z);
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
-        int i = this.disabled ? this.flags | 1 : this.flags & -2;
+        int i = this.disabled ? this.flags | 1 : this.flags & (-2);
         this.flags = i;
-        int i2 = this.video_preload_large ? i | 2 : i & -3;
+        int i2 = this.video_preload_large ? i | 2 : i & (-3);
         this.flags = i2;
-        int i3 = this.audio_preload_next ? i2 | 4 : i2 & -5;
+        int i3 = this.audio_preload_next ? i2 | 4 : i2 & (-5);
         this.flags = i3;
-        int i4 = this.phonecalls_less_data ? i3 | 8 : i3 & -9;
+        int i4 = this.phonecalls_less_data ? i3 | 8 : i3 & (-9);
         this.flags = i4;
         abstractSerializedData.writeInt32(i4);
         abstractSerializedData.writeInt32(this.photo_size_max);

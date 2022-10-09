@@ -1,5 +1,5 @@
 package org.telegram.messenger.support;
-
+/* loaded from: classes.dex */
 public class LongSparseIntArray implements Cloneable {
     private long[] mKeys;
     private int mSize;
@@ -26,9 +26,9 @@ public class LongSparseIntArray implements Cloneable {
                 return longSparseIntArray2;
             } catch (CloneNotSupportedException unused) {
                 longSparseIntArray = longSparseIntArray2;
+                return longSparseIntArray;
             }
         } catch (CloneNotSupportedException unused2) {
-            return longSparseIntArray;
         }
     }
 
@@ -38,10 +38,7 @@ public class LongSparseIntArray implements Cloneable {
 
     public int get(long j, int i) {
         int binarySearch = binarySearch(this.mKeys, 0, this.mSize, j);
-        if (binarySearch < 0) {
-            return i;
-        }
-        return this.mValues[binarySearch];
+        return binarySearch < 0 ? i : this.mValues[binarySearch];
     }
 
     public void delete(long j) {
@@ -66,7 +63,7 @@ public class LongSparseIntArray implements Cloneable {
             this.mValues[binarySearch] = i;
             return;
         }
-        int i2 = binarySearch ^ -1;
+        int i2 = binarySearch ^ (-1);
         int i3 = this.mSize;
         if (i3 >= this.mKeys.length) {
             growKeyAndValueArrays(i3 + 1);
@@ -102,7 +99,7 @@ public class LongSparseIntArray implements Cloneable {
 
     public int indexOfValue(long j) {
         for (int i = 0; i < this.mSize; i++) {
-            if (((long) this.mValues[i]) == j) {
+            if (this.mValues[i] == j) {
                 return i;
             }
         }
@@ -115,16 +112,16 @@ public class LongSparseIntArray implements Cloneable {
 
     public void append(long j, int i) {
         int i2 = this.mSize;
-        if (i2 == 0 || j > this.mKeys[i2 - 1]) {
-            if (i2 >= this.mKeys.length) {
-                growKeyAndValueArrays(i2 + 1);
-            }
-            this.mKeys[i2] = j;
-            this.mValues[i2] = i;
-            this.mSize = i2 + 1;
+        if (i2 != 0 && j <= this.mKeys[i2 - 1]) {
+            put(j, i);
             return;
         }
-        put(j, i);
+        if (i2 >= this.mKeys.length) {
+            growKeyAndValueArrays(i2 + 1);
+        }
+        this.mKeys[i2] = j;
+        this.mValues[i2] = i;
+        this.mSize = i2 + 1;
     }
 
     private void growKeyAndValueArrays(int i) {
@@ -151,9 +148,6 @@ public class LongSparseIntArray implements Cloneable {
                 i5 = i6;
             }
         }
-        if (i5 == i3) {
-            return i3 ^ -1;
-        }
-        return jArr[i5] == j ? i5 : i5 ^ -1;
+        return i5 == i3 ? i3 ^ (-1) : jArr[i5] == j ? i5 : i5 ^ (-1);
     }
 }

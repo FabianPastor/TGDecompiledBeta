@@ -1,10 +1,11 @@
 package org.telegram.tgnet;
 
 import org.telegram.messenger.SharedConfig;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_groupCall extends TLRPC$GroupCall {
     public static int constructor = -NUM;
 
+    @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
@@ -45,23 +46,24 @@ public class TLRPC$TL_groupCall extends TLRPC$GroupCall {
         this.version = abstractSerializedData.readInt32(z);
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
-        int i = this.join_muted ? this.flags | 2 : this.flags & -3;
+        int i = this.join_muted ? this.flags | 2 : this.flags & (-3);
         this.flags = i;
-        int i2 = this.can_change_join_muted ? i | 4 : i & -5;
+        int i2 = this.can_change_join_muted ? i | 4 : i & (-5);
         this.flags = i2;
-        int i3 = this.join_date_asc ? i2 | 64 : i2 & -65;
+        int i3 = this.join_date_asc ? i2 | 64 : i2 & (-65);
         this.flags = i3;
-        int i4 = this.schedule_start_subscribed ? i3 | 256 : i3 & -257;
+        int i4 = this.schedule_start_subscribed ? i3 | 256 : i3 & (-257);
         this.flags = i4;
-        int i5 = this.can_start_video ? i4 | 512 : i4 & -513;
+        int i5 = this.can_start_video ? i4 | 512 : i4 & (-513);
         this.flags = i5;
-        int i6 = this.record_video_active ? i5 | 2048 : i5 & -2049;
+        int i6 = this.record_video_active ? i5 | 2048 : i5 & (-2049);
         this.flags = i6;
-        int i7 = this.rtmp_stream ? i6 | 4096 : i6 & -4097;
+        int i7 = this.rtmp_stream ? i6 | 4096 : i6 & (-4097);
         this.flags = i7;
-        int i8 = this.listeners_hidden ? i7 | 8192 : i7 & -8193;
+        int i8 = this.listeners_hidden ? i7 | 8192 : i7 & (-8193);
         this.flags = i8;
         abstractSerializedData.writeInt32(i8);
         abstractSerializedData.writeInt64(this.id);

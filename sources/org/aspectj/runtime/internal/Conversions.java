@@ -1,5 +1,5 @@
 package org.aspectj.runtime.internal;
-
+/* loaded from: classes.dex */
 public final class Conversions {
     public static Object intObject(int i) {
         return new Integer(i);

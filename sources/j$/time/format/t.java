@@ -1,5 +1,5 @@
 package j$.time.format;
-
+/* loaded from: classes2.dex */
 public enum t {
     FULL(2, 0),
     FULL_STANDALONE(32770, 0),
@@ -8,6 +8,6 @@ public enum t {
     NARROW(4, 1),
     NARROW_STANDALONE(32772, 1);
 
-    private t(int i, int i2) {
+    t(int i, int i2) {
     }
 }

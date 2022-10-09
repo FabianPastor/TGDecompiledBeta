@@ -18,33 +18,50 @@ import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.R;
 import org.telegram.tgnet.TLRPC$TL_attachMenuBot;
 import org.telegram.tgnet.TLRPC$TL_attachMenuBotIcon;
-
+/* loaded from: classes3.dex */
 public class AttachBotIntroTopView extends View {
     private Drawable attachDrawable;
-    private Paint backgroundPaint = new Paint(1);
+    private Paint backgroundPaint;
     private ImageReceiver imageReceiver;
-    private Paint paint = new Paint(1);
+    private Paint paint;
 
     public AttachBotIntroTopView(Context context) {
         super(context);
-        ImageReceiver imageReceiver2 = new ImageReceiver(this);
-        this.imageReceiver = imageReceiver2;
-        imageReceiver2.setAlpha(0.0f);
-        this.imageReceiver.setDelegate(new AttachBotIntroTopView$$ExternalSyntheticLambda1(this));
+        this.paint = new Paint(1);
+        this.backgroundPaint = new Paint(1);
+        ImageReceiver imageReceiver = new ImageReceiver(this);
+        this.imageReceiver = imageReceiver;
+        imageReceiver.setAlpha(0.0f);
+        this.imageReceiver.setDelegate(new ImageReceiver.ImageReceiverDelegate() { // from class: org.telegram.ui.Components.AttachBotIntroTopView$$ExternalSyntheticLambda1
+            @Override // org.telegram.messenger.ImageReceiver.ImageReceiverDelegate
+            public final void didSetImage(ImageReceiver imageReceiver2, boolean z, boolean z2, boolean z3) {
+                AttachBotIntroTopView.this.lambda$new$1(imageReceiver2, z, z2, z3);
+            }
+
+            @Override // org.telegram.messenger.ImageReceiver.ImageReceiverDelegate
+            public /* synthetic */ void onAnimationReady(ImageReceiver imageReceiver2) {
+                ImageReceiver.ImageReceiverDelegate.CC.$default$onAnimationReady(this, imageReceiver2);
+            }
+        });
         this.attachDrawable = ContextCompat.getDrawable(context, R.drawable.input_attach).mutate().getConstantState().newDrawable();
         this.paint.setStyle(Paint.Style.STROKE);
-        this.paint.setStrokeWidth((float) AndroidUtilities.dp(3.0f));
+        this.paint.setStrokeWidth(AndroidUtilities.dp(3.0f));
         this.paint.setStrokeCap(Paint.Cap.ROUND);
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$1(ImageReceiver imageReceiver2, boolean z, boolean z2, boolean z3) {
-        ValueAnimator duration = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f}).setDuration(150);
-        duration.addUpdateListener(new AttachBotIntroTopView$$ExternalSyntheticLambda0(this));
+    /* JADX INFO: Access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$1(ImageReceiver imageReceiver, boolean z, boolean z2, boolean z3) {
+        ValueAnimator duration = ValueAnimator.ofFloat(0.0f, 1.0f).setDuration(150L);
+        duration.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() { // from class: org.telegram.ui.Components.AttachBotIntroTopView$$ExternalSyntheticLambda0
+            @Override // android.animation.ValueAnimator.AnimatorUpdateListener
+            public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+                AttachBotIntroTopView.this.lambda$new$0(valueAnimator);
+            }
+        });
         duration.start();
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$new$0(ValueAnimator valueAnimator) {
         this.imageReceiver.setAlpha(((Float) valueAnimator.getAnimatedValue()).floatValue());
         invalidate();
@@ -57,6 +74,7 @@ public class AttachBotIntroTopView extends View {
         }
     }
 
+    @Override // android.view.View
     public void setBackgroundColor(int i) {
         this.backgroundPaint.setColor(i);
     }
@@ -67,29 +85,28 @@ public class AttachBotIntroTopView extends View {
         this.imageReceiver.setColorFilter(new PorterDuffColorFilter(i, PorterDuff.Mode.SRC_IN));
     }
 
-    /* access modifiers changed from: protected */
-    public void onAttachedToWindow() {
+    @Override // android.view.View
+    protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         this.imageReceiver.onAttachedToWindow();
     }
 
-    /* access modifiers changed from: protected */
-    public void onDetachedFromWindow() {
+    @Override // android.view.View
+    protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         this.imageReceiver.onDetachedFromWindow();
     }
 
-    /* access modifiers changed from: protected */
-    public void onDraw(Canvas canvas) {
+    @Override // android.view.View
+    protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         RectF rectF = AndroidUtilities.rectTmp;
-        rectF.set(0.0f, 0.0f, (float) getWidth(), (float) (getHeight() + AndroidUtilities.dp(6.0f)));
-        canvas.drawRoundRect(rectF, (float) AndroidUtilities.dp(6.0f), (float) AndroidUtilities.dp(6.0f), this.backgroundPaint);
-        this.imageReceiver.setImageCoords((((float) getWidth()) / 2.0f) - ((float) AndroidUtilities.dp(66.0f)), (((float) getHeight()) / 2.0f) - (((float) AndroidUtilities.dp(42.0f)) / 2.0f), (float) AndroidUtilities.dp(42.0f), (float) AndroidUtilities.dp(42.0f));
+        rectF.set(0.0f, 0.0f, getWidth(), getHeight() + AndroidUtilities.dp(6.0f));
+        canvas.drawRoundRect(rectF, AndroidUtilities.dp(6.0f), AndroidUtilities.dp(6.0f), this.backgroundPaint);
+        this.imageReceiver.setImageCoords((getWidth() / 2.0f) - AndroidUtilities.dp(66.0f), (getHeight() / 2.0f) - (AndroidUtilities.dp(42.0f) / 2.0f), AndroidUtilities.dp(42.0f), AndroidUtilities.dp(42.0f));
         this.imageReceiver.draw(canvas);
-        Canvas canvas2 = canvas;
-        canvas2.drawLine((((float) getWidth()) / 2.0f) - ((float) AndroidUtilities.dp(8.0f)), ((float) getHeight()) / 2.0f, (((float) getWidth()) / 2.0f) + ((float) AndroidUtilities.dp(8.0f)), ((float) getHeight()) / 2.0f, this.paint);
-        canvas2.drawLine(((float) getWidth()) / 2.0f, (((float) getHeight()) / 2.0f) - ((float) AndroidUtilities.dp(8.0f)), ((float) getWidth()) / 2.0f, (((float) getHeight()) / 2.0f) + ((float) AndroidUtilities.dp(8.0f)), this.paint);
+        canvas.drawLine((getWidth() / 2.0f) - AndroidUtilities.dp(8.0f), getHeight() / 2.0f, (getWidth() / 2.0f) + AndroidUtilities.dp(8.0f), getHeight() / 2.0f, this.paint);
+        canvas.drawLine(getWidth() / 2.0f, (getHeight() / 2.0f) - AndroidUtilities.dp(8.0f), getWidth() / 2.0f, (getHeight() / 2.0f) + AndroidUtilities.dp(8.0f), this.paint);
         this.attachDrawable.setBounds((getWidth() / 2) + AndroidUtilities.dp(24.0f), (getHeight() / 2) - (AndroidUtilities.dp(42.0f) / 2), (getWidth() / 2) + AndroidUtilities.dp(66.0f), (getHeight() / 2) + (AndroidUtilities.dp(42.0f) / 2));
         this.attachDrawable.draw(canvas);
     }

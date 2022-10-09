@@ -9,27 +9,33 @@ import android.view.animation.AccelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.DocumentObject;
 import org.telegram.messenger.Emoji;
+import org.telegram.messenger.FileLoader;
+import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SendMessagesHelper;
+import org.telegram.messenger.SvgHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$DocumentAttribute;
+import org.telegram.tgnet.TLRPC$PhotoSize;
 import org.telegram.tgnet.TLRPC$TL_documentAttributeSticker;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.ListView.RecyclerListViewWithOverlayDraw;
 import org.telegram.ui.Components.Premium.PremiumLockIconView;
-
+/* loaded from: classes3.dex */
 public class StickerEmojiCell extends FrameLayout implements NotificationCenter.NotificationCenterDelegate, RecyclerListViewWithOverlayDraw.OverlayView {
     private static AccelerateInterpolator interpolator = new AccelerateInterpolator(0.5f);
-    private float alpha = 1.0f;
+    private float alpha;
     private boolean changingAlpha;
-    private int currentAccount = UserConfig.selectedAccount;
+    private int currentAccount;
     private String currentEmoji;
     private boolean drawInParentView;
     private TextView emojiTextView;
@@ -38,7 +44,7 @@ public class StickerEmojiCell extends FrameLayout implements NotificationCenter.
     private boolean isPremiumSticker;
     private long lastUpdateTime;
     private Object parentObject;
-    private float premiumAlpha = 1.0f;
+    private float premiumAlpha;
     private PremiumLockIconView premiumIconView;
     private boolean recent;
     private float scale;
@@ -50,6 +56,9 @@ public class StickerEmojiCell extends FrameLayout implements NotificationCenter.
 
     public StickerEmojiCell(Context context, boolean z) {
         super(context);
+        this.alpha = 1.0f;
+        this.currentAccount = UserConfig.selectedAccount;
+        this.premiumAlpha = 1.0f;
         this.fromEmojiPanel = z;
         ImageReceiver imageReceiver = new ImageReceiver();
         this.imageView = imageReceiver;
@@ -97,12 +106,12 @@ public class StickerEmojiCell extends FrameLayout implements NotificationCenter.
     }
 
     public void setSticker(TLRPC$Document tLRPC$Document, Object obj, boolean z) {
-        setSticker(tLRPC$Document, (SendMessagesHelper.ImportingSticker) null, obj, (String) null, z);
+        setSticker(tLRPC$Document, null, obj, null, z);
     }
 
     public void setSticker(SendMessagesHelper.ImportingSticker importingSticker) {
         String str = importingSticker.emoji;
-        setSticker((TLRPC$Document) null, importingSticker, (Object) null, str, str != null);
+        setSticker(null, importingSticker, null, str, str != null);
     }
 
     public MessageObject.SendAnimationData getSendAnimationData() {
@@ -113,310 +122,108 @@ public class StickerEmojiCell extends FrameLayout implements NotificationCenter.
         MessageObject.SendAnimationData sendAnimationData = new MessageObject.SendAnimationData();
         int[] iArr = new int[2];
         getLocationInWindow(iArr);
-        sendAnimationData.x = imageReceiver.getCenterX() + ((float) iArr[0]);
-        sendAnimationData.y = imageReceiver.getCenterY() + ((float) iArr[1]);
+        sendAnimationData.x = imageReceiver.getCenterX() + iArr[0];
+        sendAnimationData.y = imageReceiver.getCenterY() + iArr[1];
         sendAnimationData.width = imageReceiver.getImageWidth();
         sendAnimationData.height = imageReceiver.getImageHeight();
         return sendAnimationData;
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:62:0x01e4, code lost:
-        r7 = false;
-     */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void setSticker(org.telegram.tgnet.TLRPC$Document r32, org.telegram.messenger.SendMessagesHelper.ImportingSticker r33, java.lang.Object r34, java.lang.String r35, boolean r36) {
-        /*
-            r31 = this;
-            r0 = r31
-            r1 = r32
-            r2 = r33
-            r3 = r35
-            r0.currentEmoji = r3
-            boolean r4 = org.telegram.messenger.MessageObject.isPremiumSticker(r32)
-            r0.isPremiumSticker = r4
-            r5 = 0
-            java.lang.Integer r15 = java.lang.Integer.valueOf(r5)
-            r0.drawInParentView = r5
-            if (r4 == 0) goto L_0x0029
-            org.telegram.ui.Components.Premium.PremiumLockIconView r4 = r0.premiumIconView
-            java.lang.String r6 = "windowBackgroundWhite"
-            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r6)
-            r4.setColor(r6)
-            org.telegram.ui.Components.Premium.PremiumLockIconView r4 = r0.premiumIconView
-            r4.setWaitingImage()
-        L_0x0029:
-            r4 = 4
-            r6 = 1065353216(0x3var_, float:1.0)
-            r17 = 1098907648(0x41800000, float:16.0)
-            if (r2 == 0) goto L_0x00a7
-            r0.stickerPath = r2
-            boolean r1 = r2.validated
-            java.lang.String r7 = "tgs"
-            r8 = 0
-            java.lang.String r9 = "dialogBackgroundGray"
-            if (r1 == 0) goto L_0x0061
-            org.telegram.messenger.ImageReceiver r1 = r0.imageView
-            java.lang.String r10 = r2.path
-            org.telegram.messenger.ImageLocation r10 = org.telegram.messenger.ImageLocation.getForPath(r10)
-            r11 = 0
-            r12 = 0
-            org.telegram.messenger.SvgHelper$SvgDrawable r13 = org.telegram.messenger.DocumentObject.getSvgRectThumb(r9, r6)
-            r18 = 0
-            boolean r2 = r2.animated
-            if (r2 == 0) goto L_0x0051
-            r14 = r7
-            goto L_0x0052
-        L_0x0051:
-            r14 = r8
-        L_0x0052:
-            r16 = 1
-            java.lang.String r8 = "80_80"
-            r6 = r1
-            r7 = r10
-            r9 = r11
-            r10 = r12
-            r11 = r13
-            r12 = r18
-            r6.setImage(r7, r8, r9, r10, r11, r12, r14, r15, r16)
-            goto L_0x0082
-        L_0x0061:
-            org.telegram.messenger.ImageReceiver r1 = r0.imageView
-            r10 = 0
-            r11 = 0
-            r12 = 0
-            r13 = 0
-            org.telegram.messenger.SvgHelper$SvgDrawable r14 = org.telegram.messenger.DocumentObject.getSvgRectThumb(r9, r6)
-            r18 = 0
-            boolean r2 = r2.animated
-            if (r2 == 0) goto L_0x0073
-            r2 = r7
-            goto L_0x0074
-        L_0x0073:
-            r2 = r8
-        L_0x0074:
-            r16 = 1
-            r6 = r1
-            r7 = r10
-            r8 = r11
-            r9 = r12
-            r10 = r13
-            r11 = r14
-            r12 = r18
-            r14 = r2
-            r6.setImage(r7, r8, r9, r10, r11, r12, r14, r15, r16)
-        L_0x0082:
-            if (r3 == 0) goto L_0x00a0
-            android.widget.TextView r1 = r0.emojiTextView
-            android.text.TextPaint r2 = r1.getPaint()
-            android.graphics.Paint$FontMetricsInt r2 = r2.getFontMetricsInt()
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r17)
-            java.lang.CharSequence r2 = org.telegram.messenger.Emoji.replaceEmoji(r3, r2, r4, r5)
-            r1.setText(r2)
-            android.widget.TextView r1 = r0.emojiTextView
-            r1.setVisibility(r5)
-            goto L_0x0217
-        L_0x00a0:
-            android.widget.TextView r1 = r0.emojiTextView
-            r1.setVisibility(r4)
-            goto L_0x0217
-        L_0x00a7:
-            if (r1 == 0) goto L_0x0217
-            r0.sticker = r1
-            r2 = r34
-            r0.parentObject = r2
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r2 = r1.thumbs
-            r7 = 90
-            org.telegram.tgnet.TLRPC$PhotoSize r2 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r2, r7)
-            boolean r7 = r0.fromEmojiPanel
-            if (r7 == 0) goto L_0x00be
-            java.lang.String r8 = "emptyListPlaceholder"
-            goto L_0x00c0
-        L_0x00be:
-            java.lang.String r8 = "windowBackgroundGray"
-        L_0x00c0:
-            if (r7 == 0) goto L_0x00c5
-            r6 = 1045220557(0x3e4ccccd, float:0.2)
-        L_0x00c5:
-            org.telegram.messenger.SvgHelper$SvgDrawable r12 = org.telegram.messenger.DocumentObject.getSvgThumb((org.telegram.tgnet.TLRPC$Document) r1, (java.lang.String) r8, (float) r6)
-            boolean r6 = r0.fromEmojiPanel
-            if (r6 == 0) goto L_0x00d0
-            java.lang.String r6 = "66_66_pcache_compress"
-            goto L_0x00d2
-        L_0x00d0:
-            java.lang.String r6 = "66_66"
-        L_0x00d2:
-            r20 = r6
-            boolean r6 = org.telegram.messenger.MessageObject.canAutoplayAnimatedSticker(r32)
-            r7 = 1
-            if (r6 == 0) goto L_0x0138
-            boolean r6 = r0.fromEmojiPanel
-            if (r6 == 0) goto L_0x00e1
-            r0.drawInParentView = r7
-        L_0x00e1:
-            if (r12 == 0) goto L_0x0106
-            org.telegram.messenger.ImageReceiver r6 = r0.imageView
-            org.telegram.messenger.ImageLocation r19 = org.telegram.messenger.ImageLocation.getForDocument(r32)
-            org.telegram.messenger.ImageLocation r21 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC$PhotoSize) r2, (org.telegram.tgnet.TLRPC$Document) r1)
-            r22 = 0
-            r23 = 0
-            r24 = 0
-            r26 = 0
-            r28 = 0
-            java.lang.Object r2 = r0.parentObject
-            r30 = 1
-            r18 = r6
-            r25 = r12
-            r29 = r2
-            r18.setImage(r19, r20, r21, r22, r23, r24, r25, r26, r28, r29, r30)
-            goto L_0x018b
-        L_0x0106:
-            if (r2 == 0) goto L_0x0122
-            org.telegram.messenger.ImageReceiver r6 = r0.imageView
-            org.telegram.messenger.ImageLocation r19 = org.telegram.messenger.ImageLocation.getForDocument(r32)
-            org.telegram.messenger.ImageLocation r21 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC$PhotoSize) r2, (org.telegram.tgnet.TLRPC$Document) r1)
-            r22 = 0
-            r23 = 0
-            java.lang.Object r2 = r0.parentObject
-            r25 = 1
-            r18 = r6
-            r24 = r2
-            r18.setImage((org.telegram.messenger.ImageLocation) r19, (java.lang.String) r20, (org.telegram.messenger.ImageLocation) r21, (java.lang.String) r22, (java.lang.String) r23, (java.lang.Object) r24, (int) r25)
-            goto L_0x018b
-        L_0x0122:
-            org.telegram.messenger.ImageReceiver r2 = r0.imageView
-            org.telegram.messenger.ImageLocation r19 = org.telegram.messenger.ImageLocation.getForDocument(r32)
-            r21 = 0
-            r22 = 0
-            java.lang.Object r6 = r0.parentObject
-            r24 = 1
-            r18 = r2
-            r23 = r6
-            r18.setImage(r19, r20, r21, r22, r23, r24)
-            goto L_0x018b
-        L_0x0138:
-            if (r12 == 0) goto L_0x015e
-            if (r2 == 0) goto L_0x014d
-            org.telegram.messenger.ImageReceiver r9 = r0.imageView
-            org.telegram.messenger.ImageLocation r10 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC$PhotoSize) r2, (org.telegram.tgnet.TLRPC$Document) r1)
-            java.lang.Object r14 = r0.parentObject
-            r15 = 1
-            java.lang.String r13 = "webp"
-            r11 = r20
-            r9.setImage(r10, r11, r12, r13, r14, r15)
-            goto L_0x018b
-        L_0x014d:
-            org.telegram.messenger.ImageReceiver r9 = r0.imageView
-            org.telegram.messenger.ImageLocation r10 = org.telegram.messenger.ImageLocation.getForDocument(r32)
-            java.lang.Object r14 = r0.parentObject
-            r15 = 1
-            java.lang.String r13 = "webp"
-            r11 = r20
-            r9.setImage(r10, r11, r12, r13, r14, r15)
-            goto L_0x018b
-        L_0x015e:
-            if (r2 == 0) goto L_0x0176
-            org.telegram.messenger.ImageReceiver r6 = r0.imageView
-            org.telegram.messenger.ImageLocation r19 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC$PhotoSize) r2, (org.telegram.tgnet.TLRPC$Document) r1)
-            r21 = 0
-            java.lang.Object r2 = r0.parentObject
-            r24 = 1
-            java.lang.String r22 = "webp"
-            r18 = r6
-            r23 = r2
-            r18.setImage(r19, r20, r21, r22, r23, r24)
-            goto L_0x018b
-        L_0x0176:
-            org.telegram.messenger.ImageReceiver r2 = r0.imageView
-            org.telegram.messenger.ImageLocation r19 = org.telegram.messenger.ImageLocation.getForDocument(r32)
-            r21 = 0
-            java.lang.Object r6 = r0.parentObject
-            r24 = 1
-            java.lang.String r22 = "webp"
-            r18 = r2
-            r23 = r6
-            r18.setImage(r19, r20, r21, r22, r23, r24)
-        L_0x018b:
-            if (r3 == 0) goto L_0x01a8
-            android.widget.TextView r1 = r0.emojiTextView
-            android.text.TextPaint r2 = r1.getPaint()
-            android.graphics.Paint$FontMetricsInt r2 = r2.getFontMetricsInt()
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r17)
-            java.lang.CharSequence r2 = org.telegram.messenger.Emoji.replaceEmoji(r3, r2, r4, r5)
-            r1.setText(r2)
-            android.widget.TextView r1 = r0.emojiTextView
-            r1.setVisibility(r5)
-            goto L_0x0217
-        L_0x01a8:
-            if (r36 == 0) goto L_0x0212
-            r2 = 0
-        L_0x01ab:
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$DocumentAttribute> r3 = r1.attributes
-            int r3 = r3.size()
-            if (r2 >= r3) goto L_0x01e4
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$DocumentAttribute> r3 = r1.attributes
-            java.lang.Object r3 = r3.get(r2)
-            org.telegram.tgnet.TLRPC$DocumentAttribute r3 = (org.telegram.tgnet.TLRPC$DocumentAttribute) r3
-            boolean r4 = r3 instanceof org.telegram.tgnet.TLRPC$TL_documentAttributeSticker
-            if (r4 == 0) goto L_0x01e1
-            java.lang.String r1 = r3.alt
-            if (r1 == 0) goto L_0x01e4
-            int r1 = r1.length()
-            if (r1 <= 0) goto L_0x01e4
-            android.widget.TextView r1 = r0.emojiTextView
-            java.lang.String r2 = r3.alt
-            android.text.TextPaint r3 = r1.getPaint()
-            android.graphics.Paint$FontMetricsInt r3 = r3.getFontMetricsInt()
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r17)
-            java.lang.CharSequence r2 = org.telegram.messenger.Emoji.replaceEmoji(r2, r3, r4, r5)
-            r1.setText(r2)
-            goto L_0x01e5
-        L_0x01e1:
-            int r2 = r2 + 1
-            goto L_0x01ab
-        L_0x01e4:
-            r7 = 0
-        L_0x01e5:
-            if (r7 != 0) goto L_0x020c
-            android.widget.TextView r1 = r0.emojiTextView
-            int r2 = r0.currentAccount
-            org.telegram.messenger.MediaDataController r2 = org.telegram.messenger.MediaDataController.getInstance(r2)
-            org.telegram.tgnet.TLRPC$Document r3 = r0.sticker
-            long r3 = r3.id
-            java.lang.String r2 = r2.getEmojiForSticker(r3)
-            android.widget.TextView r3 = r0.emojiTextView
-            android.text.TextPaint r3 = r3.getPaint()
-            android.graphics.Paint$FontMetricsInt r3 = r3.getFontMetricsInt()
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r17)
-            java.lang.CharSequence r2 = org.telegram.messenger.Emoji.replaceEmoji(r2, r3, r4, r5)
-            r1.setText(r2)
-        L_0x020c:
-            android.widget.TextView r1 = r0.emojiTextView
-            r1.setVisibility(r5)
-            goto L_0x0217
-        L_0x0212:
-            android.widget.TextView r1 = r0.emojiTextView
-            r1.setVisibility(r4)
-        L_0x0217:
-            r0.updatePremiumStatus(r5)
-            org.telegram.messenger.ImageReceiver r1 = r0.imageView
-            float r2 = r0.alpha
-            float r3 = r0.premiumAlpha
-            float r2 = r2 * r3
-            r1.setAlpha(r2)
-            boolean r1 = r0.drawInParentView
-            if (r1 == 0) goto L_0x0235
-            org.telegram.messenger.ImageReceiver r1 = r0.imageView
-            android.view.ViewParent r2 = r31.getParent()
-            android.view.View r2 = (android.view.View) r2
-            r1.setParentView(r2)
-            goto L_0x023a
-        L_0x0235:
-            org.telegram.messenger.ImageReceiver r1 = r0.imageView
-            r1.setParentView(r0)
-        L_0x023a:
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.StickerEmojiCell.setSticker(org.telegram.tgnet.TLRPC$Document, org.telegram.messenger.SendMessagesHelper$ImportingSticker, java.lang.Object, java.lang.String, boolean):void");
+    public void setSticker(TLRPC$Document tLRPC$Document, SendMessagesHelper.ImportingSticker importingSticker, Object obj, String str, boolean z) {
+        this.currentEmoji = str;
+        boolean isPremiumSticker = MessageObject.isPremiumSticker(tLRPC$Document);
+        this.isPremiumSticker = isPremiumSticker;
+        this.drawInParentView = false;
+        if (isPremiumSticker) {
+            this.premiumIconView.setColor(Theme.getColor("windowBackgroundWhite"));
+            this.premiumIconView.setWaitingImage();
+        }
+        float f = 1.0f;
+        if (importingSticker != null) {
+            this.stickerPath = importingSticker;
+            if (importingSticker.validated) {
+                this.imageView.setImage(ImageLocation.getForPath(importingSticker.path), "80_80", null, null, DocumentObject.getSvgRectThumb("dialogBackgroundGray", 1.0f), 0L, importingSticker.animated ? "tgs" : null, 0, 1);
+            } else {
+                this.imageView.setImage(null, null, null, null, DocumentObject.getSvgRectThumb("dialogBackgroundGray", 1.0f), 0L, importingSticker.animated ? "tgs" : null, 0, 1);
+            }
+            if (str != null) {
+                TextView textView = this.emojiTextView;
+                textView.setText(Emoji.replaceEmoji(str, textView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(16.0f), false));
+                this.emojiTextView.setVisibility(0);
+            } else {
+                this.emojiTextView.setVisibility(4);
+            }
+        } else if (tLRPC$Document != null) {
+            this.sticker = tLRPC$Document;
+            this.parentObject = obj;
+            TLRPC$PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(tLRPC$Document.thumbs, 90);
+            boolean z2 = this.fromEmojiPanel;
+            String str2 = z2 ? "emptyListPlaceholder" : "windowBackgroundGray";
+            if (z2) {
+                f = 0.2f;
+            }
+            SvgHelper.SvgDrawable svgThumb = DocumentObject.getSvgThumb(tLRPC$Document, str2, f);
+            String str3 = this.fromEmojiPanel ? "66_66_pcache_compress" : "66_66";
+            boolean z3 = true;
+            if (MessageObject.canAutoplayAnimatedSticker(tLRPC$Document)) {
+                if (this.fromEmojiPanel) {
+                    this.drawInParentView = true;
+                }
+                if (svgThumb != null) {
+                    this.imageView.setImage(ImageLocation.getForDocument(tLRPC$Document), str3, ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$Document), null, null, null, svgThumb, 0L, null, this.parentObject, 1);
+                } else if (closestPhotoSizeWithSize != null) {
+                    this.imageView.setImage(ImageLocation.getForDocument(tLRPC$Document), str3, ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$Document), (String) null, (String) null, this.parentObject, 1);
+                } else {
+                    this.imageView.setImage(ImageLocation.getForDocument(tLRPC$Document), str3, null, null, this.parentObject, 1);
+                }
+            } else if (svgThumb != null) {
+                if (closestPhotoSizeWithSize != null) {
+                    this.imageView.setImage(ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$Document), str3, svgThumb, "webp", this.parentObject, 1);
+                } else {
+                    this.imageView.setImage(ImageLocation.getForDocument(tLRPC$Document), str3, svgThumb, "webp", this.parentObject, 1);
+                }
+            } else if (closestPhotoSizeWithSize != null) {
+                this.imageView.setImage(ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$Document), str3, null, "webp", this.parentObject, 1);
+            } else {
+                this.imageView.setImage(ImageLocation.getForDocument(tLRPC$Document), str3, null, "webp", this.parentObject, 1);
+            }
+            if (str != null) {
+                TextView textView2 = this.emojiTextView;
+                textView2.setText(Emoji.replaceEmoji(str, textView2.getPaint().getFontMetricsInt(), AndroidUtilities.dp(16.0f), false));
+                this.emojiTextView.setVisibility(0);
+            } else if (z) {
+                int i = 0;
+                while (true) {
+                    if (i >= tLRPC$Document.attributes.size()) {
+                        break;
+                    }
+                    TLRPC$DocumentAttribute tLRPC$DocumentAttribute = tLRPC$Document.attributes.get(i);
+                    if (tLRPC$DocumentAttribute instanceof TLRPC$TL_documentAttributeSticker) {
+                        String str4 = tLRPC$DocumentAttribute.alt;
+                        if (str4 != null && str4.length() > 0) {
+                            TextView textView3 = this.emojiTextView;
+                            textView3.setText(Emoji.replaceEmoji(tLRPC$DocumentAttribute.alt, textView3.getPaint().getFontMetricsInt(), AndroidUtilities.dp(16.0f), false));
+                        }
+                    } else {
+                        i++;
+                    }
+                }
+                z3 = false;
+                if (!z3) {
+                    this.emojiTextView.setText(Emoji.replaceEmoji(MediaDataController.getInstance(this.currentAccount).getEmojiForSticker(this.sticker.id), this.emojiTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(16.0f), false));
+                }
+                this.emojiTextView.setVisibility(0);
+            } else {
+                this.emojiTextView.setVisibility(4);
+            }
+        }
+        updatePremiumStatus(false);
+        this.imageView.setAlpha(this.alpha * this.premiumAlpha);
+        if (this.drawInParentView) {
+            this.imageView.setParentView((View) getParent());
+        } else {
+            this.imageView.setParentView(this);
+        }
     }
 
     private void updatePremiumStatus(boolean z) {
@@ -451,7 +258,7 @@ public class StickerEmojiCell extends FrameLayout implements NotificationCenter.
     public void disable() {
         this.changingAlpha = true;
         this.alpha = 0.5f;
-        this.time = 0;
+        this.time = 0L;
         this.imageView.setAlpha(0.5f * this.premiumAlpha);
         this.imageView.invalidate();
         this.lastUpdateTime = System.currentTimeMillis();
@@ -476,6 +283,7 @@ public class StickerEmojiCell extends FrameLayout implements NotificationCenter.
         return this.imageView;
     }
 
+    @Override // android.view.View
     public void invalidate() {
         if (this.drawInParentView && getParent() != null) {
             ((View) getParent()).invalidate();
@@ -484,6 +292,7 @@ public class StickerEmojiCell extends FrameLayout implements NotificationCenter.
         super.invalidate();
     }
 
+    @Override // android.view.View
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
         super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
         String string = LocaleController.getString("AttachSticker", R.string.AttachSticker);
@@ -510,8 +319,8 @@ public class StickerEmojiCell extends FrameLayout implements NotificationCenter.
         accessibilityNodeInfo.setEnabled(true);
     }
 
-    /* access modifiers changed from: protected */
-    public void onAttachedToWindow() {
+    @Override // android.view.ViewGroup, android.view.View
+    protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         if (this.drawInParentView) {
             this.imageView.setParentView((View) getParent());
@@ -522,27 +331,29 @@ public class StickerEmojiCell extends FrameLayout implements NotificationCenter.
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.currentUserPremiumStatusChanged);
     }
 
-    /* access modifiers changed from: protected */
-    public void onDetachedFromWindow() {
+    @Override // android.view.ViewGroup, android.view.View
+    protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         this.imageView.onDetachedFromWindow();
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.currentUserPremiumStatusChanged);
     }
 
+    @Override // org.telegram.messenger.NotificationCenter.NotificationCenterDelegate
     public void didReceivedNotification(int i, int i2, Object... objArr) {
         if (i == NotificationCenter.currentUserPremiumStatusChanged) {
             updatePremiumStatus(true);
         }
     }
 
-    /* access modifiers changed from: protected */
-    public void dispatchDraw(Canvas canvas) {
+    @Override // android.view.ViewGroup, android.view.View
+    protected void dispatchDraw(Canvas canvas) {
         if (!this.drawInParentView) {
             drawInternal(this, canvas);
         }
         super.dispatchDraw(canvas);
     }
 
+    @Override // org.telegram.ui.Components.ListView.RecyclerListViewWithOverlayDraw.OverlayView
     public void preDraw(View view, Canvas canvas) {
         if (this.drawInParentView) {
             drawInternal(view, canvas);
@@ -551,7 +362,7 @@ public class StickerEmojiCell extends FrameLayout implements NotificationCenter.
 
     private void drawInternal(View view, Canvas canvas) {
         boolean z;
-        if (this.changingAlpha || ((z && this.scale != 0.8f) || (!(z = this.scaled) && this.scale != 1.0f))) {
+        if (this.changingAlpha || (((z = this.scaled) && this.scale != 0.8f) || (!z && this.scale != 1.0f))) {
             long currentTimeMillis = System.currentTimeMillis();
             long j = currentTimeMillis - this.lastUpdateTime;
             this.lastUpdateTime = currentTimeMillis;
@@ -559,7 +370,7 @@ public class StickerEmojiCell extends FrameLayout implements NotificationCenter.
                 long j2 = this.time + j;
                 this.time = j2;
                 if (j2 > 1050) {
-                    this.time = 1050;
+                    this.time = 1050L;
                 }
                 float interpolation = (interpolator.getInterpolation(((float) this.time) / 150.0f) * 0.5f) + 0.5f;
                 this.alpha = interpolation;
@@ -588,10 +399,10 @@ public class StickerEmojiCell extends FrameLayout implements NotificationCenter.
             view.invalidate();
         }
         int min = Math.min(AndroidUtilities.dp(66.0f), Math.min(getMeasuredHeight(), getMeasuredWidth()));
-        float measuredWidth = (float) (getMeasuredWidth() >> 1);
-        float f4 = (float) min;
+        float measuredWidth = getMeasuredWidth() >> 1;
+        float f4 = min;
         float f5 = f4 / 2.0f;
-        float measuredHeight = (float) (getMeasuredHeight() >> 1);
+        float measuredHeight = getMeasuredHeight() >> 1;
         this.imageView.setImageCoords(measuredWidth - f5, measuredHeight - f5, f4, f4);
         this.imageView.setAlpha(this.alpha * this.premiumAlpha);
         if (this.scale != 1.0f) {

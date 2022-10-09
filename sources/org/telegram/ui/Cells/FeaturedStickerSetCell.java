@@ -34,15 +34,12 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.ProgressButton;
-
+/* loaded from: classes3.dex */
 public class FeaturedStickerSetCell extends FrameLayout {
-    /* access modifiers changed from: private */
-    public ProgressButton addButton;
-    /* access modifiers changed from: private */
-    public ImageView checkImage;
-    private int currentAccount = UserConfig.selectedAccount;
-    /* access modifiers changed from: private */
-    public AnimatorSet currentAnimation;
+    private ProgressButton addButton;
+    private ImageView checkImage;
+    private int currentAccount;
+    private AnimatorSet currentAnimation;
     private BackupImageView imageView;
     private boolean isInstalled;
     private boolean needDivider;
@@ -53,9 +50,10 @@ public class FeaturedStickerSetCell extends FrameLayout {
 
     public FeaturedStickerSetCell(Context context) {
         super(context);
-        TextView textView2 = new TextView(context);
-        this.textView = textView2;
-        textView2.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+        this.currentAccount = UserConfig.selectedAccount;
+        TextView textView = new TextView(context);
+        this.textView = textView;
+        textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
@@ -63,22 +61,22 @@ public class FeaturedStickerSetCell extends FrameLayout {
         this.textView.setEllipsize(TextUtils.TruncateAt.END);
         int i = 5;
         this.textView.setGravity(LocaleController.isRTL ? 5 : 3);
-        TextView textView3 = this.textView;
+        TextView textView2 = this.textView;
         boolean z = LocaleController.isRTL;
         float f = 71.0f;
-        addView(textView3, LayoutHelper.createFrame(-2, -2.0f, z ? 5 : 3, z ? 22.0f : 71.0f, 10.0f, z ? 71.0f : 22.0f, 0.0f));
-        TextView textView4 = new TextView(context);
-        this.valueTextView = textView4;
-        textView4.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2"));
+        addView(textView2, LayoutHelper.createFrame(-2, -2.0f, z ? 5 : 3, z ? 22.0f : 71.0f, 10.0f, z ? 71.0f : 22.0f, 0.0f));
+        TextView textView3 = new TextView(context);
+        this.valueTextView = textView3;
+        textView3.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2"));
         this.valueTextView.setTextSize(1, 13.0f);
         this.valueTextView.setLines(1);
         this.valueTextView.setMaxLines(1);
         this.valueTextView.setSingleLine(true);
         this.valueTextView.setEllipsize(TextUtils.TruncateAt.END);
         this.valueTextView.setGravity(LocaleController.isRTL ? 5 : 3);
-        TextView textView5 = this.valueTextView;
+        TextView textView4 = this.valueTextView;
         boolean z2 = LocaleController.isRTL;
-        addView(textView5, LayoutHelper.createFrame(-2, -2.0f, z2 ? 5 : 3, z2 ? 100.0f : 71.0f, 35.0f, !z2 ? 100.0f : f, 0.0f));
+        addView(textView4, LayoutHelper.createFrame(-2, -2.0f, z2 ? 5 : 3, z2 ? 100.0f : 71.0f, 35.0f, !z2 ? 100.0f : f, 0.0f));
         BackupImageView backupImageView = new BackupImageView(context);
         this.imageView = backupImageView;
         backupImageView.setAspectFit(true);
@@ -93,148 +91,160 @@ public class FeaturedStickerSetCell extends FrameLayout {
         this.addButton.setProgressColor(Theme.getColor("featuredStickers_buttonProgress"));
         this.addButton.setBackgroundRoundRect(Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed"));
         addView(this.addButton, LayoutHelper.createFrameRelatively(-2.0f, 28.0f, 8388661, 0.0f, 18.0f, 14.0f, 0.0f));
-        ImageView imageView2 = new ImageView(context);
-        this.checkImage = imageView2;
-        imageView2.setColorFilter(new PorterDuffColorFilter(Theme.getColor("featuredStickers_addedIcon"), PorterDuff.Mode.MULTIPLY));
+        ImageView imageView = new ImageView(context);
+        this.checkImage = imageView;
+        imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("featuredStickers_addedIcon"), PorterDuff.Mode.MULTIPLY));
         this.checkImage.setImageResource(R.drawable.sticker_added);
         addView(this.checkImage, LayoutHelper.createFrame(19, 14.0f));
     }
 
-    /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
+    @Override // android.widget.FrameLayout, android.view.View
+    protected void onMeasure(int i, int i2) {
         super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(64.0f) + (this.needDivider ? 1 : 0), NUM));
         measureChildWithMargins(this.textView, i, this.addButton.getMeasuredWidth(), i2, 0);
     }
 
-    /* access modifiers changed from: protected */
-    public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+    @Override // android.widget.FrameLayout, android.view.ViewGroup, android.view.View
+    protected void onLayout(boolean z, int i, int i2, int i3, int i4) {
         super.onLayout(z, i, i2, i3, i4);
         int left = (this.addButton.getLeft() + (this.addButton.getMeasuredWidth() / 2)) - (this.checkImage.getMeasuredWidth() / 2);
         int top = (this.addButton.getTop() + (this.addButton.getMeasuredHeight() / 2)) - (this.checkImage.getMeasuredHeight() / 2);
-        ImageView imageView2 = this.checkImage;
-        imageView2.layout(left, top, imageView2.getMeasuredWidth() + left, this.checkImage.getMeasuredHeight() + top);
+        ImageView imageView = this.checkImage;
+        imageView.layout(left, top, imageView.getMeasuredWidth() + left, this.checkImage.getMeasuredHeight() + top);
         this.wasLayout = true;
     }
 
-    /* access modifiers changed from: protected */
-    public void onDetachedFromWindow() {
+    @Override // android.view.ViewGroup, android.view.View
+    protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         this.wasLayout = false;
     }
 
     public void setStickersSet(TLRPC$StickerSetCovered tLRPC$StickerSetCovered, boolean z, boolean z2) {
-        ImageLocation imageLocation;
-        TLRPC$StickerSetCovered tLRPC$StickerSetCovered2 = tLRPC$StickerSetCovered;
-        boolean z3 = z;
-        boolean z4 = tLRPC$StickerSetCovered2 == this.stickersSet && this.wasLayout;
-        this.needDivider = z3;
-        this.stickersSet = tLRPC$StickerSetCovered2;
-        setWillNotDraw(!z3);
+        ImageLocation forSticker;
+        boolean z3 = tLRPC$StickerSetCovered == this.stickersSet && this.wasLayout;
+        this.needDivider = z;
+        this.stickersSet = tLRPC$StickerSetCovered;
+        setWillNotDraw(!z);
         this.textView.setText(this.stickersSet.set.title);
         TLRPC$Document tLRPC$Document = null;
         if (z2) {
-            AnonymousClass1 r2 = new Drawable(this) {
+            Drawable drawable = new Drawable(this) { // from class: org.telegram.ui.Cells.FeaturedStickerSetCell.1
                 Paint paint = new Paint(1);
 
+                @Override // android.graphics.drawable.Drawable
                 public int getOpacity() {
                     return -2;
                 }
 
+                @Override // android.graphics.drawable.Drawable
                 public void setAlpha(int i) {
                 }
 
+                @Override // android.graphics.drawable.Drawable
                 public void setColorFilter(ColorFilter colorFilter) {
                 }
 
+                @Override // android.graphics.drawable.Drawable
                 public void draw(Canvas canvas) {
                     this.paint.setColor(-12277526);
-                    canvas.drawCircle((float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(5.0f), (float) AndroidUtilities.dp(3.0f), this.paint);
+                    canvas.drawCircle(AndroidUtilities.dp(4.0f), AndroidUtilities.dp(5.0f), AndroidUtilities.dp(3.0f), this.paint);
                 }
 
+                @Override // android.graphics.drawable.Drawable
                 public int getIntrinsicWidth() {
                     return AndroidUtilities.dp(12.0f);
                 }
 
+                @Override // android.graphics.drawable.Drawable
                 public int getIntrinsicHeight() {
                     return AndroidUtilities.dp(8.0f);
                 }
             };
-            TextView textView2 = this.textView;
-            boolean z5 = LocaleController.isRTL;
-            AnonymousClass1 r5 = z5 ? null : r2;
-            if (!z5) {
-                r2 = null;
+            TextView textView = this.textView;
+            boolean z4 = LocaleController.isRTL;
+            Drawable drawable2 = z4 ? null : drawable;
+            if (!z4) {
+                drawable = null;
             }
-            textView2.setCompoundDrawablesWithIntrinsicBounds(r5, (Drawable) null, r2, (Drawable) null);
+            textView.setCompoundDrawablesWithIntrinsicBounds(drawable2, (Drawable) null, drawable, (Drawable) null);
         } else {
             this.textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         }
-        this.valueTextView.setText(LocaleController.formatPluralString("Stickers", tLRPC$StickerSetCovered2.set.count, new Object[0]));
-        TLRPC$Document tLRPC$Document2 = tLRPC$StickerSetCovered2.cover;
+        this.valueTextView.setText(LocaleController.formatPluralString("Stickers", tLRPC$StickerSetCovered.set.count, new Object[0]));
+        TLRPC$Document tLRPC$Document2 = tLRPC$StickerSetCovered.cover;
         if (tLRPC$Document2 != null) {
             tLRPC$Document = tLRPC$Document2;
-        } else if (!tLRPC$StickerSetCovered2.covers.isEmpty()) {
-            tLRPC$Document = tLRPC$StickerSetCovered2.covers.get(0);
+        } else if (!tLRPC$StickerSetCovered.covers.isEmpty()) {
+            tLRPC$Document = tLRPC$StickerSetCovered.covers.get(0);
         }
         if (tLRPC$Document != null) {
-            TLObject closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(tLRPC$StickerSetCovered2.set.thumbs, 90);
+            TLObject closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(tLRPC$StickerSetCovered.set.thumbs, 90);
             if (closestPhotoSizeWithSize == null) {
                 closestPhotoSizeWithSize = tLRPC$Document;
             }
-            SvgHelper.SvgDrawable svgThumb = DocumentObject.getSvgThumb(tLRPC$StickerSetCovered2.set.thumbs, "windowBackgroundGray", 1.0f);
-            boolean z6 = closestPhotoSizeWithSize instanceof TLRPC$Document;
-            if (z6) {
-                imageLocation = ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(tLRPC$Document.thumbs, 90), tLRPC$Document);
+            SvgHelper.SvgDrawable svgThumb = DocumentObject.getSvgThumb(tLRPC$StickerSetCovered.set.thumbs, "windowBackgroundGray", 1.0f);
+            boolean z5 = closestPhotoSizeWithSize instanceof TLRPC$Document;
+            if (z5) {
+                forSticker = ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(tLRPC$Document.thumbs, 90), tLRPC$Document);
             } else {
-                imageLocation = ImageLocation.getForSticker((TLRPC$PhotoSize) closestPhotoSizeWithSize, tLRPC$Document, tLRPC$StickerSetCovered2.set.thumb_version);
+                forSticker = ImageLocation.getForSticker((TLRPC$PhotoSize) closestPhotoSizeWithSize, tLRPC$Document, tLRPC$StickerSetCovered.set.thumb_version);
             }
-            ImageLocation imageLocation2 = imageLocation;
-            if (!z6 || !MessageObject.isAnimatedStickerDocument(tLRPC$Document, true)) {
-                if (imageLocation2 == null || imageLocation2.imageType != 1) {
-                    this.imageView.setImage(imageLocation2, "50_50", "webp", (Drawable) svgThumb, (Object) tLRPC$StickerSetCovered);
+            ImageLocation imageLocation = forSticker;
+            if (!z5 || !MessageObject.isAnimatedStickerDocument(tLRPC$Document, true)) {
+                if (imageLocation != null && imageLocation.imageType == 1) {
+                    this.imageView.setImage(imageLocation, "50_50", "tgs", svgThumb, tLRPC$StickerSetCovered);
                 } else {
-                    this.imageView.setImage(imageLocation2, "50_50", "tgs", (Drawable) svgThumb, (Object) tLRPC$StickerSetCovered);
+                    this.imageView.setImage(imageLocation, "50_50", "webp", svgThumb, tLRPC$StickerSetCovered);
                 }
             } else if (svgThumb != null) {
-                this.imageView.setImage(ImageLocation.getForDocument(tLRPC$Document), "50_50", (Drawable) svgThumb, 0, (Object) tLRPC$StickerSetCovered);
+                this.imageView.setImage(ImageLocation.getForDocument(tLRPC$Document), "50_50", svgThumb, 0, tLRPC$StickerSetCovered);
             } else {
-                this.imageView.setImage(ImageLocation.getForDocument(tLRPC$Document), "50_50", imageLocation2, (String) null, 0, (Object) tLRPC$StickerSetCovered);
+                this.imageView.setImage(ImageLocation.getForDocument(tLRPC$Document), "50_50", imageLocation, (String) null, 0, tLRPC$StickerSetCovered);
             }
         } else {
-            this.imageView.setImage((ImageLocation) null, (String) null, "webp", (Drawable) null, (Object) tLRPC$StickerSetCovered);
+            this.imageView.setImage((ImageLocation) null, (String) null, "webp", (Drawable) null, tLRPC$StickerSetCovered);
         }
-        if (z4) {
-            boolean z7 = this.isInstalled;
-            boolean isStickerPackInstalled = MediaDataController.getInstance(this.currentAccount).isStickerPackInstalled(tLRPC$StickerSetCovered2.set.id);
+        if (z3) {
+            boolean z6 = this.isInstalled;
+            boolean isStickerPackInstalled = MediaDataController.getInstance(this.currentAccount).isStickerPackInstalled(tLRPC$StickerSetCovered.set.id);
             this.isInstalled = isStickerPackInstalled;
             if (isStickerPackInstalled) {
-                if (!z7) {
-                    this.checkImage.setVisibility(0);
-                    this.addButton.setClickable(false);
-                    AnimatorSet animatorSet = this.currentAnimation;
-                    if (animatorSet != null) {
-                        animatorSet.cancel();
-                    }
-                    AnimatorSet animatorSet2 = new AnimatorSet();
-                    this.currentAnimation = animatorSet2;
-                    animatorSet2.setDuration(200);
-                    this.currentAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.addButton, "alpha", new float[]{1.0f, 0.0f}), ObjectAnimator.ofFloat(this.addButton, "scaleX", new float[]{1.0f, 0.01f}), ObjectAnimator.ofFloat(this.addButton, "scaleY", new float[]{1.0f, 0.01f}), ObjectAnimator.ofFloat(this.checkImage, "alpha", new float[]{0.0f, 1.0f}), ObjectAnimator.ofFloat(this.checkImage, "scaleX", new float[]{0.01f, 1.0f}), ObjectAnimator.ofFloat(this.checkImage, "scaleY", new float[]{0.01f, 1.0f})});
-                    this.currentAnimation.addListener(new AnimatorListenerAdapter() {
-                        public void onAnimationEnd(Animator animator) {
-                            if (FeaturedStickerSetCell.this.currentAnimation != null && FeaturedStickerSetCell.this.currentAnimation.equals(animator)) {
-                                FeaturedStickerSetCell.this.addButton.setVisibility(4);
-                            }
-                        }
-
-                        public void onAnimationCancel(Animator animator) {
-                            if (FeaturedStickerSetCell.this.currentAnimation != null && FeaturedStickerSetCell.this.currentAnimation.equals(animator)) {
-                                AnimatorSet unused = FeaturedStickerSetCell.this.currentAnimation = null;
-                            }
-                        }
-                    });
-                    this.currentAnimation.start();
+                if (z6) {
+                    return;
                 }
-            } else if (z7) {
+                this.checkImage.setVisibility(0);
+                this.addButton.setClickable(false);
+                AnimatorSet animatorSet = this.currentAnimation;
+                if (animatorSet != null) {
+                    animatorSet.cancel();
+                }
+                AnimatorSet animatorSet2 = new AnimatorSet();
+                this.currentAnimation = animatorSet2;
+                animatorSet2.setDuration(200L);
+                this.currentAnimation.playTogether(ObjectAnimator.ofFloat(this.addButton, "alpha", 1.0f, 0.0f), ObjectAnimator.ofFloat(this.addButton, "scaleX", 1.0f, 0.01f), ObjectAnimator.ofFloat(this.addButton, "scaleY", 1.0f, 0.01f), ObjectAnimator.ofFloat(this.checkImage, "alpha", 0.0f, 1.0f), ObjectAnimator.ofFloat(this.checkImage, "scaleX", 0.01f, 1.0f), ObjectAnimator.ofFloat(this.checkImage, "scaleY", 0.01f, 1.0f));
+                this.currentAnimation.addListener(new AnimatorListenerAdapter() { // from class: org.telegram.ui.Cells.FeaturedStickerSetCell.2
+                    @Override // android.animation.AnimatorListenerAdapter, android.animation.Animator.AnimatorListener
+                    public void onAnimationEnd(Animator animator) {
+                        if (FeaturedStickerSetCell.this.currentAnimation == null || !FeaturedStickerSetCell.this.currentAnimation.equals(animator)) {
+                            return;
+                        }
+                        FeaturedStickerSetCell.this.addButton.setVisibility(4);
+                    }
+
+                    @Override // android.animation.AnimatorListenerAdapter, android.animation.Animator.AnimatorListener
+                    public void onAnimationCancel(Animator animator) {
+                        if (FeaturedStickerSetCell.this.currentAnimation == null || !FeaturedStickerSetCell.this.currentAnimation.equals(animator)) {
+                            return;
+                        }
+                        FeaturedStickerSetCell.this.currentAnimation = null;
+                    }
+                });
+                this.currentAnimation.start();
+                return;
+            } else if (!z6) {
+                return;
+            } else {
                 this.addButton.setVisibility(0);
                 this.addButton.setClickable(true);
                 AnimatorSet animatorSet3 = this.currentAnimation;
@@ -243,46 +253,50 @@ public class FeaturedStickerSetCell extends FrameLayout {
                 }
                 AnimatorSet animatorSet4 = new AnimatorSet();
                 this.currentAnimation = animatorSet4;
-                animatorSet4.setDuration(200);
-                this.currentAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.checkImage, "alpha", new float[]{1.0f, 0.0f}), ObjectAnimator.ofFloat(this.checkImage, "scaleX", new float[]{1.0f, 0.01f}), ObjectAnimator.ofFloat(this.checkImage, "scaleY", new float[]{1.0f, 0.01f}), ObjectAnimator.ofFloat(this.addButton, "alpha", new float[]{0.0f, 1.0f}), ObjectAnimator.ofFloat(this.addButton, "scaleX", new float[]{0.01f, 1.0f}), ObjectAnimator.ofFloat(this.addButton, "scaleY", new float[]{0.01f, 1.0f})});
-                this.currentAnimation.addListener(new AnimatorListenerAdapter() {
+                animatorSet4.setDuration(200L);
+                this.currentAnimation.playTogether(ObjectAnimator.ofFloat(this.checkImage, "alpha", 1.0f, 0.0f), ObjectAnimator.ofFloat(this.checkImage, "scaleX", 1.0f, 0.01f), ObjectAnimator.ofFloat(this.checkImage, "scaleY", 1.0f, 0.01f), ObjectAnimator.ofFloat(this.addButton, "alpha", 0.0f, 1.0f), ObjectAnimator.ofFloat(this.addButton, "scaleX", 0.01f, 1.0f), ObjectAnimator.ofFloat(this.addButton, "scaleY", 0.01f, 1.0f));
+                this.currentAnimation.addListener(new AnimatorListenerAdapter() { // from class: org.telegram.ui.Cells.FeaturedStickerSetCell.3
+                    @Override // android.animation.AnimatorListenerAdapter, android.animation.Animator.AnimatorListener
                     public void onAnimationEnd(Animator animator) {
-                        if (FeaturedStickerSetCell.this.currentAnimation != null && FeaturedStickerSetCell.this.currentAnimation.equals(animator)) {
-                            FeaturedStickerSetCell.this.checkImage.setVisibility(4);
+                        if (FeaturedStickerSetCell.this.currentAnimation == null || !FeaturedStickerSetCell.this.currentAnimation.equals(animator)) {
+                            return;
                         }
+                        FeaturedStickerSetCell.this.checkImage.setVisibility(4);
                     }
 
+                    @Override // android.animation.AnimatorListenerAdapter, android.animation.Animator.AnimatorListener
                     public void onAnimationCancel(Animator animator) {
-                        if (FeaturedStickerSetCell.this.currentAnimation != null && FeaturedStickerSetCell.this.currentAnimation.equals(animator)) {
-                            AnimatorSet unused = FeaturedStickerSetCell.this.currentAnimation = null;
+                        if (FeaturedStickerSetCell.this.currentAnimation == null || !FeaturedStickerSetCell.this.currentAnimation.equals(animator)) {
+                            return;
                         }
+                        FeaturedStickerSetCell.this.currentAnimation = null;
                     }
                 });
                 this.currentAnimation.start();
-            }
-        } else {
-            AnimatorSet animatorSet5 = this.currentAnimation;
-            if (animatorSet5 != null) {
-                animatorSet5.cancel();
-            }
-            boolean isStickerPackInstalled2 = MediaDataController.getInstance(this.currentAccount).isStickerPackInstalled(tLRPC$StickerSetCovered2.set.id);
-            this.isInstalled = isStickerPackInstalled2;
-            if (isStickerPackInstalled2) {
-                this.addButton.setVisibility(4);
-                this.addButton.setClickable(false);
-                this.checkImage.setVisibility(0);
-                this.checkImage.setScaleX(1.0f);
-                this.checkImage.setScaleY(1.0f);
-                this.checkImage.setAlpha(1.0f);
                 return;
             }
-            this.addButton.setVisibility(0);
-            this.addButton.setClickable(true);
-            this.checkImage.setVisibility(4);
-            this.addButton.setScaleX(1.0f);
-            this.addButton.setScaleY(1.0f);
-            this.addButton.setAlpha(1.0f);
         }
+        AnimatorSet animatorSet5 = this.currentAnimation;
+        if (animatorSet5 != null) {
+            animatorSet5.cancel();
+        }
+        boolean isStickerPackInstalled2 = MediaDataController.getInstance(this.currentAccount).isStickerPackInstalled(tLRPC$StickerSetCovered.set.id);
+        this.isInstalled = isStickerPackInstalled2;
+        if (isStickerPackInstalled2) {
+            this.addButton.setVisibility(4);
+            this.addButton.setClickable(false);
+            this.checkImage.setVisibility(0);
+            this.checkImage.setScaleX(1.0f);
+            this.checkImage.setScaleY(1.0f);
+            this.checkImage.setAlpha(1.0f);
+            return;
+        }
+        this.addButton.setVisibility(0);
+        this.addButton.setClickable(true);
+        this.checkImage.setVisibility(4);
+        this.addButton.setScaleX(1.0f);
+        this.addButton.setScaleY(1.0f);
+        this.addButton.setAlpha(1.0f);
     }
 
     public TLRPC$StickerSetCovered getStickerSet() {
@@ -301,10 +315,10 @@ public class FeaturedStickerSetCell extends FrameLayout {
         return this.isInstalled;
     }
 
-    /* access modifiers changed from: protected */
-    public void onDraw(Canvas canvas) {
+    @Override // android.view.View
+    protected void onDraw(Canvas canvas) {
         if (this.needDivider) {
-            canvas.drawLine(0.0f, (float) (getHeight() - 1), (float) (getWidth() - getPaddingRight()), (float) (getHeight() - 1), Theme.dividerPaint);
+            canvas.drawLine(0.0f, getHeight() - 1, getWidth() - getPaddingRight(), getHeight() - 1, Theme.dividerPaint);
         }
     }
 }

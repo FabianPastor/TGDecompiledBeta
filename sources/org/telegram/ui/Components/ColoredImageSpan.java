@@ -10,7 +10,7 @@ import androidx.core.content.ContextCompat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.ui.ActionBar.Theme;
-
+/* loaded from: classes3.dex */
 public class ColoredImageSpan extends ReplacementSpan {
     String colorKey;
     Drawable drawable;
@@ -23,11 +23,11 @@ public class ColoredImageSpan extends ReplacementSpan {
         this(ContextCompat.getDrawable(ApplicationLoader.applicationContext, i));
     }
 
-    public ColoredImageSpan(Drawable drawable2) {
+    public ColoredImageSpan(Drawable drawable) {
         this.usePaintColor = true;
         this.topOffset = 0;
-        this.drawable = drawable2;
-        drawable2.setBounds(0, 0, drawable2.getIntrinsicWidth(), drawable2.getIntrinsicHeight());
+        this.drawable = drawable;
+        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
     }
 
     public void setSize(int i) {
@@ -35,29 +35,31 @@ public class ColoredImageSpan extends ReplacementSpan {
         this.drawable.setBounds(0, 0, i, i);
     }
 
+    @Override // android.text.style.ReplacementSpan
     public int getSize(Paint paint, CharSequence charSequence, int i, int i2, Paint.FontMetricsInt fontMetricsInt) {
         int i3 = this.size;
         return i3 != 0 ? i3 : this.drawable.getIntrinsicWidth();
     }
 
+    @Override // android.text.style.ReplacementSpan
     public void draw(Canvas canvas, CharSequence charSequence, int i, int i2, float f, int i3, int i4, int i5, Paint paint) {
-        int i6;
+        int color;
         if (this.usePaintColor) {
-            i6 = paint.getColor();
+            color = paint.getColor();
         } else {
-            i6 = Theme.getColor(this.colorKey);
+            color = Theme.getColor(this.colorKey);
         }
-        if (this.drawableColor != i6) {
-            this.drawableColor = i6;
+        if (this.drawableColor != color) {
+            this.drawableColor = color;
             this.drawable.setColorFilter(new PorterDuffColorFilter(this.drawableColor, PorterDuff.Mode.MULTIPLY));
         }
-        int i7 = i5 - i3;
-        int i8 = this.size;
-        if (i8 == 0) {
-            i8 = this.drawable.getIntrinsicHeight();
+        int i6 = i5 - i3;
+        int i7 = this.size;
+        if (i7 == 0) {
+            i7 = this.drawable.getIntrinsicHeight();
         }
         canvas.save();
-        canvas.translate(f, (float) (i3 + ((i7 - i8) / 2) + AndroidUtilities.dp((float) this.topOffset)));
+        canvas.translate(f, i3 + ((i6 - i7) / 2) + AndroidUtilities.dp(this.topOffset));
         this.drawable.draw(canvas);
         canvas.restore();
     }

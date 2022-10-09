@@ -12,9 +12,8 @@ import org.telegram.tgnet.TLRPC$InputFile;
 import org.telegram.ui.Components.AnimatedFileDrawable;
 import org.telegram.ui.Components.PhotoFilterView;
 import org.telegram.ui.Components.Point;
-
+/* loaded from: classes.dex */
 public class VideoEditedInfo {
-    public long avatarStartTime = -1;
     public int bitrate;
     public boolean canceled;
     public MediaController.CropState cropState;
@@ -25,13 +24,11 @@ public class VideoEditedInfo {
     public long estimatedSize;
     public TLRPC$InputFile file;
     public MediaController.SavedFilterState filterState;
-    public int framerate = 24;
     public boolean isPhoto;
     public byte[] iv;
     public byte[] key;
     public ArrayList<MediaEntity> mediaEntities;
     public boolean muted;
-    public boolean needUpdateProgress = false;
     public int originalBitrate;
     public long originalDuration;
     public int originalHeight;
@@ -42,11 +39,15 @@ public class VideoEditedInfo {
     public int resultWidth;
     public int rotationValue;
     public boolean roundVideo;
-    public boolean shouldLimitFps = true;
     public float start;
     public long startTime;
     public boolean videoConvertFirstWrite;
+    public long avatarStartTime = -1;
+    public int framerate = 24;
+    public boolean needUpdateProgress = false;
+    public boolean shouldLimitFps = true;
 
+    /* loaded from: classes.dex */
     public static class MediaEntity {
         public AnimatedFileDrawable animatedFileDrawable;
         public Bitmap bitmap;
@@ -93,7 +94,7 @@ public class VideoEditedInfo {
             this.viewHeight = serializedData.readInt32(false);
         }
 
-        /* access modifiers changed from: private */
+        /* JADX INFO: Access modifiers changed from: private */
         public void serializeTo(SerializedData serializedData) {
             serializedData.writeByte(this.type);
             serializedData.writeByte(this.subType);
@@ -133,17 +134,17 @@ public class VideoEditedInfo {
     }
 
     public String getString() {
-        String str;
         byte[] bArr;
+        String bytesToHex;
         PhotoFilterView.CurvesValue curvesValue;
         ArrayList<MediaEntity> arrayList;
         if (this.avatarStartTime == -1 && this.filterState == null && this.paintPath == null && (((arrayList = this.mediaEntities) == null || arrayList.isEmpty()) && this.cropState == null)) {
-            str = "";
+            bytesToHex = "";
         } else {
             int i = this.filterState != null ? 170 : 10;
-            String str2 = this.paintPath;
-            if (str2 != null) {
-                bArr = str2.getBytes();
+            String str = this.paintPath;
+            if (str != null) {
+                bArr = str.getBytes();
                 i += bArr.length;
             } else {
                 bArr = null;
@@ -206,9 +207,7 @@ public class VideoEditedInfo {
                 serializedData.writeByte(0);
             }
             ArrayList<MediaEntity> arrayList2 = this.mediaEntities;
-            if (arrayList2 == null || arrayList2.isEmpty()) {
-                serializedData.writeByte(0);
-            } else {
+            if (arrayList2 != null && !arrayList2.isEmpty()) {
                 serializedData.writeByte(1);
                 serializedData.writeInt32(this.mediaEntities.size());
                 int size = this.mediaEntities.size();
@@ -216,6 +215,8 @@ public class VideoEditedInfo {
                     this.mediaEntities.get(i3).serializeTo(serializedData);
                 }
                 serializedData.writeByte(this.isPhoto ? 1 : 0);
+            } else {
+                serializedData.writeByte(0);
             }
             if (this.cropState != null) {
                 serializedData.writeByte(1);
@@ -232,10 +233,10 @@ public class VideoEditedInfo {
             } else {
                 serializedData.writeByte(0);
             }
-            str = Utilities.bytesToHex(serializedData.toByteArray());
+            bytesToHex = Utilities.bytesToHex(serializedData.toByteArray());
             serializedData.cleanup();
         }
-        return String.format(Locale.US, "-1_%d_%d_%d_%d_%d_%d_%d_%d_%d_%d_-%s_%s", new Object[]{Long.valueOf(this.startTime), Long.valueOf(this.endTime), Integer.valueOf(this.rotationValue), Integer.valueOf(this.originalWidth), Integer.valueOf(this.originalHeight), Integer.valueOf(this.bitrate), Integer.valueOf(this.resultWidth), Integer.valueOf(this.resultHeight), Long.valueOf(this.originalDuration), Integer.valueOf(this.framerate), str, this.originalPath});
+        return String.format(Locale.US, "-1_%d_%d_%d_%d_%d_%d_%d_%d_%d_%d_-%s_%s", Long.valueOf(this.startTime), Long.valueOf(this.endTime), Integer.valueOf(this.rotationValue), Integer.valueOf(this.originalWidth), Integer.valueOf(this.originalHeight), Integer.valueOf(this.bitrate), Integer.valueOf(this.resultWidth), Integer.valueOf(this.resultHeight), Long.valueOf(this.originalDuration), Integer.valueOf(this.framerate), bytesToHex, this.originalPath);
     }
 
     public boolean parseString(String str) {
@@ -320,9 +321,9 @@ public class VideoEditedInfo {
                             this.isPhoto = serializedData.readByte(false) == 1;
                         }
                         if (readInt32 >= 2 && serializedData.readByte(false) != 0) {
-                            MediaController.CropState cropState2 = new MediaController.CropState();
-                            this.cropState = cropState2;
-                            cropState2.cropPx = serializedData.readFloat(false);
+                            MediaController.CropState cropState = new MediaController.CropState();
+                            this.cropState = cropState;
+                            cropState.cropPx = serializedData.readFloat(false);
                             this.cropState.cropPy = serializedData.readFloat(false);
                             this.cropState.cropPw = serializedData.readFloat(false);
                             this.cropState.cropPh = serializedData.readFloat(false);
@@ -350,7 +351,7 @@ public class VideoEditedInfo {
             }
             return true;
         } catch (Exception e) {
-            FileLog.e((Throwable) e);
+            FileLog.e(e);
             return false;
         }
     }

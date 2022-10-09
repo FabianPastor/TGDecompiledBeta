@@ -1,7 +1,7 @@
 package org.telegram.ui.Components.Paint.Views;
 
 import android.view.MotionEvent;
-
+/* loaded from: classes3.dex */
 public class RotationGestureDetector {
     private float angle;
     private float fX;
@@ -11,6 +11,7 @@ public class RotationGestureDetector {
     private float sY;
     private float startAngle;
 
+    /* loaded from: classes3.dex */
     public interface OnRotationGestureListener {
         void onRotation(RotationGestureDetector rotationGestureDetector);
 
@@ -74,7 +75,7 @@ public class RotationGestureDetector {
     }
 
     private float angleBetweenLines(float f, float f2, float f3, float f4, float f5, float f6, float f7, float f8) {
-        float degrees = ((float) Math.toDegrees((double) (((float) Math.atan2((double) (f2 - f4), (double) (f - f3))) - ((float) Math.atan2((double) (f6 - f8), (double) (f5 - f7)))))) % 360.0f;
+        float degrees = ((float) Math.toDegrees(((float) Math.atan2(f2 - f4, f - f3)) - ((float) Math.atan2(f6 - f8, f5 - f7)))) % 360.0f;
         if (degrees < -180.0f) {
             degrees += 360.0f;
         }

@@ -1,5 +1,5 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_messageReplyHeader extends TLObject {
     public static int constructor = -NUM;
     public int flags;
@@ -9,17 +9,18 @@ public class TLRPC$TL_messageReplyHeader extends TLObject {
     public int reply_to_top_id;
 
     public static TLRPC$TL_messageReplyHeader TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-        if (constructor == i) {
-            TLRPC$TL_messageReplyHeader tLRPC$TL_messageReplyHeader = new TLRPC$TL_messageReplyHeader();
-            tLRPC$TL_messageReplyHeader.readParams(abstractSerializedData, z);
-            return tLRPC$TL_messageReplyHeader;
-        } else if (!z) {
+        if (constructor != i) {
+            if (z) {
+                throw new RuntimeException(String.format("can't parse magic %x in TL_messageReplyHeader", Integer.valueOf(i)));
+            }
             return null;
-        } else {
-            throw new RuntimeException(String.format("can't parse magic %x in TL_messageReplyHeader", new Object[]{Integer.valueOf(i)}));
         }
+        TLRPC$TL_messageReplyHeader tLRPC$TL_messageReplyHeader = new TLRPC$TL_messageReplyHeader();
+        tLRPC$TL_messageReplyHeader.readParams(abstractSerializedData, z);
+        return tLRPC$TL_messageReplyHeader;
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         this.flags = abstractSerializedData.readInt32(z);
         this.reply_to_msg_id = abstractSerializedData.readInt32(z);
@@ -31,6 +32,7 @@ public class TLRPC$TL_messageReplyHeader extends TLObject {
         }
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
         abstractSerializedData.writeInt32(this.flags);

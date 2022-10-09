@@ -1,5 +1,5 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_groupCallParticipant extends TLObject {
     public static int constructor = -NUM;
     public String about;
@@ -38,17 +38,18 @@ public class TLRPC$TL_groupCallParticipant extends TLObject {
     public boolean volume_by_admin;
 
     public static TLRPC$TL_groupCallParticipant TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-        if (constructor == i) {
-            TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = new TLRPC$TL_groupCallParticipant();
-            tLRPC$TL_groupCallParticipant.readParams(abstractSerializedData, z);
-            return tLRPC$TL_groupCallParticipant;
-        } else if (!z) {
+        if (constructor != i) {
+            if (z) {
+                throw new RuntimeException(String.format("can't parse magic %x in TL_groupCallParticipant", Integer.valueOf(i)));
+            }
             return null;
-        } else {
-            throw new RuntimeException(String.format("can't parse magic %x in TL_groupCallParticipant", new Object[]{Integer.valueOf(i)}));
         }
+        TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = new TLRPC$TL_groupCallParticipant();
+        tLRPC$TL_groupCallParticipant.readParams(abstractSerializedData, z);
+        return tLRPC$TL_groupCallParticipant;
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
@@ -89,27 +90,28 @@ public class TLRPC$TL_groupCallParticipant extends TLObject {
         }
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
-        int i = this.muted ? this.flags | 1 : this.flags & -2;
+        int i = this.muted ? this.flags | 1 : this.flags & (-2);
         this.flags = i;
-        int i2 = this.left ? i | 2 : i & -3;
+        int i2 = this.left ? i | 2 : i & (-3);
         this.flags = i2;
-        int i3 = this.can_self_unmute ? i2 | 4 : i2 & -5;
+        int i3 = this.can_self_unmute ? i2 | 4 : i2 & (-5);
         this.flags = i3;
-        int i4 = this.just_joined ? i3 | 16 : i3 & -17;
+        int i4 = this.just_joined ? i3 | 16 : i3 & (-17);
         this.flags = i4;
-        int i5 = this.versioned ? i4 | 32 : i4 & -33;
+        int i5 = this.versioned ? i4 | 32 : i4 & (-33);
         this.flags = i5;
-        int i6 = this.min ? i5 | 256 : i5 & -257;
+        int i6 = this.min ? i5 | 256 : i5 & (-257);
         this.flags = i6;
-        int i7 = this.muted_by_you ? i6 | 512 : i6 & -513;
+        int i7 = this.muted_by_you ? i6 | 512 : i6 & (-513);
         this.flags = i7;
-        int i8 = this.volume_by_admin ? i7 | 1024 : i7 & -1025;
+        int i8 = this.volume_by_admin ? i7 | 1024 : i7 & (-1025);
         this.flags = i8;
-        int i9 = this.self ? i8 | 4096 : i8 & -4097;
+        int i9 = this.self ? i8 | 4096 : i8 & (-4097);
         this.flags = i9;
-        int i10 = this.video_joined ? i9 | 32768 : i9 & -32769;
+        int i10 = this.video_joined ? i9 | 32768 : i9 & (-32769);
         this.flags = i10;
         abstractSerializedData.writeInt32(i10);
         this.peer.serializeToStream(abstractSerializedData);

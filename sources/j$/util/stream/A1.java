@@ -1,11 +1,10 @@
 package j$.util.stream;
 
 import j$.util.function.Consumer;
-import j$.util.function.m;
-import j$.util.u;
-
+/* loaded from: classes2.dex */
 interface A1 {
-    A1 b(int i);
+    /* renamed from: b */
+    A1 mo288b(int i);
 
     long count();
 
@@ -15,9 +14,10 @@ interface A1 {
 
     int p();
 
-    Object[] q(m mVar);
+    Object[] q(j$.util.function.m mVar);
 
-    A1 r(long j, long j2, m mVar);
+    A1 r(long j, long j2, j$.util.function.m mVar);
 
-    u spliterator();
+    /* renamed from: spliterator */
+    j$.util.u mo285spliterator();
 }

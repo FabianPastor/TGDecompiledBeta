@@ -1,7 +1,7 @@
 package org.telegram.tgnet;
 
 import java.util.ArrayList;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_stickers_createStickerSet extends TLObject {
     public static int constructor = -NUM;
     public boolean animated;
@@ -16,19 +16,21 @@ public class TLRPC$TL_stickers_createStickerSet extends TLObject {
     public TLRPC$InputUser user_id;
     public boolean videos;
 
+    @Override // org.telegram.tgnet.TLObject
     public TLObject deserializeResponse(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         return TLRPC$messages_StickerSet.TLdeserialize(abstractSerializedData, i, z);
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
-        int i = this.masks ? this.flags | 1 : this.flags & -2;
+        int i = this.masks ? this.flags | 1 : this.flags & (-2);
         this.flags = i;
-        int i2 = this.animated ? i | 2 : i & -3;
+        int i2 = this.animated ? i | 2 : i & (-3);
         this.flags = i2;
-        int i3 = this.videos ? i2 | 16 : i2 & -17;
+        int i3 = this.videos ? i2 | 16 : i2 & (-17);
         this.flags = i3;
-        int i4 = this.emojis ? i3 | 32 : i3 & -33;
+        int i4 = this.emojis ? i3 | 32 : i3 & (-33);
         this.flags = i4;
         abstractSerializedData.writeInt32(i4);
         this.user_id.serializeToStream(abstractSerializedData);

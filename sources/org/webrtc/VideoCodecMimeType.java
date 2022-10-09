@@ -1,5 +1,5 @@
 package org.webrtc;
-
+/* loaded from: classes3.dex */
 enum VideoCodecMimeType {
     VP8("video/x-vnd.on2.vp8"),
     VP9("video/x-vnd.on2.vp9"),
@@ -9,11 +9,11 @@ enum VideoCodecMimeType {
     
     private final String mimeType;
 
-    private VideoCodecMimeType(String str) {
+    VideoCodecMimeType(String str) {
         this.mimeType = str;
     }
 
-    /* access modifiers changed from: package-private */
+    /* JADX INFO: Access modifiers changed from: package-private */
     public String mimeType() {
         return this.mimeType;
     }

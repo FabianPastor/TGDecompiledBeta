@@ -1,10 +1,11 @@
 package org.telegram.tgnet;
 
 import android.text.TextUtils;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_message_secret_old extends TLRPC$TL_message_secret {
     public static int constructor = NUM;
 
+    @Override // org.telegram.tgnet.TLRPC$TL_message_secret, org.telegram.tgnet.TLRPC$TL_message, org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z) | 256 | 512;
         this.flags = readInt32;
@@ -20,26 +21,28 @@ public class TLRPC$TL_message_secret_old extends TLRPC$TL_message_secret {
         this.ttl = abstractSerializedData.readInt32(z);
         TLRPC$TL_peerUser tLRPC$TL_peerUser = new TLRPC$TL_peerUser();
         this.from_id = tLRPC$TL_peerUser;
-        tLRPC$TL_peerUser.user_id = (long) abstractSerializedData.readInt32(z);
+        tLRPC$TL_peerUser.user_id = abstractSerializedData.readInt32(z);
         this.peer_id = TLRPC$Peer.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         this.date = abstractSerializedData.readInt32(z);
         this.message = abstractSerializedData.readString(z);
         TLRPC$MessageMedia TLdeserialize = TLRPC$MessageMedia.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         this.media = TLdeserialize;
-        if (TLdeserialize != null && !TextUtils.isEmpty(TLdeserialize.captionLegacy)) {
-            this.message = this.media.captionLegacy;
+        if (TLdeserialize == null || TextUtils.isEmpty(TLdeserialize.captionLegacy)) {
+            return;
         }
+        this.message = this.media.captionLegacy;
     }
 
+    @Override // org.telegram.tgnet.TLRPC$TL_message_secret, org.telegram.tgnet.TLRPC$TL_message, org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
-        int i = this.unread ? this.flags | 1 : this.flags & -2;
+        int i = this.unread ? this.flags | 1 : this.flags & (-2);
         this.flags = i;
-        int i2 = this.out ? i | 2 : i & -3;
+        int i2 = this.out ? i | 2 : i & (-3);
         this.flags = i2;
-        int i3 = this.mentioned ? i2 | 16 : i2 & -17;
+        int i3 = this.mentioned ? i2 | 16 : i2 & (-17);
         this.flags = i3;
-        int i4 = this.media_unread ? i3 | 32 : i3 & -33;
+        int i4 = this.media_unread ? i3 | 32 : i3 & (-33);
         this.flags = i4;
         abstractSerializedData.writeInt32(i4);
         abstractSerializedData.writeInt32(this.id);

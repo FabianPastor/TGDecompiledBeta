@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import org.telegram.messenger.SecureDocumentKey;
 import org.telegram.messenger.Utilities;
-
+/* loaded from: classes.dex */
 public class EncryptedFileInputStream extends FileInputStream {
     private static final int MODE_CBC = 1;
     private static final int MODE_CTR = 0;
@@ -38,28 +38,29 @@ public class EncryptedFileInputStream extends FileInputStream {
         System.arraycopy(bArr2, 0, bArr3, 0, bArr3.length);
     }
 
+    @Override // java.io.FileInputStream, java.io.InputStream
     public int read(byte[] bArr, int i, int i2) throws IOException {
-        int i3 = i2;
+        byte[] bArr2;
         if (this.currentMode == 1 && this.fileOffset == 0) {
-            byte[] bArr2 = new byte[32];
-            super.read(bArr2, 0, 32);
+            super.read(new byte[32], 0, 32);
             Utilities.aesCbcEncryptionByteArraySafe(bArr, this.key, this.iv, i, i2, this.fileOffset, 0);
             this.fileOffset += 32;
-            skip((long) ((bArr2[0] & 255) - 32));
+            skip((bArr2[0] & 255) - 32);
         }
         int read = super.read(bArr, i, i2);
-        int i4 = this.currentMode;
-        if (i4 == 1) {
+        int i3 = this.currentMode;
+        if (i3 == 1) {
             Utilities.aesCbcEncryptionByteArraySafe(bArr, this.key, this.iv, i, i2, this.fileOffset, 0);
-        } else if (i4 == 0) {
-            Utilities.aesCtrDecryptionByteArray(bArr, this.key, this.iv, i, (long) i3, this.fileOffset);
+        } else if (i3 == 0) {
+            Utilities.aesCtrDecryptionByteArray(bArr, this.key, this.iv, i, i2, this.fileOffset);
         }
-        this.fileOffset += i3;
+        this.fileOffset += i2;
         return read;
     }
 
+    @Override // java.io.FileInputStream, java.io.InputStream
     public long skip(long j) throws IOException {
-        this.fileOffset = (int) (((long) this.fileOffset) + j);
+        this.fileOffset = (int) (this.fileOffset + j);
         return super.skip(j);
     }
 
@@ -74,6 +75,6 @@ public class EncryptedFileInputStream extends FileInputStream {
         randomAccessFile.read(bArr2, 0, 32);
         randomAccessFile.read(bArr3, 0, 16);
         randomAccessFile.close();
-        Utilities.aesCtrDecryptionByteArray(bArr, bArr2, bArr3, i, (long) i2, 0);
+        Utilities.aesCtrDecryptionByteArray(bArr, bArr2, bArr3, i, i2, 0);
     }
 }

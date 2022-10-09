@@ -10,7 +10,7 @@ import android.os.IBinder;
 import androidx.core.app.BundleCompat;
 import androidx.core.content.ContextCompat;
 import java.util.ArrayList;
-
+/* loaded from: classes.dex */
 public final class CustomTabsIntent {
     public final Intent intent;
     public final Bundle startAnimationBundle;
@@ -20,22 +20,27 @@ public final class CustomTabsIntent {
         ContextCompat.startActivity(context, this.intent, this.startAnimationBundle);
     }
 
-    private CustomTabsIntent(Intent intent2, Bundle bundle) {
-        this.intent = intent2;
+    private CustomTabsIntent(Intent intent, Bundle bundle) {
+        this.intent = intent;
         this.startAnimationBundle = bundle;
     }
 
+    /* loaded from: classes.dex */
     public static final class Builder {
-        private ArrayList<Bundle> mActionButtons = null;
-        private boolean mInstantAppsEnabled = true;
+        private ArrayList<Bundle> mActionButtons;
+        private boolean mInstantAppsEnabled;
         private final Intent mIntent;
-        private ArrayList<Bundle> mMenuItems = null;
-        private Bundle mStartAnimationBundle = null;
+        private ArrayList<Bundle> mMenuItems;
+        private Bundle mStartAnimationBundle;
 
         public Builder(CustomTabsSession customTabsSession) {
             Intent intent = new Intent("android.intent.action.VIEW");
             this.mIntent = intent;
             IBinder iBinder = null;
+            this.mMenuItems = null;
+            this.mStartAnimationBundle = null;
+            this.mActionButtons = null;
+            this.mInstantAppsEnabled = true;
             if (customTabsSession != null) {
                 intent.setPackage(customTabsSession.getComponentName().getPackageName());
             }

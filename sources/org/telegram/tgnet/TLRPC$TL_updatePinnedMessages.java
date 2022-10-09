@@ -1,7 +1,7 @@
 package org.telegram.tgnet;
 
 import java.util.ArrayList;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_updatePinnedMessages extends TLRPC$Update {
     public static int constructor = -NUM;
     public int flags;
@@ -11,27 +11,31 @@ public class TLRPC$TL_updatePinnedMessages extends TLRPC$Update {
     public int pts;
     public int pts_count;
 
+    @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
         this.pinned = (readInt32 & 1) != 0;
         this.peer = TLRPC$Peer.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         int readInt322 = abstractSerializedData.readInt32(z);
-        if (readInt322 == NUM) {
-            int readInt323 = abstractSerializedData.readInt32(z);
-            for (int i = 0; i < readInt323; i++) {
-                this.messages.add(Integer.valueOf(abstractSerializedData.readInt32(z)));
+        if (readInt322 != NUM) {
+            if (z) {
+                throw new RuntimeException(String.format("wrong Vector magic, got %x", Integer.valueOf(readInt322)));
             }
-            this.pts = abstractSerializedData.readInt32(z);
-            this.pts_count = abstractSerializedData.readInt32(z);
-        } else if (z) {
-            throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt322)}));
+            return;
         }
+        int readInt323 = abstractSerializedData.readInt32(z);
+        for (int i = 0; i < readInt323; i++) {
+            this.messages.add(Integer.valueOf(abstractSerializedData.readInt32(z)));
+        }
+        this.pts = abstractSerializedData.readInt32(z);
+        this.pts_count = abstractSerializedData.readInt32(z);
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
-        int i = this.pinned ? this.flags | 1 : this.flags & -2;
+        int i = this.pinned ? this.flags | 1 : this.flags & (-2);
         this.flags = i;
         abstractSerializedData.writeInt32(i);
         this.peer.serializeToStream(abstractSerializedData);

@@ -10,11 +10,10 @@ import java.util.concurrent.CountDownLatch;
 import org.webrtc.EglBase;
 import org.webrtc.VideoFrame;
 import org.webrtc.VideoSink;
-
+/* loaded from: classes3.dex */
 public class VideoFileRenderer implements VideoSink {
     private static final String TAG = "VideoFileRenderer";
-    /* access modifiers changed from: private */
-    public EglBase eglBase;
+    private EglBase eglBase;
     private final HandlerThread fileThread;
     private final Handler fileThreadHandler;
     private int frameCount;
@@ -26,9 +25,9 @@ public class VideoFileRenderer implements VideoSink {
     private final HandlerThread renderThread;
     private final Handler renderThreadHandler;
     private final FileOutputStream videoOutFile;
-    /* access modifiers changed from: private */
-    public YuvConverter yuvConverter;
+    private YuvConverter yuvConverter;
 
+    @Override // org.webrtc.VideoSink
     public /* synthetic */ void setParentSink(VideoSink videoSink) {
         VideoSink.CC.$default$setParentSink(this, videoSink);
     }
@@ -55,44 +54,56 @@ public class VideoFileRenderer implements VideoSink {
         this.fileThread = handlerThread2;
         handlerThread2.start();
         this.fileThreadHandler = new Handler(handlerThread2.getLooper());
-        ThreadUtils.invokeAtFrontUninterruptibly(handler, (Runnable) new Runnable() {
+        ThreadUtils.invokeAtFrontUninterruptibly(handler, new Runnable() { // from class: org.webrtc.VideoFileRenderer.1
+            @Override // java.lang.Runnable
             public void run() {
-                EglBase unused = VideoFileRenderer.this.eglBase = EglBase.CC.create(context, EglBase.CONFIG_PIXEL_BUFFER);
+                VideoFileRenderer.this.eglBase = EglBase.CC.create(context, EglBase.CONFIG_PIXEL_BUFFER);
                 VideoFileRenderer.this.eglBase.createDummyPbufferSurface();
                 VideoFileRenderer.this.eglBase.makeCurrent();
-                YuvConverter unused2 = VideoFileRenderer.this.yuvConverter = new YuvConverter();
+                VideoFileRenderer.this.yuvConverter = new YuvConverter();
             }
         });
     }
 
-    public void onFrame(VideoFrame videoFrame) {
+    @Override // org.webrtc.VideoSink
+    public void onFrame(final VideoFrame videoFrame) {
         videoFrame.retain();
-        this.renderThreadHandler.post(new VideoFileRenderer$$ExternalSyntheticLambda3(this, videoFrame));
+        this.renderThreadHandler.post(new Runnable() { // from class: org.webrtc.VideoFileRenderer$$ExternalSyntheticLambda3
+            @Override // java.lang.Runnable
+            public final void run() {
+                VideoFileRenderer.this.lambda$onFrame$0(videoFrame);
+            }
+        });
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: renderFrameOnRenderThread */
-    public void lambda$onFrame$0(VideoFrame videoFrame) {
+    public void lambda$onFrame$0(final VideoFrame videoFrame) {
         VideoFrame.Buffer buffer = videoFrame.getBuffer();
         int i = videoFrame.getRotation() % 180 == 0 ? this.outputFileWidth : this.outputFileHeight;
         int i2 = videoFrame.getRotation() % 180 == 0 ? this.outputFileHeight : this.outputFileWidth;
-        float width = ((float) buffer.getWidth()) / ((float) buffer.getHeight());
-        float f = ((float) i) / ((float) i2);
+        float width = buffer.getWidth() / buffer.getHeight();
+        float f = i / i2;
         int width2 = buffer.getWidth();
         int height = buffer.getHeight();
         if (f > width) {
-            height = (int) (((float) height) * (width / f));
+            height = (int) (height * (width / f));
         } else {
-            width2 = (int) (((float) width2) * (f / width));
+            width2 = (int) (width2 * (f / width));
         }
         VideoFrame.Buffer cropAndScale = buffer.cropAndScale((buffer.getWidth() - width2) / 2, (buffer.getHeight() - height) / 2, width2, height, i, i2);
         videoFrame.release();
-        VideoFrame.I420Buffer i420 = cropAndScale.toI420();
+        final VideoFrame.I420Buffer i420 = cropAndScale.toI420();
         cropAndScale.release();
-        this.fileThreadHandler.post(new VideoFileRenderer$$ExternalSyntheticLambda2(this, i420, videoFrame));
+        this.fileThreadHandler.post(new Runnable() { // from class: org.webrtc.VideoFileRenderer$$ExternalSyntheticLambda2
+            @Override // java.lang.Runnable
+            public final void run() {
+                VideoFileRenderer.this.lambda$renderFrameOnRenderThread$1(i420, videoFrame);
+            }
+        });
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$renderFrameOnRenderThread$1(VideoFrame.I420Buffer i420Buffer, VideoFrame videoFrame) {
         YuvHelper.I420Rotate(i420Buffer.getDataY(), i420Buffer.getStrideY(), i420Buffer.getDataU(), i420Buffer.getStrideU(), i420Buffer.getDataV(), i420Buffer.getStrideV(), this.outputFrameBuffer, i420Buffer.getWidth(), i420Buffer.getHeight(), videoFrame.getRotation());
         i420Buffer.release();
@@ -106,10 +117,20 @@ public class VideoFileRenderer implements VideoSink {
     }
 
     public void release() {
-        CountDownLatch countDownLatch = new CountDownLatch(1);
-        this.renderThreadHandler.post(new VideoFileRenderer$$ExternalSyntheticLambda1(this, countDownLatch));
+        final CountDownLatch countDownLatch = new CountDownLatch(1);
+        this.renderThreadHandler.post(new Runnable() { // from class: org.webrtc.VideoFileRenderer$$ExternalSyntheticLambda1
+            @Override // java.lang.Runnable
+            public final void run() {
+                VideoFileRenderer.this.lambda$release$2(countDownLatch);
+            }
+        });
         ThreadUtils.awaitUninterruptibly(countDownLatch);
-        this.fileThreadHandler.post(new VideoFileRenderer$$ExternalSyntheticLambda0(this));
+        this.fileThreadHandler.post(new Runnable() { // from class: org.webrtc.VideoFileRenderer$$ExternalSyntheticLambda0
+            @Override // java.lang.Runnable
+            public final void run() {
+                VideoFileRenderer.this.lambda$release$3();
+            }
+        });
         try {
             this.fileThread.join();
         } catch (InterruptedException e) {
@@ -118,7 +139,7 @@ public class VideoFileRenderer implements VideoSink {
         }
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$release$2(CountDownLatch countDownLatch) {
         this.yuvConverter.release();
         this.eglBase.release();
@@ -126,7 +147,7 @@ public class VideoFileRenderer implements VideoSink {
         countDownLatch.countDown();
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$release$3() {
         try {
             this.videoOutFile.close();

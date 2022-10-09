@@ -3,7 +3,7 @@ package org.telegram.ui.Components.Paint;
 import android.graphics.PointF;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-
+/* loaded from: classes3.dex */
 public class RenderState {
     private int allocatedCount;
     public float alpha;
@@ -22,13 +22,14 @@ public class RenderState {
 
     public void prepare() {
         this.count = 0;
-        if (this.buffer == null) {
-            this.allocatedCount = 256;
-            ByteBuffer allocateDirect = ByteBuffer.allocateDirect(256 * 5 * 4);
-            this.buffer = allocateDirect;
-            allocateDirect.order(ByteOrder.nativeOrder());
-            this.buffer.position(0);
+        if (this.buffer != null) {
+            return;
         }
+        this.allocatedCount = 256;
+        ByteBuffer allocateDirect = ByteBuffer.allocateDirect(256 * 5 * 4);
+        this.buffer = allocateDirect;
+        allocateDirect.order(ByteOrder.nativeOrder());
+        this.buffer.position(0);
     }
 
     public float read() {
@@ -37,9 +38,10 @@ public class RenderState {
 
     public void setPosition(int i) {
         ByteBuffer byteBuffer = this.buffer;
-        if (byteBuffer != null && i >= 0 && i < this.allocatedCount) {
-            byteBuffer.position(i * 5 * 4);
+        if (byteBuffer == null || i < 0 || i >= this.allocatedCount) {
+            return;
         }
+        byteBuffer.position(i * 5 * 4);
     }
 
     public void appendValuesCount(int i) {
@@ -63,19 +65,19 @@ public class RenderState {
     }
 
     public boolean addPoint(PointF pointF, float f, float f2, float f3, int i) {
-        if ((i == -1 || i < this.allocatedCount) && this.buffer.position() != this.buffer.limit()) {
-            if (i != -1) {
-                this.buffer.position(i * 5 * 4);
-            }
-            this.buffer.putFloat(pointF.x);
-            this.buffer.putFloat(pointF.y);
-            this.buffer.putFloat(f);
-            this.buffer.putFloat(f2);
-            this.buffer.putFloat(f3);
-            return true;
+        if ((i != -1 && i >= this.allocatedCount) || this.buffer.position() == this.buffer.limit()) {
+            resizeBuffer();
+            return false;
         }
-        resizeBuffer();
-        return false;
+        if (i != -1) {
+            this.buffer.position(i * 5 * 4);
+        }
+        this.buffer.putFloat(pointF.x);
+        this.buffer.putFloat(pointF.y);
+        this.buffer.putFloat(f);
+        this.buffer.putFloat(f2);
+        this.buffer.putFloat(f3);
+        return true;
     }
 
     public void reset() {

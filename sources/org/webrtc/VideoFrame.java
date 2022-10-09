@@ -2,15 +2,17 @@ package org.webrtc;
 
 import android.graphics.Matrix;
 import java.nio.ByteBuffer;
-
+/* loaded from: classes3.dex */
 public class VideoFrame implements RefCounted {
     private final Buffer buffer;
     private final int rotation;
     private final long timestampNs;
 
+    /* loaded from: classes3.dex */
     public interface Buffer extends RefCounted {
 
         /* renamed from: org.webrtc.VideoFrame$Buffer$-CC  reason: invalid class name */
+        /* loaded from: classes3.dex */
         public final /* synthetic */ class CC {
             public static int $default$getBufferType(Buffer buffer) {
                 return 0;
@@ -28,9 +30,11 @@ public class VideoFrame implements RefCounted {
         @CalledByNative("Buffer")
         int getWidth();
 
+        @Override // org.webrtc.RefCounted
         @CalledByNative("Buffer")
         void release();
 
+        @Override // org.webrtc.RefCounted
         @CalledByNative("Buffer")
         void retain();
 
@@ -38,15 +42,18 @@ public class VideoFrame implements RefCounted {
         I420Buffer toI420();
     }
 
+    /* loaded from: classes3.dex */
     public interface I420Buffer extends Buffer {
 
         /* renamed from: org.webrtc.VideoFrame$I420Buffer$-CC  reason: invalid class name */
+        /* loaded from: classes3.dex */
         public final /* synthetic */ class CC {
             public static int $default$getBufferType(I420Buffer i420Buffer) {
                 return 1;
             }
         }
 
+        @Override // org.webrtc.VideoFrame.Buffer
         int getBufferType();
 
         @CalledByNative("I420Buffer")
@@ -68,6 +75,7 @@ public class VideoFrame implements RefCounted {
         int getStrideY();
     }
 
+    /* loaded from: classes3.dex */
     public interface TextureBuffer extends Buffer {
         int getTextureId();
 
@@ -75,13 +83,14 @@ public class VideoFrame implements RefCounted {
 
         Type getType();
 
+        /* loaded from: classes3.dex */
         public enum Type {
             OES(36197),
             RGB(3553);
             
             private final int glTarget;
 
-            private Type(int i) {
+            Type(int i) {
                 this.glTarget = i;
             }
 
@@ -92,16 +101,16 @@ public class VideoFrame implements RefCounted {
     }
 
     @CalledByNative
-    public VideoFrame(Buffer buffer2, int i, long j) {
-        if (buffer2 == null) {
+    public VideoFrame(Buffer buffer, int i, long j) {
+        if (buffer == null) {
             throw new IllegalArgumentException("buffer not allowed to be null");
-        } else if (i % 90 == 0) {
-            this.buffer = buffer2;
-            this.rotation = i;
-            this.timestampNs = j;
-        } else {
+        }
+        if (i % 90 != 0) {
             throw new IllegalArgumentException("rotation must be a multiple of 90");
         }
+        this.buffer = buffer;
+        this.rotation = i;
+        this.timestampNs = j;
     }
 
     @CalledByNative
@@ -133,10 +142,12 @@ public class VideoFrame implements RefCounted {
         return this.buffer.getWidth();
     }
 
+    @Override // org.webrtc.RefCounted
     public void retain() {
         this.buffer.retain();
     }
 
+    @Override // org.webrtc.RefCounted
     @CalledByNative
     public void release() {
         this.buffer.release();

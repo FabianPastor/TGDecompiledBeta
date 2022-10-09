@@ -1,19 +1,19 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public class TLRPC$MessageExtendedMedia extends TLObject {
     public static TLRPC$MessageExtendedMedia TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-        TLRPC$MessageExtendedMedia tLRPC$MessageExtendedMedia;
-        if (i != -NUM) {
-            tLRPC$MessageExtendedMedia = i != -NUM ? null : new TLRPC$TL_messageExtendedMedia();
+        TLRPC$MessageExtendedMedia tLRPC$TL_messageExtendedMediaPreview;
+        if (i == -NUM) {
+            tLRPC$TL_messageExtendedMediaPreview = new TLRPC$TL_messageExtendedMediaPreview();
         } else {
-            tLRPC$MessageExtendedMedia = new TLRPC$TL_messageExtendedMediaPreview();
+            tLRPC$TL_messageExtendedMediaPreview = i != -NUM ? null : new TLRPC$TL_messageExtendedMedia();
         }
-        if (tLRPC$MessageExtendedMedia != null || !z) {
-            if (tLRPC$MessageExtendedMedia != null) {
-                tLRPC$MessageExtendedMedia.readParams(abstractSerializedData, z);
+        if (tLRPC$TL_messageExtendedMediaPreview != null || !z) {
+            if (tLRPC$TL_messageExtendedMediaPreview != null) {
+                tLRPC$TL_messageExtendedMediaPreview.readParams(abstractSerializedData, z);
             }
-            return tLRPC$MessageExtendedMedia;
+            return tLRPC$TL_messageExtendedMediaPreview;
         }
-        throw new RuntimeException(String.format("can't parse magic %x in MessageExtendedMedia", new Object[]{Integer.valueOf(i)}));
+        throw new RuntimeException(String.format("can't parse magic %x in MessageExtendedMedia", Integer.valueOf(i)));
     }
 }

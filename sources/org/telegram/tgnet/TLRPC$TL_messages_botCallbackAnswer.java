@@ -1,5 +1,5 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_messages_botCallbackAnswer extends TLObject {
     public static int constructor = NUM;
     public boolean alert;
@@ -11,17 +11,18 @@ public class TLRPC$TL_messages_botCallbackAnswer extends TLObject {
     public String url;
 
     public static TLRPC$TL_messages_botCallbackAnswer TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-        if (constructor == i) {
-            TLRPC$TL_messages_botCallbackAnswer tLRPC$TL_messages_botCallbackAnswer = new TLRPC$TL_messages_botCallbackAnswer();
-            tLRPC$TL_messages_botCallbackAnswer.readParams(abstractSerializedData, z);
-            return tLRPC$TL_messages_botCallbackAnswer;
-        } else if (!z) {
+        if (constructor != i) {
+            if (z) {
+                throw new RuntimeException(String.format("can't parse magic %x in TL_messages_botCallbackAnswer", Integer.valueOf(i)));
+            }
             return null;
-        } else {
-            throw new RuntimeException(String.format("can't parse magic %x in TL_messages_botCallbackAnswer", new Object[]{Integer.valueOf(i)}));
         }
+        TLRPC$TL_messages_botCallbackAnswer tLRPC$TL_messages_botCallbackAnswer = new TLRPC$TL_messages_botCallbackAnswer();
+        tLRPC$TL_messages_botCallbackAnswer.readParams(abstractSerializedData, z);
+        return tLRPC$TL_messages_botCallbackAnswer;
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
@@ -41,13 +42,14 @@ public class TLRPC$TL_messages_botCallbackAnswer extends TLObject {
         this.cache_time = abstractSerializedData.readInt32(z);
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
-        int i = this.alert ? this.flags | 2 : this.flags & -3;
+        int i = this.alert ? this.flags | 2 : this.flags & (-3);
         this.flags = i;
-        int i2 = this.has_url ? i | 8 : i & -9;
+        int i2 = this.has_url ? i | 8 : i & (-9);
         this.flags = i2;
-        int i3 = this.native_ui ? i2 | 16 : i2 & -17;
+        int i3 = this.native_ui ? i2 | 16 : i2 & (-17);
         this.flags = i3;
         abstractSerializedData.writeInt32(i3);
         if ((this.flags & 1) != 0) {

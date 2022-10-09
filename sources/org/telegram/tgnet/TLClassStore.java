@@ -2,20 +2,19 @@ package org.telegram.tgnet;
 
 import android.util.SparseArray;
 import org.telegram.messenger.FileLog;
-
+/* loaded from: classes.dex */
 public class TLClassStore {
     static TLClassStore store;
     private SparseArray<Class> classStore;
 
     public TLClassStore() {
-        Class<TLRPC$TL_decryptedMessage> cls = TLRPC$TL_decryptedMessage.class;
         SparseArray<Class> sparseArray = new SparseArray<>();
         this.classStore = sparseArray;
         sparseArray.put(TLRPC$TL_error.constructor, TLRPC$TL_error.class);
         this.classStore.put(TLRPC$TL_decryptedMessageService.constructor, TLRPC$TL_decryptedMessageService.class);
-        this.classStore.put(TLRPC$TL_decryptedMessage.constructor, cls);
+        this.classStore.put(TLRPC$TL_decryptedMessage.constructor, TLRPC$TL_decryptedMessage.class);
         this.classStore.put(TLRPC$TL_decryptedMessageLayer.constructor, TLRPC$TL_decryptedMessageLayer.class);
-        this.classStore.put(TLRPC$TL_decryptedMessage_layer17.constructor, cls);
+        this.classStore.put(TLRPC$TL_decryptedMessage_layer17.constructor, TLRPC$TL_decryptedMessage.class);
         this.classStore.put(TLRPC$TL_decryptedMessage_layer45.constructor, TLRPC$TL_decryptedMessage_layer45.class);
         this.classStore.put(TLRPC$TL_decryptedMessageService_layer8.constructor, TLRPC$TL_decryptedMessageService_layer8.class);
         this.classStore.put(TLRPC$TL_decryptedMessage_layer8.constructor, TLRPC$TL_decryptedMessage_layer8.class);

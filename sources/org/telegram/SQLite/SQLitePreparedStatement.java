@@ -5,41 +5,32 @@ import java.nio.ByteBuffer;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 import org.telegram.tgnet.NativeByteBuffer;
-
+/* loaded from: classes.dex */
 public class SQLitePreparedStatement {
     private boolean isFinalized = false;
     private String query;
     private long sqliteStatementHandle;
     private long startTime;
 
-    /* access modifiers changed from: package-private */
-    public native void bindByteBuffer(long j, int i, ByteBuffer byteBuffer, int i2) throws SQLiteException;
+    native void bindByteBuffer(long j, int i, ByteBuffer byteBuffer, int i2) throws SQLiteException;
 
-    /* access modifiers changed from: package-private */
-    public native void bindDouble(long j, int i, double d) throws SQLiteException;
+    native void bindDouble(long j, int i, double d) throws SQLiteException;
 
-    /* access modifiers changed from: package-private */
-    public native void bindInt(long j, int i, int i2) throws SQLiteException;
+    native void bindInt(long j, int i, int i2) throws SQLiteException;
 
-    /* access modifiers changed from: package-private */
-    public native void bindLong(long j, int i, long j2) throws SQLiteException;
+    native void bindLong(long j, int i, long j2) throws SQLiteException;
 
-    /* access modifiers changed from: package-private */
-    public native void bindNull(long j, int i) throws SQLiteException;
+    native void bindNull(long j, int i) throws SQLiteException;
 
-    /* access modifiers changed from: package-private */
-    public native void bindString(long j, int i, String str) throws SQLiteException;
+    native void bindString(long j, int i, String str) throws SQLiteException;
 
-    /* access modifiers changed from: package-private */
-    public native void finalize(long j) throws SQLiteException;
+    native void finalize(long j) throws SQLiteException;
 
-    /* access modifiers changed from: package-private */
-    public native long prepare(long j, String str) throws SQLiteException;
+    native long prepare(long j, String str) throws SQLiteException;
 
-    /* access modifiers changed from: package-private */
-    public native void reset(long j) throws SQLiteException;
+    native void reset(long j) throws SQLiteException;
 
-    /* access modifiers changed from: package-private */
+    /* JADX INFO: Access modifiers changed from: package-private */
     public native int step(long j) throws SQLiteException;
 
     public long getStatementHandle() {
@@ -55,29 +46,29 @@ public class SQLitePreparedStatement {
     }
 
     public SQLiteCursor query(Object[] objArr) throws SQLiteException {
-        if (objArr != null) {
-            checkFinalized();
-            reset(this.sqliteStatementHandle);
-            int i = 1;
-            for (Integer num : objArr) {
-                if (num == null) {
-                    bindNull(this.sqliteStatementHandle, i);
-                } else if (num instanceof Integer) {
-                    bindInt(this.sqliteStatementHandle, i, num.intValue());
-                } else if (num instanceof Double) {
-                    bindDouble(this.sqliteStatementHandle, i, ((Double) num).doubleValue());
-                } else if (num instanceof String) {
-                    bindString(this.sqliteStatementHandle, i, (String) num);
-                } else if (num instanceof Long) {
-                    bindLong(this.sqliteStatementHandle, i, ((Long) num).longValue());
-                } else {
-                    throw new IllegalArgumentException();
-                }
-                i++;
-            }
-            return new SQLiteCursor(this);
+        if (objArr == null) {
+            throw new IllegalArgumentException();
         }
-        throw new IllegalArgumentException();
+        checkFinalized();
+        reset(this.sqliteStatementHandle);
+        int i = 1;
+        for (Object obj : objArr) {
+            if (obj == null) {
+                bindNull(this.sqliteStatementHandle, i);
+            } else if (obj instanceof Integer) {
+                bindInt(this.sqliteStatementHandle, i, ((Integer) obj).intValue());
+            } else if (obj instanceof Double) {
+                bindDouble(this.sqliteStatementHandle, i, ((Double) obj).doubleValue());
+            } else if (obj instanceof String) {
+                bindString(this.sqliteStatementHandle, i, (String) obj);
+            } else if (obj instanceof Long) {
+                bindLong(this.sqliteStatementHandle, i, ((Long) obj).longValue());
+            } else {
+                throw new IllegalArgumentException();
+            }
+            i++;
+        }
+        return new SQLiteCursor(this);
     }
 
     public int step() throws SQLiteException {
@@ -98,29 +89,31 @@ public class SQLitePreparedStatement {
         finalizeQuery();
     }
 
-    /* access modifiers changed from: package-private */
-    public void checkFinalized() throws SQLiteException {
-        if (this.isFinalized) {
-            throw new SQLiteException("Prepared query finalized");
+    void checkFinalized() throws SQLiteException {
+        if (!this.isFinalized) {
+            return;
         }
+        throw new SQLiteException("Prepared query finalized");
     }
 
     public void finalizeQuery() {
-        if (!this.isFinalized) {
-            if (BuildVars.LOGS_ENABLED) {
-                long elapsedRealtime = SystemClock.elapsedRealtime() - this.startTime;
-                if (elapsedRealtime > 500) {
-                    FileLog.d("sqlite query " + this.query + " took " + elapsedRealtime + "ms");
-                }
+        if (this.isFinalized) {
+            return;
+        }
+        if (BuildVars.LOGS_ENABLED) {
+            long elapsedRealtime = SystemClock.elapsedRealtime() - this.startTime;
+            if (elapsedRealtime > 500) {
+                FileLog.d("sqlite query " + this.query + " took " + elapsedRealtime + "ms");
             }
-            try {
-                this.isFinalized = true;
-                finalize(this.sqliteStatementHandle);
-            } catch (SQLiteException e) {
-                if (BuildVars.LOGS_ENABLED) {
-                    FileLog.e(e.getMessage(), (Throwable) e);
-                }
+        }
+        try {
+            this.isFinalized = true;
+            finalize(this.sqliteStatementHandle);
+        } catch (SQLiteException e) {
+            if (!BuildVars.LOGS_ENABLED) {
+                return;
             }
+            FileLog.e(e.getMessage(), e);
         }
     }
 

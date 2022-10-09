@@ -1,20 +1,14 @@
 package j$.util.stream;
-
-import j$.util.function.e;
-import j$.util.function.f;
-
-public final /* synthetic */ class F implements f {
+/* loaded from: classes2.dex */
+public final /* synthetic */ class F implements j$.util.function.f {
     public final /* synthetic */ int a = 1;
     public final /* synthetic */ Object b;
 
-    public /* synthetic */ F(J j) {
-        this.b = j;
-    }
-
+    @Override // j$.util.function.f
     public final void accept(double d) {
         switch (this.a) {
             case 0:
-                ((CLASSNAMEm3) this.b).accept(d);
+                ((InterfaceCLASSNAMEm3) this.b).accept(d);
                 return;
             default:
                 ((J) this.b).a.accept(d);
@@ -22,18 +16,15 @@ public final /* synthetic */ class F implements f {
         }
     }
 
-    public f j(f fVar) {
+    @Override // j$.util.function.f
+    public j$.util.function.f j(j$.util.function.f fVar) {
         switch (this.a) {
             case 0:
                 fVar.getClass();
-                return new e(this, fVar);
+                return new j$.util.function.e(this, fVar);
             default:
                 fVar.getClass();
-                return new e(this, fVar);
+                return new j$.util.function.e(this, fVar);
         }
-    }
-
-    public /* synthetic */ F(CLASSNAMEm3 m3Var) {
-        this.b = m3Var;
     }
 }

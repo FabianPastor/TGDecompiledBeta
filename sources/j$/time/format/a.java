@@ -1,12 +1,9 @@
 package j$.time.format;
 
-import j$.time.chrono.b;
-import j$.time.chrono.c;
-import j$.time.temporal.j;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Set;
-
+/* loaded from: classes2.dex */
 public final class a {
     private final f a;
 
@@ -21,7 +18,7 @@ public final class a {
         l.e('-');
         j$.time.temporal.a aVar3 = j$.time.temporal.a.DAY_OF_MONTH;
         l.k(aVar3, 2);
-        c cVar = c.a;
+        j$.time.chrono.c cVar = j$.time.chrono.c.a;
         a u = l.u(1, cVar);
         p pVar2 = new p();
         pVar2.p();
@@ -46,18 +43,18 @@ public final class a {
         pVar4.k(aVar6, 2);
         pVar4.o();
         pVar4.b(j$.time.temporal.a.NANO_OF_SECOND, 0, 9, true);
-        a u2 = pVar4.u(1, (b) null);
+        a u2 = pVar4.u(1, null);
         p pVar5 = new p();
         pVar5.p();
         pVar5.a(u2);
         pVar5.h();
-        pVar5.u(1, (b) null);
+        pVar5.u(1, null);
         p pVar6 = new p();
         pVar6.p();
         pVar6.a(u2);
         pVar6.o();
         pVar6.h();
-        pVar6.u(1, (b) null);
+        pVar6.u(1, null);
         p pVar7 = new p();
         pVar7.p();
         pVar7.a(u);
@@ -97,9 +94,9 @@ public final class a {
         l2.u(1, cVar);
         p pVar12 = new p();
         pVar12.p();
-        p l3 = pVar12.l(j.c, 4, 10, sVar);
+        p l3 = pVar12.l(j$.time.temporal.j.c, 4, 10, sVar);
         l3.f("-W");
-        l3.k(j.b, 2);
+        l3.k(j$.time.temporal.j.b, 2);
         l3.e('-');
         j$.time.temporal.a aVar7 = j$.time.temporal.a.DAY_OF_WEEK;
         l3.k(aVar7, 1);
@@ -109,7 +106,7 @@ public final class a {
         p pVar13 = new p();
         pVar13.p();
         pVar13.c();
-        pVar13.u(1, (b) null);
+        pVar13.u(1, null);
         p pVar14 = new p();
         pVar14.p();
         pVar14.k(aVar, 4);
@@ -125,7 +122,6 @@ public final class a {
         hashMap.put(4L, "Thu");
         hashMap.put(5L, "Fri");
         hashMap.put(6L, "Sat");
-        c cVar2 = cVar;
         hashMap.put(7L, "Sun");
         HashMap hashMap2 = new HashMap();
         hashMap2.put(1L, "Jan");
@@ -162,25 +158,28 @@ public final class a {
         l4.n();
         l4.e(' ');
         l4.g("+HHMM", "GMT");
-        l4.u(2, cVar2);
+        l4.u(2, cVar);
     }
 
-    a(f fVar, Locale locale, r rVar, int i, Set set, b bVar) {
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public a(f fVar, Locale locale, r rVar, int i, Set set, j$.time.chrono.b bVar) {
         if (fVar != null) {
             this.a = fVar;
             if (locale == null) {
                 throw new NullPointerException("locale");
-            } else if (rVar == null) {
+            }
+            if (rVar == null) {
                 throw new NullPointerException("decimalStyle");
-            } else if (i == 0) {
+            }
+            if (i == 0) {
                 throw new NullPointerException("resolverStyle");
             }
-        } else {
-            throw new NullPointerException("printerParser");
+            return;
         }
+        throw new NullPointerException("printerParser");
     }
 
-    /* access modifiers changed from: package-private */
+    /* JADX INFO: Access modifiers changed from: package-private */
     public f a(boolean z) {
         return this.a.a(z);
     }

@@ -2,11 +2,9 @@ package j$.wrappers;
 
 import j$.util.function.BiConsumer;
 import j$.util.function.Function;
-import j$.util.function.b;
-import j$.util.function.y;
 import java.util.Set;
 import java.util.stream.Collector;
-
+/* loaded from: classes2.dex */
 public final /* synthetic */ class J0 {
     final /* synthetic */ Collector a;
 
@@ -29,7 +27,7 @@ public final /* synthetic */ class J0 {
         return this.a.characteristics();
     }
 
-    public b c() {
+    public j$.util.function.b c() {
         return CLASSNAMEu.a(this.a.combiner());
     }
 
@@ -37,7 +35,7 @@ public final /* synthetic */ class J0 {
         return M.a(this.a.finisher());
     }
 
-    public y f() {
+    public j$.util.function.y f() {
         return z0.a(this.a.supplier());
     }
 }

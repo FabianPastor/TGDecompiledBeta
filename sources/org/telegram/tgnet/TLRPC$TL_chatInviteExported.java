@@ -1,7 +1,7 @@
 package org.telegram.tgnet;
 
 import java.util.ArrayList;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_chatInviteExported extends TLRPC$ExportedChatInvite {
     public static int constructor = NUM;
     public long admin_id;
@@ -20,6 +20,7 @@ public class TLRPC$TL_chatInviteExported extends TLRPC$ExportedChatInvite {
     public int usage;
     public int usage_limit;
 
+    @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
@@ -53,13 +54,14 @@ public class TLRPC$TL_chatInviteExported extends TLRPC$ExportedChatInvite {
         }
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
-        int i = this.revoked ? this.flags | 1 : this.flags & -2;
+        int i = this.revoked ? this.flags | 1 : this.flags & (-2);
         this.flags = i;
-        int i2 = this.permanent ? i | 32 : i & -33;
+        int i2 = this.permanent ? i | 32 : i & (-33);
         this.flags = i2;
-        int i3 = this.request_needed ? i2 | 64 : i2 & -65;
+        int i3 = this.request_needed ? i2 | 64 : i2 & (-65);
         this.flags = i3;
         abstractSerializedData.writeInt32(i3);
         abstractSerializedData.writeString(this.link);

@@ -1,22 +1,27 @@
 package j$.util.stream;
-
+/* loaded from: classes2.dex */
 abstract class Q extends T {
-    Q(CLASSNAMEc cVar, CLASSNAMEe4 e4Var, int i) {
-        super(cVar, i);
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public Q(AbstractCLASSNAMEc abstractCLASSNAMEc, EnumCLASSNAMEe4 enumCLASSNAMEe4, int i) {
+        super(abstractCLASSNAMEc, i);
     }
 
-    /* access modifiers changed from: package-private */
-    public final boolean G0() {
+    @Override // j$.util.stream.AbstractCLASSNAMEc
+    final boolean G0() {
         return true;
     }
 
-    public /* bridge */ /* synthetic */ U parallel() {
-        parallel();
+    @Override // j$.util.stream.AbstractCLASSNAMEc, j$.util.stream.InterfaceCLASSNAMEg, j$.util.stream.IntStream
+    /* renamed from: parallel */
+    public /* bridge */ /* synthetic */ U mo304parallel() {
+        mo304parallel();
         return this;
     }
 
-    public /* bridge */ /* synthetic */ U sequential() {
-        sequential();
+    @Override // j$.util.stream.AbstractCLASSNAMEc, j$.util.stream.InterfaceCLASSNAMEg, j$.util.stream.IntStream
+    /* renamed from: sequential */
+    public /* bridge */ /* synthetic */ U mo305sequential() {
+        mo305sequential();
         return this;
     }
 }

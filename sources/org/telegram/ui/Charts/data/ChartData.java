@@ -13,29 +13,22 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.telegram.messenger.SegmentTree;
-
+/* loaded from: classes3.dex */
 public class ChartData {
     public String[] daysLookup;
-    public ArrayList<Line> lines;
-    public int maxValue;
-    public int minValue;
-    public float oneDayPercentage;
+    public ArrayList<Line> lines = new ArrayList<>();
+    public int maxValue = 0;
+    public int minValue = Integer.MAX_VALUE;
+    public float oneDayPercentage = 0.0f;
     protected long timeStep;
     public long[] x;
     public float[] xPercentage;
 
-    protected ChartData() {
-        this.lines = new ArrayList<>();
-        this.maxValue = 0;
-        this.minValue = Integer.MAX_VALUE;
-        this.oneDayPercentage = 0.0f;
+    /* JADX INFO: Access modifiers changed from: protected */
+    public ChartData() {
     }
 
     public ChartData(JSONObject jSONObject) throws JSONException {
-        this.lines = new ArrayList<>();
-        this.maxValue = 0;
-        this.minValue = Integer.MAX_VALUE;
-        this.oneDayPercentage = 0.0f;
         JSONArray jSONArray = jSONObject.getJSONArray("columns");
         jSONArray.length();
         for (int i = 0; i < jSONArray.length(); i++) {
@@ -73,7 +66,7 @@ public class ChartData {
             if (jArr.length > 1) {
                 this.timeStep = jArr[1] - jArr[0];
             } else {
-                this.timeStep = 86400000;
+                this.timeStep = 86400000L;
             }
             measure();
         }
@@ -99,56 +92,57 @@ public class ChartData {
         }
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
     public void measure() {
         SimpleDateFormat simpleDateFormat;
         long[] jArr = this.x;
         int length = jArr.length;
-        if (length != 0) {
-            long j = jArr[0];
-            long j2 = jArr[length - 1];
-            float[] fArr = new float[length];
-            this.xPercentage = fArr;
-            if (length == 1) {
-                fArr[0] = 1.0f;
-            } else {
-                for (int i = 0; i < length; i++) {
-                    this.xPercentage[i] = ((float) (this.x[i] - j)) / ((float) (j2 - j));
-                }
+        if (length == 0) {
+            return;
+        }
+        long j = jArr[0];
+        long j2 = jArr[length - 1];
+        float[] fArr = new float[length];
+        this.xPercentage = fArr;
+        if (length == 1) {
+            fArr[0] = 1.0f;
+        } else {
+            for (int i = 0; i < length; i++) {
+                this.xPercentage[i] = ((float) (this.x[i] - j)) / ((float) (j2 - j));
             }
-            for (int i2 = 0; i2 < this.lines.size(); i2++) {
-                if (this.lines.get(i2).maxValue > this.maxValue) {
-                    this.maxValue = this.lines.get(i2).maxValue;
-                }
-                if (this.lines.get(i2).minValue < this.minValue) {
-                    this.minValue = this.lines.get(i2).minValue;
-                }
-                this.lines.get(i2).segmentTree = new SegmentTree(this.lines.get(i2).y);
+        }
+        for (int i2 = 0; i2 < this.lines.size(); i2++) {
+            if (this.lines.get(i2).maxValue > this.maxValue) {
+                this.maxValue = this.lines.get(i2).maxValue;
             }
-            long j3 = this.timeStep;
-            this.daysLookup = new String[(((int) ((j2 - j) / j3)) + 10)];
-            if (j3 == 1) {
-                simpleDateFormat = null;
-            } else if (j3 < 86400000) {
-                simpleDateFormat = new SimpleDateFormat("HH:mm");
-            } else {
-                simpleDateFormat = new SimpleDateFormat("MMM d");
+            if (this.lines.get(i2).minValue < this.minValue) {
+                this.minValue = this.lines.get(i2).minValue;
             }
-            int i3 = 0;
-            while (true) {
-                String[] strArr = this.daysLookup;
-                if (i3 < strArr.length) {
-                    if (this.timeStep == 1) {
-                        strArr[i3] = String.format(Locale.ENGLISH, "%02d:00", new Object[]{Integer.valueOf(i3)});
-                    } else {
-                        strArr[i3] = simpleDateFormat.format(new Date((((long) i3) * this.timeStep) + j));
-                    }
-                    i3++;
+            this.lines.get(i2).segmentTree = new SegmentTree(this.lines.get(i2).y);
+        }
+        long j3 = this.timeStep;
+        this.daysLookup = new String[((int) ((j2 - j) / j3)) + 10];
+        if (j3 == 1) {
+            simpleDateFormat = null;
+        } else if (j3 < 86400000) {
+            simpleDateFormat = new SimpleDateFormat("HH:mm");
+        } else {
+            simpleDateFormat = new SimpleDateFormat("MMM d");
+        }
+        int i3 = 0;
+        while (true) {
+            String[] strArr = this.daysLookup;
+            if (i3 < strArr.length) {
+                if (this.timeStep == 1) {
+                    strArr[i3] = String.format(Locale.ENGLISH, "%02d:00", Integer.valueOf(i3));
                 } else {
-                    long[] jArr2 = this.x;
-                    this.oneDayPercentage = ((float) this.timeStep) / ((float) (jArr2[jArr2.length - 1] - jArr2[0]));
-                    return;
+                    strArr[i3] = simpleDateFormat.format(new Date((i3 * this.timeStep) + j));
                 }
+                i3++;
+            } else {
+                long[] jArr2 = this.x;
+                this.oneDayPercentage = ((float) this.timeStep) / ((float) (jArr2[jArr2.length - 1] - jArr2[0]));
+                return;
             }
         }
     }
@@ -162,23 +156,23 @@ public class ChartData {
     public int findStartIndex(float f) {
         int length;
         int i = 0;
-        if (f == 0.0f || (length = this.xPercentage.length) < 2) {
-            return 0;
-        }
-        int i2 = length - 1;
-        while (i <= i2) {
-            int i3 = (i2 + i) >> 1;
-            float[] fArr = this.xPercentage;
-            if ((f < fArr[i3] && (i3 == 0 || f > fArr[i3 - 1])) || f == fArr[i3]) {
-                return i3;
+        if (f != 0.0f && (length = this.xPercentage.length) >= 2) {
+            int i2 = length - 1;
+            while (i <= i2) {
+                int i3 = (i2 + i) >> 1;
+                float[] fArr = this.xPercentage;
+                if ((f < fArr[i3] && (i3 == 0 || f > fArr[i3 - 1])) || f == fArr[i3]) {
+                    return i3;
+                }
+                if (f < fArr[i3]) {
+                    i2 = i3 - 1;
+                } else if (f > fArr[i3]) {
+                    i = i3 + 1;
+                }
             }
-            if (f < fArr[i3]) {
-                i2 = i3 - 1;
-            } else if (f > fArr[i3]) {
-                i = i3 + 1;
-            }
+            return i;
         }
-        return i;
+        return 0;
     }
 
     public int findEndIndex(int i, float f) {
@@ -227,16 +221,17 @@ public class ChartData {
         return i2;
     }
 
+    /* loaded from: classes3.dex */
     public class Line {
-        public int color = -16777216;
-        public int colorDark = -1;
         public String colorKey;
         public String id;
-        public int maxValue = 0;
-        public int minValue = Integer.MAX_VALUE;
         public String name;
         public SegmentTree segmentTree;
         public int[] y;
+        public int maxValue = 0;
+        public int minValue = Integer.MAX_VALUE;
+        public int color = -16777216;
+        public int colorDark = -1;
 
         public Line(ChartData chartData) {
         }

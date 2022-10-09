@@ -1,75 +1,79 @@
 package j$.util.stream;
 
-import j$.util.CLASSNAMEa;
-import j$.util.w;
+import j$.util.AbstractCLASSNAMEa;
 import java.util.Comparator;
-
-abstract class H4 extends J4 implements w {
-    H4(w wVar, long j, long j2) {
+/* JADX INFO: Access modifiers changed from: package-private */
+/* loaded from: classes2.dex */
+public abstract class H4 extends J4 implements j$.util.w {
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public H4(j$.util.w wVar, long j, long j2) {
         super(wVar, j, j2);
     }
 
-    H4(w wVar, H4 h4) {
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public H4(j$.util.w wVar, H4 h4) {
         super(wVar, h4);
     }
 
+    @Override // j$.util.w
     /* renamed from: forEachRemaining */
     public void e(Object obj) {
         obj.getClass();
-        CLASSNAMEj4 j4Var = null;
+        AbstractCLASSNAMEj4 abstractCLASSNAMEj4 = null;
         while (true) {
             int r = r();
-            if (r == 1) {
-                return;
-            }
-            if (r == 2) {
-                if (j4Var == null) {
-                    j4Var = t(128);
+            if (r != 1) {
+                if (r != 2) {
+                    ((j$.util.w) this.a).forEachRemaining(obj);
+                    return;
+                }
+                if (abstractCLASSNAMEj4 == null) {
+                    abstractCLASSNAMEj4 = t(128);
                 } else {
-                    j4Var.b = 0;
+                    abstractCLASSNAMEj4.b = 0;
                 }
                 long j = 0;
-                while (((w) this.a).tryAdvance(j4Var)) {
+                while (((j$.util.w) this.a).tryAdvance(abstractCLASSNAMEj4)) {
                     j++;
                     if (j >= 128) {
                         break;
                     }
                 }
-                if (j != 0) {
-                    j4Var.b(obj, p(j));
-                } else {
+                if (j == 0) {
                     return;
                 }
+                abstractCLASSNAMEj4.b(obj, p(j));
             } else {
-                ((w) this.a).forEachRemaining(obj);
                 return;
             }
         }
     }
 
+    @Override // j$.util.u
     public Comparator getComparator() {
         throw new IllegalStateException();
     }
 
+    @Override // j$.util.u
     public /* synthetic */ long getExactSizeIfKnown() {
-        return CLASSNAMEa.e(this);
+        return AbstractCLASSNAMEa.e(this);
     }
 
+    @Override // j$.util.u
     public /* synthetic */ boolean hasCharacteristics(int i) {
-        return CLASSNAMEa.f(this, i);
+        return AbstractCLASSNAMEa.f(this, i);
     }
 
-    /* access modifiers changed from: protected */
-    public abstract void s(Object obj);
+    protected abstract void s(Object obj);
 
-    /* access modifiers changed from: protected */
-    public abstract CLASSNAMEj4 t(int i);
+    protected abstract AbstractCLASSNAMEj4 t(int i);
 
+    @Override // j$.util.w
     /* renamed from: tryAdvance */
     public boolean k(Object obj) {
         obj.getClass();
-        while (r() != 1 && ((w) this.a).tryAdvance(this)) {
-            if (p(1) == 1) {
+        while (r() != 1 && ((j$.util.w) this.a).tryAdvance(this)) {
+            if (p(1L) == 1) {
                 s(obj);
                 return true;
             }

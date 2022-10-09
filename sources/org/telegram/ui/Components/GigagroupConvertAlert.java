@@ -2,9 +2,13 @@ package org.telegram.ui.Components;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
@@ -13,21 +17,19 @@ import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
-
+/* loaded from: classes3.dex */
 public class GigagroupConvertAlert extends BottomSheet {
-    /* access modifiers changed from: protected */
-    public void onCancel() {
+    protected void onCancel() {
         throw null;
     }
 
-    /* access modifiers changed from: protected */
-    public void onCovert() {
+    protected void onCovert() {
         throw null;
     }
 
+    /* loaded from: classes3.dex */
     public static class BottomSheetCell extends FrameLayout {
-        /* access modifiers changed from: private */
-        public View background;
+        private View background;
         private TextView textView;
 
         public BottomSheetCell(Context context) {
@@ -36,9 +38,9 @@ public class GigagroupConvertAlert extends BottomSheet {
             this.background = view;
             view.setBackground(Theme.AdaptiveRipple.filledRect("featuredStickers_addButton", 4.0f));
             addView(this.background, LayoutHelper.createFrame(-1, -1.0f, 0, 16.0f, 16.0f, 16.0f, 16.0f));
-            TextView textView2 = new TextView(context);
-            this.textView = textView2;
-            textView2.setLines(1);
+            TextView textView = new TextView(context);
+            this.textView = textView;
+            textView.setLines(1);
             this.textView.setSingleLine(true);
             this.textView.setGravity(1);
             this.textView.setEllipsize(TextUtils.TruncateAt.END);
@@ -49,8 +51,8 @@ public class GigagroupConvertAlert extends BottomSheet {
             addView(this.textView, LayoutHelper.createFrame(-2, -2, 17));
         }
 
-        /* access modifiers changed from: protected */
-        public void onMeasure(int i, int i2) {
+        @Override // android.widget.FrameLayout, android.view.View
+        protected void onMeasure(int i, int i2) {
             super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(80.0f), NUM));
         }
 
@@ -59,241 +61,107 @@ public class GigagroupConvertAlert extends BottomSheet {
         }
     }
 
-    /* JADX WARNING: Illegal instructions before constructor call */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public GigagroupConvertAlert(android.content.Context r19, org.telegram.ui.ActionBar.BaseFragment r20) {
-        /*
-            r18 = this;
-            r0 = r18
-            r1 = r19
-            r2 = 1
-            r0.<init>(r1, r2)
-            r3 = 0
-            r0.setApplyBottomPadding(r3)
-            r0.setApplyTopPadding(r3)
-            android.widget.LinearLayout r4 = new android.widget.LinearLayout
-            r4.<init>(r1)
-            r4.setOrientation(r2)
-            r0.setCustomView(r4)
-            org.telegram.ui.Components.RLottieImageView r5 = new org.telegram.ui.Components.RLottieImageView
-            r5.<init>(r1)
-            r5.setAutoRepeat(r2)
-            int r6 = org.telegram.messenger.R.raw.utyan_gigagroup
-            r7 = 120(0x78, float:1.68E-43)
-            r5.setAnimation((int) r6, (int) r7, (int) r7)
-            r5.playAnimation()
-            r8 = 160(0xa0, float:2.24E-43)
-            r9 = 160(0xa0, float:2.24E-43)
-            r10 = 49
-            r11 = 17
-            r12 = 30
-            r13 = 17
-            r14 = 0
-            android.widget.LinearLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r8, (int) r9, (int) r10, (int) r11, (int) r12, (int) r13, (int) r14)
-            r4.addView(r5, r6)
-            android.widget.TextView r5 = new android.widget.TextView
-            r5.<init>(r1)
-            java.lang.String r6 = "fonts/rmedium.ttf"
-            android.graphics.Typeface r6 = org.telegram.messenger.AndroidUtilities.getTypeface(r6)
-            r5.setTypeface(r6)
-            r6 = 1103101952(0x41CLASSNAME, float:24.0)
-            r5.setTextSize(r2, r6)
-            java.lang.String r6 = "dialogTextBlack"
-            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r6)
-            r5.setTextColor(r6)
-            int r6 = org.telegram.messenger.R.string.GigagroupConvertTitle
-            java.lang.String r7 = "GigagroupConvertTitle"
-            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
-            r5.setText(r6)
-            r7 = -2
-            r8 = -2
-            r9 = 49
-            r10 = 17
-            r11 = 18
-            r12 = 17
-            r13 = 0
-            android.widget.LinearLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r7, (int) r8, (int) r9, (int) r10, (int) r11, (int) r12, (int) r13)
-            r4.addView(r5, r6)
-            android.widget.LinearLayout r5 = new android.widget.LinearLayout
-            r5.<init>(r1)
-            r5.setOrientation(r2)
-            r6 = -2
-            r8 = 1
-            r9 = 0
-            r10 = 12
-            r11 = 0
-            r12 = 0
-            android.widget.LinearLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r6, (int) r7, (int) r8, (int) r9, (int) r10, (int) r11, (int) r12)
-            r4.addView(r5, r6)
-            r6 = 0
-        L_0x0090:
-            r7 = 3
-            if (r6 >= r7) goto L_0x0153
-            android.widget.LinearLayout r8 = new android.widget.LinearLayout
-            r8.<init>(r1)
-            r8.setOrientation(r3)
-            r9 = -2
-            r10 = -2
-            boolean r11 = org.telegram.messenger.LocaleController.isRTL
-            r16 = 5
-            if (r11 == 0) goto L_0x00a5
-            r11 = 5
-            goto L_0x00a6
-        L_0x00a5:
-            r11 = 3
-        L_0x00a6:
-            r12 = 0
-            r13 = 8
-            r14 = 0
-            r15 = 0
-            android.widget.LinearLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r9, (int) r10, (int) r11, (int) r12, (int) r13, (int) r14, (int) r15)
-            r5.addView(r8, r9)
-            android.widget.ImageView r9 = new android.widget.ImageView
-            r9.<init>(r1)
-            android.graphics.PorterDuffColorFilter r10 = new android.graphics.PorterDuffColorFilter
-            java.lang.String r11 = "dialogTextGray3"
-            int r12 = org.telegram.ui.ActionBar.Theme.getColor(r11)
-            android.graphics.PorterDuff$Mode r13 = android.graphics.PorterDuff.Mode.MULTIPLY
-            r10.<init>(r12, r13)
-            r9.setColorFilter(r10)
-            int r10 = org.telegram.messenger.R.drawable.list_circle
-            r9.setImageResource(r10)
-            android.widget.TextView r10 = new android.widget.TextView
-            r10.<init>(r1)
-            r12 = 1097859072(0x41700000, float:15.0)
-            r10.setTextSize(r2, r12)
-            int r11 = org.telegram.ui.ActionBar.Theme.getColor(r11)
-            r10.setTextColor(r11)
-            boolean r11 = org.telegram.messenger.LocaleController.isRTL
-            if (r11 == 0) goto L_0x00e2
-            r7 = 5
-        L_0x00e2:
-            r7 = r7 | 16
-            r10.setGravity(r7)
-            r7 = 1132593152(0x43820000, float:260.0)
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r10.setMaxWidth(r7)
-            if (r6 == 0) goto L_0x0110
-            if (r6 == r2) goto L_0x0104
-            r7 = 2
-            if (r6 == r7) goto L_0x00f8
-            goto L_0x011b
-        L_0x00f8:
-            int r7 = org.telegram.messenger.R.string.GigagroupConvertInfo3
-            java.lang.String r11 = "GigagroupConvertInfo3"
-            java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r11, r7)
-            r10.setText(r7)
-            goto L_0x011b
-        L_0x0104:
-            int r7 = org.telegram.messenger.R.string.GigagroupConvertInfo2
-            java.lang.String r11 = "GigagroupConvertInfo2"
-            java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r11, r7)
-            r10.setText(r7)
-            goto L_0x011b
-        L_0x0110:
-            int r7 = org.telegram.messenger.R.string.GigagroupConvertInfo1
-            java.lang.String r11 = "GigagroupConvertInfo1"
-            java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r11, r7)
-            r10.setText(r7)
-        L_0x011b:
-            boolean r7 = org.telegram.messenger.LocaleController.isRTL
-            r11 = -2
-            if (r7 == 0) goto L_0x0138
-            android.widget.LinearLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createLinear(r11, r11)
-            r8.addView(r10, r7)
-            r11 = -2
-            r12 = -2
-            r13 = 1090519040(0x41000000, float:8.0)
-            r14 = 1088421888(0x40e00000, float:7.0)
-            r15 = 0
-            r16 = 0
-            android.widget.LinearLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createLinear(r11, r12, r13, r14, r15, r16)
-            r8.addView(r9, r7)
-            goto L_0x014f
-        L_0x0138:
-            r12 = -2
-            r13 = -2
-            r14 = 0
-            r15 = 1090519040(0x41000000, float:8.0)
-            r16 = 1090519040(0x41000000, float:8.0)
-            r17 = 0
-            android.widget.LinearLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createLinear(r12, r13, r14, r15, r16, r17)
-            r8.addView(r9, r7)
-            android.widget.LinearLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createLinear(r11, r11)
-            r8.addView(r10, r7)
-        L_0x014f:
-            int r6 = r6 + 1
-            goto L_0x0090
-        L_0x0153:
-            org.telegram.ui.Components.GigagroupConvertAlert$BottomSheetCell r3 = new org.telegram.ui.Components.GigagroupConvertAlert$BottomSheetCell
-            r3.<init>(r1)
-            r5 = 0
-            r3.setBackground(r5)
-            int r5 = org.telegram.messenger.R.string.GigagroupConvertProcessButton
-            java.lang.String r6 = "GigagroupConvertProcessButton"
-            java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
-            r3.setText(r5)
-            android.view.View r5 = r3.background
-            org.telegram.ui.Components.GigagroupConvertAlert$$ExternalSyntheticLambda2 r6 = new org.telegram.ui.Components.GigagroupConvertAlert$$ExternalSyntheticLambda2
-            r7 = r20
-            r6.<init>(r0, r1, r7)
-            r5.setOnClickListener(r6)
-            r7 = -1
-            r8 = 50
-            r9 = 51
-            r10 = 0
-            r11 = 29
-            r12 = 0
-            r13 = 0
-            android.widget.LinearLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r7, (int) r8, (int) r9, (int) r10, (int) r11, (int) r12, (int) r13)
-            r4.addView(r3, r5)
-            android.widget.TextView r3 = new android.widget.TextView
-            r3.<init>(r1)
-            r1 = 1096810496(0x41600000, float:14.0)
-            r3.setTextSize(r2, r1)
-            java.lang.String r1 = "dialogTextBlue2"
-            int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
-            r3.setTextColor(r1)
-            int r1 = org.telegram.messenger.R.string.GigagroupConvertCancelButton
-            java.lang.String r2 = "GigagroupConvertCancelButton"
-            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
-            r3.setText(r1)
-            r1 = 17
-            r3.setGravity(r1)
-            r5 = -2
-            r6 = 48
-            r7 = 49
-            r8 = 17
-            r9 = 0
-            r10 = 17
-            r11 = 16
-            android.widget.LinearLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r5, (int) r6, (int) r7, (int) r8, (int) r9, (int) r10, (int) r11)
-            r4.addView(r3, r1)
-            org.telegram.ui.Components.GigagroupConvertAlert$$ExternalSyntheticLambda1 r1 = new org.telegram.ui.Components.GigagroupConvertAlert$$ExternalSyntheticLambda1
-            r1.<init>(r0)
-            r3.setOnClickListener(r1)
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.GigagroupConvertAlert.<init>(android.content.Context, org.telegram.ui.ActionBar.BaseFragment):void");
+    public GigagroupConvertAlert(final Context context, final BaseFragment baseFragment) {
+        super(context, true);
+        setApplyBottomPadding(false);
+        setApplyTopPadding(false);
+        LinearLayout linearLayout = new LinearLayout(context);
+        linearLayout.setOrientation(1);
+        setCustomView(linearLayout);
+        RLottieImageView rLottieImageView = new RLottieImageView(context);
+        rLottieImageView.setAutoRepeat(true);
+        rLottieImageView.setAnimation(R.raw.utyan_gigagroup, 120, 120);
+        rLottieImageView.playAnimation();
+        linearLayout.addView(rLottieImageView, LayoutHelper.createLinear(160, 160, 49, 17, 30, 17, 0));
+        TextView textView = new TextView(context);
+        textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        textView.setTextSize(1, 24.0f);
+        textView.setTextColor(Theme.getColor("dialogTextBlack"));
+        textView.setText(LocaleController.getString("GigagroupConvertTitle", R.string.GigagroupConvertTitle));
+        linearLayout.addView(textView, LayoutHelper.createLinear(-2, -2, 49, 17, 18, 17, 0));
+        LinearLayout linearLayout2 = new LinearLayout(context);
+        linearLayout2.setOrientation(1);
+        linearLayout.addView(linearLayout2, LayoutHelper.createLinear(-2, -2, 1, 0, 12, 0, 0));
+        int i = 0;
+        while (true) {
+            int i2 = 3;
+            if (i < 3) {
+                LinearLayout linearLayout3 = new LinearLayout(context);
+                linearLayout3.setOrientation(0);
+                linearLayout2.addView(linearLayout3, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 0, 8, 0, 0));
+                ImageView imageView = new ImageView(context);
+                imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogTextGray3"), PorterDuff.Mode.MULTIPLY));
+                imageView.setImageResource(R.drawable.list_circle);
+                TextView textView2 = new TextView(context);
+                textView2.setTextSize(1, 15.0f);
+                textView2.setTextColor(Theme.getColor("dialogTextGray3"));
+                textView2.setGravity((LocaleController.isRTL ? 5 : i2) | 16);
+                textView2.setMaxWidth(AndroidUtilities.dp(260.0f));
+                if (i == 0) {
+                    textView2.setText(LocaleController.getString("GigagroupConvertInfo1", R.string.GigagroupConvertInfo1));
+                } else if (i == 1) {
+                    textView2.setText(LocaleController.getString("GigagroupConvertInfo2", R.string.GigagroupConvertInfo2));
+                } else if (i == 2) {
+                    textView2.setText(LocaleController.getString("GigagroupConvertInfo3", R.string.GigagroupConvertInfo3));
+                }
+                if (LocaleController.isRTL) {
+                    linearLayout3.addView(textView2, LayoutHelper.createLinear(-2, -2));
+                    linearLayout3.addView(imageView, LayoutHelper.createLinear(-2, -2, 8.0f, 7.0f, 0.0f, 0.0f));
+                } else {
+                    linearLayout3.addView(imageView, LayoutHelper.createLinear(-2, -2, 0.0f, 8.0f, 8.0f, 0.0f));
+                    linearLayout3.addView(textView2, LayoutHelper.createLinear(-2, -2));
+                }
+                i++;
+            } else {
+                BottomSheetCell bottomSheetCell = new BottomSheetCell(context);
+                bottomSheetCell.setBackground(null);
+                bottomSheetCell.setText(LocaleController.getString("GigagroupConvertProcessButton", R.string.GigagroupConvertProcessButton));
+                bottomSheetCell.background.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.Components.GigagroupConvertAlert$$ExternalSyntheticLambda2
+                    @Override // android.view.View.OnClickListener
+                    public final void onClick(View view) {
+                        GigagroupConvertAlert.this.lambda$new$1(context, baseFragment, view);
+                    }
+                });
+                linearLayout.addView(bottomSheetCell, LayoutHelper.createLinear(-1, 50, 51, 0, 29, 0, 0));
+                TextView textView3 = new TextView(context);
+                textView3.setTextSize(1, 14.0f);
+                textView3.setTextColor(Theme.getColor("dialogTextBlue2"));
+                textView3.setText(LocaleController.getString("GigagroupConvertCancelButton", R.string.GigagroupConvertCancelButton));
+                textView3.setGravity(17);
+                linearLayout.addView(textView3, LayoutHelper.createLinear(-2, 48, 49, 17, 0, 17, 16));
+                textView3.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.Components.GigagroupConvertAlert$$ExternalSyntheticLambda1
+                    @Override // android.view.View.OnClickListener
+                    public final void onClick(View view) {
+                        GigagroupConvertAlert.this.lambda$new$2(view);
+                    }
+                });
+                return;
+            }
+        }
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$new$1(Context context, BaseFragment baseFragment, View view) {
         dismiss();
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(LocaleController.getString("GigagroupConvertAlertTitle", R.string.GigagroupConvertAlertTitle));
         builder.setMessage(AndroidUtilities.replaceTags(LocaleController.getString("GigagroupConvertAlertText", R.string.GigagroupConvertAlertText)));
-        builder.setPositiveButton(LocaleController.getString("GigagroupConvertAlertConver", R.string.GigagroupConvertAlertConver), new GigagroupConvertAlert$$ExternalSyntheticLambda0(this));
-        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), (DialogInterface.OnClickListener) null);
+        builder.setPositiveButton(LocaleController.getString("GigagroupConvertAlertConver", R.string.GigagroupConvertAlertConver), new DialogInterface.OnClickListener() { // from class: org.telegram.ui.Components.GigagroupConvertAlert$$ExternalSyntheticLambda0
+            @Override // android.content.DialogInterface.OnClickListener
+            public final void onClick(DialogInterface dialogInterface, int i) {
+                GigagroupConvertAlert.this.lambda$new$0(dialogInterface, i);
+            }
+        });
+        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
         baseFragment.showDialog(builder.create());
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$new$0(DialogInterface dialogInterface, int i) {
         onCovert();
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$new$2(View view) {
         onCancel();
         dismiss();

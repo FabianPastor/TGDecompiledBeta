@@ -1,5 +1,5 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public abstract class TLRPC$InputGeoPoint extends TLObject {
     public double _long;
     public int accuracy_radius;
@@ -7,18 +7,18 @@ public abstract class TLRPC$InputGeoPoint extends TLObject {
     public double lat;
 
     public static TLRPC$InputGeoPoint TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-        TLRPC$InputGeoPoint tLRPC$InputGeoPoint;
+        TLRPC$InputGeoPoint tLRPC$TL_inputGeoPointEmpty;
         if (i != -NUM) {
-            tLRPC$InputGeoPoint = i != NUM ? null : new TLRPC$TL_inputGeoPoint();
+            tLRPC$TL_inputGeoPointEmpty = i != NUM ? null : new TLRPC$TL_inputGeoPoint();
         } else {
-            tLRPC$InputGeoPoint = new TLRPC$TL_inputGeoPointEmpty();
+            tLRPC$TL_inputGeoPointEmpty = new TLRPC$TL_inputGeoPointEmpty();
         }
-        if (tLRPC$InputGeoPoint != null || !z) {
-            if (tLRPC$InputGeoPoint != null) {
-                tLRPC$InputGeoPoint.readParams(abstractSerializedData, z);
+        if (tLRPC$TL_inputGeoPointEmpty != null || !z) {
+            if (tLRPC$TL_inputGeoPointEmpty != null) {
+                tLRPC$TL_inputGeoPointEmpty.readParams(abstractSerializedData, z);
             }
-            return tLRPC$InputGeoPoint;
+            return tLRPC$TL_inputGeoPointEmpty;
         }
-        throw new RuntimeException(String.format("can't parse magic %x in InputGeoPoint", new Object[]{Integer.valueOf(i)}));
+        throw new RuntimeException(String.format("can't parse magic %x in InputGeoPoint", Integer.valueOf(i)));
     }
 }

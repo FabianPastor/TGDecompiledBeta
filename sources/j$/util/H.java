@@ -1,15 +1,12 @@
 package j$.util;
-
+/* loaded from: classes2.dex */
 abstract class H {
-    H() {
-    }
-
     public int characteristics() {
         return 16448;
     }
 
     public long estimateSize() {
-        return 0;
+        return 0L;
     }
 
     public void forEachRemaining(Object obj) {
@@ -21,7 +18,8 @@ abstract class H {
         return false;
     }
 
-    public u trySplit() {
+    /* renamed from: trySplit */
+    public u mo322trySplit() {
         return null;
     }
 }

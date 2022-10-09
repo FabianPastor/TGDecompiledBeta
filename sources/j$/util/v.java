@@ -1,16 +1,19 @@
 package j$.util;
 
 import j$.util.function.Consumer;
-import j$.util.function.q;
-
+/* loaded from: classes2.dex */
 public interface v extends w {
+    @Override // j$.util.u
     boolean b(Consumer consumer);
 
-    void d(q qVar);
+    void d(j$.util.function.q qVar);
 
+    @Override // j$.util.u
     void forEachRemaining(Consumer consumer);
 
-    boolean i(q qVar);
+    boolean i(j$.util.function.q qVar);
 
-    v trySplit();
+    @Override // j$.util.w, j$.util.u
+    /* renamed from: trySplit */
+    v mo322trySplit();
 }

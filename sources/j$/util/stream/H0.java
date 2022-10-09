@@ -1,12 +1,14 @@
 package j$.util.stream;
-
+/* loaded from: classes2.dex */
 class H0 extends K0 {
-    H0(L0 l0, CLASSNAMEc cVar, CLASSNAMEe4 e4Var, int i) {
-        super(cVar, e4Var, i);
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public H0(L0 l0, AbstractCLASSNAMEc abstractCLASSNAMEc, EnumCLASSNAMEe4 enumCLASSNAMEe4, int i) {
+        super(abstractCLASSNAMEc, enumCLASSNAMEe4, i);
     }
 
-    /* access modifiers changed from: package-private */
-    public CLASSNAMEm3 H0(int i, CLASSNAMEm3 m3Var) {
-        return m3Var;
+    /* JADX INFO: Access modifiers changed from: package-private */
+    @Override // j$.util.stream.AbstractCLASSNAMEc
+    public InterfaceCLASSNAMEm3 H0(int i, InterfaceCLASSNAMEm3 interfaceCLASSNAMEm3) {
+        return interfaceCLASSNAMEm3;
     }
 }

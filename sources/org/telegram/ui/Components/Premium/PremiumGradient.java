@@ -11,7 +11,6 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Shader;
-import android.graphics.Xfermode;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import androidx.core.content.ContextCompat;
@@ -20,7 +19,7 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.ui.ActionBar.Theme;
-
+/* loaded from: classes3.dex */
 public class PremiumGradient {
     private static PremiumGradient instance;
     private int lastStarColor;
@@ -29,8 +28,8 @@ public class PremiumGradient {
     private final Paint mainGradientPaint;
     public Drawable premiumStarColoredDrawable;
     public Drawable premiumStarDrawableMini;
-    public InternalDrawable premiumStarMenuDrawable = createGradientDrawable(ContextCompat.getDrawable(ApplicationLoader.applicationContext, R.drawable.msg_settings_premium));
-    public InternalDrawable premiumStarMenuDrawable2 = createGradientDrawable(ContextCompat.getDrawable(ApplicationLoader.applicationContext, R.drawable.msg_premium_normal));
+    public InternalDrawable premiumStarMenuDrawable;
+    public InternalDrawable premiumStarMenuDrawable2;
 
     public static PremiumGradient getInstance() {
         if (instance == null) {
@@ -46,6 +45,8 @@ public class PremiumGradient {
         Context context = ApplicationLoader.applicationContext;
         int i = R.drawable.msg_premium_liststar;
         this.premiumStarDrawableMini = ContextCompat.getDrawable(context, i).mutate();
+        this.premiumStarMenuDrawable = createGradientDrawable(ContextCompat.getDrawable(ApplicationLoader.applicationContext, R.drawable.msg_settings_premium));
+        this.premiumStarMenuDrawable2 = createGradientDrawable(ContextCompat.getDrawable(ApplicationLoader.applicationContext, R.drawable.msg_premium_normal));
         this.premiumStarColoredDrawable = ContextCompat.getDrawable(ApplicationLoader.applicationContext, i).mutate();
         gradientTools.chekColors();
         checkIconColors();
@@ -66,9 +67,9 @@ public class PremiumGradient {
         drawable.setBounds(0, 0, intrinsicWidth, minimumHeight);
         drawable.draw(canvas);
         gradientTools.paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-        gradientTools.gradientMatrix(0, 0, intrinsicWidth, minimumHeight, (float) (-intrinsicWidth), 0.0f);
-        canvas.drawRect(0.0f, 0.0f, (float) intrinsicWidth, (float) minimumHeight, gradientTools.paint);
-        gradientTools.paint.setXfermode((Xfermode) null);
+        gradientTools.gradientMatrix(0, 0, intrinsicWidth, minimumHeight, -intrinsicWidth, 0.0f);
+        canvas.drawRect(0.0f, 0.0f, intrinsicWidth, minimumHeight, gradientTools.paint);
+        gradientTools.paint.setXfermode(null);
         return new InternalDrawable(drawable, createBitmap, gradientTools.colors);
     }
 
@@ -85,23 +86,23 @@ public class PremiumGradient {
         int[] iArr = this.mainGradient.colors;
         int i = iArr[0];
         int[] iArr2 = internalDrawable.colors;
-        if (i == iArr2[0] && iArr[1] == iArr2[1] && iArr[2] == iArr2[2] && iArr[3] == iArr2[3]) {
-            return internalDrawable;
-        }
-        return createGradientDrawable(internalDrawable.originDrawable);
+        return (i == iArr2[0] && iArr[1] == iArr2[1] && iArr[2] == iArr2[2] && iArr[3] == iArr2[3]) ? internalDrawable : createGradientDrawable(internalDrawable.originDrawable);
     }
 
     public void updateMainGradientMatrix(int i, int i2, int i3, int i4, float f, float f2) {
         this.mainGradient.gradientMatrix(i, i2, i3, i4, f, f2);
     }
 
+    /* loaded from: classes3.dex */
     public static class InternalDrawable extends BitmapDrawable {
         public int[] colors;
         Drawable originDrawable;
 
+        @Override // android.graphics.drawable.Drawable
         public void setColorFilter(int i, PorterDuff.Mode mode) {
         }
 
+        @Override // android.graphics.drawable.BitmapDrawable, android.graphics.drawable.Drawable
         public void setColorFilter(ColorFilter colorFilter) {
         }
 
@@ -115,16 +116,17 @@ public class PremiumGradient {
     }
 
     public Paint getMainGradientPaint() {
-        if (!MessagesController.getInstance(UserConfig.selectedAccount).premiumLocked) {
-            return this.mainGradientPaint;
+        if (MessagesController.getInstance(UserConfig.selectedAccount).premiumLocked) {
+            if (this.lockedPremiumPaint == null) {
+                this.lockedPremiumPaint = new Paint(1);
+            }
+            this.lockedPremiumPaint.setColor(Theme.getColor("featuredStickers_addButton"));
+            return this.lockedPremiumPaint;
         }
-        if (this.lockedPremiumPaint == null) {
-            this.lockedPremiumPaint = new Paint(1);
-        }
-        this.lockedPremiumPaint.setColor(Theme.getColor("featuredStickers_addButton"));
-        return this.lockedPremiumPaint;
+        return this.mainGradientPaint;
     }
 
+    /* loaded from: classes3.dex */
     public static class GradientTools {
         final String colorKey1;
         final String colorKey2;
@@ -144,7 +146,7 @@ public class PremiumGradient {
         public float y2;
 
         public GradientTools(String str, String str2, String str3, String str4) {
-            this(str, str2, str3, str4, (String) null);
+            this(str, str2, str3, str4, null);
         }
 
         public GradientTools(String str, String str2, String str3, String str4, String str5) {
@@ -168,7 +170,7 @@ public class PremiumGradient {
             chekColors();
             if (this.exactly) {
                 this.matrix.reset();
-                this.matrix.postScale(((float) (i3 - i)) / 100.0f, ((float) (i4 - i2)) / 100.0f, this.cx * 100.0f, this.cy * 100.0f);
+                this.matrix.postScale((i3 - i) / 100.0f, (i4 - i2) / 100.0f, this.cx * 100.0f, this.cy * 100.0f);
                 this.matrix.postTranslate(f, f2);
                 this.shader.setLocalMatrix(this.matrix);
                 return;
@@ -177,12 +179,12 @@ public class PremiumGradient {
             int i6 = i5 + i5;
             chekColors();
             this.matrix.reset();
-            this.matrix.postScale(((float) (i3 - i)) / 100.0f, ((float) i6) / 100.0f, 75.0f, 50.0f);
-            this.matrix.postTranslate(f, ((float) (-i6)) + f2);
+            this.matrix.postScale((i3 - i) / 100.0f, i6 / 100.0f, 75.0f, 50.0f);
+            this.matrix.postTranslate(f, (-i6) + f2);
             this.shader.setLocalMatrix(this.matrix);
         }
 
-        /* access modifiers changed from: private */
+        /* JADX INFO: Access modifiers changed from: private */
         public void chekColors() {
             int color = Theme.getColor(this.colorKey1);
             int color2 = Theme.getColor(this.colorKey2);
@@ -193,44 +195,45 @@ public class PremiumGradient {
             String str3 = this.colorKey5;
             int color5 = str3 == null ? 0 : Theme.getColor(str3);
             int[] iArr = this.colors;
-            if (iArr[0] != color || iArr[1] != color2 || iArr[2] != color3 || iArr[3] != color4 || iArr[4] != color5) {
-                iArr[0] = color;
-                iArr[1] = color2;
-                iArr[2] = color3;
-                iArr[3] = color4;
-                iArr[4] = color5;
-                if (color3 == 0) {
-                    float f = this.x1 * 100.0f;
-                    float f2 = this.y1 * 100.0f;
-                    float f3 = this.x2 * 100.0f;
-                    float f4 = this.y2 * 100.0f;
-                    int[] iArr2 = this.colors;
-                    this.shader = new LinearGradient(f, f2, f3, f4, new int[]{iArr2[0], iArr2[1]}, new float[]{0.0f, 1.0f}, Shader.TileMode.CLAMP);
-                } else if (color4 == 0) {
-                    float f5 = this.x1 * 100.0f;
-                    float f6 = this.y1 * 100.0f;
-                    float f7 = this.x2 * 100.0f;
-                    float f8 = this.y2 * 100.0f;
-                    int[] iArr3 = this.colors;
-                    this.shader = new LinearGradient(f5, f6, f7, f8, new int[]{iArr3[0], iArr3[1], iArr3[2]}, new float[]{0.0f, 0.5f, 1.0f}, Shader.TileMode.CLAMP);
-                } else if (color5 == 0) {
-                    float f9 = this.x1 * 100.0f;
-                    float var_ = this.y1 * 100.0f;
-                    float var_ = this.x2 * 100.0f;
-                    float var_ = this.y2 * 100.0f;
-                    int[] iArr4 = this.colors;
-                    this.shader = new LinearGradient(f9, var_, var_, var_, new int[]{iArr4[0], iArr4[1], iArr4[2], iArr4[3]}, new float[]{0.0f, 0.5f, 0.78f, 1.0f}, Shader.TileMode.CLAMP);
-                } else {
-                    float var_ = this.x1 * 100.0f;
-                    float var_ = this.y1 * 100.0f;
-                    float var_ = this.x2 * 100.0f;
-                    float var_ = this.y2 * 100.0f;
-                    int[] iArr5 = this.colors;
-                    this.shader = new LinearGradient(var_, var_, var_, var_, new int[]{iArr5[0], iArr5[1], iArr5[2], iArr5[3], iArr5[4]}, new float[]{0.0f, 0.425f, 0.655f, 0.78f, 1.0f}, Shader.TileMode.CLAMP);
-                }
-                this.shader.setLocalMatrix(this.matrix);
-                this.paint.setShader(this.shader);
+            if (iArr[0] == color && iArr[1] == color2 && iArr[2] == color3 && iArr[3] == color4 && iArr[4] == color5) {
+                return;
             }
+            iArr[0] = color;
+            iArr[1] = color2;
+            iArr[2] = color3;
+            iArr[3] = color4;
+            iArr[4] = color5;
+            if (color3 == 0) {
+                float f = this.x1 * 100.0f;
+                float f2 = this.y1 * 100.0f;
+                float f3 = this.x2 * 100.0f;
+                float f4 = this.y2 * 100.0f;
+                int[] iArr2 = this.colors;
+                this.shader = new LinearGradient(f, f2, f3, f4, new int[]{iArr2[0], iArr2[1]}, new float[]{0.0f, 1.0f}, Shader.TileMode.CLAMP);
+            } else if (color4 == 0) {
+                float f5 = this.x1 * 100.0f;
+                float f6 = this.y1 * 100.0f;
+                float f7 = this.x2 * 100.0f;
+                float f8 = this.y2 * 100.0f;
+                int[] iArr3 = this.colors;
+                this.shader = new LinearGradient(f5, f6, f7, f8, new int[]{iArr3[0], iArr3[1], iArr3[2]}, new float[]{0.0f, 0.5f, 1.0f}, Shader.TileMode.CLAMP);
+            } else if (color5 == 0) {
+                float f9 = this.x1 * 100.0f;
+                float var_ = this.y1 * 100.0f;
+                float var_ = this.x2 * 100.0f;
+                float var_ = this.y2 * 100.0f;
+                int[] iArr4 = this.colors;
+                this.shader = new LinearGradient(f9, var_, var_, var_, new int[]{iArr4[0], iArr4[1], iArr4[2], iArr4[3]}, new float[]{0.0f, 0.5f, 0.78f, 1.0f}, Shader.TileMode.CLAMP);
+            } else {
+                float var_ = this.x1 * 100.0f;
+                float var_ = this.y1 * 100.0f;
+                float var_ = this.x2 * 100.0f;
+                float var_ = this.y2 * 100.0f;
+                int[] iArr5 = this.colors;
+                this.shader = new LinearGradient(var_, var_, var_, var_, new int[]{iArr5[0], iArr5[1], iArr5[2], iArr5[3], iArr5[4]}, new float[]{0.0f, 0.425f, 0.655f, 0.78f, 1.0f}, Shader.TileMode.CLAMP);
+            }
+            this.shader.setLocalMatrix(this.matrix);
+            this.paint.setShader(this.shader);
         }
 
         public void gradientMatrixLinear(float f, float f2) {

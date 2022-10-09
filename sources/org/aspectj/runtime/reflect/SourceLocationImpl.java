@@ -1,12 +1,13 @@
 package org.aspectj.runtime.reflect;
 
 import org.aspectj.lang.reflect.SourceLocation;
-
+/* loaded from: classes.dex */
 class SourceLocationImpl implements SourceLocation {
     String fileName;
     int line;
 
-    SourceLocationImpl(Class cls, String str, int i) {
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public SourceLocationImpl(Class cls, String str, int i) {
         this.fileName = str;
         this.line = i;
     }

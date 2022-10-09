@@ -2,32 +2,36 @@ package j$.util.stream;
 
 import j$.util.Optional;
 import j$.util.function.Consumer;
-import j$.util.function.b;
-
+/* loaded from: classes2.dex */
 class H2 implements S2 {
     private boolean a;
     private Object b;
-    final /* synthetic */ b c;
+    final /* synthetic */ j$.util.function.b c;
 
-    H2(b bVar) {
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public H2(j$.util.function.b bVar) {
         this.c = bVar;
     }
 
+    @Override // j$.util.stream.InterfaceCLASSNAMEm3
     public /* synthetic */ void accept(double d) {
-        CLASSNAMEo1.f(this);
+        AbstractCLASSNAMEo1.f(this);
         throw null;
     }
 
+    @Override // j$.util.stream.InterfaceCLASSNAMEm3
     public /* synthetic */ void accept(int i) {
-        CLASSNAMEo1.d(this);
+        AbstractCLASSNAMEo1.d(this);
         throw null;
     }
 
+    @Override // j$.util.stream.InterfaceCLASSNAMEm3, j$.util.stream.InterfaceCLASSNAMEl3, j$.util.function.q
     public /* synthetic */ void accept(long j) {
-        CLASSNAMEo1.e(this);
+        AbstractCLASSNAMEo1.e(this);
         throw null;
     }
 
+    @Override // j$.util.function.Consumer
     public void accept(Object obj) {
         if (this.a) {
             this.a = false;
@@ -37,14 +41,17 @@ class H2 implements S2 {
         this.b = obj;
     }
 
+    @Override // j$.util.function.Consumer
     public /* synthetic */ Consumer andThen(Consumer consumer) {
-        return Consumer.CC.$default$andThen(this, consumer);
+        return consumer.getClass();
     }
 
+    @Override // j$.util.function.y
     public Object get() {
         return this.a ? Optional.empty() : Optional.of(this.b);
     }
 
+    @Override // j$.util.stream.S2
     public void h(S2 s2) {
         H2 h2 = (H2) s2;
         if (!h2.a) {
@@ -52,14 +59,17 @@ class H2 implements S2 {
         }
     }
 
+    @Override // j$.util.stream.InterfaceCLASSNAMEm3
     public /* synthetic */ void m() {
     }
 
+    @Override // j$.util.stream.InterfaceCLASSNAMEm3
     public void n(long j) {
         this.a = true;
         this.b = null;
     }
 
+    @Override // j$.util.stream.InterfaceCLASSNAMEm3
     public /* synthetic */ boolean o() {
         return false;
     }

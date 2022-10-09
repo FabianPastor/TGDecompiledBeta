@@ -2,11 +2,19 @@ package org.telegram.ui.Cells;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
+import androidx.core.content.ContextCompat;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.DocumentObject;
+import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.R;
+import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC$TL_availableReaction;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
@@ -14,7 +22,7 @@ import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CheckBox2;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.Switch;
-
+/* loaded from: classes3.dex */
 public class AvailableReactionCell extends FrameLayout {
     private boolean canLock;
     private CheckBox2 checkBox;
@@ -43,16 +51,16 @@ public class AvailableReactionCell extends FrameLayout {
         this.imageView.setLayerNum(1);
         addView(this.imageView, LayoutHelper.createFrameRelatively(32.0f, 32.0f, 8388627, 23.0f, 0.0f, 0.0f, 0.0f));
         if (z) {
-            CheckBox2 checkBox2 = new CheckBox2(context, 26, (Theme.ResourcesProvider) null);
+            CheckBox2 checkBox2 = new CheckBox2(context, 26, null);
             this.checkBox = checkBox2;
             checkBox2.setDrawUnchecked(false);
-            this.checkBox.setColor((String) null, (String) null, "radioBackgroundChecked");
+            this.checkBox.setColor(null, null, "radioBackgroundChecked");
             this.checkBox.setDrawBackgroundAsArc(-1);
             addView(this.checkBox, LayoutHelper.createFrameRelatively(26.0f, 26.0f, 8388629, 0.0f, 0.0f, 22.0f, 0.0f));
         } else {
-            Switch switchR = new Switch(context);
-            this.switchView = switchR;
-            switchR.setColors("switchTrack", "switchTrackChecked", "switchTrackBlueThumb", "switchTrackBlueThumbChecked");
+            Switch r11 = new Switch(context);
+            this.switchView = r11;
+            r11.setColors("switchTrack", "switchTrackChecked", "switchTrackBlueThumb", "switchTrackBlueThumbChecked");
             addView(this.switchView, LayoutHelper.createFrameRelatively(37.0f, 20.0f, 8388629, 0.0f, 0.0f, 22.0f, 0.0f));
         }
         View view = new View(context);
@@ -62,81 +70,30 @@ public class AvailableReactionCell extends FrameLayout {
         setWillNotDraw(false);
     }
 
-    /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
-        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec((int) (((float) AndroidUtilities.dp(58.0f)) + Theme.dividerPaint.getStrokeWidth()), NUM));
+    @Override // android.widget.FrameLayout, android.view.View
+    protected void onMeasure(int i, int i2) {
+        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec((int) (AndroidUtilities.dp(58.0f) + Theme.dividerPaint.getStrokeWidth()), NUM));
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:2:0x0004, code lost:
-        r2 = r12.react;
-     */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void bind(org.telegram.tgnet.TLRPC$TL_availableReaction r13, boolean r14, int r15) {
-        /*
-            r12 = this;
-            r0 = 1
-            r1 = 0
-            if (r13 == 0) goto L_0x0014
-            org.telegram.tgnet.TLRPC$TL_availableReaction r2 = r12.react
-            if (r2 == 0) goto L_0x0014
-            java.lang.String r3 = r13.reaction
-            java.lang.String r2 = r2.reaction
-            boolean r2 = r3.equals(r2)
-            if (r2 == 0) goto L_0x0014
-            r2 = 1
-            goto L_0x0015
-        L_0x0014:
-            r2 = 0
-        L_0x0015:
-            r12.react = r13
-            org.telegram.ui.ActionBar.SimpleTextView r3 = r12.textView
-            java.lang.String r4 = r13.title
-            r3.setText(r4)
-            org.telegram.tgnet.TLRPC$Document r3 = r13.static_icon
-            r4 = 1065353216(0x3var_, float:1.0)
-            java.lang.String r5 = "windowBackgroundGray"
-            org.telegram.messenger.SvgHelper$SvgDrawable r10 = org.telegram.messenger.DocumentObject.getSvgThumb((org.telegram.tgnet.TLRPC$Document) r3, (java.lang.String) r5, (float) r4)
-            org.telegram.ui.Components.BackupImageView r6 = r12.imageView
-            org.telegram.tgnet.TLRPC$Document r3 = r13.activate_animation
-            org.telegram.messenger.ImageLocation r7 = org.telegram.messenger.ImageLocation.getForDocument(r3)
-            java.lang.String r8 = "30_30_pcache"
-            java.lang.String r9 = "tgs"
-            r11 = r13
-            r6.setImage((org.telegram.messenger.ImageLocation) r7, (java.lang.String) r8, (java.lang.String) r9, (android.graphics.drawable.Drawable) r10, (java.lang.Object) r11)
-            boolean r3 = r12.canLock
-            if (r3 == 0) goto L_0x004b
-            boolean r13 = r13.premium
-            if (r13 == 0) goto L_0x004b
-            org.telegram.messenger.UserConfig r13 = org.telegram.messenger.UserConfig.getInstance(r15)
-            boolean r13 = r13.isPremium()
-            if (r13 != 0) goto L_0x004b
-            goto L_0x004c
-        L_0x004b:
-            r0 = 0
-        L_0x004c:
-            r12.locked = r0
-            if (r0 == 0) goto L_0x0070
-            android.content.Context r13 = r12.getContext()
-            int r15 = org.telegram.messenger.R.drawable.other_lockedfolders2
-            android.graphics.drawable.Drawable r13 = androidx.core.content.ContextCompat.getDrawable(r13, r15)
-            android.graphics.PorterDuffColorFilter r15 = new android.graphics.PorterDuffColorFilter
-            java.lang.String r0 = "stickers_menu"
-            int r0 = org.telegram.ui.ActionBar.Theme.getColor(r0)
-            android.graphics.PorterDuff$Mode r1 = android.graphics.PorterDuff.Mode.MULTIPLY
-            r15.<init>(r0, r1)
-            r13.setColorFilter(r15)
-            org.telegram.ui.ActionBar.SimpleTextView r15 = r12.textView
-            r15.setRightDrawable((android.graphics.drawable.Drawable) r13)
-            goto L_0x0076
-        L_0x0070:
-            org.telegram.ui.ActionBar.SimpleTextView r13 = r12.textView
-            r15 = 0
-            r13.setRightDrawable((android.graphics.drawable.Drawable) r15)
-        L_0x0076:
-            r12.setChecked(r14, r2)
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.AvailableReactionCell.bind(org.telegram.tgnet.TLRPC$TL_availableReaction, boolean, int):void");
+    public void bind(TLRPC$TL_availableReaction tLRPC$TL_availableReaction, boolean z, int i) {
+        TLRPC$TL_availableReaction tLRPC$TL_availableReaction2;
+        boolean z2 = true;
+        boolean z3 = (tLRPC$TL_availableReaction == null || (tLRPC$TL_availableReaction2 = this.react) == null || !tLRPC$TL_availableReaction.reaction.equals(tLRPC$TL_availableReaction2.reaction)) ? false : true;
+        this.react = tLRPC$TL_availableReaction;
+        this.textView.setText(tLRPC$TL_availableReaction.title);
+        this.imageView.setImage(ImageLocation.getForDocument(tLRPC$TL_availableReaction.activate_animation), "30_30_pcache", "tgs", DocumentObject.getSvgThumb(tLRPC$TL_availableReaction.static_icon, "windowBackgroundGray", 1.0f), tLRPC$TL_availableReaction);
+        if (!this.canLock || !tLRPC$TL_availableReaction.premium || UserConfig.getInstance(i).isPremium()) {
+            z2 = false;
+        }
+        this.locked = z2;
+        if (z2) {
+            Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.other_lockedfolders2);
+            drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor("stickers_menu"), PorterDuff.Mode.MULTIPLY));
+            this.textView.setRightDrawable(drawable);
+        } else {
+            this.textView.setRightDrawable((Drawable) null);
+        }
+        setChecked(z, z3);
     }
 
     public void setChecked(boolean z) {
@@ -144,9 +101,9 @@ public class AvailableReactionCell extends FrameLayout {
     }
 
     public void setChecked(boolean z, boolean z2) {
-        Switch switchR = this.switchView;
-        if (switchR != null) {
-            switchR.setChecked(z, z2);
+        Switch r0 = this.switchView;
+        if (r0 != null) {
+            r0.setChecked(z, z2);
         }
         CheckBox2 checkBox2 = this.checkBox;
         if (checkBox2 != null) {
@@ -155,19 +112,19 @@ public class AvailableReactionCell extends FrameLayout {
     }
 
     public boolean isChecked() {
-        Switch switchR = this.switchView;
-        if (switchR != null) {
-            return switchR.isChecked();
+        Switch r0 = this.switchView;
+        if (r0 != null) {
+            return r0.isChecked();
         }
         CheckBox2 checkBox2 = this.checkBox;
-        if (checkBox2 != null) {
-            return checkBox2.isChecked();
+        if (checkBox2 == null) {
+            return false;
         }
-        return false;
+        return checkBox2.isChecked();
     }
 
-    /* access modifiers changed from: protected */
-    public void onDraw(Canvas canvas) {
+    @Override // android.view.View
+    protected void onDraw(Canvas canvas) {
         canvas.drawColor(Theme.getColor("windowBackgroundWhite"));
         float strokeWidth = Theme.dividerPaint.getStrokeWidth();
         int dp = AndroidUtilities.dp(81.0f);
@@ -176,9 +133,10 @@ public class AvailableReactionCell extends FrameLayout {
             i = dp;
             dp = 0;
         }
-        canvas.drawLine((float) (getPaddingLeft() + dp), ((float) getHeight()) - strokeWidth, (float) ((getWidth() - getPaddingRight()) - i), ((float) getHeight()) - strokeWidth, Theme.dividerPaint);
+        canvas.drawLine(getPaddingLeft() + dp, getHeight() - strokeWidth, (getWidth() - getPaddingRight()) - i, getHeight() - strokeWidth, Theme.dividerPaint);
     }
 
+    @Override // android.view.View
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
         super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
         accessibilityNodeInfo.setEnabled(true);

@@ -1,7 +1,7 @@
 package org.telegram.messenger;
 
 import org.telegram.ui.Components.Bulletin;
-
+/* loaded from: classes.dex */
 public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda143 implements Runnable {
     public final /* synthetic */ Bulletin.UndoButton f$0;
 
@@ -9,6 +9,7 @@ public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda1
         this.f$0 = undoButton;
     }
 
+    @Override // java.lang.Runnable
     public final void run() {
         this.f$0.undo();
     }

@@ -2,10 +2,11 @@ package org.webrtc;
 
 import android.graphics.Point;
 import android.opengl.Matrix;
-
+/* loaded from: classes3.dex */
 public class RendererCommon {
     private static float BALANCED_VISIBLE_FRACTION = 0.5625f;
 
+    /* loaded from: classes3.dex */
     public interface GlDrawer {
         void drawOes(int i, int i2, int i3, int i4, int i5, float[] fArr, int i6, int i7, int i8, int i9, int i10, int i11, boolean z);
 
@@ -16,18 +17,21 @@ public class RendererCommon {
         void release();
     }
 
+    /* loaded from: classes3.dex */
     public interface RendererEvents {
         void onFirstFrameRendered();
 
         void onFrameResolutionChanged(int i, int i2, int i3);
     }
 
+    /* loaded from: classes3.dex */
     public enum ScalingType {
         SCALE_ASPECT_FIT,
         SCALE_ASPECT_FILL,
         SCALE_ASPECT_BALANCED
     }
 
+    /* loaded from: classes3.dex */
     public static class VideoLayoutMeasure {
         private float visibleFractionMatchOrientation;
         private float visibleFractionMismatchOrientation;
@@ -52,22 +56,25 @@ public class RendererCommon {
             this.visibleFractionMismatchOrientation = f2;
         }
 
-        /* JADX WARNING: Code restructure failed: missing block: B:30:0x0056, code lost:
-            if (r8 == r2) goto L_0x0058;
+        /* JADX WARN: Code restructure failed: missing block: B:34:0x0056, code lost:
+            if (r8 == r2) goto L29;
          */
-        /* Code decompiled incorrectly, please refer to instructions dump. */
+        /*
+            Code decompiled incorrectly, please refer to instructions dump.
+            To view partially-correct add '--show-bad-code' argument
+        */
         public android.graphics.Point measure(boolean r8, int r9, int r10, int r11, int r12) {
             /*
                 r7 = this;
                 r0 = 2147483647(0x7fffffff, float:NaN)
                 int r1 = android.view.View.getDefaultSize(r0, r9)
                 int r0 = android.view.View.getDefaultSize(r0, r10)
-                if (r11 == 0) goto L_0x005b
-                if (r12 == 0) goto L_0x005b
-                if (r1 == 0) goto L_0x005b
-                if (r0 != 0) goto L_0x0014
-                goto L_0x005b
-            L_0x0014:
+                if (r11 == 0) goto L5b
+                if (r12 == 0) goto L5b
+                if (r1 == 0) goto L5b
+                if (r0 != 0) goto L14
+                goto L5b
+            L14:
                 float r11 = (float) r11
                 float r12 = (float) r12
                 float r11 = r11 / r12
@@ -78,53 +85,53 @@ public class RendererCommon {
                 r3 = 0
                 r4 = 1065353216(0x3var_, float:1.0)
                 int r5 = (r11 > r4 ? 1 : (r11 == r4 ? 0 : -1))
-                if (r5 <= 0) goto L_0x0024
+                if (r5 <= 0) goto L24
                 r5 = 1
-                goto L_0x0025
-            L_0x0024:
+                goto L25
+            L24:
                 r5 = 0
-            L_0x0025:
+            L25:
                 int r6 = (r12 > r4 ? 1 : (r12 == r4 ? 0 : -1))
-                if (r6 <= 0) goto L_0x002b
+                if (r6 <= 0) goto L2b
                 r6 = 1
-                goto L_0x002c
-            L_0x002b:
+                goto L2c
+            L2b:
                 r6 = 0
-            L_0x002c:
-                if (r5 != r6) goto L_0x0031
+            L2c:
+                if (r5 != r6) goto L31
                 float r5 = r7.visibleFractionMatchOrientation
-                goto L_0x0033
-            L_0x0031:
+                goto L33
+            L31:
                 float r5 = r7.visibleFractionMismatchOrientation
-            L_0x0033:
-                android.graphics.Point r5 = org.webrtc.RendererCommon.getDisplaySize((float) r5, (float) r11, (int) r1, (int) r0)
-                if (r8 != 0) goto L_0x005a
+            L33:
+                android.graphics.Point r5 = org.webrtc.RendererCommon.getDisplaySize(r5, r11, r1, r0)
+                if (r8 != 0) goto L5a
                 int r8 = android.view.View.MeasureSpec.getMode(r9)
                 r9 = 1073741824(0x40000000, float:2.0)
-                if (r8 != r9) goto L_0x0043
+                if (r8 != r9) goto L43
                 r5.x = r1
-            L_0x0043:
+            L43:
                 int r8 = android.view.View.MeasureSpec.getMode(r10)
-                if (r8 == r9) goto L_0x0058
+                if (r8 == r9) goto L58
                 int r8 = (r11 > r4 ? 1 : (r11 == r4 ? 0 : -1))
-                if (r8 <= 0) goto L_0x004f
+                if (r8 <= 0) goto L4f
                 r8 = 1
-                goto L_0x0050
-            L_0x004f:
+                goto L50
+            L4f:
                 r8 = 0
-            L_0x0050:
+            L50:
                 int r9 = (r12 > r4 ? 1 : (r12 == r4 ? 0 : -1))
-                if (r9 <= 0) goto L_0x0055
-                goto L_0x0056
-            L_0x0055:
+                if (r9 <= 0) goto L55
+                goto L56
+            L55:
                 r2 = 0
-            L_0x0056:
-                if (r8 != r2) goto L_0x005a
-            L_0x0058:
+            L56:
+                if (r8 != r2) goto L5a
+            L58:
                 r5.y = r0
-            L_0x005a:
+            L5a:
                 return r5
-            L_0x005b:
+            L5b:
                 android.graphics.Point r8 = new android.graphics.Point
                 r8.<init>(r1, r0)
                 return r8
@@ -177,59 +184,49 @@ public class RendererCommon {
         fArr[13] = fArr[13] + 0.5f;
     }
 
+    /* JADX INFO: Access modifiers changed from: package-private */
     /* renamed from: org.webrtc.RendererCommon$1  reason: invalid class name */
-    static /* synthetic */ class AnonymousClass1 {
+    /* loaded from: classes3.dex */
+    public static /* synthetic */ class AnonymousClass1 {
         static final /* synthetic */ int[] $SwitchMap$org$webrtc$RendererCommon$ScalingType;
 
-        /* JADX WARNING: Can't wrap try/catch for region: R(6:0|1|2|3|4|(3:5|6|8)) */
-        /* JADX WARNING: Failed to process nested try/catch */
-        /* JADX WARNING: Missing exception handler attribute for start block: B:3:0x0012 */
-        /* JADX WARNING: Missing exception handler attribute for start block: B:5:0x001d */
         static {
-            /*
-                org.webrtc.RendererCommon$ScalingType[] r0 = org.webrtc.RendererCommon.ScalingType.values()
-                int r0 = r0.length
-                int[] r0 = new int[r0]
-                $SwitchMap$org$webrtc$RendererCommon$ScalingType = r0
-                org.webrtc.RendererCommon$ScalingType r1 = org.webrtc.RendererCommon.ScalingType.SCALE_ASPECT_FIT     // Catch:{ NoSuchFieldError -> 0x0012 }
-                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x0012 }
-                r2 = 1
-                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x0012 }
-            L_0x0012:
-                int[] r0 = $SwitchMap$org$webrtc$RendererCommon$ScalingType     // Catch:{ NoSuchFieldError -> 0x001d }
-                org.webrtc.RendererCommon$ScalingType r1 = org.webrtc.RendererCommon.ScalingType.SCALE_ASPECT_FILL     // Catch:{ NoSuchFieldError -> 0x001d }
-                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x001d }
-                r2 = 2
-                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x001d }
-            L_0x001d:
-                int[] r0 = $SwitchMap$org$webrtc$RendererCommon$ScalingType     // Catch:{ NoSuchFieldError -> 0x0028 }
-                org.webrtc.RendererCommon$ScalingType r1 = org.webrtc.RendererCommon.ScalingType.SCALE_ASPECT_BALANCED     // Catch:{ NoSuchFieldError -> 0x0028 }
-                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x0028 }
-                r2 = 3
-                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x0028 }
-            L_0x0028:
-                return
-            */
-            throw new UnsupportedOperationException("Method not decompiled: org.webrtc.RendererCommon.AnonymousClass1.<clinit>():void");
+            int[] iArr = new int[ScalingType.values().length];
+            $SwitchMap$org$webrtc$RendererCommon$ScalingType = iArr;
+            try {
+                iArr[ScalingType.SCALE_ASPECT_FIT.ordinal()] = 1;
+            } catch (NoSuchFieldError unused) {
+            }
+            try {
+                $SwitchMap$org$webrtc$RendererCommon$ScalingType[ScalingType.SCALE_ASPECT_FILL.ordinal()] = 2;
+            } catch (NoSuchFieldError unused2) {
+            }
+            try {
+                $SwitchMap$org$webrtc$RendererCommon$ScalingType[ScalingType.SCALE_ASPECT_BALANCED.ordinal()] = 3;
+            } catch (NoSuchFieldError unused3) {
+            }
         }
     }
 
-    /* access modifiers changed from: private */
+    /* JADX INFO: Access modifiers changed from: private */
     public static float convertScalingTypeToVisibleFraction(ScalingType scalingType) {
         int i = AnonymousClass1.$SwitchMap$org$webrtc$RendererCommon$ScalingType[scalingType.ordinal()];
-        if (i == 1) {
-            return 1.0f;
+        if (i != 1) {
+            if (i == 2) {
+                return 0.0f;
+            }
+            if (i == 3) {
+                return BALANCED_VISIBLE_FRACTION;
+            }
+            throw new IllegalArgumentException();
         }
-        if (i == 2) {
-            return 0.0f;
-        }
-        if (i == 3) {
-            return BALANCED_VISIBLE_FRACTION;
-        }
-        throw new IllegalArgumentException();
+        return 1.0f;
     }
 
     public static Point getDisplaySize(float f, float f2, int i, int i2) {
-        return (f == 0.0f || f2 == 0.0f) ? new Point(i, i2) : new Point(Math.min(i, Math.round((((float) i2) / f) * f2)), Math.min(i2, Math.round((((float) i) / f) / f2)));
+        if (f == 0.0f || f2 == 0.0f) {
+            return new Point(i, i2);
+        }
+        return new Point(Math.min(i, Math.round((i2 / f) * f2)), Math.min(i2, Math.round((i / f) / f2)));
     }
 }

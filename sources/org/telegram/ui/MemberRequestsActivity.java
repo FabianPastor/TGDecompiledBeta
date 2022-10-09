@@ -10,17 +10,16 @@ import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.Delegates.MemberRequestsDelegate;
-
+/* loaded from: classes3.dex */
 public class MemberRequestsActivity extends BaseFragment {
-    /* access modifiers changed from: private */
-    public final MemberRequestsDelegate delegate;
+    private final MemberRequestsDelegate delegate;
 
     public MemberRequestsActivity(long j) {
-        this.delegate = new MemberRequestsDelegate(this, getLayoutContainer(), j, true) {
-            /* access modifiers changed from: protected */
-            public void onImportersChanged(String str, boolean z, boolean z2) {
+        this.delegate = new MemberRequestsDelegate(this, getLayoutContainer(), j, true) { // from class: org.telegram.ui.MemberRequestsActivity.1
+            @Override // org.telegram.ui.Delegates.MemberRequestsDelegate
+            protected void onImportersChanged(String str, boolean z, boolean z2) {
                 if (z2) {
-                    MemberRequestsActivity.this.actionBar.setSearchFieldText("");
+                    ((BaseFragment) MemberRequestsActivity.this).actionBar.setSearchFieldText("");
                 } else {
                     super.onImportersChanged(str, z, z2);
                 }
@@ -28,13 +27,15 @@ public class MemberRequestsActivity extends BaseFragment {
         };
     }
 
+    @Override // org.telegram.ui.ActionBar.BaseFragment
     public View createView(Context context) {
-        String str;
         int i;
+        String str;
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
-            public void onItemClick(int i) {
-                if (i == -1) {
+        this.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() { // from class: org.telegram.ui.MemberRequestsActivity.2
+            @Override // org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick
+            public void onItemClick(int i2) {
+                if (i2 == -1) {
                     MemberRequestsActivity.this.finishFragment();
                 }
             }
@@ -49,18 +50,21 @@ public class MemberRequestsActivity extends BaseFragment {
             str = "MemberRequests";
         }
         actionBar.setTitle(LocaleController.getString(str, i));
-        ActionBarMenuItem actionBarMenuItemSearchListener = this.actionBar.createMenu().addItem(0, R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
+        ActionBarMenuItem actionBarMenuItemSearchListener = this.actionBar.createMenu().addItem(0, R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() { // from class: org.telegram.ui.MemberRequestsActivity.3
+            @Override // org.telegram.ui.ActionBar.ActionBarMenuItem.ActionBarMenuItemSearchListener
             public void onSearchExpand() {
                 super.onSearchExpand();
                 MemberRequestsActivity.this.delegate.setSearchExpanded(true);
             }
 
+            @Override // org.telegram.ui.ActionBar.ActionBarMenuItem.ActionBarMenuItemSearchListener
             public void onSearchCollapse() {
                 super.onSearchCollapse();
                 MemberRequestsActivity.this.delegate.setSearchExpanded(false);
-                MemberRequestsActivity.this.delegate.setQuery((String) null);
+                MemberRequestsActivity.this.delegate.setQuery(null);
             }
 
+            @Override // org.telegram.ui.ActionBar.ActionBarMenuItem.ActionBarMenuItemSearchListener
             public void onTextChanged(EditText editText) {
                 super.onTextChanged(editText);
                 MemberRequestsActivity.this.delegate.setQuery(editText.getText().toString());
@@ -74,6 +78,7 @@ public class MemberRequestsActivity extends BaseFragment {
         return rootLayout;
     }
 
+    @Override // org.telegram.ui.ActionBar.BaseFragment
     public boolean onBackPressed() {
         return this.delegate.onBackPressed();
     }

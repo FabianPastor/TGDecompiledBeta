@@ -2,7 +2,7 @@ package j$.time.chrono;
 
 import j$.util.concurrent.ConcurrentHashMap;
 import java.util.Locale;
-
+/* loaded from: classes2.dex */
 public abstract class a implements b {
     static {
         new ConcurrentHashMap();
@@ -10,9 +10,7 @@ public abstract class a implements b {
         new Locale("ja", "JP", "JP");
     }
 
-    protected a() {
-    }
-
+    @Override // java.lang.Comparable
     public int compareTo(Object obj) {
         ((b) obj).getClass();
         return 0;

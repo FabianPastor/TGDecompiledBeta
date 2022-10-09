@@ -1,7 +1,7 @@
 package org.webrtc;
 
 import java.util.List;
-
+/* loaded from: classes3.dex */
 public class RtpSender {
     private MediaStreamTrack cachedTrack;
     private final DtmfSender dtmfSender;
@@ -36,7 +36,7 @@ public class RtpSender {
 
     public boolean setTrack(MediaStreamTrack mediaStreamTrack, boolean z) {
         checkRtpSenderExists();
-        if (!nativeSetTrack(this.nativeRtpSender, mediaStreamTrack == null ? 0 : mediaStreamTrack.getNativeMediaStreamTrack())) {
+        if (!nativeSetTrack(this.nativeRtpSender, mediaStreamTrack == null ? 0L : mediaStreamTrack.getNativeMediaStreamTrack())) {
             return false;
         }
         MediaStreamTrack mediaStreamTrack2 = this.cachedTrack;
@@ -88,27 +88,28 @@ public class RtpSender {
 
     public void dispose() {
         checkRtpSenderExists();
-        DtmfSender dtmfSender2 = this.dtmfSender;
-        if (dtmfSender2 != null) {
-            dtmfSender2.dispose();
+        DtmfSender dtmfSender = this.dtmfSender;
+        if (dtmfSender != null) {
+            dtmfSender.dispose();
         }
         MediaStreamTrack mediaStreamTrack = this.cachedTrack;
         if (mediaStreamTrack != null && this.ownsTrack) {
             mediaStreamTrack.dispose();
         }
         JniCommon.nativeReleaseRef(this.nativeRtpSender);
-        this.nativeRtpSender = 0;
+        this.nativeRtpSender = 0L;
     }
 
-    /* access modifiers changed from: package-private */
+    /* JADX INFO: Access modifiers changed from: package-private */
     public long getNativeRtpSender() {
         checkRtpSenderExists();
         return this.nativeRtpSender;
     }
 
     private void checkRtpSenderExists() {
-        if (this.nativeRtpSender == 0) {
-            throw new IllegalStateException("RtpSender has been disposed.");
+        if (this.nativeRtpSender != 0) {
+            return;
         }
+        throw new IllegalStateException("RtpSender has been disposed.");
     }
 }

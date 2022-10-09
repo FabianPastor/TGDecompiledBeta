@@ -1,5 +1,5 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public abstract class TLRPC$ReactionCount extends TLObject {
     public boolean chosen;
     public int chosen_order;
@@ -16,6 +16,6 @@ public abstract class TLRPC$ReactionCount extends TLObject {
             }
             return tLRPC$TL_reactionCount;
         }
-        throw new RuntimeException(String.format("can't parse magic %x in ReactionCount", new Object[]{Integer.valueOf(i)}));
+        throw new RuntimeException(String.format("can't parse magic %x in ReactionCount", Integer.valueOf(i)));
     }
 }

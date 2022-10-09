@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.TMessages.Start">
+    <style name="Theme.TMessages.Start" parent="@android:style/Theme.Material">
         <item name="android:colorBackground">#1var_</item>
         <item name="android:windowBackground">#1var_</item>
         <item name="android:windowContentOverlay">@null</item>

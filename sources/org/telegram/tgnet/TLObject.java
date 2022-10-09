@@ -1,8 +1,9 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public class TLObject {
-    private static final ThreadLocal<NativeByteBuffer> sizeCalculator = new ThreadLocal<NativeByteBuffer>() {
-        /* access modifiers changed from: protected */
+    private static final ThreadLocal<NativeByteBuffer> sizeCalculator = new ThreadLocal<NativeByteBuffer>() { // from class: org.telegram.tgnet.TLObject.1
+        /* JADX INFO: Access modifiers changed from: protected */
+        @Override // java.lang.ThreadLocal
         public NativeByteBuffer initialValue() {
             return new NativeByteBuffer(true);
         }

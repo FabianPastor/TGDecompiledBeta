@@ -1,7 +1,7 @@
 package org.telegram.tgnet;
 
 import java.util.ArrayList;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_langPackDifference extends TLObject {
     public static int constructor = -NUM;
     public int from_version;
@@ -10,39 +10,40 @@ public class TLRPC$TL_langPackDifference extends TLObject {
     public int version;
 
     public static TLRPC$TL_langPackDifference TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-        if (constructor == i) {
-            TLRPC$TL_langPackDifference tLRPC$TL_langPackDifference = new TLRPC$TL_langPackDifference();
-            tLRPC$TL_langPackDifference.readParams(abstractSerializedData, z);
-            return tLRPC$TL_langPackDifference;
-        } else if (!z) {
+        if (constructor != i) {
+            if (z) {
+                throw new RuntimeException(String.format("can't parse magic %x in TL_langPackDifference", Integer.valueOf(i)));
+            }
             return null;
-        } else {
-            throw new RuntimeException(String.format("can't parse magic %x in TL_langPackDifference", new Object[]{Integer.valueOf(i)}));
         }
+        TLRPC$TL_langPackDifference tLRPC$TL_langPackDifference = new TLRPC$TL_langPackDifference();
+        tLRPC$TL_langPackDifference.readParams(abstractSerializedData, z);
+        return tLRPC$TL_langPackDifference;
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         this.lang_code = abstractSerializedData.readString(z);
         this.from_version = abstractSerializedData.readInt32(z);
         this.version = abstractSerializedData.readInt32(z);
         int readInt32 = abstractSerializedData.readInt32(z);
-        int i = 0;
-        if (readInt32 == NUM) {
-            int readInt322 = abstractSerializedData.readInt32(z);
-            while (i < readInt322) {
-                TLRPC$LangPackString TLdeserialize = TLRPC$LangPackString.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
-                if (TLdeserialize != null) {
-                    this.strings.add(TLdeserialize);
-                    i++;
-                } else {
-                    return;
-                }
+        if (readInt32 != NUM) {
+            if (z) {
+                throw new RuntimeException(String.format("wrong Vector magic, got %x", Integer.valueOf(readInt32)));
             }
-        } else if (z) {
-            throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt32)}));
+            return;
+        }
+        int readInt322 = abstractSerializedData.readInt32(z);
+        for (int i = 0; i < readInt322; i++) {
+            TLRPC$LangPackString TLdeserialize = TLRPC$LangPackString.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+            if (TLdeserialize == null) {
+                return;
+            }
+            this.strings.add(TLdeserialize);
         }
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
         abstractSerializedData.writeString(this.lang_code);

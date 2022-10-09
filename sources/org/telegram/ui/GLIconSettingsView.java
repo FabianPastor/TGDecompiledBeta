@@ -12,17 +12,14 @@ import org.telegram.ui.Components.ColorPicker;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.Premium.GLIcon.GLIconRenderer;
 import org.telegram.ui.Components.SeekBarView;
-
+/* loaded from: classes3.dex */
 public class GLIconSettingsView extends LinearLayout {
     public static float smallStarsSize = 1.0f;
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public GLIconSettingsView(Context context, GLIconRenderer gLIconRenderer) {
+    public GLIconSettingsView(final Context context, final GLIconRenderer gLIconRenderer) {
         super(context);
-        final Context context2 = context;
-        final GLIconRenderer gLIconRenderer2 = gLIconRenderer;
         setOrientation(1);
-        TextView textView = new TextView(context2);
+        TextView textView = new TextView(context);
         textView.setText("Spectral top ");
         textView.setTextColor(Theme.getColor("dialogTextBlue2"));
         textView.setTextSize(1, 16.0f);
@@ -32,27 +29,31 @@ public class GLIconSettingsView extends LinearLayout {
         int i = 3;
         textView.setGravity((LocaleController.isRTL ? 3 : 5) | 48);
         addView(textView, LayoutHelper.createFrame(-2, -1.0f, (LocaleController.isRTL ? 3 : 5) | 48, 21.0f, 13.0f, 21.0f, 0.0f));
-        SeekBarView seekBarView = new SeekBarView(context2);
-        seekBarView.setDelegate(new SeekBarView.SeekBarViewDelegate(this) {
+        SeekBarView seekBarView = new SeekBarView(context);
+        seekBarView.setDelegate(new SeekBarView.SeekBarViewDelegate(this) { // from class: org.telegram.ui.GLIconSettingsView.1
+            @Override // org.telegram.ui.Components.SeekBarView.SeekBarViewDelegate
             public /* synthetic */ CharSequence getContentDescription() {
                 return SeekBarView.SeekBarViewDelegate.CC.$default$getContentDescription(this);
             }
 
+            @Override // org.telegram.ui.Components.SeekBarView.SeekBarViewDelegate
             public /* synthetic */ int getStepsCount() {
                 return SeekBarView.SeekBarViewDelegate.CC.$default$getStepsCount(this);
             }
 
+            @Override // org.telegram.ui.Components.SeekBarView.SeekBarViewDelegate
             public void onSeekBarPressed(boolean z) {
             }
 
+            @Override // org.telegram.ui.Components.SeekBarView.SeekBarViewDelegate
             public void onSeekBarDrag(boolean z, float f) {
-                gLIconRenderer2.star.spec1 = f * 2.0f;
+                gLIconRenderer.star.spec1 = f * 2.0f;
             }
         });
-        seekBarView.setProgress(gLIconRenderer2.star.spec1 / 2.0f);
+        seekBarView.setProgress(gLIconRenderer.star.spec1 / 2.0f);
         seekBarView.setReportChanges(true);
         addView(seekBarView, LayoutHelper.createFrame(-1, 38.0f, 0, 5.0f, 4.0f, 5.0f, 0.0f));
-        TextView textView2 = new TextView(context2);
+        TextView textView2 = new TextView(context);
         textView2.setText("Spectral bottom ");
         textView2.setTextColor(Theme.getColor("dialogTextBlue2"));
         textView2.setTextSize(1, 16.0f);
@@ -61,27 +62,31 @@ public class GLIconSettingsView extends LinearLayout {
         textView2.setSingleLine(true);
         textView2.setGravity((LocaleController.isRTL ? 3 : 5) | 48);
         addView(textView2, LayoutHelper.createFrame(-2, -1.0f, (LocaleController.isRTL ? 3 : 5) | 48, 21.0f, 13.0f, 21.0f, 0.0f));
-        SeekBarView seekBarView2 = new SeekBarView(context2);
-        seekBarView2.setDelegate(new SeekBarView.SeekBarViewDelegate(this) {
+        SeekBarView seekBarView2 = new SeekBarView(context);
+        seekBarView2.setDelegate(new SeekBarView.SeekBarViewDelegate(this) { // from class: org.telegram.ui.GLIconSettingsView.2
+            @Override // org.telegram.ui.Components.SeekBarView.SeekBarViewDelegate
             public /* synthetic */ CharSequence getContentDescription() {
                 return SeekBarView.SeekBarViewDelegate.CC.$default$getContentDescription(this);
             }
 
+            @Override // org.telegram.ui.Components.SeekBarView.SeekBarViewDelegate
             public /* synthetic */ int getStepsCount() {
                 return SeekBarView.SeekBarViewDelegate.CC.$default$getStepsCount(this);
             }
 
+            @Override // org.telegram.ui.Components.SeekBarView.SeekBarViewDelegate
             public void onSeekBarPressed(boolean z) {
             }
 
+            @Override // org.telegram.ui.Components.SeekBarView.SeekBarViewDelegate
             public void onSeekBarDrag(boolean z, float f) {
-                gLIconRenderer2.star.spec2 = f * 2.0f;
+                gLIconRenderer.star.spec2 = f * 2.0f;
             }
         });
-        seekBarView2.setProgress(gLIconRenderer2.star.spec2 / 2.0f);
+        seekBarView2.setProgress(gLIconRenderer.star.spec2 / 2.0f);
         seekBarView2.setReportChanges(true);
         addView(seekBarView2, LayoutHelper.createFrame(-1, 38.0f, 0, 5.0f, 4.0f, 5.0f, 0.0f));
-        TextView textView3 = new TextView(context2);
+        TextView textView3 = new TextView(context);
         textView3.setText("Setup spec color");
         textView3.setTextSize(1, 16.0f);
         textView3.setLines(1);
@@ -90,40 +95,45 @@ public class GLIconSettingsView extends LinearLayout {
         textView3.setSingleLine(true);
         textView3.setTextColor(Theme.getColor("featuredStickers_buttonText"));
         textView3.setBackground(Theme.AdaptiveRipple.filledRect(Theme.getColor("featuredStickers_addButton"), 4.0f));
-        textView3.setOnClickListener(new View.OnClickListener(this) {
+        textView3.setOnClickListener(new View.OnClickListener(this) { // from class: org.telegram.ui.GLIconSettingsView.3
+            @Override // android.view.View.OnClickListener
             public void onClick(View view) {
-                AnonymousClass2 r10 = new ColorPicker(this, context2, false, new ColorPicker.ColorPickerDelegate() {
+                ColorPicker colorPicker = new ColorPicker(this, context, false, new ColorPicker.ColorPickerDelegate() { // from class: org.telegram.ui.GLIconSettingsView.3.1
+                    @Override // org.telegram.ui.Components.ColorPicker.ColorPickerDelegate
                     public /* synthetic */ void deleteTheme() {
                         ColorPicker.ColorPickerDelegate.CC.$default$deleteTheme(this);
                     }
 
-                    public /* synthetic */ int getDefaultColor(int i) {
-                        return ColorPicker.ColorPickerDelegate.CC.$default$getDefaultColor(this, i);
+                    @Override // org.telegram.ui.Components.ColorPicker.ColorPickerDelegate
+                    public /* synthetic */ int getDefaultColor(int i2) {
+                        return ColorPicker.ColorPickerDelegate.CC.$default$getDefaultColor(this, i2);
                     }
 
+                    @Override // org.telegram.ui.Components.ColorPicker.ColorPickerDelegate
                     public /* synthetic */ void openThemeCreate(boolean z) {
                         ColorPicker.ColorPickerDelegate.CC.$default$openThemeCreate(this, z);
                     }
 
-                    public void setColor(int i, int i2, boolean z) {
-                        gLIconRenderer2.star.specColor = i;
+                    @Override // org.telegram.ui.Components.ColorPicker.ColorPickerDelegate
+                    public void setColor(int i2, int i3, boolean z) {
+                        gLIconRenderer.star.specColor = i2;
                     }
-                }) {
-                    /* access modifiers changed from: protected */
-                    public void onMeasure(int i, int i2) {
-                        super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(300.0f), NUM));
+                }) { // from class: org.telegram.ui.GLIconSettingsView.3.2
+                    @Override // android.widget.FrameLayout, android.view.View
+                    protected void onMeasure(int i2, int i3) {
+                        super.onMeasure(i2, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(300.0f), NUM));
                     }
                 };
-                r10.setColor(gLIconRenderer2.star.specColor, 0);
-                r10.setType(-1, true, 1, 1, false, 0, false);
-                BottomSheet bottomSheet = new BottomSheet(context2, false);
-                bottomSheet.setCustomView(r10);
+                colorPicker.setColor(gLIconRenderer.star.specColor, 0);
+                colorPicker.setType(-1, true, 1, 1, false, 0, false);
+                BottomSheet bottomSheet = new BottomSheet(context, false);
+                bottomSheet.setCustomView(colorPicker);
                 bottomSheet.setDimBehind(false);
                 bottomSheet.show();
             }
         });
         addView(textView3, LayoutHelper.createFrame(-1, 48.0f, 16, 16.0f, 0.0f, 16.0f, 0.0f));
-        TextView textView4 = new TextView(context2);
+        TextView textView4 = new TextView(context);
         textView4.setText("Diffuse ");
         textView4.setTextColor(Theme.getColor("dialogTextBlue2"));
         textView4.setTextSize(1, 16.0f);
@@ -132,27 +142,31 @@ public class GLIconSettingsView extends LinearLayout {
         textView4.setSingleLine(true);
         textView4.setGravity((LocaleController.isRTL ? 3 : 5) | 48);
         addView(textView4, LayoutHelper.createFrame(-2, -1.0f, (LocaleController.isRTL ? 3 : 5) | 48, 21.0f, 13.0f, 21.0f, 0.0f));
-        SeekBarView seekBarView3 = new SeekBarView(context2);
-        seekBarView3.setDelegate(new SeekBarView.SeekBarViewDelegate(this) {
+        SeekBarView seekBarView3 = new SeekBarView(context);
+        seekBarView3.setDelegate(new SeekBarView.SeekBarViewDelegate(this) { // from class: org.telegram.ui.GLIconSettingsView.4
+            @Override // org.telegram.ui.Components.SeekBarView.SeekBarViewDelegate
             public /* synthetic */ CharSequence getContentDescription() {
                 return SeekBarView.SeekBarViewDelegate.CC.$default$getContentDescription(this);
             }
 
+            @Override // org.telegram.ui.Components.SeekBarView.SeekBarViewDelegate
             public /* synthetic */ int getStepsCount() {
                 return SeekBarView.SeekBarViewDelegate.CC.$default$getStepsCount(this);
             }
 
+            @Override // org.telegram.ui.Components.SeekBarView.SeekBarViewDelegate
             public void onSeekBarPressed(boolean z) {
             }
 
+            @Override // org.telegram.ui.Components.SeekBarView.SeekBarViewDelegate
             public void onSeekBarDrag(boolean z, float f) {
-                gLIconRenderer2.star.diffuse = f;
+                gLIconRenderer.star.diffuse = f;
             }
         });
-        seekBarView3.setProgress(gLIconRenderer2.star.diffuse);
+        seekBarView3.setProgress(gLIconRenderer.star.diffuse);
         seekBarView3.setReportChanges(true);
         addView(seekBarView3, LayoutHelper.createFrame(-1, 38.0f, 0, 5.0f, 4.0f, 5.0f, 0.0f));
-        TextView textView5 = new TextView(context2);
+        TextView textView5 = new TextView(context);
         textView5.setText("Normal map spectral");
         textView5.setTextColor(Theme.getColor("dialogTextBlue2"));
         textView5.setTextSize(1, 16.0f);
@@ -161,27 +175,31 @@ public class GLIconSettingsView extends LinearLayout {
         textView5.setSingleLine(true);
         textView5.setGravity((LocaleController.isRTL ? 3 : 5) | 48);
         addView(textView5, LayoutHelper.createFrame(-2, -1.0f, (LocaleController.isRTL ? 3 : 5) | 48, 21.0f, 13.0f, 21.0f, 0.0f));
-        SeekBarView seekBarView4 = new SeekBarView(context2);
-        seekBarView4.setDelegate(new SeekBarView.SeekBarViewDelegate(this) {
+        SeekBarView seekBarView4 = new SeekBarView(context);
+        seekBarView4.setDelegate(new SeekBarView.SeekBarViewDelegate(this) { // from class: org.telegram.ui.GLIconSettingsView.5
+            @Override // org.telegram.ui.Components.SeekBarView.SeekBarViewDelegate
             public /* synthetic */ CharSequence getContentDescription() {
                 return SeekBarView.SeekBarViewDelegate.CC.$default$getContentDescription(this);
             }
 
+            @Override // org.telegram.ui.Components.SeekBarView.SeekBarViewDelegate
             public /* synthetic */ int getStepsCount() {
                 return SeekBarView.SeekBarViewDelegate.CC.$default$getStepsCount(this);
             }
 
+            @Override // org.telegram.ui.Components.SeekBarView.SeekBarViewDelegate
             public void onSeekBarPressed(boolean z) {
             }
 
+            @Override // org.telegram.ui.Components.SeekBarView.SeekBarViewDelegate
             public void onSeekBarDrag(boolean z, float f) {
-                gLIconRenderer2.star.normalSpec = f * 2.0f;
+                gLIconRenderer.star.normalSpec = f * 2.0f;
             }
         });
-        seekBarView4.setProgress(gLIconRenderer2.star.normalSpec / 2.0f);
+        seekBarView4.setProgress(gLIconRenderer.star.normalSpec / 2.0f);
         seekBarView4.setReportChanges(true);
         addView(seekBarView4, LayoutHelper.createFrame(-1, 38.0f, 0, 5.0f, 4.0f, 5.0f, 0.0f));
-        TextView textView6 = new TextView(context2);
+        TextView textView6 = new TextView(context);
         textView6.setText("Setup normal spec color");
         textView6.setTextSize(1, 16.0f);
         textView6.setLines(1);
@@ -190,42 +208,47 @@ public class GLIconSettingsView extends LinearLayout {
         textView6.setSingleLine(true);
         textView6.setTextColor(Theme.getColor("featuredStickers_buttonText"));
         textView6.setBackground(Theme.AdaptiveRipple.filledRect(Theme.getColor("featuredStickers_addButton"), 4.0f));
-        textView6.setOnClickListener(new View.OnClickListener(this) {
+        textView6.setOnClickListener(new View.OnClickListener(this) { // from class: org.telegram.ui.GLIconSettingsView.6
+            @Override // android.view.View.OnClickListener
             public void onClick(View view) {
-                AnonymousClass2 r10 = new ColorPicker(this, context2, false, new ColorPicker.ColorPickerDelegate() {
+                ColorPicker colorPicker = new ColorPicker(this, context, false, new ColorPicker.ColorPickerDelegate() { // from class: org.telegram.ui.GLIconSettingsView.6.1
+                    @Override // org.telegram.ui.Components.ColorPicker.ColorPickerDelegate
                     public /* synthetic */ void deleteTheme() {
                         ColorPicker.ColorPickerDelegate.CC.$default$deleteTheme(this);
                     }
 
-                    public /* synthetic */ int getDefaultColor(int i) {
-                        return ColorPicker.ColorPickerDelegate.CC.$default$getDefaultColor(this, i);
+                    @Override // org.telegram.ui.Components.ColorPicker.ColorPickerDelegate
+                    public /* synthetic */ int getDefaultColor(int i2) {
+                        return ColorPicker.ColorPickerDelegate.CC.$default$getDefaultColor(this, i2);
                     }
 
+                    @Override // org.telegram.ui.Components.ColorPicker.ColorPickerDelegate
                     public /* synthetic */ void openThemeCreate(boolean z) {
                         ColorPicker.ColorPickerDelegate.CC.$default$openThemeCreate(this, z);
                     }
 
-                    public void setColor(int i, int i2, boolean z) {
-                        if (i2 == 0) {
-                            gLIconRenderer2.star.normalSpecColor = i;
+                    @Override // org.telegram.ui.Components.ColorPicker.ColorPickerDelegate
+                    public void setColor(int i2, int i3, boolean z) {
+                        if (i3 == 0) {
+                            gLIconRenderer.star.normalSpecColor = i2;
                         }
                     }
-                }) {
-                    /* access modifiers changed from: protected */
-                    public void onMeasure(int i, int i2) {
-                        super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(300.0f), NUM));
+                }) { // from class: org.telegram.ui.GLIconSettingsView.6.2
+                    @Override // android.widget.FrameLayout, android.view.View
+                    protected void onMeasure(int i2, int i3) {
+                        super.onMeasure(i2, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(300.0f), NUM));
                     }
                 };
-                r10.setColor(gLIconRenderer2.star.normalSpecColor, 0);
-                r10.setType(-1, true, 1, 1, false, 0, false);
-                BottomSheet bottomSheet = new BottomSheet(context2, false);
-                bottomSheet.setCustomView(r10);
+                colorPicker.setColor(gLIconRenderer.star.normalSpecColor, 0);
+                colorPicker.setType(-1, true, 1, 1, false, 0, false);
+                BottomSheet bottomSheet = new BottomSheet(context, false);
+                bottomSheet.setCustomView(colorPicker);
                 bottomSheet.setDimBehind(false);
                 bottomSheet.show();
             }
         });
         addView(textView6, LayoutHelper.createFrame(-1, 48.0f, 16, 16.0f, 0.0f, 16.0f, 0.0f));
-        TextView textView7 = new TextView(context2);
+        TextView textView7 = new TextView(context);
         textView7.setText("Small starts size");
         textView7.setTextColor(Theme.getColor("dialogTextBlue2"));
         textView7.setTextSize(1, 16.0f);
@@ -234,19 +257,23 @@ public class GLIconSettingsView extends LinearLayout {
         textView7.setSingleLine(true);
         textView7.setGravity((LocaleController.isRTL ? 3 : 5) | 48);
         addView(textView7, LayoutHelper.createFrame(-2, -1.0f, (!LocaleController.isRTL ? 5 : i) | 48, 21.0f, 13.0f, 21.0f, 0.0f));
-        SeekBarView seekBarView5 = new SeekBarView(context2);
-        seekBarView5.setDelegate(new SeekBarView.SeekBarViewDelegate(this) {
+        SeekBarView seekBarView5 = new SeekBarView(context);
+        seekBarView5.setDelegate(new SeekBarView.SeekBarViewDelegate(this) { // from class: org.telegram.ui.GLIconSettingsView.7
+            @Override // org.telegram.ui.Components.SeekBarView.SeekBarViewDelegate
             public /* synthetic */ CharSequence getContentDescription() {
                 return SeekBarView.SeekBarViewDelegate.CC.$default$getContentDescription(this);
             }
 
+            @Override // org.telegram.ui.Components.SeekBarView.SeekBarViewDelegate
             public /* synthetic */ int getStepsCount() {
                 return SeekBarView.SeekBarViewDelegate.CC.$default$getStepsCount(this);
             }
 
+            @Override // org.telegram.ui.Components.SeekBarView.SeekBarViewDelegate
             public void onSeekBarPressed(boolean z) {
             }
 
+            @Override // org.telegram.ui.Components.SeekBarView.SeekBarViewDelegate
             public void onSeekBarDrag(boolean z, float f) {
                 GLIconSettingsView.smallStarsSize = f * 2.0f;
             }

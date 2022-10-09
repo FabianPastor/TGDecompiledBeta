@@ -11,7 +11,7 @@ import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.PremiumPreviewFragment;
-
+/* loaded from: classes3.dex */
 public class PremiumFeatureCell extends FrameLayout {
     public PremiumPreviewFragment.PremiumFeatureData data;
     private final TextView description;
@@ -33,18 +33,18 @@ public class PremiumFeatureCell extends FrameLayout {
         this.description = textView2;
         textView2.setTextSize(1, 14.0f);
         textView2.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText"));
-        textView2.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
+        textView2.setLineSpacing(AndroidUtilities.dp(2.0f), 1.0f);
         linearLayout.addView(textView2, LayoutHelper.createLinear(-1, -2, 0.0f, 0, 0, 1, 0, 0));
         addView(linearLayout, LayoutHelper.createFrame(-1, -2.0f, 0, 62.0f, 8.0f, 48.0f, 9.0f));
-        ImageView imageView2 = new ImageView(context);
-        this.imageView = imageView2;
-        imageView2.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+        ImageView imageView = new ImageView(context);
+        this.imageView = imageView;
+        imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         addView(this.imageView, LayoutHelper.createFrame(28, 28.0f, 0, 18.0f, 12.0f, 0.0f, 0.0f));
-        ImageView imageView3 = new ImageView(context);
-        imageView3.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-        imageView3.setImageResource(R.drawable.msg_arrowright);
-        imageView3.setColorFilter(Theme.getColor("switchTrack"));
-        addView(imageView3, LayoutHelper.createFrame(24, 24.0f, 21, 0.0f, 0.0f, 18.0f, 0.0f));
+        ImageView imageView2 = new ImageView(context);
+        imageView2.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+        imageView2.setImageResource(R.drawable.msg_arrowright);
+        imageView2.setColorFilter(Theme.getColor("switchTrack"));
+        addView(imageView2, LayoutHelper.createFrame(24, 24.0f, 21, 0.0f, 0.0f, 18.0f, 0.0f));
     }
 
     public void setData(PremiumPreviewFragment.PremiumFeatureData premiumFeatureData, boolean z) {
@@ -55,11 +55,12 @@ public class PremiumFeatureCell extends FrameLayout {
         this.drawDivider = z;
     }
 
-    /* access modifiers changed from: protected */
+    /* JADX INFO: Access modifiers changed from: protected */
+    @Override // android.view.ViewGroup, android.view.View
     public void dispatchDraw(Canvas canvas) {
         super.dispatchDraw(canvas);
         if (this.drawDivider) {
-            canvas.drawRect((float) AndroidUtilities.dp(62.0f), (float) (getMeasuredHeight() - 1), (float) getMeasuredWidth(), (float) getMeasuredHeight(), Theme.dividerPaint);
+            canvas.drawRect(AndroidUtilities.dp(62.0f), getMeasuredHeight() - 1, getMeasuredWidth(), getMeasuredHeight(), Theme.dividerPaint);
         }
     }
 }

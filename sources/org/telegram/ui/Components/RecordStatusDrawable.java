@@ -6,20 +6,22 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
-
+/* loaded from: classes3.dex */
 public class RecordStatusDrawable extends StatusDrawable {
-    int alpha = 255;
     Paint currentPaint;
+    private float progress;
     private boolean isChat = false;
     private long lastUpdateTime = 0;
-    private float progress;
-    private RectF rect = new RectF();
     private boolean started = false;
+    private RectF rect = new RectF();
+    int alpha = 255;
 
+    @Override // android.graphics.drawable.Drawable
     public int getOpacity() {
         return 0;
     }
 
+    @Override // android.graphics.drawable.Drawable
     public void setColorFilter(ColorFilter colorFilter) {
     }
 
@@ -29,14 +31,16 @@ public class RecordStatusDrawable extends StatusDrawable {
             this.currentPaint = paint;
             paint.setStyle(Paint.Style.STROKE);
             this.currentPaint.setStrokeCap(Paint.Cap.ROUND);
-            this.currentPaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
+            this.currentPaint.setStrokeWidth(AndroidUtilities.dp(2.0f));
         }
     }
 
+    @Override // org.telegram.ui.Components.StatusDrawable
     public void setIsChat(boolean z) {
         this.isChat = z;
     }
 
+    @Override // org.telegram.ui.Components.StatusDrawable
     public void setColor(int i) {
         Paint paint = this.currentPaint;
         if (paint != null) {
@@ -63,40 +67,43 @@ public class RecordStatusDrawable extends StatusDrawable {
         }
     }
 
+    @Override // org.telegram.ui.Components.StatusDrawable
     public void start() {
         this.lastUpdateTime = System.currentTimeMillis();
         this.started = true;
         invalidateSelf();
     }
 
+    @Override // org.telegram.ui.Components.StatusDrawable
     public void stop() {
         this.started = false;
     }
 
+    @Override // android.graphics.drawable.Drawable
     public void draw(Canvas canvas) {
         Paint paint = this.currentPaint;
         if (paint == null) {
             paint = Theme.chat_statusRecordPaint;
         }
         float f = 2.0f;
-        if (paint.getStrokeWidth() != ((float) AndroidUtilities.dp(2.0f))) {
-            paint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
+        if (paint.getStrokeWidth() != AndroidUtilities.dp(2.0f)) {
+            paint.setStrokeWidth(AndroidUtilities.dp(2.0f));
         }
         canvas.save();
         int intrinsicHeight = getIntrinsicHeight() / 2;
         if (this.isChat) {
             f = 1.0f;
         }
-        canvas.translate(0.0f, (float) (intrinsicHeight + AndroidUtilities.dp(f)));
+        canvas.translate(0.0f, intrinsicHeight + AndroidUtilities.dp(f));
         for (int i = 0; i < 4; i++) {
             if (i == 0) {
-                paint.setAlpha((int) (((float) this.alpha) * this.progress));
+                paint.setAlpha((int) (this.alpha * this.progress));
             } else if (i == 3) {
-                paint.setAlpha((int) (((float) this.alpha) * (1.0f - this.progress)));
+                paint.setAlpha((int) (this.alpha * (1.0f - this.progress)));
             } else {
                 paint.setAlpha(this.alpha);
             }
-            float dp = ((float) (AndroidUtilities.dp(4.0f) * i)) + (((float) AndroidUtilities.dp(4.0f)) * this.progress);
+            float dp = (AndroidUtilities.dp(4.0f) * i) + (AndroidUtilities.dp(4.0f) * this.progress);
             float f2 = -dp;
             this.rect.set(f2, f2, dp, dp);
             canvas.drawArc(this.rect, -15.0f, 30.0f, false, paint);
@@ -107,14 +114,17 @@ public class RecordStatusDrawable extends StatusDrawable {
         }
     }
 
+    @Override // android.graphics.drawable.Drawable
     public void setAlpha(int i) {
         this.alpha = i;
     }
 
+    @Override // android.graphics.drawable.Drawable
     public int getIntrinsicWidth() {
         return AndroidUtilities.dp(18.0f);
     }
 
+    @Override // android.graphics.drawable.Drawable
     public int getIntrinsicHeight() {
         return AndroidUtilities.dp(14.0f);
     }

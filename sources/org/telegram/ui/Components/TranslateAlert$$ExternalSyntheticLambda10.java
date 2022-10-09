@@ -1,5 +1,5 @@
 package org.telegram.ui.Components;
-
+/* loaded from: classes3.dex */
 public final /* synthetic */ class TranslateAlert$$ExternalSyntheticLambda10 implements Runnable {
     public final /* synthetic */ TranslateAlert f$0;
 
@@ -7,7 +7,8 @@ public final /* synthetic */ class TranslateAlert$$ExternalSyntheticLambda10 imp
         this.f$0 = translateAlert;
     }
 
+    @Override // java.lang.Runnable
     public final void run() {
-        boolean unused = this.f$0.checkForNextLoading();
+        TranslateAlert.m1683$r8$lambda$mwKSKbgsZrQySWppXYXfqWZUA4(this.f$0);
     }
 }

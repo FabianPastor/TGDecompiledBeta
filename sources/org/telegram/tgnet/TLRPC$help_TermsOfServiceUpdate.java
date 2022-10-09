@@ -1,19 +1,19 @@
 package org.telegram.tgnet;
-
+/* loaded from: classes.dex */
 public abstract class TLRPC$help_TermsOfServiceUpdate extends TLObject {
     public static TLRPC$help_TermsOfServiceUpdate TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-        TLRPC$help_TermsOfServiceUpdate tLRPC$help_TermsOfServiceUpdate;
+        TLRPC$help_TermsOfServiceUpdate tLRPC$TL_help_termsOfServiceUpdateEmpty;
         if (i != -NUM) {
-            tLRPC$help_TermsOfServiceUpdate = i != NUM ? null : new TLRPC$TL_help_termsOfServiceUpdate();
+            tLRPC$TL_help_termsOfServiceUpdateEmpty = i != NUM ? null : new TLRPC$TL_help_termsOfServiceUpdate();
         } else {
-            tLRPC$help_TermsOfServiceUpdate = new TLRPC$TL_help_termsOfServiceUpdateEmpty();
+            tLRPC$TL_help_termsOfServiceUpdateEmpty = new TLRPC$TL_help_termsOfServiceUpdateEmpty();
         }
-        if (tLRPC$help_TermsOfServiceUpdate != null || !z) {
-            if (tLRPC$help_TermsOfServiceUpdate != null) {
-                tLRPC$help_TermsOfServiceUpdate.readParams(abstractSerializedData, z);
+        if (tLRPC$TL_help_termsOfServiceUpdateEmpty != null || !z) {
+            if (tLRPC$TL_help_termsOfServiceUpdateEmpty != null) {
+                tLRPC$TL_help_termsOfServiceUpdateEmpty.readParams(abstractSerializedData, z);
             }
-            return tLRPC$help_TermsOfServiceUpdate;
+            return tLRPC$TL_help_termsOfServiceUpdateEmpty;
         }
-        throw new RuntimeException(String.format("can't parse magic %x in help_TermsOfServiceUpdate", new Object[]{Integer.valueOf(i)}));
+        throw new RuntimeException(String.format("can't parse magic %x in help_TermsOfServiceUpdate", Integer.valueOf(i)));
     }
 }

@@ -1,29 +1,29 @@
 package org.telegram.tgnet;
 
 import java.util.ArrayList;
-
+/* loaded from: classes.dex */
 public class TLRPC$TL_inputMediaPoll extends TLRPC$InputMedia {
     public static int constructor = NUM;
-    public ArrayList<byte[]> correct_answers = new ArrayList<>();
     public TLRPC$Poll poll;
     public String solution;
+    public ArrayList<byte[]> correct_answers = new ArrayList<>();
     public ArrayList<TLRPC$MessageEntity> solution_entities = new ArrayList<>();
 
+    @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         this.flags = abstractSerializedData.readInt32(z);
         this.poll = TLRPC$Poll.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
-        int i = 0;
         if ((this.flags & 1) != 0) {
             int readInt32 = abstractSerializedData.readInt32(z);
-            if (readInt32 == NUM) {
-                int readInt322 = abstractSerializedData.readInt32(z);
-                for (int i2 = 0; i2 < readInt322; i2++) {
-                    this.correct_answers.add(abstractSerializedData.readByteArray(z));
+            if (readInt32 != NUM) {
+                if (z) {
+                    throw new RuntimeException(String.format("wrong Vector magic, got %x", Integer.valueOf(readInt32)));
                 }
-            } else if (z) {
-                throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt32)}));
-            } else {
                 return;
+            }
+            int readInt322 = abstractSerializedData.readInt32(z);
+            for (int i = 0; i < readInt322; i++) {
+                this.correct_answers.add(abstractSerializedData.readByteArray(z));
             }
         }
         if ((this.flags & 2) != 0) {
@@ -31,23 +31,24 @@ public class TLRPC$TL_inputMediaPoll extends TLRPC$InputMedia {
         }
         if ((this.flags & 2) != 0) {
             int readInt323 = abstractSerializedData.readInt32(z);
-            if (readInt323 == NUM) {
-                int readInt324 = abstractSerializedData.readInt32(z);
-                while (i < readInt324) {
-                    TLRPC$MessageEntity TLdeserialize = TLRPC$MessageEntity.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
-                    if (TLdeserialize != null) {
-                        this.solution_entities.add(TLdeserialize);
-                        i++;
-                    } else {
-                        return;
-                    }
+            if (readInt323 != NUM) {
+                if (z) {
+                    throw new RuntimeException(String.format("wrong Vector magic, got %x", Integer.valueOf(readInt323)));
                 }
-            } else if (z) {
-                throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt323)}));
+                return;
+            }
+            int readInt324 = abstractSerializedData.readInt32(z);
+            for (int i2 = 0; i2 < readInt324; i2++) {
+                TLRPC$MessageEntity TLdeserialize = TLRPC$MessageEntity.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+                if (TLdeserialize == null) {
+                    return;
+                }
+                this.solution_entities.add(TLdeserialize);
             }
         }
     }
 
+    @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
         abstractSerializedData.writeInt32(this.flags);

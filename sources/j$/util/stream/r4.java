@@ -1,65 +1,69 @@
 package j$.util.stream;
 
 import j$.util.function.Consumer;
-import j$.util.function.p;
-import j$.util.function.q;
-
-public final /* synthetic */ class r4 implements CLASSNAMEl3 {
+/* loaded from: classes2.dex */
+public final /* synthetic */ class r4 implements InterfaceCLASSNAMEl3 {
     public final /* synthetic */ int a = 0;
     public final /* synthetic */ Object b;
 
-    public /* synthetic */ r4(q qVar) {
+    public /* synthetic */ r4(j$.util.function.q qVar) {
         this.b = qVar;
     }
 
+    @Override // j$.util.stream.InterfaceCLASSNAMEm3
     public /* synthetic */ void accept(double d) {
         switch (this.a) {
             case 0:
-                CLASSNAMEo1.f(this);
+                AbstractCLASSNAMEo1.f(this);
                 throw null;
             default:
-                CLASSNAMEo1.f(this);
+                AbstractCLASSNAMEo1.f(this);
                 throw null;
         }
     }
 
+    @Override // j$.util.function.Consumer
     public /* synthetic */ Consumer andThen(Consumer consumer) {
         switch (this.a) {
             case 0:
-                return Consumer.CC.$default$andThen(this, consumer);
+                return consumer.getClass();
             default:
-                return Consumer.CC.$default$andThen(this, consumer);
+                return consumer.getClass();
         }
     }
 
     public /* synthetic */ void b(Long l) {
         switch (this.a) {
             case 0:
-                CLASSNAMEo1.c(this, l);
+                AbstractCLASSNAMEo1.c(this, l);
                 return;
             default:
-                CLASSNAMEo1.c(this, l);
+                AbstractCLASSNAMEo1.c(this, l);
                 return;
         }
     }
 
-    public q f(q qVar) {
+    @Override // j$.util.function.q
+    public j$.util.function.q f(j$.util.function.q qVar) {
         switch (this.a) {
             case 0:
                 qVar.getClass();
-                return new p(this, qVar);
+                return new j$.util.function.p(this, qVar);
             default:
                 qVar.getClass();
-                return new p(this, qVar);
+                return new j$.util.function.p(this, qVar);
         }
     }
 
+    @Override // j$.util.stream.InterfaceCLASSNAMEm3
     public /* synthetic */ void m() {
     }
 
+    @Override // j$.util.stream.InterfaceCLASSNAMEm3
     public /* synthetic */ void n(long j) {
     }
 
+    @Override // j$.util.stream.InterfaceCLASSNAMEm3
     public /* synthetic */ boolean o() {
         return false;
     }
@@ -68,21 +72,23 @@ public final /* synthetic */ class r4 implements CLASSNAMEl3 {
         this.b = y3;
     }
 
+    @Override // j$.util.stream.InterfaceCLASSNAMEm3
     public /* synthetic */ void accept(int i) {
         switch (this.a) {
             case 0:
-                CLASSNAMEo1.d(this);
+                AbstractCLASSNAMEo1.d(this);
                 throw null;
             default:
-                CLASSNAMEo1.d(this);
+                AbstractCLASSNAMEo1.d(this);
                 throw null;
         }
     }
 
+    @Override // j$.util.stream.InterfaceCLASSNAMEl3, j$.util.function.q
     public final void accept(long j) {
         switch (this.a) {
             case 0:
-                ((q) this.b).accept(j);
+                ((j$.util.function.q) this.b).accept(j);
                 return;
             default:
                 ((Y3) this.b).accept(j);
@@ -90,6 +96,7 @@ public final /* synthetic */ class r4 implements CLASSNAMEl3 {
         }
     }
 
+    @Override // j$.util.function.Consumer
     public /* bridge */ /* synthetic */ void accept(Object obj) {
         switch (this.a) {
             case 0:

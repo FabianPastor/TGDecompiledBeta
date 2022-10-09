@@ -1,25 +1,31 @@
 package org.webrtc;
 
 import org.webrtc.EncodedImage;
-
+/* loaded from: classes3.dex */
 public interface VideoEncoder {
 
+    /* loaded from: classes3.dex */
     public interface Callback {
         void onEncodedFrame(EncodedImage encodedImage, CodecSpecificInfo codecSpecificInfo);
     }
 
+    /* loaded from: classes3.dex */
     public static class CodecSpecificInfo {
     }
 
+    /* loaded from: classes3.dex */
     public static class CodecSpecificInfoAV1 extends CodecSpecificInfo {
     }
 
+    /* loaded from: classes3.dex */
     public static class CodecSpecificInfoH264 extends CodecSpecificInfo {
     }
 
+    /* loaded from: classes3.dex */
     public static class CodecSpecificInfoVP8 extends CodecSpecificInfo {
     }
 
+    /* loaded from: classes3.dex */
     public static class CodecSpecificInfoVP9 extends CodecSpecificInfo {
     }
 
@@ -55,6 +61,7 @@ public interface VideoEncoder {
     @CalledByNative
     VideoCodecStatus setRates(RateControlParameters rateControlParameters);
 
+    /* loaded from: classes3.dex */
     public static class Settings {
         public final boolean automaticResizeOn;
         public final Capabilities capabilities;
@@ -71,7 +78,7 @@ public interface VideoEncoder {
         }
 
         @CalledByNative("Settings")
-        public Settings(int i, int i2, int i3, int i4, int i5, int i6, boolean z, Capabilities capabilities2) {
+        public Settings(int i, int i2, int i3, int i4, int i5, int i6, boolean z, Capabilities capabilities) {
             this.numberOfCores = i;
             this.width = i2;
             this.height = i3;
@@ -79,10 +86,11 @@ public interface VideoEncoder {
             this.maxFramerate = i5;
             this.numberOfSimulcastStreams = i6;
             this.automaticResizeOn = z;
-            this.capabilities = capabilities2;
+            this.capabilities = capabilities;
         }
     }
 
+    /* loaded from: classes3.dex */
     public static class Capabilities {
         public final boolean lossNotification;
 
@@ -92,6 +100,7 @@ public interface VideoEncoder {
         }
     }
 
+    /* loaded from: classes3.dex */
     public static class EncodeInfo {
         public final EncodedImage.FrameType[] frameTypes;
 
@@ -101,6 +110,7 @@ public interface VideoEncoder {
         }
     }
 
+    /* loaded from: classes3.dex */
     public static class BitrateAllocation {
         public final int[][] bitratesBbs;
 
@@ -110,9 +120,10 @@ public interface VideoEncoder {
         }
 
         public int getSum() {
+            int[][] iArr;
             int i = 0;
-            for (int[] iArr : this.bitratesBbs) {
-                for (int i2 : r0[r3]) {
+            for (int[] iArr2 : this.bitratesBbs) {
+                for (int i2 : iArr2) {
                     i += i2;
                 }
             }
@@ -120,6 +131,7 @@ public interface VideoEncoder {
         }
     }
 
+    /* loaded from: classes3.dex */
     public static class ScalingSettings {
         public static final ScalingSettings OFF = new ScalingSettings();
         public final Integer high;
@@ -153,13 +165,14 @@ public interface VideoEncoder {
         }
 
         public String toString() {
-            if (!this.on) {
-                return "OFF";
+            if (this.on) {
+                return "[ " + this.low + ", " + this.high + " ]";
             }
-            return "[ " + this.low + ", " + this.high + " ]";
+            return "OFF";
         }
     }
 
+    /* loaded from: classes3.dex */
     public static class ResolutionBitrateLimits {
         public final int frameSizePixels;
         public final int maxBitrateBps;
@@ -194,6 +207,7 @@ public interface VideoEncoder {
         }
     }
 
+    /* loaded from: classes3.dex */
     public static class RateControlParameters {
         public final BitrateAllocation bitrate;
         public final double framerateFps;
@@ -205,6 +219,7 @@ public interface VideoEncoder {
         }
     }
 
+    /* loaded from: classes3.dex */
     public static class EncoderInfo {
         public final boolean applyAlignmentToAllSimulcastLayers;
         public final int requestedResolutionAlignment;
@@ -226,10 +241,11 @@ public interface VideoEncoder {
     }
 
     /* renamed from: org.webrtc.VideoEncoder$-CC  reason: invalid class name */
+    /* loaded from: classes3.dex */
     public final /* synthetic */ class CC {
         @CalledByNative
         public static long $default$createNativeVideoEncoder(VideoEncoder videoEncoder) {
-            return 0;
+            return 0L;
         }
 
         @CalledByNative
@@ -240,11 +256,6 @@ public interface VideoEncoder {
         @CalledByNative
         public static boolean $default$isHardwareEncoder(VideoEncoder videoEncoder) {
             return true;
-        }
-
-        @CalledByNative
-        public static VideoCodecStatus $default$setRates(VideoEncoder _this, RateControlParameters rateControlParameters) {
-            return _this.setRateAllocation(rateControlParameters.bitrate, (int) Math.ceil(rateControlParameters.framerateFps));
         }
 
         @CalledByNative

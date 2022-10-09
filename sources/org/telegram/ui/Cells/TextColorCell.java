@@ -15,7 +15,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
-
+/* loaded from: classes3.dex */
 public class TextColorCell extends FrameLayout {
     private static Paint colorPaint;
     public static final int[] colors = {-1031100, -29183, -12769, -8792480, -12521994, -12140801, -2984711, -45162, -4473925};
@@ -27,19 +27,19 @@ public class TextColorCell extends FrameLayout {
     private TextView textView;
 
     public TextColorCell(Context context) {
-        this(context, (Theme.ResourcesProvider) null);
+        this(context, null);
     }
 
-    public TextColorCell(Context context, Theme.ResourcesProvider resourcesProvider2) {
+    public TextColorCell(Context context, Theme.ResourcesProvider resourcesProvider) {
         super(context);
         this.alpha = 1.0f;
-        this.resourcesProvider = resourcesProvider2;
+        this.resourcesProvider = resourcesProvider;
         if (colorPaint == null) {
             colorPaint = new Paint(1);
         }
-        TextView textView2 = new TextView(context);
-        this.textView = textView2;
-        textView2.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText", resourcesProvider2));
+        TextView textView = new TextView(context);
+        this.textView = textView;
+        textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText", resourcesProvider));
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
@@ -49,19 +49,21 @@ public class TextColorCell extends FrameLayout {
         addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (!LocaleController.isRTL ? 3 : i) | 48, 21.0f, 0.0f, 21.0f, 0.0f));
     }
 
+    @Override // android.view.View
     @Keep
     public void setAlpha(float f) {
         this.alpha = f;
         invalidate();
     }
 
+    @Override // android.view.View
     @Keep
     public float getAlpha() {
         return this.alpha;
     }
 
-    /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
+    @Override // android.widget.FrameLayout, android.view.View
+    protected void onMeasure(int i, int i2) {
         super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(50.0f) + (this.needDivider ? 1 : 0), NUM));
     }
 
@@ -77,11 +79,11 @@ public class TextColorCell extends FrameLayout {
         super.setEnabled(z);
         float f = 1.0f;
         if (arrayList != null) {
-            TextView textView2 = this.textView;
+            TextView textView = this.textView;
             Property property = View.ALPHA;
             float[] fArr = new float[1];
             fArr[0] = z ? 1.0f : 0.5f;
-            arrayList.add(ObjectAnimator.ofFloat(textView2, property, fArr));
+            arrayList.add(ObjectAnimator.ofFloat(textView, property, fArr));
             Property property2 = View.ALPHA;
             float[] fArr2 = new float[1];
             if (!z) {
@@ -98,16 +100,16 @@ public class TextColorCell extends FrameLayout {
         setAlpha(f);
     }
 
-    /* access modifiers changed from: protected */
-    public void onDraw(Canvas canvas) {
+    @Override // android.view.View
+    protected void onDraw(Canvas canvas) {
         if (this.needDivider) {
-            canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.dp(20.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(20.0f) : 0)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
+            canvas.drawLine(LocaleController.isRTL ? 0.0f : AndroidUtilities.dp(20.0f), getMeasuredHeight() - 1, getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(20.0f) : 0), getMeasuredHeight() - 1, Theme.dividerPaint);
         }
         int i = this.currentColor;
         if (i != 0) {
             colorPaint.setColor(i);
             colorPaint.setAlpha((int) (this.alpha * 255.0f));
-            canvas.drawCircle((float) (LocaleController.isRTL ? AndroidUtilities.dp(33.0f) : getMeasuredWidth() - AndroidUtilities.dp(33.0f)), (float) (getMeasuredHeight() / 2), (float) AndroidUtilities.dp(10.0f), colorPaint);
+            canvas.drawCircle(LocaleController.isRTL ? AndroidUtilities.dp(33.0f) : getMeasuredWidth() - AndroidUtilities.dp(33.0f), getMeasuredHeight() / 2, AndroidUtilities.dp(10.0f), colorPaint);
         }
     }
 }

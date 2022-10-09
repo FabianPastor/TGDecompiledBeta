@@ -3,7 +3,7 @@ package org.telegram.ui.Charts.data;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.telegram.messenger.SegmentTree;
-
+/* loaded from: classes3.dex */
 public class StackBarChartData extends ChartData {
     public int[] ySum;
     public SegmentTree ySumSegmentTree;

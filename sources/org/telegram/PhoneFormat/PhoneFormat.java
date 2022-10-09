@@ -1,10 +1,15 @@
 package org.telegram.PhoneFormat;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
-
+/* loaded from: classes.dex */
 public class PhoneFormat {
     private static volatile PhoneFormat Instance;
     public ByteBuffer buffer;
@@ -63,141 +68,104 @@ public class PhoneFormat {
     }
 
     public PhoneFormat() {
-        init((String) null);
+        init(null);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:39:0x0095 A[SYNTHETIC, Splitter:B:39:0x0095] */
-    /* JADX WARNING: Removed duplicated region for block: B:44:0x009f A[SYNTHETIC, Splitter:B:44:0x009f] */
-    /* JADX WARNING: Removed duplicated region for block: B:50:0x00ab A[SYNTHETIC, Splitter:B:50:0x00ab] */
-    /* JADX WARNING: Removed duplicated region for block: B:55:0x00b5 A[SYNTHETIC, Splitter:B:55:0x00b5] */
-    /* JADX WARNING: Removed duplicated region for block: B:62:? A[RETURN, SYNTHETIC] */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void init(java.lang.String r8) {
-        /*
-            r7 = this;
-            r0 = 0
-            android.content.Context r1 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x008e, all -> 0x008b }
-            android.content.res.AssetManager r1 = r1.getAssets()     // Catch:{ Exception -> 0x008e, all -> 0x008b }
-            java.lang.String r2 = "PhoneFormats.dat"
-            java.io.InputStream r1 = r1.open(r2)     // Catch:{ Exception -> 0x008e, all -> 0x008b }
-            java.io.ByteArrayOutputStream r2 = new java.io.ByteArrayOutputStream     // Catch:{ Exception -> 0x0089 }
-            r2.<init>()     // Catch:{ Exception -> 0x0089 }
-            r0 = 1024(0x400, float:1.435E-42)
-            byte[] r3 = new byte[r0]     // Catch:{ Exception -> 0x0086, all -> 0x0083 }
-        L_0x0016:
-            r4 = 0
-            int r5 = r1.read(r3, r4, r0)     // Catch:{ Exception -> 0x0086, all -> 0x0083 }
-            r6 = -1
-            if (r5 == r6) goto L_0x0022
-            r2.write(r3, r4, r5)     // Catch:{ Exception -> 0x0086, all -> 0x0083 }
-            goto L_0x0016
-        L_0x0022:
-            byte[] r0 = r2.toByteArray()     // Catch:{ Exception -> 0x0086, all -> 0x0083 }
-            r7.data = r0     // Catch:{ Exception -> 0x0086, all -> 0x0083 }
-            java.nio.ByteBuffer r0 = java.nio.ByteBuffer.wrap(r0)     // Catch:{ Exception -> 0x0086, all -> 0x0083 }
-            r7.buffer = r0     // Catch:{ Exception -> 0x0086, all -> 0x0083 }
-            java.nio.ByteOrder r3 = java.nio.ByteOrder.LITTLE_ENDIAN     // Catch:{ Exception -> 0x0086, all -> 0x0083 }
-            r0.order(r3)     // Catch:{ Exception -> 0x0086, all -> 0x0083 }
-            r2.close()     // Catch:{ Exception -> 0x0037 }
-            goto L_0x003b
-        L_0x0037:
-            r0 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x003b:
-            r1.close()     // Catch:{ Exception -> 0x003f }
-            goto L_0x0043
-        L_0x003f:
-            r0 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x0043:
-            if (r8 == 0) goto L_0x004e
-            int r0 = r8.length()
-            if (r0 == 0) goto L_0x004e
-            r7.defaultCountry = r8
-            goto L_0x005c
-        L_0x004e:
-            java.util.Locale r8 = java.util.Locale.getDefault()
-            java.lang.String r8 = r8.getCountry()
-            java.lang.String r8 = r8.toLowerCase()
-            r7.defaultCountry = r8
-        L_0x005c:
-            java.util.HashMap r8 = new java.util.HashMap
-            r0 = 255(0xff, float:3.57E-43)
-            r8.<init>(r0)
-            r7.callingCodeOffsets = r8
-            java.util.HashMap r8 = new java.util.HashMap
-            r8.<init>(r0)
-            r7.callingCodeCountries = r8
-            java.util.HashMap r8 = new java.util.HashMap
-            r1 = 10
-            r8.<init>(r1)
-            r7.callingCodeData = r8
-            java.util.HashMap r8 = new java.util.HashMap
-            r8.<init>(r0)
-            r7.countryCallingCode = r8
-            r7.parseDataHeader()
-            r8 = 1
-            r7.initialzed = r8
-            return
-        L_0x0083:
-            r8 = move-exception
-            r0 = r2
-            goto L_0x00a9
-        L_0x0086:
-            r8 = move-exception
-            r0 = r2
-            goto L_0x0090
-        L_0x0089:
-            r8 = move-exception
-            goto L_0x0090
-        L_0x008b:
-            r8 = move-exception
-            r1 = r0
-            goto L_0x00a9
-        L_0x008e:
-            r8 = move-exception
-            r1 = r0
-        L_0x0090:
-            r8.printStackTrace()     // Catch:{ all -> 0x00a8 }
-            if (r0 == 0) goto L_0x009d
-            r0.close()     // Catch:{ Exception -> 0x0099 }
-            goto L_0x009d
-        L_0x0099:
-            r8 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r8)
-        L_0x009d:
-            if (r1 == 0) goto L_0x00a7
-            r1.close()     // Catch:{ Exception -> 0x00a3 }
-            goto L_0x00a7
-        L_0x00a3:
-            r8 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r8)
-        L_0x00a7:
-            return
-        L_0x00a8:
-            r8 = move-exception
-        L_0x00a9:
-            if (r0 == 0) goto L_0x00b3
-            r0.close()     // Catch:{ Exception -> 0x00af }
-            goto L_0x00b3
-        L_0x00af:
-            r0 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x00b3:
-            if (r1 == 0) goto L_0x00bd
-            r1.close()     // Catch:{ Exception -> 0x00b9 }
-            goto L_0x00bd
-        L_0x00b9:
-            r0 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x00bd:
-            goto L_0x00bf
-        L_0x00be:
-            throw r8
-        L_0x00bf:
-            goto L_0x00be
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.PhoneFormat.PhoneFormat.init(java.lang.String):void");
+    public void init(String str) {
+        InputStream inputStream;
+        ByteArrayOutputStream byteArrayOutputStream;
+        ByteArrayOutputStream byteArrayOutputStream2 = null;
+        try {
+            inputStream = ApplicationLoader.applicationContext.getAssets().open("PhoneFormats.dat");
+            try {
+                try {
+                    byteArrayOutputStream = new ByteArrayOutputStream();
+                } catch (Exception e) {
+                    e = e;
+                }
+            } catch (Throwable th) {
+                th = th;
+            }
+        } catch (Exception e2) {
+            e = e2;
+            inputStream = null;
+        } catch (Throwable th2) {
+            th = th2;
+            inputStream = null;
+        }
+        try {
+            byte[] bArr = new byte[1024];
+            while (true) {
+                int read = inputStream.read(bArr, 0, 1024);
+                if (read == -1) {
+                    break;
+                }
+                byteArrayOutputStream.write(bArr, 0, read);
+            }
+            byte[] byteArray = byteArrayOutputStream.toByteArray();
+            this.data = byteArray;
+            ByteBuffer wrap = ByteBuffer.wrap(byteArray);
+            this.buffer = wrap;
+            wrap.order(ByteOrder.LITTLE_ENDIAN);
+            try {
+                byteArrayOutputStream.close();
+            } catch (Exception e3) {
+                FileLog.e(e3);
+            }
+            try {
+                inputStream.close();
+            } catch (Exception e4) {
+                FileLog.e(e4);
+            }
+            if (str != null && str.length() != 0) {
+                this.defaultCountry = str;
+            } else {
+                this.defaultCountry = Locale.getDefault().getCountry().toLowerCase();
+            }
+            this.callingCodeOffsets = new HashMap<>(255);
+            this.callingCodeCountries = new HashMap<>(255);
+            this.callingCodeData = new HashMap<>(10);
+            this.countryCallingCode = new HashMap<>(255);
+            parseDataHeader();
+            this.initialzed = true;
+        } catch (Exception e5) {
+            e = e5;
+            byteArrayOutputStream2 = byteArrayOutputStream;
+            e.printStackTrace();
+            if (byteArrayOutputStream2 != null) {
+                try {
+                    byteArrayOutputStream2.close();
+                } catch (Exception e6) {
+                    FileLog.e(e6);
+                }
+            }
+            if (inputStream == null) {
+                return;
+            }
+            try {
+                inputStream.close();
+            } catch (Exception e7) {
+                FileLog.e(e7);
+            }
+        } catch (Throwable th3) {
+            th = th3;
+            byteArrayOutputStream2 = byteArrayOutputStream;
+            if (byteArrayOutputStream2 != null) {
+                try {
+                    byteArrayOutputStream2.close();
+                } catch (Exception e8) {
+                    FileLog.e(e8);
+                }
+            }
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (Exception e9) {
+                    FileLog.e(e9);
+                }
+            }
+            throw th;
+        }
     }
 
     public CallingCodeInfo findCallingCodeInfo(String str) {
@@ -233,81 +201,99 @@ public class PhoneFormat {
                 return str;
             }
             String matchingAccessCode = callingCodeInfo.matchingAccessCode(strip);
-            if (matchingAccessCode == null) {
-                return callingCodeInfo.format(strip);
+            if (matchingAccessCode != null) {
+                String substring2 = strip.substring(matchingAccessCode.length());
+                CallingCodeInfo findCallingCodeInfo2 = findCallingCodeInfo(substring2);
+                if (findCallingCodeInfo2 != null) {
+                    substring2 = findCallingCodeInfo2.format(substring2);
+                }
+                return substring2.length() == 0 ? matchingAccessCode : String.format("%s %s", matchingAccessCode, substring2);
             }
-            String substring2 = strip.substring(matchingAccessCode.length());
-            CallingCodeInfo findCallingCodeInfo2 = findCallingCodeInfo(substring2);
-            if (findCallingCodeInfo2 != null) {
-                substring2 = findCallingCodeInfo2.format(substring2);
-            }
-            if (substring2.length() == 0) {
-                return matchingAccessCode;
-            }
-            return String.format("%s %s", new Object[]{matchingAccessCode, substring2});
+            return callingCodeInfo.format(strip);
         } catch (Exception e) {
-            FileLog.e((Throwable) e);
+            FileLog.e(e);
             return str;
         }
     }
 
-    /* access modifiers changed from: package-private */
-    public int value32(int i) {
-        if (i + 4 > this.data.length) {
-            return 0;
+    int value32(int i) {
+        if (i + 4 <= this.data.length) {
+            this.buffer.position(i);
+            return this.buffer.getInt();
         }
-        this.buffer.position(i);
-        return this.buffer.getInt();
+        return 0;
     }
 
-    /* access modifiers changed from: package-private */
-    public short value16(int i) {
-        if (i + 2 > this.data.length) {
-            return 0;
+    short value16(int i) {
+        if (i + 2 <= this.data.length) {
+            this.buffer.position(i);
+            return this.buffer.getShort();
         }
-        this.buffer.position(i);
-        return this.buffer.getShort();
+        return (short) 0;
     }
 
-    public String valueString(int i) {
-        int i2 = i;
-        while (true) {
-            try {
-                byte[] bArr = this.data;
-                if (i2 >= bArr.length) {
-                    return "";
-                }
-                if (bArr[i2] == 0) {
-                    int i3 = i2 - i;
-                    if (i == i3) {
-                        return "";
-                    }
-                    return new String(bArr, i, i3);
-                }
-                i2++;
-            } catch (Exception e) {
-                e.printStackTrace();
-                return "";
-            }
-        }
+    /* JADX WARN: Code restructure failed: missing block: B:11:0x0015, code lost:
+        return new java.lang.String(r2, r5, r1);
+     */
+    /* JADX WARN: Code restructure failed: missing block: B:7:0x000c, code lost:
+        r1 = r1 - r5;
+     */
+    /* JADX WARN: Code restructure failed: missing block: B:8:0x000d, code lost:
+        if (r5 != r1) goto L13;
+     */
+    /* JADX WARN: Code restructure failed: missing block: B:9:0x000f, code lost:
+        return "";
+     */
+    /*
+        Code decompiled incorrectly, please refer to instructions dump.
+        To view partially-correct add '--show-bad-code' argument
+    */
+    public java.lang.String valueString(int r5) {
+        /*
+            r4 = this;
+            java.lang.String r0 = ""
+            r1 = r5
+        L3:
+            byte[] r2 = r4.data     // Catch: java.lang.Exception -> L1a
+            int r3 = r2.length     // Catch: java.lang.Exception -> L1a
+            if (r1 >= r3) goto L19
+            r3 = r2[r1]     // Catch: java.lang.Exception -> L1a
+            if (r3 != 0) goto L16
+            int r1 = r1 - r5
+            if (r5 != r1) goto L10
+            return r0
+        L10:
+            java.lang.String r3 = new java.lang.String     // Catch: java.lang.Exception -> L1a
+            r3.<init>(r2, r5, r1)     // Catch: java.lang.Exception -> L1a
+            return r3
+        L16:
+            int r1 = r1 + 1
+            goto L3
+        L19:
+            return r0
+        L1a:
+            r5 = move-exception
+            r5.printStackTrace()
+            return r0
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.PhoneFormat.PhoneFormat.valueString(int):java.lang.String");
     }
 
     public CallingCodeInfo callingCodeInfo(String str) {
         Integer num;
-        int i;
         byte[] bArr;
+        int i;
         PhoneFormat phoneFormat = this;
-        String str2 = str;
-        CallingCodeInfo callingCodeInfo = phoneFormat.callingCodeData.get(str2);
-        if (callingCodeInfo != null || (num = phoneFormat.callingCodeOffsets.get(str2)) == null) {
+        CallingCodeInfo callingCodeInfo = phoneFormat.callingCodeData.get(str);
+        if (callingCodeInfo != null || (num = phoneFormat.callingCodeOffsets.get(str)) == null) {
             return callingCodeInfo;
         }
         byte[] bArr2 = phoneFormat.data;
         int intValue = num.intValue();
         CallingCodeInfo callingCodeInfo2 = new CallingCodeInfo();
-        callingCodeInfo2.callingCode = str2;
-        ArrayList arrayList = phoneFormat.callingCodeCountries.get(str2);
-        phoneFormat.callingCodeData.put(str2, callingCodeInfo2);
+        callingCodeInfo2.callingCode = str;
+        phoneFormat.callingCodeCountries.get(str);
+        phoneFormat.callingCodeData.put(str, callingCodeInfo2);
         short value16 = phoneFormat.value16(intValue);
         int i2 = 2;
         int i3 = intValue + 2 + 2;
@@ -315,28 +301,28 @@ public class PhoneFormat {
         int i4 = i3 + 2 + 2;
         short value163 = phoneFormat.value16(i4);
         int i5 = i4 + 2 + 2;
-        ArrayList<String> arrayList2 = new ArrayList<>(5);
+        ArrayList<String> arrayList = new ArrayList<>(5);
         while (true) {
             String valueString = phoneFormat.valueString(i5);
             if (valueString.length() == 0) {
                 break;
             }
-            arrayList2.add(valueString);
+            arrayList.add(valueString);
             i5 += valueString.length() + 1;
         }
-        callingCodeInfo2.trunkPrefixes = arrayList2;
+        callingCodeInfo2.trunkPrefixes = arrayList;
         int i6 = i5 + 1;
-        ArrayList<String> arrayList3 = new ArrayList<>(5);
+        ArrayList<String> arrayList2 = new ArrayList<>(5);
         while (true) {
             String valueString2 = phoneFormat.valueString(i6);
             if (valueString2.length() == 0) {
                 break;
             }
-            arrayList3.add(valueString2);
+            arrayList2.add(valueString2);
             i6 += valueString2.length() + 1;
         }
-        callingCodeInfo2.intlPrefixes = arrayList3;
-        ArrayList<RuleSet> arrayList4 = new ArrayList<>(value163);
+        callingCodeInfo2.intlPrefixes = arrayList2;
+        ArrayList<RuleSet> arrayList3 = new ArrayList<>(value163);
         int i7 = intValue + value16;
         int i8 = i7;
         int i9 = 0;
@@ -346,7 +332,7 @@ public class PhoneFormat {
             int i10 = i8 + i2;
             short value164 = phoneFormat.value16(i10);
             i8 = i10 + i2;
-            ArrayList<PhoneRule> arrayList5 = new ArrayList<>(value164);
+            ArrayList<PhoneRule> arrayList4 = new ArrayList<>(value164);
             int i11 = 0;
             while (i11 < value164) {
                 PhoneRule phoneRule = new PhoneRule();
@@ -375,26 +361,25 @@ public class PhoneFormat {
                     bArr = bArr2;
                     i = i7;
                     i2 = 2;
-                    phoneRule.format = String.format("%s%s", new Object[]{phoneRule.format.substring(0, indexOf), phoneRule.format.substring(phoneRule.format.indexOf("]]") + 2)});
+                    phoneRule.format = String.format("%s%s", phoneRule.format.substring(0, indexOf), phoneRule.format.substring(phoneRule.format.indexOf("]]") + 2));
                 } else {
                     bArr = bArr2;
                     i = i7;
                     i2 = 2;
                 }
-                arrayList5.add(phoneRule);
+                arrayList4.add(phoneRule);
                 i11++;
                 phoneFormat = this;
                 bArr2 = bArr;
                 i7 = i;
             }
-            byte[] bArr3 = bArr2;
-            ruleSet.rules = arrayList5;
-            arrayList4.add(ruleSet);
+            ruleSet.rules = arrayList4;
+            arrayList3.add(ruleSet);
             i9++;
             phoneFormat = this;
             i7 = i7;
         }
-        callingCodeInfo2.ruleSets = arrayList4;
+        callingCodeInfo2.ruleSets = arrayList3;
         return callingCodeInfo2;
     }
 
@@ -414,9 +399,9 @@ public class PhoneFormat {
             }
             this.countryCallingCode.put(valueString2, valueString);
             this.callingCodeOffsets.put(valueString, Integer.valueOf(value322));
-            ArrayList arrayList = this.callingCodeCountries.get(valueString);
+            ArrayList<String> arrayList = this.callingCodeCountries.get(valueString);
             if (arrayList == null) {
-                arrayList = new ArrayList();
+                arrayList = new ArrayList<>();
                 this.callingCodeCountries.put(valueString, arrayList);
             }
             arrayList.add(valueString2);

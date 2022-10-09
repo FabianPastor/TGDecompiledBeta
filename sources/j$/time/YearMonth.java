@@ -1,19 +1,17 @@
 package j$.time;
 
-import j$.time.chrono.c;
 import j$.time.format.p;
 import j$.time.format.s;
-import j$.time.temporal.a;
 import java.io.Serializable;
-
+/* loaded from: classes2.dex */
 public final class YearMonth implements Comparable<YearMonth>, Serializable {
     private final int a;
     private final int b;
 
     static {
-        p l = new p().l(a.YEAR, 4, 10, s.EXCEEDS_PAD);
+        p l = new p().l(j$.time.temporal.a.YEAR, 4, 10, s.EXCEEDS_PAD);
         l.e('-');
-        l.k(a.MONTH_OF_YEAR, 2);
+        l.k(j$.time.temporal.a.MONTH_OF_YEAR, 2);
         l.s();
     }
 
@@ -23,15 +21,16 @@ public final class YearMonth implements Comparable<YearMonth>, Serializable {
     }
 
     public static YearMonth of(int i, int i2) {
-        a.YEAR.b((long) i);
-        a.MONTH_OF_YEAR.b((long) i2);
+        j$.time.temporal.a.YEAR.b(i);
+        j$.time.temporal.a.MONTH_OF_YEAR.b(i2);
         return new YearMonth(i, i2);
     }
 
-    public int compareTo(Object obj) {
-        YearMonth yearMonth = (YearMonth) obj;
-        int i = this.a - yearMonth.a;
-        return i == 0 ? this.b - yearMonth.b : i;
+    @Override // java.lang.Comparable
+    public int compareTo(YearMonth yearMonth) {
+        YearMonth yearMonth2 = yearMonth;
+        int i = this.a - yearMonth2.a;
+        return i == 0 ? this.b - yearMonth2.b : i;
     }
 
     public boolean equals(Object obj) {
@@ -50,12 +49,12 @@ public final class YearMonth implements Comparable<YearMonth>, Serializable {
     }
 
     public int lengthOfMonth() {
-        d a2 = d.a(this.b);
-        c cVar = c.a;
-        long j = (long) this.a;
+        d a = d.a(this.b);
+        j$.time.chrono.c cVar = j$.time.chrono.c.a;
+        long j = this.a;
         boolean z = (3 & j) == 0 && (j % 100 != 0 || j % 400 == 0);
-        a2.getClass();
-        int i = c.a[a2.ordinal()];
+        a.getClass();
+        int i = c.a[a.ordinal()];
         return i != 1 ? (i == 2 || i == 3 || i == 4 || i == 5) ? 30 : 31 : z ? 29 : 28;
     }
 

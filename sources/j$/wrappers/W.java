@@ -1,7 +1,7 @@
 package j$.wrappers;
 
 import java.util.function.IntPredicate;
-
+/* loaded from: classes2.dex */
 public abstract /* synthetic */ class W implements IntPredicate {
     final /* synthetic */ V a;
 

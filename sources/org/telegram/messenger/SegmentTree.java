@@ -1,5 +1,5 @@
 package org.telegram.messenger;
-
+/* loaded from: classes.dex */
 public class SegmentTree {
     private int[] array;
     private Node[] heap;
@@ -14,10 +14,11 @@ public class SegmentTree {
 
     public SegmentTree(int[] iArr) {
         this.array = iArr;
-        if (iArr.length >= 30) {
-            this.heap = new Node[((int) (Math.pow(2.0d, Math.floor((Math.log((double) iArr.length) / Math.log(2.0d)) + 1.0d)) * 2.0d))];
-            build(1, 0, iArr.length);
+        if (iArr.length < 30) {
+            return;
         }
+        this.heap = new Node[(int) (Math.pow(2.0d, Math.floor((Math.log(iArr.length) / Math.log(2.0d)) + 1.0d)) * 2.0d)];
+        build(1, 0, iArr.length);
     }
 
     private void build(int i, int i2, int i3) {
@@ -47,24 +48,24 @@ public class SegmentTree {
 
     public int rMaxQ(int i, int i2) {
         int[] iArr = this.array;
-        if (iArr.length >= 30) {
-            return rMaxQ(1, i, i2);
-        }
-        int i3 = Integer.MIN_VALUE;
-        if (i < 0) {
-            i = 0;
-        }
-        if (i2 > iArr.length - 1) {
-            i2 = iArr.length - 1;
-        }
-        while (i <= i2) {
-            int[] iArr2 = this.array;
-            if (iArr2[i] > i3) {
-                i3 = iArr2[i];
+        if (iArr.length < 30) {
+            int i3 = Integer.MIN_VALUE;
+            if (i < 0) {
+                i = 0;
             }
-            i++;
+            if (i2 > iArr.length - 1) {
+                i2 = iArr.length - 1;
+            }
+            while (i <= i2) {
+                int[] iArr2 = this.array;
+                if (iArr2[i] > i3) {
+                    i3 = iArr2[i];
+                }
+                i++;
+            }
+            return i3;
         }
-        return i3;
+        return rMaxQ(1, i, i2);
     }
 
     private int rMaxQ(int i, int i2, int i3) {
@@ -85,24 +86,24 @@ public class SegmentTree {
 
     public int rMinQ(int i, int i2) {
         int[] iArr = this.array;
-        if (iArr.length >= 30) {
-            return rMinQ(1, i, i2);
-        }
-        int i3 = Integer.MAX_VALUE;
-        if (i < 0) {
-            i = 0;
-        }
-        if (i2 > iArr.length - 1) {
-            i2 = iArr.length - 1;
-        }
-        while (i <= i2) {
-            int[] iArr2 = this.array;
-            if (iArr2[i] < i3) {
-                i3 = iArr2[i];
+        if (iArr.length < 30) {
+            int i3 = Integer.MAX_VALUE;
+            if (i < 0) {
+                i = 0;
             }
-            i++;
+            if (i2 > iArr.length - 1) {
+                i2 = iArr.length - 1;
+            }
+            while (i <= i2) {
+                int[] iArr2 = this.array;
+                if (iArr2[i] < i3) {
+                    i3 = iArr2[i];
+                }
+                i++;
+            }
+            return i3;
         }
-        return i3;
+        return rMinQ(1, i, i2);
     }
 
     private int rMinQ(int i, int i2, int i3) {
@@ -141,7 +142,9 @@ public class SegmentTree {
         this.array[node.from] = i;
     }
 
-    static class Node {
+    /* JADX INFO: Access modifiers changed from: package-private */
+    /* loaded from: classes.dex */
+    public static class Node {
         int from;
         int max;
         int min;
@@ -152,8 +155,7 @@ public class SegmentTree {
         Node() {
         }
 
-        /* access modifiers changed from: package-private */
-        public int size() {
+        int size() {
             return (this.to - this.from) + 1;
         }
     }

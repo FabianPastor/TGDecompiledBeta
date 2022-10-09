@@ -1,52 +1,53 @@
 package j$.util.stream;
 
-import j$.util.CLASSNAMEa;
+import j$.util.AbstractCLASSNAMEa;
 import j$.util.function.Consumer;
-import j$.util.function.e;
-import j$.util.function.f;
-import j$.util.t;
-import j$.util.u;
-
-final class E4 extends H4 implements t, f {
+/* loaded from: classes2.dex */
+final class E4 extends H4 implements j$.util.t, j$.util.function.f {
     double e;
 
-    E4(t tVar, long j, long j2) {
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public E4(j$.util.t tVar, long j, long j2) {
         super(tVar, j, j2);
     }
 
-    E4(t tVar, E4 e4) {
+    E4(j$.util.t tVar, E4 e4) {
         super(tVar, e4);
     }
 
+    @Override // j$.util.function.f
     public void accept(double d) {
         this.e = d;
     }
 
+    @Override // j$.util.u
     public /* synthetic */ boolean b(Consumer consumer) {
-        return CLASSNAMEa.j(this, consumer);
+        return AbstractCLASSNAMEa.j(this, consumer);
     }
 
+    @Override // j$.util.u
     public /* synthetic */ void forEachRemaining(Consumer consumer) {
-        CLASSNAMEa.b(this, consumer);
+        AbstractCLASSNAMEa.b(this, consumer);
     }
 
-    public f j(f fVar) {
+    @Override // j$.util.function.f
+    public j$.util.function.f j(j$.util.function.f fVar) {
         fVar.getClass();
-        return new e(this, fVar);
+        return new j$.util.function.e(this, fVar);
     }
 
-    /* access modifiers changed from: protected */
-    public u q(u uVar) {
-        return new E4((t) uVar, this);
+    @Override // j$.util.stream.J4
+    protected j$.util.u q(j$.util.u uVar) {
+        return new E4((j$.util.t) uVar, this);
     }
 
-    /* access modifiers changed from: protected */
-    public void s(Object obj) {
-        ((f) obj).accept(this.e);
+    @Override // j$.util.stream.H4
+    protected void s(Object obj) {
+        ((j$.util.function.f) obj).accept(this.e);
     }
 
-    /* access modifiers changed from: protected */
-    public CLASSNAMEj4 t(int i) {
+    @Override // j$.util.stream.H4
+    protected AbstractCLASSNAMEj4 t(int i) {
         return new CLASSNAMEg4(i);
     }
 }

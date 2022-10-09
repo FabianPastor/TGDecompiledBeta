@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.TMessages">
+    <style name="Theme.TMessages" parent="@android:style/Theme.Material.Light">
         <item name="android:colorBackground">@android:color/white</item>
         <item name="android:windowBackground">@android:color/white</item>
         <item name="android:windowNoTitle">true</item>
@@ -23,7 +23,7 @@
         <item name="android:timePickerStyle">@style/Theme.TMessages.TimePicker</item>
         <item name="android:timePickerDialogTheme">@style/Theme.TMessages.Dialog.Alert</item>
         <item name="android:datePickerDialogTheme">@style/Theme.TMessages.Dialog.Alert</item>
-        <item name="?0x1010586">1</item>
-        <item name="?0x101058c">false</item>
+        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
+        <item name="android:forceDarkAllowed">false</item>
     </style>
 </resources>

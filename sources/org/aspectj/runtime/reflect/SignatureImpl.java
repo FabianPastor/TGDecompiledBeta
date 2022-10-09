@@ -3,67 +3,73 @@ package org.aspectj.runtime.reflect;
 import java.lang.ref.SoftReference;
 import java.util.StringTokenizer;
 import org.aspectj.lang.Signature;
-
+/* loaded from: classes.dex */
 abstract class SignatureImpl implements Signature {
     private static boolean useCache = true;
     Class declaringType;
     String declaringTypeName;
     ClassLoader lookupClassLoader = null;
-    int modifiers = -1;
+    int modifiers;
     String name;
     Cache stringCache;
     private String stringRep;
 
-    private interface Cache {
+    /* JADX INFO: Access modifiers changed from: private */
+    /* loaded from: classes.dex */
+    public interface Cache {
         String get(int i);
 
         void set(int i, String str);
     }
 
-    /* access modifiers changed from: protected */
-    public abstract String createToString(StringMaker stringMaker);
+    protected abstract String createToString(StringMaker stringMaker);
 
-    SignatureImpl(int i, String str, Class cls) {
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public SignatureImpl(int i, String str, Class cls) {
+        this.modifiers = -1;
         this.modifiers = i;
         this.name = str;
         this.declaringType = cls;
     }
 
-    /* access modifiers changed from: package-private */
-    /* JADX WARNING: Removed duplicated region for block: B:11:0x001e  */
-    /* JADX WARNING: Removed duplicated region for block: B:14:0x0026  */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
+    /* JADX INFO: Access modifiers changed from: package-private */
+    /* JADX WARN: Removed duplicated region for block: B:12:0x001e  */
+    /* JADX WARN: Removed duplicated region for block: B:15:0x0026  */
+    /*
+        Code decompiled incorrectly, please refer to instructions dump.
+        To view partially-correct add '--show-bad-code' argument
+    */
     public java.lang.String toString(org.aspectj.runtime.reflect.StringMaker r3) {
         /*
             r2 = this;
-            boolean r0 = useCache
-            if (r0 == 0) goto L_0x001b
+            boolean r0 = org.aspectj.runtime.reflect.SignatureImpl.useCache
+            if (r0 == 0) goto L1b
             org.aspectj.runtime.reflect.SignatureImpl$Cache r0 = r2.stringCache
-            if (r0 != 0) goto L_0x0014
-            org.aspectj.runtime.reflect.SignatureImpl$CacheImpl r0 = new org.aspectj.runtime.reflect.SignatureImpl$CacheImpl     // Catch:{ all -> 0x0010 }
-            r0.<init>()     // Catch:{ all -> 0x0010 }
-            r2.stringCache = r0     // Catch:{ all -> 0x0010 }
-            goto L_0x001b
-        L_0x0010:
+            if (r0 != 0) goto L14
+            org.aspectj.runtime.reflect.SignatureImpl$CacheImpl r0 = new org.aspectj.runtime.reflect.SignatureImpl$CacheImpl     // Catch: java.lang.Throwable -> L10
+            r0.<init>()     // Catch: java.lang.Throwable -> L10
+            r2.stringCache = r0     // Catch: java.lang.Throwable -> L10
+            goto L1b
+        L10:
             r0 = 0
-            useCache = r0
-            goto L_0x001b
-        L_0x0014:
+            org.aspectj.runtime.reflect.SignatureImpl.useCache = r0
+            goto L1b
+        L14:
             int r1 = r3.cacheOffset
             java.lang.String r0 = r0.get(r1)
-            goto L_0x001c
-        L_0x001b:
+            goto L1c
+        L1b:
             r0 = 0
-        L_0x001c:
-            if (r0 != 0) goto L_0x0022
+        L1c:
+            if (r0 != 0) goto L22
             java.lang.String r0 = r2.createToString(r3)
-        L_0x0022:
-            boolean r1 = useCache
-            if (r1 == 0) goto L_0x002d
+        L22:
+            boolean r1 = org.aspectj.runtime.reflect.SignatureImpl.useCache
+            if (r1 == 0) goto L2d
             org.aspectj.runtime.reflect.SignatureImpl$Cache r1 = r2.stringCache
             int r3 = r3.cacheOffset
             r1.set(r3, r0)
-        L_0x002d:
+        L2d:
             return r0
         */
         throw new UnsupportedOperationException("Method not decompiled: org.aspectj.runtime.reflect.SignatureImpl.toString(org.aspectj.runtime.reflect.StringMaker):java.lang.String");
@@ -108,8 +114,7 @@ abstract class SignatureImpl implements Signature {
         return this.lookupClassLoader;
     }
 
-    /* access modifiers changed from: package-private */
-    public String extractString(int i) {
+    String extractString(int i) {
         int indexOf = this.stringRep.indexOf(45);
         int i2 = 0;
         while (true) {
@@ -127,17 +132,16 @@ abstract class SignatureImpl implements Signature {
         return this.stringRep.substring(i2, indexOf);
     }
 
-    /* access modifiers changed from: package-private */
-    public int extractInt(int i) {
+    int extractInt(int i) {
         return Integer.parseInt(extractString(i), 16);
     }
 
-    /* access modifiers changed from: package-private */
+    /* JADX INFO: Access modifiers changed from: package-private */
     public Class extractType(int i) {
         return Factory.makeClass(extractString(i), getLookupClassLoader());
     }
 
-    /* access modifiers changed from: package-private */
+    /* JADX INFO: Access modifiers changed from: package-private */
     public Class[] extractTypes(int i) {
         StringTokenizer stringTokenizer = new StringTokenizer(extractString(i), ":");
         int countTokens = stringTokenizer.countTokens();
@@ -148,13 +152,16 @@ abstract class SignatureImpl implements Signature {
         return clsArr;
     }
 
-    private static final class CacheImpl implements Cache {
+    /* JADX INFO: Access modifiers changed from: private */
+    /* loaded from: classes.dex */
+    public static final class CacheImpl implements Cache {
         private SoftReference toStringCacheRef;
 
         public CacheImpl() {
             makeCache();
         }
 
+        @Override // org.aspectj.runtime.reflect.SignatureImpl.Cache
         public String get(int i) {
             String[] array = array();
             if (array == null) {
@@ -163,6 +170,7 @@ abstract class SignatureImpl implements Signature {
             return array[i];
         }
 
+        @Override // org.aspectj.runtime.reflect.SignatureImpl.Cache
         public void set(int i, String str) {
             String[] array = array();
             if (array == null) {
