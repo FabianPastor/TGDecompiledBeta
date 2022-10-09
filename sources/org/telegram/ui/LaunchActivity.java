@@ -4376,13 +4376,13 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
         checkLayout();
     }
 
-    /* JADX WARN: Code restructure failed: missing block: B:103:0x0277, code lost:
-        if (((org.telegram.ui.ProfileActivity) r1.get(r1.size() - 1)).isSettings() == false) goto L122;
+    /* JADX WARN: Code restructure failed: missing block: B:106:0x028c, code lost:
+        if (((org.telegram.ui.ProfileActivity) r1.get(r1.size() - 1)).isSettings() == false) goto L125;
      */
-    /* JADX WARN: Removed duplicated region for block: B:102:0x0266  */
-    /* JADX WARN: Removed duplicated region for block: B:213:0x05b6  */
-    /* JADX WARN: Removed duplicated region for block: B:216:0x05d2  */
-    /* JADX WARN: Removed duplicated region for block: B:452:? A[RETURN, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:105:0x027b  */
+    /* JADX WARN: Removed duplicated region for block: B:216:0x05cb  */
+    /* JADX WARN: Removed duplicated region for block: B:219:0x05e7  */
+    /* JADX WARN: Removed duplicated region for block: B:455:? A[RETURN, SYNTHETIC] */
     @Override // org.telegram.messenger.NotificationCenter.NotificationCenterDelegate
     /*
         Code decompiled incorrectly, please refer to instructions dump.
@@ -4390,7 +4390,7 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
     */
     public void didReceivedNotification(int r23, final int r24, java.lang.Object... r25) {
         /*
-            Method dump skipped, instructions count: 2534
+            Method dump skipped, instructions count: 2555
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LaunchActivity.didReceivedNotification(int, int, java.lang.Object[]):void");

@@ -15747,11 +15747,8 @@ public class MessagesController extends BaseController implements NotificationCe
         if (baseFragment == null || baseFragment.getParentActivity() == null) {
             return;
         }
-        AlertDialog.Builder builder = new AlertDialog.Builder(baseFragment.getParentActivity(), baseFragment.getResourceProvider());
-        HashMap hashMap = new HashMap();
-        hashMap.put("info1.**", Integer.valueOf(baseFragment.getThemedColor("dialogTopBackground")));
-        hashMap.put("info2.**", Integer.valueOf(baseFragment.getThemedColor("dialogTopBackground")));
-        builder.setTopAnimation(R.raw.info, 72, false, baseFragment.getThemedColor("dialogTopBackground"), hashMap);
+        AlertDialog.Builder builder = new AlertDialog.Builder(baseFragment.getParentActivity());
+        builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
         builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
         builder.setMessage(str);
         baseFragment.showDialog(builder.create());

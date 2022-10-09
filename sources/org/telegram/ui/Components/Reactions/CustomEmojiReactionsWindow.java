@@ -92,7 +92,7 @@ public class CustomEmojiReactionsWindow {
                     CustomEmojiReactionsWindow.this.dismiss();
                     return true;
                 }
-                return false;
+                return super.dispatchKeyEvent(keyEvent);
             }
 
             @Override // android.view.View

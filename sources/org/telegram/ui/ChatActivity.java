@@ -11998,14 +11998,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /*  JADX ERROR: JadxRuntimeException in pass: BlockProcessor
-        jadx.core.utils.exceptions.JadxRuntimeException: CFG modification limit reached, blocks count: 3094
+        jadx.core.utils.exceptions.JadxRuntimeException: CFG modification limit reached, blocks count: 3105
         	at jadx.core.dex.visitors.blocks.BlockProcessor.processBlocksTree(BlockProcessor.java:60)
         	at jadx.core.dex.visitors.blocks.BlockProcessor.visit(BlockProcessor.java:40)
         */
     @Override // org.telegram.messenger.NotificationCenter.NotificationCenterDelegate
-    public void didReceivedNotification(int r54, int r55, java.lang.Object... r56) {
+    public void didReceivedNotification(int r57, int r58, java.lang.Object... r59) {
         /*
-            Method dump skipped, instructions count: 14051
+            Method dump skipped, instructions count: 14101
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatActivity.didReceivedNotification(int, int, java.lang.Object[]):void");

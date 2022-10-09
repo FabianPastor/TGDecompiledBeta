@@ -1087,7 +1087,7 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
                 for (int i = 0; i < this.recyclerListView.getChildCount(); i++) {
                     if (this.recyclerListView.getChildAt(i) instanceof ReactionHolderView) {
                         ReactionHolderView reactionHolderView = (ReactionHolderView) this.recyclerListView.getChildAt(i);
-                        if (reactionHolderView.hasEnterAnimation) {
+                        if (reactionHolderView.hasEnterAnimation && (reactionHolderView.loopImageView.getImageReceiver().getLottieAnimation() != null || reactionHolderView.loopImageView.getImageReceiver().getAnimation() != null)) {
                             reactionHolderView.loopImageView.setVisibility(0);
                             reactionHolderView.enterImageView.setVisibility(4);
                             if (reactionHolderView.shouldSwitchToLoopView) {
