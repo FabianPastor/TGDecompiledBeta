@@ -283,17 +283,20 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
                     z2 = true;
                 }
                 premiumFeatureBottomSheet.containerViewsForward = z2;
-                if (premiumFeatureBottomSheet.premiumFeatures.get(i7).type == 0) {
+                if (i7 >= 0 && i7 < premiumFeatureBottomSheet.premiumFeatures.size() && PremiumFeatureBottomSheet.this.premiumFeatures.get(this.selectedPosition).type == 0) {
                     PremiumFeatureBottomSheet.this.progressToFullscreenView = 1.0f - this.progress;
-                } else if (PremiumFeatureBottomSheet.this.premiumFeatures.get(this.toPosition).type == 0) {
-                    PremiumFeatureBottomSheet.this.progressToFullscreenView = this.progress;
                 } else {
-                    PremiumFeatureBottomSheet.this.progressToFullscreenView = 0.0f;
+                    int i8 = this.toPosition;
+                    if (i8 >= 0 && i8 < PremiumFeatureBottomSheet.this.premiumFeatures.size() && PremiumFeatureBottomSheet.this.premiumFeatures.get(this.toPosition).type == 0) {
+                        PremiumFeatureBottomSheet.this.progressToFullscreenView = this.progress;
+                    } else {
+                        PremiumFeatureBottomSheet.this.progressToFullscreenView = 0.0f;
+                    }
                 }
                 PremiumFeatureBottomSheet premiumFeatureBottomSheet2 = PremiumFeatureBottomSheet.this;
-                int i8 = (int) ((1.0f - premiumFeatureBottomSheet2.progressToFullscreenView) * 255.0f);
-                if (i8 != premiumFeatureBottomSheet2.gradientAlpha) {
-                    PremiumFeatureBottomSheet.this.gradientAlpha = i8;
+                int i9 = (int) ((1.0f - premiumFeatureBottomSheet2.progressToFullscreenView) * 255.0f);
+                if (i9 != premiumFeatureBottomSheet2.gradientAlpha) {
+                    PremiumFeatureBottomSheet.this.gradientAlpha = i9;
                     PremiumFeatureBottomSheet.this.content.invalidate();
                     PremiumFeatureBottomSheet.this.checkTopOffset();
                 }

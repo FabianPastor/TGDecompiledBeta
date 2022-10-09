@@ -135,6 +135,7 @@ public class MessagesStorage extends BaseController {
     private int lastSeqValue;
     private AtomicLong lastTaskId;
     private int mainUnreadCount;
+    private int malformedCleanupCount;
     private int[] mentionChannels;
     private int[] mentionGroups;
     private int[][] nonContacts;
@@ -307,6 +308,7 @@ public class MessagesStorage extends BaseController {
         this.mentionGroups = new int[2];
         this.dialogsWithMentions = new LongSparseArray<>();
         this.dialogsWithUnread = new LongSparseArray<>();
+        this.malformedCleanupCount = 0;
         DispatchQueue dispatchQueue = new DispatchQueue("storageQueue_" + i);
         this.storageQueue = dispatchQueue;
         dispatchQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda16
@@ -7720,6 +7722,15 @@ public class MessagesStorage extends BaseController {
         executeFast.dispose();
     }
 
+    public void checkMalformed(Exception exc) {
+        int i;
+        if (exc == null || exc.getMessage() == null || !exc.getMessage().contains("malformed") || (i = this.malformedCleanupCount) >= 3) {
+            return;
+        }
+        this.malformedCleanupCount = i + 1;
+        cleanup(false);
+    }
+
     public void getUsersInternal(String str, ArrayList<TLRPC$User> arrayList) throws Exception {
         if (str == null || str.length() == 0 || arrayList == null) {
             return;
@@ -7741,6 +7752,7 @@ public class MessagesStorage extends BaseController {
                 }
             } catch (Exception e) {
                 FileLog.e(e);
+                checkMalformed(e);
             }
         }
         queryFinalized.dispose();
@@ -8863,6 +8875,7 @@ public class MessagesStorage extends BaseController {
                         e = e;
                         sQLitePreparedStatement = executeFast;
                         FileLog.e(e);
+                        checkMalformed(e);
                         SQLiteDatabase sQLiteDatabase = this.database;
                         if (sQLiteDatabase != null) {
                             sQLiteDatabase.commitTransaction();
