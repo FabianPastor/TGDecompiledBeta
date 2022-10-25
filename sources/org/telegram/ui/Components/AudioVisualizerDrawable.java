@@ -109,13 +109,13 @@ public class AudioVisualizerDrawable {
         this.dt[7] = (fArr4[7] - this.current[7]) / 120.0f;
     }
 
-    public void draw(Canvas canvas, float f, float f2, boolean z, Theme.ResourcesProvider resourcesProvider) {
+    public void draw(Canvas canvas, float f, float f2, boolean z, float f3, Theme.ResourcesProvider resourcesProvider) {
         if (z) {
             this.p1.setColor(Theme.getColor("chat_outLoader", resourcesProvider));
-            this.p1.setAlpha(this.ALPHA);
+            this.p1.setAlpha((int) (this.ALPHA * f3));
         } else {
             this.p1.setColor(Theme.getColor("chat_inLoader", resourcesProvider));
-            this.p1.setAlpha(this.ALPHA);
+            this.p1.setAlpha((int) (this.ALPHA * f3));
         }
         draw(canvas, f, f2);
     }

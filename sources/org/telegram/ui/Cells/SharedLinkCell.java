@@ -202,7 +202,7 @@ public class SharedLinkCell extends FrameLayout {
         ImageReceiver imageReceiver = new ImageReceiver(this);
         this.linkImageView = imageReceiver;
         imageReceiver.setRoundRadius(AndroidUtilities.dp(4.0f));
-        this.letterDrawable = new LetterDrawable(resourcesProvider);
+        this.letterDrawable = new LetterDrawable(resourcesProvider, 0);
         CheckBox2 checkBox2 = new CheckBox2(context, 21, resourcesProvider);
         this.checkBox = checkBox2;
         checkBox2.setVisibility(4);

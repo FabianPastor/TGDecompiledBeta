@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -52,7 +51,7 @@ public class DrawerLayoutContainer extends FrameLayout {
     private Object lastInsets;
     private boolean maybeStartTracking;
     private int minDrawerMargin;
-    private ActionBarLayout parentActionBarLayout;
+    private INavigationLayout parentActionBarLayout;
     private BitmapDrawable previewBlurDrawable;
     private PreviewForegroundDrawable previewForegroundDrawable;
     private Rect rect;
@@ -194,8 +193,8 @@ public class DrawerLayoutContainer extends FrameLayout {
         if (this.drawerLayout.getVisibility() != i) {
             this.drawerLayout.setVisibility(i);
         }
-        if (!this.parentActionBarLayout.fragmentsStack.isEmpty()) {
-            BaseFragment baseFragment = this.parentActionBarLayout.fragmentsStack.get(0);
+        if (!this.parentActionBarLayout.getFragmentStack().isEmpty()) {
+            BaseFragment baseFragment = this.parentActionBarLayout.getFragmentStack().get(0);
             if (this.drawerPosition == this.drawerLayout.getMeasuredWidth()) {
                 baseFragment.setProgressToDrawerOpened(1.0f);
             } else {
@@ -224,13 +223,12 @@ public class DrawerLayoutContainer extends FrameLayout {
     }
 
     public void openDrawer(boolean z) {
-        ActionBarLayout actionBarLayout;
-        Activity activity;
+        INavigationLayout iNavigationLayout;
         if (!this.allowOpenDrawer || this.drawerLayout == null) {
             return;
         }
-        if (AndroidUtilities.isTablet() && (actionBarLayout = this.parentActionBarLayout) != null && (activity = actionBarLayout.parentActivity) != null) {
-            AndroidUtilities.hideKeyboard(activity.getCurrentFocus());
+        if (AndroidUtilities.isTablet() && (iNavigationLayout = this.parentActionBarLayout) != null && iNavigationLayout.getParentActivity() != null) {
+            AndroidUtilities.hideKeyboard(this.parentActionBarLayout.getParentActivity().getCurrentFocus());
         }
         cancelCurrentAnimation();
         AnimatorSet animatorSet = new AnimatorSet();
@@ -302,14 +300,14 @@ public class DrawerLayoutContainer extends FrameLayout {
         return this.drawerLayout;
     }
 
-    public void setParentActionBarLayout(ActionBarLayout actionBarLayout) {
-        this.parentActionBarLayout = actionBarLayout;
+    public void setParentActionBarLayout(INavigationLayout iNavigationLayout) {
+        this.parentActionBarLayout = iNavigationLayout;
     }
 
     public void presentFragment(BaseFragment baseFragment) {
-        ActionBarLayout actionBarLayout = this.parentActionBarLayout;
-        if (actionBarLayout != null) {
-            actionBarLayout.presentFragment(baseFragment);
+        INavigationLayout iNavigationLayout = this.parentActionBarLayout;
+        if (iNavigationLayout != null) {
+            iNavigationLayout.presentFragment(baseFragment);
         }
         closeDrawer(false);
     }
@@ -414,10 +412,10 @@ public class DrawerLayoutContainer extends FrameLayout {
         return super.dispatchTouchEvent(motionEvent);
     }
 
-    /* JADX WARN: Code restructure failed: missing block: B:97:0x019d, code lost:
+    /* JADX WARN: Code restructure failed: missing block: B:97:0x01a3, code lost:
         if (r9 != r8.drawerLayout.getMeasuredWidth()) goto L115;
      */
-    /* JADX WARN: Removed duplicated region for block: B:127:0x020a  */
+    /* JADX WARN: Removed duplicated region for block: B:127:0x0210  */
     @Override // android.view.View
     /*
         Code decompiled incorrectly, please refer to instructions dump.
@@ -425,7 +423,7 @@ public class DrawerLayoutContainer extends FrameLayout {
     */
     public boolean onTouchEvent(android.view.MotionEvent r9) {
         /*
-            Method dump skipped, instructions count: 573
+            Method dump skipped, instructions count: 579
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.DrawerLayoutContainer.onTouchEvent(android.view.MotionEvent):boolean");
@@ -567,14 +565,14 @@ public class DrawerLayoutContainer extends FrameLayout {
 
     @Override // android.view.ViewGroup, android.view.View
     protected void dispatchDraw(Canvas canvas) {
-        ActionBarLayout actionBarLayout;
+        INavigationLayout iNavigationLayout;
         super.dispatchDraw(canvas);
-        if (!this.drawCurrentPreviewFragmentAbove || (actionBarLayout = this.parentActionBarLayout) == null) {
+        if (!this.drawCurrentPreviewFragmentAbove || (iNavigationLayout = this.parentActionBarLayout) == null) {
             return;
         }
         BitmapDrawable bitmapDrawable = this.previewBlurDrawable;
         if (bitmapDrawable != null) {
-            bitmapDrawable.setAlpha((int) (actionBarLayout.getCurrentPreviewFragmentAlpha() * 255.0f));
+            bitmapDrawable.setAlpha((int) (iNavigationLayout.getCurrentPreviewFragmentAlpha() * 255.0f));
             this.previewBlurDrawable.draw(canvas);
         }
         this.parentActionBarLayout.drawCurrentPreviewFragment(canvas, Build.VERSION.SDK_INT >= 21 ? this.previewForegroundDrawable : null);
@@ -665,8 +663,9 @@ public class DrawerLayoutContainer extends FrameLayout {
         return false;
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     /* loaded from: classes3.dex */
-    private static class PreviewForegroundDrawable extends Drawable {
+    public static class PreviewForegroundDrawable extends Drawable {
         private final GradientDrawable bottomDrawable;
         private final GradientDrawable topDrawable;
 

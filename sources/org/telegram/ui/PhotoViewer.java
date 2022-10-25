@@ -91,6 +91,7 @@ import androidx.collection.LongSparseArray;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.core.graphics.ColorUtils;
+import androidx.core.math.MathUtils;
 import androidx.core.util.ObjectsCompat$$ExternalSyntheticBackport0;
 import androidx.core.widget.NestedScrollView;
 import androidx.dynamicanimation.animation.DynamicAnimation;
@@ -165,12 +166,14 @@ import org.telegram.tgnet.TLRPC$FileLocation;
 import org.telegram.tgnet.TLRPC$Message;
 import org.telegram.tgnet.TLRPC$MessageAction;
 import org.telegram.tgnet.TLRPC$MessageEntity;
+import org.telegram.tgnet.TLRPC$MessageMedia;
 import org.telegram.tgnet.TLRPC$PageBlock;
 import org.telegram.tgnet.TLRPC$Photo;
 import org.telegram.tgnet.TLRPC$PhotoSize;
 import org.telegram.tgnet.TLRPC$TL_documentAttributeVideo;
 import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.tgnet.TLRPC$TL_fileLocationToBeDeprecated;
+import org.telegram.tgnet.TLRPC$TL_forumTopic;
 import org.telegram.tgnet.TLRPC$TL_inputPhoto;
 import org.telegram.tgnet.TLRPC$TL_message;
 import org.telegram.tgnet.TLRPC$TL_messageActionEmpty;
@@ -186,6 +189,7 @@ import org.telegram.tgnet.TLRPC$TL_photos_photo;
 import org.telegram.tgnet.TLRPC$TL_webDocument;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.tgnet.TLRPC$WebDocument;
+import org.telegram.tgnet.TLRPC$WebPage;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
@@ -531,6 +535,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     private boolean textureUploaded;
     private ImageView timeItem;
     private Tooltip tooltip;
+    private int topicId;
     private int totalImagesCount;
     private int totalImagesCountMerge;
     private int touchSlop;
@@ -3180,13 +3185,13 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         this.centerImage.setFileLoadingPriority(3);
     }
 
-    /* JADX WARN: Code restructure failed: missing block: B:296:0x060f, code lost:
-        if (r1.get(r1.size() - 1).getDialogId() != r20.mergeDialogId) goto L342;
+    /* JADX WARN: Code restructure failed: missing block: B:298:0x0629, code lost:
+        if (r1.get(r1.size() - 1).getDialogId() != r31.mergeDialogId) goto L345;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:310:0x0652, code lost:
-        if (r20.imagesArrTemp.get(0).getDialogId() != r20.mergeDialogId) goto L342;
+    /* JADX WARN: Code restructure failed: missing block: B:312:0x066c, code lost:
+        if (r31.imagesArrTemp.get(0).getDialogId() != r31.mergeDialogId) goto L345;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:311:0x0654, code lost:
+    /* JADX WARN: Code restructure failed: missing block: B:313:0x066e, code lost:
         r1 = 1;
         r6 = 0;
      */
@@ -3195,9 +3200,9 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public void didReceivedNotification(int r21, int r22, java.lang.Object... r23) {
+    public void didReceivedNotification(int r32, int r33, java.lang.Object... r34) {
         /*
-            Method dump skipped, instructions count: 2199
+            Method dump skipped, instructions count: 2231
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoViewer.didReceivedNotification(int, int, java.lang.Object[]):void");
@@ -4742,48 +4747,121 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$onItemClick$1(DialogInterface dialogInterface, int i) {
+        public /* synthetic */ void lambda$onItemClick$2(DialogInterface dialogInterface, int i) {
+            File pathToMessage;
+            if (PhotoViewer.this.currentMessageObject == null) {
+                return;
+            }
+            if (!(MessageObject.getMedia(PhotoViewer.this.currentMessageObject.messageOwner) instanceof TLRPC$TL_messageMediaWebPage) || MessageObject.getMedia(PhotoViewer.this.currentMessageObject.messageOwner).webpage == null || MessageObject.getMedia(PhotoViewer.this.currentMessageObject.messageOwner).webpage.document != null) {
+                pathToMessage = FileLoader.getInstance(PhotoViewer.this.currentAccount).getPathToMessage(PhotoViewer.this.currentMessageObject.messageOwner);
+            } else {
+                PhotoViewer photoViewer = PhotoViewer.this;
+                pathToMessage = FileLoader.getInstance(PhotoViewer.this.currentAccount).getPathToAttach(photoViewer.getFileLocation(photoViewer.currentIndex, null), true);
+            }
+            final boolean isVideo = PhotoViewer.this.currentMessageObject.isVideo();
+            if (pathToMessage == null || !pathToMessage.exists()) {
+                PhotoViewer.this.showDownloadAlert();
+                return;
+            }
+            MediaController.saveFile(pathToMessage.toString(), PhotoViewer.this.parentActivity, isVideo ? 1 : 0, null, null, new Runnable() { // from class: org.telegram.ui.PhotoViewer$12$$ExternalSyntheticLambda12
+                @Override // java.lang.Runnable
+                public final void run() {
+                    PhotoViewer.AnonymousClass12.this.lambda$onItemClick$1(isVideo);
+                }
+            });
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$onItemClick$1(boolean z) {
+            BulletinFactory.createSaveToGalleryBulletin(PhotoViewer.this.containerView, z, -NUM, -1).show();
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$onItemClick$5(final boolean z, ArrayList arrayList, DialogInterface dialogInterface, int i) {
+            File pathToMessage;
+            final int[] iArr = new int[1];
+            final int[] iArr2 = new int[1];
+            final Runnable runnable = new Runnable() { // from class: org.telegram.ui.PhotoViewer$12$$ExternalSyntheticLambda13
+                @Override // java.lang.Runnable
+                public final void run() {
+                    PhotoViewer.AnonymousClass12.this.lambda$onItemClick$3(iArr2, iArr, z);
+                }
+            };
+            for (int i2 = 0; i2 < arrayList.size(); i2++) {
+                MessageObject messageObject = (MessageObject) arrayList.get(i2);
+                if (messageObject != null) {
+                    if (!(MessageObject.getMedia(messageObject.messageOwner) instanceof TLRPC$TL_messageMediaWebPage) || MessageObject.getMedia(messageObject.messageOwner).webpage == null || MessageObject.getMedia(messageObject.messageOwner).webpage.document != null) {
+                        pathToMessage = FileLoader.getInstance(PhotoViewer.this.currentAccount).getPathToMessage(messageObject.messageOwner);
+                    } else {
+                        FileLoader fileLoader = FileLoader.getInstance(PhotoViewer.this.currentAccount);
+                        PhotoViewer photoViewer = PhotoViewer.this;
+                        pathToMessage = fileLoader.getPathToAttach(photoViewer.getFileLocation(photoViewer.currentIndex, null), true);
+                    }
+                    boolean isVideo = messageObject.isVideo();
+                    if (pathToMessage != null && pathToMessage.exists()) {
+                        iArr[0] = iArr[0] + 1;
+                        MediaController.saveFile(pathToMessage.toString(), PhotoViewer.this.parentActivity, isVideo ? 1 : 0, null, null, new Runnable() { // from class: org.telegram.ui.PhotoViewer$12$$ExternalSyntheticLambda8
+                            @Override // java.lang.Runnable
+                            public final void run() {
+                                AndroidUtilities.runOnUIThread(runnable);
+                            }
+                        });
+                    }
+                }
+            }
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$onItemClick$3(int[] iArr, int[] iArr2, boolean z) {
+            iArr[0] = iArr[0] + 1;
+            if (iArr[0] == iArr2[0]) {
+                BulletinFactory.createSaveToGalleryBulletin(PhotoViewer.this.containerView, iArr2[0], z, -NUM, -1).show();
+            }
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$onItemClick$7(DialogInterface dialogInterface, int i) {
             ArrayList arrayList = new ArrayList(1);
             arrayList.add(PhotoViewer.this.currentMessageObject);
             PhotoViewer.this.showShareAlert(arrayList);
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$onItemClick$2(ArrayList arrayList, DialogInterface dialogInterface, int i) {
+        public /* synthetic */ void lambda$onItemClick$8(ArrayList arrayList, DialogInterface dialogInterface, int i) {
             PhotoViewer.this.showShareAlert(arrayList);
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$onItemClick$4(ArrayList arrayList, ChatActivity chatActivity, DialogsActivity dialogsActivity, ArrayList arrayList2, CharSequence charSequence, boolean z) {
-            if (arrayList2.size() > 1 || ((Long) arrayList2.get(0)).longValue() == UserConfig.getInstance(PhotoViewer.this.currentAccount).getClientUserId() || charSequence != null) {
+        public /* synthetic */ void lambda$onItemClick$10(ArrayList arrayList, ChatActivity chatActivity, DialogsActivity dialogsActivity, ArrayList arrayList2, CharSequence charSequence, boolean z) {
+            if (arrayList2.size() > 1 || ((MessagesStorage.TopicKey) arrayList2.get(0)).dialogId == UserConfig.getInstance(PhotoViewer.this.currentAccount).getClientUserId() || charSequence != null) {
                 for (int i = 0; i < arrayList2.size(); i++) {
-                    long longValue = ((Long) arrayList2.get(i)).longValue();
+                    long j = ((MessagesStorage.TopicKey) arrayList2.get(i)).dialogId;
                     if (charSequence != null) {
-                        SendMessagesHelper.getInstance(PhotoViewer.this.currentAccount).sendMessage(charSequence.toString(), longValue, null, null, null, true, null, null, null, true, 0, null, false);
+                        SendMessagesHelper.getInstance(PhotoViewer.this.currentAccount).sendMessage(charSequence.toString(), j, null, null, null, true, null, null, null, true, 0, null, false);
                     }
-                    SendMessagesHelper.getInstance(PhotoViewer.this.currentAccount).sendMessage((ArrayList<MessageObject>) arrayList, longValue, false, false, true, 0);
+                    SendMessagesHelper.getInstance(PhotoViewer.this.currentAccount).sendMessage((ArrayList<MessageObject>) arrayList, j, false, false, true, 0);
                 }
                 dialogsActivity.finishFragment();
                 if (chatActivity == null) {
                     return;
                 }
                 if (arrayList2.size() == 1) {
-                    chatActivity.getUndoView().showWithAction(((Long) arrayList2.get(0)).longValue(), 53, Integer.valueOf(arrayList.size()));
+                    chatActivity.getUndoView().showWithAction(((MessagesStorage.TopicKey) arrayList2.get(0)).dialogId, 53, Integer.valueOf(arrayList.size()));
                     return;
                 } else {
                     chatActivity.getUndoView().showWithAction(0L, 53, Integer.valueOf(arrayList.size()), Integer.valueOf(arrayList2.size()), (Runnable) null, (Runnable) null);
                     return;
                 }
             }
-            long longValue2 = ((Long) arrayList2.get(0)).longValue();
+            long j2 = ((MessagesStorage.TopicKey) arrayList2.get(0)).dialogId;
             Bundle bundle = new Bundle();
             bundle.putBoolean("scrollToTopOnResume", true);
-            if (DialogObject.isEncryptedDialog(longValue2)) {
-                bundle.putInt("enc_id", DialogObject.getEncryptedChatId(longValue2));
-            } else if (DialogObject.isUserDialog(longValue2)) {
-                bundle.putLong("user_id", longValue2);
+            if (DialogObject.isEncryptedDialog(j2)) {
+                bundle.putInt("enc_id", DialogObject.getEncryptedChatId(j2));
+            } else if (DialogObject.isUserDialog(j2)) {
+                bundle.putLong("user_id", j2);
             } else {
-                bundle.putLong("chat_id", -longValue2);
+                bundle.putLong("chat_id", -j2);
             }
             NotificationCenter.getInstance(PhotoViewer.this.currentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
             ChatActivity chatActivity2 = new ChatActivity(bundle);
@@ -4795,14 +4873,14 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public static /* synthetic */ void lambda$onItemClick$5(boolean[] zArr, View view) {
+        public static /* synthetic */ void lambda$onItemClick$11(boolean[] zArr, View view) {
             zArr[0] = !zArr[0];
             ((CheckBoxCell) view).setChecked(zArr[0], true);
         }
 
         /* JADX INFO: Access modifiers changed from: private */
         /* JADX WARN: Multi-variable type inference failed */
-        public /* synthetic */ void lambda$onItemClick$6(boolean[] zArr, DialogInterface dialogInterface, int i) {
+        public /* synthetic */ void lambda$onItemClick$12(boolean[] zArr, DialogInterface dialogInterface, int i) {
             ArrayList arrayList;
             TLRPC$EncryptedChat tLRPC$EncryptedChat;
             if (!PhotoViewer.this.imagesArr.isEmpty()) {
@@ -4902,38 +4980,44 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             }
         }
 
-        /* JADX WARN: Removed duplicated region for block: B:110:0x02ea  */
-        /* JADX WARN: Removed duplicated region for block: B:146:0x041c  */
-        /* JADX WARN: Removed duplicated region for block: B:165:0x04c8  */
-        /* JADX WARN: Removed duplicated region for block: B:166:0x04d6  */
-        /* JADX WARN: Removed duplicated region for block: B:199:0x05b9  */
-        /* JADX WARN: Removed duplicated region for block: B:245:0x072f  */
-        /* JADX WARN: Removed duplicated region for block: B:389:? A[RETURN, SYNTHETIC] */
+        /* JADX WARN: Removed duplicated region for block: B:143:0x0429  */
+        /* JADX WARN: Removed duplicated region for block: B:144:0x0440  */
+        /* JADX WARN: Removed duplicated region for block: B:146:0x0444  */
+        /* JADX WARN: Removed duplicated region for block: B:147:0x044a  */
+        /* JADX WARN: Removed duplicated region for block: B:149:0x0455  */
+        /* JADX WARN: Removed duplicated region for block: B:152:0x0463  */
+        /* JADX WARN: Removed duplicated region for block: B:155:0x046a  */
+        /* JADX WARN: Removed duplicated region for block: B:182:0x0556  */
+        /* JADX WARN: Removed duplicated region for block: B:201:0x0606  */
+        /* JADX WARN: Removed duplicated region for block: B:203:0x0615  */
+        /* JADX WARN: Removed duplicated region for block: B:236:0x0703  */
+        /* JADX WARN: Removed duplicated region for block: B:282:0x087d  */
+        /* JADX WARN: Removed duplicated region for block: B:432:? A[RETURN, SYNTHETIC] */
         @Override // org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick
         /*
             Code decompiled incorrectly, please refer to instructions dump.
             To view partially-correct add '--show-bad-code' argument
         */
-        public void onItemClick(int r23) {
+        public void onItemClick(int r33) {
             /*
-                Method dump skipped, instructions count: 3211
+                Method dump skipped, instructions count: 3577
                 To view this dump add '--comments-level debug' option
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoViewer.AnonymousClass12.onItemClick(int):void");
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$onItemClick$8(final UserConfig userConfig, final TLRPC$Photo tLRPC$Photo, final TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-            AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.PhotoViewer$12$$ExternalSyntheticLambda6
+        public /* synthetic */ void lambda$onItemClick$14(final UserConfig userConfig, final TLRPC$Photo tLRPC$Photo, final TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+            AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.PhotoViewer$12$$ExternalSyntheticLambda10
                 @Override // java.lang.Runnable
                 public final void run() {
-                    PhotoViewer.AnonymousClass12.this.lambda$onItemClick$7(tLObject, userConfig, tLRPC$Photo);
+                    PhotoViewer.AnonymousClass12.this.lambda$onItemClick$13(tLObject, userConfig, tLRPC$Photo);
                 }
             });
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$onItemClick$7(TLObject tLObject, UserConfig userConfig, TLRPC$Photo tLRPC$Photo) {
+        public /* synthetic */ void lambda$onItemClick$13(TLObject tLObject, UserConfig userConfig, TLRPC$Photo tLRPC$Photo) {
             if (tLObject instanceof TLRPC$TL_photos_photo) {
                 TLRPC$TL_photos_photo tLRPC$TL_photos_photo = (TLRPC$TL_photos_photo) tLObject;
                 MessagesController.getInstance(PhotoViewer.this.currentAccount).putUsers(tLRPC$TL_photos_photo.users, false);
@@ -4955,7 +5039,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$onItemClick$9() {
+        public /* synthetic */ void lambda$onItemClick$15() {
             if (PhotoViewer.this.menuItem == null) {
                 return;
             }
@@ -5192,7 +5276,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$setParentActivity$11(View view) {
         if (this.captionEditText.getCaptionLimitOffset() < 0) {
-            AndroidUtilities.shakeView(this.captionLimitView, 2.0f, 0);
+            AndroidUtilities.shakeView(this.captionLimitView);
             Vibrator vibrator = (Vibrator) this.captionLimitView.getContext().getSystemService("vibrator");
             if (vibrator == null) {
                 return;
@@ -5775,6 +5859,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             if (PhotoViewer.this.mentionListViewVisible && getVisibility() == 0 && PhotoViewer.this.mentionListAnimation == null) {
                 int i5 = i2 - i4;
                 setTranslationY(i5);
+                PhotoViewer.this.mentionListView.setTranslationY(MathUtils.clamp(PhotoViewer.this.mentionListView.getTranslationY(), Math.min(i5, 0), Math.max(i5, 0)));
                 PhotoViewer.this.mentionListAnimation = new SpringAnimation(this, DynamicAnimation.TRANSLATION_Y).setMinValue(Math.min(i5, 0)).setMaxValue(Math.max(i5, 0)).setSpring(new SpringForce(0.0f).setStiffness(750.0f).setDampingRatio(1.0f));
                 PhotoViewer.this.mentionListAnimation.addEndListener(new DynamicAnimation.OnAnimationEndListener() { // from class: org.telegram.ui.PhotoViewer$32$$ExternalSyntheticLambda0
                     @Override // androidx.dynamicanimation.animation.DynamicAnimation.OnAnimationEndListener
@@ -5834,6 +5919,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     PhotoViewer.this.mentionListView.setVisibility(0);
                     PhotoViewer.this.mentionListViewVisible = true;
                     PhotoViewer.this.mentionListView.setTranslationY(AndroidUtilities.dp(min));
+                    PhotoViewer.this.mentionListView.setTranslationY(MathUtils.clamp(PhotoViewer.this.mentionListView.getTranslationY(), 0.0f, AndroidUtilities.dp(min)));
                     PhotoViewer.this.mentionListAnimation = new SpringAnimation(PhotoViewer.this.mentionListView, DynamicAnimation.TRANSLATION_Y).setMinValue(0.0f).setMaxValue(AndroidUtilities.dp(min)).setSpring(new SpringForce(0.0f).setStiffness(750.0f).setDampingRatio(1.0f));
                     PhotoViewer.this.mentionListAnimation.addEndListener(new DynamicAnimation.OnAnimationEndListener() { // from class: org.telegram.ui.PhotoViewer$34$$ExternalSyntheticLambda0
                         @Override // androidx.dynamicanimation.animation.DynamicAnimation.OnAnimationEndListener
@@ -5857,6 +5943,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             }
             if (PhotoViewer.this.allowMentions) {
                 PhotoViewer.this.mentionListViewVisible = false;
+                PhotoViewer.this.mentionListView.setTranslationY(MathUtils.clamp(PhotoViewer.this.mentionListView.getTranslationY(), 0.0f, PhotoViewer.this.mentionListView.getMeasuredHeight()));
                 PhotoViewer.this.mentionListAnimation = new SpringAnimation(PhotoViewer.this.mentionListView, DynamicAnimation.TRANSLATION_Y).setMinValue(0.0f).setMaxValue(PhotoViewer.this.mentionListView.getMeasuredHeight()).setSpring(new SpringForce(PhotoViewer.this.mentionListView.getMeasuredHeight()).setStiffness(750.0f).setDampingRatio(1.0f));
                 PhotoViewer.this.mentionListAnimation.addEndListener(new DynamicAnimation.OnAnimationEndListener() { // from class: org.telegram.ui.PhotoViewer$34$$ExternalSyntheticLambda1
                     @Override // androidx.dynamicanimation.animation.DynamicAnimation.OnAnimationEndListener
@@ -5938,7 +6025,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             AlertDialog.Builder builder = new AlertDialog.Builder(this.parentActivity, resourcesProvider);
             builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
             builder.setMessage(LocaleController.getString("ClearSearch", R.string.ClearSearch));
-            builder.setPositiveButton(LocaleController.getString("ClearButton", R.string.ClearButton).toUpperCase(), new DialogInterface.OnClickListener() { // from class: org.telegram.ui.PhotoViewer$$ExternalSyntheticLambda12
+            builder.setPositiveButton(LocaleController.getString("ClearButton", R.string.ClearButton), new DialogInterface.OnClickListener() { // from class: org.telegram.ui.PhotoViewer$$ExternalSyntheticLambda12
                 @Override // android.content.DialogInterface.OnClickListener
                 public final void onClick(DialogInterface dialogInterface, int i2) {
                     PhotoViewer.this.lambda$setParentActivity$40(dialogInterface, i2);
@@ -6051,6 +6138,9 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             if (currentVideoEditedInfo != null) {
                 long j = ((float) currentVideoEditedInfo.estimatedSize) * 0.9f;
                 if ((j > NUM && !UserConfig.getInstance(this.currentAccount).isPremium()) || j > 4194304000L) {
+                    if (this.parentAlert == null) {
+                        return;
+                    }
                     new LimitReachedBottomSheet(this.parentAlert.getBaseFragment(), this.parentAlert.getContainer().getContext(), 6, UserConfig.selectedAccount).show();
                     return;
                 }
@@ -6111,7 +6201,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         }
 
         @Override // org.telegram.ui.Components.ShareAlert
-        protected void onSend(final LongSparseArray<TLRPC$Dialog> longSparseArray, final int i) {
+        protected void onSend(final LongSparseArray<TLRPC$Dialog> longSparseArray, final int i, TLRPC$TL_forumTopic tLRPC$TL_forumTopic) {
             final FrameLayout frameLayout = this.val$photoContainerView;
             AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.PhotoViewer$36$$ExternalSyntheticLambda1
                 @Override // java.lang.Runnable
@@ -7009,7 +7099,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
 
             @Override // org.telegram.ui.Components.SeekBarAccessibilityDelegate
             /* renamed from: getContentDescription  reason: collision with other method in class */
-            public String mo2136getContentDescription(View view) {
+            public String mo2188getContentDescription(View view) {
                 return LocaleController.formatString("AccDescrPlayerDuration", R.string.AccDescrPlayerDuration, LocaleController.formatPluralString("Minutes", PhotoViewer.this.videoPlayerCurrentTime[0], new Object[0]) + ' ' + LocaleController.formatPluralString("Seconds", PhotoViewer.this.videoPlayerCurrentTime[1], new Object[0]), LocaleController.formatPluralString("Minutes", PhotoViewer.this.videoPlayerTotalTime[0], new Object[0]) + ' ' + LocaleController.formatPluralString("Seconds", PhotoViewer.this.videoPlayerTotalTime[1], new Object[0]));
             }
         };
@@ -7654,13 +7744,62 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     public void updatePlayerState(boolean z, int i) {
         VideoPlayer videoPlayer;
         MessageObject messageObject;
+        TLRPC$MessageMedia tLRPC$MessageMedia;
+        TLRPC$WebPage tLRPC$WebPage;
         PhotoViewerWebView photoViewerWebView;
         if (this.videoPlayer != null || ((photoViewerWebView = this.photoViewerWebView) != null && photoViewerWebView.isControllable())) {
             PhotoViewerWebView photoViewerWebView2 = this.photoViewerWebView;
             if (photoViewerWebView2 != null && photoViewerWebView2.isControllable() && !z) {
                 toggleActionBar(true, true);
             }
+            PhotoViewerWebView photoViewerWebView3 = this.photoViewerWebView;
             float f = 0.0f;
+            if (photoViewerWebView3 != null && photoViewerWebView3.isControllable() && i == 3 && getVideoDuration() >= 10000 && this.shouldSavePositionForCurrentVideo == null && this.shouldSavePositionForCurrentVideoShortTerm == null) {
+                if (this.currentMessageObject != null) {
+                    long videoDuration = getVideoDuration() / 1000;
+                    TLRPC$Message tLRPC$Message = this.currentMessageObject.messageOwner;
+                    String str = (tLRPC$Message == null || (tLRPC$MessageMedia = tLRPC$Message.media) == null || (tLRPC$WebPage = tLRPC$MessageMedia.webpage) == null) ? null : tLRPC$WebPage.url;
+                    if (!TextUtils.isEmpty(str)) {
+                        if (videoDuration >= 600) {
+                            if (this.currentMessageObject.forceSeekTo < 0.0f) {
+                                float f2 = ApplicationLoader.applicationContext.getSharedPreferences("media_saved_pos", 0).getFloat(str, -1.0f);
+                                if (f2 > 0.0f && f2 < 0.999f) {
+                                    this.currentMessageObject.forceSeekTo = f2;
+                                    this.videoPlayerSeekbar.setProgress(f2);
+                                }
+                            }
+                            this.shouldSavePositionForCurrentVideo = str;
+                        } else if (videoDuration >= 10) {
+                            SavedVideoPosition savedVideoPosition = null;
+                            for (int size = this.savedVideoPositions.size() - 1; size >= 0; size--) {
+                                SavedVideoPosition valueAt = this.savedVideoPositions.valueAt(size);
+                                if (valueAt.timestamp < SystemClock.elapsedRealtime() - 5000) {
+                                    this.savedVideoPositions.removeAt(size);
+                                } else if (savedVideoPosition == null && this.savedVideoPositions.keyAt(size).equals(str)) {
+                                    savedVideoPosition = valueAt;
+                                }
+                            }
+                            MessageObject messageObject2 = this.currentMessageObject;
+                            if (messageObject2.forceSeekTo < 0.0f && savedVideoPosition != null) {
+                                float f3 = savedVideoPosition.position;
+                                if (f3 > 0.0f && f3 < 0.999f) {
+                                    messageObject2.forceSeekTo = f3;
+                                    this.videoPlayerSeekbar.setProgress(f3);
+                                }
+                            }
+                            this.shouldSavePositionForCurrentVideoShortTerm = str;
+                        }
+                    }
+                }
+                MessageObject messageObject3 = this.currentMessageObject;
+                if (messageObject3 != null) {
+                    float f4 = messageObject3.forceSeekTo;
+                    if (f4 >= 0.0f) {
+                        seekVideoOrWebToProgress(f4);
+                        this.currentMessageObject.forceSeekTo = -1.0f;
+                    }
+                }
+            }
             if (this.isStreaming) {
                 if (i != 2 || !this.skipFirstBufferingProgress) {
                     boolean z2 = this.seekToProgressPending != 0.0f || i == 2;
@@ -7698,12 +7837,12 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 if (this.currentMessageObject != null && (videoPlayer = this.videoPlayer) != null) {
                     this.videoPreviewFrame.open(videoPlayer.getCurrentUri());
                 }
-                float f2 = this.seekToProgressPending;
-                if (f2 != 0.0f) {
-                    seekVideoOrWebToProgress(f2);
+                float f5 = this.seekToProgressPending;
+                if (f5 != 0.0f) {
+                    seekVideoOrWebToProgress(f5);
                     this.seekToProgressPending = 0.0f;
-                    MessageObject messageObject2 = this.currentMessageObject;
-                    if (messageObject2 != null && !FileLoader.getInstance(messageObject2.currentAccount).isLoadingVideoAny(this.currentMessageObject.getDocument())) {
+                    MessageObject messageObject4 = this.currentMessageObject;
+                    if (messageObject4 != null && !FileLoader.getInstance(messageObject4.currentAccount).isLoadingVideoAny(this.currentMessageObject.getDocument())) {
                         this.skipFirstBufferingProgress = true;
                     }
                 }
@@ -7719,8 +7858,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     this.pipItem.animate().alpha(1.0f).setDuration(175L).withEndAction(null).start();
                 }
                 this.playerWasReady = true;
-                MessageObject messageObject3 = this.currentMessageObject;
-                if (messageObject3 != null && messageObject3.isVideo()) {
+                MessageObject messageObject5 = this.currentMessageObject;
+                if (messageObject5 != null && messageObject5.isVideo()) {
                     AndroidUtilities.cancelRunOnUIThread(this.setLoadingRunnable);
                     FileLoader.getInstance(this.currentMessageObject.currentAccount).removeLoadingVideo(this.currentMessageObject.getDocument(), true, false);
                 }
@@ -8483,6 +8622,12 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             this.videoPlayer = null;
         } else {
             this.playerWasPlaying = false;
+        }
+        if (this.photoViewerWebView != null) {
+            AndroidUtilities.cancelRunOnUIThread(this.hideActionBarRunnable);
+            if (this.shouldSavePositionForCurrentVideoShortTerm != null) {
+                this.savedVideoPositions.put(this.shouldSavePositionForCurrentVideoShortTerm, new SavedVideoPosition(((float) getCurrentVideoPosition()) / ((float) getVideoDuration()), SystemClock.elapsedRealtime()));
+            }
         }
         OrientationEventListener orientationEventListener = this.orientationEventListener;
         if (orientationEventListener != null) {
@@ -10900,8 +11045,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    /* JADX WARN: Removed duplicated region for block: B:339:0x0832  */
-    /* JADX WARN: Removed duplicated region for block: B:357:0x088b  */
+    /* JADX WARN: Removed duplicated region for block: B:339:0x083a  */
+    /* JADX WARN: Removed duplicated region for block: B:357:0x0893  */
     /* JADX WARN: Type inference failed for: r11v1 */
     /* JADX WARN: Type inference failed for: r11v2, types: [android.animation.AnimatorSet, java.lang.String] */
     /* JADX WARN: Type inference failed for: r11v23 */
@@ -10911,7 +11056,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     */
     public void onPhotoShow(org.telegram.messenger.MessageObject r19, org.telegram.tgnet.TLRPC$FileLocation r20, org.telegram.messenger.ImageLocation r21, org.telegram.messenger.ImageLocation r22, java.util.ArrayList<org.telegram.messenger.MessageObject> r23, java.util.ArrayList<org.telegram.messenger.SecureDocument> r24, java.util.List<java.lang.Object> r25, int r26, org.telegram.ui.PhotoViewer.PlaceProviderObject r27) {
         /*
-            Method dump skipped, instructions count: 2297
+            Method dump skipped, instructions count: 2305
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoViewer.onPhotoShow(org.telegram.messenger.MessageObject, org.telegram.tgnet.TLRPC$FileLocation, org.telegram.messenger.ImageLocation, org.telegram.messenger.ImageLocation, java.util.ArrayList, java.util.ArrayList, java.util.List, int, org.telegram.ui.PhotoViewer$PlaceProviderObject):void");
@@ -10940,35 +11085,35 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         }
     }
 
-    /* JADX WARN: Removed duplicated region for block: B:328:0x077b  */
-    /* JADX WARN: Removed duplicated region for block: B:329:0x0782  */
-    /* JADX WARN: Removed duplicated region for block: B:391:0x08b4  */
-    /* JADX WARN: Removed duplicated region for block: B:412:0x09c5  */
-    /* JADX WARN: Removed duplicated region for block: B:448:0x0a8a  */
-    /* JADX WARN: Removed duplicated region for block: B:461:0x0ab9  */
-    /* JADX WARN: Removed duplicated region for block: B:468:0x0adf  */
-    /* JADX WARN: Removed duplicated region for block: B:471:0x0aee  */
-    /* JADX WARN: Removed duplicated region for block: B:474:0x0b08  */
-    /* JADX WARN: Removed duplicated region for block: B:477:0x0b30  */
-    /* JADX WARN: Removed duplicated region for block: B:488:0x0b69  */
-    /* JADX WARN: Removed duplicated region for block: B:499:0x0b9c  */
-    /* JADX WARN: Removed duplicated region for block: B:500:0x0b9e  */
-    /* JADX WARN: Removed duplicated region for block: B:503:0x0ba6  */
-    /* JADX WARN: Removed duplicated region for block: B:504:0x0ba8  */
-    /* JADX WARN: Removed duplicated region for block: B:507:0x0bb0  */
-    /* JADX WARN: Removed duplicated region for block: B:508:0x0bb2  */
-    /* JADX WARN: Removed duplicated region for block: B:511:0x0bba  */
-    /* JADX WARN: Removed duplicated region for block: B:512:0x0bbc  */
-    /* JADX WARN: Removed duplicated region for block: B:515:0x0bc4  */
-    /* JADX WARN: Removed duplicated region for block: B:527:0x0bdd  */
-    /* JADX WARN: Removed duplicated region for block: B:536:0x0bef  */
+    /* JADX WARN: Removed duplicated region for block: B:328:0x0787  */
+    /* JADX WARN: Removed duplicated region for block: B:329:0x078e  */
+    /* JADX WARN: Removed duplicated region for block: B:391:0x08c0  */
+    /* JADX WARN: Removed duplicated region for block: B:412:0x09d1  */
+    /* JADX WARN: Removed duplicated region for block: B:448:0x0a96  */
+    /* JADX WARN: Removed duplicated region for block: B:461:0x0ac5  */
+    /* JADX WARN: Removed duplicated region for block: B:468:0x0aeb  */
+    /* JADX WARN: Removed duplicated region for block: B:471:0x0afa  */
+    /* JADX WARN: Removed duplicated region for block: B:474:0x0b14  */
+    /* JADX WARN: Removed duplicated region for block: B:477:0x0b3c  */
+    /* JADX WARN: Removed duplicated region for block: B:488:0x0b75  */
+    /* JADX WARN: Removed duplicated region for block: B:499:0x0ba8  */
+    /* JADX WARN: Removed duplicated region for block: B:500:0x0baa  */
+    /* JADX WARN: Removed duplicated region for block: B:503:0x0bb2  */
+    /* JADX WARN: Removed duplicated region for block: B:504:0x0bb4  */
+    /* JADX WARN: Removed duplicated region for block: B:507:0x0bbc  */
+    /* JADX WARN: Removed duplicated region for block: B:508:0x0bbe  */
+    /* JADX WARN: Removed duplicated region for block: B:511:0x0bc6  */
+    /* JADX WARN: Removed duplicated region for block: B:512:0x0bc8  */
+    /* JADX WARN: Removed duplicated region for block: B:515:0x0bd0  */
+    /* JADX WARN: Removed duplicated region for block: B:527:0x0be9  */
+    /* JADX WARN: Removed duplicated region for block: B:536:0x0bfb  */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    private void setIsAboutToSwitchToIndex(int r34, boolean r35, boolean r36) {
+    private void setIsAboutToSwitchToIndex(int r35, boolean r36, boolean r37) {
         /*
-            Method dump skipped, instructions count: 3377
+            Method dump skipped, instructions count: 3389
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoViewer.setIsAboutToSwitchToIndex(int, boolean, boolean):void");
@@ -12149,40 +12294,40 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         }
     }
 
-    public boolean openPhoto(MessageObject messageObject, ChatActivity chatActivity, long j, long j2, PhotoViewerProvider photoViewerProvider) {
-        return openPhoto(messageObject, null, null, null, null, null, null, 0, photoViewerProvider, chatActivity, j, j2, true, null, null);
+    public boolean openPhoto(MessageObject messageObject, ChatActivity chatActivity, long j, long j2, int i, PhotoViewerProvider photoViewerProvider) {
+        return openPhoto(messageObject, null, null, null, null, null, null, 0, photoViewerProvider, chatActivity, j, j2, i, true, null, null);
     }
 
-    public boolean openPhoto(MessageObject messageObject, int i, ChatActivity chatActivity, long j, long j2, PhotoViewerProvider photoViewerProvider) {
-        return openPhoto(messageObject, null, null, null, null, null, null, 0, photoViewerProvider, chatActivity, j, j2, true, null, Integer.valueOf(i));
+    public boolean openPhoto(MessageObject messageObject, int i, ChatActivity chatActivity, long j, long j2, int i2, PhotoViewerProvider photoViewerProvider) {
+        return openPhoto(messageObject, null, null, null, null, null, null, 0, photoViewerProvider, chatActivity, j, j2, i2, true, null, Integer.valueOf(i));
     }
 
-    public boolean openPhoto(MessageObject messageObject, long j, long j2, PhotoViewerProvider photoViewerProvider, boolean z) {
-        return openPhoto(messageObject, null, null, null, null, null, null, 0, photoViewerProvider, null, j, j2, z, null, null);
+    public boolean openPhoto(MessageObject messageObject, long j, long j2, int i, PhotoViewerProvider photoViewerProvider, boolean z) {
+        return openPhoto(messageObject, null, null, null, null, null, null, 0, photoViewerProvider, null, j, j2, i, z, null, null);
     }
 
     public boolean openPhoto(TLRPC$FileLocation tLRPC$FileLocation, PhotoViewerProvider photoViewerProvider) {
-        return openPhoto(null, tLRPC$FileLocation, null, null, null, null, null, 0, photoViewerProvider, null, 0L, 0L, true, null, null);
+        return openPhoto(null, tLRPC$FileLocation, null, null, null, null, null, 0, photoViewerProvider, null, 0L, 0L, 0, true, null, null);
     }
 
     public boolean openPhotoWithVideo(TLRPC$FileLocation tLRPC$FileLocation, ImageLocation imageLocation, PhotoViewerProvider photoViewerProvider) {
-        return openPhoto(null, tLRPC$FileLocation, null, imageLocation, null, null, null, 0, photoViewerProvider, null, 0L, 0L, true, null, null);
+        return openPhoto(null, tLRPC$FileLocation, null, imageLocation, null, null, null, 0, photoViewerProvider, null, 0L, 0L, 0, true, null, null);
     }
 
     public boolean openPhoto(TLRPC$FileLocation tLRPC$FileLocation, ImageLocation imageLocation, PhotoViewerProvider photoViewerProvider) {
-        return openPhoto(null, tLRPC$FileLocation, imageLocation, null, null, null, null, 0, photoViewerProvider, null, 0L, 0L, true, null, null);
+        return openPhoto(null, tLRPC$FileLocation, imageLocation, null, null, null, null, 0, photoViewerProvider, null, 0L, 0L, 0, true, null, null);
     }
 
-    public boolean openPhoto(ArrayList<MessageObject> arrayList, int i, long j, long j2, PhotoViewerProvider photoViewerProvider) {
-        return openPhoto(arrayList.get(i), null, null, null, arrayList, null, null, i, photoViewerProvider, null, j, j2, true, null, null);
+    public boolean openPhoto(ArrayList<MessageObject> arrayList, int i, long j, long j2, int i2, PhotoViewerProvider photoViewerProvider) {
+        return openPhoto(arrayList.get(i), null, null, null, arrayList, null, null, i, photoViewerProvider, null, j, j2, i2, true, null, null);
     }
 
     public boolean openPhoto(ArrayList<SecureDocument> arrayList, int i, PhotoViewerProvider photoViewerProvider) {
-        return openPhoto(null, null, null, null, null, arrayList, null, i, photoViewerProvider, null, 0L, 0L, true, null, null);
+        return openPhoto(null, null, null, null, null, arrayList, null, i, photoViewerProvider, null, 0L, 0L, 0, true, null, null);
     }
 
     public boolean openPhoto(int i, PageBlocksAdapter pageBlocksAdapter, PhotoViewerProvider photoViewerProvider) {
-        return openPhoto(null, null, null, null, null, null, null, i, photoViewerProvider, null, 0L, 0L, true, pageBlocksAdapter, null);
+        return openPhoto(null, null, null, null, null, null, null, i, photoViewerProvider, null, 0L, 0L, 0, true, pageBlocksAdapter, null);
     }
 
     public boolean openPhotoForSelect(ArrayList<Object> arrayList, int i, int i2, boolean z, PhotoViewerProvider photoViewerProvider, ChatActivity chatActivity) {
@@ -12232,7 +12377,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             return true;
         }
         this.sendPhotoType = i2;
-        return openPhoto(null, null, null, null, null, null, arrayList, i, photoViewerProvider, chatActivity, 0L, 0L, true, null, null);
+        return openPhoto(null, null, null, null, null, null, arrayList, i, photoViewerProvider, chatActivity, 0L, 0L, 0, true, null, null);
     }
 
     private void openCurrentPhotoInPaintModeForSelect() {
@@ -12480,7 +12625,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         this.padImageForHorizontalInsets = true;
     }
 
-    public boolean openPhoto(MessageObject messageObject, TLRPC$FileLocation tLRPC$FileLocation, ImageLocation imageLocation, ImageLocation imageLocation2, ArrayList<MessageObject> arrayList, ArrayList<SecureDocument> arrayList2, ArrayList<Object> arrayList3, int i, final PhotoViewerProvider photoViewerProvider, ChatActivity chatActivity, long j, long j2, boolean z, PageBlocksAdapter pageBlocksAdapter, final Integer num) {
+    public boolean openPhoto(MessageObject messageObject, TLRPC$FileLocation tLRPC$FileLocation, ImageLocation imageLocation, ImageLocation imageLocation2, ArrayList<MessageObject> arrayList, ArrayList<SecureDocument> arrayList2, ArrayList<Object> arrayList3, int i, final PhotoViewerProvider photoViewerProvider, ChatActivity chatActivity, long j, long j2, int i2, boolean z, PageBlocksAdapter pageBlocksAdapter, final Integer num) {
         TLRPC$Message tLRPC$Message;
         boolean z2;
         PhotoViewerProvider photoViewerProvider2;
@@ -12535,6 +12680,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 this.placeProvider = photoViewerProvider;
                 this.mergeDialogId = j2;
                 this.currentDialogId = j;
+                this.topicId = i2;
                 this.selectedPhotosAdapter.notifyDataSetChanged();
                 this.pageBlocksAdapter = pageBlocksAdapter;
                 if (this.velocityTracker == null) {
@@ -12596,12 +12742,12 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     }
                     ClippingImageView[] animatingImageViews = getAnimatingImageViews(placeForPhoto);
                     this.clippingImageProgress = 1.0f;
-                    for (int i2 = 0; i2 < animatingImageViews.length; i2++) {
-                        animatingImageViews[i2].setAnimationValues(this.animationValues);
-                        animatingImageViews[i2].setVisibility(0);
-                        animatingImageViews[i2].setRadius(placeForPhoto.radius);
-                        animatingImageViews[i2].setOrientation(orientation);
-                        animatingImageViews[i2].setImageBitmap(placeForPhoto.thumb);
+                    for (int i3 = 0; i3 < animatingImageViews.length; i3++) {
+                        animatingImageViews[i3].setAnimationValues(this.animationValues);
+                        animatingImageViews[i3].setVisibility(0);
+                        animatingImageViews[i3].setRadius(placeForPhoto.radius);
+                        animatingImageViews[i3].setOrientation(orientation);
+                        animatingImageViews[i3].setImageBitmap(placeForPhoto.thumb);
                     }
                     initCropView();
                     if (this.sendPhotoType == 1) {
@@ -12617,21 +12763,21 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     if (height <= 0) {
                         layoutParams2.height = 100;
                     }
-                    for (int i3 = 0; i3 < animatingImageViews.length; i3++) {
+                    for (int i4 = 0; i4 < animatingImageViews.length; i4++) {
                         if (animatingImageViews.length > 1) {
                             f = 0.0f;
-                            animatingImageViews[i3].setAlpha(0.0f);
+                            animatingImageViews[i4].setAlpha(0.0f);
                         } else {
                             f = 0.0f;
-                            animatingImageViews[i3].setAlpha(1.0f);
+                            animatingImageViews[i4].setAlpha(1.0f);
                         }
-                        animatingImageViews[i3].setPivotX(f);
-                        animatingImageViews[i3].setPivotY(f);
-                        animatingImageViews[i3].setScaleX(placeForPhoto.scale);
-                        animatingImageViews[i3].setScaleY(placeForPhoto.scale);
-                        animatingImageViews[i3].setTranslationX(placeForPhoto.viewX + (drawRegion.left * placeForPhoto.scale));
-                        animatingImageViews[i3].setTranslationY(placeForPhoto.viewY + (drawRegion.top * placeForPhoto.scale));
-                        animatingImageViews[i3].setLayoutParams(layoutParams2);
+                        animatingImageViews[i4].setPivotX(f);
+                        animatingImageViews[i4].setPivotY(f);
+                        animatingImageViews[i4].setScaleX(placeForPhoto.scale);
+                        animatingImageViews[i4].setScaleY(placeForPhoto.scale);
+                        animatingImageViews[i4].setTranslationX(placeForPhoto.viewX + (drawRegion.left * placeForPhoto.scale));
+                        animatingImageViews[i4].setTranslationY(placeForPhoto.viewY + (drawRegion.top * placeForPhoto.scale));
+                        animatingImageViews[i4].setLayoutParams(layoutParams2);
                     }
                     this.windowView.getViewTreeObserver().addOnPreDrawListener(new AnonymousClass69(animatingImageViews, layoutParams2, f2, placeForPhoto, f3, pageBlocksAdapter, arrayList3, num, photoViewerProvider));
                 } else {
@@ -13091,6 +13237,13 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         }
         this.videoPlayerSeekbar.clearTimestamps();
         updateVideoPlayerTime();
+        this.shouldSavePositionForCurrentVideo = null;
+        this.shouldSavePositionForCurrentVideoShortTerm = null;
+        this.lastSaveTime = 0L;
+        this.seekToProgressPending = this.seekToProgressPending2;
+        this.videoPlayerSeekbar.setProgress(0.0f);
+        this.videoTimelineView.setProgress(0.0f);
+        this.videoPlayerSeekbar.setBufferedProgress(0.0f);
     }
 
     /* JADX INFO: Access modifiers changed from: private */
@@ -13770,79 +13923,79 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    /* JADX WARN: Code restructure failed: missing block: B:347:0x0816, code lost:
+    /* JADX WARN: Code restructure failed: missing block: B:347:0x083a, code lost:
         if (r8 == 2) goto L351;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:352:0x081e, code lost:
+    /* JADX WARN: Code restructure failed: missing block: B:352:0x0842, code lost:
         if (r9 == (-1)) goto L594;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:358:0x0827, code lost:
+    /* JADX WARN: Code restructure failed: missing block: B:358:0x084b, code lost:
         if (r9 == r0) goto L351;
      */
     /* JADX WARN: Multi-variable type inference failed */
-    /* JADX WARN: Removed duplicated region for block: B:125:0x02ae  */
-    /* JADX WARN: Removed duplicated region for block: B:128:0x02b5  */
-    /* JADX WARN: Removed duplicated region for block: B:141:0x0333 A[ADDED_TO_REGION] */
-    /* JADX WARN: Removed duplicated region for block: B:161:0x0385  */
-    /* JADX WARN: Removed duplicated region for block: B:164:0x0391  */
-    /* JADX WARN: Removed duplicated region for block: B:174:0x03b4  */
-    /* JADX WARN: Removed duplicated region for block: B:175:0x03b9  */
-    /* JADX WARN: Removed duplicated region for block: B:181:0x03d4  */
-    /* JADX WARN: Removed duplicated region for block: B:182:0x03d6  */
-    /* JADX WARN: Removed duplicated region for block: B:186:0x03dd  */
-    /* JADX WARN: Removed duplicated region for block: B:198:0x0429  */
-    /* JADX WARN: Removed duplicated region for block: B:206:0x045d  */
-    /* JADX WARN: Removed duplicated region for block: B:229:0x0517  */
-    /* JADX WARN: Removed duplicated region for block: B:230:0x051f  */
-    /* JADX WARN: Removed duplicated region for block: B:245:0x05a4  */
-    /* JADX WARN: Removed duplicated region for block: B:248:0x05fd  */
-    /* JADX WARN: Removed duplicated region for block: B:250:0x0608  */
-    /* JADX WARN: Removed duplicated region for block: B:255:0x0629  */
-    /* JADX WARN: Removed duplicated region for block: B:262:0x064d  */
-    /* JADX WARN: Removed duplicated region for block: B:266:0x0657  */
-    /* JADX WARN: Removed duplicated region for block: B:274:0x066e A[ADDED_TO_REGION] */
-    /* JADX WARN: Removed duplicated region for block: B:281:0x069d  */
-    /* JADX WARN: Removed duplicated region for block: B:282:0x06a0  */
-    /* JADX WARN: Removed duplicated region for block: B:285:0x06b8  */
-    /* JADX WARN: Removed duplicated region for block: B:289:0x06cd  */
-    /* JADX WARN: Removed duplicated region for block: B:292:0x06d9 A[ADDED_TO_REGION] */
-    /* JADX WARN: Removed duplicated region for block: B:328:0x07b8  */
-    /* JADX WARN: Removed duplicated region for block: B:336:0x07fd  */
-    /* JADX WARN: Removed duplicated region for block: B:362:0x082e  */
-    /* JADX WARN: Removed duplicated region for block: B:365:0x0835  */
-    /* JADX WARN: Removed duplicated region for block: B:404:0x08c7  */
-    /* JADX WARN: Removed duplicated region for block: B:407:0x08d2  */
-    /* JADX WARN: Removed duplicated region for block: B:415:0x08ea  */
-    /* JADX WARN: Removed duplicated region for block: B:419:0x090a  */
-    /* JADX WARN: Removed duplicated region for block: B:429:0x0934  */
-    /* JADX WARN: Removed duplicated region for block: B:450:0x097a  */
-    /* JADX WARN: Removed duplicated region for block: B:459:0x09b1  */
-    /* JADX WARN: Removed duplicated region for block: B:462:0x09bb  */
-    /* JADX WARN: Removed duplicated region for block: B:474:0x0a1d  */
-    /* JADX WARN: Removed duplicated region for block: B:477:0x0a25  */
-    /* JADX WARN: Removed duplicated region for block: B:484:0x0a3e  */
-    /* JADX WARN: Removed duplicated region for block: B:487:0x0a4f  */
-    /* JADX WARN: Removed duplicated region for block: B:494:0x0a7c  */
-    /* JADX WARN: Removed duplicated region for block: B:526:0x0af1  */
-    /* JADX WARN: Removed duplicated region for block: B:529:0x0af8  */
-    /* JADX WARN: Removed duplicated region for block: B:530:0x0b15  */
-    /* JADX WARN: Removed duplicated region for block: B:533:0x0b26  */
-    /* JADX WARN: Removed duplicated region for block: B:537:0x0b33  */
-    /* JADX WARN: Removed duplicated region for block: B:560:0x0bbb  */
-    /* JADX WARN: Removed duplicated region for block: B:562:0x0bc1  */
-    /* JADX WARN: Removed duplicated region for block: B:569:0x0bdc  */
-    /* JADX WARN: Removed duplicated region for block: B:579:0x0CLASSNAME  */
-    /* JADX WARN: Removed duplicated region for block: B:606:0x0cc7  */
-    /* JADX WARN: Removed duplicated region for block: B:652:0x0e34  */
-    /* JADX WARN: Removed duplicated region for block: B:657:0x0e47  */
-    /* JADX WARN: Removed duplicated region for block: B:677:0x0ea1  */
-    /* JADX WARN: Removed duplicated region for block: B:680:0x0ea8  */
-    /* JADX WARN: Removed duplicated region for block: B:690:0x0cb3 A[EDGE_INSN: B:690:0x0cb3->B:604:0x0cb3 ?: BREAK  , SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:125:0x02d2  */
+    /* JADX WARN: Removed duplicated region for block: B:128:0x02d9  */
+    /* JADX WARN: Removed duplicated region for block: B:141:0x0357 A[ADDED_TO_REGION] */
+    /* JADX WARN: Removed duplicated region for block: B:161:0x03a9  */
+    /* JADX WARN: Removed duplicated region for block: B:164:0x03b5  */
+    /* JADX WARN: Removed duplicated region for block: B:174:0x03d8  */
+    /* JADX WARN: Removed duplicated region for block: B:175:0x03dd  */
+    /* JADX WARN: Removed duplicated region for block: B:181:0x03f8  */
+    /* JADX WARN: Removed duplicated region for block: B:182:0x03fa  */
+    /* JADX WARN: Removed duplicated region for block: B:186:0x0401  */
+    /* JADX WARN: Removed duplicated region for block: B:198:0x044d  */
+    /* JADX WARN: Removed duplicated region for block: B:206:0x0481  */
+    /* JADX WARN: Removed duplicated region for block: B:229:0x053b  */
+    /* JADX WARN: Removed duplicated region for block: B:230:0x0543  */
+    /* JADX WARN: Removed duplicated region for block: B:245:0x05c8  */
+    /* JADX WARN: Removed duplicated region for block: B:248:0x0621  */
+    /* JADX WARN: Removed duplicated region for block: B:250:0x062c  */
+    /* JADX WARN: Removed duplicated region for block: B:255:0x064d  */
+    /* JADX WARN: Removed duplicated region for block: B:262:0x0671  */
+    /* JADX WARN: Removed duplicated region for block: B:266:0x067b  */
+    /* JADX WARN: Removed duplicated region for block: B:274:0x0692 A[ADDED_TO_REGION] */
+    /* JADX WARN: Removed duplicated region for block: B:281:0x06c1  */
+    /* JADX WARN: Removed duplicated region for block: B:282:0x06c4  */
+    /* JADX WARN: Removed duplicated region for block: B:285:0x06dc  */
+    /* JADX WARN: Removed duplicated region for block: B:289:0x06f1  */
+    /* JADX WARN: Removed duplicated region for block: B:292:0x06fd A[ADDED_TO_REGION] */
+    /* JADX WARN: Removed duplicated region for block: B:328:0x07dc  */
+    /* JADX WARN: Removed duplicated region for block: B:336:0x0821  */
+    /* JADX WARN: Removed duplicated region for block: B:362:0x0852  */
+    /* JADX WARN: Removed duplicated region for block: B:365:0x0859  */
+    /* JADX WARN: Removed duplicated region for block: B:404:0x08eb  */
+    /* JADX WARN: Removed duplicated region for block: B:407:0x08f6  */
+    /* JADX WARN: Removed duplicated region for block: B:415:0x090e  */
+    /* JADX WARN: Removed duplicated region for block: B:419:0x092e  */
+    /* JADX WARN: Removed duplicated region for block: B:429:0x0958  */
+    /* JADX WARN: Removed duplicated region for block: B:450:0x099e  */
+    /* JADX WARN: Removed duplicated region for block: B:459:0x09d5  */
+    /* JADX WARN: Removed duplicated region for block: B:462:0x09df  */
+    /* JADX WARN: Removed duplicated region for block: B:474:0x0a41  */
+    /* JADX WARN: Removed duplicated region for block: B:477:0x0a49  */
+    /* JADX WARN: Removed duplicated region for block: B:484:0x0a62  */
+    /* JADX WARN: Removed duplicated region for block: B:487:0x0a73  */
+    /* JADX WARN: Removed duplicated region for block: B:494:0x0aa0  */
+    /* JADX WARN: Removed duplicated region for block: B:526:0x0b15  */
+    /* JADX WARN: Removed duplicated region for block: B:529:0x0b1c  */
+    /* JADX WARN: Removed duplicated region for block: B:530:0x0b39  */
+    /* JADX WARN: Removed duplicated region for block: B:533:0x0b4a  */
+    /* JADX WARN: Removed duplicated region for block: B:537:0x0b57  */
+    /* JADX WARN: Removed duplicated region for block: B:560:0x0bdf  */
+    /* JADX WARN: Removed duplicated region for block: B:562:0x0be5  */
+    /* JADX WARN: Removed duplicated region for block: B:569:0x0CLASSNAME  */
+    /* JADX WARN: Removed duplicated region for block: B:579:0x0c2c  */
+    /* JADX WARN: Removed duplicated region for block: B:606:0x0ceb  */
+    /* JADX WARN: Removed duplicated region for block: B:652:0x0e58  */
+    /* JADX WARN: Removed duplicated region for block: B:657:0x0e6b  */
+    /* JADX WARN: Removed duplicated region for block: B:677:0x0ec5  */
+    /* JADX WARN: Removed duplicated region for block: B:680:0x0ecc  */
+    /* JADX WARN: Removed duplicated region for block: B:690:0x0cd7 A[EDGE_INSN: B:690:0x0cd7->B:604:0x0cd7 ?: BREAK  , SYNTHETIC] */
     /* JADX WARN: Removed duplicated region for block: B:695:? A[ADDED_TO_REGION, RETURN, SYNTHETIC] */
     /* JADX WARN: Type inference failed for: r15v28 */
     /* JADX WARN: Type inference failed for: r15v3 */
     /* JADX WARN: Type inference failed for: r15v37 */
-    /* JADX WARN: Type inference failed for: r15v4, types: [boolean, int] */
+    /* JADX WARN: Type inference failed for: r15v4, types: [int, boolean] */
     @android.annotation.SuppressLint({"NewApi", "DrawAllocation"})
     /*
         Code decompiled incorrectly, please refer to instructions dump.
@@ -13850,7 +14003,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     */
     public void onDraw(android.graphics.Canvas r45) {
         /*
-            Method dump skipped, instructions count: 3819
+            Method dump skipped, instructions count: 3855
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoViewer.onDraw(android.graphics.Canvas):void");
@@ -14831,7 +14984,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
             PhotoPickerPhotoCell photoPickerPhotoCell = new PhotoPickerPhotoCell(this.mContext);
             photoPickerPhotoCell.checkFrame.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.PhotoViewer$ListAdapter$$ExternalSyntheticLambda0
                 @Override // android.view.View.OnClickListener

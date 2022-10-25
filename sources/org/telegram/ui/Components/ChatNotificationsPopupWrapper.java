@@ -2,7 +2,13 @@ package org.telegram.ui.Components;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Canvas;
+import android.graphics.Path;
+import android.graphics.RectF;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.TextView;
+import java.util.HashSet;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
@@ -19,6 +25,7 @@ public class ChatNotificationsPopupWrapper {
     View backItem;
     Callback callback;
     int currentAccount;
+    private final View gap;
     long lastDismissTime;
     ActionBarMenuSubItem muteForLastSelected;
     private int muteForLastSelected1Time;
@@ -27,6 +34,8 @@ public class ChatNotificationsPopupWrapper {
     ActionBarMenuSubItem muteUnmuteButton;
     ActionBarPopupWindow popupWindow;
     ActionBarMenuSubItem soundToggle;
+    private final TextView topicsExceptionsTextView;
+    public int type;
     public ActionBarPopupWindow.ActionBarPopupWindowLayout windowLayout;
 
     /* loaded from: classes3.dex */
@@ -37,11 +46,16 @@ public class ChatNotificationsPopupWrapper {
         public final /* synthetic */ class CC {
             public static void $default$dismiss(Callback callback) {
             }
+
+            public static void $default$openExceptions(Callback callback) {
+            }
         }
 
         void dismiss();
 
         void muteFor(int i);
+
+        void openExceptions();
 
         void showCustomize();
 
@@ -53,13 +67,28 @@ public class ChatNotificationsPopupWrapper {
     public ChatNotificationsPopupWrapper(final Context context, final int i, final PopupSwipeBackLayout popupSwipeBackLayout, boolean z, boolean z2, final Callback callback, final Theme.ResourcesProvider resourcesProvider) {
         this.currentAccount = i;
         this.callback = callback;
-        ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(context, z ? R.drawable.popup_fixed_alert : 0, resourcesProvider);
+        ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(this, context, z ? R.drawable.popup_fixed_alert : 0, resourcesProvider) { // from class: org.telegram.ui.Components.ChatNotificationsPopupWrapper.1
+            Path path = new Path();
+
+            @Override // android.view.ViewGroup
+            protected boolean drawChild(Canvas canvas, View view, long j) {
+                canvas.save();
+                this.path.rewind();
+                RectF rectF = AndroidUtilities.rectTmp;
+                rectF.set(view.getLeft(), view.getTop(), view.getRight(), view.getBottom());
+                this.path.addRoundRect(rectF, AndroidUtilities.dp(6.0f), AndroidUtilities.dp(6.0f), Path.Direction.CW);
+                canvas.clipPath(this.path);
+                boolean drawChild = super.drawChild(canvas, view, j);
+                canvas.restore();
+                return drawChild;
+            }
+        };
         this.windowLayout = actionBarPopupWindowLayout;
         actionBarPopupWindowLayout.setFitItems(true);
         if (popupSwipeBackLayout != null) {
             ActionBarMenuSubItem addItem = ActionBarMenuItem.addItem(this.windowLayout, R.drawable.msg_arrow_back, LocaleController.getString("Back", R.string.Back), false, resourcesProvider);
             this.backItem = addItem;
-            addItem.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.Components.ChatNotificationsPopupWrapper$$ExternalSyntheticLambda6
+            addItem.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.Components.ChatNotificationsPopupWrapper$$ExternalSyntheticLambda7
                 @Override // android.view.View.OnClickListener
                 public final void onClick(View view) {
                     PopupSwipeBackLayout.this.closeForeground();
@@ -68,7 +97,7 @@ public class ChatNotificationsPopupWrapper {
         }
         ActionBarMenuSubItem addItem2 = ActionBarMenuItem.addItem(this.windowLayout, R.drawable.msg_tone_on, LocaleController.getString("SoundOn", R.string.SoundOn), false, resourcesProvider);
         this.soundToggle = addItem2;
-        addItem2.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.Components.ChatNotificationsPopupWrapper$$ExternalSyntheticLambda4
+        addItem2.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.Components.ChatNotificationsPopupWrapper$$ExternalSyntheticLambda5
             @Override // android.view.View.OnClickListener
             public final void onClick(View view) {
                 ChatNotificationsPopupWrapper.this.lambda$new$1(callback, view);
@@ -79,7 +108,7 @@ public class ChatNotificationsPopupWrapper {
         int i3 = R.string.MuteFor1h;
         ActionBarMenuSubItem addItem3 = ActionBarMenuItem.addItem(actionBarPopupWindowLayout2, i2, LocaleController.getString("MuteFor1h", i3), false, resourcesProvider);
         this.muteForLastSelected = addItem3;
-        addItem3.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.Components.ChatNotificationsPopupWrapper$$ExternalSyntheticLambda5
+        addItem3.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.Components.ChatNotificationsPopupWrapper$$ExternalSyntheticLambda6
             @Override // android.view.View.OnClickListener
             public final void onClick(View view) {
                 ChatNotificationsPopupWrapper.this.lambda$new$2(callback, view);
@@ -87,7 +116,7 @@ public class ChatNotificationsPopupWrapper {
         });
         ActionBarMenuSubItem addItem4 = ActionBarMenuItem.addItem(this.windowLayout, i2, LocaleController.getString("MuteFor1h", i3), false, resourcesProvider);
         this.muteForLastSelected2 = addItem4;
-        addItem4.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.Components.ChatNotificationsPopupWrapper$$ExternalSyntheticLambda3
+        addItem4.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.Components.ChatNotificationsPopupWrapper$$ExternalSyntheticLambda4
             @Override // android.view.View.OnClickListener
             public final void onClick(View view) {
                 ChatNotificationsPopupWrapper.this.lambda$new$3(callback, view);
@@ -99,7 +128,7 @@ public class ChatNotificationsPopupWrapper {
                 ChatNotificationsPopupWrapper.this.lambda$new$6(context, resourcesProvider, i, callback, view);
             }
         });
-        ActionBarMenuItem.addItem(this.windowLayout, R.drawable.msg_customize, LocaleController.getString("NotificationsCustomize", R.string.NotificationsCustomize), false, resourcesProvider).setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.Components.ChatNotificationsPopupWrapper$$ExternalSyntheticLambda2
+        ActionBarMenuItem.addItem(this.windowLayout, R.drawable.msg_customize, LocaleController.getString("NotificationsCustomize", R.string.NotificationsCustomize), false, resourcesProvider).setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.Components.ChatNotificationsPopupWrapper$$ExternalSyntheticLambda3
             @Override // android.view.View.OnClickListener
             public final void onClick(View view) {
                 ChatNotificationsPopupWrapper.this.lambda$new$7(callback, view);
@@ -111,6 +140,26 @@ public class ChatNotificationsPopupWrapper {
             @Override // android.view.View.OnClickListener
             public final void onClick(View view) {
                 ChatNotificationsPopupWrapper.this.lambda$new$9(callback, view);
+            }
+        });
+        FrameLayout frameLayout = new FrameLayout(context);
+        this.gap = frameLayout;
+        frameLayout.setBackgroundColor(Theme.getColor("actionBarDefaultSubmenuSeparator", resourcesProvider));
+        this.windowLayout.addView((View) frameLayout, LayoutHelper.createLinear(-1, 8));
+        TextView textView = new TextView(context);
+        this.topicsExceptionsTextView = textView;
+        textView.setPadding(AndroidUtilities.dp(13.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(13.0f), AndroidUtilities.dp(8.0f));
+        textView.setTextSize(1, 13.0f);
+        textView.setTextColor(Theme.getColor("actionBarDefaultSubmenuItem", resourcesProvider));
+        int i4 = R.id.fit_width_tag;
+        frameLayout.setTag(i4, 1);
+        textView.setTag(i4, 1);
+        this.windowLayout.addView((View) textView, LayoutHelper.createLinear(-2, -2));
+        textView.setBackground(Theme.createRadSelectorDrawable(Theme.getColor("dialogButtonSelector", resourcesProvider), 0, 6));
+        textView.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.Components.ChatNotificationsPopupWrapper$$ExternalSyntheticLambda2
+            @Override // android.view.View.OnClickListener
+            public final void onClick(View view) {
+                ChatNotificationsPopupWrapper.this.lambda$new$10(callback, view);
             }
         });
     }
@@ -132,7 +181,7 @@ public class ChatNotificationsPopupWrapper {
 
     public /* synthetic */ void lambda$new$6(Context context, Theme.ResourcesProvider resourcesProvider, final int i, final Callback callback, View view) {
         dismiss();
-        AlertsCreator.createMuteForPickerDialog(context, resourcesProvider, new AlertsCreator.ScheduleDatePickerDelegate() { // from class: org.telegram.ui.Components.ChatNotificationsPopupWrapper$$ExternalSyntheticLambda10
+        AlertsCreator.createMuteForPickerDialog(context, resourcesProvider, new AlertsCreator.ScheduleDatePickerDelegate() { // from class: org.telegram.ui.Components.ChatNotificationsPopupWrapper$$ExternalSyntheticLambda11
             @Override // org.telegram.ui.Components.AlertsCreator.ScheduleDatePickerDelegate
             public final void didSelectDate(boolean z, int i2) {
                 ChatNotificationsPopupWrapper.lambda$new$5(i, callback, z, i2);
@@ -141,7 +190,7 @@ public class ChatNotificationsPopupWrapper {
     }
 
     public static /* synthetic */ void lambda$new$5(final int i, final Callback callback, boolean z, final int i2) {
-        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.ChatNotificationsPopupWrapper$$ExternalSyntheticLambda7
+        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.ChatNotificationsPopupWrapper$$ExternalSyntheticLambda8
             @Override // java.lang.Runnable
             public final void run() {
                 ChatNotificationsPopupWrapper.lambda$new$4(i2, i, callback);
@@ -164,12 +213,19 @@ public class ChatNotificationsPopupWrapper {
 
     public /* synthetic */ void lambda$new$9(final Callback callback, View view) {
         dismiss();
-        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.ChatNotificationsPopupWrapper$$ExternalSyntheticLambda8
+        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.ChatNotificationsPopupWrapper$$ExternalSyntheticLambda9
             @Override // java.lang.Runnable
             public final void run() {
                 ChatNotificationsPopupWrapper.Callback.this.toggleMute();
             }
         });
+    }
+
+    public /* synthetic */ void lambda$new$10(Callback callback, View view) {
+        if (callback != null) {
+            callback.openExceptions();
+        }
+        dismiss();
     }
 
     private void dismiss() {
@@ -183,48 +239,51 @@ public class ChatNotificationsPopupWrapper {
     }
 
     /* renamed from: update */
-    public void lambda$update$10(final long j) {
-        int i;
+    public void lambda$update$11(final long j, final int i, final HashSet<Integer> hashSet) {
         int i2;
         int i3;
+        int i4;
         if (System.currentTimeMillis() - this.lastDismissTime < 200) {
-            AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.ChatNotificationsPopupWrapper$$ExternalSyntheticLambda9
+            AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.ChatNotificationsPopupWrapper$$ExternalSyntheticLambda10
                 @Override // java.lang.Runnable
                 public final void run() {
-                    ChatNotificationsPopupWrapper.this.lambda$update$10(j);
+                    ChatNotificationsPopupWrapper.this.lambda$update$11(j, i, hashSet);
                 }
             });
             return;
         }
-        boolean isDialogMuted = MessagesController.getInstance(this.currentAccount).isDialogMuted(j);
+        boolean isDialogMuted = MessagesController.getInstance(this.currentAccount).isDialogMuted(j, i);
         if (isDialogMuted) {
             this.muteUnmuteButton.setTextAndIcon(LocaleController.getString("UnmuteNotifications", R.string.UnmuteNotifications), R.drawable.msg_unmute);
-            i = Theme.getColor("wallet_greenText");
+            i2 = Theme.getColor("wallet_greenText");
             this.soundToggle.setVisibility(8);
         } else {
             this.muteUnmuteButton.setTextAndIcon(LocaleController.getString("MuteNotifications", R.string.MuteNotifications), R.drawable.msg_mute);
             int color = Theme.getColor("dialogTextRed");
             this.soundToggle.setVisibility(0);
-            if (MessagesController.getInstance(this.currentAccount).isDialogNotificationsSoundEnabled(j)) {
+            if (MessagesController.getInstance(this.currentAccount).isDialogNotificationsSoundEnabled(j, i)) {
                 this.soundToggle.setTextAndIcon(LocaleController.getString("SoundOff", R.string.SoundOff), R.drawable.msg_tone_off);
             } else {
                 this.soundToggle.setTextAndIcon(LocaleController.getString("SoundOn", R.string.SoundOn), R.drawable.msg_tone_on);
             }
-            i = color;
+            i2 = color;
         }
-        if (isDialogMuted) {
+        if (this.type == 1) {
+            this.backItem.setVisibility(8);
+        }
+        if (isDialogMuted || this.type == 1) {
             i3 = 0;
-            i2 = 0;
+            i4 = 0;
         } else {
             SharedPreferences notificationsSettings = MessagesController.getNotificationsSettings(this.currentAccount);
-            i2 = notificationsSettings.getInt("last_selected_mute_until_time", 0);
+            i4 = notificationsSettings.getInt("last_selected_mute_until_time", 0);
             i3 = notificationsSettings.getInt("last_selected_mute_until_time2", 0);
         }
-        if (i2 != 0) {
-            this.muteForLastSelected1Time = i2;
+        if (i4 != 0) {
+            this.muteForLastSelected1Time = i4;
             this.muteForLastSelected.setVisibility(0);
-            this.muteForLastSelected.getImageView().setImageDrawable(TimerDrawable.getTtlIcon(i2));
-            this.muteForLastSelected.setText(formatMuteForTime(i2));
+            this.muteForLastSelected.getImageView().setImageDrawable(TimerDrawable.getTtlIcon(i4));
+            this.muteForLastSelected.setText(formatMuteForTime(i4));
         } else {
             this.muteForLastSelected.setVisibility(8);
         }
@@ -236,7 +295,15 @@ public class ChatNotificationsPopupWrapper {
         } else {
             this.muteForLastSelected2.setVisibility(8);
         }
-        this.muteUnmuteButton.setColors(i, i);
+        this.muteUnmuteButton.setColors(i2, i2);
+        if (hashSet == null || hashSet.isEmpty()) {
+            this.gap.setVisibility(8);
+            this.topicsExceptionsTextView.setVisibility(8);
+            return;
+        }
+        this.gap.setVisibility(0);
+        this.topicsExceptionsTextView.setVisibility(0);
+        this.topicsExceptionsTextView.setText(AndroidUtilities.replaceSingleTag(LocaleController.formatPluralString("TopicNotificationsExceptions", hashSet.size(), new Object[0]), "windowBackgroundWhiteBlueText", 1, null));
     }
 
     private String formatMuteForTime(int i) {

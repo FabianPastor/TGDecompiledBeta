@@ -221,7 +221,7 @@ public class SecretChatHelper extends BaseController {
         getUserConfig().saveConfig(false);
         ArrayList<TLRPC$Message> arrayList = new ArrayList<>();
         arrayList.add(tLRPC$TL_messageService);
-        getMessagesStorage().putMessages(arrayList, false, true, true, 0, false);
+        getMessagesStorage().putMessages(arrayList, false, true, true, 0, false, 0);
         return tLRPC$TL_messageService;
     }
 
@@ -587,7 +587,7 @@ public class SecretChatHelper extends BaseController {
                 ImageLoader.getInstance().replaceImageInCache(str2, tLRPC$PhotoSize.location.volume_id + "_" + tLRPC$PhotoSize.location.local_id, ImageLocation.getForPhoto(tLRPC$PhotoSize, tLRPC$Message.media.photo), true);
                 ArrayList<TLRPC$Message> arrayList2 = new ArrayList<>();
                 arrayList2.add(tLRPC$Message);
-                getMessagesStorage().putMessages(arrayList2, false, true, false, 0, false);
+                getMessagesStorage().putMessages(arrayList2, false, true, false, 0, false, 0);
             } else if (!(tLRPC$MessageMedia instanceof TLRPC$TL_messageMediaDocument) || (tLRPC$Document = tLRPC$MessageMedia.document) == null) {
             } else {
                 tLRPC$MessageMedia.document = new TLRPC$TL_documentEncrypted();
@@ -617,7 +617,7 @@ public class SecretChatHelper extends BaseController {
                 }
                 ArrayList<TLRPC$Message> arrayList4 = new ArrayList<>();
                 arrayList4.add(tLRPC$Message);
-                getMessagesStorage().putMessages(arrayList4, false, true, false, 0, false);
+                getMessagesStorage().putMessages(arrayList4, false, true, false, 0, false, 0);
             }
         }
     }

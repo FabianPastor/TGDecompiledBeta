@@ -67,6 +67,7 @@ public class SharedConfig {
     public static boolean hasCameraCache = false;
     public static boolean hasEmailLogin = false;
     public static boolean inappCamera = false;
+    public static boolean isFloatingDebugActive = false;
     public static boolean isWaitingForPasscodeEnter = false;
     public static int ivFontSize = 0;
     public static int keepMedia = 2;
@@ -129,6 +130,7 @@ public class SharedConfig {
     public static int suggestStickers = 0;
     public static int textSelectionHintShows = 0;
     public static boolean useFingerprint = true;
+    public static boolean useLNavigation;
     public static boolean useSystemEmoji;
     public static boolean useThreeLinesLayout;
     public static byte[] passcodeSalt = new byte[0];
@@ -241,7 +243,6 @@ public class SharedConfig {
                 edit.putBoolean("forwardingOptionsHintShown", forwardingOptionsHintShown);
                 edit.putInt("lockRecordAudioVideoHint", lockRecordAudioVideoHint);
                 edit.putString("storageCacheDir", !TextUtils.isEmpty(storageCacheDir) ? storageCacheDir : "");
-                edit.putBoolean("hasEmailLogin", hasEmailLogin);
                 TLRPC$TL_help_appUpdate tLRPC$TL_help_appUpdate = pendingAppUpdate;
                 if (tLRPC$TL_help_appUpdate != null) {
                     try {
@@ -257,6 +258,11 @@ public class SharedConfig {
                 }
                 edit.putLong("appUpdateCheckTime", lastUpdateCheckTime);
                 edit.apply();
+                SharedPreferences.Editor edit2 = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit();
+                edit2.putBoolean("hasEmailLogin", hasEmailLogin);
+                edit2.putBoolean("useLNavigation", useLNavigation);
+                edit2.putBoolean("floatingDebugActive", isFloatingDebugActive);
+                edit2.apply();
             } catch (Exception e) {
                 FileLog.e(e);
             }
@@ -272,8 +278,8 @@ public class SharedConfig {
         return i;
     }
 
-    /* JADX WARN: Removed duplicated region for block: B:38:0x016a A[Catch: Exception -> 0x0188, all -> 0x03ea, TryCatch #1 {Exception -> 0x0188, blocks: (B:22:0x011b, B:24:0x0123, B:26:0x0133, B:27:0x0147, B:38:0x016a, B:40:0x016e, B:41:0x0170, B:43:0x0174, B:45:0x017a, B:47:0x0180, B:36:0x0164), top: B:89:0x011b, outer: #2 }] */
-    /* JADX WARN: Removed duplicated region for block: B:40:0x016e A[Catch: Exception -> 0x0188, all -> 0x03ea, TryCatch #1 {Exception -> 0x0188, blocks: (B:22:0x011b, B:24:0x0123, B:26:0x0133, B:27:0x0147, B:38:0x016a, B:40:0x016e, B:41:0x0170, B:43:0x0174, B:45:0x017a, B:47:0x0180, B:36:0x0164), top: B:89:0x011b, outer: #2 }] */
+    /* JADX WARN: Removed duplicated region for block: B:38:0x016a A[Catch: Exception -> 0x0188, all -> 0x03fa, TryCatch #1 {Exception -> 0x0188, blocks: (B:22:0x011b, B:24:0x0123, B:26:0x0133, B:27:0x0147, B:38:0x016a, B:40:0x016e, B:41:0x0170, B:43:0x0174, B:45:0x017a, B:47:0x0180, B:36:0x0164), top: B:89:0x011b, outer: #2 }] */
+    /* JADX WARN: Removed duplicated region for block: B:40:0x016e A[Catch: Exception -> 0x0188, all -> 0x03fa, TryCatch #1 {Exception -> 0x0188, blocks: (B:22:0x011b, B:24:0x0123, B:26:0x0133, B:27:0x0147, B:38:0x016a, B:40:0x016e, B:41:0x0170, B:43:0x0174, B:45:0x017a, B:47:0x0180, B:36:0x0164), top: B:89:0x011b, outer: #2 }] */
     /* JADX WARN: Removed duplicated region for block: B:65:0x0232  */
     /* JADX WARN: Removed duplicated region for block: B:66:0x0235  */
     /* JADX WARN: Removed duplicated region for block: B:69:0x0245  */
@@ -284,7 +290,7 @@ public class SharedConfig {
     */
     public static void loadConfig() {
         /*
-            Method dump skipped, instructions count: 1005
+            Method dump skipped, instructions count: 1021
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SharedConfig.loadConfig():void");
@@ -292,7 +298,7 @@ public class SharedConfig {
 
     public static void updateTabletConfig() {
         if (fontSizeIsDefault) {
-            SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("userconfing", 0);
+            SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
             int i = sharedPreferences.getInt("fons_size", AndroidUtilities.isTablet() ? 18 : 16);
             fontSize = i;
             ivFontSize = sharedPreferences.getInt("iv_font_size", i);

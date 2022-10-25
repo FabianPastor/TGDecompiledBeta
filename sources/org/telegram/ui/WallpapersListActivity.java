@@ -40,6 +40,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SendMessagesHelper;
@@ -691,30 +692,30 @@ public class WallpapersListActivity extends BaseFragment implements Notification
             WallpapersListActivity.this.selectedWallPapers.clear();
             ((BaseFragment) WallpapersListActivity.this).actionBar.hideActionMode();
             ((BaseFragment) WallpapersListActivity.this).actionBar.closeSearchField();
-            if (arrayList.size() > 1 || ((Long) arrayList.get(0)).longValue() == UserConfig.getInstance(((BaseFragment) WallpapersListActivity.this).currentAccount).getClientUserId() || charSequence != null) {
+            if (arrayList.size() > 1 || ((MessagesStorage.TopicKey) arrayList.get(0)).dialogId == UserConfig.getInstance(((BaseFragment) WallpapersListActivity.this).currentAccount).getClientUserId() || charSequence != null) {
                 WallpapersListActivity.this.updateRowsSelection();
                 for (int i2 = 0; i2 < arrayList.size(); i2++) {
-                    long longValue = ((Long) arrayList.get(i2)).longValue();
+                    long j = ((MessagesStorage.TopicKey) arrayList.get(i2)).dialogId;
                     if (charSequence != null) {
-                        SendMessagesHelper.getInstance(((BaseFragment) WallpapersListActivity.this).currentAccount).sendMessage(charSequence.toString(), longValue, null, null, null, true, null, null, null, true, 0, null, false);
+                        SendMessagesHelper.getInstance(((BaseFragment) WallpapersListActivity.this).currentAccount).sendMessage(charSequence.toString(), j, null, null, null, true, null, null, null, true, 0, null, false);
                     }
                     if (!TextUtils.isEmpty(sb)) {
-                        SendMessagesHelper.getInstance(((BaseFragment) WallpapersListActivity.this).currentAccount).sendMessage(sb.toString(), longValue, null, null, null, true, null, null, null, true, 0, null, false);
+                        SendMessagesHelper.getInstance(((BaseFragment) WallpapersListActivity.this).currentAccount).sendMessage(sb.toString(), j, null, null, null, true, null, null, null, true, 0, null, false);
                     }
                 }
                 dialogsActivity.finishFragment();
                 return;
             }
-            long longValue2 = ((Long) arrayList.get(0)).longValue();
+            long j2 = ((MessagesStorage.TopicKey) arrayList.get(0)).dialogId;
             Bundle bundle = new Bundle();
             bundle.putBoolean("scrollToTopOnResume", true);
-            if (DialogObject.isEncryptedDialog(longValue2)) {
-                bundle.putInt("enc_id", DialogObject.getEncryptedChatId(longValue2));
+            if (DialogObject.isEncryptedDialog(j2)) {
+                bundle.putInt("enc_id", DialogObject.getEncryptedChatId(j2));
             } else {
-                if (DialogObject.isUserDialog(longValue2)) {
-                    bundle.putLong("user_id", longValue2);
-                } else if (DialogObject.isChatDialog(longValue2)) {
-                    bundle.putLong("chat_id", -longValue2);
+                if (DialogObject.isUserDialog(j2)) {
+                    bundle.putLong("user_id", j2);
+                } else if (DialogObject.isChatDialog(j2)) {
+                    bundle.putLong("chat_id", -j2);
                 }
                 if (!MessagesController.getInstance(((BaseFragment) WallpapersListActivity.this).currentAccount).checkCanOpenChat(bundle, dialogsActivity)) {
                     return;
@@ -722,7 +723,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
             }
             NotificationCenter.getInstance(((BaseFragment) WallpapersListActivity.this).currentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
             WallpapersListActivity.this.presentFragment(new ChatActivity(bundle), true);
-            SendMessagesHelper.getInstance(((BaseFragment) WallpapersListActivity.this).currentAccount).sendMessage(sb.toString(), longValue2, null, null, null, true, null, null, null, true, 0, null, false);
+            SendMessagesHelper.getInstance(((BaseFragment) WallpapersListActivity.this).currentAccount).sendMessage(sb.toString(), j2, null, null, null, true, null, null, null, true, 0, null, false);
         }
     }
 
@@ -1537,7 +1538,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
 
             @Override // androidx.recyclerview.widget.RecyclerView.Adapter
             /* renamed from: onCreateViewHolder */
-            public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
+            public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
                 SearchAdapter searchAdapter = SearchAdapter.this;
                 return new RecyclerListView.Holder(new ColorCell(searchAdapter.mContext));
             }
@@ -1813,7 +1814,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
             View view = null;
             if (i == 0) {
                 view = new WallpaperCell(this.mContext) { // from class: org.telegram.ui.WallpapersListActivity.SearchAdapter.1
@@ -1919,7 +1920,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
             View textCell;
             View shadowSectionCell;
             if (i != 0) {

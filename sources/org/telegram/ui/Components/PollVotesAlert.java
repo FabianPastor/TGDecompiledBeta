@@ -26,9 +26,11 @@ import android.util.Property;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import androidx.annotation.Keep;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
@@ -159,7 +161,7 @@ public class PollVotesAlert extends BottomSheet {
     /* loaded from: classes3.dex */
     public class SectionCell extends FrameLayout {
         private TextView middleTextView;
-        private TextView righTextView;
+        private AnimatedTextView righTextView;
         private TextView textView;
 
         protected void onCollapseClick() {
@@ -183,7 +185,7 @@ public class PollVotesAlert extends BottomSheet {
             textView2.setTextSize(1, 14.0f);
             this.middleTextView.setTextColor(Theme.getColor("key_graySectionText"));
             this.middleTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
-            TextView textView3 = new TextView(getContext(), PollVotesAlert.this) { // from class: org.telegram.ui.Components.PollVotesAlert.SectionCell.1
+            AnimatedTextView animatedTextView = new AnimatedTextView(getContext(), PollVotesAlert.this) { // from class: org.telegram.ui.Components.PollVotesAlert.SectionCell.1
                 @Override // android.view.View
                 public boolean post(Runnable runnable) {
                     return ((BottomSheet) PollVotesAlert.this).containerView.post(runnable);
@@ -193,20 +195,29 @@ public class PollVotesAlert extends BottomSheet {
                 public boolean postDelayed(Runnable runnable, long j) {
                     return ((BottomSheet) PollVotesAlert.this).containerView.postDelayed(runnable, j);
                 }
+
+                @Override // android.view.View
+                public void invalidate() {
+                    super.invalidate();
+                    SectionCell sectionCell = SectionCell.this;
+                    if (sectionCell == PollVotesAlert.this.listView.getPinnedHeader()) {
+                        PollVotesAlert.this.listView.invalidate();
+                    }
+                }
             };
-            this.righTextView = textView3;
-            textView3.setTextSize(1, 14.0f);
+            this.righTextView = animatedTextView;
+            animatedTextView.setTextSize(AndroidUtilities.dp(14.0f));
             this.righTextView.setTextColor(Theme.getColor("key_graySectionText"));
-            this.righTextView.setGravity((LocaleController.isRTL ? 3 : 5) | 16);
+            this.righTextView.setGravity(LocaleController.isRTL ? 3 : 5);
             this.righTextView.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.Components.PollVotesAlert$SectionCell$$ExternalSyntheticLambda0
                 @Override // android.view.View.OnClickListener
                 public final void onClick(View view) {
                     PollVotesAlert.SectionCell.this.lambda$new$0(view);
                 }
             });
-            TextView textView4 = this.textView;
+            TextView textView3 = this.textView;
             boolean z = LocaleController.isRTL;
-            addView(textView4, LayoutHelper.createFrame(-2, -1.0f, (z ? 5 : 3) | 48, z ? 0 : 16, 0.0f, !z ? 0 : i2, 0.0f));
+            addView(textView3, LayoutHelper.createFrame(-2, -1.0f, (z ? 5 : 3) | 48, z ? 0 : 16, 0.0f, !z ? 0 : i2, 0.0f));
             addView(this.middleTextView, LayoutHelper.createFrame(-2, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, 0.0f, 0.0f, 0.0f, 0.0f));
             addView(this.righTextView, LayoutHelper.createFrame(-2, -1.0f, (LocaleController.isRTL ? 3 : i) | 48, 16.0f, 0.0f, 16.0f, 0.0f));
         }
@@ -239,7 +250,7 @@ public class PollVotesAlert extends BottomSheet {
             textView2.layout(right, textView2.getTop(), this.middleTextView.getMeasuredWidth() + right, this.middleTextView.getBottom());
         }
 
-        public void setText(String str, int i, int i2, int i3) {
+        public void setText(String str, int i, int i2, int i3, boolean z) {
             SpannableStringBuilder spannableStringBuilder;
             TextView textView = this.textView;
             textView.setText(Emoji.replaceEmoji(str, textView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(14.0f), false));
@@ -253,14 +264,14 @@ public class PollVotesAlert extends BottomSheet {
             this.middleTextView.setText(spannableStringBuilder);
             if (i3 == 0) {
                 if (PollVotesAlert.this.poll.quiz) {
-                    this.righTextView.setText(LocaleController.formatPluralString("Answer", i2, new Object[0]));
+                    this.righTextView.setText(LocaleController.formatPluralString("Answer", i2, new Object[0]), z);
                 } else {
-                    this.righTextView.setText(LocaleController.formatPluralString("Vote", i2, new Object[0]));
+                    this.righTextView.setText(LocaleController.formatPluralString("Vote", i2, new Object[0]), z);
                 }
             } else if (i3 == 1) {
-                this.righTextView.setText(LocaleController.getString("PollExpand", R.string.PollExpand));
+                this.righTextView.setText(LocaleController.getString("PollExpand", R.string.PollExpand), z);
             } else {
-                this.righTextView.setText(LocaleController.getString("PollCollapse", R.string.PollCollapse));
+                this.righTextView.setText(LocaleController.getString("PollCollapse", R.string.PollCollapse), z);
             }
         }
     }
@@ -746,7 +757,7 @@ public class PollVotesAlert extends BottomSheet {
         ViewGroup viewGroup = this.containerView;
         int i9 = this.backgroundPaddingLeft;
         viewGroup.setPadding(i9, 0, i9, 0);
-        RecyclerListView recyclerListView = new RecyclerListView(parentActivity) { // from class: org.telegram.ui.Components.PollVotesAlert.4
+        this.listView = new RecyclerListView(parentActivity) { // from class: org.telegram.ui.Components.PollVotesAlert.4
             long lastUpdateTime;
 
             @Override // org.telegram.ui.Components.RecyclerListView
@@ -778,17 +789,30 @@ public class PollVotesAlert extends BottomSheet {
                 super.dispatchDraw(canvas);
             }
         };
-        this.listView = recyclerListView;
-        recyclerListView.setClipToPadding(false);
-        this.listView.setLayoutManager(new LinearLayoutManager(getContext(), 1, false));
+        DefaultItemAnimator defaultItemAnimator = new DefaultItemAnimator();
+        defaultItemAnimator.setAddDuration(150L);
+        defaultItemAnimator.setMoveDuration(350L);
+        defaultItemAnimator.setChangeDuration(0L);
+        defaultItemAnimator.setRemoveDuration(0L);
+        defaultItemAnimator.setDelayAnimations(false);
+        defaultItemAnimator.setMoveInterpolator(new OvershootInterpolator(1.1f));
+        defaultItemAnimator.setTranslationInterpolator(CubicBezierInterpolator.EASE_OUT_QUINT);
+        this.listView.setItemAnimator(defaultItemAnimator);
+        this.listView.setClipToPadding(false);
+        this.listView.setLayoutManager(new LinearLayoutManager(this, getContext(), 1, false) { // from class: org.telegram.ui.Components.PollVotesAlert.5
+            @Override // androidx.recyclerview.widget.LinearLayoutManager
+            protected int getExtraLayoutSpace(RecyclerView.State state) {
+                return AndroidUtilities.dp(4000.0f);
+            }
+        });
         this.listView.setHorizontalScrollBarEnabled(false);
         this.listView.setVerticalScrollBarEnabled(false);
         this.listView.setSectionsType(2);
         this.containerView.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
-        RecyclerListView recyclerListView2 = this.listView;
+        RecyclerListView recyclerListView = this.listView;
         Adapter adapter = new Adapter(parentActivity);
         this.listAdapter = adapter;
-        recyclerListView2.setAdapter(adapter);
+        recyclerListView.setAdapter(adapter);
         this.listView.setGlowColor(Theme.getColor("dialogScrollGlow"));
         this.listView.setOnItemClickListener(new RecyclerListView.OnItemClickListener() { // from class: org.telegram.ui.Components.PollVotesAlert$$ExternalSyntheticLambda6
             @Override // org.telegram.ui.Components.RecyclerListView.OnItemClickListener
@@ -796,7 +820,7 @@ public class PollVotesAlert extends BottomSheet {
                 PollVotesAlert.this.lambda$new$4(chatActivity, view, i10);
             }
         });
-        this.listView.setOnScrollListener(new RecyclerView.OnScrollListener() { // from class: org.telegram.ui.Components.PollVotesAlert.5
+        this.listView.setOnScrollListener(new RecyclerView.OnScrollListener() { // from class: org.telegram.ui.Components.PollVotesAlert.6
             @Override // androidx.recyclerview.widget.RecyclerView.OnScrollListener
             public void onScrolled(RecyclerView recyclerView, int i10, int i11) {
                 if (PollVotesAlert.this.listView.getChildCount() <= 0) {
@@ -829,7 +853,7 @@ public class PollVotesAlert extends BottomSheet {
         this.titleTextView.setLayoutParams(new RecyclerView.LayoutParams(-1, -2));
         TextView textView2 = this.titleTextView;
         textView2.setText(Emoji.replaceEmoji(this.poll.question, textView2.getPaint().getFontMetricsInt(), AndroidUtilities.dp(18.0f), false));
-        ActionBar actionBar = new ActionBar(parentActivity) { // from class: org.telegram.ui.Components.PollVotesAlert.6
+        ActionBar actionBar = new ActionBar(parentActivity) { // from class: org.telegram.ui.Components.PollVotesAlert.7
             @Override // android.view.View
             public void setAlpha(float f) {
                 super.setAlpha(f);
@@ -852,7 +876,7 @@ public class PollVotesAlert extends BottomSheet {
             this.actionBar.setSubtitle(LocaleController.formatPluralString("Vote", tLRPC$TL_messageMediaPoll.results.total_voters, new Object[0]));
         }
         this.containerView.addView(this.actionBar, LayoutHelper.createFrame(-1, -2.0f));
-        this.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() { // from class: org.telegram.ui.Components.PollVotesAlert.7
+        this.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() { // from class: org.telegram.ui.Components.PollVotesAlert.8
             @Override // org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick
             public void onItemClick(int i10) {
                 if (i10 == -1) {
@@ -975,7 +999,8 @@ public class PollVotesAlert extends BottomSheet {
                 if (min == votesList.votes.size()) {
                     votesList.collapsed = false;
                 }
-                this.listAdapter.notifyDataSetChanged();
+                animateSectionUpdates(null);
+                this.listAdapter.update(true);
                 return;
             }
             this.loadingMore.add(votesList);
@@ -1036,7 +1061,8 @@ public class PollVotesAlert extends BottomSheet {
         chatActivity.getMessagesController().putUsers(tLRPC$TL_messages_votesList.users, false);
         votesList.votes.addAll(tLRPC$TL_messages_votesList.votes);
         votesList.next_offset = tLRPC$TL_messages_votesList.next_offset;
-        this.listAdapter.notifyDataSetChanged();
+        animateSectionUpdates(null);
+        this.listAdapter.update(true);
     }
 
     private void updateButtons() {
@@ -1151,7 +1177,7 @@ public class PollVotesAlert extends BottomSheet {
             fArr2[0] = f;
             animatorArr[1] = ObjectAnimator.ofFloat(view, property2, fArr2);
             animatorSet3.playTogether(animatorArr);
-            this.actionBarAnimation.addListener(new AnimatorListenerAdapter() { // from class: org.telegram.ui.Components.PollVotesAlert.8
+            this.actionBarAnimation.addListener(new AnimatorListenerAdapter() { // from class: org.telegram.ui.Components.PollVotesAlert.9
                 @Override // android.animation.AnimatorListenerAdapter, android.animation.Animator.AnimatorListener
                 public void onAnimationEnd(Animator animator) {
                 }
@@ -1197,12 +1223,6 @@ public class PollVotesAlert extends BottomSheet {
     public class Adapter extends RecyclerListView.SectionsAdapter {
         private Context mContext;
 
-        @Override // org.telegram.ui.Components.RecyclerListView.SectionsAdapter
-        /* renamed from: getItem */
-        public Object mo1741getItem(int i, int i2) {
-            return null;
-        }
-
         @Override // org.telegram.ui.Components.RecyclerListView.FastScrollAdapter
         public String getLetter(int i) {
             return null;
@@ -1211,6 +1231,23 @@ public class PollVotesAlert extends BottomSheet {
         public Adapter(Context context) {
             int i = UserConfig.selectedAccount;
             this.mContext = context;
+        }
+
+        @Override // org.telegram.ui.Components.RecyclerListView.SectionsAdapter
+        /* renamed from: getItem */
+        public Object mo1776getItem(int i, int i2) {
+            int i3;
+            if (i == 0) {
+                return 293145;
+            }
+            int i4 = i - 1;
+            if (i2 != 0) {
+                if (i4 >= 0 && i4 < PollVotesAlert.this.voters.size() && (i3 = i2 - 1) < ((VotesList) PollVotesAlert.this.voters.get(i4)).getCount()) {
+                    return Integer.valueOf(Arrays.hashCode(new Object[]{Long.valueOf(((VotesList) PollVotesAlert.this.voters.get(i4)).votes.get(i3).user_id)}));
+                }
+                return -182734;
+            }
+            return -928312;
         }
 
         @Override // org.telegram.ui.Components.RecyclerListView.SectionsAdapter
@@ -1257,7 +1294,8 @@ public class PollVotesAlert extends BottomSheet {
                     if (z) {
                         votesList.collapsedCount = 10;
                     }
-                    PollVotesAlert.this.listAdapter.notifyDataSetChanged();
+                    PollVotesAlert.this.animateSectionUpdates(this);
+                    PollVotesAlert.this.listAdapter.update(true);
                 }
             };
         }
@@ -1274,16 +1312,14 @@ public class PollVotesAlert extends BottomSheet {
                 view.setAlpha(1.0f);
                 VotesList votesList = (VotesList) PollVotesAlert.this.voters.get(i - 1);
                 int i2 = 0;
-                votesList.votes.get(0);
                 int size = PollVotesAlert.this.poll.answers.size();
                 while (true) {
                     if (i2 >= size) {
                         break;
                     }
                     TLRPC$TL_pollAnswer tLRPC$TL_pollAnswer = PollVotesAlert.this.poll.answers.get(i2);
-                    if (Arrays.equals(tLRPC$TL_pollAnswer.option, votesList.option)) {
-                        Button button = (Button) PollVotesAlert.this.votesPercents.get(votesList);
-                        sectionCell.setText(tLRPC$TL_pollAnswer.text, button.percent, button.votesCount, votesList.getCollapsed());
+                    if (Arrays.equals(tLRPC$TL_pollAnswer.option, votesList.option) && ((Button) PollVotesAlert.this.votesPercents.get(votesList)) != null) {
+                        sectionCell.setText(tLRPC$TL_pollAnswer.text, PollVotesAlert.this.calcPercent(votesList.option), votesList.count, votesList.getCollapsed(), false);
                         sectionCell.setTag(R.id.object_tag, votesList);
                         break;
                     }
@@ -1295,7 +1331,7 @@ public class PollVotesAlert extends BottomSheet {
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
             TextCell textCell;
             if (i == 0) {
                 textCell = new UserCell(this.mContext);
@@ -1309,6 +1345,7 @@ public class PollVotesAlert extends BottomSheet {
             } else {
                 TextCell textCell2 = new TextCell(this.mContext, 23, true);
                 textCell2.setOffsetFromImage(65);
+                textCell2.setBackgroundColor(PollVotesAlert.this.getThemedColor("dialogBackground"));
                 textCell2.setColors("switchTrackChecked", "windowBackgroundWhiteBlueText4");
                 textCell = textCell2;
             }
@@ -1332,9 +1369,8 @@ public class PollVotesAlert extends BottomSheet {
             int size = PollVotesAlert.this.poll.answers.size();
             for (int i3 = 0; i3 < size; i3++) {
                 TLRPC$TL_pollAnswer tLRPC$TL_pollAnswer = PollVotesAlert.this.poll.answers.get(i3);
-                if (Arrays.equals(tLRPC$TL_pollAnswer.option, votesList2.option)) {
-                    Button button = (Button) PollVotesAlert.this.votesPercents.get(votesList2);
-                    sectionCell.setText(tLRPC$TL_pollAnswer.text, button.percent, button.votesCount, votesList2.getCollapsed());
+                if (Arrays.equals(tLRPC$TL_pollAnswer.option, votesList2.option) && ((Button) PollVotesAlert.this.votesPercents.get(votesList2)) != null) {
+                    sectionCell.setText(tLRPC$TL_pollAnswer.text, PollVotesAlert.this.calcPercent(votesList2.option), votesList2.count, votesList2.getCollapsed(), false);
                     sectionCell.setTag(R.id.object_tag, votesList2);
                     return;
                 }
@@ -1375,6 +1411,62 @@ public class PollVotesAlert extends BottomSheet {
             iArr[0] = 0;
             iArr[1] = 0;
         }
+    }
+
+    public int calcPercent(byte[] bArr) {
+        if (bArr == null) {
+            return 0;
+        }
+        int i = 0;
+        int i2 = 0;
+        for (int i3 = 0; i3 < this.voters.size(); i3++) {
+            VotesList votesList = this.voters.get(i3);
+            if (votesList != null) {
+                i += votesList.count;
+                if (Arrays.equals(votesList.option, bArr)) {
+                    i2 += votesList.count;
+                }
+            }
+        }
+        if (i > 0) {
+            return Math.round((i2 / i) * 100.0f);
+        }
+        return 0;
+    }
+
+    public void animateSectionUpdates(View view) {
+        View pinnedHeader;
+        int i = -2;
+        while (i < this.listView.getChildCount()) {
+            if (i == -2) {
+                pinnedHeader = view;
+            } else {
+                pinnedHeader = i == -1 ? this.listView.getPinnedHeader() : this.listView.getChildAt(i);
+            }
+            if (pinnedHeader instanceof SectionCell) {
+                int i2 = R.id.object_tag;
+                if (pinnedHeader.getTag(i2) instanceof VotesList) {
+                    SectionCell sectionCell = (SectionCell) pinnedHeader;
+                    VotesList votesList = (VotesList) pinnedHeader.getTag(i2);
+                    int i3 = 0;
+                    int size = this.poll.answers.size();
+                    while (true) {
+                        if (i3 < size) {
+                            TLRPC$TL_pollAnswer tLRPC$TL_pollAnswer = this.poll.answers.get(i3);
+                            if (Arrays.equals(tLRPC$TL_pollAnswer.option, votesList.option) && this.votesPercents.get(votesList) != null) {
+                                sectionCell.setText(tLRPC$TL_pollAnswer.text, calcPercent(votesList.option), votesList.count, votesList.getCollapsed(), true);
+                                sectionCell.setTag(R.id.object_tag, votesList);
+                                break;
+                            }
+                            i3++;
+                        }
+                    }
+                }
+            }
+            i++;
+        }
+        this.listView.relayoutPinnedHeader();
+        this.listView.invalidate();
     }
 
     @Override // org.telegram.ui.ActionBar.BottomSheet

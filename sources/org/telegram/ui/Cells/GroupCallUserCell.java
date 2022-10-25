@@ -217,8 +217,9 @@ public class GroupCallUserCell extends FrameLayout {
         }
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     /* loaded from: classes3.dex */
-    private static class VerifiedDrawable extends Drawable {
+    public static class VerifiedDrawable extends Drawable {
         private Drawable[] drawables;
 
         @Override // android.graphics.drawable.Drawable

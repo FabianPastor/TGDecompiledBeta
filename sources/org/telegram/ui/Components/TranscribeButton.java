@@ -16,9 +16,9 @@ import android.text.style.ImageSpan;
 import android.util.StateSet;
 import androidx.core.graphics.ColorUtils;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.DialogObject;
@@ -28,6 +28,7 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
+import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
@@ -38,38 +39,52 @@ import org.telegram.tgnet.TLRPC$TL_messages_transcribeAudio;
 import org.telegram.tgnet.TLRPC$TL_messages_transcribedAudio;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.ChatMessageCell;
-import org.telegram.ui.PremiumPreviewFragment;
 /* loaded from: classes3.dex */
 public class TranscribeButton {
     private static final int[] pressedState = {16842910, 16842919};
     private static HashMap<Integer, MessageObject> transcribeOperationsByDialogPosition;
     private static HashMap<Long, MessageObject> transcribeOperationsById;
+    private static ArrayList<Integer> videoTranscriptionsOpen;
+    private float backgroundBack;
     private int backgroundColor;
     private Paint backgroundPaint;
     private Path boundsPath;
     private int color;
     private int iconColor;
     private RLottieDrawable inIconDrawable;
+    private int inIconDrawableAlpha;
     private boolean isOpen;
     private boolean loading;
     private AnimatedFloat loadingFloat;
     private RLottieDrawable outIconDrawable;
+    private int outIconDrawableAlpha;
     private ChatMessageCell parent;
     private boolean premium;
     private android.graphics.Rect pressBounds;
     private Path progressClipPath;
+    private int radius;
     private int rippleColor;
     private SeekBarWaveform seekBar;
     private float[] segments;
     private Drawable selectorDrawable;
     private boolean shouldBeOpen;
     private Paint strokePaint;
+    private boolean clickedToOpen = false;
     private boolean pressed = false;
     private final FastOutSlowInInterpolator interpolator = new FastOutSlowInInterpolator();
     private long start = SystemClock.elapsedRealtime();
     private android.graphics.Rect bounds = new android.graphics.Rect(0, 0, AndroidUtilities.dp(30.0f), AndroidUtilities.dp(30.0f));
 
+    public void drawGradientBackground(Canvas canvas, android.graphics.Rect rect, float f) {
+        throw null;
+    }
+
+    protected void onOpen() {
+        throw null;
+    }
+
     public TranscribeButton(ChatMessageCell chatMessageCell, SeekBarWaveform seekBarWaveform) {
+        boolean z = false;
         this.parent = chatMessageCell;
         this.seekBar = seekBarWaveform;
         android.graphics.Rect rect = new android.graphics.Rect(this.bounds);
@@ -79,7 +94,7 @@ public class TranscribeButton {
         this.outIconDrawable = rLottieDrawable;
         rLottieDrawable.setCurrentFrame(0);
         this.outIconDrawable.setCallback(chatMessageCell);
-        this.outIconDrawable.setOnFinishCallback(new Runnable() { // from class: org.telegram.ui.Components.TranscribeButton$$ExternalSyntheticLambda5
+        this.outIconDrawable.setOnFinishCallback(new Runnable() { // from class: org.telegram.ui.Components.TranscribeButton$$ExternalSyntheticLambda6
             @Override // java.lang.Runnable
             public final void run() {
                 TranscribeButton.this.lambda$new$0();
@@ -91,7 +106,7 @@ public class TranscribeButton {
         rLottieDrawable2.setCurrentFrame(0);
         this.inIconDrawable.setCallback(chatMessageCell);
         this.inIconDrawable.setMasterParent(chatMessageCell);
-        this.inIconDrawable.setOnFinishCallback(new Runnable() { // from class: org.telegram.ui.Components.TranscribeButton$$ExternalSyntheticLambda4
+        this.inIconDrawable.setOnFinishCallback(new Runnable() { // from class: org.telegram.ui.Components.TranscribeButton$$ExternalSyntheticLambda5
             @Override // java.lang.Runnable
             public final void run() {
                 TranscribeButton.this.lambda$new$1();
@@ -100,7 +115,10 @@ public class TranscribeButton {
         this.inIconDrawable.setAllowDecodeSingleFrame(true);
         this.isOpen = false;
         this.shouldBeOpen = false;
-        this.premium = AccountInstance.getInstance(chatMessageCell.getMessageObject().currentAccount).getUserConfig().isPremium();
+        if (chatMessageCell.getMessageObject() != null && UserConfig.getInstance(chatMessageCell.getMessageObject().currentAccount).isPremium()) {
+            z = true;
+        }
+        this.premium = z;
         this.loadingFloat = new AnimatedFloat(chatMessageCell, 250L, CubicBezierInterpolator.EASE_OUT_QUINT);
     }
 
@@ -142,6 +160,10 @@ public class TranscribeButton {
     }
 
     public void setOpen(boolean z, boolean z2) {
+        if (!this.shouldBeOpen && z && this.clickedToOpen) {
+            this.clickedToOpen = false;
+            onOpen();
+        }
         boolean z3 = this.shouldBeOpen;
         this.shouldBeOpen = z;
         if (!z2) {
@@ -194,18 +216,19 @@ public class TranscribeButton {
     }
 
     public void onTap() {
-        boolean z = this.shouldBeOpen;
-        boolean z2 = !z;
-        boolean z3 = true;
-        if (!z) {
-            boolean z4 = !this.loading;
+        boolean z;
+        this.clickedToOpen = false;
+        boolean z2 = this.shouldBeOpen;
+        boolean z3 = !z2;
+        if (!z2) {
+            z = !this.loading;
             if (this.premium && this.parent.getMessageObject().isSent()) {
                 setLoading(true, true);
             }
-            z3 = z4;
         } else {
             setOpen(false, true);
             setLoading(false, true);
+            z = true;
         }
         if (Build.VERSION.SDK_INT >= 21) {
             Drawable drawable = this.selectorDrawable;
@@ -215,29 +238,35 @@ public class TranscribeButton {
             }
         }
         this.pressed = false;
-        if (z3) {
-            if (!this.premium && z2) {
+        if (z) {
+            if (!this.premium && z3) {
                 if (this.parent.getDelegate() == null) {
                     return;
                 }
-                this.parent.getDelegate().needShowPremiumFeatures(PremiumPreviewFragment.featureTypeToServerString(8));
+                this.parent.getDelegate().needShowPremiumBulletin(0);
                 return;
             }
-            transcribePressed(this.parent.getMessageObject(), z2);
+            if (z3) {
+                this.clickedToOpen = true;
+            }
+            transcribePressed(this.parent.getMessageObject(), z3);
         }
     }
 
-    public void setColor(boolean z, int i, int i2) {
+    public void setColor(int i, int i2, boolean z, float f) {
         boolean z2 = this.color != i;
         this.color = i;
         this.iconColor = i;
         int alphaComponent = ColorUtils.setAlphaComponent(i, (int) (Color.alpha(i) * 0.156f));
         this.backgroundColor = alphaComponent;
+        this.backgroundBack = f;
         this.rippleColor = Theme.blendOver(alphaComponent, ColorUtils.setAlphaComponent(i, (int) (Color.alpha(i) * (Theme.isCurrentThemeDark() ? 0.3f : 0.2f))));
         if (this.backgroundPaint == null) {
             this.backgroundPaint = new Paint();
         }
         this.backgroundPaint.setColor(this.backgroundColor);
+        Paint paint = this.backgroundPaint;
+        paint.setAlpha((int) (paint.getAlpha() * (1.0f - f)));
         if (z2 || this.selectorDrawable == null) {
             Drawable createSimpleSelectorRoundRectDrawable = Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(8.0f), 0, this.rippleColor);
             this.selectorDrawable = createSimpleSelectorRoundRectDrawable;
@@ -249,34 +278,68 @@ public class TranscribeButton {
             this.inIconDrawable.commitApplyLayerColors();
             this.inIconDrawable.setAllowDecodeSingleFrame(true);
             this.inIconDrawable.updateCurrentFrame(0L, false);
+            RLottieDrawable rLottieDrawable = this.inIconDrawable;
+            int alpha = Color.alpha(i);
+            this.inIconDrawableAlpha = alpha;
+            rLottieDrawable.setAlpha(alpha);
             this.outIconDrawable.beginApplyLayerColors();
             this.outIconDrawable.setLayerColor("Artboard Outlines.**", this.iconColor);
             this.outIconDrawable.commitApplyLayerColors();
             this.outIconDrawable.setAllowDecodeSingleFrame(true);
             this.outIconDrawable.updateCurrentFrame(0L, false);
+            RLottieDrawable rLottieDrawable2 = this.outIconDrawable;
+            int alpha2 = Color.alpha(i);
+            this.outIconDrawableAlpha = alpha2;
+            rLottieDrawable2.setAlpha(alpha2);
         }
         if (this.strokePaint == null) {
-            Paint paint = new Paint(1);
-            this.strokePaint = paint;
-            paint.setStyle(Paint.Style.STROKE);
+            Paint paint2 = new Paint(1);
+            this.strokePaint = paint2;
+            paint2.setStyle(Paint.Style.STROKE);
+            this.strokePaint.setStrokeCap(Paint.Cap.ROUND);
         }
         this.strokePaint.setColor(i);
     }
 
-    public void draw(Canvas canvas) {
-        this.bounds.set(0, AndroidUtilities.dp(3.0f), AndroidUtilities.dp(30.0f), AndroidUtilities.dp(27.0f));
+    public void setBounds(int i, int i2, int i3, int i4, int i5) {
+        this.bounds.set(i, i2, i3 + i, i4 + i2);
+        this.radius = i5;
+    }
+
+    public int width() {
+        return this.bounds.width();
+    }
+
+    public int height() {
+        return this.bounds.height();
+    }
+
+    public void draw(Canvas canvas, float f) {
         this.pressBounds.set(this.bounds.left - AndroidUtilities.dp(8.0f), this.bounds.top - AndroidUtilities.dp(8.0f), this.bounds.right + AndroidUtilities.dp(8.0f), this.bounds.bottom + AndroidUtilities.dp(8.0f));
-        if (this.boundsPath == null) {
+        Path path = this.boundsPath;
+        if (path == null) {
             this.boundsPath = new Path();
-            RectF rectF = AndroidUtilities.rectTmp;
-            rectF.set(this.bounds);
-            this.boundsPath.addRoundRect(rectF, AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), Path.Direction.CW);
+        } else {
+            path.rewind();
         }
+        RectF rectF = AndroidUtilities.rectTmp;
+        rectF.set(this.bounds);
+        Path path2 = this.boundsPath;
+        int i = this.radius;
+        path2.addRoundRect(rectF, i, i, Path.Direction.CW);
         canvas.save();
         canvas.clipPath(this.boundsPath);
+        float f2 = this.backgroundBack;
+        float f3 = 0.0f;
+        if (f2 * f > 0.0f) {
+            drawGradientBackground(canvas, this.bounds, f2 * f);
+        }
         Paint paint = this.backgroundPaint;
         if (paint != null) {
-            canvas.drawRect(this.bounds, paint);
+            int alpha = paint.getAlpha();
+            this.backgroundPaint.setAlpha((int) (alpha * f));
+            canvas.drawRect(this.bounds, this.backgroundPaint);
+            this.backgroundPaint.setAlpha(alpha);
         }
         Drawable drawable = this.selectorDrawable;
         if (drawable != null && this.premium) {
@@ -284,39 +347,43 @@ public class TranscribeButton {
             this.selectorDrawable.draw(canvas);
         }
         canvas.restore();
-        float f = 1.0f;
-        float f2 = this.loadingFloat.set(this.loading ? 1.0f : 0.0f);
-        if (f2 > 0.0f) {
+        float f4 = this.loadingFloat.set(this.loading ? 1.0f : 0.0f);
+        if (f4 > 0.0f) {
             float[] segments = getSegments(((float) (SystemClock.elapsedRealtime() - this.start)) * 0.75f);
             canvas.save();
             if (this.progressClipPath == null) {
                 this.progressClipPath = new Path();
             }
             this.progressClipPath.reset();
-            RectF rectF2 = AndroidUtilities.rectTmp;
-            rectF2.set(this.pressBounds);
-            float max = Math.max(40.0f * f2, segments[1] - segments[0]);
-            Path path = this.progressClipPath;
-            float f3 = segments[0];
-            float f4 = (1.0f - f2) * max;
-            if (this.loading) {
-                f = 0.0f;
+            rectF.set(this.pressBounds);
+            float max = Math.max(40.0f * f4, segments[1] - segments[0]);
+            Path path3 = this.progressClipPath;
+            float f5 = segments[0];
+            float f6 = (1.0f - f4) * max;
+            if (!this.loading) {
+                f3 = 1.0f;
             }
-            path.addArc(rectF2, f3 + (f4 * f), max * f2);
-            this.progressClipPath.lineTo(rectF2.centerX(), rectF2.centerY());
+            path3.addArc(rectF, f5 + (f6 * f3), max * f4);
+            this.progressClipPath.lineTo(rectF.centerX(), rectF.centerY());
             this.progressClipPath.close();
             canvas.clipPath(this.progressClipPath);
-            rectF2.set(this.bounds);
+            rectF.set(this.bounds);
             this.strokePaint.setStrokeWidth(AndroidUtilities.dp(1.5f));
-            canvas.drawRoundRect(rectF2, AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), this.strokePaint);
+            int alpha2 = this.strokePaint.getAlpha();
+            this.strokePaint.setAlpha((int) (alpha2 * f));
+            int i2 = this.radius;
+            canvas.drawRoundRect(rectF, i2, i2, this.strokePaint);
+            this.strokePaint.setAlpha(alpha2);
             canvas.restore();
             this.parent.invalidate();
         }
         canvas.save();
-        canvas.translate(AndroidUtilities.dp(2.0f), AndroidUtilities.dp(2.0f));
+        canvas.translate(this.bounds.centerX() + AndroidUtilities.dp(-13.0f), this.bounds.centerY() + AndroidUtilities.dp(-13.0f));
         if (this.isOpen) {
+            this.inIconDrawable.setAlpha((int) (this.inIconDrawableAlpha * f));
             this.inIconDrawable.draw(canvas);
         } else {
+            this.outIconDrawable.setAlpha((int) (this.outIconDrawableAlpha * f));
             this.outIconDrawable.draw(canvas);
         }
         canvas.restore();
@@ -452,6 +519,27 @@ public class TranscribeButton {
         return Arrays.hashCode(new Object[]{Integer.valueOf(messageObject.currentAccount), Long.valueOf(messageObject.getDialogId()), Integer.valueOf(messageObject.getId())});
     }
 
+    public static void openVideoTranscription(MessageObject messageObject) {
+        if (messageObject == null || isVideoTranscriptionOpen(messageObject)) {
+            return;
+        }
+        if (videoTranscriptionsOpen == null) {
+            videoTranscriptionsOpen = new ArrayList<>(1);
+        }
+        videoTranscriptionsOpen.add(Integer.valueOf(reqInfoHash(messageObject)));
+    }
+
+    public static boolean isVideoTranscriptionOpen(MessageObject messageObject) {
+        return videoTranscriptionsOpen != null && (!messageObject.isRoundVideo() || videoTranscriptionsOpen.contains(Integer.valueOf(reqInfoHash(messageObject))));
+    }
+
+    public static void resetVideoTranscriptionsOpen() {
+        ArrayList<Integer> arrayList = videoTranscriptionsOpen;
+        if (arrayList != null) {
+            arrayList.clear();
+        }
+    }
+
     public static boolean isTranscribing(MessageObject messageObject) {
         HashMap<Long, MessageObject> hashMap;
         TLRPC$Message tLRPC$Message;
@@ -471,7 +559,8 @@ public class TranscribeButton {
         final int i2 = tLRPC$Message.id;
         if (z) {
             if (tLRPC$Message.voiceTranscription != null && tLRPC$Message.voiceTranscriptionFinal) {
-                tLRPC$Message.voiceTranscriptionOpen = true;
+                openVideoTranscription(messageObject);
+                messageObject.messageOwner.voiceTranscriptionOpen = true;
                 MessagesStorage.getInstance(i).updateMessageVoiceTranscriptionOpen(peerDialogId, i2, messageObject.messageOwner);
                 AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.TranscribeButton$$ExternalSyntheticLambda1
                     @Override // java.lang.Runnable
@@ -481,6 +570,9 @@ public class TranscribeButton {
                 });
                 return;
             }
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.d("sending Transcription request, msg_id=" + i2 + " dialog_id=" + peerDialogId);
+            }
             TLRPC$TL_messages_transcribeAudio tLRPC$TL_messages_transcribeAudio = new TLRPC$TL_messages_transcribeAudio();
             tLRPC$TL_messages_transcribeAudio.peer = inputPeer;
             tLRPC$TL_messages_transcribeAudio.msg_id = i2;
@@ -488,7 +580,7 @@ public class TranscribeButton {
                 transcribeOperationsByDialogPosition = new HashMap<>();
             }
             transcribeOperationsByDialogPosition.put(Integer.valueOf(reqInfoHash(messageObject)), messageObject);
-            ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_messages_transcribeAudio, new RequestDelegate() { // from class: org.telegram.ui.Components.TranscribeButton$$ExternalSyntheticLambda6
+            ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_messages_transcribeAudio, new RequestDelegate() { // from class: org.telegram.ui.Components.TranscribeButton$$ExternalSyntheticLambda7
                 @Override // org.telegram.tgnet.RequestDelegate
                 public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
                     TranscribeButton.lambda$transcribePressed$4(MessageObject.this, elapsedRealtime, i, peerDialogId, i2, tLObject, tLRPC$TL_error);
@@ -544,15 +636,16 @@ public class TranscribeButton {
             z = true;
         }
         long elapsedRealtime = SystemClock.elapsedRealtime() - j;
+        openVideoTranscription(messageObject);
         TLRPC$Message tLRPC$Message = messageObject.messageOwner;
         tLRPC$Message.voiceTranscriptionOpen = true;
         tLRPC$Message.voiceTranscriptionFinal = z;
         if (BuildVars.LOGS_ENABLED) {
-            FileLog.e("Transcription request sent, received final=" + z + " id=" + j3 + " text=" + str);
+            FileLog.d("Transcription request sent, received final=" + z + " id=" + j3 + " text=" + str);
         }
         MessagesStorage.getInstance(i).updateMessageVoiceTranscription(j2, i2, str, messageObject.messageOwner);
         if (z) {
-            AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.TranscribeButton$$ExternalSyntheticLambda3
+            AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.TranscribeButton$$ExternalSyntheticLambda4
                 @Override // java.lang.Runnable
                 public final void run() {
                     TranscribeButton.finishTranscription(MessageObject.this, j3, str);
@@ -583,7 +676,7 @@ public class TranscribeButton {
                 }
                 messageObject.messageOwner.voiceTranscriptionFinal = true;
                 MessagesStorage.getInstance(messageObject.currentAccount).updateMessageVoiceTranscription(messageObject.getDialogId(), messageObject.getId(), str, messageObject.messageOwner);
-                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.TranscribeButton$$ExternalSyntheticLambda2
+                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.TranscribeButton$$ExternalSyntheticLambda3
                     @Override // java.lang.Runnable
                     public final void run() {
                         TranscribeButton.lambda$finishTranscription$6(MessageObject.this, j, str);
@@ -602,5 +695,32 @@ public class TranscribeButton {
         int i = NotificationCenter.voiceTranscriptionUpdate;
         Boolean bool = Boolean.TRUE;
         notificationCenter.postNotificationName(i, messageObject, Long.valueOf(j), str, bool, bool);
+    }
+
+    public static void showOffTranscribe(MessageObject messageObject) {
+        showOffTranscribe(messageObject, true);
+    }
+
+    public static void showOffTranscribe(final MessageObject messageObject, boolean z) {
+        TLRPC$Message tLRPC$Message;
+        if (messageObject == null || (tLRPC$Message = messageObject.messageOwner) == null) {
+            return;
+        }
+        tLRPC$Message.voiceTranscriptionForce = true;
+        MessagesStorage.getInstance(messageObject.currentAccount).updateMessageVoiceTranscriptionOpen(messageObject.getDialogId(), messageObject.getId(), messageObject.messageOwner);
+        if (!z) {
+            return;
+        }
+        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.TranscribeButton$$ExternalSyntheticLambda2
+            @Override // java.lang.Runnable
+            public final void run() {
+                TranscribeButton.lambda$showOffTranscribe$7(MessageObject.this);
+            }
+        });
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
+    public static /* synthetic */ void lambda$showOffTranscribe$7(MessageObject messageObject) {
+        NotificationCenter.getInstance(messageObject.currentAccount).postNotificationName(NotificationCenter.voiceTranscriptionUpdate, messageObject);
     }
 }

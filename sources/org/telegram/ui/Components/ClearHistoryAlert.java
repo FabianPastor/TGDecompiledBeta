@@ -90,16 +90,16 @@ public class ClearHistoryAlert extends BottomSheet {
     /* JADX WARN: Removed duplicated region for block: B:132:0x00d8  */
     /* JADX WARN: Removed duplicated region for block: B:133:0x00e1  */
     /* JADX WARN: Removed duplicated region for block: B:142:0x0107  */
-    /* JADX WARN: Removed duplicated region for block: B:178:0x02f3  */
-    /* JADX WARN: Removed duplicated region for block: B:190:0x045f  */
-    /* JADX WARN: Removed duplicated region for block: B:191:0x046d  */
+    /* JADX WARN: Removed duplicated region for block: B:178:0x02f1  */
+    /* JADX WARN: Removed duplicated region for block: B:190:0x045d  */
+    /* JADX WARN: Removed duplicated region for block: B:191:0x046b  */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
     public ClearHistoryAlert(android.content.Context r28, org.telegram.tgnet.TLRPC$User r29, org.telegram.tgnet.TLRPC$Chat r30, boolean r31, org.telegram.ui.ActionBar.Theme.ResourcesProvider r32) {
         /*
-            Method dump skipped, instructions count: 1190
+            Method dump skipped, instructions count: 1188
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ClearHistoryAlert.<init>(android.content.Context, org.telegram.tgnet.TLRPC$User, org.telegram.tgnet.TLRPC$Chat, boolean, org.telegram.ui.ActionBar.Theme$ResourcesProvider):void");

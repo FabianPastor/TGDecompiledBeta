@@ -197,7 +197,7 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
         this.detailRow = i4;
         if (!this.isChannel || (this.chats.size() > 0 && this.info.linked_chat_id != 0)) {
             TLRPC$Chat tLRPC$Chat = this.isChannel ? this.chats.get(0) : this.currentChat;
-            if (tLRPC$Chat != null && ((TextUtils.isEmpty(tLRPC$Chat.username) || this.isChannel) && (tLRPC$Chat.creator || ((tLRPC$TL_chatAdminRights = tLRPC$Chat.admin_rights) != null && tLRPC$TL_chatAdminRights.ban_users)))) {
+            if (tLRPC$Chat != null && ((!ChatObject.isPublic(tLRPC$Chat) || this.isChannel) && (tLRPC$Chat.creator || ((tLRPC$TL_chatAdminRights = tLRPC$Chat.admin_rights) != null && tLRPC$TL_chatAdminRights.ban_users)))) {
                 int i5 = this.rowCount;
                 this.rowCount = i5 + 1;
                 this.joinToSendRow = i5;
@@ -565,9 +565,9 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
         textView.setTextColor(Theme.getColor("dialogTextBlack"));
         textView.setTextSize(1, 16.0f);
         textView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-        if (TextUtils.isEmpty(tLRPC$Chat.username)) {
+        if (!ChatObject.isPublic(tLRPC$Chat)) {
             formatString = LocaleController.formatString("DiscussionLinkGroupPublicPrivateAlert", R.string.DiscussionLinkGroupPublicPrivateAlert, tLRPC$Chat.title, this.currentChat.title);
-        } else if (TextUtils.isEmpty(this.currentChat.username)) {
+        } else if (!ChatObject.isPublic(this.currentChat)) {
             formatString = LocaleController.formatString("DiscussionLinkGroupPrivateAlert", R.string.DiscussionLinkGroupPrivateAlert, tLRPC$Chat.title, this.currentChat.title);
         } else {
             formatString = LocaleController.formatString("DiscussionLinkGroupPublicAlert", R.string.DiscussionLinkGroupPublicAlert, tLRPC$Chat.title, this.currentChat.title);
@@ -978,7 +978,7 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
             ManageChatUserCell manageChatUserCell = new ManageChatUserCell(this.mContext, 6, 2, false);
             manageChatUserCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
             return new RecyclerListView.Holder(manageChatUserCell);
@@ -1207,7 +1207,7 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
             View manageChatUserCell;
             View view;
             if (i == 0) {
@@ -1241,10 +1241,11 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
                 ManageChatUserCell manageChatUserCell = (ManageChatUserCell) viewHolder.itemView;
                 manageChatUserCell.setTag(Integer.valueOf(i));
                 TLRPC$Chat tLRPC$Chat = (TLRPC$Chat) ChatLinkActivity.this.chats.get(i - ChatLinkActivity.this.chatStartRow);
-                if (TextUtils.isEmpty(tLRPC$Chat.username)) {
+                String publicUsername = ChatObject.getPublicUsername(tLRPC$Chat);
+                if (TextUtils.isEmpty(publicUsername)) {
                     str = null;
                 } else {
-                    str = "@" + tLRPC$Chat.username;
+                    str = "@" + publicUsername;
                 }
                 if (i != ChatLinkActivity.this.chatEndRow - 1 || ChatLinkActivity.this.info.linked_chat_id != 0) {
                     z = true;

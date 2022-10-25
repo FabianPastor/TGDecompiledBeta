@@ -1,7 +1,7 @@
 package org.telegram.tgnet;
 /* loaded from: classes.dex */
 public class TLRPC$TL_messages_sendInlineBotResult extends TLObject {
-    public static int constructor = NUM;
+    public static int constructor = -NUM;
     public boolean background;
     public boolean clear_draft;
     public int flags;
@@ -14,6 +14,7 @@ public class TLRPC$TL_messages_sendInlineBotResult extends TLObject {
     public int schedule_date;
     public TLRPC$InputPeer send_as;
     public boolean silent;
+    public int top_msg_id;
 
     @Override // org.telegram.tgnet.TLObject
     public TLObject deserializeResponse(AbstractSerializedData abstractSerializedData, int i, boolean z) {
@@ -35,6 +36,9 @@ public class TLRPC$TL_messages_sendInlineBotResult extends TLObject {
         this.peer.serializeToStream(abstractSerializedData);
         if ((this.flags & 1) != 0) {
             abstractSerializedData.writeInt32(this.reply_to_msg_id);
+        }
+        if ((this.flags & 512) != 0) {
+            abstractSerializedData.writeInt32(this.top_msg_id);
         }
         abstractSerializedData.writeInt64(this.random_id);
         abstractSerializedData.writeInt64(this.query_id);

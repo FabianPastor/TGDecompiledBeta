@@ -176,7 +176,7 @@ public class UserCell2 extends FrameLayout {
     */
     public void update(int r13) {
         /*
-            Method dump skipped, instructions count: 617
+            Method dump skipped, instructions count: 613
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.UserCell2.update(int):void");

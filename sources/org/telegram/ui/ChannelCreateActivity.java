@@ -391,13 +391,15 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                         if (!ChannelCreateActivity.this.isPrivate) {
                             if (ChannelCreateActivity.this.descriptionTextView.length() != 0) {
                                 if (ChannelCreateActivity.this.lastNameAvailable) {
-                                    MessagesController.getInstance(((BaseFragment) ChannelCreateActivity.this).currentAccount).updateChannelUserName(ChannelCreateActivity.this.chatId, ChannelCreateActivity.this.lastCheckName);
+                                    MessagesController messagesController = MessagesController.getInstance(((BaseFragment) ChannelCreateActivity.this).currentAccount);
+                                    ChannelCreateActivity channelCreateActivity = ChannelCreateActivity.this;
+                                    messagesController.updateChannelUserName(channelCreateActivity, channelCreateActivity.chatId, ChannelCreateActivity.this.lastCheckName, null, null);
                                 } else {
                                     Vibrator vibrator = (Vibrator) ChannelCreateActivity.this.getParentActivity().getSystemService("vibrator");
                                     if (vibrator != null) {
                                         vibrator.vibrate(200L);
                                     }
-                                    AndroidUtilities.shakeView(ChannelCreateActivity.this.checkTextView, 2.0f, 0);
+                                    AndroidUtilities.shakeView(ChannelCreateActivity.this.checkTextView);
                                     return;
                                 }
                             } else {
@@ -425,14 +427,14 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                                 ChannelCreateActivity.this.createAfterUpload = true;
                                 return;
                             }
-                            ChannelCreateActivity channelCreateActivity = ChannelCreateActivity.this;
-                            channelCreateActivity.doneRequestId = Integer.valueOf(MessagesController.getInstance(((BaseFragment) channelCreateActivity).currentAccount).createChat(ChannelCreateActivity.this.nameTextView.getText().toString(), new ArrayList<>(), ChannelCreateActivity.this.descriptionTextView.getText().toString(), 2, false, null, null, ChannelCreateActivity.this));
+                            ChannelCreateActivity channelCreateActivity2 = ChannelCreateActivity.this;
+                            channelCreateActivity2.doneRequestId = Integer.valueOf(MessagesController.getInstance(((BaseFragment) channelCreateActivity2).currentAccount).createChat(ChannelCreateActivity.this.nameTextView.getText().toString(), new ArrayList<>(), ChannelCreateActivity.this.descriptionTextView.getText().toString(), 2, false, null, null, ChannelCreateActivity.this));
                         } else {
                             Vibrator vibrator2 = (Vibrator) ChannelCreateActivity.this.getParentActivity().getSystemService("vibrator");
                             if (vibrator2 != null) {
                                 vibrator2.vibrate(200L);
                             }
-                            AndroidUtilities.shakeView(ChannelCreateActivity.this.nameTextView, 2.0f, 0);
+                            AndroidUtilities.shakeView(ChannelCreateActivity.this.nameTextView);
                         }
                     }
                 }

@@ -2795,7 +2795,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
 
     public /* synthetic */ void lambda$new$12(Theme.ResourcesProvider resourcesProvider, View view) {
         if (this.currentLimit - this.codepointCount < 0) {
-            AndroidUtilities.shakeView(this.captionLimitView, 2.0f, 0);
+            AndroidUtilities.shakeView(this.captionLimitView);
             Vibrator vibrator = (Vibrator) this.captionLimitView.getContext().getSystemService("vibrator");
             if (vibrator == null) {
                 return;
@@ -4412,7 +4412,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
             View attachButton;
             if (i == 0) {
                 attachButton = new AttachButton(this.mContext);

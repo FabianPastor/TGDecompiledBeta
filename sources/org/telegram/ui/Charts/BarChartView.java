@@ -84,7 +84,7 @@ public class BarChartView extends BaseChartView<ChartData, BarViewData> {
     /* JADX WARN: Can't rename method to resolve collision */
     @Override // org.telegram.ui.Charts.BaseChartView
     /* renamed from: createLineViewData */
-    public BarViewData mo989createLineViewData(ChartData.Line line) {
+    public BarViewData mo1021createLineViewData(ChartData.Line line) {
         return new BarViewData(line);
     }
 

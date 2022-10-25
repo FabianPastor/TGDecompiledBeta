@@ -1,7 +1,7 @@
 package org.telegram.tgnet;
 /* loaded from: classes.dex */
 public class TLRPC$TL_user extends TLRPC$User {
-    public static int constructor = NUM;
+    public static int constructor = -NUM;
 
     @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
@@ -25,6 +25,7 @@ public class TLRPC$TL_user extends TLRPC$User {
         this.bot_attach_menu = (NUM & readInt32) != 0;
         this.premium = (NUM & readInt32) != 0;
         this.attach_menu_enabled = (readInt32 & NUM) != 0;
+        this.flags2 = abstractSerializedData.readInt32(z);
         this.id = abstractSerializedData.readInt64(z);
         if ((this.flags & 1) != 0) {
             this.access_hash = abstractSerializedData.readInt64(z);
@@ -76,6 +77,23 @@ public class TLRPC$TL_user extends TLRPC$User {
         if ((this.flags & NUM) != 0) {
             this.emoji_status = TLRPC$EmojiStatus.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         }
+        if ((this.flags2 & 1) != 0) {
+            int readInt324 = abstractSerializedData.readInt32(z);
+            if (readInt324 != NUM) {
+                if (z) {
+                    throw new RuntimeException(String.format("wrong Vector magic, got %x", Integer.valueOf(readInt324)));
+                }
+                return;
+            }
+            int readInt325 = abstractSerializedData.readInt32(z);
+            for (int i2 = 0; i2 < readInt325; i2++) {
+                TLRPC$TL_username TLdeserialize2 = TLRPC$TL_username.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+                if (TLdeserialize2 == null) {
+                    return;
+                }
+                this.usernames.add(TLdeserialize2);
+            }
+        }
     }
 
     @Override // org.telegram.tgnet.TLObject
@@ -118,6 +136,7 @@ public class TLRPC$TL_user extends TLRPC$User {
         int i18 = this.attach_menu_enabled ? i17 | NUM : i17 & (-NUM);
         this.flags = i18;
         abstractSerializedData.writeInt32(i18);
+        abstractSerializedData.writeInt32(this.flags2);
         abstractSerializedData.writeInt64(this.id);
         if ((this.flags & 1) != 0) {
             abstractSerializedData.writeInt64(this.access_hash);
@@ -159,6 +178,14 @@ public class TLRPC$TL_user extends TLRPC$User {
         }
         if ((this.flags & NUM) != 0) {
             this.emoji_status.serializeToStream(abstractSerializedData);
+        }
+        if ((this.flags2 & 1) != 0) {
+            abstractSerializedData.writeInt32(NUM);
+            int size2 = this.usernames.size();
+            abstractSerializedData.writeInt32(size2);
+            for (int i20 = 0; i20 < size2; i20++) {
+                this.usernames.get(i20).serializeToStream(abstractSerializedData);
+            }
         }
     }
 }

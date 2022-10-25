@@ -8,14 +8,12 @@ import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.text.TextUtils;
 import android.util.LongSparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import j$.util.Comparator$CC;
@@ -50,6 +48,7 @@ import org.telegram.tgnet.TLRPC$TL_peerUser;
 import org.telegram.tgnet.TLRPC$TL_reactionCustomEmoji;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.tgnet.TLRPC$UserProfilePhoto;
+import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble;
 import org.telegram.ui.Components.RecyclerListView;
@@ -129,7 +128,7 @@ public class ReactedUsersListView extends FrameLayout {
         RecyclerView.Adapter adapter = new RecyclerView.Adapter() { // from class: org.telegram.ui.Components.ReactedUsersListView.2
             @Override // androidx.recyclerview.widget.RecyclerView.Adapter
             /* renamed from: onCreateViewHolder */
-            public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i2) {
+            public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i2) {
                 FrameLayout reactedUserHolderView;
                 if (i2 == 0) {
                     reactedUserHolderView = new ReactedUserHolderView(context);
@@ -442,7 +441,7 @@ public class ReactedUsersListView extends FrameLayout {
         BackupImageView avatarView;
         View overlaySelectorView;
         BackupImageView reactView;
-        TextView titleView;
+        SimpleTextView titleView;
 
         ReactedUserHolderView(Context context) {
             super(context);
@@ -452,14 +451,15 @@ public class ReactedUsersListView extends FrameLayout {
             this.avatarView = backupImageView;
             backupImageView.setRoundRadius(AndroidUtilities.dp(32.0f));
             addView(this.avatarView, LayoutHelper.createFrameRelatively(36.0f, 36.0f, 8388627, 8.0f, 0.0f, 0.0f, 0.0f));
-            TextView textView = new TextView(context);
-            this.titleView = textView;
-            textView.setLines(1);
-            this.titleView.setTextSize(1, 16.0f);
+            SimpleTextView simpleTextView = new SimpleTextView(context);
+            this.titleView = simpleTextView;
+            simpleTextView.setTextSize(16);
             this.titleView.setTextColor(Theme.getColor("actionBarDefaultSubmenuItem"));
-            this.titleView.setEllipsize(TextUtils.TruncateAt.END);
+            this.titleView.setEllipsizeByGradient(true);
             this.titleView.setImportantForAccessibility(2);
-            addView(this.titleView, LayoutHelper.createFrameRelatively(-2.0f, -2.0f, 8388627, 58.0f, 0.0f, 44.0f, 0.0f));
+            this.titleView.setWidthWrapContent(true);
+            this.titleView.setPadding(0, AndroidUtilities.dp(12.0f), 0, AndroidUtilities.dp(12.0f));
+            addView(this.titleView, LayoutHelper.createFrameRelatively(-2.0f, -2.0f, 8388627, 58.0f, 0.0f, 42.0f, 0.0f));
             BackupImageView backupImageView2 = new BackupImageView(context);
             this.reactView = backupImageView2;
             addView(backupImageView2, LayoutHelper.createFrameRelatively(24.0f, 24.0f, 8388629, 0.0f, 0.0f, 12.0f, 0.0f));

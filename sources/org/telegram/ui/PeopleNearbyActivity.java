@@ -903,7 +903,6 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
         getLocationController().startLocationLookupForPeopleNearby(true);
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
     @Override // org.telegram.ui.ActionBar.BaseFragment
     public void onBecomeFullyHidden() {
         super.onBecomeFullyHidden();
@@ -935,7 +934,6 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
         openGroupCreate();
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
     @Override // org.telegram.ui.ActionBar.BaseFragment
     public void onBecomeFullyVisible() {
         super.onBecomeFullyVisible();
@@ -1102,7 +1100,7 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
             TextView textView;
             if (i == 0) {
                 View manageChatUserCell = new ManageChatUserCell(this.mContext, 6, 2, false);

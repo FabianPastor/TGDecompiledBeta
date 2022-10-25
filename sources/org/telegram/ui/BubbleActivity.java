@@ -16,16 +16,16 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
-import org.telegram.ui.ActionBar.ActionBarLayout;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.DrawerLayoutContainer;
+import org.telegram.ui.ActionBar.INavigationLayout;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.PasscodeView;
 import org.telegram.ui.Components.ThemeEditorView;
 /* loaded from: classes3.dex */
-public class BubbleActivity extends BasePermissionsActivity implements ActionBarLayout.ActionBarLayoutDelegate {
-    private ActionBarLayout actionBarLayout;
+public class BubbleActivity extends BasePermissionsActivity implements INavigationLayout.INavigationLayoutDelegate {
+    private INavigationLayout actionBarLayout;
     private long dialogId;
     protected DrawerLayoutContainer drawerLayoutContainer;
     private boolean finished;
@@ -38,23 +38,41 @@ public class BubbleActivity extends BasePermissionsActivity implements ActionBar
     private int passcodeSaveIntentState;
     private PasscodeView passcodeView;
 
-    @Override // org.telegram.ui.ActionBar.ActionBarLayout.ActionBarLayoutDelegate
-    public boolean needAddFragmentToStack(BaseFragment baseFragment, ActionBarLayout actionBarLayout) {
-        return true;
+    @Override // org.telegram.ui.ActionBar.INavigationLayout.INavigationLayoutDelegate
+    public /* synthetic */ boolean needAddFragmentToStack(BaseFragment baseFragment, INavigationLayout iNavigationLayout) {
+        return INavigationLayout.INavigationLayoutDelegate.CC.$default$needAddFragmentToStack(this, baseFragment, iNavigationLayout);
     }
 
-    @Override // org.telegram.ui.ActionBar.ActionBarLayout.ActionBarLayoutDelegate
-    public boolean needPresentFragment(BaseFragment baseFragment, boolean z, boolean z2, ActionBarLayout actionBarLayout) {
-        return true;
+    @Override // org.telegram.ui.ActionBar.INavigationLayout.INavigationLayoutDelegate
+    public /* synthetic */ boolean needPresentFragment(BaseFragment baseFragment, boolean z, boolean z2, INavigationLayout iNavigationLayout) {
+        return INavigationLayout.INavigationLayoutDelegate.CC.$default$needPresentFragment(this, baseFragment, z, z2, iNavigationLayout);
     }
 
-    @Override // org.telegram.ui.ActionBar.ActionBarLayout.ActionBarLayoutDelegate
-    public boolean onPreIme() {
-        return false;
+    @Override // org.telegram.ui.ActionBar.INavigationLayout.INavigationLayoutDelegate
+    public /* synthetic */ boolean needPresentFragment(INavigationLayout iNavigationLayout, INavigationLayout.NavigationParams navigationParams) {
+        boolean needPresentFragment;
+        needPresentFragment = needPresentFragment(navigationParams.fragment, navigationParams.removeLast, navigationParams.noAnimation, iNavigationLayout);
+        return needPresentFragment;
     }
 
-    @Override // org.telegram.ui.ActionBar.ActionBarLayout.ActionBarLayoutDelegate
-    public void onRebuildAllFragments(ActionBarLayout actionBarLayout, boolean z) {
+    @Override // org.telegram.ui.ActionBar.INavigationLayout.INavigationLayoutDelegate
+    public /* synthetic */ void onMeasureOverride(int[] iArr) {
+        INavigationLayout.INavigationLayoutDelegate.CC.$default$onMeasureOverride(this, iArr);
+    }
+
+    @Override // org.telegram.ui.ActionBar.INavigationLayout.INavigationLayoutDelegate
+    public /* synthetic */ boolean onPreIme() {
+        return INavigationLayout.INavigationLayoutDelegate.CC.$default$onPreIme(this);
+    }
+
+    @Override // org.telegram.ui.ActionBar.INavigationLayout.INavigationLayoutDelegate
+    public /* synthetic */ void onRebuildAllFragments(INavigationLayout iNavigationLayout, boolean z) {
+        INavigationLayout.INavigationLayoutDelegate.CC.$default$onRebuildAllFragments(this, iNavigationLayout, z);
+    }
+
+    @Override // org.telegram.ui.ActionBar.INavigationLayout.INavigationLayoutDelegate
+    public /* synthetic */ void onThemeProgress(float f) {
+        INavigationLayout.INavigationLayoutDelegate.CC.$default$onThemeProgress(this, f);
     }
 
     @Override // android.app.Activity
@@ -77,9 +95,9 @@ public class BubbleActivity extends BasePermissionsActivity implements ActionBar
         AndroidUtilities.fillStatusBarHeight(this);
         Theme.createDialogsResources(this);
         Theme.createChatResources(this, false);
-        ActionBarLayout actionBarLayout = new ActionBarLayout(this);
-        this.actionBarLayout = actionBarLayout;
-        actionBarLayout.setInBubbleMode(true);
+        INavigationLayout newLayout = INavigationLayout.CC.newLayout(this);
+        this.actionBarLayout = newLayout;
+        newLayout.setInBubbleMode(true);
         this.actionBarLayout.setRemoveActionBarExtraHeight(true);
         DrawerLayoutContainer drawerLayoutContainer = new DrawerLayoutContainer(this);
         this.drawerLayoutContainer = drawerLayoutContainer;
@@ -87,10 +105,10 @@ public class BubbleActivity extends BasePermissionsActivity implements ActionBar
         setContentView(this.drawerLayoutContainer, new ViewGroup.LayoutParams(-1, -1));
         RelativeLayout relativeLayout = new RelativeLayout(this);
         this.drawerLayoutContainer.addView(relativeLayout, LayoutHelper.createFrame(-1, -1.0f));
-        relativeLayout.addView(this.actionBarLayout, LayoutHelper.createRelative(-1, -1));
+        relativeLayout.addView(this.actionBarLayout.getView(), LayoutHelper.createRelative(-1, -1));
         this.drawerLayoutContainer.setParentActionBarLayout(this.actionBarLayout);
         this.actionBarLayout.setDrawerLayoutContainer(this.drawerLayoutContainer);
-        this.actionBarLayout.init(this.mainFragmentsStack);
+        this.actionBarLayout.setFragmentStack(this.mainFragmentsStack);
         this.actionBarLayout.setDelegate(this);
         PasscodeView passcodeView = new PasscodeView(this);
         this.passcodeView = passcodeView;
@@ -230,9 +248,8 @@ public class BubbleActivity extends BasePermissionsActivity implements ActionBar
         if (themeEditorView != null) {
             themeEditorView.onActivityResult(i, i2, intent);
         }
-        if (this.actionBarLayout.fragmentsStack.size() != 0) {
-            ArrayList<BaseFragment> arrayList = this.actionBarLayout.fragmentsStack;
-            arrayList.get(arrayList.size() - 1).onActivityResultFragment(i, i2, intent);
+        if (this.actionBarLayout.getFragmentStack().size() != 0) {
+            this.actionBarLayout.getFragmentStack().get(this.actionBarLayout.getFragmentStack().size() - 1).onActivityResultFragment(i, i2, intent);
         }
     }
 
@@ -242,9 +259,8 @@ public class BubbleActivity extends BasePermissionsActivity implements ActionBar
         if (!checkPermissionsResult(i, strArr, iArr)) {
             return;
         }
-        if (this.actionBarLayout.fragmentsStack.size() != 0) {
-            ArrayList<BaseFragment> arrayList = this.actionBarLayout.fragmentsStack;
-            arrayList.get(arrayList.size() - 1).onRequestPermissionsResultFragment(i, strArr, iArr);
+        if (this.actionBarLayout.getFragmentStack().size() != 0) {
+            this.actionBarLayout.getFragmentStack().get(this.actionBarLayout.getFragmentStack().size() - 1).onRequestPermissionsResultFragment(i, strArr, iArr);
         }
         VoIPFragment.onRequestPermissionsResult(i, strArr, iArr);
     }
@@ -344,9 +360,9 @@ public class BubbleActivity extends BasePermissionsActivity implements ActionBar
         this.actionBarLayout.onLowMemory();
     }
 
-    @Override // org.telegram.ui.ActionBar.ActionBarLayout.ActionBarLayoutDelegate
-    public boolean needCloseLastFragment(ActionBarLayout actionBarLayout) {
-        if (actionBarLayout.fragmentsStack.size() <= 1) {
+    @Override // org.telegram.ui.ActionBar.INavigationLayout.INavigationLayoutDelegate
+    public boolean needCloseLastFragment(INavigationLayout iNavigationLayout) {
+        if (iNavigationLayout.getFragmentStack().size() <= 1) {
             onFinish();
             finish();
             return false;

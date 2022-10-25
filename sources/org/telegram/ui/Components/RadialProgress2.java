@@ -45,6 +45,7 @@ public class RadialProgress2 {
     private ImageReceiver overlayImageView;
     private Paint overlayPaint;
     private float overrideAlpha;
+    public float overrideCircleAlpha;
     private View parent;
     private int progressColor;
     private RectF progressRect;
@@ -62,6 +63,7 @@ public class RadialProgress2 {
         this.circleMiniPaint = new Paint(1);
         this.miniIconScale = 1.0f;
         this.circleCheckProgress = 1.0f;
+        this.overrideCircleAlpha = 1.0f;
         this.drawBackground = true;
         this.overrideAlpha = 1.0f;
         this.resourcesProvider = resourcesProvider;
@@ -102,6 +104,10 @@ public class RadialProgress2 {
     public void setCircleRadius(int i) {
         this.circleRadius = i;
         this.overlayImageView.setRoundRadius(i);
+    }
+
+    public int getRadius() {
+        return this.circleRadius;
     }
 
     public void setBackgroundDrawable(Theme.MessageDrawable messageDrawable) {
@@ -164,6 +170,10 @@ public class RadialProgress2 {
 
     public void setProgressRect(int i, int i2, int i3, int i4) {
         this.progressRect.set(i, i2, i3, i4);
+    }
+
+    public void setProgressRect(float f, float f2, float f3, float f4) {
+        this.progressRect.set(f, f2, f3, f4);
     }
 
     public RectF getProgressRect() {
@@ -384,7 +394,7 @@ public class RadialProgress2 {
             if ((this.drawMiniIcon || this.circleCrossfadeColorKey != null) && this.miniDrawCanvas != null) {
                 this.miniDrawBitmap.eraseColor(0);
             }
-            this.circlePaint.setAlpha((int) (this.circlePaint.getAlpha() * transitionProgress * this.overrideAlpha));
+            this.circlePaint.setAlpha((int) (this.circlePaint.getAlpha() * transitionProgress * this.overrideAlpha * this.overrideCircleAlpha));
             this.circleMiniPaint.setAlpha((int) (this.circleMiniPaint.getAlpha() * transitionProgress * this.overrideAlpha));
             if ((this.drawMiniIcon || this.circleCrossfadeColorKey != null) && this.miniDrawCanvas != null) {
                 ceil = (int) Math.ceil(this.progressRect.width() / 2.0f);

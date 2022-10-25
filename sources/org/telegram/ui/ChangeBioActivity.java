@@ -122,7 +122,7 @@ public class ChangeBioActivity extends BaseFragment {
                     if (vibrator != null) {
                         vibrator.vibrate(200L);
                     }
-                    AndroidUtilities.shakeView(ChangeBioActivity.this.checkTextView, 2.0f, 0);
+                    AndroidUtilities.shakeView(ChangeBioActivity.this.checkTextView);
                 }
                 return filter;
             }

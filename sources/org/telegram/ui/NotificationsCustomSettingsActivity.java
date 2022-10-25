@@ -97,6 +97,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment implements
     private SearchAdapter searchAdapter;
     private boolean searchWas;
     private boolean searching;
+    int topicId;
 
     public NotificationsCustomSettingsActivity(int i, ArrayList<NotificationsSettingsActivity.NotificationException> arrayList) {
         this(i, arrayList, false);
@@ -105,6 +106,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment implements
     public NotificationsCustomSettingsActivity(int i, ArrayList<NotificationsSettingsActivity.NotificationException> arrayList, boolean z) {
         this.rowCount = 0;
         this.exceptionsDict = new HashMap<>();
+        this.topicId = 0;
         this.currentType = i;
         this.exceptions = arrayList;
         int size = arrayList.size();
@@ -305,10 +307,16 @@ public class NotificationsCustomSettingsActivity extends BaseFragment implements
                 }
 
                 @Override // org.telegram.ui.Components.ChatNotificationsPopupWrapper.Callback
+                public /* synthetic */ void openExceptions() {
+                    ChatNotificationsPopupWrapper.Callback.CC.$default$openExceptions(this);
+                }
+
+                @Override // org.telegram.ui.Components.ChatNotificationsPopupWrapper.Callback
                 public void toggleSound() {
+                    String sharedPrefKey = NotificationsController.getSharedPrefKey(j2, NotificationsCustomSettingsActivity.this.topicId);
                     SharedPreferences notificationsSettings = MessagesController.getNotificationsSettings(((BaseFragment) NotificationsCustomSettingsActivity.this).currentAccount);
-                    boolean z5 = !notificationsSettings.getBoolean("sound_enabled_" + j2, true);
-                    notificationsSettings.edit().putBoolean("sound_enabled_" + j2, z5).apply();
+                    boolean z5 = !notificationsSettings.getBoolean("sound_enabled_" + sharedPrefKey, true);
+                    notificationsSettings.edit().putBoolean("sound_enabled_" + sharedPrefKey, z5).apply();
                     if (BulletinFactory.canShowBulletin(NotificationsCustomSettingsActivity.this)) {
                         NotificationsCustomSettingsActivity notificationsCustomSettingsActivity = NotificationsCustomSettingsActivity.this;
                         BulletinFactory.createSoundEnabledBulletin(notificationsCustomSettingsActivity, !z5, notificationsCustomSettingsActivity.getResourceProvider()).show();
@@ -318,13 +326,13 @@ public class NotificationsCustomSettingsActivity extends BaseFragment implements
                 @Override // org.telegram.ui.Components.ChatNotificationsPopupWrapper.Callback
                 public void muteFor(int i3) {
                     if (i3 != 0) {
-                        NotificationsCustomSettingsActivity.this.getNotificationsController().muteUntil(j2, i3);
+                        NotificationsCustomSettingsActivity.this.getNotificationsController().muteUntil(j2, NotificationsCustomSettingsActivity.this.topicId, i3);
                         if (BulletinFactory.canShowBulletin(NotificationsCustomSettingsActivity.this)) {
                             NotificationsCustomSettingsActivity notificationsCustomSettingsActivity = NotificationsCustomSettingsActivity.this;
                             BulletinFactory.createMuteBulletin(notificationsCustomSettingsActivity, 5, i3, notificationsCustomSettingsActivity.getResourceProvider()).show();
                         }
                     } else {
-                        if (NotificationsCustomSettingsActivity.this.getMessagesController().isDialogMuted(j2)) {
+                        if (NotificationsCustomSettingsActivity.this.getMessagesController().isDialogMuted(j2, NotificationsCustomSettingsActivity.this.topicId)) {
                             toggleMute();
                         }
                         if (BulletinFactory.canShowBulletin(NotificationsCustomSettingsActivity.this)) {
@@ -357,14 +365,14 @@ public class NotificationsCustomSettingsActivity extends BaseFragment implements
 
                 @Override // org.telegram.ui.Components.ChatNotificationsPopupWrapper.Callback
                 public void toggleMute() {
-                    NotificationsCustomSettingsActivity.this.getNotificationsController().muteDialog(j2, !NotificationsCustomSettingsActivity.this.getMessagesController().isDialogMuted(j2));
+                    NotificationsCustomSettingsActivity.this.getNotificationsController().muteDialog(j2, NotificationsCustomSettingsActivity.this.topicId, !NotificationsCustomSettingsActivity.this.getMessagesController().isDialogMuted(j2, NotificationsCustomSettingsActivity.this.topicId));
                     NotificationsCustomSettingsActivity notificationsCustomSettingsActivity = NotificationsCustomSettingsActivity.this;
-                    BulletinFactory.createMuteBulletin(notificationsCustomSettingsActivity, notificationsCustomSettingsActivity.getMessagesController().isDialogMuted(j2), null).show();
+                    BulletinFactory.createMuteBulletin(notificationsCustomSettingsActivity, notificationsCustomSettingsActivity.getMessagesController().isDialogMuted(j2, NotificationsCustomSettingsActivity.this.topicId), null).show();
                     update();
                 }
 
                 private void update() {
-                    if (NotificationsCustomSettingsActivity.this.getMessagesController().isDialogMuted(j2) != isGlobalNotificationsEnabled) {
+                    if (NotificationsCustomSettingsActivity.this.getMessagesController().isDialogMuted(j2, NotificationsCustomSettingsActivity.this.topicId) != isGlobalNotificationsEnabled) {
                         setDefault();
                     } else {
                         setNotDefault();
@@ -420,7 +428,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment implements
                     ((BaseFragment) NotificationsCustomSettingsActivity.this).actionBar.closeSearchField();
                 }
             }, getResourceProvider());
-            chatNotificationsPopupWrapper.lambda$update$10(j2);
+            chatNotificationsPopupWrapper.lambda$update$11(j2, this.topicId, null);
             chatNotificationsPopupWrapper.showAsOptions(this, view, f, f2);
             return;
         }
@@ -473,7 +481,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment implements
                 }
                 checkRowsEnabled();
             } else {
-                AlertsCreator.showCustomNotificationsDialog(this, 0L, this.currentType, this.exceptions, this.currentAccount, new MessagesStorage.IntCallback() { // from class: org.telegram.ui.NotificationsCustomSettingsActivity$$ExternalSyntheticLambda7
+                AlertsCreator.showCustomNotificationsDialog(this, 0L, 0, this.currentType, this.exceptions, this.currentAccount, new MessagesStorage.IntCallback() { // from class: org.telegram.ui.NotificationsCustomSettingsActivity$$ExternalSyntheticLambda7
                     @Override // org.telegram.messenger.MessagesStorage.IntCallback
                     public final void run(int i4) {
                         NotificationsCustomSettingsActivity.this.lambda$createView$3(notificationsCheckCell, findViewHolderForAdapterPosition, i, i4);
@@ -516,7 +524,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment implements
             if (!view.isEnabled()) {
                 return;
             }
-            showDialog(AlertsCreator.createColorSelectDialog(getParentActivity(), 0L, this.currentType, new Runnable() { // from class: org.telegram.ui.NotificationsCustomSettingsActivity$$ExternalSyntheticLambda4
+            showDialog(AlertsCreator.createColorSelectDialog(getParentActivity(), 0L, 0, this.currentType, new Runnable() { // from class: org.telegram.ui.NotificationsCustomSettingsActivity$$ExternalSyntheticLambda4
                 @Override // java.lang.Runnable
                 public final void run() {
                     NotificationsCustomSettingsActivity.this.lambda$createView$4(i);
@@ -537,7 +545,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment implements
                 return;
             }
             int i5 = this.currentType;
-            showDialog(AlertsCreator.createVibrationSelectDialog(getParentActivity(), 0L, i5 == 1 ? "vibrate_messages" : i5 == 0 ? "vibrate_group" : "vibrate_channel", new Runnable() { // from class: org.telegram.ui.NotificationsCustomSettingsActivity$$ExternalSyntheticLambda3
+            showDialog(AlertsCreator.createVibrationSelectDialog(getParentActivity(), 0L, 0, i5 == 1 ? "vibrate_messages" : i5 == 0 ? "vibrate_group" : "vibrate_channel", new Runnable() { // from class: org.telegram.ui.NotificationsCustomSettingsActivity$$ExternalSyntheticLambda3
                 @Override // java.lang.Runnable
                 public final void run() {
                     NotificationsCustomSettingsActivity.this.lambda$createView$6(i);
@@ -547,7 +555,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment implements
             if (!view.isEnabled()) {
                 return;
             }
-            showDialog(AlertsCreator.createPrioritySelectDialog(getParentActivity(), 0L, this.currentType, new Runnable() { // from class: org.telegram.ui.NotificationsCustomSettingsActivity$$ExternalSyntheticLambda5
+            showDialog(AlertsCreator.createPrioritySelectDialog(getParentActivity(), 0L, 0, this.currentType, new Runnable() { // from class: org.telegram.ui.NotificationsCustomSettingsActivity$$ExternalSyntheticLambda5
                 @Override // java.lang.Runnable
                 public final void run() {
                     NotificationsCustomSettingsActivity.this.lambda$createView$7(i);
@@ -563,7 +571,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment implements
     /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$createView$1(DialogsActivity dialogsActivity, ArrayList arrayList, CharSequence charSequence, boolean z) {
         Bundle bundle = new Bundle();
-        bundle.putLong("dialog_id", ((Long) arrayList.get(0)).longValue());
+        bundle.putLong("dialog_id", ((MessagesStorage.TopicKey) arrayList.get(0)).dialogId);
         bundle.putBoolean("exception", true);
         ProfileNotificationsActivity profileNotificationsActivity = new ProfileNotificationsActivity(bundle, getResourceProvider());
         profileNotificationsActivity.setDelegate(new ProfileNotificationsActivity.ProfileNotificationsActivityDelegate() { // from class: org.telegram.ui.NotificationsCustomSettingsActivity$$ExternalSyntheticLambda11
@@ -603,7 +611,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment implements
         edit.commit();
         int size2 = this.exceptions.size();
         for (int i3 = 0; i3 < size2; i3++) {
-            getNotificationsController().updateServerNotificationsSettings(this.exceptions.get(i3).did, false);
+            getNotificationsController().updateServerNotificationsSettings(this.exceptions.get(i3).did, this.topicId, false);
         }
         this.exceptions.clear();
         this.exceptionsDict.clear();
@@ -1103,7 +1111,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment implements
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
             View userCell;
             if (i == 0) {
                 userCell = new UserCell(this.mContext, 4, 0, false, true);
@@ -1170,7 +1178,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment implements
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
             View headerCell;
             switch (i) {
                 case 0:

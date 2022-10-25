@@ -22,10 +22,14 @@ public class TextCheckCell2 extends FrameLayout {
     private TextView valueTextView;
 
     public TextCheckCell2(Context context) {
+        this(context, null);
+    }
+
+    public TextCheckCell2(Context context, Theme.ResourcesProvider resourcesProvider) {
         super(context);
         TextView textView = new TextView(context);
         this.textView = textView;
-        textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+        textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText", resourcesProvider));
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
@@ -38,7 +42,7 @@ public class TextCheckCell2 extends FrameLayout {
         addView(textView2, LayoutHelper.createFrame(-1, -1.0f, (z ? 5 : 3) | 48, z ? 64.0f : 21.0f, 0.0f, z ? 21.0f : 64.0f, 0.0f));
         TextView textView3 = new TextView(context);
         this.valueTextView = textView3;
-        textView3.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2"));
+        textView3.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2", resourcesProvider));
         this.valueTextView.setTextSize(1, 13.0f);
         this.valueTextView.setGravity(LocaleController.isRTL ? 5 : 3);
         this.valueTextView.setLines(1);
@@ -49,9 +53,9 @@ public class TextCheckCell2 extends FrameLayout {
         TextView textView4 = this.valueTextView;
         boolean z2 = LocaleController.isRTL;
         addView(textView4, LayoutHelper.createFrame(-2, -2.0f, (z2 ? 5 : 3) | 48, z2 ? 64.0f : 21.0f, 35.0f, z2 ? 21.0f : 64.0f, 0.0f));
-        Switch r0 = new Switch(context);
-        this.checkBox = r0;
-        r0.setDrawIconType(1);
+        Switch r2 = new Switch(context);
+        this.checkBox = r2;
+        r2.setDrawIconType(1);
         addView(this.checkBox, LayoutHelper.createFrame(37, 40.0f, (LocaleController.isRTL ? 3 : i) | 16, 22.0f, 0.0f, 22.0f, 0.0f));
     }
 

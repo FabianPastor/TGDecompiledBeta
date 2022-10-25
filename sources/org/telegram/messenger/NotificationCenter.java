@@ -213,6 +213,7 @@ public class NotificationCenter {
     public static final int themeUploadError;
     public static final int themeUploadedToServer;
     public static final int threadMessagesRead;
+    public static int topicsDidLoaded = 0;
     private static int totalEvents = 1;
     public static final int twoStepPasswordChanged;
     public static final int updateBotMenuButton;
@@ -920,8 +921,11 @@ public class NotificationCenter {
         int i220 = i219 + 1;
         totalEvents = i220;
         requestPermissions = i219;
-        totalEvents = i220 + 1;
+        int i221 = i220 + 1;
+        totalEvents = i221;
         permissionsGranted = i220;
+        totalEvents = i221 + 1;
+        topicsDidLoaded = i221;
     }
 
     /* loaded from: classes.dex */

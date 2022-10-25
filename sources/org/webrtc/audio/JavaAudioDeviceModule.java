@@ -8,7 +8,7 @@ import android.os.Build;
 import java.util.concurrent.ScheduledExecutorService;
 import org.webrtc.JniCommon;
 import org.webrtc.Logging;
-/* loaded from: classes3.dex */
+/* loaded from: classes.dex */
 public class JavaAudioDeviceModule implements AudioDeviceModule {
     private static final String TAG = "JavaAudioDeviceModule";
     private final WebRtcAudioRecord audioInput;
@@ -22,7 +22,7 @@ public class JavaAudioDeviceModule implements AudioDeviceModule {
     private final boolean useStereoInput;
     private final boolean useStereoOutput;
 
-    /* loaded from: classes3.dex */
+    /* loaded from: classes.dex */
     public interface AudioRecordErrorCallback {
         void onWebRtcAudioRecordError(String str);
 
@@ -31,20 +31,20 @@ public class JavaAudioDeviceModule implements AudioDeviceModule {
         void onWebRtcAudioRecordStartError(AudioRecordStartErrorCode audioRecordStartErrorCode, String str);
     }
 
-    /* loaded from: classes3.dex */
+    /* loaded from: classes.dex */
     public enum AudioRecordStartErrorCode {
         AUDIO_RECORD_START_EXCEPTION,
         AUDIO_RECORD_START_STATE_MISMATCH
     }
 
-    /* loaded from: classes3.dex */
+    /* loaded from: classes.dex */
     public interface AudioRecordStateCallback {
         void onWebRtcAudioRecordStart();
 
         void onWebRtcAudioRecordStop();
     }
 
-    /* loaded from: classes3.dex */
+    /* loaded from: classes.dex */
     public interface AudioTrackErrorCallback {
         void onWebRtcAudioTrackError(String str);
 
@@ -53,20 +53,20 @@ public class JavaAudioDeviceModule implements AudioDeviceModule {
         void onWebRtcAudioTrackStartError(AudioTrackStartErrorCode audioTrackStartErrorCode, String str);
     }
 
-    /* loaded from: classes3.dex */
+    /* loaded from: classes.dex */
     public enum AudioTrackStartErrorCode {
         AUDIO_TRACK_START_EXCEPTION,
         AUDIO_TRACK_START_STATE_MISMATCH
     }
 
-    /* loaded from: classes3.dex */
+    /* loaded from: classes.dex */
     public interface AudioTrackStateCallback {
         void onWebRtcAudioTrackStart();
 
         void onWebRtcAudioTrackStop();
     }
 
-    /* loaded from: classes3.dex */
+    /* loaded from: classes.dex */
     public interface SamplesReadyCallback {
         void onWebRtcAudioRecordSamplesReady(AudioSamples audioSamples);
     }
@@ -77,7 +77,7 @@ public class JavaAudioDeviceModule implements AudioDeviceModule {
         return new Builder(context);
     }
 
-    /* loaded from: classes3.dex */
+    /* loaded from: classes.dex */
     public static class Builder {
         private AudioAttributes audioAttributes;
         private int audioFormat;
@@ -237,7 +237,7 @@ public class JavaAudioDeviceModule implements AudioDeviceModule {
         }
     }
 
-    /* loaded from: classes3.dex */
+    /* loaded from: classes.dex */
     public static class AudioSamples {
         private final int audioFormat;
         private final int channelCount;

@@ -26,6 +26,7 @@ import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.R;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.ActionBar;
@@ -116,11 +117,11 @@ public class DialogOrContactPickerActivity extends BaseFragment {
         if (arrayList.isEmpty()) {
             return;
         }
-        long longValue = ((Long) arrayList.get(0)).longValue();
-        if (!DialogObject.isUserDialog(longValue)) {
+        long j = ((MessagesStorage.TopicKey) arrayList.get(0)).dialogId;
+        if (!DialogObject.isUserDialog(j)) {
             return;
         }
-        showBlockAlert(getMessagesController().getUser(Long.valueOf(longValue)));
+        showBlockAlert(getMessagesController().getUser(Long.valueOf(j)));
     }
 
     /* JADX INFO: Access modifiers changed from: private */

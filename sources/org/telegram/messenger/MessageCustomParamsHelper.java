@@ -7,13 +7,14 @@ import org.telegram.tgnet.TLRPC$Message;
 /* loaded from: classes.dex */
 public class MessageCustomParamsHelper {
     public static boolean isEmpty(TLRPC$Message tLRPC$Message) {
-        return tLRPC$Message.voiceTranscription == null && !tLRPC$Message.voiceTranscriptionOpen && !tLRPC$Message.voiceTranscriptionFinal && !tLRPC$Message.voiceTranscriptionRated && tLRPC$Message.voiceTranscriptionId == 0 && !tLRPC$Message.premiumEffectWasPlayed;
+        return tLRPC$Message.voiceTranscription == null && !tLRPC$Message.voiceTranscriptionOpen && !tLRPC$Message.voiceTranscriptionFinal && !tLRPC$Message.voiceTranscriptionRated && !tLRPC$Message.voiceTranscriptionForce && tLRPC$Message.voiceTranscriptionId == 0 && !tLRPC$Message.premiumEffectWasPlayed;
     }
 
     public static void copyParams(TLRPC$Message tLRPC$Message, TLRPC$Message tLRPC$Message2) {
         tLRPC$Message2.voiceTranscription = tLRPC$Message.voiceTranscription;
         tLRPC$Message2.voiceTranscriptionOpen = tLRPC$Message.voiceTranscriptionOpen;
         tLRPC$Message2.voiceTranscriptionFinal = tLRPC$Message.voiceTranscriptionFinal;
+        tLRPC$Message2.voiceTranscriptionForce = tLRPC$Message.voiceTranscriptionForce;
         tLRPC$Message2.voiceTranscriptionRated = tLRPC$Message.voiceTranscriptionRated;
         tLRPC$Message2.voiceTranscriptionId = tLRPC$Message.voiceTranscriptionId;
         tLRPC$Message2.premiumEffectWasPlayed = tLRPC$Message.premiumEffectWasPlayed;
@@ -53,15 +54,20 @@ public class MessageCustomParamsHelper {
         final TLRPC$Message message;
 
         private Params_v1(TLRPC$Message tLRPC$Message) {
+            int i = 0;
             this.flags = 0;
             this.message = tLRPC$Message;
-            this.flags = 0 + (tLRPC$Message.voiceTranscription != null ? 1 : 0);
+            int i2 = (tLRPC$Message.voiceTranscription != null ? 1 : 0) + 0;
+            this.flags = i2;
+            this.flags = i2 + (tLRPC$Message.voiceTranscriptionForce ? 2 : i);
         }
 
         @Override // org.telegram.tgnet.TLObject
         public void serializeToStream(AbstractSerializedData abstractSerializedData) {
             abstractSerializedData.writeInt32(1);
-            abstractSerializedData.writeInt32(this.flags);
+            int i = this.message.voiceTranscriptionForce ? this.flags | 2 : this.flags & (-3);
+            this.flags = i;
+            abstractSerializedData.writeInt32(i);
             if ((1 & this.flags) != 0) {
                 abstractSerializedData.writeString(this.message.voiceTranscription);
             }
@@ -74,12 +80,18 @@ public class MessageCustomParamsHelper {
 
         @Override // org.telegram.tgnet.TLObject
         public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
+            boolean z2 = true;
             int readInt32 = abstractSerializedData.readInt32(true);
             this.flags = readInt32;
-            if ((1 & readInt32) != 0) {
+            if ((readInt32 & 1) != 0) {
                 this.message.voiceTranscription = abstractSerializedData.readString(z);
             }
-            this.message.voiceTranscriptionOpen = abstractSerializedData.readBool(z);
+            TLRPC$Message tLRPC$Message = this.message;
+            if ((this.flags & 2) == 0) {
+                z2 = false;
+            }
+            tLRPC$Message.voiceTranscriptionForce = z2;
+            tLRPC$Message.voiceTranscriptionOpen = abstractSerializedData.readBool(z);
             this.message.voiceTranscriptionFinal = abstractSerializedData.readBool(z);
             this.message.voiceTranscriptionRated = abstractSerializedData.readBool(z);
             this.message.voiceTranscriptionId = abstractSerializedData.readInt64(z);

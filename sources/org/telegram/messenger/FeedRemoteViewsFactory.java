@@ -147,7 +147,7 @@ public class FeedRemoteViewsFactory implements RemoteViewsService.RemoteViewsFac
         if (this.classGuid == 0) {
             this.classGuid = ConnectionsManager.generateClassGuid();
         }
-        this.accountInstance.getMessagesController().loadMessages(this.dialogId, 0L, false, 20, 0, 0, true, 0, this.classGuid, 0, 0, 0, 0, 0, 1);
+        this.accountInstance.getMessagesController().loadMessages(this.dialogId, 0L, false, 20, 0, 0, true, 0, this.classGuid, 0, 0, 0, 0, 0, 1, false);
     }
 
     @Override // org.telegram.messenger.NotificationCenter.NotificationCenterDelegate

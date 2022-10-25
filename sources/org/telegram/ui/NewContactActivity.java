@@ -136,21 +136,21 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
                         if (vibrator != null) {
                             vibrator.vibrate(200L);
                         }
-                        AndroidUtilities.shakeView(NewContactActivity.this.phoneField, 2.0f, 0);
+                        AndroidUtilities.shakeView(NewContactActivity.this.phoneField);
                         return;
                     }
                     Vibrator vibrator2 = (Vibrator) NewContactActivity.this.getParentActivity().getSystemService("vibrator");
                     if (vibrator2 != null) {
                         vibrator2.vibrate(200L);
                     }
-                    AndroidUtilities.shakeView(NewContactActivity.this.codeField, 2.0f, 0);
+                    AndroidUtilities.shakeView(NewContactActivity.this.codeField);
                     return;
                 }
                 Vibrator vibrator3 = (Vibrator) NewContactActivity.this.getParentActivity().getSystemService("vibrator");
                 if (vibrator3 != null) {
                     vibrator3.vibrate(200L);
                 }
-                AndroidUtilities.shakeView(NewContactActivity.this.firstNameField, 2.0f, 0);
+                AndroidUtilities.shakeView(NewContactActivity.this.firstNameField);
                 return;
             }
             NewContactActivity.this.finishFragment();

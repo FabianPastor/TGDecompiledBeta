@@ -51,6 +51,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SendMessagesHelper;
@@ -1643,26 +1644,30 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
 
     /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$onSubItemClick$9(ArrayList arrayList, DialogsActivity dialogsActivity, ArrayList arrayList2, CharSequence charSequence, boolean z) {
-        if (arrayList2.size() > 1 || ((Long) arrayList2.get(0)).longValue() == UserConfig.getInstance(this.currentAccount).getClientUserId() || charSequence != null) {
+        long j;
+        if (arrayList2.size() > 1 || ((MessagesStorage.TopicKey) arrayList2.get(0)).dialogId == UserConfig.getInstance(this.currentAccount).getClientUserId() || charSequence != null) {
             for (int i = 0; i < arrayList2.size(); i++) {
-                long longValue = ((Long) arrayList2.get(i)).longValue();
+                long j2 = ((MessagesStorage.TopicKey) arrayList2.get(i)).dialogId;
                 if (charSequence != null) {
-                    SendMessagesHelper.getInstance(this.currentAccount).sendMessage(charSequence.toString(), longValue, null, null, null, true, null, null, null, true, 0, null, false);
+                    j = j2;
+                    SendMessagesHelper.getInstance(this.currentAccount).sendMessage(charSequence.toString(), j2, null, null, null, true, null, null, null, true, 0, null, false);
+                } else {
+                    j = j2;
                 }
-                SendMessagesHelper.getInstance(this.currentAccount).sendMessage((ArrayList<MessageObject>) arrayList, longValue, false, false, true, 0);
+                SendMessagesHelper.getInstance(this.currentAccount).sendMessage((ArrayList<MessageObject>) arrayList, j, false, false, true, 0);
             }
             dialogsActivity.finishFragment();
             return;
         }
-        long longValue2 = ((Long) arrayList2.get(0)).longValue();
+        long j3 = ((MessagesStorage.TopicKey) arrayList2.get(0)).dialogId;
         Bundle bundle = new Bundle();
         bundle.putBoolean("scrollToTopOnResume", true);
-        if (DialogObject.isEncryptedDialog(longValue2)) {
-            bundle.putInt("enc_id", DialogObject.getEncryptedChatId(longValue2));
-        } else if (DialogObject.isUserDialog(longValue2)) {
-            bundle.putLong("user_id", longValue2);
+        if (DialogObject.isEncryptedDialog(j3)) {
+            bundle.putInt("enc_id", DialogObject.getEncryptedChatId(j3));
+        } else if (DialogObject.isUserDialog(j3)) {
+            bundle.putLong("user_id", j3);
         } else {
-            bundle.putLong("chat_id", -longValue2);
+            bundle.putLong("chat_id", -j3);
         }
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
         ChatActivity chatActivity = new ChatActivity(bundle);
@@ -1687,7 +1692,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             this.blurredView.setTag(1);
             this.bigAlbumConver.setImageBitmap(this.coverContainer.getImageReceiver().getBitmap());
             this.blurredAnimationInProgress = true;
-            View fragmentView = this.parentActivity.getActionBarLayout().fragmentsStack.get(this.parentActivity.getActionBarLayout().fragmentsStack.size() - 1).getFragmentView();
+            View fragmentView = this.parentActivity.getActionBarLayout().getFragmentStack().get(this.parentActivity.getActionBarLayout().getFragmentStack().size() - 1).getFragmentView();
             int measuredWidth = (int) (fragmentView.getMeasuredWidth() / 6.0f);
             int measuredHeight = (int) (fragmentView.getMeasuredHeight() / 6.0f);
             Bitmap createBitmap = Bitmap.createBitmap(measuredWidth, measuredHeight, Bitmap.Config.ARGB_8888);
@@ -2241,7 +2246,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
             Context context = this.context;
             boolean currentPlaylistIsGlobalSearch = MediaController.getInstance().currentPlaylistIsGlobalSearch();
             return new RecyclerListView.Holder(new AudioPlayerCell(context, currentPlaylistIsGlobalSearch ? 1 : 0, ((BottomSheet) AudioPlayerAlert.this).resourcesProvider));

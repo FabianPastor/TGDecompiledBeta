@@ -297,15 +297,15 @@ public class Switch extends View {
         if (i != 0) {
             Drawable mutate = getResources().getDrawable(i).mutate();
             this.iconDrawable = mutate;
-            if (mutate == null) {
-                return;
+            if (mutate != null) {
+                int color = Theme.getColor(this.isChecked ? this.trackCheckedColorKey : this.trackColorKey, this.resourcesProvider);
+                this.lastIconColor = color;
+                mutate.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
             }
-            int color = Theme.getColor(this.isChecked ? this.trackCheckedColorKey : this.trackColorKey, this.resourcesProvider);
-            this.lastIconColor = color;
-            mutate.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
-            return;
+        } else {
+            this.iconDrawable = null;
         }
-        this.iconDrawable = null;
+        invalidate();
     }
 
     public boolean hasIcon() {

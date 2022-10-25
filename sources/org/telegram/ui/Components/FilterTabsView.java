@@ -127,6 +127,9 @@ public class FilterTabsView extends FrameLayout {
     public static /* synthetic */ void lambda$setIsEditing$2(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
     }
 
+    protected void onDefaultTabMoved() {
+    }
+
     static /* synthetic */ float access$2616(FilterTabsView filterTabsView, float f) {
         float f2 = filterTabsView.animationTime + f;
         filterTabsView.animationTime = f2;
@@ -279,33 +282,28 @@ public class FilterTabsView extends FrameLayout {
             setMeasuredDimension(this.currentTab.getWidth(false) + AndroidUtilities.dp(32.0f) + FilterTabsView.this.additionalTabWidth, View.MeasureSpec.getSize(i2));
         }
 
-        /* JADX WARN: Removed duplicated region for block: B:185:0x0519  */
-        /* JADX WARN: Removed duplicated region for block: B:192:0x0544  */
-        /* JADX WARN: Removed duplicated region for block: B:196:0x056c  */
-        /* JADX WARN: Removed duplicated region for block: B:207:0x05bc  */
-        /* JADX WARN: Removed duplicated region for block: B:208:0x05c7  */
-        /* JADX WARN: Removed duplicated region for block: B:211:0x05cd  */
-        /* JADX WARN: Removed duplicated region for block: B:214:0x060b  */
-        /* JADX WARN: Removed duplicated region for block: B:217:0x064a  */
-        /* JADX WARN: Removed duplicated region for block: B:219:0x067c  */
-        /* JADX WARN: Removed duplicated region for block: B:233:0x0759  */
-        /* JADX WARN: Removed duplicated region for block: B:238:0x078d  */
-        /* JADX WARN: Removed duplicated region for block: B:242:0x079c  */
-        /* JADX WARN: Removed duplicated region for block: B:245:0x07b4  */
-        /* JADX WARN: Removed duplicated region for block: B:249:0x07c2  */
-        /* JADX WARN: Removed duplicated region for block: B:252:0x07e4  */
-        /* JADX WARN: Removed duplicated region for block: B:255:0x0800  */
-        /* JADX WARN: Removed duplicated region for block: B:258:0x085e  */
-        /* JADX WARN: Removed duplicated region for block: B:259:0x0891  */
+        /* JADX WARN: Removed duplicated region for block: B:182:0x055e  */
+        /* JADX WARN: Removed duplicated region for block: B:189:0x0589  */
+        /* JADX WARN: Removed duplicated region for block: B:193:0x05b1  */
+        /* JADX WARN: Removed duplicated region for block: B:204:0x0601  */
+        /* JADX WARN: Removed duplicated region for block: B:205:0x060c  */
+        /* JADX WARN: Removed duplicated region for block: B:208:0x0612  */
+        /* JADX WARN: Removed duplicated region for block: B:211:0x0652  */
+        /* JADX WARN: Removed duplicated region for block: B:214:0x0693  */
+        /* JADX WARN: Removed duplicated region for block: B:216:0x06c5  */
+        /* JADX WARN: Removed duplicated region for block: B:248:0x0828  */
+        /* JADX WARN: Removed duplicated region for block: B:251:0x0844  */
+        /* JADX WARN: Removed duplicated region for block: B:254:0x08a2  */
+        /* JADX WARN: Removed duplicated region for block: B:255:0x08d5  */
         @Override // android.view.View
         @android.annotation.SuppressLint({"DrawAllocation"})
         /*
             Code decompiled incorrectly, please refer to instructions dump.
             To view partially-correct add '--show-bad-code' argument
         */
-        protected void onDraw(android.graphics.Canvas r35) {
+        protected void onDraw(android.graphics.Canvas r33) {
             /*
-                Method dump skipped, instructions count: 2203
+                Method dump skipped, instructions count: 2271
                 To view this dump add '--comments-level debug' option
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.FilterTabsView.TabView.onDraw(android.graphics.Canvas):void");
@@ -1302,7 +1300,7 @@ public class FilterTabsView extends FrameLayout {
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
             return new RecyclerListView.Holder(new TabView(this.mContext));
         }
 
@@ -1359,6 +1357,46 @@ public class FilterTabsView extends FrameLayout {
             FilterTabsView.this.listView.setItemAnimator(FilterTabsView.this.itemAnimator);
             notifyItemMoved(i, i2);
         }
+
+        public void moveElementToStart(int i) {
+            int size = FilterTabsView.this.tabs.size();
+            if (i < 0 || i >= size) {
+                return;
+            }
+            ArrayList<MessagesController.DialogFilter> arrayList = MessagesController.getInstance(UserConfig.selectedAccount).dialogFilters;
+            int i2 = FilterTabsView.this.positionToStableId.get(i);
+            int i3 = ((Tab) FilterTabsView.this.tabs.get(i)).id;
+            for (int i4 = i - 1; i4 >= 0; i4--) {
+                FilterTabsView.this.positionToStableId.put(i4 + 1, FilterTabsView.this.positionToStableId.get(i4));
+            }
+            MessagesController.DialogFilter remove = arrayList.remove(i);
+            remove.order = 0;
+            arrayList.add(0, remove);
+            FilterTabsView.this.positionToStableId.put(0, i2);
+            FilterTabsView.this.tabs.add(0, (Tab) FilterTabsView.this.tabs.remove(i));
+            ((Tab) FilterTabsView.this.tabs.get(0)).id = i3;
+            for (int i5 = 0; i5 <= i; i5++) {
+                ((Tab) FilterTabsView.this.tabs.get(i5)).id = i5;
+                arrayList.get(i5).order = i5;
+            }
+            int i6 = 0;
+            while (i6 <= i) {
+                if (FilterTabsView.this.currentPosition == i6) {
+                    FilterTabsView filterTabsView = FilterTabsView.this;
+                    filterTabsView.currentPosition = filterTabsView.selectedTabId = i6 == i ? 0 : i6 + 1;
+                }
+                if (FilterTabsView.this.previousPosition == i6) {
+                    FilterTabsView filterTabsView2 = FilterTabsView.this;
+                    filterTabsView2.previousPosition = filterTabsView2.previousId = i6 == i ? 0 : i6 + 1;
+                }
+                i6++;
+            }
+            notifyItemMoved(i, 0);
+            FilterTabsView.this.delegate.onPageReorder(((Tab) FilterTabsView.this.tabs.get(i)).id, i3);
+            FilterTabsView.this.updateTabsWidths();
+            FilterTabsView.this.orderChanged = true;
+            FilterTabsView.this.listView.setItemAnimator(FilterTabsView.this.itemAnimator);
+        }
     }
 
     /* loaded from: classes3.dex */
@@ -1377,19 +1415,28 @@ public class FilterTabsView extends FrameLayout {
 
         @Override // androidx.recyclerview.widget.ItemTouchHelper.Callback
         public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-            if (!FilterTabsView.this.isEditing || (viewHolder.getAdapterPosition() == 0 && ((Tab) FilterTabsView.this.tabs.get(0)).isDefault && !UserConfig.getInstance(UserConfig.selectedAccount).isPremium())) {
-                return ItemTouchHelper.Callback.makeMovementFlags(0, 0);
-            }
             return ItemTouchHelper.Callback.makeMovementFlags(12, 0);
         }
 
         @Override // androidx.recyclerview.widget.ItemTouchHelper.Callback
         public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder viewHolder2) {
-            if ((viewHolder.getAdapterPosition() == 0 || viewHolder2.getAdapterPosition() == 0) && !UserConfig.getInstance(UserConfig.selectedAccount).isPremium()) {
-                return false;
-            }
             FilterTabsView.this.adapter.swapElements(viewHolder.getAdapterPosition(), viewHolder2.getAdapterPosition());
             return true;
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public void resetDefaultPosition() {
+            if (UserConfig.getInstance(UserConfig.selectedAccount).isPremium()) {
+                return;
+            }
+            for (int i = 0; i < FilterTabsView.this.tabs.size(); i++) {
+                if (((Tab) FilterTabsView.this.tabs.get(i)).isDefault && i != 0) {
+                    FilterTabsView.this.adapter.moveElementToStart(i);
+                    FilterTabsView.this.listView.scrollToPosition(0);
+                    FilterTabsView.this.onDefaultTabMoved();
+                    return;
+                }
+            }
         }
 
         @Override // androidx.recyclerview.widget.ItemTouchHelper.Callback
@@ -1398,6 +1445,19 @@ public class FilterTabsView extends FrameLayout {
                 FilterTabsView.this.listView.cancelClickRunnables(false);
                 viewHolder.itemView.setPressed(true);
                 viewHolder.itemView.setBackgroundColor(Theme.getColor(FilterTabsView.this.backgroundColorKey));
+            } else {
+                AndroidUtilities.cancelRunOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.FilterTabsView$TouchHelperCallback$$ExternalSyntheticLambda0
+                    @Override // java.lang.Runnable
+                    public final void run() {
+                        FilterTabsView.TouchHelperCallback.this.resetDefaultPosition();
+                    }
+                });
+                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.FilterTabsView$TouchHelperCallback$$ExternalSyntheticLambda0
+                    @Override // java.lang.Runnable
+                    public final void run() {
+                        FilterTabsView.TouchHelperCallback.this.resetDefaultPosition();
+                    }
+                }, 320L);
             }
             super.onSelectedChanged(viewHolder, i);
         }

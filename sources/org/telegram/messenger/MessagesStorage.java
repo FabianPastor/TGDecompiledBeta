@@ -6,8 +6,10 @@ import android.util.Pair;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
 import androidx.collection.LongSparseArray;
+import j$.util.function.Consumer;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -26,6 +28,7 @@ import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.support.LongSparseIntArray;
+import org.telegram.tgnet.AbstractSerializedData;
 import org.telegram.tgnet.NativeByteBuffer;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
@@ -64,12 +67,15 @@ import org.telegram.tgnet.TLRPC$TL_chatParticipantAdmin;
 import org.telegram.tgnet.TLRPC$TL_contact;
 import org.telegram.tgnet.TLRPC$TL_dialog;
 import org.telegram.tgnet.TLRPC$TL_folderPeer;
+import org.telegram.tgnet.TLRPC$TL_forumTopic;
 import org.telegram.tgnet.TLRPC$TL_inputFolderPeer;
 import org.telegram.tgnet.TLRPC$TL_inputMediaGame;
 import org.telegram.tgnet.TLRPC$TL_inputMessageEntityMentionName;
 import org.telegram.tgnet.TLRPC$TL_message;
 import org.telegram.tgnet.TLRPC$TL_messageActionChatAddUser;
 import org.telegram.tgnet.TLRPC$TL_messageActionGeoProximityReached;
+import org.telegram.tgnet.TLRPC$TL_messageActionTopicCreate;
+import org.telegram.tgnet.TLRPC$TL_messageActionTopicEdit;
 import org.telegram.tgnet.TLRPC$TL_messageEntityCustomEmoji;
 import org.telegram.tgnet.TLRPC$TL_messageEntityMentionName;
 import org.telegram.tgnet.TLRPC$TL_messageMediaDocument;
@@ -87,6 +93,7 @@ import org.telegram.tgnet.TLRPC$TL_messages_deleteScheduledMessages;
 import org.telegram.tgnet.TLRPC$TL_messages_messages;
 import org.telegram.tgnet.TLRPC$TL_peerChannel;
 import org.telegram.tgnet.TLRPC$TL_peerChat;
+import org.telegram.tgnet.TLRPC$TL_peerNotifySettings;
 import org.telegram.tgnet.TLRPC$TL_peerNotifySettingsEmpty_layer77;
 import org.telegram.tgnet.TLRPC$TL_peerUser;
 import org.telegram.tgnet.TLRPC$TL_photoEmpty;
@@ -111,7 +118,7 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Adapters.DialogsSearchAdapter;
 /* loaded from: classes.dex */
 public class MessagesStorage extends BaseController {
-    private static final int LAST_DB_VERSION = 101;
+    private static final int LAST_DB_VERSION = 105;
     private int archiveUnreadCount;
     private int[][] bots;
     private File cacheFile;
@@ -121,6 +128,7 @@ public class MessagesStorage extends BaseController {
     private boolean databaseMigrationInProgress;
     private ArrayList<MessagesController.DialogFilter> dialogFilters;
     private SparseArray<MessagesController.DialogFilter> dialogFiltersMap;
+    private LongSparseIntArray dialogIsForum;
     private LongSparseArray<Integer> dialogsWithMentions;
     private LongSparseArray<Integer> dialogsWithUnread;
     private int[][] groups;
@@ -299,6 +307,7 @@ public class MessagesStorage extends BaseController {
         this.dialogFiltersMap = new SparseArray<>();
         this.unknownDialogsIds = new LongSparseArray<>();
         this.openSync = new CountDownLatch(1);
+        this.dialogIsForum = new LongSparseIntArray();
         this.contacts = new int[][]{new int[2], new int[2]};
         this.nonContacts = new int[][]{new int[2], new int[2]};
         this.bots = new int[][]{new int[2], new int[2]};
@@ -311,7 +320,7 @@ public class MessagesStorage extends BaseController {
         this.malformedCleanupCount = 0;
         DispatchQueue dispatchQueue = new DispatchQueue("storageQueue_" + i);
         this.storageQueue = dispatchQueue;
-        dispatchQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda16
+        dispatchQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda12
             @Override // java.lang.Runnable
             public final void run() {
                 MessagesStorage.this.lambda$new$0();
@@ -406,7 +415,7 @@ public class MessagesStorage extends BaseController {
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS send_state_idx_scheduled_messages_v2 ON scheduled_messages_v2(mid, send_state, date);").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_date_idx_scheduled_messages_v2 ON scheduled_messages_v2(uid, date);").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS reply_to_idx_scheduled_messages_v2 ON scheduled_messages_v2(mid, reply_to_message_id);").stepThis().dispose();
-                this.database.executeFast("CREATE TABLE messages_v2(mid INTEGER, uid INTEGER, read_state INTEGER, send_state INTEGER, date INTEGER, data BLOB, out INTEGER, ttl INTEGER, media INTEGER, replydata BLOB, imp INTEGER, mention INTEGER, forwards INTEGER, replies_data BLOB, thread_reply_id INTEGER, is_channel INTEGER, reply_to_message_id INTEGER, custom_params BLOB, PRIMARY KEY(mid, uid))").stepThis().dispose();
+                this.database.executeFast("CREATE TABLE messages_v2(mid INTEGER, uid INTEGER, read_state INTEGER, send_state INTEGER, date INTEGER, data BLOB, out INTEGER, ttl INTEGER, media INTEGER, replydata BLOB, imp INTEGER, mention INTEGER, forwards INTEGER, replies_data BLOB, thread_reply_id INTEGER, is_channel INTEGER, reply_to_message_id INTEGER, custom_params BLOB, group_id INTEGER, PRIMARY KEY(mid, uid))").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_mid_read_out_idx_messages_v2 ON messages_v2(uid, mid, read_state, out);").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_date_mid_idx_messages_v2 ON messages_v2(uid, date, mid);").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS mid_out_idx_messages_v2 ON messages_v2(mid, out);").stepThis().dispose();
@@ -415,12 +424,13 @@ public class MessagesStorage extends BaseController {
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_mention_idx_messages_v2 ON messages_v2(uid, mention, read_state);").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS is_channel_idx_messages_v2 ON messages_v2(mid, is_channel);").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS reply_to_idx_messages_v2 ON messages_v2(mid, reply_to_message_id);").stepThis().dispose();
+                this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_mid_groupid_messages_v2 ON messages_v2(uid, mid, group_id);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE download_queue(uid INTEGER, type INTEGER, date INTEGER, data BLOB, parent TEXT, PRIMARY KEY (uid, type));").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS type_date_idx_download_queue ON download_queue(type, date);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE user_contacts_v7(key TEXT PRIMARY KEY, uid INTEGER, fname TEXT, sname TEXT, imported INTEGER)").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE user_phones_v7(key TEXT, phone TEXT, sphone TEXT, deleted INTEGER, PRIMARY KEY (key, phone))").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS sphone_deleted_idx_user_phones ON user_phones_v7(sphone, deleted);").stepThis().dispose();
-                this.database.executeFast("CREATE TABLE dialogs(did INTEGER PRIMARY KEY, date INTEGER, unread_count INTEGER, last_mid INTEGER, inbox_max INTEGER, outbox_max INTEGER, last_mid_i INTEGER, unread_count_i INTEGER, pts INTEGER, date_i INTEGER, pinned INTEGER, flags INTEGER, folder_id INTEGER, data BLOB, unread_reactions INTEGER)").stepThis().dispose();
+                this.database.executeFast("CREATE TABLE dialogs(did INTEGER PRIMARY KEY, date INTEGER, unread_count INTEGER, last_mid INTEGER, inbox_max INTEGER, outbox_max INTEGER, last_mid_i INTEGER, unread_count_i INTEGER, pts INTEGER, date_i INTEGER, pinned INTEGER, flags INTEGER, folder_id INTEGER, data BLOB, unread_reactions INTEGER, last_mid_group INTEGER)").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS date_idx_dialogs ON dialogs(date);").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS last_mid_idx_dialogs ON dialogs(last_mid);").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS unread_count_idx_dialogs ON dialogs(unread_count);").stepThis().dispose();
@@ -496,7 +506,29 @@ public class MessagesStorage extends BaseController {
                 this.database.executeFast("CREATE TABLE attach_menu_bots(data BLOB, hash INTEGER, date INTEGER);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE premium_promo(data BLOB, date INTEGER);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE emoji_statuses(data BLOB, type INTEGER);").stepThis().dispose();
-                this.database.executeFast("PRAGMA user_version = 101").stepThis().dispose();
+                this.database.executeFast("CREATE TABLE messages_holes_topics(uid INTEGER, topic_id INTEGER, start INTEGER, end INTEGER, PRIMARY KEY(uid, topic_id, start));").stepThis().dispose();
+                this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_end_messages_holes ON messages_holes_topics(uid, topic_id, end);").stepThis().dispose();
+                this.database.executeFast("CREATE TABLE messages_topics(mid INTEGER, uid INTEGER, topic_id INTEGER, read_state INTEGER, send_state INTEGER, date INTEGER, data BLOB, out INTEGER, ttl INTEGER, media INTEGER, replydata BLOB, imp INTEGER, mention INTEGER, forwards INTEGER, replies_data BLOB, thread_reply_id INTEGER, is_channel INTEGER, reply_to_message_id INTEGER, custom_params BLOB, PRIMARY KEY(mid, topic_id, uid))").stepThis().dispose();
+                this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_mid_read_out_idx_messages_topics ON messages_topics(uid, mid, read_state, out);").stepThis().dispose();
+                this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_date_mid_idx_messages_topics ON messages_topics(uid, date, mid);").stepThis().dispose();
+                this.database.executeFast("CREATE INDEX IF NOT EXISTS mid_out_idx_messages_topics ON messages_topics(mid, out);").stepThis().dispose();
+                this.database.executeFast("CREATE INDEX IF NOT EXISTS task_idx_messages_topics ON messages_topics(uid, out, read_state, ttl, date, send_state);").stepThis().dispose();
+                this.database.executeFast("CREATE INDEX IF NOT EXISTS send_state_idx_messages_topics ON messages_topics(mid, send_state, date);").stepThis().dispose();
+                this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_mention_idx_messages_topics ON messages_topics(uid, mention, read_state);").stepThis().dispose();
+                this.database.executeFast("CREATE INDEX IF NOT EXISTS is_channel_idx_messages_topics ON messages_topics(mid, is_channel);").stepThis().dispose();
+                this.database.executeFast("CREATE INDEX IF NOT EXISTS reply_to_idx_messages_topics ON messages_topics(mid, reply_to_message_id);").stepThis().dispose();
+                this.database.executeFast("CREATE INDEX IF NOT EXISTS mid_uid_messages_topics ON messages_topics(mid, uid);").stepThis().dispose();
+                this.database.executeFast("CREATE INDEX IF NOT EXISTS mid_uid_messages_topics ON messages_topics(mid, topic_id, uid);").stepThis().dispose();
+                this.database.executeFast("CREATE TABLE media_topics(mid INTEGER, uid INTEGER, topic_id INTEGER, date INTEGER, type INTEGER, data BLOB, PRIMARY KEY(mid, uid, topic_id, type))").stepThis().dispose();
+                this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_mid_type_date_idx_media_topics ON media_topics(uid, topic_id, mid, type, date);").stepThis().dispose();
+                this.database.executeFast("CREATE TABLE media_holes_topics(uid INTEGER, topic_id INTEGER, type INTEGER, start INTEGER, end INTEGER, PRIMARY KEY(uid, topic_id, type, start));").stepThis().dispose();
+                this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_end_media_holes_topics ON media_holes_topics(uid, topic_id, type, end);").stepThis().dispose();
+                this.database.executeFast("CREATE TABLE topics(did INTEGER, topic_id INTEGER, data BLOB, top_message INTEGER, topic_message BLOB, unread_count INTEGER, max_read_id INTEGER, unread_mentions INTEGER, unread_reactions INTEGER, read_outbox INTEGER, PRIMARY KEY(did, topic_id));").stepThis().dispose();
+                this.database.executeFast("CREATE INDEX IF NOT EXISTS did_top_message_topics ON topics(did, top_message);").stepThis().dispose();
+                this.database.executeFast("CREATE TABLE media_counts_topics(uid INTEGER, topic_id INTEGER, type INTEGER, count INTEGER, old INTEGER, PRIMARY KEY(uid, topic_id, type))").stepThis().dispose();
+                this.database.executeFast("CREATE TABLE reaction_mentions_topics(message_id INTEGER, state INTEGER, dialog_id INTEGER, topic_id INTEGER, PRIMARY KEY(message_id, dialog_id, topic_id))").stepThis().dispose();
+                this.database.executeFast("CREATE INDEX IF NOT EXISTS reaction_mentions_topics_did ON reaction_mentions_topics(dialog_id, topic_id);").stepThis().dispose();
+                this.database.executeFast("PRAGMA user_version = 105").stepThis().dispose();
             } else {
                 int intValue = this.database.executeInt("PRAGMA user_version", new Object[0]).intValue();
                 if (BuildVars.LOGS_ENABLED) {
@@ -526,10 +558,10 @@ public class MessagesStorage extends BaseController {
                     }
                     queryFinalized.dispose();
                 } catch (Exception e) {
+                    FileLog.e(e);
                     if (e.getMessage() != null && e.getMessage().contains("malformed")) {
                         throw new RuntimeException("malformed");
                     }
-                    FileLog.e(e);
                     try {
                         this.database.executeFast("CREATE TABLE IF NOT EXISTS params(id INTEGER PRIMARY KEY, seq INTEGER, pts INTEGER, date INTEGER, qts INTEGER, lsv INTEGER, sg INTEGER, pbytes BLOB)").stepThis().dispose();
                         this.database.executeFast("INSERT INTO params VALUES(1, 0, 0, 0, 0, 0, 0, NULL)").stepThis().dispose();
@@ -537,7 +569,7 @@ public class MessagesStorage extends BaseController {
                         FileLog.e(e2);
                     }
                 }
-                if (intValue < 101) {
+                if (intValue < 105) {
                     try {
                         updateDbToLastVersion(intValue);
                     } catch (Exception e3) {
@@ -584,7 +616,7 @@ public class MessagesStorage extends BaseController {
             this.openSync.countDown();
         } catch (Throwable unused) {
         }
-        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda21
+        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda20
             @Override // java.lang.Runnable
             public final void run() {
                 MessagesStorage.this.lambda$openDatabase$2();
@@ -630,7 +662,7 @@ public class MessagesStorage extends BaseController {
                 MessagesStorage.this.lambda$updateDbToLastVersion$3();
             }
         });
-        FileLog.d("MessagesStorage start db migration from " + i4 + " to 101");
+        FileLog.d("MessagesStorage start db migration from " + i4 + " to 105");
         int i5 = 4;
         if (i4 < 4) {
             messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS user_photos(uid INTEGER, id INTEGER, data BLOB, PRIMARY KEY (uid, id))").stepThis().dispose();
@@ -1665,9 +1697,51 @@ public class MessagesStorage extends BaseController {
         if (i4 == 100) {
             messagesStorage.database.executeFast("CREATE TABLE emoji_statuses(data BLOB, type INTEGER);").stepThis().dispose();
             messagesStorage.database.executeFast("PRAGMA user_version = 101").stepThis().dispose();
+            i4 = 101;
+        }
+        if (i4 == 101) {
+            messagesStorage.database.executeFast("ALTER TABLE messages_v2 ADD COLUMN group_id INTEGER default NULL").stepThis().dispose();
+            messagesStorage.database.executeFast("ALTER TABLE dialogs ADD COLUMN last_mid_group INTEGER default NULL").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS uid_mid_groupid_messages_v2 ON messages_v2(uid, mid, group_id);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 102").stepThis().dispose();
+            i4 = 102;
+        }
+        if (i4 == 102) {
+            messagesStorage.database.executeFast("CREATE TABLE messages_holes_topics(uid INTEGER, topic_id INTEGER, start INTEGER, end INTEGER, PRIMARY KEY(uid, topic_id, start));").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS uid_end_messages_holes ON messages_holes_topics(uid, topic_id, end);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE messages_topics(mid INTEGER, uid INTEGER, topic_id INTEGER, read_state INTEGER, send_state INTEGER, date INTEGER, data BLOB, out INTEGER, ttl INTEGER, media INTEGER, replydata BLOB, imp INTEGER, mention INTEGER, forwards INTEGER, replies_data BLOB, thread_reply_id INTEGER, is_channel INTEGER, reply_to_message_id INTEGER, custom_params BLOB, PRIMARY KEY(mid, topic_id, uid))").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS uid_mid_read_out_idx_messages_topics ON messages_topics(uid, mid, read_state, out);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS uid_date_mid_idx_messages_topics ON messages_topics(uid, date, mid);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS mid_out_idx_messages_topics ON messages_topics(mid, out);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS task_idx_messages_topics ON messages_topics(uid, out, read_state, ttl, date, send_state);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS send_state_idx_messages_topics ON messages_topics(mid, send_state, date);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS uid_mention_idx_messages_topics ON messages_topics(uid, mention, read_state);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS is_channel_idx_messages_topics ON messages_topics(mid, is_channel);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS reply_to_idx_messages_topics ON messages_topics(mid, reply_to_message_id);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS mid_uid_messages_topics ON messages_topics(mid, uid);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS mid_uid_messages_topics ON messages_topics(mid, topic_id, uid);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE media_topics(mid INTEGER, uid INTEGER, topic_id INTEGER, date INTEGER, type INTEGER, data BLOB, PRIMARY KEY(mid, uid, topic_id, type))").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS uid_mid_type_date_idx_media_topics ON media_topics(uid, topic_id, mid, type, date);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE media_holes_topics(uid INTEGER, topic_id INTEGER, type INTEGER, start INTEGER, end INTEGER, PRIMARY KEY(uid, topic_id, type, start));").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS uid_end_media_holes_topics ON media_holes_topics(uid, topic_id, type, end);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE topics(did INTEGER, topic_id INTEGER, data BLOB, top_message INTEGER, topic_message BLOB, unread_count INTEGER, max_read_id INTEGER, unread_mentions INTEGER, unread_reactions INTEGER, PRIMARY KEY(did, topic_id));").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS did_top_message_topics ON topics(did, top_message);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 103").stepThis().dispose();
+            i4 = 103;
+        }
+        if (i4 == 103) {
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS media_counts_topics(uid INTEGER, topic_id INTEGER, type INTEGER, count INTEGER, old INTEGER, PRIMARY KEY(uid, topic_id, type))").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS reaction_mentions_topics(message_id INTEGER, state INTEGER, dialog_id INTEGER, topic_id INTEGER, PRIMARY KEY(message_id, dialog_id, topic_id))").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS reaction_mentions_topics_did ON reaction_mentions_topics(dialog_id, topic_id);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 104").stepThis().dispose();
+            i4 = 104;
+        }
+        if (i4 == 104) {
+            messagesStorage.database.executeFast("ALTER TABLE topics ADD COLUMN read_outbox INTEGER default 0").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 105").stepThis().dispose();
         }
         FileLog.d("MessagesStorage db migration finished");
-        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda7
+        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda8
             @Override // java.lang.Runnable
             public final void run() {
                 MessagesStorage.this.lambda$updateDbToLastVersion$4();
@@ -1740,7 +1814,7 @@ public class MessagesStorage extends BaseController {
     }
 
     public void cleanup(final boolean z) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda185
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda194
             @Override // java.lang.Runnable
             public final void run() {
                 MessagesStorage.this.lambda$cleanup$6(z);
@@ -1768,7 +1842,7 @@ public class MessagesStorage extends BaseController {
     }
 
     public void saveSecretParams(final int i, final int i2, final byte[] bArr) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda37
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda38
             @Override // java.lang.Runnable
             public final void run() {
                 MessagesStorage.this.lambda$saveSecretParams$7(i, i2, bArr);
@@ -1800,7 +1874,7 @@ public class MessagesStorage extends BaseController {
     }
 
     private void fixNotificationSettings() {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda6
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda7
             @Override // java.lang.Runnable
             public final void run() {
                 MessagesStorage.this.lambda$fixNotificationSettings$8();
@@ -1858,7 +1932,7 @@ public class MessagesStorage extends BaseController {
             return 0L;
         }
         final long andAdd = this.lastTaskId.getAndAdd(1L);
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda106
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda111
             @Override // java.lang.Runnable
             public final void run() {
                 MessagesStorage.this.lambda$createPendingTask$9(andAdd, nativeByteBuffer);
@@ -1885,7 +1959,7 @@ public class MessagesStorage extends BaseController {
     }
 
     public void removePendingTask(final long j) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda63
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda65
             @Override // java.lang.Runnable
             public final void run() {
                 MessagesStorage.this.lambda$removePendingTask$10(j);
@@ -1904,7 +1978,7 @@ public class MessagesStorage extends BaseController {
     }
 
     private void loadPendingTasks() {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda8
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda9
             @Override // java.lang.Runnable
             public final void run() {
                 MessagesStorage.this.lambda$loadPendingTasks$30();
@@ -1926,7 +2000,7 @@ public class MessagesStorage extends BaseController {
                             case 0:
                                 final TLRPC$Chat TLdeserialize = TLRPC$Chat.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false);
                                 if (TLdeserialize != null) {
-                                    Utilities.stageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda158
+                                    Utilities.stageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda167
                                         @Override // java.lang.Runnable
                                         public final void run() {
                                             MessagesStorage.this.lambda$loadPendingTasks$11(TLdeserialize, longValue);
@@ -1938,7 +2012,7 @@ public class MessagesStorage extends BaseController {
                             case 1:
                                 final long readInt322 = byteBufferValue.readInt32(false);
                                 final int readInt323 = byteBufferValue.readInt32(false);
-                                Utilities.stageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda72
+                                Utilities.stageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda76
                                     @Override // java.lang.Runnable
                                     public final void run() {
                                         MessagesStorage.this.lambda$loadPendingTasks$12(readInt322, readInt323, longValue);
@@ -1973,7 +2047,7 @@ public class MessagesStorage extends BaseController {
                                     tLRPC$TL_dialog.folder_id = byteBufferValue.readInt32(false);
                                 }
                                 final TLRPC$InputPeer TLdeserialize2 = TLRPC$InputPeer.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false);
-                                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda163
+                                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda172
                                     @Override // java.lang.Runnable
                                     public final void run() {
                                         MessagesStorage.this.lambda$loadPendingTasks$13(tLRPC$TL_dialog, TLdeserialize2, longValue);
@@ -1987,7 +2061,7 @@ public class MessagesStorage extends BaseController {
                                 final long readInt64 = byteBufferValue.readInt64(false);
                                 final boolean readBool = byteBufferValue.readBool(false);
                                 final TLRPC$InputPeer TLdeserialize3 = TLRPC$InputPeer.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false);
-                                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda113
+                                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda121
                                     @Override // java.lang.Runnable
                                     public final void run() {
                                         MessagesStorage.this.lambda$loadPendingTasks$14(readInt64, readBool, TLdeserialize3, longValue);
@@ -1998,7 +2072,7 @@ public class MessagesStorage extends BaseController {
                                 final long readInt324 = byteBufferValue.readInt32(false);
                                 final int readInt325 = byteBufferValue.readInt32(false);
                                 final TLRPC$InputChannel TLdeserialize4 = TLRPC$InputChannel.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false);
-                                Utilities.stageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda74
+                                Utilities.stageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda78
                                     @Override // java.lang.Runnable
                                     public final void run() {
                                         MessagesStorage.this.lambda$loadPendingTasks$15(readInt324, readInt325, longValue, TLdeserialize4);
@@ -2014,7 +2088,7 @@ public class MessagesStorage extends BaseController {
                                     removePendingTask(longValue);
                                     break;
                                 } else {
-                                    AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda92
+                                    AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda96
                                         @Override // java.lang.Runnable
                                         public final void run() {
                                             MessagesStorage.this.lambda$loadPendingTasks$17(readInt326, longValue, TLdeserialize6);
@@ -2025,7 +2099,7 @@ public class MessagesStorage extends BaseController {
                             case 9:
                                 final long readInt642 = byteBufferValue.readInt64(false);
                                 final TLRPC$InputPeer TLdeserialize7 = TLRPC$InputPeer.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false);
-                                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda107
+                                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda112
                                     @Override // java.lang.Runnable
                                     public final void run() {
                                         MessagesStorage.this.lambda$loadPendingTasks$19(readInt642, TLdeserialize7, longValue);
@@ -2037,7 +2111,7 @@ public class MessagesStorage extends BaseController {
                                 final long readInt329 = byteBufferValue.readInt32(false);
                                 final int readInt3210 = byteBufferValue.readInt32(false);
                                 final TLRPC$InputChannel TLdeserialize8 = readInt329 != 0 ? TLRPC$InputChannel.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false) : null;
-                                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda76
+                                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda80
                                     @Override // java.lang.Runnable
                                     public final void run() {
                                         MessagesStorage.this.lambda$loadPendingTasks$20(readInt329, readInt328, TLdeserialize8, readInt3210, longValue);
@@ -2056,7 +2130,7 @@ public class MessagesStorage extends BaseController {
                                 final int readInt3212 = byteBufferValue.readInt32(false);
                                 final boolean readBool3 = byteBufferValue.readBool(false);
                                 final TLRPC$InputPeer TLdeserialize9 = TLRPC$InputPeer.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false);
-                                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda112
+                                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda120
                                     @Override // java.lang.Runnable
                                     public final void run() {
                                         MessagesStorage.this.lambda$loadPendingTasks$23(readInt643, readBool2, readInt3211, readInt3212, readBool3, TLdeserialize9, longValue);
@@ -2065,7 +2139,7 @@ public class MessagesStorage extends BaseController {
                                 break;
                             case 15:
                                 final TLRPC$InputPeer TLdeserialize10 = TLRPC$InputPeer.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false);
-                                Utilities.stageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda170
+                                Utilities.stageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda179
                                     @Override // java.lang.Runnable
                                     public final void run() {
                                         MessagesStorage.this.lambda$loadPendingTasks$24(TLdeserialize10, longValue);
@@ -2079,7 +2153,7 @@ public class MessagesStorage extends BaseController {
                                 for (int i = 0; i < readInt3214; i++) {
                                     arrayList.add(TLRPC$InputDialogPeer.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false));
                                 }
-                                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda59
+                                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda60
                                     @Override // java.lang.Runnable
                                     public final void run() {
                                         MessagesStorage.this.lambda$loadPendingTasks$25(readInt3213, arrayList, longValue);
@@ -2093,7 +2167,7 @@ public class MessagesStorage extends BaseController {
                                 for (int i2 = 0; i2 < readInt3216; i2++) {
                                     arrayList2.add(TLRPC$TL_inputFolderPeer.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false));
                                 }
-                                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda58
+                                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda59
                                     @Override // java.lang.Runnable
                                     public final void run() {
                                         MessagesStorage.this.lambda$loadPendingTasks$26(readInt3215, arrayList2, longValue);
@@ -2108,7 +2182,7 @@ public class MessagesStorage extends BaseController {
                                     removePendingTask(longValue);
                                     break;
                                 } else {
-                                    AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda90
+                                    AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda94
                                         @Override // java.lang.Runnable
                                         public final void run() {
                                             MessagesStorage.this.lambda$loadPendingTasks$27(readInt644, longValue, TLdeserialize11);
@@ -2128,7 +2202,7 @@ public class MessagesStorage extends BaseController {
                                 final boolean readBool4 = byteBufferValue.readBool(false);
                                 overrideWallpaperInfo.slug = byteBufferValue.readString(false);
                                 overrideWallpaperInfo.originalFileName = byteBufferValue.readString(false);
-                                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda183
+                                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda192
                                     @Override // java.lang.Runnable
                                     public final void run() {
                                         MessagesStorage.this.lambda$loadPendingTasks$22(overrideWallpaperInfo, readBool4, longValue);
@@ -2137,7 +2211,7 @@ public class MessagesStorage extends BaseController {
                                 break;
                             case 22:
                                 final TLRPC$InputPeer TLdeserialize12 = TLRPC$InputPeer.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false);
-                                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda171
+                                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda180
                                     @Override // java.lang.Runnable
                                     public final void run() {
                                         MessagesStorage.this.lambda$loadPendingTasks$28(TLdeserialize12, longValue);
@@ -2149,7 +2223,7 @@ public class MessagesStorage extends BaseController {
                                 final int readInt3217 = byteBufferValue.readInt32(false);
                                 final int readInt3218 = byteBufferValue.readInt32(false);
                                 final TLRPC$InputChannel TLdeserialize13 = (DialogObject.isEncryptedDialog(readInt645) || !DialogObject.isChatDialog(readInt645) || !byteBufferValue.hasRemaining()) ? null : TLRPC$InputChannel.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false);
-                                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda77
+                                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda81
                                     @Override // java.lang.Runnable
                                     public final void run() {
                                         MessagesStorage.this.lambda$loadPendingTasks$21(readInt645, readInt3217, TLdeserialize13, readInt3218, longValue);
@@ -2165,7 +2239,7 @@ public class MessagesStorage extends BaseController {
                                     removePendingTask(longValue);
                                     break;
                                 } else {
-                                    AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda91
+                                    AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda95
                                         @Override // java.lang.Runnable
                                         public final void run() {
                                             MessagesStorage.this.lambda$loadPendingTasks$18(readInt646, longValue, TLdeserialize15);
@@ -2177,7 +2251,7 @@ public class MessagesStorage extends BaseController {
                                 final long readInt647 = byteBufferValue.readInt64(false);
                                 final int readInt3220 = byteBufferValue.readInt32(false);
                                 final TLRPC$InputChannel TLdeserialize16 = TLRPC$InputChannel.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false);
-                                Utilities.stageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda75
+                                Utilities.stageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda79
                                     @Override // java.lang.Runnable
                                     public final void run() {
                                         MessagesStorage.this.lambda$loadPendingTasks$16(readInt647, readInt3220, longValue, TLdeserialize16);
@@ -2188,7 +2262,7 @@ public class MessagesStorage extends BaseController {
                     } else {
                         final int readInt3221 = byteBufferValue.readInt32(false);
                         final boolean readBool5 = byteBufferValue.readBool(false);
-                        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda61
+                        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda62
                             @Override // java.lang.Runnable
                             public final void run() {
                                 MessagesStorage.this.lambda$loadPendingTasks$29(readInt3221, readBool5, longValue);
@@ -2300,7 +2374,7 @@ public class MessagesStorage extends BaseController {
     }
 
     public void saveChannelPts(final long j, final int i) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda42
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda39
             @Override // java.lang.Runnable
             public final void run() {
                 MessagesStorage.this.lambda$saveChannelPts$31(i, j);
@@ -2345,7 +2419,7 @@ public class MessagesStorage extends BaseController {
     }
 
     public void saveDiffParams(final int i, final int i2, final int i3, final int i4) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda34
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda35
             @Override // java.lang.Runnable
             public final void run() {
                 MessagesStorage.this.lambda$saveDiffParams$32(i, i2, i3, i4);
@@ -2359,7 +2433,7 @@ public class MessagesStorage extends BaseController {
     }
 
     public void updateMutedDialogsFiltersCounters() {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda24
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda22
             @Override // java.lang.Runnable
             public final void run() {
                 MessagesStorage.this.lambda$updateMutedDialogsFiltersCounters$33();
@@ -2368,7 +2442,7 @@ public class MessagesStorage extends BaseController {
     }
 
     public void setDialogFlags(final long j, final long j2) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda85
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda88
             @Override // java.lang.Runnable
             public final void run() {
                 MessagesStorage.this.lambda$setDialogFlags$34(j, j2);
@@ -2394,7 +2468,7 @@ public class MessagesStorage extends BaseController {
     }
 
     public void putPushMessage(final MessageObject messageObject) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda151
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda160
             @Override // java.lang.Runnable
             public final void run() {
                 MessagesStorage.this.lambda$putPushMessage$35(messageObject);
@@ -2449,7 +2523,7 @@ public class MessagesStorage extends BaseController {
     }
 
     public void clearLocalDatabase() {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda5
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda6
             @Override // java.lang.Runnable
             public final void run() {
                 MessagesStorage.this.lambda$clearLocalDatabase$37();
@@ -2459,41 +2533,41 @@ public class MessagesStorage extends BaseController {
 
     /* JADX INFO: Access modifiers changed from: private */
     /* JADX WARN: Can't wrap try/catch for region: R(3:(4:7|8|(3:10|11|12)(1:14)|13)|4|5) */
-    /* JADX WARN: Code restructure failed: missing block: B:105:0x030e, code lost:
+    /* JADX WARN: Code restructure failed: missing block: B:105:0x038f, code lost:
         r0 = th;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:106:0x030f, code lost:
+    /* JADX WARN: Code restructure failed: missing block: B:106:0x0390, code lost:
         r3 = null;
         r7 = null;
         r19 = r5;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:107:0x0315, code lost:
+    /* JADX WARN: Code restructure failed: missing block: B:107:0x0396, code lost:
         r0 = e;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:108:0x0316, code lost:
+    /* JADX WARN: Code restructure failed: missing block: B:108:0x0397, code lost:
         r3 = null;
         r7 = null;
         r19 = r5;
      */
-    /* JADX WARN: Removed duplicated region for block: B:116:0x0330  */
-    /* JADX WARN: Removed duplicated region for block: B:118:0x0335  */
-    /* JADX WARN: Removed duplicated region for block: B:120:0x033a  */
-    /* JADX WARN: Removed duplicated region for block: B:122:0x033f  */
-    /* JADX WARN: Removed duplicated region for block: B:129:0x0350  */
-    /* JADX WARN: Removed duplicated region for block: B:131:0x0355  */
-    /* JADX WARN: Removed duplicated region for block: B:133:0x035a  */
-    /* JADX WARN: Removed duplicated region for block: B:135:0x035f  */
-    /* JADX WARN: Removed duplicated region for block: B:63:0x026d A[Catch: all -> 0x0287, Exception -> 0x028a, TryCatch #3 {Exception -> 0x028a, blocks: (B:60:0x0194, B:61:0x0197, B:63:0x026d, B:65:0x027c), top: B:141:0x0194 }] */
-    /* JADX WARN: Type inference failed for: r6v12 */
-    /* JADX WARN: Type inference failed for: r6v2, types: [boolean, int] */
-    /* JADX WARN: Type inference failed for: r6v9 */
+    /* JADX WARN: Removed duplicated region for block: B:116:0x03b1  */
+    /* JADX WARN: Removed duplicated region for block: B:118:0x03b6  */
+    /* JADX WARN: Removed duplicated region for block: B:120:0x03bb  */
+    /* JADX WARN: Removed duplicated region for block: B:122:0x03c0  */
+    /* JADX WARN: Removed duplicated region for block: B:129:0x03d1  */
+    /* JADX WARN: Removed duplicated region for block: B:131:0x03d6  */
+    /* JADX WARN: Removed duplicated region for block: B:133:0x03db  */
+    /* JADX WARN: Removed duplicated region for block: B:135:0x03e0  */
+    /* JADX WARN: Removed duplicated region for block: B:63:0x02e3 A[Catch: all -> 0x02fd, Exception -> 0x0300, TryCatch #12 {Exception -> 0x0300, blocks: (B:60:0x020a, B:61:0x020d, B:63:0x02e3, B:65:0x02f2), top: B:147:0x020a }] */
+    /* JADX WARN: Type inference failed for: r6v12, types: [int, boolean] */
+    /* JADX WARN: Type inference failed for: r6v19 */
+    /* JADX WARN: Type inference failed for: r6v22 */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
     public /* synthetic */ void lambda$clearLocalDatabase$37() {
         /*
-            Method dump skipped, instructions count: 877
+            Method dump skipped, instructions count: 1006
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$clearLocalDatabase$37():void");
@@ -2503,6 +2577,311 @@ public class MessagesStorage extends BaseController {
     public /* synthetic */ void lambda$clearLocalDatabase$36() {
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.didClearDatabase, new Object[0]);
         getMediaDataController().loadAttachMenuBots(false, true);
+    }
+
+    public void saveTopics(final long j, final List<TLRPC$TL_forumTopic> list, final boolean z, boolean z2) {
+        if (z2) {
+            this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda106
+                @Override // java.lang.Runnable
+                public final void run() {
+                    MessagesStorage.this.lambda$saveTopics$38(j, list, z);
+                }
+            });
+        } else {
+            saveTopicsInternal(j, list, z, false);
+        }
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
+    public /* synthetic */ void lambda$saveTopics$38(long j, List list, boolean z) {
+        saveTopicsInternal(j, list, z, true);
+    }
+
+    /* JADX WARN: Code restructure failed: missing block: B:13:0x00a1, code lost:
+        if (r0 != null) goto L17;
+     */
+    /* JADX WARN: Code restructure failed: missing block: B:19:0x00aa, code lost:
+        if (r0 == null) goto L14;
+     */
+    /* JADX WARN: Code restructure failed: missing block: B:20:0x00ac, code lost:
+        r0.dispose();
+     */
+    /* JADX WARN: Code restructure failed: missing block: B:21:0x00af, code lost:
+        r5.database.commitTransaction();
+     */
+    /* JADX WARN: Code restructure failed: missing block: B:22:0x00b4, code lost:
+        return;
+     */
+    /*
+        Code decompiled incorrectly, please refer to instructions dump.
+        To view partially-correct add '--show-bad-code' argument
+    */
+    private void saveTopicsInternal(long r6, java.util.List<org.telegram.tgnet.TLRPC$TL_forumTopic> r8, boolean r9, boolean r10) {
+        /*
+            r5 = this;
+            r0 = 0
+            if (r9 == 0) goto L21
+            org.telegram.SQLite.SQLiteDatabase r9 = r5.database     // Catch: java.lang.Throwable -> La4 java.lang.Exception -> La6
+            java.lang.StringBuilder r1 = new java.lang.StringBuilder     // Catch: java.lang.Throwable -> La4 java.lang.Exception -> La6
+            r1.<init>()     // Catch: java.lang.Throwable -> La4 java.lang.Exception -> La6
+            java.lang.String r2 = "DELETE FROM topics WHERE did = "
+            r1.append(r2)     // Catch: java.lang.Throwable -> La4 java.lang.Exception -> La6
+            r1.append(r6)     // Catch: java.lang.Throwable -> La4 java.lang.Exception -> La6
+            java.lang.String r1 = r1.toString()     // Catch: java.lang.Throwable -> La4 java.lang.Exception -> La6
+            org.telegram.SQLite.SQLitePreparedStatement r9 = r9.executeFast(r1)     // Catch: java.lang.Throwable -> La4 java.lang.Exception -> La6
+            org.telegram.SQLite.SQLitePreparedStatement r9 = r9.stepThis()     // Catch: java.lang.Throwable -> La4 java.lang.Exception -> La6
+            r9.dispose()     // Catch: java.lang.Throwable -> La4 java.lang.Exception -> La6
+        L21:
+            org.telegram.SQLite.SQLiteDatabase r9 = r5.database     // Catch: java.lang.Throwable -> La4 java.lang.Exception -> La6
+            java.lang.String r1 = "REPLACE INTO topics VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+            org.telegram.SQLite.SQLitePreparedStatement r0 = r9.executeFast(r1)     // Catch: java.lang.Throwable -> La4 java.lang.Exception -> La6
+            if (r10 == 0) goto L30
+            org.telegram.SQLite.SQLiteDatabase r9 = r5.database     // Catch: java.lang.Throwable -> La4 java.lang.Exception -> La6
+            r9.beginTransaction()     // Catch: java.lang.Throwable -> La4 java.lang.Exception -> La6
+        L30:
+            r9 = 0
+        L31:
+            int r10 = r8.size()     // Catch: java.lang.Throwable -> La4 java.lang.Exception -> La6
+            if (r9 >= r10) goto La1
+            java.lang.Object r10 = r8.get(r9)     // Catch: java.lang.Throwable -> La4 java.lang.Exception -> La6
+            org.telegram.tgnet.TLRPC$TL_forumTopic r10 = (org.telegram.tgnet.TLRPC$TL_forumTopic) r10     // Catch: java.lang.Throwable -> La4 java.lang.Exception -> La6
+            r0.requery()     // Catch: java.lang.Throwable -> La4 java.lang.Exception -> La6
+            r1 = 1
+            r0.bindLong(r1, r6)     // Catch: java.lang.Throwable -> La4 java.lang.Exception -> La6
+            r1 = 2
+            int r2 = r10.id     // Catch: java.lang.Throwable -> La4 java.lang.Exception -> La6
+            r0.bindInteger(r1, r2)     // Catch: java.lang.Throwable -> La4 java.lang.Exception -> La6
+            org.telegram.tgnet.NativeByteBuffer r1 = new org.telegram.tgnet.NativeByteBuffer     // Catch: java.lang.Throwable -> La4 java.lang.Exception -> La6
+            int r2 = r10.getObjectSize()     // Catch: java.lang.Throwable -> La4 java.lang.Exception -> La6
+            r1.<init>(r2)     // Catch: java.lang.Throwable -> La4 java.lang.Exception -> La6
+            r10.serializeToStream(r1)     // Catch: java.lang.Throwable -> La4 java.lang.Exception -> La6
+            r2 = 3
+            r0.bindByteBuffer(r2, r1)     // Catch: java.lang.Throwable -> La4 java.lang.Exception -> La6
+            r2 = 4
+            int r3 = r10.top_message     // Catch: java.lang.Throwable -> La4 java.lang.Exception -> La6
+            r0.bindInteger(r2, r3)     // Catch: java.lang.Throwable -> La4 java.lang.Exception -> La6
+            org.telegram.tgnet.NativeByteBuffer r2 = new org.telegram.tgnet.NativeByteBuffer     // Catch: java.lang.Throwable -> La4 java.lang.Exception -> La6
+            org.telegram.tgnet.TLRPC$Message r3 = r10.topicStartMessage     // Catch: java.lang.Throwable -> La4 java.lang.Exception -> La6
+            int r3 = r3.getObjectSize()     // Catch: java.lang.Throwable -> La4 java.lang.Exception -> La6
+            r2.<init>(r3)     // Catch: java.lang.Throwable -> La4 java.lang.Exception -> La6
+            org.telegram.tgnet.TLRPC$Message r3 = r10.topicStartMessage     // Catch: java.lang.Throwable -> La4 java.lang.Exception -> La6
+            r3.serializeToStream(r2)     // Catch: java.lang.Throwable -> La4 java.lang.Exception -> La6
+            r3 = 5
+            r0.bindByteBuffer(r3, r2)     // Catch: java.lang.Throwable -> La4 java.lang.Exception -> La6
+            r3 = 6
+            int r4 = r10.unread_count     // Catch: java.lang.Throwable -> La4 java.lang.Exception -> La6
+            r0.bindInteger(r3, r4)     // Catch: java.lang.Throwable -> La4 java.lang.Exception -> La6
+            r3 = 7
+            int r4 = r10.read_inbox_max_id     // Catch: java.lang.Throwable -> La4 java.lang.Exception -> La6
+            r0.bindInteger(r3, r4)     // Catch: java.lang.Throwable -> La4 java.lang.Exception -> La6
+            r3 = 8
+            int r4 = r10.unread_mentions_count     // Catch: java.lang.Throwable -> La4 java.lang.Exception -> La6
+            r0.bindInteger(r3, r4)     // Catch: java.lang.Throwable -> La4 java.lang.Exception -> La6
+            r3 = 9
+            int r4 = r10.unread_reactions_count     // Catch: java.lang.Throwable -> La4 java.lang.Exception -> La6
+            r0.bindInteger(r3, r4)     // Catch: java.lang.Throwable -> La4 java.lang.Exception -> La6
+            r3 = 10
+            int r10 = r10.read_outbox_max_id     // Catch: java.lang.Throwable -> La4 java.lang.Exception -> La6
+            r0.bindInteger(r3, r10)     // Catch: java.lang.Throwable -> La4 java.lang.Exception -> La6
+            r0.step()     // Catch: java.lang.Throwable -> La4 java.lang.Exception -> La6
+            r2.reuse()     // Catch: java.lang.Throwable -> La4 java.lang.Exception -> La6
+            r1.reuse()     // Catch: java.lang.Throwable -> La4 java.lang.Exception -> La6
+            int r9 = r9 + 1
+            goto L31
+        La1:
+            if (r0 == 0) goto Laf
+            goto Lac
+        La4:
+            r6 = move-exception
+            goto Lb5
+        La6:
+            r6 = move-exception
+            org.telegram.messenger.FileLog.e(r6)     // Catch: java.lang.Throwable -> La4
+            if (r0 == 0) goto Laf
+        Lac:
+            r0.dispose()
+        Laf:
+            org.telegram.SQLite.SQLiteDatabase r6 = r5.database
+            r6.commitTransaction()
+            return
+        Lb5:
+            if (r0 == 0) goto Lba
+            r0.dispose()
+        Lba:
+            org.telegram.SQLite.SQLiteDatabase r7 = r5.database
+            r7.commitTransaction()
+            goto Lc1
+        Lc0:
+            throw r6
+        Lc1:
+            goto Lc0
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.saveTopicsInternal(long, java.util.List, boolean, boolean):void");
+    }
+
+    public void updateTopicData(final long j, final TLRPC$TL_forumTopic tLRPC$TL_forumTopic, final int i) {
+        if (tLRPC$TL_forumTopic == null) {
+            return;
+        }
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda116
+            @Override // java.lang.Runnable
+            public final void run() {
+                MessagesStorage.this.lambda$updateTopicData$39(j, tLRPC$TL_forumTopic, i);
+            }
+        });
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
+    public /* synthetic */ void lambda$updateTopicData$39(long j, TLRPC$TL_forumTopic tLRPC$TL_forumTopic, int i) {
+        SQLiteCursor sQLiteCursor;
+        SQLiteCursor sQLiteCursor2;
+        TLRPC$TL_forumTopic tLRPC$TL_forumTopic2;
+        NativeByteBuffer byteBufferValue;
+        SQLitePreparedStatement sQLitePreparedStatement = null;
+        try {
+            try {
+                sQLiteCursor2 = this.database.queryFinalized(String.format(Locale.US, "SELECT data FROM topics WHERE did = %d AND topic_id = %d", Long.valueOf(j), Integer.valueOf(tLRPC$TL_forumTopic.id)), new Object[0]);
+                try {
+                    if (!sQLiteCursor2.next() || (byteBufferValue = sQLiteCursor2.byteBufferValue(0)) == null) {
+                        tLRPC$TL_forumTopic2 = null;
+                    } else {
+                        tLRPC$TL_forumTopic2 = TLRPC$TL_forumTopic.TLdeserialize((AbstractSerializedData) byteBufferValue, byteBufferValue.readInt32(true), true);
+                        byteBufferValue.reuse();
+                    }
+                    sQLiteCursor2.dispose();
+                    if (tLRPC$TL_forumTopic2 != null) {
+                        if ((i & 1) != 0) {
+                            tLRPC$TL_forumTopic2.title = tLRPC$TL_forumTopic.title;
+                        }
+                        if ((i & 2) != 0) {
+                            tLRPC$TL_forumTopic2.icon_emoji_id = tLRPC$TL_forumTopic.icon_emoji_id;
+                            tLRPC$TL_forumTopic2.flags |= 1;
+                        }
+                        if ((i & 4) != 0) {
+                            tLRPC$TL_forumTopic2.pinned = tLRPC$TL_forumTopic.pinned;
+                        }
+                        if ((i & 8) != 0) {
+                            tLRPC$TL_forumTopic2.closed = tLRPC$TL_forumTopic.closed;
+                        }
+                        SQLitePreparedStatement executeFast = this.database.executeFast("UPDATE topics SET data = ? WHERE did = ? AND topic_id = ?");
+                        try {
+                            this.database.beginTransaction();
+                            NativeByteBuffer nativeByteBuffer = new NativeByteBuffer(tLRPC$TL_forumTopic2.getObjectSize());
+                            tLRPC$TL_forumTopic2.serializeToStream(nativeByteBuffer);
+                            executeFast.bindByteBuffer(1, nativeByteBuffer);
+                            executeFast.bindLong(2, j);
+                            executeFast.bindInteger(3, tLRPC$TL_forumTopic2.id);
+                            executeFast.step();
+                            nativeByteBuffer.reuse();
+                            sQLitePreparedStatement = executeFast;
+                        } catch (Exception e) {
+                            e = e;
+                            sQLiteCursor2 = null;
+                            sQLitePreparedStatement = executeFast;
+                            FileLog.e(e);
+                            if (sQLitePreparedStatement != null) {
+                                sQLitePreparedStatement.dispose();
+                            }
+                            if (sQLiteCursor2 != null) {
+                                sQLiteCursor2.dispose();
+                            }
+                            this.database.commitTransaction();
+                        } catch (Throwable th) {
+                            th = th;
+                            sQLiteCursor = null;
+                            sQLitePreparedStatement = executeFast;
+                            if (sQLitePreparedStatement != null) {
+                                sQLitePreparedStatement.dispose();
+                            }
+                            if (sQLiteCursor != null) {
+                                sQLiteCursor.dispose();
+                            }
+                            this.database.commitTransaction();
+                            throw th;
+                        }
+                    }
+                    if (sQLitePreparedStatement != null) {
+                        sQLitePreparedStatement.dispose();
+                    }
+                } catch (Exception e2) {
+                    e = e2;
+                }
+            } catch (Throwable th2) {
+                th = th2;
+            }
+        } catch (Exception e3) {
+            e = e3;
+            sQLiteCursor2 = null;
+        } catch (Throwable th3) {
+            th = th3;
+            sQLiteCursor = null;
+        }
+        this.database.commitTransaction();
+    }
+
+    public void loadTopics(final long j, final Consumer<ArrayList<TLRPC$TL_forumTopic>> consumer) {
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda107
+            @Override // java.lang.Runnable
+            public final void run() {
+                MessagesStorage.this.lambda$loadTopics$40(j, consumer);
+            }
+        });
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
+    /* JADX WARN: Removed duplicated region for block: B:87:0x01f1  */
+    /* JADX WARN: Removed duplicated region for block: B:91:0x01fe  */
+    /*
+        Code decompiled incorrectly, please refer to instructions dump.
+        To view partially-correct add '--show-bad-code' argument
+    */
+    public /* synthetic */ void lambda$loadTopics$40(long r20, j$.util.function.Consumer r22) {
+        /*
+            Method dump skipped, instructions count: 516
+            To view this dump add '--comments-level debug' option
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$loadTopics$40(long, j$.util.function.Consumer):void");
+    }
+
+    public void removeTopic(final long j, final int i) {
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda71
+            @Override // java.lang.Runnable
+            public final void run() {
+                MessagesStorage.this.lambda$removeTopic$41(j, i);
+            }
+        });
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
+    public /* synthetic */ void lambda$removeTopic$41(long j, int i) {
+        try {
+            SQLiteDatabase sQLiteDatabase = this.database;
+            Locale locale = Locale.US;
+            sQLiteDatabase.executeFast(String.format(locale, "DELETE FROM topics WHERE did = %d AND topic_id = %d", Long.valueOf(j), Integer.valueOf(i))).stepThis().dispose();
+            this.database.executeFast(String.format(locale, "DELETE FROM messages_topics WHERE uid = %d AND topic_id = %d", Long.valueOf(j), Integer.valueOf(i))).stepThis().dispose();
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateTopicsWithReadMessages(final HashMap<TopicKey, Integer> hashMap) {
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda158
+            @Override // java.lang.Runnable
+            public final void run() {
+                MessagesStorage.this.lambda$updateTopicsWithReadMessages$42(hashMap);
+            }
+        });
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
+    public /* synthetic */ void lambda$updateTopicsWithReadMessages$42(HashMap hashMap) {
+        for (TopicKey topicKey : hashMap.keySet()) {
+            try {
+                this.database.executeFast(String.format(Locale.US, "UPDATE topics SET read_outbox = max((SELECT read_outbox FROM topics WHERE did = %d AND topic_id = %d), %d) WHERE did = %d AND topic_id = %d", Long.valueOf(topicKey.dialogId), Integer.valueOf(topicKey.topicId), Integer.valueOf(((Integer) hashMap.get(topicKey)).intValue()), Long.valueOf(topicKey.dialogId), Integer.valueOf(topicKey.topicId))).stepThis().dispose();
+            } catch (SQLiteException e) {
+                FileLog.e(e);
+            }
+        }
     }
 
     /* JADX INFO: Access modifiers changed from: private */
@@ -2517,16 +2896,16 @@ public class MessagesStorage extends BaseController {
     }
 
     public void readAllDialogs(final int i) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda25
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda29
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$readAllDialogs$39(i);
+                MessagesStorage.this.lambda$readAllDialogs$44(i);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$readAllDialogs$39(int i) {
+    public /* synthetic */ void lambda$readAllDialogs$44(int i) {
         SQLiteCursor queryFinalized;
         SQLiteCursor sQLiteCursor = null;
         try {
@@ -2596,10 +2975,10 @@ public class MessagesStorage extends BaseController {
                 if (!arrayList2.isEmpty()) {
                     getChatsInternal(TextUtils.join(",", arrayList2), arrayList5);
                 }
-                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda146
+                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda154
                     @Override // java.lang.Runnable
                     public final void run() {
-                        MessagesStorage.this.lambda$readAllDialogs$38(arrayList4, arrayList5, arrayList6, longSparseArray);
+                        MessagesStorage.this.lambda$readAllDialogs$43(arrayList4, arrayList5, arrayList6, longSparseArray);
                     }
                 });
             } catch (Throwable th2) {
@@ -2611,7 +2990,7 @@ public class MessagesStorage extends BaseController {
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$readAllDialogs$38(ArrayList arrayList, ArrayList arrayList2, ArrayList arrayList3, LongSparseArray longSparseArray) {
+    public /* synthetic */ void lambda$readAllDialogs$43(ArrayList arrayList, ArrayList arrayList2, ArrayList arrayList3, LongSparseArray longSparseArray) {
         getMessagesController().putUsers(arrayList, true);
         getMessagesController().putChats(arrayList2, true);
         getMessagesController().putEncryptedChats(arrayList3, true);
@@ -2624,32 +3003,36 @@ public class MessagesStorage extends BaseController {
         }
     }
 
-    /* JADX WARN: Removed duplicated region for block: B:118:0x0274  */
-    /* JADX WARN: Removed duplicated region for block: B:16:0x0084  */
-    /* JADX WARN: Removed duplicated region for block: B:17:0x0086  */
-    /* JADX WARN: Removed duplicated region for block: B:20:0x009a  */
-    /* JADX WARN: Removed duplicated region for block: B:21:0x009c  */
-    /* JADX WARN: Removed duplicated region for block: B:24:0x00b0 A[Catch: all -> 0x0265, Exception -> 0x0268, TryCatch #3 {all -> 0x0265, blocks: (B:4:0x0029, B:6:0x0031, B:8:0x0058, B:14:0x0068, B:18:0x0087, B:22:0x009d, B:24:0x00b0, B:26:0x00b8, B:27:0x00bd, B:29:0x00d9, B:31:0x00e4, B:33:0x0107, B:34:0x0109, B:35:0x011c, B:37:0x0120, B:39:0x0124, B:41:0x012a, B:43:0x012e, B:45:0x0132, B:47:0x013a, B:49:0x0140, B:51:0x015b, B:52:0x015e, B:54:0x0162, B:57:0x0169, B:58:0x016d, B:59:0x0170, B:61:0x0176, B:63:0x017c, B:64:0x017f, B:66:0x0185, B:68:0x0193, B:69:0x019b, B:71:0x01a1, B:73:0x01ab, B:74:0x01b3, B:76:0x01c0, B:78:0x01ca), top: B:124:0x0029 }] */
-    /* JADX WARN: Removed duplicated region for block: B:29:0x00d9 A[Catch: all -> 0x0265, Exception -> 0x0268, TryCatch #3 {all -> 0x0265, blocks: (B:4:0x0029, B:6:0x0031, B:8:0x0058, B:14:0x0068, B:18:0x0087, B:22:0x009d, B:24:0x00b0, B:26:0x00b8, B:27:0x00bd, B:29:0x00d9, B:31:0x00e4, B:33:0x0107, B:34:0x0109, B:35:0x011c, B:37:0x0120, B:39:0x0124, B:41:0x012a, B:43:0x012e, B:45:0x0132, B:47:0x013a, B:49:0x0140, B:51:0x015b, B:52:0x015e, B:54:0x0162, B:57:0x0169, B:58:0x016d, B:59:0x0170, B:61:0x0176, B:63:0x017c, B:64:0x017f, B:66:0x0185, B:68:0x0193, B:69:0x019b, B:71:0x01a1, B:73:0x01ab, B:74:0x01b3, B:76:0x01c0, B:78:0x01ca), top: B:124:0x0029 }] */
-    /* JADX WARN: Removed duplicated region for block: B:66:0x0185 A[Catch: all -> 0x0265, Exception -> 0x0268, TryCatch #3 {all -> 0x0265, blocks: (B:4:0x0029, B:6:0x0031, B:8:0x0058, B:14:0x0068, B:18:0x0087, B:22:0x009d, B:24:0x00b0, B:26:0x00b8, B:27:0x00bd, B:29:0x00d9, B:31:0x00e4, B:33:0x0107, B:34:0x0109, B:35:0x011c, B:37:0x0120, B:39:0x0124, B:41:0x012a, B:43:0x012e, B:45:0x0132, B:47:0x013a, B:49:0x0140, B:51:0x015b, B:52:0x015e, B:54:0x0162, B:57:0x0169, B:58:0x016d, B:59:0x0170, B:61:0x0176, B:63:0x017c, B:64:0x017f, B:66:0x0185, B:68:0x0193, B:69:0x019b, B:71:0x01a1, B:73:0x01ab, B:74:0x01b3, B:76:0x01c0, B:78:0x01ca), top: B:124:0x0029 }] */
-    /* JADX WARN: Removed duplicated region for block: B:69:0x019b A[Catch: all -> 0x0265, Exception -> 0x0268, TryCatch #3 {all -> 0x0265, blocks: (B:4:0x0029, B:6:0x0031, B:8:0x0058, B:14:0x0068, B:18:0x0087, B:22:0x009d, B:24:0x00b0, B:26:0x00b8, B:27:0x00bd, B:29:0x00d9, B:31:0x00e4, B:33:0x0107, B:34:0x0109, B:35:0x011c, B:37:0x0120, B:39:0x0124, B:41:0x012a, B:43:0x012e, B:45:0x0132, B:47:0x013a, B:49:0x0140, B:51:0x015b, B:52:0x015e, B:54:0x0162, B:57:0x0169, B:58:0x016d, B:59:0x0170, B:61:0x0176, B:63:0x017c, B:64:0x017f, B:66:0x0185, B:68:0x0193, B:69:0x019b, B:71:0x01a1, B:73:0x01ab, B:74:0x01b3, B:76:0x01c0, B:78:0x01ca), top: B:124:0x0029 }] */
+    /* JADX WARN: Removed duplicated region for block: B:16:0x0089  */
+    /* JADX WARN: Removed duplicated region for block: B:17:0x008b  */
+    /* JADX WARN: Removed duplicated region for block: B:186:0x03eb  */
+    /* JADX WARN: Removed duplicated region for block: B:20:0x009f  */
+    /* JADX WARN: Removed duplicated region for block: B:21:0x00a1  */
+    /* JADX WARN: Removed duplicated region for block: B:24:0x00b5 A[Catch: all -> 0x03da, Exception -> 0x03dd, TryCatch #3 {Exception -> 0x03dd, blocks: (B:4:0x002d, B:6:0x0035, B:8:0x005d, B:14:0x006d, B:18:0x008c, B:22:0x00a2, B:24:0x00b5, B:26:0x00bd, B:27:0x00c2, B:29:0x00da, B:31:0x00ea, B:33:0x00f5, B:35:0x0100, B:37:0x0125, B:39:0x012c, B:72:0x01a8, B:74:0x01ae, B:76:0x01b4, B:77:0x01b7, B:79:0x01bd, B:81:0x01cd, B:82:0x01d5, B:84:0x01dd, B:86:0x01e7, B:87:0x01ef, B:89:0x01fa, B:69:0x019a, B:70:0x019e, B:91:0x0208), top: B:192:0x002d }] */
+    /* JADX WARN: Removed duplicated region for block: B:29:0x00da A[Catch: all -> 0x03da, Exception -> 0x03dd, TryCatch #3 {Exception -> 0x03dd, blocks: (B:4:0x002d, B:6:0x0035, B:8:0x005d, B:14:0x006d, B:18:0x008c, B:22:0x00a2, B:24:0x00b5, B:26:0x00bd, B:27:0x00c2, B:29:0x00da, B:31:0x00ea, B:33:0x00f5, B:35:0x0100, B:37:0x0125, B:39:0x012c, B:72:0x01a8, B:74:0x01ae, B:76:0x01b4, B:77:0x01b7, B:79:0x01bd, B:81:0x01cd, B:82:0x01d5, B:84:0x01dd, B:86:0x01e7, B:87:0x01ef, B:89:0x01fa, B:69:0x019a, B:70:0x019e, B:91:0x0208), top: B:192:0x002d }] */
+    /* JADX WARN: Removed duplicated region for block: B:30:0x00e8  */
+    /* JADX WARN: Removed duplicated region for block: B:33:0x00f5 A[Catch: all -> 0x03da, Exception -> 0x03dd, TryCatch #3 {Exception -> 0x03dd, blocks: (B:4:0x002d, B:6:0x0035, B:8:0x005d, B:14:0x006d, B:18:0x008c, B:22:0x00a2, B:24:0x00b5, B:26:0x00bd, B:27:0x00c2, B:29:0x00da, B:31:0x00ea, B:33:0x00f5, B:35:0x0100, B:37:0x0125, B:39:0x012c, B:72:0x01a8, B:74:0x01ae, B:76:0x01b4, B:77:0x01b7, B:79:0x01bd, B:81:0x01cd, B:82:0x01d5, B:84:0x01dd, B:86:0x01e7, B:87:0x01ef, B:89:0x01fa, B:69:0x019a, B:70:0x019e, B:91:0x0208), top: B:192:0x002d }] */
+    /* JADX WARN: Removed duplicated region for block: B:71:0x01a5  */
+    /* JADX WARN: Removed duplicated region for block: B:74:0x01ae A[Catch: all -> 0x03da, Exception -> 0x03dd, TryCatch #3 {Exception -> 0x03dd, blocks: (B:4:0x002d, B:6:0x0035, B:8:0x005d, B:14:0x006d, B:18:0x008c, B:22:0x00a2, B:24:0x00b5, B:26:0x00bd, B:27:0x00c2, B:29:0x00da, B:31:0x00ea, B:33:0x00f5, B:35:0x0100, B:37:0x0125, B:39:0x012c, B:72:0x01a8, B:74:0x01ae, B:76:0x01b4, B:77:0x01b7, B:79:0x01bd, B:81:0x01cd, B:82:0x01d5, B:84:0x01dd, B:86:0x01e7, B:87:0x01ef, B:89:0x01fa, B:69:0x019a, B:70:0x019e, B:91:0x0208), top: B:192:0x002d }] */
+    /* JADX WARN: Removed duplicated region for block: B:79:0x01bd A[Catch: all -> 0x03da, Exception -> 0x03dd, TryCatch #3 {Exception -> 0x03dd, blocks: (B:4:0x002d, B:6:0x0035, B:8:0x005d, B:14:0x006d, B:18:0x008c, B:22:0x00a2, B:24:0x00b5, B:26:0x00bd, B:27:0x00c2, B:29:0x00da, B:31:0x00ea, B:33:0x00f5, B:35:0x0100, B:37:0x0125, B:39:0x012c, B:72:0x01a8, B:74:0x01ae, B:76:0x01b4, B:77:0x01b7, B:79:0x01bd, B:81:0x01cd, B:82:0x01d5, B:84:0x01dd, B:86:0x01e7, B:87:0x01ef, B:89:0x01fa, B:69:0x019a, B:70:0x019e, B:91:0x0208), top: B:192:0x002d }] */
+    /* JADX WARN: Removed duplicated region for block: B:82:0x01d5 A[Catch: all -> 0x03da, Exception -> 0x03dd, TryCatch #3 {Exception -> 0x03dd, blocks: (B:4:0x002d, B:6:0x0035, B:8:0x005d, B:14:0x006d, B:18:0x008c, B:22:0x00a2, B:24:0x00b5, B:26:0x00bd, B:27:0x00c2, B:29:0x00da, B:31:0x00ea, B:33:0x00f5, B:35:0x0100, B:37:0x0125, B:39:0x012c, B:72:0x01a8, B:74:0x01ae, B:76:0x01b4, B:77:0x01b7, B:79:0x01bd, B:81:0x01cd, B:82:0x01d5, B:84:0x01dd, B:86:0x01e7, B:87:0x01ef, B:89:0x01fa, B:69:0x019a, B:70:0x019e, B:91:0x0208), top: B:192:0x002d }] */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    private org.telegram.tgnet.TLRPC$messages_Dialogs loadDialogsByIds(java.lang.String r19, java.util.ArrayList<java.lang.Long> r20, java.util.ArrayList<java.lang.Long> r21, java.util.ArrayList<java.lang.Integer> r22) throws java.lang.Exception {
+    private org.telegram.tgnet.TLRPC$messages_Dialogs loadDialogsByIds(java.lang.String r20, java.util.ArrayList<java.lang.Long> r21, java.util.ArrayList<java.lang.Long> r22, java.util.ArrayList<java.lang.Integer> r23) throws java.lang.Exception {
         /*
-            Method dump skipped, instructions count: 634
+            Method dump skipped, instructions count: 1009
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.loadDialogsByIds(java.lang.String, java.util.ArrayList, java.util.ArrayList, java.util.ArrayList):org.telegram.tgnet.TLRPC$messages_Dialogs");
     }
 
     private void loadDialogFilters() {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda22
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda25
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$loadDialogFilters$41();
+                MessagesStorage.this.lambda$loadDialogFilters$46();
             }
         });
     }
@@ -2664,16 +3047,16 @@ public class MessagesStorage extends BaseController {
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public /* synthetic */ void lambda$loadDialogFilters$41() {
+    public /* synthetic */ void lambda$loadDialogFilters$46() {
         /*
             Method dump skipped, instructions count: 615
             To view this dump add '--comments-level debug' option
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$loadDialogFilters$41():void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$loadDialogFilters$46():void");
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public static /* synthetic */ int lambda$loadDialogFilters$40(MessagesController.DialogFilter dialogFilter, MessagesController.DialogFilter dialogFilter2) {
+    public static /* synthetic */ int lambda$loadDialogFilters$45(MessagesController.DialogFilter dialogFilter, MessagesController.DialogFilter dialogFilter2) {
         int i = dialogFilter.order;
         int i2 = dialogFilter2.order;
         if (i > i2) {
@@ -2682,28 +3065,28 @@ public class MessagesStorage extends BaseController {
         return i < i2 ? -1 : 0;
     }
 
-    /* JADX WARN: Code restructure failed: missing block: B:232:0x04e1, code lost:
-        if (r13.indexOfKey(r3.id) >= 0) goto L249;
+    /* JADX WARN: Code restructure failed: missing block: B:232:0x04ce, code lost:
+        if (r13.indexOfKey(r8.id) >= 0) goto L249;
      */
-    /* JADX WARN: Removed duplicated region for block: B:103:0x02be A[Catch: all -> 0x066f, Exception -> 0x0673, TryCatch #4 {Exception -> 0x0673, all -> 0x066f, blocks: (B:7:0x000a, B:8:0x002b, B:9:0x002e, B:32:0x00e2, B:35:0x0108, B:37:0x0118, B:39:0x013b, B:43:0x014e, B:44:0x0155, B:46:0x0159, B:54:0x0182, B:47:0x0164, B:49:0x0168, B:52:0x016d, B:53:0x0178, B:56:0x0198, B:58:0x01a6, B:60:0x01bd, B:62:0x01cd, B:63:0x01df, B:65:0x01e8, B:83:0x025b, B:68:0x01fe, B:70:0x0213, B:74:0x0228, B:75:0x022f, B:77:0x0233, B:80:0x0238, B:82:0x024d, B:81:0x0243, B:86:0x0268, B:88:0x026e, B:90:0x0280, B:92:0x028c, B:95:0x0294, B:97:0x02a8, B:103:0x02be, B:107:0x02cc, B:108:0x02d4, B:110:0x02da, B:112:0x02de, B:114:0x02f3, B:116:0x0311, B:113:0x02e9, B:115:0x02fb, B:117:0x031b, B:118:0x0325, B:121:0x032b, B:124:0x033f, B:134:0x0359, B:136:0x035e, B:138:0x0363, B:140:0x0370, B:143:0x037a, B:145:0x037f, B:147:0x038e, B:149:0x0395, B:151:0x039a, B:153:0x039f, B:155:0x03ac, B:156:0x03b2, B:158:0x03b7, B:160:0x03c6, B:161:0x03cb, B:163:0x03d0, B:165:0x03d5, B:167:0x03e2, B:168:0x03e8, B:170:0x03ed, B:172:0x03fc, B:173:0x0401, B:175:0x0406, B:177:0x040b, B:179:0x0418, B:180:0x041e, B:182:0x0423, B:184:0x0432, B:185:0x0437, B:187:0x043c, B:189:0x0441, B:191:0x044e, B:192:0x0454, B:194:0x0459, B:196:0x0468, B:199:0x0471, B:201:0x047b, B:208:0x049e, B:215:0x04b7, B:217:0x04bb, B:225:0x04cc, B:227:0x04cf, B:241:0x04f9, B:229:0x04d4, B:231:0x04d9, B:233:0x04e3, B:235:0x04e8, B:237:0x04ed, B:218:0x04be, B:220:0x04c2, B:223:0x04c7, B:224:0x04ca, B:212:0x04ad, B:266:0x0553, B:243:0x0506, B:245:0x0515, B:247:0x051b, B:249:0x051f, B:251:0x0524, B:253:0x0527, B:254:0x052a, B:256:0x052f, B:258:0x0538, B:261:0x0544, B:263:0x0549, B:250:0x0522, B:267:0x0562, B:269:0x0573, B:277:0x0590, B:284:0x05a5, B:286:0x05a9, B:294:0x05ba, B:296:0x05bd, B:298:0x05c2, B:302:0x05d1, B:304:0x05d6, B:306:0x05de, B:308:0x05e4, B:287:0x05ac, B:289:0x05b0, B:292:0x05b5, B:293:0x05b8, B:281:0x059d, B:331:0x0635, B:310:0x05ee, B:312:0x05fa, B:314:0x0600, B:316:0x0604, B:318:0x0609, B:320:0x060c, B:322:0x0611, B:324:0x061a, B:326:0x061f, B:328:0x0628, B:330:0x0633, B:317:0x0607, B:332:0x063a, B:334:0x063e, B:338:0x064d, B:340:0x0651, B:341:0x0654, B:343:0x0658, B:345:0x065c, B:125:0x0342, B:127:0x0346, B:129:0x034e, B:130:0x0351, B:131:0x0353, B:132:0x0355), top: B:370:0x000a }] */
-    /* JADX WARN: Removed duplicated region for block: B:104:0x02c8  */
-    /* JADX WARN: Removed duplicated region for block: B:107:0x02cc A[Catch: all -> 0x066f, Exception -> 0x0673, TryCatch #4 {Exception -> 0x0673, all -> 0x066f, blocks: (B:7:0x000a, B:8:0x002b, B:9:0x002e, B:32:0x00e2, B:35:0x0108, B:37:0x0118, B:39:0x013b, B:43:0x014e, B:44:0x0155, B:46:0x0159, B:54:0x0182, B:47:0x0164, B:49:0x0168, B:52:0x016d, B:53:0x0178, B:56:0x0198, B:58:0x01a6, B:60:0x01bd, B:62:0x01cd, B:63:0x01df, B:65:0x01e8, B:83:0x025b, B:68:0x01fe, B:70:0x0213, B:74:0x0228, B:75:0x022f, B:77:0x0233, B:80:0x0238, B:82:0x024d, B:81:0x0243, B:86:0x0268, B:88:0x026e, B:90:0x0280, B:92:0x028c, B:95:0x0294, B:97:0x02a8, B:103:0x02be, B:107:0x02cc, B:108:0x02d4, B:110:0x02da, B:112:0x02de, B:114:0x02f3, B:116:0x0311, B:113:0x02e9, B:115:0x02fb, B:117:0x031b, B:118:0x0325, B:121:0x032b, B:124:0x033f, B:134:0x0359, B:136:0x035e, B:138:0x0363, B:140:0x0370, B:143:0x037a, B:145:0x037f, B:147:0x038e, B:149:0x0395, B:151:0x039a, B:153:0x039f, B:155:0x03ac, B:156:0x03b2, B:158:0x03b7, B:160:0x03c6, B:161:0x03cb, B:163:0x03d0, B:165:0x03d5, B:167:0x03e2, B:168:0x03e8, B:170:0x03ed, B:172:0x03fc, B:173:0x0401, B:175:0x0406, B:177:0x040b, B:179:0x0418, B:180:0x041e, B:182:0x0423, B:184:0x0432, B:185:0x0437, B:187:0x043c, B:189:0x0441, B:191:0x044e, B:192:0x0454, B:194:0x0459, B:196:0x0468, B:199:0x0471, B:201:0x047b, B:208:0x049e, B:215:0x04b7, B:217:0x04bb, B:225:0x04cc, B:227:0x04cf, B:241:0x04f9, B:229:0x04d4, B:231:0x04d9, B:233:0x04e3, B:235:0x04e8, B:237:0x04ed, B:218:0x04be, B:220:0x04c2, B:223:0x04c7, B:224:0x04ca, B:212:0x04ad, B:266:0x0553, B:243:0x0506, B:245:0x0515, B:247:0x051b, B:249:0x051f, B:251:0x0524, B:253:0x0527, B:254:0x052a, B:256:0x052f, B:258:0x0538, B:261:0x0544, B:263:0x0549, B:250:0x0522, B:267:0x0562, B:269:0x0573, B:277:0x0590, B:284:0x05a5, B:286:0x05a9, B:294:0x05ba, B:296:0x05bd, B:298:0x05c2, B:302:0x05d1, B:304:0x05d6, B:306:0x05de, B:308:0x05e4, B:287:0x05ac, B:289:0x05b0, B:292:0x05b5, B:293:0x05b8, B:281:0x059d, B:331:0x0635, B:310:0x05ee, B:312:0x05fa, B:314:0x0600, B:316:0x0604, B:318:0x0609, B:320:0x060c, B:322:0x0611, B:324:0x061a, B:326:0x061f, B:328:0x0628, B:330:0x0633, B:317:0x0607, B:332:0x063a, B:334:0x063e, B:338:0x064d, B:340:0x0651, B:341:0x0654, B:343:0x0658, B:345:0x065c, B:125:0x0342, B:127:0x0346, B:129:0x034e, B:130:0x0351, B:131:0x0353, B:132:0x0355), top: B:370:0x000a }] */
-    /* JADX WARN: Removed duplicated region for block: B:120:0x0329  */
-    /* JADX WARN: Removed duplicated region for block: B:199:0x0471 A[Catch: all -> 0x066f, Exception -> 0x0673, TryCatch #4 {Exception -> 0x0673, all -> 0x066f, blocks: (B:7:0x000a, B:8:0x002b, B:9:0x002e, B:32:0x00e2, B:35:0x0108, B:37:0x0118, B:39:0x013b, B:43:0x014e, B:44:0x0155, B:46:0x0159, B:54:0x0182, B:47:0x0164, B:49:0x0168, B:52:0x016d, B:53:0x0178, B:56:0x0198, B:58:0x01a6, B:60:0x01bd, B:62:0x01cd, B:63:0x01df, B:65:0x01e8, B:83:0x025b, B:68:0x01fe, B:70:0x0213, B:74:0x0228, B:75:0x022f, B:77:0x0233, B:80:0x0238, B:82:0x024d, B:81:0x0243, B:86:0x0268, B:88:0x026e, B:90:0x0280, B:92:0x028c, B:95:0x0294, B:97:0x02a8, B:103:0x02be, B:107:0x02cc, B:108:0x02d4, B:110:0x02da, B:112:0x02de, B:114:0x02f3, B:116:0x0311, B:113:0x02e9, B:115:0x02fb, B:117:0x031b, B:118:0x0325, B:121:0x032b, B:124:0x033f, B:134:0x0359, B:136:0x035e, B:138:0x0363, B:140:0x0370, B:143:0x037a, B:145:0x037f, B:147:0x038e, B:149:0x0395, B:151:0x039a, B:153:0x039f, B:155:0x03ac, B:156:0x03b2, B:158:0x03b7, B:160:0x03c6, B:161:0x03cb, B:163:0x03d0, B:165:0x03d5, B:167:0x03e2, B:168:0x03e8, B:170:0x03ed, B:172:0x03fc, B:173:0x0401, B:175:0x0406, B:177:0x040b, B:179:0x0418, B:180:0x041e, B:182:0x0423, B:184:0x0432, B:185:0x0437, B:187:0x043c, B:189:0x0441, B:191:0x044e, B:192:0x0454, B:194:0x0459, B:196:0x0468, B:199:0x0471, B:201:0x047b, B:208:0x049e, B:215:0x04b7, B:217:0x04bb, B:225:0x04cc, B:227:0x04cf, B:241:0x04f9, B:229:0x04d4, B:231:0x04d9, B:233:0x04e3, B:235:0x04e8, B:237:0x04ed, B:218:0x04be, B:220:0x04c2, B:223:0x04c7, B:224:0x04ca, B:212:0x04ad, B:266:0x0553, B:243:0x0506, B:245:0x0515, B:247:0x051b, B:249:0x051f, B:251:0x0524, B:253:0x0527, B:254:0x052a, B:256:0x052f, B:258:0x0538, B:261:0x0544, B:263:0x0549, B:250:0x0522, B:267:0x0562, B:269:0x0573, B:277:0x0590, B:284:0x05a5, B:286:0x05a9, B:294:0x05ba, B:296:0x05bd, B:298:0x05c2, B:302:0x05d1, B:304:0x05d6, B:306:0x05de, B:308:0x05e4, B:287:0x05ac, B:289:0x05b0, B:292:0x05b5, B:293:0x05b8, B:281:0x059d, B:331:0x0635, B:310:0x05ee, B:312:0x05fa, B:314:0x0600, B:316:0x0604, B:318:0x0609, B:320:0x060c, B:322:0x0611, B:324:0x061a, B:326:0x061f, B:328:0x0628, B:330:0x0633, B:317:0x0607, B:332:0x063a, B:334:0x063e, B:338:0x064d, B:340:0x0651, B:341:0x0654, B:343:0x0658, B:345:0x065c, B:125:0x0342, B:127:0x0346, B:129:0x034e, B:130:0x0351, B:131:0x0353, B:132:0x0355), top: B:370:0x000a }] */
-    /* JADX WARN: Removed duplicated region for block: B:336:0x0645  */
-    /* JADX WARN: Removed duplicated region for block: B:357:0x067b  */
-    /* JADX WARN: Removed duplicated region for block: B:362:0x0683  */
-    /* JADX WARN: Removed duplicated region for block: B:423:? A[RETURN, SYNTHETIC] */
-    /* JADX WARN: Removed duplicated region for block: B:88:0x026e A[Catch: all -> 0x066f, Exception -> 0x0673, TryCatch #4 {Exception -> 0x0673, all -> 0x066f, blocks: (B:7:0x000a, B:8:0x002b, B:9:0x002e, B:32:0x00e2, B:35:0x0108, B:37:0x0118, B:39:0x013b, B:43:0x014e, B:44:0x0155, B:46:0x0159, B:54:0x0182, B:47:0x0164, B:49:0x0168, B:52:0x016d, B:53:0x0178, B:56:0x0198, B:58:0x01a6, B:60:0x01bd, B:62:0x01cd, B:63:0x01df, B:65:0x01e8, B:83:0x025b, B:68:0x01fe, B:70:0x0213, B:74:0x0228, B:75:0x022f, B:77:0x0233, B:80:0x0238, B:82:0x024d, B:81:0x0243, B:86:0x0268, B:88:0x026e, B:90:0x0280, B:92:0x028c, B:95:0x0294, B:97:0x02a8, B:103:0x02be, B:107:0x02cc, B:108:0x02d4, B:110:0x02da, B:112:0x02de, B:114:0x02f3, B:116:0x0311, B:113:0x02e9, B:115:0x02fb, B:117:0x031b, B:118:0x0325, B:121:0x032b, B:124:0x033f, B:134:0x0359, B:136:0x035e, B:138:0x0363, B:140:0x0370, B:143:0x037a, B:145:0x037f, B:147:0x038e, B:149:0x0395, B:151:0x039a, B:153:0x039f, B:155:0x03ac, B:156:0x03b2, B:158:0x03b7, B:160:0x03c6, B:161:0x03cb, B:163:0x03d0, B:165:0x03d5, B:167:0x03e2, B:168:0x03e8, B:170:0x03ed, B:172:0x03fc, B:173:0x0401, B:175:0x0406, B:177:0x040b, B:179:0x0418, B:180:0x041e, B:182:0x0423, B:184:0x0432, B:185:0x0437, B:187:0x043c, B:189:0x0441, B:191:0x044e, B:192:0x0454, B:194:0x0459, B:196:0x0468, B:199:0x0471, B:201:0x047b, B:208:0x049e, B:215:0x04b7, B:217:0x04bb, B:225:0x04cc, B:227:0x04cf, B:241:0x04f9, B:229:0x04d4, B:231:0x04d9, B:233:0x04e3, B:235:0x04e8, B:237:0x04ed, B:218:0x04be, B:220:0x04c2, B:223:0x04c7, B:224:0x04ca, B:212:0x04ad, B:266:0x0553, B:243:0x0506, B:245:0x0515, B:247:0x051b, B:249:0x051f, B:251:0x0524, B:253:0x0527, B:254:0x052a, B:256:0x052f, B:258:0x0538, B:261:0x0544, B:263:0x0549, B:250:0x0522, B:267:0x0562, B:269:0x0573, B:277:0x0590, B:284:0x05a5, B:286:0x05a9, B:294:0x05ba, B:296:0x05bd, B:298:0x05c2, B:302:0x05d1, B:304:0x05d6, B:306:0x05de, B:308:0x05e4, B:287:0x05ac, B:289:0x05b0, B:292:0x05b5, B:293:0x05b8, B:281:0x059d, B:331:0x0635, B:310:0x05ee, B:312:0x05fa, B:314:0x0600, B:316:0x0604, B:318:0x0609, B:320:0x060c, B:322:0x0611, B:324:0x061a, B:326:0x061f, B:328:0x0628, B:330:0x0633, B:317:0x0607, B:332:0x063a, B:334:0x063e, B:338:0x064d, B:340:0x0651, B:341:0x0654, B:343:0x0658, B:345:0x065c, B:125:0x0342, B:127:0x0346, B:129:0x034e, B:130:0x0351, B:131:0x0353, B:132:0x0355), top: B:370:0x000a }] */
-    /* JADX WARN: Type inference failed for: r5v29, types: [boolean] */
-    /* JADX WARN: Type inference failed for: r6v35, types: [boolean] */
+    /* JADX WARN: Removed duplicated region for block: B:103:0x02ba A[Catch: all -> 0x0656, Exception -> 0x065a, TryCatch #5 {Exception -> 0x065a, all -> 0x0656, blocks: (B:7:0x000a, B:8:0x002b, B:9:0x002e, B:32:0x00e2, B:35:0x0108, B:37:0x0118, B:39:0x013d, B:43:0x014c, B:44:0x0153, B:46:0x0157, B:54:0x0180, B:47:0x0162, B:49:0x0166, B:52:0x016b, B:53:0x0176, B:56:0x0196, B:58:0x01a4, B:60:0x01bb, B:62:0x01cb, B:63:0x01dd, B:65:0x01e6, B:83:0x0255, B:68:0x01fb, B:70:0x0213, B:74:0x0222, B:75:0x0229, B:77:0x022d, B:80:0x0232, B:82:0x0247, B:81:0x023d, B:86:0x0263, B:88:0x0269, B:90:0x027b, B:92:0x0287, B:95:0x028f, B:97:0x02a4, B:103:0x02ba, B:107:0x02c8, B:108:0x02d0, B:110:0x02d6, B:112:0x02da, B:114:0x02ef, B:116:0x030c, B:113:0x02e5, B:115:0x02f7, B:117:0x0315, B:118:0x031e, B:121:0x0324, B:124:0x0334, B:134:0x034e, B:136:0x0353, B:138:0x0358, B:140:0x0365, B:143:0x036f, B:145:0x0374, B:147:0x0382, B:149:0x0389, B:151:0x038e, B:153:0x0393, B:155:0x03a0, B:156:0x03a6, B:158:0x03ab, B:160:0x03b9, B:161:0x03be, B:163:0x03c3, B:165:0x03c8, B:167:0x03d5, B:168:0x03db, B:170:0x03e0, B:172:0x03ee, B:173:0x03f3, B:175:0x03f8, B:177:0x03fd, B:179:0x040a, B:180:0x0410, B:182:0x0415, B:184:0x0423, B:185:0x0428, B:187:0x042d, B:189:0x0432, B:191:0x043f, B:192:0x0445, B:194:0x044a, B:196:0x0458, B:199:0x0461, B:201:0x046a, B:208:0x048b, B:215:0x04a4, B:217:0x04a8, B:225:0x04b9, B:227:0x04bc, B:241:0x04e6, B:229:0x04c1, B:231:0x04c6, B:233:0x04d0, B:235:0x04d5, B:237:0x04da, B:218:0x04ab, B:220:0x04af, B:223:0x04b4, B:224:0x04b7, B:212:0x049a, B:266:0x0540, B:243:0x04f3, B:245:0x0502, B:247:0x0508, B:249:0x050c, B:251:0x0511, B:253:0x0514, B:254:0x0517, B:256:0x051c, B:258:0x0525, B:261:0x0531, B:263:0x0536, B:250:0x050f, B:267:0x054d, B:269:0x055a, B:277:0x0577, B:284:0x0590, B:286:0x0594, B:294:0x05a5, B:296:0x05a8, B:298:0x05ad, B:302:0x05ba, B:304:0x05bf, B:306:0x05c7, B:309:0x05ce, B:287:0x0597, B:289:0x059b, B:292:0x05a0, B:293:0x05a3, B:281:0x0586, B:332:0x0622, B:311:0x05da, B:313:0x05e7, B:315:0x05ed, B:317:0x05f1, B:319:0x05f6, B:321:0x05f9, B:323:0x05fe, B:325:0x0607, B:327:0x060c, B:329:0x0615, B:331:0x0620, B:318:0x05f4, B:333:0x062a, B:335:0x062e, B:339:0x0637, B:341:0x063b, B:342:0x063e, B:344:0x0642, B:346:0x0646, B:125:0x0337, B:127:0x033b, B:129:0x0343, B:130:0x0346, B:131:0x0348, B:132:0x034a), top: B:369:0x000a }] */
+    /* JADX WARN: Removed duplicated region for block: B:104:0x02c4  */
+    /* JADX WARN: Removed duplicated region for block: B:107:0x02c8 A[Catch: all -> 0x0656, Exception -> 0x065a, TryCatch #5 {Exception -> 0x065a, all -> 0x0656, blocks: (B:7:0x000a, B:8:0x002b, B:9:0x002e, B:32:0x00e2, B:35:0x0108, B:37:0x0118, B:39:0x013d, B:43:0x014c, B:44:0x0153, B:46:0x0157, B:54:0x0180, B:47:0x0162, B:49:0x0166, B:52:0x016b, B:53:0x0176, B:56:0x0196, B:58:0x01a4, B:60:0x01bb, B:62:0x01cb, B:63:0x01dd, B:65:0x01e6, B:83:0x0255, B:68:0x01fb, B:70:0x0213, B:74:0x0222, B:75:0x0229, B:77:0x022d, B:80:0x0232, B:82:0x0247, B:81:0x023d, B:86:0x0263, B:88:0x0269, B:90:0x027b, B:92:0x0287, B:95:0x028f, B:97:0x02a4, B:103:0x02ba, B:107:0x02c8, B:108:0x02d0, B:110:0x02d6, B:112:0x02da, B:114:0x02ef, B:116:0x030c, B:113:0x02e5, B:115:0x02f7, B:117:0x0315, B:118:0x031e, B:121:0x0324, B:124:0x0334, B:134:0x034e, B:136:0x0353, B:138:0x0358, B:140:0x0365, B:143:0x036f, B:145:0x0374, B:147:0x0382, B:149:0x0389, B:151:0x038e, B:153:0x0393, B:155:0x03a0, B:156:0x03a6, B:158:0x03ab, B:160:0x03b9, B:161:0x03be, B:163:0x03c3, B:165:0x03c8, B:167:0x03d5, B:168:0x03db, B:170:0x03e0, B:172:0x03ee, B:173:0x03f3, B:175:0x03f8, B:177:0x03fd, B:179:0x040a, B:180:0x0410, B:182:0x0415, B:184:0x0423, B:185:0x0428, B:187:0x042d, B:189:0x0432, B:191:0x043f, B:192:0x0445, B:194:0x044a, B:196:0x0458, B:199:0x0461, B:201:0x046a, B:208:0x048b, B:215:0x04a4, B:217:0x04a8, B:225:0x04b9, B:227:0x04bc, B:241:0x04e6, B:229:0x04c1, B:231:0x04c6, B:233:0x04d0, B:235:0x04d5, B:237:0x04da, B:218:0x04ab, B:220:0x04af, B:223:0x04b4, B:224:0x04b7, B:212:0x049a, B:266:0x0540, B:243:0x04f3, B:245:0x0502, B:247:0x0508, B:249:0x050c, B:251:0x0511, B:253:0x0514, B:254:0x0517, B:256:0x051c, B:258:0x0525, B:261:0x0531, B:263:0x0536, B:250:0x050f, B:267:0x054d, B:269:0x055a, B:277:0x0577, B:284:0x0590, B:286:0x0594, B:294:0x05a5, B:296:0x05a8, B:298:0x05ad, B:302:0x05ba, B:304:0x05bf, B:306:0x05c7, B:309:0x05ce, B:287:0x0597, B:289:0x059b, B:292:0x05a0, B:293:0x05a3, B:281:0x0586, B:332:0x0622, B:311:0x05da, B:313:0x05e7, B:315:0x05ed, B:317:0x05f1, B:319:0x05f6, B:321:0x05f9, B:323:0x05fe, B:325:0x0607, B:327:0x060c, B:329:0x0615, B:331:0x0620, B:318:0x05f4, B:333:0x062a, B:335:0x062e, B:339:0x0637, B:341:0x063b, B:342:0x063e, B:344:0x0642, B:346:0x0646, B:125:0x0337, B:127:0x033b, B:129:0x0343, B:130:0x0346, B:131:0x0348, B:132:0x034a), top: B:369:0x000a }] */
+    /* JADX WARN: Removed duplicated region for block: B:120:0x0322  */
+    /* JADX WARN: Removed duplicated region for block: B:199:0x0461 A[Catch: all -> 0x0656, Exception -> 0x065a, TryCatch #5 {Exception -> 0x065a, all -> 0x0656, blocks: (B:7:0x000a, B:8:0x002b, B:9:0x002e, B:32:0x00e2, B:35:0x0108, B:37:0x0118, B:39:0x013d, B:43:0x014c, B:44:0x0153, B:46:0x0157, B:54:0x0180, B:47:0x0162, B:49:0x0166, B:52:0x016b, B:53:0x0176, B:56:0x0196, B:58:0x01a4, B:60:0x01bb, B:62:0x01cb, B:63:0x01dd, B:65:0x01e6, B:83:0x0255, B:68:0x01fb, B:70:0x0213, B:74:0x0222, B:75:0x0229, B:77:0x022d, B:80:0x0232, B:82:0x0247, B:81:0x023d, B:86:0x0263, B:88:0x0269, B:90:0x027b, B:92:0x0287, B:95:0x028f, B:97:0x02a4, B:103:0x02ba, B:107:0x02c8, B:108:0x02d0, B:110:0x02d6, B:112:0x02da, B:114:0x02ef, B:116:0x030c, B:113:0x02e5, B:115:0x02f7, B:117:0x0315, B:118:0x031e, B:121:0x0324, B:124:0x0334, B:134:0x034e, B:136:0x0353, B:138:0x0358, B:140:0x0365, B:143:0x036f, B:145:0x0374, B:147:0x0382, B:149:0x0389, B:151:0x038e, B:153:0x0393, B:155:0x03a0, B:156:0x03a6, B:158:0x03ab, B:160:0x03b9, B:161:0x03be, B:163:0x03c3, B:165:0x03c8, B:167:0x03d5, B:168:0x03db, B:170:0x03e0, B:172:0x03ee, B:173:0x03f3, B:175:0x03f8, B:177:0x03fd, B:179:0x040a, B:180:0x0410, B:182:0x0415, B:184:0x0423, B:185:0x0428, B:187:0x042d, B:189:0x0432, B:191:0x043f, B:192:0x0445, B:194:0x044a, B:196:0x0458, B:199:0x0461, B:201:0x046a, B:208:0x048b, B:215:0x04a4, B:217:0x04a8, B:225:0x04b9, B:227:0x04bc, B:241:0x04e6, B:229:0x04c1, B:231:0x04c6, B:233:0x04d0, B:235:0x04d5, B:237:0x04da, B:218:0x04ab, B:220:0x04af, B:223:0x04b4, B:224:0x04b7, B:212:0x049a, B:266:0x0540, B:243:0x04f3, B:245:0x0502, B:247:0x0508, B:249:0x050c, B:251:0x0511, B:253:0x0514, B:254:0x0517, B:256:0x051c, B:258:0x0525, B:261:0x0531, B:263:0x0536, B:250:0x050f, B:267:0x054d, B:269:0x055a, B:277:0x0577, B:284:0x0590, B:286:0x0594, B:294:0x05a5, B:296:0x05a8, B:298:0x05ad, B:302:0x05ba, B:304:0x05bf, B:306:0x05c7, B:309:0x05ce, B:287:0x0597, B:289:0x059b, B:292:0x05a0, B:293:0x05a3, B:281:0x0586, B:332:0x0622, B:311:0x05da, B:313:0x05e7, B:315:0x05ed, B:317:0x05f1, B:319:0x05f6, B:321:0x05f9, B:323:0x05fe, B:325:0x0607, B:327:0x060c, B:329:0x0615, B:331:0x0620, B:318:0x05f4, B:333:0x062a, B:335:0x062e, B:339:0x0637, B:341:0x063b, B:342:0x063e, B:344:0x0642, B:346:0x0646, B:125:0x0337, B:127:0x033b, B:129:0x0343, B:130:0x0346, B:131:0x0348, B:132:0x034a), top: B:369:0x000a }] */
+    /* JADX WARN: Removed duplicated region for block: B:337:0x0633  */
+    /* JADX WARN: Removed duplicated region for block: B:358:0x0662  */
+    /* JADX WARN: Removed duplicated region for block: B:363:0x066a  */
+    /* JADX WARN: Removed duplicated region for block: B:424:? A[RETURN, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:88:0x0269 A[Catch: all -> 0x0656, Exception -> 0x065a, TryCatch #5 {Exception -> 0x065a, all -> 0x0656, blocks: (B:7:0x000a, B:8:0x002b, B:9:0x002e, B:32:0x00e2, B:35:0x0108, B:37:0x0118, B:39:0x013d, B:43:0x014c, B:44:0x0153, B:46:0x0157, B:54:0x0180, B:47:0x0162, B:49:0x0166, B:52:0x016b, B:53:0x0176, B:56:0x0196, B:58:0x01a4, B:60:0x01bb, B:62:0x01cb, B:63:0x01dd, B:65:0x01e6, B:83:0x0255, B:68:0x01fb, B:70:0x0213, B:74:0x0222, B:75:0x0229, B:77:0x022d, B:80:0x0232, B:82:0x0247, B:81:0x023d, B:86:0x0263, B:88:0x0269, B:90:0x027b, B:92:0x0287, B:95:0x028f, B:97:0x02a4, B:103:0x02ba, B:107:0x02c8, B:108:0x02d0, B:110:0x02d6, B:112:0x02da, B:114:0x02ef, B:116:0x030c, B:113:0x02e5, B:115:0x02f7, B:117:0x0315, B:118:0x031e, B:121:0x0324, B:124:0x0334, B:134:0x034e, B:136:0x0353, B:138:0x0358, B:140:0x0365, B:143:0x036f, B:145:0x0374, B:147:0x0382, B:149:0x0389, B:151:0x038e, B:153:0x0393, B:155:0x03a0, B:156:0x03a6, B:158:0x03ab, B:160:0x03b9, B:161:0x03be, B:163:0x03c3, B:165:0x03c8, B:167:0x03d5, B:168:0x03db, B:170:0x03e0, B:172:0x03ee, B:173:0x03f3, B:175:0x03f8, B:177:0x03fd, B:179:0x040a, B:180:0x0410, B:182:0x0415, B:184:0x0423, B:185:0x0428, B:187:0x042d, B:189:0x0432, B:191:0x043f, B:192:0x0445, B:194:0x044a, B:196:0x0458, B:199:0x0461, B:201:0x046a, B:208:0x048b, B:215:0x04a4, B:217:0x04a8, B:225:0x04b9, B:227:0x04bc, B:241:0x04e6, B:229:0x04c1, B:231:0x04c6, B:233:0x04d0, B:235:0x04d5, B:237:0x04da, B:218:0x04ab, B:220:0x04af, B:223:0x04b4, B:224:0x04b7, B:212:0x049a, B:266:0x0540, B:243:0x04f3, B:245:0x0502, B:247:0x0508, B:249:0x050c, B:251:0x0511, B:253:0x0514, B:254:0x0517, B:256:0x051c, B:258:0x0525, B:261:0x0531, B:263:0x0536, B:250:0x050f, B:267:0x054d, B:269:0x055a, B:277:0x0577, B:284:0x0590, B:286:0x0594, B:294:0x05a5, B:296:0x05a8, B:298:0x05ad, B:302:0x05ba, B:304:0x05bf, B:306:0x05c7, B:309:0x05ce, B:287:0x0597, B:289:0x059b, B:292:0x05a0, B:293:0x05a3, B:281:0x0586, B:332:0x0622, B:311:0x05da, B:313:0x05e7, B:315:0x05ed, B:317:0x05f1, B:319:0x05f6, B:321:0x05f9, B:323:0x05fe, B:325:0x0607, B:327:0x060c, B:329:0x0615, B:331:0x0620, B:318:0x05f4, B:333:0x062a, B:335:0x062e, B:339:0x0637, B:341:0x063b, B:342:0x063e, B:344:0x0642, B:346:0x0646, B:125:0x0337, B:127:0x033b, B:129:0x0343, B:130:0x0346, B:131:0x0348, B:132:0x034a), top: B:369:0x000a }] */
+    /* JADX WARN: Type inference failed for: r5v24, types: [boolean] */
+    /* JADX WARN: Type inference failed for: r6v79, types: [boolean] */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    private void calcUnreadCounters(boolean r24) {
+    private void calcUnreadCounters(boolean r25) {
         /*
-            Method dump skipped, instructions count: 1673
+            Method dump skipped, instructions count: 1648
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.calcUnreadCounters(boolean):void");
@@ -2811,10 +3194,10 @@ public class MessagesStorage extends BaseController {
     }
 
     public void checkLoadedRemoteFilters(final TLRPC$Vector tLRPC$Vector) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda178
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda187
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$checkLoadedRemoteFilters$43(tLRPC$Vector);
+                MessagesStorage.this.lambda$checkLoadedRemoteFilters$48(tLRPC$Vector);
             }
         });
     }
@@ -2834,16 +3217,16 @@ public class MessagesStorage extends BaseController {
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public /* synthetic */ void lambda$checkLoadedRemoteFilters$43(org.telegram.tgnet.TLRPC$Vector r39) {
+    public /* synthetic */ void lambda$checkLoadedRemoteFilters$48(org.telegram.tgnet.TLRPC$Vector r39) {
         /*
             Method dump skipped, instructions count: 1541
             To view this dump add '--comments-level debug' option
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$checkLoadedRemoteFilters$43(org.telegram.tgnet.TLRPC$Vector):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$checkLoadedRemoteFilters$48(org.telegram.tgnet.TLRPC$Vector):void");
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public static /* synthetic */ int lambda$checkLoadedRemoteFilters$42(LongSparseIntArray longSparseIntArray, Long l, Long l2) {
+    public static /* synthetic */ int lambda$checkLoadedRemoteFilters$47(LongSparseIntArray longSparseIntArray, Long l, Long l2) {
         int i = longSparseIntArray.get(l.longValue());
         int i2 = longSparseIntArray.get(l2.longValue());
         if (i > i2) {
@@ -2854,13 +3237,13 @@ public class MessagesStorage extends BaseController {
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: processLoadedFilterPeersInternal */
-    public void lambda$processLoadedFilterPeers$45(TLRPC$messages_Dialogs tLRPC$messages_Dialogs, TLRPC$messages_Dialogs tLRPC$messages_Dialogs2, ArrayList<TLRPC$User> arrayList, ArrayList<TLRPC$Chat> arrayList2, ArrayList<MessagesController.DialogFilter> arrayList3, SparseArray<MessagesController.DialogFilter> sparseArray, ArrayList<Integer> arrayList4, HashMap<Integer, HashSet<Long>> hashMap, HashMap<Integer, HashSet<Long>> hashMap2, HashSet<Integer> hashSet) {
+    public void lambda$processLoadedFilterPeers$50(TLRPC$messages_Dialogs tLRPC$messages_Dialogs, TLRPC$messages_Dialogs tLRPC$messages_Dialogs2, ArrayList<TLRPC$User> arrayList, ArrayList<TLRPC$Chat> arrayList2, ArrayList<MessagesController.DialogFilter> arrayList3, SparseArray<MessagesController.DialogFilter> sparseArray, ArrayList<Integer> arrayList4, HashMap<Integer, HashSet<Long>> hashMap, HashMap<Integer, HashSet<Long>> hashMap2, HashSet<Integer> hashSet) {
         putUsersAndChats(arrayList, arrayList2, true, false);
         int size = sparseArray.size();
         int i = 0;
         boolean z = false;
         while (i < size) {
-            lambda$deleteDialogFilter$46(sparseArray.valueAt(i));
+            lambda$deleteDialogFilter$51(sparseArray.valueAt(i));
             i++;
             z = true;
         }
@@ -2909,7 +3292,7 @@ public class MessagesStorage extends BaseController {
             }
         }
         if (z2) {
-            Collections.sort(this.dialogFilters, MessagesStorage$$ExternalSyntheticLambda200.INSTANCE);
+            Collections.sort(this.dialogFilters, MessagesStorage$$ExternalSyntheticLambda209.INSTANCE);
             saveDialogFiltersOrderInternal();
         }
         int i4 = z ? 1 : 2;
@@ -2918,7 +3301,7 @@ public class MessagesStorage extends BaseController {
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public static /* synthetic */ int lambda$processLoadedFilterPeersInternal$44(MessagesController.DialogFilter dialogFilter, MessagesController.DialogFilter dialogFilter2) {
+    public static /* synthetic */ int lambda$processLoadedFilterPeersInternal$49(MessagesController.DialogFilter dialogFilter, MessagesController.DialogFilter dialogFilter2) {
         int i = dialogFilter.order;
         int i2 = dialogFilter2.order;
         if (i > i2) {
@@ -2929,17 +3312,17 @@ public class MessagesStorage extends BaseController {
 
     /* JADX INFO: Access modifiers changed from: protected */
     public void processLoadedFilterPeers(final TLRPC$messages_Dialogs tLRPC$messages_Dialogs, final TLRPC$messages_Dialogs tLRPC$messages_Dialogs2, final ArrayList<TLRPC$User> arrayList, final ArrayList<TLRPC$Chat> arrayList2, final ArrayList<MessagesController.DialogFilter> arrayList3, final SparseArray<MessagesController.DialogFilter> sparseArray, final ArrayList<Integer> arrayList4, final HashMap<Integer, HashSet<Long>> hashMap, final HashMap<Integer, HashSet<Long>> hashMap2, final HashSet<Integer> hashSet) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda181
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda190
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$processLoadedFilterPeers$45(tLRPC$messages_Dialogs, tLRPC$messages_Dialogs2, arrayList, arrayList2, arrayList3, sparseArray, arrayList4, hashMap, hashMap2, hashSet);
+                MessagesStorage.this.lambda$processLoadedFilterPeers$50(tLRPC$messages_Dialogs, tLRPC$messages_Dialogs2, arrayList, arrayList2, arrayList3, sparseArray, arrayList4, hashMap, hashMap2, hashSet);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: deleteDialogFilterInternal */
-    public void lambda$deleteDialogFilter$46(MessagesController.DialogFilter dialogFilter) {
+    public void lambda$deleteDialogFilter$51(MessagesController.DialogFilter dialogFilter) {
         try {
             this.dialogFilters.remove(dialogFilter);
             this.dialogFiltersMap.remove(dialogFilter.id);
@@ -2955,37 +3338,37 @@ public class MessagesStorage extends BaseController {
     }
 
     public void deleteDialogFilter(final MessagesController.DialogFilter dialogFilter) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda153
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda162
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$deleteDialogFilter$46(dialogFilter);
+                MessagesStorage.this.lambda$deleteDialogFilter$51(dialogFilter);
             }
         });
     }
 
     public void saveDialogFilter(final MessagesController.DialogFilter dialogFilter, final boolean z, final boolean z2) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda154
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda163
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$saveDialogFilter$48(dialogFilter, z, z2);
+                MessagesStorage.this.lambda$saveDialogFilter$53(dialogFilter, z, z2);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$saveDialogFilter$48(MessagesController.DialogFilter dialogFilter, boolean z, boolean z2) {
+    public /* synthetic */ void lambda$saveDialogFilter$53(MessagesController.DialogFilter dialogFilter, boolean z, boolean z2) {
         saveDialogFilterInternal(dialogFilter, z, z2);
         calcUnreadCounters(false);
         AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda15
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$saveDialogFilter$47();
+                MessagesStorage.this.lambda$saveDialogFilter$52();
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$saveDialogFilter$47() {
+    public /* synthetic */ void lambda$saveDialogFilter$52() {
         ArrayList<MessagesController.DialogFilter> arrayList = getMessagesController().dialogFilters;
         int size = arrayList.size();
         for (int i = 0; i < size; i++) {
@@ -3028,16 +3411,16 @@ public class MessagesStorage extends BaseController {
 
     public void saveDialogFiltersOrder() {
         final ArrayList arrayList = new ArrayList(getMessagesController().dialogFilters);
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda128
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda138
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$saveDialogFiltersOrder$49(arrayList);
+                MessagesStorage.this.lambda$saveDialogFiltersOrder$54(arrayList);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$saveDialogFiltersOrder$49(ArrayList arrayList) {
+    public /* synthetic */ void lambda$saveDialogFiltersOrder$54(ArrayList arrayList) {
         this.dialogFilters.clear();
         this.dialogFiltersMap.clear();
         this.dialogFilters.addAll(arrayList);
@@ -3073,7 +3456,7 @@ public class MessagesStorage extends BaseController {
     }
 
     /* JADX WARN: Removed duplicated region for block: B:44:0x00fd  */
-    /* JADX WARN: Type inference failed for: r3v2, types: [boolean, int] */
+    /* JADX WARN: Type inference failed for: r3v2, types: [int, boolean] */
     /* JADX WARN: Type inference failed for: r3v3 */
     /* JADX WARN: Type inference failed for: r3v6 */
     /*
@@ -3089,10 +3472,10 @@ public class MessagesStorage extends BaseController {
     }
 
     public void loadUnreadMessages() {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda12
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda13
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$loadUnreadMessages$51();
+                MessagesStorage.this.lambda$loadUnreadMessages$56();
             }
         });
     }
@@ -3110,24 +3493,24 @@ public class MessagesStorage extends BaseController {
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public /* synthetic */ void lambda$loadUnreadMessages$51() {
+    public /* synthetic */ void lambda$loadUnreadMessages$56() {
         /*
             Method dump skipped, instructions count: 1116
             To view this dump add '--comments-level debug' option
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$loadUnreadMessages$51():void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$loadUnreadMessages$56():void");
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadUnreadMessages$50(LongSparseArray longSparseArray, ArrayList arrayList, ArrayList arrayList2, ArrayList arrayList3, ArrayList arrayList4, ArrayList arrayList5) {
+    public /* synthetic */ void lambda$loadUnreadMessages$55(LongSparseArray longSparseArray, ArrayList arrayList, ArrayList arrayList2, ArrayList arrayList3, ArrayList arrayList4, ArrayList arrayList5) {
         getNotificationsController().processLoadedUnreadMessages(longSparseArray, arrayList, arrayList2, arrayList3, arrayList4, arrayList5);
     }
 
     public void putWallpapers(final ArrayList<TLRPC$WallPaper> arrayList, final int i) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda54
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda56
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$putWallpapers$52(i, arrayList);
+                MessagesStorage.this.lambda$putWallpapers$57(i, arrayList);
             }
         });
     }
@@ -3142,7 +3525,7 @@ public class MessagesStorage extends BaseController {
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public /* synthetic */ void lambda$putWallpapers$52(int r11, java.util.ArrayList r12) {
+    public /* synthetic */ void lambda$putWallpapers$57(int r11, java.util.ArrayList r12) {
         /*
             r10 = this;
             r0 = 0
@@ -3249,20 +3632,20 @@ public class MessagesStorage extends BaseController {
         Laa:
             goto La9
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$putWallpapers$52(int, java.util.ArrayList):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$putWallpapers$57(int, java.util.ArrayList):void");
     }
 
     public void deleteWallpaper(final long j) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda64
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda68
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$deleteWallpaper$53(j);
+                MessagesStorage.this.lambda$deleteWallpaper$58(j);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$deleteWallpaper$53(long j) {
+    public /* synthetic */ void lambda$deleteWallpaper$58(long j) {
         try {
             SQLiteDatabase sQLiteDatabase = this.database;
             sQLiteDatabase.executeFast("DELETE FROM wallpapers2 WHERE uid = " + j).stepThis().dispose();
@@ -3272,16 +3655,16 @@ public class MessagesStorage extends BaseController {
     }
 
     public void getWallpapers() {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda11
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda14
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$getWallpapers$55();
+                MessagesStorage.this.lambda$getWallpapers$60();
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$getWallpapers$55() {
+    public /* synthetic */ void lambda$getWallpapers$60() {
         SQLiteCursor sQLiteCursor = null;
         try {
             try {
@@ -3297,10 +3680,10 @@ public class MessagesStorage extends BaseController {
                         }
                     }
                 }
-                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda0
+                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda1
                     @Override // java.lang.Runnable
                     public final void run() {
-                        MessagesStorage.lambda$getWallpapers$54(arrayList);
+                        MessagesStorage.lambda$getWallpapers$59(arrayList);
                     }
                 });
             } catch (Exception e) {
@@ -3319,7 +3702,7 @@ public class MessagesStorage extends BaseController {
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public static /* synthetic */ void lambda$getWallpapers$54(ArrayList arrayList) {
+    public static /* synthetic */ void lambda$getWallpapers$59(ArrayList arrayList) {
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.wallpapersDidLoad, arrayList);
     }
 
@@ -3330,16 +3713,16 @@ public class MessagesStorage extends BaseController {
         if ((str2 == null || str2.length() == 0) && tLRPC$Document == null) {
             return;
         }
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda164
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda173
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$addRecentLocalFile$56(tLRPC$Document, str, str2);
+                MessagesStorage.this.lambda$addRecentLocalFile$61(tLRPC$Document, str, str2);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$addRecentLocalFile$56(TLRPC$Document tLRPC$Document, String str, String str2) {
+    public /* synthetic */ void lambda$addRecentLocalFile$61(TLRPC$Document tLRPC$Document, String str, String str2) {
         SQLitePreparedStatement sQLitePreparedStatement = null;
         try {
             try {
@@ -3377,10 +3760,10 @@ public class MessagesStorage extends BaseController {
     }
 
     public void deleteUserChatHistory(final long j, final long j2) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda82
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda87
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$deleteUserChatHistory$59(j, j2);
+                MessagesStorage.this.lambda$deleteUserChatHistory$64(j, j2);
             }
         });
     }
@@ -3395,22 +3778,22 @@ public class MessagesStorage extends BaseController {
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public /* synthetic */ void lambda$deleteUserChatHistory$59(final long r18, long r20) {
+    public /* synthetic */ void lambda$deleteUserChatHistory$64(final long r18, long r20) {
         /*
             Method dump skipped, instructions count: 260
             To view this dump add '--comments-level debug' option
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$deleteUserChatHistory$59(long, long):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$deleteUserChatHistory$64(long, long):void");
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$deleteUserChatHistory$57(ArrayList arrayList, long j, ArrayList arrayList2) {
+    public /* synthetic */ void lambda$deleteUserChatHistory$62(ArrayList arrayList, long j, ArrayList arrayList2) {
         getFileLoader().cancelLoadFiles(arrayList);
         getMessagesController().markDialogMessageAsDeleted(j, arrayList2);
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$deleteUserChatHistory$58(ArrayList arrayList, long j) {
+    public /* synthetic */ void lambda$deleteUserChatHistory$63(ArrayList arrayList, long j) {
         NotificationCenter notificationCenter = getNotificationCenter();
         int i = NotificationCenter.messagesDeleted;
         Object[] objArr = new Object[3];
@@ -3503,10 +3886,10 @@ public class MessagesStorage extends BaseController {
     }
 
     public void deleteDialog(final long j, final int i) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda39
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda42
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$deleteDialog$62(i, j);
+                MessagesStorage.this.lambda$deleteDialog$67(i, j);
             }
         });
     }
@@ -3535,35 +3918,35 @@ public class MessagesStorage extends BaseController {
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public /* synthetic */ void lambda$deleteDialog$62(int r25, long r26) {
+    public /* synthetic */ void lambda$deleteDialog$67(int r25, long r26) {
         /*
             Method dump skipped, instructions count: 1362
             To view this dump add '--comments-level debug' option
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$deleteDialog$62(int, long):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$deleteDialog$67(int, long):void");
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$deleteDialog$60(ArrayList arrayList) {
+    public /* synthetic */ void lambda$deleteDialog$65(ArrayList arrayList) {
         getFileLoader().cancelLoadFiles(arrayList);
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$deleteDialog$61() {
+    public /* synthetic */ void lambda$deleteDialog$66() {
         getNotificationCenter().postNotificationName(NotificationCenter.needReloadRecentDialogsSearch, new Object[0]);
     }
 
     public void onDeleteQueryComplete(final long j) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda67
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda69
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$onDeleteQueryComplete$63(j);
+                MessagesStorage.this.lambda$onDeleteQueryComplete$68(j);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$onDeleteQueryComplete$63(long j) {
+    public /* synthetic */ void lambda$onDeleteQueryComplete$68(long j) {
         try {
             SQLiteDatabase sQLiteDatabase = this.database;
             sQLiteDatabase.executeFast("DELETE FROM media_counts_v2 WHERE uid = " + j).stepThis().dispose();
@@ -3576,13 +3959,13 @@ public class MessagesStorage extends BaseController {
         this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda45
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$getDialogPhotos$65(i2, j, i, i3);
+                MessagesStorage.this.lambda$getDialogPhotos$70(i2, j, i, i3);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$getDialogPhotos$65(final int i, final long j, final int i2, final int i3) {
+    public /* synthetic */ void lambda$getDialogPhotos$70(final int i, final long j, final int i2, final int i3) {
         SQLiteCursor queryFinalized;
         SQLiteCursor sQLiteCursor;
         SQLiteCursor sQLiteCursor2 = null;
@@ -3617,10 +4000,10 @@ public class MessagesStorage extends BaseController {
                 }
             }
             sQLiteCursor.dispose();
-            Utilities.stageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda182
+            Utilities.stageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda191
                 @Override // java.lang.Runnable
                 public final void run() {
-                    MessagesStorage.this.lambda$getDialogPhotos$64(tLRPC$TL_photos_photos, arrayList, j, i2, i, i3);
+                    MessagesStorage.this.lambda$getDialogPhotos$69(tLRPC$TL_photos_photos, arrayList, j, i2, i, i3);
                 }
             });
         } catch (Exception e2) {
@@ -3642,21 +4025,21 @@ public class MessagesStorage extends BaseController {
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$getDialogPhotos$64(TLRPC$photos_Photos tLRPC$photos_Photos, ArrayList arrayList, long j, int i, int i2, int i3) {
+    public /* synthetic */ void lambda$getDialogPhotos$69(TLRPC$photos_Photos tLRPC$photos_Photos, ArrayList arrayList, long j, int i, int i2, int i3) {
         getMessagesController().processLoadedUserPhotos(tLRPC$photos_Photos, arrayList, j, i, i2, true, i3);
     }
 
     public void clearUserPhotos(final long j) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda66
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda67
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$clearUserPhotos$66(j);
+                MessagesStorage.this.lambda$clearUserPhotos$71(j);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$clearUserPhotos$66(long j) {
+    public /* synthetic */ void lambda$clearUserPhotos$71(long j) {
         try {
             SQLiteDatabase sQLiteDatabase = this.database;
             sQLiteDatabase.executeFast("DELETE FROM user_photos WHERE uid = " + j).stepThis().dispose();
@@ -3666,16 +4049,16 @@ public class MessagesStorage extends BaseController {
     }
 
     public void clearUserPhoto(final long j, final long j2) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda84
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda89
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$clearUserPhoto$67(j, j2);
+                MessagesStorage.this.lambda$clearUserPhoto$72(j, j2);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$clearUserPhoto$67(long j, long j2) {
+    public /* synthetic */ void lambda$clearUserPhoto$72(long j, long j2) {
         try {
             SQLiteDatabase sQLiteDatabase = this.database;
             sQLiteDatabase.executeFast("DELETE FROM user_photos WHERE uid = " + j + " AND id = " + j2).stepThis().dispose();
@@ -3684,11 +4067,11 @@ public class MessagesStorage extends BaseController {
         }
     }
 
-    public void resetDialogs(final TLRPC$messages_Dialogs tLRPC$messages_Dialogs, final int i, final int i2, final int i3, final int i4, final int i5, final LongSparseArray<TLRPC$Dialog> longSparseArray, final LongSparseArray<MessageObject> longSparseArray2, final TLRPC$Message tLRPC$Message, final int i6) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda180
+    public void resetDialogs(final TLRPC$messages_Dialogs tLRPC$messages_Dialogs, final int i, final int i2, final int i3, final int i4, final int i5, final LongSparseArray<TLRPC$Dialog> longSparseArray, final LongSparseArray<ArrayList<MessageObject>> longSparseArray2, final TLRPC$Message tLRPC$Message, final int i6) {
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda189
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$resetDialogs$69(tLRPC$messages_Dialogs, i6, i2, i3, i4, i5, tLRPC$Message, i, longSparseArray, longSparseArray2);
+                MessagesStorage.this.lambda$resetDialogs$74(tLRPC$messages_Dialogs, i6, i2, i3, i4, i5, tLRPC$Message, i, longSparseArray, longSparseArray2);
             }
         });
     }
@@ -3703,16 +4086,16 @@ public class MessagesStorage extends BaseController {
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public /* synthetic */ void lambda$resetDialogs$69(org.telegram.tgnet.TLRPC$messages_Dialogs r33, int r34, int r35, int r36, int r37, int r38, org.telegram.tgnet.TLRPC$Message r39, int r40, androidx.collection.LongSparseArray r41, androidx.collection.LongSparseArray r42) {
+    public /* synthetic */ void lambda$resetDialogs$74(org.telegram.tgnet.TLRPC$messages_Dialogs r33, int r34, int r35, int r36, int r37, int r38, org.telegram.tgnet.TLRPC$Message r39, int r40, androidx.collection.LongSparseArray r41, androidx.collection.LongSparseArray r42) {
         /*
             Method dump skipped, instructions count: 841
             To view this dump add '--comments-level debug' option
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$resetDialogs$69(org.telegram.tgnet.TLRPC$messages_Dialogs, int, int, int, int, int, org.telegram.tgnet.TLRPC$Message, int, androidx.collection.LongSparseArray, androidx.collection.LongSparseArray):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$resetDialogs$74(org.telegram.tgnet.TLRPC$messages_Dialogs, int, int, int, int, int, org.telegram.tgnet.TLRPC$Message, int, androidx.collection.LongSparseArray, androidx.collection.LongSparseArray):void");
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public static /* synthetic */ int lambda$resetDialogs$68(LongSparseIntArray longSparseIntArray, Long l, Long l2) {
+    public static /* synthetic */ int lambda$resetDialogs$73(LongSparseIntArray longSparseIntArray, Long l, Long l2) {
         int i = longSparseIntArray.get(l.longValue());
         int i2 = longSparseIntArray.get(l2.longValue());
         if (i < i2) {
@@ -3725,16 +4108,16 @@ public class MessagesStorage extends BaseController {
         if (tLRPC$photos_Photos == null) {
             return;
         }
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda110
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda118
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$putDialogPhotos$70(j, tLRPC$photos_Photos, arrayList);
+                MessagesStorage.this.lambda$putDialogPhotos$75(j, tLRPC$photos_Photos, arrayList);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$putDialogPhotos$70(long j, TLRPC$photos_Photos tLRPC$photos_Photos, ArrayList arrayList) {
+    public /* synthetic */ void lambda$putDialogPhotos$75(long j, TLRPC$photos_Photos tLRPC$photos_Photos, ArrayList arrayList) {
         SQLitePreparedStatement sQLitePreparedStatement = null;
         try {
             try {
@@ -3779,70 +4162,72 @@ public class MessagesStorage extends BaseController {
     }
 
     public void emptyMessagesMedia(final long j, final ArrayList<Integer> arrayList) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda141
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda149
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$emptyMessagesMedia$73(arrayList, j);
+                MessagesStorage.this.lambda$emptyMessagesMedia$78(arrayList, j);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    /* JADX WARN: Removed duplicated region for block: B:100:0x0203  */
-    /* JADX WARN: Removed duplicated region for block: B:102:0x0208  */
-    /* JADX WARN: Removed duplicated region for block: B:121:0x01b7 A[SYNTHETIC] */
-    /* JADX WARN: Removed duplicated region for block: B:122:? A[RETURN, SYNTHETIC] */
-    /* JADX WARN: Removed duplicated region for block: B:40:0x012c A[Catch: all -> 0x01c8, Exception -> 0x01cd, TryCatch #6 {Exception -> 0x01cd, all -> 0x01c8, blocks: (B:29:0x00d0, B:31:0x00d6, B:33:0x0112, B:38:0x011a, B:40:0x012c, B:42:0x0139, B:48:0x0144, B:52:0x0152, B:54:0x0162, B:56:0x017a, B:58:0x0180, B:62:0x0187, B:64:0x018f, B:66:0x01a0, B:68:0x01a7, B:70:0x01af, B:72:0x01b4, B:73:0x01b7, B:67:0x01a4, B:61:0x0185, B:63:0x018b, B:55:0x0176, B:41:0x0132, B:74:0x01bc), top: B:110:0x00d0 }] */
-    /* JADX WARN: Removed duplicated region for block: B:41:0x0132 A[Catch: all -> 0x01c8, Exception -> 0x01cd, TryCatch #6 {Exception -> 0x01cd, all -> 0x01c8, blocks: (B:29:0x00d0, B:31:0x00d6, B:33:0x0112, B:38:0x011a, B:40:0x012c, B:42:0x0139, B:48:0x0144, B:52:0x0152, B:54:0x0162, B:56:0x017a, B:58:0x0180, B:62:0x0187, B:64:0x018f, B:66:0x01a0, B:68:0x01a7, B:70:0x01af, B:72:0x01b4, B:73:0x01b7, B:67:0x01a4, B:61:0x0185, B:63:0x018b, B:55:0x0176, B:41:0x0132, B:74:0x01bc), top: B:110:0x00d0 }] */
+    /* JADX WARN: Removed duplicated region for block: B:100:0x0210  */
+    /* JADX WARN: Removed duplicated region for block: B:104:0x0217  */
+    /* JADX WARN: Removed duplicated region for block: B:106:0x021c  */
+    /* JADX WARN: Removed duplicated region for block: B:125:0x01c9 A[SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:126:? A[RETURN, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:40:0x012c A[Catch: all -> 0x01dc, Exception -> 0x01e1, TryCatch #6 {Exception -> 0x01e1, all -> 0x01dc, blocks: (B:29:0x00d0, B:31:0x00d6, B:33:0x0112, B:38:0x011a, B:40:0x012c, B:42:0x0139, B:48:0x0144, B:52:0x0152, B:54:0x0162, B:56:0x017a, B:58:0x0180, B:62:0x0187, B:64:0x018f, B:66:0x01a0, B:68:0x01a7, B:70:0x01b0, B:72:0x01b9, B:74:0x01c1, B:76:0x01c6, B:77:0x01c9, B:71:0x01b6, B:67:0x01a4, B:61:0x0185, B:63:0x018b, B:55:0x0176, B:41:0x0132, B:78:0x01d0), top: B:114:0x00d0 }] */
+    /* JADX WARN: Removed duplicated region for block: B:41:0x0132 A[Catch: all -> 0x01dc, Exception -> 0x01e1, TryCatch #6 {Exception -> 0x01e1, all -> 0x01dc, blocks: (B:29:0x00d0, B:31:0x00d6, B:33:0x0112, B:38:0x011a, B:40:0x012c, B:42:0x0139, B:48:0x0144, B:52:0x0152, B:54:0x0162, B:56:0x017a, B:58:0x0180, B:62:0x0187, B:64:0x018f, B:66:0x01a0, B:68:0x01a7, B:70:0x01b0, B:72:0x01b9, B:74:0x01c1, B:76:0x01c6, B:77:0x01c9, B:71:0x01b6, B:67:0x01a4, B:61:0x0185, B:63:0x018b, B:55:0x0176, B:41:0x0132, B:78:0x01d0), top: B:114:0x00d0 }] */
     /* JADX WARN: Removed duplicated region for block: B:44:0x013d  */
     /* JADX WARN: Removed duplicated region for block: B:45:0x013f  */
     /* JADX WARN: Removed duplicated region for block: B:50:0x014f  */
     /* JADX WARN: Removed duplicated region for block: B:51:0x0151  */
-    /* JADX WARN: Removed duplicated region for block: B:54:0x0162 A[Catch: all -> 0x01c8, Exception -> 0x01cd, TryCatch #6 {Exception -> 0x01cd, all -> 0x01c8, blocks: (B:29:0x00d0, B:31:0x00d6, B:33:0x0112, B:38:0x011a, B:40:0x012c, B:42:0x0139, B:48:0x0144, B:52:0x0152, B:54:0x0162, B:56:0x017a, B:58:0x0180, B:62:0x0187, B:64:0x018f, B:66:0x01a0, B:68:0x01a7, B:70:0x01af, B:72:0x01b4, B:73:0x01b7, B:67:0x01a4, B:61:0x0185, B:63:0x018b, B:55:0x0176, B:41:0x0132, B:74:0x01bc), top: B:110:0x00d0 }] */
-    /* JADX WARN: Removed duplicated region for block: B:55:0x0176 A[Catch: all -> 0x01c8, Exception -> 0x01cd, TryCatch #6 {Exception -> 0x01cd, all -> 0x01c8, blocks: (B:29:0x00d0, B:31:0x00d6, B:33:0x0112, B:38:0x011a, B:40:0x012c, B:42:0x0139, B:48:0x0144, B:52:0x0152, B:54:0x0162, B:56:0x017a, B:58:0x0180, B:62:0x0187, B:64:0x018f, B:66:0x01a0, B:68:0x01a7, B:70:0x01af, B:72:0x01b4, B:73:0x01b7, B:67:0x01a4, B:61:0x0185, B:63:0x018b, B:55:0x0176, B:41:0x0132, B:74:0x01bc), top: B:110:0x00d0 }] */
-    /* JADX WARN: Removed duplicated region for block: B:58:0x0180 A[Catch: all -> 0x01c8, Exception -> 0x01cd, TryCatch #6 {Exception -> 0x01cd, all -> 0x01c8, blocks: (B:29:0x00d0, B:31:0x00d6, B:33:0x0112, B:38:0x011a, B:40:0x012c, B:42:0x0139, B:48:0x0144, B:52:0x0152, B:54:0x0162, B:56:0x017a, B:58:0x0180, B:62:0x0187, B:64:0x018f, B:66:0x01a0, B:68:0x01a7, B:70:0x01af, B:72:0x01b4, B:73:0x01b7, B:67:0x01a4, B:61:0x0185, B:63:0x018b, B:55:0x0176, B:41:0x0132, B:74:0x01bc), top: B:110:0x00d0 }] */
-    /* JADX WARN: Removed duplicated region for block: B:63:0x018b A[Catch: all -> 0x01c8, Exception -> 0x01cd, TryCatch #6 {Exception -> 0x01cd, all -> 0x01c8, blocks: (B:29:0x00d0, B:31:0x00d6, B:33:0x0112, B:38:0x011a, B:40:0x012c, B:42:0x0139, B:48:0x0144, B:52:0x0152, B:54:0x0162, B:56:0x017a, B:58:0x0180, B:62:0x0187, B:64:0x018f, B:66:0x01a0, B:68:0x01a7, B:70:0x01af, B:72:0x01b4, B:73:0x01b7, B:67:0x01a4, B:61:0x0185, B:63:0x018b, B:55:0x0176, B:41:0x0132, B:74:0x01bc), top: B:110:0x00d0 }] */
-    /* JADX WARN: Removed duplicated region for block: B:66:0x01a0 A[Catch: all -> 0x01c8, Exception -> 0x01cd, TryCatch #6 {Exception -> 0x01cd, all -> 0x01c8, blocks: (B:29:0x00d0, B:31:0x00d6, B:33:0x0112, B:38:0x011a, B:40:0x012c, B:42:0x0139, B:48:0x0144, B:52:0x0152, B:54:0x0162, B:56:0x017a, B:58:0x0180, B:62:0x0187, B:64:0x018f, B:66:0x01a0, B:68:0x01a7, B:70:0x01af, B:72:0x01b4, B:73:0x01b7, B:67:0x01a4, B:61:0x0185, B:63:0x018b, B:55:0x0176, B:41:0x0132, B:74:0x01bc), top: B:110:0x00d0 }] */
-    /* JADX WARN: Removed duplicated region for block: B:67:0x01a4 A[Catch: all -> 0x01c8, Exception -> 0x01cd, TryCatch #6 {Exception -> 0x01cd, all -> 0x01c8, blocks: (B:29:0x00d0, B:31:0x00d6, B:33:0x0112, B:38:0x011a, B:40:0x012c, B:42:0x0139, B:48:0x0144, B:52:0x0152, B:54:0x0162, B:56:0x017a, B:58:0x0180, B:62:0x0187, B:64:0x018f, B:66:0x01a0, B:68:0x01a7, B:70:0x01af, B:72:0x01b4, B:73:0x01b7, B:67:0x01a4, B:61:0x0185, B:63:0x018b, B:55:0x0176, B:41:0x0132, B:74:0x01bc), top: B:110:0x00d0 }] */
-    /* JADX WARN: Removed duplicated region for block: B:70:0x01af A[Catch: all -> 0x01c8, Exception -> 0x01cd, TryCatch #6 {Exception -> 0x01cd, all -> 0x01c8, blocks: (B:29:0x00d0, B:31:0x00d6, B:33:0x0112, B:38:0x011a, B:40:0x012c, B:42:0x0139, B:48:0x0144, B:52:0x0152, B:54:0x0162, B:56:0x017a, B:58:0x0180, B:62:0x0187, B:64:0x018f, B:66:0x01a0, B:68:0x01a7, B:70:0x01af, B:72:0x01b4, B:73:0x01b7, B:67:0x01a4, B:61:0x0185, B:63:0x018b, B:55:0x0176, B:41:0x0132, B:74:0x01bc), top: B:110:0x00d0 }] */
-    /* JADX WARN: Removed duplicated region for block: B:72:0x01b4 A[Catch: all -> 0x01c8, Exception -> 0x01cd, TryCatch #6 {Exception -> 0x01cd, all -> 0x01c8, blocks: (B:29:0x00d0, B:31:0x00d6, B:33:0x0112, B:38:0x011a, B:40:0x012c, B:42:0x0139, B:48:0x0144, B:52:0x0152, B:54:0x0162, B:56:0x017a, B:58:0x0180, B:62:0x0187, B:64:0x018f, B:66:0x01a0, B:68:0x01a7, B:70:0x01af, B:72:0x01b4, B:73:0x01b7, B:67:0x01a4, B:61:0x0185, B:63:0x018b, B:55:0x0176, B:41:0x0132, B:74:0x01bc), top: B:110:0x00d0 }] */
-    /* JADX WARN: Removed duplicated region for block: B:94:0x01f7  */
-    /* JADX WARN: Removed duplicated region for block: B:96:0x01fc  */
+    /* JADX WARN: Removed duplicated region for block: B:54:0x0162 A[Catch: all -> 0x01dc, Exception -> 0x01e1, TryCatch #6 {Exception -> 0x01e1, all -> 0x01dc, blocks: (B:29:0x00d0, B:31:0x00d6, B:33:0x0112, B:38:0x011a, B:40:0x012c, B:42:0x0139, B:48:0x0144, B:52:0x0152, B:54:0x0162, B:56:0x017a, B:58:0x0180, B:62:0x0187, B:64:0x018f, B:66:0x01a0, B:68:0x01a7, B:70:0x01b0, B:72:0x01b9, B:74:0x01c1, B:76:0x01c6, B:77:0x01c9, B:71:0x01b6, B:67:0x01a4, B:61:0x0185, B:63:0x018b, B:55:0x0176, B:41:0x0132, B:78:0x01d0), top: B:114:0x00d0 }] */
+    /* JADX WARN: Removed duplicated region for block: B:55:0x0176 A[Catch: all -> 0x01dc, Exception -> 0x01e1, TryCatch #6 {Exception -> 0x01e1, all -> 0x01dc, blocks: (B:29:0x00d0, B:31:0x00d6, B:33:0x0112, B:38:0x011a, B:40:0x012c, B:42:0x0139, B:48:0x0144, B:52:0x0152, B:54:0x0162, B:56:0x017a, B:58:0x0180, B:62:0x0187, B:64:0x018f, B:66:0x01a0, B:68:0x01a7, B:70:0x01b0, B:72:0x01b9, B:74:0x01c1, B:76:0x01c6, B:77:0x01c9, B:71:0x01b6, B:67:0x01a4, B:61:0x0185, B:63:0x018b, B:55:0x0176, B:41:0x0132, B:78:0x01d0), top: B:114:0x00d0 }] */
+    /* JADX WARN: Removed duplicated region for block: B:58:0x0180 A[Catch: all -> 0x01dc, Exception -> 0x01e1, TryCatch #6 {Exception -> 0x01e1, all -> 0x01dc, blocks: (B:29:0x00d0, B:31:0x00d6, B:33:0x0112, B:38:0x011a, B:40:0x012c, B:42:0x0139, B:48:0x0144, B:52:0x0152, B:54:0x0162, B:56:0x017a, B:58:0x0180, B:62:0x0187, B:64:0x018f, B:66:0x01a0, B:68:0x01a7, B:70:0x01b0, B:72:0x01b9, B:74:0x01c1, B:76:0x01c6, B:77:0x01c9, B:71:0x01b6, B:67:0x01a4, B:61:0x0185, B:63:0x018b, B:55:0x0176, B:41:0x0132, B:78:0x01d0), top: B:114:0x00d0 }] */
+    /* JADX WARN: Removed duplicated region for block: B:63:0x018b A[Catch: all -> 0x01dc, Exception -> 0x01e1, TryCatch #6 {Exception -> 0x01e1, all -> 0x01dc, blocks: (B:29:0x00d0, B:31:0x00d6, B:33:0x0112, B:38:0x011a, B:40:0x012c, B:42:0x0139, B:48:0x0144, B:52:0x0152, B:54:0x0162, B:56:0x017a, B:58:0x0180, B:62:0x0187, B:64:0x018f, B:66:0x01a0, B:68:0x01a7, B:70:0x01b0, B:72:0x01b9, B:74:0x01c1, B:76:0x01c6, B:77:0x01c9, B:71:0x01b6, B:67:0x01a4, B:61:0x0185, B:63:0x018b, B:55:0x0176, B:41:0x0132, B:78:0x01d0), top: B:114:0x00d0 }] */
+    /* JADX WARN: Removed duplicated region for block: B:66:0x01a0 A[Catch: all -> 0x01dc, Exception -> 0x01e1, TryCatch #6 {Exception -> 0x01e1, all -> 0x01dc, blocks: (B:29:0x00d0, B:31:0x00d6, B:33:0x0112, B:38:0x011a, B:40:0x012c, B:42:0x0139, B:48:0x0144, B:52:0x0152, B:54:0x0162, B:56:0x017a, B:58:0x0180, B:62:0x0187, B:64:0x018f, B:66:0x01a0, B:68:0x01a7, B:70:0x01b0, B:72:0x01b9, B:74:0x01c1, B:76:0x01c6, B:77:0x01c9, B:71:0x01b6, B:67:0x01a4, B:61:0x0185, B:63:0x018b, B:55:0x0176, B:41:0x0132, B:78:0x01d0), top: B:114:0x00d0 }] */
+    /* JADX WARN: Removed duplicated region for block: B:67:0x01a4 A[Catch: all -> 0x01dc, Exception -> 0x01e1, TryCatch #6 {Exception -> 0x01e1, all -> 0x01dc, blocks: (B:29:0x00d0, B:31:0x00d6, B:33:0x0112, B:38:0x011a, B:40:0x012c, B:42:0x0139, B:48:0x0144, B:52:0x0152, B:54:0x0162, B:56:0x017a, B:58:0x0180, B:62:0x0187, B:64:0x018f, B:66:0x01a0, B:68:0x01a7, B:70:0x01b0, B:72:0x01b9, B:74:0x01c1, B:76:0x01c6, B:77:0x01c9, B:71:0x01b6, B:67:0x01a4, B:61:0x0185, B:63:0x018b, B:55:0x0176, B:41:0x0132, B:78:0x01d0), top: B:114:0x00d0 }] */
+    /* JADX WARN: Removed duplicated region for block: B:70:0x01b0 A[Catch: all -> 0x01dc, Exception -> 0x01e1, TryCatch #6 {Exception -> 0x01e1, all -> 0x01dc, blocks: (B:29:0x00d0, B:31:0x00d6, B:33:0x0112, B:38:0x011a, B:40:0x012c, B:42:0x0139, B:48:0x0144, B:52:0x0152, B:54:0x0162, B:56:0x017a, B:58:0x0180, B:62:0x0187, B:64:0x018f, B:66:0x01a0, B:68:0x01a7, B:70:0x01b0, B:72:0x01b9, B:74:0x01c1, B:76:0x01c6, B:77:0x01c9, B:71:0x01b6, B:67:0x01a4, B:61:0x0185, B:63:0x018b, B:55:0x0176, B:41:0x0132, B:78:0x01d0), top: B:114:0x00d0 }] */
+    /* JADX WARN: Removed duplicated region for block: B:71:0x01b6 A[Catch: all -> 0x01dc, Exception -> 0x01e1, TryCatch #6 {Exception -> 0x01e1, all -> 0x01dc, blocks: (B:29:0x00d0, B:31:0x00d6, B:33:0x0112, B:38:0x011a, B:40:0x012c, B:42:0x0139, B:48:0x0144, B:52:0x0152, B:54:0x0162, B:56:0x017a, B:58:0x0180, B:62:0x0187, B:64:0x018f, B:66:0x01a0, B:68:0x01a7, B:70:0x01b0, B:72:0x01b9, B:74:0x01c1, B:76:0x01c6, B:77:0x01c9, B:71:0x01b6, B:67:0x01a4, B:61:0x0185, B:63:0x018b, B:55:0x0176, B:41:0x0132, B:78:0x01d0), top: B:114:0x00d0 }] */
+    /* JADX WARN: Removed duplicated region for block: B:74:0x01c1 A[Catch: all -> 0x01dc, Exception -> 0x01e1, TryCatch #6 {Exception -> 0x01e1, all -> 0x01dc, blocks: (B:29:0x00d0, B:31:0x00d6, B:33:0x0112, B:38:0x011a, B:40:0x012c, B:42:0x0139, B:48:0x0144, B:52:0x0152, B:54:0x0162, B:56:0x017a, B:58:0x0180, B:62:0x0187, B:64:0x018f, B:66:0x01a0, B:68:0x01a7, B:70:0x01b0, B:72:0x01b9, B:74:0x01c1, B:76:0x01c6, B:77:0x01c9, B:71:0x01b6, B:67:0x01a4, B:61:0x0185, B:63:0x018b, B:55:0x0176, B:41:0x0132, B:78:0x01d0), top: B:114:0x00d0 }] */
+    /* JADX WARN: Removed duplicated region for block: B:76:0x01c6 A[Catch: all -> 0x01dc, Exception -> 0x01e1, TryCatch #6 {Exception -> 0x01e1, all -> 0x01dc, blocks: (B:29:0x00d0, B:31:0x00d6, B:33:0x0112, B:38:0x011a, B:40:0x012c, B:42:0x0139, B:48:0x0144, B:52:0x0152, B:54:0x0162, B:56:0x017a, B:58:0x0180, B:62:0x0187, B:64:0x018f, B:66:0x01a0, B:68:0x01a7, B:70:0x01b0, B:72:0x01b9, B:74:0x01c1, B:76:0x01c6, B:77:0x01c9, B:71:0x01b6, B:67:0x01a4, B:61:0x0185, B:63:0x018b, B:55:0x0176, B:41:0x0132, B:78:0x01d0), top: B:114:0x00d0 }] */
+    /* JADX WARN: Removed duplicated region for block: B:98:0x020b  */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public /* synthetic */ void lambda$emptyMessagesMedia$73(java.util.ArrayList r19, long r20) {
+    public /* synthetic */ void lambda$emptyMessagesMedia$78(java.util.ArrayList r19, long r20) {
         /*
-            Method dump skipped, instructions count: 526
+            Method dump skipped, instructions count: 546
             To view this dump add '--comments-level debug' option
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$emptyMessagesMedia$73(java.util.ArrayList, long):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$emptyMessagesMedia$78(java.util.ArrayList, long):void");
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$emptyMessagesMedia$71(ArrayList arrayList) {
+    public /* synthetic */ void lambda$emptyMessagesMedia$76(ArrayList arrayList) {
         for (int i = 0; i < arrayList.size(); i++) {
             getNotificationCenter().postNotificationName(NotificationCenter.updateMessageMedia, arrayList.get(i));
         }
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$emptyMessagesMedia$72(ArrayList arrayList) {
+    public /* synthetic */ void lambda$emptyMessagesMedia$77(ArrayList arrayList) {
         getFileLoader().cancelLoadFiles(arrayList);
     }
 
     public void updateMessagePollResults(final long j, final TLRPC$Poll tLRPC$Poll, final TLRPC$PollResults tLRPC$PollResults) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda108
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda113
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$updateMessagePollResults$74(j, tLRPC$Poll, tLRPC$PollResults);
+                MessagesStorage.this.lambda$updateMessagePollResults$79(j, tLRPC$Poll, tLRPC$PollResults);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateMessagePollResults$74(long j, TLRPC$Poll tLRPC$Poll, TLRPC$PollResults tLRPC$PollResults) {
+    public /* synthetic */ void lambda$updateMessagePollResults$79(long j, TLRPC$Poll tLRPC$Poll, TLRPC$PollResults tLRPC$PollResults) {
         Integer num;
         SQLiteDatabase sQLiteDatabase;
         Locale locale;
@@ -3969,170 +4354,189 @@ public class MessagesStorage extends BaseController {
     }
 
     public void updateMessageReactions(final long j, final int i, final TLRPC$TL_messageReactions tLRPC$TL_messageReactions) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda50
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda51
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$updateMessageReactions$75(i, j, tLRPC$TL_messageReactions);
+                MessagesStorage.this.lambda$updateMessageReactions$80(i, j, tLRPC$TL_messageReactions);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateMessageReactions$75(int i, long j, TLRPC$TL_messageReactions tLRPC$TL_messageReactions) {
+    public /* synthetic */ void lambda$updateMessageReactions$80(int i, long j, TLRPC$TL_messageReactions tLRPC$TL_messageReactions) {
         SQLiteCursor queryFinalized;
         NativeByteBuffer byteBufferValue;
+        SQLitePreparedStatement executeFast;
         SQLiteCursor sQLiteCursor = null;
         try {
             try {
                 this.database.beginTransaction();
-                queryFinalized = this.database.queryFinalized(String.format(Locale.US, "SELECT data FROM messages_v2 WHERE mid = %d AND uid = %d", Integer.valueOf(i), Long.valueOf(j)), new Object[0]);
-            } catch (Throwable th) {
-                th = th;
-            }
-        } catch (Exception e) {
-            e = e;
-        }
-        try {
-            if (queryFinalized.next() && (byteBufferValue = queryFinalized.byteBufferValue(0)) != null) {
-                TLRPC$Message TLdeserialize = TLRPC$Message.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false);
-                if (TLdeserialize != null) {
-                    TLdeserialize.readAttachPath(byteBufferValue, getUserConfig().clientUserId);
-                    byteBufferValue.reuse();
-                    MessageObject.updateReactions(TLdeserialize, tLRPC$TL_messageReactions);
-                    SQLitePreparedStatement executeFast = this.database.executeFast("UPDATE messages_v2 SET data = ? WHERE mid = ? AND uid = ?");
-                    NativeByteBuffer nativeByteBuffer = new NativeByteBuffer(TLdeserialize.getObjectSize());
-                    TLdeserialize.serializeToStream(nativeByteBuffer);
-                    executeFast.requery();
-                    executeFast.bindByteBuffer(1, nativeByteBuffer);
-                    executeFast.bindInteger(2, i);
-                    executeFast.bindLong(3, j);
-                    executeFast.step();
-                    nativeByteBuffer.reuse();
-                    executeFast.dispose();
-                } else {
-                    byteBufferValue.reuse();
+                for (int i2 = 0; i2 < 2; i2++) {
+                    if (i2 == 0) {
+                        queryFinalized = this.database.queryFinalized(String.format(Locale.US, "SELECT data FROM messages_v2 WHERE mid = %d AND uid = %d", Integer.valueOf(i), Long.valueOf(j)), new Object[0]);
+                    } else {
+                        queryFinalized = this.database.queryFinalized(String.format(Locale.US, "SELECT data FROM messages_topics WHERE mid = %d AND uid = %d", Integer.valueOf(i), Long.valueOf(j)), new Object[0]);
+                    }
+                    try {
+                        if (queryFinalized.next() && (byteBufferValue = queryFinalized.byteBufferValue(0)) != null) {
+                            TLRPC$Message TLdeserialize = TLRPC$Message.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false);
+                            if (TLdeserialize != null) {
+                                TLdeserialize.readAttachPath(byteBufferValue, getUserConfig().clientUserId);
+                                byteBufferValue.reuse();
+                                MessageObject.updateReactions(TLdeserialize, tLRPC$TL_messageReactions);
+                                if (i2 == 0) {
+                                    executeFast = this.database.executeFast("UPDATE messages_v2 SET data = ? WHERE mid = ? AND uid = ?");
+                                } else {
+                                    executeFast = this.database.executeFast("UPDATE messages_topics SET data = ? WHERE mid = ? AND uid = ?");
+                                }
+                                NativeByteBuffer nativeByteBuffer = new NativeByteBuffer(TLdeserialize.getObjectSize());
+                                TLdeserialize.serializeToStream(nativeByteBuffer);
+                                executeFast.requery();
+                                executeFast.bindByteBuffer(1, nativeByteBuffer);
+                                executeFast.bindInteger(2, i);
+                                executeFast.bindLong(3, j);
+                                executeFast.step();
+                                nativeByteBuffer.reuse();
+                                executeFast.dispose();
+                            } else {
+                                byteBufferValue.reuse();
+                            }
+                        }
+                        queryFinalized.dispose();
+                    } catch (Exception e) {
+                        e = e;
+                        sQLiteCursor = queryFinalized;
+                        FileLog.e(e);
+                        SQLiteDatabase sQLiteDatabase = this.database;
+                        if (sQLiteDatabase != null) {
+                            sQLiteDatabase.commitTransaction();
+                        }
+                        if (sQLiteCursor == null) {
+                            return;
+                        }
+                        sQLiteCursor.dispose();
+                        return;
+                    } catch (Throwable th) {
+                        th = th;
+                        sQLiteCursor = queryFinalized;
+                        SQLiteDatabase sQLiteDatabase2 = this.database;
+                        if (sQLiteDatabase2 != null) {
+                            sQLiteDatabase2.commitTransaction();
+                        }
+                        if (sQLiteCursor != null) {
+                            sQLiteCursor.dispose();
+                        }
+                        throw th;
+                    }
                 }
+                this.database.commitTransaction();
+                SQLiteDatabase sQLiteDatabase3 = this.database;
+                if (sQLiteDatabase3 == null) {
+                    return;
+                }
+                sQLiteDatabase3.commitTransaction();
+            } catch (Throwable th2) {
+                th = th2;
             }
-            queryFinalized.dispose();
-            this.database.commitTransaction();
-            SQLiteDatabase sQLiteDatabase = this.database;
-            if (sQLiteDatabase == null) {
-                return;
-            }
-            sQLiteDatabase.commitTransaction();
         } catch (Exception e2) {
             e = e2;
-            sQLiteCursor = queryFinalized;
-            FileLog.e(e);
-            SQLiteDatabase sQLiteDatabase2 = this.database;
-            if (sQLiteDatabase2 != null) {
-                sQLiteDatabase2.commitTransaction();
-            }
-            if (sQLiteCursor == null) {
-                return;
-            }
-            sQLiteCursor.dispose();
-        } catch (Throwable th2) {
-            th = th2;
-            sQLiteCursor = queryFinalized;
-            SQLiteDatabase sQLiteDatabase3 = this.database;
-            if (sQLiteDatabase3 != null) {
-                sQLiteDatabase3.commitTransaction();
-            }
-            if (sQLiteCursor != null) {
-                sQLiteCursor.dispose();
-            }
-            throw th;
         }
     }
 
     public void updateMessageVoiceTranscriptionOpen(final long j, final int i, final TLRPC$Message tLRPC$Message) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda48
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda49
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$updateMessageVoiceTranscriptionOpen$76(i, j, tLRPC$Message);
+                MessagesStorage.this.lambda$updateMessageVoiceTranscriptionOpen$81(i, j, tLRPC$Message);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateMessageVoiceTranscriptionOpen$76(int i, long j, TLRPC$Message tLRPC$Message) {
-        TLRPC$Message messageWithCustomParamsOnly;
+    public /* synthetic */ void lambda$updateMessageVoiceTranscriptionOpen$81(int i, long j, TLRPC$Message tLRPC$Message) {
         SQLitePreparedStatement executeFast;
         SQLitePreparedStatement sQLitePreparedStatement = null;
         try {
             try {
                 this.database.beginTransaction();
-                messageWithCustomParamsOnly = getMessageWithCustomParamsOnly(i, j);
+                TLRPC$Message messageWithCustomParamsOnly = getMessageWithCustomParamsOnly(i, j);
                 messageWithCustomParamsOnly.voiceTranscriptionOpen = tLRPC$Message.voiceTranscriptionOpen;
                 messageWithCustomParamsOnly.voiceTranscriptionRated = tLRPC$Message.voiceTranscriptionRated;
                 messageWithCustomParamsOnly.voiceTranscriptionFinal = tLRPC$Message.voiceTranscriptionFinal;
+                messageWithCustomParamsOnly.voiceTranscriptionForce = tLRPC$Message.voiceTranscriptionForce;
                 messageWithCustomParamsOnly.voiceTranscriptionId = tLRPC$Message.voiceTranscriptionId;
-                executeFast = this.database.executeFast("UPDATE messages_v2 SET custom_params = ? WHERE mid = ? AND uid = ?");
-            } catch (Exception e) {
-                e = e;
+                for (int i2 = 0; i2 < 2; i2++) {
+                    if (i2 == 0) {
+                        executeFast = this.database.executeFast("UPDATE messages_v2 SET custom_params = ? WHERE mid = ? AND uid = ?");
+                    } else {
+                        executeFast = this.database.executeFast("UPDATE messages_topics SET custom_params = ? WHERE mid = ? AND uid = ?");
+                    }
+                    try {
+                        executeFast.requery();
+                        NativeByteBuffer writeLocalParams = MessageCustomParamsHelper.writeLocalParams(messageWithCustomParamsOnly);
+                        if (writeLocalParams != null) {
+                            executeFast.bindByteBuffer(1, writeLocalParams);
+                        } else {
+                            executeFast.bindNull(1);
+                        }
+                        executeFast.bindInteger(2, i);
+                        executeFast.bindLong(3, j);
+                        executeFast.step();
+                        executeFast.dispose();
+                        if (writeLocalParams != null) {
+                            writeLocalParams.reuse();
+                        }
+                    } catch (Exception e) {
+                        e = e;
+                        sQLitePreparedStatement = executeFast;
+                        FileLog.e(e);
+                        SQLiteDatabase sQLiteDatabase = this.database;
+                        if (sQLiteDatabase != null) {
+                            sQLiteDatabase.commitTransaction();
+                        }
+                        if (sQLitePreparedStatement == null) {
+                            return;
+                        }
+                        sQLitePreparedStatement.dispose();
+                        return;
+                    } catch (Throwable th) {
+                        th = th;
+                        sQLitePreparedStatement = executeFast;
+                        SQLiteDatabase sQLiteDatabase2 = this.database;
+                        if (sQLiteDatabase2 != null) {
+                            sQLiteDatabase2.commitTransaction();
+                        }
+                        if (sQLitePreparedStatement != null) {
+                            sQLitePreparedStatement.dispose();
+                        }
+                        throw th;
+                    }
+                }
+                this.database.commitTransaction();
+                SQLiteDatabase sQLiteDatabase3 = this.database;
+                if (sQLiteDatabase3 == null) {
+                    return;
+                }
+                sQLiteDatabase3.commitTransaction();
+            } catch (Exception e2) {
+                e = e2;
             }
-        } catch (Throwable th) {
-            th = th;
-        }
-        try {
-            executeFast.requery();
-            NativeByteBuffer writeLocalParams = MessageCustomParamsHelper.writeLocalParams(messageWithCustomParamsOnly);
-            if (writeLocalParams != null) {
-                executeFast.bindByteBuffer(1, writeLocalParams);
-            } else {
-                executeFast.bindNull(1);
-            }
-            executeFast.bindInteger(2, i);
-            executeFast.bindLong(3, j);
-            executeFast.step();
-            executeFast.dispose();
-            if (writeLocalParams != null) {
-                writeLocalParams.reuse();
-            }
-            this.database.commitTransaction();
-            SQLiteDatabase sQLiteDatabase = this.database;
-            if (sQLiteDatabase == null) {
-                return;
-            }
-            sQLiteDatabase.commitTransaction();
-        } catch (Exception e2) {
-            e = e2;
-            sQLitePreparedStatement = executeFast;
-            FileLog.e(e);
-            SQLiteDatabase sQLiteDatabase2 = this.database;
-            if (sQLiteDatabase2 != null) {
-                sQLiteDatabase2.commitTransaction();
-            }
-            if (sQLitePreparedStatement == null) {
-                return;
-            }
-            sQLitePreparedStatement.dispose();
         } catch (Throwable th2) {
             th = th2;
-            sQLitePreparedStatement = executeFast;
-            SQLiteDatabase sQLiteDatabase3 = this.database;
-            if (sQLiteDatabase3 != null) {
-                sQLiteDatabase3.commitTransaction();
-            }
-            if (sQLitePreparedStatement != null) {
-                sQLitePreparedStatement.dispose();
-            }
-            throw th;
         }
     }
 
     public void updateMessageVoiceTranscription(final long j, final int i, final String str, final long j2, final boolean z) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda51
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda52
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$updateMessageVoiceTranscription$77(i, j, z, j2, str);
+                MessagesStorage.this.lambda$updateMessageVoiceTranscription$82(i, j, z, j2, str);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateMessageVoiceTranscription$77(int i, long j, boolean z, long j2, String str) {
+    public /* synthetic */ void lambda$updateMessageVoiceTranscription$82(int i, long j, boolean z, long j2, String str) {
         TLRPC$Message messageWithCustomParamsOnly;
         SQLitePreparedStatement executeFast;
         SQLitePreparedStatement sQLitePreparedStatement = null;
@@ -4198,186 +4602,223 @@ public class MessagesStorage extends BaseController {
     }
 
     public void updateMessageVoiceTranscription(final long j, final int i, final String str, final TLRPC$Message tLRPC$Message) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda49
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda50
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$updateMessageVoiceTranscription$78(i, j, tLRPC$Message, str);
+                MessagesStorage.this.lambda$updateMessageVoiceTranscription$83(i, j, tLRPC$Message, str);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateMessageVoiceTranscription$78(int i, long j, TLRPC$Message tLRPC$Message, String str) {
-        TLRPC$Message messageWithCustomParamsOnly;
+    public /* synthetic */ void lambda$updateMessageVoiceTranscription$83(int i, long j, TLRPC$Message tLRPC$Message, String str) {
         SQLitePreparedStatement executeFast;
         SQLitePreparedStatement sQLitePreparedStatement = null;
         try {
             try {
                 this.database.beginTransaction();
-                messageWithCustomParamsOnly = getMessageWithCustomParamsOnly(i, j);
+                TLRPC$Message messageWithCustomParamsOnly = getMessageWithCustomParamsOnly(i, j);
                 messageWithCustomParamsOnly.voiceTranscriptionOpen = tLRPC$Message.voiceTranscriptionOpen;
                 messageWithCustomParamsOnly.voiceTranscriptionRated = tLRPC$Message.voiceTranscriptionRated;
                 messageWithCustomParamsOnly.voiceTranscriptionFinal = tLRPC$Message.voiceTranscriptionFinal;
+                messageWithCustomParamsOnly.voiceTranscriptionForce = tLRPC$Message.voiceTranscriptionForce;
                 messageWithCustomParamsOnly.voiceTranscriptionId = tLRPC$Message.voiceTranscriptionId;
                 messageWithCustomParamsOnly.voiceTranscription = str;
-                executeFast = this.database.executeFast("UPDATE messages_v2 SET custom_params = ? WHERE mid = ? AND uid = ?");
-            } catch (Exception e) {
-                e = e;
+                for (int i2 = 0; i2 < 2; i2++) {
+                    if (i2 == 0) {
+                        executeFast = this.database.executeFast("UPDATE messages_v2 SET custom_params = ? WHERE mid = ? AND uid = ?");
+                    } else {
+                        executeFast = this.database.executeFast("UPDATE messages_topics SET custom_params = ? WHERE mid = ? AND uid = ?");
+                    }
+                    try {
+                        executeFast.requery();
+                        NativeByteBuffer writeLocalParams = MessageCustomParamsHelper.writeLocalParams(messageWithCustomParamsOnly);
+                        if (writeLocalParams != null) {
+                            executeFast.bindByteBuffer(1, writeLocalParams);
+                        } else {
+                            executeFast.bindNull(1);
+                        }
+                        executeFast.bindInteger(2, i);
+                        executeFast.bindLong(3, j);
+                        executeFast.step();
+                        executeFast.dispose();
+                        this.database.commitTransaction();
+                        if (writeLocalParams != null) {
+                            writeLocalParams.reuse();
+                        }
+                    } catch (Exception e) {
+                        e = e;
+                        sQLitePreparedStatement = executeFast;
+                        FileLog.e(e);
+                        SQLiteDatabase sQLiteDatabase = this.database;
+                        if (sQLiteDatabase != null) {
+                            sQLiteDatabase.commitTransaction();
+                        }
+                        if (sQLitePreparedStatement == null) {
+                            return;
+                        }
+                        sQLitePreparedStatement.dispose();
+                        return;
+                    } catch (Throwable th) {
+                        th = th;
+                        sQLitePreparedStatement = executeFast;
+                        SQLiteDatabase sQLiteDatabase2 = this.database;
+                        if (sQLiteDatabase2 != null) {
+                            sQLiteDatabase2.commitTransaction();
+                        }
+                        if (sQLitePreparedStatement != null) {
+                            sQLitePreparedStatement.dispose();
+                        }
+                        throw th;
+                    }
+                }
+                SQLiteDatabase sQLiteDatabase3 = this.database;
+                if (sQLiteDatabase3 == null) {
+                    return;
+                }
+                sQLiteDatabase3.commitTransaction();
+            } catch (Throwable th2) {
+                th = th2;
             }
-        } catch (Throwable th) {
-            th = th;
-        }
-        try {
-            executeFast.requery();
-            NativeByteBuffer writeLocalParams = MessageCustomParamsHelper.writeLocalParams(messageWithCustomParamsOnly);
-            if (writeLocalParams != null) {
-                executeFast.bindByteBuffer(1, writeLocalParams);
-            } else {
-                executeFast.bindNull(1);
-            }
-            executeFast.bindInteger(2, i);
-            executeFast.bindLong(3, j);
-            executeFast.step();
-            executeFast.dispose();
-            this.database.commitTransaction();
-            if (writeLocalParams != null) {
-                writeLocalParams.reuse();
-            }
-            SQLiteDatabase sQLiteDatabase = this.database;
-            if (sQLiteDatabase == null) {
-                return;
-            }
-            sQLiteDatabase.commitTransaction();
         } catch (Exception e2) {
             e = e2;
-            sQLitePreparedStatement = executeFast;
-            FileLog.e(e);
-            SQLiteDatabase sQLiteDatabase2 = this.database;
-            if (sQLiteDatabase2 != null) {
-                sQLiteDatabase2.commitTransaction();
-            }
-            if (sQLitePreparedStatement == null) {
-                return;
-            }
-            sQLitePreparedStatement.dispose();
-        } catch (Throwable th2) {
-            th = th2;
-            sQLitePreparedStatement = executeFast;
-            SQLiteDatabase sQLiteDatabase3 = this.database;
-            if (sQLiteDatabase3 != null) {
-                sQLiteDatabase3.commitTransaction();
-            }
-            if (sQLitePreparedStatement != null) {
-                sQLitePreparedStatement.dispose();
-            }
-            throw th;
         }
     }
 
     public void updateMessageCustomParams(final long j, final TLRPC$Message tLRPC$Message) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda172
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda181
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$updateMessageCustomParams$79(tLRPC$Message, j);
+                MessagesStorage.this.lambda$updateMessageCustomParams$84(tLRPC$Message, j);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateMessageCustomParams$79(TLRPC$Message tLRPC$Message, long j) {
-        TLRPC$Message messageWithCustomParamsOnly;
+    public /* synthetic */ void lambda$updateMessageCustomParams$84(TLRPC$Message tLRPC$Message, long j) {
         SQLitePreparedStatement executeFast;
         SQLitePreparedStatement sQLitePreparedStatement = null;
         try {
             try {
                 this.database.beginTransaction();
-                messageWithCustomParamsOnly = getMessageWithCustomParamsOnly(tLRPC$Message.id, j);
+                TLRPC$Message messageWithCustomParamsOnly = getMessageWithCustomParamsOnly(tLRPC$Message.id, j);
                 MessageCustomParamsHelper.copyParams(tLRPC$Message, messageWithCustomParamsOnly);
-                executeFast = this.database.executeFast("UPDATE messages_v2 SET custom_params = ? WHERE mid = ? AND uid = ?");
-            } catch (Throwable th) {
-                th = th;
+                for (int i = 0; i < 2; i++) {
+                    if (i == 0) {
+                        executeFast = this.database.executeFast("UPDATE messages_v2 SET custom_params = ? WHERE mid = ? AND uid = ?");
+                    } else {
+                        executeFast = this.database.executeFast("UPDATE messages_topics SET custom_params = ? WHERE mid = ? AND uid = ?");
+                    }
+                    try {
+                        executeFast.requery();
+                        NativeByteBuffer writeLocalParams = MessageCustomParamsHelper.writeLocalParams(messageWithCustomParamsOnly);
+                        if (writeLocalParams != null) {
+                            executeFast.bindByteBuffer(1, writeLocalParams);
+                        } else {
+                            executeFast.bindNull(1);
+                        }
+                        executeFast.bindInteger(2, tLRPC$Message.id);
+                        executeFast.bindLong(3, j);
+                        executeFast.step();
+                        executeFast.dispose();
+                        if (writeLocalParams != null) {
+                            writeLocalParams.reuse();
+                        }
+                    } catch (Exception e) {
+                        e = e;
+                        sQLitePreparedStatement = executeFast;
+                        FileLog.e(e);
+                        SQLiteDatabase sQLiteDatabase = this.database;
+                        if (sQLiteDatabase != null) {
+                            sQLiteDatabase.commitTransaction();
+                        }
+                        if (sQLitePreparedStatement == null) {
+                            return;
+                        }
+                        sQLitePreparedStatement.dispose();
+                        return;
+                    } catch (Throwable th) {
+                        th = th;
+                        sQLitePreparedStatement = executeFast;
+                        SQLiteDatabase sQLiteDatabase2 = this.database;
+                        if (sQLiteDatabase2 != null) {
+                            sQLiteDatabase2.commitTransaction();
+                        }
+                        if (sQLitePreparedStatement != null) {
+                            sQLitePreparedStatement.dispose();
+                        }
+                        throw th;
+                    }
+                }
+                this.database.commitTransaction();
+                SQLiteDatabase sQLiteDatabase3 = this.database;
+                if (sQLiteDatabase3 == null) {
+                    return;
+                }
+                sQLiteDatabase3.commitTransaction();
+            } catch (Throwable th2) {
+                th = th2;
             }
-        } catch (Exception e) {
-            e = e;
-        }
-        try {
-            executeFast.requery();
-            NativeByteBuffer writeLocalParams = MessageCustomParamsHelper.writeLocalParams(messageWithCustomParamsOnly);
-            if (writeLocalParams != null) {
-                executeFast.bindByteBuffer(1, writeLocalParams);
-            } else {
-                executeFast.bindNull(1);
-            }
-            executeFast.bindInteger(2, tLRPC$Message.id);
-            executeFast.bindLong(3, j);
-            executeFast.step();
-            executeFast.dispose();
-            this.database.commitTransaction();
-            if (writeLocalParams != null) {
-                writeLocalParams.reuse();
-            }
-            SQLiteDatabase sQLiteDatabase = this.database;
-            if (sQLiteDatabase == null) {
-                return;
-            }
-            sQLiteDatabase.commitTransaction();
         } catch (Exception e2) {
             e = e2;
-            sQLitePreparedStatement = executeFast;
-            FileLog.e(e);
-            SQLiteDatabase sQLiteDatabase2 = this.database;
-            if (sQLiteDatabase2 != null) {
-                sQLiteDatabase2.commitTransaction();
-            }
-            if (sQLitePreparedStatement == null) {
-                return;
-            }
-            sQLitePreparedStatement.dispose();
-        } catch (Throwable th2) {
-            th = th2;
-            sQLitePreparedStatement = executeFast;
-            SQLiteDatabase sQLiteDatabase3 = this.database;
-            if (sQLiteDatabase3 != null) {
-                sQLiteDatabase3.commitTransaction();
-            }
-            if (sQLitePreparedStatement != null) {
-                sQLitePreparedStatement.dispose();
-            }
-            throw th;
         }
     }
 
     private TLRPC$Message getMessageWithCustomParamsOnly(int i, long j) {
+        SQLiteCursor queryFinalized;
+        boolean z;
         TLRPC$TL_message tLRPC$TL_message = new TLRPC$TL_message();
         SQLiteCursor sQLiteCursor = null;
         try {
             try {
                 SQLiteDatabase sQLiteDatabase = this.database;
-                sQLiteCursor = sQLiteDatabase.queryFinalized("SELECT custom_params FROM messages_v2 WHERE mid = " + i + " AND uid = " + j, new Object[0]);
+                queryFinalized = sQLiteDatabase.queryFinalized("SELECT custom_params FROM messages_v2 WHERE mid = " + i + " AND uid = " + j, new Object[0]);
+            } catch (Throwable th) {
+                th = th;
+            }
+        } catch (SQLiteException e) {
+            e = e;
+        }
+        try {
+            if (queryFinalized.next()) {
+                MessageCustomParamsHelper.readLocalParams(tLRPC$TL_message, queryFinalized.byteBufferValue(0));
+                z = true;
+            } else {
+                z = false;
+            }
+            queryFinalized.dispose();
+            if (!z) {
+                SQLiteDatabase sQLiteDatabase2 = this.database;
+                sQLiteCursor = sQLiteDatabase2.queryFinalized("SELECT custom_params FROM messages_topics WHERE mid = " + i + " AND uid = " + j, new Object[0]);
                 if (sQLiteCursor.next()) {
                     MessageCustomParamsHelper.readLocalParams(tLRPC$TL_message, sQLiteCursor.byteBufferValue(0));
                 }
                 sQLiteCursor.dispose();
-            } catch (SQLiteException e) {
-                FileLog.e(e);
-                if (sQLiteCursor != null) {
-                    sQLiteCursor.dispose();
-                }
+            }
+        } catch (SQLiteException e2) {
+            e = e2;
+            sQLiteCursor = queryFinalized;
+            FileLog.e(e);
+            if (sQLiteCursor != null) {
+                sQLiteCursor.dispose();
             }
             return tLRPC$TL_message;
-        } catch (Throwable th) {
+        } catch (Throwable th2) {
+            th = th2;
+            sQLiteCursor = queryFinalized;
             if (sQLiteCursor != null) {
                 sQLiteCursor.dispose();
             }
             throw th;
         }
+        return tLRPC$TL_message;
     }
 
     public void getNewTask(final LongSparseArray<ArrayList<Integer>> longSparseArray, final LongSparseArray<ArrayList<Integer>> longSparseArray2) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda120
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda128
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$getNewTask$80(longSparseArray, longSparseArray2);
+                MessagesStorage.this.lambda$getNewTask$85(longSparseArray, longSparseArray2);
             }
         });
     }
@@ -4393,80 +4834,111 @@ public class MessagesStorage extends BaseController {
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public /* synthetic */ void lambda$getNewTask$80(androidx.collection.LongSparseArray r14, androidx.collection.LongSparseArray r15) {
+    public /* synthetic */ void lambda$getNewTask$85(androidx.collection.LongSparseArray r14, androidx.collection.LongSparseArray r15) {
         /*
             Method dump skipped, instructions count: 255
             To view this dump add '--comments-level debug' option
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getNewTask$80(androidx.collection.LongSparseArray, androidx.collection.LongSparseArray):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getNewTask$85(androidx.collection.LongSparseArray, androidx.collection.LongSparseArray):void");
     }
 
     public void markMentionMessageAsRead(final long j, final int i, final long j2) {
         this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda47
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$markMentionMessageAsRead$81(i, j, j2);
+                MessagesStorage.this.lambda$markMentionMessageAsRead$86(i, j, j2);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$markMentionMessageAsRead$81(int i, long j, long j2) {
-        Locale locale;
-        SQLiteCursor queryFinalized;
-        SQLiteCursor sQLiteCursor = null;
+    public /* synthetic */ void lambda$markMentionMessageAsRead$86(int i, long j, long j2) {
+        SQLiteCursor sQLiteCursor;
+        SQLiteCursor sQLiteCursor2;
+        SQLiteCursor sQLiteCursor3 = null;
         try {
             try {
                 SQLiteDatabase sQLiteDatabase = this.database;
-                locale = Locale.US;
+                Locale locale = Locale.US;
                 sQLiteDatabase.executeFast(String.format(locale, "UPDATE messages_v2 SET read_state = read_state | 2 WHERE mid = %d AND uid = %d", Integer.valueOf(i), Long.valueOf(j))).stepThis().dispose();
                 SQLiteDatabase sQLiteDatabase2 = this.database;
-                queryFinalized = sQLiteDatabase2.queryFinalized("SELECT unread_count_i FROM dialogs WHERE did = " + j2, new Object[0]);
-            } catch (Throwable th) {
-                th = th;
+                SQLiteCursor queryFinalized = sQLiteDatabase2.queryFinalized("SELECT unread_count_i FROM dialogs WHERE did = " + j2, new Object[0]);
+                try {
+                    int max = queryFinalized.next() ? Math.max(0, queryFinalized.intValue(0) - 1) : 0;
+                    queryFinalized.dispose();
+                    this.database.executeFast(String.format(locale, "UPDATE dialogs SET unread_count_i = %d WHERE did = %d", Integer.valueOf(max), Long.valueOf(j2))).stepThis().dispose();
+                    LongSparseIntArray longSparseIntArray = new LongSparseIntArray(1);
+                    longSparseIntArray.put(j2, max);
+                    if (max == 0) {
+                        updateFiltersReadCounter(null, longSparseIntArray, true);
+                    }
+                    getMessagesController().processDialogsUpdateRead(null, longSparseIntArray);
+                    this.database.executeFast(String.format(locale, "UPDATE messages_topics SET read_state = read_state | 2 WHERE mid = %d AND uid = %d", Integer.valueOf(i), Long.valueOf(j))).stepThis().dispose();
+                    SQLiteCursor queryFinalized2 = this.database.queryFinalized(String.format(locale, "SELECT data FROM messages_topics WHERE mid = %d AND uid = %d", Integer.valueOf(i), Long.valueOf(j)), new Object[0]);
+                    int i2 = 0;
+                    while (queryFinalized2.next()) {
+                        try {
+                            NativeByteBuffer byteBufferValue = queryFinalized2.byteBufferValue(0);
+                            if (byteBufferValue != null) {
+                                TLRPC$Message TLdeserialize = TLRPC$Message.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false);
+                                byteBufferValue.reuse();
+                                i2 = MessageObject.getTopicId(TLdeserialize);
+                            }
+                        } catch (Exception e) {
+                            sQLiteCursor3 = sQLiteCursor2;
+                            e = e;
+                            FileLog.e(e);
+                            if (sQLiteCursor3 == null) {
+                                return;
+                            }
+                            sQLiteCursor3.dispose();
+                            return;
+                        } catch (Throwable th) {
+                            sQLiteCursor3 = sQLiteCursor;
+                            th = th;
+                            if (sQLiteCursor3 != null) {
+                                sQLiteCursor3.dispose();
+                            }
+                            throw th;
+                        }
+                    }
+                    queryFinalized2.dispose();
+                    if (i2 == 0) {
+                        return;
+                    }
+                    SQLiteDatabase sQLiteDatabase3 = this.database;
+                    Locale locale2 = Locale.US;
+                    SQLiteCursor queryFinalized3 = sQLiteDatabase3.queryFinalized(String.format(locale2, "SELECT unread_mentions FROM topics WHERE did = %d AND topic_id = %d", Long.valueOf(j2), Integer.valueOf(i2)), new Object[0]);
+                    int max2 = queryFinalized3.next() ? Math.max(0, queryFinalized3.intValue(0) - 1) : 0;
+                    queryFinalized3.dispose();
+                    this.database.executeFast(String.format(locale2, "UPDATE topics SET unread_mentions = %d WHERE did = %d AND topic_id = %d", Integer.valueOf(max2), Long.valueOf(j), Integer.valueOf(i2))).stepThis().dispose();
+                    getMessagesController().getTopicsController().updateMentionsUnread(j, i2, max2);
+                } catch (Exception e2) {
+                    e = e2;
+                    sQLiteCursor3 = queryFinalized;
+                } catch (Throwable th2) {
+                    th = th2;
+                    sQLiteCursor3 = queryFinalized;
+                }
+            } catch (Exception e3) {
+                e = e3;
             }
-        } catch (Exception e) {
-            e = e;
-        }
-        try {
-            int max = queryFinalized.next() ? Math.max(0, queryFinalized.intValue(0) - 1) : 0;
-            queryFinalized.dispose();
-            this.database.executeFast(String.format(locale, "UPDATE dialogs SET unread_count_i = %d WHERE did = %d", Integer.valueOf(max), Long.valueOf(j2))).stepThis().dispose();
-            LongSparseIntArray longSparseIntArray = new LongSparseIntArray(1);
-            longSparseIntArray.put(j2, max);
-            if (max == 0) {
-                updateFiltersReadCounter(null, longSparseIntArray, true);
-            }
-            getMessagesController().processDialogsUpdateRead(null, longSparseIntArray);
-        } catch (Exception e2) {
-            e = e2;
-            sQLiteCursor = queryFinalized;
-            FileLog.e(e);
-            if (sQLiteCursor == null) {
-                return;
-            }
-            sQLiteCursor.dispose();
-        } catch (Throwable th2) {
-            th = th2;
-            sQLiteCursor = queryFinalized;
-            if (sQLiteCursor != null) {
-                sQLiteCursor.dispose();
-            }
-            throw th;
+        } catch (Throwable th3) {
+            th = th3;
         }
     }
 
     public void markMessageAsMention(final long j, final int i) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda41
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda40
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$markMessageAsMention$82(i, j);
+                MessagesStorage.this.lambda$markMessageAsMention$87(i, j);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$markMessageAsMention$82(int i, long j) {
+    public /* synthetic */ void lambda$markMessageAsMention$87(int i, long j) {
         try {
             this.database.executeFast(String.format(Locale.US, "UPDATE messages_v2 SET mention = 1, read_state = read_state & ~2 WHERE mid = %d AND uid = %d", Integer.valueOf(i), Long.valueOf(j))).stepThis().dispose();
         } catch (Exception e) {
@@ -4475,16 +4947,16 @@ public class MessagesStorage extends BaseController {
     }
 
     public void resetMentionsCount(final long j, final int i) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda68
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda70
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$resetMentionsCount$83(j, i);
+                MessagesStorage.this.lambda$resetMentionsCount$88(j, i);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$resetMentionsCount$83(long j, int i) {
+    public /* synthetic */ void lambda$resetMentionsCount$88(long j, int i) {
         SQLiteCursor queryFinalized;
         SQLiteCursor sQLiteCursor = null;
         try {
@@ -4533,16 +5005,16 @@ public class MessagesStorage extends BaseController {
     }
 
     public void createTaskForMid(final long j, final int i, final int i2, final int i3, final int i4, final boolean z) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda35
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda36
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$createTaskForMid$85(i2, i3, i4, i, z, j);
+                MessagesStorage.this.lambda$createTaskForMid$90(i2, i3, i4, i, z, j);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$createTaskForMid$85(int i, int i2, int i3, int i4, final boolean z, final long j) {
+    public /* synthetic */ void lambda$createTaskForMid$90(int i, int i2, int i3, int i4, final boolean z, final long j) {
         SQLitePreparedStatement sQLitePreparedStatement = null;
         try {
             try {
@@ -4551,10 +5023,10 @@ public class MessagesStorage extends BaseController {
                 final ArrayList<Integer> arrayList = new ArrayList<>();
                 arrayList.add(Integer.valueOf(i4));
                 sparseArray.put(max, arrayList);
-                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda188
+                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda197
                     @Override // java.lang.Runnable
                     public final void run() {
-                        MessagesStorage.this.lambda$createTaskForMid$84(z, j, arrayList);
+                        MessagesStorage.this.lambda$createTaskForMid$89(z, j, arrayList);
                     }
                 });
                 SQLitePreparedStatement executeFast = this.database.executeFast("REPLACE INTO enc_tasks_v4 VALUES(?, ?, ?, ?)");
@@ -4600,7 +5072,7 @@ public class MessagesStorage extends BaseController {
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$createTaskForMid$84(boolean z, long j, ArrayList arrayList) {
+    public /* synthetic */ void lambda$createTaskForMid$89(boolean z, long j, ArrayList arrayList) {
         if (!z) {
             markMessagesContentAsRead(j, arrayList, 0);
         }
@@ -4608,10 +5080,10 @@ public class MessagesStorage extends BaseController {
     }
 
     public void createTaskForSecretChat(final int i, final int i2, final int i3, final int i4, final ArrayList<Long> arrayList) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda56
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda57
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$createTaskForSecretChat$87(i, arrayList, i4, i2, i3);
+                MessagesStorage.this.lambda$createTaskForSecretChat$92(i, arrayList, i4, i2, i3);
             }
         });
     }
@@ -4628,34 +5100,34 @@ public class MessagesStorage extends BaseController {
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public /* synthetic */ void lambda$createTaskForSecretChat$87(int r18, java.util.ArrayList r19, int r20, int r21, int r22) {
+    public /* synthetic */ void lambda$createTaskForSecretChat$92(int r18, java.util.ArrayList r19, int r20, int r21, int r22) {
         /*
             Method dump skipped, instructions count: 382
             To view this dump add '--comments-level debug' option
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$createTaskForSecretChat$87(int, java.util.ArrayList, int, int, int):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$createTaskForSecretChat$92(int, java.util.ArrayList, int, int, int):void");
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$createTaskForSecretChat$86(long j, ArrayList arrayList) {
+    public /* synthetic */ void lambda$createTaskForSecretChat$91(long j, ArrayList arrayList) {
         markMessagesContentAsRead(j, arrayList, 0);
         getNotificationCenter().postNotificationName(NotificationCenter.messagesReadContent, Long.valueOf(j), arrayList);
     }
 
-    /* JADX WARN: Code restructure failed: missing block: B:164:0x03bf, code lost:
-        if (r9.indexOfKey(-r4.id) >= 0) goto L167;
+    /* JADX WARN: Code restructure failed: missing block: B:165:0x03c6, code lost:
+        if (r9.indexOfKey(-r4.id) >= 0) goto L168;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:329:0x0670, code lost:
-        if (r1.dialogsWithMentions.indexOfKey(-r0.id) < 0) goto L344;
+    /* JADX WARN: Code restructure failed: missing block: B:330:0x0677, code lost:
+        if (r1.dialogsWithMentions.indexOfKey(-r0.id) < 0) goto L345;
      */
-    /* JADX WARN: Removed duplicated region for block: B:203:0x047f  */
-    /* JADX WARN: Removed duplicated region for block: B:217:0x04ba  */
-    /* JADX WARN: Removed duplicated region for block: B:265:0x057f  */
-    /* JADX WARN: Removed duplicated region for block: B:427:0x07e3  */
-    /* JADX WARN: Removed duplicated region for block: B:441:0x0819  */
-    /* JADX WARN: Removed duplicated region for block: B:489:0x08cf  */
-    /* JADX WARN: Removed duplicated region for block: B:609:0x0a9e  */
+    /* JADX WARN: Removed duplicated region for block: B:204:0x0486  */
+    /* JADX WARN: Removed duplicated region for block: B:218:0x04c1  */
+    /* JADX WARN: Removed duplicated region for block: B:266:0x0586  */
+    /* JADX WARN: Removed duplicated region for block: B:428:0x07ea  */
+    /* JADX WARN: Removed duplicated region for block: B:442:0x0820  */
+    /* JADX WARN: Removed duplicated region for block: B:490:0x08d6  */
     /* JADX WARN: Removed duplicated region for block: B:610:0x0aa5  */
+    /* JADX WARN: Removed duplicated region for block: B:611:0x0aac  */
     /* JADX WARN: Type inference failed for: r3v83, types: [boolean] */
     /* JADX WARN: Type inference failed for: r6v106, types: [boolean] */
     /* JADX WARN: Type inference failed for: r6v114, types: [boolean] */
@@ -4665,14 +5137,14 @@ public class MessagesStorage extends BaseController {
     */
     private void updateFiltersReadCounter(org.telegram.messenger.support.LongSparseIntArray r26, org.telegram.messenger.support.LongSparseIntArray r27, boolean r28) throws java.lang.Exception {
         /*
-            Method dump skipped, instructions count: 2765
+            Method dump skipped, instructions count: 2772
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.updateFiltersReadCounter(org.telegram.messenger.support.LongSparseIntArray, org.telegram.messenger.support.LongSparseIntArray, boolean):void");
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateFiltersReadCounter$88() {
+    public /* synthetic */ void lambda$updateFiltersReadCounter$93() {
         ArrayList<MessagesController.DialogFilter> arrayList = getMessagesController().dialogFilters;
         int size = arrayList.size();
         for (int i = 0; i < size; i++) {
@@ -4719,10 +5191,10 @@ public class MessagesStorage extends BaseController {
     public void updateDialogsWithReadMessages(final LongSparseIntArray longSparseIntArray, final LongSparseIntArray longSparseIntArray2, final LongSparseArray<ArrayList<Integer>> longSparseArray, final LongSparseIntArray longSparseIntArray3, boolean z) {
         if (!isEmpty(longSparseIntArray) || !isEmpty(longSparseIntArray2) || !isEmpty(longSparseArray) || !isEmpty(longSparseIntArray3)) {
             if (z) {
-                this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda156
+                this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda165
                     @Override // java.lang.Runnable
                     public final void run() {
-                        MessagesStorage.this.lambda$updateDialogsWithReadMessages$89(longSparseIntArray, longSparseIntArray2, longSparseArray, longSparseIntArray3);
+                        MessagesStorage.this.lambda$updateDialogsWithReadMessages$94(longSparseIntArray, longSparseIntArray2, longSparseArray, longSparseIntArray3);
                     }
                 });
             } else {
@@ -4732,7 +5204,7 @@ public class MessagesStorage extends BaseController {
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateDialogsWithReadMessages$89(LongSparseIntArray longSparseIntArray, LongSparseIntArray longSparseIntArray2, LongSparseArray longSparseArray, LongSparseIntArray longSparseIntArray3) {
+    public /* synthetic */ void lambda$updateDialogsWithReadMessages$94(LongSparseIntArray longSparseIntArray, LongSparseIntArray longSparseIntArray2, LongSparseArray longSparseArray, LongSparseIntArray longSparseIntArray3) {
         updateDialogsWithReadMessagesInternal(null, longSparseIntArray, longSparseIntArray2, longSparseArray, longSparseIntArray3);
     }
 
@@ -4740,16 +5212,16 @@ public class MessagesStorage extends BaseController {
         if (tLRPC$ChatParticipants == null) {
             return;
         }
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda162
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda171
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$updateChatParticipants$91(tLRPC$ChatParticipants);
+                MessagesStorage.this.lambda$updateChatParticipants$96(tLRPC$ChatParticipants);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateChatParticipants$91(TLRPC$ChatParticipants tLRPC$ChatParticipants) {
+    public /* synthetic */ void lambda$updateChatParticipants$96(TLRPC$ChatParticipants tLRPC$ChatParticipants) {
         SQLiteCursor queryFinalized;
         final TLRPC$ChatFull tLRPC$ChatFull;
         NativeByteBuffer byteBufferValue;
@@ -4779,10 +5251,10 @@ public class MessagesStorage extends BaseController {
                 return;
             }
             tLRPC$ChatFull.participants = tLRPC$ChatParticipants;
-            AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda160
+            AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda168
                 @Override // java.lang.Runnable
                 public final void run() {
-                    MessagesStorage.this.lambda$updateChatParticipants$90(tLRPC$ChatFull);
+                    MessagesStorage.this.lambda$updateChatParticipants$95(tLRPC$ChatFull);
                 }
             });
             SQLitePreparedStatement executeFast = this.database.executeFast("REPLACE INTO chat_settings_v2 VALUES(?, ?, ?, ?, ?, ?)");
@@ -4816,7 +5288,7 @@ public class MessagesStorage extends BaseController {
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateChatParticipants$90(TLRPC$ChatFull tLRPC$ChatFull) {
+    public /* synthetic */ void lambda$updateChatParticipants$95(TLRPC$ChatFull tLRPC$ChatFull) {
         NotificationCenter notificationCenter = getNotificationCenter();
         int i = NotificationCenter.chatInfoDidLoad;
         Boolean bool = Boolean.FALSE;
@@ -4824,16 +5296,16 @@ public class MessagesStorage extends BaseController {
     }
 
     public void loadChannelAdmins(final long j) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda65
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda66
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$loadChannelAdmins$92(j);
+                MessagesStorage.this.lambda$loadChannelAdmins$97(j);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadChannelAdmins$92(long j) {
+    public /* synthetic */ void lambda$loadChannelAdmins$97(long j) {
         SQLiteCursor queryFinalized;
         SQLiteCursor sQLiteCursor = null;
         try {
@@ -4879,16 +5351,16 @@ public class MessagesStorage extends BaseController {
     }
 
     public void putChannelAdmins(final long j, final LongSparseArray<TLRPC$ChannelParticipant> longSparseArray) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda93
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda97
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$putChannelAdmins$93(j, longSparseArray);
+                MessagesStorage.this.lambda$putChannelAdmins$98(j, longSparseArray);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$putChannelAdmins$93(long j, LongSparseArray longSparseArray) {
+    public /* synthetic */ void lambda$putChannelAdmins$98(long j, LongSparseArray longSparseArray) {
         SQLitePreparedStatement sQLitePreparedStatement = null;
         try {
             try {
@@ -4949,16 +5421,16 @@ public class MessagesStorage extends BaseController {
     }
 
     public void updateChannelUsers(final long j, final ArrayList<TLRPC$ChannelParticipant> arrayList) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda96
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda99
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$updateChannelUsers$94(j, arrayList);
+                MessagesStorage.this.lambda$updateChannelUsers$99(j, arrayList);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateChannelUsers$94(long j, ArrayList arrayList) {
+    public /* synthetic */ void lambda$updateChannelUsers$99(long j, ArrayList arrayList) {
         SQLitePreparedStatement executeFast;
         long j2 = -j;
         SQLitePreparedStatement sQLitePreparedStatement = null;
@@ -5026,16 +5498,16 @@ public class MessagesStorage extends BaseController {
         if (tLObject == null || TextUtils.isEmpty(str)) {
             return;
         }
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda157
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda166
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$saveBotCache$95(tLObject, str);
+                MessagesStorage.this.lambda$saveBotCache$100(tLObject, str);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$saveBotCache$95(TLObject tLObject, String str) {
+    public /* synthetic */ void lambda$saveBotCache$100(TLObject tLObject, String str) {
         int currentTime;
         int i;
         SQLitePreparedStatement executeFast;
@@ -5102,10 +5574,10 @@ public class MessagesStorage extends BaseController {
             return;
         }
         final int currentTime = getConnectionsManager().getCurrentTime();
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda52
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda53
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$getBotCache$96(currentTime, str, requestDelegate);
+                MessagesStorage.this.lambda$getBotCache$101(currentTime, str, requestDelegate);
             }
         });
     }
@@ -5116,7 +5588,7 @@ public class MessagesStorage extends BaseController {
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public /* synthetic */ void lambda$getBotCache$96(int r5, java.lang.String r6, org.telegram.tgnet.RequestDelegate r7) {
+    public /* synthetic */ void lambda$getBotCache$101(int r5, java.lang.String r6, org.telegram.tgnet.RequestDelegate r7) {
         /*
             r4 = this;
             r0 = 0
@@ -5202,17 +5674,17 @@ public class MessagesStorage extends BaseController {
         L82:
             throw r6
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getBotCache$96(int, java.lang.String, org.telegram.tgnet.RequestDelegate):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getBotCache$101(int, java.lang.String, org.telegram.tgnet.RequestDelegate):void");
     }
 
     public void loadUserInfo(final TLRPC$User tLRPC$User, final boolean z, final int i, int i2) {
         if (tLRPC$User == null) {
             return;
         }
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda177
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda186
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$loadUserInfo$97(tLRPC$User, z, i);
+                MessagesStorage.this.lambda$loadUserInfo$102(tLRPC$User, z, i);
             }
         });
     }
@@ -5225,19 +5697,19 @@ public class MessagesStorage extends BaseController {
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public /* synthetic */ void lambda$loadUserInfo$97(org.telegram.tgnet.TLRPC$User r20, boolean r21, int r22) {
+    public /* synthetic */ void lambda$loadUserInfo$102(org.telegram.tgnet.TLRPC$User r20, boolean r21, int r22) {
         /*
             Method dump skipped, instructions count: 423
             To view this dump add '--comments-level debug' option
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$loadUserInfo$97(org.telegram.tgnet.TLRPC$User, boolean, int):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$loadUserInfo$102(org.telegram.tgnet.TLRPC$User, boolean, int):void");
     }
 
     public void updateUserInfo(final TLRPC$UserFull tLRPC$UserFull, final boolean z) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda193
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda202
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$updateUserInfo$98(z, tLRPC$UserFull);
+                MessagesStorage.this.lambda$updateUserInfo$103(z, tLRPC$UserFull);
             }
         });
     }
@@ -5255,7 +5727,7 @@ public class MessagesStorage extends BaseController {
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public /* synthetic */ void lambda$updateUserInfo$98(boolean r8, org.telegram.tgnet.TLRPC$UserFull r9) {
+    public /* synthetic */ void lambda$updateUserInfo$103(boolean r8, org.telegram.tgnet.TLRPC$UserFull r9) {
         /*
             r7 = this;
             r0 = 0
@@ -5356,20 +5828,20 @@ public class MessagesStorage extends BaseController {
         Laf:
             throw r9
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$updateUserInfo$98(boolean, org.telegram.tgnet.TLRPC$UserFull):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$updateUserInfo$103(boolean, org.telegram.tgnet.TLRPC$UserFull):void");
     }
 
     public void saveChatInviter(final long j, final long j2) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda83
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda86
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$saveChatInviter$99(j2, j);
+                MessagesStorage.this.lambda$saveChatInviter$104(j2, j);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$saveChatInviter$99(long j, long j2) {
+    public /* synthetic */ void lambda$saveChatInviter$104(long j, long j2) {
         SQLitePreparedStatement sQLitePreparedStatement = null;
         try {
             try {
@@ -5395,16 +5867,16 @@ public class MessagesStorage extends BaseController {
     }
 
     public void saveChatLinksCount(final long j, final int i) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda40
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda44
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$saveChatLinksCount$100(i, j);
+                MessagesStorage.this.lambda$saveChatLinksCount$105(i, j);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$saveChatLinksCount$100(int i, long j) {
+    public /* synthetic */ void lambda$saveChatLinksCount$105(int i, long j) {
         SQLitePreparedStatement sQLitePreparedStatement = null;
         try {
             try {
@@ -5430,10 +5902,10 @@ public class MessagesStorage extends BaseController {
     }
 
     public void updateChatInfo(final TLRPC$ChatFull tLRPC$ChatFull, final boolean z) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda161
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda170
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$updateChatInfo$101(tLRPC$ChatFull, z);
+                MessagesStorage.this.lambda$updateChatInfo$106(tLRPC$ChatFull, z);
             }
         });
     }
@@ -5448,25 +5920,25 @@ public class MessagesStorage extends BaseController {
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public /* synthetic */ void lambda$updateChatInfo$101(org.telegram.tgnet.TLRPC$ChatFull r12, boolean r13) {
+    public /* synthetic */ void lambda$updateChatInfo$106(org.telegram.tgnet.TLRPC$ChatFull r12, boolean r13) {
         /*
             Method dump skipped, instructions count: 345
             To view this dump add '--comments-level debug' option
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$updateChatInfo$101(org.telegram.tgnet.TLRPC$ChatFull, boolean):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$updateChatInfo$106(org.telegram.tgnet.TLRPC$ChatFull, boolean):void");
     }
 
     public void updateChatOnlineCount(final long j, final int i) {
         this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda43
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$updateChatOnlineCount$102(i, j);
+                MessagesStorage.this.lambda$updateChatOnlineCount$107(i, j);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateChatOnlineCount$102(int i, long j) {
+    public /* synthetic */ void lambda$updateChatOnlineCount$107(int i, long j) {
         SQLitePreparedStatement sQLitePreparedStatement = null;
         try {
             try {
@@ -5492,10 +5964,10 @@ public class MessagesStorage extends BaseController {
     }
 
     public void updatePinnedMessages(final long j, final ArrayList<Integer> arrayList, final boolean z, final int i, final int i2, final boolean z2, final HashMap<Integer, MessageObject> hashMap) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda192
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda201
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$updatePinnedMessages$105(z, hashMap, i2, j, arrayList, i, z2);
+                MessagesStorage.this.lambda$updatePinnedMessages$110(z, hashMap, i2, j, arrayList, i, z2);
             }
         });
     }
@@ -5509,41 +5981,41 @@ public class MessagesStorage extends BaseController {
     /* JADX WARN: Removed duplicated region for block: B:138:0x0348  */
     /* JADX WARN: Removed duplicated region for block: B:140:0x034d  */
     /* JADX WARN: Removed duplicated region for block: B:157:? A[RETURN, SYNTHETIC] */
-    /* JADX WARN: Type inference failed for: r1v29, types: [org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda99] */
-    /* JADX WARN: Type inference failed for: r1v9, types: [org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda98] */
+    /* JADX WARN: Type inference failed for: r1v29, types: [org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda103] */
+    /* JADX WARN: Type inference failed for: r1v9, types: [org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda102] */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public /* synthetic */ void lambda$updatePinnedMessages$105(boolean r19, final java.util.HashMap r20, final int r21, final long r22, final java.util.ArrayList r24, int r25, boolean r26) {
+    public /* synthetic */ void lambda$updatePinnedMessages$110(boolean r19, final java.util.HashMap r20, final int r21, final long r22, final java.util.ArrayList r24, int r25, boolean r26) {
         /*
             Method dump skipped, instructions count: 851
             To view this dump add '--comments-level debug' option
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$updatePinnedMessages$105(boolean, java.util.HashMap, int, long, java.util.ArrayList, int, boolean):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$updatePinnedMessages$110(boolean, java.util.HashMap, int, long, java.util.ArrayList, int, boolean):void");
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$updatePinnedMessages$103(long j, ArrayList arrayList, HashMap hashMap, int i, int i2, boolean z) {
+    public /* synthetic */ void lambda$updatePinnedMessages$108(long j, ArrayList arrayList, HashMap hashMap, int i, int i2, boolean z) {
         getNotificationCenter().postNotificationName(NotificationCenter.didLoadPinnedMessages, Long.valueOf(j), arrayList, Boolean.TRUE, 0, hashMap, Integer.valueOf(i), Integer.valueOf(i2), Boolean.valueOf(z));
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$updatePinnedMessages$104(long j, ArrayList arrayList, HashMap hashMap, int i, int i2, boolean z) {
+    public /* synthetic */ void lambda$updatePinnedMessages$109(long j, ArrayList arrayList, HashMap hashMap, int i, int i2, boolean z) {
         getNotificationCenter().postNotificationName(NotificationCenter.didLoadPinnedMessages, Long.valueOf(j), arrayList, Boolean.FALSE, 0, hashMap, Integer.valueOf(i), Integer.valueOf(i2), Boolean.valueOf(z));
     }
 
     public void updateChatInfo(final long j, final long j2, final int i, final long j3, final int i2) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda73
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda77
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$updateChatInfo$107(j, i, j2, j3, i2);
+                MessagesStorage.this.lambda$updateChatInfo$112(j, i, j2, j3, i2);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateChatInfo$107(long j, int i, long j2, long j3, int i2) {
+    public /* synthetic */ void lambda$updateChatInfo$112(long j, int i, long j2, long j3, int i2) {
         int i3;
         SQLiteCursor queryFinalized;
         final TLRPC$ChatFull tLRPC$ChatFull;
@@ -5620,10 +6092,10 @@ public class MessagesStorage extends BaseController {
                 }
             }
             tLRPC$ChatFull.participants.version = i2;
-            AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda159
+            AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda169
                 @Override // java.lang.Runnable
                 public final void run() {
-                    MessagesStorage.this.lambda$updateChatInfo$106(tLRPC$ChatFull);
+                    MessagesStorage.this.lambda$updateChatInfo$111(tLRPC$ChatFull);
                 }
             });
             SQLitePreparedStatement executeFast = this.database.executeFast("REPLACE INTO chat_settings_v2 VALUES(?, ?, ?, ?, ?, ?)");
@@ -5657,7 +6129,7 @@ public class MessagesStorage extends BaseController {
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateChatInfo$106(TLRPC$ChatFull tLRPC$ChatFull) {
+    public /* synthetic */ void lambda$updateChatInfo$111(TLRPC$ChatFull tLRPC$ChatFull) {
         NotificationCenter notificationCenter = getNotificationCenter();
         int i = NotificationCenter.chatInfoDidLoad;
         Boolean bool = Boolean.FALSE;
@@ -5667,10 +6139,10 @@ public class MessagesStorage extends BaseController {
     public boolean isMigratedChat(final long j) {
         final CountDownLatch countDownLatch = new CountDownLatch(1);
         final boolean[] zArr = new boolean[1];
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda115
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda125
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$isMigratedChat$108(j, zArr, countDownLatch);
+                MessagesStorage.this.lambda$isMigratedChat$113(j, zArr, countDownLatch);
             }
         });
         try {
@@ -5682,7 +6154,7 @@ public class MessagesStorage extends BaseController {
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$isMigratedChat$108(long j, boolean[] zArr, CountDownLatch countDownLatch) {
+    public /* synthetic */ void lambda$isMigratedChat$113(long j, boolean[] zArr, CountDownLatch countDownLatch) {
         SQLiteCursor queryFinalized;
         TLRPC$ChatFull tLRPC$ChatFull;
         NativeByteBuffer byteBufferValue;
@@ -5730,10 +6202,10 @@ public class MessagesStorage extends BaseController {
     public TLRPC$Message getMessage(final long j, final long j2) {
         final CountDownLatch countDownLatch = new CountDownLatch(1);
         final AtomicReference atomicReference = new AtomicReference();
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda89
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda93
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$getMessage$109(j, j2, atomicReference, countDownLatch);
+                MessagesStorage.this.lambda$getMessage$114(j, j2, atomicReference, countDownLatch);
             }
         });
         try {
@@ -5745,7 +6217,7 @@ public class MessagesStorage extends BaseController {
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$getMessage$109(long j, long j2, AtomicReference atomicReference, CountDownLatch countDownLatch) {
+    public /* synthetic */ void lambda$getMessage$114(long j, long j2, AtomicReference atomicReference, CountDownLatch countDownLatch) {
         SQLiteCursor sQLiteCursor = null;
         try {
             try {
@@ -5779,10 +6251,10 @@ public class MessagesStorage extends BaseController {
     public boolean hasInviteMeMessage(final long j) {
         final CountDownLatch countDownLatch = new CountDownLatch(1);
         final boolean[] zArr = new boolean[1];
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda117
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda123
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$hasInviteMeMessage$110(j, zArr, countDownLatch);
+                MessagesStorage.this.lambda$hasInviteMeMessage$115(j, zArr, countDownLatch);
             }
         });
         try {
@@ -5794,7 +6266,7 @@ public class MessagesStorage extends BaseController {
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$hasInviteMeMessage$110(long j, boolean[] zArr, CountDownLatch countDownLatch) {
+    public /* synthetic */ void lambda$hasInviteMeMessage$115(long j, boolean[] zArr, CountDownLatch countDownLatch) {
         SQLiteCursor sQLiteCursor = null;
         try {
             try {
@@ -5916,10 +6388,10 @@ public class MessagesStorage extends BaseController {
 
     public TLRPC$ChatFull loadChatInfo(final long j, final boolean z, final CountDownLatch countDownLatch, final boolean z2, final boolean z3, final int i) {
         final TLRPC$ChatFull[] tLRPC$ChatFullArr = new TLRPC$ChatFull[1];
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda195
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda204
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$loadChatInfo$111(tLRPC$ChatFullArr, j, z, z2, z3, i, countDownLatch);
+                MessagesStorage.this.lambda$loadChatInfo$116(tLRPC$ChatFullArr, j, z, z2, z3, i, countDownLatch);
             }
         });
         if (countDownLatch != null) {
@@ -5932,7 +6404,7 @@ public class MessagesStorage extends BaseController {
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadChatInfo$111(TLRPC$ChatFull[] tLRPC$ChatFullArr, long j, boolean z, boolean z2, boolean z3, int i, CountDownLatch countDownLatch) {
+    public /* synthetic */ void lambda$loadChatInfo$116(TLRPC$ChatFull[] tLRPC$ChatFullArr, long j, boolean z, boolean z2, boolean z3, int i, CountDownLatch countDownLatch) {
         tLRPC$ChatFullArr[0] = loadChatInfoInternal(j, z, z2, z3, i);
         if (countDownLatch != null) {
             countDownLatch.countDown();
@@ -5941,10 +6413,10 @@ public class MessagesStorage extends BaseController {
 
     public void processPendingRead(final long j, final int i, final int i2, final int i3) {
         final int i4 = this.lastSavedDate;
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda71
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda75
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$processPendingRead$112(j, i, i3, i4, i2);
+                MessagesStorage.this.lambda$processPendingRead$117(j, i, i3, i4, i2);
             }
         });
     }
@@ -5960,21 +6432,21 @@ public class MessagesStorage extends BaseController {
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public /* synthetic */ void lambda$processPendingRead$112(long r19, int r21, int r22, int r23, int r24) {
+    public /* synthetic */ void lambda$processPendingRead$117(long r19, int r21, int r22, int r23, int r24) {
         /*
             Method dump skipped, instructions count: 458
             To view this dump add '--comments-level debug' option
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$processPendingRead$112(long, int, int, int, int):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$processPendingRead$117(long, int, int, int, int):void");
     }
 
     public void putContacts(ArrayList<TLRPC$TL_contact> arrayList, final boolean z) {
         if (!arrayList.isEmpty() || z) {
             final ArrayList arrayList2 = new ArrayList(arrayList);
-            this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda191
+            this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda200
                 @Override // java.lang.Runnable
                 public final void run() {
-                    MessagesStorage.this.lambda$putContacts$113(z, arrayList2);
+                    MessagesStorage.this.lambda$putContacts$118(z, arrayList2);
                 }
             });
         }
@@ -5989,7 +6461,7 @@ public class MessagesStorage extends BaseController {
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public /* synthetic */ void lambda$putContacts$113(boolean r8, java.util.ArrayList r9) {
+    public /* synthetic */ void lambda$putContacts$118(boolean r8, java.util.ArrayList r9) {
         /*
             r7 = this;
             r0 = 0
@@ -6074,23 +6546,23 @@ public class MessagesStorage extends BaseController {
         L7c:
             goto L7b
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$putContacts$113(boolean, java.util.ArrayList):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$putContacts$118(boolean, java.util.ArrayList):void");
     }
 
     public void deleteContacts(final ArrayList<Long> arrayList) {
         if (arrayList == null || arrayList.isEmpty()) {
             return;
         }
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda138
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda143
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$deleteContacts$114(arrayList);
+                MessagesStorage.this.lambda$deleteContacts$119(arrayList);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$deleteContacts$114(ArrayList arrayList) {
+    public /* synthetic */ void lambda$deleteContacts$119(ArrayList arrayList) {
         try {
             String join = TextUtils.join(",", arrayList);
             SQLiteDatabase sQLiteDatabase = this.database;
@@ -6104,16 +6576,16 @@ public class MessagesStorage extends BaseController {
         if (TextUtils.isEmpty(str)) {
             return;
         }
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda125
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda133
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$applyPhoneBookUpdates$115(str, str2);
+                MessagesStorage.this.lambda$applyPhoneBookUpdates$120(str, str2);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$applyPhoneBookUpdates$115(String str, String str2) {
+    public /* synthetic */ void lambda$applyPhoneBookUpdates$120(String str, String str2) {
         try {
             if (str.length() != 0) {
                 this.database.executeFast(String.format(Locale.US, "UPDATE user_phones_v7 SET deleted = 0 WHERE sphone IN(%s)", str)).stepThis().dispose();
@@ -6132,10 +6604,10 @@ public class MessagesStorage extends BaseController {
             if (hashMap.isEmpty() && !z && !z2) {
                 return;
             }
-            this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda150
+            this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda159
                 @Override // java.lang.Runnable
                 public final void run() {
-                    MessagesStorage.this.lambda$putCachedPhoneBook$116(hashMap, z);
+                    MessagesStorage.this.lambda$putCachedPhoneBook$121(hashMap, z);
                 }
             });
         }
@@ -6149,19 +6621,19 @@ public class MessagesStorage extends BaseController {
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public /* synthetic */ void lambda$putCachedPhoneBook$116(java.util.HashMap r12, boolean r13) {
+    public /* synthetic */ void lambda$putCachedPhoneBook$121(java.util.HashMap r12, boolean r13) {
         /*
             Method dump skipped, instructions count: 336
             To view this dump add '--comments-level debug' option
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$putCachedPhoneBook$116(java.util.HashMap, boolean):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$putCachedPhoneBook$121(java.util.HashMap, boolean):void");
     }
 
     public void getCachedPhoneBook(final boolean z) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda184
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda193
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$getCachedPhoneBook$117(z);
+                MessagesStorage.this.lambda$getCachedPhoneBook$122(z);
             }
         });
     }
@@ -6179,19 +6651,19 @@ public class MessagesStorage extends BaseController {
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public /* synthetic */ void lambda$getCachedPhoneBook$117(boolean r25) {
+    public /* synthetic */ void lambda$getCachedPhoneBook$122(boolean r25) {
         /*
             Method dump skipped, instructions count: 554
             To view this dump add '--comments-level debug' option
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getCachedPhoneBook$117(boolean):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getCachedPhoneBook$122(boolean):void");
     }
 
     public void getContacts() {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda9
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda23
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$getContacts$118();
+                MessagesStorage.this.lambda$getContacts$123();
             }
         });
     }
@@ -6202,7 +6674,7 @@ public class MessagesStorage extends BaseController {
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public /* synthetic */ void lambda$getContacts$118() {
+    public /* synthetic */ void lambda$getContacts$123() {
         /*
             r11 = this;
             java.util.ArrayList r0 = new java.util.ArrayList
@@ -6284,14 +6756,14 @@ public class MessagesStorage extends BaseController {
         L85:
             goto L84
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getContacts$118():void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getContacts$123():void");
     }
 
     public void getUnsentMessages(final int i) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda31
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda26
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$getUnsentMessages$119(i);
+                MessagesStorage.this.lambda$getUnsentMessages$124(i);
             }
         });
     }
@@ -6302,21 +6774,21 @@ public class MessagesStorage extends BaseController {
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public /* synthetic */ void lambda$getUnsentMessages$119(int r20) {
+    public /* synthetic */ void lambda$getUnsentMessages$124(int r20) {
         /*
             Method dump skipped, instructions count: 706
             To view this dump add '--comments-level debug' option
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getUnsentMessages$119(int):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getUnsentMessages$124(int):void");
     }
 
     public boolean checkMessageByRandomId(final long j) {
         final boolean[] zArr = new boolean[1];
         final CountDownLatch countDownLatch = new CountDownLatch(1);
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda116
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda124
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$checkMessageByRandomId$120(j, zArr, countDownLatch);
+                MessagesStorage.this.lambda$checkMessageByRandomId$125(j, zArr, countDownLatch);
             }
         });
         try {
@@ -6335,7 +6807,7 @@ public class MessagesStorage extends BaseController {
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public /* synthetic */ void lambda$checkMessageByRandomId$120(long r7, boolean[] r9, java.util.concurrent.CountDownLatch r10) {
+    public /* synthetic */ void lambda$checkMessageByRandomId$125(long r7, boolean[] r9, java.util.concurrent.CountDownLatch r10) {
         /*
             r6 = this;
             r0 = 0
@@ -6372,16 +6844,16 @@ public class MessagesStorage extends BaseController {
         L38:
             throw r7
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$checkMessageByRandomId$120(long, boolean[], java.util.concurrent.CountDownLatch):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$checkMessageByRandomId$125(long, boolean[], java.util.concurrent.CountDownLatch):void");
     }
 
     public boolean checkMessageId(final long j, final int i) {
         final boolean[] zArr = new boolean[1];
         final CountDownLatch countDownLatch = new CountDownLatch(1);
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda81
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda85
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$checkMessageId$121(j, i, zArr, countDownLatch);
+                MessagesStorage.this.lambda$checkMessageId$126(j, i, zArr, countDownLatch);
             }
         });
         try {
@@ -6400,7 +6872,7 @@ public class MessagesStorage extends BaseController {
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public /* synthetic */ void lambda$checkMessageId$121(long r6, int r8, boolean[] r9, java.util.concurrent.CountDownLatch r10) {
+    public /* synthetic */ void lambda$checkMessageId$126(long r6, int r8, boolean[] r9, java.util.concurrent.CountDownLatch r10) {
         /*
             r5 = this;
             r0 = 0
@@ -6440,33 +6912,39 @@ public class MessagesStorage extends BaseController {
         L3f:
             throw r6
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$checkMessageId$121(long, int, boolean[], java.util.concurrent.CountDownLatch):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$checkMessageId$126(long, int, boolean[], java.util.concurrent.CountDownLatch):void");
     }
 
-    public void getUnreadMention(final long j, final IntCallback intCallback) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda104
+    public void getUnreadMention(final long j, final int i, final IntCallback intCallback) {
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda48
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$getUnreadMention$123(j, intCallback);
+                MessagesStorage.this.lambda$getUnreadMention$128(i, j, intCallback);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$getUnreadMention$123(long j, final IntCallback intCallback) {
+    public /* synthetic */ void lambda$getUnreadMention$128(int i, long j, final IntCallback intCallback) {
+        SQLiteCursor queryFinalized;
+        final int i2 = 0;
         SQLiteCursor sQLiteCursor = null;
         try {
             try {
-                final int i = 0;
-                sQLiteCursor = this.database.queryFinalized(String.format(Locale.US, "SELECT MIN(mid) FROM messages_v2 WHERE uid = %d AND mention = 1 AND read_state IN(0, 1)", Long.valueOf(j)), new Object[0]);
+                if (i != 0) {
+                    queryFinalized = this.database.queryFinalized(String.format(Locale.US, "SELECT MIN(mid) FROM messages_topics WHERE uid = %d AND topic_id = %d AND mention = 1 AND read_state IN(0, 1)", Long.valueOf(j), Integer.valueOf(i)), new Object[0]);
+                } else {
+                    queryFinalized = this.database.queryFinalized(String.format(Locale.US, "SELECT MIN(mid) FROM messages_v2 WHERE uid = %d AND mention = 1 AND read_state IN(0, 1)", Long.valueOf(j)), new Object[0]);
+                }
+                sQLiteCursor = queryFinalized;
                 if (sQLiteCursor.next()) {
-                    i = sQLiteCursor.intValue(0);
+                    i2 = sQLiteCursor.intValue(0);
                 }
                 sQLiteCursor.dispose();
-                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda1
+                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda4
                     @Override // java.lang.Runnable
                     public final void run() {
-                        MessagesStorage.IntCallback.this.run(i);
+                        MessagesStorage.IntCallback.this.run(i2);
                     }
                 });
             } catch (Exception e) {
@@ -6485,16 +6963,16 @@ public class MessagesStorage extends BaseController {
     }
 
     public void getMessagesCount(final long j, final IntCallback intCallback) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda105
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda108
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$getMessagesCount$125(j, intCallback);
+                MessagesStorage.this.lambda$getMessagesCount$130(j, intCallback);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$getMessagesCount$125(long j, final IntCallback intCallback) {
+    public /* synthetic */ void lambda$getMessagesCount$130(long j, final IntCallback intCallback) {
         SQLiteCursor sQLiteCursor = null;
         try {
             try {
@@ -6504,7 +6982,7 @@ public class MessagesStorage extends BaseController {
                     i = sQLiteCursor.intValue(0);
                 }
                 sQLiteCursor.dispose();
-                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda2
+                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda3
                     @Override // java.lang.Runnable
                     public final void run() {
                         MessagesStorage.IntCallback.this.run(i);
@@ -6519,21 +6997,21 @@ public class MessagesStorage extends BaseController {
     }
 
     /*  JADX ERROR: JadxRuntimeException in pass: BlockProcessor
-        jadx.core.utils.exceptions.JadxRuntimeException: Unreachable block: B:944:0x171b
+        jadx.core.utils.exceptions.JadxRuntimeException: Unreachable block: B:189:0x0471
         	at jadx.core.dex.visitors.blocks.BlockProcessor.checkForUnreachableBlocks(BlockProcessor.java:82)
         	at jadx.core.dex.visitors.blocks.BlockProcessor.processBlocksTree(BlockProcessor.java:48)
         	at jadx.core.dex.visitors.blocks.BlockProcessor.visit(BlockProcessor.java:40)
         */
-    public java.lang.Runnable getMessagesInternal(long r50, long r52, int r54, int r55, int r56, int r57, int r58, int r59, boolean r60, int r61, int r62, boolean r63) {
+    public java.lang.Runnable getMessagesInternal(long r53, long r55, int r57, int r58, int r59, int r60, int r61, int r62, boolean r63, int r64, int r65, boolean r66, boolean r67) {
         /*
-            Method dump skipped, instructions count: 6107
+            Method dump skipped, instructions count: 8437
             To view this dump add '--comments-level debug' option
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.getMessagesInternal(long, long, int, int, int, int, int, int, boolean, int, int, boolean):java.lang.Runnable");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.getMessagesInternal(long, long, int, int, int, int, int, int, boolean, int, int, boolean, boolean):java.lang.Runnable");
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public static /* synthetic */ int lambda$getMessagesInternal$126(TLRPC$Message tLRPC$Message, TLRPC$Message tLRPC$Message2) {
+    public static /* synthetic */ int lambda$getMessagesInternal$131(TLRPC$Message tLRPC$Message, TLRPC$Message tLRPC$Message2) {
         int i;
         int i2;
         int i3 = tLRPC$Message.id;
@@ -6558,8 +7036,8 @@ public class MessagesStorage extends BaseController {
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$getMessagesInternal$127(TLRPC$TL_messages_messages tLRPC$TL_messages_messages, int i, long j, long j2, int i2, int i3, int i4, int i5, int i6, int i7, int i8, int i9, int i10, boolean z, boolean z2, int i11, int i12, boolean z3, int i13, boolean z4) {
-        getMessagesController().processLoadedMessages(tLRPC$TL_messages_messages, i, j, j2, i2, i3, i4, true, i5, i6, i7, i8, i9, i10, z, z2 ? 1 : 0, i11, i12, z3, i13, z4);
+    public /* synthetic */ void lambda$getMessagesInternal$132(TLRPC$TL_messages_messages tLRPC$TL_messages_messages, int i, long j, long j2, int i2, int i3, int i4, int i5, int i6, int i7, int i8, int i9, int i10, boolean z, boolean z2, int i11, int i12, boolean z3, int i13, boolean z4, boolean z5) {
+        getMessagesController().processLoadedMessages(tLRPC$TL_messages_messages, i, j, j2, i2, i3, i4, true, i5, i6, i7, i8, i9, i10, z, z2 ? 1 : 0, i11, i12, z3, i13, z4, z5);
     }
 
     private void getAnimatedEmoji(String str, ArrayList<TLRPC$Document> arrayList) {
@@ -6596,31 +7074,38 @@ public class MessagesStorage extends BaseController {
         sQLiteCursor.dispose();
     }
 
-    public void getMessages(final long j, final long j2, boolean z, final int i, final int i2, final int i3, final int i4, final int i5, final int i6, final boolean z2, final int i7, final int i8, final boolean z3) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda86
+    public void getMessages(final long j, final long j2, boolean z, final int i, final int i2, final int i3, final int i4, final int i5, final int i6, final boolean z2, final int i7, final int i8, final boolean z3, final boolean z4) {
+        System.currentTimeMillis();
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda90
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$getMessages$128(j, j2, i, i2, i3, i4, i5, i6, z2, i7, i8, z3);
+                MessagesStorage.this.lambda$getMessages$134(j, j2, i, i2, i3, i4, i5, i6, z2, i7, i8, z3, z4);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$getMessages$128(long j, long j2, int i, int i2, int i3, int i4, int i5, int i6, boolean z, int i7, int i8, boolean z2) {
-        Utilities.stageQueue.postRunnable(getMessagesInternal(j, j2, i, i2, i3, i4, i5, i6, z, i7, i8, z2));
+    public /* synthetic */ void lambda$getMessages$134(long j, long j2, int i, int i2, int i3, int i4, int i5, int i6, boolean z, int i7, int i8, boolean z2, boolean z3) {
+        final Runnable messagesInternal = getMessagesInternal(j, j2, i, i2, i3, i4, i5, i6, z, i7, i8, z2, z3);
+        Utilities.stageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda0
+            @Override // java.lang.Runnable
+            public final void run() {
+                messagesInternal.run();
+            }
+        });
     }
 
     public void clearSentMedia() {
         this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda10
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$clearSentMedia$129();
+                MessagesStorage.this.lambda$clearSentMedia$135();
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$clearSentMedia$129() {
+    public /* synthetic */ void lambda$clearSentMedia$135() {
         try {
             this.database.executeFast("DELETE FROM sent_files_v2 WHERE 1").stepThis().dispose();
         } catch (Exception e) {
@@ -6634,10 +7119,10 @@ public class MessagesStorage extends BaseController {
         }
         final CountDownLatch countDownLatch = new CountDownLatch(1);
         final Object[] objArr = new Object[2];
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda124
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda132
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$getSentFile$130(str, i, objArr, countDownLatch);
+                MessagesStorage.this.lambda$getSentFile$136(str, i, objArr, countDownLatch);
             }
         });
         try {
@@ -6652,7 +7137,7 @@ public class MessagesStorage extends BaseController {
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$getSentFile$130(String str, int i, Object[] objArr, CountDownLatch countDownLatch) {
+    public /* synthetic */ void lambda$getSentFile$136(String str, int i, Object[] objArr, CountDownLatch countDownLatch) {
         NativeByteBuffer byteBufferValue;
         try {
             try {
@@ -6707,17 +7192,17 @@ public class MessagesStorage extends BaseController {
         }
     }
 
-    public void putWidgetDialogs(final int i, final ArrayList<Long> arrayList) {
+    public void putWidgetDialogs(final int i, final ArrayList<TopicKey> arrayList) {
         this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda55
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$putWidgetDialogs$131(i, arrayList);
+                MessagesStorage.this.lambda$putWidgetDialogs$137(i, arrayList);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$putWidgetDialogs$131(int i, ArrayList arrayList) {
+    public /* synthetic */ void lambda$putWidgetDialogs$137(int i, ArrayList arrayList) {
         try {
             this.database.beginTransaction();
             SQLiteDatabase sQLiteDatabase = this.database;
@@ -6732,10 +7217,10 @@ public class MessagesStorage extends BaseController {
             } else {
                 int size = arrayList.size();
                 for (int i2 = 0; i2 < size; i2++) {
-                    long longValue = ((Long) arrayList.get(i2)).longValue();
+                    long j = ((TopicKey) arrayList.get(i2)).dialogId;
                     executeFast.requery();
                     executeFast.bindInteger(1, i);
-                    executeFast.bindLong(2, longValue);
+                    executeFast.bindLong(2, j);
                     executeFast.bindInteger(3, i2);
                     executeFast.step();
                 }
@@ -6748,16 +7233,16 @@ public class MessagesStorage extends BaseController {
     }
 
     public void clearWidgetDialogs(final int i) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda27
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda33
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$clearWidgetDialogs$132(i);
+                MessagesStorage.this.lambda$clearWidgetDialogs$138(i);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$clearWidgetDialogs$132(int i) {
+    public /* synthetic */ void lambda$clearWidgetDialogs$138(int i) {
         try {
             SQLiteDatabase sQLiteDatabase = this.database;
             sQLiteDatabase.executeFast("DELETE FROM shortcut_widget WHERE id = " + i).stepThis().dispose();
@@ -6768,10 +7253,10 @@ public class MessagesStorage extends BaseController {
 
     public void getWidgetDialogIds(final int i, final int i2, final ArrayList<Long> arrayList, final ArrayList<TLRPC$User> arrayList2, final ArrayList<TLRPC$Chat> arrayList3, final boolean z) {
         final CountDownLatch countDownLatch = new CountDownLatch(1);
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda60
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda61
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$getWidgetDialogIds$133(i, arrayList, arrayList2, arrayList3, z, i2, countDownLatch);
+                MessagesStorage.this.lambda$getWidgetDialogIds$139(i, arrayList, arrayList2, arrayList3, z, i2, countDownLatch);
             }
         });
         try {
@@ -6782,7 +7267,7 @@ public class MessagesStorage extends BaseController {
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$getWidgetDialogIds$133(int i, ArrayList arrayList, ArrayList arrayList2, ArrayList arrayList3, boolean z, int i2, CountDownLatch countDownLatch) {
+    public /* synthetic */ void lambda$getWidgetDialogIds$139(int i, ArrayList arrayList, ArrayList arrayList2, ArrayList arrayList3, boolean z, int i2, CountDownLatch countDownLatch) {
         SQLiteCursor sQLiteCursor = null;
         try {
             try {
@@ -6873,10 +7358,10 @@ public class MessagesStorage extends BaseController {
 
     public void getWidgetDialogs(final int i, final int i2, final ArrayList<Long> arrayList, final LongSparseArray<TLRPC$Dialog> longSparseArray, final LongSparseArray<TLRPC$Message> longSparseArray2, final ArrayList<TLRPC$User> arrayList2, final ArrayList<TLRPC$Chat> arrayList3) {
         final CountDownLatch countDownLatch = new CountDownLatch(1);
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda57
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda58
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$getWidgetDialogs$134(i, arrayList, i2, longSparseArray, longSparseArray2, arrayList3, arrayList2, countDownLatch);
+                MessagesStorage.this.lambda$getWidgetDialogs$140(i, arrayList, i2, longSparseArray, longSparseArray2, arrayList3, arrayList2, countDownLatch);
             }
         });
         try {
@@ -6887,7 +7372,7 @@ public class MessagesStorage extends BaseController {
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$getWidgetDialogs$134(int i, ArrayList arrayList, int i2, LongSparseArray longSparseArray, LongSparseArray longSparseArray2, ArrayList arrayList2, ArrayList arrayList3, CountDownLatch countDownLatch) {
+    public /* synthetic */ void lambda$getWidgetDialogs$140(int i, ArrayList arrayList, int i2, LongSparseArray longSparseArray, LongSparseArray longSparseArray2, ArrayList arrayList2, ArrayList arrayList3, CountDownLatch countDownLatch) {
         SQLiteCursor queryFinalized;
         boolean z;
         SQLiteCursor sQLiteCursor = null;
@@ -7016,16 +7501,16 @@ public class MessagesStorage extends BaseController {
         if (str == null || tLObject == null || str2 == null) {
             return;
         }
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda126
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda134
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$putSentFile$135(str, tLObject, i, str2);
+                MessagesStorage.this.lambda$putSentFile$141(str, tLObject, i, str2);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$putSentFile$135(String str, TLObject tLObject, int i, String str2) {
+    public /* synthetic */ void lambda$putSentFile$141(String str, TLObject tLObject, int i, String str2) {
         TLRPC$MessageMedia tLRPC$MessageMedia;
         SQLitePreparedStatement sQLitePreparedStatement = null;
         try {
@@ -7079,16 +7564,16 @@ public class MessagesStorage extends BaseController {
         if (tLRPC$EncryptedChat == null) {
             return;
         }
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda169
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda178
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$updateEncryptedChatSeq$136(tLRPC$EncryptedChat, z);
+                MessagesStorage.this.lambda$updateEncryptedChatSeq$142(tLRPC$EncryptedChat, z);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateEncryptedChatSeq$136(TLRPC$EncryptedChat tLRPC$EncryptedChat, boolean z) {
+    public /* synthetic */ void lambda$updateEncryptedChatSeq$142(TLRPC$EncryptedChat tLRPC$EncryptedChat, boolean z) {
         SQLitePreparedStatement sQLitePreparedStatement = null;
         try {
             try {
@@ -7123,16 +7608,16 @@ public class MessagesStorage extends BaseController {
         if (tLRPC$EncryptedChat == null) {
             return;
         }
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda165
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda176
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$updateEncryptedChatTTL$137(tLRPC$EncryptedChat);
+                MessagesStorage.this.lambda$updateEncryptedChatTTL$143(tLRPC$EncryptedChat);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateEncryptedChatTTL$137(TLRPC$EncryptedChat tLRPC$EncryptedChat) {
+    public /* synthetic */ void lambda$updateEncryptedChatTTL$143(TLRPC$EncryptedChat tLRPC$EncryptedChat) {
         SQLitePreparedStatement sQLitePreparedStatement = null;
         try {
             try {
@@ -7159,16 +7644,16 @@ public class MessagesStorage extends BaseController {
         if (tLRPC$EncryptedChat == null) {
             return;
         }
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda166
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda174
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$updateEncryptedChatLayer$138(tLRPC$EncryptedChat);
+                MessagesStorage.this.lambda$updateEncryptedChatLayer$144(tLRPC$EncryptedChat);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateEncryptedChatLayer$138(TLRPC$EncryptedChat tLRPC$EncryptedChat) {
+    public /* synthetic */ void lambda$updateEncryptedChatLayer$144(TLRPC$EncryptedChat tLRPC$EncryptedChat) {
         SQLitePreparedStatement sQLitePreparedStatement = null;
         try {
             try {
@@ -7195,16 +7680,16 @@ public class MessagesStorage extends BaseController {
         if (tLRPC$EncryptedChat == null) {
             return;
         }
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda167
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda175
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$updateEncryptedChat$139(tLRPC$EncryptedChat);
+                MessagesStorage.this.lambda$updateEncryptedChat$145(tLRPC$EncryptedChat);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateEncryptedChat$139(TLRPC$EncryptedChat tLRPC$EncryptedChat) {
+    public /* synthetic */ void lambda$updateEncryptedChat$145(TLRPC$EncryptedChat tLRPC$EncryptedChat) {
         byte[] bArr;
         SQLitePreparedStatement sQLitePreparedStatement = null;
         try {
@@ -7279,10 +7764,10 @@ public class MessagesStorage extends BaseController {
     }
 
     public void isDialogHasTopMessage(final long j, final Runnable runnable) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda94
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda98
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$isDialogHasTopMessage$140(j, runnable);
+                MessagesStorage.this.lambda$isDialogHasTopMessage$146(j, runnable);
             }
         });
     }
@@ -7295,7 +7780,7 @@ public class MessagesStorage extends BaseController {
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public /* synthetic */ void lambda$isDialogHasTopMessage$140(long r8, java.lang.Runnable r10) {
+    public /* synthetic */ void lambda$isDialogHasTopMessage$146(long r8, java.lang.Runnable r10) {
         /*
             r7 = this;
             r0 = 0
@@ -7341,16 +7826,16 @@ public class MessagesStorage extends BaseController {
         L42:
             goto L41
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$isDialogHasTopMessage$140(long, java.lang.Runnable):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$isDialogHasTopMessage$146(long, java.lang.Runnable):void");
     }
 
     public boolean hasAuthMessage(final int i) {
         final CountDownLatch countDownLatch = new CountDownLatch(1);
         final boolean[] zArr = new boolean[1];
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda62
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda64
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$hasAuthMessage$141(i, zArr, countDownLatch);
+                MessagesStorage.this.lambda$hasAuthMessage$147(i, zArr, countDownLatch);
             }
         });
         try {
@@ -7369,7 +7854,7 @@ public class MessagesStorage extends BaseController {
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public /* synthetic */ void lambda$hasAuthMessage$141(int r7, boolean[] r8, java.util.concurrent.CountDownLatch r9) {
+    public /* synthetic */ void lambda$hasAuthMessage$147(int r7, boolean[] r8, java.util.concurrent.CountDownLatch r9) {
         /*
             r6 = this;
             r0 = 0
@@ -7406,23 +7891,23 @@ public class MessagesStorage extends BaseController {
             r9.countDown()
             throw r7
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$hasAuthMessage$141(int, boolean[], java.util.concurrent.CountDownLatch):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$hasAuthMessage$147(int, boolean[], java.util.concurrent.CountDownLatch):void");
     }
 
     public void getEncryptedChat(final long j, final CountDownLatch countDownLatch, final ArrayList<TLObject> arrayList) {
         if (countDownLatch == null || arrayList == null) {
             return;
         }
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda100
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda104
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$getEncryptedChat$142(j, arrayList, countDownLatch);
+                MessagesStorage.this.lambda$getEncryptedChat$148(j, arrayList, countDownLatch);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$getEncryptedChat$142(long j, ArrayList arrayList, CountDownLatch countDownLatch) {
+    public /* synthetic */ void lambda$getEncryptedChat$148(long j, ArrayList arrayList, CountDownLatch countDownLatch) {
         try {
             try {
                 ArrayList<Long> arrayList2 = new ArrayList<>();
@@ -7448,10 +7933,10 @@ public class MessagesStorage extends BaseController {
         if (tLRPC$EncryptedChat == null) {
             return;
         }
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda168
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda177
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$putEncryptedChat$143(tLRPC$EncryptedChat, tLRPC$User, tLRPC$Dialog);
+                MessagesStorage.this.lambda$putEncryptedChat$149(tLRPC$EncryptedChat, tLRPC$User, tLRPC$Dialog);
             }
         });
     }
@@ -7462,12 +7947,12 @@ public class MessagesStorage extends BaseController {
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public /* synthetic */ void lambda$putEncryptedChat$143(org.telegram.tgnet.TLRPC$EncryptedChat r17, org.telegram.tgnet.TLRPC$User r18, org.telegram.tgnet.TLRPC$Dialog r19) {
+    public /* synthetic */ void lambda$putEncryptedChat$149(org.telegram.tgnet.TLRPC$EncryptedChat r17, org.telegram.tgnet.TLRPC$User r18, org.telegram.tgnet.TLRPC$Dialog r19) {
         /*
             Method dump skipped, instructions count: 395
             To view this dump add '--comments-level debug' option
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$putEncryptedChat$143(org.telegram.tgnet.TLRPC$EncryptedChat, org.telegram.tgnet.TLRPC$User, org.telegram.tgnet.TLRPC$Dialog):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$putEncryptedChat$149(org.telegram.tgnet.TLRPC$EncryptedChat, org.telegram.tgnet.TLRPC$User, org.telegram.tgnet.TLRPC$Dialog):void");
     }
 
     private String formatUserSearchName(TLRPC$User tLRPC$User) {
@@ -7498,7 +7983,7 @@ public class MessagesStorage extends BaseController {
         SQLitePreparedStatement executeFast = this.database.executeFast("REPLACE INTO users VALUES(?, ?, ?, ?)");
         for (int i = 0; i < arrayList.size(); i++) {
             TLRPC$User tLRPC$User = arrayList.get(i);
-            if (tLRPC$User.min) {
+            if (tLRPC$User != null && tLRPC$User.min) {
                 SQLiteCursor queryFinalized = this.database.queryFinalized(String.format(Locale.US, "SELECT data FROM users WHERE uid = %d", Long.valueOf(tLRPC$User.id)), new Object[0]);
                 if (queryFinalized.next()) {
                     try {
@@ -7563,10 +8048,10 @@ public class MessagesStorage extends BaseController {
         if (tLRPC$TL_chatBannedRights == null || j == 0) {
             return;
         }
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda78
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda82
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$updateChatDefaultBannedRights$144(j, i, tLRPC$TL_chatBannedRights);
+                MessagesStorage.this.lambda$updateChatDefaultBannedRights$150(j, i, tLRPC$TL_chatBannedRights);
             }
         });
     }
@@ -7576,7 +8061,7 @@ public class MessagesStorage extends BaseController {
     /* JADX WARN: Type inference failed for: r8v10 */
     /* JADX WARN: Type inference failed for: r8v15, types: [org.telegram.SQLite.SQLitePreparedStatement] */
     /* JADX WARN: Type inference failed for: r8v5, types: [org.telegram.SQLite.SQLitePreparedStatement] */
-    public /* synthetic */ void lambda$updateChatDefaultBannedRights$144(long j, int i, TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights) {
+    public /* synthetic */ void lambda$updateChatDefaultBannedRights$150(long j, int i, TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights) {
         SQLiteCursor queryFinalized;
         TLRPC$Chat tLRPC$Chat;
         NativeByteBuffer byteBufferValue;
@@ -7718,6 +8203,7 @@ public class MessagesStorage extends BaseController {
             executeFast.bindByteBuffer(3, nativeByteBuffer);
             executeFast.step();
             nativeByteBuffer.reuse();
+            this.dialogIsForum.put(-tLRPC$Chat.id, tLRPC$Chat.forum ? 1 : 0);
         }
         executeFast.dispose();
     }
@@ -7829,7 +8315,7 @@ public class MessagesStorage extends BaseController {
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: putUsersAndChatsInternal */
-    public void lambda$putUsersAndChats$145(ArrayList<TLRPC$User> arrayList, ArrayList<TLRPC$Chat> arrayList2, boolean z) {
+    public void lambda$putUsersAndChats$151(ArrayList<TLRPC$User> arrayList, ArrayList<TLRPC$Chat> arrayList2, boolean z) {
         SQLiteDatabase sQLiteDatabase;
         try {
             if (z) {
@@ -7862,29 +8348,29 @@ public class MessagesStorage extends BaseController {
     public void putUsersAndChats(final ArrayList<TLRPC$User> arrayList, final ArrayList<TLRPC$Chat> arrayList2, final boolean z, boolean z2) {
         if (arrayList == null || !arrayList.isEmpty() || arrayList2 == null || !arrayList2.isEmpty()) {
             if (z2) {
-                this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda147
+                this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda155
                     @Override // java.lang.Runnable
                     public final void run() {
-                        MessagesStorage.this.lambda$putUsersAndChats$145(arrayList, arrayList2, z);
+                        MessagesStorage.this.lambda$putUsersAndChats$151(arrayList, arrayList2, z);
                     }
                 });
             } else {
-                lambda$putUsersAndChats$145(arrayList, arrayList2, z);
+                lambda$putUsersAndChats$151(arrayList, arrayList2, z);
             }
         }
     }
 
     public void removeFromDownloadQueue(final long j, final int i, final boolean z) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda186
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda195
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$removeFromDownloadQueue$146(z, i, j);
+                MessagesStorage.this.lambda$removeFromDownloadQueue$152(z, i, j);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$removeFromDownloadQueue$146(boolean z, int i, long j) {
+    public /* synthetic */ void lambda$removeFromDownloadQueue$152(boolean z, int i, long j) {
         SQLiteCursor sQLiteCursor = null;
         try {
             try {
@@ -7973,7 +8459,7 @@ public class MessagesStorage extends BaseController {
             org.telegram.SQLite.SQLiteDatabase r1 = r8.database     // Catch: java.lang.Throwable -> L67 java.lang.Exception -> L69
             r1.commitTransaction()     // Catch: java.lang.Throwable -> L67 java.lang.Exception -> L69
         L52:
-            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda136 r1 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda136     // Catch: java.lang.Throwable -> L67 java.lang.Exception -> L69
+            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda144 r1 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda144     // Catch: java.lang.Throwable -> L67 java.lang.Exception -> L69
             r1.<init>()     // Catch: java.lang.Throwable -> L67 java.lang.Exception -> L69
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r1)     // Catch: java.lang.Throwable -> L67 java.lang.Exception -> L69
             if (r10 == 0) goto L7b
@@ -8022,21 +8508,21 @@ public class MessagesStorage extends BaseController {
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$deleteFromDownloadQueue$147(ArrayList arrayList) {
+    public /* synthetic */ void lambda$deleteFromDownloadQueue$153(ArrayList arrayList) {
         getDownloadController().cancelDownloading(arrayList);
     }
 
     public void clearDownloadQueue(final int i) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda30
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda32
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$clearDownloadQueue$148(i);
+                MessagesStorage.this.lambda$clearDownloadQueue$154(i);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$clearDownloadQueue$148(int i) {
+    public /* synthetic */ void lambda$clearDownloadQueue$154(int i) {
         try {
             if (i == 0) {
                 this.database.executeFast("DELETE FROM download_queue WHERE 1").stepThis().dispose();
@@ -8049,16 +8535,16 @@ public class MessagesStorage extends BaseController {
     }
 
     public void getDownloadQueue(final int i) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda32
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda28
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$getDownloadQueue$150(i);
+                MessagesStorage.this.lambda$getDownloadQueue$156(i);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$getDownloadQueue$150(final int i) {
+    public /* synthetic */ void lambda$getDownloadQueue$156(final int i) {
         int i2;
         SQLiteCursor sQLiteCursor = null;
         try {
@@ -8109,10 +8595,10 @@ public class MessagesStorage extends BaseController {
                     }
                 }
                 queryFinalized.dispose();
-                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda53
+                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda54
                     @Override // java.lang.Runnable
                     public final void run() {
-                        MessagesStorage.this.lambda$getDownloadQueue$149(i, arrayList);
+                        MessagesStorage.this.lambda$getDownloadQueue$155(i, arrayList);
                     }
                 });
             } catch (Exception e2) {
@@ -8124,7 +8610,7 @@ public class MessagesStorage extends BaseController {
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$getDownloadQueue$149(int i, ArrayList arrayList) {
+    public /* synthetic */ void lambda$getDownloadQueue$155(int i, ArrayList arrayList) {
         getDownloadController().processDownloadObjects(i, arrayList);
     }
 
@@ -8149,10 +8635,10 @@ public class MessagesStorage extends BaseController {
         if (isEmpty(longSparseArray)) {
             return;
         }
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda118
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda126
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$putWebPages$152(longSparseArray);
+                MessagesStorage.this.lambda$putWebPages$158(longSparseArray);
             }
         });
     }
@@ -8170,56 +8656,56 @@ public class MessagesStorage extends BaseController {
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public /* synthetic */ void lambda$putWebPages$152(androidx.collection.LongSparseArray r18) {
+    public /* synthetic */ void lambda$putWebPages$158(androidx.collection.LongSparseArray r18) {
         /*
             Method dump skipped, instructions count: 468
             To view this dump add '--comments-level debug' option
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$putWebPages$152(androidx.collection.LongSparseArray):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$putWebPages$158(androidx.collection.LongSparseArray):void");
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$putWebPages$151(ArrayList arrayList) {
+    public /* synthetic */ void lambda$putWebPages$157(ArrayList arrayList) {
         getNotificationCenter().postNotificationName(NotificationCenter.didReceivedWebpages, arrayList);
     }
 
     public void overwriteChannel(final long j, final TLRPC$TL_updates_channelDifferenceTooLong tLRPC$TL_updates_channelDifferenceTooLong, final int i) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda79
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda83
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$overwriteChannel$154(j, i, tLRPC$TL_updates_channelDifferenceTooLong);
+                MessagesStorage.this.lambda$overwriteChannel$160(j, i, tLRPC$TL_updates_channelDifferenceTooLong);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    /* JADX WARN: Removed duplicated region for block: B:14:0x0157  */
-    /* JADX WARN: Removed duplicated region for block: B:15:0x0159  */
-    /* JADX WARN: Removed duplicated region for block: B:18:0x0186  */
-    /* JADX WARN: Removed duplicated region for block: B:36:0x01b0  */
+    /* JADX WARN: Removed duplicated region for block: B:14:0x01ed  */
+    /* JADX WARN: Removed duplicated region for block: B:15:0x01ef  */
+    /* JADX WARN: Removed duplicated region for block: B:18:0x021c  */
+    /* JADX WARN: Removed duplicated region for block: B:37:0x0251  */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public /* synthetic */ void lambda$overwriteChannel$154(long r20, int r22, final org.telegram.tgnet.TLRPC$TL_updates_channelDifferenceTooLong r23) {
+    public /* synthetic */ void lambda$overwriteChannel$160(long r20, int r22, final org.telegram.tgnet.TLRPC$TL_updates_channelDifferenceTooLong r23) {
         /*
-            Method dump skipped, instructions count: 438
+            Method dump skipped, instructions count: 599
             To view this dump add '--comments-level debug' option
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$overwriteChannel$154(long, int, org.telegram.tgnet.TLRPC$TL_updates_channelDifferenceTooLong):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$overwriteChannel$160(long, int, org.telegram.tgnet.TLRPC$TL_updates_channelDifferenceTooLong):void");
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$overwriteChannel$153(long j, TLRPC$TL_updates_channelDifferenceTooLong tLRPC$TL_updates_channelDifferenceTooLong) {
+    public /* synthetic */ void lambda$overwriteChannel$159(long j, TLRPC$TL_updates_channelDifferenceTooLong tLRPC$TL_updates_channelDifferenceTooLong) {
         getNotificationCenter().postNotificationName(NotificationCenter.removeAllMessagesFromDialog, Long.valueOf(j), Boolean.TRUE, tLRPC$TL_updates_channelDifferenceTooLong);
     }
 
     public void putChannelViews(final LongSparseArray<SparseIntArray> longSparseArray, final LongSparseArray<SparseIntArray> longSparseArray2, final LongSparseArray<SparseArray<TLRPC$MessageReplies>> longSparseArray3, final boolean z) {
         if (!isEmpty(longSparseArray) || !isEmpty(longSparseArray2) || !isEmpty(longSparseArray3)) {
-            this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda121
+            this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda129
                 @Override // java.lang.Runnable
                 public final void run() {
-                    MessagesStorage.this.lambda$putChannelViews$155(longSparseArray, longSparseArray2, longSparseArray3, z);
+                    MessagesStorage.this.lambda$putChannelViews$161(longSparseArray, longSparseArray2, longSparseArray3, z);
                 }
             });
         }
@@ -8236,130 +8722,53 @@ public class MessagesStorage extends BaseController {
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public /* synthetic */ void lambda$putChannelViews$155(androidx.collection.LongSparseArray r23, androidx.collection.LongSparseArray r24, androidx.collection.LongSparseArray r25, boolean r26) {
+    public /* synthetic */ void lambda$putChannelViews$161(androidx.collection.LongSparseArray r23, androidx.collection.LongSparseArray r24, androidx.collection.LongSparseArray r25, boolean r26) {
         /*
             Method dump skipped, instructions count: 605
             To view this dump add '--comments-level debug' option
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$putChannelViews$155(androidx.collection.LongSparseArray, androidx.collection.LongSparseArray, androidx.collection.LongSparseArray, boolean):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$putChannelViews$161(androidx.collection.LongSparseArray, androidx.collection.LongSparseArray, androidx.collection.LongSparseArray, boolean):void");
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    /* JADX WARN: Removed duplicated region for block: B:38:0x0090  */
-    /* JADX WARN: Removed duplicated region for block: B:40:0x0095  */
+    /* JADX WARN: Multi-variable type inference failed */
+    /* JADX WARN: Removed duplicated region for block: B:109:0x00e2 A[EXC_TOP_SPLITTER, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:119:? A[RETURN, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:120:? A[RETURN, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:49:0x011b  */
+    /* JADX WARN: Removed duplicated region for block: B:51:0x011f A[Catch: all -> 0x01ce, Exception -> 0x01d2, TRY_ENTER, TRY_LEAVE, TryCatch #11 {Exception -> 0x01d2, all -> 0x01ce, blocks: (B:3:0x0007, B:22:0x0081, B:36:0x00b9, B:51:0x011f), top: B:115:0x0007 }] */
+    /* JADX WARN: Removed duplicated region for block: B:89:0x01da  */
+    /* JADX WARN: Removed duplicated region for block: B:91:0x01df  */
+    /* JADX WARN: Removed duplicated region for block: B:95:0x01e6  */
+    /* JADX WARN: Removed duplicated region for block: B:97:0x01eb  */
     /* renamed from: updateRepliesMaxReadIdInternal */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public void lambda$updateRepliesMaxReadId$156(long r11, int r13, int r14) {
+    public void lambda$updateRepliesMaxReadId$163(final long r19, final int r21, final int r22, int r23) {
         /*
-            r10 = this;
-            long r11 = -r11
-            r0 = 0
-            org.telegram.SQLite.SQLiteDatabase r1 = r10.database     // Catch: java.lang.Throwable -> L7a java.lang.Exception -> L7d
-            java.lang.String r2 = "UPDATE messages_v2 SET replies_data = ? WHERE mid = ? AND uid = ?"
-            org.telegram.SQLite.SQLitePreparedStatement r1 = r1.executeFast(r2)     // Catch: java.lang.Throwable -> L7a java.lang.Exception -> L7d
-            org.telegram.SQLite.SQLiteDatabase r2 = r10.database     // Catch: java.lang.Throwable -> L72 java.lang.Exception -> L76
-            java.util.Locale r3 = java.util.Locale.US     // Catch: java.lang.Throwable -> L72 java.lang.Exception -> L76
-            java.lang.String r4 = "SELECT replies_data FROM messages_v2 WHERE mid = %d AND uid = %d"
-            r5 = 2
-            java.lang.Object[] r6 = new java.lang.Object[r5]     // Catch: java.lang.Throwable -> L72 java.lang.Exception -> L76
-            java.lang.Integer r7 = java.lang.Integer.valueOf(r13)     // Catch: java.lang.Throwable -> L72 java.lang.Exception -> L76
-            r8 = 0
-            r6[r8] = r7     // Catch: java.lang.Throwable -> L72 java.lang.Exception -> L76
-            java.lang.Long r7 = java.lang.Long.valueOf(r11)     // Catch: java.lang.Throwable -> L72 java.lang.Exception -> L76
-            r9 = 1
-            r6[r9] = r7     // Catch: java.lang.Throwable -> L72 java.lang.Exception -> L76
-            java.lang.String r3 = java.lang.String.format(r3, r4, r6)     // Catch: java.lang.Throwable -> L72 java.lang.Exception -> L76
-            java.lang.Object[] r4 = new java.lang.Object[r8]     // Catch: java.lang.Throwable -> L72 java.lang.Exception -> L76
-            org.telegram.SQLite.SQLiteCursor r2 = r2.queryFinalized(r3, r4)     // Catch: java.lang.Throwable -> L72 java.lang.Exception -> L76
-            boolean r3 = r2.next()     // Catch: java.lang.Throwable -> L6e java.lang.Exception -> L70
-            if (r3 == 0) goto L43
-            org.telegram.tgnet.NativeByteBuffer r3 = r2.byteBufferValue(r8)     // Catch: java.lang.Throwable -> L6e java.lang.Exception -> L70
-            if (r3 == 0) goto L43
-            int r4 = r3.readInt32(r8)     // Catch: java.lang.Throwable -> L6e java.lang.Exception -> L70
-            org.telegram.tgnet.TLRPC$MessageReplies r4 = org.telegram.tgnet.TLRPC$MessageReplies.TLdeserialize(r3, r4, r8)     // Catch: java.lang.Throwable -> L6e java.lang.Exception -> L70
-            r3.reuse()     // Catch: java.lang.Throwable -> L6e java.lang.Exception -> L70
-            goto L44
-        L43:
-            r4 = r0
-        L44:
-            r2.dispose()     // Catch: java.lang.Throwable -> L6e java.lang.Exception -> L70
-            if (r4 == 0) goto L6a
-            r4.read_max_id = r14     // Catch: java.lang.Throwable -> L72 java.lang.Exception -> L76
-            r1.requery()     // Catch: java.lang.Throwable -> L72 java.lang.Exception -> L76
-            org.telegram.tgnet.NativeByteBuffer r14 = new org.telegram.tgnet.NativeByteBuffer     // Catch: java.lang.Throwable -> L72 java.lang.Exception -> L76
-            int r2 = r4.getObjectSize()     // Catch: java.lang.Throwable -> L72 java.lang.Exception -> L76
-            r14.<init>(r2)     // Catch: java.lang.Throwable -> L72 java.lang.Exception -> L76
-            r4.serializeToStream(r14)     // Catch: java.lang.Throwable -> L72 java.lang.Exception -> L76
-            r1.bindByteBuffer(r9, r14)     // Catch: java.lang.Throwable -> L72 java.lang.Exception -> L76
-            r1.bindInteger(r5, r13)     // Catch: java.lang.Throwable -> L72 java.lang.Exception -> L76
-            r13 = 3
-            r1.bindLong(r13, r11)     // Catch: java.lang.Throwable -> L72 java.lang.Exception -> L76
-            r1.step()     // Catch: java.lang.Throwable -> L72 java.lang.Exception -> L76
-            r14.reuse()     // Catch: java.lang.Throwable -> L72 java.lang.Exception -> L76
-        L6a:
-            r1.dispose()     // Catch: java.lang.Throwable -> L72 java.lang.Exception -> L76
-            goto L8c
-        L6e:
-            r11 = move-exception
-            goto L74
-        L70:
-            r11 = move-exception
-            goto L78
-        L72:
-            r11 = move-exception
-            r2 = r0
-        L74:
-            r0 = r1
-            goto L8e
-        L76:
-            r11 = move-exception
-            r2 = r0
-        L78:
-            r0 = r1
-            goto L7f
-        L7a:
-            r11 = move-exception
-            r2 = r0
-            goto L8e
-        L7d:
-            r11 = move-exception
-            r2 = r0
-        L7f:
-            org.telegram.messenger.FileLog.e(r11)     // Catch: java.lang.Throwable -> L8d
-            if (r0 == 0) goto L87
-            r0.dispose()
-        L87:
-            if (r2 == 0) goto L8c
-            r2.dispose()
-        L8c:
-            return
-        L8d:
-            r11 = move-exception
-        L8e:
-            if (r0 == 0) goto L93
-            r0.dispose()
-        L93:
-            if (r2 == 0) goto L98
-            r2.dispose()
-        L98:
-            throw r11
+            Method dump skipped, instructions count: 497
+            To view this dump add '--comments-level debug' option
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$updateRepliesMaxReadId$156(long, int, int):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$updateRepliesMaxReadId$163(long, int, int, int):void");
     }
 
-    public void updateRepliesMaxReadId(final long j, final int i, final int i2, boolean z) {
+    /* JADX INFO: Access modifiers changed from: private */
+    public /* synthetic */ void lambda$updateRepliesMaxReadIdInternal$162(long j, int i, int i2, int i3) {
+        getMessagesController().getTopicsController().updateMaxReadId(j, i, i2, i3);
+    }
+
+    public void updateRepliesMaxReadId(final long j, final int i, final int i2, final int i3, boolean z) {
         if (z) {
-            this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda70
+            this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda73
                 @Override // java.lang.Runnable
                 public final void run() {
-                    MessagesStorage.this.lambda$updateRepliesMaxReadId$156(j, i, i2);
+                    MessagesStorage.this.lambda$updateRepliesMaxReadId$163(j, i, i2, i3);
                 }
             });
         } else {
-            lambda$updateRepliesMaxReadId$156(j, i, i2);
+            lambda$updateRepliesMaxReadId$163(j, i, i2, i3);
         }
     }
 
@@ -8367,7 +8776,7 @@ public class MessagesStorage extends BaseController {
         this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda46
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$updateRepliesCount$157(i, j, i3, arrayList, i2);
+                MessagesStorage.this.lambda$updateRepliesCount$164(i, j, i3, arrayList, i2);
             }
         });
     }
@@ -8379,7 +8788,7 @@ public class MessagesStorage extends BaseController {
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public /* synthetic */ void lambda$updateRepliesCount$157(int r16, long r17, int r19, java.util.ArrayList r20, int r21) {
+    public /* synthetic */ void lambda$updateRepliesCount$164(int r16, long r17, int r19, java.util.ArrayList r20, int r21) {
         /*
             r15 = this;
             r1 = r15
@@ -8493,7 +8902,7 @@ public class MessagesStorage extends BaseController {
         Lb6:
             throw r0
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$updateRepliesCount$157(int, long, int, java.util.ArrayList, int):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$updateRepliesCount$164(int, long, int, java.util.ArrayList, int):void");
     }
 
     private boolean isValidKeyboardToSave(TLRPC$Message tLRPC$Message) {
@@ -8502,16 +8911,16 @@ public class MessagesStorage extends BaseController {
     }
 
     public void updateMessageVerifyFlags(final ArrayList<TLRPC$Message> arrayList) {
-        Utilities.stageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda137
+        Utilities.stageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda146
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$updateMessageVerifyFlags$158(arrayList);
+                MessagesStorage.this.lambda$updateMessageVerifyFlags$165(arrayList);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateMessageVerifyFlags$158(ArrayList arrayList) {
+    public /* synthetic */ void lambda$updateMessageVerifyFlags$165(ArrayList arrayList) {
         SQLiteDatabase sQLiteDatabase;
         SQLiteDatabase sQLiteDatabase2;
         SQLitePreparedStatement executeFast;
@@ -8573,133 +8982,251 @@ public class MessagesStorage extends BaseController {
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    /* JADX WARN: Can't wrap try/catch for region: R(32:318|319|(1:321)|322|(18:(3:614|615|(43:619|(2:328|(1:611))(1:612)|339|340|341|(3:597|598|(37:600|344|345|346|(1:348)(1:596)|349|(1:351)(2:592|(1:594)(1:595))|352|(1:354)(1:591)|355|(2:357|358)(2:589|590)|359|(3:361|(1:363)(1:586)|364)(2:587|588)|365|366|367|(3:369|370|371)(2:579|580)|372|373|(8:553|554|555|556|557|558|559|560)(1:375)|376|377|(3:(2:380|381)(1:542)|382|383)(1:543)|385|386|(2:(1:391)|392)|393|(6:(2:396|397)|398|399|400|401|402)(4:517|518|519|(12:521|522|523|524|(2:502|503)|(1:406)|407|408|(2:419|(4:425|(2:427|428)(6:463|(5:468|(1:(1:476)(1:(2:486|(12:431|(1:433)|434|435|436|437|438|439|(2:456|457)(1:441)|442|454|455))(5:480|(1:482)(1:485)|483|484|(0))))|487|488|(0))|489|490|484|(0))|429|(0)))|491|492|455))|403|(0)|(0)|407|408|(10:410|411|415|417|419|(1:421)|425|(0)(0)|429|(0))|491|492|455))|343|344|345|346|(0)(0)|349|(0)(0)|352|(0)(0)|355|(0)(0)|359|(0)(0)|365|366|367|(0)(0)|372|373|(0)(0)|376|377|(0)(0)|385|386|(3:388|(0)|392)|393|(0)(0)|403|(0)|(0)|407|408|(0)|491|492|455))|376|377|(0)(0)|385|386|(0)|393|(0)(0)|403|(0)|(0)|407|408|(0)|491|492|455)|324|(1:326)(1:613)|(0)(0)|339|340|341|(0)|343|344|345|346|(0)(0)|349|(0)(0)|352|(0)(0)|355|(0)(0)|359|(0)(0)|365|366|367|(0)(0)|372|373|(0)(0)) */
-    /* JADX WARN: Code restructure failed: missing block: B:118:0x02a9, code lost:
-        if (r11 > r8) goto L240;
+    /* JADX WARN: Can't wrap try/catch for region: R(30:490|(3:492|493|494)(1:833)|495|(1:497)|498|(6:(2:500|(28:504|505|(2:(1:510)|511)|512|(2:(1:515)|516)|(4:518|(2:520|(4:522|(1:524)|(1:529)|(3:531|(2:533|(3:535|(1:537)|(1:542)))(1:821)|820)(1:822)))(1:824)|823|(0)(0))(1:825)|543|(4:545|(1:547)(1:628)|(24:(1:556)(1:627)|557|558|(3:560|561|562)(1:619)|563|564|(1:618)(1:568)|569|570|(2:572|573)(2:616|617)|574|(1:576)(2:612|(1:614)(1:615))|577|(1:579)(1:611)|580|(1:582)(2:609|610)|583|(4:585|586|(1:588)(1:606)|589)(2:607|608)|590|(1:592)(1:605)|(2:594|(1:596)(1:597))|598|(1:600)|(2:602|603)(1:604))(2:550|551)|552)|629|630|631|632|633|(5:800|801|802|803|804)(1:635)|636|637|(6:639|640|641|642|643|(2:(1:646)|647))(1:792)|648|649|(1:772)(2:(1:654)|655)|656|(2:(1:659)|660)(2:759|(9:761|762|763|764|662|663|(5:665|666|(2:742|743)|668|(2:672|(4:678|(2:680|681)(6:714|(5:719|(1:(1:727)(1:(2:737|(12:684|(1:686)|687|688|689|690|691|692|(2:707|708)(1:694)|695|696|697))(5:731|(1:733)(1:736)|734|735|(0))))|738|739|(0))|740|741|735|(0))|682|(0))))|752|753))|661|662|663|(0)|752|753))(1:827)|662|663|(0)|752|753)|826|505|(3:507|(0)|511)|512|(0)|(0)(0)|543|(0)|629|630|631|632|633|(0)(0)|636|637|(0)(0)|648|649|(1:651)|772|656|(0)(0)|661) */
+    /* JADX WARN: Code restructure failed: missing block: B:1048:0x1868, code lost:
+        r3 = r0;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:530:0x0aab, code lost:
+    /* JADX WARN: Code restructure failed: missing block: B:1053:0x187c, code lost:
+        r3 = r0;
+     */
+    /* JADX WARN: Code restructure failed: missing block: B:131:0x033a, code lost:
+        if (r8 > r4) goto L291;
+     */
+    /* JADX WARN: Code restructure failed: missing block: B:418:0x0afc, code lost:
+        if (r12.id <= r9) goto L526;
+     */
+    /* JADX WARN: Code restructure failed: missing block: B:433:0x0b2e, code lost:
+        if (r12.id <= r8) goto L539;
+     */
+    /* JADX WARN: Code restructure failed: missing block: B:602:0x0e55, code lost:
+        if (r12.post != false) goto L668;
+     */
+    /* JADX WARN: Code restructure failed: missing block: B:674:0x0fde, code lost:
         r0 = th;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:532:0x0aad, code lost:
+    /* JADX WARN: Code restructure failed: missing block: B:675:0x0fdf, code lost:
+        r37 = r5;
+     */
+    /* JADX WARN: Code restructure failed: missing block: B:676:0x0fe2, code lost:
         r0 = e;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:534:0x0aaf, code lost:
+    /* JADX WARN: Code restructure failed: missing block: B:677:0x0fe3, code lost:
+        r37 = r5;
+     */
+    /* JADX WARN: Code restructure failed: missing block: B:678:0x0fe6, code lost:
         r0 = th;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:535:0x0ab0, code lost:
-        r49 = r8;
+    /* JADX WARN: Code restructure failed: missing block: B:679:0x0fe7, code lost:
+        r37 = r5;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:538:0x0ab7, code lost:
+    /* JADX WARN: Code restructure failed: missing block: B:680:0x0fea, code lost:
         r0 = e;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:539:0x0ab8, code lost:
-        r49 = r8;
+    /* JADX WARN: Code restructure failed: missing block: B:681:0x0feb, code lost:
+        r37 = r5;
      */
-    /* JADX WARN: Removed duplicated region for block: B:1044:? A[RETURN, SYNTHETIC] */
-    /* JADX WARN: Removed duplicated region for block: B:281:0x068a A[Catch: all -> 0x0636, Exception -> 0x063d, TryCatch #109 {Exception -> 0x063d, all -> 0x0636, blocks: (B:267:0x0622, B:269:0x0628, B:281:0x068a, B:283:0x0696, B:285:0x069c, B:287:0x06a0, B:290:0x06a6, B:292:0x06aa, B:278:0x0648), top: B:911:0x0622 }] */
-    /* JADX WARN: Removed duplicated region for block: B:294:0x06b0  */
-    /* JADX WARN: Removed duplicated region for block: B:311:0x0703 A[Catch: all -> 0x06e5, Exception -> 0x06eb, TRY_ENTER, TRY_LEAVE, TryCatch #118 {Exception -> 0x06eb, all -> 0x06e5, blocks: (B:298:0x06de, B:311:0x0703, B:327:0x073a, B:333:0x075b, B:337:0x0762, B:336:0x0760), top: B:893:0x06de }] */
-    /* JADX WARN: Removed duplicated region for block: B:313:0x070b A[Catch: all -> 0x0aaf, Exception -> 0x0ab7, TRY_ENTER, TryCatch #91 {Exception -> 0x0ab7, all -> 0x0aaf, blocks: (B:296:0x06b5, B:308:0x06f3, B:314:0x0714, B:321:0x0720, B:325:0x072a, B:331:0x0757, B:340:0x076b, B:330:0x0753, B:313:0x070b), top: B:947:0x06b5 }] */
-    /* JADX WARN: Removed duplicated region for block: B:316:0x0718  */
-    /* JADX WARN: Removed duplicated region for block: B:317:0x071a  */
-    /* JADX WARN: Removed duplicated region for block: B:323:0x0727  */
-    /* JADX WARN: Removed duplicated region for block: B:324:0x0729  */
-    /* JADX WARN: Removed duplicated region for block: B:327:0x073a A[Catch: all -> 0x06e5, Exception -> 0x06eb, TRY_ENTER, TRY_LEAVE, TryCatch #118 {Exception -> 0x06eb, all -> 0x06e5, blocks: (B:298:0x06de, B:311:0x0703, B:327:0x073a, B:333:0x075b, B:337:0x0762, B:336:0x0760), top: B:893:0x06de }] */
-    /* JADX WARN: Removed duplicated region for block: B:329:0x0751  */
-    /* JADX WARN: Removed duplicated region for block: B:333:0x075b A[Catch: all -> 0x06e5, Exception -> 0x06eb, TRY_ENTER, TryCatch #118 {Exception -> 0x06eb, all -> 0x06e5, blocks: (B:298:0x06de, B:311:0x0703, B:327:0x073a, B:333:0x075b, B:337:0x0762, B:336:0x0760), top: B:893:0x06de }] */
-    /* JADX WARN: Removed duplicated region for block: B:339:0x0768  */
-    /* JADX WARN: Removed duplicated region for block: B:344:0x077f  */
-    /* JADX WARN: Removed duplicated region for block: B:351:0x078b  */
-    /* JADX WARN: Removed duplicated region for block: B:370:0x07c6  */
-    /* JADX WARN: Removed duplicated region for block: B:373:0x07d0  */
-    /* JADX WARN: Removed duplicated region for block: B:387:0x0827  */
-    /* JADX WARN: Removed duplicated region for block: B:390:0x082f A[Catch: all -> 0x0809, Exception -> 0x0818, TRY_ENTER, TryCatch #103 {Exception -> 0x0818, all -> 0x0809, blocks: (B:381:0x07e4, B:390:0x082f, B:393:0x0835, B:394:0x083e, B:398:0x086d), top: B:923:0x07e4 }] */
-    /* JADX WARN: Removed duplicated region for block: B:393:0x0835 A[Catch: all -> 0x0809, Exception -> 0x0818, TryCatch #103 {Exception -> 0x0818, all -> 0x0809, blocks: (B:381:0x07e4, B:390:0x082f, B:393:0x0835, B:394:0x083e, B:398:0x086d), top: B:923:0x07e4 }] */
-    /* JADX WARN: Removed duplicated region for block: B:397:0x086b  */
-    /* JADX WARN: Removed duplicated region for block: B:412:0x08a7  */
-    /* JADX WARN: Removed duplicated region for block: B:429:0x08ec A[Catch: all -> 0x08da, Exception -> 0x08e2, TRY_LEAVE, TryCatch #108 {Exception -> 0x08e2, all -> 0x08da, blocks: (B:423:0x08d6, B:429:0x08ec, B:435:0x08fe, B:443:0x0921, B:445:0x0925, B:449:0x0937, B:483:0x09e5, B:454:0x0951, B:457:0x0959, B:459:0x095f, B:461:0x0965, B:465:0x096e, B:467:0x0982, B:469:0x098e, B:471:0x09a3, B:475:0x09b4, B:417:0x08b9), top: B:913:0x08d6 }] */
-    /* JADX WARN: Removed duplicated region for block: B:432:0x08f4 A[Catch: all -> 0x0a72, Exception -> 0x0a76, TRY_LEAVE, TryCatch #87 {Exception -> 0x0a76, all -> 0x0a72, blocks: (B:430:0x08ef, B:432:0x08f4, B:437:0x0902, B:439:0x0910, B:441:0x091b, B:447:0x0929, B:481:0x09df, B:485:0x09f0, B:452:0x094b, B:478:0x09cb), top: B:955:0x08ef }] */
-    /* JADX WARN: Removed duplicated region for block: B:449:0x0937 A[Catch: all -> 0x08da, Exception -> 0x08e2, TRY_ENTER, TRY_LEAVE, TryCatch #108 {Exception -> 0x08e2, all -> 0x08da, blocks: (B:423:0x08d6, B:429:0x08ec, B:435:0x08fe, B:443:0x0921, B:445:0x0925, B:449:0x0937, B:483:0x09e5, B:454:0x0951, B:457:0x0959, B:459:0x095f, B:461:0x0965, B:465:0x096e, B:467:0x0982, B:469:0x098e, B:471:0x09a3, B:475:0x09b4, B:417:0x08b9), top: B:913:0x08d6 }] */
-    /* JADX WARN: Removed duplicated region for block: B:452:0x094b A[Catch: all -> 0x0a72, Exception -> 0x0a76, TRY_ENTER, TRY_LEAVE, TryCatch #87 {Exception -> 0x0a76, all -> 0x0a72, blocks: (B:430:0x08ef, B:432:0x08f4, B:437:0x0902, B:439:0x0910, B:441:0x091b, B:447:0x0929, B:481:0x09df, B:485:0x09f0, B:452:0x094b, B:478:0x09cb), top: B:955:0x08ef }] */
-    /* JADX WARN: Removed duplicated region for block: B:481:0x09df A[Catch: all -> 0x0a72, Exception -> 0x0a76, TRY_LEAVE, TryCatch #87 {Exception -> 0x0a76, all -> 0x0a72, blocks: (B:430:0x08ef, B:432:0x08f4, B:437:0x0902, B:439:0x0910, B:441:0x091b, B:447:0x0929, B:481:0x09df, B:485:0x09f0, B:452:0x094b, B:478:0x09cb), top: B:955:0x08ef }] */
-    /* JADX WARN: Removed duplicated region for block: B:840:0x115d  */
-    /* JADX WARN: Removed duplicated region for block: B:844:0x1166  */
-    /* JADX WARN: Removed duplicated region for block: B:846:0x116b  */
-    /* JADX WARN: Removed duplicated region for block: B:848:0x1170  */
-    /* JADX WARN: Removed duplicated region for block: B:850:0x1175  */
-    /* JADX WARN: Removed duplicated region for block: B:852:0x117a  */
-    /* JADX WARN: Removed duplicated region for block: B:854:0x117f  */
-    /* JADX WARN: Removed duplicated region for block: B:856:0x1184  */
-    /* JADX WARN: Removed duplicated region for block: B:858:0x1189  */
-    /* JADX WARN: Removed duplicated region for block: B:860:0x118e  */
-    /* JADX WARN: Removed duplicated region for block: B:865:0x1196  */
-    /* JADX WARN: Removed duplicated region for block: B:869:0x119f  */
-    /* JADX WARN: Removed duplicated region for block: B:871:0x11a4  */
-    /* JADX WARN: Removed duplicated region for block: B:873:0x11a9  */
-    /* JADX WARN: Removed duplicated region for block: B:875:0x11ae  */
-    /* JADX WARN: Removed duplicated region for block: B:877:0x11b3  */
-    /* JADX WARN: Removed duplicated region for block: B:879:0x11b8  */
-    /* JADX WARN: Removed duplicated region for block: B:881:0x11bd  */
-    /* JADX WARN: Removed duplicated region for block: B:883:0x11c2  */
-    /* JADX WARN: Removed duplicated region for block: B:885:0x11c7  */
-    /* JADX WARN: Removed duplicated region for block: B:893:0x06de A[EXC_TOP_SPLITTER, SYNTHETIC] */
-    /* JADX WARN: Removed duplicated region for block: B:913:0x08d6 A[EXC_TOP_SPLITTER, SYNTHETIC] */
-    /* JADX WARN: Removed duplicated region for block: B:996:0x079c A[EXC_TOP_SPLITTER, SYNTHETIC] */
+    /* JADX WARN: Code restructure failed: missing block: B:682:0x0fee, code lost:
+        r0 = th;
+     */
+    /* JADX WARN: Code restructure failed: missing block: B:683:0x0fef, code lost:
+        r5 = null;
+        r15 = false;
+        r16 = null;
+        r2 = r52;
+        r3 = r0;
+        r21 = r13;
+        r13 = r32;
+        r1 = null;
+        r11 = null;
+     */
+    /* JADX WARN: Code restructure failed: missing block: B:684:0x1002, code lost:
+        r0 = e;
+     */
+    /* JADX WARN: Code restructure failed: missing block: B:685:0x1003, code lost:
+        r5 = null;
+        r15 = false;
+        r16 = null;
+        r2 = r52;
+        r3 = r0;
+        r21 = r13;
+        r13 = r32;
+        r1 = null;
+        r11 = null;
+     */
+    /* JADX WARN: Removed duplicated region for block: B:1094:0x194f  */
+    /* JADX WARN: Removed duplicated region for block: B:1098:0x1958  */
+    /* JADX WARN: Removed duplicated region for block: B:1100:0x195d  */
+    /* JADX WARN: Removed duplicated region for block: B:1102:0x1962  */
+    /* JADX WARN: Removed duplicated region for block: B:1104:0x1967  */
+    /* JADX WARN: Removed duplicated region for block: B:1106:0x196c  */
+    /* JADX WARN: Removed duplicated region for block: B:1108:0x1971  */
+    /* JADX WARN: Removed duplicated region for block: B:1110:0x1976  */
+    /* JADX WARN: Removed duplicated region for block: B:1112:0x197b  */
+    /* JADX WARN: Removed duplicated region for block: B:1114:0x1980  */
+    /* JADX WARN: Removed duplicated region for block: B:1116:0x1985  */
+    /* JADX WARN: Removed duplicated region for block: B:1121:0x198e  */
+    /* JADX WARN: Removed duplicated region for block: B:1125:0x1997  */
+    /* JADX WARN: Removed duplicated region for block: B:1127:0x199c  */
+    /* JADX WARN: Removed duplicated region for block: B:1129:0x19a1  */
+    /* JADX WARN: Removed duplicated region for block: B:1131:0x19a6  */
+    /* JADX WARN: Removed duplicated region for block: B:1133:0x19ab  */
+    /* JADX WARN: Removed duplicated region for block: B:1135:0x19b0  */
+    /* JADX WARN: Removed duplicated region for block: B:1137:0x19b5  */
+    /* JADX WARN: Removed duplicated region for block: B:1139:0x19ba  */
+    /* JADX WARN: Removed duplicated region for block: B:1141:0x19bf  */
+    /* JADX WARN: Removed duplicated region for block: B:1143:0x19c4  */
+    /* JADX WARN: Removed duplicated region for block: B:1161:0x0cb2 A[EXC_TOP_SPLITTER, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:1327:? A[RETURN, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:1329:? A[RETURN, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:176:0x0449  */
+    /* JADX WARN: Removed duplicated region for block: B:206:0x050c  */
+    /* JADX WARN: Removed duplicated region for block: B:209:0x0518 A[Catch: all -> 0x0544, Exception -> 0x0549, TryCatch #97 {Exception -> 0x0549, all -> 0x0544, blocks: (B:97:0x027a, B:99:0x0291, B:101:0x0295, B:103:0x02a1, B:105:0x02b2, B:107:0x02bb, B:109:0x02c9, B:110:0x02d1, B:112:0x02de, B:114:0x02e4, B:116:0x02ea, B:119:0x02f0, B:121:0x02f4, B:123:0x02fa, B:126:0x0304, B:128:0x030d, B:130:0x0331, B:133:0x033d, B:135:0x0349, B:149:0x03b4, B:155:0x03cd, B:157:0x03fb, B:159:0x0401, B:161:0x0411, B:163:0x0415, B:165:0x0419, B:167:0x041d, B:169:0x0425, B:170:0x042a, B:174:0x0443, B:177:0x044b, B:179:0x0465, B:181:0x046f, B:183:0x047e, B:185:0x0484, B:186:0x0487, B:188:0x0494, B:189:0x049e, B:191:0x04af, B:192:0x04b9, B:194:0x04c2, B:196:0x04d3, B:197:0x04db, B:199:0x04e1, B:200:0x04e4, B:202:0x04f1, B:203:0x04f9, B:207:0x0512, B:209:0x0518, B:211:0x0524, B:213:0x052a, B:152:0x03c6, B:138:0x0363, B:140:0x036d, B:141:0x0377, B:143:0x037d, B:144:0x0380, B:146:0x038d, B:147:0x0397, B:224:0x0561, B:226:0x0577, B:228:0x0580, B:229:0x05d7, B:231:0x05dd, B:233:0x05ec, B:236:0x05f8, B:238:0x0600, B:240:0x0608, B:242:0x0613, B:244:0x0618, B:246:0x061d, B:247:0x0622, B:249:0x0629, B:251:0x0641, B:255:0x065e, B:257:0x0667, B:259:0x066e, B:261:0x0676, B:265:0x068b, B:262:0x0682, B:252:0x064f, B:273:0x06d7, B:274:0x0719, B:276:0x071f, B:278:0x0739, B:282:0x0747, B:283:0x074c, B:285:0x0756, B:286:0x0760, B:288:0x0767, B:290:0x0779, B:292:0x0797, B:298:0x07b1, B:300:0x07bc, B:302:0x07c3, B:304:0x07cb, B:312:0x07ea, B:305:0x07d5, B:309:0x07e2, B:293:0x07a0, B:297:0x07ac, B:318:0x080d, B:320:0x0814, B:321:0x085a, B:323:0x0860, B:325:0x086a, B:327:0x086f, B:329:0x0874, B:332:0x0881, B:334:0x088b, B:337:0x0895, B:345:0x08b6, B:346:0x08be, B:348:0x08c4, B:349:0x090b, B:351:0x0911, B:352:0x091e, B:356:0x0961, B:358:0x0967, B:359:0x0977, B:361:0x097d, B:363:0x0987, B:365:0x0991, B:366:0x0999), top: B:1185:0x027a }] */
+    /* JADX WARN: Removed duplicated region for block: B:215:0x0530  */
+    /* JADX WARN: Removed duplicated region for block: B:304:0x07cb A[Catch: all -> 0x0544, Exception -> 0x0549, TryCatch #97 {Exception -> 0x0549, all -> 0x0544, blocks: (B:97:0x027a, B:99:0x0291, B:101:0x0295, B:103:0x02a1, B:105:0x02b2, B:107:0x02bb, B:109:0x02c9, B:110:0x02d1, B:112:0x02de, B:114:0x02e4, B:116:0x02ea, B:119:0x02f0, B:121:0x02f4, B:123:0x02fa, B:126:0x0304, B:128:0x030d, B:130:0x0331, B:133:0x033d, B:135:0x0349, B:149:0x03b4, B:155:0x03cd, B:157:0x03fb, B:159:0x0401, B:161:0x0411, B:163:0x0415, B:165:0x0419, B:167:0x041d, B:169:0x0425, B:170:0x042a, B:174:0x0443, B:177:0x044b, B:179:0x0465, B:181:0x046f, B:183:0x047e, B:185:0x0484, B:186:0x0487, B:188:0x0494, B:189:0x049e, B:191:0x04af, B:192:0x04b9, B:194:0x04c2, B:196:0x04d3, B:197:0x04db, B:199:0x04e1, B:200:0x04e4, B:202:0x04f1, B:203:0x04f9, B:207:0x0512, B:209:0x0518, B:211:0x0524, B:213:0x052a, B:152:0x03c6, B:138:0x0363, B:140:0x036d, B:141:0x0377, B:143:0x037d, B:144:0x0380, B:146:0x038d, B:147:0x0397, B:224:0x0561, B:226:0x0577, B:228:0x0580, B:229:0x05d7, B:231:0x05dd, B:233:0x05ec, B:236:0x05f8, B:238:0x0600, B:240:0x0608, B:242:0x0613, B:244:0x0618, B:246:0x061d, B:247:0x0622, B:249:0x0629, B:251:0x0641, B:255:0x065e, B:257:0x0667, B:259:0x066e, B:261:0x0676, B:265:0x068b, B:262:0x0682, B:252:0x064f, B:273:0x06d7, B:274:0x0719, B:276:0x071f, B:278:0x0739, B:282:0x0747, B:283:0x074c, B:285:0x0756, B:286:0x0760, B:288:0x0767, B:290:0x0779, B:292:0x0797, B:298:0x07b1, B:300:0x07bc, B:302:0x07c3, B:304:0x07cb, B:312:0x07ea, B:305:0x07d5, B:309:0x07e2, B:293:0x07a0, B:297:0x07ac, B:318:0x080d, B:320:0x0814, B:321:0x085a, B:323:0x0860, B:325:0x086a, B:327:0x086f, B:329:0x0874, B:332:0x0881, B:334:0x088b, B:337:0x0895, B:345:0x08b6, B:346:0x08be, B:348:0x08c4, B:349:0x090b, B:351:0x0911, B:352:0x091e, B:356:0x0961, B:358:0x0967, B:359:0x0977, B:361:0x097d, B:363:0x0987, B:365:0x0991, B:366:0x0999), top: B:1185:0x027a }] */
+    /* JADX WARN: Removed duplicated region for block: B:305:0x07d5 A[Catch: all -> 0x0544, Exception -> 0x0549, TryCatch #97 {Exception -> 0x0549, all -> 0x0544, blocks: (B:97:0x027a, B:99:0x0291, B:101:0x0295, B:103:0x02a1, B:105:0x02b2, B:107:0x02bb, B:109:0x02c9, B:110:0x02d1, B:112:0x02de, B:114:0x02e4, B:116:0x02ea, B:119:0x02f0, B:121:0x02f4, B:123:0x02fa, B:126:0x0304, B:128:0x030d, B:130:0x0331, B:133:0x033d, B:135:0x0349, B:149:0x03b4, B:155:0x03cd, B:157:0x03fb, B:159:0x0401, B:161:0x0411, B:163:0x0415, B:165:0x0419, B:167:0x041d, B:169:0x0425, B:170:0x042a, B:174:0x0443, B:177:0x044b, B:179:0x0465, B:181:0x046f, B:183:0x047e, B:185:0x0484, B:186:0x0487, B:188:0x0494, B:189:0x049e, B:191:0x04af, B:192:0x04b9, B:194:0x04c2, B:196:0x04d3, B:197:0x04db, B:199:0x04e1, B:200:0x04e4, B:202:0x04f1, B:203:0x04f9, B:207:0x0512, B:209:0x0518, B:211:0x0524, B:213:0x052a, B:152:0x03c6, B:138:0x0363, B:140:0x036d, B:141:0x0377, B:143:0x037d, B:144:0x0380, B:146:0x038d, B:147:0x0397, B:224:0x0561, B:226:0x0577, B:228:0x0580, B:229:0x05d7, B:231:0x05dd, B:233:0x05ec, B:236:0x05f8, B:238:0x0600, B:240:0x0608, B:242:0x0613, B:244:0x0618, B:246:0x061d, B:247:0x0622, B:249:0x0629, B:251:0x0641, B:255:0x065e, B:257:0x0667, B:259:0x066e, B:261:0x0676, B:265:0x068b, B:262:0x0682, B:252:0x064f, B:273:0x06d7, B:274:0x0719, B:276:0x071f, B:278:0x0739, B:282:0x0747, B:283:0x074c, B:285:0x0756, B:286:0x0760, B:288:0x0767, B:290:0x0779, B:292:0x0797, B:298:0x07b1, B:300:0x07bc, B:302:0x07c3, B:304:0x07cb, B:312:0x07ea, B:305:0x07d5, B:309:0x07e2, B:293:0x07a0, B:297:0x07ac, B:318:0x080d, B:320:0x0814, B:321:0x085a, B:323:0x0860, B:325:0x086a, B:327:0x086f, B:329:0x0874, B:332:0x0881, B:334:0x088b, B:337:0x0895, B:345:0x08b6, B:346:0x08be, B:348:0x08c4, B:349:0x090b, B:351:0x0911, B:352:0x091e, B:356:0x0961, B:358:0x0967, B:359:0x0977, B:361:0x097d, B:363:0x0987, B:365:0x0991, B:366:0x0999), top: B:1185:0x027a }] */
+    /* JADX WARN: Removed duplicated region for block: B:311:0x07e9  */
+    /* JADX WARN: Removed duplicated region for block: B:403:0x0ac7 A[Catch: all -> 0x0a79, Exception -> 0x0a7e, TryCatch #77 {Exception -> 0x0a7e, all -> 0x0a79, blocks: (B:379:0x0a3a, B:391:0x0aaa, B:393:0x0ab2, B:400:0x0abf, B:403:0x0ac7, B:404:0x0acd, B:408:0x0ad8, B:409:0x0add, B:411:0x0ae2, B:413:0x0aee, B:415:0x0af6, B:417:0x0afa, B:420:0x0b00, B:426:0x0b0e, B:428:0x0b1e, B:430:0x0b28, B:432:0x0b2c, B:435:0x0b32, B:461:0x0b89, B:467:0x0bb3, B:476:0x0bcd, B:493:0x0CLASSNAME, B:500:0x0CLASSNAME, B:504:0x0c2f, B:503:0x0c2d, B:439:0x0b3b, B:424:0x0b07), top: B:1224:0x0a3a }] */
+    /* JADX WARN: Removed duplicated region for block: B:407:0x0ad6  */
+    /* JADX WARN: Removed duplicated region for block: B:411:0x0ae2 A[Catch: all -> 0x0a79, Exception -> 0x0a7e, TryCatch #77 {Exception -> 0x0a7e, all -> 0x0a79, blocks: (B:379:0x0a3a, B:391:0x0aaa, B:393:0x0ab2, B:400:0x0abf, B:403:0x0ac7, B:404:0x0acd, B:408:0x0ad8, B:409:0x0add, B:411:0x0ae2, B:413:0x0aee, B:415:0x0af6, B:417:0x0afa, B:420:0x0b00, B:426:0x0b0e, B:428:0x0b1e, B:430:0x0b28, B:432:0x0b2c, B:435:0x0b32, B:461:0x0b89, B:467:0x0bb3, B:476:0x0bcd, B:493:0x0CLASSNAME, B:500:0x0CLASSNAME, B:504:0x0c2f, B:503:0x0c2d, B:439:0x0b3b, B:424:0x0b07), top: B:1224:0x0a3a }] */
+    /* JADX WARN: Removed duplicated region for block: B:426:0x0b0e A[Catch: all -> 0x0a79, Exception -> 0x0a7e, TryCatch #77 {Exception -> 0x0a7e, all -> 0x0a79, blocks: (B:379:0x0a3a, B:391:0x0aaa, B:393:0x0ab2, B:400:0x0abf, B:403:0x0ac7, B:404:0x0acd, B:408:0x0ad8, B:409:0x0add, B:411:0x0ae2, B:413:0x0aee, B:415:0x0af6, B:417:0x0afa, B:420:0x0b00, B:426:0x0b0e, B:428:0x0b1e, B:430:0x0b28, B:432:0x0b2c, B:435:0x0b32, B:461:0x0b89, B:467:0x0bb3, B:476:0x0bcd, B:493:0x0CLASSNAME, B:500:0x0CLASSNAME, B:504:0x0c2f, B:503:0x0c2d, B:439:0x0b3b, B:424:0x0b07), top: B:1224:0x0a3a }] */
+    /* JADX WARN: Removed duplicated region for block: B:441:0x0b3f  */
+    /* JADX WARN: Removed duplicated region for block: B:442:0x0b46  */
+    /* JADX WARN: Removed duplicated region for block: B:445:0x0b54  */
+    /* JADX WARN: Removed duplicated region for block: B:545:0x0d07  */
+    /* JADX WARN: Removed duplicated region for block: B:548:0x0d0f  */
+    /* JADX WARN: Removed duplicated region for block: B:566:0x0d9b  */
+    /* JADX WARN: Removed duplicated region for block: B:578:0x0de3  */
+    /* JADX WARN: Removed duplicated region for block: B:582:0x0e0d A[Catch: all -> 0x0fde, Exception -> 0x0fe2, TRY_ENTER, TRY_LEAVE, TryCatch #99 {Exception -> 0x0fe2, all -> 0x0fde, blocks: (B:567:0x0d9d, B:576:0x0ddd, B:582:0x0e0d), top: B:1181:0x0d9d }] */
+    /* JADX WARN: Removed duplicated region for block: B:598:0x0e49 A[Catch: all -> 0x0fca, Exception -> 0x0fd4, TRY_LEAVE, TryCatch #68 {Exception -> 0x0fd4, all -> 0x0fca, blocks: (B:596:0x0e44, B:598:0x0e49, B:603:0x0e57, B:605:0x0e65, B:607:0x0e70, B:613:0x0e7e, B:647:0x0var_, B:651:0x0var_, B:618:0x0ea0, B:644:0x0f1f), top: B:1242:0x0e44 }] */
+    /* JADX WARN: Removed duplicated region for block: B:647:0x0var_ A[Catch: all -> 0x0fca, Exception -> 0x0fd4, TRY_LEAVE, TryCatch #68 {Exception -> 0x0fd4, all -> 0x0fca, blocks: (B:596:0x0e44, B:598:0x0e49, B:603:0x0e57, B:605:0x0e65, B:607:0x0e70, B:613:0x0e7e, B:647:0x0var_, B:651:0x0var_, B:618:0x0ea0, B:644:0x0f1f), top: B:1242:0x0e44 }] */
+    /* JADX WARN: Removed duplicated region for block: B:961:0x170b  */
+    /* JADX WARN: Removed duplicated region for block: B:963:0x1710  */
+    /* JADX WARN: Removed duplicated region for block: B:965:0x1715  */
     /* renamed from: putMessagesInternal */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public void lambda$putMessages$160(java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> r44, boolean r45, boolean r46, int r47, boolean r48, boolean r49) {
+    public void lambda$putMessages$169(java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> r53, boolean r54, boolean r55, int r56, boolean r57, boolean r58, int r59) {
         /*
-            Method dump skipped, instructions count: 4557
+            Method dump skipped, instructions count: 6602
             To view this dump add '--comments-level debug' option
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$putMessages$160(java.util.ArrayList, boolean, boolean, int, boolean, boolean):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$putMessages$169(java.util.ArrayList, boolean, boolean, int, boolean, boolean, int):void");
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$putMessagesInternal$159(int i) {
+    public /* synthetic */ void lambda$putMessagesInternal$166(int i) {
         getDownloadController().newDownloadObjectsAvailable(i);
     }
 
-    public void putMessages(ArrayList<TLRPC$Message> arrayList, boolean z, boolean z2, boolean z3, int i, boolean z4) {
-        putMessages(arrayList, z, z2, z3, i, false, z4);
+    private void createOrEditTopic(final long j, TLRPC$Message tLRPC$Message) {
+        final TLRPC$TL_forumTopic tLRPC$TL_forumTopic = new TLRPC$TL_forumTopic();
+        tLRPC$TL_forumTopic.topicStartMessage = tLRPC$Message;
+        tLRPC$TL_forumTopic.top_message = tLRPC$Message.id;
+        tLRPC$TL_forumTopic.topMessage = tLRPC$Message;
+        tLRPC$TL_forumTopic.from_id = getMessagesController().getPeer(getUserConfig().clientUserId);
+        tLRPC$TL_forumTopic.notify_settings = new TLRPC$TL_peerNotifySettings();
+        int i = 0;
+        tLRPC$TL_forumTopic.unread_count = 0;
+        TLRPC$MessageAction tLRPC$MessageAction = tLRPC$Message.action;
+        if (tLRPC$MessageAction instanceof TLRPC$TL_messageActionTopicCreate) {
+            TLRPC$TL_messageActionTopicCreate tLRPC$TL_messageActionTopicCreate = (TLRPC$TL_messageActionTopicCreate) tLRPC$MessageAction;
+            tLRPC$TL_forumTopic.id = tLRPC$Message.id;
+            long j2 = tLRPC$TL_messageActionTopicCreate.icon_emoji_id;
+            tLRPC$TL_forumTopic.icon_emoji_id = j2;
+            tLRPC$TL_forumTopic.title = tLRPC$TL_messageActionTopicCreate.title;
+            tLRPC$TL_forumTopic.icon_color = tLRPC$TL_messageActionTopicCreate.icon_color;
+            if (j2 != 0) {
+                tLRPC$TL_forumTopic.flags |= 1;
+            }
+            ArrayList arrayList = new ArrayList();
+            arrayList.add(tLRPC$TL_forumTopic);
+            saveTopics(j, arrayList, false, false);
+            AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda114
+                @Override // java.lang.Runnable
+                public final void run() {
+                    MessagesStorage.this.lambda$createOrEditTopic$167(j, tLRPC$TL_forumTopic);
+                }
+            });
+        } else if (!(tLRPC$MessageAction instanceof TLRPC$TL_messageActionTopicEdit)) {
+        } else {
+            TLRPC$TL_messageActionTopicEdit tLRPC$TL_messageActionTopicEdit = (TLRPC$TL_messageActionTopicEdit) tLRPC$MessageAction;
+            tLRPC$TL_forumTopic.id = MessageObject.getTopicId(tLRPC$Message);
+            tLRPC$TL_forumTopic.icon_emoji_id = tLRPC$TL_messageActionTopicEdit.icon_emoji_id;
+            tLRPC$TL_forumTopic.title = tLRPC$TL_messageActionTopicEdit.title;
+            tLRPC$TL_forumTopic.closed = tLRPC$TL_messageActionTopicEdit.closed;
+            int i2 = tLRPC$TL_messageActionTopicEdit.flags;
+            if ((i2 & 1) != 0) {
+                i = 1;
+            }
+            if ((i2 & 2) != 0) {
+                i += 2;
+            }
+            if ((i2 & 4) != 0) {
+                i += 8;
+            }
+            final int i3 = i;
+            updateTopicData(j, tLRPC$TL_forumTopic, i3);
+            AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda115
+                @Override // java.lang.Runnable
+                public final void run() {
+                    MessagesStorage.this.lambda$createOrEditTopic$168(j, tLRPC$TL_forumTopic, i3);
+                }
+            });
+        }
     }
 
-    public void putMessages(final ArrayList<TLRPC$Message> arrayList, final boolean z, boolean z2, final boolean z3, final int i, final boolean z4, final boolean z5) {
+    /* JADX INFO: Access modifiers changed from: private */
+    public /* synthetic */ void lambda$createOrEditTopic$167(long j, TLRPC$TL_forumTopic tLRPC$TL_forumTopic) {
+        getMessagesController().getTopicsController().onTopicCreated(j, tLRPC$TL_forumTopic, false);
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
+    public /* synthetic */ void lambda$createOrEditTopic$168(long j, TLRPC$TL_forumTopic tLRPC$TL_forumTopic, int i) {
+        getMessagesController().getTopicsController().updateTopicInUi(j, tLRPC$TL_forumTopic, i);
+    }
+
+    public void putMessages(ArrayList<TLRPC$Message> arrayList, boolean z, boolean z2, boolean z3, int i, boolean z4, int i2) {
+        putMessages(arrayList, z, z2, z3, i, false, z4, i2);
+    }
+
+    public void putMessages(final ArrayList<TLRPC$Message> arrayList, final boolean z, boolean z2, final boolean z3, final int i, final boolean z4, final boolean z5, final int i2) {
         if (arrayList.size() == 0) {
             return;
         }
         if (z2) {
-            this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda149
+            this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda157
                 @Override // java.lang.Runnable
                 public final void run() {
-                    MessagesStorage.this.lambda$putMessages$160(arrayList, z, z3, i, z4, z5);
+                    MessagesStorage.this.lambda$putMessages$169(arrayList, z, z3, i, z4, z5, i2);
                 }
             });
         } else {
-            lambda$putMessages$160(arrayList, z, z3, i, z4, z5);
+            lambda$putMessages$169(arrayList, z, z3, i, z4, z5, i2);
         }
     }
 
     public void markMessageAsSendError(final TLRPC$Message tLRPC$Message, final boolean z) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda173
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda182
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$markMessageAsSendError$161(tLRPC$Message, z);
+                MessagesStorage.this.lambda$markMessageAsSendError$170(tLRPC$Message, z);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$markMessageAsSendError$161(TLRPC$Message tLRPC$Message, boolean z) {
+    public /* synthetic */ void lambda$markMessageAsSendError$170(TLRPC$Message tLRPC$Message, boolean z) {
         try {
             long j = tLRPC$Message.id;
             if (z) {
                 this.database.executeFast(String.format(Locale.US, "UPDATE scheduled_messages_v2 SET send_state = 2 WHERE mid = %d AND uid = %d", Long.valueOf(j), Long.valueOf(MessageObject.getDialogId(tLRPC$Message)))).stepThis().dispose();
             } else {
-                this.database.executeFast(String.format(Locale.US, "UPDATE messages_v2 SET send_state = 2 WHERE mid = %d AND uid = %d", Long.valueOf(j), Long.valueOf(MessageObject.getDialogId(tLRPC$Message)))).stepThis().dispose();
+                SQLiteDatabase sQLiteDatabase = this.database;
+                Locale locale = Locale.US;
+                sQLiteDatabase.executeFast(String.format(locale, "UPDATE messages_v2 SET send_state = 2 WHERE mid = %d AND uid = %d", Long.valueOf(j), Long.valueOf(MessageObject.getDialogId(tLRPC$Message)))).stepThis().dispose();
+                this.database.executeFast(String.format(locale, "UPDATE messages_topics SET send_state = 2 WHERE mid = %d AND uid = %d", Long.valueOf(j), Long.valueOf(MessageObject.getDialogId(tLRPC$Message)))).stepThis().dispose();
             }
         } catch (Exception e) {
             FileLog.e(e);
@@ -8707,16 +9234,16 @@ public class MessagesStorage extends BaseController {
     }
 
     public void setMessageSeq(final int i, final int i2, final int i3) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda33
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda34
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$setMessageSeq$162(i, i2, i3);
+                MessagesStorage.this.lambda$setMessageSeq$171(i, i2, i3);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$setMessageSeq$162(int i, int i2, int i3) {
+    public /* synthetic */ void lambda$setMessageSeq$171(int i, int i2, int i3) {
         SQLitePreparedStatement sQLitePreparedStatement = null;
         try {
             try {
@@ -8742,28 +9269,35 @@ public class MessagesStorage extends BaseController {
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    /* JADX WARN: Can't wrap try/catch for region: R(15:1|(7:182|183|184|185|(3:187|188|189)(1:201)|190|(1:192))(1:3)|4|(8:(2:155|(18:157|158|159|160|161|162|163|164|20|(13:132|133|134|135|(2:137|138)(1:141)|139|(1:26)(1:131)|116|117|(2:119|120)|122|28|(1:30)(1:(4:50|(12:63|64|65|66|67|68|69|70|71|72|73|74)(3:52|53|54)|55|56)(6:33|(1:35)(1:41)|36|37|38|39)))(1:23)|24|(0)(0)|116|117|(0)|122|28|(0)(0)))|116|117|(0)|122|28|(0)(0)|(13:(0)|(1:60)|(1:126)|(1:100)|(1:45)|(1:103)|(0)|(1:83)|(0)|(0)|(0)|(0)|(0)))|6|(6:8|(1:10)(1:19)|11|12|13|14)|20|(0)|132|133|134|135|(0)(0)|139|(0)(0)) */
-    /* JADX WARN: Can't wrap try/catch for region: R(22:1|(7:182|183|184|185|(3:187|188|189)(1:201)|190|(1:192))(1:3)|4|(2:155|(18:157|158|159|160|161|162|163|164|20|(13:132|133|134|135|(2:137|138)(1:141)|139|(1:26)(1:131)|116|117|(2:119|120)|122|28|(1:30)(1:(4:50|(12:63|64|65|66|67|68|69|70|71|72|73|74)(3:52|53|54)|55|56)(6:33|(1:35)(1:41)|36|37|38|39)))(1:23)|24|(0)(0)|116|117|(0)|122|28|(0)(0)))|6|(6:8|(1:10)(1:19)|11|12|13|14)|20|(0)|132|133|134|135|(0)(0)|139|(0)(0)|116|117|(0)|122|28|(0)(0)|(13:(0)|(1:60)|(1:126)|(1:100)|(1:45)|(1:103)|(0)|(1:83)|(0)|(0)|(0)|(0)|(0))) */
+    /* JADX WARN: Can't wrap try/catch for region: R(21:241|242|(1:244)|245|(0)|4|(0)|6|(0)|20|(0)|178|179|(4:180|181|(0)(0)|185)|(0)(0)|162|163|(0)|168|28|(0)(0)) */
+    /* JADX WARN: Can't wrap try/catch for region: R(22:1|(7:229|230|231|232|(3:234|235|236)(1:248)|237|(1:239))(1:3)|4|(2:202|(18:204|205|206|207|208|209|210|211|20|(13:178|179|180|181|(2:183|184)(1:187)|185|(1:26)(1:177)|162|163|(2:165|166)|168|28|(1:30)(1:(4:70|(18:83|84|85|86|87|88|89|90|91|92|93|94|95|96|97|98|99|100)(3:72|73|74)|75|76)(10:33|(1:35)(1:65)|36|37|38|(1:40)|42|(1:44)|45|46)))(1:23)|24|(0)(0)|162|163|(0)|168|28|(0)(0)))|6|(6:8|(1:10)(1:19)|11|12|13|14)|20|(0)|178|179|180|181|(0)(0)|185|(0)(0)|162|163|(0)|168|28|(0)(0)|(10:(0)|(1:172)|(1:80)|(1:105)|(1:128)|(0)|(0)|(0)|(0)|(0))) */
+    /* JADX WARN: Can't wrap try/catch for region: R(5:(2:133|134)|92|93|94|(7:95|96|97|(2:98|99)|100|75|76)) */
+    /* JADX WARN: Code restructure failed: missing block: B:101:0x019a, code lost:
+        r0 = move-exception;
+     */
+    /* JADX WARN: Code restructure failed: missing block: B:102:0x019b, code lost:
+        org.telegram.messenger.FileLog.e(r0);
+     */
     /* JADX WARN: Code restructure failed: missing block: B:103:0x019e, code lost:
         if (r8 == null) goto L28;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:119:0x01d8, code lost:
-        if (r5 == null) goto L38;
+    /* JADX WARN: Code restructure failed: missing block: B:170:0x0320, code lost:
+        r0 = move-exception;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:140:0x0255, code lost:
-        if (r3 != null) goto L68;
+    /* JADX WARN: Code restructure failed: missing block: B:171:0x0321, code lost:
+        org.telegram.messenger.FileLog.e(r0);
      */
-    /* JADX WARN: Code restructure failed: missing block: B:159:0x02c0, code lost:
-        if (r5 == null) goto L55;
+    /* JADX WARN: Code restructure failed: missing block: B:172:0x0324, code lost:
+        if (r3 != null) goto L94;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:178:0x031c, code lost:
-        if (r5 != null) goto L54;
+    /* JADX WARN: Code restructure failed: missing block: B:191:0x038f, code lost:
+        if (r5 == null) goto L75;
+     */
+    /* JADX WARN: Code restructure failed: missing block: B:215:0x03f6, code lost:
+        if (r5 != null) goto L74;
      */
     /* JADX WARN: Code restructure failed: missing block: B:49:0x009c, code lost:
         if (r10 == null) goto L20;
-     */
-    /* JADX WARN: Code restructure failed: missing block: B:81:0x0156, code lost:
-        r0 = e;
      */
     /* JADX WARN: Code restructure failed: missing block: B:83:0x0158, code lost:
         r0 = th;
@@ -8777,38 +9311,35 @@ public class MessagesStorage extends BaseController {
     /* JADX WARN: Code restructure failed: missing block: B:86:0x015e, code lost:
         r8 = r22;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:87:0x0160, code lost:
-        org.telegram.messenger.FileLog.e(r0);
-     */
-    /* JADX WARN: Code restructure failed: missing block: B:88:0x0163, code lost:
-        if (r8 != null) goto L149;
-     */
-    /* JADX WARN: Code restructure failed: missing block: B:89:0x0165, code lost:
-        r8.dispose();
-     */
     /* JADX WARN: Code restructure failed: missing block: B:92:0x016c, code lost:
-        if (r4 == 1) goto L116;
+        if (r4 == 1) goto L162;
      */
     /* JADX WARN: Multi-variable type inference failed */
     /* JADX WARN: Removed duplicated region for block: B:107:0x01a9 A[RETURN] */
     /* JADX WARN: Removed duplicated region for block: B:108:0x01aa  */
-    /* JADX WARN: Removed duplicated region for block: B:152:0x02a5  */
-    /* JADX WARN: Removed duplicated region for block: B:168:0x02d4  */
-    /* JADX WARN: Removed duplicated region for block: B:195:0x0072 A[EXC_TOP_SPLITTER, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:137:0x021a  */
+    /* JADX WARN: Removed duplicated region for block: B:139:0x021f  */
+    /* JADX WARN: Removed duplicated region for block: B:161:0x02d6  */
+    /* JADX WARN: Removed duplicated region for block: B:163:0x02dc  */
+    /* JADX WARN: Removed duplicated region for block: B:184:0x0374  */
+    /* JADX WARN: Removed duplicated region for block: B:203:0x03a9  */
+    /* JADX WARN: Removed duplicated region for block: B:205:0x03ae  */
+    /* JADX WARN: Removed duplicated region for block: B:227:0x0418  */
+    /* JADX WARN: Removed duplicated region for block: B:232:0x0072 A[EXC_TOP_SPLITTER, SYNTHETIC] */
     /* JADX WARN: Removed duplicated region for block: B:25:0x0058 A[RETURN] */
     /* JADX WARN: Removed duplicated region for block: B:29:0x005d  */
     /* JADX WARN: Removed duplicated region for block: B:58:0x00b5  */
     /* JADX WARN: Removed duplicated region for block: B:70:0x0122 A[ADDED_TO_REGION] */
-    /* JADX WARN: Removed duplicated region for block: B:77:0x0149 A[Catch: Exception -> 0x0156, all -> 0x033b, TRY_LEAVE, TryCatch #10 {all -> 0x033b, blocks: (B:75:0x0143, B:77:0x0149, B:87:0x0160), top: B:209:0x0143 }] */
+    /* JADX WARN: Removed duplicated region for block: B:77:0x0149 A[Catch: Exception -> 0x0156, all -> 0x0415, TRY_LEAVE, TryCatch #24 {Exception -> 0x0156, blocks: (B:75:0x0143, B:77:0x0149), top: B:255:0x0143 }] */
     /* JADX WARN: Removed duplicated region for block: B:79:0x014f  */
     /* JADX WARN: Removed duplicated region for block: B:91:0x016b  */
     /* JADX WARN: Removed duplicated region for block: B:94:0x016f  */
-    /* JADX WARN: Removed duplicated region for block: B:97:0x018f A[Catch: all -> 0x0197, Exception -> 0x019a, TRY_LEAVE, TryCatch #8 {Exception -> 0x019a, blocks: (B:95:0x0170, B:97:0x018f), top: B:205:0x0170, outer: #27 }] */
+    /* JADX WARN: Removed duplicated region for block: B:97:0x018f A[Catch: all -> 0x0197, Exception -> 0x019a, TRY_LEAVE, TryCatch #10 {Exception -> 0x019a, blocks: (B:95:0x0170, B:97:0x018f), top: B:236:0x0170, outer: #32 }] */
     /* JADX WARN: Type inference failed for: r10v1 */
     /* JADX WARN: Type inference failed for: r10v10, types: [org.telegram.SQLite.SQLitePreparedStatement] */
-    /* JADX WARN: Type inference failed for: r10v19 */
-    /* JADX WARN: Type inference failed for: r10v20 */
-    /* JADX WARN: Type inference failed for: r10v21 */
+    /* JADX WARN: Type inference failed for: r10v25 */
+    /* JADX WARN: Type inference failed for: r10v26 */
+    /* JADX WARN: Type inference failed for: r10v27 */
     /* JADX WARN: Type inference failed for: r10v6, types: [long] */
     /* JADX WARN: Type inference failed for: r10v7 */
     /* renamed from: updateMessageStateAndIdInternal */
@@ -8816,35 +9347,35 @@ public class MessagesStorage extends BaseController {
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public long[] lambda$updateMessageStateAndId$164(long r20, long r22, java.lang.Integer r24, int r25, int r26, int r27) {
+    public long[] lambda$updateMessageStateAndId$173(long r20, long r22, java.lang.Integer r24, int r25, int r26, int r27) {
         /*
-            Method dump skipped, instructions count: 836
+            Method dump skipped, instructions count: 1054
             To view this dump add '--comments-level debug' option
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$updateMessageStateAndId$164(long, long, java.lang.Integer, int, int, int):long[]");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$updateMessageStateAndId$173(long, long, java.lang.Integer, int, int, int):long[]");
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateMessageStateAndIdInternal$163(TLRPC$TL_updates tLRPC$TL_updates) {
+    public /* synthetic */ void lambda$updateMessageStateAndIdInternal$172(TLRPC$TL_updates tLRPC$TL_updates) {
         getMessagesController().processUpdates(tLRPC$TL_updates, false);
     }
 
     public long[] updateMessageStateAndId(final long j, final long j2, final Integer num, final int i, final int i2, boolean z, final int i3) {
         if (z) {
-            this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda87
+            this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda91
                 @Override // java.lang.Runnable
                 public final void run() {
-                    MessagesStorage.this.lambda$updateMessageStateAndId$164(j, j2, num, i, i2, i3);
+                    MessagesStorage.this.lambda$updateMessageStateAndId$173(j, j2, num, i, i2, i3);
                 }
             });
             return null;
         }
-        return lambda$updateMessageStateAndId$164(j, j2, num, i, i2, i3);
+        return lambda$updateMessageStateAndId$173(j, j2, num, i, i2, i3);
     }
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: updateUsersInternal */
-    public void lambda$updateUsers$165(ArrayList<TLRPC$User> arrayList, boolean z, boolean z2) {
+    public void lambda$updateUsers$174(ArrayList<TLRPC$User> arrayList, boolean z, boolean z2) {
         SQLitePreparedStatement sQLitePreparedStatement = null;
         try {
             try {
@@ -8963,14 +9494,14 @@ public class MessagesStorage extends BaseController {
             return;
         }
         if (z3) {
-            this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda148
+            this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda156
                 @Override // java.lang.Runnable
                 public final void run() {
-                    MessagesStorage.this.lambda$updateUsers$165(arrayList, z, z2);
+                    MessagesStorage.this.lambda$updateUsers$174(arrayList, z, z2);
                 }
             });
         } else {
-            lambda$updateUsers$165(arrayList, z, z2);
+            lambda$updateUsers$174(arrayList, z, z2);
         }
     }
 
@@ -8983,12 +9514,12 @@ public class MessagesStorage extends BaseController {
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public void lambda$markMessagesAsRead$167(org.telegram.messenger.support.LongSparseIntArray r18, org.telegram.messenger.support.LongSparseIntArray r19, android.util.SparseIntArray r20) {
+    public void lambda$markMessagesAsRead$176(org.telegram.messenger.support.LongSparseIntArray r18, org.telegram.messenger.support.LongSparseIntArray r19, android.util.SparseIntArray r20) {
         /*
             Method dump skipped, instructions count: 243
             To view this dump add '--comments-level debug' option
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$markMessagesAsRead$167(org.telegram.messenger.support.LongSparseIntArray, org.telegram.messenger.support.LongSparseIntArray, android.util.SparseIntArray):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$markMessagesAsRead$176(org.telegram.messenger.support.LongSparseIntArray, org.telegram.messenger.support.LongSparseIntArray, android.util.SparseIntArray):void");
     }
 
     private void markMessagesContentAsReadInternal(long j, ArrayList<Integer> arrayList, int i) {
@@ -9045,10 +9576,10 @@ public class MessagesStorage extends BaseController {
         if (isEmpty(arrayList)) {
             return;
         }
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda97
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda101
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$markMessagesContentAsRead$166(j, arrayList, i);
+                MessagesStorage.this.lambda$markMessagesContentAsRead$175(j, arrayList, i);
             }
         });
     }
@@ -9061,7 +9592,7 @@ public class MessagesStorage extends BaseController {
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public /* synthetic */ void lambda$markMessagesContentAsRead$166(long r7, java.util.ArrayList r9, int r10) {
+    public /* synthetic */ void lambda$markMessagesContentAsRead$175(long r7, java.util.ArrayList r9, int r10) {
         /*
             r6 = this;
             r0 = 0
@@ -9137,19 +9668,19 @@ public class MessagesStorage extends BaseController {
         L83:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$markMessagesContentAsRead$166(long, java.util.ArrayList, int):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$markMessagesContentAsRead$175(long, java.util.ArrayList, int):void");
     }
 
     public void markMessagesAsRead(final LongSparseIntArray longSparseIntArray, final LongSparseIntArray longSparseIntArray2, final SparseIntArray sparseIntArray, boolean z) {
         if (z) {
-            this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda155
+            this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda164
                 @Override // java.lang.Runnable
                 public final void run() {
-                    MessagesStorage.this.lambda$markMessagesAsRead$167(longSparseIntArray, longSparseIntArray2, sparseIntArray);
+                    MessagesStorage.this.lambda$markMessagesAsRead$176(longSparseIntArray, longSparseIntArray2, sparseIntArray);
                 }
             });
         } else {
-            lambda$markMessagesAsRead$167(longSparseIntArray, longSparseIntArray2, sparseIntArray);
+            lambda$markMessagesAsRead$176(longSparseIntArray, longSparseIntArray2, sparseIntArray);
         }
     }
 
@@ -9157,16 +9688,16 @@ public class MessagesStorage extends BaseController {
         if (arrayList.isEmpty()) {
             return;
         }
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda139
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda142
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$markMessagesAsDeletedByRandoms$169(arrayList);
+                MessagesStorage.this.lambda$markMessagesAsDeletedByRandoms$178(arrayList);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$markMessagesAsDeletedByRandoms$169(ArrayList arrayList) {
+    public /* synthetic */ void lambda$markMessagesAsDeletedByRandoms$178(ArrayList arrayList) {
         SQLiteCursor queryFinalized;
         SQLiteCursor sQLiteCursor = null;
         try {
@@ -9197,15 +9728,15 @@ public class MessagesStorage extends BaseController {
             for (int i = 0; i < size; i++) {
                 long keyAt = longSparseArray.keyAt(i);
                 final ArrayList<Integer> arrayList3 = (ArrayList) longSparseArray.valueAt(i);
-                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda127
+                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda135
                     @Override // java.lang.Runnable
                     public final void run() {
-                        MessagesStorage.this.lambda$markMessagesAsDeletedByRandoms$168(arrayList3);
+                        MessagesStorage.this.lambda$markMessagesAsDeletedByRandoms$177(arrayList3);
                     }
                 });
                 updateDialogsWithReadMessagesInternal(arrayList3, null, null, null, null);
-                lambda$markMessagesAsDeleted$173(keyAt, arrayList3, true, false);
-                lambda$updateDialogsWithDeletedMessages$172(keyAt, 0L, arrayList3, null);
+                lambda$markMessagesAsDeleted$182(keyAt, arrayList3, true, false);
+                lambda$updateDialogsWithDeletedMessages$181(keyAt, 0L, arrayList3, null);
             }
         } catch (Exception e2) {
             e = e2;
@@ -9226,7 +9757,7 @@ public class MessagesStorage extends BaseController {
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$markMessagesAsDeletedByRandoms$168(ArrayList arrayList) {
+    public /* synthetic */ void lambda$markMessagesAsDeletedByRandoms$177(ArrayList arrayList) {
         getNotificationCenter().postNotificationName(NotificationCenter.messagesDeleted, arrayList, 0L, Boolean.FALSE);
     }
 
@@ -9258,10 +9789,10 @@ public class MessagesStorage extends BaseController {
                 i = queryFinalized.intValue(0);
             }
             queryFinalized.dispose();
-            AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda123
+            AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda131
                 @Override // java.lang.Runnable
                 public final void run() {
-                    MessagesStorage.this.lambda$broadcastScheduledMessagesChange$170(l, i);
+                    MessagesStorage.this.lambda$broadcastScheduledMessagesChange$179(l, i);
                 }
             });
         } catch (Exception e2) {
@@ -9283,92 +9814,84 @@ public class MessagesStorage extends BaseController {
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$broadcastScheduledMessagesChange$170(Long l, int i) {
+    public /* synthetic */ void lambda$broadcastScheduledMessagesChange$179(Long l, int i) {
         getNotificationCenter().postNotificationName(NotificationCenter.scheduledMessagesUpdated, l, Integer.valueOf(i));
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    /* JADX WARN: Can't wrap try/catch for region: R(12:75|(5:76|77|(2:349|350)|79|80)|(5:(3:82|83|(9:85|(3:87|88|89)(1:347)|90|(1:92)|(1:342)|96|97|(5:105|106|107|108|110)(2:100|101)|102))|107|108|110|102)|348|96|97|(0)|103|105|106|72|73) */
-    /* JADX WARN: Code restructure failed: missing block: B:76:0x020a, code lost:
-        r0 = e;
-     */
-    /* JADX WARN: Code restructure failed: missing block: B:77:0x020b, code lost:
-        r24 = r5;
-        r25 = r13;
-        r15 = r22;
-        r22 = r23;
-        r23 = r4;
-     */
-    /* JADX WARN: Code restructure failed: missing block: B:80:0x0221, code lost:
-        r13 = r6;
-     */
-    /* JADX WARN: Removed duplicated region for block: B:112:0x02f9 A[Catch: all -> 0x079a, Exception -> 0x07a0, TRY_LEAVE, TryCatch #40 {Exception -> 0x07a0, all -> 0x079a, blocks: (B:3:0x0006, B:6:0x0012, B:19:0x005e, B:21:0x0083, B:26:0x0099, B:28:0x00cb, B:89:0x0247, B:94:0x0258, B:104:0x02c5, B:95:0x0267, B:98:0x027c, B:99:0x028b, B:109:0x02dc, B:110:0x02f3, B:112:0x02f9, B:118:0x0334, B:131:0x038d, B:29:0x00ee), top: B:336:0x0006 }] */
-    /* JADX WARN: Removed duplicated region for block: B:134:0x0396  */
-    /* JADX WARN: Removed duplicated region for block: B:256:0x0724  */
-    /* JADX WARN: Removed duplicated region for block: B:262:0x0768 A[Catch: all -> 0x0787, Exception -> 0x078e, TryCatch #31 {Exception -> 0x078e, all -> 0x0787, blocks: (B:143:0x03be, B:150:0x041f, B:148:0x03e8, B:254:0x0703, B:258:0x072a, B:259:0x073a, B:260:0x0757, B:262:0x0768, B:263:0x076c), top: B:353:0x03be }] */
-    /* JADX WARN: Removed duplicated region for block: B:267:0x0779  */
-    /* JADX WARN: Removed duplicated region for block: B:269:0x077e  */
-    /* JADX WARN: Removed duplicated region for block: B:271:0x0783  */
-    /* JADX WARN: Removed duplicated region for block: B:288:0x07ab  */
-    /* JADX WARN: Removed duplicated region for block: B:290:0x07b0  */
-    /* JADX WARN: Removed duplicated region for block: B:292:0x07b5  */
-    /* JADX WARN: Removed duplicated region for block: B:300:0x07c3  */
-    /* JADX WARN: Removed duplicated region for block: B:302:0x07c8  */
-    /* JADX WARN: Removed duplicated region for block: B:304:0x07cd  */
-    /* JADX WARN: Removed duplicated region for block: B:379:? A[RETURN, SYNTHETIC] */
-    /* JADX WARN: Removed duplicated region for block: B:91:0x0250  */
+    /* JADX WARN: Removed duplicated region for block: B:153:0x0391  */
+    /* JADX WARN: Removed duplicated region for block: B:156:0x03a2  */
+    /* JADX WARN: Removed duplicated region for block: B:185:0x0468 A[Catch: all -> 0x0b70, Exception -> 0x0b74, TRY_LEAVE, TryCatch #58 {Exception -> 0x0b74, all -> 0x0b70, blocks: (B:88:0x0237, B:154:0x0399, B:159:0x03aa, B:175:0x0430, B:176:0x0438, B:160:0x03b9, B:165:0x03d1, B:166:0x03e0, B:170:0x03f6, B:182:0x0449, B:183:0x0462, B:185:0x0468, B:191:0x04a5, B:205:0x0506), top: B:491:0x0237 }] */
+    /* JADX WARN: Removed duplicated region for block: B:208:0x050f  */
+    /* JADX WARN: Removed duplicated region for block: B:298:0x0830 A[Catch: all -> 0x09fa, Exception -> 0x0a01, TryCatch #41 {Exception -> 0x0a01, all -> 0x09fa, blocks: (B:296:0x082a, B:298:0x0830, B:299:0x084e, B:301:0x0854, B:303:0x0868, B:304:0x086d, B:306:0x0875, B:309:0x088c, B:310:0x0891, B:307:0x0883, B:311:0x08a0), top: B:525:0x082a }] */
+    /* JADX WARN: Removed duplicated region for block: B:364:0x0999  */
+    /* JADX WARN: Removed duplicated region for block: B:395:0x0a55  */
+    /* JADX WARN: Removed duplicated region for block: B:401:0x0a8e  */
+    /* JADX WARN: Removed duplicated region for block: B:407:0x0ad2 A[Catch: all -> 0x0b60, Exception -> 0x0b68, TryCatch #54 {Exception -> 0x0b68, all -> 0x0b60, blocks: (B:215:0x0536, B:218:0x058d, B:216:0x055a, B:393:0x0a34, B:397:0x0a5b, B:398:0x0a6b, B:399:0x0a88, B:403:0x0a94, B:404:0x0aa4, B:405:0x0ac1, B:407:0x0ad2, B:408:0x0ad6, B:411:0x0ade, B:413:0x0ae4, B:414:0x0b3d), top: B:499:0x0536 }] */
+    /* JADX WARN: Removed duplicated region for block: B:410:0x0add  */
+    /* JADX WARN: Removed duplicated region for block: B:418:0x0b52  */
+    /* JADX WARN: Removed duplicated region for block: B:420:0x0b57  */
+    /* JADX WARN: Removed duplicated region for block: B:422:0x0b5c  */
+    /* JADX WARN: Removed duplicated region for block: B:445:0x0b92  */
+    /* JADX WARN: Removed duplicated region for block: B:447:0x0b97  */
+    /* JADX WARN: Removed duplicated region for block: B:449:0x0b9c  */
+    /* JADX WARN: Removed duplicated region for block: B:457:0x0baa  */
+    /* JADX WARN: Removed duplicated region for block: B:459:0x0baf  */
+    /* JADX WARN: Removed duplicated region for block: B:461:0x0bb4  */
+    /* JADX WARN: Removed duplicated region for block: B:565:? A[RETURN, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:87:0x0235  */
     /* renamed from: markMessagesAsDeletedInternal */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public java.util.ArrayList<java.lang.Long> lambda$markMessagesAsDeleted$173(long r33, java.util.ArrayList<java.lang.Integer> r35, boolean r36, boolean r37) {
+    public java.util.ArrayList<java.lang.Long> lambda$markMessagesAsDeleted$182(long r37, java.util.ArrayList<java.lang.Integer> r39, boolean r40, boolean r41) {
         /*
-            Method dump skipped, instructions count: 2003
+            Method dump skipped, instructions count: 3002
             To view this dump add '--comments-level debug' option
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$markMessagesAsDeleted$173(long, java.util.ArrayList, boolean, boolean):java.util.ArrayList");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$markMessagesAsDeleted$182(long, java.util.ArrayList, boolean, boolean):java.util.ArrayList");
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$markMessagesAsDeletedInternal$171(ArrayList arrayList) {
+    public /* synthetic */ void lambda$markMessagesAsDeletedInternal$180(ArrayList arrayList) {
         getFileLoader().cancelLoadFiles(arrayList);
     }
 
     /* JADX INFO: Access modifiers changed from: private */
     /* JADX WARN: Multi-variable type inference failed */
-    /* JADX WARN: Removed duplicated region for block: B:150:0x02e8  */
-    /* JADX WARN: Removed duplicated region for block: B:152:0x02ed  */
-    /* JADX WARN: Removed duplicated region for block: B:154:0x02f2  */
-    /* JADX WARN: Removed duplicated region for block: B:159:0x02fb  */
-    /* JADX WARN: Removed duplicated region for block: B:161:0x0300  */
-    /* JADX WARN: Removed duplicated region for block: B:163:0x0305  */
-    /* JADX WARN: Removed duplicated region for block: B:199:? A[RETURN, SYNTHETIC] */
-    /* JADX WARN: Type inference failed for: r4v8 */
+    /* JADX WARN: Removed duplicated region for block: B:188:0x03f2  */
+    /* JADX WARN: Removed duplicated region for block: B:190:0x03f7  */
+    /* JADX WARN: Removed duplicated region for block: B:192:0x03fc  */
+    /* JADX WARN: Removed duplicated region for block: B:197:0x0405  */
+    /* JADX WARN: Removed duplicated region for block: B:199:0x040a  */
+    /* JADX WARN: Removed duplicated region for block: B:201:0x040f  */
+    /* JADX WARN: Removed duplicated region for block: B:252:? A[RETURN, SYNTHETIC] */
     /* renamed from: updateDialogsWithDeletedMessagesInternal */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public void lambda$updateDialogsWithDeletedMessages$172(long r21, long r23, java.util.ArrayList<java.lang.Integer> r25, java.util.ArrayList<java.lang.Long> r26) {
+    public void lambda$updateDialogsWithDeletedMessages$181(long r21, long r23, java.util.ArrayList<java.lang.Integer> r25, java.util.ArrayList<java.lang.Long> r26) {
         /*
-            Method dump skipped, instructions count: 779
+            Method dump skipped, instructions count: 1045
             To view this dump add '--comments-level debug' option
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$updateDialogsWithDeletedMessages$172(long, long, java.util.ArrayList, java.util.ArrayList):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$updateDialogsWithDeletedMessages$181(long, long, java.util.ArrayList, java.util.ArrayList):void");
     }
 
     public void updateDialogsWithDeletedMessages(final long j, final long j2, final ArrayList<Integer> arrayList, final ArrayList<Long> arrayList2, boolean z) {
         if (z) {
-            this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda88
+            this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda92
                 @Override // java.lang.Runnable
                 public final void run() {
-                    MessagesStorage.this.lambda$updateDialogsWithDeletedMessages$172(j, j2, arrayList, arrayList2);
+                    MessagesStorage.this.lambda$updateDialogsWithDeletedMessages$181(j, j2, arrayList, arrayList2);
                 }
             });
         } else {
-            lambda$updateDialogsWithDeletedMessages$172(j, j2, arrayList, arrayList2);
+            lambda$updateDialogsWithDeletedMessages$181(j, j2, arrayList, arrayList2);
         }
+        getMessagesController().getTopicsController().updateTopicsWithDeletedMessages(j, arrayList);
     }
 
     public ArrayList<Long> markMessagesAsDeleted(final long j, final ArrayList<Integer> arrayList, boolean z, final boolean z2, final boolean z3) {
@@ -9376,29 +9899,29 @@ public class MessagesStorage extends BaseController {
             return null;
         }
         if (z) {
-            this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda101
+            this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda105
                 @Override // java.lang.Runnable
                 public final void run() {
-                    MessagesStorage.this.lambda$markMessagesAsDeleted$173(j, arrayList, z2, z3);
+                    MessagesStorage.this.lambda$markMessagesAsDeleted$182(j, arrayList, z2, z3);
                 }
             });
             return null;
         }
-        return lambda$markMessagesAsDeleted$173(j, arrayList, z2, z3);
+        return lambda$markMessagesAsDeleted$182(j, arrayList, z2, z3);
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    /* JADX WARN: Removed duplicated region for block: B:113:0x02f3  */
-    /* JADX WARN: Removed duplicated region for block: B:115:0x02f8  */
-    /* JADX WARN: Removed duplicated region for block: B:121:0x0303  */
-    /* JADX WARN: Removed duplicated region for block: B:123:0x0308  */
+    /* JADX WARN: Removed duplicated region for block: B:113:0x0331  */
+    /* JADX WARN: Removed duplicated region for block: B:115:0x0336  */
+    /* JADX WARN: Removed duplicated region for block: B:121:0x0341  */
+    /* JADX WARN: Removed duplicated region for block: B:123:0x0346  */
     /* JADX WARN: Removed duplicated region for block: B:156:? A[RETURN, SYNTHETIC] */
-    /* JADX WARN: Removed duplicated region for block: B:33:0x00cb A[Catch: all -> 0x0105, Exception -> 0x0110, TRY_LEAVE, TryCatch #0 {Exception -> 0x0110, blocks: (B:5:0x004b, B:7:0x0051, B:11:0x005a, B:13:0x0064, B:15:0x006c, B:18:0x0083, B:27:0x00b7, B:31:0x00c4, B:33:0x00cb, B:22:0x0099), top: B:127:0x004b }] */
+    /* JADX WARN: Removed duplicated region for block: B:33:0x00cb A[Catch: all -> 0x0105, Exception -> 0x0110, TRY_LEAVE, TryCatch #1 {Exception -> 0x0110, blocks: (B:5:0x004b, B:7:0x0051, B:11:0x005a, B:13:0x0064, B:15:0x006c, B:18:0x0083, B:27:0x00b7, B:31:0x00c4, B:33:0x00cb, B:22:0x0099), top: B:127:0x004b }] */
     /* JADX WARN: Removed duplicated region for block: B:41:0x00f4  */
-    /* JADX WARN: Removed duplicated region for block: B:55:0x0136 A[Catch: all -> 0x02d4, Exception -> 0x02d6, TRY_LEAVE, TryCatch #18 {Exception -> 0x02d6, all -> 0x02d4, blocks: (B:52:0x011c, B:53:0x0130, B:55:0x0136, B:61:0x016e, B:73:0x01c4, B:80:0x0226, B:89:0x026b), top: B:136:0x011c }] */
-    /* JADX WARN: Removed duplicated region for block: B:76:0x021b A[Catch: all -> 0x02cf, Exception -> 0x02d2, TryCatch #16 {Exception -> 0x02d2, all -> 0x02cf, blocks: (B:74:0x0215, B:76:0x021b, B:78:0x0221, B:81:0x023d, B:83:0x0243, B:88:0x0268), top: B:140:0x0215 }] */
+    /* JADX WARN: Removed duplicated region for block: B:55:0x0136 A[Catch: all -> 0x0312, Exception -> 0x0314, TRY_LEAVE, TryCatch #16 {Exception -> 0x0314, all -> 0x0312, blocks: (B:52:0x011c, B:53:0x0130, B:55:0x0136, B:61:0x016e, B:73:0x01c4, B:80:0x0226, B:89:0x026b), top: B:140:0x011c }] */
+    /* JADX WARN: Removed duplicated region for block: B:76:0x021b A[Catch: all -> 0x030d, Exception -> 0x0310, TryCatch #19 {Exception -> 0x0310, all -> 0x030d, blocks: (B:74:0x0215, B:76:0x021b, B:78:0x0221, B:81:0x023d, B:83:0x0243, B:88:0x0268), top: B:134:0x0215 }] */
     /* JADX WARN: Removed duplicated region for block: B:77:0x0220  */
-    /* JADX WARN: Removed duplicated region for block: B:80:0x0226 A[Catch: all -> 0x02d4, Exception -> 0x02d6, TRY_ENTER, TRY_LEAVE, TryCatch #18 {Exception -> 0x02d6, all -> 0x02d4, blocks: (B:52:0x011c, B:53:0x0130, B:55:0x0136, B:61:0x016e, B:73:0x01c4, B:80:0x0226, B:89:0x026b), top: B:136:0x011c }] */
+    /* JADX WARN: Removed duplicated region for block: B:80:0x0226 A[Catch: all -> 0x0312, Exception -> 0x0314, TRY_ENTER, TRY_LEAVE, TryCatch #16 {Exception -> 0x0314, all -> 0x0312, blocks: (B:52:0x011c, B:53:0x0130, B:55:0x0136, B:61:0x016e, B:73:0x01c4, B:80:0x0226, B:89:0x026b), top: B:140:0x011c }] */
     /* JADX WARN: Type inference failed for: r7v10 */
     /* JADX WARN: Type inference failed for: r7v4 */
     /* renamed from: markMessagesAsDeletedInternal */
@@ -9406,30 +9929,30 @@ public class MessagesStorage extends BaseController {
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public java.util.ArrayList<java.lang.Long> lambda$markMessagesAsDeleted$175(long r24, int r26, boolean r27) {
+    public java.util.ArrayList<java.lang.Long> lambda$markMessagesAsDeleted$184(long r24, int r26, boolean r27) {
         /*
-            Method dump skipped, instructions count: 782
+            Method dump skipped, instructions count: 844
             To view this dump add '--comments-level debug' option
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$markMessagesAsDeleted$175(long, int, boolean):java.util.ArrayList");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$markMessagesAsDeleted$184(long, int, boolean):java.util.ArrayList");
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$markMessagesAsDeletedInternal$174(ArrayList arrayList) {
+    public /* synthetic */ void lambda$markMessagesAsDeletedInternal$183(ArrayList arrayList) {
         getFileLoader().cancelLoadFiles(arrayList);
     }
 
     public ArrayList<Long> markMessagesAsDeleted(final long j, final int i, boolean z, final boolean z2) {
         if (z) {
-            this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda80
+            this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda84
                 @Override // java.lang.Runnable
                 public final void run() {
-                    MessagesStorage.this.lambda$markMessagesAsDeleted$175(j, i, z2);
+                    MessagesStorage.this.lambda$markMessagesAsDeleted$184(j, i, z2);
                 }
             });
             return null;
         }
-        return lambda$markMessagesAsDeleted$175(j, i, z2);
+        return lambda$markMessagesAsDeleted$184(j, i, z2);
     }
 
     private void fixUnsupportedMedia(TLRPC$Message tLRPC$Message) {
@@ -9441,35 +9964,57 @@ public class MessagesStorage extends BaseController {
             if (tLRPC$MessageMedia.bytes.length != 0) {
                 return;
             }
-            tLRPC$MessageMedia.bytes = Utilities.intToBytes(147);
+            tLRPC$MessageMedia.bytes = Utilities.intToBytes(148);
         } else if (!(tLRPC$MessageMedia instanceof TLRPC$TL_messageMediaUnsupported)) {
         } else {
             TLRPC$TL_messageMediaUnsupported_old tLRPC$TL_messageMediaUnsupported_old = new TLRPC$TL_messageMediaUnsupported_old();
             tLRPC$Message.media = tLRPC$TL_messageMediaUnsupported_old;
-            tLRPC$TL_messageMediaUnsupported_old.bytes = Utilities.intToBytes(147);
+            tLRPC$TL_messageMediaUnsupported_old.bytes = Utilities.intToBytes(148);
             tLRPC$Message.flags |= 512;
         }
     }
 
-    private void doneHolesInTable(String str, long j, int i) throws Exception {
-        if (i == 0) {
-            SQLiteDatabase sQLiteDatabase = this.database;
-            Locale locale = Locale.US;
-            sQLiteDatabase.executeFast(String.format(locale, "DELETE FROM " + str + " WHERE uid = %d", Long.valueOf(j))).stepThis().dispose();
+    private void doneHolesInTable(String str, long j, int i, int i2) throws Exception {
+        SQLitePreparedStatement executeFast;
+        int i3 = 2;
+        if (i2 != 0) {
+            if (i == 0) {
+                SQLiteDatabase sQLiteDatabase = this.database;
+                Locale locale = Locale.US;
+                sQLiteDatabase.executeFast(String.format(locale, "DELETE FROM " + str + " WHERE uid = %d AND topic_id = %d", Long.valueOf(j), Integer.valueOf(i2))).stepThis().dispose();
+            } else {
+                SQLiteDatabase sQLiteDatabase2 = this.database;
+                Locale locale2 = Locale.US;
+                sQLiteDatabase2.executeFast(String.format(locale2, "DELETE FROM " + str + " WHERE uid = %d AND topic_id = %d AND start = 0", Long.valueOf(j), Integer.valueOf(i2))).stepThis().dispose();
+            }
+        } else if (i == 0) {
+            SQLiteDatabase sQLiteDatabase3 = this.database;
+            Locale locale3 = Locale.US;
+            sQLiteDatabase3.executeFast(String.format(locale3, "DELETE FROM " + str + " WHERE uid = %d", Long.valueOf(j))).stepThis().dispose();
         } else {
-            SQLiteDatabase sQLiteDatabase2 = this.database;
-            Locale locale2 = Locale.US;
-            sQLiteDatabase2.executeFast(String.format(locale2, "DELETE FROM " + str + " WHERE uid = %d AND start = 0", Long.valueOf(j))).stepThis().dispose();
+            SQLiteDatabase sQLiteDatabase4 = this.database;
+            Locale locale4 = Locale.US;
+            sQLiteDatabase4.executeFast(String.format(locale4, "DELETE FROM " + str + " WHERE uid = %d AND start = 0", Long.valueOf(j))).stepThis().dispose();
         }
         SQLitePreparedStatement sQLitePreparedStatement = null;
         try {
             try {
-                SQLiteDatabase sQLiteDatabase3 = this.database;
-                sQLitePreparedStatement = sQLiteDatabase3.executeFast("REPLACE INTO " + str + " VALUES(?, ?, ?)");
+                if (i2 != 0) {
+                    SQLiteDatabase sQLiteDatabase5 = this.database;
+                    executeFast = sQLiteDatabase5.executeFast("REPLACE INTO " + str + " VALUES(?, ?, ?, ?)");
+                } else {
+                    SQLiteDatabase sQLiteDatabase6 = this.database;
+                    executeFast = sQLiteDatabase6.executeFast("REPLACE INTO " + str + " VALUES(?, ?, ?)");
+                }
+                sQLitePreparedStatement = executeFast;
                 sQLitePreparedStatement.requery();
                 sQLitePreparedStatement.bindLong(1, j);
-                sQLitePreparedStatement.bindInteger(2, 1);
-                sQLitePreparedStatement.bindInteger(3, 1);
+                if (i2 != 0) {
+                    sQLitePreparedStatement.bindInteger(2, i2);
+                    i3 = 3;
+                }
+                sQLitePreparedStatement.bindInteger(i3, 1);
+                sQLitePreparedStatement.bindInteger(i3 + 1, 1);
                 sQLitePreparedStatement.step();
                 sQLitePreparedStatement.dispose();
             } catch (Exception e) {
@@ -9483,23 +10028,45 @@ public class MessagesStorage extends BaseController {
         }
     }
 
-    public void doneHolesInMedia(long j, int i, int i2) throws Exception {
+    public void doneHolesInMedia(long j, int i, int i2, int i3) throws Exception {
+        SQLitePreparedStatement executeFast;
+        SQLitePreparedStatement executeFast2;
+        int i4;
         SQLitePreparedStatement sQLitePreparedStatement = null;
+        int i5 = 3;
         if (i2 == -1) {
-            if (i == 0) {
+            if (i3 != 0) {
+                if (i == 0) {
+                    this.database.executeFast(String.format(Locale.US, "DELETE FROM media_holes_topics WHERE uid = %d AND topic_id = %d", Long.valueOf(j), Integer.valueOf(i3))).stepThis().dispose();
+                } else {
+                    this.database.executeFast(String.format(Locale.US, "DELETE FROM media_holes_topics WHERE uid = %d AND topic_id = %d AND start = 0", Long.valueOf(j), Integer.valueOf(i3))).stepThis().dispose();
+                }
+            } else if (i == 0) {
                 this.database.executeFast(String.format(Locale.US, "DELETE FROM media_holes_v2 WHERE uid = %d", Long.valueOf(j))).stepThis().dispose();
             } else {
                 this.database.executeFast(String.format(Locale.US, "DELETE FROM media_holes_v2 WHERE uid = %d AND start = 0", Long.valueOf(j))).stepThis().dispose();
             }
             try {
                 try {
-                    sQLitePreparedStatement = this.database.executeFast("REPLACE INTO media_holes_v2 VALUES(?, ?, ?, ?)");
-                    for (int i3 = 0; i3 < 8; i3++) {
+                    if (i3 != 0) {
+                        executeFast2 = this.database.executeFast("REPLACE INTO media_holes_topics VALUES(?, ?, ?, ?, ?)");
+                    } else {
+                        executeFast2 = this.database.executeFast("REPLACE INTO media_holes_v2 VALUES(?, ?, ?, ?)");
+                    }
+                    sQLitePreparedStatement = executeFast2;
+                    for (int i6 = 0; i6 < 8; i6++) {
                         sQLitePreparedStatement.requery();
                         sQLitePreparedStatement.bindLong(1, j);
-                        sQLitePreparedStatement.bindInteger(2, i3);
-                        sQLitePreparedStatement.bindInteger(3, 1);
-                        sQLitePreparedStatement.bindInteger(4, 1);
+                        if (i3 != 0) {
+                            sQLitePreparedStatement.bindInteger(2, i3);
+                            i4 = 3;
+                        } else {
+                            i4 = 2;
+                        }
+                        int i7 = i4 + 1;
+                        sQLitePreparedStatement.bindInteger(i4, i6);
+                        sQLitePreparedStatement.bindInteger(i7, 1);
+                        sQLitePreparedStatement.bindInteger(i7 + 1, 1);
                         sQLitePreparedStatement.step();
                     }
                     if (sQLitePreparedStatement == null) {
@@ -9513,26 +10080,43 @@ public class MessagesStorage extends BaseController {
             } finally {
             }
         }
-        if (i == 0) {
+        if (i3 != 0) {
+            if (i == 0) {
+                this.database.executeFast(String.format(Locale.US, "DELETE FROM media_holes_topics WHERE uid = %d AND topic_id = %d AND type = %d", Long.valueOf(j), Integer.valueOf(i3), Integer.valueOf(i2))).stepThis().dispose();
+            } else {
+                this.database.executeFast(String.format(Locale.US, "DELETE FROM media_holes_topics WHERE uid = %d AND topic_id = %d AND type = %d AND start = 0", Long.valueOf(j), Integer.valueOf(i3), Integer.valueOf(i2))).stepThis().dispose();
+            }
+        } else if (i == 0) {
             this.database.executeFast(String.format(Locale.US, "DELETE FROM media_holes_v2 WHERE uid = %d AND type = %d", Long.valueOf(j), Integer.valueOf(i2))).stepThis().dispose();
         } else {
             this.database.executeFast(String.format(Locale.US, "DELETE FROM media_holes_v2 WHERE uid = %d AND type = %d AND start = 0", Long.valueOf(j), Integer.valueOf(i2))).stepThis().dispose();
         }
         try {
             try {
-                sQLitePreparedStatement = this.database.executeFast("REPLACE INTO media_holes_v2 VALUES(?, ?, ?, ?)");
+                if (i3 != 0) {
+                    executeFast = this.database.executeFast("REPLACE INTO media_holes_topics VALUES(?, ?, ?, ?, ?)");
+                } else {
+                    executeFast = this.database.executeFast("REPLACE INTO media_holes_v2 VALUES(?, ?, ?, ?)");
+                }
+                sQLitePreparedStatement = executeFast;
                 sQLitePreparedStatement.requery();
                 sQLitePreparedStatement.bindLong(1, j);
-                sQLitePreparedStatement.bindInteger(2, i2);
-                sQLitePreparedStatement.bindInteger(3, 1);
-                sQLitePreparedStatement.bindInteger(4, 1);
+                if (i3 != 0) {
+                    sQLitePreparedStatement.bindInteger(2, i3);
+                } else {
+                    i5 = 2;
+                }
+                int i8 = i5 + 1;
+                sQLitePreparedStatement.bindInteger(i5, i2);
+                sQLitePreparedStatement.bindInteger(i8, 1);
+                sQLitePreparedStatement.bindInteger(i8 + 1, 1);
                 sQLitePreparedStatement.step();
                 sQLitePreparedStatement.dispose();
                 sQLitePreparedStatement.dispose();
-            } catch (Exception e2) {
-                throw e2;
+            } finally {
             }
-        } finally {
+        } catch (Exception e2) {
+            throw e2;
         }
     }
 
@@ -9555,193 +10139,311 @@ public class MessagesStorage extends BaseController {
         }
     }
 
-    /* JADX WARN: Removed duplicated region for block: B:66:0x0265  */
-    /* JADX WARN: Removed duplicated region for block: B:68:0x026a  */
-    /* JADX WARN: Removed duplicated region for block: B:72:0x0271  */
-    /* JADX WARN: Removed duplicated region for block: B:74:0x0276  */
-    /* JADX WARN: Removed duplicated region for block: B:97:? A[RETURN, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:114:? A[RETURN, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:82:0x048d  */
+    /* JADX WARN: Removed duplicated region for block: B:84:0x0492  */
+    /* JADX WARN: Removed duplicated region for block: B:89:0x049a  */
+    /* JADX WARN: Removed duplicated region for block: B:91:0x049f  */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public void closeHolesInMedia(long r22, int r24, int r25, int r26) {
+    public void closeHolesInMedia(long r25, int r27, int r28, int r29, int r30) {
         /*
-            Method dump skipped, instructions count: 636
+            Method dump skipped, instructions count: 1189
             To view this dump add '--comments-level debug' option
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.closeHolesInMedia(long, int, int, int):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.closeHolesInMedia(long, int, int, int, int):void");
     }
 
-    /* JADX WARN: Removed duplicated region for block: B:61:0x0255  */
-    /* JADX WARN: Removed duplicated region for block: B:63:0x025a  */
-    /* JADX WARN: Removed duplicated region for block: B:67:0x0261  */
-    /* JADX WARN: Removed duplicated region for block: B:69:0x0266  */
-    /* JADX WARN: Removed duplicated region for block: B:96:? A[RETURN, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:122:? A[RETURN, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:88:0x046f  */
+    /* JADX WARN: Removed duplicated region for block: B:90:0x0474  */
+    /* JADX WARN: Removed duplicated region for block: B:95:0x047c  */
+    /* JADX WARN: Removed duplicated region for block: B:97:0x0481  */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    private void closeHolesInTable(java.lang.String r21, long r22, int r24, int r25) {
+    private void closeHolesInTable(java.lang.String r25, long r26, int r28, int r29, int r30) {
         /*
-            Method dump skipped, instructions count: 620
+            Method dump skipped, instructions count: 1159
             To view this dump add '--comments-level debug' option
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.closeHolesInTable(java.lang.String, long, int, int):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.closeHolesInTable(java.lang.String, long, int, int, int):void");
     }
 
     public void replaceMessageIfExists(final TLRPC$Message tLRPC$Message, final ArrayList<TLRPC$User> arrayList, final ArrayList<TLRPC$Chat> arrayList2, final boolean z) {
         if (tLRPC$Message == null) {
             return;
         }
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda174
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda183
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$replaceMessageIfExists$177(tLRPC$Message, z, arrayList, arrayList2);
+                MessagesStorage.this.lambda$replaceMessageIfExists$186(tLRPC$Message, z, arrayList, arrayList2);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    /* JADX WARN: Removed duplicated region for block: B:112:0x0206 A[Catch: all -> 0x01fb, Exception -> 0x01ff, TRY_ENTER, TryCatch #10 {Exception -> 0x01ff, all -> 0x01fb, blocks: (B:6:0x0031, B:13:0x0044, B:28:0x005c, B:79:0x017e, B:81:0x0185, B:82:0x0190, B:84:0x0196, B:85:0x01aa, B:87:0x01b0, B:88:0x01c4, B:26:0x0058, B:112:0x0206, B:113:0x0209), top: B:149:0x0007 }] */
-    /* JADX WARN: Removed duplicated region for block: B:117:0x0211  */
-    /* JADX WARN: Removed duplicated region for block: B:119:0x0216  */
-    /* JADX WARN: Removed duplicated region for block: B:121:0x021b  */
-    /* JADX WARN: Removed duplicated region for block: B:126:0x0224  */
-    /* JADX WARN: Removed duplicated region for block: B:128:0x0229  */
-    /* JADX WARN: Removed duplicated region for block: B:130:0x022e  */
-    /* JADX WARN: Removed duplicated region for block: B:153:? A[RETURN, SYNTHETIC] */
-    /* JADX WARN: Removed duplicated region for block: B:155:? A[RETURN, SYNTHETIC] */
-    /* JADX WARN: Removed duplicated region for block: B:26:0x0058 A[Catch: all -> 0x01fb, Exception -> 0x01ff, TRY_ENTER, TryCatch #10 {Exception -> 0x01ff, all -> 0x01fb, blocks: (B:6:0x0031, B:13:0x0044, B:28:0x005c, B:79:0x017e, B:81:0x0185, B:82:0x0190, B:84:0x0196, B:85:0x01aa, B:87:0x01b0, B:88:0x01c4, B:26:0x0058, B:112:0x0206, B:113:0x0209), top: B:149:0x0007 }] */
-    /* JADX WARN: Removed duplicated region for block: B:32:0x0079 A[Catch: all -> 0x01ed, Exception -> 0x01f0, TryCatch #14 {Exception -> 0x01f0, all -> 0x01ed, blocks: (B:30:0x0071, B:32:0x0079, B:33:0x007c, B:35:0x00b3, B:40:0x00bb, B:42:0x00cd, B:44:0x00da, B:50:0x00e5, B:54:0x00f3, B:56:0x0103, B:58:0x011b, B:60:0x0121, B:64:0x0128, B:66:0x012f, B:68:0x013c, B:70:0x0143, B:72:0x014c, B:74:0x016d, B:76:0x0172, B:77:0x0175, B:69:0x0140, B:63:0x0126, B:65:0x012c, B:57:0x0117, B:43:0x00d3), top: B:142:0x0071 }] */
-    /* JADX WARN: Removed duplicated region for block: B:35:0x00b3 A[Catch: all -> 0x01ed, Exception -> 0x01f0, TryCatch #14 {Exception -> 0x01f0, all -> 0x01ed, blocks: (B:30:0x0071, B:32:0x0079, B:33:0x007c, B:35:0x00b3, B:40:0x00bb, B:42:0x00cd, B:44:0x00da, B:50:0x00e5, B:54:0x00f3, B:56:0x0103, B:58:0x011b, B:60:0x0121, B:64:0x0128, B:66:0x012f, B:68:0x013c, B:70:0x0143, B:72:0x014c, B:74:0x016d, B:76:0x0172, B:77:0x0175, B:69:0x0140, B:63:0x0126, B:65:0x012c, B:57:0x0117, B:43:0x00d3), top: B:142:0x0071 }] */
-    /* JADX WARN: Removed duplicated region for block: B:42:0x00cd A[Catch: all -> 0x01ed, Exception -> 0x01f0, TryCatch #14 {Exception -> 0x01f0, all -> 0x01ed, blocks: (B:30:0x0071, B:32:0x0079, B:33:0x007c, B:35:0x00b3, B:40:0x00bb, B:42:0x00cd, B:44:0x00da, B:50:0x00e5, B:54:0x00f3, B:56:0x0103, B:58:0x011b, B:60:0x0121, B:64:0x0128, B:66:0x012f, B:68:0x013c, B:70:0x0143, B:72:0x014c, B:74:0x016d, B:76:0x0172, B:77:0x0175, B:69:0x0140, B:63:0x0126, B:65:0x012c, B:57:0x0117, B:43:0x00d3), top: B:142:0x0071 }] */
-    /* JADX WARN: Removed duplicated region for block: B:43:0x00d3 A[Catch: all -> 0x01ed, Exception -> 0x01f0, TryCatch #14 {Exception -> 0x01f0, all -> 0x01ed, blocks: (B:30:0x0071, B:32:0x0079, B:33:0x007c, B:35:0x00b3, B:40:0x00bb, B:42:0x00cd, B:44:0x00da, B:50:0x00e5, B:54:0x00f3, B:56:0x0103, B:58:0x011b, B:60:0x0121, B:64:0x0128, B:66:0x012f, B:68:0x013c, B:70:0x0143, B:72:0x014c, B:74:0x016d, B:76:0x0172, B:77:0x0175, B:69:0x0140, B:63:0x0126, B:65:0x012c, B:57:0x0117, B:43:0x00d3), top: B:142:0x0071 }] */
-    /* JADX WARN: Removed duplicated region for block: B:46:0x00de  */
-    /* JADX WARN: Removed duplicated region for block: B:47:0x00e0  */
-    /* JADX WARN: Removed duplicated region for block: B:52:0x00f0  */
-    /* JADX WARN: Removed duplicated region for block: B:53:0x00f2  */
-    /* JADX WARN: Removed duplicated region for block: B:56:0x0103 A[Catch: all -> 0x01ed, Exception -> 0x01f0, TryCatch #14 {Exception -> 0x01f0, all -> 0x01ed, blocks: (B:30:0x0071, B:32:0x0079, B:33:0x007c, B:35:0x00b3, B:40:0x00bb, B:42:0x00cd, B:44:0x00da, B:50:0x00e5, B:54:0x00f3, B:56:0x0103, B:58:0x011b, B:60:0x0121, B:64:0x0128, B:66:0x012f, B:68:0x013c, B:70:0x0143, B:72:0x014c, B:74:0x016d, B:76:0x0172, B:77:0x0175, B:69:0x0140, B:63:0x0126, B:65:0x012c, B:57:0x0117, B:43:0x00d3), top: B:142:0x0071 }] */
-    /* JADX WARN: Removed duplicated region for block: B:57:0x0117 A[Catch: all -> 0x01ed, Exception -> 0x01f0, TryCatch #14 {Exception -> 0x01f0, all -> 0x01ed, blocks: (B:30:0x0071, B:32:0x0079, B:33:0x007c, B:35:0x00b3, B:40:0x00bb, B:42:0x00cd, B:44:0x00da, B:50:0x00e5, B:54:0x00f3, B:56:0x0103, B:58:0x011b, B:60:0x0121, B:64:0x0128, B:66:0x012f, B:68:0x013c, B:70:0x0143, B:72:0x014c, B:74:0x016d, B:76:0x0172, B:77:0x0175, B:69:0x0140, B:63:0x0126, B:65:0x012c, B:57:0x0117, B:43:0x00d3), top: B:142:0x0071 }] */
-    /* JADX WARN: Removed duplicated region for block: B:60:0x0121 A[Catch: all -> 0x01ed, Exception -> 0x01f0, TryCatch #14 {Exception -> 0x01f0, all -> 0x01ed, blocks: (B:30:0x0071, B:32:0x0079, B:33:0x007c, B:35:0x00b3, B:40:0x00bb, B:42:0x00cd, B:44:0x00da, B:50:0x00e5, B:54:0x00f3, B:56:0x0103, B:58:0x011b, B:60:0x0121, B:64:0x0128, B:66:0x012f, B:68:0x013c, B:70:0x0143, B:72:0x014c, B:74:0x016d, B:76:0x0172, B:77:0x0175, B:69:0x0140, B:63:0x0126, B:65:0x012c, B:57:0x0117, B:43:0x00d3), top: B:142:0x0071 }] */
-    /* JADX WARN: Removed duplicated region for block: B:65:0x012c A[Catch: all -> 0x01ed, Exception -> 0x01f0, TryCatch #14 {Exception -> 0x01f0, all -> 0x01ed, blocks: (B:30:0x0071, B:32:0x0079, B:33:0x007c, B:35:0x00b3, B:40:0x00bb, B:42:0x00cd, B:44:0x00da, B:50:0x00e5, B:54:0x00f3, B:56:0x0103, B:58:0x011b, B:60:0x0121, B:64:0x0128, B:66:0x012f, B:68:0x013c, B:70:0x0143, B:72:0x014c, B:74:0x016d, B:76:0x0172, B:77:0x0175, B:69:0x0140, B:63:0x0126, B:65:0x012c, B:57:0x0117, B:43:0x00d3), top: B:142:0x0071 }] */
-    /* JADX WARN: Removed duplicated region for block: B:68:0x013c A[Catch: all -> 0x01ed, Exception -> 0x01f0, TryCatch #14 {Exception -> 0x01f0, all -> 0x01ed, blocks: (B:30:0x0071, B:32:0x0079, B:33:0x007c, B:35:0x00b3, B:40:0x00bb, B:42:0x00cd, B:44:0x00da, B:50:0x00e5, B:54:0x00f3, B:56:0x0103, B:58:0x011b, B:60:0x0121, B:64:0x0128, B:66:0x012f, B:68:0x013c, B:70:0x0143, B:72:0x014c, B:74:0x016d, B:76:0x0172, B:77:0x0175, B:69:0x0140, B:63:0x0126, B:65:0x012c, B:57:0x0117, B:43:0x00d3), top: B:142:0x0071 }] */
-    /* JADX WARN: Removed duplicated region for block: B:69:0x0140 A[Catch: all -> 0x01ed, Exception -> 0x01f0, TryCatch #14 {Exception -> 0x01f0, all -> 0x01ed, blocks: (B:30:0x0071, B:32:0x0079, B:33:0x007c, B:35:0x00b3, B:40:0x00bb, B:42:0x00cd, B:44:0x00da, B:50:0x00e5, B:54:0x00f3, B:56:0x0103, B:58:0x011b, B:60:0x0121, B:64:0x0128, B:66:0x012f, B:68:0x013c, B:70:0x0143, B:72:0x014c, B:74:0x016d, B:76:0x0172, B:77:0x0175, B:69:0x0140, B:63:0x0126, B:65:0x012c, B:57:0x0117, B:43:0x00d3), top: B:142:0x0071 }] */
-    /* JADX WARN: Removed duplicated region for block: B:72:0x014c A[Catch: all -> 0x01ed, Exception -> 0x01f0, TryCatch #14 {Exception -> 0x01f0, all -> 0x01ed, blocks: (B:30:0x0071, B:32:0x0079, B:33:0x007c, B:35:0x00b3, B:40:0x00bb, B:42:0x00cd, B:44:0x00da, B:50:0x00e5, B:54:0x00f3, B:56:0x0103, B:58:0x011b, B:60:0x0121, B:64:0x0128, B:66:0x012f, B:68:0x013c, B:70:0x0143, B:72:0x014c, B:74:0x016d, B:76:0x0172, B:77:0x0175, B:69:0x0140, B:63:0x0126, B:65:0x012c, B:57:0x0117, B:43:0x00d3), top: B:142:0x0071 }] */
-    /* JADX WARN: Removed duplicated region for block: B:74:0x016d A[Catch: all -> 0x01ed, Exception -> 0x01f0, TryCatch #14 {Exception -> 0x01f0, all -> 0x01ed, blocks: (B:30:0x0071, B:32:0x0079, B:33:0x007c, B:35:0x00b3, B:40:0x00bb, B:42:0x00cd, B:44:0x00da, B:50:0x00e5, B:54:0x00f3, B:56:0x0103, B:58:0x011b, B:60:0x0121, B:64:0x0128, B:66:0x012f, B:68:0x013c, B:70:0x0143, B:72:0x014c, B:74:0x016d, B:76:0x0172, B:77:0x0175, B:69:0x0140, B:63:0x0126, B:65:0x012c, B:57:0x0117, B:43:0x00d3), top: B:142:0x0071 }] */
-    /* JADX WARN: Removed duplicated region for block: B:76:0x0172 A[Catch: all -> 0x01ed, Exception -> 0x01f0, TryCatch #14 {Exception -> 0x01f0, all -> 0x01ed, blocks: (B:30:0x0071, B:32:0x0079, B:33:0x007c, B:35:0x00b3, B:40:0x00bb, B:42:0x00cd, B:44:0x00da, B:50:0x00e5, B:54:0x00f3, B:56:0x0103, B:58:0x011b, B:60:0x0121, B:64:0x0128, B:66:0x012f, B:68:0x013c, B:70:0x0143, B:72:0x014c, B:74:0x016d, B:76:0x0172, B:77:0x0175, B:69:0x0140, B:63:0x0126, B:65:0x012c, B:57:0x0117, B:43:0x00d3), top: B:142:0x0071 }] */
-    /* JADX WARN: Removed duplicated region for block: B:81:0x0185 A[Catch: all -> 0x01fb, Exception -> 0x01ff, TryCatch #10 {Exception -> 0x01ff, all -> 0x01fb, blocks: (B:6:0x0031, B:13:0x0044, B:28:0x005c, B:79:0x017e, B:81:0x0185, B:82:0x0190, B:84:0x0196, B:85:0x01aa, B:87:0x01b0, B:88:0x01c4, B:26:0x0058, B:112:0x0206, B:113:0x0209), top: B:149:0x0007 }] */
-    /* JADX WARN: Removed duplicated region for block: B:91:0x01e5  */
+    /* JADX WARN: Removed duplicated region for block: B:118:0x01c7 A[Catch: all -> 0x0268, Exception -> 0x026c, TRY_LEAVE, TryCatch #18 {Exception -> 0x026c, all -> 0x0268, blocks: (B:116:0x01c1, B:118:0x01c7), top: B:197:0x01c1 }] */
+    /* JADX WARN: Removed duplicated region for block: B:121:0x01ec  */
+    /* JADX WARN: Removed duplicated region for block: B:123:0x01f0 A[Catch: all -> 0x0264, Exception -> 0x0266, TryCatch #19 {Exception -> 0x0266, all -> 0x0264, blocks: (B:120:0x01cf, B:123:0x01f0, B:124:0x01f3), top: B:195:0x01cf }] */
+    /* JADX WARN: Removed duplicated region for block: B:127:0x0200 A[Catch: all -> 0x027c, Exception -> 0x0281, TryCatch #14 {Exception -> 0x0281, all -> 0x027c, blocks: (B:6:0x0031, B:13:0x0044, B:28:0x005c, B:125:0x01f9, B:127:0x0200, B:128:0x020b, B:130:0x0211, B:132:0x0226, B:134:0x022c, B:135:0x0240, B:26:0x0058, B:161:0x0289, B:162:0x028c), top: B:183:0x0007 }] */
+    /* JADX WARN: Removed duplicated region for block: B:138:0x0260  */
+    /* JADX WARN: Removed duplicated region for block: B:166:0x0294  */
+    /* JADX WARN: Removed duplicated region for block: B:168:0x0299  */
+    /* JADX WARN: Removed duplicated region for block: B:170:0x029e  */
+    /* JADX WARN: Removed duplicated region for block: B:175:0x02a7  */
+    /* JADX WARN: Removed duplicated region for block: B:177:0x02ac  */
+    /* JADX WARN: Removed duplicated region for block: B:179:0x02b1  */
+    /* JADX WARN: Removed duplicated region for block: B:193:0x019f A[EXC_TOP_SPLITTER, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:203:0x0071 A[EXC_TOP_SPLITTER, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:205:0x01bf A[EDGE_INSN: B:205:0x01bf->B:115:0x01bf ?: BREAK  , SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:207:0x01a9 A[SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:212:? A[RETURN, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:214:? A[RETURN, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:26:0x0058 A[Catch: all -> 0x027c, Exception -> 0x0281, TRY_ENTER, TryCatch #14 {Exception -> 0x0281, all -> 0x027c, blocks: (B:6:0x0031, B:13:0x0044, B:28:0x005c, B:125:0x01f9, B:127:0x0200, B:128:0x020b, B:130:0x0211, B:132:0x0226, B:134:0x022c, B:135:0x0240, B:26:0x0058, B:161:0x0289, B:162:0x028c), top: B:183:0x0007 }] */
+    /* JADX WARN: Removed duplicated region for block: B:42:0x0093  */
+    /* JADX WARN: Removed duplicated region for block: B:67:0x0105 A[Catch: Exception -> 0x01b2, all -> 0x02a2, TryCatch #1 {all -> 0x02a2, blocks: (B:54:0x00c1, B:56:0x00c8, B:58:0x00cd, B:60:0x00ed, B:65:0x00f5, B:67:0x0105, B:69:0x0116, B:75:0x0121, B:79:0x012f, B:81:0x013d, B:83:0x0159, B:85:0x015d, B:89:0x0166, B:91:0x016f, B:93:0x017a, B:96:0x0187, B:98:0x018e, B:99:0x0194, B:100:0x0197, B:163:0x028d, B:94:0x0180, B:88:0x0164, B:90:0x016a, B:82:0x0153, B:68:0x010d), top: B:183:0x0007 }] */
+    /* JADX WARN: Removed duplicated region for block: B:68:0x010d A[Catch: Exception -> 0x01b2, all -> 0x02a2, TryCatch #1 {all -> 0x02a2, blocks: (B:54:0x00c1, B:56:0x00c8, B:58:0x00cd, B:60:0x00ed, B:65:0x00f5, B:67:0x0105, B:69:0x0116, B:75:0x0121, B:79:0x012f, B:81:0x013d, B:83:0x0159, B:85:0x015d, B:89:0x0166, B:91:0x016f, B:93:0x017a, B:96:0x0187, B:98:0x018e, B:99:0x0194, B:100:0x0197, B:163:0x028d, B:94:0x0180, B:88:0x0164, B:90:0x016a, B:82:0x0153, B:68:0x010d), top: B:183:0x0007 }] */
+    /* JADX WARN: Removed duplicated region for block: B:71:0x011a  */
+    /* JADX WARN: Removed duplicated region for block: B:72:0x011c  */
+    /* JADX WARN: Removed duplicated region for block: B:77:0x012c  */
+    /* JADX WARN: Removed duplicated region for block: B:78:0x012e  */
+    /* JADX WARN: Removed duplicated region for block: B:81:0x013d A[Catch: Exception -> 0x01b2, all -> 0x02a2, TryCatch #1 {all -> 0x02a2, blocks: (B:54:0x00c1, B:56:0x00c8, B:58:0x00cd, B:60:0x00ed, B:65:0x00f5, B:67:0x0105, B:69:0x0116, B:75:0x0121, B:79:0x012f, B:81:0x013d, B:83:0x0159, B:85:0x015d, B:89:0x0166, B:91:0x016f, B:93:0x017a, B:96:0x0187, B:98:0x018e, B:99:0x0194, B:100:0x0197, B:163:0x028d, B:94:0x0180, B:88:0x0164, B:90:0x016a, B:82:0x0153, B:68:0x010d), top: B:183:0x0007 }] */
+    /* JADX WARN: Removed duplicated region for block: B:82:0x0153 A[Catch: Exception -> 0x01b2, all -> 0x02a2, TryCatch #1 {all -> 0x02a2, blocks: (B:54:0x00c1, B:56:0x00c8, B:58:0x00cd, B:60:0x00ed, B:65:0x00f5, B:67:0x0105, B:69:0x0116, B:75:0x0121, B:79:0x012f, B:81:0x013d, B:83:0x0159, B:85:0x015d, B:89:0x0166, B:91:0x016f, B:93:0x017a, B:96:0x0187, B:98:0x018e, B:99:0x0194, B:100:0x0197, B:163:0x028d, B:94:0x0180, B:88:0x0164, B:90:0x016a, B:82:0x0153, B:68:0x010d), top: B:183:0x0007 }] */
+    /* JADX WARN: Removed duplicated region for block: B:85:0x015d A[Catch: Exception -> 0x01b2, all -> 0x02a2, TryCatch #1 {all -> 0x02a2, blocks: (B:54:0x00c1, B:56:0x00c8, B:58:0x00cd, B:60:0x00ed, B:65:0x00f5, B:67:0x0105, B:69:0x0116, B:75:0x0121, B:79:0x012f, B:81:0x013d, B:83:0x0159, B:85:0x015d, B:89:0x0166, B:91:0x016f, B:93:0x017a, B:96:0x0187, B:98:0x018e, B:99:0x0194, B:100:0x0197, B:163:0x028d, B:94:0x0180, B:88:0x0164, B:90:0x016a, B:82:0x0153, B:68:0x010d), top: B:183:0x0007 }] */
+    /* JADX WARN: Removed duplicated region for block: B:90:0x016a A[Catch: Exception -> 0x01b2, all -> 0x02a2, TryCatch #1 {all -> 0x02a2, blocks: (B:54:0x00c1, B:56:0x00c8, B:58:0x00cd, B:60:0x00ed, B:65:0x00f5, B:67:0x0105, B:69:0x0116, B:75:0x0121, B:79:0x012f, B:81:0x013d, B:83:0x0159, B:85:0x015d, B:89:0x0166, B:91:0x016f, B:93:0x017a, B:96:0x0187, B:98:0x018e, B:99:0x0194, B:100:0x0197, B:163:0x028d, B:94:0x0180, B:88:0x0164, B:90:0x016a, B:82:0x0153, B:68:0x010d), top: B:183:0x0007 }] */
+    /* JADX WARN: Removed duplicated region for block: B:93:0x017a A[Catch: Exception -> 0x01b2, all -> 0x02a2, TryCatch #1 {all -> 0x02a2, blocks: (B:54:0x00c1, B:56:0x00c8, B:58:0x00cd, B:60:0x00ed, B:65:0x00f5, B:67:0x0105, B:69:0x0116, B:75:0x0121, B:79:0x012f, B:81:0x013d, B:83:0x0159, B:85:0x015d, B:89:0x0166, B:91:0x016f, B:93:0x017a, B:96:0x0187, B:98:0x018e, B:99:0x0194, B:100:0x0197, B:163:0x028d, B:94:0x0180, B:88:0x0164, B:90:0x016a, B:82:0x0153, B:68:0x010d), top: B:183:0x0007 }] */
+    /* JADX WARN: Removed duplicated region for block: B:94:0x0180 A[Catch: Exception -> 0x01b2, all -> 0x02a2, TryCatch #1 {all -> 0x02a2, blocks: (B:54:0x00c1, B:56:0x00c8, B:58:0x00cd, B:60:0x00ed, B:65:0x00f5, B:67:0x0105, B:69:0x0116, B:75:0x0121, B:79:0x012f, B:81:0x013d, B:83:0x0159, B:85:0x015d, B:89:0x0166, B:91:0x016f, B:93:0x017a, B:96:0x0187, B:98:0x018e, B:99:0x0194, B:100:0x0197, B:163:0x028d, B:94:0x0180, B:88:0x0164, B:90:0x016a, B:82:0x0153, B:68:0x010d), top: B:183:0x0007 }] */
+    /* JADX WARN: Removed duplicated region for block: B:96:0x0187 A[Catch: Exception -> 0x01b2, all -> 0x02a2, TryCatch #1 {all -> 0x02a2, blocks: (B:54:0x00c1, B:56:0x00c8, B:58:0x00cd, B:60:0x00ed, B:65:0x00f5, B:67:0x0105, B:69:0x0116, B:75:0x0121, B:79:0x012f, B:81:0x013d, B:83:0x0159, B:85:0x015d, B:89:0x0166, B:91:0x016f, B:93:0x017a, B:96:0x0187, B:98:0x018e, B:99:0x0194, B:100:0x0197, B:163:0x028d, B:94:0x0180, B:88:0x0164, B:90:0x016a, B:82:0x0153, B:68:0x010d), top: B:183:0x0007 }] */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public /* synthetic */ void lambda$replaceMessageIfExists$177(org.telegram.tgnet.TLRPC$Message r17, boolean r18, java.util.ArrayList r19, java.util.ArrayList r20) {
+    public /* synthetic */ void lambda$replaceMessageIfExists$186(org.telegram.tgnet.TLRPC$Message r18, boolean r19, java.util.ArrayList r20, java.util.ArrayList r21) {
         /*
-            Method dump skipped, instructions count: 564
+            Method dump skipped, instructions count: 695
             To view this dump add '--comments-level debug' option
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$replaceMessageIfExists$177(org.telegram.tgnet.TLRPC$Message, boolean, java.util.ArrayList, java.util.ArrayList):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$replaceMessageIfExists$186(org.telegram.tgnet.TLRPC$Message, boolean, java.util.ArrayList, java.util.ArrayList):void");
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$replaceMessageIfExists$176(MessageObject messageObject, ArrayList arrayList) {
+    public /* synthetic */ void lambda$replaceMessageIfExists$185(MessageObject messageObject, ArrayList arrayList) {
         getNotificationCenter().postNotificationName(NotificationCenter.replaceMessagesObjects, Long.valueOf(messageObject.getDialogId()), arrayList);
     }
 
-    public void putMessages(final TLRPC$messages_Messages tLRPC$messages_Messages, final long j, final int i, final int i2, final boolean z, final boolean z2) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda189
+    public void putMessages(final TLRPC$messages_Messages tLRPC$messages_Messages, final long j, final int i, final int i2, final boolean z, final boolean z2, final int i3) {
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda198
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$putMessages$179(z2, j, tLRPC$messages_Messages, i, i2, z);
+                MessagesStorage.this.lambda$putMessages$188(z2, j, tLRPC$messages_Messages, i3, i, i2, z);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    /* JADX WARN: Can't wrap try/catch for region: R(11:101|102|103|(3:414|415|416)|105|(35:(10:311|312|313|314|315|317|318|(6:320|(11:322|323|(4:388|389|(1:391)|392)|325|(2:327|(2:333|334))|376|(2:378|(2:384|385))|387|(3:339|340|341)(1:374)|342|(1:344))(1:398)|345|(1:347)(1:368)|348|(3:350|(3:352|(1:354)|355)(1:363)|(2:357|(1:359))(2:360|(1:362))))(1:399)|364|(3:366|367|194))(1:107)|127|128|(3:269|270|(31:272|131|132|(1:134)(1:268)|135|(1:137)(2:264|(1:266)(1:267))|138|(1:140)(1:263)|141|(1:143)(2:261|262)|144|(3:146|(1:148)(1:258)|149)(2:259|260)|150|151|(1:153)(1:257)|154|(4:156|157|158|159)(2:241|(17:245|246|247|248|249|(1:162)|(1:164)|165|(1:235)(3:(2:170|171)(1:234)|172|173)|174|(7:(1:177)(1:215)|178|179|180|181|182|183)(2:216|(8:(1:219)(1:228)|220|221|222|(1:197)(2:188|(3:195|196|194))|192|193|194))|184|(1:186)|197|192|193|194))|160|(0)|(0)|165|(1:167)|235|174|(0)(0)|184|(0)|197|192|193|194))|130|131|132|(0)(0)|135|(0)(0)|138|(0)(0)|141|(0)(0)|144|(0)(0)|150|151|(0)(0)|154|(0)(0)|160|(0)|(0)|165|(0)|235|174|(0)(0)|184|(0)|197|192|193|194)|108|(1:310)(8:111|112|113|114|(1:116)(1:297)|117|(4:119|120|121|122)(3:294|295|296)|123)|124|125|126) */
-    /* JADX WARN: Code restructure failed: missing block: B:100:0x02a2, code lost:
+    /* JADX WARN: Can't wrap try/catch for region: R(11:(3:120|121|122)|(19:(24:(2:478|479)(1:481)|131|(2:133|134)|135|(11:367|368|369|370|371|373|374|(6:376|(12:378|379|(4:445|446|(1:448)|449)|381|(2:383|(2:389|390))|433|434|(2:436|(2:438|(2:440|(2:442|443))))|432|(3:394|395|396)(1:431)|397|(1:399))(1:455)|400|(1:402)(1:425)|403|(5:405|(3:407|(1:409)|410)(1:422)|(2:412|(1:414))(2:419|(1:421))|415|(3:417|418|300))(1:423))(1:456)|424|415|(0))(1:137)|(9:140|141|142|143|(1:145)(1:178)|146|147|(5:149|150|151|(1:153)(1:156)|154)(7:164|165|166|167|(1:169)(1:172)|170|171)|155)|195|196|197|(5:199|(1:201)(1:269)|(1:268)(1:204)|(22:(1:211)(1:267)|212|(1:214)(1:266)|215|(17:220|221|(1:223)(1:264)|224|(1:226)(2:260|(1:262)(1:263))|227|(1:229)(1:259)|230|(1:232)(1:258)|233|(3:235|(1:237)(1:256)|238)(1:257)|239|(1:241)(1:255)|(2:243|(1:245)(1:253))(1:254)|246|(1:248)|(2:250|251)(1:252))|265|221|(0)(0)|224|(0)(0)|227|(0)(0)|230|(0)(0)|233|(0)(0)|239|(0)(0)|(0)(0)|246|(0)|(0)(0))(2:207|208)|209)|270|271|(2:273|(4:275|276|277|278)(2:349|(2:353|354)))(2:359|(10:361|280|(1:343)(4:(1:285)(1:342)|286|287|288)|289|(4:(1:292)(1:322)|293|294|295)(3:323|(4:(1:326)(1:335)|327|328|329)|336)|(3:301|302|(5:304|(3:308|309|300)|298|299|300))|297|298|299|300))|279|280|(1:282)|343|289|(0)(0)|(0)|297|298|299|300)(1:125)|195|196|197|(0)|270|271|(0)(0)|279|280|(0)|343|289|(0)(0)|(0)|297|298|299|300)|126|127|(1:129)(1:471)|130|131|(0)|135|(0)(0)|(9:140|141|142|143|(0)(0)|146|147|(0)(0)|155)) */
+    /* JADX WARN: Can't wrap try/catch for region: R(17:105|(2:106|107)|(18:(1:109)(2:578|(1:580)(33:581|(2:583|(0))(1:591)|(1:590)(1:588)|589|111|112|113|114|115|116|117|118|(31:120|121|122|(24:(2:478|479)(1:481)|131|(2:133|134)|135|(11:367|368|369|370|371|373|374|(6:376|(12:378|379|(4:445|446|(1:448)|449)|381|(2:383|(2:389|390))|433|434|(2:436|(2:438|(2:440|(2:442|443))))|432|(3:394|395|396)(1:431)|397|(1:399))(1:455)|400|(1:402)(1:425)|403|(5:405|(3:407|(1:409)|410)(1:422)|(2:412|(1:414))(2:419|(1:421))|415|(3:417|418|300))(1:423))(1:456)|424|415|(0))(1:137)|(9:140|141|142|143|(1:145)(1:178)|146|147|(5:149|150|151|(1:153)(1:156)|154)(7:164|165|166|167|(1:169)(1:172)|170|171)|155)|195|196|197|(5:199|(1:201)(1:269)|(1:268)(1:204)|(22:(1:211)(1:267)|212|(1:214)(1:266)|215|(17:220|221|(1:223)(1:264)|224|(1:226)(2:260|(1:262)(1:263))|227|(1:229)(1:259)|230|(1:232)(1:258)|233|(3:235|(1:237)(1:256)|238)(1:257)|239|(1:241)(1:255)|(2:243|(1:245)(1:253))(1:254)|246|(1:248)|(2:250|251)(1:252))|265|221|(0)(0)|224|(0)(0)|227|(0)(0)|230|(0)(0)|233|(0)(0)|239|(0)(0)|(0)(0)|246|(0)|(0)(0))(2:207|208)|209)|270|271|(2:273|(4:275|276|277|278)(2:349|(2:353|354)))(2:359|(10:361|280|(1:343)(4:(1:285)(1:342)|286|287|288)|289|(4:(1:292)(1:322)|293|294|295)(3:323|(4:(1:326)(1:335)|327|328|329)|336)|(3:301|302|(5:304|(3:308|309|300)|298|299|300))|297|298|299|300))|279|280|(1:282)|343|289|(0)(0)|(0)|297|298|299|300)(1:125)|126|127|(1:129)(1:471)|130|131|(0)|135|(0)(0)|(9:140|141|142|143|(0)(0)|146|147|(0)(0)|155)|195|196|197|(0)|270|271|(0)(0)|279|280|(0)|343|289|(0)(0)|(0)|297|298|299|300)|487|488|489|490|492|493|494|495|(2:542|543)|(1:498)|(1:500)|(1:502)|510|511|512|(4:514|515|516|517)(1:537)|(4:519|(1:521)(1:530)|522|523)(1:531)|524|(1:528)|527))|492|493|494|495|(0)|(0)|(0)|(0)|510|511|512|(0)(0)|(0)(0)|524|(0)|528|527)|110|111|112|113|114|115|116|117|118|(0)|487|488|489|490) */
+    /* JADX WARN: Can't wrap try/catch for region: R(18:105|106|107|(18:(1:109)(2:578|(1:580)(33:581|(2:583|(0))(1:591)|(1:590)(1:588)|589|111|112|113|114|115|116|117|118|(31:120|121|122|(24:(2:478|479)(1:481)|131|(2:133|134)|135|(11:367|368|369|370|371|373|374|(6:376|(12:378|379|(4:445|446|(1:448)|449)|381|(2:383|(2:389|390))|433|434|(2:436|(2:438|(2:440|(2:442|443))))|432|(3:394|395|396)(1:431)|397|(1:399))(1:455)|400|(1:402)(1:425)|403|(5:405|(3:407|(1:409)|410)(1:422)|(2:412|(1:414))(2:419|(1:421))|415|(3:417|418|300))(1:423))(1:456)|424|415|(0))(1:137)|(9:140|141|142|143|(1:145)(1:178)|146|147|(5:149|150|151|(1:153)(1:156)|154)(7:164|165|166|167|(1:169)(1:172)|170|171)|155)|195|196|197|(5:199|(1:201)(1:269)|(1:268)(1:204)|(22:(1:211)(1:267)|212|(1:214)(1:266)|215|(17:220|221|(1:223)(1:264)|224|(1:226)(2:260|(1:262)(1:263))|227|(1:229)(1:259)|230|(1:232)(1:258)|233|(3:235|(1:237)(1:256)|238)(1:257)|239|(1:241)(1:255)|(2:243|(1:245)(1:253))(1:254)|246|(1:248)|(2:250|251)(1:252))|265|221|(0)(0)|224|(0)(0)|227|(0)(0)|230|(0)(0)|233|(0)(0)|239|(0)(0)|(0)(0)|246|(0)|(0)(0))(2:207|208)|209)|270|271|(2:273|(4:275|276|277|278)(2:349|(2:353|354)))(2:359|(10:361|280|(1:343)(4:(1:285)(1:342)|286|287|288)|289|(4:(1:292)(1:322)|293|294|295)(3:323|(4:(1:326)(1:335)|327|328|329)|336)|(3:301|302|(5:304|(3:308|309|300)|298|299|300))|297|298|299|300))|279|280|(1:282)|343|289|(0)(0)|(0)|297|298|299|300)(1:125)|126|127|(1:129)(1:471)|130|131|(0)|135|(0)(0)|(9:140|141|142|143|(0)(0)|146|147|(0)(0)|155)|195|196|197|(0)|270|271|(0)(0)|279|280|(0)|343|289|(0)(0)|(0)|297|298|299|300)|487|488|489|490|492|493|494|495|(2:542|543)|(1:498)|(1:500)|(1:502)|510|511|512|(4:514|515|516|517)(1:537)|(4:519|(1:521)(1:530)|522|523)(1:531)|524|(1:528)|527))|492|493|494|495|(0)|(0)|(0)|(0)|510|511|512|(0)(0)|(0)(0)|524|(0)|528|527)|110|111|112|113|114|115|116|117|118|(0)|487|488|489|490) */
+    /* JADX WARN: Code restructure failed: missing block: B:128:0x0334, code lost:
+        if (r4.id == r2.id) goto L392;
+     */
+    /* JADX WARN: Code restructure failed: missing block: B:129:0x0336, code lost:
         r4 = true;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:101:0x02a4, code lost:
-        r4 = false;
+    /* JADX WARN: Code restructure failed: missing block: B:141:0x0352, code lost:
+        if (r1.id == r2.id) goto L392;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:102:0x02a5, code lost:
-        r2 = r4;
+    /* JADX WARN: Code restructure failed: missing block: B:475:0x0a2c, code lost:
+        r0 = move-exception;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:113:0x02bf, code lost:
-        if (r1.id == r2.id) goto L336;
+    /* JADX WARN: Code restructure failed: missing block: B:476:0x0a2d, code lost:
+        r12 = null;
+        r1 = r0;
+        r32 = r4;
+        r16 = null;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:344:0x0761, code lost:
-        r0 = th;
+    /* JADX WARN: Code restructure failed: missing block: B:477:0x0a34, code lost:
+        r0 = move-exception;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:345:0x0762, code lost:
-        r6 = r31;
+    /* JADX WARN: Code restructure failed: missing block: B:478:0x0a35, code lost:
+        r12 = null;
+        r1 = r0;
+        r32 = r4;
+        r16 = null;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:349:0x0769, code lost:
-        r0 = e;
+    /* JADX WARN: Code restructure failed: missing block: B:479:0x0a3d, code lost:
+        r0 = move-exception;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:350:0x076a, code lost:
-        r6 = r31;
+    /* JADX WARN: Code restructure failed: missing block: B:480:0x0a3e, code lost:
+        r12 = null;
+        r1 = r0;
+        r32 = r3;
+        r16 = null;
+        r23 = null;
+        r25 = null;
+        r27 = null;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:47:0x0167, code lost:
-        if (r44 == 4) goto L499;
+    /* JADX WARN: Code restructure failed: missing block: B:481:0x0a4c, code lost:
+        r0 = move-exception;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:99:0x02a0, code lost:
-        if (r4.id == r2.id) goto L336;
+    /* JADX WARN: Code restructure failed: missing block: B:482:0x0a4d, code lost:
+        r12 = null;
+        r1 = r0;
+        r32 = r3;
+        r16 = null;
+        r23 = null;
+        r25 = null;
+        r27 = null;
+     */
+    /* JADX WARN: Code restructure failed: missing block: B:483:0x0a5b, code lost:
+        r0 = move-exception;
+     */
+    /* JADX WARN: Code restructure failed: missing block: B:484:0x0a5c, code lost:
+        r12 = null;
+        r1 = r0;
+        r16 = null;
+        r23 = null;
+     */
+    /* JADX WARN: Code restructure failed: missing block: B:485:0x0a63, code lost:
+        r0 = move-exception;
+     */
+    /* JADX WARN: Code restructure failed: missing block: B:486:0x0a64, code lost:
+        r12 = null;
+        r1 = r0;
+        r16 = null;
+        r23 = null;
+     */
+    /* JADX WARN: Code restructure failed: missing block: B:487:0x0a6b, code lost:
+        r0 = move-exception;
+     */
+    /* JADX WARN: Code restructure failed: missing block: B:488:0x0a6c, code lost:
+        r12 = null;
+        r1 = r0;
+        r16 = null;
+        r19 = null;
+        r23 = null;
+     */
+    /* JADX WARN: Code restructure failed: missing block: B:489:0x0a74, code lost:
+        r25 = r23;
+        r27 = r25;
+        r32 = r27;
+        r12 = r12;
+     */
+    /* JADX WARN: Code restructure failed: missing block: B:491:0x0a7e, code lost:
+        r0 = move-exception;
+     */
+    /* JADX WARN: Code restructure failed: missing block: B:492:0x0a7f, code lost:
+        r12 = null;
+        r1 = r0;
+        r16 = null;
+        r19 = null;
+        r23 = null;
+     */
+    /* JADX WARN: Code restructure failed: missing block: B:493:0x0a87, code lost:
+        r25 = r23;
+        r27 = r25;
+        r32 = r27;
+        r12 = r12;
+     */
+    /* JADX WARN: Code restructure failed: missing block: B:58:0x01a1, code lost:
+        if (r13 != 4) goto L110;
+     */
+    /* JADX WARN: Code restructure failed: missing block: B:82:0x0256, code lost:
+        if (r24.intValue() < r15.id) goto L126;
+     */
+    /* JADX WARN: Code restructure failed: missing block: B:88:0x0273, code lost:
+        r0 = move-exception;
+     */
+    /* JADX WARN: Code restructure failed: missing block: B:89:0x0274, code lost:
+        r1 = r0;
+        r32 = r3;
+     */
+    /* JADX WARN: Code restructure failed: missing block: B:90:0x0279, code lost:
+        r0 = move-exception;
+     */
+    /* JADX WARN: Code restructure failed: missing block: B:91:0x027a, code lost:
+        r1 = r0;
+        r32 = r3;
      */
     /* JADX WARN: Multi-variable type inference failed */
-    /* JADX WARN: Removed duplicated region for block: B:217:0x051c A[Catch: all -> 0x0505, Exception -> 0x050a, TRY_ENTER, TRY_LEAVE, TryCatch #43 {Exception -> 0x050a, all -> 0x0505, blocks: (B:205:0x04fe, B:217:0x051c, B:233:0x0555, B:239:0x0575, B:243:0x057c, B:250:0x0599, B:242:0x057a), top: B:502:0x04fe }] */
-    /* JADX WARN: Removed duplicated region for block: B:219:0x0522 A[Catch: all -> 0x075d, Exception -> 0x075f, TRY_ENTER, TryCatch #52 {Exception -> 0x075f, all -> 0x075d, blocks: (B:203:0x04d9, B:214:0x050e, B:220:0x0529, B:227:0x053b, B:231:0x0545, B:237:0x0571, B:247:0x0588, B:253:0x05a0, B:255:0x05a9, B:252:0x059d, B:246:0x0585, B:236:0x056d, B:219:0x0522), top: B:485:0x04d9 }] */
-    /* JADX WARN: Removed duplicated region for block: B:222:0x052d  */
-    /* JADX WARN: Removed duplicated region for block: B:223:0x0531  */
-    /* JADX WARN: Removed duplicated region for block: B:229:0x0542  */
-    /* JADX WARN: Removed duplicated region for block: B:230:0x0544  */
-    /* JADX WARN: Removed duplicated region for block: B:233:0x0555 A[Catch: all -> 0x0505, Exception -> 0x050a, TRY_ENTER, TRY_LEAVE, TryCatch #43 {Exception -> 0x050a, all -> 0x0505, blocks: (B:205:0x04fe, B:217:0x051c, B:233:0x0555, B:239:0x0575, B:243:0x057c, B:250:0x0599, B:242:0x057a), top: B:502:0x04fe }] */
-    /* JADX WARN: Removed duplicated region for block: B:235:0x056b  */
-    /* JADX WARN: Removed duplicated region for block: B:239:0x0575 A[Catch: all -> 0x0505, Exception -> 0x050a, TRY_ENTER, TryCatch #43 {Exception -> 0x050a, all -> 0x0505, blocks: (B:205:0x04fe, B:217:0x051c, B:233:0x0555, B:239:0x0575, B:243:0x057c, B:250:0x0599, B:242:0x057a), top: B:502:0x04fe }] */
-    /* JADX WARN: Removed duplicated region for block: B:245:0x0582  */
-    /* JADX WARN: Removed duplicated region for block: B:250:0x0599 A[Catch: all -> 0x0505, Exception -> 0x050a, TRY_ENTER, TRY_LEAVE, TryCatch #43 {Exception -> 0x050a, all -> 0x0505, blocks: (B:205:0x04fe, B:217:0x051c, B:233:0x0555, B:239:0x0575, B:243:0x057c, B:250:0x0599, B:242:0x057a), top: B:502:0x04fe }] */
-    /* JADX WARN: Removed duplicated region for block: B:252:0x059d A[Catch: all -> 0x075d, Exception -> 0x075f, TRY_ENTER, TryCatch #52 {Exception -> 0x075f, all -> 0x075d, blocks: (B:203:0x04d9, B:214:0x050e, B:220:0x0529, B:227:0x053b, B:231:0x0545, B:237:0x0571, B:247:0x0588, B:253:0x05a0, B:255:0x05a9, B:252:0x059d, B:246:0x0585, B:236:0x056d, B:219:0x0522), top: B:485:0x04d9 }] */
-    /* JADX WARN: Removed duplicated region for block: B:255:0x05a9 A[Catch: all -> 0x075d, Exception -> 0x075f, TRY_LEAVE, TryCatch #52 {Exception -> 0x075f, all -> 0x075d, blocks: (B:203:0x04d9, B:214:0x050e, B:220:0x0529, B:227:0x053b, B:231:0x0545, B:237:0x0571, B:247:0x0588, B:253:0x05a0, B:255:0x05a9, B:252:0x059d, B:246:0x0585, B:236:0x056d, B:219:0x0522), top: B:485:0x04d9 }] */
-    /* JADX WARN: Removed duplicated region for block: B:258:0x05ce A[Catch: all -> 0x0757, Exception -> 0x0759, TryCatch #8 {Exception -> 0x0759, blocks: (B:257:0x05b1, B:274:0x0634, B:276:0x0639, B:277:0x063c, B:279:0x0643, B:282:0x0649, B:258:0x05ce, B:260:0x05d5, B:271:0x062c), top: B:467:0x05b1 }] */
-    /* JADX WARN: Removed duplicated region for block: B:274:0x0634 A[Catch: all -> 0x0757, Exception -> 0x0759, TryCatch #8 {Exception -> 0x0759, blocks: (B:257:0x05b1, B:274:0x0634, B:276:0x0639, B:277:0x063c, B:279:0x0643, B:282:0x0649, B:258:0x05ce, B:260:0x05d5, B:271:0x062c), top: B:467:0x05b1 }] */
-    /* JADX WARN: Removed duplicated region for block: B:276:0x0639 A[Catch: all -> 0x0757, Exception -> 0x0759, TryCatch #8 {Exception -> 0x0759, blocks: (B:257:0x05b1, B:274:0x0634, B:276:0x0639, B:277:0x063c, B:279:0x0643, B:282:0x0649, B:258:0x05ce, B:260:0x05d5, B:271:0x062c), top: B:467:0x05b1 }] */
-    /* JADX WARN: Removed duplicated region for block: B:279:0x0643 A[Catch: all -> 0x0757, Exception -> 0x0759, TryCatch #8 {Exception -> 0x0759, blocks: (B:257:0x05b1, B:274:0x0634, B:276:0x0639, B:277:0x063c, B:279:0x0643, B:282:0x0649, B:258:0x05ce, B:260:0x05d5, B:271:0x062c), top: B:467:0x05b1 }] */
-    /* JADX WARN: Removed duplicated region for block: B:289:0x068e  */
-    /* JADX WARN: Removed duplicated region for block: B:307:0x06d4 A[Catch: all -> 0x074d, Exception -> 0x0752, TRY_ENTER, TryCatch #41 {Exception -> 0x0752, all -> 0x074d, blocks: (B:285:0x0655, B:287:0x0688, B:290:0x0690, B:321:0x071f, B:325:0x0729, B:307:0x06d4, B:310:0x06da), top: B:506:0x0655 }] */
-    /* JADX WARN: Removed duplicated region for block: B:321:0x071f A[Catch: all -> 0x074d, Exception -> 0x0752, TRY_ENTER, TryCatch #41 {Exception -> 0x0752, all -> 0x074d, blocks: (B:285:0x0655, B:287:0x0688, B:290:0x0690, B:321:0x071f, B:325:0x0729, B:307:0x06d4, B:310:0x06da), top: B:506:0x0655 }] */
-    /* JADX WARN: Removed duplicated region for block: B:429:0x08cd  */
-    /* JADX WARN: Removed duplicated region for block: B:431:0x08d2  */
-    /* JADX WARN: Removed duplicated region for block: B:433:0x08d7  */
-    /* JADX WARN: Removed duplicated region for block: B:435:0x08dc  */
-    /* JADX WARN: Removed duplicated region for block: B:437:0x08e1  */
-    /* JADX WARN: Removed duplicated region for block: B:439:0x08e6  */
-    /* JADX WARN: Removed duplicated region for block: B:441:0x08eb  */
-    /* JADX WARN: Removed duplicated region for block: B:443:0x08f0  */
-    /* JADX WARN: Removed duplicated region for block: B:449:0x08fc  */
-    /* JADX WARN: Removed duplicated region for block: B:451:0x0901  */
-    /* JADX WARN: Removed duplicated region for block: B:453:0x0906  */
-    /* JADX WARN: Removed duplicated region for block: B:455:0x090b  */
-    /* JADX WARN: Removed duplicated region for block: B:457:0x0910  */
-    /* JADX WARN: Removed duplicated region for block: B:459:0x0915  */
-    /* JADX WARN: Removed duplicated region for block: B:461:0x091a  */
-    /* JADX WARN: Removed duplicated region for block: B:463:0x091f  */
-    /* JADX WARN: Removed duplicated region for block: B:536:? A[RETURN, SYNTHETIC] */
-    /* JADX WARN: Type inference failed for: r10v24 */
+    /* JADX WARN: Removed duplicated region for block: B:177:0x0412  */
+    /* JADX WARN: Removed duplicated region for block: B:198:0x0445  */
+    /* JADX WARN: Removed duplicated region for block: B:204:0x0479 A[Catch: all -> 0x056d, Exception -> 0x0575, TryCatch #63 {Exception -> 0x0575, all -> 0x056d, blocks: (B:202:0x0473, B:204:0x0479, B:206:0x048d), top: B:560:0x0473 }] */
+    /* JADX WARN: Removed duplicated region for block: B:205:0x048a  */
+    /* JADX WARN: Removed duplicated region for block: B:209:0x0495 A[Catch: all -> 0x057d, Exception -> 0x0580, TRY_ENTER, TRY_LEAVE, TryCatch #44 {Exception -> 0x0580, all -> 0x057d, blocks: (B:201:0x0459, B:209:0x0495, B:220:0x04e2, B:255:0x05a0, B:263:0x05b4, B:265:0x05c3, B:267:0x05ca, B:269:0x05ee, B:274:0x05f6, B:276:0x0606, B:278:0x0617, B:285:0x0623, B:289:0x0631, B:291:0x063f, B:293:0x065b, B:295:0x065f, B:299:0x066a, B:301:0x0676, B:303:0x0685, B:306:0x0692, B:308:0x0698, B:311:0x06a5, B:313:0x06aa, B:315:0x06af, B:309:0x069f, B:304:0x068b, B:298:0x0668, B:300:0x0670, B:292:0x0655, B:277:0x060e), top: B:597:0x0459 }] */
+    /* JADX WARN: Removed duplicated region for block: B:220:0x04e2 A[Catch: all -> 0x057d, Exception -> 0x0580, TRY_ENTER, TRY_LEAVE, TryCatch #44 {Exception -> 0x0580, all -> 0x057d, blocks: (B:201:0x0459, B:209:0x0495, B:220:0x04e2, B:255:0x05a0, B:263:0x05b4, B:265:0x05c3, B:267:0x05ca, B:269:0x05ee, B:274:0x05f6, B:276:0x0606, B:278:0x0617, B:285:0x0623, B:289:0x0631, B:291:0x063f, B:293:0x065b, B:295:0x065f, B:299:0x066a, B:301:0x0676, B:303:0x0685, B:306:0x0692, B:308:0x0698, B:311:0x06a5, B:313:0x06aa, B:315:0x06af, B:309:0x069f, B:304:0x068b, B:298:0x0668, B:300:0x0670, B:292:0x0655, B:277:0x060e), top: B:597:0x0459 }] */
+    /* JADX WARN: Removed duplicated region for block: B:249:0x0596  */
+    /* JADX WARN: Removed duplicated region for block: B:276:0x0606 A[Catch: all -> 0x057d, Exception -> 0x0580, TryCatch #44 {Exception -> 0x0580, all -> 0x057d, blocks: (B:201:0x0459, B:209:0x0495, B:220:0x04e2, B:255:0x05a0, B:263:0x05b4, B:265:0x05c3, B:267:0x05ca, B:269:0x05ee, B:274:0x05f6, B:276:0x0606, B:278:0x0617, B:285:0x0623, B:289:0x0631, B:291:0x063f, B:293:0x065b, B:295:0x065f, B:299:0x066a, B:301:0x0676, B:303:0x0685, B:306:0x0692, B:308:0x0698, B:311:0x06a5, B:313:0x06aa, B:315:0x06af, B:309:0x069f, B:304:0x068b, B:298:0x0668, B:300:0x0670, B:292:0x0655, B:277:0x060e), top: B:597:0x0459 }] */
+    /* JADX WARN: Removed duplicated region for block: B:277:0x060e A[Catch: all -> 0x057d, Exception -> 0x0580, TryCatch #44 {Exception -> 0x0580, all -> 0x057d, blocks: (B:201:0x0459, B:209:0x0495, B:220:0x04e2, B:255:0x05a0, B:263:0x05b4, B:265:0x05c3, B:267:0x05ca, B:269:0x05ee, B:274:0x05f6, B:276:0x0606, B:278:0x0617, B:285:0x0623, B:289:0x0631, B:291:0x063f, B:293:0x065b, B:295:0x065f, B:299:0x066a, B:301:0x0676, B:303:0x0685, B:306:0x0692, B:308:0x0698, B:311:0x06a5, B:313:0x06aa, B:315:0x06af, B:309:0x069f, B:304:0x068b, B:298:0x0668, B:300:0x0670, B:292:0x0655, B:277:0x060e), top: B:597:0x0459 }] */
+    /* JADX WARN: Removed duplicated region for block: B:280:0x061b  */
+    /* JADX WARN: Removed duplicated region for block: B:281:0x061d  */
+    /* JADX WARN: Removed duplicated region for block: B:287:0x062e  */
+    /* JADX WARN: Removed duplicated region for block: B:288:0x0630  */
+    /* JADX WARN: Removed duplicated region for block: B:291:0x063f A[Catch: all -> 0x057d, Exception -> 0x0580, TryCatch #44 {Exception -> 0x0580, all -> 0x057d, blocks: (B:201:0x0459, B:209:0x0495, B:220:0x04e2, B:255:0x05a0, B:263:0x05b4, B:265:0x05c3, B:267:0x05ca, B:269:0x05ee, B:274:0x05f6, B:276:0x0606, B:278:0x0617, B:285:0x0623, B:289:0x0631, B:291:0x063f, B:293:0x065b, B:295:0x065f, B:299:0x066a, B:301:0x0676, B:303:0x0685, B:306:0x0692, B:308:0x0698, B:311:0x06a5, B:313:0x06aa, B:315:0x06af, B:309:0x069f, B:304:0x068b, B:298:0x0668, B:300:0x0670, B:292:0x0655, B:277:0x060e), top: B:597:0x0459 }] */
+    /* JADX WARN: Removed duplicated region for block: B:292:0x0655 A[Catch: all -> 0x057d, Exception -> 0x0580, TryCatch #44 {Exception -> 0x0580, all -> 0x057d, blocks: (B:201:0x0459, B:209:0x0495, B:220:0x04e2, B:255:0x05a0, B:263:0x05b4, B:265:0x05c3, B:267:0x05ca, B:269:0x05ee, B:274:0x05f6, B:276:0x0606, B:278:0x0617, B:285:0x0623, B:289:0x0631, B:291:0x063f, B:293:0x065b, B:295:0x065f, B:299:0x066a, B:301:0x0676, B:303:0x0685, B:306:0x0692, B:308:0x0698, B:311:0x06a5, B:313:0x06aa, B:315:0x06af, B:309:0x069f, B:304:0x068b, B:298:0x0668, B:300:0x0670, B:292:0x0655, B:277:0x060e), top: B:597:0x0459 }] */
+    /* JADX WARN: Removed duplicated region for block: B:295:0x065f A[Catch: all -> 0x057d, Exception -> 0x0580, TryCatch #44 {Exception -> 0x0580, all -> 0x057d, blocks: (B:201:0x0459, B:209:0x0495, B:220:0x04e2, B:255:0x05a0, B:263:0x05b4, B:265:0x05c3, B:267:0x05ca, B:269:0x05ee, B:274:0x05f6, B:276:0x0606, B:278:0x0617, B:285:0x0623, B:289:0x0631, B:291:0x063f, B:293:0x065b, B:295:0x065f, B:299:0x066a, B:301:0x0676, B:303:0x0685, B:306:0x0692, B:308:0x0698, B:311:0x06a5, B:313:0x06aa, B:315:0x06af, B:309:0x069f, B:304:0x068b, B:298:0x0668, B:300:0x0670, B:292:0x0655, B:277:0x060e), top: B:597:0x0459 }] */
+    /* JADX WARN: Removed duplicated region for block: B:300:0x0670 A[Catch: all -> 0x057d, Exception -> 0x0580, TryCatch #44 {Exception -> 0x0580, all -> 0x057d, blocks: (B:201:0x0459, B:209:0x0495, B:220:0x04e2, B:255:0x05a0, B:263:0x05b4, B:265:0x05c3, B:267:0x05ca, B:269:0x05ee, B:274:0x05f6, B:276:0x0606, B:278:0x0617, B:285:0x0623, B:289:0x0631, B:291:0x063f, B:293:0x065b, B:295:0x065f, B:299:0x066a, B:301:0x0676, B:303:0x0685, B:306:0x0692, B:308:0x0698, B:311:0x06a5, B:313:0x06aa, B:315:0x06af, B:309:0x069f, B:304:0x068b, B:298:0x0668, B:300:0x0670, B:292:0x0655, B:277:0x060e), top: B:597:0x0459 }] */
+    /* JADX WARN: Removed duplicated region for block: B:303:0x0685 A[Catch: all -> 0x057d, Exception -> 0x0580, TryCatch #44 {Exception -> 0x0580, all -> 0x057d, blocks: (B:201:0x0459, B:209:0x0495, B:220:0x04e2, B:255:0x05a0, B:263:0x05b4, B:265:0x05c3, B:267:0x05ca, B:269:0x05ee, B:274:0x05f6, B:276:0x0606, B:278:0x0617, B:285:0x0623, B:289:0x0631, B:291:0x063f, B:293:0x065b, B:295:0x065f, B:299:0x066a, B:301:0x0676, B:303:0x0685, B:306:0x0692, B:308:0x0698, B:311:0x06a5, B:313:0x06aa, B:315:0x06af, B:309:0x069f, B:304:0x068b, B:298:0x0668, B:300:0x0670, B:292:0x0655, B:277:0x060e), top: B:597:0x0459 }] */
+    /* JADX WARN: Removed duplicated region for block: B:304:0x068b A[Catch: all -> 0x057d, Exception -> 0x0580, TryCatch #44 {Exception -> 0x0580, all -> 0x057d, blocks: (B:201:0x0459, B:209:0x0495, B:220:0x04e2, B:255:0x05a0, B:263:0x05b4, B:265:0x05c3, B:267:0x05ca, B:269:0x05ee, B:274:0x05f6, B:276:0x0606, B:278:0x0617, B:285:0x0623, B:289:0x0631, B:291:0x063f, B:293:0x065b, B:295:0x065f, B:299:0x066a, B:301:0x0676, B:303:0x0685, B:306:0x0692, B:308:0x0698, B:311:0x06a5, B:313:0x06aa, B:315:0x06af, B:309:0x069f, B:304:0x068b, B:298:0x0668, B:300:0x0670, B:292:0x0655, B:277:0x060e), top: B:597:0x0459 }] */
+    /* JADX WARN: Removed duplicated region for block: B:306:0x0692 A[Catch: all -> 0x057d, Exception -> 0x0580, TryCatch #44 {Exception -> 0x0580, all -> 0x057d, blocks: (B:201:0x0459, B:209:0x0495, B:220:0x04e2, B:255:0x05a0, B:263:0x05b4, B:265:0x05c3, B:267:0x05ca, B:269:0x05ee, B:274:0x05f6, B:276:0x0606, B:278:0x0617, B:285:0x0623, B:289:0x0631, B:291:0x063f, B:293:0x065b, B:295:0x065f, B:299:0x066a, B:301:0x0676, B:303:0x0685, B:306:0x0692, B:308:0x0698, B:311:0x06a5, B:313:0x06aa, B:315:0x06af, B:309:0x069f, B:304:0x068b, B:298:0x0668, B:300:0x0670, B:292:0x0655, B:277:0x060e), top: B:597:0x0459 }] */
+    /* JADX WARN: Removed duplicated region for block: B:310:0x06a4  */
+    /* JADX WARN: Removed duplicated region for block: B:313:0x06aa A[Catch: all -> 0x057d, Exception -> 0x0580, TryCatch #44 {Exception -> 0x0580, all -> 0x057d, blocks: (B:201:0x0459, B:209:0x0495, B:220:0x04e2, B:255:0x05a0, B:263:0x05b4, B:265:0x05c3, B:267:0x05ca, B:269:0x05ee, B:274:0x05f6, B:276:0x0606, B:278:0x0617, B:285:0x0623, B:289:0x0631, B:291:0x063f, B:293:0x065b, B:295:0x065f, B:299:0x066a, B:301:0x0676, B:303:0x0685, B:306:0x0692, B:308:0x0698, B:311:0x06a5, B:313:0x06aa, B:315:0x06af, B:309:0x069f, B:304:0x068b, B:298:0x0668, B:300:0x0670, B:292:0x0655, B:277:0x060e), top: B:597:0x0459 }] */
+    /* JADX WARN: Removed duplicated region for block: B:315:0x06af A[Catch: all -> 0x057d, Exception -> 0x0580, TRY_LEAVE, TryCatch #44 {Exception -> 0x0580, all -> 0x057d, blocks: (B:201:0x0459, B:209:0x0495, B:220:0x04e2, B:255:0x05a0, B:263:0x05b4, B:265:0x05c3, B:267:0x05ca, B:269:0x05ee, B:274:0x05f6, B:276:0x0606, B:278:0x0617, B:285:0x0623, B:289:0x0631, B:291:0x063f, B:293:0x065b, B:295:0x065f, B:299:0x066a, B:301:0x0676, B:303:0x0685, B:306:0x0692, B:308:0x0698, B:311:0x06a5, B:313:0x06aa, B:315:0x06af, B:309:0x069f, B:304:0x068b, B:298:0x0668, B:300:0x0670, B:292:0x0655, B:277:0x060e), top: B:597:0x0459 }] */
+    /* JADX WARN: Removed duplicated region for block: B:319:0x06bd A[Catch: all -> 0x0895, Exception -> 0x089a, TRY_ENTER, TryCatch #39 {Exception -> 0x089a, all -> 0x0895, blocks: (B:246:0x0583, B:319:0x06bd, B:321:0x06c3), top: B:607:0x0583 }] */
+    /* JADX WARN: Removed duplicated region for block: B:333:0x0742 A[Catch: all -> 0x0891, Exception -> 0x0893, TryCatch #18 {Exception -> 0x0893, blocks: (B:323:0x06cb, B:337:0x0778, B:339:0x077f, B:342:0x0785, B:352:0x07d7, B:355:0x07df, B:364:0x081a, B:367:0x0820, B:324:0x06e9, B:326:0x06ef, B:332:0x073e, B:333:0x0742, B:335:0x074a), top: B:552:0x06cb }] */
+    /* JADX WARN: Removed duplicated region for block: B:339:0x077f A[Catch: all -> 0x0891, Exception -> 0x0893, TryCatch #18 {Exception -> 0x0893, blocks: (B:323:0x06cb, B:337:0x0778, B:339:0x077f, B:342:0x0785, B:352:0x07d7, B:355:0x07df, B:364:0x081a, B:367:0x0820, B:324:0x06e9, B:326:0x06ef, B:332:0x073e, B:333:0x0742, B:335:0x074a), top: B:552:0x06cb }] */
+    /* JADX WARN: Removed duplicated region for block: B:354:0x07dd  */
+    /* JADX WARN: Removed duplicated region for block: B:364:0x081a A[Catch: all -> 0x0891, Exception -> 0x0893, TRY_ENTER, TryCatch #18 {Exception -> 0x0893, blocks: (B:323:0x06cb, B:337:0x0778, B:339:0x077f, B:342:0x0785, B:352:0x07d7, B:355:0x07df, B:364:0x081a, B:367:0x0820, B:324:0x06e9, B:326:0x06ef, B:332:0x073e, B:333:0x0742, B:335:0x074a), top: B:552:0x06cb }] */
+    /* JADX WARN: Removed duplicated region for block: B:423:0x08e9 A[Catch: all -> 0x08d3, Exception -> 0x08dd, TryCatch #58 {Exception -> 0x08dd, all -> 0x08d3, blocks: (B:417:0x08cd, B:423:0x08e9, B:425:0x08fa, B:427:0x0901), top: B:570:0x08cd }] */
+    /* JADX WARN: Removed duplicated region for block: B:425:0x08fa A[Catch: all -> 0x08d3, Exception -> 0x08dd, TryCatch #58 {Exception -> 0x08dd, all -> 0x08d3, blocks: (B:417:0x08cd, B:423:0x08e9, B:425:0x08fa, B:427:0x0901), top: B:570:0x08cd }] */
+    /* JADX WARN: Removed duplicated region for block: B:427:0x0901 A[Catch: all -> 0x08d3, Exception -> 0x08dd, TRY_LEAVE, TryCatch #58 {Exception -> 0x08dd, all -> 0x08d3, blocks: (B:417:0x08cd, B:423:0x08e9, B:425:0x08fa, B:427:0x0901), top: B:570:0x08cd }] */
+    /* JADX WARN: Removed duplicated region for block: B:431:0x0932 A[Catch: all -> 0x09e6, Exception -> 0x09f2, TRY_LEAVE, TryCatch #60 {Exception -> 0x09f2, all -> 0x09e6, blocks: (B:429:0x090b, B:431:0x0932), top: B:566:0x090b }] */
+    /* JADX WARN: Removed duplicated region for block: B:434:0x096a  */
+    /* JADX WARN: Removed duplicated region for block: B:436:0x096d A[Catch: all -> 0x09e2, Exception -> 0x09e4, TryCatch #55 {Exception -> 0x09e4, all -> 0x09e2, blocks: (B:433:0x0966, B:436:0x096d, B:441:0x0990, B:443:0x09af, B:446:0x09b8, B:440:0x097e), top: B:576:0x0966 }] */
+    /* JADX WARN: Removed duplicated region for block: B:442:0x09ad  */
+    /* JADX WARN: Removed duplicated region for block: B:510:0x0abe  */
+    /* JADX WARN: Removed duplicated region for block: B:512:0x0ac3  */
+    /* JADX WARN: Removed duplicated region for block: B:514:0x0ac8  */
+    /* JADX WARN: Removed duplicated region for block: B:516:0x0acd  */
+    /* JADX WARN: Removed duplicated region for block: B:518:0x0ad2  */
+    /* JADX WARN: Removed duplicated region for block: B:520:0x0ad7  */
+    /* JADX WARN: Removed duplicated region for block: B:522:0x0adc  */
+    /* JADX WARN: Removed duplicated region for block: B:524:0x0ae1  */
+    /* JADX WARN: Removed duplicated region for block: B:526:0x0ae6  */
+    /* JADX WARN: Removed duplicated region for block: B:532:0x0af0  */
+    /* JADX WARN: Removed duplicated region for block: B:534:0x0af5  */
+    /* JADX WARN: Removed duplicated region for block: B:536:0x0afa  */
+    /* JADX WARN: Removed duplicated region for block: B:538:0x0aff  */
+    /* JADX WARN: Removed duplicated region for block: B:540:0x0b04  */
+    /* JADX WARN: Removed duplicated region for block: B:542:0x0b09  */
+    /* JADX WARN: Removed duplicated region for block: B:544:0x0b0e  */
+    /* JADX WARN: Removed duplicated region for block: B:546:0x0b13  */
+    /* JADX WARN: Removed duplicated region for block: B:548:0x0b18  */
+    /* JADX WARN: Removed duplicated region for block: B:564:0x085a A[EXC_TOP_SPLITTER, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:570:0x08cd A[EXC_TOP_SPLITTER, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:574:0x0292 A[EXC_TOP_SPLITTER, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:603:0x0236 A[EXC_TOP_SPLITTER, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:627:0x06b2 A[SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:631:? A[RETURN, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:95:0x0289 A[Catch: all -> 0x0273, Exception -> 0x0279, TRY_LEAVE, TryCatch #42 {Exception -> 0x0279, all -> 0x0273, blocks: (B:83:0x0258, B:85:0x0264, B:95:0x0289, B:81:0x024e), top: B:601:0x0258 }] */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public /* synthetic */ void lambda$putMessages$179(boolean r40, long r41, org.telegram.tgnet.TLRPC$messages_Messages r43, int r44, int r45, boolean r46) {
+    public /* synthetic */ void lambda$putMessages$188(boolean r43, long r44, org.telegram.tgnet.TLRPC$messages_Messages r46, int r47, int r48, int r49, boolean r50) {
         /*
-            Method dump skipped, instructions count: 2341
+            Method dump skipped, instructions count: 2846
             To view this dump add '--comments-level debug' option
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$putMessages$179(boolean, long, org.telegram.tgnet.TLRPC$messages_Messages, int, int, boolean):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$putMessages$188(boolean, long, org.telegram.tgnet.TLRPC$messages_Messages, int, int, int, boolean):void");
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$putMessages$178(ArrayList arrayList) {
+    public /* synthetic */ void lambda$putMessages$187(ArrayList arrayList) {
         getFileLoader().cancelLoadFiles(arrayList);
     }
 
@@ -9933,48 +10635,65 @@ public class MessagesStorage extends BaseController {
             }
         }
         final long[] jArr2 = jArr;
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda36
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda37
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$getDialogs$181(i, i2, i3, jArr2);
+                MessagesStorage.this.lambda$getDialogs$190(i, i2, i3, jArr2);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
+    /* JADX WARN: Can't wrap try/catch for region: R(11:221|(3:257|258|(1:260))|223|224|(3:243|244|(2:246|(8:248|249|250|227|228|(3:230|231|232)(1:239)|233|234)))|226|227|228|(0)(0)|233|234) */
+    /* JADX WARN: Code restructure failed: missing block: B:181:0x041f, code lost:
+        if ((r3 instanceof org.telegram.tgnet.TLRPC$TL_messageActionGameScore) == false) goto L265;
+     */
+    /* JADX WARN: Code restructure failed: missing block: B:209:0x046d, code lost:
+        r0 = e;
+     */
+    /* JADX WARN: Code restructure failed: missing block: B:210:0x046e, code lost:
+        r3 = r26;
+     */
+    /* JADX WARN: Code restructure failed: missing block: B:72:0x0224, code lost:
+        if ((r1 instanceof org.telegram.tgnet.TLRPC$TL_messageActionGameScore) == false) goto L155;
+     */
     /* JADX WARN: Multi-variable type inference failed */
-    /* JADX WARN: Removed duplicated region for block: B:104:0x0270 A[Catch: all -> 0x02df, Exception -> 0x02e6, TryCatch #11 {Exception -> 0x02e6, blocks: (B:13:0x009b, B:15:0x00a1, B:17:0x00ab, B:19:0x00b8, B:21:0x00be, B:25:0x00e3, B:27:0x00f6, B:29:0x0118, B:35:0x0128, B:39:0x0147, B:43:0x015e, B:45:0x0174, B:47:0x017c, B:48:0x0181, B:50:0x0198, B:52:0x01a4, B:54:0x01ab, B:56:0x01b6, B:58:0x01db, B:59:0x01dd, B:97:0x025b, B:99:0x0261, B:101:0x0267, B:102:0x026a, B:104:0x0270, B:106:0x0280, B:107:0x0288, B:109:0x0290, B:111:0x029a, B:112:0x02a2, B:114:0x02a8, B:116:0x02b3, B:93:0x0249, B:94:0x024d, B:22:0x00cf, B:26:0x00ef, B:118:0x02c6), top: B:221:0x009b }] */
-    /* JADX WARN: Removed duplicated region for block: B:107:0x0288 A[Catch: all -> 0x02df, Exception -> 0x02e6, TryCatch #11 {Exception -> 0x02e6, blocks: (B:13:0x009b, B:15:0x00a1, B:17:0x00ab, B:19:0x00b8, B:21:0x00be, B:25:0x00e3, B:27:0x00f6, B:29:0x0118, B:35:0x0128, B:39:0x0147, B:43:0x015e, B:45:0x0174, B:47:0x017c, B:48:0x0181, B:50:0x0198, B:52:0x01a4, B:54:0x01ab, B:56:0x01b6, B:58:0x01db, B:59:0x01dd, B:97:0x025b, B:99:0x0261, B:101:0x0267, B:102:0x026a, B:104:0x0270, B:106:0x0280, B:107:0x0288, B:109:0x0290, B:111:0x029a, B:112:0x02a2, B:114:0x02a8, B:116:0x02b3, B:93:0x0249, B:94:0x024d, B:22:0x00cf, B:26:0x00ef, B:118:0x02c6), top: B:221:0x009b }] */
-    /* JADX WARN: Removed duplicated region for block: B:200:0x044e  */
-    /* JADX WARN: Removed duplicated region for block: B:204:0x0455  */
-    /* JADX WARN: Removed duplicated region for block: B:245:? A[RETURN, SYNTHETIC] */
-    /* JADX WARN: Removed duplicated region for block: B:37:0x0144  */
-    /* JADX WARN: Removed duplicated region for block: B:38:0x0146  */
-    /* JADX WARN: Removed duplicated region for block: B:41:0x015b  */
-    /* JADX WARN: Removed duplicated region for block: B:42:0x015d  */
-    /* JADX WARN: Removed duplicated region for block: B:45:0x0174 A[Catch: all -> 0x02df, Exception -> 0x02e6, TryCatch #11 {Exception -> 0x02e6, blocks: (B:13:0x009b, B:15:0x00a1, B:17:0x00ab, B:19:0x00b8, B:21:0x00be, B:25:0x00e3, B:27:0x00f6, B:29:0x0118, B:35:0x0128, B:39:0x0147, B:43:0x015e, B:45:0x0174, B:47:0x017c, B:48:0x0181, B:50:0x0198, B:52:0x01a4, B:54:0x01ab, B:56:0x01b6, B:58:0x01db, B:59:0x01dd, B:97:0x025b, B:99:0x0261, B:101:0x0267, B:102:0x026a, B:104:0x0270, B:106:0x0280, B:107:0x0288, B:109:0x0290, B:111:0x029a, B:112:0x02a2, B:114:0x02a8, B:116:0x02b3, B:93:0x0249, B:94:0x024d, B:22:0x00cf, B:26:0x00ef, B:118:0x02c6), top: B:221:0x009b }] */
-    /* JADX WARN: Removed duplicated region for block: B:50:0x0198 A[Catch: all -> 0x02df, Exception -> 0x02e6, TryCatch #11 {Exception -> 0x02e6, blocks: (B:13:0x009b, B:15:0x00a1, B:17:0x00ab, B:19:0x00b8, B:21:0x00be, B:25:0x00e3, B:27:0x00f6, B:29:0x0118, B:35:0x0128, B:39:0x0147, B:43:0x015e, B:45:0x0174, B:47:0x017c, B:48:0x0181, B:50:0x0198, B:52:0x01a4, B:54:0x01ab, B:56:0x01b6, B:58:0x01db, B:59:0x01dd, B:97:0x025b, B:99:0x0261, B:101:0x0267, B:102:0x026a, B:104:0x0270, B:106:0x0280, B:107:0x0288, B:109:0x0290, B:111:0x029a, B:112:0x02a2, B:114:0x02a8, B:116:0x02b3, B:93:0x0249, B:94:0x024d, B:22:0x00cf, B:26:0x00ef, B:118:0x02c6), top: B:221:0x009b }] */
-    /* JADX WARN: Removed duplicated region for block: B:51:0x01a2  */
-    /* JADX WARN: Removed duplicated region for block: B:54:0x01ab A[Catch: all -> 0x02df, Exception -> 0x02e6, TryCatch #11 {Exception -> 0x02e6, blocks: (B:13:0x009b, B:15:0x00a1, B:17:0x00ab, B:19:0x00b8, B:21:0x00be, B:25:0x00e3, B:27:0x00f6, B:29:0x0118, B:35:0x0128, B:39:0x0147, B:43:0x015e, B:45:0x0174, B:47:0x017c, B:48:0x0181, B:50:0x0198, B:52:0x01a4, B:54:0x01ab, B:56:0x01b6, B:58:0x01db, B:59:0x01dd, B:97:0x025b, B:99:0x0261, B:101:0x0267, B:102:0x026a, B:104:0x0270, B:106:0x0280, B:107:0x0288, B:109:0x0290, B:111:0x029a, B:112:0x02a2, B:114:0x02a8, B:116:0x02b3, B:93:0x0249, B:94:0x024d, B:22:0x00cf, B:26:0x00ef, B:118:0x02c6), top: B:221:0x009b }] */
-    /* JADX WARN: Removed duplicated region for block: B:95:0x0256  */
-    /* JADX WARN: Removed duplicated region for block: B:99:0x0261 A[Catch: all -> 0x02df, Exception -> 0x02e6, TryCatch #11 {Exception -> 0x02e6, blocks: (B:13:0x009b, B:15:0x00a1, B:17:0x00ab, B:19:0x00b8, B:21:0x00be, B:25:0x00e3, B:27:0x00f6, B:29:0x0118, B:35:0x0128, B:39:0x0147, B:43:0x015e, B:45:0x0174, B:47:0x017c, B:48:0x0181, B:50:0x0198, B:52:0x01a4, B:54:0x01ab, B:56:0x01b6, B:58:0x01db, B:59:0x01dd, B:97:0x025b, B:99:0x0261, B:101:0x0267, B:102:0x026a, B:104:0x0270, B:106:0x0280, B:107:0x0288, B:109:0x0290, B:111:0x029a, B:112:0x02a2, B:114:0x02a8, B:116:0x02b3, B:93:0x0249, B:94:0x024d, B:22:0x00cf, B:26:0x00ef, B:118:0x02c6), top: B:221:0x009b }] */
-    /* JADX WARN: Type inference failed for: r0v114, types: [org.telegram.tgnet.TLRPC$TL_dialogFolder] */
-    /* JADX WARN: Type inference failed for: r0v37, types: [org.telegram.tgnet.TLRPC$TL_dialog] */
-    /* JADX WARN: Type inference failed for: r0v38 */
+    /* JADX WARN: Removed duplicated region for block: B:109:0x0296  */
+    /* JADX WARN: Removed duplicated region for block: B:119:0x02b4 A[Catch: Exception -> 0x04d0, all -> 0x04d9, TryCatch #26 {Exception -> 0x04d0, blocks: (B:112:0x029f, B:114:0x02a5, B:116:0x02ab, B:117:0x02ae, B:119:0x02b4, B:121:0x02c4, B:122:0x02cc, B:124:0x02d4, B:126:0x02de, B:127:0x02e6, B:129:0x02ec, B:131:0x02f7, B:107:0x0285, B:108:0x0289, B:133:0x0311), top: B:391:0x02a5 }] */
+    /* JADX WARN: Removed duplicated region for block: B:122:0x02cc A[Catch: Exception -> 0x04d0, all -> 0x04d9, TryCatch #26 {Exception -> 0x04d0, blocks: (B:112:0x029f, B:114:0x02a5, B:116:0x02ab, B:117:0x02ae, B:119:0x02b4, B:121:0x02c4, B:122:0x02cc, B:124:0x02d4, B:126:0x02de, B:127:0x02e6, B:129:0x02ec, B:131:0x02f7, B:107:0x0285, B:108:0x0289, B:133:0x0311), top: B:391:0x02a5 }] */
+    /* JADX WARN: Removed duplicated region for block: B:203:0x0462  */
+    /* JADX WARN: Removed duplicated region for block: B:208:0x046a  */
+    /* JADX WARN: Removed duplicated region for block: B:339:0x067d  */
+    /* JADX WARN: Removed duplicated region for block: B:344:0x0685  */
+    /* JADX WARN: Removed duplicated region for block: B:37:0x0146  */
+    /* JADX WARN: Removed duplicated region for block: B:38:0x0148  */
+    /* JADX WARN: Removed duplicated region for block: B:391:0x02a5 A[EXC_TOP_SPLITTER, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:41:0x015d  */
+    /* JADX WARN: Removed duplicated region for block: B:42:0x015f  */
+    /* JADX WARN: Removed duplicated region for block: B:443:? A[RETURN, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:45:0x0178 A[Catch: all -> 0x04d9, Exception -> 0x04de, TryCatch #10 {Exception -> 0x04de, blocks: (B:14:0x00a6, B:16:0x00ac, B:18:0x00b9, B:20:0x00c6, B:22:0x00cc, B:23:0x00db, B:25:0x00ea, B:27:0x00fb, B:29:0x011c, B:35:0x012a, B:39:0x0149, B:43:0x0160, B:45:0x0178, B:47:0x0180, B:48:0x0185, B:50:0x019d, B:51:0x01b1, B:53:0x01b8, B:55:0x01c4, B:57:0x01cb, B:59:0x01d6, B:61:0x01fb, B:62:0x01fd, B:26:0x00f6), top: B:365:0x00a6 }] */
+    /* JADX WARN: Removed duplicated region for block: B:50:0x019d A[Catch: all -> 0x04d9, Exception -> 0x04de, TryCatch #10 {Exception -> 0x04de, blocks: (B:14:0x00a6, B:16:0x00ac, B:18:0x00b9, B:20:0x00c6, B:22:0x00cc, B:23:0x00db, B:25:0x00ea, B:27:0x00fb, B:29:0x011c, B:35:0x012a, B:39:0x0149, B:43:0x0160, B:45:0x0178, B:47:0x0180, B:48:0x0185, B:50:0x019d, B:51:0x01b1, B:53:0x01b8, B:55:0x01c4, B:57:0x01cb, B:59:0x01d6, B:61:0x01fb, B:62:0x01fd, B:26:0x00f6), top: B:365:0x00a6 }] */
+    /* JADX WARN: Removed duplicated region for block: B:53:0x01b8 A[Catch: all -> 0x04d9, Exception -> 0x04de, TryCatch #10 {Exception -> 0x04de, blocks: (B:14:0x00a6, B:16:0x00ac, B:18:0x00b9, B:20:0x00c6, B:22:0x00cc, B:23:0x00db, B:25:0x00ea, B:27:0x00fb, B:29:0x011c, B:35:0x012a, B:39:0x0149, B:43:0x0160, B:45:0x0178, B:47:0x0180, B:48:0x0185, B:50:0x019d, B:51:0x01b1, B:53:0x01b8, B:55:0x01c4, B:57:0x01cb, B:59:0x01d6, B:61:0x01fb, B:62:0x01fd, B:26:0x00f6), top: B:365:0x00a6 }] */
+    /* JADX WARN: Removed duplicated region for block: B:54:0x01c2  */
+    /* JADX WARN: Removed duplicated region for block: B:57:0x01cb A[Catch: all -> 0x04d9, Exception -> 0x04de, TryCatch #10 {Exception -> 0x04de, blocks: (B:14:0x00a6, B:16:0x00ac, B:18:0x00b9, B:20:0x00c6, B:22:0x00cc, B:23:0x00db, B:25:0x00ea, B:27:0x00fb, B:29:0x011c, B:35:0x012a, B:39:0x0149, B:43:0x0160, B:45:0x0178, B:47:0x0180, B:48:0x0185, B:50:0x019d, B:51:0x01b1, B:53:0x01b8, B:55:0x01c4, B:57:0x01cb, B:59:0x01d6, B:61:0x01fb, B:62:0x01fd, B:26:0x00f6), top: B:365:0x00a6 }] */
+    /* JADX WARN: Removed duplicated region for block: B:96:0x0270  */
+    /* JADX WARN: Type inference failed for: r5v31, types: [org.telegram.tgnet.TLRPC$TL_dialog] */
+    /* JADX WARN: Type inference failed for: r5v32, types: [java.lang.Object, org.telegram.tgnet.TLRPC$Dialog] */
+    /* JADX WARN: Type inference failed for: r5v33, types: [org.telegram.tgnet.TLRPC$TL_dialogFolder] */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public /* synthetic */ void lambda$getDialogs$181(int r25, int r26, int r27, long[] r28) {
+    public /* synthetic */ void lambda$getDialogs$190(int r33, int r34, int r35, long[] r36) {
         /*
-            Method dump skipped, instructions count: 1115
+            Method dump skipped, instructions count: 1675
             To view this dump add '--comments-level debug' option
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getDialogs$181(int, int, int, long[]):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getDialogs$190(int, int, int, long[]):void");
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$getDialogs$180(LongSparseArray longSparseArray) {
+    public /* synthetic */ void lambda$getDialogs$189(LongSparseArray longSparseArray) {
         MediaDataController mediaDataController = getMediaDataController();
         mediaDataController.clearDraftsFolderIds();
         if (longSparseArray != null) {
@@ -10001,79 +10720,85 @@ public class MessagesStorage extends BaseController {
         }
     }
 
-    /* JADX WARN: Code restructure failed: missing block: B:33:0x00d9, code lost:
-        if (r4 != false) goto L302;
+    /* JADX WARN: Code restructure failed: missing block: B:39:0x00f5, code lost:
+        if (r4 != false) goto L406;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:34:0x00db, code lost:
-        r5 = r20;
-        r8 = r21;
+    /* JADX WARN: Code restructure failed: missing block: B:40:0x00f7, code lost:
+        r5 = r14;
+        r14 = r15;
+        r19 = r17;
+        r3 = r21;
+        r4 = r22;
+        r21 = r7;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:71:0x016c, code lost:
-        if (r4 < 0) goto L302;
+    /* JADX WARN: Code restructure failed: missing block: B:77:0x01aa, code lost:
+        if (r4 < 0) goto L406;
      */
     /* JADX WARN: Multi-variable type inference failed */
-    /* JADX WARN: Removed duplicated region for block: B:104:0x0209 A[Catch: all -> 0x01ec, Exception -> 0x01f2, TRY_ENTER, TRY_LEAVE, TryCatch #63 {Exception -> 0x01f2, all -> 0x01ec, blocks: (B:91:0x01e5, B:104:0x0209, B:122:0x023b, B:128:0x025c, B:132:0x0263, B:131:0x0261), top: B:420:0x01e5 }] */
-    /* JADX WARN: Removed duplicated region for block: B:106:0x020c  */
-    /* JADX WARN: Removed duplicated region for block: B:110:0x0216  */
-    /* JADX WARN: Removed duplicated region for block: B:112:0x021a  */
-    /* JADX WARN: Removed duplicated region for block: B:118:0x0228  */
-    /* JADX WARN: Removed duplicated region for block: B:119:0x022a  */
-    /* JADX WARN: Removed duplicated region for block: B:122:0x023b A[Catch: all -> 0x01ec, Exception -> 0x01f2, TRY_ENTER, TRY_LEAVE, TryCatch #63 {Exception -> 0x01f2, all -> 0x01ec, blocks: (B:91:0x01e5, B:104:0x0209, B:122:0x023b, B:128:0x025c, B:132:0x0263, B:131:0x0261), top: B:420:0x01e5 }] */
-    /* JADX WARN: Removed duplicated region for block: B:124:0x0252  */
-    /* JADX WARN: Removed duplicated region for block: B:128:0x025c A[Catch: all -> 0x01ec, Exception -> 0x01f2, TRY_ENTER, TryCatch #63 {Exception -> 0x01f2, all -> 0x01ec, blocks: (B:91:0x01e5, B:104:0x0209, B:122:0x023b, B:128:0x025c, B:132:0x0263, B:131:0x0261), top: B:420:0x01e5 }] */
-    /* JADX WARN: Removed duplicated region for block: B:134:0x0269  */
-    /* JADX WARN: Removed duplicated region for block: B:145:0x02b6  */
-    /* JADX WARN: Removed duplicated region for block: B:147:0x02bd A[Catch: all -> 0x013a, Exception -> 0x013c, TRY_LEAVE, TryCatch #56 {Exception -> 0x013c, all -> 0x013a, blocks: (B:31:0x00c2, B:140:0x0290, B:147:0x02bd, B:150:0x02c7, B:153:0x02cd, B:154:0x02d5, B:49:0x0106, B:65:0x0141), top: B:434:0x00c2 }] */
-    /* JADX WARN: Removed duplicated region for block: B:160:0x0308  */
-    /* JADX WARN: Removed duplicated region for block: B:174:0x0353  */
-    /* JADX WARN: Removed duplicated region for block: B:176:0x0356 A[Catch: all -> 0x0393, Exception -> 0x039d, TRY_ENTER, TRY_LEAVE, TryCatch #39 {Exception -> 0x039d, all -> 0x0393, blocks: (B:158:0x0302, B:176:0x0356), top: B:468:0x0302 }] */
-    /* JADX WARN: Removed duplicated region for block: B:179:0x037a A[Catch: all -> 0x038f, Exception -> 0x0391, TRY_LEAVE, TryCatch #47 {Exception -> 0x0391, all -> 0x038f, blocks: (B:178:0x036b, B:179:0x037a), top: B:452:0x036b }] */
-    /* JADX WARN: Removed duplicated region for block: B:356:0x0645  */
-    /* JADX WARN: Removed duplicated region for block: B:358:0x064a  */
-    /* JADX WARN: Removed duplicated region for block: B:360:0x064f  */
-    /* JADX WARN: Removed duplicated region for block: B:362:0x0654  */
-    /* JADX WARN: Removed duplicated region for block: B:364:0x0659  */
-    /* JADX WARN: Removed duplicated region for block: B:366:0x065e  */
-    /* JADX WARN: Removed duplicated region for block: B:368:0x0663  */
-    /* JADX WARN: Removed duplicated region for block: B:370:0x0668  */
-    /* JADX WARN: Removed duplicated region for block: B:372:0x066d  */
-    /* JADX WARN: Removed duplicated region for block: B:374:0x0672  */
-    /* JADX WARN: Removed duplicated region for block: B:382:0x0681  */
-    /* JADX WARN: Removed duplicated region for block: B:384:0x0686  */
-    /* JADX WARN: Removed duplicated region for block: B:386:0x068b  */
-    /* JADX WARN: Removed duplicated region for block: B:388:0x0690  */
-    /* JADX WARN: Removed duplicated region for block: B:390:0x0695  */
-    /* JADX WARN: Removed duplicated region for block: B:392:0x069a  */
-    /* JADX WARN: Removed duplicated region for block: B:394:0x069f  */
-    /* JADX WARN: Removed duplicated region for block: B:396:0x06a4  */
-    /* JADX WARN: Removed duplicated region for block: B:398:0x06a9  */
-    /* JADX WARN: Removed duplicated region for block: B:400:0x06ae  */
-    /* JADX WARN: Removed duplicated region for block: B:402:0x06b3  */
-    /* JADX WARN: Removed duplicated region for block: B:418:0x0283 A[EXC_TOP_SPLITTER, SYNTHETIC] */
-    /* JADX WARN: Removed duplicated region for block: B:482:? A[RETURN, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:119:0x026b A[Catch: all -> 0x0244, Exception -> 0x024f, TRY_ENTER, TRY_LEAVE, TryCatch #67 {Exception -> 0x024f, all -> 0x0244, blocks: (B:106:0x023d, B:119:0x026b, B:137:0x029d, B:143:0x02be, B:147:0x02c5, B:154:0x02e2, B:146:0x02c3), top: B:536:0x023d }] */
+    /* JADX WARN: Removed duplicated region for block: B:121:0x026e  */
+    /* JADX WARN: Removed duplicated region for block: B:125:0x0278  */
+    /* JADX WARN: Removed duplicated region for block: B:127:0x027c  */
+    /* JADX WARN: Removed duplicated region for block: B:133:0x028a  */
+    /* JADX WARN: Removed duplicated region for block: B:134:0x028c  */
+    /* JADX WARN: Removed duplicated region for block: B:137:0x029d A[Catch: all -> 0x0244, Exception -> 0x024f, TRY_ENTER, TRY_LEAVE, TryCatch #67 {Exception -> 0x024f, all -> 0x0244, blocks: (B:106:0x023d, B:119:0x026b, B:137:0x029d, B:143:0x02be, B:147:0x02c5, B:154:0x02e2, B:146:0x02c3), top: B:536:0x023d }] */
+    /* JADX WARN: Removed duplicated region for block: B:139:0x02b4  */
+    /* JADX WARN: Removed duplicated region for block: B:143:0x02be A[Catch: all -> 0x0244, Exception -> 0x024f, TRY_ENTER, TryCatch #67 {Exception -> 0x024f, all -> 0x0244, blocks: (B:106:0x023d, B:119:0x026b, B:137:0x029d, B:143:0x02be, B:147:0x02c5, B:154:0x02e2, B:146:0x02c3), top: B:536:0x023d }] */
+    /* JADX WARN: Removed duplicated region for block: B:149:0x02cb  */
+    /* JADX WARN: Removed duplicated region for block: B:154:0x02e2 A[Catch: all -> 0x0244, Exception -> 0x024f, TRY_ENTER, TRY_LEAVE, TryCatch #67 {Exception -> 0x024f, all -> 0x0244, blocks: (B:106:0x023d, B:119:0x026b, B:137:0x029d, B:143:0x02be, B:147:0x02c5, B:154:0x02e2, B:146:0x02c3), top: B:536:0x023d }] */
+    /* JADX WARN: Removed duplicated region for block: B:156:0x02ec  */
+    /* JADX WARN: Removed duplicated region for block: B:185:0x036f  */
+    /* JADX WARN: Removed duplicated region for block: B:187:0x037a A[Catch: all -> 0x037e, Exception -> 0x0380, TRY_LEAVE, TryCatch #60 {Exception -> 0x0380, all -> 0x037e, blocks: (B:166:0x030f, B:187:0x037a, B:195:0x0389, B:198:0x038f, B:199:0x0397), top: B:550:0x030f }] */
+    /* JADX WARN: Removed duplicated region for block: B:205:0x03ca  */
+    /* JADX WARN: Removed duplicated region for block: B:219:0x041f  */
+    /* JADX WARN: Removed duplicated region for block: B:235:0x047d  */
+    /* JADX WARN: Removed duplicated region for block: B:440:0x084f  */
+    /* JADX WARN: Removed duplicated region for block: B:442:0x0854  */
+    /* JADX WARN: Removed duplicated region for block: B:444:0x0859  */
+    /* JADX WARN: Removed duplicated region for block: B:446:0x085e  */
+    /* JADX WARN: Removed duplicated region for block: B:448:0x0863  */
+    /* JADX WARN: Removed duplicated region for block: B:450:0x0868  */
+    /* JADX WARN: Removed duplicated region for block: B:452:0x086d  */
+    /* JADX WARN: Removed duplicated region for block: B:454:0x0872  */
+    /* JADX WARN: Removed duplicated region for block: B:456:0x0877  */
+    /* JADX WARN: Removed duplicated region for block: B:458:0x087c  */
+    /* JADX WARN: Removed duplicated region for block: B:466:0x088b  */
+    /* JADX WARN: Removed duplicated region for block: B:468:0x0890  */
+    /* JADX WARN: Removed duplicated region for block: B:470:0x0895  */
+    /* JADX WARN: Removed duplicated region for block: B:472:0x089a  */
+    /* JADX WARN: Removed duplicated region for block: B:474:0x089f  */
+    /* JADX WARN: Removed duplicated region for block: B:476:0x08a4  */
+    /* JADX WARN: Removed duplicated region for block: B:478:0x08a9  */
+    /* JADX WARN: Removed duplicated region for block: B:480:0x08ae  */
+    /* JADX WARN: Removed duplicated region for block: B:482:0x08b3  */
+    /* JADX WARN: Removed duplicated region for block: B:484:0x08b8  */
+    /* JADX WARN: Removed duplicated region for block: B:486:0x08bd  */
+    /* JADX WARN: Removed duplicated region for block: B:504:0x0422 A[EXC_TOP_SPLITTER, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:524:0x02fa A[EXC_TOP_SPLITTER, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:589:? A[RETURN, SYNTHETIC] */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    private void putDialogsInternal(org.telegram.tgnet.TLRPC$messages_Dialogs r25, int r26) {
+    private void putDialogsInternal(org.telegram.tgnet.TLRPC$messages_Dialogs r30, int r31) {
         /*
-            Method dump skipped, instructions count: 1721
+            Method dump skipped, instructions count: 2243
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.putDialogsInternal(org.telegram.tgnet.TLRPC$messages_Dialogs, int):void");
     }
 
     public void getDialogFolderId(final long j, final IntCallback intCallback) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda103
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda109
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$getDialogFolderId$183(j, intCallback);
+                MessagesStorage.this.lambda$getDialogFolderId$192(j, intCallback);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$getDialogFolderId$183(long j, final IntCallback intCallback) {
+    public /* synthetic */ void lambda$getDialogFolderId$192(long j, final IntCallback intCallback) {
         SQLiteCursor sQLiteCursor = null;
         try {
             try {
@@ -10085,7 +10810,7 @@ public class MessagesStorage extends BaseController {
                     }
                     sQLiteCursor.dispose();
                 }
-                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda3
+                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda2
                     @Override // java.lang.Runnable
                     public final void run() {
                         MessagesStorage.IntCallback.this.run(i);
@@ -10113,16 +10838,16 @@ public class MessagesStorage extends BaseController {
         if (arrayList == null && arrayList2 == null && j == 0) {
             return;
         }
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda145
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda153
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$setDialogsFolderId$184(arrayList, arrayList2, i, j);
+                MessagesStorage.this.lambda$setDialogsFolderId$193(arrayList, arrayList2, i, j);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$setDialogsFolderId$184(ArrayList arrayList, ArrayList arrayList2, int i, long j) {
+    public /* synthetic */ void lambda$setDialogsFolderId$193(ArrayList arrayList, ArrayList arrayList2, int i, long j) {
         SQLitePreparedStatement executeFast;
         SQLitePreparedStatement sQLitePreparedStatement = null;
         try {
@@ -10169,7 +10894,7 @@ public class MessagesStorage extends BaseController {
             }
             executeFast.dispose();
             this.database.commitTransaction();
-            lambda$checkIfFolderEmpty$186(1);
+            lambda$checkIfFolderEmpty$195(1);
             resetAllUnreadCounters(false);
             SQLiteDatabase sQLiteDatabase = this.database;
             if (sQLiteDatabase == null) {
@@ -10204,7 +10929,7 @@ public class MessagesStorage extends BaseController {
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: checkIfFolderEmptyInternal */
-    public void lambda$checkIfFolderEmpty$186(final int i) {
+    public void lambda$checkIfFolderEmpty$195(final int i) {
         SQLiteCursor sQLiteCursor = null;
         try {
             try {
@@ -10221,10 +10946,10 @@ public class MessagesStorage extends BaseController {
                 }
                 sQLiteCursor.dispose();
                 if (z) {
-                    AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda28
+                    AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda27
                         @Override // java.lang.Runnable
                         public final void run() {
-                            MessagesStorage.this.lambda$checkIfFolderEmptyInternal$185(i);
+                            MessagesStorage.this.lambda$checkIfFolderEmptyInternal$194(i);
                         }
                     });
                     SQLiteDatabase sQLiteDatabase = this.database;
@@ -10246,24 +10971,24 @@ public class MessagesStorage extends BaseController {
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$checkIfFolderEmptyInternal$185(int i) {
+    public /* synthetic */ void lambda$checkIfFolderEmptyInternal$194(int i) {
         getMessagesController().onFolderEmpty(i);
     }
 
     public void checkIfFolderEmpty(final int i) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda29
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda30
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$checkIfFolderEmpty$186(i);
+                MessagesStorage.this.lambda$checkIfFolderEmpty$195(i);
             }
         });
     }
 
     public void unpinAllDialogsExceptNew(final ArrayList<Long> arrayList, final int i) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda140
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda148
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$unpinAllDialogsExceptNew$187(arrayList, i);
+                MessagesStorage.this.lambda$unpinAllDialogsExceptNew$196(arrayList, i);
             }
         });
     }
@@ -10275,7 +11000,7 @@ public class MessagesStorage extends BaseController {
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public /* synthetic */ void lambda$unpinAllDialogsExceptNew$187(java.util.ArrayList r10, int r11) {
+    public /* synthetic */ void lambda$unpinAllDialogsExceptNew$196(java.util.ArrayList r10, int r11) {
         /*
             r9 = this;
             r0 = 0
@@ -10377,14 +11102,14 @@ public class MessagesStorage extends BaseController {
         Lac:
             goto Lab
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$unpinAllDialogsExceptNew$187(java.util.ArrayList, int):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$unpinAllDialogsExceptNew$196(java.util.ArrayList, int):void");
     }
 
     public void setDialogUnread(final long j, final boolean z) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda111
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda119
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$setDialogUnread$188(j, z);
+                MessagesStorage.this.lambda$setDialogUnread$197(j, z);
             }
         });
     }
@@ -10400,7 +11125,7 @@ public class MessagesStorage extends BaseController {
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public /* synthetic */ void lambda$setDialogUnread$188(long r6, boolean r8) {
+    public /* synthetic */ void lambda$setDialogUnread$197(long r6, boolean r8) {
         /*
             r5 = this;
             r0 = 0
@@ -10484,7 +11209,7 @@ public class MessagesStorage extends BaseController {
         L76:
             throw r6
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$setDialogUnread$188(long, boolean):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$setDialogUnread$197(long, boolean):void");
     }
 
     private void resetAllUnreadCounters(boolean z) {
@@ -10500,16 +11225,16 @@ public class MessagesStorage extends BaseController {
             }
         }
         calcUnreadCounters(false);
-        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda20
+        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda21
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$resetAllUnreadCounters$189();
+                MessagesStorage.this.lambda$resetAllUnreadCounters$198();
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$resetAllUnreadCounters$189() {
+    public /* synthetic */ void lambda$resetAllUnreadCounters$198() {
         ArrayList<MessagesController.DialogFilter> arrayList = getMessagesController().dialogFilters;
         int size = arrayList.size();
         for (int i = 0; i < size; i++) {
@@ -10521,16 +11246,16 @@ public class MessagesStorage extends BaseController {
     }
 
     public void setDialogPinned(final long j, final int i) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda38
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda41
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$setDialogPinned$190(i, j);
+                MessagesStorage.this.lambda$setDialogPinned$199(i, j);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$setDialogPinned$190(int i, long j) {
+    public /* synthetic */ void lambda$setDialogPinned$199(int i, long j) {
         SQLitePreparedStatement sQLitePreparedStatement = null;
         try {
             try {
@@ -10555,16 +11280,16 @@ public class MessagesStorage extends BaseController {
     }
 
     public void setDialogsPinned(final ArrayList<Long> arrayList, final ArrayList<Integer> arrayList2) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda144
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda152
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$setDialogsPinned$191(arrayList, arrayList2);
+                MessagesStorage.this.lambda$setDialogsPinned$200(arrayList, arrayList2);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$setDialogsPinned$191(ArrayList arrayList, ArrayList arrayList2) {
+    public /* synthetic */ void lambda$setDialogsPinned$200(ArrayList arrayList, ArrayList arrayList2) {
         SQLitePreparedStatement sQLitePreparedStatement = null;
         try {
             try {
@@ -10596,16 +11321,16 @@ public class MessagesStorage extends BaseController {
         if (tLRPC$messages_Dialogs.dialogs.isEmpty()) {
             return;
         }
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda179
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda188
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$putDialogs$192(tLRPC$messages_Dialogs, i);
+                MessagesStorage.this.lambda$putDialogs$201(tLRPC$messages_Dialogs, i);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$putDialogs$192(TLRPC$messages_Dialogs tLRPC$messages_Dialogs, int i) {
+    public /* synthetic */ void lambda$putDialogs$201(TLRPC$messages_Dialogs tLRPC$messages_Dialogs, int i) {
         putDialogsInternal(tLRPC$messages_Dialogs, i);
         try {
             loadUnreadMessages();
@@ -10615,10 +11340,10 @@ public class MessagesStorage extends BaseController {
     }
 
     public void getDialogMaxMessageId(final long j, final IntCallback intCallback) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda102
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda110
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$getDialogMaxMessageId$194(j, intCallback);
+                MessagesStorage.this.lambda$getDialogMaxMessageId$203(j, intCallback);
             }
         });
     }
@@ -10631,7 +11356,7 @@ public class MessagesStorage extends BaseController {
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public /* synthetic */ void lambda$getDialogMaxMessageId$194(long r6, final org.telegram.messenger.MessagesStorage.IntCallback r8) {
+    public /* synthetic */ void lambda$getDialogMaxMessageId$203(long r6, final org.telegram.messenger.MessagesStorage.IntCallback r8) {
         /*
             r5 = this;
             r0 = 1
@@ -10662,7 +11387,7 @@ public class MessagesStorage extends BaseController {
         L33:
             r1.dispose()
         L36:
-            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda4 r6 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda4
+            org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda5 r6 = new org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda5
             r6.<init>()
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r6)
             return
@@ -10672,21 +11397,21 @@ public class MessagesStorage extends BaseController {
         L44:
             throw r6
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getDialogMaxMessageId$194(long, org.telegram.messenger.MessagesStorage$IntCallback):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getDialogMaxMessageId$203(long, org.telegram.messenger.MessagesStorage$IntCallback):void");
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public static /* synthetic */ void lambda$getDialogMaxMessageId$193(IntCallback intCallback, int[] iArr) {
+    public static /* synthetic */ void lambda$getDialogMaxMessageId$202(IntCallback intCallback, int[] iArr) {
         intCallback.run(iArr[0]);
     }
 
     public int getDialogReadMax(final boolean z, final long j) {
         final CountDownLatch countDownLatch = new CountDownLatch(1);
         final Integer[] numArr = {0};
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda190
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda199
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$getDialogReadMax$195(z, j, numArr, countDownLatch);
+                MessagesStorage.this.lambda$getDialogReadMax$204(z, j, numArr, countDownLatch);
             }
         });
         try {
@@ -10705,7 +11430,7 @@ public class MessagesStorage extends BaseController {
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public /* synthetic */ void lambda$getDialogReadMax$195(boolean r5, long r6, java.lang.Integer[] r8, java.util.concurrent.CountDownLatch r9) {
+    public /* synthetic */ void lambda$getDialogReadMax$204(boolean r5, long r6, java.lang.Integer[] r8, java.util.concurrent.CountDownLatch r9) {
         /*
             r4 = this;
             r0 = 0
@@ -10767,16 +11492,16 @@ public class MessagesStorage extends BaseController {
         L7a:
             throw r5
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getDialogReadMax$195(boolean, long, java.lang.Integer[], java.util.concurrent.CountDownLatch):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getDialogReadMax$204(boolean, long, java.lang.Integer[], java.util.concurrent.CountDownLatch):void");
     }
 
     public int getChannelPtsSync(final long j) {
         final CountDownLatch countDownLatch = new CountDownLatch(1);
         final Integer[] numArr = {0};
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda114
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda122
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$getChannelPtsSync$196(j, numArr, countDownLatch);
+                MessagesStorage.this.lambda$getChannelPtsSync$205(j, numArr, countDownLatch);
             }
         });
         try {
@@ -10795,7 +11520,7 @@ public class MessagesStorage extends BaseController {
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public /* synthetic */ void lambda$getChannelPtsSync$196(long r5, java.lang.Integer[] r7, java.util.concurrent.CountDownLatch r8) {
+    public /* synthetic */ void lambda$getChannelPtsSync$205(long r5, java.lang.Integer[] r7, java.util.concurrent.CountDownLatch r8) {
         /*
             r4 = this;
             r0 = 0
@@ -10839,16 +11564,16 @@ public class MessagesStorage extends BaseController {
         L46:
             throw r5
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getChannelPtsSync$196(long, java.lang.Integer[], java.util.concurrent.CountDownLatch):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getChannelPtsSync$205(long, java.lang.Integer[], java.util.concurrent.CountDownLatch):void");
     }
 
     public TLRPC$User getUserSync(final long j) {
         final CountDownLatch countDownLatch = new CountDownLatch(1);
         final TLRPC$User[] tLRPC$UserArr = new TLRPC$User[1];
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda196
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda205
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$getUserSync$197(tLRPC$UserArr, j, countDownLatch);
+                MessagesStorage.this.lambda$getUserSync$206(tLRPC$UserArr, j, countDownLatch);
             }
         });
         try {
@@ -10860,7 +11585,7 @@ public class MessagesStorage extends BaseController {
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$getUserSync$197(TLRPC$User[] tLRPC$UserArr, long j, CountDownLatch countDownLatch) {
+    public /* synthetic */ void lambda$getUserSync$206(TLRPC$User[] tLRPC$UserArr, long j, CountDownLatch countDownLatch) {
         tLRPC$UserArr[0] = getUser(j);
         countDownLatch.countDown();
     }
@@ -10868,10 +11593,10 @@ public class MessagesStorage extends BaseController {
     public TLRPC$Chat getChatSync(final long j) {
         final CountDownLatch countDownLatch = new CountDownLatch(1);
         final TLRPC$Chat[] tLRPC$ChatArr = new TLRPC$Chat[1];
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda194
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda203
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$getChatSync$198(tLRPC$ChatArr, j, countDownLatch);
+                MessagesStorage.this.lambda$getChatSync$207(tLRPC$ChatArr, j, countDownLatch);
             }
         });
         try {
@@ -10883,7 +11608,7 @@ public class MessagesStorage extends BaseController {
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$getChatSync$198(TLRPC$Chat[] tLRPC$ChatArr, long j, CountDownLatch countDownLatch) {
+    public /* synthetic */ void lambda$getChatSync$207(TLRPC$Chat[] tLRPC$ChatArr, long j, CountDownLatch countDownLatch) {
         tLRPC$ChatArr[0] = getChat(j);
         countDownLatch.countDown();
     }
@@ -10966,7 +11691,7 @@ public class MessagesStorage extends BaseController {
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public static /* synthetic */ int lambda$localSearch$199(DialogsSearchAdapter.DialogSearchResult dialogSearchResult, DialogsSearchAdapter.DialogSearchResult dialogSearchResult2) {
+    public static /* synthetic */ int lambda$localSearch$208(DialogsSearchAdapter.DialogSearchResult dialogSearchResult, DialogsSearchAdapter.DialogSearchResult dialogSearchResult2) {
         int i = dialogSearchResult.date;
         int i2 = dialogSearchResult2.date;
         if (i < i2) {
@@ -11042,268 +11767,241 @@ public class MessagesStorage extends BaseController {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.getCachedMessagesInRange(long, int, int):java.util.ArrayList");
     }
 
-    public void updateUnreadReactionsCount(final long j, final int i) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda44
+    public void updateUnreadReactionsCount(long j, int i, int i2) {
+        updateUnreadReactionsCount(j, i, i2, false);
+    }
+
+    public void updateUnreadReactionsCount(final long j, final int i, final int i2, final boolean z) {
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda63
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesStorage.this.lambda$updateUnreadReactionsCount$200(i, j);
+                MessagesStorage.this.lambda$updateUnreadReactionsCount$209(i, z, j, i2);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateUnreadReactionsCount$200(int i, long j) {
-        SQLitePreparedStatement executeFast;
-        SQLitePreparedStatement sQLitePreparedStatement = null;
-        try {
-            try {
-                executeFast = this.database.executeFast("UPDATE dialogs SET unread_reactions = ? WHERE did = ?");
-            } catch (Throwable th) {
-                th = th;
-            }
-        } catch (SQLiteException e) {
-            e = e;
-        }
-        try {
-            executeFast.bindInteger(1, Math.max(i, 0));
-            executeFast.bindLong(2, j);
-            executeFast.step();
-            executeFast.dispose();
-            if (i != 0) {
-                return;
-            }
-            sQLitePreparedStatement = this.database.executeFast("UPDATE reaction_mentions SET state = 0 WHERE dialog_id = ?");
-            sQLitePreparedStatement.bindLong(1, j);
-            sQLitePreparedStatement.step();
-            sQLitePreparedStatement.dispose();
-        } catch (SQLiteException e2) {
-            e = e2;
-            sQLitePreparedStatement = executeFast;
-            e.printStackTrace();
-            if (sQLitePreparedStatement == null) {
-                return;
-            }
-            sQLitePreparedStatement.dispose();
-        } catch (Throwable th2) {
-            th = th2;
-            sQLitePreparedStatement = executeFast;
-            if (sQLitePreparedStatement != null) {
-                sQLitePreparedStatement.dispose();
-            }
-            throw th;
-        }
-    }
-
-    public void markMessageReactionsAsRead(final long j, final int i, boolean z) {
-        if (z) {
-            getStorageQueue().postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda69
-                @Override // java.lang.Runnable
-                public final void run() {
-                    MessagesStorage.this.lambda$markMessageReactionsAsRead$201(j, i);
-                }
-            });
-        } else {
-            lambda$markMessageReactionsAsRead$201(j, i);
-        }
-    }
-
-    /* renamed from: markMessageReactionsAsReadInternal */
-    public void lambda$markMessageReactionsAsRead$201(long j, int i) {
-        SQLiteCursor sQLiteCursor;
-        SQLiteCursor sQLiteCursor2;
-        TLRPC$Message tLRPC$Message;
-        NativeByteBuffer byteBufferValue;
-        SQLitePreparedStatement sQLitePreparedStatement = null;
-        try {
-            try {
-                SQLitePreparedStatement executeFast = getMessagesStorage().getDatabase().executeFast("UPDATE reaction_mentions SET state = 0 WHERE message_id = ? AND dialog_id = ?");
-                try {
-                    executeFast.bindInteger(1, i);
-                    executeFast.bindLong(2, j);
-                    executeFast.step();
-                    executeFast.dispose();
-                    sQLiteCursor2 = this.database.queryFinalized(String.format(Locale.US, "SELECT data FROM messages_v2 WHERE uid = %d AND mid = %d", Long.valueOf(j), Integer.valueOf(i)), new Object[0]);
-                    try {
-                        if (!sQLiteCursor2.next() || (byteBufferValue = sQLiteCursor2.byteBufferValue(0)) == null) {
-                            tLRPC$Message = null;
-                        } else {
-                            tLRPC$Message = TLRPC$Message.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false);
-                            tLRPC$Message.readAttachPath(byteBufferValue, getUserConfig().clientUserId);
-                            byteBufferValue.reuse();
-                            TLRPC$TL_messageReactions tLRPC$TL_messageReactions = tLRPC$Message.reactions;
-                            if (tLRPC$TL_messageReactions != null && tLRPC$TL_messageReactions.recent_reactions != null) {
-                                for (int i2 = 0; i2 < tLRPC$Message.reactions.recent_reactions.size(); i2++) {
-                                    tLRPC$Message.reactions.recent_reactions.get(i2).unread = false;
-                                }
-                            }
-                        }
-                        sQLiteCursor2.dispose();
-                        if (tLRPC$Message != null) {
-                            SQLitePreparedStatement executeFast2 = getMessagesStorage().getDatabase().executeFast(String.format(Locale.US, "UPDATE messages_v2 SET data = ? WHERE uid = %d AND mid = %d", Long.valueOf(j), Integer.valueOf(i)));
-                            try {
-                                try {
-                                    NativeByteBuffer nativeByteBuffer = new NativeByteBuffer(tLRPC$Message.getObjectSize());
-                                    tLRPC$Message.serializeToStream(nativeByteBuffer);
-                                    executeFast2.bindByteBuffer(1, nativeByteBuffer);
-                                    executeFast2.step();
-                                    executeFast2.dispose();
-                                    nativeByteBuffer.reuse();
-                                } catch (Exception e) {
-                                    try {
-                                        FileLog.e(e);
-                                    } catch (SQLiteException e2) {
-                                        sQLiteCursor2 = null;
-                                        sQLitePreparedStatement = executeFast2;
-                                        e = e2;
-                                        FileLog.e(e);
-                                        if (sQLitePreparedStatement != null) {
-                                            sQLitePreparedStatement.dispose();
-                                        }
-                                        if (sQLiteCursor2 == null) {
-                                            return;
-                                        }
-                                        sQLiteCursor2.dispose();
-                                        return;
-                                    }
-                                }
-                                sQLitePreparedStatement = executeFast2;
-                            } catch (Throwable th) {
-                                sQLiteCursor = null;
-                                sQLitePreparedStatement = executeFast2;
-                                th = th;
-                                if (sQLitePreparedStatement != null) {
-                                    sQLitePreparedStatement.dispose();
-                                }
-                                if (sQLiteCursor != null) {
-                                    sQLiteCursor.dispose();
-                                }
-                                throw th;
-                            }
-                        }
-                        if (sQLitePreparedStatement == null) {
-                            return;
-                        }
-                        sQLitePreparedStatement.dispose();
-                    } catch (SQLiteException e3) {
-                        e = e3;
-                    }
-                } catch (SQLiteException e4) {
-                    e = e4;
-                    sQLiteCursor2 = null;
-                    sQLitePreparedStatement = executeFast;
-                } catch (Throwable th2) {
-                    th = th2;
-                    sQLiteCursor = null;
-                    sQLitePreparedStatement = executeFast;
-                }
-            } catch (Throwable th3) {
-                th = th3;
-            }
-        } catch (SQLiteException e5) {
-            e = e5;
-            sQLiteCursor2 = null;
-        } catch (Throwable th4) {
-            th = th4;
-            sQLiteCursor = null;
-        }
-    }
-
-    public void updateDialogUnreadReactions(final long j, final int i, final boolean z) {
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda187
-            @Override // java.lang.Runnable
-            public final void run() {
-                MessagesStorage.this.lambda$updateDialogUnreadReactions$202(z, j, i);
-            }
-        });
-    }
-
-    /* JADX INFO: Access modifiers changed from: private */
-    /* JADX WARN: Removed duplicated region for block: B:27:0x0063  */
-    /* JADX WARN: Removed duplicated region for block: B:29:0x0068  */
-    /* JADX WARN: Removed duplicated region for block: B:33:0x006f  */
-    /* JADX WARN: Removed duplicated region for block: B:35:0x0074  */
-    /* JADX WARN: Removed duplicated region for block: B:44:? A[RETURN, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:26:0x0077  */
+    /* JADX WARN: Removed duplicated region for block: B:28:0x007d  */
+    /* JADX WARN: Removed duplicated region for block: B:62:? A[RETURN, SYNTHETIC] */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public /* synthetic */ void lambda$updateDialogUnreadReactions$202(boolean r6, long r7, int r9) {
+    public /* synthetic */ void lambda$updateUnreadReactionsCount$209(int r8, boolean r9, long r10, int r12) {
         /*
-            r5 = this;
+            r7 = this;
             r0 = 0
-            r1 = 0
-            if (r6 == 0) goto L31
-            org.telegram.SQLite.SQLiteDatabase r6 = r5.database     // Catch: java.lang.Throwable -> L59 org.telegram.SQLite.SQLiteException -> L5c
-            java.lang.StringBuilder r2 = new java.lang.StringBuilder     // Catch: java.lang.Throwable -> L59 org.telegram.SQLite.SQLiteException -> L5c
-            r2.<init>()     // Catch: java.lang.Throwable -> L59 org.telegram.SQLite.SQLiteException -> L5c
-            java.lang.String r3 = "SELECT unread_reactions FROM dialogs WHERE did = "
-            r2.append(r3)     // Catch: java.lang.Throwable -> L59 org.telegram.SQLite.SQLiteException -> L5c
-            r2.append(r7)     // Catch: java.lang.Throwable -> L59 org.telegram.SQLite.SQLiteException -> L5c
-            java.lang.String r2 = r2.toString()     // Catch: java.lang.Throwable -> L59 org.telegram.SQLite.SQLiteException -> L5c
-            java.lang.Object[] r3 = new java.lang.Object[r1]     // Catch: java.lang.Throwable -> L59 org.telegram.SQLite.SQLiteException -> L5c
-            org.telegram.SQLite.SQLiteCursor r6 = r6.queryFinalized(r2, r3)     // Catch: java.lang.Throwable -> L59 org.telegram.SQLite.SQLiteException -> L5c
-            boolean r2 = r6.next()     // Catch: org.telegram.SQLite.SQLiteException -> L2f java.lang.Throwable -> L6c
-            if (r2 == 0) goto L2b
-            int r2 = r6.intValue(r1)     // Catch: org.telegram.SQLite.SQLiteException -> L2f java.lang.Throwable -> L6c
-            int r1 = java.lang.Math.max(r1, r2)     // Catch: org.telegram.SQLite.SQLiteException -> L2f java.lang.Throwable -> L6c
-        L2b:
-            r6.dispose()     // Catch: org.telegram.SQLite.SQLiteException -> L2f java.lang.Throwable -> L6c
-            goto L31
+            r1 = 2
+            r2 = 1
+            r3 = 0
+            if (r8 == 0) goto L81
+            if (r9 == 0) goto L34
+            org.telegram.SQLite.SQLiteDatabase r9 = r7.database     // Catch: java.lang.Throwable -> L6f org.telegram.SQLite.SQLiteException -> L71
+            java.lang.String r4 = "SELECT unread_reactions FROM topics WHERE did = %d AND topic_id = %d"
+            java.lang.Object[] r5 = new java.lang.Object[r1]     // Catch: java.lang.Throwable -> L6f org.telegram.SQLite.SQLiteException -> L71
+            java.lang.Long r6 = java.lang.Long.valueOf(r10)     // Catch: java.lang.Throwable -> L6f org.telegram.SQLite.SQLiteException -> L71
+            r5[r3] = r6     // Catch: java.lang.Throwable -> L6f org.telegram.SQLite.SQLiteException -> L71
+            java.lang.Integer r6 = java.lang.Integer.valueOf(r8)     // Catch: java.lang.Throwable -> L6f org.telegram.SQLite.SQLiteException -> L71
+            r5[r2] = r6     // Catch: java.lang.Throwable -> L6f org.telegram.SQLite.SQLiteException -> L71
+            java.lang.String r4 = java.lang.String.format(r4, r5)     // Catch: java.lang.Throwable -> L6f org.telegram.SQLite.SQLiteException -> L71
+            java.lang.Object[] r5 = new java.lang.Object[r3]     // Catch: java.lang.Throwable -> L6f org.telegram.SQLite.SQLiteException -> L71
+            org.telegram.SQLite.SQLiteCursor r9 = r9.queryFinalized(r4, r5)     // Catch: java.lang.Throwable -> L6f org.telegram.SQLite.SQLiteException -> L71
+            boolean r4 = r9.next()     // Catch: java.lang.Throwable -> L6f org.telegram.SQLite.SQLiteException -> L71
+            if (r4 == 0) goto L2f
+            int r4 = r9.intValue(r3)     // Catch: java.lang.Throwable -> L6f org.telegram.SQLite.SQLiteException -> L71
+            goto L30
         L2f:
-            r7 = move-exception
-            goto L5e
-        L31:
-            int r1 = r1 + r9
-            org.telegram.messenger.MessagesStorage r6 = r5.getMessagesStorage()     // Catch: java.lang.Throwable -> L59 org.telegram.SQLite.SQLiteException -> L5c
-            org.telegram.SQLite.SQLiteDatabase r6 = r6.getDatabase()     // Catch: java.lang.Throwable -> L59 org.telegram.SQLite.SQLiteException -> L5c
-            java.lang.String r9 = "UPDATE dialogs SET unread_reactions = ? WHERE did = ?"
-            org.telegram.SQLite.SQLitePreparedStatement r6 = r6.executeFast(r9)     // Catch: java.lang.Throwable -> L59 org.telegram.SQLite.SQLiteException -> L5c
-            r9 = 1
-            r6.bindInteger(r9, r1)     // Catch: java.lang.Throwable -> L4f org.telegram.SQLite.SQLiteException -> L54
-            r9 = 2
-            r6.bindLong(r9, r7)     // Catch: java.lang.Throwable -> L4f org.telegram.SQLite.SQLiteException -> L54
-            r6.step()     // Catch: java.lang.Throwable -> L4f org.telegram.SQLite.SQLiteException -> L54
-            r6.dispose()     // Catch: java.lang.Throwable -> L4f org.telegram.SQLite.SQLiteException -> L54
-            goto L6b
-        L4f:
-            r7 = move-exception
-            r4 = r0
-            r0 = r6
-            r6 = r4
-            goto L6d
-        L54:
-            r7 = move-exception
-            r4 = r0
-            r0 = r6
-            r6 = r4
-            goto L5e
-        L59:
-            r7 = move-exception
-            r6 = r0
-            goto L6d
-        L5c:
-            r7 = move-exception
-            r6 = r0
-        L5e:
-            r7.printStackTrace()     // Catch: java.lang.Throwable -> L6c
-            if (r0 == 0) goto L66
-            r0.dispose()
-        L66:
-            if (r6 == 0) goto L6b
-            r6.dispose()
-        L6b:
-            return
+            r4 = 0
+        L30:
+            r9.dispose()     // Catch: java.lang.Throwable -> L6f org.telegram.SQLite.SQLiteException -> L71
+            goto L35
+        L34:
+            r4 = 0
+        L35:
+            org.telegram.SQLite.SQLiteDatabase r9 = r7.database     // Catch: java.lang.Throwable -> L6f org.telegram.SQLite.SQLiteException -> L71
+            java.lang.String r5 = "UPDATE topics SET unread_reactions = ? WHERE did = ? AND topic_id = ?"
+            org.telegram.SQLite.SQLitePreparedStatement r9 = r9.executeFast(r5)     // Catch: java.lang.Throwable -> L6f org.telegram.SQLite.SQLiteException -> L71
+            int r4 = r4 + r12
+            int r3 = java.lang.Math.max(r4, r3)     // Catch: java.lang.Throwable -> L69 org.telegram.SQLite.SQLiteException -> L6c
+            r9.bindInteger(r2, r3)     // Catch: java.lang.Throwable -> L69 org.telegram.SQLite.SQLiteException -> L6c
+            r9.bindLong(r1, r10)     // Catch: java.lang.Throwable -> L69 org.telegram.SQLite.SQLiteException -> L6c
+            r3 = 3
+            r9.bindInteger(r3, r8)     // Catch: java.lang.Throwable -> L69 org.telegram.SQLite.SQLiteException -> L6c
+            r9.step()     // Catch: java.lang.Throwable -> L69 org.telegram.SQLite.SQLiteException -> L6c
+            r9.dispose()     // Catch: java.lang.Throwable -> L69 org.telegram.SQLite.SQLiteException -> L6c
+            if (r12 != 0) goto Lc0
+            org.telegram.SQLite.SQLiteDatabase r9 = r7.database     // Catch: java.lang.Throwable -> L6f org.telegram.SQLite.SQLiteException -> L71
+            java.lang.String r12 = "UPDATE reaction_mentions_topics SET state = 0 WHERE dialog_id = ? AND topic_id = ? "
+            org.telegram.SQLite.SQLitePreparedStatement r0 = r9.executeFast(r12)     // Catch: java.lang.Throwable -> L6f org.telegram.SQLite.SQLiteException -> L71
+            r0.bindLong(r2, r10)     // Catch: java.lang.Throwable -> L6f org.telegram.SQLite.SQLiteException -> L71
+            r0.bindInteger(r1, r8)     // Catch: java.lang.Throwable -> L6f org.telegram.SQLite.SQLiteException -> L71
+            r0.step()     // Catch: java.lang.Throwable -> L6f org.telegram.SQLite.SQLiteException -> L71
+            r0.dispose()     // Catch: java.lang.Throwable -> L6f org.telegram.SQLite.SQLiteException -> L71
+            goto Lc0
+        L69:
+            r8 = move-exception
+            r0 = r9
+            goto L7b
         L6c:
-            r7 = move-exception
-        L6d:
-            if (r0 == 0) goto L72
-            r0.dispose()
+            r8 = move-exception
+            r0 = r9
+            goto L72
+        L6f:
+            r8 = move-exception
+            goto L7b
+        L71:
+            r8 = move-exception
         L72:
-            if (r6 == 0) goto L77
-            r6.dispose()
-        L77:
-            throw r7
+            r8.printStackTrace()     // Catch: java.lang.Throwable -> L6f
+            if (r0 == 0) goto Lc0
+            r0.dispose()
+            goto Lc0
+        L7b:
+            if (r0 == 0) goto L80
+            r0.dispose()
+        L80:
+            throw r8
+        L81:
+            org.telegram.SQLite.SQLiteDatabase r8 = r7.database     // Catch: java.lang.Throwable -> Lb5 org.telegram.SQLite.SQLiteException -> Lb7
+            java.lang.String r9 = "UPDATE dialogs SET unread_reactions = ? WHERE did = ?"
+            org.telegram.SQLite.SQLitePreparedStatement r8 = r8.executeFast(r9)     // Catch: java.lang.Throwable -> Lb5 org.telegram.SQLite.SQLiteException -> Lb7
+            int r9 = java.lang.Math.max(r12, r3)     // Catch: java.lang.Throwable -> Lad org.telegram.SQLite.SQLiteException -> Lb1
+            r8.bindInteger(r2, r9)     // Catch: java.lang.Throwable -> Lad org.telegram.SQLite.SQLiteException -> Lb1
+            r8.bindLong(r1, r10)     // Catch: java.lang.Throwable -> Lad org.telegram.SQLite.SQLiteException -> Lb1
+            r8.step()     // Catch: java.lang.Throwable -> Lad org.telegram.SQLite.SQLiteException -> Lb1
+            r8.dispose()     // Catch: java.lang.Throwable -> Lad org.telegram.SQLite.SQLiteException -> Lb1
+            if (r12 != 0) goto Lc0
+            org.telegram.SQLite.SQLiteDatabase r8 = r7.database     // Catch: java.lang.Throwable -> Lb5 org.telegram.SQLite.SQLiteException -> Lb7
+            java.lang.String r9 = "UPDATE reaction_mentions SET state = 0 WHERE dialog_id = ?"
+            org.telegram.SQLite.SQLitePreparedStatement r0 = r8.executeFast(r9)     // Catch: java.lang.Throwable -> Lb5 org.telegram.SQLite.SQLiteException -> Lb7
+            r0.bindLong(r2, r10)     // Catch: java.lang.Throwable -> Lb5 org.telegram.SQLite.SQLiteException -> Lb7
+            r0.step()     // Catch: java.lang.Throwable -> Lb5 org.telegram.SQLite.SQLiteException -> Lb7
+            r0.dispose()     // Catch: java.lang.Throwable -> Lb5 org.telegram.SQLite.SQLiteException -> Lb7
+            goto Lc0
+        Lad:
+            r9 = move-exception
+            r0 = r8
+            r8 = r9
+            goto Lc1
+        Lb1:
+            r9 = move-exception
+            r0 = r8
+            r8 = r9
+            goto Lb8
+        Lb5:
+            r8 = move-exception
+            goto Lc1
+        Lb7:
+            r8 = move-exception
+        Lb8:
+            r8.printStackTrace()     // Catch: java.lang.Throwable -> Lb5
+            if (r0 == 0) goto Lc0
+            r0.dispose()
+        Lc0:
+            return
+        Lc1:
+            if (r0 == 0) goto Lc6
+            r0.dispose()
+        Lc6:
+            throw r8
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$updateDialogUnreadReactions$202(boolean, long, int):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$updateUnreadReactionsCount$209(int, boolean, long, int):void");
+    }
+
+    public void markMessageReactionsAsRead(final long j, final int i, final int i2, boolean z) {
+        if (z) {
+            getStorageQueue().postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda72
+                @Override // java.lang.Runnable
+                public final void run() {
+                    MessagesStorage.this.lambda$markMessageReactionsAsRead$210(j, i, i2);
+                }
+            });
+        } else {
+            lambda$markMessageReactionsAsRead$210(j, i, i2);
+        }
+    }
+
+    /* JADX WARN: Removed duplicated region for block: B:56:0x0161  */
+    /* JADX WARN: Removed duplicated region for block: B:58:0x0166  */
+    /* JADX WARN: Removed duplicated region for block: B:61:0x016d  */
+    /* JADX WARN: Removed duplicated region for block: B:63:0x0172  */
+    /* JADX WARN: Removed duplicated region for block: B:83:? A[RETURN, SYNTHETIC] */
+    /* renamed from: markMessageReactionsAsReadInternal */
+    /*
+        Code decompiled incorrectly, please refer to instructions dump.
+        To view partially-correct add '--show-bad-code' argument
+    */
+    public void lambda$markMessageReactionsAsRead$210(long r18, int r20, int r21) {
+        /*
+            Method dump skipped, instructions count: 380
+            To view this dump add '--comments-level debug' option
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$markMessageReactionsAsRead$210(long, int, int):void");
+    }
+
+    public void updateDialogUnreadReactions(final long j, final int i, final int i2, final boolean z) {
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda196
+            @Override // java.lang.Runnable
+            public final void run() {
+                MessagesStorage.this.lambda$updateDialogUnreadReactions$211(z, j, i2, i);
+            }
+        });
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
+    /* JADX WARN: Removed duplicated region for block: B:50:0x00ca  */
+    /* JADX WARN: Removed duplicated region for block: B:52:0x00cf  */
+    /* JADX WARN: Removed duplicated region for block: B:56:0x00d6  */
+    /* JADX WARN: Removed duplicated region for block: B:58:0x00db  */
+    /* JADX WARN: Removed duplicated region for block: B:72:? A[RETURN, SYNTHETIC] */
+    /*
+        Code decompiled incorrectly, please refer to instructions dump.
+        To view partially-correct add '--show-bad-code' argument
+    */
+    public /* synthetic */ void lambda$updateDialogUnreadReactions$211(boolean r10, long r11, int r13, int r14) {
+        /*
+            Method dump skipped, instructions count: 223
+            To view this dump add '--comments-level debug' option
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$updateDialogUnreadReactions$211(boolean, long, int, int):void");
+    }
+
+    private boolean isForum(long j) {
+        int i = this.dialogIsForum.get(j, -1);
+        if (i == -1) {
+            TLRPC$Chat chat = getChat(-j);
+            i = (chat == null || !chat.forum) ? 0 : 1;
+            this.dialogIsForum.put(j, i);
+        }
+        return i == 1;
+    }
+
+    /* loaded from: classes.dex */
+    public static class TopicKey {
+        public long dialogId;
+        public int topicId;
+
+        public static TopicKey of(long j, int i) {
+            TopicKey topicKey = new TopicKey();
+            topicKey.dialogId = j;
+            topicKey.topicId = i;
+            return topicKey;
+        }
+
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null || getClass() != obj.getClass()) {
+                return false;
+            }
+            TopicKey topicKey = (TopicKey) obj;
+            return this.dialogId == topicKey.dialogId && this.topicId == topicKey.topicId;
+        }
+
+        public int hashCode() {
+            return Arrays.hashCode(new Object[]{Long.valueOf(this.dialogId), Integer.valueOf(this.topicId)});
+        }
     }
 }

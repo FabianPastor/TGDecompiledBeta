@@ -12,6 +12,8 @@ public class TLRPC$TL_sponsoredMessage extends TLObject {
     public TLRPC$Peer from_id;
     public String message;
     public byte[] random_id;
+    public boolean recommended;
+    public boolean show_peer_photo;
     public String start_param;
 
     public static TLRPC$TL_sponsoredMessage TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
@@ -28,7 +30,10 @@ public class TLRPC$TL_sponsoredMessage extends TLObject {
 
     @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
-        this.flags = abstractSerializedData.readInt32(z);
+        int readInt32 = abstractSerializedData.readInt32(z);
+        this.flags = readInt32;
+        this.recommended = (readInt32 & 32) != 0;
+        this.show_peer_photo = (readInt32 & 64) != 0;
         this.random_id = abstractSerializedData.readByteArray(z);
         if ((this.flags & 8) != 0) {
             this.from_id = TLRPC$Peer.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
@@ -47,15 +52,15 @@ public class TLRPC$TL_sponsoredMessage extends TLObject {
         }
         this.message = abstractSerializedData.readString(z);
         if ((this.flags & 2) != 0) {
-            int readInt32 = abstractSerializedData.readInt32(z);
-            if (readInt32 != NUM) {
+            int readInt322 = abstractSerializedData.readInt32(z);
+            if (readInt322 != NUM) {
                 if (z) {
-                    throw new RuntimeException(String.format("wrong Vector magic, got %x", Integer.valueOf(readInt32)));
+                    throw new RuntimeException(String.format("wrong Vector magic, got %x", Integer.valueOf(readInt322)));
                 }
                 return;
             }
-            int readInt322 = abstractSerializedData.readInt32(z);
-            for (int i = 0; i < readInt322; i++) {
+            int readInt323 = abstractSerializedData.readInt32(z);
+            for (int i = 0; i < readInt323; i++) {
                 TLRPC$MessageEntity TLdeserialize = TLRPC$MessageEntity.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
                 if (TLdeserialize == null) {
                     return;
@@ -68,7 +73,11 @@ public class TLRPC$TL_sponsoredMessage extends TLObject {
     @Override // org.telegram.tgnet.TLObject
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
-        abstractSerializedData.writeInt32(this.flags);
+        int i = this.recommended ? this.flags | 32 : this.flags & (-33);
+        this.flags = i;
+        int i2 = this.show_peer_photo ? i | 64 : i & (-65);
+        this.flags = i2;
+        abstractSerializedData.writeInt32(i2);
         abstractSerializedData.writeByteArray(this.random_id);
         if ((this.flags & 8) != 0) {
             this.from_id.serializeToStream(abstractSerializedData);
@@ -90,8 +99,8 @@ public class TLRPC$TL_sponsoredMessage extends TLObject {
             abstractSerializedData.writeInt32(NUM);
             int size = this.entities.size();
             abstractSerializedData.writeInt32(size);
-            for (int i = 0; i < size; i++) {
-                this.entities.get(i).serializeToStream(abstractSerializedData);
+            for (int i3 = 0; i3 < size; i3++) {
+                this.entities.get(i3).serializeToStream(abstractSerializedData);
             }
         }
     }

@@ -598,6 +598,7 @@ public class ThemeEditorView {
             FrameLayout frameLayout = new FrameLayout(context, ThemeEditorView.this) { // from class: org.telegram.ui.Components.ThemeEditorView.EditorAlert.1
                 private boolean ignoreLayout = false;
                 private RectF rect1 = new RectF();
+                private Boolean statusBarOpen;
 
                 @Override // android.view.ViewGroup
                 public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
@@ -652,9 +653,9 @@ public class ThemeEditorView {
                     super.requestLayout();
                 }
 
-                /* JADX WARN: Removed duplicated region for block: B:17:0x00b4  */
+                /* JADX WARN: Removed duplicated region for block: B:17:0x00b3  */
                 /* JADX WARN: Removed duplicated region for block: B:20:0x0154  */
-                /* JADX WARN: Removed duplicated region for block: B:22:? A[RETURN, SYNTHETIC] */
+                /* JADX WARN: Removed duplicated region for block: B:23:0x0185  */
                 @Override // android.view.View
                 /*
                     Code decompiled incorrectly, please refer to instructions dump.
@@ -662,10 +663,27 @@ public class ThemeEditorView {
                 */
                 protected void onDraw(android.graphics.Canvas r14) {
                     /*
-                        Method dump skipped, instructions count: 411
+                        Method dump skipped, instructions count: 394
                         To view this dump add '--comments-level debug' option
                     */
                     throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ThemeEditorView.EditorAlert.AnonymousClass1.onDraw(android.graphics.Canvas):void");
+                }
+
+                private void updateLightStatusBar(boolean z) {
+                    Boolean bool = this.statusBarOpen;
+                    if (bool == null || bool.booleanValue() != z) {
+                        boolean z2 = true;
+                        boolean z3 = AndroidUtilities.computePerceivedBrightness(EditorAlert.this.getThemedColor("dialogBackground")) > 0.721f;
+                        if (AndroidUtilities.computePerceivedBrightness(Theme.blendOver(EditorAlert.this.getThemedColor("actionBarDefault"), NUM)) <= 0.721f) {
+                            z2 = false;
+                        }
+                        Boolean valueOf = Boolean.valueOf(z);
+                        this.statusBarOpen = valueOf;
+                        if (!valueOf.booleanValue()) {
+                            z3 = z2;
+                        }
+                        AndroidUtilities.setLightStatusBar(EditorAlert.this.getWindow(), z3);
+                    }
                 }
             };
             this.containerView = frameLayout;
@@ -1265,7 +1283,7 @@ public class ThemeEditorView {
 
             @Override // androidx.recyclerview.widget.RecyclerView.Adapter
             /* renamed from: onCreateViewHolder */
-            public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
+            public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
                 View textColorThemeCell;
                 if (i == 0) {
                     textColorThemeCell = new TextColorThemeCell(this.context);
@@ -1347,7 +1365,7 @@ public class ThemeEditorView {
 
             @Override // androidx.recyclerview.widget.RecyclerView.Adapter
             /* renamed from: onCreateViewHolder */
-            public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
+            public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
                 View textColorThemeCell;
                 if (i == 0) {
                     textColorThemeCell = new TextColorThemeCell(this.context);
@@ -1447,11 +1465,11 @@ public class ThemeEditorView {
             super(context);
         }
 
-        /* JADX WARN: Code restructure failed: missing block: B:31:0x0088, code lost:
-            if (r6.fragmentsStack.isEmpty() != false) goto L72;
+        /* JADX WARN: Code restructure failed: missing block: B:31:0x008c, code lost:
+            if (r6.getFragmentStack().isEmpty() != false) goto L72;
          */
-        /* JADX WARN: Removed duplicated region for block: B:34:0x008d  */
-        /* JADX WARN: Removed duplicated region for block: B:36:0x0093  */
+        /* JADX WARN: Removed duplicated region for block: B:34:0x0091  */
+        /* JADX WARN: Removed duplicated region for block: B:36:0x0097  */
         @Override // android.view.View
         /*
             Code decompiled incorrectly, please refer to instructions dump.
@@ -1459,7 +1477,7 @@ public class ThemeEditorView {
         */
         public boolean onTouchEvent(android.view.MotionEvent r11) {
             /*
-                Method dump skipped, instructions count: 557
+                Method dump skipped, instructions count: 569
                 To view this dump add '--comments-level debug' option
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ThemeEditorView.AnonymousClass1.onTouchEvent(android.view.MotionEvent):boolean");

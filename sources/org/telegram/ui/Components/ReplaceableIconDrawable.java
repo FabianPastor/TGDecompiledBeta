@@ -6,7 +6,9 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.drawable.Drawable;
+import android.view.View;
 import androidx.core.content.ContextCompat;
+import java.util.ArrayList;
 /* loaded from: classes3.dex */
 public class ReplaceableIconDrawable extends Drawable implements Animator.AnimatorListener {
     private ValueAnimator animation;
@@ -16,6 +18,7 @@ public class ReplaceableIconDrawable extends Drawable implements Animator.Animat
     private Drawable outDrawable;
     private int currentResId = 0;
     private float progress = 1.0f;
+    ArrayList<View> parentViews = new ArrayList<>();
 
     @Override // android.graphics.drawable.Drawable
     public int getOpacity() {
@@ -192,5 +195,19 @@ public class ReplaceableIconDrawable extends Drawable implements Animator.Animat
     public void onAnimationEnd(Animator animator) {
         this.outDrawable = null;
         invalidateSelf();
+    }
+
+    public void addView(View view) {
+        this.parentViews.add(view);
+    }
+
+    @Override // android.graphics.drawable.Drawable
+    public void invalidateSelf() {
+        super.invalidateSelf();
+        if (this.parentViews != null) {
+            for (int i = 0; i < this.parentViews.size(); i++) {
+                this.parentViews.get(i).invalidate();
+            }
+        }
     }
 }

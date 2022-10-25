@@ -14,55 +14,58 @@ import androidx.core.graphics.ColorUtils;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.R;
-import org.telegram.ui.ActionBar.ActionBarLayout;
 import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.ActionBar.INavigationLayout;
 import org.telegram.ui.ActionBar.Theme;
 /* loaded from: classes3.dex */
-public class OverlayActionBarLayoutDialog extends Dialog implements ActionBarLayout.ActionBarLayoutDelegate {
-    private ActionBarLayout actionBarLayout;
+public class OverlayActionBarLayoutDialog extends Dialog implements INavigationLayout.INavigationLayoutDelegate {
+    private INavigationLayout actionBarLayout;
     private FrameLayout frameLayout;
     private Theme.ResourcesProvider resourcesProvider;
 
-    @Override // org.telegram.ui.ActionBar.ActionBarLayout.ActionBarLayoutDelegate
-    public boolean needAddFragmentToStack(BaseFragment baseFragment, ActionBarLayout actionBarLayout) {
+    @Override // org.telegram.ui.ActionBar.INavigationLayout.INavigationLayoutDelegate
+    public boolean needAddFragmentToStack(BaseFragment baseFragment, INavigationLayout iNavigationLayout) {
         return true;
     }
 
-    @Override // org.telegram.ui.ActionBar.ActionBarLayout.ActionBarLayoutDelegate
-    public boolean needPresentFragment(BaseFragment baseFragment, boolean z, boolean z2, ActionBarLayout actionBarLayout) {
+    @Override // org.telegram.ui.ActionBar.INavigationLayout.INavigationLayoutDelegate
+    public boolean needPresentFragment(BaseFragment baseFragment, boolean z, boolean z2, INavigationLayout iNavigationLayout) {
         return true;
     }
 
-    @Override // org.telegram.ui.ActionBar.ActionBarLayout.ActionBarLayoutDelegate
+    @Override // org.telegram.ui.ActionBar.INavigationLayout.INavigationLayoutDelegate
+    public /* synthetic */ boolean needPresentFragment(INavigationLayout iNavigationLayout, INavigationLayout.NavigationParams navigationParams) {
+        boolean needPresentFragment;
+        needPresentFragment = needPresentFragment(navigationParams.fragment, navigationParams.removeLast, navigationParams.noAnimation, iNavigationLayout);
+        return needPresentFragment;
+    }
+
+    @Override // org.telegram.ui.ActionBar.INavigationLayout.INavigationLayoutDelegate
     public boolean onPreIme() {
         return false;
     }
 
-    @Override // org.telegram.ui.ActionBar.ActionBarLayout.ActionBarLayoutDelegate
-    public void onRebuildAllFragments(ActionBarLayout actionBarLayout, boolean z) {
+    @Override // org.telegram.ui.ActionBar.INavigationLayout.INavigationLayoutDelegate
+    public void onRebuildAllFragments(INavigationLayout iNavigationLayout, boolean z) {
+    }
+
+    @Override // org.telegram.ui.ActionBar.INavigationLayout.INavigationLayoutDelegate
+    public /* synthetic */ void onThemeProgress(float f) {
+        INavigationLayout.INavigationLayoutDelegate.CC.$default$onThemeProgress(this, f);
     }
 
     public OverlayActionBarLayoutDialog(Context context, Theme.ResourcesProvider resourcesProvider) {
         super(context, R.style.TransparentDialog);
         this.resourcesProvider = resourcesProvider;
-        ActionBarLayout actionBarLayout = new ActionBarLayout(this, context) { // from class: org.telegram.ui.Components.OverlayActionBarLayoutDialog.1
-            @Override // android.widget.FrameLayout, android.view.View
-            protected void onMeasure(int i, int i2) {
-                if (AndroidUtilities.isTablet() && !AndroidUtilities.isInMultiwindow && !AndroidUtilities.isSmallTablet()) {
-                    super.onMeasure(View.MeasureSpec.makeMeasureSpec(Math.min(AndroidUtilities.dp(530.0f), View.MeasureSpec.getSize(i)), NUM), View.MeasureSpec.makeMeasureSpec(Math.min(AndroidUtilities.dp(528.0f), View.MeasureSpec.getSize(i2)), NUM));
-                } else {
-                    super.onMeasure(i, i2);
-                }
-            }
-        };
-        this.actionBarLayout = actionBarLayout;
-        actionBarLayout.init(new ArrayList<>());
-        this.actionBarLayout.presentFragment(new EmptyFragment(), false, true, false, false);
+        INavigationLayout newLayout = INavigationLayout.CC.newLayout(context);
+        this.actionBarLayout = newLayout;
+        newLayout.setFragmentStack(new ArrayList());
+        this.actionBarLayout.presentFragment(new INavigationLayout.NavigationParams(new EmptyFragment()).setNoAnimation(true));
         this.actionBarLayout.setDelegate(this);
         FrameLayout frameLayout = new FrameLayout(context);
         this.frameLayout = frameLayout;
         frameLayout.setLayoutParams(new ViewGroup.LayoutParams(-1, -1));
-        this.frameLayout.addView(this.actionBarLayout, new FrameLayout.LayoutParams(-1, -1, 17));
+        this.frameLayout.addView(this.actionBarLayout.getView(), new FrameLayout.LayoutParams(-1, -1, 17));
         if (AndroidUtilities.isTablet() && !AndroidUtilities.isInMultiwindow && !AndroidUtilities.isSmallTablet()) {
             this.frameLayout.setBackgroundColor(-NUM);
             this.frameLayout.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.Components.OverlayActionBarLayoutDialog$$ExternalSyntheticLambda1
@@ -72,7 +75,7 @@ public class OverlayActionBarLayoutDialog extends Dialog implements ActionBarLay
                 }
             });
             this.actionBarLayout.setRemoveActionBarExtraHeight(true);
-            VerticalPositionAutoAnimator.attach(this.actionBarLayout);
+            VerticalPositionAutoAnimator.attach(this.actionBarLayout.getView());
         }
         setContentView(this.frameLayout);
     }
@@ -80,6 +83,15 @@ public class OverlayActionBarLayoutDialog extends Dialog implements ActionBarLay
     /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$new$0(View view) {
         onBackPressed();
+    }
+
+    @Override // org.telegram.ui.ActionBar.INavigationLayout.INavigationLayoutDelegate
+    public void onMeasureOverride(int[] iArr) {
+        if (!AndroidUtilities.isTablet() || AndroidUtilities.isInMultiwindow || AndroidUtilities.isSmallTablet()) {
+            return;
+        }
+        iArr[0] = View.MeasureSpec.makeMeasureSpec(Math.min(AndroidUtilities.dp(530.0f), View.MeasureSpec.getSize(iArr[0])), NUM);
+        iArr[1] = View.MeasureSpec.makeMeasureSpec(Math.min(AndroidUtilities.dp(528.0f), View.MeasureSpec.getSize(iArr[1])), NUM);
     }
 
     @Override // android.app.Dialog
@@ -133,14 +145,14 @@ public class OverlayActionBarLayoutDialog extends Dialog implements ActionBarLay
     @Override // android.app.Dialog
     public void onBackPressed() {
         this.actionBarLayout.onBackPressed();
-        if (this.actionBarLayout.fragmentsStack.size() <= 1) {
+        if (this.actionBarLayout.getFragmentStack().size() <= 1) {
             dismiss();
         }
     }
 
-    @Override // org.telegram.ui.ActionBar.ActionBarLayout.ActionBarLayoutDelegate
-    public boolean needCloseLastFragment(ActionBarLayout actionBarLayout) {
-        if (actionBarLayout.fragmentsStack.size() <= 1) {
+    @Override // org.telegram.ui.ActionBar.INavigationLayout.INavigationLayoutDelegate
+    public boolean needCloseLastFragment(INavigationLayout iNavigationLayout) {
+        if (iNavigationLayout.getFragmentStack().size() <= 1) {
             dismiss();
         }
         return true;

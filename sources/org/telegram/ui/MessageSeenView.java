@@ -39,6 +39,7 @@ import org.telegram.tgnet.TLRPC$TL_messages_getFullChat;
 import org.telegram.tgnet.TLRPC$TL_messages_getMessageReadParticipants;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.tgnet.TLRPC$Vector;
+import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.AvatarsImageView;
@@ -56,7 +57,7 @@ public class MessageSeenView extends FrameLayout {
     boolean ignoreLayout;
     boolean isVoice;
     ArrayList<Long> peerIds;
-    TextView titleView;
+    SimpleTextView titleView;
     public ArrayList<TLRPC$User> users;
 
     public MessageSeenView(Context context, final int i, MessageObject messageObject, final TLRPC$Chat tLRPC$Chat) {
@@ -71,17 +72,12 @@ public class MessageSeenView extends FrameLayout {
         this.flickerLoadingView.setViewType(13);
         this.flickerLoadingView.setIsSingleCell(false);
         addView(this.flickerLoadingView, LayoutHelper.createFrame(-2, -1.0f));
-        TextView textView = new TextView(this, context) { // from class: org.telegram.ui.MessageSeenView.1
-            @Override // android.widget.TextView
-            public void setText(CharSequence charSequence, TextView.BufferType bufferType) {
-                super.setText(charSequence, bufferType);
-            }
-        };
-        this.titleView = textView;
-        textView.setTextSize(1, 16.0f);
-        this.titleView.setLines(1);
-        this.titleView.setEllipsize(TextUtils.TruncateAt.END);
-        addView(this.titleView, LayoutHelper.createFrame(-2, -2.0f, 19, 40.0f, 0.0f, 62.0f, 0.0f));
+        SimpleTextView simpleTextView = new SimpleTextView(context);
+        this.titleView = simpleTextView;
+        simpleTextView.setTextSize(16);
+        this.titleView.setEllipsizeByGradient(true);
+        this.titleView.setRightPadding(AndroidUtilities.dp(62.0f));
+        addView(this.titleView, LayoutHelper.createFrame(0, -2.0f, 19, 40.0f, 0.0f, 0.0f, 0.0f));
         AvatarsImageView avatarsImageView = new AvatarsImageView(context, false);
         this.avatarsImageView = avatarsImageView;
         avatarsImageView.setStyle(11);
@@ -243,16 +239,23 @@ public class MessageSeenView extends FrameLayout {
         if (view != null && view.getWidth() > 0) {
             i = View.MeasureSpec.makeMeasureSpec(view.getWidth(), NUM);
         }
-        if (this.flickerLoadingView.getVisibility() == 0) {
-            this.ignoreLayout = true;
+        boolean z = true;
+        this.ignoreLayout = true;
+        if (this.flickerLoadingView.getVisibility() != 0) {
+            z = false;
+        }
+        this.titleView.setVisibility(8);
+        if (z) {
             this.flickerLoadingView.setVisibility(8);
-            super.onMeasure(i, i2);
+        }
+        super.onMeasure(i, i2);
+        if (z) {
             this.flickerLoadingView.getLayoutParams().width = getMeasuredWidth();
             this.flickerLoadingView.setVisibility(0);
-            this.ignoreLayout = false;
-            super.onMeasure(i, i2);
-            return;
         }
+        this.titleView.setVisibility(0);
+        this.titleView.getLayoutParams().width = getMeasuredWidth() - AndroidUtilities.dp(40.0f);
+        this.ignoreLayout = false;
         super.onMeasure(i, i2);
     }
 
@@ -272,12 +275,7 @@ public class MessageSeenView extends FrameLayout {
         } else {
             this.avatarsImageView.setTranslationX(0.0f);
         }
-        int dp = AndroidUtilities.dp(this.users.size() == 0 ? 8.0f : 62.0f);
-        ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) this.titleView.getLayoutParams();
-        if (marginLayoutParams.rightMargin != dp) {
-            marginLayoutParams.rightMargin = dp;
-            this.titleView.setLayoutParams(marginLayoutParams);
-        }
+        this.titleView.setRightPadding(AndroidUtilities.dp((Math.min(2, this.users.size() - 1) * 12) + 32 + 6));
         this.avatarsImageView.commitTransition(false);
         if (this.peerIds.size() == 1 && this.users.get(0) != null) {
             this.titleView.setText(ContactsController.formatName(this.users.get(0).first_name, this.users.get(0).last_name));
@@ -292,7 +290,7 @@ public class MessageSeenView extends FrameLayout {
     }
 
     public RecyclerListView createListView() {
-        RecyclerListView recyclerListView = new RecyclerListView(this, getContext()) { // from class: org.telegram.ui.MessageSeenView.2
+        RecyclerListView recyclerListView = new RecyclerListView(this, getContext()) { // from class: org.telegram.ui.MessageSeenView.1
             /* JADX INFO: Access modifiers changed from: protected */
             @Override // org.telegram.ui.Components.RecyclerListView, androidx.recyclerview.widget.RecyclerView, android.view.View
             public void onMeasure(int i, int i2) {
@@ -305,7 +303,7 @@ public class MessageSeenView extends FrameLayout {
             }
         };
         recyclerListView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerListView.addItemDecoration(new RecyclerView.ItemDecoration() { // from class: org.telegram.ui.MessageSeenView.3
+        recyclerListView.addItemDecoration(new RecyclerView.ItemDecoration() { // from class: org.telegram.ui.MessageSeenView.2
             @Override // androidx.recyclerview.widget.RecyclerView.ItemDecoration
             public void getItemOffsets(Rect rect, View view, RecyclerView recyclerView, RecyclerView.State state) {
                 int childAdapterPosition = recyclerView.getChildAdapterPosition(view);
@@ -317,7 +315,7 @@ public class MessageSeenView extends FrameLayout {
                 }
             }
         });
-        recyclerListView.setAdapter(new RecyclerListView.SelectionAdapter() { // from class: org.telegram.ui.MessageSeenView.4
+        recyclerListView.setAdapter(new RecyclerListView.SelectionAdapter() { // from class: org.telegram.ui.MessageSeenView.3
             @Override // org.telegram.ui.Components.RecyclerListView.SelectionAdapter
             public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
                 return true;
@@ -325,7 +323,7 @@ public class MessageSeenView extends FrameLayout {
 
             @Override // androidx.recyclerview.widget.RecyclerView.Adapter
             /* renamed from: onCreateViewHolder */
-            public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
+            public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
                 UserCell userCell = new UserCell(viewGroup.getContext());
                 userCell.setLayoutParams(new RecyclerView.LayoutParams(-1, -2));
                 return new RecyclerListView.Holder(userCell);

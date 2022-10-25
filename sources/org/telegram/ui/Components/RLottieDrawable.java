@@ -2107,13 +2107,15 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable, Bitma
 
     @Override // org.telegram.messenger.utils.BitmapsCache.Cacheable
     public void prepareForGenerateCache() {
-        String file = this.args.file.toString();
+        File file;
+        String file2 = this.args.file.toString();
         NativePtrArgs nativePtrArgs = this.args;
-        long create = create(file, nativePtrArgs.json, this.width, this.height, new int[3], false, nativePtrArgs.colorReplacement, false, nativePtrArgs.fitzModifier);
+        long create = create(file2, nativePtrArgs.json, this.width, this.height, new int[3], false, nativePtrArgs.colorReplacement, false, nativePtrArgs.fitzModifier);
         this.generateCacheNativePtr = create;
-        if (create == 0) {
-            this.file.delete();
+        if (create != 0 || (file = this.file) == null) {
+            return;
         }
+        file.delete();
     }
 
     @Override // org.telegram.messenger.utils.BitmapsCache.Cacheable

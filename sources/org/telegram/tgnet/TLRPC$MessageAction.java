@@ -249,6 +249,9 @@ public abstract class TLRPC$MessageAction extends TLObject {
                     }
                 };
                 break;
+            case -1316338916:
+                tLRPC$MessageAction = new TLRPC$TL_messageActionTopicEdit();
+                break;
             case -1297179892:
                 tLRPC$MessageAction = new TLRPC$TL_messageActionChatDeleteUser() { // from class: org.telegram.tgnet.TLRPC$TL_messageActionChatDeleteUser_layer131
                     public static int constructor = -NUM;
@@ -359,6 +362,9 @@ public abstract class TLRPC$MessageAction extends TLObject {
                 break;
             case 51520707:
                 tLRPC$MessageAction = new TLRPC$TL_messageActionChatJoinedByLink();
+                break;
+            case 228168278:
+                tLRPC$MessageAction = new TLRPC$TL_messageActionTopicCreate();
                 break;
             case 365886720:
                 tLRPC$MessageAction = new TLRPC$TL_messageActionChatAddUser();

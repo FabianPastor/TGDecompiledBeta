@@ -9,7 +9,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.SystemClock;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -466,7 +465,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
     /* JADX WARN: Type inference failed for: r1v9 */
     @Override // androidx.recyclerview.widget.RecyclerView.Adapter
     /* renamed from: onCreateViewHolder */
-    public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
         ?? dialogCell;
         View shadowSectionCell;
         switch (i) {
@@ -658,7 +657,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
                         int i4 = tLRPC$Chat.participants_count;
                         if (i4 != 0) {
                             str = LocaleController.formatPluralStringComma("Subscribers", i4);
-                        } else if (TextUtils.isEmpty(tLRPC$Chat.username)) {
+                        } else if (!ChatObject.isPublic(tLRPC$Chat)) {
                             str = LocaleController.getString("ChannelPrivate", R.string.ChannelPrivate).toLowerCase();
                         } else {
                             str = LocaleController.getString("ChannelPublic", R.string.ChannelPublic).toLowerCase();
@@ -669,7 +668,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
                             str = LocaleController.formatPluralStringComma("Members", i5);
                         } else if (tLRPC$Chat.has_geo) {
                             str = LocaleController.getString("MegaLocation", R.string.MegaLocation);
-                        } else if (TextUtils.isEmpty(tLRPC$Chat.username)) {
+                        } else if (!ChatObject.isPublic(tLRPC$Chat)) {
                             str = LocaleController.getString("MegaPrivate", R.string.MegaPrivate).toLowerCase();
                         } else {
                             str = LocaleController.getString("MegaPublic", R.string.MegaPublic).toLowerCase();

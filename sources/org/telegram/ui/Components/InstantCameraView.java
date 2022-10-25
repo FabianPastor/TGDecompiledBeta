@@ -1105,6 +1105,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
 
     /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$createCamera$3() {
+        CameraGLThread cameraGLThread;
         CameraSession cameraSession = this.cameraSession;
         if (cameraSession != null) {
             boolean z = false;
@@ -1131,10 +1132,10 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 FileLog.d("camera initied");
             }
             this.cameraSession.setInitied();
-            if (!z) {
+            if (!z || (cameraGLThread = this.cameraThread) == null) {
                 return;
             }
-            this.cameraThread.reinitForNewCamera();
+            cameraGLThread.reinitForNewCamera();
         }
     }
 

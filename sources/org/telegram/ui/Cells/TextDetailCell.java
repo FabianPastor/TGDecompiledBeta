@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
+import android.text.style.ClickableSpan;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityNodeInfo;
@@ -14,20 +16,26 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.LinkSpanDrawable;
 /* loaded from: classes3.dex */
 public class TextDetailCell extends FrameLayout {
     private boolean contentDescriptionValueFirst;
     private final ImageView imageView;
+    private boolean multiline;
     private boolean needDivider;
     private Theme.ResourcesProvider resourcesProvider;
     private final TextView textView;
-    private final TextView valueTextView;
+    private final LinkSpanDrawable.LinksTextView valueTextView;
 
     public TextDetailCell(Context context) {
         this(context, null);
     }
 
     public TextDetailCell(Context context, Theme.ResourcesProvider resourcesProvider) {
+        this(context, resourcesProvider, false);
+    }
+
+    public TextDetailCell(Context context, Theme.ResourcesProvider resourcesProvider, boolean z) {
         super(context);
         this.resourcesProvider = resourcesProvider;
         TextView textView = new TextView(context);
@@ -41,16 +49,27 @@ public class TextDetailCell extends FrameLayout {
         textView.setEllipsize(TextUtils.TruncateAt.END);
         textView.setImportantForAccessibility(2);
         addView(textView, LayoutHelper.createFrame(-2, -2.0f, LocaleController.isRTL ? 5 : 3, 23.0f, 8.0f, 23.0f, 0.0f));
-        TextView textView2 = new TextView(context);
-        this.valueTextView = textView2;
-        textView2.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2", resourcesProvider));
-        textView2.setTextSize(1, 13.0f);
-        textView2.setLines(1);
-        textView2.setMaxLines(1);
-        textView2.setSingleLine(true);
-        textView2.setGravity(LocaleController.isRTL ? 5 : 3);
-        textView2.setImportantForAccessibility(2);
-        addView(textView2, LayoutHelper.createFrame(-2, -2.0f, LocaleController.isRTL ? 5 : 3, 23.0f, 33.0f, 23.0f, 0.0f));
+        LinkSpanDrawable.LinksTextView linksTextView = new LinkSpanDrawable.LinksTextView(context);
+        this.valueTextView = linksTextView;
+        linksTextView.setOnLinkLongPressListener(new LinkSpanDrawable.LinksTextView.OnLinkPress() { // from class: org.telegram.ui.Cells.TextDetailCell$$ExternalSyntheticLambda0
+            @Override // org.telegram.ui.Components.LinkSpanDrawable.LinksTextView.OnLinkPress
+            public final void run(ClickableSpan clickableSpan) {
+                TextDetailCell.this.lambda$new$0(clickableSpan);
+            }
+        });
+        this.multiline = z;
+        if (z) {
+            setMinimumHeight(AndroidUtilities.dp(60.0f));
+        } else {
+            linksTextView.setLines(1);
+            linksTextView.setSingleLine(true);
+        }
+        linksTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2", resourcesProvider));
+        linksTextView.setTextSize(1, 13.0f);
+        linksTextView.setGravity(LocaleController.isRTL ? 5 : 3);
+        linksTextView.setImportantForAccessibility(2);
+        linksTextView.setEllipsize(TextUtils.TruncateAt.END);
+        addView(linksTextView, LayoutHelper.createFrame(-1, -2.0f, LocaleController.isRTL ? 5 : 3, 23.0f, 33.0f, 23.0f, 10.0f));
         ImageView imageView = new ImageView(context);
         this.imageView = imageView;
         imageView.setImportantForAccessibility(2);
@@ -58,14 +77,42 @@ public class TextDetailCell extends FrameLayout {
         addView(imageView, LayoutHelper.createFrameRelatively(48.0f, 48.0f, 8388629, 0.0f, 0.0f, 12.0f, 0.0f));
     }
 
-    @Override // android.widget.FrameLayout, android.view.View
-    protected void onMeasure(int i, int i2) {
-        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(60.0f) + (this.needDivider ? 1 : 0), NUM));
+    /* JADX INFO: Access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$0(ClickableSpan clickableSpan) {
+        if (clickableSpan != null) {
+            try {
+                performHapticFeedback(0, 1);
+            } catch (Exception unused) {
+            }
+            clickableSpan.onClick(this.valueTextView);
+        }
     }
 
-    public void setTextAndValue(String str, String str2, boolean z) {
-        this.textView.setText(str);
-        this.valueTextView.setText(str2);
+    @Override // android.view.ViewGroup
+    public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
+        return !(this.valueTextView.hit(((int) motionEvent.getX()) - this.valueTextView.getLeft(), ((int) motionEvent.getY()) - this.valueTextView.getTop()) != null);
+    }
+
+    @Override // android.view.View
+    public boolean onTouchEvent(MotionEvent motionEvent) {
+        if (this.valueTextView.hit(((int) motionEvent.getX()) - this.valueTextView.getLeft(), ((int) motionEvent.getY()) - this.valueTextView.getTop()) != null) {
+            return true;
+        }
+        return super.onTouchEvent(motionEvent);
+    }
+
+    @Override // android.widget.FrameLayout, android.view.View
+    protected void onMeasure(int i, int i2) {
+        int makeMeasureSpec = View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM);
+        if (!this.multiline) {
+            i2 = View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(60.0f) + (this.needDivider ? 1 : 0), NUM);
+        }
+        super.onMeasure(makeMeasureSpec, i2);
+    }
+
+    public void setTextAndValue(CharSequence charSequence, CharSequence charSequence2, boolean z) {
+        this.textView.setText(charSequence);
+        this.valueTextView.setText(charSequence2);
         this.needDivider = z;
         setWillNotDraw(!z);
     }
@@ -75,6 +122,7 @@ public class TextDetailCell extends FrameLayout {
     }
 
     public void setImage(Drawable drawable, CharSequence charSequence) {
+        ((ViewGroup.MarginLayoutParams) this.valueTextView.getLayoutParams()).rightMargin = (LocaleController.isRTL || drawable == null) ? AndroidUtilities.dp(23.0f) : AndroidUtilities.dp(58.0f);
         this.imageView.setImageDrawable(drawable);
         int i = 0;
         this.imageView.setFocusable(drawable != null);

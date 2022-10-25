@@ -667,7 +667,7 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder  reason: collision with other method in class */
-        public RecyclerListView.Holder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerListView.Holder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
             MemberRequestCell memberRequestCell;
             if (i == 1) {
                 View view = new View(viewGroup.getContext());
@@ -1163,7 +1163,7 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
             Canvas canvas = new Canvas(createBitmap);
             canvas.scale(0.16666667f, 0.16666667f);
             canvas.save();
-            ((LaunchActivity) MemberRequestsDelegate.this.fragment.getParentActivity()).getActionBarLayout().draw(canvas);
+            ((LaunchActivity) MemberRequestsDelegate.this.fragment.getParentActivity()).getActionBarLayout().getView().draw(canvas);
             canvas.drawColor(ColorUtils.setAlphaComponent(-16777216, 76));
             Dialog visibleDialog = MemberRequestsDelegate.this.fragment.getVisibleDialog();
             if (visibleDialog != null) {

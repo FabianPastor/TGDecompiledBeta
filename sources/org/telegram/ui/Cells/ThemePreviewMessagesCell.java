@@ -35,8 +35,8 @@ import org.telegram.tgnet.TLRPC$TL_messageMediaEmpty;
 import org.telegram.tgnet.TLRPC$TL_messageReplyHeader;
 import org.telegram.tgnet.TLRPC$TL_peerUser;
 import org.telegram.tgnet.TLRPC$User;
-import org.telegram.ui.ActionBar.ActionBarLayout;
 import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.ActionBar.INavigationLayout;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.ChatMessageCell;
 import org.telegram.ui.Cells.TextSelectionHelper;
@@ -56,7 +56,7 @@ public class ThemePreviewMessagesCell extends LinearLayout {
     public BaseFragment fragment;
     private Drawable oldBackgroundDrawable;
     private BackgroundGradientDrawable.Disposable oldBackgroundGradientDisposable;
-    private ActionBarLayout parentLayout;
+    private INavigationLayout parentLayout;
     private Drawable shadowDrawable;
     private final int type;
 
@@ -65,7 +65,7 @@ public class ThemePreviewMessagesCell extends LinearLayout {
     }
 
     @SuppressLint({"ClickableViewAccessibility"})
-    public ThemePreviewMessagesCell(Context context, ActionBarLayout actionBarLayout, int i) {
+    public ThemePreviewMessagesCell(Context context, INavigationLayout iNavigationLayout, int i) {
         super(context);
         int i2;
         MessageObject messageObject;
@@ -79,7 +79,7 @@ public class ThemePreviewMessagesCell extends LinearLayout {
         this.cells = new ChatMessageCell[2];
         this.type = i;
         int i3 = UserConfig.selectedAccount;
-        this.parentLayout = actionBarLayout;
+        this.parentLayout = iNavigationLayout;
         setWillNotDraw(false);
         setOrientation(1);
         setPadding(0, AndroidUtilities.dp(11.0f), 0, AndroidUtilities.dp(11.0f));
@@ -490,8 +490,8 @@ public class ThemePreviewMessagesCell extends LinearLayout {
                     }
 
                     @Override // org.telegram.ui.Cells.ChatMessageCell.ChatMessageCellDelegate
-                    public /* synthetic */ boolean needPlayMessage(MessageObject messageObject7) {
-                        return ChatMessageCell.ChatMessageCellDelegate.CC.$default$needPlayMessage(this, messageObject7);
+                    public /* synthetic */ boolean needPlayMessage(MessageObject messageObject7, boolean z) {
+                        return ChatMessageCell.ChatMessageCellDelegate.CC.$default$needPlayMessage(this, messageObject7, z);
                     }
 
                     @Override // org.telegram.ui.Cells.ChatMessageCell.ChatMessageCellDelegate
@@ -500,8 +500,8 @@ public class ThemePreviewMessagesCell extends LinearLayout {
                     }
 
                     @Override // org.telegram.ui.Cells.ChatMessageCell.ChatMessageCellDelegate
-                    public /* synthetic */ void needShowPremiumFeatures(String str) {
-                        ChatMessageCell.ChatMessageCellDelegate.CC.$default$needShowPremiumFeatures(this, str);
+                    public /* synthetic */ void needShowPremiumBulletin(int i6) {
+                        ChatMessageCell.ChatMessageCellDelegate.CC.$default$needShowPremiumBulletin(this, i6);
                     }
 
                     @Override // org.telegram.ui.Cells.ChatMessageCell.ChatMessageCellDelegate

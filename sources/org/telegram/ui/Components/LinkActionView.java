@@ -312,7 +312,7 @@ public class LinkActionView extends LinearLayout {
             actionBarPopupWindowLayout.addView((View) actionBarMenuSubItem3, LayoutHelper.createLinear(-1, 48));
         }
         if (bottomSheet == null) {
-            container = baseFragment.getParentLayout();
+            container = (FrameLayout) baseFragment.getParentLayout().getView();
         } else {
             container = bottomSheet.getContainer();
         }

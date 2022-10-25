@@ -37,6 +37,7 @@ public class UserConfig extends BaseController {
     public boolean contactsReimported;
     public int contactsSavedCount;
     private TLRPC$User currentUser;
+    public String defaultTopicIcons;
     public boolean draftsLoaded;
     public boolean filtersLoaded;
     public String genericAnimationsStickerPack;
@@ -47,6 +48,7 @@ public class UserConfig extends BaseController {
     public int lastHintsSyncTime;
     public int lastMyLocationShareTime;
     public int lastSendMessageId;
+    public long lastUpdatedDefaultTopicIcons;
     public long lastUpdatedGenericAnimations;
     public long lastUpdatedPremiumGiftsStickerPack;
     public int loginTime;
@@ -352,7 +354,7 @@ public class UserConfig extends BaseController {
         }
     }
 
-    private SharedPreferences getPreferences() {
+    public SharedPreferences getPreferences() {
         if (this.currentAccount == 0) {
             return ApplicationLoader.applicationContext.getSharedPreferences("userconfing", 0);
         }

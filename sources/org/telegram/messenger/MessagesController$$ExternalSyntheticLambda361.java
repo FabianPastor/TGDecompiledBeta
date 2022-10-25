@@ -12,6 +12,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda36
 
     @Override // org.telegram.tgnet.RequestDelegate
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        MessagesController.lambda$markMentionsAsRead$202(tLObject, tLRPC$TL_error);
+        MessagesController.lambda$reportSpam$55(tLObject, tLRPC$TL_error);
     }
 }

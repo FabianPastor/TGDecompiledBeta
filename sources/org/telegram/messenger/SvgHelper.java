@@ -16,6 +16,7 @@ import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.util.SparseArray;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -111,6 +112,7 @@ public class SvgHelper {
         private Matrix[] placeholderMatrix = new Matrix[2];
         private int[] currentColor = new int[2];
         private float crossfadeAlpha = 1.0f;
+        SparseArray<Paint> overridePaintByPosition = new SparseArray<>();
         private boolean aspectFill = true;
 
         @Override // android.graphics.drawable.Drawable
@@ -147,7 +149,6 @@ public class SvgHelper {
         }
 
         public void drawInternal(Canvas canvas, boolean z, long j, float f, float f2, float f3, float f4) {
-            Paint paint;
             int i;
             String str = this.currentColorKey;
             if (str != null) {
@@ -236,16 +237,18 @@ public class SvgHelper {
                 Object obj = this.commands.get(i2);
                 if (obj instanceof Matrix) {
                     canvas.save();
+                    canvas.concat((Matrix) obj);
                 } else if (obj == null) {
                     canvas.restore();
                 } else {
+                    Paint paint = this.overridePaintByPosition.get(i2);
+                    if (paint == null) {
+                        paint = this.overridePaint;
+                    }
                     if (z != 0) {
                         paint = this.backgroundPaint;
-                    } else {
-                        paint = this.overridePaint;
-                        if (paint == null) {
-                            paint = this.paints.get(obj);
-                        }
+                    } else if (paint == null) {
+                        paint = this.paints.get(obj);
                     }
                     int alpha = paint.getAlpha();
                     paint.setAlpha((int) (this.crossfadeAlpha * alpha));
@@ -360,6 +363,15 @@ public class SvgHelper {
 
         public void setPaint(Paint paint) {
             this.overridePaint = paint;
+        }
+
+        public void setPaint(Paint paint, int i) {
+            this.overridePaintByPosition.put(i, paint);
+        }
+
+        public void copyCommandFromPosition(int i) {
+            ArrayList<Object> arrayList = this.commands;
+            arrayList.add(arrayList.get(i));
         }
     }
 

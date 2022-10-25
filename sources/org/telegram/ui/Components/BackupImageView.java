@@ -1,5 +1,6 @@
 package org.telegram.ui.Components;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -18,6 +19,7 @@ public class BackupImageView extends View {
     boolean attached;
     protected int height;
     protected ImageReceiver imageReceiver;
+    ValueAnimator roundRadiusAnimator;
     protected int width;
 
     public BackupImageView(Context context) {
@@ -209,5 +211,24 @@ public class BackupImageView extends View {
             return;
         }
         animatedEmojiDrawable.addView(this);
+    }
+
+    public void animateToRoundRadius(int i) {
+        if (getRoundRadius()[0] != i) {
+            ValueAnimator valueAnimator = this.roundRadiusAnimator;
+            if (valueAnimator != null) {
+                valueAnimator.cancel();
+            }
+            ValueAnimator ofInt = ValueAnimator.ofInt(getRoundRadius()[0], i);
+            this.roundRadiusAnimator = ofInt;
+            ofInt.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() { // from class: org.telegram.ui.Components.BackupImageView.1
+                @Override // android.animation.ValueAnimator.AnimatorUpdateListener
+                public void onAnimationUpdate(ValueAnimator valueAnimator2) {
+                    BackupImageView.this.setRoundRadius(((Integer) valueAnimator2.getAnimatedValue()).intValue());
+                }
+            });
+            this.roundRadiusAnimator.setDuration(200L);
+            this.roundRadiusAnimator.start();
+        }
     }
 }

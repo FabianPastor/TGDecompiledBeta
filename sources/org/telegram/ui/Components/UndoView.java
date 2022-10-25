@@ -225,7 +225,7 @@ public class UndoView extends FrameLayout {
         this.textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.textPaint.setColor(getThemedColor("undo_infoColor"));
         setWillNotDraw(false);
-        this.backgroundDrawable = Theme.createRoundRectDrawable(AndroidUtilities.dp(6.0f), getThemedColor("undo_background"));
+        this.backgroundDrawable = Theme.createRoundRectDrawable(AndroidUtilities.dp(14.0f), getThemedColor("undo_background"));
         setOnTouchListener(UndoView$$ExternalSyntheticLambda3.INSTANCE);
         setVisibility(4);
     }
@@ -253,8 +253,9 @@ public class UndoView extends FrameLayout {
     }
 
     private boolean hasSubInfo() {
-        int i = this.currentAction;
-        return i == 11 || i == 24 || i == 6 || i == 3 || i == 5 || i == 13 || i == 14 || i == 74 || (i == 7 && MessagesController.getInstance(this.currentAccount).dialogFilters.isEmpty()) || this.currentAction == ACTION_RINGTONE_ADDED;
+        int i;
+        int i2 = this.currentAction;
+        return i2 == 11 || i2 == 24 || i2 == 6 || i2 == 3 || i2 == 5 || i2 == 13 || i2 == 14 || i2 == 74 || (i2 == 7 && MessagesController.getInstance(this.currentAccount).dialogFilters.isEmpty()) || (i = this.currentAction) == ACTION_RINGTONE_ADDED || i == 85;
     }
 
     public boolean isMultilineSubInfo() {
@@ -363,20 +364,20 @@ public class UndoView extends FrameLayout {
     }
 
     /* JADX WARN: Multi-variable type inference failed */
-    /* JADX WARN: Removed duplicated region for block: B:580:0x15ed  */
-    /* JADX WARN: Removed duplicated region for block: B:583:0x160d  */
-    /* JADX WARN: Removed duplicated region for block: B:586:0x1634  */
-    /* JADX WARN: Removed duplicated region for block: B:590:0x1679  */
-    /* JADX WARN: Removed duplicated region for block: B:617:0x1723  */
-    /* JADX WARN: Removed duplicated region for block: B:643:? A[RETURN, SYNTHETIC] */
-    /* JADX WARN: Type inference failed for: r2v348, types: [java.lang.CharSequence] */
+    /* JADX WARN: Removed duplicated region for block: B:600:0x1753  */
+    /* JADX WARN: Removed duplicated region for block: B:603:0x1773  */
+    /* JADX WARN: Removed duplicated region for block: B:606:0x179a  */
+    /* JADX WARN: Removed duplicated region for block: B:610:0x17df  */
+    /* JADX WARN: Removed duplicated region for block: B:639:0x188d  */
+    /* JADX WARN: Removed duplicated region for block: B:665:? A[RETURN, SYNTHETIC] */
+    /* JADX WARN: Type inference failed for: r2v393, types: [java.lang.CharSequence] */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public void showWithAction(java.util.ArrayList<java.lang.Long> r21, int r22, java.lang.Object r23, java.lang.Object r24, java.lang.Runnable r25, java.lang.Runnable r26) {
+    public void showWithAction(java.util.ArrayList<java.lang.Long> r19, int r20, java.lang.Object r21, java.lang.Object r22, java.lang.Runnable r23, java.lang.Runnable r24) {
         /*
-            Method dump skipped, instructions count: 6014
+            Method dump skipped, instructions count: 6377
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.UndoView.showWithAction(java.util.ArrayList, int, java.lang.Object, java.lang.Object, java.lang.Runnable, java.lang.Runnable):void");

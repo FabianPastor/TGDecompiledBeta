@@ -86,6 +86,12 @@ public abstract class BaseCell extends ViewGroup {
         setDrawableBounds(drawable, (int) f, (int) f2, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
     }
 
+    public static float setDrawableBounds(Drawable drawable, float f, float f2, float f3) {
+        float intrinsicWidth = (drawable.getIntrinsicWidth() * f3) / drawable.getIntrinsicHeight();
+        setDrawableBounds(drawable, (int) f, (int) f2, (int) intrinsicWidth, (int) f3);
+        return intrinsicWidth;
+    }
+
     public static void setDrawableBounds(Drawable drawable, int i, int i2, int i3, int i4) {
         if (drawable != null) {
             drawable.setBounds(i, i2, i3 + i, i4 + i2);

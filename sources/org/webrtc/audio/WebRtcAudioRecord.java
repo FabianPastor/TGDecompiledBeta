@@ -25,7 +25,7 @@ import org.webrtc.Logging;
 import org.webrtc.ThreadUtils;
 import org.webrtc.audio.JavaAudioDeviceModule;
 /* JADX INFO: Access modifiers changed from: package-private */
-/* loaded from: classes3.dex */
+/* loaded from: classes.dex */
 public class WebRtcAudioRecord {
     private static final int AUDIO_RECORD_START = 0;
     private static final int AUDIO_RECORD_STOP = 1;
@@ -72,7 +72,7 @@ public class WebRtcAudioRecord {
     /* JADX INFO: Access modifiers changed from: private */
     public native void nativeDataIsRecorded(long j, int i);
 
-    /* loaded from: classes3.dex */
+    /* loaded from: classes.dex */
     private class AudioRecordThread extends Thread {
         private volatile boolean keepAlive;
 

@@ -182,7 +182,7 @@ public class TextPaintView extends EntityView {
     /* JADX INFO: Access modifiers changed from: protected */
     @Override // org.telegram.ui.Components.Paint.Views.EntityView
     /* renamed from: createSelectionView  reason: collision with other method in class */
-    public TextViewSelectionView mo1512createSelectionView() {
+    public TextViewSelectionView mo1541createSelectionView() {
         return new TextViewSelectionView(this, getContext());
     }
 

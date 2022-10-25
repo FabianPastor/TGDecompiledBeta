@@ -297,14 +297,14 @@ public abstract class TLRPC$Update extends TLObject {
             case -440534818:
                 tLRPC$TL_updateTheme = new TLRPC$TL_updateUserStatus();
                 break;
+            case -366410403:
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateChannelReadMessagesContents();
+                break;
             case -337352679:
                 tLRPC$TL_updateTheme = new TLRPC$TL_updateServiceNotification();
                 break;
             case -309990731:
                 tLRPC$TL_updateTheme = new TLRPC$TL_updatePinnedMessages();
-                break;
-            case -299124375:
-                tLRPC$TL_updateTheme = new TLRPC$TL_updateDraftMessage();
                 break;
             case -298113238:
                 tLRPC$TL_updateTheme = new TLRPC$TL_updatePrivacy();
@@ -317,6 +317,9 @@ public abstract class TLRPC$Update extends TLObject {
                 break;
             case -219423922:
                 tLRPC$TL_updateTheme = new TLRPC$TL_updateGroupCallParticipants();
+                break;
+            case -158027602:
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateChannelPinnedTopic();
                 break;
             case -124097970:
                 tLRPC$TL_updateTheme = new TLRPC$TL_updateChat();
@@ -361,9 +364,6 @@ public abstract class TLRPC$Update extends TLObject {
             case 347625491:
                 tLRPC$TL_updateTheme = new TLRPC$TL_updateBotMenuButton();
                 break;
-            case 357013699:
-                tLRPC$TL_updateTheme = new TLRPC$TL_updateMessageReactions();
-                break;
             case 361936797:
                 tLRPC$TL_updateTheme = new TLRPC$TL_updateWebViewResultSent();
                 break;
@@ -385,6 +385,9 @@ public abstract class TLRPC$Update extends TLObject {
                 break;
             case 457133559:
                 tLRPC$TL_updateTheme = new TLRPC$TL_updateEditChannelMessage();
+                break;
+            case 457829485:
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateDraftMessage();
                 break;
             case 522914557:
                 tLRPC$TL_updateTheme = new TLRPC$TL_updateNewMessage();
@@ -490,9 +493,6 @@ public abstract class TLRPC$Update extends TLObject {
             case 1037718609:
                 tLRPC$TL_updateTheme = new TLRPC$TL_updateChatParticipantAdd();
                 break;
-            case 1153291573:
-                tLRPC$TL_updateTheme = new TLRPC$TL_updateChannelReadMessagesContents();
-                break;
             case 1180041828:
                 tLRPC$TL_updateTheme = new TLRPC$TL_updateLangPackTooLong();
                 break;
@@ -533,6 +533,9 @@ public abstract class TLRPC$Update extends TLObject {
                 break;
             case 1538885128:
                 tLRPC$TL_updateTheme = new TLRPC$TL_updatePinnedChannelMessages();
+                break;
+            case 1578843320:
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateMessageReactions();
                 break;
             case 1656358105:
                 tLRPC$TL_updateTheme = new TLRPC$TL_updateNewChannelMessage();

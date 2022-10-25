@@ -24,6 +24,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLObject;
@@ -478,27 +479,27 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
         }
         this.selectedFiles.clear();
         showActionMode(false);
-        if (arrayList.size() > 1 || ((Long) arrayList.get(0)).longValue() == AccountInstance.getInstance(this.currentAccount).getUserConfig().getClientUserId() || charSequence != null) {
+        if (arrayList.size() > 1 || ((MessagesStorage.TopicKey) arrayList.get(0)).dialogId == AccountInstance.getInstance(this.currentAccount).getUserConfig().getClientUserId() || charSequence != null) {
             for (int i = 0; i < arrayList.size(); i++) {
-                long longValue = ((Long) arrayList.get(i)).longValue();
+                long j = ((MessagesStorage.TopicKey) arrayList.get(i)).dialogId;
                 if (charSequence != null) {
-                    AccountInstance.getInstance(this.currentAccount).getSendMessagesHelper().sendMessage(charSequence.toString(), longValue, null, null, null, true, null, null, null, true, 0, null, false);
+                    AccountInstance.getInstance(this.currentAccount).getSendMessagesHelper().sendMessage(charSequence.toString(), j, null, null, null, true, null, null, null, true, 0, null, false);
                 }
-                AccountInstance.getInstance(this.currentAccount).getSendMessagesHelper().sendMessage(arrayList2, longValue, false, false, true, 0);
+                AccountInstance.getInstance(this.currentAccount).getSendMessagesHelper().sendMessage(arrayList2, j, false, false, true, 0);
             }
             dialogsActivity.finishFragment();
             return;
         }
-        long longValue2 = ((Long) arrayList.get(0)).longValue();
+        long j2 = ((MessagesStorage.TopicKey) arrayList.get(0)).dialogId;
         Bundle bundle = new Bundle();
         bundle.putBoolean("scrollToTopOnResume", true);
-        if (DialogObject.isEncryptedDialog(longValue2)) {
-            bundle.putInt("enc_id", DialogObject.getEncryptedChatId(longValue2));
+        if (DialogObject.isEncryptedDialog(j2)) {
+            bundle.putInt("enc_id", DialogObject.getEncryptedChatId(j2));
         } else {
-            if (DialogObject.isUserDialog(longValue2)) {
-                bundle.putLong("user_id", longValue2);
+            if (DialogObject.isUserDialog(j2)) {
+                bundle.putLong("user_id", j2);
             } else {
-                bundle.putLong("chat_id", -longValue2);
+                bundle.putLong("chat_id", -j2);
             }
             if (!AccountInstance.getInstance(this.currentAccount).getMessagesController().checkCanOpenChat(bundle, dialogsActivity)) {
                 return;

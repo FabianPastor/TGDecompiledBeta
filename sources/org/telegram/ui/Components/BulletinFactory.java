@@ -6,9 +6,14 @@ import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.view.View;
 import android.widget.FrameLayout;
+import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
+import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.UserObject;
+import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -130,16 +135,20 @@ public final class BulletinFactory {
         this.resourcesProvider = resourcesProvider;
     }
 
-    public Bulletin createSimpleBulletin(int i, String str) {
+    public Bulletin createSimpleBulletin(int i, CharSequence charSequence) {
         Bulletin.LottieLayout lottieLayout = new Bulletin.LottieLayout(getContext(), this.resourcesProvider);
         lottieLayout.setAnimation(i, 36, 36, new String[0]);
-        lottieLayout.textView.setText(str);
+        lottieLayout.textView.setText(charSequence);
         lottieLayout.textView.setSingleLine(false);
         lottieLayout.textView.setMaxLines(2);
         return create(lottieLayout, 1500);
     }
 
     public Bulletin createSimpleBulletin(int i, CharSequence charSequence, CharSequence charSequence2, Runnable runnable) {
+        return createSimpleBulletin(i, charSequence, charSequence2, 1500, runnable);
+    }
+
+    public Bulletin createSimpleBulletin(int i, CharSequence charSequence, CharSequence charSequence2, int i2, Runnable runnable) {
         Bulletin.LottieLayout lottieLayout = new Bulletin.LottieLayout(getContext(), this.resourcesProvider);
         lottieLayout.setAnimation(i, 36, 36, new String[0]);
         lottieLayout.textView.setTextSize(1, 14.0f);
@@ -147,7 +156,57 @@ public final class BulletinFactory {
         lottieLayout.textView.setMaxLines(3);
         lottieLayout.textView.setText(charSequence);
         lottieLayout.setButton(new Bulletin.UndoButton(getContext(), true, this.resourcesProvider).setText(charSequence2).setUndoAction(runnable));
-        return create(lottieLayout, 1500);
+        return create(lottieLayout, i2);
+    }
+
+    public Bulletin createUsersBulletin(ArrayList<TLRPC$User> arrayList, CharSequence charSequence) {
+        Bulletin.UsersLayout usersLayout = new Bulletin.UsersLayout(getContext(), this.resourcesProvider);
+        int i = 0;
+        for (int i2 = 0; i2 < arrayList.size() && i < 3; i2++) {
+            TLRPC$User tLRPC$User = arrayList.get(i2);
+            if (tLRPC$User != null) {
+                i++;
+                usersLayout.avatarsImageView.setCount(i);
+                usersLayout.avatarsImageView.setObject(i - 1, UserConfig.selectedAccount, tLRPC$User);
+            }
+        }
+        usersLayout.avatarsImageView.commitTransition(false);
+        usersLayout.textView.setSingleLine(true);
+        usersLayout.textView.setLines(1);
+        usersLayout.textView.setText(charSequence);
+        usersLayout.textView.setTranslationX((-(3 - i)) * AndroidUtilities.dp(12.0f));
+        return create(usersLayout, 2750);
+    }
+
+    public Bulletin createUsersAddedBulletin(ArrayList<TLRPC$User> arrayList, TLRPC$Chat tLRPC$Chat) {
+        SpannableStringBuilder spannableStringBuilder;
+        if (arrayList == null || arrayList.size() == 0) {
+            spannableStringBuilder = null;
+        } else if (arrayList.size() == 1) {
+            if (ChatObject.isForum(tLRPC$Chat)) {
+                int i = R.string.HasBeenAddedToForum;
+                spannableStringBuilder = AndroidUtilities.replaceTags(LocaleController.formatString("HasBeenAddedToForum", i, "**" + UserObject.getUserName(arrayList.get(0)) + "**"));
+            } else if (ChatObject.isChannelAndNotMegaGroup(tLRPC$Chat)) {
+                int i2 = R.string.HasBeenAddedToChannel;
+                spannableStringBuilder = AndroidUtilities.replaceTags(LocaleController.formatString("HasBeenAddedToChannel", i2, "**" + UserObject.getUserName(arrayList.get(0)) + "**"));
+            } else {
+                int i3 = R.string.HasBeenAddedToGroup;
+                spannableStringBuilder = AndroidUtilities.replaceTags(LocaleController.formatString("HasBeenAddedToGroup", i3, "**" + UserObject.getUserName(arrayList.get(0)) + "**"));
+            }
+        } else if (ChatObject.isForum(tLRPC$Chat)) {
+            String formatPluralString = LocaleController.formatPluralString("Members", arrayList.size(), new Object[0]);
+            int i4 = R.string.HaveBeenAddedToForum;
+            spannableStringBuilder = AndroidUtilities.replaceTags(LocaleController.formatString("HaveBeenAddedToForum", i4, "**" + formatPluralString + "**"));
+        } else if (ChatObject.isChannelAndNotMegaGroup(tLRPC$Chat)) {
+            String formatPluralString2 = LocaleController.formatPluralString("Subscribers", arrayList.size(), new Object[0]);
+            int i5 = R.string.HaveBeenAddedToChannel;
+            spannableStringBuilder = AndroidUtilities.replaceTags(LocaleController.formatString("HaveBeenAddedToChannel", i5, "**" + formatPluralString2 + "**"));
+        } else {
+            String formatPluralString3 = LocaleController.formatPluralString("Members", arrayList.size(), new Object[0]);
+            int i6 = R.string.HaveBeenAddedToGroup;
+            spannableStringBuilder = AndroidUtilities.replaceTags(LocaleController.formatString("HaveBeenAddedToGroup", i6, "**" + formatPluralString3 + "**"));
+        }
+        return createUsersBulletin(arrayList, spannableStringBuilder);
     }
 
     public Bulletin createEmojiBulletin(TLRPC$Document tLRPC$Document, CharSequence charSequence, CharSequence charSequence2, Runnable runnable) {
@@ -465,6 +524,10 @@ public final class BulletinFactory {
 
     public static Bulletin createSaveToGalleryBulletin(FrameLayout frameLayout, boolean z, int i, int i2) {
         return of(frameLayout, null).createDownloadBulletin(z ? FileType.VIDEO : FileType.PHOTO, 1, i, i2);
+    }
+
+    public static Bulletin createSaveToGalleryBulletin(FrameLayout frameLayout, int i, boolean z, int i2, int i3) {
+        return of(frameLayout, null).createDownloadBulletin(z ? i > 1 ? FileType.VIDEOS : FileType.VIDEO : i > 1 ? FileType.PHOTOS : FileType.PHOTO, i, i2, i3);
     }
 
     public static Bulletin createPromoteToAdminBulletin(BaseFragment baseFragment, String str) {

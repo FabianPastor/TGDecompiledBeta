@@ -410,10 +410,15 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
     public boolean setFontSize(int i) {
         if (i != SharedConfig.fontSize) {
             SharedConfig.fontSize = i;
-            SharedPreferences.Editor edit = MessagesController.getGlobalMainSettings().edit();
+            SharedConfig.fontSizeIsDefault = false;
+            SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
+            if (sharedPreferences == null) {
+                return false;
+            }
+            SharedPreferences.Editor edit = sharedPreferences.edit();
             edit.putInt("fons_size", SharedConfig.fontSize);
             edit.commit();
-            Theme.chat_msgTextPaint.setTextSize(AndroidUtilities.dp(SharedConfig.fontSize));
+            Theme.createCommonMessageResources();
             RecyclerView.ViewHolder findViewHolderForAdapterPosition = this.listView.findViewHolderForAdapterPosition(this.textSizeRow);
             if (findViewHolderForAdapterPosition != null) {
                 View view = findViewHolderForAdapterPosition.itemView;
@@ -1426,7 +1431,6 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
     @Override // org.telegram.ui.ActionBar.BaseFragment
     public void onTransitionAnimationEnd(boolean z, boolean z2) {
         if (z) {
@@ -1810,7 +1814,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
             if (i == 0) {
                 return new RecyclerListView.Holder(new InnerAccentView(this.mContext));
             }
@@ -2077,7 +2081,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
             DefaultThemesPreviewCell defaultThemesPreviewCell;
             ThemePreviewMessagesCell themePreviewMessagesCell;
             switch (i) {

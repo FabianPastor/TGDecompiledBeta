@@ -25,8 +25,8 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.ui.ActionBar.ActionBar;
-import org.telegram.ui.ActionBar.ActionBarLayout;
 import org.telegram.ui.ActionBar.AdjustPanLayoutHelper;
+import org.telegram.ui.ActionBar.INavigationLayout;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.BlurSettingsBottomSheet;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
@@ -66,7 +66,7 @@ public class SizeNotifierFrameLayout extends FrameLayout {
     private Drawable oldBackgroundDrawable;
     private WallpaperParallaxEffect parallaxEffect;
     private float parallaxScale;
-    private ActionBarLayout parentLayout;
+    private INavigationLayout parentLayout;
     private boolean paused;
     BlurBitmap prevBitmap;
     private android.graphics.Rect rect;
@@ -125,7 +125,7 @@ public class SizeNotifierFrameLayout extends FrameLayout {
         this(context, null);
     }
 
-    public SizeNotifierFrameLayout(Context context, ActionBarLayout actionBarLayout) {
+    public SizeNotifierFrameLayout(Context context, INavigationLayout iNavigationLayout) {
         super(context);
         this.rect = new android.graphics.Rect();
         this.occupyStatusBar = true;
@@ -141,7 +141,7 @@ public class SizeNotifierFrameLayout extends FrameLayout {
         this.blurPaintBottom2 = new Paint();
         this.blurBackgroundTask = new BlurBackgroundTask();
         setWillNotDraw(false);
-        this.parentLayout = actionBarLayout;
+        this.parentLayout = iNavigationLayout;
         this.adjustPanLayoutHelper = createAdjustPanLayoutHelper();
         View view = new View(context) { // from class: org.telegram.ui.Components.SizeNotifierFrameLayout.1
             @Override // android.view.View

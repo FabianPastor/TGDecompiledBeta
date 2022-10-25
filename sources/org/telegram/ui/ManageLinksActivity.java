@@ -723,7 +723,7 @@ public class ManageLinksActivity extends BaseFragment {
     public void setInfo(TLRPC$ChatFull tLRPC$ChatFull, TLRPC$ExportedChatInvite tLRPC$ExportedChatInvite) {
         this.info = tLRPC$ChatFull;
         this.invite = (TLRPC$TL_chatInviteExported) tLRPC$ExportedChatInvite;
-        this.isPublic = !TextUtils.isEmpty(this.currentChat.username);
+        this.isPublic = ChatObject.isPublic(this.currentChat);
         loadLinks(true);
     }
 
@@ -802,7 +802,7 @@ public class ManageLinksActivity extends BaseFragment {
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
             TextInfoPrivacyCell textInfoPrivacyCell;
             LinkActionView linkActionView;
             switch (i) {
@@ -1692,7 +1692,6 @@ public class ManageLinksActivity extends BaseFragment {
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
     @Override // org.telegram.ui.ActionBar.BaseFragment
     public void onTransitionAnimationEnd(boolean z, boolean z2) {
         InviteLinkBottomSheet inviteLinkBottomSheet;
@@ -1706,7 +1705,6 @@ public class ManageLinksActivity extends BaseFragment {
         NotificationCenter.getInstance(this.currentAccount).onAnimationFinish(this.animationIndex);
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
     @Override // org.telegram.ui.ActionBar.BaseFragment
     public void onTransitionAnimationStart(boolean z, boolean z2) {
         super.onTransitionAnimationStart(z, z2);

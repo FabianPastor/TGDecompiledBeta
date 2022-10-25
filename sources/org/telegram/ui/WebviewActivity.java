@@ -315,7 +315,6 @@ public class WebviewActivity extends BaseFragment {
         this.typingRunnable.run();
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
     @Override // org.telegram.ui.ActionBar.BaseFragment
     public void onTransitionAnimationEnd(boolean z, boolean z2) {
         WebView webView;

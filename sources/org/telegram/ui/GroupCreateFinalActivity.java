@@ -753,7 +753,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
             if (vibrator != null) {
                 vibrator.vibrate(200L);
             }
-            AndroidUtilities.shakeView(this.editText, 2.0f, 0);
+            AndroidUtilities.shakeView(this.editText);
             return;
         }
         this.donePressed = true;
@@ -1040,7 +1040,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
             TextSettingsCell textSettingsCell;
             if (i == 0) {
                 View shadowSectionCell = new ShadowSectionCell(this.context);

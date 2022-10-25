@@ -143,6 +143,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
     private String initialBannedRights;
     private int initialSlowmode;
     private boolean isChannel;
+    private boolean isForum;
     private LinearLayoutManager layoutManager;
     private RecyclerListView listView;
     private ListAdapter listViewAdapter;
@@ -150,6 +151,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
     private int loadingProgressRow;
     private int loadingUserCellRow;
     private boolean loadingUsers;
+    private int manageTopicsRow;
     private int membersHeaderRow;
     private boolean needOpenSearch;
     private boolean openTransitionStarted;
@@ -294,7 +296,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
 
                 @Override // org.telegram.ui.Components.SeekBarAccessibilityDelegate
                 /* renamed from: getContentDescription */
-                protected CharSequence mo2136getContentDescription(View view) {
+                protected CharSequence mo2188getContentDescription(View view) {
                     if (ChatUsersActivity.this.selectedSlowmode == 0) {
                         return LocaleController.getString("SlowmodeOff", R.string.SlowmodeOff);
                     }
@@ -482,27 +484,29 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             tLRPC$TL_chatBannedRights2.pin_messages = tLRPC$TL_chatBannedRights.pin_messages;
             tLRPC$TL_chatBannedRights2.send_polls = tLRPC$TL_chatBannedRights.send_polls;
             tLRPC$TL_chatBannedRights2.invite_users = tLRPC$TL_chatBannedRights.invite_users;
+            tLRPC$TL_chatBannedRights2.manage_topics = tLRPC$TL_chatBannedRights.manage_topics;
             tLRPC$TL_chatBannedRights2.change_info = tLRPC$TL_chatBannedRights.change_info;
         }
         this.initialBannedRights = ChatObject.getBannedRightsString(this.defaultBannedRights);
         this.isChannel = ChatObject.isChannel(this.currentChat) && !this.currentChat.megagroup;
+        this.isForum = ChatObject.isForum(this.currentChat);
     }
 
-    /* JADX WARN: Code restructure failed: missing block: B:30:0x00fd, code lost:
+    /* JADX WARN: Code restructure failed: missing block: B:30:0x0105, code lost:
         if (org.telegram.messenger.ChatObject.canBlockUsers(r0) != false) goto L25;
      */
-    /* JADX WARN: Removed duplicated region for block: B:37:0x0127  */
-    /* JADX WARN: Removed duplicated region for block: B:50:0x0157  */
-    /* JADX WARN: Removed duplicated region for block: B:57:0x0171  */
-    /* JADX WARN: Removed duplicated region for block: B:67:0x0191  */
-    /* JADX WARN: Removed duplicated region for block: B:70:0x01a4  */
+    /* JADX WARN: Removed duplicated region for block: B:37:0x012f  */
+    /* JADX WARN: Removed duplicated region for block: B:50:0x015f  */
+    /* JADX WARN: Removed duplicated region for block: B:57:0x0179  */
+    /* JADX WARN: Removed duplicated region for block: B:67:0x0199  */
+    /* JADX WARN: Removed duplicated region for block: B:70:0x01ac  */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
     private void updateRows() {
         /*
-            Method dump skipped, instructions count: 874
+            Method dump skipped, instructions count: 882
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatUsersActivity.updateRows():void");
@@ -780,8 +784,8 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
 
     /* JADX INFO: Access modifiers changed from: private */
     /* JADX WARN: Multi-variable type inference failed */
-    /* JADX WARN: Removed duplicated region for block: B:272:0x0503 A[RETURN] */
-    /* JADX WARN: Removed duplicated region for block: B:273:0x0504  */
+    /* JADX WARN: Removed duplicated region for block: B:275:0x0514 A[RETURN] */
+    /* JADX WARN: Removed duplicated region for block: B:276:0x0515  */
     /* JADX WARN: Type inference failed for: r21v1 */
     /* JADX WARN: Type inference failed for: r31v0, types: [org.telegram.ui.ActionBar.BaseFragment, org.telegram.ui.ChatUsersActivity] */
     /*
@@ -790,7 +794,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
     */
     public /* synthetic */ void lambda$createView$1(android.content.Context r32, android.view.View r33, int r34) {
         /*
-            Method dump skipped, instructions count: 1312
+            Method dump skipped, instructions count: 1329
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatUsersActivity.lambda$createView$1(android.content.Context, android.view.View, int):void");
@@ -1006,14 +1010,14 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             if (!z || ((BaseFragment) ChatUsersActivity.this).parentLayout == null) {
                 return;
             }
-            BaseFragment baseFragment = ((BaseFragment) ChatUsersActivity.this).parentLayout.fragmentsStack.get(((BaseFragment) ChatUsersActivity.this).parentLayout.fragmentsStack.size() - 2);
+            BaseFragment baseFragment = ((BaseFragment) ChatUsersActivity.this).parentLayout.getFragmentStack().get(((BaseFragment) ChatUsersActivity.this).parentLayout.getFragmentStack().size() - 2);
             if (baseFragment instanceof ChatEditActivity) {
                 baseFragment.removeSelfFromStack();
                 Bundle bundle = new Bundle();
                 bundle.putLong("chat_id", ChatUsersActivity.this.chatId);
                 ChatEditActivity chatEditActivity = new ChatEditActivity(bundle);
                 chatEditActivity.setInfo(ChatUsersActivity.this.info);
-                ((BaseFragment) ChatUsersActivity.this).parentLayout.addFragmentToStack(chatEditActivity, ((BaseFragment) ChatUsersActivity.this).parentLayout.fragmentsStack.size() - 1);
+                ((BaseFragment) ChatUsersActivity.this).parentLayout.addFragmentToStack(chatEditActivity, ((BaseFragment) ChatUsersActivity.this).parentLayout.getFragmentStack().size() - 1);
                 ChatUsersActivity.this.finishFragment();
                 chatEditActivity.showConvertTooltip();
                 return;
@@ -1177,6 +1181,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 tLRPC$TL_channelParticipantAdmin.admin_rights = tLRPC$TL_chatAdminRights;
                 tLRPC$TL_chatAdminRights.add_admins = true;
                 tLRPC$TL_chatAdminRights.pin_messages = true;
+                tLRPC$TL_chatAdminRights.manage_topics = true;
                 tLRPC$TL_chatAdminRights.invite_users = true;
                 tLRPC$TL_chatAdminRights.ban_users = true;
                 tLRPC$TL_chatAdminRights.delete_messages = true;
@@ -1237,7 +1242,6 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         final boolean[] zArr = new boolean[1];
         boolean z3 = (tLObject instanceof TLRPC$TL_channelParticipantAdmin) || (tLObject instanceof TLRPC$TL_chatParticipantAdmin);
         ChatRightsEditActivity chatRightsEditActivity = new ChatRightsEditActivity(j, this.chatId, tLRPC$TL_chatAdminRights, this.defaultBannedRights, tLRPC$TL_chatBannedRights, str, i2, true, false, null) { // from class: org.telegram.ui.ChatUsersActivity.14
-            /* JADX INFO: Access modifiers changed from: protected */
             @Override // org.telegram.ui.ActionBar.BaseFragment
             public void onTransitionAnimationEnd(boolean z4, boolean z5) {
                 if (z4 || !z5 || !zArr[0] || !BulletinFactory.canShowBulletin(ChatUsersActivity.this)) {
@@ -2285,7 +2289,6 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
     @Override // org.telegram.ui.ActionBar.BaseFragment
     public void onBecomeFullyHidden() {
         UndoView undoView = this.undoView;
@@ -2294,7 +2297,6 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
     @Override // org.telegram.ui.ActionBar.BaseFragment
     public void onTransitionAnimationEnd(boolean z, boolean z2) {
         if (z) {
@@ -2581,7 +2583,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
             FrameLayout frameLayout;
             if (i == 0) {
                 ManageChatUserCell manageChatUserCell = new ManageChatUserCell(this.mContext, 2, 2, ChatUsersActivity.this.selectType == 0);
@@ -2671,7 +2673,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
             FlickerLoadingView flickerLoadingView;
             boolean z = false;
             int i2 = 6;
@@ -2762,17 +2764,17 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             return new RecyclerListView.Holder(flickerLoadingView);
         }
 
-        /* JADX WARN: Code restructure failed: missing block: B:270:0x0678, code lost:
-            if (r20.this$0.currentChat.megagroup == false) goto L305;
+        /* JADX WARN: Code restructure failed: missing block: B:273:0x0690, code lost:
+            if (r20.this$0.currentChat.megagroup == false) goto L308;
          */
-        /* JADX WARN: Code restructure failed: missing block: B:271:0x067a, code lost:
+        /* JADX WARN: Code restructure failed: missing block: B:274:0x0692, code lost:
             r10 = true;
          */
-        /* JADX WARN: Code restructure failed: missing block: B:279:0x06a6, code lost:
-            if (r20.this$0.currentChat.megagroup == false) goto L305;
+        /* JADX WARN: Code restructure failed: missing block: B:282:0x06be, code lost:
+            if (r20.this$0.currentChat.megagroup == false) goto L308;
          */
-        /* JADX WARN: Removed duplicated region for block: B:329:0x07be  */
-        /* JADX WARN: Removed duplicated region for block: B:330:0x07c1  */
+        /* JADX WARN: Removed duplicated region for block: B:332:0x07d6  */
+        /* JADX WARN: Removed duplicated region for block: B:333:0x07d9  */
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /*
             Code decompiled incorrectly, please refer to instructions dump.
@@ -2780,7 +2782,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         */
         public void onBindViewHolder(androidx.recyclerview.widget.RecyclerView.ViewHolder r21, int r22) {
             /*
-                Method dump skipped, instructions count: 2030
+                Method dump skipped, instructions count: 2054
                 To view this dump add '--comments-level debug' option
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatUsersActivity.ListAdapter.onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder, int):void");
@@ -2817,7 +2819,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             if (i == ChatUsersActivity.this.removedUsersRow) {
                 return 6;
             }
-            if (i == ChatUsersActivity.this.changeInfoRow || i == ChatUsersActivity.this.addUsersRow || i == ChatUsersActivity.this.pinMessagesRow || i == ChatUsersActivity.this.sendMessagesRow || i == ChatUsersActivity.this.sendMediaRow || i == ChatUsersActivity.this.sendStickersRow || i == ChatUsersActivity.this.embedLinksRow || i == ChatUsersActivity.this.sendPollsRow) {
+            if (i == ChatUsersActivity.this.changeInfoRow || i == ChatUsersActivity.this.addUsersRow || i == ChatUsersActivity.this.pinMessagesRow || i == ChatUsersActivity.this.sendMessagesRow || i == ChatUsersActivity.this.sendMediaRow || i == ChatUsersActivity.this.sendStickersRow || i == ChatUsersActivity.this.embedLinksRow || i == ChatUsersActivity.this.sendPollsRow || i == ChatUsersActivity.this.manageTopicsRow) {
                 return 7;
             }
             if (i == ChatUsersActivity.this.membersHeaderRow || i == ChatUsersActivity.this.contactsHeaderRow || i == ChatUsersActivity.this.botHeaderRow || i == ChatUsersActivity.this.loadingHeaderRow) {
@@ -2972,18 +2974,33 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             put(17, ChatUsersActivity.this.sendPollsRow, sparseIntArray);
             put(18, ChatUsersActivity.this.embedLinksRow, sparseIntArray);
             put(19, ChatUsersActivity.this.addUsersRow, sparseIntArray);
+            int i = 20;
             put(20, ChatUsersActivity.this.pinMessagesRow, sparseIntArray);
-            put(21, ChatUsersActivity.this.changeInfoRow, sparseIntArray);
-            put(22, ChatUsersActivity.this.removedUsersRow, sparseIntArray);
-            put(23, ChatUsersActivity.this.contactsHeaderRow, sparseIntArray);
-            put(24, ChatUsersActivity.this.botHeaderRow, sparseIntArray);
-            put(25, ChatUsersActivity.this.membersHeaderRow, sparseIntArray);
-            put(26, ChatUsersActivity.this.slowmodeRow, sparseIntArray);
-            put(27, ChatUsersActivity.this.slowmodeSelectRow, sparseIntArray);
-            put(28, ChatUsersActivity.this.slowmodeInfoRow, sparseIntArray);
-            put(29, ChatUsersActivity.this.loadingProgressRow, sparseIntArray);
-            put(30, ChatUsersActivity.this.loadingUserCellRow, sparseIntArray);
-            put(31, ChatUsersActivity.this.loadingHeaderRow, sparseIntArray);
+            if (ChatUsersActivity.this.isForum) {
+                i = 21;
+                put(21, ChatUsersActivity.this.manageTopicsRow, sparseIntArray);
+            }
+            int i2 = i + 1;
+            put(i2, ChatUsersActivity.this.changeInfoRow, sparseIntArray);
+            int i3 = i2 + 1;
+            put(i3, ChatUsersActivity.this.removedUsersRow, sparseIntArray);
+            int i4 = i3 + 1;
+            put(i4, ChatUsersActivity.this.contactsHeaderRow, sparseIntArray);
+            int i5 = i4 + 1;
+            put(i5, ChatUsersActivity.this.botHeaderRow, sparseIntArray);
+            int i6 = i5 + 1;
+            put(i6, ChatUsersActivity.this.membersHeaderRow, sparseIntArray);
+            int i7 = i6 + 1;
+            put(i7, ChatUsersActivity.this.slowmodeRow, sparseIntArray);
+            int i8 = i7 + 1;
+            put(i8, ChatUsersActivity.this.slowmodeSelectRow, sparseIntArray);
+            int i9 = i8 + 1;
+            put(i9, ChatUsersActivity.this.slowmodeInfoRow, sparseIntArray);
+            int i10 = i9 + 1;
+            put(i10, ChatUsersActivity.this.loadingProgressRow, sparseIntArray);
+            int i11 = i10 + 1;
+            put(i11, ChatUsersActivity.this.loadingUserCellRow, sparseIntArray);
+            put(i11 + 1, ChatUsersActivity.this.loadingHeaderRow, sparseIntArray);
         }
 
         private void put(int i, int i2, SparseIntArray sparseIntArray) {

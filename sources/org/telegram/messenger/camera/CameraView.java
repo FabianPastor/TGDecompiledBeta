@@ -549,7 +549,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
         return new Rect(Math.round(rectF.left), Math.round(rectF.top), Math.round(rectF.right), Math.round(rectF.bottom));
     }
 
-    public void focusToPoint(int i, int i2) {
+    public void focusToPoint(int i, int i2, boolean z) {
         float f = i;
         float f2 = i2;
         Rect calculateTapArea = calculateTapArea(f, f2, 1.0f);
@@ -558,13 +558,19 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
         if (cameraSession != null) {
             cameraSession.focusToRect(calculateTapArea, calculateTapArea2);
         }
-        this.focusProgress = 0.0f;
-        this.innerAlpha = 1.0f;
-        this.outerAlpha = 1.0f;
-        this.cx = i;
-        this.cy = i2;
-        this.lastDrawTime = System.currentTimeMillis();
-        invalidate();
+        if (z) {
+            this.focusProgress = 0.0f;
+            this.innerAlpha = 1.0f;
+            this.outerAlpha = 1.0f;
+            this.cx = i;
+            this.cy = i2;
+            this.lastDrawTime = System.currentTimeMillis();
+            invalidate();
+        }
+    }
+
+    public void focusToPoint(int i, int i2) {
+        focusToPoint(i, i2, true);
     }
 
     public void setZoom(float f) {

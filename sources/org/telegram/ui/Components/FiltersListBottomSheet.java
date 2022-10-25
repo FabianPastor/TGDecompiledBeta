@@ -63,6 +63,7 @@ public class FiltersListBottomSheet extends BottomSheet implements NotificationC
         FrameLayout frameLayout = new FrameLayout(parentActivity) { // from class: org.telegram.ui.Components.FiltersListBottomSheet.1
             private boolean fullHeight;
             private RectF rect = new RectF();
+            private Boolean statusBarOpen;
 
             @Override // android.view.ViewGroup
             public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
@@ -126,7 +127,7 @@ public class FiltersListBottomSheet extends BottomSheet implements NotificationC
 
             /* JADX WARN: Removed duplicated region for block: B:17:0x009c  */
             /* JADX WARN: Removed duplicated region for block: B:19:0x00ed  */
-            /* JADX WARN: Removed duplicated region for block: B:21:? A[RETURN, SYNTHETIC] */
+            /* JADX WARN: Removed duplicated region for block: B:22:0x011c  */
             @Override // android.view.View
             /*
                 Code decompiled incorrectly, please refer to instructions dump.
@@ -134,10 +135,27 @@ public class FiltersListBottomSheet extends BottomSheet implements NotificationC
             */
             protected void onDraw(android.graphics.Canvas r13) {
                 /*
-                    Method dump skipped, instructions count: 312
+                    Method dump skipped, instructions count: 289
                     To view this dump add '--comments-level debug' option
                 */
                 throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.FiltersListBottomSheet.AnonymousClass1.onDraw(android.graphics.Canvas):void");
+            }
+
+            private void updateLightStatusBar(boolean z) {
+                Boolean bool = this.statusBarOpen;
+                if (bool == null || bool.booleanValue() != z) {
+                    boolean z2 = true;
+                    boolean z3 = AndroidUtilities.computePerceivedBrightness(FiltersListBottomSheet.this.getThemedColor("dialogBackground")) > 0.721f;
+                    if (AndroidUtilities.computePerceivedBrightness(Theme.blendOver(FiltersListBottomSheet.this.getThemedColor("actionBarDefault"), NUM)) <= 0.721f) {
+                        z2 = false;
+                    }
+                    Boolean valueOf = Boolean.valueOf(z);
+                    this.statusBarOpen = valueOf;
+                    if (!valueOf.booleanValue()) {
+                        z3 = z2;
+                    }
+                    AndroidUtilities.setLightStatusBar(FiltersListBottomSheet.this.getWindow(), z3);
+                }
             }
         };
         this.containerView = frameLayout;
@@ -383,7 +401,7 @@ public class FiltersListBottomSheet extends BottomSheet implements NotificationC
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
             BottomSheet.BottomSheetCell bottomSheetCell = new BottomSheet.BottomSheetCell(this.context, 0);
             bottomSheetCell.setBackground(null);
             bottomSheetCell.setLayoutParams(new RecyclerView.LayoutParams(-1, -2));

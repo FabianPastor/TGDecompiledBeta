@@ -2,12 +2,18 @@ package org.telegram.ui.Cells;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.RectF;
 import android.os.SystemClock;
+import android.text.Layout;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import androidx.dynamicanimation.animation.DynamicAnimation;
+import androidx.dynamicanimation.animation.FloatValueHolder;
+import androidx.dynamicanimation.animation.SpringAnimation;
+import androidx.dynamicanimation.animation.SpringForce;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.DialogObject;
@@ -19,13 +25,16 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC$Chat;
+import org.telegram.tgnet.TLRPC$TL_forumTopic;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.tgnet.TLRPC$UserStatus;
+import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CheckBox2;
 import org.telegram.ui.Components.CheckBoxBase;
+import org.telegram.ui.Components.Forum.ForumUtilities;
 import org.telegram.ui.Components.LayoutHelper;
 /* loaded from: classes3.dex */
 public class ShareDialogCell extends FrameLayout {
@@ -39,6 +48,8 @@ public class ShareDialogCell extends FrameLayout {
     private TextView nameTextView;
     private float onlineProgress;
     private final Theme.ResourcesProvider resourcesProvider;
+    private SimpleTextView topicTextView;
+    private boolean topicWasVisible;
     private TLRPC$User user;
 
     public ShareDialogCell(Context context, int i, Theme.ResourcesProvider resourcesProvider) {
@@ -58,19 +69,28 @@ public class ShareDialogCell extends FrameLayout {
         }
         TextView textView = new TextView(context);
         this.nameTextView = textView;
-        textView.setTextColor(getThemedColor(i == 1 ? "voipgroup_nameText" : "dialogTextBlack"));
+        String str = "voipgroup_nameText";
+        textView.setTextColor(getThemedColor(i == 1 ? str : "dialogTextBlack"));
         this.nameTextView.setTextSize(1, 12.0f);
         this.nameTextView.setMaxLines(2);
         this.nameTextView.setGravity(49);
         this.nameTextView.setLines(2);
         this.nameTextView.setEllipsize(TextUtils.TruncateAt.END);
         addView(this.nameTextView, LayoutHelper.createFrame(-1, -2.0f, 51, 6.0f, this.currentType == 2 ? 58.0f : 66.0f, 6.0f, 0.0f));
+        SimpleTextView simpleTextView = new SimpleTextView(context);
+        this.topicTextView = simpleTextView;
+        simpleTextView.setTextColor(getThemedColor(i != 1 ? "dialogTextBlack" : str));
+        this.topicTextView.setTextSize(12);
+        this.topicTextView.setMaxLines(2);
+        this.topicTextView.setGravity(49);
+        this.topicTextView.setAlignment(Layout.Alignment.ALIGN_CENTER);
+        addView(this.topicTextView, LayoutHelper.createFrame(-1, -2.0f, 51, 6.0f, this.currentType == 2 ? 58.0f : 66.0f, 6.0f, 0.0f));
         CheckBox2 checkBox2 = new CheckBox2(context, 21, resourcesProvider);
         this.checkBox = checkBox2;
         checkBox2.setColor("dialogRoundCheckBox", i == 1 ? "voipgroup_inviteMembersBackground" : "dialogBackground", "dialogRoundCheckBoxCheck");
         this.checkBox.setDrawUnchecked(false);
         this.checkBox.setDrawBackgroundAsArc(4);
-        this.checkBox.setProgressDelegate(new CheckBoxBase.ProgressDelegate() { // from class: org.telegram.ui.Cells.ShareDialogCell$$ExternalSyntheticLambda0
+        this.checkBox.setProgressDelegate(new CheckBoxBase.ProgressDelegate() { // from class: org.telegram.ui.Cells.ShareDialogCell$$ExternalSyntheticLambda2
             @Override // org.telegram.ui.Components.CheckBoxBase.ProgressDelegate
             public final void setProgress(float f) {
                 ShareDialogCell.this.lambda$new$0(f);
@@ -119,6 +139,7 @@ public class ShareDialogCell extends FrameLayout {
                 }
                 this.imageView.setForUserOrChat(this.user, this.avatarDrawable);
             }
+            this.imageView.setRoundRadius(AndroidUtilities.dp(28.0f));
         } else {
             this.user = null;
             TLRPC$Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Long.valueOf(-j));
@@ -131,6 +152,7 @@ public class ShareDialogCell extends FrameLayout {
             }
             this.avatarDrawable.setInfo(chat);
             this.imageView.setForUserOrChat(chat, this.avatarDrawable);
+            this.imageView.setRoundRadius((chat == null || !chat.forum) ? AndroidUtilities.dp(28.0f) : AndroidUtilities.dp(16.0f));
         }
         this.currentDialog = j;
         this.checkBox.setChecked(z, false);
@@ -142,6 +164,73 @@ public class ShareDialogCell extends FrameLayout {
 
     public void setChecked(boolean z, boolean z2) {
         this.checkBox.setChecked(z, z2);
+        if (!z) {
+            setTopic(null, true);
+        }
+    }
+
+    public void setTopic(TLRPC$TL_forumTopic tLRPC$TL_forumTopic, boolean z) {
+        boolean z2 = this.topicWasVisible;
+        boolean z3 = tLRPC$TL_forumTopic != null;
+        if (z2 != z3 || !z) {
+            SimpleTextView simpleTextView = this.topicTextView;
+            int i = R.id.spring_tag;
+            SpringAnimation springAnimation = (SpringAnimation) simpleTextView.getTag(i);
+            if (springAnimation != null) {
+                springAnimation.cancel();
+            }
+            if (z3) {
+                SimpleTextView simpleTextView2 = this.topicTextView;
+                simpleTextView2.setText(ForumUtilities.getForumSpannedName(tLRPC$TL_forumTopic, simpleTextView2.getTextPaint()));
+                this.topicTextView.requestLayout();
+            }
+            float f = 0.0f;
+            if (z) {
+                SpringAnimation springAnimation2 = new SpringAnimation(new FloatValueHolder(z3 ? 0.0f : 1000.0f));
+                if (z3) {
+                    f = 1000.0f;
+                }
+                SpringAnimation addEndListener = springAnimation2.setSpring(new SpringForce(f).setStiffness(1500.0f).setDampingRatio(1.0f)).addUpdateListener(new DynamicAnimation.OnAnimationUpdateListener() { // from class: org.telegram.ui.Cells.ShareDialogCell$$ExternalSyntheticLambda1
+                    @Override // androidx.dynamicanimation.animation.DynamicAnimation.OnAnimationUpdateListener
+                    public final void onAnimationUpdate(DynamicAnimation dynamicAnimation, float f2, float f3) {
+                        ShareDialogCell.this.lambda$setTopic$1(dynamicAnimation, f2, f3);
+                    }
+                }).addEndListener(new DynamicAnimation.OnAnimationEndListener() { // from class: org.telegram.ui.Cells.ShareDialogCell$$ExternalSyntheticLambda0
+                    @Override // androidx.dynamicanimation.animation.DynamicAnimation.OnAnimationEndListener
+                    public final void onAnimationEnd(DynamicAnimation dynamicAnimation, boolean z4, float f2, float f3) {
+                        ShareDialogCell.this.lambda$setTopic$2(dynamicAnimation, z4, f2, f3);
+                    }
+                });
+                this.topicTextView.setTag(i, addEndListener);
+                addEndListener.start();
+            } else if (z3) {
+                this.topicTextView.setAlpha(1.0f);
+                this.nameTextView.setAlpha(0.0f);
+                this.topicTextView.setTranslationX(0.0f);
+                this.nameTextView.setTranslationX(AndroidUtilities.dp(10.0f));
+            } else {
+                this.topicTextView.setAlpha(0.0f);
+                this.nameTextView.setAlpha(1.0f);
+                this.topicTextView.setTranslationX(-AndroidUtilities.dp(10.0f));
+                this.nameTextView.setTranslationX(0.0f);
+            }
+            this.topicWasVisible = z3;
+        }
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
+    public /* synthetic */ void lambda$setTopic$1(DynamicAnimation dynamicAnimation, float f, float f2) {
+        float f3 = f / 1000.0f;
+        this.topicTextView.setAlpha(f3);
+        float f4 = 1.0f - f3;
+        this.nameTextView.setAlpha(f4);
+        this.topicTextView.setTranslationX(f4 * (-AndroidUtilities.dp(10.0f)));
+        this.nameTextView.setTranslationX(f3 * AndroidUtilities.dp(10.0f));
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
+    public /* synthetic */ void lambda$setTopic$2(DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
+        this.topicTextView.setTag(R.id.spring_tag, null);
     }
 
     @Override // android.view.ViewGroup
@@ -201,7 +290,10 @@ public class ShareDialogCell extends FrameLayout {
         int top = this.imageView.getTop() + (this.imageView.getMeasuredHeight() / 2);
         Theme.checkboxSquare_checkPaint.setColor(getThemedColor("dialogRoundCheckBox"));
         Theme.checkboxSquare_checkPaint.setAlpha((int) (this.checkBox.getProgress() * 255.0f));
-        canvas.drawCircle(left, top, AndroidUtilities.dp(this.currentType == 2 ? 24.0f : 28.0f), Theme.checkboxSquare_checkPaint);
+        int dp = AndroidUtilities.dp(this.currentType == 2 ? 24.0f : 28.0f);
+        RectF rectF = AndroidUtilities.rectTmp;
+        rectF.set(left - dp, top - dp, left + dp, top + dp);
+        canvas.drawRoundRect(rectF, this.imageView.getRoundRadius()[0], this.imageView.getRoundRadius()[0], Theme.checkboxSquare_checkPaint);
         super.onDraw(canvas);
     }
 

@@ -155,7 +155,7 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
     }
 
     /* renamed from: createLineViewData */
-    public abstract L mo989createLineViewData(ChartData.Line line);
+    public abstract L mo1021createLineViewData(ChartData.Line line);
 
     protected void drawChart(Canvas canvas) {
     }
@@ -1230,7 +1230,7 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
             this.lines.clear();
             if (t != null && t.lines != null) {
                 for (int i = 0; i < t.lines.size(); i++) {
-                    this.lines.add(mo989createLineViewData(t.lines.get(i)));
+                    this.lines.add(mo1021createLineViewData(t.lines.get(i)));
                 }
             }
             clearSelection();

@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -14,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.Iterator;
 import org.telegram.PhoneFormat.PhoneFormat;
+import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
@@ -422,7 +422,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
             HeaderCell headerCell;
             if (i == 0) {
                 ManageChatUserCell manageChatUserCell = new ManageChatUserCell(this.mContext, 7, 6, true);
@@ -544,7 +544,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
                 string = LocaleController.formatPluralString("Members", i3, new Object[0]);
             } else if (chat.has_geo) {
                 string = LocaleController.getString("MegaLocation", R.string.MegaLocation);
-            } else if (TextUtils.isEmpty(chat.username)) {
+            } else if (!ChatObject.isPublic(chat)) {
                 string = LocaleController.getString("MegaPrivate", R.string.MegaPrivate);
             } else {
                 string = LocaleController.getString("MegaPublic", R.string.MegaPublic);

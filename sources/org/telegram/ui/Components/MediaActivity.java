@@ -296,6 +296,22 @@ public class MediaActivity extends BaseFragment implements SharedMediaLayout.Sha
         return sizeNotifierFrameLayout;
     }
 
+    @Override // org.telegram.ui.ActionBar.BaseFragment
+    public boolean isSwipeBackEnabled(MotionEvent motionEvent) {
+        if (!this.sharedMediaLayout.isSwipeBackEnabled()) {
+            return false;
+        }
+        return this.sharedMediaLayout.isCurrentTabFirst();
+    }
+
+    @Override // org.telegram.ui.ActionBar.BaseFragment
+    public boolean canBeginSlide() {
+        if (!this.sharedMediaLayout.isSwipeBackEnabled()) {
+            return false;
+        }
+        return super.canBeginSlide();
+    }
+
     /* JADX INFO: Access modifiers changed from: private */
     public void updateMediaCount() {
         int closestTab = this.sharedMediaLayout.getClosestTab();

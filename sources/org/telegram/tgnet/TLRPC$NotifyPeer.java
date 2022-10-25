@@ -37,6 +37,9 @@ public abstract class TLRPC$NotifyPeer extends TLObject {
                     }
                 };
                 break;
+            case 577659656:
+                tLRPC$TL_notifyPeer = new TLRPC$TL_notifyForumTopic();
+                break;
             default:
                 tLRPC$TL_notifyPeer = null;
                 break;

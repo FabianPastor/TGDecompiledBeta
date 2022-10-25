@@ -499,7 +499,7 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
         CheckBoxCell checkBoxCell = (CheckBoxCell) view;
         int intValue = ((Integer) checkBoxCell.getTag()).intValue();
         if (i2 == 1 && this.clearViewData[intValue].clear) {
-            AndroidUtilities.shakeView(checkBoxCell.getCheckBoxView(), 2.0f, 0);
+            AndroidUtilities.shakeView(checkBoxCell.getCheckBoxView());
             return;
         }
         StorageDiagramView.ClearViewData[] clearViewDataArr2 = this.clearViewData;
@@ -622,7 +622,7 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
         /* JADX WARN: Multi-variable type inference failed */
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
             FrameLayout frameLayout;
             FrameLayout frameLayout2;
             if (i == 0) {

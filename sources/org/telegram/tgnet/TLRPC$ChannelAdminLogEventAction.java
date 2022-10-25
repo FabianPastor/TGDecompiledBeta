@@ -7,6 +7,9 @@ public abstract class TLRPC$ChannelAdminLogEventAction extends TLObject {
             case -1895328189:
                 tLRPC$TL_channelAdminLogEventActionStopPoll = new TLRPC$TL_channelAdminLogEventActionStopPoll();
                 break;
+            case -1374254839:
+                tLRPC$TL_channelAdminLogEventActionStopPoll = new TLRPC$TL_channelAdminLogEventActionDeleteTopic();
+                break;
             case -1347021750:
                 tLRPC$TL_channelAdminLogEventActionStopPoll = new TLRPC$TL_channelAdminLogEventActionParticipantJoinByRequest();
                 break;
@@ -57,6 +60,12 @@ public abstract class TLRPC$ChannelAdminLogEventAction extends TLObject {
             case -370660328:
                 tLRPC$TL_channelAdminLogEventActionStopPoll = new TLRPC$TL_channelAdminLogEventActionUpdatePinned();
                 break;
+            case -263212119:
+                tLRPC$TL_channelAdminLogEventActionStopPoll = new TLRPC$TL_channelAdminLogEventActionChangeUsernames();
+                break;
+            case -261103096:
+                tLRPC$TL_channelAdminLogEventActionStopPoll = new TLRPC$TL_channelAdminLogEventActionEditTopic();
+                break;
             case -124291086:
                 tLRPC$TL_channelAdminLogEventActionStopPoll = new TLRPC$ChannelAdminLogEventAction() { // from class: org.telegram.tgnet.TLRPC$TL_channelAdminLogEventActionParticipantLeave
                     public static int constructor = -NUM;
@@ -72,6 +81,9 @@ public abstract class TLRPC$ChannelAdminLogEventAction extends TLObject {
                 break;
             case -26672755:
                 tLRPC$TL_channelAdminLogEventActionStopPoll = new TLRPC$TL_channelAdminLogEventActionChangeTheme();
+                break;
+            case 46949251:
+                tLRPC$TL_channelAdminLogEventActionStopPoll = new TLRPC$TL_channelAdminLogEventActionToggleForum();
                 break;
             case 84703944:
                 tLRPC$TL_channelAdminLogEventActionStopPoll = new TLRPC$TL_channelAdminLogEventActionChangeLinkedChat();
@@ -136,6 +148,9 @@ public abstract class TLRPC$ChannelAdminLogEventAction extends TLObject {
             case 1456906823:
                 tLRPC$TL_channelAdminLogEventActionStopPoll = new TLRPC$TL_channelAdminLogEventActionToggleGroupCallSetting();
                 break;
+            case 1483767080:
+                tLRPC$TL_channelAdminLogEventActionStopPoll = new TLRPC$TL_channelAdminLogEventActionCreateTopic();
+                break;
             case 1515256996:
                 tLRPC$TL_channelAdminLogEventActionStopPoll = new TLRPC$TL_channelAdminLogEventActionExportedInviteDelete();
                 break;
@@ -155,6 +170,9 @@ public abstract class TLRPC$ChannelAdminLogEventAction extends TLObject {
                         this.invite.serializeToStream(abstractSerializedData2);
                     }
                 };
+                break;
+            case 1569535291:
+                tLRPC$TL_channelAdminLogEventActionStopPoll = new TLRPC$TL_channelAdminLogEventActionPinTopic();
                 break;
             case 1599903217:
                 tLRPC$TL_channelAdminLogEventActionStopPoll = new TLRPC$TL_channelAdminLogEventActionTogglePreHistoryHidden();

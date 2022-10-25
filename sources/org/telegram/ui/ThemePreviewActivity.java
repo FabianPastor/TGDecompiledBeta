@@ -1448,7 +1448,6 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
         super.onFragmentDestroy();
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
     @Override // org.telegram.ui.ActionBar.BaseFragment
     public void onTransitionAnimationStart(boolean z, boolean z2) {
         super.onTransitionAnimationStart(z, z2);
@@ -2919,7 +2918,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             customDialog.date = currentTimeMillis;
             customDialog.verified = false;
             customDialog.isMedia = false;
-            customDialog.sent = true;
+            customDialog.sent = 2;
             this.dialogs.add(customDialog);
             DialogCell.CustomDialog customDialog2 = new DialogCell.CustomDialog();
             customDialog2.name = LocaleController.getString("ThemePreviewDialog2", R.string.ThemePreviewDialog2);
@@ -2932,7 +2931,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             customDialog2.date = currentTimeMillis - 3600;
             customDialog2.verified = false;
             customDialog2.isMedia = false;
-            customDialog2.sent = false;
+            customDialog2.sent = -1;
             this.dialogs.add(customDialog2);
             DialogCell.CustomDialog customDialog3 = new DialogCell.CustomDialog();
             customDialog3.name = LocaleController.getString("ThemePreviewDialog3", R.string.ThemePreviewDialog3);
@@ -2945,7 +2944,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             customDialog3.date = currentTimeMillis - 7200;
             customDialog3.verified = false;
             customDialog3.isMedia = true;
-            customDialog3.sent = false;
+            customDialog3.sent = -1;
             this.dialogs.add(customDialog3);
             DialogCell.CustomDialog customDialog4 = new DialogCell.CustomDialog();
             customDialog4.name = LocaleController.getString("ThemePreviewDialog4", R.string.ThemePreviewDialog4);
@@ -2958,7 +2957,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             customDialog4.date = currentTimeMillis - 10800;
             customDialog4.verified = false;
             customDialog4.isMedia = false;
-            customDialog4.sent = false;
+            customDialog4.sent = -1;
             this.dialogs.add(customDialog4);
             DialogCell.CustomDialog customDialog5 = new DialogCell.CustomDialog();
             customDialog5.name = LocaleController.getString("ThemePreviewDialog5", R.string.ThemePreviewDialog5);
@@ -2971,7 +2970,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             customDialog5.date = currentTimeMillis - 14400;
             customDialog5.verified = false;
             customDialog5.isMedia = false;
-            customDialog5.sent = true;
+            customDialog5.sent = 2;
             this.dialogs.add(customDialog5);
             DialogCell.CustomDialog customDialog6 = new DialogCell.CustomDialog();
             customDialog6.name = LocaleController.getString("ThemePreviewDialog6", R.string.ThemePreviewDialog6);
@@ -2984,7 +2983,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             customDialog6.date = currentTimeMillis - 18000;
             customDialog6.verified = false;
             customDialog6.isMedia = false;
-            customDialog6.sent = false;
+            customDialog6.sent = -1;
             this.dialogs.add(customDialog6);
             DialogCell.CustomDialog customDialog7 = new DialogCell.CustomDialog();
             customDialog7.name = LocaleController.getString("ThemePreviewDialog7", R.string.ThemePreviewDialog7);
@@ -2997,7 +2996,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             customDialog7.date = currentTimeMillis - 21600;
             customDialog7.verified = true;
             customDialog7.isMedia = false;
-            customDialog7.sent = false;
+            customDialog7.sent = -1;
             this.dialogs.add(customDialog7);
             DialogCell.CustomDialog customDialog8 = new DialogCell.CustomDialog();
             customDialog8.name = LocaleController.getString("ThemePreviewDialog8", R.string.ThemePreviewDialog8);
@@ -3010,7 +3009,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             customDialog8.date = currentTimeMillis - 25200;
             customDialog8.verified = true;
             customDialog8.isMedia = false;
-            customDialog8.sent = false;
+            customDialog8.sent = -1;
             this.dialogs.add(customDialog8);
         }
 
@@ -3026,7 +3025,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
             View loadingCell;
             if (i == 0) {
                 loadingCell = new DialogCell(null, this.mContext, false, false);
@@ -3471,7 +3470,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
         /* JADX WARN: Multi-variable type inference failed */
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
             FrameLayout frameLayout;
             if (i == 0) {
                 ChatMessageCell chatMessageCell = new ChatMessageCell(this.mContext, false, new Theme.ResourcesProvider() { // from class: org.telegram.ui.ThemePreviewActivity.MessagesAdapter.1
@@ -3706,8 +3705,8 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                     }
 
                     @Override // org.telegram.ui.Cells.ChatMessageCell.ChatMessageCellDelegate
-                    public /* synthetic */ boolean needPlayMessage(MessageObject messageObject) {
-                        return ChatMessageCell.ChatMessageCellDelegate.CC.$default$needPlayMessage(this, messageObject);
+                    public /* synthetic */ boolean needPlayMessage(MessageObject messageObject, boolean z) {
+                        return ChatMessageCell.ChatMessageCellDelegate.CC.$default$needPlayMessage(this, messageObject, z);
                     }
 
                     @Override // org.telegram.ui.Cells.ChatMessageCell.ChatMessageCellDelegate
@@ -3716,8 +3715,8 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                     }
 
                     @Override // org.telegram.ui.Cells.ChatMessageCell.ChatMessageCellDelegate
-                    public /* synthetic */ void needShowPremiumFeatures(String str) {
-                        ChatMessageCell.ChatMessageCellDelegate.CC.$default$needShowPremiumFeatures(this, str);
+                    public /* synthetic */ void needShowPremiumBulletin(int i2) {
+                        ChatMessageCell.ChatMessageCellDelegate.CC.$default$needShowPremiumBulletin(this, i2);
                     }
 
                     @Override // org.telegram.ui.Cells.ChatMessageCell.ChatMessageCellDelegate
@@ -3772,6 +3771,16 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                     @Override // org.telegram.ui.Cells.ChatActionCell.ChatActionCellDelegate
                     public /* synthetic */ void didPressReplyMessage(ChatActionCell chatActionCell2, int i2) {
                         ChatActionCell.ChatActionCellDelegate.CC.$default$didPressReplyMessage(this, chatActionCell2, i2);
+                    }
+
+                    @Override // org.telegram.ui.Cells.ChatActionCell.ChatActionCellDelegate
+                    public /* synthetic */ BaseFragment getBaseFragment() {
+                        return ChatActionCell.ChatActionCellDelegate.CC.$default$getBaseFragment(this);
+                    }
+
+                    @Override // org.telegram.ui.Cells.ChatActionCell.ChatActionCellDelegate
+                    public /* synthetic */ long getDialogId() {
+                        return ChatActionCell.ChatActionCellDelegate.CC.$default$getDialogId(this);
                     }
 
                     @Override // org.telegram.ui.Cells.ChatActionCell.ChatActionCellDelegate
@@ -3917,7 +3926,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
             return new RecyclerListView.Holder(new PatternCell(this.mContext, ThemePreviewActivity.this.maxWallpaperSize, new PatternCell.PatternCellDelegate() { // from class: org.telegram.ui.ThemePreviewActivity.PatternsAdapter.1
                 @Override // org.telegram.ui.Cells.PatternCell.PatternCellDelegate
                 public TLRPC$TL_wallPaper getSelectedPattern() {

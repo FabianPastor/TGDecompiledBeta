@@ -30,6 +30,7 @@ import org.telegram.tgnet.TLRPC$TL_account_autoDownloadSettings;
 import org.telegram.tgnet.TLRPC$TL_account_saveAutoDownloadSettings;
 import org.telegram.tgnet.TLRPC$TL_autoDownloadSettings;
 import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.ui.LaunchActivity;
 /* loaded from: classes.dex */
 public class DownloadController extends BaseController implements NotificationCenter.NotificationCenterDelegate {
     public static final int AUTODOWNLOAD_TYPE_AUDIO = 2;
@@ -1450,10 +1451,12 @@ public class DownloadController extends BaseController implements NotificationCe
         }
         if (z) {
             getNotificationCenter().postNotificationName(NotificationCenter.onDownloadingFilesChanged, new Object[0]);
-            if (i != 0) {
-                return;
+            if (i == 0) {
+                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, 1, LocaleController.formatString("MessageNotFound", R.string.MessageNotFound, new Object[0]));
+            } else if (i != -1) {
+            } else {
+                LaunchActivity.checkFreeDiscSpaceStatic(2);
             }
-            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, 1, LocaleController.formatString("MessageNotFound", R.string.MessageNotFound, new Object[0]));
         }
     }
 

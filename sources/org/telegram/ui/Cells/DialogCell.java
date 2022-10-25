@@ -45,6 +45,7 @@ import org.telegram.tgnet.TLRPC$Message;
 import org.telegram.tgnet.TLRPC$MessageAction;
 import org.telegram.tgnet.TLRPC$TL_dialog;
 import org.telegram.tgnet.TLRPC$TL_dialogFolder;
+import org.telegram.tgnet.TLRPC$TL_forumTopic;
 import org.telegram.tgnet.TLRPC$TL_messageActionSetChatTheme;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.tgnet.TLRPC$UserStatus;
@@ -65,13 +66,14 @@ public class DialogCell extends BaseCell {
     private int animateFromStatusDrawableParams;
     private int animateToStatusDrawableParams;
     private AnimatedEmojiSpan.EmojiGroupedSpans animatedEmojiStack;
+    private AnimatedEmojiSpan.EmojiGroupedSpans animatedEmojiStack2;
     private boolean animatingArchiveAvatar;
     private float animatingArchiveAvatarProgress;
     private float archiveBackgroundProgress;
     private boolean archiveHidden;
     private PullForegroundDrawable archivedChatsDrawable;
     private AvatarDrawable avatarDrawable;
-    private ImageReceiver avatarImage;
+    public ImageReceiver avatarImage;
     private int bottomClip;
     private TLRPC$Chat chat;
     private float chatCallProgress;
@@ -79,6 +81,7 @@ public class DialogCell extends BaseCell {
     private int checkDrawLeft;
     private int checkDrawLeft1;
     private int checkDrawTop;
+    public float chekBoxPaddingTop;
     private boolean clearingDialog;
     private float clipProgress;
     private int clockDrawLeft;
@@ -107,6 +110,7 @@ public class DialogCell extends BaseCell {
     private float dialogMutedProgress;
     private int dialogsType;
     private TLRPC$DraftMessage draftMessage;
+    public boolean drawAvatar;
     private boolean drawCheck1;
     private boolean drawCheck2;
     private boolean drawClock;
@@ -117,7 +121,8 @@ public class DialogCell extends BaseCell {
     private boolean drawNameLock;
     private boolean drawPin;
     private boolean drawPinBackground;
-    private boolean drawPlay;
+    private boolean drawPinForced;
+    private boolean[] drawPlay;
     private boolean drawPremium;
     private boolean drawReactionMention;
     private boolean drawReorder;
@@ -132,17 +137,23 @@ public class DialogCell extends BaseCell {
     private Paint fadePaint;
     private Paint fadePaintBack;
     private int folderId;
+    public TLRPC$TL_forumTopic forumTopic;
     public boolean fullSeparator;
     public boolean fullSeparator2;
+    private ArrayList<MessageObject> groupMessages;
     private int halfCheckDrawLeft;
     private boolean hasCall;
-    private boolean hasMessageThumb;
+    private boolean hasUnmutedTopics;
+    private boolean hasVideoThumb;
+    public int heightDefault;
+    public int heightThreeLines;
     private int index;
     private float innerProgress;
     private BounceInterpolator interpolator;
     private boolean isDialogCell;
     private boolean isSelected;
     private boolean isSliding;
+    private boolean isTopic;
     long lastDialogChangedTime;
     private int lastDrawSwipeMessageStringId;
     private RLottieDrawable lastDrawTranslationDrawable;
@@ -154,6 +165,7 @@ public class DialogCell extends BaseCell {
     private int lastStatusDrawableParams;
     private boolean lastUnreadState;
     private long lastUpdateTime;
+    private int lock2Left;
     private boolean markUnread;
     private int mentionCount;
     private StaticLayout mentionLayout;
@@ -166,8 +178,10 @@ public class DialogCell extends BaseCell {
     private StaticLayout messageNameLayout;
     private int messageNameLeft;
     private int messageNameTop;
+    public int messagePaddingStart;
     private int messageTop;
     boolean moving;
+    private boolean nameIsEllipsized;
     private StaticLayout nameLayout;
     private boolean nameLayoutEllipsizeByGradient;
     private boolean nameLayoutEllipsizeLeft;
@@ -204,14 +218,17 @@ public class DialogCell extends BaseCell {
     private int swipeMessageTextId;
     private StaticLayout swipeMessageTextLayout;
     private int swipeMessageWidth;
-    private ImageReceiver thumbImage;
+    private ImageReceiver[] thumbImage;
+    private int thumbsCount;
     private StaticLayout timeLayout;
     private int timeLeft;
     private int timeTop;
     private int topClip;
+    protected int translateY;
     private boolean translationAnimationStarted;
     private RLottieDrawable translationDrawable;
     private float translationX;
+    private boolean twoLinesForName;
     private int unreadCount;
     public boolean useForceThreeLines;
     private boolean useMeForMyMessages;
@@ -239,10 +256,14 @@ public class DialogCell extends BaseCell {
         public boolean muted;
         public String name;
         public boolean pinned;
-        public boolean sent;
+        public int sent = -1;
         public int type;
         public int unread_count;
         public boolean verified;
+    }
+
+    protected boolean drawLock2() {
+        return false;
     }
 
     @Override // org.telegram.ui.Cells.BaseCell, android.view.View
@@ -256,6 +277,36 @@ public class DialogCell extends BaseCell {
 
     public boolean isMoving() {
         return this.moving;
+    }
+
+    public void setForumTopic(TLRPC$TL_forumTopic tLRPC$TL_forumTopic, long j, MessageObject messageObject, boolean z) {
+        this.forumTopic = tLRPC$TL_forumTopic;
+        boolean z2 = true;
+        this.isTopic = tLRPC$TL_forumTopic != null;
+        if (this.currentDialogId != j) {
+            this.lastStatusDrawableParams = -1;
+        }
+        this.currentDialogId = j;
+        this.lastDialogChangedTime = System.currentTimeMillis();
+        this.message = messageObject;
+        this.isDialogCell = false;
+        TLRPC$Message tLRPC$Message = messageObject.messageOwner;
+        this.lastMessageDate = tLRPC$Message.date;
+        this.currentEditDate = tLRPC$Message.edit_date;
+        this.markUnread = false;
+        this.messageId = messageObject.getId();
+        if (!messageObject.isUnread()) {
+            z2 = false;
+        }
+        this.lastUnreadState = z2;
+        MessageObject messageObject2 = this.message;
+        if (messageObject2 != null) {
+            this.lastSendState = messageObject2.messageOwner.send_state;
+        }
+        if (!z) {
+            this.lastStatusDrawableParams = -1;
+        }
+        update(0, z);
     }
 
     /* loaded from: classes3.dex */
@@ -292,7 +343,14 @@ public class DialogCell extends BaseCell {
 
     public DialogCell(DialogsActivity dialogsActivity, Context context, boolean z, boolean z2, int i, Theme.ResourcesProvider resourcesProvider) {
         super(context);
-        this.thumbImage = new ImageReceiver(this);
+        this.drawAvatar = true;
+        this.messagePaddingStart = 72;
+        this.heightDefault = 72;
+        this.heightThreeLines = 78;
+        this.chekBoxPaddingTop = 42.0f;
+        this.hasUnmutedTopics = false;
+        this.thumbImage = new ImageReceiver[3];
+        this.drawPlay = new boolean[3];
         this.avatarImage = new ImageReceiver(this);
         this.avatarDrawable = new AvatarDrawable();
         this.interpolator = new BounceInterpolator();
@@ -307,20 +365,22 @@ public class DialogCell extends BaseCell {
         this.parentFragment = dialogsActivity;
         Theme.createDialogsResources(context);
         this.avatarImage.setRoundRadius(AndroidUtilities.dp(28.0f));
-        this.thumbImage.setRoundRadius(AndroidUtilities.dp(2.0f));
-        this.useForceThreeLines = z2;
-        this.currentAccount = i;
-        if (z) {
-            CheckBox2 checkBox2 = new CheckBox2(context, 21, resourcesProvider);
-            this.checkBox = checkBox2;
-            checkBox2.setColor(null, "windowBackgroundWhite", "checkboxCheck");
-            this.checkBox.setDrawUnchecked(false);
-            this.checkBox.setDrawBackgroundAsArc(3);
-            addView(this.checkBox);
+        int i2 = 0;
+        while (true) {
+            ImageReceiver[] imageReceiverArr = this.thumbImage;
+            if (i2 < imageReceiverArr.length) {
+                imageReceiverArr[i2] = new ImageReceiver(this);
+                this.thumbImage[i2].setRoundRadius(AndroidUtilities.dp(2.0f));
+                i2++;
+            } else {
+                this.useForceThreeLines = z2;
+                this.currentAccount = i;
+                AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable swapAnimatedEmojiDrawable = new AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable(this, AndroidUtilities.dp(22.0f));
+                this.emojiStatus = swapAnimatedEmojiDrawable;
+                swapAnimatedEmojiDrawable.center = false;
+                return;
+            }
         }
-        AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable swapAnimatedEmojiDrawable = new AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable(this, AndroidUtilities.dp(22.0f));
-        this.emojiStatus = swapAnimatedEmojiDrawable;
-        swapAnimatedEmojiDrawable.center = false;
     }
 
     public void setDialog(TLRPC$Dialog tLRPC$Dialog, int i, int i2) {
@@ -410,7 +470,7 @@ public class DialogCell extends BaseCell {
         ChatThemeController.getInstance(this.currentAccount).setDialogTheme(this.currentDialogId, ((TLRPC$TL_messageActionSetChatTheme) tLRPC$MessageAction).emoticon, false);
     }
 
-    public void setDialog(long j, MessageObject messageObject, int i, boolean z) {
+    public void setDialog(long j, MessageObject messageObject, int i, boolean z, boolean z2) {
         if (this.currentDialogId != j) {
             this.lastStatusDrawableParams = -1;
         }
@@ -431,7 +491,7 @@ public class DialogCell extends BaseCell {
         if (messageObject2 != null) {
             this.lastSendState = messageObject2.messageOwner.send_state;
         }
-        update(0);
+        update(0, z2);
     }
 
     public long getDialogId() {
@@ -450,15 +510,24 @@ public class DialogCell extends BaseCell {
         this.preloader = dialogsPreloader;
     }
 
+    /* JADX INFO: Access modifiers changed from: protected */
     @Override // android.view.ViewGroup, android.view.View
-    protected void onDetachedFromWindow() {
+    public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         this.isSliding = false;
         this.drawRevealBackground = false;
         this.currentRevealProgress = 0.0f;
-        this.reorderIconProgress = (!this.drawPin || !this.drawReorder) ? 0.0f : 1.0f;
+        this.reorderIconProgress = (!getIsPinned() || !this.drawReorder) ? 0.0f : 1.0f;
         this.avatarImage.onDetachedFromWindow();
-        this.thumbImage.onDetachedFromWindow();
+        int i = 0;
+        while (true) {
+            ImageReceiver[] imageReceiverArr = this.thumbImage;
+            if (i >= imageReceiverArr.length) {
+                break;
+            }
+            imageReceiverArr[i].onDetachedFromWindow();
+            i++;
+        }
         RLottieDrawable rLottieDrawable = this.translationDrawable;
         if (rLottieDrawable != null) {
             rLottieDrawable.stop();
@@ -476,15 +545,27 @@ public class DialogCell extends BaseCell {
             swapAnimatedEmojiDrawable.detach();
         }
         AnimatedEmojiSpan.release(this, this.animatedEmojiStack);
+        AnimatedEmojiSpan.release(this, this.animatedEmojiStack2);
     }
 
+    /* JADX INFO: Access modifiers changed from: protected */
     @Override // android.view.ViewGroup, android.view.View
-    protected void onAttachedToWindow() {
+    public void onAttachedToWindow() {
         super.onAttachedToWindow();
         this.avatarImage.onAttachedToWindow();
-        this.thumbImage.onAttachedToWindow();
-        resetPinnedArchiveState();
-        this.animatedEmojiStack = AnimatedEmojiSpan.update(0, this, this.animatedEmojiStack, this.messageLayout);
+        int i = 0;
+        while (true) {
+            ImageReceiver[] imageReceiverArr = this.thumbImage;
+            if (i < imageReceiverArr.length) {
+                imageReceiverArr[i].onAttachedToWindow();
+                i++;
+            } else {
+                resetPinnedArchiveState();
+                this.animatedEmojiStack = AnimatedEmojiSpan.update(0, this, this.animatedEmojiStack, this.messageLayout);
+                this.animatedEmojiStack2 = AnimatedEmojiSpan.update(0, this, this.animatedEmojiStack2, this.messageNameLayout);
+                return;
+            }
+        }
     }
 
     public void resetPinnedArchiveState() {
@@ -496,7 +577,7 @@ public class DialogCell extends BaseCell {
         this.avatarDrawable.setArchivedAvatarHiddenProgress(f2);
         this.clipProgress = 0.0f;
         this.isSliding = false;
-        if (!this.drawPin || !this.drawReorder) {
+        if (!getIsPinned() || !this.drawReorder) {
             f = 0.0f;
         }
         this.reorderIconProgress = f;
@@ -515,32 +596,38 @@ public class DialogCell extends BaseCell {
         if (checkBox2 != null) {
             checkBox2.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(24.0f), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(24.0f), NUM));
         }
-        setMeasuredDimension(View.MeasureSpec.getSize(i), AndroidUtilities.dp((this.useForceThreeLines || SharedConfig.useThreeLinesLayout) ? 78.0f : 72.0f) + (this.useSeparator ? 1 : 0));
+        if (this.isTopic) {
+            setMeasuredDimension(View.MeasureSpec.getSize(i), AndroidUtilities.dp((this.useForceThreeLines || SharedConfig.useThreeLinesLayout) ? this.heightThreeLines : this.heightDefault) + (this.useSeparator ? 1 : 0));
+            checkTwoLinesForName();
+        }
+        setMeasuredDimension(View.MeasureSpec.getSize(i), AndroidUtilities.dp((this.useForceThreeLines || SharedConfig.useThreeLinesLayout) ? this.heightThreeLines : this.heightDefault) + (this.useSeparator ? 1 : 0) + (this.twoLinesForName ? AndroidUtilities.dp(20.0f) : 0));
         this.topClip = 0;
         this.bottomClip = getMeasuredHeight();
     }
 
+    private void checkTwoLinesForName() {
+        this.twoLinesForName = false;
+        if (this.isTopic) {
+            buildLayout();
+            if (!this.nameIsEllipsized) {
+                return;
+            }
+            this.twoLinesForName = true;
+            buildLayout();
+        }
+    }
+
     @Override // android.view.ViewGroup, android.view.View
     protected void onLayout(boolean z, int i, int i2, int i3, int i4) {
-        int dp;
         if (this.currentDialogId == 0 && this.customDialog == null) {
             return;
         }
         if (this.checkBox != null) {
-            float f = 45.0f;
+            int dp = AndroidUtilities.dp(this.messagePaddingStart - ((this.useForceThreeLines || SharedConfig.useThreeLinesLayout) ? 29 : 27));
             if (LocaleController.isRTL) {
-                int i5 = i3 - i;
-                if (this.useForceThreeLines || SharedConfig.useThreeLinesLayout) {
-                    f = 43.0f;
-                }
-                dp = i5 - AndroidUtilities.dp(f);
-            } else {
-                if (this.useForceThreeLines || SharedConfig.useThreeLinesLayout) {
-                    f = 43.0f;
-                }
-                dp = AndroidUtilities.dp(f);
+                dp = (i3 - i) - dp;
             }
-            int dp2 = AndroidUtilities.dp((this.useForceThreeLines || SharedConfig.useThreeLinesLayout) ? 48.0f : 42.0f);
+            int dp2 = AndroidUtilities.dp(this.chekBoxPaddingTop + ((this.useForceThreeLines || SharedConfig.useThreeLinesLayout) ? 6 : 0));
             CheckBox2 checkBox2 = this.checkBox;
             checkBox2.layout(dp, dp2, checkBox2.getMeasuredWidth() + dp, this.checkBox.getMeasuredHeight() + dp2);
         }
@@ -565,7 +652,13 @@ public class DialogCell extends BaseCell {
     }
 
     public boolean getIsPinned() {
-        return this.drawPin;
+        return this.drawPin || this.drawPinForced;
+    }
+
+    public void setPinForced(boolean z) {
+        this.drawPinForced = z;
+        buildLayout();
+        invalidate();
     }
 
     private CharSequence formatArchivedDialogNames() {
@@ -612,72 +705,104 @@ public class DialogCell extends BaseCell {
         return Emoji.replaceEmoji(spannableStringBuilder, Theme.dialogs_messagePaint[this.paintIndex].getFontMetricsInt(), AndroidUtilities.dp(17.0f), false);
     }
 
-    /* JADX WARN: Code restructure failed: missing block: B:210:0x04c4, code lost:
-        if (r2.post_messages == false) goto L552;
+    /* JADX WARN: Code restructure failed: missing block: B:223:0x054d, code lost:
+        if (r2.post_messages == false) goto L617;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:216:0x04d0, code lost:
-        if (r2.kicked != false) goto L552;
+    /* JADX WARN: Code restructure failed: missing block: B:229:0x0559, code lost:
+        if (r2.kicked != false) goto L617;
      */
-    /* JADX WARN: Removed duplicated region for block: B:1028:0x17cb  */
-    /* JADX WARN: Removed duplicated region for block: B:1090:0x18db A[Catch: Exception -> 0x1995, TryCatch #3 {Exception -> 0x1995, blocks: (B:1073:0x18a4, B:1075:0x18a8, B:1083:0x18c1, B:1086:0x18c7, B:1088:0x18d7, B:1090:0x18db, B:1092:0x18ef, B:1094:0x18f5, B:1096:0x18f9, B:1099:0x1906, B:1098:0x1903, B:1100:0x1909, B:1102:0x190d, B:1105:0x1912, B:1107:0x1916, B:1109:0x1922, B:1110:0x192d, B:1120:0x196f, B:1111:0x1941, B:1114:0x1947, B:1115:0x194e, B:1119:0x1964, B:1077:0x18ac, B:1079:0x18b0, B:1081:0x18b5), top: B:1251:0x18a4 }] */
-    /* JADX WARN: Removed duplicated region for block: B:1107:0x1916 A[Catch: Exception -> 0x1995, TryCatch #3 {Exception -> 0x1995, blocks: (B:1073:0x18a4, B:1075:0x18a8, B:1083:0x18c1, B:1086:0x18c7, B:1088:0x18d7, B:1090:0x18db, B:1092:0x18ef, B:1094:0x18f5, B:1096:0x18f9, B:1099:0x1906, B:1098:0x1903, B:1100:0x1909, B:1102:0x190d, B:1105:0x1912, B:1107:0x1916, B:1109:0x1922, B:1110:0x192d, B:1120:0x196f, B:1111:0x1941, B:1114:0x1947, B:1115:0x194e, B:1119:0x1964, B:1077:0x18ac, B:1079:0x18b0, B:1081:0x18b5), top: B:1251:0x18a4 }] */
-    /* JADX WARN: Removed duplicated region for block: B:1117:0x195f  */
-    /* JADX WARN: Removed duplicated region for block: B:1118:0x1962  */
-    /* JADX WARN: Removed duplicated region for block: B:1126:0x19a0  */
-    /* JADX WARN: Removed duplicated region for block: B:1180:0x1b13  */
-    /* JADX WARN: Removed duplicated region for block: B:1219:0x1bc1  */
-    /* JADX WARN: Removed duplicated region for block: B:1223:0x1bd0 A[Catch: Exception -> 0x1bfb, TryCatch #1 {Exception -> 0x1bfb, blocks: (B:1221:0x1bc5, B:1223:0x1bd0, B:1224:0x1bd2, B:1226:0x1beb, B:1227:0x1bf2), top: B:1247:0x1bc5 }] */
-    /* JADX WARN: Removed duplicated region for block: B:1226:0x1beb A[Catch: Exception -> 0x1bfb, TryCatch #1 {Exception -> 0x1bfb, blocks: (B:1221:0x1bc5, B:1223:0x1bd0, B:1224:0x1bd2, B:1226:0x1beb, B:1227:0x1bf2), top: B:1247:0x1bc5 }] */
-    /* JADX WARN: Removed duplicated region for block: B:1233:0x1CLASSNAME  */
-    /* JADX WARN: Removed duplicated region for block: B:1268:? A[ADDED_TO_REGION, RETURN, SYNTHETIC] */
-    /* JADX WARN: Removed duplicated region for block: B:172:0x0427  */
-    /* JADX WARN: Removed duplicated region for block: B:184:0x0475  */
-    /* JADX WARN: Removed duplicated region for block: B:189:0x0481  */
-    /* JADX WARN: Removed duplicated region for block: B:219:0x04d6  */
-    /* JADX WARN: Removed duplicated region for block: B:221:0x04db  */
-    /* JADX WARN: Removed duplicated region for block: B:233:0x0561  */
-    /* JADX WARN: Removed duplicated region for block: B:326:0x07a8  */
-    /* JADX WARN: Removed duplicated region for block: B:330:0x07b0  */
-    /* JADX WARN: Removed duplicated region for block: B:591:0x0cdf  */
-    /* JADX WARN: Removed duplicated region for block: B:596:0x0cf0  */
-    /* JADX WARN: Removed duplicated region for block: B:607:0x0d4c  */
-    /* JADX WARN: Removed duplicated region for block: B:691:0x0var_  */
-    /* JADX WARN: Removed duplicated region for block: B:696:0x0var_  */
-    /* JADX WARN: Removed duplicated region for block: B:715:0x0fbe  */
-    /* JADX WARN: Removed duplicated region for block: B:718:0x0fc6  */
-    /* JADX WARN: Removed duplicated region for block: B:721:0x0fd0  */
-    /* JADX WARN: Removed duplicated region for block: B:722:0x0fd8  */
-    /* JADX WARN: Removed duplicated region for block: B:731:0x0ff5  */
-    /* JADX WARN: Removed duplicated region for block: B:733:0x1009  */
-    /* JADX WARN: Removed duplicated region for block: B:795:0x1119  */
-    /* JADX WARN: Removed duplicated region for block: B:810:0x116f  */
-    /* JADX WARN: Removed duplicated region for block: B:812:0x117a  */
-    /* JADX WARN: Removed duplicated region for block: B:835:0x11d2  */
-    /* JADX WARN: Removed duplicated region for block: B:839:0x1212  */
-    /* JADX WARN: Removed duplicated region for block: B:842:0x121e  */
-    /* JADX WARN: Removed duplicated region for block: B:843:0x1230  */
-    /* JADX WARN: Removed duplicated region for block: B:846:0x124a  */
-    /* JADX WARN: Removed duplicated region for block: B:849:0x1262  */
-    /* JADX WARN: Removed duplicated region for block: B:853:0x128e  */
-    /* JADX WARN: Removed duplicated region for block: B:883:0x1358  */
-    /* JADX WARN: Removed duplicated region for block: B:886:0x1372  */
-    /* JADX WARN: Removed duplicated region for block: B:903:0x13bb  */
-    /* JADX WARN: Removed duplicated region for block: B:906:0x13c8 A[Catch: Exception -> 0x1464, TryCatch #4 {Exception -> 0x1464, blocks: (B:901:0x13b2, B:904:0x13bc, B:906:0x13c8, B:910:0x13e2, B:911:0x13eb, B:913:0x140f, B:915:0x1415, B:919:0x1426, B:921:0x1447, B:923:0x144e, B:925:0x1458), top: B:1253:0x13b2 }] */
-    /* JADX WARN: Removed duplicated region for block: B:941:0x156d  */
-    /* JADX WARN: Removed duplicated region for block: B:942:0x158b  */
-    /* JADX WARN: Removed duplicated region for block: B:946:0x15d6  */
-    /* JADX WARN: Removed duplicated region for block: B:952:0x15fb  */
-    /* JADX WARN: Removed duplicated region for block: B:957:0x162b  */
+    /* JADX WARN: Multi-variable type inference failed */
+    /* JADX WARN: Removed duplicated region for block: B:1005:0x14f5  */
+    /* JADX WARN: Removed duplicated region for block: B:1009:0x1534  */
+    /* JADX WARN: Removed duplicated region for block: B:1012:0x1541  */
+    /* JADX WARN: Removed duplicated region for block: B:1017:0x1575  */
+    /* JADX WARN: Removed duplicated region for block: B:1020:0x157a  */
+    /* JADX WARN: Removed duplicated region for block: B:1021:0x158c  */
+    /* JADX WARN: Removed duplicated region for block: B:1024:0x15ab  */
+    /* JADX WARN: Removed duplicated region for block: B:1027:0x15c3  */
+    /* JADX WARN: Removed duplicated region for block: B:1031:0x15f0  */
+    /* JADX WARN: Removed duplicated region for block: B:1061:0x16c0  */
+    /* JADX WARN: Removed duplicated region for block: B:1064:0x16da  */
+    /* JADX WARN: Removed duplicated region for block: B:1081:0x1723  */
+    /* JADX WARN: Removed duplicated region for block: B:1084:0x1730 A[Catch: Exception -> 0x180e, TryCatch #1 {Exception -> 0x180e, blocks: (B:1079:0x171a, B:1082:0x1724, B:1084:0x1730, B:1088:0x174a, B:1089:0x1753, B:1093:0x1769, B:1095:0x176f, B:1096:0x177b, B:1098:0x1792, B:1100:0x1798, B:1104:0x17a9, B:1106:0x17ad, B:1108:0x17eb, B:1110:0x17ef, B:1112:0x17f8, B:1114:0x1802, B:1107:0x17ce), top: B:1467:0x171a }] */
+    /* JADX WARN: Removed duplicated region for block: B:1091:0x1766  */
+    /* JADX WARN: Removed duplicated region for block: B:1092:0x1768  */
+    /* JADX WARN: Removed duplicated region for block: B:1095:0x176f A[Catch: Exception -> 0x180e, TryCatch #1 {Exception -> 0x180e, blocks: (B:1079:0x171a, B:1082:0x1724, B:1084:0x1730, B:1088:0x174a, B:1089:0x1753, B:1093:0x1769, B:1095:0x176f, B:1096:0x177b, B:1098:0x1792, B:1100:0x1798, B:1104:0x17a9, B:1106:0x17ad, B:1108:0x17eb, B:1110:0x17ef, B:1112:0x17f8, B:1114:0x1802, B:1107:0x17ce), top: B:1467:0x171a }] */
+    /* JADX WARN: Removed duplicated region for block: B:1106:0x17ad A[Catch: Exception -> 0x180e, TryCatch #1 {Exception -> 0x180e, blocks: (B:1079:0x171a, B:1082:0x1724, B:1084:0x1730, B:1088:0x174a, B:1089:0x1753, B:1093:0x1769, B:1095:0x176f, B:1096:0x177b, B:1098:0x1792, B:1100:0x1798, B:1104:0x17a9, B:1106:0x17ad, B:1108:0x17eb, B:1110:0x17ef, B:1112:0x17f8, B:1114:0x1802, B:1107:0x17ce), top: B:1467:0x171a }] */
+    /* JADX WARN: Removed duplicated region for block: B:1107:0x17ce A[Catch: Exception -> 0x180e, TryCatch #1 {Exception -> 0x180e, blocks: (B:1079:0x171a, B:1082:0x1724, B:1084:0x1730, B:1088:0x174a, B:1089:0x1753, B:1093:0x1769, B:1095:0x176f, B:1096:0x177b, B:1098:0x1792, B:1100:0x1798, B:1104:0x17a9, B:1106:0x17ad, B:1108:0x17eb, B:1110:0x17ef, B:1112:0x17f8, B:1114:0x1802, B:1107:0x17ce), top: B:1467:0x171a }] */
+    /* JADX WARN: Removed duplicated region for block: B:1142:0x1952  */
+    /* JADX WARN: Removed duplicated region for block: B:1143:0x1970  */
+    /* JADX WARN: Removed duplicated region for block: B:1147:0x19a7 A[LOOP:9: B:1145:0x19a2->B:1147:0x19a7, LOOP_END] */
+    /* JADX WARN: Removed duplicated region for block: B:1151:0x19d3  */
+    /* JADX WARN: Removed duplicated region for block: B:1154:0x19e2  */
+    /* JADX WARN: Removed duplicated region for block: B:1160:0x1a07  */
+    /* JADX WARN: Removed duplicated region for block: B:1164:0x1a35  */
+    /* JADX WARN: Removed duplicated region for block: B:1235:0x1bd1  */
+    /* JADX WARN: Removed duplicated region for block: B:1276:0x1c7c A[LOOP:8: B:1274:0x1CLASSNAME->B:1276:0x1c7c, LOOP_END] */
+    /* JADX WARN: Removed duplicated region for block: B:1289:0x1cc3  */
+    /* JADX WARN: Removed duplicated region for block: B:1307:0x1d11 A[Catch: Exception -> 0x1de1, TryCatch #6 {Exception -> 0x1de1, blocks: (B:1291:0x1cdc, B:1293:0x1ce0, B:1301:0x1cf8, B:1304:0x1cfe, B:1305:0x1d0d, B:1307:0x1d11, B:1309:0x1d25, B:1311:0x1d2b, B:1313:0x1d2f, B:1316:0x1d3c, B:1315:0x1d39, B:1317:0x1d3f, B:1319:0x1d43, B:1322:0x1d48, B:1324:0x1d4c, B:1326:0x1d5e, B:1327:0x1d70, B:1337:0x1dbb, B:1328:0x1d88, B:1331:0x1d8e, B:1332:0x1d95, B:1336:0x1dab, B:1295:0x1ce4, B:1297:0x1ce8, B:1299:0x1ced), top: B:1477:0x1cdc }] */
+    /* JADX WARN: Removed duplicated region for block: B:1324:0x1d4c A[Catch: Exception -> 0x1de1, TryCatch #6 {Exception -> 0x1de1, blocks: (B:1291:0x1cdc, B:1293:0x1ce0, B:1301:0x1cf8, B:1304:0x1cfe, B:1305:0x1d0d, B:1307:0x1d11, B:1309:0x1d25, B:1311:0x1d2b, B:1313:0x1d2f, B:1316:0x1d3c, B:1315:0x1d39, B:1317:0x1d3f, B:1319:0x1d43, B:1322:0x1d48, B:1324:0x1d4c, B:1326:0x1d5e, B:1327:0x1d70, B:1337:0x1dbb, B:1328:0x1d88, B:1331:0x1d8e, B:1332:0x1d95, B:1336:0x1dab, B:1295:0x1ce4, B:1297:0x1ce8, B:1299:0x1ced), top: B:1477:0x1cdc }] */
+    /* JADX WARN: Removed duplicated region for block: B:1334:0x1da6  */
+    /* JADX WARN: Removed duplicated region for block: B:1335:0x1da9  */
+    /* JADX WARN: Removed duplicated region for block: B:1343:0x1dec  */
+    /* JADX WARN: Removed duplicated region for block: B:1397:0x1var_  */
+    /* JADX WARN: Removed duplicated region for block: B:1436:0x2016  */
+    /* JADX WARN: Removed duplicated region for block: B:1440:0x2025 A[Catch: Exception -> 0x2064, TryCatch #4 {Exception -> 0x2064, blocks: (B:1438:0x201a, B:1440:0x2025, B:1441:0x2027, B:1443:0x2040, B:1445:0x2048, B:1447:0x204c), top: B:1473:0x201a }] */
+    /* JADX WARN: Removed duplicated region for block: B:1443:0x2040 A[Catch: Exception -> 0x2064, TryCatch #4 {Exception -> 0x2064, blocks: (B:1438:0x201a, B:1440:0x2025, B:1441:0x2027, B:1443:0x2040, B:1445:0x2048, B:1447:0x204c), top: B:1473:0x201a }] */
+    /* JADX WARN: Removed duplicated region for block: B:1447:0x204c A[Catch: Exception -> 0x2064, TRY_LEAVE, TryCatch #4 {Exception -> 0x2064, blocks: (B:1438:0x201a, B:1440:0x2025, B:1441:0x2027, B:1443:0x2040, B:1445:0x2048, B:1447:0x204c), top: B:1473:0x201a }] */
+    /* JADX WARN: Removed duplicated region for block: B:1453:0x206c  */
+    /* JADX WARN: Removed duplicated region for block: B:1491:0x1cbf A[EDGE_INSN: B:1491:0x1cbf->B:1287:0x1cbf ?: BREAK  , SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:1492:0x19cb A[EDGE_INSN: B:1492:0x19cb->B:1148:0x19cb ?: BREAK  , SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:1515:? A[ADDED_TO_REGION, RETURN, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:176:0x0481  */
+    /* JADX WARN: Removed duplicated region for block: B:188:0x04d3  */
+    /* JADX WARN: Removed duplicated region for block: B:193:0x04df  */
+    /* JADX WARN: Removed duplicated region for block: B:198:0x04ff  */
+    /* JADX WARN: Removed duplicated region for block: B:204:0x051a  */
+    /* JADX WARN: Removed duplicated region for block: B:216:0x053d  */
+    /* JADX WARN: Removed duplicated region for block: B:226:0x0553  */
+    /* JADX WARN: Removed duplicated region for block: B:233:0x0560  */
+    /* JADX WARN: Removed duplicated region for block: B:245:0x05e9  */
+    /* JADX WARN: Removed duplicated region for block: B:343:0x0835  */
+    /* JADX WARN: Removed duplicated region for block: B:421:0x097c  */
+    /* JADX WARN: Removed duplicated region for block: B:574:0x0bed  */
+    /* JADX WARN: Removed duplicated region for block: B:588:0x0CLASSNAME  */
+    /* JADX WARN: Removed duplicated region for block: B:590:0x0CLASSNAME  */
+    /* JADX WARN: Removed duplicated region for block: B:716:0x0f1a  */
+    /* JADX WARN: Removed duplicated region for block: B:734:0x0var_  */
+    /* JADX WARN: Removed duplicated region for block: B:739:0x0var_  */
+    /* JADX WARN: Removed duplicated region for block: B:873:0x12b0  */
+    /* JADX WARN: Removed duplicated region for block: B:877:0x12be  */
+    /* JADX WARN: Removed duplicated region for block: B:878:0x12c6  */
+    /* JADX WARN: Removed duplicated region for block: B:887:0x12e3  */
+    /* JADX WARN: Removed duplicated region for block: B:888:0x12f7  */
+    /* JADX WARN: Removed duplicated region for block: B:961:0x1427  */
+    /* JADX WARN: Removed duplicated region for block: B:976:0x147e  */
+    /* JADX WARN: Removed duplicated region for block: B:978:0x1491  */
+    /* JADX WARN: Type inference failed for: r0v38, types: [android.text.SpannableStringBuilder, java.lang.CharSequence, android.text.Spannable] */
+    /* JADX WARN: Type inference failed for: r2v188, types: [android.text.SpannableStringBuilder] */
+    /* JADX WARN: Type inference failed for: r5v45, types: [android.text.SpannableStringBuilder] */
+    /* JADX WARN: Type inference failed for: r7v67, types: [android.text.SpannableStringBuilder] */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
     public void buildLayout() {
         /*
-            Method dump skipped, instructions count: 7246
+            Method dump skipped, instructions count: 8375
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.DialogCell.buildLayout():void");
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
+    public static /* synthetic */ int lambda$buildLayout$0(MessageObject messageObject, MessageObject messageObject2) {
+        return messageObject.getId() - messageObject2.getId();
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
+    public static /* synthetic */ int lambda$buildLayout$1(MessageObject messageObject, MessageObject messageObject2) {
+        return messageObject.getId() - messageObject2.getId();
     }
 
     private void drawCheckStatus(Canvas canvas, boolean z, boolean z2, boolean z3, boolean z4, float f) {
@@ -772,12 +897,19 @@ public class DialogCell extends BaseCell {
         }
         TLRPC$Dialog tLRPC$Dialog = dialogsArray.get(this.index);
         boolean z2 = true;
+        MessageObject messageObject3 = null;
         TLRPC$Dialog tLRPC$Dialog2 = this.index + 1 < dialogsArray.size() ? dialogsArray.get(this.index + 1) : null;
         TLRPC$DraftMessage draft = MediaDataController.getInstance(this.currentAccount).getDraft(this.currentDialogId, 0);
         if (this.currentDialogFolderId != 0) {
             messageObject = findFolderTopMessage();
+            this.groupMessages = null;
         } else {
-            messageObject = MessagesController.getInstance(this.currentAccount).dialogMessage.get(tLRPC$Dialog.id);
+            ArrayList<MessageObject> arrayList = MessagesController.getInstance(this.currentAccount).dialogMessage.get(tLRPC$Dialog.id);
+            this.groupMessages = arrayList;
+            if (arrayList != null && arrayList.size() > 0) {
+                messageObject3 = this.groupMessages.get(0);
+            }
+            messageObject = messageObject3;
         }
         if (this.currentDialogId == tLRPC$Dialog.id && (((messageObject2 = this.message) == null || messageObject2.getId() == tLRPC$Dialog.top_message) && ((messageObject == null || messageObject.messageOwner.edit_date == this.currentEditDate) && this.unreadCount == tLRPC$Dialog.unread_count && this.mentionCount == tLRPC$Dialog.unread_mentions_count && this.markUnread == tLRPC$Dialog.unread_mark && this.message == messageObject && draft == this.draftMessage && this.drawPin == tLRPC$Dialog.pinned))) {
             return;
@@ -838,31 +970,37 @@ public class DialogCell extends BaseCell {
     }
 
     public void setChecked(boolean z, boolean z2) {
-        CheckBox2 checkBox2 = this.checkBox;
-        if (checkBox2 == null) {
-            return;
+        if (this.checkBox == null) {
+            CheckBox2 checkBox2 = new CheckBox2(getContext(), 21, this.resourcesProvider);
+            this.checkBox = checkBox2;
+            checkBox2.setColor(null, "windowBackgroundWhite", "checkboxCheck");
+            this.checkBox.setDrawUnchecked(false);
+            this.checkBox.setDrawBackgroundAsArc(3);
+            addView(this.checkBox);
         }
-        checkBox2.setChecked(z, z2);
+        this.checkBox.setChecked(z, z2);
     }
 
     private MessageObject findFolderTopMessage() {
         DialogsActivity dialogsActivity = this.parentFragment;
-        MessageObject messageObject = null;
         if (dialogsActivity == null) {
             return null;
         }
         ArrayList<TLRPC$Dialog> dialogsArray = dialogsActivity.getDialogsArray(this.currentAccount, this.dialogsType, this.currentDialogFolderId, false);
-        if (!dialogsArray.isEmpty()) {
-            int size = dialogsArray.size();
-            for (int i = 0; i < size; i++) {
-                TLRPC$Dialog tLRPC$Dialog = dialogsArray.get(i);
-                MessageObject messageObject2 = MessagesController.getInstance(this.currentAccount).dialogMessage.get(tLRPC$Dialog.id);
-                if (messageObject2 != null && (messageObject == null || messageObject2.messageOwner.date > messageObject.messageOwner.date)) {
-                    messageObject = messageObject2;
-                }
-                if (tLRPC$Dialog.pinnedNum == 0 && messageObject != null) {
-                    break;
-                }
+        if (dialogsArray.isEmpty()) {
+            return null;
+        }
+        int size = dialogsArray.size();
+        MessageObject messageObject = null;
+        for (int i = 0; i < size; i++) {
+            TLRPC$Dialog tLRPC$Dialog = dialogsArray.get(i);
+            ArrayList<MessageObject> arrayList = MessagesController.getInstance(this.currentAccount).dialogMessage.get(tLRPC$Dialog.id);
+            MessageObject messageObject2 = (arrayList == null || arrayList.size() <= 0) ? null : arrayList.get(0);
+            if (messageObject2 != null && (messageObject == null || messageObject2.messageOwner.date > messageObject.messageOwner.date)) {
+                messageObject = messageObject2;
+            }
+            if (tLRPC$Dialog.pinnedNum == 0 && messageObject != null) {
+                break;
             }
         }
         return messageObject;
@@ -876,33 +1014,44 @@ public class DialogCell extends BaseCell {
         update(i, true);
     }
 
-    /* JADX WARN: Removed duplicated region for block: B:118:0x0214  */
-    /* JADX WARN: Removed duplicated region for block: B:144:0x024b  */
-    /* JADX WARN: Removed duplicated region for block: B:175:0x02c3  */
-    /* JADX WARN: Removed duplicated region for block: B:177:0x02c8  */
-    /* JADX WARN: Removed duplicated region for block: B:305:0x05fd  */
+    /* JADX WARN: Removed duplicated region for block: B:139:0x0282  */
+    /* JADX WARN: Removed duplicated region for block: B:165:0x02b9  */
+    /* JADX WARN: Removed duplicated region for block: B:208:0x036c  */
+    /* JADX WARN: Removed duplicated region for block: B:210:0x0371  */
+    /* JADX WARN: Removed duplicated region for block: B:212:0x0375  */
+    /* JADX WARN: Type inference failed for: r3v0 */
+    /* JADX WARN: Type inference failed for: r3v1, types: [org.telegram.tgnet.TLRPC$Chat, org.telegram.tgnet.TLRPC$User, org.telegram.tgnet.TLRPC$EncryptedChat] */
+    /* JADX WARN: Type inference failed for: r3v77 */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public void update(int r25, boolean r26) {
+    public void update(int r26, boolean r27) {
         /*
-            Method dump skipped, instructions count: 1570
+            Method dump skipped, instructions count: 1786
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.DialogCell.update(int, boolean):void");
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$update$0(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$update$2(ValueAnimator valueAnimator) {
         this.countChangeProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidate();
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$update$1(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$update$3(ValueAnimator valueAnimator) {
         this.reactionsMentionsChangeProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidate();
+    }
+
+    private int getTopicId() {
+        TLRPC$TL_forumTopic tLRPC$TL_forumTopic = this.forumTopic;
+        if (tLRPC$TL_forumTopic == null) {
+            return 0;
+        }
+        return tLRPC$TL_forumTopic.id;
     }
 
     @Override // android.view.View
@@ -947,64 +1096,59 @@ public class DialogCell extends BaseCell {
         invalidate();
     }
 
-    /* JADX WARN: Code restructure failed: missing block: B:218:0x06bf, code lost:
-        if (r0.type != 2) goto L707;
-     */
-    /* JADX WARN: Removed duplicated region for block: B:249:0x0799  */
-    /* JADX WARN: Removed duplicated region for block: B:264:0x07ed  */
-    /* JADX WARN: Removed duplicated region for block: B:297:0x0908  */
-    /* JADX WARN: Removed duplicated region for block: B:298:0x090d  */
-    /* JADX WARN: Removed duplicated region for block: B:301:0x092d  */
-    /* JADX WARN: Removed duplicated region for block: B:305:0x093a  */
-    /* JADX WARN: Removed duplicated region for block: B:365:0x09fe  */
-    /* JADX WARN: Removed duplicated region for block: B:368:0x0a0a  */
-    /* JADX WARN: Removed duplicated region for block: B:401:0x0a6b  */
-    /* JADX WARN: Removed duplicated region for block: B:402:0x0a6e  */
-    /* JADX WARN: Removed duplicated region for block: B:405:0x0a7d  */
-    /* JADX WARN: Removed duplicated region for block: B:406:0x0ab6  */
-    /* JADX WARN: Removed duplicated region for block: B:409:0x0ac1  */
-    /* JADX WARN: Removed duplicated region for block: B:424:0x0b09  */
-    /* JADX WARN: Removed duplicated region for block: B:470:0x0bc8  */
-    /* JADX WARN: Removed duplicated region for block: B:475:0x0bf0  */
-    /* JADX WARN: Removed duplicated region for block: B:476:0x0c3e  */
-    /* JADX WARN: Removed duplicated region for block: B:595:0x102e  */
-    /* JADX WARN: Removed duplicated region for block: B:598:0x104e  */
-    /* JADX WARN: Removed duplicated region for block: B:605:0x1061  */
-    /* JADX WARN: Removed duplicated region for block: B:610:0x1099  */
-    /* JADX WARN: Removed duplicated region for block: B:613:0x10a0  */
-    /* JADX WARN: Removed duplicated region for block: B:662:0x1180  */
-    /* JADX WARN: Removed duplicated region for block: B:725:0x135a  */
-    /* JADX WARN: Removed duplicated region for block: B:730:0x13e7  */
-    /* JADX WARN: Removed duplicated region for block: B:735:0x13fc  */
-    /* JADX WARN: Removed duplicated region for block: B:741:0x1412  */
-    /* JADX WARN: Removed duplicated region for block: B:747:0x1425  */
-    /* JADX WARN: Removed duplicated region for block: B:756:0x1444  */
-    /* JADX WARN: Removed duplicated region for block: B:759:0x144b  */
-    /* JADX WARN: Removed duplicated region for block: B:766:0x146f  */
-    /* JADX WARN: Removed duplicated region for block: B:788:0x14d5  */
-    /* JADX WARN: Removed duplicated region for block: B:794:0x1522  */
-    /* JADX WARN: Removed duplicated region for block: B:799:0x152e  */
-    /* JADX WARN: Removed duplicated region for block: B:805:0x1541  */
-    /* JADX WARN: Removed duplicated region for block: B:813:0x1559  */
-    /* JADX WARN: Removed duplicated region for block: B:821:0x1583  */
-    /* JADX WARN: Removed duplicated region for block: B:832:0x15b2  */
-    /* JADX WARN: Removed duplicated region for block: B:838:0x15c6  */
-    /* JADX WARN: Removed duplicated region for block: B:846:0x15e1  */
-    /* JADX WARN: Removed duplicated region for block: B:849:0x15ef  */
-    /* JADX WARN: Removed duplicated region for block: B:860:0x1612  */
-    /* JADX WARN: Removed duplicated region for block: B:870:? A[RETURN, SYNTHETIC] */
-    /* JADX WARN: Type inference failed for: r9v28, types: [boolean, int] */
-    /* JADX WARN: Type inference failed for: r9v29 */
-    /* JADX WARN: Type inference failed for: r9v58 */
+    /* JADX INFO: Access modifiers changed from: protected */
+    /* JADX WARN: Removed duplicated region for block: B:247:0x079d  */
+    /* JADX WARN: Removed duplicated region for block: B:248:0x07de  */
+    /* JADX WARN: Removed duplicated region for block: B:251:0x07e3  */
+    /* JADX WARN: Removed duplicated region for block: B:269:0x0861  */
+    /* JADX WARN: Removed duplicated region for block: B:272:0x086d  */
+    /* JADX WARN: Removed duplicated region for block: B:307:0x098f  */
+    /* JADX WARN: Removed duplicated region for block: B:367:0x0a5a  */
+    /* JADX WARN: Removed duplicated region for block: B:370:0x0a66  */
+    /* JADX WARN: Removed duplicated region for block: B:403:0x0ac7  */
+    /* JADX WARN: Removed duplicated region for block: B:404:0x0aca  */
+    /* JADX WARN: Removed duplicated region for block: B:407:0x0ad9  */
+    /* JADX WARN: Removed duplicated region for block: B:408:0x0b12  */
+    /* JADX WARN: Removed duplicated region for block: B:411:0x0b1d  */
+    /* JADX WARN: Removed duplicated region for block: B:426:0x0b65  */
+    /* JADX WARN: Removed duplicated region for block: B:473:0x0CLASSNAME  */
+    /* JADX WARN: Removed duplicated region for block: B:478:0x0c4e  */
+    /* JADX WARN: Removed duplicated region for block: B:479:0x0c9c  */
+    /* JADX WARN: Removed duplicated region for block: B:602:0x109d  */
+    /* JADX WARN: Removed duplicated region for block: B:605:0x10bd  */
+    /* JADX WARN: Removed duplicated region for block: B:614:0x10d4  */
+    /* JADX WARN: Removed duplicated region for block: B:623:0x111c  */
+    /* JADX WARN: Removed duplicated region for block: B:626:0x1123  */
+    /* JADX WARN: Removed duplicated region for block: B:675:0x1202  */
+    /* JADX WARN: Removed duplicated region for block: B:738:0x13dc  */
+    /* JADX WARN: Removed duplicated region for block: B:743:0x1469  */
+    /* JADX WARN: Removed duplicated region for block: B:748:0x147e  */
+    /* JADX WARN: Removed duplicated region for block: B:753:0x1492  */
+    /* JADX WARN: Removed duplicated region for block: B:759:0x14a5  */
+    /* JADX WARN: Removed duplicated region for block: B:768:0x14c4  */
+    /* JADX WARN: Removed duplicated region for block: B:771:0x14cb  */
+    /* JADX WARN: Removed duplicated region for block: B:778:0x14f0  */
+    /* JADX WARN: Removed duplicated region for block: B:800:0x1557  */
+    /* JADX WARN: Removed duplicated region for block: B:806:0x15a4  */
+    /* JADX WARN: Removed duplicated region for block: B:811:0x15b0  */
+    /* JADX WARN: Removed duplicated region for block: B:817:0x15c3  */
+    /* JADX WARN: Removed duplicated region for block: B:825:0x15db  */
+    /* JADX WARN: Removed duplicated region for block: B:833:0x1605  */
+    /* JADX WARN: Removed duplicated region for block: B:844:0x1634  */
+    /* JADX WARN: Removed duplicated region for block: B:850:0x1649  */
+    /* JADX WARN: Removed duplicated region for block: B:858:0x1664  */
+    /* JADX WARN: Removed duplicated region for block: B:861:0x1672  */
+    /* JADX WARN: Removed duplicated region for block: B:872:0x1695  */
+    /* JADX WARN: Removed duplicated region for block: B:885:? A[RETURN, SYNTHETIC] */
     @Override // android.view.View
     @android.annotation.SuppressLint({"DrawAllocation"})
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    protected void onDraw(android.graphics.Canvas r41) {
+    public void onDraw(android.graphics.Canvas r41) {
         /*
-            Method dump skipped, instructions count: 5686
+            Method dump skipped, instructions count: 5818
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.DialogCell.onDraw(android.graphics.Canvas):void");
@@ -1019,10 +1163,10 @@ public class DialogCell extends BaseCell {
         this.statusDrawableAnimator.setInterpolator(CubicBezierInterpolator.DEFAULT);
         this.animateFromStatusDrawableParams = i;
         this.animateToStatusDrawableParams = i2;
-        this.statusDrawableAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() { // from class: org.telegram.ui.Cells.DialogCell$$ExternalSyntheticLambda1
+        this.statusDrawableAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() { // from class: org.telegram.ui.Cells.DialogCell$$ExternalSyntheticLambda2
             @Override // android.animation.ValueAnimator.AnimatorUpdateListener
             public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                DialogCell.this.lambda$createStatusDrawableAnimator$2(valueAnimator);
+                DialogCell.this.lambda$createStatusDrawableAnimator$4(valueAnimator);
             }
         });
         this.statusDrawableAnimator.addListener(new AnimatorListenerAdapter() { // from class: org.telegram.ui.Cells.DialogCell.3
@@ -1045,7 +1189,7 @@ public class DialogCell extends BaseCell {
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$createStatusDrawableAnimator$2(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$createStatusDrawableAnimator$4(ValueAnimator valueAnimator) {
         this.statusDrawableProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidate();
     }
@@ -1062,9 +1206,8 @@ public class DialogCell extends BaseCell {
     }
 
     public void onReorderStateChanged(boolean z, boolean z2) {
-        boolean z3 = this.drawPin;
-        if ((!z3 && z) || this.drawReorder == z) {
-            if (z3) {
+        if ((!getIsPinned() && z) || this.drawReorder == z) {
+            if (getIsPinned()) {
                 return;
             }
             this.drawReorder = false;
@@ -1133,6 +1276,7 @@ public class DialogCell extends BaseCell {
 
     @Override // android.view.View
     public void onPopulateAccessibilityEvent(AccessibilityEvent accessibilityEvent) {
+        MessageObject captionMessage;
         TLRPC$User user;
         super.onPopulateAccessibilityEvent(accessibilityEvent);
         StringBuilder sb = new StringBuilder();
@@ -1216,9 +1360,11 @@ public class DialogCell extends BaseCell {
         if (this.encryptedChat == null) {
             StringBuilder sb2 = new StringBuilder();
             sb2.append(this.message.messageText);
-            if (!this.message.isMediaEmpty() && !TextUtils.isEmpty(this.message.caption)) {
-                sb2.append(". ");
-                sb2.append(this.message.caption);
+            if (!this.message.isMediaEmpty() && (captionMessage = getCaptionMessage()) != null && !TextUtils.isEmpty(captionMessage.caption)) {
+                if (sb2.length() > 0) {
+                    sb2.append(". ");
+                }
+                sb2.append(captionMessage);
             }
             StaticLayout staticLayout = this.messageLayout;
             int length = staticLayout == null ? -1 : staticLayout.getText().length();
@@ -1242,6 +1388,32 @@ public class DialogCell extends BaseCell {
             }
         }
         accessibilityEvent.setContentDescription(sb.toString());
+    }
+
+    private MessageObject getCaptionMessage() {
+        CharSequence charSequence;
+        if (this.groupMessages == null) {
+            MessageObject messageObject = this.message;
+            if (messageObject != null && messageObject.caption != null) {
+                return messageObject;
+            }
+            return null;
+        }
+        MessageObject messageObject2 = null;
+        int i = 0;
+        for (int i2 = 0; i2 < this.groupMessages.size(); i2++) {
+            MessageObject messageObject3 = this.groupMessages.get(i2);
+            if (messageObject3 != null && (charSequence = messageObject3.caption) != null) {
+                if (!TextUtils.isEmpty(charSequence)) {
+                    i++;
+                }
+                messageObject2 = messageObject3;
+            }
+        }
+        if (i <= 1) {
+            return messageObject2;
+        }
+        return null;
     }
 
     public void setClipProgress(float f) {

@@ -1026,7 +1026,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
         /* JADX WARN: Multi-variable type inference failed */
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
             FrameLayout frameLayout;
             if (i == 0) {
                 SharedPhotoVideoCell sharedPhotoVideoCell = new SharedPhotoVideoCell(this.mContext, 1);
@@ -1097,7 +1097,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                 if (dialogCell.getMessage() == null || dialogCell.getMessage().getId() != messageObject2.getId()) {
                     z = false;
                 }
-                dialogCell.setDialog(messageObject2.getDialogId(), messageObject2, messageObject2.messageOwner.date, false);
+                dialogCell.setDialog(messageObject2.getDialogId(), messageObject2, messageObject2.messageOwner.date, false, false);
                 if (FilteredSearchView.this.uiCallback.actionModeShowing()) {
                     FilteredSearchView.this.messageHashIdTmp.set(messageObject2.getId(), messageObject2.getDialogId());
                     dialogCell.setChecked(FilteredSearchView.this.uiCallback.isSelected(FilteredSearchView.this.messageHashIdTmp), z);
@@ -1128,7 +1128,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
             int i3 = this.currentSearchFilter.filterType;
             if (i3 == 0) {
                 PhotoViewer.getInstance().setParentActivity(this.parentFragment);
-                PhotoViewer.getInstance().openPhoto(this.messages, i, 0L, 0L, this.provider);
+                PhotoViewer.getInstance().openPhoto(this.messages, i, 0L, 0L, 0, this.provider);
                 this.photoViewerClassGuid = PhotoViewer.getInstance().getClassGuid();
             } else if (i3 == 3 || i3 == 5) {
                 if (!(view instanceof SharedAudioCell)) {
@@ -1178,12 +1178,12 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                             ArrayList<MessageObject> arrayList = new ArrayList<>();
                             arrayList.add(messageObject);
                             PhotoViewer.getInstance().setParentActivity(this.parentFragment);
-                            PhotoViewer.getInstance().openPhoto(arrayList, 0, 0L, 0L, this.provider);
+                            PhotoViewer.getInstance().openPhoto(arrayList, 0, 0L, 0L, 0, this.provider);
                             this.photoViewerClassGuid = PhotoViewer.getInstance().getClassGuid();
                             return;
                         }
                         PhotoViewer.getInstance().setParentActivity(this.parentFragment);
-                        PhotoViewer.getInstance().openPhoto(this.messages, indexOf, 0L, 0L, this.provider);
+                        PhotoViewer.getInstance().openPhoto(this.messages, indexOf, 0L, 0L, 0, this.provider);
                         this.photoViewerClassGuid = PhotoViewer.getInstance().getClassGuid();
                         return;
                     }
@@ -1209,7 +1209,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
 
         @Override // org.telegram.ui.Components.RecyclerListView.SectionsAdapter
         /* renamed from: getItem */
-        public Object mo1741getItem(int i, int i2) {
+        public Object mo1776getItem(int i, int i2) {
             return null;
         }
 
@@ -1327,7 +1327,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
         /* JADX WARN: Multi-variable type inference failed */
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
             GraySectionCell graySectionCell;
             if (i == 0) {
                 graySectionCell = new GraySectionCell(this.mContext);
@@ -1405,7 +1405,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
 
         @Override // org.telegram.ui.Components.RecyclerListView.SectionsAdapter
         /* renamed from: getItem */
-        public Object mo1741getItem(int i, int i2) {
+        public Object mo1776getItem(int i, int i2) {
             return null;
         }
 
@@ -1471,7 +1471,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
         /* JADX WARN: Multi-variable type inference failed */
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
             View graySectionCell;
             SharedDocumentCell sharedDocumentCell;
             if (i != 0) {
@@ -1698,7 +1698,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
         /* JADX WARN: Multi-variable type inference failed */
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
             DialogCell dialogCell;
             if (i == 0) {
                 dialogCell = new DialogCell(null, viewGroup.getContext(), true, false);
@@ -1721,7 +1721,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
             if (viewHolder.getItemViewType() == 0) {
                 final DialogCell dialogCell = (DialogCell) viewHolder.itemView;
                 final MessageObject messageObject = FilteredSearchView.this.messages.get(i);
-                dialogCell.setDialog(messageObject.getDialogId(), messageObject, messageObject.messageOwner.date, false);
+                dialogCell.setDialog(messageObject.getDialogId(), messageObject, messageObject.messageOwner.date, false, false);
                 final boolean z = true;
                 dialogCell.useSeparator = i != getItemCount() - 1;
                 if (dialogCell.getMessage() == null || dialogCell.getMessage().getId() != messageObject.getId()) {

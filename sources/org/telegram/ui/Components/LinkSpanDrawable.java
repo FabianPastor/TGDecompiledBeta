@@ -7,9 +7,12 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 import android.os.SystemClock;
+import android.text.Layout;
+import android.text.SpannableString;
 import android.text.style.CharacterStyle;
 import android.text.style.ClickableSpan;
 import android.util.Pair;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.TextView;
@@ -413,29 +416,79 @@ public class LinkSpanDrawable<S extends CharacterStyle> {
             this.onLongPressListener = onLinkPress;
         }
 
-        /* JADX WARN: Removed duplicated region for block: B:22:0x00b9  */
-        /* JADX WARN: Removed duplicated region for block: B:34:0x00ee  */
+        public ClickableSpan hit(int i, int i2) {
+            Layout layout = getLayout();
+            if (layout == null) {
+                return null;
+            }
+            int paddingLeft = i - getPaddingLeft();
+            int paddingTop = i2 - getPaddingTop();
+            int lineForVertical = layout.getLineForVertical(paddingTop);
+            float f = paddingLeft;
+            int offsetForHorizontal = layout.getOffsetForHorizontal(lineForVertical, f);
+            float lineLeft = getLayout().getLineLeft(lineForVertical);
+            if (lineLeft <= f && lineLeft + layout.getLineWidth(lineForVertical) >= f && paddingTop >= 0 && paddingTop <= layout.getHeight()) {
+                ClickableSpan[] clickableSpanArr = (ClickableSpan[]) new SpannableString(layout.getText()).getSpans(offsetForHorizontal, offsetForHorizontal, ClickableSpan.class);
+                if (clickableSpanArr.length != 0 && !AndroidUtilities.isAccessibilityScreenReaderEnabled()) {
+                    return clickableSpanArr[0];
+                }
+            }
+            return null;
+        }
+
         @Override // android.widget.TextView, android.view.View
-        /*
-            Code decompiled incorrectly, please refer to instructions dump.
-            To view partially-correct add '--show-bad-code' argument
-        */
-        public boolean onTouchEvent(android.view.MotionEvent r11) {
-            /*
-                Method dump skipped, instructions count: 265
-                To view this dump add '--comments-level debug' option
-            */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.LinkSpanDrawable.LinksTextView.onTouchEvent(android.view.MotionEvent):boolean");
+        public boolean onTouchEvent(MotionEvent motionEvent) {
+            if (this.links != null) {
+                Layout layout = getLayout();
+                final ClickableSpan hit = hit((int) motionEvent.getX(), (int) motionEvent.getY());
+                if (hit != null && motionEvent.getAction() == 0) {
+                    final LinkSpanDrawable<ClickableSpan> linkSpanDrawable = new LinkSpanDrawable<>(hit, this.resourcesProvider, motionEvent.getX(), motionEvent.getY());
+                    this.pressedLink = linkSpanDrawable;
+                    this.links.addLink(linkSpanDrawable);
+                    SpannableString spannableString = new SpannableString(layout.getText());
+                    int spanStart = spannableString.getSpanStart(this.pressedLink.getSpan());
+                    int spanEnd = spannableString.getSpanEnd(this.pressedLink.getSpan());
+                    LinkPath obtainNewPath = this.pressedLink.obtainNewPath();
+                    obtainNewPath.setCurrentLayout(layout, spanStart, getPaddingTop());
+                    layout.getSelectionPath(spanStart, spanEnd, obtainNewPath);
+                    AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.LinkSpanDrawable$LinksTextView$$ExternalSyntheticLambda0
+                        @Override // java.lang.Runnable
+                        public final void run() {
+                            LinkSpanDrawable.LinksTextView.this.lambda$onTouchEvent$0(linkSpanDrawable, hit);
+                        }
+                    }, ViewConfiguration.getLongPressTimeout());
+                    return true;
+                } else if (motionEvent.getAction() == 1) {
+                    this.links.clear();
+                    LinkSpanDrawable<ClickableSpan> linkSpanDrawable2 = this.pressedLink;
+                    if (linkSpanDrawable2 != null && linkSpanDrawable2.getSpan() == hit) {
+                        OnLinkPress onLinkPress = this.onPressListener;
+                        if (onLinkPress != null) {
+                            onLinkPress.run(this.pressedLink.getSpan());
+                        } else if (this.pressedLink.getSpan() != null) {
+                            this.pressedLink.getSpan().onClick(this);
+                        }
+                    }
+                    this.pressedLink = null;
+                    return true;
+                } else if (motionEvent.getAction() == 3) {
+                    this.links.clear();
+                    this.pressedLink = null;
+                    return true;
+                }
+            }
+            return this.pressedLink != null || super.onTouchEvent(motionEvent);
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$onTouchEvent$0(ClickableSpan[] clickableSpanArr) {
+        public /* synthetic */ void lambda$onTouchEvent$0(LinkSpanDrawable linkSpanDrawable, ClickableSpan clickableSpan) {
             OnLinkPress onLinkPress = this.onLongPressListener;
-            if (onLinkPress != null) {
-                onLinkPress.run(clickableSpanArr[0]);
-                this.pressedLink = null;
-                this.links.clear();
+            if (onLinkPress == null || this.pressedLink != linkSpanDrawable) {
+                return;
             }
+            onLinkPress.run(clickableSpan);
+            this.pressedLink = null;
+            this.links.clear();
         }
 
         /* JADX INFO: Access modifiers changed from: protected */

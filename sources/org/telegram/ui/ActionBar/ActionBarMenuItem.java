@@ -95,6 +95,7 @@ public class ActionBarMenuItem extends FrameLayout {
     private EditTextBoldCursor searchField;
     private TextView searchFieldCaption;
     private LinearLayout searchFilterLayout;
+    public int searchItemPaddingStart;
     private int selectedFilterIndex;
     private View selectedMenuView;
     private Runnable showMenuRunnable;
@@ -160,6 +161,14 @@ public class ActionBarMenuItem extends FrameLayout {
     }
 
     protected void onDismiss() {
+    }
+
+    public void setSearchPaddingStart(int i) {
+        this.searchItemPaddingStart = i;
+        FrameLayout frameLayout = this.searchContainer;
+        if (frameLayout != null) {
+            ((ViewGroup.MarginLayoutParams) frameLayout.getLayoutParams()).leftMargin = AndroidUtilities.dp(i);
+        }
     }
 
     public ActionBarMenuItem(Context context, ActionBarMenu actionBarMenu, int i, int i2) {
@@ -1362,9 +1371,9 @@ public class ActionBarMenuItem extends FrameLayout {
                 horizontalScrollView.setHorizontalScrollBarEnabled(false);
                 horizontalScrollView.setClipChildren(false);
                 this.wrappedSearchFrameLayout.addView(horizontalScrollView, LayoutHelper.createFrame(-1, -1.0f, 0, 0.0f, 0.0f, 48.0f, 0.0f));
-                this.parentMenu.addView(this.wrappedSearchFrameLayout, 0, LayoutHelper.createLinear(0, -1, 1.0f, 0, 0, 0, 0));
+                this.parentMenu.addView(this.wrappedSearchFrameLayout, 0, LayoutHelper.createLinear(0, -1, 1.0f, this.searchItemPaddingStart, 0, 0, 0));
             } else {
-                this.parentMenu.addView(this.searchContainer, 0, LayoutHelper.createLinear(0, -1, 1.0f, 6, 0, 0, 0));
+                this.parentMenu.addView(this.searchContainer, 0, LayoutHelper.createLinear(0, -1, 1.0f, this.searchItemPaddingStart + 6, 0, 0, 0));
             }
             this.searchContainer.setVisibility(8);
             TextView textView = new TextView(getContext());

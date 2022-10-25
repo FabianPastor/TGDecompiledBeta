@@ -18,7 +18,8 @@ public class TLRPC$TL_message extends TLRPC$Message {
         this.legacy = (524288 & readInt32) != 0;
         this.edit_hide = (2097152 & readInt32) != 0;
         this.pinned = (16777216 & readInt32) != 0;
-        this.noforwards = (readInt32 & 67108864) != 0;
+        this.noforwards = (67108864 & readInt32) != 0;
+        this.topic_start = (readInt32 & NUM) != 0;
         this.id = abstractSerializedData.readInt32(z);
         if ((this.flags & 256) != 0) {
             this.from_id = TLRPC$Peer.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
@@ -131,7 +132,9 @@ public class TLRPC$TL_message extends TLRPC$Message {
         this.flags = i9;
         int i10 = this.noforwards ? i9 | 67108864 : i9 & (-67108865);
         this.flags = i10;
-        abstractSerializedData.writeInt32(i10);
+        int i11 = this.topic_start ? i10 | NUM : i10 & (-NUM);
+        this.flags = i11;
+        abstractSerializedData.writeInt32(i11);
         abstractSerializedData.writeInt32(this.id);
         if ((this.flags & 256) != 0) {
             this.from_id.serializeToStream(abstractSerializedData);
@@ -158,8 +161,8 @@ public class TLRPC$TL_message extends TLRPC$Message {
             abstractSerializedData.writeInt32(NUM);
             int size = this.entities.size();
             abstractSerializedData.writeInt32(size);
-            for (int i11 = 0; i11 < size; i11++) {
-                this.entities.get(i11).serializeToStream(abstractSerializedData);
+            for (int i12 = 0; i12 < size; i12++) {
+                this.entities.get(i12).serializeToStream(abstractSerializedData);
             }
         }
         if ((this.flags & 1024) != 0) {
@@ -187,8 +190,8 @@ public class TLRPC$TL_message extends TLRPC$Message {
             abstractSerializedData.writeInt32(NUM);
             int size2 = this.restriction_reason.size();
             abstractSerializedData.writeInt32(size2);
-            for (int i12 = 0; i12 < size2; i12++) {
-                this.restriction_reason.get(i12).serializeToStream(abstractSerializedData);
+            for (int i13 = 0; i13 < size2; i13++) {
+                this.restriction_reason.get(i13).serializeToStream(abstractSerializedData);
             }
         }
         if ((this.flags & 33554432) != 0) {

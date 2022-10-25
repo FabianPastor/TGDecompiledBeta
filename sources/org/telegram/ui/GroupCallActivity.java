@@ -1083,7 +1083,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
         canvas.scale(0.16666667f, 0.16666667f);
         canvas.save();
         canvas.translate(0.0f, -AndroidUtilities.statusBarHeight);
-        this.parentActivity.getActionBarLayout().draw(canvas);
+        this.parentActivity.getActionBarLayout().getView().draw(canvas);
         canvas.drawColor(ColorUtils.setAlphaComponent(-16777216, 76));
         canvas.restore();
         canvas.save();
@@ -1527,25 +1527,25 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    /* JADX WARN: Code restructure failed: missing block: B:31:0x007a, code lost:
-        if (android.text.TextUtils.isEmpty(r0.username) == false) goto L166;
+    /* JADX WARN: Code restructure failed: missing block: B:31:0x0076, code lost:
+        if (org.telegram.messenger.ChatObject.isPublic(r0) != false) goto L166;
      */
-    /* JADX WARN: Removed duplicated region for block: B:130:0x0283  */
-    /* JADX WARN: Removed duplicated region for block: B:131:0x0286  */
-    /* JADX WARN: Removed duplicated region for block: B:173:0x0358  */
-    /* JADX WARN: Removed duplicated region for block: B:49:0x00be  */
-    /* JADX WARN: Removed duplicated region for block: B:50:0x00c1  */
-    /* JADX WARN: Removed duplicated region for block: B:53:0x00cc  */
-    /* JADX WARN: Removed duplicated region for block: B:54:0x00d1  */
-    /* JADX WARN: Removed duplicated region for block: B:57:0x00ec  */
-    /* JADX WARN: Removed duplicated region for block: B:92:0x01be  */
+    /* JADX WARN: Removed duplicated region for block: B:130:0x027f  */
+    /* JADX WARN: Removed duplicated region for block: B:131:0x0282  */
+    /* JADX WARN: Removed duplicated region for block: B:173:0x0354  */
+    /* JADX WARN: Removed duplicated region for block: B:49:0x00ba  */
+    /* JADX WARN: Removed duplicated region for block: B:50:0x00bd  */
+    /* JADX WARN: Removed duplicated region for block: B:53:0x00c8  */
+    /* JADX WARN: Removed duplicated region for block: B:54:0x00cd  */
+    /* JADX WARN: Removed duplicated region for block: B:57:0x00e8  */
+    /* JADX WARN: Removed duplicated region for block: B:92:0x01ba  */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
     public void updateItems() {
         /*
-            Method dump skipped, instructions count: 891
+            Method dump skipped, instructions count: 887
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.GroupCallActivity.updateItems():void");
@@ -1559,7 +1559,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
 
     protected void makeFocusable(final BottomSheet bottomSheet, final AlertDialog alertDialog, final EditTextBoldCursor editTextBoldCursor, final boolean z) {
         if (!this.enterEventSent) {
-            BaseFragment baseFragment = this.parentActivity.getActionBarLayout().fragmentsStack.get(this.parentActivity.getActionBarLayout().fragmentsStack.size() - 1);
+            BaseFragment baseFragment = this.parentActivity.getActionBarLayout().getFragmentStack().get(this.parentActivity.getActionBarLayout().getFragmentStack().size() - 1);
             if (baseFragment instanceof ChatActivity) {
                 boolean needEnterText = ((ChatActivity) baseFragment).needEnterText();
                 this.enterEventSent = true;
@@ -3729,7 +3729,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
 
     /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$new$9(DialogInterface dialogInterface) {
-        BaseFragment baseFragment = this.parentActivity.getActionBarLayout().fragmentsStack.get(this.parentActivity.getActionBarLayout().fragmentsStack.size() - 1);
+        BaseFragment baseFragment = this.parentActivity.getActionBarLayout().getFragmentStack().get(this.parentActivity.getActionBarLayout().getFragmentStack().size() - 1);
         if (!this.anyEnterEventSent || !(baseFragment instanceof ChatActivity)) {
             return;
         }
@@ -3907,7 +3907,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                         if (!this.ignoreTextChange && editable.length() > 40) {
                             this.ignoreTextChange = true;
                             editable.delete(40, editable.length());
-                            AndroidUtilities.shakeView(editTextBoldCursor, 2.0f, 0);
+                            AndroidUtilities.shakeView(editTextBoldCursor);
                             editTextBoldCursor.performHapticFeedback(3, 2);
                             this.ignoreTextChange = false;
                         }
@@ -4290,13 +4290,13 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             if (groupCallInvitedCell.hasAvatarSet()) {
                 bundle.putBoolean("expandPhoto", true);
             }
-            this.parentActivity.lambda$runLinkRequest$62(new ProfileActivity(bundle));
+            this.parentActivity.lambda$runLinkRequest$66(new ProfileActivity(bundle));
             dismiss();
         } else if (i != this.listAdapter.addMemberRow) {
         } else {
             if (ChatObject.isChannel(this.currentChat)) {
                 TLRPC$Chat tLRPC$Chat = this.currentChat;
-                if (!tLRPC$Chat.megagroup && !TextUtils.isEmpty(tLRPC$Chat.username)) {
+                if (!tLRPC$Chat.megagroup && ChatObject.isPublic(tLRPC$Chat)) {
                     getLink(false);
                     return;
                 }
@@ -4760,7 +4760,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                             return;
                         }
                         GroupCallActivity.this.playingHandAnimation = true;
-                        AndroidUtilities.shakeView(GroupCallActivity.this.muteLabel[0], 2.0f, 0);
+                        AndroidUtilities.shakeView(GroupCallActivity.this.muteLabel[0]);
                         view.performHapticFeedback(3, 2);
                         int nextInt = Utilities.random.nextInt(100);
                         int i3 = 540;
@@ -6051,10 +6051,11 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
         String str;
         TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported;
         TLRPC$Chat chat = this.accountInstance.getMessagesController().getChat(Long.valueOf(this.currentChat.id));
-        if (chat != null && TextUtils.isEmpty(chat.username)) {
+        if (chat != null && !ChatObject.isPublic(chat)) {
             final TLRPC$ChatFull chatFull = this.accountInstance.getMessagesController().getChatFull(this.currentChat.id);
-            if (!TextUtils.isEmpty(this.currentChat.username)) {
-                str = this.accountInstance.getMessagesController().linkPrefix + "/" + this.currentChat.username;
+            String publicUsername = ChatObject.getPublicUsername(this.currentChat);
+            if (!TextUtils.isEmpty(publicUsername)) {
+                str = this.accountInstance.getMessagesController().linkPrefix + "/" + publicUsername;
             } else {
                 str = (chatFull == null || (tLRPC$TL_chatInviteExported = chatFull.exported_invite) == null) ? null : tLRPC$TL_chatInviteExported.link;
             }
@@ -6140,7 +6141,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             this.invites[0] = null;
         }
         String[] strArr2 = this.invites;
-        if (strArr2[0] == null && strArr2[1] == null && !TextUtils.isEmpty(this.currentChat.username)) {
+        if (strArr2[0] == null && strArr2[1] == null && ChatObject.isPublic(this.currentChat)) {
             openShareAlert(true, null, this.accountInstance.getMessagesController().linkPrefix + "/" + this.currentChat.username, z);
             return;
         }
@@ -6148,8 +6149,8 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
         openShareAlert(false, strArr3[0], strArr3[1], z);
     }
 
-    /* JADX WARN: Removed duplicated region for block: B:32:0x00bb  */
-    /* JADX WARN: Removed duplicated region for block: B:33:0x00be  */
+    /* JADX WARN: Removed duplicated region for block: B:32:0x00bf  */
+    /* JADX WARN: Removed duplicated region for block: B:33:0x00c2  */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
@@ -6172,7 +6173,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
         L12:
             org.telegram.messenger.AndroidUtilities.addToClipboard(r0)
             boolean r0 = org.telegram.messenger.AndroidUtilities.shouldShowClipboardToast()
-            if (r0 == 0) goto Lc3
+            if (r0 == 0) goto Lc7
             org.telegram.ui.Components.UndoView r1 = r15.getUndoView()
             r2 = 0
             r4 = 33
@@ -6181,64 +6182,64 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r7 = 0
             r8 = 0
             r1.showWithAction(r2, r4, r5, r6, r7, r8)
-            goto Lc3
+            goto Lc7
         L2c:
             org.telegram.ui.LaunchActivity r2 = r12.parentActivity
             r3 = 0
             r4 = 1
-            if (r2 == 0) goto L5b
-            org.telegram.ui.ActionBar.ActionBarLayout r2 = r2.getActionBarLayout()
-            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r2 = r2.fragmentsStack
+            if (r2 == 0) goto L5f
+            org.telegram.ui.ActionBar.INavigationLayout r2 = r2.getActionBarLayout()
+            java.util.List r2 = r2.getFragmentStack()
             org.telegram.ui.LaunchActivity r5 = r12.parentActivity
-            org.telegram.ui.ActionBar.ActionBarLayout r5 = r5.getActionBarLayout()
-            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r5 = r5.fragmentsStack
+            org.telegram.ui.ActionBar.INavigationLayout r5 = r5.getActionBarLayout()
+            java.util.List r5 = r5.getFragmentStack()
             int r5 = r5.size()
             int r5 = r5 - r4
             java.lang.Object r2 = r2.get(r5)
             org.telegram.ui.ActionBar.BaseFragment r2 = (org.telegram.ui.ActionBar.BaseFragment) r2
             boolean r5 = r2 instanceof org.telegram.ui.ChatActivity
-            if (r5 == 0) goto L5b
+            if (r5 == 0) goto L5f
             org.telegram.ui.ChatActivity r2 = (org.telegram.ui.ChatActivity) r2
             boolean r2 = r2.needEnterText()
             r12.anyEnterEventSent = r4
             r12.enterEventSent = r4
             r13 = r2
-            goto L5c
-        L5b:
+            goto L60
+        L5f:
             r13 = 0
-        L5c:
-            if (r17 == 0) goto L64
-            if (r0 != 0) goto L64
+        L60:
+            if (r17 == 0) goto L68
+            if (r0 != 0) goto L68
             r8 = r17
             r9 = r1
-            goto L67
-        L64:
+            goto L6b
+        L68:
             r9 = r17
             r8 = r0
-        L67:
-            if (r9 != 0) goto L8e
-            if (r16 == 0) goto L8e
+        L6b:
+            if (r9 != 0) goto L92
+            if (r16 == 0) goto L92
             org.telegram.tgnet.TLRPC$Chat r0 = r12.currentChat
             boolean r0 = org.telegram.messenger.ChatObject.isChannelOrGiga(r0)
-            if (r0 == 0) goto L80
+            if (r0 == 0) goto L84
             int r0 = org.telegram.messenger.R.string.VoipChannelInviteText
             java.lang.Object[] r1 = new java.lang.Object[r4]
             r1[r3] = r8
             java.lang.String r2 = "VoipChannelInviteText"
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r2, r0, r1)
-            goto L8c
-        L80:
+            goto L90
+        L84:
             int r0 = org.telegram.messenger.R.string.VoipGroupInviteText
             java.lang.Object[] r1 = new java.lang.Object[r4]
             r1[r3] = r8
             java.lang.String r2 = "VoipGroupInviteText"
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r2, r0, r1)
-        L8c:
+        L90:
             r5 = r0
-            goto L8f
-        L8e:
+            goto L93
+        L92:
             r5 = r8
-        L8f:
+        L93:
             org.telegram.ui.GroupCallActivity$46 r14 = new org.telegram.ui.GroupCallActivity$46
             android.content.Context r2 = r15.getContext()
             r3 = 0
@@ -6260,14 +6261,14 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r0.setOnDismissListener(r1)
             org.telegram.ui.GroupCallActivity$$ExternalSyntheticLambda33 r0 = new org.telegram.ui.GroupCallActivity$$ExternalSyntheticLambda33
             r0.<init>()
-            if (r13 == 0) goto Lbe
+            if (r13 == 0) goto Lc2
             r1 = 200(0xc8, double:9.9E-322)
-            goto Lc0
-        Lbe:
+            goto Lc4
+        Lc2:
             r1 = 0
-        Lc0:
+        Lc4:
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0, r1)
-        Lc3:
+        Lc7:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.GroupCallActivity.openShareAlert(boolean, java.lang.String, java.lang.String, boolean):void");
@@ -6367,7 +6368,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             processSelectedOption(null, j, 3);
             return;
         }
-        AlertsCreator.processError(this.currentAccount, tLRPC$TL_error, this.parentActivity.getActionBarLayout().fragmentsStack.get(this.parentActivity.getActionBarLayout().fragmentsStack.size() - 1), tLRPC$TL_phone_inviteToGroupCall, new Object[0]);
+        AlertsCreator.processError(this.currentAccount, tLRPC$TL_error, this.parentActivity.getActionBarLayout().getFragmentStack().get(this.parentActivity.getActionBarLayout().getFragmentStack().size() - 1), tLRPC$TL_phone_inviteToGroupCall, new Object[0]);
     }
 
     /* JADX INFO: Access modifiers changed from: private */
@@ -6610,7 +6611,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
         boolean z2 = false;
         if (sharedInstance == null || isRtmpStream()) {
             this.soundButton.setData(R.drawable.msg_voiceshare, -1, 0, 0.3f, true, LocaleController.getString("VoipChatShare", R.string.VoipChatShare), false, z);
-            this.soundButton.setEnabled(!TextUtils.isEmpty(this.currentChat.username) || (ChatObject.hasAdminRights(this.currentChat) && ChatObject.canAddUsers(this.currentChat)), false);
+            this.soundButton.setEnabled(ChatObject.isPublic(this.currentChat) || (ChatObject.hasAdminRights(this.currentChat) && ChatObject.canAddUsers(this.currentChat)), false);
             this.soundButton.setChecked(true, false);
             return;
         }
@@ -7044,11 +7045,11 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             } else {
                 bundle.putLong("chat_id", -j);
             }
-            this.parentActivity.lambda$runLinkRequest$62(new ChatActivity(bundle));
+            this.parentActivity.lambda$runLinkRequest$66(new ChatActivity(bundle));
             dismiss();
         } else if (i == 8) {
             this.parentActivity.switchToAccount(this.currentAccount, true);
-            BaseFragment baseFragment = this.parentActivity.getActionBarLayout().fragmentsStack.get(this.parentActivity.getActionBarLayout().fragmentsStack.size() - 1);
+            BaseFragment baseFragment = this.parentActivity.getActionBarLayout().getFragmentStack().get(this.parentActivity.getActionBarLayout().getFragmentStack().size() - 1);
             if ((baseFragment instanceof ChatActivity) && ((ChatActivity) baseFragment).getDialogId() == j) {
                 dismiss();
                 return;
@@ -7059,7 +7060,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             } else {
                 bundle2.putLong("chat_id", -j);
             }
-            this.parentActivity.lambda$runLinkRequest$62(new ChatActivity(bundle2));
+            this.parentActivity.lambda$runLinkRequest$66(new ChatActivity(bundle2));
             dismiss();
         } else if (i == 7) {
             sharedInstance.editCallMember(tLObject, Boolean.TRUE, null, null, Boolean.FALSE, null);
@@ -7125,7 +7126,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
 
     /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$processSelectedOption$56(TLRPC$User tLRPC$User, final long j, DialogInterface dialogInterface, int i) {
-        this.accountInstance.getMessagesController().addUserToChat(this.currentChat.id, tLRPC$User, 0, null, this.parentActivity.getActionBarLayout().fragmentsStack.get(this.parentActivity.getActionBarLayout().fragmentsStack.size() - 1), new Runnable() { // from class: org.telegram.ui.GroupCallActivity$$ExternalSyntheticLambda38
+        this.accountInstance.getMessagesController().addUserToChat(this.currentChat.id, tLRPC$User, 0, null, this.parentActivity.getActionBarLayout().getFragmentStack().get(this.parentActivity.getActionBarLayout().getFragmentStack().size() - 1), new Runnable() { // from class: org.telegram.ui.GroupCallActivity$$ExternalSyntheticLambda38
             @Override // java.lang.Runnable
             public final void run() {
                 GroupCallActivity.this.lambda$processSelectedOption$55(j);
@@ -7325,8 +7326,8 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        /* JADX WARN: Code restructure failed: missing block: B:47:0x0112, code lost:
-            if (android.text.TextUtils.isEmpty(r0.username) == false) goto L40;
+        /* JADX WARN: Code restructure failed: missing block: B:47:0x0110, code lost:
+            if (org.telegram.messenger.ChatObject.isPublic(r0) != false) goto L40;
          */
         /* JADX WARN: Removed duplicated region for block: B:26:0x0096  */
         /* JADX WARN: Removed duplicated region for block: B:36:0x00de  */
@@ -7336,7 +7337,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
         */
         public void updateRows() {
             /*
-                Method dump skipped, instructions count: 296
+                Method dump skipped, instructions count: 294
                 To view this dump add '--comments-level debug' option
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.GroupCallActivity.ListAdapter.updateRows():void");
@@ -7435,7 +7436,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 groupCallTextCell.setColors(offsetColor, offsetColor);
                 if (ChatObject.isChannel(GroupCallActivity.this.currentChat)) {
                     TLRPC$Chat tLRPC$Chat = GroupCallActivity.this.currentChat;
-                    if (!tLRPC$Chat.megagroup && !TextUtils.isEmpty(tLRPC$Chat.username)) {
+                    if (!tLRPC$Chat.megagroup && ChatObject.isPublic(tLRPC$Chat)) {
                         groupCallTextCell.setTextAndIcon(LocaleController.getString("VoipGroupShareLink", R.string.VoipGroupShareLink), R.drawable.msg_link, false);
                         return;
                     }
@@ -7545,7 +7546,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
             View view;
             if (i == 0) {
                 view = new GroupCallTextCell(this, this.mContext) { // from class: org.telegram.ui.GroupCallActivity.ListAdapter.1

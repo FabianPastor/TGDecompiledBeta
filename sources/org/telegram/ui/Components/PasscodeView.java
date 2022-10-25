@@ -1730,7 +1730,7 @@ public class PasscodeView extends FrameLayout implements NotificationCenter.Noti
         if (vibrator != null) {
             vibrator.vibrate(200L);
         }
-        AndroidUtilities.shakeView(this.fingerprintStatusTextView, 2.0f, 0);
+        AndroidUtilities.shakeView(this.fingerprintStatusTextView);
     }
 
     @Override // android.widget.FrameLayout, android.view.View

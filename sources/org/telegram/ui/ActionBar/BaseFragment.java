@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -42,6 +43,7 @@ import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.ui.ActionBar.ActionBarPopupWindow;
+import org.telegram.ui.ActionBar.INavigationLayout;
 import org.telegram.ui.ActionBar.Theme;
 /* loaded from: classes3.dex */
 public abstract class BaseFragment {
@@ -55,7 +57,7 @@ public abstract class BaseFragment {
     protected boolean inPreviewMode;
     private boolean isFinished;
     protected Dialog parentDialog;
-    protected ActionBarLayout parentLayout;
+    protected INavigationLayout parentLayout;
     private boolean removingFromStack;
     protected Dialog visibleDialog;
     protected int currentAccount = UserConfig.selectedAccount;
@@ -79,6 +81,9 @@ public abstract class BaseFragment {
         return true;
     }
 
+    public void drawOverlay(Canvas canvas, View view) {
+    }
+
     public boolean extendActionMode(Menu menu) {
         return false;
     }
@@ -88,7 +93,6 @@ public abstract class BaseFragment {
         return null;
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
     public int getPreviewHeight() {
         return -1;
     }
@@ -121,14 +125,12 @@ public abstract class BaseFragment {
         return true;
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
     public void onBecomeFullyHidden() {
     }
 
     public void onConfigurationChanged(Configuration configuration) {
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
     public AnimatorSet onCustomTransitionAnimation(boolean z, Runnable runnable) {
         return null;
     }
@@ -144,33 +146,27 @@ public abstract class BaseFragment {
     public void onLowMemory() {
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
     public void onPreviewOpenAnimationEnd() {
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
     public void onRemoveFromParent() {
     }
 
     public void onRequestPermissionsResultFragment(int i, String[] strArr, int[] iArr) {
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
     public void onSlideProgress(boolean z, float f) {
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
     public void onTransitionAnimationEnd(boolean z, boolean z2) {
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
     public void onTransitionAnimationProgress(boolean z, float f) {
     }
 
     public void onUserLeaveHint() {
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
     public void prepareFragmentToSlide(boolean z, boolean z2) {
     }
 
@@ -202,12 +198,24 @@ public abstract class BaseFragment {
         this.currentAccount = i;
     }
 
+    public boolean hasOwnBackground() {
+        return this.hasOwnBackground;
+    }
+
+    public boolean getFragmentBeginToShow() {
+        return this.fragmentBeginToShow;
+    }
+
     public ActionBar getActionBar() {
         return this.actionBar;
     }
 
     public View getFragmentView() {
         return this.fragmentView;
+    }
+
+    public void setFragmentView(View view) {
+        this.fragmentView = view;
     }
 
     public Bundle getArguments() {
@@ -234,7 +242,6 @@ public abstract class BaseFragment {
         return this.inPreviewMode;
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
     public void setInPreviewMode(boolean z) {
         this.inPreviewMode = z;
         ActionBar actionBar = this.actionBar;
@@ -251,12 +258,10 @@ public abstract class BaseFragment {
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
     public void setInMenuMode(boolean z) {
         this.inMenuMode = z;
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
     public void clearViews() {
         View view = this.fragmentView;
         if (view != null) {
@@ -288,16 +293,15 @@ public abstract class BaseFragment {
 
     public void setParentFragment(BaseFragment baseFragment) {
         setParentLayout(baseFragment.parentLayout);
-        this.fragmentView = createView(this.parentLayout.getContext());
+        this.fragmentView = createView(this.parentLayout.getView().getContext());
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
-    public void setParentLayout(ActionBarLayout actionBarLayout) {
+    public void setParentLayout(INavigationLayout iNavigationLayout) {
         ViewGroup viewGroup;
-        if (this.parentLayout != actionBarLayout) {
-            this.parentLayout = actionBarLayout;
+        if (this.parentLayout != iNavigationLayout) {
+            this.parentLayout = iNavigationLayout;
             boolean z = true;
-            this.inBubbleMode = actionBarLayout != null && actionBarLayout.isInBubbleMode();
+            this.inBubbleMode = iNavigationLayout != null && iNavigationLayout.isInBubbleMode();
             View view = this.fragmentView;
             if (view != null) {
                 ViewGroup viewGroup2 = (ViewGroup) view.getParent();
@@ -309,14 +313,14 @@ public abstract class BaseFragment {
                         FileLog.e(e);
                     }
                 }
-                ActionBarLayout actionBarLayout2 = this.parentLayout;
-                if (actionBarLayout2 != null && actionBarLayout2.getContext() != this.fragmentView.getContext()) {
+                INavigationLayout iNavigationLayout2 = this.parentLayout;
+                if (iNavigationLayout2 != null && iNavigationLayout2.getView().getContext() != this.fragmentView.getContext()) {
                     this.fragmentView = null;
                 }
             }
             if (this.actionBar != null) {
-                ActionBarLayout actionBarLayout3 = this.parentLayout;
-                if (actionBarLayout3 == null || actionBarLayout3.getContext() == this.actionBar.getContext()) {
+                INavigationLayout iNavigationLayout3 = this.parentLayout;
+                if (iNavigationLayout3 == null || iNavigationLayout3.getView().getContext() == this.actionBar.getContext()) {
                     z = false;
                 }
                 if ((this.actionBar.shouldAddToContainer() || z) && (viewGroup = (ViewGroup) this.actionBar.getParent()) != null) {
@@ -330,11 +334,11 @@ public abstract class BaseFragment {
                     this.actionBar = null;
                 }
             }
-            ActionBarLayout actionBarLayout4 = this.parentLayout;
-            if (actionBarLayout4 == null || this.actionBar != null) {
+            INavigationLayout iNavigationLayout4 = this.parentLayout;
+            if (iNavigationLayout4 == null || this.actionBar != null) {
                 return;
             }
-            ActionBar createActionBar = createActionBar(actionBarLayout4.getContext());
+            ActionBar createActionBar = createActionBar(iNavigationLayout4.getView().getContext());
             this.actionBar = createActionBar;
             if (createActionBar == null) {
                 return;
@@ -375,24 +379,24 @@ public abstract class BaseFragment {
     }
 
     public void finishFragment(boolean z) {
-        ActionBarLayout actionBarLayout;
-        if (this.isFinished || (actionBarLayout = this.parentLayout) == null) {
+        INavigationLayout iNavigationLayout;
+        if (this.isFinished || (iNavigationLayout = this.parentLayout) == null) {
             return;
         }
         this.finishing = true;
-        actionBarLayout.closeLastFragment(z);
+        iNavigationLayout.closeLastFragment(z);
     }
 
     public void removeSelfFromStack() {
-        ActionBarLayout actionBarLayout;
-        if (this.isFinished || (actionBarLayout = this.parentLayout) == null) {
+        INavigationLayout iNavigationLayout;
+        if (this.isFinished || (iNavigationLayout = this.parentLayout) == null) {
             return;
         }
         Dialog dialog = this.parentDialog;
         if (dialog != null) {
             dialog.dismiss();
         } else {
-            actionBarLayout.removeFragmentFromStack(this);
+            iNavigationLayout.removeFragmentFromStack(this);
         }
     }
 
@@ -422,9 +426,9 @@ public abstract class BaseFragment {
 
     /* JADX INFO: Access modifiers changed from: protected */
     public void resumeDelayedFragmentAnimation() {
-        ActionBarLayout actionBarLayout = this.parentLayout;
-        if (actionBarLayout != null) {
-            actionBarLayout.resumeDelayedFragmentAnimation();
+        INavigationLayout iNavigationLayout = this.parentLayout;
+        if (iNavigationLayout != null) {
+            iNavigationLayout.resumeDelayedFragmentAnimation();
         }
     }
 
@@ -451,26 +455,16 @@ public abstract class BaseFragment {
     }
 
     public BaseFragment getFragmentForAlert(int i) {
-        ActionBarLayout actionBarLayout = this.parentLayout;
-        if (actionBarLayout == null || actionBarLayout.fragmentsStack.size() <= i + 1) {
-            return this;
-        }
-        ArrayList<BaseFragment> arrayList = this.parentLayout.fragmentsStack;
-        return arrayList.get((arrayList.size() - 2) - i);
+        INavigationLayout iNavigationLayout = this.parentLayout;
+        return (iNavigationLayout == null || iNavigationLayout.getFragmentStack().size() <= i + 1) ? this : this.parentLayout.getFragmentStack().get((this.parentLayout.getFragmentStack().size() - 2) - i);
     }
 
     public boolean isLastFragment() {
-        ActionBarLayout actionBarLayout = this.parentLayout;
-        if (actionBarLayout != null && !actionBarLayout.fragmentsStack.isEmpty()) {
-            ArrayList<BaseFragment> arrayList = this.parentLayout.fragmentsStack;
-            if (arrayList.get(arrayList.size() - 1) == this) {
-                return true;
-            }
-        }
-        return false;
+        INavigationLayout iNavigationLayout = this.parentLayout;
+        return iNavigationLayout != null && iNavigationLayout.getLastFragment() == this;
     }
 
-    public ActionBarLayout getParentLayout() {
+    public INavigationLayout getParentLayout() {
         return this.parentLayout;
     }
 
@@ -487,34 +481,34 @@ public abstract class BaseFragment {
     }
 
     public boolean presentFragmentAsPreview(BaseFragment baseFragment) {
-        ActionBarLayout actionBarLayout;
-        return allowPresentFragment() && (actionBarLayout = this.parentLayout) != null && actionBarLayout.presentFragmentAsPreview(baseFragment);
+        INavigationLayout iNavigationLayout;
+        return allowPresentFragment() && (iNavigationLayout = this.parentLayout) != null && iNavigationLayout.presentFragmentAsPreview(baseFragment);
     }
 
     public boolean presentFragmentAsPreviewWithMenu(BaseFragment baseFragment, ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout) {
-        ActionBarLayout actionBarLayout;
-        return allowPresentFragment() && (actionBarLayout = this.parentLayout) != null && actionBarLayout.presentFragmentAsPreviewWithMenu(baseFragment, actionBarPopupWindowLayout);
+        INavigationLayout iNavigationLayout;
+        return allowPresentFragment() && (iNavigationLayout = this.parentLayout) != null && iNavigationLayout.presentFragmentAsPreviewWithMenu(baseFragment, actionBarPopupWindowLayout);
     }
 
     public boolean presentFragment(BaseFragment baseFragment) {
-        ActionBarLayout actionBarLayout;
-        return allowPresentFragment() && (actionBarLayout = this.parentLayout) != null && actionBarLayout.presentFragment(baseFragment);
+        INavigationLayout iNavigationLayout;
+        return allowPresentFragment() && (iNavigationLayout = this.parentLayout) != null && iNavigationLayout.presentFragment(baseFragment);
     }
 
     public boolean presentFragment(BaseFragment baseFragment, boolean z) {
-        ActionBarLayout actionBarLayout;
-        return allowPresentFragment() && (actionBarLayout = this.parentLayout) != null && actionBarLayout.presentFragment(baseFragment, z);
+        INavigationLayout iNavigationLayout;
+        return allowPresentFragment() && (iNavigationLayout = this.parentLayout) != null && iNavigationLayout.presentFragment(baseFragment, z);
     }
 
     public boolean presentFragment(BaseFragment baseFragment, boolean z, boolean z2) {
-        ActionBarLayout actionBarLayout;
-        return allowPresentFragment() && (actionBarLayout = this.parentLayout) != null && actionBarLayout.presentFragment(baseFragment, z, z2, true, false, null);
+        INavigationLayout iNavigationLayout;
+        return allowPresentFragment() && (iNavigationLayout = this.parentLayout) != null && iNavigationLayout.presentFragment(baseFragment, z, z2, true, false, null);
     }
 
     public Activity getParentActivity() {
-        ActionBarLayout actionBarLayout = this.parentLayout;
-        if (actionBarLayout != null) {
-            return actionBarLayout.parentActivity;
+        INavigationLayout iNavigationLayout = this.parentLayout;
+        if (iNavigationLayout != null) {
+            return iNavigationLayout.getParentActivity();
         }
         return null;
     }
@@ -532,9 +526,9 @@ public abstract class BaseFragment {
     }
 
     public void startActivityForResult(Intent intent, int i) {
-        ActionBarLayout actionBarLayout = this.parentLayout;
-        if (actionBarLayout != null) {
-            actionBarLayout.startActivityForResult(intent, i);
+        INavigationLayout iNavigationLayout = this.parentLayout;
+        if (iNavigationLayout != null) {
+            iNavigationLayout.startActivityForResult(intent, i);
         }
     }
 
@@ -567,14 +561,12 @@ public abstract class BaseFragment {
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
     public void onTransitionAnimationStart(boolean z, boolean z2) {
         if (z) {
             this.fragmentBeginToShow = true;
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
     public void onBecomeFullyVisible() {
         ActionBar actionBar;
         if (!((AccessibilityManager) ApplicationLoader.applicationContext.getSystemService("accessibility")).isEnabled() || (actionBar = getActionBar()) == null) {
@@ -596,8 +588,8 @@ public abstract class BaseFragment {
     }
 
     public Dialog showDialog(Dialog dialog, boolean z, final DialogInterface.OnDismissListener onDismissListener) {
-        ActionBarLayout actionBarLayout;
-        if (dialog != null && (actionBarLayout = this.parentLayout) != null && !actionBarLayout.animationInProgress && !actionBarLayout.startedTracking && (z || !actionBarLayout.checkTransitionAnimation())) {
+        INavigationLayout iNavigationLayout;
+        if (dialog != null && (iNavigationLayout = this.parentLayout) != null && !iNavigationLayout.isTransitionAnimationInProgress() && !this.parentLayout.isSwipeInProgress() && (z || !this.parentLayout.checkTransitionAnimation())) {
             try {
                 Dialog dialog2 = this.visibleDialog;
                 if (dialog2 != null) {
@@ -717,27 +709,27 @@ public abstract class BaseFragment {
     }
 
     public void setFragmentPanTranslationOffset(int i) {
-        ActionBarLayout actionBarLayout = this.parentLayout;
-        if (actionBarLayout != null) {
-            actionBarLayout.setFragmentPanTranslationOffset(i);
+        INavigationLayout iNavigationLayout = this.parentLayout;
+        if (iNavigationLayout != null) {
+            iNavigationLayout.setFragmentPanTranslationOffset(i);
         }
     }
 
-    public ActionBarLayout[] showAsSheet(BaseFragment baseFragment) {
+    public INavigationLayout[] showAsSheet(BaseFragment baseFragment) {
         if (getParentActivity() == null) {
             return null;
         }
-        ActionBarLayout[] actionBarLayoutArr = {new ActionBarLayout(getParentActivity())};
-        AnonymousClass1 anonymousClass1 = new AnonymousClass1(this, getParentActivity(), true, actionBarLayoutArr, baseFragment);
+        INavigationLayout[] iNavigationLayoutArr = {INavigationLayout.CC.newLayout(getParentActivity())};
+        AnonymousClass1 anonymousClass1 = new AnonymousClass1(this, getParentActivity(), true, iNavigationLayoutArr, baseFragment);
         baseFragment.setParentDialog(anonymousClass1);
         anonymousClass1.show();
-        return actionBarLayoutArr;
+        return iNavigationLayoutArr;
     }
 
     /* renamed from: org.telegram.ui.ActionBar.BaseFragment$1  reason: invalid class name */
     /* loaded from: classes3.dex */
     class AnonymousClass1 extends BottomSheet {
-        final /* synthetic */ ActionBarLayout[] val$actionBarLayout;
+        final /* synthetic */ INavigationLayout[] val$actionBarLayout;
         final /* synthetic */ BaseFragment val$fragment;
 
         @Override // org.telegram.ui.ActionBar.BottomSheet
@@ -746,17 +738,17 @@ public abstract class BaseFragment {
         }
 
         /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-        AnonymousClass1(BaseFragment baseFragment, Context context, boolean z, ActionBarLayout[] actionBarLayoutArr, final BaseFragment baseFragment2) {
+        AnonymousClass1(BaseFragment baseFragment, Context context, boolean z, INavigationLayout[] iNavigationLayoutArr, final BaseFragment baseFragment2) {
             super(context, z);
-            this.val$actionBarLayout = actionBarLayoutArr;
+            this.val$actionBarLayout = iNavigationLayoutArr;
             this.val$fragment = baseFragment2;
-            actionBarLayoutArr[0].init(new ArrayList<>());
-            actionBarLayoutArr[0].addFragmentToStack(baseFragment2);
-            actionBarLayoutArr[0].showLastFragment();
-            ActionBarLayout actionBarLayout = actionBarLayoutArr[0];
+            iNavigationLayoutArr[0].setFragmentStack(new ArrayList());
+            iNavigationLayoutArr[0].addFragmentToStack(baseFragment2);
+            iNavigationLayoutArr[0].showLastFragment();
+            ViewGroup view = iNavigationLayoutArr[0].getView();
             int i = this.backgroundPaddingLeft;
-            actionBarLayout.setPadding(i, 0, i, 0);
-            this.containerView = actionBarLayoutArr[0];
+            view.setPadding(i, 0, i, 0);
+            this.containerView = iNavigationLayoutArr[0].getView();
             setApplyBottomPadding(false);
             setApplyBottomPadding(false);
             setOnDismissListener(new DialogInterface.OnDismissListener() { // from class: org.telegram.ui.ActionBar.BaseFragment$1$$ExternalSyntheticLambda0
@@ -769,8 +761,8 @@ public abstract class BaseFragment {
 
         @Override // android.app.Dialog
         public void onBackPressed() {
-            ActionBarLayout[] actionBarLayoutArr = this.val$actionBarLayout;
-            if (actionBarLayoutArr[0] == null || actionBarLayoutArr[0].fragmentsStack.size() <= 1) {
+            INavigationLayout[] iNavigationLayoutArr = this.val$actionBarLayout;
+            if (iNavigationLayoutArr[0] == null || iNavigationLayoutArr[0].getFragmentStack().size() <= 1) {
                 super.onBackPressed();
             } else {
                 this.val$actionBarLayout[0].onBackPressed();

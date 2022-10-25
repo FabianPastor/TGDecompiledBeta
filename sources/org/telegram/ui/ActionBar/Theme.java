@@ -61,6 +61,7 @@ import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
@@ -81,7 +82,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.MessagesController$$ExternalSyntheticLambda220;
+import org.telegram.messenger.MessagesController$$ExternalSyntheticLambda222;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
@@ -325,6 +326,7 @@ public class Theme {
     public static Drawable dialogs_holidayDrawable = null;
     private static int dialogs_holidayDrawableOffsetX = 0;
     private static int dialogs_holidayDrawableOffsetY = 0;
+    public static Drawable dialogs_lock2Drawable = null;
     public static Drawable dialogs_lockDrawable = null;
     public static Drawable dialogs_mentionDrawable = null;
     public static TextPaint dialogs_messageNamePaint = null;
@@ -516,6 +518,7 @@ public class Theme {
         public boolean lastDrawWithShadow;
         private Matrix matrix;
         private int overrideRoundRadius;
+        private float overrideRounding;
         private Paint paint;
         private Path path;
         PathDrawParams pathDrawCacheParams;
@@ -523,6 +526,7 @@ public class Theme {
         private final ResourcesProvider resourcesProvider;
         private Paint selectedPaint;
         private Drawable[] shadowDrawable;
+        private Bitmap[] shadowDrawableBitmap;
         private int[] shadowDrawableColor;
         public boolean themePreview;
         private int topY;
@@ -552,6 +556,7 @@ public class Theme {
             this.matrix = new Matrix();
             this.backupRect = new Rect();
             this.currentShadowDrawableRadius = new int[]{-1, -1, -1, -1};
+            this.shadowDrawableBitmap = new Bitmap[4];
             this.shadowDrawable = new Drawable[4];
             this.shadowDrawableColor = new int[]{-1, -1, -1, -1};
             this.currentBackgroundDrawableRadius = new int[][]{new int[]{-1, -1, -1, -1}, new int[]{-1, -1, -1, -1}};
@@ -666,19 +671,77 @@ public class Theme {
             return this.shadowDrawable;
         }
 
-        /* JADX WARN: Removed duplicated region for block: B:49:0x0160  */
-        /* JADX WARN: Removed duplicated region for block: B:54:0x016e  */
-        /* JADX WARN: Type inference failed for: r6v0, types: [boolean] */
-        /*
-            Code decompiled incorrectly, please refer to instructions dump.
-            To view partially-correct add '--show-bad-code' argument
-        */
-        public android.graphics.drawable.Drawable getBackgroundDrawable() {
-            /*
-                Method dump skipped, instructions count: 424
-                To view this dump add '--comments-level debug' option
-            */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.MessageDrawable.getBackgroundDrawable():android.graphics.drawable.Drawable");
+        /* JADX WARN: Type inference failed for: r7v0, types: [boolean] */
+        public Drawable getBackgroundDrawable() {
+            char c;
+            int color;
+            int i = this.overrideRoundRadius;
+            boolean z = false;
+            if (i == 0) {
+                i = this.overrideRounding > 0.0f ? 0 : AndroidUtilities.dp(SharedConfig.bubbleRadius);
+            }
+            boolean z2 = this.isTopNear;
+            if (z2 && this.isBottomNear) {
+                c = 3;
+            } else if (z2) {
+                c = 2;
+            } else {
+                c = this.isBottomNear ? (char) 1 : (char) 0;
+            }
+            ?? r7 = this.isSelected;
+            boolean z3 = this.gradientShader == null && r7 == 0 && !this.isCrossfadeBackground;
+            int color2 = getColor(this.isOut ? "chat_outBubbleShadow" : "chat_inBubbleShadow");
+            if (this.lastDrawWithShadow != z3 || this.currentBackgroundDrawableRadius[r7][c] != i || (z3 && this.shadowDrawableColor[c] != color2)) {
+                this.currentBackgroundDrawableRadius[r7 == true ? 1 : 0][c] = i;
+                try {
+                    Bitmap createBitmap = Bitmap.createBitmap(dp(50.0f), dp(40.0f), Bitmap.Config.ARGB_8888);
+                    Canvas canvas = new Canvas(createBitmap);
+                    this.backupRect.set(getBounds());
+                    if (z3) {
+                        this.shadowDrawableColor[c] = color2;
+                        Paint paint = new Paint(1);
+                        paint.setShader(new LinearGradient(0.0f, 0.0f, 0.0f, dp(40.0f), new int[]{NUM, NUM}, (float[]) null, Shader.TileMode.CLAMP));
+                        paint.setColorFilter(new PorterDuffColorFilter(color2, PorterDuff.Mode.MULTIPLY));
+                        paint.setShadowLayer(2.0f, 0.0f, 1.0f, -1);
+                        if (AndroidUtilities.density > 1.0f) {
+                            setBounds(-1, -1, createBitmap.getWidth() + 1, createBitmap.getHeight() + 1);
+                        } else {
+                            setBounds(0, 0, createBitmap.getWidth(), createBitmap.getHeight());
+                        }
+                        draw(canvas, paint);
+                        if (AndroidUtilities.density > 1.0f) {
+                            paint.setColor(0);
+                            paint.setShadowLayer(0.0f, 0.0f, 0.0f, 0);
+                            paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+                            setBounds(0, 0, createBitmap.getWidth(), createBitmap.getHeight());
+                            draw(canvas, paint);
+                        }
+                    }
+                    Paint paint2 = new Paint(1);
+                    paint2.setColor(-1);
+                    setBounds(0, 0, createBitmap.getWidth(), createBitmap.getHeight());
+                    draw(canvas, paint2);
+                    this.backgroundDrawable[r7][c] = new NinePatchDrawable(createBitmap, getByteBuffer((createBitmap.getWidth() / 2) - 1, (createBitmap.getWidth() / 2) + 1, (createBitmap.getHeight() / 2) - 1, (createBitmap.getHeight() / 2) + 1).array(), new Rect(), null);
+                    try {
+                        setBounds(this.backupRect);
+                    } catch (Throwable unused) {
+                    }
+                    z = true;
+                } catch (Throwable unused2) {
+                }
+            }
+            this.lastDrawWithShadow = z3;
+            if (this.isSelected) {
+                color = getColor(this.isOut ? "chat_outBubbleSelected" : "chat_inBubbleSelected");
+            } else {
+                color = getColor(this.isOut ? "chat_outBubble" : "chat_inBubble");
+            }
+            Drawable[][] drawableArr = this.backgroundDrawable;
+            if (drawableArr[r7][c] != null && (this.backgroundDrawableColor[r7][c] != color || z)) {
+                drawableArr[r7][c].setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
+                this.backgroundDrawableColor[r7][c] = color;
+            }
+            return this.backgroundDrawable[r7][c];
         }
 
         public Drawable getTransitionDrawable(int i) {
@@ -728,6 +791,10 @@ public class Theme {
             int[] iArr = this.currentShadowDrawableRadius;
             if (iArr[c] != dp) {
                 iArr[c] = dp;
+                Bitmap[] bitmapArr = this.shadowDrawableBitmap;
+                if (bitmapArr[c] != null) {
+                    bitmapArr[c].recycle();
+                }
                 try {
                     Bitmap createBitmap = Bitmap.createBitmap(dp(50.0f), dp(40.0f), Bitmap.Config.ARGB_8888);
                     Canvas canvas = new Canvas(createBitmap);
@@ -747,6 +814,7 @@ public class Theme {
                         setBounds(0, 0, createBitmap.getWidth(), createBitmap.getHeight());
                         draw(canvas, paint);
                     }
+                    this.shadowDrawableBitmap[c] = createBitmap;
                     this.shadowDrawable[c] = new NinePatchDrawable(createBitmap, getByteBuffer((createBitmap.getWidth() / 2) - 1, (createBitmap.getWidth() / 2) + 1, (createBitmap.getHeight() / 2) - 1, (createBitmap.getHeight() / 2) + 1).array(), new Rect(), null);
                     z2 = true;
                 } catch (Throwable unused) {
@@ -759,6 +827,19 @@ public class Theme {
                 this.shadowDrawableColor[c] = color;
             }
             return this.shadowDrawable[c];
+        }
+
+        protected void finalize() throws Throwable {
+            Bitmap[] bitmapArr;
+            super.finalize();
+            for (Bitmap bitmap : this.shadowDrawableBitmap) {
+                if (bitmap != null) {
+                    bitmap.recycle();
+                }
+            }
+            Arrays.fill(this.shadowDrawableBitmap, (Object) null);
+            Arrays.fill(this.shadowDrawable, (Object) null);
+            Arrays.fill(this.currentShadowDrawableRadius, -1);
         }
 
         private static ByteBuffer getByteBuffer(int i, int i2, int i3, int i4) {
@@ -821,16 +902,17 @@ public class Theme {
             draw(canvas, null);
         }
 
-        /* JADX WARN: Removed duplicated region for block: B:47:0x00b7  */
-        /* JADX WARN: Removed duplicated region for block: B:48:0x00be  */
-        /* JADX WARN: Removed duplicated region for block: B:50:0x00c3  */
+        /* JADX WARN: Removed duplicated region for block: B:112:0x035e  */
+        /* JADX WARN: Removed duplicated region for block: B:53:0x0100  */
+        /* JADX WARN: Removed duplicated region for block: B:54:0x0107  */
+        /* JADX WARN: Removed duplicated region for block: B:60:0x0119  */
         /*
             Code decompiled incorrectly, please refer to instructions dump.
             To view partially-correct add '--show-bad-code' argument
         */
         public void draw(android.graphics.Canvas r22, android.graphics.Paint r23) {
             /*
-                Method dump skipped, instructions count: 1415
+                Method dump skipped, instructions count: 1492
                 To view this dump add '--comments-level debug' option
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.MessageDrawable.draw(android.graphics.Canvas, android.graphics.Paint):void");
@@ -875,6 +957,10 @@ public class Theme {
             this.overrideRoundRadius = i;
         }
 
+        public void setRoundingRadius(float f) {
+            this.overrideRounding = f;
+        }
+
         /* loaded from: classes3.dex */
         public static class PathDrawParams {
             boolean lastDrawFullBottom;
@@ -899,6 +985,10 @@ public class Theme {
                 this.lastDrawFullBottom = z;
                 this.lastRect.set(rect);
                 return z3;
+            }
+
+            public Path getPath() {
+                return this.path;
             }
         }
     }
@@ -3316,6 +3406,44 @@ public class Theme {
             fArr4[6] = dp4;
         }
 
+        public void setRadius(float f, float f2) {
+            float[] fArr = this.radii;
+            float dp = AndroidUtilities.dp(f);
+            fArr[3] = dp;
+            fArr[2] = dp;
+            fArr[1] = dp;
+            fArr[0] = dp;
+            float[] fArr2 = this.radii;
+            float dp2 = AndroidUtilities.dp(f2);
+            fArr2[7] = dp2;
+            fArr2[6] = dp2;
+            fArr2[5] = dp2;
+            fArr2[4] = dp2;
+            this.invalidatePath = true;
+            invalidateSelf();
+        }
+
+        public void setRadius(float f, float f2, float f3, float f4) {
+            float[] fArr = this.radii;
+            float dp = AndroidUtilities.dp(f);
+            fArr[1] = dp;
+            fArr[0] = dp;
+            float[] fArr2 = this.radii;
+            float dp2 = AndroidUtilities.dp(f2);
+            fArr2[3] = dp2;
+            fArr2[2] = dp2;
+            float[] fArr3 = this.radii;
+            float dp3 = AndroidUtilities.dp(f3);
+            fArr3[5] = dp3;
+            fArr3[4] = dp3;
+            float[] fArr4 = this.radii;
+            float dp4 = AndroidUtilities.dp(f4);
+            fArr4[7] = dp4;
+            fArr4[6] = dp4;
+            this.invalidatePath = true;
+            invalidateSelf();
+        }
+
         @Override // android.graphics.drawable.Drawable
         protected void onBoundsChange(Rect rect) {
             this.invalidatePath = true;
@@ -3339,8 +3467,23 @@ public class Theme {
             RippleDrawable rippleDrawable = (RippleDrawable) drawable;
             int numberOfLayers = rippleDrawable.getNumberOfLayers();
             for (int i3 = 0; i3 < numberOfLayers; i3++) {
-                if (rippleDrawable.getDrawable(i3) instanceof RippleRadMaskDrawable) {
-                    rippleDrawable.setDrawableByLayerId(16908334, new RippleRadMaskDrawable(i, i2));
+                Drawable drawable2 = rippleDrawable.getDrawable(i3);
+                if (drawable2 instanceof RippleRadMaskDrawable) {
+                    ((RippleRadMaskDrawable) drawable2).setRadius(i, i2);
+                    return;
+                }
+            }
+        }
+    }
+
+    public static void setMaskDrawableRad(Drawable drawable, int i, int i2, int i3, int i4) {
+        if (Build.VERSION.SDK_INT >= 21 && (drawable instanceof RippleDrawable)) {
+            RippleDrawable rippleDrawable = (RippleDrawable) drawable;
+            int numberOfLayers = rippleDrawable.getNumberOfLayers();
+            for (int i5 = 0; i5 < numberOfLayers; i5++) {
+                Drawable drawable2 = rippleDrawable.getDrawable(i5);
+                if (drawable2 instanceof RippleRadMaskDrawable) {
+                    ((RippleRadMaskDrawable) drawable2).setRadius(i, i2, i3, i4);
                     return;
                 }
             }
@@ -3655,7 +3798,7 @@ public class Theme {
             org.telegram.ui.ActionBar.Theme.switchNightThemeDelay = r0     // Catch: java.lang.Exception -> La3
             long r0 = android.os.SystemClock.elapsedRealtime()     // Catch: java.lang.Exception -> La3
             org.telegram.ui.ActionBar.Theme.lastDelayUpdateTime = r0     // Catch: java.lang.Exception -> La3
-            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda220 r0 = org.telegram.messenger.MessagesController$$ExternalSyntheticLambda220.INSTANCE     // Catch: java.lang.Exception -> La3
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda222 r0 = org.telegram.messenger.MessagesController$$ExternalSyntheticLambda222.INSTANCE     // Catch: java.lang.Exception -> La3
             r1 = 2100(0x834, double:1.0375E-320)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0, r1)     // Catch: java.lang.Exception -> La3
         L5c:
@@ -3788,7 +3931,7 @@ public class Theme {
                 if (isCurrentThemeNight()) {
                     switchNightThemeDelay = 2000;
                     lastDelayUpdateTime = SystemClock.elapsedRealtime();
-                    AndroidUtilities.runOnUIThread(MessagesController$$ExternalSyntheticLambda220.INSTANCE, 2100L);
+                    AndroidUtilities.runOnUIThread(MessagesController$$ExternalSyntheticLambda222.INSTANCE, 2100L);
                 }
             }
             currentTheme = themeInfo;
@@ -4324,10 +4467,11 @@ public class Theme {
             return;
         }
         ThemeInfo themeInfo3 = currentTheme;
-        if (themeInfo3 == currentDayTheme) {
+        ThemeInfo themeInfo4 = currentDayTheme;
+        if (themeInfo3 == themeInfo4) {
             return;
         }
-        if (themeInfo3 != null && (currentNightTheme == null || themeInfo3.isDark() == currentNightTheme.isDark())) {
+        if (themeInfo3 != null && (themeInfo4 == null || themeInfo3.isLight() == currentDayTheme.isLight())) {
             return;
         }
         isInNigthMode = false;
@@ -5190,6 +5334,7 @@ public class Theme {
             dialogs_errorPaint = new Paint(1);
             dialogs_actionMessagePaint = new Paint(1);
             dialogs_lockDrawable = resources.getDrawable(R.drawable.list_secret);
+            dialogs_lock2Drawable = resources.getDrawable(R.drawable.msg_mini_lock2);
             int i2 = R.drawable.list_check;
             dialogs_checkDrawable = resources.getDrawable(i2).mutate();
             dialogs_playDrawable = resources.getDrawable(R.drawable.minithumb_play).mutate();
@@ -5270,6 +5415,7 @@ public class Theme {
         dialogs_onlinePaint.setColor(getColor("windowBackgroundWhiteBlueText3"));
         dialogs_offlinePaint.setColor(getColor("windowBackgroundWhiteGrayText3"));
         setDrawableColorByKey(dialogs_lockDrawable, "chats_secretIcon");
+        setDrawableColorByKey(dialogs_lock2Drawable, "chats_pinnedIcon");
         setDrawableColorByKey(dialogs_checkDrawable, "chats_sentCheck");
         setDrawableColorByKey(dialogs_checkReadDrawable, "chats_sentReadCheck");
         setDrawableColorByKey(dialogs_halfCheckDrawable, "chats_sentReadCheck");
@@ -5315,6 +5461,16 @@ public class Theme {
                 TextPaint textPaint = new TextPaint(1);
                 chat_msgBotButtonPaint = textPaint;
                 textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+                TextPaint textPaint2 = new TextPaint(1);
+                chat_namePaint = textPaint2;
+                textPaint2.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+                TextPaint textPaint3 = new TextPaint(1);
+                chat_replyNamePaint = textPaint3;
+                textPaint3.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+                chat_replyTextPaint = new TextPaint(1);
+                chat_forwardNamePaint = new TextPaint(1);
+                chat_adminPaint = new TextPaint(1);
+                chat_timePaint = new TextPaint(1);
             }
             int i = 0;
             float[] fArr = {0.7f, 0.52f, 0.37f, 0.28f, 0.25f, 0.19f};
@@ -5331,6 +5487,12 @@ public class Theme {
                     chat_msgTextPaint.setTextSize(AndroidUtilities.dp(SharedConfig.fontSize));
                     chat_msgGameTextPaint.setTextSize(AndroidUtilities.dp(14.0f));
                     chat_msgBotButtonPaint.setTextSize(AndroidUtilities.dp(15.0f));
+                    float f = ((SharedConfig.fontSize * 2) + 10) / 3.0f;
+                    chat_namePaint.setTextSize(AndroidUtilities.dp(f));
+                    chat_replyNamePaint.setTextSize(AndroidUtilities.dp(f));
+                    chat_replyTextPaint.setTextSize(AndroidUtilities.dp(f));
+                    chat_forwardNamePaint.setTextSize(AndroidUtilities.dp(f));
+                    chat_adminPaint.setTextSize(AndroidUtilities.dp(f - 1.0f));
                 }
             }
         }
@@ -5719,6 +5881,7 @@ public class Theme {
             addChatDrawable("drawableMsgInSelected", chat_msgInSelectedDrawable, null);
             addChatDrawable("drawableMsgInMedia", chat_msgInMediaDrawable, null);
             addChatDrawable("drawableMsgInMediaSelected", chat_msgInMediaSelectedDrawable, null);
+            addChatDrawable("drawableMsgInInstant", chat_msgInInstantDrawable, "chat_inInstant");
             addChatDrawable("drawableMsgOut", chat_msgOutDrawable, null);
             addChatDrawable("drawableMsgOutSelected", chat_msgOutSelectedDrawable, null);
             addChatDrawable("drawableMsgOutMedia", chat_msgOutMediaDrawable, null);
@@ -5772,12 +5935,14 @@ public class Theme {
         chat_contactNamePaint.setTextSize(AndroidUtilities.dp(15.0f));
         chat_contactPhonePaint.setTextSize(AndroidUtilities.dp(13.0f));
         chat_durationPaint.setTextSize(AndroidUtilities.dp(12.0f));
+        float f = ((SharedConfig.fontSize * 2) + 10) / 3.0f;
+        chat_namePaint.setTextSize(AndroidUtilities.dp(f));
+        chat_replyNamePaint.setTextSize(AndroidUtilities.dp(f));
+        chat_replyTextPaint.setTextSize(AndroidUtilities.dp(f));
+        chat_forwardNamePaint.setTextSize(AndroidUtilities.dp(f));
+        chat_adminPaint.setTextSize(AndroidUtilities.dp(f - 1.0f));
+        int i27 = SharedConfig.fontSize;
         chat_timePaint.setTextSize(AndroidUtilities.dp(12.0f));
-        chat_adminPaint.setTextSize(AndroidUtilities.dp(13.0f));
-        chat_namePaint.setTextSize(AndroidUtilities.dp(14.0f));
-        chat_forwardNamePaint.setTextSize(AndroidUtilities.dp(14.0f));
-        chat_replyNamePaint.setTextSize(AndroidUtilities.dp(14.0f));
-        chat_replyTextPaint.setTextSize(AndroidUtilities.dp(14.0f));
         chat_gamePaint.setTextSize(AndroidUtilities.dp(13.0f));
         chat_shipmentPaint.setTextSize(AndroidUtilities.dp(13.0f));
         chat_instantViewPaint.setTextSize(AndroidUtilities.dp(13.0f));

@@ -187,7 +187,7 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
                     ArrayList<MessageObject> arrayList = new ArrayList<>();
                     arrayList.add(message2);
                     PhotoViewer.getInstance().setParentActivity(this.parentFragment);
-                    PhotoViewer.getInstance().openPhoto(arrayList, 0, 0L, 0L, new PhotoViewer.EmptyPhotoViewerProvider());
+                    PhotoViewer.getInstance().openPhoto(arrayList, 0, 0L, 0L, 0, new PhotoViewer.EmptyPhotoViewerProvider());
                     return;
                 }
                 AndroidUtilities.openDocument(message2, this.parentActivity, this.parentFragment);
@@ -539,7 +539,7 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
             View view;
             if (i == 0) {
                 view = new GraySectionCell(viewGroup.getContext());

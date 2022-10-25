@@ -1141,7 +1141,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
             View groupCreateUserCell;
             if (i == 1) {
                 groupCreateUserCell = new GroupCreateUserCell(this.context, 1, 0, true);
@@ -1152,11 +1152,11 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
         }
 
         /* JADX WARN: Multi-variable type inference failed */
-        /* JADX WARN: Removed duplicated region for block: B:103:0x0219  */
+        /* JADX WARN: Removed duplicated region for block: B:103:0x021b  */
         /* JADX WARN: Removed duplicated region for block: B:116:? A[RETURN, SYNTHETIC] */
-        /* JADX WARN: Removed duplicated region for block: B:85:0x01c3  */
-        /* JADX WARN: Removed duplicated region for block: B:86:0x01c9  */
-        /* JADX WARN: Removed duplicated region for block: B:92:0x01d9  */
+        /* JADX WARN: Removed duplicated region for block: B:85:0x01c5  */
+        /* JADX WARN: Removed duplicated region for block: B:86:0x01cb  */
+        /* JADX WARN: Removed duplicated region for block: B:92:0x01db  */
         /* JADX WARN: Type inference failed for: r1v2, types: [org.telegram.ui.Cells.GroupCreateUserCell] */
         /* JADX WARN: Type inference failed for: r7v0 */
         /* JADX WARN: Type inference failed for: r7v1 */
@@ -1175,7 +1175,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
         */
         public void onBindViewHolder(androidx.recyclerview.widget.RecyclerView.ViewHolder r18, int r19) {
             /*
-                Method dump skipped, instructions count: 559
+                Method dump skipped, instructions count: 561
                 To view this dump add '--comments-level debug' option
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.FilterUsersActivity.GroupCreateAdapter.onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder, int):void");

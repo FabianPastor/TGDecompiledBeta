@@ -11,8 +11,8 @@ public final /* synthetic */ class ShareAlert$$ExternalSyntheticLambda8 implemen
 
     @Override // android.view.View.OnTouchListener
     public final boolean onTouch(View view, MotionEvent motionEvent) {
-        boolean lambda$new$6;
-        lambda$new$6 = ShareAlert.lambda$new$6(view, motionEvent);
-        return lambda$new$6;
+        boolean lambda$new$7;
+        lambda$new$7 = ShareAlert.lambda$new$7(view, motionEvent);
+        return lambda$new$7;
     }
 }

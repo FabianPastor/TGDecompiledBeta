@@ -148,6 +148,7 @@ public class InviteLinkBottomSheet extends BottomSheet {
         FrameLayout frameLayout = new FrameLayout(context) { // from class: org.telegram.ui.Components.InviteLinkBottomSheet.1
             private boolean fullHeight;
             private RectF rect = new RectF();
+            private Boolean statusBarOpen;
 
             @Override // android.view.ViewGroup
             public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
@@ -191,7 +192,7 @@ public class InviteLinkBottomSheet extends BottomSheet {
 
             /* JADX WARN: Removed duplicated region for block: B:17:0x009c  */
             /* JADX WARN: Removed duplicated region for block: B:19:0x00ed  */
-            /* JADX WARN: Removed duplicated region for block: B:21:? A[RETURN, SYNTHETIC] */
+            /* JADX WARN: Removed duplicated region for block: B:22:0x011c  */
             @Override // android.view.View
             /*
                 Code decompiled incorrectly, please refer to instructions dump.
@@ -199,10 +200,27 @@ public class InviteLinkBottomSheet extends BottomSheet {
             */
             protected void onDraw(android.graphics.Canvas r13) {
                 /*
-                    Method dump skipped, instructions count: 312
+                    Method dump skipped, instructions count: 289
                     To view this dump add '--comments-level debug' option
                 */
                 throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.InviteLinkBottomSheet.AnonymousClass1.onDraw(android.graphics.Canvas):void");
+            }
+
+            private void updateLightStatusBar(boolean z3) {
+                Boolean bool = this.statusBarOpen;
+                if (bool == null || bool.booleanValue() != z3) {
+                    boolean z4 = true;
+                    boolean z5 = AndroidUtilities.computePerceivedBrightness(InviteLinkBottomSheet.this.getThemedColor("dialogBackground")) > 0.721f;
+                    if (AndroidUtilities.computePerceivedBrightness(Theme.blendOver(InviteLinkBottomSheet.this.getThemedColor("actionBarDefault"), NUM)) <= 0.721f) {
+                        z4 = false;
+                    }
+                    Boolean valueOf = Boolean.valueOf(z3);
+                    this.statusBarOpen = valueOf;
+                    if (!valueOf.booleanValue()) {
+                        z5 = z4;
+                    }
+                    AndroidUtilities.setLightStatusBar(InviteLinkBottomSheet.this.getWindow(), z5);
+                }
             }
         };
         this.containerView = frameLayout;
@@ -514,7 +532,7 @@ public class InviteLinkBottomSheet extends BottomSheet {
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
             View timerPrivacyCell;
             HeaderCell headerCell;
             Context context = viewGroup.getContext();

@@ -18,6 +18,7 @@ public class TLRPC$TL_messages_sendMessage extends TLObject {
     public int schedule_date;
     public TLRPC$InputPeer send_as;
     public boolean silent;
+    public int top_msg_id;
     public boolean update_stickersets_order;
 
     @Override // org.telegram.tgnet.TLObject
@@ -44,6 +45,9 @@ public class TLRPC$TL_messages_sendMessage extends TLObject {
         this.peer.serializeToStream(abstractSerializedData);
         if ((this.flags & 1) != 0) {
             abstractSerializedData.writeInt32(this.reply_to_msg_id);
+        }
+        if ((this.flags & 512) != 0) {
+            abstractSerializedData.writeInt32(this.top_msg_id);
         }
         abstractSerializedData.writeString(this.message);
         abstractSerializedData.writeInt64(this.random_id);

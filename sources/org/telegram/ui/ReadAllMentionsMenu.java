@@ -3,16 +3,18 @@ package org.telegram.ui;
 import android.app.Activity;
 import android.content.Context;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.ActionBarMenuSubItem;
 import org.telegram.ui.ActionBar.ActionBarPopupWindow;
+import org.telegram.ui.ActionBar.INavigationLayout;
 import org.telegram.ui.ActionBar.Theme;
 /* loaded from: classes3.dex */
 public class ReadAllMentionsMenu {
-    public static ActionBarPopupWindow show(int i, Activity activity, FrameLayout frameLayout, View view, Theme.ResourcesProvider resourcesProvider, final Runnable runnable) {
+    public static ActionBarPopupWindow show(int i, Activity activity, INavigationLayout iNavigationLayout, FrameLayout frameLayout, View view, Theme.ResourcesProvider resourcesProvider, final Runnable runnable) {
         int i2;
         String str;
         ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(activity);
@@ -45,7 +47,14 @@ public class ReadAllMentionsMenu {
         actionBarPopupWindow.setInputMethodMode(2);
         actionBarPopupWindow.setSoftInputMode(0);
         actionBarPopupWindow.getContentView().setFocusableInTouchMode(true);
-        actionBarPopupWindow.showAtLocation(frameLayout, 51, (int) (((view.getX() + view.getWidth()) - actionBarPopupWindowLayout.getMeasuredWidth()) + AndroidUtilities.dp(8.0f)), (int) (view.getY() - actionBarPopupWindowLayout.getMeasuredHeight()));
+        float x = ((view.getX() + view.getWidth()) - actionBarPopupWindowLayout.getMeasuredWidth()) + AndroidUtilities.dp(8.0f);
+        float y = view.getY() - actionBarPopupWindowLayout.getMeasuredHeight();
+        if (AndroidUtilities.isTablet()) {
+            ViewGroup view2 = iNavigationLayout.getView();
+            x += view2.getX() + view2.getPaddingLeft();
+            y += view2.getY() + view2.getPaddingTop();
+        }
+        actionBarPopupWindow.showAtLocation(frameLayout, 51, (int) x, (int) y);
         return actionBarPopupWindow;
     }
 

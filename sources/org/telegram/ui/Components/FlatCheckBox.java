@@ -174,6 +174,6 @@ public class FlatCheckBox extends View {
     }
 
     public void denied() {
-        AndroidUtilities.shakeView(this, 2.0f, 0);
+        AndroidUtilities.shakeView(this);
     }
 }

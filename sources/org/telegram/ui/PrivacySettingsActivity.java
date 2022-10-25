@@ -83,6 +83,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
     private boolean currentSync;
     private int deleteAccountDetailRow;
     private int deleteAccountRow;
+    private boolean deleteAccountUpdate;
     private int emailLoginRow;
     private int forwardsRow;
     private int groupsDetailRow;
@@ -107,6 +108,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
     private int rowCount;
     private int secretDetailRow;
     private int secretMapRow;
+    private boolean secretMapUpdate;
     private int secretSectionRow;
     private int secretWebpageRow;
     private int securitySectionRow;
@@ -275,6 +277,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
         });
         this.listView.setVerticalScrollBarEnabled(false);
         this.listView.setLayoutAnimation(null);
+        this.listView.setItemAnimator(null);
         frameLayout2.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView.setAdapter(this.listAdapter);
         this.listView.setOnItemClickListener(new RecyclerListView.OnItemClickListener() { // from class: org.telegram.ui.PrivacySettingsActivity$$ExternalSyntheticLambda19
@@ -574,6 +577,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
             FileLog.e(e);
         }
         if (tLObject instanceof TLRPC$TL_boolTrue) {
+            this.deleteAccountUpdate = true;
             getContactsController().setDeleteAccountTTL(tLRPC$TL_account_setAccountTTL.ttl.days);
             this.listAdapter.notifyDataSetChanged();
         }
@@ -663,6 +667,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
     /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$createView$12() {
         this.listAdapter.notifyDataSetChanged();
+        this.secretMapUpdate = true;
     }
 
     /* JADX INFO: Access modifiers changed from: private */
@@ -1069,7 +1074,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
             View textSettingsCell;
             if (i == 0) {
                 textSettingsCell = new TextSettingsCell(this.mContext);
@@ -1292,7 +1297,8 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                                                 }
                                                 z2 = false;
                                             }
-                                            textSettingsCell.setTextAndValue(LocaleController.getString("DeleteAccountIfAwayFor3", R.string.DeleteAccountIfAwayFor3), str, false);
+                                            textSettingsCell.setTextAndValue(LocaleController.getString("DeleteAccountIfAwayFor3", R.string.DeleteAccountIfAwayFor3), str, PrivacySettingsActivity.this.deleteAccountUpdate, false);
+                                            PrivacySettingsActivity.this.deleteAccountUpdate = false;
                                         } else if (i != PrivacySettingsActivity.this.paymentsClearRow) {
                                             if (i != PrivacySettingsActivity.this.secretMapRow) {
                                                 if (i == PrivacySettingsActivity.this.contactsDeleteRow) {
@@ -1309,7 +1315,8 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                                                 } else {
                                                     string = LocaleController.getString("MapPreviewProviderYandex", R.string.MapPreviewProviderYandex);
                                                 }
-                                                textSettingsCell.setTextAndValue(LocaleController.getString("MapPreviewProvider", R.string.MapPreviewProvider), string, true);
+                                                textSettingsCell.setTextAndValue(LocaleController.getString("MapPreviewProvider", R.string.MapPreviewProvider), string, PrivacySettingsActivity.this.secretMapUpdate, true);
+                                                PrivacySettingsActivity.this.secretMapUpdate = false;
                                             }
                                         } else {
                                             textSettingsCell.setText(LocaleController.getString("PrivacyPaymentsClear", R.string.PrivacyPaymentsClear), true);

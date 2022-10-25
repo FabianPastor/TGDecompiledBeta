@@ -22,6 +22,7 @@ public class SeekBar {
     private View parentView;
     private int progressColor;
     private boolean selected;
+    private float thumbProgress;
     private int width;
     private int thumbX = 0;
     private int draggingThumbX = 0;
@@ -29,6 +30,7 @@ public class SeekBar {
     private boolean pressed = false;
     private RectF rect = new RectF();
     private int lineHeight = AndroidUtilities.dp(2.0f);
+    private float alpha = 1.0f;
 
     /* loaded from: classes3.dex */
     public interface SeekBarDelegate {
@@ -38,11 +40,21 @@ public class SeekBar {
         public final /* synthetic */ class CC {
             public static void $default$onSeekBarContinuousDrag(SeekBarDelegate seekBarDelegate, float f) {
             }
+
+            public static void $default$onSeekBarPressed(SeekBarDelegate seekBarDelegate) {
+            }
+
+            public static void $default$onSeekBarReleased(SeekBarDelegate seekBarDelegate) {
+            }
         }
 
         void onSeekBarContinuousDrag(float f);
 
         void onSeekBarDrag(float f);
+
+        void onSeekBarPressed();
+
+        void onSeekBarReleased();
     }
 
     public SeekBar(View view) {
@@ -123,7 +135,12 @@ public class SeekBar {
         this.backgroundSelectedColor = i5;
     }
 
+    public void setAlpha(float f) {
+        this.alpha = f;
+    }
+
     public void setProgress(float f) {
+        this.thumbProgress = f;
         int ceil = (int) Math.ceil((this.width - thumbWidth) * f);
         this.thumbX = ceil;
         if (ceil < 0) {
@@ -157,6 +174,7 @@ public class SeekBar {
     public void setSize(int i, int i2) {
         this.width = i;
         this.height = i2;
+        setProgress(this.thumbProgress);
     }
 
     public int getWidth() {
@@ -165,6 +183,13 @@ public class SeekBar {
 
     public void draw(Canvas canvas) {
         int i;
+        float f = this.alpha;
+        if (f <= 0.0f) {
+            return;
+        }
+        if (f < 1.0f) {
+            canvas.saveLayerAlpha(0.0f, 0.0f, this.width, this.height, (int) (f * 255.0f), 31);
+        }
         RectF rectF = this.rect;
         int i2 = thumbWidth;
         int i3 = this.height;
@@ -186,10 +211,10 @@ public class SeekBar {
             canvas.drawRoundRect(rectF4, i9 / 2, i9 / 2, paint);
         }
         RectF rectF5 = this.rect;
-        float f = thumbWidth / 2;
+        float f2 = thumbWidth / 2;
         int i10 = this.height;
         int i11 = this.lineHeight;
-        rectF5.set(f, (i10 / 2) - (i11 / 2), (i / 2) + (this.pressed ? this.draggingThumbX : this.thumbX), (i10 / 2) + (i11 / 2));
+        rectF5.set(f2, (i10 / 2) - (i11 / 2), (i / 2) + (this.pressed ? this.draggingThumbX : this.thumbX), (i10 / 2) + (i11 / 2));
         paint.setColor(this.progressColor);
         RectF rectF6 = this.rect;
         int i12 = thumbWidth;
@@ -201,15 +226,15 @@ public class SeekBar {
             if (elapsedRealtime > 18) {
                 elapsedRealtime = 16;
             }
-            float f2 = this.currentRadius;
-            if (f2 < dp) {
-                float dp2 = f2 + (AndroidUtilities.dp(1.0f) * (((float) elapsedRealtime) / 60.0f));
+            float f3 = this.currentRadius;
+            if (f3 < dp) {
+                float dp2 = f3 + (AndroidUtilities.dp(1.0f) * (((float) elapsedRealtime) / 60.0f));
                 this.currentRadius = dp2;
                 if (dp2 > dp) {
                     this.currentRadius = dp;
                 }
             } else {
-                float dp3 = f2 - (AndroidUtilities.dp(1.0f) * (((float) elapsedRealtime) / 60.0f));
+                float dp3 = f3 - (AndroidUtilities.dp(1.0f) * (((float) elapsedRealtime) / 60.0f));
                 this.currentRadius = dp3;
                 if (dp3 < dp) {
                     this.currentRadius = dp;
@@ -221,5 +246,9 @@ public class SeekBar {
             }
         }
         canvas.drawCircle((this.pressed ? this.draggingThumbX : this.thumbX) + (thumbWidth / 2), this.height / 2, this.currentRadius, paint);
+        if (this.alpha >= 1.0f) {
+            return;
+        }
+        canvas.restore();
     }
 }

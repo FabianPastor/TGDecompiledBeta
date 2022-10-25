@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 /* loaded from: classes.dex */
-public abstract class TLRPC$Message extends TLObject {
+public class TLRPC$Message extends TLObject {
     public TLRPC$MessageAction action;
     public int date;
     public int destroyTime;
@@ -45,6 +45,7 @@ public abstract class TLRPC$Message extends TLObject {
     public int seq_in;
     public int seq_out;
     public boolean silent;
+    public boolean topic_start;
     public int ttl;
     public int ttl_period;
     public boolean unread;
@@ -53,6 +54,7 @@ public abstract class TLRPC$Message extends TLObject {
     public int views;
     public String voiceTranscription;
     public boolean voiceTranscriptionFinal;
+    public boolean voiceTranscriptionForce;
     public long voiceTranscriptionId;
     public boolean voiceTranscriptionOpen;
     public boolean voiceTranscriptionRated;
@@ -2837,8 +2839,8 @@ public abstract class TLRPC$Message extends TLObject {
             if (this.params == null) {
                 this.params = new HashMap<>();
             }
-            this.layer = 147;
-            this.params.put("legacy_layer", "147");
+            this.layer = 148;
+            this.params.put("legacy_layer", "148");
         }
         if ((this.id < 0 || this.send_state == 3 || this.legacy) && (hashMap2 = this.params) != null && hashMap2.size() > 0) {
             for (Map.Entry<String, String> entry2 : this.params.entrySet()) {

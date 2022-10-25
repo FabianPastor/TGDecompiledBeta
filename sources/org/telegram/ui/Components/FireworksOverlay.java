@@ -35,6 +35,10 @@ public class FireworksOverlay extends View {
     private boolean started;
     private boolean startedFall;
 
+    /* JADX INFO: Access modifiers changed from: protected */
+    public void onStop() {
+    }
+
     static /* synthetic */ int access$408(FireworksOverlay fireworksOverlay) {
         int i = fireworksOverlay.fallingDownCount;
         fireworksOverlay.fallingDownCount = i + 1;
@@ -165,7 +169,7 @@ public class FireworksOverlay extends View {
                     this.rotation = (short) (s - 360);
                 }
             }
-            return this.y >= ((float) FireworksOverlay.this.getMeasuredHeight());
+            return this.y >= ((float) FireworksOverlay.this.getHeightForAnimation());
         }
     }
 
@@ -193,6 +197,21 @@ public class FireworksOverlay extends View {
         }
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
+    public int getHeightForAnimation() {
+        if (getMeasuredHeight() == 0) {
+            return ((View) getParent()).getHeight();
+        }
+        return getMeasuredHeight();
+    }
+
+    private int getWidthForAnimation() {
+        if (getMeasuredWidth() == 0) {
+            return ((View) getParent()).getWidth();
+        }
+        return getMeasuredWidth();
+    }
+
     private Particle createParticle(boolean z) {
         Particle particle = new Particle();
         byte nextInt = (byte) Utilities.random.nextInt(2);
@@ -213,23 +232,23 @@ public class FireworksOverlay extends View {
             particle.typeSize = (byte) ((Utilities.random.nextFloat() * 4.0f) + 4.0f);
         }
         if (z) {
-            particle.y = (-Utilities.random.nextFloat()) * getMeasuredHeight() * 1.2f;
-            particle.x = AndroidUtilities.dp(5.0f) + Utilities.random.nextInt(getMeasuredWidth() - AndroidUtilities.dp(10.0f));
+            particle.y = (-Utilities.random.nextFloat()) * getHeightForAnimation() * 1.2f;
+            particle.x = AndroidUtilities.dp(5.0f) + Utilities.random.nextInt(getWidthForAnimation() - AndroidUtilities.dp(10.0f));
             particle.xFinished = particle.finishedStart;
         } else {
             int dp = AndroidUtilities.dp(Utilities.random.nextInt(10) + 4);
-            int measuredHeight = getMeasuredHeight() / 4;
+            int heightForAnimation = getHeightForAnimation() / 4;
             if (particle.side == 0) {
                 particle.x = -dp;
             } else {
-                particle.x = getMeasuredWidth() + dp;
+                particle.x = getWidthForAnimation() + dp;
             }
             if (particle.side != 0) {
                 i = -1;
             }
             particle.moveX = i * (AndroidUtilities.dp(1.2f) + (Utilities.random.nextFloat() * AndroidUtilities.dp(4.0f)));
             particle.moveY = -(AndroidUtilities.dp(4.0f) + (Utilities.random.nextFloat() * AndroidUtilities.dp(4.0f)));
-            particle.y = (measuredHeight / 2) + Utilities.random.nextInt(measuredHeight * 2);
+            particle.y = (heightForAnimation / 2) + Utilities.random.nextInt(heightForAnimation * 2);
         }
         return particle;
     }
@@ -307,15 +326,15 @@ public class FireworksOverlay extends View {
             return;
         }
         this.started = false;
-        if (Build.VERSION.SDK_INT < 18) {
-            return;
+        if (Build.VERSION.SDK_INT >= 18) {
+            AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.FireworksOverlay$$ExternalSyntheticLambda0
+                @Override // java.lang.Runnable
+                public final void run() {
+                    FireworksOverlay.this.lambda$onDraw$0();
+                }
+            });
         }
-        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.FireworksOverlay$$ExternalSyntheticLambda0
-            @Override // java.lang.Runnable
-            public final void run() {
-                FireworksOverlay.this.lambda$onDraw$0();
-            }
-        });
+        onStop();
     }
 
     /* JADX INFO: Access modifiers changed from: private */

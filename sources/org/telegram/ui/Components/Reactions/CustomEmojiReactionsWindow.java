@@ -17,7 +17,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import androidx.core.content.ContextCompat;
-import com.google.android.exoplayer2.util.Log;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -46,6 +45,7 @@ import org.telegram.ui.Components.ReactionsContainerLayout;
 import org.telegram.ui.SelectAnimatedEmojiDialog;
 /* loaded from: classes3.dex */
 public class CustomEmojiReactionsWindow {
+    int animationIndex;
     BaseFragment baseFragment;
     ContainerView containerView;
     private float dismissProgress;
@@ -266,7 +266,7 @@ public class CustomEmojiReactionsWindow {
             reactionsContainerLayout.getLocationOnScreen(this.location);
         }
         this.windowView.getLocationOnScreen(iArr);
-        float dp = ((this.location[1] - iArr[1]) - AndroidUtilities.dp(44.0f)) - AndroidUtilities.dp(34.0f);
+        float dp = (this.location[1] - iArr[1]) - AndroidUtilities.dp(44.0f);
         if (this.containerView.getMeasuredHeight() + dp > this.windowView.getMeasuredHeight() - AndroidUtilities.dp(32.0f)) {
             dp = (this.windowView.getMeasuredHeight() - AndroidUtilities.dp(32.0f)) - this.containerView.getMeasuredHeight();
         }
@@ -280,9 +280,10 @@ public class CustomEmojiReactionsWindow {
             this.yTranslation = dp;
             this.containerView.setTranslationY(dp);
         }
-        Log.d("kek", "" + this.reactionsContainerLayout.rect.top + " " + this.location[1] + " " + iArr[1] + " " + this.containerView.getY());
-        this.fromRect.offset(((float) (this.location[0] - iArr[0])) - this.containerView.getX(), ((float) (this.location[1] - iArr[1])) - this.containerView.getY());
+        this.fromRect.offset((this.location[0] - iArr[0]) - this.containerView.getX(), (this.location[1] - iArr[1]) - this.containerView.getY());
         this.reactionsContainerLayout.setCustomEmojiEnterProgress(this.enterTransitionProgress);
+        final int i = UserConfig.selectedAccount;
+        this.animationIndex = NotificationCenter.getInstance(i).setAnimationInProgress(this.animationIndex, null);
         float[] fArr = new float[2];
         fArr[0] = this.enterTransitionProgress;
         fArr[1] = z ? 1.0f : 0.0f;
@@ -296,6 +297,7 @@ public class CustomEmojiReactionsWindow {
         ofFloat.addListener(new AnimatorListenerAdapter() { // from class: org.telegram.ui.Components.Reactions.CustomEmojiReactionsWindow.6
             @Override // android.animation.AnimatorListenerAdapter, android.animation.Animator.AnimatorListener
             public void onAnimationEnd(Animator animator) {
+                NotificationCenter.getInstance(i).onAnimationFinish(CustomEmojiReactionsWindow.this.animationIndex);
                 CustomEmojiReactionsWindow customEmojiReactionsWindow = CustomEmojiReactionsWindow.this;
                 boolean z2 = z;
                 customEmojiReactionsWindow.enterTransitionProgress = z2 ? 1.0f : 0.0f;

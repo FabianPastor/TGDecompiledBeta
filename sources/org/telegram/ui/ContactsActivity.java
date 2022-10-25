@@ -186,7 +186,6 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         getNotificationCenter().onAnimationFinish(this.animationIndex);
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
     @Override // org.telegram.ui.ActionBar.BaseFragment
     public void onTransitionAnimationProgress(boolean z, float f) {
         super.onTransitionAnimationProgress(z, f);
@@ -197,30 +196,30 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
     }
 
     /* JADX WARN: Can't wrap try/catch for region: R(17:1|(2:3|(1:5)(2:86|(1:88)(1:89)))(1:90)|6|(3:10|(1:12)(1:14)|13)|15|(1:17)(2:77|(2:79|(1:84)(1:83))(11:85|19|20|21|(2:23|(1:25)(1:73))(1:74)|26|(20:30|(1:32)(1:66)|33|(1:35)(1:65)|36|(1:38)|39|(1:41)(1:64)|42|(1:44)(1:63)|45|(1:47)|48|(1:50)(1:62)|51|(1:53)|54|(1:56)(1:61)|(1:58)(1:60)|59)|67|(1:69)|70|71))|18|19|20|21|(0)(0)|26|(21:28|30|(0)(0)|33|(0)(0)|36|(0)|39|(0)(0)|42|(0)(0)|45|(0)|48|(0)(0)|51|(0)|54|(0)(0)|(0)(0)|59)|67|(0)|70|71) */
-    /* JADX WARN: Code restructure failed: missing block: B:36:0x011c, code lost:
+    /* JADX WARN: Code restructure failed: missing block: B:36:0x011a, code lost:
         r23.hasGps = false;
      */
     /* JADX WARN: Multi-variable type inference failed */
-    /* JADX WARN: Removed duplicated region for block: B:39:0x0137  */
-    /* JADX WARN: Removed duplicated region for block: B:43:0x013f  */
-    /* JADX WARN: Removed duplicated region for block: B:50:0x0202  */
-    /* JADX WARN: Removed duplicated region for block: B:51:0x0205  */
-    /* JADX WARN: Removed duplicated region for block: B:54:0x020b  */
-    /* JADX WARN: Removed duplicated region for block: B:55:0x020e  */
-    /* JADX WARN: Removed duplicated region for block: B:59:0x0218  */
-    /* JADX WARN: Removed duplicated region for block: B:62:0x0220  */
-    /* JADX WARN: Removed duplicated region for block: B:63:0x0223  */
-    /* JADX WARN: Removed duplicated region for block: B:66:0x0229  */
-    /* JADX WARN: Removed duplicated region for block: B:67:0x022c  */
-    /* JADX WARN: Removed duplicated region for block: B:70:0x0267  */
-    /* JADX WARN: Removed duplicated region for block: B:73:0x02b7  */
-    /* JADX WARN: Removed duplicated region for block: B:74:0x02ba  */
-    /* JADX WARN: Removed duplicated region for block: B:77:0x02d0  */
-    /* JADX WARN: Removed duplicated region for block: B:80:0x0333  */
-    /* JADX WARN: Removed duplicated region for block: B:81:0x0336  */
-    /* JADX WARN: Removed duplicated region for block: B:83:0x033a  */
-    /* JADX WARN: Removed duplicated region for block: B:84:0x033d  */
-    /* JADX WARN: Removed duplicated region for block: B:88:0x0357  */
+    /* JADX WARN: Removed duplicated region for block: B:39:0x0135  */
+    /* JADX WARN: Removed duplicated region for block: B:43:0x013d  */
+    /* JADX WARN: Removed duplicated region for block: B:50:0x0200  */
+    /* JADX WARN: Removed duplicated region for block: B:51:0x0203  */
+    /* JADX WARN: Removed duplicated region for block: B:54:0x0209  */
+    /* JADX WARN: Removed duplicated region for block: B:55:0x020c  */
+    /* JADX WARN: Removed duplicated region for block: B:59:0x0216  */
+    /* JADX WARN: Removed duplicated region for block: B:62:0x021e  */
+    /* JADX WARN: Removed duplicated region for block: B:63:0x0221  */
+    /* JADX WARN: Removed duplicated region for block: B:66:0x0227  */
+    /* JADX WARN: Removed duplicated region for block: B:67:0x022a  */
+    /* JADX WARN: Removed duplicated region for block: B:70:0x0265  */
+    /* JADX WARN: Removed duplicated region for block: B:73:0x02b5  */
+    /* JADX WARN: Removed duplicated region for block: B:74:0x02b8  */
+    /* JADX WARN: Removed duplicated region for block: B:77:0x02ce  */
+    /* JADX WARN: Removed duplicated region for block: B:80:0x0331  */
+    /* JADX WARN: Removed duplicated region for block: B:81:0x0334  */
+    /* JADX WARN: Removed duplicated region for block: B:83:0x0338  */
+    /* JADX WARN: Removed duplicated region for block: B:84:0x033b  */
+    /* JADX WARN: Removed duplicated region for block: B:88:0x0355  */
     @Override // org.telegram.ui.ActionBar.BaseFragment
     /*
         Code decompiled incorrectly, please refer to instructions dump.
@@ -228,7 +227,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
     */
     public android.view.View createView(android.content.Context r24) {
         /*
-            Method dump skipped, instructions count: 866
+            Method dump skipped, instructions count: 864
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ContactsActivity.createView(android.content.Context):android.view.View");
@@ -362,9 +361,9 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                 return;
             }
         }
-        Object mo1741getItem = this.listViewAdapter.mo1741getItem(sectionForPosition, positionInSectionForPosition);
-        if (mo1741getItem instanceof TLRPC$User) {
-            TLRPC$User tLRPC$User2 = (TLRPC$User) mo1741getItem;
+        Object mo1776getItem = this.listViewAdapter.mo1776getItem(sectionForPosition, positionInSectionForPosition);
+        if (mo1776getItem instanceof TLRPC$User) {
+            TLRPC$User tLRPC$User2 = (TLRPC$User) mo1776getItem;
             if (this.returnAsResult) {
                 LongSparseArray<TLRPC$User> longSparseArray2 = this.ignoreUsers;
                 if (longSparseArray2 != null && longSparseArray2.indexOfKey(tLRPC$User2.id) >= 0) {
@@ -382,9 +381,9 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                 }
                 presentFragment(new ChatActivity(bundle4), true);
             }
-        } else if (!(mo1741getItem instanceof ContactsController.Contact)) {
+        } else if (!(mo1776getItem instanceof ContactsController.Contact)) {
         } else {
-            ContactsController.Contact contact = (ContactsController.Contact) mo1741getItem;
+            ContactsController.Contact contact = (ContactsController.Contact) mo1776getItem;
             final String str2 = !contact.phones.isEmpty() ? contact.phones.get(0) : null;
             if (str2 == null || getParentActivity() == null) {
                 return;
@@ -812,11 +811,9 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         });
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
     @Override // org.telegram.ui.ActionBar.BaseFragment
     public AnimatorSet onCustomTransitionAnimation(final boolean z, final Runnable runnable) {
         final ValueAnimator ofFloat;
-        BaseFragment baseFragment;
         float[] fArr = {0.0f, 1.0f};
         if (z) {
             // fill-array-data instruction
@@ -827,12 +824,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             ofFloat = ValueAnimator.ofFloat(fArr);
         }
         final ViewGroup viewGroup = (ViewGroup) this.fragmentView.getParent();
-        if (this.parentLayout.fragmentsStack.size() > 1) {
-            ArrayList<BaseFragment> arrayList = this.parentLayout.fragmentsStack;
-            baseFragment = arrayList.get(arrayList.size() - 2);
-        } else {
-            baseFragment = null;
-        }
+        BaseFragment baseFragment = this.parentLayout.getFragmentStack().size() > 1 ? this.parentLayout.getFragmentStack().get(this.parentLayout.getFragmentStack().size() - 2) : null;
         DialogsActivity dialogsActivity = baseFragment instanceof DialogsActivity ? (DialogsActivity) baseFragment : null;
         if (dialogsActivity == null) {
             return null;
@@ -855,7 +847,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         FrameLayout frameLayout = this.floatingButtonContainer;
         if (frameLayout != null) {
             ((ViewGroup) this.fragmentView).removeView(frameLayout);
-            ((FrameLayout) viewGroup.getParent()).addView(this.floatingButtonContainer);
+            this.parentLayout.getOverlayContainerView().addView(this.floatingButtonContainer);
         }
         ofFloat.setDuration(150L);
         ofFloat.setInterpolator(new DecelerateInterpolator(1.5f));

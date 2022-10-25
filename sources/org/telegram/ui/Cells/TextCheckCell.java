@@ -41,6 +41,7 @@ public class TextCheckCell extends FrameLayout {
     private Paint animationPaint;
     private float animationProgress;
     private ObjectAnimator animator;
+    boolean attached;
     private Switch checkBox;
     private boolean drawCheckRipple;
     private int height;
@@ -134,7 +135,7 @@ public class TextCheckCell extends FrameLayout {
     public void setTextAndCheck(String str, boolean z, boolean z2) {
         this.textView.setText(str);
         this.isMultiline = false;
-        this.checkBox.setChecked(z, false);
+        this.checkBox.setChecked(z, this.attached);
         this.needDivider = z2;
         this.valueTextView.setVisibility(8);
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) this.textView.getLayoutParams();
@@ -362,5 +363,17 @@ public class TextCheckCell extends FrameLayout {
             sb.append(this.valueTextView.getText());
         }
         accessibilityNodeInfo.setContentDescription(sb);
+    }
+
+    @Override // android.view.ViewGroup, android.view.View
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        this.attached = true;
+    }
+
+    @Override // android.view.ViewGroup, android.view.View
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        this.attached = false;
     }
 }

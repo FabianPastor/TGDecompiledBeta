@@ -319,7 +319,6 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
         });
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
     @Override // org.telegram.ui.ActionBar.BaseFragment
     public void onTransitionAnimationEnd(boolean z, boolean z2) {
         String str;

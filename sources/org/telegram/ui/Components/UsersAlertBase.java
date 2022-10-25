@@ -534,6 +534,7 @@ public class UsersAlertBase extends BottomSheet {
     public class ContainerView extends FrameLayout {
         private boolean ignoreLayout;
         float snapToTopOffset;
+        private Boolean statusBarOpen;
         ValueAnimator valueAnimator;
 
         public ContainerView(Context context) {
@@ -647,6 +648,7 @@ public class UsersAlertBase extends BottomSheet {
 
         /* JADX WARN: Removed duplicated region for block: B:15:0x00c3  */
         /* JADX WARN: Removed duplicated region for block: B:18:0x016a  */
+        /* JADX WARN: Removed duplicated region for block: B:21:0x01a7  */
         @Override // android.view.View
         /*
             Code decompiled incorrectly, please refer to instructions dump.
@@ -654,10 +656,27 @@ public class UsersAlertBase extends BottomSheet {
         */
         protected void onDraw(android.graphics.Canvas r14) {
             /*
-                Method dump skipped, instructions count: 466
+                Method dump skipped, instructions count: 431
                 To view this dump add '--comments-level debug' option
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.UsersAlertBase.ContainerView.onDraw(android.graphics.Canvas):void");
+        }
+
+        private void updateLightStatusBar(boolean z) {
+            Boolean bool = this.statusBarOpen;
+            if (bool == null || bool.booleanValue() != z) {
+                boolean z2 = true;
+                boolean z3 = AndroidUtilities.computePerceivedBrightness(UsersAlertBase.this.getThemedColor("dialogBackground")) > 0.721f;
+                if (AndroidUtilities.computePerceivedBrightness(Theme.blendOver(UsersAlertBase.this.getThemedColor("actionBarDefault"), NUM)) <= 0.721f) {
+                    z2 = false;
+                }
+                Boolean valueOf = Boolean.valueOf(z);
+                this.statusBarOpen = valueOf;
+                if (!valueOf.booleanValue()) {
+                    z3 = z2;
+                }
+                AndroidUtilities.setLightStatusBar(UsersAlertBase.this.getWindow(), z3);
+            }
         }
 
         /* JADX INFO: Access modifiers changed from: protected */

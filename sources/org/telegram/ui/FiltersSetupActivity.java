@@ -30,6 +30,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
+import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
@@ -47,6 +48,7 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.ShadowSectionCell;
+import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.CombinedDrawable;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.Premium.LimitReachedBottomSheet;
@@ -410,12 +412,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
         this.rowCount = 0 + 1;
         this.filterHelpRow = 0;
         int size = getMessagesController().dialogFilters.size();
-        if (!getUserConfig().isPremium()) {
-            size--;
-            this.showAllChats = false;
-        } else {
-            this.showAllChats = true;
-        }
+        this.showAllChats = true;
         if (!arrayList.isEmpty() && size < 10) {
             int i = this.rowCount;
             int i2 = i + 1;
@@ -473,7 +470,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
             for (int i2 = 0; i2 < size; i2++) {
                 tLRPC$TL_messages_updateDialogFiltersOrder.order.add(Integer.valueOf(arrayList.get(i2).id));
             }
-            getConnectionsManager().sendRequest(tLRPC$TL_messages_updateDialogFiltersOrder, FiltersSetupActivity$$ExternalSyntheticLambda0.INSTANCE);
+            getConnectionsManager().sendRequest(tLRPC$TL_messages_updateDialogFiltersOrder, FiltersSetupActivity$$ExternalSyntheticLambda1.INSTANCE);
         }
         super.onFragmentDestroy();
     }
@@ -508,7 +505,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
         ListAdapter listAdapter = new ListAdapter(context);
         this.adapter = listAdapter;
         recyclerListView.setAdapter(listAdapter);
-        this.listView.setOnItemClickListener(new RecyclerListView.OnItemClickListenerExtended() { // from class: org.telegram.ui.FiltersSetupActivity$$ExternalSyntheticLambda1
+        this.listView.setOnItemClickListener(new RecyclerListView.OnItemClickListenerExtended() { // from class: org.telegram.ui.FiltersSetupActivity$$ExternalSyntheticLambda2
             @Override // org.telegram.ui.Components.RecyclerListView.OnItemClickListenerExtended
             public /* synthetic */ boolean hasDoubleTap(View view, int i) {
                 return RecyclerListView.OnItemClickListenerExtended.CC.$default$hasDoubleTap(this, view, i);
@@ -763,7 +760,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
             SuggestedFilterCell suggestedFilterCell;
             if (i == 0) {
                 View headerCell = new HeaderCell(this.mContext);
@@ -1010,6 +1007,27 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
             FiltersSetupActivity.this.orderChanged = true;
             notifyItemMoved(i, i2);
         }
+
+        public void moveElementToStart(int i) {
+            int i2;
+            int i3 = FiltersSetupActivity.this.filtersEndRow - FiltersSetupActivity.this.filtersStartRow;
+            if (!FiltersSetupActivity.this.showAllChats) {
+                i2 = i + 1;
+                i3++;
+            } else {
+                i2 = i;
+            }
+            if (i2 < 0 || i2 >= i3) {
+                return;
+            }
+            ArrayList<MessagesController.DialogFilter> arrayList = FiltersSetupActivity.this.getMessagesController().dialogFilters;
+            arrayList.add(0, arrayList.remove(i));
+            for (int i4 = 0; i4 <= i; i4++) {
+                arrayList.get(i4).order = i4;
+            }
+            FiltersSetupActivity.this.orderChanged = true;
+            notifyItemMoved(FiltersSetupActivity.this.filtersStartRow + i, FiltersSetupActivity.this.filtersStartRow);
+        }
     }
 
     /* loaded from: classes3.dex */
@@ -1028,39 +1046,29 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
 
         @Override // androidx.recyclerview.widget.ItemTouchHelper.Callback
         public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-            boolean z;
             if (!FiltersSetupActivity.this.getUserConfig().isPremium()) {
                 View view = viewHolder.itemView;
-                if ((view instanceof FilterCell) && ((FilterCell) view).currentFilter.isDefault()) {
-                    z = false;
-                    if (viewHolder.getItemViewType() == 2 || !z) {
-                        return ItemTouchHelper.Callback.makeMovementFlags(0, 0);
-                    }
-                    return ItemTouchHelper.Callback.makeMovementFlags(3, 0);
+                if (view instanceof FilterCell) {
+                    ((FilterCell) view).currentFilter.isDefault();
                 }
             }
-            z = true;
-            if (viewHolder.getItemViewType() == 2) {
+            if (viewHolder.getItemViewType() != 2) {
+                return ItemTouchHelper.Callback.makeMovementFlags(0, 0);
             }
-            return ItemTouchHelper.Callback.makeMovementFlags(0, 0);
+            return ItemTouchHelper.Callback.makeMovementFlags(3, 0);
         }
 
         @Override // androidx.recyclerview.widget.ItemTouchHelper.Callback
         public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder viewHolder2) {
-            boolean z;
             if (!FiltersSetupActivity.this.getUserConfig().isPremium()) {
                 View view = viewHolder2.itemView;
-                if ((view instanceof FilterCell) && ((FilterCell) view).currentFilter.isDefault()) {
-                    z = false;
-                    if (viewHolder.getItemViewType() == viewHolder2.getItemViewType() || !z) {
-                        return false;
-                    }
-                    FiltersSetupActivity.this.adapter.swapElements(viewHolder.getAdapterPosition(), viewHolder2.getAdapterPosition());
-                    return true;
+                if (view instanceof FilterCell) {
+                    ((FilterCell) view).currentFilter.isDefault();
                 }
             }
-            z = true;
             if (viewHolder.getItemViewType() == viewHolder2.getItemViewType()) {
+                FiltersSetupActivity.this.adapter.swapElements(viewHolder.getAdapterPosition(), viewHolder2.getAdapterPosition());
+                return true;
             }
             return false;
         }
@@ -1070,11 +1078,40 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
             super.onChildDraw(canvas, recyclerView, viewHolder, f, f2, i, z);
         }
 
+        /* JADX INFO: Access modifiers changed from: private */
+        public void resetDefaultPosition() {
+            if (UserConfig.getInstance(UserConfig.selectedAccount).isPremium()) {
+                return;
+            }
+            ArrayList<MessagesController.DialogFilter> arrayList = FiltersSetupActivity.this.getMessagesController().dialogFilters;
+            for (int i = 0; i < arrayList.size(); i++) {
+                if (arrayList.get(i).isDefault() && i != 0) {
+                    FiltersSetupActivity.this.adapter.moveElementToStart(i);
+                    FiltersSetupActivity.this.listView.scrollToPosition(0);
+                    FiltersSetupActivity.this.onDefaultTabMoved();
+                    return;
+                }
+            }
+        }
+
         @Override // androidx.recyclerview.widget.ItemTouchHelper.Callback
         public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int i) {
             if (i != 0) {
                 FiltersSetupActivity.this.listView.cancelClickRunnables(false);
                 viewHolder.itemView.setPressed(true);
+            } else {
+                AndroidUtilities.cancelRunOnUIThread(new Runnable() { // from class: org.telegram.ui.FiltersSetupActivity$TouchHelperCallback$$ExternalSyntheticLambda0
+                    @Override // java.lang.Runnable
+                    public final void run() {
+                        FiltersSetupActivity.TouchHelperCallback.this.resetDefaultPosition();
+                    }
+                });
+                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.FiltersSetupActivity$TouchHelperCallback$$ExternalSyntheticLambda0
+                    @Override // java.lang.Runnable
+                    public final void run() {
+                        FiltersSetupActivity.TouchHelperCallback.this.resetDefaultPosition();
+                    }
+                }, 320L);
             }
             super.onSelectedChanged(viewHolder, i);
         }
@@ -1084,6 +1121,20 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
             super.clearView(recyclerView, viewHolder);
             viewHolder.itemView.setPressed(false);
         }
+    }
+
+    protected void onDefaultTabMoved() {
+        BulletinFactory.of(this).createSimpleBulletin(R.raw.filter_reorder, AndroidUtilities.replaceTags(LocaleController.formatString(R.string.LimitReachedReorderFolder, "LimitReachedReorderFolder", LocaleController.getString(R.string.FilterAllChats))), LocaleController.getString("PremiumMore", R.string.PremiumMore), 5000, new Runnable() { // from class: org.telegram.ui.FiltersSetupActivity$$ExternalSyntheticLambda0
+            @Override // java.lang.Runnable
+            public final void run() {
+                FiltersSetupActivity.this.lambda$onDefaultTabMoved$2();
+            }
+        }).show();
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
+    public /* synthetic */ void lambda$onDefaultTabMoved$2() {
+        presentFragment(new PremiumPreviewFragment("folders"));
     }
 
     @Override // org.telegram.ui.ActionBar.BaseFragment

@@ -247,26 +247,26 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    /* JADX WARN: Code restructure failed: missing block: B:25:0x0121, code lost:
-        if (r4.deleted != false) goto L30;
+    /* JADX WARN: Code restructure failed: missing block: B:28:0x0130, code lost:
+        if (r4.deleted != false) goto L34;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:34:0x014c, code lost:
-        if (r4.deleted != false) goto L30;
+    /* JADX WARN: Code restructure failed: missing block: B:37:0x015b, code lost:
+        if (r4.deleted != false) goto L34;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:35:0x014e, code lost:
+    /* JADX WARN: Code restructure failed: missing block: B:38:0x015d, code lost:
         r7 = r15;
      */
-    /* JADX WARN: Removed duplicated region for block: B:108:0x0264  */
-    /* JADX WARN: Removed duplicated region for block: B:115:0x027e A[LOOP:3: B:114:0x027c->B:115:0x027e, LOOP_END] */
-    /* JADX WARN: Removed duplicated region for block: B:118:0x0297  */
-    /* JADX WARN: Removed duplicated region for block: B:90:0x0225  */
+    /* JADX WARN: Removed duplicated region for block: B:111:0x0273  */
+    /* JADX WARN: Removed duplicated region for block: B:118:0x028d A[LOOP:3: B:117:0x028b->B:118:0x028d, LOOP_END] */
+    /* JADX WARN: Removed duplicated region for block: B:121:0x02a6  */
+    /* JADX WARN: Removed duplicated region for block: B:93:0x0234  */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
     public /* synthetic */ void lambda$loadExceptions$1() {
         /*
-            Method dump skipped, instructions count: 717
+            Method dump skipped, instructions count: 732
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.NotificationsSettingsActivity.lambda$loadExceptions$1():void");
@@ -540,7 +540,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                 if (i == this.callsVibrateRow) {
                     str = "vibrate_calls";
                 }
-                showDialog(AlertsCreator.createVibrationSelectDialog(getParentActivity(), 0L, str, new Runnable() { // from class: org.telegram.ui.NotificationsSettingsActivity$$ExternalSyntheticLambda5
+                showDialog(AlertsCreator.createVibrationSelectDialog(getParentActivity(), 0L, 0, str, new Runnable() { // from class: org.telegram.ui.NotificationsSettingsActivity$$ExternalSyntheticLambda5
                     @Override // java.lang.Runnable
                     public final void run() {
                         NotificationsSettingsActivity.this.lambda$createView$6(i);
@@ -752,7 +752,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
             View headerCell;
             View view;
             if (i == 0) {

@@ -28,6 +28,7 @@ import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import androidx.core.view.GestureDetectorCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.concurrent.atomic.AtomicReference;
 import org.telegram.messenger.AndroidUtilities;
@@ -60,6 +61,7 @@ public class AboutLinkCell extends FrameLayout {
     private float expandT;
     private boolean expanded;
     private StaticLayout firstThreeLinesLayout;
+    private GestureDetectorCompat gestureDetector;
     private int lastInlineLine;
     private int lastMaxWidth;
     private LinkSpanDrawable.LinkCollector links;
@@ -248,6 +250,20 @@ public class AboutLinkCell extends FrameLayout {
         }
         this.container.draw(canvas);
         super.draw(canvas);
+    }
+
+    public void setGestureDetector(GestureDetectorCompat gestureDetectorCompat) {
+        this.gestureDetector = gestureDetectorCompat;
+    }
+
+    @Override // android.view.ViewGroup, android.view.View
+    public boolean dispatchTouchEvent(MotionEvent motionEvent) {
+        GestureDetectorCompat gestureDetectorCompat = this.gestureDetector;
+        if (gestureDetectorCompat != null && gestureDetectorCompat.onTouchEvent(motionEvent)) {
+            super.dispatchTouchEvent(motionEvent);
+            return true;
+        }
+        return super.dispatchTouchEvent(motionEvent);
     }
 
     private void drawText(Canvas canvas) {

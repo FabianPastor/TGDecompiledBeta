@@ -77,6 +77,7 @@ public class ConnectionsManager extends BaseController {
     private static final int KEEP_ALIVE_SECONDS = 30;
     private static final int MAXIMUM_POOL_SIZE;
     public static final int RequestFlagCanCompress = 4;
+    public static final int RequestFlagDoNotWaitFloodWait = 1024;
     public static final int RequestFlagEnableUnauthorized = 1;
     public static final int RequestFlagFailOnServerErrors = 2;
     public static final int RequestFlagForceDownload = 32;
@@ -283,7 +284,7 @@ public class ConnectionsManager extends BaseController {
             sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig" + this.currentAccount, 0);
         }
         this.forceTryIpV6 = sharedPreferences.getBoolean("forceTryIpV6", false);
-        init(BuildVars.BUILD_VERSION, 147, BuildVars.APP_ID, str9, str10, str2, str4, str8, file2, FileLog.getNetworkLogPath(), regId, certificateSHA256Fingerprint, rawOffset, getUserConfig().getClientUserId(), isPushConnectionEnabled);
+        init(BuildVars.BUILD_VERSION, 148, BuildVars.APP_ID, str9, str10, str2, str4, str8, file2, FileLog.getNetworkLogPath(), regId, certificateSHA256Fingerprint, rawOffset, getUserConfig().getClientUserId(), isPushConnectionEnabled);
     }
 
     private String getRegId() {

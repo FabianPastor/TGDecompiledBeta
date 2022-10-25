@@ -254,7 +254,7 @@ public class ManageChatUserCell extends FrameLayout {
     */
     public void update(int r12) {
         /*
-            Method dump skipped, instructions count: 610
+            Method dump skipped, instructions count: 608
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.ManageChatUserCell.update(int):void");

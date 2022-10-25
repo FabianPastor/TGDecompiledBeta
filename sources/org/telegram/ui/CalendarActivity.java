@@ -333,8 +333,8 @@ public class CalendarActivity extends BaseFragment {
             @Override // org.telegram.messenger.MessagesStorage.BooleanCallback
             public void run(boolean z) {
                 CalendarActivity.this.finishFragment();
-                if (((BaseFragment) CalendarActivity.this).parentLayout.fragmentsStack.size() >= 2) {
-                    BaseFragment baseFragment = ((BaseFragment) CalendarActivity.this).parentLayout.fragmentsStack.get(((BaseFragment) CalendarActivity.this).parentLayout.fragmentsStack.size() - 2);
+                if (((BaseFragment) CalendarActivity.this).parentLayout.getFragmentStack().size() >= 2) {
+                    BaseFragment baseFragment = ((BaseFragment) CalendarActivity.this).parentLayout.getFragmentStack().get(((BaseFragment) CalendarActivity.this).parentLayout.getFragmentStack().size() - 2);
                     if (!(baseFragment instanceof ChatActivity)) {
                         return;
                     }
@@ -512,7 +512,7 @@ public class CalendarActivity extends BaseFragment {
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
             return new RecyclerListView.Holder(new MonthView(viewGroup.getContext()));
         }
 
@@ -718,8 +718,8 @@ public class CalendarActivity extends BaseFragment {
                         }
                     } else {
                         PeriodDay dayAtCoord3 = getDayAtCoord(motionEvent.getX(), motionEvent.getY());
-                        if (dayAtCoord3 != null && ((BaseFragment) CalendarActivity.this).parentLayout.fragmentsStack.size() >= 2) {
-                            BaseFragment baseFragment = ((BaseFragment) CalendarActivity.this).parentLayout.fragmentsStack.get(((BaseFragment) CalendarActivity.this).parentLayout.fragmentsStack.size() - 2);
+                        if (dayAtCoord3 != null && ((BaseFragment) CalendarActivity.this).parentLayout.getFragmentStack().size() >= 2) {
+                            BaseFragment baseFragment = ((BaseFragment) CalendarActivity.this).parentLayout.getFragmentStack().get(((BaseFragment) CalendarActivity.this).parentLayout.getFragmentStack().size() - 2);
                             if (baseFragment instanceof ChatActivity) {
                                 CalendarActivity.this.finishFragment();
                                 ((ChatActivity) baseFragment).jumpToDate(dayAtCoord3.date);
@@ -824,7 +824,7 @@ public class CalendarActivity extends BaseFragment {
                     });
                     CalendarActivity.this.blurredView.setVisibility(8);
                     CalendarActivity.this.blurredView.setFitsSystemWindows(true);
-                    ((BaseFragment) CalendarActivity.this).parentLayout.containerView.addView(CalendarActivity.this.blurredView, LayoutHelper.createFrame(-1, -1.0f));
+                    ((BaseFragment) CalendarActivity.this).parentLayout.getOverlayContainerView().addView(CalendarActivity.this.blurredView, LayoutHelper.createFrame(-1, -1.0f));
                     CalendarActivity.this.prepareBlurBitmap();
                     CalendarActivity.this.presentFragmentAsPreviewWithMenu(chatActivity, actionBarPopupWindowLayout);
                 }
@@ -832,8 +832,8 @@ public class CalendarActivity extends BaseFragment {
 
             /* JADX INFO: Access modifiers changed from: private */
             public /* synthetic */ void lambda$onLongPress$1(final PeriodDay periodDay, View view) {
-                if (((BaseFragment) CalendarActivity.this).parentLayout.fragmentsStack.size() >= 3) {
-                    final BaseFragment baseFragment = ((BaseFragment) CalendarActivity.this).parentLayout.fragmentsStack.get(((BaseFragment) CalendarActivity.this).parentLayout.fragmentsStack.size() - 3);
+                if (((BaseFragment) CalendarActivity.this).parentLayout.getFragmentStack().size() >= 3) {
+                    final BaseFragment baseFragment = ((BaseFragment) CalendarActivity.this).parentLayout.getFragmentStack().get(((BaseFragment) CalendarActivity.this).parentLayout.getFragmentStack().size() - 3);
                     if (baseFragment instanceof ChatActivity) {
                         AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.CalendarActivity$MonthView$2$$ExternalSyntheticLambda4
                             @Override // java.lang.Runnable
@@ -864,8 +864,8 @@ public class CalendarActivity extends BaseFragment {
 
             /* JADX INFO: Access modifiers changed from: private */
             public /* synthetic */ void lambda$onLongPress$3(View view) {
-                if (((BaseFragment) CalendarActivity.this).parentLayout.fragmentsStack.size() >= 3) {
-                    final BaseFragment baseFragment = ((BaseFragment) CalendarActivity.this).parentLayout.fragmentsStack.get(((BaseFragment) CalendarActivity.this).parentLayout.fragmentsStack.size() - 3);
+                if (((BaseFragment) CalendarActivity.this).parentLayout.getFragmentStack().size() >= 3) {
+                    final BaseFragment baseFragment = ((BaseFragment) CalendarActivity.this).parentLayout.getFragmentStack().get(((BaseFragment) CalendarActivity.this).parentLayout.getFragmentStack().size() - 3);
                     if (baseFragment instanceof ChatActivity) {
                         CalendarActivity calendarActivity = CalendarActivity.this;
                         AlertsCreator.createClearDaysDialogAlert(calendarActivity, 1, calendarActivity.getMessagesController().getUser(Long.valueOf(CalendarActivity.this.dialogId)), null, false, new MessagesStorage.BooleanCallback() { // from class: org.telegram.ui.CalendarActivity.MonthView.2.1
@@ -1436,14 +1436,12 @@ public class CalendarActivity extends BaseFragment {
         return super.getThemeDescriptions();
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
     @Override // org.telegram.ui.ActionBar.BaseFragment
     public void onTransitionAnimationStart(boolean z, boolean z2) {
         super.onTransitionAnimationStart(z, z2);
         this.isOpened = true;
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
     @Override // org.telegram.ui.ActionBar.BaseFragment
     public void onTransitionAnimationProgress(boolean z, float f) {
         super.onTransitionAnimationProgress(z, f);
@@ -1458,7 +1456,6 @@ public class CalendarActivity extends BaseFragment {
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
     @Override // org.telegram.ui.ActionBar.BaseFragment
     public void onTransitionAnimationEnd(boolean z, boolean z2) {
         View view;
@@ -1589,12 +1586,12 @@ public class CalendarActivity extends BaseFragment {
         if (this.blurredView == null) {
             return;
         }
-        int measuredWidth = (int) (this.parentLayout.getMeasuredWidth() / 6.0f);
-        int measuredHeight = (int) (this.parentLayout.getMeasuredHeight() / 6.0f);
+        int measuredWidth = (int) (this.parentLayout.getView().getMeasuredWidth() / 6.0f);
+        int measuredHeight = (int) (this.parentLayout.getView().getMeasuredHeight() / 6.0f);
         Bitmap createBitmap = Bitmap.createBitmap(measuredWidth, measuredHeight, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(createBitmap);
         canvas.scale(0.16666667f, 0.16666667f);
-        this.parentLayout.draw(canvas);
+        this.parentLayout.getView().draw(canvas);
         Utilities.stackBlurBitmap(createBitmap, Math.max(7, Math.max(measuredWidth, measuredHeight) / 180));
         this.blurredView.setBackground(new BitmapDrawable(createBitmap));
         this.blurredView.setAlpha(0.0f);

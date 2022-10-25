@@ -125,11 +125,11 @@ import org.telegram.tgnet.TLRPC$Updates;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.tgnet.TLRPC$account_Password;
 import org.telegram.ui.ActionBar.ActionBar;
-import org.telegram.ui.ActionBar.ActionBarLayout;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
+import org.telegram.ui.ActionBar.INavigationLayout;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.EditTextSettingsCell;
@@ -559,7 +559,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     /* JADX WARN: Removed duplicated region for block: B:672:0x1bb0  */
     /* JADX WARN: Type inference failed for: r0v89, types: [org.telegram.ui.Cells.RecurrentPaymentsAcceptCell] */
     /* JADX WARN: Type inference failed for: r13v3 */
-    /* JADX WARN: Type inference failed for: r13v4, types: [boolean, int] */
+    /* JADX WARN: Type inference failed for: r13v4, types: [int, boolean] */
     /* JADX WARN: Type inference failed for: r13v7 */
     /* JADX WARN: Type inference failed for: r1v122, types: [org.telegram.ui.ActionBar.ActionBarMenuItem, android.widget.FrameLayout] */
     /* JADX WARN: Type inference failed for: r1v141, types: [android.text.SpannableStringBuilder, java.lang.CharSequence] */
@@ -1607,21 +1607,20 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     public int getOtherSameFragmentDiff() {
-        ArrayList<BaseFragment> arrayList;
-        ActionBarLayout actionBarLayout = this.parentLayout;
+        INavigationLayout iNavigationLayout = this.parentLayout;
         int i = 0;
-        if (actionBarLayout == null || (arrayList = actionBarLayout.fragmentsStack) == null) {
+        if (iNavigationLayout == null || iNavigationLayout.getFragmentStack() == null) {
             return 0;
         }
-        int indexOf = arrayList.indexOf(this);
+        int indexOf = this.parentLayout.getFragmentStack().indexOf(this);
         if (indexOf == -1) {
-            indexOf = this.parentLayout.fragmentsStack.size();
+            indexOf = this.parentLayout.getFragmentStack().size();
         }
         while (true) {
-            if (i >= this.parentLayout.fragmentsStack.size()) {
+            if (i >= this.parentLayout.getFragmentStack().size()) {
                 i = indexOf;
                 break;
-            } else if (this.parentLayout.fragmentsStack.get(i) instanceof PaymentFormActivity) {
+            } else if (this.parentLayout.getFragmentStack().get(i) instanceof PaymentFormActivity) {
                 break;
             } else {
                 i++;
@@ -1675,7 +1674,6 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         this.canceled = true;
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
     @Override // org.telegram.ui.ActionBar.BaseFragment
     public void onBecomeFullyVisible() {
         super.onBecomeFullyVisible();
@@ -1686,7 +1684,6 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         this.bottomLayout.callOnClick();
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
     @Override // org.telegram.ui.ActionBar.BaseFragment
     public void onTransitionAnimationEnd(boolean z, boolean z2) {
         if (!z || z2) {
@@ -1983,19 +1980,19 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         finishFragment();
     }
 
-    private boolean onCheckoutSuccess(ActionBarLayout actionBarLayout, Activity activity) {
+    private boolean onCheckoutSuccess(INavigationLayout iNavigationLayout, Activity activity) {
         String str = this.botUser.username;
-        if (((str == null || !str.equalsIgnoreCase(getMessagesController().premiumBotUsername) || this.invoiceSlug != null) && (this.invoiceSlug == null || getMessagesController().premiumInvoiceSlug == null || !ObjectsCompat$$ExternalSyntheticBackport0.m(this.invoiceSlug, getMessagesController().premiumInvoiceSlug))) || actionBarLayout == null) {
+        if (((str == null || !str.equalsIgnoreCase(getMessagesController().premiumBotUsername) || this.invoiceSlug != null) && (this.invoiceSlug == null || getMessagesController().premiumInvoiceSlug == null || !ObjectsCompat$$ExternalSyntheticBackport0.m(this.invoiceSlug, getMessagesController().premiumInvoiceSlug))) || iNavigationLayout == null) {
             return false;
         }
-        Iterator it = new ArrayList(actionBarLayout.fragmentsStack).iterator();
+        Iterator it = new ArrayList(iNavigationLayout.getFragmentStack()).iterator();
         while (it.hasNext()) {
             BaseFragment baseFragment = (BaseFragment) it.next();
             if ((baseFragment instanceof ChatActivity) || (baseFragment instanceof PremiumPreviewFragment)) {
                 baseFragment.removeSelfFromStack();
             }
         }
-        actionBarLayout.presentFragment(new PremiumPreviewFragment(null).setForcePremium(), !isFinishing());
+        iNavigationLayout.presentFragment(new PremiumPreviewFragment(null).setForcePremium(), !isFinishing());
         if (activity instanceof LaunchActivity) {
             try {
                 this.fragmentView.performHapticFeedback(3, 2);
@@ -2946,7 +2943,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             actionBarMenuItem.setEnabled(false);
             this.doneItem.getContentView().setVisibility(4);
         }
-        final ActionBarLayout parentLayout = getParentLayout();
+        final INavigationLayout parentLayout = getParentLayout();
         final Activity parentActivity = getParentActivity();
         getMessagesController().newMessageCallback = new MessagesController.NewMessageCallback() { // from class: org.telegram.ui.PaymentFormActivity$$ExternalSyntheticLambda54
             @Override // org.telegram.messenger.MessagesController.NewMessageCallback
@@ -2974,21 +2971,21 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ boolean lambda$sendData$58(final ActionBarLayout actionBarLayout, final Activity activity, final TLRPC$Message tLRPC$Message) {
+    public /* synthetic */ boolean lambda$sendData$58(final INavigationLayout iNavigationLayout, final Activity activity, final TLRPC$Message tLRPC$Message) {
         if (MessageObject.getPeerId(tLRPC$Message.peer_id) != this.botUser.id || !(tLRPC$Message.action instanceof TLRPC$TL_messageActionPaymentSent)) {
             return false;
         }
         AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.PaymentFormActivity$$ExternalSyntheticLambda51
             @Override // java.lang.Runnable
             public final void run() {
-                PaymentFormActivity.this.lambda$sendData$57(actionBarLayout, activity, tLRPC$Message);
+                PaymentFormActivity.this.lambda$sendData$57(iNavigationLayout, activity, tLRPC$Message);
             }
         });
         return true;
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$sendData$57(ActionBarLayout actionBarLayout, Activity activity, TLRPC$Message tLRPC$Message) {
+    public /* synthetic */ void lambda$sendData$57(INavigationLayout iNavigationLayout, Activity activity, TLRPC$Message tLRPC$Message) {
         this.paymentStatusSent = true;
         InvoiceStatus invoiceStatus = InvoiceStatus.PAID;
         this.invoiceStatus = invoiceStatus;
@@ -2996,7 +2993,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         if (paymentFormCallback != null) {
             paymentFormCallback.onInvoiceStatusChanged(invoiceStatus);
         }
-        onCheckoutSuccess(actionBarLayout, activity);
+        onCheckoutSuccess(iNavigationLayout, activity);
         if (this.parentFragment instanceof ChatActivity) {
             ((ChatActivity) this.parentFragment).getUndoView().showWithAction(0L, 77, AndroidUtilities.replaceTags(LocaleController.formatString(R.string.PaymentInfoHint, this.totalPrice[0], this.currentItemName)), tLRPC$Message, (Runnable) null, (Runnable) null);
         }
@@ -3025,7 +3022,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             view.performHapticFeedback(3, 2);
         } catch (Exception unused) {
         }
-        AndroidUtilities.shakeView(view, 2.0f, 0);
+        AndroidUtilities.shakeView(view);
     }
 
     /* JADX INFO: Access modifiers changed from: private */
@@ -3060,7 +3057,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                 this.inputFields[1].performHapticFeedback(3, 2);
             } catch (Exception unused) {
             }
-            AndroidUtilities.shakeView(this.inputFields[1], 2.0f, 0);
+            AndroidUtilities.shakeView(this.inputFields[1]);
         } else {
             final String obj = this.inputFields[1].getText().toString();
             showEditDoneProgress(true, true);
@@ -3166,7 +3163,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                 this.inputFields[1].performHapticFeedback(3, 2);
             } catch (Exception unused) {
             }
-            AndroidUtilities.shakeView(this.inputFields[1], 2.0f, 0);
+            AndroidUtilities.shakeView(this.inputFields[1]);
             this.inputFields[1].setText("");
         } else {
             AlertsCreator.processError(this.currentAccount, tLRPC$TL_error, this, tLRPC$TL_account_getTmpPassword, new Object[0]);

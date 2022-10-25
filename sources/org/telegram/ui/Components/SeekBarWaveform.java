@@ -51,6 +51,7 @@ public class SeekBarWaveform {
     private int thumbDX = 0;
     private boolean startDraging = false;
     private boolean pressed = false;
+    private float alpha = 1.0f;
     private float clearProgress = 1.0f;
     private AnimatedFloat appearFloat = new AnimatedFloat(125, 600, CubicBezierInterpolator.EASE_OUT_QUINT);
     private float waveScaling = 1.0f;
@@ -92,6 +93,10 @@ public class SeekBarWaveform {
         this.messageObject = messageObject;
     }
 
+    public void setAlpha(float f) {
+        this.alpha = f;
+    }
+
     public void setParentView(View view) {
         this.parentView = view;
         this.loadingFloat.setParent(view);
@@ -110,6 +115,7 @@ public class SeekBarWaveform {
                 this.pressed = true;
                 this.thumbDX = (int) (f - this.thumbX);
                 this.startDraging = false;
+                this.delegate.onSeekBarPressed();
                 return true;
             }
         } else if (i == 1 || i == 3) {
@@ -118,6 +124,7 @@ public class SeekBarWaveform {
                     seekBarDelegate.onSeekBarDrag(this.thumbX / this.width);
                 }
                 this.pressed = false;
+                this.delegate.onSeekBarReleased();
                 return true;
             }
         } else if (i == 2 && this.pressed) {
@@ -271,7 +278,7 @@ public class SeekBarWaveform {
         int i;
         float f;
         float[] fArr;
-        if (this.waveformBytes == null || (i = this.width) == 0) {
+        if (this.waveformBytes == null || (i = this.width) == 0 || this.alpha <= 0.0f) {
             return;
         }
         float dpf2 = i / AndroidUtilities.dpf2(3.0f);
@@ -318,11 +325,9 @@ public class SeekBarWaveform {
                 f5 = 1.0f - f5;
             }
             int i5 = -1;
-            int i6 = 0;
             f = 0.0f;
-            while (i6 < max) {
+            for (int i6 = 0; i6 < max; i6++) {
                 float f6 = i6;
-                int i7 = max;
                 int clamp = MathUtils.clamp((int) Math.floor((f6 / max) * min), 0, min - 1);
                 if (i5 < clamp) {
                     addBar(this.path, AndroidUtilities.lerp(clamp, f6, f5) * AndroidUtilities.dpf2(3.0f), AndroidUtilities.dpf2(AndroidUtilities.lerp(fArr5[clamp], fArr6[i6], f5)));
@@ -331,8 +336,6 @@ public class SeekBarWaveform {
                     addBar(this.alphaPath, AndroidUtilities.lerp(clamp, f6, f5) * AndroidUtilities.dpf2(3.0f), AndroidUtilities.dpf2(AndroidUtilities.lerp(fArr5[clamp], fArr6[i6], f5)));
                     f = f5;
                 }
-                i6++;
-                max = i7;
             }
         } else {
             if (this.heights != null) {
@@ -341,8 +344,9 @@ public class SeekBarWaveform {
                     if (f7 >= dpf2 || i2 >= this.heights.length) {
                         break;
                     }
+                    float dpvar_ = AndroidUtilities.dpf2(3.0f) * f7;
                     float clamp2 = MathUtils.clamp((f4 * dpf2) - f7, 0.0f, 1.0f);
-                    addBar(this.path, AndroidUtilities.dpf2(3.0f) * f7, (AndroidUtilities.dpf2(this.heights[i2]) * clamp2) - (AndroidUtilities.dpf2(1.0f) * (1.0f - clamp2)));
+                    addBar(this.path, dpvar_, (AndroidUtilities.dpf2(this.heights[i2]) * clamp2) - (AndroidUtilities.dpf2(1.0f) * (1.0f - clamp2)));
                     i2++;
                 }
             }
@@ -351,12 +355,12 @@ public class SeekBarWaveform {
         if (f > 0.0f) {
             canvas.save();
             canvas.clipPath(this.alphaPath);
-            drawFill(canvas, f);
+            drawFill(canvas, f * this.alpha);
             canvas.restore();
         }
         canvas.save();
         canvas.clipPath(this.path);
-        drawFill(canvas, 1.0f);
+        drawFill(canvas, this.alpha);
         canvas.restore();
     }
 

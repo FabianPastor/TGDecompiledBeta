@@ -65,6 +65,7 @@ import org.telegram.tgnet.TLRPC$TL_phone_toggleGroupCallRecord;
 import org.telegram.tgnet.TLRPC$TL_reactionEmoji;
 import org.telegram.tgnet.TLRPC$TL_updateGroupCall;
 import org.telegram.tgnet.TLRPC$TL_updateGroupCallParticipants;
+import org.telegram.tgnet.TLRPC$TL_username;
 import org.telegram.tgnet.TLRPC$Updates;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.tgnet.TLRPC$UserFull;
@@ -79,6 +80,7 @@ public class ChatObject {
     public static final int ACTION_EMBED_LINKS = 9;
     public static final int ACTION_INVITE = 3;
     public static final int ACTION_MANAGE_CALLS = 14;
+    public static final int ACTION_MANAGE_TOPICS = 15;
     public static final int ACTION_PIN = 0;
     public static final int ACTION_POST = 5;
     public static final int ACTION_SEND = 6;
@@ -96,7 +98,7 @@ public class ChatObject {
     public static final int VIDEO_FRAME_REQUESTING = 1;
 
     private static boolean isAdminAction(int i) {
-        return i == 0 || i == 1 || i == 2 || i == 3 || i == 4 || i == 5 || i == 12 || i == 13;
+        return i == 0 || i == 1 || i == 2 || i == 3 || i == 4 || i == 5 || i == 12 || i == 13 || i == 15;
     }
 
     private static boolean isBannableAction(int i) {
@@ -128,6 +130,14 @@ public class ChatObject {
                     return true;
                 }
             }
+        }
+        return false;
+    }
+
+    public static boolean isForum(int i, long j) {
+        TLRPC$Chat chat = MessagesController.getInstance(i).getChat(Long.valueOf(-j));
+        if (chat != null) {
+            return chat.forum;
         }
         return false;
     }
@@ -1522,6 +1532,9 @@ public class ChatObject {
                     case 14:
                         z = tLRPC$TL_chatAdminRights.manage_call;
                         break;
+                    case 15:
+                        z = tLRPC$TL_chatAdminRights.manage_topics;
+                        break;
                     default:
                         z = false;
                         break;
@@ -1567,7 +1580,7 @@ public class ChatObject {
     }
 
     public static boolean canSendAsPeers(TLRPC$Chat tLRPC$Chat) {
-        return isChannel(tLRPC$Chat) && tLRPC$Chat.megagroup && (!TextUtils.isEmpty(tLRPC$Chat.username) || tLRPC$Chat.has_geo || tLRPC$Chat.has_link);
+        return isChannel(tLRPC$Chat) && tLRPC$Chat.megagroup && (isPublic(tLRPC$Chat) || tLRPC$Chat.has_geo || tLRPC$Chat.has_link);
     }
 
     public static boolean isChannel(TLRPC$Chat tLRPC$Chat) {
@@ -1584,6 +1597,10 @@ public class ChatObject {
 
     public static boolean isChannelAndNotMegaGroup(TLRPC$Chat tLRPC$Chat) {
         return isChannel(tLRPC$Chat) && !isMegagroup(tLRPC$Chat);
+    }
+
+    public static boolean isForum(TLRPC$Chat tLRPC$Chat) {
+        return tLRPC$Chat != null && tLRPC$Chat.forum;
     }
 
     public static boolean isMegagroup(int i, long j) {
@@ -1699,7 +1716,7 @@ public class ChatObject {
     }
 
     public static String getBannedRightsString(TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights) {
-        return (((((((((((("" + (tLRPC$TL_chatBannedRights.view_messages ? 1 : 0)) + (tLRPC$TL_chatBannedRights.send_messages ? 1 : 0)) + (tLRPC$TL_chatBannedRights.send_media ? 1 : 0)) + (tLRPC$TL_chatBannedRights.send_stickers ? 1 : 0)) + (tLRPC$TL_chatBannedRights.send_gifs ? 1 : 0)) + (tLRPC$TL_chatBannedRights.send_games ? 1 : 0)) + (tLRPC$TL_chatBannedRights.send_inline ? 1 : 0)) + (tLRPC$TL_chatBannedRights.embed_links ? 1 : 0)) + (tLRPC$TL_chatBannedRights.send_polls ? 1 : 0)) + (tLRPC$TL_chatBannedRights.invite_users ? 1 : 0)) + (tLRPC$TL_chatBannedRights.change_info ? 1 : 0)) + (tLRPC$TL_chatBannedRights.pin_messages ? 1 : 0)) + tLRPC$TL_chatBannedRights.until_date;
+        return ((((((((((((("" + (tLRPC$TL_chatBannedRights.view_messages ? 1 : 0)) + (tLRPC$TL_chatBannedRights.send_messages ? 1 : 0)) + (tLRPC$TL_chatBannedRights.send_media ? 1 : 0)) + (tLRPC$TL_chatBannedRights.send_stickers ? 1 : 0)) + (tLRPC$TL_chatBannedRights.send_gifs ? 1 : 0)) + (tLRPC$TL_chatBannedRights.send_games ? 1 : 0)) + (tLRPC$TL_chatBannedRights.send_inline ? 1 : 0)) + (tLRPC$TL_chatBannedRights.embed_links ? 1 : 0)) + (tLRPC$TL_chatBannedRights.send_polls ? 1 : 0)) + (tLRPC$TL_chatBannedRights.invite_users ? 1 : 0)) + (tLRPC$TL_chatBannedRights.change_info ? 1 : 0)) + (tLRPC$TL_chatBannedRights.pin_messages ? 1 : 0)) + (tLRPC$TL_chatBannedRights.manage_topics ? 1 : 0)) + tLRPC$TL_chatBannedRights.until_date;
     }
 
     public static boolean hasPhoto(TLRPC$Chat tLRPC$Chat) {
@@ -1712,6 +1729,54 @@ public class ChatObject {
             return tLRPC$Chat.photo;
         }
         return null;
+    }
+
+    public static String getPublicUsername(TLRPC$Chat tLRPC$Chat) {
+        return getPublicUsername(tLRPC$Chat, false);
+    }
+
+    public static String getPublicUsername(TLRPC$Chat tLRPC$Chat, boolean z) {
+        ArrayList<TLRPC$TL_username> arrayList;
+        if (tLRPC$Chat == null) {
+            return null;
+        }
+        if (!TextUtils.isEmpty(tLRPC$Chat.username) && !z) {
+            return tLRPC$Chat.username;
+        }
+        if (tLRPC$Chat.usernames != null) {
+            for (int i = 0; i < tLRPC$Chat.usernames.size(); i++) {
+                TLRPC$TL_username tLRPC$TL_username = tLRPC$Chat.usernames.get(i);
+                if (tLRPC$TL_username != null && (((tLRPC$TL_username.active && !z) || tLRPC$TL_username.editable) && !TextUtils.isEmpty(tLRPC$TL_username.username))) {
+                    return tLRPC$TL_username.username;
+                }
+            }
+        }
+        if (!TextUtils.isEmpty(tLRPC$Chat.username) && z && ((arrayList = tLRPC$Chat.usernames) == null || arrayList.size() <= 0)) {
+            return tLRPC$Chat.username;
+        }
+        return null;
+    }
+
+    public static boolean hasPublicLink(TLRPC$Chat tLRPC$Chat, String str) {
+        if (tLRPC$Chat == null) {
+            return false;
+        }
+        if (!TextUtils.isEmpty(tLRPC$Chat.username)) {
+            return tLRPC$Chat.username.equalsIgnoreCase(str);
+        }
+        if (tLRPC$Chat.usernames != null) {
+            for (int i = 0; i < tLRPC$Chat.usernames.size(); i++) {
+                TLRPC$TL_username tLRPC$TL_username = tLRPC$Chat.usernames.get(i);
+                if (tLRPC$TL_username != null && tLRPC$TL_username.active && !TextUtils.isEmpty(tLRPC$TL_username.username) && tLRPC$TL_username.username.equalsIgnoreCase(str)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static boolean isPublic(TLRPC$Chat tLRPC$Chat) {
+        return !TextUtils.isEmpty(getPublicUsername(tLRPC$Chat));
     }
 
     /* loaded from: classes.dex */

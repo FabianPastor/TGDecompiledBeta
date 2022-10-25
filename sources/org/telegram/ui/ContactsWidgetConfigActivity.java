@@ -31,10 +31,10 @@ public class ContactsWidgetConfigActivity extends ExternalActionActivity {
                 }
             });
             if (AndroidUtilities.isTablet()) {
-                if (this.layersActionBarLayout.fragmentsStack.isEmpty()) {
+                if (this.layersActionBarLayout.getFragmentStack().isEmpty()) {
                     this.layersActionBarLayout.addFragmentToStack(editWidgetActivity);
                 }
-            } else if (this.actionBarLayout.fragmentsStack.isEmpty()) {
+            } else if (this.actionBarLayout.getFragmentStack().isEmpty()) {
                 this.actionBarLayout.addFragmentToStack(editWidgetActivity);
             }
             if (!AndroidUtilities.isTablet()) {

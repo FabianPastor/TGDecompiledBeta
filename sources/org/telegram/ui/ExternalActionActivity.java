@@ -33,22 +33,22 @@ import org.telegram.tgnet.TLRPC$TL_account_getAuthorizationForm;
 import org.telegram.tgnet.TLRPC$TL_account_getPassword;
 import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.tgnet.TLRPC$account_Password;
-import org.telegram.ui.ActionBar.ActionBarLayout;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.DrawerLayoutContainer;
+import org.telegram.ui.ActionBar.INavigationLayout;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.PasscodeView;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
 /* loaded from: classes3.dex */
-public class ExternalActionActivity extends Activity implements ActionBarLayout.ActionBarLayoutDelegate {
-    protected ActionBarLayout actionBarLayout;
+public class ExternalActionActivity extends Activity implements INavigationLayout.INavigationLayoutDelegate {
+    protected INavigationLayout actionBarLayout;
     protected SizeNotifierFrameLayout backgroundTablet;
     protected DrawerLayoutContainer drawerLayoutContainer;
     private boolean finished;
-    protected ActionBarLayout layersActionBarLayout;
+    protected INavigationLayout layersActionBarLayout;
     private Runnable lockRunnable;
     private Intent passcodeSaveIntent;
     private int passcodeSaveIntentAccount;
@@ -63,19 +63,36 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
     public static /* synthetic */ void lambda$onCreate$1(View view) {
     }
 
-    @Override // org.telegram.ui.ActionBar.ActionBarLayout.ActionBarLayoutDelegate
-    public boolean needAddFragmentToStack(BaseFragment baseFragment, ActionBarLayout actionBarLayout) {
+    @Override // org.telegram.ui.ActionBar.INavigationLayout.INavigationLayoutDelegate
+    public boolean needAddFragmentToStack(BaseFragment baseFragment, INavigationLayout iNavigationLayout) {
         return true;
     }
 
-    @Override // org.telegram.ui.ActionBar.ActionBarLayout.ActionBarLayoutDelegate
-    public boolean needPresentFragment(BaseFragment baseFragment, boolean z, boolean z2, ActionBarLayout actionBarLayout) {
+    @Override // org.telegram.ui.ActionBar.INavigationLayout.INavigationLayoutDelegate
+    public boolean needPresentFragment(BaseFragment baseFragment, boolean z, boolean z2, INavigationLayout iNavigationLayout) {
         return true;
     }
 
-    @Override // org.telegram.ui.ActionBar.ActionBarLayout.ActionBarLayoutDelegate
+    @Override // org.telegram.ui.ActionBar.INavigationLayout.INavigationLayoutDelegate
+    public /* synthetic */ boolean needPresentFragment(INavigationLayout iNavigationLayout, INavigationLayout.NavigationParams navigationParams) {
+        boolean needPresentFragment;
+        needPresentFragment = needPresentFragment(navigationParams.fragment, navigationParams.removeLast, navigationParams.noAnimation, iNavigationLayout);
+        return needPresentFragment;
+    }
+
+    @Override // org.telegram.ui.ActionBar.INavigationLayout.INavigationLayoutDelegate
+    public /* synthetic */ void onMeasureOverride(int[] iArr) {
+        INavigationLayout.INavigationLayoutDelegate.CC.$default$onMeasureOverride(this, iArr);
+    }
+
+    @Override // org.telegram.ui.ActionBar.INavigationLayout.INavigationLayoutDelegate
     public boolean onPreIme() {
         return false;
+    }
+
+    @Override // org.telegram.ui.ActionBar.INavigationLayout.INavigationLayoutDelegate
+    public /* synthetic */ void onThemeProgress(float f) {
+        INavigationLayout.INavigationLayoutDelegate.CC.$default$onThemeProgress(this, f);
     }
 
     @Override // android.app.Activity
@@ -98,7 +115,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
         AndroidUtilities.fillStatusBarHeight(this);
         Theme.createDialogsResources(this);
         Theme.createChatResources(this, false);
-        this.actionBarLayout = new ActionBarLayout(this);
+        this.actionBarLayout = INavigationLayout.CC.newLayout(this);
         DrawerLayoutContainer drawerLayoutContainer = new DrawerLayoutContainer(this);
         this.drawerLayoutContainer = drawerLayoutContainer;
         drawerLayoutContainer.setAllowOpenDrawer(false, false);
@@ -121,7 +138,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
             sizeNotifierFrameLayout.setOccupyStatusBar(false);
             this.backgroundTablet.setBackgroundImage(Theme.getCachedWallpaper(), Theme.isWallpaperMotion());
             relativeLayout.addView(this.backgroundTablet, LayoutHelper.createRelative(-1, -1));
-            relativeLayout.addView(this.actionBarLayout, LayoutHelper.createRelative(-1, -1));
+            relativeLayout.addView(this.actionBarLayout.getView(), LayoutHelper.createRelative(-1, -1));
             FrameLayout frameLayout = new FrameLayout(this);
             frameLayout.setBackgroundColor(NUM);
             relativeLayout.addView(frameLayout, LayoutHelper.createRelative(-1, -1));
@@ -134,14 +151,14 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
                 }
             });
             frameLayout.setOnClickListener(ExternalActionActivity$$ExternalSyntheticLambda3.INSTANCE);
-            ActionBarLayout actionBarLayout = new ActionBarLayout(this);
-            this.layersActionBarLayout = actionBarLayout;
-            actionBarLayout.setRemoveActionBarExtraHeight(true);
+            INavigationLayout newLayout = INavigationLayout.CC.newLayout(this);
+            this.layersActionBarLayout = newLayout;
+            newLayout.setRemoveActionBarExtraHeight(true);
             this.layersActionBarLayout.setBackgroundView(frameLayout);
             this.layersActionBarLayout.setUseAlphaAnimations(true);
-            this.layersActionBarLayout.setBackgroundResource(R.drawable.boxshadow);
-            relativeLayout.addView(this.layersActionBarLayout, LayoutHelper.createRelative(530, AndroidUtilities.isSmallTablet() ? 528 : 700));
-            this.layersActionBarLayout.init(layerFragmentsStack);
+            this.layersActionBarLayout.getView().setBackgroundResource(R.drawable.boxshadow);
+            relativeLayout.addView(this.layersActionBarLayout.getView(), LayoutHelper.createRelative(530, AndroidUtilities.isSmallTablet() ? 528 : 700));
+            this.layersActionBarLayout.setFragmentStack(layerFragmentsStack);
             this.layersActionBarLayout.setDelegate(this);
             this.layersActionBarLayout.setDrawerLayoutContainer(this.drawerLayoutContainer);
         } else {
@@ -157,20 +174,20 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
             sizeNotifierFrameLayout2.setOccupyStatusBar(false);
             this.backgroundTablet.setBackgroundImage(Theme.getCachedWallpaper(), Theme.isWallpaperMotion());
             relativeLayout2.addView(this.backgroundTablet, LayoutHelper.createRelative(-1, -1));
-            relativeLayout2.addView(this.actionBarLayout, LayoutHelper.createRelative(-1, -1));
+            relativeLayout2.addView(this.actionBarLayout.getView(), LayoutHelper.createRelative(-1, -1));
         }
         this.drawerLayoutContainer.setParentActionBarLayout(this.actionBarLayout);
         this.actionBarLayout.setDrawerLayoutContainer(this.drawerLayoutContainer);
-        this.actionBarLayout.init(mainFragmentsStack);
+        this.actionBarLayout.setFragmentStack(mainFragmentsStack);
         this.actionBarLayout.setDelegate(this);
         PasscodeView passcodeView = new PasscodeView(this);
         this.passcodeView = passcodeView;
         this.drawerLayoutContainer.addView(passcodeView, LayoutHelper.createFrame(-1, -1.0f));
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.closeOtherAppActivities, this);
         this.actionBarLayout.removeAllFragments();
-        ActionBarLayout actionBarLayout2 = this.layersActionBarLayout;
-        if (actionBarLayout2 != null) {
-            actionBarLayout2.removeAllFragments();
+        INavigationLayout iNavigationLayout = this.layersActionBarLayout;
+        if (iNavigationLayout != null) {
+            iNavigationLayout.removeAllFragments();
         }
         handleIntent(getIntent(), false, bundle != null, false, UserConfig.selectedAccount, 0);
         needLayout();
@@ -178,18 +195,18 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
 
     /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ boolean lambda$onCreate$0(View view, MotionEvent motionEvent) {
-        if (!this.actionBarLayout.fragmentsStack.isEmpty() && motionEvent.getAction() == 1) {
+        if (!this.actionBarLayout.getFragmentStack().isEmpty() && motionEvent.getAction() == 1) {
             float x = motionEvent.getX();
             float y = motionEvent.getY();
             int[] iArr = new int[2];
-            this.layersActionBarLayout.getLocationOnScreen(iArr);
+            this.layersActionBarLayout.getView().getLocationOnScreen(iArr);
             int i = iArr[0];
             int i2 = iArr[1];
-            if (!this.layersActionBarLayout.checkTransitionAnimation() && (x <= i || x >= i + this.layersActionBarLayout.getWidth() || y <= i2 || y >= i2 + this.layersActionBarLayout.getHeight())) {
-                if (!this.layersActionBarLayout.fragmentsStack.isEmpty()) {
-                    while (this.layersActionBarLayout.fragmentsStack.size() - 1 > 0) {
-                        ActionBarLayout actionBarLayout = this.layersActionBarLayout;
-                        actionBarLayout.removeFragmentFromStack(actionBarLayout.fragmentsStack.get(0));
+            if (!this.layersActionBarLayout.checkTransitionAnimation() && (x <= i || x >= i + this.layersActionBarLayout.getView().getWidth() || y <= i2 || y >= i2 + this.layersActionBarLayout.getView().getHeight())) {
+                if (!this.layersActionBarLayout.getFragmentStack().isEmpty()) {
+                    while (this.layersActionBarLayout.getFragmentStack().size() - 1 > 0) {
+                        INavigationLayout iNavigationLayout = this.layersActionBarLayout;
+                        iNavigationLayout.removeFragmentFromStack(iNavigationLayout.getFragmentStack().get(0));
                     }
                     this.layersActionBarLayout.closeLastFragment(true);
                 }
@@ -241,9 +258,9 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
     public void onFinishLogin() {
         handleIntent(this.passcodeSaveIntent, this.passcodeSaveIntentIsNew, this.passcodeSaveIntentIsRestore, true, this.passcodeSaveIntentAccount, this.passcodeSaveIntentState);
         this.actionBarLayout.removeAllFragments();
-        ActionBarLayout actionBarLayout = this.layersActionBarLayout;
-        if (actionBarLayout != null) {
-            actionBarLayout.removeAllFragments();
+        INavigationLayout iNavigationLayout = this.layersActionBarLayout;
+        if (iNavigationLayout != null) {
+            iNavigationLayout.removeAllFragments();
         }
         SizeNotifierFrameLayout sizeNotifierFrameLayout = this.backgroundTablet;
         if (sizeNotifierFrameLayout != null) {
@@ -344,10 +361,10 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
             }, 10);
         } else {
             if (AndroidUtilities.isTablet()) {
-                if (this.layersActionBarLayout.fragmentsStack.isEmpty()) {
+                if (this.layersActionBarLayout.getFragmentStack().isEmpty()) {
                     this.layersActionBarLayout.addFragmentToStack(new CacheControlActivity());
                 }
-            } else if (this.actionBarLayout.fragmentsStack.isEmpty()) {
+            } else if (this.actionBarLayout.getFragmentStack().isEmpty()) {
                 this.actionBarLayout.addFragmentToStack(new CacheControlActivity());
             }
             if (!AndroidUtilities.isTablet()) {
@@ -508,45 +525,45 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
 
     public void needLayout() {
         if (AndroidUtilities.isTablet()) {
-            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) this.layersActionBarLayout.getLayoutParams();
+            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) this.layersActionBarLayout.getView().getLayoutParams();
             layoutParams.leftMargin = (AndroidUtilities.displaySize.x - layoutParams.width) / 2;
             int i = Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0;
             layoutParams.topMargin = i + (((AndroidUtilities.displaySize.y - layoutParams.height) - i) / 2);
-            this.layersActionBarLayout.setLayoutParams(layoutParams);
+            this.layersActionBarLayout.getView().setLayoutParams(layoutParams);
             if (!AndroidUtilities.isSmallTablet() || getResources().getConfiguration().orientation == 2) {
                 int i2 = (AndroidUtilities.displaySize.x / 100) * 35;
                 if (i2 < AndroidUtilities.dp(320.0f)) {
                     i2 = AndroidUtilities.dp(320.0f);
                 }
-                RelativeLayout.LayoutParams layoutParams2 = (RelativeLayout.LayoutParams) this.actionBarLayout.getLayoutParams();
+                RelativeLayout.LayoutParams layoutParams2 = (RelativeLayout.LayoutParams) this.actionBarLayout.getView().getLayoutParams();
                 layoutParams2.width = i2;
                 layoutParams2.height = -1;
-                this.actionBarLayout.setLayoutParams(layoutParams2);
-                if (!AndroidUtilities.isSmallTablet() || this.actionBarLayout.fragmentsStack.size() != 2) {
+                this.actionBarLayout.getView().setLayoutParams(layoutParams2);
+                if (!AndroidUtilities.isSmallTablet() || this.actionBarLayout.getFragmentStack().size() != 2) {
                     return;
                 }
-                this.actionBarLayout.fragmentsStack.get(1).onPause();
-                this.actionBarLayout.fragmentsStack.remove(1);
+                this.actionBarLayout.getFragmentStack().get(1).onPause();
+                this.actionBarLayout.getFragmentStack().remove(1);
                 this.actionBarLayout.showLastFragment();
                 return;
             }
-            RelativeLayout.LayoutParams layoutParams3 = (RelativeLayout.LayoutParams) this.actionBarLayout.getLayoutParams();
+            RelativeLayout.LayoutParams layoutParams3 = (RelativeLayout.LayoutParams) this.actionBarLayout.getView().getLayoutParams();
             layoutParams3.width = -1;
             layoutParams3.height = -1;
-            this.actionBarLayout.setLayoutParams(layoutParams3);
+            this.actionBarLayout.getView().setLayoutParams(layoutParams3);
         }
     }
 
     public void fixLayout() {
-        ActionBarLayout actionBarLayout;
-        if (AndroidUtilities.isTablet() && (actionBarLayout = this.actionBarLayout) != null) {
-            actionBarLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() { // from class: org.telegram.ui.ExternalActionActivity.3
+        INavigationLayout iNavigationLayout;
+        if (AndroidUtilities.isTablet() && (iNavigationLayout = this.actionBarLayout) != null) {
+            iNavigationLayout.getView().getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() { // from class: org.telegram.ui.ExternalActionActivity.3
                 @Override // android.view.ViewTreeObserver.OnGlobalLayoutListener
                 public void onGlobalLayout() {
                     ExternalActionActivity.this.needLayout();
-                    ActionBarLayout actionBarLayout2 = ExternalActionActivity.this.actionBarLayout;
-                    if (actionBarLayout2 != null) {
-                        actionBarLayout2.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    INavigationLayout iNavigationLayout2 = ExternalActionActivity.this.actionBarLayout;
+                    if (iNavigationLayout2 != null) {
+                        iNavigationLayout2.getView().getViewTreeObserver().removeOnGlobalLayoutListener(this);
                     }
                 }
             });
@@ -668,7 +685,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
         } else if (this.drawerLayoutContainer.isDrawerOpened()) {
             this.drawerLayoutContainer.closeDrawer(false);
         } else if (AndroidUtilities.isTablet()) {
-            if (this.layersActionBarLayout.getVisibility() == 0) {
+            if (this.layersActionBarLayout.getView().getVisibility() == 0) {
                 this.layersActionBarLayout.onBackPressed();
             } else {
                 this.actionBarLayout.onBackPressed();
@@ -687,19 +704,19 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
         }
     }
 
-    @Override // org.telegram.ui.ActionBar.ActionBarLayout.ActionBarLayoutDelegate
-    public boolean needCloseLastFragment(ActionBarLayout actionBarLayout) {
+    @Override // org.telegram.ui.ActionBar.INavigationLayout.INavigationLayoutDelegate
+    public boolean needCloseLastFragment(INavigationLayout iNavigationLayout) {
         if (AndroidUtilities.isTablet()) {
-            if (actionBarLayout == this.actionBarLayout && actionBarLayout.fragmentsStack.size() <= 1) {
+            if (iNavigationLayout == this.actionBarLayout && iNavigationLayout.getFragmentStack().size() <= 1) {
                 onFinish();
                 finish();
                 return false;
-            } else if (actionBarLayout == this.layersActionBarLayout && this.actionBarLayout.fragmentsStack.isEmpty() && this.layersActionBarLayout.fragmentsStack.size() == 1) {
+            } else if (iNavigationLayout == this.layersActionBarLayout && this.actionBarLayout.getFragmentStack().isEmpty() && this.layersActionBarLayout.getFragmentStack().size() == 1) {
                 onFinish();
                 finish();
                 return false;
             }
-        } else if (actionBarLayout.fragmentsStack.size() <= 1) {
+        } else if (iNavigationLayout.getFragmentStack().size() <= 1) {
             onFinish();
             finish();
             return false;
@@ -707,9 +724,9 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
         return true;
     }
 
-    @Override // org.telegram.ui.ActionBar.ActionBarLayout.ActionBarLayoutDelegate
-    public void onRebuildAllFragments(ActionBarLayout actionBarLayout, boolean z) {
-        if (!AndroidUtilities.isTablet() || actionBarLayout != this.layersActionBarLayout) {
+    @Override // org.telegram.ui.ActionBar.INavigationLayout.INavigationLayoutDelegate
+    public void onRebuildAllFragments(INavigationLayout iNavigationLayout, boolean z) {
+        if (!AndroidUtilities.isTablet() || iNavigationLayout != this.layersActionBarLayout) {
             return;
         }
         this.actionBarLayout.rebuildAllFragmentViews(z, z);

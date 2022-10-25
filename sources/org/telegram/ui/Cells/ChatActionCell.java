@@ -45,14 +45,17 @@ import org.telegram.tgnet.TLRPC$MessageMedia;
 import org.telegram.tgnet.TLRPC$PhotoSize;
 import org.telegram.tgnet.TLRPC$TL_chatInviteExported;
 import org.telegram.tgnet.TLRPC$TL_documentEmpty;
+import org.telegram.tgnet.TLRPC$TL_forumTopic;
 import org.telegram.tgnet.TLRPC$TL_photoEmpty;
 import org.telegram.tgnet.TLRPC$TL_photoStrippedSize;
 import org.telegram.tgnet.TLRPC$TL_premiumGiftOption;
 import org.telegram.tgnet.TLRPC$VideoSize;
 import org.telegram.ui.ActionBar.ActionBar;
+import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AnimatedEmojiSpan;
 import org.telegram.ui.Components.AvatarDrawable;
+import org.telegram.ui.Components.Forum.ForumUtilities;
 import org.telegram.ui.Components.Premium.StarParticlesView;
 import org.telegram.ui.Components.RLottieDrawable;
 import org.telegram.ui.Components.TypefaceSpan;
@@ -142,6 +145,14 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
             public static void $default$didPressReplyMessage(ChatActionCellDelegate chatActionCellDelegate, ChatActionCell chatActionCell, int i) {
             }
 
+            public static BaseFragment $default$getBaseFragment(ChatActionCellDelegate chatActionCellDelegate) {
+                return null;
+            }
+
+            public static long $default$getDialogId(ChatActionCellDelegate chatActionCellDelegate) {
+                return 0L;
+            }
+
             public static void $default$needOpenInviteLink(ChatActionCellDelegate chatActionCellDelegate, TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported) {
             }
 
@@ -159,6 +170,10 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
         void didOpenPremiumGift(ChatActionCell chatActionCell, TLRPC$TL_premiumGiftOption tLRPC$TL_premiumGiftOption, boolean z);
 
         void didPressReplyMessage(ChatActionCell chatActionCell, int i);
+
+        BaseFragment getBaseFragment();
+
+        long getDialogId();
 
         void needOpenInviteLink(TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported);
 
@@ -501,14 +516,25 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
             return;
         }
         String url = ((URLSpan) characterStyle).getURL();
-        if (url.startsWith("invite")) {
+        if (url.startsWith("topic")) {
             URLSpan uRLSpan = this.pressedLink;
             if (uRLSpan instanceof URLSpanNoUnderline) {
                 TLObject object = ((URLSpanNoUnderline) uRLSpan).getObject();
-                if (!(object instanceof TLRPC$TL_chatInviteExported)) {
+                if (!(object instanceof TLRPC$TL_forumTopic)) {
                     return;
                 }
-                this.delegate.needOpenInviteLink((TLRPC$TL_chatInviteExported) object);
+                ForumUtilities.openTopic(this.delegate.getBaseFragment(), -this.delegate.getDialogId(), (TLRPC$TL_forumTopic) object, 0);
+                return;
+            }
+        }
+        if (url.startsWith("invite")) {
+            URLSpan uRLSpan2 = this.pressedLink;
+            if (uRLSpan2 instanceof URLSpanNoUnderline) {
+                TLObject object2 = ((URLSpanNoUnderline) uRLSpan2).getObject();
+                if (!(object2 instanceof TLRPC$TL_chatInviteExported)) {
+                    return;
+                }
+                this.delegate.needOpenInviteLink((TLRPC$TL_chatInviteExported) object2);
                 return;
             }
         }

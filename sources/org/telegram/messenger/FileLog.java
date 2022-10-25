@@ -7,6 +7,7 @@ import java.io.OutputStreamWriter;
 import java.util.Locale;
 import org.telegram.messenger.time.FastDateFormat;
 import org.telegram.messenger.video.MediaCodecVideoConvertor;
+import org.telegram.ui.LaunchActivity;
 /* loaded from: classes.dex */
 public class FileLog {
     private static volatile FileLog Instance = null;
@@ -289,6 +290,10 @@ public class FileLog {
             getInstance().streamWriter.flush();
         } catch (Exception e) {
             e.printStackTrace();
+            if (!AndroidUtilities.isENOSPC(e)) {
+                return;
+            }
+            LaunchActivity.checkFreeDiscSpaceStatic(1);
         }
     }
 

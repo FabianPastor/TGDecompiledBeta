@@ -740,7 +740,7 @@ public class Bulletin {
         }
 
         protected void setBackground(int i) {
-            this.background = Theme.createRoundRectDrawable(AndroidUtilities.dp(6.0f), i);
+            this.background = Theme.createRoundRectDrawable(AndroidUtilities.dp(14.0f), i);
         }
 
         @Override // android.view.View
@@ -1352,6 +1352,45 @@ public class Bulletin {
 
         public void setIconPaddingBottom(int i) {
             this.imageView.setLayoutParams(LayoutHelper.createFrameRelatively(56.0f, 48 - i, 8388627, 0.0f, 0.0f, 0.0f, i));
+        }
+
+        @Override // org.telegram.ui.Components.Bulletin.Layout
+        public CharSequence getAccessibilityText() {
+            return this.textView.getText();
+        }
+    }
+
+    /* loaded from: classes3.dex */
+    public static class UsersLayout extends ButtonLayout {
+        public AvatarsImageView avatarsImageView;
+        public TextView textView;
+
+        public UsersLayout(Context context, Theme.ResourcesProvider resourcesProvider) {
+            super(context, resourcesProvider);
+            AvatarsImageView avatarsImageView = new AvatarsImageView(context, false);
+            this.avatarsImageView = avatarsImageView;
+            avatarsImageView.setStyle(11);
+            addView(this.avatarsImageView, LayoutHelper.createFrameRelatively(56.0f, 48.0f, 8388627, 12.0f, 0.0f, 0.0f, 0.0f));
+            LinkSpanDrawable.LinksTextView linksTextView = new LinkSpanDrawable.LinksTextView(context);
+            this.textView = linksTextView;
+            linksTextView.setSingleLine();
+            this.textView.setTypeface(Typeface.SANS_SERIF);
+            this.textView.setTextSize(1, 15.0f);
+            this.textView.setEllipsize(TextUtils.TruncateAt.END);
+            this.textView.setPadding(0, AndroidUtilities.dp(8.0f), 0, AndroidUtilities.dp(8.0f));
+            addView(this.textView, LayoutHelper.createFrameRelatively(-2.0f, -2.0f, 8388627, 70.0f, 0.0f, 8.0f, 0.0f));
+            this.textView.setLinkTextColor(getThemedColor("undo_cancelColor"));
+            setTextColor(getThemedColor("undo_infoColor"));
+            setBackground(getThemedColor("undo_background"));
+        }
+
+        public void setTextColor(int i) {
+            this.textView.setTextColor(i);
+        }
+
+        @Override // org.telegram.ui.Components.Bulletin.Layout
+        protected void onShow() {
+            super.onShow();
         }
 
         @Override // org.telegram.ui.Components.Bulletin.Layout

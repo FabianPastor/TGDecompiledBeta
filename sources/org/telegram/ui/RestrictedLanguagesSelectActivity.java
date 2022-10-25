@@ -237,7 +237,7 @@ public class RestrictedLanguagesSelectActivity extends BaseFragment implements N
         LocaleController.LocaleInfo currentLocaleInfo = LocaleController.getInstance().getCurrentLocaleInfo();
         final String str = localeInfo.pluralLangCode;
         if (str != null && str.equals(currentLocaleInfo.pluralLangCode)) {
-            AndroidUtilities.shakeView(((TextCheckbox2Cell) view).checkbox, 2.0f, 0);
+            AndroidUtilities.shakeView(((TextCheckbox2Cell) view).checkbox);
             return;
         }
         boolean contains = this.selectedLanguages.contains(str);
@@ -474,7 +474,7 @@ public class RestrictedLanguagesSelectActivity extends BaseFragment implements N
         /* JADX WARN: Multi-variable type inference failed */
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
             TextCheckbox2Cell textCheckbox2Cell;
             View view;
             if (i == 0) {

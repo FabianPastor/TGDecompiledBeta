@@ -19,7 +19,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.TextPaint;
-import android.text.TextUtils;
 import android.text.style.ImageSpan;
 import android.view.MotionEvent;
 import android.view.View;
@@ -1231,7 +1230,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
             View callCell;
             HeaderCell headerCell;
             if (i != 0) {
@@ -1318,14 +1317,14 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
                 groupCallCell.setChat(chat);
                 groupCallCell.button.setTag(Long.valueOf(chat.id));
                 if (ChatObject.isChannel(chat) && !chat.megagroup) {
-                    if (TextUtils.isEmpty(chat.username)) {
+                    if (!ChatObject.isPublic(chat)) {
                         lowerCase = LocaleController.getString("ChannelPrivate", R.string.ChannelPrivate).toLowerCase();
                     } else {
                         lowerCase = LocaleController.getString("ChannelPublic", R.string.ChannelPublic).toLowerCase();
                     }
                 } else if (chat.has_geo) {
                     lowerCase = LocaleController.getString("MegaLocation", R.string.MegaLocation);
-                } else if (TextUtils.isEmpty(chat.username)) {
+                } else if (!ChatObject.isPublic(chat)) {
                     lowerCase = LocaleController.getString("MegaPrivate", R.string.MegaPrivate).toLowerCase();
                 } else {
                     lowerCase = LocaleController.getString("MegaPublic", R.string.MegaPublic).toLowerCase();
@@ -1370,7 +1369,6 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
     @Override // org.telegram.ui.ActionBar.BaseFragment
     public void onTransitionAnimationStart(boolean z, boolean z2) {
         super.onTransitionAnimationStart(z, z2);

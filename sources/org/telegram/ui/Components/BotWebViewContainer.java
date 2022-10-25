@@ -1044,25 +1044,34 @@ public class BotWebViewContainer extends FrameLayout implements NotificationCent
     /* JADX INFO: Access modifiers changed from: private */
     /* JADX WARN: Can't fix incorrect switch cases order, some code will duplicate */
     /* JADX WARN: Code restructure failed: missing block: B:100:0x015a, code lost:
-        if (r7 == 1) goto L218;
+        if (r6 == 1) goto L226;
      */
     /* JADX WARN: Code restructure failed: missing block: B:102:0x015d, code lost:
         r12 = "windowBackgroundGray";
      */
-    /* JADX WARN: Multi-variable type inference failed */
+    /* JADX WARN: Code restructure failed: missing block: B:173:0x0266, code lost:
+        if (r6 == 1) goto L133;
+     */
+    /* JADX WARN: Code restructure failed: missing block: B:174:0x0268, code lost:
+        if (r6 == 2) goto L131;
+     */
+    /* JADX WARN: Code restructure failed: missing block: B:176:0x026c, code lost:
+        r0 = org.telegram.messenger.BotWebViewVibrationEffect.NOTIFICATION_WARNING;
+     */
+    /* JADX WARN: Code restructure failed: missing block: B:177:0x026f, code lost:
+        r0 = org.telegram.messenger.BotWebViewVibrationEffect.NOTIFICATION_SUCCESS;
+     */
     /* JADX WARN: Removed duplicated region for block: B:152:0x0223  */
-    /* JADX WARN: Removed duplicated region for block: B:174:0x0267  */
-    /* JADX WARN: Removed duplicated region for block: B:179:0x0273 A[Catch: Exception -> 0x02f1, TryCatch #7 {Exception -> 0x02f1, blocks: (B:134:0x01e3, B:212:0x02d3, B:214:0x02d9, B:215:0x02e6, B:155:0x0229, B:156:0x022d, B:177:0x026d, B:178:0x0270, B:179:0x0273, B:163:0x0247, B:166:0x0251, B:169:0x025a, B:181:0x0277, B:182:0x0281, B:206:0x02c2, B:207:0x02c5, B:208:0x02c8, B:209:0x02cb, B:210:0x02ce, B:184:0x0285, B:187:0x028f, B:190:0x0298, B:193:0x02a2, B:196:0x02ac, B:141:0x0202, B:144:0x020c, B:147:0x0216), top: B:316:0x01e3 }] */
-    /* JADX WARN: Removed duplicated region for block: B:181:0x0277 A[Catch: Exception -> 0x02f1, TryCatch #7 {Exception -> 0x02f1, blocks: (B:134:0x01e3, B:212:0x02d3, B:214:0x02d9, B:215:0x02e6, B:155:0x0229, B:156:0x022d, B:177:0x026d, B:178:0x0270, B:179:0x0273, B:163:0x0247, B:166:0x0251, B:169:0x025a, B:181:0x0277, B:182:0x0281, B:206:0x02c2, B:207:0x02c5, B:208:0x02c8, B:209:0x02cb, B:210:0x02ce, B:184:0x0285, B:187:0x028f, B:190:0x0298, B:193:0x02a2, B:196:0x02ac, B:141:0x0202, B:144:0x020c, B:147:0x0216), top: B:316:0x01e3 }] */
-    /* JADX WARN: Removed duplicated region for block: B:212:0x02d3 A[Catch: Exception -> 0x02f1, TryCatch #7 {Exception -> 0x02f1, blocks: (B:134:0x01e3, B:212:0x02d3, B:214:0x02d9, B:215:0x02e6, B:155:0x0229, B:156:0x022d, B:177:0x026d, B:178:0x0270, B:179:0x0273, B:163:0x0247, B:166:0x0251, B:169:0x025a, B:181:0x0277, B:182:0x0281, B:206:0x02c2, B:207:0x02c5, B:208:0x02c8, B:209:0x02cb, B:210:0x02ce, B:184:0x0285, B:187:0x028f, B:190:0x0298, B:193:0x02a2, B:196:0x02ac, B:141:0x0202, B:144:0x020c, B:147:0x0216), top: B:316:0x01e3 }] */
-    /* JADX WARN: Removed duplicated region for block: B:338:? A[RETURN, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:180:0x0276 A[Catch: Exception -> 0x02d6, TryCatch #5 {Exception -> 0x02d6, blocks: (B:134:0x01e3, B:210:0x02d1, B:155:0x0229, B:156:0x022d, B:176:0x026c, B:177:0x026f, B:178:0x0272, B:163:0x0247, B:166:0x0251, B:169:0x025b, B:180:0x0276, B:181:0x0280, B:204:0x02c0, B:205:0x02c3, B:206:0x02c6, B:207:0x02c9, B:208:0x02cc, B:183:0x0284, B:186:0x028e, B:189:0x0298, B:192:0x02a2, B:195:0x02ac, B:141:0x0202, B:144:0x020c, B:147:0x0216), top: B:309:0x01e3 }] */
+    /* JADX WARN: Removed duplicated region for block: B:210:0x02d1 A[Catch: Exception -> 0x02d6, TRY_LEAVE, TryCatch #5 {Exception -> 0x02d6, blocks: (B:134:0x01e3, B:210:0x02d1, B:155:0x0229, B:156:0x022d, B:176:0x026c, B:177:0x026f, B:178:0x0272, B:163:0x0247, B:166:0x0251, B:169:0x025b, B:180:0x0276, B:181:0x0280, B:204:0x02c0, B:205:0x02c3, B:206:0x02c6, B:207:0x02c9, B:208:0x02cc, B:183:0x0284, B:186:0x028e, B:189:0x0298, B:192:0x02a2, B:195:0x02ac, B:141:0x0202, B:144:0x020c, B:147:0x0216), top: B:309:0x01e3 }] */
+    /* JADX WARN: Removed duplicated region for block: B:334:? A[RETURN, SYNTHETIC] */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
     public void onEventReceived(java.lang.String r20, java.lang.String r21) {
         /*
-            Method dump skipped, instructions count: 1486
+            Method dump skipped, instructions count: 1458
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.BotWebViewContainer.onEventReceived(java.lang.String, java.lang.String):void");

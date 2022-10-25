@@ -11,6 +11,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
@@ -68,9 +70,9 @@ import org.telegram.messenger.camera.CameraSession;
 import org.telegram.messenger.camera.CameraView;
 import org.telegram.messenger.camera.Size;
 import org.telegram.ui.ActionBar.ActionBar;
-import org.telegram.ui.ActionBar.ActionBarLayout;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
+import org.telegram.ui.ActionBar.INavigationLayout;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.CameraScanActivity;
@@ -154,19 +156,19 @@ public class CameraScanActivity extends BaseFragment {
         return true;
     }
 
-    public static ActionBarLayout[] showAsSheet(BaseFragment baseFragment, boolean z, int i, CameraScanActivityDelegate cameraScanActivityDelegate) {
+    public static INavigationLayout[] showAsSheet(BaseFragment baseFragment, boolean z, int i, CameraScanActivityDelegate cameraScanActivityDelegate) {
         if (baseFragment == null || baseFragment.getParentActivity() == null) {
             return null;
         }
-        ActionBarLayout[] actionBarLayoutArr = {new ActionBarLayout(baseFragment.getParentActivity())};
-        AnonymousClass1 anonymousClass1 = new AnonymousClass1(baseFragment.getParentActivity(), false, actionBarLayoutArr, i, z, cameraScanActivityDelegate);
+        INavigationLayout[] iNavigationLayoutArr = {INavigationLayout.CC.newLayout(baseFragment.getParentActivity())};
+        AnonymousClass1 anonymousClass1 = new AnonymousClass1(baseFragment.getParentActivity(), false, iNavigationLayoutArr, i, z, cameraScanActivityDelegate);
         anonymousClass1.setUseLightStatusBar(false);
         AndroidUtilities.setLightNavigationBar(anonymousClass1.getWindow(), false);
         AndroidUtilities.setNavigationBarColor(anonymousClass1.getWindow(), -16777216, false);
         anonymousClass1.setUseLightStatusBar(false);
         anonymousClass1.getWindow().addFlags(512);
         anonymousClass1.show();
-        return actionBarLayoutArr;
+        return iNavigationLayoutArr;
     }
 
     /* JADX INFO: Access modifiers changed from: package-private */
@@ -174,7 +176,7 @@ public class CameraScanActivity extends BaseFragment {
     /* loaded from: classes3.dex */
     public class AnonymousClass1 extends BottomSheet {
         CameraScanActivity fragment;
-        final /* synthetic */ ActionBarLayout[] val$actionBarLayout;
+        final /* synthetic */ INavigationLayout[] val$actionBarLayout;
         final /* synthetic */ CameraScanActivityDelegate val$cameraDelegate;
         final /* synthetic */ boolean val$gallery;
         final /* synthetic */ int val$type;
@@ -185,13 +187,13 @@ public class CameraScanActivity extends BaseFragment {
         }
 
         /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-        AnonymousClass1(Context context, boolean z, ActionBarLayout[] actionBarLayoutArr, int i, boolean z2, CameraScanActivityDelegate cameraScanActivityDelegate) {
+        AnonymousClass1(Context context, boolean z, INavigationLayout[] iNavigationLayoutArr, int i, boolean z2, CameraScanActivityDelegate cameraScanActivityDelegate) {
             super(context, z);
-            this.val$actionBarLayout = actionBarLayoutArr;
+            this.val$actionBarLayout = iNavigationLayoutArr;
             this.val$type = i;
             this.val$gallery = z2;
             this.val$cameraDelegate = cameraScanActivityDelegate;
-            actionBarLayoutArr[0].init(new ArrayList<>());
+            iNavigationLayoutArr[0].setFragmentStack(new ArrayList());
             CameraScanActivity cameraScanActivity = new CameraScanActivity(i) { // from class: org.telegram.ui.CameraScanActivity.1.1
                 @Override // org.telegram.ui.ActionBar.BaseFragment
                 public void finishFragment() {
@@ -206,13 +208,13 @@ public class CameraScanActivity extends BaseFragment {
             this.fragment = cameraScanActivity;
             cameraScanActivity.shownAsBottomSheet = true;
             cameraScanActivity.needGalleryButton = z2;
-            actionBarLayoutArr[0].addFragmentToStack(this.fragment);
-            actionBarLayoutArr[0].showLastFragment();
-            ActionBarLayout actionBarLayout = actionBarLayoutArr[0];
+            iNavigationLayoutArr[0].addFragmentToStack(this.fragment);
+            iNavigationLayoutArr[0].showLastFragment();
+            ViewGroup view = iNavigationLayoutArr[0].getView();
             int i2 = this.backgroundPaddingLeft;
-            actionBarLayout.setPadding(i2, 0, i2, 0);
+            view.setPadding(i2, 0, i2, 0);
             this.fragment.setDelegate(cameraScanActivityDelegate);
-            this.containerView = actionBarLayoutArr[0];
+            this.containerView = iNavigationLayoutArr[0].getView();
             setApplyBottomPadding(false);
             setApplyBottomPadding(false);
             setOnDismissListener(new DialogInterface.OnDismissListener() { // from class: org.telegram.ui.CameraScanActivity$1$$ExternalSyntheticLambda0
@@ -230,8 +232,8 @@ public class CameraScanActivity extends BaseFragment {
 
         @Override // android.app.Dialog
         public void onBackPressed() {
-            ActionBarLayout[] actionBarLayoutArr = this.val$actionBarLayout;
-            if (actionBarLayoutArr[0] == null || actionBarLayoutArr[0].fragmentsStack.size() <= 1) {
+            INavigationLayout[] iNavigationLayoutArr = this.val$actionBarLayout;
+            if (iNavigationLayoutArr[0] == null || iNavigationLayoutArr[0].getFragmentStack().size() <= 1) {
                 super.onBackPressed();
             } else {
                 this.val$actionBarLayout[0].onBackPressed();
@@ -1013,6 +1015,10 @@ public class CameraScanActivity extends BaseFragment {
 
         /* JADX INFO: Access modifiers changed from: private */
         public /* synthetic */ void lambda$run$0() {
+            try {
+                CameraScanActivity.this.cameraView.focusToPoint(CameraScanActivity.this.cameraView.getWidth() / 2, CameraScanActivity.this.cameraView.getHeight() / 2, false);
+            } catch (Exception unused) {
+            }
             if (CameraScanActivity.this.cameraView != null) {
                 CameraScanActivity cameraScanActivity = CameraScanActivity.this;
                 cameraScanActivity.processShot(cameraScanActivity.cameraView.getTextureView().getBitmap());
@@ -1210,6 +1216,34 @@ public class CameraScanActivity extends BaseFragment {
         }
     }
 
+    private Bitmap invert(Bitmap bitmap) {
+        Bitmap createBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(createBitmap);
+        Paint paint = new Paint();
+        ColorMatrix colorMatrix = new ColorMatrix();
+        colorMatrix.setSaturation(0.0f);
+        ColorMatrix colorMatrix2 = new ColorMatrix();
+        colorMatrix2.set(new float[]{-1.0f, 0.0f, 0.0f, 0.0f, 255.0f, 0.0f, -1.0f, 0.0f, 0.0f, 255.0f, 0.0f, 0.0f, -1.0f, 0.0f, 255.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f});
+        colorMatrix2.preConcat(colorMatrix);
+        paint.setColorFilter(new ColorMatrixColorFilter(colorMatrix2));
+        canvas.drawBitmap(bitmap, 0.0f, 0.0f, paint);
+        return createBitmap;
+    }
+
+    private Bitmap monochrome(Bitmap bitmap, int i) {
+        Bitmap createBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(createBitmap);
+        Paint paint = new Paint();
+        paint.setColorFilter(new ColorMatrixColorFilter(createThresholdMatrix(i)));
+        canvas.drawBitmap(bitmap, 0.0f, 0.0f, paint);
+        return createBitmap;
+    }
+
+    public static ColorMatrix createThresholdMatrix(int i) {
+        float f = i * (-255.0f);
+        return new ColorMatrix(new float[]{85.0f, 85.0f, 85.0f, 0.0f, f, 85.0f, 85.0f, 85.0f, 0.0f, f, 85.0f, 85.0f, 85.0f, 0.0f, f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f});
+    }
+
     /* JADX INFO: Access modifiers changed from: private */
     /* loaded from: classes3.dex */
     public class QrResult {
@@ -1230,13 +1264,15 @@ public class CameraScanActivity extends BaseFragment {
         int i4;
         LuminanceSource planarYUVLuminanceSource;
         Frame build;
+        int i5;
+        String str2;
         try {
             RectF rectF = new RectF();
             BarcodeDetector barcodeDetector = this.visionQrReader;
-            int i5 = 0;
+            int i6 = 1;
+            int i7 = 0;
             float f = Float.MIN_VALUE;
             float f2 = Float.MAX_VALUE;
-            int i6 = 1;
             if (barcodeDetector != null && barcodeDetector.isOperational()) {
                 if (bitmap != null) {
                     build = new Frame.Builder().setBitmap(bitmap).build();
@@ -1248,9 +1284,7 @@ public class CameraScanActivity extends BaseFragment {
                     i4 = size.getWidth();
                 }
                 SparseArray<Barcode> detect = this.visionQrReader.detect(build);
-                if (detect == null || detect.size() <= 0) {
-                    str = null;
-                } else {
+                if (detect != null && detect.size() > 0) {
                     Barcode valueAt = detect.valueAt(0);
                     str = valueAt.rawValue;
                     Point[] pointArr = valueAt.cornerPoints;
@@ -1258,17 +1292,94 @@ public class CameraScanActivity extends BaseFragment {
                         int length = pointArr.length;
                         float f3 = Float.MIN_VALUE;
                         float f4 = Float.MAX_VALUE;
-                        while (i5 < length) {
-                            Point point = pointArr[i5];
+                        while (i7 < length) {
+                            Point point = pointArr[i7];
                             f2 = Math.min(f2, point.x);
                             f = Math.max(f, point.x);
                             f4 = Math.min(f4, point.y);
                             f3 = Math.max(f3, point.y);
-                            i5++;
+                            i7++;
                         }
                         rectF.set(f2, f4, f, f3);
                     }
                     rectF = null;
+                } else if (bitmap != null) {
+                    Bitmap invert = invert(bitmap);
+                    bitmap.recycle();
+                    Frame build2 = new Frame.Builder().setBitmap(invert).build();
+                    int width = invert.getWidth();
+                    int height = invert.getHeight();
+                    SparseArray<Barcode> detect2 = this.visionQrReader.detect(build2);
+                    if (detect2 != null && detect2.size() > 0) {
+                        Barcode valueAt2 = detect2.valueAt(0);
+                        str2 = valueAt2.rawValue;
+                        Point[] pointArr2 = valueAt2.cornerPoints;
+                        if (pointArr2 != null && pointArr2.length != 0) {
+                            int length2 = pointArr2.length;
+                            float f5 = Float.MIN_VALUE;
+                            float f6 = Float.MAX_VALUE;
+                            while (i7 < length2) {
+                                Point point2 = pointArr2[i7];
+                                f2 = Math.min(f2, point2.x);
+                                f = Math.max(f, point2.x);
+                                f6 = Math.min(f6, point2.y);
+                                f5 = Math.max(f5, point2.y);
+                                i7++;
+                            }
+                            rectF.set(f2, f6, f, f5);
+                            i5 = height;
+                            str = str2;
+                            i6 = width;
+                            i4 = i5;
+                        }
+                        rectF = null;
+                        i5 = height;
+                        str = str2;
+                        i6 = width;
+                        i4 = i5;
+                    } else {
+                        Bitmap monochrome = monochrome(invert, 90);
+                        invert.recycle();
+                        Frame build3 = new Frame.Builder().setBitmap(monochrome).build();
+                        width = invert.getWidth();
+                        height = invert.getHeight();
+                        SparseArray<Barcode> detect3 = this.visionQrReader.detect(build3);
+                        if (detect3 == null || detect3.size() <= 0) {
+                            i5 = height;
+                            str = null;
+                            i6 = width;
+                            i4 = i5;
+                        } else {
+                            Barcode valueAt3 = detect3.valueAt(0);
+                            str2 = valueAt3.rawValue;
+                            Point[] pointArr3 = valueAt3.cornerPoints;
+                            if (pointArr3 != null && pointArr3.length != 0) {
+                                int length3 = pointArr3.length;
+                                float f7 = Float.MIN_VALUE;
+                                float f8 = Float.MAX_VALUE;
+                                while (i7 < length3) {
+                                    Point point3 = pointArr3[i7];
+                                    f2 = Math.min(f2, point3.x);
+                                    f = Math.max(f, point3.x);
+                                    f8 = Math.min(f8, point3.y);
+                                    f7 = Math.max(f7, point3.y);
+                                    i7++;
+                                }
+                                rectF.set(f2, f8, f, f7);
+                                i5 = height;
+                                str = str2;
+                                i6 = width;
+                                i4 = i5;
+                            }
+                            rectF = null;
+                            i5 = height;
+                            str = str2;
+                            i6 = width;
+                            i4 = i5;
+                        }
+                    }
+                } else {
+                    str = null;
                 }
             } else if (this.qrReader != null) {
                 if (bitmap != null) {
@@ -1290,18 +1401,18 @@ public class CameraScanActivity extends BaseFragment {
                 str = decode.getText();
                 if (decode.getResultPoints() != null && decode.getResultPoints().length != 0) {
                     ResultPoint[] resultPoints = decode.getResultPoints();
-                    int length2 = resultPoints.length;
-                    float f5 = Float.MIN_VALUE;
-                    float f6 = Float.MAX_VALUE;
-                    while (i5 < length2) {
-                        ResultPoint resultPoint = resultPoints[i5];
+                    int length4 = resultPoints.length;
+                    float f9 = Float.MIN_VALUE;
+                    float var_ = Float.MAX_VALUE;
+                    while (i7 < length4) {
+                        ResultPoint resultPoint = resultPoints[i7];
                         f2 = Math.min(f2, resultPoint.getX());
                         f = Math.max(f, resultPoint.getX());
-                        f6 = Math.min(f6, resultPoint.getY());
-                        f5 = Math.max(f5, resultPoint.getY());
-                        i5++;
+                        var_ = Math.min(var_, resultPoint.getY());
+                        f9 = Math.max(f9, resultPoint.getY());
+                        i7++;
                     }
-                    rectF.set(f2, f6, f, f5);
+                    rectF.set(f2, var_, f, f9);
                 }
                 rectF = null;
             } else {
@@ -1326,9 +1437,9 @@ public class CameraScanActivity extends BaseFragment {
                 float dp = AndroidUtilities.dp(25.0f);
                 float dp2 = AndroidUtilities.dp(15.0f);
                 rectF.set(rectF.left - dp, rectF.top - dp2, rectF.right + dp, rectF.bottom + dp2);
-                float f7 = i6;
-                float f8 = i4;
-                rectF.set(rectF.left / f7, rectF.top / f8, rectF.right / f7, rectF.bottom / f8);
+                float var_ = i6;
+                float var_ = i4;
+                rectF.set(rectF.left / var_, rectF.top / var_, rectF.right / var_, rectF.bottom / var_);
             }
             qrResult.bounds = rectF;
             qrResult.text = str;

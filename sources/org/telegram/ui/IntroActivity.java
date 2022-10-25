@@ -543,7 +543,6 @@ public class IntroActivity extends BaseFragment implements NotificationCenter.No
         return this;
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
     @Override // org.telegram.ui.ActionBar.BaseFragment
     public AnimatorSet onCustomTransitionAnimation(boolean z, Runnable runnable) {
         if (this.isOnLogout) {
@@ -575,7 +574,7 @@ public class IntroActivity extends BaseFragment implements NotificationCenter.No
 
         @Override // androidx.viewpager.widget.PagerAdapter
         /* renamed from: instantiateItem */
-        public Object mo1567instantiateItem(ViewGroup viewGroup, int i) {
+        public Object mo1597instantiateItem(ViewGroup viewGroup, int i) {
             final TextView textView = new TextView(viewGroup.getContext());
             textView.setTag(IntroActivity.this.pagerHeaderTag);
             final TextView textView2 = new TextView(viewGroup.getContext());

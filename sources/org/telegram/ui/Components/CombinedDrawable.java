@@ -173,4 +173,8 @@ public class CombinedDrawable extends Drawable implements Drawable.Callback {
     public void unscheduleDrawable(Drawable drawable, Runnable runnable) {
         unscheduleSelf(runnable);
     }
+
+    public Drawable getBackgroundDrawable() {
+        return this.background;
+    }
 }

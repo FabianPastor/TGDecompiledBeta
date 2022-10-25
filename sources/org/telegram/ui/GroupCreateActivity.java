@@ -64,10 +64,10 @@ import org.telegram.tgnet.TLRPC$InputUser;
 import org.telegram.tgnet.TLRPC$TL_contact;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.ActionBar;
-import org.telegram.ui.ActionBar.ActionBarLayout;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BackDrawable;
 import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.ActionBar.INavigationLayout;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Adapters.SearchAdapterHelper;
@@ -530,9 +530,9 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             @Override // android.view.ViewGroup, android.view.View
             protected void dispatchDraw(Canvas canvas) {
                 super.dispatchDraw(canvas);
-                ActionBarLayout actionBarLayout = ((BaseFragment) GroupCreateActivity.this).parentLayout;
+                INavigationLayout iNavigationLayout = ((BaseFragment) GroupCreateActivity.this).parentLayout;
                 GroupCreateActivity groupCreateActivity = GroupCreateActivity.this;
-                actionBarLayout.drawHeaderShadow(canvas, Math.min(groupCreateActivity.maxSize, (groupCreateActivity.measuredContainerHeight + GroupCreateActivity.this.containerHeight) - GroupCreateActivity.this.measuredContainerHeight));
+                iNavigationLayout.drawHeaderShadow(canvas, Math.min(groupCreateActivity.maxSize, (groupCreateActivity.measuredContainerHeight + GroupCreateActivity.this.containerHeight) - GroupCreateActivity.this.measuredContainerHeight));
             }
 
             @Override // android.view.ViewGroup
@@ -1424,7 +1424,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                     this.inviteViaLink = ChatObject.canUserDoAdminAction(GroupCreateActivity.this.getMessagesController().getChat(Long.valueOf(GroupCreateActivity.this.chatId)), 3) ? 1 : 0;
                 } else if (GroupCreateActivity.this.channelId != 0) {
                     TLRPC$Chat chat = GroupCreateActivity.this.getMessagesController().getChat(Long.valueOf(GroupCreateActivity.this.channelId));
-                    this.inviteViaLink = (!ChatObject.canUserDoAdminAction(chat, 3) || !TextUtils.isEmpty(chat.username)) ? 0 : 2;
+                    this.inviteViaLink = (!ChatObject.canUserDoAdminAction(chat, 3) || ChatObject.isPublic(chat)) ? 0 : 2;
                 } else {
                     this.inviteViaLink = 0;
                 }
@@ -1444,7 +1444,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         /* JADX WARN: Multi-variable type inference failed */
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
             View groupCreateSectionCell;
             GroupCreateUserCell groupCreateUserCell;
             if (i != 0) {
@@ -1480,7 +1480,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             SpannableStringBuilder spannableStringBuilder;
             long j;
             CharSequence charSequence;
-            String str;
+            String publicUsername;
             int itemViewType = viewHolder.getItemViewType();
             if (itemViewType == 0) {
                 GroupCreateSectionCell groupCreateSectionCell = (GroupCreateSectionCell) viewHolder.itemView;
@@ -1514,19 +1514,19 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                     }
                     if (tLObject != null) {
                         if (tLObject instanceof TLRPC$User) {
-                            str = ((TLRPC$User) tLObject).username;
+                            publicUsername = ((TLRPC$User) tLObject).username;
                         } else {
-                            str = ((TLRPC$Chat) tLObject).username;
+                            publicUsername = ChatObject.getPublicUsername((TLRPC$Chat) tLObject);
                         }
                         if (i < size) {
                             charSequence = this.searchResultNames.get(i);
-                            if (charSequence != null && !TextUtils.isEmpty(str)) {
-                                if (charSequence.toString().startsWith("@" + str)) {
+                            if (charSequence != null && !TextUtils.isEmpty(publicUsername)) {
+                                if (charSequence.toString().startsWith("@" + publicUsername)) {
                                     spannableStringBuilder2 = charSequence;
                                     charSequence = null;
                                 }
                             }
-                        } else if (i > size && !TextUtils.isEmpty(str)) {
+                        } else if (i > size && !TextUtils.isEmpty(publicUsername)) {
                             String lastFoundUsername = this.searchAdapterHelper.getLastFoundUsername();
                             if (lastFoundUsername.startsWith("@")) {
                                 lastFoundUsername = lastFoundUsername.substring(1);
@@ -1534,8 +1534,8 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                             try {
                                 SpannableStringBuilder spannableStringBuilder3 = new SpannableStringBuilder();
                                 spannableStringBuilder3.append((CharSequence) "@");
-                                spannableStringBuilder3.append((CharSequence) str);
-                                int indexOfIgnoreCase = AndroidUtilities.indexOfIgnoreCase(str, lastFoundUsername);
+                                spannableStringBuilder3.append((CharSequence) publicUsername);
+                                int indexOfIgnoreCase = AndroidUtilities.indexOfIgnoreCase(publicUsername, lastFoundUsername);
                                 if (indexOfIgnoreCase != -1) {
                                     int length = lastFoundUsername.length();
                                     if (indexOfIgnoreCase == 0) {
@@ -1549,7 +1549,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                                 spannableStringBuilder2 = spannableStringBuilder3;
                             } catch (Exception unused) {
                                 charSequence = null;
-                                spannableStringBuilder2 = str;
+                                spannableStringBuilder2 = publicUsername;
                             }
                         }
                         SpannableStringBuilder spannableStringBuilder4 = spannableStringBuilder2;

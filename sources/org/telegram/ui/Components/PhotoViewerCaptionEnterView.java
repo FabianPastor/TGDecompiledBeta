@@ -399,7 +399,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$new$5(View view) {
         if (MessagesController.getInstance(this.currentAccount).getCaptionMaxLengthLimit() - this.codePointCount < 0) {
-            AndroidUtilities.shakeView(this.captionLimitView, 2.0f, 0);
+            AndroidUtilities.shakeView(this.captionLimitView);
             Vibrator vibrator = (Vibrator) this.captionLimitView.getContext().getSystemService("vibrator");
             if (vibrator == null) {
                 return;

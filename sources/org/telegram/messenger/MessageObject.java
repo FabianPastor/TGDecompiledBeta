@@ -46,6 +46,7 @@ import org.telegram.tgnet.TLRPC$DecryptedMessageAction;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$DocumentAttribute;
 import org.telegram.tgnet.TLRPC$FileLocation;
+import org.telegram.tgnet.TLRPC$ForumTopic;
 import org.telegram.tgnet.TLRPC$InputStickerSet;
 import org.telegram.tgnet.TLRPC$KeyboardButton;
 import org.telegram.tgnet.TLRPC$Message;
@@ -99,6 +100,8 @@ import org.telegram.tgnet.TLRPC$TL_messageActionGiftPremium;
 import org.telegram.tgnet.TLRPC$TL_messageActionHistoryClear;
 import org.telegram.tgnet.TLRPC$TL_messageActionLoginUnknownLocation;
 import org.telegram.tgnet.TLRPC$TL_messageActionPhoneCall;
+import org.telegram.tgnet.TLRPC$TL_messageActionTopicCreate;
+import org.telegram.tgnet.TLRPC$TL_messageActionTopicEdit;
 import org.telegram.tgnet.TLRPC$TL_messageActionUserUpdatedPhoto;
 import org.telegram.tgnet.TLRPC$TL_messageEmpty;
 import org.telegram.tgnet.TLRPC$TL_messageEncryptedAction;
@@ -162,6 +165,7 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.ChatMessageCell;
 import org.telegram.ui.Components.AnimatedEmojiDrawable;
 import org.telegram.ui.Components.AnimatedEmojiSpan;
+import org.telegram.ui.Components.Forum.ForumUtilities;
 import org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble;
 import org.telegram.ui.Components.Reactions.ReactionsUtils;
 import org.telegram.ui.Components.TranscribeButton;
@@ -236,12 +240,14 @@ public class MessageObject {
     private boolean hasUnwrappedEmoji;
     public boolean hideSendersName;
     public ArrayList<String> highlightedWords;
+    public boolean isCreateTopicStubMessage;
     public boolean isDateObject;
     public boolean isDownloadingFile;
     public boolean isReactionPush;
     public boolean isRestrictedMessage;
     private int isRoundVideoCached;
     public boolean isSpoilersRevealed;
+    public boolean isTopicMainMessage;
     public int lastLineWidth;
     private boolean layoutCreated;
     public int linesCount;
@@ -290,12 +296,15 @@ public class MessageObject {
     public TLRPC$ChatInvite sponsoredChatInvite;
     public String sponsoredChatInviteHash;
     public byte[] sponsoredId;
+    public boolean sponsoredRecommended;
+    public boolean sponsoredShowPeerPhoto;
     public int stableId;
     public BitmapDrawable strippedThumb;
     public int textHeight;
     public ArrayList<TextLayoutBlock> textLayoutBlocks;
     public int textWidth;
     public float textXOffset;
+    public String topicName;
     private int totalAnimatedEmojiCount;
     public int type;
     public boolean useCustomPhoto;
@@ -353,6 +362,31 @@ public class MessageObject {
         return false;
     }
 
+    public static int getTopicId(TLRPC$Message tLRPC$Message) {
+        TLRPC$TL_messageReplyHeader tLRPC$TL_messageReplyHeader;
+        if (tLRPC$Message == null || !(tLRPC$Message.action instanceof TLRPC$TL_messageActionTopicCreate)) {
+            if (tLRPC$Message == null || (tLRPC$TL_messageReplyHeader = tLRPC$Message.reply_to) == null || !tLRPC$TL_messageReplyHeader.forum_topic) {
+                return 0;
+            }
+            if (tLRPC$Message instanceof TLRPC$TL_messageService) {
+                int i = tLRPC$TL_messageReplyHeader.reply_to_msg_id;
+                return i == 0 ? tLRPC$TL_messageReplyHeader.reply_to_top_id : i;
+            }
+            int i2 = tLRPC$TL_messageReplyHeader.reply_to_top_id;
+            return i2 == 0 ? tLRPC$TL_messageReplyHeader.reply_to_msg_id : i2;
+        }
+        return tLRPC$Message.id;
+    }
+
+    public static boolean isTopicActionMessage(MessageObject messageObject) {
+        TLRPC$Message tLRPC$Message;
+        if (messageObject == null || (tLRPC$Message = messageObject.messageOwner) == null) {
+            return false;
+        }
+        TLRPC$MessageAction tLRPC$MessageAction = tLRPC$Message.action;
+        return (tLRPC$MessageAction instanceof TLRPC$TL_messageActionTopicCreate) || (tLRPC$MessageAction instanceof TLRPC$TL_messageActionTopicEdit);
+    }
+
     public int getEmojiOnlyCount() {
         return this.emojiOnlyCount;
     }
@@ -391,7 +425,7 @@ public class MessageObject {
         }
         MessagesStorage messagesStorage = MessagesStorage.getInstance(this.currentAccount);
         TLRPC$Message tLRPC$Message = this.messageOwner;
-        messagesStorage.markMessageReactionsAsRead(tLRPC$Message.dialog_id, tLRPC$Message.id, true);
+        messagesStorage.markMessageReactionsAsRead(tLRPC$Message.dialog_id, getTopicId(tLRPC$Message), this.messageOwner.id, true);
     }
 
     public boolean isPremiumSticker() {
@@ -1072,21 +1106,21 @@ public class MessageObject {
     /* JADX WARN: Removed duplicated region for block: B:185:0x04b5  */
     /* JADX WARN: Removed duplicated region for block: B:190:0x04c9  */
     /* JADX WARN: Removed duplicated region for block: B:194:0x04cf A[LOOP:0: B:170:0x0482->B:194:0x04cf, LOOP_END] */
-    /* JADX WARN: Removed duplicated region for block: B:468:0x0ca0  */
-    /* JADX WARN: Removed duplicated region for block: B:743:0x1437  */
-    /* JADX WARN: Removed duplicated region for block: B:746:0x1485  */
-    /* JADX WARN: Removed duplicated region for block: B:748:0x1488  */
-    /* JADX WARN: Removed duplicated region for block: B:760:0x1504  */
-    /* JADX WARN: Removed duplicated region for block: B:764:0x150b  */
-    /* JADX WARN: Removed duplicated region for block: B:789:0x04e8 A[EDGE_INSN: B:789:0x04e8->B:196:0x04e8 ?: BREAK  , SYNTHETIC] */
-    /* JADX WARN: Removed duplicated region for block: B:790:? A[RETURN, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:468:0x0ca2  */
+    /* JADX WARN: Removed duplicated region for block: B:800:0x15ee  */
+    /* JADX WARN: Removed duplicated region for block: B:803:0x163c  */
+    /* JADX WARN: Removed duplicated region for block: B:805:0x163f  */
+    /* JADX WARN: Removed duplicated region for block: B:817:0x16bb  */
+    /* JADX WARN: Removed duplicated region for block: B:821:0x16c2  */
+    /* JADX WARN: Removed duplicated region for block: B:846:0x04e8 A[EDGE_INSN: B:846:0x04e8->B:196:0x04e8 ?: BREAK  , SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:855:? A[RETURN, SYNTHETIC] */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
     public MessageObject(int r26, org.telegram.tgnet.TLRPC$TL_channelAdminLogEvent r27, java.util.ArrayList<org.telegram.messenger.MessageObject> r28, java.util.HashMap<java.lang.String, java.util.ArrayList<org.telegram.messenger.MessageObject>> r29, org.telegram.tgnet.TLRPC$Chat r30, int[] r31, boolean r32) {
         /*
-            Method dump skipped, instructions count: 5535
+            Method dump skipped, instructions count: 5974
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessageObject.<init>(int, org.telegram.tgnet.TLRPC$TL_channelAdminLogEvent, java.util.ArrayList, java.util.HashMap, org.telegram.tgnet.TLRPC$Chat, int[], boolean):void");
@@ -1107,6 +1141,21 @@ public class MessageObject {
             }
         }
         return LocaleController.getString("NoReactions", R.string.NoReactions);
+    }
+
+    private String getUsernamesString(ArrayList<String> arrayList) {
+        if (arrayList == null || arrayList.size() == 0) {
+            return LocaleController.getString("UsernameEmpty", R.string.UsernameEmpty).toLowerCase();
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < arrayList.size(); i++) {
+            sb.append("@");
+            sb.append(arrayList.get(i));
+            if (i < arrayList.size() - 1) {
+                sb.append(", ");
+            }
+        }
+        return sb.toString();
     }
 
     private String getUserName(TLObject tLObject, ArrayList<TLRPC$MessageEntity> arrayList, int i) {
@@ -1944,25 +1993,25 @@ public class MessageObject {
 
     /* JADX WARN: Removed duplicated region for block: B:11:0x002a  */
     /* JADX WARN: Removed duplicated region for block: B:12:0x002c  */
-    /* JADX WARN: Removed duplicated region for block: B:15:0x0037  */
-    /* JADX WARN: Removed duplicated region for block: B:208:0x0598  */
-    /* JADX WARN: Removed duplicated region for block: B:212:0x05b6  */
-    /* JADX WARN: Removed duplicated region for block: B:231:0x0616  */
+    /* JADX WARN: Removed duplicated region for block: B:15:0x0039  */
+    /* JADX WARN: Removed duplicated region for block: B:209:0x05ac  */
+    /* JADX WARN: Removed duplicated region for block: B:213:0x05ca  */
     /* JADX WARN: Removed duplicated region for block: B:232:0x062c  */
-    /* JADX WARN: Removed duplicated region for block: B:248:0x0676  */
-    /* JADX WARN: Removed duplicated region for block: B:249:0x0682  */
-    /* JADX WARN: Removed duplicated region for block: B:279:0x074d  */
-    /* JADX WARN: Removed duplicated region for block: B:283:0x0787  */
-    /* JADX WARN: Removed duplicated region for block: B:505:0x0d23  */
-    /* JADX WARN: Removed duplicated region for block: B:606:0x0var_  */
-    /* JADX WARN: Removed duplicated region for block: B:626:? A[RETURN, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:233:0x0642  */
+    /* JADX WARN: Removed duplicated region for block: B:249:0x068e  */
+    /* JADX WARN: Removed duplicated region for block: B:250:0x069a  */
+    /* JADX WARN: Removed duplicated region for block: B:280:0x0763  */
+    /* JADX WARN: Removed duplicated region for block: B:284:0x079b  */
+    /* JADX WARN: Removed duplicated region for block: B:528:0x0e01  */
+    /* JADX WARN: Removed duplicated region for block: B:632:0x108a  */
+    /* JADX WARN: Removed duplicated region for block: B:652:? A[RETURN, SYNTHETIC] */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
     private void updateMessageText(java.util.AbstractMap<java.lang.Long, org.telegram.tgnet.TLRPC$User> r21, java.util.AbstractMap<java.lang.Long, org.telegram.tgnet.TLRPC$Chat> r22, androidx.collection.LongSparseArray<org.telegram.tgnet.TLRPC$User> r23, androidx.collection.LongSparseArray<org.telegram.tgnet.TLRPC$Chat> r24) {
         /*
-            Method dump skipped, instructions count: 3996
+            Method dump skipped, instructions count: 4237
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessageObject.updateMessageText(java.util.AbstractMap, java.util.AbstractMap, androidx.collection.LongSparseArray, androidx.collection.LongSparseArray):void");
@@ -2513,34 +2562,45 @@ public class MessageObject {
 
     public static CharSequence replaceWithLink(CharSequence charSequence, String str, TLObject tLObject) {
         String str2;
+        CharSequence charSequence2;
         String str3;
+        TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported;
         TLRPC$Chat tLRPC$Chat;
         TLRPC$User tLRPC$User;
         int indexOf = TextUtils.indexOf(charSequence, str);
         if (indexOf >= 0) {
-            TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported = null;
+            TLObject tLObject2 = null;
             if (tLObject instanceof TLRPC$User) {
-                str3 = UserObject.getUserName((TLRPC$User) tLObject);
+                charSequence2 = UserObject.getUserName((TLRPC$User) tLObject).replace('\n', ' ');
                 str2 = "" + tLRPC$User.id;
             } else if (tLObject instanceof TLRPC$Chat) {
-                str3 = ((TLRPC$Chat) tLObject).title;
+                charSequence2 = ((TLRPC$Chat) tLObject).title.replace('\n', ' ');
                 str2 = "" + (-tLRPC$Chat.id);
             } else if (tLObject instanceof TLRPC$TL_game) {
-                str3 = ((TLRPC$TL_game) tLObject).title;
+                charSequence2 = ((TLRPC$TL_game) tLObject).title.replace('\n', ' ');
                 str2 = "game";
-            } else if (tLObject instanceof TLRPC$TL_chatInviteExported) {
-                tLRPC$TL_chatInviteExported = (TLRPC$TL_chatInviteExported) tLObject;
-                str3 = tLRPC$TL_chatInviteExported.link;
-                str2 = "invite";
             } else {
-                str2 = "0";
-                str3 = "";
+                if (tLObject instanceof TLRPC$TL_chatInviteExported) {
+                    TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported2 = (TLRPC$TL_chatInviteExported) tLObject;
+                    charSequence2 = tLRPC$TL_chatInviteExported2.link.replace('\n', ' ');
+                    str3 = "invite";
+                    tLRPC$TL_chatInviteExported = tLRPC$TL_chatInviteExported2;
+                } else if (tLObject instanceof TLRPC$ForumTopic) {
+                    charSequence2 = ForumUtilities.getForumSpannedName((TLRPC$ForumTopic) tLObject, null);
+                    str3 = "topic";
+                    tLRPC$TL_chatInviteExported = tLObject;
+                } else {
+                    str2 = "0";
+                    charSequence2 = "";
+                }
+                String str4 = str3;
+                tLObject2 = tLRPC$TL_chatInviteExported;
+                str2 = str4;
             }
-            String replace = str3.replace('\n', ' ');
-            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(TextUtils.replace(charSequence, new String[]{str}, new String[]{replace}));
+            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(TextUtils.replace(charSequence, new String[]{str}, new CharSequence[]{charSequence2}));
             URLSpanNoUnderlineBold uRLSpanNoUnderlineBold = new URLSpanNoUnderlineBold("" + str2);
-            uRLSpanNoUnderlineBold.setObject(tLRPC$TL_chatInviteExported);
-            spannableStringBuilder.setSpan(uRLSpanNoUnderlineBold, indexOf, replace.length() + indexOf, 33);
+            uRLSpanNoUnderlineBold.setObject(tLObject2);
+            spannableStringBuilder.setSpan(uRLSpanNoUnderlineBold, indexOf, charSequence2.length() + indexOf, 33);
             return spannableStringBuilder;
         }
         return charSequence;
@@ -2736,8 +2796,13 @@ public class MessageObject {
     }
 
     public boolean isVoiceTranscriptionOpen() {
-        TLRPC$Message tLRPC$Message;
-        return isVoice() && (tLRPC$Message = this.messageOwner) != null && tLRPC$Message.voiceTranscriptionOpen && tLRPC$Message.voiceTranscription != null && (tLRPC$Message.voiceTranscriptionFinal || TranscribeButton.isTranscribing(this)) && UserConfig.getInstance(this.currentAccount).isPremium();
+        if (UserConfig.getInstance(this.currentAccount).isPremium() && this.messageOwner != null && (isVoice() || (isRoundVideo() && TranscribeButton.isVideoTranscriptionOpen(this)))) {
+            TLRPC$Message tLRPC$Message = this.messageOwner;
+            if (tLRPC$Message.voiceTranscriptionOpen && tLRPC$Message.voiceTranscription != null && (tLRPC$Message.voiceTranscriptionFinal || TranscribeButton.isTranscribing(this))) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void generateCaption() {
@@ -3005,7 +3070,6 @@ public class MessageObject {
 
     public boolean needDrawShareButton() {
         int i;
-        String str;
         if (!this.preview && !this.scheduled && this.eventId == 0) {
             TLRPC$Message tLRPC$Message = this.messageOwner;
             if (tLRPC$Message.noforwards) {
@@ -3029,7 +3093,7 @@ public class MessageObject {
                         return true;
                     }
                     if (!isOut()) {
-                        if ((getMedia(this.messageOwner) instanceof TLRPC$TL_messageMediaGame) || ((getMedia(this.messageOwner) instanceof TLRPC$TL_messageMediaInvoice) && !hasExtendedMedia())) {
+                        if ((getMedia(this.messageOwner) instanceof TLRPC$TL_messageMediaGame) || (((getMedia(this.messageOwner) instanceof TLRPC$TL_messageMediaInvoice) && !hasExtendedMedia()) || (getMedia(this.messageOwner) instanceof TLRPC$TL_messageMediaWebPage))) {
                             return true;
                         }
                         TLRPC$Peer tLRPC$Peer = this.messageOwner.peer_id;
@@ -3040,16 +3104,21 @@ public class MessageObject {
                                 tLRPC$Chat = getChat(null, null, j);
                             }
                         }
-                        return ChatObject.isChannel(tLRPC$Chat) && tLRPC$Chat.megagroup && (str = tLRPC$Chat.username) != null && str.length() > 0 && !(getMedia(this.messageOwner) instanceof TLRPC$TL_messageMediaContact) && !(getMedia(this.messageOwner) instanceof TLRPC$TL_messageMediaGeo);
+                        return ChatObject.isChannel(tLRPC$Chat) && tLRPC$Chat.megagroup && ChatObject.isPublic(tLRPC$Chat) && !(getMedia(this.messageOwner) instanceof TLRPC$TL_messageMediaContact) && !(getMedia(this.messageOwner) instanceof TLRPC$TL_messageMediaGeo);
                     }
                 } else {
                     TLRPC$Message tLRPC$Message2 = this.messageOwner;
-                    if ((!(tLRPC$Message2.from_id instanceof TLRPC$TL_peerChannel) && !tLRPC$Message2.post) || isSupergroup()) {
-                        return false;
-                    }
-                    TLRPC$Message tLRPC$Message3 = this.messageOwner;
-                    if (tLRPC$Message3.peer_id.channel_id != 0 && ((tLRPC$Message3.via_bot_id == 0 && tLRPC$Message3.reply_to == null) || ((i = this.type) != 13 && i != 15))) {
-                        return true;
+                    if ((tLRPC$Message2.from_id instanceof TLRPC$TL_peerChannel) || tLRPC$Message2.post) {
+                        if ((getMedia(tLRPC$Message2) instanceof TLRPC$TL_messageMediaWebPage) && !isOutOwner()) {
+                            return true;
+                        }
+                        if (isSupergroup()) {
+                            return false;
+                        }
+                        TLRPC$Message tLRPC$Message3 = this.messageOwner;
+                        if (tLRPC$Message3.peer_id.channel_id != 0 && ((tLRPC$Message3.via_bot_id == 0 && tLRPC$Message3.reply_to == null) || ((i = this.type) != 13 && i != 15))) {
+                            return true;
+                        }
                     }
                 }
             }
@@ -3216,7 +3285,7 @@ public class MessageObject {
         if (this.customAvatarDrawable != null) {
             return true;
         }
-        if (isSponsored() && isFromChat()) {
+        if (isSponsored() && (isFromChat() || this.sponsoredShowPeerPhoto)) {
             return true;
         }
         if (!isSponsored()) {
@@ -3284,6 +3353,16 @@ public class MessageObject {
             return tLRPC$Peer.user_id;
         }
         return -j;
+    }
+
+    public static boolean peersEqual(TLRPC$Peer tLRPC$Peer, TLRPC$Peer tLRPC$Peer2) {
+        if (tLRPC$Peer == null && tLRPC$Peer2 == null) {
+            return true;
+        }
+        if (tLRPC$Peer != null && tLRPC$Peer2 != null) {
+            return (!(tLRPC$Peer instanceof TLRPC$TL_peerChat) || !(tLRPC$Peer2 instanceof TLRPC$TL_peerChat)) ? (!(tLRPC$Peer instanceof TLRPC$TL_peerChannel) || !(tLRPC$Peer2 instanceof TLRPC$TL_peerChannel)) ? (tLRPC$Peer instanceof TLRPC$TL_peerUser) && (tLRPC$Peer2 instanceof TLRPC$TL_peerUser) && tLRPC$Peer.user_id == tLRPC$Peer2.user_id : tLRPC$Peer.channel_id == tLRPC$Peer2.channel_id : tLRPC$Peer.chat_id == tLRPC$Peer2.chat_id;
+        }
+        return false;
     }
 
     public long getFromChatId() {

@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.UUID;
 import org.telegram.messenger.SharedConfig;
 import org.webrtc.Logging;
-/* loaded from: classes3.dex */
+/* loaded from: classes.dex */
 public class WebRtcAudioEffects {
     private static final UUID AOSP_ACOUSTIC_ECHO_CANCELER = UUID.fromString("bb392ec0-8d4d-11e0-a896-0002a5d5CLASSNAMEb");
     private static final UUID AOSP_NOISE_SUPPRESSOR = UUID.fromString("CLASSNAMECLASSNAME-8e06-11e0-9cb6-0002a5d5CLASSNAMEb");

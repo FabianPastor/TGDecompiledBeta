@@ -33,6 +33,7 @@ import org.telegram.messenger.ChatsWidgetProvider;
 import org.telegram.messenger.ContactsWidgetProvider;
 import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.tgnet.TLRPC$Chat;
@@ -221,18 +222,18 @@ public class EditWidgetActivity extends BaseFragment {
             this.shadowDrawable = Theme.getThemedDrawable(context, R.drawable.greydivider_bottom, "windowBackgroundGrayShadow");
         }
 
-        /* JADX WARN: Code restructure failed: missing block: B:105:0x028d, code lost:
-            if ((r0 instanceof org.telegram.tgnet.TLRPC$TL_messageActionChannelMigrateFrom) != false) goto L60;
+        /* JADX WARN: Code restructure failed: missing block: B:110:0x029e, code lost:
+            if ((r0 instanceof org.telegram.tgnet.TLRPC$TL_messageActionChannelMigrateFrom) != false) goto L64;
          */
-        /* JADX WARN: Removed duplicated region for block: B:377:0x0900  */
-        /* JADX WARN: Removed duplicated region for block: B:390:0x094b  */
+        /* JADX WARN: Removed duplicated region for block: B:382:0x0911  */
+        /* JADX WARN: Removed duplicated region for block: B:395:0x095c  */
         /*
             Code decompiled incorrectly, please refer to instructions dump.
             To view partially-correct add '--show-bad-code' argument
         */
         public void updateDialogs() {
             /*
-                Method dump skipped, instructions count: 2459
+                Method dump skipped, instructions count: 2476
                 To view this dump add '--comments-level debug' option
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.EditWidgetActivity.WidgetPreviewCell.updateDialogs():void");
@@ -399,9 +400,12 @@ public class EditWidgetActivity extends BaseFragment {
                     } else {
                         EditWidgetActivity.this.finishFragment();
                     }
-                } else if (i != 1 || EditWidgetActivity.this.getParentActivity() == null) {
-                } else {
-                    EditWidgetActivity.this.getMessagesStorage().putWidgetDialogs(EditWidgetActivity.this.currentWidgetId, EditWidgetActivity.this.selectedDialogs);
+                } else if (i == 1 && EditWidgetActivity.this.getParentActivity() != null) {
+                    ArrayList<MessagesStorage.TopicKey> arrayList = new ArrayList<>();
+                    for (int i2 = 0; i2 < EditWidgetActivity.this.selectedDialogs.size(); i2++) {
+                        arrayList.add(MessagesStorage.TopicKey.of(((Long) EditWidgetActivity.this.selectedDialogs.get(i2)).longValue(), 0));
+                    }
+                    EditWidgetActivity.this.getMessagesStorage().putWidgetDialogs(EditWidgetActivity.this.currentWidgetId, arrayList);
                     SharedPreferences.Editor edit = EditWidgetActivity.this.getParentActivity().getSharedPreferences("shortcut_widget", 0).edit();
                     edit.putInt("account" + EditWidgetActivity.this.currentWidgetId, ((BaseFragment) EditWidgetActivity.this).currentAccount);
                     edit.putInt("type" + EditWidgetActivity.this.currentWidgetId, EditWidgetActivity.this.widgetType);
@@ -555,7 +559,7 @@ public class EditWidgetActivity extends BaseFragment {
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1753onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
             GroupCreateUserCell groupCreateUserCell;
             if (i == 0) {
                 FrameLayout textInfoPrivacyCell = new TextInfoPrivacyCell(this.mContext);

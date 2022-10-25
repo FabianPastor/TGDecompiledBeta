@@ -20,9 +20,9 @@ import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$ChatPhoto;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.tgnet.TLRPC$UserProfilePhoto;
-import org.telegram.ui.ActionBar.ActionBarLayout;
 import org.telegram.ui.ActionBar.ActionBarPopupWindow;
 import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.ActionBar.INavigationLayout;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ChatActivity;
 import org.telegram.ui.ProfileActivity;
@@ -54,7 +54,7 @@ public class BackButtonMenu {
         if (baseFragment == null) {
             return null;
         }
-        final ActionBarLayout parentLayout = baseFragment.getParentLayout();
+        final INavigationLayout parentLayout = baseFragment.getParentLayout();
         Activity parentActivity = baseFragment.getParentActivity();
         View fragmentView = baseFragment.getFragmentView();
         if (parentLayout == null || parentActivity == null || fragmentView == null) {
@@ -181,18 +181,15 @@ public class BackButtonMenu {
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public static /* synthetic */ void lambda$show$0(AtomicReference atomicReference, PulledDialog pulledDialog, ActionBarLayout actionBarLayout, BaseFragment baseFragment, View view) {
-        ArrayList<BaseFragment> arrayList;
+    public static /* synthetic */ void lambda$show$0(AtomicReference atomicReference, PulledDialog pulledDialog, INavigationLayout iNavigationLayout, BaseFragment baseFragment, View view) {
         int i;
-        ArrayList<BaseFragment> arrayList2;
         Long l = null;
         if (atomicReference.get() != null) {
             ((ActionBarPopupWindow) atomicReference.getAndSet(null)).dismiss();
         }
-        int i2 = pulledDialog.stackIndex;
-        if (i2 >= 0) {
-            if (actionBarLayout != null && (arrayList2 = actionBarLayout.fragmentsStack) != null && i2 < arrayList2.size()) {
-                BaseFragment baseFragment2 = actionBarLayout.fragmentsStack.get(pulledDialog.stackIndex);
+        if (pulledDialog.stackIndex >= 0) {
+            if (iNavigationLayout != null && iNavigationLayout.getFragmentStack() != null && pulledDialog.stackIndex < iNavigationLayout.getFragmentStack().size()) {
+                BaseFragment baseFragment2 = iNavigationLayout.getFragmentStack().get(pulledDialog.stackIndex);
                 if (baseFragment2 instanceof ChatActivity) {
                     l = Long.valueOf(((ChatActivity) baseFragment2).getDialogId());
                 } else if (baseFragment2 instanceof ProfileActivity) {
@@ -200,24 +197,24 @@ public class BackButtonMenu {
                 }
             }
             if (l != null && l.longValue() != pulledDialog.dialogId) {
-                for (int size = actionBarLayout.fragmentsStack.size() - 2; size > pulledDialog.stackIndex; size--) {
-                    actionBarLayout.removeFragmentFromStack(size);
+                for (int size = iNavigationLayout.getFragmentStack().size() - 2; size > pulledDialog.stackIndex; size--) {
+                    iNavigationLayout.removeFragmentFromStack(size);
                 }
-            } else if (actionBarLayout != null && (arrayList = actionBarLayout.fragmentsStack) != null) {
-                int size2 = arrayList.size() - 2;
+            } else if (iNavigationLayout != null && iNavigationLayout.getFragmentStack() != null) {
+                int size2 = iNavigationLayout.getFragmentStack().size() - 2;
                 while (true) {
                     i = pulledDialog.stackIndex;
                     if (size2 <= i) {
                         break;
                     }
-                    if (size2 >= 0 && size2 < actionBarLayout.fragmentsStack.size()) {
-                        actionBarLayout.removeFragmentFromStack(size2);
+                    if (size2 >= 0 && size2 < iNavigationLayout.getFragmentStack().size()) {
+                        iNavigationLayout.removeFragmentFromStack(size2);
                     }
                     size2--;
                 }
-                if (i < actionBarLayout.fragmentsStack.size()) {
-                    actionBarLayout.showFragment(pulledDialog.stackIndex);
-                    actionBarLayout.closeLastFragment(true);
+                if (i < iNavigationLayout.getFragmentStack().size()) {
+                    iNavigationLayout.bringToFront(pulledDialog.stackIndex);
+                    iNavigationLayout.closeLastFragment(true);
                     return;
                 }
             }
@@ -253,17 +250,17 @@ public class BackButtonMenu {
     }
 
     /* JADX WARN: Multi-variable type inference failed */
-    /* JADX WARN: Removed duplicated region for block: B:34:0x0084  */
-    /* JADX WARN: Removed duplicated region for block: B:40:0x009e  */
-    /* JADX WARN: Removed duplicated region for block: B:70:0x00bb A[SYNTHETIC] */
-    /* JADX WARN: Removed duplicated region for block: B:74:0x0099 A[SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:34:0x0088  */
+    /* JADX WARN: Removed duplicated region for block: B:40:0x00a2  */
+    /* JADX WARN: Removed duplicated region for block: B:70:0x00bf A[SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:74:0x009d A[SYNTHETIC] */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
     public static java.util.ArrayList<org.telegram.ui.Components.BackButtonMenu.PulledDialog> getStackedHistoryDialogs(org.telegram.ui.ActionBar.BaseFragment r18, long r19) {
         /*
-            Method dump skipped, instructions count: 256
+            Method dump skipped, instructions count: 260
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.BackButtonMenu.getStackedHistoryDialogs(org.telegram.ui.ActionBar.BaseFragment, long):java.util.ArrayList");
@@ -275,15 +272,15 @@ public class BackButtonMenu {
     }
 
     public static void addToPulledDialogs(BaseFragment baseFragment, int i, TLRPC$Chat tLRPC$Chat, TLRPC$User tLRPC$User, long j, int i2, int i3) {
-        ActionBarLayout parentLayout;
+        INavigationLayout parentLayout;
         if ((tLRPC$Chat == null && tLRPC$User == null) || baseFragment == null || (parentLayout = baseFragment.getParentLayout()) == null) {
             return;
         }
-        if (parentLayout.pulledDialogs == null) {
-            parentLayout.pulledDialogs = new ArrayList<>();
+        if (parentLayout.getPulledDialogs() == null) {
+            parentLayout.setPulledDialogs(new ArrayList());
         }
         boolean z = false;
-        Iterator<PulledDialog> it = parentLayout.pulledDialogs.iterator();
+        Iterator<PulledDialog> it = parentLayout.getPulledDialogs().iterator();
         while (true) {
             if (it.hasNext()) {
                 if (it.next().dialogId == j) {
@@ -305,18 +302,18 @@ public class BackButtonMenu {
         pulledDialog.folderId = i2;
         pulledDialog.chat = tLRPC$Chat;
         pulledDialog.user = tLRPC$User;
-        parentLayout.pulledDialogs.add(pulledDialog);
+        parentLayout.getPulledDialogs().add(pulledDialog);
     }
 
     public static void clearPulledDialogs(BaseFragment baseFragment, int i) {
-        ActionBarLayout parentLayout;
-        if (baseFragment == null || (parentLayout = baseFragment.getParentLayout()) == null || parentLayout.pulledDialogs == null) {
+        INavigationLayout parentLayout;
+        if (baseFragment == null || (parentLayout = baseFragment.getParentLayout()) == null || parentLayout.getPulledDialogs() == null) {
             return;
         }
         int i2 = 0;
-        while (i2 < parentLayout.pulledDialogs.size()) {
-            if (parentLayout.pulledDialogs.get(i2).stackIndex > i) {
-                parentLayout.pulledDialogs.remove(i2);
+        while (i2 < parentLayout.getPulledDialogs().size()) {
+            if (parentLayout.getPulledDialogs().get(i2).stackIndex > i) {
+                parentLayout.getPulledDialogs().remove(i2);
                 i2--;
             }
             i2++;

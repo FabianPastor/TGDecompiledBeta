@@ -34,6 +34,7 @@ import org.telegram.tgnet.TLRPC$UserFull;
 import org.telegram.tgnet.TLRPC$UserProfilePhoto;
 import org.telegram.tgnet.TLRPC$VideoSize;
 import org.telegram.ui.Components.AnimatedFileDrawable;
+import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.RLottieDrawable;
 import org.telegram.ui.Components.RecyclableDrawable;
 /* loaded from: classes.dex */
@@ -539,6 +540,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                 if (drawable instanceof SvgHelper.SvgDrawable) {
                     ((SvgHelper.SvgDrawable) drawable).setParent(this);
                 }
+                updateDrawableRadius(this.staticThumbDrawable);
                 ImageLoader.getInstance().cancelLoadingForImageReceiver(this, true);
                 invalidate();
                 ImageReceiverDelegate imageReceiverDelegate = this.delegate;
@@ -950,7 +952,11 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
         if (drawable == null) {
             return;
         }
-        if ((hasRoundRadius() || this.gradientShader != null) && (drawable instanceof BitmapDrawable)) {
+        if ((hasRoundRadius() || this.gradientShader != null) && ((drawable instanceof BitmapDrawable) || (drawable instanceof AvatarDrawable))) {
+            if (drawable instanceof AvatarDrawable) {
+                ((AvatarDrawable) drawable).setRoundRadius(this.roundRadius[0]);
+                return;
+            }
             BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
             if (bitmapDrawable instanceof RLottieDrawable) {
                 return;
@@ -2274,7 +2280,6 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
             Drawable drawable3 = this.currentThumbDrawable;
             if (drawable3 != null) {
                 updateDrawableRadius(drawable3);
-                return;
             }
             Drawable drawable4 = this.staticThumbDrawable;
             if (drawable4 == null) {

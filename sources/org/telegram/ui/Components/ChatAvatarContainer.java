@@ -219,7 +219,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
         }
         ChatActivity chatActivity2 = this.parentFragment;
         if (chatActivity2 != null && chatActivity2.getChatMode() == 0) {
-            if (!this.parentFragment.isThreadChat() && !UserObject.isReplyUser(this.parentFragment.getCurrentUser())) {
+            if ((!this.parentFragment.isThreadChat() || this.parentFragment.isTopic) && !UserObject.isReplyUser(this.parentFragment.getCurrentUser())) {
                 setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.Components.ChatAvatarContainer$$ExternalSyntheticLambda1
                     @Override // android.view.View.OnClickListener
                     public final void onClick(View view) {
@@ -356,7 +356,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
     */
     private void openProfile(boolean r8) {
         /*
-            Method dump skipped, instructions count: 256
+            Method dump skipped, instructions count: 276
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatAvatarContainer.openProfile(boolean):void");
@@ -783,12 +783,12 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                             string = LocaleController.getString("Loading", R.string.Loading).toLowerCase();
                         } else if (currentChat.has_geo) {
                             string = LocaleController.getString("MegaLocation", R.string.MegaLocation).toLowerCase();
-                        } else if (!TextUtils.isEmpty(currentChat.username)) {
+                        } else if (ChatObject.isPublic(currentChat)) {
                             string = LocaleController.getString("MegaPublic", R.string.MegaPublic).toLowerCase();
                         } else {
                             string = LocaleController.getString("MegaPrivate", R.string.MegaPrivate).toLowerCase();
                         }
-                    } else if ((currentChat.flags & 64) != 0) {
+                    } else if (ChatObject.isPublic(currentChat)) {
                         string = LocaleController.getString("ChannelPublic", R.string.ChannelPublic).toLowerCase();
                     } else {
                         string = LocaleController.getString("ChannelPrivate", R.string.ChannelPrivate).toLowerCase();
@@ -936,10 +936,10 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
             }
             this.avatarDrawable.setInfo(currentChat);
             BackupImageView backupImageView = this.avatarImageView;
-            if (backupImageView == null) {
-                return;
+            if (backupImageView != null) {
+                backupImageView.setForUserOrChat(currentChat, this.avatarDrawable);
             }
-            backupImageView.setForUserOrChat(currentChat, this.avatarDrawable);
+            this.avatarImageView.setRoundRadius(AndroidUtilities.dp(currentChat.forum ? 16.0f : 21.0f));
             return;
         }
         this.avatarDrawable.setInfo(currentUser);

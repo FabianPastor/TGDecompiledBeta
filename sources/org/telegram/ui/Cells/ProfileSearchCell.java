@@ -359,7 +359,7 @@ public class ProfileSearchCell extends BaseCell implements NotificationCenter.No
                     int i2 = tLRPC$Chat4.participants_count;
                     if (i2 != 0) {
                         str = LocaleController.formatPluralString("Subscribers", i2, new Object[0]);
-                    } else if (TextUtils.isEmpty(tLRPC$Chat4.username)) {
+                    } else if (!ChatObject.isPublic(tLRPC$Chat4)) {
                         str = LocaleController.getString("ChannelPrivate", R.string.ChannelPrivate).toLowerCase();
                     } else {
                         str = LocaleController.getString("ChannelPublic", R.string.ChannelPublic).toLowerCase();
@@ -373,7 +373,7 @@ public class ProfileSearchCell extends BaseCell implements NotificationCenter.No
                 str = LocaleController.formatPluralString("Members", i3, new Object[0]);
             } else if (tLRPC$Chat5.has_geo) {
                 str = LocaleController.getString("MegaLocation", R.string.MegaLocation);
-            } else if (TextUtils.isEmpty(tLRPC$Chat5.username)) {
+            } else if (!ChatObject.isPublic(tLRPC$Chat5)) {
                 str = LocaleController.getString("MegaPrivate", R.string.MegaPrivate).toLowerCase();
             } else {
                 str = LocaleController.getString("MegaPublic", R.string.MegaPublic).toLowerCase();
@@ -616,12 +616,13 @@ public class ProfileSearchCell extends BaseCell implements NotificationCenter.No
                     double d = this.nameLeft + this.nameWidth;
                     double ceil = Math.ceil(lineWidth);
                     Double.isNaN(d);
+                    double d2 = d - ceil;
                     double dp2 = AndroidUtilities.dp(6.0f);
                     Double.isNaN(dp2);
-                    double d2 = (d - ceil) - dp2;
+                    double d3 = d2 - dp2;
                     double intrinsicWidth = this.statusDrawable.getIntrinsicWidth();
                     Double.isNaN(intrinsicWidth);
-                    lineRight = (int) (d2 - intrinsicWidth);
+                    lineRight = (int) (d3 - intrinsicWidth);
                 }
             } else {
                 lineRight = (int) (this.nameLeft + this.nameLayout.getLineRight(0) + AndroidUtilities.dp(6.0f));
@@ -639,7 +640,7 @@ public class ProfileSearchCell extends BaseCell implements NotificationCenter.No
             this.rect.set(this.countLeft - AndroidUtilities.dp(5.5f), this.countTop, dp + this.countWidth + AndroidUtilities.dp(11.0f), this.countTop + AndroidUtilities.dp(23.0f));
             RectF rectF = this.rect;
             float f = AndroidUtilities.density;
-            canvas.drawRoundRect(rectF, f * 11.5f, f * 11.5f, MessagesController.getInstance(this.currentAccount).isDialogMuted(this.dialog_id) ? Theme.dialogs_countGrayPaint : Theme.dialogs_countPaint);
+            canvas.drawRoundRect(rectF, f * 11.5f, f * 11.5f, MessagesController.getInstance(this.currentAccount).isDialogMuted(this.dialog_id, 0) ? Theme.dialogs_countGrayPaint : Theme.dialogs_countPaint);
             canvas.save();
             canvas.translate(this.countLeft, this.countTop + AndroidUtilities.dp(4.0f));
             this.countLayout.draw(canvas);

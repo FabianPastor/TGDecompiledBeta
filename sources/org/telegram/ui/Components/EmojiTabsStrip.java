@@ -75,7 +75,7 @@ public class EmojiTabsStrip extends ScrollableHorizontalScrollView {
     protected void onTabCreate(EmojiTabButton emojiTabButton) {
     }
 
-    public EmojiTabsStrip(Context context, Theme.ResourcesProvider resourcesProvider, boolean z, final boolean z2, Runnable runnable) {
+    public EmojiTabsStrip(Context context, Theme.ResourcesProvider resourcesProvider, boolean z, final boolean z2, int i, Runnable runnable) {
         super(context);
         this.recentDrawableId = R.drawable.msg_emoji_recent;
         this.settingsDrawableId = R.drawable.smiles_tab_settings;
@@ -103,15 +103,15 @@ public class EmojiTabsStrip extends ScrollableHorizontalScrollView {
             private Path path = new Path();
 
             @Override // android.widget.LinearLayout, android.view.ViewGroup, android.view.View
-            protected void onLayout(boolean z3, int i, int i2, int i3, int i4) {
-                int i5 = (i4 - i2) / 2;
-                int i6 = 0;
+            protected void onLayout(boolean z3, int i2, int i3, int i4, int i5) {
+                int i6 = (i5 - i3) / 2;
+                int i7 = 0;
                 if (z2) {
                     int paddingLeft = getPaddingLeft() - (!EmojiTabsStrip.this.recentIsShown ? AndroidUtilities.dp(33.0f) : 0);
-                    for (int i7 = 0; i7 < getChildCount(); i7++) {
-                        View childAt = getChildAt(i7);
+                    for (int i8 = 0; i8 < getChildCount(); i8++) {
+                        View childAt = getChildAt(i8);
                         if (childAt != EmojiTabsStrip.this.settingsTab && !EmojiTabsStrip.this.removingViews.containsKey(childAt) && childAt != null) {
-                            childAt.layout(paddingLeft, i5 - (childAt.getMeasuredHeight() / 2), childAt.getMeasuredWidth() + paddingLeft, (childAt.getMeasuredHeight() / 2) + i5);
+                            childAt.layout(paddingLeft, i6 - (childAt.getMeasuredHeight() / 2), childAt.getMeasuredWidth() + paddingLeft, (childAt.getMeasuredHeight() / 2) + i6);
                             boolean z4 = childAt instanceof EmojiTabButton;
                             Integer valueOf = z4 ? ((EmojiTabButton) childAt).id : childAt instanceof EmojiTabsView ? Integer.valueOf(((EmojiTabsView) childAt).id) : null;
                             if (EmojiTabsStrip.this.animateAppear && z4) {
@@ -138,57 +138,57 @@ public class EmojiTabsStrip extends ScrollableHorizontalScrollView {
                         return;
                     }
                     if (!EmojiTabsStrip.this.recentIsShown) {
-                        i6 = AndroidUtilities.dp(33.0f);
+                        i7 = AndroidUtilities.dp(33.0f);
                     }
-                    int i8 = paddingLeft + i6;
+                    int i9 = paddingLeft + i7;
                     Integer num = EmojiTabsStrip.this.settingsTab.id;
-                    if (EmojiTabsStrip.this.settingsTab.getMeasuredWidth() + i8 + getPaddingRight() <= EmojiTabsStrip.this.getMeasuredWidth()) {
+                    if (EmojiTabsStrip.this.settingsTab.getMeasuredWidth() + i9 + getPaddingRight() <= EmojiTabsStrip.this.getMeasuredWidth()) {
                         EmojiTabButton emojiTabButton2 = EmojiTabsStrip.this.settingsTab;
-                        int i9 = i3 - i;
-                        int paddingRight = (i9 - getPaddingRight()) - EmojiTabsStrip.this.settingsTab.getMeasuredWidth();
-                        emojiTabButton2.layout(paddingRight, i5 - (EmojiTabsStrip.this.settingsTab.getMeasuredHeight() / 2), i9 - getPaddingRight(), i5 + (EmojiTabsStrip.this.settingsTab.getMeasuredHeight() / 2));
-                        i8 = paddingRight;
+                        int i10 = i4 - i2;
+                        int paddingRight = (i10 - getPaddingRight()) - EmojiTabsStrip.this.settingsTab.getMeasuredWidth();
+                        emojiTabButton2.layout(paddingRight, i6 - (EmojiTabsStrip.this.settingsTab.getMeasuredHeight() / 2), i10 - getPaddingRight(), i6 + (EmojiTabsStrip.this.settingsTab.getMeasuredHeight() / 2));
+                        i9 = paddingRight;
                     } else {
-                        EmojiTabsStrip.this.settingsTab.layout(i8, i5 - (EmojiTabsStrip.this.settingsTab.getMeasuredHeight() / 2), EmojiTabsStrip.this.settingsTab.getMeasuredWidth() + i8, i5 + (EmojiTabsStrip.this.settingsTab.getMeasuredHeight() / 2));
+                        EmojiTabsStrip.this.settingsTab.layout(i9, i6 - (EmojiTabsStrip.this.settingsTab.getMeasuredHeight() / 2), EmojiTabsStrip.this.settingsTab.getMeasuredWidth() + i9, i6 + (EmojiTabsStrip.this.settingsTab.getMeasuredHeight() / 2));
                     }
                     if (num == null) {
                         return;
                     }
-                    if (this.lastX.get(num) != null && this.lastX.get(num).intValue() != i8) {
-                        EmojiTabsStrip.this.settingsTab.setTranslationX(this.lastX.get(num).intValue() - i8);
+                    if (this.lastX.get(num) != null && this.lastX.get(num).intValue() != i9) {
+                        EmojiTabsStrip.this.settingsTab.setTranslationX(this.lastX.get(num).intValue() - i9);
                         EmojiTabsStrip.this.settingsTab.animate().translationX(0.0f).setDuration(350L).start();
                     }
-                    this.lastX.put(num, Integer.valueOf(i8));
+                    this.lastX.put(num, Integer.valueOf(i9));
                     return;
                 }
                 int childCount = getChildCount() - (!EmojiTabsStrip.this.recentIsShown ? 1 : 0);
-                int paddingLeft2 = (int) (((((i3 - i) - getPaddingLeft()) - getPaddingRight()) - (AndroidUtilities.dp(30.0f) * childCount)) / Math.max(1, childCount - 1));
+                int paddingLeft2 = (int) (((((i4 - i2) - getPaddingLeft()) - getPaddingRight()) - (AndroidUtilities.dp(30.0f) * childCount)) / Math.max(1, childCount - 1));
                 int paddingLeft3 = getPaddingLeft();
-                while (i6 < childCount) {
-                    View childAt2 = getChildAt((!EmojiTabsStrip.this.recentIsShown ? 1 : 0) + i6);
+                while (i7 < childCount) {
+                    View childAt2 = getChildAt((!EmojiTabsStrip.this.recentIsShown ? 1 : 0) + i7);
                     if (childAt2 != null) {
-                        childAt2.layout(paddingLeft3, i5 - (childAt2.getMeasuredHeight() / 2), childAt2.getMeasuredWidth() + paddingLeft3, (childAt2.getMeasuredHeight() / 2) + i5);
+                        childAt2.layout(paddingLeft3, i6 - (childAt2.getMeasuredHeight() / 2), childAt2.getMeasuredWidth() + paddingLeft3, (childAt2.getMeasuredHeight() / 2) + i6);
                         paddingLeft3 += childAt2.getMeasuredWidth() + paddingLeft2;
                     }
-                    i6++;
+                    i7++;
                 }
             }
 
             @Override // android.widget.LinearLayout, android.view.View
-            protected void onMeasure(int i, int i2) {
+            protected void onMeasure(int i2, int i3) {
                 int makeMeasureSpec = View.MeasureSpec.makeMeasureSpec(99999999, Integer.MIN_VALUE);
                 int paddingLeft = (getPaddingLeft() + getPaddingRight()) - ((int) (EmojiTabsStrip.this.recentIsShown ? 0.0f : EmojiTabsStrip.this.recentTab.getAlpha() * AndroidUtilities.dp(33.0f)));
-                for (int i3 = 0; i3 < getChildCount(); i3++) {
-                    View childAt = getChildAt(i3);
+                for (int i4 = 0; i4 < getChildCount(); i4++) {
+                    View childAt = getChildAt(i4);
                     if (childAt != null) {
-                        childAt.measure(makeMeasureSpec, i2);
-                        paddingLeft += childAt.getMeasuredWidth() + (i3 + 1 < getChildCount() ? AndroidUtilities.dp(3.0f) : 0);
+                        childAt.measure(makeMeasureSpec, i3);
+                        paddingLeft += childAt.getMeasuredWidth() + (i4 + 1 < getChildCount() ? AndroidUtilities.dp(3.0f) : 0);
                     }
                 }
                 if (!z2) {
-                    setMeasuredDimension(View.MeasureSpec.getSize(i), View.MeasureSpec.getSize(i2));
+                    setMeasuredDimension(View.MeasureSpec.getSize(i2), View.MeasureSpec.getSize(i3));
                 } else {
-                    setMeasuredDimension(Math.max(paddingLeft, View.MeasureSpec.getSize(i)), View.MeasureSpec.getSize(i2));
+                    setMeasuredDimension(Math.max(paddingLeft, View.MeasureSpec.getSize(i2)), View.MeasureSpec.getSize(i3));
                 }
             }
 
@@ -241,8 +241,8 @@ public class EmojiTabsStrip extends ScrollableHorizontalScrollView {
                 return super.drawChild(canvas, view, j);
             }
 
-            private void getChildBounds(int i, RectF rectF) {
-                View childAt = getChildAt(MathUtils.clamp(i, 0, getChildCount() - 1));
+            private void getChildBounds(int i2, RectF rectF) {
+                View childAt = getChildAt(MathUtils.clamp(i2, 0, getChildCount() - 1));
                 rectF.set(childAt.getLeft(), childAt.getTop(), childAt.getRight(), childAt.getBottom());
                 rectF.set(rectF.centerX() - ((rectF.width() / 2.0f) * childAt.getScaleX()), rectF.centerY() - ((rectF.height() / 2.0f) * childAt.getScaleY()), rectF.centerX() + ((rectF.width() / 2.0f) * childAt.getScaleX()), rectF.centerY() + ((rectF.height() / 2.0f) * childAt.getScaleY()));
             }
@@ -253,6 +253,9 @@ public class EmojiTabsStrip extends ScrollableHorizontalScrollView {
         setVerticalScrollBarEnabled(false);
         setHorizontalScrollBarEnabled(false);
         addView(this.contentView);
+        if (i == 3) {
+            this.recentDrawableId = R.drawable.msg_emoji_smiles;
+        }
         LinearLayout linearLayout2 = this.contentView;
         EmojiTabButton emojiTabButton = new EmojiTabButton(context, this.recentDrawableId, false, false);
         this.recentTab = emojiTabButton;
@@ -277,12 +280,12 @@ public class EmojiTabsStrip extends ScrollableHorizontalScrollView {
             updateClickListeners();
             return;
         }
-        int i = 0;
+        int i2 = 0;
         while (true) {
             int[] iArr = emojiTabsDrawableIds;
-            if (i < iArr.length) {
-                this.contentView.addView(new EmojiTabButton(context, iArr[i], false, i == 0));
-                i++;
+            if (i2 < iArr.length) {
+                this.contentView.addView(new EmojiTabButton(context, iArr[i2], false, i2 == 0));
+                i2++;
             } else {
                 updateClickListeners();
                 return;

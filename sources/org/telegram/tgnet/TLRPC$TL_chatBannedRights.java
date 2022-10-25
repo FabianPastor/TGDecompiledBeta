@@ -6,6 +6,7 @@ public class TLRPC$TL_chatBannedRights extends TLObject {
     public boolean embed_links;
     public int flags;
     public boolean invite_users;
+    public boolean manage_topics;
     public boolean pin_messages;
     public boolean send_games;
     public boolean send_gifs;
@@ -45,10 +46,11 @@ public class TLRPC$TL_chatBannedRights extends TLObject {
         this.send_polls = (readInt32 & 256) != 0;
         this.change_info = (readInt32 & 1024) != 0;
         this.invite_users = (32768 & readInt32) != 0;
-        if ((readInt32 & 131072) != 0) {
+        this.pin_messages = (131072 & readInt32) != 0;
+        if ((readInt32 & 262144) != 0) {
             z2 = true;
         }
-        this.pin_messages = z2;
+        this.manage_topics = z2;
         this.until_date = abstractSerializedData.readInt32(z);
     }
 
@@ -79,7 +81,9 @@ public class TLRPC$TL_chatBannedRights extends TLObject {
         this.flags = i11;
         int i12 = this.pin_messages ? i11 | 131072 : i11 & (-131073);
         this.flags = i12;
-        abstractSerializedData.writeInt32(i12);
+        int i13 = this.manage_topics ? i12 | 262144 : i12 & (-262145);
+        this.flags = i13;
+        abstractSerializedData.writeInt32(i13);
         abstractSerializedData.writeInt32(this.until_date);
     }
 }
