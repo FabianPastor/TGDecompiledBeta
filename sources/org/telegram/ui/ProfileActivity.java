@@ -92,6 +92,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
+import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -292,6 +293,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private int actionBarAnimationColorFrom;
     private Paint actionBarBackgroundPaint;
     private int addMemberRow;
+    private int addToContactsRow;
     private int addToGroupButtonRow;
     private int addToGroupInfoRow;
     private int administratorsRow;
@@ -489,6 +491,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private boolean sharedMediaLayoutAttached;
     private SharedMediaLayout.SharedMediaPreloader sharedMediaPreloader;
     private int sharedMediaRow;
+    private boolean showAddToContacts;
     private ArrayList<Integer> sortedUsers;
     private int stickersRow;
     private int subscribersRequestsRow;
@@ -513,6 +516,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private int usernameRow;
     private boolean usersEndReached;
     private int usersForceShowingIn;
+    private String vcardFirstName;
+    private String vcardLastName;
+    private String vcardPhone;
     private Drawable verifiedCheckDrawable;
     private CrossfadeDrawable verifiedCrossfadeDrawable;
     private Drawable verifiedDrawable;
@@ -531,7 +537,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* JADX INFO: Access modifiers changed from: package-private */
-    public static /* synthetic */ void access$27200(ProfileActivity profileActivity, View view) {
+    public static /* synthetic */ void access$27300(ProfileActivity profileActivity, View view) {
         profileActivity.onTextDetailCellImageClicked(view);
     }
 
@@ -1466,6 +1472,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         this.banFromGroup = this.arguments.getLong("ban_chat_id", 0L);
         this.reportReactionMessageId = this.arguments.getInt("report_reaction_message_id", 0);
         this.reportReactionFromDialogId = this.arguments.getLong("report_reaction_from_dialog_id", 0L);
+        this.showAddToContacts = this.arguments.getBoolean("show_add_to_contacts");
+        this.vcardPhone = this.arguments.getString("vcard_phone");
+        this.vcardFirstName = this.arguments.getString("vcard_first_name");
+        this.vcardLastName = this.arguments.getString("vcard_last_name");
         this.reportSpam = this.arguments.getBoolean("reportSpam", false);
         if (!this.expandPhoto) {
             boolean z = this.arguments.getBoolean("expandPhoto", false);
@@ -3481,6 +3491,15 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             if (i2 >= 0) {
                 this.listAdapter.notifyItemChanged(i2);
             }
+        } else if (i == this.addToContactsRow) {
+            TLRPC$User user = getMessagesController().getUser(Long.valueOf(this.userId));
+            Bundle bundle = new Bundle();
+            bundle.putLong("user_id", user.id);
+            bundle.putBoolean("addContact", true);
+            bundle.putString("phone", PhoneFormat.stripExceptNumbers(this.vcardPhone));
+            bundle.putString("first_name_card", this.vcardFirstName);
+            bundle.putString("last_name_card", this.vcardLastName);
+            presentFragment(new ContactAddActivity(bundle, this.resourcesProvider));
         } else if (i == this.reportReactionRow) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity(), this.resourcesProvider);
             builder.setTitle(LocaleController.getString("ReportReaction", R.string.ReportReaction));
@@ -3517,9 +3536,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             }
         }
         if (i == this.settingsKeyRow) {
-            Bundle bundle = new Bundle();
-            bundle.putInt("chat_id", DialogObject.getEncryptedChatId(this.dialogId));
-            presentFragment(new IdenticonActivity(bundle));
+            Bundle bundle2 = new Bundle();
+            bundle2.putInt("chat_id", DialogObject.getEncryptedChatId(this.dialogId));
+            presentFragment(new IdenticonActivity(bundle2));
         } else if (i == this.settingsTimerRow) {
             showDialog(AlertsCreator.createTTLAlert(getParentActivity(), this.currentEncryptedChat, this.resourcesProvider).create());
         } else if (i == this.notificationsRow) {
@@ -3621,11 +3640,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 @Override // org.telegram.ui.Components.ChatNotificationsPopupWrapper.Callback
                 public void showCustomize() {
                     if (j != 0) {
-                        Bundle bundle2 = new Bundle();
-                        bundle2.putLong("dialog_id", j);
-                        bundle2.putInt("topic_id", ProfileActivity.this.topicId);
+                        Bundle bundle3 = new Bundle();
+                        bundle3.putLong("dialog_id", j);
+                        bundle3.putInt("topic_id", ProfileActivity.this.topicId);
                         ProfileActivity profileActivity = ProfileActivity.this;
-                        profileActivity.presentFragment(new ProfileNotificationsActivity(bundle2, profileActivity.resourcesProvider));
+                        profileActivity.presentFragment(new ProfileNotificationsActivity(bundle3, profileActivity.resourcesProvider));
                     }
                 }
 
@@ -3642,9 +3661,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
                 @Override // org.telegram.ui.Components.ChatNotificationsPopupWrapper.Callback
                 public void openExceptions() {
-                    Bundle bundle2 = new Bundle();
-                    bundle2.putLong("dialog_id", j);
-                    TopicsNotifySettingsFragments topicsNotifySettingsFragments = new TopicsNotifySettingsFragments(bundle2);
+                    Bundle bundle3 = new Bundle();
+                    bundle3.putLong("dialog_id", j);
+                    TopicsNotifySettingsFragments topicsNotifySettingsFragments = new TopicsNotifySettingsFragments(bundle3);
                     topicsNotifySettingsFragments.setExceptions(ProfileActivity.this.notificationsExceptionTopics);
                     ProfileActivity.this.presentFragment(topicsNotifySettingsFragments);
                 }
@@ -3697,26 +3716,26 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             getMessagesController().addUserToChat(this.currentChat.id, getUserConfig().getCurrentUser(), 0, null, this, null);
             NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.closeSearchByActiveAction, new Object[0]);
         } else if (i == this.subscribersRow) {
-            Bundle bundle2 = new Bundle();
-            bundle2.putLong("chat_id", this.chatId);
-            bundle2.putInt("type", 2);
-            ChatUsersActivity chatUsersActivity = new ChatUsersActivity(bundle2);
+            Bundle bundle3 = new Bundle();
+            bundle3.putLong("chat_id", this.chatId);
+            bundle3.putInt("type", 2);
+            ChatUsersActivity chatUsersActivity = new ChatUsersActivity(bundle3);
             chatUsersActivity.setInfo(this.chatInfo);
             presentFragment(chatUsersActivity);
         } else if (i == this.subscribersRequestsRow) {
             presentFragment(new MemberRequestsActivity(this.chatId));
         } else if (i == this.administratorsRow) {
-            Bundle bundle3 = new Bundle();
-            bundle3.putLong("chat_id", this.chatId);
-            bundle3.putInt("type", 1);
-            ChatUsersActivity chatUsersActivity2 = new ChatUsersActivity(bundle3);
+            Bundle bundle4 = new Bundle();
+            bundle4.putLong("chat_id", this.chatId);
+            bundle4.putInt("type", 1);
+            ChatUsersActivity chatUsersActivity2 = new ChatUsersActivity(bundle4);
             chatUsersActivity2.setInfo(this.chatInfo);
             presentFragment(chatUsersActivity2);
         } else if (i == this.blockedUsersRow) {
-            Bundle bundle4 = new Bundle();
-            bundle4.putLong("chat_id", this.chatId);
-            bundle4.putInt("type", 0);
-            ChatUsersActivity chatUsersActivity3 = new ChatUsersActivity(bundle4);
+            Bundle bundle5 = new Bundle();
+            bundle5.putLong("chat_id", this.chatId);
+            bundle5.putInt("type", 0);
+            ChatUsersActivity chatUsersActivity3 = new ChatUsersActivity(bundle5);
             chatUsersActivity3.setInfo(this.chatInfo);
             presentFragment(chatUsersActivity3);
         } else if (i == this.notificationRow) {
@@ -4072,52 +4091,21 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             int r8 = r7.numberRow
             java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
             org.telegram.ui.ProfileActivity$SearchAdapter r0 = r7.searchAdapter
-            boolean r0 = org.telegram.ui.ProfileActivity.SearchAdapter.access$28300(r0)
+            boolean r0 = org.telegram.ui.ProfileActivity.SearchAdapter.access$28400(r0)
             r1 = 0
             r2 = 1
             if (r0 == 0) goto L50
             org.telegram.ui.ProfileActivity$SearchAdapter r0 = r7.searchAdapter
-            java.util.ArrayList r0 = org.telegram.ui.ProfileActivity.SearchAdapter.access$28400(r0)
-            int r0 = r0.size()
-            if (r9 >= r0) goto L2b
-            org.telegram.ui.ProfileActivity$SearchAdapter r8 = r7.searchAdapter
-            java.util.ArrayList r8 = org.telegram.ui.ProfileActivity.SearchAdapter.access$28400(r8)
-            java.lang.Object r8 = r8.get(r9)
-            goto L9d
-        L2b:
-            org.telegram.ui.ProfileActivity$SearchAdapter r0 = r7.searchAdapter
-            java.util.ArrayList r0 = org.telegram.ui.ProfileActivity.SearchAdapter.access$28400(r0)
-            int r0 = r0.size()
-            int r0 = r0 + r2
-            int r9 = r9 - r0
-            if (r9 < 0) goto L9d
-            org.telegram.ui.ProfileActivity$SearchAdapter r0 = r7.searchAdapter
             java.util.ArrayList r0 = org.telegram.ui.ProfileActivity.SearchAdapter.access$28500(r0)
             int r0 = r0.size()
-            if (r9 >= r0) goto L9d
+            if (r9 >= r0) goto L2b
             org.telegram.ui.ProfileActivity$SearchAdapter r8 = r7.searchAdapter
             java.util.ArrayList r8 = org.telegram.ui.ProfileActivity.SearchAdapter.access$28500(r8)
             java.lang.Object r8 = r8.get(r9)
             goto L9d
-        L50:
+        L2b:
             org.telegram.ui.ProfileActivity$SearchAdapter r0 = r7.searchAdapter
-            java.util.ArrayList r0 = org.telegram.ui.ProfileActivity.SearchAdapter.access$28200(r0)
-            boolean r0 = r0.isEmpty()
-            if (r0 != 0) goto L5e
-            int r9 = r9 + (-1)
-        L5e:
-            if (r9 < 0) goto L77
-            org.telegram.ui.ProfileActivity$SearchAdapter r0 = r7.searchAdapter
-            java.util.ArrayList r0 = org.telegram.ui.ProfileActivity.SearchAdapter.access$28200(r0)
-            int r0 = r0.size()
-            if (r9 >= r0) goto L77
-            org.telegram.ui.ProfileActivity$SearchAdapter r8 = r7.searchAdapter
-            java.util.ArrayList r8 = org.telegram.ui.ProfileActivity.SearchAdapter.access$28200(r8)
-            java.lang.Object r8 = r8.get(r9)
-            goto L9d
-        L77:
-            org.telegram.ui.ProfileActivity$SearchAdapter r0 = r7.searchAdapter
-            java.util.ArrayList r0 = org.telegram.ui.ProfileActivity.SearchAdapter.access$28200(r0)
+            java.util.ArrayList r0 = org.telegram.ui.ProfileActivity.SearchAdapter.access$28500(r0)
             int r0 = r0.size()
             int r0 = r0 + r2
             int r9 = r9 - r0
@@ -4129,6 +4117,37 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             org.telegram.ui.ProfileActivity$SearchAdapter r8 = r7.searchAdapter
             java.util.ArrayList r8 = org.telegram.ui.ProfileActivity.SearchAdapter.access$28600(r8)
             java.lang.Object r8 = r8.get(r9)
+            goto L9d
+        L50:
+            org.telegram.ui.ProfileActivity$SearchAdapter r0 = r7.searchAdapter
+            java.util.ArrayList r0 = org.telegram.ui.ProfileActivity.SearchAdapter.access$28300(r0)
+            boolean r0 = r0.isEmpty()
+            if (r0 != 0) goto L5e
+            int r9 = r9 + (-1)
+        L5e:
+            if (r9 < 0) goto L77
+            org.telegram.ui.ProfileActivity$SearchAdapter r0 = r7.searchAdapter
+            java.util.ArrayList r0 = org.telegram.ui.ProfileActivity.SearchAdapter.access$28300(r0)
+            int r0 = r0.size()
+            if (r9 >= r0) goto L77
+            org.telegram.ui.ProfileActivity$SearchAdapter r8 = r7.searchAdapter
+            java.util.ArrayList r8 = org.telegram.ui.ProfileActivity.SearchAdapter.access$28300(r8)
+            java.lang.Object r8 = r8.get(r9)
+            goto L9d
+        L77:
+            org.telegram.ui.ProfileActivity$SearchAdapter r0 = r7.searchAdapter
+            java.util.ArrayList r0 = org.telegram.ui.ProfileActivity.SearchAdapter.access$28300(r0)
+            int r0 = r0.size()
+            int r0 = r0 + r2
+            int r9 = r9 - r0
+            if (r9 < 0) goto L9d
+            org.telegram.ui.ProfileActivity$SearchAdapter r0 = r7.searchAdapter
+            java.util.ArrayList r0 = org.telegram.ui.ProfileActivity.SearchAdapter.access$28700(r0)
+            int r0 = r0.size()
+            if (r9 >= r0) goto L9d
+            org.telegram.ui.ProfileActivity$SearchAdapter r8 = r7.searchAdapter
+            java.util.ArrayList r8 = org.telegram.ui.ProfileActivity.SearchAdapter.access$28700(r8)
+            java.lang.Object r8 = r8.get(r9)
             r9 = 0
             goto L9e
         L9d:
@@ -4138,7 +4157,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             if (r0 == 0) goto La9
             r0 = r8
             org.telegram.ui.ProfileActivity$SearchAdapter$SearchResult r0 = (org.telegram.ui.ProfileActivity.SearchAdapter.SearchResult) r0
-            org.telegram.ui.ProfileActivity.SearchAdapter.SearchResult.access$28700(r0)
+            org.telegram.ui.ProfileActivity.SearchAdapter.SearchResult.access$28800(r0)
             goto Lca
         La9:
             boolean r0 = r8 instanceof org.telegram.messenger.MessagesController.FaqSearchResult
@@ -4151,7 +4170,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r5 = 2
             java.lang.Object[] r5 = new java.lang.Object[r5]
             org.telegram.ui.ProfileActivity$SearchAdapter r6 = r7.searchAdapter
-            org.telegram.tgnet.TLRPC$WebPage r6 = org.telegram.ui.ProfileActivity.SearchAdapter.access$28800(r6)
+            org.telegram.tgnet.TLRPC$WebPage r6 = org.telegram.ui.ProfileActivity.SearchAdapter.access$28900(r6)
             r5[r1] = r6
             java.lang.String r0 = r0.url
             r5[r2] = r0
@@ -7078,7 +7097,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    /* JADX WARN: Code restructure failed: missing block: B:26:0x00e7, code lost:
+    /* JADX WARN: Code restructure failed: missing block: B:26:0x00e9, code lost:
         if ((r3 instanceof org.telegram.tgnet.TLRPC$TL_fileLocationToBeDeprecated) == false) goto L26;
      */
     /*
@@ -7087,7 +7106,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     */
     public void updateRowsIds() {
         /*
-            Method dump skipped, instructions count: 1575
+            Method dump skipped, instructions count: 1595
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ProfileActivity.updateRowsIds():void");
@@ -8021,7 +8040,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     textDetailCell2.setImageClickListener(new View.OnClickListener() { // from class: org.telegram.ui.ProfileActivity$ListAdapter$$ExternalSyntheticLambda0
                         @Override // android.view.View.OnClickListener
                         public final void onClick(View view) {
-                            ProfileActivity.access$27200(ProfileActivity.this, view);
+                            ProfileActivity.access$27300(ProfileActivity.this, view);
                         }
                     });
                     textDetailCell = textDetailCell2;
@@ -8217,7 +8236,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         */
         public void onBindViewHolder(androidx.recyclerview.widget.RecyclerView.ViewHolder r23, int r24) {
             /*
-                Method dump skipped, instructions count: 3342
+                Method dump skipped, instructions count: 3364
                 To view this dump add '--comments-level debug' option
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ProfileActivity.ListAdapter.onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder, int):void");
@@ -8318,7 +8337,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             if (i == ProfileActivity.this.userInfoRow || i == ProfileActivity.this.channelInfoRow || i == ProfileActivity.this.bioRow) {
                 return 3;
             }
-            if (i == ProfileActivity.this.settingsTimerRow || i == ProfileActivity.this.settingsKeyRow || i == ProfileActivity.this.reportRow || i == ProfileActivity.this.reportReactionRow || i == ProfileActivity.this.subscribersRow || i == ProfileActivity.this.subscribersRequestsRow || i == ProfileActivity.this.administratorsRow || i == ProfileActivity.this.blockedUsersRow || i == ProfileActivity.this.addMemberRow || i == ProfileActivity.this.joinRow || i == ProfileActivity.this.unblockRow || i == ProfileActivity.this.sendMessageRow || i == ProfileActivity.this.notificationRow || i == ProfileActivity.this.privacyRow || i == ProfileActivity.this.languageRow || i == ProfileActivity.this.dataRow || i == ProfileActivity.this.chatRow || i == ProfileActivity.this.questionRow || i == ProfileActivity.this.devicesRow || i == ProfileActivity.this.filtersRow || i == ProfileActivity.this.stickersRow || i == ProfileActivity.this.faqRow || i == ProfileActivity.this.policyRow || i == ProfileActivity.this.sendLogsRow || i == ProfileActivity.this.sendLastLogsRow || i == ProfileActivity.this.clearLogsRow || i == ProfileActivity.this.switchBackendRow || i == ProfileActivity.this.setAvatarRow || i == ProfileActivity.this.addToGroupButtonRow) {
+            if (i == ProfileActivity.this.settingsTimerRow || i == ProfileActivity.this.settingsKeyRow || i == ProfileActivity.this.reportRow || i == ProfileActivity.this.reportReactionRow || i == ProfileActivity.this.subscribersRow || i == ProfileActivity.this.subscribersRequestsRow || i == ProfileActivity.this.administratorsRow || i == ProfileActivity.this.blockedUsersRow || i == ProfileActivity.this.addMemberRow || i == ProfileActivity.this.joinRow || i == ProfileActivity.this.unblockRow || i == ProfileActivity.this.sendMessageRow || i == ProfileActivity.this.notificationRow || i == ProfileActivity.this.privacyRow || i == ProfileActivity.this.languageRow || i == ProfileActivity.this.dataRow || i == ProfileActivity.this.chatRow || i == ProfileActivity.this.questionRow || i == ProfileActivity.this.devicesRow || i == ProfileActivity.this.filtersRow || i == ProfileActivity.this.stickersRow || i == ProfileActivity.this.faqRow || i == ProfileActivity.this.policyRow || i == ProfileActivity.this.sendLogsRow || i == ProfileActivity.this.sendLastLogsRow || i == ProfileActivity.this.clearLogsRow || i == ProfileActivity.this.switchBackendRow || i == ProfileActivity.this.setAvatarRow || i == ProfileActivity.this.addToGroupButtonRow || i == ProfileActivity.this.addToContactsRow) {
                 return 4;
             }
             if (i == ProfileActivity.this.notificationsDividerRow) {
@@ -10370,23 +10389,24 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             put(47, ProfileActivity.this.sendMessageRow, sparseIntArray);
             put(48, ProfileActivity.this.reportRow, sparseIntArray);
             put(49, ProfileActivity.this.reportReactionRow, sparseIntArray);
-            put(50, ProfileActivity.this.settingsTimerRow, sparseIntArray);
-            put(51, ProfileActivity.this.settingsKeyRow, sparseIntArray);
-            put(52, ProfileActivity.this.secretSettingsSectionRow, sparseIntArray);
-            put(53, ProfileActivity.this.membersHeaderRow, sparseIntArray);
-            put(54, ProfileActivity.this.addMemberRow, sparseIntArray);
-            put(55, ProfileActivity.this.subscribersRow, sparseIntArray);
-            put(56, ProfileActivity.this.subscribersRequestsRow, sparseIntArray);
-            put(57, ProfileActivity.this.administratorsRow, sparseIntArray);
-            put(58, ProfileActivity.this.blockedUsersRow, sparseIntArray);
-            put(59, ProfileActivity.this.membersSectionRow, sparseIntArray);
-            put(60, ProfileActivity.this.sharedMediaRow, sparseIntArray);
-            put(61, ProfileActivity.this.unblockRow, sparseIntArray);
-            put(62, ProfileActivity.this.addToGroupButtonRow, sparseIntArray);
-            put(63, ProfileActivity.this.addToGroupInfoRow, sparseIntArray);
-            put(64, ProfileActivity.this.joinRow, sparseIntArray);
-            put(65, ProfileActivity.this.lastSectionRow, sparseIntArray);
-            put(66, ProfileActivity.this.notificationsSimpleRow, sparseIntArray);
+            put(50, ProfileActivity.this.addToContactsRow, sparseIntArray);
+            put(51, ProfileActivity.this.settingsTimerRow, sparseIntArray);
+            put(52, ProfileActivity.this.settingsKeyRow, sparseIntArray);
+            put(53, ProfileActivity.this.secretSettingsSectionRow, sparseIntArray);
+            put(54, ProfileActivity.this.membersHeaderRow, sparseIntArray);
+            put(55, ProfileActivity.this.addMemberRow, sparseIntArray);
+            put(56, ProfileActivity.this.subscribersRow, sparseIntArray);
+            put(57, ProfileActivity.this.subscribersRequestsRow, sparseIntArray);
+            put(58, ProfileActivity.this.administratorsRow, sparseIntArray);
+            put(59, ProfileActivity.this.blockedUsersRow, sparseIntArray);
+            put(60, ProfileActivity.this.membersSectionRow, sparseIntArray);
+            put(61, ProfileActivity.this.sharedMediaRow, sparseIntArray);
+            put(62, ProfileActivity.this.unblockRow, sparseIntArray);
+            put(63, ProfileActivity.this.addToGroupButtonRow, sparseIntArray);
+            put(64, ProfileActivity.this.addToGroupInfoRow, sparseIntArray);
+            put(65, ProfileActivity.this.joinRow, sparseIntArray);
+            put(66, ProfileActivity.this.lastSectionRow, sparseIntArray);
+            put(67, ProfileActivity.this.notificationsSimpleRow, sparseIntArray);
         }
 
         private void put(int i, int i2, SparseIntArray sparseIntArray) {

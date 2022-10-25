@@ -241,16 +241,16 @@ public class TopicCreateFragment extends BaseFragment {
         }
 
         /* JADX WARN: Code restructure failed: missing block: B:42:0x0100, code lost:
-            if (r11.topicForEdit.icon_emoji_id != r11.selectedEmojiDocumentId) goto L48;
+            if (r13.topicForEdit.icon_emoji_id != r13.selectedEmojiDocumentId) goto L48;
          */
         @Override // org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick
         /*
             Code decompiled incorrectly, please refer to instructions dump.
             To view partially-correct add '--show-bad-code' argument
         */
-        public void onItemClick(int r11) {
+        public void onItemClick(int r13) {
             /*
-                Method dump skipped, instructions count: 364
+                Method dump skipped, instructions count: 386
                 To view this dump add '--comments-level debug' option
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.TopicCreateFragment.AnonymousClass1.onItemClick(int):void");

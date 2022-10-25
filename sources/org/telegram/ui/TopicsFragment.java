@@ -162,6 +162,8 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
     ChatActivity.ThemeDelegate themeDelegate;
     private final TopicsController topicsController;
     StickerEmptyView topicsEmptyView;
+    private int transitionAnimationGlobalIndex;
+    private int transitionAnimationIndex;
     private ActionBarMenuItem unpinItem;
     private boolean updateAnimated;
 
@@ -879,26 +881,28 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
 
     private boolean showChatPreview(TopicDialogCell topicDialogCell) {
         topicDialogCell.performHapticFeedback(0);
-        final ActionBarPopupWindow.ActionBarPopupWindowLayout[] actionBarPopupWindowLayoutArr = {new ActionBarPopupWindow.ActionBarPopupWindowLayout(getParentActivity(), R.drawable.popup_fixed_alert, getResourceProvider(), 3)};
+        final ActionBarPopupWindow.ActionBarPopupWindowLayout[] actionBarPopupWindowLayoutArr = {new ActionBarPopupWindow.ActionBarPopupWindowLayout(getParentActivity(), R.drawable.popup_fixed_alert, getResourceProvider(), 1)};
         final TLRPC$TL_forumTopic tLRPC$TL_forumTopic = topicDialogCell.forumTopic;
         ChatNotificationsPopupWrapper chatNotificationsPopupWrapper = new ChatNotificationsPopupWrapper(getContext(), this.currentAccount, actionBarPopupWindowLayoutArr[0].getSwipeBack(), false, false, new AnonymousClass15(tLRPC$TL_forumTopic), getResourceProvider());
         final int addViewToSwipeBack = actionBarPopupWindowLayoutArr[0].addViewToSwipeBack(chatNotificationsPopupWrapper.windowLayout);
         chatNotificationsPopupWrapper.type = 1;
         chatNotificationsPopupWrapper.lambda$update$11(-this.chatId, tLRPC$TL_forumTopic.id, null);
-        ActionBarMenuSubItem actionBarMenuSubItem = new ActionBarMenuSubItem(getParentActivity(), true, false);
-        if (tLRPC$TL_forumTopic.pinned) {
-            actionBarMenuSubItem.setTextAndIcon(LocaleController.getString("DialogUnpin", R.string.DialogUnpin), R.drawable.msg_unpin);
-        } else {
-            actionBarMenuSubItem.setTextAndIcon(LocaleController.getString("DialogPin", R.string.DialogPin), R.drawable.msg_pin);
-        }
-        actionBarMenuSubItem.setMinimumWidth(160);
-        actionBarMenuSubItem.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.TopicsFragment$$ExternalSyntheticLambda4
-            @Override // android.view.View.OnClickListener
-            public final void onClick(View view) {
-                TopicsFragment.this.lambda$showChatPreview$4(tLRPC$TL_forumTopic, view);
+        if (ChatObject.canManageTopics(getCurrentChat())) {
+            ActionBarMenuSubItem actionBarMenuSubItem = new ActionBarMenuSubItem(getParentActivity(), true, false);
+            if (tLRPC$TL_forumTopic.pinned) {
+                actionBarMenuSubItem.setTextAndIcon(LocaleController.getString("DialogUnpin", R.string.DialogUnpin), R.drawable.msg_unpin);
+            } else {
+                actionBarMenuSubItem.setTextAndIcon(LocaleController.getString("DialogPin", R.string.DialogPin), R.drawable.msg_pin);
             }
-        });
-        actionBarPopupWindowLayoutArr[0].addView(actionBarMenuSubItem);
+            actionBarMenuSubItem.setMinimumWidth(160);
+            actionBarMenuSubItem.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.TopicsFragment$$ExternalSyntheticLambda4
+                @Override // android.view.View.OnClickListener
+                public final void onClick(View view) {
+                    TopicsFragment.this.lambda$showChatPreview$4(tLRPC$TL_forumTopic, view);
+                }
+            });
+            actionBarPopupWindowLayoutArr[0].addView(actionBarMenuSubItem);
+        }
         ActionBarMenuSubItem actionBarMenuSubItem2 = new ActionBarMenuSubItem(getParentActivity(), false, false);
         if (getMessagesController().isDialogMuted(-this.chatId, tLRPC$TL_forumTopic.id)) {
             actionBarMenuSubItem2.setTextAndIcon(LocaleController.getString("Unmute", R.string.Unmute), R.drawable.msg_mute);
@@ -913,32 +917,34 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
             }
         });
         actionBarPopupWindowLayoutArr[0].addView(actionBarMenuSubItem2);
-        ActionBarMenuSubItem actionBarMenuSubItem3 = new ActionBarMenuSubItem(getParentActivity(), false, false);
-        if (tLRPC$TL_forumTopic.closed) {
-            actionBarMenuSubItem3.setTextAndIcon(LocaleController.getString("RestartTopic", R.string.RestartTopic), R.drawable.msg_topic_restart);
-        } else {
-            actionBarMenuSubItem3.setTextAndIcon(LocaleController.getString("CloseTopic", R.string.CloseTopic), R.drawable.msg_topic_close);
+        if (ChatObject.canManageTopic(getCurrentChat(), tLRPC$TL_forumTopic)) {
+            ActionBarMenuSubItem actionBarMenuSubItem3 = new ActionBarMenuSubItem(getParentActivity(), false, false);
+            if (tLRPC$TL_forumTopic.closed) {
+                actionBarMenuSubItem3.setTextAndIcon(LocaleController.getString("RestartTopic", R.string.RestartTopic), R.drawable.msg_topic_restart);
+            } else {
+                actionBarMenuSubItem3.setTextAndIcon(LocaleController.getString("CloseTopic", R.string.CloseTopic), R.drawable.msg_topic_close);
+            }
+            actionBarMenuSubItem3.setMinimumWidth(160);
+            actionBarMenuSubItem3.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.TopicsFragment$$ExternalSyntheticLambda6
+                @Override // android.view.View.OnClickListener
+                public final void onClick(View view) {
+                    TopicsFragment.this.lambda$showChatPreview$6(tLRPC$TL_forumTopic, view);
+                }
+            });
+            actionBarPopupWindowLayoutArr[0].addView(actionBarMenuSubItem3);
+            ActionBarMenuSubItem actionBarMenuSubItem4 = new ActionBarMenuSubItem(getParentActivity(), false, true);
+            actionBarMenuSubItem4.setTextAndIcon(LocaleController.getString("DeleteTopics_one", R.string.DeleteTopics_one), R.drawable.msg_delete);
+            actionBarMenuSubItem4.setIconColor(getThemedColor("dialogRedIcon"));
+            actionBarMenuSubItem4.setTextColor(getThemedColor("dialogTextRed"));
+            actionBarMenuSubItem4.setMinimumWidth(160);
+            actionBarMenuSubItem4.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.TopicsFragment$$ExternalSyntheticLambda5
+                @Override // android.view.View.OnClickListener
+                public final void onClick(View view) {
+                    TopicsFragment.this.lambda$showChatPreview$8(tLRPC$TL_forumTopic, view);
+                }
+            });
+            actionBarPopupWindowLayoutArr[0].addView(actionBarMenuSubItem4);
         }
-        actionBarMenuSubItem3.setMinimumWidth(160);
-        actionBarMenuSubItem3.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.TopicsFragment$$ExternalSyntheticLambda6
-            @Override // android.view.View.OnClickListener
-            public final void onClick(View view) {
-                TopicsFragment.this.lambda$showChatPreview$6(tLRPC$TL_forumTopic, view);
-            }
-        });
-        actionBarPopupWindowLayoutArr[0].addView(actionBarMenuSubItem3);
-        ActionBarMenuSubItem actionBarMenuSubItem4 = new ActionBarMenuSubItem(getParentActivity(), false, true);
-        actionBarMenuSubItem4.setTextAndIcon(LocaleController.getString("DeleteTopics_one", R.string.DeleteTopics_one), R.drawable.msg_delete);
-        actionBarMenuSubItem4.setIconColor(getThemedColor("dialogRedIcon"));
-        actionBarMenuSubItem4.setTextColor(getThemedColor("dialogTextRed"));
-        actionBarMenuSubItem4.setMinimumWidth(160);
-        actionBarMenuSubItem4.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.TopicsFragment$$ExternalSyntheticLambda5
-            @Override // android.view.View.OnClickListener
-            public final void onClick(View view) {
-                TopicsFragment.this.lambda$showChatPreview$8(tLRPC$TL_forumTopic, view);
-            }
-        });
-        actionBarPopupWindowLayoutArr[0].addView(actionBarMenuSubItem4);
         Bundle bundle = new Bundle();
         bundle.putLong("chat_id", this.chatId);
         ChatActivity chatActivity = new ChatActivity(bundle);
@@ -1462,6 +1468,8 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
 
     @Override // org.telegram.ui.ActionBar.BaseFragment
     public void onFragmentDestroy() {
+        getNotificationCenter().onAnimationFinish(this.transitionAnimationIndex);
+        NotificationCenter.getGlobalInstance().onAnimationFinish(this.transitionAnimationGlobalIndex);
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.chatInfoDidLoad);
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.topicsDidLoaded);
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.updateInterfaces);
@@ -2303,8 +2311,17 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
     }
 
     @Override // org.telegram.ui.ActionBar.BaseFragment
+    public void onTransitionAnimationStart(boolean z, boolean z2) {
+        super.onTransitionAnimationStart(z, z2);
+        this.transitionAnimationIndex = getNotificationCenter().setAnimationInProgress(this.transitionAnimationIndex, new int[]{NotificationCenter.topicsDidLoaded});
+        this.transitionAnimationGlobalIndex = NotificationCenter.getGlobalInstance().setAnimationInProgress(this.transitionAnimationGlobalIndex, new int[0]);
+    }
+
+    @Override // org.telegram.ui.ActionBar.BaseFragment
     public void onTransitionAnimationEnd(boolean z, boolean z2) {
         super.onTransitionAnimationEnd(z, z2);
+        getNotificationCenter().onAnimationFinish(this.transitionAnimationIndex);
+        NotificationCenter.getGlobalInstance().onAnimationFinish(this.transitionAnimationGlobalIndex);
         if (z || !this.opnendForSelect || !this.removeFragmentOnTransitionEnd) {
             return;
         }

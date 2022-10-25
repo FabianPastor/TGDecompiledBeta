@@ -1127,7 +1127,7 @@ public class LNavigation extends FrameLayout implements INavigationLayout, Float
 
     @Override // org.telegram.ui.ActionBar.INavigationLayout
     public void showLastFragment() {
-        lambda$rebuildFragments$12(3);
+        lambda$rebuildFragments$12(1);
     }
 
     @Override // org.telegram.ui.ActionBar.INavigationLayout

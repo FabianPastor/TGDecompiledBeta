@@ -3954,6 +3954,8 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
             this.input.setGravity(19);
             this.input.setCursorWidth(1.5f);
             this.input.setMaxLines(1);
+            this.input.setSingleLine(true);
+            this.input.setLines(1);
             this.box.addView(this.input, LayoutHelper.createFrame(-1, -1.0f, 119, 36.0f, -1.0f, 32.0f, 0.0f));
             ImageView imageView2 = new ImageView(context);
             this.clear = imageView2;

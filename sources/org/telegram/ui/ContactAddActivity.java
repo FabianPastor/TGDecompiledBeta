@@ -39,8 +39,10 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
     private ContactAddActivityDelegate delegate;
     private View doneButton;
     private EditTextBoldCursor firstNameField;
+    private String firstNameFromCard;
     private TextView infoTextView;
     private EditTextBoldCursor lastNameField;
+    private String lastNameFromCard;
     private TextView nameTextView;
     private boolean needAddException;
     private TextView onlineTextView;
@@ -78,6 +80,8 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         getNotificationCenter().addObserver(this, NotificationCenter.updateInterfaces);
         this.user_id = getArguments().getLong("user_id", 0L);
         this.phone = getArguments().getString("phone");
+        this.firstNameFromCard = getArguments().getString("first_name_card");
+        this.lastNameFromCard = getArguments().getString("last_name_card");
         this.addContact = getArguments().getBoolean("addContact", false);
         SharedPreferences notificationsSettings = MessagesController.getNotificationsSettings(this.currentAccount);
         this.needAddException = notificationsSettings.getBoolean("dialog_bar_exception" + this.user_id, false);
@@ -206,6 +210,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
                 this.focused = z3;
             }
         });
+        this.firstNameField.setText(this.firstNameFromCard);
         EditTextBoldCursor editTextBoldCursor2 = new EditTextBoldCursor(context) { // from class: org.telegram.ui.ContactAddActivity.4
             @Override // org.telegram.ui.Components.EditTextBoldCursor
             protected Theme.ResourcesProvider getResourcesProvider() {
@@ -237,8 +242,9 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
                 return lambda$createView$2;
             }
         });
+        this.lastNameField.setText(this.lastNameFromCard);
         TLRPC$User user = getMessagesController().getUser(Long.valueOf(this.user_id));
-        if (user != null) {
+        if (user != null && this.firstNameFromCard == null && this.lastNameFromCard == null) {
             if (user.phone == null && (str = this.phone) != null) {
                 user.phone = PhoneFormat.stripExceptNumbers(str);
             }
@@ -253,7 +259,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         this.infoTextView.setTextSize(1, 14.0f);
         this.infoTextView.setGravity(LocaleController.isRTL ? 5 : 3);
         if (this.addContact) {
-            if (!this.needAddException || TextUtils.isEmpty(user.phone)) {
+            if (!this.needAddException || TextUtils.isEmpty(getPhone())) {
                 linearLayout.addView(this.infoTextView, LayoutHelper.createLinear(-1, -2, 24.0f, 18.0f, 24.0f, 0.0f));
             }
             if (this.needAddException) {
@@ -309,13 +315,13 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         if (this.nameTextView == null || (user = getMessagesController().getUser(Long.valueOf(this.user_id))) == null) {
             return;
         }
-        if (TextUtils.isEmpty(user.phone)) {
+        if (TextUtils.isEmpty(getPhone())) {
             this.nameTextView.setText(LocaleController.getString("MobileHidden", R.string.MobileHidden));
             this.infoTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("MobileHiddenExceptionInfo", R.string.MobileHiddenExceptionInfo, UserObject.getFirstName(user))));
         } else {
             TextView textView = this.nameTextView;
             PhoneFormat phoneFormat = PhoneFormat.getInstance();
-            textView.setText(phoneFormat.format("+" + user.phone));
+            textView.setText(phoneFormat.format("+" + getPhone()));
             if (this.needAddException) {
                 this.infoTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("MobileVisibleInfo", R.string.MobileVisibleInfo, UserObject.getFirstName(user))));
             }
@@ -325,6 +331,11 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         AvatarDrawable avatarDrawable = new AvatarDrawable(user);
         this.avatarDrawable = avatarDrawable;
         backupImageView.setForUserOrChat(user, avatarDrawable);
+    }
+
+    private String getPhone() {
+        TLRPC$User user = getMessagesController().getUser(Long.valueOf(this.user_id));
+        return (user == null || TextUtils.isEmpty(user.phone)) ? this.phone : user.phone;
     }
 
     @Override // org.telegram.messenger.NotificationCenter.NotificationCenterDelegate

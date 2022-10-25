@@ -182,32 +182,30 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         AndroidUtilities.removeAdjustResize(getParentActivity(), this.classGuid);
     }
 
-    /* JADX WARN: Removed duplicated region for block: B:14:0x0213  */
-    /* JADX WARN: Removed duplicated region for block: B:15:0x0215  */
-    /* JADX WARN: Removed duplicated region for block: B:18:0x0232  */
-    /* JADX WARN: Removed duplicated region for block: B:19:0x0234  */
-    /* JADX WARN: Removed duplicated region for block: B:22:0x0261  */
-    /* JADX WARN: Removed duplicated region for block: B:23:0x0263  */
-    /* JADX WARN: Removed duplicated region for block: B:26:0x02c1  */
-    /* JADX WARN: Removed duplicated region for block: B:27:0x02c4  */
-    /* JADX WARN: Removed duplicated region for block: B:30:0x0327  */
-    /* JADX WARN: Removed duplicated region for block: B:31:0x032a  */
-    /* JADX WARN: Removed duplicated region for block: B:34:0x0355  */
-    /* JADX WARN: Removed duplicated region for block: B:37:0x0400  */
-    /* JADX WARN: Removed duplicated region for block: B:38:0x0403  */
+    /* JADX WARN: Removed duplicated region for block: B:16:0x0217  */
+    /* JADX WARN: Removed duplicated region for block: B:17:0x0219  */
+    /* JADX WARN: Removed duplicated region for block: B:20:0x0236  */
+    /* JADX WARN: Removed duplicated region for block: B:21:0x0238  */
+    /* JADX WARN: Removed duplicated region for block: B:24:0x0265  */
+    /* JADX WARN: Removed duplicated region for block: B:25:0x0267  */
+    /* JADX WARN: Removed duplicated region for block: B:28:0x02c5  */
+    /* JADX WARN: Removed duplicated region for block: B:29:0x02c8  */
+    /* JADX WARN: Removed duplicated region for block: B:32:0x032b  */
+    /* JADX WARN: Removed duplicated region for block: B:33:0x032e  */
+    /* JADX WARN: Removed duplicated region for block: B:36:0x0359  */
+    /* JADX WARN: Removed duplicated region for block: B:39:0x0404  */
     /* JADX WARN: Removed duplicated region for block: B:40:0x0407  */
-    /* JADX WARN: Removed duplicated region for block: B:41:0x040a  */
-    /* JADX WARN: Removed duplicated region for block: B:44:0x0429  */
-    /* JADX WARN: Removed duplicated region for block: B:47:0x045f  */
-    /* JADX WARN: Removed duplicated region for block: B:48:0x0464  */
-    /* JADX WARN: Removed duplicated region for block: B:50:0x046a  */
-    /* JADX WARN: Removed duplicated region for block: B:51:0x046d  */
-    /* JADX WARN: Removed duplicated region for block: B:54:0x051a  */
-    /* JADX WARN: Removed duplicated region for block: B:55:0x0528  */
-    /* JADX WARN: Removed duplicated region for block: B:58:0x0532  */
-    /* JADX WARN: Removed duplicated region for block: B:59:0x0540  */
-    /* JADX WARN: Removed duplicated region for block: B:62:0x055f  */
-    /* JADX WARN: Removed duplicated region for block: B:63:0x0572  */
+    /* JADX WARN: Removed duplicated region for block: B:42:0x040b  */
+    /* JADX WARN: Removed duplicated region for block: B:43:0x040e  */
+    /* JADX WARN: Removed duplicated region for block: B:46:0x042d  */
+    /* JADX WARN: Removed duplicated region for block: B:49:0x0463  */
+    /* JADX WARN: Removed duplicated region for block: B:50:0x0468  */
+    /* JADX WARN: Removed duplicated region for block: B:52:0x046e  */
+    /* JADX WARN: Removed duplicated region for block: B:53:0x0471  */
+    /* JADX WARN: Removed duplicated region for block: B:62:0x053a  */
+    /* JADX WARN: Removed duplicated region for block: B:63:0x0556  */
+    /* JADX WARN: Removed duplicated region for block: B:66:0x0575  */
+    /* JADX WARN: Removed duplicated region for block: B:67:0x0588  */
     @Override // org.telegram.ui.ActionBar.BaseFragment
     /*
         Code decompiled incorrectly, please refer to instructions dump.
@@ -215,7 +213,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
     */
     public android.view.View createView(android.content.Context r32) {
         /*
-            Method dump skipped, instructions count: 1411
+            Method dump skipped, instructions count: 1433
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.TwoStepVerificationActivity.createView(android.content.Context):android.view.View");
