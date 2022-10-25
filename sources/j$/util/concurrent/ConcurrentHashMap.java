@@ -133,9 +133,8 @@ public class ConcurrentHashMap<K, V> extends AbstractMap<K, V> implements Concur
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: package-private */
     /* loaded from: classes2.dex */
-    public static final class e extends b implements Set, InterfaceCLASSNAMEb {
+    static final class e extends b implements Set, InterfaceCLASSNAMEb {
         e(ConcurrentHashMap concurrentHashMap) {
             super(concurrentHashMap);
         }

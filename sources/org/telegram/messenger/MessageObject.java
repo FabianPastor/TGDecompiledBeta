@@ -165,6 +165,7 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.ChatMessageCell;
 import org.telegram.ui.Components.AnimatedEmojiDrawable;
 import org.telegram.ui.Components.AnimatedEmojiSpan;
+import org.telegram.ui.Components.Forum.ForumBubbleDrawable;
 import org.telegram.ui.Components.Forum.ForumUtilities;
 import org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble;
 import org.telegram.ui.Components.Reactions.ReactionsUtils;
@@ -240,7 +241,6 @@ public class MessageObject {
     private boolean hasUnwrappedEmoji;
     public boolean hideSendersName;
     public ArrayList<String> highlightedWords;
-    public boolean isCreateTopicStubMessage;
     public boolean isDateObject;
     public boolean isDownloadingFile;
     public boolean isReactionPush;
@@ -267,6 +267,7 @@ public class MessageObject {
     public ImageLocation mediaThumb;
     public TLRPC$Message messageOwner;
     public CharSequence messageText;
+    public CharSequence messageTextShort;
     public String messageTrimmedToHighlight;
     public String monthKey;
     public int parentWidth;
@@ -305,7 +306,7 @@ public class MessageObject {
     public ArrayList<TextLayoutBlock> textLayoutBlocks;
     public int textWidth;
     public float textXOffset;
-    public String topicName;
+    public ForumBubbleDrawable[] topicIconDrawable;
     private int totalAnimatedEmojiCount;
     public int type;
     public boolean useCustomPhoto;
@@ -765,7 +766,9 @@ public class MessageObject {
     public MessageObject(int i, TLRPC$Message tLRPC$Message, String str, String str2, String str3, boolean z, boolean z2, boolean z3, boolean z4) {
         this.type = 1000;
         this.forceSeekTo = -1.0f;
-        this.localType = z ? 2 : 1;
+        int i2 = 1;
+        this.topicIconDrawable = new ForumBubbleDrawable[1];
+        this.localType = z ? 2 : i2;
         this.currentAccount = i;
         this.localName = str2;
         this.localUserName = str3;
@@ -808,6 +811,7 @@ public class MessageObject {
         TextPaint textPaint;
         this.type = 1000;
         this.forceSeekTo = -1.0f;
+        this.topicIconDrawable = new ForumBubbleDrawable[1];
         Theme.createCommonMessageResources();
         this.currentAccount = i;
         this.messageOwner = tLRPC$Message;
@@ -1104,16 +1108,16 @@ public class MessageObject {
         this.totalAnimatedEmojiCount = 0;
     }
 
-    /* JADX WARN: Removed duplicated region for block: B:185:0x04b5  */
-    /* JADX WARN: Removed duplicated region for block: B:190:0x04c9  */
-    /* JADX WARN: Removed duplicated region for block: B:194:0x04cf A[LOOP:0: B:170:0x0482->B:194:0x04cf, LOOP_END] */
-    /* JADX WARN: Removed duplicated region for block: B:468:0x0ca2  */
-    /* JADX WARN: Removed duplicated region for block: B:800:0x15ee  */
-    /* JADX WARN: Removed duplicated region for block: B:803:0x163c  */
-    /* JADX WARN: Removed duplicated region for block: B:805:0x163f  */
-    /* JADX WARN: Removed duplicated region for block: B:817:0x16bb  */
-    /* JADX WARN: Removed duplicated region for block: B:821:0x16c2  */
-    /* JADX WARN: Removed duplicated region for block: B:846:0x04e8 A[EDGE_INSN: B:846:0x04e8->B:196:0x04e8 ?: BREAK  , SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:185:0x04b9  */
+    /* JADX WARN: Removed duplicated region for block: B:190:0x04cd  */
+    /* JADX WARN: Removed duplicated region for block: B:194:0x04d3 A[LOOP:0: B:170:0x0486->B:194:0x04d3, LOOP_END] */
+    /* JADX WARN: Removed duplicated region for block: B:468:0x0ca6  */
+    /* JADX WARN: Removed duplicated region for block: B:800:0x15f2  */
+    /* JADX WARN: Removed duplicated region for block: B:803:0x1640  */
+    /* JADX WARN: Removed duplicated region for block: B:805:0x1643  */
+    /* JADX WARN: Removed duplicated region for block: B:817:0x16bf  */
+    /* JADX WARN: Removed duplicated region for block: B:821:0x16c6  */
+    /* JADX WARN: Removed duplicated region for block: B:846:0x04ec A[EDGE_INSN: B:846:0x04ec->B:196:0x04ec ?: BREAK  , SYNTHETIC] */
     /* JADX WARN: Removed duplicated region for block: B:855:? A[RETURN, SYNTHETIC] */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
@@ -1121,7 +1125,7 @@ public class MessageObject {
     */
     public MessageObject(int r26, org.telegram.tgnet.TLRPC$TL_channelAdminLogEvent r27, java.util.ArrayList<org.telegram.messenger.MessageObject> r28, java.util.HashMap<java.lang.String, java.util.ArrayList<org.telegram.messenger.MessageObject>> r29, org.telegram.tgnet.TLRPC$Chat r30, int[] r31, boolean r32) {
         /*
-            Method dump skipped, instructions count: 5974
+            Method dump skipped, instructions count: 5979
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessageObject.<init>(int, org.telegram.tgnet.TLRPC$TL_channelAdminLogEvent, java.util.ArrayList, java.util.HashMap, org.telegram.tgnet.TLRPC$Chat, int[], boolean):void");
@@ -2003,8 +2007,8 @@ public class MessageObject {
     /* JADX WARN: Removed duplicated region for block: B:250:0x069a  */
     /* JADX WARN: Removed duplicated region for block: B:280:0x0763  */
     /* JADX WARN: Removed duplicated region for block: B:284:0x079b  */
-    /* JADX WARN: Removed duplicated region for block: B:528:0x0e01  */
-    /* JADX WARN: Removed duplicated region for block: B:632:0x108a  */
+    /* JADX WARN: Removed duplicated region for block: B:528:0x0e49  */
+    /* JADX WARN: Removed duplicated region for block: B:632:0x10d2  */
     /* JADX WARN: Removed duplicated region for block: B:652:? A[RETURN, SYNTHETIC] */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
@@ -2012,7 +2016,7 @@ public class MessageObject {
     */
     private void updateMessageText(java.util.AbstractMap<java.lang.Long, org.telegram.tgnet.TLRPC$User> r21, java.util.AbstractMap<java.lang.Long, org.telegram.tgnet.TLRPC$Chat> r22, androidx.collection.LongSparseArray<org.telegram.tgnet.TLRPC$User> r23, androidx.collection.LongSparseArray<org.telegram.tgnet.TLRPC$Chat> r24) {
         /*
-            Method dump skipped, instructions count: 4237
+            Method dump skipped, instructions count: 4309
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessageObject.updateMessageText(java.util.AbstractMap, java.util.AbstractMap, androidx.collection.LongSparseArray, androidx.collection.LongSparseArray):void");
@@ -2587,7 +2591,7 @@ public class MessageObject {
                     str3 = "invite";
                     tLRPC$TL_chatInviteExported = tLRPC$TL_chatInviteExported2;
                 } else if (tLObject instanceof TLRPC$ForumTopic) {
-                    charSequence2 = ForumUtilities.getForumSpannedName((TLRPC$ForumTopic) tLObject, null);
+                    charSequence2 = ForumUtilities.getTopicSpannedName((TLRPC$ForumTopic) tLObject, null);
                     str3 = "topic";
                     tLRPC$TL_chatInviteExported = tLObject;
                 } else {
@@ -5237,11 +5241,13 @@ public class MessageObject {
         if (arrayList.isEmpty() || !arrayList.contains(tLRPC$ReactionCount) || !z) {
             int maxUserReactionsCount = MessagesController.getInstance(this.currentAccount).getMaxUserReactionsCount();
             if (!arrayList.isEmpty() && (arrayList.contains(tLRPC$ReactionCount) || z2)) {
-                tLRPC$ReactionCount.chosen = false;
-                int i4 = tLRPC$ReactionCount.count - 1;
-                tLRPC$ReactionCount.count = i4;
-                if (i4 <= 0) {
-                    this.messageOwner.reactions.results.remove(tLRPC$ReactionCount);
+                if (tLRPC$ReactionCount != null) {
+                    tLRPC$ReactionCount.chosen = false;
+                    int i4 = tLRPC$ReactionCount.count - 1;
+                    tLRPC$ReactionCount.count = i4;
+                    if (i4 <= 0) {
+                        this.messageOwner.reactions.results.remove(tLRPC$ReactionCount);
+                    }
                 }
                 if (this.messageOwner.reactions.can_see_list) {
                     int i5 = 0;

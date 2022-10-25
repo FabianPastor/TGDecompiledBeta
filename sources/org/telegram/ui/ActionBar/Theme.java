@@ -359,6 +359,7 @@ public class Theme {
     public static Paint dialogs_tabletSeletedPaint = null;
     public static TextPaint dialogs_timePaint = null;
     public static RLottieDrawable dialogs_unarchiveDrawable = null;
+    public static Drawable dialogs_unmuteDrawable = null;
     public static RLottieDrawable dialogs_unpinArchiveDrawable = null;
     public static Drawable dialogs_verifiedCheckDrawable = null;
     public static Drawable dialogs_verifiedDrawable = null;
@@ -5345,6 +5346,7 @@ public class Theme {
             dialogs_errorDrawable = resources.getDrawable(R.drawable.list_warning_sign);
             dialogs_reorderDrawable = resources.getDrawable(R.drawable.list_reorder).mutate();
             dialogs_muteDrawable = resources.getDrawable(R.drawable.list_mute).mutate();
+            dialogs_unmuteDrawable = resources.getDrawable(R.drawable.list_unmute).mutate();
             dialogs_verifiedDrawable = resources.getDrawable(R.drawable.verified_area).mutate();
             dialogs_scamDrawable = new ScamDrawable(11, 0);
             dialogs_fakeDrawable = new ScamDrawable(11, 1);
@@ -5425,6 +5427,7 @@ public class Theme {
         setDrawableColorByKey(dialogs_pinnedDrawable, "chats_pinnedIcon");
         setDrawableColorByKey(dialogs_reorderDrawable, "chats_pinnedIcon");
         setDrawableColorByKey(dialogs_muteDrawable, "chats_muteIcon");
+        setDrawableColorByKey(dialogs_unmuteDrawable, "chats_muteIcon");
         setDrawableColorByKey(dialogs_mentionDrawable, "chats_mentionIcon");
         setDrawableColorByKey(dialogs_reactionsMentionDrawable, "chats_mentionIcon");
         setDrawableColorByKey(dialogs_verifiedDrawable, "chats_verifiedBackground");

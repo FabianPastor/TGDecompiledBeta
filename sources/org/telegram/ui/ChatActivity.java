@@ -908,7 +908,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private boolean waitingForSendingMessageLoad;
     private boolean wasManualScroll;
     private boolean wasPaused;
-    private static final int[] allowedNotificationsDuringChatListAnimations = {NotificationCenter.messagesRead, NotificationCenter.threadMessagesRead, NotificationCenter.commentsRead, NotificationCenter.messagesReadEncrypted, NotificationCenter.messagesReadContent, NotificationCenter.didLoadPinnedMessages, NotificationCenter.newDraftReceived, NotificationCenter.updateMentionsCount, NotificationCenter.didUpdateConnectionState, NotificationCenter.updateInterfaces, NotificationCenter.updateDefaultSendAsPeer, NotificationCenter.closeChats, NotificationCenter.chatInfoCantLoad, NotificationCenter.userInfoDidLoad, NotificationCenter.pinnedInfoDidLoad, NotificationCenter.didSetNewWallpapper, NotificationCenter.didApplyNewTheme};
+    private static final int[] allowedNotificationsDuringChatListAnimations = {NotificationCenter.messagesRead, NotificationCenter.threadMessagesRead, NotificationCenter.commentsRead, NotificationCenter.messagesReadEncrypted, NotificationCenter.messagesReadContent, NotificationCenter.didLoadPinnedMessages, NotificationCenter.newDraftReceived, NotificationCenter.updateMentionsCount, NotificationCenter.didUpdateConnectionState, NotificationCenter.updateDefaultSendAsPeer, NotificationCenter.closeChats, NotificationCenter.chatInfoCantLoad, NotificationCenter.userInfoDidLoad, NotificationCenter.pinnedInfoDidLoad, NotificationCenter.didSetNewWallpapper, NotificationCenter.didApplyNewTheme};
     private static boolean replacingChatActivity = false;
 
     /* JADX INFO: Access modifiers changed from: private */
@@ -5298,7 +5298,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 } else {
                     ChatActivity.this.newMentionsCount = 0;
                 }
-                messagesStorage.resetMentionsCount(ChatActivity.this.dialog_id, ChatActivity.this.newMentionsCount);
+                messagesStorage.resetMentionsCount(ChatActivity.this.dialog_id, ChatActivity.this.getTopicId(), ChatActivity.this.newMentionsCount);
                 if (ChatActivity.this.newMentionsCount == 0) {
                     ChatActivity.this.hasAllMentionsLocal = true;
                     ChatActivity.this.showMentionDownButton(false, true);
@@ -5353,7 +5353,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
         }
         this.newMentionsCount = 0;
-        getMessagesController().markMentionsAsRead(this.dialog_id);
+        getMessagesController().markMentionsAsRead(this.dialog_id, getTopicId());
         this.hasAllMentionsLocal = true;
         showMentionDownButton(false, true);
         ActionBarPopupWindow actionBarPopupWindow = this.scrimPopupWindow;
@@ -9580,13 +9580,22 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
     /* JADX INFO: Access modifiers changed from: private */
     public void checkScrollForLoad(boolean z) {
-        GridLayoutManagerFixed gridLayoutManagerFixed = this.chatLayoutManager;
-        if (gridLayoutManagerFixed == null || this.paused || this.chatAdapter.isFrozen) {
+        if (this.chatLayoutManager == null || this.paused || this.chatAdapter.isFrozen) {
             return;
         }
-        int findFirstVisibleItemPosition = gridLayoutManagerFixed.findFirstVisibleItemPosition();
-        int abs = findFirstVisibleItemPosition == -1 ? 0 : Math.abs(this.chatLayoutManager.findLastVisibleItemPosition() - findFirstVisibleItemPosition) + 1;
-        if ((this.chatAdapter.getItemCount() - findFirstVisibleItemPosition) - abs <= (z ? 25 : 5) && !this.loading) {
+        int i = -1;
+        int i2 = 0;
+        for (int i3 = 0; i3 < this.chatListView.getChildCount(); i3++) {
+            RecyclerListView recyclerListView = this.chatListView;
+            int childAdapterPosition = recyclerListView.getChildAdapterPosition(recyclerListView.getChildAt(i3));
+            if (childAdapterPosition != -1) {
+                if (i == -1 || childAdapterPosition < i) {
+                    i = childAdapterPosition;
+                }
+                i2++;
+            }
+        }
+        if ((this.chatAdapter.getItemCount() - i) - i2 <= (z ? 25 : 5) && !this.loading) {
             boolean[] zArr = this.endReached;
             if (!zArr[0]) {
                 this.loading = true;
@@ -9595,79 +9604,78 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     MessagesController messagesController = getMessagesController();
                     long j = this.dialog_id;
                     long j2 = this.mergeDialogId;
-                    int i = this.maxMessageId[0];
+                    int i4 = this.maxMessageId[0];
                     boolean z2 = !this.cacheEndReached[0];
-                    int i2 = this.minDate[0];
-                    int i3 = this.classGuid;
-                    int i4 = this.chatMode;
-                    int i5 = this.threadMessageId;
-                    int i6 = this.replyMaxReadId;
-                    int i7 = this.lastLoadIndex;
-                    this.lastLoadIndex = i7 + 1;
-                    messagesController.loadMessages(j, j2, false, 50, i, 0, z2, i2, i3, 0, 0, i4, i5, i6, i7, this.isTopic);
+                    int i5 = this.minDate[0];
+                    int i6 = this.classGuid;
+                    int i7 = this.chatMode;
+                    int i8 = this.threadMessageId;
+                    int i9 = this.replyMaxReadId;
+                    int i10 = this.lastLoadIndex;
+                    this.lastLoadIndex = i10 + 1;
+                    messagesController.loadMessages(j, j2, false, 50, i4, 0, z2, i5, i6, 0, 0, i7, i8, i9, i10, this.isTopic);
                 } else {
                     MessagesController messagesController2 = getMessagesController();
                     long j3 = this.dialog_id;
                     long j4 = this.mergeDialogId;
                     boolean z3 = !this.cacheEndReached[0];
-                    int i8 = this.minDate[0];
-                    int i9 = this.classGuid;
-                    int i10 = this.chatMode;
-                    int i11 = this.threadMessageId;
-                    int i12 = this.replyMaxReadId;
-                    int i13 = this.lastLoadIndex;
-                    this.lastLoadIndex = i13 + 1;
-                    messagesController2.loadMessages(j3, j4, false, 50, 0, 0, z3, i8, i9, 0, 0, i10, i11, i12, i13, this.isTopic);
+                    int i11 = this.minDate[0];
+                    int i12 = this.classGuid;
+                    int i13 = this.chatMode;
+                    int i14 = this.threadMessageId;
+                    int i15 = this.replyMaxReadId;
+                    int i16 = this.lastLoadIndex;
+                    this.lastLoadIndex = i16 + 1;
+                    messagesController2.loadMessages(j3, j4, false, 50, 0, 0, z3, i11, i12, 0, 0, i13, i14, i15, i16, this.isTopic);
                 }
             } else if (this.mergeDialogId != 0 && !zArr[1]) {
                 this.loading = true;
                 this.waitingForLoad.add(Integer.valueOf(this.lastLoadIndex));
                 MessagesController messagesController3 = getMessagesController();
                 long j5 = this.mergeDialogId;
-                int i14 = this.maxMessageId[1];
+                int i17 = this.maxMessageId[1];
                 boolean z4 = !this.cacheEndReached[1];
-                int i15 = this.minDate[1];
-                int i16 = this.classGuid;
-                int i17 = this.chatMode;
-                int i18 = this.threadMessageId;
-                int i19 = this.replyMaxReadId;
-                int i20 = this.lastLoadIndex;
-                this.lastLoadIndex = i20 + 1;
-                messagesController3.loadMessages(j5, 0L, false, 50, i14, 0, z4, i15, i16, 0, 0, i17, i18, i19, i20, this.isTopic);
+                int i18 = this.minDate[1];
+                int i19 = this.classGuid;
+                int i20 = this.chatMode;
+                int i21 = this.threadMessageId;
+                int i22 = this.replyMaxReadId;
+                int i23 = this.lastLoadIndex;
+                this.lastLoadIndex = i23 + 1;
+                messagesController3.loadMessages(j5, 0L, false, 50, i17, 0, z4, i18, i19, 0, 0, i20, i21, i22, i23, this.isTopic);
             }
         }
-        if (abs <= 0 || this.loadingForward || findFirstVisibleItemPosition > 10) {
+        if (i2 <= 0 || this.loadingForward || i > 10) {
             return;
         }
         if (this.mergeDialogId != 0 && !this.forwardEndReached[1]) {
             this.waitingForLoad.add(Integer.valueOf(this.lastLoadIndex));
             MessagesController messagesController4 = getMessagesController();
             long j6 = this.mergeDialogId;
-            int i21 = this.minMessageId[1];
-            int i22 = this.maxDate[1];
-            int i23 = this.classGuid;
-            int i24 = this.chatMode;
-            int i25 = this.threadMessageId;
-            int i26 = this.replyMaxReadId;
-            int i27 = this.lastLoadIndex;
-            this.lastLoadIndex = i27 + 1;
-            messagesController4.loadMessages(j6, 0L, false, 50, i21, 0, true, i22, i23, 1, 0, i24, i25, i26, i27, this.isTopic);
+            int i24 = this.minMessageId[1];
+            int i25 = this.maxDate[1];
+            int i26 = this.classGuid;
+            int i27 = this.chatMode;
+            int i28 = this.threadMessageId;
+            int i29 = this.replyMaxReadId;
+            int i30 = this.lastLoadIndex;
+            this.lastLoadIndex = i30 + 1;
+            messagesController4.loadMessages(j6, 0L, false, 50, i24, 0, true, i25, i26, 1, 0, i27, i28, i29, i30, this.isTopic);
             this.loadingForward = true;
-        } else if (this.forwardEndReached[0]) {
-        } else {
+        } else if (!this.forwardEndReached[0]) {
             this.waitingForLoad.add(Integer.valueOf(this.lastLoadIndex));
             MessagesController messagesController5 = getMessagesController();
             long j7 = this.dialog_id;
             long j8 = this.mergeDialogId;
-            int i28 = this.minMessageId[0];
-            int i29 = this.maxDate[0];
-            int i30 = this.classGuid;
-            int i31 = this.chatMode;
-            int i32 = this.threadMessageId;
-            int i33 = this.replyMaxReadId;
-            int i34 = this.lastLoadIndex;
-            this.lastLoadIndex = i34 + 1;
-            messagesController5.loadMessages(j7, j8, false, 50, i28, 0, true, i29, i30, 1, 0, i31, i32, i33, i34, this.isTopic);
+            int i31 = this.minMessageId[0];
+            int i32 = this.maxDate[0];
+            int i33 = this.classGuid;
+            int i34 = this.chatMode;
+            int i35 = this.threadMessageId;
+            int i36 = this.replyMaxReadId;
+            int i37 = this.lastLoadIndex;
+            this.lastLoadIndex = i37 + 1;
+            messagesController5.loadMessages(j7, j8, false, 50, i31, 0, true, i32, i33, 1, 0, i34, i35, i36, i37, this.isTopic);
             this.loadingForward = true;
         }
     }
@@ -11802,10 +11810,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     private void updateTopicTitleIcon() {
-        if (this.forumTopic != null) {
-            this.avatarContainer.getAvatarImageView().setVisibility(0);
-            ForumUtilities.setTopicIcon(this.avatarContainer.getAvatarImageView(), this.forumTopic);
+        ChatAvatarContainer chatAvatarContainer;
+        if (this.forumTopic == null || (chatAvatarContainer = this.avatarContainer) == null) {
+            return;
         }
+        chatAvatarContainer.getAvatarImageView().setVisibility(0);
+        ForumUtilities.setTopicIcon(this.avatarContainer.getAvatarImageView(), this.forumTopic);
     }
 
     /* JADX INFO: Access modifiers changed from: private */
@@ -12515,14 +12525,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /*  JADX ERROR: JadxRuntimeException in pass: BlockProcessor
-        jadx.core.utils.exceptions.JadxRuntimeException: CFG modification limit reached, blocks count: 3149
+        jadx.core.utils.exceptions.JadxRuntimeException: CFG modification limit reached, blocks count: 3154
         	at jadx.core.dex.visitors.blocks.BlockProcessor.processBlocksTree(BlockProcessor.java:60)
         	at jadx.core.dex.visitors.blocks.BlockProcessor.visit(BlockProcessor.java:40)
         */
     @Override // org.telegram.messenger.NotificationCenter.NotificationCenterDelegate
     public void didReceivedNotification(int r58, int r59, java.lang.Object... r60) {
         /*
-            Method dump skipped, instructions count: 14467
+            Method dump skipped, instructions count: 14488
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatActivity.didReceivedNotification(int, int, java.lang.Object[]):void");
@@ -13056,16 +13066,16 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* JADX WARN: Multi-variable type inference failed */
-    /* JADX WARN: Removed duplicated region for block: B:411:0x066a  */
-    /* JADX WARN: Removed duplicated region for block: B:452:0x0714  */
-    /* JADX WARN: Removed duplicated region for block: B:455:0x071e  */
-    /* JADX WARN: Removed duplicated region for block: B:474:0x0777  */
-    /* JADX WARN: Removed duplicated region for block: B:568:0x09b1  */
-    /* JADX WARN: Removed duplicated region for block: B:575:0x09ce  */
-    /* JADX WARN: Removed duplicated region for block: B:578:0x09d8  */
-    /* JADX WARN: Removed duplicated region for block: B:592:0x09ff  */
-    /* JADX WARN: Removed duplicated region for block: B:599:0x0a18  */
-    /* JADX WARN: Removed duplicated region for block: B:730:0x075e A[SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:413:0x066e  */
+    /* JADX WARN: Removed duplicated region for block: B:454:0x0718  */
+    /* JADX WARN: Removed duplicated region for block: B:457:0x0722  */
+    /* JADX WARN: Removed duplicated region for block: B:476:0x077b  */
+    /* JADX WARN: Removed duplicated region for block: B:570:0x09b5  */
+    /* JADX WARN: Removed duplicated region for block: B:577:0x09d2  */
+    /* JADX WARN: Removed duplicated region for block: B:580:0x09dc  */
+    /* JADX WARN: Removed duplicated region for block: B:594:0x0a03  */
+    /* JADX WARN: Removed duplicated region for block: B:601:0x0a1c  */
+    /* JADX WARN: Removed duplicated region for block: B:732:0x0762 A[SYNTHETIC] */
     /* JADX WARN: Type inference failed for: r4v62 */
     /* JADX WARN: Type inference failed for: r4v64 */
     /*
@@ -13074,7 +13084,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     */
     private void processNewMessages(java.util.ArrayList<org.telegram.messenger.MessageObject> r32) {
         /*
-            Method dump skipped, instructions count: 3103
+            Method dump skipped, instructions count: 3107
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatActivity.processNewMessages(java.util.ArrayList):void");
@@ -14574,8 +14584,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             return this.trackWidth;
         }
 
+        /* JADX INFO: Access modifiers changed from: protected */
         @Override // org.telegram.ui.ActionBar.SimpleTextView
-        protected boolean createLayout(int i) {
+        public boolean createLayout(int i) {
             boolean createLayout = super.createLayout(i);
             if (this.trackWidth && getVisibility() == 0) {
                 ChatActivity.this.pinnedCounterTextViewX = getTextWidth() + AndroidUtilities.dp(4.0f);
@@ -15605,7 +15616,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
         @Override // androidx.viewpager.widget.PagerAdapter
         /* renamed from: instantiateItem */
-        public Object mo1597instantiateItem(ViewGroup viewGroup, final int i) {
+        public Object mo1596instantiateItem(ViewGroup viewGroup, final int i) {
             View view = (View) this.val$cachedViews.get(i);
             if (view != null) {
                 viewGroup.addView(view);
@@ -16476,7 +16487,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     */
     private void processSelectedOption(int r22) {
         /*
-            Method dump skipped, instructions count: 2845
+            Method dump skipped, instructions count: 2811
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatActivity.processSelectedOption(int):void");
@@ -18515,7 +18526,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         /* JADX WARN: Multi-variable type inference failed */
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1787onCreateViewHolder(ViewGroup viewGroup, int i) {
             ChatActionCell chatActionCell;
             ChatMessageCell chatMessageCell;
             if (i == 0) {
@@ -18582,6 +18593,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     @Override // org.telegram.ui.Cells.ChatActionCell.ChatActionCellDelegate
                     public BaseFragment getBaseFragment() {
                         return ChatActivity.this;
+                    }
+
+                    @Override // org.telegram.ui.Cells.ChatActionCell.ChatActionCellDelegate
+                    public int getTopicId() {
+                        return ChatActivity.this.getTopicId();
                     }
 
                     @Override // org.telegram.ui.Cells.ChatActionCell.ChatActionCellDelegate

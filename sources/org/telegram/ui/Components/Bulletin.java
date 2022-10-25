@@ -8,11 +8,16 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
+import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.text.Layout;
+import android.text.StaticLayout;
+import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.util.Property;
@@ -1129,9 +1134,12 @@ public class Bulletin {
     public static class ButtonLayout extends Layout {
         private Button button;
         private int childrenMeasuredWidth;
+        Theme.ResourcesProvider resourcesProvider;
+        public TimerView timerView;
 
         public ButtonLayout(Context context, Theme.ResourcesProvider resourcesProvider) {
             super(context, resourcesProvider);
+            this.resourcesProvider = resourcesProvider;
         }
 
         @Override // android.widget.FrameLayout, android.view.View
@@ -1172,6 +1180,13 @@ public class Bulletin {
                 addCallback(button);
                 addView(button, 0, LayoutHelper.createFrameRelatively(-2.0f, -2.0f, 8388629));
             }
+        }
+
+        public void setTimer() {
+            TimerView timerView = new TimerView(getContext(), this.resourcesProvider);
+            this.timerView = timerView;
+            timerView.timeLeft = 5000L;
+            addView(this.timerView, LayoutHelper.createFrameRelatively(20.0f, 20.0f, 8388627, 21.0f, 0.0f, 21.0f, 0.0f));
         }
     }
 
@@ -1588,6 +1603,105 @@ public class Bulletin {
 
         public EmptyBulletin() {
             super();
+        }
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
+    /* loaded from: classes3.dex */
+    public static class TimerView extends View {
+        private long lastUpdateTime;
+        private int prevSeconds;
+        private final Paint progressPaint;
+        RectF rect;
+        private TextPaint textPaint;
+        private int textWidth;
+        int textWidthOut;
+        StaticLayout timeLayout;
+        StaticLayout timeLayoutOut;
+        private long timeLeft;
+        private String timeLeftString;
+        float timeReplaceProgress;
+
+        public TimerView(Context context, Theme.ResourcesProvider resourcesProvider) {
+            super(context);
+            this.timeReplaceProgress = 1.0f;
+            this.rect = new RectF();
+            TextPaint textPaint = new TextPaint(1);
+            this.textPaint = textPaint;
+            textPaint.setTextSize(AndroidUtilities.dp(12.0f));
+            this.textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            this.textPaint.setColor(Theme.getColor("undo_infoColor", resourcesProvider));
+            Paint paint = new Paint(1);
+            this.progressPaint = paint;
+            paint.setStyle(Paint.Style.STROKE);
+            paint.setStrokeWidth(AndroidUtilities.dp(2.0f));
+            paint.setStrokeCap(Paint.Cap.ROUND);
+            paint.setColor(Theme.getColor("undo_infoColor", resourcesProvider));
+        }
+
+        @Override // android.view.View
+        protected void onDraw(Canvas canvas) {
+            long j;
+            String format;
+            super.onDraw(canvas);
+            int ceil = this.timeLeft > 0 ? (int) Math.ceil(((float) j) / 1000.0f) : 0;
+            this.rect.set(AndroidUtilities.dp(1.0f), AndroidUtilities.dp(1.0f), getMeasuredWidth() - AndroidUtilities.dp(1.0f), getMeasuredHeight() - AndroidUtilities.dp(1.0f));
+            if (this.prevSeconds != ceil) {
+                this.prevSeconds = ceil;
+                this.timeLeftString = String.format("%d", Integer.valueOf(Math.max(1, ceil)));
+                StaticLayout staticLayout = this.timeLayout;
+                if (staticLayout != null) {
+                    this.timeLayoutOut = staticLayout;
+                    this.timeReplaceProgress = 0.0f;
+                    this.textWidthOut = this.textWidth;
+                }
+                this.textWidth = (int) Math.ceil(this.textPaint.measureText(format));
+                this.timeLayout = new StaticLayout(this.timeLeftString, this.textPaint, Integer.MAX_VALUE, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+            }
+            float f = this.timeReplaceProgress;
+            if (f < 1.0f) {
+                float f2 = f + 0.10666667f;
+                this.timeReplaceProgress = f2;
+                if (f2 > 1.0f) {
+                    this.timeReplaceProgress = 1.0f;
+                } else {
+                    invalidate();
+                }
+            }
+            int alpha = this.textPaint.getAlpha();
+            if (this.timeLayoutOut != null) {
+                float f3 = this.timeReplaceProgress;
+                if (f3 < 1.0f) {
+                    this.textPaint.setAlpha((int) (alpha * (1.0f - f3)));
+                    canvas.save();
+                    canvas.translate(this.rect.centerX() - (this.textWidthOut / 2.0f), (this.rect.centerY() - (this.timeLayoutOut.getHeight() / 2.0f)) + (AndroidUtilities.dp(10.0f) * this.timeReplaceProgress));
+                    this.timeLayoutOut.draw(canvas);
+                    this.textPaint.setAlpha(alpha);
+                    canvas.restore();
+                }
+            }
+            if (this.timeLayout != null) {
+                float f4 = this.timeReplaceProgress;
+                if (f4 != 1.0f) {
+                    this.textPaint.setAlpha((int) (alpha * f4));
+                }
+                canvas.save();
+                canvas.translate(this.rect.centerX() - (this.textWidth / 2.0f), (this.rect.centerY() - (this.timeLayout.getHeight() / 2.0f)) - (AndroidUtilities.dp(10.0f) * (1.0f - this.timeReplaceProgress)));
+                this.timeLayout.draw(canvas);
+                if (this.timeReplaceProgress != 1.0f) {
+                    this.textPaint.setAlpha(alpha);
+                }
+                canvas.restore();
+            }
+            canvas.drawArc(this.rect, -90.0f, (((float) this.timeLeft) / 5000.0f) * (-360.0f), false, this.progressPaint);
+            if (this.lastUpdateTime != 0) {
+                long currentTimeMillis = System.currentTimeMillis();
+                this.timeLeft -= currentTimeMillis - this.lastUpdateTime;
+                this.lastUpdateTime = currentTimeMillis;
+            } else {
+                this.lastUpdateTime = System.currentTimeMillis();
+            }
+            invalidate();
         }
     }
 }

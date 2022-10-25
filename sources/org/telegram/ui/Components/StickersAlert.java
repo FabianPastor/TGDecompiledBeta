@@ -747,7 +747,11 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             return;
         }
         dismiss();
-        BulletinFactory.of(this.parentFragment).createErrorBulletin(LocaleController.getString("AddStickersNotFound", R.string.AddStickersNotFound)).show();
+        BaseFragment baseFragment = this.parentFragment;
+        if (baseFragment == null) {
+            return;
+        }
+        BulletinFactory.of(baseFragment).createErrorBulletin(LocaleController.getString("AddStickersNotFound", R.string.AddStickersNotFound)).show();
     }
 
     /* JADX INFO: Access modifiers changed from: package-private */
@@ -2211,7 +2215,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1787onCreateViewHolder(ViewGroup viewGroup, int i) {
             FrameLayout frameLayout;
             if (i == 0) {
                 StickerEmojiCell stickerEmojiCell = new StickerEmojiCell(this.context, false) { // from class: org.telegram.ui.Components.StickersAlert.GridAdapter.1

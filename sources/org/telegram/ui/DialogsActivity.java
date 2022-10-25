@@ -5929,7 +5929,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r14 = -1
         L94:
             org.telegram.messenger.MessagesController r4 = r15.getMessagesController()
-            r4.markMentionsAsRead(r2)
+            r4.markMentionsAsRead(r2, r12)
             org.telegram.messenger.MessagesController r4 = r15.getMessagesController()
             int r5 = r1.top_message
             int r6 = r1.last_message_date

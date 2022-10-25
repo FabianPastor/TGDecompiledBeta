@@ -961,15 +961,15 @@ public class NotificationsController extends BaseController {
     /* JADX WARN: Code restructure failed: missing block: B:16:0x0048, code lost:
         if ((r5 instanceof org.telegram.tgnet.TLRPC$TL_messageActionUserJoined) == false) goto L20;
      */
-    /* JADX WARN: Removed duplicated region for block: B:53:0x00f6  */
-    /* JADX WARN: Removed duplicated region for block: B:67:0x013d  */
+    /* JADX WARN: Removed duplicated region for block: B:57:0x00fe  */
+    /* JADX WARN: Removed duplicated region for block: B:71:0x0145  */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
     public /* synthetic */ void lambda$processNewMessages$18(java.util.ArrayList r30, final java.util.ArrayList r31, boolean r32, boolean r33, java.util.concurrent.CountDownLatch r34) {
         /*
-            Method dump skipped, instructions count: 832
+            Method dump skipped, instructions count: 840
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.NotificationsController.lambda$processNewMessages$18(java.util.ArrayList, java.util.ArrayList, boolean, boolean, java.util.concurrent.CountDownLatch):void");
@@ -4769,7 +4769,7 @@ public class NotificationsController extends BaseController {
             String key = entry.getKey();
             if (key.startsWith("notify2_" + j)) {
                 int intValue = Utilities.parseInt((CharSequence) key.replace("notify2_" + j, "")).intValue();
-                if (intValue != 0) {
+                if (intValue != 0 && getMessagesController().isDialogMuted(j, intValue) != getMessagesController().isDialogMuted(j, 0)) {
                     hashSet.add(Integer.valueOf(intValue));
                 }
             }

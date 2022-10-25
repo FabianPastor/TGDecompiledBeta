@@ -4277,10 +4277,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
     /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ boolean lambda$createView$16(View view) {
-        if (this.avatarBig != null) {
-            return false;
+        if (this.avatarBig == null && !this.isTopic) {
+            openAvatar();
         }
-        openAvatar();
         return false;
     }
 
@@ -7066,7 +7065,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     */
     public void updateRowsIds() {
         /*
-            Method dump skipped, instructions count: 1573
+            Method dump skipped, instructions count: 1575
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ProfileActivity.updateRowsIds():void");
@@ -7978,7 +7977,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         /* JADX WARN: Multi-variable type inference failed */
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1787onCreateViewHolder(ViewGroup viewGroup, int i) {
             View headerCell;
             TextDetailCell textDetailCell;
             String str;
@@ -7997,7 +7996,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     TextDetailCell textDetailCell2 = new TextDetailCell(context, resourcesProvider, z);
                     textDetailCell2.setContentDescriptionValueFirst(true);
                     final ProfileActivity profileActivity = ProfileActivity.this;
-                    textDetailCell2.setImageClickListener(new View.OnClickListener() { // from class: org.telegram.ui.ProfileActivity$ListAdapter$$ExternalSyntheticLambda1
+                    textDetailCell2.setImageClickListener(new View.OnClickListener() { // from class: org.telegram.ui.ProfileActivity$ListAdapter$$ExternalSyntheticLambda0
                         @Override // android.view.View.OnClickListener
                         public final void onClick(View view) {
                             ProfileActivity.access$27200(ProfileActivity.this, view);
@@ -8194,19 +8193,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             Code decompiled incorrectly, please refer to instructions dump.
             To view partially-correct add '--show-bad-code' argument
         */
-        public void onBindViewHolder(androidx.recyclerview.widget.RecyclerView.ViewHolder r23, final int r24) {
+        public void onBindViewHolder(androidx.recyclerview.widget.RecyclerView.ViewHolder r23, int r24) {
             /*
-                Method dump skipped, instructions count: 3378
+                Method dump skipped, instructions count: 3342
                 To view this dump add '--comments-level debug' option
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ProfileActivity.ListAdapter.onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder, int):void");
-        }
-
-        /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$onBindViewHolder$1(View view) {
-            if (ProfileActivity.this.userInfo != null) {
-                ProfileActivity.this.presentFragment(new ChangeBioActivity());
-            }
         }
 
         private CharSequence alsoUsernamesString(String str, ArrayList<TLRPC$TL_username> arrayList, CharSequence charSequence) {
@@ -8228,7 +8220,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 for (int i2 = 0; i2 < arrayList2.size(); i2++) {
                     final String str2 = ((TLRPC$TL_username) arrayList2.get(i2)).username;
                     SpannableString spannableString = new SpannableString("@" + str2);
-                    spannableString.setSpan(new ClickableSpan() { // from class: org.telegram.ui.ProfileActivity.ListAdapter.6
+                    spannableString.setSpan(new ClickableSpan() { // from class: org.telegram.ui.ProfileActivity.ListAdapter.5
                         @Override // android.text.style.ClickableSpan
                         public void onClick(View view) {
                             String str3 = ProfileActivity.this.getMessagesController().linkPrefix + "/" + str2;
@@ -9651,7 +9643,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1787onCreateViewHolder(ViewGroup viewGroup, int i) {
             View settingsSearchCell;
             if (i == 0) {
                 settingsSearchCell = new SettingsSearchCell(this.mContext);

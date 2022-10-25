@@ -10941,7 +10941,7 @@ public class MessagesController extends BaseController implements NotificationCe
             if (i == 0) {
                 i = tLRPC$messages_Messages.messages.size();
             }
-            getMessagesStorage().resetMentionsCount(-tLRPC$InputPeer.channel_id, i);
+            getMessagesStorage().resetMentionsCount(-tLRPC$InputPeer.channel_id, 0, i);
         }
         if (j != 0) {
             getMessagesStorage().removePendingTask(j);
@@ -11645,13 +11645,17 @@ public class MessagesController extends BaseController implements NotificationCe
         this.readTasksMap.remove(j);
     }
 
-    public void markMentionsAsRead(long j) {
+    public void markMentionsAsRead(long j, int i) {
         if (DialogObject.isEncryptedDialog(j)) {
             return;
         }
-        getMessagesStorage().resetMentionsCount(j, 0);
+        getMessagesStorage().resetMentionsCount(j, i, 0);
         TLRPC$TL_messages_readMentions tLRPC$TL_messages_readMentions = new TLRPC$TL_messages_readMentions();
         tLRPC$TL_messages_readMentions.peer = getInputPeer(j);
+        if (i != 0) {
+            tLRPC$TL_messages_readMentions.top_msg_id = i;
+            tLRPC$TL_messages_readMentions.flags |= 1;
+        }
         getConnectionsManager().sendRequest(tLRPC$TL_messages_readMentions, MessagesController$$ExternalSyntheticLambda365.INSTANCE);
     }
 
@@ -15312,14 +15316,14 @@ public class MessagesController extends BaseController implements NotificationCe
         }
     }
 
-    /* JADX WARN: Removed duplicated region for block: B:1473:0x0var_  */
+    /* JADX WARN: Removed duplicated region for block: B:1473:0x0f2d  */
     /* JADX WARN: Removed duplicated region for block: B:1478:0x0var_  */
-    /* JADX WARN: Removed duplicated region for block: B:1522:0x1048  */
-    /* JADX WARN: Removed duplicated region for block: B:1524:0x1056  */
-    /* JADX WARN: Removed duplicated region for block: B:1526:0x105c  */
-    /* JADX WARN: Removed duplicated region for block: B:1529:0x1068  */
-    /* JADX WARN: Removed duplicated region for block: B:1539:0x10a4  */
-    /* JADX WARN: Removed duplicated region for block: B:1542:0x10ba  */
+    /* JADX WARN: Removed duplicated region for block: B:1522:0x104e  */
+    /* JADX WARN: Removed duplicated region for block: B:1524:0x105c  */
+    /* JADX WARN: Removed duplicated region for block: B:1526:0x1062  */
+    /* JADX WARN: Removed duplicated region for block: B:1529:0x106e  */
+    /* JADX WARN: Removed duplicated region for block: B:1539:0x10aa  */
+    /* JADX WARN: Removed duplicated region for block: B:1542:0x10c0  */
     /* JADX WARN: Removed duplicated region for block: B:1627:? A[RETURN, SYNTHETIC] */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
@@ -15327,7 +15331,7 @@ public class MessagesController extends BaseController implements NotificationCe
     */
     public /* synthetic */ void lambda$processUpdateArray$330(int r44, java.util.ArrayList r45, androidx.collection.LongSparseArray r46, int r47, org.telegram.messenger.support.LongSparseIntArray r48, androidx.collection.LongSparseArray r49, androidx.collection.LongSparseArray r50, java.util.ArrayList r51, androidx.collection.LongSparseArray r52, androidx.collection.LongSparseArray r53, boolean r54, java.util.ArrayList r55, java.util.ArrayList r56, androidx.collection.LongSparseArray r57, androidx.collection.LongSparseArray r58, androidx.collection.LongSparseArray r59, java.util.ArrayList r60) {
         /*
-            Method dump skipped, instructions count: 4290
+            Method dump skipped, instructions count: 4296
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.lambda$processUpdateArray$330(int, java.util.ArrayList, androidx.collection.LongSparseArray, int, org.telegram.messenger.support.LongSparseIntArray, androidx.collection.LongSparseArray, androidx.collection.LongSparseArray, java.util.ArrayList, androidx.collection.LongSparseArray, androidx.collection.LongSparseArray, boolean, java.util.ArrayList, java.util.ArrayList, androidx.collection.LongSparseArray, androidx.collection.LongSparseArray, androidx.collection.LongSparseArray, java.util.ArrayList):void");

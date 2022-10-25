@@ -4616,4 +4616,18 @@ public class AndroidUtilities {
     public static boolean isENOSPC(Exception exc) {
         return (Build.VERSION.SDK_INT >= 21 && (exc instanceof IOException) && (exc.getCause() instanceof ErrnoException) && ((ErrnoException) exc.getCause()).errno == OsConstants.ENOSPC) || (exc.getMessage() != null && exc.getMessage().equalsIgnoreCase("no space left on device"));
     }
+
+    public static CharSequence replaceCharSequence(String str, CharSequence charSequence, CharSequence charSequence2) {
+        SpannableStringBuilder spannableStringBuilder;
+        if (charSequence instanceof SpannableStringBuilder) {
+            spannableStringBuilder = (SpannableStringBuilder) charSequence;
+        } else {
+            spannableStringBuilder = new SpannableStringBuilder(charSequence);
+        }
+        int indexOf = TextUtils.indexOf(charSequence, str);
+        if (indexOf >= 0) {
+            spannableStringBuilder.replace(indexOf, str.length() + indexOf, charSequence2);
+        }
+        return spannableStringBuilder;
+    }
 }

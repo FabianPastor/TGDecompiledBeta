@@ -29,7 +29,6 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import androidx.core.graphics.ColorUtils;
 import androidx.core.math.MathUtils;
 import androidx.core.view.GestureDetectorCompat;
 import androidx.dynamicanimation.animation.DynamicAnimation;
@@ -83,7 +82,6 @@ public class LNavigation extends FrameLayout implements INavigationLayout, Float
     private Paint dimmPaint;
     private DrawerLayoutContainer drawerLayoutContainer;
     private List<BaseFragment> fragmentStack;
-    private int fromBackgroundColor;
     private GestureDetectorCompat gestureDetector;
     private Drawable headerShadowDrawable;
     private boolean highlightActionButtons;
@@ -122,7 +120,6 @@ public class LNavigation extends FrameLayout implements INavigationLayout, Float
     private View touchCapturedView;
     private List<BaseFragment> unmodifiableFragmentStack;
     private boolean useAlphaAnimations;
-    private boolean useBackground;
     private boolean wasPortrait;
 
     @Override // org.telegram.ui.ActionBar.INavigationLayout
@@ -269,7 +266,6 @@ public class LNavigation extends FrameLayout implements INavigationLayout, Float
         this.highlightActionButtons = false;
         this.previewFragmentRect = new Rect();
         this.blurPaint = new Paint(5);
-        this.useBackground = true;
         this.startColorsProvider = new INavigationLayout.StartColorsProvider();
         this.themeAnimatorDelegate = new ArrayList<>();
         this.themeAnimatorDescriptions = new ArrayList<>();
@@ -282,7 +278,6 @@ public class LNavigation extends FrameLayout implements INavigationLayout, Float
         this.layerShadowDrawable = getResources().getDrawable(R.drawable.layer_shadow).mutate();
         this.dimmPaint.setColor(NUM);
         setWillNotDraw(false);
-        setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
         final int scaledTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
         GestureDetectorCompat gestureDetectorCompat = new GestureDetectorCompat(context, new GestureDetector.SimpleOnGestureListener() { // from class: org.telegram.ui.LNavigation.LNavigation.1
             @Override // android.view.GestureDetector.SimpleOnGestureListener, android.view.GestureDetector.OnGestureListener
@@ -568,7 +563,7 @@ public class LNavigation extends FrameLayout implements INavigationLayout, Float
         if (!this.gestureDetector.onTouchEvent(motionEvent) && (actionMasked == 1 || actionMasked == 3)) {
             if (this.isFirstHoverAllowed && !this.allowToPressByHover) {
                 clearTouchFlags();
-            } else if (this.allowToPressByHover) {
+            } else if (this.allowToPressByHover && this.previewMenu != null) {
                 for (int i = 0; i < this.previewMenu.getItemsCount(); i++) {
                     ActionBarMenuSubItem actionBarMenuSubItem = (ActionBarMenuSubItem) this.previewMenu.getItemAt(i);
                     if (actionBarMenuSubItem != null) {
@@ -1055,10 +1050,6 @@ public class LNavigation extends FrameLayout implements INavigationLayout, Float
             if (drawerLayoutContainer != null) {
                 drawerLayoutContainer.setAllowOpenDrawer(this.fragmentStack.isEmpty(), false);
             }
-        } else if (this.fragmentStack.isEmpty() || this.useAlphaAnimations || !this.useBackground) {
-            setBackgroundColor(0);
-        } else {
-            setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
         }
         ImageLoader.getInstance().onFragmentStackChanged();
     }
@@ -1289,21 +1280,6 @@ public class LNavigation extends FrameLayout implements INavigationLayout, Float
     @Override // org.telegram.ui.ActionBar.INavigationLayout
     public void setUseAlphaAnimations(boolean z) {
         this.useAlphaAnimations = z;
-        if (z || !this.useBackground) {
-            setBackgroundColor(0);
-        } else {
-            setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-        }
-    }
-
-    @Override // org.telegram.ui.ActionBar.INavigationLayout
-    public void setUseBackground(boolean z) {
-        this.useBackground = z;
-        if (this.useAlphaAnimations || !z) {
-            setBackgroundColor(0);
-        } else {
-            setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-        }
     }
 
     @Override // org.telegram.ui.ActionBar.INavigationLayout
@@ -1544,10 +1520,9 @@ public class LNavigation extends FrameLayout implements INavigationLayout, Float
     public /* synthetic */ void lambda$animateThemedValues$18(int i, final INavigationLayout.ThemeAnimationSettings themeAnimationSettings, Runnable runnable) {
         BaseFragment baseFragment;
         Runnable runnable2;
-        int i2 = 0;
         boolean z = false;
-        for (int i3 = 0; i3 < i; i3++) {
-            if (i3 == 0) {
+        for (int i2 = 0; i2 < i; i2++) {
+            if (i2 == 0) {
                 baseFragment = getLastFragment();
             } else {
                 if ((isInPreviewMode() || isPreviewOpenAnimationInProgress()) && this.fragmentStack.size() > 1) {
@@ -1574,7 +1549,7 @@ public class LNavigation extends FrameLayout implements INavigationLayout, Float
                 } else if (baseFragment.getVisibleDialog() instanceof AlertDialog) {
                     addStartDescriptions(((AlertDialog) baseFragment.getVisibleDialog()).getThemeDescriptions());
                 }
-                if (i3 == 0 && (runnable2 = themeAnimationSettings.afterStartDescriptionsAddedRunnable) != null) {
+                if (i2 == 0 && (runnable2 = themeAnimationSettings.afterStartDescriptionsAddedRunnable) != null) {
                     runnable2.run();
                 }
                 addEndDescriptions(themeDescriptions);
@@ -1590,16 +1565,16 @@ public class LNavigation extends FrameLayout implements INavigationLayout, Float
             if (!themeAnimationSettings.onlyTopFragment) {
                 int size = this.fragmentStack.size() - ((isInPreviewMode() || isPreviewOpenAnimationInProgress()) ? 2 : 1);
                 boolean z2 = false;
-                for (int i4 = 0; i4 < size; i4++) {
-                    BaseFragment baseFragment2 = this.fragmentStack.get(i4);
+                for (int i3 = 0; i3 < size; i3++) {
+                    BaseFragment baseFragment2 = this.fragmentStack.get(i3);
                     baseFragment2.clearViews();
                     baseFragment2.setParentLayout(this);
-                    if (i4 == this.fragmentStack.size() - 1) {
+                    if (i3 == this.fragmentStack.size() - 1) {
                         if (getForegroundView() != null) {
                             getForegroundView().setFragment(baseFragment2);
                         }
                         z2 = true;
-                    } else if (i4 == this.fragmentStack.size() - 2) {
+                    } else if (i3 == this.fragmentStack.size() - 2) {
                         if (getBackgroundView() != null) {
                             getBackgroundView().setFragment(baseFragment2);
                         }
@@ -1638,9 +1613,8 @@ public class LNavigation extends FrameLayout implements INavigationLayout, Float
                 onanimationprogress.setProgress(0.0f);
             }
             if (getBackground() instanceof ColorDrawable) {
-                i2 = ((ColorDrawable) getBackground()).getColor();
+                ((ColorDrawable) getBackground()).getColor();
             }
-            this.fromBackgroundColor = i2;
             ValueAnimator duration = ValueAnimator.ofFloat(0.0f, 1.0f).setDuration(themeAnimationSettings.duration);
             this.themeAnimator = duration;
             duration.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() { // from class: org.telegram.ui.LNavigation.LNavigation$$ExternalSyntheticLambda0
@@ -1750,10 +1724,6 @@ public class LNavigation extends FrameLayout implements INavigationLayout, Float
         if (iNavigationLayoutDelegate != null) {
             iNavigationLayoutDelegate.onThemeProgress(f);
         }
-        if (this.useAlphaAnimations || !this.useBackground) {
-            return;
-        }
-        setBackgroundColor(ColorUtils.blendARGB(this.fromBackgroundColor, Theme.getColor("windowBackgroundWhite"), f));
     }
 
     @Override // org.telegram.ui.ActionBar.INavigationLayout
@@ -1989,7 +1959,7 @@ public class LNavigation extends FrameLayout implements INavigationLayout, Float
         if (z) {
             canvas.save();
             Rect rect = AndroidUtilities.rectTmp2;
-            rect.set(getPaddingLeft(), getPaddingTop(), getPaddingLeft() + ((int) (((getWidth() - getPaddingLeft()) - getPaddingRight()) * this.swipeProgress)), getHeight() - getPaddingBottom());
+            rect.set(getPaddingLeft(), getPaddingTop(), getPaddingLeft() + ((int) (((getWidth() - getPaddingLeft()) - getPaddingRight()) * this.swipeProgress)) + 1, getHeight() - getPaddingBottom());
             canvas.clipRect(rect);
         }
         if (indexOfChild == 1 && isInPreviewMode()) {

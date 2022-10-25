@@ -25,10 +25,11 @@ public class ForumBubbleDrawable extends Drawable {
     private int[] currentColors;
     LinearGradient gradient;
     private final Paint strokePaint;
+    SvgHelper.SvgDrawable svgDrawable;
     private final Paint topPaint;
     Matrix gradientMatrix = new Matrix();
     ArrayList<View> parents = new ArrayList<>();
-    SvgHelper.SvgDrawable svgDrawable = SvgHelper.getDrawable(R.raw.topic_bubble, -1);
+    int color = -1;
 
     @Override // android.graphics.drawable.Drawable
     public int getOpacity() {
@@ -55,42 +56,18 @@ public class ForumBubbleDrawable extends Drawable {
     }
 
     public ForumBubbleDrawable(int i) {
-        int[] iArr;
-        int colorDistance = colorDistance(serverSupportedColor[0], i);
-        this.colorIndex = 0;
-        int i2 = 0;
-        while (true) {
-            iArr = serverSupportedColor;
-            if (i2 >= iArr.length) {
-                break;
-            }
-            int colorDistance2 = colorDistance(iArr[i2], i);
-            if (colorDistance2 < colorDistance) {
-                this.colorIndex = i2;
-                colorDistance = colorDistance2;
-            }
-            i2++;
-        }
-        int[] iArr2 = colorsMap.get(iArr[this.colorIndex]);
-        iArr2 = Theme.isCurrentThemeDark() ? new int[]{ColorUtils.blendARGB(iArr2[0], -1, 0.2f), ColorUtils.blendARGB(iArr2[1], -1, 0.2f)} : iArr2;
-        this.currentColors = iArr2;
+        SvgHelper.SvgDrawable drawable = SvgHelper.getDrawable(R.raw.topic_bubble, -1);
+        this.svgDrawable = drawable;
+        drawable.copyCommandFromPosition(0);
         Paint paint = new Paint(1);
-        LinearGradient linearGradient = new LinearGradient(0.0f, 100.0f, 0.0f, 0.0f, iArr2, (float[]) null, Shader.TileMode.CLAMP);
-        this.gradient = linearGradient;
-        linearGradient.setLocalMatrix(this.gradientMatrix);
-        paint.setShader(this.gradient);
-        this.svgDrawable.setPaint(paint, 0);
+        this.topPaint = paint;
         Paint paint2 = new Paint(1);
-        this.topPaint = paint2;
-        this.svgDrawable.setPaint(paint2, 1);
-        this.svgDrawable.copyCommandFromPosition(0);
-        Paint paint3 = new Paint(1);
-        this.strokePaint = paint3;
-        paint3.setStrokeWidth(AndroidUtilities.dp(1.0f));
-        paint3.setStyle(Paint.Style.STROKE);
-        this.svgDrawable.setPaint(paint3, 2);
-        paint2.setColor(ColorUtils.blendARGB(iArr2[1], -1, 0.1f));
-        paint3.setColor(ColorUtils.blendARGB(iArr2[0], -16777216, 0.1f));
+        this.strokePaint = paint2;
+        paint2.setStrokeWidth(AndroidUtilities.dp(1.0f));
+        paint2.setStyle(Paint.Style.STROKE);
+        this.svgDrawable.setPaint(paint, 1);
+        this.svgDrawable.setPaint(paint2, 2);
+        setColor(i);
     }
 
     @Override // android.graphics.drawable.Drawable
@@ -124,7 +101,9 @@ public class ForumBubbleDrawable extends Drawable {
             this.colorIndex = 0;
         }
         final int[] iArr2 = this.currentColors;
-        this.currentColors = colorsMap.get(iArr[this.colorIndex]);
+        int i2 = this.colorIndex;
+        this.color = iArr[i2];
+        this.currentColors = colorsMap.get(iArr[i2]);
         if (Theme.isCurrentThemeDark()) {
             this.currentColors = new int[]{ColorUtils.blendARGB(this.currentColors[0], -1, 0.2f), ColorUtils.blendARGB(this.currentColors[1], -1, 0.2f)};
         }
@@ -165,5 +144,42 @@ public class ForumBubbleDrawable extends Drawable {
         for (int i = 0; i < this.parents.size(); i++) {
             this.parents.get(i).invalidate();
         }
+    }
+
+    public void setColor(int i) {
+        int[] iArr;
+        int i2 = this.color;
+        if (i2 == i && i2 == -1) {
+            return;
+        }
+        this.color = i;
+        int colorDistance = colorDistance(serverSupportedColor[0], i);
+        this.colorIndex = 0;
+        int i3 = 0;
+        while (true) {
+            iArr = serverSupportedColor;
+            if (i3 >= iArr.length) {
+                break;
+            }
+            int colorDistance2 = colorDistance(iArr[i3], i);
+            if (colorDistance2 < colorDistance) {
+                this.colorIndex = i3;
+                colorDistance = colorDistance2;
+            }
+            i3++;
+        }
+        int[] iArr2 = colorsMap.get(iArr[this.colorIndex]);
+        if (Theme.isCurrentThemeDark()) {
+            iArr2 = new int[]{ColorUtils.blendARGB(iArr2[0], -1, 0.2f), ColorUtils.blendARGB(iArr2[1], -1, 0.2f)};
+        }
+        this.currentColors = iArr2;
+        Paint paint = new Paint(1);
+        LinearGradient linearGradient = new LinearGradient(0.0f, 100.0f, 0.0f, 0.0f, iArr2, (float[]) null, Shader.TileMode.CLAMP);
+        this.gradient = linearGradient;
+        linearGradient.setLocalMatrix(this.gradientMatrix);
+        paint.setShader(this.gradient);
+        this.svgDrawable.setPaint(paint, 0);
+        this.topPaint.setColor(ColorUtils.blendARGB(iArr2[1], -1, 0.1f));
+        this.strokePaint.setColor(ColorUtils.blendARGB(iArr2[0], -16777216, 0.1f));
     }
 }

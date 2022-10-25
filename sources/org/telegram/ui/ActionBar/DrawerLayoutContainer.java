@@ -663,9 +663,8 @@ public class DrawerLayoutContainer extends FrameLayout {
         return false;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     /* loaded from: classes3.dex */
-    public static class PreviewForegroundDrawable extends Drawable {
+    private static class PreviewForegroundDrawable extends Drawable {
         private final GradientDrawable bottomDrawable;
         private final GradientDrawable topDrawable;
 

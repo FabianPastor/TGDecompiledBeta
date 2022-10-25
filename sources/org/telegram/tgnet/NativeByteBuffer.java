@@ -617,4 +617,11 @@ public class NativeByteBuffer extends AbstractSerializedData {
     public int remaining() {
         return this.buffer.remaining();
     }
+
+    protected void finalize() throws Throwable {
+        if (!this.reused) {
+            reuse();
+        }
+        super.finalize();
+    }
 }

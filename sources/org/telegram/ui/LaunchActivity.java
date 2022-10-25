@@ -757,8 +757,9 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
             super(context);
         }
 
+        /* JADX INFO: Access modifiers changed from: protected */
         @Override // org.telegram.ui.ActionBar.DrawerLayoutContainer, android.widget.FrameLayout, android.view.ViewGroup, android.view.View
-        protected void onLayout(boolean z, int i, int i2, int i3, int i4) {
+        public void onLayout(boolean z, int i, int i2, int i3, int i4) {
             super.onLayout(z, i, i2, i3, i4);
             setDrawerPosition(getDrawerPosition());
             boolean z2 = i4 - i2 > i3 - i;
@@ -1109,8 +1110,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
             this.launchLayout.addView(this.actionBarLayout.getView());
             INavigationLayout newLayout = INavigationLayout.CC.newLayout(this);
             this.rightActionBarLayout = newLayout;
-            newLayout.setUseBackground(false);
-            this.rightActionBarLayout.setFragmentStack(rightFragmentsStack);
+            newLayout.setFragmentStack(rightFragmentsStack);
             this.rightActionBarLayout.setDelegate(this);
             this.launchLayout.addView(this.rightActionBarLayout.getView());
             FrameLayout frameLayout = new FrameLayout(this);
@@ -1788,46 +1788,46 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         if (r1.checkCanOpenChat(r0, r2.get(r2.size() - r3)) != false) goto L141;
      */
     /* JADX WARN: Code restructure failed: missing block: B:168:0x0330, code lost:
-        if (r85.sendingText == null) goto L294;
+        if (r85.sendingText == null) goto L296;
      */
     /* JADX WARN: Code restructure failed: missing block: B:440:0x09bf, code lost:
-        if (r7 == 0) goto L717;
+        if (r7 == 0) goto L719;
      */
     /* JADX WARN: Code restructure failed: missing block: B:460:0x0a51, code lost:
-        if (r7 == 0) goto L744;
+        if (r7 == 0) goto L746;
      */
     /* JADX WARN: Code restructure failed: missing block: B:64:0x015b, code lost:
         if (r1.equals(r0) != false) goto L48;
      */
     /* JADX WARN: Code restructure failed: missing block: B:808:0x1686, code lost:
-        if (r2 == 0) goto L1090;
+        if (r2 == 0) goto L1092;
      */
     /* JADX WARN: Multi-variable type inference failed */
     /* JADX WARN: Removed duplicated region for block: B:1002:0x1e20  */
     /* JADX WARN: Removed duplicated region for block: B:100:0x01fe  */
     /* JADX WARN: Removed duplicated region for block: B:1015:0x1e4f  */
     /* JADX WARN: Removed duplicated region for block: B:1033:0x1ecc  */
-    /* JADX WARN: Removed duplicated region for block: B:1123:0x20bf  */
-    /* JADX WARN: Removed duplicated region for block: B:1124:0x20d1  */
-    /* JADX WARN: Removed duplicated region for block: B:1127:0x20df  */
-    /* JADX WARN: Removed duplicated region for block: B:1128:0x20f0  */
-    /* JADX WARN: Removed duplicated region for block: B:1194:0x233c A[ADDED_TO_REGION] */
-    /* JADX WARN: Removed duplicated region for block: B:1197:0x2344  */
-    /* JADX WARN: Removed duplicated region for block: B:1208:0x2393  */
-    /* JADX WARN: Removed duplicated region for block: B:1219:0x23e0  */
-    /* JADX WARN: Removed duplicated region for block: B:1221:0x23ec  */
-    /* JADX WARN: Removed duplicated region for block: B:1223:0x23f4  */
-    /* JADX WARN: Removed duplicated region for block: B:1270:0x1223 A[EXC_TOP_SPLITTER, SYNTHETIC] */
-    /* JADX WARN: Removed duplicated region for block: B:1290:0x1ac2 A[EXC_TOP_SPLITTER, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:1125:0x20c1  */
+    /* JADX WARN: Removed duplicated region for block: B:1126:0x20d3  */
+    /* JADX WARN: Removed duplicated region for block: B:1129:0x20e1  */
+    /* JADX WARN: Removed duplicated region for block: B:1130:0x20f2  */
+    /* JADX WARN: Removed duplicated region for block: B:1196:0x233e A[ADDED_TO_REGION] */
+    /* JADX WARN: Removed duplicated region for block: B:1199:0x2346  */
+    /* JADX WARN: Removed duplicated region for block: B:1210:0x2395  */
+    /* JADX WARN: Removed duplicated region for block: B:1221:0x23e2  */
+    /* JADX WARN: Removed duplicated region for block: B:1223:0x23ee  */
+    /* JADX WARN: Removed duplicated region for block: B:1225:0x23f6  */
+    /* JADX WARN: Removed duplicated region for block: B:1272:0x1223 A[EXC_TOP_SPLITTER, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:1292:0x1ac2 A[EXC_TOP_SPLITTER, SYNTHETIC] */
     /* JADX WARN: Removed duplicated region for block: B:167:0x032e  */
     /* JADX WARN: Removed duplicated region for block: B:172:0x0337  */
     /* JADX WARN: Removed duplicated region for block: B:202:0x03f6  */
     /* JADX WARN: Removed duplicated region for block: B:269:0x0521  */
     /* JADX WARN: Removed duplicated region for block: B:354:0x073c  */
-    /* JADX WARN: Removed duplicated region for block: B:394:0x0828 A[Catch: Exception -> 0x0836, TRY_LEAVE, TryCatch #1 {Exception -> 0x0836, blocks: (B:392:0x081c, B:394:0x0828), top: B:1246:0x081c }] */
+    /* JADX WARN: Removed duplicated region for block: B:394:0x0828 A[Catch: Exception -> 0x0836, TRY_LEAVE, TryCatch #1 {Exception -> 0x0836, blocks: (B:392:0x081c, B:394:0x0828), top: B:1248:0x081c }] */
     /* JADX WARN: Removed duplicated region for block: B:396:0x0835  */
     /* JADX WARN: Removed duplicated region for block: B:63:0x0157  */
-    /* JADX WARN: Removed duplicated region for block: B:801:0x15ee A[Catch: Exception -> 0x15fc, TRY_LEAVE, TryCatch #18 {Exception -> 0x15fc, blocks: (B:799:0x15e2, B:801:0x15ee), top: B:1278:0x15e2 }] */
+    /* JADX WARN: Removed duplicated region for block: B:801:0x15ee A[Catch: Exception -> 0x15fc, TRY_LEAVE, TryCatch #18 {Exception -> 0x15fc, blocks: (B:799:0x15e2, B:801:0x15ee), top: B:1280:0x15e2 }] */
     /* JADX WARN: Removed duplicated region for block: B:868:0x199b  */
     /* JADX WARN: Removed duplicated region for block: B:87:0x01c5  */
     /* JADX WARN: Removed duplicated region for block: B:880:0x19dd  */
@@ -1885,7 +1885,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
     */
     private boolean handleIntent(android.content.Intent r86, boolean r87, boolean r88, boolean r89) {
         /*
-            Method dump skipped, instructions count: 9252
+            Method dump skipped, instructions count: 9254
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LaunchActivity.handleIntent(android.content.Intent, boolean, boolean, boolean):boolean");

@@ -802,7 +802,7 @@ public class ManageLinksActivity extends BaseFragment {
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1787onCreateViewHolder(ViewGroup viewGroup, int i) {
             TextInfoPrivacyCell textInfoPrivacyCell;
             LinkActionView linkActionView;
             switch (i) {

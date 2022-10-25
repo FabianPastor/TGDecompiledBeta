@@ -242,11 +242,6 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
         INavigationLayout.CC.$default$removeFragmentFromStack(this, i);
     }
 
-    @Override // org.telegram.ui.ActionBar.INavigationLayout
-    public /* bridge */ /* synthetic */ void setUseBackground(boolean z) {
-        INavigationLayout.CC.$default$setUseBackground(this, z);
-    }
-
     static /* synthetic */ float access$1116(ActionBarLayout actionBarLayout, float f) {
         float f2 = actionBarLayout.animationProgress + f;
         actionBarLayout.animationProgress = f2;

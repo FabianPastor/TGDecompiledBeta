@@ -28,7 +28,6 @@ import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-import androidx.core.view.GestureDetectorCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.concurrent.atomic.AtomicReference;
 import org.telegram.messenger.AndroidUtilities;
@@ -61,7 +60,6 @@ public class AboutLinkCell extends FrameLayout {
     private float expandT;
     private boolean expanded;
     private StaticLayout firstThreeLinesLayout;
-    private GestureDetectorCompat gestureDetector;
     private int lastInlineLine;
     private int lastMaxWidth;
     private LinkSpanDrawable.LinkCollector links;
@@ -111,33 +109,16 @@ public class AboutLinkCell extends FrameLayout {
         this.needSpace = false;
         this.backgroundPaint = new Paint();
         this.SPACE = AndroidUtilities.dp(3.0f);
-        this.longPressedRunnable = new AnonymousClass3();
+        this.longPressedRunnable = new AnonymousClass2();
         this.expandT = 0.0f;
         this.lastMaxWidth = 0;
         this.shouldExpand = false;
         this.resourcesProvider = resourcesProvider;
         this.parentFragment = baseFragment;
-        FrameLayout frameLayout = new FrameLayout(context) { // from class: org.telegram.ui.Cells.AboutLinkCell.1
-            /* JADX WARN: Code restructure failed: missing block: B:53:0x011b, code lost:
-                if (r1.checkTouchTextLayout(r1.textLayout, r11.this$0.textX, r11.this$0.textY, r0, r7) != false) goto L60;
-             */
-            @Override // android.view.View
-            /*
-                Code decompiled incorrectly, please refer to instructions dump.
-                To view partially-correct add '--show-bad-code' argument
-            */
-            public boolean onTouchEvent(android.view.MotionEvent r12) {
-                /*
-                    Method dump skipped, instructions count: 342
-                    To view this dump add '--comments-level debug' option
-                */
-                throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.AboutLinkCell.AnonymousClass1.onTouchEvent(android.view.MotionEvent):boolean");
-            }
-        };
+        FrameLayout frameLayout = new FrameLayout(context);
         this.container = frameLayout;
         frameLayout.setImportantForAccessibility(2);
         this.links = new LinkSpanDrawable.LinkCollector(this.container);
-        this.container.setClickable(true);
         this.rippleBackground = Theme.createRadSelectorDrawable(Theme.getColor("listSelectorSDK21", resourcesProvider), 0, 0);
         TextView textView = new TextView(context);
         this.valueTextView = textView;
@@ -158,7 +139,7 @@ public class AboutLinkCell extends FrameLayout {
         this.bottomShadow.setBackground(mutate);
         addView(this.bottomShadow, LayoutHelper.createFrame(-1, 12.0f, 87, 0.0f, 0.0f, 0.0f, 0.0f));
         addView(this.container, LayoutHelper.createFrame(-1, -1, 55));
-        TextView textView2 = new TextView(this, context) { // from class: org.telegram.ui.Cells.AboutLinkCell.2
+        TextView textView2 = new TextView(this, context) { // from class: org.telegram.ui.Cells.AboutLinkCell.1
             private boolean pressed = false;
 
             @Override // android.widget.TextView, android.view.View
@@ -172,7 +153,7 @@ public class AboutLinkCell extends FrameLayout {
                 if (z != this.pressed) {
                     invalidate();
                 }
-                return super.onTouchEvent(motionEvent);
+                return this.pressed || super.onTouchEvent(motionEvent);
             }
 
             @Override // android.widget.TextView, android.view.View
@@ -218,6 +199,51 @@ public class AboutLinkCell extends FrameLayout {
         updateCollapse(true, true);
     }
 
+    @Override // android.view.View
+    public boolean onTouchEvent(MotionEvent motionEvent) {
+        boolean z;
+        int x = (int) motionEvent.getX();
+        int y = (int) motionEvent.getY();
+        if (this.showMoreTextView.getVisibility() == 0 && x >= this.showMoreTextView.getLeft() && x <= this.showMoreTextView.getRight() && y >= this.showMoreTextView.getTop() && y <= this.showMoreTextView.getBottom()) {
+            motionEvent.offsetLocation(-this.showMoreTextView.getLeft(), -this.showMoreTextView.getTop());
+            this.showMoreTextView.dispatchTouchEvent(motionEvent);
+            return true;
+        }
+        if (this.textLayout != null || this.nextLinesLayouts != null) {
+            if (motionEvent.getAction() == 0 || (this.pressedLink != null && motionEvent.getAction() == 1)) {
+                if (motionEvent.getAction() == 0) {
+                    resetPressedLink();
+                    LinkSpanDrawable hitLink = hitLink(x, y);
+                    if (hitLink != null) {
+                        LinkSpanDrawable.LinkCollector linkCollector = this.links;
+                        this.pressedLink = hitLink;
+                        linkCollector.addLink(hitLink);
+                        AndroidUtilities.runOnUIThread(this.longPressedRunnable, ViewConfiguration.getLongPressTimeout());
+                        z = true;
+                    }
+                } else {
+                    LinkSpanDrawable linkSpanDrawable = this.pressedLink;
+                    if (linkSpanDrawable != null) {
+                        try {
+                            onLinkClick((ClickableSpan) linkSpanDrawable.getSpan());
+                        } catch (Exception e) {
+                            FileLog.e(e);
+                        }
+                        resetPressedLink();
+                        z = true;
+                    }
+                }
+                return z || super.onTouchEvent(motionEvent);
+            } else if (motionEvent.getAction() == 3) {
+                resetPressedLink();
+            }
+        }
+        z = false;
+        if (z) {
+            return true;
+        }
+    }
+
     private void setShowMoreMarginBottom(int i) {
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) this.showMoreTextBackgroundView.getLayoutParams();
         if (layoutParams.bottomMargin != i) {
@@ -250,20 +276,6 @@ public class AboutLinkCell extends FrameLayout {
         }
         this.container.draw(canvas);
         super.draw(canvas);
-    }
-
-    public void setGestureDetector(GestureDetectorCompat gestureDetectorCompat) {
-        this.gestureDetector = gestureDetectorCompat;
-    }
-
-    @Override // android.view.ViewGroup, android.view.View
-    public boolean dispatchTouchEvent(MotionEvent motionEvent) {
-        GestureDetectorCompat gestureDetectorCompat = this.gestureDetector;
-        if (gestureDetectorCompat != null && gestureDetectorCompat.onTouchEvent(motionEvent)) {
-            super.dispatchTouchEvent(motionEvent);
-            return true;
-        }
-        return super.dispatchTouchEvent(motionEvent);
     }
 
     private void drawText(Canvas canvas) {
@@ -346,11 +358,6 @@ public class AboutLinkCell extends FrameLayout {
         canvas.restore();
     }
 
-    @Override // android.view.View
-    public void setOnClickListener(View.OnClickListener onClickListener) {
-        this.container.setOnClickListener(onClickListener);
-    }
-
     /* JADX INFO: Access modifiers changed from: private */
     public void resetPressedLink() {
         this.links.clear();
@@ -395,10 +402,10 @@ public class AboutLinkCell extends FrameLayout {
     }
 
     /* JADX INFO: Access modifiers changed from: package-private */
-    /* renamed from: org.telegram.ui.Cells.AboutLinkCell$3  reason: invalid class name */
+    /* renamed from: org.telegram.ui.Cells.AboutLinkCell$2  reason: invalid class name */
     /* loaded from: classes3.dex */
-    public class AnonymousClass3 implements Runnable {
-        AnonymousClass3() {
+    public class AnonymousClass2 implements Runnable {
+        AnonymousClass2() {
         }
 
         @Override // java.lang.Runnable
@@ -412,16 +419,16 @@ public class AboutLinkCell extends FrameLayout {
                 final ClickableSpan clickableSpan = (ClickableSpan) AboutLinkCell.this.pressedLink.getSpan();
                 BottomSheet.Builder builder = new BottomSheet.Builder(AboutLinkCell.this.parentFragment.getParentActivity());
                 builder.setTitle(url);
-                builder.setItems(new CharSequence[]{LocaleController.getString("Open", R.string.Open), LocaleController.getString("Copy", R.string.Copy)}, new DialogInterface.OnClickListener() { // from class: org.telegram.ui.Cells.AboutLinkCell$3$$ExternalSyntheticLambda0
+                builder.setItems(new CharSequence[]{LocaleController.getString("Open", R.string.Open), LocaleController.getString("Copy", R.string.Copy)}, new DialogInterface.OnClickListener() { // from class: org.telegram.ui.Cells.AboutLinkCell$2$$ExternalSyntheticLambda0
                     @Override // android.content.DialogInterface.OnClickListener
                     public final void onClick(DialogInterface dialogInterface, int i) {
-                        AboutLinkCell.AnonymousClass3.this.lambda$run$0(clickableSpan, url, dialogInterface, i);
+                        AboutLinkCell.AnonymousClass2.this.lambda$run$0(clickableSpan, url, dialogInterface, i);
                     }
                 });
-                builder.setOnPreDismissListener(new DialogInterface.OnDismissListener() { // from class: org.telegram.ui.Cells.AboutLinkCell$3$$ExternalSyntheticLambda1
+                builder.setOnPreDismissListener(new DialogInterface.OnDismissListener() { // from class: org.telegram.ui.Cells.AboutLinkCell$2$$ExternalSyntheticLambda1
                     @Override // android.content.DialogInterface.OnDismissListener
                     public final void onDismiss(DialogInterface dialogInterface) {
-                        AboutLinkCell.AnonymousClass3.this.lambda$run$1(dialogInterface);
+                        AboutLinkCell.AnonymousClass2.this.lambda$run$1(dialogInterface);
                     }
                 });
                 builder.show();
@@ -455,8 +462,44 @@ public class AboutLinkCell extends FrameLayout {
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    public boolean checkTouchTextLayout(StaticLayout staticLayout, int i, int i2, int i3, int i4) {
+    private LinkSpanDrawable hitLink(int i, int i2) {
+        if (i < this.showMoreTextView.getLeft() || i > this.showMoreTextView.getRight() || i2 < this.showMoreTextView.getTop() || i2 > this.showMoreTextView.getBottom()) {
+            if (getMeasuredWidth() > 0 && i > getMeasuredWidth() - AndroidUtilities.dp(23.0f)) {
+                return null;
+            }
+            StaticLayout staticLayout = this.firstThreeLinesLayout;
+            if (staticLayout != null && this.expandT < 1.0f && this.shouldExpand) {
+                LinkSpanDrawable checkTouchTextLayout = checkTouchTextLayout(staticLayout, this.textX, this.textY, i, i2);
+                if (checkTouchTextLayout != null) {
+                    return checkTouchTextLayout;
+                }
+                if (this.nextLinesLayouts != null) {
+                    int i3 = 0;
+                    while (true) {
+                        StaticLayout[] staticLayoutArr = this.nextLinesLayouts;
+                        if (i3 >= staticLayoutArr.length) {
+                            break;
+                        }
+                        StaticLayout staticLayout2 = staticLayoutArr[i3];
+                        Point[] pointArr = this.nextLinesLayoutsPositions;
+                        LinkSpanDrawable checkTouchTextLayout2 = checkTouchTextLayout(staticLayout2, pointArr[i3].x, pointArr[i3].y, i, i2);
+                        if (checkTouchTextLayout2 != null) {
+                            return checkTouchTextLayout2;
+                        }
+                        i3++;
+                    }
+                }
+            }
+            LinkSpanDrawable checkTouchTextLayout3 = checkTouchTextLayout(this.textLayout, this.textX, this.textY, i, i2);
+            if (checkTouchTextLayout3 == null) {
+                return null;
+            }
+            return checkTouchTextLayout3;
+        }
+        return null;
+    }
+
+    private LinkSpanDrawable checkTouchTextLayout(StaticLayout staticLayout, int i, int i2, int i3, int i4) {
         int i5 = i3 - i;
         int i6 = i4 - i2;
         try {
@@ -464,27 +507,24 @@ public class AboutLinkCell extends FrameLayout {
             float f = i5;
             int offsetForHorizontal = staticLayout.getOffsetForHorizontal(lineForVertical, f);
             float lineLeft = staticLayout.getLineLeft(lineForVertical);
-            if (lineLeft <= f && lineLeft + staticLayout.getLineWidth(lineForVertical) >= f && i6 >= 0 && i6 <= staticLayout.getHeight()) {
-                Spannable spannable = (Spannable) staticLayout.getText();
-                ClickableSpan[] clickableSpanArr = (ClickableSpan[]) spannable.getSpans(offsetForHorizontal, offsetForHorizontal, ClickableSpan.class);
-                if (clickableSpanArr.length != 0 && !AndroidUtilities.isAccessibilityScreenReaderEnabled()) {
-                    resetPressedLink();
-                    LinkSpanDrawable linkSpanDrawable = new LinkSpanDrawable(clickableSpanArr[0], this.parentFragment.getResourceProvider(), i3, i4);
-                    this.pressedLink = linkSpanDrawable;
-                    this.links.addLink(linkSpanDrawable);
-                    int spanStart = spannable.getSpanStart(this.pressedLink.getSpan());
-                    int spanEnd = spannable.getSpanEnd(this.pressedLink.getSpan());
-                    LinkPath obtainNewPath = this.pressedLink.obtainNewPath();
-                    obtainNewPath.setCurrentLayout(staticLayout, spanStart, i2);
-                    staticLayout.getSelectionPath(spanStart, spanEnd, obtainNewPath);
-                    AndroidUtilities.runOnUIThread(this.longPressedRunnable, ViewConfiguration.getLongPressTimeout());
-                    return true;
-                }
+            if (lineLeft > f || lineLeft + staticLayout.getLineWidth(lineForVertical) < f || i6 < 0 || i6 > staticLayout.getHeight()) {
+                return null;
             }
-            return false;
+            Spannable spannable = (Spannable) staticLayout.getText();
+            ClickableSpan[] clickableSpanArr = (ClickableSpan[]) spannable.getSpans(offsetForHorizontal, offsetForHorizontal, ClickableSpan.class);
+            if (clickableSpanArr.length == 0 || AndroidUtilities.isAccessibilityScreenReaderEnabled()) {
+                return null;
+            }
+            LinkSpanDrawable linkSpanDrawable = new LinkSpanDrawable(clickableSpanArr[0], this.parentFragment.getResourceProvider(), i3, i4);
+            int spanStart = spannable.getSpanStart(clickableSpanArr[0]);
+            int spanEnd = spannable.getSpanEnd(clickableSpanArr[0]);
+            LinkPath obtainNewPath = linkSpanDrawable.obtainNewPath();
+            obtainNewPath.setCurrentLayout(staticLayout, spanStart, i2);
+            staticLayout.getSelectionPath(spanStart, spanEnd, obtainNewPath);
+            return linkSpanDrawable;
         } catch (Exception e) {
             FileLog.e(e);
-            return false;
+            return null;
         }
     }
 
@@ -563,7 +603,7 @@ public class AboutLinkCell extends FrameLayout {
                     AboutLinkCell.this.lambda$updateCollapse$1(atomicReference, f, f2, springInterpolator, valueAnimator2);
                 }
             });
-            this.collapseAnimator.addListener(new AnimatorListenerAdapter() { // from class: org.telegram.ui.Cells.AboutLinkCell.4
+            this.collapseAnimator.addListener(new AnimatorListenerAdapter() { // from class: org.telegram.ui.Cells.AboutLinkCell.3
                 @Override // android.animation.AnimatorListenerAdapter, android.animation.Animator.AnimatorListener
                 public void onAnimationEnd(Animator animator) {
                     AboutLinkCell.this.didResizeEnd();

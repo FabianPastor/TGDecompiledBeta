@@ -32,6 +32,7 @@ import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
@@ -153,6 +154,10 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
                 return 0L;
             }
 
+            public static int $default$getTopicId(ChatActionCellDelegate chatActionCellDelegate) {
+                return 0;
+            }
+
             public static void $default$needOpenInviteLink(ChatActionCellDelegate chatActionCellDelegate, TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported) {
             }
 
@@ -174,6 +179,8 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
         BaseFragment getBaseFragment();
 
         long getDialogId();
+
+        int getTopicId();
 
         void needOpenInviteLink(TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported);
 
@@ -638,17 +645,20 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
         TLRPC$MessageMedia tLRPC$MessageMedia;
         MessageObject messageObject = this.currentMessageObject;
         if (messageObject != null) {
-            TLRPC$Message tLRPC$Message = messageObject.messageOwner;
-            if (tLRPC$Message != null && (tLRPC$MessageMedia = tLRPC$Message.media) != null && tLRPC$MessageMedia.ttl_seconds != 0) {
-                if (tLRPC$MessageMedia.photo instanceof TLRPC$TL_photoEmpty) {
-                    charSequence = LocaleController.getString("AttachPhotoExpired", R.string.AttachPhotoExpired);
-                } else if (tLRPC$MessageMedia.document instanceof TLRPC$TL_documentEmpty) {
-                    charSequence = LocaleController.getString("AttachVideoExpired", R.string.AttachVideoExpired);
+            charSequence = (this.delegate.getTopicId() != 0 || !MessageObject.isTopicActionMessage(messageObject)) ? null : ForumUtilities.createActionTextWithTopic(MessagesController.getInstance(this.currentAccount).getTopicsController().findTopic(-messageObject.getDialogId(), MessageObject.getTopicId(messageObject.messageOwner)), messageObject);
+            if (charSequence == null) {
+                TLRPC$Message tLRPC$Message = messageObject.messageOwner;
+                if (tLRPC$Message != null && (tLRPC$MessageMedia = tLRPC$Message.media) != null && tLRPC$MessageMedia.ttl_seconds != 0) {
+                    if (tLRPC$MessageMedia.photo instanceof TLRPC$TL_photoEmpty) {
+                        charSequence = LocaleController.getString("AttachPhotoExpired", R.string.AttachPhotoExpired);
+                    } else if (tLRPC$MessageMedia.document instanceof TLRPC$TL_documentEmpty) {
+                        charSequence = LocaleController.getString("AttachVideoExpired", R.string.AttachVideoExpired);
+                    } else {
+                        charSequence = AnimatedEmojiSpan.cloneSpans(messageObject.messageText);
+                    }
                 } else {
                     charSequence = AnimatedEmojiSpan.cloneSpans(messageObject.messageText);
                 }
-            } else {
-                charSequence = AnimatedEmojiSpan.cloneSpans(messageObject.messageText);
             }
         } else {
             charSequence = this.customText;

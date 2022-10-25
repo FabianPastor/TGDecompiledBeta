@@ -1699,6 +1699,11 @@ public class ChatObject {
         return canUserDoAction(tLRPC$Chat, 0) || (isChannel(tLRPC$Chat) && !tLRPC$Chat.megagroup && (tLRPC$TL_chatAdminRights = tLRPC$Chat.admin_rights) != null && tLRPC$TL_chatAdminRights.edit_messages);
     }
 
+    public static boolean canManageTopics(TLRPC$Chat tLRPC$Chat) {
+        TLRPC$TL_chatAdminRights tLRPC$TL_chatAdminRights;
+        return canUserDoAction(tLRPC$Chat, 15) || (isChannel(tLRPC$Chat) && !tLRPC$Chat.megagroup && (tLRPC$TL_chatAdminRights = tLRPC$Chat.admin_rights) != null && tLRPC$TL_chatAdminRights.edit_messages);
+    }
+
     public static boolean isChannel(long j, int i) {
         TLRPC$Chat chat = MessagesController.getInstance(i).getChat(Long.valueOf(j));
         return (chat instanceof TLRPC$TL_channel) || (chat instanceof TLRPC$TL_channelForbidden);

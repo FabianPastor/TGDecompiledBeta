@@ -3025,7 +3025,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1787onCreateViewHolder(ViewGroup viewGroup, int i) {
             View loadingCell;
             if (i == 0) {
                 loadingCell = new DialogCell(null, this.mContext, false, false);
@@ -3470,7 +3470,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
         /* JADX WARN: Multi-variable type inference failed */
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1787onCreateViewHolder(ViewGroup viewGroup, int i) {
             FrameLayout frameLayout;
             if (i == 0) {
                 ChatMessageCell chatMessageCell = new ChatMessageCell(this.mContext, false, new Theme.ResourcesProvider() { // from class: org.telegram.ui.ThemePreviewActivity.MessagesAdapter.1
@@ -3784,6 +3784,11 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                     }
 
                     @Override // org.telegram.ui.Cells.ChatActionCell.ChatActionCellDelegate
+                    public /* synthetic */ int getTopicId() {
+                        return ChatActionCell.ChatActionCellDelegate.CC.$default$getTopicId(this);
+                    }
+
+                    @Override // org.telegram.ui.Cells.ChatActionCell.ChatActionCellDelegate
                     public /* synthetic */ void needOpenInviteLink(TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported) {
                         ChatActionCell.ChatActionCellDelegate.CC.$default$needOpenInviteLink(this, tLRPC$TL_chatInviteExported);
                     }
@@ -3926,7 +3931,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1787onCreateViewHolder(ViewGroup viewGroup, int i) {
             return new RecyclerListView.Holder(new PatternCell(this.mContext, ThemePreviewActivity.this.maxWallpaperSize, new PatternCell.PatternCellDelegate() { // from class: org.telegram.ui.ThemePreviewActivity.PatternsAdapter.1
                 @Override // org.telegram.ui.Cells.PatternCell.PatternCellDelegate
                 public TLRPC$TL_wallPaper getSelectedPattern() {

@@ -160,14 +160,12 @@ public interface INavigationLayout {
 
     void setUseAlphaAnimations(boolean z);
 
-    void setUseBackground(boolean z);
-
     @Deprecated
     void showLastFragment();
 
     void startActivityForResult(Intent intent, int i);
 
-    /* renamed from: org.telegram.ui.ActionBar.INavigationLayout$-CC */
+    /* renamed from: org.telegram.ui.ActionBar.INavigationLayout$-CC  reason: invalid class name */
     /* loaded from: classes3.dex */
     public final /* synthetic */ class CC {
         public static boolean $default$hasIntegratedBlurInPreview(INavigationLayout iNavigationLayout) {
@@ -180,9 +178,6 @@ public interface INavigationLayout {
 
         @Deprecated
         public static void $default$rebuildLogout(INavigationLayout iNavigationLayout) {
-        }
-
-        public static void $default$setUseBackground(INavigationLayout iNavigationLayout, boolean z) {
         }
 
         public static INavigationLayout newLayout(Context context) {
@@ -277,7 +272,7 @@ public interface INavigationLayout {
 
         void onThemeProgress(float f);
 
-        /* renamed from: org.telegram.ui.ActionBar.INavigationLayout$INavigationLayoutDelegate$-CC */
+        /* renamed from: org.telegram.ui.ActionBar.INavigationLayout$INavigationLayoutDelegate$-CC  reason: invalid class name */
         /* loaded from: classes3.dex */
         public final /* synthetic */ class CC {
             public static boolean $default$needAddFragmentToStack(INavigationLayoutDelegate iNavigationLayoutDelegate, BaseFragment baseFragment, INavigationLayout iNavigationLayout) {

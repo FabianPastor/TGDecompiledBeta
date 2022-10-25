@@ -70,7 +70,7 @@ public class CustomEmojiReactionsWindow {
     int[] location = new int[2];
     private int frameDrawCount = 0;
 
-    static /* synthetic */ int access$808(CustomEmojiReactionsWindow customEmojiReactionsWindow) {
+    static /* synthetic */ int access$908(CustomEmojiReactionsWindow customEmojiReactionsWindow) {
         int i = customEmojiReactionsWindow.frameDrawCount;
         customEmojiReactionsWindow.frameDrawCount = i + 1;
         return i;
@@ -309,6 +309,7 @@ public class CustomEmojiReactionsWindow {
                 }
                 CustomEmojiReactionsWindow customEmojiReactionsWindow2 = CustomEmojiReactionsWindow.this;
                 customEmojiReactionsWindow2.reactionsContainerLayout.setCustomEmojiEnterProgress(customEmojiReactionsWindow2.enterTransitionProgress);
+                CustomEmojiReactionsWindow.this.syncReactionFrames(z);
                 if (!z) {
                     CustomEmojiReactionsWindow.this.reactionsContainerLayout.setSkipDraw(false);
                 }
@@ -330,6 +331,48 @@ public class CustomEmojiReactionsWindow {
         this.reactionsContainerLayout.setCustomEmojiEnterProgress(floatValue);
         this.invalidatePath = true;
         this.containerView.invalidate();
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
+    public void syncReactionFrames(boolean z) {
+        View childAt;
+        ImageReceiver imageReceiver;
+        ImageReceiver imageReceiver2;
+        SelectAnimatedEmojiDialog.ImageViewEmoji imageViewEmoji;
+        ReactionsLayoutInBubble.VisibleReaction visibleReaction;
+        HashMap hashMap = new HashMap();
+        for (int i = 0; i < this.selectAnimatedEmojiDialog.emojiGridView.getChildCount(); i++) {
+            if ((this.selectAnimatedEmojiDialog.emojiGridView.getChildAt(i) instanceof SelectAnimatedEmojiDialog.ImageViewEmoji) && (visibleReaction = (imageViewEmoji = (SelectAnimatedEmojiDialog.ImageViewEmoji) this.selectAnimatedEmojiDialog.emojiGridView.getChildAt(i)).reaction) != null) {
+                hashMap.put(visibleReaction, imageViewEmoji);
+                imageViewEmoji.notDraw = false;
+                imageViewEmoji.invalidate();
+            }
+        }
+        for (int i2 = -1; i2 < this.reactionsContainerLayout.recyclerListView.getChildCount(); i2++) {
+            if (i2 == -1) {
+                childAt = this.reactionsContainerLayout.nextRecentReaction;
+            } else {
+                childAt = this.reactionsContainerLayout.recyclerListView.getChildAt(i2);
+            }
+            if (childAt instanceof ReactionsContainerLayout.ReactionHolderView) {
+                ReactionsContainerLayout.ReactionHolderView reactionHolderView = (ReactionsContainerLayout.ReactionHolderView) childAt;
+                SelectAnimatedEmojiDialog.ImageViewEmoji imageViewEmoji2 = (SelectAnimatedEmojiDialog.ImageViewEmoji) hashMap.get(reactionHolderView.currentReaction);
+                if (imageViewEmoji2 != null && imageViewEmoji2.span == null) {
+                    if (z) {
+                        imageReceiver2 = reactionHolderView.loopImageView.getImageReceiver();
+                        imageReceiver = imageViewEmoji2.imageReceiver;
+                    } else {
+                        ImageReceiver imageReceiver3 = reactionHolderView.loopImageView.getImageReceiver();
+                        ImageReceiver imageReceiver4 = imageViewEmoji2.imageReceiver;
+                        imageReceiver = imageReceiver3;
+                        imageReceiver2 = imageReceiver4;
+                    }
+                    if (imageReceiver2.getLottieAnimation() != null && imageReceiver.getLottieAnimation() != null && imageReceiver2.getLottieAnimation() != imageReceiver.getLottieAnimation()) {
+                        imageReceiver.getLottieAnimation().setCurrentFrame(imageReceiver2.getLottieAnimation().getCurrentFrame(), false);
+                    }
+                }
+            }
+        }
     }
 
     public void removeView() {
@@ -710,7 +753,7 @@ public class CustomEmojiReactionsWindow {
                 if (CustomEmojiReactionsWindow.this.frameDrawCount == 3) {
                     CustomEmojiReactionsWindow.this.reactionsContainerLayout.setSkipDraw(true);
                 }
-                CustomEmojiReactionsWindow.access$808(CustomEmojiReactionsWindow.this);
+                CustomEmojiReactionsWindow.access$908(CustomEmojiReactionsWindow.this);
             }
             CustomEmojiReactionsWindow.this.selectAnimatedEmojiDialog.drawBigReaction(canvas, this);
             invalidate();
@@ -720,7 +763,10 @@ public class CustomEmojiReactionsWindow {
     /* JADX INFO: Access modifiers changed from: private */
     public boolean imageIsEquals(BackupImageView backupImageView, SelectAnimatedEmojiDialog.ImageViewEmoji imageViewEmoji) {
         AnimatedEmojiSpan animatedEmojiSpan = imageViewEmoji.span;
-        return animatedEmojiSpan == null ? imageViewEmoji.imageReceiver.getLottieAnimation() == backupImageView.getImageReceiver().getLottieAnimation() : backupImageView.animatedEmojiDrawable != null && animatedEmojiSpan.getDocumentId() == backupImageView.animatedEmojiDrawable.getDocumentId();
+        if (animatedEmojiSpan == null) {
+            return true;
+        }
+        return backupImageView.animatedEmojiDrawable != null && animatedEmojiSpan.getDocumentId() == backupImageView.animatedEmojiDrawable.getDocumentId();
     }
 
     public void setRecentReactions(List<ReactionsLayoutInBubble.VisibleReaction> list) {

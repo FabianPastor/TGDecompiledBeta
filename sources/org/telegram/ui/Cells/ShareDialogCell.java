@@ -181,7 +181,7 @@ public class ShareDialogCell extends FrameLayout {
             }
             if (z3) {
                 SimpleTextView simpleTextView2 = this.topicTextView;
-                simpleTextView2.setText(ForumUtilities.getForumSpannedName(tLRPC$TL_forumTopic, simpleTextView2.getTextPaint()));
+                simpleTextView2.setText(ForumUtilities.getTopicSpannedName(tLRPC$TL_forumTopic, simpleTextView2.getTextPaint()));
                 this.topicTextView.requestLayout();
             }
             float f = 0.0f;

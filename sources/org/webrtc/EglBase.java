@@ -37,7 +37,7 @@ public interface EglBase {
     void detachCurrent();
 
     /* renamed from: getEglBaseContext */
-    Context mo2426getEglBaseContext();
+    Context mo2427getEglBaseContext();
 
     boolean hasBackgroundSurface();
 

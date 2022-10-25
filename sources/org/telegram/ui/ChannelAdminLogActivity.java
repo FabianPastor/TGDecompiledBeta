@@ -1874,7 +1874,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1787onCreateViewHolder(ViewGroup viewGroup, int i) {
             ChatActionCell chatActionCell;
             View view;
             if (i == 0) {
@@ -2329,6 +2329,11 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
 
             @Override // org.telegram.ui.Cells.ChatActionCell.ChatActionCellDelegate
             public void didPressReplyMessage(ChatActionCell chatActionCell, int i) {
+            }
+
+            @Override // org.telegram.ui.Cells.ChatActionCell.ChatActionCellDelegate
+            public /* synthetic */ int getTopicId() {
+                return ChatActionCell.ChatActionCellDelegate.CC.$default$getTopicId(this);
             }
 
             @Override // org.telegram.ui.Cells.ChatActionCell.ChatActionCellDelegate

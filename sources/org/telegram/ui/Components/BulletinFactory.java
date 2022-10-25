@@ -159,6 +159,16 @@ public final class BulletinFactory {
         return create(lottieLayout, i2);
     }
 
+    public Bulletin createUndoBulletin(CharSequence charSequence, Runnable runnable, Runnable runnable2) {
+        Bulletin.LottieLayout lottieLayout = new Bulletin.LottieLayout(getContext(), this.resourcesProvider);
+        lottieLayout.textView.setText(charSequence);
+        lottieLayout.textView.setSingleLine(false);
+        lottieLayout.textView.setMaxLines(2);
+        lottieLayout.setTimer();
+        lottieLayout.setButton(new Bulletin.UndoButton(getContext(), true, this.resourcesProvider).setText(LocaleController.getString("Undo", R.string.Undo)).setUndoAction(runnable).setDelayedAction(runnable2));
+        return create(lottieLayout, 5000);
+    }
+
     public Bulletin createUsersBulletin(ArrayList<TLRPC$User> arrayList, CharSequence charSequence) {
         Bulletin.UsersLayout usersLayout = new Bulletin.UsersLayout(getContext(), this.resourcesProvider);
         int i = 0;

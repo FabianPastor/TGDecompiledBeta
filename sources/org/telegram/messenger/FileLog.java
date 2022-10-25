@@ -262,7 +262,7 @@ public class FileLog {
     }
 
     private static boolean needSent(Throwable th) {
-        return !(th instanceof InterruptedException) && !(th instanceof MediaCodecVideoConvertor.ConversionCanceledException);
+        return !(th instanceof InterruptedException) && !(th instanceof MediaCodecVideoConvertor.ConversionCanceledException) && !(th instanceof IgnoreSentException);
     }
 
     public static void d(final String str) {
@@ -339,6 +339,13 @@ public class FileLog {
             if ((getInstance().currentFile == null || !file.getAbsolutePath().equals(getInstance().currentFile.getAbsolutePath())) && ((getInstance().networkFile == null || !file.getAbsolutePath().equals(getInstance().networkFile.getAbsolutePath())) && (getInstance().tonlibFile == null || !file.getAbsolutePath().equals(getInstance().tonlibFile.getAbsolutePath())))) {
                 file.delete();
             }
+        }
+    }
+
+    /* loaded from: classes.dex */
+    public static class IgnoreSentException extends Exception {
+        public IgnoreSentException(String str) {
+            super(str);
         }
     }
 }

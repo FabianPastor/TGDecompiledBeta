@@ -60,7 +60,7 @@ public class AppIconsSelectorCell extends RecyclerListView implements Notificati
         setAdapter(new RecyclerView.Adapter() { // from class: org.telegram.ui.Cells.AppIconsSelectorCell.1
             @Override // androidx.recyclerview.widget.RecyclerView.Adapter
             /* renamed from: onCreateViewHolder */
-            public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i2) {
+            public RecyclerView.ViewHolder mo1787onCreateViewHolder(ViewGroup viewGroup, int i2) {
                 return new RecyclerListView.Holder(new IconHolderView(viewGroup.getContext()));
             }
 

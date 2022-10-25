@@ -774,26 +774,26 @@ public class FileLoadOperation {
     /* JADX WARN: Removed duplicated region for block: B:109:0x03ba  */
     /* JADX WARN: Removed duplicated region for block: B:115:0x03db  */
     /* JADX WARN: Removed duplicated region for block: B:126:0x0409  */
-    /* JADX WARN: Removed duplicated region for block: B:221:0x0610  */
-    /* JADX WARN: Removed duplicated region for block: B:236:0x063d  */
-    /* JADX WARN: Removed duplicated region for block: B:249:0x06b0  */
-    /* JADX WARN: Removed duplicated region for block: B:262:0x0709  */
-    /* JADX WARN: Removed duplicated region for block: B:269:0x0734  */
-    /* JADX WARN: Removed duplicated region for block: B:275:0x0760  */
-    /* JADX WARN: Removed duplicated region for block: B:280:0x079d  */
-    /* JADX WARN: Removed duplicated region for block: B:309:0x0801  */
-    /* JADX WARN: Removed duplicated region for block: B:317:0x0824 A[Catch: Exception -> 0x082a, TRY_LEAVE, TryCatch #1 {Exception -> 0x082a, blocks: (B:315:0x0813, B:317:0x0824), top: B:345:0x0813 }] */
-    /* JADX WARN: Removed duplicated region for block: B:327:0x0844  */
-    /* JADX WARN: Removed duplicated region for block: B:329:0x0848  */
-    /* JADX WARN: Removed duplicated region for block: B:330:0x0855  */
-    /* JADX WARN: Removed duplicated region for block: B:365:0x061b A[EXC_TOP_SPLITTER, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:221:0x0611  */
+    /* JADX WARN: Removed duplicated region for block: B:236:0x063e  */
+    /* JADX WARN: Removed duplicated region for block: B:249:0x06b1  */
+    /* JADX WARN: Removed duplicated region for block: B:262:0x070a  */
+    /* JADX WARN: Removed duplicated region for block: B:269:0x0735  */
+    /* JADX WARN: Removed duplicated region for block: B:275:0x0761  */
+    /* JADX WARN: Removed duplicated region for block: B:280:0x079e  */
+    /* JADX WARN: Removed duplicated region for block: B:309:0x0802  */
+    /* JADX WARN: Removed duplicated region for block: B:317:0x0825 A[Catch: Exception -> 0x082b, TRY_LEAVE, TryCatch #0 {Exception -> 0x082b, blocks: (B:315:0x0814, B:317:0x0825), top: B:343:0x0814 }] */
+    /* JADX WARN: Removed duplicated region for block: B:327:0x0845  */
+    /* JADX WARN: Removed duplicated region for block: B:329:0x0849  */
+    /* JADX WARN: Removed duplicated region for block: B:330:0x0856  */
+    /* JADX WARN: Removed duplicated region for block: B:363:0x061c A[EXC_TOP_SPLITTER, SYNTHETIC] */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
     public boolean start(final org.telegram.messenger.FileLoadOperationStream r29, final long r30, final boolean r32) {
         /*
-            Method dump skipped, instructions count: 2183
+            Method dump skipped, instructions count: 2184
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.FileLoadOperation.start(org.telegram.messenger.FileLoadOperationStream, long, boolean):boolean");

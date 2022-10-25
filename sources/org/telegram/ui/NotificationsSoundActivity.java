@@ -614,7 +614,7 @@ public class NotificationsSoundActivity extends BaseFragment implements ChatAtta
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1788onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1787onCreateViewHolder(ViewGroup viewGroup, int i) {
             CreationTextCell creationTextCell;
             Context context = viewGroup.getContext();
             if (i == 0) {
