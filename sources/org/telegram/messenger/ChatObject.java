@@ -45,6 +45,7 @@ import org.telegram.tgnet.TLRPC$TL_chat_layer92;
 import org.telegram.tgnet.TLRPC$TL_chat_old;
 import org.telegram.tgnet.TLRPC$TL_chat_old2;
 import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC$TL_forumTopic;
 import org.telegram.tgnet.TLRPC$TL_groupCallParticipant;
 import org.telegram.tgnet.TLRPC$TL_groupCallParticipantVideo;
 import org.telegram.tgnet.TLRPC$TL_groupCallParticipantVideoSourceGroup;
@@ -1699,9 +1700,32 @@ public class ChatObject {
         return canUserDoAction(tLRPC$Chat, 0) || (isChannel(tLRPC$Chat) && !tLRPC$Chat.megagroup && (tLRPC$TL_chatAdminRights = tLRPC$Chat.admin_rights) != null && tLRPC$TL_chatAdminRights.edit_messages);
     }
 
+    public static boolean canCreateTopic(TLRPC$Chat tLRPC$Chat) {
+        return canUserDoAction(tLRPC$Chat, 15);
+    }
+
     public static boolean canManageTopics(TLRPC$Chat tLRPC$Chat) {
-        TLRPC$TL_chatAdminRights tLRPC$TL_chatAdminRights;
-        return canUserDoAction(tLRPC$Chat, 15) || (isChannel(tLRPC$Chat) && !tLRPC$Chat.megagroup && (tLRPC$TL_chatAdminRights = tLRPC$Chat.admin_rights) != null && tLRPC$TL_chatAdminRights.edit_messages);
+        return canUserDoAdminAction(tLRPC$Chat, 15);
+    }
+
+    public static boolean canManageTopic(TLRPC$Chat tLRPC$Chat, TLRPC$TL_forumTopic tLRPC$TL_forumTopic) {
+        return canManageTopics(tLRPC$Chat) || isMyTopic(tLRPC$TL_forumTopic);
+    }
+
+    public static boolean canManageTopic(int i, TLRPC$Chat tLRPC$Chat, int i2) {
+        return canManageTopics(tLRPC$Chat) || isMyTopic(i, tLRPC$Chat, i2);
+    }
+
+    public static boolean isMyTopic(TLRPC$TL_forumTopic tLRPC$TL_forumTopic) {
+        return tLRPC$TL_forumTopic != null && tLRPC$TL_forumTopic.my;
+    }
+
+    public static boolean isMyTopic(int i, TLRPC$Chat tLRPC$Chat, int i2) {
+        return tLRPC$Chat != null && tLRPC$Chat.forum && isMyTopic(i, tLRPC$Chat.id, i2);
+    }
+
+    public static boolean isMyTopic(int i, long j, int i2) {
+        return isMyTopic(MessagesController.getInstance(i).getTopicsController().findTopic(j, i2));
     }
 
     public static boolean isChannel(long j, int i) {

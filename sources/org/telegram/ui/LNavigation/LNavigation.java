@@ -327,7 +327,7 @@ public class LNavigation extends FrameLayout implements INavigationLayout, Float
                             LNavigation.this.getLastFragment().onBeginSlide();
                             BaseFragment backgroundFragment = LNavigation.this.getBackgroundFragment();
                             if (backgroundFragment != null) {
-                                backgroundFragment.onResume();
+                                backgroundFragment.setPaused(false);
                                 backgroundFragment.prepareFragmentToSlide(false, true);
                                 backgroundFragment.onBeginSlide();
                             }
@@ -541,7 +541,7 @@ public class LNavigation extends FrameLayout implements INavigationLayout, Float
         }
         baseFragment.onBecomeFullyVisible();
         if (baseFragment2 != null) {
-            baseFragment2.onPause();
+            baseFragment2.setPaused(true);
             baseFragment2.onBecomeFullyHidden();
             baseFragment2.prepareFragmentToSlide(false, false);
         }
@@ -725,7 +725,7 @@ public class LNavigation extends FrameLayout implements INavigationLayout, Float
                     addView(onCreateHolderView, getChildCount() - 1);
                     this.fragmentStack.add(baseFragment);
                     notifyFragmentStackChanged();
-                    baseFragment.onResume();
+                    baseFragment.setPaused(false);
                     this.swipeProgress = 1.0f;
                     invalidateTranslation();
                 }
@@ -847,7 +847,7 @@ public class LNavigation extends FrameLayout implements INavigationLayout, Float
             if (baseFragment2 != null) {
                 baseFragment2.onTransitionAnimationEnd(false, true);
                 baseFragment2.onBecomeFullyHidden();
-                baseFragment2.onPause();
+                baseFragment2.setPaused(true);
             }
             runnable.run();
             this.currentSpringAnimation = null;
@@ -967,7 +967,7 @@ public class LNavigation extends FrameLayout implements INavigationLayout, Float
             if (i == -1 || i >= this.fragmentStack.size()) {
                 BaseFragment lastFragment = getLastFragment();
                 if (lastFragment != null) {
-                    lastFragment.onPause();
+                    lastFragment.setPaused(true);
                     lastFragment.onTransitionAnimationStart(false, true);
                     lastFragment.onTransitionAnimationEnd(false, true);
                     lastFragment.onBecomeFullyHidden();
@@ -975,7 +975,7 @@ public class LNavigation extends FrameLayout implements INavigationLayout, Float
                 this.fragmentStack.add(baseFragment);
                 notifyFragmentStackChanged();
                 addView(onCreateHolderView(baseFragment), getChildCount() - 1);
-                baseFragment.onResume();
+                baseFragment.setPaused(false);
                 baseFragment.onTransitionAnimationStart(true, false);
                 baseFragment.onTransitionAnimationEnd(true, false);
                 baseFragment.onBecomeFullyVisible();
@@ -1069,7 +1069,7 @@ public class LNavigation extends FrameLayout implements INavigationLayout, Float
         if (indexOf == size - 1) {
             BaseFragment lastFragment = getLastFragment();
             if (lastFragment != null) {
-                lastFragment.onResume();
+                lastFragment.setPaused(false);
                 lastFragment.onBecomeFullyVisible();
             }
             FragmentHolderView foregroundView = getForegroundView();
@@ -1146,41 +1146,38 @@ public class LNavigation extends FrameLayout implements INavigationLayout, Float
         AnimatorSet animatorSet = this.customAnimation;
         if (animatorSet != null && animatorSet.isRunning()) {
             this.customAnimation.addListener(new AnonymousClass4(i));
-            return;
-        }
-        int i2 = 0;
-        if (this.fragmentStack.isEmpty()) {
+        } else if (this.fragmentStack.isEmpty()) {
             while (getChildCount() > 1) {
                 removeViewAt(0);
             }
-            return;
-        }
-        int i3 = (i & 1) != 0 ? 1 : 0;
-        boolean z = (i & 2) == 0 || (i3 != 0 && (!(getBackgroundView() == null || getBackgroundView().fragment == getBackgroundFragment()) || (getForegroundView() != null && getForegroundView().fragment == getLastFragment())));
-        if (z && getChildCount() >= 3) {
-            removeViewAt(0);
-        }
-        if (i3 != 0 && getChildCount() >= 2) {
-            removeViewAt(0);
-        }
-        if (!z) {
-            i2 = this.fragmentStack.size() - 1;
-        }
-        while (i2 < this.fragmentStack.size() - (i3 ^ 1)) {
-            BaseFragment baseFragment = this.fragmentStack.get(i2);
-            baseFragment.clearViews();
-            baseFragment.setParentLayout(this);
-            FragmentHolderView fragmentHolderView = new FragmentHolderView(getContext());
-            fragmentHolderView.setFragment(baseFragment);
-            if (i2 >= this.fragmentStack.size() - 2) {
-                addView(fragmentHolderView, getChildCount() - 1);
+        } else {
+            boolean z = (i & 1) != 0;
+            boolean z2 = (i & 2) == 0 || (z && (!(getBackgroundView() == null || getBackgroundView().fragment == getBackgroundFragment()) || (getForegroundView() != null && getForegroundView().fragment == getLastFragment())));
+            if (z2 && getChildCount() >= 3) {
+                removeViewAt(0);
             }
-            i2++;
+            if (z && getChildCount() >= 2) {
+                removeViewAt(0);
+            }
+            for (int size = z2 ? 0 : this.fragmentStack.size() - 1; size < this.fragmentStack.size() - (!z ? 1 : 0); size++) {
+                BaseFragment baseFragment = this.fragmentStack.get(size);
+                baseFragment.clearViews();
+                baseFragment.setParentLayout(this);
+                FragmentHolderView fragmentHolderView = new FragmentHolderView(getContext());
+                fragmentHolderView.setFragment(baseFragment);
+                if (size >= this.fragmentStack.size() - 2) {
+                    addView(fragmentHolderView, getChildCount() - 1);
+                }
+            }
+            INavigationLayout.INavigationLayoutDelegate iNavigationLayoutDelegate = this.delegate;
+            if (iNavigationLayoutDelegate != null) {
+                iNavigationLayoutDelegate.onRebuildAllFragments(this, z);
+            }
+            if (getLastFragment() == null) {
+                return;
+            }
+            getLastFragment().setPaused(false);
         }
-        if (getLastFragment() == null) {
-            return;
-        }
-        getLastFragment().onResume();
     }
 
     /* JADX INFO: Access modifiers changed from: private */
@@ -1309,7 +1306,7 @@ public class LNavigation extends FrameLayout implements INavigationLayout, Float
             }
             lastFragment.onTransitionAnimationStart(false, true);
             if (backgroundFragment != null) {
-                backgroundFragment.onResume();
+                backgroundFragment.setPaused(false);
                 backgroundFragment.onTransitionAnimationStart(true, false);
             }
             if (this.swipeProgress == 0.0f) {
@@ -1379,7 +1376,7 @@ public class LNavigation extends FrameLayout implements INavigationLayout, Float
     }
 
     private void onCloseAnimationEnd(BaseFragment baseFragment, BaseFragment baseFragment2) {
-        baseFragment.onPause();
+        baseFragment.setPaused(true);
         baseFragment.setRemovingFromStack(true);
         baseFragment.onTransitionAnimationEnd(false, true);
         baseFragment.prepareFragmentToSlide(true, false);
@@ -1958,9 +1955,9 @@ public class LNavigation extends FrameLayout implements INavigationLayout, Float
         }
         if (z) {
             canvas.save();
-            Rect rect = AndroidUtilities.rectTmp2;
-            rect.set(getPaddingLeft(), getPaddingTop(), getPaddingLeft() + ((int) (((getWidth() - getPaddingLeft()) - getPaddingRight()) * this.swipeProgress)) + 1, getHeight() - getPaddingBottom());
-            canvas.clipRect(rect);
+            RectF rectF = AndroidUtilities.rectTmp;
+            rectF.set(getPaddingLeft(), getPaddingTop(), getPaddingLeft() + (((getWidth() - getPaddingLeft()) - getPaddingRight()) * this.swipeProgress), getHeight() - getPaddingBottom());
+            canvas.clipRect(rectF);
         }
         if (indexOfChild == 1 && isInPreviewMode()) {
             drawPreviewDrawables(canvas, (ViewGroup) view);
@@ -2075,7 +2072,7 @@ public class LNavigation extends FrameLayout implements INavigationLayout, Float
     public void onPause() {
         BaseFragment lastFragment = getLastFragment();
         if (lastFragment != null) {
-            lastFragment.onPause();
+            lastFragment.setPaused(true);
         }
     }
 
@@ -2083,7 +2080,7 @@ public class LNavigation extends FrameLayout implements INavigationLayout, Float
     public void onResume() {
         BaseFragment lastFragment = getLastFragment();
         if (lastFragment != null) {
-            lastFragment.onResume();
+            lastFragment.setPaused(false);
         }
     }
 

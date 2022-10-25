@@ -1874,7 +1874,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1787onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1786onCreateViewHolder(ViewGroup viewGroup, int i) {
             ChatActionCell chatActionCell;
             View view;
             if (i == 0) {
@@ -2322,6 +2322,11 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         /* renamed from: org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter$3  reason: invalid class name */
         /* loaded from: classes3.dex */
         public class AnonymousClass3 implements ChatActionCell.ChatActionCellDelegate {
+            @Override // org.telegram.ui.Cells.ChatActionCell.ChatActionCellDelegate
+            public /* synthetic */ boolean canDrawOutboundsContent() {
+                return ChatActionCell.ChatActionCellDelegate.CC.$default$canDrawOutboundsContent(this);
+            }
+
             @Override // org.telegram.ui.Cells.ChatActionCell.ChatActionCellDelegate
             public /* synthetic */ void didOpenPremiumGift(ChatActionCell chatActionCell, TLRPC$TL_premiumGiftOption tLRPC$TL_premiumGiftOption, boolean z) {
                 ChatActionCell.ChatActionCellDelegate.CC.$default$didOpenPremiumGift(this, chatActionCell, tLRPC$TL_premiumGiftOption, z);

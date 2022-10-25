@@ -4109,37 +4109,38 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         TransitionParams transitionParams = this.transitionParams;
         int i4 = 65;
         if (transitionParams.animateBackgroundBoundsInner && ((i = this.documentAttachType) == 3 || i == 7)) {
-            float f = transitionParams.toDeltaLeft;
-            if (f != 0.0f || transitionParams.toDeltaRight != 0.0f) {
-                int i5 = this.backgroundWidth;
-                int i6 = (int) ((i5 - f) + transitionParams.toDeltaRight);
-                int i7 = (int) ((i5 - transitionParams.deltaLeft) + transitionParams.deltaRight);
-                if (this.isRoundVideo && this.drawPinnedBottom && !this.drawBackground) {
-                    i7 = (int) (i7 + (getVideoTranscriptionProgress() * AndroidUtilities.dp(6.0f)));
-                    i6 += AndroidUtilities.dp(6.0f);
+            int i5 = this.backgroundWidth;
+            int i6 = (int) ((i5 - transitionParams.toDeltaLeft) + transitionParams.toDeltaRight);
+            int i7 = (int) ((i5 - transitionParams.deltaLeft) + transitionParams.deltaRight);
+            if (this.isRoundVideo && !this.drawBackground) {
+                i7 = (int) (i7 + (getVideoTranscriptionProgress() * AndroidUtilities.dp(8.0f)));
+                i6 += AndroidUtilities.dp(8.0f);
+            }
+            TransitionParams transitionParams2 = this.transitionParams;
+            if (transitionParams2.toDeltaLeft == 0.0f && transitionParams2.toDeltaRight == 0.0f) {
+                i6 = i7;
+            }
+            SeekBarWaveform seekBarWaveform = this.seekBarWaveform;
+            if (seekBarWaveform != null) {
+                if (transitionParams2.animateUseTranscribeButton) {
+                    seekBarWaveform.setSize((i7 + i3) - ((int) (AndroidUtilities.dp(34.0f) * getUseTranscribeButtonProgress())), AndroidUtilities.dp(30.0f), i5 + i3 + (!this.useTranscribeButton ? -AndroidUtilities.dp(34.0f) : 0), i6 + i3 + (this.useTranscribeButton ? -AndroidUtilities.dp(34.0f) : 0));
+                } else {
+                    seekBarWaveform.setSize((i7 + i3) - ((int) (AndroidUtilities.dp(34.0f) * getUseTranscribeButtonProgress())), AndroidUtilities.dp(30.0f), (i5 + i3) - ((int) (AndroidUtilities.dp(34.0f) * getUseTranscribeButtonProgress())), (i6 + i3) - ((int) (AndroidUtilities.dp(34.0f) * getUseTranscribeButtonProgress())));
                 }
-                SeekBarWaveform seekBarWaveform = this.seekBarWaveform;
-                if (seekBarWaveform != null) {
-                    if (this.transitionParams.animateUseTranscribeButton) {
-                        seekBarWaveform.setSize((i7 + i3) - ((int) (AndroidUtilities.dp(34.0f) * getUseTranscribeButtonProgress())), AndroidUtilities.dp(30.0f), i5 + i3 + (!this.useTranscribeButton ? -AndroidUtilities.dp(34.0f) : 0), i6 + i3 + (this.useTranscribeButton ? -AndroidUtilities.dp(34.0f) : 0));
-                    } else {
-                        seekBarWaveform.setSize((i7 + i3) - ((int) (AndroidUtilities.dp(34.0f) * getUseTranscribeButtonProgress())), AndroidUtilities.dp(30.0f), (i5 + i3) - ((int) (AndroidUtilities.dp(34.0f) * getUseTranscribeButtonProgress())), (i6 + i3) - ((int) (AndroidUtilities.dp(34.0f) * getUseTranscribeButtonProgress())));
-                    }
-                }
-                SeekBar seekBar = this.seekBar;
-                if (seekBar == null) {
-                    return;
-                }
-                int useTranscribeButtonProgress = i7 - ((int) (getUseTranscribeButtonProgress() * AndroidUtilities.dp(34.0f)));
-                if (this.documentAttachType != 5) {
-                    i4 = 72;
-                }
-                if (this.hasLinkPreview) {
-                    i2 = 10;
-                }
-                seekBar.setSize(useTranscribeButtonProgress - AndroidUtilities.dp(i4 + i2), AndroidUtilities.dp(30.0f));
+            }
+            SeekBar seekBar = this.seekBar;
+            if (seekBar == null) {
                 return;
             }
+            int useTranscribeButtonProgress = i7 - ((int) (getUseTranscribeButtonProgress() * AndroidUtilities.dp(34.0f)));
+            if (this.documentAttachType != 5) {
+                i4 = 72;
+            }
+            if (this.hasLinkPreview) {
+                i2 = 10;
+            }
+            seekBar.setSize(useTranscribeButtonProgress - AndroidUtilities.dp(i4 + i2), AndroidUtilities.dp(30.0f));
+            return;
         }
         SeekBarWaveform seekBarWaveform2 = this.seekBarWaveform;
         if (seekBarWaveform2 != null) {
@@ -4150,16 +4151,17 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             }
         }
         SeekBar seekBar2 = this.seekBar;
-        if (seekBar2 != null) {
-            int useTranscribeButtonProgress2 = this.backgroundWidth - ((int) (getUseTranscribeButtonProgress() * AndroidUtilities.dp(34.0f)));
-            if (this.documentAttachType != 5) {
-                i4 = 72;
-            }
-            if (this.hasLinkPreview) {
-                i2 = 10;
-            }
-            seekBar2.setSize(useTranscribeButtonProgress2 - AndroidUtilities.dp(i4 + i2), AndroidUtilities.dp(30.0f));
+        if (seekBar2 == null) {
+            return;
         }
+        int useTranscribeButtonProgress2 = this.backgroundWidth - ((int) (getUseTranscribeButtonProgress() * AndroidUtilities.dp(34.0f)));
+        if (this.documentAttachType != 5) {
+            i4 = 72;
+        }
+        if (this.hasLinkPreview) {
+            i2 = 10;
+        }
+        seekBar2.setSize(useTranscribeButtonProgress2 - AndroidUtilities.dp(i4 + i2), AndroidUtilities.dp(30.0f));
     }
 
     private int createDocumentLayout(int i, MessageObject messageObject) {

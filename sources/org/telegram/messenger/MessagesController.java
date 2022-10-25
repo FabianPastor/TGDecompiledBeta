@@ -16227,6 +16227,9 @@ public class MessagesController extends BaseController implements NotificationCe
         } else if (baseFragment.getParentActivity() == null) {
         } else {
             try {
+                if (baseFragment instanceof ChatActivity) {
+                    ((ChatActivity) baseFragment).shakeContent();
+                }
                 BulletinFactory.of(baseFragment).createErrorBulletin(LocaleController.getString("NoUsernameFound", R.string.NoUsernameFound)).show();
             } catch (Exception e) {
                 FileLog.e(e);

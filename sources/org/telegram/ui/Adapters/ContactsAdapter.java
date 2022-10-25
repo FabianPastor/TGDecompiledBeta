@@ -203,7 +203,7 @@ public class ContactsAdapter extends RecyclerListView.SectionsAdapter {
 
     @Override // org.telegram.ui.Components.RecyclerListView.SectionsAdapter
     /* renamed from: getItem */
-    public Object mo1775getItem(int i, int i2) {
+    public Object mo1774getItem(int i, int i2) {
         HashMap<String, ArrayList<TLRPC$TL_contact>> hashMap = this.onlyUsers == 2 ? ContactsController.getInstance(this.currentAccount).usersMutualSectionsDict : ContactsController.getInstance(this.currentAccount).usersSectionsDict;
         ArrayList<String> arrayList = this.onlyUsers == 2 ? ContactsController.getInstance(this.currentAccount).sortedUsersMutualSectionsArray : ContactsController.getInstance(this.currentAccount).sortedUsersSectionsArray;
         if (this.onlyUsers != 0 && !this.isAdmin) {
@@ -364,7 +364,7 @@ public class ContactsAdapter extends RecyclerListView.SectionsAdapter {
 
     @Override // androidx.recyclerview.widget.RecyclerView.Adapter
     /* renamed from: onCreateViewHolder */
-    public RecyclerView.ViewHolder mo1787onCreateViewHolder(final ViewGroup viewGroup, int i) {
+    public RecyclerView.ViewHolder mo1786onCreateViewHolder(final ViewGroup viewGroup, int i) {
         View userCell;
         if (i == 0) {
             userCell = new UserCell(this.mContext, 58, 1, false);

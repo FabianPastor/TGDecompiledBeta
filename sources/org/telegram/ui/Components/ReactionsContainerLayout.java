@@ -383,7 +383,7 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1787onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1786onCreateViewHolder(ViewGroup viewGroup, int i) {
             View view;
             if (i == 1) {
                 ReactionsContainerLayout.this.premiumLockContainer = new FrameLayout(this.val$context);

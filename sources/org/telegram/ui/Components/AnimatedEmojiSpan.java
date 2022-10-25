@@ -524,16 +524,15 @@ public class AnimatedEmojiSpan extends ReplacementSpan {
         }
 
         public void remove(int i) {
-            AnimatedEmojiHolder animatedEmojiHolder = this.holders.get(i);
-            this.holders.remove(i);
-            SpansChunk spansChunk = this.groupedByLayout.get(animatedEmojiHolder.layout);
+            AnimatedEmojiHolder remove = this.holders.remove(i);
+            SpansChunk spansChunk = this.groupedByLayout.get(remove.layout);
             if (spansChunk != null) {
-                spansChunk.remove(animatedEmojiHolder);
+                spansChunk.remove(remove);
                 if (spansChunk.holders.isEmpty()) {
-                    this.groupedByLayout.remove(animatedEmojiHolder.layout);
+                    this.groupedByLayout.remove(remove.layout);
                     this.backgroundDrawingArray.remove(spansChunk);
                 }
-                animatedEmojiHolder.drawable.removeView(animatedEmojiHolder);
+                remove.drawable.removeView(remove);
                 return;
             }
             throw new RuntimeException("!!!");

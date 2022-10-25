@@ -4971,7 +4971,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             new PremiumFeatureBottomSheet(baseFragment, 11, false).show();
         } else if (!(baseFragment.getContext() instanceof LaunchActivity)) {
         } else {
-            ((LaunchActivity) baseFragment.getContext()).lambda$runLinkRequest$66(new PremiumPreviewFragment(null));
+            ((LaunchActivity) baseFragment.getContext()).lambda$runLinkRequest$65(new PremiumPreviewFragment(null));
         }
     }
 

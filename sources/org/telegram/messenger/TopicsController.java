@@ -190,6 +190,10 @@ public class TopicsController extends BaseController {
             ArrayList<TLRPC$TL_forumTopic> arrayList = tLRPC$TL_messages_forumTopics.topics;
             TLRPC$TL_forumTopic tLRPC$TL_forumTopic = arrayList.get(arrayList.size() - 1);
             saveLoadOffset(j, tLRPC$TL_forumTopic.top_message, ((TLRPC$Message) sparseArray.get(tLRPC$TL_forumTopic.top_message)).date, tLRPC$TL_forumTopic.id);
+        } else if (getTopics(j) != null && getTopics(j).size() >= tLRPC$TL_messages_forumTopics.count) {
+        } else {
+            clearLoadingOffset(j);
+            loadTopics(j);
         }
     }
 

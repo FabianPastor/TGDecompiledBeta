@@ -38,7 +38,7 @@ public class StackLinearChartView<T extends StackLinearViewData> extends BaseCha
 
     @Override // org.telegram.ui.Charts.BaseChartView
     /* renamed from: createLineViewData  reason: collision with other method in class */
-    public T mo1020createLineViewData(ChartData.Line line) {
+    public T mo1019createLineViewData(ChartData.Line line) {
         return (T) new StackLinearViewData(line);
     }
 

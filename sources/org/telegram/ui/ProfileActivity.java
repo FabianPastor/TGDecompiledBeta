@@ -7153,15 +7153,15 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
     /* JADX INFO: Access modifiers changed from: private */
     /* JADX WARN: Code restructure failed: missing block: B:213:0x0416, code lost:
-        if (r29.chatInfo.can_view_participants != false) goto L388;
+        if (r28.chatInfo.can_view_participants != false) goto L390;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:282:0x0608, code lost:
-        if (r29.nameTextView[r4].setText(r13) != false) goto L311;
+    /* JADX WARN: Code restructure failed: missing block: B:283:0x05f5, code lost:
+        if (r28.nameTextView[r4].setText(r13) != false) goto L315;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:290:0x0632, code lost:
-        if (r29.nameTextView[r4].setText(r1) != false) goto L311;
+    /* JADX WARN: Code restructure failed: missing block: B:291:0x061f, code lost:
+        if (r28.nameTextView[r4].setText(r1) != false) goto L315;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:291:0x0634, code lost:
+    /* JADX WARN: Code restructure failed: missing block: B:292:0x0621, code lost:
         r8 = true;
      */
     /* JADX WARN: Removed duplicated region for block: B:108:0x023a  */
@@ -7173,19 +7173,19 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     /* JADX WARN: Removed duplicated region for block: B:172:0x0351 A[ADDED_TO_REGION] */
     /* JADX WARN: Removed duplicated region for block: B:177:0x0360  */
     /* JADX WARN: Removed duplicated region for block: B:182:0x037c  */
-    /* JADX WARN: Removed duplicated region for block: B:266:0x05c2  */
-    /* JADX WARN: Removed duplicated region for block: B:373:0x0829  */
-    /* JADX WARN: Removed duplicated region for block: B:382:0x083d  */
-    /* JADX WARN: Removed duplicated region for block: B:383:0x0847  */
-    /* JADX WARN: Removed duplicated region for block: B:412:0x08df  */
-    /* JADX WARN: Removed duplicated region for block: B:429:0x0394 A[ADDED_TO_REGION, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:267:0x05af  */
+    /* JADX WARN: Removed duplicated region for block: B:376:0x081a  */
+    /* JADX WARN: Removed duplicated region for block: B:385:0x082e  */
+    /* JADX WARN: Removed duplicated region for block: B:386:0x0838  */
+    /* JADX WARN: Removed duplicated region for block: B:415:0x08d0  */
+    /* JADX WARN: Removed duplicated region for block: B:432:0x0394 A[ADDED_TO_REGION, SYNTHETIC] */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public void updateProfileData(boolean r30) {
+    public void updateProfileData(boolean r29) {
         /*
-            Method dump skipped, instructions count: 2283
+            Method dump skipped, instructions count: 2268
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ProfileActivity.updateProfileData(boolean):void");
@@ -7977,7 +7977,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         /* JADX WARN: Multi-variable type inference failed */
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1787onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1786onCreateViewHolder(ViewGroup viewGroup, int i) {
             View headerCell;
             TextDetailCell textDetailCell;
             String str;
@@ -9643,7 +9643,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1787onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1786onCreateViewHolder(ViewGroup viewGroup, int i) {
             View settingsSearchCell;
             if (i == 0) {
                 settingsSearchCell = new SettingsSearchCell(this.mContext);

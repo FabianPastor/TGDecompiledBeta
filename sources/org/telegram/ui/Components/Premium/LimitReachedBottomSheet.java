@@ -332,7 +332,7 @@ public class LimitReachedBottomSheet extends BottomSheetWithRecyclerListView {
 
             @Override // androidx.recyclerview.widget.RecyclerView.Adapter
             /* renamed from: onCreateViewHolder */
-            public RecyclerView.ViewHolder mo1787onCreateViewHolder(ViewGroup viewGroup, int i) {
+            public RecyclerView.ViewHolder mo1786onCreateViewHolder(ViewGroup viewGroup, int i) {
                 FlickerLoadingView flickerLoadingView;
                 Context context = viewGroup.getContext();
                 if (i == 1) {
@@ -796,6 +796,9 @@ public class LimitReachedBottomSheet extends BottomSheetWithRecyclerListView {
         updateRows();
         if (this.headerRow >= 0 && i != 0) {
             ((LinearLayoutManager) this.recyclerListView.getLayoutManager()).scrollToPositionWithOffset(this.headerRow + 1, i);
+        }
+        if (this.limitParams == null) {
+            this.limitParams = getLimitParams(this.type, this.currentAccount);
         }
         int max = Math.max(this.inactiveChats.size(), this.limitParams.defaultLimit);
         this.limitPreviewView.setIconValue(max);

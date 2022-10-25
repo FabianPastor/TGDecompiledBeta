@@ -772,6 +772,9 @@ public class AndroidUtilities {
     }
 
     public static int calcBitmapColor(Bitmap bitmap) {
+        if (bitmap == null) {
+            return 0;
+        }
         try {
             Bitmap createScaledBitmap = Bitmaps.createScaledBitmap(bitmap, 1, 1, true);
             if (createScaledBitmap != null) {

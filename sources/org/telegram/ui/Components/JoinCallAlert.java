@@ -801,7 +801,7 @@ public class JoinCallAlert extends BottomSheet {
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1787onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1786onCreateViewHolder(ViewGroup viewGroup, int i) {
             View groupCreateUserCell;
             if (JoinCallAlert.this.currentType == 0) {
                 groupCreateUserCell = new ShareDialogCell(this.context, 2, null);

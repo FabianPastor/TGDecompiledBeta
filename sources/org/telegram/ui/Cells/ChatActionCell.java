@@ -133,6 +133,10 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
         /* renamed from: org.telegram.ui.Cells.ChatActionCell$ChatActionCellDelegate$-CC */
         /* loaded from: classes3.dex */
         public final /* synthetic */ class CC {
+            public static boolean $default$canDrawOutboundsContent(ChatActionCellDelegate chatActionCellDelegate) {
+                return true;
+            }
+
             public static void $default$didClickImage(ChatActionCellDelegate chatActionCellDelegate, ChatActionCell chatActionCell) {
             }
 
@@ -167,6 +171,8 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
             public static void $default$needShowEffectOverlay(ChatActionCellDelegate chatActionCellDelegate, ChatActionCell chatActionCell, TLRPC$Document tLRPC$Document, TLRPC$VideoSize tLRPC$VideoSize) {
             }
         }
+
+        boolean canDrawOutboundsContent();
 
         void didClickImage(ChatActionCell chatActionCell);
 
@@ -457,10 +463,11 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
 
     @Override // android.view.ViewGroup, android.view.View
     protected void onAttachedToWindow() {
+        ChatActionCellDelegate chatActionCellDelegate;
         super.onAttachedToWindow();
         this.imageReceiver.onAttachedToWindow();
         setStarsPaused(false);
-        this.animatedEmojiStack = AnimatedEmojiSpan.update(0, this, this.animatedEmojiStack, this.textLayout);
+        this.animatedEmojiStack = AnimatedEmojiSpan.update(0, this, this.canDrawInParent && (chatActionCellDelegate = this.delegate) != null && !chatActionCellDelegate.canDrawOutboundsContent(), this.animatedEmojiStack, this.textLayout);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.didUpdatePremiumGiftStickers);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.diceStickersDidLoad);
     }
@@ -555,6 +562,7 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
     }
 
     private void createLayout(CharSequence charSequence, int i) {
+        ChatActionCellDelegate chatActionCellDelegate;
         int dp = i - AndroidUtilities.dp(30.0f);
         this.invalidatePath = true;
         this.textLayout = new StaticLayout(charSequence, (TextPaint) getThemedPaint("paintChatActionText"), dp, Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
@@ -563,7 +571,7 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
         if (charSequence instanceof Spannable) {
             SpoilerEffect.addSpoilers(this, this.textLayout, (Spannable) charSequence, this.spoilersPool, this.spoilers);
         }
-        this.animatedEmojiStack = AnimatedEmojiSpan.update(0, this, this.animatedEmojiStack, this.textLayout);
+        this.animatedEmojiStack = AnimatedEmojiSpan.update(0, this, this.canDrawInParent && (chatActionCellDelegate = this.delegate) != null && !chatActionCellDelegate.canDrawOutboundsContent(), this.animatedEmojiStack, this.textLayout);
         this.textHeight = 0;
         this.textWidth = 0;
         try {
@@ -736,8 +744,11 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
             }
             canvas.save();
             SpoilerEffect.clipOutCanvas(canvas, this.spoilers);
-            AnimatedEmojiSpan.drawAnimatedEmojis(canvas, this.textLayout, this.animatedEmojiStack, 0.0f, this.spoilers, 0.0f, 0.0f, 0.0f, 1.0f);
             this.textLayout.draw(canvas);
+            ChatActionCellDelegate chatActionCellDelegate = this.delegate;
+            if (chatActionCellDelegate == null || chatActionCellDelegate.canDrawOutboundsContent()) {
+                AnimatedEmojiSpan.drawAnimatedEmojis(canvas, this.textLayout, this.animatedEmojiStack, 0.0f, this.spoilers, 0.0f, 0.0f, 0.0f, 1.0f);
+            }
             canvas.restore();
             for (SpoilerEffect spoilerEffect : this.spoilers) {
                 spoilerEffect.setColor(this.textLayout.getPaint().getColor());
@@ -1103,5 +1114,12 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
         ThemeDelegate themeDelegate = this.themeDelegate;
         Paint paint = themeDelegate != null ? themeDelegate.getPaint(str) : null;
         return paint != null ? paint : Theme.getThemePaint(str);
+    }
+
+    public void drawOutboundsContent(Canvas canvas) {
+        canvas.save();
+        canvas.translate(this.textXLeft, this.textY);
+        AnimatedEmojiSpan.drawAnimatedEmojis(canvas, this.textLayout, this.animatedEmojiStack, 0.0f, this.spoilers, 0.0f, 0.0f, 0.0f, 1.0f);
+        canvas.restore();
     }
 }

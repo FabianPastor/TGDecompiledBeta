@@ -162,7 +162,7 @@ public class ForumUtilities {
                 return AndroidUtilities.replaceCharSequence("%1$s", LocaleController.getString(R.string.TopicWasRenamedToAction), getTopicSpannedName(tLRPC$TL_forumTopic, null));
             } else {
                 if ((i & 2) != 0) {
-                    return AndroidUtilities.replaceCharSequence("%s", LocaleController.getString(R.string.TopicWasIconChangedToAction), getTopicSpannedName(tLRPC$TL_forumTopic, null));
+                    return AndroidUtilities.replaceCharSequence("%1$s", LocaleController.getString(R.string.TopicWasIconChangedToAction), getTopicSpannedName(tLRPC$TL_forumTopic, null));
                 }
             }
         }

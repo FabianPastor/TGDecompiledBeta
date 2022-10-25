@@ -454,6 +454,17 @@ public abstract class BaseFragment {
         }
     }
 
+    public void setPaused(boolean z) {
+        if (this.isPaused == z) {
+            return;
+        }
+        if (z) {
+            onPause();
+        } else {
+            onResume();
+        }
+    }
+
     public BaseFragment getFragmentForAlert(int i) {
         INavigationLayout iNavigationLayout = this.parentLayout;
         return (iNavigationLayout == null || iNavigationLayout.getFragmentStack().size() <= i + 1) ? this : this.parentLayout.getFragmentStack().get((this.parentLayout.getFragmentStack().size() - 2) - i);

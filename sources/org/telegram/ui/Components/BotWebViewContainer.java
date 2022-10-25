@@ -990,8 +990,10 @@ public class BotWebViewContainer extends FrameLayout implements NotificationCent
         return this.isBackButtonVisible;
     }
 
-    public void evaluateJs(String str) {
-        checkCreateWebView();
+    public void evaluateJs(String str, boolean z) {
+        if (z) {
+            checkCreateWebView();
+        }
         WebView webView = this.webView;
         if (webView == null) {
             return;
@@ -1030,7 +1032,7 @@ public class BotWebViewContainer extends FrameLayout implements NotificationCent
     }
 
     private void notifyEvent(String str, JSONObject jSONObject) {
-        evaluateJs("window.Telegram.WebView.receiveEvent('" + str + "', " + jSONObject + ");");
+        evaluateJs("window.Telegram.WebView.receiveEvent('" + str + "', " + jSONObject + ");", false);
     }
 
     public void setWebViewScrollListener(WebViewScrollListener webViewScrollListener) {

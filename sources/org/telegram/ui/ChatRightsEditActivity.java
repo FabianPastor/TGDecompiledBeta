@@ -1235,16 +1235,16 @@ public class ChatRightsEditActivity extends BaseFragment {
                 int i15 = i14 + 1;
                 this.rowCount = i15;
                 this.startVoiceChatRow = i14;
-                if (this.isForum) {
-                    this.rowCount = i15 + 1;
-                    this.manageTopicsRow = i15;
-                }
-                int i16 = this.rowCount;
+                int i16 = i15 + 1;
+                this.rowCount = i16;
+                this.addAdminsRow = i15;
                 int i17 = i16 + 1;
                 this.rowCount = i17;
-                this.addAdminsRow = i16;
-                this.rowCount = i17 + 1;
-                this.anonymousRow = i17;
+                this.anonymousRow = i16;
+                if (this.isForum) {
+                    this.rowCount = i17 + 1;
+                    this.manageTopicsRow = i17;
+                }
             }
         } else if (i2 == 1) {
             int i18 = 3 + 1;
@@ -1268,14 +1268,14 @@ public class ChatRightsEditActivity extends BaseFragment {
             int i24 = i23 + 1;
             this.rowCount = i24;
             this.pinMessagesRow = i23;
+            int i25 = i24 + 1;
+            this.rowCount = i25;
+            this.changeInfoRow = i24;
             if (this.isForum) {
-                this.rowCount = i24 + 1;
-                this.manageTopicsRow = i24;
+                this.rowCount = i25 + 1;
+                this.manageTopicsRow = i25;
             }
-            int i25 = this.rowCount;
-            int i26 = i25 + 1;
-            this.rowCount = i26;
-            this.changeInfoRow = i25;
+            int i26 = this.rowCount;
             int i27 = i26 + 1;
             this.rowCount = i27;
             this.untilSectionRow = i26;
@@ -1754,7 +1754,7 @@ public class ChatRightsEditActivity extends BaseFragment {
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1787onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1786onCreateViewHolder(ViewGroup viewGroup, int i) {
             View textInfoPrivacyCell;
             int i2;
             String str;
@@ -1967,7 +1967,7 @@ public class ChatRightsEditActivity extends BaseFragment {
                                 textCheckCell2.setIcon((ChatRightsEditActivity.this.myAdminRights.change_info || z3) ? 0 : R.drawable.permission_locked);
                             }
                         } else if (ChatRightsEditActivity.this.currentType == 1) {
-                            textCheckCell2.setTextAndCheck(LocaleController.getString("UserRestrictionsChangeInfo", R.string.UserRestrictionsChangeInfo), !ChatRightsEditActivity.this.bannedRights.change_info && !ChatRightsEditActivity.this.defaultBannedRights.change_info, false);
+                            textCheckCell2.setTextAndCheck(LocaleController.getString("UserRestrictionsChangeInfo", R.string.UserRestrictionsChangeInfo), !ChatRightsEditActivity.this.bannedRights.change_info && !ChatRightsEditActivity.this.defaultBannedRights.change_info, ChatRightsEditActivity.this.manageTopicsRow != -1);
                             textCheckCell2.setIcon(ChatRightsEditActivity.this.defaultBannedRights.change_info ? R.drawable.permission_locked : 0);
                         }
                     } else if (i == ChatRightsEditActivity.this.postMessagesRow) {
@@ -1995,7 +1995,7 @@ public class ChatRightsEditActivity extends BaseFragment {
                             textCheckCell2.setIcon((ChatRightsEditActivity.this.myAdminRights.add_admins || z3) ? 0 : R.drawable.permission_locked);
                         }
                     } else if (i == ChatRightsEditActivity.this.anonymousRow) {
-                        textCheckCell2.setTextAndCheck(LocaleController.getString("EditAdminSendAnonymously", R.string.EditAdminSendAnonymously), z2 && ChatRightsEditActivity.this.adminRights.anonymous, false);
+                        textCheckCell2.setTextAndCheck(LocaleController.getString("EditAdminSendAnonymously", R.string.EditAdminSendAnonymously), z2 && ChatRightsEditActivity.this.adminRights.anonymous, ChatRightsEditActivity.this.manageTopicsRow != -1);
                         if (ChatRightsEditActivity.this.currentType == 2) {
                             textCheckCell2.setIcon((ChatRightsEditActivity.this.myAdminRights.anonymous || z3) ? 0 : R.drawable.permission_locked);
                         }
@@ -2011,12 +2011,12 @@ public class ChatRightsEditActivity extends BaseFragment {
                         }
                     } else if (i == ChatRightsEditActivity.this.manageTopicsRow) {
                         if (ChatRightsEditActivity.this.currentType == 0) {
-                            textCheckCell2.setTextAndCheck(LocaleController.getString("ManageTopicsPermission", R.string.ManageTopicsPermission), z2 && ChatRightsEditActivity.this.adminRights.manage_topics, true);
+                            textCheckCell2.setTextAndCheck(LocaleController.getString("ManageTopicsPermission", R.string.ManageTopicsPermission), z2 && ChatRightsEditActivity.this.adminRights.manage_topics, false);
                         } else if (ChatRightsEditActivity.this.currentType == 1) {
-                            textCheckCell2.setTextAndCheck(LocaleController.getString("ManageTopicsPermission", R.string.ManageTopicsPermission), !ChatRightsEditActivity.this.bannedRights.manage_topics && !ChatRightsEditActivity.this.defaultBannedRights.manage_topics, true);
+                            textCheckCell2.setTextAndCheck(LocaleController.getString("CreateTopicsPermission", R.string.CreateTopicsPermission), !ChatRightsEditActivity.this.bannedRights.manage_topics && !ChatRightsEditActivity.this.defaultBannedRights.manage_topics, false);
                             textCheckCell2.setIcon(ChatRightsEditActivity.this.defaultBannedRights.manage_topics ? R.drawable.permission_locked : 0);
                         } else if (ChatRightsEditActivity.this.currentType == 2) {
-                            textCheckCell2.setTextAndCheck(LocaleController.getString("ManageTopicsPermission", R.string.ManageTopicsPermission), z2 && ChatRightsEditActivity.this.adminRights.manage_topics, true);
+                            textCheckCell2.setTextAndCheck(LocaleController.getString("ManageTopicsPermission", R.string.ManageTopicsPermission), z2 && ChatRightsEditActivity.this.adminRights.manage_topics, false);
                             textCheckCell2.setIcon((ChatRightsEditActivity.this.myAdminRights.manage_topics || z3) ? 0 : R.drawable.permission_locked);
                         }
                     } else if (i == ChatRightsEditActivity.this.addUsersRow) {

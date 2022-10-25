@@ -2790,6 +2790,10 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         }
     }
 
+    public boolean isPiPShown() {
+        return this.pipRoundVideoView != null;
+    }
+
     public void setCurrentVideoVisible(boolean z) {
         AspectRatioFrameLayout aspectRatioFrameLayout = this.currentAspectRatioFrameLayout;
         if (aspectRatioFrameLayout == null) {

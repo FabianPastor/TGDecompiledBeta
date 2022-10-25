@@ -181,6 +181,11 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                 }
                 super.setTranslationY(f);
             }
+
+            @Override // android.view.View
+            public void setVisibility(int i) {
+                super.setVisibility(i);
+            }
         };
         this.subtitleTextView = simpleTextView2;
         simpleTextView2.setEllipsizeByGradient(true);
@@ -725,7 +730,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
         }
         boolean[] zArr = null;
         if (printingString == null || printingString.length() == 0 || (ChatObject.isChannel(currentChat) && !currentChat.megagroup)) {
-            if (this.parentFragment.isThreadChat()) {
+            if (this.parentFragment.isThreadChat() && !this.parentFragment.isTopic) {
                 if (this.titleTextView.getTag() != null) {
                     return;
                 }

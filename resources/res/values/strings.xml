@@ -1399,6 +1399,7 @@
     <string name="CreateTheme">Create Theme</string>
     <string name="CreateTopic">Create topic</string>
     <string name="CreateTopicTitle">Choose topic title and icon</string>
+    <string name="CreateTopicsPermission">Create topics</string>
     <string name="Crop">CROP</string>
     <string name="CropImage">Crop image</string>
     <string name="CropOriginal">Original</string>
