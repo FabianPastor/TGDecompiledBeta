@@ -727,7 +727,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
         */
         public void didReceivedNotification(int r26, final int r27, java.lang.Object... r28) {
             /*
-                Method dump skipped, instructions count: 1251
+                Method dump skipped, instructions count: 1265
                 To view this dump add '--comments-level debug' option
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.SharedMediaLayout.SharedMediaPreloader.didReceivedNotification(int, int, java.lang.Object[]):void");
@@ -860,7 +860,11 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                 this.sectionArrays.remove(messageObject.monthKey);
                 this.sections.remove(messageObject.monthKey);
             }
-            this.totalCount--;
+            int i3 = this.totalCount - 1;
+            this.totalCount = i3;
+            if (i3 < 0) {
+                this.totalCount = 0;
+            }
             return messageObject;
         }
 

@@ -185,7 +185,7 @@ public class VideoCapturerDevice {
             final Point screenCaptureSize = getScreenCaptureSize();
             this.currentWidth = screenCaptureSize.x;
             this.currentHeight = screenCaptureSize.y;
-            this.videoCapturerSurfaceTextureHelper = SurfaceTextureHelper.create("ScreenCapturerThread", eglBase.mo2421getEglBaseContext());
+            this.videoCapturerSurfaceTextureHelper = SurfaceTextureHelper.create("ScreenCapturerThread", eglBase.mo2423getEglBaseContext());
             this.handler.post(new Runnable() { // from class: org.telegram.messenger.voip.VideoCapturerDevice$$ExternalSyntheticLambda6
                 @Override // java.lang.Runnable
                 public final void run() {
@@ -213,7 +213,7 @@ public class VideoCapturerDevice {
         final String str2 = deviceNames[i];
         if (this.videoCapturer == null) {
             this.videoCapturer = camera2Enumerator.createCapturer(str2, new AnonymousClass2());
-            this.videoCapturerSurfaceTextureHelper = SurfaceTextureHelper.create("VideoCapturerThread", eglBase.mo2421getEglBaseContext());
+            this.videoCapturerSurfaceTextureHelper = SurfaceTextureHelper.create("VideoCapturerThread", eglBase.mo2423getEglBaseContext());
             this.handler.post(new Runnable() { // from class: org.telegram.messenger.voip.VideoCapturerDevice$$ExternalSyntheticLambda0
                 @Override // java.lang.Runnable
                 public final void run() {
@@ -471,7 +471,7 @@ public class VideoCapturerDevice {
         }
         EglBase eglBase2 = eglBase;
         if (eglBase2 != null) {
-            return eglBase2.mo2421getEglBaseContext();
+            return eglBase2.mo2423getEglBaseContext();
         }
         return null;
     }

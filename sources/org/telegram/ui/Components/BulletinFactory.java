@@ -170,15 +170,20 @@ public final class BulletinFactory {
     }
 
     public Bulletin createUsersBulletin(ArrayList<TLRPC$User> arrayList, CharSequence charSequence) {
+        int i;
         Bulletin.UsersLayout usersLayout = new Bulletin.UsersLayout(getContext(), this.resourcesProvider);
-        int i = 0;
-        for (int i2 = 0; i2 < arrayList.size() && i < 3; i2++) {
-            TLRPC$User tLRPC$User = arrayList.get(i2);
-            if (tLRPC$User != null) {
-                i++;
-                usersLayout.avatarsImageView.setCount(i);
-                usersLayout.avatarsImageView.setObject(i - 1, UserConfig.selectedAccount, tLRPC$User);
+        if (arrayList != null) {
+            i = 0;
+            for (int i2 = 0; i2 < arrayList.size() && i < 3; i2++) {
+                TLRPC$User tLRPC$User = arrayList.get(i2);
+                if (tLRPC$User != null) {
+                    i++;
+                    usersLayout.avatarsImageView.setCount(i);
+                    usersLayout.avatarsImageView.setObject(i - 1, UserConfig.selectedAccount, tLRPC$User);
+                }
             }
+        } else {
+            i = 0;
         }
         usersLayout.avatarsImageView.commitTransition(false);
         usersLayout.textView.setSingleLine(true);
@@ -193,28 +198,17 @@ public final class BulletinFactory {
         if (arrayList == null || arrayList.size() == 0) {
             spannableStringBuilder = null;
         } else if (arrayList.size() == 1) {
-            if (ChatObject.isForum(tLRPC$Chat)) {
-                int i = R.string.HasBeenAddedToForum;
-                spannableStringBuilder = AndroidUtilities.replaceTags(LocaleController.formatString("HasBeenAddedToForum", i, "**" + UserObject.getUserName(arrayList.get(0)) + "**"));
-            } else if (ChatObject.isChannelAndNotMegaGroup(tLRPC$Chat)) {
-                int i2 = R.string.HasBeenAddedToChannel;
-                spannableStringBuilder = AndroidUtilities.replaceTags(LocaleController.formatString("HasBeenAddedToChannel", i2, "**" + UserObject.getUserName(arrayList.get(0)) + "**"));
+            if (ChatObject.isChannelAndNotMegaGroup(tLRPC$Chat)) {
+                int i = R.string.HasBeenAddedToChannel;
+                spannableStringBuilder = AndroidUtilities.replaceTags(LocaleController.formatString("HasBeenAddedToChannel", i, "**" + UserObject.getUserName(arrayList.get(0)) + "**"));
             } else {
-                int i3 = R.string.HasBeenAddedToGroup;
-                spannableStringBuilder = AndroidUtilities.replaceTags(LocaleController.formatString("HasBeenAddedToGroup", i3, "**" + UserObject.getUserName(arrayList.get(0)) + "**"));
+                int i2 = R.string.HasBeenAddedToGroup;
+                spannableStringBuilder = AndroidUtilities.replaceTags(LocaleController.formatString("HasBeenAddedToGroup", i2, "**" + UserObject.getUserName(arrayList.get(0)) + "**"));
             }
-        } else if (ChatObject.isForum(tLRPC$Chat)) {
-            String formatPluralString = LocaleController.formatPluralString("Members", arrayList.size(), new Object[0]);
-            int i4 = R.string.HaveBeenAddedToForum;
-            spannableStringBuilder = AndroidUtilities.replaceTags(LocaleController.formatString("HaveBeenAddedToForum", i4, "**" + formatPluralString + "**"));
         } else if (ChatObject.isChannelAndNotMegaGroup(tLRPC$Chat)) {
-            String formatPluralString2 = LocaleController.formatPluralString("Subscribers", arrayList.size(), new Object[0]);
-            int i5 = R.string.HaveBeenAddedToChannel;
-            spannableStringBuilder = AndroidUtilities.replaceTags(LocaleController.formatString("HaveBeenAddedToChannel", i5, "**" + formatPluralString2 + "**"));
+            spannableStringBuilder = AndroidUtilities.replaceTags(LocaleController.formatPluralString("AddedMembersToChannel", arrayList.size(), new Object[0]));
         } else {
-            String formatPluralString3 = LocaleController.formatPluralString("Members", arrayList.size(), new Object[0]);
-            int i6 = R.string.HaveBeenAddedToGroup;
-            spannableStringBuilder = AndroidUtilities.replaceTags(LocaleController.formatString("HaveBeenAddedToGroup", i6, "**" + formatPluralString3 + "**"));
+            spannableStringBuilder = AndroidUtilities.replaceTags(LocaleController.formatPluralString("AddedMembersToGroup", arrayList.size(), new Object[0]));
         }
         return createUsersBulletin(arrayList, spannableStringBuilder);
     }

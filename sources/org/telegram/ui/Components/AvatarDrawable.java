@@ -10,6 +10,7 @@ import android.text.StaticLayout;
 import android.text.TextPaint;
 import androidx.core.graphics.ColorUtils;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLObject;
@@ -265,7 +266,7 @@ public class AvatarDrawable extends Drawable {
         }
         if (this.stringBuilder.length() > 0) {
             try {
-                StaticLayout staticLayout = new StaticLayout(this.stringBuilder.toString().toUpperCase(), this.namePaint, AndroidUtilities.dp(100.0f), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                StaticLayout staticLayout = new StaticLayout(Emoji.replaceEmoji(this.stringBuilder.toString().toUpperCase(), this.namePaint.getFontMetricsInt(), AndroidUtilities.dp(16.0f), true), this.namePaint, AndroidUtilities.dp(100.0f), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                 this.textLayout = staticLayout;
                 if (staticLayout.getLineCount() <= 0) {
                     return;

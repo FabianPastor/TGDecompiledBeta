@@ -1,7 +1,7 @@
 package j$.wrappers;
 
 import java.util.function.Consumer;
-/* renamed from: j$.wrappers.x */
+/* renamed from: j$.wrappers.x  reason: case insensitive filesystem */
 /* loaded from: classes2.dex */
 public final /* synthetic */ class CLASSNAMEx implements Consumer {
     final /* synthetic */ j$.util.function.Consumer a;

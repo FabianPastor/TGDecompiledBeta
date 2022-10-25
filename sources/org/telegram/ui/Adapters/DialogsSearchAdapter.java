@@ -1267,12 +1267,12 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
      */
     /* JADX WARN: Multi-variable type inference failed */
     /* JADX WARN: Removed duplicated region for block: B:165:0x0361  */
-    /* JADX WARN: Removed duplicated region for block: B:216:0x042d  */
-    /* JADX WARN: Removed duplicated region for block: B:217:0x0438  */
-    /* JADX WARN: Removed duplicated region for block: B:224:0x0455  */
-    /* JADX WARN: Removed duplicated region for block: B:225:0x0457  */
-    /* JADX WARN: Removed duplicated region for block: B:228:0x0472  */
-    /* JADX WARN: Removed duplicated region for block: B:229:0x0474  */
+    /* JADX WARN: Removed duplicated region for block: B:216:0x0429  */
+    /* JADX WARN: Removed duplicated region for block: B:217:0x0434  */
+    /* JADX WARN: Removed duplicated region for block: B:224:0x0451  */
+    /* JADX WARN: Removed duplicated region for block: B:225:0x0453  */
+    /* JADX WARN: Removed duplicated region for block: B:228:0x046e  */
+    /* JADX WARN: Removed duplicated region for block: B:229:0x0470  */
     /* JADX WARN: Type inference failed for: r2v20, types: [android.text.SpannableStringBuilder] */
     /* JADX WARN: Type inference failed for: r2v23, types: [java.lang.CharSequence] */
     /* JADX WARN: Type inference failed for: r2v24 */
@@ -1286,7 +1286,7 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
     */
     public void onBindViewHolder(androidx.recyclerview.widget.RecyclerView.ViewHolder r23, int r24) {
         /*
-            Method dump skipped, instructions count: 1145
+            Method dump skipped, instructions count: 1141
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Adapters.DialogsSearchAdapter.onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder, int):void");

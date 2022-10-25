@@ -1781,59 +1781,63 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
     }
 
     /* JADX WARN: Can't fix incorrect switch cases order, some code will duplicate */
-    /* JADX WARN: Code restructure failed: missing block: B:1024:0x1e83, code lost:
+    /* JADX WARN: Code restructure failed: missing block: B:1041:0x1ed1, code lost:
         if (r1.checkCanOpenChat(r0, r2.get(r2.size() - r3)) != false) goto L123;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:1041:0x1efe, code lost:
+    /* JADX WARN: Code restructure failed: missing block: B:1058:0x1f4c, code lost:
         if (r1.checkCanOpenChat(r0, r2.get(r2.size() - r3)) != false) goto L141;
      */
     /* JADX WARN: Code restructure failed: missing block: B:168:0x0330, code lost:
         if (r85.sendingText == null) goto L296;
      */
     /* JADX WARN: Code restructure failed: missing block: B:440:0x09bf, code lost:
-        if (r7 == 0) goto L719;
+        if (r7 == 0) goto L724;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:460:0x0a51, code lost:
-        if (r7 == 0) goto L746;
+    /* JADX WARN: Code restructure failed: missing block: B:465:0x0a66, code lost:
+        if (r7 == 0) goto L755;
      */
     /* JADX WARN: Code restructure failed: missing block: B:64:0x015b, code lost:
         if (r1.equals(r0) != false) goto L48;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:808:0x1686, code lost:
-        if (r2 == 0) goto L1092;
+    /* JADX WARN: Code restructure failed: missing block: B:817:0x16ae, code lost:
+        if (r2 == 0) goto L1105;
      */
     /* JADX WARN: Multi-variable type inference failed */
-    /* JADX WARN: Removed duplicated region for block: B:1002:0x1e20  */
     /* JADX WARN: Removed duplicated region for block: B:100:0x01fe  */
-    /* JADX WARN: Removed duplicated region for block: B:1015:0x1e4f  */
-    /* JADX WARN: Removed duplicated region for block: B:1033:0x1ec9  */
-    /* JADX WARN: Removed duplicated region for block: B:1125:0x20b8  */
-    /* JADX WARN: Removed duplicated region for block: B:1126:0x20c7  */
-    /* JADX WARN: Removed duplicated region for block: B:1129:0x20d5  */
-    /* JADX WARN: Removed duplicated region for block: B:1130:0x20e6  */
-    /* JADX WARN: Removed duplicated region for block: B:1196:0x232d A[ADDED_TO_REGION] */
-    /* JADX WARN: Removed duplicated region for block: B:1199:0x2335  */
-    /* JADX WARN: Removed duplicated region for block: B:1210:0x2384  */
-    /* JADX WARN: Removed duplicated region for block: B:1221:0x23d1  */
-    /* JADX WARN: Removed duplicated region for block: B:1223:0x23dd  */
-    /* JADX WARN: Removed duplicated region for block: B:1225:0x23e5  */
-    /* JADX WARN: Removed duplicated region for block: B:1272:0x1223 A[EXC_TOP_SPLITTER, SYNTHETIC] */
-    /* JADX WARN: Removed duplicated region for block: B:1292:0x1ac2 A[EXC_TOP_SPLITTER, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:1019:0x1e6e  */
+    /* JADX WARN: Removed duplicated region for block: B:1032:0x1e9d  */
+    /* JADX WARN: Removed duplicated region for block: B:1050:0x1var_  */
+    /* JADX WARN: Removed duplicated region for block: B:1142:0x2106  */
+    /* JADX WARN: Removed duplicated region for block: B:1143:0x2115  */
+    /* JADX WARN: Removed duplicated region for block: B:1146:0x2123  */
+    /* JADX WARN: Removed duplicated region for block: B:1147:0x2134  */
+    /* JADX WARN: Removed duplicated region for block: B:1213:0x237b A[ADDED_TO_REGION] */
+    /* JADX WARN: Removed duplicated region for block: B:1216:0x2383  */
+    /* JADX WARN: Removed duplicated region for block: B:1227:0x23d2  */
+    /* JADX WARN: Removed duplicated region for block: B:1238:0x241f  */
+    /* JADX WARN: Removed duplicated region for block: B:1240:0x242b  */
+    /* JADX WARN: Removed duplicated region for block: B:1242:0x2433  */
+    /* JADX WARN: Removed duplicated region for block: B:1285:0x124b A[EXC_TOP_SPLITTER, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:1306:0x1b10 A[EXC_TOP_SPLITTER, SYNTHETIC] */
     /* JADX WARN: Removed duplicated region for block: B:167:0x032e  */
     /* JADX WARN: Removed duplicated region for block: B:172:0x0337  */
     /* JADX WARN: Removed duplicated region for block: B:202:0x03f6  */
     /* JADX WARN: Removed duplicated region for block: B:269:0x0521  */
     /* JADX WARN: Removed duplicated region for block: B:354:0x073c  */
-    /* JADX WARN: Removed duplicated region for block: B:394:0x0828 A[Catch: Exception -> 0x0836, TRY_LEAVE, TryCatch #1 {Exception -> 0x0836, blocks: (B:392:0x081c, B:394:0x0828), top: B:1248:0x081c }] */
+    /* JADX WARN: Removed duplicated region for block: B:394:0x0828 A[Catch: Exception -> 0x0836, TRY_LEAVE, TryCatch #5 {Exception -> 0x0836, blocks: (B:392:0x081c, B:394:0x0828), top: B:1271:0x081c }] */
     /* JADX WARN: Removed duplicated region for block: B:396:0x0835  */
+    /* JADX WARN: Removed duplicated region for block: B:481:0x0af8  */
+    /* JADX WARN: Removed duplicated region for block: B:482:0x0b15  */
     /* JADX WARN: Removed duplicated region for block: B:63:0x0157  */
-    /* JADX WARN: Removed duplicated region for block: B:801:0x15ee A[Catch: Exception -> 0x15fc, TRY_LEAVE, TryCatch #18 {Exception -> 0x15fc, blocks: (B:799:0x15e2, B:801:0x15ee), top: B:1280:0x15e2 }] */
-    /* JADX WARN: Removed duplicated region for block: B:868:0x199b  */
+    /* JADX WARN: Removed duplicated region for block: B:810:0x1616 A[Catch: Exception -> 0x1624, TRY_LEAVE, TryCatch #13 {Exception -> 0x1624, blocks: (B:808:0x160a, B:810:0x1616), top: B:1287:0x160a }] */
+    /* JADX WARN: Removed duplicated region for block: B:869:0x18f4  */
+    /* JADX WARN: Removed duplicated region for block: B:870:0x192c  */
     /* JADX WARN: Removed duplicated region for block: B:87:0x01c5  */
-    /* JADX WARN: Removed duplicated region for block: B:880:0x19dd  */
-    /* JADX WARN: Removed duplicated region for block: B:957:0x1b96  */
-    /* JADX WARN: Removed duplicated region for block: B:958:0x1ba6  */
+    /* JADX WARN: Removed duplicated region for block: B:885:0x19e9  */
+    /* JADX WARN: Removed duplicated region for block: B:897:0x1a2b  */
     /* JADX WARN: Removed duplicated region for block: B:95:0x01f0  */
+    /* JADX WARN: Removed duplicated region for block: B:974:0x1be4  */
+    /* JADX WARN: Removed duplicated region for block: B:975:0x1bf4  */
     /* JADX WARN: Type inference failed for: r0v19, types: [org.telegram.ui.ActionBar.DrawerLayoutContainer] */
     /* JADX WARN: Type inference failed for: r0v24, types: [org.telegram.ui.ActionBar.INavigationLayout] */
     /* JADX WARN: Type inference failed for: r0v25, types: [org.telegram.ui.ActionBar.INavigationLayout] */
@@ -1841,7 +1845,6 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
     /* JADX WARN: Type inference failed for: r0v311, types: [java.lang.Integer] */
     /* JADX WARN: Type inference failed for: r0v33, types: [org.telegram.ui.ActionBar.DrawerLayoutContainer] */
     /* JADX WARN: Type inference failed for: r0v491, types: [java.lang.Integer] */
-    /* JADX WARN: Type inference failed for: r0v499, types: [java.lang.Integer] */
     /* JADX WARN: Type inference failed for: r0v58, types: [org.telegram.ui.ActionBar.DrawerLayoutContainer] */
     /* JADX WARN: Type inference failed for: r0v60, types: [org.telegram.ui.ActionBar.INavigationLayout] */
     /* JADX WARN: Type inference failed for: r0v65, types: [org.telegram.ui.ActionBar.DrawerLayoutContainer] */
@@ -1860,17 +1863,14 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
     /* JADX WARN: Type inference failed for: r0v94, types: [org.telegram.ui.ActionBar.INavigationLayout] */
     /* JADX WARN: Type inference failed for: r11v7, types: [android.content.Intent] */
     /* JADX WARN: Type inference failed for: r1v180, types: [java.lang.Integer] */
-    /* JADX WARN: Type inference failed for: r1v183, types: [java.lang.Integer] */
-    /* JADX WARN: Type inference failed for: r1v189, types: [java.util.HashMap] */
-    /* JADX WARN: Type inference failed for: r1v204, types: [java.lang.Long] */
-    /* JADX WARN: Type inference failed for: r1v211, types: [org.telegram.tgnet.TLRPC$TL_wallPaper, org.telegram.tgnet.TLRPC$WallPaper] */
-    /* JADX WARN: Type inference failed for: r1v272, types: [java.util.HashMap] */
-    /* JADX WARN: Type inference failed for: r1v393, types: [java.lang.Integer] */
-    /* JADX WARN: Type inference failed for: r1v402, types: [java.lang.Integer] */
-    /* JADX WARN: Type inference failed for: r1v409, types: [java.lang.Integer] */
-    /* JADX WARN: Type inference failed for: r1v421, types: [org.telegram.tgnet.TLRPC$TL_wallPaper, org.telegram.tgnet.TLRPC$WallPaper] */
-    /* JADX WARN: Type inference failed for: r2v131, types: [java.lang.Integer] */
-    /* JADX WARN: Type inference failed for: r2v239, types: [java.lang.Long] */
+    /* JADX WARN: Type inference failed for: r1v195, types: [java.util.HashMap] */
+    /* JADX WARN: Type inference failed for: r1v210, types: [java.lang.Long] */
+    /* JADX WARN: Type inference failed for: r1v217, types: [org.telegram.tgnet.TLRPC$TL_wallPaper, org.telegram.tgnet.TLRPC$WallPaper] */
+    /* JADX WARN: Type inference failed for: r1v278, types: [java.util.HashMap] */
+    /* JADX WARN: Type inference failed for: r1v414, types: [java.lang.Integer] */
+    /* JADX WARN: Type inference failed for: r1v421, types: [java.lang.Integer] */
+    /* JADX WARN: Type inference failed for: r1v433, types: [org.telegram.tgnet.TLRPC$TL_wallPaper, org.telegram.tgnet.TLRPC$WallPaper] */
+    /* JADX WARN: Type inference failed for: r2v244, types: [java.lang.Long] */
     /* JADX WARN: Type inference failed for: r2v25, types: [org.telegram.ui.ActionBar.INavigationLayout$NavigationParams] */
     /* JADX WARN: Type inference failed for: r2v31, types: [org.telegram.ui.ActionBar.INavigationLayout$NavigationParams] */
     /* JADX WARN: Type inference failed for: r2v34, types: [org.telegram.ui.ActionBar.INavigationLayout$NavigationParams] */
@@ -1878,11 +1878,17 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
     /* JADX WARN: Type inference failed for: r2v50, types: [org.telegram.ui.ActionBar.INavigationLayout$NavigationParams] */
     /* JADX WARN: Type inference failed for: r2v52, types: [org.telegram.ui.ActionBar.INavigationLayout$NavigationParams] */
     /* JADX WARN: Type inference failed for: r2v62, types: [org.telegram.ui.ActionBar.INavigationLayout$NavigationParams] */
+    /* JADX WARN: Type inference failed for: r30v56 */
+    /* JADX WARN: Type inference failed for: r30v57 */
+    /* JADX WARN: Type inference failed for: r30v60 */
     /* JADX WARN: Type inference failed for: r3v0 */
     /* JADX WARN: Type inference failed for: r3v1, types: [int, boolean] */
     /* JADX WARN: Type inference failed for: r3v10 */
     /* JADX WARN: Type inference failed for: r3v13 */
     /* JADX WARN: Type inference failed for: r3v14 */
+    /* JADX WARN: Type inference failed for: r40v38 */
+    /* JADX WARN: Type inference failed for: r40v39 */
+    /* JADX WARN: Type inference failed for: r40v43 */
     /* JADX WARN: Type inference failed for: r7v57, types: [java.lang.Integer] */
     /* JADX WARN: Type inference failed for: r8v13, types: [android.os.Bundle, java.lang.String] */
     /* JADX WARN: Type inference failed for: r8v21 */
@@ -1890,9 +1896,9 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
     /* JADX WARN: Type inference failed for: r8v39 */
     /* JADX WARN: Type inference failed for: r8v46 */
     /* JADX WARN: Type inference failed for: r9v12 */
-    /* JADX WARN: Type inference failed for: r9v210 */
-    /* JADX WARN: Type inference failed for: r9v218 */
+    /* JADX WARN: Type inference failed for: r9v211 */
     /* JADX WARN: Type inference failed for: r9v219 */
+    /* JADX WARN: Type inference failed for: r9v220 */
     /* JADX WARN: Type inference failed for: r9v4, types: [int, boolean] */
     @android.annotation.SuppressLint({"Range"})
     /*
@@ -1901,7 +1907,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
     */
     private boolean handleIntent(android.content.Intent r86, boolean r87, boolean r88, boolean r89) {
         /*
-            Method dump skipped, instructions count: 9236
+            Method dump skipped, instructions count: 9314
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LaunchActivity.handleIntent(android.content.Intent, boolean, boolean, boolean):boolean");
@@ -2427,7 +2433,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
     }
 
     /* JADX WARN: Multi-variable type inference failed */
-    /* JADX WARN: Removed duplicated region for block: B:119:0x04e1  */
+    /* JADX WARN: Removed duplicated region for block: B:119:0x04e3  */
     /* JADX WARN: Removed duplicated region for block: B:130:? A[RETURN, SYNTHETIC] */
     /* JADX WARN: Removed duplicated region for block: B:92:0x03b2  */
     /*
@@ -2436,7 +2442,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
     */
     private void runLinkRequest(final int r35, final java.lang.String r36, final java.lang.String r37, final java.lang.String r38, final java.lang.String r39, final java.lang.String r40, final java.lang.String r41, final java.lang.String r42, final java.lang.String r43, final java.lang.String r44, final boolean r45, final java.lang.Integer r46, final java.lang.Long r47, final java.lang.Integer r48, final java.lang.Integer r49, final java.lang.String r50, final java.util.HashMap<java.lang.String, java.lang.String> r51, final java.lang.String r52, final java.lang.String r53, final java.lang.String r54, final java.lang.String r55, final org.telegram.tgnet.TLRPC$TL_wallPaper r56, final java.lang.String r57, final java.lang.String r58, final java.lang.String r59, final java.lang.String r60, int r61, final int r62, final java.lang.String r63, final java.lang.String r64, final java.lang.String r65) {
         /*
-            Method dump skipped, instructions count: 1263
+            Method dump skipped, instructions count: 1265
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LaunchActivity.runLinkRequest(int, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, boolean, java.lang.Integer, java.lang.Long, java.lang.Integer, java.lang.Integer, java.lang.String, java.util.HashMap, java.lang.String, java.lang.String, java.lang.String, java.lang.String, org.telegram.tgnet.TLRPC$TL_wallPaper, java.lang.String, java.lang.String, java.lang.String, java.lang.String, int, int, java.lang.String, java.lang.String, java.lang.String):void");
@@ -3719,7 +3725,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$runLinkRequest$75(final Bundle bundle, final Long l, int[] iArr, final AlertDialog alertDialog, final Integer num, final BaseFragment baseFragment, final int i) {
+    public /* synthetic */ void lambda$runLinkRequest$75(final Bundle bundle, final Long l, int[] iArr, final AlertDialog alertDialog, final Integer num, final Integer num2, final BaseFragment baseFragment, final int i) {
         if (!this.actionBarLayout.presentFragment(new ChatActivity(bundle))) {
             TLRPC$TL_channels_getChannels tLRPC$TL_channels_getChannels = new TLRPC$TL_channels_getChannels();
             TLRPC$TL_inputChannel tLRPC$TL_inputChannel = new TLRPC$TL_inputChannel();
@@ -3728,24 +3734,24 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
             iArr[0] = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_channels_getChannels, new RequestDelegate() { // from class: org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda90
                 @Override // org.telegram.tgnet.RequestDelegate
                 public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    LaunchActivity.this.lambda$runLinkRequest$74(alertDialog, l, num, baseFragment, i, bundle, tLObject, tLRPC$TL_error);
+                    LaunchActivity.this.lambda$runLinkRequest$74(alertDialog, num, l, num2, baseFragment, i, bundle, tLObject, tLRPC$TL_error);
                 }
             });
         }
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$runLinkRequest$74(final AlertDialog alertDialog, final Long l, final Integer num, final BaseFragment baseFragment, final int i, final Bundle bundle, final TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$runLinkRequest$74(final AlertDialog alertDialog, final Integer num, final Long l, final Integer num2, final BaseFragment baseFragment, final int i, final Bundle bundle, final TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda60
             @Override // java.lang.Runnable
             public final void run() {
-                LaunchActivity.this.lambda$runLinkRequest$73(alertDialog, tLObject, l, num, baseFragment, i, bundle);
+                LaunchActivity.this.lambda$runLinkRequest$73(alertDialog, tLObject, num, l, num2, baseFragment, i, bundle);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$runLinkRequest$73(AlertDialog alertDialog, TLObject tLObject, Long l, Integer num, BaseFragment baseFragment, int i, Bundle bundle) {
+    public /* synthetic */ void lambda$runLinkRequest$73(AlertDialog alertDialog, TLObject tLObject, Integer num, Long l, Integer num2, BaseFragment baseFragment, int i, Bundle bundle) {
         try {
             alertDialog.dismiss();
         } catch (Exception e) {
@@ -3758,7 +3764,11 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                 MessagesController.getInstance(this.currentAccount).putChats(tLRPC$TL_messages_chats.chats, false);
                 TLRPC$Chat tLRPC$Chat = tLRPC$TL_messages_chats.chats.get(0);
                 if (tLRPC$Chat != null && tLRPC$Chat.forum) {
-                    openForumFromLink(-l.longValue(), num.intValue(), null, null);
+                    if (num != null) {
+                        openForumFromLink(-l.longValue(), num.intValue(), num2, null);
+                    } else {
+                        openForumFromLink(-l.longValue(), num2.intValue(), null, null);
+                    }
                 }
                 if (baseFragment == null || MessagesController.getInstance(i).checkCanOpenChat(bundle, baseFragment)) {
                     this.actionBarLayout.presentFragment(new ChatActivity(bundle));

@@ -265,7 +265,6 @@ import org.telegram.tgnet.TLRPC$TL_messages_setChatAvailableReactions;
 import org.telegram.tgnet.TLRPC$TL_messages_setEncryptedTyping;
 import org.telegram.tgnet.TLRPC$TL_messages_setHistoryTTL;
 import org.telegram.tgnet.TLRPC$TL_messages_setTyping;
-import org.telegram.tgnet.TLRPC$TL_messages_sponsoredMessages;
 import org.telegram.tgnet.TLRPC$TL_messages_startBot;
 import org.telegram.tgnet.TLRPC$TL_messages_stickerSet;
 import org.telegram.tgnet.TLRPC$TL_messages_toggleDialogPin;
@@ -371,6 +370,7 @@ import org.telegram.tgnet.TLRPC$WebPage;
 import org.telegram.tgnet.TLRPC$contacts_Blocked;
 import org.telegram.tgnet.TLRPC$messages_Dialogs;
 import org.telegram.tgnet.TLRPC$messages_Messages;
+import org.telegram.tgnet.TLRPC$messages_SponsoredMessages;
 import org.telegram.tgnet.TLRPC$photos_Photos;
 import org.telegram.tgnet.TLRPC$updates_ChannelDifference;
 import org.telegram.tgnet.TLRPC$updates_Difference;
@@ -2002,7 +2002,7 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public void processLoadedDialogFilters(final ArrayList<DialogFilter> arrayList, final TLRPC$messages_Dialogs tLRPC$messages_Dialogs, final TLRPC$messages_Dialogs tLRPC$messages_Dialogs2, final ArrayList<TLRPC$User> arrayList2, final ArrayList<TLRPC$Chat> arrayList3, final ArrayList<TLRPC$EncryptedChat> arrayList4, final int i) {
-        Utilities.stageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesController$$ExternalSyntheticLambda197
+        Utilities.stageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesController$$ExternalSyntheticLambda196
             @Override // java.lang.Runnable
             public final void run() {
                 MessagesController.this.lambda$processLoadedDialogFilters$15(tLRPC$messages_Dialogs, arrayList4, tLRPC$messages_Dialogs2, i, arrayList, arrayList2, arrayList3);
@@ -4850,7 +4850,7 @@ public class MessagesController extends BaseController implements NotificationCe
             } catch (Exception unused) {
             }
         }
-        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesController$$ExternalSyntheticLambda192
+        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesController$$ExternalSyntheticLambda191
             @Override // java.lang.Runnable
             public final void run() {
                 MessagesController.this.lambda$didReceivedNotification$26(tLRPC$WallPaper, tLRPC$TL_wallPaperSettings, overrideWallpaperInfo, file);
@@ -6084,7 +6084,7 @@ public class MessagesController extends BaseController implements NotificationCe
             TLRPC$UserFull tLRPC$UserFull2 = tLRPC$TL_users_userFull.full_user;
             tLRPC$UserFull2.user = getUser(Long.valueOf(tLRPC$UserFull2.id));
             getMessagesStorage().updateUserInfo(tLRPC$UserFull, false);
-            AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesController$$ExternalSyntheticLambda191
+            AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesController$$ExternalSyntheticLambda190
                 @Override // java.lang.Runnable
                 public final void run() {
                     MessagesController.this.lambda$loadFullUser$49(tLRPC$UserFull, tLRPC$User, i);
@@ -6092,7 +6092,7 @@ public class MessagesController extends BaseController implements NotificationCe
             });
             return;
         }
-        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesController$$ExternalSyntheticLambda190
+        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesController$$ExternalSyntheticLambda189
             @Override // java.lang.Runnable
             public final void run() {
                 MessagesController.this.lambda$loadFullUser$50(tLRPC$User);
@@ -7929,8 +7929,8 @@ public class MessagesController extends BaseController implements NotificationCe
         }
     }
 
-    /* JADX WARN: Removed duplicated region for block: B:411:0x03d9  */
-    /* JADX WARN: Removed duplicated region for block: B:421:0x0412  */
+    /* JADX WARN: Removed duplicated region for block: B:411:0x03e0  */
+    /* JADX WARN: Removed duplicated region for block: B:421:0x0419  */
     /* JADX WARN: Type inference failed for: r2v11 */
     /* JADX WARN: Type inference failed for: r2v12, types: [int, boolean] */
     /* JADX WARN: Type inference failed for: r2v59 */
@@ -7940,7 +7940,7 @@ public class MessagesController extends BaseController implements NotificationCe
     */
     public void deleteDialog(final long r26, int r28, final int r29, int r30, final boolean r31, final org.telegram.tgnet.TLRPC$InputPeer r32, final long r33) {
         /*
-            Method dump skipped, instructions count: 1130
+            Method dump skipped, instructions count: 1137
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.deleteDialog(long, int, int, int, boolean, org.telegram.tgnet.TLRPC$InputPeer, long):void");
@@ -10397,7 +10397,7 @@ public class MessagesController extends BaseController implements NotificationCe
         getMessagesStorage().setLastDateValue(i2);
         getMessagesStorage().setLastQtsValue(i3);
         getDifference();
-        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesController$$ExternalSyntheticLambda195
+        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesController$$ExternalSyntheticLambda194
             @Override // java.lang.Runnable
             public final void run() {
                 MessagesController.this.lambda$completeDialogsReset$170(tLRPC$messages_Dialogs, longSparseArray, longSparseArray2);
@@ -10526,7 +10526,7 @@ public class MessagesController extends BaseController implements NotificationCe
     public /* synthetic */ void lambda$migrateDialogs$175(final int i, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLRPC$TL_error == null) {
             final TLRPC$messages_Dialogs tLRPC$messages_Dialogs = (TLRPC$messages_Dialogs) tLObject;
-            getMessagesStorage().getStorageQueue().postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesController$$ExternalSyntheticLambda193
+            getMessagesStorage().getStorageQueue().postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesController$$ExternalSyntheticLambda192
                 @Override // java.lang.Runnable
                 public final void run() {
                     MessagesController.this.lambda$migrateDialogs$173(tLRPC$messages_Dialogs, i);
@@ -11142,7 +11142,7 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public void processDialogsUpdate(final TLRPC$messages_Dialogs tLRPC$messages_Dialogs, ArrayList<TLRPC$EncryptedChat> arrayList, final boolean z) {
-        Utilities.stageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesController$$ExternalSyntheticLambda198
+        Utilities.stageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesController$$ExternalSyntheticLambda197
             @Override // java.lang.Runnable
             public final void run() {
                 MessagesController.this.lambda$processDialogsUpdate$188(tLRPC$messages_Dialogs, z);
@@ -11168,18 +11168,18 @@ public class MessagesController extends BaseController implements NotificationCe
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.lambda$processDialogsUpdate$188(org.telegram.tgnet.TLRPC$messages_Dialogs, boolean):void");
     }
 
-    /* JADX WARN: Code restructure failed: missing block: B:351:0x02c1, code lost:
-        if (r5.size() == r11.size()) goto L142;
+    /* JADX WARN: Code restructure failed: missing block: B:349:0x02c7, code lost:
+        if (r8.size() == r12.size()) goto L142;
      */
-    /* JADX WARN: Removed duplicated region for block: B:389:0x0378  */
-    /* JADX WARN: Removed duplicated region for block: B:407:0x037d A[SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:387:0x037e  */
+    /* JADX WARN: Removed duplicated region for block: B:405:0x0383 A[SYNTHETIC] */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public /* synthetic */ void lambda$processDialogsUpdate$187(org.telegram.tgnet.TLRPC$messages_Dialogs r21, androidx.collection.LongSparseArray r22, androidx.collection.LongSparseArray r23, boolean r24, org.telegram.messenger.support.LongSparseIntArray r25) {
+    public /* synthetic */ void lambda$processDialogsUpdate$187(org.telegram.tgnet.TLRPC$messages_Dialogs r20, androidx.collection.LongSparseArray r21, androidx.collection.LongSparseArray r22, boolean r23, org.telegram.messenger.support.LongSparseIntArray r24) {
         /*
-            Method dump skipped, instructions count: 964
+            Method dump skipped, instructions count: 970
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.lambda$processDialogsUpdate$187(org.telegram.tgnet.TLRPC$messages_Dialogs, androidx.collection.LongSparseArray, androidx.collection.LongSparseArray, boolean, org.telegram.messenger.support.LongSparseIntArray):void");
@@ -11995,7 +11995,7 @@ public class MessagesController extends BaseController implements NotificationCe
         }
         final TLRPC$Updates tLRPC$Updates = (TLRPC$Updates) tLObject;
         processUpdates(tLRPC$Updates, false);
-        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesController$$ExternalSyntheticLambda188
+        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesController$$ExternalSyntheticLambda187
             @Override // java.lang.Runnable
             public final void run() {
                 MessagesController.this.lambda$createChat$209(tLRPC$Updates);
@@ -12031,7 +12031,7 @@ public class MessagesController extends BaseController implements NotificationCe
         }
         final TLRPC$Updates tLRPC$Updates = (TLRPC$Updates) tLObject;
         processUpdates(tLRPC$Updates, false);
-        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesController$$ExternalSyntheticLambda187
+        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesController$$ExternalSyntheticLambda186
             @Override // java.lang.Runnable
             public final void run() {
                 MessagesController.this.lambda$createChat$212(tLRPC$Updates);
@@ -15170,44 +15170,44 @@ public class MessagesController extends BaseController implements NotificationCe
         return z;
     }
 
-    /* JADX WARN: Code restructure failed: missing block: B:2167:0x1377, code lost:
-        if (r0.action.user_id == r31) goto L914;
+    /* JADX WARN: Code restructure failed: missing block: B:2165:0x1377, code lost:
+        if (r0.action.user_id == r31) goto L912;
      */
-    /* JADX WARN: Removed duplicated region for block: B:2032:0x110b  */
-    /* JADX WARN: Removed duplicated region for block: B:2072:0x120c  */
-    /* JADX WARN: Removed duplicated region for block: B:2082:0x1238  */
-    /* JADX WARN: Removed duplicated region for block: B:2084:0x123b  */
-    /* JADX WARN: Removed duplicated region for block: B:2120:0x12b0  */
-    /* JADX WARN: Removed duplicated region for block: B:2157:0x1345  */
-    /* JADX WARN: Removed duplicated region for block: B:2200:0x13f9  */
-    /* JADX WARN: Removed duplicated region for block: B:2201:0x13ff  */
-    /* JADX WARN: Removed duplicated region for block: B:2205:0x140a  */
-    /* JADX WARN: Removed duplicated region for block: B:2216:0x145f  */
-    /* JADX WARN: Removed duplicated region for block: B:2239:0x14c1  */
-    /* JADX WARN: Removed duplicated region for block: B:2246:0x14f4  */
-    /* JADX WARN: Removed duplicated region for block: B:2248:0x14f9  */
-    /* JADX WARN: Removed duplicated region for block: B:2252:0x1502  */
-    /* JADX WARN: Removed duplicated region for block: B:2255:0x1512  */
-    /* JADX WARN: Removed duplicated region for block: B:2258:0x1525  */
-    /* JADX WARN: Removed duplicated region for block: B:2268:0x153f  */
-    /* JADX WARN: Removed duplicated region for block: B:2269:0x1545  */
-    /* JADX WARN: Removed duplicated region for block: B:2276:0x156b  */
-    /* JADX WARN: Removed duplicated region for block: B:2282:0x1580  */
-    /* JADX WARN: Removed duplicated region for block: B:2519:0x1b37  */
-    /* JADX WARN: Removed duplicated region for block: B:2525:0x1b6a  */
-    /* JADX WARN: Removed duplicated region for block: B:2527:0x1b7a  */
-    /* JADX WARN: Removed duplicated region for block: B:2532:0x1ba1  */
-    /* JADX WARN: Removed duplicated region for block: B:2537:0x1bcd  */
-    /* JADX WARN: Removed duplicated region for block: B:2542:0x1bf4  */
-    /* JADX WARN: Removed duplicated region for block: B:2547:0x1c1a  */
-    /* JADX WARN: Removed duplicated region for block: B:2576:0x133a A[SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:2030:0x110b  */
+    /* JADX WARN: Removed duplicated region for block: B:2070:0x120c  */
+    /* JADX WARN: Removed duplicated region for block: B:2080:0x1238  */
+    /* JADX WARN: Removed duplicated region for block: B:2082:0x123b  */
+    /* JADX WARN: Removed duplicated region for block: B:2118:0x12b0  */
+    /* JADX WARN: Removed duplicated region for block: B:2155:0x1345  */
+    /* JADX WARN: Removed duplicated region for block: B:2198:0x13f9  */
+    /* JADX WARN: Removed duplicated region for block: B:2199:0x13ff  */
+    /* JADX WARN: Removed duplicated region for block: B:2203:0x140a  */
+    /* JADX WARN: Removed duplicated region for block: B:2214:0x145f  */
+    /* JADX WARN: Removed duplicated region for block: B:2237:0x14c1  */
+    /* JADX WARN: Removed duplicated region for block: B:2244:0x14f4  */
+    /* JADX WARN: Removed duplicated region for block: B:2246:0x14f9  */
+    /* JADX WARN: Removed duplicated region for block: B:2250:0x1502  */
+    /* JADX WARN: Removed duplicated region for block: B:2253:0x1512  */
+    /* JADX WARN: Removed duplicated region for block: B:2256:0x1525  */
+    /* JADX WARN: Removed duplicated region for block: B:2266:0x153f  */
+    /* JADX WARN: Removed duplicated region for block: B:2267:0x1545  */
+    /* JADX WARN: Removed duplicated region for block: B:2274:0x156b  */
+    /* JADX WARN: Removed duplicated region for block: B:2280:0x1580  */
+    /* JADX WARN: Removed duplicated region for block: B:2515:0x1b04  */
+    /* JADX WARN: Removed duplicated region for block: B:2521:0x1b37  */
+    /* JADX WARN: Removed duplicated region for block: B:2523:0x1b47  */
+    /* JADX WARN: Removed duplicated region for block: B:2528:0x1b6e  */
+    /* JADX WARN: Removed duplicated region for block: B:2533:0x1b9a  */
+    /* JADX WARN: Removed duplicated region for block: B:2538:0x1bc1  */
+    /* JADX WARN: Removed duplicated region for block: B:2543:0x1be7  */
+    /* JADX WARN: Removed duplicated region for block: B:2572:0x133a A[SYNTHETIC] */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
     public boolean processUpdateArray(java.util.ArrayList<org.telegram.tgnet.TLRPC$Update> r80, final java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r81, final java.util.ArrayList<org.telegram.tgnet.TLRPC$Chat> r82, boolean r83, final int r84) {
         /*
-            Method dump skipped, instructions count: 7232
+            Method dump skipped, instructions count: 7181
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.processUpdateArray(java.util.ArrayList, java.util.ArrayList, java.util.ArrayList, boolean, int):boolean");
@@ -15232,7 +15232,7 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public /* synthetic */ void lambda$processUpdateArray$316(final TLRPC$TL_updatePeerBlocked tLRPC$TL_updatePeerBlocked) {
-        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesController$$ExternalSyntheticLambda183
+        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesController$$ExternalSyntheticLambda182
             @Override // java.lang.Runnable
             public final void run() {
                 MessagesController.this.lambda$processUpdateArray$315(tLRPC$TL_updatePeerBlocked);
@@ -15273,10 +15273,6 @@ public class MessagesController extends BaseController implements NotificationCe
         });
     }
 
-    public /* synthetic */ void lambda$processUpdateArray$321(LongSparseArray longSparseArray) {
-        getNotificationsController().processEditedMessages(longSparseArray);
-    }
-
     public /* synthetic */ void lambda$processUpdateArray$322(final LongSparseArray longSparseArray) {
         AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesController$$ExternalSyntheticLambda97
             @Override // java.lang.Runnable
@@ -15284,6 +15280,11 @@ public class MessagesController extends BaseController implements NotificationCe
                 MessagesController.this.lambda$processUpdateArray$321(longSparseArray);
             }
         });
+    }
+
+    public /* synthetic */ void lambda$processUpdateArray$321(LongSparseArray longSparseArray) {
+        getNotificationsController().processEditedMessages(longSparseArray);
+        getTopicsController().processEditedMessages(longSparseArray);
     }
 
     public /* synthetic */ void lambda$processUpdateArray$323(TLRPC$User tLRPC$User) {
@@ -15527,7 +15528,7 @@ public class MessagesController extends BaseController implements NotificationCe
         }
         tLRPC$Dialog.unread_reactions_count = i;
         getMessagesStorage().updateUnreadReactionsCount(j, i2, i);
-        getNotificationCenter().postNotificationName(NotificationCenter.dialogsUnreadReactionsCounterChanged, Long.valueOf(j), Integer.valueOf(i), arrayList);
+        getNotificationCenter().postNotificationName(NotificationCenter.dialogsUnreadReactionsCounterChanged, Long.valueOf(j), Integer.valueOf(i2), Integer.valueOf(i), arrayList);
     }
 
     public /* synthetic */ void lambda$checkUnreadReactions$338(final long j, final int i, final ArrayList arrayList, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
@@ -15546,7 +15547,7 @@ public class MessagesController extends BaseController implements NotificationCe
     public /* synthetic */ void lambda$checkUnreadReactions$337(long j, int i, int i2, ArrayList arrayList) {
         getMessagesController().getTopicsController().updateReactionsUnread(j, i, i2, false);
         getMessagesStorage().updateUnreadReactionsCount(j, i, i2);
-        getNotificationCenter().postNotificationName(NotificationCenter.dialogsUnreadReactionsCounterChanged, Long.valueOf(j), Integer.valueOf(i2), arrayList);
+        getNotificationCenter().postNotificationName(NotificationCenter.dialogsUnreadReactionsCounterChanged, Long.valueOf(j), Integer.valueOf(i), Integer.valueOf(i2), arrayList);
     }
 
     public /* synthetic */ void lambda$checkUnreadReactions$339(int i, long j, int i2) {
@@ -15651,31 +15652,31 @@ public class MessagesController extends BaseController implements NotificationCe
 
     public /* synthetic */ void lambda$getSponsoredMessages$344(final long j, final SponsoredMessagesInfo sponsoredMessagesInfo, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         final ArrayList arrayList = null;
-        if (tLObject instanceof TLRPC$TL_messages_sponsoredMessages) {
-            final TLRPC$TL_messages_sponsoredMessages tLRPC$TL_messages_sponsoredMessages = (TLRPC$TL_messages_sponsoredMessages) tLObject;
-            if (!tLRPC$TL_messages_sponsoredMessages.messages.isEmpty()) {
+        if (tLObject instanceof TLRPC$messages_SponsoredMessages) {
+            final TLRPC$messages_SponsoredMessages tLRPC$messages_SponsoredMessages = (TLRPC$messages_SponsoredMessages) tLObject;
+            if (!tLRPC$messages_SponsoredMessages.messages.isEmpty()) {
                 arrayList = new ArrayList();
-                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesController$$ExternalSyntheticLambda179
+                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesController$$ExternalSyntheticLambda199
                     @Override // java.lang.Runnable
                     public final void run() {
-                        MessagesController.this.lambda$getSponsoredMessages$342(tLRPC$TL_messages_sponsoredMessages);
+                        MessagesController.this.lambda$getSponsoredMessages$342(tLRPC$messages_SponsoredMessages);
                     }
                 });
                 LongSparseArray longSparseArray = new LongSparseArray();
                 LongSparseArray longSparseArray2 = new LongSparseArray();
                 int i = 0;
-                for (int i2 = 0; i2 < tLRPC$TL_messages_sponsoredMessages.users.size(); i2++) {
-                    TLRPC$User tLRPC$User = tLRPC$TL_messages_sponsoredMessages.users.get(i2);
+                for (int i2 = 0; i2 < tLRPC$messages_SponsoredMessages.users.size(); i2++) {
+                    TLRPC$User tLRPC$User = tLRPC$messages_SponsoredMessages.users.get(i2);
                     longSparseArray.put(tLRPC$User.id, tLRPC$User);
                 }
-                for (int i3 = 0; i3 < tLRPC$TL_messages_sponsoredMessages.chats.size(); i3++) {
-                    TLRPC$Chat tLRPC$Chat = tLRPC$TL_messages_sponsoredMessages.chats.get(i3);
+                for (int i3 = 0; i3 < tLRPC$messages_SponsoredMessages.chats.size(); i3++) {
+                    TLRPC$Chat tLRPC$Chat = tLRPC$messages_SponsoredMessages.chats.get(i3);
                     longSparseArray2.put(tLRPC$Chat.id, tLRPC$Chat);
                 }
                 int i4 = -10000000;
-                int size = tLRPC$TL_messages_sponsoredMessages.messages.size();
-                while (i < size) {
-                    TLRPC$TL_sponsoredMessage tLRPC$TL_sponsoredMessage = tLRPC$TL_messages_sponsoredMessages.messages.get(i);
+                int min = Math.min(1, tLRPC$messages_SponsoredMessages.messages.size());
+                while (i < min) {
+                    TLRPC$TL_sponsoredMessage tLRPC$TL_sponsoredMessage = tLRPC$messages_SponsoredMessages.messages.get(i);
                     TLRPC$TL_message tLRPC$TL_message = new TLRPC$TL_message();
                     tLRPC$TL_message.message = tLRPC$TL_sponsoredMessage.message;
                     if (!tLRPC$TL_sponsoredMessage.entities.isEmpty()) {
@@ -15710,9 +15711,9 @@ public class MessagesController extends BaseController implements NotificationCe
         });
     }
 
-    public /* synthetic */ void lambda$getSponsoredMessages$342(TLRPC$TL_messages_sponsoredMessages tLRPC$TL_messages_sponsoredMessages) {
-        putUsers(tLRPC$TL_messages_sponsoredMessages.users, false);
-        putChats(tLRPC$TL_messages_sponsoredMessages.chats, false);
+    public /* synthetic */ void lambda$getSponsoredMessages$342(TLRPC$messages_SponsoredMessages tLRPC$messages_SponsoredMessages) {
+        putUsers(tLRPC$messages_SponsoredMessages.users, false);
+        putChats(tLRPC$messages_SponsoredMessages.chats, false);
     }
 
     public /* synthetic */ void lambda$getSponsoredMessages$343(ArrayList arrayList, long j, SponsoredMessagesInfo sponsoredMessagesInfo) {

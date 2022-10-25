@@ -1408,7 +1408,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             imageReceiverArr[i] = new ImageReceiver(this);
             this.commentAvatarImages[i].setRoundRadius(AndroidUtilities.dp(12.0f));
             this.commentAvatarDrawables[i] = new AvatarDrawable();
-            this.commentAvatarDrawables[i].setTextSize(AndroidUtilities.dp(8.0f));
+            this.commentAvatarDrawables[i].setTextSize(AndroidUtilities.dp(18.0f));
             i++;
         }
     }
@@ -9046,29 +9046,29 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         }
     }
 
-    /* JADX WARN: Code restructure failed: missing block: B:1374:0x09dd, code lost:
+    /* JADX WARN: Code restructure failed: missing block: B:1383:0x09dd, code lost:
         if (r1[0] == 3) goto L323;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:1640:0x1136, code lost:
+    /* JADX WARN: Code restructure failed: missing block: B:1649:0x1136, code lost:
         if (r3 == 2) goto L654;
      */
-    /* JADX WARN: Removed duplicated region for block: B:1519:0x0dda  */
-    /* JADX WARN: Removed duplicated region for block: B:1803:0x1426  */
-    /* JADX WARN: Removed duplicated region for block: B:1807:0x143f  */
-    /* JADX WARN: Removed duplicated region for block: B:1815:0x1460  */
-    /* JADX WARN: Removed duplicated region for block: B:1819:0x1477  */
-    /* JADX WARN: Removed duplicated region for block: B:1841:0x14b5  */
-    /* JADX WARN: Removed duplicated region for block: B:1845:0x14c6  */
-    /* JADX WARN: Removed duplicated region for block: B:1909:0x1675  */
-    /* JADX WARN: Removed duplicated region for block: B:1915:0x1689  */
-    /* JADX WARN: Removed duplicated region for block: B:1919:0x1697  */
-    /* JADX WARN: Removed duplicated region for block: B:1954:0x175d  */
-    /* JADX WARN: Removed duplicated region for block: B:1957:0x1764  */
-    /* JADX WARN: Removed duplicated region for block: B:2023:0x1926  */
-    /* JADX WARN: Removed duplicated region for block: B:2030:0x1945  */
-    /* JADX WARN: Removed duplicated region for block: B:2033:0x1999  */
-    /* JADX WARN: Removed duplicated region for block: B:2061:0x0de3 A[SYNTHETIC] */
-    /* JADX WARN: Removed duplicated region for block: B:2062:? A[RETURN, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:1528:0x0dda  */
+    /* JADX WARN: Removed duplicated region for block: B:1812:0x1426  */
+    /* JADX WARN: Removed duplicated region for block: B:1816:0x143f  */
+    /* JADX WARN: Removed duplicated region for block: B:1824:0x1460  */
+    /* JADX WARN: Removed duplicated region for block: B:1828:0x1477  */
+    /* JADX WARN: Removed duplicated region for block: B:1850:0x14b5  */
+    /* JADX WARN: Removed duplicated region for block: B:1854:0x14c6  */
+    /* JADX WARN: Removed duplicated region for block: B:1918:0x1675  */
+    /* JADX WARN: Removed duplicated region for block: B:1924:0x1689  */
+    /* JADX WARN: Removed duplicated region for block: B:1928:0x1697  */
+    /* JADX WARN: Removed duplicated region for block: B:1963:0x175d  */
+    /* JADX WARN: Removed duplicated region for block: B:1966:0x1764  */
+    /* JADX WARN: Removed duplicated region for block: B:2041:0x1942  */
+    /* JADX WARN: Removed duplicated region for block: B:2048:0x1961  */
+    /* JADX WARN: Removed duplicated region for block: B:2051:0x19b5  */
+    /* JADX WARN: Removed duplicated region for block: B:2079:0x0de3 A[SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:2080:? A[RETURN, SYNTHETIC] */
     /* JADX WARN: Type inference failed for: r2v477, types: [boolean] */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
@@ -9076,7 +9076,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     */
     public void drawOverlays(android.graphics.Canvas r28) {
         /*
-            Method dump skipped, instructions count: 6766
+            Method dump skipped, instructions count: 6794
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.ChatMessageCell.drawOverlays(android.graphics.Canvas):void");

@@ -1296,13 +1296,17 @@ public class LocaleController {
     }
 
     public static String formatPluralStringComma(String str, int i) {
+        return formatPluralStringComma(str, i, ',');
+    }
+
+    public static String formatPluralStringComma(String str, int i, char c) {
         if (str != null) {
             try {
                 if (str.length() != 0 && getInstance().currentPluralRules != null) {
                     String str2 = str + "_" + getInstance().stringForQuantity(getInstance().currentPluralRules.quantityForNumber(i));
                     StringBuilder sb = new StringBuilder(String.format(Locale.US, "%d", Integer.valueOf(i)));
                     for (int length = sb.length() - 3; length > 0; length -= 3) {
-                        sb.insert(length, ',');
+                        sb.insert(length, c);
                     }
                     String str3 = null;
                     String str4 = BuildVars.USE_CLOUD_STRINGS ? getInstance().localeValues.get(str2) : null;

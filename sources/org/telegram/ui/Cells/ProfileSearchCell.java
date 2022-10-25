@@ -358,7 +358,7 @@ public class ProfileSearchCell extends BaseCell implements NotificationCenter.No
                 if (!tLRPC$Chat4.megagroup) {
                     int i2 = tLRPC$Chat4.participants_count;
                     if (i2 != 0) {
-                        str = LocaleController.formatPluralString("Subscribers", i2, new Object[0]);
+                        str = LocaleController.formatPluralStringComma("Subscribers", i2);
                     } else if (!ChatObject.isPublic(tLRPC$Chat4)) {
                         str = LocaleController.getString("ChannelPrivate", R.string.ChannelPrivate).toLowerCase();
                     } else {
@@ -370,7 +370,7 @@ public class ProfileSearchCell extends BaseCell implements NotificationCenter.No
             TLRPC$Chat tLRPC$Chat5 = this.chat;
             int i3 = tLRPC$Chat5.participants_count;
             if (i3 != 0) {
-                str = LocaleController.formatPluralString("Members", i3, new Object[0]);
+                str = LocaleController.formatPluralStringComma("Members", i3);
             } else if (tLRPC$Chat5.has_geo) {
                 str = LocaleController.getString("MegaLocation", R.string.MegaLocation);
             } else if (!ChatObject.isPublic(tLRPC$Chat5)) {

@@ -512,6 +512,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         }
         this.silentButton.setContentDescription(LocaleController.getString("Unmute", R.string.Unmute));
         this.silentButton.setOnClickListener(FragmentContextView$$ExternalSyntheticLambda8.INSTANCE);
+        this.silentButton.setVisibility(8);
         addView(this.silentButton, LayoutHelper.createFrame(36, 36.0f, 53, 0.0f, 0.0f, 36.0f, 0.0f));
         if (!z) {
             i = 51;
@@ -1145,21 +1146,9 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         view.setPadding(0, ((int) (getVisibility() == 0 ? this.topPadding : 0.0f)) + dp, 0, 0);
     }
 
-    private void updateSilent() {
-        if (this.currentStyle == 0) {
-            boolean z = MediaController.getInstance().isSilent;
-            AndroidUtilities.updateViewShow(this.silentButton, z);
-            AndroidUtilities.updateViewShow(this.playbackSpeedButton, !z);
-            return;
-        }
-        AndroidUtilities.updateViewShow(this.silentButton, false, true, false);
-        AndroidUtilities.updateViewShow(this.playbackSpeedButton, false, true, false);
-    }
-
     private void updateStyle(int i) {
         int i2 = this.currentStyle;
         if (i2 == i) {
-            updateSilent();
             return;
         }
         boolean z = true;
@@ -1252,11 +1241,11 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                     this.playbackSpeedButton.setTag(1);
                 }
                 this.closeButton.setContentDescription(LocaleController.getString("AccDescrClosePlayer", R.string.AccDescrClosePlayer));
-            } else {
-                this.playButton.setLayoutParams(LayoutHelper.createFrame(36, 36.0f, 51, 8.0f, 0.0f, 0.0f, 0.0f));
-                this.titleTextView.setLayoutParams(LayoutHelper.createFrame(-1, 36.0f, 51, 51.0f, 0.0f, 36.0f, 0.0f));
-                this.closeButton.setContentDescription(LocaleController.getString("AccDescrStopLiveLocation", R.string.AccDescrStopLiveLocation));
+                return;
             }
+            this.playButton.setLayoutParams(LayoutHelper.createFrame(36, 36.0f, 51, 8.0f, 0.0f, 0.0f, 0.0f));
+            this.titleTextView.setLayoutParams(LayoutHelper.createFrame(-1, 36.0f, 51, 51.0f, 0.0f, 36.0f, 0.0f));
+            this.closeButton.setContentDescription(LocaleController.getString("AccDescrStopLiveLocation", R.string.AccDescrStopLiveLocation));
         } else if (i == 4) {
             this.selector.setBackground(Theme.getSelectorDrawable(false));
             this.frameLayout.setBackgroundColor(getThemedColor("inappPlayerBackground"));
@@ -1293,11 +1282,13 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             this.closeButton.setVisibility(8);
             this.playButton.setVisibility(8);
             ActionBarMenuItem actionBarMenuItem3 = this.playbackSpeedButton;
-            if (actionBarMenuItem3 != null) {
-                actionBarMenuItem3.setVisibility(8);
-                this.playbackSpeedButton.setTag(null);
+            if (actionBarMenuItem3 == null) {
+                return;
             }
-        } else if (i == 1 || i == 3) {
+            actionBarMenuItem3.setVisibility(8);
+            this.playbackSpeedButton.setTag(null);
+        } else if (i != 1 && i != 3) {
+        } else {
             this.selector.setBackground(null);
             updateCallTitle();
             boolean hasRtmpStream = VoIPService.hasRtmpStream();
@@ -1344,12 +1335,12 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             this.titleTextView.setLayoutParams(LayoutHelper.createFrame(-2, -2.0f, 17, 0.0f, 0.0f, 0.0f, 2.0f));
             this.titleTextView.setPadding(AndroidUtilities.dp(112.0f), 0, AndroidUtilities.dp(112.0f), 0);
             ActionBarMenuItem actionBarMenuItem4 = this.playbackSpeedButton;
-            if (actionBarMenuItem4 != null) {
-                actionBarMenuItem4.setVisibility(8);
-                this.playbackSpeedButton.setTag(null);
+            if (actionBarMenuItem4 == null) {
+                return;
             }
+            actionBarMenuItem4.setVisibility(8);
+            this.playbackSpeedButton.setTag(null);
         }
-        updateSilent();
     }
 
     @Override // android.view.ViewGroup, android.view.View

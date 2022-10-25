@@ -6707,8 +6707,12 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
 
         /* JADX INFO: Access modifiers changed from: private */
         public /* synthetic */ void lambda$onAnimationEnd$0() {
-            PhotoViewer.this.videoTextureView.setOutlineProvider(null);
-            PhotoViewer.this.textureImageView.setOutlineProvider(null);
+            if (PhotoViewer.this.videoTextureView != null) {
+                PhotoViewer.this.videoTextureView.setOutlineProvider(null);
+            }
+            if (PhotoViewer.this.textureImageView != null) {
+                PhotoViewer.this.textureImageView.setOutlineProvider(null);
+            }
             if (PhotoViewer.this.firstFrameView != null) {
                 PhotoViewer.this.firstFrameView.setOutlineProvider(null);
             }
@@ -7104,7 +7108,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
 
             @Override // org.telegram.ui.Components.SeekBarAccessibilityDelegate
             /* renamed from: getContentDescription  reason: collision with other method in class */
-            public String mo2183getContentDescription(View view) {
+            public String mo2184getContentDescription(View view) {
                 return LocaleController.formatString("AccDescrPlayerDuration", R.string.AccDescrPlayerDuration, LocaleController.formatPluralString("Minutes", PhotoViewer.this.videoPlayerCurrentTime[0], new Object[0]) + ' ' + LocaleController.formatPluralString("Seconds", PhotoViewer.this.videoPlayerCurrentTime[1], new Object[0]), LocaleController.formatPluralString("Minutes", PhotoViewer.this.videoPlayerTotalTime[0], new Object[0]) + ' ' + LocaleController.formatPluralString("Seconds", PhotoViewer.this.videoPlayerTotalTime[1], new Object[0]));
             }
         };

@@ -89,6 +89,7 @@ import org.telegram.tgnet.TLRPC$TL_contacts_topPeers;
 import org.telegram.tgnet.TLRPC$TL_contacts_topPeersDisabled;
 import org.telegram.tgnet.TLRPC$TL_documentAttributeAnimated;
 import org.telegram.tgnet.TLRPC$TL_documentAttributeAudio;
+import org.telegram.tgnet.TLRPC$TL_documentAttributeCustomEmoji;
 import org.telegram.tgnet.TLRPC$TL_documentAttributeSticker;
 import org.telegram.tgnet.TLRPC$TL_documentAttributeVideo;
 import org.telegram.tgnet.TLRPC$TL_documentEmpty;
@@ -3810,9 +3811,12 @@ public class MediaDataController extends BaseController {
     }
 
     public static long getStickerSetId(TLRPC$Document tLRPC$Document) {
+        if (tLRPC$Document == null) {
+            return -1L;
+        }
         for (int i = 0; i < tLRPC$Document.attributes.size(); i++) {
             TLRPC$DocumentAttribute tLRPC$DocumentAttribute = tLRPC$Document.attributes.get(i);
-            if (tLRPC$DocumentAttribute instanceof TLRPC$TL_documentAttributeSticker) {
+            if ((tLRPC$DocumentAttribute instanceof TLRPC$TL_documentAttributeSticker) || (tLRPC$DocumentAttribute instanceof TLRPC$TL_documentAttributeCustomEmoji)) {
                 TLRPC$InputStickerSet tLRPC$InputStickerSet = tLRPC$DocumentAttribute.stickerset;
                 if (!(tLRPC$InputStickerSet instanceof TLRPC$TL_inputStickerSetID)) {
                     return -1L;

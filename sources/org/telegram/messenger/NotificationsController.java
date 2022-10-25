@@ -41,7 +41,6 @@ import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import org.telegram.messenger.support.LongSparseIntArray;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$Dialog;
@@ -49,9 +48,7 @@ import org.telegram.tgnet.TLRPC$EncryptedChat;
 import org.telegram.tgnet.TLRPC$Message;
 import org.telegram.tgnet.TLRPC$MessageAction;
 import org.telegram.tgnet.TLRPC$MessageFwdHeader;
-import org.telegram.tgnet.TLRPC$NotifyPeer;
 import org.telegram.tgnet.TLRPC$Peer;
-import org.telegram.tgnet.TLRPC$TL_account_getNotifyExceptions;
 import org.telegram.tgnet.TLRPC$TL_account_updateNotifySettings;
 import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.tgnet.TLRPC$TL_inputNotifyBroadcasts;
@@ -70,10 +67,7 @@ import org.telegram.tgnet.TLRPC$TL_notificationSoundDefault;
 import org.telegram.tgnet.TLRPC$TL_notificationSoundLocal;
 import org.telegram.tgnet.TLRPC$TL_notificationSoundNone;
 import org.telegram.tgnet.TLRPC$TL_notificationSoundRingtone;
-import org.telegram.tgnet.TLRPC$TL_notifyForumTopic;
 import org.telegram.tgnet.TLRPC$TL_peerNotifySettings;
-import org.telegram.tgnet.TLRPC$TL_updateNotifySettings;
-import org.telegram.tgnet.TLRPC$TL_updates;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.PopupNotificationActivity;
 /* loaded from: classes.dex */
@@ -240,7 +234,7 @@ public class NotificationsController extends BaseController {
         } catch (Exception e3) {
             FileLog.e(e3);
         }
-        this.notificationDelayRunnable = new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda8
+        this.notificationDelayRunnable = new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda9
             @Override // java.lang.Runnable
             public final void run() {
                 NotificationsController.this.lambda$new$0();
@@ -352,7 +346,7 @@ public class NotificationsController extends BaseController {
         this.popupMessages.clear();
         this.popupReplyMessages.clear();
         this.channelGroupsCreated = false;
-        notificationsQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda11
+        notificationsQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda12
             @Override // java.lang.Runnable
             public final void run() {
                 NotificationsController.this.lambda$cleanup$1();
@@ -421,7 +415,7 @@ public class NotificationsController extends BaseController {
     }
 
     public void setOpenedDialogId(final long j, final int i) {
-        notificationsQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda22
+        notificationsQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda23
             @Override // java.lang.Runnable
             public final void run() {
                 NotificationsController.this.lambda$setOpenedDialogId$2(j, i);
@@ -436,7 +430,7 @@ public class NotificationsController extends BaseController {
     }
 
     public void setOpenedInBubble(final long j, final boolean z) {
-        notificationsQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda38
+        notificationsQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda39
             @Override // java.lang.Runnable
             public final void run() {
                 NotificationsController.this.lambda$setOpenedInBubble$3(z, j);
@@ -454,7 +448,7 @@ public class NotificationsController extends BaseController {
     }
 
     public void setLastOnlineFromOtherDevice(final int i) {
-        notificationsQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda18
+        notificationsQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda19
             @Override // java.lang.Runnable
             public final void run() {
                 NotificationsController.this.lambda$setLastOnlineFromOtherDevice$4(i);
@@ -491,7 +485,7 @@ public class NotificationsController extends BaseController {
 
     /* JADX INFO: Access modifiers changed from: protected */
     public void forceShowPopupForReply() {
-        notificationsQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda6
+        notificationsQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda7
             @Override // java.lang.Runnable
             public final void run() {
                 NotificationsController.this.lambda$forceShowPopupForReply$6();
@@ -513,7 +507,7 @@ public class NotificationsController extends BaseController {
         if (arrayList.isEmpty() || AndroidUtilities.needShowPasscode() || SharedConfig.isWaitingForPasscodeEnter) {
             return;
         }
-        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda30
+        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda31
             @Override // java.lang.Runnable
             public final void run() {
                 NotificationsController.this.lambda$forceShowPopupForReply$5(arrayList);
@@ -534,7 +528,7 @@ public class NotificationsController extends BaseController {
 
     public void removeDeletedMessagesFromNotifications(final LongSparseArray<ArrayList<Integer>> longSparseArray, final boolean z) {
         final ArrayList arrayList = new ArrayList(0);
-        notificationsQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda26
+        notificationsQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda27
             @Override // java.lang.Runnable
             public final void run() {
                 NotificationsController.this.lambda$removeDeletedMessagesFromNotifications$9(longSparseArray, z, arrayList);
@@ -606,7 +600,7 @@ public class NotificationsController extends BaseController {
             longSparseArray2 = longSparseArray;
         }
         if (!arrayList.isEmpty()) {
-            AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda28
+            AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda29
                 @Override // java.lang.Runnable
                 public final void run() {
                     NotificationsController.this.lambda$removeDeletedMessagesFromNotifications$7(arrayList);
@@ -621,7 +615,7 @@ public class NotificationsController extends BaseController {
                 scheduleNotificationDelay(this.lastOnlineFromOtherDevice > getConnectionsManager().getCurrentTime());
             }
             final int size2 = this.pushDialogs.size();
-            AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda15
+            AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda16
                 @Override // java.lang.Runnable
                 public final void run() {
                     NotificationsController.this.lambda$removeDeletedMessagesFromNotifications$8(size2);
@@ -651,7 +645,7 @@ public class NotificationsController extends BaseController {
 
     public void removeDeletedHisoryFromNotifications(final LongSparseIntArray longSparseIntArray) {
         final ArrayList arrayList = new ArrayList(0);
-        notificationsQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda36
+        notificationsQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda37
             @Override // java.lang.Runnable
             public final void run() {
                 NotificationsController.this.lambda$removeDeletedHisoryFromNotifications$12(longSparseIntArray, arrayList);
@@ -727,7 +721,7 @@ public class NotificationsController extends BaseController {
             num2 = num5;
         }
         if (arrayList.isEmpty()) {
-            AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda29
+            AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda30
                 @Override // java.lang.Runnable
                 public final void run() {
                     NotificationsController.this.lambda$removeDeletedHisoryFromNotifications$10(arrayList);
@@ -745,7 +739,7 @@ public class NotificationsController extends BaseController {
                 scheduleNotificationDelay(z);
             }
             final int size = this.pushDialogs.size();
-            AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda19
+            AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda20
                 @Override // java.lang.Runnable
                 public final void run() {
                     NotificationsController.this.lambda$removeDeletedHisoryFromNotifications$11(size);
@@ -775,7 +769,7 @@ public class NotificationsController extends BaseController {
 
     public void processReadMessages(final LongSparseIntArray longSparseIntArray, final long j, final int i, final int i2, final boolean z) {
         final ArrayList arrayList = new ArrayList(0);
-        notificationsQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda37
+        notificationsQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda38
             @Override // java.lang.Runnable
             public final void run() {
                 NotificationsController.this.lambda$processReadMessages$14(longSparseIntArray, arrayList, j, i2, i, z);
@@ -891,7 +885,7 @@ public class NotificationsController extends BaseController {
             return;
         }
         new ArrayList(0);
-        notificationsQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda25
+        notificationsQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda26
             @Override // java.lang.Runnable
             public final void run() {
                 NotificationsController.this.lambda$processEditedMessages$15(longSparseArray);
@@ -945,7 +939,7 @@ public class NotificationsController extends BaseController {
     public void processNewMessages(final ArrayList<MessageObject> arrayList, final boolean z, final boolean z2, final CountDownLatch countDownLatch) {
         if (!arrayList.isEmpty()) {
             final ArrayList arrayList2 = new ArrayList(0);
-            notificationsQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda34
+            notificationsQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda35
                 @Override // java.lang.Runnable
                 public final void run() {
                     NotificationsController.this.lambda$processNewMessages$18(arrayList, arrayList2, z2, z, countDownLatch);
@@ -1003,7 +997,7 @@ public class NotificationsController extends BaseController {
 
     public void processDialogsUpdateRead(final LongSparseIntArray longSparseIntArray) {
         final ArrayList arrayList = new ArrayList();
-        notificationsQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda35
+        notificationsQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda36
             @Override // java.lang.Runnable
             public final void run() {
                 NotificationsController.this.lambda$processDialogsUpdateRead$21(longSparseIntArray, arrayList);
@@ -1050,7 +1044,7 @@ public class NotificationsController extends BaseController {
         getMessagesController().putUsers(arrayList3, true);
         getMessagesController().putChats(arrayList4, true);
         getMessagesController().putEncryptedChats(arrayList5, true);
-        notificationsQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda33
+        notificationsQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda34
             @Override // java.lang.Runnable
             public final void run() {
                 NotificationsController.this.lambda$processLoadedUnreadMessages$23(arrayList, longSparseArray, arrayList2);
@@ -1241,7 +1235,7 @@ public class NotificationsController extends BaseController {
             }
         }
         final int size = this.pushDialogs.size();
-        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda16
+        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda17
             @Override // java.lang.Runnable
             public final void run() {
                 NotificationsController.this.lambda$processLoadedUnreadMessages$22(size);
@@ -1316,7 +1310,7 @@ public class NotificationsController extends BaseController {
     }
 
     public void updateBadge() {
-        notificationsQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda13
+        notificationsQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda14
             @Override // java.lang.Runnable
             public final void run() {
                 NotificationsController.this.lambda$updateBadge$24();
@@ -3692,7 +3686,7 @@ public class NotificationsController extends BaseController {
     }
 
     public void showNotifications() {
-        notificationsQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda14
+        notificationsQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda15
             @Override // java.lang.Runnable
             public final void run() {
                 NotificationsController.this.lambda$showNotifications$25();
@@ -3701,7 +3695,7 @@ public class NotificationsController extends BaseController {
     }
 
     public void hideNotifications() {
-        notificationsQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda12
+        notificationsQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda13
             @Override // java.lang.Runnable
             public final void run() {
                 NotificationsController.this.lambda$hideNotifications$26();
@@ -3757,7 +3751,7 @@ public class NotificationsController extends BaseController {
             if (getNotifyOverride(getAccountInstance().getNotificationsSettings(), this.openedDialogId, this.openedTopicId) == 2) {
                 return;
             }
-            notificationsQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda5
+            notificationsQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda6
                 @Override // java.lang.Runnable
                 public final void run() {
                     NotificationsController.this.lambda$playInChatSound$29();
@@ -3824,7 +3818,7 @@ public class NotificationsController extends BaseController {
 
     /* JADX INFO: Access modifiers changed from: protected */
     public void repeatNotificationMaybe() {
-        notificationsQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda7
+        notificationsQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda8
             @Override // java.lang.Runnable
             public final void run() {
                 NotificationsController.this.lambda$repeatNotificationMaybe$30();
@@ -3911,7 +3905,7 @@ public class NotificationsController extends BaseController {
         if (Build.VERSION.SDK_INT < 26) {
             return;
         }
-        notificationsQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda23
+        notificationsQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda24
             @Override // java.lang.Runnable
             public final void run() {
                 NotificationsController.this.lambda$deleteNotificationChannel$31(j, i, i2);
@@ -3974,7 +3968,7 @@ public class NotificationsController extends BaseController {
         if (Build.VERSION.SDK_INT < 26) {
             return;
         }
-        notificationsQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda21
+        notificationsQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda22
             @Override // java.lang.Runnable
             public final void run() {
                 NotificationsController.this.lambda$deleteNotificationChannelGlobal$32(i, i2);
@@ -3986,7 +3980,7 @@ public class NotificationsController extends BaseController {
         if (Build.VERSION.SDK_INT < 26) {
             return;
         }
-        notificationsQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda10
+        notificationsQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda11
             @Override // java.lang.Runnable
             public final void run() {
                 NotificationsController.this.lambda$deleteAllNotificationChannels$33();
@@ -4440,7 +4434,7 @@ public class NotificationsController extends BaseController {
         } catch (Exception e) {
             FileLog.e(e);
         }
-        notificationsQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda9
+        notificationsQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda10
             @Override // java.lang.Runnable
             public final void run() {
                 NotificationsController.this.lambda$playOutChatSound$38();
@@ -4611,7 +4605,7 @@ public class NotificationsController extends BaseController {
             tLRPC$TL_account_updateNotifySettings.peer = tLRPC$TL_inputNotifyPeer;
             tLRPC$TL_inputNotifyPeer.peer = getMessagesController().getInputPeer(j);
         }
-        getConnectionsManager().sendRequest(tLRPC$TL_account_updateNotifySettings, NotificationsController$$ExternalSyntheticLambda43.INSTANCE);
+        getConnectionsManager().sendRequest(tLRPC$TL_account_updateNotifySettings, NotificationsController$$ExternalSyntheticLambda42.INSTANCE);
     }
 
     public void updateServerNotificationsSettings(int i) {
@@ -4664,7 +4658,7 @@ public class NotificationsController extends BaseController {
         } else {
             tLRPC$TL_account_updateNotifySettings.settings.sound = new TLRPC$TL_notificationSoundDefault();
         }
-        getConnectionsManager().sendRequest(tLRPC$TL_account_updateNotifySettings, NotificationsController$$ExternalSyntheticLambda42.INSTANCE);
+        getConnectionsManager().sendRequest(tLRPC$TL_account_updateNotifySettings, NotificationsController$$ExternalSyntheticLambda41.INSTANCE);
     }
 
     public boolean isGlobalNotificationsEnabled(long j) {
@@ -4754,16 +4748,16 @@ public class NotificationsController extends BaseController {
     }
 
     public void loadTopicsNotificationsExceptions(final long j, final Consumer<HashSet<Integer>> consumer) {
-        getMessagesStorage().getStorageQueue().postRunnable(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda24
+        getMessagesStorage().getStorageQueue().postRunnable(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda25
             @Override // java.lang.Runnable
             public final void run() {
-                NotificationsController.this.lambda$loadTopicsNotificationsExceptions$43(j, consumer);
+                NotificationsController.this.lambda$loadTopicsNotificationsExceptions$42(j, consumer);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadTopicsNotificationsExceptions$43(long j, final Consumer consumer) {
+    public /* synthetic */ void lambda$loadTopicsNotificationsExceptions$42(long j, final Consumer consumer) {
         final HashSet hashSet = new HashSet();
         for (Map.Entry<String, ?> entry : MessagesController.getNotificationsSettings(this.currentAccount).getAll().entrySet()) {
             String key = entry.getKey();
@@ -4773,44 +4767,20 @@ public class NotificationsController extends BaseController {
                     hashSet.add(Integer.valueOf(intValue));
                 }
             }
-            TLRPC$TL_account_getNotifyExceptions tLRPC$TL_account_getNotifyExceptions = new TLRPC$TL_account_getNotifyExceptions();
-            TLRPC$TL_inputNotifyPeer tLRPC$TL_inputNotifyPeer = new TLRPC$TL_inputNotifyPeer();
-            tLRPC$TL_account_getNotifyExceptions.peer = tLRPC$TL_inputNotifyPeer;
-            tLRPC$TL_account_getNotifyExceptions.flags |= 1;
-            tLRPC$TL_inputNotifyPeer.peer = getMessagesController().getInputPeer(j);
-            getConnectionsManager().sendRequest(tLRPC$TL_account_getNotifyExceptions, new RequestDelegate() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda41
-                @Override // org.telegram.tgnet.RequestDelegate
-                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    NotificationsController.lambda$loadTopicsNotificationsExceptions$42(hashSet, consumer, tLObject, tLRPC$TL_error);
-                }
-            });
         }
-    }
-
-    /* JADX INFO: Access modifiers changed from: private */
-    public static /* synthetic */ void lambda$loadTopicsNotificationsExceptions$42(final HashSet hashSet, final Consumer consumer, final TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda39
+        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.NotificationsController$$ExternalSyntheticLambda5
             @Override // java.lang.Runnable
             public final void run() {
-                NotificationsController.lambda$loadTopicsNotificationsExceptions$41(TLObject.this, hashSet, consumer);
+                NotificationsController.lambda$loadTopicsNotificationsExceptions$41(Consumer.this, hashSet);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public static /* synthetic */ void lambda$loadTopicsNotificationsExceptions$41(TLObject tLObject, HashSet hashSet, Consumer consumer) {
-        if (tLObject instanceof TLRPC$TL_updates) {
-            TLRPC$TL_updates tLRPC$TL_updates = (TLRPC$TL_updates) tLObject;
-            for (int i = 0; i < tLRPC$TL_updates.updates.size(); i++) {
-                if (tLRPC$TL_updates.updates.get(i) instanceof TLRPC$TL_updateNotifySettings) {
-                    TLRPC$NotifyPeer tLRPC$NotifyPeer = ((TLRPC$TL_updateNotifySettings) tLRPC$TL_updates.updates.get(i)).peer;
-                    if (tLRPC$NotifyPeer instanceof TLRPC$TL_notifyForumTopic) {
-                        hashSet.add(Integer.valueOf(((TLRPC$TL_notifyForumTopic) tLRPC$NotifyPeer).top_msg_id));
-                    }
-                }
-            }
+    public static /* synthetic */ void lambda$loadTopicsNotificationsExceptions$41(Consumer consumer, HashSet hashSet) {
+        if (consumer != null) {
+            consumer.accept(hashSet);
         }
-        consumer.accept(hashSet);
     }
 
     /* JADX INFO: Access modifiers changed from: private */

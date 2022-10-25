@@ -768,77 +768,82 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                 return;
             }
             setTypingAnimation(false);
-            if (currentChat != null) {
-                TLRPC$ChatFull currentChatInfo = this.parentFragment.getCurrentChatInfo();
-                if (ChatObject.isChannel(currentChat)) {
-                    if (currentChatInfo != null && (i = currentChatInfo.participants_count) != 0) {
-                        if (currentChat.megagroup) {
-                            string = this.onlineCount > 1 ? String.format("%s, %s", LocaleController.formatPluralString("Members", i, new Object[0]), LocaleController.formatPluralString("OnlineCount", Math.min(this.onlineCount, currentChatInfo.participants_count), new Object[0])) : LocaleController.formatPluralString("Members", i, new Object[0]);
-                        } else {
-                            int[] iArr = new int[1];
-                            String formatShortNumber = LocaleController.formatShortNumber(i, iArr);
+            ChatActivity chatActivity2 = this.parentFragment;
+            if (!chatActivity2.isTopic || currentChat == null) {
+                if (currentChat != null) {
+                    TLRPC$ChatFull currentChatInfo = chatActivity2.getCurrentChatInfo();
+                    if (ChatObject.isChannel(currentChat)) {
+                        if (currentChatInfo != null && (i = currentChatInfo.participants_count) != 0) {
                             if (currentChat.megagroup) {
-                                string = LocaleController.formatPluralString("Members", iArr[0], new Object[0]).replace(String.format("%d", Integer.valueOf(iArr[0])), formatShortNumber);
+                                string = this.onlineCount > 1 ? String.format("%s, %s", LocaleController.formatPluralString("Members", i, new Object[0]), LocaleController.formatPluralString("OnlineCount", Math.min(this.onlineCount, currentChatInfo.participants_count), new Object[0])) : LocaleController.formatPluralString("Members", i, new Object[0]);
                             } else {
-                                string = LocaleController.formatPluralString("Subscribers", iArr[0], new Object[0]).replace(String.format("%d", Integer.valueOf(iArr[0])), formatShortNumber);
+                                int[] iArr = new int[1];
+                                String formatShortNumber = LocaleController.formatShortNumber(i, iArr);
+                                if (currentChat.megagroup) {
+                                    string = LocaleController.formatPluralString("Members", iArr[0], new Object[0]).replace(String.format("%d", Integer.valueOf(iArr[0])), formatShortNumber);
+                                } else {
+                                    string = LocaleController.formatPluralString("Subscribers", iArr[0], new Object[0]).replace(String.format("%d", Integer.valueOf(iArr[0])), formatShortNumber);
+                                }
                             }
-                        }
-                    } else if (currentChat.megagroup) {
-                        if (currentChatInfo == null) {
-                            string = LocaleController.getString("Loading", R.string.Loading).toLowerCase();
-                        } else if (currentChat.has_geo) {
-                            string = LocaleController.getString("MegaLocation", R.string.MegaLocation).toLowerCase();
+                        } else if (currentChat.megagroup) {
+                            if (currentChatInfo == null) {
+                                string = LocaleController.getString("Loading", R.string.Loading).toLowerCase();
+                            } else if (currentChat.has_geo) {
+                                string = LocaleController.getString("MegaLocation", R.string.MegaLocation).toLowerCase();
+                            } else if (ChatObject.isPublic(currentChat)) {
+                                string = LocaleController.getString("MegaPublic", R.string.MegaPublic).toLowerCase();
+                            } else {
+                                string = LocaleController.getString("MegaPrivate", R.string.MegaPrivate).toLowerCase();
+                            }
                         } else if (ChatObject.isPublic(currentChat)) {
-                            string = LocaleController.getString("MegaPublic", R.string.MegaPublic).toLowerCase();
+                            string = LocaleController.getString("ChannelPublic", R.string.ChannelPublic).toLowerCase();
                         } else {
-                            string = LocaleController.getString("MegaPrivate", R.string.MegaPrivate).toLowerCase();
+                            string = LocaleController.getString("ChannelPrivate", R.string.ChannelPrivate).toLowerCase();
                         }
-                    } else if (ChatObject.isPublic(currentChat)) {
-                        string = LocaleController.getString("ChannelPublic", R.string.ChannelPublic).toLowerCase();
+                    } else if (ChatObject.isKickedFromChat(currentChat)) {
+                        string = LocaleController.getString("YouWereKicked", R.string.YouWereKicked);
+                    } else if (ChatObject.isLeftFromChat(currentChat)) {
+                        string = LocaleController.getString("YouLeft", R.string.YouLeft);
                     } else {
-                        string = LocaleController.getString("ChannelPrivate", R.string.ChannelPrivate).toLowerCase();
+                        int i2 = currentChat.participants_count;
+                        if (currentChatInfo != null && (tLRPC$ChatParticipants = currentChatInfo.participants) != null) {
+                            i2 = tLRPC$ChatParticipants.participants.size();
+                        }
+                        string = (this.onlineCount <= 1 || i2 == 0) ? LocaleController.formatPluralString("Members", i2, new Object[0]) : String.format("%s, %s", LocaleController.formatPluralString("Members", i2, new Object[0]), LocaleController.formatPluralString("OnlineCount", this.onlineCount, new Object[0]));
                     }
-                } else if (ChatObject.isKickedFromChat(currentChat)) {
-                    string = LocaleController.getString("YouWereKicked", R.string.YouWereKicked);
-                } else if (ChatObject.isLeftFromChat(currentChat)) {
-                    string = LocaleController.getString("YouLeft", R.string.YouLeft);
-                } else {
-                    int i2 = currentChat.participants_count;
-                    if (currentChatInfo != null && (tLRPC$ChatParticipants = currentChatInfo.participants) != null) {
-                        i2 = tLRPC$ChatParticipants.participants.size();
+                } else if (currentUser != null) {
+                    TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(currentUser.id));
+                    if (user != null) {
+                        currentUser = user;
                     }
-                    string = (this.onlineCount <= 1 || i2 == 0) ? LocaleController.formatPluralString("Members", i2, new Object[0]) : String.format("%s, %s", LocaleController.formatPluralString("Members", i2, new Object[0]), LocaleController.formatPluralString("OnlineCount", this.onlineCount, new Object[0]));
-                }
-            } else if (currentUser != null) {
-                TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(currentUser.id));
-                if (user != null) {
-                    currentUser = user;
-                }
-                if (!UserObject.isReplyUser(currentUser)) {
-                    if (currentUser.id == UserConfig.getInstance(this.currentAccount).getClientUserId()) {
-                        string = LocaleController.getString("ChatYourSelf", R.string.ChatYourSelf);
-                    } else {
-                        long j = currentUser.id;
-                        if (j == 333000 || j == 777000 || j == 42777) {
-                            string = LocaleController.getString("ServiceNotifications", R.string.ServiceNotifications);
-                        } else if (MessagesController.isSupportUser(currentUser)) {
-                            string = LocaleController.getString("SupportStatus", R.string.SupportStatus);
-                        } else if (currentUser.bot) {
-                            string = LocaleController.getString("Bot", R.string.Bot);
+                    if (!UserObject.isReplyUser(currentUser)) {
+                        if (currentUser.id == UserConfig.getInstance(this.currentAccount).getClientUserId()) {
+                            string = LocaleController.getString("ChatYourSelf", R.string.ChatYourSelf);
                         } else {
-                            boolean[] zArr2 = this.isOnline;
-                            zArr2[0] = false;
-                            int i3 = this.currentAccount;
-                            if (this.allowShorterStatus) {
-                                zArr = this.statusMadeShorter;
+                            long j = currentUser.id;
+                            if (j == 333000 || j == 777000 || j == 42777) {
+                                string = LocaleController.getString("ServiceNotifications", R.string.ServiceNotifications);
+                            } else if (MessagesController.isSupportUser(currentUser)) {
+                                string = LocaleController.getString("SupportStatus", R.string.SupportStatus);
+                            } else if (currentUser.bot) {
+                                string = LocaleController.getString("Bot", R.string.Bot);
+                            } else {
+                                boolean[] zArr2 = this.isOnline;
+                                zArr2[0] = false;
+                                int i3 = this.currentAccount;
+                                if (this.allowShorterStatus) {
+                                    zArr = this.statusMadeShorter;
+                                }
+                                str = LocaleController.formatUserStatus(i3, currentUser, zArr2, zArr);
+                                z2 = this.isOnline[0];
                             }
-                            str = LocaleController.formatUserStatus(i3, currentUser, zArr2, zArr);
-                            z2 = this.isOnline[0];
                         }
                     }
                 }
+                str = string;
+            } else {
+                str = LocaleController.formatString("TopicProfileStatus", R.string.TopicProfileStatus, currentChat.title);
             }
-            str = string;
         } else {
             if (this.parentFragment.isThreadChat() && this.titleTextView.getTag() != null) {
                 this.titleTextView.setTag(null);

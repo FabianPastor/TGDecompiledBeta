@@ -1,10 +1,103 @@
 package org.telegram.tgnet;
+
+import java.util.ArrayList;
 /* loaded from: classes.dex */
 public abstract class TLRPC$messages_SponsoredMessages extends TLObject {
+    public int flags;
+    public int posts_between;
+    public ArrayList<TLRPC$TL_sponsoredMessage> messages = new ArrayList<>();
+    public ArrayList<TLRPC$Chat> chats = new ArrayList<>();
+    public ArrayList<TLRPC$User> users = new ArrayList<>();
+
     public static TLRPC$messages_SponsoredMessages TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-        TLRPC$messages_SponsoredMessages tLRPC$TL_messages_sponsoredMessages;
-        if (i != -NUM) {
-            tLRPC$TL_messages_sponsoredMessages = i != NUM ? null : new TLRPC$messages_SponsoredMessages() { // from class: org.telegram.tgnet.TLRPC$TL_messages_sponsoredMessagesEmpty
+        TLRPC$messages_SponsoredMessages tLRPC$messages_SponsoredMessages;
+        if (i == -NUM) {
+            tLRPC$messages_SponsoredMessages = new TLRPC$messages_SponsoredMessages() { // from class: org.telegram.tgnet.TLRPC$TL_messages_sponsoredMessages
+                public static int constructor = -NUM;
+
+                @Override // org.telegram.tgnet.TLObject
+                public void readParams(AbstractSerializedData abstractSerializedData2, boolean z2) {
+                    int readInt32 = abstractSerializedData2.readInt32(z2);
+                    this.flags = readInt32;
+                    if ((readInt32 & 1) != 0) {
+                        this.posts_between = abstractSerializedData2.readInt32(z2);
+                    }
+                    int readInt322 = abstractSerializedData2.readInt32(z2);
+                    if (readInt322 != NUM) {
+                        if (z2) {
+                            throw new RuntimeException(String.format("wrong Vector magic, got %x", Integer.valueOf(readInt322)));
+                        }
+                        return;
+                    }
+                    int readInt323 = abstractSerializedData2.readInt32(z2);
+                    for (int i2 = 0; i2 < readInt323; i2++) {
+                        TLRPC$TL_sponsoredMessage TLdeserialize = TLRPC$TL_sponsoredMessage.TLdeserialize(abstractSerializedData2, abstractSerializedData2.readInt32(z2), z2);
+                        if (TLdeserialize == null) {
+                            return;
+                        }
+                        this.messages.add(TLdeserialize);
+                    }
+                    int readInt324 = abstractSerializedData2.readInt32(z2);
+                    if (readInt324 != NUM) {
+                        if (z2) {
+                            throw new RuntimeException(String.format("wrong Vector magic, got %x", Integer.valueOf(readInt324)));
+                        }
+                        return;
+                    }
+                    int readInt325 = abstractSerializedData2.readInt32(z2);
+                    for (int i3 = 0; i3 < readInt325; i3++) {
+                        TLRPC$Chat TLdeserialize2 = TLRPC$Chat.TLdeserialize(abstractSerializedData2, abstractSerializedData2.readInt32(z2), z2);
+                        if (TLdeserialize2 == null) {
+                            return;
+                        }
+                        this.chats.add(TLdeserialize2);
+                    }
+                    int readInt326 = abstractSerializedData2.readInt32(z2);
+                    if (readInt326 != NUM) {
+                        if (z2) {
+                            throw new RuntimeException(String.format("wrong Vector magic, got %x", Integer.valueOf(readInt326)));
+                        }
+                        return;
+                    }
+                    int readInt327 = abstractSerializedData2.readInt32(z2);
+                    for (int i4 = 0; i4 < readInt327; i4++) {
+                        TLRPC$User TLdeserialize3 = TLRPC$User.TLdeserialize(abstractSerializedData2, abstractSerializedData2.readInt32(z2), z2);
+                        if (TLdeserialize3 == null) {
+                            return;
+                        }
+                        this.users.add(TLdeserialize3);
+                    }
+                }
+
+                @Override // org.telegram.tgnet.TLObject
+                public void serializeToStream(AbstractSerializedData abstractSerializedData2) {
+                    abstractSerializedData2.writeInt32(constructor);
+                    abstractSerializedData2.writeInt32(this.flags);
+                    if ((this.flags & 1) != 0) {
+                        abstractSerializedData2.writeInt32(this.posts_between);
+                    }
+                    abstractSerializedData2.writeInt32(NUM);
+                    int size = this.messages.size();
+                    abstractSerializedData2.writeInt32(size);
+                    for (int i2 = 0; i2 < size; i2++) {
+                        this.messages.get(i2).serializeToStream(abstractSerializedData2);
+                    }
+                    abstractSerializedData2.writeInt32(NUM);
+                    int size2 = this.chats.size();
+                    abstractSerializedData2.writeInt32(size2);
+                    for (int i3 = 0; i3 < size2; i3++) {
+                        this.chats.get(i3).serializeToStream(abstractSerializedData2);
+                    }
+                    abstractSerializedData2.writeInt32(NUM);
+                    int size3 = this.users.size();
+                    abstractSerializedData2.writeInt32(size3);
+                    for (int i4 = 0; i4 < size3; i4++) {
+                        this.users.get(i4).serializeToStream(abstractSerializedData2);
+                    }
+                }
+            };
+        } else if (i == NUM) {
+            tLRPC$messages_SponsoredMessages = new TLRPC$messages_SponsoredMessages() { // from class: org.telegram.tgnet.TLRPC$TL_messages_sponsoredMessagesEmpty
                 public static int constructor = NUM;
 
                 @Override // org.telegram.tgnet.TLObject
@@ -13,13 +106,87 @@ public abstract class TLRPC$messages_SponsoredMessages extends TLObject {
                 }
             };
         } else {
-            tLRPC$TL_messages_sponsoredMessages = new TLRPC$TL_messages_sponsoredMessages();
+            tLRPC$messages_SponsoredMessages = i != NUM ? null : new TLRPC$messages_SponsoredMessages() { // from class: org.telegram.tgnet.TLRPC$TL_messages_sponsoredMessagesLayer147
+                public static int constructor = -NUM;
+
+                @Override // org.telegram.tgnet.TLObject
+                public void readParams(AbstractSerializedData abstractSerializedData2, boolean z2) {
+                    int readInt32 = abstractSerializedData2.readInt32(z2);
+                    if (readInt32 != NUM) {
+                        if (z2) {
+                            throw new RuntimeException(String.format("wrong Vector magic, got %x", Integer.valueOf(readInt32)));
+                        }
+                        return;
+                    }
+                    int readInt322 = abstractSerializedData2.readInt32(z2);
+                    for (int i2 = 0; i2 < readInt322; i2++) {
+                        TLRPC$TL_sponsoredMessage TLdeserialize = TLRPC$TL_sponsoredMessage.TLdeserialize(abstractSerializedData2, abstractSerializedData2.readInt32(z2), z2);
+                        if (TLdeserialize == null) {
+                            return;
+                        }
+                        this.messages.add(TLdeserialize);
+                    }
+                    int readInt323 = abstractSerializedData2.readInt32(z2);
+                    if (readInt323 != NUM) {
+                        if (z2) {
+                            throw new RuntimeException(String.format("wrong Vector magic, got %x", Integer.valueOf(readInt323)));
+                        }
+                        return;
+                    }
+                    int readInt324 = abstractSerializedData2.readInt32(z2);
+                    for (int i3 = 0; i3 < readInt324; i3++) {
+                        TLRPC$Chat TLdeserialize2 = TLRPC$Chat.TLdeserialize(abstractSerializedData2, abstractSerializedData2.readInt32(z2), z2);
+                        if (TLdeserialize2 == null) {
+                            return;
+                        }
+                        this.chats.add(TLdeserialize2);
+                    }
+                    int readInt325 = abstractSerializedData2.readInt32(z2);
+                    if (readInt325 != NUM) {
+                        if (z2) {
+                            throw new RuntimeException(String.format("wrong Vector magic, got %x", Integer.valueOf(readInt325)));
+                        }
+                        return;
+                    }
+                    int readInt326 = abstractSerializedData2.readInt32(z2);
+                    for (int i4 = 0; i4 < readInt326; i4++) {
+                        TLRPC$User TLdeserialize3 = TLRPC$User.TLdeserialize(abstractSerializedData2, abstractSerializedData2.readInt32(z2), z2);
+                        if (TLdeserialize3 == null) {
+                            return;
+                        }
+                        this.users.add(TLdeserialize3);
+                    }
+                }
+
+                @Override // org.telegram.tgnet.TLObject
+                public void serializeToStream(AbstractSerializedData abstractSerializedData2) {
+                    abstractSerializedData2.writeInt32(constructor);
+                    abstractSerializedData2.writeInt32(NUM);
+                    int size = this.messages.size();
+                    abstractSerializedData2.writeInt32(size);
+                    for (int i2 = 0; i2 < size; i2++) {
+                        this.messages.get(i2).serializeToStream(abstractSerializedData2);
+                    }
+                    abstractSerializedData2.writeInt32(NUM);
+                    int size2 = this.chats.size();
+                    abstractSerializedData2.writeInt32(size2);
+                    for (int i3 = 0; i3 < size2; i3++) {
+                        this.chats.get(i3).serializeToStream(abstractSerializedData2);
+                    }
+                    abstractSerializedData2.writeInt32(NUM);
+                    int size3 = this.users.size();
+                    abstractSerializedData2.writeInt32(size3);
+                    for (int i4 = 0; i4 < size3; i4++) {
+                        this.users.get(i4).serializeToStream(abstractSerializedData2);
+                    }
+                }
+            };
         }
-        if (tLRPC$TL_messages_sponsoredMessages != null || !z) {
-            if (tLRPC$TL_messages_sponsoredMessages != null) {
-                tLRPC$TL_messages_sponsoredMessages.readParams(abstractSerializedData, z);
+        if (tLRPC$messages_SponsoredMessages != null || !z) {
+            if (tLRPC$messages_SponsoredMessages != null) {
+                tLRPC$messages_SponsoredMessages.readParams(abstractSerializedData, z);
             }
-            return tLRPC$TL_messages_sponsoredMessages;
+            return tLRPC$messages_SponsoredMessages;
         }
         throw new RuntimeException(String.format("can't parse magic %x in messages_SponsoredMessages", Integer.valueOf(i)));
     }

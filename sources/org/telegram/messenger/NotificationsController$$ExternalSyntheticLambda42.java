@@ -12,6 +12,6 @@ public final /* synthetic */ class NotificationsController$$ExternalSyntheticLam
 
     @Override // org.telegram.tgnet.RequestDelegate
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        NotificationsController.lambda$updateServerNotificationsSettings$40(tLObject, tLRPC$TL_error);
+        NotificationsController.lambda$updateServerNotificationsSettings$39(tLObject, tLRPC$TL_error);
     }
 }

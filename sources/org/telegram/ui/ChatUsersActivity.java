@@ -296,7 +296,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
 
                 @Override // org.telegram.ui.Components.SeekBarAccessibilityDelegate
                 /* renamed from: getContentDescription */
-                protected CharSequence mo2183getContentDescription(View view) {
+                protected CharSequence mo2184getContentDescription(View view) {
                     if (ChatUsersActivity.this.selectedSlowmode == 0) {
                         return LocaleController.getString("SlowmodeOff", R.string.SlowmodeOff);
                     }

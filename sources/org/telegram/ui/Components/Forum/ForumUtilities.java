@@ -8,8 +8,11 @@ import android.text.TextUtils;
 import android.text.style.ImageSpan;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ContactsController;
+import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
@@ -20,6 +23,7 @@ import org.telegram.tgnet.TLRPC$MessageAction;
 import org.telegram.tgnet.TLRPC$TL_forumTopic;
 import org.telegram.tgnet.TLRPC$TL_messageActionTopicCreate;
 import org.telegram.tgnet.TLRPC$TL_messageActionTopicEdit;
+import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.AnimatedEmojiDrawable;
@@ -146,6 +150,9 @@ public class ForumUtilities {
     }
 
     public static CharSequence createActionTextWithTopic(TLRPC$TL_forumTopic tLRPC$TL_forumTopic, MessageObject messageObject) {
+        TLRPC$Chat chat;
+        TLRPC$User tLRPC$User;
+        String str;
         if (tLRPC$TL_forumTopic == null) {
             return null;
         }
@@ -155,14 +162,35 @@ public class ForumUtilities {
         }
         if (tLRPC$MessageAction instanceof TLRPC$TL_messageActionTopicEdit) {
             TLRPC$TL_messageActionTopicEdit tLRPC$TL_messageActionTopicEdit = (TLRPC$TL_messageActionTopicEdit) tLRPC$MessageAction;
+            long fromChatId = messageObject.getFromChatId();
+            if (DialogObject.isUserDialog(fromChatId)) {
+                tLRPC$User = MessagesController.getInstance(messageObject.currentAccount).getUser(Long.valueOf(fromChatId));
+                chat = null;
+            } else {
+                chat = MessagesController.getInstance(messageObject.currentAccount).getChat(Long.valueOf(-fromChatId));
+                tLRPC$User = null;
+            }
+            if (tLRPC$User != null) {
+                str = ContactsController.formatName(tLRPC$User.first_name, tLRPC$User.last_name);
+            } else {
+                str = chat != null ? chat.title : null;
+            }
             int i = tLRPC$TL_messageActionTopicEdit.flags;
             if ((i & 4) != 0) {
-                return AndroidUtilities.replaceCharSequence("%s", LocaleController.getString(tLRPC$TL_messageActionTopicEdit.closed ? R.string.TopicWasClosedAction : R.string.TopicWasReopenedAction), getTopicSpannedName(tLRPC$TL_forumTopic, null));
+                return AndroidUtilities.replaceCharSequence("%1$s", AndroidUtilities.replaceCharSequence("%2$s", LocaleController.getString(tLRPC$TL_messageActionTopicEdit.closed ? R.string.TopicWasClosedAction : R.string.TopicWasReopenedAction), getTopicSpannedName(tLRPC$TL_forumTopic, null)), str);
+            } else if ((i & 1) != 0 && (i & 2) != 0) {
+                TLRPC$TL_forumTopic tLRPC$TL_forumTopic2 = new TLRPC$TL_forumTopic();
+                tLRPC$TL_forumTopic2.icon_emoji_id = tLRPC$TL_messageActionTopicEdit.icon_emoji_id;
+                tLRPC$TL_forumTopic2.title = tLRPC$TL_messageActionTopicEdit.title;
+                return AndroidUtilities.replaceCharSequence("%1$s", AndroidUtilities.replaceCharSequence("%2$s", LocaleController.getString(R.string.TopicWasRenamedToAction2), getTopicSpannedName(tLRPC$TL_forumTopic2, null)), str);
             } else if ((i & 1) != 0) {
-                return AndroidUtilities.replaceCharSequence("%1$s", LocaleController.getString(R.string.TopicWasRenamedToAction), getTopicSpannedName(tLRPC$TL_forumTopic, null));
+                return AndroidUtilities.replaceCharSequence("%1$s", AndroidUtilities.replaceCharSequence("%2$s", LocaleController.getString(R.string.TopicWasRenamedToAction), tLRPC$TL_messageActionTopicEdit.title), str);
             } else {
                 if ((i & 2) != 0) {
-                    return AndroidUtilities.replaceCharSequence("%1$s", LocaleController.getString(R.string.TopicWasIconChangedToAction), getTopicSpannedName(tLRPC$TL_forumTopic, null));
+                    TLRPC$TL_forumTopic tLRPC$TL_forumTopic3 = new TLRPC$TL_forumTopic();
+                    tLRPC$TL_forumTopic3.icon_emoji_id = tLRPC$TL_messageActionTopicEdit.icon_emoji_id;
+                    tLRPC$TL_forumTopic3.title = "";
+                    return AndroidUtilities.replaceCharSequence("%1$s", AndroidUtilities.replaceCharSequence("%2$s", LocaleController.getString(R.string.TopicWasIconChangedToAction), getTopicSpannedName(tLRPC$TL_forumTopic3, null)), str);
                 }
             }
         }

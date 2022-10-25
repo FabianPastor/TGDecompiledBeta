@@ -1556,19 +1556,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             } else if (this.chatInfo == null) {
                 this.chatInfo = getMessagesStorage().loadChatInfo(this.chatId, false, null, false, false);
             }
-            if (!this.isTopic && this.currentChat.forum) {
-                getNotificationsController().loadTopicsNotificationsExceptions(-this.chatId, new Consumer() { // from class: org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda35
-                    @Override // j$.util.function.Consumer
-                    public final void accept(Object obj) {
-                        ProfileActivity.this.lambda$onFragmentCreate$1((HashSet) obj);
-                    }
-
-                    @Override // j$.util.function.Consumer
-                    public /* synthetic */ Consumer andThen(Consumer consumer) {
-                        return consumer.getClass();
-                    }
-                });
-            }
+            updateExceptions();
         }
         if (this.sharedMediaPreloader == null) {
             this.sharedMediaPreloader = new SharedMediaLayout.SharedMediaPreloader(this);
@@ -1591,7 +1579,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             getConnectionsManager().sendRequest(new TLRPC$TL_account_getPassword(), new RequestDelegate() { // from class: org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda40
                 @Override // org.telegram.tgnet.RequestDelegate
                 public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    ProfileActivity.this.lambda$onFragmentCreate$2(tLObject, tLRPC$TL_error);
+                    ProfileActivity.this.lambda$onFragmentCreate$1(tLObject, tLRPC$TL_error);
                 }
             });
         }
@@ -1605,19 +1593,49 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$onFragmentCreate$1(HashSet hashSet) {
-        this.notificationsExceptionTopics.addAll(hashSet);
-        int i = this.notificationsRow;
-        if (i >= 0) {
-            this.listAdapter.notifyItemChanged(i);
+    public /* synthetic */ void lambda$onFragmentCreate$1(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        if (tLObject instanceof TLRPC$TL_account_password) {
+            this.currentPassword = (TLRPC$TL_account_password) tLObject;
         }
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$onFragmentCreate$2(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        if (tLObject instanceof TLRPC$TL_account_password) {
-            this.currentPassword = (TLRPC$TL_account_password) tLObject;
+    public void updateExceptions() {
+        if (this.isTopic || !this.currentChat.forum) {
+            return;
         }
+        getNotificationsController().loadTopicsNotificationsExceptions(-this.chatId, new Consumer() { // from class: org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda35
+            @Override // j$.util.function.Consumer
+            public final void accept(Object obj) {
+                ProfileActivity.this.lambda$updateExceptions$2((HashSet) obj);
+            }
+
+            @Override // j$.util.function.Consumer
+            public /* synthetic */ Consumer andThen(Consumer consumer) {
+                return consumer.getClass();
+            }
+        });
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
+    public /* synthetic */ void lambda$updateExceptions$2(HashSet hashSet) {
+        ListAdapter listAdapter;
+        ArrayList arrayList = new ArrayList(hashSet);
+        int i = 0;
+        while (i < arrayList.size()) {
+            if (getMessagesController().getTopicsController().findTopic(this.chatId, ((Integer) arrayList.get(i)).intValue()) == null) {
+                arrayList.remove(i);
+                i--;
+            }
+            i++;
+        }
+        this.notificationsExceptionTopics.clear();
+        this.notificationsExceptionTopics.addAll(arrayList);
+        int i2 = this.notificationsRow;
+        if (i2 < 0 || (listAdapter = this.listAdapter) == null) {
+            return;
+        }
+        listAdapter.notifyItemChanged(i2);
     }
 
     @Override // org.telegram.ui.ActionBar.BaseFragment
@@ -3458,6 +3476,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             boolean isDialogMuted = getMessagesController().isDialogMuted(j, this.topicId);
             getNotificationsController().muteDialog(j, this.topicId, !isDialogMuted);
             BulletinFactory.createMuteBulletin(this, !isDialogMuted, null).show();
+            updateExceptions();
             int i2 = this.notificationsSimpleRow;
             if (i2 >= 0) {
                 this.listAdapter.notifyItemChanged(i2);
@@ -3547,6 +3566,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     }
                     edit2.apply();
                 }
+                updateExceptions();
                 getNotificationsController().updateServerNotificationsSettings(j, this.topicId);
                 notificationsCheckCell.setChecked(z);
                 RecyclerListView.Holder holder = (RecyclerListView.Holder) this.listView.findViewHolderForPosition(this.notificationsRow);
@@ -3591,6 +3611,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         ProfileActivity profileActivity2 = ProfileActivity.this;
                         BulletinFactory.createMuteBulletin(profileActivity2, 5, i3, profileActivity2.getResourceProvider()).show();
                     }
+                    ProfileActivity.this.updateExceptions();
                     if (ProfileActivity.this.notificationsRow < 0) {
                         return;
                     }
@@ -3613,6 +3634,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     boolean isDialogMuted2 = ProfileActivity.this.getMessagesController().isDialogMuted(j, ProfileActivity.this.topicId);
                     ProfileActivity.this.getNotificationsController().muteDialog(j, ProfileActivity.this.topicId, !isDialogMuted2);
                     BulletinFactory.createMuteBulletin(ProfileActivity.this, !isDialogMuted2, null).show();
+                    ProfileActivity.this.updateExceptions();
                     if (ProfileActivity.this.notificationsRow >= 0) {
                         ProfileActivity.this.listAdapter.notifyItemChanged(ProfileActivity.this.notificationsRow);
                     }
@@ -3830,7 +3852,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             String str8;
             if (i != ProfileActivity.this.versionRow) {
                 if (i < ProfileActivity.this.membersStartRow || i >= ProfileActivity.this.membersEndRow) {
-                    return ProfileActivity.this.processOnClickOrPress(i, view, view.getX() + (view.getWidth() / 2.0f), view.getY() + (view.getHeight() / 2.0f));
+                    return ProfileActivity.this.processOnClickOrPress(i, view, view.getWidth() / 2.0f, (int) (view.getHeight() * 0.75f));
                 }
                 return ProfileActivity.this.onMemberClick(!ProfileActivity.this.sortedUsers.isEmpty() ? (TLRPC$ChatParticipant) ProfileActivity.this.visibleChatParticipants.get(((Integer) ProfileActivity.this.sortedUsers.get(i - ProfileActivity.this.membersStartRow)).intValue()) : (TLRPC$ChatParticipant) ProfileActivity.this.visibleChatParticipants.get(i - ProfileActivity.this.membersStartRow), true);
             }

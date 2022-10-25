@@ -204,44 +204,41 @@ public class AboutLinkCell extends FrameLayout {
         boolean z;
         int x = (int) motionEvent.getX();
         int y = (int) motionEvent.getY();
-        if (this.showMoreTextView.getVisibility() == 0 && x >= this.showMoreTextView.getLeft() && x <= this.showMoreTextView.getRight() && y >= this.showMoreTextView.getTop() && y <= this.showMoreTextView.getBottom()) {
-            motionEvent.offsetLocation(-this.showMoreTextView.getLeft(), -this.showMoreTextView.getTop());
-            this.showMoreTextView.dispatchTouchEvent(motionEvent);
-            return true;
-        }
-        if (this.textLayout != null || this.nextLinesLayouts != null) {
-            if (motionEvent.getAction() == 0 || (this.pressedLink != null && motionEvent.getAction() == 1)) {
-                if (motionEvent.getAction() == 0) {
-                    resetPressedLink();
-                    LinkSpanDrawable hitLink = hitLink(x, y);
-                    if (hitLink != null) {
-                        LinkSpanDrawable.LinkCollector linkCollector = this.links;
-                        this.pressedLink = hitLink;
-                        linkCollector.addLink(hitLink);
-                        AndroidUtilities.runOnUIThread(this.longPressedRunnable, ViewConfiguration.getLongPressTimeout());
-                        z = true;
-                    }
-                } else {
-                    LinkSpanDrawable linkSpanDrawable = this.pressedLink;
-                    if (linkSpanDrawable != null) {
-                        try {
-                            onLinkClick((ClickableSpan) linkSpanDrawable.getSpan());
-                        } catch (Exception e) {
-                            FileLog.e(e);
-                        }
+        if (this.showMoreTextView.getVisibility() != 0 || x < this.showMoreTextBackgroundView.getLeft() || x > this.showMoreTextBackgroundView.getRight() || y < this.showMoreTextBackgroundView.getTop() || y > this.showMoreTextBackgroundView.getBottom()) {
+            if (this.textLayout != null || this.nextLinesLayouts != null) {
+                if (motionEvent.getAction() == 0 || (this.pressedLink != null && motionEvent.getAction() == 1)) {
+                    if (motionEvent.getAction() == 0) {
                         resetPressedLink();
-                        z = true;
+                        LinkSpanDrawable hitLink = hitLink(x, y);
+                        if (hitLink != null) {
+                            LinkSpanDrawable.LinkCollector linkCollector = this.links;
+                            this.pressedLink = hitLink;
+                            linkCollector.addLink(hitLink);
+                            AndroidUtilities.runOnUIThread(this.longPressedRunnable, ViewConfiguration.getLongPressTimeout());
+                            z = true;
+                        }
+                    } else {
+                        LinkSpanDrawable linkSpanDrawable = this.pressedLink;
+                        if (linkSpanDrawable != null) {
+                            try {
+                                onLinkClick((ClickableSpan) linkSpanDrawable.getSpan());
+                            } catch (Exception e) {
+                                FileLog.e(e);
+                            }
+                            resetPressedLink();
+                            z = true;
+                        }
                     }
+                    return !z || super.onTouchEvent(motionEvent);
+                } else if (motionEvent.getAction() == 3) {
+                    resetPressedLink();
                 }
-                return z || super.onTouchEvent(motionEvent);
-            } else if (motionEvent.getAction() == 3) {
-                resetPressedLink();
+            }
+            z = false;
+            if (!z) {
             }
         }
-        z = false;
-        if (z) {
-            return true;
-        }
+        return false;
     }
 
     private void setShowMoreMarginBottom(int i) {

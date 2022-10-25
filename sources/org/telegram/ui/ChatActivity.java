@@ -1325,6 +1325,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             int measuredWidth;
             Drawable drawable;
             Drawable drawable2;
+            Drawable drawable3;
             StaticLayout staticLayout = this.textLayout;
             int themedColor = ChatActivity.this.getThemedColor(isEnabled() ? "chat_fieldOverlayText" : "windowBackgroundWhiteGrayText");
             if (this.textColor != themedColor) {
@@ -1369,40 +1370,34 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 if (this.replaceProgress != 1.0f && this.textLayoutOut != null) {
                     int alpha = this.layoutPaint.getAlpha();
                     canvas.save();
-                    canvas.translate(((getMeasuredWidth() - this.textLayoutOut.getWidth()) / 2) - (this.circleWidth / 2), (getMeasuredHeight() - this.textLayout.getHeight()) / 2);
-                    float f = -1.0f;
+                    canvas.translate(((getMeasuredWidth() - this.textLayoutOut.getWidth()) / 2) - (this.circleWidth / 2), ((getMeasuredHeight() - this.textLayout.getHeight()) / 2) - AndroidUtilities.dp(2.0f));
                     canvas.translate(this.iconOut != null ? (drawable2.getIntrinsicWidth() / 2) + AndroidUtilities.dp(3.0f) : 0, (this.animatedFromBottom ? -1.0f : 1.0f) * AndroidUtilities.dp(18.0f) * this.replaceProgress);
-                    Drawable drawable3 = this.iconOut;
-                    if (drawable3 != null) {
-                        drawable3.setBounds((-drawable3.getIntrinsicWidth()) - AndroidUtilities.dp(6.0f), ((this.textLayout.getHeight() - this.iconOut.getIntrinsicHeight()) / 2) + AndroidUtilities.dp(1.0f), -AndroidUtilities.dp(6.0f), ((this.textLayout.getHeight() + this.iconOut.getIntrinsicHeight()) / 2) + AndroidUtilities.dp(1.0f));
+                    Drawable drawable4 = this.iconOut;
+                    if (drawable4 != null) {
+                        drawable4.setBounds((-drawable4.getIntrinsicWidth()) - AndroidUtilities.dp(6.0f), ((this.textLayout.getHeight() - this.iconOut.getIntrinsicHeight()) / 2) + AndroidUtilities.dp(1.0f), -AndroidUtilities.dp(6.0f), ((this.textLayout.getHeight() + this.iconOut.getIntrinsicHeight()) / 2) + AndroidUtilities.dp(1.0f));
                         this.iconOut.setAlpha((int) (alpha * (1.0f - this.replaceProgress)));
                         this.iconOut.draw(canvas);
                     }
-                    float f2 = alpha;
-                    this.layoutPaint.setAlpha((int) ((1.0f - this.replaceProgress) * f2));
+                    float f = alpha;
+                    this.layoutPaint.setAlpha((int) ((1.0f - this.replaceProgress) * f));
                     this.textLayoutOut.draw(canvas);
                     canvas.restore();
                     canvas.save();
-                    canvas.translate(((getMeasuredWidth() - this.layoutTextWidth) / 2) - (this.circleWidth / 2), (getMeasuredHeight() - this.textLayout.getHeight()) / 2);
-                    Drawable drawable4 = this.icon;
-                    float intrinsicWidth = drawable4 != null ? (drawable4.getIntrinsicWidth() / 2) + AndroidUtilities.dp(3.0f) : 0;
-                    if (this.animatedFromBottom) {
-                        f = 1.0f;
-                    }
-                    canvas.translate(intrinsicWidth, f * AndroidUtilities.dp(18.0f) * (1.0f - this.replaceProgress));
+                    canvas.translate(((getMeasuredWidth() - this.layoutTextWidth) / 2) - (this.circleWidth / 2), ((getMeasuredHeight() - this.textLayout.getHeight()) / 2) - AndroidUtilities.dp(2.0f));
+                    canvas.translate(this.icon != null ? (drawable3.getIntrinsicWidth() / 2) + AndroidUtilities.dp(3.0f) : 0, (this.animatedFromBottom ? 1.0f : -1.0f) * AndroidUtilities.dp(18.0f) * (1.0f - this.replaceProgress));
                     Drawable drawable5 = this.icon;
                     if (drawable5 != null) {
                         drawable5.setBounds((-drawable5.getIntrinsicWidth()) - AndroidUtilities.dp(6.0f), ((this.textLayout.getHeight() - this.icon.getIntrinsicHeight()) / 2) + AndroidUtilities.dp(1.0f), -AndroidUtilities.dp(6.0f), ((this.textLayout.getHeight() + this.icon.getIntrinsicHeight()) / 2) + AndroidUtilities.dp(1.0f));
-                        this.icon.setAlpha((int) (this.replaceProgress * f2));
+                        this.icon.setAlpha((int) (this.replaceProgress * f));
                         this.icon.draw(canvas);
                     }
-                    this.layoutPaint.setAlpha((int) (f2 * this.replaceProgress));
+                    this.layoutPaint.setAlpha((int) (f * this.replaceProgress));
                     this.textLayout.draw(canvas);
                     canvas.restore();
                     this.layoutPaint.setAlpha(alpha);
                 } else {
                     int measuredWidth4 = ((getMeasuredWidth() - this.layoutTextWidth) / 2) - (this.circleWidth / 2);
-                    canvas.translate(measuredWidth4 + (this.icon != null ? (drawable.getIntrinsicWidth() / 2) + AndroidUtilities.dp(3.0f) : 0), (getMeasuredHeight() - this.textLayout.getHeight()) / 2);
+                    canvas.translate(measuredWidth4 + (this.icon != null ? (drawable.getIntrinsicWidth() / 2) + AndroidUtilities.dp(3.0f) : 0), ((getMeasuredHeight() - this.textLayout.getHeight()) / 2) - AndroidUtilities.dp(2.0f));
                     Drawable drawable6 = this.icon;
                     if (drawable6 != null) {
                         drawable6.setBounds((-drawable6.getIntrinsicWidth()) - AndroidUtilities.dp(6.0f), ((this.textLayout.getHeight() - this.icon.getIntrinsicHeight()) / 2) + AndroidUtilities.dp(1.0f), -AndroidUtilities.dp(6.0f), ((this.textLayout.getHeight() + this.icon.getIntrinsicHeight()) / 2) + AndroidUtilities.dp(1.0f));
@@ -12549,14 +12544,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /*  JADX ERROR: JadxRuntimeException in pass: BlockProcessor
-        jadx.core.utils.exceptions.JadxRuntimeException: CFG modification limit reached, blocks count: 3156
+        jadx.core.utils.exceptions.JadxRuntimeException: CFG modification limit reached, blocks count: 3166
         	at jadx.core.dex.visitors.blocks.BlockProcessor.processBlocksTree(BlockProcessor.java:60)
         	at jadx.core.dex.visitors.blocks.BlockProcessor.visit(BlockProcessor.java:40)
         */
     @Override // org.telegram.messenger.NotificationCenter.NotificationCenterDelegate
     public void didReceivedNotification(int r58, int r59, java.lang.Object... r60) {
         /*
-            Method dump skipped, instructions count: 14491
+            Method dump skipped, instructions count: 14533
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatActivity.didReceivedNotification(int, int, java.lang.Object[]):void");
@@ -14616,9 +14611,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             return this.trackWidth;
         }
 
-        /* JADX INFO: Access modifiers changed from: protected */
         @Override // org.telegram.ui.ActionBar.SimpleTextView
-        public boolean createLayout(int i) {
+        protected boolean createLayout(int i) {
             boolean createLayout = super.createLayout(i);
             if (this.trackWidth && getVisibility() == 0) {
                 ChatActivity.this.pinnedCounterTextViewX = getTextWidth() + AndroidUtilities.dp(4.0f);
@@ -18902,6 +18896,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             public void didPressUserAvatar(ChatMessageCell chatMessageCell, TLRPC$User tLRPC$User, float f, float f2) {
                 if (((BaseFragment) ChatActivity.this).actionBar.isActionModeShowed() || ChatActivity.this.reportType >= 0) {
                     ChatActivity.this.processRowSelect(chatMessageCell, true, f, f2);
+                } else if (chatMessageCell != null && chatMessageCell.getMessageObject() != null && chatMessageCell.getMessageObject().isSponsored()) {
+                    didPressInstantButton(chatMessageCell, 10);
                 } else {
                     openProfile(tLRPC$User);
                 }
