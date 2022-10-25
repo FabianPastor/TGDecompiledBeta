@@ -5,7 +5,6 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.SparseArray;
 import androidx.collection.LongSparseArray;
-import com.google.android.exoplayer2.util.Log;
 import j$.util.Comparator$CC;
 import j$.util.function.Consumer;
 import java.util.ArrayList;
@@ -90,7 +89,6 @@ public class TopicsController extends BaseController {
         }
         if (BuildVars.DEBUG_PRIVATE_VERSION) {
             FileLog.d("load topics " + j + " fromCache=" + z + " loadType=" + i);
-            Log.d("kek", "load topics " + j + " fromCache=" + z + " loadType=" + i);
         }
         if (z) {
             getMessagesStorage().loadTopics(-j, new Consumer() { // from class: org.telegram.messenger.TopicsController$$ExternalSyntheticLambda14
@@ -119,7 +117,6 @@ public class TopicsController extends BaseController {
             tLRPC$TL_channels_getForumTopics.offset_topic = loadOffset.lastTopicId;
             if (BuildVars.DEBUG_PRIVATE_VERSION) {
                 FileLog.d("offset_date=" + loadOffset.lastMessageDate + " offset_id=" + loadOffset.lastMessageId + " offset_topic=" + loadOffset.lastTopicId);
-                Log.d("kek", "offset_date " + loadOffset.lastMessageDate + " offset_id=" + loadOffset.lastMessageId + " offset_topic=" + loadOffset.lastTopicId);
             }
         }
         getConnectionsManager().sendRequest(tLRPC$TL_channels_getForumTopics, new RequestDelegate() { // from class: org.telegram.messenger.TopicsController$$ExternalSyntheticLambda17
@@ -149,12 +146,6 @@ public class TopicsController extends BaseController {
             sb.append(" topics_count=");
             sb.append(arrayList == null ? 0 : arrayList.size());
             FileLog.d(sb.toString());
-            StringBuilder sb2 = new StringBuilder();
-            sb2.append("loaded from cache ");
-            sb2.append(j);
-            sb2.append(" topics_count=");
-            sb2.append(arrayList == null ? 0 : arrayList.size());
-            Log.d("kek", sb2.toString());
         }
         this.topicsIsLoading.put(j, 0);
         processTopics(j, arrayList, null, z, i, -1);
@@ -264,29 +255,21 @@ public class TopicsController extends BaseController {
         }
         if (arrayList4 != null) {
             reloadTopics(j, arrayList4);
-        } else if (i == 1 && arrayList3.size() >= i2 && i2 >= 0) {
-            Log.d("kek", "topics end reached" + j);
             i3 = 1;
-            this.endIsReached.put(j, 1);
-            NotificationCenter notificationCenter = getNotificationCenter();
-            int i5 = NotificationCenter.topicsDidLoaded;
-            Object[] objArr = new Object[i3];
-            objArr[0] = Long.valueOf(j);
-            notificationCenter.postNotificationName(i5, objArr);
-            if ((i == 0 && (i != 0 || z)) || !z || !this.topicsByChatId.get(j).isEmpty()) {
-                return;
+        } else {
+            i3 = 1;
+            if (i == 1 && arrayList3.size() >= i2 && i2 >= 0) {
+                this.endIsReached.put(j, 1);
             }
+        }
+        NotificationCenter notificationCenter = getNotificationCenter();
+        int i5 = NotificationCenter.topicsDidLoaded;
+        Object[] objArr = new Object[i3];
+        objArr[0] = Long.valueOf(j);
+        notificationCenter.postNotificationName(i5, objArr);
+        if ((i == 0 || (i == 0 && !z)) && z && this.topicsByChatId.get(j).isEmpty()) {
             loadTopics(j, false, 0);
         }
-        i3 = 1;
-        NotificationCenter notificationCenter2 = getNotificationCenter();
-        int i52 = NotificationCenter.topicsDidLoaded;
-        Object[] objArr2 = new Object[i3];
-        objArr2[0] = Long.valueOf(j);
-        notificationCenter2.postNotificationName(i52, objArr2);
-        if (i == 0) {
-        }
-        loadTopics(j, false, 0);
     }
 
     public ArrayList<TLRPC$TL_forumTopic> getTopics(long j) {

@@ -1357,17 +1357,17 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    /* JADX WARN: Removed duplicated region for block: B:54:0x0104  */
-    /* JADX WARN: Removed duplicated region for block: B:55:0x010d  */
-    /* JADX WARN: Removed duplicated region for block: B:64:0x013d  */
-    /* JADX WARN: Removed duplicated region for block: B:68:? A[RETURN, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:52:0x0102  */
+    /* JADX WARN: Removed duplicated region for block: B:53:0x010b  */
+    /* JADX WARN: Removed duplicated region for block: B:62:0x013b  */
+    /* JADX WARN: Removed duplicated region for block: B:66:? A[RETURN, SYNTHETIC] */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
     public /* synthetic */ void lambda$onLinkLongPress$1(android.text.style.URLSpan r6, android.widget.TextView r7, int r8, android.content.DialogInterface r9, int r10) {
         /*
-            Method dump skipped, instructions count: 335
+            Method dump skipped, instructions count: 333
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoViewer.lambda$onLinkLongPress$1(android.text.style.URLSpan, android.widget.TextView, int, android.content.DialogInterface, int):void");
@@ -2487,13 +2487,18 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             this.adjustPanLayoutHelper.onAttach();
             Bulletin.addDelegate(this, new Bulletin.Delegate() { // from class: org.telegram.ui.PhotoViewer.FrameLayoutDrawer.2
                 @Override // org.telegram.ui.Components.Bulletin.Delegate
-                public /* synthetic */ void onHide(Bulletin bulletin) {
-                    Bulletin.Delegate.CC.$default$onHide(this, bulletin);
+                public /* synthetic */ int getTopOffset(int i) {
+                    return Bulletin.Delegate.CC.$default$getTopOffset(this, i);
                 }
 
                 @Override // org.telegram.ui.Components.Bulletin.Delegate
-                public /* synthetic */ void onOffsetChange(float f) {
-                    Bulletin.Delegate.CC.$default$onOffsetChange(this, f);
+                public /* synthetic */ void onBottomOffsetChange(float f) {
+                    Bulletin.Delegate.CC.$default$onBottomOffsetChange(this, f);
+                }
+
+                @Override // org.telegram.ui.Components.Bulletin.Delegate
+                public /* synthetic */ void onHide(Bulletin bulletin) {
+                    Bulletin.Delegate.CC.$default$onHide(this, bulletin);
                 }
 
                 @Override // org.telegram.ui.Components.Bulletin.Delegate

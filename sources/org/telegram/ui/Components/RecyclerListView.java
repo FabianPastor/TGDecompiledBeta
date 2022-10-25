@@ -1573,19 +1573,6 @@ public class RecyclerListView extends RecyclerView {
         return this.onItemClickListener;
     }
 
-    public void clickItem(View view, int i) {
-        OnItemClickListener onItemClickListener = this.onItemClickListener;
-        if (onItemClickListener != null) {
-            onItemClickListener.onItemClick(view, i);
-            return;
-        }
-        OnItemClickListenerExtended onItemClickListenerExtended = this.onItemClickListenerExtended;
-        if (onItemClickListenerExtended == null) {
-            return;
-        }
-        onItemClickListenerExtended.onItemClick(view, i, 0.0f, 0.0f);
-    }
-
     public void setOnItemLongClickListener(OnItemLongClickListener onItemLongClickListener) {
         setOnItemLongClickListener(onItemLongClickListener, ViewConfiguration.getLongPressTimeout());
     }

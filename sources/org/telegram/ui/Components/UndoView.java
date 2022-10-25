@@ -225,7 +225,7 @@ public class UndoView extends FrameLayout {
         this.textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.textPaint.setColor(getThemedColor("undo_infoColor"));
         setWillNotDraw(false);
-        this.backgroundDrawable = Theme.createRoundRectDrawable(AndroidUtilities.dp(14.0f), getThemedColor("undo_background"));
+        this.backgroundDrawable = Theme.createRoundRectDrawable(AndroidUtilities.dp(10.0f), getThemedColor("undo_background"));
         setOnTouchListener(UndoView$$ExternalSyntheticLambda3.INSTANCE);
         setVisibility(4);
     }
@@ -368,8 +368,8 @@ public class UndoView extends FrameLayout {
     /* JADX WARN: Removed duplicated region for block: B:603:0x1773  */
     /* JADX WARN: Removed duplicated region for block: B:606:0x179a  */
     /* JADX WARN: Removed duplicated region for block: B:610:0x17df  */
-    /* JADX WARN: Removed duplicated region for block: B:639:0x188d  */
-    /* JADX WARN: Removed duplicated region for block: B:665:? A[RETURN, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:641:0x1891  */
+    /* JADX WARN: Removed duplicated region for block: B:667:? A[RETURN, SYNTHETIC] */
     /* JADX WARN: Type inference failed for: r2v393, types: [java.lang.CharSequence] */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
@@ -377,7 +377,7 @@ public class UndoView extends FrameLayout {
     */
     public void showWithAction(java.util.ArrayList<java.lang.Long> r19, int r20, java.lang.Object r21, java.lang.Object r22, java.lang.Runnable r23, java.lang.Runnable r24) {
         /*
-            Method dump skipped, instructions count: 6377
+            Method dump skipped, instructions count: 6381
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.UndoView.showWithAction(java.util.ArrayList, int, java.lang.Object, java.lang.Object, java.lang.Runnable, java.lang.Runnable):void");

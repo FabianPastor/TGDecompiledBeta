@@ -154,6 +154,7 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.NumberTextView;
 import org.telegram.ui.Components.PacmanAnimation;
 import org.telegram.ui.Components.Premium.LimitReachedBottomSheet;
+import org.telegram.ui.Components.Premium.PremiumFeatureBottomSheet;
 import org.telegram.ui.Components.ProxyDrawable;
 import org.telegram.ui.Components.PullForegroundDrawable;
 import org.telegram.ui.Components.RLottieDrawable;
@@ -353,6 +354,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     private boolean tabsAnimationInProgress;
     private float tabsYOffset;
     private TextPaint textPaint;
+    private Bulletin topBulletin;
     private int topPadding;
     private UndoView[] undoView;
     private FrameLayout updateLayout;
@@ -409,13 +411,13 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         private int selectedType;
         private SwipeController swipeController;
 
-        static /* synthetic */ int access$11408(ViewPage viewPage) {
+        static /* synthetic */ int access$11508(ViewPage viewPage) {
             int i = viewPage.lastItemsCount;
             viewPage.lastItemsCount = i + 1;
             return i;
         }
 
-        static /* synthetic */ int access$11410(ViewPage viewPage) {
+        static /* synthetic */ int access$11510(ViewPage viewPage) {
             int i = viewPage.lastItemsCount;
             viewPage.lastItemsCount = i - 1;
             return i;
@@ -790,6 +792,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     }
                     if (!DialogsActivity.this.onlySelect) {
                         ((BaseFragment) DialogsActivity.this).actionBar.setTranslationY(0.0f);
+                        if (DialogsActivity.this.topBulletin != null) {
+                            DialogsActivity.this.topBulletin.updatePosition();
+                        }
                     }
                     DialogsActivity.this.searchViewPager.setTranslationY(0.0f);
                 }
@@ -1707,7 +1712,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 int addDialogToFolder = DialogsActivity.this.getMessagesController().addDialogToFolder(tLRPC$Dialog.id, DialogsActivity.this.folderId == 0 ? 1 : 0, -1, 0L);
                 if (addDialogToFolder != 2 || i2 != 0) {
                     this.parentPage.dialogsItemAnimator.prepareForRemove();
-                    ViewPage.access$11410(this.parentPage);
+                    ViewPage.access$11510(this.parentPage);
                     this.parentPage.dialogsAdapter.notifyItemRemoved(i2);
                     DialogsActivity.this.dialogRemoveFinished = 2;
                 }
@@ -1719,7 +1724,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                             DialogsActivity.this.setDialogsListFrozen(true);
                             this.parentPage.dialogsAdapter.notifyItemChanged(0);
                         } else {
-                            ViewPage.access$11408(this.parentPage);
+                            ViewPage.access$11508(this.parentPage);
                             this.parentPage.dialogsAdapter.notifyItemInserted(0);
                             if (!SharedConfig.archiveHidden && this.parentPage.layoutManager.findFirstVisibleItemPosition() == 0) {
                                 DialogsActivity.this.disableActionBarScrolling = true;
@@ -1759,7 +1764,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             }
             DialogsActivity.this.getMessagesController().hidePromoDialog();
             this.parentPage.dialogsItemAnimator.prepareForRemove();
-            ViewPage.access$11410(this.parentPage);
+            ViewPage.access$11510(this.parentPage);
             this.parentPage.dialogsAdapter.notifyItemRemoved(i2);
             DialogsActivity.this.dialogRemoveFinished = 2;
         }
@@ -1780,7 +1785,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 DialogsActivity.this.dialogInsertFinished = 2;
                 DialogsActivity.this.setDialogsListFrozen(true);
                 this.parentPage.dialogsItemAnimator.prepareForRemove();
-                ViewPage.access$11408(this.parentPage);
+                ViewPage.access$11508(this.parentPage);
                 this.parentPage.dialogsAdapter.notifyItemInserted(indexOf);
             }
             if (!dialogs2.isEmpty()) {
@@ -1795,7 +1800,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             }
             DialogsActivity.this.frozenDialogsList.remove(0);
             this.parentPage.dialogsItemAnimator.prepareForRemove();
-            ViewPage.access$11410(this.parentPage);
+            ViewPage.access$11510(this.parentPage);
             this.parentPage.dialogsAdapter.notifyItemRemoved(0);
         }
 
@@ -2200,17 +2205,18 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
         @Override // org.telegram.ui.Components.FilterTabsView
         protected void onDefaultTabMoved() {
-            BulletinFactory.of(DialogsActivity.this).createSimpleBulletin(R.raw.filter_reorder, AndroidUtilities.replaceTags(LocaleController.formatString(R.string.LimitReachedReorderFolder, "LimitReachedReorderFolder", LocaleController.getString(R.string.FilterAllChats))), LocaleController.getString("PremiumMore", R.string.PremiumMore), 5000, new Runnable() { // from class: org.telegram.ui.DialogsActivity$6$$ExternalSyntheticLambda0
+            DialogsActivity dialogsActivity = DialogsActivity.this;
+            dialogsActivity.topBulletin = BulletinFactory.of(dialogsActivity).createSimpleBulletin(R.raw.filter_reorder, AndroidUtilities.replaceTags(LocaleController.formatString("LimitReachedReorderFolder", R.string.LimitReachedReorderFolder, LocaleController.getString(R.string.FilterAllChats))), LocaleController.getString("PremiumMore", R.string.PremiumMore), 5000, new Runnable() { // from class: org.telegram.ui.DialogsActivity$6$$ExternalSyntheticLambda0
                 @Override // java.lang.Runnable
                 public final void run() {
                     DialogsActivity.AnonymousClass6.this.lambda$onDefaultTabMoved$0();
                 }
-            }).show();
+            }).show(true);
         }
 
         /* JADX INFO: Access modifiers changed from: private */
         public /* synthetic */ void lambda$onDefaultTabMoved$0() {
-            DialogsActivity.this.presentFragment(new PremiumPreviewFragment("folders"));
+            DialogsActivity.this.showDialog(new PremiumFeatureBottomSheet(DialogsActivity.this, 9, false));
             DialogsActivity.this.filterTabsView.setIsEditing(false);
             DialogsActivity.this.showDoneItem(false);
         }
@@ -3821,7 +3827,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             }
 
             @Override // org.telegram.ui.Components.Bulletin.Delegate
-            public void onOffsetChange(float f) {
+            public void onBottomOffsetChange(float f) {
                 if (DialogsActivity.this.undoView[0] == null || DialogsActivity.this.undoView[0].getVisibility() != 0) {
                     DialogsActivity.this.additionalFloatingTranslation = f;
                     if (DialogsActivity.this.additionalFloatingTranslation < 0.0f) {
@@ -3840,6 +3846,16 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     return;
                 }
                 DialogsActivity.this.undoView[0].hide(true, 2);
+            }
+
+            @Override // org.telegram.ui.Components.Bulletin.Delegate
+            public int getTopOffset(int i4) {
+                int i5 = 0;
+                int measuredHeight = (((BaseFragment) DialogsActivity.this).actionBar != null ? ((BaseFragment) DialogsActivity.this).actionBar.getMeasuredHeight() + ((int) ((BaseFragment) DialogsActivity.this).actionBar.getTranslationY()) : 0) + ((DialogsActivity.this.filterTabsView == null || DialogsActivity.this.filterTabsView.getVisibility() != 0) ? 0 : DialogsActivity.this.filterTabsView.getMeasuredHeight());
+                if (DialogsActivity.this.fragmentContextView != null && DialogsActivity.this.fragmentContextView.isCallTypeVisible()) {
+                    i5 = AndroidUtilities.dp(DialogsActivity.this.fragmentContextView.getStyleHeight());
+                }
+                return measuredHeight + i5;
             }
         });
         if (this.searchIsShowed) {
@@ -5461,6 +5477,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             view.getLocationInWindow(this.scrimViewLocation);
         }
         this.actionBar.setTranslationY(f);
+        Bulletin bulletin = this.topBulletin;
+        if (bulletin != null) {
+            bulletin.updatePosition();
+        }
         FilterTabsView filterTabsView = this.filterTabsView;
         if (filterTabsView != null) {
             filterTabsView.setTranslationY(f);
@@ -5831,7 +5851,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             org.telegram.ui.DialogsActivity$ViewPage[] r4 = r0.viewPages
             r12 = 0
             r4 = r4[r12]
-            int r4 = org.telegram.ui.DialogsActivity.ViewPage.access$12300(r4)
+            int r4 = org.telegram.ui.DialogsActivity.ViewPage.access$12400(r4)
             r5 = 0
             r6 = 8
             r7 = 1
@@ -5839,7 +5859,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             if (r4 == r8) goto L29
             org.telegram.ui.DialogsActivity$ViewPage[] r4 = r0.viewPages
             r4 = r4[r12]
-            int r4 = org.telegram.ui.DialogsActivity.ViewPage.access$12300(r4)
+            int r4 = org.telegram.ui.DialogsActivity.ViewPage.access$12400(r4)
             if (r4 != r6) goto L3a
         L29:
             org.telegram.ui.ActionBar.ActionBar r4 = r0.actionBar
@@ -5860,7 +5880,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             org.telegram.messenger.MessagesController$DialogFilter[] r4 = r4.selectedDialogFilter
             org.telegram.ui.DialogsActivity$ViewPage[] r5 = r0.viewPages
             r5 = r5[r12]
-            int r5 = org.telegram.ui.DialogsActivity.ViewPage.access$12300(r5)
+            int r5 = org.telegram.ui.DialogsActivity.ViewPage.access$12400(r5)
             if (r5 != r6) goto L51
             r5 = 1
             goto L52
@@ -5927,11 +5947,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r1.remove(r14)
             org.telegram.ui.DialogsActivity$ViewPage[] r1 = r0.viewPages
             r1 = r1[r12]
-            org.telegram.ui.Components.DialogsItemAnimator r1 = org.telegram.ui.DialogsActivity.ViewPage.access$12600(r1)
+            org.telegram.ui.Components.DialogsItemAnimator r1 = org.telegram.ui.DialogsActivity.ViewPage.access$12700(r1)
             r1.prepareForRemove()
             org.telegram.ui.DialogsActivity$ViewPage[] r1 = r0.viewPages
             r1 = r1[r12]
-            org.telegram.ui.Adapters.DialogsAdapter r1 = org.telegram.ui.DialogsActivity.ViewPage.access$9300(r1)
+            org.telegram.ui.Adapters.DialogsAdapter r1 = org.telegram.ui.DialogsActivity.ViewPage.access$9400(r1)
             r1.notifyItemRemoved(r14)
             r0.dialogRemoveFinished = r13
         Lce:

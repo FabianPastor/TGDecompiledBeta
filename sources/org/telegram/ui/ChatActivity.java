@@ -14574,9 +14574,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             return this.trackWidth;
         }
 
-        /* JADX INFO: Access modifiers changed from: protected */
         @Override // org.telegram.ui.ActionBar.SimpleTextView
-        public boolean createLayout(int i) {
+        protected boolean createLayout(int i) {
             boolean createLayout = super.createLayout(i);
             if (this.trackWidth && getVisibility() == 0) {
                 ChatActivity.this.pinnedCounterTextViewX = getTextWidth() + AndroidUtilities.dp(4.0f);
@@ -14820,13 +14819,18 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         checkChecksHint();
         Bulletin.Delegate delegate = new Bulletin.Delegate() { // from class: org.telegram.ui.ChatActivity.100
             @Override // org.telegram.ui.Components.Bulletin.Delegate
-            public /* synthetic */ void onHide(Bulletin bulletin) {
-                Bulletin.Delegate.CC.$default$onHide(this, bulletin);
+            public /* synthetic */ int getTopOffset(int i) {
+                return Bulletin.Delegate.CC.$default$getTopOffset(this, i);
             }
 
             @Override // org.telegram.ui.Components.Bulletin.Delegate
-            public /* synthetic */ void onOffsetChange(float f) {
-                Bulletin.Delegate.CC.$default$onOffsetChange(this, f);
+            public /* synthetic */ void onBottomOffsetChange(float f) {
+                Bulletin.Delegate.CC.$default$onBottomOffsetChange(this, f);
+            }
+
+            @Override // org.telegram.ui.Components.Bulletin.Delegate
+            public /* synthetic */ void onHide(Bulletin bulletin) {
+                Bulletin.Delegate.CC.$default$onHide(this, bulletin);
             }
 
             @Override // org.telegram.ui.Components.Bulletin.Delegate
@@ -15875,7 +15879,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     public /* synthetic */ void lambda$createMenu$180(String[] strArr, String str, boolean z, ActionBarMenuSubItem actionBarMenuSubItem, AtomicBoolean atomicBoolean, AtomicReference atomicReference, String str2) {
         TLRPC$Chat tLRPC$Chat;
         strArr[0] = str2;
-        if (strArr[0] != null && ((!strArr[0].equals(str) || strArr[0].equals("und")) && ((z && !RestrictedLanguagesSelectActivity.getRestrictedLanguages().contains(strArr[0])) || ((tLRPC$Chat = this.currentChat) != null && ((tLRPC$Chat.has_link || tLRPC$Chat.username != null) && ("uk".equals(strArr[0]) || "ru".equals(strArr[0]))))))) {
+        if (strArr[0] != null && ((!strArr[0].equals(str) || strArr[0].equals("und")) && ((z && !RestrictedLanguagesSelectActivity.getRestrictedLanguages().contains(strArr[0])) || ((tLRPC$Chat = this.currentChat) != null && ((tLRPC$Chat.has_link || ChatObject.isPublic(tLRPC$Chat)) && ("uk".equals(strArr[0]) || "ru".equals(strArr[0]))))))) {
             actionBarMenuSubItem.setVisibility(0);
         }
         atomicBoolean.set(false);
@@ -17840,8 +17844,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    /* JADX WARN: Removed duplicated region for block: B:50:0x00ea A[RETURN] */
-    /* JADX WARN: Removed duplicated region for block: B:51:0x00eb  */
+    /* JADX WARN: Removed duplicated region for block: B:49:0x00ea A[RETURN] */
+    /* JADX WARN: Removed duplicated region for block: B:50:0x00eb  */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
@@ -20148,91 +20152,88 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     }
                     return true;
                 }
-            } else {
-                String str2 = this.currentChat.username;
-                if (str2 != null) {
-                    String lowerCase = str2.toLowerCase();
-                    if (publicMsgUrlPattern == null) {
-                        publicMsgUrlPattern = Pattern.compile("(https://)?t.me/([0-9a-zA-Z_]+)/([0-9]+)");
-                        voiceChatUrlPattern = Pattern.compile("(https://)?t.me/([0-9a-zA-Z_]+)\\?(voicechat+)");
+            } else if (ChatObject.getPublicUsername(this.currentChat) != null) {
+                String lowerCase = ChatObject.getPublicUsername(this.currentChat).toLowerCase();
+                if (publicMsgUrlPattern == null) {
+                    publicMsgUrlPattern = Pattern.compile("(https://)?t.me/([0-9a-zA-Z_]+)/([0-9]+)");
+                    voiceChatUrlPattern = Pattern.compile("(https://)?t.me/([0-9a-zA-Z_]+)\\?(voicechat+)");
+                }
+                Matcher matcher = publicMsgUrlPattern.matcher(str);
+                if (matcher.find(2) && matcher.find(3) && lowerCase.equals(matcher.group(2).toLowerCase())) {
+                    Uri parse2 = Uri.parse(str);
+                    int intValue3 = Utilities.parseInt((CharSequence) parse2.getQueryParameter("thread")).intValue();
+                    int intValue4 = Utilities.parseInt((CharSequence) parse2.getQueryParameter("comment")).intValue();
+                    if (intValue3 != 0 || intValue4 != 0) {
+                        return false;
                     }
-                    Matcher matcher = publicMsgUrlPattern.matcher(str);
-                    if (matcher.find(2) && matcher.find(3) && lowerCase.equals(matcher.group(2).toLowerCase())) {
-                        Uri parse2 = Uri.parse(str);
-                        int intValue3 = Utilities.parseInt((CharSequence) parse2.getQueryParameter("thread")).intValue();
-                        int intValue4 = Utilities.parseInt((CharSequence) parse2.getQueryParameter("comment")).intValue();
-                        if (intValue3 != 0 || intValue4 != 0) {
+                    int parseInt = Integer.parseInt(matcher.group(3));
+                    this.showScrollToMessageError = true;
+                    if (this.chatMode == 2) {
+                        this.chatActivityDelegate.openReplyMessage(parseInt);
+                        lambda$onBackPressed$226();
+                    } else {
+                        int timestampFromLink = LaunchActivity.getTimestampFromLink(parse2);
+                        this.startFromVideoTimestamp = timestampFromLink;
+                        if (timestampFromLink >= 0) {
+                            this.startFromVideoMessageId = parseInt;
+                        }
+                        scrollToMessageId(parseInt, i, true, 0, false, 0);
+                    }
+                    return true;
+                } else if (str.startsWith("tg:resolve") || str.startsWith("tg://resolve")) {
+                    Uri parse3 = Uri.parse(str.replace("tg:resolve", "tg://telegram.org").replace("tg://resolve", "tg://telegram.org"));
+                    String lowerCase2 = parse3.getQueryParameter("domain").toLowerCase();
+                    int intValue5 = Utilities.parseInt((CharSequence) parse3.getQueryParameter("post")).intValue();
+                    int intValue6 = Utilities.parseInt((CharSequence) parse3.getQueryParameter("thread")).intValue();
+                    int intValue7 = Utilities.parseInt((CharSequence) parse3.getQueryParameter("comment")).intValue();
+                    if (!lowerCase.equals(lowerCase2) || intValue5 == 0 || intValue6 != 0 || intValue7 != 0) {
+                        return false;
+                    }
+                    if (this.chatMode == 2) {
+                        this.chatActivityDelegate.openReplyMessage(intValue5);
+                        lambda$onBackPressed$226();
+                    } else {
+                        scrollToMessageId(intValue5, i, true, 0, false, 0);
+                    }
+                    return true;
+                } else {
+                    Matcher matcher2 = voiceChatUrlPattern.matcher(str);
+                    try {
+                        if (matcher2.find(2) && matcher2.find(3) && lowerCase.equals(matcher2.group(2).toLowerCase())) {
+                            String queryParameter = Uri.parse(str).getQueryParameter("voicechat");
+                            if (!TextUtils.isEmpty(queryParameter)) {
+                                this.voiceChatHash = queryParameter;
+                                checkGroupCallJoin(true);
+                                return true;
+                            }
+                        }
+                    } catch (Exception e) {
+                        FileLog.e(e);
+                    }
+                }
+            } else {
+                if (privateMsgUrlPattern == null) {
+                    privateMsgUrlPattern = Pattern.compile("(https://)?t.me/c/([0-9]+)/([0-9]+)");
+                }
+                Matcher matcher3 = privateMsgUrlPattern.matcher(str);
+                if (matcher3.find(2) && matcher3.find(3)) {
+                    long parseLong = Long.parseLong(matcher3.group(2));
+                    int parseInt2 = Integer.parseInt(matcher3.group(3));
+                    if (parseLong == this.currentChat.id && parseInt2 != 0) {
+                        Uri parse4 = Uri.parse(str);
+                        int intValue8 = Utilities.parseInt((CharSequence) parse4.getQueryParameter("thread")).intValue();
+                        int intValue9 = Utilities.parseInt((CharSequence) parse4.getQueryParameter("comment")).intValue();
+                        if (intValue8 != 0 || intValue9 != 0) {
                             return false;
                         }
-                        int parseInt = Integer.parseInt(matcher.group(3));
                         this.showScrollToMessageError = true;
                         if (this.chatMode == 2) {
-                            this.chatActivityDelegate.openReplyMessage(parseInt);
+                            this.chatActivityDelegate.openReplyMessage(parseInt2);
                             lambda$onBackPressed$226();
                         } else {
-                            int timestampFromLink = LaunchActivity.getTimestampFromLink(parse2);
-                            this.startFromVideoTimestamp = timestampFromLink;
-                            if (timestampFromLink >= 0) {
-                                this.startFromVideoMessageId = parseInt;
-                            }
-                            scrollToMessageId(parseInt, i, true, 0, false, 0);
+                            scrollToMessageId(parseInt2, i, true, 0, false, 0);
                         }
                         return true;
-                    } else if (str.startsWith("tg:resolve") || str.startsWith("tg://resolve")) {
-                        Uri parse3 = Uri.parse(str.replace("tg:resolve", "tg://telegram.org").replace("tg://resolve", "tg://telegram.org"));
-                        String lowerCase2 = parse3.getQueryParameter("domain").toLowerCase();
-                        int intValue5 = Utilities.parseInt((CharSequence) parse3.getQueryParameter("post")).intValue();
-                        int intValue6 = Utilities.parseInt((CharSequence) parse3.getQueryParameter("thread")).intValue();
-                        int intValue7 = Utilities.parseInt((CharSequence) parse3.getQueryParameter("comment")).intValue();
-                        if (!lowerCase.equals(lowerCase2) || intValue5 == 0 || intValue6 != 0 || intValue7 != 0) {
-                            return false;
-                        }
-                        if (this.chatMode == 2) {
-                            this.chatActivityDelegate.openReplyMessage(intValue5);
-                            lambda$onBackPressed$226();
-                        } else {
-                            scrollToMessageId(intValue5, i, true, 0, false, 0);
-                        }
-                        return true;
-                    } else {
-                        Matcher matcher2 = voiceChatUrlPattern.matcher(str);
-                        try {
-                            if (matcher2.find(2) && matcher2.find(3) && lowerCase.equals(matcher2.group(2).toLowerCase())) {
-                                String queryParameter = Uri.parse(str).getQueryParameter("voicechat");
-                                if (!TextUtils.isEmpty(queryParameter)) {
-                                    this.voiceChatHash = queryParameter;
-                                    checkGroupCallJoin(true);
-                                    return true;
-                                }
-                            }
-                        } catch (Exception e) {
-                            FileLog.e(e);
-                        }
-                    }
-                } else {
-                    if (privateMsgUrlPattern == null) {
-                        privateMsgUrlPattern = Pattern.compile("(https://)?t.me/c/([0-9]+)/([0-9]+)");
-                    }
-                    Matcher matcher3 = privateMsgUrlPattern.matcher(str);
-                    if (matcher3.find(2) && matcher3.find(3)) {
-                        long parseLong = Long.parseLong(matcher3.group(2));
-                        int parseInt2 = Integer.parseInt(matcher3.group(3));
-                        if (parseLong == this.currentChat.id && parseInt2 != 0) {
-                            Uri parse4 = Uri.parse(str);
-                            int intValue8 = Utilities.parseInt((CharSequence) parse4.getQueryParameter("thread")).intValue();
-                            int intValue9 = Utilities.parseInt((CharSequence) parse4.getQueryParameter("comment")).intValue();
-                            if (intValue8 != 0 || intValue9 != 0) {
-                                return false;
-                            }
-                            this.showScrollToMessageError = true;
-                            if (this.chatMode == 2) {
-                                this.chatActivityDelegate.openReplyMessage(parseInt2);
-                                lambda$onBackPressed$226();
-                            } else {
-                                scrollToMessageId(parseInt2, i, true, 0, false, 0);
-                            }
-                            return true;
-                        }
                     }
                 }
             }
@@ -21058,7 +21059,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     public AnimatorSet onCustomTransitionAnimation(boolean z, Runnable runnable) {
         ValueAnimator ofFloat;
         float f = 0.0f;
-        if (z && this.fromPullingDownTransition && getParentLayout().getFragmentStack().size() > 1) {
+        if (z && this.fromPullingDownTransition && getParentLayout() != null && getParentLayout().getFragmentStack().size() > 1) {
             BaseFragment baseFragment = getParentLayout().getFragmentStack().get(getParentLayout().getFragmentStack().size() - 2);
             if (baseFragment instanceof ChatActivity) {
                 this.wasManualScroll = true;

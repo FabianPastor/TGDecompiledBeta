@@ -64,7 +64,7 @@ public class TextCell extends FrameLayout {
         AnimatedTextView animatedTextView = new AnimatedTextView(context);
         this.valueTextView = animatedTextView;
         animatedTextView.setTextColor(Theme.getColor(z ? "dialogTextBlue2" : "windowBackgroundWhiteValueText", resourcesProvider));
-        animatedTextView.setPadding(0, AndroidUtilities.dp(12.0f), 0, AndroidUtilities.dp(12.0f));
+        animatedTextView.setPadding(0, AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f));
         animatedTextView.setTextSize(AndroidUtilities.dp(16.0f));
         animatedTextView.setGravity(LocaleController.isRTL ? 3 : 5);
         animatedTextView.setImportantForAccessibility(2);

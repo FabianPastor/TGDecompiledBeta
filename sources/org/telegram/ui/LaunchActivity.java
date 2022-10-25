@@ -1460,8 +1460,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         }
         DialogsActivity provide = genericProvider.provide(null);
         provide.setSideMenu(this.sideMenu);
-        mainFragmentsStack.add(0, provide);
-        this.actionBarLayout.setFragmentStack(mainFragmentsStack);
+        this.actionBarLayout.addFragmentToStack(provide, 0);
         this.drawerLayoutContainer.setAllowOpenDrawer(true, false);
         this.actionBarLayout.rebuildFragments(1);
         if (AndroidUtilities.isTablet()) {
@@ -5495,7 +5494,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
             this.drawerLayoutContainer.setAllowOpenDrawer(!z4 && !(baseFragment instanceof IntroActivity) && !(baseFragment instanceof CountrySelectActivity) && this.layersActionBarLayout.getView().getVisibility() != 0, true);
             if ((baseFragment instanceof DialogsActivity) && ((DialogsActivity) baseFragment).isMainDialogList() && iNavigationLayout != (iNavigationLayout5 = this.actionBarLayout)) {
                 iNavigationLayout5.removeAllFragments();
-                this.actionBarLayout.presentFragment(baseFragment, z, z2, false, false);
+                this.actionBarLayout.presentFragment(navigationParams.setRemoveLast(z).setNoAnimation(z2).setCheckPresentFromDelegate(false));
                 this.layersActionBarLayout.removeAllFragments();
                 this.layersActionBarLayout.getView().setVisibility(8);
                 this.drawerLayoutContainer.setAllowOpenDrawer(true, false);
@@ -5518,14 +5517,14 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                         this.layersActionBarLayout.closeLastFragment(!z2);
                     }
                     if (!z6) {
-                        this.actionBarLayout.presentFragment(navigationParams.setNoAnimation(z2));
+                        this.actionBarLayout.presentFragment(navigationParams.setNoAnimation(z2).setCheckPresentFromDelegate(false));
                     }
                     return z6;
                 } else if (!z5 && iNavigationLayout != (iNavigationLayout3 = this.rightActionBarLayout)) {
                     iNavigationLayout3.getView().setVisibility(0);
                     this.backgroundTablet.setVisibility(8);
                     this.rightActionBarLayout.removeAllFragments();
-                    this.rightActionBarLayout.presentFragment(navigationParams.setNoAnimation(true).setRemoveLast(z));
+                    this.rightActionBarLayout.presentFragment(navigationParams.setNoAnimation(true).setRemoveLast(z).setCheckPresentFromDelegate(false));
                     if (!this.layersActionBarLayout.getFragmentStack().isEmpty()) {
                         while (this.layersActionBarLayout.getFragmentStack().size() - 1 > 0) {
                             INavigationLayout iNavigationLayout7 = this.layersActionBarLayout;
@@ -5535,7 +5534,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                     }
                     return false;
                 } else if (z5 && iNavigationLayout != (iNavigationLayout2 = this.actionBarLayout)) {
-                    iNavigationLayout2.presentFragment(navigationParams.setRemoveLast(iNavigationLayout2.getFragmentStack().size() > 1).setNoAnimation(z2));
+                    iNavigationLayout2.presentFragment(navigationParams.setRemoveLast(iNavigationLayout2.getFragmentStack().size() > 1).setNoAnimation(z2).setCheckPresentFromDelegate(false));
                     if (!this.layersActionBarLayout.getFragmentStack().isEmpty()) {
                         while (this.layersActionBarLayout.getFragmentStack().size() - 1 > 0) {
                             INavigationLayout iNavigationLayout8 = this.layersActionBarLayout;
@@ -5556,7 +5555,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                     if (iNavigationLayout10.getFragmentStack().size() <= 1) {
                         z3 = false;
                     }
-                    iNavigationLayout10.presentFragment(navigationParams.setRemoveLast(z3).setNoAnimation(z2));
+                    iNavigationLayout10.presentFragment(navigationParams.setRemoveLast(z3).setNoAnimation(z2).setCheckPresentFromDelegate(false));
                     return false;
                 }
             } else {
@@ -5582,7 +5581,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                     } else {
                         this.shadowTablet.setBackgroundColor(NUM);
                     }
-                    this.layersActionBarLayout.presentFragment(baseFragment, z, z2, false, false);
+                    this.layersActionBarLayout.presentFragment(navigationParams.setRemoveLast(z).setNoAnimation(z2).setCheckPresentFromDelegate(false));
                     return false;
                 }
             }

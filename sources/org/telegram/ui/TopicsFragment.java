@@ -1073,7 +1073,7 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
             return;
         }
         int i = 0;
-        boolean z2 = ChatObject.canPinMessages(getMessagesController().getChat(Long.valueOf(this.chatId))) && !this.searching && !this.opnendForSelect && !this.loadingTopics;
+        boolean z2 = ChatObject.canUserDoAction(getMessagesController().getChat(Long.valueOf(this.chatId)), 15) && !this.searching && !this.opnendForSelect && !this.loadingTopics;
         this.canShowCreateTopic = z2;
         ActionBarMenuSubItem actionBarMenuSubItem = this.createTopicSubmenu;
         if (!z2) {
@@ -1468,10 +1468,11 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
 
     /* JADX INFO: Access modifiers changed from: private */
     public void checkForLoadMore() {
-        if (this.topicsController.endIsReached(this.chatId)) {
+        LinearLayoutManager linearLayoutManager;
+        if (this.topicsController.endIsReached(this.chatId) || (linearLayoutManager = this.layoutManager) == null) {
             return;
         }
-        int findLastVisibleItemPosition = this.layoutManager.findLastVisibleItemPosition();
+        int findLastVisibleItemPosition = linearLayoutManager.findLastVisibleItemPosition();
         if (this.forumTopics.isEmpty() || findLastVisibleItemPosition >= this.adapter.getItemCount() - 5) {
             this.topicsController.loadTopics(this.chatId);
         }

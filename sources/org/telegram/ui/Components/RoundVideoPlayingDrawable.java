@@ -5,12 +5,15 @@ import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.view.View;
+import androidx.core.graphics.ColorUtils;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
 /* loaded from: classes3.dex */
 public class RoundVideoPlayingDrawable extends Drawable {
+    public float colorProgress;
     private View parentView;
     private final Theme.ResourcesProvider resourcesProvider;
+    public int timeColor;
     private long lastUpdateTime = 0;
     private boolean started = false;
     private Paint paint = new Paint(1);
@@ -92,7 +95,7 @@ public class RoundVideoPlayingDrawable extends Drawable {
 
     @Override // android.graphics.drawable.Drawable
     public void draw(Canvas canvas) {
-        this.paint.setColor(getThemedColor("chat_serviceText"));
+        this.paint.setColor(ColorUtils.blendARGB(getThemedColor("chat_serviceText"), this.timeColor, this.colorProgress));
         int i = this.alpha;
         if (i != 255) {
             Paint paint = this.paint;

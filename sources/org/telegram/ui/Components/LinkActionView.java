@@ -312,7 +312,7 @@ public class LinkActionView extends LinearLayout {
             actionBarPopupWindowLayout.addView((View) actionBarMenuSubItem3, LayoutHelper.createLinear(-1, 48));
         }
         if (bottomSheet == null) {
-            container = (FrameLayout) baseFragment.getParentLayout().getView();
+            container = (FrameLayout) baseFragment.getParentLayout().getOverlayContainerView();
         } else {
             container = bottomSheet.getContainer();
         }
@@ -427,10 +427,13 @@ public class LinkActionView extends LinearLayout {
         float f2 = 0.0f;
         FrameLayout frameLayout3 = frameLayout;
         while (frameLayout3 != frameLayout2) {
-            f2 += frameLayout3.getY();
-            f += frameLayout3.getX();
+            f += frameLayout3.getY();
+            f2 += frameLayout3.getX();
             if (frameLayout3 instanceof ScrollView) {
-                f2 -= frameLayout3.getScrollY();
+                f -= frameLayout3.getScrollY();
+            }
+            if (!(frameLayout3.getParent() instanceof View)) {
+                break;
             }
             ?? r4 = (View) frameLayout3.getParent();
             boolean z = r4 instanceof ViewGroup;
@@ -439,8 +442,8 @@ public class LinkActionView extends LinearLayout {
                 return;
             }
         }
-        fArr[0] = f - frameLayout2.getPaddingLeft();
-        fArr[1] = f2 - frameLayout2.getPaddingTop();
+        fArr[0] = f2 - frameLayout2.getPaddingLeft();
+        fArr[1] = f - frameLayout2.getPaddingTop();
     }
 
     private void showQrCode() {

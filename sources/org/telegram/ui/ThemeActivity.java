@@ -156,6 +156,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
     private int themeListRow2;
     private int themePreviewRow;
     private ThemesHorizontalListCell themesHorizontalListCell;
+    private boolean updateDistance;
+    private boolean updateRecordViaSco;
     private boolean updatingLocation;
     private ArrayList<Theme.ThemeInfo> darkThemes = new ArrayList<>();
     private ArrayList<Theme.ThemeInfo> defaultThemes = new ArrayList<>();
@@ -1343,6 +1345,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
     /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$createView$2(DialogInterface dialogInterface, int i) {
         SharedConfig.setDistanceSystemType(i);
+        this.updateDistance = true;
         RecyclerView.ViewHolder findViewHolderForAdapterPosition = this.listView.findViewHolderForAdapterPosition(this.distanceRow);
         if (findViewHolderForAdapterPosition != null) {
             this.listAdapter.onBindViewHolder(findViewHolderForAdapterPosition, this.distanceRow);
@@ -1353,6 +1356,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
     public /* synthetic */ void lambda$createView$3(AtomicReference atomicReference, View view) {
         SharedConfig.recordViaSco = false;
         SharedConfig.saveConfig();
+        this.updateRecordViaSco = true;
         ((Dialog) atomicReference.get()).dismiss();
         RecyclerView.ViewHolder findViewHolderForAdapterPosition = this.listView.findViewHolderForAdapterPosition(this.bluetoothScoRow);
         if (findViewHolderForAdapterPosition != null) {
@@ -1364,6 +1368,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
     public /* synthetic */ void lambda$createView$4(AtomicReference atomicReference, View view) {
         SharedConfig.recordViaSco = true;
         SharedConfig.saveConfig();
+        this.updateRecordViaSco = true;
         ((Dialog) atomicReference.get()).dismiss();
         RecyclerView.ViewHolder findViewHolderForAdapterPosition = this.listView.findViewHolderForAdapterPosition(this.bluetoothScoRow);
         if (findViewHolderForAdapterPosition != null) {
@@ -2281,7 +2286,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                                                 if (i != ThemeActivity.this.bluetoothScoRow) {
                                                     return;
                                                 }
-                                                textSettingsCell.setTextAndValue(LocaleController.getString(R.string.MicrophoneForVoiceMessages), LocaleController.getString(SharedConfig.recordViaSco ? R.string.MicrophoneForVoiceMessagesSco : R.string.MicrophoneForVoiceMessagesBuiltIn), true);
+                                                textSettingsCell.setTextAndValue(LocaleController.getString(R.string.MicrophoneForVoiceMessages), LocaleController.getString(SharedConfig.recordViaSco ? R.string.MicrophoneForVoiceMessagesSco : R.string.MicrophoneForVoiceMessagesBuiltIn), ThemeActivity.this.updateRecordViaSco, true);
+                                                ThemeActivity.this.updateRecordViaSco = false;
                                                 return;
                                             }
                                             int i2 = SharedConfig.distanceSystemType;
@@ -2292,7 +2298,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                                             } else {
                                                 string = LocaleController.getString("DistanceUnitsMiles", R.string.DistanceUnitsMiles);
                                             }
-                                            textSettingsCell.setTextAndValue(LocaleController.getString("DistanceUnits", R.string.DistanceUnits), string, false);
+                                            textSettingsCell.setTextAndValue(LocaleController.getString("DistanceUnits", R.string.DistanceUnits), string, ThemeActivity.this.updateDistance, false);
+                                            ThemeActivity.this.updateDistance = false;
                                             return;
                                         }
                                         textSettingsCell.setText(LocaleController.getString("ImportContacts", R.string.ImportContacts), true);

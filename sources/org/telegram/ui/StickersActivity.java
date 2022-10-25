@@ -120,6 +120,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
     private int suggestAnimatedEmojiRow;
     private int suggestRow;
     private TrendingStickersAlert trendingStickersAlert;
+    private boolean updateSuggestStickers;
 
     /* JADX INFO: Access modifiers changed from: private */
     public static /* synthetic */ boolean lambda$createView$0(View view, MotionEvent motionEvent) {
@@ -458,6 +459,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
     /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$createView$1(AlertDialog.Builder builder, View view) {
         SharedConfig.setSuggestStickers(((Integer) view.getTag()).intValue());
+        this.updateSuggestStickers = true;
         this.listAdapter.notifyItemChanged(this.suggestRow);
         builder.getDismissRunnable().run();
     }
@@ -1092,7 +1094,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             }
         }
 
-        /* JADX WARN: Code restructure failed: missing block: B:140:0x041d, code lost:
+        /* JADX WARN: Code restructure failed: missing block: B:140:0x0428, code lost:
             if (r6 == false) goto L166;
          */
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
@@ -1102,7 +1104,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         */
         public void onBindViewHolder(androidx.recyclerview.widget.RecyclerView.ViewHolder r12, int r13) {
             /*
-                Method dump skipped, instructions count: 1100
+                Method dump skipped, instructions count: 1110
                 To view this dump add '--comments-level debug' option
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.StickersActivity.ListAdapter.onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder, int):void");

@@ -81,6 +81,7 @@ public class DataSettingsActivity extends BaseFragment {
     private int storageNumRow;
     private int storageUsageRow;
     private int streamSectionRow;
+    private boolean updateVoipUseLessData;
     private int usageSection2Row;
     private int usageSectionRow;
     private int useLessDataForCallsRow;
@@ -519,6 +520,7 @@ public class DataSettingsActivity extends BaseFragment {
         }
         if (i3 != -1) {
             sharedPreferences.edit().putInt("VoipDataSaving", i3).commit();
+            this.updateVoipUseLessData = true;
         }
         ListAdapter listAdapter = this.listAdapter;
         if (listAdapter != null) {
@@ -684,7 +686,8 @@ public class DataSettingsActivity extends BaseFragment {
                     } else if (i3 == 3) {
                         str = LocaleController.getString("UseLessDataOnRoaming", R.string.UseLessDataOnRoaming);
                     }
-                    textSettingsCell.setTextAndValue(LocaleController.getString("VoipUseLessData", R.string.VoipUseLessData), str, true);
+                    textSettingsCell.setTextAndValue(LocaleController.getString("VoipUseLessData", R.string.VoipUseLessData), str, DataSettingsActivity.this.updateVoipUseLessData, true);
+                    DataSettingsActivity.this.updateVoipUseLessData = false;
                     return;
                 }
                 textSettingsCell.setText(LocaleController.getString("StorageUsage", R.string.StorageUsage), true);

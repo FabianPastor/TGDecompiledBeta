@@ -1589,18 +1589,25 @@ public class LNavigation extends FrameLayout implements INavigationLayout, Float
         if (z) {
             if (!themeAnimationSettings.onlyTopFragment) {
                 int size = this.fragmentStack.size() - ((isInPreviewMode() || isPreviewOpenAnimationInProgress()) ? 2 : 1);
+                boolean z2 = false;
                 for (int i4 = 0; i4 < size; i4++) {
                     BaseFragment baseFragment2 = this.fragmentStack.get(i4);
                     baseFragment2.clearViews();
                     baseFragment2.setParentLayout(this);
-                    int indexOf = this.fragmentStack.indexOf(baseFragment2);
-                    if (indexOf != -1) {
-                        if (indexOf == this.fragmentStack.size() - 1) {
+                    if (i4 == this.fragmentStack.size() - 1) {
+                        if (getForegroundView() != null) {
                             getForegroundView().setFragment(baseFragment2);
-                        } else if (indexOf == this.fragmentStack.size() - 2) {
+                        }
+                        z2 = true;
+                    } else if (i4 == this.fragmentStack.size() - 2) {
+                        if (getBackgroundView() != null) {
                             getBackgroundView().setFragment(baseFragment2);
                         }
+                        z2 = true;
                     }
+                }
+                if (z2) {
+                    lambda$rebuildFragments$12(1);
                 }
             }
             if (themeAnimationSettings.instant) {

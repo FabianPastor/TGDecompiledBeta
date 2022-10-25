@@ -88,11 +88,6 @@ public class TextDetailCell extends FrameLayout {
         }
     }
 
-    @Override // android.view.ViewGroup
-    public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
-        return !(this.valueTextView.hit(((int) motionEvent.getX()) - this.valueTextView.getLeft(), ((int) motionEvent.getY()) - this.valueTextView.getTop()) != null);
-    }
-
     @Override // android.view.View
     public boolean onTouchEvent(MotionEvent motionEvent) {
         if (this.valueTextView.hit(((int) motionEvent.getX()) - this.valueTextView.getLeft(), ((int) motionEvent.getY()) - this.valueTextView.getTop()) != null) {

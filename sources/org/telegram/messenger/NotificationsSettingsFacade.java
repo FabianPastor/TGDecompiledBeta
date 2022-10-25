@@ -49,6 +49,18 @@ public class NotificationsSettingsFacade {
         return preferences3.getInt(str + sharedPrefKey2, i2);
     }
 
+    public long getProperty(String str, long j, int i, long j2) {
+        String sharedPrefKey = NotificationsController.getSharedPrefKey(j, i);
+        SharedPreferences preferences = getPreferences();
+        if (preferences.contains(str + sharedPrefKey)) {
+            SharedPreferences preferences2 = getPreferences();
+            return preferences2.getLong(str + sharedPrefKey, j2);
+        }
+        String sharedPrefKey2 = NotificationsController.getSharedPrefKey(j, 0);
+        SharedPreferences preferences3 = getPreferences();
+        return preferences3.getLong(str + sharedPrefKey2, j2);
+    }
+
     public boolean getProperty(String str, long j, int i, boolean z) {
         String sharedPrefKey = NotificationsController.getSharedPrefKey(j, i);
         SharedPreferences preferences = getPreferences();

@@ -342,7 +342,7 @@ public class TranscribeButton {
             this.backgroundPaint.setAlpha(alpha);
         }
         Drawable drawable = this.selectorDrawable;
-        if (drawable != null && this.premium) {
+        if (drawable != null) {
             drawable.setBounds(this.bounds);
             this.selectorDrawable.draw(canvas);
         }

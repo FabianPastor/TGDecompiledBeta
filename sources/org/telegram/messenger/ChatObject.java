@@ -102,7 +102,7 @@ public class ChatObject {
     }
 
     private static boolean isBannableAction(int i) {
-        if (i != 0 && i != 1 && i != 3) {
+        if (i != 0 && i != 1 && i != 3 && i != 15) {
             switch (i) {
                 case 6:
                 case 7:
@@ -1470,22 +1470,25 @@ public class ChatObject {
         if (i == 3) {
             return tLRPC$TL_chatBannedRights.invite_users;
         }
-        switch (i) {
-            case 6:
-                return tLRPC$TL_chatBannedRights.send_messages;
-            case 7:
-                return tLRPC$TL_chatBannedRights.send_media;
-            case 8:
-                return tLRPC$TL_chatBannedRights.send_stickers;
-            case 9:
-                return tLRPC$TL_chatBannedRights.embed_links;
-            case 10:
-                return tLRPC$TL_chatBannedRights.send_polls;
-            case 11:
-                return tLRPC$TL_chatBannedRights.view_messages;
-            default:
-                return false;
+        if (i != 15) {
+            switch (i) {
+                case 6:
+                    return tLRPC$TL_chatBannedRights.send_messages;
+                case 7:
+                    return tLRPC$TL_chatBannedRights.send_media;
+                case 8:
+                    return tLRPC$TL_chatBannedRights.send_stickers;
+                case 9:
+                    return tLRPC$TL_chatBannedRights.embed_links;
+                case 10:
+                    return tLRPC$TL_chatBannedRights.send_polls;
+                case 11:
+                    return tLRPC$TL_chatBannedRights.view_messages;
+                default:
+                    return false;
+            }
         }
+        return tLRPC$TL_chatBannedRights.manage_topics;
     }
 
     public static boolean isActionBannedByDefault(TLRPC$Chat tLRPC$Chat, int i) {

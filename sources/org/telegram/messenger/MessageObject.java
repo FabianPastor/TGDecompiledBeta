@@ -284,6 +284,7 @@ public class MessageObject {
     public String previousMessage;
     public ArrayList<TLRPC$MessageEntity> previousMessageEntities;
     public boolean putInDownloadsStore;
+    private byte[] randomWaveform;
     public boolean reactionsChanged;
     public long reactionsLastCheckTime;
     public MessageObject replyMessageObject;
@@ -5331,5 +5332,37 @@ public class MessageObject {
             }
         }
         return false;
+    }
+
+    public byte[] getWaveform() {
+        if (getDocument() == null) {
+            return null;
+        }
+        int i = 0;
+        for (int i2 = 0; i2 < getDocument().attributes.size(); i2++) {
+            TLRPC$DocumentAttribute tLRPC$DocumentAttribute = getDocument().attributes.get(i2);
+            if (tLRPC$DocumentAttribute instanceof TLRPC$TL_documentAttributeAudio) {
+                byte[] bArr = tLRPC$DocumentAttribute.waveform;
+                if (bArr == null || bArr.length == 0) {
+                    MediaController.getInstance().generateWaveform(this);
+                }
+                return tLRPC$DocumentAttribute.waveform;
+            }
+        }
+        if (!isRoundVideo()) {
+            return null;
+        }
+        if (this.randomWaveform == null) {
+            this.randomWaveform = new byte[120];
+            while (true) {
+                byte[] bArr2 = this.randomWaveform;
+                if (i >= bArr2.length) {
+                    break;
+                }
+                bArr2[i] = (byte) (Math.random() * 255.0d);
+                i++;
+            }
+        }
+        return this.randomWaveform;
     }
 }

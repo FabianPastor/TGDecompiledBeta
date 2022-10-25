@@ -369,7 +369,10 @@ public class SenderSelectPopup extends ActionBarPopupWindow {
             this.bulletinContainer.animate().alpha(0.0f).setDuration(150L).setListener(new AnimatorListenerAdapter() { // from class: org.telegram.ui.Components.SenderSelectPopup.6
                 @Override // android.animation.AnimatorListenerAdapter, android.animation.Animator.AnimatorListener
                 public void onAnimationEnd(Animator animator) {
-                    windowManager.removeViewImmediate(SenderSelectPopup.this.bulletinContainer);
+                    try {
+                        windowManager.removeViewImmediate(SenderSelectPopup.this.bulletinContainer);
+                    } catch (Exception unused) {
+                    }
                     if (SenderSelectPopup.this.bulletinHideCallback != null) {
                         AndroidUtilities.cancelRunOnUIThread(SenderSelectPopup.this.bulletinHideCallback);
                     }

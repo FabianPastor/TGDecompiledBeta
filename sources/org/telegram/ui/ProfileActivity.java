@@ -5078,8 +5078,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             if (i == this.bioRow && ((tLRPC$UserFull = this.userInfo) == null || TextUtils.isEmpty(tLRPC$UserFull.about))) {
                 return false;
             }
-            boolean z = view2 instanceof AboutLinkCell;
-            if (z && ((AboutLinkCell) view2).onClick()) {
+            if ((view2 instanceof AboutLinkCell) && ((AboutLinkCell) view2).onClick()) {
                 return false;
             }
             String str4 = null;
@@ -5107,7 +5106,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 return false;
             }
             final String[] strArr = {"und"};
-            final boolean z2 = MessagesController.getGlobalMainSettings().getBoolean("translate_button", false);
+            final boolean z = MessagesController.getGlobalMainSettings().getBoolean("translate_button", false);
             final boolean[] zArr = new boolean[1];
             zArr[0] = i == this.bioRow || i == this.channelInfoRow || i == this.userInfoRow;
             final String language = LocaleController.getInstance().getCurrentLocale().getLanguage();
@@ -5122,7 +5121,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     LanguageDetector.detectLanguage(str5, new LanguageDetector.StringCallback() { // from class: org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda37
                         @Override // org.telegram.messenger.LanguageDetector.StringCallback
                         public final void run(String str6) {
-                            ProfileActivity.this.lambda$processOnClickOrPress$27(strArr, zArr, language, z2, runnable, str6);
+                            ProfileActivity.this.lambda$processOnClickOrPress$27(strArr, zArr, language, z, runnable, str6);
                         }
                     }, new LanguageDetector.ExceptionCallback() { // from class: org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda36
                         @Override // org.telegram.messenger.LanguageDetector.ExceptionCallback
@@ -5136,7 +5135,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             } else {
                 runnable.run();
             }
-            return !z;
+            return true;
         }
     }
 
@@ -5299,7 +5298,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     public /* synthetic */ void lambda$processOnClickOrPress$27(String[] strArr, boolean[] zArr, String str, boolean z, Runnable runnable, String str2) {
         TLRPC$Chat tLRPC$Chat;
         strArr[0] = str2;
-        zArr[0] = str2 != null && (!str2.equals(str) || str2.equals("und")) && ((z && !RestrictedLanguagesSelectActivity.getRestrictedLanguages().contains(str2)) || ((tLRPC$Chat = this.currentChat) != null && ((tLRPC$Chat.has_link || tLRPC$Chat.username != null) && ("uk".equals(str2) || "ru".equals(str2)))));
+        zArr[0] = str2 != null && (!str2.equals(str) || str2.equals("und")) && ((z && !RestrictedLanguagesSelectActivity.getRestrictedLanguages().contains(str2)) || ((tLRPC$Chat = this.currentChat) != null && ((tLRPC$Chat.has_link || ChatObject.isPublic(tLRPC$Chat)) && ("uk".equals(str2) || "ru".equals(str2)))));
         runnable.run();
     }
 
@@ -7998,7 +7997,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     TextDetailCell textDetailCell2 = new TextDetailCell(context, resourcesProvider, z);
                     textDetailCell2.setContentDescriptionValueFirst(true);
                     final ProfileActivity profileActivity = ProfileActivity.this;
-                    textDetailCell2.setImageClickListener(new View.OnClickListener() { // from class: org.telegram.ui.ProfileActivity$ListAdapter$$ExternalSyntheticLambda3
+                    textDetailCell2.setImageClickListener(new View.OnClickListener() { // from class: org.telegram.ui.ProfileActivity$ListAdapter$$ExternalSyntheticLambda1
                         @Override // android.view.View.OnClickListener
                         public final void onClick(View view) {
                             ProfileActivity.access$27200(ProfileActivity.this, view);
@@ -8197,34 +8196,14 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         */
         public void onBindViewHolder(androidx.recyclerview.widget.RecyclerView.ViewHolder r23, final int r24) {
             /*
-                Method dump skipped, instructions count: 3456
+                Method dump skipped, instructions count: 3378
                 To view this dump add '--comments-level debug' option
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ProfileActivity.ListAdapter.onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder, int):void");
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$onBindViewHolder$1(TextDetailCell textDetailCell, int i, View view) {
-            ProfileActivity.this.listView.clickItem(textDetailCell, i);
-        }
-
-        /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ boolean lambda$onBindViewHolder$2(int i, TextDetailCell textDetailCell, View view) {
-            return ProfileActivity.this.processOnClickOrPress(i, textDetailCell, 0.0f, 0.0f);
-        }
-
-        /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$onBindViewHolder$3(TextDetailCell textDetailCell, int i, View view) {
-            ProfileActivity.this.listView.clickItem(textDetailCell, i);
-        }
-
-        /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ boolean lambda$onBindViewHolder$4(int i, TextDetailCell textDetailCell, View view) {
-            return ProfileActivity.this.processOnClickOrPress(i, textDetailCell, 0.0f, 0.0f);
-        }
-
-        /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$onBindViewHolder$5(View view) {
+        public /* synthetic */ void lambda$onBindViewHolder$1(View view) {
             if (ProfileActivity.this.userInfo != null) {
                 ProfileActivity.this.presentFragment(new ChangeBioActivity());
             }

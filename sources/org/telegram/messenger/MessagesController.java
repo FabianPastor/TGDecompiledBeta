@@ -15166,44 +15166,44 @@ public class MessagesController extends BaseController implements NotificationCe
         return z;
     }
 
-    /* JADX WARN: Code restructure failed: missing block: B:2171:0x1410, code lost:
-        if (r0.action.user_id == r31) goto L916;
+    /* JADX WARN: Code restructure failed: missing block: B:2167:0x1377, code lost:
+        if (r0.action.user_id == r31) goto L914;
      */
-    /* JADX WARN: Removed duplicated region for block: B:2035:0x119f  */
-    /* JADX WARN: Removed duplicated region for block: B:2075:0x12a4  */
-    /* JADX WARN: Removed duplicated region for block: B:2086:0x12d1  */
-    /* JADX WARN: Removed duplicated region for block: B:2088:0x12d4  */
-    /* JADX WARN: Removed duplicated region for block: B:2123:0x1346  */
-    /* JADX WARN: Removed duplicated region for block: B:2161:0x13de  */
-    /* JADX WARN: Removed duplicated region for block: B:2204:0x1492  */
-    /* JADX WARN: Removed duplicated region for block: B:2205:0x1498  */
-    /* JADX WARN: Removed duplicated region for block: B:2209:0x14a3  */
-    /* JADX WARN: Removed duplicated region for block: B:2220:0x14fb  */
-    /* JADX WARN: Removed duplicated region for block: B:2244:0x155f  */
-    /* JADX WARN: Removed duplicated region for block: B:2251:0x1589  */
-    /* JADX WARN: Removed duplicated region for block: B:2253:0x158e  */
-    /* JADX WARN: Removed duplicated region for block: B:2257:0x1597  */
-    /* JADX WARN: Removed duplicated region for block: B:2260:0x15a7  */
-    /* JADX WARN: Removed duplicated region for block: B:2263:0x15ba  */
-    /* JADX WARN: Removed duplicated region for block: B:2273:0x15d4  */
-    /* JADX WARN: Removed duplicated region for block: B:2274:0x15da  */
-    /* JADX WARN: Removed duplicated region for block: B:2281:0x1602  */
-    /* JADX WARN: Removed duplicated region for block: B:2287:0x1617  */
-    /* JADX WARN: Removed duplicated region for block: B:2524:0x1bf3  */
-    /* JADX WARN: Removed duplicated region for block: B:2530:0x1CLASSNAME  */
-    /* JADX WARN: Removed duplicated region for block: B:2532:0x1CLASSNAME  */
-    /* JADX WARN: Removed duplicated region for block: B:2537:0x1c5b  */
-    /* JADX WARN: Removed duplicated region for block: B:2542:0x1CLASSNAME  */
-    /* JADX WARN: Removed duplicated region for block: B:2547:0x1cae  */
-    /* JADX WARN: Removed duplicated region for block: B:2552:0x1cd4  */
-    /* JADX WARN: Removed duplicated region for block: B:2580:0x13d3 A[SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:2032:0x110b  */
+    /* JADX WARN: Removed duplicated region for block: B:2072:0x120c  */
+    /* JADX WARN: Removed duplicated region for block: B:2082:0x1238  */
+    /* JADX WARN: Removed duplicated region for block: B:2084:0x123b  */
+    /* JADX WARN: Removed duplicated region for block: B:2120:0x12b0  */
+    /* JADX WARN: Removed duplicated region for block: B:2157:0x1345  */
+    /* JADX WARN: Removed duplicated region for block: B:2200:0x13f9  */
+    /* JADX WARN: Removed duplicated region for block: B:2201:0x13ff  */
+    /* JADX WARN: Removed duplicated region for block: B:2205:0x140a  */
+    /* JADX WARN: Removed duplicated region for block: B:2216:0x145f  */
+    /* JADX WARN: Removed duplicated region for block: B:2239:0x14c1  */
+    /* JADX WARN: Removed duplicated region for block: B:2246:0x14f4  */
+    /* JADX WARN: Removed duplicated region for block: B:2248:0x14f9  */
+    /* JADX WARN: Removed duplicated region for block: B:2252:0x1502  */
+    /* JADX WARN: Removed duplicated region for block: B:2255:0x1512  */
+    /* JADX WARN: Removed duplicated region for block: B:2258:0x1525  */
+    /* JADX WARN: Removed duplicated region for block: B:2268:0x153f  */
+    /* JADX WARN: Removed duplicated region for block: B:2269:0x1545  */
+    /* JADX WARN: Removed duplicated region for block: B:2276:0x156b  */
+    /* JADX WARN: Removed duplicated region for block: B:2282:0x1580  */
+    /* JADX WARN: Removed duplicated region for block: B:2519:0x1b37  */
+    /* JADX WARN: Removed duplicated region for block: B:2525:0x1b6a  */
+    /* JADX WARN: Removed duplicated region for block: B:2527:0x1b7a  */
+    /* JADX WARN: Removed duplicated region for block: B:2532:0x1ba1  */
+    /* JADX WARN: Removed duplicated region for block: B:2537:0x1bcd  */
+    /* JADX WARN: Removed duplicated region for block: B:2542:0x1bf4  */
+    /* JADX WARN: Removed duplicated region for block: B:2547:0x1c1a  */
+    /* JADX WARN: Removed duplicated region for block: B:2576:0x133a A[SYNTHETIC] */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public boolean processUpdateArray(java.util.ArrayList<org.telegram.tgnet.TLRPC$Update> r81, final java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r82, final java.util.ArrayList<org.telegram.tgnet.TLRPC$Chat> r83, boolean r84, final int r85) {
+    public boolean processUpdateArray(java.util.ArrayList<org.telegram.tgnet.TLRPC$Update> r80, final java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r81, final java.util.ArrayList<org.telegram.tgnet.TLRPC$Chat> r82, boolean r83, final int r84) {
         /*
-            Method dump skipped, instructions count: 7418
+            Method dump skipped, instructions count: 7232
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.processUpdateArray(java.util.ArrayList, java.util.ArrayList, java.util.ArrayList, boolean, int):boolean");
@@ -15646,8 +15646,8 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public /* synthetic */ void lambda$getSponsoredMessages$344(final long j, final SponsoredMessagesInfo sponsoredMessagesInfo, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        ArrayList arrayList = null;
-        if (tLObject != null) {
+        final ArrayList arrayList = null;
+        if (tLObject instanceof TLRPC$TL_messages_sponsoredMessages) {
             final TLRPC$TL_messages_sponsoredMessages tLRPC$TL_messages_sponsoredMessages = (TLRPC$TL_messages_sponsoredMessages) tLObject;
             if (!tLRPC$TL_messages_sponsoredMessages.messages.isEmpty()) {
                 arrayList = new ArrayList();
@@ -15698,11 +15698,10 @@ public class MessagesController extends BaseController implements NotificationCe
                 }
             }
         }
-        final ArrayList arrayList2 = arrayList;
         AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesController$$ExternalSyntheticLambda121
             @Override // java.lang.Runnable
             public final void run() {
-                MessagesController.this.lambda$getSponsoredMessages$343(arrayList2, j, sponsoredMessagesInfo);
+                MessagesController.this.lambda$getSponsoredMessages$343(arrayList, j, sponsoredMessagesInfo);
             }
         });
     }

@@ -183,6 +183,7 @@ public class Theme {
     public static Drawable chat_commentArrowDrawable = null;
     public static Drawable chat_commentDrawable = null;
     public static Drawable chat_commentStickerDrawable = null;
+    public static TextPaint chat_commentTextPaint = null;
     public static Paint chat_composeBackgroundPaint = null;
     public static Drawable chat_composeShadowDrawable = null;
     public static Drawable chat_composeShadowRoundDrawable = null;
@@ -5566,6 +5567,7 @@ public class Theme {
             chat_replyNamePaint = textPaint10;
             textPaint10.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             chat_replyTextPaint = new TextPaint(1);
+            chat_commentTextPaint = new TextPaint(1);
             TextPaint textPaint11 = new TextPaint(1);
             chat_instantViewPaint = textPaint11;
             textPaint11.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -5954,6 +5956,8 @@ public class Theme {
         chat_contextResult_descriptionTextPaint.setTextSize(AndroidUtilities.dp(13.0f));
         chat_radialProgressPaint.setStrokeWidth(AndroidUtilities.dp(3.0f));
         chat_radialProgress2Paint.setStrokeWidth(AndroidUtilities.dp(2.0f));
+        chat_commentTextPaint.setTextSize(AndroidUtilities.dp(14.0f));
+        chat_commentTextPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
     }
 
     public static void refreshAttachButtonsColors() {

@@ -1151,6 +1151,18 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             protected boolean allowSelectChildAtPosition(float f, float f2) {
                 return f2 >= ((float) (AndroidUtilities.dp((!ShareAlert.this.darkTheme || ShareAlert.this.linkToCopy[1] == null) ? 58.0f : 111.0f) + (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0)));
             }
+
+            @Override // androidx.recyclerview.widget.RecyclerView, android.view.View
+            public void draw(Canvas canvas) {
+                if (ShareAlert.this.topicsGridView.getVisibility() != 8) {
+                    canvas.save();
+                    canvas.clipRect(0, ShareAlert.this.scrollOffsetY + AndroidUtilities.dp((!ShareAlert.this.darkTheme || ShareAlert.this.linkToCopy[1] == null) ? 58.0f : 111.0f), getWidth(), getHeight());
+                }
+                super.draw(canvas);
+                if (ShareAlert.this.topicsGridView.getVisibility() != 8) {
+                    canvas.restore();
+                }
+            }
         };
         this.searchGridView = recyclerListView6;
         recyclerListView6.setSelectorDrawableColor(0);
@@ -1865,6 +1877,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
 
         public /* synthetic */ void lambda$didReceivedNotification$1(DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
             ShareAlert.this.gridView.setVisibility(8);
+            ShareAlert.this.searchGridView.setVisibility(8);
             ShareAlert.this.searchView.setVisibility(8);
             ShareAlert.this.topicsAnimation = null;
         }
@@ -1883,8 +1896,8 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
         }
         final View view = null;
         this.selectedTopicDialog = null;
-        for (int i = 0; i < this.gridView.getChildCount(); i++) {
-            View childAt = this.gridView.getChildAt(i);
+        for (int i = 0; i < getMainGridView().getChildCount(); i++) {
+            View childAt = getMainGridView().getChildAt(i);
             if ((childAt instanceof ShareDialogCell) && ((ShareDialogCell) childAt).getCurrentDialog() == tLRPC$Dialog.id) {
                 view = childAt;
             }
@@ -1896,7 +1909,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
         if (springAnimation != null) {
             springAnimation.cancel();
         }
-        this.gridView.setVisibility(0);
+        getMainGridView().setVisibility(0);
         this.searchView.setVisibility(0);
         final int[] iArr = new int[2];
         SpringAnimation springAnimation2 = new SpringAnimation(new FloatValueHolder(1000.0f));
@@ -1940,13 +1953,14 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
         this.topicsGridView.setScaleX(f3);
         this.topicsGridView.setScaleY(f3);
         this.topicsGridView.setAlpha(f);
-        this.gridView.setPivotX(view.getX() + (view.getWidth() / 2.0f));
-        this.gridView.setPivotY(view.getY() + (view.getHeight() / 2.0f));
+        RecyclerListView mainGridView = getMainGridView();
+        mainGridView.setPivotX(view.getX() + (view.getWidth() / 2.0f));
+        mainGridView.setPivotY(view.getY() + (view.getHeight() / 2.0f));
         float f4 = f2 + 1.0f;
-        this.gridView.setScaleX(f4);
-        this.gridView.setScaleY(f4);
+        mainGridView.setScaleX(f4);
+        mainGridView.setScaleY(f4);
         float f5 = 1.0f - f;
-        this.gridView.setAlpha(f5);
+        mainGridView.setAlpha(f5);
         this.searchView.setPivotX(searchField.getWidth() / 2.0f);
         this.searchView.setPivotY(0.0f);
         float f6 = (0.1f * f5) + 0.9f;
@@ -1959,8 +1973,8 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
         this.topicsBackActionBar.setAlpha(f);
         this.topicsGridView.getLocationInWindow(iArr);
         float interpolation = CubicBezierInterpolator.EASE_OUT.getInterpolation(f);
-        for (int i = 0; i < this.gridView.getChildCount(); i++) {
-            View childAt = this.gridView.getChildAt(i);
+        for (int i = 0; i < mainGridView.getChildCount(); i++) {
+            View childAt = mainGridView.getChildAt(i);
             if (childAt instanceof ShareDialogCell) {
                 childAt.setTranslationX((childAt.getX() - view.getX()) * 0.75f * interpolation);
                 childAt.setTranslationY((childAt.getY() - view.getY()) * 0.75f * interpolation);
@@ -1981,7 +1995,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             }
         }
         this.containerView.requestLayout();
-        this.gridView.invalidate();
+        mainGridView.invalidate();
     }
 
     @Override // org.telegram.ui.ActionBar.BottomSheet
@@ -2249,7 +2263,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                         }
                         long keyAt2 = this.selectedDialogs.keyAt(i5);
                         TLRPC$TL_forumTopic tLRPC$TL_forumTopic3 = this.selectedDialogTopics.get(this.selectedDialogs.get(keyAt2));
-                        MessageObject messageObject2 = tLRPC$TL_forumTopic3 != null ? new MessageObject(this.currentAccount, tLRPC$TL_forumTopic3.topMessage, r1, r1) : tLRPC$TL_forumTopic2;
+                        MessageObject messageObject2 = tLRPC$TL_forumTopic3 != null ? new MessageObject(this.currentAccount, tLRPC$TL_forumTopic3.topicStartMessage, r1, r1) : tLRPC$TL_forumTopic2;
                         if (this.frameLayout2.getTag() == null || this.commentTextView.length() <= 0) {
                             j2 = keyAt2;
                             i2 = i5;
@@ -2307,7 +2321,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                             TLRPC$TL_forumTopic tLRPC$TL_forumTopic4 = this.selectedDialogTopics.get(this.selectedDialogs.get(keyAt3));
                             if (tLRPC$TL_forumTopic4 != null) {
                                 c = 0;
-                                messageObject = new MessageObject(this.currentAccount, tLRPC$TL_forumTopic4.topMessage, false, false);
+                                messageObject = new MessageObject(this.currentAccount, tLRPC$TL_forumTopic4.topicStartMessage, false, false);
                             } else {
                                 c = 0;
                                 messageObject = tLRPC$TL_forumTopic2;
@@ -2355,6 +2369,10 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             return paddingTop - i;
         }
         return -1000;
+    }
+
+    private RecyclerListView getMainGridView() {
+        return this.searchIsVisible ? this.searchGridView : this.gridView;
     }
 
     public void setDelegate(ShareAlertDelegate shareAlertDelegate) {

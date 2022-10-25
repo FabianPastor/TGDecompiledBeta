@@ -727,13 +727,16 @@ public class ChangeUsernameActivity extends BaseFragment {
 
         /* JADX INFO: Access modifiers changed from: private */
         public void update() {
+            if (this.text2View.getVisibility() == 0) {
+                this.text2View.measure(View.MeasureSpec.makeMeasureSpec((getMeasuredWidth() - getPaddingLeft()) - getPaddingRight(), NUM), View.MeasureSpec.makeMeasureSpec(9999999, Integer.MIN_VALUE));
+            }
             ValueAnimator valueAnimator = this.heightUpdateAnimator;
             if (valueAnimator != null) {
                 valueAnimator.cancel();
             }
             Integer num = this.height;
             final int measuredHeight = num == null ? getMeasuredHeight() : num.intValue();
-            final int dp = AndroidUtilities.dp(27.0f) + this.text1View.getHeight() + ((this.text2View.getVisibility() != 0 || TextUtils.isEmpty(this.text2View.getText())) ? 0 : this.text2View.getHeight() + AndroidUtilities.dp(8.0f));
+            final int dp = AndroidUtilities.dp(27.0f) + this.text1View.getHeight() + ((this.text2View.getVisibility() != 0 || TextUtils.isEmpty(this.text2View.getText())) ? 0 : this.text2View.getMeasuredHeight() + AndroidUtilities.dp(8.0f));
             final float translationY = this.text1View.getTranslationY();
             final float measuredHeight2 = (this.text2View.getVisibility() != 0 || TextUtils.isEmpty(this.text2View.getText())) ? 0.0f : this.text2View.getMeasuredHeight() + AndroidUtilities.dp(8.0f);
             ValueAnimator ofFloat = ValueAnimator.ofFloat(0.0f, 1.0f);

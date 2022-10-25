@@ -49,6 +49,7 @@ import java.util.Iterator;
 import java.util.List;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ChatThemeController;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
@@ -290,7 +291,7 @@ public class QrActivity extends BaseFragment {
                 imageLocation2 = null;
                 avatarDrawable = null;
             } else {
-                str = chat.username;
+                str = ChatObject.getPublicUsername(chat);
                 AvatarDrawable avatarDrawable3 = new AvatarDrawable(chat);
                 ImageLocation forChat = ImageLocation.getForChat(chat, 1);
                 str2 = null;
