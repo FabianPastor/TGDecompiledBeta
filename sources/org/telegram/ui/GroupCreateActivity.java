@@ -1444,7 +1444,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         /* JADX WARN: Multi-variable type inference failed */
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1786onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1790onCreateViewHolder(ViewGroup viewGroup, int i) {
             View groupCreateSectionCell;
             GroupCreateUserCell groupCreateUserCell;
             if (i != 0) {
@@ -1669,18 +1669,18 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        /* JADX WARN: Code restructure failed: missing block: B:38:0x00c8, code lost:
+        /* JADX WARN: Code restructure failed: missing block: B:38:0x00ca, code lost:
             if (r13.contains(" " + r3) != false) goto L53;
          */
-        /* JADX WARN: Removed duplicated region for block: B:54:0x0128 A[LOOP:1: B:29:0x008c->B:54:0x0128, LOOP_END] */
-        /* JADX WARN: Removed duplicated region for block: B:63:0x00d8 A[SYNTHETIC] */
+        /* JADX WARN: Removed duplicated region for block: B:54:0x012a A[LOOP:1: B:29:0x008e->B:54:0x012a, LOOP_END] */
+        /* JADX WARN: Removed duplicated region for block: B:63:0x00da A[SYNTHETIC] */
         /*
             Code decompiled incorrectly, please refer to instructions dump.
             To view partially-correct add '--show-bad-code' argument
         */
         public /* synthetic */ void lambda$searchDialogs$1(java.lang.String r18) {
             /*
-                Method dump skipped, instructions count: 316
+                Method dump skipped, instructions count: 318
                 To view this dump add '--comments-level debug' option
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.GroupCreateActivity.GroupCreateAdapter.lambda$searchDialogs$1(java.lang.String):void");

@@ -51,10 +51,10 @@ public abstract class TLRPC$Chat extends TLObject {
         TLRPC$Chat tLRPC$Chat;
         switch (i) {
             case -2107528095:
-                tLRPC$Chat = new TLRPC$Chat() { // from class: org.telegram.tgnet.TLRPC$TL_channel_layer147
+                tLRPC$Chat = new TLRPC$TL_channel() { // from class: org.telegram.tgnet.TLRPC$TL_channel_layer147
                     public static int constructor = -NUM;
 
-                    @Override // org.telegram.tgnet.TLObject
+                    @Override // org.telegram.tgnet.TLRPC$TL_channel, org.telegram.tgnet.TLObject
                     public void readParams(AbstractSerializedData abstractSerializedData2, boolean z2) {
                         int readInt32 = abstractSerializedData2.readInt32(z2);
                         this.flags = readInt32;
@@ -119,7 +119,7 @@ public abstract class TLRPC$Chat extends TLObject {
                         }
                     }
 
-                    @Override // org.telegram.tgnet.TLObject
+                    @Override // org.telegram.tgnet.TLRPC$TL_channel, org.telegram.tgnet.TLObject
                     public void serializeToStream(AbstractSerializedData abstractSerializedData2) {
                         abstractSerializedData2.writeInt32(constructor);
                         int i2 = this.creator ? this.flags | 1 : this.flags & (-2);

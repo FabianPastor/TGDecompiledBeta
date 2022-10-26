@@ -2242,29 +2242,6 @@ public class AlertsCreator {
         });
     }
 
-    public static void showDiscardTopicDialog(BaseFragment baseFragment, Theme.ResourcesProvider resourcesProvider, final Runnable runnable) {
-        if (baseFragment == null || baseFragment.getParentActivity() == null) {
-            return;
-        }
-        AlertDialog.Builder builder = new AlertDialog.Builder(baseFragment.getParentActivity(), resourcesProvider);
-        builder.setTitle(LocaleController.getString("DiscardTopic", R.string.DiscardTopic));
-        builder.setMessage(LocaleController.getString("DiscardTopicMessage", R.string.DiscardTopicMessage));
-        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), new DialogInterface.OnClickListener() { // from class: org.telegram.ui.Components.AlertsCreator.7
-            @Override // android.content.DialogInterface.OnClickListener
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-            }
-        });
-        builder.setPositiveButton(LocaleController.getString("Discard", R.string.Discard), new DialogInterface.OnClickListener() { // from class: org.telegram.ui.Components.AlertsCreator.8
-            @Override // android.content.DialogInterface.OnClickListener
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-                runnable.run();
-            }
-        });
-        baseFragment.showDialog(builder.create());
-    }
-
     public static void createBlockDialogAlert(BaseFragment baseFragment, int i, boolean z, TLRPC$User tLRPC$User, final BlockDialogCallback blockDialogCallback) {
         String string;
         int i2;

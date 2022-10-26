@@ -225,6 +225,8 @@ public class TopicCreateFragment extends BaseFragment {
         if (tLRPC$TL_forumTopic != null) {
             this.editTextBoldCursor.setText(tLRPC$TL_forumTopic.title);
             selectEmoji(Long.valueOf(this.topicForEdit.icon_emoji_id), true);
+        } else {
+            selectEmoji(0L, true);
         }
         return this.fragmentView;
     }
@@ -405,6 +407,7 @@ public class TopicCreateFragment extends BaseFragment {
     /* JADX INFO: Access modifiers changed from: private */
     public void selectEmoji(Long l, boolean z) {
         long longValue = l == null ? 0L : l.longValue();
+        this.selectAnimatedEmojiDialog.setSelected(Long.valueOf(longValue));
         if (this.selectedEmojiDocumentId == longValue) {
             return;
         }
@@ -422,7 +425,6 @@ public class TopicCreateFragment extends BaseFragment {
             return;
         }
         this.selectedEmojiDocumentId = longValue;
-        this.selectAnimatedEmojiDialog.setSelected(Long.valueOf(longValue));
         if (longValue != 0) {
             this.backupImageView[1].setAnimatedEmojiDrawable(new AnimatedEmojiDrawable(10, this.currentAccount, longValue));
             this.backupImageView[1].setImageDrawable(null);

@@ -278,8 +278,8 @@ public class SharedConfig {
         return i;
     }
 
-    /* JADX WARN: Removed duplicated region for block: B:38:0x016a A[Catch: Exception -> 0x0188, all -> 0x03fa, TryCatch #1 {Exception -> 0x0188, blocks: (B:22:0x011b, B:24:0x0123, B:26:0x0133, B:27:0x0147, B:38:0x016a, B:40:0x016e, B:41:0x0170, B:43:0x0174, B:45:0x017a, B:47:0x0180, B:36:0x0164), top: B:89:0x011b, outer: #2 }] */
-    /* JADX WARN: Removed duplicated region for block: B:40:0x016e A[Catch: Exception -> 0x0188, all -> 0x03fa, TryCatch #1 {Exception -> 0x0188, blocks: (B:22:0x011b, B:24:0x0123, B:26:0x0133, B:27:0x0147, B:38:0x016a, B:40:0x016e, B:41:0x0170, B:43:0x0174, B:45:0x017a, B:47:0x0180, B:36:0x0164), top: B:89:0x011b, outer: #2 }] */
+    /* JADX WARN: Removed duplicated region for block: B:38:0x016a A[Catch: Exception -> 0x0188, all -> 0x03fc, TryCatch #1 {Exception -> 0x0188, blocks: (B:22:0x011b, B:24:0x0123, B:26:0x0133, B:27:0x0147, B:38:0x016a, B:40:0x016e, B:41:0x0170, B:43:0x0174, B:45:0x017a, B:47:0x0180, B:36:0x0164), top: B:89:0x011b, outer: #3 }] */
+    /* JADX WARN: Removed duplicated region for block: B:40:0x016e A[Catch: Exception -> 0x0188, all -> 0x03fc, TryCatch #1 {Exception -> 0x0188, blocks: (B:22:0x011b, B:24:0x0123, B:26:0x0133, B:27:0x0147, B:38:0x016a, B:40:0x016e, B:41:0x0170, B:43:0x0174, B:45:0x017a, B:47:0x0180, B:36:0x0164), top: B:89:0x011b, outer: #3 }] */
     /* JADX WARN: Removed duplicated region for block: B:65:0x0232  */
     /* JADX WARN: Removed duplicated region for block: B:66:0x0235  */
     /* JADX WARN: Removed duplicated region for block: B:69:0x0245  */
@@ -290,7 +290,7 @@ public class SharedConfig {
     */
     public static void loadConfig() {
         /*
-            Method dump skipped, instructions count: 1021
+            Method dump skipped, instructions count: 1023
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SharedConfig.loadConfig():void");

@@ -3314,10 +3314,10 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    /* JADX WARN: Code restructure failed: missing block: B:19:0x0031, code lost:
+    /* JADX WARN: Code restructure failed: missing block: B:19:0x002f, code lost:
         if (r10.chat.has_geo != false) goto L19;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:23:0x0079, code lost:
+    /* JADX WARN: Code restructure failed: missing block: B:23:0x0077, code lost:
         if (r14.checkCanOpenChat(r7, r0.get(r0.size() - 1)) != false) goto L33;
      */
     /*
@@ -3326,7 +3326,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
     */
     public /* synthetic */ void lambda$runLinkRequest$52(org.telegram.tgnet.TLRPC$TL_error r10, org.telegram.tgnet.TLObject r11, int r12, final org.telegram.ui.ActionBar.AlertDialog r13, java.lang.String r14) {
         /*
-            Method dump skipped, instructions count: 329
+            Method dump skipped, instructions count: 327
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LaunchActivity.lambda$runLinkRequest$52(org.telegram.tgnet.TLRPC$TL_error, org.telegram.tgnet.TLObject, int, org.telegram.ui.ActionBar.AlertDialog, java.lang.String):void");

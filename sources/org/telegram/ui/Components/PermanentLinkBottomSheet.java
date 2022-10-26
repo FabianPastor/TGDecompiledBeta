@@ -8,6 +8,7 @@ import androidx.core.graphics.ColorUtils;
 import androidx.core.widget.NestedScrollView;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.R;
@@ -125,8 +126,8 @@ public class PermanentLinkBottomSheet extends BottomSheet {
         nestedScrollView.addView(linearLayout);
         setCustomView(nestedScrollView);
         TLRPC$Chat chat = MessagesController.getInstance(UserConfig.selectedAccount).getChat(Long.valueOf(j));
-        if (chat != null && chat.username != null) {
-            linkActionView.setLink("https://t.me/" + chat.username);
+        if (chat != null && ChatObject.isPublic(chat)) {
+            linkActionView.setLink("https://t.me/" + ChatObject.getPublicUsername(chat));
             textView3.setVisibility(8);
         } else if (tLRPC$ChatFull != null && (tLRPC$TL_chatInviteExported = tLRPC$ChatFull.exported_invite) != null) {
             linkActionView.setLink(tLRPC$TL_chatInviteExported.link);

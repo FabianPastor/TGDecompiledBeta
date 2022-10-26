@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.UserConfig;
@@ -125,9 +126,10 @@ public class MentionCell extends LinearLayout {
             this.imageView.setImageDrawable(this.avatarDrawable);
         }
         this.nameTextView.setText(tLRPC$Chat.title);
-        if (tLRPC$Chat.username != null) {
+        String publicUsername = ChatObject.getPublicUsername(tLRPC$Chat);
+        if (publicUsername != null) {
             TextView textView = this.usernameTextView;
-            textView.setText("@" + tLRPC$Chat.username);
+            textView.setText("@" + publicUsername);
         } else {
             this.usernameTextView.setText("");
         }

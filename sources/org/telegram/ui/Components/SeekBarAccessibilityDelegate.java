@@ -31,7 +31,7 @@ public abstract class SeekBarAccessibilityDelegate extends View.AccessibilityDel
     protected abstract void doScroll(View view, boolean z);
 
     /* renamed from: getContentDescription */
-    protected CharSequence mo2184getContentDescription(View view) {
+    protected CharSequence mo2188getContentDescription(View view) {
         return null;
     }
 
@@ -97,9 +97,9 @@ public abstract class SeekBarAccessibilityDelegate extends View.AccessibilityDel
 
     public void onInitializeAccessibilityNodeInfoInternal(View view, AccessibilityNodeInfo accessibilityNodeInfo) {
         accessibilityNodeInfo.setClassName(SEEK_BAR_CLASS_NAME);
-        CharSequence mo2184getContentDescription = mo2184getContentDescription(view);
-        if (!TextUtils.isEmpty(mo2184getContentDescription)) {
-            accessibilityNodeInfo.setText(mo2184getContentDescription);
+        CharSequence mo2188getContentDescription = mo2188getContentDescription(view);
+        if (!TextUtils.isEmpty(mo2188getContentDescription)) {
+            accessibilityNodeInfo.setText(mo2188getContentDescription);
         }
         if (Build.VERSION.SDK_INT >= 21) {
             if (canScrollBackward(view)) {

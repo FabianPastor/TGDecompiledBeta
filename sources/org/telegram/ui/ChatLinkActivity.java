@@ -918,18 +918,18 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        /* JADX WARN: Code restructure failed: missing block: B:34:0x00af, code lost:
-            if (r12.contains(" " + r15) != false) goto L47;
+        /* JADX WARN: Code restructure failed: missing block: B:34:0x00b2, code lost:
+            if (r12.contains(" " + r3) != false) goto L67;
          */
-        /* JADX WARN: Removed duplicated region for block: B:47:0x00fd A[LOOP:1: B:25:0x0073->B:47:0x00fd, LOOP_END] */
-        /* JADX WARN: Removed duplicated region for block: B:56:0x00c1 A[SYNTHETIC] */
+        /* JADX WARN: Removed duplicated region for block: B:63:0x0139 A[LOOP:1: B:25:0x0074->B:63:0x0139, LOOP_END] */
+        /* JADX WARN: Removed duplicated region for block: B:72:0x00fe A[SYNTHETIC] */
         /*
             Code decompiled incorrectly, please refer to instructions dump.
             To view partially-correct add '--show-bad-code' argument
         */
-        public /* synthetic */ void lambda$processSearch$1(java.lang.String r18, java.util.ArrayList r19) {
+        public /* synthetic */ void lambda$processSearch$1(java.lang.String r20, java.util.ArrayList r21) {
             /*
-                Method dump skipped, instructions count: 269
+                Method dump skipped, instructions count: 339
                 To view this dump add '--comments-level debug' option
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatLinkActivity.SearchAdapter.lambda$processSearch$1(java.lang.String, java.util.ArrayList):void");
@@ -978,7 +978,7 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1786onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1790onCreateViewHolder(ViewGroup viewGroup, int i) {
             ManageChatUserCell manageChatUserCell = new ManageChatUserCell(this.mContext, 6, 2, false);
             manageChatUserCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
             return new RecyclerListView.Holder(manageChatUserCell);
@@ -987,11 +987,11 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
             TLRPC$Chat tLRPC$Chat = this.searchResult.get(i);
-            String str = tLRPC$Chat.username;
+            String publicUsername = ChatObject.getPublicUsername(tLRPC$Chat);
             CharSequence charSequence = this.searchResultNames.get(i);
             CharSequence charSequence2 = null;
-            if (charSequence != null && !TextUtils.isEmpty(str)) {
-                if (charSequence.toString().startsWith("@" + str)) {
+            if (charSequence != null && !TextUtils.isEmpty(publicUsername)) {
+                if (charSequence.toString().startsWith("@" + publicUsername)) {
                     charSequence2 = charSequence;
                     charSequence = null;
                 }
@@ -1207,7 +1207,7 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1786onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1790onCreateViewHolder(ViewGroup viewGroup, int i) {
             View manageChatUserCell;
             View view;
             if (i == 0) {

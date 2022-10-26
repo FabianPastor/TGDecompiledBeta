@@ -511,7 +511,7 @@ public class ChangeUsernameActivity extends BaseFragment {
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1786onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1790onCreateViewHolder(ViewGroup viewGroup, int i) {
             if (i == 0) {
                 HeaderCell headerCell = new HeaderCell(ChangeUsernameActivity.this.getContext());
                 headerCell.setBackgroundColor(ChangeUsernameActivity.this.getThemedColor("windowBackgroundWhite"));

@@ -1166,13 +1166,13 @@ public class MessageObject {
 
     private String getUserName(TLObject tLObject, ArrayList<TLRPC$MessageEntity> arrayList, int i) {
         String str;
-        String str2;
+        String publicUsername;
         long j;
-        String str3;
+        String str2;
         long j2;
         String formatName;
         if (tLObject == null) {
-            str3 = null;
+            str2 = null;
             j2 = 0;
             str = "";
         } else {
@@ -1184,15 +1184,15 @@ public class MessageObject {
                     formatName = ContactsController.formatName(tLRPC$User.first_name, tLRPC$User.last_name);
                 }
                 str = formatName;
-                str2 = tLRPC$User.username;
+                publicUsername = tLRPC$User.username;
                 j = tLRPC$User.id;
             } else {
                 TLRPC$Chat tLRPC$Chat = (TLRPC$Chat) tLObject;
                 str = tLRPC$Chat.title;
-                str2 = tLRPC$Chat.username;
+                publicUsername = ChatObject.getPublicUsername(tLRPC$Chat);
                 j = -tLRPC$Chat.id;
             }
-            str3 = str2;
+            str2 = publicUsername;
             j2 = j;
         }
         if (i >= 0) {
@@ -1202,15 +1202,15 @@ public class MessageObject {
             tLRPC$TL_messageEntityMentionName.length = str.length();
             arrayList.add(tLRPC$TL_messageEntityMentionName);
         }
-        if (!TextUtils.isEmpty(str3)) {
+        if (!TextUtils.isEmpty(str2)) {
             if (i >= 0) {
                 TLRPC$TL_messageEntityMentionName tLRPC$TL_messageEntityMentionName2 = new TLRPC$TL_messageEntityMentionName();
                 tLRPC$TL_messageEntityMentionName2.user_id = j2;
                 tLRPC$TL_messageEntityMentionName2.offset = i + str.length() + 2;
-                tLRPC$TL_messageEntityMentionName2.length = str3.length() + 1;
+                tLRPC$TL_messageEntityMentionName2.length = str2.length() + 1;
                 arrayList.add(tLRPC$TL_messageEntityMentionName2);
             }
-            return String.format("%1$s (@%2$s)", str, str3);
+            return String.format("%1$s (@%2$s)", str, str2);
         }
         return str;
     }
@@ -1999,25 +1999,25 @@ public class MessageObject {
 
     /* JADX WARN: Removed duplicated region for block: B:11:0x002a  */
     /* JADX WARN: Removed duplicated region for block: B:12:0x002c  */
-    /* JADX WARN: Removed duplicated region for block: B:15:0x0039  */
-    /* JADX WARN: Removed duplicated region for block: B:209:0x05ac  */
-    /* JADX WARN: Removed duplicated region for block: B:213:0x05ca  */
-    /* JADX WARN: Removed duplicated region for block: B:232:0x062c  */
-    /* JADX WARN: Removed duplicated region for block: B:233:0x0642  */
-    /* JADX WARN: Removed duplicated region for block: B:249:0x068e  */
-    /* JADX WARN: Removed duplicated region for block: B:250:0x069a  */
-    /* JADX WARN: Removed duplicated region for block: B:280:0x0763  */
-    /* JADX WARN: Removed duplicated region for block: B:284:0x079b  */
-    /* JADX WARN: Removed duplicated region for block: B:528:0x0e49  */
-    /* JADX WARN: Removed duplicated region for block: B:632:0x10d2  */
-    /* JADX WARN: Removed duplicated region for block: B:652:? A[RETURN, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:15:0x0037  */
+    /* JADX WARN: Removed duplicated region for block: B:209:0x05b1  */
+    /* JADX WARN: Removed duplicated region for block: B:213:0x05cf  */
+    /* JADX WARN: Removed duplicated region for block: B:232:0x0631  */
+    /* JADX WARN: Removed duplicated region for block: B:233:0x0647  */
+    /* JADX WARN: Removed duplicated region for block: B:249:0x0693  */
+    /* JADX WARN: Removed duplicated region for block: B:250:0x069f  */
+    /* JADX WARN: Removed duplicated region for block: B:280:0x076c  */
+    /* JADX WARN: Removed duplicated region for block: B:284:0x07a6  */
+    /* JADX WARN: Removed duplicated region for block: B:537:0x0e86  */
+    /* JADX WARN: Removed duplicated region for block: B:641:0x110f  */
+    /* JADX WARN: Removed duplicated region for block: B:661:? A[RETURN, SYNTHETIC] */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    private void updateMessageText(java.util.AbstractMap<java.lang.Long, org.telegram.tgnet.TLRPC$User> r21, java.util.AbstractMap<java.lang.Long, org.telegram.tgnet.TLRPC$Chat> r22, androidx.collection.LongSparseArray<org.telegram.tgnet.TLRPC$User> r23, androidx.collection.LongSparseArray<org.telegram.tgnet.TLRPC$Chat> r24) {
+    private void updateMessageText(java.util.AbstractMap<java.lang.Long, org.telegram.tgnet.TLRPC$User> r23, java.util.AbstractMap<java.lang.Long, org.telegram.tgnet.TLRPC$Chat> r24, androidx.collection.LongSparseArray<org.telegram.tgnet.TLRPC$User> r25, androidx.collection.LongSparseArray<org.telegram.tgnet.TLRPC$Chat> r26) {
         /*
-            Method dump skipped, instructions count: 4309
+            Method dump skipped, instructions count: 4370
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessageObject.updateMessageText(java.util.AbstractMap, java.util.AbstractMap, androidx.collection.LongSparseArray, androidx.collection.LongSparseArray):void");

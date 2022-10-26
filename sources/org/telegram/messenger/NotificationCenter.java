@@ -36,6 +36,7 @@ public class NotificationCenter {
     public static final int chatOnlineCountDidLoad;
     public static final int chatSearchResultsAvailable;
     public static final int chatSearchResultsLoading;
+    public static int chatSwithcedToForum = 0;
     public static final int closeChats;
     public static final int closeInCallActivity;
     public static final int closeOtherAppActivities;
@@ -924,8 +925,11 @@ public class NotificationCenter {
         int i221 = i220 + 1;
         totalEvents = i221;
         permissionsGranted = i220;
-        totalEvents = i221 + 1;
+        int i222 = i221 + 1;
+        totalEvents = i222;
         topicsDidLoaded = i221;
+        totalEvents = i222 + 1;
+        chatSwithcedToForum = i222;
     }
 
     /* loaded from: classes.dex */

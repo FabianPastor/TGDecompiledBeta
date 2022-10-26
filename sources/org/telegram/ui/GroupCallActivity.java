@@ -6142,7 +6142,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
         }
         String[] strArr2 = this.invites;
         if (strArr2[0] == null && strArr2[1] == null && ChatObject.isPublic(this.currentChat)) {
-            openShareAlert(true, null, this.accountInstance.getMessagesController().linkPrefix + "/" + this.currentChat.username, z);
+            openShareAlert(true, null, this.accountInstance.getMessagesController().linkPrefix + "/" + ChatObject.getPublicUsername(this.currentChat), z);
             return;
         }
         String[] strArr3 = this.invites;
@@ -7546,7 +7546,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1786onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1790onCreateViewHolder(ViewGroup viewGroup, int i) {
             View view;
             if (i == 0) {
                 view = new GroupCallTextCell(this, this.mContext) { // from class: org.telegram.ui.GroupCallActivity.ListAdapter.1

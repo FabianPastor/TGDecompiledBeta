@@ -802,7 +802,7 @@ public class ManageLinksActivity extends BaseFragment {
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1786onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1790onCreateViewHolder(ViewGroup viewGroup, int i) {
             TextInfoPrivacyCell textInfoPrivacyCell;
             LinkActionView linkActionView;
             switch (i) {
@@ -919,7 +919,7 @@ public class ManageLinksActivity extends BaseFragment {
         */
         public void onBindViewHolder(androidx.recyclerview.widget.RecyclerView.ViewHolder r9, int r10) {
             /*
-                Method dump skipped, instructions count: 642
+                Method dump skipped, instructions count: 644
                 To view this dump add '--comments-level debug' option
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ManageLinksActivity.ListAdapter.onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder, int):void");

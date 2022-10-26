@@ -483,7 +483,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1786onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1790onCreateViewHolder(ViewGroup viewGroup, int i) {
             String string;
             HeaderCell headerCell;
             if (i == 1) {
@@ -587,7 +587,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1786onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1790onCreateViewHolder(ViewGroup viewGroup, int i) {
             return new RecyclerListView.Holder(new GroupCreateUserCell(viewGroup.getContext(), 1, 0, false));
         }
 
@@ -673,13 +673,13 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                     if (i4 >= 2) {
                         break;
                     }
-                    String str3 = i4 == 0 ? tLRPC$Chat.title : tLRPC$Chat.username;
-                    if (str3 != null) {
-                        String lowerCase2 = str3.toLowerCase();
+                    String publicUsername = i4 == 0 ? tLRPC$Chat.title : ChatObject.getPublicUsername(tLRPC$Chat);
+                    if (publicUsername != null) {
+                        String lowerCase2 = publicUsername.toLowerCase();
                         for (int i5 = 0; i5 < i2; i5++) {
-                            String str4 = strArr[i5];
-                            if (!lowerCase2.startsWith(str4)) {
-                                if (!lowerCase2.contains(" " + str4)) {
+                            String str3 = strArr[i5];
+                            if (!lowerCase2.startsWith(str3)) {
+                                if (!lowerCase2.contains(" " + str3)) {
                                 }
                             }
                             z = true;

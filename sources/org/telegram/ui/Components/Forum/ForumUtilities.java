@@ -196,4 +196,8 @@ public class ForumUtilities {
         }
         return null;
     }
+
+    public static boolean isTopicCreateMessage(MessageObject messageObject) {
+        return messageObject != null && (messageObject.messageOwner.action instanceof TLRPC$TL_messageActionTopicCreate);
+    }
 }

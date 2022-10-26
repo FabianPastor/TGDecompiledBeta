@@ -158,6 +158,7 @@ import org.telegram.tgnet.TLRPC$TL_encryptedChatWaiting;
 import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.tgnet.TLRPC$TL_folder;
 import org.telegram.tgnet.TLRPC$TL_folderPeer;
+import org.telegram.tgnet.TLRPC$TL_forumTopic;
 import org.telegram.tgnet.TLRPC$TL_groupCallDiscarded;
 import org.telegram.tgnet.TLRPC$TL_help_dismissSuggestion;
 import org.telegram.tgnet.TLRPC$TL_help_getAppChangelog;
@@ -5403,10 +5404,9 @@ public class MessagesController extends BaseController implements NotificationCe
         if (tLRPC$Chat2 != null && !TextUtils.isEmpty(tLRPC$Chat2.username)) {
             this.objectsByUsernames.remove(tLRPC$Chat2.username.toLowerCase());
         }
-        int i = 0;
         if (tLRPC$Chat2 != null && tLRPC$Chat2.usernames != null) {
-            for (int i2 = 0; i2 < tLRPC$Chat2.usernames.size(); i2++) {
-                TLRPC$TL_username tLRPC$TL_username = tLRPC$Chat2.usernames.get(i2);
+            for (int i = 0; i < tLRPC$Chat2.usernames.size(); i++) {
+                TLRPC$TL_username tLRPC$TL_username = tLRPC$Chat2.usernames.get(i);
                 if (tLRPC$TL_username != null && !TextUtils.isEmpty(tLRPC$TL_username.username)) {
                     this.objectsByUsernames.remove(tLRPC$TL_username.username.toLowerCase());
                 }
@@ -5416,147 +5416,144 @@ public class MessagesController extends BaseController implements NotificationCe
             this.objectsByUsernames.put(tLRPC$Chat.username.toLowerCase(), tLRPC$Chat);
         }
         if (tLRPC$Chat.usernames != null) {
-            for (int i3 = 0; i3 < tLRPC$Chat.usernames.size(); i3++) {
-                TLRPC$TL_username tLRPC$TL_username2 = tLRPC$Chat.usernames.get(i3);
+            for (int i2 = 0; i2 < tLRPC$Chat.usernames.size(); i2++) {
+                TLRPC$TL_username tLRPC$TL_username2 = tLRPC$Chat.usernames.get(i2);
                 if (tLRPC$TL_username2 != null && !TextUtils.isEmpty(tLRPC$TL_username2.username)) {
                     this.objectsByUsernames.put(tLRPC$TL_username2.username.toLowerCase(), tLRPC$Chat);
                 }
             }
         }
-        if (tLRPC$Chat.min) {
-            if (tLRPC$Chat2 == null) {
-                this.chats.put(Long.valueOf(tLRPC$Chat.id), tLRPC$Chat);
-                addOrRemoveActiveVoiceChat(tLRPC$Chat);
-                return;
-            } else if (z) {
-                return;
-            } else {
-                tLRPC$Chat2.title = tLRPC$Chat.title;
-                tLRPC$Chat2.photo = tLRPC$Chat.photo;
-                tLRPC$Chat2.broadcast = tLRPC$Chat.broadcast;
-                tLRPC$Chat2.verified = tLRPC$Chat.verified;
-                tLRPC$Chat2.megagroup = tLRPC$Chat.megagroup;
-                tLRPC$Chat2.call_not_empty = tLRPC$Chat.call_not_empty;
-                tLRPC$Chat2.call_active = tLRPC$Chat.call_active;
-                TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights = tLRPC$Chat.default_banned_rights;
-                if (tLRPC$TL_chatBannedRights != null) {
-                    tLRPC$Chat2.default_banned_rights = tLRPC$TL_chatBannedRights;
-                    tLRPC$Chat2.flags |= 262144;
-                }
-                TLRPC$TL_chatAdminRights tLRPC$TL_chatAdminRights = tLRPC$Chat.admin_rights;
-                if (tLRPC$TL_chatAdminRights != null) {
-                    tLRPC$Chat2.admin_rights = tLRPC$TL_chatAdminRights;
-                    tLRPC$Chat2.flags |= 16384;
-                }
-                TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights2 = tLRPC$Chat.banned_rights;
-                if (tLRPC$TL_chatBannedRights2 != null) {
+        if (!tLRPC$Chat.min) {
+            if (!z) {
+                if (tLRPC$Chat2 != null) {
+                    if (tLRPC$Chat.version != tLRPC$Chat2.version) {
+                        this.loadedFullChats.remove(Long.valueOf(tLRPC$Chat.id));
+                    }
+                    int i3 = tLRPC$Chat2.participants_count;
+                    if (i3 != 0 && tLRPC$Chat.participants_count == 0) {
+                        tLRPC$Chat.participants_count = i3;
+                        tLRPC$Chat.flags |= 131072;
+                    }
+                    TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights = tLRPC$Chat2.banned_rights;
+                    int i4 = tLRPC$TL_chatBannedRights != null ? tLRPC$TL_chatBannedRights.flags : 0;
+                    TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights2 = tLRPC$Chat.banned_rights;
+                    int i5 = tLRPC$TL_chatBannedRights2 != null ? tLRPC$TL_chatBannedRights2.flags : 0;
+                    TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights3 = tLRPC$Chat2.default_banned_rights;
+                    int i6 = tLRPC$TL_chatBannedRights3 != null ? tLRPC$TL_chatBannedRights3.flags : 0;
+                    TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights4 = tLRPC$Chat.default_banned_rights;
+                    int i7 = tLRPC$TL_chatBannedRights4 != null ? tLRPC$TL_chatBannedRights4.flags : 0;
+                    tLRPC$Chat2.default_banned_rights = tLRPC$TL_chatBannedRights4;
+                    if (tLRPC$TL_chatBannedRights4 == null) {
+                        tLRPC$Chat2.flags &= -262145;
+                    } else {
+                        tLRPC$Chat2.flags = 262144 | tLRPC$Chat2.flags;
+                    }
                     tLRPC$Chat2.banned_rights = tLRPC$TL_chatBannedRights2;
-                    tLRPC$Chat2.flags |= 32768;
+                    if (tLRPC$TL_chatBannedRights2 == null) {
+                        tLRPC$Chat2.flags &= -32769;
+                    } else {
+                        tLRPC$Chat2.flags |= 32768;
+                    }
+                    TLRPC$TL_chatAdminRights tLRPC$TL_chatAdminRights = tLRPC$Chat.admin_rights;
+                    tLRPC$Chat2.admin_rights = tLRPC$TL_chatAdminRights;
+                    if (tLRPC$TL_chatAdminRights == null) {
+                        tLRPC$Chat2.flags &= -16385;
+                    } else {
+                        tLRPC$Chat2.flags |= 16384;
+                    }
+                    if (i4 != i5 || i6 != i7) {
+                        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesController$$ExternalSyntheticLambda151
+                            @Override // java.lang.Runnable
+                            public final void run() {
+                                MessagesController.this.lambda$putChat$39(tLRPC$Chat);
+                            }
+                        });
+                    }
                 }
-                String str = tLRPC$Chat.username;
+                this.chats.put(Long.valueOf(tLRPC$Chat.id), tLRPC$Chat);
+            } else if (tLRPC$Chat2 == null) {
+                this.chats.put(Long.valueOf(tLRPC$Chat.id), tLRPC$Chat);
+            } else if (tLRPC$Chat2.min) {
+                tLRPC$Chat.title = tLRPC$Chat2.title;
+                tLRPC$Chat.photo = tLRPC$Chat2.photo;
+                tLRPC$Chat.broadcast = tLRPC$Chat2.broadcast;
+                tLRPC$Chat.verified = tLRPC$Chat2.verified;
+                tLRPC$Chat.megagroup = tLRPC$Chat2.megagroup;
+                TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights5 = tLRPC$Chat2.default_banned_rights;
+                if (tLRPC$TL_chatBannedRights5 != null) {
+                    tLRPC$Chat.default_banned_rights = tLRPC$TL_chatBannedRights5;
+                    tLRPC$Chat.flags |= 262144;
+                }
+                TLRPC$TL_chatAdminRights tLRPC$TL_chatAdminRights2 = tLRPC$Chat2.admin_rights;
+                if (tLRPC$TL_chatAdminRights2 != null) {
+                    tLRPC$Chat.admin_rights = tLRPC$TL_chatAdminRights2;
+                    tLRPC$Chat.flags |= 16384;
+                }
+                TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights6 = tLRPC$Chat2.banned_rights;
+                if (tLRPC$TL_chatBannedRights6 != null) {
+                    tLRPC$Chat.banned_rights = tLRPC$TL_chatBannedRights6;
+                    tLRPC$Chat.flags |= 32768;
+                }
+                String str = tLRPC$Chat2.username;
                 if (str != null) {
-                    tLRPC$Chat2.username = str;
-                    tLRPC$Chat2.flags |= 64;
+                    tLRPC$Chat.username = str;
+                    tLRPC$Chat.flags |= 64;
                 } else {
-                    tLRPC$Chat2.flags &= -65;
-                    tLRPC$Chat2.username = null;
+                    tLRPC$Chat.flags &= -65;
+                    tLRPC$Chat.username = null;
                 }
-                int i4 = tLRPC$Chat.participants_count;
-                if (i4 != 0) {
-                    tLRPC$Chat2.participants_count = i4;
-                }
-                addOrRemoveActiveVoiceChat(tLRPC$Chat2);
-                return;
-            }
-        }
-        if (!z) {
-            if (tLRPC$Chat2 != null) {
-                if (tLRPC$Chat.version != tLRPC$Chat2.version) {
-                    this.loadedFullChats.remove(Long.valueOf(tLRPC$Chat.id));
-                }
-                int i5 = tLRPC$Chat2.participants_count;
-                if (i5 != 0 && tLRPC$Chat.participants_count == 0) {
-                    tLRPC$Chat.participants_count = i5;
+                int i8 = tLRPC$Chat2.participants_count;
+                if (i8 != 0 && tLRPC$Chat.participants_count == 0) {
+                    tLRPC$Chat.participants_count = i8;
                     tLRPC$Chat.flags |= 131072;
                 }
-                TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights3 = tLRPC$Chat2.banned_rights;
-                int i6 = tLRPC$TL_chatBannedRights3 != null ? tLRPC$TL_chatBannedRights3.flags : 0;
-                TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights4 = tLRPC$Chat.banned_rights;
-                int i7 = tLRPC$TL_chatBannedRights4 != null ? tLRPC$TL_chatBannedRights4.flags : 0;
-                TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights5 = tLRPC$Chat2.default_banned_rights;
-                int i8 = tLRPC$TL_chatBannedRights5 != null ? tLRPC$TL_chatBannedRights5.flags : 0;
-                TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights6 = tLRPC$Chat.default_banned_rights;
-                if (tLRPC$TL_chatBannedRights6 != null) {
-                    i = tLRPC$TL_chatBannedRights6.flags;
-                }
-                tLRPC$Chat2.default_banned_rights = tLRPC$TL_chatBannedRights6;
-                if (tLRPC$TL_chatBannedRights6 == null) {
-                    tLRPC$Chat2.flags &= -262145;
-                } else {
-                    tLRPC$Chat2.flags = 262144 | tLRPC$Chat2.flags;
-                }
-                tLRPC$Chat2.banned_rights = tLRPC$TL_chatBannedRights4;
-                if (tLRPC$TL_chatBannedRights4 == null) {
-                    tLRPC$Chat2.flags &= -32769;
-                } else {
-                    tLRPC$Chat2.flags |= 32768;
-                }
-                TLRPC$TL_chatAdminRights tLRPC$TL_chatAdminRights2 = tLRPC$Chat.admin_rights;
-                tLRPC$Chat2.admin_rights = tLRPC$TL_chatAdminRights2;
-                if (tLRPC$TL_chatAdminRights2 == null) {
-                    tLRPC$Chat2.flags &= -16385;
-                } else {
-                    tLRPC$Chat2.flags |= 16384;
-                }
-                if (i6 != i7 || i8 != i) {
-                    AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesController$$ExternalSyntheticLambda151
-                        @Override // java.lang.Runnable
-                        public final void run() {
-                            MessagesController.this.lambda$putChat$39(tLRPC$Chat);
-                        }
-                    });
-                }
+                this.chats.put(Long.valueOf(tLRPC$Chat.id), tLRPC$Chat);
             }
-            this.chats.put(Long.valueOf(tLRPC$Chat.id), tLRPC$Chat);
+            addOrRemoveActiveVoiceChat(tLRPC$Chat);
         } else if (tLRPC$Chat2 == null) {
             this.chats.put(Long.valueOf(tLRPC$Chat.id), tLRPC$Chat);
-        } else if (tLRPC$Chat2.min) {
-            tLRPC$Chat.title = tLRPC$Chat2.title;
-            tLRPC$Chat.photo = tLRPC$Chat2.photo;
-            tLRPC$Chat.broadcast = tLRPC$Chat2.broadcast;
-            tLRPC$Chat.verified = tLRPC$Chat2.verified;
-            tLRPC$Chat.megagroup = tLRPC$Chat2.megagroup;
-            TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights7 = tLRPC$Chat2.default_banned_rights;
+            addOrRemoveActiveVoiceChat(tLRPC$Chat);
+        } else if (!z) {
+            tLRPC$Chat2.title = tLRPC$Chat.title;
+            tLRPC$Chat2.photo = tLRPC$Chat.photo;
+            tLRPC$Chat2.broadcast = tLRPC$Chat.broadcast;
+            tLRPC$Chat2.verified = tLRPC$Chat.verified;
+            tLRPC$Chat2.megagroup = tLRPC$Chat.megagroup;
+            tLRPC$Chat2.call_not_empty = tLRPC$Chat.call_not_empty;
+            tLRPC$Chat2.call_active = tLRPC$Chat.call_active;
+            TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights7 = tLRPC$Chat.default_banned_rights;
             if (tLRPC$TL_chatBannedRights7 != null) {
-                tLRPC$Chat.default_banned_rights = tLRPC$TL_chatBannedRights7;
-                tLRPC$Chat.flags |= 262144;
+                tLRPC$Chat2.default_banned_rights = tLRPC$TL_chatBannedRights7;
+                tLRPC$Chat2.flags |= 262144;
             }
-            TLRPC$TL_chatAdminRights tLRPC$TL_chatAdminRights3 = tLRPC$Chat2.admin_rights;
+            TLRPC$TL_chatAdminRights tLRPC$TL_chatAdminRights3 = tLRPC$Chat.admin_rights;
             if (tLRPC$TL_chatAdminRights3 != null) {
-                tLRPC$Chat.admin_rights = tLRPC$TL_chatAdminRights3;
-                tLRPC$Chat.flags |= 16384;
+                tLRPC$Chat2.admin_rights = tLRPC$TL_chatAdminRights3;
+                tLRPC$Chat2.flags |= 16384;
             }
-            TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights8 = tLRPC$Chat2.banned_rights;
+            TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights8 = tLRPC$Chat.banned_rights;
             if (tLRPC$TL_chatBannedRights8 != null) {
-                tLRPC$Chat.banned_rights = tLRPC$TL_chatBannedRights8;
-                tLRPC$Chat.flags |= 32768;
+                tLRPC$Chat2.banned_rights = tLRPC$TL_chatBannedRights8;
+                tLRPC$Chat2.flags |= 32768;
             }
-            String str2 = tLRPC$Chat2.username;
+            String str2 = tLRPC$Chat.username;
             if (str2 != null) {
-                tLRPC$Chat.username = str2;
-                tLRPC$Chat.flags |= 64;
+                tLRPC$Chat2.username = str2;
+                tLRPC$Chat2.flags |= 64;
             } else {
-                tLRPC$Chat.flags &= -65;
-                tLRPC$Chat.username = null;
+                tLRPC$Chat2.flags &= -65;
+                tLRPC$Chat2.username = null;
             }
-            int i9 = tLRPC$Chat2.participants_count;
-            if (i9 != 0 && tLRPC$Chat.participants_count == 0) {
-                tLRPC$Chat.participants_count = i9;
-                tLRPC$Chat.flags |= 131072;
+            int i9 = tLRPC$Chat.participants_count;
+            if (i9 != 0) {
+                tLRPC$Chat2.participants_count = i9;
             }
-            this.chats.put(Long.valueOf(tLRPC$Chat.id), tLRPC$Chat);
+            addOrRemoveActiveVoiceChat(tLRPC$Chat2);
         }
-        addOrRemoveActiveVoiceChat(tLRPC$Chat);
+        if (tLRPC$Chat2 == null || tLRPC$Chat2.forum == tLRPC$Chat.forum) {
+            return;
+        }
+        getNotificationCenter().postNotificationName(NotificationCenter.chatSwithcedToForum, Long.valueOf(tLRPC$Chat.id));
     }
 
     public /* synthetic */ void lambda$putChat$39(TLRPC$Chat tLRPC$Chat) {
@@ -9367,39 +9364,55 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public void loadMessagesInternal(final long j, final long j2, final boolean z, final int i, final int i2, final int i3, boolean z2, final int i4, final int i5, final int i6, final int i7, final int i8, final int i9, final int i10, final int i11, final int i12, final int i13, final boolean z3, final int i14, boolean z4, final boolean z5, final boolean z6) {
+        MessagesController messagesController;
+        TLRPC$TL_forumTopic findTopic;
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("load messages in chat " + j + " count " + i + " max_id " + i2 + " cache " + z2 + " mindate = " + i4 + " guid " + i5 + " load_type " + i6 + " last_message_id " + i7 + " mode " + i8 + " index " + i10 + " firstUnread " + i11 + " unread_count " + i12 + " last_date " + i13 + " queryFromServer " + z3 + " isTopic " + z6);
         }
         if ((i9 == 0 || z6) && i8 != 2 && (z2 || DialogObject.isEncryptedDialog(j))) {
             getMessagesStorage().getMessages(j, j2, z, i, i2, i3, i4, i5, i6, i8 == 1, i9, i10, z5, z6);
         } else if (i9 != 0) {
-            if (i8 != 0) {
-                return;
-            }
-            final TLRPC$TL_messages_getReplies tLRPC$TL_messages_getReplies = new TLRPC$TL_messages_getReplies();
-            tLRPC$TL_messages_getReplies.peer = getInputPeer(j);
-            tLRPC$TL_messages_getReplies.msg_id = i9;
-            tLRPC$TL_messages_getReplies.offset_date = i3;
-            if (i6 == 4) {
-                tLRPC$TL_messages_getReplies.add_offset = (-i) + 5;
-            } else if (i6 == 3) {
-                tLRPC$TL_messages_getReplies.add_offset = (-i) / 2;
-            } else if (i6 == 1) {
-                tLRPC$TL_messages_getReplies.add_offset = (-i) - 1;
-            } else if (i6 == 2 && i2 != 0) {
-                tLRPC$TL_messages_getReplies.add_offset = (-i) + 10;
-            } else if (j < 0 && i2 != 0 && ChatObject.isChannel(getChat(Long.valueOf(-j)))) {
-                tLRPC$TL_messages_getReplies.add_offset = -1;
-                tLRPC$TL_messages_getReplies.limit++;
-            }
-            tLRPC$TL_messages_getReplies.limit = i;
-            tLRPC$TL_messages_getReplies.offset_id = i2;
-            getConnectionsManager().bindRequestToGuid(getConnectionsManager().sendRequest(tLRPC$TL_messages_getReplies, new RequestDelegate() { // from class: org.telegram.messenger.MessagesController$$ExternalSyntheticLambda269
-                @Override // org.telegram.tgnet.RequestDelegate
-                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    MessagesController.this.lambda$loadMessagesInternal$146(i, i2, i3, i11, i6, j, j2, i5, i7, i12, i13, i9, i10, z3, i14, z5, z6, tLRPC$TL_messages_getReplies, tLObject, tLRPC$TL_error);
+            if (z4 && z6 && i6 == 2 && i7 == 0 && (findTopic = this.topicsController.findTopic(-j, i9)) != null) {
+                loadMessagesInternal(j, j2, z, i, i2, i3, false, i4, i5, i6, findTopic.top_message, 0, i9, i10, i11, findTopic.unread_count, i13, z3, findTopic.unread_mentions_count, false, z5, z6);
+            } else if (i8 != 0) {
+            } else {
+                final TLRPC$TL_messages_getReplies tLRPC$TL_messages_getReplies = new TLRPC$TL_messages_getReplies();
+                tLRPC$TL_messages_getReplies.peer = getInputPeer(j);
+                tLRPC$TL_messages_getReplies.msg_id = i9;
+                tLRPC$TL_messages_getReplies.offset_date = i3;
+                if (i6 == 4) {
+                    tLRPC$TL_messages_getReplies.add_offset = (-i) + 5;
+                } else if (i6 == 3) {
+                    tLRPC$TL_messages_getReplies.add_offset = (-i) / 2;
+                } else if (i6 == 1) {
+                    tLRPC$TL_messages_getReplies.add_offset = (-i) - 1;
+                } else if (i6 == 2 && i2 != 0) {
+                    tLRPC$TL_messages_getReplies.add_offset = (-i) + 10;
+                } else if (j < 0 && i2 != 0) {
+                    messagesController = this;
+                    if (ChatObject.isChannel(messagesController.getChat(Long.valueOf(-j)))) {
+                        tLRPC$TL_messages_getReplies.add_offset = -1;
+                        tLRPC$TL_messages_getReplies.limit++;
+                    }
+                    tLRPC$TL_messages_getReplies.limit = i;
+                    tLRPC$TL_messages_getReplies.offset_id = i2;
+                    getConnectionsManager().bindRequestToGuid(getConnectionsManager().sendRequest(tLRPC$TL_messages_getReplies, new RequestDelegate() { // from class: org.telegram.messenger.MessagesController$$ExternalSyntheticLambda269
+                        @Override // org.telegram.tgnet.RequestDelegate
+                        public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+                            MessagesController.this.lambda$loadMessagesInternal$146(i, i2, i3, i11, i6, j, j2, i5, i7, i12, i13, i9, i10, z3, i14, z5, z6, tLRPC$TL_messages_getReplies, tLObject, tLRPC$TL_error);
+                        }
+                    }), i5);
                 }
-            }), i5);
+                messagesController = this;
+                tLRPC$TL_messages_getReplies.limit = i;
+                tLRPC$TL_messages_getReplies.offset_id = i2;
+                getConnectionsManager().bindRequestToGuid(getConnectionsManager().sendRequest(tLRPC$TL_messages_getReplies, new RequestDelegate() { // from class: org.telegram.messenger.MessagesController$$ExternalSyntheticLambda269
+                    @Override // org.telegram.tgnet.RequestDelegate
+                    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+                        MessagesController.this.lambda$loadMessagesInternal$146(i, i2, i3, i11, i6, j, j2, i5, i7, i12, i13, i9, i10, z3, i14, z5, z6, tLRPC$TL_messages_getReplies, tLObject, tLRPC$TL_error);
+                    }
+                }), i5);
+            }
         } else if (i8 == 2) {
         } else {
             if (i8 == 1) {

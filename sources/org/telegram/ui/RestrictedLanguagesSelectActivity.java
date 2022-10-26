@@ -474,7 +474,7 @@ public class RestrictedLanguagesSelectActivity extends BaseFragment implements N
         /* JADX WARN: Multi-variable type inference failed */
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1786onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1790onCreateViewHolder(ViewGroup viewGroup, int i) {
             TextCheckbox2Cell textCheckbox2Cell;
             View view;
             if (i == 0) {

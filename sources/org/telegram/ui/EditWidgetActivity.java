@@ -559,7 +559,7 @@ public class EditWidgetActivity extends BaseFragment {
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1786onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1790onCreateViewHolder(ViewGroup viewGroup, int i) {
             GroupCreateUserCell groupCreateUserCell;
             if (i == 0) {
                 FrameLayout textInfoPrivacyCell = new TextInfoPrivacyCell(this.mContext);

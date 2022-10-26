@@ -96,7 +96,7 @@ public class PaddedListAdapter extends RecyclerListView.SelectionAdapter {
 
     @Override // androidx.recyclerview.widget.RecyclerView.Adapter
     /* renamed from: onCreateViewHolder */
-    public RecyclerView.ViewHolder mo1786onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public RecyclerView.ViewHolder mo1790onCreateViewHolder(ViewGroup viewGroup, int i) {
         if (i == -983904) {
             View view = new View(viewGroup.getContext()) { // from class: org.telegram.ui.Adapters.PaddedListAdapter.1
                 @Override // android.view.View
@@ -119,7 +119,7 @@ public class PaddedListAdapter extends RecyclerListView.SelectionAdapter {
             this.paddingView = view;
             return new RecyclerListView.Holder(view);
         }
-        return this.wrappedAdapter.mo1786onCreateViewHolder(viewGroup, i);
+        return this.wrappedAdapter.mo1790onCreateViewHolder(viewGroup, i);
     }
 
     @Override // androidx.recyclerview.widget.RecyclerView.Adapter

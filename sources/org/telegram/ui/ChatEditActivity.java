@@ -1257,7 +1257,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
                 if (z3) {
                     format = LocaleController.getString("TypeLocationGroupEdit", R.string.TypeLocationGroupEdit);
                 } else {
-                    format = String.format("https://" + getMessagesController().linkPrefix + "/%s", this.currentChat.username);
+                    format = String.format("https://" + getMessagesController().linkPrefix + "/%s", ChatObject.getPublicUsername(this.currentChat));
                 }
                 TextCell textCell17 = this.typeCell;
                 String string4 = LocaleController.getString("TypeLocationGroup", R.string.TypeLocationGroup);

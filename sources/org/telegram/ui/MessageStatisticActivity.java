@@ -620,7 +620,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1786onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1790onCreateViewHolder(ViewGroup viewGroup, int i) {
             HeaderCell headerCell;
             if (i == 0) {
                 View manageChatUserCell = new ManageChatUserCell(this.mContext, 6, 2, false);

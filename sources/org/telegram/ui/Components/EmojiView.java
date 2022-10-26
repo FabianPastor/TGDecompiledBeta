@@ -6274,7 +6274,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1786onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1790onCreateViewHolder(ViewGroup viewGroup, int i) {
             BackupImageView backupImageView = new BackupImageView(EmojiView.this.getContext()) { // from class: org.telegram.ui.Components.EmojiView.TrendingAdapter.1
                 {
                     TrendingAdapter.this = this;
@@ -6542,7 +6542,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         @SuppressLint({"NotifyDataSetChanged"})
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1786onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1790onCreateViewHolder(ViewGroup viewGroup, int i) {
             StickerSetNameCell stickerSetNameCell;
             switch (i) {
                 case 0:
@@ -6975,7 +6975,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         /* JADX WARN: Type inference failed for: r6v6, types: [org.telegram.ui.Components.EmojiView$TrendingListView, androidx.recyclerview.widget.RecyclerView, android.view.ViewGroup, org.telegram.ui.Components.RecyclerListView] */
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1786onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1790onCreateViewHolder(ViewGroup viewGroup, int i) {
             View imageViewEmoji;
             StickerSetNameCell stickerSetNameCell;
             if (i != 0) {
@@ -7547,7 +7547,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1786onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1790onCreateViewHolder(ViewGroup viewGroup, int i) {
             FrameLayout frameLayout;
             if (i == 0) {
                 EmojiView emojiView = EmojiView.this;
@@ -7948,7 +7948,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
 
         @Override // androidx.viewpager.widget.PagerAdapter
         /* renamed from: instantiateItem */
-        public Object mo1595instantiateItem(ViewGroup viewGroup, int i) {
+        public Object mo1599instantiateItem(ViewGroup viewGroup, int i) {
             View view = ((Tab) EmojiView.this.currentTabs.get(i)).view;
             viewGroup.addView(view);
             return view;
@@ -8021,7 +8021,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1786onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1790onCreateViewHolder(ViewGroup viewGroup, int i) {
             StickerSetNameCell stickerSetNameCell;
             if (i == 0) {
                 ContextLinkCell contextLinkCell = new ContextLinkCell(this.context);
@@ -8868,7 +8868,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         /* JADX WARN: Type inference failed for: r15v2 */
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1786onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1790onCreateViewHolder(ViewGroup viewGroup, int i) {
             ?? r15;
             FeaturedStickerSetInfoCell featuredStickerSetInfoCell;
             if (i == 0) {

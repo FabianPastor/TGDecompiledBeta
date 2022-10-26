@@ -1895,8 +1895,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 TLRPC$TL_pageBlockParagraph tLRPC$TL_pageBlockParagraph = new TLRPC$TL_pageBlockParagraph();
                 tLRPC$TL_pageBlockParagraph.text = tLRPC$TL_textAnchor.text;
                 int typeForBlock = this.adapter[0].getTypeForBlock(tLRPC$TL_pageBlockParagraph);
-                RecyclerView.ViewHolder mo1786onCreateViewHolder = this.adapter[0].mo1786onCreateViewHolder(null, typeForBlock);
-                this.adapter[0].bindBlockToHolder(typeForBlock, mo1786onCreateViewHolder, tLRPC$TL_pageBlockParagraph, 0, 0);
+                RecyclerView.ViewHolder mo1790onCreateViewHolder = this.adapter[0].mo1790onCreateViewHolder(null, typeForBlock);
+                this.adapter[0].bindBlockToHolder(typeForBlock, mo1790onCreateViewHolder, tLRPC$TL_pageBlockParagraph, 0, 0);
                 BottomSheet.Builder builder = new BottomSheet.Builder(this.parentActivity);
                 builder.setApplyTopPadding(false);
                 builder.setApplyBottomPadding(false);
@@ -1927,8 +1927,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 textView.setTextColor(getTextColor());
                 textView.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
                 linearLayout.addView(textView, new LinearLayout.LayoutParams(-1, AndroidUtilities.dp(48.0f) + 1));
-                mo1786onCreateViewHolder.itemView.setTag("bottomSheet");
-                linearLayout.addView(mo1786onCreateViewHolder.itemView, LayoutHelper.createLinear(-1, -2, 0.0f, 7.0f, 0.0f, 0.0f));
+                mo1790onCreateViewHolder.itemView.setTag("bottomSheet");
+                linearLayout.addView(mo1790onCreateViewHolder.itemView, LayoutHelper.createLinear(-1, -2, 0.0f, 7.0f, 0.0f, 0.0f));
                 TextSelectionHelper<Cell>.TextSelectionOverlay overlayView = this.textSelectionHelperBottomSheet.getOverlayView(this.parentActivity);
                 FrameLayout frameLayout = new FrameLayout(this.parentActivity) { // from class: org.telegram.ui.ArticleViewer.5
                     @Override // android.view.ViewGroup, android.view.View
@@ -1992,9 +1992,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 if (num3 != null) {
                     if (num3.intValue() == -1) {
                         int typeForBlock2 = this.adapter[0].getTypeForBlock(tLRPC$PageBlock);
-                        RecyclerView.ViewHolder mo1786onCreateViewHolder2 = this.adapter[0].mo1786onCreateViewHolder(null, typeForBlock2);
-                        this.adapter[0].bindBlockToHolder(typeForBlock2, mo1786onCreateViewHolder2, tLRPC$PageBlock, 0, 0);
-                        mo1786onCreateViewHolder2.itemView.measure(View.MeasureSpec.makeMeasureSpec(this.listView[0].getMeasuredWidth(), NUM), View.MeasureSpec.makeMeasureSpec(0, 0));
+                        RecyclerView.ViewHolder mo1790onCreateViewHolder2 = this.adapter[0].mo1790onCreateViewHolder(null, typeForBlock2);
+                        this.adapter[0].bindBlockToHolder(typeForBlock2, mo1790onCreateViewHolder2, tLRPC$PageBlock, 0, 0);
+                        mo1790onCreateViewHolder2.itemView.measure(View.MeasureSpec.makeMeasureSpec(this.listView[0].getMeasuredWidth(), NUM), View.MeasureSpec.makeMeasureSpec(0, 0));
                         Integer num4 = (Integer) this.adapter[0].anchorsOffset.get(lowerCase);
                         if (num4.intValue() != -1) {
                             num = num4;
@@ -3732,7 +3732,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 lastNonListPageBlock = ((TL_pageBlockDetailsChild) lastNonListPageBlock).block;
             }
             if (lastNonListPageBlock instanceof TLRPC$TL_pageBlockChannel) {
-                MessagesController.getInstance(this.currentAccount).openByUserName(((TLRPC$TL_pageBlockChannel) lastNonListPageBlock).channel.username, this.parentFragment, 2);
+                MessagesController.getInstance(this.currentAccount).openByUserName(ChatObject.getPublicUsername(((TLRPC$TL_pageBlockChannel) lastNonListPageBlock).channel), this.parentFragment, 2);
                 close(false, true);
             } else if (lastNonListPageBlock instanceof TL_pageBlockRelatedArticlesChild) {
                 TL_pageBlockRelatedArticlesChild tL_pageBlockRelatedArticlesChild = (TL_pageBlockRelatedArticlesChild) lastNonListPageBlock;
@@ -5374,7 +5374,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1786onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1790onCreateViewHolder(ViewGroup viewGroup, int i) {
             TextView textView;
             View blockVideoCell;
             if (i != 90) {
@@ -5914,7 +5914,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             this.channelCell.setVisibility(0);
         }
 
-        /* JADX WARN: Code restructure failed: missing block: B:30:0x00a3, code lost:
+        /* JADX WARN: Code restructure failed: missing block: B:30:0x00a5, code lost:
             if (r2 <= (r0 + org.telegram.messenger.AndroidUtilities.dp(48.0f))) goto L31;
          */
         @Override // android.view.View
@@ -5924,7 +5924,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         */
         public boolean onTouchEvent(android.view.MotionEvent r13) {
             /*
-                Method dump skipped, instructions count: 282
+                Method dump skipped, instructions count: 284
                 To view this dump add '--comments-level debug' option
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ArticleViewer.BlockVideoCell.onTouchEvent(android.view.MotionEvent):boolean");
@@ -7903,7 +7903,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             RecyclerView.Adapter adapter = new RecyclerView.Adapter(ArticleViewer.this) { // from class: org.telegram.ui.ArticleViewer.BlockCollageCell.5
                 @Override // androidx.recyclerview.widget.RecyclerView.Adapter
                 /* renamed from: onCreateViewHolder */
-                public RecyclerView.ViewHolder mo1786onCreateViewHolder(ViewGroup viewGroup, int i) {
+                public RecyclerView.ViewHolder mo1790onCreateViewHolder(ViewGroup viewGroup, int i) {
                     View blockPhotoCell;
                     if (i == 0) {
                         BlockCollageCell blockCollageCell = BlockCollageCell.this;
@@ -8172,7 +8172,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 /* JADX WARN: Multi-variable type inference failed */
                 @Override // androidx.viewpager.widget.PagerAdapter
                 /* renamed from: instantiateItem */
-                public Object mo1595instantiateItem(ViewGroup viewGroup, int i) {
+                public Object mo1599instantiateItem(ViewGroup viewGroup, int i) {
                     BlockVideoCell blockVideoCell;
                     TLRPC$PageBlock tLRPC$PageBlock = BlockSlideshowCell.this.currentBlock.items.get(i);
                     if (tLRPC$PageBlock instanceof TLRPC$TL_pageBlockPhoto) {
@@ -8384,9 +8384,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 if (this.currentBlock.blockItem != null) {
                     int typeForBlock = this.parentAdapter.getTypeForBlock(this.currentBlock.blockItem);
                     this.currentBlockType = typeForBlock;
-                    RecyclerView.ViewHolder mo1786onCreateViewHolder = this.parentAdapter.mo1786onCreateViewHolder(this, typeForBlock);
-                    this.blockLayout = mo1786onCreateViewHolder;
-                    addView(mo1786onCreateViewHolder.itemView);
+                    RecyclerView.ViewHolder mo1790onCreateViewHolder = this.parentAdapter.mo1790onCreateViewHolder(this, typeForBlock);
+                    this.blockLayout = mo1790onCreateViewHolder;
+                    addView(mo1790onCreateViewHolder.itemView);
                 }
             }
             if (this.currentBlock.blockItem != null) {
@@ -8535,9 +8535,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 if (this.currentBlock.blockItem != null) {
                     int typeForBlock = this.parentAdapter.getTypeForBlock(this.currentBlock.blockItem);
                     this.currentBlockType = typeForBlock;
-                    RecyclerView.ViewHolder mo1786onCreateViewHolder = this.parentAdapter.mo1786onCreateViewHolder(this, typeForBlock);
-                    this.blockLayout = mo1786onCreateViewHolder;
-                    addView(mo1786onCreateViewHolder.itemView);
+                    RecyclerView.ViewHolder mo1790onCreateViewHolder = this.parentAdapter.mo1790onCreateViewHolder(this, typeForBlock);
+                    this.blockLayout = mo1790onCreateViewHolder;
+                    addView(mo1790onCreateViewHolder.itemView);
                 }
             }
             if (this.currentBlock.blockItem != null) {
@@ -9510,7 +9510,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             this.channelCell.setVisibility(0);
         }
 
-        /* JADX WARN: Code restructure failed: missing block: B:30:0x00a3, code lost:
+        /* JADX WARN: Code restructure failed: missing block: B:30:0x00a5, code lost:
             if (r2 <= (r0 + org.telegram.messenger.AndroidUtilities.dp(48.0f))) goto L31;
          */
         @Override // android.view.View
@@ -9520,7 +9520,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         */
         public boolean onTouchEvent(android.view.MotionEvent r13) {
             /*
-                Method dump skipped, instructions count: 284
+                Method dump skipped, instructions count: 286
                 To view this dump add '--comments-level debug' option
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ArticleViewer.BlockPhotoCell.onTouchEvent(android.view.MotionEvent):boolean");

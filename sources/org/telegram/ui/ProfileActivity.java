@@ -4428,7 +4428,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     }
 
     private int getSmallAvatarRoundRadius() {
-        if (getCurrentChat() != null && getCurrentChat().forum) {
+        TLRPC$Chat chat;
+        if (this.chatId != 0 && (chat = getMessagesController().getChat(Long.valueOf(this.chatId))) != null && chat.forum) {
             return AndroidUtilities.dp(16.0f);
         }
         return AndroidUtilities.dp(21.0f);
@@ -7286,16 +7287,16 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         showDialog(premiumPreviewBottomSheet);
     }
 
-    /* JADX WARN: Removed duplicated region for block: B:194:0x039c  */
-    /* JADX WARN: Removed duplicated region for block: B:195:0x03d7  */
-    /* JADX WARN: Removed duplicated region for block: B:198:0x03f0  */
-    /* JADX WARN: Removed duplicated region for block: B:200:0x03f7  */
-    /* JADX WARN: Removed duplicated region for block: B:203:0x040c  */
-    /* JADX WARN: Removed duplicated region for block: B:206:0x042f  */
-    /* JADX WARN: Removed duplicated region for block: B:242:0x04e5  */
-    /* JADX WARN: Removed duplicated region for block: B:245:0x04fc  */
-    /* JADX WARN: Removed duplicated region for block: B:248:0x0513  */
-    /* JADX WARN: Removed duplicated region for block: B:251:0x052a  */
+    /* JADX WARN: Removed duplicated region for block: B:194:0x03a0  */
+    /* JADX WARN: Removed duplicated region for block: B:195:0x03db  */
+    /* JADX WARN: Removed duplicated region for block: B:198:0x03f4  */
+    /* JADX WARN: Removed duplicated region for block: B:200:0x03fb  */
+    /* JADX WARN: Removed duplicated region for block: B:203:0x0410  */
+    /* JADX WARN: Removed duplicated region for block: B:206:0x0433  */
+    /* JADX WARN: Removed duplicated region for block: B:242:0x04e9  */
+    /* JADX WARN: Removed duplicated region for block: B:245:0x0500  */
+    /* JADX WARN: Removed duplicated region for block: B:248:0x0517  */
+    /* JADX WARN: Removed duplicated region for block: B:251:0x052e  */
     /* JADX WARN: Removed duplicated region for block: B:254:? A[RETURN, SYNTHETIC] */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
@@ -7303,7 +7304,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     */
     private void createActionBarMenu(boolean r17) {
         /*
-            Method dump skipped, instructions count: 1330
+            Method dump skipped, instructions count: 1334
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ProfileActivity.createActionBarMenu(boolean):void");
@@ -8018,7 +8019,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         /* JADX WARN: Multi-variable type inference failed */
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1786onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1790onCreateViewHolder(ViewGroup viewGroup, int i) {
             View headerCell;
             TextDetailCell textDetailCell;
             String str;
@@ -9684,7 +9685,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1786onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1790onCreateViewHolder(ViewGroup viewGroup, int i) {
             View settingsSearchCell;
             if (i == 0) {
                 settingsSearchCell = new SettingsSearchCell(this.mContext);

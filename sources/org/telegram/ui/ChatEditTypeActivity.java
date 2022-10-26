@@ -468,13 +468,11 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
         ShadowSectionCell shadowSectionCell2 = new ShadowSectionCell(context);
         this.adminedInfoCell = shadowSectionCell2;
         this.linearLayout.addView(shadowSectionCell2, LayoutHelper.createLinear(-1, -2));
-        if (this.isChannel) {
-            LinearLayout linearLayout7 = this.linearLayout;
-            UsernamesListView usernamesListView = new UsernamesListView(context);
-            this.usernamesListView = usernamesListView;
-            linearLayout7.addView(usernamesListView, LayoutHelper.createLinear(-1, -2));
-            this.usernamesListView.setVisibility((this.isPrivate || this.usernames.isEmpty()) ? 8 : 0);
-        }
+        LinearLayout linearLayout7 = this.linearLayout;
+        UsernamesListView usernamesListView = new UsernamesListView(context);
+        this.usernamesListView = usernamesListView;
+        linearLayout7.addView(usernamesListView, LayoutHelper.createLinear(-1, -2));
+        this.usernamesListView.setVisibility((this.isPrivate || this.usernames.isEmpty()) ? 8 : 0);
         TextCell textCell = new TextCell(context);
         this.manageLinksTextView = textCell;
         textCell.setBackgroundDrawable(Theme.getSelectorDrawable(true));
@@ -1193,7 +1191,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
 
             @Override // androidx.recyclerview.widget.RecyclerView.Adapter
             /* renamed from: onCreateViewHolder */
-            public RecyclerView.ViewHolder mo1786onCreateViewHolder(ViewGroup viewGroup, int i) {
+            public RecyclerView.ViewHolder mo1790onCreateViewHolder(ViewGroup viewGroup, int i) {
                 if (i != 0) {
                     if (i == 1) {
                         return new RecyclerListView.Holder(new ChangeUsernameActivity.UsernameCell(UsernamesListView.this.getContext(), ((RecyclerListView) UsernamesListView.this).resourcesProvider) { // from class: org.telegram.ui.ChatEditTypeActivity.UsernamesListView.Adapter.1
@@ -1463,10 +1461,10 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
         builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
         if (this.isChannel) {
             int i = R.string.RevokeLinkAlertChannel;
-            builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("RevokeLinkAlertChannel", i, getMessagesController().linkPrefix + "/" + currentChannel.username, currentChannel.title)));
+            builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("RevokeLinkAlertChannel", i, getMessagesController().linkPrefix + "/" + ChatObject.getPublicUsername(currentChannel), currentChannel.title)));
         } else {
             int i2 = R.string.RevokeLinkAlert;
-            builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("RevokeLinkAlert", i2, getMessagesController().linkPrefix + "/" + currentChannel.username, currentChannel.title)));
+            builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("RevokeLinkAlert", i2, getMessagesController().linkPrefix + "/" + ChatObject.getPublicUsername(currentChannel), currentChannel.title)));
         }
         builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
         builder.setPositiveButton(LocaleController.getString("RevokeButton", R.string.RevokeButton), new DialogInterface.OnClickListener() { // from class: org.telegram.ui.ChatEditTypeActivity$$ExternalSyntheticLambda1
