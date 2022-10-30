@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Canvas;
@@ -26,6 +27,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -1702,6 +1705,94 @@ public class Bulletin {
                 this.lastUpdateTime = System.currentTimeMillis();
             }
             invalidate();
+        }
+    }
+
+    /* loaded from: classes3.dex */
+    public static class BulletinWindow extends Dialog {
+        private final FrameLayout container;
+
+        public static FrameLayout make(Context context) {
+            return new BulletinWindow(context).container;
+        }
+
+        private BulletinWindow(Context context) {
+            super(context);
+            FrameLayout frameLayout = new FrameLayout(context) { // from class: org.telegram.ui.Components.Bulletin.BulletinWindow.1
+                {
+                    BulletinWindow.this = this;
+                }
+
+                @Override // android.view.ViewGroup
+                public void addView(View view) {
+                    super.addView(view);
+                    BulletinWindow.this.show();
+                }
+
+                @Override // android.view.ViewGroup, android.view.ViewManager
+                public void removeView(View view) {
+                    super.removeView(view);
+                    BulletinWindow.this.dismiss();
+                    Bulletin.removeDelegate(BulletinWindow.this.container);
+                }
+            };
+            this.container = frameLayout;
+            setContentView(frameLayout, new ViewGroup.LayoutParams(-1, -1));
+            Bulletin.addDelegate(frameLayout, new Delegate(this) { // from class: org.telegram.ui.Components.Bulletin.BulletinWindow.2
+                @Override // org.telegram.ui.Components.Bulletin.Delegate
+                public int getBottomOffset(int i) {
+                    return 0;
+                }
+
+                @Override // org.telegram.ui.Components.Bulletin.Delegate
+                public /* synthetic */ void onBottomOffsetChange(float f) {
+                    Delegate.CC.$default$onBottomOffsetChange(this, f);
+                }
+
+                @Override // org.telegram.ui.Components.Bulletin.Delegate
+                public /* synthetic */ void onHide(Bulletin bulletin) {
+                    Delegate.CC.$default$onHide(this, bulletin);
+                }
+
+                @Override // org.telegram.ui.Components.Bulletin.Delegate
+                public /* synthetic */ void onShow(Bulletin bulletin) {
+                    Delegate.CC.$default$onShow(this, bulletin);
+                }
+
+                @Override // org.telegram.ui.Components.Bulletin.Delegate
+                public int getTopOffset(int i) {
+                    return AndroidUtilities.statusBarHeight;
+                }
+            });
+            try {
+                Window window = getWindow();
+                window.setWindowAnimations(R.style.DialogNoAnimation);
+                window.setBackgroundDrawable(null);
+                WindowManager.LayoutParams attributes = window.getAttributes();
+                attributes.width = -1;
+                attributes.gravity = 51;
+                attributes.dimAmount = 0.0f;
+                int i = attributes.flags & (-3);
+                attributes.flags = i;
+                int i2 = i | 8;
+                attributes.flags = i2;
+                int i3 = Build.VERSION.SDK_INT;
+                if (i3 >= 19) {
+                    attributes.flags = i2 | 67108864;
+                }
+                int i4 = attributes.flags | 16;
+                attributes.flags = i4;
+                if (i3 >= 21) {
+                    attributes.flags = i4 | (-NUM);
+                }
+                attributes.flags &= -1025;
+                attributes.height = -1;
+                if (i3 >= 28) {
+                    attributes.layoutInDisplayCutoutMode = 1;
+                }
+                window.setAttributes(attributes);
+            } catch (Exception unused) {
+            }
         }
     }
 }

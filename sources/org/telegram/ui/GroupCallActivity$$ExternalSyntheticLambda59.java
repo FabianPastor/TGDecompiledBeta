@@ -10,8 +10,8 @@ public final /* synthetic */ class GroupCallActivity$$ExternalSyntheticLambda59 
 
     @Override // org.telegram.ui.Components.NumberPicker.Formatter
     public final String format(int i) {
-        String lambda$new$33;
-        lambda$new$33 = GroupCallActivity.lambda$new$33(i);
-        return lambda$new$33;
+        String lambda$new$34;
+        lambda$new$34 = GroupCallActivity.lambda$new$34(i);
+        return lambda$new$34;
     }
 }

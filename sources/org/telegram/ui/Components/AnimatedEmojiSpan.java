@@ -70,6 +70,18 @@ public class AnimatedEmojiSpan extends ReplacementSpan {
         }
     }
 
+    public static void applyFontMetricsForString(CharSequence charSequence, Paint paint) {
+        if (charSequence instanceof Spannable) {
+            AnimatedEmojiSpan[] animatedEmojiSpanArr = (AnimatedEmojiSpan[]) ((Spannable) charSequence).getSpans(0, charSequence.length(), AnimatedEmojiSpan.class);
+            if (animatedEmojiSpanArr == null) {
+                return;
+            }
+            for (AnimatedEmojiSpan animatedEmojiSpan : animatedEmojiSpanArr) {
+                animatedEmojiSpan.applyFontMetrics(paint.getFontMetricsInt());
+            }
+        }
+    }
+
     public long getDocumentId() {
         TLRPC$Document tLRPC$Document = this.document;
         return tLRPC$Document != null ? tLRPC$Document.id : this.documentId;
@@ -84,6 +96,10 @@ public class AnimatedEmojiSpan extends ReplacementSpan {
     public void applyFontMetrics(Paint.FontMetricsInt fontMetricsInt, int i) {
         this.fontMetrics = fontMetricsInt;
         this.cacheType = i;
+    }
+
+    public void applyFontMetrics(Paint.FontMetricsInt fontMetricsInt) {
+        this.fontMetrics = fontMetricsInt;
     }
 
     @Override // android.text.style.ReplacementSpan

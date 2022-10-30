@@ -25,12 +25,15 @@ import org.telegram.tgnet.TLRPC$TL_messageActionTopicCreate;
 import org.telegram.tgnet.TLRPC$TL_messageActionTopicEdit;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.ActionBar.INavigationLayout;
 import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.AnimatedEmojiDrawable;
 import org.telegram.ui.Components.AnimatedEmojiSpan;
 import org.telegram.ui.Components.BackupImageView;
+import org.telegram.ui.Components.ColoredImageSpan;
 import org.telegram.ui.Components.CombinedDrawable;
 import org.telegram.ui.Components.LetterDrawable;
+import org.telegram.ui.TopicsFragment;
 /* loaded from: classes3.dex */
 public class ForumUtilities {
     public static void setTopicIcon(BackupImageView backupImageView, TLRPC$TL_forumTopic tLRPC$TL_forumTopic) {
@@ -127,7 +130,13 @@ public class ForumUtilities {
                         ((LetterDrawable) combinedDrawable.getIcon()).scale = 0.7f;
                     }
                 }
-                spannableStringBuilder.setSpan(new ImageSpan(createTopicDrawable, 2), 0, 1, 33);
+                if (textPaint != null) {
+                    ColoredImageSpan coloredImageSpan = new ColoredImageSpan(createTopicDrawable);
+                    coloredImageSpan.setSize((int) (Math.abs(textPaint.getFontMetrics().descent) + Math.abs(textPaint.getFontMetrics().ascent)));
+                    spannableStringBuilder.setSpan(coloredImageSpan, 0, 1, 33);
+                } else {
+                    spannableStringBuilder.setSpan(new ImageSpan(createTopicDrawable), 0, 1, 33);
+                }
             }
             if (!TextUtils.isEmpty(tLRPC$TL_forumTopic.title)) {
                 spannableStringBuilder.append((CharSequence) " ");
@@ -199,5 +208,65 @@ public class ForumUtilities {
 
     public static boolean isTopicCreateMessage(MessageObject messageObject) {
         return messageObject != null && (messageObject.messageOwner.action instanceof TLRPC$TL_messageActionTopicCreate);
+    }
+
+    public static void applyTopicToMessage(MessageObject messageObject) {
+        TLRPC$TL_forumTopic findTopic;
+        if (messageObject.getDialogId() <= 0 && (findTopic = MessagesController.getInstance(messageObject.currentAccount).getTopicsController().findTopic(-messageObject.getDialogId(), MessageObject.getTopicId(messageObject.messageOwner))) != null) {
+            ForumBubbleDrawable[] forumBubbleDrawableArr = messageObject.topicIconDrawable;
+            if (forumBubbleDrawableArr[0] == null) {
+                return;
+            }
+            forumBubbleDrawableArr[0].setColor(findTopic.icon_color);
+        }
+    }
+
+    public static void switchAllFragmentsInStackToForum(long j, INavigationLayout iNavigationLayout) {
+        BaseFragment lastFragment = iNavigationLayout.getLastFragment();
+        if (lastFragment instanceof ChatActivity) {
+            final ChatActivity chatActivity = (ChatActivity) lastFragment;
+            if ((-chatActivity.getDialogId()) == j && chatActivity.getMessagesController().getChat(Long.valueOf(j)).forum && chatActivity.getParentLayout() != null) {
+                if (chatActivity.getParentLayout().checkTransitionAnimation()) {
+                    AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.Forum.ForumUtilities$$ExternalSyntheticLambda0
+                        @Override // java.lang.Runnable
+                        public final void run() {
+                            ForumUtilities.lambda$switchAllFragmentsInStackToForum$0(ChatActivity.this);
+                        }
+                    }, 500L);
+                } else {
+                    TopicsFragment.prepareToSwitchAnimation(chatActivity);
+                }
+            }
+        }
+        if (lastFragment instanceof TopicsFragment) {
+            final TopicsFragment topicsFragment = (TopicsFragment) lastFragment;
+            if ((-topicsFragment.getDialogId()) != j || topicsFragment.getMessagesController().getChat(Long.valueOf(j)).forum) {
+                return;
+            }
+            if (topicsFragment.getParentLayout() != null && topicsFragment.getParentLayout().checkTransitionAnimation()) {
+                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.Forum.ForumUtilities$$ExternalSyntheticLambda1
+                    @Override // java.lang.Runnable
+                    public final void run() {
+                        ForumUtilities.lambda$switchAllFragmentsInStackToForum$1(TopicsFragment.this);
+                    }
+                }, 500L);
+            } else {
+                topicsFragment.switchToChat(true);
+            }
+        }
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
+    public static /* synthetic */ void lambda$switchAllFragmentsInStackToForum$0(ChatActivity chatActivity) {
+        if (chatActivity.getParentLayout() != null) {
+            TopicsFragment.prepareToSwitchAnimation(chatActivity);
+        }
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
+    public static /* synthetic */ void lambda$switchAllFragmentsInStackToForum$1(TopicsFragment topicsFragment) {
+        if (topicsFragment.getParentLayout() != null) {
+            topicsFragment.switchToChat(true);
+        }
     }
 }

@@ -249,6 +249,9 @@ public class ChatActivityMemberRequestsDelegate {
                     if (!z) {
                         ChatActivityMemberRequestsDelegate.this.root.setVisibility(8);
                     }
+                    if (ChatActivityMemberRequestsDelegate.this.callback != null) {
+                        ChatActivityMemberRequestsDelegate.this.callback.onEnterOffsetChanged();
+                    }
                 }
             });
             this.pendingRequestsAnimator.setDuration(200L);

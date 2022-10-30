@@ -1708,16 +1708,24 @@ public class ChatObject {
         return canUserDoAdminAction(tLRPC$Chat, 15);
     }
 
-    public static boolean canManageTopic(TLRPC$Chat tLRPC$Chat, TLRPC$TL_forumTopic tLRPC$TL_forumTopic) {
-        return canManageTopics(tLRPC$Chat) || isMyTopic(tLRPC$TL_forumTopic);
+    public static boolean canManageTopic(int i, TLRPC$Chat tLRPC$Chat, TLRPC$TL_forumTopic tLRPC$TL_forumTopic) {
+        return canManageTopics(tLRPC$Chat) || isMyTopic(i, tLRPC$TL_forumTopic);
     }
 
     public static boolean canManageTopic(int i, TLRPC$Chat tLRPC$Chat, int i2) {
         return canManageTopics(tLRPC$Chat) || isMyTopic(i, tLRPC$Chat, i2);
     }
 
-    public static boolean isMyTopic(TLRPC$TL_forumTopic tLRPC$TL_forumTopic) {
-        return tLRPC$TL_forumTopic != null && tLRPC$TL_forumTopic.my;
+    public static boolean isMyTopic(int i, TLRPC$TL_forumTopic tLRPC$TL_forumTopic) {
+        if (tLRPC$TL_forumTopic != null) {
+            if (!tLRPC$TL_forumTopic.my) {
+                TLRPC$Peer tLRPC$Peer = tLRPC$TL_forumTopic.from_id;
+                if (!(tLRPC$Peer instanceof TLRPC$TL_peerUser) || tLRPC$Peer.user_id != UserConfig.getInstance(i).clientUserId) {
+                }
+            }
+            return true;
+        }
+        return false;
     }
 
     public static boolean isMyTopic(int i, TLRPC$Chat tLRPC$Chat, int i2) {
@@ -1725,7 +1733,7 @@ public class ChatObject {
     }
 
     public static boolean isMyTopic(int i, long j, int i2) {
-        return isMyTopic(MessagesController.getInstance(i).getTopicsController().findTopic(j, i2));
+        return isMyTopic(i, MessagesController.getInstance(i).getTopicsController().findTopic(j, i2));
     }
 
     public static boolean isChannel(long j, int i) {

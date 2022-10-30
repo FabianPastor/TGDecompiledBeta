@@ -1,4 +1,7 @@
 package org.telegram.tgnet;
+
+import java.util.ArrayList;
+import org.telegram.messenger.MessageObject;
 /* loaded from: classes.dex */
 public class TLRPC$TL_forumTopic extends TLRPC$ForumTopic {
     public static int constructor = NUM;
@@ -7,6 +10,7 @@ public class TLRPC$TL_forumTopic extends TLRPC$ForumTopic {
     public TLRPC$DraftMessage draft;
     public int flags;
     public TLRPC$Peer from_id;
+    public ArrayList<MessageObject> groupedMessages;
     public int icon_color;
     public long icon_emoji_id;
     public int id;

@@ -185,15 +185,22 @@ public class MessageObject {
     public static final int POSITION_FLAG_LEFT = 1;
     public static final int POSITION_FLAG_RIGHT = 2;
     public static final int POSITION_FLAG_TOP = 4;
+    public static final int TYPE_ACTION_PHOTO = 11;
     public static final int TYPE_ANIMATED_STICKER = 15;
+    public static final int TYPE_CONTACT = 12;
     public static final int TYPE_EMOJIS = 19;
     public static final int TYPE_EXTENDED_MEDIA_PREVIEW = 20;
+    public static final int TYPE_FILE = 9;
     public static final int TYPE_GEO = 4;
+    public static final int TYPE_GIF = 8;
     public static final int TYPE_GIFT_PREMIUM = 18;
+    public static final int TYPE_MUSIC = 14;
+    public static final int TYPE_PHONE_CALL = 16;
     public static final int TYPE_PHOTO = 1;
     public static final int TYPE_POLL = 17;
     public static final int TYPE_ROUND_VIDEO = 5;
     public static final int TYPE_STICKER = 13;
+    public static final int TYPE_TEXT = 0;
     public static final int TYPE_VIDEO = 3;
     public static final int TYPE_VOICE = 2;
     static final String[] excludeWords = {" vs. ", " vs ", " versus ", " ft. ", " ft ", " featuring ", " feat. ", " feat ", " presents ", " pres. ", " pres ", " and ", " & ", " . "};
@@ -268,6 +275,7 @@ public class MessageObject {
     public ImageLocation mediaThumb;
     public TLRPC$Message messageOwner;
     public CharSequence messageText;
+    public CharSequence messageTextForReply;
     public CharSequence messageTextShort;
     public String messageTrimmedToHighlight;
     public String monthKey;
@@ -935,14 +943,12 @@ public class MessageObject {
         }
         if (this.emojiAnimatedSticker == null && this.emojiAnimatedStickerId == null) {
             generateLayout(null);
-            return;
-        }
-        this.type = 1000;
-        if (isSticker()) {
+        } else if (isSticker()) {
             this.type = 13;
-        } else if (!isAnimatedSticker()) {
-        } else {
+        } else if (isAnimatedSticker()) {
             this.type = 15;
+        } else {
+            this.type = 1000;
         }
     }
 
@@ -2008,8 +2014,8 @@ public class MessageObject {
     /* JADX WARN: Removed duplicated region for block: B:250:0x069f  */
     /* JADX WARN: Removed duplicated region for block: B:280:0x076c  */
     /* JADX WARN: Removed duplicated region for block: B:284:0x07a6  */
-    /* JADX WARN: Removed duplicated region for block: B:537:0x0e86  */
-    /* JADX WARN: Removed duplicated region for block: B:641:0x110f  */
+    /* JADX WARN: Removed duplicated region for block: B:537:0x0ebc  */
+    /* JADX WARN: Removed duplicated region for block: B:641:0x1147  */
     /* JADX WARN: Removed duplicated region for block: B:661:? A[RETURN, SYNTHETIC] */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
@@ -2017,7 +2023,7 @@ public class MessageObject {
     */
     private void updateMessageText(java.util.AbstractMap<java.lang.Long, org.telegram.tgnet.TLRPC$User> r23, java.util.AbstractMap<java.lang.Long, org.telegram.tgnet.TLRPC$Chat> r24, androidx.collection.LongSparseArray<org.telegram.tgnet.TLRPC$User> r25, androidx.collection.LongSparseArray<org.telegram.tgnet.TLRPC$Chat> r26) {
         /*
-            Method dump skipped, instructions count: 4370
+            Method dump skipped, instructions count: 4426
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessageObject.updateMessageText(java.util.AbstractMap, java.util.AbstractMap, androidx.collection.LongSparseArray, androidx.collection.LongSparseArray):void");
@@ -2067,7 +2073,7 @@ public class MessageObject {
             } else if (isMediaEmpty()) {
                 this.type = 0;
                 if (TextUtils.isEmpty(this.messageText) && this.eventId == 0) {
-                    this.messageText = "Empty message";
+                    this.messageText = LocaleController.getString("EventLogOriginalCaptionEmpty", R.string.EventLogOriginalCaptionEmpty);
                 }
             } else if (hasExtendedMediaPreview()) {
                 this.type = 20;

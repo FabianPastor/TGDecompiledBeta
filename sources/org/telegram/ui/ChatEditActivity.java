@@ -441,15 +441,15 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
         return checkDiscard();
     }
 
-    /* JADX WARN: Removed duplicated region for block: B:163:0x0655  */
-    /* JADX WARN: Removed duplicated region for block: B:176:0x06c8  */
-    /* JADX WARN: Removed duplicated region for block: B:186:0x0702  */
-    /* JADX WARN: Removed duplicated region for block: B:201:0x0781  */
-    /* JADX WARN: Removed duplicated region for block: B:204:0x0794  */
-    /* JADX WARN: Removed duplicated region for block: B:207:0x07a2  */
-    /* JADX WARN: Removed duplicated region for block: B:217:0x07df  */
-    /* JADX WARN: Removed duplicated region for block: B:224:0x0865  */
-    /* JADX WARN: Removed duplicated region for block: B:230:0x08c3  */
+    /* JADX WARN: Removed duplicated region for block: B:163:0x065e  */
+    /* JADX WARN: Removed duplicated region for block: B:176:0x06d1  */
+    /* JADX WARN: Removed duplicated region for block: B:186:0x070b  */
+    /* JADX WARN: Removed duplicated region for block: B:201:0x078c  */
+    /* JADX WARN: Removed duplicated region for block: B:204:0x079f  */
+    /* JADX WARN: Removed duplicated region for block: B:207:0x07ad  */
+    /* JADX WARN: Removed duplicated region for block: B:217:0x07ea  */
+    /* JADX WARN: Removed duplicated region for block: B:224:0x0872  */
+    /* JADX WARN: Removed duplicated region for block: B:230:0x08d0  */
     @Override // org.telegram.ui.ActionBar.BaseFragment
     /*
         Code decompiled incorrectly, please refer to instructions dump.
@@ -457,7 +457,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
     */
     public android.view.View createView(final android.content.Context r34) {
         /*
-            Method dump skipped, instructions count: 2259
+            Method dump skipped, instructions count: 2272
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatEditActivity.createView(android.content.Context):android.view.View");
@@ -647,7 +647,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$15(View view) {
+    public /* synthetic */ void lambda$createView$15(FrameLayout frameLayout, View view) {
         SpannableStringBuilder replaceTags;
         if (!this.canForum) {
             TLRPC$ChatFull tLRPC$ChatFull = this.info;
@@ -657,6 +657,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
                 replaceTags = AndroidUtilities.replaceTags(LocaleController.formatPluralString("ChannelTopicsForbidden", getMessagesController().forumUpgradeParticipantsMin, new Object[0]));
             }
             BulletinFactory.of(this).createSimpleBulletin(R.raw.topics, replaceTags).show();
+            frameLayout.performHapticFeedback(3);
             return;
         }
         boolean z = !this.forum;

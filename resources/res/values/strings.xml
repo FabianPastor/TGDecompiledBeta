@@ -4446,6 +4446,7 @@
     <string name="SelectTheme">Select theme</string>
     <string name="SelectThisDay">Select this day</string>
     <string name="SelectTopic">Select topic</string>
+    <string name="SelectTopicIconHint">Select Topic Icon</string>
     <string name="SelectingContact">selecting a contact to share...</string>
     <string name="SelectingLocation">selecting a location to share...</string>
     <string name="Send">Send</string>
@@ -4981,15 +4982,18 @@
     <string name="TopHoursChartTitle">Views by hours</string>
     <string name="TopInviters">Top inviters</string>
     <string name="TopMembers">Top members</string>
+    <string name="TopicChangeIconAndTitleTo">%1$s changed the topic title and icon to %2$s</string>
+    <string name="TopicChangeIconAndTitleToInReply">changed the topic title and icon to %s</string>
     <string name="TopicClosed">Topic closed</string>
     <string name="TopicClosed2">%s closed topic</string>
     <string name="TopicClosedByAdmin">The topic is closed</string>
     <string name="TopicContainsEmojiPackSingle">This topic contains **%s**</string>
-    <string name="TopicCreated">Topic created</string>
+    <string name="TopicCreated">Topic was created</string>
     <string name="TopicCreator">topic creator</string>
     <string name="TopicEmptyViewDescription">Send first message to start the topic</string>
     <string name="TopicIconChanged">Topic icon changed</string>
     <string name="TopicIconChangedTo">%1$s changed topic icon to %2$s</string>
+    <string name="TopicIconChangedToInReply">changed topic icon to %s</string>
     <string name="TopicNotificationsExceptions_few">There are **%d topics** that are listed as exceptions.</string>
     <string name="TopicNotificationsExceptions_many">There are **%d topics** that are listed as exceptions.</string>
     <string name="TopicNotificationsExceptions_one">There is **%d topic** that is listed as exception.</string>
@@ -4998,6 +5002,7 @@
     <string name="TopicProfileStatus">In %s</string>
     <string name="TopicRenamed">Topic renamed</string>
     <string name="TopicRenamedTo">%1$s renamed topic to %2$s</string>
+    <string name="TopicRenamedToInReply">renamed topic to %s</string>
     <string name="TopicRestarted">Topic reopened</string>
     <string name="TopicRestarted2">%s reopened topic</string>
     <string name="TopicViewAsMessages">View as messages</string>
@@ -5207,6 +5212,9 @@
     <string name="UsernameLinkInactive">not active</string>
     <string name="UsernameLinkPlaceholder">username</string>
     <string name="UsernamePlaceholder">Your Username</string>
+    <string name="UsernameProfileLinkActive">active</string>
+    <string name="UsernameProfileLinkEditable">tap to edit</string>
+    <string name="UsernameProfileLinkInactive">not active</string>
     <string name="UsernamesChannelHeader">Links order</string>
     <string name="UsernamesChannelHelp">Drag and drop links to change the order in which they will be displayed on the channel info page.</string>
     <string name="UsernamesProfileHeader">Usernames order</string>

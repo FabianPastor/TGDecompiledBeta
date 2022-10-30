@@ -27,7 +27,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.os.PersistableBundle;
 import android.os.StatFs;
 import android.os.StrictMode;
 import android.os.SystemClock;
@@ -1552,6 +1551,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
             NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.stickersImportComplete);
             NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.newSuggestionsAvailable);
             NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.currentUserPremiumStatusChanged);
+            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.chatSwithcedToForum);
         }
         int i2 = UserConfig.selectedAccount;
         this.currentAccount = i2;
@@ -1572,6 +1572,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.newSuggestionsAvailable);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.currentUserShowLimitReachedDialog);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.currentUserPremiumStatusChanged);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.chatSwithcedToForum);
     }
 
     private void checkLayout() {
@@ -4519,8 +4520,8 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
     }
 
     @Override // android.app.Activity
-    public void onRestoreInstanceState(Bundle bundle, PersistableBundle persistableBundle) {
-        super.onRestoreInstanceState(bundle, persistableBundle);
+    public void onRestoreInstanceState(Bundle bundle) {
+        super.onRestoreInstanceState(bundle);
         INavigationLayout iNavigationLayout = this.actionBarLayout;
         if (iNavigationLayout != null) {
             iNavigationLayout.rebuildFragments(1);
@@ -4852,7 +4853,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
     /* JADX WARN: Removed duplicated region for block: B:223:0x0631  */
     /* JADX WARN: Removed duplicated region for block: B:224:0x0638  */
     /* JADX WARN: Removed duplicated region for block: B:227:0x0648  */
-    /* JADX WARN: Removed duplicated region for block: B:461:? A[RETURN, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:464:? A[RETURN, SYNTHETIC] */
     @Override // org.telegram.messenger.NotificationCenter.NotificationCenterDelegate
     /*
         Code decompiled incorrectly, please refer to instructions dump.
@@ -4860,7 +4861,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
     */
     public void didReceivedNotification(int r23, final int r24, java.lang.Object... r25) {
         /*
-            Method dump skipped, instructions count: 2653
+            Method dump skipped, instructions count: 2672
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LaunchActivity.didReceivedNotification(int, int, java.lang.Object[]):void");

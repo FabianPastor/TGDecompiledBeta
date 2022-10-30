@@ -511,7 +511,7 @@ public class ChangeUsernameActivity extends BaseFragment {
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1790onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1810onCreateViewHolder(ViewGroup viewGroup, int i) {
             if (i == 0) {
                 HeaderCell headerCell = new HeaderCell(ChangeUsernameActivity.this.getContext());
                 headerCell.setBackgroundColor(ChangeUsernameActivity.this.getThemedColor("windowBackgroundWhite"));
@@ -527,6 +527,10 @@ public class ChangeUsernameActivity extends BaseFragment {
                     return new RecyclerListView.Holder(new InputCell(changeUsernameActivity2.getContext()));
                 } else if (i == 4) {
                     return new RecyclerListView.Holder(new UsernameCell(ChangeUsernameActivity.this.getContext(), ChangeUsernameActivity.this.getResourceProvider()) { // from class: org.telegram.ui.ChangeUsernameActivity.Adapter.1
+                        {
+                            this.isProfile = true;
+                        }
+
                         @Override // org.telegram.ui.ChangeUsernameActivity.UsernameCell
                         protected String getUsernameEditable() {
                             return ChangeUsernameActivity.this.username;
@@ -882,6 +886,7 @@ public class ChangeUsernameActivity extends BaseFragment {
         private float activeViewTextColorT;
         public TLRPC$TL_username currentUsername;
         public boolean editable;
+        public boolean isProfile;
         private Drawable[] linkDrawables;
         private Theme.ResourcesProvider resourcesProvider;
         private boolean useDivider;
@@ -894,6 +899,7 @@ public class ChangeUsernameActivity extends BaseFragment {
 
         public UsernameCell(Context context, Theme.ResourcesProvider resourcesProvider) {
             super(context);
+            this.isProfile = false;
             this.useDividerAlpha = new AnimatedFloat(this, 300L, CubicBezierInterpolator.DEFAULT);
             this.activeFloat = new AnimatedFloat(this, 400L, CubicBezierInterpolator.EASE_OUT_QUINT);
             this.resourcesProvider = resourcesProvider;
@@ -921,6 +927,8 @@ public class ChangeUsernameActivity extends BaseFragment {
         public void set(TLRPC$TL_username tLRPC$TL_username, boolean z, boolean z2) {
             int i;
             String str;
+            int i2;
+            String str2;
             this.currentUsername = tLRPC$TL_username;
             this.useDivider = z;
             invalidate();
@@ -933,18 +941,33 @@ public class ChangeUsernameActivity extends BaseFragment {
             this.active = tLRPC$TL_username.active;
             this.editable = tLRPC$TL_username.editable;
             updateUsername(tLRPC$TL_username.username);
-            AnimatedTextView animatedTextView = this.activeView;
-            if (this.editable) {
-                i = R.string.UsernameLinkEditable;
-                str = "UsernameLinkEditable";
-            } else if (this.active) {
-                i = R.string.UsernameLinkActive;
-                str = "UsernameLinkActive";
+            if (this.isProfile) {
+                AnimatedTextView animatedTextView = this.activeView;
+                if (this.editable) {
+                    i2 = R.string.UsernameProfileLinkEditable;
+                    str2 = "UsernameProfileLinkEditable";
+                } else if (this.active) {
+                    i2 = R.string.UsernameProfileLinkActive;
+                    str2 = "UsernameProfileLinkActive";
+                } else {
+                    i2 = R.string.UsernameProfileLinkInactive;
+                    str2 = "UsernameProfileLinkInactive";
+                }
+                animatedTextView.setText(LocaleController.getString(str2, i2), z2, !this.active);
             } else {
-                i = R.string.UsernameLinkInactive;
-                str = "UsernameLinkInactive";
+                AnimatedTextView animatedTextView2 = this.activeView;
+                if (this.editable) {
+                    i = R.string.UsernameLinkEditable;
+                    str = "UsernameLinkEditable";
+                } else if (this.active) {
+                    i = R.string.UsernameLinkActive;
+                    str = "UsernameLinkActive";
+                } else {
+                    i = R.string.UsernameLinkInactive;
+                    str = "UsernameLinkInactive";
+                }
+                animatedTextView2.setText(LocaleController.getString(str, i), z2, !this.active);
             }
-            animatedTextView.setText(LocaleController.getString(str, i), z2, !this.active);
             if (this.active || this.editable) {
                 z3 = true;
             }

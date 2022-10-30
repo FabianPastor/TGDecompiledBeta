@@ -427,6 +427,7 @@ public class SimpleTextView extends View {
     @Override // android.view.View
     protected void onMeasure(int i, int i2) {
         Drawable drawable;
+        Drawable drawable2;
         int size = View.MeasureSpec.getSize(i);
         int size2 = View.MeasureSpec.getSize(i2);
         int i3 = this.lastWidth;
@@ -436,9 +437,17 @@ public class SimpleTextView extends View {
             this.scrollingOffset = 0.0f;
             this.currentScrollDelay = 500;
         }
-        createLayout((((size - getPaddingLeft()) - getPaddingRight()) - this.minusWidth) - ((!this.rightDrawableOutside || (drawable = this.rightDrawable) == null) ? 0 : drawable.getIntrinsicWidth() + this.drawablePadding));
+        int i5 = 0;
+        createLayout((((size - getPaddingLeft()) - getPaddingRight()) - this.minusWidth) - ((!this.rightDrawableOutside || (drawable2 = this.rightDrawable) == null) ? 0 : drawable2.getIntrinsicWidth() + this.drawablePadding));
         if (View.MeasureSpec.getMode(i2) != NUM) {
             size2 = getPaddingBottom() + getPaddingTop() + this.textHeight;
+        }
+        if (this.widthWrapContent) {
+            int paddingLeft = getPaddingLeft() + this.textWidth + getPaddingRight() + this.minusWidth;
+            if (this.rightDrawableOutside && (drawable = this.rightDrawable) != null) {
+                i5 = drawable.getIntrinsicWidth() + this.drawablePadding;
+            }
+            size = Math.min(size, paddingLeft + i5);
         }
         setMeasuredDimension(size, size2);
         if ((this.gravity & 112) == 16) {

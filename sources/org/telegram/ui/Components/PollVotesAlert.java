@@ -1235,7 +1235,7 @@ public class PollVotesAlert extends BottomSheet {
 
         @Override // org.telegram.ui.Components.RecyclerListView.SectionsAdapter
         /* renamed from: getItem */
-        public Object mo1778getItem(int i, int i2) {
+        public Object mo1798getItem(int i, int i2) {
             int i3;
             if (i == 0) {
                 return 293145;
@@ -1331,7 +1331,7 @@ public class PollVotesAlert extends BottomSheet {
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1790onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1810onCreateViewHolder(ViewGroup viewGroup, int i) {
             TextCell textCell;
             if (i == 0) {
                 textCell = new UserCell(this.mContext);

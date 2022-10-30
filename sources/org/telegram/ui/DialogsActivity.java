@@ -262,6 +262,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     private RadialProgressView floatingProgressView;
     private boolean floatingProgressVisible;
     private int folderId;
+    private int forumCount;
     private FragmentContextView fragmentContextView;
     private FragmentContextView fragmentLocationContextView;
     private ArrayList<TLRPC$Dialog> frozenDialogsList;
@@ -2205,13 +2206,15 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
         @Override // org.telegram.ui.Components.FilterTabsView
         protected void onDefaultTabMoved() {
-            DialogsActivity dialogsActivity = DialogsActivity.this;
-            dialogsActivity.topBulletin = BulletinFactory.of(dialogsActivity).createSimpleBulletin(R.raw.filter_reorder, AndroidUtilities.replaceTags(LocaleController.formatString("LimitReachedReorderFolder", R.string.LimitReachedReorderFolder, LocaleController.getString(R.string.FilterAllChats))), LocaleController.getString("PremiumMore", R.string.PremiumMore), 5000, new Runnable() { // from class: org.telegram.ui.DialogsActivity$6$$ExternalSyntheticLambda0
-                @Override // java.lang.Runnable
-                public final void run() {
-                    DialogsActivity.AnonymousClass6.this.lambda$onDefaultTabMoved$0();
-                }
-            }).show(true);
+            if (!DialogsActivity.this.getMessagesController().premiumLocked) {
+                DialogsActivity dialogsActivity = DialogsActivity.this;
+                dialogsActivity.topBulletin = BulletinFactory.of(dialogsActivity).createSimpleBulletin(R.raw.filter_reorder, AndroidUtilities.replaceTags(LocaleController.formatString("LimitReachedReorderFolder", R.string.LimitReachedReorderFolder, LocaleController.getString(R.string.FilterAllChats))), LocaleController.getString("PremiumMore", R.string.PremiumMore), 5000, new Runnable() { // from class: org.telegram.ui.DialogsActivity$6$$ExternalSyntheticLambda0
+                    @Override // java.lang.Runnable
+                    public final void run() {
+                        DialogsActivity.AnonymousClass6.this.lambda$onDefaultTabMoved$0();
+                    }
+                }).show(true);
+            }
         }
 
         /* JADX INFO: Access modifiers changed from: private */
@@ -5833,129 +5836,17 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         hideActionMode(true);
     }
 
-    /* JADX WARN: Removed duplicated region for block: B:40:0x00b1  */
-    /* JADX WARN: Removed duplicated region for block: B:44:? A[RETURN, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:40:0x009e  */
+    /* JADX WARN: Removed duplicated region for block: B:43:0x00c2  */
+    /* JADX WARN: Removed duplicated region for block: B:47:? A[RETURN, SYNTHETIC] */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
     private void markAsRead(long r16) {
         /*
-            r15 = this;
-            r0 = r15
-            r2 = r16
-            org.telegram.messenger.MessagesController r1 = r15.getMessagesController()
-            androidx.collection.LongSparseArray<org.telegram.tgnet.TLRPC$Dialog> r1 = r1.dialogs_dict
-            java.lang.Object r1 = r1.get(r2)
-            org.telegram.tgnet.TLRPC$Dialog r1 = (org.telegram.tgnet.TLRPC$Dialog) r1
-            org.telegram.ui.DialogsActivity$ViewPage[] r4 = r0.viewPages
-            r12 = 0
-            r4 = r4[r12]
-            int r4 = org.telegram.ui.DialogsActivity.ViewPage.access$12400(r4)
-            r5 = 0
-            r6 = 8
-            r7 = 1
-            r8 = 7
-            if (r4 == r8) goto L29
-            org.telegram.ui.DialogsActivity$ViewPage[] r4 = r0.viewPages
-            r4 = r4[r12]
-            int r4 = org.telegram.ui.DialogsActivity.ViewPage.access$12400(r4)
-            if (r4 != r6) goto L3a
-        L29:
-            org.telegram.ui.ActionBar.ActionBar r4 = r0.actionBar
-            boolean r4 = r4.isActionModeShowed()
-            if (r4 == 0) goto L3c
-            org.telegram.ui.ActionBar.ActionBar r4 = r0.actionBar
-            boolean r4 = r4.isActionModeShowed(r5)
-            if (r4 == 0) goto L3a
-            goto L3c
-        L3a:
-            r4 = 0
-            goto L3d
-        L3c:
-            r4 = 1
-        L3d:
-            if (r4 == 0) goto L54
-            org.telegram.messenger.MessagesController r4 = r15.getMessagesController()
-            org.telegram.messenger.MessagesController$DialogFilter[] r4 = r4.selectedDialogFilter
-            org.telegram.ui.DialogsActivity$ViewPage[] r5 = r0.viewPages
-            r5 = r5[r12]
-            int r5 = org.telegram.ui.DialogsActivity.ViewPage.access$12400(r5)
-            if (r5 != r6) goto L51
-            r5 = 1
-            goto L52
-        L51:
-            r5 = 0
-        L52:
-            r5 = r4[r5]
-        L54:
-            r13 = 2
-            r0.debugLastUpdateAction = r13
-            r4 = -1
-            if (r5 == 0) goto L93
-            int r6 = r5.flags
-            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_READ
-            r6 = r6 & r8
-            if (r6 == 0) goto L93
-            int r6 = r0.currentAccount
-            boolean r5 = r5.alwaysShow(r6, r1)
-            if (r5 != 0) goto L93
-            r15.setDialogsListFrozen(r7)
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r5 = r0.frozenDialogsList
-            if (r5 == 0) goto L93
-            r5 = 0
-        L71:
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r6 = r0.frozenDialogsList
-            int r6 = r6.size()
-            if (r5 >= r6) goto L8c
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r6 = r0.frozenDialogsList
-            java.lang.Object r6 = r6.get(r5)
-            org.telegram.tgnet.TLRPC$Dialog r6 = (org.telegram.tgnet.TLRPC$Dialog) r6
-            long r6 = r6.id
-            int r8 = (r6 > r2 ? 1 : (r6 == r2 ? 0 : -1))
-            if (r8 != 0) goto L89
-            r4 = r5
-            goto L8c
-        L89:
-            int r5 = r5 + 1
-            goto L71
-        L8c:
-            if (r4 >= 0) goto L91
-            r15.setDialogsListFrozen(r12, r12)
-        L91:
-            r14 = r4
-            goto L94
-        L93:
-            r14 = -1
-        L94:
-            org.telegram.messenger.MessagesController r4 = r15.getMessagesController()
-            r4.markMentionsAsRead(r2, r12)
-            org.telegram.messenger.MessagesController r4 = r15.getMessagesController()
-            int r5 = r1.top_message
-            int r6 = r1.last_message_date
-            r7 = 0
-            r8 = 0
-            r9 = 0
-            r10 = 1
-            r11 = 0
-            r1 = r4
-            r2 = r16
-            r4 = r5
-            r1.markDialogAsRead(r2, r4, r5, r6, r7, r8, r9, r10, r11)
-            if (r14 < 0) goto Lce
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r1 = r0.frozenDialogsList
-            r1.remove(r14)
-            org.telegram.ui.DialogsActivity$ViewPage[] r1 = r0.viewPages
-            r1 = r1[r12]
-            org.telegram.ui.Components.DialogsItemAnimator r1 = org.telegram.ui.DialogsActivity.ViewPage.access$12700(r1)
-            r1.prepareForRemove()
-            org.telegram.ui.DialogsActivity$ViewPage[] r1 = r0.viewPages
-            r1 = r1[r12]
-            org.telegram.ui.Adapters.DialogsAdapter r1 = org.telegram.ui.DialogsActivity.ViewPage.access$9400(r1)
-            r1.notifyItemRemoved(r14)
-            r0.dialogRemoveFinished = r13
-        Lce:
-            return
+            Method dump skipped, instructions count: 224
+            To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.DialogsActivity.markAsRead(long):void");
     }
@@ -6035,6 +5926,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         this.canMuteCount = 0;
         this.canPinCount = 0;
         this.canReadCount = 0;
+        this.forumCount = 0;
         this.canClearCacheCount = 0;
         this.canReportSpamCount = 0;
         if (z) {
@@ -6059,7 +5951,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 boolean isDialogPinned = isDialogPinned(tLRPC$Dialog);
                 i2 = size;
                 boolean z2 = tLRPC$Dialog.unread_count != 0 || tLRPC$Dialog.unread_mark;
-                i3 = i5;
+                if (getMessagesController().isForum(j)) {
+                    i3 = i5;
+                    this.forumCount++;
+                } else {
+                    i3 = i5;
+                }
                 if (getMessagesController().isDialogMuted(j, 0)) {
                     i4 = 1;
                     this.canUnmuteCount++;
@@ -6227,8 +6124,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         }
         if (this.canReadCount != 0) {
             this.readItem.setTextAndIcon(LocaleController.getString("MarkAsRead", R.string.MarkAsRead), R.drawable.msg_markread);
-        } else {
+            this.readItem.setVisibility(0);
+        } else if (this.forumCount == 0) {
             this.readItem.setTextAndIcon(LocaleController.getString("MarkAsUnread", R.string.MarkAsUnread), R.drawable.msg_markunread);
+            this.readItem.setVisibility(0);
+        } else {
+            this.readItem.setVisibility(8);
         }
         if (this.canPinCount != 0) {
             this.pinItem.setIcon(R.drawable.msg_pin);

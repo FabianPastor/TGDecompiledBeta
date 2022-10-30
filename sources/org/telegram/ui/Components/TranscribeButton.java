@@ -15,6 +15,7 @@ import android.text.TextUtils;
 import android.text.style.ImageSpan;
 import android.util.StateSet;
 import androidx.core.graphics.ColorUtils;
+import androidx.core.math.MathUtils;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,11 +46,14 @@ public class TranscribeButton {
     private static HashMap<Integer, MessageObject> transcribeOperationsByDialogPosition;
     private static HashMap<Long, MessageObject> transcribeOperationsById;
     private static ArrayList<Integer> videoTranscriptionsOpen;
+    private float a;
+    private float b;
     private float backgroundBack;
     private int backgroundColor;
     private Paint backgroundPaint;
     private Path boundsPath;
     private int color;
+    private int diameter;
     private int iconColor;
     private RLottieDrawable inIconDrawable;
     private int inIconDrawableAlpha;
@@ -302,8 +306,17 @@ public class TranscribeButton {
     }
 
     public void setBounds(int i, int i2, int i3, int i4, int i5) {
-        this.bounds.set(i, i2, i3 + i, i4 + i2);
-        this.radius = i5;
+        if (i3 != this.bounds.width() || i4 != this.bounds.height()) {
+            float f = i3 / 2.0f;
+            float f2 = i5;
+            float f3 = i4 / 2.0f;
+            this.a = (float) ((Math.atan((f - f2) / f3) * 180.0d) / 3.141592653589793d);
+            this.b = (float) ((Math.atan(f / (f3 - f2)) * 180.0d) / 3.141592653589793d);
+        }
+        this.bounds.set(i, i2, i + i3, i2 + i4);
+        int min = Math.min(Math.min(i3, i4) / 2, i5);
+        this.radius = min;
+        this.diameter = min * 2;
     }
 
     public int width() {
@@ -330,7 +343,6 @@ public class TranscribeButton {
         canvas.save();
         canvas.clipPath(this.boundsPath);
         float f2 = this.backgroundBack;
-        float f3 = 0.0f;
         if (f2 * f > 0.0f) {
             drawGradientBackground(canvas, this.bounds, f2 * f);
         }
@@ -347,34 +359,82 @@ public class TranscribeButton {
             this.selectorDrawable.draw(canvas);
         }
         canvas.restore();
+        float f3 = 1.0f;
         float f4 = this.loadingFloat.set(this.loading ? 1.0f : 0.0f);
         if (f4 > 0.0f) {
             float[] segments = getSegments(((float) (SystemClock.elapsedRealtime() - this.start)) * 0.75f);
-            canvas.save();
-            if (this.progressClipPath == null) {
-                this.progressClipPath = new Path();
-            }
-            this.progressClipPath.reset();
-            rectF.set(this.pressBounds);
-            float max = Math.max(40.0f * f4, segments[1] - segments[0]);
             Path path3 = this.progressClipPath;
+            if (path3 == null) {
+                this.progressClipPath = new Path();
+            } else {
+                path3.rewind();
+            }
+            float max = Math.max(40.0f * f4, segments[1] - segments[0]);
             float f5 = segments[0];
             float f6 = (1.0f - f4) * max;
-            if (!this.loading) {
-                f3 = 1.0f;
+            if (this.loading) {
+                f3 = 0.0f;
             }
-            path3.addArc(rectF, f5 + (f6 * f3), max * f4);
-            this.progressClipPath.lineTo(rectF.centerX(), rectF.centerY());
-            this.progressClipPath.close();
-            canvas.clipPath(this.progressClipPath);
-            rectF.set(this.bounds);
+            float f7 = f5 + (f6 * f3);
+            float f8 = (max * f4) + f7;
+            float f9 = f7 % 360.0f;
+            float var_ = f8 % 360.0f;
+            if (f9 < 0.0f) {
+                f9 += 360.0f;
+            }
+            float var_ = f9;
+            if (var_ < 0.0f) {
+                var_ += 360.0f;
+            }
+            float var_ = var_;
+            Path path4 = this.progressClipPath;
+            int centerX = this.bounds.centerX();
+            android.graphics.Rect rect = this.bounds;
+            int i2 = rect.top;
+            addLine(path4, centerX, i2, rect.right - this.radius, i2, var_, var_, 0.0f, this.a);
+            Path path5 = this.progressClipPath;
+            android.graphics.Rect rect2 = this.bounds;
+            addCorner(path5, rect2.right, rect2.top, this.diameter, 1, var_, var_, this.a, this.b);
+            Path path6 = this.progressClipPath;
+            android.graphics.Rect rect3 = this.bounds;
+            int i3 = rect3.right;
+            int i4 = rect3.top;
+            int i5 = this.radius;
+            float var_ = this.b;
+            addLine(path6, i3, i4 + i5, i3, rect3.bottom - i5, var_, var_, var_, 180.0f - var_);
+            Path path7 = this.progressClipPath;
+            android.graphics.Rect rect4 = this.bounds;
+            addCorner(path7, rect4.right, rect4.bottom, this.diameter, 2, var_, var_, 180.0f - this.b, 180.0f - this.a);
+            Path path8 = this.progressClipPath;
+            android.graphics.Rect rect5 = this.bounds;
+            int i6 = rect5.right;
+            int i7 = this.radius;
+            int i8 = rect5.bottom;
+            int i9 = rect5.left + i7;
+            float var_ = this.a;
+            addLine(path8, i6 - i7, i8, i9, i8, var_, var_, 180.0f - var_, var_ + 180.0f);
+            Path path9 = this.progressClipPath;
+            android.graphics.Rect rect6 = this.bounds;
+            addCorner(path9, rect6.left, rect6.bottom, this.diameter, 3, var_, var_, this.a + 180.0f, this.b + 180.0f);
+            Path path10 = this.progressClipPath;
+            android.graphics.Rect rect7 = this.bounds;
+            int i10 = rect7.left;
+            int i11 = rect7.bottom;
+            int i12 = this.radius;
+            int i13 = rect7.top + i12;
+            float var_ = this.b;
+            addLine(path10, i10, i11 - i12, i10, i13, var_, var_, var_ + 180.0f, 360.0f - var_);
+            Path path11 = this.progressClipPath;
+            android.graphics.Rect rect8 = this.bounds;
+            addCorner(path11, rect8.left, rect8.top, this.diameter, 4, var_, var_, 360.0f - this.b, 360.0f - this.a);
+            Path path12 = this.progressClipPath;
+            android.graphics.Rect rect9 = this.bounds;
+            addLine(path12, rect9.left + this.radius, rect9.top, rect9.centerX(), this.bounds.top, var_, var_, 360.0f - this.a, 360.0f);
             this.strokePaint.setStrokeWidth(AndroidUtilities.dp(1.5f));
             int alpha2 = this.strokePaint.getAlpha();
             this.strokePaint.setAlpha((int) (alpha2 * f));
-            int i2 = this.radius;
-            canvas.drawRoundRect(rectF, i2, i2, this.strokePaint);
+            canvas.drawPath(this.progressClipPath, this.strokePaint);
             this.strokePaint.setAlpha(alpha2);
-            canvas.restore();
             this.parent.invalidate();
         }
         canvas.save();
@@ -399,13 +459,69 @@ public class TranscribeButton {
         fArr[0] = f - 20.0f;
         fArr[1] = f;
         for (int i = 0; i < 4; i++) {
-            int i2 = i * 1350;
             float[] fArr2 = this.segments;
+            int i2 = i * 1350;
             fArr2[1] = fArr2[1] + (this.interpolator.getInterpolation(((float) (j2 - i2)) / 667.0f) * 250.0f);
             float[] fArr3 = this.segments;
             fArr3[0] = fArr3[0] + (this.interpolator.getInterpolation(((float) (j2 - (i2 + 667))) / 667.0f) * 250.0f);
         }
         return this.segments;
+    }
+
+    private void addLine(Path path, int i, int i2, int i3, int i4, float f, float f2, float f3, float f4) {
+        if (i == i3 && i2 == i4) {
+            return;
+        }
+        if (f > f2) {
+            float f5 = f4 - f3;
+            addLine(path, i, i2, i3, i4, (f - f3) / f5, 1.0f);
+            addLine(path, i, i2, i3, i4, 0.0f, (f2 - f3) / f5);
+            return;
+        }
+        float f6 = f4 - f3;
+        addLine(path, i, i2, i3, i4, Math.max(0.0f, f - f3) / f6, (Math.min(f2, f4) - f3) / f6);
+    }
+
+    private void addLine(Path path, int i, int i2, int i3, int i4, float f, float f2) {
+        if (i == i3 && i2 == i4) {
+            return;
+        }
+        float clamp = MathUtils.clamp(f, 0.0f, 1.0f);
+        float clamp2 = MathUtils.clamp(f2, 0.0f, 1.0f);
+        if (clamp2 - clamp <= 0.0f) {
+            return;
+        }
+        path.moveTo(AndroidUtilities.lerp(i, i3, clamp), AndroidUtilities.lerp(i2, i4, clamp));
+        path.lineTo(AndroidUtilities.lerp(i, i3, clamp2), AndroidUtilities.lerp(i2, i4, clamp2));
+    }
+
+    private void addCorner(Path path, int i, int i2, int i3, int i4, float f, float f2, float f3, float f4) {
+        if (f > f2) {
+            float f5 = f4 - f3;
+            addCorner(path, i, i2, i3, i4, (f - f3) / f5, 1.0f);
+            addCorner(path, i, i2, i3, i4, 0.0f, (f2 - f3) / f5);
+            return;
+        }
+        float f6 = f4 - f3;
+        addCorner(path, i, i2, i3, i4, Math.max(0.0f, f - f3) / f6, (Math.min(f2, f4) - f3) / f6);
+    }
+
+    private void addCorner(Path path, int i, int i2, int i3, int i4, float f, float f2) {
+        float clamp = MathUtils.clamp(f, 0.0f, 1.0f);
+        float clamp2 = MathUtils.clamp(f2, 0.0f, 1.0f) - clamp;
+        if (clamp2 <= 0.0f) {
+            return;
+        }
+        if (i4 == 1) {
+            AndroidUtilities.rectTmp.set(i - i3, i2, i, i2 + i3);
+        } else if (i4 == 2) {
+            AndroidUtilities.rectTmp.set(i - i3, i2 - i3, i, i2);
+        } else if (i4 == 3) {
+            AndroidUtilities.rectTmp.set(i, i2 - i3, i + i3, i2);
+        } else if (i4 == 4) {
+            AndroidUtilities.rectTmp.set(i, i2, i + i3, i2 + i3);
+        }
+        path.addArc(AndroidUtilities.rectTmp, ((i4 * 90) - 180) + (clamp * 90.0f), clamp2 * 90.0f);
     }
 
     /* loaded from: classes3.dex */

@@ -42,12 +42,14 @@ import org.telegram.tgnet.TLRPC$UserFull;
 import org.telegram.tgnet.TLRPC$UserStatus;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarPopupWindow;
+import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.AnimatedEmojiDrawable;
 import org.telegram.ui.Components.AutoDeletePopupWrapper;
 import org.telegram.ui.Components.SharedMediaLayout;
+import org.telegram.ui.TopicsFragment;
 /* loaded from: classes3.dex */
 public class ChatAvatarContainer extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
     public boolean allowShorterStatus;
@@ -82,11 +84,11 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
     private SimpleTextView titleTextLargerCopyView;
     private SimpleTextView titleTextView;
 
-    public ChatAvatarContainer(Context context, ChatActivity chatActivity, boolean z) {
-        this(context, chatActivity, z, null);
+    public ChatAvatarContainer(Context context, BaseFragment baseFragment, boolean z) {
+        this(context, baseFragment, z, null);
     }
 
-    public ChatAvatarContainer(Context context, ChatActivity chatActivity, boolean z, final Theme.ResourcesProvider resourcesProvider) {
+    public ChatAvatarContainer(Context context, BaseFragment baseFragment, boolean z, final Theme.ResourcesProvider resourcesProvider) {
         super(context);
         this.statusDrawables = new StatusDrawable[6];
         this.avatarDrawable = new AvatarDrawable();
@@ -102,13 +104,17 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
         this.rightDrawableIsScamOrVerified = false;
         this.rightDrawableContentDescription = null;
         this.resourcesProvider = resourcesProvider;
-        this.parentFragment = chatActivity;
-        final boolean z2 = chatActivity != null && chatActivity.getChatMode() == 0 && !UserObject.isReplyUser(this.parentFragment.getCurrentUser());
+        boolean z2 = baseFragment instanceof ChatActivity;
+        if (z2) {
+            this.parentFragment = (ChatActivity) baseFragment;
+        }
+        ChatActivity chatActivity = this.parentFragment;
+        final boolean z3 = chatActivity != null && chatActivity.getChatMode() == 0 && !UserObject.isReplyUser(this.parentFragment.getCurrentUser());
         this.avatarImageView = new BackupImageView(this, context) { // from class: org.telegram.ui.Components.ChatAvatarContainer.1
             @Override // android.view.View
             public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
                 super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
-                if (z2 && getImageReceiver().hasNotThumb()) {
+                if (z3 && getImageReceiver().hasNotThumb()) {
                     accessibilityNodeInfo.setText(LocaleController.getString("AccDescrProfilePicture", R.string.AccDescrProfilePicture));
                     if (Build.VERSION.SDK_INT < 21) {
                         return;
@@ -119,16 +125,17 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                 accessibilityNodeInfo.setVisibleToUser(false);
             }
         };
-        if (this.parentFragment != null) {
-            this.sharedMediaPreloader = new SharedMediaLayout.SharedMediaPreloader(chatActivity);
-            if (this.parentFragment.isThreadChat() || this.parentFragment.getChatMode() == 2) {
+        if (z2 || (baseFragment instanceof TopicsFragment)) {
+            this.sharedMediaPreloader = new SharedMediaLayout.SharedMediaPreloader(baseFragment);
+            ChatActivity chatActivity2 = this.parentFragment;
+            if (chatActivity2 != null && (chatActivity2.isThreadChat() || this.parentFragment.getChatMode() == 2)) {
                 this.avatarImageView.setVisibility(8);
             }
         }
         this.avatarImageView.setContentDescription(LocaleController.getString("AccDescrProfilePicture", R.string.AccDescrProfilePicture));
         this.avatarImageView.setRoundRadius(AndroidUtilities.dp(21.0f));
         addView(this.avatarImageView);
-        if (z2) {
+        if (z3) {
             this.avatarImageView.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.Components.ChatAvatarContainer$$ExternalSyntheticLambda0
                 @Override // android.view.View.OnClickListener
                 public final void onClick(View view) {
@@ -222,8 +229,8 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                 this.timeItem.setContentDescription(LocaleController.getString("AccAutoDeleteTimer", R.string.AccAutoDeleteTimer));
             }
         }
-        ChatActivity chatActivity2 = this.parentFragment;
-        if (chatActivity2 != null && chatActivity2.getChatMode() == 0) {
+        ChatActivity chatActivity3 = this.parentFragment;
+        if (chatActivity3 != null && chatActivity3.getChatMode() == 0) {
             if ((!this.parentFragment.isThreadChat() || this.parentFragment.isTopic) && !UserObject.isReplyUser(this.parentFragment.getCurrentUser())) {
                 setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.Components.ChatAvatarContainer$$ExternalSyntheticLambda1
                     @Override // android.view.View.OnClickListener
@@ -898,6 +905,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
         BackupImageView backupImageView = this.avatarImageView;
         if (backupImageView != null) {
             backupImageView.setForUserOrChat(tLRPC$Chat, this.avatarDrawable);
+            this.avatarImageView.setRoundRadius(AndroidUtilities.dp((tLRPC$Chat == null || !tLRPC$Chat.forum) ? 21.0f : 16.0f));
         }
     }
 

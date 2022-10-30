@@ -455,13 +455,13 @@ public class AnimatedTextView extends View {
 
             @Override // java.lang.CharSequence
             /* renamed from: chars  reason: collision with other method in class */
-            public /* synthetic */ IntStream mo1253chars() {
+            public /* synthetic */ IntStream mo1274chars() {
                 return C$r8$wrapper$java$util$stream$IntStream$WRP.convert(chars());
             }
 
             @Override // java.lang.CharSequence
             /* renamed from: codePoints  reason: collision with other method in class */
-            public /* synthetic */ IntStream mo1254codePoints() {
+            public /* synthetic */ IntStream mo1275codePoints() {
                 return C$r8$wrapper$java$util$stream$IntStream$WRP.convert(codePoints());
             }
 

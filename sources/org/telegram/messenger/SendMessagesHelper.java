@@ -7,6 +7,8 @@ import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.location.LocationListener;
@@ -21,6 +23,9 @@ import android.text.Spannable;
 import android.text.TextUtils;
 import android.util.SparseArray;
 import android.webkit.MimeTypeMap;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.collection.LongSparseArray;
 import androidx.core.view.inputmethod.InputContentInfoCompat;
@@ -33,6 +38,7 @@ import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
@@ -75,6 +81,7 @@ import org.telegram.tgnet.TLRPC$MessageReplies;
 import org.telegram.tgnet.TLRPC$Peer;
 import org.telegram.tgnet.TLRPC$PhotoSize;
 import org.telegram.tgnet.TLRPC$ReplyMarkup;
+import org.telegram.tgnet.TLRPC$TL_account_getPassword;
 import org.telegram.tgnet.TLRPC$TL_botInlineMessageMediaAuto;
 import org.telegram.tgnet.TLRPC$TL_botInlineMessageMediaContact;
 import org.telegram.tgnet.TLRPC$TL_botInlineMessageMediaGeo;
@@ -129,6 +136,7 @@ import org.telegram.tgnet.TLRPC$TL_messageEncryptedAction;
 import org.telegram.tgnet.TLRPC$TL_messageEntityUrl;
 import org.telegram.tgnet.TLRPC$TL_messageMediaDocument;
 import org.telegram.tgnet.TLRPC$TL_messageMediaEmpty;
+import org.telegram.tgnet.TLRPC$TL_messageMediaGame;
 import org.telegram.tgnet.TLRPC$TL_messageMediaGeo;
 import org.telegram.tgnet.TLRPC$TL_messageMediaGeoLive;
 import org.telegram.tgnet.TLRPC$TL_messageMediaInvoice;
@@ -137,6 +145,7 @@ import org.telegram.tgnet.TLRPC$TL_messageMediaVenue;
 import org.telegram.tgnet.TLRPC$TL_messageReplies;
 import org.telegram.tgnet.TLRPC$TL_messageReplyHeader;
 import org.telegram.tgnet.TLRPC$TL_messageService;
+import org.telegram.tgnet.TLRPC$TL_messages_botCallbackAnswer;
 import org.telegram.tgnet.TLRPC$TL_messages_editMessage;
 import org.telegram.tgnet.TLRPC$TL_messages_forwardMessages;
 import org.telegram.tgnet.TLRPC$TL_messages_getBotCallbackAnswer;
@@ -156,6 +165,8 @@ import org.telegram.tgnet.TLRPC$TL_messages_startHistoryImport;
 import org.telegram.tgnet.TLRPC$TL_messages_stickerSet;
 import org.telegram.tgnet.TLRPC$TL_messages_uploadImportedMedia;
 import org.telegram.tgnet.TLRPC$TL_messages_uploadMedia;
+import org.telegram.tgnet.TLRPC$TL_payments_paymentForm;
+import org.telegram.tgnet.TLRPC$TL_payments_paymentReceipt;
 import org.telegram.tgnet.TLRPC$TL_peerUser;
 import org.telegram.tgnet.TLRPC$TL_photo;
 import org.telegram.tgnet.TLRPC$TL_photoCachedSize;
@@ -189,15 +200,19 @@ import org.telegram.tgnet.TLRPC$WebDocument;
 import org.telegram.tgnet.TLRPC$WebPage;
 import org.telegram.tgnet.TLRPC$account_Password;
 import org.telegram.tgnet.TLRPC$messages_Messages;
+import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.ChatMessageCell;
 import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.AnimatedEmojiSpan;
 import org.telegram.ui.Components.AnimatedFileDrawable;
+import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.Point;
 import org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble;
 import org.telegram.ui.Components.Reactions.ReactionsUtils;
+import org.telegram.ui.PaymentFormActivity;
 import org.telegram.ui.TwoStepVerificationActivity;
 import org.telegram.ui.TwoStepVerificationSetupActivity;
 /* loaded from: classes.dex */
@@ -221,6 +236,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
     private LongSparseArray<Integer> uploadingMessagesIdDialogs;
     private LongSparseArray<Long> voteSendTime;
     private HashMap<String, Boolean> waitingForCallback;
+    private HashMap<String, List<String>> waitingForCallbackMap;
     private HashMap<String, MessageObject> waitingForLocation;
     private HashMap<String, byte[]> waitingForVote;
 
@@ -1078,6 +1094,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         this.uploadingMessagesIdDialogs = new LongSparseArray<>();
         this.waitingForLocation = new HashMap<>();
         this.waitingForCallback = new HashMap<>();
+        this.waitingForCallbackMap = new HashMap<>();
         this.waitingForVote = new HashMap<>();
         this.voteSendTime = new LongSparseArray<>();
         this.importingHistoryFiles = new HashMap<>();
@@ -2401,6 +2418,13 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         TLRPC$User userSync;
         final String str = j + "_" + i + "_" + Utilities.bytesToHex(bArr) + "_0";
         this.waitingForCallback.put(str, Boolean.TRUE);
+        final List<String> list = this.waitingForCallbackMap.get(j + "_" + i);
+        if (list == null) {
+            ArrayList arrayList = new ArrayList();
+            this.waitingForCallbackMap.put(j + "_" + i, arrayList);
+            list = arrayList;
+        }
+        list.add(str);
         if (DialogObject.isUserDialog(j)) {
             if (getMessagesController().getUser(Long.valueOf(j)) == null && (userSync = getMessagesStorage().getUserSync(j)) != null) {
                 getMessagesController().putUser(userSync, true);
@@ -2422,25 +2446,40 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         getConnectionsManager().sendRequest(tLRPC$TL_messages_getBotCallbackAnswer, new RequestDelegate() { // from class: org.telegram.messenger.SendMessagesHelper$$ExternalSyntheticLambda83
             @Override // org.telegram.tgnet.RequestDelegate
             public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                SendMessagesHelper.this.lambda$sendNotificationCallback$18(str, tLObject, tLRPC$TL_error);
+                SendMessagesHelper.this.lambda$sendNotificationCallback$18(str, list, tLObject, tLRPC$TL_error);
             }
         }, 2);
         getMessagesController().markDialogAsRead(j, i, i, 0, false, 0, 0, true, 0);
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$sendNotificationCallback$17(String str) {
-        this.waitingForCallback.remove(str);
+    public /* synthetic */ void lambda$sendNotificationCallback$18(final String str, final List list, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.SendMessagesHelper$$ExternalSyntheticLambda30
+            @Override // java.lang.Runnable
+            public final void run() {
+                SendMessagesHelper.this.lambda$sendNotificationCallback$17(str, list);
+            }
+        });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$sendNotificationCallback$18(final String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.SendMessagesHelper$$ExternalSyntheticLambda27
-            @Override // java.lang.Runnable
-            public final void run() {
-                SendMessagesHelper.this.lambda$sendNotificationCallback$17(str);
-            }
-        });
+    public /* synthetic */ void lambda$sendNotificationCallback$17(String str, List list) {
+        this.waitingForCallback.remove(str);
+        list.remove(str);
+    }
+
+    public void onMessageEdited(TLRPC$Message tLRPC$Message) {
+        if (tLRPC$Message == null || tLRPC$Message.reply_markup == null) {
+            return;
+        }
+        HashMap<String, List<String>> hashMap = this.waitingForCallbackMap;
+        List<String> remove = hashMap.remove(tLRPC$Message.dialog_id + "_" + tLRPC$Message.id);
+        if (remove == null) {
+            return;
+        }
+        for (String str : remove) {
+            this.waitingForCallback.remove(str);
+        }
     }
 
     public byte[] isSendingVote(MessageObject messageObject) {
@@ -2488,7 +2527,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             getMessagesController().processUpdates((TLRPC$Updates) tLObject, false);
             this.voteSendTime.put(messageObject.getPollId(), Long.valueOf(SystemClock.elapsedRealtime()));
         }
-        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.SendMessagesHelper$$ExternalSyntheticLambda29
+        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.SendMessagesHelper$$ExternalSyntheticLambda28
             @Override // java.lang.Runnable
             public final void run() {
                 SendMessagesHelper.this.lambda$sendVote$20(str, runnable);
@@ -2600,45 +2639,235 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         lambda$sendCallback$24(z, messageObject, tLRPC$KeyboardButton, null, null, chatActivity);
     }
 
-    /* JADX WARN: Removed duplicated region for block: B:20:0x007f  */
-    /* JADX WARN: Removed duplicated region for block: B:21:0x0088  */
+    /* JADX WARN: Removed duplicated region for block: B:20:0x0084  */
+    /* JADX WARN: Removed duplicated region for block: B:21:0x00aa  */
+    /* JADX WARN: Removed duplicated region for block: B:24:0x00d1  */
+    /* JADX WARN: Removed duplicated region for block: B:25:0x00da  */
     /* renamed from: sendCallback */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public void lambda$sendCallback$24(final boolean r19, final org.telegram.messenger.MessageObject r20, final org.telegram.tgnet.TLRPC$KeyboardButton r21, final org.telegram.tgnet.TLRPC$InputCheckPasswordSRP r22, final org.telegram.ui.TwoStepVerificationActivity r23, final org.telegram.ui.ChatActivity r24) {
+    public void lambda$sendCallback$24(final boolean r21, final org.telegram.messenger.MessageObject r22, final org.telegram.tgnet.TLRPC$KeyboardButton r23, final org.telegram.tgnet.TLRPC$InputCheckPasswordSRP r24, final org.telegram.ui.TwoStepVerificationActivity r25, final org.telegram.ui.ChatActivity r26) {
         /*
-            Method dump skipped, instructions count: 443
+            Method dump skipped, instructions count: 528
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SendMessagesHelper.lambda$sendCallback$24(boolean, org.telegram.messenger.MessageObject, org.telegram.tgnet.TLRPC$KeyboardButton, org.telegram.tgnet.TLRPC$InputCheckPasswordSRP, org.telegram.ui.TwoStepVerificationActivity, org.telegram.ui.ChatActivity):void");
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$sendCallback$30(final String str, final boolean z, final MessageObject messageObject, final TLRPC$KeyboardButton tLRPC$KeyboardButton, final ChatActivity chatActivity, final TwoStepVerificationActivity twoStepVerificationActivity, final TLObject[] tLObjectArr, final TLRPC$InputCheckPasswordSRP tLRPC$InputCheckPasswordSRP, final boolean z2, final TLObject tLObject, final TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$sendCallback$30(final String str, final List list, final boolean z, final MessageObject messageObject, final TLRPC$KeyboardButton tLRPC$KeyboardButton, final ChatActivity chatActivity, final TwoStepVerificationActivity twoStepVerificationActivity, final TLObject[] tLObjectArr, final TLRPC$InputCheckPasswordSRP tLRPC$InputCheckPasswordSRP, final boolean z2, final TLObject tLObject, final TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.SendMessagesHelper$$ExternalSyntheticLambda31
             @Override // java.lang.Runnable
             public final void run() {
-                SendMessagesHelper.this.lambda$sendCallback$29(str, z, tLObject, messageObject, tLRPC$KeyboardButton, chatActivity, twoStepVerificationActivity, tLObjectArr, tLRPC$TL_error, tLRPC$InputCheckPasswordSRP, z2);
+                SendMessagesHelper.this.lambda$sendCallback$29(str, list, z, tLObject, messageObject, tLRPC$KeyboardButton, chatActivity, twoStepVerificationActivity, tLObjectArr, tLRPC$TL_error, tLRPC$InputCheckPasswordSRP, z2);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    /* JADX WARN: Code restructure failed: missing block: B:80:0x0167, code lost:
-        if (org.telegram.messenger.MessagesController.getNotificationsSettings(r27.currentAccount).getBoolean("askgame_" + r11, true) != false) goto L86;
-     */
-    /*
-        Code decompiled incorrectly, please refer to instructions dump.
-        To view partially-correct add '--show-bad-code' argument
-    */
-    public /* synthetic */ void lambda$sendCallback$29(java.lang.String r28, boolean r29, org.telegram.tgnet.TLObject r30, final org.telegram.messenger.MessageObject r31, final org.telegram.tgnet.TLRPC$KeyboardButton r32, final org.telegram.ui.ChatActivity r33, final org.telegram.ui.TwoStepVerificationActivity r34, org.telegram.tgnet.TLObject[] r35, org.telegram.tgnet.TLRPC$TL_error r36, org.telegram.tgnet.TLRPC$InputCheckPasswordSRP r37, final boolean r38) {
-        /*
-            Method dump skipped, instructions count: 1166
-            To view this dump add '--comments-level debug' option
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SendMessagesHelper.lambda$sendCallback$29(java.lang.String, boolean, org.telegram.tgnet.TLObject, org.telegram.messenger.MessageObject, org.telegram.tgnet.TLRPC$KeyboardButton, org.telegram.ui.ChatActivity, org.telegram.ui.TwoStepVerificationActivity, org.telegram.tgnet.TLObject[], org.telegram.tgnet.TLRPC$TL_error, org.telegram.tgnet.TLRPC$InputCheckPasswordSRP, boolean):void");
+    public /* synthetic */ void lambda$sendCallback$29(String str, List list, boolean z, TLObject tLObject, final MessageObject messageObject, final TLRPC$KeyboardButton tLRPC$KeyboardButton, final ChatActivity chatActivity, final TwoStepVerificationActivity twoStepVerificationActivity, TLObject[] tLObjectArr, TLRPC$TL_error tLRPC$TL_error, TLRPC$InputCheckPasswordSRP tLRPC$InputCheckPasswordSRP, final boolean z2) {
+        String str2;
+        this.waitingForCallback.remove(str);
+        list.remove(str);
+        boolean z3 = false;
+        if (z && tLObject == null) {
+            sendCallback(false, messageObject, tLRPC$KeyboardButton, chatActivity);
+            return;
+        }
+        TLRPC$TL_game tLRPC$TL_game = null;
+        if (tLObject != null) {
+            if (twoStepVerificationActivity != null) {
+                twoStepVerificationActivity.needHideProgress();
+                twoStepVerificationActivity.finishFragment();
+            }
+            long fromChatId = messageObject.getFromChatId();
+            long j = messageObject.messageOwner.via_bot_id;
+            if (j != 0) {
+                fromChatId = j;
+            }
+            if (fromChatId > 0) {
+                TLRPC$User user = getMessagesController().getUser(Long.valueOf(fromChatId));
+                if (user != null) {
+                    str2 = ContactsController.formatName(user.first_name, user.last_name);
+                }
+                str2 = null;
+            } else {
+                TLRPC$Chat chat = getMessagesController().getChat(Long.valueOf(-fromChatId));
+                if (chat != null) {
+                    str2 = chat.title;
+                }
+                str2 = null;
+            }
+            if (str2 == null) {
+                str2 = "bot";
+            }
+            if (tLRPC$KeyboardButton instanceof TLRPC$TL_keyboardButtonUrlAuth) {
+                if (tLObject instanceof TLRPC$TL_urlAuthResultRequest) {
+                    chatActivity.showRequestUrlAlert((TLRPC$TL_urlAuthResultRequest) tLObject, (TLRPC$TL_messages_requestUrlAuth) tLObjectArr[0], tLRPC$KeyboardButton.url, false);
+                } else if (tLObject instanceof TLRPC$TL_urlAuthResultAccepted) {
+                    AlertsCreator.showOpenUrlAlert(chatActivity, ((TLRPC$TL_urlAuthResultAccepted) tLObject).url, false, false);
+                } else if (!(tLObject instanceof TLRPC$TL_urlAuthResultDefault)) {
+                } else {
+                    TLRPC$TL_urlAuthResultDefault tLRPC$TL_urlAuthResultDefault = (TLRPC$TL_urlAuthResultDefault) tLObject;
+                    AlertsCreator.showOpenUrlAlert(chatActivity, tLRPC$KeyboardButton.url, false, true);
+                }
+            } else if (tLRPC$KeyboardButton instanceof TLRPC$TL_keyboardButtonBuy) {
+                if (tLObject instanceof TLRPC$TL_payments_paymentForm) {
+                    TLRPC$TL_payments_paymentForm tLRPC$TL_payments_paymentForm = (TLRPC$TL_payments_paymentForm) tLObject;
+                    getMessagesController().putUsers(tLRPC$TL_payments_paymentForm.users, false);
+                    chatActivity.presentFragment(new PaymentFormActivity(tLRPC$TL_payments_paymentForm, messageObject, chatActivity));
+                } else if (!(tLObject instanceof TLRPC$TL_payments_paymentReceipt)) {
+                } else {
+                    chatActivity.presentFragment(new PaymentFormActivity((TLRPC$TL_payments_paymentReceipt) tLObject));
+                }
+            } else {
+                TLRPC$TL_messages_botCallbackAnswer tLRPC$TL_messages_botCallbackAnswer = (TLRPC$TL_messages_botCallbackAnswer) tLObject;
+                if (!z && tLRPC$TL_messages_botCallbackAnswer.cache_time != 0 && !tLRPC$KeyboardButton.requires_password) {
+                    getMessagesStorage().saveBotCache(str, tLRPC$TL_messages_botCallbackAnswer);
+                }
+                String str3 = tLRPC$TL_messages_botCallbackAnswer.message;
+                if (str3 != null) {
+                    if (tLRPC$TL_messages_botCallbackAnswer.alert) {
+                        if (chatActivity.getParentActivity() == null) {
+                            return;
+                        }
+                        AlertDialog.Builder builder = new AlertDialog.Builder(chatActivity.getParentActivity());
+                        builder.setTitle(str2);
+                        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                        builder.setMessage(tLRPC$TL_messages_botCallbackAnswer.message);
+                        chatActivity.showDialog(builder.create());
+                        return;
+                    }
+                    chatActivity.showAlert(str2, str3);
+                } else if (tLRPC$TL_messages_botCallbackAnswer.url == null || chatActivity.getParentActivity() == null) {
+                } else {
+                    TLRPC$User user2 = getMessagesController().getUser(Long.valueOf(fromChatId));
+                    boolean z4 = user2 != null && user2.verified;
+                    if (tLRPC$KeyboardButton instanceof TLRPC$TL_keyboardButtonGame) {
+                        TLRPC$MessageMedia tLRPC$MessageMedia = messageObject.messageOwner.media;
+                        if (tLRPC$MessageMedia instanceof TLRPC$TL_messageMediaGame) {
+                            tLRPC$TL_game = tLRPC$MessageMedia.game;
+                        }
+                        if (tLRPC$TL_game == null) {
+                            return;
+                        }
+                        String str4 = tLRPC$TL_messages_botCallbackAnswer.url;
+                        if (!z4) {
+                            if (MessagesController.getNotificationsSettings(this.currentAccount).getBoolean("askgame_" + fromChatId, true)) {
+                                z3 = true;
+                            }
+                        }
+                        chatActivity.showOpenGameAlert(tLRPC$TL_game, messageObject, str4, z3, fromChatId);
+                        return;
+                    }
+                    AlertsCreator.showOpenUrlAlert(chatActivity, tLRPC$TL_messages_botCallbackAnswer.url, false, false);
+                }
+            }
+        } else if (tLRPC$TL_error == null || chatActivity.getParentActivity() == null) {
+        } else {
+            if ("PASSWORD_HASH_INVALID".equals(tLRPC$TL_error.text)) {
+                if (tLRPC$InputCheckPasswordSRP != null) {
+                    return;
+                }
+                AlertDialog.Builder builder2 = new AlertDialog.Builder(chatActivity.getParentActivity());
+                builder2.setTitle(LocaleController.getString("BotOwnershipTransfer", R.string.BotOwnershipTransfer));
+                builder2.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("BotOwnershipTransferReadyAlertText", R.string.BotOwnershipTransferReadyAlertText, new Object[0])));
+                builder2.setPositiveButton(LocaleController.getString("BotOwnershipTransferChangeOwner", R.string.BotOwnershipTransferChangeOwner), new DialogInterface.OnClickListener() { // from class: org.telegram.messenger.SendMessagesHelper$$ExternalSyntheticLambda0
+                    @Override // android.content.DialogInterface.OnClickListener
+                    public final void onClick(DialogInterface dialogInterface, int i) {
+                        SendMessagesHelper.this.lambda$sendCallback$25(z2, messageObject, tLRPC$KeyboardButton, chatActivity, dialogInterface, i);
+                    }
+                });
+                builder2.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                chatActivity.showDialog(builder2.create());
+            } else if ("PASSWORD_MISSING".equals(tLRPC$TL_error.text) || tLRPC$TL_error.text.startsWith("PASSWORD_TOO_FRESH_") || tLRPC$TL_error.text.startsWith("SESSION_TOO_FRESH_")) {
+                if (twoStepVerificationActivity != null) {
+                    twoStepVerificationActivity.needHideProgress();
+                }
+                AlertDialog.Builder builder3 = new AlertDialog.Builder(chatActivity.getParentActivity());
+                builder3.setTitle(LocaleController.getString("EditAdminTransferAlertTitle", R.string.EditAdminTransferAlertTitle));
+                LinearLayout linearLayout = new LinearLayout(chatActivity.getParentActivity());
+                linearLayout.setPadding(AndroidUtilities.dp(24.0f), AndroidUtilities.dp(2.0f), AndroidUtilities.dp(24.0f), 0);
+                linearLayout.setOrientation(1);
+                builder3.setView(linearLayout);
+                TextView textView = new TextView(chatActivity.getParentActivity());
+                textView.setTextColor(Theme.getColor("dialogTextBlack"));
+                textView.setTextSize(1, 16.0f);
+                textView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
+                textView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("BotOwnershipTransferAlertText", R.string.BotOwnershipTransferAlertText, new Object[0])));
+                linearLayout.addView(textView, LayoutHelper.createLinear(-1, -2));
+                LinearLayout linearLayout2 = new LinearLayout(chatActivity.getParentActivity());
+                linearLayout2.setOrientation(0);
+                linearLayout.addView(linearLayout2, LayoutHelper.createLinear(-1, -2, 0.0f, 11.0f, 0.0f, 0.0f));
+                ImageView imageView = new ImageView(chatActivity.getParentActivity());
+                int i = R.drawable.list_circle;
+                imageView.setImageResource(i);
+                imageView.setPadding(LocaleController.isRTL ? AndroidUtilities.dp(11.0f) : 0, AndroidUtilities.dp(9.0f), LocaleController.isRTL ? 0 : AndroidUtilities.dp(11.0f), 0);
+                imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogTextBlack"), PorterDuff.Mode.MULTIPLY));
+                TextView textView2 = new TextView(chatActivity.getParentActivity());
+                textView2.setTextColor(Theme.getColor("dialogTextBlack"));
+                textView2.setTextSize(1, 16.0f);
+                textView2.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
+                textView2.setText(AndroidUtilities.replaceTags(LocaleController.getString("EditAdminTransferAlertText1", R.string.EditAdminTransferAlertText1)));
+                if (LocaleController.isRTL) {
+                    linearLayout2.addView(textView2, LayoutHelper.createLinear(-1, -2));
+                    linearLayout2.addView(imageView, LayoutHelper.createLinear(-2, -2, 5));
+                } else {
+                    linearLayout2.addView(imageView, LayoutHelper.createLinear(-2, -2));
+                    linearLayout2.addView(textView2, LayoutHelper.createLinear(-1, -2));
+                }
+                LinearLayout linearLayout3 = new LinearLayout(chatActivity.getParentActivity());
+                linearLayout3.setOrientation(0);
+                linearLayout.addView(linearLayout3, LayoutHelper.createLinear(-1, -2, 0.0f, 11.0f, 0.0f, 0.0f));
+                ImageView imageView2 = new ImageView(chatActivity.getParentActivity());
+                imageView2.setImageResource(i);
+                imageView2.setPadding(LocaleController.isRTL ? AndroidUtilities.dp(11.0f) : 0, AndroidUtilities.dp(9.0f), LocaleController.isRTL ? 0 : AndroidUtilities.dp(11.0f), 0);
+                imageView2.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogTextBlack"), PorterDuff.Mode.MULTIPLY));
+                TextView textView3 = new TextView(chatActivity.getParentActivity());
+                textView3.setTextColor(Theme.getColor("dialogTextBlack"));
+                textView3.setTextSize(1, 16.0f);
+                textView3.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
+                textView3.setText(AndroidUtilities.replaceTags(LocaleController.getString("EditAdminTransferAlertText2", R.string.EditAdminTransferAlertText2)));
+                if (LocaleController.isRTL) {
+                    linearLayout3.addView(textView3, LayoutHelper.createLinear(-1, -2));
+                    linearLayout3.addView(imageView2, LayoutHelper.createLinear(-2, -2, 5));
+                } else {
+                    linearLayout3.addView(imageView2, LayoutHelper.createLinear(-2, -2));
+                    linearLayout3.addView(textView3, LayoutHelper.createLinear(-1, -2));
+                }
+                if ("PASSWORD_MISSING".equals(tLRPC$TL_error.text)) {
+                    builder3.setPositiveButton(LocaleController.getString("EditAdminTransferSetPassword", R.string.EditAdminTransferSetPassword), new DialogInterface.OnClickListener() { // from class: org.telegram.messenger.SendMessagesHelper$$ExternalSyntheticLambda1
+                        @Override // android.content.DialogInterface.OnClickListener
+                        public final void onClick(DialogInterface dialogInterface, int i2) {
+                            SendMessagesHelper.lambda$sendCallback$26(ChatActivity.this, dialogInterface, i2);
+                        }
+                    });
+                    builder3.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                } else {
+                    TextView textView4 = new TextView(chatActivity.getParentActivity());
+                    textView4.setTextColor(Theme.getColor("dialogTextBlack"));
+                    textView4.setTextSize(1, 16.0f);
+                    textView4.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
+                    textView4.setText(LocaleController.getString("EditAdminTransferAlertText3", R.string.EditAdminTransferAlertText3));
+                    linearLayout.addView(textView4, LayoutHelper.createLinear(-1, -2, 0.0f, 11.0f, 0.0f, 0.0f));
+                    builder3.setNegativeButton(LocaleController.getString("OK", R.string.OK), null);
+                }
+                chatActivity.showDialog(builder3.create());
+            } else if ("SRP_ID_INVALID".equals(tLRPC$TL_error.text)) {
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TLRPC$TL_account_getPassword(), new RequestDelegate() { // from class: org.telegram.messenger.SendMessagesHelper$$ExternalSyntheticLambda91
+                    @Override // org.telegram.tgnet.RequestDelegate
+                    public final void run(TLObject tLObject2, TLRPC$TL_error tLRPC$TL_error2) {
+                        SendMessagesHelper.this.lambda$sendCallback$28(twoStepVerificationActivity, z2, messageObject, tLRPC$KeyboardButton, chatActivity, tLObject2, tLRPC$TL_error2);
+                    }
+                }, 8);
+            } else if (twoStepVerificationActivity == null) {
+            } else {
+                twoStepVerificationActivity.needHideProgress();
+                twoStepVerificationActivity.finishFragment();
+            }
+        }
     }
 
     /* JADX INFO: Access modifiers changed from: private */
@@ -3670,7 +3899,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
 
     /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$stopVideoService$37(final String str) {
-        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.SendMessagesHelper$$ExternalSyntheticLambda28
+        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.SendMessagesHelper$$ExternalSyntheticLambda27
             @Override // java.lang.Runnable
             public final void run() {
                 SendMessagesHelper.this.lambda$stopVideoService$36(str);
@@ -4612,7 +4841,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         if (this.importingStickersMap.get(str2) != null) {
             stringCallback.run(null);
         } else {
-            new Thread(new Runnable() { // from class: org.telegram.messenger.SendMessagesHelper$$ExternalSyntheticLambda30
+            new Thread(new Runnable() { // from class: org.telegram.messenger.SendMessagesHelper$$ExternalSyntheticLambda29
                 @Override // java.lang.Runnable
                 public final void run() {
                     SendMessagesHelper.this.lambda$prepareImportStickers$72(str, str2, str3, arrayList, stringCallback);

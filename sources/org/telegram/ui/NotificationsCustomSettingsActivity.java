@@ -1044,23 +1044,23 @@ public class NotificationsCustomSettingsActivity extends BaseFragment implements
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        /* JADX WARN: Code restructure failed: missing block: B:62:0x0169, code lost:
+        /* JADX WARN: Code restructure failed: missing block: B:62:0x016b, code lost:
             if (r10[r5].contains(" " + r15) == false) goto L40;
          */
-        /* JADX WARN: Code restructure failed: missing block: B:69:0x0189, code lost:
+        /* JADX WARN: Code restructure failed: missing block: B:69:0x018b, code lost:
             if (r6.contains(" " + r15) != false) goto L63;
          */
-        /* JADX WARN: Removed duplicated region for block: B:52:0x0130  */
-        /* JADX WARN: Removed duplicated region for block: B:57:0x0140  */
-        /* JADX WARN: Removed duplicated region for block: B:84:0x01e0 A[LOOP:1: B:56:0x013e->B:84:0x01e0, LOOP_END] */
-        /* JADX WARN: Removed duplicated region for block: B:94:0x01a1 A[SYNTHETIC] */
+        /* JADX WARN: Removed duplicated region for block: B:52:0x0132  */
+        /* JADX WARN: Removed duplicated region for block: B:57:0x0142  */
+        /* JADX WARN: Removed duplicated region for block: B:84:0x01e2 A[LOOP:1: B:56:0x0140->B:84:0x01e2, LOOP_END] */
+        /* JADX WARN: Removed duplicated region for block: B:94:0x01a3 A[SYNTHETIC] */
         /*
             Code decompiled incorrectly, please refer to instructions dump.
             To view partially-correct add '--show-bad-code' argument
         */
         public /* synthetic */ void lambda$processSearch$2(java.lang.String r20, java.util.ArrayList r21) {
             /*
-                Method dump skipped, instructions count: 513
+                Method dump skipped, instructions count: 515
                 To view this dump add '--comments-level debug' option
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.NotificationsCustomSettingsActivity.SearchAdapter.lambda$processSearch$2(java.lang.String, java.util.ArrayList):void");
@@ -1111,7 +1111,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment implements
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1790onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1810onCreateViewHolder(ViewGroup viewGroup, int i) {
             View userCell;
             if (i == 0) {
                 userCell = new UserCell(this.mContext, 4, 0, false, true);
@@ -1178,7 +1178,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment implements
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1790onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1810onCreateViewHolder(ViewGroup viewGroup, int i) {
             View headerCell;
             switch (i) {
                 case 0:

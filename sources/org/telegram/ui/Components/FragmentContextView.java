@@ -151,6 +151,14 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 return null;
             }
 
+            public static long $default$getMergeDialogId(ChatActivityInterface chatActivityInterface) {
+                return 0L;
+            }
+
+            public static int $default$getTopicId(ChatActivityInterface chatActivityInterface) {
+                return 0;
+            }
+
             public static boolean $default$openedWithLivestream(ChatActivityInterface chatActivityInterface) {
                 return false;
             }
@@ -170,6 +178,10 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         long getDialogId();
 
         ChatObject.Call getGroupCall();
+
+        long getMergeDialogId();
+
+        int getTopicId();
 
         boolean openedWithLivestream();
 

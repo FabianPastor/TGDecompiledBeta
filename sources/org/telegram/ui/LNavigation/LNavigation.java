@@ -817,7 +817,9 @@ public class LNavigation extends FrameLayout implements INavigationLayout, Float
         baseFragment.onTransitionAnimationEnd(true, false);
         this.swipeProgress = 0.0f;
         invalidateTranslation();
-        getBackgroundView().setVisibility(8);
+        if (getBackgroundView() != null) {
+            getBackgroundView().setVisibility(8);
+        }
         baseFragment.onBecomeFullyVisible();
         if (baseFragment2 != null) {
             baseFragment2.onTransitionAnimationEnd(false, true);

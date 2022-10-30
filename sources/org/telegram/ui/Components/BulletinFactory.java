@@ -141,11 +141,11 @@ public final class BulletinFactory {
         lottieLayout.textView.setText(charSequence);
         lottieLayout.textView.setSingleLine(false);
         lottieLayout.textView.setMaxLines(2);
-        return create(lottieLayout, 1500);
+        return create(lottieLayout, charSequence.length() < 20 ? 1500 : 2750);
     }
 
     public Bulletin createSimpleBulletin(int i, CharSequence charSequence, CharSequence charSequence2, Runnable runnable) {
-        return createSimpleBulletin(i, charSequence, charSequence2, 1500, runnable);
+        return createSimpleBulletin(i, charSequence, charSequence2, charSequence.length() < 20 ? 1500 : 2750, runnable);
     }
 
     public Bulletin createSimpleBulletin(int i, CharSequence charSequence, CharSequence charSequence2, int i2, Runnable runnable) {

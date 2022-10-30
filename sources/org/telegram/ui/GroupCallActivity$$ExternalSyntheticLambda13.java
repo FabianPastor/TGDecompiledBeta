@@ -10,6 +10,6 @@ public final /* synthetic */ class GroupCallActivity$$ExternalSyntheticLambda13 
 
     @Override // android.content.DialogInterface.OnDismissListener
     public final void onDismiss(DialogInterface dialogInterface) {
-        GroupCallActivity.lambda$processSelectedOption$58(dialogInterface);
+        GroupCallActivity.lambda$processSelectedOption$59(dialogInterface);
     }
 }

@@ -2539,32 +2539,15 @@ public class MessagesStorage extends BaseController {
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    /* JADX WARN: Can't wrap try/catch for region: R(3:(4:7|8|(3:10|11|12)(1:14)|13)|4|5) */
-    /* JADX WARN: Code restructure failed: missing block: B:105:0x038f, code lost:
-        r0 = th;
-     */
-    /* JADX WARN: Code restructure failed: missing block: B:106:0x0390, code lost:
-        r3 = null;
-        r7 = null;
-        r19 = r5;
-     */
-    /* JADX WARN: Code restructure failed: missing block: B:107:0x0396, code lost:
-        r0 = e;
-     */
-    /* JADX WARN: Code restructure failed: missing block: B:108:0x0397, code lost:
-        r3 = null;
-        r7 = null;
-        r19 = r5;
-     */
-    /* JADX WARN: Removed duplicated region for block: B:116:0x03b1  */
-    /* JADX WARN: Removed duplicated region for block: B:118:0x03b6  */
-    /* JADX WARN: Removed duplicated region for block: B:120:0x03bb  */
-    /* JADX WARN: Removed duplicated region for block: B:122:0x03c0  */
-    /* JADX WARN: Removed duplicated region for block: B:129:0x03d1  */
-    /* JADX WARN: Removed duplicated region for block: B:131:0x03d6  */
-    /* JADX WARN: Removed duplicated region for block: B:133:0x03db  */
-    /* JADX WARN: Removed duplicated region for block: B:135:0x03e0  */
-    /* JADX WARN: Removed duplicated region for block: B:63:0x02e3 A[Catch: all -> 0x02fd, Exception -> 0x0300, TryCatch #12 {Exception -> 0x0300, blocks: (B:60:0x020a, B:61:0x020d, B:63:0x02e3, B:65:0x02f2), top: B:147:0x020a }] */
+    /* JADX WARN: Removed duplicated region for block: B:116:0x03cf  */
+    /* JADX WARN: Removed duplicated region for block: B:118:0x03d4  */
+    /* JADX WARN: Removed duplicated region for block: B:120:0x03d9  */
+    /* JADX WARN: Removed duplicated region for block: B:122:0x03de  */
+    /* JADX WARN: Removed duplicated region for block: B:129:0x03ef  */
+    /* JADX WARN: Removed duplicated region for block: B:131:0x03f4  */
+    /* JADX WARN: Removed duplicated region for block: B:133:0x03f9  */
+    /* JADX WARN: Removed duplicated region for block: B:135:0x03fe  */
+    /* JADX WARN: Removed duplicated region for block: B:63:0x0301 A[Catch: all -> 0x031b, Exception -> 0x031e, TryCatch #12 {Exception -> 0x031e, blocks: (B:60:0x0228, B:61:0x022b, B:63:0x0301, B:65:0x0310), top: B:149:0x0228 }] */
     /* JADX WARN: Type inference failed for: r6v12, types: [int, boolean] */
     /* JADX WARN: Type inference failed for: r6v19 */
     /* JADX WARN: Type inference failed for: r6v22 */
@@ -2574,7 +2557,7 @@ public class MessagesStorage extends BaseController {
     */
     public /* synthetic */ void lambda$clearLocalDatabase$37() {
         /*
-            Method dump skipped, instructions count: 1006
+            Method dump skipped, instructions count: 1036
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$clearLocalDatabase$37():void");
@@ -2604,19 +2587,19 @@ public class MessagesStorage extends BaseController {
         saveTopicsInternal(j, list, z, true);
     }
 
-    /* JADX WARN: Code restructure failed: missing block: B:17:0x00ad, code lost:
-        if (r0 != null) goto L21;
+    /* JADX WARN: Code restructure failed: missing block: B:17:0x00b0, code lost:
+        if (r0 != null) goto L23;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:23:0x00b6, code lost:
-        if (r0 == null) goto L18;
+    /* JADX WARN: Code restructure failed: missing block: B:23:0x00b9, code lost:
+        if (r0 == null) goto L20;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:24:0x00b8, code lost:
+    /* JADX WARN: Code restructure failed: missing block: B:24:0x00bb, code lost:
         r0.dispose();
      */
-    /* JADX WARN: Code restructure failed: missing block: B:25:0x00bb, code lost:
+    /* JADX WARN: Code restructure failed: missing block: B:25:0x00be, code lost:
         r7.database.commitTransaction();
      */
-    /* JADX WARN: Code restructure failed: missing block: B:26:0x00c0, code lost:
+    /* JADX WARN: Code restructure failed: missing block: B:26:0x00c3, code lost:
         return;
      */
     /*
@@ -2628,109 +2611,110 @@ public class MessagesStorage extends BaseController {
             r7 = this;
             r0 = 0
             if (r11 == 0) goto L21
-            org.telegram.SQLite.SQLiteDatabase r11 = r7.database     // Catch: java.lang.Throwable -> Lb0 java.lang.Exception -> Lb2
-            java.lang.StringBuilder r1 = new java.lang.StringBuilder     // Catch: java.lang.Throwable -> Lb0 java.lang.Exception -> Lb2
-            r1.<init>()     // Catch: java.lang.Throwable -> Lb0 java.lang.Exception -> Lb2
+            org.telegram.SQLite.SQLiteDatabase r11 = r7.database     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
+            java.lang.StringBuilder r1 = new java.lang.StringBuilder     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
+            r1.<init>()     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
             java.lang.String r2 = "DELETE FROM topics WHERE did = "
-            r1.append(r2)     // Catch: java.lang.Throwable -> Lb0 java.lang.Exception -> Lb2
-            r1.append(r8)     // Catch: java.lang.Throwable -> Lb0 java.lang.Exception -> Lb2
-            java.lang.String r1 = r1.toString()     // Catch: java.lang.Throwable -> Lb0 java.lang.Exception -> Lb2
-            org.telegram.SQLite.SQLitePreparedStatement r11 = r11.executeFast(r1)     // Catch: java.lang.Throwable -> Lb0 java.lang.Exception -> Lb2
-            org.telegram.SQLite.SQLitePreparedStatement r11 = r11.stepThis()     // Catch: java.lang.Throwable -> Lb0 java.lang.Exception -> Lb2
-            r11.dispose()     // Catch: java.lang.Throwable -> Lb0 java.lang.Exception -> Lb2
+            r1.append(r2)     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
+            r1.append(r8)     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
+            java.lang.String r1 = r1.toString()     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
+            org.telegram.SQLite.SQLitePreparedStatement r11 = r11.executeFast(r1)     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
+            org.telegram.SQLite.SQLitePreparedStatement r11 = r11.stepThis()     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
+            r11.dispose()     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
         L21:
-            org.telegram.SQLite.SQLiteDatabase r11 = r7.database     // Catch: java.lang.Throwable -> Lb0 java.lang.Exception -> Lb2
+            org.telegram.SQLite.SQLiteDatabase r11 = r7.database     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
             java.lang.String r1 = "REPLACE INTO topics VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-            org.telegram.SQLite.SQLitePreparedStatement r0 = r11.executeFast(r1)     // Catch: java.lang.Throwable -> Lb0 java.lang.Exception -> Lb2
+            org.telegram.SQLite.SQLitePreparedStatement r0 = r11.executeFast(r1)     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
             if (r12 == 0) goto L30
-            org.telegram.SQLite.SQLiteDatabase r11 = r7.database     // Catch: java.lang.Throwable -> Lb0 java.lang.Exception -> Lb2
-            r11.beginTransaction()     // Catch: java.lang.Throwable -> Lb0 java.lang.Exception -> Lb2
+            org.telegram.SQLite.SQLiteDatabase r11 = r7.database     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
+            r11.beginTransaction()     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
         L30:
             r11 = 0
             r12 = 0
         L32:
-            int r1 = r10.size()     // Catch: java.lang.Throwable -> Lb0 java.lang.Exception -> Lb2
+            int r1 = r10.size()     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
             if (r12 >= r1) goto Lad
-            java.lang.Object r1 = r10.get(r12)     // Catch: java.lang.Throwable -> Lb0 java.lang.Exception -> Lb2
-            org.telegram.tgnet.TLRPC$TL_forumTopic r1 = (org.telegram.tgnet.TLRPC$TL_forumTopic) r1     // Catch: java.lang.Throwable -> Lb0 java.lang.Exception -> Lb2
-            r0.requery()     // Catch: java.lang.Throwable -> Lb0 java.lang.Exception -> Lb2
+            java.lang.Object r1 = r10.get(r12)     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
+            org.telegram.tgnet.TLRPC$TL_forumTopic r1 = (org.telegram.tgnet.TLRPC$TL_forumTopic) r1     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
+            r0.requery()     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
             r2 = 1
-            r0.bindLong(r2, r8)     // Catch: java.lang.Throwable -> Lb0 java.lang.Exception -> Lb2
+            r0.bindLong(r2, r8)     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
             r3 = 2
-            int r4 = r1.id     // Catch: java.lang.Throwable -> Lb0 java.lang.Exception -> Lb2
-            r0.bindInteger(r3, r4)     // Catch: java.lang.Throwable -> Lb0 java.lang.Exception -> Lb2
-            org.telegram.tgnet.NativeByteBuffer r3 = new org.telegram.tgnet.NativeByteBuffer     // Catch: java.lang.Throwable -> Lb0 java.lang.Exception -> Lb2
-            int r4 = r1.getObjectSize()     // Catch: java.lang.Throwable -> Lb0 java.lang.Exception -> Lb2
-            r3.<init>(r4)     // Catch: java.lang.Throwable -> Lb0 java.lang.Exception -> Lb2
-            r1.serializeToStream(r3)     // Catch: java.lang.Throwable -> Lb0 java.lang.Exception -> Lb2
+            int r4 = r1.id     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
+            r0.bindInteger(r3, r4)     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
+            org.telegram.tgnet.NativeByteBuffer r3 = new org.telegram.tgnet.NativeByteBuffer     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
+            int r4 = r1.getObjectSize()     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
+            r3.<init>(r4)     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
+            r1.serializeToStream(r3)     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
             r4 = 3
-            r0.bindByteBuffer(r4, r3)     // Catch: java.lang.Throwable -> Lb0 java.lang.Exception -> Lb2
+            r0.bindByteBuffer(r4, r3)     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
             r4 = 4
-            int r5 = r1.top_message     // Catch: java.lang.Throwable -> Lb0 java.lang.Exception -> Lb2
-            r0.bindInteger(r4, r5)     // Catch: java.lang.Throwable -> Lb0 java.lang.Exception -> Lb2
-            org.telegram.tgnet.NativeByteBuffer r4 = new org.telegram.tgnet.NativeByteBuffer     // Catch: java.lang.Throwable -> Lb0 java.lang.Exception -> Lb2
-            org.telegram.tgnet.TLRPC$Message r5 = r1.topicStartMessage     // Catch: java.lang.Throwable -> Lb0 java.lang.Exception -> Lb2
-            int r5 = r5.getObjectSize()     // Catch: java.lang.Throwable -> Lb0 java.lang.Exception -> Lb2
-            r4.<init>(r5)     // Catch: java.lang.Throwable -> Lb0 java.lang.Exception -> Lb2
-            org.telegram.tgnet.TLRPC$Message r5 = r1.topicStartMessage     // Catch: java.lang.Throwable -> Lb0 java.lang.Exception -> Lb2
-            r5.serializeToStream(r4)     // Catch: java.lang.Throwable -> Lb0 java.lang.Exception -> Lb2
+            int r5 = r1.top_message     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
+            r0.bindInteger(r4, r5)     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
+            org.telegram.tgnet.NativeByteBuffer r4 = new org.telegram.tgnet.NativeByteBuffer     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
+            org.telegram.tgnet.TLRPC$Message r5 = r1.topicStartMessage     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
+            int r5 = r5.getObjectSize()     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
+            r4.<init>(r5)     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
+            org.telegram.tgnet.TLRPC$Message r5 = r1.topicStartMessage     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
+            r5.serializeToStream(r4)     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
             r5 = 5
-            r0.bindByteBuffer(r5, r4)     // Catch: java.lang.Throwable -> Lb0 java.lang.Exception -> Lb2
+            r0.bindByteBuffer(r5, r4)     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
             r5 = 6
-            int r6 = r1.unread_count     // Catch: java.lang.Throwable -> Lb0 java.lang.Exception -> Lb2
-            r0.bindInteger(r5, r6)     // Catch: java.lang.Throwable -> Lb0 java.lang.Exception -> Lb2
+            int r6 = r1.unread_count     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
+            r0.bindInteger(r5, r6)     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
             r5 = 7
-            int r6 = r1.read_inbox_max_id     // Catch: java.lang.Throwable -> Lb0 java.lang.Exception -> Lb2
-            r0.bindInteger(r5, r6)     // Catch: java.lang.Throwable -> Lb0 java.lang.Exception -> Lb2
+            int r6 = r1.read_inbox_max_id     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
+            r0.bindInteger(r5, r6)     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
             r5 = 8
-            int r6 = r1.unread_mentions_count     // Catch: java.lang.Throwable -> Lb0 java.lang.Exception -> Lb2
-            r0.bindInteger(r5, r6)     // Catch: java.lang.Throwable -> Lb0 java.lang.Exception -> Lb2
+            int r6 = r1.unread_mentions_count     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
+            r0.bindInteger(r5, r6)     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
             r5 = 9
-            int r6 = r1.unread_reactions_count     // Catch: java.lang.Throwable -> Lb0 java.lang.Exception -> Lb2
-            r0.bindInteger(r5, r6)     // Catch: java.lang.Throwable -> Lb0 java.lang.Exception -> Lb2
+            int r6 = r1.unread_reactions_count     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
+            r0.bindInteger(r5, r6)     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
             r5 = 10
-            int r6 = r1.read_outbox_max_id     // Catch: java.lang.Throwable -> Lb0 java.lang.Exception -> Lb2
-            r0.bindInteger(r5, r6)     // Catch: java.lang.Throwable -> Lb0 java.lang.Exception -> Lb2
+            int r6 = r1.read_outbox_max_id     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
+            r0.bindInteger(r5, r6)     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
             r5 = 11
-            boolean r1 = r1.pinned     // Catch: java.lang.Throwable -> Lb0 java.lang.Exception -> Lb2
+            boolean r1 = r1.pinned     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
             if (r1 == 0) goto L9d
             goto L9e
         L9d:
             r2 = 0
         L9e:
-            r0.bindInteger(r5, r2)     // Catch: java.lang.Throwable -> Lb0 java.lang.Exception -> Lb2
-            r0.step()     // Catch: java.lang.Throwable -> Lb0 java.lang.Exception -> Lb2
-            r4.reuse()     // Catch: java.lang.Throwable -> Lb0 java.lang.Exception -> Lb2
-            r3.reuse()     // Catch: java.lang.Throwable -> Lb0 java.lang.Exception -> Lb2
+            r0.bindInteger(r5, r2)     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
+            r0.step()     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
+            r4.reuse()     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
+            r3.reuse()     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
             int r12 = r12 + 1
             goto L32
         Lad:
-            if (r0 == 0) goto Lbb
-            goto Lb8
-        Lb0:
+            r7.resetAllUnreadCounters(r11)     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
+            if (r0 == 0) goto Lbe
+            goto Lbb
+        Lb3:
             r8 = move-exception
-            goto Lc1
-        Lb2:
+            goto Lc4
+        Lb5:
             r8 = move-exception
-            org.telegram.messenger.FileLog.e(r8)     // Catch: java.lang.Throwable -> Lb0
-            if (r0 == 0) goto Lbb
-        Lb8:
-            r0.dispose()
+            org.telegram.messenger.FileLog.e(r8)     // Catch: java.lang.Throwable -> Lb3
+            if (r0 == 0) goto Lbe
         Lbb:
+            r0.dispose()
+        Lbe:
             org.telegram.SQLite.SQLiteDatabase r8 = r7.database
             r8.commitTransaction()
             return
-        Lc1:
-            if (r0 == 0) goto Lc6
+        Lc4:
+            if (r0 == 0) goto Lc9
             r0.dispose()
-        Lc6:
+        Lc9:
             org.telegram.SQLite.SQLiteDatabase r9 = r7.database
             r9.commitTransaction()
-            goto Lcd
-        Lcc:
+            goto Ld0
+        Lcf:
             throw r8
-        Lcd:
-            goto Lcc
+        Ld0:
+            goto Lcf
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.saveTopicsInternal(long, java.util.List, boolean, boolean):void");
     }
@@ -2851,17 +2835,17 @@ public class MessagesStorage extends BaseController {
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    /* JADX WARN: Removed duplicated region for block: B:131:0x02a2  */
-    /* JADX WARN: Removed duplicated region for block: B:136:0x02b0  */
-    /* JADX WARN: Removed duplicated region for block: B:165:0x01b3 A[SYNTHETIC] */
-    /* JADX WARN: Removed duplicated region for block: B:74:0x01a4 A[Catch: Exception -> 0x01a8, all -> 0x0276, TRY_LEAVE, TryCatch #8 {all -> 0x0276, blocks: (B:37:0x0103, B:38:0x0109, B:40:0x010f, B:42:0x011a, B:44:0x0127, B:45:0x0132, B:48:0x0145, B:50:0x014b, B:51:0x0156, B:53:0x015c, B:55:0x0160, B:57:0x0164, B:59:0x016a, B:61:0x016e, B:63:0x0172, B:65:0x0179, B:67:0x017f, B:70:0x019b, B:72:0x01a0, B:74:0x01a4, B:80:0x01ac, B:84:0x01ba, B:86:0x01cc, B:87:0x01d3, B:89:0x01d9, B:90:0x01e0, B:92:0x01f1, B:93:0x021c, B:95:0x0222, B:97:0x022d, B:99:0x0237, B:100:0x0242, B:103:0x0255, B:105:0x025b, B:108:0x0267, B:109:0x026a), top: B:145:0x0103 }] */
+    /* JADX WARN: Removed duplicated region for block: B:149:0x02b8  */
+    /* JADX WARN: Removed duplicated region for block: B:154:0x02c4  */
+    /* JADX WARN: Removed duplicated region for block: B:187:0x01af A[SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:74:0x01a0 A[Catch: Exception -> 0x01a4, all -> 0x0295, TRY_LEAVE, TryCatch #8 {all -> 0x0295, blocks: (B:35:0x00e3, B:37:0x00ff, B:38:0x0105, B:40:0x010b, B:42:0x0116, B:44:0x0123, B:45:0x012e, B:48:0x0141, B:50:0x0147, B:51:0x0152, B:53:0x0158, B:55:0x015c, B:57:0x0160, B:59:0x0166, B:61:0x016a, B:63:0x016e, B:65:0x0175, B:67:0x017b, B:70:0x0197, B:72:0x019c, B:74:0x01a0, B:80:0x01a8, B:88:0x01bf, B:90:0x01cf, B:91:0x01d6, B:93:0x01dc, B:94:0x01e3, B:96:0x01f4, B:97:0x021f, B:99:0x0225, B:101:0x0230, B:103:0x023a, B:105:0x0242, B:107:0x024a, B:110:0x025d, B:112:0x0263, B:120:0x0279, B:125:0x0288, B:127:0x028d), top: B:162:0x00e3 }] */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public /* synthetic */ void lambda$loadTopics$41(long r21, j$.util.function.Consumer r23) {
+    public /* synthetic */ void lambda$loadTopics$41(long r22, j$.util.function.Consumer r24) {
         /*
-            Method dump skipped, instructions count: 694
+            Method dump skipped, instructions count: 714
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$loadTopics$41(long, j$.util.function.Consumer):void");
@@ -2874,6 +2858,94 @@ public class MessagesStorage extends BaseController {
         }
         if (!arrayList2.isEmpty()) {
             getMessagesController().putChats(arrayList2, true);
+        }
+    }
+
+    public void loadGroupedMessagesForTopicUpdates(ArrayList<TopicsController.TopicUpdate> arrayList) {
+        if (arrayList == null) {
+            return;
+        }
+        try {
+            LongSparseArray longSparseArray = new LongSparseArray();
+            for (int i = 0; i < arrayList.size(); i++) {
+                if (!arrayList.get(i).reloadTopic && !arrayList.get(i).onlyCounters && arrayList.get(i).topMessage != null) {
+                    long j = arrayList.get(i).topMessage.grouped_id;
+                    if (j != 0) {
+                        ArrayList arrayList2 = (ArrayList) longSparseArray.get(j);
+                        if (arrayList2 == null) {
+                            arrayList2 = new ArrayList();
+                            longSparseArray.put(j, arrayList2);
+                        }
+                        arrayList2.add(arrayList.get(i));
+                    }
+                }
+            }
+            for (int i2 = 0; i2 < longSparseArray.size(); i2++) {
+                long keyAt = longSparseArray.keyAt(i2);
+                ArrayList arrayList3 = (ArrayList) longSparseArray.valueAt(i2);
+                SQLiteCursor queryFinalized = this.database.queryFinalized(String.format(Locale.US, "SELECT data FROM messages_v2 WHERE uid = %s AND group_id = %s ORDER BY date DESC", Long.valueOf(((TopicsController.TopicUpdate) arrayList3.get(0)).dialogId), Long.valueOf(keyAt)), new Object[0]);
+                ArrayList<MessageObject> arrayList4 = null;
+                while (queryFinalized.next()) {
+                    NativeByteBuffer byteBufferValue = queryFinalized.byteBufferValue(0);
+                    TLRPC$Message TLdeserialize = TLRPC$Message.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false);
+                    if (TLdeserialize != null) {
+                        TLdeserialize.readAttachPath(byteBufferValue, UserConfig.getInstance(this.currentAccount).clientUserId);
+                    }
+                    if (arrayList4 == null) {
+                        arrayList4 = new ArrayList<>();
+                    }
+                    arrayList4.add(new MessageObject(this.currentAccount, TLdeserialize, false, false));
+                }
+                queryFinalized.dispose();
+                for (int i3 = 0; i3 < arrayList3.size(); i3++) {
+                    ((TopicsController.TopicUpdate) arrayList3.get(i3)).groupedMessages = arrayList4;
+                }
+            }
+        } catch (Throwable th) {
+            FileLog.e(th);
+        }
+    }
+
+    public void loadGroupedMessagesForTopics(long j, ArrayList<TLRPC$TL_forumTopic> arrayList) {
+        if (arrayList == null) {
+            return;
+        }
+        try {
+            LongSparseArray longSparseArray = new LongSparseArray();
+            for (int i = 0; i < arrayList.size(); i++) {
+                long j2 = arrayList.get(i).topMessage.grouped_id;
+                if (j2 != 0) {
+                    ArrayList arrayList2 = (ArrayList) longSparseArray.get(j2);
+                    if (arrayList2 == null) {
+                        arrayList2 = new ArrayList();
+                        longSparseArray.put(j2, arrayList2);
+                    }
+                    arrayList2.add(arrayList.get(i));
+                }
+            }
+            for (int i2 = 0; i2 < longSparseArray.size(); i2++) {
+                long keyAt = longSparseArray.keyAt(i2);
+                ArrayList arrayList3 = (ArrayList) longSparseArray.valueAt(i2);
+                SQLiteCursor queryFinalized = this.database.queryFinalized(String.format(Locale.US, "SELECT data FROM messages_v2 WHERE uid = %s AND group_id = %s ORDER BY date DESC", Long.valueOf(j), Long.valueOf(keyAt)), new Object[0]);
+                ArrayList<MessageObject> arrayList4 = null;
+                while (queryFinalized.next()) {
+                    NativeByteBuffer byteBufferValue = queryFinalized.byteBufferValue(0);
+                    TLRPC$Message TLdeserialize = TLRPC$Message.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false);
+                    if (TLdeserialize != null) {
+                        TLdeserialize.readAttachPath(byteBufferValue, UserConfig.getInstance(this.currentAccount).clientUserId);
+                    }
+                    if (arrayList4 == null) {
+                        arrayList4 = new ArrayList<>();
+                    }
+                    arrayList4.add(new MessageObject(this.currentAccount, TLdeserialize, false, false));
+                }
+                queryFinalized.dispose();
+                for (int i3 = 0; i3 < arrayList3.size(); i3++) {
+                    ((TLRPC$TL_forumTopic) arrayList3.get(i3)).groupedMessages = arrayList4;
+                }
+            }
+        } catch (Throwable th) {
+            FileLog.e(th);
         }
     }
 
@@ -3099,28 +3171,28 @@ public class MessagesStorage extends BaseController {
         return i < i2 ? -1 : 0;
     }
 
-    /* JADX WARN: Code restructure failed: missing block: B:232:0x04ce, code lost:
-        if (r13.indexOfKey(r8.id) >= 0) goto L249;
+    /* JADX WARN: Code restructure failed: missing block: B:243:0x04fc, code lost:
+        if (r13.indexOfKey(r6.id) >= 0) goto L264;
      */
-    /* JADX WARN: Removed duplicated region for block: B:103:0x02ba A[Catch: all -> 0x0656, Exception -> 0x065a, TryCatch #5 {Exception -> 0x065a, all -> 0x0656, blocks: (B:7:0x000a, B:8:0x002b, B:9:0x002e, B:32:0x00e2, B:35:0x0108, B:37:0x0118, B:39:0x013d, B:43:0x014c, B:44:0x0153, B:46:0x0157, B:54:0x0180, B:47:0x0162, B:49:0x0166, B:52:0x016b, B:53:0x0176, B:56:0x0196, B:58:0x01a4, B:60:0x01bb, B:62:0x01cb, B:63:0x01dd, B:65:0x01e6, B:83:0x0255, B:68:0x01fb, B:70:0x0213, B:74:0x0222, B:75:0x0229, B:77:0x022d, B:80:0x0232, B:82:0x0247, B:81:0x023d, B:86:0x0263, B:88:0x0269, B:90:0x027b, B:92:0x0287, B:95:0x028f, B:97:0x02a4, B:103:0x02ba, B:107:0x02c8, B:108:0x02d0, B:110:0x02d6, B:112:0x02da, B:114:0x02ef, B:116:0x030c, B:113:0x02e5, B:115:0x02f7, B:117:0x0315, B:118:0x031e, B:121:0x0324, B:124:0x0334, B:134:0x034e, B:136:0x0353, B:138:0x0358, B:140:0x0365, B:143:0x036f, B:145:0x0374, B:147:0x0382, B:149:0x0389, B:151:0x038e, B:153:0x0393, B:155:0x03a0, B:156:0x03a6, B:158:0x03ab, B:160:0x03b9, B:161:0x03be, B:163:0x03c3, B:165:0x03c8, B:167:0x03d5, B:168:0x03db, B:170:0x03e0, B:172:0x03ee, B:173:0x03f3, B:175:0x03f8, B:177:0x03fd, B:179:0x040a, B:180:0x0410, B:182:0x0415, B:184:0x0423, B:185:0x0428, B:187:0x042d, B:189:0x0432, B:191:0x043f, B:192:0x0445, B:194:0x044a, B:196:0x0458, B:199:0x0461, B:201:0x046a, B:208:0x048b, B:215:0x04a4, B:217:0x04a8, B:225:0x04b9, B:227:0x04bc, B:241:0x04e6, B:229:0x04c1, B:231:0x04c6, B:233:0x04d0, B:235:0x04d5, B:237:0x04da, B:218:0x04ab, B:220:0x04af, B:223:0x04b4, B:224:0x04b7, B:212:0x049a, B:266:0x0540, B:243:0x04f3, B:245:0x0502, B:247:0x0508, B:249:0x050c, B:251:0x0511, B:253:0x0514, B:254:0x0517, B:256:0x051c, B:258:0x0525, B:261:0x0531, B:263:0x0536, B:250:0x050f, B:267:0x054d, B:269:0x055a, B:277:0x0577, B:284:0x0590, B:286:0x0594, B:294:0x05a5, B:296:0x05a8, B:298:0x05ad, B:302:0x05ba, B:304:0x05bf, B:306:0x05c7, B:309:0x05ce, B:287:0x0597, B:289:0x059b, B:292:0x05a0, B:293:0x05a3, B:281:0x0586, B:332:0x0622, B:311:0x05da, B:313:0x05e7, B:315:0x05ed, B:317:0x05f1, B:319:0x05f6, B:321:0x05f9, B:323:0x05fe, B:325:0x0607, B:327:0x060c, B:329:0x0615, B:331:0x0620, B:318:0x05f4, B:333:0x062a, B:335:0x062e, B:339:0x0637, B:341:0x063b, B:342:0x063e, B:344:0x0642, B:346:0x0646, B:125:0x0337, B:127:0x033b, B:129:0x0343, B:130:0x0346, B:131:0x0348, B:132:0x034a), top: B:369:0x000a }] */
-    /* JADX WARN: Removed duplicated region for block: B:104:0x02c4  */
-    /* JADX WARN: Removed duplicated region for block: B:107:0x02c8 A[Catch: all -> 0x0656, Exception -> 0x065a, TryCatch #5 {Exception -> 0x065a, all -> 0x0656, blocks: (B:7:0x000a, B:8:0x002b, B:9:0x002e, B:32:0x00e2, B:35:0x0108, B:37:0x0118, B:39:0x013d, B:43:0x014c, B:44:0x0153, B:46:0x0157, B:54:0x0180, B:47:0x0162, B:49:0x0166, B:52:0x016b, B:53:0x0176, B:56:0x0196, B:58:0x01a4, B:60:0x01bb, B:62:0x01cb, B:63:0x01dd, B:65:0x01e6, B:83:0x0255, B:68:0x01fb, B:70:0x0213, B:74:0x0222, B:75:0x0229, B:77:0x022d, B:80:0x0232, B:82:0x0247, B:81:0x023d, B:86:0x0263, B:88:0x0269, B:90:0x027b, B:92:0x0287, B:95:0x028f, B:97:0x02a4, B:103:0x02ba, B:107:0x02c8, B:108:0x02d0, B:110:0x02d6, B:112:0x02da, B:114:0x02ef, B:116:0x030c, B:113:0x02e5, B:115:0x02f7, B:117:0x0315, B:118:0x031e, B:121:0x0324, B:124:0x0334, B:134:0x034e, B:136:0x0353, B:138:0x0358, B:140:0x0365, B:143:0x036f, B:145:0x0374, B:147:0x0382, B:149:0x0389, B:151:0x038e, B:153:0x0393, B:155:0x03a0, B:156:0x03a6, B:158:0x03ab, B:160:0x03b9, B:161:0x03be, B:163:0x03c3, B:165:0x03c8, B:167:0x03d5, B:168:0x03db, B:170:0x03e0, B:172:0x03ee, B:173:0x03f3, B:175:0x03f8, B:177:0x03fd, B:179:0x040a, B:180:0x0410, B:182:0x0415, B:184:0x0423, B:185:0x0428, B:187:0x042d, B:189:0x0432, B:191:0x043f, B:192:0x0445, B:194:0x044a, B:196:0x0458, B:199:0x0461, B:201:0x046a, B:208:0x048b, B:215:0x04a4, B:217:0x04a8, B:225:0x04b9, B:227:0x04bc, B:241:0x04e6, B:229:0x04c1, B:231:0x04c6, B:233:0x04d0, B:235:0x04d5, B:237:0x04da, B:218:0x04ab, B:220:0x04af, B:223:0x04b4, B:224:0x04b7, B:212:0x049a, B:266:0x0540, B:243:0x04f3, B:245:0x0502, B:247:0x0508, B:249:0x050c, B:251:0x0511, B:253:0x0514, B:254:0x0517, B:256:0x051c, B:258:0x0525, B:261:0x0531, B:263:0x0536, B:250:0x050f, B:267:0x054d, B:269:0x055a, B:277:0x0577, B:284:0x0590, B:286:0x0594, B:294:0x05a5, B:296:0x05a8, B:298:0x05ad, B:302:0x05ba, B:304:0x05bf, B:306:0x05c7, B:309:0x05ce, B:287:0x0597, B:289:0x059b, B:292:0x05a0, B:293:0x05a3, B:281:0x0586, B:332:0x0622, B:311:0x05da, B:313:0x05e7, B:315:0x05ed, B:317:0x05f1, B:319:0x05f6, B:321:0x05f9, B:323:0x05fe, B:325:0x0607, B:327:0x060c, B:329:0x0615, B:331:0x0620, B:318:0x05f4, B:333:0x062a, B:335:0x062e, B:339:0x0637, B:341:0x063b, B:342:0x063e, B:344:0x0642, B:346:0x0646, B:125:0x0337, B:127:0x033b, B:129:0x0343, B:130:0x0346, B:131:0x0348, B:132:0x034a), top: B:369:0x000a }] */
-    /* JADX WARN: Removed duplicated region for block: B:120:0x0322  */
-    /* JADX WARN: Removed duplicated region for block: B:199:0x0461 A[Catch: all -> 0x0656, Exception -> 0x065a, TryCatch #5 {Exception -> 0x065a, all -> 0x0656, blocks: (B:7:0x000a, B:8:0x002b, B:9:0x002e, B:32:0x00e2, B:35:0x0108, B:37:0x0118, B:39:0x013d, B:43:0x014c, B:44:0x0153, B:46:0x0157, B:54:0x0180, B:47:0x0162, B:49:0x0166, B:52:0x016b, B:53:0x0176, B:56:0x0196, B:58:0x01a4, B:60:0x01bb, B:62:0x01cb, B:63:0x01dd, B:65:0x01e6, B:83:0x0255, B:68:0x01fb, B:70:0x0213, B:74:0x0222, B:75:0x0229, B:77:0x022d, B:80:0x0232, B:82:0x0247, B:81:0x023d, B:86:0x0263, B:88:0x0269, B:90:0x027b, B:92:0x0287, B:95:0x028f, B:97:0x02a4, B:103:0x02ba, B:107:0x02c8, B:108:0x02d0, B:110:0x02d6, B:112:0x02da, B:114:0x02ef, B:116:0x030c, B:113:0x02e5, B:115:0x02f7, B:117:0x0315, B:118:0x031e, B:121:0x0324, B:124:0x0334, B:134:0x034e, B:136:0x0353, B:138:0x0358, B:140:0x0365, B:143:0x036f, B:145:0x0374, B:147:0x0382, B:149:0x0389, B:151:0x038e, B:153:0x0393, B:155:0x03a0, B:156:0x03a6, B:158:0x03ab, B:160:0x03b9, B:161:0x03be, B:163:0x03c3, B:165:0x03c8, B:167:0x03d5, B:168:0x03db, B:170:0x03e0, B:172:0x03ee, B:173:0x03f3, B:175:0x03f8, B:177:0x03fd, B:179:0x040a, B:180:0x0410, B:182:0x0415, B:184:0x0423, B:185:0x0428, B:187:0x042d, B:189:0x0432, B:191:0x043f, B:192:0x0445, B:194:0x044a, B:196:0x0458, B:199:0x0461, B:201:0x046a, B:208:0x048b, B:215:0x04a4, B:217:0x04a8, B:225:0x04b9, B:227:0x04bc, B:241:0x04e6, B:229:0x04c1, B:231:0x04c6, B:233:0x04d0, B:235:0x04d5, B:237:0x04da, B:218:0x04ab, B:220:0x04af, B:223:0x04b4, B:224:0x04b7, B:212:0x049a, B:266:0x0540, B:243:0x04f3, B:245:0x0502, B:247:0x0508, B:249:0x050c, B:251:0x0511, B:253:0x0514, B:254:0x0517, B:256:0x051c, B:258:0x0525, B:261:0x0531, B:263:0x0536, B:250:0x050f, B:267:0x054d, B:269:0x055a, B:277:0x0577, B:284:0x0590, B:286:0x0594, B:294:0x05a5, B:296:0x05a8, B:298:0x05ad, B:302:0x05ba, B:304:0x05bf, B:306:0x05c7, B:309:0x05ce, B:287:0x0597, B:289:0x059b, B:292:0x05a0, B:293:0x05a3, B:281:0x0586, B:332:0x0622, B:311:0x05da, B:313:0x05e7, B:315:0x05ed, B:317:0x05f1, B:319:0x05f6, B:321:0x05f9, B:323:0x05fe, B:325:0x0607, B:327:0x060c, B:329:0x0615, B:331:0x0620, B:318:0x05f4, B:333:0x062a, B:335:0x062e, B:339:0x0637, B:341:0x063b, B:342:0x063e, B:344:0x0642, B:346:0x0646, B:125:0x0337, B:127:0x033b, B:129:0x0343, B:130:0x0346, B:131:0x0348, B:132:0x034a), top: B:369:0x000a }] */
-    /* JADX WARN: Removed duplicated region for block: B:337:0x0633  */
-    /* JADX WARN: Removed duplicated region for block: B:358:0x0662  */
-    /* JADX WARN: Removed duplicated region for block: B:363:0x066a  */
-    /* JADX WARN: Removed duplicated region for block: B:424:? A[RETURN, SYNTHETIC] */
-    /* JADX WARN: Removed duplicated region for block: B:88:0x0269 A[Catch: all -> 0x0656, Exception -> 0x065a, TryCatch #5 {Exception -> 0x065a, all -> 0x0656, blocks: (B:7:0x000a, B:8:0x002b, B:9:0x002e, B:32:0x00e2, B:35:0x0108, B:37:0x0118, B:39:0x013d, B:43:0x014c, B:44:0x0153, B:46:0x0157, B:54:0x0180, B:47:0x0162, B:49:0x0166, B:52:0x016b, B:53:0x0176, B:56:0x0196, B:58:0x01a4, B:60:0x01bb, B:62:0x01cb, B:63:0x01dd, B:65:0x01e6, B:83:0x0255, B:68:0x01fb, B:70:0x0213, B:74:0x0222, B:75:0x0229, B:77:0x022d, B:80:0x0232, B:82:0x0247, B:81:0x023d, B:86:0x0263, B:88:0x0269, B:90:0x027b, B:92:0x0287, B:95:0x028f, B:97:0x02a4, B:103:0x02ba, B:107:0x02c8, B:108:0x02d0, B:110:0x02d6, B:112:0x02da, B:114:0x02ef, B:116:0x030c, B:113:0x02e5, B:115:0x02f7, B:117:0x0315, B:118:0x031e, B:121:0x0324, B:124:0x0334, B:134:0x034e, B:136:0x0353, B:138:0x0358, B:140:0x0365, B:143:0x036f, B:145:0x0374, B:147:0x0382, B:149:0x0389, B:151:0x038e, B:153:0x0393, B:155:0x03a0, B:156:0x03a6, B:158:0x03ab, B:160:0x03b9, B:161:0x03be, B:163:0x03c3, B:165:0x03c8, B:167:0x03d5, B:168:0x03db, B:170:0x03e0, B:172:0x03ee, B:173:0x03f3, B:175:0x03f8, B:177:0x03fd, B:179:0x040a, B:180:0x0410, B:182:0x0415, B:184:0x0423, B:185:0x0428, B:187:0x042d, B:189:0x0432, B:191:0x043f, B:192:0x0445, B:194:0x044a, B:196:0x0458, B:199:0x0461, B:201:0x046a, B:208:0x048b, B:215:0x04a4, B:217:0x04a8, B:225:0x04b9, B:227:0x04bc, B:241:0x04e6, B:229:0x04c1, B:231:0x04c6, B:233:0x04d0, B:235:0x04d5, B:237:0x04da, B:218:0x04ab, B:220:0x04af, B:223:0x04b4, B:224:0x04b7, B:212:0x049a, B:266:0x0540, B:243:0x04f3, B:245:0x0502, B:247:0x0508, B:249:0x050c, B:251:0x0511, B:253:0x0514, B:254:0x0517, B:256:0x051c, B:258:0x0525, B:261:0x0531, B:263:0x0536, B:250:0x050f, B:267:0x054d, B:269:0x055a, B:277:0x0577, B:284:0x0590, B:286:0x0594, B:294:0x05a5, B:296:0x05a8, B:298:0x05ad, B:302:0x05ba, B:304:0x05bf, B:306:0x05c7, B:309:0x05ce, B:287:0x0597, B:289:0x059b, B:292:0x05a0, B:293:0x05a3, B:281:0x0586, B:332:0x0622, B:311:0x05da, B:313:0x05e7, B:315:0x05ed, B:317:0x05f1, B:319:0x05f6, B:321:0x05f9, B:323:0x05fe, B:325:0x0607, B:327:0x060c, B:329:0x0615, B:331:0x0620, B:318:0x05f4, B:333:0x062a, B:335:0x062e, B:339:0x0637, B:341:0x063b, B:342:0x063e, B:344:0x0642, B:346:0x0646, B:125:0x0337, B:127:0x033b, B:129:0x0343, B:130:0x0346, B:131:0x0348, B:132:0x034a), top: B:369:0x000a }] */
-    /* JADX WARN: Type inference failed for: r5v24, types: [boolean] */
-    /* JADX WARN: Type inference failed for: r6v79, types: [boolean] */
+    /* JADX WARN: Code restructure failed: missing block: B:292:0x05c1, code lost:
+        if (r20 == 0) goto L336;
+     */
+    /* JADX WARN: Removed duplicated region for block: B:101:0x02a5 A[Catch: all -> 0x069e, Exception -> 0x06a2, TryCatch #5 {Exception -> 0x06a2, all -> 0x069e, blocks: (B:7:0x000a, B:8:0x002b, B:9:0x002e, B:46:0x0120, B:49:0x0148, B:51:0x0156, B:53:0x017b, B:57:0x018a, B:58:0x0191, B:60:0x0195, B:68:0x01be, B:61:0x01a0, B:63:0x01a4, B:66:0x01a9, B:67:0x01b4, B:69:0x01d2, B:71:0x01e0, B:73:0x01f7, B:75:0x0207, B:76:0x0219, B:78:0x0222, B:96:0x0291, B:81:0x0237, B:83:0x024f, B:87:0x025e, B:88:0x0265, B:90:0x0269, B:93:0x026e, B:95:0x0283, B:94:0x0279, B:99:0x029f, B:101:0x02a5, B:103:0x02b7, B:105:0x02c3, B:108:0x02ca, B:110:0x02df, B:115:0x02ef, B:118:0x02fa, B:119:0x0302, B:121:0x0308, B:123:0x030c, B:125:0x0321, B:127:0x033b, B:124:0x0317, B:126:0x0329, B:128:0x0341, B:129:0x034a, B:132:0x0350, B:135:0x0361, B:145:0x037b, B:147:0x0380, B:149:0x0385, B:151:0x0392, B:154:0x039c, B:156:0x03a1, B:158:0x03af, B:160:0x03b6, B:162:0x03bb, B:164:0x03c0, B:166:0x03cd, B:167:0x03d3, B:169:0x03d8, B:171:0x03e6, B:172:0x03eb, B:174:0x03f0, B:176:0x03f5, B:178:0x0402, B:179:0x0408, B:181:0x040d, B:183:0x041b, B:184:0x0420, B:186:0x0425, B:188:0x042a, B:190:0x0437, B:191:0x043d, B:193:0x0442, B:195:0x0450, B:196:0x0455, B:198:0x045a, B:200:0x045f, B:202:0x046c, B:203:0x0472, B:205:0x0477, B:207:0x0485, B:210:0x048e, B:212:0x0497, B:219:0x04b7, B:226:0x04d0, B:228:0x04d4, B:236:0x04e5, B:238:0x04e8, B:252:0x0517, B:240:0x04ee, B:242:0x04f3, B:244:0x04fe, B:246:0x0504, B:248:0x0509, B:229:0x04d7, B:231:0x04db, B:234:0x04e0, B:235:0x04e3, B:223:0x04c6, B:277:0x0574, B:254:0x0526, B:256:0x0536, B:258:0x053c, B:260:0x0540, B:262:0x0545, B:264:0x0548, B:265:0x054b, B:267:0x0550, B:269:0x0559, B:272:0x0565, B:274:0x056a, B:261:0x0543, B:278:0x0580, B:280:0x058c, B:287:0x05ab, B:294:0x05c6, B:296:0x05ca, B:304:0x05db, B:319:0x0607, B:306:0x05de, B:308:0x05e3, B:312:0x05f2, B:314:0x05f7, B:316:0x05ff, B:297:0x05cd, B:299:0x05d1, B:302:0x05d6, B:303:0x05d9, B:291:0x05ba, B:342:0x0661, B:321:0x0616, B:323:0x0626, B:325:0x062c, B:327:0x0630, B:329:0x0635, B:331:0x0638, B:333:0x063d, B:335:0x0646, B:337:0x064b, B:339:0x0654, B:341:0x065f, B:328:0x0633, B:343:0x066a, B:345:0x0671, B:349:0x067c, B:351:0x0680, B:352:0x0683, B:354:0x0687, B:356:0x068b, B:136:0x0364, B:138:0x0368, B:140:0x0370, B:141:0x0373, B:142:0x0375, B:143:0x0377), top: B:384:0x000a }] */
+    /* JADX WARN: Removed duplicated region for block: B:131:0x034e  */
+    /* JADX WARN: Removed duplicated region for block: B:210:0x048e A[Catch: all -> 0x069e, Exception -> 0x06a2, TryCatch #5 {Exception -> 0x06a2, all -> 0x069e, blocks: (B:7:0x000a, B:8:0x002b, B:9:0x002e, B:46:0x0120, B:49:0x0148, B:51:0x0156, B:53:0x017b, B:57:0x018a, B:58:0x0191, B:60:0x0195, B:68:0x01be, B:61:0x01a0, B:63:0x01a4, B:66:0x01a9, B:67:0x01b4, B:69:0x01d2, B:71:0x01e0, B:73:0x01f7, B:75:0x0207, B:76:0x0219, B:78:0x0222, B:96:0x0291, B:81:0x0237, B:83:0x024f, B:87:0x025e, B:88:0x0265, B:90:0x0269, B:93:0x026e, B:95:0x0283, B:94:0x0279, B:99:0x029f, B:101:0x02a5, B:103:0x02b7, B:105:0x02c3, B:108:0x02ca, B:110:0x02df, B:115:0x02ef, B:118:0x02fa, B:119:0x0302, B:121:0x0308, B:123:0x030c, B:125:0x0321, B:127:0x033b, B:124:0x0317, B:126:0x0329, B:128:0x0341, B:129:0x034a, B:132:0x0350, B:135:0x0361, B:145:0x037b, B:147:0x0380, B:149:0x0385, B:151:0x0392, B:154:0x039c, B:156:0x03a1, B:158:0x03af, B:160:0x03b6, B:162:0x03bb, B:164:0x03c0, B:166:0x03cd, B:167:0x03d3, B:169:0x03d8, B:171:0x03e6, B:172:0x03eb, B:174:0x03f0, B:176:0x03f5, B:178:0x0402, B:179:0x0408, B:181:0x040d, B:183:0x041b, B:184:0x0420, B:186:0x0425, B:188:0x042a, B:190:0x0437, B:191:0x043d, B:193:0x0442, B:195:0x0450, B:196:0x0455, B:198:0x045a, B:200:0x045f, B:202:0x046c, B:203:0x0472, B:205:0x0477, B:207:0x0485, B:210:0x048e, B:212:0x0497, B:219:0x04b7, B:226:0x04d0, B:228:0x04d4, B:236:0x04e5, B:238:0x04e8, B:252:0x0517, B:240:0x04ee, B:242:0x04f3, B:244:0x04fe, B:246:0x0504, B:248:0x0509, B:229:0x04d7, B:231:0x04db, B:234:0x04e0, B:235:0x04e3, B:223:0x04c6, B:277:0x0574, B:254:0x0526, B:256:0x0536, B:258:0x053c, B:260:0x0540, B:262:0x0545, B:264:0x0548, B:265:0x054b, B:267:0x0550, B:269:0x0559, B:272:0x0565, B:274:0x056a, B:261:0x0543, B:278:0x0580, B:280:0x058c, B:287:0x05ab, B:294:0x05c6, B:296:0x05ca, B:304:0x05db, B:319:0x0607, B:306:0x05de, B:308:0x05e3, B:312:0x05f2, B:314:0x05f7, B:316:0x05ff, B:297:0x05cd, B:299:0x05d1, B:302:0x05d6, B:303:0x05d9, B:291:0x05ba, B:342:0x0661, B:321:0x0616, B:323:0x0626, B:325:0x062c, B:327:0x0630, B:329:0x0635, B:331:0x0638, B:333:0x063d, B:335:0x0646, B:337:0x064b, B:339:0x0654, B:341:0x065f, B:328:0x0633, B:343:0x066a, B:345:0x0671, B:349:0x067c, B:351:0x0680, B:352:0x0683, B:354:0x0687, B:356:0x068b, B:136:0x0364, B:138:0x0368, B:140:0x0370, B:141:0x0373, B:142:0x0375, B:143:0x0377), top: B:384:0x000a }] */
+    /* JADX WARN: Removed duplicated region for block: B:347:0x0677  */
+    /* JADX WARN: Removed duplicated region for block: B:370:0x06aa  */
+    /* JADX WARN: Removed duplicated region for block: B:375:0x06b2  */
+    /* JADX WARN: Removed duplicated region for block: B:441:? A[RETURN, SYNTHETIC] */
+    /* JADX WARN: Type inference failed for: r5v64, types: [boolean] */
+    /* JADX WARN: Type inference failed for: r7v24, types: [boolean] */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    private void calcUnreadCounters(boolean r25) {
+    private void calcUnreadCounters(boolean r28) {
         /*
-            Method dump skipped, instructions count: 1648
+            Method dump skipped, instructions count: 1720
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.calcUnreadCounters(boolean):void");
@@ -5199,15 +5271,15 @@ public class MessagesStorage extends BaseController {
         this.archiveUnreadCount = this.pendingArchiveUnreadCount;
     }
 
-    /* JADX WARN: Removed duplicated region for block: B:126:0x036e A[Catch: Exception -> 0x0376, TRY_LEAVE, TryCatch #0 {Exception -> 0x0376, blocks: (B:3:0x0008, B:7:0x0024, B:8:0x003c, B:10:0x0042, B:13:0x0049, B:16:0x0050, B:18:0x005a, B:19:0x005e, B:20:0x0064, B:93:0x029c, B:95:0x02a2, B:124:0x035e, B:126:0x036e, B:99:0x02ac, B:101:0x02b7, B:102:0x02c5, B:104:0x02cb, B:106:0x02f3, B:108:0x02f9, B:110:0x02fe, B:113:0x031b, B:112:0x0305, B:114:0x031d, B:116:0x0326, B:118:0x032c, B:119:0x0335, B:121:0x033b, B:122:0x0354, B:123:0x0357, B:21:0x0069, B:24:0x0070, B:26:0x0076, B:31:0x008b, B:33:0x0092, B:55:0x015f, B:36:0x00af, B:37:0x00d1, B:40:0x00d9, B:43:0x00e0, B:45:0x0108, B:47:0x0113, B:51:0x0143, B:48:0x012b, B:50:0x012f, B:52:0x0147, B:54:0x014b, B:29:0x0083, B:56:0x0187, B:58:0x018d, B:60:0x0194, B:61:0x01bd, B:63:0x01c3, B:65:0x01db, B:67:0x01e1, B:69:0x01e8, B:71:0x01ef, B:73:0x0211, B:75:0x0218, B:78:0x0235, B:76:0x0226, B:79:0x023f, B:83:0x0250, B:85:0x025a, B:86:0x0261, B:87:0x0267, B:90:0x026e, B:92:0x0274), top: B:131:0x0008 }] */
-    /* JADX WARN: Removed duplicated region for block: B:164:? A[RETURN, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:133:0x0389 A[Catch: Exception -> 0x0391, TRY_LEAVE, TryCatch #0 {Exception -> 0x0391, blocks: (B:3:0x0008, B:7:0x0024, B:8:0x003c, B:10:0x0042, B:13:0x0049, B:16:0x0050, B:18:0x005a, B:19:0x005e, B:20:0x0064, B:93:0x029c, B:95:0x02a2, B:131:0x0379, B:133:0x0389, B:99:0x02ac, B:101:0x02b7, B:102:0x02c5, B:104:0x02cb, B:106:0x02d5, B:116:0x0329, B:107:0x02dd, B:109:0x0301, B:111:0x0307, B:113:0x030c, B:115:0x0313, B:117:0x032b, B:119:0x0334, B:121:0x033a, B:122:0x0343, B:124:0x0349, B:126:0x0353, B:128:0x036d, B:127:0x035b, B:129:0x036f, B:130:0x0372, B:21:0x0069, B:24:0x0070, B:26:0x0076, B:31:0x008b, B:33:0x0092, B:55:0x015f, B:36:0x00af, B:37:0x00d1, B:40:0x00d9, B:43:0x00e0, B:45:0x0108, B:47:0x0113, B:51:0x0143, B:48:0x012b, B:50:0x012f, B:52:0x0147, B:54:0x014b, B:29:0x0083, B:56:0x0187, B:58:0x018d, B:60:0x0194, B:61:0x01bd, B:63:0x01c3, B:65:0x01db, B:67:0x01e1, B:69:0x01e8, B:71:0x01ef, B:73:0x0211, B:75:0x0218, B:78:0x0235, B:76:0x0226, B:79:0x023f, B:83:0x0250, B:85:0x025a, B:86:0x0261, B:87:0x0267, B:90:0x026e, B:92:0x0274), top: B:138:0x0008 }] */
+    /* JADX WARN: Removed duplicated region for block: B:175:? A[RETURN, SYNTHETIC] */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
     private void updateDialogsWithReadMessagesInternal(java.util.ArrayList<java.lang.Integer> r22, org.telegram.messenger.support.LongSparseIntArray r23, org.telegram.messenger.support.LongSparseIntArray r24, androidx.collection.LongSparseArray<java.util.ArrayList<java.lang.Integer>> r25, org.telegram.messenger.support.LongSparseIntArray r26) {
         /*
-            Method dump skipped, instructions count: 891
+            Method dump skipped, instructions count: 918
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.updateDialogsWithReadMessagesInternal(java.util.ArrayList, org.telegram.messenger.support.LongSparseIntArray, org.telegram.messenger.support.LongSparseIntArray, androidx.collection.LongSparseArray, org.telegram.messenger.support.LongSparseIntArray):void");
@@ -6467,19 +6539,19 @@ public class MessagesStorage extends BaseController {
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    /* JADX WARN: Removed duplicated region for block: B:108:0x01a5  */
-    /* JADX WARN: Removed duplicated region for block: B:110:0x01aa  */
-    /* JADX WARN: Removed duplicated region for block: B:117:0x01b8  */
-    /* JADX WARN: Removed duplicated region for block: B:119:0x01bd  */
-    /* JADX WARN: Removed duplicated region for block: B:122:0x01c4  */
-    /* JADX WARN: Removed duplicated region for block: B:151:? A[RETURN, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:110:0x01ab  */
+    /* JADX WARN: Removed duplicated region for block: B:112:0x01b0  */
+    /* JADX WARN: Removed duplicated region for block: B:119:0x01be  */
+    /* JADX WARN: Removed duplicated region for block: B:121:0x01c3  */
+    /* JADX WARN: Removed duplicated region for block: B:124:0x01ca  */
+    /* JADX WARN: Removed duplicated region for block: B:153:? A[RETURN, SYNTHETIC] */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
     public /* synthetic */ void lambda$processPendingRead$118(long r19, int r21, int r22, int r23, int r24) {
         /*
-            Method dump skipped, instructions count: 458
+            Method dump skipped, instructions count: 464
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$processPendingRead$118(long, int, int, int, int):void");
@@ -8826,7 +8898,7 @@ public class MessagesStorage extends BaseController {
                 }
                 queryFinalized.dispose();
                 if (longSparseIntArray != null) {
-                    this.database.executeFast(String.format(locale, "UPDATE dialogs SET unread_count = 0 WHERE did = %d", Long.valueOf(j))).stepThis().dispose();
+                    this.database.executeFast(String.format(locale, "UPDATE dialogs SET unread_count = 0, unread_count_i = 0 WHERE did = %d", Long.valueOf(j))).stepThis().dispose();
                 }
                 updateFiltersReadCounter(longSparseIntArray, null, true);
                 getMessagesController().processDialogsUpdateRead(longSparseIntArray, null);
@@ -9070,59 +9142,61 @@ public class MessagesStorage extends BaseController {
 
     /* JADX INFO: Access modifiers changed from: private */
     /* JADX WARN: Code restructure failed: missing block: B:124:0x0313, code lost:
-        if (r9 > r5) goto L294;
+        if (r9 > r5) goto L293;
      */
     /* JADX WARN: Code restructure failed: missing block: B:413:0x0ab9, code lost:
-        if (r10.id <= r8) goto L526;
+        if (r10.id <= r8) goto L525;
      */
     /* JADX WARN: Code restructure failed: missing block: B:428:0x0aeb, code lost:
-        if (r10.id <= r6) goto L539;
+        if (r10.id <= r6) goto L538;
      */
     /* JADX WARN: Code restructure failed: missing block: B:599:0x0dd6, code lost:
-        if (r10.post != false) goto L675;
+        if (r10.post != false) goto L674;
      */
-    /* JADX WARN: Removed duplicated region for block: B:1149:0x19ed  */
-    /* JADX WARN: Removed duplicated region for block: B:1153:0x19f6  */
-    /* JADX WARN: Removed duplicated region for block: B:1155:0x19fb  */
-    /* JADX WARN: Removed duplicated region for block: B:1157:0x1a00  */
-    /* JADX WARN: Removed duplicated region for block: B:1159:0x1a05  */
-    /* JADX WARN: Removed duplicated region for block: B:1161:0x1a0a  */
-    /* JADX WARN: Removed duplicated region for block: B:1163:0x1a0f  */
-    /* JADX WARN: Removed duplicated region for block: B:1165:0x1a14  */
-    /* JADX WARN: Removed duplicated region for block: B:1167:0x1a19  */
-    /* JADX WARN: Removed duplicated region for block: B:1169:0x1a1e  */
-    /* JADX WARN: Removed duplicated region for block: B:1171:0x1a23  */
-    /* JADX WARN: Removed duplicated region for block: B:1176:0x1a2b  */
-    /* JADX WARN: Removed duplicated region for block: B:1180:0x1a34  */
-    /* JADX WARN: Removed duplicated region for block: B:1182:0x1a39  */
-    /* JADX WARN: Removed duplicated region for block: B:1184:0x1a3e  */
-    /* JADX WARN: Removed duplicated region for block: B:1186:0x1a43  */
-    /* JADX WARN: Removed duplicated region for block: B:1188:0x1a48  */
-    /* JADX WARN: Removed duplicated region for block: B:1190:0x1a4d  */
-    /* JADX WARN: Removed duplicated region for block: B:1192:0x1a52  */
-    /* JADX WARN: Removed duplicated region for block: B:1194:0x1a57  */
-    /* JADX WARN: Removed duplicated region for block: B:1196:0x1a5c  */
-    /* JADX WARN: Removed duplicated region for block: B:1198:0x1a61  */
-    /* JADX WARN: Removed duplicated region for block: B:1301:0x0CLASSNAME A[EXC_TOP_SPLITTER, SYNTHETIC] */
-    /* JADX WARN: Removed duplicated region for block: B:1402:? A[RETURN, SYNTHETIC] */
-    /* JADX WARN: Removed duplicated region for block: B:297:0x079f A[Catch: all -> 0x0524, Exception -> 0x0527, TryCatch #128 {Exception -> 0x0527, all -> 0x0524, blocks: (B:90:0x0253, B:92:0x026a, B:94:0x026e, B:96:0x027b, B:98:0x028a, B:100:0x0293, B:102:0x02a1, B:103:0x02a9, B:105:0x02b6, B:107:0x02bc, B:109:0x02c2, B:112:0x02c8, B:114:0x02cc, B:116:0x02d2, B:119:0x02dc, B:121:0x02e5, B:123:0x030a, B:126:0x0316, B:128:0x0323, B:142:0x038e, B:148:0x03a5, B:150:0x03d2, B:152:0x03d8, B:154:0x03e7, B:156:0x03eb, B:158:0x03ef, B:160:0x03f3, B:162:0x03fd, B:163:0x0402, B:167:0x041b, B:170:0x0423, B:172:0x043f, B:174:0x0449, B:176:0x045a, B:178:0x0460, B:179:0x0463, B:181:0x0470, B:183:0x047d, B:185:0x048e, B:186:0x0498, B:188:0x04a1, B:190:0x04b1, B:191:0x04b9, B:193:0x04bf, B:194:0x04c2, B:196:0x04cf, B:197:0x04d7, B:201:0x04f2, B:203:0x04f8, B:205:0x0504, B:207:0x050a, B:145:0x039e, B:131:0x033d, B:133:0x0347, B:134:0x0351, B:136:0x0357, B:137:0x035a, B:139:0x0367, B:140:0x0371, B:218:0x053e, B:220:0x0554, B:222:0x055d, B:223:0x05b6, B:225:0x05bc, B:227:0x05cb, B:230:0x05d7, B:231:0x05dc, B:233:0x05e4, B:235:0x05ed, B:237:0x05f2, B:239:0x05f7, B:240:0x05fc, B:242:0x0603, B:244:0x061d, B:248:0x0638, B:250:0x063f, B:252:0x0646, B:254:0x064e, B:259:0x0666, B:255:0x065a, B:245:0x062b, B:267:0x06b0, B:268:0x06f1, B:270:0x06f7, B:272:0x0711, B:275:0x071d, B:276:0x0722, B:278:0x072c, B:279:0x0736, B:281:0x073c, B:283:0x074d, B:285:0x076b, B:291:0x0785, B:293:0x0790, B:295:0x0797, B:297:0x079f, B:305:0x07be, B:298:0x07a9, B:302:0x07b6, B:286:0x0774, B:290:0x0780, B:311:0x07dd, B:313:0x07e4, B:314:0x082e, B:316:0x0834, B:318:0x083e, B:320:0x0843, B:322:0x0848, B:325:0x0855, B:327:0x085f, B:330:0x0869, B:338:0x088c, B:339:0x0894, B:341:0x089a, B:342:0x08e2, B:344:0x08e8, B:345:0x08f5, B:349:0x093a, B:351:0x0940, B:352:0x0950, B:354:0x0956, B:356:0x0960, B:358:0x096a, B:359:0x0972), top: B:1214:0x0253 }] */
-    /* JADX WARN: Removed duplicated region for block: B:298:0x07a9 A[Catch: all -> 0x0524, Exception -> 0x0527, TryCatch #128 {Exception -> 0x0527, all -> 0x0524, blocks: (B:90:0x0253, B:92:0x026a, B:94:0x026e, B:96:0x027b, B:98:0x028a, B:100:0x0293, B:102:0x02a1, B:103:0x02a9, B:105:0x02b6, B:107:0x02bc, B:109:0x02c2, B:112:0x02c8, B:114:0x02cc, B:116:0x02d2, B:119:0x02dc, B:121:0x02e5, B:123:0x030a, B:126:0x0316, B:128:0x0323, B:142:0x038e, B:148:0x03a5, B:150:0x03d2, B:152:0x03d8, B:154:0x03e7, B:156:0x03eb, B:158:0x03ef, B:160:0x03f3, B:162:0x03fd, B:163:0x0402, B:167:0x041b, B:170:0x0423, B:172:0x043f, B:174:0x0449, B:176:0x045a, B:178:0x0460, B:179:0x0463, B:181:0x0470, B:183:0x047d, B:185:0x048e, B:186:0x0498, B:188:0x04a1, B:190:0x04b1, B:191:0x04b9, B:193:0x04bf, B:194:0x04c2, B:196:0x04cf, B:197:0x04d7, B:201:0x04f2, B:203:0x04f8, B:205:0x0504, B:207:0x050a, B:145:0x039e, B:131:0x033d, B:133:0x0347, B:134:0x0351, B:136:0x0357, B:137:0x035a, B:139:0x0367, B:140:0x0371, B:218:0x053e, B:220:0x0554, B:222:0x055d, B:223:0x05b6, B:225:0x05bc, B:227:0x05cb, B:230:0x05d7, B:231:0x05dc, B:233:0x05e4, B:235:0x05ed, B:237:0x05f2, B:239:0x05f7, B:240:0x05fc, B:242:0x0603, B:244:0x061d, B:248:0x0638, B:250:0x063f, B:252:0x0646, B:254:0x064e, B:259:0x0666, B:255:0x065a, B:245:0x062b, B:267:0x06b0, B:268:0x06f1, B:270:0x06f7, B:272:0x0711, B:275:0x071d, B:276:0x0722, B:278:0x072c, B:279:0x0736, B:281:0x073c, B:283:0x074d, B:285:0x076b, B:291:0x0785, B:293:0x0790, B:295:0x0797, B:297:0x079f, B:305:0x07be, B:298:0x07a9, B:302:0x07b6, B:286:0x0774, B:290:0x0780, B:311:0x07dd, B:313:0x07e4, B:314:0x082e, B:316:0x0834, B:318:0x083e, B:320:0x0843, B:322:0x0848, B:325:0x0855, B:327:0x085f, B:330:0x0869, B:338:0x088c, B:339:0x0894, B:341:0x089a, B:342:0x08e2, B:344:0x08e8, B:345:0x08f5, B:349:0x093a, B:351:0x0940, B:352:0x0950, B:354:0x0956, B:356:0x0960, B:358:0x096a, B:359:0x0972), top: B:1214:0x0253 }] */
+    /* JADX WARN: Removed duplicated region for block: B:1138:0x1929  */
+    /* JADX WARN: Removed duplicated region for block: B:1142:0x1932  */
+    /* JADX WARN: Removed duplicated region for block: B:1144:0x1937  */
+    /* JADX WARN: Removed duplicated region for block: B:1146:0x193c  */
+    /* JADX WARN: Removed duplicated region for block: B:1148:0x1941  */
+    /* JADX WARN: Removed duplicated region for block: B:1150:0x1946  */
+    /* JADX WARN: Removed duplicated region for block: B:1152:0x194b  */
+    /* JADX WARN: Removed duplicated region for block: B:1154:0x1950  */
+    /* JADX WARN: Removed duplicated region for block: B:1156:0x1955  */
+    /* JADX WARN: Removed duplicated region for block: B:1158:0x195a  */
+    /* JADX WARN: Removed duplicated region for block: B:1160:0x195f  */
+    /* JADX WARN: Removed duplicated region for block: B:1165:0x1967  */
+    /* JADX WARN: Removed duplicated region for block: B:1169:0x1970  */
+    /* JADX WARN: Removed duplicated region for block: B:1171:0x1975  */
+    /* JADX WARN: Removed duplicated region for block: B:1173:0x197a  */
+    /* JADX WARN: Removed duplicated region for block: B:1175:0x197f  */
+    /* JADX WARN: Removed duplicated region for block: B:1177:0x1984  */
+    /* JADX WARN: Removed duplicated region for block: B:1179:0x1989  */
+    /* JADX WARN: Removed duplicated region for block: B:1181:0x198e  */
+    /* JADX WARN: Removed duplicated region for block: B:1183:0x1993  */
+    /* JADX WARN: Removed duplicated region for block: B:1185:0x1998  */
+    /* JADX WARN: Removed duplicated region for block: B:1187:0x199d  */
+    /* JADX WARN: Removed duplicated region for block: B:1292:0x0CLASSNAME A[EXC_TOP_SPLITTER, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:1385:? A[RETURN, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:297:0x079f A[Catch: all -> 0x0524, Exception -> 0x0527, TryCatch #122 {Exception -> 0x0527, all -> 0x0524, blocks: (B:90:0x0253, B:92:0x026a, B:94:0x026e, B:96:0x027b, B:98:0x028a, B:100:0x0293, B:102:0x02a1, B:103:0x02a9, B:105:0x02b6, B:107:0x02bc, B:109:0x02c2, B:112:0x02c8, B:114:0x02cc, B:116:0x02d2, B:119:0x02dc, B:121:0x02e5, B:123:0x030a, B:126:0x0316, B:128:0x0323, B:142:0x038e, B:148:0x03a5, B:150:0x03d2, B:152:0x03d8, B:154:0x03e7, B:156:0x03eb, B:158:0x03ef, B:160:0x03f3, B:162:0x03fd, B:163:0x0402, B:167:0x041b, B:170:0x0423, B:172:0x043f, B:174:0x0449, B:176:0x045a, B:178:0x0460, B:179:0x0463, B:181:0x0470, B:183:0x047d, B:185:0x048e, B:186:0x0498, B:188:0x04a1, B:190:0x04b1, B:191:0x04b9, B:193:0x04bf, B:194:0x04c2, B:196:0x04cf, B:197:0x04d7, B:201:0x04f2, B:203:0x04f8, B:205:0x0504, B:207:0x050a, B:145:0x039e, B:131:0x033d, B:133:0x0347, B:134:0x0351, B:136:0x0357, B:137:0x035a, B:139:0x0367, B:140:0x0371, B:218:0x053e, B:220:0x0554, B:222:0x055d, B:223:0x05b6, B:225:0x05bc, B:227:0x05cb, B:230:0x05d7, B:231:0x05dc, B:233:0x05e4, B:235:0x05ed, B:237:0x05f2, B:239:0x05f7, B:240:0x05fc, B:242:0x0603, B:244:0x061d, B:248:0x0638, B:250:0x063f, B:252:0x0646, B:254:0x064e, B:259:0x0666, B:255:0x065a, B:245:0x062b, B:267:0x06b0, B:268:0x06f1, B:270:0x06f7, B:272:0x0711, B:275:0x071d, B:276:0x0722, B:278:0x072c, B:279:0x0736, B:281:0x073c, B:283:0x074d, B:285:0x076b, B:291:0x0785, B:293:0x0790, B:295:0x0797, B:297:0x079f, B:305:0x07be, B:298:0x07a9, B:302:0x07b6, B:286:0x0774, B:290:0x0780, B:311:0x07dd, B:313:0x07e4, B:314:0x082e, B:316:0x0834, B:318:0x083e, B:320:0x0843, B:322:0x0848, B:325:0x0855, B:327:0x085f, B:330:0x0869, B:338:0x088c, B:339:0x0894, B:341:0x089a, B:342:0x08e2, B:344:0x08e8, B:345:0x08f5, B:349:0x093a, B:351:0x0940, B:352:0x0950, B:354:0x0956, B:356:0x0960, B:358:0x096a, B:359:0x0972), top: B:1203:0x0253 }] */
+    /* JADX WARN: Removed duplicated region for block: B:298:0x07a9 A[Catch: all -> 0x0524, Exception -> 0x0527, TryCatch #122 {Exception -> 0x0527, all -> 0x0524, blocks: (B:90:0x0253, B:92:0x026a, B:94:0x026e, B:96:0x027b, B:98:0x028a, B:100:0x0293, B:102:0x02a1, B:103:0x02a9, B:105:0x02b6, B:107:0x02bc, B:109:0x02c2, B:112:0x02c8, B:114:0x02cc, B:116:0x02d2, B:119:0x02dc, B:121:0x02e5, B:123:0x030a, B:126:0x0316, B:128:0x0323, B:142:0x038e, B:148:0x03a5, B:150:0x03d2, B:152:0x03d8, B:154:0x03e7, B:156:0x03eb, B:158:0x03ef, B:160:0x03f3, B:162:0x03fd, B:163:0x0402, B:167:0x041b, B:170:0x0423, B:172:0x043f, B:174:0x0449, B:176:0x045a, B:178:0x0460, B:179:0x0463, B:181:0x0470, B:183:0x047d, B:185:0x048e, B:186:0x0498, B:188:0x04a1, B:190:0x04b1, B:191:0x04b9, B:193:0x04bf, B:194:0x04c2, B:196:0x04cf, B:197:0x04d7, B:201:0x04f2, B:203:0x04f8, B:205:0x0504, B:207:0x050a, B:145:0x039e, B:131:0x033d, B:133:0x0347, B:134:0x0351, B:136:0x0357, B:137:0x035a, B:139:0x0367, B:140:0x0371, B:218:0x053e, B:220:0x0554, B:222:0x055d, B:223:0x05b6, B:225:0x05bc, B:227:0x05cb, B:230:0x05d7, B:231:0x05dc, B:233:0x05e4, B:235:0x05ed, B:237:0x05f2, B:239:0x05f7, B:240:0x05fc, B:242:0x0603, B:244:0x061d, B:248:0x0638, B:250:0x063f, B:252:0x0646, B:254:0x064e, B:259:0x0666, B:255:0x065a, B:245:0x062b, B:267:0x06b0, B:268:0x06f1, B:270:0x06f7, B:272:0x0711, B:275:0x071d, B:276:0x0722, B:278:0x072c, B:279:0x0736, B:281:0x073c, B:283:0x074d, B:285:0x076b, B:291:0x0785, B:293:0x0790, B:295:0x0797, B:297:0x079f, B:305:0x07be, B:298:0x07a9, B:302:0x07b6, B:286:0x0774, B:290:0x0780, B:311:0x07dd, B:313:0x07e4, B:314:0x082e, B:316:0x0834, B:318:0x083e, B:320:0x0843, B:322:0x0848, B:325:0x0855, B:327:0x085f, B:330:0x0869, B:338:0x088c, B:339:0x0894, B:341:0x089a, B:342:0x08e2, B:344:0x08e8, B:345:0x08f5, B:349:0x093a, B:351:0x0940, B:352:0x0950, B:354:0x0956, B:356:0x0960, B:358:0x096a, B:359:0x0972), top: B:1203:0x0253 }] */
     /* JADX WARN: Removed duplicated region for block: B:304:0x07bd  */
-    /* JADX WARN: Removed duplicated region for block: B:398:0x0a84 A[Catch: all -> 0x0a36, Exception -> 0x0a3c, TryCatch #123 {Exception -> 0x0a3c, all -> 0x0a36, blocks: (B:372:0x0a14, B:386:0x0a67, B:388:0x0a6f, B:395:0x0a7c, B:398:0x0a84, B:399:0x0a8a, B:403:0x0a95, B:404:0x0a9a, B:406:0x0a9f, B:408:0x0aab, B:410:0x0ab3, B:412:0x0ab7, B:415:0x0abd, B:421:0x0acb, B:423:0x0adb, B:425:0x0ae5, B:427:0x0ae9, B:430:0x0aef, B:457:0x0b45, B:463:0x0b6f, B:472:0x0b89, B:489:0x0bc0, B:434:0x0af8, B:419:0x0ac4), top: B:1224:0x0a14 }] */
+    /* JADX WARN: Removed duplicated region for block: B:398:0x0a84 A[Catch: all -> 0x0a36, Exception -> 0x0a3c, TryCatch #115 {Exception -> 0x0a3c, all -> 0x0a36, blocks: (B:372:0x0a14, B:386:0x0a67, B:388:0x0a6f, B:395:0x0a7c, B:398:0x0a84, B:399:0x0a8a, B:403:0x0a95, B:404:0x0a9a, B:406:0x0a9f, B:408:0x0aab, B:410:0x0ab3, B:412:0x0ab7, B:415:0x0abd, B:421:0x0acb, B:423:0x0adb, B:425:0x0ae5, B:427:0x0ae9, B:430:0x0aef, B:457:0x0b45, B:463:0x0b6f, B:472:0x0b89, B:489:0x0bc0, B:434:0x0af8, B:419:0x0ac4), top: B:1217:0x0a14 }] */
     /* JADX WARN: Removed duplicated region for block: B:402:0x0a93  */
-    /* JADX WARN: Removed duplicated region for block: B:406:0x0a9f A[Catch: all -> 0x0a36, Exception -> 0x0a3c, TryCatch #123 {Exception -> 0x0a3c, all -> 0x0a36, blocks: (B:372:0x0a14, B:386:0x0a67, B:388:0x0a6f, B:395:0x0a7c, B:398:0x0a84, B:399:0x0a8a, B:403:0x0a95, B:404:0x0a9a, B:406:0x0a9f, B:408:0x0aab, B:410:0x0ab3, B:412:0x0ab7, B:415:0x0abd, B:421:0x0acb, B:423:0x0adb, B:425:0x0ae5, B:427:0x0ae9, B:430:0x0aef, B:457:0x0b45, B:463:0x0b6f, B:472:0x0b89, B:489:0x0bc0, B:434:0x0af8, B:419:0x0ac4), top: B:1224:0x0a14 }] */
-    /* JADX WARN: Removed duplicated region for block: B:421:0x0acb A[Catch: all -> 0x0a36, Exception -> 0x0a3c, TryCatch #123 {Exception -> 0x0a3c, all -> 0x0a36, blocks: (B:372:0x0a14, B:386:0x0a67, B:388:0x0a6f, B:395:0x0a7c, B:398:0x0a84, B:399:0x0a8a, B:403:0x0a95, B:404:0x0a9a, B:406:0x0a9f, B:408:0x0aab, B:410:0x0ab3, B:412:0x0ab7, B:415:0x0abd, B:421:0x0acb, B:423:0x0adb, B:425:0x0ae5, B:427:0x0ae9, B:430:0x0aef, B:457:0x0b45, B:463:0x0b6f, B:472:0x0b89, B:489:0x0bc0, B:434:0x0af8, B:419:0x0ac4), top: B:1224:0x0a14 }] */
+    /* JADX WARN: Removed duplicated region for block: B:406:0x0a9f A[Catch: all -> 0x0a36, Exception -> 0x0a3c, TryCatch #115 {Exception -> 0x0a3c, all -> 0x0a36, blocks: (B:372:0x0a14, B:386:0x0a67, B:388:0x0a6f, B:395:0x0a7c, B:398:0x0a84, B:399:0x0a8a, B:403:0x0a95, B:404:0x0a9a, B:406:0x0a9f, B:408:0x0aab, B:410:0x0ab3, B:412:0x0ab7, B:415:0x0abd, B:421:0x0acb, B:423:0x0adb, B:425:0x0ae5, B:427:0x0ae9, B:430:0x0aef, B:457:0x0b45, B:463:0x0b6f, B:472:0x0b89, B:489:0x0bc0, B:434:0x0af8, B:419:0x0ac4), top: B:1217:0x0a14 }] */
+    /* JADX WARN: Removed duplicated region for block: B:421:0x0acb A[Catch: all -> 0x0a36, Exception -> 0x0a3c, TryCatch #115 {Exception -> 0x0a3c, all -> 0x0a36, blocks: (B:372:0x0a14, B:386:0x0a67, B:388:0x0a6f, B:395:0x0a7c, B:398:0x0a84, B:399:0x0a8a, B:403:0x0a95, B:404:0x0a9a, B:406:0x0a9f, B:408:0x0aab, B:410:0x0ab3, B:412:0x0ab7, B:415:0x0abd, B:421:0x0acb, B:423:0x0adb, B:425:0x0ae5, B:427:0x0ae9, B:430:0x0aef, B:457:0x0b45, B:463:0x0b6f, B:472:0x0b89, B:489:0x0bc0, B:434:0x0af8, B:419:0x0ac4), top: B:1217:0x0a14 }] */
     /* JADX WARN: Removed duplicated region for block: B:436:0x0afc  */
     /* JADX WARN: Removed duplicated region for block: B:437:0x0b03  */
     /* JADX WARN: Removed duplicated region for block: B:441:0x0b0f  */
     /* JADX WARN: Removed duplicated region for block: B:542:0x0c8b  */
-    /* JADX WARN: Removed duplicated region for block: B:545:0x0CLASSNAME A[Catch: all -> 0x0c7f, Exception -> 0x0CLASSNAME, TRY_ENTER, TRY_LEAVE, TryCatch #86 {Exception -> 0x0CLASSNAME, all -> 0x0c7f, blocks: (B:532:0x0c6e, B:545:0x0CLASSNAME, B:549:0x0cc1, B:551:0x0ccc, B:560:0x0d16, B:563:0x0d1c, B:564:0x0d24, B:568:0x0d53), top: B:1297:0x0c6e }] */
-    /* JADX WARN: Removed duplicated region for block: B:560:0x0d16 A[Catch: all -> 0x0c7f, Exception -> 0x0CLASSNAME, TRY_ENTER, TryCatch #86 {Exception -> 0x0CLASSNAME, all -> 0x0c7f, blocks: (B:532:0x0c6e, B:545:0x0CLASSNAME, B:549:0x0cc1, B:551:0x0ccc, B:560:0x0d16, B:563:0x0d1c, B:564:0x0d24, B:568:0x0d53), top: B:1297:0x0c6e }] */
-    /* JADX WARN: Removed duplicated region for block: B:563:0x0d1c A[Catch: all -> 0x0c7f, Exception -> 0x0CLASSNAME, TryCatch #86 {Exception -> 0x0CLASSNAME, all -> 0x0c7f, blocks: (B:532:0x0c6e, B:545:0x0CLASSNAME, B:549:0x0cc1, B:551:0x0ccc, B:560:0x0d16, B:563:0x0d1c, B:564:0x0d24, B:568:0x0d53), top: B:1297:0x0c6e }] */
+    /* JADX WARN: Removed duplicated region for block: B:545:0x0CLASSNAME A[Catch: all -> 0x0c7f, Exception -> 0x0CLASSNAME, TRY_ENTER, TRY_LEAVE, TryCatch #80 {Exception -> 0x0CLASSNAME, all -> 0x0c7f, blocks: (B:532:0x0c6e, B:545:0x0CLASSNAME, B:549:0x0cc1, B:551:0x0ccc, B:560:0x0d16, B:563:0x0d1c, B:564:0x0d24, B:568:0x0d53), top: B:1286:0x0c6e }] */
+    /* JADX WARN: Removed duplicated region for block: B:560:0x0d16 A[Catch: all -> 0x0c7f, Exception -> 0x0CLASSNAME, TRY_ENTER, TryCatch #80 {Exception -> 0x0CLASSNAME, all -> 0x0c7f, blocks: (B:532:0x0c6e, B:545:0x0CLASSNAME, B:549:0x0cc1, B:551:0x0ccc, B:560:0x0d16, B:563:0x0d1c, B:564:0x0d24, B:568:0x0d53), top: B:1286:0x0c6e }] */
+    /* JADX WARN: Removed duplicated region for block: B:563:0x0d1c A[Catch: all -> 0x0c7f, Exception -> 0x0CLASSNAME, TryCatch #80 {Exception -> 0x0CLASSNAME, all -> 0x0c7f, blocks: (B:532:0x0c6e, B:545:0x0CLASSNAME, B:549:0x0cc1, B:551:0x0ccc, B:560:0x0d16, B:563:0x0d1c, B:564:0x0d24, B:568:0x0d53), top: B:1286:0x0c6e }] */
     /* JADX WARN: Removed duplicated region for block: B:567:0x0d51  */
-    /* JADX WARN: Removed duplicated region for block: B:577:0x0d8a A[Catch: all -> 0x0f7a, Exception -> 0x0f7e, TRY_ENTER, TRY_LEAVE, TryCatch #91 {Exception -> 0x0f7e, all -> 0x0f7a, blocks: (B:565:0x0d4b, B:577:0x0d8a), top: B:1287:0x0d4b }] */
-    /* JADX WARN: Removed duplicated region for block: B:595:0x0dca A[Catch: all -> 0x0var_, Exception -> 0x0f6e, TRY_LEAVE, TryCatch #99 {Exception -> 0x0f6e, all -> 0x0var_, blocks: (B:593:0x0dc5, B:595:0x0dca, B:605:0x0ddf, B:607:0x0ded, B:609:0x0df8, B:615:0x0e06, B:649:0x0eb8, B:653:0x0ec8, B:620:0x0e28, B:646:0x0ea6), top: B:1272:0x0dc5 }] */
-    /* JADX WARN: Removed duplicated region for block: B:649:0x0eb8 A[Catch: all -> 0x0var_, Exception -> 0x0f6e, TRY_LEAVE, TryCatch #99 {Exception -> 0x0f6e, all -> 0x0var_, blocks: (B:593:0x0dc5, B:595:0x0dca, B:605:0x0ddf, B:607:0x0ded, B:609:0x0df8, B:615:0x0e06, B:649:0x0eb8, B:653:0x0ec8, B:620:0x0e28, B:646:0x0ea6), top: B:1272:0x0dc5 }] */
+    /* JADX WARN: Removed duplicated region for block: B:577:0x0d8a A[Catch: all -> 0x0f7a, Exception -> 0x0f7e, TRY_ENTER, TRY_LEAVE, TryCatch #85 {Exception -> 0x0f7e, all -> 0x0f7a, blocks: (B:565:0x0d4b, B:577:0x0d8a), top: B:1276:0x0d4b }] */
+    /* JADX WARN: Removed duplicated region for block: B:595:0x0dca A[Catch: all -> 0x0var_, Exception -> 0x0f6e, TRY_LEAVE, TryCatch #95 {Exception -> 0x0f6e, all -> 0x0var_, blocks: (B:593:0x0dc5, B:595:0x0dca, B:605:0x0ddf, B:607:0x0ded, B:609:0x0df8, B:615:0x0e06, B:649:0x0eb8, B:653:0x0ec8, B:620:0x0e28, B:646:0x0ea6), top: B:1257:0x0dc5 }] */
+    /* JADX WARN: Removed duplicated region for block: B:649:0x0eb8 A[Catch: all -> 0x0var_, Exception -> 0x0f6e, TRY_LEAVE, TryCatch #95 {Exception -> 0x0f6e, all -> 0x0var_, blocks: (B:593:0x0dc5, B:595:0x0dca, B:605:0x0ddf, B:607:0x0ded, B:609:0x0df8, B:615:0x0e06, B:649:0x0eb8, B:653:0x0ec8, B:620:0x0e28, B:646:0x0ea6), top: B:1257:0x0dc5 }] */
+    /* JADX WARN: Removed duplicated region for block: B:809:0x11ab A[Catch: all -> 0x128b, Exception -> 0x1296, TryCatch #74 {Exception -> 0x1296, all -> 0x128b, blocks: (B:782:0x114d, B:790:0x116f, B:792:0x1175, B:796:0x117c, B:800:0x1186, B:804:0x1192, B:807:0x11a0, B:809:0x11ab, B:813:0x11b4, B:788:0x1168, B:785:0x115f), top: B:1298:0x114d }] */
+    /* JADX WARN: Removed duplicated region for block: B:824:0x11f1 A[Catch: all -> 0x1287, Exception -> 0x1289, TryCatch #75 {Exception -> 0x1289, all -> 0x1287, blocks: (B:817:0x11c2, B:819:0x11d0, B:821:0x11d6, B:823:0x11e1, B:822:0x11dd, B:824:0x11f1, B:828:0x1202, B:830:0x1207, B:834:0x1232, B:836:0x1258, B:838:0x125e, B:840:0x1267, B:839:0x1264), top: B:1296:0x11c2 }] */
     /* renamed from: putMessagesInternal */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
@@ -9130,7 +9204,7 @@ public class MessagesStorage extends BaseController {
     */
     public void lambda$putMessages$170(java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> r51, boolean r52, boolean r53, int r54, boolean r55, boolean r56, int r57) {
         /*
-            Method dump skipped, instructions count: 6759
+            Method dump skipped, instructions count: 6563
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$putMessages$170(java.util.ArrayList, boolean, boolean, int, boolean, boolean, int):void");
@@ -11147,7 +11221,7 @@ public class MessagesStorage extends BaseController {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$setDialogUnread$198(long, boolean):void");
     }
 
-    private void resetAllUnreadCounters(boolean z) {
+    public void resetAllUnreadCounters(boolean z) {
         int size = this.dialogFilters.size();
         for (int i = 0; i < size; i++) {
             MessagesController.DialogFilter dialogFilter = this.dialogFilters.get(i);

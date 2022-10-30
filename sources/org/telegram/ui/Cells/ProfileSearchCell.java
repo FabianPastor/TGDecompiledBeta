@@ -10,6 +10,7 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.accessibility.AccessibilityNodeInfo;
+import java.util.Locale;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
@@ -188,7 +189,6 @@ public class ProfileSearchCell extends BaseCell implements NotificationCenter.No
         String str;
         TLRPC$UserStatus tLRPC$UserStatus;
         int dp;
-        int i;
         String str2;
         String userName;
         this.drawNameLock = false;
@@ -273,10 +273,10 @@ public class ProfileSearchCell extends BaseCell implements NotificationCenter.No
         this.nameWidth -= getPaddingLeft() + getPaddingRight();
         int paddingLeft = measuredWidth - (getPaddingLeft() + getPaddingRight());
         if (this.drawCount) {
-            TLRPC$Dialog tLRPC$Dialog = MessagesController.getInstance(this.currentAccount).dialogs_dict.get(this.dialog_id);
-            if (tLRPC$Dialog != null && (i = tLRPC$Dialog.unread_count) != 0) {
-                this.lastUnreadCount = i;
-                String format = String.format("%d", Integer.valueOf(i));
+            int dialogUnreadCount = MessagesController.getInstance(this.currentAccount).getDialogUnreadCount(MessagesController.getInstance(this.currentAccount).dialogs_dict.get(this.dialog_id));
+            if (dialogUnreadCount != 0) {
+                this.lastUnreadCount = dialogUnreadCount;
+                String format = String.format(Locale.US, "%d", Integer.valueOf(dialogUnreadCount));
                 this.countWidth = Math.max(AndroidUtilities.dp(12.0f), (int) Math.ceil(Theme.dialogs_countTextPaint.measureText(format)));
                 this.countLayout = new StaticLayout(format, Theme.dialogs_countTextPaint, this.countWidth, Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
                 int dp2 = this.countWidth + AndroidUtilities.dp(18.0f);
@@ -356,9 +356,9 @@ public class ProfileSearchCell extends BaseCell implements NotificationCenter.No
             if (ChatObject.isChannel(tLRPC$Chat3)) {
                 TLRPC$Chat tLRPC$Chat4 = this.chat;
                 if (!tLRPC$Chat4.megagroup) {
-                    int i2 = tLRPC$Chat4.participants_count;
-                    if (i2 != 0) {
-                        str = LocaleController.formatPluralStringComma("Subscribers", i2);
+                    int i = tLRPC$Chat4.participants_count;
+                    if (i != 0) {
+                        str = LocaleController.formatPluralStringComma("Subscribers", i);
                     } else if (!ChatObject.isPublic(tLRPC$Chat4)) {
                         str = LocaleController.getString("ChannelPrivate", R.string.ChannelPrivate).toLowerCase();
                     } else {
@@ -368,9 +368,9 @@ public class ProfileSearchCell extends BaseCell implements NotificationCenter.No
                 }
             }
             TLRPC$Chat tLRPC$Chat5 = this.chat;
-            int i3 = tLRPC$Chat5.participants_count;
-            if (i3 != 0) {
-                str = LocaleController.formatPluralStringComma("Members", i3);
+            int i2 = tLRPC$Chat5.participants_count;
+            if (i2 != 0) {
+                str = LocaleController.formatPluralStringComma("Members", i2);
             } else if (tLRPC$Chat5.has_geo) {
                 str = LocaleController.getString("MegaLocation", R.string.MegaLocation);
             } else if (!ChatObject.isPublic(tLRPC$Chat5)) {
@@ -397,10 +397,10 @@ public class ProfileSearchCell extends BaseCell implements NotificationCenter.No
         if (LocaleController.isRTL) {
             if (this.nameLayout.getLineCount() > 0 && this.nameLayout.getLineLeft(0) == 0.0f) {
                 double ceil = Math.ceil(this.nameLayout.getLineWidth(0));
-                int i4 = this.nameWidth;
-                if (ceil < i4) {
+                int i3 = this.nameWidth;
+                if (ceil < i3) {
                     double d = this.nameLeft;
-                    double d2 = i4;
+                    double d2 = i3;
                     Double.isNaN(d2);
                     Double.isNaN(d);
                     this.nameLeft = (int) (d + (d2 - ceil));
@@ -420,10 +420,10 @@ public class ProfileSearchCell extends BaseCell implements NotificationCenter.No
         } else {
             if (this.nameLayout.getLineCount() > 0 && this.nameLayout.getLineRight(0) == this.nameWidth) {
                 double ceil3 = Math.ceil(this.nameLayout.getLineWidth(0));
-                int i5 = this.nameWidth;
-                if (ceil3 < i5) {
+                int i4 = this.nameWidth;
+                if (ceil3 < i4) {
                     double d5 = this.nameLeft;
-                    double d6 = i5;
+                    double d6 = i4;
                     Double.isNaN(d6);
                     Double.isNaN(d5);
                     this.nameLeft = (int) (d5 - (d6 - ceil3));
@@ -533,6 +533,9 @@ public class ProfileSearchCell extends BaseCell implements NotificationCenter.No
                 this.avatarImage.setImage(null, null, this.avatarDrawable, null, null, 0);
             }
         }
+        ImageReceiver imageReceiver = this.avatarImage;
+        TLRPC$Chat tLRPC$Chat2 = this.chat;
+        imageReceiver.setRoundRadius(AndroidUtilities.dp((tLRPC$Chat2 == null || !tLRPC$Chat2.forum) ? 23.0f : 16.0f));
         if (i != 0) {
             boolean z2 = !(((MessagesController.UPDATE_MASK_AVATAR & i) == 0 || this.user == null) && ((MessagesController.UPDATE_MASK_CHAT_AVATAR & i) == 0 || this.chat == null)) && (((tLRPC$FileLocation = this.lastAvatar) != null && tLRPC$FileLocation2 == null) || ((tLRPC$FileLocation == null && tLRPC$FileLocation2 != null) || !(tLRPC$FileLocation == null || (tLRPC$FileLocation.volume_id == tLRPC$FileLocation2.volume_id && tLRPC$FileLocation.local_id == tLRPC$FileLocation2.local_id))));
             if (!z2 && (MessagesController.UPDATE_MASK_STATUS & i) != 0 && (tLRPC$User2 = this.user) != null) {
@@ -554,7 +557,7 @@ public class ProfileSearchCell extends BaseCell implements NotificationCenter.No
                     z2 = true;
                 }
             }
-            if (z2 || !this.drawCount || (i & MessagesController.UPDATE_MASK_READ_DIALOG_MESSAGE) == 0 || (tLRPC$Dialog = MessagesController.getInstance(this.currentAccount).dialogs_dict.get(this.dialog_id)) == null || tLRPC$Dialog.unread_count == this.lastUnreadCount) {
+            if (z2 || !this.drawCount || (i & MessagesController.UPDATE_MASK_READ_DIALOG_MESSAGE) == 0 || (tLRPC$Dialog = MessagesController.getInstance(this.currentAccount).dialogs_dict.get(this.dialog_id)) == null || MessagesController.getInstance(this.currentAccount).getDialogUnreadCount(tLRPC$Dialog) == this.lastUnreadCount) {
                 z = z2;
             }
             if (!z) {
@@ -571,9 +574,9 @@ public class ProfileSearchCell extends BaseCell implements NotificationCenter.No
             }
             this.lastName = this.user.first_name + this.user.last_name;
         } else {
-            TLRPC$Chat tLRPC$Chat2 = this.chat;
-            if (tLRPC$Chat2 != null) {
-                this.lastName = tLRPC$Chat2.title;
+            TLRPC$Chat tLRPC$Chat3 = this.chat;
+            if (tLRPC$Chat3 != null) {
+                this.lastName = tLRPC$Chat3.title;
             }
         }
         this.lastAvatar = tLRPC$FileLocation2;

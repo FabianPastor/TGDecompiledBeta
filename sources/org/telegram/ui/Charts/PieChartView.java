@@ -459,7 +459,7 @@ public class PieChartView extends StackLinearChartView<PieChartViewData> {
 
     @Override // org.telegram.ui.Charts.StackLinearChartView, org.telegram.ui.Charts.BaseChartView
     /* renamed from: createLineViewData */
-    public PieChartViewData mo1019createLineViewData(ChartData.Line line) {
+    public PieChartViewData mo1036createLineViewData(ChartData.Line line) {
         return new PieChartViewData(line);
     }
 

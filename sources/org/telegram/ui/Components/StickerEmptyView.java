@@ -103,7 +103,7 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
         this.linearLayout.addView(this.stickerView, LayoutHelper.createLinear(117, 117, 1));
         this.linearLayout.addView(textView, LayoutHelper.createLinear(-2, -2, 1, 0, 12, 0, 0));
         this.linearLayout.addView(textView2, LayoutHelper.createLinear(-2, -2, 1, 0, 8, 0, 0));
-        addView(this.linearLayout, LayoutHelper.createFrame(-2, -2.0f, 17, 56.0f, 0.0f, 56.0f, 30.0f));
+        addView(this.linearLayout, LayoutHelper.createFrame(-2, -2.0f, 17, 46.0f, 0.0f, 46.0f, 30.0f));
         if (view == null) {
             RadialProgressView radialProgressView = new RadialProgressView(context, resourcesProvider);
             this.progressBar = radialProgressView;
@@ -246,7 +246,8 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
                 svgThumb.overrideWidthAndHeight(512, 512);
             }
             this.stickerView.setImage(ImageLocation.getForDocument(tLRPC$Document), str, "tgs", svgThumb, tLRPC$TL_messages_stickerSet);
-            if (this.stickerType == 9) {
+            int i2 = this.stickerType;
+            if (i2 == 9 || i2 == 0) {
                 this.stickerView.getImageReceiver().setAutoRepeat(1);
                 return;
             } else {

@@ -300,6 +300,8 @@ public class TopicCreateFragment extends BaseFragment {
                             tLRPC$TL_forumTopic.icon_emoji_id = j;
                             tLRPC$TL_forumTopic.flags |= 1;
                         }
+                        tLRPC$TL_forumTopic.my = true;
+                        tLRPC$TL_forumTopic.flags |= 2;
                         tLRPC$TL_forumTopic.topicStartMessage = tLRPC$TL_messageService;
                         tLRPC$TL_forumTopic.title = str;
                         tLRPC$TL_forumTopic.top_message = tLRPC$TL_messageService.id;

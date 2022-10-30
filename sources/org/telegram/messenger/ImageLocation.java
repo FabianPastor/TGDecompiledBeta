@@ -9,6 +9,7 @@ import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$FileLocation;
 import org.telegram.tgnet.TLRPC$InputPeer;
 import org.telegram.tgnet.TLRPC$InputStickerSet;
+import org.telegram.tgnet.TLRPC$Message;
 import org.telegram.tgnet.TLRPC$Photo;
 import org.telegram.tgnet.TLRPC$PhotoSize;
 import org.telegram.tgnet.TLRPC$TL_fileLocationToBeDeprecated;
@@ -97,10 +98,22 @@ public class ImageLocation {
         if (tLObject instanceof TLRPC$Photo) {
             return getForPhoto(tLRPC$PhotoSize, (TLRPC$Photo) tLObject);
         }
-        if (!(tLObject instanceof TLRPC$Document)) {
+        if (tLObject instanceof TLRPC$Document) {
+            return getForDocument(tLRPC$PhotoSize, (TLRPC$Document) tLObject);
+        }
+        if (!(tLObject instanceof TLRPC$Message)) {
             return null;
         }
-        return getForDocument(tLRPC$PhotoSize, (TLRPC$Document) tLObject);
+        return getForMessage(tLRPC$PhotoSize, (TLRPC$Message) tLObject);
+    }
+
+    public static ImageLocation getForMessage(TLRPC$PhotoSize tLRPC$PhotoSize, TLRPC$Message tLRPC$Message) {
+        if ((tLRPC$PhotoSize instanceof TLRPC$TL_photoStrippedSize) || (tLRPC$PhotoSize instanceof TLRPC$TL_photoPathSize)) {
+            ImageLocation imageLocation = new ImageLocation();
+            imageLocation.photoSize = tLRPC$PhotoSize;
+            return imageLocation;
+        }
+        return null;
     }
 
     public static ImageLocation getForPhoto(TLRPC$PhotoSize tLRPC$PhotoSize, TLRPC$Photo tLRPC$Photo) {

@@ -49,7 +49,6 @@ public class ReactionsLayoutInBubble {
     private boolean animateMove;
     private boolean animateWidth;
     boolean attached;
-    int currentAccount;
     public float drawServiceShaderBackground;
     public int fromWidth;
     private float fromX;
@@ -89,6 +88,7 @@ public class ReactionsLayoutInBubble {
     HashMap<String, ReactionButton> lastDrawingReactionButtons = new HashMap<>();
     HashMap<String, ReactionButton> lastDrawingReactionButtonsTmp = new HashMap<>();
     HashMap<VisibleReaction, ImageReceiver> animatedReactions = new HashMap<>();
+    int currentAccount = UserConfig.selectedAccount;
 
     /* JADX INFO: Access modifiers changed from: private */
     public static /* synthetic */ int lambda$static$0(TLRPC$User tLRPC$User, TLRPC$User tLRPC$User2) {
@@ -96,9 +96,7 @@ public class ReactionsLayoutInBubble {
     }
 
     public ReactionsLayoutInBubble(ChatMessageCell chatMessageCell) {
-        Math.random();
         this.parentView = chatMessageCell;
-        this.currentAccount = UserConfig.selectedAccount;
         paint.setColor(Theme.getColor("chat_inLoader", this.resourcesProvider));
         textPaint.setColor(Theme.getColor("featuredStickers_buttonText", this.resourcesProvider));
         textPaint.setTextSize(AndroidUtilities.dp(12.0f));
@@ -339,19 +337,10 @@ public class ReactionsLayoutInBubble {
     }
 
     public void recordDrawingState() {
-        this.lastDrawingReactionButtonsTmp.clear();
-        for (int i = 0; i < this.reactionButtons.size(); i++) {
-            ReactionButton reactionButton = this.reactionButtons.get(i);
-            if (reactionButton != null) {
-                ReactionButton reactionButton2 = this.lastDrawingReactionButtons.get(reactionButton.key);
-                if (reactionButton2 == null || !reactionButton2.equal(reactionButton)) {
-                    reactionButton2 = reactionButton.clone();
-                }
-                this.lastDrawingReactionButtonsTmp.put(reactionButton.key, reactionButton2);
-            }
-        }
         this.lastDrawingReactionButtons.clear();
-        this.lastDrawingReactionButtons.putAll(this.lastDrawingReactionButtonsTmp);
+        for (int i = 0; i < this.reactionButtons.size(); i++) {
+            this.lastDrawingReactionButtons.put(this.reactionButtons.get(i).key, this.reactionButtons.get(i));
+        }
         this.wasDrawn = !this.isEmpty;
         this.lastDrawnX = this.x;
         this.lastDrawnY = this.y;
@@ -736,8 +725,9 @@ public class ReactionsLayoutInBubble {
                     this.avatarsDarawable.width = AndroidUtilities.dp(100.0f);
                     AvatarsDarawable avatarsDarawable2 = this.avatarsDarawable;
                     avatarsDarawable2.height = this.height;
+                    avatarsDarawable2.setAvatarsTextSize(AndroidUtilities.dp(22.0f));
                     if (ReactionsLayoutInBubble.this.attached) {
-                        avatarsDarawable2.onAttachedToWindow();
+                        this.avatarsDarawable.onAttachedToWindow();
                     }
                 }
                 for (int i = 0; i < arrayList.size() && i != 3; i++) {
@@ -775,31 +765,6 @@ public class ReactionsLayoutInBubble {
             if (animatedEmojiDrawable != null) {
                 animatedEmojiDrawable.removeView(ReactionsLayoutInBubble.this.parentView);
             }
-        }
-
-        public ReactionButton clone() {
-            ReactionButton reactionButton = new ReactionButton(this.reactionCount, this.isSmall);
-            reactionButton.x = this.x;
-            reactionButton.y = this.y;
-            reactionButton.width = this.width;
-            reactionButton.choosen = this.choosen;
-            reactionButton.avatarsDarawable = this.avatarsDarawable;
-            reactionButton.lastDrawnTextColor = this.lastDrawnTextColor;
-            reactionButton.lastDrawnBackgroundColor = this.lastDrawnBackgroundColor;
-            if (this.users != null) {
-                reactionButton.users = new ArrayList<>(this.users);
-            }
-            return reactionButton;
-        }
-
-        public boolean equal(ReactionButton reactionButton) {
-            if (reactionButton != null && this.x == reactionButton.x && this.y == reactionButton.y && this.width == reactionButton.width && this.choosen == reactionButton.choosen && this.lastDrawnTextColor == reactionButton.lastDrawnTextColor && this.lastDrawnBackgroundColor == reactionButton.lastDrawnBackgroundColor && this.avatarsDarawable == reactionButton.avatarsDarawable) {
-                ArrayList<TLRPC$User> arrayList = this.users;
-                if ((arrayList == null) == (reactionButton.users == null) && arrayList != null && arrayList.size() == reactionButton.users.size()) {
-                    return true;
-                }
-            }
-            return false;
         }
     }
 

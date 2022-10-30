@@ -413,7 +413,7 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
     */
     public void setMessageObject(org.telegram.messenger.MessageObject r19, boolean r20) {
         /*
-            Method dump skipped, instructions count: 708
+            Method dump skipped, instructions count: 711
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.ChatActionCell.setMessageObject(org.telegram.messenger.MessageObject, boolean):void");
