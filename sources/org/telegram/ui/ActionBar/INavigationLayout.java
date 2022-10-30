@@ -165,7 +165,7 @@ public interface INavigationLayout {
 
     void startActivityForResult(Intent intent, int i);
 
-    /* renamed from: org.telegram.ui.ActionBar.INavigationLayout$-CC */
+    /* renamed from: org.telegram.ui.ActionBar.INavigationLayout$-CC  reason: invalid class name */
     /* loaded from: classes3.dex */
     public final /* synthetic */ class CC {
         public static boolean $default$hasIntegratedBlurInPreview(INavigationLayout iNavigationLayout) {
@@ -272,7 +272,7 @@ public interface INavigationLayout {
 
         void onThemeProgress(float f);
 
-        /* renamed from: org.telegram.ui.ActionBar.INavigationLayout$INavigationLayoutDelegate$-CC */
+        /* renamed from: org.telegram.ui.ActionBar.INavigationLayout$INavigationLayoutDelegate$-CC  reason: invalid class name */
         /* loaded from: classes3.dex */
         public final /* synthetic */ class CC {
             public static boolean $default$needAddFragmentToStack(INavigationLayoutDelegate iNavigationLayoutDelegate, BaseFragment baseFragment, INavigationLayout iNavigationLayout) {

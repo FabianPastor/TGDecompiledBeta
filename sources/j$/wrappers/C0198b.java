@@ -4,7 +4,7 @@ import j$.util.InterfaceCLASSNAMEn;
 import java.util.PrimitiveIterator;
 import java.util.function.Consumer;
 import java.util.function.DoubleConsumer;
-/* renamed from: j$.wrappers.b */
+/* renamed from: j$.wrappers.b  reason: case insensitive filesystem */
 /* loaded from: classes2.dex */
 public final /* synthetic */ class CLASSNAMEb implements PrimitiveIterator.OfDouble {
     final /* synthetic */ InterfaceCLASSNAMEn a;
@@ -31,7 +31,7 @@ public final /* synthetic */ class CLASSNAMEb implements PrimitiveIterator.OfDou
     }
 
     @Override // java.util.PrimitiveIterator.OfDouble
-    /* renamed from: forEachRemaining */
+    /* renamed from: forEachRemaining  reason: avoid collision after fix types in other method */
     public /* synthetic */ void forEachRemaining2(DoubleConsumer doubleConsumer) {
         this.a.e(A.b(doubleConsumer));
     }
@@ -49,7 +49,7 @@ public final /* synthetic */ class CLASSNAMEb implements PrimitiveIterator.OfDou
 
     /* JADX WARN: Type inference failed for: r0v0, types: [j$.util.Iterator, j$.util.n] */
     @Override // java.util.PrimitiveIterator.OfDouble, java.util.Iterator
-    /* renamed from: next */
+    /* renamed from: next  reason: collision with other method in class */
     public /* synthetic */ Object mo308next() {
         return this.a.mo307next();
     }
