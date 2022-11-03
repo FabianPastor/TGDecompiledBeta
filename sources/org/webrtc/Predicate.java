@@ -1,5 +1,5 @@
 package org.webrtc;
-/* loaded from: classes3.dex */
+/* loaded from: classes.dex */
 public interface Predicate<T> {
     Predicate<T> and(Predicate<? super T> predicate);
 
@@ -10,7 +10,7 @@ public interface Predicate<T> {
     boolean test(T t);
 
     /* renamed from: org.webrtc.Predicate$-CC  reason: invalid class name */
-    /* loaded from: classes3.dex */
+    /* loaded from: classes.dex */
     public final /* synthetic */ class CC {
         public static Predicate $default$or(final Predicate _this, final Predicate predicate) {
             return new Predicate<T>() { // from class: org.webrtc.Predicate.1

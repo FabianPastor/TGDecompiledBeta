@@ -4,7 +4,6 @@ public class TLRPC$TL_messageActionTopicEdit extends TLRPC$MessageAction {
     public static int constructor = -NUM;
     public boolean closed;
     public long icon_emoji_id;
-    public String title;
 
     @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {

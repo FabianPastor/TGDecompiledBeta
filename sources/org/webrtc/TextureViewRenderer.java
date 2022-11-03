@@ -16,7 +16,7 @@ import org.webrtc.EglRenderer;
 import org.webrtc.GlGenericDrawer;
 import org.webrtc.RendererCommon;
 import org.webrtc.TextureViewRenderer;
-/* loaded from: classes3.dex */
+/* loaded from: classes.dex */
 public class TextureViewRenderer extends TextureView implements TextureView.SurfaceTextureListener, VideoSink, RendererCommon.RendererEvents {
     private static final String TAG = "TextureViewRenderer";
     private TextureView backgroundRenderer;
@@ -79,7 +79,7 @@ public class TextureViewRenderer extends TextureView implements TextureView.Surf
         textureEglRenderer.isFirstFrameRendered = false;
     }
 
-    /* loaded from: classes3.dex */
+    /* loaded from: classes.dex */
     public static class TextureEglRenderer extends EglRenderer implements TextureView.SurfaceTextureListener {
         private static final String TAG = "TextureEglRenderer";
         private int frameRotation;

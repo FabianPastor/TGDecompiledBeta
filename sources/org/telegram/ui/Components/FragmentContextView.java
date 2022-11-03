@@ -136,7 +136,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     private boolean supportsCalls;
     private StaticLayout timeLayout;
     private AudioPlayerAlert.ClippingTextViewSwitcher titleTextView;
-    private float topPadding;
+    protected float topPadding;
     private final Runnable updateScheduleTimeRunnable;
     private boolean visible;
     boolean wasDraw;

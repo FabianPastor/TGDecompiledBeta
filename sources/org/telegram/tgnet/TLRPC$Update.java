@@ -233,6 +233,9 @@ public abstract class TLRPC$Update extends TLObject {
                     }
                 };
                 break;
+            case -1484486364:
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateUserName();
+                break;
             case -1425052898:
                 tLRPC$TL_updateTheme = new TLRPC$TL_updatePhoneCall();
                 break;
@@ -262,9 +265,6 @@ public abstract class TLRPC$Update extends TLObject {
                 break;
             case -1020437742:
                 tLRPC$TL_updateTheme = new TLRPC$TL_updateDeleteChannelMessages();
-                break;
-            case -1007549728:
-                tLRPC$TL_updateTheme = new TLRPC$TL_updateUserName();
                 break;
             case -761649164:
                 tLRPC$TL_updateTheme = new TLRPC$TL_updateChannelMessageForwards();

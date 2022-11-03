@@ -5,7 +5,7 @@ import android.view.Surface;
 import java.util.ArrayList;
 import org.webrtc.EglBase10;
 import org.webrtc.EglBase14;
-/* loaded from: classes3.dex */
+/* loaded from: classes.dex */
 public interface EglBase {
     public static final int EGL_OPENGL_ES2_BIT = 4;
     public static final int EGL_OPENGL_ES3_BIT = 64;
@@ -17,7 +17,7 @@ public interface EglBase {
     public static final int[] CONFIG_PIXEL_RGBA_BUFFER = CC.configBuilder().setHasAlphaChannel(true).setSupportsPixelBuffer(true).createConfigAttributes();
     public static final int[] CONFIG_RECORDABLE = CC.configBuilder().setIsRecordable(true).createConfigAttributes();
 
-    /* loaded from: classes3.dex */
+    /* loaded from: classes.dex */
     public interface Context {
         public static final long NO_CONTEXT = 0;
 
@@ -37,7 +37,7 @@ public interface EglBase {
     void detachCurrent();
 
     /* renamed from: getEglBaseContext */
-    Context mo2457getEglBaseContext();
+    Context mo2459getEglBaseContext();
 
     boolean hasBackgroundSurface();
 
@@ -60,7 +60,7 @@ public interface EglBase {
     void swapBuffers(boolean z);
 
     /* renamed from: org.webrtc.EglBase$-CC  reason: invalid class name */
-    /* loaded from: classes3.dex */
+    /* loaded from: classes.dex */
     public final /* synthetic */ class CC {
         static {
             Object obj = EglBase.lock;
@@ -113,7 +113,7 @@ public interface EglBase {
         }
     }
 
-    /* loaded from: classes3.dex */
+    /* loaded from: classes.dex */
     public static class ConfigBuilder {
         private boolean hasAlphaChannel;
         private boolean isRecordable;

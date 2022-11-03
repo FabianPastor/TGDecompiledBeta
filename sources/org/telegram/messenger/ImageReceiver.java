@@ -113,6 +113,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
     private float imageY;
     private boolean invalidateAll;
     private boolean isAspectFit;
+    private int isLastFrame;
     private int isPressed;
     private boolean isRoundRect;
     private boolean isRoundVideo;
@@ -1126,7 +1127,11 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
         Paint paint;
         int intrinsicHeight;
         int intrinsicWidth;
+        boolean z2;
         int i4;
+        float f5;
+        int i5;
+        boolean z3;
         BitmapDrawable bitmapDrawable;
         if (backgroundThreadDrawHolder != null) {
             f = backgroundThreadDrawHolder.imageX;
@@ -1147,13 +1152,13 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
         }
         if (drawable instanceof BitmapDrawable) {
             BitmapDrawable bitmapDrawable2 = (BitmapDrawable) drawable;
-            boolean z2 = drawable instanceof RLottieDrawable;
-            if (z2) {
-                z = z2;
+            boolean z4 = drawable instanceof RLottieDrawable;
+            if (z4) {
+                z = z4;
                 iArr2 = iArr;
                 ((RLottieDrawable) drawable).skipFrameUpdate = this.skipUpdateFrame;
             } else {
-                z = z2;
+                z = z4;
                 iArr2 = iArr;
                 if (drawable instanceof AnimatedFileDrawable) {
                     ((AnimatedFileDrawable) drawable).skipFrameUpdate = this.skipUpdateFrame;
@@ -1164,9 +1169,9 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
             } else {
                 paint = bitmapDrawable2.getPaint();
             }
-            int i5 = Build.VERSION.SDK_INT;
+            int i6 = Build.VERSION.SDK_INT;
             RectF rectF2 = rectF;
-            if (i5 >= 29) {
+            if (i6 >= 29) {
                 Object obj = this.blendMode;
                 if (obj != null && this.gradientShader == null) {
                     paint.setBlendMode((BlendMode) obj);
@@ -1174,9 +1179,9 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                     paint.setBlendMode(null);
                 }
             }
-            boolean z3 = (paint == null || paint.getColorFilter() == null) ? false : true;
-            if (!z3 || i3 != 0) {
-                if (!z3 && i3 != 0) {
+            boolean z5 = (paint == null || paint.getColorFilter() == null) ? false : true;
+            if (!z5 || i3 != 0) {
+                if (!z5 && i3 != 0) {
                     if (i3 == 1) {
                         if (bitmapShader != null) {
                             this.roundPaint.setColorFilter(selectedColorFilter);
@@ -1201,38 +1206,50 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                     bitmapDrawable2.setColorFilter(colorFilter);
                 }
             }
-            boolean z4 = bitmapDrawable2 instanceof AnimatedFileDrawable;
-            if (z4 || (bitmapDrawable2 instanceof RLottieDrawable)) {
-                int i6 = i2 % 360;
-                if (i6 == 90 || i6 == 270) {
+            boolean z6 = bitmapDrawable2 instanceof AnimatedFileDrawable;
+            if (z6 || (bitmapDrawable2 instanceof RLottieDrawable)) {
+                int i7 = i2 % 360;
+                if (i7 == 90 || i7 == 270) {
                     intrinsicHeight = bitmapDrawable2.getIntrinsicHeight();
                     intrinsicWidth = bitmapDrawable2.getIntrinsicWidth();
                 } else {
                     intrinsicHeight = bitmapDrawable2.getIntrinsicWidth();
                     intrinsicWidth = bitmapDrawable2.getIntrinsicHeight();
                 }
+                z2 = false;
             } else {
                 Bitmap bitmap = bitmapDrawable2.getBitmap();
                 if (bitmap != null && bitmap.isRecycled()) {
                     return;
                 }
-                int i7 = i2 % 360;
-                if (i7 == 90 || i7 == 270) {
+                int i8 = i2 % 360;
+                if (i8 == 90 || i8 == 270) {
                     intrinsicHeight = bitmap.getHeight();
                     intrinsicWidth = bitmap.getWidth();
                 } else {
                     intrinsicHeight = bitmap.getWidth();
                     intrinsicWidth = bitmap.getHeight();
                 }
+                z2 = bitmapDrawable2 instanceof ReactionLastFrame;
             }
-            float f5 = this.sideClip;
-            float f6 = f4 - (f5 * 2.0f);
-            float f7 = f3 - (f5 * 2.0f);
-            float f8 = f4 == 0.0f ? 1.0f : intrinsicHeight / f6;
-            float f9 = f3 == 0.0f ? 1.0f : intrinsicWidth / f7;
+            float f6 = this.sideClip;
+            float f7 = f4 - (f6 * 2.0f);
+            float f8 = f3 - (f6 * 2.0f);
+            float f9 = f4 == 0.0f ? 1.0f : intrinsicHeight / f7;
+            if (f3 == 0.0f) {
+                i4 = i6;
+                f5 = 1.0f;
+            } else {
+                i4 = i6;
+                f5 = intrinsicWidth / f8;
+            }
+            if (z2) {
+                f9 /= 1.2f;
+                f5 /= 1.2f;
+            }
             if (bitmapShader != null && backgroundThreadDrawHolder == null) {
                 if (this.isAspectFit) {
-                    float max = Math.max(f8, f9);
+                    float max = Math.max(f9, f5);
                     float var_ = (int) (intrinsicHeight / max);
                     float var_ = (int) (intrinsicWidth / max);
                     rectF2.set(((f4 - var_) / 2.0f) + f, ((f3 - var_) / 2.0f) + f2, f + ((f4 + var_) / 2.0f), f2 + ((f3 + var_) / 2.0f));
@@ -1258,11 +1275,11 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                             }
                         } else {
                             int[] iArr3 = iArr2;
-                            for (int i8 = 0; i8 < iArr3.length; i8++) {
+                            for (int i9 = 0; i9 < iArr3.length; i9++) {
                                 float[] fArr = radii;
-                                int i9 = i8 * 2;
-                                fArr[i9] = iArr3[i8];
-                                fArr[i9 + 1] = iArr3[i8];
+                                int i10 = i9 * 2;
+                                fArr[i10] = iArr3[i9];
+                                fArr[i10 + 1] = iArr3[i9];
                             }
                             this.roundPath.reset();
                             this.roundPath.addRoundRect(this.roundRect, radii, Path.Direction.CW);
@@ -1271,14 +1288,17 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                         }
                     }
                 } else {
+                    int[] iArr4 = iArr2;
                     if (this.legacyCanvas != null) {
-                        i4 = intrinsicWidth;
+                        z3 = z2;
+                        i5 = intrinsicWidth;
                         this.roundRect.set(0.0f, 0.0f, this.legacyBitmap.getWidth(), this.legacyBitmap.getHeight());
                         this.legacyCanvas.drawBitmap(this.gradientBitmap, (Rect) null, this.roundRect, (Paint) null);
                         bitmapDrawable = bitmapDrawable2;
                         this.legacyCanvas.drawBitmap(bitmapDrawable2.getBitmap(), (Rect) null, this.roundRect, this.legacyPaint);
                     } else {
-                        i4 = intrinsicWidth;
+                        i5 = intrinsicWidth;
+                        z3 = z2;
                         bitmapDrawable = bitmapDrawable2;
                     }
                     if (bitmapShader == this.imageShader && this.gradientShader != null) {
@@ -1291,29 +1311,33 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                     } else {
                         this.roundPaint.setShader(bitmapShader);
                     }
-                    float min = 1.0f / Math.min(f8, f9);
+                    float min = 1.0f / Math.min(f9, f5);
                     RectF rectF3 = this.roundRect;
                     float var_ = this.sideClip;
                     float var_ = f4;
                     rectF3.set(f + var_, f2 + var_, (f + f4) - var_, (f2 + f3) - var_);
-                    if (Math.abs(f8 - f9) > 5.0E-4f) {
-                        float var_ = intrinsicHeight / f9;
-                        if (var_ > f6) {
+                    if (Math.abs(f9 - f5) > 5.0E-4f) {
+                        float var_ = intrinsicHeight / f5;
+                        if (var_ > f7) {
                             float var_ = (int) var_;
-                            rectF2.set(f - ((var_ - f6) / 2.0f), f2, ((var_ + f6) / 2.0f) + f, f2 + f7);
+                            rectF2.set(f - ((var_ - f7) / 2.0f), f2, ((var_ + f7) / 2.0f) + f, f2 + f8);
                         } else {
-                            float var_ = (int) (i4 / f8);
-                            rectF2.set(f, f2 - ((var_ - f7) / 2.0f), f + f6, ((var_ + f7) / 2.0f) + f2);
+                            float var_ = (int) (i5 / f9);
+                            rectF2.set(f, f2 - ((var_ - f8) / 2.0f), f + f7, ((var_ + f8) / 2.0f) + f2);
                         }
                     } else {
-                        rectF2.set(f, f2, f + f6, f2 + f7);
+                        rectF2.set(f, f2, f + f7, f2 + f8);
                     }
                     if (this.isVisible) {
                         this.shaderMatrix.reset();
-                        Matrix matrix = this.shaderMatrix;
-                        float var_ = rectF2.left;
-                        float var_ = this.sideClip;
-                        matrix.setTranslate((int) (var_ + var_), (int) (rectF2.top + var_));
+                        if (z3) {
+                            this.shaderMatrix.setTranslate(((int) (rectF2.left + this.sideClip)) - (((rectF2.width() * 1.2f) - rectF2.width()) / 2.0f), ((int) (rectF2.top + this.sideClip)) - (((rectF2.height() * 1.2f) - rectF2.height()) / 2.0f));
+                        } else {
+                            Matrix matrix = this.shaderMatrix;
+                            float var_ = rectF2.left;
+                            float var_ = this.sideClip;
+                            matrix.setTranslate((int) (var_ + var_), (int) (rectF2.top + var_));
+                        }
                         if (i2 == 90) {
                             this.shaderMatrix.preRotate(90.0f);
                             this.shaderMatrix.preTranslate(0.0f, -rectF2.width());
@@ -1326,7 +1350,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                         }
                         this.shaderMatrix.preScale(min, min);
                         if (this.isRoundVideo) {
-                            float var_ = (f6 + (AndroidUtilities.roundMessageInset * 2)) / f6;
+                            float var_ = (f7 + (AndroidUtilities.roundMessageInset * 2)) / f7;
                             this.shaderMatrix.postScale(var_, var_, rectF2.centerX(), rectF2.centerY());
                         }
                         BitmapShader bitmapShader2 = this.legacyShader;
@@ -1337,23 +1361,23 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                         if (this.composeShader != null) {
                             int width = this.gradientBitmap.getWidth();
                             int height = this.gradientBitmap.getHeight();
-                            float var_ = var_ == 0.0f ? 1.0f : width / f6;
-                            float var_ = f3 == 0.0f ? 1.0f : height / f7;
+                            float var_ = var_ == 0.0f ? 1.0f : width / f7;
+                            float var_ = f3 == 0.0f ? 1.0f : height / f8;
                             if (Math.abs(var_ - var_) > 5.0E-4f) {
                                 float var_ = width / var_;
-                                if (var_ > f6) {
+                                if (var_ > f7) {
                                     width = (int) var_;
                                     float var_ = width;
-                                    rectF2.set(f - ((var_ - f6) / 2.0f), f2, f + ((var_ + f6) / 2.0f), f2 + f7);
+                                    rectF2.set(f - ((var_ - f7) / 2.0f), f2, f + ((var_ + f7) / 2.0f), f2 + f8);
                                 } else {
                                     height = (int) (height / var_);
                                     float var_ = height;
-                                    rectF2.set(f, f2 - ((var_ - f7) / 2.0f), f + f6, f2 + ((var_ + f7) / 2.0f));
+                                    rectF2.set(f, f2 - ((var_ - f8) / 2.0f), f + f7, f2 + ((var_ + f8) / 2.0f));
                                 }
                             } else {
-                                rectF2.set(f, f2, f + f6, f2 + f7);
+                                rectF2.set(f, f2, f + f7, f2 + f8);
                             }
-                            float min2 = 1.0f / Math.min(var_ == 0.0f ? 1.0f : width / f6, f3 == 0.0f ? 1.0f : height / f7);
+                            float min2 = 1.0f / Math.min(var_ == 0.0f ? 1.0f : width / f7, f3 == 0.0f ? 1.0f : height / f8);
                             this.shaderMatrix.reset();
                             Matrix matrix2 = this.shaderMatrix;
                             float var_ = rectF2.left;
@@ -1365,11 +1389,15 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                         this.roundPaint.setAlpha(i);
                         if (this.isRoundRect) {
                             try {
-                                if (iArr2[0] == 0) {
-                                    canvas.drawRect(this.roundRect, this.roundPaint);
-                                } else {
-                                    int[] iArr4 = iArr2;
+                                if (iArr4[0] != 0) {
                                     canvas.drawRoundRect(this.roundRect, iArr4[0], iArr4[0], this.roundPaint);
+                                } else if (z3) {
+                                    RectF rectF4 = AndroidUtilities.rectTmp;
+                                    rectF4.set(this.roundRect);
+                                    rectF4.inset((-((rectF2.width() * 1.2f) - rectF2.width())) / 2.0f, (-((rectF2.height() * 1.2f) - rectF2.height())) / 2.0f);
+                                    canvas.drawRect(rectF4, this.roundPaint);
+                                } else {
+                                    canvas.drawRect(this.roundRect, this.roundPaint);
                                 }
                             } catch (Exception e2) {
                                 if (backgroundThreadDrawHolder == null) {
@@ -1378,12 +1406,11 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                                 FileLog.e(e2);
                             }
                         } else {
-                            int[] iArr5 = iArr2;
-                            for (int i10 = 0; i10 < iArr5.length; i10++) {
+                            for (int i11 = 0; i11 < iArr4.length; i11++) {
                                 float[] fArr2 = radii;
-                                int i11 = i10 * 2;
-                                fArr2[i11] = iArr5[i10];
-                                fArr2[i11 + 1] = iArr5[i10];
+                                int i12 = i11 * 2;
+                                fArr2[i12] = iArr4[i11];
+                                fArr2[i12 + 1] = iArr4[i11];
                             }
                             this.roundPath.reset();
                             this.roundPath.addRoundRect(this.roundRect, radii, Path.Direction.CW);
@@ -1394,29 +1421,29 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                 }
             } else {
                 float var_ = f4;
-                int[] iArr6 = iArr2;
-                int i12 = intrinsicWidth;
+                int[] iArr5 = iArr2;
+                int i13 = intrinsicWidth;
                 if (this.isAspectFit) {
-                    float max2 = Math.max(f8, f9);
+                    float max2 = Math.max(f9, f5);
                     canvas.save();
-                    int i13 = (int) (intrinsicHeight / max2);
-                    int i14 = (int) (i12 / max2);
+                    int i14 = (int) (intrinsicHeight / max2);
+                    int i15 = (int) (i13 / max2);
                     if (backgroundThreadDrawHolder == null) {
-                        float var_ = i13;
                         float var_ = i14;
+                        float var_ = i15;
                         rectF2.set(((var_ - var_) / 2.0f) + f, ((f3 - var_) / 2.0f) + f2, ((var_ + var_) / 2.0f) + f, ((var_ + f3) / 2.0f) + f2);
                         bitmapDrawable2.setBounds((int) rectF2.left, (int) rectF2.top, (int) rectF2.right, (int) rectF2.bottom);
                         if (bitmapDrawable2 instanceof AnimatedFileDrawable) {
                             ((AnimatedFileDrawable) bitmapDrawable2).setActualDrawRect(rectF2.left, rectF2.top, rectF2.width(), rectF2.height());
                         }
                     }
-                    if (backgroundThreadDrawHolder != null && iArr6 != null && iArr6[0] > 0) {
+                    if (backgroundThreadDrawHolder != null && iArr5 != null && iArr5[0] > 0) {
                         canvas.save();
                         Path path = backgroundThreadDrawHolder.roundPath == null ? backgroundThreadDrawHolder.roundPath = new Path() : backgroundThreadDrawHolder.roundPath;
                         path.rewind();
-                        RectF rectF4 = AndroidUtilities.rectTmp;
-                        rectF4.set(f, f2, f + var_, f3 + f2);
-                        path.addRoundRect(rectF4, iArr6[0], iArr6[2], Path.Direction.CW);
+                        RectF rectF5 = AndroidUtilities.rectTmp;
+                        rectF5.set(f, f2, f + var_, f3 + f2);
+                        path.addRoundRect(rectF5, iArr5[0], iArr5[2], Path.Direction.CW);
                         canvas.clipPath(path);
                     }
                     if (this.isVisible) {
@@ -1431,35 +1458,35 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                         }
                     }
                     canvas.restore();
-                    if (backgroundThreadDrawHolder != null && iArr6 != null && iArr6[0] > 0) {
+                    if (backgroundThreadDrawHolder != null && iArr5 != null && iArr5[0] > 0) {
                         canvas.restore();
                     }
-                } else if (Math.abs(f8 - f9) > 1.0E-5f) {
+                } else if (Math.abs(f9 - f5) > 1.0E-5f) {
                     canvas.save();
                     if (this.clip) {
                         canvas.clipRect(f, f2, f + var_, f2 + f3);
                     }
-                    int i15 = i2 % 360;
-                    if (i15 != 0) {
+                    int i16 = i2 % 360;
+                    if (i16 != 0) {
                         if (this.centerRotation) {
                             canvas.rotate(i2, var_ / 2.0f, f3 / 2.0f);
                         } else {
                             canvas.rotate(i2, 0.0f, 0.0f);
                         }
                     }
-                    float var_ = intrinsicHeight / f9;
+                    float var_ = intrinsicHeight / f5;
                     if (var_ > var_) {
                         float var_ = (int) var_;
                         rectF2.set(f - ((var_ - var_) / 2.0f), f2, ((var_ + var_) / 2.0f) + f, f2 + f3);
                     } else {
-                        float var_ = (int) (i12 / f8);
+                        float var_ = (int) (i13 / f9);
                         rectF2.set(f, f2 - ((var_ - f3) / 2.0f), f + var_, ((var_ + f3) / 2.0f) + f2);
                     }
-                    if (z4) {
+                    if (z6) {
                         ((AnimatedFileDrawable) bitmapDrawable2).setActualDrawRect(f, f2, var_, f3);
                     }
                     if (backgroundThreadDrawHolder == null) {
-                        if (i15 == 90 || i15 == 270) {
+                        if (i16 == 90 || i16 == 270) {
                             float width2 = rectF2.width() / 2.0f;
                             float height2 = rectF2.height() / 2.0f;
                             float centerX = rectF2.centerX();
@@ -1470,7 +1497,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                         }
                     }
                     if (this.isVisible) {
-                        if (i5 >= 29) {
+                        if (i4 >= 29) {
                             try {
                                 if (this.blendMode != null) {
                                     bitmapDrawable2.getPaint().setBlendMode((BlendMode) this.blendMode);
@@ -1488,9 +1515,10 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                     }
                     canvas.restore();
                 } else {
+                    int i17 = i4;
                     canvas.save();
-                    int i16 = i2 % 360;
-                    if (i16 != 0) {
+                    int i18 = i2 % 360;
+                    if (i18 != 0) {
                         if (this.centerRotation) {
                             canvas.rotate(i2, var_ / 2.0f, f3 / 2.0f);
                         } else {
@@ -1499,14 +1527,14 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                     }
                     rectF2.set(f, f2, f + var_, f2 + f3);
                     if (this.isRoundVideo) {
-                        int i17 = AndroidUtilities.roundMessageInset;
-                        rectF2.inset(-i17, -i17);
+                        int i19 = AndroidUtilities.roundMessageInset;
+                        rectF2.inset(-i19, -i19);
                     }
-                    if (z4) {
+                    if (z6) {
                         ((AnimatedFileDrawable) bitmapDrawable2).setActualDrawRect(f, f2, var_, f3);
                     }
                     if (backgroundThreadDrawHolder == null) {
-                        if (i16 == 90 || i16 == 270) {
+                        if (i18 == 90 || i18 == 270) {
                             float width3 = rectF2.width() / 2.0f;
                             float height3 = rectF2.height() / 2.0f;
                             float centerX2 = rectF2.centerX();
@@ -1517,7 +1545,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                         }
                     }
                     if (this.isVisible) {
-                        if (i5 >= 29) {
+                        if (i17 >= 29) {
                             try {
                                 if (this.blendMode != null) {
                                     bitmapDrawable2.getPaint().setBlendMode((BlendMode) this.blendMode);
@@ -1545,7 +1573,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
             }
         }
         float var_ = f4;
-        RectF rectF5 = rectF;
+        RectF rectF6 = rectF;
         if (backgroundThreadDrawHolder == null) {
             if (this.isAspectFit) {
                 int intrinsicWidth2 = drawable.getIntrinsicWidth();
@@ -1554,11 +1582,11 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                 float max3 = Math.max(var_ == 0.0f ? 1.0f : intrinsicWidth2 / (var_ - (var_ * 2.0f)), f3 == 0.0f ? 1.0f : intrinsicHeight2 / (f3 - (var_ * 2.0f)));
                 float var_ = (int) (intrinsicWidth2 / max3);
                 float var_ = (int) (intrinsicHeight2 / max3);
-                rectF5.set(((var_ - var_) / 2.0f) + f, ((f3 - var_) / 2.0f) + f2, f + ((var_ + var_) / 2.0f), f2 + ((f3 + var_) / 2.0f));
+                rectF6.set(((var_ - var_) / 2.0f) + f, ((f3 - var_) / 2.0f) + f2, f + ((var_ + var_) / 2.0f), f2 + ((f3 + var_) / 2.0f));
             } else {
-                rectF5.set(f, f2, f + var_, f3 + f2);
+                rectF6.set(f, f2, f + var_, f3 + f2);
             }
-            drawable.setBounds((int) rectF5.left, (int) rectF5.top, (int) rectF5.right, (int) rectF5.bottom);
+            drawable.setBounds((int) rectF6.left, (int) rectF6.top, (int) rectF6.right, (int) rectF6.bottom);
         }
         if (!this.isVisible) {
             return;
@@ -2892,6 +2920,15 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                 rect.right = (int) (i + this.imageW);
                 rect.bottom = (int) (i2 + this.imageH);
             }
+        }
+    }
+
+    /* loaded from: classes.dex */
+    public static class ReactionLastFrame extends BitmapDrawable {
+        public static final float LAST_FRAME_SCALE = 1.2f;
+
+        public ReactionLastFrame(Bitmap bitmap) {
+            super(bitmap);
         }
     }
 }

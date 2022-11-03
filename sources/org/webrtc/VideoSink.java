@@ -1,9 +1,9 @@
 package org.webrtc;
-/* loaded from: classes3.dex */
+/* loaded from: classes.dex */
 public interface VideoSink {
 
     /* renamed from: org.webrtc.VideoSink$-CC  reason: invalid class name */
-    /* loaded from: classes3.dex */
+    /* loaded from: classes.dex */
     public final /* synthetic */ class CC {
         public static void $default$setParentSink(VideoSink videoSink, VideoSink videoSink2) {
         }

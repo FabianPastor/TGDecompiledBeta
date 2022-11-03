@@ -1407,7 +1407,7 @@ public class ConnectionsManager extends BaseController {
                         th = th2;
                         inputStream = inputStream2;
                         try {
-                            FileLog.e(th);
+                            FileLog.e(th, false);
                             if (inputStream != null) {
                                 try {
                                     inputStream.close();
@@ -1527,7 +1527,7 @@ public class ConnectionsManager extends BaseController {
                         ConnectionsManager.FirebaseTask.this.lambda$doInBackground$3();
                     }
                 });
-                FileLog.e(th);
+                FileLog.e(th, false);
                 return null;
             }
         }

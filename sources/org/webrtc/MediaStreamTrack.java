@@ -1,5 +1,5 @@
 package org.webrtc;
-/* loaded from: classes3.dex */
+/* loaded from: classes.dex */
 public class MediaStreamTrack {
     public static final String AUDIO_TRACK_KIND = "audio";
     public static final String VIDEO_TRACK_KIND = "video";
@@ -15,7 +15,7 @@ public class MediaStreamTrack {
 
     private static native boolean nativeSetEnabled(long j, boolean z);
 
-    /* loaded from: classes3.dex */
+    /* loaded from: classes.dex */
     public enum State {
         LIVE,
         ENDED;
@@ -26,7 +26,7 @@ public class MediaStreamTrack {
         }
     }
 
-    /* loaded from: classes3.dex */
+    /* loaded from: classes.dex */
     public enum MediaType {
         MEDIA_TYPE_AUDIO(0),
         MEDIA_TYPE_VIDEO(1);

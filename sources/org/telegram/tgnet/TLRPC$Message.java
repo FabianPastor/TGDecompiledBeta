@@ -2810,7 +2810,7 @@ public class TLRPC$Message extends TLObject {
     */
     public void readAttachPath(org.telegram.tgnet.AbstractSerializedData r12, long r13) {
         /*
-            Method dump skipped, instructions count: 307
+            Method dump skipped, instructions count: 308
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.tgnet.TLRPC$Message.readAttachPath(org.telegram.tgnet.AbstractSerializedData, long):void");

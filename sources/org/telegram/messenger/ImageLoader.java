@@ -50,6 +50,7 @@ import org.json.JSONObject;
 import org.telegram.DispatchQueuePriority;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLoader;
+import org.telegram.messenger.ImageReceiver;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$FileLocation;
@@ -896,72 +897,71 @@ public class ImageLoader {
             this.cacheImage = cacheImage;
         }
 
-        /* JADX WARN: Can't wrap try/catch for region: R(10:855|(2:857|(8:859|860|861|(1:863)(1:871)|864|(1:866)(1:869)|867|868))|874|860|861|(0)(0)|864|(0)(0)|867|868) */
-        /* JADX WARN: Can't wrap try/catch for region: R(23:(6:810|811|812|813|(1:815)(1:828)|816)|(2:818|(21:820|821|822|265|(14:267|(3:269|(1:271)(1:797)|272)(3:798|(3:800|(1:802)(1:805)|803)(2:806|(1:808))|804)|273|(1:275)|276|277|278|(12:280|(6:752|753|754|755|756|757)(1:282)|283|284|(1:286)(2:741|(1:743)(2:744|(1:746)(1:747)))|287|288|289|290|(1:292)|(1:733)(11:298|299|300|301|(2:692|(12:699|700|(1:721)(1:704)|(1:706)|707|708|709|710|(3:715|716|(1:718))|719|716|(0))(3:694|(1:696)(1:698)|697))(2:(7:677|678|679|680|681|682|683)(1:305)|306)|307|(1:676)(1:311)|312|(1:314)|315|(1:675)(4:321|(1:322)|324|325))|326)(3:766|(11:768|769|770|(1:772)(1:791)|773|774|775|(1:777)|778|(4:780|(1:781)|783|784)(1:787)|785)(1:794)|786)|327|328|(3:551|552|7d4)(6:330|(1:332)|(3:535|536|(5:538|539|(3:542|543|(1:545))(1:541)|335|a20))|334|335|a20)|366|(3:369|(1:371)(1:373)|372)|(3:(1:382)(1:385)|383|384)(3:(1:377)(1:380)|378|379))|809|273|(0)|276|277|278|(0)(0)|327|328|(0)(0)|366|(3:369|(0)(0)|372)|(0)|(0)(0)|383|384))|827|821|822|265|(0)|809|273|(0)|276|277|278|(0)(0)|327|328|(0)(0)|366|(0)|(0)|(0)(0)|383|384) */
-        /* JADX WARN: Can't wrap try/catch for region: R(25:248|(1:854)(1:255)|256|(2:258|(1:852))(1:853)|262|(28:810|811|812|813|(1:815)(1:828)|816|(2:818|(21:820|821|822|265|(14:267|(3:269|(1:271)(1:797)|272)(3:798|(3:800|(1:802)(1:805)|803)(2:806|(1:808))|804)|273|(1:275)|276|277|278|(12:280|(6:752|753|754|755|756|757)(1:282)|283|284|(1:286)(2:741|(1:743)(2:744|(1:746)(1:747)))|287|288|289|290|(1:292)|(1:733)(11:298|299|300|301|(2:692|(12:699|700|(1:721)(1:704)|(1:706)|707|708|709|710|(3:715|716|(1:718))|719|716|(0))(3:694|(1:696)(1:698)|697))(2:(7:677|678|679|680|681|682|683)(1:305)|306)|307|(1:676)(1:311)|312|(1:314)|315|(1:675)(4:321|(1:322)|324|325))|326)(3:766|(11:768|769|770|(1:772)(1:791)|773|774|775|(1:777)|778|(4:780|(1:781)|783|784)(1:787)|785)(1:794)|786)|327|328|(3:551|552|7d4)(6:330|(1:332)|(3:535|536|(5:538|539|(3:542|543|(1:545))(1:541)|335|a20))|334|335|a20)|366|(3:369|(1:371)(1:373)|372)|(3:(1:382)(1:385)|383|384)(3:(1:377)(1:380)|378|379))|809|273|(0)|276|277|278|(0)(0)|327|328|(0)(0)|366|(3:369|(0)(0)|372)|(0)|(0)(0)|383|384))|827|821|822|265|(0)|809|273|(0)|276|277|278|(0)(0)|327|328|(0)(0)|366|(0)|(0)|(0)(0)|383|384)|264|265|(0)|809|273|(0)|276|277|278|(0)(0)|327|328|(0)(0)|366|(0)|(0)|(0)(0)|383|384) */
+        /* JADX WARN: Can't wrap try/catch for region: R(10:848|(2:850|(8:852|853|854|(1:856)(1:864)|857|(1:859)(1:862)|860|861))|867|853|854|(0)(0)|857|(0)(0)|860|861) */
+        /* JADX WARN: Can't wrap try/catch for region: R(23:(6:803|804|805|806|(1:808)(1:821)|809)|(2:811|(21:813|814|815|265|(14:267|(3:269|(1:271)(1:790)|272)(3:791|(3:793|(1:795)(1:798)|796)(2:799|(1:801))|797)|273|(1:275)|276|277|278|(12:280|(6:745|746|747|748|749|750)(1:282)|283|284|(1:286)(2:734|(1:736)(2:737|(1:739)(1:740)))|287|288|289|290|(1:292)|(1:726)(11:298|299|300|301|(2:685|(12:692|693|(1:714)(1:697)|(1:699)|700|701|702|703|(3:708|709|(1:711))|712|709|(0))(3:687|(1:689)(1:691)|690))(2:(7:670|671|672|673|674|675|676)(1:305)|306)|307|(1:669)(1:311)|312|(1:314)|315|(1:668)(4:321|(1:322)|324|325))|326)(3:759|(11:761|762|763|(1:765)(1:784)|766|767|768|(1:770)|771|(4:773|(1:774)|776|777)(1:780)|778)(1:787)|779)|327|328|(3:544|545|7d5)(6:330|(1:332)|(3:528|529|(5:531|532|(3:535|536|(1:538))(1:534)|335|a21))|334|335|a21)|366|(3:369|(1:371)(1:373)|372)|(3:(1:382)(1:385)|383|384)(3:(1:377)(1:380)|378|379))|802|273|(0)|276|277|278|(0)(0)|327|328|(0)(0)|366|(3:369|(0)(0)|372)|(0)|(0)(0)|383|384))|820|814|815|265|(0)|802|273|(0)|276|277|278|(0)(0)|327|328|(0)(0)|366|(0)|(0)|(0)(0)|383|384) */
+        /* JADX WARN: Can't wrap try/catch for region: R(25:248|(1:847)(1:255)|256|(2:258|(1:845))(1:846)|262|(28:803|804|805|806|(1:808)(1:821)|809|(2:811|(21:813|814|815|265|(14:267|(3:269|(1:271)(1:790)|272)(3:791|(3:793|(1:795)(1:798)|796)(2:799|(1:801))|797)|273|(1:275)|276|277|278|(12:280|(6:745|746|747|748|749|750)(1:282)|283|284|(1:286)(2:734|(1:736)(2:737|(1:739)(1:740)))|287|288|289|290|(1:292)|(1:726)(11:298|299|300|301|(2:685|(12:692|693|(1:714)(1:697)|(1:699)|700|701|702|703|(3:708|709|(1:711))|712|709|(0))(3:687|(1:689)(1:691)|690))(2:(7:670|671|672|673|674|675|676)(1:305)|306)|307|(1:669)(1:311)|312|(1:314)|315|(1:668)(4:321|(1:322)|324|325))|326)(3:759|(11:761|762|763|(1:765)(1:784)|766|767|768|(1:770)|771|(4:773|(1:774)|776|777)(1:780)|778)(1:787)|779)|327|328|(3:544|545|7d5)(6:330|(1:332)|(3:528|529|(5:531|532|(3:535|536|(1:538))(1:534)|335|a21))|334|335|a21)|366|(3:369|(1:371)(1:373)|372)|(3:(1:382)(1:385)|383|384)(3:(1:377)(1:380)|378|379))|802|273|(0)|276|277|278|(0)(0)|327|328|(0)(0)|366|(3:369|(0)(0)|372)|(0)|(0)(0)|383|384))|820|814|815|265|(0)|802|273|(0)|276|277|278|(0)(0)|327|328|(0)(0)|366|(0)|(0)|(0)(0)|383|384)|264|265|(0)|802|273|(0)|276|277|278|(0)(0)|327|328|(0)(0)|366|(0)|(0)|(0)(0)|383|384) */
         /* JADX WARN: Can't wrap try/catch for region: R(9:68|(6:69|70|71|72|(1:74)(1:107)|75)|(3:77|78|(6:80|81|82|(1:85)|(5:87|(1:91)|92|(1:96)|97)(1:101)|(1:99)(1:100)))|106|81|82|(1:85)|(0)(0)|(0)(0)) */
-        /* JADX WARN: Code restructure failed: missing block: B:113:0x01ea, code lost:
+        /* JADX WARN: Code restructure failed: missing block: B:113:0x01eb, code lost:
             r0 = move-exception;
          */
-        /* JADX WARN: Code restructure failed: missing block: B:114:0x01eb, code lost:
+        /* JADX WARN: Code restructure failed: missing block: B:114:0x01ec, code lost:
             org.telegram.messenger.FileLog.e(r0);
          */
-        /* JADX WARN: Code restructure failed: missing block: B:279:0x0498, code lost:
+        /* JADX WARN: Code restructure failed: missing block: B:279:0x0499, code lost:
             r0 = move-exception;
          */
-        /* JADX WARN: Code restructure failed: missing block: B:280:0x0499, code lost:
+        /* JADX WARN: Code restructure failed: missing block: B:280:0x049a, code lost:
             org.telegram.messenger.FileLog.e(r0);
          */
-        /* JADX WARN: Code restructure failed: missing block: B:470:0x07ab, code lost:
+        /* JADX WARN: Code restructure failed: missing block: B:470:0x07ac, code lost:
             r0 = th;
          */
-        /* JADX WARN: Code restructure failed: missing block: B:471:0x07ac, code lost:
+        /* JADX WARN: Code restructure failed: missing block: B:471:0x07ad, code lost:
             r32 = r12;
             r33 = r13;
          */
-        /* JADX WARN: Code restructure failed: missing block: B:831:0x0d22, code lost:
+        /* JADX WARN: Code restructure failed: missing block: B:827:0x0d1f, code lost:
             r0 = move-exception;
          */
-        /* JADX WARN: Code restructure failed: missing block: B:832:0x0d23, code lost:
+        /* JADX WARN: Code restructure failed: missing block: B:828:0x0d20, code lost:
             org.telegram.messenger.FileLog.e(r0);
             r5 = null;
          */
-        /* JADX WARN: Not initialized variable reg: 30, insn: 0x061f: MOVE  (r8 I:??[int, float, boolean, short, byte, char, OBJECT, ARRAY]) = (r30 I:??[int, float, boolean, short, byte, char, OBJECT, ARRAY]), block:B:377:0x061b */
-        /* JADX WARN: Not initialized variable reg: 31, insn: 0x0621: MOVE  (r5 I:??[int, float, boolean, short, byte, char, OBJECT, ARRAY]) = (r31 I:??[int, float, boolean, short, byte, char, OBJECT, ARRAY]), block:B:377:0x061b */
-        /* JADX WARN: Removed duplicated region for block: B:129:0x020a A[ADDED_TO_REGION] */
-        /* JADX WARN: Removed duplicated region for block: B:133:0x0210  */
-        /* JADX WARN: Removed duplicated region for block: B:144:0x023a  */
-        /* JADX WARN: Removed duplicated region for block: B:146:0x023e  */
-        /* JADX WARN: Removed duplicated region for block: B:147:0x025c  */
-        /* JADX WARN: Removed duplicated region for block: B:180:0x02d6  */
-        /* JADX WARN: Removed duplicated region for block: B:228:0x03a8  */
-        /* JADX WARN: Removed duplicated region for block: B:234:0x03c2  */
-        /* JADX WARN: Removed duplicated region for block: B:304:0x04cf  */
-        /* JADX WARN: Removed duplicated region for block: B:325:0x053e  */
-        /* JADX WARN: Removed duplicated region for block: B:329:0x0550 A[Catch: all -> 0x07ab, TRY_LEAVE, TryCatch #7 {all -> 0x07ab, blocks: (B:327:0x054a, B:329:0x0550), top: B:854:0x054a }] */
-        /* JADX WARN: Removed duplicated region for block: B:401:0x067f A[Catch: all -> 0x06f7, TryCatch #15 {all -> 0x06f7, blocks: (B:410:0x06ae, B:414:0x06bc, B:419:0x06d6, B:426:0x06e6, B:428:0x06f0, B:429:0x06f3, B:415:0x06c5, B:392:0x0667, B:394:0x066d, B:399:0x0677, B:401:0x067f, B:407:0x0698, B:409:0x06a7, B:408:0x06a2), top: B:867:0x05d5 }] */
-        /* JADX WARN: Removed duplicated region for block: B:444:0x0732  */
-        /* JADX WARN: Removed duplicated region for block: B:603:0x09d6  */
-        /* JADX WARN: Removed duplicated region for block: B:621:0x0a21 A[Catch: all -> 0x0c8e, TRY_ENTER, TryCatch #36 {all -> 0x0CLASSNAME, blocks: (B:612:0x09fd, B:614:0x0a05, B:619:0x0a15, B:620:0x0a20, B:627:0x0a2a, B:630:0x0a32, B:633:0x0a39, B:635:0x0a42, B:639:0x0a4b, B:640:0x0a5b, B:634:0x0a3e, B:621:0x0a21, B:623:0x0a25, B:625:0x0a27), top: B:898:0x09fd }] */
-        /* JADX WARN: Removed duplicated region for block: B:709:0x0b7f  */
-        /* JADX WARN: Removed duplicated region for block: B:716:0x0b97 A[Catch: all -> 0x0c8c, TryCatch #30 {all -> 0x0c8c, blocks: (B:678:0x0b11, B:710:0x0b81, B:712:0x0b8b, B:714:0x0b91, B:716:0x0b97, B:718:0x0b9d, B:724:0x0bb3, B:730:0x0bc1, B:732:0x0bc7, B:738:0x0be4, B:733:0x0bd1, B:735:0x0bd7, B:741:0x0bec, B:743:0x0bfa, B:745:0x0CLASSNAME, B:749:0x0c0c), top: B:890:0x0b11 }] */
-        /* JADX WARN: Removed duplicated region for block: B:738:0x0be4 A[Catch: all -> 0x0c8c, TryCatch #30 {all -> 0x0c8c, blocks: (B:678:0x0b11, B:710:0x0b81, B:712:0x0b8b, B:714:0x0b91, B:716:0x0b97, B:718:0x0b9d, B:724:0x0bb3, B:730:0x0bc1, B:732:0x0bc7, B:738:0x0be4, B:733:0x0bd1, B:735:0x0bd7, B:741:0x0bec, B:743:0x0bfa, B:745:0x0CLASSNAME, B:749:0x0c0c), top: B:890:0x0b11 }] */
+        /* JADX WARN: Not initialized variable reg: 30, insn: 0x0620: MOVE  (r8 I:??[int, float, boolean, short, byte, char, OBJECT, ARRAY]) = (r30 I:??[int, float, boolean, short, byte, char, OBJECT, ARRAY]), block:B:377:0x061c */
+        /* JADX WARN: Not initialized variable reg: 31, insn: 0x0622: MOVE  (r5 I:??[int, float, boolean, short, byte, char, OBJECT, ARRAY]) = (r31 I:??[int, float, boolean, short, byte, char, OBJECT, ARRAY]), block:B:377:0x061c */
+        /* JADX WARN: Removed duplicated region for block: B:129:0x020b A[ADDED_TO_REGION] */
+        /* JADX WARN: Removed duplicated region for block: B:133:0x0211  */
+        /* JADX WARN: Removed duplicated region for block: B:144:0x023b  */
+        /* JADX WARN: Removed duplicated region for block: B:146:0x023f  */
+        /* JADX WARN: Removed duplicated region for block: B:147:0x025d  */
+        /* JADX WARN: Removed duplicated region for block: B:180:0x02d7  */
+        /* JADX WARN: Removed duplicated region for block: B:228:0x03a9  */
+        /* JADX WARN: Removed duplicated region for block: B:234:0x03c3  */
+        /* JADX WARN: Removed duplicated region for block: B:304:0x04d0  */
+        /* JADX WARN: Removed duplicated region for block: B:325:0x053f  */
+        /* JADX WARN: Removed duplicated region for block: B:329:0x0551 A[Catch: all -> 0x07ac, TRY_LEAVE, TryCatch #5 {all -> 0x07ac, blocks: (B:327:0x054b, B:329:0x0551), top: B:846:0x054b }] */
+        /* JADX WARN: Removed duplicated region for block: B:401:0x0680 A[Catch: all -> 0x06f8, TryCatch #15 {all -> 0x06f8, blocks: (B:410:0x06af, B:414:0x06bd, B:419:0x06d7, B:426:0x06e7, B:428:0x06f1, B:429:0x06f4, B:415:0x06c6, B:392:0x0668, B:394:0x066e, B:399:0x0678, B:401:0x0680, B:407:0x0699, B:409:0x06a8, B:408:0x06a3), top: B:863:0x05d6 }] */
+        /* JADX WARN: Removed duplicated region for block: B:444:0x0733  */
+        /* JADX WARN: Removed duplicated region for block: B:603:0x09d7  */
+        /* JADX WARN: Removed duplicated region for block: B:621:0x0a22 A[Catch: all -> 0x0CLASSNAME, TRY_ENTER, TryCatch #27 {all -> 0x0c8a, blocks: (B:612:0x09fe, B:614:0x0a06, B:619:0x0a16, B:620:0x0a21, B:627:0x0a2b, B:630:0x0a33, B:633:0x0a3a, B:635:0x0a43, B:639:0x0a4c, B:640:0x0a5c, B:634:0x0a3f, B:621:0x0a22, B:623:0x0a26, B:625:0x0a28), top: B:879:0x09fe }] */
+        /* JADX WARN: Removed duplicated region for block: B:709:0x0b80  */
+        /* JADX WARN: Removed duplicated region for block: B:716:0x0b98 A[Catch: all -> 0x0CLASSNAME, TryCatch #24 {all -> 0x0CLASSNAME, blocks: (B:678:0x0b12, B:710:0x0b82, B:712:0x0b8c, B:714:0x0b92, B:716:0x0b98, B:718:0x0b9e, B:724:0x0bb4, B:730:0x0bc2, B:732:0x0bc8, B:738:0x0be5, B:733:0x0bd2, B:735:0x0bd8, B:741:0x0bed, B:743:0x0bfb, B:745:0x0CLASSNAME, B:749:0x0c0d), top: B:877:0x0b12 }] */
+        /* JADX WARN: Removed duplicated region for block: B:738:0x0be5 A[Catch: all -> 0x0CLASSNAME, TryCatch #24 {all -> 0x0CLASSNAME, blocks: (B:678:0x0b12, B:710:0x0b82, B:712:0x0b8c, B:714:0x0b92, B:716:0x0b98, B:718:0x0b9e, B:724:0x0bb4, B:730:0x0bc2, B:732:0x0bc8, B:738:0x0be5, B:733:0x0bd2, B:735:0x0bd8, B:741:0x0bed, B:743:0x0bfb, B:745:0x0CLASSNAME, B:749:0x0c0d), top: B:877:0x0b12 }] */
         /* JADX WARN: Removed duplicated region for block: B:74:0x0147  */
-        /* JADX WARN: Removed duplicated region for block: B:802:0x0ca1 A[ADDED_TO_REGION] */
-        /* JADX WARN: Removed duplicated region for block: B:805:0x0caf  */
-        /* JADX WARN: Removed duplicated region for block: B:806:0x0cb1  */
-        /* JADX WARN: Removed duplicated region for block: B:809:0x0cc6 A[ADDED_TO_REGION] */
-        /* JADX WARN: Removed duplicated region for block: B:816:0x0cd8  */
-        /* JADX WARN: Removed duplicated region for block: B:817:0x0cde  */
-        /* JADX WARN: Removed duplicated region for block: B:827:0x0d1a  */
-        /* JADX WARN: Removed duplicated region for block: B:828:0x0d1c  */
-        /* JADX WARN: Removed duplicated region for block: B:834:0x0d29  */
-        /* JADX WARN: Removed duplicated region for block: B:835:0x0d30  */
-        /* JADX WARN: Removed duplicated region for block: B:872:0x0a6f A[EXC_TOP_SPLITTER, SYNTHETIC] */
-        /* JADX WARN: Removed duplicated region for block: B:877:0x028c A[EXC_TOP_SPLITTER, SYNTHETIC] */
-        /* JADX WARN: Removed duplicated region for block: B:883:0x0c7f A[EXC_TOP_SPLITTER, SYNTHETIC] */
-        /* JADX WARN: Removed duplicated region for block: B:897:0x07c9 A[EXC_TOP_SPLITTER, SYNTHETIC] */
-        /* JADX WARN: Removed duplicated region for block: B:899:0x04ba A[EXC_TOP_SPLITTER, SYNTHETIC] */
+        /* JADX WARN: Removed duplicated region for block: B:798:0x0c9e A[ADDED_TO_REGION] */
+        /* JADX WARN: Removed duplicated region for block: B:801:0x0cac  */
+        /* JADX WARN: Removed duplicated region for block: B:802:0x0cae  */
+        /* JADX WARN: Removed duplicated region for block: B:805:0x0cc3 A[ADDED_TO_REGION] */
+        /* JADX WARN: Removed duplicated region for block: B:812:0x0cd5  */
+        /* JADX WARN: Removed duplicated region for block: B:813:0x0cdb  */
+        /* JADX WARN: Removed duplicated region for block: B:823:0x0d17  */
+        /* JADX WARN: Removed duplicated region for block: B:824:0x0d19  */
+        /* JADX WARN: Removed duplicated region for block: B:830:0x0d26  */
+        /* JADX WARN: Removed duplicated region for block: B:831:0x0d2d  */
+        /* JADX WARN: Removed duplicated region for block: B:868:0x0a70 A[EXC_TOP_SPLITTER, SYNTHETIC] */
+        /* JADX WARN: Removed duplicated region for block: B:888:0x07ca A[EXC_TOP_SPLITTER, SYNTHETIC] */
+        /* JADX WARN: Removed duplicated region for block: B:889:0x028d A[EXC_TOP_SPLITTER, SYNTHETIC] */
+        /* JADX WARN: Removed duplicated region for block: B:891:0x04bb A[EXC_TOP_SPLITTER, SYNTHETIC] */
         @Override // java.lang.Runnable
         /*
             Code decompiled incorrectly, please refer to instructions dump.
@@ -969,22 +969,31 @@ public class ImageLoader {
         */
         public void run() {
             /*
-                Method dump skipped, instructions count: 3386
+                Method dump skipped, instructions count: 3383
                 To view this dump add '--comments-level debug' option
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ImageLoader.CacheOutTask.run():void");
         }
 
         private void loadLastFrame(final RLottieDrawable rLottieDrawable, final int i, final int i2, final boolean z) {
-            final Bitmap createBitmap = Bitmap.createBitmap(i, i2, Bitmap.Config.ARGB_8888);
-            final Canvas canvas = new Canvas(createBitmap);
+            Bitmap createBitmap;
+            Canvas canvas;
             if (z) {
-                canvas.scale(2.0f, 2.0f, i / 2.0f, i2 / 2.0f);
+                float f = i * 1.2f;
+                float f2 = i2 * 1.2f;
+                createBitmap = Bitmap.createBitmap((int) f, (int) f2, Bitmap.Config.ARGB_8888);
+                canvas = new Canvas(createBitmap);
+                canvas.scale(2.0f, 2.0f, f / 2.0f, f2 / 2.0f);
+            } else {
+                createBitmap = Bitmap.createBitmap(i, i2, Bitmap.Config.ARGB_8888);
+                canvas = new Canvas(createBitmap);
             }
+            final Bitmap bitmap = createBitmap;
+            final Canvas canvas2 = canvas;
             AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.ImageLoader$CacheOutTask$$ExternalSyntheticLambda3
                 @Override // java.lang.Runnable
                 public final void run() {
-                    ImageLoader.CacheOutTask.this.lambda$loadLastFrame$1(rLottieDrawable, canvas, z, i, i2, createBitmap);
+                    ImageLoader.CacheOutTask.this.lambda$loadLastFrame$1(rLottieDrawable, canvas2, z, i, i2, bitmap);
                 }
             });
         }
@@ -1002,7 +1011,7 @@ public class ImageLoader {
 
         /* JADX INFO: Access modifiers changed from: private */
         public /* synthetic */ void lambda$loadLastFrame$0(RLottieDrawable rLottieDrawable, Canvas canvas, boolean z, int i, int i2, Bitmap bitmap) {
-            BitmapDrawable bitmapDrawable = null;
+            Drawable drawable = null;
             rLottieDrawable.setOnFrameReadyRunnable(null);
             if (rLottieDrawable.getBackgroundBitmap() != null || rLottieDrawable.getRenderingBitmap() != null) {
                 Bitmap backgroundBitmap = rLottieDrawable.getBackgroundBitmap() != null ? rLottieDrawable.getBackgroundBitmap() : rLottieDrawable.getRenderingBitmap();
@@ -1012,10 +1021,15 @@ public class ImageLoader {
                 }
                 Paint paint = new Paint(1);
                 paint.setFilterBitmap(true);
-                canvas.drawBitmap(backgroundBitmap, 0.0f, 0.0f, paint);
-                bitmapDrawable = new BitmapDrawable(bitmap);
+                if (z) {
+                    canvas.drawBitmap(backgroundBitmap, (bitmap.getWidth() - backgroundBitmap.getWidth()) / 2.0f, (bitmap.getHeight() - backgroundBitmap.getHeight()) / 2.0f, paint);
+                    drawable = new ImageReceiver.ReactionLastFrame(bitmap);
+                } else {
+                    canvas.drawBitmap(backgroundBitmap, 0.0f, 0.0f, paint);
+                    drawable = new BitmapDrawable(bitmap);
+                }
             }
-            onPostExecute(bitmapDrawable);
+            onPostExecute(drawable);
             rLottieDrawable.recycle();
         }
 

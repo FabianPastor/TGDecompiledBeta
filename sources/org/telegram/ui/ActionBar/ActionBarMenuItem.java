@@ -168,6 +168,7 @@ public class ActionBarMenuItem extends FrameLayout {
         FrameLayout frameLayout = this.searchContainer;
         if (frameLayout != null) {
             ((ViewGroup.MarginLayoutParams) frameLayout.getLayoutParams()).leftMargin = AndroidUtilities.dp(i);
+            this.searchContainer.setClipChildren(this.searchItemPaddingStart != 0);
         }
     }
 
@@ -1331,7 +1332,7 @@ public class ActionBarMenuItem extends FrameLayout {
                 }
             };
             this.searchContainer = frameLayout;
-            frameLayout.setClipChildren(false);
+            frameLayout.setClipChildren(this.searchItemPaddingStart != 0);
             this.wrappedSearchFrameLayout = null;
             if (z2) {
                 this.wrappedSearchFrameLayout = new FrameLayout(getContext());
@@ -1369,7 +1370,7 @@ public class ActionBarMenuItem extends FrameLayout {
                 };
                 horizontalScrollView.addView(this.searchContainer, LayoutHelper.createScroll(-2, -1, 0));
                 horizontalScrollView.setHorizontalScrollBarEnabled(false);
-                horizontalScrollView.setClipChildren(false);
+                horizontalScrollView.setClipChildren(this.searchItemPaddingStart != 0);
                 this.wrappedSearchFrameLayout.addView(horizontalScrollView, LayoutHelper.createFrame(-1, -1.0f, 0, 0.0f, 0.0f, 48.0f, 0.0f));
                 this.parentMenu.addView(this.wrappedSearchFrameLayout, 0, LayoutHelper.createLinear(0, -1, 1.0f, this.searchItemPaddingStart, 0, 0, 0));
             } else {
@@ -1504,11 +1505,11 @@ public class ActionBarMenuItem extends FrameLayout {
             this.searchFilterLayout.setVisibility(0);
             if (!LocaleController.isRTL) {
                 this.searchContainer.addView(this.searchFieldCaption, LayoutHelper.createFrame(-2, 36.0f, 19, 0.0f, 5.5f, 0.0f, 0.0f));
-                this.searchContainer.addView(this.searchField, LayoutHelper.createFrame(-2, 36.0f, 16, 6.0f, 0.0f, 48.0f, 0.0f));
+                this.searchContainer.addView(this.searchField, LayoutHelper.createFrame(-1, 36.0f, 16, 6.0f, 0.0f, z2 ? 0.0f : 48.0f, 0.0f));
                 this.searchContainer.addView(this.searchFilterLayout, LayoutHelper.createFrame(-2, 32.0f, 16, 0.0f, 0.0f, 48.0f, 0.0f));
             } else {
                 this.searchContainer.addView(this.searchFilterLayout, LayoutHelper.createFrame(-2, 32.0f, 16, 0.0f, 0.0f, 48.0f, 0.0f));
-                this.searchContainer.addView(this.searchField, LayoutHelper.createFrame(-2, 36.0f, 16, 0.0f, 0.0f, z2 ? 0.0f : 48.0f, 0.0f));
+                this.searchContainer.addView(this.searchField, LayoutHelper.createFrame(-1, 36.0f, 16, 0.0f, 0.0f, z2 ? 0.0f : 48.0f, 0.0f));
                 this.searchContainer.addView(this.searchFieldCaption, LayoutHelper.createFrame(-2, 36.0f, 21, 0.0f, 5.5f, 48.0f, 0.0f));
             }
             this.searchFilterLayout.setClipChildren(false);

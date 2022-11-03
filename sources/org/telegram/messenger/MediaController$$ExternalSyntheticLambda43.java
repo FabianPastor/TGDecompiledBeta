@@ -2,10 +2,10 @@ package org.telegram.messenger;
 
 import java.util.Comparator;
 /* loaded from: classes.dex */
-public final /* synthetic */ class MediaController$$ExternalSyntheticLambda41 implements Comparator {
-    public static final /* synthetic */ MediaController$$ExternalSyntheticLambda41 INSTANCE = new MediaController$$ExternalSyntheticLambda41();
+public final /* synthetic */ class MediaController$$ExternalSyntheticLambda43 implements Comparator {
+    public static final /* synthetic */ MediaController$$ExternalSyntheticLambda43 INSTANCE = new MediaController$$ExternalSyntheticLambda43();
 
-    private /* synthetic */ MediaController$$ExternalSyntheticLambda41() {
+    private /* synthetic */ MediaController$$ExternalSyntheticLambda43() {
     }
 
     @Override // java.util.Comparator

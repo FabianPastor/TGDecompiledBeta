@@ -29,6 +29,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import androidx.core.graphics.ColorUtils;
 import androidx.core.math.MathUtils;
 import androidx.core.view.GestureDetectorCompat;
 import androidx.dynamicanimation.animation.DynamicAnimation;
@@ -313,7 +314,7 @@ public class LNavigation extends FrameLayout implements INavigationLayout, Float
                 if (!LNavigation.this.isSwipeInProgress && !LNavigation.this.isSwipeDisallowed) {
                     if (Math.abs(f) >= Math.abs(f2) * 1.5f && f <= (-scaledTouchSlop)) {
                         LNavigation lNavigation = LNavigation.this;
-                        if (!lNavigation.isIgnoredView(lNavigation.getForegroundView(), motionEvent2, LNavigation.this.ignoreRect) && LNavigation.this.getLastFragment().canBeginSlide() && LNavigation.this.getLastFragment().isSwipeBackEnabled(motionEvent2) && LNavigation.this.fragmentStack.size() >= 2 && !LNavigation.this.isInActionMode && !LNavigation.this.isInPreviewMode()) {
+                        if (!lNavigation.isIgnoredView(lNavigation.getForegroundView(), motionEvent2, LNavigation.this.ignoreRect) && LNavigation.this.getLastFragment() != null && LNavigation.this.getLastFragment().canBeginSlide() && LNavigation.this.getLastFragment().isSwipeBackEnabled(motionEvent2) && LNavigation.this.fragmentStack.size() >= 2 && !LNavigation.this.isInActionMode && !LNavigation.this.isInPreviewMode()) {
                             LNavigation.this.isSwipeInProgress = true;
                             LNavigation lNavigation2 = LNavigation.this;
                             lNavigation2.startScroll = lNavigation2.swipeProgress - MathUtils.clamp((motionEvent2.getX() - motionEvent.getX()) / LNavigation.this.getWidth(), 0.0f, 1.0f);
@@ -905,6 +906,14 @@ public class LNavigation extends FrameLayout implements INavigationLayout, Float
             }
         }
         invalidate();
+        if (backgroundView != null && foregroundView != null) {
+            try {
+                if (Build.VERSION.SDK_INT >= 21) {
+                    getParentActivity().getWindow().setNavigationBarColor(ColorUtils.blendARGB(foregroundView.fragment.getNavigationBarColor(), backgroundView.fragment.getNavigationBarColor(), this.swipeProgress));
+                }
+            } catch (Exception unused) {
+            }
+        }
         if (getBackgroundFragment() == null) {
             return;
         }
@@ -1401,7 +1410,7 @@ public class LNavigation extends FrameLayout implements INavigationLayout, Float
         resetViewProperties(foregroundView);
         if (baseFragment2 != null) {
             baseFragment2.prepareFragmentToSlide(false, false);
-            baseFragment2.onTransitionAnimationEnd(true, false);
+            baseFragment2.onTransitionAnimationEnd(true, true);
             baseFragment2.onBecomeFullyVisible();
         }
         if (this.fragmentStack.size() >= 2) {
@@ -2307,7 +2316,7 @@ public class LNavigation extends FrameLayout implements INavigationLayout, Float
                 if (childAt == view || !(childAt instanceof ActionBar) || childAt.getVisibility() != 0) {
                     i3++;
                 } else if (((ActionBar) childAt).getCastShadows()) {
-                    i = childAt.getMeasuredHeight();
+                    i = (int) (childAt.getMeasuredHeight() * childAt.getScaleY());
                     i2 = (int) childAt.getY();
                 }
             }

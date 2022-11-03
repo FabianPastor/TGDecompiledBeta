@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import org.telegram.messenger.FileLog;
-/* loaded from: classes3.dex */
+/* loaded from: classes.dex */
 class MediaCodecUtils {
     static final int COLOR_QCOM_FORMATYUV420PackedSemiPlanar32m = NUM;
     static final int COLOR_QCOM_FORMATYVU420PackedSemiPlanar16m4ka = NUM;
@@ -77,7 +77,7 @@ class MediaCodecUtils {
     }
 
     /* renamed from: org.webrtc.MediaCodecUtils$1  reason: invalid class name */
-    /* loaded from: classes3.dex */
+    /* loaded from: classes.dex */
     static /* synthetic */ class AnonymousClass1 {
         static final /* synthetic */ int[] $SwitchMap$org$webrtc$VideoCodecMimeType;
 

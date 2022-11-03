@@ -2169,7 +2169,7 @@ public class MediaDataController extends BaseController {
     */
     public void loadRecents(final int r8, final boolean r9, boolean r10, boolean r11) {
         /*
-            Method dump skipped, instructions count: 317
+            Method dump skipped, instructions count: 320
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaDataController.loadRecents(int, boolean, boolean, boolean):void");
@@ -3058,7 +3058,7 @@ public class MediaDataController extends BaseController {
         final ArrayList<TLRPC$TL_messages_stickerSet> arrayList = new ArrayList<>();
         long j = 1000;
         if (tLRPC$TL_messages_allStickers.sets.isEmpty()) {
-            processLoadedStickers(i, arrayList, false, (int) (System.currentTimeMillis() / 1000), tLRPC$TL_messages_allStickers.hash, runnable);
+            processLoadedStickers(i, arrayList, false, (int) (System.currentTimeMillis() / 1000), tLRPC$TL_messages_allStickers.hash2, runnable);
             return;
         }
         final LongSparseArray longSparseArray = new LongSparseArray();
@@ -3075,7 +3075,7 @@ public class MediaDataController extends BaseController {
                     longSparseArray.put(tLRPC$StickerSet2.id, tLRPC$TL_messages_stickerSet);
                     arrayList.add(tLRPC$TL_messages_stickerSet);
                     if (longSparseArray.size() == tLRPC$TL_messages_allStickers.sets.size()) {
-                        processLoadedStickers(i, arrayList, false, (int) (System.currentTimeMillis() / j), tLRPC$TL_messages_allStickers.hash);
+                        processLoadedStickers(i, arrayList, false, (int) (System.currentTimeMillis() / j), tLRPC$TL_messages_allStickers.hash2);
                     }
                     i2++;
                     j = 1000;
@@ -3127,7 +3127,7 @@ public class MediaDataController extends BaseController {
                 }
                 i3++;
             }
-            processLoadedStickers(i2, arrayList, false, (int) (System.currentTimeMillis() / 1000), tLRPC$TL_messages_allStickers.hash);
+            processLoadedStickers(i2, arrayList, false, (int) (System.currentTimeMillis() / 1000), tLRPC$TL_messages_allStickers.hash2);
         }
     }
 
@@ -3561,7 +3561,7 @@ public class MediaDataController extends BaseController {
                 c = 0;
             }
             TLRPC$TL_messages_allStickers tLRPC$TL_messages_allStickers = new TLRPC$TL_messages_allStickers();
-            tLRPC$TL_messages_allStickers.hash = this.loadFeaturedHash[c];
+            tLRPC$TL_messages_allStickers.hash2 = this.loadFeaturedHash[c];
             int size = this.featuredStickerSets[c].size();
             for (int i2 = 0; i2 < size; i2++) {
                 tLRPC$TL_messages_allStickers.sets.add(this.featuredStickerSets[c].get(i2).set);
@@ -7924,29 +7924,31 @@ public class MediaDataController extends BaseController {
             serializedData2.cleanup();
         }
         edit.commit();
-        if (!z || i != 0) {
-            return;
-        }
-        if (tLRPC$DraftMessage != null && tLRPC$DraftMessage.reply_to_msg_id != 0 && tLRPC$Message == null) {
-            TLRPC$Chat tLRPC$Chat = null;
-            if (DialogObject.isUserDialog(j)) {
-                tLRPC$Chat = getMessagesController().getUser(Long.valueOf(j));
-                chat = tLRPC$Chat;
-            } else {
-                chat = getMessagesController().getChat(Long.valueOf(-j));
+        if (z) {
+            if (i != 0 && !getMessagesController().isForum(j)) {
+                return;
             }
-            if (tLRPC$Chat != null || chat != null) {
-                final long j2 = ChatObject.isChannel(chat) ? chat.id : 0L;
-                final int i2 = tLRPC$DraftMessage.reply_to_msg_id;
-                getMessagesStorage().getStorageQueue().postRunnable(new Runnable() { // from class: org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda29
-                    @Override // java.lang.Runnable
-                    public final void run() {
-                        MediaDataController.this.lambda$saveDraft$171(i2, j, j2, i);
-                    }
-                });
+            if (tLRPC$DraftMessage != null && tLRPC$DraftMessage.reply_to_msg_id != 0 && tLRPC$Message == null) {
+                TLRPC$Chat tLRPC$Chat = null;
+                if (DialogObject.isUserDialog(j)) {
+                    tLRPC$Chat = getMessagesController().getUser(Long.valueOf(j));
+                    chat = tLRPC$Chat;
+                } else {
+                    chat = getMessagesController().getChat(Long.valueOf(-j));
+                }
+                if (tLRPC$Chat != null || chat != null) {
+                    final long j2 = ChatObject.isChannel(chat) ? chat.id : 0L;
+                    final int i2 = tLRPC$DraftMessage.reply_to_msg_id;
+                    getMessagesStorage().getStorageQueue().postRunnable(new Runnable() { // from class: org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda29
+                        @Override // java.lang.Runnable
+                        public final void run() {
+                            MediaDataController.this.lambda$saveDraft$171(i2, j, j2, i);
+                        }
+                    });
+                }
             }
+            getNotificationCenter().postNotificationName(NotificationCenter.newDraftReceived, Long.valueOf(j));
         }
-        getNotificationCenter().postNotificationName(NotificationCenter.newDraftReceived, Long.valueOf(j));
     }
 
     /* JADX INFO: Access modifiers changed from: private */

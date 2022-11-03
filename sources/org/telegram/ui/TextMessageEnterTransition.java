@@ -117,21 +117,21 @@ public class TextMessageEnterTransition implements MessageEnterTransitionContain
         return layout.getLineRight(i) == ((float) layout.getWidth()) && layout.getLineLeft(i) != 0.0f;
     }
 
-    /* JADX WARN: Removed duplicated region for block: B:73:0x0373  */
-    /* JADX WARN: Removed duplicated region for block: B:74:0x0380  */
-    /* JADX WARN: Removed duplicated region for block: B:77:0x03b2  */
-    /* JADX WARN: Removed duplicated region for block: B:80:0x0418  */
-    /* JADX WARN: Removed duplicated region for block: B:83:0x045d  */
-    /* JADX WARN: Removed duplicated region for block: B:86:0x0473  */
-    /* JADX WARN: Removed duplicated region for block: B:94:0x04df  */
+    /* JADX WARN: Removed duplicated region for block: B:73:0x03c4  */
+    /* JADX WARN: Removed duplicated region for block: B:74:0x03d3  */
+    /* JADX WARN: Removed duplicated region for block: B:77:0x040b  */
+    /* JADX WARN: Removed duplicated region for block: B:80:0x047f  */
+    /* JADX WARN: Removed duplicated region for block: B:83:0x04bc  */
+    /* JADX WARN: Removed duplicated region for block: B:86:0x04d2  */
+    /* JADX WARN: Removed duplicated region for block: B:94:0x0550  */
     @Override // org.telegram.ui.MessageEnterTransitionContainer.Transition
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public void onDraw(android.graphics.Canvas r39) {
+    public void onDraw(android.graphics.Canvas r42) {
         /*
-            Method dump skipped, instructions count: 2148
+            Method dump skipped, instructions count: 2267
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.TextMessageEnterTransition.onDraw(android.graphics.Canvas):void");

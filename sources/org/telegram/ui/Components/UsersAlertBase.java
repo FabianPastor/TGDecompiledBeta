@@ -395,6 +395,7 @@ public class UsersAlertBase extends BottomSheet {
         this.backgroundColor = AndroidUtilities.getOffsetColor(Theme.getColor(this.keyInviteMembersBackground), Theme.getColor(this.keyListViewBackground), f, 1.0f);
         this.shadowDrawable.setColorFilter(new PorterDuffColorFilter(this.backgroundColor, PorterDuff.Mode.MULTIPLY));
         this.frameLayout.setBackgroundColor(this.backgroundColor);
+        fixNavigationBar(this.backgroundColor);
         int i = this.backgroundColor;
         this.navBarColor = i;
         this.listView.setGlowColor(i);

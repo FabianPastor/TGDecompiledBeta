@@ -97,7 +97,7 @@ public class ArchiveHintCell extends FrameLayout {
 
         @Override // androidx.viewpager.widget.PagerAdapter
         /* renamed from: instantiateItem */
-        public Object mo1620instantiateItem(ViewGroup viewGroup, int i) {
+        public Object mo1624instantiateItem(ViewGroup viewGroup, int i) {
             ArchiveHintInnerCell archiveHintInnerCell = new ArchiveHintInnerCell(viewGroup.getContext(), i);
             if (archiveHintInnerCell.getParent() != null) {
                 ((ViewGroup) archiveHintInnerCell.getParent()).removeView(archiveHintInnerCell);

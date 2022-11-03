@@ -1,7 +1,7 @@
 package org.webrtc;
 
 import org.webrtc.Logging;
-/* loaded from: classes3.dex */
+/* loaded from: classes.dex */
 class JNILogging {
     private final Loggable loggable;
 

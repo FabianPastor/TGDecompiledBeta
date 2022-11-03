@@ -6,15 +6,15 @@ import android.os.SystemClock;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-/* loaded from: classes3.dex */
+/* loaded from: classes.dex */
 public class ThreadUtils {
 
-    /* loaded from: classes3.dex */
+    /* loaded from: classes.dex */
     public interface BlockingOperation {
         void run() throws InterruptedException;
     }
 
-    /* loaded from: classes3.dex */
+    /* loaded from: classes.dex */
     public static class ThreadChecker {
         private Thread thread = Thread.currentThread();
 
@@ -148,7 +148,7 @@ public class ThreadUtils {
 
     /* JADX INFO: Access modifiers changed from: package-private */
     /* renamed from: org.webrtc.ThreadUtils$1CaughtException  reason: invalid class name */
-    /* loaded from: classes3.dex */
+    /* loaded from: classes.dex */
     public class C1CaughtException {
         Exception e;
 
@@ -158,7 +158,7 @@ public class ThreadUtils {
 
     /* JADX INFO: Access modifiers changed from: package-private */
     /* renamed from: org.webrtc.ThreadUtils$1Result  reason: invalid class name */
-    /* loaded from: classes3.dex */
+    /* loaded from: classes.dex */
     public class C1Result {
         public V value;
 

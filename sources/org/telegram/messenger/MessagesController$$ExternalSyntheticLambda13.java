@@ -9,6 +9,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda13
 
     @Override // java.lang.Runnable
     public final void run() {
-        MessagesController.m551$r8$lambda$3glUIU4Rpam_ZmjiPRPcrBSWg8(this.f$0);
+        MessagesController.m555$r8$lambda$3glUIU4Rpam_ZmjiPRPcrBSWg8(this.f$0);
     }
 }

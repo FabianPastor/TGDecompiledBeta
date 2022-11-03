@@ -1,7 +1,7 @@
 package org.webrtc;
 
 import org.webrtc.PeerConnection;
-/* loaded from: classes3.dex */
+/* loaded from: classes.dex */
 public class RtcCertificatePem {
     private static final long DEFAULT_EXPIRY = 2592000;
     public final String certificate;

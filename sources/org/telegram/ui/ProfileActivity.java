@@ -1611,7 +1611,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
     /* JADX INFO: Access modifiers changed from: private */
     public void updateExceptions() {
-        if (this.isTopic || !this.currentChat.forum) {
+        TLRPC$Chat tLRPC$Chat;
+        if (this.isTopic || (tLRPC$Chat = this.currentChat) == null || !tLRPC$Chat.forum) {
             return;
         }
         getNotificationsController().loadTopicsNotificationsExceptions(-this.chatId, new Consumer() { // from class: org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda36
@@ -6474,7 +6475,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             TLRPC$UserFull tLRPC$UserFull = (TLRPC$UserFull) objArr[1];
             this.userInfo = tLRPC$UserFull;
             if (this.imageUpdater != null) {
-                if (!TextUtils.equals(tLRPC$UserFull.about, this.currentBio)) {
+                if (this.listAdapter != null && !TextUtils.equals(tLRPC$UserFull.about, this.currentBio)) {
                     this.listAdapter.notifyItemChanged(this.bioRow);
                 }
             } else {
@@ -6916,7 +6917,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             if (z && this.listAdapter != null && this.membersStartRow > 0) {
                 AndroidUtilities.updateVisibleRows(this.listView);
             }
-            if (this.isTopic || this.sharedMediaLayout == null || this.sharedMediaRow == -1) {
+            if (this.sharedMediaLayout == null || this.sharedMediaRow == -1) {
                 return;
             }
             if ((this.sortedUsers.size() <= 5 && this.usersForceShowingIn != 2) || this.usersForceShowingIn == 1) {
@@ -7126,7 +7127,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     */
     public void updateRowsIds() {
         /*
-            Method dump skipped, instructions count: 1611
+            Method dump skipped, instructions count: 1627
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ProfileActivity.updateRowsIds():void");
@@ -8038,7 +8039,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         /* JADX WARN: Multi-variable type inference failed */
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1810onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1813onCreateViewHolder(ViewGroup viewGroup, int i) {
             View headerCell;
             TextDetailCell textDetailCell;
             String str;
@@ -9704,7 +9705,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1810onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1813onCreateViewHolder(ViewGroup viewGroup, int i) {
             View settingsSearchCell;
             if (i == 0) {
                 settingsSearchCell = new SettingsSearchCell(this.mContext);

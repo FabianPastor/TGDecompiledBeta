@@ -85,66 +85,16 @@ public class BitmapsCache {
         this.file = new File(file2, sb.toString());
     }
 
-    /* JADX WARN: Code restructure failed: missing block: B:137:?, code lost:
-        return;
+    /* JADX WARN: Code restructure failed: missing block: B:23:0x0048, code lost:
+        if (r0 == null) goto L6;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:31:0x00ae, code lost:
-        r8 = 0;
-     */
-    /* JADX WARN: Code restructure failed: missing block: B:33:0x00b1, code lost:
-        if (r8 >= org.telegram.messenger.utils.BitmapsCache.N) goto L51;
-     */
-    /* JADX WARN: Code restructure failed: missing block: B:35:0x00b5, code lost:
-        if (r9[r8] == null) goto L34;
-     */
-    /* JADX WARN: Code restructure failed: missing block: B:36:0x00b7, code lost:
-        r9[r8].await();
-     */
-    /* JADX WARN: Code restructure failed: missing block: B:38:0x00bd, code lost:
-        r0 = move-exception;
-     */
-    /* JADX WARN: Code restructure failed: missing block: B:39:0x00be, code lost:
-        r0.printStackTrace();
-     */
-    /* JADX WARN: Code restructure failed: missing block: B:47:0x00d7, code lost:
-        r0 = (int) r14.length();
-        java.util.Collections.sort(r7, j$.util.Comparator$CC.comparingInt(org.telegram.messenger.utils.BitmapsCache$$ExternalSyntheticLambda1.INSTANCE));
-        r14.writeInt(r7.size());
-        r8 = 0;
-     */
-    /* JADX WARN: Code restructure failed: missing block: B:49:0x00f1, code lost:
-        if (r8 >= r7.size()) goto L56;
-     */
-    /* JADX WARN: Code restructure failed: missing block: B:50:0x00f3, code lost:
-        r14.writeInt(((org.telegram.messenger.utils.BitmapsCache.FrameOffset) r7.get(r8)).frameOffset);
-        r14.writeInt(((org.telegram.messenger.utils.BitmapsCache.FrameOffset) r7.get(r8)).frameSize);
-        r8 = r8 + 1;
-     */
-    /* JADX WARN: Code restructure failed: missing block: B:51:0x010c, code lost:
-        r14.seek(r4);
-        r14.writeBoolean(true);
-        r14.writeInt(r0);
-        r6.set(true);
-        r14.close();
-     */
-    /* JADX WARN: Code restructure failed: missing block: B:52:0x011e, code lost:
-        if (org.telegram.messenger.BuildVars.DEBUG_VERSION == false) goto L61;
-     */
-    /* JADX WARN: Code restructure failed: missing block: B:53:0x0120, code lost:
-        org.telegram.messenger.FileLog.d("generate cache for time = " + (java.lang.System.currentTimeMillis() - r12) + " drawFrameTime = " + r1 + " comressQuality = " + r11.compressQuality + " fileSize = " + org.telegram.messenger.AndroidUtilities.formatFileSize(r11.file.length()) + " " + r11.fileName);
-     */
-    /* JADX WARN: Code restructure failed: missing block: B:54:0x0167, code lost:
-        r11.source.releaseForGenerateCache();
-     */
-    /* JADX WARN: Removed duplicated region for block: B:132:0x00d3 A[SYNTHETIC] */
-    /* JADX WARN: Removed duplicated region for block: B:45:0x00ce A[Catch: all -> 0x0211, IOException -> 0x0214, FileNotFoundException -> 0x021a, TryCatch #11 {all -> 0x0211, blocks: (B:3:0x0004, B:5:0x0017, B:7:0x0021, B:11:0x002a, B:12:0x002f, B:13:0x0043, B:15:0x0047, B:16:0x0065, B:17:0x0081, B:19:0x0085, B:23:0x008f, B:32:0x00af, B:34:0x00b3, B:36:0x00b7, B:40:0x00c1, B:42:0x00c5, B:43:0x00ca, B:45:0x00ce, B:46:0x00d3, B:39:0x00be, B:47:0x00d7, B:48:0x00ed, B:50:0x00f3, B:51:0x010c, B:53:0x0120, B:22:0x008c), top: B:112:0x0004 }] */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
     public void createCache() {
         /*
-            Method dump skipped, instructions count: 558
+            Method dump skipped, instructions count: 555
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.utils.BitmapsCache.createCache():void");
@@ -222,8 +172,11 @@ public class BitmapsCache {
             try {
                 RandomAccessFile randomAccessFile3 = new RandomAccessFile(this.file, "r");
                 this.cacheCreated = randomAccessFile3.readBoolean();
+                if (randomAccessFile3.readInt() <= 0) {
+                    this.cacheCreated = false;
+                }
                 randomAccessFile3.close();
-                this.checkCache = false;
+                this.checkCache = true;
                 return this.cacheCreated;
             } catch (Throwable th4) {
                 randomAccessFile = null;
@@ -235,7 +188,7 @@ public class BitmapsCache {
                     if (randomAccessFile2 != null) {
                         randomAccessFile2.close();
                     }
-                    this.checkCache = false;
+                    this.checkCache = true;
                     return this.cacheCreated;
                 } catch (Throwable th5) {
                     th = th5;

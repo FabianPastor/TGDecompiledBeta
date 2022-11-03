@@ -1,12 +1,12 @@
 package org.webrtc;
-/* loaded from: classes3.dex */
+/* loaded from: classes.dex */
 public class StatsReport {
     public final String id;
     public final double timestamp;
     public final String type;
     public final Value[] values;
 
-    /* loaded from: classes3.dex */
+    /* loaded from: classes.dex */
     public static class Value {
         public final String name;
         public final String value;

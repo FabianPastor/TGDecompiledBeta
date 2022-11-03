@@ -264,10 +264,15 @@ public class ThemeSmallPreviewView extends FrameLayout implements NotificationCe
                         ImageLoader.getInstance().loadImageForImageReceiver(imageReceiver);
                     }
                 } else if (themeAccent != null && themeAccent.info == null) {
+                    final int i4 = (int) (themeAccent.patternIntensity * 100.0f);
+                    Drawable drawable = chatThemeItem.previewDrawable;
+                    if (drawable instanceof MotionBackgroundDrawable) {
+                        ((MotionBackgroundDrawable) drawable).setPatternBitmap(i4);
+                    }
                     ChatThemeController.chatThemeQueue.postRunnable(new Runnable() { // from class: org.telegram.ui.Components.ThemeSmallPreviewView$$ExternalSyntheticLambda2
                         @Override // java.lang.Runnable
                         public final void run() {
-                            ThemeSmallPreviewView.this.lambda$setItem$3(chatThemeItem);
+                            ThemeSmallPreviewView.this.lambda$setItem$3(chatThemeItem, i4);
                         }
                     });
                 }
@@ -324,22 +329,22 @@ public class ThemeSmallPreviewView extends FrameLayout implements NotificationCe
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$setItem$3(final ChatThemeBottomSheet.ChatThemeItem chatThemeItem) {
+    public /* synthetic */ void lambda$setItem$3(final ChatThemeBottomSheet.ChatThemeItem chatThemeItem, final int i) {
         final Bitmap bitmap = SvgHelper.getBitmap(R.raw.default_pattern, AndroidUtilities.dp(120.0f), AndroidUtilities.dp(140.0f), -16777216, AndroidUtilities.density);
         AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.ThemeSmallPreviewView$$ExternalSyntheticLambda3
             @Override // java.lang.Runnable
             public final void run() {
-                ThemeSmallPreviewView.this.lambda$setItem$2(chatThemeItem, bitmap);
+                ThemeSmallPreviewView.this.lambda$setItem$2(chatThemeItem, i, bitmap);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$setItem$2(ChatThemeBottomSheet.ChatThemeItem chatThemeItem, Bitmap bitmap) {
+    public /* synthetic */ void lambda$setItem$2(ChatThemeBottomSheet.ChatThemeItem chatThemeItem, int i, Bitmap bitmap) {
         Drawable drawable = chatThemeItem.previewDrawable;
         if (drawable instanceof MotionBackgroundDrawable) {
             MotionBackgroundDrawable motionBackgroundDrawable = (MotionBackgroundDrawable) drawable;
-            motionBackgroundDrawable.setPatternBitmap(100, prescaleBitmap(bitmap), true);
+            motionBackgroundDrawable.setPatternBitmap(i, prescaleBitmap(bitmap), true);
             motionBackgroundDrawable.setPatternColorFilter(this.patternColor);
             invalidate();
         }

@@ -56,9 +56,11 @@ import org.telegram.ui.DialogsActivity;
 /* loaded from: classes3.dex */
 public class Bulletin {
     private static final HashMap<FrameLayout, Delegate> delegates = new HashMap<>();
+    private static final HashMap<BaseFragment, Delegate> fragmentDelegates = new HashMap<>();
     @SuppressLint({"StaticFieldLeak"})
     private static Bulletin visibleBulletin;
     private boolean canHide;
+    private final BaseFragment containerFragment;
     private final FrameLayout containerLayout;
     public int currentBottomOffset;
     private Delegate currentDelegate;
@@ -107,7 +109,7 @@ public class Bulletin {
     }
 
     public static Bulletin make(FrameLayout frameLayout, Layout layout, int i) {
-        return new Bulletin(frameLayout, layout, i);
+        return new Bulletin(null, frameLayout, layout, i);
     }
 
     @SuppressLint({"RtlHardcoded"})
@@ -119,7 +121,7 @@ public class Bulletin {
         } else {
             layout.setWideScreenParams(-2, 5);
         }
-        return new Bulletin(baseFragment.getLayoutContainer(), layout, i);
+        return new Bulletin(baseFragment, baseFragment.getLayoutContainer(), layout, i);
     }
 
     public static Bulletin find(FrameLayout frameLayout) {
@@ -153,10 +155,11 @@ public class Bulletin {
         };
         this.layout = null;
         this.parentLayout = null;
+        this.containerFragment = null;
         this.containerLayout = null;
     }
 
-    private Bulletin(final FrameLayout frameLayout, Layout layout, int i) {
+    private Bulletin(BaseFragment baseFragment, final FrameLayout frameLayout, Layout layout, int i) {
         this.hideRunnable = new Runnable() { // from class: org.telegram.ui.Components.Bulletin$$ExternalSyntheticLambda2
             @Override // java.lang.Runnable
             public final void run() {
@@ -182,6 +185,7 @@ public class Bulletin {
                 Bulletin.this.hide();
             }
         };
+        this.containerFragment = baseFragment;
         this.containerLayout = frameLayout;
         this.duration = i;
     }
@@ -258,9 +262,10 @@ public class Bulletin {
             Bulletin.this.layout.removeOnLayoutChangeListener(this);
             if (Bulletin.this.showing) {
                 Bulletin.this.layout.onShow();
-                Bulletin.this.currentDelegate = (Delegate) Bulletin.delegates.get(Bulletin.this.containerLayout);
                 Bulletin bulletin = Bulletin.this;
-                bulletin.currentBottomOffset = bulletin.currentDelegate != null ? Bulletin.this.currentDelegate.getBottomOffset(Bulletin.this.tag) : 0;
+                bulletin.currentDelegate = Bulletin.findDelegate(bulletin.containerFragment, Bulletin.this.containerLayout);
+                Bulletin bulletin2 = Bulletin.this;
+                bulletin2.currentBottomOffset = bulletin2.currentDelegate != null ? Bulletin.this.currentDelegate.getBottomOffset(Bulletin.this.tag) : 0;
                 if (Bulletin.this.currentDelegate != null) {
                     Bulletin.this.currentDelegate.onShow(Bulletin.this);
                 }
@@ -469,7 +474,7 @@ public class Bulletin {
 
         protected abstract void onPressedStateChanged(boolean z);
 
-        static /* synthetic */ float access$1624(ParentLayout parentLayout, float f) {
+        static /* synthetic */ float access$1724(ParentLayout parentLayout, float f) {
             float f2 = parentLayout.translationX - f;
             parentLayout.translationX = f2;
             return f2;
@@ -507,7 +512,7 @@ public class Bulletin {
 
             @Override // android.view.GestureDetector.SimpleOnGestureListener, android.view.GestureDetector.OnGestureListener
             public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent2, float f, float f2) {
-                this.val$layout.setTranslationX(ParentLayout.access$1624(ParentLayout.this, f));
+                this.val$layout.setTranslationX(ParentLayout.access$1724(ParentLayout.this, f));
                 if (ParentLayout.this.translationX == 0.0f || ((ParentLayout.this.translationX < 0.0f && ParentLayout.this.needLeftAlphaAnimation) || (ParentLayout.this.translationX > 0.0f && ParentLayout.this.needRightAlphaAnimation))) {
                     this.val$layout.setAlpha(1.0f - (Math.abs(ParentLayout.this.translationX) / this.val$layout.getWidth()));
                     return true;
@@ -637,21 +642,27 @@ public class Bulletin {
     }
 
     public static void addDelegate(BaseFragment baseFragment, Delegate delegate) {
-        FrameLayout layoutContainer = baseFragment.getLayoutContainer();
-        if (layoutContainer != null) {
-            addDelegate(layoutContainer, delegate);
-        }
+        fragmentDelegates.put(baseFragment, delegate);
     }
 
     public static void addDelegate(FrameLayout frameLayout, Delegate delegate) {
         delegates.put(frameLayout, delegate);
     }
 
-    public static void removeDelegate(BaseFragment baseFragment) {
-        FrameLayout layoutContainer = baseFragment.getLayoutContainer();
-        if (layoutContainer != null) {
-            removeDelegate(layoutContainer);
+    public static Delegate findDelegate(BaseFragment baseFragment, FrameLayout frameLayout) {
+        Delegate delegate = fragmentDelegates.get(baseFragment);
+        if (delegate != null) {
+            return delegate;
         }
+        Delegate delegate2 = delegates.get(frameLayout);
+        if (delegate2 == null) {
+            return null;
+        }
+        return delegate2;
+    }
+
+    public static void removeDelegate(BaseFragment baseFragment) {
+        fragmentDelegates.remove(baseFragment);
     }
 
     public static void removeDelegate(FrameLayout frameLayout) {

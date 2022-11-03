@@ -795,6 +795,65 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
         PhotoViewer.getInstance().checkCurrentImageVisibility();
     }
 
+    /* JADX WARN: Code restructure failed: missing block: B:9:0x001b, code lost:
+        if (java.lang.Math.max(r0 == null ? 0 : r0.participants_count, r6.currentChat.participants_count) >= getMessagesController().forumUpgradeParticipantsMin) goto L19;
+     */
+    /* JADX WARN: Removed duplicated region for block: B:19:0x0033  */
+    /* JADX WARN: Removed duplicated region for block: B:25:? A[RETURN, SYNTHETIC] */
+    /*
+        Code decompiled incorrectly, please refer to instructions dump.
+        To view partially-correct add '--show-bad-code' argument
+    */
+    private void updateCanForum() {
+        /*
+            r6 = this;
+            boolean r0 = r6.forum
+            r1 = 0
+            if (r0 != 0) goto L1d
+            org.telegram.tgnet.TLRPC$ChatFull r0 = r6.info
+            if (r0 != 0) goto Lb
+            r0 = 0
+            goto Ld
+        Lb:
+            int r0 = r0.participants_count
+        Ld:
+            org.telegram.tgnet.TLRPC$Chat r2 = r6.currentChat
+            int r2 = r2.participants_count
+            int r0 = java.lang.Math.max(r0, r2)
+            org.telegram.messenger.MessagesController r2 = r6.getMessagesController()
+            int r2 = r2.forumUpgradeParticipantsMin
+            if (r0 < r2) goto L2a
+        L1d:
+            org.telegram.tgnet.TLRPC$ChatFull r0 = r6.info
+            if (r0 == 0) goto L2c
+            long r2 = r0.linked_chat_id
+            r4 = 0
+            int r0 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1))
+            if (r0 != 0) goto L2a
+            goto L2c
+        L2a:
+            r0 = 0
+            goto L2d
+        L2c:
+            r0 = 1
+        L2d:
+            r6.canForum = r0
+            org.telegram.ui.Cells.TextCell r0 = r6.forumsCell
+            if (r0 == 0) goto L41
+            org.telegram.ui.Components.Switch r0 = r0.getCheckBox()
+            boolean r2 = r6.canForum
+            if (r2 == 0) goto L3c
+            goto L3e
+        L3c:
+            int r1 = org.telegram.messenger.R.drawable.permission_locked
+        L3e:
+            r0.setIcon(r1)
+        L41:
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatEditActivity.updateCanForum():void");
+    }
+
     @Override // org.telegram.messenger.NotificationCenter.NotificationCenterDelegate
     public void didReceivedNotification(int i, int i2, Object... objArr) {
         EditTextBoldCursor editTextBoldCursor;
@@ -809,6 +868,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             }
             boolean z2 = this.info == null;
             this.info = tLRPC$ChatFull;
+            updateCanForum();
             if (ChatObject.isChannel(this.currentChat) && !this.info.hidden_prehistory) {
                 z = false;
             }

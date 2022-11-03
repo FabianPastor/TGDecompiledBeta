@@ -1,7 +1,7 @@
 package org.webrtc;
 
 import org.webrtc.VideoEncoder;
-/* loaded from: classes3.dex */
+/* loaded from: classes.dex */
 public abstract class WrappedNativeVideoEncoder implements VideoEncoder {
     @Override // org.webrtc.VideoEncoder
     public abstract long createNativeVideoEncoder();

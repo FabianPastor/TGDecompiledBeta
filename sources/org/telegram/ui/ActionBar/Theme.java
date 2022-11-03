@@ -2125,6 +2125,19 @@ public class Theme {
                     themeAccent.backgroundRotation = iArr9[i];
                     themeAccent.patternSlug = strArr[i];
                 }
+                if ((Theme.isHome(themeAccent) && this.name.equals("Dark Blue")) || this.name.equals("Night")) {
+                    themeAccent.myMessagesAccentColor = -10128392;
+                    themeAccent.myMessagesGradientAccentColor1 = -9026357;
+                    themeAccent.myMessagesGradientAccentColor2 = -7845452;
+                    themeAccent.myMessagesGradientAccentColor3 = -5811800;
+                    if (this.name.equals("Night")) {
+                        themeAccent.patternIntensity = -0.57f;
+                        themeAccent.backgroundOverrideColor = -9666650L;
+                        themeAccent.backgroundGradientOverrideColor1 = -13749173L;
+                        themeAccent.backgroundGradientOverrideColor2 = -8883033L;
+                        themeAccent.backgroundGradientOverrideColor3 = -13421992L;
+                    }
+                }
                 this.themeAccentsMap.put(themeAccent.id, themeAccent);
                 this.themeAccents.add(themeAccent);
             }

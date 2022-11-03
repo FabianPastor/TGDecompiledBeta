@@ -83,6 +83,9 @@ public class MentionsContainerView extends BlurredFrameLayout {
     public void onPanTransitionEnd() {
     }
 
+    protected void onScrolled(boolean z, boolean z2) {
+    }
+
     public MentionsContainerView(Context context, long j, int i, final ChatActivity chatActivity, Theme.ResourcesProvider resourcesProvider) {
         super(context, chatActivity.contentView);
         this.shouldLiftMentions = false;
@@ -600,10 +603,11 @@ public class MentionsContainerView extends BlurredFrameLayout {
                 @Override // androidx.recyclerview.widget.RecyclerView.OnScrollListener
                 public void onScrolled(RecyclerView recyclerView, int i, int i2) {
                     int findLastVisibleItemPosition = MentionsListView.this.getLayoutManager() == MentionsContainerView.this.gridLayoutManager ? MentionsContainerView.this.gridLayoutManager.findLastVisibleItemPosition() : MentionsContainerView.this.linearLayoutManager.findLastVisibleItemPosition();
-                    if ((findLastVisibleItemPosition == -1 ? 0 : findLastVisibleItemPosition) <= 0 || findLastVisibleItemPosition <= MentionsContainerView.this.adapter.getLastItemCount() - 5) {
-                        return;
+                    if ((findLastVisibleItemPosition == -1 ? 0 : findLastVisibleItemPosition) > 0 && findLastVisibleItemPosition > MentionsContainerView.this.adapter.getLastItemCount() - 5) {
+                        MentionsContainerView.this.adapter.searchForContextBotForNextOffset();
                     }
-                    MentionsContainerView.this.adapter.searchForContextBotForNextOffset();
+                    MentionsListView mentionsListView = MentionsListView.this;
+                    MentionsContainerView.this.onScrolled(!mentionsListView.canScrollVertically(-1), true ^ MentionsListView.this.canScrollVertically(1));
                 }
             });
             addItemDecoration(new RecyclerView.ItemDecoration(MentionsContainerView.this) { // from class: org.telegram.ui.Components.MentionsContainerView.MentionsListView.2

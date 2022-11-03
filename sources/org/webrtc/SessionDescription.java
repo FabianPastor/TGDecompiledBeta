@@ -1,12 +1,12 @@
 package org.webrtc;
 
 import java.util.Locale;
-/* loaded from: classes3.dex */
+/* loaded from: classes.dex */
 public class SessionDescription {
     public final String description;
     public final Type type;
 
-    /* loaded from: classes3.dex */
+    /* loaded from: classes.dex */
     public enum Type {
         OFFER,
         PRANSWER,

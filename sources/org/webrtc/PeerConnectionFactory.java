@@ -7,7 +7,7 @@ import org.webrtc.Logging;
 import org.webrtc.PeerConnection;
 import org.webrtc.audio.AudioDeviceModule;
 import org.webrtc.audio.JavaAudioDeviceModule;
-/* loaded from: classes3.dex */
+/* loaded from: classes.dex */
 public class PeerConnectionFactory {
     private static final String TAG = "PeerConnectionFactory";
     public static final String TRIAL_ENABLED = "Enabled";
@@ -69,7 +69,7 @@ public class PeerConnectionFactory {
     private static native void nativeStopInternalTracingCapture();
 
     /* JADX INFO: Access modifiers changed from: private */
-    /* loaded from: classes3.dex */
+    /* loaded from: classes.dex */
     public static class ThreadInfo {
         final Thread thread;
         final int tid;
@@ -84,7 +84,7 @@ public class PeerConnectionFactory {
         }
     }
 
-    /* loaded from: classes3.dex */
+    /* loaded from: classes.dex */
     public static class InitializationOptions {
         final Context applicationContext;
         final boolean enableInternalTracer;
@@ -106,7 +106,7 @@ public class PeerConnectionFactory {
             return new Builder(context);
         }
 
-        /* loaded from: classes3.dex */
+        /* loaded from: classes.dex */
         public static class Builder {
             private final Context applicationContext;
             private boolean enableInternalTracer;
@@ -146,7 +146,7 @@ public class PeerConnectionFactory {
         }
     }
 
-    /* loaded from: classes3.dex */
+    /* loaded from: classes.dex */
     public static class Options {
         static final int ADAPTER_TYPE_ANY = 32;
         static final int ADAPTER_TYPE_CELLULAR = 4;
@@ -175,7 +175,7 @@ public class PeerConnectionFactory {
         }
     }
 
-    /* loaded from: classes3.dex */
+    /* loaded from: classes.dex */
     public static class Builder {
         private AudioDecoderFactoryFactory audioDecoderFactoryFactory;
         private AudioDeviceModule audioDeviceModule;

@@ -4,7 +4,7 @@ import android.opengl.GLES20;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
-/* loaded from: classes3.dex */
+/* loaded from: classes.dex */
 public class GlUtil {
     public static void checkNoGLES2Error(String str) {
     }
@@ -12,7 +12,7 @@ public class GlUtil {
     private GlUtil() {
     }
 
-    /* loaded from: classes3.dex */
+    /* loaded from: classes.dex */
     public static class GlOutOfMemoryException extends RuntimeException {
         public GlOutOfMemoryException(String str) {
             super(str);

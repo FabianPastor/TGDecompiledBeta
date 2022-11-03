@@ -2,11 +2,11 @@ package org.webrtc;
 
 import android.graphics.Point;
 import android.opengl.Matrix;
-/* loaded from: classes3.dex */
+/* loaded from: classes.dex */
 public class RendererCommon {
     private static float BALANCED_VISIBLE_FRACTION = 0.5625f;
 
-    /* loaded from: classes3.dex */
+    /* loaded from: classes.dex */
     public interface GlDrawer {
         void drawOes(int i, int i2, int i3, int i4, int i5, float[] fArr, int i6, int i7, int i8, int i9, int i10, int i11, boolean z);
 
@@ -17,21 +17,21 @@ public class RendererCommon {
         void release();
     }
 
-    /* loaded from: classes3.dex */
+    /* loaded from: classes.dex */
     public interface RendererEvents {
         void onFirstFrameRendered();
 
         void onFrameResolutionChanged(int i, int i2, int i3);
     }
 
-    /* loaded from: classes3.dex */
+    /* loaded from: classes.dex */
     public enum ScalingType {
         SCALE_ASPECT_FIT,
         SCALE_ASPECT_FILL,
         SCALE_ASPECT_BALANCED
     }
 
-    /* loaded from: classes3.dex */
+    /* loaded from: classes.dex */
     public static class VideoLayoutMeasure {
         private float visibleFractionMatchOrientation;
         private float visibleFractionMismatchOrientation;
@@ -186,7 +186,7 @@ public class RendererCommon {
 
     /* JADX INFO: Access modifiers changed from: package-private */
     /* renamed from: org.webrtc.RendererCommon$1  reason: invalid class name */
-    /* loaded from: classes3.dex */
+    /* loaded from: classes.dex */
     public static /* synthetic */ class AnonymousClass1 {
         static final /* synthetic */ int[] $SwitchMap$org$webrtc$RendererCommon$ScalingType;
 

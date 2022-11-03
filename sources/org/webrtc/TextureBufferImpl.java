@@ -6,7 +6,7 @@ import java.nio.ByteBuffer;
 import java.util.concurrent.Callable;
 import org.telegram.messenger.FileLog;
 import org.webrtc.VideoFrame;
-/* loaded from: classes3.dex */
+/* loaded from: classes.dex */
 public class TextureBufferImpl implements VideoFrame.TextureBuffer {
     private final int height;
     private final int id;
@@ -21,7 +21,7 @@ public class TextureBufferImpl implements VideoFrame.TextureBuffer {
     private final YuvConverter yuvConverter;
 
     /* JADX INFO: Access modifiers changed from: package-private */
-    /* loaded from: classes3.dex */
+    /* loaded from: classes.dex */
     public interface RefCountMonitor {
         void onDestroy(TextureBufferImpl textureBufferImpl);
 

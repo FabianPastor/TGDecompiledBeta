@@ -42,7 +42,7 @@ public class DrawerUserCell extends FrameLayout implements NotificationCenter.No
         this.rect = new RectF();
         AvatarDrawable avatarDrawable = new AvatarDrawable();
         this.avatarDrawable = avatarDrawable;
-        avatarDrawable.setTextSize(AndroidUtilities.dp(12.0f));
+        avatarDrawable.setTextSize(AndroidUtilities.dp(20.0f));
         BackupImageView backupImageView = new BackupImageView(context);
         this.imageView = backupImageView;
         backupImageView.setRoundRadius(AndroidUtilities.dp(18.0f));

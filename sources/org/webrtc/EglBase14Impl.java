@@ -14,7 +14,7 @@ import org.webrtc.EglBase;
 import org.webrtc.EglBase14;
 /* JADX INFO: Access modifiers changed from: package-private */
 @TargetApi(18)
-/* loaded from: classes3.dex */
+/* loaded from: classes.dex */
 public class EglBase14Impl implements EglBase14 {
     private static final int CURRENT_SDK_VERSION = Build.VERSION.SDK_INT;
     private static final int EGLExt_SDK_VERSION = 18;
@@ -36,7 +36,7 @@ public class EglBase14Impl implements EglBase14 {
         return i >= 18;
     }
 
-    /* loaded from: classes3.dex */
+    /* loaded from: classes.dex */
     public static class Context implements EglBase14.Context {
         private final EGLContext egl14Context;
 
@@ -131,7 +131,7 @@ public class EglBase14Impl implements EglBase14 {
 
     @Override // org.webrtc.EglBase
     /* renamed from: getEglBaseContext  reason: collision with other method in class */
-    public Context mo2457getEglBaseContext() {
+    public Context mo2459getEglBaseContext() {
         return new Context(this.eglContext);
     }
 

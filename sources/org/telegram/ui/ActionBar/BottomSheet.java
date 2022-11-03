@@ -1661,7 +1661,7 @@ public class BottomSheet extends Dialog {
         try {
             super.dismiss();
         } catch (Exception e) {
-            FileLog.e(e);
+            FileLog.e((Throwable) e, false);
         }
     }
 

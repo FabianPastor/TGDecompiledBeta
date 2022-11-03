@@ -1277,8 +1277,9 @@ public class MessageObject {
             tLRPC$User = MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(this.messageOwner.from_id.user_id));
         }
         TLRPC$TL_game tLRPC$TL_game = null;
-        if (this.replyMessageObject != null && getMedia(this.messageOwner) != null && getMedia(this.messageOwner).game != null) {
-            tLRPC$TL_game = getMedia(this.messageOwner).game;
+        MessageObject messageObject = this.replyMessageObject;
+        if (messageObject != null && getMedia(messageObject) != null && getMedia(this.replyMessageObject).game != null) {
+            tLRPC$TL_game = getMedia(this.replyMessageObject).game;
         }
         if (tLRPC$TL_game == null) {
             if (tLRPC$User == null || tLRPC$User.id != UserConfig.getInstance(this.currentAccount).getClientUserId()) {
@@ -1322,12 +1323,12 @@ public class MessageObject {
             FileLog.e(e);
             str = "<error>";
         }
-        if (this.replyMessageObject != null && (getMedia(this.messageOwner) instanceof TLRPC$TL_messageMediaInvoice)) {
-            TLRPC$Message tLRPC$Message = this.messageOwner;
-            if (tLRPC$Message.action.recurring_init) {
-                this.messageText = LocaleController.formatString(R.string.PaymentSuccessfullyPaidRecurrent, str, firstName, getMedia(tLRPC$Message).title);
+        MessageObject messageObject = this.replyMessageObject;
+        if (messageObject != null && (getMedia(messageObject) instanceof TLRPC$TL_messageMediaInvoice)) {
+            if (this.messageOwner.action.recurring_init) {
+                this.messageText = LocaleController.formatString(R.string.PaymentSuccessfullyPaidRecurrent, str, firstName, getMedia(this.replyMessageObject).title);
             } else {
-                this.messageText = LocaleController.formatString("PaymentSuccessfullyPaid", R.string.PaymentSuccessfullyPaid, str, firstName, getMedia(tLRPC$Message).title);
+                this.messageText = LocaleController.formatString("PaymentSuccessfullyPaid", R.string.PaymentSuccessfullyPaid, str, firstName, getMedia(this.replyMessageObject).title);
             }
         } else if (this.messageOwner.action.recurring_init) {
             this.messageText = LocaleController.formatString(R.string.PaymentSuccessfullyPaidNoItemRecurrent, str, firstName);
@@ -1405,7 +1406,7 @@ public class MessageObject {
                     }
                     this.messageText = replaceWithLink(string6, "un1", tLRPC$Chat7);
                     return;
-                } else if (getMedia(this.messageOwner) instanceof TLRPC$TL_messageMediaDocument) {
+                } else if (getMedia(this.replyMessageObject) instanceof TLRPC$TL_messageMediaDocument) {
                     String string7 = LocaleController.getString("ActionPinnedFile", R.string.ActionPinnedFile);
                     TLRPC$Chat tLRPC$Chat8 = tLRPC$User;
                     if (tLRPC$User == null) {
@@ -1413,7 +1414,7 @@ public class MessageObject {
                     }
                     this.messageText = replaceWithLink(string7, "un1", tLRPC$Chat8);
                     return;
-                } else if (getMedia(this.messageOwner) instanceof TLRPC$TL_messageMediaGeo) {
+                } else if (getMedia(this.replyMessageObject) instanceof TLRPC$TL_messageMediaGeo) {
                     String string8 = LocaleController.getString("ActionPinnedGeo", R.string.ActionPinnedGeo);
                     TLRPC$Chat tLRPC$Chat9 = tLRPC$User;
                     if (tLRPC$User == null) {
@@ -1421,7 +1422,7 @@ public class MessageObject {
                     }
                     this.messageText = replaceWithLink(string8, "un1", tLRPC$Chat9);
                     return;
-                } else if (getMedia(this.messageOwner) instanceof TLRPC$TL_messageMediaGeoLive) {
+                } else if (getMedia(this.replyMessageObject) instanceof TLRPC$TL_messageMediaGeoLive) {
                     String string9 = LocaleController.getString("ActionPinnedGeoLive", R.string.ActionPinnedGeoLive);
                     TLRPC$Chat tLRPC$Chat10 = tLRPC$User;
                     if (tLRPC$User == null) {
@@ -1429,7 +1430,7 @@ public class MessageObject {
                     }
                     this.messageText = replaceWithLink(string9, "un1", tLRPC$Chat10);
                     return;
-                } else if (getMedia(this.messageOwner) instanceof TLRPC$TL_messageMediaContact) {
+                } else if (getMedia(this.replyMessageObject) instanceof TLRPC$TL_messageMediaContact) {
                     String string10 = LocaleController.getString("ActionPinnedContact", R.string.ActionPinnedContact);
                     TLRPC$Chat tLRPC$Chat11 = tLRPC$User;
                     if (tLRPC$User == null) {
@@ -1437,8 +1438,8 @@ public class MessageObject {
                     }
                     this.messageText = replaceWithLink(string10, "un1", tLRPC$Chat11);
                     return;
-                } else if (getMedia(this.messageOwner) instanceof TLRPC$TL_messageMediaPoll) {
-                    if (((TLRPC$TL_messageMediaPoll) getMedia(this.messageOwner)).poll.quiz) {
+                } else if (getMedia(this.replyMessageObject) instanceof TLRPC$TL_messageMediaPoll) {
+                    if (((TLRPC$TL_messageMediaPoll) getMedia(this.replyMessageObject)).poll.quiz) {
                         String string11 = LocaleController.getString("ActionPinnedQuiz", R.string.ActionPinnedQuiz);
                         TLRPC$Chat tLRPC$Chat12 = tLRPC$User;
                         if (tLRPC$User == null) {
@@ -1454,7 +1455,7 @@ public class MessageObject {
                     }
                     this.messageText = replaceWithLink(string12, "un1", tLRPC$Chat13);
                     return;
-                } else if (getMedia(this.messageOwner) instanceof TLRPC$TL_messageMediaPhoto) {
+                } else if (getMedia(this.replyMessageObject) instanceof TLRPC$TL_messageMediaPhoto) {
                     String string13 = LocaleController.getString("ActionPinnedPhoto", R.string.ActionPinnedPhoto);
                     TLRPC$Chat tLRPC$Chat14 = tLRPC$User;
                     if (tLRPC$User == null) {
@@ -1462,9 +1463,9 @@ public class MessageObject {
                     }
                     this.messageText = replaceWithLink(string13, "un1", tLRPC$Chat14);
                     return;
-                } else if (getMedia(this.messageOwner) instanceof TLRPC$TL_messageMediaGame) {
+                } else if (getMedia(this.replyMessageObject) instanceof TLRPC$TL_messageMediaGame) {
                     int i = R.string.ActionPinnedGame;
-                    String formatString = LocaleController.formatString("ActionPinnedGame", i, "🎮 " + getMedia(this.messageOwner).game.title);
+                    String formatString = LocaleController.formatString("ActionPinnedGame", i, "🎮 " + getMedia(this.replyMessageObject).game.title);
                     TLRPC$Chat tLRPC$Chat15 = tLRPC$User;
                     if (tLRPC$User == null) {
                         tLRPC$Chat15 = tLRPC$Chat;
@@ -2015,7 +2016,7 @@ public class MessageObject {
     /* JADX WARN: Removed duplicated region for block: B:280:0x076c  */
     /* JADX WARN: Removed duplicated region for block: B:284:0x07a6  */
     /* JADX WARN: Removed duplicated region for block: B:537:0x0ebc  */
-    /* JADX WARN: Removed duplicated region for block: B:641:0x1147  */
+    /* JADX WARN: Removed duplicated region for block: B:641:0x1148  */
     /* JADX WARN: Removed duplicated region for block: B:661:? A[RETURN, SYNTHETIC] */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
@@ -2023,10 +2024,18 @@ public class MessageObject {
     */
     private void updateMessageText(java.util.AbstractMap<java.lang.Long, org.telegram.tgnet.TLRPC$User> r23, java.util.AbstractMap<java.lang.Long, org.telegram.tgnet.TLRPC$Chat> r24, androidx.collection.LongSparseArray<org.telegram.tgnet.TLRPC$User> r25, androidx.collection.LongSparseArray<org.telegram.tgnet.TLRPC$Chat> r26) {
         /*
-            Method dump skipped, instructions count: 4426
+            Method dump skipped, instructions count: 4427
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessageObject.updateMessageText(java.util.AbstractMap, java.util.AbstractMap, androidx.collection.LongSparseArray, androidx.collection.LongSparseArray):void");
+    }
+
+    public static TLRPC$MessageMedia getMedia(MessageObject messageObject) {
+        TLRPC$Message tLRPC$Message;
+        if (messageObject == null || (tLRPC$Message = messageObject.messageOwner) == null) {
+            return null;
+        }
+        return getMedia(tLRPC$Message);
     }
 
     public static TLRPC$MessageMedia getMedia(TLRPC$Message tLRPC$Message) {

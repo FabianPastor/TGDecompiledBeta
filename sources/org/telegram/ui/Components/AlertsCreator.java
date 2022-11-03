@@ -93,6 +93,7 @@ import org.telegram.tgnet.TLRPC$TL_account_saveSecureValue;
 import org.telegram.tgnet.TLRPC$TL_account_sendChangePhoneCode;
 import org.telegram.tgnet.TLRPC$TL_account_sendConfirmPhoneCode;
 import org.telegram.tgnet.TLRPC$TL_account_updateProfile;
+import org.telegram.tgnet.TLRPC$TL_account_updateUsername;
 import org.telegram.tgnet.TLRPC$TL_account_verifyEmail;
 import org.telegram.tgnet.TLRPC$TL_account_verifyPhone;
 import org.telegram.tgnet.TLRPC$TL_auth_resendCode;
@@ -141,7 +142,6 @@ import org.telegram.tgnet.TLRPC$TL_messages_startHistoryImport;
 import org.telegram.tgnet.TLRPC$TL_payments_sendPaymentForm;
 import org.telegram.tgnet.TLRPC$TL_payments_validateRequestedInfo;
 import org.telegram.tgnet.TLRPC$TL_phone_inviteToGroupCall;
-import org.telegram.tgnet.TLRPC$TL_updateUserName;
 import org.telegram.tgnet.TLRPC$Updates;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.tgnet.TLRPC$UserFull;
@@ -626,7 +626,7 @@ public class AlertsCreator {
                 } else {
                     showSimpleAlert(baseFragment, LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred));
                 }
-            } else if (tLObject instanceof TLRPC$TL_updateUserName) {
+            } else if (tLObject instanceof TLRPC$TL_account_updateUsername) {
                 str.hashCode();
                 if (str.equals("USERNAME_INVALID")) {
                     showSimpleAlert(baseFragment, LocaleController.getString("UsernameInvalid", R.string.UsernameInvalid));

@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.BotWebViewVibrationEffect;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
@@ -493,8 +494,10 @@ public class ChangeUsernameActivity extends BaseFragment {
     public void focusUsernameField(boolean z) {
         InputCell inputCell = this.inputCell;
         if (inputCell != null) {
-            EditTextBoldCursor editTextBoldCursor = inputCell.field;
-            editTextBoldCursor.setSelection(editTextBoldCursor.length());
+            if (!inputCell.field.isFocused()) {
+                EditTextBoldCursor editTextBoldCursor = this.inputCell.field;
+                editTextBoldCursor.setSelection(editTextBoldCursor.length());
+            }
             this.inputCell.field.requestFocus();
             if (!z) {
                 return;
@@ -511,7 +514,7 @@ public class ChangeUsernameActivity extends BaseFragment {
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1810onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1813onCreateViewHolder(ViewGroup viewGroup, int i) {
             if (i == 0) {
                 HeaderCell headerCell = new HeaderCell(ChangeUsernameActivity.this.getContext());
                 headerCell.setBackgroundColor(ChangeUsernameActivity.this.getThemedColor("windowBackgroundWhite"));
@@ -769,6 +772,7 @@ public class ChangeUsernameActivity extends BaseFragment {
     /* loaded from: classes3.dex */
     public class InputCell extends FrameLayout {
         public EditTextBoldCursor field;
+        public TextView tme;
 
         public InputCell(Context context) {
             super(context);
@@ -847,18 +851,20 @@ public class ChangeUsernameActivity extends BaseFragment {
                 }
             });
             TextView textView = new TextView(getContext());
+            this.tme = textView;
             textView.setMaxLines(1);
-            textView.setLines(1);
-            textView.setPadding(0, 0, 0, 0);
-            textView.setSingleLine(true);
-            textView.setText(ChangeUsernameActivity.this.getMessagesController().linkPrefix + "/");
-            textView.setTextSize(1, 17.0f);
-            textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
-            textView.setGravity((!LocaleController.isRTL ? 3 : i) | 48);
-            textView.setTranslationY(-AndroidUtilities.dp(3.0f));
-            linearLayout.addView(textView, LayoutHelper.createLinear(-2, -2, 0.0f, 80));
-            linearLayout.addView(this.field, LayoutHelper.createLinear(-2, -2, 1.0f, 80));
-            addView(linearLayout, LayoutHelper.createFrame(-1, -1.0f, 48, 21.0f, 15.0f, 21.0f, 15.0f));
+            this.tme.setLines(1);
+            this.tme.setPadding(0, 0, 0, 0);
+            this.tme.setSingleLine(true);
+            TextView textView2 = this.tme;
+            textView2.setText(ChangeUsernameActivity.this.getMessagesController().linkPrefix + "/");
+            this.tme.setTextSize(1, 17.0f);
+            this.tme.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+            this.tme.setGravity((!LocaleController.isRTL ? 3 : i) | 48);
+            this.tme.setTranslationY(-AndroidUtilities.dp(3.0f));
+            linearLayout.addView(this.tme, LayoutHelper.createLinear(-2, -2, 0.0f, 16, 21, 15, 0, 15));
+            linearLayout.addView(this.field, LayoutHelper.createLinear(-2, -2, 1.0f, 16, 0, 15, 21, 15));
+            addView(linearLayout, LayoutHelper.createFrame(-1, -1, 48));
             setBackgroundColor(ChangeUsernameActivity.this.getThemedColor("windowBackgroundWhite"));
         }
 
@@ -1362,7 +1368,8 @@ public class ChangeUsernameActivity extends BaseFragment {
         if (this.username.startsWith("@")) {
             this.username = this.username.substring(1);
         }
-        if (!checkUserName(this.username, true)) {
+        if (!checkUserName(this.username, false)) {
+            shakeIfOff();
             return;
         }
         TLRPC$User currentUser = UserConfig.getInstance(this.currentAccount).getCurrentUser();
@@ -1457,6 +1464,7 @@ public class ChangeUsernameActivity extends BaseFragment {
             FileLog.e(e);
         }
         AlertsCreator.processError(this.currentAccount, tLRPC$TL_error, this, tLRPC$TL_account_updateUsername, new Object[0]);
+        shakeIfOff();
     }
 
     /* JADX INFO: Access modifiers changed from: private */
@@ -1469,6 +1477,25 @@ public class ChangeUsernameActivity extends BaseFragment {
         if (z) {
             focusUsernameField(false);
         }
+    }
+
+    public void shakeIfOff() {
+        if (this.listView == null) {
+            return;
+        }
+        for (int i = 0; i < this.listView.getChildCount(); i++) {
+            View childAt = this.listView.getChildAt(i);
+            if (childAt instanceof HeaderCell) {
+                AndroidUtilities.shakeViewSpring(((HeaderCell) childAt).getTextView());
+            } else if (childAt instanceof UsernameHelpCell) {
+                AndroidUtilities.shakeViewSpring(childAt);
+            } else if (childAt instanceof InputCell) {
+                InputCell inputCell = (InputCell) childAt;
+                AndroidUtilities.shakeViewSpring(inputCell.field);
+                AndroidUtilities.shakeViewSpring(inputCell.tme);
+            }
+        }
+        BotWebViewVibrationEffect.APP_ERROR.vibrate();
     }
 
     @Override // org.telegram.ui.ActionBar.BaseFragment

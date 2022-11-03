@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import org.webrtc.MediaStreamTrack;
 import org.webrtc.RtpParameters;
-/* loaded from: classes3.dex */
+/* loaded from: classes.dex */
 public class RtpTransceiver {
     private RtpReceiver cachedReceiver;
     private RtpSender cachedSender;
@@ -31,7 +31,7 @@ public class RtpTransceiver {
 
     private static native boolean nativeStopped(long j);
 
-    /* loaded from: classes3.dex */
+    /* loaded from: classes.dex */
     public enum RtpTransceiverDirection {
         SEND_RECV(0),
         SEND_ONLY(1),
@@ -61,7 +61,7 @@ public class RtpTransceiver {
         }
     }
 
-    /* loaded from: classes3.dex */
+    /* loaded from: classes.dex */
     public static final class RtpTransceiverInit {
         private final RtpTransceiverDirection direction;
         private final List<RtpParameters.Encoding> sendEncodings;

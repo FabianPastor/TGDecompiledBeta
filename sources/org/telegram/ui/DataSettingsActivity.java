@@ -901,7 +901,7 @@ public class DataSettingsActivity extends BaseFragment {
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1810onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1813onCreateViewHolder(ViewGroup viewGroup, int i) {
             View shadowSectionCell;
             if (i == 0) {
                 shadowSectionCell = new ShadowSectionCell(this.mContext);

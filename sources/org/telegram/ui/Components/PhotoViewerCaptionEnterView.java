@@ -119,6 +119,10 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         return MessagesController.getInstance(this.currentAccount).getCaptionMaxLengthLimit() - this.codePointCount;
     }
 
+    public int getCodePointCount() {
+        return this.codePointCount;
+    }
+
     public PhotoViewerCaptionEnterView(Context context, SizeNotifierFrameLayoutPhoto sizeNotifierFrameLayoutPhoto, View view, Theme.ResourcesProvider resourcesProvider) {
         super(context);
         this.sendButtonEnabled = true;

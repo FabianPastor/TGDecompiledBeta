@@ -4067,6 +4067,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     public boolean addOrRemoveSelectedDialog(long j, View view) {
+        if (getMessagesController().isForum(j)) {
+            return false;
+        }
         if (this.selectedDialogs.contains(Long.valueOf(j))) {
             this.selectedDialogs.remove(Long.valueOf(j));
             if (view instanceof DialogCell) {

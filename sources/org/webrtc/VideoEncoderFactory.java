@@ -1,8 +1,8 @@
 package org.webrtc;
-/* loaded from: classes3.dex */
+/* loaded from: classes.dex */
 public interface VideoEncoderFactory {
 
-    /* loaded from: classes3.dex */
+    /* loaded from: classes.dex */
     public interface VideoEncoderSelector {
         @CalledByNative("VideoEncoderSelector")
         VideoCodecInfo onAvailableBitrate(int i);
@@ -27,7 +27,7 @@ public interface VideoEncoderFactory {
     VideoCodecInfo[] getSupportedCodecs();
 
     /* renamed from: org.webrtc.VideoEncoderFactory$-CC  reason: invalid class name */
-    /* loaded from: classes3.dex */
+    /* loaded from: classes.dex */
     public final /* synthetic */ class CC {
         @CalledByNative
         public static VideoEncoderSelector $default$getEncoderSelector(VideoEncoderFactory videoEncoderFactory) {
