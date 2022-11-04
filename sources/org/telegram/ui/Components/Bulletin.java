@@ -1361,7 +1361,7 @@ public class Bulletin {
     public static class LottieLayout extends ButtonLayout {
         public RLottieImageView imageView;
         private int textColor;
-        public TextView textView;
+        public LinkSpanDrawable.LinksTextView textView;
 
         public LottieLayout(Context context, Theme.ResourcesProvider resourcesProvider) {
             super(context, resourcesProvider);
@@ -1371,7 +1371,8 @@ public class Bulletin {
             addView(this.imageView, LayoutHelper.createFrameRelatively(56.0f, 48.0f, 8388627));
             LinkSpanDrawable.LinksTextView linksTextView = new LinkSpanDrawable.LinksTextView(context);
             this.textView = linksTextView;
-            linksTextView.setSingleLine();
+            linksTextView.setDisablePaddingsOffset(true);
+            this.textView.setSingleLine();
             this.textView.setTypeface(Typeface.SANS_SERIF);
             this.textView.setTextSize(1, 15.0f);
             this.textView.setEllipsize(TextUtils.TruncateAt.END);

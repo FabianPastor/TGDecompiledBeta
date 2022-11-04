@@ -6815,7 +6815,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
 
                 @Override // org.telegram.ui.Components.ChatAttachAlert.ChatAttachViewDelegate
                 public /* synthetic */ void doOnIdle(Runnable runnable) {
-                    runnable.run();
+                    ChatAttachAlert.ChatAttachViewDelegate.CC.$default$doOnIdle(this, runnable);
                 }
 
                 @Override // org.telegram.ui.Components.ChatAttachAlert.ChatAttachViewDelegate

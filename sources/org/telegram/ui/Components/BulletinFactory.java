@@ -275,6 +275,33 @@ public final class BulletinFactory {
         return create(lottieLayout, 1500);
     }
 
+    public Bulletin createCaptionLimitBulletin(int i, final Runnable runnable) {
+        Bulletin.LottieLayout lottieLayout = new Bulletin.LottieLayout(getContext(), null);
+        lottieLayout.setAnimation(R.raw.caption_limit, new String[0]);
+        String formatPluralString = LocaleController.formatPluralString("ChannelCaptionLimitPremiumPromo", i, new Object[0]);
+        SpannableStringBuilder valueOf = SpannableStringBuilder.valueOf(AndroidUtilities.replaceTags(formatPluralString));
+        int indexOf = formatPluralString.indexOf(42);
+        int i2 = indexOf + 1;
+        int indexOf2 = formatPluralString.indexOf(42, i2);
+        valueOf.replace(indexOf, indexOf2 + 1, (CharSequence) formatPluralString.substring(i2, indexOf2));
+        valueOf.setSpan(new ClickableSpan(this) { // from class: org.telegram.ui.Components.BulletinFactory.1
+            @Override // android.text.style.ClickableSpan
+            public void onClick(View view) {
+                runnable.run();
+            }
+
+            @Override // android.text.style.ClickableSpan, android.text.style.CharacterStyle
+            public void updateDrawState(TextPaint textPaint) {
+                super.updateDrawState(textPaint);
+                textPaint.setUnderlineText(false);
+            }
+        }, indexOf, indexOf2 - 1, 33);
+        lottieLayout.textView.setText(valueOf);
+        lottieLayout.textView.setSingleLine(false);
+        lottieLayout.textView.setMaxLines(3);
+        return create(lottieLayout, 5000);
+    }
+
     public Bulletin createRestrictVoiceMessagesPremiumBulletin() {
         Bulletin.LottieLayout lottieLayout = new Bulletin.LottieLayout(getContext(), null);
         lottieLayout.setAnimation(R.raw.voip_muted, new String[0]);
@@ -283,7 +310,7 @@ public final class BulletinFactory {
         int indexOf = string.indexOf(42);
         int lastIndexOf = string.lastIndexOf(42);
         spannableStringBuilder.replace(indexOf, lastIndexOf + 1, (CharSequence) string.substring(indexOf + 1, lastIndexOf));
-        spannableStringBuilder.setSpan(new ClickableSpan() { // from class: org.telegram.ui.Components.BulletinFactory.1
+        spannableStringBuilder.setSpan(new ClickableSpan() { // from class: org.telegram.ui.Components.BulletinFactory.2
             @Override // android.text.style.ClickableSpan
             public void onClick(View view) {
                 BulletinFactory.this.fragment.presentFragment(new PremiumPreviewFragment("settings"));
@@ -483,7 +510,7 @@ public final class BulletinFactory {
             r13[r3] = r1
             r0.setAnimation(r12, r13)
         Lc0:
-            android.widget.TextView r12 = r0.textView
+            org.telegram.ui.Components.LinkSpanDrawable$LinksTextView r12 = r0.textView
             r12.setText(r11)
             r11 = 1500(0x5dc, float:2.102E-42)
             org.telegram.ui.Components.Bulletin r10 = org.telegram.ui.Components.Bulletin.make(r10, r0, r11)
@@ -627,7 +654,7 @@ public final class BulletinFactory {
             r3 = r5
             r5 = 300(0x12c, float:4.2E-43)
         La3:
-            android.widget.TextView r6 = r8.textView
+            org.telegram.ui.Components.LinkSpanDrawable$LinksTextView r6 = r8.textView
             r6.setText(r3)
             if (r5 <= 0) goto Lb3
             org.telegram.ui.Components.BulletinFactory$$ExternalSyntheticLambda1 r3 = new org.telegram.ui.Components.BulletinFactory$$ExternalSyntheticLambda1

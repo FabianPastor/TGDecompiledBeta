@@ -25,6 +25,7 @@ import org.telegram.tgnet.TLRPC$ChatPhoto;
 import org.telegram.tgnet.TLRPC$ChatReactions;
 import org.telegram.tgnet.TLRPC$GroupCall;
 import org.telegram.tgnet.TLRPC$InputPeer;
+import org.telegram.tgnet.TLRPC$Message;
 import org.telegram.tgnet.TLRPC$Peer;
 import org.telegram.tgnet.TLRPC$TL_channel;
 import org.telegram.tgnet.TLRPC$TL_channelForbidden;
@@ -1714,6 +1715,26 @@ public class ChatObject {
 
     public static boolean canManageTopic(int i, TLRPC$Chat tLRPC$Chat, int i2) {
         return canManageTopics(tLRPC$Chat) || isMyTopic(i, tLRPC$Chat, i2);
+    }
+
+    public static boolean canDeleteTopic(int i, TLRPC$Chat tLRPC$Chat, int i2) {
+        return tLRPC$Chat != null && canDeleteTopic(i, tLRPC$Chat, MessagesController.getInstance(i).getTopicsController().findTopic(tLRPC$Chat.id, i2));
+    }
+
+    public static boolean canDeleteTopic(int i, TLRPC$Chat tLRPC$Chat, TLRPC$TL_forumTopic tLRPC$TL_forumTopic) {
+        TLRPC$Message tLRPC$Message;
+        TLRPC$Message tLRPC$Message2;
+        if (!canUserDoAction(tLRPC$Chat, 13)) {
+            if (!isMyTopic(i, tLRPC$TL_forumTopic) || (tLRPC$Message = tLRPC$TL_forumTopic.topMessage) == null || (tLRPC$Message2 = tLRPC$TL_forumTopic.topicStartMessage) == null) {
+                return false;
+            }
+            int i2 = tLRPC$Message.id - tLRPC$Message2.id;
+            ArrayList<MessageObject> arrayList = tLRPC$TL_forumTopic.groupedMessages;
+            if (i2 > Math.max(1, arrayList == null ? 0 : arrayList.size()) || !MessageObject.peersEqual(tLRPC$TL_forumTopic.from_id, tLRPC$TL_forumTopic.topMessage.from_id)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static boolean isMyTopic(int i, TLRPC$TL_forumTopic tLRPC$TL_forumTopic) {

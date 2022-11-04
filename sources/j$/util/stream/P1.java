@@ -1,9 +1,8 @@
 package j$.util.stream;
 
 import j$.util.function.Consumer;
-/* JADX INFO: Access modifiers changed from: package-private */
 /* loaded from: classes2.dex */
-public final class P1 extends R1 implements InterfaceCLASSNAMEw1 {
+final class P1 extends R1 implements InterfaceCLASSNAMEw1 {
     /* JADX INFO: Access modifiers changed from: package-private */
     public P1(InterfaceCLASSNAMEw1 interfaceCLASSNAMEw1, InterfaceCLASSNAMEw1 interfaceCLASSNAMEw12) {
         super(interfaceCLASSNAMEw1, interfaceCLASSNAMEw12);

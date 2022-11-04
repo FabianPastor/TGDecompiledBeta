@@ -1798,7 +1798,7 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1821onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1817onCreateViewHolder(ViewGroup viewGroup, int i) {
             View imageViewEmoji;
             if (i == this.VIEW_TYPE_SEARCH) {
                 imageViewEmoji = new View(this, SelectAnimatedEmojiDialog.this.getContext()) { // from class: org.telegram.ui.SelectAnimatedEmojiDialog.SearchAdapter.1
@@ -1999,7 +1999,7 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1821onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1817onCreateViewHolder(ViewGroup viewGroup, int i) {
             TextView textView;
             if (i == this.VIEW_TYPE_HEADER) {
                 SelectAnimatedEmojiDialog selectAnimatedEmojiDialog = SelectAnimatedEmojiDialog.this;
@@ -3141,7 +3141,7 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
         this.emojiTabs.updateEmojiPacks(this.packs);
     }
 
-    /* JADX WARN: Type inference failed for: r5v2, types: [int, boolean] */
+    /* JADX WARN: Type inference failed for: r5v2, types: [boolean, int] */
     public void expand(int i, View view) {
         ?? r5;
         int size;

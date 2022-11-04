@@ -5,6 +5,10 @@ import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Canvas;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.AnimatedVectorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
@@ -24,6 +28,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
@@ -49,11 +54,13 @@ import org.telegram.ui.Cells.SharedDocumentCell;
 import org.telegram.ui.Cells.SharedLinkCell;
 import org.telegram.ui.Cells.SharedPhotoVideoCell;
 import org.telegram.ui.ChatActivity;
+import org.telegram.ui.Components.Premium.PremiumFeatureBottomSheet;
 import org.telegram.ui.Components.ViewPagerFixed;
 import org.telegram.ui.DialogsActivity;
 import org.telegram.ui.FilteredSearchView;
 /* loaded from: classes3.dex */
 public class SearchViewPager extends ViewPagerFixed implements FilteredSearchView.UiCallback {
+    private ActionBarMenu actionMode;
     int animateFromCount;
     private boolean attached;
     ChatPreviewDelegate chatPreviewDelegate;
@@ -61,6 +68,7 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
     private ArrayList<FiltersView.MediaFilterData> currentSearchFilters;
     private ActionBarMenuItem deleteItem;
     public DialogsSearchAdapter dialogsSearchAdapter;
+    private SearchDownloadsContainer downloadsContainer;
     public StickerEmptyView emptyView;
     private FilteredSearchView.Delegate filteredSearchViewDelegate;
     private final int folderId;
@@ -81,6 +89,7 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
     private HashMap<FilteredSearchView.MessageHashId, MessageObject> selectedFiles;
     private NumberTextView selectedMessagesCountTextView;
     private boolean showOnlyDialogsAdapter;
+    private ActionBarMenuItem speedItem;
     private final ViewPagerAdapter viewPagerAdapter;
 
     /* loaded from: classes3.dex */
@@ -239,6 +248,14 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
         setAdapter(viewPagerAdapter);
     }
 
+    public ActionBarMenu getActionMode() {
+        return this.actionMode;
+    }
+
+    public ActionBarMenuItem getSpeedItem() {
+        return this.speedItem;
+    }
+
     public void onTextChanged(String str) {
         View currentView = getCurrentView();
         boolean z = true;
@@ -336,6 +353,10 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
         }
     }
 
+    public SearchDownloadsContainer getDownloadsContainer() {
+        return this.downloadsContainer;
+    }
+
     public void onResume() {
         DialogsSearchAdapter dialogsSearchAdapter = this.dialogsSearchAdapter;
         if (dialogsSearchAdapter != null) {
@@ -368,25 +389,32 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
         }
         if (z && !this.parent.getActionBar().actionModeIsExist("search_view_pager")) {
             ActionBarMenu createActionMode = this.parent.getActionBar().createActionMode(true, "search_view_pager");
+            this.actionMode = createActionMode;
             NumberTextView numberTextView = new NumberTextView(createActionMode.getContext());
             this.selectedMessagesCountTextView = numberTextView;
             numberTextView.setTextSize(18);
             this.selectedMessagesCountTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             this.selectedMessagesCountTextView.setTextColor(Theme.getColor("actionBarActionModeDefaultIcon"));
-            createActionMode.addView(this.selectedMessagesCountTextView, LayoutHelper.createLinear(0, -1, 1.0f, 72, 0, 0, 0));
+            this.actionMode.addView(this.selectedMessagesCountTextView, LayoutHelper.createLinear(0, -1, 1.0f, 72, 0, 0, 0));
             this.selectedMessagesCountTextView.setOnTouchListener(SearchViewPager$$ExternalSyntheticLambda2.INSTANCE);
-            this.gotoItem = createActionMode.addItemWithWidth(200, R.drawable.msg_message, AndroidUtilities.dp(54.0f), LocaleController.getString("AccDescrGoToMessage", R.string.AccDescrGoToMessage));
-            this.forwardItem = createActionMode.addItemWithWidth(201, R.drawable.msg_forward, AndroidUtilities.dp(54.0f), LocaleController.getString("Forward", R.string.Forward));
-            this.deleteItem = createActionMode.addItemWithWidth(202, R.drawable.msg_delete, AndroidUtilities.dp(54.0f), LocaleController.getString("Delete", R.string.Delete));
+            ActionBarMenuItem addItemWithWidth = this.actionMode.addItemWithWidth(203, R.drawable.avd_speed, AndroidUtilities.dp(54.0f), LocaleController.getString("AccDescrPremiumSpeed", R.string.AccDescrPremiumSpeed));
+            this.speedItem = addItemWithWidth;
+            addItemWithWidth.getIconView().setColorFilter(new PorterDuffColorFilter(Theme.getColor("actionBarActionModeDefaultIcon"), PorterDuff.Mode.SRC_IN));
+            this.gotoItem = this.actionMode.addItemWithWidth(200, R.drawable.msg_message, AndroidUtilities.dp(54.0f), LocaleController.getString("AccDescrGoToMessage", R.string.AccDescrGoToMessage));
+            this.forwardItem = this.actionMode.addItemWithWidth(201, R.drawable.msg_forward, AndroidUtilities.dp(54.0f), LocaleController.getString("Forward", R.string.Forward));
+            this.deleteItem = this.actionMode.addItemWithWidth(202, R.drawable.msg_delete, AndroidUtilities.dp(54.0f), LocaleController.getString("Delete", R.string.Delete));
         }
         if (this.parent.getActionBar().getBackButton().getDrawable() instanceof MenuDrawable) {
-            this.parent.getActionBar().setBackButtonDrawable(new BackDrawable(false));
+            BackDrawable backDrawable = new BackDrawable(false);
+            this.parent.getActionBar().setBackButtonDrawable(backDrawable);
+            backDrawable.setColorFilter(null);
         }
         this.isActionModeShowed = z;
         if (z) {
             AndroidUtilities.hideKeyboard(this.parent.getParentActivity().getCurrentFocus());
             this.parent.getActionBar().showActionMode();
             this.selectedMessagesCountTextView.setNumber(this.selectedFiles.size(), false);
+            this.speedItem.setVisibility(isSpeedItemVisible() ? 0 : 8);
             this.gotoItem.setVisibility(0);
             this.forwardItem.setVisibility(0);
             this.deleteItem.setVisibility(0);
@@ -415,53 +443,65 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
         }
     }
 
-    public void onActionBarItemClick(int i) {
-        if (i != 202) {
-            if (i == 200) {
-                if (this.selectedFiles.size() != 1) {
-                    return;
+    private boolean isSpeedItemVisible() {
+        if (!UserConfig.getInstance(this.currentAccount).isPremium() && !MessagesController.getInstance(this.currentAccount).premiumLocked) {
+            for (MessageObject messageObject : this.selectedFiles.values()) {
+                if (messageObject.getDocument() != null && messageObject.getDocument().size >= NUM) {
+                    return true;
                 }
-                goToMessage(this.selectedFiles.values().iterator().next());
-                return;
-            } else if (i != 201) {
-                return;
-            } else {
-                Bundle bundle = new Bundle();
-                bundle.putBoolean("onlySelect", true);
-                bundle.putInt("dialogsType", 3);
-                DialogsActivity dialogsActivity = new DialogsActivity(bundle);
-                dialogsActivity.setDelegate(new DialogsActivity.DialogsActivityDelegate() { // from class: org.telegram.ui.Components.SearchViewPager$$ExternalSyntheticLambda3
-                    @Override // org.telegram.ui.DialogsActivity.DialogsActivityDelegate
-                    public final void didSelectDialogs(DialogsActivity dialogsActivity2, ArrayList arrayList, CharSequence charSequence, boolean z) {
-                        SearchViewPager.this.lambda$onActionBarItemClick$3(dialogsActivity2, arrayList, charSequence, z);
-                    }
-                });
-                this.parent.presentFragment(dialogsActivity);
-                return;
             }
         }
-        BaseFragment baseFragment = this.parent;
-        if (baseFragment == null || baseFragment.getParentActivity() == null) {
-            return;
-        }
-        final ArrayList arrayList = new ArrayList(this.selectedFiles.values());
-        AlertDialog.Builder builder = new AlertDialog.Builder(this.parent.getParentActivity());
-        builder.setTitle(LocaleController.formatPluralString("RemoveDocumentsTitle", this.selectedFiles.size(), new Object[0]));
-        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder();
-        spannableStringBuilder.append((CharSequence) AndroidUtilities.replaceTags(LocaleController.formatPluralString("RemoveDocumentsMessage", this.selectedFiles.size(), new Object[0]))).append((CharSequence) "\n\n").append((CharSequence) LocaleController.getString("RemoveDocumentsAlertMessage", R.string.RemoveDocumentsAlertMessage));
-        builder.setMessage(spannableStringBuilder);
-        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), SearchViewPager$$ExternalSyntheticLambda1.INSTANCE);
-        builder.setPositiveButton(LocaleController.getString("Delete", R.string.Delete), new DialogInterface.OnClickListener() { // from class: org.telegram.ui.Components.SearchViewPager$$ExternalSyntheticLambda0
-            @Override // android.content.DialogInterface.OnClickListener
-            public final void onClick(DialogInterface dialogInterface, int i2) {
-                SearchViewPager.this.lambda$onActionBarItemClick$2(arrayList, dialogInterface, i2);
+        return false;
+    }
+
+    public void onActionBarItemClick(int i) {
+        if (i == 202) {
+            BaseFragment baseFragment = this.parent;
+            if (baseFragment == null || baseFragment.getParentActivity() == null) {
+                return;
             }
-        });
-        TextView textView = (TextView) builder.show().getButton(-1);
-        if (textView == null) {
-            return;
+            final ArrayList arrayList = new ArrayList(this.selectedFiles.values());
+            AlertDialog.Builder builder = new AlertDialog.Builder(this.parent.getParentActivity());
+            builder.setTitle(LocaleController.formatPluralString("RemoveDocumentsTitle", this.selectedFiles.size(), new Object[0]));
+            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder();
+            spannableStringBuilder.append((CharSequence) AndroidUtilities.replaceTags(LocaleController.formatPluralString("RemoveDocumentsMessage", this.selectedFiles.size(), new Object[0]))).append((CharSequence) "\n\n").append((CharSequence) LocaleController.getString("RemoveDocumentsAlertMessage", R.string.RemoveDocumentsAlertMessage));
+            builder.setMessage(spannableStringBuilder);
+            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), SearchViewPager$$ExternalSyntheticLambda1.INSTANCE);
+            builder.setPositiveButton(LocaleController.getString("Delete", R.string.Delete), new DialogInterface.OnClickListener() { // from class: org.telegram.ui.Components.SearchViewPager$$ExternalSyntheticLambda0
+                @Override // android.content.DialogInterface.OnClickListener
+                public final void onClick(DialogInterface dialogInterface, int i2) {
+                    SearchViewPager.this.lambda$onActionBarItemClick$2(arrayList, dialogInterface, i2);
+                }
+            });
+            TextView textView = (TextView) builder.show().getButton(-1);
+            if (textView == null) {
+                return;
+            }
+            textView.setTextColor(Theme.getColor("dialogTextRed2"));
+        } else if (i == 203) {
+            if (!isSpeedItemVisible()) {
+                return;
+            }
+            this.parent.showDialog(new PremiumFeatureBottomSheet(this.parent, 2, true));
+        } else if (i == 200) {
+            if (this.selectedFiles.size() != 1) {
+                return;
+            }
+            goToMessage(this.selectedFiles.values().iterator().next());
+        } else if (i != 201) {
+        } else {
+            Bundle bundle = new Bundle();
+            bundle.putBoolean("onlySelect", true);
+            bundle.putInt("dialogsType", 3);
+            DialogsActivity dialogsActivity = new DialogsActivity(bundle);
+            dialogsActivity.setDelegate(new DialogsActivity.DialogsActivityDelegate() { // from class: org.telegram.ui.Components.SearchViewPager$$ExternalSyntheticLambda3
+                @Override // org.telegram.ui.DialogsActivity.DialogsActivityDelegate
+                public final void didSelectDialogs(DialogsActivity dialogsActivity2, ArrayList arrayList2, CharSequence charSequence, boolean z) {
+                    SearchViewPager.this.lambda$onActionBarItemClick$3(dialogsActivity2, arrayList2, charSequence, z);
+                }
+            });
+            this.parent.presentFragment(dialogsActivity);
         }
-        textView.setTextColor(Theme.getColor("dialogTextRed2"));
     }
 
     /* JADX INFO: Access modifiers changed from: private */
@@ -563,6 +603,25 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
             ActionBarMenuItem actionBarMenuItem = this.gotoItem;
             if (actionBarMenuItem != null) {
                 actionBarMenuItem.setVisibility(this.selectedFiles.size() == 1 ? 0 : 8);
+            }
+            if (this.speedItem != null) {
+                boolean isSpeedItemVisible = isSpeedItemVisible();
+                int i3 = isSpeedItemVisible ? 0 : 8;
+                if (this.speedItem.getVisibility() != i3) {
+                    this.speedItem.setVisibility(i3);
+                    int i4 = Build.VERSION.SDK_INT;
+                    if (i4 >= 21) {
+                        AnimatedVectorDrawable animatedVectorDrawable = (AnimatedVectorDrawable) this.speedItem.getIconView().getDrawable();
+                        animatedVectorDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor("actionBarActionModeDefaultIcon"), PorterDuff.Mode.SRC_IN));
+                        if (isSpeedItemVisible) {
+                            animatedVectorDrawable.start();
+                        } else if (i4 >= 23) {
+                            animatedVectorDrawable.reset();
+                        } else {
+                            animatedVectorDrawable.setVisible(false, true);
+                        }
+                    }
+                }
             }
             if (this.deleteItem != null) {
                 Iterator<FilteredSearchView.MessageHashId> it = this.selectedFiles.keySet().iterator();
@@ -970,16 +1029,17 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
             }
             if (i == 2) {
                 SearchViewPager searchViewPager = SearchViewPager.this;
-                SearchDownloadsContainer searchDownloadsContainer = new SearchDownloadsContainer(searchViewPager.parent, searchViewPager.currentAccount);
-                searchDownloadsContainer.recyclerListView.addOnScrollListener(new RecyclerView.OnScrollListener() { // from class: org.telegram.ui.Components.SearchViewPager.ViewPagerAdapter.1
+                SearchViewPager searchViewPager2 = SearchViewPager.this;
+                searchViewPager.downloadsContainer = new SearchDownloadsContainer(searchViewPager2.parent, searchViewPager2.currentAccount);
+                SearchViewPager.this.downloadsContainer.recyclerListView.addOnScrollListener(new RecyclerView.OnScrollListener() { // from class: org.telegram.ui.Components.SearchViewPager.ViewPagerAdapter.1
                     @Override // androidx.recyclerview.widget.RecyclerView.OnScrollListener
                     public void onScrolled(RecyclerView recyclerView, int i2, int i3) {
                         super.onScrolled(recyclerView, i2, i3);
                         SearchViewPager.this.fragmentView.invalidateBlur();
                     }
                 });
-                searchDownloadsContainer.setUiCallback(SearchViewPager.this);
-                return searchDownloadsContainer;
+                SearchViewPager.this.downloadsContainer.setUiCallback(SearchViewPager.this);
+                return SearchViewPager.this.downloadsContainer;
             }
             FilteredSearchView filteredSearchView = new FilteredSearchView(SearchViewPager.this.parent);
             filteredSearchView.setChatPreviewDelegate(SearchViewPager.this.chatPreviewDelegate);

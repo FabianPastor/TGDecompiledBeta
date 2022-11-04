@@ -1874,7 +1874,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1821onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1817onCreateViewHolder(ViewGroup viewGroup, int i) {
             ChatActionCell chatActionCell;
             View view;
             if (i == 0) {

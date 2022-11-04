@@ -101,6 +101,9 @@ public class ViewPagerFixed extends FrameLayout {
     protected void onItemSelected(View view, View view2, int i, int i2) {
     }
 
+    protected void onTabPageSelected(int i) {
+    }
+
     public ViewPagerFixed(Context context) {
         super(context);
         this.viewsByType = new SparseArray<>();
@@ -137,9 +140,19 @@ public class ViewPagerFixed extends FrameLayout {
     }
 
     public TabsView createTabsView() {
-        TabsView tabsView = new TabsView(getContext());
+        TabsView tabsView = new TabsView(getContext()) { // from class: org.telegram.ui.Components.ViewPagerFixed.2
+            @Override // org.telegram.ui.Components.ViewPagerFixed.TabsView
+            public void selectTab(int i, int i2, float f) {
+                super.selectTab(i, i2, f);
+                ViewPagerFixed viewPagerFixed = ViewPagerFixed.this;
+                if (f > 0.5f) {
+                    i = i2;
+                }
+                viewPagerFixed.onTabPageSelected(i);
+            }
+        };
         this.tabsView = tabsView;
-        tabsView.setDelegate(new TabsView.TabsViewDelegate() { // from class: org.telegram.ui.Components.ViewPagerFixed.2
+        tabsView.setDelegate(new TabsView.TabsViewDelegate() { // from class: org.telegram.ui.Components.ViewPagerFixed.3
             @Override // org.telegram.ui.Components.ViewPagerFixed.TabsView.TabsViewDelegate
             public void onSamePageSelected() {
             }
@@ -150,6 +163,7 @@ public class ViewPagerFixed extends FrameLayout {
                 ViewPagerFixed viewPagerFixed = ViewPagerFixed.this;
                 viewPagerFixed.nextPosition = i;
                 viewPagerFixed.updateViewForIndex(1);
+                ViewPagerFixed.this.onTabPageSelected(i);
                 if (z) {
                     View[] viewArr = ViewPagerFixed.this.viewPages;
                     viewArr[1].setTranslationX(viewArr[0].getMeasuredWidth());
@@ -874,6 +888,18 @@ public class ViewPagerFixed extends FrameLayout {
             return this.animatingIndicator;
         }
 
+        public int getCurrentPosition() {
+            return this.currentPosition;
+        }
+
+        public int getPreviousPosition() {
+            return this.previousPosition;
+        }
+
+        public float getAnimatingIndicatorProgress() {
+            return this.animatingIndicatorProgress;
+        }
+
         public void scrollToTab(int i, int i2) {
             int i3 = this.currentPosition;
             boolean z = i3 < i2;
@@ -1181,7 +1207,7 @@ public class ViewPagerFixed extends FrameLayout {
 
             @Override // androidx.recyclerview.widget.RecyclerView.Adapter
             /* renamed from: onCreateViewHolder */
-            public RecyclerView.ViewHolder mo1821onCreateViewHolder(ViewGroup viewGroup, int i) {
+            public RecyclerView.ViewHolder mo1817onCreateViewHolder(ViewGroup viewGroup, int i) {
                 return new RecyclerListView.Holder(new TabView(this.mContext));
             }
 

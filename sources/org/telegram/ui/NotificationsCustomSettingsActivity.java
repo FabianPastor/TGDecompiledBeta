@@ -1111,7 +1111,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment implements
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1821onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1817onCreateViewHolder(ViewGroup viewGroup, int i) {
             View userCell;
             if (i == 0) {
                 userCell = new UserCell(this.mContext, 4, 0, false, true);
@@ -1178,7 +1178,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment implements
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1821onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1817onCreateViewHolder(ViewGroup viewGroup, int i) {
             View headerCell;
             switch (i) {
                 case 0:

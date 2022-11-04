@@ -236,7 +236,7 @@ public class VideoScreenPreview extends FrameLayout implements PagerHeaderView, 
             }
             this.attachFileName = FileLoader.getAttachFileName(tLRPC$Document);
             this.imageReceiver.setImage(null, null, combinedDrawable, null, null, 1);
-            FileLoader.getInstance(this.currentAccount).loadFile(tLRPC$Document, null, 1, 0);
+            FileLoader.getInstance(this.currentAccount).loadFile(tLRPC$Document, null, 3, 0);
             Utilities.globalQueue.postRunnable(new Runnable() { // from class: org.telegram.ui.Components.Premium.VideoScreenPreview$$ExternalSyntheticLambda1
                 @Override // java.lang.Runnable
                 public final void run() {

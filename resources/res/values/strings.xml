@@ -110,6 +110,7 @@
     <string name="AccDescrPlayerDuration">%1$s of %2$s</string>
     <string name="AccDescrPlayerSpeed">2X playback</string>
     <string name="AccDescrPremium">Premium account</string>
+    <string name="AccDescrPremiumSpeed">Increase speed</string>
     <string name="AccDescrPrevious">Previous</string>
     <string name="AccDescrProfilePicture">Profile picture</string>
     <string name="AccDescrQuizCorrectAnswer">Correct answer</string>
@@ -985,6 +986,10 @@
     <string name="ChannelCantOpenPrivate">Sorry, this channel is private, so you can’t view its content.</string>
     <string name="ChannelCantOpenPrivate2">Sorry, this channel is private.</string>
     <string name="ChannelCantSendMessage">Sorry, you can\'t send messages to this channel.</string>
+    <string name="ChannelCaptionLimitPremiumPromo_few">Make the caption shorter or subscribe to *Telegram Premium* to double the limit to **%1$s** characters.</string>
+    <string name="ChannelCaptionLimitPremiumPromo_many">Make the caption shorter or subscribe to *Telegram Premium* to double the limit to **%1$s** characters.</string>
+    <string name="ChannelCaptionLimitPremiumPromo_one">Make the caption shorter or subscribe to *Telegram Premium* to double the limit to **%1$s** character.</string>
+    <string name="ChannelCaptionLimitPremiumPromo_other">Make the caption shorter or subscribe to *Telegram Premium* to double the limit to **%1$s** characters.</string>
     <string name="ChannelContacts">Contacts in this channel</string>
     <string name="ChannelCreator">Owner</string>
     <string name="ChannelDelete">Delete Channel</string>
@@ -3865,6 +3870,7 @@
     <string name="PremiumPreviewUploadsDescription">Increased upload size from 2Gb to 4Gb per document, unlimited storage overall.</string>
     <string name="PremiumPreviewVoiceToText">Voice-to-Text Conversion</string>
     <string name="PremiumPreviewVoiceToTextDescription">Ability to read the transcript of any incoming voice message.</string>
+    <string name="PremiumSpeedPromo">Increase speed</string>
     <string name="PremiumStickerTooltip">This pack contains premium stickers like this one.</string>
     <string name="PremiumStickers">Premuim Stickers</string>
     <string name="PremiumStickersShort">Premium</string>

@@ -2,10 +2,10 @@ package org.telegram.ui;
 
 import org.telegram.ui.Components.NumberPicker;
 /* loaded from: classes3.dex */
-public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda79 implements NumberPicker.Formatter {
-    public static final /* synthetic */ PhotoViewer$$ExternalSyntheticLambda79 INSTANCE = new PhotoViewer$$ExternalSyntheticLambda79();
+public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda80 implements NumberPicker.Formatter {
+    public static final /* synthetic */ PhotoViewer$$ExternalSyntheticLambda80 INSTANCE = new PhotoViewer$$ExternalSyntheticLambda80();
 
-    private /* synthetic */ PhotoViewer$$ExternalSyntheticLambda79() {
+    private /* synthetic */ PhotoViewer$$ExternalSyntheticLambda80() {
     }
 
     @Override // org.telegram.ui.Components.NumberPicker.Formatter

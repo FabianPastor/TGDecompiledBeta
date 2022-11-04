@@ -1150,7 +1150,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
 
             @Override // androidx.recyclerview.widget.RecyclerView.Adapter
             /* renamed from: onCreateViewHolder */
-            public RecyclerView.ViewHolder mo1821onCreateViewHolder(ViewGroup viewGroup, int i) {
+            public RecyclerView.ViewHolder mo1817onCreateViewHolder(ViewGroup viewGroup, int i) {
                 if (i != 0) {
                     if (i == 1) {
                         return new RecyclerListView.Holder(new ChangeUsernameActivity.UsernameCell(UsernamesListView.this.getContext(), ((RecyclerListView) UsernamesListView.this).resourcesProvider) { // from class: org.telegram.ui.ChatEditTypeActivity.UsernamesListView.Adapter.1

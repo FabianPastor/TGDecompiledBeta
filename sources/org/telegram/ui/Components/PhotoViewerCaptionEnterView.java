@@ -13,7 +13,6 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
-import android.os.Vibrator;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.TextPaint;
@@ -123,7 +122,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         return this.codePointCount;
     }
 
-    public PhotoViewerCaptionEnterView(Context context, SizeNotifierFrameLayoutPhoto sizeNotifierFrameLayoutPhoto, View view, Theme.ResourcesProvider resourcesProvider) {
+    public PhotoViewerCaptionEnterView(final PhotoViewer photoViewer, Context context, final SizeNotifierFrameLayoutPhoto sizeNotifierFrameLayoutPhoto, View view, Theme.ResourcesProvider resourcesProvider) {
         super(context);
         this.sendButtonEnabled = true;
         this.sendButtonEnabledProgress = 1.0f;
@@ -151,7 +150,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         this.emojiButton.setPadding(AndroidUtilities.dp(4.0f), AndroidUtilities.dp(1.0f), 0, 0);
         this.emojiButton.setAlpha(0.58f);
         frameLayout.addView(this.emojiButton, LayoutHelper.createFrame(48, 48, 83));
-        this.emojiButton.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.Components.PhotoViewerCaptionEnterView$$ExternalSyntheticLambda5
+        this.emojiButton.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.Components.PhotoViewerCaptionEnterView$$ExternalSyntheticLambda4
             @Override // android.view.View.OnClickListener
             public final void onClick(View view2) {
                 PhotoViewerCaptionEnterView.this.lambda$new$0(view2);
@@ -259,13 +258,13 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
                 return lambda$new$3;
             }
         });
-        this.messageEditText.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.Components.PhotoViewerCaptionEnterView$$ExternalSyntheticLambda4
+        this.messageEditText.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.Components.PhotoViewerCaptionEnterView$$ExternalSyntheticLambda3
             @Override // android.view.View.OnClickListener
             public final void onClick(View view2) {
                 PhotoViewerCaptionEnterView.this.lambda$new$4(view2);
             }
         });
-        this.messageEditText.addTextChangedListener(new AnonymousClass2());
+        this.messageEditText.addTextChangedListener(new AnonymousClass2(photoViewer, sizeNotifierFrameLayoutPhoto));
         this.doneDrawable = Theme.createCircleDrawable(AndroidUtilities.dp(16.0f), -10043398);
         this.checkDrawable = context.getResources().getDrawable(R.drawable.input_done).mutate();
         CombinedDrawable combinedDrawable = new CombinedDrawable(this.doneDrawable, this.checkDrawable, 0, AndroidUtilities.dp(1.0f));
@@ -275,10 +274,10 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         imageView3.setScaleType(ImageView.ScaleType.CENTER);
         imageView3.setImageDrawable(combinedDrawable);
         linearLayout.addView(imageView3, LayoutHelper.createLinear(48, 48, 80));
-        imageView3.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.Components.PhotoViewerCaptionEnterView$$ExternalSyntheticLambda3
+        imageView3.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.Components.PhotoViewerCaptionEnterView$$ExternalSyntheticLambda5
             @Override // android.view.View.OnClickListener
             public final void onClick(View view2) {
-                PhotoViewerCaptionEnterView.this.lambda$new$5(view2);
+                PhotoViewerCaptionEnterView.this.lambda$new$5(photoViewer, sizeNotifierFrameLayoutPhoto, view2);
             }
         });
         imageView3.setContentDescription(LocaleController.getString("Done", R.string.Done));
@@ -346,12 +345,16 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     /* loaded from: classes3.dex */
     public class AnonymousClass2 implements TextWatcher {
         boolean processChange = false;
+        final /* synthetic */ SizeNotifierFrameLayoutPhoto val$parent;
+        final /* synthetic */ PhotoViewer val$photoViewer;
 
         @Override // android.text.TextWatcher
         public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
         }
 
-        AnonymousClass2() {
+        AnonymousClass2(PhotoViewer photoViewer, SizeNotifierFrameLayoutPhoto sizeNotifierFrameLayoutPhoto) {
+            this.val$photoViewer = photoViewer;
+            this.val$parent = sizeNotifierFrameLayoutPhoto;
         }
 
         @Override // android.text.TextWatcher
@@ -377,7 +380,6 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         }
 
         /* JADX WARN: Removed duplicated region for block: B:37:0x0172  */
-        /* JADX WARN: Removed duplicated region for block: B:50:? A[RETURN, SYNTHETIC] */
         @Override // android.text.TextWatcher
         /*
             Code decompiled incorrectly, please refer to instructions dump.
@@ -385,7 +387,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         */
         public void afterTextChanged(android.text.Editable r11) {
             /*
-                Method dump skipped, instructions count: 445
+                Method dump skipped, instructions count: 540
                 To view this dump add '--comments-level debug' option
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PhotoViewerCaptionEnterView.AnonymousClass2.afterTextChanged(android.text.Editable):void");
@@ -401,14 +403,17 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$5(View view) {
+    public /* synthetic */ void lambda$new$5(PhotoViewer photoViewer, SizeNotifierFrameLayoutPhoto sizeNotifierFrameLayoutPhoto, View view) {
         if (MessagesController.getInstance(this.currentAccount).getCaptionMaxLengthLimit() - this.codePointCount < 0) {
             AndroidUtilities.shakeView(this.captionLimitView);
-            Vibrator vibrator = (Vibrator) this.captionLimitView.getContext().getSystemService("vibrator");
-            if (vibrator == null) {
+            try {
+                this.captionLimitView.performHapticFeedback(3, 2);
+            } catch (Exception unused) {
+            }
+            if (MessagesController.getInstance(this.currentAccount).premiumLocked || MessagesController.getInstance(this.currentAccount).captionLengthLimitPremium <= this.codePointCount) {
                 return;
             }
-            vibrator.vibrate(200L);
+            photoViewer.showCaptionLimitBulletin(sizeNotifierFrameLayoutPhoto);
             return;
         }
         this.delegate.onCaptionEnter();

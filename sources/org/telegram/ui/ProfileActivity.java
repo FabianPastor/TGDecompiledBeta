@@ -249,6 +249,7 @@ import org.telegram.ui.Components.AutoDeletePopupWrapper;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackButtonMenu;
 import org.telegram.ui.Components.BackupImageView;
+import org.telegram.ui.Components.Bulletin;
 import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.ChatAvatarContainer;
 import org.telegram.ui.Components.ChatNotificationsPopupWrapper;
@@ -537,11 +538,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* JADX INFO: Access modifiers changed from: package-private */
-    public static /* synthetic */ void access$27400(ProfileActivity profileActivity, View view) {
+    public static /* synthetic */ void access$27900(ProfileActivity profileActivity, View view) {
         profileActivity.onTextDetailCellImageClicked(view);
     }
 
-    static /* synthetic */ int access$7712(ProfileActivity profileActivity, int i) {
+    static /* synthetic */ int access$8212(ProfileActivity profileActivity, int i) {
         int i2 = profileActivity.listContentHeight + i;
         profileActivity.listContentHeight = i2;
         return i2;
@@ -2744,6 +2745,47 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 textView2.setTextColor(ProfileActivity.this.getThemedColor("dialogTextRed2"));
             } else if (i == 7) {
                 ProfileActivity.this.leaveChatPressed();
+            } else if (i == 23) {
+                AlertDialog.Builder builder3 = new AlertDialog.Builder(ProfileActivity.this.getContext());
+                builder3.setTitle(LocaleController.getPluralString("DeleteTopics", 1));
+                TLRPC$TL_forumTopic findTopic = MessagesController.getInstance(((BaseFragment) ProfileActivity.this).currentAccount).getTopicsController().findTopic(ProfileActivity.this.chatId, ProfileActivity.this.topicId);
+                int i2 = R.string.DeleteSelectedTopic;
+                Object[] objArr = new Object[1];
+                objArr[0] = findTopic == null ? "topic" : findTopic.title;
+                builder3.setMessage(LocaleController.formatString("DeleteSelectedTopic", i2, objArr));
+                builder3.setPositiveButton(LocaleController.getString("Delete", R.string.Delete), new DialogInterface.OnClickListener() { // from class: org.telegram.ui.ProfileActivity.5.1
+                    @Override // android.content.DialogInterface.OnClickListener
+                    public void onClick(DialogInterface dialogInterface, int i3) {
+                        ArrayList<Integer> arrayList = new ArrayList<>();
+                        arrayList.add(Integer.valueOf(ProfileActivity.this.topicId));
+                        ProfileActivity.this.getMessagesController().getTopicsController().deleteTopics(ProfileActivity.this.chatId, arrayList);
+                        ProfileActivity.this.playProfileAnimation = 0;
+                        if (((BaseFragment) ProfileActivity.this).parentLayout != null && ((BaseFragment) ProfileActivity.this).parentLayout.getFragmentStack() != null) {
+                            for (int i4 = 0; i4 < ((BaseFragment) ProfileActivity.this).parentLayout.getFragmentStack().size(); i4++) {
+                                BaseFragment baseFragment = ((BaseFragment) ProfileActivity.this).parentLayout.getFragmentStack().get(i4);
+                                if ((baseFragment instanceof ChatActivity) && ((ChatActivity) baseFragment).getTopicId() == ProfileActivity.this.topicId) {
+                                    baseFragment.removeSelfFromStack();
+                                }
+                            }
+                        }
+                        ProfileActivity.this.finishFragment();
+                        BulletinFactory.of(Bulletin.BulletinWindow.make(ProfileActivity.this.getContext()), ProfileActivity.this.resourcesProvider).createSimpleBulletin(R.raw.ic_delete, LocaleController.getPluralString("TopicsDeleted", 1)).show();
+                        dialogInterface.dismiss();
+                    }
+                });
+                builder3.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), new DialogInterface.OnClickListener(this) { // from class: org.telegram.ui.ProfileActivity.5.2
+                    @Override // android.content.DialogInterface.OnClickListener
+                    public void onClick(DialogInterface dialogInterface, int i3) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                AlertDialog create3 = builder3.create();
+                create3.show();
+                TextView textView3 = (TextView) create3.getButton(-1);
+                if (textView3 == null) {
+                    return;
+                }
+                textView3.setTextColor(Theme.getColor("dialogTextRed2"));
             } else if (i == 12) {
                 if (ProfileActivity.this.isTopic) {
                     new Bundle().putLong("chat_id", ProfileActivity.this.chatId);
@@ -2864,23 +2906,23 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 ProfileActivity profileActivity7 = ProfileActivity.this;
                 profileActivity6.showDialog(new GiftPremiumBottomSheet(profileActivity7, profileActivity7.getMessagesController().getUser(Long.valueOf(ProfileActivity.this.userId))));
             } else if (i == 20) {
-                AlertDialog.Builder builder3 = new AlertDialog.Builder(ProfileActivity.this.getParentActivity(), ProfileActivity.this.resourcesProvider);
-                builder3.setTitle(LocaleController.getString("AreYouSureSecretChatTitle", R.string.AreYouSureSecretChatTitle));
-                builder3.setMessage(LocaleController.getString("AreYouSureSecretChat", R.string.AreYouSureSecretChat));
-                builder3.setPositiveButton(LocaleController.getString("Start", R.string.Start), new DialogInterface.OnClickListener() { // from class: org.telegram.ui.ProfileActivity$5$$ExternalSyntheticLambda2
+                AlertDialog.Builder builder4 = new AlertDialog.Builder(ProfileActivity.this.getParentActivity(), ProfileActivity.this.resourcesProvider);
+                builder4.setTitle(LocaleController.getString("AreYouSureSecretChatTitle", R.string.AreYouSureSecretChatTitle));
+                builder4.setMessage(LocaleController.getString("AreYouSureSecretChat", R.string.AreYouSureSecretChat));
+                builder4.setPositiveButton(LocaleController.getString("Start", R.string.Start), new DialogInterface.OnClickListener() { // from class: org.telegram.ui.ProfileActivity$5$$ExternalSyntheticLambda2
                     @Override // android.content.DialogInterface.OnClickListener
-                    public final void onClick(DialogInterface dialogInterface, int i2) {
-                        ProfileActivity.AnonymousClass5.this.lambda$onItemClick$7(dialogInterface, i2);
+                    public final void onClick(DialogInterface dialogInterface, int i3) {
+                        ProfileActivity.AnonymousClass5.this.lambda$onItemClick$7(dialogInterface, i3);
                     }
                 });
-                builder3.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-                ProfileActivity.this.showDialog(builder3.create());
+                builder4.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                ProfileActivity.this.showDialog(builder4.create());
             } else if (i == 21) {
                 if (ProfileActivity.this.getParentActivity() == null) {
                     return;
                 }
-                int i2 = Build.VERSION.SDK_INT;
-                if (i2 < 23 || ((i2 > 28 && !BuildVars.NO_SCOPED_STORAGE) || ProfileActivity.this.getParentActivity().checkSelfPermission("android.permission.WRITE_EXTERNAL_STORAGE") == 0)) {
+                int i3 = Build.VERSION.SDK_INT;
+                if (i3 < 23 || ((i3 > 28 && !BuildVars.NO_SCOPED_STORAGE) || ProfileActivity.this.getParentActivity().checkSelfPermission("android.permission.WRITE_EXTERNAL_STORAGE") == 0)) {
                     ImageLocation imageLocation = ProfileActivity.this.avatarsViewPager.getImageLocation(ProfileActivity.this.avatarsViewPager.getRealPosition());
                     if (imageLocation == null) {
                         return;
@@ -2975,32 +3017,32 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     ProfileActivity.this.presentFragment(new QrActivity(bundle8));
                 }
             } else {
-                AlertDialog.Builder builder4 = new AlertDialog.Builder(ProfileActivity.this.getParentActivity(), ProfileActivity.this.resourcesProvider);
+                AlertDialog.Builder builder5 = new AlertDialog.Builder(ProfileActivity.this.getParentActivity(), ProfileActivity.this.resourcesProvider);
                 ImageLocation imageLocation3 = ProfileActivity.this.avatarsViewPager.getImageLocation(ProfileActivity.this.avatarsViewPager.getRealPosition());
                 if (imageLocation3 == null) {
                     return;
                 }
                 if (imageLocation3.imageType == 2) {
-                    builder4.setTitle(LocaleController.getString("AreYouSureDeleteVideoTitle", R.string.AreYouSureDeleteVideoTitle));
-                    builder4.setMessage(LocaleController.formatString("AreYouSureDeleteVideo", R.string.AreYouSureDeleteVideo, new Object[0]));
+                    builder5.setTitle(LocaleController.getString("AreYouSureDeleteVideoTitle", R.string.AreYouSureDeleteVideoTitle));
+                    builder5.setMessage(LocaleController.formatString("AreYouSureDeleteVideo", R.string.AreYouSureDeleteVideo, new Object[0]));
                 } else {
-                    builder4.setTitle(LocaleController.getString("AreYouSureDeletePhotoTitle", R.string.AreYouSureDeletePhotoTitle));
-                    builder4.setMessage(LocaleController.formatString("AreYouSureDeletePhoto", R.string.AreYouSureDeletePhoto, new Object[0]));
+                    builder5.setTitle(LocaleController.getString("AreYouSureDeletePhotoTitle", R.string.AreYouSureDeletePhotoTitle));
+                    builder5.setMessage(LocaleController.formatString("AreYouSureDeletePhoto", R.string.AreYouSureDeletePhoto, new Object[0]));
                 }
-                builder4.setPositiveButton(LocaleController.getString("Delete", R.string.Delete), new DialogInterface.OnClickListener() { // from class: org.telegram.ui.ProfileActivity$5$$ExternalSyntheticLambda1
+                builder5.setPositiveButton(LocaleController.getString("Delete", R.string.Delete), new DialogInterface.OnClickListener() { // from class: org.telegram.ui.ProfileActivity$5$$ExternalSyntheticLambda1
                     @Override // android.content.DialogInterface.OnClickListener
-                    public final void onClick(DialogInterface dialogInterface, int i3) {
-                        ProfileActivity.AnonymousClass5.this.lambda$onItemClick$11(dialogInterface, i3);
+                    public final void onClick(DialogInterface dialogInterface, int i4) {
+                        ProfileActivity.AnonymousClass5.this.lambda$onItemClick$11(dialogInterface, i4);
                     }
                 });
-                builder4.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-                AlertDialog create3 = builder4.create();
-                ProfileActivity.this.showDialog(create3);
-                TextView textView3 = (TextView) create3.getButton(-1);
-                if (textView3 == null) {
+                builder5.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                AlertDialog create4 = builder5.create();
+                ProfileActivity.this.showDialog(create4);
+                TextView textView4 = (TextView) create4.getButton(-1);
+                if (textView4 == null) {
                     return;
                 }
-                textView3.setTextColor(ProfileActivity.this.getThemedColor("dialogTextRed2"));
+                textView4.setTextColor(ProfileActivity.this.getThemedColor("dialogTextRed2"));
             }
         }
 
@@ -3075,7 +3117,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         /* JADX INFO: Access modifiers changed from: private */
         public /* synthetic */ void lambda$onItemClick$3(long j, TLRPC$TL_chatAdminRights tLRPC$TL_chatAdminRights, String str, boolean z, final DialogsActivity dialogsActivity) {
             ChatRightsEditActivity chatRightsEditActivity = new ChatRightsEditActivity(ProfileActivity.this.userId, -j, tLRPC$TL_chatAdminRights, null, null, str, 2, true, !z, null);
-            chatRightsEditActivity.setDelegate(new ChatRightsEditActivity.ChatRightsEditActivityDelegate() { // from class: org.telegram.ui.ProfileActivity.5.1
+            chatRightsEditActivity.setDelegate(new ChatRightsEditActivity.ChatRightsEditActivityDelegate() { // from class: org.telegram.ui.ProfileActivity.5.3
                 @Override // org.telegram.ui.ChatRightsEditActivity.ChatRightsEditActivityDelegate
                 public void didChangeOwner(TLRPC$User tLRPC$User) {
                 }
@@ -4100,62 +4142,62 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             int r8 = r7.numberRow
             java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
             org.telegram.ui.ProfileActivity$SearchAdapter r0 = r7.searchAdapter
-            boolean r0 = org.telegram.ui.ProfileActivity.SearchAdapter.access$28500(r0)
+            boolean r0 = org.telegram.ui.ProfileActivity.SearchAdapter.access$29000(r0)
             r1 = 0
             r2 = 1
             if (r0 == 0) goto L50
             org.telegram.ui.ProfileActivity$SearchAdapter r0 = r7.searchAdapter
-            java.util.ArrayList r0 = org.telegram.ui.ProfileActivity.SearchAdapter.access$28600(r0)
+            java.util.ArrayList r0 = org.telegram.ui.ProfileActivity.SearchAdapter.access$29100(r0)
             int r0 = r0.size()
             if (r9 >= r0) goto L2b
             org.telegram.ui.ProfileActivity$SearchAdapter r8 = r7.searchAdapter
-            java.util.ArrayList r8 = org.telegram.ui.ProfileActivity.SearchAdapter.access$28600(r8)
+            java.util.ArrayList r8 = org.telegram.ui.ProfileActivity.SearchAdapter.access$29100(r8)
             java.lang.Object r8 = r8.get(r9)
             goto L9d
         L2b:
             org.telegram.ui.ProfileActivity$SearchAdapter r0 = r7.searchAdapter
-            java.util.ArrayList r0 = org.telegram.ui.ProfileActivity.SearchAdapter.access$28600(r0)
+            java.util.ArrayList r0 = org.telegram.ui.ProfileActivity.SearchAdapter.access$29100(r0)
             int r0 = r0.size()
             int r0 = r0 + r2
             int r9 = r9 - r0
             if (r9 < 0) goto L9d
             org.telegram.ui.ProfileActivity$SearchAdapter r0 = r7.searchAdapter
-            java.util.ArrayList r0 = org.telegram.ui.ProfileActivity.SearchAdapter.access$28700(r0)
+            java.util.ArrayList r0 = org.telegram.ui.ProfileActivity.SearchAdapter.access$29200(r0)
             int r0 = r0.size()
             if (r9 >= r0) goto L9d
             org.telegram.ui.ProfileActivity$SearchAdapter r8 = r7.searchAdapter
-            java.util.ArrayList r8 = org.telegram.ui.ProfileActivity.SearchAdapter.access$28700(r8)
+            java.util.ArrayList r8 = org.telegram.ui.ProfileActivity.SearchAdapter.access$29200(r8)
             java.lang.Object r8 = r8.get(r9)
             goto L9d
         L50:
             org.telegram.ui.ProfileActivity$SearchAdapter r0 = r7.searchAdapter
-            java.util.ArrayList r0 = org.telegram.ui.ProfileActivity.SearchAdapter.access$28400(r0)
+            java.util.ArrayList r0 = org.telegram.ui.ProfileActivity.SearchAdapter.access$28900(r0)
             boolean r0 = r0.isEmpty()
             if (r0 != 0) goto L5e
             int r9 = r9 + (-1)
         L5e:
             if (r9 < 0) goto L77
             org.telegram.ui.ProfileActivity$SearchAdapter r0 = r7.searchAdapter
-            java.util.ArrayList r0 = org.telegram.ui.ProfileActivity.SearchAdapter.access$28400(r0)
+            java.util.ArrayList r0 = org.telegram.ui.ProfileActivity.SearchAdapter.access$28900(r0)
             int r0 = r0.size()
             if (r9 >= r0) goto L77
             org.telegram.ui.ProfileActivity$SearchAdapter r8 = r7.searchAdapter
-            java.util.ArrayList r8 = org.telegram.ui.ProfileActivity.SearchAdapter.access$28400(r8)
+            java.util.ArrayList r8 = org.telegram.ui.ProfileActivity.SearchAdapter.access$28900(r8)
             java.lang.Object r8 = r8.get(r9)
             goto L9d
         L77:
             org.telegram.ui.ProfileActivity$SearchAdapter r0 = r7.searchAdapter
-            java.util.ArrayList r0 = org.telegram.ui.ProfileActivity.SearchAdapter.access$28400(r0)
+            java.util.ArrayList r0 = org.telegram.ui.ProfileActivity.SearchAdapter.access$28900(r0)
             int r0 = r0.size()
             int r0 = r0 + r2
             int r9 = r9 - r0
             if (r9 < 0) goto L9d
             org.telegram.ui.ProfileActivity$SearchAdapter r0 = r7.searchAdapter
-            java.util.ArrayList r0 = org.telegram.ui.ProfileActivity.SearchAdapter.access$28800(r0)
+            java.util.ArrayList r0 = org.telegram.ui.ProfileActivity.SearchAdapter.access$29300(r0)
             int r0 = r0.size()
             if (r9 >= r0) goto L9d
             org.telegram.ui.ProfileActivity$SearchAdapter r8 = r7.searchAdapter
-            java.util.ArrayList r8 = org.telegram.ui.ProfileActivity.SearchAdapter.access$28800(r8)
+            java.util.ArrayList r8 = org.telegram.ui.ProfileActivity.SearchAdapter.access$29300(r8)
             java.lang.Object r8 = r8.get(r9)
             r9 = 0
             goto L9e
@@ -4166,7 +4208,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             if (r0 == 0) goto La9
             r0 = r8
             org.telegram.ui.ProfileActivity$SearchAdapter$SearchResult r0 = (org.telegram.ui.ProfileActivity.SearchAdapter.SearchResult) r0
-            org.telegram.ui.ProfileActivity.SearchAdapter.SearchResult.access$28900(r0)
+            org.telegram.ui.ProfileActivity.SearchAdapter.SearchResult.access$29400(r0)
             goto Lca
         La9:
             boolean r0 = r8 instanceof org.telegram.messenger.MessagesController.FaqSearchResult
@@ -4179,7 +4221,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r5 = 2
             java.lang.Object[] r5 = new java.lang.Object[r5]
             org.telegram.ui.ProfileActivity$SearchAdapter r6 = r7.searchAdapter
-            org.telegram.tgnet.TLRPC$WebPage r6 = org.telegram.ui.ProfileActivity.SearchAdapter.access$29000(r6)
+            org.telegram.tgnet.TLRPC$WebPage r6 = org.telegram.ui.ProfileActivity.SearchAdapter.access$29500(r6)
             r5[r1] = r6
             java.lang.String r0 = r0.url
             r5[r2] = r0
@@ -7216,15 +7258,15 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
     /* JADX INFO: Access modifiers changed from: private */
     /* JADX WARN: Code restructure failed: missing block: B:213:0x0416, code lost:
-        if (r28.chatInfo.can_view_participants != false) goto L390;
+        if (r28.chatInfo.can_view_participants != false) goto L392;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:283:0x05f5, code lost:
-        if (r28.nameTextView[r4].setText(r13) != false) goto L315;
+    /* JADX WARN: Code restructure failed: missing block: B:285:0x05fa, code lost:
+        if (r28.nameTextView[r4].setText(r13) != false) goto L316;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:291:0x061f, code lost:
-        if (r28.nameTextView[r4].setText(r1) != false) goto L315;
+    /* JADX WARN: Code restructure failed: missing block: B:293:0x0624, code lost:
+        if (r28.nameTextView[r4].setText(r1) != false) goto L316;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:292:0x0621, code lost:
+    /* JADX WARN: Code restructure failed: missing block: B:294:0x0626, code lost:
         r8 = true;
      */
     /* JADX WARN: Removed duplicated region for block: B:108:0x023a  */
@@ -7237,18 +7279,18 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     /* JADX WARN: Removed duplicated region for block: B:177:0x0360  */
     /* JADX WARN: Removed duplicated region for block: B:182:0x037c  */
     /* JADX WARN: Removed duplicated region for block: B:267:0x05af  */
-    /* JADX WARN: Removed duplicated region for block: B:376:0x081a  */
-    /* JADX WARN: Removed duplicated region for block: B:385:0x082e  */
-    /* JADX WARN: Removed duplicated region for block: B:386:0x0838  */
-    /* JADX WARN: Removed duplicated region for block: B:415:0x08d0  */
-    /* JADX WARN: Removed duplicated region for block: B:432:0x0394 A[ADDED_TO_REGION, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:378:0x081f  */
+    /* JADX WARN: Removed duplicated region for block: B:387:0x0833  */
+    /* JADX WARN: Removed duplicated region for block: B:388:0x083d  */
+    /* JADX WARN: Removed duplicated region for block: B:417:0x08d5  */
+    /* JADX WARN: Removed duplicated region for block: B:434:0x0394 A[ADDED_TO_REGION, SYNTHETIC] */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
     public void updateProfileData(boolean r29) {
         /*
-            Method dump skipped, instructions count: 2268
+            Method dump skipped, instructions count: 2273
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ProfileActivity.updateProfileData(boolean):void");
@@ -7308,24 +7350,24 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         showDialog(premiumPreviewBottomSheet);
     }
 
-    /* JADX WARN: Removed duplicated region for block: B:196:0x03aa  */
-    /* JADX WARN: Removed duplicated region for block: B:197:0x03e5  */
-    /* JADX WARN: Removed duplicated region for block: B:200:0x03fe  */
-    /* JADX WARN: Removed duplicated region for block: B:202:0x0405  */
-    /* JADX WARN: Removed duplicated region for block: B:205:0x041a  */
-    /* JADX WARN: Removed duplicated region for block: B:208:0x043d  */
-    /* JADX WARN: Removed duplicated region for block: B:244:0x04f3  */
-    /* JADX WARN: Removed duplicated region for block: B:247:0x050a  */
-    /* JADX WARN: Removed duplicated region for block: B:250:0x0521  */
-    /* JADX WARN: Removed duplicated region for block: B:253:0x0538  */
-    /* JADX WARN: Removed duplicated region for block: B:256:? A[RETURN, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:203:0x03cb  */
+    /* JADX WARN: Removed duplicated region for block: B:204:0x0406  */
+    /* JADX WARN: Removed duplicated region for block: B:207:0x041f  */
+    /* JADX WARN: Removed duplicated region for block: B:209:0x0426  */
+    /* JADX WARN: Removed duplicated region for block: B:212:0x043b  */
+    /* JADX WARN: Removed duplicated region for block: B:215:0x045e  */
+    /* JADX WARN: Removed duplicated region for block: B:251:0x0514  */
+    /* JADX WARN: Removed duplicated region for block: B:254:0x052b  */
+    /* JADX WARN: Removed duplicated region for block: B:257:0x0542  */
+    /* JADX WARN: Removed duplicated region for block: B:260:0x0559  */
+    /* JADX WARN: Removed duplicated region for block: B:263:? A[RETURN, SYNTHETIC] */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
     private void createActionBarMenu(boolean r17) {
         /*
-            Method dump skipped, instructions count: 1344
+            Method dump skipped, instructions count: 1377
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ProfileActivity.createActionBarMenu(boolean):void");
@@ -8040,7 +8082,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         /* JADX WARN: Multi-variable type inference failed */
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1821onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1817onCreateViewHolder(ViewGroup viewGroup, int i) {
             View headerCell;
             TextDetailCell textDetailCell;
             String str;
@@ -8062,7 +8104,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     textDetailCell2.setImageClickListener(new View.OnClickListener() { // from class: org.telegram.ui.ProfileActivity$ListAdapter$$ExternalSyntheticLambda0
                         @Override // android.view.View.OnClickListener
                         public final void onClick(View view) {
-                            ProfileActivity.access$27400(ProfileActivity.this, view);
+                            ProfileActivity.access$27900(ProfileActivity.this, view);
                         }
                     });
                     textDetailCell = textDetailCell2;
@@ -9706,7 +9748,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1821onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1817onCreateViewHolder(ViewGroup viewGroup, int i) {
             View settingsSearchCell;
             if (i == 0) {
                 settingsSearchCell = new SettingsSearchCell(this.mContext);

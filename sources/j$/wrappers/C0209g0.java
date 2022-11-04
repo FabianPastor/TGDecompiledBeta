@@ -1,7 +1,7 @@
 package j$.wrappers;
 
 import java.util.function.LongConsumer;
-/* renamed from: j$.wrappers.g0 */
+/* renamed from: j$.wrappers.g0  reason: case insensitive filesystem */
 /* loaded from: classes2.dex */
 public final /* synthetic */ class CLASSNAMEg0 implements LongConsumer {
     final /* synthetic */ j$.util.function.q a;

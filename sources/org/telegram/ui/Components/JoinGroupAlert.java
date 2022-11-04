@@ -459,7 +459,7 @@ public class JoinGroupAlert extends BottomSheet {
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1821onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1817onCreateViewHolder(ViewGroup viewGroup, int i) {
             JoinSheetUserCell joinSheetUserCell = new JoinSheetUserCell(this.context);
             joinSheetUserCell.setLayoutParams(new RecyclerView.LayoutParams(AndroidUtilities.dp(100.0f), AndroidUtilities.dp(90.0f)));
             return new RecyclerListView.Holder(joinSheetUserCell);

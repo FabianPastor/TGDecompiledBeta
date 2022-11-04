@@ -1883,7 +1883,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
     /* JADX WARN: Type inference failed for: r30v57 */
     /* JADX WARN: Type inference failed for: r30v60 */
     /* JADX WARN: Type inference failed for: r3v0 */
-    /* JADX WARN: Type inference failed for: r3v1, types: [int, boolean] */
+    /* JADX WARN: Type inference failed for: r3v1, types: [boolean, int] */
     /* JADX WARN: Type inference failed for: r3v10 */
     /* JADX WARN: Type inference failed for: r3v13 */
     /* JADX WARN: Type inference failed for: r3v14 */
@@ -1900,7 +1900,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
     /* JADX WARN: Type inference failed for: r9v211 */
     /* JADX WARN: Type inference failed for: r9v219 */
     /* JADX WARN: Type inference failed for: r9v220 */
-    /* JADX WARN: Type inference failed for: r9v4, types: [int, boolean] */
+    /* JADX WARN: Type inference failed for: r9v4, types: [boolean, int] */
     @android.annotation.SuppressLint({"Range"})
     /*
         Code decompiled incorrectly, please refer to instructions dump.

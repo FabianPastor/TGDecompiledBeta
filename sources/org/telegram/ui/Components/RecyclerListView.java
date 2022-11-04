@@ -281,7 +281,7 @@ public class RecyclerListView extends RecyclerView {
         public abstract int getCountForSection(int i);
 
         /* renamed from: getItem */
-        public abstract Object mo1809getItem(int i, int i2);
+        public abstract Object mo1805getItem(int i, int i2);
 
         public abstract int getItemViewType(int i, int i2);
 
@@ -342,7 +342,7 @@ public class RecyclerListView extends RecyclerView {
         }
 
         public final Object getItem(int i) {
-            return mo1809getItem(getSectionForPosition(i), getPositionInSectionForPosition(i));
+            return mo1805getItem(getSectionForPosition(i), getPositionInSectionForPosition(i));
         }
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
@@ -424,7 +424,7 @@ public class RecyclerListView extends RecyclerView {
             for (int i = 0; i < internalGetSectionCount; i++) {
                 int internalGetCountForSection = internalGetCountForSection(i);
                 for (int i2 = 0; i2 < internalGetCountForSection; i2++) {
-                    this.hashes.add(Integer.valueOf(Arrays.hashCode(new Object[]{Integer.valueOf((-49612) * i), mo1809getItem(i, i2)})));
+                    this.hashes.add(Integer.valueOf(Arrays.hashCode(new Object[]{Integer.valueOf((-49612) * i), mo1805getItem(i, i2)})));
                 }
             }
             if (z) {

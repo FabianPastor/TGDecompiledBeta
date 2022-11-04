@@ -944,10 +944,11 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
                     TopicsFragment.this.clearSelectedTopics();
                     break;
                 case 11:
-                    AlertsCreator.createClearOrDeleteDialogAlert(TopicsFragment.this, false, TopicsFragment.this.getMessagesController().getChat(Long.valueOf(TopicsFragment.this.chatId)), null, false, true, false, new MessagesStorage.BooleanCallback() { // from class: org.telegram.ui.TopicsFragment$2$$ExternalSyntheticLambda3
+                    final TLRPC$Chat chat = TopicsFragment.this.getMessagesController().getChat(Long.valueOf(TopicsFragment.this.chatId));
+                    AlertsCreator.createClearOrDeleteDialogAlert(TopicsFragment.this, false, chat, null, false, true, false, new MessagesStorage.BooleanCallback() { // from class: org.telegram.ui.TopicsFragment$2$$ExternalSyntheticLambda3
                         @Override // org.telegram.messenger.MessagesStorage.BooleanCallback
                         public final void run(boolean z2) {
-                            TopicsFragment.AnonymousClass2.this.lambda$onItemClick$3(z2);
+                            TopicsFragment.AnonymousClass2.this.lambda$onItemClick$3(chat, z2);
                         }
                     }, TopicsFragment.this.themeDelegate);
                     break;
@@ -979,9 +980,10 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$onItemClick$3(boolean z) {
-            TopicsFragment.this.getMessagesController().deleteDialog(-TopicsFragment.this.chatId, 0);
+        public /* synthetic */ void lambda$onItemClick$3(TLRPC$Chat tLRPC$Chat, boolean z) {
+            TopicsFragment.this.getNotificationCenter().postNotificationName(NotificationCenter.closeChats, new Object[0]);
             TopicsFragment.this.finishFragment();
+            TopicsFragment.this.getNotificationCenter().postNotificationName(NotificationCenter.needDeleteDialog, Long.valueOf(-tLRPC$Chat.id), null, tLRPC$Chat, Boolean.valueOf(z));
         }
 
         /* JADX INFO: Access modifiers changed from: private */
@@ -1203,9 +1205,9 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
             });
             actionBarPopupWindowLayoutArr[0].addView(actionBarMenuSubItem3);
         }
-        if (ChatObject.canManageTopics(getCurrentChat())) {
+        if (ChatObject.canDeleteTopic(this.currentAccount, getCurrentChat(), tLRPC$TL_forumTopic)) {
             ActionBarMenuSubItem actionBarMenuSubItem4 = new ActionBarMenuSubItem(getParentActivity(), false, true);
-            actionBarMenuSubItem4.setTextAndIcon(LocaleController.getString("DeleteTopics_one", R.string.DeleteTopics_one), R.drawable.msg_delete);
+            actionBarMenuSubItem4.setTextAndIcon(LocaleController.getPluralString("DeleteTopics", 1), R.drawable.msg_delete);
             actionBarMenuSubItem4.setIconColor(getThemedColor("dialogRedIcon"));
             actionBarMenuSubItem4.setTextColor(getThemedColor("dialogTextRed"));
             actionBarMenuSubItem4.setMinimumWidth(160);
@@ -1560,7 +1562,7 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
             while (it2.hasNext()) {
                 TLRPC$TL_forumTopic findTopic2 = this.topicsController.findTopic(this.chatId, it2.next().intValue());
                 if (findTopic2 != null) {
-                    if (ChatObject.canManageTopics(chat)) {
+                    if (ChatObject.canDeleteTopic(this.currentAccount, chat, findTopic2)) {
                         i11++;
                     }
                     if (ChatObject.canManageTopic(this.currentAccount, chat, findTopic2)) {
@@ -1910,7 +1912,7 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1821onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1817onCreateViewHolder(ViewGroup viewGroup, int i) {
             return new RecyclerListView.Holder(new TopicDialogCell(null, viewGroup.getContext(), true, false));
         }
 
@@ -2482,7 +2484,7 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
 
             @Override // androidx.recyclerview.widget.RecyclerView.Adapter
             /* renamed from: onCreateViewHolder */
-            public RecyclerView.ViewHolder mo1821onCreateViewHolder(ViewGroup viewGroup, int i) {
+            public RecyclerView.ViewHolder mo1817onCreateViewHolder(ViewGroup viewGroup, int i) {
                 View graySectionCell;
                 if (i == 1) {
                     graySectionCell = new GraySectionCell(viewGroup.getContext());

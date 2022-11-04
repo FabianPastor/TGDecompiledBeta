@@ -1040,7 +1040,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1821onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1817onCreateViewHolder(ViewGroup viewGroup, int i) {
             TextSettingsCell textSettingsCell;
             if (i == 0) {
                 View shadowSectionCell = new ShadowSectionCell(this.context);

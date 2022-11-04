@@ -3661,9 +3661,9 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     /* JADX WARN: Type inference failed for: r3v1058 */
     /* JADX WARN: Type inference failed for: r3v1059 */
     /* JADX WARN: Type inference failed for: r3v24 */
-    /* JADX WARN: Type inference failed for: r3v25, types: [int, boolean] */
+    /* JADX WARN: Type inference failed for: r3v25, types: [boolean, int] */
     /* JADX WARN: Type inference failed for: r3v33 */
-    /* JADX WARN: Type inference failed for: r3v46, types: [int, boolean] */
+    /* JADX WARN: Type inference failed for: r3v46, types: [boolean, int] */
     /* JADX WARN: Type inference failed for: r4v608, types: [org.telegram.tgnet.TLRPC$InputStickerSet] */
     /* JADX WARN: Type inference failed for: r8v112 */
     /* JADX WARN: Type inference failed for: r8v327, types: [org.telegram.messenger.WebFile, android.text.StaticLayout, java.lang.String] */
@@ -5251,7 +5251,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
 
     /* JADX WARN: Type inference failed for: r12v2 */
     /* JADX WARN: Type inference failed for: r12v29 */
-    /* JADX WARN: Type inference failed for: r12v3, types: [int, boolean] */
+    /* JADX WARN: Type inference failed for: r12v3, types: [boolean, int] */
     public void drawLinkPreview(Canvas canvas, float f) {
         int dp;
         int i;

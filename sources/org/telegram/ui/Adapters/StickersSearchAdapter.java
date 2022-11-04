@@ -303,7 +303,7 @@ public class StickersSearchAdapter extends RecyclerListView.SelectionAdapter {
 
     @Override // androidx.recyclerview.widget.RecyclerView.Adapter
     /* renamed from: onCreateViewHolder */
-    public RecyclerView.ViewHolder mo1821onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public RecyclerView.ViewHolder mo1817onCreateViewHolder(ViewGroup viewGroup, int i) {
         View view;
         LinearLayout linearLayout;
         if (i == 0) {
