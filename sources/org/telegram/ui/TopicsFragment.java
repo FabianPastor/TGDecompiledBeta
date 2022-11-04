@@ -1202,6 +1202,8 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
                 }
             });
             actionBarPopupWindowLayoutArr[0].addView(actionBarMenuSubItem3);
+        }
+        if (ChatObject.canManageTopics(getCurrentChat())) {
             ActionBarMenuSubItem actionBarMenuSubItem4 = new ActionBarMenuSubItem(getParentActivity(), false, true);
             actionBarMenuSubItem4.setTextAndIcon(LocaleController.getString("DeleteTopics_one", R.string.DeleteTopics_one), R.drawable.msg_delete);
             actionBarMenuSubItem4.setIconColor(getThemedColor("dialogRedIcon"));

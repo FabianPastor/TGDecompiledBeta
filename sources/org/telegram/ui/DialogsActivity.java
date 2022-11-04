@@ -4067,25 +4067,25 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     public boolean addOrRemoveSelectedDialog(long j, View view) {
-        if (getMessagesController().isForum(j)) {
-            return false;
-        }
-        if (this.selectedDialogs.contains(Long.valueOf(j))) {
-            this.selectedDialogs.remove(Long.valueOf(j));
-            if (view instanceof DialogCell) {
-                ((DialogCell) view).setChecked(false, true);
-            } else if (view instanceof ProfileSearchCell) {
-                ((ProfileSearchCell) view).setChecked(false, true);
+        if (!this.onlySelect || !getMessagesController().isForum(j)) {
+            if (this.selectedDialogs.contains(Long.valueOf(j))) {
+                this.selectedDialogs.remove(Long.valueOf(j));
+                if (view instanceof DialogCell) {
+                    ((DialogCell) view).setChecked(false, true);
+                } else if (view instanceof ProfileSearchCell) {
+                    ((ProfileSearchCell) view).setChecked(false, true);
+                }
+                return false;
             }
-            return false;
+            this.selectedDialogs.add(Long.valueOf(j));
+            if (view instanceof DialogCell) {
+                ((DialogCell) view).setChecked(true, true);
+            } else if (view instanceof ProfileSearchCell) {
+                ((ProfileSearchCell) view).setChecked(true, true);
+            }
+            return true;
         }
-        this.selectedDialogs.add(Long.valueOf(j));
-        if (view instanceof DialogCell) {
-            ((DialogCell) view).setChecked(true, true);
-        } else if (view instanceof ProfileSearchCell) {
-            ((ProfileSearchCell) view).setChecked(true, true);
-        }
-        return true;
+        return false;
     }
 
     public void search(String str, boolean z) {

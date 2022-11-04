@@ -1368,7 +1368,7 @@ public class ChangeUsernameActivity extends BaseFragment {
         if (this.username.startsWith("@")) {
             this.username = this.username.substring(1);
         }
-        if (!checkUserName(this.username, false)) {
+        if (!checkUserName(this.username, true)) {
             shakeIfOff();
             return;
         }
