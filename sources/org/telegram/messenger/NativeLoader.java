@@ -71,9 +71,9 @@ public class NativeLoader {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.NativeLoader.loadFromZip(android.content.Context, java.io.File, java.io.File, java.lang.String):boolean");
     }
 
-    /* JADX WARN: Removed duplicated region for block: B:59:0x00d5 A[Catch: all -> 0x001c, TryCatch #6 {, blocks: (B:4:0x0003, B:65:0x00f4, B:68:0x00fd, B:9:0x000a, B:11:0x0015, B:17:0x0020, B:18:0x0023, B:42:0x0089, B:44:0x0091, B:47:0x009b, B:49:0x00b6, B:51:0x00ba, B:52:0x00bf, B:57:0x00d1, B:59:0x00d5, B:60:0x00e9, B:56:0x00cb, B:21:0x0030, B:24:0x003b, B:27:0x0046, B:30:0x0051, B:33:0x005c, B:36:0x0067, B:38:0x006d, B:41:0x0084), top: B:82:0x0003 }] */
-    /* JADX WARN: Removed duplicated region for block: B:63:0x00f0 A[RETURN] */
-    /* JADX WARN: Removed duplicated region for block: B:76:0x00f4 A[EXC_TOP_SPLITTER, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:59:0x00da A[Catch: all -> 0x001c, TryCatch #3 {, blocks: (B:4:0x0003, B:65:0x00f9, B:68:0x0102, B:9:0x000a, B:11:0x0015, B:17:0x0020, B:18:0x0023, B:42:0x008d, B:44:0x0095, B:47:0x00a0, B:49:0x00bb, B:51:0x00bf, B:52:0x00c4, B:57:0x00d6, B:59:0x00da, B:60:0x00ee, B:56:0x00d0, B:21:0x0032, B:24:0x003d, B:27:0x0048, B:30:0x0053, B:33:0x0060, B:36:0x006b, B:38:0x0071, B:41:0x0088), top: B:78:0x0003, inners: #0 }] */
+    /* JADX WARN: Removed duplicated region for block: B:63:0x00f5 A[RETURN] */
+    /* JADX WARN: Removed duplicated region for block: B:74:0x00f9 A[EXC_TOP_SPLITTER, SYNTHETIC] */
     @android.annotation.SuppressLint({"UnsafeDynamicallyLoadedCode"})
     /*
         Code decompiled incorrectly, please refer to instructions dump.
@@ -81,7 +81,7 @@ public class NativeLoader {
     */
     public static synchronized void initNativeLibs(android.content.Context r7) {
         /*
-            Method dump skipped, instructions count: 261
+            Method dump skipped, instructions count: 266
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.NativeLoader.initNativeLibs(android.content.Context):void");

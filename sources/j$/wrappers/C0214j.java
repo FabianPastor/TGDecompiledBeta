@@ -79,18 +79,18 @@ public final /* synthetic */ class CLASSNAMEj implements Spliterator.OfDouble {
 
     @Override // java.util.Spliterator.OfDouble, java.util.Spliterator.OfPrimitive, java.util.Spliterator
     public /* synthetic */ Spliterator.OfDouble trySplit() {
-        return a(this.a.mo322trySplit());
+        return a(this.a.mo326trySplit());
     }
 
     @Override // java.util.Spliterator.OfDouble, java.util.Spliterator.OfPrimitive, java.util.Spliterator
     /* renamed from: trySplit */
-    public /* synthetic */ Spliterator.OfPrimitive mo314trySplit() {
-        return CLASSNAMEp.a(this.a.mo322trySplit());
+    public /* synthetic */ Spliterator.OfPrimitive mo318trySplit() {
+        return CLASSNAMEp.a(this.a.mo326trySplit());
     }
 
     @Override // java.util.Spliterator.OfDouble, java.util.Spliterator.OfPrimitive, java.util.Spliterator
     /* renamed from: trySplit */
-    public /* synthetic */ Spliterator mo315trySplit() {
-        return CLASSNAMEh.a(this.a.mo322trySplit());
+    public /* synthetic */ Spliterator mo319trySplit() {
+        return CLASSNAMEh.a(this.a.mo326trySplit());
     }
 }

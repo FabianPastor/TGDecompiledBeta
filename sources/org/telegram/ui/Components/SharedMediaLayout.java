@@ -4408,7 +4408,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
 
         @Override // org.telegram.ui.Components.RecyclerListView.SectionsAdapter
         /* renamed from: getItem */
-        public Object mo1801getItem(int i, int i2) {
+        public Object mo1809getItem(int i, int i2) {
             return null;
         }
 
@@ -4475,7 +4475,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
         /* JADX WARN: Multi-variable type inference failed */
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1813onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1821onCreateViewHolder(ViewGroup viewGroup, int i) {
             GraySectionCell graySectionCell;
             if (i == 0) {
                 graySectionCell = new GraySectionCell(this.mContext, SharedMediaLayout.this.resourcesProvider);
@@ -4583,7 +4583,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
         /* JADX WARN: Multi-variable type inference failed */
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1813onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1821onCreateViewHolder(ViewGroup viewGroup, int i) {
             View view;
             View view2;
             if (i == 1) {
@@ -4894,7 +4894,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1813onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1821onCreateViewHolder(ViewGroup viewGroup, int i) {
             if (i != 0) {
                 View createEmptyStubView = SharedMediaLayout.createEmptyStubView(this.mContext, 0, SharedMediaLayout.this.dialog_id, SharedMediaLayout.this.resourcesProvider);
                 createEmptyStubView.setLayoutParams(new RecyclerView.LayoutParams(-1, -1));
@@ -5409,7 +5409,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1813onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1821onCreateViewHolder(ViewGroup viewGroup, int i) {
             FrameLayout frameLayout;
             int i2 = this.currentType;
             if (i2 == 1) {
@@ -5520,7 +5520,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1813onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1821onCreateViewHolder(ViewGroup viewGroup, int i) {
             if (i == 1) {
                 View createEmptyStubView = SharedMediaLayout.createEmptyStubView(this.mContext, 5, SharedMediaLayout.this.dialog_id, SharedMediaLayout.this.resourcesProvider);
                 createEmptyStubView.setLayoutParams(new RecyclerView.LayoutParams(-1, -1));
@@ -5660,7 +5660,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
         /* JADX WARN: Multi-variable type inference failed */
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1813onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1821onCreateViewHolder(ViewGroup viewGroup, int i) {
             ProfileSearchCell profileSearchCell;
             if (i == 0) {
                 profileSearchCell = new ProfileSearchCell(this.mContext, SharedMediaLayout.this.resourcesProvider);
@@ -5732,7 +5732,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1813onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1821onCreateViewHolder(ViewGroup viewGroup, int i) {
             if (i == 1) {
                 View createEmptyStubView = SharedMediaLayout.createEmptyStubView(this.mContext, 7, SharedMediaLayout.this.dialog_id, SharedMediaLayout.this.resourcesProvider);
                 createEmptyStubView.setLayoutParams(new RecyclerView.LayoutParams(-1, -1));
@@ -5934,15 +5934,15 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
         /* JADX WARN: Code restructure failed: missing block: B:42:0x00f1, code lost:
             if (r14.contains(" " + r3) != false) goto L53;
          */
-        /* JADX WARN: Removed duplicated region for block: B:57:0x0147 A[LOOP:1: B:33:0x00b5->B:57:0x0147, LOOP_END] */
-        /* JADX WARN: Removed duplicated region for block: B:65:0x0108 A[SYNTHETIC] */
+        /* JADX WARN: Removed duplicated region for block: B:57:0x014b A[LOOP:1: B:33:0x00b5->B:57:0x014b, LOOP_END] */
+        /* JADX WARN: Removed duplicated region for block: B:65:0x010a A[SYNTHETIC] */
         /*
             Code decompiled incorrectly, please refer to instructions dump.
             To view partially-correct add '--show-bad-code' argument
         */
         public /* synthetic */ void lambda$processSearch$2(java.lang.String r19, java.util.ArrayList r20) {
             /*
-                Method dump skipped, instructions count: 346
+                Method dump skipped, instructions count: 350
                 To view this dump add '--comments-level debug' option
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.SharedMediaLayout.GroupUsersSearchAdapter.lambda$processSearch$2(java.lang.String, java.util.ArrayList):void");
@@ -6014,7 +6014,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1813onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1821onCreateViewHolder(ViewGroup viewGroup, int i) {
             ManageChatUserCell manageChatUserCell = new ManageChatUserCell(this.mContext, 9, 5, true, SharedMediaLayout.this.resourcesProvider);
             manageChatUserCell.setBackgroundColor(SharedMediaLayout.this.getThemedColor("windowBackgroundWhite"));
             manageChatUserCell.setDelegate(new ManageChatUserCell.ManageChatUserCellDelegate() { // from class: org.telegram.ui.Components.SharedMediaLayout$GroupUsersSearchAdapter$$ExternalSyntheticLambda5
@@ -6049,7 +6049,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             } else {
                 user = SharedMediaLayout.this.profileActivity.getMessagesController().getUser(Long.valueOf(((TLRPC$ChatParticipant) item).user_id));
             }
-            String str = user.username;
+            UserObject.getPublicUsername(user);
             this.searchAdapterHelper.getGroupSearch().size();
             String lastFoundChannel = this.searchAdapterHelper.getLastFoundChannel();
             if (lastFoundChannel != null) {

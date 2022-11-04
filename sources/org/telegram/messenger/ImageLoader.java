@@ -2689,18 +2689,18 @@ public class ImageLoader {
         }
     }
 
-    /* JADX WARN: Removed duplicated region for block: B:33:0x009a  */
-    /* JADX WARN: Removed duplicated region for block: B:34:0x009f  */
-    /* JADX WARN: Removed duplicated region for block: B:40:0x00bd  */
-    /* JADX WARN: Removed duplicated region for block: B:43:0x00cd  */
-    /* JADX WARN: Removed duplicated region for block: B:45:0x00e3  */
+    /* JADX WARN: Removed duplicated region for block: B:33:0x009c  */
+    /* JADX WARN: Removed duplicated region for block: B:34:0x00a1  */
+    /* JADX WARN: Removed duplicated region for block: B:40:0x00bf  */
+    /* JADX WARN: Removed duplicated region for block: B:43:0x00cf  */
+    /* JADX WARN: Removed duplicated region for block: B:45:0x00e5  */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
     private static org.telegram.tgnet.TLRPC$PhotoSize scaleAndSaveImageInternal(org.telegram.tgnet.TLRPC$PhotoSize r2, android.graphics.Bitmap r3, android.graphics.Bitmap.CompressFormat r4, boolean r5, int r6, int r7, float r8, float r9, float r10, int r11, boolean r12, boolean r13, boolean r14) throws java.lang.Exception {
         /*
-            Method dump skipped, instructions count: 231
+            Method dump skipped, instructions count: 233
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ImageLoader.scaleAndSaveImageInternal(org.telegram.tgnet.TLRPC$PhotoSize, android.graphics.Bitmap, android.graphics.Bitmap$CompressFormat, boolean, int, int, float, float, float, int, boolean, boolean, boolean):org.telegram.tgnet.TLRPC$PhotoSize");

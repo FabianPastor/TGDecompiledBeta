@@ -337,6 +337,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     private float drawTimeY;
     private boolean drawVideoImageButton;
     private boolean drawVideoSize;
+    private Paint drillHolePaint;
     private Path drillHolePath;
     private StaticLayout durationLayout;
     private int durationWidth;
@@ -558,7 +559,6 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     int roundSeekbarTouched;
     private float roundToPauseProgress;
     private float roundToPauseProgress2;
-    private Paint roundVideoPipPaint;
     private AnimatedFloat roundVideoPlayPipFloat;
     private RoundVideoPlayingDrawable roundVideoPlayingDrawable;
     private Path sPath;
@@ -5205,17 +5205,17 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.ChatMessageCell.updatePollAnimations(long):void");
     }
 
-    /* JADX WARN: Removed duplicated region for block: B:1281:0x0903  */
-    /* JADX WARN: Removed duplicated region for block: B:1286:0x094b  */
-    /* JADX WARN: Removed duplicated region for block: B:1289:0x0952  */
-    /* JADX WARN: Removed duplicated region for block: B:1299:0x09e3  */
+    /* JADX WARN: Removed duplicated region for block: B:1315:0x0964  */
+    /* JADX WARN: Removed duplicated region for block: B:1320:0x09ac  */
+    /* JADX WARN: Removed duplicated region for block: B:1323:0x09b3  */
+    /* JADX WARN: Removed duplicated region for block: B:1333:0x0a44  */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
     private void drawContent(android.graphics.Canvas r37) {
         /*
-            Method dump skipped, instructions count: 5199
+            Method dump skipped, instructions count: 5296
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.ChatMessageCell.drawContent(android.graphics.Canvas):void");
@@ -7273,28 +7273,16 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         updateSelectionTextPosition();
     }
 
-    /* JADX WARN: Removed duplicated region for block: B:578:0x031d A[ADDED_TO_REGION] */
-    /* JADX WARN: Removed duplicated region for block: B:582:0x032c  */
-    /* JADX WARN: Removed duplicated region for block: B:585:0x0339  */
-    /* JADX WARN: Removed duplicated region for block: B:598:0x03a1  */
-    /* JADX WARN: Removed duplicated region for block: B:601:0x03a7  */
-    /* JADX WARN: Removed duplicated region for block: B:605:0x03af  */
-    /* JADX WARN: Removed duplicated region for block: B:606:0x03b4  */
-    /* JADX WARN: Removed duplicated region for block: B:609:0x03bc  */
-    /* JADX WARN: Removed duplicated region for block: B:610:0x03be  */
-    /* JADX WARN: Removed duplicated region for block: B:613:0x03d1  */
-    /* JADX WARN: Removed duplicated region for block: B:621:0x0404  */
-    /* JADX WARN: Removed duplicated region for block: B:622:0x041e  */
-    /* JADX WARN: Removed duplicated region for block: B:799:0x07fd  */
-    /* JADX WARN: Removed duplicated region for block: B:812:0x08ad  */
+    /* JADX WARN: Removed duplicated region for block: B:773:0x07a4  */
+    /* JADX WARN: Removed duplicated region for block: B:786:0x0854  */
     @android.annotation.SuppressLint({"WrongCall"})
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public void drawBackgroundInternal(android.graphics.Canvas r30, boolean r31) {
+    public void drawBackgroundInternal(android.graphics.Canvas r28, boolean r29) {
         /*
-            Method dump skipped, instructions count: 2353
+            Method dump skipped, instructions count: 2264
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.ChatMessageCell.drawBackgroundInternal(android.graphics.Canvas, boolean):void");

@@ -1,8 +1,9 @@
 package j$.util.stream;
 
 import j$.util.function.Consumer;
+/* JADX INFO: Access modifiers changed from: package-private */
 /* loaded from: classes2.dex */
-final class P1 extends R1 implements InterfaceCLASSNAMEw1 {
+public final class P1 extends R1 implements InterfaceCLASSNAMEw1 {
     /* JADX INFO: Access modifiers changed from: package-private */
     public P1(InterfaceCLASSNAMEw1 interfaceCLASSNAMEw1, InterfaceCLASSNAMEw1 interfaceCLASSNAMEw12) {
         super(interfaceCLASSNAMEw1, interfaceCLASSNAMEw12);
@@ -33,13 +34,13 @@ final class P1 extends R1 implements InterfaceCLASSNAMEw1 {
 
     @Override // j$.util.stream.A1
     /* renamed from: spliterator  reason: collision with other method in class */
-    public j$.util.w mo285spliterator() {
+    public j$.util.w mo289spliterator() {
         return new CLASSNAMEg2(this);
     }
 
     @Override // j$.util.stream.A1
     /* renamed from: spliterator */
-    public j$.util.u mo285spliterator() {
+    public j$.util.u mo289spliterator() {
         return new CLASSNAMEg2(this);
     }
 }

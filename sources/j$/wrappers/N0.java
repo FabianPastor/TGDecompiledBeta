@@ -123,13 +123,13 @@ public final /* synthetic */ class N0 implements InterfaceCLASSNAMEe1 {
 
     @Override // j$.util.stream.InterfaceCLASSNAMEe1, j$.util.stream.InterfaceCLASSNAMEg
     /* renamed from: iterator */
-    public /* synthetic */ j$.util.r mo303iterator() {
+    public /* synthetic */ j$.util.r mo307iterator() {
         return CLASSNAMEe.a(this.a.iterator());
     }
 
     @Override // j$.util.stream.InterfaceCLASSNAMEe1, j$.util.stream.InterfaceCLASSNAMEg
     /* renamed from: iterator */
-    public /* synthetic */ Iterator mo303iterator() {
+    public /* synthetic */ Iterator mo307iterator() {
         return this.a.iterator();
     }
 
@@ -165,13 +165,13 @@ public final /* synthetic */ class N0 implements InterfaceCLASSNAMEe1 {
 
     @Override // j$.util.stream.InterfaceCLASSNAMEe1, j$.util.stream.InterfaceCLASSNAMEg, j$.util.stream.IntStream
     /* renamed from: parallel */
-    public /* synthetic */ InterfaceCLASSNAMEe1 mo304parallel() {
+    public /* synthetic */ InterfaceCLASSNAMEe1 mo308parallel() {
         return n0(this.a.parallel());
     }
 
     @Override // j$.util.stream.InterfaceCLASSNAMEe1, j$.util.stream.InterfaceCLASSNAMEg, j$.util.stream.IntStream
     /* renamed from: parallel */
-    public /* synthetic */ InterfaceCLASSNAMEg mo304parallel() {
+    public /* synthetic */ InterfaceCLASSNAMEg mo308parallel() {
         return H0.n0(this.a.parallel());
     }
 
@@ -182,13 +182,13 @@ public final /* synthetic */ class N0 implements InterfaceCLASSNAMEe1 {
 
     @Override // j$.util.stream.InterfaceCLASSNAMEe1, j$.util.stream.InterfaceCLASSNAMEg, j$.util.stream.IntStream
     /* renamed from: sequential */
-    public /* synthetic */ InterfaceCLASSNAMEe1 mo305sequential() {
+    public /* synthetic */ InterfaceCLASSNAMEe1 mo309sequential() {
         return n0(this.a.sequential());
     }
 
     @Override // j$.util.stream.InterfaceCLASSNAMEe1, j$.util.stream.InterfaceCLASSNAMEg, j$.util.stream.IntStream
     /* renamed from: sequential */
-    public /* synthetic */ InterfaceCLASSNAMEg mo305sequential() {
+    public /* synthetic */ InterfaceCLASSNAMEg mo309sequential() {
         return H0.n0(this.a.sequential());
     }
 
@@ -204,13 +204,13 @@ public final /* synthetic */ class N0 implements InterfaceCLASSNAMEe1 {
 
     @Override // j$.util.stream.InterfaceCLASSNAMEe1, j$.util.stream.InterfaceCLASSNAMEg
     /* renamed from: spliterator */
-    public /* synthetic */ j$.util.u mo306spliterator() {
+    public /* synthetic */ j$.util.u mo310spliterator() {
         return CLASSNAMEg.a(this.a.spliterator());
     }
 
     @Override // j$.util.stream.InterfaceCLASSNAMEe1, j$.util.stream.InterfaceCLASSNAMEg
     /* renamed from: spliterator */
-    public /* synthetic */ j$.util.v mo306spliterator() {
+    public /* synthetic */ j$.util.v mo310spliterator() {
         return CLASSNAMEm.a(this.a.spliterator());
     }
 

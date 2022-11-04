@@ -19,7 +19,7 @@ public interface u {
 
         @Override // j$.util.w, j$.util.u
         /* renamed from: trySplit */
-        a mo322trySplit();
+        a mo326trySplit();
     }
 
     boolean b(Consumer consumer);
@@ -37,5 +37,5 @@ public interface u {
     boolean hasCharacteristics(int i);
 
     /* renamed from: trySplit */
-    u mo322trySplit();
+    u mo326trySplit();
 }

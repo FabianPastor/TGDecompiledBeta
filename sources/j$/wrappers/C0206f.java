@@ -43,14 +43,14 @@ public final /* synthetic */ class CLASSNAMEf implements PrimitiveIterator.OfLon
 
     @Override // java.util.PrimitiveIterator.OfLong, java.util.Iterator
     public /* synthetic */ Long next() {
-        return this.a.mo311next();
+        return this.a.mo315next();
     }
 
     /* JADX WARN: Type inference failed for: r0v0, types: [j$.util.Iterator, j$.util.r] */
     @Override // java.util.PrimitiveIterator.OfLong, java.util.Iterator
     /* renamed from: next  reason: collision with other method in class */
-    public /* synthetic */ Object mo312next() {
-        return this.a.mo307next();
+    public /* synthetic */ Object mo316next() {
+        return this.a.mo311next();
     }
 
     @Override // java.util.PrimitiveIterator.OfLong

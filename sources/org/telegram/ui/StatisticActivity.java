@@ -806,7 +806,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1813onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1821onCreateViewHolder(ViewGroup viewGroup, int i) {
             ManageChatTextCell shadowSectionCell;
             if (i >= 0 && i <= 4) {
                 View view = new ChartCell(this, viewGroup.getContext(), i, StatisticActivity.this.sharedUi) { // from class: org.telegram.ui.StatisticActivity.Adapter.1

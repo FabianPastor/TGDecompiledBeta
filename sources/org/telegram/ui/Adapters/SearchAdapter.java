@@ -168,14 +168,13 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
         LongSparseArray<TLRPC$User> longSparseArray;
         int i3;
         String str2;
-        String str3;
         String lowerCase = str.trim().toLowerCase();
         if (lowerCase.length() == 0) {
             updateSearchResults(i, new ArrayList<>(), new ArrayList<>());
             return;
         }
         String translitString = LocaleController.getInstance().getTranslitString(lowerCase);
-        String str4 = null;
+        String str3 = null;
         if (lowerCase.equals(translitString) || translitString.length() == 0) {
             translitString = null;
         }
@@ -199,7 +198,7 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
                 strArr2[c] = ContactsController.formatName(user.first_name, user.last_name).toLowerCase();
                 strArr2[c2] = LocaleController.getInstance().getTranslitString(strArr2[c]);
                 if (strArr2[c].equals(strArr2[c2])) {
-                    strArr2[c2] = str4;
+                    strArr2[c2] = str3;
                 }
                 if (UserObject.isReplyUser(user)) {
                     strArr2[2] = LocaleController.getString("RepliesTitle", R.string.RepliesTitle).toLowerCase();
@@ -209,17 +208,17 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
                 int i7 = 0;
                 char c3 = 0;
                 while (i7 < i4) {
-                    String str5 = strArr[i7];
+                    String str4 = strArr[i7];
                     int i8 = 0;
                     while (i8 < i6) {
-                        String str6 = strArr2[i8];
-                        if (str6 != null) {
-                            if (!str6.startsWith(str5)) {
+                        String str5 = strArr2[i8];
+                        if (str5 != null) {
+                            if (!str5.startsWith(str4)) {
                                 StringBuilder sb = new StringBuilder();
                                 i3 = i4;
                                 sb.append(" ");
-                                sb.append(str5);
-                                if (str6.contains(sb.toString())) {
+                                sb.append(str4);
+                                if (str5.contains(sb.toString())) {
                                 }
                             } else {
                                 i3 = i4;
@@ -233,35 +232,36 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
                         i6 = 3;
                     }
                     i3 = i4;
-                    if (c3 == 0 && (str3 = user.username) != null && str3.startsWith(str5)) {
+                    String publicUsername = UserObject.getPublicUsername(user);
+                    if (c3 == 0 && publicUsername != null && publicUsername.startsWith(str4)) {
                         c3 = 2;
                     }
                     if (c3 != 0) {
                         if (c3 == 1) {
-                            arrayList3.add(AndroidUtilities.generateSearchName(user.first_name, user.last_name, str5));
+                            arrayList3.add(AndroidUtilities.generateSearchName(user.first_name, user.last_name, str4));
                             str2 = null;
                         } else {
                             str2 = null;
-                            arrayList3.add(AndroidUtilities.generateSearchName("@" + user.username, null, "@" + str5));
+                            arrayList3.add(AndroidUtilities.generateSearchName("@" + UserObject.getPublicUsername(user), null, "@" + str4));
                         }
                         arrayList2.add(user);
                         i5++;
-                        str4 = str2;
+                        str3 = str2;
                         i4 = i3;
                         c = 0;
                         c2 = 1;
                     } else {
                         i7++;
-                        str4 = null;
+                        str3 = null;
                         i4 = i3;
                         i6 = 3;
                     }
                 }
             }
             i3 = i4;
-            str2 = str4;
+            str2 = str3;
             i5++;
-            str4 = str2;
+            str3 = str2;
             i4 = i3;
             c = 0;
             c2 = 1;
@@ -341,7 +341,7 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
 
     @Override // androidx.recyclerview.widget.RecyclerView.Adapter
     /* renamed from: onCreateViewHolder */
-    public RecyclerView.ViewHolder mo1813onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public RecyclerView.ViewHolder mo1821onCreateViewHolder(ViewGroup viewGroup, int i) {
         View profileSearchCell;
         if (i != 0) {
             if (i == 1) {

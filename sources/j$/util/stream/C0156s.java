@@ -34,7 +34,7 @@ class CLASSNAMEs extends AbstractCLASSNAMEc3 {
 
     @Override // j$.util.stream.AbstractCLASSNAMEc
     j$.util.u F0(AbstractCLASSNAMEy2 abstractCLASSNAMEy2, j$.util.u uVar) {
-        return EnumCLASSNAMEd4.DISTINCT.d(abstractCLASSNAMEy2.s0()) ? abstractCLASSNAMEy2.w0(uVar) : EnumCLASSNAMEd4.ORDERED.d(abstractCLASSNAMEy2.s0()) ? ((E1) L0(abstractCLASSNAMEy2, uVar)).mo285spliterator() : new CLASSNAMEm4(abstractCLASSNAMEy2.w0(uVar));
+        return EnumCLASSNAMEd4.DISTINCT.d(abstractCLASSNAMEy2.s0()) ? abstractCLASSNAMEy2.w0(uVar) : EnumCLASSNAMEd4.ORDERED.d(abstractCLASSNAMEy2.s0()) ? ((E1) L0(abstractCLASSNAMEy2, uVar)).mo289spliterator() : new CLASSNAMEm4(abstractCLASSNAMEy2.w0(uVar));
     }
 
     /* JADX INFO: Access modifiers changed from: package-private */

@@ -33,13 +33,13 @@ final class Q1 extends R1 implements InterfaceCLASSNAMEy1 {
 
     @Override // j$.util.stream.A1
     /* renamed from: spliterator  reason: collision with other method in class */
-    public j$.util.w mo285spliterator() {
+    public j$.util.w mo289spliterator() {
         return new CLASSNAMEh2(this);
     }
 
     @Override // j$.util.stream.A1
     /* renamed from: spliterator */
-    public j$.util.u mo285spliterator() {
+    public j$.util.u mo289spliterator() {
         return new CLASSNAMEh2(this);
     }
 }

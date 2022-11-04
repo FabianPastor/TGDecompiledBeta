@@ -19,7 +19,7 @@ abstract class H {
     }
 
     /* renamed from: trySplit */
-    public u mo322trySplit() {
+    public u mo326trySplit() {
         return null;
     }
 }

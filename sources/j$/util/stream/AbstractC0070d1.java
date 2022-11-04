@@ -163,14 +163,14 @@ public abstract class AbstractCLASSNAMEd1 extends AbstractCLASSNAMEc implements 
 
     @Override // j$.util.stream.InterfaceCLASSNAMEg
     /* renamed from: iterator */
-    public final j$.util.r mo303iterator() {
-        return j$.util.L.h(mo306spliterator());
+    public final j$.util.r mo307iterator() {
+        return j$.util.L.h(mo310spliterator());
     }
 
     @Override // j$.util.stream.InterfaceCLASSNAMEg
     /* renamed from: iterator */
-    public Iterator mo303iterator() {
-        return j$.util.L.h(mo306spliterator());
+    public Iterator mo307iterator() {
+        return j$.util.L.h(mo310spliterator());
     }
 
     @Override // j$.util.stream.InterfaceCLASSNAMEe1
@@ -223,8 +223,8 @@ public abstract class AbstractCLASSNAMEd1 extends AbstractCLASSNAMEc implements 
 
     @Override // j$.util.stream.AbstractCLASSNAMEc, j$.util.stream.InterfaceCLASSNAMEg
     /* renamed from: spliterator */
-    public final j$.util.v mo306spliterator() {
-        return M0(super.mo306spliterator());
+    public final j$.util.v mo310spliterator() {
+        return M0(super.mo310spliterator());
     }
 
     @Override // j$.util.stream.InterfaceCLASSNAMEe1

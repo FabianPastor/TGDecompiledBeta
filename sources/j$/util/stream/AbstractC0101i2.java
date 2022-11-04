@@ -46,9 +46,9 @@ abstract class AbstractCLASSNAMEi2 extends AbstractCLASSNAMEk2 implements j$.uti
         boolean tryAdvance = ((j$.util.w) this.d).tryAdvance(obj);
         if (!tryAdvance) {
             if (this.c == null && (interfaceCLASSNAMEz1 = (InterfaceCLASSNAMEz1) a(this.e)) != null) {
-                j$.util.w mo285spliterator = interfaceCLASSNAMEz1.mo285spliterator();
-                this.d = mo285spliterator;
-                return mo285spliterator.tryAdvance(obj);
+                j$.util.w mo289spliterator = interfaceCLASSNAMEz1.mo289spliterator();
+                this.d = mo289spliterator;
+                return mo289spliterator.tryAdvance(obj);
             }
             this.a = null;
         }

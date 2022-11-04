@@ -52,7 +52,7 @@ abstract class AbstractCLASSNAMEf extends CountedCompleter {
 
     @Override // java.util.concurrent.CountedCompleter
     public void compute() {
-        j$.util.u mo322trySplit;
+        j$.util.u mo326trySplit;
         j$.util.u uVar = this.b;
         long estimateSize = uVar.estimateSize();
         long j = this.c;
@@ -62,14 +62,14 @@ abstract class AbstractCLASSNAMEf extends CountedCompleter {
         }
         boolean z = false;
         AbstractCLASSNAMEf abstractCLASSNAMEf = this;
-        while (estimateSize > j && (mo322trySplit = uVar.mo322trySplit()) != null) {
-            AbstractCLASSNAMEf f = abstractCLASSNAMEf.f(mo322trySplit);
+        while (estimateSize > j && (mo326trySplit = uVar.mo326trySplit()) != null) {
+            AbstractCLASSNAMEf f = abstractCLASSNAMEf.f(mo326trySplit);
             abstractCLASSNAMEf.d = f;
             AbstractCLASSNAMEf f2 = abstractCLASSNAMEf.f(uVar);
             abstractCLASSNAMEf.e = f2;
             abstractCLASSNAMEf.setPendingCount(1);
             if (z) {
-                uVar = mo322trySplit;
+                uVar = mo326trySplit;
                 abstractCLASSNAMEf = f;
                 f = f2;
             } else {

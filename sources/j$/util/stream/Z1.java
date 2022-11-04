@@ -17,7 +17,7 @@ class Z1 extends AbstractCLASSNAMEa2 {
 
     @Override // j$.util.stream.A1
     /* renamed from: spliterator */
-    public j$.util.u mo285spliterator() {
+    public j$.util.u mo289spliterator() {
         return j$.util.L.e();
     }
 }

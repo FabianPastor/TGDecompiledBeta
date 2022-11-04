@@ -7,5 +7,5 @@ public interface e {
     void forEach(Consumer consumer);
 
     /* renamed from: spliterator */
-    u mo289spliterator();
+    u mo293spliterator();
 }

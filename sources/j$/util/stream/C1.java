@@ -14,7 +14,7 @@ abstract class C1 implements A1 {
 
     @Override // j$.util.stream.A1
     /* renamed from: b */
-    public A1 mo288b(int i) {
+    public A1 mo292b(int i) {
         if (i == 0) {
             return this.a;
         }
@@ -26,8 +26,8 @@ abstract class C1 implements A1 {
 
     @Override // j$.util.stream.A1
     /* renamed from: b  reason: collision with other method in class */
-    public /* bridge */ /* synthetic */ InterfaceCLASSNAMEz1 mo288b(int i) {
-        return (InterfaceCLASSNAMEz1) mo288b(i);
+    public /* bridge */ /* synthetic */ InterfaceCLASSNAMEz1 mo292b(int i) {
+        return (InterfaceCLASSNAMEz1) mo292b(i);
     }
 
     @Override // j$.util.stream.A1

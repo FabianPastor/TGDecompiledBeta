@@ -7,6 +7,7 @@ import org.telegram.tgnet.TLRPC$TL_userDeleted_old2;
 import org.telegram.tgnet.TLRPC$TL_userEmpty;
 import org.telegram.tgnet.TLRPC$TL_userProfilePhotoEmpty;
 import org.telegram.tgnet.TLRPC$TL_userSelf_old3;
+import org.telegram.tgnet.TLRPC$TL_username;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.tgnet.TLRPC$UserProfilePhoto;
 /* loaded from: classes.dex */
@@ -47,6 +48,28 @@ public class UserObject {
         }
         PhoneFormat phoneFormat = PhoneFormat.getInstance();
         return phoneFormat.format("+" + tLRPC$User.phone);
+    }
+
+    public static String getPublicUsername(TLRPC$User tLRPC$User, boolean z) {
+        if (tLRPC$User == null) {
+            return null;
+        }
+        if (!TextUtils.isEmpty(tLRPC$User.username)) {
+            return tLRPC$User.username;
+        }
+        if (tLRPC$User.usernames != null) {
+            for (int i = 0; i < tLRPC$User.usernames.size(); i++) {
+                TLRPC$TL_username tLRPC$TL_username = tLRPC$User.usernames.get(i);
+                if (tLRPC$TL_username != null && (((tLRPC$TL_username.active && !z) || tLRPC$TL_username.editable) && !TextUtils.isEmpty(tLRPC$TL_username.username))) {
+                    return tLRPC$TL_username.username;
+                }
+            }
+        }
+        return null;
+    }
+
+    public static String getPublicUsername(TLRPC$User tLRPC$User) {
+        return getPublicUsername(tLRPC$User, false);
     }
 
     public static String getFirstName(TLRPC$User tLRPC$User) {

@@ -66,13 +66,13 @@ public final /* synthetic */ class CLASSNAMEo implements j$.util.w {
 
     @Override // j$.util.w, j$.util.u
     /* renamed from: trySplit */
-    public /* synthetic */ j$.util.u mo322trySplit() {
+    public /* synthetic */ j$.util.u mo326trySplit() {
         return CLASSNAMEg.a(this.a.trySplit());
     }
 
     @Override // j$.util.w, j$.util.u
     /* renamed from: trySplit  reason: collision with other method in class */
-    public /* synthetic */ j$.util.w mo322trySplit() {
+    public /* synthetic */ j$.util.w mo326trySplit() {
         return a(this.a.trySplit());
     }
 }

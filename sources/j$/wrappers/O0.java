@@ -118,13 +118,13 @@ public final /* synthetic */ class O0 implements LongStream {
 
     @Override // java.util.stream.LongStream, java.util.stream.BaseStream
     public /* synthetic */ Iterator<Long> iterator() {
-        return this.a.mo303iterator();
+        return this.a.mo307iterator();
     }
 
     @Override // java.util.stream.LongStream, java.util.stream.BaseStream
     /* renamed from: iterator */
     public /* synthetic */ Iterator<Long> iterator2() {
-        return CLASSNAMEf.a(this.a.mo303iterator());
+        return CLASSNAMEf.a(this.a.mo307iterator());
     }
 
     @Override // java.util.stream.LongStream
@@ -176,13 +176,13 @@ public final /* synthetic */ class O0 implements LongStream {
     /* JADX WARN: Type inference failed for: r0v2, types: [java.util.stream.LongStream, java.util.stream.BaseStream] */
     @Override // java.util.stream.LongStream, java.util.stream.BaseStream
     public /* synthetic */ LongStream parallel() {
-        return I0.n0(this.a.mo304parallel());
+        return I0.n0(this.a.mo308parallel());
     }
 
     @Override // java.util.stream.LongStream, java.util.stream.BaseStream
     /* renamed from: parallel */
     public /* synthetic */ LongStream parallel2() {
-        return n0(this.a.mo304parallel());
+        return n0(this.a.mo308parallel());
     }
 
     @Override // java.util.stream.LongStream
@@ -203,13 +203,13 @@ public final /* synthetic */ class O0 implements LongStream {
     /* JADX WARN: Type inference failed for: r0v2, types: [java.util.stream.LongStream, java.util.stream.BaseStream] */
     @Override // java.util.stream.LongStream, java.util.stream.BaseStream
     public /* synthetic */ LongStream sequential() {
-        return I0.n0(this.a.mo305sequential());
+        return I0.n0(this.a.mo309sequential());
     }
 
     @Override // java.util.stream.LongStream, java.util.stream.BaseStream
     /* renamed from: sequential */
     public /* synthetic */ LongStream sequential2() {
-        return n0(this.a.mo305sequential());
+        return n0(this.a.mo309sequential());
     }
 
     @Override // java.util.stream.LongStream
@@ -224,13 +224,13 @@ public final /* synthetic */ class O0 implements LongStream {
 
     @Override // java.util.stream.LongStream, java.util.stream.BaseStream
     public /* synthetic */ Spliterator<Long> spliterator() {
-        return CLASSNAMEn.a(this.a.mo306spliterator());
+        return CLASSNAMEn.a(this.a.mo310spliterator());
     }
 
     @Override // java.util.stream.LongStream, java.util.stream.BaseStream
     /* renamed from: spliterator */
     public /* synthetic */ Spliterator<Long> spliterator2() {
-        return CLASSNAMEh.a(this.a.mo306spliterator());
+        return CLASSNAMEh.a(this.a.mo310spliterator());
     }
 
     @Override // java.util.stream.LongStream

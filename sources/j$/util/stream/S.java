@@ -14,15 +14,15 @@ public abstract class S extends T {
 
     @Override // j$.util.stream.AbstractCLASSNAMEc, j$.util.stream.InterfaceCLASSNAMEg, j$.util.stream.IntStream
     /* renamed from: parallel */
-    public /* bridge */ /* synthetic */ U mo304parallel() {
-        mo304parallel();
+    public /* bridge */ /* synthetic */ U mo308parallel() {
+        mo308parallel();
         return this;
     }
 
     @Override // j$.util.stream.AbstractCLASSNAMEc, j$.util.stream.InterfaceCLASSNAMEg, j$.util.stream.IntStream
     /* renamed from: sequential */
-    public /* bridge */ /* synthetic */ U mo305sequential() {
-        mo305sequential();
+    public /* bridge */ /* synthetic */ U mo309sequential() {
+        mo309sequential();
         return this;
     }
 }

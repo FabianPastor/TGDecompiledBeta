@@ -14,15 +14,15 @@ public abstract class K0 extends L0 {
 
     @Override // j$.util.stream.AbstractCLASSNAMEc, j$.util.stream.InterfaceCLASSNAMEg, j$.util.stream.IntStream
     /* renamed from: parallel */
-    public /* bridge */ /* synthetic */ IntStream mo304parallel() {
-        mo304parallel();
+    public /* bridge */ /* synthetic */ IntStream mo308parallel() {
+        mo308parallel();
         return this;
     }
 
     @Override // j$.util.stream.AbstractCLASSNAMEc, j$.util.stream.InterfaceCLASSNAMEg, j$.util.stream.IntStream
     /* renamed from: sequential */
-    public /* bridge */ /* synthetic */ IntStream mo305sequential() {
-        mo305sequential();
+    public /* bridge */ /* synthetic */ IntStream mo309sequential() {
+        mo309sequential();
         return this;
     }
 }

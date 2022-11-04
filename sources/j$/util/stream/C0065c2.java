@@ -27,7 +27,7 @@ public class CLASSNAMEc2 implements InterfaceCLASSNAMEw1 {
 
     @Override // j$.util.stream.InterfaceCLASSNAMEz1, j$.util.stream.A1
     /* renamed from: b  reason: collision with other method in class */
-    public InterfaceCLASSNAMEz1 mo288b(int i) {
+    public InterfaceCLASSNAMEz1 mo292b(int i) {
         throw new IndexOutOfBoundsException();
     }
 
@@ -86,7 +86,7 @@ public class CLASSNAMEc2 implements InterfaceCLASSNAMEw1 {
 
     @Override // j$.util.stream.InterfaceCLASSNAMEz1, j$.util.stream.A1
     /* renamed from: spliterator  reason: collision with other method in class */
-    public j$.util.w mo285spliterator() {
+    public j$.util.w mo289spliterator() {
         return j$.util.L.k(this.a, 0, this.b, 1040);
     }
 
@@ -96,14 +96,14 @@ public class CLASSNAMEc2 implements InterfaceCLASSNAMEw1 {
 
     @Override // j$.util.stream.InterfaceCLASSNAMEz1, j$.util.stream.A1
     /* renamed from: b */
-    public /* bridge */ /* synthetic */ A1 mo288b(int i) {
-        mo288b(i);
+    public /* bridge */ /* synthetic */ A1 mo292b(int i) {
+        mo292b(i);
         throw null;
     }
 
     @Override // j$.util.stream.InterfaceCLASSNAMEz1, j$.util.stream.A1
     /* renamed from: spliterator */
-    public j$.util.u mo285spliterator() {
+    public j$.util.u mo289spliterator() {
         return j$.util.L.k(this.a, 0, this.b, 1040);
     }
 }

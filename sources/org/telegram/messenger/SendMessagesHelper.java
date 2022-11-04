@@ -2650,7 +2650,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
     */
     public void lambda$sendCallback$24(final boolean r21, final org.telegram.messenger.MessageObject r22, final org.telegram.tgnet.TLRPC$KeyboardButton r23, final org.telegram.tgnet.TLRPC$InputCheckPasswordSRP r24, final org.telegram.ui.TwoStepVerificationActivity r25, final org.telegram.ui.ChatActivity r26) {
         /*
-            Method dump skipped, instructions count: 528
+            Method dump skipped, instructions count: 532
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SendMessagesHelper.lambda$sendCallback$24(boolean, org.telegram.messenger.MessageObject, org.telegram.tgnet.TLRPC$KeyboardButton, org.telegram.tgnet.TLRPC$InputCheckPasswordSRP, org.telegram.ui.TwoStepVerificationActivity, org.telegram.ui.ChatActivity):void");
@@ -5348,13 +5348,13 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
     /* JADX INFO: Access modifiers changed from: private */
     /* JADX WARN: Can't fix incorrect switch cases order, some code will duplicate */
     /* JADX WARN: Multi-variable type inference failed */
-    /* JADX WARN: Removed duplicated region for block: B:181:0x0454  */
-    /* JADX WARN: Removed duplicated region for block: B:184:0x045a  */
-    /* JADX WARN: Removed duplicated region for block: B:187:0x0466  */
-    /* JADX WARN: Removed duplicated region for block: B:197:0x04b0  */
-    /* JADX WARN: Removed duplicated region for block: B:201:0x04f2  */
-    /* JADX WARN: Removed duplicated region for block: B:204:0x04fa  */
-    /* JADX WARN: Removed duplicated region for block: B:205:0x0505  */
+    /* JADX WARN: Removed duplicated region for block: B:181:0x0455  */
+    /* JADX WARN: Removed duplicated region for block: B:184:0x045b  */
+    /* JADX WARN: Removed duplicated region for block: B:187:0x0467  */
+    /* JADX WARN: Removed duplicated region for block: B:197:0x04b1  */
+    /* JADX WARN: Removed duplicated region for block: B:201:0x04f3  */
+    /* JADX WARN: Removed duplicated region for block: B:204:0x04fb  */
+    /* JADX WARN: Removed duplicated region for block: B:205:0x0506  */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
@@ -5578,47 +5578,47 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    /* JADX WARN: Code restructure failed: missing block: B:254:0x062c, code lost:
-        if (r5 != null) goto L240;
+    /* JADX WARN: Code restructure failed: missing block: B:254:0x062e, code lost:
+        if (r5 != null) goto L236;
      */
     /* JADX WARN: Code restructure failed: missing block: B:25:0x005d, code lost:
         if (r4 != false) goto L78;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:281:0x066d, code lost:
-        if (r3.endsWith(r8) != false) goto L261;
+    /* JADX WARN: Code restructure failed: missing block: B:281:0x066f, code lost:
+        if (r3.endsWith(r8) != false) goto L257;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:402:0x08fc, code lost:
-        if (r11 == (r15 - 1)) goto L308;
+    /* JADX WARN: Code restructure failed: missing block: B:402:0x08fe, code lost:
+        if (r11 == (r15 - 1)) goto L304;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:566:0x0cf9, code lost:
+    /* JADX WARN: Code restructure failed: missing block: B:566:0x0cfb, code lost:
         if (r5 == (r11 - 1)) goto L573;
      */
     /* JADX WARN: Removed duplicated region for block: B:138:0x02db A[Catch: Exception -> 0x02cc, TryCatch #1 {Exception -> 0x02cc, blocks: (B:129:0x02c4, B:136:0x02d1, B:138:0x02db, B:139:0x02e6), top: B:625:0x02c4 }] */
     /* JADX WARN: Removed duplicated region for block: B:139:0x02e6 A[Catch: Exception -> 0x02cc, TRY_LEAVE, TryCatch #1 {Exception -> 0x02cc, blocks: (B:129:0x02c4, B:136:0x02d1, B:138:0x02db, B:139:0x02e6), top: B:625:0x02c4 }] */
     /* JADX WARN: Removed duplicated region for block: B:157:0x0320  */
-    /* JADX WARN: Removed duplicated region for block: B:158:0x034b  */
-    /* JADX WARN: Removed duplicated region for block: B:164:0x035c  */
-    /* JADX WARN: Removed duplicated region for block: B:167:0x0367  */
-    /* JADX WARN: Removed duplicated region for block: B:304:0x06bf  */
-    /* JADX WARN: Removed duplicated region for block: B:310:0x0718  */
-    /* JADX WARN: Removed duplicated region for block: B:340:0x07b1  */
-    /* JADX WARN: Removed duplicated region for block: B:399:0x08de  */
-    /* JADX WARN: Removed duplicated region for block: B:406:0x0907  */
-    /* JADX WARN: Removed duplicated region for block: B:473:0x0b2d  */
-    /* JADX WARN: Removed duplicated region for block: B:503:0x0bc5  */
-    /* JADX WARN: Removed duplicated region for block: B:506:0x0bdc  */
-    /* JADX WARN: Removed duplicated region for block: B:507:0x0be2  */
+    /* JADX WARN: Removed duplicated region for block: B:158:0x034c  */
+    /* JADX WARN: Removed duplicated region for block: B:164:0x035d  */
+    /* JADX WARN: Removed duplicated region for block: B:167:0x0368  */
+    /* JADX WARN: Removed duplicated region for block: B:304:0x06c1  */
+    /* JADX WARN: Removed duplicated region for block: B:310:0x071a  */
+    /* JADX WARN: Removed duplicated region for block: B:340:0x07b3  */
+    /* JADX WARN: Removed duplicated region for block: B:399:0x08e0  */
+    /* JADX WARN: Removed duplicated region for block: B:406:0x0909  */
+    /* JADX WARN: Removed duplicated region for block: B:473:0x0b2f  */
+    /* JADX WARN: Removed duplicated region for block: B:503:0x0bc7  */
+    /* JADX WARN: Removed duplicated region for block: B:506:0x0bde  */
+    /* JADX WARN: Removed duplicated region for block: B:507:0x0be4  */
     /* JADX WARN: Removed duplicated region for block: B:534:0x0CLASSNAME  */
-    /* JADX WARN: Removed duplicated region for block: B:537:0x0c5a  */
+    /* JADX WARN: Removed duplicated region for block: B:537:0x0c5c  */
     /* JADX WARN: Removed duplicated region for block: B:543:0x0CLASSNAME  */
     /* JADX WARN: Removed duplicated region for block: B:549:0x0CLASSNAME  */
     /* JADX WARN: Removed duplicated region for block: B:54:0x00ac  */
-    /* JADX WARN: Removed duplicated region for block: B:558:0x0ccb  */
+    /* JADX WARN: Removed duplicated region for block: B:558:0x0ccd  */
     /* JADX WARN: Removed duplicated region for block: B:55:0x00d0  */
-    /* JADX WARN: Removed duplicated region for block: B:560:0x0cd0  */
-    /* JADX WARN: Removed duplicated region for block: B:627:0x0627 A[EXC_TOP_SPLITTER, SYNTHETIC] */
-    /* JADX WARN: Removed duplicated region for block: B:637:0x02f3 A[EXC_TOP_SPLITTER, SYNTHETIC] */
-    /* JADX WARN: Removed duplicated region for block: B:663:0x0c7f A[SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:560:0x0cd2  */
+    /* JADX WARN: Removed duplicated region for block: B:623:0x0629 A[EXC_TOP_SPLITTER, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:633:0x02f3 A[EXC_TOP_SPLITTER, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:662:0x0CLASSNAME A[SYNTHETIC] */
     /* JADX WARN: Removed duplicated region for block: B:87:0x0161  */
     /* JADX WARN: Removed duplicated region for block: B:88:0x0166  */
     /* JADX WARN: Type inference failed for: r8v0 */
@@ -5630,7 +5630,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
     */
     public static /* synthetic */ void lambda$prepareSendingMedia$91(java.util.ArrayList r66, final long r67, boolean r69, boolean r70, final org.telegram.messenger.AccountInstance r71, final org.telegram.messenger.MessageObject r72, final org.telegram.messenger.MessageObject r73, final org.telegram.messenger.MessageObject r74, final boolean r75, final int r76, androidx.core.view.inputmethod.InputContentInfoCompat r77, final boolean r78) {
         /*
-            Method dump skipped, instructions count: 3866
+            Method dump skipped, instructions count: 3868
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SendMessagesHelper.lambda$prepareSendingMedia$91(java.util.ArrayList, long, boolean, boolean, org.telegram.messenger.AccountInstance, org.telegram.messenger.MessageObject, org.telegram.messenger.MessageObject, org.telegram.messenger.MessageObject, boolean, int, androidx.core.view.inputmethod.InputContentInfoCompat, boolean):void");

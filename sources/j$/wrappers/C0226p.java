@@ -66,12 +66,12 @@ public final /* synthetic */ class CLASSNAMEp implements Spliterator.OfPrimitive
 
     @Override // java.util.Spliterator.OfPrimitive, java.util.Spliterator
     public /* synthetic */ Spliterator.OfPrimitive trySplit() {
-        return a(this.a.mo322trySplit());
+        return a(this.a.mo326trySplit());
     }
 
     @Override // java.util.Spliterator.OfPrimitive, java.util.Spliterator
     /* renamed from: trySplit  reason: collision with other method in class */
-    public /* synthetic */ Spliterator mo323trySplit() {
-        return CLASSNAMEh.a(this.a.mo322trySplit());
+    public /* synthetic */ Spliterator mo327trySplit() {
+        return CLASSNAMEh.a(this.a.mo326trySplit());
     }
 }

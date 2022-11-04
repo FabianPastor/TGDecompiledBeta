@@ -60,7 +60,7 @@ class z implements r, j$.util.function.q, Iterator {
 
     @Override // j$.util.r, java.util.Iterator
     /* renamed from: next */
-    public Long mo311next() {
+    public Long mo315next() {
         if (!N.a) {
             return Long.valueOf(nextLong());
         }

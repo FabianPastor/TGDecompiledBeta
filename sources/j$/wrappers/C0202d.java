@@ -44,14 +44,14 @@ public final /* synthetic */ class CLASSNAMEd implements PrimitiveIterator.OfInt
 
     @Override // java.util.PrimitiveIterator.OfInt, java.util.Iterator
     public /* synthetic */ Integer next() {
-        return this.a.mo309next();
+        return this.a.mo313next();
     }
 
     /* JADX WARN: Type inference failed for: r0v0, types: [j$.util.Iterator, j$.util.p$a] */
     @Override // java.util.PrimitiveIterator.OfInt, java.util.Iterator
     /* renamed from: next  reason: collision with other method in class */
-    public /* synthetic */ Object mo310next() {
-        return this.a.mo307next();
+    public /* synthetic */ Object mo314next() {
+        return this.a.mo311next();
     }
 
     @Override // java.util.PrimitiveIterator.OfInt

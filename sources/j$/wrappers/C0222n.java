@@ -79,18 +79,18 @@ public final /* synthetic */ class CLASSNAMEn implements Spliterator.OfLong {
 
     @Override // java.util.Spliterator.OfLong, java.util.Spliterator.OfPrimitive, java.util.Spliterator
     public /* synthetic */ Spliterator.OfLong trySplit() {
-        return a(this.a.mo322trySplit());
+        return a(this.a.mo326trySplit());
     }
 
     @Override // java.util.Spliterator.OfLong, java.util.Spliterator.OfPrimitive, java.util.Spliterator
     /* renamed from: trySplit */
-    public /* synthetic */ Spliterator.OfPrimitive mo320trySplit() {
-        return CLASSNAMEp.a(this.a.mo322trySplit());
+    public /* synthetic */ Spliterator.OfPrimitive mo324trySplit() {
+        return CLASSNAMEp.a(this.a.mo326trySplit());
     }
 
     @Override // java.util.Spliterator.OfLong, java.util.Spliterator.OfPrimitive, java.util.Spliterator
     /* renamed from: trySplit */
-    public /* synthetic */ Spliterator mo321trySplit() {
-        return CLASSNAMEh.a(this.a.mo322trySplit());
+    public /* synthetic */ Spliterator mo325trySplit() {
+        return CLASSNAMEh.a(this.a.mo326trySplit());
     }
 }

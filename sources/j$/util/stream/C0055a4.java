@@ -115,19 +115,19 @@ public class CLASSNAMEa4 extends AbstractCLASSNAMEe implements Consumer, Iterabl
 
     @Override // java.lang.Iterable
     public Iterator iterator() {
-        return j$.util.L.i(mo289spliterator());
+        return j$.util.L.i(mo293spliterator());
     }
 
     @Override // java.lang.Iterable, j$.lang.e
     /* renamed from: spliterator */
-    public j$.util.u mo289spliterator() {
+    public j$.util.u mo293spliterator() {
         return new S3(this, 0, this.c, 0, this.b);
     }
 
     @Override // java.lang.Iterable, j$.lang.e
     /* renamed from: spliterator  reason: collision with other method in class */
-    public /* synthetic */ Spliterator mo289spliterator() {
-        return CLASSNAMEh.a(mo289spliterator());
+    public /* synthetic */ Spliterator mo293spliterator() {
+        return CLASSNAMEh.a(mo293spliterator());
     }
 
     protected long t() {

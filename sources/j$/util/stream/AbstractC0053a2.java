@@ -4,7 +4,7 @@ package j$.util.stream;
 abstract class AbstractCLASSNAMEa2 implements A1 {
     @Override // j$.util.stream.A1
     /* renamed from: b */
-    public A1 mo288b(int i) {
+    public A1 mo292b(int i) {
         throw new IndexOutOfBoundsException();
     }
 

@@ -12,14 +12,14 @@ public final class U1 extends T1 implements InterfaceCLASSNAMEp1 {
 
     @Override // j$.util.stream.InterfaceCLASSNAMEp1, j$.util.stream.InterfaceCLASSNAMEs1
     /* renamed from: a */
-    public /* bridge */ /* synthetic */ A1 mo287a() {
-        mo287a();
+    public /* bridge */ /* synthetic */ A1 mo291a() {
+        mo291a();
         return this;
     }
 
     @Override // j$.util.stream.InterfaceCLASSNAMEp1, j$.util.stream.InterfaceCLASSNAMEs1
     /* renamed from: a  reason: collision with other method in class */
-    public InterfaceCLASSNAMEu1 mo287a() {
+    public InterfaceCLASSNAMEu1 mo291a() {
         if (this.b >= this.a.length) {
             return this;
         }

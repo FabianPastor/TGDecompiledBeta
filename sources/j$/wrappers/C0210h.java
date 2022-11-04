@@ -56,6 +56,6 @@ public final /* synthetic */ class CLASSNAMEh implements Spliterator {
 
     @Override // java.util.Spliterator
     public /* synthetic */ Spliterator trySplit() {
-        return a(this.a.mo322trySplit());
+        return a(this.a.mo326trySplit());
     }
 }

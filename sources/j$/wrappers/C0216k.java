@@ -77,19 +77,19 @@ public final /* synthetic */ class CLASSNAMEk implements u.a {
 
     @Override // j$.util.u.a, j$.util.w, j$.util.u
     /* renamed from: trySplit */
-    public /* synthetic */ u.a mo322trySplit() {
+    public /* synthetic */ u.a mo326trySplit() {
         return a(this.a.trySplit());
     }
 
     @Override // j$.util.u.a, j$.util.w, j$.util.u
     /* renamed from: trySplit  reason: collision with other method in class */
-    public /* synthetic */ j$.util.u mo322trySplit() {
+    public /* synthetic */ j$.util.u mo326trySplit() {
         return CLASSNAMEg.a(this.a.trySplit());
     }
 
     @Override // j$.util.u.a, j$.util.w, j$.util.u
     /* renamed from: trySplit */
-    public /* synthetic */ j$.util.w mo322trySplit() {
+    public /* synthetic */ j$.util.w mo326trySplit() {
         return CLASSNAMEo.a(this.a.trySplit());
     }
 }

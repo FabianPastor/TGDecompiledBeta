@@ -13,8 +13,8 @@ public interface InterfaceCLASSNAMEb extends j$.lang.e {
 
     @Override // j$.lang.e
     /* renamed from: spliterator */
-    u mo289spliterator();
+    u mo293spliterator();
 
     /* renamed from: stream */
-    Stream mo238stream();
+    Stream mo242stream();
 }

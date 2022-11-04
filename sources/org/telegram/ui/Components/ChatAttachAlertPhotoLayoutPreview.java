@@ -174,7 +174,7 @@ public class ChatAttachAlertPhotoLayoutPreview extends ChatAttachAlert.AttachAle
 
             @Override // androidx.recyclerview.widget.RecyclerView.Adapter
             /* renamed from: onCreateViewHolder */
-            public RecyclerView.ViewHolder mo1813onCreateViewHolder(ViewGroup viewGroup, int i) {
+            public RecyclerView.ViewHolder mo1821onCreateViewHolder(ViewGroup viewGroup, int i) {
                 return new RecyclerListView.Holder(ChatAttachAlertPhotoLayoutPreview.this.groupsView);
             }
         });

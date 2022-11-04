@@ -44,14 +44,14 @@ public final /* synthetic */ class CLASSNAMEb implements PrimitiveIterator.OfDou
 
     @Override // java.util.PrimitiveIterator.OfDouble, java.util.Iterator
     public /* synthetic */ Double next() {
-        return this.a.mo307next();
+        return this.a.mo311next();
     }
 
     /* JADX WARN: Type inference failed for: r0v0, types: [j$.util.Iterator, j$.util.n] */
     @Override // java.util.PrimitiveIterator.OfDouble, java.util.Iterator
     /* renamed from: next  reason: collision with other method in class */
-    public /* synthetic */ Object mo308next() {
-        return this.a.mo307next();
+    public /* synthetic */ Object mo312next() {
+        return this.a.mo311next();
     }
 
     @Override // java.util.PrimitiveIterator.OfDouble

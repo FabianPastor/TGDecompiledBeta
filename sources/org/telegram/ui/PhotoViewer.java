@@ -1357,10 +1357,10 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    /* JADX WARN: Removed duplicated region for block: B:52:0x0102  */
-    /* JADX WARN: Removed duplicated region for block: B:53:0x010b  */
-    /* JADX WARN: Removed duplicated region for block: B:62:0x013b  */
-    /* JADX WARN: Removed duplicated region for block: B:66:? A[RETURN, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:51:0x0102  */
+    /* JADX WARN: Removed duplicated region for block: B:52:0x010b  */
+    /* JADX WARN: Removed duplicated region for block: B:61:0x013b  */
+    /* JADX WARN: Removed duplicated region for block: B:65:? A[RETURN, SYNTHETIC] */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
@@ -5986,9 +5986,10 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         int resultLength = this.mentionsAdapter.getResultLength();
         if (item instanceof TLRPC$User) {
             TLRPC$User tLRPC$User = (TLRPC$User) item;
-            if (tLRPC$User.username != null) {
+            String publicUsername = UserObject.getPublicUsername(tLRPC$User);
+            if (publicUsername != null) {
                 PhotoViewerCaptionEnterView photoViewerCaptionEnterView = this.captionEditText;
-                photoViewerCaptionEnterView.replaceWithText(resultStartPosition, resultLength, "@" + tLRPC$User.username + " ", false);
+                photoViewerCaptionEnterView.replaceWithText(resultStartPosition, resultLength, "@" + publicUsername + " ", false);
                 return;
             }
             String firstName = UserObject.getFirstName(tLRPC$User);
@@ -7108,7 +7109,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
 
             @Override // org.telegram.ui.Components.SeekBarAccessibilityDelegate
             /* renamed from: getContentDescription  reason: collision with other method in class */
-            public String mo2220getContentDescription(View view) {
+            public String mo2228getContentDescription(View view) {
                 return LocaleController.formatString("AccDescrPlayerDuration", R.string.AccDescrPlayerDuration, LocaleController.formatPluralString("Minutes", PhotoViewer.this.videoPlayerCurrentTime[0], new Object[0]) + ' ' + LocaleController.formatPluralString("Seconds", PhotoViewer.this.videoPlayerCurrentTime[1], new Object[0]), LocaleController.formatPluralString("Minutes", PhotoViewer.this.videoPlayerTotalTime[0], new Object[0]) + ' ' + LocaleController.formatPluralString("Seconds", PhotoViewer.this.videoPlayerTotalTime[1], new Object[0]));
             }
         };
@@ -14993,7 +14994,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1813onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1821onCreateViewHolder(ViewGroup viewGroup, int i) {
             PhotoPickerPhotoCell photoPickerPhotoCell = new PhotoPickerPhotoCell(this.mContext);
             photoPickerPhotoCell.checkFrame.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.PhotoViewer$ListAdapter$$ExternalSyntheticLambda0
                 @Override // android.view.View.OnClickListener

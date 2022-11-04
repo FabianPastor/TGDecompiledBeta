@@ -142,14 +142,14 @@ public abstract class T extends AbstractCLASSNAMEc implements U {
 
     @Override // j$.util.stream.InterfaceCLASSNAMEg
     /* renamed from: iterator */
-    public final InterfaceCLASSNAMEn mo303iterator() {
-        return j$.util.L.f(mo306spliterator());
+    public final InterfaceCLASSNAMEn mo307iterator() {
+        return j$.util.L.f(mo310spliterator());
     }
 
     @Override // j$.util.stream.InterfaceCLASSNAMEg
     /* renamed from: iterator */
-    public Iterator mo303iterator() {
-        return j$.util.L.f(mo306spliterator());
+    public Iterator mo307iterator() {
+        return j$.util.L.f(mo310spliterator());
     }
 
     public void j(j$.util.function.f fVar) {
@@ -202,8 +202,8 @@ public abstract class T extends AbstractCLASSNAMEc implements U {
 
     @Override // j$.util.stream.AbstractCLASSNAMEc, j$.util.stream.InterfaceCLASSNAMEg
     /* renamed from: spliterator */
-    public final j$.util.t mo306spliterator() {
-        return M0(super.mo306spliterator());
+    public final j$.util.t mo310spliterator() {
+        return M0(super.mo310spliterator());
     }
 
     @Override // j$.util.stream.U

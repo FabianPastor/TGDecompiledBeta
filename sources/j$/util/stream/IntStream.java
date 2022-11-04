@@ -51,7 +51,7 @@ public interface IntStream extends InterfaceCLASSNAMEg {
 
     @Override // j$.util.stream.InterfaceCLASSNAMEg
     /* renamed from: iterator */
-    p.a mo303iterator();
+    p.a mo307iterator();
 
     Object k0(j$.util.function.y yVar, j$.util.function.v vVar, BiConsumer biConsumer);
 
@@ -63,13 +63,13 @@ public interface IntStream extends InterfaceCLASSNAMEg {
 
     @Override // 
     /* renamed from: parallel */
-    IntStream mo304parallel();
+    IntStream mo308parallel();
 
     IntStream q(CLASSNAMEb0 CLASSNAMEb0);
 
     @Override // 
     /* renamed from: sequential */
-    IntStream mo305sequential();
+    IntStream mo309sequential();
 
     IntStream skip(long j);
 
@@ -77,7 +77,7 @@ public interface IntStream extends InterfaceCLASSNAMEg {
 
     @Override // j$.util.stream.InterfaceCLASSNAMEg
     /* renamed from: spliterator */
-    u.a mo306spliterator();
+    u.a mo310spliterator();
 
     int sum();
 

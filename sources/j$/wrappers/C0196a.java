@@ -41,13 +41,13 @@ public final /* synthetic */ class CLASSNAMEa implements InterfaceCLASSNAMEn {
 
     @Override // j$.util.InterfaceCLASSNAMEn, java.util.Iterator, j$.util.Iterator
     /* renamed from: next */
-    public /* synthetic */ Double mo307next() {
+    public /* synthetic */ Double mo311next() {
         return this.a.next();
     }
 
     @Override // j$.util.InterfaceCLASSNAMEn, java.util.Iterator, j$.util.Iterator
     /* renamed from: next  reason: collision with other method in class */
-    public /* synthetic */ Object mo307next() {
+    public /* synthetic */ Object mo311next() {
         return this.a.next();
     }
 

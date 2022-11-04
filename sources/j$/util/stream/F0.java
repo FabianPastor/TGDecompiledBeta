@@ -41,7 +41,7 @@ class F0 extends AbstractCLASSNAMEg3 {
                 IntStream intStream = (IntStream) ((j$.util.function.m) ((M) this.c).m).apply(i);
                 if (intStream != null) {
                     try {
-                        intStream.mo305sequential().U(new B0(this));
+                        intStream.mo309sequential().U(new B0(this));
                     } finally {
                         try {
                             intStream.close();

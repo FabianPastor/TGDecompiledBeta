@@ -510,7 +510,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1813onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1821onCreateViewHolder(ViewGroup viewGroup, int i) {
             ManageChatTextCell manageChatTextCell;
             Context context = viewGroup.getContext();
             if (i == 2) {
@@ -684,7 +684,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1813onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1821onCreateViewHolder(ViewGroup viewGroup, int i) {
             View groupCreateUserCell;
             Context context = viewGroup.getContext();
             if (i == 1) {
@@ -837,18 +837,18 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        /* JADX WARN: Code restructure failed: missing block: B:38:0x00d2, code lost:
+        /* JADX WARN: Code restructure failed: missing block: B:38:0x00d4, code lost:
             if (r13.contains(" " + r3) != false) goto L53;
          */
-        /* JADX WARN: Removed duplicated region for block: B:54:0x0132 A[LOOP:1: B:29:0x0096->B:54:0x0132, LOOP_END] */
-        /* JADX WARN: Removed duplicated region for block: B:62:0x00e2 A[SYNTHETIC] */
+        /* JADX WARN: Removed duplicated region for block: B:54:0x0134 A[LOOP:1: B:29:0x0098->B:54:0x0134, LOOP_END] */
+        /* JADX WARN: Removed duplicated region for block: B:62:0x00e4 A[SYNTHETIC] */
         /*
             Code decompiled incorrectly, please refer to instructions dump.
             To view partially-correct add '--show-bad-code' argument
         */
         public /* synthetic */ void lambda$searchDialogs$2(java.lang.String r18) {
             /*
-                Method dump skipped, instructions count: 326
+                Method dump skipped, instructions count: 328
                 To view this dump add '--comments-level debug' option
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.InviteMembersBottomSheet.SearchAdapter.lambda$searchDialogs$2(java.lang.String):void");

@@ -113,7 +113,7 @@ public class S3 implements j$.util.u {
 
     @Override // j$.util.u
     /* renamed from: trySplit */
-    public j$.util.u mo322trySplit() {
+    public j$.util.u mo326trySplit() {
         int i = this.a;
         int i2 = this.b;
         if (i < i2) {

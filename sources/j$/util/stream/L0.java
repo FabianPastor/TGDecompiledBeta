@@ -176,14 +176,14 @@ public abstract class L0 extends AbstractCLASSNAMEc implements IntStream {
 
     @Override // j$.util.stream.InterfaceCLASSNAMEg
     /* renamed from: iterator */
-    public final p.a mo303iterator() {
-        return j$.util.L.g(mo306spliterator());
+    public final p.a mo307iterator() {
+        return j$.util.L.g(mo310spliterator());
     }
 
     @Override // j$.util.stream.InterfaceCLASSNAMEg
     /* renamed from: iterator */
-    public Iterator mo303iterator() {
-        return j$.util.L.g(mo306spliterator());
+    public Iterator mo307iterator() {
+        return j$.util.L.g(mo310spliterator());
     }
 
     @Override // j$.util.stream.IntStream
@@ -234,8 +234,8 @@ public abstract class L0 extends AbstractCLASSNAMEc implements IntStream {
 
     @Override // j$.util.stream.AbstractCLASSNAMEc, j$.util.stream.InterfaceCLASSNAMEg
     /* renamed from: spliterator */
-    public final u.a mo306spliterator() {
-        return M0(super.mo306spliterator());
+    public final u.a mo310spliterator() {
+        return M0(super.mo310spliterator());
     }
 
     @Override // j$.util.stream.IntStream

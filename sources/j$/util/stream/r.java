@@ -29,7 +29,7 @@ class r extends AbstractCLASSNAMEi3 {
                 InterfaceCLASSNAMEe1 interfaceCLASSNAMEe1 = (InterfaceCLASSNAMEe1) ((Function) ((N) this.d).m).apply(obj);
                 if (interfaceCLASSNAMEe1 != null) {
                     try {
-                        interfaceCLASSNAMEe1.mo305sequential().d((j$.util.function.q) this.c);
+                        interfaceCLASSNAMEe1.mo309sequential().d((j$.util.function.q) this.c);
                     } finally {
                         try {
                             interfaceCLASSNAMEe1.close();
@@ -45,7 +45,7 @@ class r extends AbstractCLASSNAMEi3 {
                 IntStream intStream = (IntStream) ((Function) ((M) this.d).m).apply(obj);
                 if (intStream != null) {
                     try {
-                        intStream.mo305sequential().U((j$.util.function.l) this.c);
+                        intStream.mo309sequential().U((j$.util.function.l) this.c);
                     } finally {
                         try {
                             intStream.close();
@@ -61,7 +61,7 @@ class r extends AbstractCLASSNAMEi3 {
                 U u = (U) ((Function) ((K) this.d).m).apply(obj);
                 if (u != null) {
                     try {
-                        u.mo305sequential().j((j$.util.function.f) this.c);
+                        u.mo309sequential().j((j$.util.function.f) this.c);
                     } finally {
                         try {
                             u.close();

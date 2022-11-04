@@ -24,7 +24,7 @@ public interface Iterator<E> {
     boolean hasNext();
 
     /* renamed from: next */
-    E mo307next();
+    E mo311next();
 
     void remove();
 }

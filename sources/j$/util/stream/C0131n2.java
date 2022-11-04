@@ -7,7 +7,7 @@ import j$.util.function.Consumer;
 public final class CLASSNAMEn2 extends Y3 implements InterfaceCLASSNAMEy1, InterfaceCLASSNAMEr1 {
     @Override // j$.util.stream.Y3
     public j$.util.v B() {
-        return super.mo289spliterator();
+        return super.mo293spliterator();
     }
 
     @Override // j$.util.function.Consumer
@@ -30,13 +30,13 @@ public final class CLASSNAMEn2 extends Y3 implements InterfaceCLASSNAMEy1, Inter
 
     @Override // j$.util.stream.InterfaceCLASSNAMEr1, j$.util.stream.InterfaceCLASSNAMEs1
     /* renamed from: a */
-    public A1 mo287a() {
+    public A1 mo291a() {
         return this;
     }
 
     @Override // j$.util.stream.InterfaceCLASSNAMEr1, j$.util.stream.InterfaceCLASSNAMEs1
     /* renamed from: a  reason: collision with other method in class */
-    public InterfaceCLASSNAMEy1 mo287a() {
+    public InterfaceCLASSNAMEy1 mo291a() {
         return this;
     }
 
@@ -64,7 +64,7 @@ public final class CLASSNAMEn2 extends Y3 implements InterfaceCLASSNAMEy1, Inter
 
     @Override // j$.util.stream.InterfaceCLASSNAMEz1, j$.util.stream.A1
     /* renamed from: b  reason: collision with other method in class */
-    public InterfaceCLASSNAMEz1 mo288b(int i) {
+    public InterfaceCLASSNAMEz1 mo292b(int i) {
         throw new IndexOutOfBoundsException();
     }
 
@@ -110,20 +110,20 @@ public final class CLASSNAMEn2 extends Y3 implements InterfaceCLASSNAMEy1, Inter
 
     @Override // j$.util.stream.Y3, j$.util.stream.Z3, java.lang.Iterable, j$.lang.e
     /* renamed from: spliterator  reason: collision with other method in class */
-    public j$.util.w mo289spliterator() {
-        return super.mo289spliterator();
+    public j$.util.w mo293spliterator() {
+        return super.mo293spliterator();
     }
 
     @Override // j$.util.stream.InterfaceCLASSNAMEz1, j$.util.stream.A1
     /* renamed from: b */
-    public /* bridge */ /* synthetic */ A1 mo288b(int i) {
-        mo288b(i);
+    public /* bridge */ /* synthetic */ A1 mo292b(int i) {
+        mo292b(i);
         throw null;
     }
 
     @Override // j$.util.stream.Y3, j$.util.stream.Z3, java.lang.Iterable, j$.lang.e
     /* renamed from: spliterator */
-    public j$.util.u mo289spliterator() {
-        return super.mo289spliterator();
+    public j$.util.u mo293spliterator() {
+        return super.mo293spliterator();
     }
 }

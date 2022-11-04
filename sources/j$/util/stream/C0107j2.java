@@ -19,9 +19,9 @@ final class CLASSNAMEj2 extends AbstractCLASSNAMEk2 {
         boolean b = this.d.b(consumer);
         if (!b) {
             if (this.c == null && (a = a(this.e)) != null) {
-                j$.util.u mo285spliterator = a.mo285spliterator();
-                this.d = mo285spliterator;
-                return mo285spliterator.b(consumer);
+                j$.util.u mo289spliterator = a.mo289spliterator();
+                this.d = mo289spliterator;
+                return mo289spliterator.b(consumer);
             }
             this.a = null;
         }

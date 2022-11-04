@@ -132,7 +132,7 @@ public final /* synthetic */ class C$r8$wrapper$java$util$stream$Stream$VWRP imp
 
     @Override // j$.util.stream.InterfaceCLASSNAMEg
     /* renamed from: iterator */
-    public /* synthetic */ Iterator mo303iterator() {
+    public /* synthetic */ Iterator mo307iterator() {
         return this.a.iterator();
     }
 
@@ -188,13 +188,13 @@ public final /* synthetic */ class C$r8$wrapper$java$util$stream$Stream$VWRP imp
 
     @Override // j$.util.stream.InterfaceCLASSNAMEg, j$.util.stream.IntStream
     /* renamed from: parallel */
-    public /* synthetic */ InterfaceCLASSNAMEg mo304parallel() {
+    public /* synthetic */ InterfaceCLASSNAMEg mo308parallel() {
         return H0.n0(this.a.parallel());
     }
 
     @Override // j$.util.stream.InterfaceCLASSNAMEg, j$.util.stream.IntStream
     /* renamed from: sequential */
-    public /* synthetic */ InterfaceCLASSNAMEg mo305sequential() {
+    public /* synthetic */ InterfaceCLASSNAMEg mo309sequential() {
         return H0.n0(this.a.sequential());
     }
 
@@ -215,7 +215,7 @@ public final /* synthetic */ class C$r8$wrapper$java$util$stream$Stream$VWRP imp
 
     @Override // j$.util.stream.InterfaceCLASSNAMEg
     /* renamed from: spliterator */
-    public /* synthetic */ j$.util.u mo306spliterator() {
+    public /* synthetic */ j$.util.u mo310spliterator() {
         return CLASSNAMEg.a(this.a.spliterator());
     }
 

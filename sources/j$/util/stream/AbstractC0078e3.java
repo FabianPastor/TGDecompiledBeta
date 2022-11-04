@@ -153,8 +153,8 @@ public abstract class AbstractCLASSNAMEe3 extends AbstractCLASSNAMEc implements 
 
     @Override // j$.util.stream.InterfaceCLASSNAMEg
     /* renamed from: iterator */
-    public final Iterator mo303iterator() {
-        return j$.util.L.i(mo306spliterator());
+    public final Iterator mo307iterator() {
+        return j$.util.L.i(mo310spliterator());
     }
 
     @Override // j$.util.stream.Stream

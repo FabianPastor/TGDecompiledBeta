@@ -1141,7 +1141,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1813onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1821onCreateViewHolder(ViewGroup viewGroup, int i) {
             View groupCreateUserCell;
             if (i == 1) {
                 groupCreateUserCell = new GroupCreateUserCell(this.context, 1, 0, true);
@@ -1296,7 +1296,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
                 if (z) {
                     TLRPC$User tLRPC$User = (TLRPC$User) tLObject;
                     strArr2[c] = ContactsController.formatName(tLRPC$User.first_name, tLRPC$User.last_name).toLowerCase();
-                    str2 = tLRPC$User.username;
+                    str2 = UserObject.getPublicUsername(tLRPC$User);
                     if (UserObject.isReplyUser(tLRPC$User)) {
                         strArr2[2] = LocaleController.getString("RepliesTitle", R.string.RepliesTitle).toLowerCase();
                     } else if (tLRPC$User.self) {

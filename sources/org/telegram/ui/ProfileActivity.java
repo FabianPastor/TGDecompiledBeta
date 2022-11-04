@@ -2781,9 +2781,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             return;
                         }
                         if (ProfileActivity.this.botInfo != null && ProfileActivity.this.userInfo != null && !TextUtils.isEmpty(ProfileActivity.this.userInfo.about)) {
-                            format = String.format("%s https://" + ProfileActivity.this.getMessagesController().linkPrefix + "/%s", ProfileActivity.this.userInfo.about, user5.username);
+                            format = String.format("%s https://" + ProfileActivity.this.getMessagesController().linkPrefix + "/%s", ProfileActivity.this.userInfo.about, UserObject.getPublicUsername(user5));
                         } else {
-                            format = String.format("https://" + ProfileActivity.this.getMessagesController().linkPrefix + "/%s", user5.username);
+                            format = String.format("https://" + ProfileActivity.this.getMessagesController().linkPrefix + "/%s", UserObject.getPublicUsername(user5));
                         }
                         str = format;
                     } else if (ProfileActivity.this.chatId != 0) {
@@ -2792,9 +2792,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             return;
                         }
                         if (ProfileActivity.this.chatInfo != null && !TextUtils.isEmpty(ProfileActivity.this.chatInfo.about)) {
-                            str = String.format("%s\nhttps://" + ProfileActivity.this.getMessagesController().linkPrefix + "/%s", ProfileActivity.this.chatInfo.about, chat.username);
+                            str = String.format("%s\nhttps://" + ProfileActivity.this.getMessagesController().linkPrefix + "/%s", ProfileActivity.this.chatInfo.about, ChatObject.getPublicUsername(chat));
                         } else {
-                            str = String.format("https://" + ProfileActivity.this.getMessagesController().linkPrefix + "/%s", chat.username);
+                            str = String.format("https://" + ProfileActivity.this.getMessagesController().linkPrefix + "/%s", ChatObject.getPublicUsername(chat));
                         }
                     }
                     if (TextUtils.isEmpty(str)) {
@@ -5021,7 +5021,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         if (i == this.usernameRow || i == this.setUsernameRow) {
             if (this.userId != 0) {
                 TLRPC$User user = getMessagesController().getUser(Long.valueOf(this.userId));
-                if (user == null || (str = user.username) == null) {
+                str = UserObject.getPublicUsername(user);
+                if (user == null || str == null) {
                     return false;
                 }
             } else if (this.chatId == 0 || (chat = getMessagesController().getChat(Long.valueOf(this.chatId))) == null || !ChatObject.isPublic(chat)) {
@@ -7127,7 +7128,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     */
     public void updateRowsIds() {
         /*
-            Method dump skipped, instructions count: 1627
+            Method dump skipped, instructions count: 1623
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ProfileActivity.updateRowsIds():void");
@@ -7307,24 +7308,24 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         showDialog(premiumPreviewBottomSheet);
     }
 
-    /* JADX WARN: Removed duplicated region for block: B:200:0x03b4  */
-    /* JADX WARN: Removed duplicated region for block: B:201:0x03ef  */
-    /* JADX WARN: Removed duplicated region for block: B:204:0x0408  */
-    /* JADX WARN: Removed duplicated region for block: B:206:0x040f  */
-    /* JADX WARN: Removed duplicated region for block: B:209:0x0424  */
-    /* JADX WARN: Removed duplicated region for block: B:212:0x0447  */
-    /* JADX WARN: Removed duplicated region for block: B:248:0x04fd  */
-    /* JADX WARN: Removed duplicated region for block: B:251:0x0514  */
-    /* JADX WARN: Removed duplicated region for block: B:254:0x052b  */
-    /* JADX WARN: Removed duplicated region for block: B:257:0x0542  */
-    /* JADX WARN: Removed duplicated region for block: B:260:? A[RETURN, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:196:0x03aa  */
+    /* JADX WARN: Removed duplicated region for block: B:197:0x03e5  */
+    /* JADX WARN: Removed duplicated region for block: B:200:0x03fe  */
+    /* JADX WARN: Removed duplicated region for block: B:202:0x0405  */
+    /* JADX WARN: Removed duplicated region for block: B:205:0x041a  */
+    /* JADX WARN: Removed duplicated region for block: B:208:0x043d  */
+    /* JADX WARN: Removed duplicated region for block: B:244:0x04f3  */
+    /* JADX WARN: Removed duplicated region for block: B:247:0x050a  */
+    /* JADX WARN: Removed duplicated region for block: B:250:0x0521  */
+    /* JADX WARN: Removed duplicated region for block: B:253:0x0538  */
+    /* JADX WARN: Removed duplicated region for block: B:256:? A[RETURN, SYNTHETIC] */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
     private void createActionBarMenu(boolean r17) {
         /*
-            Method dump skipped, instructions count: 1354
+            Method dump skipped, instructions count: 1344
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ProfileActivity.createActionBarMenu(boolean):void");
@@ -8039,7 +8040,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         /* JADX WARN: Multi-variable type inference failed */
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1813onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1821onCreateViewHolder(ViewGroup viewGroup, int i) {
             View headerCell;
             TextDetailCell textDetailCell;
             String str;
@@ -8257,7 +8258,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         */
         public void onBindViewHolder(androidx.recyclerview.widget.RecyclerView.ViewHolder r23, int r24) {
             /*
-                Method dump skipped, instructions count: 3408
+                Method dump skipped, instructions count: 3426
                 To view this dump add '--comments-level debug' option
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ProfileActivity.ListAdapter.onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder, int):void");
@@ -9705,7 +9706,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1813onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1821onCreateViewHolder(ViewGroup viewGroup, int i) {
             View settingsSearchCell;
             if (i == 0) {
                 settingsSearchCell = new SettingsSearchCell(this.mContext);

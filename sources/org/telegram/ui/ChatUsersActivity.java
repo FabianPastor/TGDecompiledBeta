@@ -296,7 +296,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
 
                 @Override // org.telegram.ui.Components.SeekBarAccessibilityDelegate
                 /* renamed from: getContentDescription */
-                protected CharSequence mo2220getContentDescription(View view) {
+                protected CharSequence mo2228getContentDescription(View view) {
                     if (ChatUsersActivity.this.selectedSlowmode == 0) {
                         return LocaleController.getString("SlowmodeOff", R.string.SlowmodeOff);
                     }
@@ -2429,17 +2429,17 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        /* JADX WARN: Code restructure failed: missing block: B:49:0x013e, code lost:
+        /* JADX WARN: Code restructure failed: missing block: B:49:0x0142, code lost:
             if (r15.contains(" " + r4) != false) goto L58;
          */
-        /* JADX WARN: Code restructure failed: missing block: B:90:0x0247, code lost:
+        /* JADX WARN: Code restructure failed: missing block: B:90:0x024b, code lost:
             if (r5.contains(" " + r9) != false) goto L109;
          */
         /* JADX WARN: Multi-variable type inference failed */
-        /* JADX WARN: Removed duplicated region for block: B:104:0x02a1 A[LOOP:3: B:81:0x020d->B:104:0x02a1, LOOP_END] */
-        /* JADX WARN: Removed duplicated region for block: B:114:0x0153 A[SYNTHETIC] */
-        /* JADX WARN: Removed duplicated region for block: B:119:0x0259 A[SYNTHETIC] */
-        /* JADX WARN: Removed duplicated region for block: B:64:0x0188 A[LOOP:1: B:39:0x0100->B:64:0x0188, LOOP_END] */
+        /* JADX WARN: Removed duplicated region for block: B:104:0x02a9 A[LOOP:3: B:81:0x0211->B:104:0x02a9, LOOP_END] */
+        /* JADX WARN: Removed duplicated region for block: B:114:0x0157 A[SYNTHETIC] */
+        /* JADX WARN: Removed duplicated region for block: B:119:0x025f A[SYNTHETIC] */
+        /* JADX WARN: Removed duplicated region for block: B:64:0x018c A[LOOP:1: B:39:0x0104->B:64:0x018c, LOOP_END] */
         /* JADX WARN: Type inference failed for: r15v3, types: [java.util.ArrayList] */
         /*
             Code decompiled incorrectly, please refer to instructions dump.
@@ -2447,7 +2447,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         */
         public /* synthetic */ void lambda$processSearch$2(java.lang.String r24, java.util.ArrayList r25, java.util.ArrayList r26) {
             /*
-                Method dump skipped, instructions count: 706
+                Method dump skipped, instructions count: 714
                 To view this dump add '--comments-level debug' option
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatUsersActivity.SearchAdapter.lambda$processSearch$2(java.lang.String, java.util.ArrayList, java.util.ArrayList):void");
@@ -2583,7 +2583,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1813onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1821onCreateViewHolder(ViewGroup viewGroup, int i) {
             FrameLayout frameLayout;
             if (i == 0) {
                 ManageChatUserCell manageChatUserCell = new ManageChatUserCell(this.mContext, 2, 2, ChatUsersActivity.this.selectType == 0);
@@ -2604,14 +2604,14 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         }
 
         /* JADX WARN: Multi-variable type inference failed */
-        /* JADX WARN: Removed duplicated region for block: B:42:0x00f2  */
-        /* JADX WARN: Removed duplicated region for block: B:49:0x0104  */
-        /* JADX WARN: Removed duplicated region for block: B:53:0x010f  */
-        /* JADX WARN: Removed duplicated region for block: B:62:0x0141  */
-        /* JADX WARN: Removed duplicated region for block: B:66:0x014d A[ADDED_TO_REGION] */
-        /* JADX WARN: Removed duplicated region for block: B:69:0x015b  */
-        /* JADX WARN: Removed duplicated region for block: B:85:0x019f A[ADDED_TO_REGION] */
-        /* JADX WARN: Removed duplicated region for block: B:88:0x01ac  */
+        /* JADX WARN: Removed duplicated region for block: B:42:0x00f4  */
+        /* JADX WARN: Removed duplicated region for block: B:49:0x0106  */
+        /* JADX WARN: Removed duplicated region for block: B:53:0x0111  */
+        /* JADX WARN: Removed duplicated region for block: B:62:0x0143  */
+        /* JADX WARN: Removed duplicated region for block: B:66:0x014f A[ADDED_TO_REGION] */
+        /* JADX WARN: Removed duplicated region for block: B:69:0x015d  */
+        /* JADX WARN: Removed duplicated region for block: B:85:0x01a1 A[ADDED_TO_REGION] */
+        /* JADX WARN: Removed duplicated region for block: B:88:0x01ae  */
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /*
             Code decompiled incorrectly, please refer to instructions dump.
@@ -2619,7 +2619,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         */
         public void onBindViewHolder(androidx.recyclerview.widget.RecyclerView.ViewHolder r17, int r18) {
             /*
-                Method dump skipped, instructions count: 460
+                Method dump skipped, instructions count: 462
                 To view this dump add '--comments-level debug' option
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatUsersActivity.SearchAdapter.onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder, int):void");
@@ -2673,7 +2673,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1813onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1821onCreateViewHolder(ViewGroup viewGroup, int i) {
             FlickerLoadingView flickerLoadingView;
             boolean z = false;
             int i2 = 6;

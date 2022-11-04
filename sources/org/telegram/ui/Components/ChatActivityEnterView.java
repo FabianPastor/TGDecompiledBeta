@@ -6002,7 +6002,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                 tLRPC$User = this.accountInstance.getMessagesController().getUser(Long.valueOf(messageObject.messageOwner.from_id.user_id));
             }
             if ((this.botCount != 1 || z2) && tLRPC$User != null && tLRPC$User.bot && !str.contains("@")) {
-                str2 = String.format(Locale.US, "%s@%s", str, tLRPC$User.username) + " " + obj.replaceFirst("^/[a-zA-Z@\\d_]{1,255}(\\s|$)", "");
+                str2 = String.format(Locale.US, "%s@%s", str, UserObject.getPublicUsername(tLRPC$User)) + " " + obj.replaceFirst("^/[a-zA-Z@\\d_]{1,255}(\\s|$)", "");
             } else {
                 str2 = str + " " + obj.replaceFirst("^/[a-zA-Z@\\d_]{1,255}(\\s|$)", "");
             }
@@ -6031,7 +6031,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                 tLRPC$User = this.accountInstance.getMessagesController().getUser(Long.valueOf(messageObject.messageOwner.from_id.user_id));
             }
             if ((this.botCount != 1 || z2) && tLRPC$User != null && tLRPC$User.bot && !str.contains("@")) {
-                SendMessagesHelper.getInstance(this.currentAccount).sendMessage(String.format(Locale.US, "%s@%s", str, tLRPC$User.username), this.dialog_id, this.replyingMessageObject, getThreadMessage(), null, false, null, null, null, true, 0, null, false);
+                SendMessagesHelper.getInstance(this.currentAccount).sendMessage(String.format(Locale.US, "%s@%s", str, UserObject.getPublicUsername(tLRPC$User)), this.dialog_id, this.replyingMessageObject, getThreadMessage(), null, false, null, null, null, true, 0, null, false);
             } else {
                 SendMessagesHelper.getInstance(this.currentAccount).sendMessage(str, this.dialog_id, this.replyingMessageObject, getThreadMessage(), null, false, null, null, null, true, 0, null, false);
             }
@@ -7156,7 +7156,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                     if (user2 == null) {
                         return true;
                     }
-                    setFieldText("@" + user2.username + " " + tLRPC$KeyboardButton.query);
+                    setFieldText("@" + UserObject.getPublicUsername(user2) + " " + tLRPC$KeyboardButton.query);
                 } else {
                     Bundle bundle = new Bundle();
                     bundle.putBoolean("onlySelect", true);
@@ -7208,7 +7208,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         }
         long j3 = ((MessagesStorage.TopicKey) arrayList.get(0)).dialogId;
         MediaDataController mediaDataController = MediaDataController.getInstance(this.currentAccount);
-        mediaDataController.saveDraft(j3, 0, "@" + user.username + " " + tLRPC$KeyboardButton.query, null, null, true);
+        mediaDataController.saveDraft(j3, 0, "@" + UserObject.getPublicUsername(user) + " " + tLRPC$KeyboardButton.query, null, null, true);
         if (j3 != this.dialog_id) {
             if (!DialogObject.isEncryptedDialog(j3)) {
                 Bundle bundle = new Bundle();

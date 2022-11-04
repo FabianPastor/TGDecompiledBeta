@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Outline;
@@ -96,6 +97,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
     private boolean currentMapStyleDark;
     private LocationActivityDelegate delegate;
     private long dialogId;
+    private boolean doNotDrawMap;
     private ImageView emptyImageView;
     private TextView emptySubtitleTextView;
     private TextView emptyTitleTextView;
@@ -169,7 +171,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
         return 1;
     }
 
-    static /* synthetic */ float access$2816(ChatAttachAlertLocationLayout chatAttachAlertLocationLayout, float f) {
+    static /* synthetic */ float access$2916(ChatAttachAlertLocationLayout chatAttachAlertLocationLayout, float f) {
         float f2 = chatAttachAlertLocationLayout.yOffset + f;
         chatAttachAlertLocationLayout.yOffset = f2;
         return f2;
@@ -469,10 +471,13 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
             @Override // android.view.ViewGroup
             protected boolean drawChild(Canvas canvas, View view, long j) {
                 canvas.save();
+                boolean z = false;
                 canvas.clipRect(0, 0, getMeasuredWidth(), getMeasuredHeight() - ChatAttachAlertLocationLayout.this.clipSize);
-                boolean drawChild = super.drawChild(canvas, view, j);
+                if (!ChatAttachAlertLocationLayout.this.doNotDrawMap) {
+                    z = super.drawChild(canvas, view, j);
+                }
                 canvas.restore();
-                return drawChild;
+                return z;
             }
 
             @Override // android.view.View
@@ -722,7 +727,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
             public void onScrolled(RecyclerView recyclerView, int i3, int i4) {
                 ChatAttachAlertLocationLayout.this.updateClipView();
                 if (ChatAttachAlertLocationLayout.this.forceUpdate != null) {
-                    ChatAttachAlertLocationLayout.access$2816(ChatAttachAlertLocationLayout.this, i4);
+                    ChatAttachAlertLocationLayout.access$2916(ChatAttachAlertLocationLayout.this, i4);
                 }
                 ChatAttachAlertLocationLayout chatAttachAlertLocationLayout = ChatAttachAlertLocationLayout.this;
                 chatAttachAlertLocationLayout.parentAlert.updateLayout(chatAttachAlertLocationLayout, true, i4);
@@ -1123,6 +1128,11 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
     void onDestroy() {
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.locationPermissionGranted);
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.locationPermissionDenied);
+        this.doNotDrawMap = true;
+        FrameLayout frameLayout = this.mapViewClip;
+        if (frameLayout != null) {
+            frameLayout.invalidate();
+        }
         try {
             IMapsProvider.IMap iMap = this.map;
             if (iMap != null) {
@@ -1474,6 +1484,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
     }
 
     private void onMapInit() {
+        PackageManager packageManager;
         if (this.map == null) {
             return;
         }
@@ -1526,7 +1537,8 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
         positionMarker(lastLocation);
         if (this.checkGpsEnabled && getParentActivity() != null) {
             this.checkGpsEnabled = false;
-            if (!getParentActivity().getPackageManager().hasSystemFeature("android.hardware.location.gps")) {
+            Activity parentActivity = getParentActivity();
+            if (parentActivity != null && (packageManager = parentActivity.getPackageManager()) != null && !packageManager.hasSystemFeature("android.hardware.location.gps")) {
                 return;
             }
             try {
@@ -1648,6 +1660,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
         int i;
         int i2;
         IMapsProvider.LatLng latLng;
+        IMapsProvider.IMap iMap;
         if (this.mapView == null || this.mapViewClip == null) {
             return;
         }
@@ -1695,9 +1708,9 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
         this.nonClipSize = i3 - this.clipSize;
         this.mapViewClip.invalidate();
         this.mapViewClip.setTranslationY(i - this.nonClipSize);
-        IMapsProvider.IMap iMap = this.map;
-        if (iMap != null) {
-            iMap.setPadding(0, AndroidUtilities.dp(6.0f), 0, this.clipSize + AndroidUtilities.dp(6.0f));
+        IMapsProvider.IMap iMap2 = this.map;
+        if (iMap2 != null) {
+            iMap2.setPadding(0, AndroidUtilities.dp(6.0f), 0, this.clipSize + AndroidUtilities.dp(6.0f));
         }
         MapOverlayView mapOverlayView3 = this.overlayView;
         if (mapOverlayView3 != null) {
@@ -1721,8 +1734,8 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
                 Location location = this.myLocation;
                 latLng = location != null ? new IMapsProvider.LatLng(location.getLatitude(), this.myLocation.getLongitude()) : null;
             }
-            if (latLng != null) {
-                this.map.moveCamera(ApplicationLoader.getMapsProvider().newCameraUpdateLatLng(latLng));
+            if (latLng != null && (iMap = this.map) != null) {
+                iMap.moveCamera(ApplicationLoader.getMapsProvider().newCameraUpdateLatLng(latLng));
             }
         }
         if (!this.locationDenied || !isTypeSend()) {

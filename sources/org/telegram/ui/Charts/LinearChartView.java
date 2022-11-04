@@ -97,7 +97,7 @@ public class LinearChartView extends BaseChartView<ChartData, LineViewData> {
 
     @Override // org.telegram.ui.Charts.BaseChartView
     /* renamed from: createLineViewData */
-    public LineViewData mo1040createLineViewData(ChartData.Line line) {
+    public LineViewData mo1048createLineViewData(ChartData.Line line) {
         return new LineViewData(line);
     }
 }

@@ -140,13 +140,13 @@ public final /* synthetic */ class C$r8$wrapper$java$util$stream$IntStream$VWRP 
 
     @Override // j$.util.stream.IntStream, j$.util.stream.InterfaceCLASSNAMEg
     /* renamed from: iterator */
-    public /* synthetic */ p.a mo303iterator() {
+    public /* synthetic */ p.a mo307iterator() {
         return CLASSNAMEc.a(this.a.iterator());
     }
 
     @Override // j$.util.stream.IntStream, j$.util.stream.InterfaceCLASSNAMEg
     /* renamed from: iterator */
-    public /* synthetic */ Iterator mo303iterator() {
+    public /* synthetic */ Iterator mo307iterator() {
         return this.a.iterator();
     }
 
@@ -177,13 +177,13 @@ public final /* synthetic */ class C$r8$wrapper$java$util$stream$IntStream$VWRP 
 
     @Override // j$.util.stream.IntStream
     /* renamed from: parallel */
-    public /* synthetic */ IntStream mo304parallel() {
+    public /* synthetic */ IntStream mo308parallel() {
         return convert(this.a.parallel());
     }
 
     @Override // j$.util.stream.IntStream
     /* renamed from: parallel */
-    public /* synthetic */ InterfaceCLASSNAMEg mo304parallel() {
+    public /* synthetic */ InterfaceCLASSNAMEg mo308parallel() {
         return H0.n0(this.a.parallel());
     }
 
@@ -194,13 +194,13 @@ public final /* synthetic */ class C$r8$wrapper$java$util$stream$IntStream$VWRP 
 
     @Override // j$.util.stream.IntStream
     /* renamed from: sequential */
-    public /* synthetic */ IntStream mo305sequential() {
+    public /* synthetic */ IntStream mo309sequential() {
         return convert(this.a.sequential());
     }
 
     @Override // j$.util.stream.IntStream
     /* renamed from: sequential */
-    public /* synthetic */ InterfaceCLASSNAMEg mo305sequential() {
+    public /* synthetic */ InterfaceCLASSNAMEg mo309sequential() {
         return H0.n0(this.a.sequential());
     }
 
@@ -216,13 +216,13 @@ public final /* synthetic */ class C$r8$wrapper$java$util$stream$IntStream$VWRP 
 
     @Override // j$.util.stream.IntStream, j$.util.stream.InterfaceCLASSNAMEg
     /* renamed from: spliterator */
-    public /* synthetic */ u.a mo306spliterator() {
+    public /* synthetic */ u.a mo310spliterator() {
         return CLASSNAMEk.a(this.a.spliterator());
     }
 
     @Override // j$.util.stream.IntStream, j$.util.stream.InterfaceCLASSNAMEg
     /* renamed from: spliterator */
-    public /* synthetic */ j$.util.u mo306spliterator() {
+    public /* synthetic */ j$.util.u mo310spliterator() {
         return CLASSNAMEg.a(this.a.spliterator());
     }
 

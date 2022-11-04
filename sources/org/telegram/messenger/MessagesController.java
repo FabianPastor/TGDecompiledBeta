@@ -3408,6 +3408,7 @@ public class MessagesController extends BaseController implements NotificationCe
                             FileLog.e(e);
                             break;
                         }
+                        break;
                     case 24:
                         tLRPC$TL_jsonObject = tLRPC$TL_jsonObject5;
                         i = size;
@@ -5390,16 +5391,18 @@ public class MessagesController extends BaseController implements NotificationCe
         return putUser(tLRPC$User, z, false);
     }
 
-    /* JADX WARN: Removed duplicated region for block: B:112:0x00aa  */
-    /* JADX WARN: Removed duplicated region for block: B:94:0x004d  */
-    /* JADX WARN: Removed duplicated region for block: B:97:0x0064  */
+    /* JADX WARN: Removed duplicated region for block: B:132:0x0054  */
+    /* JADX WARN: Removed duplicated region for block: B:140:0x0076  */
+    /* JADX WARN: Removed duplicated region for block: B:143:0x0085  */
+    /* JADX WARN: Removed duplicated region for block: B:156:0x00b8  */
+    /* JADX WARN: Removed duplicated region for block: B:171:0x00fe  */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
     public boolean putUser(org.telegram.tgnet.TLRPC$User r9, boolean r10, boolean r11) {
         /*
-            Method dump skipped, instructions count: 308
+            Method dump skipped, instructions count: 392
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.putUser(org.telegram.tgnet.TLRPC$User, boolean, boolean):boolean");
@@ -5453,7 +5456,7 @@ public class MessagesController extends BaseController implements NotificationCe
         if (tLRPC$Chat.usernames != null) {
             for (int i2 = 0; i2 < tLRPC$Chat.usernames.size(); i2++) {
                 TLRPC$TL_username tLRPC$TL_username2 = tLRPC$Chat.usernames.get(i2);
-                if (tLRPC$TL_username2 != null && !TextUtils.isEmpty(tLRPC$TL_username2.username)) {
+                if (tLRPC$TL_username2 != null && !TextUtils.isEmpty(tLRPC$TL_username2.username) && tLRPC$TL_username2.active) {
                     this.objectsByUsernames.put(tLRPC$TL_username2.username.toLowerCase(), tLRPC$Chat);
                 }
             }
@@ -6165,12 +6168,12 @@ public class MessagesController extends BaseController implements NotificationCe
         this.fullUsers.put(tLRPC$User.id, tLRPC$UserFull);
         this.loadingFullUsers.remove(Long.valueOf(tLRPC$User.id));
         this.loadedFullUsers.add(Long.valueOf(tLRPC$User.id));
-        String str = tLRPC$User.first_name + tLRPC$User.last_name + tLRPC$User.username;
+        String str = tLRPC$User.first_name + tLRPC$User.last_name + UserObject.getPublicUsername(tLRPC$User);
         ArrayList<TLRPC$User> arrayList = new ArrayList<>();
         arrayList.add(tLRPC$UserFull.user);
         putUsers(arrayList, false);
         getMessagesStorage().putUsersAndChats(arrayList, null, false, true);
-        if (!str.equals(tLRPC$UserFull.user.first_name + tLRPC$UserFull.user.last_name + tLRPC$UserFull.user.username)) {
+        if (!str.equals(tLRPC$UserFull.user.first_name + tLRPC$UserFull.user.last_name + UserObject.getPublicUsername(tLRPC$UserFull.user))) {
             getNotificationCenter().postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(UPDATE_MASK_NAME));
         }
         TLRPC$UserProfilePhoto tLRPC$UserProfilePhoto = tLRPC$UserFull.user.photo;
@@ -8168,6 +8171,17 @@ public class MessagesController extends BaseController implements NotificationCe
 
     public void loadUserInfo(TLRPC$User tLRPC$User, boolean z, int i, int i2) {
         getMessagesStorage().loadUserInfo(tLRPC$User, z, i, i2);
+    }
+
+    public void updateUsernameActiveness(TLObject tLObject, String str, boolean z) {
+        if (TextUtils.isEmpty(str)) {
+            return;
+        }
+        this.objectsByUsernames.remove(str);
+        if (!z) {
+            return;
+        }
+        this.objectsByUsernames.put(str.toLowerCase(), tLObject);
     }
 
     public void processUserInfo(final TLRPC$User tLRPC$User, final TLRPC$UserFull tLRPC$UserFull, final boolean z, final boolean z2, final int i, final ArrayList<Integer> arrayList, final HashMap<Integer, MessageObject> hashMap, final int i2, final boolean z3) {
@@ -15141,22 +15155,22 @@ public class MessagesController extends BaseController implements NotificationCe
         }
     }
 
-    /* JADX WARN: Removed duplicated region for block: B:1489:0x0f4a  */
     /* JADX WARN: Removed duplicated region for block: B:1494:0x0var_  */
-    /* JADX WARN: Removed duplicated region for block: B:1538:0x106b  */
-    /* JADX WARN: Removed duplicated region for block: B:1540:0x1079  */
-    /* JADX WARN: Removed duplicated region for block: B:1542:0x107f  */
-    /* JADX WARN: Removed duplicated region for block: B:1545:0x108b  */
-    /* JADX WARN: Removed duplicated region for block: B:1555:0x10c7  */
-    /* JADX WARN: Removed duplicated region for block: B:1558:0x10dd  */
-    /* JADX WARN: Removed duplicated region for block: B:1643:? A[RETURN, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:1499:0x0var_  */
+    /* JADX WARN: Removed duplicated region for block: B:1543:0x1077  */
+    /* JADX WARN: Removed duplicated region for block: B:1545:0x1085  */
+    /* JADX WARN: Removed duplicated region for block: B:1547:0x108b  */
+    /* JADX WARN: Removed duplicated region for block: B:1550:0x1097  */
+    /* JADX WARN: Removed duplicated region for block: B:1560:0x10d3  */
+    /* JADX WARN: Removed duplicated region for block: B:1563:0x10e9  */
+    /* JADX WARN: Removed duplicated region for block: B:1649:? A[RETURN, SYNTHETIC] */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
     public /* synthetic */ void lambda$processUpdateArray$333(int r46, java.util.ArrayList r47, androidx.collection.LongSparseArray r48, int r49, org.telegram.messenger.support.LongSparseIntArray r50, androidx.collection.LongSparseArray r51, androidx.collection.LongSparseArray r52, java.util.ArrayList r53, androidx.collection.LongSparseArray r54, androidx.collection.LongSparseArray r55, boolean r56, java.util.ArrayList r57, java.util.ArrayList r58, androidx.collection.LongSparseArray r59, androidx.collection.LongSparseArray r60, androidx.collection.LongSparseArray r61, java.util.ArrayList r62) {
         /*
-            Method dump skipped, instructions count: 4325
+            Method dump skipped, instructions count: 4337
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.lambda$processUpdateArray$333(int, java.util.ArrayList, androidx.collection.LongSparseArray, int, org.telegram.messenger.support.LongSparseIntArray, androidx.collection.LongSparseArray, androidx.collection.LongSparseArray, java.util.ArrayList, androidx.collection.LongSparseArray, androidx.collection.LongSparseArray, boolean, java.util.ArrayList, java.util.ArrayList, androidx.collection.LongSparseArray, androidx.collection.LongSparseArray, androidx.collection.LongSparseArray, java.util.ArrayList):void");

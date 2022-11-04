@@ -718,7 +718,7 @@ public class MessageObject {
         */
         public void calculate() {
             /*
-                Method dump skipped, instructions count: 2087
+                Method dump skipped, instructions count: 2088
                 To view this dump add '--comments-level debug' option
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessageObject.GroupedMessages.calculate():void");
@@ -1190,7 +1190,7 @@ public class MessageObject {
                     formatName = ContactsController.formatName(tLRPC$User.first_name, tLRPC$User.last_name);
                 }
                 str = formatName;
-                publicUsername = tLRPC$User.username;
+                publicUsername = UserObject.getPublicUsername(tLRPC$User);
                 j = tLRPC$User.id;
             } else {
                 TLRPC$Chat tLRPC$Chat = (TLRPC$Chat) tLObject;

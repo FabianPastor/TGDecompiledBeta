@@ -35,7 +35,7 @@ public class CLASSNAMEs3 extends J0 {
             d = B3.d(j, this.m);
             return new w4(aVar, j, d);
         }
-        return !EnumCLASSNAMEd4.ORDERED.d(abstractCLASSNAMEy2.s0()) ? N0((u.a) abstractCLASSNAMEy2.w0(uVar), this.l, this.m, q0) : ((A1) new A3(this, abstractCLASSNAMEy2, uVar, CLASSNAMEq3.a, this.l, this.m).invoke()).mo285spliterator();
+        return !EnumCLASSNAMEd4.ORDERED.d(abstractCLASSNAMEy2.s0()) ? N0((u.a) abstractCLASSNAMEy2.w0(uVar), this.l, this.m, q0) : ((A1) new A3(this, abstractCLASSNAMEy2, uVar, CLASSNAMEq3.a, this.l, this.m).invoke()).mo289spliterator();
     }
 
     /* JADX INFO: Access modifiers changed from: package-private */

@@ -107,7 +107,7 @@ abstract class AbstractCLASSNAMEc extends AbstractCLASSNAMEy2 implements Interfa
     }
 
     j$.util.u F0(AbstractCLASSNAMEy2 abstractCLASSNAMEy2, j$.util.u uVar) {
-        return E0(abstractCLASSNAMEy2, uVar, CLASSNAMEa.a).mo285spliterator();
+        return E0(abstractCLASSNAMEy2, uVar, CLASSNAMEa.a).mo289spliterator();
     }
 
     abstract boolean G0();
@@ -197,11 +197,11 @@ abstract class AbstractCLASSNAMEc extends AbstractCLASSNAMEy2 implements Interfa
         InterfaceCLASSNAMEs1 t0 = t0(q0(uVar), mVar);
         t0.getClass();
         n0(v0(t0), uVar);
-        return t0.mo287a();
+        return t0.mo291a();
     }
 
     /* renamed from: parallel */
-    public final InterfaceCLASSNAMEg mo304parallel() {
+    public final InterfaceCLASSNAMEg mo308parallel() {
         this.a.k = true;
         return this;
     }
@@ -232,13 +232,13 @@ abstract class AbstractCLASSNAMEc extends AbstractCLASSNAMEy2 implements Interfa
     }
 
     /* renamed from: sequential */
-    public final InterfaceCLASSNAMEg mo305sequential() {
+    public final InterfaceCLASSNAMEg mo309sequential() {
         this.a.k = false;
         return this;
     }
 
     /* renamed from: spliterator */
-    public j$.util.u mo306spliterator() {
+    public j$.util.u mo310spliterator() {
         if (!this.h) {
             this.h = true;
             AbstractCLASSNAMEc abstractCLASSNAMEc = this.a;

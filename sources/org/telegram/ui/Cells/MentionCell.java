@@ -84,9 +84,9 @@ public class MentionCell extends LinearLayout {
             this.imageView.setImageDrawable(this.avatarDrawable);
         }
         this.nameTextView.setText(UserObject.getUserName(tLRPC$User));
-        if (tLRPC$User.username != null) {
+        if (UserObject.getPublicUsername(tLRPC$User) != null) {
             TextView textView = this.usernameTextView;
-            textView.setText("@" + tLRPC$User.username);
+            textView.setText("@" + UserObject.getPublicUsername(tLRPC$User));
         } else {
             this.usernameTextView.setText("");
         }

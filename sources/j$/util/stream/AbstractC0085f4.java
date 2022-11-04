@@ -148,14 +148,14 @@ public abstract class AbstractCLASSNAMEf4 implements j$.util.u {
 
     @Override // j$.util.u
     /* renamed from: trySplit */
-    public j$.util.u mo322trySplit() {
+    public j$.util.u mo326trySplit() {
         if (!this.a || this.i) {
             return null;
         }
         h();
-        j$.util.u mo322trySplit = this.d.mo322trySplit();
-        if (mo322trySplit != null) {
-            return l(mo322trySplit);
+        j$.util.u mo326trySplit = this.d.mo326trySplit();
+        if (mo326trySplit != null) {
+            return l(mo326trySplit);
         }
         return null;
     }

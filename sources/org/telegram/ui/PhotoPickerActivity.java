@@ -1884,7 +1884,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                     searchImage.params = hashMap;
                     hashMap.put("id", tLRPC$BotInlineResult.id);
                     searchImage.params.put("query_id", "" + tLRPC$messages_BotResults.query_id);
-                    searchImage.params.put("bot_name", tLRPC$User.username);
+                    searchImage.params.put("bot_name", UserObject.getPublicUsername(tLRPC$User));
                     this.searchResult.add(searchImage);
                     this.searchResultKeys.put(searchImage.id, searchImage);
                     i2++;
@@ -1966,7 +1966,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         /* JADX WARN: Multi-variable type inference failed */
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1813onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1821onCreateViewHolder(ViewGroup viewGroup, int i) {
             FrameLayout frameLayout;
             TextCell textCell;
             if (i != 0) {

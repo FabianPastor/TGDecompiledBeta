@@ -50,16 +50,16 @@ final class A3 extends AbstractCLASSNAMEd {
             InterfaceCLASSNAMEm3 H0 = this.j.H0(this.a.s0(), t0);
             AbstractCLASSNAMEy2 abstractCLASSNAMEy2 = this.a;
             abstractCLASSNAMEy2.o0(abstractCLASSNAMEy2.v0(H0), this.b);
-            return t0.mo287a();
+            return t0.mo291a();
         }
         AbstractCLASSNAMEy2 abstractCLASSNAMEy22 = this.a;
         InterfaceCLASSNAMEs1 t02 = abstractCLASSNAMEy22.t0(-1L, this.k);
         abstractCLASSNAMEy22.u0(t02, this.b);
-        A1 mo287a = t02.mo287a();
-        this.n = mo287a.count();
+        A1 mo291a = t02.mo291a();
+        this.n = mo291a.count();
         this.o = true;
         this.b = null;
-        return mo287a;
+        return mo291a;
     }
 
     /* JADX INFO: Access modifiers changed from: protected */

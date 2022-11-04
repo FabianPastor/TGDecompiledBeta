@@ -34,25 +34,25 @@ abstract class D4 {
     }
 
     public /* bridge */ /* synthetic */ j$.util.t trySplit() {
-        return (j$.util.t) m244trySplit();
+        return (j$.util.t) m248trySplit();
     }
 
     /* renamed from: trySplit  reason: collision with other method in class */
-    public /* bridge */ /* synthetic */ u.a m243trySplit() {
-        return (u.a) m244trySplit();
+    public /* bridge */ /* synthetic */ u.a m247trySplit() {
+        return (u.a) m248trySplit();
     }
 
     /* renamed from: trySplit  reason: collision with other method in class */
-    public j$.util.u m244trySplit() {
+    public j$.util.u m248trySplit() {
         long j = this.a;
         long j2 = this.e;
         if (j < j2 && this.d < j2) {
             while (true) {
-                j$.util.u mo322trySplit = this.c.mo322trySplit();
-                if (mo322trySplit == null) {
+                j$.util.u mo326trySplit = this.c.mo326trySplit();
+                if (mo326trySplit == null) {
                     return null;
                 }
-                long estimateSize = mo322trySplit.estimateSize() + this.d;
+                long estimateSize = mo326trySplit.estimateSize() + this.d;
                 long min = Math.min(estimateSize, this.b);
                 long j3 = this.a;
                 if (j3 >= min) {
@@ -63,12 +63,12 @@ abstract class D4 {
                         long j5 = this.d;
                         if (j5 < j3 || estimateSize > j4) {
                             this.d = min;
-                            return a(mo322trySplit, j3, j4, j5, min);
+                            return a(mo326trySplit, j3, j4, j5, min);
                         }
                         this.d = min;
-                        return mo322trySplit;
+                        return mo326trySplit;
                     }
-                    this.c = mo322trySplit;
+                    this.c = mo326trySplit;
                     this.e = min;
                 }
             }
@@ -78,12 +78,12 @@ abstract class D4 {
     }
 
     /* renamed from: trySplit  reason: collision with other method in class */
-    public /* bridge */ /* synthetic */ j$.util.v m245trySplit() {
-        return (j$.util.v) m244trySplit();
+    public /* bridge */ /* synthetic */ j$.util.v m249trySplit() {
+        return (j$.util.v) m248trySplit();
     }
 
     /* renamed from: trySplit  reason: collision with other method in class */
-    public /* bridge */ /* synthetic */ j$.util.w m246trySplit() {
-        return (j$.util.w) m244trySplit();
+    public /* bridge */ /* synthetic */ j$.util.w m250trySplit() {
+        return (j$.util.w) m248trySplit();
     }
 }

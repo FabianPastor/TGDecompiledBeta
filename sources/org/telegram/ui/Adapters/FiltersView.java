@@ -588,7 +588,7 @@ public class FiltersView extends RecyclerListView {
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder  reason: collision with other method in class */
-        public ViewHolder mo1813onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public ViewHolder mo1821onCreateViewHolder(ViewGroup viewGroup, int i) {
             ViewHolder viewHolder = new ViewHolder(FiltersView.this, new FilterView(viewGroup.getContext(), ((RecyclerListView) FiltersView.this).resourcesProvider));
             RecyclerView.LayoutParams layoutParams = new RecyclerView.LayoutParams(-2, AndroidUtilities.dp(32.0f));
             ((ViewGroup.MarginLayoutParams) layoutParams).topMargin = AndroidUtilities.dp(6.0f);

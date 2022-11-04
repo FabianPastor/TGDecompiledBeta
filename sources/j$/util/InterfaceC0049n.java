@@ -10,7 +10,7 @@ public interface InterfaceCLASSNAMEn extends p {
 
     @Override // java.util.Iterator, j$.util.Iterator
     /* renamed from: next */
-    Double mo307next();
+    Double mo311next();
 
     double nextDouble();
 }

@@ -43,7 +43,7 @@ class Y2 extends AbstractCLASSNAMEi3 {
                 Stream stream = (Stream) ((CLASSNAMEa3) this.c).m.apply(obj);
                 if (stream != null) {
                     try {
-                        ((Stream) stream.mo305sequential()).forEach(this.a);
+                        ((Stream) stream.mo309sequential()).forEach(this.a);
                     } finally {
                         try {
                             stream.close();

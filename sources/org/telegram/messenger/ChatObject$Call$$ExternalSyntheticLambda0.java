@@ -11,6 +11,6 @@ public final /* synthetic */ class ChatObject$Call$$ExternalSyntheticLambda0 imp
 
     @Override // java.lang.Runnable
     public final void run() {
-        ChatObject.Call.m332$r8$lambda$A9Iyjy8qm5XwdmVhsjek1P93bY(this.f$0);
+        ChatObject.Call.m336$r8$lambda$A9Iyjy8qm5XwdmVhsjek1P93bY(this.f$0);
     }
 }

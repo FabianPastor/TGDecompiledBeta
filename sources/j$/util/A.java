@@ -60,7 +60,7 @@ class A implements InterfaceCLASSNAMEn, j$.util.function.f, Iterator {
 
     @Override // j$.util.InterfaceCLASSNAMEn, java.util.Iterator, j$.util.Iterator
     /* renamed from: next */
-    public Double mo307next() {
+    public Double mo311next() {
         if (!N.a) {
             return Double.valueOf(nextDouble());
         }

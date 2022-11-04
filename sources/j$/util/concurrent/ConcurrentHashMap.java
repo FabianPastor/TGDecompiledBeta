@@ -120,7 +120,7 @@ public class ConcurrentHashMap<K, V> extends AbstractMap<K, V> implements Concur
 
         @Override // java.util.Iterator, j$.util.Iterator
         /* renamed from: next */
-        public Object mo307next() {
+        public Object mo311next() {
             l lVar = this.b;
             if (lVar != null) {
                 Object obj = lVar.b;
@@ -243,7 +243,7 @@ public class ConcurrentHashMap<K, V> extends AbstractMap<K, V> implements Concur
 
         @Override // java.util.Collection, java.lang.Iterable, java.util.Set, j$.util.InterfaceCLASSNAMEb, j$.lang.e
         /* renamed from: spliterator */
-        public j$.util.u mo289spliterator() {
+        public j$.util.u mo293spliterator() {
             ConcurrentHashMap concurrentHashMap = this.a;
             long m = concurrentHashMap.m();
             l[] lVarArr = concurrentHashMap.a;
@@ -257,19 +257,19 @@ public class ConcurrentHashMap<K, V> extends AbstractMap<K, V> implements Concur
 
         @Override // java.util.Collection, java.lang.Iterable, java.util.Set, j$.util.InterfaceCLASSNAMEb, j$.lang.e
         /* renamed from: spliterator  reason: collision with other method in class */
-        public /* synthetic */ Spliterator mo289spliterator() {
-            return CLASSNAMEh.a(mo289spliterator());
+        public /* synthetic */ Spliterator mo293spliterator() {
+            return CLASSNAMEh.a(mo293spliterator());
         }
 
         @Override // java.util.Collection, j$.util.InterfaceCLASSNAMEb
         /* renamed from: stream */
-        public /* synthetic */ j$.util.stream.Stream mo238stream() {
+        public /* synthetic */ j$.util.stream.Stream mo242stream() {
             return AbstractCLASSNAMEa.i(this);
         }
 
         @Override // java.util.Collection, j$.util.InterfaceCLASSNAMEb
         /* renamed from: stream  reason: collision with other method in class */
-        public /* synthetic */ Stream mo238stream() {
+        public /* synthetic */ Stream mo242stream() {
             return P0.n0(AbstractCLASSNAMEa.i(this));
         }
     }
@@ -337,7 +337,7 @@ public class ConcurrentHashMap<K, V> extends AbstractMap<K, V> implements Concur
 
         @Override // j$.util.u
         /* renamed from: trySplit */
-        public j$.util.u mo322trySplit() {
+        public j$.util.u mo326trySplit() {
             int i = this.f;
             int i2 = this.g;
             int i3 = (i + i2) >>> 1;
@@ -440,7 +440,7 @@ public class ConcurrentHashMap<K, V> extends AbstractMap<K, V> implements Concur
 
         @Override // java.util.Iterator, j$.util.Iterator
         /* renamed from: next */
-        public final Object mo307next() {
+        public final Object mo311next() {
             l lVar = this.b;
             if (lVar != null) {
                 Object obj = lVar.b;
@@ -453,7 +453,7 @@ public class ConcurrentHashMap<K, V> extends AbstractMap<K, V> implements Concur
 
         @Override // java.util.Enumeration
         public final Object nextElement() {
-            return mo307next();
+            return mo311next();
         }
     }
 
@@ -510,7 +510,7 @@ public class ConcurrentHashMap<K, V> extends AbstractMap<K, V> implements Concur
             java.util.Iterator it = iterator();
             int i = 0;
             while (((a) it).hasNext()) {
-                i += ((h) it).mo307next().hashCode();
+                i += ((h) it).mo311next().hashCode();
             }
             return i;
         }
@@ -545,7 +545,7 @@ public class ConcurrentHashMap<K, V> extends AbstractMap<K, V> implements Concur
 
         @Override // java.util.Collection, java.lang.Iterable, java.util.Set, j$.util.InterfaceCLASSNAMEb, j$.lang.e
         /* renamed from: spliterator */
-        public j$.util.u mo289spliterator() {
+        public j$.util.u mo293spliterator() {
             ConcurrentHashMap concurrentHashMap = this.a;
             long m = concurrentHashMap.m();
             l[] lVarArr = concurrentHashMap.a;
@@ -559,19 +559,19 @@ public class ConcurrentHashMap<K, V> extends AbstractMap<K, V> implements Concur
 
         @Override // java.util.Collection, java.lang.Iterable, java.util.Set, j$.util.InterfaceCLASSNAMEb, j$.lang.e
         /* renamed from: spliterator  reason: collision with other method in class */
-        public /* synthetic */ Spliterator mo289spliterator() {
-            return CLASSNAMEh.a(mo289spliterator());
+        public /* synthetic */ Spliterator mo293spliterator() {
+            return CLASSNAMEh.a(mo293spliterator());
         }
 
         @Override // java.util.Collection, j$.util.InterfaceCLASSNAMEb
         /* renamed from: stream */
-        public /* synthetic */ j$.util.stream.Stream mo238stream() {
+        public /* synthetic */ j$.util.stream.Stream mo242stream() {
             return AbstractCLASSNAMEa.i(this);
         }
 
         @Override // java.util.Collection, j$.util.InterfaceCLASSNAMEb
         /* renamed from: stream  reason: collision with other method in class */
-        public /* synthetic */ Stream mo238stream() {
+        public /* synthetic */ Stream mo242stream() {
             return P0.n0(AbstractCLASSNAMEa.i(this));
         }
     }
@@ -637,7 +637,7 @@ public class ConcurrentHashMap<K, V> extends AbstractMap<K, V> implements Concur
 
         @Override // j$.util.u
         /* renamed from: trySplit */
-        public j$.util.u mo322trySplit() {
+        public j$.util.u mo326trySplit() {
             int i = this.f;
             int i2 = this.g;
             int i3 = (i + i2) >>> 1;
@@ -1478,7 +1478,7 @@ public class ConcurrentHashMap<K, V> extends AbstractMap<K, V> implements Concur
 
         @Override // java.util.Iterator, j$.util.Iterator
         /* renamed from: next */
-        public final Object mo307next() {
+        public final Object mo311next() {
             l lVar = this.b;
             if (lVar != null) {
                 Object obj = lVar.c;
@@ -1491,7 +1491,7 @@ public class ConcurrentHashMap<K, V> extends AbstractMap<K, V> implements Concur
 
         @Override // java.util.Enumeration
         public final Object nextElement() {
-            return mo307next();
+            return mo311next();
         }
     }
 
@@ -1556,7 +1556,7 @@ public class ConcurrentHashMap<K, V> extends AbstractMap<K, V> implements Concur
 
         @Override // j$.util.u
         /* renamed from: trySplit */
-        public j$.util.u mo322trySplit() {
+        public j$.util.u mo326trySplit() {
             int i = this.f;
             int i2 = this.g;
             int i3 = (i + i2) >>> 1;
@@ -1642,7 +1642,7 @@ public class ConcurrentHashMap<K, V> extends AbstractMap<K, V> implements Concur
                     if (!aVar.hasNext()) {
                         return false;
                     }
-                } while (!obj.equals(((s) it).mo307next()));
+                } while (!obj.equals(((s) it).mo311next()));
                 aVar.remove();
                 return true;
             }
@@ -1656,7 +1656,7 @@ public class ConcurrentHashMap<K, V> extends AbstractMap<K, V> implements Concur
 
         @Override // java.util.Collection, java.lang.Iterable, j$.util.InterfaceCLASSNAMEb, j$.lang.e
         /* renamed from: spliterator */
-        public j$.util.u mo289spliterator() {
+        public j$.util.u mo293spliterator() {
             ConcurrentHashMap concurrentHashMap = this.a;
             long m = concurrentHashMap.m();
             l[] lVarArr = concurrentHashMap.a;
@@ -1670,19 +1670,19 @@ public class ConcurrentHashMap<K, V> extends AbstractMap<K, V> implements Concur
 
         @Override // java.util.Collection, java.lang.Iterable, j$.util.InterfaceCLASSNAMEb, j$.lang.e
         /* renamed from: spliterator  reason: collision with other method in class */
-        public /* synthetic */ Spliterator mo289spliterator() {
-            return CLASSNAMEh.a(mo289spliterator());
+        public /* synthetic */ Spliterator mo293spliterator() {
+            return CLASSNAMEh.a(mo293spliterator());
         }
 
         @Override // java.util.Collection, j$.util.InterfaceCLASSNAMEb
         /* renamed from: stream */
-        public /* synthetic */ j$.util.stream.Stream mo238stream() {
+        public /* synthetic */ j$.util.stream.Stream mo242stream() {
             return AbstractCLASSNAMEa.i(this);
         }
 
         @Override // java.util.Collection, j$.util.InterfaceCLASSNAMEb
         /* renamed from: stream  reason: collision with other method in class */
-        public /* synthetic */ Stream mo238stream() {
+        public /* synthetic */ Stream mo242stream() {
             return P0.n0(AbstractCLASSNAMEa.i(this));
         }
     }

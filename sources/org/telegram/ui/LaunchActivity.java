@@ -2828,7 +2828,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         } else {
             bundle.putLong("chat_id", -j);
         }
-        bundle.putString("attach_bot", tLRPC$User.username);
+        bundle.putString("attach_bot", UserObject.getPublicUsername(tLRPC$User));
         if (str != null) {
             bundle.putString("attach_bot_start_command", str);
         }
@@ -3858,7 +3858,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
     */
     private java.util.List<org.telegram.tgnet.TLRPC$TL_contact> findContacts(java.lang.String r18, java.lang.String r19, boolean r20) {
         /*
-            Method dump skipped, instructions count: 354
+            Method dump skipped, instructions count: 356
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LaunchActivity.findContacts(java.lang.String, java.lang.String, boolean):java.util.List");

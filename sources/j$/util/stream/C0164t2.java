@@ -7,7 +7,7 @@ import j$.util.function.Consumer;
 public final class CLASSNAMEt2 extends CLASSNAMEa4 implements A1, InterfaceCLASSNAMEs1 {
     @Override // j$.util.stream.InterfaceCLASSNAMEs1
     /* renamed from: a */
-    public A1 mo287a() {
+    public A1 mo291a() {
         return this;
     }
 
@@ -36,7 +36,7 @@ public final class CLASSNAMEt2 extends CLASSNAMEa4 implements A1, InterfaceCLASS
 
     @Override // j$.util.stream.A1
     /* renamed from: b */
-    public A1 mo288b(int i) {
+    public A1 mo292b(int i) {
         throw new IndexOutOfBoundsException();
     }
 
@@ -88,7 +88,7 @@ public final class CLASSNAMEt2 extends CLASSNAMEa4 implements A1, InterfaceCLASS
 
     @Override // j$.util.stream.CLASSNAMEa4, java.lang.Iterable, j$.lang.e
     /* renamed from: spliterator */
-    public j$.util.u mo289spliterator() {
-        return super.mo289spliterator();
+    public j$.util.u mo293spliterator() {
+        return super.mo293spliterator();
     }
 }

@@ -16,7 +16,7 @@ final class E1 implements A1 {
 
     @Override // j$.util.stream.A1
     /* renamed from: b */
-    public A1 mo288b(int i) {
+    public A1 mo292b(int i) {
         throw new IndexOutOfBoundsException();
     }
 
@@ -56,9 +56,9 @@ final class E1 implements A1 {
 
     @Override // j$.util.stream.A1
     /* renamed from: spliterator */
-    public j$.util.u mo285spliterator() {
+    public j$.util.u mo289spliterator() {
         Collection collection = this.a;
-        return (collection instanceof InterfaceCLASSNAMEb ? ((InterfaceCLASSNAMEb) collection).mo238stream() : AbstractCLASSNAMEa.i(collection)).mo306spliterator();
+        return (collection instanceof InterfaceCLASSNAMEb ? ((InterfaceCLASSNAMEb) collection).mo242stream() : AbstractCLASSNAMEa.i(collection)).mo310spliterator();
     }
 
     public String toString() {

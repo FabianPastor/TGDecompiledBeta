@@ -134,6 +134,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
     private UsernamesListView usernamesListView;
     private ArrayList<TLRPC$TL_username> editableUsernames = new ArrayList<>();
     private ArrayList<TLRPC$TL_username> usernames = new ArrayList<>();
+    private ArrayList<String> loadingUsernames = new ArrayList<>();
     private boolean canCreatePublic = true;
     private ArrayList<AdminedChannelCell> adminedChannelCells = new ArrayList<>();
     HashMap<Long, TLRPC$User> usersMap = new HashMap<>();
@@ -854,34 +855,42 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
                     tLRPC$TL_username.active = z;
                     chatEditTypeActivity.editableUsernameUpdated = Boolean.valueOf(z);
                 } else {
-                    TLRPC$TL_channels_toggleUsername tLRPC$TL_channels_toggleUsername = new TLRPC$TL_channels_toggleUsername();
+                    final TLRPC$TL_channels_toggleUsername tLRPC$TL_channels_toggleUsername = new TLRPC$TL_channels_toggleUsername();
                     TLRPC$TL_inputChannel tLRPC$TL_inputChannel = new TLRPC$TL_inputChannel();
                     tLRPC$TL_inputChannel.channel_id = ChatEditTypeActivity.this.currentChat.id;
                     tLRPC$TL_inputChannel.access_hash = ChatEditTypeActivity.this.currentChat.access_hash;
                     tLRPC$TL_channels_toggleUsername.channel = tLRPC$TL_inputChannel;
                     tLRPC$TL_channels_toggleUsername.username = tLRPC$TL_username.username;
                     final boolean z2 = tLRPC$TL_username.active;
-                    boolean z3 = !z2;
-                    tLRPC$TL_username.active = z3;
-                    tLRPC$TL_channels_toggleUsername.active = z3;
+                    tLRPC$TL_channels_toggleUsername.active = !z2;
                     ChatEditTypeActivity.this.getConnectionsManager().sendRequest(tLRPC$TL_channels_toggleUsername, new RequestDelegate() { // from class: org.telegram.ui.ChatEditTypeActivity$UsernamesListView$1$$ExternalSyntheticLambda5
                         @Override // org.telegram.tgnet.RequestDelegate
                         public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                            ChatEditTypeActivity.UsernamesListView.AnonymousClass1.this.lambda$onItemClick$3(tLRPC$TL_username, z2, tLObject, tLRPC$TL_error);
+                            ChatEditTypeActivity.UsernamesListView.AnonymousClass1.this.lambda$onItemClick$3(tLRPC$TL_channels_toggleUsername, tLRPC$TL_username, z2, tLObject, tLRPC$TL_error);
                         }
-                    }, 1024);
+                    });
+                    ChatEditTypeActivity.this.loadingUsernames.add(tLRPC$TL_username.username);
+                    ((ChangeUsernameActivity.UsernameCell) view).setLoading(true);
                 }
-                ((ChangeUsernameActivity.UsernameCell) view).update();
                 ChatEditTypeActivity.this.checkDoneButton();
-                UsernamesListView.this.toggleUsername(tLRPC$TL_username, tLRPC$TL_username.active);
             }
 
             /* JADX INFO: Access modifiers changed from: private */
-            public /* synthetic */ void lambda$onItemClick$3(final TLRPC$TL_username tLRPC$TL_username, final boolean z, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+            public /* synthetic */ void lambda$onItemClick$3(final TLRPC$TL_channels_toggleUsername tLRPC$TL_channels_toggleUsername, final TLRPC$TL_username tLRPC$TL_username, final boolean z, final TLObject tLObject, final TLRPC$TL_error tLRPC$TL_error) {
+                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.ChatEditTypeActivity$UsernamesListView$1$$ExternalSyntheticLambda3
+                    @Override // java.lang.Runnable
+                    public final void run() {
+                        ChatEditTypeActivity.UsernamesListView.AnonymousClass1.this.lambda$onItemClick$2(tLRPC$TL_channels_toggleUsername, tLObject, tLRPC$TL_username, z, tLRPC$TL_error);
+                    }
+                });
+            }
+
+            /* JADX INFO: Access modifiers changed from: private */
+            public /* synthetic */ void lambda$onItemClick$2(TLRPC$TL_channels_toggleUsername tLRPC$TL_channels_toggleUsername, TLObject tLObject, final TLRPC$TL_username tLRPC$TL_username, final boolean z, TLRPC$TL_error tLRPC$TL_error) {
+                ChatEditTypeActivity.this.loadingUsernames.remove(tLRPC$TL_channels_toggleUsername.username);
                 if (tLObject instanceof TLRPC$TL_boolTrue) {
-                    return;
-                }
-                if (tLRPC$TL_error != null && "USERNAMES_ACTIVE_TOO_MUCH".equals(tLRPC$TL_error.text)) {
+                    UsernamesListView.this.toggleUsername(tLRPC$TL_username, true ^ z);
+                } else if (tLRPC$TL_error != null && "USERNAMES_ACTIVE_TOO_MUCH".equals(tLRPC$TL_error.text)) {
                     AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.ChatEditTypeActivity$UsernamesListView$1$$ExternalSyntheticLambda4
                         @Override // java.lang.Runnable
                         public final void run() {
@@ -889,13 +898,10 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
                         }
                     });
                 } else {
-                    AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.ChatEditTypeActivity$UsernamesListView$1$$ExternalSyntheticLambda3
-                        @Override // java.lang.Runnable
-                        public final void run() {
-                            ChatEditTypeActivity.UsernamesListView.AnonymousClass1.this.lambda$onItemClick$2(tLRPC$TL_username, z);
-                        }
-                    });
+                    UsernamesListView.this.toggleUsername(tLRPC$TL_username, z, true);
+                    ChatEditTypeActivity.this.checkDoneButton();
                 }
+                ChatEditTypeActivity.this.getMessagesController().updateUsernameActiveness(ChatEditTypeActivity.this.currentChat, tLRPC$TL_username.username, tLRPC$TL_username.active);
             }
 
             /* JADX INFO: Access modifiers changed from: private */
@@ -910,12 +916,6 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
 
             /* JADX INFO: Access modifiers changed from: private */
             public /* synthetic */ void lambda$onItemClick$0(TLRPC$TL_username tLRPC$TL_username, boolean z, DialogInterface dialogInterface, int i) {
-                UsernamesListView.this.toggleUsername(tLRPC$TL_username, z, true);
-                ChatEditTypeActivity.this.checkDoneButton();
-            }
-
-            /* JADX INFO: Access modifiers changed from: private */
-            public /* synthetic */ void lambda$onItemClick$2(TLRPC$TL_username tLRPC$TL_username, boolean z) {
                 UsernamesListView.this.toggleUsername(tLRPC$TL_username, z, true);
                 ChatEditTypeActivity.this.checkDoneButton();
             }
@@ -934,109 +934,68 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
             }
         }
 
-        /* JADX WARN: Removed duplicated region for block: B:31:0x008e  */
-        /* JADX WARN: Removed duplicated region for block: B:46:0x00aa A[EDGE_INSN: B:46:0x00aa->B:39:0x00aa ?: BREAK  , SYNTHETIC] */
-        /*
-            Code decompiled incorrectly, please refer to instructions dump.
-            To view partially-correct add '--show-bad-code' argument
-        */
-        public void toggleUsername(int r5, boolean r6, boolean r7) {
-            /*
-                r4 = this;
-                int r0 = r5 + (-1)
-                if (r0 < 0) goto Lb3
-                org.telegram.ui.ChatEditTypeActivity r1 = org.telegram.ui.ChatEditTypeActivity.this
-                java.util.ArrayList r1 = org.telegram.ui.ChatEditTypeActivity.access$2100(r1)
-                int r1 = r1.size()
-                if (r0 < r1) goto L12
-                goto Lb3
-            L12:
-                org.telegram.ui.ChatEditTypeActivity r1 = org.telegram.ui.ChatEditTypeActivity.this
-                java.util.ArrayList r1 = org.telegram.ui.ChatEditTypeActivity.access$2100(r1)
-                java.lang.Object r0 = r1.get(r0)
-                org.telegram.tgnet.TLRPC$TL_username r0 = (org.telegram.tgnet.TLRPC$TL_username) r0
-                r0.active = r6
-                r0 = -1
-                r1 = 0
-                if (r6 == 0) goto L51
-                r6 = 0
-            L25:
-                org.telegram.ui.ChatEditTypeActivity r2 = org.telegram.ui.ChatEditTypeActivity.this
-                java.util.ArrayList r2 = org.telegram.ui.ChatEditTypeActivity.access$2100(r2)
-                int r2 = r2.size()
-                if (r6 >= r2) goto L45
-                org.telegram.ui.ChatEditTypeActivity r2 = org.telegram.ui.ChatEditTypeActivity.this
-                java.util.ArrayList r2 = org.telegram.ui.ChatEditTypeActivity.access$2100(r2)
-                java.lang.Object r2 = r2.get(r6)
-                org.telegram.tgnet.TLRPC$TL_username r2 = (org.telegram.tgnet.TLRPC$TL_username) r2
-                boolean r2 = r2.active
-                if (r2 != 0) goto L42
-                goto L46
-            L42:
-                int r6 = r6 + 1
-                goto L25
-            L45:
-                r6 = -1
-            L46:
-                if (r6 < 0) goto L88
-                int r6 = r6 + (-1)
-                int r6 = java.lang.Math.max(r1, r6)
-            L4e:
-                int r0 = r6 + 1
-                goto L88
-            L51:
-                r6 = 0
-                r2 = -1
-            L53:
-                org.telegram.ui.ChatEditTypeActivity r3 = org.telegram.ui.ChatEditTypeActivity.this
-                java.util.ArrayList r3 = org.telegram.ui.ChatEditTypeActivity.access$2100(r3)
-                int r3 = r3.size()
-                if (r6 >= r3) goto L73
-                org.telegram.ui.ChatEditTypeActivity r3 = org.telegram.ui.ChatEditTypeActivity.this
-                java.util.ArrayList r3 = org.telegram.ui.ChatEditTypeActivity.access$2100(r3)
-                java.lang.Object r3 = r3.get(r6)
-                org.telegram.tgnet.TLRPC$TL_username r3 = (org.telegram.tgnet.TLRPC$TL_username) r3
-                boolean r3 = r3.active
-                if (r3 == 0) goto L70
-                r2 = r6
-            L70:
-                int r6 = r6 + 1
-                goto L53
-            L73:
-                if (r2 < 0) goto L88
-                org.telegram.ui.ChatEditTypeActivity r6 = org.telegram.ui.ChatEditTypeActivity.this
-                java.util.ArrayList r6 = org.telegram.ui.ChatEditTypeActivity.access$2100(r6)
-                int r6 = r6.size()
-                int r6 = r6 + (-1)
-                int r2 = r2 + 1
-                int r6 = java.lang.Math.min(r6, r2)
-                goto L4e
-            L88:
-                int r6 = r4.getChildCount()
-                if (r1 >= r6) goto Laa
-                android.view.View r6 = r4.getChildAt(r1)
-                int r2 = r4.getChildAdapterPosition(r6)
-                if (r2 != r5) goto La7
-                if (r7 == 0) goto L9d
-                org.telegram.messenger.AndroidUtilities.shakeView(r6)
-            L9d:
-                boolean r7 = r6 instanceof org.telegram.ui.ChangeUsernameActivity.UsernameCell
-                if (r7 == 0) goto Laa
-                org.telegram.ui.ChangeUsernameActivity$UsernameCell r6 = (org.telegram.ui.ChangeUsernameActivity.UsernameCell) r6
-                r6.update()
-                goto Laa
-            La7:
-                int r1 = r1 + 1
-                goto L88
-            Laa:
-                if (r0 < 0) goto Lb3
-                if (r5 == r0) goto Lb3
-                org.telegram.ui.ChatEditTypeActivity$UsernamesListView$Adapter r6 = r4.adapter
-                r6.moveElement(r5, r0)
-            Lb3:
-                return
-            */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatEditTypeActivity.UsernamesListView.toggleUsername(int, boolean, boolean):void");
+        public void toggleUsername(int i, boolean z, boolean z2) {
+            TLRPC$TL_username tLRPC$TL_username;
+            int min;
+            int i2 = i - 1;
+            if (i2 < 0 || i2 >= ChatEditTypeActivity.this.usernames.size() || (tLRPC$TL_username = (TLRPC$TL_username) ChatEditTypeActivity.this.usernames.get(i2)) == null) {
+                return;
+            }
+            int i3 = 0;
+            int i4 = -1;
+            if (tLRPC$TL_username.active != z) {
+                tLRPC$TL_username.active = z;
+                if (z) {
+                    int i5 = 0;
+                    while (true) {
+                        if (i5 >= ChatEditTypeActivity.this.usernames.size()) {
+                            i5 = -1;
+                            break;
+                        } else if (!((TLRPC$TL_username) ChatEditTypeActivity.this.usernames.get(i5)).active) {
+                            break;
+                        } else {
+                            i5++;
+                        }
+                    }
+                    if (i5 >= 0) {
+                        min = Math.max(0, i5 - 1);
+                        i4 = min + 1;
+                    }
+                } else {
+                    int i6 = -1;
+                    for (int i7 = 0; i7 < ChatEditTypeActivity.this.usernames.size(); i7++) {
+                        if (((TLRPC$TL_username) ChatEditTypeActivity.this.usernames.get(i7)).active) {
+                            i6 = i7;
+                        }
+                    }
+                    if (i6 >= 0) {
+                        min = Math.min(ChatEditTypeActivity.this.usernames.size() - 1, i6 + 1);
+                        i4 = min + 1;
+                    }
+                }
+            }
+            while (true) {
+                if (i3 >= getChildCount()) {
+                    break;
+                }
+                View childAt = getChildAt(i3);
+                if (getChildAdapterPosition(childAt) == i) {
+                    if (z2) {
+                        AndroidUtilities.shakeView(childAt);
+                    }
+                    if (childAt instanceof ChangeUsernameActivity.UsernameCell) {
+                        ChangeUsernameActivity.UsernameCell usernameCell = (ChangeUsernameActivity.UsernameCell) childAt;
+                        usernameCell.setLoading(ChatEditTypeActivity.this.loadingUsernames.contains(tLRPC$TL_username.username));
+                        usernameCell.update();
+                    }
+                } else {
+                    i3++;
+                }
+            }
+            if (i4 < 0 || i == i4) {
+                return;
+            }
+            this.adapter.moveElement(i, i4);
         }
 
         /* JADX INFO: Access modifiers changed from: protected */
@@ -1191,7 +1150,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
 
             @Override // androidx.recyclerview.widget.RecyclerView.Adapter
             /* renamed from: onCreateViewHolder */
-            public RecyclerView.ViewHolder mo1813onCreateViewHolder(ViewGroup viewGroup, int i) {
+            public RecyclerView.ViewHolder mo1821onCreateViewHolder(ViewGroup viewGroup, int i) {
                 if (i != 0) {
                     if (i == 1) {
                         return new RecyclerListView.Holder(new ChangeUsernameActivity.UsernameCell(UsernamesListView.this.getContext(), ((RecyclerListView) UsernamesListView.this).resourcesProvider) { // from class: org.telegram.ui.ChatEditTypeActivity.UsernamesListView.Adapter.1

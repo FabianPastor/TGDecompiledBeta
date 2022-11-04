@@ -79,7 +79,7 @@ final class B implements u {
 
     @Override // j$.util.u
     /* renamed from: trySplit */
-    public u mo322trySplit() {
+    public u mo326trySplit() {
         int i = this.b;
         int i2 = (this.c + i) >>> 1;
         if (i >= i2) {

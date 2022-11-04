@@ -76,19 +76,19 @@ public final /* synthetic */ class CLASSNAMEm implements j$.util.v {
 
     @Override // j$.util.v, j$.util.w, j$.util.u
     /* renamed from: trySplit */
-    public /* synthetic */ j$.util.u mo322trySplit() {
+    public /* synthetic */ j$.util.u mo326trySplit() {
         return CLASSNAMEg.a(this.a.trySplit());
     }
 
     @Override // j$.util.v, j$.util.w, j$.util.u
     /* renamed from: trySplit  reason: collision with other method in class */
-    public /* synthetic */ j$.util.v mo322trySplit() {
+    public /* synthetic */ j$.util.v mo326trySplit() {
         return a(this.a.trySplit());
     }
 
     @Override // j$.util.v, j$.util.w, j$.util.u
     /* renamed from: trySplit */
-    public /* synthetic */ j$.util.w mo322trySplit() {
+    public /* synthetic */ j$.util.w mo326trySplit() {
         return CLASSNAMEo.a(this.a.trySplit());
     }
 }

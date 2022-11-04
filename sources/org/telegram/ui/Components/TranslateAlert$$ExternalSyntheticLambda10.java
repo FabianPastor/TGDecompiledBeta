@@ -9,6 +9,6 @@ public final /* synthetic */ class TranslateAlert$$ExternalSyntheticLambda10 imp
 
     @Override // java.lang.Runnable
     public final void run() {
-        TranslateAlert.m1742$r8$lambda$mwKSKbgsZrQySWppXYXfqWZUA4(this.f$0);
+        TranslateAlert.m1750$r8$lambda$mwKSKbgsZrQySWppXYXfqWZUA4(this.f$0);
     }
 }

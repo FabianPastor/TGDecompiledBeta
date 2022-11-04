@@ -96,7 +96,7 @@ public abstract /* synthetic */ class AbstractCLASSNAMEo1 {
         if (consumer instanceof j$.util.function.f) {
             interfaceCLASSNAMEu1.g((j$.util.function.f) consumer);
         } else if (!Q4.a) {
-            ((j$.util.t) interfaceCLASSNAMEu1.mo285spliterator()).forEachRemaining(consumer);
+            ((j$.util.t) interfaceCLASSNAMEu1.mo289spliterator()).forEachRemaining(consumer);
         } else {
             Q4.a(interfaceCLASSNAMEu1.getClass(), "{0} calling Node.OfLong.forEachRemaining(Consumer)");
             throw null;
@@ -107,7 +107,7 @@ public abstract /* synthetic */ class AbstractCLASSNAMEo1 {
         if (consumer instanceof j$.util.function.l) {
             interfaceCLASSNAMEw1.g((j$.util.function.l) consumer);
         } else if (!Q4.a) {
-            ((u.a) interfaceCLASSNAMEw1.mo285spliterator()).forEachRemaining(consumer);
+            ((u.a) interfaceCLASSNAMEw1.mo289spliterator()).forEachRemaining(consumer);
         } else {
             Q4.a(interfaceCLASSNAMEw1.getClass(), "{0} calling Node.OfInt.forEachRemaining(Consumer)");
             throw null;
@@ -118,7 +118,7 @@ public abstract /* synthetic */ class AbstractCLASSNAMEo1 {
         if (consumer instanceof j$.util.function.q) {
             interfaceCLASSNAMEy1.g((j$.util.function.q) consumer);
         } else if (!Q4.a) {
-            ((j$.util.v) interfaceCLASSNAMEy1.mo285spliterator()).forEachRemaining(consumer);
+            ((j$.util.v) interfaceCLASSNAMEy1.mo289spliterator()).forEachRemaining(consumer);
         } else {
             Q4.a(interfaceCLASSNAMEy1.getClass(), "{0} calling Node.OfLong.forEachRemaining(Consumer)");
             throw null;
@@ -130,7 +130,7 @@ public abstract /* synthetic */ class AbstractCLASSNAMEo1 {
             return interfaceCLASSNAMEu1;
         }
         long j3 = j2 - j;
-        j$.util.t tVar = (j$.util.t) interfaceCLASSNAMEu1.mo285spliterator();
+        j$.util.t tVar = (j$.util.t) interfaceCLASSNAMEu1.mo289spliterator();
         InterfaceCLASSNAMEp1 j4 = AbstractCLASSNAMEx2.j(j3);
         j4.n(j3);
         for (int i = 0; i < j && tVar.k(CLASSNAMEt1.a); i++) {
@@ -138,7 +138,7 @@ public abstract /* synthetic */ class AbstractCLASSNAMEo1 {
         for (int i2 = 0; i2 < j3 && tVar.k(j4); i2++) {
         }
         j4.m();
-        return j4.mo287a();
+        return j4.mo291a();
     }
 
     public static InterfaceCLASSNAMEw1 o(InterfaceCLASSNAMEw1 interfaceCLASSNAMEw1, long j, long j2, j$.util.function.m mVar) {
@@ -146,7 +146,7 @@ public abstract /* synthetic */ class AbstractCLASSNAMEo1 {
             return interfaceCLASSNAMEw1;
         }
         long j3 = j2 - j;
-        u.a aVar = (u.a) interfaceCLASSNAMEw1.mo285spliterator();
+        u.a aVar = (u.a) interfaceCLASSNAMEw1.mo289spliterator();
         InterfaceCLASSNAMEq1 p = AbstractCLASSNAMEx2.p(j3);
         p.n(j3);
         for (int i = 0; i < j && aVar.g(CLASSNAMEv1.a); i++) {
@@ -154,7 +154,7 @@ public abstract /* synthetic */ class AbstractCLASSNAMEo1 {
         for (int i2 = 0; i2 < j3 && aVar.g(p); i2++) {
         }
         p.m();
-        return p.mo287a();
+        return p.mo291a();
     }
 
     public static InterfaceCLASSNAMEy1 p(InterfaceCLASSNAMEy1 interfaceCLASSNAMEy1, long j, long j2, j$.util.function.m mVar) {
@@ -162,7 +162,7 @@ public abstract /* synthetic */ class AbstractCLASSNAMEo1 {
             return interfaceCLASSNAMEy1;
         }
         long j3 = j2 - j;
-        j$.util.v vVar = (j$.util.v) interfaceCLASSNAMEy1.mo285spliterator();
+        j$.util.v vVar = (j$.util.v) interfaceCLASSNAMEy1.mo289spliterator();
         InterfaceCLASSNAMEr1 q = AbstractCLASSNAMEx2.q(j3);
         q.n(j3);
         for (int i = 0; i < j && vVar.i(CLASSNAMEx1.a); i++) {
@@ -170,23 +170,23 @@ public abstract /* synthetic */ class AbstractCLASSNAMEo1 {
         for (int i2 = 0; i2 < j3 && vVar.i(q); i2++) {
         }
         q.m();
-        return q.mo287a();
+        return q.mo291a();
     }
 
     public static A1 q(A1 a1, long j, long j2, j$.util.function.m mVar) {
         if (j == 0 && j2 == a1.count()) {
             return a1;
         }
-        j$.util.u mo285spliterator = a1.mo285spliterator();
+        j$.util.u mo289spliterator = a1.mo289spliterator();
         long j3 = j2 - j;
         InterfaceCLASSNAMEs1 d = AbstractCLASSNAMEx2.d(j3, mVar);
         d.n(j3);
-        for (int i = 0; i < j && mo285spliterator.b(CLASSNAMEn1.a); i++) {
+        for (int i = 0; i < j && mo289spliterator.b(CLASSNAMEn1.a); i++) {
         }
-        for (int i2 = 0; i2 < j3 && mo285spliterator.b(d); i2++) {
+        for (int i2 = 0; i2 < j3 && mo289spliterator.b(d); i2++) {
         }
         d.m();
-        return d.mo287a();
+        return d.mo291a();
     }
 
     public static U r(j$.util.t tVar, boolean z) {

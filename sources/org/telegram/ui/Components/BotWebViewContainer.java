@@ -823,9 +823,9 @@ public class BotWebViewContainer extends FrameLayout implements NotificationCent
     public void loadFlickerAndSettingsItem(int i, long j, final ActionBarMenuSubItem actionBarMenuSubItem) {
         TLRPC$TL_attachMenuBot tLRPC$TL_attachMenuBot;
         boolean z;
-        String str = MessagesController.getInstance(i).getUser(Long.valueOf(j)).username;
+        String publicUsername = UserObject.getPublicUsername(MessagesController.getInstance(i).getUser(Long.valueOf(j)));
         int i2 = 0;
-        if (str != null && ObjectsCompat$$ExternalSyntheticBackport0.m(str, "DurgerKingBot")) {
+        if (publicUsername != null && ObjectsCompat$$ExternalSyntheticBackport0.m(publicUsername, "DurgerKingBot")) {
             this.flickerView.setVisibility(0);
             this.flickerView.setAlpha(1.0f);
             this.flickerView.setImageDrawable(SvgHelper.getDrawable(R.raw.durgerking_placeholder, getColor("windowBackgroundGray")));

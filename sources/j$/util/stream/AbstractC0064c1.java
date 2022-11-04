@@ -15,15 +15,15 @@ public abstract class AbstractCLASSNAMEc1 extends AbstractCLASSNAMEd1 {
 
     @Override // j$.util.stream.AbstractCLASSNAMEc, j$.util.stream.InterfaceCLASSNAMEg, j$.util.stream.IntStream
     /* renamed from: parallel */
-    public /* bridge */ /* synthetic */ InterfaceCLASSNAMEe1 mo304parallel() {
-        mo304parallel();
+    public /* bridge */ /* synthetic */ InterfaceCLASSNAMEe1 mo308parallel() {
+        mo308parallel();
         return this;
     }
 
     @Override // j$.util.stream.AbstractCLASSNAMEc, j$.util.stream.InterfaceCLASSNAMEg, j$.util.stream.IntStream
     /* renamed from: sequential */
-    public /* bridge */ /* synthetic */ InterfaceCLASSNAMEe1 mo305sequential() {
-        mo305sequential();
+    public /* bridge */ /* synthetic */ InterfaceCLASSNAMEe1 mo309sequential() {
+        mo309sequential();
         return this;
     }
 }

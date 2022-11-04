@@ -1029,7 +1029,7 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
     */
     public void searchUsernameOrHashtag(java.lang.CharSequence r22, int r23, java.util.ArrayList<org.telegram.messenger.MessageObject> r24, boolean r25, boolean r26) {
         /*
-            Method dump skipped, instructions count: 1887
+            Method dump skipped, instructions count: 1889
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Adapters.MentionsAdapter.searchUsernameOrHashtag(java.lang.CharSequence, int, java.util.ArrayList, boolean, boolean):void");
@@ -1374,7 +1374,7 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
 
     @Override // androidx.recyclerview.widget.RecyclerView.Adapter
     /* renamed from: onCreateViewHolder */
-    public RecyclerView.ViewHolder mo1813onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public RecyclerView.ViewHolder mo1821onCreateViewHolder(ViewGroup viewGroup, int i) {
         ContextLinkCell contextLinkCell;
         if (i == 0) {
             MentionCell mentionCell = new MentionCell(this.mContext, this.resourcesProvider);

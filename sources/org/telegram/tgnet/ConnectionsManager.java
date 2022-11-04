@@ -363,50 +363,59 @@ public class ConnectionsManager extends BaseController {
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$sendRequest$2(final TLObject tLObject, int i, final RequestDelegate requestDelegate, final RequestDelegateTimestamp requestDelegateTimestamp, final QuickAckDelegate quickAckDelegate, final WriteToSocketDelegate writeToSocketDelegate, final int i2, final int i3, final int i4, final boolean z) {
-        NativeByteBuffer nativeByteBuffer;
+    public /* synthetic */ void lambda$sendRequest$2(final TLObject tLObject, final int i, final RequestDelegate requestDelegate, final RequestDelegateTimestamp requestDelegateTimestamp, final QuickAckDelegate quickAckDelegate, final WriteToSocketDelegate writeToSocketDelegate, final int i2, final int i3, final int i4, final boolean z) {
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("send request " + tLObject + " with token = " + i);
         }
         try {
-            nativeByteBuffer = new NativeByteBuffer(tLObject.getObjectSize());
+            NativeByteBuffer nativeByteBuffer = new NativeByteBuffer(tLObject.getObjectSize());
             tLObject.serializeToStream(nativeByteBuffer);
             tLObject.freeResources();
-        } catch (Exception e) {
-            e = e;
-        }
-        try {
+            long j = 0;
+            if (BuildVars.DEBUG_PRIVATE_VERSION && BuildVars.LOGS_ENABLED) {
+                j = System.currentTimeMillis();
+            }
+            final long j2 = j;
             native_sendRequest(this.currentAccount, nativeByteBuffer.address, new RequestDelegateInternal() { // from class: org.telegram.tgnet.ConnectionsManager$$ExternalSyntheticLambda13
                 @Override // org.telegram.tgnet.RequestDelegateInternal
-                public final void run(long j, int i5, String str, int i6, long j2) {
-                    ConnectionsManager.this.lambda$sendRequest$1(tLObject, requestDelegate, requestDelegateTimestamp, quickAckDelegate, writeToSocketDelegate, i2, i3, i4, z, j, i5, str, i6, j2);
+                public final void run(long j3, int i5, String str, int i6, long j4, long j5) {
+                    ConnectionsManager.this.lambda$sendRequest$1(tLObject, requestDelegate, requestDelegateTimestamp, quickAckDelegate, writeToSocketDelegate, i2, i3, i4, z, j2, i, j3, i5, str, i6, j4, j5);
                 }
             }, quickAckDelegate, writeToSocketDelegate, i2, i3, i4, z, i);
-        } catch (Exception e2) {
-            e = e2;
+        } catch (Exception e) {
             FileLog.e(e);
         }
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$sendRequest$1(TLObject tLObject, final RequestDelegate requestDelegate, final RequestDelegateTimestamp requestDelegateTimestamp, QuickAckDelegate quickAckDelegate, WriteToSocketDelegate writeToSocketDelegate, int i, int i2, int i3, boolean z, long j, int i4, String str, int i5, final long j2) {
+    public /* synthetic */ void lambda$sendRequest$1(TLObject tLObject, final RequestDelegate requestDelegate, final RequestDelegateTimestamp requestDelegateTimestamp, QuickAckDelegate quickAckDelegate, WriteToSocketDelegate writeToSocketDelegate, int i, int i2, int i3, boolean z, long j, int i4, long j2, int i5, String str, int i6, final long j3, long j4) {
+        TLRPC$TL_error tLRPC$TL_error;
         TLObject tLObject2;
-        TLRPC$TL_error tLRPC$TL_error = null;
         try {
-            if (j != 0) {
-                NativeByteBuffer wrap = NativeByteBuffer.wrap(j);
+            if (j2 != 0) {
+                NativeByteBuffer wrap = NativeByteBuffer.wrap(j2);
                 wrap.reused = true;
-                tLObject2 = tLObject.deserializeResponse(wrap, wrap.readInt32(true), true);
+                try {
+                    tLObject2 = tLObject.deserializeResponse(wrap, wrap.readInt32(true), true);
+                    tLRPC$TL_error = null;
+                } catch (Exception e) {
+                    if (BuildVars.DEBUG_PRIVATE_VERSION) {
+                        throw e;
+                    }
+                    FileLog.fatal(e);
+                    return;
+                }
             } else if (str != null) {
                 TLRPC$TL_error tLRPC$TL_error2 = new TLRPC$TL_error();
-                tLRPC$TL_error2.code = i4;
+                tLRPC$TL_error2.code = i5;
                 tLRPC$TL_error2.text = str;
                 if (BuildVars.LOGS_ENABLED) {
                     FileLog.e(tLObject + " got error " + tLRPC$TL_error2.code + " " + tLRPC$TL_error2.text);
                 }
-                tLObject2 = null;
                 tLRPC$TL_error = tLRPC$TL_error2;
+                tLObject2 = null;
             } else {
+                tLRPC$TL_error = null;
                 tLObject2 = null;
             }
             if (BuildVars.DEBUG_PRIVATE_VERSION && !getUserConfig().isClientActivated() && tLRPC$TL_error != null && tLRPC$TL_error.code == 400 && ObjectsCompat$$ExternalSyntheticBackport0.m(tLRPC$TL_error.text, "CONNECTION_NOT_INITED")) {
@@ -418,21 +427,22 @@ public class ConnectionsManager extends BaseController {
                 return;
             }
             if (tLObject2 != null) {
-                tLObject2.networkType = i5;
+                tLObject2.networkType = i6;
             }
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("java received " + tLObject2 + " error = " + tLRPC$TL_error);
             }
+            FileLog.dumpResponseAndRequest(tLObject, tLObject2, tLRPC$TL_error, j4, j, i4);
             final TLObject tLObject3 = tLObject2;
             final TLRPC$TL_error tLRPC$TL_error3 = tLRPC$TL_error;
             Utilities.stageQueue.postRunnable(new Runnable() { // from class: org.telegram.tgnet.ConnectionsManager$$ExternalSyntheticLambda11
                 @Override // java.lang.Runnable
                 public final void run() {
-                    ConnectionsManager.lambda$sendRequest$0(RequestDelegate.this, tLObject3, tLRPC$TL_error3, requestDelegateTimestamp, j2);
+                    ConnectionsManager.lambda$sendRequest$0(RequestDelegate.this, tLObject3, tLRPC$TL_error3, requestDelegateTimestamp, j3);
                 }
             });
-        } catch (Exception e) {
-            FileLog.e(e);
+        } catch (Exception e2) {
+            FileLog.e(e2);
         }
     }
 
@@ -610,12 +620,13 @@ public class ConnectionsManager extends BaseController {
         }
     }
 
-    public static void onUnparsedMessageReceived(long j, final int i) {
+    public static void onUnparsedMessageReceived(long j, final int i, long j2) {
         try {
             NativeByteBuffer wrap = NativeByteBuffer.wrap(j);
             wrap.reused = true;
             int readInt32 = wrap.readInt32(true);
             final TLObject TLdeserialize = TLClassStore.Instance().TLdeserialize(wrap, readInt32, true);
+            FileLog.dumpUnparsedMessage(TLdeserialize, j2);
             if (TLdeserialize instanceof TLRPC$Updates) {
                 if (BuildVars.LOGS_ENABLED) {
                     FileLog.d("java received " + TLdeserialize);

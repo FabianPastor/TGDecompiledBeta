@@ -29,7 +29,7 @@ class J extends AbstractCLASSNAMEf3 {
                 U u = (U) ((j$.util.function.g) ((K) this.c).m).apply(d);
                 if (u != null) {
                     try {
-                        u.mo305sequential().j(new F(this));
+                        u.mo309sequential().j(new F(this));
                     } finally {
                         try {
                             u.close();

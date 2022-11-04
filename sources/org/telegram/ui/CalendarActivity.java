@@ -513,7 +513,7 @@ public class CalendarActivity extends BaseFragment {
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1813onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1821onCreateViewHolder(ViewGroup viewGroup, int i) {
             return new RecyclerListView.Holder(new MonthView(viewGroup.getContext()));
         }
 
@@ -722,7 +722,7 @@ public class CalendarActivity extends BaseFragment {
                         }
                     } else {
                         PeriodDay dayAtCoord3 = getDayAtCoord(motionEvent.getX(), motionEvent.getY());
-                        if (dayAtCoord3 != null && ((BaseFragment) CalendarActivity.this).parentLayout.getFragmentStack().size() >= 2) {
+                        if (dayAtCoord3 != null && ((BaseFragment) CalendarActivity.this).parentLayout != null && ((BaseFragment) CalendarActivity.this).parentLayout.getFragmentStack().size() >= 2) {
                             BaseFragment baseFragment = ((BaseFragment) CalendarActivity.this).parentLayout.getFragmentStack().get(((BaseFragment) CalendarActivity.this).parentLayout.getFragmentStack().size() - 2);
                             if (baseFragment instanceof ChatActivity) {
                                 CalendarActivity.this.finishFragment();

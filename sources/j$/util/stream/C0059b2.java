@@ -13,7 +13,7 @@ public final class CLASSNAMEb2 extends D1 implements InterfaceCLASSNAMEs1 {
 
     @Override // j$.util.stream.InterfaceCLASSNAMEs1
     /* renamed from: a */
-    public A1 mo287a() {
+    public A1 mo291a() {
         if (this.b >= this.a.length) {
             return this;
         }

@@ -2835,7 +2835,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1813onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1821onCreateViewHolder(ViewGroup viewGroup, int i) {
             View shareDialogCell;
             if (i == 0) {
                 shareDialogCell = new ShareDialogCell(this.context, ShareAlert.this.darkTheme ? 1 : 0, ShareAlert.this.resourcesProvider);
@@ -2903,7 +2903,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1813onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1821onCreateViewHolder(ViewGroup viewGroup, int i) {
             View shareTopicCell;
             if (i == 0) {
                 shareTopicCell = new ShareTopicCell(this.context, ShareAlert.this.resourcesProvider);
@@ -3008,17 +3008,17 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             });
         }
 
-        /* JADX WARN: Removed duplicated region for block: B:298:0x01cd A[Catch: Exception -> 0x0414, LOOP:2: B:269:0x0111->B:298:0x01cd, LOOP_END, TryCatch #0 {Exception -> 0x0414, blocks: (B:226:0x0002, B:228:0x0011, B:230:0x001e, B:232:0x002c, B:239:0x003a, B:241:0x0041, B:242:0x0043, B:243:0x0068, B:245:0x006e, B:247:0x0086, B:249:0x0090, B:250:0x0098, B:252:0x009e, B:254:0x00a9, B:255:0x00b1, B:258:0x00c2, B:259:0x00e7, B:261:0x00ed, B:264:0x0101, B:266:0x0108, B:270:0x0113, B:272:0x011d, B:275:0x0136, B:277:0x013c, B:281:0x0154, B:288:0x0164, B:290:0x016b, B:292:0x0185, B:294:0x018d, B:296:0x01bf, B:295:0x0198, B:298:0x01cd, B:301:0x01e4, B:303:0x01f1, B:305:0x01f7, B:306:0x021d, B:308:0x0223, B:313:0x023a, B:315:0x0242, B:318:0x0259, B:320:0x025f, B:323:0x0275, B:324:0x0278, B:326:0x027f, B:328:0x028c, B:330:0x0292, B:332:0x0298, B:334:0x029c, B:336:0x02a0, B:338:0x02a4, B:340:0x02a8, B:343:0x02ce, B:345:0x02d6, B:346:0x02dc, B:348:0x02e2, B:350:0x02ec, B:352:0x02f0, B:353:0x02f3, B:354:0x02f6, B:355:0x030d, B:357:0x0313, B:360:0x031f, B:363:0x0333, B:365:0x033c, B:369:0x0348, B:371:0x0350, B:374:0x0367, B:376:0x036d, B:380:0x0385, B:385:0x0390, B:387:0x0397, B:389:0x03ab, B:390:0x03b2, B:392:0x03bd, B:394:0x03f0, B:393:0x03c9, B:396:0x03f8, B:399:0x0406), top: B:404:0x0002 }] */
-        /* JADX WARN: Removed duplicated region for block: B:396:0x03f8 A[Catch: Exception -> 0x0414, LOOP:7: B:368:0x0346->B:396:0x03f8, LOOP_END, TryCatch #0 {Exception -> 0x0414, blocks: (B:226:0x0002, B:228:0x0011, B:230:0x001e, B:232:0x002c, B:239:0x003a, B:241:0x0041, B:242:0x0043, B:243:0x0068, B:245:0x006e, B:247:0x0086, B:249:0x0090, B:250:0x0098, B:252:0x009e, B:254:0x00a9, B:255:0x00b1, B:258:0x00c2, B:259:0x00e7, B:261:0x00ed, B:264:0x0101, B:266:0x0108, B:270:0x0113, B:272:0x011d, B:275:0x0136, B:277:0x013c, B:281:0x0154, B:288:0x0164, B:290:0x016b, B:292:0x0185, B:294:0x018d, B:296:0x01bf, B:295:0x0198, B:298:0x01cd, B:301:0x01e4, B:303:0x01f1, B:305:0x01f7, B:306:0x021d, B:308:0x0223, B:313:0x023a, B:315:0x0242, B:318:0x0259, B:320:0x025f, B:323:0x0275, B:324:0x0278, B:326:0x027f, B:328:0x028c, B:330:0x0292, B:332:0x0298, B:334:0x029c, B:336:0x02a0, B:338:0x02a4, B:340:0x02a8, B:343:0x02ce, B:345:0x02d6, B:346:0x02dc, B:348:0x02e2, B:350:0x02ec, B:352:0x02f0, B:353:0x02f3, B:354:0x02f6, B:355:0x030d, B:357:0x0313, B:360:0x031f, B:363:0x0333, B:365:0x033c, B:369:0x0348, B:371:0x0350, B:374:0x0367, B:376:0x036d, B:380:0x0385, B:385:0x0390, B:387:0x0397, B:389:0x03ab, B:390:0x03b2, B:392:0x03bd, B:394:0x03f0, B:393:0x03c9, B:396:0x03f8, B:399:0x0406), top: B:404:0x0002 }] */
+        /* JADX WARN: Removed duplicated region for block: B:298:0x01cf A[Catch: Exception -> 0x0418, LOOP:2: B:269:0x0111->B:298:0x01cf, LOOP_END, TryCatch #0 {Exception -> 0x0418, blocks: (B:226:0x0002, B:228:0x0011, B:230:0x001e, B:232:0x002c, B:239:0x003a, B:241:0x0041, B:242:0x0043, B:243:0x0068, B:245:0x006e, B:247:0x0086, B:249:0x0090, B:250:0x0098, B:252:0x009e, B:254:0x00a9, B:255:0x00b1, B:258:0x00c2, B:259:0x00e7, B:261:0x00ed, B:264:0x0101, B:266:0x0108, B:270:0x0113, B:272:0x011d, B:275:0x0136, B:277:0x013c, B:281:0x0154, B:288:0x0164, B:290:0x016b, B:292:0x0185, B:294:0x018d, B:296:0x01c1, B:295:0x0198, B:298:0x01cf, B:301:0x01e6, B:303:0x01f3, B:305:0x01f9, B:306:0x021f, B:308:0x0225, B:313:0x023c, B:315:0x0244, B:318:0x025b, B:320:0x0261, B:323:0x0277, B:324:0x027a, B:326:0x0281, B:328:0x028e, B:330:0x0294, B:332:0x029a, B:334:0x029e, B:336:0x02a2, B:338:0x02a6, B:340:0x02aa, B:343:0x02d0, B:345:0x02d8, B:346:0x02de, B:348:0x02e4, B:350:0x02ee, B:352:0x02f2, B:353:0x02f5, B:354:0x02f8, B:355:0x030f, B:357:0x0315, B:360:0x0321, B:363:0x0335, B:365:0x033e, B:369:0x034a, B:371:0x0352, B:374:0x0369, B:376:0x036f, B:380:0x0387, B:385:0x0392, B:387:0x0399, B:389:0x03ad, B:390:0x03b4, B:392:0x03bf, B:394:0x03f4, B:393:0x03cb, B:396:0x03fc, B:399:0x040a), top: B:404:0x0002 }] */
+        /* JADX WARN: Removed duplicated region for block: B:396:0x03fc A[Catch: Exception -> 0x0418, LOOP:7: B:368:0x0348->B:396:0x03fc, LOOP_END, TryCatch #0 {Exception -> 0x0418, blocks: (B:226:0x0002, B:228:0x0011, B:230:0x001e, B:232:0x002c, B:239:0x003a, B:241:0x0041, B:242:0x0043, B:243:0x0068, B:245:0x006e, B:247:0x0086, B:249:0x0090, B:250:0x0098, B:252:0x009e, B:254:0x00a9, B:255:0x00b1, B:258:0x00c2, B:259:0x00e7, B:261:0x00ed, B:264:0x0101, B:266:0x0108, B:270:0x0113, B:272:0x011d, B:275:0x0136, B:277:0x013c, B:281:0x0154, B:288:0x0164, B:290:0x016b, B:292:0x0185, B:294:0x018d, B:296:0x01c1, B:295:0x0198, B:298:0x01cf, B:301:0x01e6, B:303:0x01f3, B:305:0x01f9, B:306:0x021f, B:308:0x0225, B:313:0x023c, B:315:0x0244, B:318:0x025b, B:320:0x0261, B:323:0x0277, B:324:0x027a, B:326:0x0281, B:328:0x028e, B:330:0x0294, B:332:0x029a, B:334:0x029e, B:336:0x02a2, B:338:0x02a6, B:340:0x02aa, B:343:0x02d0, B:345:0x02d8, B:346:0x02de, B:348:0x02e4, B:350:0x02ee, B:352:0x02f2, B:353:0x02f5, B:354:0x02f8, B:355:0x030f, B:357:0x0315, B:360:0x0321, B:363:0x0335, B:365:0x033e, B:369:0x034a, B:371:0x0352, B:374:0x0369, B:376:0x036f, B:380:0x0387, B:385:0x0392, B:387:0x0399, B:389:0x03ad, B:390:0x03b4, B:392:0x03bf, B:394:0x03f4, B:393:0x03cb, B:396:0x03fc, B:399:0x040a), top: B:404:0x0002 }] */
         /* JADX WARN: Removed duplicated region for block: B:421:0x0164 A[SYNTHETIC] */
-        /* JADX WARN: Removed duplicated region for block: B:444:0x0390 A[SYNTHETIC] */
+        /* JADX WARN: Removed duplicated region for block: B:444:0x0392 A[SYNTHETIC] */
         /*
             Code decompiled incorrectly, please refer to instructions dump.
             To view partially-correct add '--show-bad-code' argument
         */
         public /* synthetic */ void lambda$searchDialogsInternal$1(java.lang.String r21, int r22) {
             /*
-                Method dump skipped, instructions count: 1049
+                Method dump skipped, instructions count: 1053
                 To view this dump add '--comments-level debug' option
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ShareAlert.ShareSearchAdapter.lambda$searchDialogsInternal$1(java.lang.String, int):void");
@@ -3245,7 +3245,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
         /* JADX WARN: Type inference failed for: r5v6, types: [android.view.View] */
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1813onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1821onCreateViewHolder(ViewGroup viewGroup, int i) {
             ShareDialogCell shareDialogCell;
             if (i == 0) {
                 ShareDialogCell shareDialogCell2 = new ShareDialogCell(this.context, ShareAlert.this.darkTheme ? 1 : 0, ShareAlert.this.resourcesProvider);

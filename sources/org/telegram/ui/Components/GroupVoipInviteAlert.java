@@ -681,15 +681,15 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
         /* JADX WARN: Code restructure failed: missing block: B:42:0x00db, code lost:
             if (r14.contains(" " + r4) != false) goto L48;
          */
-        /* JADX WARN: Removed duplicated region for block: B:52:0x00f3 A[LOOP:1: B:33:0x009f->B:52:0x00f3, LOOP_END] */
-        /* JADX WARN: Removed duplicated region for block: B:61:0x00ef A[SYNTHETIC] */
+        /* JADX WARN: Removed duplicated region for block: B:52:0x00f5 A[LOOP:1: B:33:0x009f->B:52:0x00f5, LOOP_END] */
+        /* JADX WARN: Removed duplicated region for block: B:61:0x00f1 A[SYNTHETIC] */
         /*
             Code decompiled incorrectly, please refer to instructions dump.
             To view partially-correct add '--show-bad-code' argument
         */
         public /* synthetic */ void lambda$processSearch$1(java.lang.String r19, int r20, java.util.ArrayList r21) {
             /*
-                Method dump skipped, instructions count: 258
+                Method dump skipped, instructions count: 260
                 To view this dump add '--comments-level debug' option
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.GroupVoipInviteAlert.SearchAdapter.lambda$processSearch$1(java.lang.String, int, java.util.ArrayList):void");
@@ -784,7 +784,7 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
         /* JADX WARN: Type inference failed for: r3v12, types: [android.view.View] */
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1813onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1821onCreateViewHolder(ViewGroup viewGroup, int i) {
             ManageChatUserCell manageChatUserCell;
             if (i == 0) {
                 ManageChatUserCell manageChatUserCell2 = new ManageChatUserCell(this.mContext, 2, 2, false);
@@ -809,7 +809,7 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
         }
 
         /* JADX WARN: Multi-variable type inference failed */
-        /* JADX WARN: Removed duplicated region for block: B:50:0x00f0  */
+        /* JADX WARN: Removed duplicated region for block: B:50:0x00f2  */
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /*
             Code decompiled incorrectly, please refer to instructions dump.
@@ -817,7 +817,7 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
         */
         public void onBindViewHolder(androidx.recyclerview.widget.RecyclerView.ViewHolder r14, int r15) {
             /*
-                Method dump skipped, instructions count: 306
+                Method dump skipped, instructions count: 308
                 To view this dump add '--comments-level debug' option
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.GroupVoipInviteAlert.SearchAdapter.onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder, int):void");
@@ -869,7 +869,7 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
         /* JADX WARN: Multi-variable type inference failed */
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1813onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1821onCreateViewHolder(ViewGroup viewGroup, int i) {
             ManageChatUserCell manageChatUserCell;
             View view;
             if (i == 0) {

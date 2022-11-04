@@ -172,7 +172,7 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1813onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1821onCreateViewHolder(ViewGroup viewGroup, int i) {
             HintDialogCell hintDialogCell = new HintDialogCell(this.mContext, this.drawChecked);
             hintDialogCell.setLayoutParams(new RecyclerView.LayoutParams(AndroidUtilities.dp(80.0f), AndroidUtilities.dp(86.0f)));
             return new RecyclerListView.Holder(hintDialogCell);
@@ -1188,7 +1188,7 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
 
     @Override // androidx.recyclerview.widget.RecyclerView.Adapter
     /* renamed from: onCreateViewHolder */
-    public RecyclerView.ViewHolder mo1813onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public RecyclerView.ViewHolder mo1821onCreateViewHolder(ViewGroup viewGroup, int i) {
         RecyclerListView recyclerListView;
         FlickerLoadingView flickerLoadingView;
         if (i == 0) {
@@ -1262,17 +1262,17 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
         return new RecyclerListView.Holder(recyclerListView);
     }
 
-    /* JADX WARN: Code restructure failed: missing block: B:159:0x0359, code lost:
-        if (r6.startsWith("@" + r4.username) != false) goto L148;
+    /* JADX WARN: Code restructure failed: missing block: B:156:0x0355, code lost:
+        if (r7.startsWith("@" + r6) != false) goto L145;
      */
     /* JADX WARN: Multi-variable type inference failed */
-    /* JADX WARN: Removed duplicated region for block: B:165:0x0363  */
-    /* JADX WARN: Removed duplicated region for block: B:216:0x042b  */
-    /* JADX WARN: Removed duplicated region for block: B:217:0x0436  */
-    /* JADX WARN: Removed duplicated region for block: B:224:0x0453  */
-    /* JADX WARN: Removed duplicated region for block: B:225:0x0455  */
-    /* JADX WARN: Removed duplicated region for block: B:228:0x0470  */
-    /* JADX WARN: Removed duplicated region for block: B:229:0x0472  */
+    /* JADX WARN: Removed duplicated region for block: B:162:0x035f  */
+    /* JADX WARN: Removed duplicated region for block: B:213:0x0427  */
+    /* JADX WARN: Removed duplicated region for block: B:214:0x0432  */
+    /* JADX WARN: Removed duplicated region for block: B:221:0x044f  */
+    /* JADX WARN: Removed duplicated region for block: B:222:0x0451  */
+    /* JADX WARN: Removed duplicated region for block: B:225:0x046c  */
+    /* JADX WARN: Removed duplicated region for block: B:226:0x046e  */
     /* JADX WARN: Type inference failed for: r2v20, types: [android.text.SpannableStringBuilder] */
     /* JADX WARN: Type inference failed for: r2v23, types: [java.lang.CharSequence] */
     /* JADX WARN: Type inference failed for: r2v24 */
@@ -1286,7 +1286,7 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
     */
     public void onBindViewHolder(androidx.recyclerview.widget.RecyclerView.ViewHolder r23, int r24) {
         /*
-            Method dump skipped, instructions count: 1143
+            Method dump skipped, instructions count: 1139
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Adapters.DialogsSearchAdapter.onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder, int):void");

@@ -1,10 +1,10 @@
 Signature-Version: 1.0
 Created-By: Android Gradle 7.0.3
-SHA1-Digest-Manifest: l7jRNSyuretpG0zZrij81n1NlfM=
+SHA1-Digest-Manifest: YnPzfwkawD0tCvKpuzw72tMKKzU=
 X-Android-APK-Signed: 2
 
 Name: AndroidManifest.xml
-SHA1-Digest: 1tgPlHWdblL917zQ/qNCA5Yrqog=
+SHA1-Digest: FSeE60QJ/NTrapjCpFEyXasDf9Y=
 
 Name: META-INF/androidx.annotation_annotation-experimental.version
 SHA1-Digest: 4Tx/OE4OYuecGI9+583MUWSivc0=
@@ -10816,13 +10816,13 @@ Name: builddef.lst
 SHA1-Digest: b4iFOKGOQFQJO7IF+KXHSQsv2sI=
 
 Name: classes.dex
-SHA1-Digest: wpjhthxv2uJOhuw9hBcFVnfA76o=
+SHA1-Digest: zO3bV85jZQSzTcov9WnshbepiOA=
 
 Name: classes2.dex
 SHA1-Digest: tqeJRCuCNeOUW7qj0s2Wo7feq3s=
 
 Name: classes3.dex
-SHA1-Digest: 18yEoNnCdatFEBstOhgSRBIGVSk=
+SHA1-Digest: OKRwO2WCuZ+L4ApsdfKhMca8PXU=
 
 Name: com/google/android/search/verification/client/R.java
 SHA1-Digest: CIvj9T4PvsdJr6yfeJo7sTlaGfQ=
@@ -10888,25 +10888,25 @@ Name: lib/arm64-v8a/liblanguage_id_jni.so
 SHA1-Digest: t7P6h8rsFIyAseOFqTtwHhqIMFw=
 
 Name: lib/arm64-v8a/libtmessages.42.so
-SHA1-Digest: 25FgQAoFQENQrVmd+2FSDoFKl8Y=
+SHA1-Digest: DcnAXLMbvwsYcCv7PFAj4/Oqm+0=
 
 Name: lib/armeabi-v7a/liblanguage_id_jni.so
 SHA1-Digest: pDQRN1LMtmK8vbXS5aq7JQ/tlow=
 
 Name: lib/armeabi-v7a/libtmessages.42.so
-SHA1-Digest: K5/efg1NKyUaVUQAYnoBegL4h64=
+SHA1-Digest: 7VQ/PhyVeIBfkeToCS0BLxc6//0=
 
 Name: lib/x86/liblanguage_id_jni.so
 SHA1-Digest: 1R0ziNMuJtkOsRH6aq52bvYzNvs=
 
 Name: lib/x86/libtmessages.42.so
-SHA1-Digest: wayZrpiJ6buvjmh0D8HCPrhKWFI=
+SHA1-Digest: ZVaT3eNf4/ws0nAKtP+VKs03j3Y=
 
 Name: lib/x86_64/liblanguage_id_jni.so
 SHA1-Digest: 0F7r//X3czk2qGFK8RXwhK1KkMU=
 
 Name: lib/x86_64/libtmessages.42.so
-SHA1-Digest: 8YxEbS4bf931Uj84nadpW+l+xbY=
+SHA1-Digest: er7Gqhu4lhmeWNa/1XRbzzKncE8=
 
 Name: play-services-auth-api-phone.properties
 SHA1-Digest: 4xRXfC5wD7cP7zkWXYe1OQH2mf8=
@@ -14267,6 +14267,9 @@ SHA1-Digest: iS0xcGwc1VCsukxew1DbtIwcLrQ=
 
 Name: res/Ebq.png
 SHA1-Digest: sXqXMA7WhmhWfPWSeWe88Asmzbg=
+
+Name: res/EcE.svg
+SHA1-Digest: ZJEcRtPvVc27Vz6mfQsX0VC5BBs=
 
 Name: res/Ed-.png
 SHA1-Digest: /eusQDqMFd9T/mozKMSRam2ylng=
@@ -24289,7 +24292,7 @@ Name: res/zyk.png
 SHA1-Digest: TfrDVZtDk24WW6zV+5bliTNiuI8=
 
 Name: resources.arsc
-SHA1-Digest: 7VVTag6emWZiRu5C+WLklM/ifvw=
+SHA1-Digest: VQWgDYMta6JPmr+ZZUduh0esYlY=
 
 Name: transport-api.properties
 SHA1-Digest: /JnnuH3pAnVsbL2i4WeJtM5GCqI=
