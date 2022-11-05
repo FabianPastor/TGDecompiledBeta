@@ -10,14 +10,11 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.SparseIntArray;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import androidx.collection.LongSparseArray;
@@ -97,11 +94,10 @@ import org.telegram.ui.ChatUsersActivity;
 import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.FlickerLoadingView;
 import org.telegram.ui.Components.GigagroupConvertAlert;
-import org.telegram.ui.Components.IntSeekBarAccessibilityDelegate;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RadialProgressView;
 import org.telegram.ui.Components.RecyclerListView;
-import org.telegram.ui.Components.SeekBarAccessibilityDelegate;
+import org.telegram.ui.Components.SlideChooseView;
 import org.telegram.ui.Components.StickerEmptyView;
 import org.telegram.ui.Components.UndoView;
 import org.telegram.ui.GroupCreateActivity;
@@ -232,227 +228,6 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
     @Override // org.telegram.ui.ActionBar.BaseFragment
     public boolean needDelayOpenAnimation() {
         return true;
-    }
-
-    /* loaded from: classes3.dex */
-    private class ChooseView extends View {
-        private final SeekBarAccessibilityDelegate accessibilityDelegate;
-        private int circleSize;
-        private int gapSize;
-        private int lineSize;
-        private boolean moving;
-        private final Paint paint;
-        private int sideSide;
-        private ArrayList<Integer> sizes;
-        private boolean startMoving;
-        private int startMovingItem;
-        private float startX;
-        private ArrayList<String> strings;
-        private final TextPaint textPaint;
-
-        public ChooseView(Context context) {
-            super(context);
-            String string;
-            this.strings = new ArrayList<>();
-            this.sizes = new ArrayList<>();
-            this.paint = new Paint(1);
-            TextPaint textPaint = new TextPaint(1);
-            this.textPaint = textPaint;
-            textPaint.setTextSize(AndroidUtilities.dp(13.0f));
-            for (int i = 0; i < 7; i++) {
-                if (i == 0) {
-                    string = LocaleController.getString("SlowmodeOff", R.string.SlowmodeOff);
-                } else if (i == 1) {
-                    string = LocaleController.formatString("SlowmodeSeconds", R.string.SlowmodeSeconds, 10);
-                } else if (i == 2) {
-                    string = LocaleController.formatString("SlowmodeSeconds", R.string.SlowmodeSeconds, 30);
-                } else if (i == 3) {
-                    string = LocaleController.formatString("SlowmodeMinutes", R.string.SlowmodeMinutes, 1);
-                } else if (i == 4) {
-                    string = LocaleController.formatString("SlowmodeMinutes", R.string.SlowmodeMinutes, 5);
-                } else if (i == 5) {
-                    string = LocaleController.formatString("SlowmodeMinutes", R.string.SlowmodeMinutes, 15);
-                } else {
-                    string = LocaleController.formatString("SlowmodeHours", R.string.SlowmodeHours, 1);
-                }
-                this.strings.add(string);
-                this.sizes.add(Integer.valueOf((int) Math.ceil(this.textPaint.measureText(string))));
-            }
-            this.accessibilityDelegate = new IntSeekBarAccessibilityDelegate(ChatUsersActivity.this) { // from class: org.telegram.ui.ChatUsersActivity.ChooseView.1
-                @Override // org.telegram.ui.Components.IntSeekBarAccessibilityDelegate
-                public int getProgress() {
-                    return ChatUsersActivity.this.selectedSlowmode;
-                }
-
-                @Override // org.telegram.ui.Components.IntSeekBarAccessibilityDelegate
-                public void setProgress(int i2) {
-                    ChooseView.this.setItem(i2);
-                }
-
-                @Override // org.telegram.ui.Components.IntSeekBarAccessibilityDelegate
-                public int getMaxValue() {
-                    return ChooseView.this.strings.size() - 1;
-                }
-
-                @Override // org.telegram.ui.Components.SeekBarAccessibilityDelegate
-                /* renamed from: getContentDescription */
-                protected CharSequence mo2213getContentDescription(View view) {
-                    if (ChatUsersActivity.this.selectedSlowmode == 0) {
-                        return LocaleController.getString("SlowmodeOff", R.string.SlowmodeOff);
-                    }
-                    ChatUsersActivity chatUsersActivity = ChatUsersActivity.this;
-                    return chatUsersActivity.formatSeconds(chatUsersActivity.getSecondsForIndex(chatUsersActivity.selectedSlowmode));
-                }
-            };
-        }
-
-        @Override // android.view.View
-        public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
-            super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
-            this.accessibilityDelegate.onInitializeAccessibilityNodeInfoInternal(this, accessibilityNodeInfo);
-        }
-
-        @Override // android.view.View
-        public boolean performAccessibilityAction(int i, Bundle bundle) {
-            return super.performAccessibilityAction(i, bundle) || this.accessibilityDelegate.performAccessibilityActionInternal(this, i, bundle);
-        }
-
-        @Override // android.view.View
-        public boolean onTouchEvent(MotionEvent motionEvent) {
-            float x = motionEvent.getX();
-            int i = 0;
-            boolean z = false;
-            if (motionEvent.getAction() == 0) {
-                getParent().requestDisallowInterceptTouchEvent(true);
-                int i2 = 0;
-                while (true) {
-                    if (i2 >= this.strings.size()) {
-                        break;
-                    }
-                    int i3 = this.sideSide;
-                    int i4 = this.lineSize + (this.gapSize * 2);
-                    int i5 = this.circleSize;
-                    int i6 = i3 + ((i4 + i5) * i2) + (i5 / 2);
-                    if (x <= i6 - AndroidUtilities.dp(15.0f) || x >= i6 + AndroidUtilities.dp(15.0f)) {
-                        i2++;
-                    } else {
-                        if (i2 == ChatUsersActivity.this.selectedSlowmode) {
-                            z = true;
-                        }
-                        this.startMoving = z;
-                        this.startX = x;
-                        this.startMovingItem = ChatUsersActivity.this.selectedSlowmode;
-                    }
-                }
-            } else if (motionEvent.getAction() == 2) {
-                if (this.startMoving) {
-                    if (Math.abs(this.startX - x) >= AndroidUtilities.getPixelsInCM(0.5f, true)) {
-                        this.moving = true;
-                        this.startMoving = false;
-                    }
-                } else if (this.moving) {
-                    while (true) {
-                        if (i >= this.strings.size()) {
-                            break;
-                        }
-                        int i7 = this.sideSide;
-                        int i8 = this.lineSize;
-                        int i9 = this.gapSize;
-                        int i10 = this.circleSize;
-                        int i11 = i7 + (((i9 * 2) + i8 + i10) * i) + (i10 / 2);
-                        int i12 = (i8 / 2) + (i10 / 2) + i9;
-                        if (x <= i11 - i12 || x >= i11 + i12) {
-                            i++;
-                        } else if (ChatUsersActivity.this.selectedSlowmode != i) {
-                            setItem(i);
-                        }
-                    }
-                }
-            } else if (motionEvent.getAction() == 1 || motionEvent.getAction() == 3) {
-                if (!this.moving) {
-                    int i13 = 0;
-                    while (true) {
-                        if (i13 >= this.strings.size()) {
-                            break;
-                        }
-                        int i14 = this.sideSide;
-                        int i15 = this.lineSize + (this.gapSize * 2);
-                        int i16 = this.circleSize;
-                        int i17 = i14 + ((i15 + i16) * i13) + (i16 / 2);
-                        if (x <= i17 - AndroidUtilities.dp(15.0f) || x >= i17 + AndroidUtilities.dp(15.0f)) {
-                            i13++;
-                        } else if (ChatUsersActivity.this.selectedSlowmode != i13) {
-                            setItem(i13);
-                        }
-                    }
-                } else if (ChatUsersActivity.this.selectedSlowmode != this.startMovingItem) {
-                    setItem(ChatUsersActivity.this.selectedSlowmode);
-                }
-                this.startMoving = false;
-                this.moving = false;
-            }
-            return true;
-        }
-
-        /* JADX INFO: Access modifiers changed from: private */
-        public void setItem(int i) {
-            if (ChatUsersActivity.this.info == null) {
-                return;
-            }
-            ChatUsersActivity.this.selectedSlowmode = i;
-            ChatUsersActivity.this.listViewAdapter.notifyItemChanged(ChatUsersActivity.this.slowmodeInfoRow);
-            invalidate();
-        }
-
-        @Override // android.view.View
-        protected void onMeasure(int i, int i2) {
-            super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(74.0f), NUM));
-            this.circleSize = AndroidUtilities.dp(6.0f);
-            this.gapSize = AndroidUtilities.dp(2.0f);
-            this.sideSide = AndroidUtilities.dp(22.0f);
-            this.lineSize = (((getMeasuredWidth() - (this.circleSize * this.strings.size())) - ((this.gapSize * 2) * (this.strings.size() - 1))) - (this.sideSide * 2)) / (this.strings.size() - 1);
-        }
-
-        @Override // android.view.View
-        protected void onDraw(Canvas canvas) {
-            this.textPaint.setColor(Theme.getColor("windowBackgroundWhiteGrayText"));
-            int measuredHeight = (getMeasuredHeight() / 2) + AndroidUtilities.dp(11.0f);
-            int i = 0;
-            while (i < this.strings.size()) {
-                int i2 = this.sideSide;
-                int i3 = this.lineSize + (this.gapSize * 2);
-                int i4 = this.circleSize;
-                int i5 = i2 + ((i3 + i4) * i) + (i4 / 2);
-                if (i <= ChatUsersActivity.this.selectedSlowmode) {
-                    this.paint.setColor(Theme.getColor("switchTrackChecked"));
-                } else {
-                    this.paint.setColor(Theme.getColor("switchTrack"));
-                }
-                canvas.drawCircle(i5, measuredHeight, i == ChatUsersActivity.this.selectedSlowmode ? AndroidUtilities.dp(6.0f) : this.circleSize / 2, this.paint);
-                if (i != 0) {
-                    int i6 = (i5 - (this.circleSize / 2)) - this.gapSize;
-                    int i7 = this.lineSize;
-                    int i8 = i6 - i7;
-                    if (i == ChatUsersActivity.this.selectedSlowmode || i == ChatUsersActivity.this.selectedSlowmode + 1) {
-                        i7 -= AndroidUtilities.dp(3.0f);
-                    }
-                    if (i == ChatUsersActivity.this.selectedSlowmode + 1) {
-                        i8 += AndroidUtilities.dp(3.0f);
-                    }
-                    canvas.drawRect(i8, measuredHeight - AndroidUtilities.dp(1.0f), i8 + i7, AndroidUtilities.dp(1.0f) + measuredHeight, this.paint);
-                }
-                int intValue = this.sizes.get(i).intValue();
-                String str = this.strings.get(i);
-                if (i == 0) {
-                    canvas.drawText(str, AndroidUtilities.dp(22.0f), AndroidUtilities.dp(28.0f), this.textPaint);
-                } else if (i == this.strings.size() - 1) {
-                    canvas.drawText(str, (getMeasuredWidth() - intValue) - AndroidUtilities.dp(22.0f), AndroidUtilities.dp(28.0f), this.textPaint);
-                } else {
-                    canvas.drawText(str, i5 - (intValue / 2), AndroidUtilities.dp(28.0f), this.textPaint);
-                }
-                i++;
-            }
-        }
     }
 
     public ChatUsersActivity(Bundle bundle) {
@@ -2583,7 +2358,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1817onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1818onCreateViewHolder(ViewGroup viewGroup, int i) {
             FrameLayout frameLayout;
             if (i == 0) {
                 ManageChatUserCell manageChatUserCell = new ManageChatUserCell(this.mContext, 2, 2, ChatUsersActivity.this.selectType == 0);
@@ -2673,16 +2448,20 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1817onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1818onCreateViewHolder(ViewGroup viewGroup, int i) {
             FlickerLoadingView flickerLoadingView;
+            SlideChooseView slideChooseView;
+            int i2 = 2;
+            int i3 = 7;
             boolean z = false;
-            int i2 = 6;
             switch (i) {
                 case 0:
                     Context context = this.mContext;
-                    int i3 = (ChatUsersActivity.this.type == 0 || ChatUsersActivity.this.type == 3) ? 7 : 6;
                     if (ChatUsersActivity.this.type != 0 && ChatUsersActivity.this.type != 3) {
-                        i2 = 2;
+                        i3 = 6;
+                    }
+                    if (ChatUsersActivity.this.type == 0 || ChatUsersActivity.this.type == 3) {
+                        i2 = 6;
                     }
                     if (ChatUsersActivity.this.selectType == 0) {
                         z = true;
@@ -2697,7 +2476,8 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                             return lambda$onCreateViewHolder$0;
                         }
                     });
-                    flickerLoadingView = manageChatUserCell;
+                    slideChooseView = manageChatUserCell;
+                    flickerLoadingView = slideChooseView;
                     break;
                 case 1:
                     flickerLoadingView = new TextInfoPrivacyCell(this.mContext);
@@ -2743,9 +2523,25 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                     break;
                 case 9:
                 default:
-                    View chooseView = new ChooseView(this.mContext);
-                    chooseView.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                    flickerLoadingView = chooseView;
+                    SlideChooseView slideChooseView2 = new SlideChooseView(this.mContext);
+                    slideChooseView2.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
+                    int i4 = ChatUsersActivity.this.selectedSlowmode;
+                    int i5 = R.string.SlowmodeSeconds;
+                    int i6 = R.string.SlowmodeMinutes;
+                    slideChooseView2.setOptions(i4, LocaleController.getString("SlowmodeOff", R.string.SlowmodeOff), LocaleController.formatString("SlowmodeSeconds", i5, 10), LocaleController.formatString("SlowmodeSeconds", i5, 30), LocaleController.formatString("SlowmodeMinutes", i6, 1), LocaleController.formatString("SlowmodeMinutes", i6, 5), LocaleController.formatString("SlowmodeMinutes", i6, 15), LocaleController.formatString("SlowmodeHours", R.string.SlowmodeHours, 1));
+                    slideChooseView2.setCallback(new SlideChooseView.Callback() { // from class: org.telegram.ui.ChatUsersActivity$ListAdapter$$ExternalSyntheticLambda1
+                        @Override // org.telegram.ui.Components.SlideChooseView.Callback
+                        public final void onOptionSelected(int i7) {
+                            ChatUsersActivity.ListAdapter.this.lambda$onCreateViewHolder$1(i7);
+                        }
+
+                        @Override // org.telegram.ui.Components.SlideChooseView.Callback
+                        public /* synthetic */ void onTouchEnd() {
+                            SlideChooseView.Callback.CC.$default$onTouchEnd(this);
+                        }
+                    });
+                    slideChooseView = slideChooseView2;
+                    flickerLoadingView = slideChooseView;
                     break;
                 case 10:
                     flickerLoadingView = new LoadingCell(this.mContext, AndroidUtilities.dp(40.0f), AndroidUtilities.dp(120.0f));
@@ -2762,6 +2558,14 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                     break;
             }
             return new RecyclerListView.Holder(flickerLoadingView);
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$onCreateViewHolder$1(int i) {
+            if (ChatUsersActivity.this.info == null) {
+                return;
+            }
+            ChatUsersActivity.this.selectedSlowmode = i;
         }
 
         /* JADX WARN: Code restructure failed: missing block: B:281:0x06af, code lost:
@@ -3024,7 +2828,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 ThemeDescription.ThemeDescriptionDelegate.CC.$default$onAnimationProgress(this, f);
             }
         };
-        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{HeaderCell.class, ManageChatUserCell.class, ManageChatTextCell.class, TextCheckCell2.class, TextSettingsCell.class, ChooseView.class}, null, null, null, "windowBackgroundWhite"));
+        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{HeaderCell.class, ManageChatUserCell.class, ManageChatTextCell.class, TextCheckCell2.class, TextSettingsCell.class, SlideChooseView.class}, null, null, null, "windowBackgroundWhite"));
         arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundGray"));
         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "actionBarDefault"));
         arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, "actionBarDefault"));

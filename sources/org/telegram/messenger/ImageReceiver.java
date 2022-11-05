@@ -29,12 +29,14 @@ import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$ChatPhoto;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$Photo;
+import org.telegram.tgnet.TLRPC$TL_messageMediaGeoLive;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.tgnet.TLRPC$UserFull;
 import org.telegram.tgnet.TLRPC$UserProfilePhoto;
 import org.telegram.tgnet.TLRPC$VideoSize;
 import org.telegram.ui.Components.AnimatedFileDrawable;
 import org.telegram.ui.Components.AvatarDrawable;
+import org.telegram.ui.Components.ClipRoundedDrawable;
 import org.telegram.ui.Components.RLottieDrawable;
 import org.telegram.ui.Components.RecyclableDrawable;
 /* loaded from: classes.dex */
@@ -64,6 +66,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
     private ColorFilter colorFilter;
     private ComposeShader composeShader;
     private byte crossfadeAlpha;
+    private float crossfadeByScale;
     private int crossfadeDuration;
     private Drawable crossfadeImage;
     private String crossfadeKey;
@@ -333,6 +336,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
         this.overrideAlpha = 1.0f;
         this.previousAlpha = 1.0f;
         this.crossfadeAlpha = (byte) 1;
+        this.crossfadeByScale = 0.05f;
         this.crossfadeDuration = 150;
         this.loadingOperations = new ArrayList<>();
         this.clip = true;
@@ -611,6 +615,11 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                 key3 = key3 + "@" + str3;
             }
             if (this.crossfadeWithOldImage) {
+                Object obj2 = this.currentParentObject;
+                if ((obj2 instanceof MessageObject) && ((MessageObject) obj2).lastGeoWebFileSet != null && (MessageObject.getMedia((MessageObject) obj2) instanceof TLRPC$TL_messageMediaGeoLive)) {
+                    Object obj3 = this.currentParentObject;
+                    ((MessageObject) obj3).lastGeoWebFileLoaded = ((MessageObject) obj3).lastGeoWebFileSet;
+                }
                 Drawable drawable4 = this.currentMediaDrawable;
                 if (drawable4 != null) {
                     if (drawable4 instanceof AnimatedFileDrawable) {
@@ -700,7 +709,11 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
             this.currentAlpha = 1.0f;
             this.previousAlpha = 1.0f;
             Drawable drawable5 = this.staticThumbDrawable;
-            if (drawable5 instanceof SvgHelper.SvgDrawable) {
+            if (drawable5 instanceof ClipRoundedDrawable) {
+                if (((ClipRoundedDrawable) drawable5).getDrawable() instanceof SvgHelper.SvgDrawable) {
+                    ((SvgHelper.SvgDrawable) ((ClipRoundedDrawable) this.staticThumbDrawable).getDrawable()).setParent(this);
+                }
+            } else if (drawable5 instanceof SvgHelper.SvgDrawable) {
                 ((SvgHelper.SvgDrawable) drawable5).setParent(this);
             }
             updateDrawableRadius(this.staticThumbDrawable);
@@ -953,7 +966,10 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
         if (drawable == null) {
             return;
         }
-        if ((hasRoundRadius() || this.gradientShader != null) && ((drawable instanceof BitmapDrawable) || (drawable instanceof AvatarDrawable))) {
+        if (drawable instanceof ClipRoundedDrawable) {
+            int[] iArr = this.roundRadius;
+            ((ClipRoundedDrawable) drawable).setRadii(iArr[0], iArr[1], iArr[2], iArr[3]);
+        } else if ((hasRoundRadius() || this.gradientShader != null) && ((drawable instanceof BitmapDrawable) || (drawable instanceof AvatarDrawable))) {
             if (drawable instanceof AvatarDrawable) {
                 ((AvatarDrawable) drawable).setRoundRadius(this.roundRadius[0]);
                 return;
@@ -964,17 +980,15 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
             }
             if (bitmapDrawable instanceof AnimatedFileDrawable) {
                 ((AnimatedFileDrawable) drawable).setRoundRadius(this.roundRadius);
-                return;
             } else if (bitmapDrawable.getBitmap() == null) {
-                return;
             } else {
                 Bitmap bitmap = bitmapDrawable.getBitmap();
                 Shader.TileMode tileMode = Shader.TileMode.REPEAT;
                 setDrawableShader(drawable, new BitmapShader(bitmap, tileMode, tileMode));
-                return;
             }
+        } else {
+            setDrawableShader(drawable, null);
         }
-        setDrawableShader(drawable, null);
     }
 
     public void clearImage() {
@@ -1736,25 +1750,28 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
         return draw(canvas, null);
     }
 
-    /* JADX WARN: Code restructure failed: missing block: B:106:0x0254, code lost:
-        if (r8.useRoundForThumb == false) goto L98;
+    /* JADX WARN: Code restructure failed: missing block: B:113:0x0287, code lost:
+        if (r9.useRoundForThumb == false) goto L102;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:107:0x0256, code lost:
-        if (r1 != null) goto L98;
+    /* JADX WARN: Code restructure failed: missing block: B:114:0x0289, code lost:
+        if (r1 != null) goto L102;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:108:0x0258, code lost:
-        r8.updateDrawableRadius(r13);
-        r1 = r8.thumbShader;
+    /* JADX WARN: Code restructure failed: missing block: B:115:0x028b, code lost:
+        r9.updateDrawableRadius(r13);
+        r1 = r9.thumbShader;
      */
-    /* JADX WARN: Removed duplicated region for block: B:121:0x027d A[Catch: Exception -> 0x014a, TryCatch #0 {Exception -> 0x014a, blocks: (B:33:0x0142, B:46:0x0166, B:50:0x016e, B:73:0x01e6, B:88:0x0223, B:91:0x0229, B:136:0x02cf, B:140:0x02da, B:149:0x0301, B:121:0x027d, B:123:0x0281, B:126:0x0286, B:128:0x0291, B:130:0x02a3, B:132:0x02a7, B:127:0x028b, B:105:0x0252, B:108:0x0258, B:114:0x026b, B:117:0x0271, B:133:0x02aa, B:81:0x01fa, B:84:0x0200, B:85:0x0205, B:134:0x02bd, B:143:0x02e2, B:145:0x02f8, B:55:0x0189, B:59:0x01a0, B:60:0x01af, B:62:0x01b5, B:65:0x01bb, B:66:0x01c2, B:69:0x01d1, B:40:0x0157, B:43:0x015d, B:45:0x0163), top: B:162:0x0142 }] */
-    /* JADX WARN: Removed duplicated region for block: B:158:0x0312  */
+    /* JADX WARN: Removed duplicated region for block: B:119:0x0299  */
+    /* JADX WARN: Removed duplicated region for block: B:120:0x029c  */
+    /* JADX WARN: Removed duplicated region for block: B:128:0x02b0 A[Catch: Exception -> 0x014f, TryCatch #0 {Exception -> 0x014f, blocks: (B:35:0x0147, B:48:0x016b, B:52:0x0173, B:73:0x01e7, B:75:0x01f3, B:79:0x0203, B:95:0x0254, B:98:0x025a, B:128:0x02b0, B:130:0x02b4, B:133:0x02b9, B:135:0x02c6, B:137:0x02d7, B:139:0x02db, B:134:0x02bf, B:112:0x0285, B:115:0x028b, B:121:0x029e, B:124:0x02a4, B:140:0x02de, B:145:0x02ea, B:146:0x0304, B:148:0x0307, B:149:0x031a, B:87:0x0215, B:90:0x021b, B:91:0x0220, B:57:0x018e, B:61:0x01a5, B:62:0x01b4, B:64:0x01ba, B:67:0x01c0, B:68:0x01c7, B:71:0x01d6, B:42:0x015c, B:45:0x0162, B:47:0x0168), top: B:187:0x0147 }] */
+    /* JADX WARN: Removed duplicated region for block: B:155:0x0360 A[Catch: Exception -> 0x03b2, TryCatch #3 {Exception -> 0x03b2, blocks: (B:158:0x0379, B:162:0x0384, B:171:0x03ae, B:151:0x0329, B:153:0x034c, B:155:0x0360, B:156:0x0364, B:165:0x038f, B:167:0x03a5), top: B:191:0x0201 }] */
+    /* JADX WARN: Removed duplicated region for block: B:183:0x03c4  */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public boolean draw(android.graphics.Canvas r41, org.telegram.messenger.ImageReceiver.BackgroundThreadDrawHolder r42) {
+    public boolean draw(android.graphics.Canvas r42, org.telegram.messenger.ImageReceiver.BackgroundThreadDrawHolder r43) {
         /*
-            Method dump skipped, instructions count: 794
+            Method dump skipped, instructions count: 972
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ImageReceiver.draw(android.graphics.Canvas, org.telegram.messenger.ImageReceiver$BackgroundThreadDrawHolder):boolean");
@@ -1946,6 +1963,10 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
         return null;
     }
 
+    public Drawable getThumb() {
+        return this.currentThumbDrawable;
+    }
+
     public Bitmap getThumbBitmap() {
         Drawable drawable = this.currentThumbDrawable;
         if (drawable instanceof BitmapDrawable) {
@@ -2084,6 +2105,10 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
 
     public boolean hasBitmapImage() {
         return (this.currentImageDrawable == null && this.currentThumbDrawable == null && this.staticThumbDrawable == null && this.currentMediaDrawable == null) ? false : true;
+    }
+
+    public boolean hasImageLoaded() {
+        return (this.currentImageDrawable == null && this.currentMediaDrawable == null) ? false : true;
     }
 
     public boolean hasNotThumb() {
@@ -2343,6 +2368,10 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
 
     public void setCrossfadeWithOldImage(boolean z) {
         this.crossfadeWithOldImage = z;
+    }
+
+    public boolean isCrossfadingWithOldImage() {
+        return this.crossfadeWithOldImage && this.crossfadeImage != null && !this.crossfadingWithThumb;
     }
 
     public boolean isNeedsQualityThumb() {
@@ -2625,6 +2654,10 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
 
     public void setCrossfadeDuration(int i) {
         this.crossfadeDuration = i;
+    }
+
+    public void setCrossfadeByScale(float f) {
+        this.crossfadeByScale = f;
     }
 
     @Override // org.telegram.messenger.NotificationCenter.NotificationCenterDelegate

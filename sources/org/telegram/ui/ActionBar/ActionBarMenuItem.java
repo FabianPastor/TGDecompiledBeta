@@ -7,6 +7,7 @@ import android.animation.ObjectAnimator;
 import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.graphics.Canvas;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
@@ -73,6 +74,7 @@ public class ActionBarMenuItem extends FrameLayout {
     private AnimatorSet clearButtonAnimator;
     private ArrayList<FiltersView.MediaFilterData> currentSearchFilters;
     private ActionBarMenuItemDelegate delegate;
+    private boolean fixBackground;
     private boolean forceSmoothKeyboard;
     protected RLottieImageView iconView;
     private boolean ignoreOnTextChange;
@@ -233,6 +235,19 @@ public class ActionBarMenuItem extends FrameLayout {
 
     public void setLongClickEnabled(boolean z) {
         this.longClickEnabled = z;
+    }
+
+    public void setFixBackground(boolean z) {
+        this.fixBackground = z;
+        invalidate();
+    }
+
+    @Override // android.view.View
+    public void draw(Canvas canvas) {
+        if (this.fixBackground) {
+            getBackground().draw(canvas);
+        }
+        super.draw(canvas);
     }
 
     @Override // android.view.View
@@ -1543,6 +1558,12 @@ public class ActionBarMenuItem extends FrameLayout {
                     ActionBarMenuItem.this.clearButton.setScaleX(1.0f);
                     ActionBarMenuItem.this.clearButton.setScaleY(1.0f);
                 }
+
+                @Override // android.view.View
+                public void draw(Canvas canvas) {
+                    getBackground().draw(canvas);
+                    super.draw(canvas);
+                }
             };
             this.clearButton = imageView;
             CloseProgressDrawable2 closeProgressDrawable2 = new CloseProgressDrawable2() { // from class: org.telegram.ui.ActionBar.ActionBarMenuItem.13
@@ -1553,6 +1574,7 @@ public class ActionBarMenuItem extends FrameLayout {
             };
             this.progressDrawable = closeProgressDrawable2;
             imageView.setImageDrawable(closeProgressDrawable2);
+            this.clearButton.setBackground(Theme.createSelectorDrawable(this.parentMenu.parentActionBar.itemsActionModeBackgroundColor, 1));
             this.clearButton.setScaleType(ImageView.ScaleType.CENTER);
             this.clearButton.setAlpha(0.0f);
             this.clearButton.setRotation(45.0f);

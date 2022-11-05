@@ -366,7 +366,10 @@ public abstract class BaseFragment {
     }
 
     public void finishPreviewFragment() {
-        this.parentLayout.finishPreviewFragment();
+        INavigationLayout iNavigationLayout = this.parentLayout;
+        if (iNavigationLayout != null) {
+            iNavigationLayout.finishPreviewFragment();
+        }
     }
 
     public void finishFragment() {

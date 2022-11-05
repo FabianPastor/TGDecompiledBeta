@@ -7786,7 +7786,8 @@ public class MediaDataController extends BaseController {
 
     public void saveDraft(long j, int i, CharSequence charSequence, ArrayList<TLRPC$MessageEntity> arrayList, TLRPC$Message tLRPC$Message, boolean z, boolean z2) {
         TLRPC$DraftMessage tLRPC$TL_draftMessage;
-        if (!TextUtils.isEmpty(charSequence) || tLRPC$Message != null) {
+        TLRPC$Message tLRPC$Message2 = (!getMessagesController().isForum(j) || i != 0) ? tLRPC$Message : null;
+        if (!TextUtils.isEmpty(charSequence) || tLRPC$Message2 != null) {
             tLRPC$TL_draftMessage = new TLRPC$TL_draftMessage();
         } else {
             tLRPC$TL_draftMessage = new TLRPC$TL_draftMessageEmpty();
@@ -7795,8 +7796,8 @@ public class MediaDataController extends BaseController {
         tLRPC$DraftMessage.date = (int) (System.currentTimeMillis() / 1000);
         tLRPC$DraftMessage.message = charSequence == null ? "" : charSequence.toString();
         tLRPC$DraftMessage.no_webpage = z;
-        if (tLRPC$Message != null) {
-            tLRPC$DraftMessage.reply_to_msg_id = tLRPC$Message.id;
+        if (tLRPC$Message2 != null) {
+            tLRPC$DraftMessage.reply_to_msg_id = tLRPC$Message2.id;
             tLRPC$DraftMessage.flags |= 1;
         }
         if (arrayList != null && !arrayList.isEmpty()) {
@@ -7813,7 +7814,7 @@ public class MediaDataController extends BaseController {
                 return;
             }
         }
-        saveDraft(j, i, tLRPC$DraftMessage, tLRPC$Message, false);
+        saveDraft(j, i, tLRPC$DraftMessage, tLRPC$Message2, false);
         if (i == 0 || ChatObject.isForum(this.currentAccount, j)) {
             if (!DialogObject.isEncryptedDialog(j)) {
                 TLRPC$TL_messages_saveDraft tLRPC$TL_messages_saveDraft = new TLRPC$TL_messages_saveDraft();
@@ -7841,6 +7842,9 @@ public class MediaDataController extends BaseController {
         StringBuilder sb;
         TLRPC$Chat chat;
         String str;
+        if (getMessagesController().isForum(j) && i == 0 && TextUtils.isEmpty(tLRPC$DraftMessage.message)) {
+            tLRPC$DraftMessage.reply_to_msg_id = 0;
+        }
         SharedPreferences.Editor edit = this.draftPreferences.edit();
         MessagesController messagesController = getMessagesController();
         if (tLRPC$DraftMessage == null || (tLRPC$DraftMessage instanceof TLRPC$TL_draftMessageEmpty)) {

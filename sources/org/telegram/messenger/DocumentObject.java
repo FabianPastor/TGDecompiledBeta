@@ -157,4 +157,12 @@ public class DocumentObject {
         }
         return svgDrawable;
     }
+
+    public static SvgHelper.SvgDrawable getSvgThumb(int i, String str, float f) {
+        SvgHelper.SvgDrawable drawable = SvgHelper.getDrawable(i, -65536);
+        if (drawable != null) {
+            drawable.setupGradient(str, f, false);
+        }
+        return drawable;
+    }
 }

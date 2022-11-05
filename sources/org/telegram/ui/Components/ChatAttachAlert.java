@@ -1588,7 +1588,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         this.commentTextView = anonymousClass11;
         anonymousClass11.setHint(LocaleController.getString("AddCaption", R.string.AddCaption));
         this.commentTextView.onResume();
-        this.commentTextView.getEditText().addTextChangedListener(new AnonymousClass12(baseFragment));
+        this.commentTextView.getEditText().addTextChangedListener(new AnonymousClass12());
         this.frameLayout2.addView(this.commentTextView, LayoutHelper.createFrame(-1, -2.0f, 83, 0.0f, 0.0f, 84.0f, 0.0f));
         this.frameLayout2.setClipChildren(false);
         this.commentTextView.setClipChildren(false);
@@ -2765,15 +2765,13 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
     /* loaded from: classes3.dex */
     public class AnonymousClass12 implements TextWatcher {
         private boolean processChange;
-        final /* synthetic */ BaseFragment val$parentFragment;
 
         @Override // android.text.TextWatcher
         public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
         }
 
-        AnonymousClass12(BaseFragment baseFragment) {
+        AnonymousClass12() {
             ChatAttachAlert.this = r1;
-            this.val$parentFragment = baseFragment;
         }
 
         @Override // android.text.TextWatcher
@@ -2783,7 +2781,8 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             }
         }
 
-        /* JADX WARN: Removed duplicated region for block: B:91:0x0133  */
+        /* JADX WARN: Removed duplicated region for block: B:76:0x0133  */
+        /* JADX WARN: Removed duplicated region for block: B:89:? A[RETURN, SYNTHETIC] */
         @Override // android.text.TextWatcher
         /*
             Code decompiled incorrectly, please refer to instructions dump.
@@ -2791,7 +2790,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         */
         public void afterTextChanged(android.text.Editable r10) {
             /*
-                Method dump skipped, instructions count: 457
+                Method dump skipped, instructions count: 382
                 To view this dump add '--comments-level debug' option
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatAttachAlert.AnonymousClass12.afterTextChanged(android.text.Editable):void");
@@ -2911,7 +2910,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         dismiss();
     }
 
-    public void showCaptionLimitBulletin(final BaseFragment baseFragment) {
+    private void showCaptionLimitBulletin(final BaseFragment baseFragment) {
         if (!(baseFragment instanceof ChatActivity) || !ChatObject.isChannelAndNotMegaGroup(((ChatActivity) baseFragment).getCurrentChat())) {
             return;
         }
@@ -4446,7 +4445,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1817onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1818onCreateViewHolder(ViewGroup viewGroup, int i) {
             View attachButton;
             if (i == 0) {
                 attachButton = new AttachButton(this.mContext);

@@ -205,7 +205,7 @@ public class ChatReactionsEditActivity extends BaseFragment implements Notificat
         RecyclerView.Adapter adapter = new RecyclerView.Adapter() { // from class: org.telegram.ui.ChatReactionsEditActivity.2
             @Override // androidx.recyclerview.widget.RecyclerView.Adapter
             /* renamed from: onCreateViewHolder */
-            public RecyclerView.ViewHolder mo1817onCreateViewHolder(ViewGroup viewGroup, int i) {
+            public RecyclerView.ViewHolder mo1818onCreateViewHolder(ViewGroup viewGroup, int i) {
                 if (i != 0) {
                     if (i == 1) {
                         return new RecyclerListView.Holder(new HeaderCell(context, 23));

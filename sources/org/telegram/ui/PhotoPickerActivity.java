@@ -1966,7 +1966,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         /* JADX WARN: Multi-variable type inference failed */
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1817onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1818onCreateViewHolder(ViewGroup viewGroup, int i) {
             FrameLayout frameLayout;
             TextCell textCell;
             if (i != 0) {

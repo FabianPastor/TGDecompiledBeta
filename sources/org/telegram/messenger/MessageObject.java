@@ -256,6 +256,8 @@ public class MessageObject {
     private int isRoundVideoCached;
     public boolean isSpoilersRevealed;
     public boolean isTopicMainMessage;
+    public Object lastGeoWebFileLoaded;
+    public Object lastGeoWebFileSet;
     public int lastLineWidth;
     private boolean layoutCreated;
     public int linesCount;

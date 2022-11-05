@@ -54,7 +54,7 @@ public class MessagesSearchAdapter extends RecyclerListView.SelectionAdapter {
 
     @Override // androidx.recyclerview.widget.RecyclerView.Adapter
     /* renamed from: onCreateViewHolder */
-    public RecyclerView.ViewHolder mo1817onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public RecyclerView.ViewHolder mo1818onCreateViewHolder(ViewGroup viewGroup, int i) {
         View dialogCell;
         if (i == 0) {
             dialogCell = new DialogCell(null, this.mContext, false, true, this.currentAccount, this.resourcesProvider);

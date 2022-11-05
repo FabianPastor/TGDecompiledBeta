@@ -101,6 +101,7 @@ public class SvgHelper {
         private String currentColorKey;
         private Theme.ResourcesProvider currentResourcesProvider;
         protected int height;
+        private Integer overrideColor;
         private Paint overridePaint;
         private ImageReceiver parentImageReceiver;
         protected int width;
@@ -114,6 +115,7 @@ public class SvgHelper {
         private float crossfadeAlpha = 1.0f;
         SparseArray<Paint> overridePaintByPosition = new SparseArray<>();
         private boolean aspectFill = true;
+        private boolean aspectCenter = false;
 
         @Override // android.graphics.drawable.Drawable
         public int getOpacity() {
@@ -136,6 +138,10 @@ public class SvgHelper {
 
         public void setAspectFill(boolean z) {
             this.aspectFill = z;
+        }
+
+        public void setAspectCenter(boolean z) {
+            this.aspectCenter = z;
         }
 
         public void overrideWidthAndHeight(int i, int i2) {
@@ -228,7 +234,7 @@ public class SvgHelper {
             }
             canvas.save();
             canvas.translate(f, f2);
-            if (!this.aspectFill) {
+            if (!this.aspectFill || this.aspectCenter) {
                 canvas.translate((f3 - (this.width * scale)) / 2.0f, (f4 - (this.height * scale)) / 2.0f);
             }
             canvas.scale(scale, scale);
@@ -310,7 +316,8 @@ public class SvgHelper {
 
         public void setupGradient(String str, Theme.ResourcesProvider resourcesProvider, float f, boolean z) {
             Shader bitmapShader;
-            int color = Theme.getColor(str, resourcesProvider);
+            Integer num = this.overrideColor;
+            int color = num == null ? Theme.getColor(str, resourcesProvider) : num.intValue();
             this.currentResourcesProvider = resourcesProvider;
             int[] iArr = this.currentColor;
             if (iArr[z ? 1 : 0] != color) {
@@ -359,6 +366,14 @@ public class SvgHelper {
                     }
                 }
             }
+        }
+
+        public void setColorKey(String str) {
+            this.currentColorKey = str;
+        }
+
+        public void setColor(int i) {
+            this.overrideColor = Integer.valueOf(i);
         }
 
         public void setPaint(Paint paint) {

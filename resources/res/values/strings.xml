@@ -3848,6 +3848,7 @@
     <string name="PremiumPreviewAppIconDescription2">Unlock a wider range of app icons by subscribing to Telegram Premium.</string>
     <string name="PremiumPreviewDownloadSpeed">Faster Download Speed</string>
     <string name="PremiumPreviewDownloadSpeedDescription">No more limits on the speed with which media and documents are downloaded.</string>
+    <string name="PremiumPreviewDownloadSpeedDescription2">Subscribe to Telegram Premium to download media and files at the fastest possible speed.</string>
     <string name="PremiumPreviewEmoji">Animated Emoji</string>
     <string name="PremiumPreviewEmojiDescription">Include animated emoji from different emoji sets in any message you send.</string>
     <string name="PremiumPreviewEmojiPack">This emoji pack is available only to subscribers of **Telegram Premium.**</string>
@@ -3870,7 +3871,7 @@
     <string name="PremiumPreviewUploadsDescription">Increased upload size from 2Gb to 4Gb per document, unlimited storage overall.</string>
     <string name="PremiumPreviewVoiceToText">Voice-to-Text Conversion</string>
     <string name="PremiumPreviewVoiceToTextDescription">Ability to read the transcript of any incoming voice message.</string>
-    <string name="PremiumSpeedPromo">Increase speed</string>
+    <string name="PremiumSpeedPromo">Increase Speed</string>
     <string name="PremiumStickerTooltip">This pack contains premium stickers like this one.</string>
     <string name="PremiumStickers">Premuim Stickers</string>
     <string name="PremiumStickersShort">Premium</string>

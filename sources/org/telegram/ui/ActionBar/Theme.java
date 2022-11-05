@@ -52,6 +52,7 @@ import android.util.SparseArray;
 import android.util.StateSet;
 import android.view.View;
 import androidx.core.graphics.ColorUtils;
+import androidx.core.math.MathUtils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -1379,10 +1380,15 @@ public class Theme {
         */
         public boolean fillAccentColors(java.util.HashMap<java.lang.String, java.lang.Integer> r17, java.util.HashMap<java.lang.String, java.lang.Integer> r18) {
             /*
-                Method dump skipped, instructions count: 1651
+                Method dump skipped, instructions count: 1695
                 To view this dump add '--comments-level debug' option
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.ThemeAccent.fillAccentColors(java.util.HashMap, java.util.HashMap):boolean");
+        }
+
+        private float getHue(int i) {
+            Color.colorToHSV(i, this.tempHSV);
+            return this.tempHSV[0];
         }
 
         private int bubbleSelectedOverlay(int i, int i2) {
@@ -1442,6 +1448,25 @@ public class Theme {
             }
             fArr2[2] = Math.max(0.0f, Math.min(1.0f, f2 + f));
             return Color.HSVToColor(51, this.tempHSV);
+        }
+
+        private int locationPlaceholderColor(float f, int i, boolean z) {
+            if (z) {
+                return NUM;
+            }
+            Color.colorToHSV(i, this.tempHSV);
+            float[] fArr = this.tempHSV;
+            if (fArr[1] <= 0.0f || fArr[2] >= 1.0f || fArr[2] <= 0.0f) {
+                fArr[0] = f;
+                fArr[1] = 0.2f;
+            } else {
+                fArr[0] = MathUtils.clamp(fArr[0] + 0.22f, 0.0f, 1.0f);
+                float[] fArr2 = this.tempHSV;
+                fArr2[1] = MathUtils.clamp(fArr2[1] - 0.35f, 0.0f, 1.0f);
+            }
+            float[] fArr3 = this.tempHSV;
+            fArr3[2] = MathUtils.clamp(fArr3[2] - 0.65f, 0.0f, 1.0f);
+            return Color.HSVToColor(90, this.tempHSV);
         }
 
         private int averageColor(HashMap<String, Integer> hashMap, String... strArr) {
@@ -2561,17 +2586,17 @@ public class Theme {
     }
 
     /* JADX WARN: Multi-variable type inference failed */
-    /* JADX WARN: Removed duplicated region for block: B:150:0x37ca A[Catch: Exception -> 0x39b4, TryCatch #1 {Exception -> 0x39b4, blocks: (B:38:0x3476, B:40:0x348f, B:50:0x34d0, B:52:0x34df, B:60:0x350b, B:62:0x350f, B:64:0x3517, B:65:0x3529, B:66:0x3535, B:68:0x353b, B:70:0x3545, B:72:0x3549, B:74:0x3578, B:76:0x357c, B:148:0x37c4, B:150:0x37ca, B:151:0x37d3, B:153:0x37d7, B:155:0x37df, B:157:0x37e3, B:159:0x37e7, B:160:0x37e9, B:162:0x37f3, B:131:0x36b0, B:134:0x36d3, B:136:0x36de, B:138:0x36ea, B:140:0x36f6, B:144:0x3702, B:146:0x37a9, B:141:0x36fc, B:167:0x380b, B:168:0x3811, B:172:0x381c, B:174:0x3873, B:176:0x3881, B:178:0x388f, B:180:0x389d, B:179:0x3896, B:175:0x387a, B:53:0x34ee, B:55:0x34f6, B:57:0x34ff, B:59:0x3509, B:41:0x349e, B:43:0x34a6, B:45:0x34ae, B:47:0x34b8, B:49:0x34c0, B:78:0x358d, B:124:0x3697, B:125:0x369c), top: B:219:0x3476 }] */
-    /* JADX WARN: Removed duplicated region for block: B:157:0x37e3 A[Catch: Exception -> 0x39b4, TryCatch #1 {Exception -> 0x39b4, blocks: (B:38:0x3476, B:40:0x348f, B:50:0x34d0, B:52:0x34df, B:60:0x350b, B:62:0x350f, B:64:0x3517, B:65:0x3529, B:66:0x3535, B:68:0x353b, B:70:0x3545, B:72:0x3549, B:74:0x3578, B:76:0x357c, B:148:0x37c4, B:150:0x37ca, B:151:0x37d3, B:153:0x37d7, B:155:0x37df, B:157:0x37e3, B:159:0x37e7, B:160:0x37e9, B:162:0x37f3, B:131:0x36b0, B:134:0x36d3, B:136:0x36de, B:138:0x36ea, B:140:0x36f6, B:144:0x3702, B:146:0x37a9, B:141:0x36fc, B:167:0x380b, B:168:0x3811, B:172:0x381c, B:174:0x3873, B:176:0x3881, B:178:0x388f, B:180:0x389d, B:179:0x3896, B:175:0x387a, B:53:0x34ee, B:55:0x34f6, B:57:0x34ff, B:59:0x3509, B:41:0x349e, B:43:0x34a6, B:45:0x34ae, B:47:0x34b8, B:49:0x34c0, B:78:0x358d, B:124:0x3697, B:125:0x369c), top: B:219:0x3476 }] */
-    /* JADX WARN: Removed duplicated region for block: B:158:0x37e6  */
-    /* JADX WARN: Removed duplicated region for block: B:162:0x37f3 A[Catch: Exception -> 0x39b4, TryCatch #1 {Exception -> 0x39b4, blocks: (B:38:0x3476, B:40:0x348f, B:50:0x34d0, B:52:0x34df, B:60:0x350b, B:62:0x350f, B:64:0x3517, B:65:0x3529, B:66:0x3535, B:68:0x353b, B:70:0x3545, B:72:0x3549, B:74:0x3578, B:76:0x357c, B:148:0x37c4, B:150:0x37ca, B:151:0x37d3, B:153:0x37d7, B:155:0x37df, B:157:0x37e3, B:159:0x37e7, B:160:0x37e9, B:162:0x37f3, B:131:0x36b0, B:134:0x36d3, B:136:0x36de, B:138:0x36ea, B:140:0x36f6, B:144:0x3702, B:146:0x37a9, B:141:0x36fc, B:167:0x380b, B:168:0x3811, B:172:0x381c, B:174:0x3873, B:176:0x3881, B:178:0x388f, B:180:0x389d, B:179:0x3896, B:175:0x387a, B:53:0x34ee, B:55:0x34f6, B:57:0x34ff, B:59:0x3509, B:41:0x349e, B:43:0x34a6, B:45:0x34ae, B:47:0x34b8, B:49:0x34c0, B:78:0x358d, B:124:0x3697, B:125:0x369c), top: B:219:0x3476 }] */
-    /* JADX WARN: Removed duplicated region for block: B:232:0x3801 A[SYNTHETIC] */
-    /* JADX WARN: Type inference failed for: r1v76, types: [boolean] */
-    /* JADX WARN: Type inference failed for: r1v82 */
-    /* JADX WARN: Type inference failed for: r1v85 */
+    /* JADX WARN: Removed duplicated region for block: B:150:0x37e6 A[Catch: Exception -> 0x39d0, TryCatch #3 {Exception -> 0x39d0, blocks: (B:38:0x3492, B:40:0x34ab, B:50:0x34ec, B:52:0x34fb, B:60:0x3527, B:62:0x352b, B:64:0x3533, B:65:0x3545, B:66:0x3551, B:68:0x3557, B:70:0x3561, B:72:0x3565, B:74:0x3594, B:76:0x3598, B:148:0x37e0, B:150:0x37e6, B:151:0x37ef, B:153:0x37f3, B:155:0x37fb, B:157:0x37ff, B:159:0x3803, B:160:0x3805, B:162:0x380f, B:131:0x36cc, B:134:0x36ef, B:136:0x36fa, B:138:0x3706, B:140:0x3712, B:144:0x371e, B:146:0x37c5, B:141:0x3718, B:167:0x3827, B:168:0x382d, B:172:0x3838, B:174:0x388f, B:176:0x389d, B:178:0x38ab, B:180:0x38b9, B:179:0x38b2, B:175:0x3896, B:53:0x350a, B:55:0x3512, B:57:0x351b, B:59:0x3525, B:41:0x34ba, B:43:0x34c2, B:45:0x34ca, B:47:0x34d4, B:49:0x34dc, B:78:0x35a9, B:81:0x35bf, B:83:0x35d4, B:84:0x35da, B:86:0x35ec, B:89:0x35fc, B:93:0x3608, B:97:0x361f, B:101:0x3630, B:103:0x363f, B:106:0x3648, B:108:0x365b, B:111:0x3664, B:113:0x366b, B:114:0x367b, B:116:0x367f, B:117:0x3683, B:119:0x368e, B:121:0x369a, B:98:0x3626, B:94:0x3612), top: B:221:0x3492 }] */
+    /* JADX WARN: Removed duplicated region for block: B:157:0x37ff A[Catch: Exception -> 0x39d0, TryCatch #3 {Exception -> 0x39d0, blocks: (B:38:0x3492, B:40:0x34ab, B:50:0x34ec, B:52:0x34fb, B:60:0x3527, B:62:0x352b, B:64:0x3533, B:65:0x3545, B:66:0x3551, B:68:0x3557, B:70:0x3561, B:72:0x3565, B:74:0x3594, B:76:0x3598, B:148:0x37e0, B:150:0x37e6, B:151:0x37ef, B:153:0x37f3, B:155:0x37fb, B:157:0x37ff, B:159:0x3803, B:160:0x3805, B:162:0x380f, B:131:0x36cc, B:134:0x36ef, B:136:0x36fa, B:138:0x3706, B:140:0x3712, B:144:0x371e, B:146:0x37c5, B:141:0x3718, B:167:0x3827, B:168:0x382d, B:172:0x3838, B:174:0x388f, B:176:0x389d, B:178:0x38ab, B:180:0x38b9, B:179:0x38b2, B:175:0x3896, B:53:0x350a, B:55:0x3512, B:57:0x351b, B:59:0x3525, B:41:0x34ba, B:43:0x34c2, B:45:0x34ca, B:47:0x34d4, B:49:0x34dc, B:78:0x35a9, B:81:0x35bf, B:83:0x35d4, B:84:0x35da, B:86:0x35ec, B:89:0x35fc, B:93:0x3608, B:97:0x361f, B:101:0x3630, B:103:0x363f, B:106:0x3648, B:108:0x365b, B:111:0x3664, B:113:0x366b, B:114:0x367b, B:116:0x367f, B:117:0x3683, B:119:0x368e, B:121:0x369a, B:98:0x3626, B:94:0x3612), top: B:221:0x3492 }] */
+    /* JADX WARN: Removed duplicated region for block: B:158:0x3802  */
+    /* JADX WARN: Removed duplicated region for block: B:162:0x380f A[Catch: Exception -> 0x39d0, TryCatch #3 {Exception -> 0x39d0, blocks: (B:38:0x3492, B:40:0x34ab, B:50:0x34ec, B:52:0x34fb, B:60:0x3527, B:62:0x352b, B:64:0x3533, B:65:0x3545, B:66:0x3551, B:68:0x3557, B:70:0x3561, B:72:0x3565, B:74:0x3594, B:76:0x3598, B:148:0x37e0, B:150:0x37e6, B:151:0x37ef, B:153:0x37f3, B:155:0x37fb, B:157:0x37ff, B:159:0x3803, B:160:0x3805, B:162:0x380f, B:131:0x36cc, B:134:0x36ef, B:136:0x36fa, B:138:0x3706, B:140:0x3712, B:144:0x371e, B:146:0x37c5, B:141:0x3718, B:167:0x3827, B:168:0x382d, B:172:0x3838, B:174:0x388f, B:176:0x389d, B:178:0x38ab, B:180:0x38b9, B:179:0x38b2, B:175:0x3896, B:53:0x350a, B:55:0x3512, B:57:0x351b, B:59:0x3525, B:41:0x34ba, B:43:0x34c2, B:45:0x34ca, B:47:0x34d4, B:49:0x34dc, B:78:0x35a9, B:81:0x35bf, B:83:0x35d4, B:84:0x35da, B:86:0x35ec, B:89:0x35fc, B:93:0x3608, B:97:0x361f, B:101:0x3630, B:103:0x363f, B:106:0x3648, B:108:0x365b, B:111:0x3664, B:113:0x366b, B:114:0x367b, B:116:0x367f, B:117:0x3683, B:119:0x368e, B:121:0x369a, B:98:0x3626, B:94:0x3612), top: B:221:0x3492 }] */
+    /* JADX WARN: Removed duplicated region for block: B:231:0x381d A[SYNTHETIC] */
+    /* JADX WARN: Type inference failed for: r1v75, types: [boolean] */
+    /* JADX WARN: Type inference failed for: r1v81 */
+    /* JADX WARN: Type inference failed for: r1v84 */
     static {
         /*
-            Method dump skipped, instructions count: 16476
+            Method dump skipped, instructions count: 16504
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.<clinit>():void");

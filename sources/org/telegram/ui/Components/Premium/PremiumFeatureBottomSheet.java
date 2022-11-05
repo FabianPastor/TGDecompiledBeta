@@ -202,7 +202,7 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
 
             @Override // androidx.viewpager.widget.PagerAdapter
             /* renamed from: instantiateItem */
-            public Object mo1628instantiateItem(ViewGroup viewGroup, int i4) {
+            public Object mo1629instantiateItem(ViewGroup viewGroup, int i4) {
                 PremiumFeatureBottomSheet premiumFeatureBottomSheet = PremiumFeatureBottomSheet.this;
                 ViewPage viewPage = new ViewPage(premiumFeatureBottomSheet.getContext(), i4);
                 viewGroup.addView(viewPage);
@@ -436,19 +436,24 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
     }
 
     private void setButtonText() {
-        int i;
-        if (!this.onlySelectedType || (i = this.startType) == 2) {
-            this.premiumButtonView.buttonTextView.setText(PremiumPreviewFragment.getPremiumButtonText(this.currentAccount, this.selectedTier));
-        } else if (i == 4) {
-            this.premiumButtonView.buttonTextView.setText(LocaleController.getString(R.string.UnlockPremiumReactions));
-            this.premiumButtonView.setIcon(R.raw.unlock_icon);
-        } else if (i == 3) {
-            this.premiumButtonView.buttonTextView.setText(LocaleController.getString(R.string.AboutTelegramPremium));
-        } else if (i != 10) {
-        } else {
-            this.premiumButtonView.buttonTextView.setText(LocaleController.getString(R.string.UnlockPremiumIcons));
-            this.premiumButtonView.setIcon(R.raw.unlock_icon);
+        if (this.onlySelectedType) {
+            int i = this.startType;
+            if (i == 4) {
+                this.premiumButtonView.buttonTextView.setText(LocaleController.getString(R.string.UnlockPremiumReactions));
+                this.premiumButtonView.setIcon(R.raw.unlock_icon);
+                return;
+            } else if (i == 3 || i == 2) {
+                this.premiumButtonView.buttonTextView.setText(LocaleController.getString(R.string.AboutTelegramPremium));
+                return;
+            } else if (i != 10) {
+                return;
+            } else {
+                this.premiumButtonView.buttonTextView.setText(LocaleController.getString(R.string.UnlockPremiumIcons));
+                this.premiumButtonView.setIcon(R.raw.unlock_icon);
+                return;
+            }
         }
+        this.premiumButtonView.buttonTextView.setText(PremiumPreviewFragment.getPremiumButtonText(this.currentAccount, this.selectedTier));
     }
 
     @Override // org.telegram.ui.ActionBar.BottomSheet, android.app.Dialog
@@ -611,10 +616,15 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
 
         void setFeatureDate(PremiumPreviewFragment.PremiumFeatureData premiumFeatureData) {
             if (premiumFeatureData.type != 0) {
-                if (PremiumFeatureBottomSheet.this.onlySelectedType && PremiumFeatureBottomSheet.this.startType != 2) {
+                if (PremiumFeatureBottomSheet.this.onlySelectedType) {
                     if (PremiumFeatureBottomSheet.this.startType != 4) {
                         if (PremiumFeatureBottomSheet.this.startType != 3) {
-                            if (PremiumFeatureBottomSheet.this.startType == 10) {
+                            if (PremiumFeatureBottomSheet.this.startType != 10) {
+                                if (PremiumFeatureBottomSheet.this.startType == 2) {
+                                    this.title.setText(LocaleController.getString(R.string.PremiumPreviewDownloadSpeed));
+                                    this.description.setText(LocaleController.getString(R.string.PremiumPreviewDownloadSpeedDescription2));
+                                }
+                            } else {
                                 this.title.setText(LocaleController.getString("PremiumPreviewAppIcon", R.string.PremiumPreviewAppIcon));
                                 this.description.setText(LocaleController.getString("PremiumPreviewAppIconDescription2", R.string.PremiumPreviewAppIconDescription2));
                             }

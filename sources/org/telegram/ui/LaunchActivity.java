@@ -2524,11 +2524,10 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         String str12;
         long j;
         boolean z;
-        BaseFragment baseFragment;
+        ChatActivity chatActivity;
         if (!isFinishing()) {
             final TLRPC$TL_contacts_resolvedPeer tLRPC$TL_contacts_resolvedPeer = (TLRPC$TL_contacts_resolvedPeer) tLObject;
             boolean z2 = true;
-            boolean z3 = false;
             if (tLRPC$TL_error == null && this.actionBarLayout != null && ((str == null && str2 == null) || ((str != null && !tLRPC$TL_contacts_resolvedPeer.users.isEmpty()) || ((str2 != null && !tLRPC$TL_contacts_resolvedPeer.chats.isEmpty()) || (str3 != null && !tLRPC$TL_contacts_resolvedPeer.chats.isEmpty()))))) {
                 MessagesController.getInstance(i).putUsers(tLRPC$TL_contacts_resolvedPeer.users, false);
                 MessagesController.getInstance(i).putChats(tLRPC$TL_contacts_resolvedPeer.chats, false);
@@ -2568,8 +2567,8 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                     DialogsActivity dialogsActivity = new DialogsActivity(bundle);
                     dialogsActivity.setDelegate(new DialogsActivity.DialogsActivityDelegate() { // from class: org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda107
                         @Override // org.telegram.ui.DialogsActivity.DialogsActivityDelegate
-                        public final void didSelectDialogs(DialogsActivity dialogsActivity2, ArrayList arrayList3, CharSequence charSequence, boolean z4) {
-                            LaunchActivity.this.lambda$runLinkRequest$42(str, i, tLRPC$TL_contacts_resolvedPeer, dialogsActivity2, arrayList3, charSequence, z4);
+                        public final void didSelectDialogs(DialogsActivity dialogsActivity2, ArrayList arrayList3, CharSequence charSequence, boolean z3) {
+                            LaunchActivity.this.lambda$runLinkRequest$42(str, i, tLRPC$TL_contacts_resolvedPeer, dialogsActivity2, arrayList3, charSequence, z3);
                         }
                     });
                     this.actionBarLayout.presentFragment(dialogsActivity, !AndroidUtilities.isTablet() ? !(this.actionBarLayout.getFragmentStack().size() <= 1 || !(this.actionBarLayout.getFragmentStack().get(this.actionBarLayout.getFragmentStack().size() - 1) instanceof DialogsActivity)) : !(this.layersActionBarLayout.getFragmentStack().size() <= 0 || !(this.layersActionBarLayout.getFragmentStack().get(this.layersActionBarLayout.getFragmentStack().size() - 1) instanceof DialogsActivity)), true, true, false);
@@ -2612,18 +2611,15 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                     bundle2.putBoolean("resetDelegate", false);
                     bundle2.putBoolean("closeFragment", false);
                     bundle2.putBoolean("allowGroups", str7 != null);
-                    if (str8 != null) {
-                        z3 = true;
-                    }
-                    bundle2.putBoolean("allowChannels", z3);
+                    bundle2.putBoolean("allowChannels", str8 != null);
                     String str13 = TextUtils.isEmpty(str7) ? TextUtils.isEmpty(str8) ? null : str8 : str7;
                     final DialogsActivity dialogsActivity2 = new DialogsActivity(bundle2);
                     final TLRPC$User tLRPC$User2 = tLRPC$User;
                     final String str14 = str13;
                     dialogsActivity2.setDelegate(new DialogsActivity.DialogsActivityDelegate() { // from class: org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda106
                         @Override // org.telegram.ui.DialogsActivity.DialogsActivityDelegate
-                        public final void didSelectDialogs(DialogsActivity dialogsActivity3, ArrayList arrayList4, CharSequence charSequence, boolean z4) {
-                            LaunchActivity.this.lambda$runLinkRequest$47(i, tLRPC$User2, str9, str14, dialogsActivity2, dialogsActivity3, arrayList4, charSequence, z4);
+                        public final void didSelectDialogs(DialogsActivity dialogsActivity3, ArrayList arrayList4, CharSequence charSequence, boolean z3) {
+                            LaunchActivity.this.lambda$runLinkRequest$47(i, tLRPC$User2, str9, str14, dialogsActivity2, dialogsActivity3, arrayList4, charSequence, z3);
                         }
                     });
                     lambda$runLinkRequest$65(dialogsActivity2);
@@ -2665,16 +2661,16 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                         bundle3.putString("attach_bot_start_command", str4);
                     }
                     if (mainFragmentsStack.isEmpty() || str2 != null) {
-                        baseFragment = null;
+                        chatActivity = null;
                     } else {
                         ArrayList<BaseFragment> arrayList4 = mainFragmentsStack;
-                        baseFragment = arrayList4.get(arrayList4.size() - 1);
+                        chatActivity = arrayList4.get(arrayList4.size() - 1);
                     }
-                    if (baseFragment == null || MessagesController.getInstance(i).checkCanOpenChat(bundle3, baseFragment)) {
-                        if (z && (baseFragment instanceof ChatActivity)) {
-                            ChatActivity chatActivity = (ChatActivity) baseFragment;
-                            if (chatActivity.getDialogId() == j) {
-                                chatActivity.setBotUser(str10);
+                    if (chatActivity == null || MessagesController.getInstance(i).checkCanOpenChat(bundle3, chatActivity)) {
+                        if (z && (chatActivity instanceof ChatActivity)) {
+                            ChatActivity chatActivity2 = chatActivity;
+                            if (chatActivity2.getDialogId() == j) {
+                                chatActivity2.setBotUser(str10);
                             }
                         }
                         long j2 = -j;
@@ -2699,7 +2695,8 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                                 }
                             }
                         } else {
-                            MessagesController.getInstance(i).ensureMessagesLoaded(j, num == null ? 0 : num.intValue(), new AnonymousClass16(alertDialog, str3, baseFragment, j, bundle3));
+                            long j3 = j;
+                            MessagesController.getInstance(i).ensureMessagesLoaded(j3, num == null ? 0 : num.intValue(), new AnonymousClass16(alertDialog, str3, chatActivity, j3, num, bundle3));
                         }
                         z2 = false;
                     }
@@ -2708,16 +2705,16 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                 try {
                     if (!mainFragmentsStack.isEmpty()) {
                         ArrayList<BaseFragment> arrayList5 = mainFragmentsStack;
-                        BaseFragment baseFragment2 = arrayList5.get(arrayList5.size() - 1);
-                        if (baseFragment2 instanceof ChatActivity) {
-                            ((ChatActivity) baseFragment2).shakeContent();
+                        BaseFragment baseFragment = arrayList5.get(arrayList5.size() - 1);
+                        if (baseFragment instanceof ChatActivity) {
+                            ((ChatActivity) baseFragment).shakeContent();
                         }
                         if (tLRPC$TL_error != null && (str12 = tLRPC$TL_error.text) != null && str12.startsWith("FLOOD_WAIT")) {
-                            BulletinFactory.of(baseFragment2).createErrorBulletin(LocaleController.getString("FloodWait", R.string.FloodWait)).show();
+                            BulletinFactory.of(baseFragment).createErrorBulletin(LocaleController.getString("FloodWait", R.string.FloodWait)).show();
                         } else if (AndroidUtilities.isNumeric(str11)) {
-                            BulletinFactory.of(baseFragment2).createErrorBulletin(LocaleController.getString("NoPhoneFound", R.string.NoPhoneFound)).show();
+                            BulletinFactory.of(baseFragment).createErrorBulletin(LocaleController.getString("NoPhoneFound", R.string.NoPhoneFound)).show();
                         } else {
-                            BulletinFactory.of(baseFragment2).createErrorBulletin(LocaleController.getString("NoUsernameFound", R.string.NoUsernameFound)).show();
+                            BulletinFactory.of(baseFragment).createErrorBulletin(LocaleController.getString("NoUsernameFound", R.string.NoUsernameFound)).show();
                         }
                     }
                 } catch (Exception e3) {
@@ -3168,13 +3165,15 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         final /* synthetic */ long val$dialog_id;
         final /* synthetic */ BaseFragment val$lastFragment;
         final /* synthetic */ String val$livestream;
+        final /* synthetic */ Integer val$messageId;
         final /* synthetic */ AlertDialog val$progressDialog;
 
-        AnonymousClass16(AlertDialog alertDialog, String str, BaseFragment baseFragment, long j, Bundle bundle) {
+        AnonymousClass16(AlertDialog alertDialog, String str, BaseFragment baseFragment, long j, Integer num, Bundle bundle) {
             this.val$progressDialog = alertDialog;
             this.val$livestream = str;
             this.val$lastFragment = baseFragment;
             this.val$dialog_id = j;
+            this.val$messageId = num;
             this.val$args = bundle;
         }
 
@@ -3203,7 +3202,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                     }
                 }
                 BaseFragment baseFragment3 = this.val$lastFragment;
-                if ((baseFragment3 instanceof ChatActivity) && ((ChatActivity) baseFragment3).getDialogId() == this.val$dialog_id) {
+                if ((baseFragment3 instanceof ChatActivity) && ((ChatActivity) baseFragment3).getDialogId() == this.val$dialog_id && this.val$messageId == null) {
                     ChatActivity chatActivity2 = (ChatActivity) this.val$lastFragment;
                     AndroidUtilities.shakeViewSpring(chatActivity2.getChatListView(), 5.0f);
                     BotWebViewVibrationEffect.APP_ERROR.vibrate();

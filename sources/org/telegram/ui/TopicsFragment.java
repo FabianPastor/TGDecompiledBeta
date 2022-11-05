@@ -1058,6 +1058,7 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
     public void updateTopView() {
         float f;
         FragmentContextView fragmentContextView = this.fragmentContextView;
+        float f2 = 0.0f;
         if (fragmentContextView != null) {
             f = Math.max(0.0f, fragmentContextView.getTopPadding()) + 0.0f;
             this.fragmentContextView.setTranslationY(f);
@@ -1071,6 +1072,12 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
             f += this.pendingRequestsDelegate.getViewEnterOffset() + this.pendingRequestsDelegate.getViewHeight();
         }
         this.recyclerListView.setTranslationY(Math.max(0.0f, f));
+        RecyclerListView recyclerListView = this.recyclerListView;
+        int dp = AndroidUtilities.dp(100.0f);
+        if (this.bottomPannelVisible) {
+            f2 = 51.0f;
+        }
+        recyclerListView.setPadding(0, dp, 0, AndroidUtilities.dp(f2) + ((int) f));
     }
 
     /* JADX INFO: Access modifiers changed from: private */
@@ -1630,18 +1637,18 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
         updateChatInfo(false);
     }
 
-    /* JADX WARN: Removed duplicated region for block: B:59:0x0171  */
-    /* JADX WARN: Removed duplicated region for block: B:77:0x01bf  */
-    /* JADX WARN: Removed duplicated region for block: B:78:0x01c2  */
-    /* JADX WARN: Removed duplicated region for block: B:81:0x01ce  */
-    /* JADX WARN: Removed duplicated region for block: B:82:0x01d0  */
+    /* JADX WARN: Removed duplicated region for block: B:59:0x0149  */
+    /* JADX WARN: Removed duplicated region for block: B:77:0x019a  */
+    /* JADX WARN: Removed duplicated region for block: B:78:0x019d  */
+    /* JADX WARN: Removed duplicated region for block: B:81:0x01a9  */
+    /* JADX WARN: Removed duplicated region for block: B:82:0x01ab  */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    private void updateChatInfo(boolean r13) {
+    private void updateChatInfo(boolean r11) {
         /*
-            Method dump skipped, instructions count: 503
+            Method dump skipped, instructions count: 466
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.TopicsFragment.updateChatInfo(boolean):void");
@@ -1912,7 +1919,7 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1817onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1818onCreateViewHolder(ViewGroup viewGroup, int i) {
             return new RecyclerListView.Holder(new TopicDialogCell(null, viewGroup.getContext(), true, false));
         }
 
@@ -2484,7 +2491,7 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
 
             @Override // androidx.recyclerview.widget.RecyclerView.Adapter
             /* renamed from: onCreateViewHolder */
-            public RecyclerView.ViewHolder mo1817onCreateViewHolder(ViewGroup viewGroup, int i) {
+            public RecyclerView.ViewHolder mo1818onCreateViewHolder(ViewGroup viewGroup, int i) {
                 View graySectionCell;
                 if (i == 1) {
                     graySectionCell = new GraySectionCell(viewGroup.getContext());

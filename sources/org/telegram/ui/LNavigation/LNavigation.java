@@ -654,6 +654,9 @@ public class LNavigation extends FrameLayout implements INavigationLayout, Float
         INavigationLayout.INavigationLayoutDelegate iNavigationLayoutDelegate;
         final BaseFragment baseFragment = navigationParams.fragment;
         if (navigationParams.isFromDelay || (baseFragment != null && !checkTransitionAnimation() && (((iNavigationLayoutDelegate = this.delegate) == null || !navigationParams.checkPresentFromDelegate || iNavigationLayoutDelegate.needPresentFragment(this, navigationParams)) && baseFragment.onFragmentCreate() && this.delayedPresentAnimation == null))) {
+            if (!this.fragmentStack.isEmpty() && getChildCount() < 2) {
+                lambda$rebuildFragments$12(1);
+            }
             if (getParentActivity().getCurrentFocus() != null) {
                 AndroidUtilities.hideKeyboard(getParentActivity().getCurrentFocus());
             }
@@ -974,6 +977,9 @@ public class LNavigation extends FrameLayout implements INavigationLayout, Float
     public boolean addFragmentToStack(BaseFragment baseFragment, int i, boolean z) {
         INavigationLayout.INavigationLayoutDelegate iNavigationLayoutDelegate;
         if (z || (((iNavigationLayoutDelegate = this.delegate) == null || iNavigationLayoutDelegate.needAddFragmentToStack(baseFragment, this)) && baseFragment.onFragmentCreate())) {
+            if (!this.fragmentStack.isEmpty() && getChildCount() < 2) {
+                lambda$rebuildFragments$12(1);
+            }
             baseFragment.setParentLayout(this);
             if (i == -1 || i >= this.fragmentStack.size()) {
                 BaseFragment lastFragment = getLastFragment();

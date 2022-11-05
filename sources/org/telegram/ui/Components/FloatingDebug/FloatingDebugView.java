@@ -237,7 +237,7 @@ public class FloatingDebugView extends FrameLayout implements NotificationCenter
 
             @Override // androidx.recyclerview.widget.RecyclerView.Adapter
             /* renamed from: onCreateViewHolder */
-            public RecyclerView.ViewHolder mo1817onCreateViewHolder(ViewGroup viewGroup, int i) {
+            public RecyclerView.ViewHolder mo1818onCreateViewHolder(ViewGroup viewGroup, int i) {
                 int i2 = AnonymousClass4.$SwitchMap$org$telegram$ui$Components$FloatingDebug$FloatingDebugController$DebugItemType[FloatingDebugController.DebugItemType.values()[i].ordinal()];
                 AlertDialog.AlertDialogCell alertDialogCell = new AlertDialog.AlertDialogCell(context, null);
                 alertDialogCell.setLayoutParams(new RecyclerView.LayoutParams(-1, -2));

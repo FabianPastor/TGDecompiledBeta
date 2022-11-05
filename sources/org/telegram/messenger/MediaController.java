@@ -720,9 +720,8 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     /* loaded from: classes.dex */
-    public class InternalObserver extends ContentObserver {
+    private class InternalObserver extends ContentObserver {
         public InternalObserver() {
             super(null);
         }
@@ -734,9 +733,8 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     /* loaded from: classes.dex */
-    public class ExternalObserver extends ContentObserver {
+    private class ExternalObserver extends ContentObserver {
         public ExternalObserver() {
             super(null);
         }
@@ -956,9 +954,8 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaController.lambda$checkGallery$1(int):void");
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     /* loaded from: classes.dex */
-    public final class StopMediaObserverRunnable implements Runnable {
+    private final class StopMediaObserverRunnable implements Runnable {
         public int currentObserverToken;
 
         private StopMediaObserverRunnable() {
@@ -4737,10 +4734,10 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
 
     /* JADX INFO: Access modifiers changed from: private */
     /* JADX WARN: Can't wrap try/catch for region: R(12:1|(6:2|3|4|5|6|7)|8|(2:9|10)|(18:15|16|(2:130|131)|18|19|20|(9:22|(1:24)|25|(2:35|36)|27|(2:30|28)|31|32|33)|41|(1:43)(1:128)|44|(5:46|(1:48)(1:127)|49|(4:52|(3:122|123|124)(10:54|55|(7:57|58|59|60|(1:62)(1:117)|(1:64)|65)(1:121)|(3:67|68|69)(1:116)|71|72|(2:74|(1:108)(3:80|81|82))(1:109)|83|84|85)|86|50)|125)|25|(0)|27|(1:28)|31|32|33)|136|137|(1:139)(1:279)|140|141|(44:144|145|146|147|148|149|150|151|152|153|154|155|(1:157)(1:262)|158|159|160|161|162|163|164|165|166|167|168|169|(7:173|174|175|(3:237|238|239)(11:177|178|(3:180|181|182)(1:236)|(3:184|185|186)(1:232)|187|(2:189|(1:196)(1:195))|197|(2:199|(1:206)(1:205))|207|208|209)|210|170|171)|242|243|(0)|18|19|20|(0)|41|(0)(0)|44|(0)|25|(0)|27|(1:28)|31|32|33)(18:143|16|(0)|18|19|20|(0)|41|(0)(0)|44|(0)|25|(0)|27|(1:28)|31|32|33)|(1:(0))) */
-    /* JADX WARN: Code restructure failed: missing block: B:116:0x027c, code lost:
+    /* JADX WARN: Code restructure failed: missing block: B:116:0x027d, code lost:
         r0 = th;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:117:0x027d, code lost:
+    /* JADX WARN: Code restructure failed: missing block: B:117:0x027e, code lost:
         r34 = r2;
         r29 = "height";
         r27 = "width";
@@ -4750,31 +4747,31 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         r22 = "_id";
         r26 = " DESC";
      */
-    /* JADX WARN: Code restructure failed: missing block: B:120:0x02a1, code lost:
+    /* JADX WARN: Code restructure failed: missing block: B:120:0x02a2, code lost:
         r10 = null;
         r30 = null;
      */
     /* JADX WARN: Multi-variable type inference failed */
-    /* JADX WARN: Removed duplicated region for block: B:110:0x025f  */
-    /* JADX WARN: Removed duplicated region for block: B:132:0x02bf A[Catch: all -> 0x042a, TryCatch #1 {all -> 0x042a, blocks: (B:130:0x02b9, B:132:0x02bf, B:136:0x02cd, B:140:0x02e7, B:142:0x02f9, B:146:0x031a, B:147:0x0336, B:149:0x033c, B:152:0x0347, B:154:0x0387), top: B:232:0x02b9 }] */
-    /* JADX WARN: Removed duplicated region for block: B:138:0x02e2  */
-    /* JADX WARN: Removed duplicated region for block: B:139:0x02e5  */
-    /* JADX WARN: Removed duplicated region for block: B:142:0x02f9 A[Catch: all -> 0x042a, TryCatch #1 {all -> 0x042a, blocks: (B:130:0x02b9, B:132:0x02bf, B:136:0x02cd, B:140:0x02e7, B:142:0x02f9, B:146:0x031a, B:147:0x0336, B:149:0x033c, B:152:0x0347, B:154:0x0387), top: B:232:0x02b9 }] */
-    /* JADX WARN: Removed duplicated region for block: B:209:0x0447 A[LOOP:0: B:207:0x0441->B:209:0x0447, LOOP_END] */
-    /* JADX WARN: Removed duplicated region for block: B:236:0x0431 A[EXC_TOP_SPLITTER, SYNTHETIC] */
-    /* JADX WARN: Removed duplicated region for block: B:23:0x009f  */
-    /* JADX WARN: Removed duplicated region for block: B:240:0x02ae A[EXC_TOP_SPLITTER, SYNTHETIC] */
-    /* JADX WARN: Removed duplicated region for block: B:248:0x0423 A[EXC_TOP_SPLITTER, SYNTHETIC] */
-    /* JADX WARN: Removed duplicated region for block: B:24:0x00a2  */
-    /* JADX WARN: Removed duplicated region for block: B:266:0x00b4 A[EXC_TOP_SPLITTER, SYNTHETIC] */
-    /* JADX WARN: Removed duplicated region for block: B:278:0x0275 A[EXC_TOP_SPLITTER, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:110:0x0260  */
+    /* JADX WARN: Removed duplicated region for block: B:132:0x02c0 A[Catch: all -> 0x042b, TryCatch #5 {all -> 0x042b, blocks: (B:130:0x02ba, B:132:0x02c0, B:136:0x02ce, B:140:0x02e8, B:142:0x02fa, B:146:0x031b, B:147:0x0337, B:149:0x033d, B:152:0x0348, B:154:0x0388), top: B:240:0x02ba }] */
+    /* JADX WARN: Removed duplicated region for block: B:138:0x02e3  */
+    /* JADX WARN: Removed duplicated region for block: B:139:0x02e6  */
+    /* JADX WARN: Removed duplicated region for block: B:142:0x02fa A[Catch: all -> 0x042b, TryCatch #5 {all -> 0x042b, blocks: (B:130:0x02ba, B:132:0x02c0, B:136:0x02ce, B:140:0x02e8, B:142:0x02fa, B:146:0x031b, B:147:0x0337, B:149:0x033d, B:152:0x0348, B:154:0x0388), top: B:240:0x02ba }] */
+    /* JADX WARN: Removed duplicated region for block: B:209:0x0448 A[LOOP:0: B:207:0x0442->B:209:0x0448, LOOP_END] */
+    /* JADX WARN: Removed duplicated region for block: B:238:0x0432 A[EXC_TOP_SPLITTER, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:23:0x00a0  */
+    /* JADX WARN: Removed duplicated region for block: B:242:0x02af A[EXC_TOP_SPLITTER, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:24:0x00a3  */
+    /* JADX WARN: Removed duplicated region for block: B:252:0x0424 A[EXC_TOP_SPLITTER, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:270:0x00b5 A[EXC_TOP_SPLITTER, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:280:0x0276 A[EXC_TOP_SPLITTER, SYNTHETIC] */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
     public static /* synthetic */ void lambda$loadGalleryPhotosAlbums$41(int r50) {
         /*
-            Method dump skipped, instructions count: 1149
+            Method dump skipped, instructions count: 1150
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaController.lambda$loadGalleryPhotosAlbums$41(int):void");

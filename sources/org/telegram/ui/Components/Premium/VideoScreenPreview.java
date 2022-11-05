@@ -21,6 +21,7 @@ import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import com.google.android.exoplayer2.analytics.AnalyticsListener;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import java.io.File;
+import java.net.URLEncoder;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLoader;
@@ -50,6 +51,7 @@ public class VideoScreenPreview extends FrameLayout implements PagerHeaderView, 
     boolean attached;
     CellFlickerDrawable.DrawableInterface cellFlickerDrawable;
     int currentAccount;
+    private TLRPC$Document document;
     File file;
     boolean firstFrameRendered;
     boolean fromTop;
@@ -73,15 +75,20 @@ public class VideoScreenPreview extends FrameLayout implements PagerHeaderView, 
 
     private void checkVideo() {
         File file = this.file;
-        if (file == null || !file.exists()) {
+        if ((file == null || !file.exists()) && !SharedConfig.streamMedia) {
             return;
         }
-        MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
-        mediaMetadataRetriever.setDataSource(ApplicationLoader.applicationContext, Uri.fromFile(this.file));
-        int intValue = Integer.valueOf(mediaMetadataRetriever.extractMetadata(18)).intValue();
-        int intValue2 = Integer.valueOf(mediaMetadataRetriever.extractMetadata(19)).intValue();
-        mediaMetadataRetriever.release();
-        this.aspectRatio = intValue / intValue2;
+        File file2 = this.file;
+        if (file2 != null && file2.exists()) {
+            MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
+            mediaMetadataRetriever.setDataSource(ApplicationLoader.applicationContext, Uri.fromFile(this.file));
+            int intValue = Integer.valueOf(mediaMetadataRetriever.extractMetadata(18)).intValue();
+            int intValue2 = Integer.valueOf(mediaMetadataRetriever.extractMetadata(19)).intValue();
+            mediaMetadataRetriever.release();
+            this.aspectRatio = intValue / intValue2;
+        } else {
+            this.aspectRatio = 0.671f;
+        }
         if (!this.allowPlay) {
             return;
         }
@@ -237,6 +244,7 @@ public class VideoScreenPreview extends FrameLayout implements PagerHeaderView, 
             this.attachFileName = FileLoader.getAttachFileName(tLRPC$Document);
             this.imageReceiver.setImage(null, null, combinedDrawable, null, null, 1);
             FileLoader.getInstance(this.currentAccount).loadFile(tLRPC$Document, null, 3, 0);
+            this.document = tLRPC$Document;
             Utilities.globalQueue.postRunnable(new Runnable() { // from class: org.telegram.ui.Components.Premium.VideoScreenPreview$$ExternalSyntheticLambda1
                 @Override // java.lang.Runnable
                 public final void run() {
@@ -522,81 +530,118 @@ public class VideoScreenPreview extends FrameLayout implements PagerHeaderView, 
     }
 
     private void runVideoPlayer() {
-        if (this.file == null || this.videoPlayer != null) {
-            return;
-        }
-        this.aspectRatioFrameLayout.setAspectRatio(this.aspectRatio, 0);
-        VideoPlayer videoPlayer = new VideoPlayer();
-        this.videoPlayer = videoPlayer;
-        videoPlayer.setTextureView(this.textureView);
-        this.videoPlayer.setDelegate(new VideoPlayer.VideoPlayerDelegate() { // from class: org.telegram.ui.Components.Premium.VideoScreenPreview.3
-            @Override // org.telegram.ui.Components.VideoPlayer.VideoPlayerDelegate
-            public void onError(VideoPlayer videoPlayer2, Exception exc) {
-            }
+        Uri uri;
+        if ((this.file != null || SharedConfig.streamMedia) && this.videoPlayer == null) {
+            this.aspectRatioFrameLayout.setAspectRatio(this.aspectRatio, 0);
+            VideoPlayer videoPlayer = new VideoPlayer();
+            this.videoPlayer = videoPlayer;
+            videoPlayer.setTextureView(this.textureView);
+            this.videoPlayer.setDelegate(new VideoPlayer.VideoPlayerDelegate() { // from class: org.telegram.ui.Components.Premium.VideoScreenPreview.3
+                @Override // org.telegram.ui.Components.VideoPlayer.VideoPlayerDelegate
+                public void onError(VideoPlayer videoPlayer2, Exception exc) {
+                }
 
-            @Override // org.telegram.ui.Components.VideoPlayer.VideoPlayerDelegate
-            public /* synthetic */ void onRenderedFirstFrame(AnalyticsListener.EventTime eventTime) {
-                VideoPlayer.VideoPlayerDelegate.CC.$default$onRenderedFirstFrame(this, eventTime);
-            }
+                @Override // org.telegram.ui.Components.VideoPlayer.VideoPlayerDelegate
+                public /* synthetic */ void onRenderedFirstFrame(AnalyticsListener.EventTime eventTime) {
+                    VideoPlayer.VideoPlayerDelegate.CC.$default$onRenderedFirstFrame(this, eventTime);
+                }
 
-            @Override // org.telegram.ui.Components.VideoPlayer.VideoPlayerDelegate
-            public /* synthetic */ void onSeekFinished(AnalyticsListener.EventTime eventTime) {
-                VideoPlayer.VideoPlayerDelegate.CC.$default$onSeekFinished(this, eventTime);
-            }
+                @Override // org.telegram.ui.Components.VideoPlayer.VideoPlayerDelegate
+                public /* synthetic */ void onSeekFinished(AnalyticsListener.EventTime eventTime) {
+                    VideoPlayer.VideoPlayerDelegate.CC.$default$onSeekFinished(this, eventTime);
+                }
 
-            @Override // org.telegram.ui.Components.VideoPlayer.VideoPlayerDelegate
-            public /* synthetic */ void onSeekStarted(AnalyticsListener.EventTime eventTime) {
-                VideoPlayer.VideoPlayerDelegate.CC.$default$onSeekStarted(this, eventTime);
-            }
+                @Override // org.telegram.ui.Components.VideoPlayer.VideoPlayerDelegate
+                public /* synthetic */ void onSeekStarted(AnalyticsListener.EventTime eventTime) {
+                    VideoPlayer.VideoPlayerDelegate.CC.$default$onSeekStarted(this, eventTime);
+                }
 
-            @Override // org.telegram.ui.Components.VideoPlayer.VideoPlayerDelegate
-            public boolean onSurfaceDestroyed(SurfaceTexture surfaceTexture) {
-                return false;
-            }
+                @Override // org.telegram.ui.Components.VideoPlayer.VideoPlayerDelegate
+                public boolean onSurfaceDestroyed(SurfaceTexture surfaceTexture) {
+                    return false;
+                }
 
-            @Override // org.telegram.ui.Components.VideoPlayer.VideoPlayerDelegate
-            public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
-            }
+                @Override // org.telegram.ui.Components.VideoPlayer.VideoPlayerDelegate
+                public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
+                }
 
-            @Override // org.telegram.ui.Components.VideoPlayer.VideoPlayerDelegate
-            public void onVideoSizeChanged(int i, int i2, int i3, float f) {
-            }
+                @Override // org.telegram.ui.Components.VideoPlayer.VideoPlayerDelegate
+                public void onVideoSizeChanged(int i, int i2, int i3, float f) {
+                }
 
-            @Override // org.telegram.ui.Components.VideoPlayer.VideoPlayerDelegate
-            public void onStateChanged(boolean z, int i) {
-                if (i == 4) {
-                    VideoScreenPreview.this.videoPlayer.seekTo(0L);
-                    VideoScreenPreview.this.videoPlayer.play();
-                } else if (i != 1) {
-                } else {
-                    VideoScreenPreview.this.videoPlayer.play();
+                @Override // org.telegram.ui.Components.VideoPlayer.VideoPlayerDelegate
+                public void onStateChanged(boolean z, int i) {
+                    if (i == 4) {
+                        VideoScreenPreview.this.videoPlayer.seekTo(0L);
+                        VideoScreenPreview.this.videoPlayer.play();
+                    } else if (i != 1) {
+                    } else {
+                        VideoScreenPreview.this.videoPlayer.play();
+                    }
+                }
+
+                @Override // org.telegram.ui.Components.VideoPlayer.VideoPlayerDelegate
+                public void onRenderedFirstFrame() {
+                    VideoScreenPreview videoScreenPreview = VideoScreenPreview.this;
+                    if (!videoScreenPreview.firstFrameRendered) {
+                        videoScreenPreview.textureView.setAlpha(0.0f);
+                        VideoScreenPreview.this.textureView.animate().alpha(1.0f).setListener(new AnimatorListenerAdapter() { // from class: org.telegram.ui.Components.Premium.VideoScreenPreview.3.1
+                            @Override // android.animation.AnimatorListenerAdapter, android.animation.Animator.AnimatorListener
+                            public void onAnimationEnd(Animator animator) {
+                                VideoScreenPreview videoScreenPreview2 = VideoScreenPreview.this;
+                                videoScreenPreview2.firstFrameRendered = true;
+                                videoScreenPreview2.invalidate();
+                            }
+                        }).setDuration(200L);
+                    }
+                }
+            });
+            File file = this.file;
+            if (file != null && file.exists()) {
+                uri = Uri.fromFile(this.file);
+            } else {
+                try {
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("?account=");
+                    sb.append(this.currentAccount);
+                    sb.append("&id=");
+                    sb.append(this.document.id);
+                    sb.append("&hash=");
+                    sb.append(this.document.access_hash);
+                    sb.append("&dc=");
+                    sb.append(this.document.dc_id);
+                    sb.append("&size=");
+                    sb.append(this.document.size);
+                    sb.append("&mime=");
+                    sb.append(URLEncoder.encode(this.document.mime_type, "UTF-8"));
+                    sb.append("&rid=");
+                    sb.append(FileLoader.getInstance(this.currentAccount).getFileReference(this.document));
+                    sb.append("&name=");
+                    sb.append(URLEncoder.encode(FileLoader.getDocumentFileName(this.document), "UTF-8"));
+                    sb.append("&reference=");
+                    byte[] bArr = this.document.file_reference;
+                    if (bArr == null) {
+                        bArr = new byte[0];
+                    }
+                    sb.append(Utilities.bytesToHex(bArr));
+                    String sb2 = sb.toString();
+                    uri = Uri.parse("tg://" + this.attachFileName + sb2);
+                } catch (Exception unused) {
+                    uri = null;
                 }
             }
-
-            @Override // org.telegram.ui.Components.VideoPlayer.VideoPlayerDelegate
-            public void onRenderedFirstFrame() {
-                VideoScreenPreview videoScreenPreview = VideoScreenPreview.this;
-                if (!videoScreenPreview.firstFrameRendered) {
-                    videoScreenPreview.textureView.setAlpha(0.0f);
-                    VideoScreenPreview.this.textureView.animate().alpha(1.0f).setListener(new AnimatorListenerAdapter() { // from class: org.telegram.ui.Components.Premium.VideoScreenPreview.3.1
-                        @Override // android.animation.AnimatorListenerAdapter, android.animation.Animator.AnimatorListener
-                        public void onAnimationEnd(Animator animator) {
-                            VideoScreenPreview videoScreenPreview2 = VideoScreenPreview.this;
-                            videoScreenPreview2.firstFrameRendered = true;
-                            videoScreenPreview2.invalidate();
-                        }
-                    }).setDuration(200L);
-                }
+            if (uri == null) {
+                return;
             }
-        });
-        this.videoPlayer.preparePlayer(Uri.fromFile(this.file), "other");
-        this.videoPlayer.setPlayWhenReady(true);
-        if (!this.firstFrameRendered) {
-            this.imageReceiver.stopAnimation();
-            this.textureView.setAlpha(0.0f);
+            this.videoPlayer.preparePlayer(uri, "other");
+            this.videoPlayer.setPlayWhenReady(true);
+            if (!this.firstFrameRendered) {
+                this.imageReceiver.stopAnimation();
+                this.textureView.setAlpha(0.0f);
+            }
+            this.videoPlayer.seekTo(this.lastFrameTime + 60);
+            this.videoPlayer.play();
         }
-        this.videoPlayer.seekTo(this.lastFrameTime + 60);
-        this.videoPlayer.play();
     }
 
     private void stopVideoPlayer() {

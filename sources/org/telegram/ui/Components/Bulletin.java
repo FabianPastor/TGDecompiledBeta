@@ -1663,7 +1663,7 @@ public class Bulletin {
             this.rect.set(AndroidUtilities.dp(1.0f), AndroidUtilities.dp(1.0f), getMeasuredWidth() - AndroidUtilities.dp(1.0f), getMeasuredHeight() - AndroidUtilities.dp(1.0f));
             if (this.prevSeconds != ceil) {
                 this.prevSeconds = ceil;
-                this.timeLeftString = String.format("%d", Integer.valueOf(Math.max(1, ceil)));
+                this.timeLeftString = String.format("%d", Integer.valueOf(Math.max(0, ceil)));
                 StaticLayout staticLayout = this.timeLayout;
                 if (staticLayout != null) {
                     this.timeLayoutOut = staticLayout;
@@ -1708,7 +1708,7 @@ public class Bulletin {
                 }
                 canvas.restore();
             }
-            canvas.drawArc(this.rect, -90.0f, (((float) this.timeLeft) / 5000.0f) * (-360.0f), false, this.progressPaint);
+            canvas.drawArc(this.rect, -90.0f, (((float) Math.max(0L, this.timeLeft)) / 5000.0f) * (-360.0f), false, this.progressPaint);
             if (this.lastUpdateTime != 0) {
                 long currentTimeMillis = System.currentTimeMillis();
                 this.timeLeft -= currentTimeMillis - this.lastUpdateTime;

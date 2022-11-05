@@ -713,7 +713,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
         /* JADX WARN: Multi-variable type inference failed */
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1817onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1818onCreateViewHolder(ViewGroup viewGroup, int i) {
             TextRadioCell textRadioCell;
             View view;
             if (i == 0) {

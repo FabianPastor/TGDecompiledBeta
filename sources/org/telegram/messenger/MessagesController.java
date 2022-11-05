@@ -388,6 +388,7 @@ import org.telegram.ui.DialogsActivity;
 import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.PremiumPreviewFragment;
 import org.telegram.ui.ProfileActivity;
+import org.telegram.ui.TopicsFragment;
 /* loaded from: classes.dex */
 public class MessagesController extends BaseController implements NotificationCenter.NotificationCenterDelegate {
     public static int DIALOG_FILTER_FLAG_BOTS = 16;
@@ -16000,7 +16001,13 @@ public class MessagesController extends BaseController implements NotificationCe
         if (i == 0) {
             baseFragment.presentFragment(new ProfileActivity(bundle));
         } else if (i == 2) {
-            baseFragment.presentFragment(new ChatActivity(bundle), true, true);
+            if (ChatObject.isForum(tLRPC$Chat)) {
+                baseFragment.presentFragment(new TopicsFragment(bundle), true, true);
+            } else {
+                baseFragment.presentFragment(new ChatActivity(bundle), true, true);
+            }
+        } else if (ChatObject.isForum(tLRPC$Chat)) {
+            baseFragment.presentFragment(new TopicsFragment(bundle), z);
         } else {
             baseFragment.presentFragment(new ChatActivity(bundle), z);
         }

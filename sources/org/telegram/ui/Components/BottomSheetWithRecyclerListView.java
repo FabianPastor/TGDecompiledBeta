@@ -136,7 +136,7 @@ public abstract class BottomSheetWithRecyclerListView extends BottomSheet {
 
                 @Override // androidx.recyclerview.widget.RecyclerView.Adapter
                 /* renamed from: onCreateViewHolder */
-                public RecyclerView.ViewHolder mo1817onCreateViewHolder(ViewGroup viewGroup, int i) {
+                public RecyclerView.ViewHolder mo1818onCreateViewHolder(ViewGroup viewGroup, int i) {
                     if (i == -1000) {
                         return new RecyclerListView.Holder(new View(parentActivity) { // from class: org.telegram.ui.Components.BottomSheetWithRecyclerListView.2.1
                             @Override // android.view.View
@@ -151,7 +151,7 @@ public abstract class BottomSheetWithRecyclerListView extends BottomSheet {
                             }
                         });
                     }
-                    return createAdapter.mo1817onCreateViewHolder(viewGroup, i);
+                    return createAdapter.mo1818onCreateViewHolder(viewGroup, i);
                 }
 
                 @Override // androidx.recyclerview.widget.RecyclerView.Adapter

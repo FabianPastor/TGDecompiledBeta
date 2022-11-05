@@ -70,6 +70,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.FilesMigrationService;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
@@ -98,6 +99,7 @@ import org.telegram.tgnet.TLRPC$TL_emojiStatus;
 import org.telegram.tgnet.TLRPC$TL_emojiStatusEmpty;
 import org.telegram.tgnet.TLRPC$TL_emojiStatusUntil;
 import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC$TL_help_premiumPromo;
 import org.telegram.tgnet.TLRPC$TL_inputStickerSetID;
 import org.telegram.tgnet.TLRPC$TL_messages_checkHistoryImportPeer;
 import org.telegram.tgnet.TLRPC$TL_messages_checkedHistoryImportPeer;
@@ -2127,34 +2129,33 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* JADX WARN: Multi-variable type inference failed */
-    /* JADX WARN: Removed duplicated region for block: B:216:0x0a6d  */
-    /* JADX WARN: Removed duplicated region for block: B:217:0x0a78  */
-    /* JADX WARN: Removed duplicated region for block: B:220:0x0a7d  */
-    /* JADX WARN: Removed duplicated region for block: B:232:0x0ad0  */
-    /* JADX WARN: Removed duplicated region for block: B:236:0x0b6f A[LOOP:2: B:235:0x0b6d->B:236:0x0b6f, LOOP_END] */
-    /* JADX WARN: Removed duplicated region for block: B:239:0x0b98  */
-    /* JADX WARN: Removed duplicated region for block: B:246:0x0bf7  */
-    /* JADX WARN: Removed duplicated region for block: B:250:0x0c3c  */
-    /* JADX WARN: Removed duplicated region for block: B:251:0x0c3f  */
-    /* JADX WARN: Removed duplicated region for block: B:254:0x0c4c  */
-    /* JADX WARN: Removed duplicated region for block: B:262:0x0ccf  */
-    /* JADX WARN: Removed duplicated region for block: B:263:0x0cda  */
-    /* JADX WARN: Removed duplicated region for block: B:271:0x0d04  */
-    /* JADX WARN: Type inference failed for: r0v108, types: [org.telegram.ui.ActionBar.ActionBar] */
+    /* JADX WARN: Removed duplicated region for block: B:216:0x0a7c  */
+    /* JADX WARN: Removed duplicated region for block: B:217:0x0a87  */
+    /* JADX WARN: Removed duplicated region for block: B:220:0x0a8c  */
+    /* JADX WARN: Removed duplicated region for block: B:232:0x0adf  */
+    /* JADX WARN: Removed duplicated region for block: B:236:0x0b7f A[LOOP:2: B:235:0x0b7d->B:236:0x0b7f, LOOP_END] */
+    /* JADX WARN: Removed duplicated region for block: B:239:0x0ba8  */
+    /* JADX WARN: Removed duplicated region for block: B:246:0x0CLASSNAME  */
+    /* JADX WARN: Removed duplicated region for block: B:250:0x0c4e  */
+    /* JADX WARN: Removed duplicated region for block: B:251:0x0CLASSNAME  */
+    /* JADX WARN: Removed duplicated region for block: B:254:0x0c5e  */
+    /* JADX WARN: Removed duplicated region for block: B:262:0x0cde  */
+    /* JADX WARN: Removed duplicated region for block: B:263:0x0cea  */
+    /* JADX WARN: Removed duplicated region for block: B:271:0x0d15  */
+    /* JADX WARN: Type inference failed for: r0v114, types: [org.telegram.ui.ActionBar.ActionBar] */
     /* JADX WARN: Type inference failed for: r0v12, types: [android.widget.FrameLayout] */
     /* JADX WARN: Type inference failed for: r0v20, types: [org.telegram.ui.ActionBar.ActionBar] */
     /* JADX WARN: Type inference failed for: r0v33, types: [org.telegram.ui.ActionBar.ActionBar] */
-    /* JADX WARN: Type inference failed for: r14v1, types: [android.widget.FrameLayout, org.telegram.ui.DialogsActivity$ContentView, android.view.View, org.telegram.ui.Components.SizeNotifierFrameLayout] */
-    /* JADX WARN: Type inference failed for: r1v185, types: [org.telegram.ui.DialogsActivity$DialogsRecyclerView, org.telegram.ui.Components.RecyclerListView] */
-    /* JADX WARN: Type inference failed for: r6v20, types: [android.graphics.drawable.BitmapDrawable] */
+    /* JADX WARN: Type inference failed for: r1v132, types: [org.telegram.ui.DialogsActivity$DialogsRecyclerView, org.telegram.ui.Components.RecyclerListView] */
+    /* JADX WARN: Type inference failed for: r5v37, types: [android.graphics.drawable.BitmapDrawable] */
     @Override // org.telegram.ui.ActionBar.BaseFragment
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public android.view.View createView(final android.content.Context r40) {
+    public android.view.View createView(final android.content.Context r38) {
         /*
-            Method dump skipped, instructions count: 3346
+            Method dump skipped, instructions count: 3363
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.DialogsActivity.createView(android.content.Context):android.view.View");
@@ -3420,13 +3421,39 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     int i = Build.VERSION.SDK_INT;
                     if (i >= 21) {
                         AnimatedVectorDrawable animatedVectorDrawable = (AnimatedVectorDrawable) DialogsActivity.this.speedItem.getIconView().getDrawable();
-                        if (z3) {
-                            animatedVectorDrawable.start();
-                        } else if (i >= 23) {
-                            animatedVectorDrawable.reset();
-                        } else {
-                            animatedVectorDrawable.setVisible(false, true);
+                        if (!z3) {
+                            if (i >= 23) {
+                                animatedVectorDrawable.reset();
+                                return;
+                            } else {
+                                animatedVectorDrawable.setVisible(false, true);
+                                return;
+                            }
                         }
+                        animatedVectorDrawable.start();
+                        if (SharedConfig.getDevicePerformanceClass() == 0) {
+                            return;
+                        }
+                        TLRPC$TL_help_premiumPromo premiumPromo = MediaDataController.getInstance(((BaseFragment) DialogsActivity.this).currentAccount).getPremiumPromo();
+                        String featureTypeToServerString = PremiumPreviewFragment.featureTypeToServerString(2);
+                        if (premiumPromo == null) {
+                            return;
+                        }
+                        int i2 = 0;
+                        while (true) {
+                            if (i2 >= premiumPromo.video_sections.size()) {
+                                i2 = -1;
+                                break;
+                            } else if (premiumPromo.video_sections.get(i2).equals(featureTypeToServerString)) {
+                                break;
+                            } else {
+                                i2++;
+                            }
+                        }
+                        if (i2 == -1) {
+                            return;
+                        }
+                        FileLoader.getInstance(((BaseFragment) DialogsActivity.this).currentAccount).loadFile(premiumPromo.videos.get(i2), null, 3, 0);
                     }
                 }
             });
@@ -4524,6 +4551,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             return;
         }
         this.searchViewPager.showDownloads();
+        updateSpeedItem(true);
     }
 
     /* JADX INFO: Access modifiers changed from: private */
@@ -6801,6 +6829,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         DialogsSearchAdapter dialogsSearchAdapter;
         DialogsSearchAdapter dialogsSearchAdapter2;
         MessagesController.DialogFilter dialogFilter;
+        boolean z = true;
         int i3 = 0;
         if (i == NotificationCenter.dialogsNeedReload) {
             if (this.viewPages == null || this.dialogsListFrozen) {
@@ -6818,8 +6847,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 } else {
                     dialogFilter = null;
                 }
-                boolean z = (dialogFilter == null || (dialogFilter.flags & MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_READ) == 0) ? false : true;
-                if (this.slowedReloadAfterDialogClick && z) {
+                boolean z2 = (dialogFilter == null || (dialogFilter.flags & MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_READ) == 0) ? false : true;
+                if (this.slowedReloadAfterDialogClick && z2) {
                     AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda51
                         @Override // java.lang.Runnable
                         public final void run() {
@@ -6884,30 +6913,30 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             if (this.viewPages == null || this.dialogsListFrozen) {
                 return;
             }
-            boolean z2 = this.floatingProgressVisible;
+            boolean z3 = this.floatingProgressVisible;
             setFloatingProgressVisible(false, true);
             for (ViewPage viewPage2 : this.viewPages) {
                 viewPage2.dialogsAdapter.setForceUpdatingContacts(false);
             }
-            if (z2) {
+            if (z3) {
                 setContactsAlpha(0.0f);
                 animateContactsAlpha(1.0f);
             }
             int i5 = 0;
-            boolean z3 = false;
+            boolean z4 = false;
             while (true) {
                 ViewPage[] viewPageArr3 = this.viewPages;
                 if (i5 >= viewPageArr3.length) {
                     break;
                 }
                 if (!viewPageArr3[i5].isDefaultDialogType() || getMessagesController().getAllFoldersDialogsCount() > 10) {
-                    z3 = true;
+                    z4 = true;
                 } else {
                     this.viewPages[i5].dialogsAdapter.notifyDataSetChanged();
                 }
                 i5++;
             }
-            if (!z3) {
+            if (!z4) {
                 return;
             }
             updateVisibleRows(0);
@@ -6966,6 +6995,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             updateProxyButton(true, false);
         } else if (i == NotificationCenter.onDownloadingFilesChanged) {
             updateProxyButton(true, false);
+            if (this.searchViewPager.getCurrentPosition() != 2) {
+                z = false;
+            }
+            updateSpeedItem(z);
         } else if (i == NotificationCenter.needDeleteDialog) {
             if (this.fragmentView == null || this.isPaused) {
                 return;
@@ -6981,11 +7014,13 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 }
             };
             if (this.undoView[0] != null) {
-                if (ChatObject.isForum(tLRPC$Chat)) {
+                if (!ChatObject.isForum(tLRPC$Chat)) {
+                    getUndoView().showWithAction(longValue2, 1, runnable);
+                    return;
+                } else {
+                    runnable.run();
                     return;
                 }
-                getUndoView().showWithAction(longValue2, 1, runnable);
-                return;
             }
             runnable.run();
         } else if (i == NotificationCenter.folderBecomeEmpty) {
