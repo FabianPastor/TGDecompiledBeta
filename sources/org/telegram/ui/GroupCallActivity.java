@@ -1371,7 +1371,10 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 if (findContainingViewHolder != null) {
                     View view = findContainingViewHolder.itemView;
                     if (view instanceof GroupCallUserCell) {
-                        ((GroupCallUserCell) view).getParticipant().lastVisibleDate = longValue2;
+                        GroupCallUserCell groupCallUserCell = (GroupCallUserCell) view;
+                        if (groupCallUserCell.getParticipant() != null) {
+                            groupCallUserCell.getParticipant().lastVisibleDate = longValue2;
+                        }
                     }
                 }
                 i7++;

@@ -13716,14 +13716,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    /* JADX WARN: Removed duplicated region for block: B:82:0x01ed  */
+    /* JADX WARN: Removed duplicated region for block: B:90:0x0218  */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
     public void updateBottomOverlay() {
         /*
-            Method dump skipped, instructions count: 1363
+            Method dump skipped, instructions count: 1406
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatActivity.updateBottomOverlay():void");
@@ -14226,28 +14226,32 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
     /* JADX INFO: Access modifiers changed from: private */
     /* JADX WARN: Code restructure failed: missing block: B:36:0x017e, code lost:
-        if (((org.telegram.tgnet.TLRPC$TL_emojiStatusUntil) r1).until > ((int) (java.lang.System.currentTimeMillis() / 1000))) goto L209;
+        if (((org.telegram.tgnet.TLRPC$TL_emojiStatusUntil) r1).until > ((int) (java.lang.System.currentTimeMillis() / 1000))) goto L214;
      */
-    /* JADX WARN: Removed duplicated region for block: B:104:0x0309  */
-    /* JADX WARN: Removed duplicated region for block: B:156:0x04cd  */
-    /* JADX WARN: Removed duplicated region for block: B:174:0x04ff  */
-    /* JADX WARN: Removed duplicated region for block: B:194:0x05e2  */
-    /* JADX WARN: Removed duplicated region for block: B:197:0x0603  */
-    /* JADX WARN: Removed duplicated region for block: B:209:0x0672  */
+    /* JADX WARN: Removed duplicated region for block: B:100:0x02c8  */
+    /* JADX WARN: Removed duplicated region for block: B:107:0x030e  */
+    /* JADX WARN: Removed duplicated region for block: B:159:0x04d2  */
+    /* JADX WARN: Removed duplicated region for block: B:177:0x0504  */
+    /* JADX WARN: Removed duplicated region for block: B:197:0x05e7  */
+    /* JADX WARN: Removed duplicated region for block: B:200:0x0608  */
+    /* JADX WARN: Removed duplicated region for block: B:212:0x0677  */
     /* JADX WARN: Removed duplicated region for block: B:53:0x01a7  */
-    /* JADX WARN: Removed duplicated region for block: B:77:0x01df  */
-    /* JADX WARN: Removed duplicated region for block: B:79:0x01e3  */
-    /* JADX WARN: Removed duplicated region for block: B:80:0x01e5  */
-    /* JADX WARN: Removed duplicated region for block: B:83:0x01ec  */
-    /* JADX WARN: Removed duplicated region for block: B:84:0x01fe  */
-    /* JADX WARN: Removed duplicated region for block: B:97:0x02c3  */
+    /* JADX WARN: Removed duplicated region for block: B:72:0x01cf  */
+    /* JADX WARN: Removed duplicated region for block: B:73:0x01d1  */
+    /* JADX WARN: Removed duplicated region for block: B:76:0x01da  */
+    /* JADX WARN: Removed duplicated region for block: B:77:0x01dd  */
+    /* JADX WARN: Removed duplicated region for block: B:80:0x01e4  */
+    /* JADX WARN: Removed duplicated region for block: B:82:0x01e8  */
+    /* JADX WARN: Removed duplicated region for block: B:83:0x01ea  */
+    /* JADX WARN: Removed duplicated region for block: B:86:0x01f1  */
+    /* JADX WARN: Removed duplicated region for block: B:87:0x0203  */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
     public void updateTopPanel(boolean r29) {
         /*
-            Method dump skipped, instructions count: 1765
+            Method dump skipped, instructions count: 1770
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatActivity.updateTopPanel(boolean):void");

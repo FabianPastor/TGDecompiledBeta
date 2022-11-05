@@ -1130,7 +1130,10 @@ public class MessagesController extends BaseController implements NotificationCe
         if (arrayList != null) {
             for (int i = 0; i < arrayList.size(); i++) {
                 TLRPC$TL_forumTopic tLRPC$TL_forumTopic = (TLRPC$TL_forumTopic) arrayList.get(i);
-                getMessagesController().markDialogAsRead(j, tLRPC$TL_forumTopic.top_message, 0, tLRPC$TL_forumTopic.topMessage.date, false, tLRPC$TL_forumTopic.id, 0, true, 0);
+                MessagesController messagesController = getMessagesController();
+                int i2 = tLRPC$TL_forumTopic.top_message;
+                TLRPC$Message tLRPC$Message = tLRPC$TL_forumTopic.topMessage;
+                messagesController.markDialogAsRead(j, i2, 0, tLRPC$Message != null ? tLRPC$Message.date : 0, false, tLRPC$TL_forumTopic.id, 0, true, 0);
                 getMessagesStorage().updateRepliesMaxReadId(-j, tLRPC$TL_forumTopic.id, tLRPC$TL_forumTopic.top_message, 0, true);
             }
         }
@@ -9428,7 +9431,7 @@ public class MessagesController extends BaseController implements NotificationCe
         MessagesController messagesController;
         TLRPC$TL_forumTopic findTopic;
         if (BuildVars.LOGS_ENABLED) {
-            FileLog.d("load messages in chat " + j + " count " + i + " max_id " + i2 + " cache " + z2 + " mindate = " + i4 + " guid " + i5 + " load_type " + i6 + " last_message_id " + i7 + " mode " + i8 + " index " + i10 + " firstUnread " + i11 + " unread_count " + i12 + " last_date " + i13 + " queryFromServer " + z3 + " isTopic " + z6);
+            FileLog.d("load messages in chat " + j + " topic_id " + i9 + " count " + i + " max_id " + i2 + " cache " + z2 + " mindate = " + i4 + " guid " + i5 + " load_type " + i6 + " last_message_id " + i7 + " mode " + i8 + " index " + i10 + " firstUnread " + i11 + " unread_count " + i12 + " last_date " + i13 + " queryFromServer " + z3 + " isTopic " + z6);
         }
         if ((i9 == 0 || z6) && i8 != 2 && (z2 || DialogObject.isEncryptedDialog(j))) {
             getMessagesStorage().getMessages(j, j2, z, i, i2, i3, i4, i5, i6, i8 == 1, i9, i10, z5, z6);
@@ -9766,25 +9769,25 @@ public class MessagesController extends BaseController implements NotificationCe
         getNotificationCenter().postNotificationName(NotificationCenter.replaceMessagesObjects, Long.valueOf(j), arrayList);
     }
 
-    /* JADX WARN: Removed duplicated region for block: B:223:0x0106  */
-    /* JADX WARN: Removed duplicated region for block: B:230:0x0119  */
-    /* JADX WARN: Removed duplicated region for block: B:234:0x0136  */
-    /* JADX WARN: Removed duplicated region for block: B:254:0x0194 A[ADDED_TO_REGION] */
-    /* JADX WARN: Removed duplicated region for block: B:271:0x022a A[RETURN] */
-    /* JADX WARN: Removed duplicated region for block: B:276:0x023f A[LOOP:0: B:274:0x0237->B:276:0x023f, LOOP_END] */
-    /* JADX WARN: Removed duplicated region for block: B:280:0x0258 A[LOOP:1: B:278:0x0250->B:280:0x0258, LOOP_END] */
-    /* JADX WARN: Removed duplicated region for block: B:283:0x0272  */
-    /* JADX WARN: Removed duplicated region for block: B:328:0x0343  */
-    /* JADX WARN: Removed duplicated region for block: B:331:0x0349  */
-    /* JADX WARN: Removed duplicated region for block: B:337:0x037a  */
-    /* JADX WARN: Removed duplicated region for block: B:379:0x049d  */
+    /* JADX WARN: Removed duplicated region for block: B:223:0x010e  */
+    /* JADX WARN: Removed duplicated region for block: B:230:0x0121  */
+    /* JADX WARN: Removed duplicated region for block: B:234:0x013e  */
+    /* JADX WARN: Removed duplicated region for block: B:254:0x019c A[ADDED_TO_REGION] */
+    /* JADX WARN: Removed duplicated region for block: B:271:0x0232 A[RETURN] */
+    /* JADX WARN: Removed duplicated region for block: B:276:0x0247 A[LOOP:0: B:274:0x023f->B:276:0x0247, LOOP_END] */
+    /* JADX WARN: Removed duplicated region for block: B:280:0x0260 A[LOOP:1: B:278:0x0258->B:280:0x0260, LOOP_END] */
+    /* JADX WARN: Removed duplicated region for block: B:283:0x027a  */
+    /* JADX WARN: Removed duplicated region for block: B:328:0x034b  */
+    /* JADX WARN: Removed duplicated region for block: B:331:0x0351  */
+    /* JADX WARN: Removed duplicated region for block: B:337:0x0382  */
+    /* JADX WARN: Removed duplicated region for block: B:379:0x04a5  */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
     public void processLoadedMessages(final org.telegram.tgnet.TLRPC$messages_Messages r33, final int r34, final long r35, final long r37, final int r39, final int r40, final int r41, final boolean r42, final int r43, final int r44, final int r45, final int r46, final int r47, final int r48, final boolean r49, final int r50, final int r51, final int r52, final boolean r53, final int r54, final boolean r55, final boolean r56) {
         /*
-            Method dump skipped, instructions count: 1279
+            Method dump skipped, instructions count: 1287
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.processLoadedMessages(org.telegram.tgnet.TLRPC$messages_Messages, int, long, long, int, int, int, boolean, int, int, int, int, int, int, boolean, int, int, int, boolean, int, boolean, boolean):void");

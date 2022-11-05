@@ -6528,12 +6528,15 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     this.recreateMenuAfterAnimation = true;
                 }
                 updateListAnimated(false);
-                this.sharedMediaLayout.setCommonGroupsCount(this.userInfo.common_chats_count);
-                updateSelectedMediaTabText();
-                SharedMediaLayout.SharedMediaPreloader sharedMediaPreloader = this.sharedMediaPreloader;
-                if (sharedMediaPreloader == null || sharedMediaPreloader.isMediaWasLoaded()) {
-                    resumeDelayedFragmentAnimation();
-                    needLayout(true);
+                SharedMediaLayout sharedMediaLayout = this.sharedMediaLayout;
+                if (sharedMediaLayout != null) {
+                    sharedMediaLayout.setCommonGroupsCount(this.userInfo.common_chats_count);
+                    updateSelectedMediaTabText();
+                    SharedMediaLayout.SharedMediaPreloader sharedMediaPreloader = this.sharedMediaPreloader;
+                    if (sharedMediaPreloader == null || sharedMediaPreloader.isMediaWasLoaded()) {
+                        resumeDelayedFragmentAnimation();
+                        needLayout(true);
+                    }
                 }
             }
             updateAutoDeleteItem();

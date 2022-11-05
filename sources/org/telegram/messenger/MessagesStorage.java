@@ -120,7 +120,7 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Adapters.DialogsSearchAdapter;
 /* loaded from: classes.dex */
 public class MessagesStorage extends BaseController {
-    private static final int LAST_DB_VERSION = 106;
+    private static final int LAST_DB_VERSION = 107;
     private int archiveUnreadCount;
     private int[][] bots;
     private File cacheFile;
@@ -511,26 +511,29 @@ public class MessagesStorage extends BaseController {
                 this.database.executeFast("CREATE TABLE messages_holes_topics(uid INTEGER, topic_id INTEGER, start INTEGER, end INTEGER, PRIMARY KEY(uid, topic_id, start));").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_end_messages_holes ON messages_holes_topics(uid, topic_id, end);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE messages_topics(mid INTEGER, uid INTEGER, topic_id INTEGER, read_state INTEGER, send_state INTEGER, date INTEGER, data BLOB, out INTEGER, ttl INTEGER, media INTEGER, replydata BLOB, imp INTEGER, mention INTEGER, forwards INTEGER, replies_data BLOB, thread_reply_id INTEGER, is_channel INTEGER, reply_to_message_id INTEGER, custom_params BLOB, PRIMARY KEY(mid, topic_id, uid))").stepThis().dispose();
-                this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_mid_read_out_idx_messages_topics ON messages_topics(uid, mid, read_state, out);").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_date_mid_idx_messages_topics ON messages_topics(uid, date, mid);").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS mid_out_idx_messages_topics ON messages_topics(mid, out);").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS task_idx_messages_topics ON messages_topics(uid, out, read_state, ttl, date, send_state);").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS send_state_idx_messages_topics ON messages_topics(mid, send_state, date);").stepThis().dispose();
-                this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_mention_idx_messages_topics ON messages_topics(uid, mention, read_state);").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS is_channel_idx_messages_topics ON messages_topics(mid, is_channel);").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS reply_to_idx_messages_topics ON messages_topics(mid, reply_to_message_id);").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS mid_uid_messages_topics ON messages_topics(mid, uid);").stepThis().dispose();
-                this.database.executeFast("CREATE INDEX IF NOT EXISTS mid_uid_messages_topics ON messages_topics(mid, topic_id, uid);").stepThis().dispose();
+                this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_mid_read_out_idx_messages_topics ON messages_topics(uid, topic_id, mid, read_state, out);").stepThis().dispose();
+                this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_mention_idx_messages_topics ON messages_topics(uid, topic_id, mention, read_state);").stepThis().dispose();
+                this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_topic_id_messages_topics ON messages_topics(uid, topic_id);").stepThis().dispose();
+                this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_topic_id_date_mid_messages_topics ON messages_topics(uid, topic_id, date, mid);").stepThis().dispose();
+                this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_topic_id_mid_messages_topics ON messages_topics(uid, topic_id, mid);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE media_topics(mid INTEGER, uid INTEGER, topic_id INTEGER, date INTEGER, type INTEGER, data BLOB, PRIMARY KEY(mid, uid, topic_id, type))").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_mid_type_date_idx_media_topics ON media_topics(uid, topic_id, mid, type, date);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE media_holes_topics(uid INTEGER, topic_id INTEGER, type INTEGER, start INTEGER, end INTEGER, PRIMARY KEY(uid, topic_id, type, start));").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_end_media_holes_topics ON media_holes_topics(uid, topic_id, type, end);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE topics(did INTEGER, topic_id INTEGER, data BLOB, top_message INTEGER, topic_message BLOB, unread_count INTEGER, max_read_id INTEGER, unread_mentions INTEGER, unread_reactions INTEGER, read_outbox INTEGER, pinned INTEGER, PRIMARY KEY(did, topic_id));").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS did_top_message_topics ON topics(did, top_message);").stepThis().dispose();
+                this.database.executeFast("CREATE INDEX IF NOT EXISTS did_topics ON topics(did);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE media_counts_topics(uid INTEGER, topic_id INTEGER, type INTEGER, count INTEGER, old INTEGER, PRIMARY KEY(uid, topic_id, type))").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE reaction_mentions_topics(message_id INTEGER, state INTEGER, dialog_id INTEGER, topic_id INTEGER, PRIMARY KEY(message_id, dialog_id, topic_id))").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS reaction_mentions_topics_did ON reaction_mentions_topics(dialog_id, topic_id);").stepThis().dispose();
-                this.database.executeFast("PRAGMA user_version = 106").stepThis().dispose();
+                this.database.executeFast("PRAGMA user_version = 107").stepThis().dispose();
             } else {
                 int intValue = this.database.executeInt("PRAGMA user_version", new Object[0]).intValue();
                 if (BuildVars.LOGS_ENABLED) {
@@ -571,7 +574,7 @@ public class MessagesStorage extends BaseController {
                         FileLog.e(e2);
                     }
                 }
-                if (intValue < 106) {
+                if (intValue < 107) {
                     try {
                         updateDbToLastVersion(intValue);
                     } catch (Exception e3) {
@@ -664,7 +667,7 @@ public class MessagesStorage extends BaseController {
                 MessagesStorage.this.lambda$updateDbToLastVersion$3();
             }
         });
-        FileLog.d("MessagesStorage start db migration from " + i4 + " to 106");
+        FileLog.d("MessagesStorage start db migration from " + i4 + " to 107");
         int i5 = 4;
         if (i4 < 4) {
             messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS user_photos(uid INTEGER, id INTEGER, data BLOB, PRIMARY KEY (uid, id))").stepThis().dispose();
@@ -1721,7 +1724,7 @@ public class MessagesStorage extends BaseController {
             messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS is_channel_idx_messages_topics ON messages_topics(mid, is_channel);").stepThis().dispose();
             messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS reply_to_idx_messages_topics ON messages_topics(mid, reply_to_message_id);").stepThis().dispose();
             messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS mid_uid_messages_topics ON messages_topics(mid, uid);").stepThis().dispose();
-            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS mid_uid_messages_topics ON messages_topics(mid, topic_id, uid);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS mid_uid_topic_id_messages_topics ON messages_topics(mid, topic_id, uid);").stepThis().dispose();
             messagesStorage.database.executeFast("CREATE TABLE media_topics(mid INTEGER, uid INTEGER, topic_id INTEGER, date INTEGER, type INTEGER, data BLOB, PRIMARY KEY(mid, uid, topic_id, type))").stepThis().dispose();
             messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS uid_mid_type_date_idx_media_topics ON media_topics(uid, topic_id, mid, type, date);").stepThis().dispose();
             messagesStorage.database.executeFast("CREATE TABLE media_holes_topics(uid INTEGER, topic_id INTEGER, type INTEGER, start INTEGER, end INTEGER, PRIMARY KEY(uid, topic_id, type, start));").stepThis().dispose();
@@ -1746,6 +1749,18 @@ public class MessagesStorage extends BaseController {
         if (i4 == 105) {
             messagesStorage.database.executeFast("ALTER TABLE topics ADD COLUMN pinned INTEGER default 0").stepThis().dispose();
             messagesStorage.database.executeFast("PRAGMA user_version = 106").stepThis().dispose();
+            i4 = 106;
+        }
+        if (i4 == 106) {
+            messagesStorage.database.executeFast("DROP INDEX IF EXISTS uid_mid_read_out_idx_messages_topics").stepThis().dispose();
+            messagesStorage.database.executeFast("DROP INDEX IF EXISTS uid_mention_idx_messages_topics").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS uid_mid_read_out_idx_messages_topics ON messages_topics(uid, topic_id, mid, read_state, out);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS uid_mention_idx_messages_topics ON messages_topics(uid, topic_id, mention, read_state);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS uid_topic_id_messages_topics ON messages_topics(uid, topic_id);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS uid_topic_id_date_mid_messages_topics ON messages_topics(uid, topic_id, date, mid);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS uid_topic_id_mid_messages_topics ON messages_topics(uid, topic_id, mid);").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS did_topics ON topics(did);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 107").stepThis().dispose();
         }
         FileLog.d("MessagesStorage db migration finished");
         AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda8
@@ -2587,134 +2602,16 @@ public class MessagesStorage extends BaseController {
         saveTopicsInternal(j, list, z, true);
     }
 
-    /* JADX WARN: Code restructure failed: missing block: B:17:0x00b0, code lost:
-        if (r0 != null) goto L23;
-     */
-    /* JADX WARN: Code restructure failed: missing block: B:23:0x00b9, code lost:
-        if (r0 == null) goto L20;
-     */
-    /* JADX WARN: Code restructure failed: missing block: B:24:0x00bb, code lost:
-        r0.dispose();
-     */
-    /* JADX WARN: Code restructure failed: missing block: B:25:0x00be, code lost:
-        r7.database.commitTransaction();
-     */
-    /* JADX WARN: Code restructure failed: missing block: B:26:0x00c3, code lost:
-        return;
-     */
+    /* JADX WARN: Removed duplicated region for block: B:28:0x00e6  */
+    /* JADX WARN: Removed duplicated region for block: B:32:0x00f1  */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    private void saveTopicsInternal(long r8, java.util.List<org.telegram.tgnet.TLRPC$TL_forumTopic> r10, boolean r11, boolean r12) {
+    private void saveTopicsInternal(long r16, java.util.List<org.telegram.tgnet.TLRPC$TL_forumTopic> r18, boolean r19, boolean r20) {
         /*
-            r7 = this;
-            r0 = 0
-            if (r11 == 0) goto L21
-            org.telegram.SQLite.SQLiteDatabase r11 = r7.database     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
-            java.lang.StringBuilder r1 = new java.lang.StringBuilder     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
-            r1.<init>()     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
-            java.lang.String r2 = "DELETE FROM topics WHERE did = "
-            r1.append(r2)     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
-            r1.append(r8)     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
-            java.lang.String r1 = r1.toString()     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
-            org.telegram.SQLite.SQLitePreparedStatement r11 = r11.executeFast(r1)     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
-            org.telegram.SQLite.SQLitePreparedStatement r11 = r11.stepThis()     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
-            r11.dispose()     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
-        L21:
-            org.telegram.SQLite.SQLiteDatabase r11 = r7.database     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
-            java.lang.String r1 = "REPLACE INTO topics VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-            org.telegram.SQLite.SQLitePreparedStatement r0 = r11.executeFast(r1)     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
-            if (r12 == 0) goto L30
-            org.telegram.SQLite.SQLiteDatabase r11 = r7.database     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
-            r11.beginTransaction()     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
-        L30:
-            r11 = 0
-            r12 = 0
-        L32:
-            int r1 = r10.size()     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
-            if (r12 >= r1) goto Lad
-            java.lang.Object r1 = r10.get(r12)     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
-            org.telegram.tgnet.TLRPC$TL_forumTopic r1 = (org.telegram.tgnet.TLRPC$TL_forumTopic) r1     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
-            r0.requery()     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
-            r2 = 1
-            r0.bindLong(r2, r8)     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
-            r3 = 2
-            int r4 = r1.id     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
-            r0.bindInteger(r3, r4)     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
-            org.telegram.tgnet.NativeByteBuffer r3 = new org.telegram.tgnet.NativeByteBuffer     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
-            int r4 = r1.getObjectSize()     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
-            r3.<init>(r4)     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
-            r1.serializeToStream(r3)     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
-            r4 = 3
-            r0.bindByteBuffer(r4, r3)     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
-            r4 = 4
-            int r5 = r1.top_message     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
-            r0.bindInteger(r4, r5)     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
-            org.telegram.tgnet.NativeByteBuffer r4 = new org.telegram.tgnet.NativeByteBuffer     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
-            org.telegram.tgnet.TLRPC$Message r5 = r1.topicStartMessage     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
-            int r5 = r5.getObjectSize()     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
-            r4.<init>(r5)     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
-            org.telegram.tgnet.TLRPC$Message r5 = r1.topicStartMessage     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
-            r5.serializeToStream(r4)     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
-            r5 = 5
-            r0.bindByteBuffer(r5, r4)     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
-            r5 = 6
-            int r6 = r1.unread_count     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
-            r0.bindInteger(r5, r6)     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
-            r5 = 7
-            int r6 = r1.read_inbox_max_id     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
-            r0.bindInteger(r5, r6)     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
-            r5 = 8
-            int r6 = r1.unread_mentions_count     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
-            r0.bindInteger(r5, r6)     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
-            r5 = 9
-            int r6 = r1.unread_reactions_count     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
-            r0.bindInteger(r5, r6)     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
-            r5 = 10
-            int r6 = r1.read_outbox_max_id     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
-            r0.bindInteger(r5, r6)     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
-            r5 = 11
-            boolean r1 = r1.pinned     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
-            if (r1 == 0) goto L9d
-            goto L9e
-        L9d:
-            r2 = 0
-        L9e:
-            r0.bindInteger(r5, r2)     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
-            r0.step()     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
-            r4.reuse()     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
-            r3.reuse()     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
-            int r12 = r12 + 1
-            goto L32
-        Lad:
-            r7.resetAllUnreadCounters(r11)     // Catch: java.lang.Throwable -> Lb3 java.lang.Exception -> Lb5
-            if (r0 == 0) goto Lbe
-            goto Lbb
-        Lb3:
-            r8 = move-exception
-            goto Lc4
-        Lb5:
-            r8 = move-exception
-            org.telegram.messenger.FileLog.e(r8)     // Catch: java.lang.Throwable -> Lb3
-            if (r0 == 0) goto Lbe
-        Lbb:
-            r0.dispose()
-        Lbe:
-            org.telegram.SQLite.SQLiteDatabase r8 = r7.database
-            r8.commitTransaction()
-            return
-        Lc4:
-            if (r0 == 0) goto Lc9
-            r0.dispose()
-        Lc9:
-            org.telegram.SQLite.SQLiteDatabase r9 = r7.database
-            r9.commitTransaction()
-            goto Ld0
-        Lcf:
-            throw r8
-        Ld0:
-            goto Lcf
+            Method dump skipped, instructions count: 252
+            To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.saveTopicsInternal(long, java.util.List, boolean, boolean):void");
     }
@@ -8809,17 +8706,17 @@ public class MessagesStorage extends BaseController {
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    /* JADX WARN: Removed duplicated region for block: B:14:0x01ed  */
-    /* JADX WARN: Removed duplicated region for block: B:15:0x01ef  */
-    /* JADX WARN: Removed duplicated region for block: B:18:0x021c  */
-    /* JADX WARN: Removed duplicated region for block: B:37:0x0251  */
+    /* JADX WARN: Removed duplicated region for block: B:14:0x020b  */
+    /* JADX WARN: Removed duplicated region for block: B:15:0x020d  */
+    /* JADX WARN: Removed duplicated region for block: B:18:0x023a  */
+    /* JADX WARN: Removed duplicated region for block: B:37:0x026f  */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
     public /* synthetic */ void lambda$overwriteChannel$161(long r20, int r22, final org.telegram.tgnet.TLRPC$TL_updates_channelDifferenceTooLong r23) {
         /*
-            Method dump skipped, instructions count: 599
+            Method dump skipped, instructions count: 629
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$overwriteChannel$161(long, int, org.telegram.tgnet.TLRPC$TL_updates_channelDifferenceTooLong):void");

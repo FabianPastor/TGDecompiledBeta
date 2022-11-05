@@ -1001,8 +1001,11 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
 
     /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$createView$1(View view, int i) {
+        TLRPC$TL_forumTopic tLRPC$TL_forumTopic = view instanceof TopicDialogCell ? ((TopicDialogCell) view).forumTopic : null;
+        if (tLRPC$TL_forumTopic == null) {
+            return;
+        }
         if (this.opnendForSelect) {
-            TLRPC$TL_forumTopic tLRPC$TL_forumTopic = this.forumTopics.get(i);
             OnTopicSelectedListener onTopicSelectedListener = this.onTopicSelectedListener;
             if (onTopicSelectedListener != null) {
                 onTopicSelectedListener.onTopicSelected(tLRPC$TL_forumTopic);
@@ -1015,7 +1018,7 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
         } else if (this.selectedTopics.size() > 0) {
             toggleSelection(view);
         } else {
-            ForumUtilities.openTopic(this, this.chatId, this.forumTopics.get(i), 0);
+            ForumUtilities.openTopic(this, this.chatId, tLRPC$TL_forumTopic, 0);
         }
     }
 
@@ -2584,6 +2587,10 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
     public void onResume() {
         super.onResume();
         getMessagesController().getTopicsController().onTopicFragmentResume(this.chatId);
+        Adapter adapter = this.adapter;
+        if (adapter != null) {
+            adapter.notifyDataSetChanged();
+        }
         Bulletin.addDelegate(this, new Bulletin.Delegate() { // from class: org.telegram.ui.TopicsFragment.19
             @Override // org.telegram.ui.Components.Bulletin.Delegate
             public /* synthetic */ int getTopOffset(int i) {

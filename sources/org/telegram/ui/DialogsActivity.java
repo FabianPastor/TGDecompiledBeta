@@ -6995,7 +6995,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             updateProxyButton(true, false);
         } else if (i == NotificationCenter.onDownloadingFilesChanged) {
             updateProxyButton(true, false);
-            if (this.searchViewPager.getCurrentPosition() != 2) {
+            SearchViewPager searchViewPager3 = this.searchViewPager;
+            if (searchViewPager3 == null) {
+                return;
+            }
+            if (searchViewPager3.getCurrentPosition() != 2) {
                 z = false;
             }
             updateSpeedItem(z);
@@ -8058,12 +8062,16 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
     /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$getThemeDescriptions$63() {
-        ActionBarMenu actionMode = this.searchViewPager.getActionMode();
-        if (actionMode != null) {
-            actionMode.setBackgroundColor(getThemedColor("actionBarActionModeDefault"));
-        }
-        ActionBarMenuItem speedItem = this.searchViewPager.getSpeedItem();
-        if (speedItem != null) {
+        SearchViewPager searchViewPager = this.searchViewPager;
+        if (searchViewPager != null) {
+            ActionBarMenu actionMode = searchViewPager.getActionMode();
+            if (actionMode != null) {
+                actionMode.setBackgroundColor(getThemedColor("actionBarActionModeDefault"));
+            }
+            ActionBarMenuItem speedItem = this.searchViewPager.getSpeedItem();
+            if (speedItem == null) {
+                return;
+            }
             speedItem.getIconView().setColorFilter(new PorterDuffColorFilter(getThemedColor("actionBarActionModeDefaultIcon"), PorterDuff.Mode.SRC_IN));
         }
     }

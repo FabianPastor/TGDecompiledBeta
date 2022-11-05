@@ -847,7 +847,7 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
         AnimatedEmojiDrawable animatedEmojiDrawable;
         float clamp = this.pullingLeftOffset != 0.0f ? Utilities.clamp(reactionHolderView.getLeft() / (getMeasuredWidth() - AndroidUtilities.dp(34.0f)), 1.0f, 0.0f) * getPullingLeftProgress() * AndroidUtilities.dp(46.0f) : 0.0f;
         if (reactionHolderView.currentReaction.equals(this.pressedReaction)) {
-            BackupImageView backupImageView = showCustomEmojiReaction() ? reactionHolderView.loopImageView : reactionHolderView.enterImageView;
+            BackupImageView backupImageView = reactionHolderView.loopImageView.getVisibility() == 0 ? reactionHolderView.loopImageView : reactionHolderView.enterImageView;
             reactionHolderView.setPivotX(reactionHolderView.getMeasuredWidth() >> 1);
             reactionHolderView.setPivotY(backupImageView.getY() + backupImageView.getMeasuredHeight());
             reactionHolderView.setScaleX(this.pressedViewScale);

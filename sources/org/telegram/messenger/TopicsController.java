@@ -276,12 +276,6 @@ public class TopicsController extends BaseController {
         }
     }
 
-    private void updateDialogUnreadCount(long j) {
-        int[] forumUnreadCount = getForumUnreadCount(j);
-        int i = forumUnreadCount[0];
-        int i2 = forumUnreadCount[1];
-    }
-
     public ArrayList<TLRPC$TL_forumTopic> getTopics(long j) {
         return this.topicsByChatId.get(j);
     }
@@ -831,10 +825,10 @@ public class TopicsController extends BaseController {
         this.endIsReached.delete(j);
         clearLoadingOffset(j);
         TLRPC$Chat chat = getMessagesController().getChat(Long.valueOf(j));
-        if (chat == null || !chat.forum) {
-            return;
+        if (chat != null && chat.forum) {
+            preloadTopics(j);
         }
-        preloadTopics(j);
+        sortTopics(j);
     }
 
     public void databaseCleared() {
