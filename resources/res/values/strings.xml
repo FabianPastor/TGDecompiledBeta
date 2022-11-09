@@ -3840,6 +3840,7 @@
     <string name="PremiumMore">More</string>
     <string name="PremiumPreviewAdvancedChatManagement">Advanced Chat Management</string>
     <string name="PremiumPreviewAdvancedChatManagementDescription">Tools to set the default folder, auto-archive and hide new chats from non-contacts.</string>
+    <string name="PremiumPreviewAdvancedChatManagementDescription2">Subscribers of Telegram Premium can set the default folder, auto-archive and hide new chats from non-contacts.</string>
     <string name="PremiumPreviewAnimatedProfiles">Animated Profile Pictures</string>
     <string name="PremiumPreviewAnimatedProfilesDescription">Video avatars animated in chat lists and chats to allow for additional self-expression.</string>
     <string name="PremiumPreviewAppIcon">Premium App Icon</string>
@@ -3871,6 +3872,7 @@
     <string name="PremiumPreviewUploadsDescription">Increased upload size from 2Gb to 4Gb per document, unlimited storage overall.</string>
     <string name="PremiumPreviewVoiceToText">Voice-to-Text Conversion</string>
     <string name="PremiumPreviewVoiceToTextDescription">Ability to read the transcript of any incoming voice message.</string>
+    <string name="PremiumPreviewVoiceToTextDescription2">Subscribe to Telegram Premium to be able to convert voice and video messages to text.</string>
     <string name="PremiumSpeedPromo">Increase Speed</string>
     <string name="PremiumStickerTooltip">This pack contains premium stickers like this one.</string>
     <string name="PremiumStickers">Premuim Stickers</string>

@@ -52,6 +52,7 @@ import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.CombinedDrawable;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.Premium.LimitReachedBottomSheet;
+import org.telegram.ui.Components.Premium.PremiumFeatureBottomSheet;
 import org.telegram.ui.Components.ProgressButton;
 import org.telegram.ui.Components.RLottieImageView;
 import org.telegram.ui.Components.RecyclerListView;
@@ -760,7 +761,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1818onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1822onCreateViewHolder(ViewGroup viewGroup, int i) {
             SuggestedFilterCell suggestedFilterCell;
             if (i == 0) {
                 View headerCell = new HeaderCell(this.mContext);
@@ -1124,6 +1125,10 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
     }
 
     protected void onDefaultTabMoved() {
+        try {
+            this.fragmentView.performHapticFeedback(3, 1);
+        } catch (Exception unused) {
+        }
         BulletinFactory.of(this).createSimpleBulletin(R.raw.filter_reorder, AndroidUtilities.replaceTags(LocaleController.formatString("LimitReachedReorderFolder", R.string.LimitReachedReorderFolder, LocaleController.getString(R.string.FilterAllChats))), LocaleController.getString("PremiumMore", R.string.PremiumMore), 5000, new Runnable() { // from class: org.telegram.ui.FiltersSetupActivity$$ExternalSyntheticLambda0
             @Override // java.lang.Runnable
             public final void run() {
@@ -1134,7 +1139,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
 
     /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$onDefaultTabMoved$2() {
-        presentFragment(new PremiumPreviewFragment("folders"));
+        showDialog(new PremiumFeatureBottomSheet(this, 9, true));
     }
 
     @Override // org.telegram.ui.ActionBar.BaseFragment

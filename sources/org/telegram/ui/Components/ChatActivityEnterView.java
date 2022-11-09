@@ -2761,6 +2761,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
     /* renamed from: org.telegram.ui.Components.ChatActivityEnterView$15 */
     /* loaded from: classes3.dex */
     public class AnonymousClass15 implements TextWatcher {
+        boolean heightShouldBeChanged;
         private boolean ignorePrevTextChange;
         private boolean nextChangeIsSend;
         private CharSequence prevText;
@@ -2794,12 +2795,15 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                 ChatActivityEnterView.this.setEmojiButtonImage(false, true);
             }
             if (ChatActivityEnterView.this.lineCount != ChatActivityEnterView.this.messageEditText.getLineCount()) {
+                this.heightShouldBeChanged = (ChatActivityEnterView.this.messageEditText.getLineCount() >= 4) != (ChatActivityEnterView.this.lineCount >= 4);
                 if (!ChatActivityEnterView.this.isInitLineCount && ChatActivityEnterView.this.messageEditText.getMeasuredWidth() > 0) {
                     ChatActivityEnterView chatActivityEnterView = ChatActivityEnterView.this;
                     chatActivityEnterView.onLineCountChanged(chatActivityEnterView.lineCount, ChatActivityEnterView.this.messageEditText.getLineCount());
                 }
                 ChatActivityEnterView chatActivityEnterView2 = ChatActivityEnterView.this;
                 chatActivityEnterView2.lineCount = chatActivityEnterView2.messageEditText.getLineCount();
+            } else {
+                this.heightShouldBeChanged = false;
             }
             if (ChatActivityEnterView.this.innerTextChange == 1) {
                 return;
@@ -2834,8 +2838,8 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             ChatActivityEnterView.this.delegate.needSendTyping();
         }
 
-        /* JADX WARN: Removed duplicated region for block: B:121:0x015f  */
-        /* JADX WARN: Removed duplicated region for block: B:134:0x01af  */
+        /* JADX WARN: Removed duplicated region for block: B:125:0x015f  */
+        /* JADX WARN: Removed duplicated region for block: B:138:0x01af  */
         @Override // android.text.TextWatcher
         /*
             Code decompiled incorrectly, please refer to instructions dump.
@@ -2843,7 +2847,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         */
         public void afterTextChanged(android.text.Editable r11) {
             /*
-                Method dump skipped, instructions count: 536
+                Method dump skipped, instructions count: 551
                 To view this dump add '--comments-level debug' option
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatActivityEnterView.AnonymousClass15.afterTextChanged(android.text.Editable):void");
@@ -2855,6 +2859,10 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             ChatActivityEnterView.this.doneButtonEnabledProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
             ChatActivityEnterView.this.doneCheckDrawable.setColorFilter(new PorterDuffColorFilter(ColorUtils.setAlphaComponent(themedColor, (int) (alpha * ((ChatActivityEnterView.this.doneButtonEnabledProgress * 0.42f) + 0.58f))), PorterDuff.Mode.MULTIPLY));
             ChatActivityEnterView.this.doneButtonImage.invalidate();
+        }
+
+        public /* synthetic */ void lambda$afterTextChanged$1() {
+            ChatActivityEnterView.this.showCaptionLimitBulletin();
         }
     }
 

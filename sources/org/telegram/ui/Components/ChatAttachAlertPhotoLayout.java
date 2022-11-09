@@ -3831,7 +3831,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1818onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1822onCreateViewHolder(ViewGroup viewGroup, int i) {
             if (i == 0) {
                 if (!this.viewsCache.isEmpty()) {
                     RecyclerListView.Holder holder = this.viewsCache.get(0);

@@ -128,7 +128,7 @@ public class ReactedUsersListView extends FrameLayout {
         RecyclerView.Adapter adapter = new RecyclerView.Adapter() { // from class: org.telegram.ui.Components.ReactedUsersListView.2
             @Override // androidx.recyclerview.widget.RecyclerView.Adapter
             /* renamed from: onCreateViewHolder */
-            public RecyclerView.ViewHolder mo1818onCreateViewHolder(ViewGroup viewGroup, int i2) {
+            public RecyclerView.ViewHolder mo1822onCreateViewHolder(ViewGroup viewGroup, int i2) {
                 FrameLayout reactedUserHolderView;
                 if (i2 == 0) {
                     reactedUserHolderView = new ReactedUserHolderView(context);

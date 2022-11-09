@@ -481,16 +481,16 @@ public class AnimatedEmojiDrawable extends Drawable {
     /* JADX WARN: Removed duplicated region for block: B:69:0x018c  */
     /* JADX WARN: Removed duplicated region for block: B:72:0x0192  */
     /* JADX WARN: Removed duplicated region for block: B:73:0x01b2  */
-    /* JADX WARN: Removed duplicated region for block: B:89:0x020f  */
-    /* JADX WARN: Removed duplicated region for block: B:92:0x021f  */
-    /* JADX WARN: Removed duplicated region for block: B:93:0x0230  */
+    /* JADX WARN: Removed duplicated region for block: B:93:0x021a  */
+    /* JADX WARN: Removed duplicated region for block: B:96:0x022a  */
+    /* JADX WARN: Removed duplicated region for block: B:97:0x023b  */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
     private void initDocument() {
         /*
-            Method dump skipped, instructions count: 610
+            Method dump skipped, instructions count: 621
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AnimatedEmojiDrawable.initDocument():void");
@@ -842,6 +842,8 @@ public class AnimatedEmojiDrawable extends Drawable {
             }
             if (animatedEmojiDrawable.cacheType == 7 || animatedEmojiDrawable.cacheType == 9 || animatedEmojiDrawable.cacheType == 10) {
                 imageReceiver.setAutoRepeatCount(2);
+            } else if (this.cacheType == 11) {
+                imageReceiver.setAutoRepeatCount(1);
             }
             imageReceiver.startAnimation();
         }

@@ -4441,7 +4441,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1818onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1822onCreateViewHolder(ViewGroup viewGroup, int i) {
             View attachButton;
             if (i == 0) {
                 attachButton = new AttachButton(this.mContext);

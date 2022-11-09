@@ -156,8 +156,8 @@ public class VoIPPiPView implements VoIPService.StateListener, NotificationCente
         instance.setRelativePosition(sharedPreferences.getFloat("relativeX", 1.0f), sharedPreferences.getFloat("relativeY", 0.0f));
         NotificationCenter.getGlobalInstance().addObserver(instance, NotificationCenter.didEndCall);
         windowManager.addView(instance.windowView, createWindowLayoutParams);
-        instance.currentUserTextureView.renderer.init(VideoCapturerDevice.eglBase.mo2457getEglBaseContext(), null);
-        instance.callingUserTextureView.renderer.init(VideoCapturerDevice.eglBase.mo2457getEglBaseContext(), null);
+        instance.currentUserTextureView.renderer.init(VideoCapturerDevice.eglBase.mo2467getEglBaseContext(), null);
+        instance.callingUserTextureView.renderer.init(VideoCapturerDevice.eglBase.mo2467getEglBaseContext(), null);
         if (i4 != 0) {
             if (i4 != 1) {
                 return;
@@ -780,8 +780,8 @@ public class VoIPPiPView implements VoIPService.StateListener, NotificationCente
             if (eglBase == null) {
                 return;
             }
-            voIPPiPView2.currentUserTextureView.renderer.init(eglBase.mo2457getEglBaseContext(), null);
-            voIPPiPView2.callingUserTextureView.renderer.init(VideoCapturerDevice.eglBase.mo2457getEglBaseContext(), null);
+            voIPPiPView2.currentUserTextureView.renderer.init(eglBase.mo2467getEglBaseContext(), null);
+            voIPPiPView2.callingUserTextureView.renderer.init(VideoCapturerDevice.eglBase.mo2467getEglBaseContext(), null);
             if (VoIPService.getSharedInstance() == null) {
                 return;
             }

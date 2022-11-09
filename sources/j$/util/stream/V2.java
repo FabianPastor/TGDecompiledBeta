@@ -1,8 +1,9 @@
 package j$.util.stream;
 
 import java.util.concurrent.CountedCompleter;
+/* JADX INFO: Access modifiers changed from: package-private */
 /* loaded from: classes2.dex */
-final class V2 extends AbstractCLASSNAMEf {
+public final class V2 extends AbstractCLASSNAMEf {
     private final U2 h;
 
     /* JADX INFO: Access modifiers changed from: package-private */

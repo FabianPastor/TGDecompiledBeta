@@ -190,26 +190,26 @@ public class CountrySelectActivity extends BaseFragment {
 
     /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$createView$0(View view, int i) {
-        Country mo1806getItem;
+        Country mo1810getItem;
         CountrySelectActivityDelegate countrySelectActivityDelegate;
         if (this.searching && this.searchWas) {
-            mo1806getItem = this.searchListViewAdapter.getItem(i);
+            mo1810getItem = this.searchListViewAdapter.getItem(i);
         } else {
             int sectionForPosition = this.listViewAdapter.getSectionForPosition(i);
             int positionInSectionForPosition = this.listViewAdapter.getPositionInSectionForPosition(i);
             if (positionInSectionForPosition < 0 || sectionForPosition < 0) {
                 return;
             }
-            mo1806getItem = this.listViewAdapter.mo1806getItem(sectionForPosition, positionInSectionForPosition);
+            mo1810getItem = this.listViewAdapter.mo1810getItem(sectionForPosition, positionInSectionForPosition);
         }
         if (i < 0) {
             return;
         }
         finishFragment();
-        if (mo1806getItem == null || (countrySelectActivityDelegate = this.delegate) == null) {
+        if (mo1810getItem == null || (countrySelectActivityDelegate = this.delegate) == null) {
             return;
         }
-        countrySelectActivityDelegate.didSelectCountry(mo1806getItem);
+        countrySelectActivityDelegate.didSelectCountry(mo1810getItem);
     }
 
     @Override // org.telegram.ui.ActionBar.BaseFragment
@@ -319,7 +319,7 @@ public class CountrySelectActivity extends BaseFragment {
 
         @Override // org.telegram.ui.Components.RecyclerListView.SectionsAdapter
         /* renamed from: getItem  reason: collision with other method in class */
-        public Country mo1806getItem(int i, int i2) {
+        public Country mo1810getItem(int i, int i2) {
             if (i >= 0 && i < this.sortedCountries.size()) {
                 ArrayList<Country> arrayList = this.countries.get(this.sortedCountries.get(i));
                 if (i2 >= 0 && i2 < arrayList.size()) {
@@ -347,7 +347,7 @@ public class CountrySelectActivity extends BaseFragment {
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1818onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1822onCreateViewHolder(ViewGroup viewGroup, int i) {
             View createSettingsCell;
             if (i == 0) {
                 createSettingsCell = CountrySelectActivity.createSettingsCell(this.mContext);
@@ -524,7 +524,7 @@ public class CountrySelectActivity extends BaseFragment {
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1818onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1822onCreateViewHolder(ViewGroup viewGroup, int i) {
             return new RecyclerListView.Holder(CountrySelectActivity.createSettingsCell(this.mContext));
         }
 

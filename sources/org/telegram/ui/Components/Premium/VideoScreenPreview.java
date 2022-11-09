@@ -58,6 +58,7 @@ public class VideoScreenPreview extends FrameLayout implements PagerHeaderView, 
     ImageReceiver imageReceiver;
     long lastFrameTime;
     private MatrixParticlesDrawable matrixParticlesDrawable;
+    Runnable nextCheck;
     Paint phoneFrame1;
     Paint phoneFrame2;
     boolean play;
@@ -73,26 +74,41 @@ public class VideoScreenPreview extends FrameLayout implements PagerHeaderView, 
     VideoPlayer videoPlayer;
     boolean visible;
 
-    private void checkVideo() {
+    /* JADX INFO: Access modifiers changed from: private */
+    public void checkVideo() {
         File file = this.file;
-        if ((file == null || !file.exists()) && !SharedConfig.streamMedia) {
-            return;
+        if ((file != null && file.exists()) || SharedConfig.streamMedia) {
+            File file2 = this.file;
+            if (file2 != null && file2.exists()) {
+                if ((NotificationCenter.getGlobalInstance().getCurrentHeavyOperationFlags() & 512) != 0) {
+                    Runnable runnable = this.nextCheck;
+                    if (runnable != null) {
+                        AndroidUtilities.cancelRunOnUIThread(runnable);
+                    }
+                    Runnable runnable2 = new Runnable() { // from class: org.telegram.ui.Components.Premium.VideoScreenPreview$$ExternalSyntheticLambda0
+                        @Override // java.lang.Runnable
+                        public final void run() {
+                            VideoScreenPreview.this.checkVideo();
+                        }
+                    };
+                    this.nextCheck = runnable2;
+                    AndroidUtilities.runOnUIThread(runnable2, 300L);
+                    return;
+                }
+                MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
+                mediaMetadataRetriever.setDataSource(ApplicationLoader.applicationContext, Uri.fromFile(this.file));
+                int intValue = Integer.valueOf(mediaMetadataRetriever.extractMetadata(18)).intValue();
+                int intValue2 = Integer.valueOf(mediaMetadataRetriever.extractMetadata(19)).intValue();
+                mediaMetadataRetriever.release();
+                this.aspectRatio = intValue / intValue2;
+            } else {
+                this.aspectRatio = 0.671f;
+            }
+            if (this.allowPlay) {
+                runVideoPlayer();
+            }
         }
-        File file2 = this.file;
-        if (file2 != null && file2.exists()) {
-            MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
-            mediaMetadataRetriever.setDataSource(ApplicationLoader.applicationContext, Uri.fromFile(this.file));
-            int intValue = Integer.valueOf(mediaMetadataRetriever.extractMetadata(18)).intValue();
-            int intValue2 = Integer.valueOf(mediaMetadataRetriever.extractMetadata(19)).intValue();
-            mediaMetadataRetriever.release();
-            this.aspectRatio = intValue / intValue2;
-        } else {
-            this.aspectRatio = 0.671f;
-        }
-        if (!this.allowPlay) {
-            return;
-        }
-        runVideoPlayer();
+        this.nextCheck = null;
     }
 
     public VideoScreenPreview(Context context, SvgHelper.SvgDrawable svgDrawable, int i, int i2) {
@@ -245,7 +261,7 @@ public class VideoScreenPreview extends FrameLayout implements PagerHeaderView, 
             this.imageReceiver.setImage(null, null, combinedDrawable, null, null, 1);
             FileLoader.getInstance(this.currentAccount).loadFile(tLRPC$Document, null, 3, 0);
             this.document = tLRPC$Document;
-            Utilities.globalQueue.postRunnable(new Runnable() { // from class: org.telegram.ui.Components.Premium.VideoScreenPreview$$ExternalSyntheticLambda1
+            Utilities.globalQueue.postRunnable(new Runnable() { // from class: org.telegram.ui.Components.Premium.VideoScreenPreview$$ExternalSyntheticLambda2
                 @Override // java.lang.Runnable
                 public final void run() {
                     VideoScreenPreview.this.lambda$setVideo$1(tLRPC$Document);
@@ -257,7 +273,7 @@ public class VideoScreenPreview extends FrameLayout implements PagerHeaderView, 
     /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$setVideo$1(TLRPC$Document tLRPC$Document) {
         final File pathToAttach = FileLoader.getInstance(this.currentAccount).getPathToAttach(tLRPC$Document);
-        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.Premium.VideoScreenPreview$$ExternalSyntheticLambda0
+        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.Premium.VideoScreenPreview$$ExternalSyntheticLambda1
             @Override // java.lang.Runnable
             public final void run() {
                 VideoScreenPreview.this.lambda$setVideo$0(pathToAttach);

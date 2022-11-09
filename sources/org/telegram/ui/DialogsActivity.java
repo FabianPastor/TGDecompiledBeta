@@ -2219,6 +2219,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         @Override // org.telegram.ui.Components.FilterTabsView
         protected void onDefaultTabMoved() {
             if (!DialogsActivity.this.getMessagesController().premiumLocked) {
+                try {
+                    performHapticFeedback(3, 1);
+                } catch (Exception unused) {
+                }
                 DialogsActivity dialogsActivity = DialogsActivity.this;
                 dialogsActivity.topBulletin = BulletinFactory.of(dialogsActivity).createSimpleBulletin(R.raw.filter_reorder, AndroidUtilities.replaceTags(LocaleController.formatString("LimitReachedReorderFolder", R.string.LimitReachedReorderFolder, LocaleController.getString(R.string.FilterAllChats))), LocaleController.getString("PremiumMore", R.string.PremiumMore), 5000, new Runnable() { // from class: org.telegram.ui.DialogsActivity$6$$ExternalSyntheticLambda0
                     @Override // java.lang.Runnable
@@ -2231,7 +2235,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
         /* JADX INFO: Access modifiers changed from: private */
         public /* synthetic */ void lambda$onDefaultTabMoved$0() {
-            DialogsActivity.this.showDialog(new PremiumFeatureBottomSheet(DialogsActivity.this, 9, false));
+            DialogsActivity.this.showDialog(new PremiumFeatureBottomSheet(DialogsActivity.this, 9, true));
             DialogsActivity.this.filterTabsView.setIsEditing(false);
             DialogsActivity.this.showDoneItem(false);
         }
@@ -4213,10 +4217,13 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         INavigationLayout iNavigationLayout;
         FilterTabsView filterTabsView;
         int i;
-        int i2 = this.initialDialogsType;
-        int i3 = 0;
+        int i2 = 0;
         boolean z4 = false;
-        boolean z5 = (i2 == 0 || i2 == 3) ? z3 : false;
+        if (!z) {
+            updateSpeedItem(false);
+        }
+        int i3 = this.initialDialogsType;
+        boolean z5 = (i3 == 0 || i3 == 3) ? z3 : false;
         AnimatorSet animatorSet = this.searchAnimator;
         if (animatorSet != null) {
             animatorSet.cancel();
@@ -4526,9 +4533,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             }
             SearchViewPager searchViewPager5 = this.searchViewPager;
             if (!z) {
-                i3 = 8;
+                i2 = 8;
             }
-            searchViewPager5.setVisibility(i3);
+            searchViewPager5.setVisibility(i2);
             setSearchAnimationProgress(z ? 1.0f : 0.0f);
             this.fragmentView.invalidate();
             ActionBarMenuItem actionBarMenuItem3 = this.downloadsItem;
@@ -5715,7 +5722,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         int i = 0;
         ValueAnimator ofFloat = ValueAnimator.ofFloat(this.progressToActionMode, 0.0f);
         this.actionBarColorAnimator = ofFloat;
-        ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() { // from class: org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda5
+        ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() { // from class: org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda4
             @Override // android.animation.ValueAnimator.AnimatorUpdateListener
             public final void onAnimationUpdate(ValueAnimator valueAnimator2) {
                 DialogsActivity.this.lambda$hideActionMode$35(valueAnimator2);
@@ -6329,7 +6336,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             }
             ValueAnimator ofFloat = ValueAnimator.ofFloat(this.progressToActionMode, 1.0f);
             this.actionBarColorAnimator = ofFloat;
-            ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() { // from class: org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda4
+            ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() { // from class: org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda3
                 @Override // android.animation.ValueAnimator.AnimatorUpdateListener
                 public final void onAnimationUpdate(ValueAnimator valueAnimator2) {
                     DialogsActivity.this.lambda$showOrUpdateActionMode$45(valueAnimator2);
@@ -7236,7 +7243,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             return;
         }
         globalMainSettings.edit().putBoolean("filterhint", true).commit();
-        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda39
+        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda38
             @Override // java.lang.Runnable
             public final void run() {
                 DialogsActivity.this.lambda$showFiltersHint$53();
@@ -7251,7 +7258,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
     /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$showFiltersHint$53() {
-        getUndoView().showWithAction(0L, 15, null, new Runnable() { // from class: org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda38
+        getUndoView().showWithAction(0L, 15, null, new Runnable() { // from class: org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda37
             @Override // java.lang.Runnable
             public final void run() {
                 DialogsActivity.this.lambda$showFiltersHint$52();
@@ -7556,7 +7563,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         ValueAnimator duration = ValueAnimator.ofFloat(this.contactsAlpha, f).setDuration(250L);
         this.contactsAlphaAnimator = duration;
         duration.setInterpolator(CubicBezierInterpolator.DEFAULT);
-        this.contactsAlphaAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() { // from class: org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda3
+        this.contactsAlphaAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() { // from class: org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda2
             @Override // android.animation.ValueAnimator.AnimatorUpdateListener
             public final void onAnimationUpdate(ValueAnimator valueAnimator2) {
                 DialogsActivity.this.lambda$animateContactsAlpha$55(valueAnimator2);
@@ -8028,10 +8035,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         this.delegate.didSelectDialogs(this, arrayList, this.commentView.getFieldText(), false);
     }
 
-    /* JADX WARN: Multi-variable type inference failed */
-    /* JADX WARN: Removed duplicated region for block: B:105:0x0889 A[SYNTHETIC] */
-    /* JADX WARN: Removed duplicated region for block: B:44:0x03f0  */
-    /* JADX WARN: Type inference failed for: r4v186, types: [org.telegram.ui.Components.RecyclerListView] */
+    /* JADX WARN: Removed duplicated region for block: B:107:0x088a A[SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:44:0x03f1  */
     @Override // org.telegram.ui.ActionBar.BaseFragment
     /*
         Code decompiled incorrectly, please refer to instructions dump.
@@ -8039,7 +8044,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     */
     public java.util.ArrayList<org.telegram.ui.ActionBar.ThemeDescription> getThemeDescriptions() {
         /*
-            Method dump skipped, instructions count: 6764
+            Method dump skipped, instructions count: 6854
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.DialogsActivity.getThemeDescriptions():java.util.ArrayList");
@@ -8076,6 +8081,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         }
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
+    public /* synthetic */ void lambda$getThemeDescriptions$64() {
+        this.speedItem.getIconView().setColorFilter(new PorterDuffColorFilter(Theme.getColor("actionBarActionModeDefaultIcon"), PorterDuff.Mode.SRC_IN));
+        this.speedItem.setBackground(Theme.createSelectorDrawable(Theme.getColor("actionBarActionModeDefaultSelector")));
+    }
+
     private void updateFloatingButtonColor() {
         if (getParentActivity() == null || this.floatingButtonContainer == null) {
             return;
@@ -8101,10 +8112,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         }
         ValueAnimator ofFloat2 = ValueAnimator.ofFloat(this.slideFragmentProgress, 1.0f);
         this.slideBackTransitionAnimator = ofFloat2;
-        ofFloat2.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() { // from class: org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda2
+        ofFloat2.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() { // from class: org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda5
             @Override // android.animation.ValueAnimator.AnimatorUpdateListener
             public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                DialogsActivity.this.lambda$getCustomSlideTransition$64(valueAnimator);
+                DialogsActivity.this.lambda$getCustomSlideTransition$65(valueAnimator);
             }
         });
         this.slideBackTransitionAnimator.setInterpolator(CubicBezierInterpolator.EASE_OUT);
@@ -8114,7 +8125,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$getCustomSlideTransition$64(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$getCustomSlideTransition$65(ValueAnimator valueAnimator) {
         setSlideTransitionProgress(((Float) valueAnimator.getAnimatedValue()).floatValue());
     }
 
@@ -8271,27 +8282,27 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
     @Override // org.telegram.ui.Components.FloatingDebug.FloatingDebugProvider
     public List<FloatingDebugController.DebugItem> onGetDebugItems() {
-        return Arrays.asList(new FloatingDebugController.DebugItem(LocaleController.getString(R.string.ClearLocalDatabase), new Runnable() { // from class: org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda37
-            @Override // java.lang.Runnable
-            public final void run() {
-                DialogsActivity.this.lambda$onGetDebugItems$65();
-            }
-        }), new FloatingDebugController.DebugItem(LocaleController.getString(R.string.DebugClearSendMessageAsPeers), new Runnable() { // from class: org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda41
+        return Arrays.asList(new FloatingDebugController.DebugItem(LocaleController.getString(R.string.ClearLocalDatabase), new Runnable() { // from class: org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda41
             @Override // java.lang.Runnable
             public final void run() {
                 DialogsActivity.this.lambda$onGetDebugItems$66();
+            }
+        }), new FloatingDebugController.DebugItem(LocaleController.getString(R.string.DebugClearSendMessageAsPeers), new Runnable() { // from class: org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda39
+            @Override // java.lang.Runnable
+            public final void run() {
+                DialogsActivity.this.lambda$onGetDebugItems$67();
             }
         }));
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$onGetDebugItems$65() {
+    public /* synthetic */ void lambda$onGetDebugItems$66() {
         getMessagesStorage().clearLocalDatabase();
         Toast.makeText(getContext(), LocaleController.getString(R.string.DebugClearLocalDatabaseSuccess), 0).show();
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$onGetDebugItems$66() {
+    public /* synthetic */ void lambda$onGetDebugItems$67() {
         getMessagesController().clearSendAsPeers();
     }
 }

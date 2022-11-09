@@ -494,7 +494,7 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
             bundle.putBoolean("onlySelect", true);
             bundle.putInt("dialogsType", 3);
             DialogsActivity dialogsActivity = new DialogsActivity(bundle);
-            dialogsActivity.setDelegate(new DialogsActivity.DialogsActivityDelegate() { // from class: org.telegram.ui.Components.SearchViewPager$$ExternalSyntheticLambda3
+            dialogsActivity.setDelegate(new DialogsActivity.DialogsActivityDelegate() { // from class: org.telegram.ui.Components.SearchViewPager$$ExternalSyntheticLambda4
                 @Override // org.telegram.ui.DialogsActivity.DialogsActivityDelegate
                 public final void didSelectDialogs(DialogsActivity dialogsActivity2, ArrayList arrayList2, CharSequence charSequence, boolean z) {
                     SearchViewPager.this.lambda$onActionBarItemClick$3(dialogsActivity2, arrayList2, charSequence, z);
@@ -718,6 +718,25 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
         }
         arrayList.add(new ThemeDescription(this.emptyView.title, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText"));
         arrayList.add(new ThemeDescription(this.emptyView.subtitle, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteGrayText"));
+        arrayList.addAll(SimpleThemeDescription.createThemeDescriptions(new ThemeDescription.ThemeDescriptionDelegate() { // from class: org.telegram.ui.Components.SearchViewPager$$ExternalSyntheticLambda3
+            @Override // org.telegram.ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate
+            public final void didSetColor() {
+                SearchViewPager.this.lambda$getThemeDescriptions$4();
+            }
+
+            @Override // org.telegram.ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate
+            public /* synthetic */ void onAnimationProgress(float f) {
+                ThemeDescription.ThemeDescriptionDelegate.CC.$default$onAnimationProgress(this, f);
+            }
+        }, "actionBarActionModeDefaultIcon"));
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
+    public /* synthetic */ void lambda$getThemeDescriptions$4() {
+        NumberTextView numberTextView = this.selectedMessagesCountTextView;
+        if (numberTextView != null) {
+            numberTextView.setTextColor(Theme.getColor("actionBarActionModeDefaultIcon"));
+        }
     }
 
     public void updateColors() {

@@ -50,7 +50,7 @@ public class ForumUtilities {
             if (animatedEmojiDrawable != null && tLRPC$TL_forumTopic.icon_emoji_id == animatedEmojiDrawable.getDocumentId()) {
                 return;
             }
-            backupImageView.setAnimatedEmojiDrawable(new AnimatedEmojiDrawable(10, UserConfig.selectedAccount, tLRPC$TL_forumTopic.icon_emoji_id));
+            backupImageView.setAnimatedEmojiDrawable(new AnimatedEmojiDrawable(z ? 11 : 10, UserConfig.selectedAccount, tLRPC$TL_forumTopic.icon_emoji_id));
             return;
         }
         backupImageView.setAnimatedEmojiDrawable(null);

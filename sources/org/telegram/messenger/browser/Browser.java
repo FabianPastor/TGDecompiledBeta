@@ -203,7 +203,7 @@ public class Browser {
     */
     public static void openUrl(final android.content.Context r16, final android.net.Uri r17, final boolean r18, boolean r19) {
         /*
-            Method dump skipped, instructions count: 827
+            Method dump skipped, instructions count: 840
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.browser.Browser.openUrl(android.content.Context, android.net.Uri, boolean, boolean):void");

@@ -2,10 +2,10 @@ package org.telegram.ui;
 
 import org.telegram.messenger.GenericProvider;
 /* loaded from: classes3.dex */
-public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda71 implements GenericProvider {
-    public static final /* synthetic */ LaunchActivity$$ExternalSyntheticLambda71 INSTANCE = new LaunchActivity$$ExternalSyntheticLambda71();
+public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda72 implements GenericProvider {
+    public static final /* synthetic */ LaunchActivity$$ExternalSyntheticLambda72 INSTANCE = new LaunchActivity$$ExternalSyntheticLambda72();
 
-    private /* synthetic */ LaunchActivity$$ExternalSyntheticLambda71() {
+    private /* synthetic */ LaunchActivity$$ExternalSyntheticLambda72() {
     }
 
     @Override // org.telegram.messenger.GenericProvider

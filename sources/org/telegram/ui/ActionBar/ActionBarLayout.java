@@ -692,28 +692,6 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
 
     @Override // org.telegram.ui.ActionBar.INavigationLayout
     public void onResume() {
-        if (this.transitionAnimationInProgress) {
-            AnimatorSet animatorSet = this.currentAnimation;
-            if (animatorSet != null) {
-                animatorSet.cancel();
-                this.currentAnimation = null;
-            }
-            Runnable runnable = this.animationRunnable;
-            if (runnable != null) {
-                AndroidUtilities.cancelRunOnUIThread(runnable);
-                this.animationRunnable = null;
-            }
-            Runnable runnable2 = this.waitingForKeyboardCloseRunnable;
-            if (runnable2 != null) {
-                AndroidUtilities.cancelRunOnUIThread(runnable2);
-                this.waitingForKeyboardCloseRunnable = null;
-            }
-            if (this.onCloseAnimationEndRunnable != null) {
-                onCloseAnimationEnd();
-            } else if (this.onOpenAnimationEndRunnable != null) {
-                onOpenAnimationEnd();
-            }
-        }
         if (!this.fragmentsStack.isEmpty()) {
             List<BaseFragment> list = this.fragmentsStack;
             list.get(list.size() - 1).onResume();
@@ -2501,15 +2479,19 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
     }
 
     private void onCloseAnimationEnd() {
-        Runnable runnable;
-        if (!this.transitionAnimationInProgress || (runnable = this.onCloseAnimationEndRunnable) == null) {
+        if (!this.transitionAnimationInProgress || this.onCloseAnimationEndRunnable == null) {
             return;
+        }
+        AnimatorSet animatorSet = this.currentAnimation;
+        if (animatorSet != null) {
+            animatorSet.cancel();
         }
         this.transitionAnimationInProgress = false;
         this.transitionAnimationPreviewMode = false;
         this.transitionAnimationStartTime = 0L;
         this.newFragment = null;
         this.oldFragment = null;
+        Runnable runnable = this.onCloseAnimationEndRunnable;
         this.onCloseAnimationEndRunnable = null;
         runnable.run();
         checkNeedRebuild();

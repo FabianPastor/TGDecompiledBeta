@@ -1,7 +1,6 @@
 package j$.util.stream;
-/* JADX INFO: Access modifiers changed from: package-private */
 /* loaded from: classes2.dex */
-public abstract class U2 implements N4 {
+abstract class U2 implements N4 {
     private final EnumCLASSNAMEe4 a;
 
     /* JADX INFO: Access modifiers changed from: package-private */

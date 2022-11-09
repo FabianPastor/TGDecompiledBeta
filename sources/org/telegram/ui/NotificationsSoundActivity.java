@@ -202,7 +202,7 @@ public class NotificationsSoundActivity extends BaseFragment implements ChatAtta
             if (this.dialogId < 0) {
                 if (this.topicId != 0) {
                     TLRPC$TL_forumTopic findTopic = getMessagesController().getTopicsController().findTopic(-this.dialogId, this.topicId);
-                    ForumUtilities.setTopicIcon(this.avatarContainer.getAvatarImageView(), findTopic);
+                    ForumUtilities.setTopicIcon(this.avatarContainer.getAvatarImageView(), findTopic, true);
                     this.avatarContainer.setTitle(findTopic.title);
                 } else {
                     TLRPC$Chat chat = getMessagesController().getChat(Long.valueOf(-this.dialogId));
@@ -614,7 +614,7 @@ public class NotificationsSoundActivity extends BaseFragment implements ChatAtta
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1818onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1822onCreateViewHolder(ViewGroup viewGroup, int i) {
             CreationTextCell creationTextCell;
             Context context = viewGroup.getContext();
             if (i == 0) {

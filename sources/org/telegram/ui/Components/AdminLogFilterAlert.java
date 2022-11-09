@@ -472,7 +472,7 @@ public class AdminLogFilterAlert extends BottomSheet {
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1818onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1822onCreateViewHolder(ViewGroup viewGroup, int i) {
             FrameLayout checkBoxCell;
             FrameLayout frameLayout;
             if (i == 0) {

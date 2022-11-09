@@ -37,7 +37,9 @@ import androidx.core.util.Consumer;
 import androidx.core.view.ViewCompat;
 import androidx.dynamicanimation.animation.DynamicAnimation;
 import androidx.dynamicanimation.animation.FloatPropertyCompat;
+import androidx.dynamicanimation.animation.FloatValueHolder;
 import androidx.dynamicanimation.animation.SpringAnimation;
+import androidx.dynamicanimation.animation.SpringForce;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -59,9 +61,11 @@ public class Bulletin {
     private static final HashMap<BaseFragment, Delegate> fragmentDelegates = new HashMap<>();
     @SuppressLint({"StaticFieldLeak"})
     private static Bulletin visibleBulletin;
+    private SpringAnimation bottomOffsetSpring;
     private boolean canHide;
     private final BaseFragment containerFragment;
     private final FrameLayout containerLayout;
+    private View.OnLayoutChangeListener containerLayoutListener;
     public int currentBottomOffset;
     private Delegate currentDelegate;
     private int duration;
@@ -147,7 +151,7 @@ public class Bulletin {
     }
 
     private Bulletin() {
-        this.hideRunnable = new Runnable() { // from class: org.telegram.ui.Components.Bulletin$$ExternalSyntheticLambda2
+        this.hideRunnable = new Runnable() { // from class: org.telegram.ui.Components.Bulletin$$ExternalSyntheticLambda5
             @Override // java.lang.Runnable
             public final void run() {
                 Bulletin.this.hide();
@@ -160,7 +164,7 @@ public class Bulletin {
     }
 
     private Bulletin(BaseFragment baseFragment, final FrameLayout frameLayout, Layout layout, int i) {
-        this.hideRunnable = new Runnable() { // from class: org.telegram.ui.Components.Bulletin$$ExternalSyntheticLambda2
+        this.hideRunnable = new Runnable() { // from class: org.telegram.ui.Components.Bulletin$$ExternalSyntheticLambda5
             @Override // java.lang.Runnable
             public final void run() {
                 Bulletin.this.hide();
@@ -209,7 +213,7 @@ public class Bulletin {
         return show(false);
     }
 
-    public Bulletin show(boolean z) {
+    public Bulletin show(final boolean z) {
         if (!this.showing && this.containerLayout != null) {
             this.showing = true;
             this.layout.setTop(z);
@@ -226,6 +230,15 @@ public class Bulletin {
             }
             visibleBulletin = this;
             this.layout.onAttach(this);
+            FrameLayout frameLayout = this.containerLayout;
+            View.OnLayoutChangeListener onLayoutChangeListener = new View.OnLayoutChangeListener() { // from class: org.telegram.ui.Components.Bulletin$$ExternalSyntheticLambda0
+                @Override // android.view.View.OnLayoutChangeListener
+                public final void onLayoutChange(View view, int i, int i2, int i3, int i4, int i5, int i6, int i7, int i8) {
+                    Bulletin.this.lambda$show$2(z, view, i, i2, i3, i4, i5, i6, i7, i8);
+                }
+            };
+            this.containerLayoutListener = onLayoutChangeListener;
+            frameLayout.addOnLayoutChangeListener(onLayoutChangeListener);
             this.layout.addOnLayoutChangeListener(new AnonymousClass2(z));
             this.layout.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() { // from class: org.telegram.ui.Components.Bulletin.3
                 @Override // android.view.View.OnAttachStateChangeListener
@@ -247,6 +260,47 @@ public class Bulletin {
         return this;
     }
 
+    public /* synthetic */ void lambda$show$2(boolean z, View view, int i, int i2, int i3, int i4, int i5, int i6, int i7, int i8) {
+        if (!z) {
+            Delegate delegate = this.currentDelegate;
+            int bottomOffset = delegate != null ? delegate.getBottomOffset(this.tag) : 0;
+            if (this.currentBottomOffset == bottomOffset) {
+                return;
+            }
+            SpringAnimation springAnimation = this.bottomOffsetSpring;
+            if (springAnimation == null || !springAnimation.isRunning()) {
+                SpringAnimation spring = new SpringAnimation(new FloatValueHolder(this.currentBottomOffset)).setSpring(new SpringForce().setFinalPosition(bottomOffset).setStiffness(900.0f).setDampingRatio(1.0f));
+                this.bottomOffsetSpring = spring;
+                spring.addUpdateListener(new DynamicAnimation.OnAnimationUpdateListener() { // from class: org.telegram.ui.Components.Bulletin$$ExternalSyntheticLambda3
+                    @Override // androidx.dynamicanimation.animation.DynamicAnimation.OnAnimationUpdateListener
+                    public final void onAnimationUpdate(DynamicAnimation dynamicAnimation, float f, float f2) {
+                        Bulletin.this.lambda$show$0(dynamicAnimation, f, f2);
+                    }
+                });
+                this.bottomOffsetSpring.addEndListener(new DynamicAnimation.OnAnimationEndListener() { // from class: org.telegram.ui.Components.Bulletin$$ExternalSyntheticLambda2
+                    @Override // androidx.dynamicanimation.animation.DynamicAnimation.OnAnimationEndListener
+                    public final void onAnimationEnd(DynamicAnimation dynamicAnimation, boolean z2, float f, float f2) {
+                        Bulletin.this.lambda$show$1(dynamicAnimation, z2, f, f2);
+                    }
+                });
+            } else {
+                this.bottomOffsetSpring.getSpring().setFinalPosition(bottomOffset);
+            }
+            this.bottomOffsetSpring.start();
+        }
+    }
+
+    public /* synthetic */ void lambda$show$0(DynamicAnimation dynamicAnimation, float f, float f2) {
+        this.currentBottomOffset = (int) f;
+        updatePosition();
+    }
+
+    public /* synthetic */ void lambda$show$1(DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
+        if (this.bottomOffsetSpring == dynamicAnimation) {
+            this.bottomOffsetSpring = null;
+        }
+    }
+
     /* renamed from: org.telegram.ui.Components.Bulletin$2 */
     /* loaded from: classes3.dex */
     public class AnonymousClass2 implements View.OnLayoutChangeListener {
@@ -264,8 +318,10 @@ public class Bulletin {
                 Bulletin.this.layout.onShow();
                 Bulletin bulletin = Bulletin.this;
                 bulletin.currentDelegate = Bulletin.findDelegate(bulletin.containerFragment, Bulletin.this.containerLayout);
-                Bulletin bulletin2 = Bulletin.this;
-                bulletin2.currentBottomOffset = bulletin2.currentDelegate != null ? Bulletin.this.currentDelegate.getBottomOffset(Bulletin.this.tag) : 0;
+                if (Bulletin.this.bottomOffsetSpring == null || !Bulletin.this.bottomOffsetSpring.isRunning()) {
+                    Bulletin bulletin2 = Bulletin.this;
+                    bulletin2.currentBottomOffset = bulletin2.currentDelegate != null ? Bulletin.this.currentDelegate.getBottomOffset(Bulletin.this.tag) : 0;
+                }
                 if (Bulletin.this.currentDelegate != null) {
                     Bulletin.this.currentDelegate.onShow(Bulletin.this);
                 }
@@ -378,20 +434,20 @@ public class Bulletin {
                     Layout.Transition transition = this.layoutTransition;
                     final Layout layout3 = this.layout;
                     layout3.getClass();
-                    transition.animateExit(layout3, new Runnable() { // from class: org.telegram.ui.Components.Bulletin$$ExternalSyntheticLambda1
+                    transition.animateExit(layout3, new Runnable() { // from class: org.telegram.ui.Components.Bulletin$$ExternalSyntheticLambda4
                         @Override // java.lang.Runnable
                         public final void run() {
                             Bulletin.Layout.this.onExitTransitionStart();
                         }
-                    }, new Runnable() { // from class: org.telegram.ui.Components.Bulletin$$ExternalSyntheticLambda3
+                    }, new Runnable() { // from class: org.telegram.ui.Components.Bulletin$$ExternalSyntheticLambda6
                         @Override // java.lang.Runnable
                         public final void run() {
-                            Bulletin.this.lambda$hide$0();
+                            Bulletin.this.lambda$hide$3();
                         }
-                    }, new Consumer() { // from class: org.telegram.ui.Components.Bulletin$$ExternalSyntheticLambda0
+                    }, new Consumer() { // from class: org.telegram.ui.Components.Bulletin$$ExternalSyntheticLambda1
                         @Override // androidx.core.util.Consumer
                         public final void accept(Object obj) {
-                            Bulletin.this.lambda$hide$1((Float) obj);
+                            Bulletin.this.lambda$hide$4((Float) obj);
                         }
                     }, i);
                     return;
@@ -405,10 +461,10 @@ public class Bulletin {
             this.layout.onExitTransitionEnd();
             this.layout.onHide();
             if (this.containerLayout != null) {
-                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.Bulletin$$ExternalSyntheticLambda4
+                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.Bulletin$$ExternalSyntheticLambda7
                     @Override // java.lang.Runnable
                     public final void run() {
-                        Bulletin.this.lambda$hide$2();
+                        Bulletin.this.lambda$hide$5();
                     }
                 });
             }
@@ -416,7 +472,7 @@ public class Bulletin {
         }
     }
 
-    public /* synthetic */ void lambda$hide$0() {
+    public /* synthetic */ void lambda$hide$3() {
         if (this.currentDelegate != null && !this.layout.top) {
             this.currentDelegate.onBottomOffsetChange(0.0f);
             this.currentDelegate.onHide(this);
@@ -426,18 +482,20 @@ public class Bulletin {
         layout.onExitTransitionEnd();
         this.layout.onHide();
         this.containerLayout.removeView(this.parentLayout);
+        this.containerLayout.removeOnLayoutChangeListener(this.containerLayoutListener);
         this.layout.onDetach();
     }
 
-    public /* synthetic */ void lambda$hide$1(Float f) {
+    public /* synthetic */ void lambda$hide$4(Float f) {
         if (this.currentDelegate == null || this.layout.top) {
             return;
         }
         this.currentDelegate.onBottomOffsetChange(this.layout.getHeight() - f.floatValue());
     }
 
-    public /* synthetic */ void lambda$hide$2() {
+    public /* synthetic */ void lambda$hide$5() {
         this.containerLayout.removeView(this.parentLayout);
+        this.containerLayout.removeOnLayoutChangeListener(this.containerLayoutListener);
     }
 
     public boolean isShowing() {
@@ -474,7 +532,7 @@ public class Bulletin {
 
         protected abstract void onPressedStateChanged(boolean z);
 
-        static /* synthetic */ float access$1724(ParentLayout parentLayout, float f) {
+        static /* synthetic */ float access$1824(ParentLayout parentLayout, float f) {
             float f2 = parentLayout.translationX - f;
             parentLayout.translationX = f2;
             return f2;
@@ -512,7 +570,7 @@ public class Bulletin {
 
             @Override // android.view.GestureDetector.SimpleOnGestureListener, android.view.GestureDetector.OnGestureListener
             public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent2, float f, float f2) {
-                this.val$layout.setTranslationX(ParentLayout.access$1724(ParentLayout.this, f));
+                this.val$layout.setTranslationX(ParentLayout.access$1824(ParentLayout.this, f));
                 if (ParentLayout.this.translationX == 0.0f || ((ParentLayout.this.translationX < 0.0f && ParentLayout.this.needLeftAlphaAnimation) || (ParentLayout.this.translationX > 0.0f && ParentLayout.this.needRightAlphaAnimation))) {
                     this.val$layout.setAlpha(1.0f - (Math.abs(ParentLayout.this.translationX) / this.val$layout.getWidth()));
                     return true;
@@ -921,22 +979,27 @@ public class Bulletin {
             Delegate delegate = this.delegate;
             float f = 0.0f;
             if (delegate != null) {
-                int i = 0;
                 if (this.top) {
                     Bulletin bulletin = this.bulletin;
-                    if (bulletin != null) {
-                        i = bulletin.tag;
-                    }
-                    f = 0.0f - delegate.getTopOffset(i);
+                    f = 0.0f - delegate.getTopOffset(bulletin != null ? bulletin.tag : 0);
                 } else {
-                    Bulletin bulletin2 = this.bulletin;
-                    if (bulletin2 != null) {
-                        i = bulletin2.tag;
-                    }
-                    f = 0.0f + delegate.getBottomOffset(i);
+                    f = 0.0f + getBottomOffset();
                 }
             }
             setTranslationY((-f) + (this.inOutOffset * (this.top ? -1 : 1)));
+        }
+
+        public float getBottomOffset() {
+            int bottomOffset;
+            Bulletin bulletin = this.bulletin;
+            if (bulletin != null && bulletin.bottomOffsetSpring != null && this.bulletin.bottomOffsetSpring.isRunning()) {
+                bottomOffset = this.bulletin.currentBottomOffset;
+            } else {
+                Delegate delegate = this.delegate;
+                Bulletin bulletin2 = this.bulletin;
+                bottomOffset = delegate.getBottomOffset(bulletin2 != null ? bulletin2.tag : 0);
+            }
+            return bottomOffset;
         }
 
         public Transition createTransition() {
@@ -1125,7 +1188,7 @@ public class Bulletin {
             this.background.setBounds(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), getMeasuredWidth() - AndroidUtilities.dp(8.0f), getMeasuredHeight() - AndroidUtilities.dp(8.0f));
             if (isTransitionRunning() && this.delegate != null) {
                 canvas.save();
-                canvas.clipRect(0.0f, this.delegate.getTopOffset(this.bulletin.tag) - getY(), getMeasuredWidth(), (((View) getParent()).getMeasuredHeight() - this.delegate.getBottomOffset(this.bulletin.tag)) - getY());
+                canvas.clipRect(0.0f, this.delegate.getTopOffset(this.bulletin.tag) - getY(), getMeasuredWidth(), (((View) getParent()).getMeasuredHeight() - getBottomOffset()) - getY());
                 this.background.draw(canvas);
                 super.dispatchDraw(canvas);
                 canvas.restore();

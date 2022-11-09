@@ -190,7 +190,7 @@ public class StickerView extends EntityView {
 
     @Override // org.telegram.ui.Components.Paint.Views.EntityView
     /* renamed from: createSelectionView */
-    protected EntityView.SelectionView mo1572createSelectionView() {
+    protected EntityView.SelectionView mo1576createSelectionView() {
         return new StickerViewSelectionView(this, getContext());
     }
 

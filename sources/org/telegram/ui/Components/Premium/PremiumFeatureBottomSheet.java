@@ -202,7 +202,7 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
 
             @Override // androidx.viewpager.widget.PagerAdapter
             /* renamed from: instantiateItem */
-            public Object mo1629instantiateItem(ViewGroup viewGroup, int i4) {
+            public Object mo1633instantiateItem(ViewGroup viewGroup, int i4) {
                 PremiumFeatureBottomSheet premiumFeatureBottomSheet = PremiumFeatureBottomSheet.this;
                 ViewPage viewPage = new ViewPage(premiumFeatureBottomSheet.getContext(), i4);
                 viewGroup.addView(viewPage);
@@ -442,7 +442,7 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
                 this.premiumButtonView.buttonTextView.setText(LocaleController.getString(R.string.UnlockPremiumReactions));
                 this.premiumButtonView.setIcon(R.raw.unlock_icon);
                 return;
-            } else if (i == 3 || i == 2) {
+            } else if (i == 3 || i == 2 || i == 9 || i == 8) {
                 this.premiumButtonView.buttonTextView.setText(LocaleController.getString(R.string.AboutTelegramPremium));
                 return;
             } else if (i != 10) {
@@ -620,7 +620,17 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
                     if (PremiumFeatureBottomSheet.this.startType != 4) {
                         if (PremiumFeatureBottomSheet.this.startType != 3) {
                             if (PremiumFeatureBottomSheet.this.startType != 10) {
-                                if (PremiumFeatureBottomSheet.this.startType == 2) {
+                                if (PremiumFeatureBottomSheet.this.startType != 2) {
+                                    if (PremiumFeatureBottomSheet.this.startType != 9) {
+                                        if (PremiumFeatureBottomSheet.this.startType == 8) {
+                                            this.title.setText(LocaleController.getString(R.string.PremiumPreviewVoiceToText));
+                                            this.description.setText(LocaleController.getString(R.string.PremiumPreviewVoiceToTextDescription2));
+                                        }
+                                    } else {
+                                        this.title.setText(LocaleController.getString(R.string.PremiumPreviewAdvancedChatManagement));
+                                        this.description.setText(LocaleController.getString(R.string.PremiumPreviewAdvancedChatManagementDescription2));
+                                    }
+                                } else {
                                     this.title.setText(LocaleController.getString(R.string.PremiumPreviewDownloadSpeed));
                                     this.description.setText(LocaleController.getString(R.string.PremiumPreviewDownloadSpeedDescription2));
                                 }

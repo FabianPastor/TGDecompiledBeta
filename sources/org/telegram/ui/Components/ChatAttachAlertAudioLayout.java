@@ -715,7 +715,7 @@ public class ChatAttachAlertAudioLayout extends ChatAttachAlert.AttachAlertLayou
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1818onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1822onCreateViewHolder(ViewGroup viewGroup, int i) {
             View view;
             if (i == 0) {
                 SharedAudioCell sharedAudioCell = new SharedAudioCell(this.mContext, ChatAttachAlertAudioLayout.this.resourcesProvider) { // from class: org.telegram.ui.Components.ChatAttachAlertAudioLayout.ListAdapter.1
@@ -902,7 +902,7 @@ public class ChatAttachAlertAudioLayout extends ChatAttachAlert.AttachAlertLayou
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1818onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1822onCreateViewHolder(ViewGroup viewGroup, int i) {
             View view;
             if (i == 0) {
                 SharedAudioCell sharedAudioCell = new SharedAudioCell(this.mContext, ChatAttachAlertAudioLayout.this.resourcesProvider) { // from class: org.telegram.ui.Components.ChatAttachAlertAudioLayout.SearchAdapter.1
